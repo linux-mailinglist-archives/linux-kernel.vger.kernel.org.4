@@ -2,48 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E27735732
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 14:47:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A23735737
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 14:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbjFSMra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 08:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
+        id S231221AbjFSMs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 08:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbjFSMr2 (ORCPT
+        with ESMTP id S231144AbjFSMsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 08:47:28 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6CA31113;
-        Mon, 19 Jun 2023 05:47:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E311112FC;
-        Mon, 19 Jun 2023 05:48:08 -0700 (PDT)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.36.163])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8FF033F64C;
-        Mon, 19 Jun 2023 05:47:23 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 13:47:18 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>, linux-mm@kvack.org,
-        Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@kernel.org>
-Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
-Message-ID: <ZJBOVsFraksigfRF@FVFF77S0Q05N.cambridge.arm.com>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-8-kent.overstreet@linux.dev>
- <ZJAdhBIvwFBOFQU/@FVFF77S0Q05N>
- <20230619104717.3jvy77y3quou46u3@moria.home.lan>
+        Mon, 19 Jun 2023 08:48:51 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35275120
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 05:48:49 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-54f85f8b961so2622042a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 05:48:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=shopee.com; s=shopee.com; t=1687178928; x=1689770928;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zkvtgJhNiAhlhE/5X9KIzqXme2yxIHOQ4aJAd2h6f9c=;
+        b=Sy4BZQSQxGMw6NONjzbcq2N7RyjpWRHbA6AvoFZp8NRVHtp783fyfgNtZaScvfKhMq
+         6KVatXhq782lhFz5kt4R8SHgs3hbFpvVxWm1daPJds0XiUCcY/EeGoEciKB9xofPWt66
+         JXuOF9+OspCQ0j5tjiOMTFPPxsu7Q4j0y2G+eazqGvqqjbYr4uEGMBYBGnQuEhDHSeo7
+         iMKwKmjOxJj/nJBwMDF3ZHBclzTjYVRukgbfIPUb+BxtzacxWRMKd7RUjgz0YmtOd3Fy
+         FVk5qmlxKAHp/4omdq9Ei3HsZX6yEwLpA3jTjIaADA+P/mP4WazNN694252yL4sU0wnM
+         ya9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687178928; x=1689770928;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zkvtgJhNiAhlhE/5X9KIzqXme2yxIHOQ4aJAd2h6f9c=;
+        b=eJkUzBFmbmZwR4a51WxjE/IEZD7vAz1tkQ7weTreApJKMCcdZpeBkRgD5H+JIo6hAW
+         TXU8ijGNzhg+JWDaZ0pX0nPoAJGc9wYsLEhsr8S+gTG/93zxJeJ9/lVDyTG+H3qKa2XI
+         AXkMWzyRBq2nnOJE/nGc8lDK3vtkfc0AfXlQjoi8LwlUYtmAy0t9eJjdtg9G0cYyH073
+         PO+yeRXGEtDC9WQmHnxSgEw2wcDz6QZgXJ/IYm768AkR0S+byfxsNsfPKN1MIgcT+7lm
+         L2WWoj6z9lrQZsC3KA5txJHe7U7w33Y3l/Mr9/Bq1M8fJzyM4xNp450U36ag6KsCP/hV
+         FNIQ==
+X-Gm-Message-State: AC+VfDxLKp2a7M/vUXty+ODxFoPYBJtCZYnWfP4EhPtyj4O08D9dvidI
+        DaJ1q/eUtQnwqbkS6UFYg5SIrg==
+X-Google-Smtp-Source: ACHHUZ5mUsmBPn48KvGeEemZhnT2w4mL+mwLrRoTndxKIzScpVQqN0QtZtsqPxDgwaKC5qYR30kPBQ==
+X-Received: by 2002:a17:90a:ff09:b0:25c:7f2:2e5d with SMTP id ce9-20020a17090aff0900b0025c07f22e5dmr9442987pjb.13.1687178928639;
+        Mon, 19 Jun 2023 05:48:48 -0700 (PDT)
+Received: from ubuntu-hf2.default.svc.cluster.local ([101.127.248.173])
+        by smtp.gmail.com with ESMTPSA id fr3-20020a17090ae2c300b0024de39e8746sm5597090pjb.11.2023.06.19.05.48.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 05:48:48 -0700 (PDT)
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+To:     mhocko@kernel.org
+Cc:     roman.gushchin@linux.dev, hannes@cmpxchg.org, shakeelb@google.com,
+        cgroups@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, mkoutny@suse.com,
+        akpm@linux-foundation.org, Haifeng Xu <haifeng.xu@shopee.com>
+Subject: [PATCH] selftests: cgroup: fix unexpected failure on test_memcg_sock
+Date:   Mon, 19 Jun 2023 12:47:35 +0000
+Message-Id: <20230619124735.2124-1-haifeng.xu@shopee.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230619104717.3jvy77y3quou46u3@moria.home.lan>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,57 +71,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 06:47:17AM -0400, Kent Overstreet wrote:
-> On Mon, Jun 19, 2023 at 10:19:00AM +0100, Mark Rutland wrote:
-> > On Tue, May 09, 2023 at 12:56:32PM -0400, Kent Overstreet wrote:
-> > > From: Kent Overstreet <kent.overstreet@gmail.com>
-> > > 
-> > > This is needed for bcachefs, which dynamically generates per-btree node
-> > > unpack functions.
-> > 
-> > Much like Kees and Andy, I have concerns with adding new code generators to the
-> > kernel. Even ignoring the actual code generation, there are a bunch of subtle
-> > ordering/maintenance/synchronization concerns across architectures, and we
-> > already have a fair amount of pain with the existing cases.
-> 
-> Look, jits are just not that unusual. I'm not going to be responding to
-> vague concerns that don't have any actual engineering rational.
+Before server got a client connection, there were some memory allocation
+in the test memcg, such as user stack. So do not count those memory not
+related to socket when checking socket memory accounting.
 
-Sorry, but I do have an engineering rationale here: I want to make sure that
-this actually works, on architectures that I care about, and will be
-maintanable long-term.
+Signed-off-by: Haifeng Xu <haifeng.xu@shopee.com>
+---
+ tools/testing/selftests/cgroup/test_memcontrol.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-We've had a bunch of problems with other JITs ranging from JIT-local "we got
-the encoding wrong" to major kernel infrastructure changes like tasks RCU rude
-synchronization. I'm trying to figure out whether any of those are likely to
-apply and/or whether we should be refactoring other infrastructure for use here
-(e.g. the factoring the acutal instruction generation from arch code, or
-perhaps reusing eBPF so this can be arch-neutral).
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index f4f7c0aef702..9e0d6d315826 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -987,7 +987,9 @@ static int tcp_client(const char *cgroup, unsigned short port)
+ 	char servport[6];
+ 	int retries = 0x10; /* nice round number */
+ 	int sk, ret;
++	long allocated;
+ 
++	allocated = cg_read_long(cgroup, "memory.current");
+ 	snprintf(servport, sizeof(servport), "%hd", port);
+ 	ret = getaddrinfo(server, servport, NULL, &ai);
+ 	if (ret)
+@@ -1015,7 +1017,8 @@ static int tcp_client(const char *cgroup, unsigned short port)
+ 		if (current < 0 || sock < 0)
+ 			goto close_sk;
+ 
+-		if (values_close(current, sock, 10)) {
++		/* exclude the memory not related to socket connection */
++		if (values_close(current - allocated, sock, 10)) {
+ 			ret = KSFT_PASS;
+ 			break;
+ 		}
+-- 
+2.25.1
 
-I appreciate that's not clear from my initial mail, but please don't jump
-straight to assuming I'm adversarial here.
-
-> > Can you share more detail on how you want to use this?
-> > 
-> > From a quick scan of your gitweb for the bcachefs-for-upstream branch I
-> > couldn't spot the relevant patches.
-> 
-> I've already written extensively in this thread.
-
-Sorry, I hadn't seen that.
-
-For the benefit of others, the codegen is at:
-
-  https://lore.kernel.org/lkml/ZFq7JhrhyrMTNfd%2F@moria.home.lan/
-  https://evilpiepirate.org/git/bcachefs.git/tree/fs/bcachefs/bkey.c#n727
-
-... and the rationale is at:
-
-  https://lore.kernel.org/lkml/ZF6HHRDeUWLNtuL7@moria.home.lan/
-
-One thing I note mmediately is that HAVE_BCACHEFS_COMPILED_UNPACK seems to be
-x86-only. If this is important, that'll need some rework to either be
-arch-neutral or allow for arch-specific implementations.
-
-Thanks,
-Mark.
