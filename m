@@ -2,128 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E468735F6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 23:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A86BC735FBE
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 00:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjFSVzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 17:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
+        id S229875AbjFSWGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 18:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjFSVzW (ORCPT
+        with ESMTP id S229538AbjFSWGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 17:55:22 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B013E2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 14:55:21 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id 6a1803df08f44-62ff1cdf079so30966066d6.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 14:55:21 -0700 (PDT)
+        Mon, 19 Jun 2023 18:06:34 -0400
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79206AF
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 15:06:32 -0700 (PDT)
+Received: by mail-vk1-xa31.google.com with SMTP id 71dfb90a1353d-4717089ae5bso793525e0c.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 15:06:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687211720; x=1689803720;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RdzLczGyyyiIYNvTKN6t+nBWF1GzRjK5CWv52ZbiRPw=;
-        b=APeY+OLAeUM0ntetAp1LDxTmd/ZT8qV36vebhZ6/VcMwk4uMUUhR800CSyT18vQlKW
-         uZrNQ0FXmnmG48copWury88dMkDTPzBwzMO4eHtQcqLUzVlqVbWLjqVkFWoHN7/9nYt4
-         gdgeN6/4LPgoMA6mnX7E+CKl7ob64ZJ233kC5FH2SyFdQUNGKTK5tvC1N0UIsrq+T6yn
-         HK2AWxXZShhWSMaNeyZIHkrZSssRKkui9N5KvRKfbAdA0nA9UQ3gK6+SPuyPkaTf9Xh8
-         yEtrMZykMHE2W08gpiQ9liyy7c+0Bi4srhjg+nU5OCAJPdoY1CcNDc3e2kdTORGk8eX3
-         j7lA==
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687212391; x=1689804391;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=epHaUjkubRomEjpu/oKPC+kOjwKS/BUbVDRooU3Z4so=;
+        b=Clc4AYB6+dKRBg/IDg+ygozDHkBJRNn61FpjM6RVMm18cdgtaWY0cX5rcr9WOoyL5f
+         m7u70nYbAuk2kaAZCxpqaLxARlP2YJoS64wUCYS+vmIGiqgwXTBcSll6d9X/2eD/SOng
+         bnvSuhu3b16BWuqmdkF7tHs0c3d9r0mv4QvUGsldx7qxTme7ArCAoNuiCIBOokrzdVRE
+         epGhqtrFxDpd0gMY9anaTfl+z9wKFgnv3qJSw5Snx0PtIhSGlt/z5JfEPVnEFHlTZ2gR
+         oME2kHMtBN2/kFhbqPIZph5uY1swSYpVqA1TrM1J6JuowBy2eLA6cv0zprikuBxbJBIP
+         JgeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687211720; x=1689803720;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RdzLczGyyyiIYNvTKN6t+nBWF1GzRjK5CWv52ZbiRPw=;
-        b=GmSNYUzKwJI1xtTjs1VxhFepkBtg8GmtAHZ2sK/PjXllrqDwBttxNUDLqEgcuXdbLN
-         n1cGGYXFVqK5HLAIerbhAEGWJB3Zbx6vFn7g3BqXPBXtRHstCle6xK0kz4ON8PbrxRZp
-         nrhjcfDaP0UFOjxLHEmSdslvZNWAzVN/FTpwxm4C5iUxll0PEonwLstzi89g7KElaWp7
-         wCxc5dW+fB+WQzD+BJKLj0uOdTORDXpa0FllpSO8pWSls3IULM2uHejnDSucYwsISk4q
-         SnbdC4cY4Z57JzddNsl+V6lzh0aHFC/GYL92w18BnTf7QO3vYGH0hM65OdLrhvJwNrLt
-         tOGw==
-X-Gm-Message-State: AC+VfDy8upOtvo+qw6yFj2ZHeUlPwE7xlYThgyt8K2BAgF1qRrVDu4ZP
-        zuGmnD9A0AtmFimZsP832EUbstczumr+ShyJR0VGWg==
-X-Google-Smtp-Source: ACHHUZ6KgfyuctugoVyraKcM8/CJNj0lR3f8HJwxs5YUXGKvuIfI0mQXyJJIMWhpcjZgwCcSiJvSEr/zQ5TDsp+5oq4=
-X-Received: by 2002:a05:6214:21ec:b0:615:a18b:d5af with SMTP id
- p12-20020a05621421ec00b00615a18bd5afmr13033287qvj.35.1687211720528; Mon, 19
- Jun 2023 14:55:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1686858861.git.isaku.yamahata@intel.com>
- <CAGtprH8O6dsjjNrMzLPmRio0ZDLe6M3U06HD0oNX3NN9FeWQfg@mail.gmail.com> <20230619231142.0000134a.zhi.wang.linux@gmail.com>
-In-Reply-To: <20230619231142.0000134a.zhi.wang.linux@gmail.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Mon, 19 Jun 2023 14:55:09 -0700
-Message-ID: <CAGtprH8jreK52wTcNhoAcBoHKZfkQ_1AYArgb2v6M_YVRYAw+w@mail.gmail.com>
-Subject: Re: [RFC PATCH 0/6] KVM: guest memory: Misc enhacnement
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>, chen.bo@intel.com,
-        linux-coco@lists.linux.dev,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Michael Roth <michael.roth@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687212391; x=1689804391;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=epHaUjkubRomEjpu/oKPC+kOjwKS/BUbVDRooU3Z4so=;
+        b=a5CMts2GoeYRmmt/HgVoknAWBDRbkQgKt0CR8khsBLfhECeIOhI2dJacVVoo4pCbWL
+         vnSjaq20Ylb/MxihXrpW7oFQGm6V+BkNHZIll3lb/h9t4tlhslRCTpCnpP5gGoSeMadn
+         VgfiSzRfngDqdRZqHliTKqS1q0ENzrVh4W+wGnAqllSMG4EyldzESE53+GqkDISJV2eQ
+         5Q5NA8gFaxJdbjIV4AVOvHVYGDwUcEs94xmY5flRF09HCaJQB9eW2urJJ02k02rHZBnH
+         5dTaDteBD+SjLz1leg9ukkeDPww5Z9H580jdvMl4HN/M/gN9tLNSI28PU8dYYabn/mxe
+         WE6Q==
+X-Gm-Message-State: AC+VfDwiKW2HAXorxMZ95t/SnW07+YVBwb1/UsUUyrVCT5tQK+Uff1dL
+        gZYmJ2xZxDSy7XRl3b7VpXAzSA==
+X-Google-Smtp-Source: ACHHUZ7DIN/jiAGa9oBPkCoLh+LmqcRVR1Lpn9QSUwCOEnPyWLgfT+5eGZP6x9+3N0protXz72Kx0w==
+X-Received: by 2002:a1f:3d11:0:b0:465:fa30:d633 with SMTP id k17-20020a1f3d11000000b00465fa30d633mr2844926vka.0.1687212391496;
+        Mon, 19 Jun 2023 15:06:31 -0700 (PDT)
+Received: from localhost ([135.180.227.0])
+        by smtp.gmail.com with ESMTPSA id g7-20020a635207000000b00528db73ed70sm165781pgb.3.2023.06.19.15.06.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 15:06:30 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 15:06:30 -0700 (PDT)
+X-Google-Original-Date: Mon, 19 Jun 2023 15:06:25 PDT (-0700)
+Subject:     Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+In-Reply-To: <mhng-41a06775-95dc-4747-aaab-2c5c83fd6422@palmer-ri-x1c9>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        Arnd Bergmann <arnd@arndb.de>, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     jszhang@kernel.org, llvm@lists.linux.dev
+Message-ID: <mhng-57559277-afaa-4a85-a3ad-b9be6dba737f@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 1:11=E2=80=AFPM Zhi Wang <zhi.wang.linux@gmail.com>=
- wrote:
+On Thu, 15 Jun 2023 06:54:33 PDT (-0700), Palmer Dabbelt wrote:
+> On Wed, 14 Jun 2023 09:25:49 PDT (-0700), jszhang@kernel.org wrote:
+>>
+>> On Wed, Jun 14, 2023 at 07:49:17AM -0700, Palmer Dabbelt wrote:
+>>> On Tue, 23 May 2023 09:54:58 PDT (-0700), jszhang@kernel.org wrote:
+>>> > When trying to run linux with various opensource riscv core on
+>>> > resource limited FPGA platforms, for example, those FPGAs with less
+>>> > than 16MB SDRAM, I want to save mem as much as possible. One of the
+>>> > major technologies is kernel size optimizations, I found that riscv
+>>> > does not currently support HAVE_LD_DEAD_CODE_DATA_ELIMINATION, which
+>>> > passes -fdata-sections, -ffunction-sections to CFLAGS and passes the
+>>> > --gc-sections flag to the linker.
+>>> >
+>>> > This not only benefits my case on FPGA but also benefits defconfigs.
+>>> > Here are some notable improvements from enabling this with defconfigs:
+>>> >
+>>> > nommu_k210_defconfig:
+>>> >    text    data     bss     dec     hex
+>>> > 1112009  410288   59837 1582134  182436     before
+>>> >  962838  376656   51285 1390779  1538bb     after
+>>> >
+>>> > rv32_defconfig:
+>>> >    text    data     bss     dec     hex
+>>> > 8804455 2816544  290577 11911576 b5c198     before
+>>> > 8692295 2779872  288977 11761144 b375f8     after
+>>> >
+>>> > defconfig:
+>>> >    text    data     bss     dec     hex
+>>> > 9438267 3391332  485333 13314932 cb2b74     before
+>>> > 9285914 3350052  483349 13119315 c82f53     after
+>>> >
+>>> > patch1 and patch2 are clean ups.
+>>> > patch3 fixes a typo.
+>>> > patch4 finally enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION for riscv.
+>>> >
+>>> > NOTE: Zhangjin Wu firstly sent out a patch to enable dead code
+>>> > elimination for riscv several months ago, I didn't notice it until
+>>> > yesterday. Although it missed some preparations and some sections's
+>>> > keeping, he is the first person to enable this feature for riscv. To
+>>> > ease merging, this series take his patch into my entire series and
+>>> > makes patch4 authored by him after getting his ack to reflect
+>>> > the above fact.
+>>> >
+>>> > Since v1:
+>>> >   - collect Reviewed-by, Tested-by tag
+>>> >   - Make patch4 authored by Zhangjin Wu, add my co-developed-by tag
+>>> >
+>>> > Jisheng Zhang (3):
+>>> >   riscv: move options to keep entries sorted
+>>> >   riscv: vmlinux-xip.lds.S: remove .alternative section
+>>> >   vmlinux.lds.h: use correct .init.data.* section name
+>>> >
+>>> > Zhangjin Wu (1):
+>>> >   riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+>>> >
+>>> >  arch/riscv/Kconfig                  |  13 +-
+>>> >  arch/riscv/kernel/vmlinux-xip.lds.S |   6 -
+>>> >  arch/riscv/kernel/vmlinux.lds.S     |   6 +-
+>>> >  include/asm-generic/vmlinux.lds.h   |   2 +-
+>>> >  4 files changed, 11 insertions(+), 16 deletions(-)
+>>>
+>>> Do you have a base commit for this?  It's not applying to 6.4-rc1 and the
+>>> patchwork bot couldn't find one either.
+>>
+>> Hi Palmer,
+>>
+>> Commit 3b90b09af5be ("riscv: Fix orphan section warnings caused by
+>> kernel/pi") touches vmlinux.lds.S, so to make the merge easy, this
+>> series is based on 6.4-rc2.
 >
-> On Mon, 19 Jun 2023 12:11:50 -0700
-> Vishal Annapurve <vannapurve@google.com> wrote:
->
-> > On Thu, Jun 15, 2023 at 1:12___PM <isaku.yamahata@intel.com> wrote:
-> > > ...
-> > >
-> > > * VM type: Now we have KVM_X86_PROTECTED_VM. How do we proceed?
-> > >   - Keep KVM_X86_PROTECTED_VM for its use. Introduce KVM_X86_TDX_VM
-> > >   - Use KVM_X86_PROTECTED_VM for TDX. (If necessary, introduce anothe=
-r type in
-> > >     the future)
-> > >   - any other way?
-> >
-> > There are selftests posted[1] in context of this work, which rely on
-> > KVM_X86_PROTECTED_VM being just the software-only psuedo-confidential
-> > VMs. In future there might be more work to expand this usecase to
-> > full-scale VMs. So it would be better to treat protected VMs as a
-> > separate type which can be used on any platform without the need of
-> > enabling TDX/SEV functionality.
-> >
->
-> Out of curiosity, is this really a valid case in practice except selftest=
-?
-> It sounds to me whenever KVM_X86_PROTECTED_VM is used, it has to be tied
-> with a platform-specific CC type.
+> Thanks.
 
-Protected VM effort is about being able to have guest memory ranges
-not mapped into Userspace VMM and so are unreachable for most of the
-cases from KVM as well. Non-CC VMs can use this support to mitigate
-any unintended accesses from userspace VMM/KVM possibly using
-enlightened kernels.
-
-Exact implementation of such a support warrants more discussion but it
-should be in the line of sight here as a future work item.
-
-
-
+Sorry to be so slow here, but I think this is causing LLD to hang on 
+allmodconfig.  I'm still getting to the bottom of it, there's a few 
+other things I have in flight still.
 
 >
-> > TDX VM type can possibly serve as a specialized type of protected VM
-> > with additional arch specific capabilities enabled.
-> >
-> > [1] - https://github.com/sean-jc/linux/commits/x86/kvm_gmem_solo
->
+>>
+>> Thanks
