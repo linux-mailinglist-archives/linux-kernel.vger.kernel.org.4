@@ -2,128 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07D9734B43
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 07:17:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59C57734B47
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 07:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbjFSFQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 01:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52260 "EHLO
+        id S229877AbjFSFRY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 01:17:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjFSFQ4 (ORCPT
+        with ESMTP id S229485AbjFSFRW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 01:16:56 -0400
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCEBF1
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 22:16:54 -0700 (PDT)
-Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-77de452f2a1so252030039f.2
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 22:16:54 -0700 (PDT)
+        Mon, 19 Jun 2023 01:17:22 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6147124
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 22:17:20 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5618857518dso35597217b3.2
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 22:17:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687151840; x=1689743840;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=wIJtbiNHWORZFFJvZlaFdgy0aymB8UjaLQ1n2ZbqAGA=;
+        b=gF61XMV36bH0I0OFvVtMJMGfMqtsf5GRLhWCa6KadS7mbkOfJd8Nx9f6fyfD0xONPr
+         gWmimxA9RjSurXO02roA0UblNhg0/LzFtfe/76MNLOqk8f9E40XXbrQ+OXLQjhme9er0
+         6CVWLC/hLBlwKdhfotjAtiyH1l14V+xB12eI5kJJf84Jn36fg+DSVCh+xi1dPFJmsGgw
+         6oXNg/F33JJmP82PkyDzdux+9ZZZBoRQOXweSvCZJwPQafOLvflD1OXS0vtB8Si0QDor
+         NrjaREvL25r/7Hjs1fV4HN2tV5ZQ0H55KOrMpxqUn40TA3clVeMbmIoNBPOWMcYoU+Gz
+         x87A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687151814; x=1689743814;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+        d=1e100.net; s=20221208; t=1687151840; x=1689743840;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=eMyLT01zqKPRiI1X/lV/7KH/QqoRQe0rS+m01dwVN7s=;
-        b=DJV8dWaT9aWYefNnoFqWkjwy7hZh8GRPD5X7CviExSo1Kygzv0fdf15ds+miD3u7m1
-         Yn5cn4SeXSKjF3OGl4nJYbbiMMI+KypzUX1YzJXFCvdcKLcU9AYjVLKsWZfciALHVbcM
-         mwCu0s4C8DcQeSVkSf29cLzkKjV1dTCIM3TUjJvKZ9GCmyUoLzJFtl9ouyJgKoOmyZCe
-         cp21TPmoieHfJVdpc9PoCC6bjaWbJjkesvGkxzuNlDZQ1LdV9ftXycHZ2CFE/l3IDGQm
-         v/u/43segfbaRm3mgKx1YxvuTx1zj1OXGfco4GnMcxRa6QWx2MuAZyXHevBgfxJWhyhg
-         5vQg==
-X-Gm-Message-State: AC+VfDwJ97V539dAa9iUaHw34o5XECqcNVWO6CADDMShyyxDJHetASfT
-        S3BNtlNJMLcX6LNSnn8c/Nzpaahh45La7I7cCJ77U6OxTQf3
-X-Google-Smtp-Source: ACHHUZ5GYVs1CA2p6OFbtt3L3wCxopwlljQqI6CF8Vddx1qLPvu7A3FlhTsm90vdaOO9CPLWCfvWPmPJTIenMbVujgCBZSFsj14m
-MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2051:b0:77d:c2c3:4e39 with SMTP id
- z17-20020a056602205100b0077dc2c34e39mr2444681iod.1.1687151814083; Sun, 18 Jun
- 2023 22:16:54 -0700 (PDT)
-Date:   Sun, 18 Jun 2023 22:16:54 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008f885d05fe74a486@google.com>
-Subject: [syzbot] [net?] KASAN: null-ptr-deref Read in nsim_dev_trap_report_work
-From:   syzbot <syzbot+f9b37508c6a44a2b72b6@syzkaller.appspotmail.com>
-To:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
+        bh=wIJtbiNHWORZFFJvZlaFdgy0aymB8UjaLQ1n2ZbqAGA=;
+        b=e1UlVuGJxFYTGtUyu1YqS8xxy1Rw/jQoTseENVbPT2LogJEWKEF2u9E51C7xHBHP4U
+         Qmq3hpJGoD7FJCqYhTQ3ihsnOfteSplDt3eBQtQuoshRniO4AJ9Ssgl+Q+TJQy4vB2AW
+         hGHJlBct2Ks3VPWzEi37XREOcGIOdsb5o0oZVF1cFDrpkOizMh4InPvEqhtBJLZglMOv
+         aT/EgpVsmtPJw//b3VuLIpnvfbPwdkQ4YYrIraVvfhcPdxCjtjxY2PcFKzvvUWPr8hkD
+         a976L5I54d/kz9u6Q9cqkQs5IsYDJ+jEzcZW9rBg1sWPzFh+zdnKDiCKfABxkFxjowZ+
+         3n9Q==
+X-Gm-Message-State: AC+VfDxHEg15kVqw7gEGxNt8sCcEqqaUUSjPPgQ7Y3yxIPelHoa0Em8g
+        jHP46XvV3HA1wDibv/tZUpXn35o4dDmbIhZD
+X-Google-Smtp-Source: ACHHUZ4bERXIPoat5d1IzHXmL6LrgMtKb/8unGaeig1J8SlCYu4NeAeG5s68/yZupgeGKDfJMDcTzlOYVExCpEWM
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a81:e709:0:b0:568:f589:2b4e with SMTP
+ id x9-20020a81e709000000b00568f5892b4emr3820382ywl.0.1687151839830; Sun, 18
+ Jun 2023 22:17:19 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 05:17:15 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230619051715.2306134-1-yosryahmed@google.com>
+Subject: [PATCH] selftests/cgroup: allow running a specific test with test_memcontrol
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yosry Ahmed <yosryahmed@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+It is handy during testing and/or debugging to be able to run a single
+test from test_memcontrol. Allow passing in a test name through a
+command line argument (e.g. ./test_memcontrol -t test_memcg_recharge).
 
-syzbot found the following issue on:
-
-HEAD commit:    3a2cb45ca0cc net: mlxsw: i2c: Switch back to use struct i2..
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=158b6207280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=526f919910d4a671
-dashboard link: https://syzkaller.appspot.com/bug?extid=f9b37508c6a44a2b72b6
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/5fa469ebaab3/disk-3a2cb45c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e92fd67e9282/vmlinux-3a2cb45c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/5201fed94bfc/bzImage-3a2cb45c.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f9b37508c6a44a2b72b6@syzkaller.appspotmail.com
-
-==================================================================
-BUG: KASAN: null-ptr-deref in instrument_atomic_read include/linux/instrumented.h:68 [inline]
-BUG: KASAN: null-ptr-deref in _test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline]
-BUG: KASAN: null-ptr-deref in netif_running include/linux/netdevice.h:3619 [inline]
-BUG: KASAN: null-ptr-deref in nsim_dev_trap_report_work+0x117/0xc80 drivers/net/netdevsim/dev.c:850
-Read of size 8 at addr 0000000000000038 by task kworker/1:2/29478
-
-CPU: 1 PID: 29478 Comm: kworker/1:2 Not tainted 6.4.0-rc5-syzkaller-01182-g3a2cb45ca0cc #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-Workqueue: events nsim_dev_trap_report_work
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_report mm/kasan/report.c:465 [inline]
- kasan_report+0xec/0x130 mm/kasan/report.c:572
- check_region_inline mm/kasan/generic.c:181 [inline]
- kasan_check_range+0x141/0x190 mm/kasan/generic.c:187
- instrument_atomic_read include/linux/instrumented.h:68 [inline]
- _test_bit include/asm-generic/bitops/instrumented-non-atomic.h:141 [inline]
- netif_running include/linux/netdevice.h:3619 [inline]
- nsim_dev_trap_report_work+0x117/0xc80 drivers/net/netdevsim/dev.c:850
- process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
- worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
- kthread+0x344/0x440 kernel/kthread.c:379
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-==================================================================
-
-
+Change-Id: I0e0d74d81fdd9d997987389085a816715160467f
+Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ .../selftests/cgroup/test_memcontrol.c        | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index a2a90f4bfe9f..d8f8a13bc6c4 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -1308,9 +1308,36 @@ struct memcg_test {
+ 
+ int main(int argc, char **argv)
+ {
++	int opt;
+ 	char root[PATH_MAX];
++	int selected_test = -1;
+ 	int i, proc_status, ret = EXIT_SUCCESS;
+ 
++	while ((opt = getopt(argc, argv, "ht:")) != -1) {
++		switch (opt) {
++		case 't':
++			for (i = 0; i < ARRAY_SIZE(tests); i++) {
++				if (!strcmp(tests[i].name, optarg)) {
++					selected_test = i;
++					break;
++				}
++			}
++			if (selected_test >= 0)
++				break;
++			fprintf(stderr, "test %s not found\n", optarg);
++			return EXIT_FAILURE;
++		case 'h':
++			fprintf(stderr,
++				"Usage: %s [-h] [-t name]\n"
++				"\t-h       print help\n"
++				"\t-t name  run specific test\n"
++				, argv[0]);
++			return ret;
++		default:
++			break;
++		}
++	}
++
+ 	if (cg_find_unified_root(root, sizeof(root)))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
+ 
+@@ -1336,6 +1363,9 @@ int main(int argc, char **argv)
+ 	has_localevents = proc_status;
+ 
+ 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
++		if (selected_test >= 0 && selected_test != i)
++			continue;
++
+ 		switch (tests[i].fn(root)) {
+ 		case KSFT_PASS:
+ 			ksft_test_result_pass("%s\n", tests[i].name);
+-- 
+2.41.0.162.gfafddb0af9-goog
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
