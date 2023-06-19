@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8AC735C16
+	by mail.lfdr.de (Postfix) with ESMTP id 6A926735C15
 	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbjFSQTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 12:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36086 "EHLO
+        id S232229AbjFSQTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 12:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232218AbjFSQTA (ORCPT
+        with ESMTP id S232227AbjFSQTA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 19 Jun 2023 12:19:00 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB9CE61
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:18:57 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f867700f36so2605473e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:18:57 -0700 (PDT)
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551A9E66
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:18:58 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f867700f36so2605513e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:18:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687191535; x=1689783535;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fsaki9f+UZgl1Nxe4pywUOtc38gD6sbALTtH94iAX+s=;
-        b=br9e16MGjHz82Yi8wkrnxP/PnHiBCOyExOzGrmUAT8y4L5ibrtZ4bjp0JluVECizki
-         F5d7C/CxoGYbCmZwMNhQ5IEOSH58CsK7mrGCn4LLzLgP+cK4a0P5odGhXp8N5FLGiFz/
-         rXnCDJHiXWgpDS23TaGCy/cfrl5lva5Xh4zamJY2xw36rIBZh/9X4HHj/+TSgGOt5KOp
-         QTf9bvqUNd+ftWGY8NwjX6dRC/rMtYDo5j4UqMWhgREsHD0U7SbfM/x8wEm2FiD92st2
-         WyAe15+NPpZq0r0JffPV/6BRKiwiO81PB/dWH8OgGXqXmeVH6GtsLV62hB1nIcT+FPk6
-         TOQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687191535; x=1689783535;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1687191536; x=1689783536;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=fsaki9f+UZgl1Nxe4pywUOtc38gD6sbALTtH94iAX+s=;
-        b=DE/FU0xWEgeKluhsu/Kud9zH2Dny2F6/3C3NjpCo2jN2sEjhhc0ckskQ/GgzSUbMIq
-         f2zxQ9Rmrj72h0wD5qtF7KpkMGYkJgEbAir654W9gP91LzTxxEZ5ZicxyLjquqFO6/Ru
-         87+BWeRu/pJfel8u+pyjJ72P/CAo6yKdVMwf5VXUmbAJhoeHOauF4gWuTVJHs5CEqVEC
-         WebSyB8kBvjijsNZSjXPF4wSuG1KJW1knGut/OKqxQBLW4kySZPMSxdtzQN27ZwsU+iv
-         Ar+ZWrLwd41NwlDRCpNJMKCNpEzvk23WnlEDe2lJ6QzItnvkEDChtLJ5iRyC9u6ut+27
-         DnxQ==
-X-Gm-Message-State: AC+VfDwE0dDpOhdAgZsr4/Li1UQZdi4utPuHCJj8fPbxwG7ZA4isXMY3
-        qa+O3GCi3CTSxMVFK20hSSCe0GLofR4P4R+7vV0=
-X-Google-Smtp-Source: ACHHUZ7FKytpT1bIzBWmeX+ibT6gpEBgUWOEGUg57C2o92fQt0WDpjil/FQlercYeXK3Mwexb9xceA==
-X-Received: by 2002:a19:5f1c:0:b0:4f4:d83e:4141 with SMTP id t28-20020a195f1c000000b004f4d83e4141mr5192012lfb.50.1687191535334;
-        Mon, 19 Jun 2023 09:18:55 -0700 (PDT)
+        bh=OoV/xjcktwt+INM9g5muSXeeb6bvGay0A0ymUJBmMcs=;
+        b=wVfw2HzZLyB21AFz24OT1v5puatvlwL9EGXHSE6MFMhtyGjLNtUfwKxS0Sjo6JRuf9
+         ChSc8/dQJySBDrl7C8OthZd3Cso7txRX6yuTHh/j50rLjCZkQwthhKgaxmVTuAAG8uYU
+         sVD/waXm/WurLUIsWPVP9NZecmOcH2aOUzrji9IfxIGgneSPBqxhrDwFZ+Zm/tLVZdYn
+         81RMIZjbJQxsGUNO84JIRZk8Ho4zz44M2UBx/XPO/amtSA9cpMt6AqzxsSWV9LXoHJfJ
+         fpvAs1gqS4yF5CpOhZPi5K2ljzVVuAtP8sVUzMy/tAz0qgSUcqAhhnJdyygdH1796xWY
+         iMrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687191536; x=1689783536;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OoV/xjcktwt+INM9g5muSXeeb6bvGay0A0ymUJBmMcs=;
+        b=ZaajKIkKk5UORYaLOECQsXl1aYa8uVfphsiaKK0X7rxB7NZj0d5AcYnQkXDXMc1X9U
+         ILn6QGfxeB9cz3I9ULXzairNrbDWRLfmVf5p2nO3KGCunibDHiOlM2fvpEYM6L/kD81U
+         yZi79oJ/+eKFhBxaE/tmDT0EWAJ63xr0GylJM1wuMXEDjYhnkcEqwI7/SMxXM0HjJH7Y
+         XLRcQg1ADmYr9qzYPnt5Ss3Ou3+NqedGCs5B+TDYq5YCtgjC8BXudCWyrOD2wTTFE5za
+         iF2YNZ8FsxLi4+UDWhB/5bdaMSCnXLYaouqHXivNlIrkwP0xHb6tCUeHXUbAHMf5qswq
+         jI8Q==
+X-Gm-Message-State: AC+VfDwrK3j1XliV322cEAkJzPP6cwcPKbCO3qpoqt3+0fQ8yCwagXLP
+        vgcLjjHyoNthozUDNEjGGlu+9A==
+X-Google-Smtp-Source: ACHHUZ4wEakvLWzKzjneE+3eObFu3avXN3GJ4aK+FkBke233tbvDtXsaMZOiexB1i9NuwjPzE9HB2Q==
+X-Received: by 2002:a19:6d12:0:b0:4f7:604f:f4c8 with SMTP id i18-20020a196d12000000b004f7604ff4c8mr5568228lfc.18.1687191536578;
+        Mon, 19 Jun 2023 09:18:56 -0700 (PDT)
 Received: from [192.168.1.101] (abyl242.neoplus.adsl.tpnet.pl. [83.9.31.242])
-        by smtp.gmail.com with ESMTPSA id c11-20020ac2530b000000b004b4cbc942a3sm4332824lfh.127.2023.06.19.09.18.54
+        by smtp.gmail.com with ESMTPSA id c11-20020ac2530b000000b004b4cbc942a3sm4332824lfh.127.2023.06.19.09.18.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 09:18:54 -0700 (PDT)
+        Mon, 19 Jun 2023 09:18:56 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: [PATCH RFT RFC 0/3] Fix up SC8280XP idle states
-Date:   Mon, 19 Jun 2023 18:18:52 +0200
-Message-Id: <20230619-topic-sc8280xp-idle-v1-0-35a8b98451d0@linaro.org>
+Date:   Mon, 19 Jun 2023 18:18:53 +0200
+Subject: [PATCH RFT RFC 1/3] arm64: dts: qcom: sc8280xp: Add lower cluster
+ idle states
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAOx/kGQC/x2NwQrCMBBEf6Xs2cA2LRq9Cv2A4q14SNetXQhpS
- FQKpf/u6vHNzGM2KJyFC1yqDTJ/pMgSFepDBTT7+GQjD2WwaBs81mfzWpKQKeSswzVpG9ggToR
- 4sk1LDtQcfWEzZh9pVje+Q9AwZZ5k/V8N0He337DvrnDf9y9rENLHhgAAAA==
+Message-Id: <20230619-topic-sc8280xp-idle-v1-1-35a8b98451d0@linaro.org>
+References: <20230619-topic-sc8280xp-idle-v1-0-35a8b98451d0@linaro.org>
+In-Reply-To: <20230619-topic-sc8280xp-idle-v1-0-35a8b98451d0@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -72,16 +73,16 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1687191534; l=1359;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687191534; l=1687;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=GYm5GFOL7jLxNcgLuse8QD/24Xdd2Q2S5dQ75UZ085U=;
- b=RroKKu+kpc0100TCKw5v3rsJZf1kE1Ubt2T4QaB1aIyQ+f5eoIQp5dJOoKacfaAYs+E3aaTeG
- 48wmF5OwVJQCneXWxQTSh/aDfr8jSTt/TO4veiUJZsRcI09rHEr6VDY
+ bh=I32j7um6NhN2jAjxwWACUhCcYczpx9OD9HWlBlfpRFA=;
+ b=0b8ZFniFCU6cYHplkHHxQukfuPUxlOA71hmCyW9OJIJTV0N9G95XNLtoemi1Laok9S1n5KQYx
+ 7TeuLTjesYLCJCF7TTPje5T71FtuAuf+nhWM6124/SYTmHo6Zre/alh
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,38 +90,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Comparing the data available in the downstream sources with what's there
-upstream, it was easy to spot some differences. This series aligns what
-we have upstream with what is there on the vendor kernel.
+Apart from a total LLCC + APSS power collapse, SC8280XP can also put
+either the DSU rail (CPU + L3), or VDD_CX in power collapse.
 
-The big asterisk there is that the downstream sources for SC8280XP can't
-always be trusted. A simple test shows that the lower idle states that
-were previously missing are implemented in the firmware (Linux reports no
-errors and enters them).
-
-HOWEVER
-
-The only cluster idle state that's been present until now (the deepest
-one) is now barely used if at all, as the scheduler seems to deem it
-inefficient or so.
-
-Hence, a request for testing and comments, especially from those who
-use the X13s daily or have reliable setup to measure the power usage.
+Add support for these lower idle states to allow more flexibility.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-Konrad Dybcio (3):
-      arm64: dts: qcom: sc8280xp: Add lower cluster idle states
-      arm64: dts: qcom: sc8280xp: Add missing CPU idle states
-      arm64: dts: qcom: sc8280xp: Fix up idle state periods
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 20 ++++++++++++++++++--
+ 1 file changed, 18 insertions(+), 2 deletions(-)
 
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 72 +++++++++++++++++++++++++---------
- 1 file changed, 54 insertions(+), 18 deletions(-)
----
-base-commit: 47045630bc409ce6606d97b790895210dd1d517d
-change-id: 20230619-topic-sc8280xp-idle-00fc007234c8
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+index ac0596dfdbc4..d524f851cb53 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+@@ -285,7 +285,23 @@ BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
+ 		};
+ 
+ 		domain-idle-states {
+-			CLUSTER_SLEEP_0: cluster-sleep-0 {
++			CLUSTER_SLEEP_L3_PC: cluster-sleep-0 {
++				compatible = "domain-idle-state";
++				arm,psci-suspend-param = <0x41000044>;
++				entry-latency-us = <2752>;
++				exit-latency-us = <3048>;
++				min-residency-us = <6118>;
++			};
++
++			CLUSTER_SLEEP_CX_OFF: cluster-sleep-1 {
++				compatible = "domain-idle-state";
++				arm,psci-suspend-param = <0x41002344>;
++				entry-latency-us = <3263>;
++				exit-latency-us = <4562>;
++				min-residency-us = <8467>;
++			};
++
++			CLUSTER_SLEEP_APSS_OFF: cluster-sleep-2 {
+ 				compatible = "domain-idle-state";
+ 				arm,psci-suspend-param = <0x4100c344>;
+ 				entry-latency-us = <3263>;
+@@ -632,7 +648,7 @@ CPU_PD7: power-domain-cpu7 {
+ 
+ 		CLUSTER_PD: power-domain-cpu-cluster0 {
+ 			#power-domain-cells = <0>;
+-			domain-idle-states = <&CLUSTER_SLEEP_0>;
++			domain-idle-states = <&CLUSTER_SLEEP_L3_PC &CLUSTER_SLEEP_CX_OFF &CLUSTER_SLEEP_APSS_OFF>;
+ 		};
+ 	};
+ 
 
-Best regards,
 -- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
+2.41.0
 
