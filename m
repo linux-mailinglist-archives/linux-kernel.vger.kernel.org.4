@@ -2,112 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DD727358BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:38:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 649727358C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbjFSNiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 09:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41098 "EHLO
+        id S231578AbjFSNko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 09:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbjFSNiK (ORCPT
+        with ESMTP id S229771AbjFSNkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 09:38:10 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7D53E58;
-        Mon, 19 Jun 2023 06:38:09 -0700 (PDT)
-Received: from dggpeml500012.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Ql9lH1KhczLmqY;
-        Mon, 19 Jun 2023 21:36:11 +0800 (CST)
-Received: from [10.67.110.218] (10.67.110.218) by
- dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 19 Jun 2023 21:38:06 +0800
-Message-ID: <3544fa2b-ce22-c2fa-ad22-77d3a897d53a@huawei.com>
-Date:   Mon, 19 Jun 2023 21:38:06 +0800
+        Mon, 19 Jun 2023 09:40:42 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6882A118;
+        Mon, 19 Jun 2023 06:40:40 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DB3D31EC0102;
+        Mon, 19 Jun 2023 15:40:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1687182038;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=NQcQ+a91rnEmxFtS6KIZWR6r/nd+aTVNBSnx9bM3XZo=;
+        b=MjZrI2Pb1EA97CsnjLQkLLYXnftqpz1BMSytwT2Fkcm79yTr7JlS3vbPHybZQGk2gNvBdV
+        7pJxq+Ljl/BYq/YNswcZLYfOeYT3BcOtdCS2ltKIotcJp6HYvURYcrmTpDMEIyanHuqgDd
+        H+X68i3UAmnnIDktOVRK7Y5dvsc0MIs=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id xyc2kN7e7SI6; Mon, 19 Jun 2023 13:40:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1687182035; bh=NQcQ+a91rnEmxFtS6KIZWR6r/nd+aTVNBSnx9bM3XZo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hhjq4sAwqpuXAjDZr0482mo+tJJ0h0offjDvdI0pCCoCQw2bDUcP8d1vbDkapw272
+         xVM5yjFjjoNovnJZSBbFHf8J20dy0BvYq3Lf5/6HRBdwil9v1Aobm+f2g/gfW4DXnM
+         b4YK0b1ne/U38dROisrBRRDzRlbXtYjRrFji1OTpCkEAnk7c+RPW9lAtONuYgZRerJ
+         I6+INtMP4DnSAZnjWraSMdu0T5EW08EU7cAYkC/Hha/niDr/F5MewITS/JqCLcCk2w
+         M4fJW5oXMRz9hZQzxEsZOb+8GOiaXrEPRugbBe8sJyskrr6Nh7FJhJjuPcsFYYypTU
+         hca7QInRQqaye2PTigrrCnFcm0WMOQp1goK0OxCGZ9Ing4TiGzBJOuvh74BZVr/Qmi
+         DdSTA2frFGKVeHBbStTjaynkbdb1FjWeT4A2xGYIok+FY/MvJPPnX/bv72T9u8DOue
+         fdyb1/BCxS9myr7OYuFisiuGoDRpYKpLCPZZzwC8xjY8OXaZXwAYoWmCwqI56wH0Js
+         TfJMAZ4TNRorAeiEzc0gIHq0u0T5lPm4dt0t754mvHOYYJYEaoCsQqHeC4Dy2RGzS1
+         aqKVArwd+i9hfQZM7ZM3g53aGg9SoCzbpCl/YgirQxJXdSuW99oJN7wrICWB1/lnJP
+         63A8a5ZQ59tJNZlWhFgkbgVs=
+Received: from zn.tnic (p200300ea971dC5b2329c23fFFEA6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c5b2:329c:23ff:fea6:a903])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 793DE40E0034;
+        Mon, 19 Jun 2023 13:39:55 +0000 (UTC)
+Date:   Mon, 19 Jun 2023 15:39:50 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        nikunj.dadhania@amd.com, liam.merwick@oracle.com,
+        zhi.a.wang@intel.com
+Subject: Re: [PATCH RFC v9 02/51] KVM: x86: Add gmem hook for invalidating
+ private memory
+Message-ID: <20230619133950.GBZJBapnJ3vD74ASAu@fat_crate.local>
+References: <20230612042559.375660-1-michael.roth@amd.com>
+ <20230612042559.375660-3-michael.roth@amd.com>
+ <20230612104905.GOZIb4ISN9gj9lWYNv@fat_crate.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 5.10] tracing: Add
- tracing_reset_all_online_cpus_unlocked() function
-To:     Greg KH <gregkh@linuxfoundation.org>
-CC:     <rostedt@goodmis.org>, <mhiramat@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <stable@vger.kernel.org>
-References: <20230615204931.3250659-1-zhengyejian1@huawei.com>
- <2023061913-dosage-repacking-678e@gregkh>
-Content-Language: en-US
-From:   Zheng Yejian <zhengyejian1@huawei.com>
-In-Reply-To: <2023061913-dosage-repacking-678e@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.218]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500012.china.huawei.com (7.185.36.15)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230612104905.GOZIb4ISN9gj9lWYNv@fat_crate.local>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/19 16:26, Greg KH wrote:
-> On Fri, Jun 16, 2023 at 04:49:31AM +0800, Zheng Yejian wrote:
->> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
->>
->> commit e18eb8783ec4949adebc7d7b0fdb65f65bfeefd9 upstream.
->>
->> Currently the tracing_reset_all_online_cpus() requires the
->> trace_types_lock held. But only one caller of this function actually has
->> that lock held before calling it, and the other just takes the lock so
->> that it can call it. More users of this function is needed where the lock
->> is not held.
->>
->> Add a tracing_reset_all_online_cpus_unlocked() function for the one use
->> case that calls it without being held, and also add a lockdep_assert to
->> make sure it is held when called.
->>
->> Then have tracing_reset_all_online_cpus() take the lock internally, such
->> that callers do not need to worry about taking it.
->>
->> Link: https://lkml.kernel.org/r/20221123192741.658273220@goodmis.org
->>
->> Cc: Masami Hiramatsu <mhiramat@kernel.org>
->> Cc: Andrew Morton <akpm@linux-foundation.org>
->> Cc: Zheng Yejian <zhengyejian1@huawei.com>
->> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
->> [this patch is pre-depended by be111ebd8868d4b7c041cb3c6102e1ae27d6dc1d
->> due to tracing_reset_all_online_cpus() should be called after taking lock]
->> Fixes: be111ebd8868 ("tracing: Free buffers when a used dynamic event is removed")
->> Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
->> ---
-> 
-> 
-> What about for 5.15.y?  You can't apply a fix to just an older tree as
-> you will then have a regression when you update.
-> 
-> I'll drop this one from my queue, please resend a backport for all
-> relevent stable releases.
+On Mon, Jun 12, 2023 at 12:49:05PM +0200, Borislav Petkov wrote:
+> ld: arch/x86/kvm/../../../virt/kvm/eventfd.o: in function `kvm_arch_gmem_invalidate':
+> /home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: multiple definition of `kvm_arch_gmem_invalidate'; arch/x86/kvm/../../../virt/kvm/kvm_main.o:/home/boris/kernel/2nd/linux/./include/linux/kvm_host.h:2356: first defined here
+> ld: arch/x86/kvm/../../../virt/kvm/binary_stats.o: in function `kvm_arch_gmem_invalidate':
 
-Hi, greg,
-
-I have resend the patch to relevent stable releases:
-5.15.y: 
-https://lore.kernel.org/all/20230620013052.1127047-1-zhengyejian1@huawei.com/
-5.10.y: 
-https://lore.kernel.org/all/20230620013104.1127100-1-zhengyejian1@huawei.com/
-5.4.y: 
-https://lore.kernel.org/all/20230620013113.1127152-1-zhengyejian1@huawei.com/
+Fix is trivial:
 
 ---
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index 7de06add2235..67fdfb683cb9 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -2353,7 +2353,7 @@ static inline int kvm_gmem_get_pfn(struct kvm *kvm,
+ 	return -EIO;
+ }
+ 
+-void kvm_arch_gmem_invalidate(struct kvm *kvm, kvm_pfn_t start, kvm_pfn_t end) { }
++static inline void kvm_arch_gmem_invalidate(struct kvm *kvm, kvm_pfn_t start, kvm_pfn_t end) { }
+ #endif /* CONFIG_KVM_PRIVATE_MEM */
+ 
+ #endif
 
-Thanks,
-Zheng Yejian
+-- 
+Regards/Gruss,
+    Boris.
 
-> 
-> thanks,
-> 
-> greg k-h
-
+https://people.kernel.org/tglx/notes-about-netiquette
