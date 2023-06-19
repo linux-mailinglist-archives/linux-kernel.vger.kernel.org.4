@@ -2,89 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13BD1734E39
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:43:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F7B3734E34
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbjFSIne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 04:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
+        id S230256AbjFSInW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 04:43:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjFSInF (ORCPT
+        with ESMTP id S229674AbjFSImz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 04:43:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFD43C33
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:41:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B0146160D
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6411DC433C9;
-        Mon, 19 Jun 2023 08:40:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687164019;
-        bh=UtjravUBCN3o1U68Iy/Hasvwofkbayx1QqElmRLNbLo=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ksgRvdgkbOYVLhm0Mg4tjNiOiG6jqlM0r3VI2AY6TUGc5pWk8+XU5K+/wBAQhSvrU
-         QLWWtZeKjGcBu3F3e4+x130eDB7Ev/n3tiYsnO6h8v+BkLAA2bSU6pF/a62qOtWruv
-         XclF3HrFZxnTYDpxhsmktGohjlJp+IT/uiNMYCpv3KWYn0770cnimUsiEOF9PNguCt
-         8ZzeZ2iUpahXkkRUbXjPUqlQB5xMZloAqDtg4GleSvy+TqwajhVWvvqrg540Y5SWzp
-         wY5XZ4eRUFVhFNzXeL6eiK0/DBQVAN/26bdlyqoCmOSgQ4xi8UhWpSY+M/c3idCrIg
-         LTGIPlj9bFwBQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 42789C4316B;
-        Mon, 19 Jun 2023 08:40:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 19 Jun 2023 04:42:55 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265D03A92;
+        Mon, 19 Jun 2023 01:40:48 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 18098547;
+        Mon, 19 Jun 2023 10:39:56 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687163998;
+        bh=6NJRwC5Dr2vzbjlVl+AeJg6cppAZ6p7cGxmaf/F5s+A=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=PaMdwDVelUCr2Bpl2OTfDXcqBa72Fpqc3Hu/XO7d+sfRqTSba/rZCj1lwsB+RT3uR
+         gIs59uF6Vc5B3SJS4habkckkrntXpSc/YOZGagGbM0stbTIGIvGlg/AkMT1KEKFO5J
+         +4E8WyJYBT0wdbv/Q2lI9F6NGyDLy4rYgedF8/Wg=
+Message-ID: <fa3f72a1-8f69-e3f1-96c3-5e53c612afe7@ideasonboard.com>
+Date:   Mon, 19 Jun 2023 11:40:28 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH V2 net] net: qca_spi: Avoid high load if QCA7000 is not
- available
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168716401926.31468.11826494564143832409.git-patchwork-notify@kernel.org>
-Date:   Mon, 19 Jun 2023 08:40:19 +0000
-References: <20230614210656.6264-1-stefan.wahren@i2se.com>
-In-Reply-To: <20230614210656.6264-1-stefan.wahren@i2se.com>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, stefan.wahren@chargebyte.com,
-        simon.horman@corigine.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 11/18] media: i2c: ds90ub9xx: Select GPIOLIB rather
+ than OF_GPIO
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        Luca Ceresoli <luca.ceresoli@bootlin.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Mike Pagano <mpagano@gentoo.org>,
+        =?UTF-8?Q?Krzysztof_Ha=c5=82asa?= <khalasa@piap.pl>,
+        Marek Vasut <marex@denx.de>,
+        Satish Nagireddy <satish.nagireddy@getcruise.com>
+References: <20230616135922.442979-1-tomi.valkeinen@ideasonboard.com>
+ <20230616135922.442979-12-tomi.valkeinen@ideasonboard.com>
+ <ZIxu+IvTSaFW3erU@smile.fi.intel.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <ZIxu+IvTSaFW3erU@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Wed, 14 Jun 2023 23:06:56 +0200 you wrote:
-> In case the QCA7000 is not available via SPI (e.g. in reset),
-> the driver will cause a high load. The reason for this is
-> that the synchronization is never finished and schedule()
-> is never called. Since the synchronization is not timing
-> critical, it's safe to drop this from the scheduling condition.
+On 16/06/2023 17:17, Andy Shevchenko wrote:
+> On Fri, Jun 16, 2023 at 04:59:15PM +0300, Tomi Valkeinen wrote:
+>> Select GPIOLIB rather than OF_GPIO, as the drivers use gpiolib
+>> functionality, but no of_gpio (directly).
 > 
-> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
-> Fixes: 291ab06ecf67 ("net: qualcomm: new Ethernet over SPI driver for QCA7000")
+> This is useful change, but has to be folded in the original code.
+> We do not want even a trace of newly added OF_GPIO.
+
+Yes, I think the first three new patches should be squashed:
+
+   media: i2c: ds90ub960: Fix use of UB960_SR_FWD_CTL1
+   media: i2c: ds90ub9xx: Add COMMON_CLK kconfig dependency
+   media: i2c: ds90ub9xx: Select GPIOLIB rather than OF_GPIO
+
+The rest... Thinking about it now, I should have perhaps left them out, 
+as they're not fixing issues, and perhaps they just confuse the merging 
+process.
+
+  Tomi
+
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > 
-> [...]
-
-Here is the summary with links:
-  - [V2,net] net: qca_spi: Avoid high load if QCA7000 is not available
-    https://git.kernel.org/netdev/net/c/92717c2356cb
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+>> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+>> ---
+>>   drivers/media/i2c/Kconfig | 6 +++---
+>>   1 file changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+>> index 8a5f09a3de6c..29fc00e30d8b 100644
+>> --- a/drivers/media/i2c/Kconfig
+>> +++ b/drivers/media/i2c/Kconfig
+>> @@ -1622,7 +1622,7 @@ config VIDEO_DS90UB913
+>>   	depends on OF && I2C && VIDEO_DEV && COMMON_CLK
+>>   	select I2C_ATR
+>>   	select MEDIA_CONTROLLER
+>> -	select OF_GPIO
+>> +	select GPIOLIB
+>>   	select REGMAP_I2C
+>>   	select V4L2_FWNODE
+>>   	select VIDEO_V4L2_SUBDEV_API
+>> @@ -1635,7 +1635,7 @@ config VIDEO_DS90UB953
+>>   	depends on OF && I2C && VIDEO_DEV && COMMON_CLK
+>>   	select I2C_ATR
+>>   	select MEDIA_CONTROLLER
+>> -	select OF_GPIO
+>> +	select GPIOLIB
+>>   	select REGMAP_I2C
+>>   	select V4L2_FWNODE
+>>   	select VIDEO_V4L2_SUBDEV_API
+>> @@ -1648,7 +1648,7 @@ config VIDEO_DS90UB960
+>>   	depends on OF && I2C && VIDEO_DEV && COMMON_CLK
+>>   	select I2C_ATR
+>>   	select MEDIA_CONTROLLER
+>> -	select OF_GPIO
+>> +	select GPIOLIB
+>>   	select REGMAP_I2C
+>>   	select V4L2_FWNODE
+>>   	select VIDEO_V4L2_SUBDEV_API
+>> -- 
+>> 2.34.1
+>>
+> 
 
