@@ -2,89 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9B4734E1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:38:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09AF4734E09
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:36:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbjFSIiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 04:38:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37050 "EHLO
+        id S230486AbjFSIf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 04:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230523AbjFSIiB (ORCPT
+        with ESMTP id S231124AbjFSIeR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 04:38:01 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0FB54220;
-        Mon, 19 Jun 2023 01:35:39 -0700 (PDT)
-Received: from loongson.cn (unknown [10.2.5.185])
-        by gateway (Coremail) with SMTP id _____8Cxd+nKEpBkdswGAA--.12113S3;
-        Mon, 19 Jun 2023 16:33:14 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.2.5.185])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxC8q3EpBkAgsgAA--.15169S32;
-        Mon, 19 Jun 2023 16:33:13 +0800 (CST)
-From:   Tianrui Zhao <zhaotianrui@loongson.cn>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
-        Xi Ruoyao <xry111@xry111.site>, zhaotianrui@loongson.cn,
-        tangyouling@loongson.cn
-Subject: [PATCH v14 30/30] LoongArch: KVM: Add maintainers for LoongArch KVM
-Date:   Mon, 19 Jun 2023 16:32:55 +0800
-Message-Id: <20230619083255.3841777-31-zhaotianrui@loongson.cn>
-X-Mailer: git-send-email 2.39.1
-In-Reply-To: <20230619083255.3841777-1-zhaotianrui@loongson.cn>
-References: <20230619083255.3841777-1-zhaotianrui@loongson.cn>
+        Mon, 19 Jun 2023 04:34:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4011990
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:33:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B4B40615D2
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:33:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77257C433C9;
+        Mon, 19 Jun 2023 08:33:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687163617;
+        bh=vCiGNFmway1xT8+5HeboDaHKKj7jfcsjDO8MygM7DHs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tFliDPQHKPU78L2i5PEnlMjzcJKnjOQlcKipokhnjTQQAC+aJvUC7uCtSL8Zejm9g
+         Tpo8yPkXesBzFBF5sY4s+Dz+HFEiok2UrEn0iaiFCM9BgP+/19Df392U+TR7vpqOSV
+         yuYlGEi0QApa3PFhap3tkD8XbsTMkQACvezjHf135y3CQxlLrWg8dztxV3TdSs9fw8
+         vMCQ8HE0reQPpM1XRv8itZkFoPjpAyiwLjMh5Fx78a3H6+3y6PdXPMgmAB81/EtUt1
+         sP9WyXpMtwGSqf5pSZv6vuG+JCZ/JX28SXEcIpySO2GlI+GkfzTk8GjOCRpz9yJWhr
+         1LYVLvn9cdxGQ==
+Date:   Mon, 19 Jun 2023 09:33:33 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] mfd: rsmu: turn rsmu-{core,i2c,spi} into
+ single-object modules
+Message-ID: <20230619083333.GQ3635807@google.com>
+References: <20230604042557.900590-1-masahiroy@kernel.org>
+ <20230604042557.900590-2-masahiroy@kernel.org>
+ <20230615140010.GE3635807@google.com>
+ <CAK7LNAQjYQSMjNb4Cn_8NVxGhsJ96-JBeNChVzLjefQZ82aKVg@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxC8q3EpBkAgsgAA--.15169S32
-X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAK7LNAQjYQSMjNb4Cn_8NVxGhsJ96-JBeNChVzLjefQZ82aKVg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add maintainers for LoongArch KVM.
+On Fri, 16 Jun 2023, Masahiro Yamada wrote:
 
-Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
----
- MAINTAINERS | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+> On Thu, Jun 15, 2023 at 11:00 PM Lee Jones <lee@kernel.org> wrote:
+> >
+> > On Sun, 04 Jun 2023, Masahiro Yamada wrote:
+> >
+> > > With the previous fix, these modules are built from a single C file.
+> > >
+> > > Rename the source files so they match the module names.
+> >
+> > Should this be part of the previous patch?
+> 
+> 
+> I do not know. It is up to the maintainer's preference (you).
+> 
+> If you want me to send a squashed patch, I will be
+> happy to do so.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 27ef11624748..44db717f90c2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11357,6 +11357,18 @@ F:	include/kvm/arm_*
- F:	tools/testing/selftests/kvm/*/aarch64/
- F:	tools/testing/selftests/kvm/aarch64/
- 
-+KERNEL VIRTUAL MACHINE FOR LOONGARCH (KVM/LoongArch)
-+M:	Tianrui Zhao <zhaotianrui@loongson.cn>
-+M:	Bibo Mao <maobibo@loongson.cn>
-+M:	Huacai Chen <chenhuacai@kernel.org>
-+L:	kvm@vger.kernel.org
-+L:	loongarch@lists.linux.dev
-+S:	Maintained
-+T:	git git://git.kernel.org/pub/scm/virt/kvm/kvm.git
-+F:	arch/loongarch/include/asm/kvm*
-+F:	arch/loongarch/include/uapi/asm/kvm*
-+F:	arch/loongarch/kvm/
-+
- KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)
- M:	Huacai Chen <chenhuacai@kernel.org>
- M:	Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+I think it makes sense in this case.
+
 -- 
-2.39.1
-
+Lee Jones [李琼斯]
