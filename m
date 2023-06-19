@@ -2,114 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC54873598F
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 16:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CBD5735993
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 16:32:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbjFSOb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 10:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35424 "EHLO
+        id S231218AbjFSOcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 10:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjFSObZ (ORCPT
+        with ESMTP id S229649AbjFSOcu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 10:31:25 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53041E64;
-        Mon, 19 Jun 2023 07:31:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687185084; x=1718721084;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=SyHqZgKn1J7+dVTcmF56m4tqTwlz6VxhZtSS7tFcl4Q=;
-  b=CPw3ldJP1GucdAnsD/brr3mDne8ALYD8xIs5Dj4KNK7hexxkhnzFhPUk
-   tlGlHPj19jxj+RQQsoXX1ghYEOy2cBdGnK4Tj7HzaqR1Azf7bE7I4aFMy
-   UkH75W8k3cIRhfnJZzTTNyYxvZRLbelw9zm/N9n2rPb0XU1gG6xTZWwNg
-   otz8DDxsVfoKhUK+Xb6GRMH6UQRa+Db3jgLtAkg0wDnzB5xMMcSKc7M3o
-   MNn2IXerwx2o6imRaD0ktqn6dbOIh/G6E1h1fAOj0n0GjCxmPztG1/cPR
-   S763qh85MLIo2/G7q4U8zgLpuLmdRaBmDe+5daWRhz2LtprXc/O4vr0g5
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="388720366"
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="388720366"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 07:31:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="803621243"
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="803621243"
-Received: from alaird-mobl2.amr.corp.intel.com (HELO [10.212.177.39]) ([10.212.177.39])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 07:31:22 -0700
-Message-ID: <be258af9-a329-6f03-fcf9-9dafad42c97f@intel.com>
-Date:   Mon, 19 Jun 2023 07:31:21 -0700
+        Mon, 19 Jun 2023 10:32:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CBC81F1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:32:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 60E2912FC;
+        Mon, 19 Jun 2023 07:33:32 -0700 (PDT)
+Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 58EC53F59C;
+        Mon, 19 Jun 2023 07:32:47 -0700 (PDT)
+Message-ID: <bbfd874e-4a07-5be5-dde3-2b44763eaa0a@arm.com>
+Date:   Mon, 19 Jun 2023 15:32:42 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v11 18/20] x86: Handle TDX erratum to reset TDX private
- memory during kexec() and reboot
-Content-Language: en-US
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-References: <cover.1685887183.git.kai.huang@intel.com>
- <5aa7506d4fedbf625e3fe8ceeb88af3be1ce97ea.1685887183.git.kai.huang@intel.com>
- <20230609132301.uvvp27yr5kpenl6f@box.shutemov.name>
- <58f34b4b81b6d6b37d3386dec0f073e6eb7a97ff.camel@intel.com>
- <20230612075830.jbrdd6ysz4qq7wdf@box.shutemov.name>
- <4c7effc3abe71aa1cbee41f3bd46b97aed40be26.camel@intel.com>
- <48d5a29a-878c-665d-6ac2-6f0563bf6f3c@intel.com>
- <5782c8c2bb3e76a802e4a81c553a21edbaee7c47.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <5782c8c2bb3e76a802e4a81c553a21edbaee7c47.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH v3 1/2] iommu: rockchip: Fix directory table address
+ encoding
+Content-Language: en-GB
+To:     Jonas Karlman <jonas@kwiboo.se>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Joerg Roedel <jroedel@suse.de>
+References: <20230617182540.3091374-1-jonas@kwiboo.se>
+ <20230617182540.3091374-2-jonas@kwiboo.se>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20230617182540.3091374-2-jonas@kwiboo.se>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/19/23 04:43, Huang, Kai wrote:
-> On Mon, 2023-06-12 at 06:47 -0700, Dave Hansen wrote:
->> On 6/12/23 03:27, Huang, Kai wrote:
->>> So I think a __mb() after setting tdmr->pamt_4k_base should be good enough, as
->>> it guarantees when setting to any pamt_*_size happens, the valid pamt_4k_base
->>> will be seen by other cpus.
->>>
->>> Does it make sense?
->> Just use a normal old atomic_t or set_bit()/test_bit().  They have
->> built-in memory barriers are are less likely to get botched.
-> Hi Dave,
+On 17/06/2023 7:25 pm, Jonas Karlman wrote:
+> The physical address to the directory table is currently encoded using
+> the following bit layout for IOMMU v2.
 > 
-> Using atomic_set() requires changing tdmr->pamt_4k_base to atomic_t, which is a
-> little bit silly or overkill IMHO.  Looking at the code, it seems
-> arch_atomic_set() simply uses __WRITE_ONCE():
+>   31:12 - Address bit 31:0
+>   11: 4 - Address bit 39:32
+> 
+> This is also the bit layout used by the vendor kernel.
+> 
+> However, testing has shown that addresses to the directory/page tables
+> and memory pages are all encoded using the same bit layout.
+> 
+> IOMMU v1:
+>   31:12 - Address bit 31:0
+> 
+> IOMMU v2:
+>   31:12 - Address bit 31:0
+>   11: 8 - Address bit 35:32
+>    7: 4 - Address bit 39:36
+> 
+> Change to use the mk_dtentries ops to encode the directory table address
+> correctly. The value written to DTE_ADDR may include the valid bit set,
+> a bit that is ignored and DTE_ADDR reg read it back as 0.
+> 
+> This also update the bit layout comment for the page address and the
+> number of nybbles that are read back for DTE_ADDR comment.
+> 
+> These changes render the dte_addr_phys and dma_addr_dte ops unused and
+> is removed.
 
-How about _adding_ a variable that protects tdmr->pamt_4k_base?
-Wouldn't that be more straightforward than mucking around with existing
-types?
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+
+> Fixes: 227014b33f62 ("iommu: rockchip: Add internal ops to handle variants")
+> Fixes: c55356c534aa ("iommu: rockchip: Add support for iommu v2")
+> Fixes: c987b65a574f ("iommu/rockchip: Fix physical address decoding")
+> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+> ---
+> v3:
+> - squash removal of unused ops into this patch
+> - update commit message
+> 
+> v2:
+> - replace currently with correctly in commit message
+> 
+>   drivers/iommu/rockchip-iommu.c | 43 ++++------------------------------
+>   1 file changed, 5 insertions(+), 38 deletions(-)
+> 
+> diff --git a/drivers/iommu/rockchip-iommu.c b/drivers/iommu/rockchip-iommu.c
+> index 4054030c3237..ae42959bc490 100644
+> --- a/drivers/iommu/rockchip-iommu.c
+> +++ b/drivers/iommu/rockchip-iommu.c
+> @@ -98,8 +98,6 @@ struct rk_iommu_ops {
+>   	phys_addr_t (*pt_address)(u32 dte);
+>   	u32 (*mk_dtentries)(dma_addr_t pt_dma);
+>   	u32 (*mk_ptentries)(phys_addr_t page, int prot);
+> -	phys_addr_t (*dte_addr_phys)(u32 addr);
+> -	u32 (*dma_addr_dte)(dma_addr_t dt_dma);
+>   	u64 dma_bit_mask;
+>   };
+>   
+> @@ -278,8 +276,8 @@ static u32 rk_mk_pte(phys_addr_t page, int prot)
+>   /*
+>    * In v2:
+>    * 31:12 - Page address bit 31:0
+> - *  11:9 - Page address bit 34:32
+> - *   8:4 - Page address bit 39:35
+> + * 11: 8 - Page address bit 35:32
+> + *  7: 4 - Page address bit 39:36
+>    *     3 - Security
+>    *     2 - Writable
+>    *     1 - Readable
+> @@ -506,7 +504,7 @@ static int rk_iommu_force_reset(struct rk_iommu *iommu)
+>   
+>   	/*
+>   	 * Check if register DTE_ADDR is working by writing DTE_ADDR_DUMMY
+> -	 * and verifying that upper 5 nybbles are read back.
+> +	 * and verifying that upper 5 (v1) or 7 (v2) nybbles are read back.
+>   	 */
+>   	for (i = 0; i < iommu->num_mmu; i++) {
+>   		dte_addr = rk_ops->pt_address(DTE_ADDR_DUMMY);
+> @@ -531,33 +529,6 @@ static int rk_iommu_force_reset(struct rk_iommu *iommu)
+>   	return 0;
+>   }
+>   
+> -static inline phys_addr_t rk_dte_addr_phys(u32 addr)
+> -{
+> -	return (phys_addr_t)addr;
+> -}
+> -
+> -static inline u32 rk_dma_addr_dte(dma_addr_t dt_dma)
+> -{
+> -	return dt_dma;
+> -}
+> -
+> -#define DT_HI_MASK GENMASK_ULL(39, 32)
+> -#define DTE_BASE_HI_MASK GENMASK(11, 4)
+> -#define DT_SHIFT   28
+> -
+> -static inline phys_addr_t rk_dte_addr_phys_v2(u32 addr)
+> -{
+> -	u64 addr64 = addr;
+> -	return (phys_addr_t)(addr64 & RK_DTE_PT_ADDRESS_MASK) |
+> -	       ((addr64 & DTE_BASE_HI_MASK) << DT_SHIFT);
+> -}
+> -
+> -static inline u32 rk_dma_addr_dte_v2(dma_addr_t dt_dma)
+> -{
+> -	return (dt_dma & RK_DTE_PT_ADDRESS_MASK) |
+> -	       ((dt_dma & DT_HI_MASK) >> DT_SHIFT);
+> -}
+> -
+>   static void log_iova(struct rk_iommu *iommu, int index, dma_addr_t iova)
+>   {
+>   	void __iomem *base = iommu->bases[index];
+> @@ -577,7 +548,7 @@ static void log_iova(struct rk_iommu *iommu, int index, dma_addr_t iova)
+>   	page_offset = rk_iova_page_offset(iova);
+>   
+>   	mmu_dte_addr = rk_iommu_read(base, RK_MMU_DTE_ADDR);
+> -	mmu_dte_addr_phys = rk_ops->dte_addr_phys(mmu_dte_addr);
+> +	mmu_dte_addr_phys = rk_ops->pt_address(mmu_dte_addr);
+>   
+>   	dte_addr_phys = mmu_dte_addr_phys + (4 * dte_index);
+>   	dte_addr = phys_to_virt(dte_addr_phys);
+> @@ -967,7 +938,7 @@ static int rk_iommu_enable(struct rk_iommu *iommu)
+>   
+>   	for (i = 0; i < iommu->num_mmu; i++) {
+>   		rk_iommu_write(iommu->bases[i], RK_MMU_DTE_ADDR,
+> -			       rk_ops->dma_addr_dte(rk_domain->dt_dma));
+> +			       rk_ops->mk_dtentries(rk_domain->dt_dma));
+>   		rk_iommu_base_command(iommu->bases[i], RK_MMU_CMD_ZAP_CACHE);
+>   		rk_iommu_write(iommu->bases[i], RK_MMU_INT_MASK, RK_MMU_IRQ_MASK);
+>   	}
+> @@ -1405,8 +1376,6 @@ static struct rk_iommu_ops iommu_data_ops_v1 = {
+>   	.pt_address = &rk_dte_pt_address,
+>   	.mk_dtentries = &rk_mk_dte,
+>   	.mk_ptentries = &rk_mk_pte,
+> -	.dte_addr_phys = &rk_dte_addr_phys,
+> -	.dma_addr_dte = &rk_dma_addr_dte,
+>   	.dma_bit_mask = DMA_BIT_MASK(32),
+>   };
+>   
+> @@ -1414,8 +1383,6 @@ static struct rk_iommu_ops iommu_data_ops_v2 = {
+>   	.pt_address = &rk_dte_pt_address_v2,
+>   	.mk_dtentries = &rk_mk_dte_v2,
+>   	.mk_ptentries = &rk_mk_pte_v2,
+> -	.dte_addr_phys = &rk_dte_addr_phys_v2,
+> -	.dma_addr_dte = &rk_dma_addr_dte_v2,
+>   	.dma_bit_mask = DMA_BIT_MASK(40),
+>   };
+>   
