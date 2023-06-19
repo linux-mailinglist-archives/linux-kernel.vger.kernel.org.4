@@ -2,71 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3C5734D64
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B0B734D72
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 10:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbjFSIRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 04:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56666 "EHLO
+        id S230097AbjFSIUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 04:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbjFSIRb (ORCPT
+        with ESMTP id S230180AbjFSIUa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 04:17:31 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25AC10D
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:17:30 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f762b3227dso3795716e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:17:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1687162649; x=1689754649;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Yv2rIjaXMDMpPLlwF9jwu6QeCtYranVnkffyN+HyQU=;
-        b=PwoutS+BntF9MCQalJkmoo5F0NDU9r5BLunwlMmivEzDmJCqE0xV3ZIlYjX5JDEi/p
-         T1imxKFaIUWUEf1c8DVAUeT0hwnmVlNhEgz8f3A1trJ8ZvDzPZUpL8GtWINkVb4XyxGN
-         lGsmTavgOCfyEFps6M/vTYd7rLHJU07DiLGNo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687162649; x=1689754649;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2Yv2rIjaXMDMpPLlwF9jwu6QeCtYranVnkffyN+HyQU=;
-        b=ceJJRyRdbpquGvNiSrDHIIjgdxE06Q1ntI2hAlfBDnZq3NcOsaE54Xp1KwPK2V+x7e
-         BKpmzbp+oZrqEujD/LqOIfuYdXznDnS75f5K/ZtfsG9zp4owpvsEfVAcX+jFnovdGls1
-         ZsozijeDXksrgN2ZmFqs3LClVYWjX0OVnis+XfbOh7Q9tLvaVDi9FEMlw66I67XQdKjZ
-         uqX71pBNn9w3eOlrbeoSI1NRYzbsTIiC6DMclMYaYfEDovYNBNZ1D20XcUuqz4mIg1j1
-         aTQZ2jo2mj+ZJemr8DHR8oAhhB/04CWnHr8iJuo1bcxshsVG3PY18ALbCanxT/cz6Rg1
-         47kg==
-X-Gm-Message-State: AC+VfDwBmtlelpiLw1ajQ3nuVF9yCUUM6b84YnP3bVsm1d3vIbYjxarC
-        3hMrYPoKmw0tkqAtx8tMVwHRKA==
-X-Google-Smtp-Source: ACHHUZ7qO6cBJkmxBk4du5cNmihY6RimwgxVhN5bfZR9+X6qndg8wPmimAT8wFwu0qd2uAI5R7zWEg==
-X-Received: by 2002:a05:6512:2ef:b0:4f4:ffae:7b93 with SMTP id m15-20020a05651202ef00b004f4ffae7b93mr2891866lfq.7.1687162648785;
-        Mon, 19 Jun 2023 01:17:28 -0700 (PDT)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id g23-20020a19ee17000000b004f4b3e9e0cesm4137924lfb.297.2023.06.19.01.17.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 01:17:28 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Robert Hancock <hancock@sedsystems.ca>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        stable@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] net: dsa: microchip: ksz9477: follow errata sheet when applying fixups
-Date:   Mon, 19 Jun 2023 10:16:32 +0200
-Message-Id: <20230619081633.589703-1-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
+        Mon, 19 Jun 2023 04:20:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818B0FA;
+        Mon, 19 Jun 2023 01:20:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1ECBD61490;
+        Mon, 19 Jun 2023 08:20:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8663AC433C8;
+        Mon, 19 Jun 2023 08:20:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687162826;
+        bh=3qmrbX+gre5g324ufIaHDRifEUP5SgH9Kco2mZL155U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mdMIswmrdfZbEPolQxk4U3MMdRbKG7clRlpwVVU+po7lodeNJWfqP5tlXv7sOyBzk
+         zuKikrud9u1SwwPwOPAY/P0xvVwd5knb/W0+3i7VdRoYukOUV65ZNl5a2qR1iZY19F
+         RxU3Ev3AcFf2V8deVvxspGeIiOKmuRu9tSTIHKiPThxC2Yax0XE8Dqs/lw2XVwohf3
+         +blK27iRqPof/ng//FKYF95MaC18xx2pYaGreus772awP0FtgxvHQNbrUsAZwK+aLK
+         rBJ8KzE9ezDRoObYV2aghtCwwYI4h9bY2dIH9TE8wToyvEryGZIz6raw1Y0Wv28w63
+         MQMC0ne7t2ctg==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Namjae Jeon <linkinjeon@kernel.org>,
+        Steve French <sfrench@samba.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Tom Talpey <tom@talpey.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Hyunchul Lee <hyc.lee@gmail.com>, linux-cifs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH] [v2] smb: avoid field overflow warning
+Date:   Mon, 19 Jun 2023 10:19:38 +0200
+Message-Id: <20230619082019.656605-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,75 +62,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The errata sheets for both ksz9477 and ksz9567 begin with
+From: Arnd Bergmann <arnd@arndb.de>
 
-  IMPORTANT NOTE
+clang warns about a possible field overflow in a memcpy:
 
-  Multiple errata workarounds in this document call for changing PHY
-  registers for each PHY port. PHY registers 0x0 to 0x1F are in the
-  address range 0xN100 to 0xN13F, while indirect (MMD) PHY registers
-  are accessed via the PHY MMD Setup Register and the PHY MMD Data
-  Register.
+In file included from fs/smb/server/smb_common.c:7:
+include/linux/fortify-string.h:583:4: error: call to '__write_overflow_field' declared with 'warning' attribute: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Werror,-Wattribute-warning]
+                        __write_overflow_field(p_size_field, size);
 
-  Before configuring the PHY MMD registers, it is necessary to set the
-  PHY to 100 Mbps speed with auto-negotiation disabled by writing to
-  register 0xN100-0xN101. After writing the MMD registers, and after
-  all errata workarounds that involve PHY register settings, write
-  register 0xN100-0xN101 again to enable and restart auto-negotiation.
+It appears to interpret the "&out[baselen + 4]" as referring to a single
+byte of the character array, while the equivalen "out + baselen + 4" is
+seen as an offset into the array.
 
-Without that explicit auto-neg restart, we do sometimes have problems
-establishing link.
+I don't see that kind of warning elsewhere, so just go with the simple
+rework.
 
-Rather than writing back the hardcoded 0x1340 value the errata sheet
-suggests (which likely just corresponds to the most common strap
-configuration), restore the original value, setting the
-PORT_AUTO_NEG_RESTART bit if PORT_AUTO_NEG_ENABLE is set.
-
-Fixes: 1fc33199185d ("net: dsa: microchip: Add PHY errata workarounds")
-Cc: stable@vger.kernel.org
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Fixes: e2f34481b24db ("cifsd: add server-side procedures for SMB3")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+----
+v2: fix typo in array length, and make sure it still addresses the warning
 ---
-While I do believe this is a fix, I don't think it's post-rc7
-material, hence targeting net-next with cc stable.
+ fs/smb/server/smb_common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/net/dsa/microchip/ksz9477.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
-
-diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-index bf13d47c26cf..9a712ea71ee7 100644
---- a/drivers/net/dsa/microchip/ksz9477.c
-+++ b/drivers/net/dsa/microchip/ksz9477.c
-@@ -902,6 +902,16 @@ static void ksz9477_port_mmd_write(struct ksz_device *dev, int port,
+diff --git a/fs/smb/server/smb_common.c b/fs/smb/server/smb_common.c
+index a7e81067bc991..39c6c8d7d0623 100644
+--- a/fs/smb/server/smb_common.c
++++ b/fs/smb/server/smb_common.c
+@@ -536,7 +536,7 @@ int ksmbd_extract_shortname(struct ksmbd_conn *conn, const char *longname,
+ 	out[baselen + 3] = PERIOD;
  
- static void ksz9477_phy_errata_setup(struct ksz_device *dev, int port)
- {
-+	u16 cr;
-+
-+	/* Errata document says the PHY must be configured to 100Mbps
-+	 * with auto-neg disabled before configuring the PHY MMD
-+	 * registers.
-+	 */
-+	ksz_pread16(dev, port, REG_PORT_PHY_CTRL, &cr);
-+	ksz_pwrite16(dev, port, REG_PORT_PHY_CTRL,
-+		     PORT_SPEED_100MBIT | PORT_FULL_DUPLEX);
-+
- 	/* Apply PHY settings to address errata listed in
- 	 * KSZ9477, KSZ9897, KSZ9896, KSZ9567, KSZ8565
- 	 * Silicon Errata and Data Sheet Clarification documents:
-@@ -943,6 +953,13 @@ static void ksz9477_phy_errata_setup(struct ksz_device *dev, int port)
- 	ksz9477_port_mmd_write(dev, port, 0x1c, 0x1d, 0xe7ff);
- 	ksz9477_port_mmd_write(dev, port, 0x1c, 0x1e, 0xefff);
- 	ksz9477_port_mmd_write(dev, port, 0x1c, 0x20, 0xeeee);
-+
-+	/* Restore PHY CTRL register, restart auto-negotiation if
-+	 * enabled in the original value.
-+	 */
-+	if (cr & PORT_AUTO_NEG_ENABLE)
-+		cr |= PORT_AUTO_NEG_RESTART;
-+	ksz_pwrite16(dev, port, REG_PORT_PHY_CTRL, cr);
- }
- 
- void ksz9477_get_caps(struct ksz_device *dev, int port,
+ 	if (dot_present)
+-		memcpy(&out[baselen + 4], extension, 4);
++		memcpy(out + baselen + 4, extension, 4);
+ 	else
+ 		out[baselen + 4] = '\0';
+ 	smbConvertToUTF16((__le16 *)shortname, out, PATH_MAX,
 -- 
-2.37.2
+2.39.2
 
