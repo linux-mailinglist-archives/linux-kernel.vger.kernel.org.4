@@ -2,108 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5040E735DEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 21:43:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 228C4735DF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 21:45:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbjFSTnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 15:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
+        id S229871AbjFSTpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 15:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjFSTnG (ORCPT
+        with ESMTP id S229641AbjFSTps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 15:43:06 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EED11A;
-        Mon, 19 Jun 2023 12:43:05 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id 5614622812f47-38dec65ab50so2862776b6e.2;
-        Mon, 19 Jun 2023 12:43:05 -0700 (PDT)
+        Mon, 19 Jun 2023 15:45:48 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD01911A
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 12:45:45 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6685421cdb3so1398543b3a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 12:45:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687203785; x=1689795785;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=GMRLY2j+IAS7ISAiw0R05ZGvFawTOjh4yP2LDnudezY=;
-        b=c4940YOE6lC4WLcpyNG1SzkRuwK56KRqkCHnfj73sNBcqvvOCBP4HtZvyzR5iI+dT6
-         JUNcqUKno3vGxTXWyCKlk7qoQoMIVXv1eQRqFkCuxBeyvJsdagBBnqZdvcI2w0KWg21G
-         15R/crgx+370LKofABEqLtjp7ln7QqkDFqxx3Rql4WmATHLaRnajEMtKHVpDI2Ls9Fch
-         pYS3nmKeSDINZPfxXlkMRMBnMmA/8+aZQZ237yfiMucPJiVeXcRlBPoCCODa2rH0Ux9z
-         eA7WHOxhRiH5G2XfR945tQGBd4uNhPHrgUt3ge/hkeuz9T9rwsfjKp8xLSzgQsd6B91z
-         Ny0w==
+        d=chromium.org; s=google; t=1687203945; x=1689795945;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2mZiRdSqt+8wYLSRq7eLPC9b4RpYVG9iNh28AaCGdYw=;
+        b=VbyQLRYNz3Mu4xhjfuwM6hsK60V4+prvJC2X+UK9XAc/Elig3W+lZfOdm3lsaFffXc
+         aLwRhEXpqpl49PVYjZsMWtH3rA+TStqTAEBqKAhOrHyss+uM65w2xGYEfuipVtRsXjG5
+         f8D6Fx7Bv1krhLICrN7S8Z1r0/mK+azg85Gk8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687203785; x=1689795785;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GMRLY2j+IAS7ISAiw0R05ZGvFawTOjh4yP2LDnudezY=;
-        b=MNAhLi8zjco/eCfi6vYhSL6pskDPCoAD6eK4J1FG/lNPARHS1WImZLaRulTactQ8oH
-         pAYlQnqpU/8POLfqNaL0z7EtJLR1O6RSdaumpGMZh+cqTDeZLvGWGFfkF1Blo766hbiP
-         Hz8/lwogM/+gekLdBgT10eTdiyh7rkKIM8N88TwbCISdKCxO5LOU7UARqwlgAt3GNHOU
-         4mAlOG5CT/1KLXNJphViWVXtqq5PLWaC0t+uCfT4PvjKF6M/5Slt5eDrHkckX1wKHp/M
-         fROmSFM7wH+LZSQctg3JcBluTfHFIvx2Zp014IaO+ka15Y6tdrvoQLvGu/CtTN6MeSaP
-         aNhQ==
-X-Gm-Message-State: AC+VfDwC/RlmHpBOefQNZKx3j1vFIHjme+o5sr6C/MDcHOCCk2b4nY6+
-        49aFhHDiEU4UmEatrBWx+pM=
-X-Google-Smtp-Source: ACHHUZ5LEzTKiHDX05E7U2SS9tQva5v1sd1qAMHrZlJEr1RiYXXQiSMcIYUYIhl4ZdGn5Mz/lJt/RQ==
-X-Received: by 2002:a05:6808:6243:b0:394:45ad:3ea7 with SMTP id dt3-20020a056808624300b0039445ad3ea7mr11202863oib.5.1687203784829;
-        Mon, 19 Jun 2023 12:43:04 -0700 (PDT)
-Received: from [10.230.29.214] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id j4-20020a17090a694400b0025c1fbc9984sm5937690pjm.19.2023.06.19.12.43.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 12:43:04 -0700 (PDT)
-Message-ID: <deace106-94b8-8cc0-efae-2c77aa97dd0e@gmail.com>
-Date:   Mon, 19 Jun 2023 20:42:58 +0100
+        d=1e100.net; s=20221208; t=1687203945; x=1689795945;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2mZiRdSqt+8wYLSRq7eLPC9b4RpYVG9iNh28AaCGdYw=;
+        b=b0RR28m/R4En1VPZLcmzYNG8gknbk2nykKnn6Nbcn+BV0j3DJyjkVRRfwEjcE+qMdR
+         wZVZ6G/DOS3glwQVARX5ffw7B6trSD49s491gMJdZ3eh1GpSsBYmS3JC90d1bcuUQVPk
+         yvXmUfM5KmIXEdLGgUfmE6sM4dg/QrldzsNC3+7taLL1GTaVAlRAXPAy39RnTVBKLN8s
+         HWceQLq+29hd2EpztgPXMV3j/IR0rSV/6cuJNrJFtJX4w4Si1UJqX7HoybJkmoFaJfA/
+         HjGp3+EzgIrEMVOPmUXLu5vG0egqi5UVeTXcuW7LDWOsuxBPAqaHk0m38+ERcy3d2sHF
+         UE+w==
+X-Gm-Message-State: AC+VfDyq3vnF9NptXJUeIovHftS/pKgLm8s0ke2WY2+Vr0LwfbWJ0oPk
+        Qsl14Kzub2D4Uzkg7FlzgYA66A==
+X-Google-Smtp-Source: ACHHUZ7onSh5feYj5qpymA9lTfUnolVSYLdS9M5+I0v+eTgmIbWulfKky2Q6Tl0VqKEkRqo1tB/S/w==
+X-Received: by 2002:a05:6a20:9389:b0:121:637e:f0e5 with SMTP id x9-20020a056a20938900b00121637ef0e5mr6130614pzh.5.1687203945205;
+        Mon, 19 Jun 2023 12:45:45 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id h18-20020a63f912000000b00519c3475f21sm76437pgi.46.2023.06.19.12.45.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 12:45:44 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 12:45:43 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Johannes Thumshirn <Johannes.Thumshirn@wdc.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
+Message-ID: <202306191228.6A98FD25@keescook>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-8-kent.overstreet@linux.dev>
+ <3508afc0-6f03-a971-e716-999a7373951f@wdc.com>
+ <202305111525.67001E5C4@keescook>
+ <ZF6Ibvi8U9B+mV1d@moria.home.lan>
+ <202305161401.F1E3ACFAC@keescook>
+ <ZGPzocRpSlg+4vgN@moria.home.lan>
+ <1d249326-e3dd-9c9d-7b53-2fffeb39bfb4@kernel.org>
+ <ZI3Sh6p8b4FcP0Y2@moria.home.lan>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH 6.3 000/187] 6.3.9-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230619102157.579823843@linuxfoundation.org>
-Content-Language: en-US
-In-Reply-To: <20230619102157.579823843@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZI3Sh6p8b4FcP0Y2@moria.home.lan>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/19/2023 11:26 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.3.9 release.
-> There are 187 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Sat, Jun 17, 2023 at 11:34:31AM -0400, Kent Overstreet wrote:
+> On Fri, Jun 16, 2023 at 09:13:22PM -0700, Andy Lutomirski wrote:
+> > On 5/16/23 14:20, Kent Overstreet wrote:
+> > > On Tue, May 16, 2023 at 02:02:11PM -0700, Kees Cook wrote:
+> > > > For something that small, why not use the text_poke API?
+> > > 
+> > > This looks like it's meant for patching existing kernel text, which
+> > > isn't what I want - I'm generating new functions on the fly, one per
+> > > btree node.
+> > 
+> > Dynamically generating code is a giant can of worms.
+> > 
+> > Kees touched on a basic security thing: a linear address mapped W+X is a big
+> > no-no.  And that's just scratching the surface -- ideally we would have a
+> > strong protocol for generating code: the code is generated in some
+> > extra-secure context, then it's made immutable and double-checked, then
+> > it becomes live.
 > 
-> Responses should be made by Wed, 21 Jun 2023 10:21:12 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.9-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> "Double checking" arbitrary code is is fantasy. You can't "prove the
+> security" of arbitrary code post compilation.
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+I think there's a misunderstanding here about the threat model I'm
+interested in protecting against for JITs. While making sure the VM of a
+JIT is safe in itself, that's separate from what I'm concerned about.
 
-Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
+The threat model is about flaws _elsewhere_ in the kernel that can
+leverage the JIT machinery to convert a "write anything anywhere anytime"
+exploit primitive into an "execute anything" primitive. Arguments can
+be made to say "a write anything flaw means the total collapse of the
+security model so there's no point defending against it", but both that
+type of flaw and the slippery slope argument don't stand up well to
+real-world situations.
+
+The kinds of flaws we've seen are frequently limited in scope (write
+1 byte, write only NULs, write only in a specific range, etc), but
+when chained together, the weakest link is what ultimately compromises
+the kernel. As such, "W^X" is a basic building block of the kernel's
+self-defense methods, because it is such a potent target for a
+write->execute attack upgrades.
+
+Since a JIT constructs something that will become executable, it needs
+to defend itself against stray writes from other threads. Since Linux
+doesn't (really) use per-CPU page tables, the workspace for a JIT can be
+targeted by something that isn't the JIT. To deal with this, JITs need
+to use 3 phases: a writing pass (into W memory), then switch it to RO
+and perform a verification pass (construct it again, but compare results
+to the RO version), and finally switch it executable. Or, it can use
+writes to memory that only the local CPU can perform (i.e. text_poke(),
+which uses a different set of page tables with different permissions).
+
+Without basic W^X, it becomes extremely difficult to build further
+defenses (e.g. protecting page tables themselves, etc) since WX will
+remain the easiest target.
+
+-Kees
+
 -- 
-Florian
-
+Kees Cook
