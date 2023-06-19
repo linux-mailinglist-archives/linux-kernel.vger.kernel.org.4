@@ -2,130 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88417734B92
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 08:10:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E84F734B91
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 08:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbjFSGKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 02:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36926 "EHLO
+        id S229602AbjFSGKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 02:10:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjFSGKx (ORCPT
+        with ESMTP id S229500AbjFSGKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 02:10:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC6283
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 23:10:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687155007;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WGDrBUF36TLreoIVg0sYhBbDfxOAFyjjLH/MwCEaO0o=;
-        b=imbP6qycGgm7xhKoqn+AK0Pj7KAiNUNaGW7xYsIbJWCwYAKudV3aJXKuFzF0FmjGECahXL
-        JJqH+2XD1wjuBoYSerleBdntrG3ayxUWYQFG36FK6623fnl3AhH4GjER6s3wpj8Yz09ih/
-        dv7Hj2jsvr7fwz7ubwK1eoGiue33xeI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-349-H6uWdKehPG-vx_7-Qi-58Q-1; Mon, 19 Jun 2023 02:10:04 -0400
-X-MC-Unique: H6uWdKehPG-vx_7-Qi-58Q-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 911883C025AC;
-        Mon, 19 Jun 2023 06:10:03 +0000 (UTC)
-Received: from localhost (ovpn-12-194.pek2.redhat.com [10.72.12.194])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 81DA2112132C;
-        Mon, 19 Jun 2023 06:10:01 +0000 (UTC)
-Date:   Mon, 19 Jun 2023 14:09:58 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     catalin.marinas@arm.com, thunder.leizhen@huawei.com,
-        John.p.donnelly@oracle.com, kexec@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, horms@kernel.org,
-        chenjiahao16@huawei.com, linux-riscv@lists.infradead.org,
-        x86@kernel.org, bp@alien8.de
-Subject: Re: [RFC PATCH 0/4] kdump: add generic functions to simplify
- crashkernel crashkernel in architecture
-Message-ID: <ZI/xNm23BCNcB0+v@MiWiFi-R3L-srv>
-References: <20230619055951.45620-1-bhe@redhat.com>
+        Mon, 19 Jun 2023 02:10:34 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167B5D9
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 23:10:33 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4f58444a410so3717e87.0
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 23:10:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687155031; x=1689747031;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+l56EVhv3DJvNU1IQjzDjseQEvnEEKyVbt3cN52claY=;
+        b=F/kNBWEEgaE+8lZUPTIARp5HRaAoZ3OJ/XgML6vdgc6EtwY5p58wPd7kV++KSKFm4b
+         OyFBJALpf5kDPATAbF5lTZpwdyu8JFxTuRi+4mcLd7Guw1jwIhL298AzYLOSzwyjpcFs
+         diNAyNdCsjpLeq6GebJUxF9gkklqRHhSUKMHppwtT677LSlbWJNIV/RdCVO8WNFa+K36
+         OgZIXUfm9t/cUUrLLTNJVyCLnRJeUoJ+PQMpUk/s6c2YsiD1uPs7ajY4/f44OtoctmS2
+         w1T49dUAe0bYDleIE21DH/ZQZYp4NMlzFH7d4LkOKrbpxy5b2bL//xP4GGVLpTB7e7dF
+         p7Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687155031; x=1689747031;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+l56EVhv3DJvNU1IQjzDjseQEvnEEKyVbt3cN52claY=;
+        b=Hm3JZxM5FLabxTWfvYoGa5m0p4fjm3o0N9kMKELSYGu/PaCwHhFtprFb3kgof1pJc+
+         kMqouVbc/pYvgSwof592y/UIU7bseosUWEn+t769J/TFe6oKevtdCHgDKN8XXdyRU0hk
+         fRCy0Y73hrYhIrzEOR9aekx/IpX68j4UYyqXU6nC6jWIk22Q9lhLm6FZVQYYiupdftPi
+         niKj1zkci3FBRsm1+WiSku//QZq5jJWuVTPYn4GGfdQjuU1j7JEebXJ9+XL+F4wVMHiD
+         HiP3XcA7F7+hErZCAb3sCrmpaK3jXU702WQIPJl8pRi4n+C7fe9Bd6JIE2s2pcm30p8J
+         D4Cg==
+X-Gm-Message-State: AC+VfDyL44y20HfVYwBqooMgYbexUIAEl/WqSHoNBLETZTE8DnYkQ3dq
+        VPhpQVu0K/klFD6BAn3j3/aviiYsxuIGjQ4ZqqQS9Q==
+X-Google-Smtp-Source: ACHHUZ5YZyM2139hV/S/LS2+fvOQj0z9kDkZezC1c+rH06UyGBkfRjikrsYcNhvom7a/Prxm0KpMhNj4eVR2w8dGe7o=
+X-Received: by 2002:ac2:5450:0:b0:4f2:7840:e534 with SMTP id
+ d16-20020ac25450000000b004f27840e534mr267987lfn.0.1687155031253; Sun, 18 Jun
+ 2023 23:10:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230619055951.45620-1-bhe@redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <00000000000098289005dc17b71b@google.com> <00000000000051087405fe4092cc@google.com>
+In-Reply-To: <00000000000051087405fe4092cc@google.com>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Mon, 19 Jun 2023 08:10:19 +0200
+Message-ID: <CACT4Y+ZEL5FKx+R7poFFE_v2Di=qFRfv7GNnEoa9f9Y4r6ZK=w@mail.gmail.com>
+Subject: Re: [syzbot] [bluetooth?] possible deadlock in sco_conn_del
+To:     syzbot <syzbot+b825d87fe2d043e3e652@syzkaller.appspotmail.com>
+Cc:     davem@davemloft.net, edumazet@google.com, fgheet255t@gmail.com,
+        hdanton@sina.com, johan.hedberg@gmail.com, josephsih@chromium.org,
+        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lrh2000@pku.edu.cn,
+        luiz.dentz@gmail.com, luiz.von.dentz@intel.com,
+        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com, yinghsu@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 06/19/23 at 01:59pm, Baoquan He wrote:
-> In the current arm64, crashkernel=,high support has been finished after
-> several rounds of posting and careful reviewing. The code in arm64 which
-> parses crashkernel kernel parameters firstly, then reserve memory can be
-> a good example for other ARCH to refer to.
-> 
-> Whereas in x86_64, the code mixing crashkernel parameter parsing and
-> memory reserving is twisted, and looks messy. Refactoring the code to
-> make it more readable maintainable is necessary.
-                       ^ 'and' missed
-> 
-> Here, try to abstract the crashkernel parameter parsing code into a
-> generic function parse_crashkernel_generic(), and the crashkernel memory
-> reserving code into a generic function reserve_crashkernel_generic().
-> Then, in ARCH which crashkernel=,high support is needed, a simple
-> arch_reserve_crashkernel() can be added to call above two generic
-> functions. This can remove the duplicated implmentation code in each
-> ARCH, like arm64, x86_64.
-> 
-> I only change the arm64 and x86_64 implementation to make use of the
-> generic functions to simplify code. Risc-v can be done very easily refer
-> to the steps in arm64 and x86_64. I leave this to Jiahao or other risc-v
-> developer since Jiahao have posted a patchset to add crashkernel=,high
-> support to risc-v.
-> 
-> This patchset is based on the latest linus's tree, and on top of below
-> patch:
-> 
-> arm64: kdump: simplify the reservation behaviour of crashkernel=,high
->       https://git.kernel.org/arm64/c/6c4dcaddbd36
-> 
-> 
-> Baoquan He (4):
->   kdump: rename parse_crashkernel() to parse_crashkernel_common()
->   kdump: add generic functions to parse crashkernel and do reservation
->   arm64: kdump: use generic interfaces to simplify crashkernel
->     reservation code
->   x86: kdump: use generic interfaces to simplify crashkernel reservation
->     code
-> 
->  arch/arm/kernel/setup.c              |   4 +-
->  arch/arm64/Kconfig                   |   3 +
->  arch/arm64/include/asm/kexec.h       |   8 ++
->  arch/arm64/mm/init.c                 | 141 ++----------------------
->  arch/ia64/kernel/setup.c             |   4 +-
->  arch/loongarch/kernel/setup.c        |   3 +-
->  arch/mips/cavium-octeon/setup.c      |   2 +-
->  arch/mips/kernel/setup.c             |   4 +-
->  arch/powerpc/kernel/fadump.c         |   5 +-
->  arch/powerpc/kexec/core.c            |   4 +-
->  arch/powerpc/mm/nohash/kaslr_booke.c |   4 +-
->  arch/riscv/mm/init.c                 |   5 +-
->  arch/s390/kernel/setup.c             |   4 +-
->  arch/sh/kernel/machine_kexec.c       |   5 +-
->  arch/x86/Kconfig                     |   3 +
->  arch/x86/include/asm/kexec.h         |  32 ++++++
->  arch/x86/kernel/setup.c              | 141 +++---------------------
->  include/linux/crash_core.h           |  33 +++++-
->  kernel/crash_core.c                  | 158 +++++++++++++++++++++++++--
->  19 files changed, 274 insertions(+), 289 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
+On Fri, 16 Jun 2023 at 17:09, syzbot
+<syzbot+b825d87fe2d043e3e652@syzkaller.appspotmail.com> wrote:
+>
+> syzbot suspects this issue was fixed by commit:
+>
+> commit a2ac591cb4d83e1f2d4b4adb3c14b2c79764650a
+> Author: Ruihan Li <lrh2000@pku.edu.cn>
+> Date:   Wed May 3 13:39:36 2023 +0000
+>
+>     Bluetooth: Fix UAF in hci_conn_hash_flush again
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13755717280000
+> start commit:   e4cf7c25bae5 Merge tag 'kbuild-fixes-v6.2' of git://git.ke..
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=555d27e379d75ff1
+> dashboard link: https://syzkaller.appspot.com/bug?extid=b825d87fe2d043e3e652
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10052058480000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1190687c480000
+>
+> If the result looks correct, please mark the issue as fixed by replying with:
+>
+> #syz fix: Bluetooth: Fix UAF in hci_conn_hash_flush again
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
+Looks reasonable:
+
+#syz fix: Bluetooth: Fix UAF in hci_conn_hash_flush again
