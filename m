@@ -2,110 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C37735651
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D40735653
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjFSL5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 07:57:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35918 "EHLO
+        id S229761AbjFSL6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 07:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjFSL5F (ORCPT
+        with ESMTP id S229554AbjFSL6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 07:57:05 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FECB3;
-        Mon, 19 Jun 2023 04:57:04 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-987341238aeso386127866b.3;
-        Mon, 19 Jun 2023 04:57:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687175823; x=1689767823;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Up4jJYc04onqJVjn/jduw0AxLdn5KV2b68agsfpNuv0=;
-        b=WZhfMEOl6W4eSeONkArOXbFdMsxwAX0hnyfh6JfAdn0t9zqPB2eycMsQhkfbJ5ZlIC
-         ouot1OhvI1zBxDFbitYy7/+PKqJ/gj4X3oltatjV712V6Oeghb5DfPlUnMK+ZZDypqAq
-         sYU6cZvCfd9ULAiY23tmTWsxKUxwmDwpkqB8HK7/4iA86XkWFSxoiynpt89JVcc6fjBe
-         XfLv8N1QJk8NLjDaVK3zidz4oMmxFZWziX+t4L6b+oEW2LqZ35xppflwZsndWd5B43IR
-         13dA3pBRd0s+GAunRsJ+EgZ8s84ooKBteBvGDlMAPKA5aFxRKYF+zmyY+Wy/18q75PWa
-         Xb7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687175823; x=1689767823;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Up4jJYc04onqJVjn/jduw0AxLdn5KV2b68agsfpNuv0=;
-        b=Wd5CkWVfzENn9siLzfvqX4QpqgiF20HBvqvxDS1N13P/hv/yQDWdRsvp19Jv8DhMTX
-         A+KAb2adB7kMlp4dSTcSfqrAQtUV66nRiNzGQ5PXHYcZSZdlsMhVaJSLuxdHAcvHqAia
-         dO/tFp5o7D62N9TDDIISCQx0v3nis9BfbZmAO0tgvTUzsdKwY+5Pn+OfIahBuzJ9FttO
-         /NBJYo7ZtDtot6JnVcSJjIJqGSMSTo9i99bx3s+ovTi8VgW/0J83WA3P0lN2lj/2n/Vk
-         2rgT52s94B3/frYqBZ0Scwzz3uk2AnKoPmVzNs2JdvYjSmyB+VEMk897UUZvJYQn+uKG
-         YQtQ==
-X-Gm-Message-State: AC+VfDzVX+J7ppS+w0fAoDnfUdSL9sr9/UYtpsUHA3+wflsQqIg3SV1g
-        rOJRdL5GSaP+Mp0swGty9Gg=
-X-Google-Smtp-Source: ACHHUZ4iA5WgHAy5UdQgL9UY0qqnt+Y4TMeEJj7iHabnmfR/qt7lxQ1zk0720GXrfvApDycLxYpvkg==
-X-Received: by 2002:a17:906:ef0e:b0:978:adad:fe18 with SMTP id f14-20020a170906ef0e00b00978adadfe18mr7848960ejs.21.1687175822554;
-        Mon, 19 Jun 2023 04:57:02 -0700 (PDT)
-Received: from skbuf ([188.25.159.134])
-        by smtp.gmail.com with ESMTPSA id r20-20020a1709064d1400b00988a6421831sm1444511eju.93.2023.06.19.04.57.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 04:57:02 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 14:56:59 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     arinc9.unal@gmail.com
-Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net v6 4/6] net: dsa: mt7530: fix handling of LLDP frames
-Message-ID: <20230619115659.7dpve4uoodqts4ok@skbuf>
-References: <20230617062649.28444-1-arinc.unal@arinc9.com>
- <20230617062649.28444-1-arinc.unal@arinc9.com>
- <20230617062649.28444-5-arinc.unal@arinc9.com>
- <20230617062649.28444-5-arinc.unal@arinc9.com>
+        Mon, 19 Jun 2023 07:58:53 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89BDFB3
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 04:58:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=oanGpIVnmNDJ42HG0BJHoWH2TaXRJrMbzL5szTBJMgg=; b=hGJgEy8kj060xYe6Pm1j1/K7ll
+        WzLUiWXGSiFSEL5uvsajrYxFb5skntJP3xhRG7nxH+qucknA+ZQUDMvvzxwRK6HVX/Pw8sXzNNNIu
+        LLBYTp4LQ+4Fr6myzI+w5DhUP4d+v3bxqC2Pg+Nyo03P25gdvrPiU0b3NU06YdSoXbUgt9bLQmz4g
+        kWCQD+qbXgCk6kXiDn9YQSY1rkRyO/OWaeNt6PrqBlgq4Qnar8zjJ9rk0xNiA/loV6E8LlUdqsJ2G
+        E8aIldL/fLcL2i/KAuZzomLFsWT/VbMvL5EtSxHaOPJxL7FSAOGm8RT7ACpLKV298oh/sak2t090V
+        AavpKYeg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qBDWd-00EiRH-2I;
+        Mon, 19 Jun 2023 11:58:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7E5D7300322;
+        Mon, 19 Jun 2023 13:58:26 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 2DE9D24653290; Mon, 19 Jun 2023 13:58:26 +0200 (CEST)
+Date:   Mon, 19 Jun 2023 13:58:26 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Cruz Zhao <CruzZhao@linux.alibaba.com>
+Cc:     mingo@redhat.com, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, paulmck@kernel.org,
+        frederic@kernel.org, nsaenzju@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched/core: fix inaccurate idle stat in /proc/stat when
+ force idle
+Message-ID: <20230619115826.GN4253@hirez.programming.kicks-ass.net>
+References: <1687107760-111340-1-git-send-email-CruzZhao@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230617062649.28444-5-arinc.unal@arinc9.com>
- <20230617062649.28444-5-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1687107760-111340-1-git-send-email-CruzZhao@linux.alibaba.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 09:26:47AM +0300, arinc9.unal@gmail.com wrote:
-> From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On Mon, Jun 19, 2023 at 01:02:40AM +0800, Cruz Zhao wrote:
+> When force idle, rq->curr == rq->idle but rq->nr_running > 0, results
+> that idle_cpu() returns 0. In function tick_irq_exit(), if idle_cpu()
+> is 0, tick_nohz_irq_exit() will not be called, and ts->idle_active will
+> not become 1, which became 0 in tick_nohz_irq_enter().
+> ts->idle_sleeptime won't update in function update_ts_time_stats(), if
+> ts->idle_active is 0, which should be 1. And this bug will result that
+> ts->idle_sleeptime is less than the actual value, and finally will
+> result that the idle time in /proc/stat is less than the actual value.
 > 
-> LLDP frames are link-local frames, therefore they must be trapped to the
-> CPU port. Currently, the MT753X switches treat LLDP frames as regular
-> multicast frames, therefore flooding them to user ports. To fix this, set
-> LLDP frames to be trapped to the CPU port(s).
+> To fix this problem, we introduce sched_core_idle_cpu(), which returns
+> true when force idle, and we change the judgment criteria from
+> idle_cpu() to sched_core_idle_cpu() in function tick_irq_exit().
 > 
-> Fixes: b8f126a8d543 ("net-next: dsa: add dsa support for Mediatek MT7530 switch")
-> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> Signed-off-by: Cruz Zhao <CruzZhao@linux.alibaba.com>
 > ---
+>  include/linux/sched.h |  2 ++
+>  kernel/sched/core.c   | 13 +++++++++++++
+>  kernel/softirq.c      |  2 +-
+>  3 files changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index b09a83bfad8b..73e61c0f10a7 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -2430,9 +2430,11 @@ extern void sched_core_free(struct task_struct *tsk);
+>  extern void sched_core_fork(struct task_struct *p);
+>  extern int sched_core_share_pid(unsigned int cmd, pid_t pid, enum pid_type type,
+>  				unsigned long uaddr);
+> +extern int sched_core_idle_cpu(int cpu);
+>  #else
+>  static inline void sched_core_free(struct task_struct *tsk) { }
+>  static inline void sched_core_fork(struct task_struct *p) { }
+> +static inline int sched_core_idle_cpu(int cpu) { return idle_cpu(cpu); }
+>  #endif
+>  
+>  extern void sched_set_stop_task(int cpu, struct task_struct *stop);
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index 71c1a0f232b4..c80088956987 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -7286,6 +7286,19 @@ struct task_struct *idle_task(int cpu)
+>  	return cpu_rq(cpu)->idle;
+>  }
+>  
+> +#ifdef CONFIG_SCHED_CORE
+> +int sched_core_idle_cpu(int cpu)
+> +{
+> +	struct rq *rq = cpu_rq(cpu);
+> +
+> +	if (sched_core_enabled(rq) && rq->curr == rq->idle)
+> +		return 1;
+> +
+> +	return idle_cpu(cpu);
+> +}
+> +
+> +#endif
+> +
+>  #ifdef CONFIG_SMP
+>  /*
+>   * This function computes an effective utilization for the given CPU, to be
+> diff --git a/kernel/softirq.c b/kernel/softirq.c
+> index c8a6913c067d..98b98991ce45 100644
+> --- a/kernel/softirq.c
+> +++ b/kernel/softirq.c
+> @@ -630,7 +630,7 @@ static inline void tick_irq_exit(void)
+>  	int cpu = smp_processor_id();
+>  
+>  	/* Make sure that timer wheel updates are propagated */
+> -	if ((idle_cpu(cpu) && !need_resched()) || tick_nohz_full_cpu(cpu)) {
+> +	if ((sched_core_idle_cpu(cpu) && !need_resched()) || tick_nohz_full_cpu(cpu)) {
+>  		if (!in_hardirq())
+>  			tick_nohz_irq_exit();
+>  	}
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Urgh...
+
+did you audit all idle_cpu() users?
+
+Or so we want something like so instead?
+
+---
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index a68d1276bab0..b0a1cd184b1b 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -7303,6 +7303,11 @@ int idle_cpu(int cpu)
+ 	if (rq->curr != rq->idle)
+ 		return 0;
+ 
++#ifdef CONFIG_SCHED_CORE
++	if (sched_core_enabled() && rq->core->core_forceidle_count)
++		return 1;
++#endif
++
+ 	if (rq->nr_running)
+ 		return 0;
+ 
