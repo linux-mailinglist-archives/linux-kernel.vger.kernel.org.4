@@ -2,140 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC336735D44
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 20:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB0C6735D47
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 20:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232177AbjFSSHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 14:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
+        id S232191AbjFSSIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 14:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbjFSSHK (ORCPT
+        with ESMTP id S229521AbjFSSH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 14:07:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CD9D120;
-        Mon, 19 Jun 2023 11:07:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45EB360DF4;
-        Mon, 19 Jun 2023 18:07:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B85C3C433C8;
-        Mon, 19 Jun 2023 18:07:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687198027;
-        bh=XNrWx0e+VFb0jaH8wmeXcZNg0osk8eDrh+qYB5nAfyk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hnq0AOiprtBC3qrex4NKnoSCrfoj8sJY8nyfDOYmMWS+LAdWlLROaAKj8NrHdAqKV
-         gVhM8EURFdB3wFLNb5+cKug0R7eGHAYnxKLQtws1cQD1w4jy4qo3Hb7J1+QEk+tsBU
-         CwaUfd+n40I3VQBfJ115llahzE5XrSWAEPqImjrhQ0Q9+4yBUo9WuCwv+e9Jgp1nFc
-         JK4Y6V1bPN+wKsKswtz5r475G3cj3+O1jsBSXMG326is1pnTd64o/YSXvOjdb2TDxy
-         /MScaTumbH45kNF4b2HPmMzPaXxYXkmbDyTzbrZl34qcyt4Si2iWxAdohcw8Fn2wxj
-         eAVJ5xQrBneyw==
-Date:   Mon, 19 Jun 2023 11:07:05 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
-Cc:     brouer@redhat.com, Alexander Duyck <alexander.duyck@gmail.com>,
-        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Yisen Zhuang <yisen.zhuang@huawei.com>,
-        Salil Mehta <salil.mehta@huawei.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Sunil Goutham <sgoutham@marvell.com>,
-        Geetha sowjanya <gakula@marvell.com>,
-        Subbaraya Sundeep <sbhatta@marvell.com>,
-        hariprasad <hkelam@marvell.com>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Felix Fietkau <nbd@nbd.name>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-rdma@vger.kernel.org, linux-wireless@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Jonathan Lemon <jonathan.lemon@gmail.com>
-Subject: Re: Memory providers multiplexing (Was: [PATCH net-next v4 4/5]
- page_pool: remove PP_FLAG_PAGE_FRAG flag)
-Message-ID: <20230619110705.106ec599@kernel.org>
-In-Reply-To: <eadebd58-d79a-30b6-87aa-1c77acb2ec17@redhat.com>
-References: <20230612130256.4572-1-linyunsheng@huawei.com>
-        <20230612130256.4572-5-linyunsheng@huawei.com>
-        <20230614101954.30112d6e@kernel.org>
-        <8c544cd9-00a3-2f17-bd04-13ca99136750@huawei.com>
-        <20230615095100.35c5eb10@kernel.org>
-        <CAKgT0Uc6Xoyh3Edgt+83b+HTM5j4JDr3fuxcyL9qDk+Wwt9APg@mail.gmail.com>
-        <908b8b17-f942-f909-61e6-276df52a5ad5@huawei.com>
-        <CAKgT0UeZfbxDYaeUntrQpxHmwCh6zy0dEpjxghiCNxPxv=kdoQ@mail.gmail.com>
-        <72ccf224-7b45-76c5-5ca9-83e25112c9c6@redhat.com>
-        <20230616122140.6e889357@kernel.org>
-        <eadebd58-d79a-30b6-87aa-1c77acb2ec17@redhat.com>
+        Mon, 19 Jun 2023 14:07:58 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94E7127;
+        Mon, 19 Jun 2023 11:07:56 -0700 (PDT)
+X-GND-Sasl: kory.maincent@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1687198075;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1Tp0LI/vg6JlukmNhiGcWBsiAqUGGuvYo9ddkoGSkQ8=;
+        b=TqUC5G+oG2WZNMdW5APZhi2AEdB2iUJ6cOkSUjSv4dsXItMPY/7hLXGuFgAWL0AA9C1m6O
+        NVYkBMiafaZx/Y+BFKc69nmbridg+oN+ogOvlJpnlm5LGN44R9K5dGrHO0IHiOwWvlBluk
+        LXyHZ+AmJyrq1he8xnZV9STojd2OCZsWS0qcKZ87OOBtbY/zs6LdZQSp3BlRuFXUDBgFVi
+        elF+gMlV/6fk1ggzD34RIh3p6leN41HeT4a7bcwD22922M+9Y0EeCQBgxGHWOFePxOBdtf
+        qyhB7Et6w28JtrGPmDzhfAvIUyuKczE6x/CMI7hm+fe010hME2DwiwrroP2e8w==
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+X-GND-Sasl: kory.maincent@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7EE67E0003;
+        Mon, 19 Jun 2023 18:07:54 +0000 (UTC)
+Date:   Mon, 19 Jun 2023 20:07:53 +0200
+From:   =?UTF-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>
+Subject: Re: [PATCH 1/9] dmaengine: dw-edma: Fix the ch_count hdma callback
+Message-ID: <20230619200753.242c746d@kmaincent-XPS-13-7390>
+In-Reply-To: <20230618210709.rkdjlehyhc7lngam@mobilestation>
+References: <20230609081654.330857-1-kory.maincent@bootlin.com>
+        <20230609081654.330857-2-kory.maincent@bootlin.com>
+        <20230618210709.rkdjlehyhc7lngam@mobilestation>
+Organization: bootlin
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Jun 2023 22:42:35 +0200 Jesper Dangaard Brouer wrote:
-> > Former is better for huge pages, latter is better for IO mem
-> > (peer-to-peer DMA). I wonder if you have different use case which
-> > requires a different model :(
-> 
-> I want for the network stack SKBs (and XDP) to support different memory
-> types for the "head" frame and "data-frags". Eric have described this
-> idea before, that hardware will do header-split, and we/he can get TCP
-> data part is another page/frag, making it faster for TCP-streams, but
-> this can be used for much more.
-> 
-> My proposed use-cases involves more that TCP.  We can easily imagine
-> NVMe protocol header-split, and the data-frag could be a mem_type that
-> actually belongs to the harddisk (maybe CPU cannot even read this).  The
-> same scenario goes for GPU memory, which is for the AI use-case.  IIRC
-> then Jonathan have previously send patches for the GPU use-case.
-> 
-> I really hope we can work in this direction together,
+On Mon, 19 Jun 2023 00:07:09 +0300
+Serge Semin <fancer.lancer@gmail.com> wrote:
 
-Perfect, that's also the use case I had in mind. The huge page thing
-was just a quick thing to implement as a PoC (although useful in its
-own right, one day I'll find the time to finish it, sigh).
+> > diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> > b/drivers/dma/dw-edma/dw-hdma-v0-core.c index 00b735a0202a..de87ce6b8585
+> > 100644 --- a/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> > +++ b/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> > @@ -65,18 +65,7 @@ static void dw_hdma_v0_core_off(struct dw_edma *dw)
+> > =20
+> >  static u16 dw_hdma_v0_core_ch_count(struct dw_edma *dw, enum dw_edma_d=
+ir
+> > dir) {
+> > -	u32 num_ch =3D 0;
+> > -	int id;
+> > -
+> > -	for (id =3D 0; id < HDMA_V0_MAX_NR_CH; id++) {
+> > -		if (GET_CH_32(dw, id, dir, ch_en) & BIT(0))
+> > -			num_ch++;
+> > -	}
+> > -
+> > -	if (num_ch > HDMA_V0_MAX_NR_CH)
+> > -		num_ch =3D HDMA_V0_MAX_NR_CH;
+> > -
+> > -	return (u16)num_ch;
+> > +	return HDMA_V0_MAX_NR_CH; =20
+>=20
+> Mainly I am ok with this change. But it would be nice to have a
+> comment inlined here of why the number of channels is fixed and that
+> the platform is responsible for specifying the real number of channels
+> (it's basically what you described in the patch log).
 
-That said I couldn't convince myself that for a peer-to-peer setup we
-have enough space in struct page to store all the information we need.
-Or that we'd get a struct page at all, and not just a region of memory
-with no struct page * allocated :S
+Ok I will, thanks for your review.
 
-That'd require serious surgery on the page pool's fast paths to work
-around.
-
-I haven't dug into the details, tho. If you think we can use page pool
-as a frontend for iouring and/or p2p memory that'd be awesome!
-
-The workaround solution I had in mind would be to create a narrower API
-for just data pages. Since we'd need to sprinkle ifs anyway, pull them
-up close to the call site. Allowing to switch page pool for a
-completely different implementation, like the one Jonathan coded up for
-iouring. Basically
-
-$name_alloc_page(queue)
-{
-	if (queue->pp)
-		return page_pool_dev_alloc_pages(queue->pp);
-	else if (queue->iouring..)
-		...
-}
+K=C3=B6ry
