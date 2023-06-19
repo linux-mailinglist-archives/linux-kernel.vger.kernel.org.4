@@ -2,144 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A8B735B68
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 347C4735B65
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbjFSPpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 11:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47488 "EHLO
+        id S229997AbjFSPoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231777AbjFSPo4 (ORCPT
+        with ESMTP id S231674AbjFSPop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:44:56 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2079.outbound.protection.outlook.com [40.107.117.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EFD139
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:44:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Dl1CgY+MR3bFoi91sEzLHvymaybMxM/o0khIDuO4xIYJ52tINo2smmbjTY/sYr0TWWGoQaN9If1D+NDHYaC05OL6vhmOgU0FJOeOmSh2G2DGqRMSj9bqYJgX3t9LZiFt8nw49mqUGgkAlr5WtLcr7cG7S0mFT1xOAoerSjCLtVmL1wiLFuYspMHmdPW9MBdAXeydpcAwgVa0Zd4Hq/acvlJDoDP/427t2GvjnaORzgtc5tGGlB0xoCQpQ906YxnZuD6xdBtpRotmpyoNGgAKpSMY8MkXJIL+MfQ3p/UkNcVSKw6dFsmK1N30LrTYkcfjNLZSw3q/DAmTDFFMRcZtqw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9tCzT5ec+lIWaVP//zwec/hbklere7Xyr24Gs0Yam6k=;
- b=ZK0ebGfedRAqDGBxx6ORTFtzKm14j5OHLycj7+GKkzzCdwcwTeXMJoIDsiQxxe7jhyhkW4U4Q9PQzalAa8Lp1NIVrfHvtolvP3+eBBq/632/4Cuj85pANsQFxSUe4JLJWKgiLBh1dNXYUNC5VjK9WP+w17mziLud6k3scuxOtDRNshVhV26XEFAaYzD4kfugYaMKDgepp5v4SULpHxOJOJK5yP6rKzOUodCxyunVY+5wJsQ7EovZo0X+i8D5vjdr8O/0nyOpVppvBd/HV8BzWAtYPvQnBcr/SzNW/fh4gBTh+73IQFstYs83BfWQYQ2XEmKQXf9985cZ2z+hCmpcsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
- dkim=pass header.d=oppo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9tCzT5ec+lIWaVP//zwec/hbklere7Xyr24Gs0Yam6k=;
- b=o5M0VP4RNvUkq+Ec9QlUM6I8CCTiK0vvnRM6wUDuNxNT85k/JIaIc6XePzmA5kwUo10vNSKhLu1bXwB3/ciHysV7YfBxnwM5AeRLa9DKb3HNYsLFULjxjkWo7M9jno8xIf0igt2R+iOUyQcD6CAQFtNj4Yz4bZSSvRSssCCQUrc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oppo.com;
-Received: from TY2PR02MB4479.apcprd02.prod.outlook.com (2603:1096:404:800e::7)
- by SI2PR02MB5684.apcprd02.prod.outlook.com (2603:1096:4:1af::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.21; Mon, 19 Jun
- 2023 15:44:51 +0000
-Received: from TY2PR02MB4479.apcprd02.prod.outlook.com
- ([fe80::bc4a:4d7a:4c73:76eb]) by TY2PR02MB4479.apcprd02.prod.outlook.com
- ([fe80::bc4a:4d7a:4c73:76eb%4]) with mapi id 15.20.6521.020; Mon, 19 Jun 2023
- 15:44:50 +0000
-From:   Yunlei He <heyunlei@oppo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yunlei He <heyunlei@oppo.com>
-Subject: [f2fs-dev][PATCH v2] f2fs: count mmap write io more accurately
-Date:   Mon, 19 Jun 2023 23:44:32 +0800
-Message-Id: <20230619154432.2205654-1-heyunlei@oppo.com>
-X-Mailer: git-send-email 2.40.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI1PR02CA0055.apcprd02.prod.outlook.com
- (2603:1096:4:1f5::16) To TY2PR02MB4479.apcprd02.prod.outlook.com
- (2603:1096:404:800e::7)
+        Mon, 19 Jun 2023 11:44:45 -0400
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42FA137;
+        Mon, 19 Jun 2023 08:44:41 -0700 (PDT)
+Received: from francesco-nb.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+        by mail11.truemail.it (Postfix) with ESMTPA id 7844B206F2;
+        Mon, 19 Jun 2023 17:44:39 +0200 (CEST)
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Geet Modi <geet.modi@ti.com>,
+        Praneeth Bajjuri <praneeth@ti.com>, netdev@vger.kernel.org
+Subject: [PATCH net v1] Revert "net: phy: dp83867: perform soft reset and retain established link"
+Date:   Mon, 19 Jun 2023 17:44:35 +0200
+Message-Id: <20230619154435.355485-1-francesco@dolcini.it>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TY2PR02MB4479:EE_|SI2PR02MB5684:EE_
-X-MS-Office365-Filtering-Correlation-Id: 456806a2-8035-4ac6-2cae-08db70dc1de0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: z9ZACDLrGA/Ny6mQjRLNEG0W/F2BKV1LUa4KGg35r2ENnKMNZJVoyOcahdZ3z4tB6uIjLo2OhWSwdOQIhWyuVlAJDA0ZgP6hRGHWLQQKSmFateLiUj4lV18YD6qp8cNKJGEoj1t38Lv4NAH/yxutNC/OK/zlcOl5jCms/0ti4qhmDRg5mhYmMu9CNWyIingNBTLdkf0WekfMIb13hpykopC0tGqzArNRgOY7UxHSGsLx3nT5ZiUAHeUgDwqXt9W/DhYQXvLWqk9Qnz9mh+bRvzczErPqiVW8R+5BrVA7sAwKpc5m+0q8XPF1hss/qbYqe8RcAWzn3mHg3XNcbrdZ8w+xFrSRjb9EOaPQ6q3izkjndRWF2ztzJcwMLuKRNVnfJ/qpSL06ozcdMWOJyoxGVByjTHzctUVSZu6mTsscfL5RgnE1sFPIPb5sucl1u12wWabWZCvAx3P9p2G2E4a7uIt9zrjMqhRCkccyCsFL142QlfEqS2H79zZ8TxHlhMHUnPRNsjd5ArnvuDVYcrtkUIRDi4wrr/FLIoxgbey1618dSX0T/tAbPR2aWz5NIhHizkJlxUkCmAd4YV2QY1DHb0tQjicEy5V8IDG61p/XgGtiSgmj+jj9ruF1jmu/mYLZ
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR02MB4479.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(39860400002)(376002)(346002)(396003)(451199021)(4744005)(2906002)(5660300002)(41300700001)(8936002)(8676002)(86362001)(36756003)(6512007)(26005)(1076003)(6506007)(478600001)(107886003)(186003)(6486002)(52116002)(6666004)(66946007)(4326008)(66556008)(66476007)(316002)(38100700002)(38350700002)(2616005)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0RvtKxkgglXnwDerk4t659lElg6J1bA667gd85BTkmGoryEYu2aClrjAPLn+?=
- =?us-ascii?Q?rSAGuf6tpnhb1+Ijl9IidJGtqBTjwm4xSOsx+WrW/0UxikXJYX1KLaCSP3lF?=
- =?us-ascii?Q?owRRo0LhV+p3Vgwwn6ydZh72kU+2ZFl0vtQvo1m/mz4VQHIp5I8krBvfU1y/?=
- =?us-ascii?Q?wmxfoozHaLa+g52y9cg5Pm/L3dd4vH2Y+5lO5XtT4b3qZC6k2O5Yz9kaLApy?=
- =?us-ascii?Q?21xe4q/QBbkmb89rKYKM9N1wkD6FCdwSIPYJdex+ygbDtL9xVimmA1Nxcfxn?=
- =?us-ascii?Q?P1t99SACZ1U4vsex2aKC1xoYkJ6TjOxLkerUZ+R75u/CqtUEKUdfHtSv7iac?=
- =?us-ascii?Q?3LeBp0MFjzzN2i/ISDtKw0IoEjX+o9uYF5pUdiScnLFgo6y6108ECI0NqZGP?=
- =?us-ascii?Q?qiP8PQuaILrZtLEYt4Exkq/G3d8Ro5bdJOL8+HoWUtp30dmFL4GMgKwf7CHJ?=
- =?us-ascii?Q?vwJtJBD40bUFgCPxnWvNn2untDr58zLwX5mLtjJQleqe5nZPhiRAQfD5O/G/?=
- =?us-ascii?Q?ocuULfuKf0wV60I/Cs3SCf/hrBrDvh5VaydWtN4ie91NeFHXLP8zyxmmnf2L?=
- =?us-ascii?Q?5SW710RgkFyha6y1DQPAc4fE6GTbbiIKd+ziWtnUc/SqUE2B68bZxKjxl1LV?=
- =?us-ascii?Q?DTDVhMRTpAlojAW6kDXN5SzQZgoIW5x53p5jhFMto/DtCVXPd/5JlHMz9mSH?=
- =?us-ascii?Q?GduPXOB09PMyB7u9TJjDYIA+m0TN/V9Mheidv1EVtZNofeEYQLZ+VNmqEt34?=
- =?us-ascii?Q?+S0RiL6uHN07Td9lY58F8xN1OaxOat+Enqw3oUeV01+d7WNgPsjpkZRfTE+N?=
- =?us-ascii?Q?NZUPVWSVXvkHHXXEmmf2575uph9aW6PhIhvxy1N4QC7zF3s9gweAL1C/51pZ?=
- =?us-ascii?Q?Js58jwZxom4Ll7FhUc5Co2NJtFwS3TlxV670f7qVKF8e/JGOdZEqK+iJYqRD?=
- =?us-ascii?Q?lSyoHSpl4K/XWrWtUNE9AMwajtt4XJ/GsrbTojQQbytB/mmotzUIO2FPsfis?=
- =?us-ascii?Q?g1C3nnYCWARrNj8hXxXi/gg5w+3ljFarMo4fawN/hYx9gOqKY3UUAB32bBNJ?=
- =?us-ascii?Q?UbQ6Tugws1pnG//OWy6UlchWmmMprVlydu9WaojCffolsmJJDfVCbn4fNXRs?=
- =?us-ascii?Q?LSfaThdKwbs7nojwikESCWwiOXF6h/IvPVK/NwvsdxOhf0jrVw+0MaKeUMed?=
- =?us-ascii?Q?aS4s/aFxBOrfchmeqcoTGYQb0e2qSkGZIKP3QJjdZRjC50fhkRQUT9NZwBVH?=
- =?us-ascii?Q?GmjBh+Ivl1xNDsgCe2TTC/YByfBVemrqfepRiUyUlMY38hHEXafx6DKLm1cA?=
- =?us-ascii?Q?nACH//5kcCZMZpS7koR19DtjVGTJJDCFFXwmItJMnYZf70PDs9o8JCNLWWqo?=
- =?us-ascii?Q?/tqgUxbFQBW4jdHnHy8W3+zFBguIQ5nVN3Cl2Iqh7Hdyq7t97jOh7bYdOtQX?=
- =?us-ascii?Q?d5mnh6l6cYwpm0LIsGLyyBjDtSlTAuA4VfxrXuooBAEExquwosIKYx5Dphl6?=
- =?us-ascii?Q?ZhYqolHp+uITKjbxpf5cVH3TfbXGyGt7B8OlZrMzdYtmFcwOuLs0kncuHmg2?=
- =?us-ascii?Q?Hcvn1z62OUNq5abylcoUCeKbD+Ainxzjcr8xa89T?=
-X-OriginatorOrg: oppo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 456806a2-8035-4ac6-2cae-08db70dc1de0
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR02MB4479.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 15:44:50.1887
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SgRVG6REoPJa+9TnfpDqBeDHyjZJk9WU/nKhIxblxjVROdSTqmYe8A7SPiRu5n237ewvCJF5XyTkRQxy6KFWKQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR02MB5684
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch count mmap write io more accurately.
+From: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-Signed-off-by: Yunlei He <heyunlei@oppo.com>
+This reverts commit da9ef50f545f86ffe6ff786174d26500c4db737a.
+
+This fixes a regression in which the link would come up, but no
+communication was possible.
+
+The reverted commit was also removing a comment about
+DP83867_PHYCR_FORCE_LINK_GOOD, this is not added back in this commits
+since it seems that this is unrelated to the original code change.
+
+Cc: Praneeth Bajjuri <praneeth@ti.com>
+Closes: https://lore.kernel.org/all/ZGuDJos8D7N0J6Z2@francesco-nb.int.toradex.com/
+Fixes: da9ef50f545f ("net: phy: dp83867: perform soft reset and retain established link")
+Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 ---
- fs/f2fs/file.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/net/phy/dp83867.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index f05209a62370..cb42d8464ad9 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -150,11 +150,13 @@ static vm_fault_t f2fs_vm_page_mkwrite(struct vm_fault *vmf)
- 	}
- 	set_page_dirty(page);
+diff --git a/drivers/net/phy/dp83867.c b/drivers/net/phy/dp83867.c
+index 76f5a2402fb0..e397e7d642d9 100644
+--- a/drivers/net/phy/dp83867.c
++++ b/drivers/net/phy/dp83867.c
+@@ -936,7 +936,7 @@ static int dp83867_phy_reset(struct phy_device *phydev)
+ {
+ 	int err;
  
--	f2fs_update_iostat(sbi, inode, APP_MAPPED_IO, F2FS_BLKSIZE);
--	f2fs_update_time(sbi, REQ_TIME);
--
--	trace_f2fs_vm_page_mkwrite(page, DATA);
- out_sem:
-+	if (!err) {
-+		f2fs_update_iostat(sbi, inode, APP_MAPPED_IO, F2FS_BLKSIZE);
-+		f2fs_update_time(sbi, REQ_TIME);
-+
-+		trace_f2fs_vm_page_mkwrite(page, DATA);
-+	}
- 	filemap_invalidate_unlock_shared(inode->i_mapping);
+-	err = phy_write(phydev, DP83867_CTRL, DP83867_SW_RESTART);
++	err = phy_write(phydev, DP83867_CTRL, DP83867_SW_RESET);
+ 	if (err < 0)
+ 		return err;
  
- 	sb_end_pagefault(inode->i_sb);
 -- 
-2.40.1
+2.25.1
 
