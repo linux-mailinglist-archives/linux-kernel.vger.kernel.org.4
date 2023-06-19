@@ -2,138 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF9E4735B93
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B132735B90
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbjFSPxa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 11:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52692 "EHLO
+        id S232036AbjFSPxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbjFSPx1 (ORCPT
+        with ESMTP id S229629AbjFSPxE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:53:27 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FA3186;
-        Mon, 19 Jun 2023 08:53:24 -0700 (PDT)
-X-QQ-mid: bizesmtp85t1687189991tj28c6n8
-Received: from linux-lab-host.localdomain ( [116.30.126.60])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 19 Jun 2023 23:53:09 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: IcCSTr/hHjPXBzWN/U8TqAy26Icbc9MCR5PRDeanWzS97OqZQp6D8x32yCRXd
-        z7v3lJkDjh8Bnduvjgxp6BUtmiTBWR4NZ+ZdQiVjrii5Yv4zug2TpFN1ywarWMuQiS68CRm
-        oI9rETIcMUDABclQFL803tjbxYaTUC8P5gnCkG/xKhjTdifzmw9KjwKDZj9R0x5vjatl5xW
-        n44oyKgmuqburMW/jSxFr/Lm/YCcDTSSCHz/KPdiklbNFlPmEQje0supEPDaWXkOp098Hrq
-        PWsFjKpwymtqmhg2ZEPFcOKRiDvAB1mdcheA4/IXre18GQrwZVLwISWCRUdKb7ACqM87hMx
-        dGz9eICsxNFzymXN/Z7LPoSpK5ykIi/QDivgqdAd+0g6VfRJ7M62nmIGdf8MacIUA3vKknU
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 16052288436696807788
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     david.laight@aculab.com, arnd@arndb.de, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, thomas@t-8ch.de
-Subject: [PATCH v4 08/10] selftests/nolibc: add EXPECT_PTREQ, EXPECT_PTRNE and EXPECT_PTRER
-Date:   Mon, 19 Jun 2023 23:52:31 +0800
-Message-Id: <12bd89048c33436a72d2a1b34ea79c60ac3643d5.1687187451.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687187451.git.falcon@tinylab.org>
-References: <cover.1687187451.git.falcon@tinylab.org>
+        Mon, 19 Jun 2023 11:53:04 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADEC186;
+        Mon, 19 Jun 2023 08:53:03 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51a5eec783cso1104639a12.3;
+        Mon, 19 Jun 2023 08:53:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687189982; x=1689781982;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vOPr1z9vlSr5spRntqrxIkfrh9a7FoSLQdUEXV07vyE=;
+        b=CGp4cmw96jKKbtcMkKQb6HKOiaUVBetI5OoP1lV3nt1XlXsRpOJ6aJR55iRZe42MOH
+         d3XkWQJz1eeZ9MVZiFR/jQxtdvY8ABkaxxAys3Woxt40xPjmV9ojkFiY3z7F1J09p15S
+         m6EqSAneZHzENs96TSZ31iPYvgU8pUz2XSv9vU9n8JeJTxYHUuATAdfE0gSrKVcxW9ZS
+         pYBDT2i48SdHC2zdt1iNODZaNRB8qpUnVh81PcfDfAl6xdESs/b9cqaZKEpJMDCF3S/z
+         fTaZSyRl/FDhpw8vTCWBzj94zscL5RulsrIxYuwFv+9etWxuxsfAO8VPVSgh6lnI0ALn
+         NFxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687189982; x=1689781982;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vOPr1z9vlSr5spRntqrxIkfrh9a7FoSLQdUEXV07vyE=;
+        b=BY7Fgsu1lytziaJYjdNJThhShyVfLuibDUozjBZ+UqXvjOQfNQ0mqafisw7KleP+hy
+         pCfXxfYTYIdxSbLJYTFkUID4osN+8+fI2CMNUzRoNUZeq+BtLd4ifqgjPq5JbE9KirxO
+         z4WZpKkdMR7jJpTHI0yFu+pzUf8JS/PEy+JlojvKSDRtQTsn56uHGoxqxcA6cony4XYR
+         wbdP2Js4wOBGITtdhxsPZh0u/JF5UsX1yYO/Jq1JxZQgQewtlLZWz1dGmmIqP6M+T2Rh
+         Ju4wfbpRX5EzDcY49j9D33XL3J0yj/1cHSfNI2hICM5mjwjvhWPduDIT/bthkIi1UBbv
+         wRqQ==
+X-Gm-Message-State: AC+VfDyuM54q7TT9pmh2waf8MSkTm5eTJy8L6Ql8sA1nqUGfTahQHkR2
+        2JWh4G+9FIPcKTOC1HjlSEuu+Te2lrmrZl3OugQaU+0STtk=
+X-Google-Smtp-Source: ACHHUZ5qPy3Y95u+AZJvki/P+LidrnXzCwctg81KDPqToTjNO1sequUNWrs93Asp3WpYdG5kwnW4Ui0NqPhwAMNzZoE=
+X-Received: by 2002:a17:906:da84:b0:988:f307:aea7 with SMTP id
+ xh4-20020a170906da8400b00988f307aea7mr812098ejb.7.1687189981732; Mon, 19 Jun
+ 2023 08:53:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230619153732.46258-1-clamor95@gmail.com> <30c50635-ff42-3a85-a419-673ca6d0422e@linaro.org>
+In-Reply-To: <30c50635-ff42-3a85-a419-673ca6d0422e@linaro.org>
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+Date:   Mon, 19 Jun 2023 18:52:50 +0300
+Message-ID: <CAPVz0n1fo7EjAC-UUVawQoeP4AhwRWAg1MZyremNDHFdta+Reg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] GPIO-based hotplug i2c bus
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andi Shyti <andi.shyti@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The syscalls like sbrk() and mmap() return pointers, to test them, more
-pointer compare test macros are required, add them:
+=D0=BF=D0=BD, 19 =D1=87=D0=B5=D1=80=D0=B2. 2023=E2=80=AF=D1=80. =D0=BE 18:4=
+9 Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> On 19/06/2023 17:37, Svyatoslav Ryhel wrote:
+> > ASUS Transformers require this driver for proper work with their dock.
+> > Dock is controlled by EC and its presence is detected by a GPIO.
+> >
+> > ---
+> > Changes in v2:
+> > - adjusted documentation
+>
+> This is too generic. Everything can be adjustment. Be precise what you
+> did here. What changed?
+>
 
-- EXPECT_PTREQ() expects two equal pointers.
-- EXPECT_PTRNE() expects two non-equal pointers.
-- EXPECT_PTRER() expects failure with a specified errno.
-- EXPECT_PTRER2() expects failure with two specified errnos.
+Everything that you asked for.
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 58 ++++++++++++++++++++
- 1 file changed, 58 insertions(+)
-
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 486334981e60..34af802dadfd 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -361,6 +361,64 @@ static int expect_ptrnz(const void *expr, int llen)
- 	return ret;
- }
- 
-+#define EXPECT_PTREQ(cond, expr, cmp)				\
-+	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_ptreq(expr, llen, cmp); } while (0)
-+
-+static int expect_ptreq(const void *expr, int llen, const void *cmp)
-+{
-+	int ret = 0;
-+
-+	llen += printf(" = <%p> ", expr);
-+	if (expr != cmp) {
-+		ret = 1;
-+		llen += pad_spc(llen, 64, "[FAIL]\n");
-+	} else {
-+		llen += pad_spc(llen, 64, " [OK]\n");
-+	}
-+	return ret;
-+}
-+
-+#define EXPECT_PTRNE(cond, expr, cmp)				\
-+	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_ptrne(expr, llen, cmp); } while (0)
-+
-+static int expect_ptrne(const void *expr, int llen, const void *cmp)
-+{
-+	int ret = 0;
-+
-+	llen += printf(" = <%p> ", expr);
-+	if (expr == cmp) {
-+		ret = 1;
-+		llen += pad_spc(llen, 64, "[FAIL]\n");
-+	} else {
-+		llen += pad_spc(llen, 64, " [OK]\n");
-+	}
-+	return ret;
-+}
-+
-+#define EXPECT_PTRER2(cond, expr, expret, experr1, experr2)		\
-+	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_ptrerr2(expr, expret, experr1, experr2, llen); } while (0)
-+
-+#define EXPECT_PTRER(cond, expr, expret, experr)			\
-+	EXPECT_PTRER2(cond, expr, expret, experr, 0)
-+
-+static int expect_ptrerr2(const void *expr, const void *expret, int experr1, int experr2, int llen)
-+{
-+	int ret = 0;
-+	int _errno = errno;
-+
-+	llen += printf(" = <%p> %s ", expr, errorname(_errno));
-+	if (expr != expret || (_errno != experr1 && _errno != experr2)) {
-+		ret = 1;
-+		if (experr2 == 0)
-+			llen += printf(" != (<%p> %s) ", expret, errorname(experr1));
-+		else
-+			llen += printf(" != (<%p> %s %s) ", expret, errorname(experr1), errorname(experr2));
-+		llen += pad_spc(llen, 64, "[FAIL]\n");
-+	} else {
-+		llen += pad_spc(llen, 64, " [OK]\n");
-+	}
-+	return ret;
-+}
- 
- #define EXPECT_STRZR(cond, expr)				\
- 	do { if (!cond) pad_spc(llen, 64, "[SKIPPED]\n"); else ret += expect_strzr(expr, llen); } while (0)
--- 
-2.25.1
-
+> Best regards,
+> Krzysztof
+>
