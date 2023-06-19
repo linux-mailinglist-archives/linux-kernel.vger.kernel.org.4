@@ -2,731 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A600735B6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:45:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A8B735B68
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231691AbjFSPpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 11:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
+        id S232034AbjFSPpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231845AbjFSPpS (ORCPT
+        with ESMTP id S231777AbjFSPo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:45:18 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C173E60;
-        Mon, 19 Jun 2023 08:45:07 -0700 (PDT)
-X-QQ-mid: bizesmtp66t1687189493tyi5nzgp
-Received: from linux-lab-host.localdomain ( [116.30.126.60])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Mon, 19 Jun 2023 23:44:52 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: 5q30pvLz2idsdmc9f9pGnrjy20UAEYph0v6umJ4a/uXyjNtPiHSgH+UYiKC0d
-        CP/677LjPaJ3QbXCilHSkpklfY0Wy/gAYGuGYjC1qHGzQN24elRKaU7shaAKpQ5tKLNIafU
-        zRsMH2nY+2IuRyg/P9DypoW91LN2fhPuz/Eax6yHRCO0vwcOyH5rHp60E/QpGQRmrQ1ztti
-        kapizPoW9zGahmrRqe83WA2vMZcnwW408MUdOb1mQ9wliOm78ijZhUM6DUIjqWXJ48Xh1F6
-        NMwnLEJA5u2zeCquafQvKOxG2RZRNla/gELXwfERmi+aVW4AEcqW2NZtESqY/G14xL6RHxk
-        2PkdqueuIIjKJlFbQuc6QF4+90c7CHGgeJDcXIZfhq5nvzCe25/1vRstXAt+g==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 5705770642168147759
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     david.laight@aculab.com, arnd@arndb.de, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, thomas@t-8ch.de,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH v4 03/10] tools/nolibc: sys.h: apply __sysret() helper
-Date:   Mon, 19 Jun 2023 23:44:00 +0800
-Message-Id: <251570bef4f2b707e53996702321ac7425e3ee64.1687187451.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687187451.git.falcon@tinylab.org>
-References: <cover.1687187451.git.falcon@tinylab.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Mon, 19 Jun 2023 11:44:56 -0400
+Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2079.outbound.protection.outlook.com [40.107.117.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EFD139
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:44:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Dl1CgY+MR3bFoi91sEzLHvymaybMxM/o0khIDuO4xIYJ52tINo2smmbjTY/sYr0TWWGoQaN9If1D+NDHYaC05OL6vhmOgU0FJOeOmSh2G2DGqRMSj9bqYJgX3t9LZiFt8nw49mqUGgkAlr5WtLcr7cG7S0mFT1xOAoerSjCLtVmL1wiLFuYspMHmdPW9MBdAXeydpcAwgVa0Zd4Hq/acvlJDoDP/427t2GvjnaORzgtc5tGGlB0xoCQpQ906YxnZuD6xdBtpRotmpyoNGgAKpSMY8MkXJIL+MfQ3p/UkNcVSKw6dFsmK1N30LrTYkcfjNLZSw3q/DAmTDFFMRcZtqw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9tCzT5ec+lIWaVP//zwec/hbklere7Xyr24Gs0Yam6k=;
+ b=ZK0ebGfedRAqDGBxx6ORTFtzKm14j5OHLycj7+GKkzzCdwcwTeXMJoIDsiQxxe7jhyhkW4U4Q9PQzalAa8Lp1NIVrfHvtolvP3+eBBq/632/4Cuj85pANsQFxSUe4JLJWKgiLBh1dNXYUNC5VjK9WP+w17mziLud6k3scuxOtDRNshVhV26XEFAaYzD4kfugYaMKDgepp5v4SULpHxOJOJK5yP6rKzOUodCxyunVY+5wJsQ7EovZo0X+i8D5vjdr8O/0nyOpVppvBd/HV8BzWAtYPvQnBcr/SzNW/fh4gBTh+73IQFstYs83BfWQYQ2XEmKQXf9985cZ2z+hCmpcsA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
+ dkim=pass header.d=oppo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9tCzT5ec+lIWaVP//zwec/hbklere7Xyr24Gs0Yam6k=;
+ b=o5M0VP4RNvUkq+Ec9QlUM6I8CCTiK0vvnRM6wUDuNxNT85k/JIaIc6XePzmA5kwUo10vNSKhLu1bXwB3/ciHysV7YfBxnwM5AeRLa9DKb3HNYsLFULjxjkWo7M9jno8xIf0igt2R+iOUyQcD6CAQFtNj4Yz4bZSSvRSssCCQUrc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oppo.com;
+Received: from TY2PR02MB4479.apcprd02.prod.outlook.com (2603:1096:404:800e::7)
+ by SI2PR02MB5684.apcprd02.prod.outlook.com (2603:1096:4:1af::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.21; Mon, 19 Jun
+ 2023 15:44:51 +0000
+Received: from TY2PR02MB4479.apcprd02.prod.outlook.com
+ ([fe80::bc4a:4d7a:4c73:76eb]) by TY2PR02MB4479.apcprd02.prod.outlook.com
+ ([fe80::bc4a:4d7a:4c73:76eb%4]) with mapi id 15.20.6521.020; Mon, 19 Jun 2023
+ 15:44:50 +0000
+From:   Yunlei He <heyunlei@oppo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yunlei He <heyunlei@oppo.com>
+Subject: [f2fs-dev][PATCH v2] f2fs: count mmap write io more accurately
+Date:   Mon, 19 Jun 2023 23:44:32 +0800
+Message-Id: <20230619154432.2205654-1-heyunlei@oppo.com>
+X-Mailer: git-send-email 2.40.1
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0055.apcprd02.prod.outlook.com
+ (2603:1096:4:1f5::16) To TY2PR02MB4479.apcprd02.prod.outlook.com
+ (2603:1096:404:800e::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TY2PR02MB4479:EE_|SI2PR02MB5684:EE_
+X-MS-Office365-Filtering-Correlation-Id: 456806a2-8035-4ac6-2cae-08db70dc1de0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: z9ZACDLrGA/Ny6mQjRLNEG0W/F2BKV1LUa4KGg35r2ENnKMNZJVoyOcahdZ3z4tB6uIjLo2OhWSwdOQIhWyuVlAJDA0ZgP6hRGHWLQQKSmFateLiUj4lV18YD6qp8cNKJGEoj1t38Lv4NAH/yxutNC/OK/zlcOl5jCms/0ti4qhmDRg5mhYmMu9CNWyIingNBTLdkf0WekfMIb13hpykopC0tGqzArNRgOY7UxHSGsLx3nT5ZiUAHeUgDwqXt9W/DhYQXvLWqk9Qnz9mh+bRvzczErPqiVW8R+5BrVA7sAwKpc5m+0q8XPF1hss/qbYqe8RcAWzn3mHg3XNcbrdZ8w+xFrSRjb9EOaPQ6q3izkjndRWF2ztzJcwMLuKRNVnfJ/qpSL06ozcdMWOJyoxGVByjTHzctUVSZu6mTsscfL5RgnE1sFPIPb5sucl1u12wWabWZCvAx3P9p2G2E4a7uIt9zrjMqhRCkccyCsFL142QlfEqS2H79zZ8TxHlhMHUnPRNsjd5ArnvuDVYcrtkUIRDi4wrr/FLIoxgbey1618dSX0T/tAbPR2aWz5NIhHizkJlxUkCmAd4YV2QY1DHb0tQjicEy5V8IDG61p/XgGtiSgmj+jj9ruF1jmu/mYLZ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR02MB4479.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(39860400002)(376002)(346002)(396003)(451199021)(4744005)(2906002)(5660300002)(41300700001)(8936002)(8676002)(86362001)(36756003)(6512007)(26005)(1076003)(6506007)(478600001)(107886003)(186003)(6486002)(52116002)(6666004)(66946007)(4326008)(66556008)(66476007)(316002)(38100700002)(38350700002)(2616005)(83380400001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0RvtKxkgglXnwDerk4t659lElg6J1bA667gd85BTkmGoryEYu2aClrjAPLn+?=
+ =?us-ascii?Q?rSAGuf6tpnhb1+Ijl9IidJGtqBTjwm4xSOsx+WrW/0UxikXJYX1KLaCSP3lF?=
+ =?us-ascii?Q?owRRo0LhV+p3Vgwwn6ydZh72kU+2ZFl0vtQvo1m/mz4VQHIp5I8krBvfU1y/?=
+ =?us-ascii?Q?wmxfoozHaLa+g52y9cg5Pm/L3dd4vH2Y+5lO5XtT4b3qZC6k2O5Yz9kaLApy?=
+ =?us-ascii?Q?21xe4q/QBbkmb89rKYKM9N1wkD6FCdwSIPYJdex+ygbDtL9xVimmA1Nxcfxn?=
+ =?us-ascii?Q?P1t99SACZ1U4vsex2aKC1xoYkJ6TjOxLkerUZ+R75u/CqtUEKUdfHtSv7iac?=
+ =?us-ascii?Q?3LeBp0MFjzzN2i/ISDtKw0IoEjX+o9uYF5pUdiScnLFgo6y6108ECI0NqZGP?=
+ =?us-ascii?Q?qiP8PQuaILrZtLEYt4Exkq/G3d8Ro5bdJOL8+HoWUtp30dmFL4GMgKwf7CHJ?=
+ =?us-ascii?Q?vwJtJBD40bUFgCPxnWvNn2untDr58zLwX5mLtjJQleqe5nZPhiRAQfD5O/G/?=
+ =?us-ascii?Q?ocuULfuKf0wV60I/Cs3SCf/hrBrDvh5VaydWtN4ie91NeFHXLP8zyxmmnf2L?=
+ =?us-ascii?Q?5SW710RgkFyha6y1DQPAc4fE6GTbbiIKd+ziWtnUc/SqUE2B68bZxKjxl1LV?=
+ =?us-ascii?Q?DTDVhMRTpAlojAW6kDXN5SzQZgoIW5x53p5jhFMto/DtCVXPd/5JlHMz9mSH?=
+ =?us-ascii?Q?GduPXOB09PMyB7u9TJjDYIA+m0TN/V9Mheidv1EVtZNofeEYQLZ+VNmqEt34?=
+ =?us-ascii?Q?+S0RiL6uHN07Td9lY58F8xN1OaxOat+Enqw3oUeV01+d7WNgPsjpkZRfTE+N?=
+ =?us-ascii?Q?NZUPVWSVXvkHHXXEmmf2575uph9aW6PhIhvxy1N4QC7zF3s9gweAL1C/51pZ?=
+ =?us-ascii?Q?Js58jwZxom4Ll7FhUc5Co2NJtFwS3TlxV670f7qVKF8e/JGOdZEqK+iJYqRD?=
+ =?us-ascii?Q?lSyoHSpl4K/XWrWtUNE9AMwajtt4XJ/GsrbTojQQbytB/mmotzUIO2FPsfis?=
+ =?us-ascii?Q?g1C3nnYCWARrNj8hXxXi/gg5w+3ljFarMo4fawN/hYx9gOqKY3UUAB32bBNJ?=
+ =?us-ascii?Q?UbQ6Tugws1pnG//OWy6UlchWmmMprVlydu9WaojCffolsmJJDfVCbn4fNXRs?=
+ =?us-ascii?Q?LSfaThdKwbs7nojwikESCWwiOXF6h/IvPVK/NwvsdxOhf0jrVw+0MaKeUMed?=
+ =?us-ascii?Q?aS4s/aFxBOrfchmeqcoTGYQb0e2qSkGZIKP3QJjdZRjC50fhkRQUT9NZwBVH?=
+ =?us-ascii?Q?GmjBh+Ivl1xNDsgCe2TTC/YByfBVemrqfepRiUyUlMY38hHEXafx6DKLm1cA?=
+ =?us-ascii?Q?nACH//5kcCZMZpS7koR19DtjVGTJJDCFFXwmItJMnYZf70PDs9o8JCNLWWqo?=
+ =?us-ascii?Q?/tqgUxbFQBW4jdHnHy8W3+zFBguIQ5nVN3Cl2Iqh7Hdyq7t97jOh7bYdOtQX?=
+ =?us-ascii?Q?d5mnh6l6cYwpm0LIsGLyyBjDtSlTAuA4VfxrXuooBAEExquwosIKYx5Dphl6?=
+ =?us-ascii?Q?ZhYqolHp+uITKjbxpf5cVH3TfbXGyGt7B8OlZrMzdYtmFcwOuLs0kncuHmg2?=
+ =?us-ascii?Q?Hcvn1z62OUNq5abylcoUCeKbD+Ainxzjcr8xa89T?=
+X-OriginatorOrg: oppo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 456806a2-8035-4ac6-2cae-08db70dc1de0
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR02MB4479.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Jun 2023 15:44:50.1887
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SgRVG6REoPJa+9TnfpDqBeDHyjZJk9WU/nKhIxblxjVROdSTqmYe8A7SPiRu5n237ewvCJF5XyTkRQxy6KFWKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR02MB5684
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use __sysret() to shrink most of the library routines to oneline code.
+This patch count mmap write io more accurately.
 
-Removed 266 lines of duplicated code.
-
-Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+Signed-off-by: Yunlei He <heyunlei@oppo.com>
 ---
- tools/include/nolibc/sys.h | 354 +++++--------------------------------
- 1 file changed, 44 insertions(+), 310 deletions(-)
+ fs/f2fs/file.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
-index 150777207468..4fbefe5adf93 100644
---- a/tools/include/nolibc/sys.h
-+++ b/tools/include/nolibc/sys.h
-@@ -76,13 +76,7 @@ void *sys_brk(void *addr)
- static __attribute__((unused))
- int brk(void *addr)
- {
--	void *ret = sys_brk(addr);
--
--	if (!ret) {
--		SET_ERRNO(ENOMEM);
--		return -1;
--	}
--	return 0;
-+	return __sysret(sys_brk(addr) ? 0 : -ENOMEM);
- }
- 
- static __attribute__((unused))
-@@ -112,13 +106,7 @@ int sys_chdir(const char *path)
- static __attribute__((unused))
- int chdir(const char *path)
- {
--	int ret = sys_chdir(path);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_chdir(path));
- }
- 
- 
-@@ -141,13 +129,7 @@ int sys_chmod(const char *path, mode_t mode)
- static __attribute__((unused))
- int chmod(const char *path, mode_t mode)
- {
--	int ret = sys_chmod(path, mode);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_chmod(path, mode));
- }
- 
- 
-@@ -170,13 +152,7 @@ int sys_chown(const char *path, uid_t owner, gid_t group)
- static __attribute__((unused))
- int chown(const char *path, uid_t owner, gid_t group)
- {
--	int ret = sys_chown(path, owner, group);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_chown(path, owner, group));
- }
- 
- 
-@@ -193,13 +169,7 @@ int sys_chroot(const char *path)
- static __attribute__((unused))
- int chroot(const char *path)
- {
--	int ret = sys_chroot(path);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_chroot(path));
- }
- 
- 
-@@ -216,13 +186,7 @@ int sys_close(int fd)
- static __attribute__((unused))
- int close(int fd)
- {
--	int ret = sys_close(fd);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_close(fd));
- }
- 
- 
-@@ -239,13 +203,7 @@ int sys_dup(int fd)
- static __attribute__((unused))
- int dup(int fd)
- {
--	int ret = sys_dup(fd);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_dup(fd));
- }
- 
- 
-@@ -268,13 +226,7 @@ int sys_dup2(int old, int new)
- static __attribute__((unused))
- int dup2(int old, int new)
- {
--	int ret = sys_dup2(old, new);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_dup2(old, new));
- }
- 
- 
-@@ -292,13 +244,7 @@ int sys_dup3(int old, int new, int flags)
- static __attribute__((unused))
- int dup3(int old, int new, int flags)
- {
--	int ret = sys_dup3(old, new, flags);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_dup3(old, new, flags));
- }
- #endif
- 
-@@ -316,13 +262,7 @@ int sys_execve(const char *filename, char *const argv[], char *const envp[])
- static __attribute__((unused))
- int execve(const char *filename, char *const argv[], char *const envp[])
- {
--	int ret = sys_execve(filename, argv, envp);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_execve(filename, argv, envp));
- }
- 
- 
-@@ -369,13 +309,7 @@ pid_t sys_fork(void)
- static __attribute__((unused))
- pid_t fork(void)
- {
--	pid_t ret = sys_fork();
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_fork());
- }
- 
- 
-@@ -392,13 +326,7 @@ int sys_fsync(int fd)
- static __attribute__((unused))
- int fsync(int fd)
- {
--	int ret = sys_fsync(fd);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_fsync(fd));
- }
- 
- 
-@@ -415,13 +343,7 @@ int sys_getdents64(int fd, struct linux_dirent64 *dirp, int count)
- static __attribute__((unused))
- int getdents64(int fd, struct linux_dirent64 *dirp, int count)
- {
--	int ret = sys_getdents64(fd, dirp, count);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_getdents64(fd, dirp, count));
- }
- 
- 
-@@ -459,13 +381,7 @@ pid_t sys_getpgid(pid_t pid)
- static __attribute__((unused))
- pid_t getpgid(pid_t pid)
- {
--	pid_t ret = sys_getpgid(pid);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_getpgid(pid));
- }
- 
- 
-@@ -545,15 +461,7 @@ static unsigned long getauxval(unsigned long key);
- static __attribute__((unused))
- long getpagesize(void)
- {
--	long ret;
--
--	ret = getauxval(AT_PAGESZ);
--	if (!ret) {
--		SET_ERRNO(ENOENT);
--		return -1;
--	}
--
--	return ret;
-+	return __sysret(getauxval(AT_PAGESZ) ?: -ENOENT);
- }
- 
- 
-@@ -570,13 +478,7 @@ int sys_gettimeofday(struct timeval *tv, struct timezone *tz)
- static __attribute__((unused))
- int gettimeofday(struct timeval *tv, struct timezone *tz)
- {
--	int ret = sys_gettimeofday(tv, tz);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_gettimeofday(tv, tz));
- }
- 
- 
-@@ -614,13 +516,7 @@ int sys_ioctl(int fd, unsigned long req, void *value)
- static __attribute__((unused))
- int ioctl(int fd, unsigned long req, void *value)
- {
--	int ret = sys_ioctl(fd, req, value);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_ioctl(fd, req, value));
- }
- 
- /*
-@@ -636,13 +532,7 @@ int sys_kill(pid_t pid, int signal)
- static __attribute__((unused))
- int kill(pid_t pid, int signal)
- {
--	int ret = sys_kill(pid, signal);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_kill(pid, signal));
- }
- 
- 
-@@ -665,13 +555,7 @@ int sys_link(const char *old, const char *new)
- static __attribute__((unused))
- int link(const char *old, const char *new)
- {
--	int ret = sys_link(old, new);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_link(old, new));
- }
- 
- 
-@@ -688,13 +572,7 @@ off_t sys_lseek(int fd, off_t offset, int whence)
- static __attribute__((unused))
- off_t lseek(int fd, off_t offset, int whence)
- {
--	off_t ret = sys_lseek(fd, offset, whence);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_lseek(fd, offset, whence));
- }
- 
- 
-@@ -717,13 +595,7 @@ int sys_mkdir(const char *path, mode_t mode)
- static __attribute__((unused))
- int mkdir(const char *path, mode_t mode)
- {
--	int ret = sys_mkdir(path, mode);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_mkdir(path, mode));
- }
- 
- 
-@@ -746,13 +618,7 @@ long sys_mknod(const char *path, mode_t mode, dev_t dev)
- static __attribute__((unused))
- int mknod(const char *path, mode_t mode, dev_t dev)
- {
--	int ret = sys_mknod(path, mode, dev);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_mknod(path, mode, dev));
- }
- 
- #ifndef MAP_SHARED
-@@ -810,13 +676,7 @@ int sys_munmap(void *addr, size_t length)
- static __attribute__((unused))
- int munmap(void *addr, size_t length)
- {
--	int ret = sys_munmap(addr, length);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_munmap(addr, length));
- }
- 
- /*
-@@ -836,13 +696,7 @@ int mount(const char *src, const char *tgt,
-           const char *fst, unsigned long flags,
-           const void *data)
- {
--	int ret = sys_mount(src, tgt, fst, flags, data);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_mount(src, tgt, fst, flags, data));
- }
- 
- 
-@@ -876,13 +730,7 @@ int open(const char *path, int flags, ...)
- 		va_end(args);
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index f05209a62370..cb42d8464ad9 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -150,11 +150,13 @@ static vm_fault_t f2fs_vm_page_mkwrite(struct vm_fault *vmf)
  	}
+ 	set_page_dirty(page);
  
--	ret = sys_open(path, flags, mode);
+-	f2fs_update_iostat(sbi, inode, APP_MAPPED_IO, F2FS_BLKSIZE);
+-	f2fs_update_time(sbi, REQ_TIME);
 -
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_open(path, flags, mode));
- }
+-	trace_f2fs_vm_page_mkwrite(page, DATA);
+ out_sem:
++	if (!err) {
++		f2fs_update_iostat(sbi, inode, APP_MAPPED_IO, F2FS_BLKSIZE);
++		f2fs_update_time(sbi, REQ_TIME);
++
++		trace_f2fs_vm_page_mkwrite(page, DATA);
++	}
+ 	filemap_invalidate_unlock_shared(inode->i_mapping);
  
- 
-@@ -902,13 +750,7 @@ static __attribute__((unused))
- int prctl(int option, unsigned long arg2, unsigned long arg3,
- 		      unsigned long arg4, unsigned long arg5)
- {
--	int ret = sys_prctl(option, arg2, arg3, arg4, arg5);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_prctl(option, arg2, arg3, arg4, arg5));
- }
- 
- 
-@@ -925,13 +767,7 @@ int sys_pivot_root(const char *new, const char *old)
- static __attribute__((unused))
- int pivot_root(const char *new, const char *old)
- {
--	int ret = sys_pivot_root(new, old);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_pivot_root(new, old));
- }
- 
- 
-@@ -960,13 +796,7 @@ int sys_poll(struct pollfd *fds, int nfds, int timeout)
- static __attribute__((unused))
- int poll(struct pollfd *fds, int nfds, int timeout)
- {
--	int ret = sys_poll(fds, nfds, timeout);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_poll(fds, nfds, timeout));
- }
- 
- 
-@@ -983,13 +813,7 @@ ssize_t sys_read(int fd, void *buf, size_t count)
- static __attribute__((unused))
- ssize_t read(int fd, void *buf, size_t count)
- {
--	ssize_t ret = sys_read(fd, buf, count);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_read(fd, buf, count));
- }
- 
- 
-@@ -1007,13 +831,7 @@ ssize_t sys_reboot(int magic1, int magic2, int cmd, void *arg)
- static __attribute__((unused))
- int reboot(int cmd)
- {
--	int ret = sys_reboot(LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2, cmd, 0);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_reboot(LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2, cmd, 0));
- }
- 
- 
-@@ -1030,13 +848,7 @@ int sys_sched_yield(void)
- static __attribute__((unused))
- int sched_yield(void)
- {
--	int ret = sys_sched_yield();
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_sched_yield());
- }
- 
- 
-@@ -1076,13 +888,7 @@ int sys_select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeva
- static __attribute__((unused))
- int select(int nfds, fd_set *rfds, fd_set *wfds, fd_set *efds, struct timeval *timeout)
- {
--	int ret = sys_select(nfds, rfds, wfds, efds, timeout);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_select(nfds, rfds, wfds, efds, timeout));
- }
- 
- 
-@@ -1099,13 +905,7 @@ int sys_setpgid(pid_t pid, pid_t pgid)
- static __attribute__((unused))
- int setpgid(pid_t pid, pid_t pgid)
- {
--	int ret = sys_setpgid(pid, pgid);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_setpgid(pid, pgid));
- }
- 
- 
-@@ -1122,13 +922,7 @@ pid_t sys_setsid(void)
- static __attribute__((unused))
- pid_t setsid(void)
- {
--	pid_t ret = sys_setsid();
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_setsid());
- }
- 
- #if defined(__NR_statx)
-@@ -1145,13 +939,7 @@ int sys_statx(int fd, const char *path, int flags, unsigned int mask, struct sta
- static __attribute__((unused))
- int statx(int fd, const char *path, int flags, unsigned int mask, struct statx *buf)
- {
--	int ret = sys_statx(fd, path, flags, mask, buf);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_statx(fd, path, flags, mask, buf));
- }
- #endif
- 
-@@ -1231,13 +1019,7 @@ int sys_stat(const char *path, struct stat *buf)
- static __attribute__((unused))
- int stat(const char *path, struct stat *buf)
- {
--	int ret = sys_stat(path, buf);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_stat(path, buf));
- }
- 
- 
-@@ -1260,13 +1042,7 @@ int sys_symlink(const char *old, const char *new)
- static __attribute__((unused))
- int symlink(const char *old, const char *new)
- {
--	int ret = sys_symlink(old, new);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_symlink(old, new));
- }
- 
- 
-@@ -1300,13 +1076,7 @@ int sys_umount2(const char *path, int flags)
- static __attribute__((unused))
- int umount2(const char *path, int flags)
- {
--	int ret = sys_umount2(path, flags);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_umount2(path, flags));
- }
- 
- 
-@@ -1329,13 +1099,7 @@ int sys_unlink(const char *path)
- static __attribute__((unused))
- int unlink(const char *path)
- {
--	int ret = sys_unlink(path);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_unlink(path));
- }
- 
- 
-@@ -1354,38 +1118,20 @@ pid_t sys_wait4(pid_t pid, int *status, int options, struct rusage *rusage)
- static __attribute__((unused))
- pid_t wait(int *status)
- {
--	pid_t ret = sys_wait4(-1, status, 0, NULL);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_wait4(-1, status, 0, NULL));
- }
- 
- static __attribute__((unused))
- pid_t wait4(pid_t pid, int *status, int options, struct rusage *rusage)
- {
--	pid_t ret = sys_wait4(pid, status, options, rusage);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_wait4(pid, status, options, rusage));
- }
- 
- 
- static __attribute__((unused))
- pid_t waitpid(pid_t pid, int *status, int options)
- {
--	pid_t ret = sys_wait4(pid, status, options, NULL);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_wait4(pid, status, options, NULL));
- }
- 
- 
-@@ -1402,13 +1148,7 @@ ssize_t sys_write(int fd, const void *buf, size_t count)
- static __attribute__((unused))
- ssize_t write(int fd, const void *buf, size_t count)
- {
--	ssize_t ret = sys_write(fd, buf, count);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_write(fd, buf, count));
- }
- 
- 
-@@ -1425,13 +1165,7 @@ int sys_memfd_create(const char *name, unsigned int flags)
- static __attribute__((unused))
- int memfd_create(const char *name, unsigned int flags)
- {
--	ssize_t ret = sys_memfd_create(name, flags);
--
--	if (ret < 0) {
--		SET_ERRNO(-ret);
--		ret = -1;
--	}
--	return ret;
-+	return __sysret(sys_memfd_create(name, flags));
- }
- 
- /* make sure to include all global symbols */
+ 	sb_end_pagefault(inode->i_sb);
 -- 
-2.25.1
+2.40.1
 
