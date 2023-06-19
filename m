@@ -2,164 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 211F57349CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 03:52:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BFE17349DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 04:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjFSBwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 21:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40724 "EHLO
+        id S229718AbjFSCAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 22:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjFSBwR (ORCPT
+        with ESMTP id S229700AbjFSCAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 21:52:17 -0400
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A73D9E44
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 18:52:15 -0700 (PDT)
-Received: by mail-oo1-xc30.google.com with SMTP id 006d021491bc7-55e163e93d5so1907946eaf.3
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 18:52:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1687139535; x=1689731535;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=y0HdewFqYNfw5Jxe2MzOIpg2fQoQaMstEP/0eP1FzIo=;
-        b=Kvk+6JStgD+T3vLboAGdC7I6gRd1y1qtW0W4iGqEuZHqI7jcLRfFHzRDQNVj6T9qM6
-         lxgxIRar69qsT7/QH9vfAcL4WBVTLdFDZOjAlYlaB+ej7n4OgrS9joLYgCrqktJjysz0
-         6F59etDPLOW29tFTNH5DeumtBTeFNl9bikMSGHZLmbDe4qMyND+d+lYzZOdr4VxUo3yJ
-         KJ9WBSxvq7lxqyAeV5igBgG/ZxAMvyadUiuJGJj+6qjw8Z/+vO7SmzNpASBgDKjbp/BM
-         TiOQMuMStI2zqYVU0n9idx4m8EZP8DyKZAIyHJBzuQ24neRM9v2G5E5GbNjIGorO/Uv1
-         femg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687139535; x=1689731535;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y0HdewFqYNfw5Jxe2MzOIpg2fQoQaMstEP/0eP1FzIo=;
-        b=VaiRLkC69rgS4aLv3nrvXt+D1nBQXuNkY4BDM5peSqBoINR+GPAYJcEx3RIfvmqYQU
-         CbgW32WpmgIa8SgHMCNBm7G6caZY54MWiGG5jhSVGfUTmr6Yn4OeZLPLd7HYEyXeeYHS
-         5sQocgTGkPX2WQSurYaxInESoCag3nOfyn0mBAygQiTy1yXr6BJoLb/TaMwUv3wRb9Dw
-         YuaiayNq0LnCybsGOAUchO/3AGhDpnANmc+QxUdH2T5shz9ySSffSvRSeZmGkQFb/sm6
-         /0ujPXunWGR/eFCi6PfenNdMHeQ8eDPpVGtWgc/Yyl1YzQidBUNnOKg/ca9tzDYmzLcG
-         eENw==
-X-Gm-Message-State: AC+VfDw4KCRI4G5DNUAdc4q71j87FoxQCVLfLFvF/7yeponczT79xULN
-        /2zboi0je7OfMLhD2XYrlB9JrA==
-X-Google-Smtp-Source: ACHHUZ5qbz78riMP2Loam5VGkXbrUYuwQpD+CXejr+CTgGGnq4Io593wt0JxdkeDmwPnL6VgQzbIYw==
-X-Received: by 2002:a05:6808:15a4:b0:39e:d344:b4c0 with SMTP id t36-20020a05680815a400b0039ed344b4c0mr3026443oiw.34.1687139534927;
-        Sun, 18 Jun 2023 18:52:14 -0700 (PDT)
-Received: from dread.disaster.area (pa49-180-13-202.pa.nsw.optusnet.com.au. [49.180.13.202])
-        by smtp.gmail.com with ESMTPSA id p14-20020a170902e74e00b001b39e866324sm15469535plf.306.2023.06.18.18.52.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 18 Jun 2023 18:52:14 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1qB43u-00DTfc-2U;
-        Mon, 19 Jun 2023 11:52:10 +1000
-Date:   Mon, 19 Jun 2023 11:52:10 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     syzbot <syzbot+b7854dc75e15ffc8c2ae@syzkaller.appspotmail.com>
-Cc:     djwong@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [xfs?] KASAN: slab-out-of-bounds Read in xlog_pack_data
-Message-ID: <ZI+0yi+V+ziqAQ3Z@dread.disaster.area>
-References: <00000000000029729c05fe5c6f5c@google.com>
+        Sun, 18 Jun 2023 22:00:23 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F088CE44
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 19:00:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687140020; x=1718676020;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=oR4P0GMr2zpplJmRIjn6et1iR6kpZud+0pyoFilsgp4=;
+  b=WklpBN7y6CCwf3QruJuVHgB3t3gy5P5+GrcXMoZ5NQ7IRhALKv9G4UdH
+   mjK2NIR3GoWPrYgjAtFrxwt8YuV8+AlNE5thyfScvrEq9vrbKbuAYBcHl
+   A7Mn5n3Wppq+541jvxdJJSpnreQkeFFyk1NAF7KZQq5CYzHiFYUvpGRqT
+   +UtNxvtvvS3KY3KEsZRBMe3VS4SjbjF0z2CZq7PdSomEA0U8w9WpyjvU9
+   Gb7VqJNa4YDoxxt+vxr+C/hhQi9640OShi7YnFAaeRolOusdBDS7PlqSf
+   j4c1/dtC2sRFkN/MXv6/SgI8GW5md2ZSWAqfwZhETe3PsLlQtHr9/DOsE
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="359534614"
+X-IronPort-AV: E=Sophos;i="6.00,253,1681196400"; 
+   d="scan'208";a="359534614"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2023 18:59:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10745"; a="663812323"
+X-IronPort-AV: E=Sophos;i="6.00,253,1681196400"; 
+   d="scan'208";a="663812323"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jun 2023 18:59:38 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Yu Zhao <yuzhao@google.com>,
+        "Jan Alexander Steffens (heftig)" <heftig@archlinux.org>,
+        Steven Barrett <steven@liquorix.net>,
+        Brian Geffon <bgeffon@google.com>,
+        "T.J. Alumbaugh" <talumbau@google.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        David Howells <dhowells@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Greg Thelen <gthelen@google.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 5/5] Revert "mm/migrate: __unmap_and_move() push
+ good newpage to LRU"
+References: <20230618065824.1365750-1-yosryahmed@google.com>
+Date:   Mon, 19 Jun 2023 09:57:58 +0800
+In-Reply-To: <20230618065824.1365750-1-yosryahmed@google.com> (Yosry Ahmed's
+        message of "Sun, 18 Jun 2023 06:58:24 +0000")
+Message-ID: <87ilbk8b89.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000029729c05fe5c6f5c@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 05:23:58P[   65.275181][ T4996] XFS (loop0): Deprecated V4 format (crc=0) will not be supported after September 2030.
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    15adb51c04cc Merge tag 'devicetree-fixes-for-6.4-3' of git..
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=17554263280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3731e922b1097b2e
-> dashboard link: https://syzkaller.appspot.com/bug?extid=b7854dc75e15ffc8c2ae
-> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1323469d280000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12975795280000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/733f46de69b0/disk-15adb51c.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/f9a6a2c566b8/vmlinux-15adb51c.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/55e80680ef0e/bzImage-15adb51c.xz
-> mounted in repro: https://storage.googleapis.com/syzbot-assets/99d5407c555b/mount_0.gz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+b7854dc75e15ffc8c2ae@syzkaller.appspotmail.com
+Hi, Yosry,
 
- XFS (loop0): Deprecated V4 format (crc=0) will not be supported after September 2030.
- XFS (loop0): Mounting V4 Filesystem acfebfcd-0806-4e27-9777-0ac4ff5ddf54
- XFS (loop0): Log size 756 blocks too small, minimum size is 2220 blocks
- XFS (loop0): Log size out of supported range.
- XFS (loop0): Continuing onwards, but if log hangs are experienced then please report this message in the bug report.
- XFS (loop0): Torn write (CRC failure) detected at log block 0x10. Truncating head block from 0x20.
- XFS (loop0): Ending clean mount
- xfs filesystem being mounted at /root/file0 supports timestamps until 2038-01-19 (0x7fffffff)
- XFS (loop0): Unmounting Filesystem acfebfcd-0806-4e27-9777-0ac4ff5ddf54
+Yosry Ahmed <yosryahmed@google.com> writes:
 
-<sigh>
+> This reverts commit c3096e6782b733158bf34f6bbb4567808d4e0740.
+>
+> That commit made sure we immediately add the new page to the LRU before
+> remove_migration_ptes() is called in migrate_move_folio() (used to be
+> __unmap_and_move() back then), such that the rmap walk will rebuild the
+> correct mlock_count for the page again. This was needed because the
+> mlock_count was lost when the page is isolated. This is no longer the
+> case since mlock_count no longer overlays page->lru.
+>
+> Revert the commit (the code was foliated afterward the commit, so the
+> revert is updated as such).
+>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> ---
+>  mm/migrate.c | 24 +++++++++---------------
+>  1 file changed, 9 insertions(+), 15 deletions(-)
+>
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index 01cac26a3127..68f693731865 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1279,19 +1279,6 @@ static int migrate_folio_move(free_page_t put_new_page, unsigned long private,
+>  	if (unlikely(!is_lru))
+>  		goto out_unlock_both;
 
-Still testing on v4 filesystems.
+The patch itself looks good to me!  Thanks!
 
-And with yet another invalid configuration - one that we
-explicitly cannot fix for v4 filesystems, yet one that V5
-filesystems will immediately reject.
+Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
 
-So at this point, the problem "discovered" by syzbot will not
-manifest on V5 formats at all.
+And, it seems that we can remove the above 2 lines and "out_unlock_both"
+label now.  That can make the code simpler a little.  Right?
 
-> xfs filesystem being mounted at /root/file0 supports timestamps until 2038-01-19 (0x7fffffff)
-> XFS (loop0): Unmounting Filesystem acfebfcd-0806-4e27-9777-0ac4ff5ddf54
-> ==================================================================
-> BUG: KASAN: slab-out-of-bounds in xlog_pack_data+0x370/0x540 fs/xfs/xfs_log.c:1822
-> Read of size 4 at addr ffff888075c64e00 by task syz-executor205/4996
+Best Regards,
+Huang, Ying
 
-And, yeah, the issue that is a too-small log on V4 filesystems skips
-over other geometry checks (which will still be run on V5) and it's
-one of those skipped geometry checks that causes the UAF.
-
-Even if the log was not too small, the specific corruption
-that caused the OOB read would have been caught at mount by a V5
-filesystem and rejected before anything any attempt to write to the
-log occurred.
-
-So here we are again, with syzbot reporting a V4 filesystem issue
-that just doesn't happen in the real world, and one that V5
-filesystems detect and reject.
-
-And, once again, I'm going to have to modify the code so that V4
-filesystems reject stuff that v5 filesystems already reject, even
-though no users are actually going to benefit from these changes:
-
- loop0: detected capacity change from 0 to 65536
- XFS (loop0): log stripe unit 151041 bytes must be a multiple of block size
- XFS (loop0): Metadata corruption detected at xfs_sb_read_verify+0x279/0x2a0, xfs_sb_quiet block 0x0 
- XFS (loop0): Unmount and run xfs_repair
- XFS (loop0): First 128 bytes of corrupted metadata buffer:
- 00000000: 58 46 53 42 00 00 08 00 00 00 00 00 00 00 40 00  XFSB..........@.
- 00000010: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
- 00000020: ac fe bf cd 08 06 4e 27 97 77 0a c4 ff 5d df 54  ......N'.w...].T
- 00000030: 00 00 00 00 00 00 20 04 00 00 00 00 00 00 00 10  ...... .........
- 00000040: 00 00 00 00 00 00 00 11 00 00 00 00 00 00 00 12  ................
- 00000050: 00 00 00 02 00 00 20 00 00 00 00 02 00 00 00 00  ...... .........
- 00000060: 00 00 02 f4 b4 b4 02 00 04 00 00 02 00 00 00 00  ................
- 00000070: 00 00 00 00 00 00 00 00 0b 09 0a 01 0d 00 00 05  ................
-
-Can you please just stop testing V4 filesystems already?
-
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+> -	/*
+> -	 * When successful, push dst to LRU immediately: so that if it
+> -	 * turns out to be an mlocked page, remove_migration_ptes() will
+> -	 * automatically build up the correct dst->mlock_count for it.
+> -	 *
+> -	 * We would like to do something similar for the old page, when
+> -	 * unsuccessful, and other cases when a page has been temporarily
+> -	 * isolated from the unevictable LRU: but this case is the easiest.
+> -	 */
+> -	folio_add_lru(dst);
+> -	if (page_was_mapped)
+> -		lru_add_drain();
+> -
+>  	if (page_was_mapped)
+>  		remove_migration_ptes(src, dst, false);
+>  
+> @@ -1301,9 +1288,16 @@ static int migrate_folio_move(free_page_t put_new_page, unsigned long private,
+>  	/*
+>  	 * If migration is successful, decrease refcount of dst,
+>  	 * which will not free the page because new page owner increased
+> -	 * refcounter.
+> +	 * refcounter. As well, if it is LRU folio, add the folio to LRU
+> +	 * list in here. Use the old state of the isolated source folio to
+> +	 * determine if we migrated a LRU folio. dst was already unlocked
+> +	 * and possibly modified by its owner - don't rely on the folio
+> +	 * state.
+>  	 */
+> -	folio_put(dst);
+> +	if (unlikely(!is_lru))
+> +		folio_put(dst);
+> +	else
+> +		folio_putback_lru(dst);
+>  
+>  	/*
+>  	 * A folio that has been migrated has all references removed
