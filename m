@@ -2,115 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24DCD735167
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 12:02:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D28F4735173
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 12:05:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231963AbjFSKC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 06:02:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47658 "EHLO
+        id S231183AbjFSKEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 06:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231848AbjFSKB6 (ORCPT
+        with ESMTP id S230513AbjFSKEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 06:01:58 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66035E5C
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 03:01:32 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51a2de3385fso4584801a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 03:01:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687168891; x=1689760891;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mi0odYZrNrQKpGzw5pHs6LQO/1iyCGY9vkdXXwKkTF4=;
-        b=L+yWMlBqSShj9sCq4emOy+ZP9U+SEJeb+06+PNfJW+hYojJwsDXMUbgjFV6jKeKpjm
-         cxyLBTMywkj8ODTab8jKv3kWzIt98Yp7wvAATmXLFPEwIG43qCzBj8jyn8rRfpa3HAXT
-         XFWfe9A3YQfW80ScopExHmLkWUC0hV+g8vEocIXnFgd4P43IHVGQgqBupJ65fcQTGSRk
-         AyBbeYvEusX6q2KvMe8+mjmkmxsiCZLhQBAMaioWkENpt3uIe+QSVM2U4DFGWtVv/38B
-         GODElrI693wmoWAtwZb7OCxEzHWSueBG/EPLVLDZWnRc37n2iv7Smk+nOdJCKLyUWeec
-         19bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687168891; x=1689760891;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mi0odYZrNrQKpGzw5pHs6LQO/1iyCGY9vkdXXwKkTF4=;
-        b=VDQceQoM8roV9i7MJTkPqAIMS/JhJxIntC3nN3Bg+DAPIykpiidRaLch139ILse7Ys
-         GJa9I5+HYOjCgquAVeytMC2cnTL+lCOXWxAuqUFfkIHRGtW/o3amRINMP7gxBbhir2x2
-         SVZX3qFXx2EH960zBf1x+7d1eGbehChgTfTtMQXFzi12zIqM4jR7PAJpoDQSuZ/uOjrI
-         zO1gIjX1mxrWJ7iWdz7yueL+1S7iM0EIp7c9qilMmAcioTgxY/EUeoehqUGkS5/dOJRP
-         O28HJSWS48k3RGPYrJz3f0wG7+dEDmkg2fpymM83GYtxx5VzM2aTcEzt0/JiEmSudB/8
-         JseQ==
-X-Gm-Message-State: AC+VfDwpU3h4mF1swBcxlZzkuPD/CkUuqJMqWVrK3UxBGM4ybq6UaTnd
-        0j2eH6+6onrfEuI1SjexOL5Elg==
-X-Google-Smtp-Source: ACHHUZ7iLPMfAVkQt+pj0GE9+mhW4YCjeFhwk799Y3AhojRcbkBWBNp6i4fChge21Aam9eSkWvKAew==
-X-Received: by 2002:a05:6402:12c2:b0:514:9d2f:10be with SMTP id k2-20020a05640212c200b005149d2f10bemr6230109edx.18.1687168890853;
-        Mon, 19 Jun 2023 03:01:30 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id o8-20020aa7d3c8000000b0051a575c76e6sm1368098edr.43.2023.06.19.03.01.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 03:01:30 -0700 (PDT)
-Message-ID: <c65313c7-c1e1-3a51-9fff-4324701ebfd7@linaro.org>
-Date:   Mon, 19 Jun 2023 12:01:27 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 1/4] dt-bindings: firmware: qcom,scm: Document that SCM
- can be dma-coherent
+        Mon, 19 Jun 2023 06:04:38 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940F6E59;
+        Mon, 19 Jun 2023 03:04:28 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35J9MZie027177;
+        Mon, 19 Jun 2023 10:04:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=EdEtN+o8C25mmqwDYGCqUsh3TXJ29oh+zpreQVrX0Uw=;
+ b=fjovvVVzZSoIoWjrTTCriOhGIbwMWAZnx338qVOpbhGWRXkYlmSRlO+hhHTu/cRegyEl
+ Mr0tYJ633CFNnLWeGxrYx8z/ZYmXoRVMPsiB8urIyE1Y6feucfoXU8syC67r7akgeROP
+ D5bVCsoPWpnrbXXlQ2If+2A3f5X29Uq7MbGei7nmCJz97w+bV/NXTVvEJUSTmVMHjB7M
+ 0a7LFTFWBbKEMryPP/NfjWl6qiVX4qTYBJrD/mxC+7EQgZ0PuN6IFuUKOGqEWfqfzAeE
+ VcGT5eY1XqWw272LayeJD3Q48n+I+TZCN9z3mmQ2ApqgnUXotFGBXJoavfU+3WNw8NhT BQ== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3ramb611w9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Jun 2023 10:04:21 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35J5BQdw025864;
+        Mon, 19 Jun 2023 10:04:20 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3r943e19uc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 19 Jun 2023 10:04:19 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35JA4GWH57409962
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 19 Jun 2023 10:04:16 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8285E2004B;
+        Mon, 19 Jun 2023 10:04:16 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D29542004F;
+        Mon, 19 Jun 2023 10:04:15 +0000 (GMT)
+Received: from [9.171.4.59] (unknown [9.171.4.59])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 19 Jun 2023 10:04:15 +0000 (GMT)
+Message-ID: <4f2afa34-830a-3c17-99e7-1cb5b874e7ce@linux.ibm.com>
+Date:   Mon, 19 Jun 2023 12:04:15 +0200
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH] s390/net: lcs: use IS_ENABLED() for kconfig detection
+To:     patchwork-bot+netdevbpf@kernel.org,
+        Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, wenjia@linux.ibm.com,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com
+References: <20230615222152.13250-1-rdunlap@infradead.org>
+ <168690302072.8823.785077843270614259.git-patchwork-notify@kernel.org>
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>, andersson@kernel.org
-Cc:     amit.pundir@linaro.org, Will Deacon <will@kernel.org>,
-        sumit.semwal@linaro.org, linux-arm-msm@vger.kernel.org,
-        konrad.dybcio@somainline.org, linux-arm-kernel@lists.infradead.org,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Nikita Travkin <nikita@trvn.ru>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Das Srinagesh <quic_gurus@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Marko <robimarko@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230616081440.v2.1.Ie79b5f0ed45739695c9970df121e11d724909157@changeid>
- <e89e574c-db6d-877b-462c-bb91cc9d9ff1@linaro.org>
- <23cecdde-2b24-a472-1497-5da9f1158c00@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <23cecdde-2b24-a472-1497-5da9f1158c00@linaro.org>
+From:   Alexandra Winter <wintera@linux.ibm.com>
+In-Reply-To: <168690302072.8823.785077843270614259.git-patchwork-notify@kernel.org>
 Content-Type: text/plain; charset=UTF-8
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: jgyEbaYa6AtKo8QDsTl54lZEVLR9-CNq
+X-Proofpoint-GUID: jgyEbaYa6AtKo8QDsTl54lZEVLR9-CNq
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-19_06,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ mlxscore=0 priorityscore=1501 clxscore=1011 phishscore=0 bulkscore=0
+ adultscore=0 lowpriorityscore=0 suspectscore=0 malwarescore=0
+ mlxlogscore=864 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306190091
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/06/2023 12:00, Konrad Dybcio wrote:
-> On 18.06.2023 10:07, Krzysztof Kozlowski wrote:
->> On 16/06/2023 17:14, Douglas Anderson wrote:
->>> Trogdor devices use firmware backed by TF-A instead of Qualcomm's
->>> normal TZ. On TF-A we end up mapping memory as cacheable. Specifically,
->>> you can see in Trogdor's TF-A code [1] in qti_sip_mem_assign() that we
->>> call qti_mmap_add_dynamic_region() with MT_RO_DATA. This translates
->>> down to MT_MEMORY instead of MT_NON_CACHEABLE or MT_DEVICE.
->>>
->>> Let's allow devices like trogdor to be described properly by allowing
->>> "dma-coherent" in the SCM node.
->>>
->>> Signed-off-by: Douglas Anderson <dianders@chromium.org
+
+
+On 16.06.23 10:10, patchwork-bot+netdevbpf@kernel.org wrote:
+> Hello:
+> 
+> This patch was applied to netdev/net-next.git (main)
+> by David S. Miller <davem@davemloft.net>:
+> 
+> On Thu, 15 Jun 2023 15:21:52 -0700 you wrote:
+>> When CONFIG_ETHERNET=m or CONFIG_FDDI=m, lcs.s has build errors or
+>> warnings:
 >>
->> 2
-> Forgot to press alt or something
+ 
+IIUC, CONFIG_ETHERNET is bool.
+I reproduced this with CONFIG_ETHERNET=n and CONFIG_FDDI=m,
+and verified that it does compile with your patch.
 
-D'oh!
+Thank you Randy for correcting this.
 
-Best regards,
-Krzysztof
+>> ../drivers/s390/net/lcs.c:40:2: error: #error Cannot compile lcs.c without some net devices switched on.
+>>    40 | #error Cannot compile lcs.c without some net devices switched on.
+>> ../drivers/s390/net/lcs.c: In function 'lcs_startlan_auto':
+>> ../drivers/s390/net/lcs.c:1601:13: warning: unused variable 'rc' [-Wunused-variable]
+>>  1601 |         int rc;
+>>
+>> [...]
+> 
+> Here is the summary with links:
+>   - s390/net: lcs: use IS_ENABLED() for kconfig detection
+>     https://git.kernel.org/netdev/net-next/c/128272336120
+> 
+> You are awesome, thank you!
 
