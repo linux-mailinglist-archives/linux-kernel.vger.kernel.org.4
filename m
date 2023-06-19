@@ -2,183 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3087D734EEA
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2FAB734EEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229678AbjFSI7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 04:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58486 "EHLO
+        id S229510AbjFSJAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 05:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230215AbjFSI7U (ORCPT
+        with ESMTP id S229530AbjFSJAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 04:59:20 -0400
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E42D83;
-        Mon, 19 Jun 2023 01:59:17 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0VlTKQLc_1687165151;
-Received: from 30.221.149.0(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VlTKQLc_1687165151)
-          by smtp.aliyun-inc.com;
-          Mon, 19 Jun 2023 16:59:12 +0800
-Message-ID: <a6e1114c-b37c-6999-0668-039aa495db84@linux.alibaba.com>
-Date:   Mon, 19 Jun 2023 16:59:08 +0800
+        Mon, 19 Jun 2023 05:00:22 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F7CAD
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:00:20 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f9b37cd58bso2600605e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:00:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687165219; x=1689757219;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=bCBr4oTjiVPYqPEUo0CydkQP5zohM2Xp0GU5zTzP8rs=;
+        b=UJjm17SJlTP86cw43v7G8uuapaedwpHHlpiVfaCIAfpJDh9mcTbe6iVbg/gcMnysB+
+         87IpUyo+vWUqhB0dGOigtlbttsSDoJVO5gy37LfrXMIJ6yGfdFFcwaBnX6nNbYyKglc/
+         G3YyJJs/jlYA2I/lYMIolWZchurQImO9KY6Kt5BQQb18X6hvYeAVaCFnNp9kyUJ8bSQl
+         yfv2iv1zRUTlSbpmjibQBuwEmaDivJ55zRuFKLsmu7jPjf1qAwie/6mDZHwEWe8L5ai0
+         lduXdoSr/FLxjcHNEGwjR3WCUruJ2Ewdg4dFR1MPSC1Ngsl3SR0+oNXwTQ/0o8ZBHy5k
+         sCKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687165219; x=1689757219;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bCBr4oTjiVPYqPEUo0CydkQP5zohM2Xp0GU5zTzP8rs=;
+        b=Gmg60c+PDI/+1KlTNOoPMtav8UdadOX4Z5oNqC0rcB1CYZAQPsDcSoVCHUkPfMfW4J
+         mobcoSKGPF2EEjCkr03KpyR7BqTBqLR8b0/uxc+VtpyEy/abDxhmI08eWkqdjOGLIan3
+         e59PDM5iR/FHKrePx6juaBiYfw3Gk/7rQA3rzThIPWZld12gx9TUMhcJ22jX06/NGq7e
+         ghHPQngkzHHS/FOEn9Tx4uyUbs4d7t1rXKWcgrQxhcMSSTMZuwF2CsTtM4fVdRlIWLQc
+         P2n0XehrqerjUPZHj4HRWQFll/O/avvAIdcVauvnw6lOzaZnsZgnOoloq9474HabFTm8
+         sJ5A==
+X-Gm-Message-State: AC+VfDyfnvdEgdxFRBHb4IVpvhH+QpcCqyOU5gOswiM9In7jLdFR2feb
+        T+xeAdDy7zDhCLI+epCRwacwvQ==
+X-Google-Smtp-Source: ACHHUZ4kTHBI7R/neEMBwF3PvF3KlSrrEUcjqpnITUG/q4ykuPe3Q7fTVaE+jrDwycnvmT9JU+o9uQ==
+X-Received: by 2002:a7b:c045:0:b0:3f8:dac6:58ee with SMTP id u5-20020a7bc045000000b003f8dac658eemr5842223wmc.5.1687165218801;
+        Mon, 19 Jun 2023 02:00:18 -0700 (PDT)
+Received: from [192.168.7.189] (679773502.box.freepro.com. [212.114.21.58])
+        by smtp.gmail.com with ESMTPSA id f20-20020a7bcc14000000b003f8044b3436sm9970750wmh.23.2023.06.19.02.00.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 02:00:18 -0700 (PDT)
+Message-ID: <0d50047b-b30a-9c20-1754-2ee4fc4f7e18@linaro.org>
+Date:   Mon, 19 Jun 2023 11:00:17 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [PATCH v3 2/7] perf metric: Event "Compat" value supports
- matching multiple identifiers
-To:     John Garry <john.g.garry@oracle.com>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Zhuo Song <zhuo.song@linux.alibaba.com>
-References: <1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1685438374-33287-3-git-send-email-renyu.zj@linux.alibaba.com>
- <c1d8ee9b-4839-1011-4dad-c4777d8f8224@oracle.com>
- <452e724b-2a2c-52fd-274b-60db7a7f730e@linux.alibaba.com>
- <c4b2fca8-602d-9c76-90a7-3eafd92da8bc@oracle.com>
- <76fcb062-61a8-5f90-b39d-b5fb6da35652@linux.alibaba.com>
- <5f38ef6c-8c50-5df9-19dd-c3c9fe590452@oracle.com>
- <e4be7189-a1ba-7758-bff3-e7b8d8ff1419@linux.alibaba.com>
- <892f57c7-8ce2-634c-26f3-4d4ab8b2f2ce@oracle.com>
- <079d7920-2030-2e00-a833-5ec6d450f7dc@oracle.com>
- <552eebae-76bb-a2fe-ccdc-11e8a01717da@linux.alibaba.com>
- <045a49c9-b9ae-bf0e-c4be-858d905bcc55@oracle.com>
- <7c765e0f-ca76-d212-0496-f9c56369e389@linux.alibaba.com>
- <d1ab4947-6bdf-2b9c-5b26-52c572611ca6@oracle.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <d1ab4947-6bdf-2b9c-5b26-52c572611ca6@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+From:   neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v1] drivers: meson: secure-pwrc: always enable DMA domain
+Content-Language: en-US
+To:     Alexey Romanov <avromanov@sberdevices.ru>, narmstrong@baylibre.com,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        martin.blumenstingl@googlemail.com
+Cc:     linux-arm-kernel@lists.infradead.org, kernel@sberdevices.ru,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230610090414.90529-1-avromanov@sberdevices.ru>
+Organization: Linaro Developer Services
+In-Reply-To: <20230610090414.90529-1-avromanov@sberdevices.ru>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/6/19 下午3:07, John Garry 写道:
-> On 19/06/2023 03:58, Jing Zhang wrote:
->>> +++ b/tools/perf/pmu-events/arch/arm64/arm/cmn/sys/metrics.json
->>> @@ -0,0 +1,74 @@
->>> +[
->>> +    {
->>> +        "MetricName": "slc_miss_rate",
->>> +        "BriefDescription": "The system level cache miss rate include.",
->>> +        "MetricGroup": "arm_cmn",
->>> +        "MetricExpr": "hnf_cache_miss / hnf_slc_sf_cache_access",
->>>
->>> So this expression uses event aliases hnf_cache_miss and hnf_slc_sf_cache_access - where are they defined in a JSON?
->>>
->> Hi John,
->>
->> I defined the aliases for these events in the JSON file during the RFC version. However, I later removed the alias
->> definitions for these events in subsequent versions due to the possibility of non-uniqueness and difficulty in defining
->> their EventCode. But this does not affect their usage in metrics. In other words, metrics can use the aliases without
->> defining event aliases in the JSON file.
+On 10/06/2023 11:04, Alexey Romanov wrote:
+> Starting from commit e45f243409db ("firmware: meson_sm:
+> populate platform devices from sm device tree data") pwrc
+> is probed successfully and disables unused pwr domains.
+> By A1 SoC family design, any TEE requires DMA pwr domain
+> always enabled.
 > 
-> Really? So how can we resolve the event aliases when we try to run the metric?
+> Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
+> ---
+> I'm not entirely sure if this domain should always be enabled on or it
+> should be separately enabled in dts file. Comments are welcome.
+> ---
+>   drivers/soc/amlogic/meson-secure-pwrc.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Please verify running these metrics with 'perf stat', like 'perf stat -v -M slc_miss_rate'
-> 
+> diff --git a/drivers/soc/amlogic/meson-secure-pwrc.c b/drivers/soc/amlogic/meson-secure-pwrc.c
+> index e93518763526..25b4b71df9b8 100644
+> --- a/drivers/soc/amlogic/meson-secure-pwrc.c
+> +++ b/drivers/soc/amlogic/meson-secure-pwrc.c
+> @@ -105,7 +105,7 @@ static struct meson_secure_pwrc_domain_desc a1_pwrc_domains[] = {
+>   	SEC_PD(ACODEC,	0),
+>   	SEC_PD(AUDIO,	0),
+>   	SEC_PD(OTP,	0),
+> -	SEC_PD(DMA,	0),
+> +	SEC_PD(DMA,	GENPD_FLAG_ALWAYS_ON | GENPD_FLAG_IRQ_SAFE),
+>   	SEC_PD(SD_EMMC,	0),
+>   	SEC_PD(RAMA,	0),
+>   	/* SRAMB is used as ATF runtime memory, and should be always on */
 
-Ok, it shows:
-#./perf stat -v -M slc_miss_rate sleep 1
+It's fine to keep it enabled.
 
-metric expr hnf_cache_miss / hnf_slc_sf_cache_access for slc_miss_rate
-found event duration_time
-found event hnf_slc_sf_cache_access
-found event hnf_cache_miss
-Parsing metric events '{hnf_slc_sf_cache_access/metric-id=hnf_slc_sf_cache_access/,hnf_cache_miss/metric-id=hnf_cache_miss/}:W,duration_time'
-hnf_slc_sf_cache_access -> arm_cmn_0/type=0x5,eventid=0x2/
-hnf_slc_sf_cache_access -> arm_cmn_1/type=0x5,eventid=0x2/
-hnf_cache_miss -> arm_cmn_0/type=0x5,eventid=0x1/
-hnf_cache_miss -> arm_cmn_1/type=0x5,eventid=0x1/
-Control descriptor is not initialized
-hnf_slc_sf_cache_access: 127615 1001344900 1001344900
-hnf_cache_miss: 36829 1001344900 1001344900
-hnf_slc_sf_cache_access: 131526 1001343540 1001343540
-hnf_cache_miss: 40587 1001343540 1001343540
-duration_time: 1001381687 1001381687 1001381687
+Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
 
- Performance counter stats for 'system wide':
-
-           259,141      hnf_slc_sf_cache_access   #     29.9 %  slc_miss_rate
-            77,416      hnf_cache_miss
-     1,001,381,687 ns   duration_time
-
-       1.001381687 seconds time elapsed
-
-
-
-#./perf list
-...
- arm_cmn_0/hnf_cache_miss/                          [Kernel PMU event]
- arm_cmn_0/hnf_slc_sf_cache_access/                 [Kernel PMU event]
-...
- arm_cmn_1/hnf_cache_miss/                          [Kernel PMU event]
- arm_cmn_1/hnf_slc_sf_cache_access/                 [Kernel PMU event]
-...
-
->>
->> In the past, I always thought that the function of the alias was to explain the meaning of these events in the perf list.
->> Or maybe I'm missing something?
-> 
-> Event aliases do give the ability to describe the event in perf list. But we can also run them for 'perf stat', like:
-> 
-> ./perf list uncore
-> List of pre-defined events (to be used in -e or -M):
-> 
->   uncore_cbox_0/clockticks/                          [Kernel PMU event]
->   uncore_cbox_1/clockticks/                          [Kernel PMU event]
->   uncore_imc/data_reads/                             [Kernel PMU event]
->   uncore_imc/data_writes/                            [Kernel PMU event]
->   uncore_imc/gt_requests/                            [Kernel PMU event]
->   uncore_imc/ia_requests/                            [Kernel PMU event]
->   uncore_imc/io_requests/                            [Kernel PMU event]
-> 
-> uncore cache:
->   unc_cbo_cache_lookup.any_es
->        [L3 Lookup any request that access cache and found line in E or S-state. Unit: uncore_cbox]
-> ...
-> 
-> sudo ./perf stat -v -e unc_cbo_cache_lookup.any_es
-> Using CPUID GenuineIntel-6-3D-4
-> unc_cbo_cache_lookup.any_es -> uncore_cbox_0/event=0x34,umask=0x86/
-> unc_cbo_cache_lookup.any_es -> uncore_cbox_1/event=0x34,umask=0x86/
-> Control descriptor is not initialized
-> ^Cunc_cbo_cache_lookup.any_es: 14361103 1853372468 1853372468
-> unc_cbo_cache_lookup.any_es: 14322188 1853360415 1853360415
-> 
->  Performance counter stats for 'system wide':
-> 
->         14,361,103      unc_cbo_cache_lookup.any_es
->         14,322,188      unc_cbo_cache_lookup.any_es
-> 
->        1.853388227 seconds time elapsed
-> 
-
-Ok, thanks. If I use events without a prefix, such as perf stat -e clockticks sleep 1, will this also work?
-
-Thanks,
-Jing
-
-
-> 
-> Thanks,
-> John
+Neil
