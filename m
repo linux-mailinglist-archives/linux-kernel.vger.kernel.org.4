@@ -2,73 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3207A735EDD
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 23:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 889CE735EE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 23:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjFSVQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 17:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47082 "EHLO
+        id S229713AbjFSVSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 17:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjFSVQo (ORCPT
+        with ESMTP id S229558AbjFSVSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 17:16:44 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F410DC
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 14:16:43 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1687209402;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jeie3GhpDhGt5KA66c8W/BLeUY1w7zIhRb/ALkuu058=;
-        b=cJ2RnpbBk6qpmuHdsOyDkEiw6CbQzJqfckkj+wDzewvbibMHomLDapvvE7xmNZf9H5MBmc
-        53Up892pgR2YkhfpPaKNqchDDXkaIYL5aNqpBGqYg5hR6B0a+794IY5OMJDwrHsxU9sTOA
-        ZIiDzYmq1/pX0ESP318Hq/M4JvdCt5tXFZzfYSKFnu1yrdh0or+AqgXyaXGu9CHxjGiykp
-        z8HVEHYBaL/lmT3FAZ+TiYA4gADNq9Q0sR33Q1veMVMcI1ZBoWPZwYBgHcbnbEic0JVEs6
-        cmcO+y7+/pvfk0V52XqziJsN4Pf+1IIStpSVgwnKcFBsyg6+Tbt5sQ6y9gubAA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1687209402;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Jeie3GhpDhGt5KA66c8W/BLeUY1w7zIhRb/ALkuu058=;
-        b=Mva53YtgCVG0sKVucBO3SFBXt6/nhUbNJeem2RbbmJGtel2goSTpX0CCEvATgQpXQP7H2I
-        LMmDnSsVzHcplDDA==
-To:     Brian Gerst <brgerst@gmail.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org
-Cc:     Borislav Petkov <bp@alien8.de>, "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Brian Gerst <brgerst@gmail.com>
-Subject: Re: [PATCH 0/2] x86: Clean up ia32_unistd.h
-In-Reply-To: <20230619194745.80552-1-brgerst@gmail.com>
-References: <20230619194745.80552-1-brgerst@gmail.com>
-Date:   Mon, 19 Jun 2023 23:16:41 +0200
-Message-ID: <87mt0vp2yu.ffs@tglx>
+        Mon, 19 Jun 2023 17:18:50 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DFCE10E;
+        Mon, 19 Jun 2023 14:18:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1687209521; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=qpjhPsoZtT3zx6c1qT4HP38r7NJBMDykzaZw9Kph+ZvXbQN/u7gnWbk0e6ePlaSplK
+    fOADWya9FACkoKWMqp9CXjFhwc8vo/jISH2wVv9d7mi+QcGU114HfutvgLNoEZ6W6+3O
+    zsNIR/yoP24XSmw7B83+nDrtBRINwdRKUaBX0MayRKA6NeQA4b3GksyrwNcl6uW1Yslp
+    ily+E/v+kQFGheC06p5NfMy9/NQZrQ890/7T67de9xhqtBElKcM/RMb7yDZ+bqsJ/6O6
+    TQVvIElGMXGUA5bpP6OQV2u1H1Mkxmgja9ZQzuizp89bv5amlZ70zGaPXCldPZMLmPJ3
+    zAsg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1687209521;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=nj2Y7Ri4R0W6QZ4x2JuvJ33FXiLCKwjJhdChI0lOxtU=;
+    b=gCyV3+OIWY0sFKCFHhcS2Ax3BYVApgKCV2t/uDD6qMGHAP7R2ZzgAS5GGIYo8X9hwW
+    kD5KYYl+s1nJ23xqyznIFVztEFJ/SlZVvzTriwAWrbXtd/GisRWipk56sGbrjMuXiHav
+    2U2NYXaPsrNRI0pz6ETjkYlqmgOWAyONzdorNO1P2fVURvPJ5rnpbUSUYnKn+4RF2GDI
+    hezjbDQpmvj34Yuy/51ijZ5WfLK4UogAVl3B7fx4jlWu7QXQGlZBhKvIWRr+OnAm0I6Q
+    QE9cnJgfQX5SQ/YGXI3RvUer6cBs4oQWyoHh3V8jriEc559vcbSWWgCMcPzcL2vqLFmI
+    E4GQ==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1687209521;
+    s=strato-dkim-0002; d=iokpp.de;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=nj2Y7Ri4R0W6QZ4x2JuvJ33FXiLCKwjJhdChI0lOxtU=;
+    b=EmOMBLh84jYGENmMw3FiyMU8uDlEPBla7puVnJ3lV0SsuxVVd2zrF623gfUbjdMCed
+    1xQ0x8T17uQHeljRKoMLetbLd2J16qvOaUzCQa+hXk1gSPq3lj39wGfXxCN4cDmP0dhh
+    Pk+SgkznnufrzX0+ZTvd7IW5IyJP7hd2oPK6R9Jj2vrwCxY8Own4wVRFoLJvJLQAPZbg
+    +DZd5lNuo9dL9ucE2XIfBYag6o/xMIqKcIexf4kyB7Au9ibE9exxXxPQPmgCZOHNcONv
+    XEBEmcc+6LXF2izjII8i0BXKmx0YTlUfqRBnYIqj5mivUILmo8MUkQXXsKvxHcSQQfGj
+    Zu6A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1687209521;
+    s=strato-dkim-0003; d=iokpp.de;
+    h=Message-Id:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=nj2Y7Ri4R0W6QZ4x2JuvJ33FXiLCKwjJhdChI0lOxtU=;
+    b=grxmVO2oXqYiWN0i48AewPi5wFOOtkL09drX1sgR8KqfkktewI0o0eR9KLCe3gO6OV
+    1yAtzccL2EdNXHC01wCA==
+X-RZG-AUTH: ":LmkFe0i9dN8c2t4QQyGBB/NDXvjDB6pBSedrgBzPc9DUyubU4DD1EQ33bneoxgmq7ABeEwyjghc0WGLJ+05px4XK4px0+bSzE8qij5Q="
+Received: from blinux.speedport.ip
+    by smtp.strato.de (RZmta 49.6.0 AUTH)
+    with ESMTPSA id zb0c8bz5JLIcDvf
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Mon, 19 Jun 2023 23:18:38 +0200 (CEST)
+From:   Bean Huo <beanhuo@iokpp.de>
+To:     viro@zeniv.linux.org.uk, brauner@kernel.org,
+        akpm@linux-foundation.org, jack@suse.cz, jack@suse.com,
+        tytso@mit.edu, adilger.kernel@dilger.ca, mark@fasheh.com,
+        jlbec@evilplan.org, joseph.qi@linux.alibaba.com
+Cc:     linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ocfs2-devel@oss.oracle.com,
+        beanhuo@micron.com, Bean Huo <beanhuo@iokpp.de>
+Subject: [PATCH v2 0/5] clean up block_commit_write
+Date:   Mon, 19 Jun 2023 23:18:22 +0200
+Message-Id: <20230619211827.707054-1-beanhuo@iokpp.de>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Brian!
+Changelog:
 
-On Mon, Jun 19 2023 at 15:47, Brian Gerst wrote:
-> Other than one unused macro, ia32_unistd.h is just a wrapper for
-> unistd_32_ia32.h, and can be removed.
->
-> Brian Gerst (2):
->   x86/syscall/compat: Remove unused macro __SYSCALL_ia32_NR
->   x86/syscall/compat: Remove ia32_unistd.h
+    v1--v2:
+        1. Re-order patches to avoid breaking compilation.
 
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+Bean Huo (5):
+  fs/buffer: clean up block_commit_write
+  ext4: No need to check return value of block_commit_write()
+  fs/ocfs2: No need to check return value of block_commit_write()
+  udf: No need to check return value of block_commit_write()
+  fs/buffer.c: convert block_commit_write to return void
 
-Thanks a lot for doing this (thankless) cleanup work!
+ fs/buffer.c                 | 24 +++++++-----------------
+ fs/ext4/move_extent.c       |  7 ++-----
+ fs/ocfs2/file.c             |  7 +------
+ fs/udf/file.c               |  6 +++---
+ include/linux/buffer_head.h |  2 +-
+ 5 files changed, 14 insertions(+), 32 deletions(-)
 
-       tglx
+-- 
+2.34.1
+
