@@ -2,259 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED7E7351A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 12:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35EC17351A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 12:11:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231866AbjFSKKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 06:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54204 "EHLO
+        id S231923AbjFSKLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 06:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231845AbjFSKKV (ORCPT
+        with ESMTP id S231740AbjFSKLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 06:10:21 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B90710C0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 03:09:53 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f90b8acefeso12725785e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 03:09:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687169381; x=1689761381;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=qL1Y9NTTBFPTkLhCXPXhMrGsEQz66xI2d8hJPKibEXE=;
-        b=ecl8/xkZnzxzwe1eJeQ03wgBEZ/tw5tQF+fKaVcp3eggBHVTKjxoB80xb872DQdfO6
-         yrIqcQsJSzw2ht1btgrJgLGsfdSH8FwxPcFBWfu15tx1WzPppHLrafK91LNIRIL0/Cde
-         lVQwgjSveA0Xa5X1+RFpDGFzK8ptefNmHogIv77x0rF4CgLOMCRkPcmLrg69024UMiE1
-         jNYJZ+/kp4eWCjI0P7Y8xbAzyPY7vhxY75I0ZdiRKMD3cIjVCh4rJtkiGk5vKADvrQo9
-         uiDTUGuhL8RpHxenz8+q0FpZ8VH0VNRJvSmdO1mvwBpRqZhebBfWveidCRhO9ZAMGCXL
-         omRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687169381; x=1689761381;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qL1Y9NTTBFPTkLhCXPXhMrGsEQz66xI2d8hJPKibEXE=;
-        b=kUQakrWnatYtTeSqeW8C79m2eBUwd1J/4fOi0mDDDhjxWHPRzvPMf5UtK1xbkb+XZQ
-         1//Do65hHirUXt7bOvHu2l7cLFmTnZVoP8HoJUkP34+4L15MDwMP8rrwxY6lJvfX/QTo
-         lM1RlAK6QjZhCtVNryp8gbq9iGvp3IP4PZ/CZ5exmoWIoIvDLBpH93qKC2Wk7GbgKvw7
-         jpAP8dktquR4zFkShKJWLoZmZA6HQBLQjkW6Psm/kPBHtpQePmOFGXakXDy+XQ8n+oAs
-         QCrrFKgTrPgMIUCHvAqQoijw3sdCQpy+H9dLB/0UnadKyQnFxXFYAQidm7eerMZyWpIF
-         tn1g==
-X-Gm-Message-State: AC+VfDxlObw9K1TvHiU374kjwtov3Z/jwVhIm4fYXcO94PA4C75K+P8N
-        7HIDztZoMKJIBtpcn8wdfMa4lg==
-X-Google-Smtp-Source: ACHHUZ75N+n4c2DV5uEmFOy5Vi9V0f6zvoat3Q+ugXiUr7THvx6ZpwB/C/0AFoTjplRxgN/Qps+eAw==
-X-Received: by 2002:a05:600c:2190:b0:3f9:be1:507d with SMTP id e16-20020a05600c219000b003f90be1507dmr2619357wme.20.1687169380970;
-        Mon, 19 Jun 2023 03:09:40 -0700 (PDT)
-Received: from [192.168.7.189] (679773502.box.freepro.com. [212.114.21.58])
-        by smtp.gmail.com with ESMTPSA id u9-20020a05600c00c900b003f9b0cfbe30sm2626023wmm.36.2023.06.19.03.09.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 03:09:40 -0700 (PDT)
-Message-ID: <5b9535d6-d59e-5b8b-2649-3efdb777a8a2@linaro.org>
-Date:   Mon, 19 Jun 2023 12:09:39 +0200
+        Mon, 19 Jun 2023 06:11:07 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94BBC10CE;
+        Mon, 19 Jun 2023 03:10:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
+ s=s31663417; t=1687169428; x=1687774228; i=deller@gmx.de;
+ bh=qGeiVrX793s0DZYEPdtucWfg8cVq1CsOldhtd9/eL3w=;
+ h=X-UI-Sender-Class:Date:Subject:To:References:From:In-Reply-To;
+ b=N7Px8AjvhL4+znxRqKxz+lSA270421k2rcZysgGpUOdCoRMhGTVOjDqDGLH1s0EkpQD0ZFf
+ P8X6a67UPCgBtqINFV+8/+O48QhEDhGdWFL8S2dc7nWGUbJOPu9FHjuAF/MwnelAJRj70ooke
+ TF0kgPe8dAPr5xLyNrzU7eQOpE1eD3kp57dGR93RygOq7/7ZzHsan29gdI/D6roYCEefuxco/
+ Po6GiDXT+7WReQvdM1U5aRmkRt1Y+JRjARR3yIt3/ipmtXPE3rWn4HHtSismb6F+asv/8Oj/G
+ auQPLsmcFpQoUStnyLN72oawOJVSUjfcDxuz1ekj35RKbozKmoNw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.144.204]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N2E1G-1q6PTW2kcI-013i1Z; Mon, 19
+ Jun 2023 12:10:28 +0200
+Message-ID: <6c7a0ca2-003b-c724-6ef1-4d756d05d2f0@gmx.de>
+Date:   Mon, 19 Jun 2023 12:10:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 2/2] interconnect: qcom: sm8550: add enable_mask for bcm
- nodes
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/3] nios2: Fix flush_dcache_page() for usage from irq
+ context
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230619-topic-sm8550-upstream-interconnect-mask-vote-v1-0-66663c0aa592@linaro.org>
- <20230619-topic-sm8550-upstream-interconnect-mask-vote-v1-2-66663c0aa592@linaro.org>
- <f4801649-6968-7e62-01b1-7aa517a5d2f3@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <f4801649-6968-7e62-01b1-7aa517a5d2f3@linaro.org>
+To:     Dinh Nguyen <dinguyen@kernel.org>, linux@armlinux.org.uk,
+        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org
+References: <20230524152633.203927-1-deller@gmx.de>
+ <20230524152633.203927-3-deller@gmx.de>
+ <d5bd569d-b20e-f9c7-d839-93011dde380b@kernel.org>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <d5bd569d-b20e-f9c7-d839-93011dde380b@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:6Ip6mm7Bsw+/cTJsBB4pvMFdzoEQcOBCpy8pF0iNolDQnV9g6xO
+ Kaxf/VhnOD/qaECrj4ihQZK7zgQ12RoTTOe4jXea6vqDj52E3/ZKrkEyrgE9bJE95StLKUk
+ QjkBoizdPUV2f9C0Z87Kh61nOR5xeXswAU5iMrMr1RJvzmAdHxRas4oyMhkBjaXaGZw8LHv
+ QDCTMPCq1u49IMf8wx2Uw==
+UI-OutboundReport: notjunk:1;M01:P0:qmtmZJb+fTI=;ofiShLOTJd+FmbyF/cxgXTjj6/m
+ 1c50isGBSSmpooU3EBnDLlKYI6pj+dvZ0InRMF/IW/qHNTJZewNtxjQsIMM9OZW7pY0jCvk2L
+ iqNZaA0oMrvA3DCEKKI8OOqVOuGnTiyAso9B+TklqkrfVaOBFX05Bft6wHSAF8CwbCYe7YOtl
+ bb/3WduWfTG7xrC+uDZCRTMeHxHB9aWJ7/HlBs/ykMO+LlGlqcSMoMMkyNz4PGHCNZ/UyAs1F
+ TbDQr7/eqHQvhfGTwyGDSy6uQ4nd//mCctuedjPtJbOSmCe6KtLsaJ9wGczSN8IXj0S6GLUEN
+ GkcRqQXSBDSzbaQMf/QGJ2wdsrO+fvyf4QQu8iNiVvBk4RyIWBZGgpopPyxI3zK3QRjHzF981
+ svk5BLTXhXPDSeYu6zqVziOGDW5sgjUOcVS/Nbs18/3ASCIdZ9seorxIz4kJfrwO4kXFa1O0B
+ ROldqmDjv4esQsHt5EeCuKlHy81gbImu5Ke8NbTId9sZGmRk9fDC6yScSVDEyF4O/gTEvzNxX
+ rslfj4/Sbvz/yRWafBLg/JnzZd9aYEft7Jzrynp8KXdGTzS6V/y9sbmScAyhiFlTy54KFd16F
+ YXFj4OVNsyQV3cL3IPG2TtHZN3A+7jrBHqPQAZuJNAJ7rnOO/+0f1cK+UWa6v27sn+I8kI6TY
+ wv873yemxhmLdNsa9RiPzrSwVTsvDGaI87WQowmJsraROW7xfPrIZGrZMf2GW3D1lyQG7gv6K
+ wGa8vtSr+02jhURb9OTv3taZquBs5FKqqleDcCgjgcpwTLcPAPFYUTDBEscZmk3RiKOjgfKzo
+ JM4r6Em1G7TxXBlDuvy6139O3KQs6y+yTNCS/9vRXfJoXc5wl68vGrsoolhILfsyz6kbnnlUa
+ R4TRS0FnSXSdmxbEhcsiePledct/I9QIDWljgktylsRoYZXEgiHbQwQ2IfCTjC6nUs4ui+JDD
+ DLWuOKYQEquTAZo2nHeE+5ZSk0s=
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/06/2023 11:55, Konrad Dybcio wrote:
-> On 19.06.2023 10:24, Neil Armstrong wrote:
->> Set the proper enable_mask to needs requiring such value
->> to be used instead of a bandwidth when voting.
+Hi Dinh,
+
+On 6/14/23 00:39, Dinh Nguyen wrote:
+> Thanks for the patch. Does it need a Fixes tag?
+
+I did not add a fixes tag for the parisc or arm version.
+
+The code was originally correct, but later patches then suddenly started
+using cache flushes from irq context (e.g. 21b40200cfe96 ("aio: use
+flush_dcache_page()")) which then triggers the bug.
+So, it's hard to say that it fixes one specific commit.
+
+I suggest you backport it as far as possible.
+
+Helge
+
+> Dinh
+>
+> On 5/24/23 10:26, Helge Deller wrote:
+>> Since at least kernel 6.1, flush_dcache_page() is called with IRQs
+>> disabled, e.g. from aio_complete().
 >>
->> The masks were copied from the downstream implementation at [1].
+>> But the current implementation for flush_dcache_page() on NIOS2
+>> unintentionally re-enables IRQs, which may lead to deadlocks.
 >>
->> [1] https://git.codelinaro.org/clo/la/kernel/msm-5.15/-/blob/kernel.lnx.5.15.r1-rel/drivers/interconnect/qcom/kalama.c
+>> Fix it by using xa_lock_irqsave() and xa_unlock_irqrestore()
+>> for the flush_dcache_mmap_*lock() macros instead.
 >>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> Cc: Dinh Nguyen <dinguyen@kernel.org>
+>> Signed-off-by: Helge Deller <deller@gmx.de>
 >> ---
-> The values match downstream, so:
-> 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
-> Since you're already touching this code, may I turn your interest to:
-> 
-> 1. Adding enable_mask-s to 8450 and 8775
-> 
-> 2. Porting https://git.codelinaro.org/clo/la/kernel/msm-5.15/-/commit/d5edeca085f4
-> 
-> 3. Adding the default perf settings for 8450 and 8550
-
-Yep this would be the next steps.
-
-Neil
-
-> 
-> Konrad
-> 
->>   drivers/interconnect/qcom/sm8550.c | 17 +++++++++++++++++
->>   1 file changed, 17 insertions(+)
+>> =C2=A0 arch/nios2/include/asm/cacheflush.h | 4 ++++
+>> =C2=A0 arch/nios2/mm/cacheflush.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 | 5 +++--
+>> =C2=A0 2 files changed, 7 insertions(+), 2 deletions(-)
 >>
->> diff --git a/drivers/interconnect/qcom/sm8550.c b/drivers/interconnect/qcom/sm8550.c
->> index d823ba988ef6..0864ed285375 100644
->> --- a/drivers/interconnect/qcom/sm8550.c
->> +++ b/drivers/interconnect/qcom/sm8550.c
->> @@ -1473,6 +1473,7 @@ static struct qcom_icc_node qns_mem_noc_sf_cam_ife_2 = {
->>   
->>   static struct qcom_icc_bcm bcm_acv = {
->>   	.name = "ACV",
->> +	.enable_mask = 0x8,
->>   	.num_nodes = 1,
->>   	.nodes = { &ebi },
->>   };
->> @@ -1485,6 +1486,7 @@ static struct qcom_icc_bcm bcm_ce0 = {
->>   
->>   static struct qcom_icc_bcm bcm_cn0 = {
->>   	.name = "CN0",
->> +	.enable_mask = 0x1,
->>   	.keepalive = true,
->>   	.num_nodes = 54,
->>   	.nodes = { &qsm_cfg, &qhs_ahb2phy0,
->> @@ -1524,6 +1526,7 @@ static struct qcom_icc_bcm bcm_cn1 = {
->>   
->>   static struct qcom_icc_bcm bcm_co0 = {
->>   	.name = "CO0",
->> +	.enable_mask = 0x1,
->>   	.num_nodes = 2,
->>   	.nodes = { &qxm_nsp, &qns_nsp_gemnoc },
->>   };
->> @@ -1549,6 +1552,7 @@ static struct qcom_icc_bcm bcm_mm0 = {
->>   
->>   static struct qcom_icc_bcm bcm_mm1 = {
->>   	.name = "MM1",
->> +	.enable_mask = 0x1,
->>   	.num_nodes = 8,
->>   	.nodes = { &qnm_camnoc_hf, &qnm_camnoc_icp,
->>   		   &qnm_camnoc_sf, &qnm_vapss_hcp,
->> @@ -1589,6 +1593,7 @@ static struct qcom_icc_bcm bcm_sh0 = {
->>   
->>   static struct qcom_icc_bcm bcm_sh1 = {
->>   	.name = "SH1",
->> +	.enable_mask = 0x1,
->>   	.num_nodes = 13,
->>   	.nodes = { &alm_gpu_tcu, &alm_sys_tcu,
->>   		   &chm_apps, &qnm_gpu,
->> @@ -1608,6 +1613,7 @@ static struct qcom_icc_bcm bcm_sn0 = {
->>   
->>   static struct qcom_icc_bcm bcm_sn1 = {
->>   	.name = "SN1",
->> +	.enable_mask = 0x1,
->>   	.num_nodes = 3,
->>   	.nodes = { &qhm_gic, &xm_gic,
->>   		   &qns_gemnoc_gc },
->> @@ -1633,6 +1639,7 @@ static struct qcom_icc_bcm bcm_sn7 = {
->>   
->>   static struct qcom_icc_bcm bcm_acv_disp = {
->>   	.name = "ACV",
->> +	.enable_mask = 0x1,
->>   	.num_nodes = 1,
->>   	.nodes = { &ebi_disp },
->>   };
->> @@ -1657,12 +1664,14 @@ static struct qcom_icc_bcm bcm_sh0_disp = {
->>   
->>   static struct qcom_icc_bcm bcm_sh1_disp = {
->>   	.name = "SH1",
->> +	.enable_mask = 0x1,
->>   	.num_nodes = 2,
->>   	.nodes = { &qnm_mnoc_hf_disp, &qnm_pcie_disp },
->>   };
->>   
->>   static struct qcom_icc_bcm bcm_acv_cam_ife_0 = {
->>   	.name = "ACV",
->> +	.enable_mask = 0x0,
->>   	.num_nodes = 1,
->>   	.nodes = { &ebi_cam_ife_0 },
->>   };
->> @@ -1681,6 +1690,7 @@ static struct qcom_icc_bcm bcm_mm0_cam_ife_0 = {
->>   
->>   static struct qcom_icc_bcm bcm_mm1_cam_ife_0 = {
->>   	.name = "MM1",
->> +	.enable_mask = 0x1,
->>   	.num_nodes = 4,
->>   	.nodes = { &qnm_camnoc_hf_cam_ife_0, &qnm_camnoc_icp_cam_ife_0,
->>   		   &qnm_camnoc_sf_cam_ife_0, &qns_mem_noc_sf_cam_ife_0 },
->> @@ -1694,6 +1704,7 @@ static struct qcom_icc_bcm bcm_sh0_cam_ife_0 = {
->>   
->>   static struct qcom_icc_bcm bcm_sh1_cam_ife_0 = {
->>   	.name = "SH1",
->> +	.enable_mask = 0x1,
->>   	.num_nodes = 3,
->>   	.nodes = { &qnm_mnoc_hf_cam_ife_0, &qnm_mnoc_sf_cam_ife_0,
->>   		   &qnm_pcie_cam_ife_0 },
->> @@ -1701,6 +1712,7 @@ static struct qcom_icc_bcm bcm_sh1_cam_ife_0 = {
->>   
->>   static struct qcom_icc_bcm bcm_acv_cam_ife_1 = {
->>   	.name = "ACV",
->> +	.enable_mask = 0x0,
->>   	.num_nodes = 1,
->>   	.nodes = { &ebi_cam_ife_1 },
->>   };
->> @@ -1719,6 +1731,7 @@ static struct qcom_icc_bcm bcm_mm0_cam_ife_1 = {
->>   
->>   static struct qcom_icc_bcm bcm_mm1_cam_ife_1 = {
->>   	.name = "MM1",
->> +	.enable_mask = 0x1,
->>   	.num_nodes = 4,
->>   	.nodes = { &qnm_camnoc_hf_cam_ife_1, &qnm_camnoc_icp_cam_ife_1,
->>   		   &qnm_camnoc_sf_cam_ife_1, &qns_mem_noc_sf_cam_ife_1 },
->> @@ -1732,6 +1745,7 @@ static struct qcom_icc_bcm bcm_sh0_cam_ife_1 = {
->>   
->>   static struct qcom_icc_bcm bcm_sh1_cam_ife_1 = {
->>   	.name = "SH1",
->> +	.enable_mask = 0x1,
->>   	.num_nodes = 3,
->>   	.nodes = { &qnm_mnoc_hf_cam_ife_1, &qnm_mnoc_sf_cam_ife_1,
->>   		   &qnm_pcie_cam_ife_1 },
->> @@ -1739,6 +1753,7 @@ static struct qcom_icc_bcm bcm_sh1_cam_ife_1 = {
->>   
->>   static struct qcom_icc_bcm bcm_acv_cam_ife_2 = {
->>   	.name = "ACV",
->> +	.enable_mask = 0x0,
->>   	.num_nodes = 1,
->>   	.nodes = { &ebi_cam_ife_2 },
->>   };
->> @@ -1757,6 +1772,7 @@ static struct qcom_icc_bcm bcm_mm0_cam_ife_2 = {
->>   
->>   static struct qcom_icc_bcm bcm_mm1_cam_ife_2 = {
->>   	.name = "MM1",
->> +	.enable_mask = 0x1,
->>   	.num_nodes = 4,
->>   	.nodes = { &qnm_camnoc_hf_cam_ife_2, &qnm_camnoc_icp_cam_ife_2,
->>   		   &qnm_camnoc_sf_cam_ife_2, &qns_mem_noc_sf_cam_ife_2 },
->> @@ -1770,6 +1786,7 @@ static struct qcom_icc_bcm bcm_sh0_cam_ife_2 = {
->>   
->>   static struct qcom_icc_bcm bcm_sh1_cam_ife_2 = {
->>   	.name = "SH1",
->> +	.enable_mask = 0x1,
->>   	.num_nodes = 3,
->>   	.nodes = { &qnm_mnoc_hf_cam_ife_2, &qnm_mnoc_sf_cam_ife_2,
->>   		   &qnm_pcie_cam_ife_2 },
+>> diff --git a/arch/nios2/include/asm/cacheflush.h b/arch/nios2/include/a=
+sm/cacheflush.h
+>> index d0b71dd71287..a37242662809 100644
+>> --- a/arch/nios2/include/asm/cacheflush.h
+>> +++ b/arch/nios2/include/asm/cacheflush.h
+>> @@ -48,5 +48,9 @@ extern void invalidate_dcache_range(unsigned long sta=
+rt, unsigned long end);
+>>
+>> =C2=A0 #define flush_dcache_mmap_lock(mapping)=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 xa_lock_irq(&mapping->i_pages)
+>> =C2=A0 #define flush_dcache_mmap_unlock(mapping)=C2=A0=C2=A0=C2=A0 xa_u=
+nlock_irq(&mapping->i_pages)
+>> +#define flush_dcache_mmap_lock_irqsave(mapping, flags)=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 \
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 xa_lock_irqsave(&mapping->i=
+_pages, flags)
+>> +#define flush_dcache_mmap_unlock_irqrestore(mapping, flags)=C2=A0=C2=
+=A0=C2=A0 \
+>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 xa_unlock_irqrestore(&mappi=
+ng->i_pages, flags)
+>>
+>> =C2=A0 #endif /* _ASM_NIOS2_CACHEFLUSH_H */
+>> diff --git a/arch/nios2/mm/cacheflush.c b/arch/nios2/mm/cacheflush.c
+>> index 6aa9257c3ede..35f3b599187f 100644
+>> --- a/arch/nios2/mm/cacheflush.c
+>> +++ b/arch/nios2/mm/cacheflush.c
+>> @@ -75,11 +75,12 @@ static void flush_aliases(struct address_space *map=
+ping, struct page *page)
+>> =C2=A0 {
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct mm_struct *mm =3D current->active=
+_mm;
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct vm_area_struct *mpnt;
+>> +=C2=A0=C2=A0=C2=A0 unsigned long flags;
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pgoff_t pgoff;
+>>
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pgoff =3D page->index;
+>>
+>> -=C2=A0=C2=A0=C2=A0 flush_dcache_mmap_lock(mapping);
+>> +=C2=A0=C2=A0=C2=A0 flush_dcache_mmap_lock_irqsave(mapping, flags);
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vma_interval_tree_foreach(mpnt, &mapping=
+->i_mmap, pgoff, pgoff) {
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned long of=
+fset;
+>>
+>> @@ -92,7 +93,7 @@ static void flush_aliases(struct address_space *mappi=
+ng, struct page *page)
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 flush_cache_page=
+(mpnt, mpnt->vm_start + offset,
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 page_to_pfn(page));
+>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
+>> -=C2=A0=C2=A0=C2=A0 flush_dcache_mmap_unlock(mapping);
+>> +=C2=A0=C2=A0=C2=A0 flush_dcache_mmap_unlock_irqrestore(mapping, flags)=
+;
+>> =C2=A0 }
+>>
+>> =C2=A0 void flush_cache_all(void)
+>> --
+>> 2.38.1
 >>
 
