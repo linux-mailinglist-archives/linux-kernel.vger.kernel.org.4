@@ -2,82 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C8E73555F
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:04:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90ABA735566
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 13:05:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232614AbjFSLEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 07:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
+        id S232000AbjFSLFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 07:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232366AbjFSLDo (ORCPT
+        with ESMTP id S232626AbjFSLEl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 07:03:44 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A9C199E
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 04:02:39 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-3f9d619103dso313641cf.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 04:02:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687172558; x=1689764558;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a1ugOR/KEVGYUAKk/Qgjdj0XOASdnjFM7amQnwAGBpE=;
-        b=SMYN+zoY8GakUy6Uui72WHzodYo4MHpEx/QctJPwsbuqUf5i29Ochiy97P533vCVyM
-         YlCNiLJjO6JeEhOOsTVnpFgtDX02fkeyJiT6b7LHJjD/y02ikcRTElHFPeezbKTyGnG6
-         QnbY9xkKPfpoCL1JGVv/39WHW/Dw0YImMN+Q9UPLn9CkwR6+/XfOh8SWFAWWnjaBoIPU
-         8vakdZ1aWdhas5CR3LhXOhm+1Ef29MJEADGvGv8+MJa6EcBKGkqA1HDjtF9Q/jjHL3WH
-         JhfdRFRUVSOhdOjd3hmHqUCr24uX+rbehT5VW1njAzqHoOQ/Mv7raoAAAT2G/Qzoeufs
-         R1rA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687172558; x=1689764558;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a1ugOR/KEVGYUAKk/Qgjdj0XOASdnjFM7amQnwAGBpE=;
-        b=DHjPdfrxbW+Gw7inqAXsXV6jU3mKZB/Ls9164i7qxIK89cLpwYQTMGqq57hsB4mvF9
-         dn7LbJEljqJUawnY1f0UtBWQmWPJWK1STrY3N7vJr2IgtEGvaFqBaCOz2bGBqjjdNXHx
-         dP70basD12KYzl/JSYBN5rCtBx+snz2nkqQo28m4YabXt1zFCzOWyCm/85cfQdKhD73Y
-         LcLAqC4gYUW31XJxbSjqMU605VNsi6o9cu7rYy3q5PyZ7d2N92lyLJOzaEv4XTjEJ4S2
-         UmR/YhWmoIHmwPDHjuizV85OKSZ27HOhst3soUx7Ojtb4d4l506+Hld5hoP6a78hzGyr
-         Fofw==
-X-Gm-Message-State: AC+VfDxn15an1/DCd84/AxVwuFS1PkvK4jJtBnWYQEu2G3G9o6cpYKCr
-        0WbrKMM4u3gV5KWbrz7xLbN9GqsKeD/PL4MRH04d5w==
-X-Google-Smtp-Source: ACHHUZ5D6gOzxDPBzlWVen/WvBANfbbBPs2oeYrfU58bLqsgPMrlOYxAltoM+w4lQ2unLBjlVHFxfQHfYi5QgORGpoc=
-X-Received: by 2002:a05:622a:1745:b0:3ef:3361:75d5 with SMTP id
- l5-20020a05622a174500b003ef336175d5mr1105234qtk.11.1687172558235; Mon, 19 Jun
- 2023 04:02:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230619090336.145738-1-mmpgouride@gmail.com>
-In-Reply-To: <20230619090336.145738-1-mmpgouride@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 19 Jun 2023 13:02:27 +0200
-Message-ID: <CANn89iJgM1-SBzHXDdur+MgK2cBBeOacKOWz=zPyEa2mee3fOw@mail.gmail.com>
-Subject: Re: [PATCH] list: Remove unnecessary WRITE_ONCE()
-To:     Alan Huang <mmpgouride@gmail.com>
-Cc:     paulmck@kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 19 Jun 2023 07:04:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F1D2733;
+        Mon, 19 Jun 2023 04:03:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9923160BA2;
+        Mon, 19 Jun 2023 11:03:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05EB9C433C8;
+        Mon, 19 Jun 2023 11:03:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687172610;
+        bh=Gbbft4RegPZLfwKq98ecTGKYvyCX9Hk20rzGGLCNRyg=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=uiPAiFYuI4+WL4ZgxE2edNxsq+aFR5tBS4hzIg7oRW40jX81+zqf3Sy3hVTfZTK1c
+         /+Qc684YtfpetV9nsPn2fgtk0Glha8F8DpfB3AjOhJR0VEUWgpq8vCHqhlyVJt+vxy
+         1PzdGnP9kdhbjzoDxqqj+ugdkWXAdTAiLMDdP72hpGL2SBJKm0hVgES8+IqZmfOEX9
+         BzHZjLAS4o40UwDLy0AtgTv/nu18bfZ7KHN2UJnaXVssR8vA2JX4aQ9mYiXp9iH00h
+         kYFXX6y9OmcfGcMUF0ECcZqVulY9HB16vasxC8y0oyMTJ4dY29TaJw3g3xG3I21wtc
+         Pp7az95SIw/0w==
+Message-ID: <356b94ef10dc12063da5dc145b61a47ddff5c23a.camel@kernel.org>
+Subject: Re: [PATCH] nfsd: move init of percpu reply_cache_stats counters
+ back to nfsd_init_net
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Chuck Lever III <chuck.lever@oracle.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     Chuck Lever <cel@kernel.org>, Neil Brown <neilb@suse.de>,
+        Olga Kornievskaia <kolga@netapp.com>,
+        Dai Ngo <dai.ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+        linux-stable <stable@vger.kernel.org>,
+        Eirik Fuller <efuller@redhat.com>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Mon, 19 Jun 2023 07:03:27 -0400
+In-Reply-To: <9154BA25-C795-4BEF-B32D-EAB8679E9472@oracle.com>
+References: <20230616191744.202292-1-jlayton@kernel.org>
+         <ZIzFp3ViiU2SCi6J@manet.1015granger.net>
+         <4b5063eb5a1139adc9dd4bdadde30674faee0700.camel@kernel.org>
+         <d698b838-57e0-d019-a783-c229c04eeca4@leemhuis.info>
+         <7d9515dbe6af110f2c32dce2b994120e4637b295.camel@kernel.org>
+         <9154BA25-C795-4BEF-B32D-EAB8679E9472@oracle.com>
+Content-Type: text/plain; charset="ISO-8859-15"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 11:03=E2=80=AFAM Alan Huang <mmpgouride@gmail.com> =
-wrote:
->
-> Commit c54a2744497d("list: Add hlist_unhashed_lockless()") added
-> various WRITE_ONCE() to pair with the READ_ONCE() in
-> hlist_unhashed_lockless(), but there is no need to protect
-> ->next with WRITE_ONCE(). Therefore, this commit removes those
-> unnecessary WRITE_ONCE().
+On Sun, 2023-06-18 at 15:59 +0000, Chuck Lever III wrote:
+>=20
+> > On Jun 18, 2023, at 8:09 AM, Jeff Layton <jlayton@kernel.org> wrote:
+> >=20
+> > On Sun, 2023-06-18 at 12:40 +0200, Thorsten Leemhuis wrote:
+> > > On 16.06.23 22:54, Jeff Layton wrote:
+> > > > On Fri, 2023-06-16 at 16:27 -0400, Chuck Lever wrote:
+> > > > > Thanks Eirik and Jeff.
+> > > > >=20
+> > > > > At this point in the release cycle, I plan to apply this for the
+> > > > > next merge window (6.5).
+> > > >=20
+> > > > I think we should take this in sooner. This is a regression and a
+> > > > user-triggerable oops in the right situation. If:
+> > > >=20
+> > > > - non-x86_64 arch
+> > > > - /proc/fs/nfsd is mounted in the namespace
+> > > > - nfsd is not started in the namespace
+> > > > - unprivileged user calls "cat /proc/fs/nfsd/reply_cache_stats"
+> > >=20
+> > > FWIW, might be worth to simply tell Linus about it and let him decide=
+,
+> > > that's totally fine and even documented in the old and the new docs f=
+or
+> > > handling regressions[1].
+> > >=20
+> > > [1]
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/c=
+ommit/Documentation/process/handling-regressions.rst?id=3Deed892da9cd08be76=
+a8f467c600ef58716dbb4d2
+> > >=20
+> >=20
+> > I'd rather Chuck make the final call here.
+>=20
+> Thanks! I feel this one needs broader testing than we can manage
+> in just a couple of days. If this were earlier in the -rc cycle
+> I would pull the patch right into 6.4-rc without hesitation. It
+> is obviously -rc material, but the timing is unfortunate.
+>=20
+> I'm planning the nfsd for-6.5 pull request early in the merge
+> window, so practically speaking it shouldn't delay the finalized
+> upstream version of this patch by more than a few days.
+>=20
+>=20
+Ok. I'll trust your judgment then and just cultivate my patience!
 
-Why are they unnecessary ?
-They seem just fine to me.
-Please elaborate.
+Cheers,
+--=20
+Jeff Layton <jlayton@kernel.org>
