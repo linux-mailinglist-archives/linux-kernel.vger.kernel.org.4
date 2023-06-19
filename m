@@ -2,135 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351D3735C8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 18:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0A23735C91
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 19:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjFSQ6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 12:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
+        id S230098AbjFSQ7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 12:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbjFSQ62 (ORCPT
+        with ESMTP id S230319AbjFSQ7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 12:58:28 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61529E2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:58:27 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f9b0f139feso15309155e9.3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 09:58:27 -0700 (PDT)
+        Mon, 19 Jun 2023 12:59:16 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6351C187;
+        Mon, 19 Jun 2023 09:59:14 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f900cd3f96so24615245e9.2;
+        Mon, 19 Jun 2023 09:59:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687193906; x=1689785906;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        d=gmail.com; s=20221208; t=1687193953; x=1689785953;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=cSjLhKAkEVmr9MYwtf9eP9pfk3HW3uaYe68MnVI4gb4=;
-        b=JlVoWKoejeYGVw9gW2I/yNfs7ivLHcr1xRX/Kt9aY+bNwIYXp2NvRfeCZHk+T69Xux
-         VizWnR2LcZ3KuXcodUg3gLKcfu8BL0M3D1nWycrXYlyzMwkn69cL5OxaHIDnbsFTtY2n
-         BHz9GBSZ2mPvHFQCavT77ItUUyjF+RrquclO4Lx3lmmbYQxwGJ+SqmxCdgE2+Tweej4E
-         chy5R2GV5JpIAaUz/bl3nf2SsHV2/w7d3uUzR248KV+FHYj3EEUyu91Cnj7Xn72ETw2E
-         E5fgy16kn6ppIe+1J9ceVMUUQudx3B3igm5sTtnCpY1Jpm68LHzCFoZLjcRLhf7kOs3x
-         5Lxw==
+        bh=TcgbxV13XHEhA/N3Ft+cQbY1ssnVPurgnzZbLT5IVvg=;
+        b=rmSHozbtFZwsTQuNS4qaaFdpHUAsEWtn1O06M+v2RH9pZegxdEClx+Os8kKZ5mv0hD
+         Mzg8unGu/utXpqiKwaprjvmUf6qVbRXbrQhonesupUatGu3LWXurCl3Fo2THWDrEL5W3
+         qTKPTNa7N1gj32TLPZUmXKusTyLK9o6/dKUVWLH3HODNcEz6XHiDwgEfe+FSykhDf+i3
+         UjFo0DqIMvuXYY/BWhqHFy31B7u0fcnClGmiFiyc5itKTEtOrtaP1sWv8BY7c5nLZrk8
+         3xR9KPCXfS8eZc2Qr86IJjQ1XDqCsBxtYPfgozJIiir58bi1leS4phMWm2sz/xjsu5tL
+         CpVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687193906; x=1689785906;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        d=1e100.net; s=20221208; t=1687193953; x=1689785953;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cSjLhKAkEVmr9MYwtf9eP9pfk3HW3uaYe68MnVI4gb4=;
-        b=QIXsxDULRpqScRo8GNPrQQjccHxpi7gu7pYsWAfwblO9uev5NnVBW2guUtFBpw39ED
-         gRmBaiEzVOQJbWVoDSqXdR53wrBM51rEzovH8iy2VuAvcDqzp05onn/d7+fpQ0oNIu4y
-         60sIThC6tfp3yoQGKjyMcE9vuq+GDNQoemNnRE7MneS4J4NYwmLXvqLBQjN6PiTOXSOn
-         OKqlR026wqOHGhjayx7tsJqykvsYDAh5KJFgEnWq8Bwr6UfTuCqEY84wIJkmpOu2uGP+
-         9x96ZpIQtLUGNQSPGHOmW/cmjqciufsZJXvQZg5qNVe057EVYZp43Y1VfNyklJuMzsOc
-         yNMQ==
-X-Gm-Message-State: AC+VfDxyPYDejjD8nCpD/WO/DVCEmYWf1V49NdJxlMn1x1a4hNqj5BRX
-        sWjl3sLngti+a+7KaGcuzvie3A==
-X-Google-Smtp-Source: ACHHUZ7LG1qZO6pyGSLX05cmV1ONaJCA3BVDnjiEngtgcdfzljIp98Kn6HsVCboJAURsVKJ3A49TRw==
-X-Received: by 2002:a05:600c:b4e:b0:3f7:fcca:5e32 with SMTP id k14-20020a05600c0b4e00b003f7fcca5e32mr9158353wmr.17.1687193905807;
-        Mon, 19 Jun 2023 09:58:25 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:13d0:1b6c:ce40:5429? ([2a05:6e02:1041:c10:13d0:1b6c:ce40:5429])
-        by smtp.googlemail.com with ESMTPSA id x23-20020a1c7c17000000b003f72468833esm211361wmc.26.2023.06.19.09.58.25
+        bh=TcgbxV13XHEhA/N3Ft+cQbY1ssnVPurgnzZbLT5IVvg=;
+        b=Ea4u4W6GkSBb0Mw33PGdfWYuATh85QdBxMy8S+aOEoYlLR4Rrmb2iPERivPaBDmJTL
+         LkMb0dxdbp7g5MQIZfw+U6NU8BSHrwHNadClEZuauKiB+sGf01AR+3/izSwgRev5lQCn
+         NnCdWCUvZeIL3yN8daOeOtyoXEyDM2LPBQ7oay6oAc3cmUf/Dw60qXPlMlKpa+CUZlgw
+         EHG21p0Kbq/jEzH+2q+8gJ6iBD30ihGrYs4DWpWGNeX5+eTibwxfriOvhFqSgbK0sEFo
+         FcbekOi4nBewMEdyEn/29MIfXewPDSuxn1EmDTDafkcSNYkG6akixgdoUSwLAgi1GaAY
+         7fVA==
+X-Gm-Message-State: AC+VfDyCXX1U0l/KIQbfJQ3CuiqNKJYg+FfawrBBhWRNEnJJMe5AKKqJ
+        rz0OPVoz9qJEuj0wcjvwKu2hlLvC9ehC0A==
+X-Google-Smtp-Source: ACHHUZ6ouUZ32BpR+60TvJfH8oq0bL3RBnN5kq+q9HK67ea5Ripk9XfYfuNAYUcPG7Of/DSSqdCBnQ==
+X-Received: by 2002:a05:600c:aca:b0:3f6:4cfc:79cb with SMTP id c10-20020a05600c0aca00b003f64cfc79cbmr7150653wmr.31.1687193952643;
+        Mon, 19 Jun 2023 09:59:12 -0700 (PDT)
+Received: from [10.83.37.24] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id p21-20020a7bcc95000000b003f739a8bcc8sm229171wma.19.2023.06.19.09.59.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 09:58:25 -0700 (PDT)
-Message-ID: <07c5efe5-4eb0-121f-7b50-8f3fba68beab@linaro.org>
-Date:   Mon, 19 Jun 2023 18:58:24 +0200
+        Mon, 19 Jun 2023 09:59:12 -0700 (PDT)
+Message-ID: <8f464cee-55e4-47c3-3666-629ed548167a@gmail.com>
+Date:   Mon, 19 Jun 2023 17:59:10 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/1] clocksource: hyper-v: Rework clocksource and sched
- clock setup
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v7 04/22] net/tcp: Prevent TCP-MD5 with TCP-AO being set
 Content-Language: en-US
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-References: <1686325621-16382-1-git-send-email-mikelley@microsoft.com>
- <fdc643c4-6298-d337-1d8d-3f28f6c1acfc@linaro.org>
- <BYAPR21MB1688E1163BB36DF03CC8E00BD75FA@BYAPR21MB1688.namprd21.prod.outlook.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <BYAPR21MB1688E1163BB36DF03CC8E00BD75FA@BYAPR21MB1688.namprd21.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+To:     Dmitry Safonov <dima@arista.com>, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     linux-kernel@vger.kernel.org,
+        Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dan Carpenter <error27@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Donald Cassidy <dcassidy@redhat.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Francesco Ruggeri <fruggeri05@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        netdev@vger.kernel.org
+References: <20230614230947.3954084-1-dima@arista.com>
+ <20230614230947.3954084-5-dima@arista.com>
+ <85077827-d11d-d3e6-0d23-9e60974cad0f@kernel.org>
+ <1c2537d0-cf64-c010-fec6-9fa9ad758f42@arista.com>
+ <9ae5c977-ff9c-591d-3a32-ca9dd00d531e@arista.com>
+From:   Dmitry Safonov <0x7f454c46@gmail.com>
+In-Reply-To: <9ae5c977-ff9c-591d-3a32-ca9dd00d531e@arista.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/06/2023 18:44, Michael Kelley (LINUX) wrote:
-> From: Daniel Lezcano <daniel.lezcano@linaro.org> Sent: Monday, June 19, 2023 9:16 AM
+On 6/19/23 17:41, Dmitry Safonov wrote:
+> On 6/19/23 17:31, Dmitry Safonov wrote:
+>> Hi David,
 >>
->> On 09/06/2023 17:47, Michael Kelley wrote:
->>> Current code assigns either the Hyper-V TSC page or MSR-based ref counter
->>> as the sched clock. This may be sub-optimal in two cases. First, if there
->>> is hardware support to ensure consistent TSC frequency across live
->>> migrations and Hyper-V is using that support, the raw TSC is a faster
->>> source of time than the Hyper-V TSC page.  Second, the MSR-based ref
->>> counter is relatively slow because reads require a trap to the hypervisor.
->>> As such, it should never be used as the sched clock. The native sched
->>> clock based on the raw TSC or jiffies is much better.
+>> On 6/18/23 18:50, David Ahern wrote:
+>>> On 6/14/23 4:09 PM, Dmitry Safonov wrote:
+>>>> Be as conservative as possible: if there is TCP-MD5 key for a given peer
+>>>> regardless of L3 interface - don't allow setting TCP-AO key for the same
+>>>> peer. According to RFC5925, TCP-AO is supposed to replace TCP-MD5 and
+>>>> there can't be any switch between both on any connected tuple.
+>>>> Later it can be relaxed, if there's a use, but in the beginning restrict
+>>>> any intersection.
+>>>>
+>>>> Note: it's still should be possible to set both TCP-MD5 and TCP-AO keys
+>>>> on a listening socket for *different* peers.
 >>>
->>> Rework the sched clock setup so it is set to the TSC page only if
->>> Hyper-V indicates that the TSC may have inconsistent frequency across
->>> live migrations. Also, remove the code that sets the sched clock to
->>> the MSR-based ref counter. In the cases where it is not set, the sched
->>> clock will then be the native sched clock.
->>>
->>> As part of the rework, always enable both the TSC page clocksource and
->>> the MSR-based ref counter clocksource. Set the ratings so the TSC page
->>> clocksource is preferred. While the MSR-based ref counter clocksource
->>> is unlikely to ever be the default, having it available for manual
->>> selection is convenient for development purposes.
->>>
->>> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+>>> Does the testsuite cover use of both MD5 and AO for a single listening
+>>> socket with different peers and then other tests covering attempts to
+>>> use both for a same peer?
 >>
->> The patch does not apply, does it depend on another patch?
+>> Thanks for the question, I have written the following tests for
+>> AO/MD5/unsigned listening socket [1]:
+>>
+>> 1. Listener with TCP-AO key, which has addr = INADDR_ANY
+>> 2. Listener with TCP-MD5 key, which has tcpm_addr = INADDR_ANY
+>> 3. Listener without any key
+>>
+>> Then there's AO_REQUIRED thing, which BGP folks asked to introduce,
+>> which is (7.3) from RFC5925, an option that is per-ao_info, which makes
+>> such socket accepting only TCP-AO enabled segments.
+>>
+>> So, 4. Listener with TCP-AO, AO_REQUIRED flag.
+>>
+>> And then, going to non-INADDR_ANY:
+>> 5. Listener with TCP-AO and TCP-MD5 keys for different peers.
+>>
+>> Here again, for each of AO/MD5/unsigned methods, attempt to connect:
+>> 6. outside of both key peers
+>> 7. inside correct key: i.e. TCP-MD5 client to TCP-MD5 matching key
+>> 8. to a wrong key: i.e. TCP-AO client to TCP-MD5 matching key
+>>
+>> And another type of checks are the ones expecting *setsockopt()* to fail:
+>> 9. Adding TCP-AO key that matches the same peer as TCP-MD5 key
+>> 10. The reverse situation
+>> 11. Adding TCP-MD5 key to AO_REQUIRED socket
+>> 12. Setting AO_REQUIRED on a socket with TCP-MD5 key
+>> 13. Adding TCP-AO key on already established connection without any key
 > 
-> It should apply to linux-next.  It depends on two previous patches from
-> Peter Zijlstra in the sched/core branch of tip.  See:
+> Oh, yeah, forgot to mention, there are another 2 tests for TCP_CLOSE
+> socket (just a new one), that has both TCP-AO and TCP-MD5 keys and tries
+> to call connect(). In discussion with the team, it seems really
+> unexpected situation and better to force userspace to remove either AO
+> or MD5 key before calling connect(). Those from the output in [1] are:
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=sched/core&id=9397fa2ea3e7634f61da1ab76b9eb88ba04dfdfc
-> 
-> and
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=sched/core&id=e39acc37db34f6688e2c16e958fb1d662c422c81
+>> ok 39 AO+MD5 server: client with both [TCP-MD5] and TCP-AO keys:
+> connect() was prevented
+>> ok 40 AO+MD5 server: client with both TCP-MD5 and [TCP-AO] keys:
+> connect() was prevented
 
-Yeah, but the branch is tip/timers/core
+And while starring at the selftest results, I noticed in the output
+sample a copy-n-paste typo for VRFs, this:
+> ok 60 VRF: TCP-AO key (l3index=0) + TCP-MD5 key (no l3index)
+> ok 61 VRF: TCP-MD5 key (no l3index) + TCP-AO key (l3index=0)
 
-Could you respin against it ?
+Should be read as
+> ok 60 VRF: TCP-AO key (l3index=0) + TCP-MD5 key (l3index=N)
+> ok 61 VRF: TCP-MD5 key (l3index=N) + TCP-AO key (l3index=0)
 
-Thanks
+(those checks are corresponding to the table in VRF-support commit [2])
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+>> And then another bunch of tests that check TCP-AO/TCP-MD5/unsigned
+>> interaction in non/default VRFs.
+>> I think the output of selftest [1] is more-or-less self-descriptive,
+>> correct me if I could improve that.
+>>
+>> [1]
+>> https://github.com/0x7f454c46/linux/commit/d7b321f2b5a481e5ff0e80e2e0b3503b1ddb9817
+
+[2]
+https://lore.kernel.org/all/20230614230947.3954084-22-dima@arista.com/T/#u
+
+Thanks,
+             Dmitry
 
