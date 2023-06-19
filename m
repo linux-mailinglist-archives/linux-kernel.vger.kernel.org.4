@@ -2,167 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D689A736005
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 01:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19452736034
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 01:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjFSXMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 19:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
+        id S229690AbjFSXnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 19:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbjFSXMV (ORCPT
+        with ESMTP id S229670AbjFSXne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 19:12:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918BEE6E
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 16:11:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687216259;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lJajW3CLipjyQ640k+WW23diII/jzqCXLm/r+yoabGU=;
-        b=ScTonLJPeCP5RcZsSjBU1fqNCsI1OK2Fxwbgp61vS/mHZwA2U2DjFvNmUWE+rf2Vg7sGgh
-        vMVI7+lMLOodGnQx8p0pb16l/qPFG4QOx/1ZDy3R+POIhpTrQnN+TDA1GNAFRf24mFG+fw
-        crYMmzrorQYffrGehFKmVpRPVUyPY9s=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-646-Gm_WOQplN3i02Nm-V8_UgA-1; Mon, 19 Jun 2023 19:10:58 -0400
-X-MC-Unique: Gm_WOQplN3i02Nm-V8_UgA-1
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7625940fbf3so29808785a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 16:10:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687216258; x=1689808258;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lJajW3CLipjyQ640k+WW23diII/jzqCXLm/r+yoabGU=;
-        b=R8jv0i9LiQpFdxOaiRX4+ZI5ZSTPp0D3ENp92HJj6/P1PVwXlcKSfseE0HQRTRURGc
-         GnUYxoHYTOsKgDK6e4inegt2fJ2f9wqOSgzn3OlrtGg7Uvo8ed9JEdQf6fjeB5vg3t9Y
-         TK0hlCk4y47QNs0cmq2vwh7kFhZqVjMkKS3eEUH/HCLqWUcipWt9lsAXPwjCtPqvw1HD
-         y8CXBqTetItXwyWdQ9L5ZUXzerqbO+B3VO2l/fTwHLHSbXh2aw33DxqaOZKZ2znvR+E4
-         UtvFGpAtI8czD/kXhYOt9T4xzi2r6gsdlRsJWOxM+kNXZUXDkZDK7iD2MJuIxg6W7DOC
-         9C9w==
-X-Gm-Message-State: AC+VfDxy40OVICivyymhJn7wX68bG1oGbsMeN7NoyyYqjPd8XPFs7kVb
-        SOUAfLBoyBfJ72M3MRnoKBPexANujDRl9KZsDgacoKxWTRq2/8iJybbTRBtyTxuCSNAuf/hpzjc
-        Ylk0pLljTMUM7ZsRkYALjw2b+
-X-Received: by 2002:a05:620a:4104:b0:762:63b:e10b with SMTP id j4-20020a05620a410400b00762063be10bmr14345380qko.1.1687216258220;
-        Mon, 19 Jun 2023 16:10:58 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7WYX27wSLfWLAP6ptDSxeQjeiOuxTJdqk6j7utUmQ2LCWuj5byVhLohQPj0ZsEQC2nxlnrpw==
-X-Received: by 2002:a05:620a:4104:b0:762:63b:e10b with SMTP id j4-20020a05620a410400b00762063be10bmr14345358qko.1.1687216257943;
-        Mon, 19 Jun 2023 16:10:57 -0700 (PDT)
-Received: from x1n.. (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id t15-20020a05620a034f00b007592f2016f4sm405864qkm.110.2023.06.19.16.10.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 16:10:57 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Andrea Arcangeli <aarcange@redhat.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        James Houghton <jthoughton@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Hugh Dickins <hughd@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>, peterx@redhat.com,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [PATCH v2 8/8] selftests/mm: Add gup test matrix in run_vmtests.sh
-Date:   Mon, 19 Jun 2023 19:10:44 -0400
-Message-Id: <20230619231044.112894-9-peterx@redhat.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230619231044.112894-1-peterx@redhat.com>
-References: <20230619231044.112894-1-peterx@redhat.com>
+        Mon, 19 Jun 2023 19:43:34 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D504A186;
+        Mon, 19 Jun 2023 16:43:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687218213; x=1718754213;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2IydA7aDSW7WAlkvgWIB7B8MuolrT6i4fpDMP7/KzxQ=;
+  b=Ou8khvC0mKcie3XfRCeAvE+vLIfcT9X74jf+zmIyB6SgoyFaa/0JqQzW
+   PMK4fZgKQRXFhNmnT4zgg+xLlMaPx4uGl8+jYzXeESePiQiOrVGhSyTGJ
+   rrmmm6P+jKFurl7nWDceTlhnIbTHAt2ucNuJwFDsHwCAvdiQMxbz8YqIx
+   RUMmozqOhiaCeXXV8YVAr1YV9bn2Lig939B5wWa29lrtQQ7K6BhoYCoxe
+   QdYOI2Aha+KMa32TBdko7GrFzXkFbKqBIypSYQYuOL5Uqe9CLRrUWIEeN
+   xOZ8eZDzKHQy9ccXZspL2b6CRDESUfLkXPjJ1jr++VwsdGHs8t0QWOW+U
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="340071423"
+X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
+   d="scan'208";a="340071423"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 16:43:33 -0700
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="747789680"
+X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
+   d="scan'208";a="747789680"
+Received: from unknown (HELO fred..) ([172.25.112.68])
+  by orsmga001.jf.intel.com with ESMTP; 19 Jun 2023 16:43:31 -0700
+From:   Xin Li <xin3.li@intel.com>
+To:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        iommu@lists.linux.dev, linux-hyperv@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, x86@kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, steve.wahl@hpe.com,
+        mike.travis@hpe.com, dimitri.sivanich@hpe.com,
+        russ.anderson@hpe.com, dvhart@infradead.org, andy@infradead.org,
+        joro@8bytes.org, suravee.suthikulpanit@amd.com, will@kernel.org,
+        robin.murphy@arm.com, kys@microsoft.com, haiyangz@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, peterz@infradead.org, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        adrian.hunter@intel.com, xin3.li@intel.com, seanjc@google.com,
+        jiangshanlai@gmail.com, jgg@ziepe.ca, yangtiezhu@loongson.cn
+Subject: [PATCH 0/3] Do IRQ move cleanup with a timer instead of an IPI
+Date:   Mon, 19 Jun 2023 16:16:08 -0700
+Message-Id: <20230619231611.2230-1-xin3.li@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a matrix for testing gup based on the current gup_test.  Only run the
-matrix when -a is specified because it's a bit slow.
+No point to waste a vector for cleaning up the leftovers of a moved
+interrupt. Aside of that this must be the lowest priority of all vectors
+which makes FRED systems utilizing vectors 0x10-0x1f more complicated
+than necessary.
 
-It covers:
+Schedule a timer instead.
 
-  - Different types of huge pages: thp, hugetlb, or no huge page
-  - Permissions: Write / Read-only
-  - Fast-gup, with/without
-  - Types of the GUP: pin / gup / longterm pins
-  - Shared / Private memories
-  - GUP size: 1 / 512 / random page sizes
+Thomas Gleixner (2):
+  x86/vector: Rename send_cleanup_vector() to vector_schedule_cleanup()
+  x86/vector: Replace IRQ_MOVE_CLEANUP_VECTOR with a timer callback
 
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- tools/testing/selftests/mm/run_vmtests.sh | 37 ++++++++++++++++++++---
- 1 file changed, 32 insertions(+), 5 deletions(-)
+Xin Li (1):
+  tools: Get rid of IRQ_MOVE_CLEANUP_VECTOR from tools
 
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 824e651f62f4..9666c0c171ab 100644
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -90,6 +90,30 @@ test_selected() {
- 	fi
- }
- 
-+run_gup_matrix() {
-+    # -t: thp=on, -T: thp=off, -H: hugetlb=on
-+    local hugetlb_mb=$(( needmem_KB / 1024 ))
-+
-+    for huge in -t -T "-H -m $hugetlb_mb"; do
-+        # -u: gup-fast, -U: gup-basic, -a: pin-fast, -b: pin-basic, -L: pin-longterm
-+        for test_cmd in -u -U -a -b -L; do
-+            # -w: write=1, -W: write=0
-+            for write in -w -W; do
-+                # -S: shared
-+                for share in -S " "; do
-+                    # -n: How many pages to fetch together?  512 is special
-+                    # because it's default thp size (or 2M on x86), 123 to
-+                    # just test partial gup when hit a huge in whatever form
-+                    for num in "-n 1" "-n 512" "-n 123"; do
-+                        CATEGORY="gup_test" run_test ./gup_test \
-+                                $huge $test_cmd $write $share $num
-+                    done
-+                done
-+            done
-+        done
-+    done
-+}
-+
- # get huge pagesize and freepages from /proc/meminfo
- while read -r name size unit; do
- 	if [ "$name" = "HugePages_Free:" ]; then
-@@ -194,13 +218,16 @@ fi
- 
- CATEGORY="mmap" run_test ./map_fixed_noreplace
- 
--# get_user_pages_fast() benchmark
--CATEGORY="gup_test" run_test ./gup_test -u
--# pin_user_pages_fast() benchmark
--CATEGORY="gup_test" run_test ./gup_test -a
-+if $RUN_ALL; then
-+    run_gup_matrix
-+else
-+    # get_user_pages_fast() benchmark
-+    CATEGORY="gup_test" run_test ./gup_test -u
-+    # pin_user_pages_fast() benchmark
-+    CATEGORY="gup_test" run_test ./gup_test -a
-+fi
- # Dump pages 0, 19, and 4096, using pin_user_pages:
- CATEGORY="gup_test" run_test ./gup_test -ct -F 0x1 0 19 0x1000
--
- CATEGORY="gup_test" run_test ./gup_longterm
- 
- CATEGORY="userfaultfd" run_test ./uffd-unit-tests
+ arch/x86/include/asm/hw_irq.h                 |   4 +-
+ arch/x86/include/asm/idtentry.h               |   1 -
+ arch/x86/include/asm/irq_vectors.h            |   7 --
+ arch/x86/kernel/apic/vector.c                 | 109 ++++++++++++++----
+ arch/x86/kernel/idt.c                         |   1 -
+ arch/x86/platform/uv/uv_irq.c                 |   2 +-
+ drivers/iommu/amd/iommu.c                     |   2 +-
+ drivers/iommu/hyperv-iommu.c                  |   4 +-
+ drivers/iommu/intel/irq_remapping.c           |   2 +-
+ tools/arch/x86/include/asm/irq_vectors.h      |   7 --
+ .../beauty/tracepoints/x86_irq_vectors.sh     |   2 +-
+ 11 files changed, 92 insertions(+), 49 deletions(-)
+
 -- 
-2.40.1
+2.34.1
 
