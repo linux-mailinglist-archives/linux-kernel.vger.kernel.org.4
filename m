@@ -2,64 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A88F734BA5
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 08:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5398734BAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 08:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjFSGSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 02:18:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
+        id S229596AbjFSGTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 02:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229596AbjFSGSQ (ORCPT
+        with ESMTP id S229680AbjFSGTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 02:18:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887A88F;
-        Sun, 18 Jun 2023 23:18:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1DA11614A7;
-        Mon, 19 Jun 2023 06:18:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E0F9C433C0;
-        Mon, 19 Jun 2023 06:18:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687155494;
-        bh=1QwrfkXws282a/X0drBElYIBbWLM8rTUZ8/6zofeERE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=wTw4njNyovkm9utAYfDJaAvpzyn0fan/TX8kaURDGHCroW8Ro2UX+6XbxZ+dCM/Nu
-         fuihdgPbqZS1rrJHZdA6W3t1/ads6YvYKWMpTAtdOBRsx0VnIqG4a/uZHgxo35Kx8k
-         UgssX+NSq+qYffLd1vRbANZKktwPH63Sql/TsY9E=
-Date:   Mon, 19 Jun 2023 08:18:10 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     Mathias Krause <minipli@grsecurity.net>,
-        Luiz Capitulino <luizcap@amazon.com>,
-        Sven-Haegar Koch <haegar@sdinet.de>,
-        "Bhatnagar, Rishabh" <risbhat@amazon.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "sashal@kernel.org" <sashal@kernel.org>, abuehaze@amazon.com,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Ingo Molnar <mingo@kernel.org>
-Subject: Re: [PATCH] tick/common: Align tick period during sched_timer setup.
-Message-ID: <2023061944-uprising-applaud-990a@gregkh>
-References: <12c6f9a3-d087-b824-0d05-0d18c9bc1bf3@amazon.com>
- <c4724b40-89f6-5aa7-720d-c4a4af57cf45@amazon.com>
- <2023061428-compacter-economic-b648@gregkh>
- <20230614092045.tNY8USjq@linutronix.de>
- <4c4178a1-1050-ced4-e6fb-f95c3bdefc98@amazon.com>
- <2a3fa097-8ba0-5b0e-f506-779fee5b8fef@sdinet.de>
- <f5d2cc62-4aae-2579-1468-2e6e389f28dc@amazon.com>
- <23fb8ad7-beb0-ae1c-fa5a-a682a57f79b0@grsecurity.net>
- <20230615091830.RxMV2xf_@linutronix.de>
+        Mon, 19 Jun 2023 02:19:31 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C339B
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 23:19:29 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-988883b0d8fso167903266b.1
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 23:19:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687155568; x=1689747568;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TUK8dSl71LkLklLlosa67QeZlhaF4m6sTso85fZuDbY=;
+        b=yPmWAUa/KjJZ5fhG6S+ldz4gIZQvoW2zGXupl6aNt6gAcLENYZogsLSjBORGOTgyC7
+         TiuswjeJ1+muRQQraWW6aW8pi/1aOOwspJ91CQZJXBpS08uWb7Qxc7uTyV55SEMii0bM
+         Q2oBcb9uustXcetR8X1/+7Jtnii779rzY1NlFYL1H3KGuIlAwl2pYAlHA6upmJlCPfHI
+         MKVfpDMQeIA1ARIOQCYZAcA4MMzHA/uiRVvTDj6rQSOUDMVGZNgVTMrtcNIUfhH285eW
+         FUskEAHwp9myHWSaCJoKiLa0w5rEUJvHaLWAZ1Udi3EkNL5hmAybN72lt1dlgdvgwGQx
+         zjRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687155568; x=1689747568;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TUK8dSl71LkLklLlosa67QeZlhaF4m6sTso85fZuDbY=;
+        b=CtKn3iGNHCkC5Y0c/EJCZuu24jT2mWiUXlSbnBQgC2aLDJzTWPsfgprlOWeH60J6LI
+         4Yf5SwCbOgGyazlnY9kbqCdV8vScTyOA5ekLwk06EBirn0WIGFw86KEBLyNQChxpo8qz
+         VAF4hj65KoUctCEUeXDUQcqcPxW6V7BFfDYIvN7f/0prwGoCka8yyvEbKGJbTJjr9a5/
+         5VoFJae23O1Zr46Jdpdn8KeQCSyYySigXojIVupvF7R6lnE/CnieuylpcKN8Y1y4B/Hq
+         8eeH1UdAFYnXAohpDNe4SL3+CGOSktYtNpOiw6f3l4VBPjPvgxY9KFmeJgqekv5J8IBh
+         5Msw==
+X-Gm-Message-State: AC+VfDxIvMIp8Kd3ykQrP3vPJcUk2iI97mOOY37qlGCnPcigWJDFJFwl
+        yfjLKOfHC563wwTOHAY1CZhdTw==
+X-Google-Smtp-Source: ACHHUZ6OF2c/jqFmm4VkySNlU9SoxjzV70HZfWaE631Oi96Kdx05GVlZ5CwzTbjl3aaiEGU2X+DejQ==
+X-Received: by 2002:a17:907:36c6:b0:974:1d8b:ca5e with SMTP id bj6-20020a17090736c600b009741d8bca5emr7575145ejc.14.1687155568140;
+        Sun, 18 Jun 2023 23:19:28 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id a13-20020a170906684d00b0096f7500502csm14222118ejs.199.2023.06.18.23.19.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 18 Jun 2023 23:19:27 -0700 (PDT)
+Message-ID: <bdda97fa-6b19-324e-b244-8088a149cdd8@linaro.org>
+Date:   Mon, 19 Jun 2023 08:19:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615091830.RxMV2xf_@linutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2] dt-bindings: timer: brcm,kona-timer: convert to YAML
+To:     Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>
+Cc:     bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20230618144635.GA22166@standask-GA-A55M-S2HP>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230618144635.GA22166@standask-GA-A55M-S2HP>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,44 +83,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 11:18:30AM +0200, Sebastian Andrzej Siewior wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
+On 18/06/2023 16:46, Stanislav Jakubek wrote:
+> Convert Broadcom Kona family timer bindings to DT schema.
 > 
-> The tick period is aligned very early while the first clock_event_device
-> is registered. The system runs in periodic mode and switches later to
-> one-shot mode if possible.
+> Changes during conversion:
+>   - drop deprecated compatible (it's been deprecated for ~10 years)
 > 
-> The next wake-up event is programmed based on aligned value
-> (tick_next_period) but the delta value, that is used to program the
-> clock_event_device, is computed based on ktime_get().
-> 
-> With the subtracted offset, the devices fires in less than the exacted
-> time frame. With a large enough offset the system programs the timer for
-> the next wake-up and the remaining time left is too little to make any
-> boot progress. The system hangs.
-> 
-> Move the alignment later to the setup of tick_sched timer. At this point
-> the system switches to oneshot mode and a highres clocksource is
-> available. It safe to update tick_next_period ktime_get() will now
-> return accurate (not jiffies based) time.
-> 
-> [bigeasy: Patch description + testing].
-> 
-> Reported-by: Mathias Krause <minipli@grsecurity.net>
-> Reported-by: "Bhatnagar, Rishabh" <risbhat@amazon.com>
-> Fixes: e9523a0d81899 ("tick/common: Align tick period with the HZ tick.")
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-> Link: https://lore.kernel.org/5a56290d-806e-b9a5-f37c-f21958b5a8c0@grsecurity.net
-> Link: https://lore.kernel.org/12c6f9a3-d087-b824-0d05-0d18c9bc1bf3@amazon.com
-> ---
->  kernel/time/tick-common.c | 11 +----------
->  kernel/time/tick-sched.c  | 13 ++++++++++++-
->  2 files changed, 13 insertions(+), 11 deletions(-)
+> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
 
-What's the status of this fix, I didn't see it in -rc7, am I looking in
-the wrong place?
 
-thanks,
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-greg k-h
+Best regards,
+Krzysztof
+
