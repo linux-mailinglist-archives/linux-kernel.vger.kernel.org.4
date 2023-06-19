@@ -2,41 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5960734A70
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 05:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B96A734A72
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 05:06:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjFSDDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 23:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55792 "EHLO
+        id S229663AbjFSDGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 23:06:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjFSDCu (ORCPT
+        with ESMTP id S229472AbjFSDGn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 23:02:50 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2E9A1BD;
-        Sun, 18 Jun 2023 20:02:49 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id BF25592009C; Mon, 19 Jun 2023 05:02:48 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id B0C1092009B;
-        Mon, 19 Jun 2023 04:02:48 +0100 (BST)
-Date:   Mon, 19 Jun 2023 04:02:48 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Sui Jingfeng <15330273260@189.cn>
-cc:     Bjorn Helgaas <bhelgaas@google.com>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-pci@vger.kernel.org, kvm@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, Sui Jingfeng <suijingfeng@loongson.cn>
-Subject: Re: [PATCH v7 2/8] PCI/VGA: Deal only with VGA class devices
-In-Reply-To: <20230613030151.216625-3-15330273260@189.cn>
-Message-ID: <alpine.DEB.2.21.2306190339590.14084@angie.orcam.me.uk>
-References: <20230613030151.216625-1-15330273260@189.cn> <20230613030151.216625-3-15330273260@189.cn>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Sun, 18 Jun 2023 23:06:43 -0400
+Received: from cstnet.cn (smtp80.cstnet.cn [159.226.251.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA76DE49
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 20:06:40 -0700 (PDT)
+Received: from ed3e173716be.home.arpa (unknown [124.16.138.129])
+        by APP-01 (Coremail) with SMTP id qwCowAB3GPI4xo9kUaJEAQ--.1734S2;
+        Mon, 19 Jun 2023 11:06:33 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        mathieu.poirier@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] rpmsg: glink: Add check for kstrdup
+Date:   Mon, 19 Jun 2023 11:06:31 +0800
+Message-Id: <20230619030631.12361-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowAB3GPI4xo9kUaJEAQ--.1734S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrur45XrWrCr43Cw48CF45Jrb_yoWfZrcE9r
+        yrZ3Z3Zryqkr93uF47Xrn3XF9ayw1qq3Wvqw4vqFy3AFykGwnxZryvqrs3CrZruasrGF4D
+        C34DtryfCr47ZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr
+        0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVAFwVW8
+        GwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r
+        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
+        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
+        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
+        0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUjQBMtUUUUU==
+X-Originating-IP: [124.16.138.129]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,35 +56,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 13 Jun 2023, Sui Jingfeng wrote:
+Add check for the return value of kstrdup() and return the error
+if it fails in order to avoid NULL pointer dereference.
 
-> Deal only with the VGA devcie(pdev->class == 0x0300), so replace the
+Fixes: b4f8e52b89f6 ("rpmsg: Introduce Qualcomm RPM glink driver")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/rpmsg/qcom_glink_native.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- Typo here: s/devcie/device/.
+diff --git a/drivers/rpmsg/qcom_glink_native.c b/drivers/rpmsg/qcom_glink_native.c
+index 1beb40a1d3df..e4015db99899 100644
+--- a/drivers/rpmsg/qcom_glink_native.c
++++ b/drivers/rpmsg/qcom_glink_native.c
+@@ -221,6 +221,10 @@ static struct glink_channel *qcom_glink_alloc_channel(struct qcom_glink *glink,
+ 
+ 	channel->glink = glink;
+ 	channel->name = kstrdup(name, GFP_KERNEL);
++	if (!channel->name) {
++		kfree(channel);
++		return ERR_PTR(-ENOMEM);
++	}
+ 
+ 	init_completion(&channel->open_req);
+ 	init_completion(&channel->open_ack);
+-- 
+2.25.1
 
-> pci_get_subsys() function with pci_get_class(). Filter the non-PCI display
-> device(pdev->class != 0x0300) out. There no need to process the non-display
-> PCI device.
-
- I've only come across this patch series now.  Without diving into what 
-this code actually does I have just one question as a matter of interest.
-
-> diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
-> index c1bc6c983932..22a505e877dc 100644
-> --- a/drivers/pci/vgaarb.c
-> +++ b/drivers/pci/vgaarb.c
-> @@ -1500,7 +1496,9 @@ static int pci_notify(struct notifier_block *nb, unsigned long action,
->  	struct pci_dev *pdev = to_pci_dev(dev);
->  	bool notify = false;
->  
-> -	vgaarb_dbg(dev, "%s\n", __func__);
-> +	/* Only deal with VGA class devices */
-> +	if (pdev->class != PCI_CLASS_DISPLAY_VGA << 8)
-> +		return 0;
-
- Hmm, shouldn't this also handle PCI_CLASS_NOT_DEFINED_VGA?  As far as I 
-know it is the equivalent of PCI_CLASS_DISPLAY_VGA for PCI <= 2.0 devices 
-that were implemented before the idea of PCI device classes has developed 
-into its current form.  I may have such a VGA device somewhere.
-
-  Maciej
