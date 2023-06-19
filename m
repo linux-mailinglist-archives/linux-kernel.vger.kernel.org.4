@@ -2,69 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68EFE7349B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 03:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33C987349B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 03:32:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjFSBaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 21:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36684 "EHLO
+        id S229640AbjFSBbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 21:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjFSB37 (ORCPT
+        with ESMTP id S229472AbjFSBbn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 21:29:59 -0400
-X-Greylist: delayed 6276 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 18 Jun 2023 18:29:58 PDT
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DB2CD1;
-        Sun, 18 Jun 2023 18:29:58 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 5DA7392009C; Mon, 19 Jun 2023 03:29:57 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id 523E792009B;
-        Mon, 19 Jun 2023 02:29:57 +0100 (BST)
-Date:   Mon, 19 Jun 2023 02:29:57 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Randy Dunlap <rdunlap@infradead.org>
-cc:     Sam Ravnborg <sam@ravnborg.org>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        linux-kernel@vger.kernel.org,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        sparclinux@vger.kernel.org, linux-parport@lists.infradead.org
-Subject: Re: [PATCH] parport_pc: don't allow driver for SPARC32
-In-Reply-To: <ea8b0e25-fd2e-4fe1-3157-7556e29eee87@infradead.org>
-Message-ID: <alpine.DEB.2.21.2306190202050.14084@angie.orcam.me.uk>
-References: <20230406160548.25721-1-rdunlap@infradead.org> <alpine.DEB.2.21.2304062039260.44308@angie.orcam.me.uk> <20230406203207.GA1534216@ravnborg.org> <alpine.DEB.2.21.2304062144520.44308@angie.orcam.me.uk> <20230407200313.GA1655046@ravnborg.org>
- <alpine.DEB.2.21.2304072142290.62619@angie.orcam.me.uk> <a05558c3-8d5c-c389-ba4c-be134c75ac1c@infradead.org> <alpine.DEB.2.21.2306190000530.14084@angie.orcam.me.uk> <ea8b0e25-fd2e-4fe1-3157-7556e29eee87@infradead.org>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Sun, 18 Jun 2023 21:31:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD8BD1
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 18:31:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8E7A260F0F
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 01:31:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1E3CC433C0;
+        Mon, 19 Jun 2023 01:31:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687138301;
+        bh=i3jkIUwYMg0GoBLvyBEiJO0i1ENUUhOWr6sshjDMEpM=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kUllh/f0NoNMU2ZcAhzXYlzyRRLJO8p75zYc+jWDd41d0jEqA7eD4E1HSsQ1ffe6o
+         d/h2XcGNJvwUDS7nwDY9acWTORJyxQl/RQCqSDHDQruSium5aHcgh+Bc9WXUfYXeMJ
+         X9R9KE6gaqR8Ig1GIWuFfQypAPspBYx4SmGmFcf5ZEgjsEHe6R2WNi6vryxPUyxV0y
+         3ya5BYXVxI+EyxEdJqiJU37otoSReF+rUJvRURUunDdxb9S5r5mCDezMC3qID1024s
+         dszuuxr40JYnOGhmr8K/L9g1gQGQ8Wev4xH7FKEFsq3VjrjSQ7qcDCJRmRXARmSb/y
+         Il8DlNoTeTxYg==
+Message-ID: <0a6619cd-444b-69c4-818b-1b6dd6757c6c@kernel.org>
+Date:   Mon, 19 Jun 2023 09:31:38 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v4] f2fs: refactor struct f2fs_attr macro
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20230506151604.36890-1-frank.li@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <20230506151604.36890-1-frank.li@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy,
-
-> >  What happened to DaveM?
+On 2023/5/6 23:16, Yangtao Li wrote:
+> This patch provides a large number of variants of F2FS_RW_ATTR
+> and F2FS_RO_ATTR macros, reducing the number of parameters required
+> to initialize the f2fs_attr structure.
 > 
-> I haven't seen him merge any arch/sparc/ patches lately.
-> I have a couple that are still pending.
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link: https://lore.kernel.org/oe-kbuild-all/202304152234.wjaY3IYm-lkp@intel.com/
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
 
- Oh, I hope he's been doing good then, and it's just a change of life 
-priorities or suchlike.  Patch reviews can take a lot of mental effort, 
-and I can't claim I've been as effective as I wished to with stuff that 
-lands on my plate either.
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-> >  In any case after a couple of iterations I have made a succesful build of 
-> > a 32-bit SPARC toolchain now, which I was able to verify a fix with I have 
-> 
-> Is your newly built toolchain for riscv hosting?
-
- Are you asking whether the SPARC toolchain has been built/installed on a 
-RISC-V system?  If so, then no, it hasn't.  It runs on POWER9.
-
-  Maciej
+Thanks,
