@@ -2,197 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8CC8734CB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 09:53:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D46EC734CBB
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 09:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229977AbjFSHxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 03:53:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
+        id S229974AbjFSHyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 03:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjFSHx2 (ORCPT
+        with ESMTP id S230130AbjFSHxv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 03:53:28 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF9CFA;
-        Mon, 19 Jun 2023 00:53:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687161207; x=1718697207;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MiB/if3MwjUhaxKHqfTF5j5XLIhDj9DbE/a/MWuxAUI=;
-  b=Og9JYVciaH4dGSm2tSYwomtoqTbbDJHSgtlDQzLCELJKym65Kp6gyRMU
-   jxAeBnMgMee9UbaDbCMieWnT9PjWYZBYn8D+TE1xx5dFJhic/lL54m4c0
-   CA7rcKm2mKCBc98S/sw+eUlmu1Woaz9Gd2mW+ZSCajlzdwimyGb3760af
-   Qg4OPG2rCdV2i+Hp1pCj5d0RKyXTiC6JtPlQQYgP0xR6qR4AVfw6uwpiJ
-   VDbc+XzJbmQ0rJTrd4iMt6m8s9dBGvER4bdQnDJQdJ1CncDaJsjnUFCYZ
-   o8SB+PSthiwfXuMPy993XeOvSLEg0eQzdWHQq0PfuulnHAOegmkXVao5/
-   w==;
-X-IronPort-AV: E=Sophos;i="6.00,254,1681196400"; 
-   d="scan'208";a="219214935"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 Jun 2023 00:53:27 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+        Mon, 19 Jun 2023 03:53:51 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B153E7F;
+        Mon, 19 Jun 2023 00:53:43 -0700 (PDT)
+Received: from dggpemm500014.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Ql24T4yRfzMnwD;
+        Mon, 19 Jun 2023 15:50:33 +0800 (CST)
+Received: from [10.174.178.120] (10.174.178.120) by
+ dggpemm500014.china.huawei.com (7.185.36.153) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 19 Jun 2023 00:53:26 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Mon, 19 Jun 2023 00:53:26 -0700
-Date:   Mon, 19 Jun 2023 09:53:25 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     "Radu Pirea (NXP OSS)" <radu-nicolae.pirea@oss.nxp.com>
-CC:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <richardcochran@gmail.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <sebastian.tobuschat@nxp.com>
-Subject: Re: [PATCH net-next v1 05/14] net: phy: nxp-c45-tja11xx: prepare the
- ground for TJA1120
-Message-ID: <20230619075325.ywg4jv6h2hifqjx4@soft-dev3-1>
-References: <20230616135323.98215-1-radu-nicolae.pirea@oss.nxp.com>
- <20230616135323.98215-6-radu-nicolae.pirea@oss.nxp.com>
+ 15.1.2507.27; Mon, 19 Jun 2023 15:53:40 +0800
+Message-ID: <a54be73e-840b-2091-b240-1417499f5738@huawei.com>
+Date:   Mon, 19 Jun 2023 15:53:40 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20230616135323.98215-6-radu-nicolae.pirea@oss.nxp.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+CC:     <mawupeng1@huawei.com>, <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>, <richard.weiyang@linux.alibaba.com>,
+        <mst@redhat.com>, <jasowang@redhat.com>,
+        <pankaj.gupta.linux@gmail.com>, <mhocko@kernel.org>,
+        <osalvador@suse.de>
+Subject: Re: [PATCH stable 5.10] mm/memory_hotplug: extend
+ offline_and_remove_memory() to handle more than one memory block
+Content-Language: en-US
+To:     <david@redhat.com>, <gregkh@linuxfoundation.org>
+References: <cd9688dc-a716-3031-489e-a867df0d1ea2@huawei.com>
+ <20230619065121.1720912-1-mawupeng1@huawei.com>
+ <2023061926-monoxide-pastor-fa3b@gregkh>
+ <a7d39606-cc85-42c3-c882-fa217954bf00@huawei.com>
+ <cc1c2973-493a-6e21-048e-148ed55e653b@redhat.com>
+From:   mawupeng <mawupeng1@huawei.com>
+In-Reply-To: <cc1c2973-493a-6e21-048e-148ed55e653b@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.120]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500014.china.huawei.com (7.185.36.153)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 06/16/2023 16:53, Radu Pirea (NXP OSS) wrote:
 
-Hi Radu,
+
+On 2023/6/19 15:41, David Hildenbrand wrote:
+> On 19.06.23 09:22, mawupeng wrote:
+>>
+>>
+>> On 2023/6/19 15:16, Greg KH wrote:
+>>> On Mon, Jun 19, 2023 at 02:51:21PM +0800, Wupeng Ma wrote:
+>>>> From: David Hildenbrand <david@redhat.com>
+>>>>
+>>>> commit 8dc4bb58a146655eb057247d7c9d19e73928715b upstream.
+>>>>
+>>>> virtio-mem soon wants to use offline_and_remove_memory() memory that
+>>>> exceeds a single Linux memory block (memory_block_size_bytes()). Let's
+>>>> remove that restriction.
+>>>>
+>>>> Let's remember the old state and try to restore that if anything goes
+>>>> wrong. While re-onlining can, in general, fail, it's highly unlikely to
+>>>> happen (usually only when a notifier fails to allocate memory, and these
+>>>> are rather rare).
+>>>>
+>>>> This will be used by virtio-mem to offline+remove memory ranges that are
+>>>> bigger than a single memory block - for example, with a device block
+>>>> size of 1 GiB (e.g., gigantic pages in the hypervisor) and a Linux memory
+>>>> block size of 128MB.
+>>>>
+>>>> While we could compress the state into 2 bit, using 8 bit is much
+>>>> easier.
+>>>>
+>>>> This handling is similar, but different to acpi_scan_try_to_offline():
+>>>>
+>>>> a) We don't try to offline twice. I am not sure if this CONFIG_MEMCG
+>>>> optimization is still relevant - it should only apply to ZONE_NORMAL
+>>>> (where we have no guarantees). If relevant, we can always add it.
+>>>>
+>>>> b) acpi_scan_try_to_offline() simply onlines all memory in case
+>>>> something goes wrong. It doesn't restore previous online type. Let's do
+>>>> that, so we won't overwrite what e.g., user space configured.
+>>>>
+>>>> Reviewed-by: Wei Yang <richard.weiyang@linux.alibaba.com>
+>>>> Cc: "Michael S. Tsirkin" <mst@redhat.com>
+>>>> Cc: Jason Wang <jasowang@redhat.com>
+>>>> Cc: Pankaj Gupta <pankaj.gupta.linux@gmail.com>
+>>>> Cc: Michal Hocko <mhocko@kernel.org>
+>>>> Cc: Oscar Salvador <osalvador@suse.de>
+>>>> Cc: Wei Yang <richard.weiyang@linux.alibaba.com>
+>>>> Cc: Andrew Morton <akpm@linux-foundation.org>
+>>>> Signed-off-by: David Hildenbrand <david@redhat.com>
+>>>> Link: https://lore.kernel.org/r/20201112133815.13332-28-david@redhat.com
+>>>> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+>>>> Acked-by: Andrew Morton <akpm@linux-foundation.org>
+>>>> Signed-off-by: Ma Wupeng <mawupeng1@huawei.com>
+>>>> ---
+>>>>   mm/memory_hotplug.c | 105 +++++++++++++++++++++++++++++++++++++-------
+>>>>   1 file changed, 89 insertions(+), 16 deletions(-)
+>>>>
+>>>
+>>> Why is this needed in 5.10.y?  Looks like a new feature to me, what
+>>> problem does it solve there?
+>>>
+>>> thanks,
+>>>
+>>> greg k-h
+>>
+>> It do introduce a new feature. But at the same time, it fix a memleak introduced
+>> in Commit 08b3acd7a68f ("mm/memory_hotplug: Introduce offline_and_remove_memory()"
+>>
+>> Our test find a memleak in init_memory_block, it is clear that mem is never
+>> been released due to wrong refcount. Commit 08b3acd7a68f ("mm/memory_hotplug:
+>> Introduce offline_and_remove_memory()") failed to dec refcount after
+>> find_memory_block which fail to dec refcount to zero in remove memory
+>> causing the leak.
+>>
+>> Commit 8dc4bb58a146 ("mm/memory_hotplug: extend offline_and_remove_memory()
+>> to handle more than one memory block") introduce walk_memory_blocks to
+>> replace find_memory_block which dec refcount by calling put_device after
+>> find_memory_block_by_id. In the way, the memleak is fixed.
+>>
+>> Here is the simplified calltrace:
+>>
+>>    kmem_cache_alloc_trace+0x664/0xed0
+>>    init_memory_block+0x8c/0x170
+>>    create_memory_block_devices+0xa4/0x150
+>>    add_memory_resource+0x188/0x530
+>>    __add_memory+0x78/0x104
+>>    add_memory+0x6c/0xb0
+>>
+> 
+> Makes sense to me. Of course, we could think about a simplified stable fix that only drops the ref.
+
+Since the new patch does not introduce any kabi change, maybe we can merge this one？
+
+However the changelog may lead to some confusion for other people just like the question
+you asked.
 
 > 
-> 
-> -struct nxp_c45_phy_stats {
-> -       const char      *name;
-> -       u8              mmd;
-> -       u16             reg;
-> -       u8              off;
-> -       u16             mask;
-> -};
-> +static inline
-
-It is recommended not to use inline inside .c files.
-
-> +const struct nxp_c45_phy_data *nxp_c45_get_data(struct phy_device *phydev)
-> +{
-> +       return phydev->drv->driver_data;
-> +}
-> +
-> +static inline
-> +const struct nxp_c45_regmap *nxp_c45_get_regmap(struct phy_device *phydev)
-> +{
-> +       const struct nxp_c45_phy_data *phy_data = nxp_c45_get_data(phydev);
-> +
-> +       return phy_data ? phy_data->regmap : NULL;
-
-From what I can see nxp_c45_get_data(phydev) can't return a NULL pointer
-so then I don't think you need the above check. And then maybe you can
-remove more of the checks in the code where you check for data to not be
-NULL.
-The reason why I say nxp_c45_get_data(phydev) can't return a NULL is
-because few lines bellow you have:
-
-.driver_data            = &tja1103_phy_data,
-
-...
-
-> +}
-> @@ -806,6 +835,7 @@ static int nxp_c45_hwtstamp(struct mii_timestamper *mii_ts,
->         struct nxp_c45_phy *priv = container_of(mii_ts, struct nxp_c45_phy,
->                                                 mii_ts);
->         struct phy_device *phydev = priv->phydev;
-> +       const struct nxp_c45_phy_data *data;
->         struct hwtstamp_config cfg;
-> 
->         if (copy_from_user(&cfg, ifreq->ifr_data, sizeof(cfg)))
-> @@ -814,6 +844,7 @@ static int nxp_c45_hwtstamp(struct mii_timestamper *mii_ts,
->         if (cfg.tx_type < 0 || cfg.tx_type > HWTSTAMP_TX_ON)
->                 return -ERANGE;
-> 
-> +       data = nxp_c45_get_data(phydev);
->         priv->hwts_tx = cfg.tx_type;
-> 
->         switch (cfg.rx_filter) {
-> @@ -831,27 +862,26 @@ static int nxp_c45_hwtstamp(struct mii_timestamper *mii_ts,
->         }
-> 
->         if (priv->hwts_rx || priv->hwts_tx) {
-> -               phy_write_mmd(phydev, MDIO_MMD_VEND1, VEND1_EVENT_MSG_FILT,
-> +               phy_write_mmd(phydev, MDIO_MMD_VEND1,
-> +                             data->regmap->vend1_event_msg_filt,
->                               EVENT_MSG_FILT_ALL);
-> -               phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1,
-> -                                  VEND1_PORT_PTP_CONTROL,
-> -                                  PORT_PTP_CONTROL_BYPASS);
-> +               if (data && data->ptp_enable)
-
-Like here
-
-> +                       data->ptp_enable(phydev, true);
->         } else {
-> -               phy_write_mmd(phydev, MDIO_MMD_VEND1, VEND1_EVENT_MSG_FILT,
-> +               phy_write_mmd(phydev, MDIO_MMD_VEND1,
-> +                             data->regmap->vend1_event_msg_filt,
->                               EVENT_MSG_FILT_NONE);
-> -               phy_set_bits_mmd(phydev, MDIO_MMD_VEND1, VEND1_PORT_PTP_CONTROL,
-> -                                PORT_PTP_CONTROL_BYPASS);
-> +               if (data && data->ptp_enable)
-
-And here and few other places bellow:
-
-> +                       data->ptp_enable(phydev, false);
->         }
-> 
->         if (nxp_c45_poll_txts(priv->phydev))
->                 goto nxp_c45_no_ptp_irq;
-> 
->         if (priv->hwts_tx)
-> -               phy_set_bits_mmd(phydev, MDIO_MMD_VEND1,
-> -                                VEND1_PTP_IRQ_EN, PTP_IRQ_EGR_TS);
-> +               nxp_c45_set_reg_field(phydev, &data->regmap->irq_egr_ts_en);
->         else
-> -               phy_clear_bits_mmd(phydev, MDIO_MMD_VEND1,
-> -                                  VEND1_PTP_IRQ_EN, PTP_IRQ_EGR_TS);
-> +               nxp_c45_clear_reg_field(phydev, &data->regmap->irq_egr_ts_en);
-> 
-
-...
-
-> 
-> +static const struct nxp_c45_phy_data tja1103_phy_data = {
-> +       .regmap = &tja1103_regmap,
-> +       .stats = tja1103_hw_stats,
-> +       .n_stats = ARRAY_SIZE(tja1103_hw_stats),
-> +       .ptp_clk_period = PTP_CLK_PERIOD_100BT1,
-> +       .counters_enable = tja1103_counters_enable,
-> +       .ptp_init = tja1103_ptp_init,
-> +       .ptp_enable = tja1103_ptp_enable,
-> +};
-> +
->  static struct phy_driver nxp_c45_driver[] = {
->         {
->                 PHY_ID_MATCH_MODEL(PHY_ID_TJA_1103),
->                 .name                   = "NXP C45 TJA1103",
->                 .features               = PHY_BASIC_T1_FEATURES,
-> +               .driver_data            = &tja1103_phy_data,
->                 .probe                  = nxp_c45_probe,
->                 .soft_reset             = nxp_c45_soft_reset,
->                 .config_aneg            = genphy_c45_config_aneg,
-> --
-> 2.34.1
-> 
-> 
-
--- 
-/Horatiu
