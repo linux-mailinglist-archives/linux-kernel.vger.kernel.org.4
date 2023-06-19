@@ -2,159 +2,268 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C2873593F
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 16:13:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65EAD735941
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 16:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbjFSONT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 10:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
+        id S232149AbjFSONa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 10:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjFSONQ (ORCPT
+        with ESMTP id S232141AbjFSON2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 10:13:16 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED0599
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:13:14 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51a2c8e5a2cso5023094a12.2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:13:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pqrs.dk; s=google; t=1687183992; x=1689775992;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iZZvuUg/XJppy1RQPzIvzHMS06C+pQD8xRtk2Ai4foU=;
-        b=NzscS+z2Afd9uBqEqkAty/34jFNErBTkXTRKILnq/lKMpEqiZbRbWzWVArRQJQqj56
-         SRmVzl84OC9RaUWQaUC9/NmY9QhHVkue5RGZNwtIHglAR7SDY2CEl1fGL3DyGSx9Khbi
-         plEhh5etCtzE9e4LLmRUykkqB2NTEd9TdVByizZbvak7sIDlnuLL5fwlTMDOsmerKOIh
-         Hi6Jqjb2qtPQSPZfg8W+ZaLBJvGJ7+77hfwtQUPegXtGhyIfHaa6t27MugkPR1j28ixD
-         2Sy1IdhonaqvuFbnE99ON0SQlXojXihSnWa28PA7CNxj4wR5YE9UzjFQC5EiZLo425HB
-         ckEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687183992; x=1689775992;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iZZvuUg/XJppy1RQPzIvzHMS06C+pQD8xRtk2Ai4foU=;
-        b=iamf/Rc7Q/DbsbewHGCd3Th7I4+ULcw9x/sR5RwA3itQgEZJsS9++BWcwrlTnAutJ6
-         fhs53cXxsozkSWJzTs/EbYmS6GvcOkqzOD/Jjzjh1nlkqGiKJQXpzuQipPv2PjdSbzZT
-         98xIYWcgr88gpj/QU+4jOS+C3Pe8xXg/AYxQwn94QKQFQUKVLU+cj7Pq6w00oJlSEid3
-         Sh64Rj2ePf4P11Ln9NXJb/JMFoxnWSf616L0xxqputBkHtTnygOm4xunuSKHQjMqfsSK
-         /6v7mHU1B8PM+VURzzmeL6xX+TU370jeZYL68669HVYRFnBmNt+k5akiabHwUzOOakvC
-         K37w==
-X-Gm-Message-State: AC+VfDxhQ25g/HSddkL2e64bvuYmYd4aVYImP8vXjgT+mJiuZdqXPI9a
-        EM9rLOireKC6yX4ok3etztFbFq7g0DNN6oGEexM=
-X-Google-Smtp-Source: ACHHUZ5cAAjNf4xsxv8uDi3DvjzpJ43DHxy310s4QeIFunCXApaRQRFdekzGFVZP+e7+2P0C9IUBfA==
-X-Received: by 2002:a05:6402:545:b0:51a:5abc:668d with SMTP id i5-20020a056402054500b0051a5abc668dmr1987364edx.3.1687183992326;
-        Mon, 19 Jun 2023 07:13:12 -0700 (PDT)
-Received: from localhost.localdomain (80.71.142.18.ipv4.parknet.dk. [80.71.142.18])
-        by smtp.gmail.com with ESMTPSA id m1-20020aa7d341000000b0051a44a5636asm2788489edr.44.2023.06.19.07.13.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 07:13:12 -0700 (PDT)
-From:   =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alvin@pqrs.dk>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Marc Titinger <mtitinger@baylibre.com>
-Cc:     =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] iio: adc: ina2xx: avoid NULL pointer dereference on OF device match
-Date:   Mon, 19 Jun 2023 16:12:39 +0200
-Message-Id: <20230619141239.2257392-1-alvin@pqrs.dk>
-X-Mailer: git-send-email 2.40.0
+        Mon, 19 Jun 2023 10:13:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A329CE56
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 07:13:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33D9660C86
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 14:13:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B2B7C433C0;
+        Mon, 19 Jun 2023 14:13:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687184005;
+        bh=Vv+JjUW5NUGjvWxBMhY5zIj9v9WdE3i5E3SoAj5yTB0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BFO2b0Fn5GJc4IRMklTjeOV4f2MuROZsnJcmYzywaNRZqdIp8VTejsfLNU/ao22FT
+         8bLKk7AvEr6Wt5evtWSfoQPLJYp5xERDfuNGhhrzuotLEaweQOXJj4QFxm8FXxRhUJ
+         OQRYpzaKO9lfydShIcxa+hvsNoRd9acuNEOJ3HBSGfa3yVMxQQC5yENXwnyd+SNQJv
+         9HCXQV0/18ypoyezsKiLdH/AgTtXAVbrHCeQ3wUsTuyuFghWvAGHSFJrOC4c8PTPZ7
+         bxk0SaGINAhI73SCrvbvic/aPoKVWAQKwsEpHgnVsMZzqqDhsytvUTdRWlASpQkJQ+
+         jBTv9ItFBa2yw==
+Message-ID: <84795faa-2fe0-0a2a-f1e6-9037c52414fa@kernel.org>
+Date:   Mon, 19 Jun 2023 22:13:21 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] f2fs: compress: don't force buffered io when in
+ COMPR_MODE_USER mode
+Content-Language: en-US
+To:     Yangtao Li <frank.li@vivo.com>, Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     Qi Han <hanqi@vivo.com>, linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+References: <20230609131555.56651-1-frank.li@vivo.com>
+ <8097d4d9-815e-2527-0fb7-90ec0609a4a3@kernel.org>
+ <dde6972a-e98c-8a6e-493b-9aff5668101d@vivo.com>
+ <7ab6b6f9-37fa-9bf2-69ce-7b1b1944d9f3@kernel.org>
+ <fe223231-5445-61ef-1ba8-0d46f4f4ed5f@vivo.com>
+ <65ce42d6-889a-5e1d-8f04-af8f66fd0afa@kernel.org>
+ <6fb1d0be-b9d5-ce0a-7984-56b2e1a1a242@vivo.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <6fb1d0be-b9d5-ce0a-7984-56b2e1a1a242@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alvin Šipraga <alsi@bang-olufsen.dk>
+On 2023/6/19 17:31, Yangtao Li wrote:
+> On 2023/6/19 12:04, Chao Yu wrote:
+> 
+>> On 2023/6/19 11:11, Yangtao Li wrote:
+>>> On 2023/6/19 8:54, Chao Yu wrote:
+>>>
+>>>> On 2023/6/13 12:14, Yangtao Li wrote:
+>>>>>
+>>>>> On 2023/6/12 22:38, Chao Yu wrote:
+>>>>>> On 2023/6/9 21:15, Yangtao Li wrote:
+>>>>>>> It is observed that when in user compression mode
+>>>>>>> (compress_extension=*),
+>>>>>>> even though the file is not compressed, the file is still forced
+>>>>>>> to use
+>>>>>>> buffer io, which makes the AndroBench sequential read and write drop
+>>>>>>> significantly. In fact, when the file is not compressed, we don't
+>>>>>>> need
+>>>>>>> to force it to buffer io.
+>>>>>>>
+>>>>>>>                     | w/o patch | w/ patch |
+>>>>>>> seq read  (MB/s) | 1320.068  | 3696.154 |
+>>>>>>> seq write (MB/s) | 617.996   | 2978.478 |
+>>>>>>>
+>>>>>>> Fixes: 4c8ff7095bef ("f2fs: support data compression")
+>>>>>>> Signed-off-by: Qi Han <hanqi@vivo.com>
+>>>>>>> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+>>>>>>> ---
+>>>>>>>     fs/f2fs/f2fs.h | 14 ++++++++++++++
+>>>>>>>     fs/f2fs/file.c |  2 +-
+>>>>>>>     2 files changed, 15 insertions(+), 1 deletion(-)
+>>>>>>>
+>>>>>>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+>>>>>>> index 1efcfd9e5a99..7f5472525310 100644
+>>>>>>> --- a/fs/f2fs/f2fs.h
+>>>>>>> +++ b/fs/f2fs/f2fs.h
+>>>>>>> @@ -3168,6 +3168,20 @@ static inline int f2fs_compressed_file(struct
+>>>>>>> inode *inode)
+>>>>>>>             is_inode_flag_set(inode, FI_COMPRESSED_FILE);
+>>>>>>>     }
+>>>>>>>     +static inline bool f2fs_is_compressed_file(struct inode *inode)
+>>>>>>> +{
+>>>>>>> +    int compress_mode =
+>>>>>>> F2FS_OPTION(F2FS_I_SB(inode)).compress_mode;
+>>>>>>> +
+>>>>>>> +    if (compress_mode == COMPR_MODE_FS)
+>>>>>>> +        return f2fs_compressed_file(inode);
+>>>>>>> +    else if (atomic_read(&F2FS_I(inode)->i_compr_blocks) ||
+>>>>>>
+>>>>>> Should check dirty page as well? i_compr_blocks may increase after
+>>>>>> data writeback.
+>>>>>>
+>>>>> IIUC, in COMPR_MODE_USER mode, i_compr_blocks will only be updated
+>>>>> when
+>>>>> FI_ENABLE_COMPRESS is enabled.
+>>>>>
+>>>>> If FI_ENABLE_COMPRESS is not enabled, i_compr_blocks will never be
+>>>>> updated after data writeback.
+>>>>>
+>>>>> So there is no need to additionally judge whether there is a dirty
+>>>>> page?
+>>>>
+>>>> Oh, user mode, that's correct.
+>>>>
+>>>> If we allow dio/aio on compress file, it needs to consider race case in
+>>>> between aio and ioc_compress_file.
+>>>
+>>>
+>>> The inode_lock is already held in f2fs_file_write_iter and
+>>> f2fs_ioc_compress_file, I guess this is enough?
+>>>
+>>> What else?
+>>
+>> aio may complete outside inode lock, so it needs to call inode_dio_wait()
+>> in f2fs_ioc_compress_file() to avoid the race case?
+> 
+> 
+> How about adding this below？
+> 
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index f45d05c13ae5..5021d13e788b 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -4146,6 +4146,10 @@ static int f2fs_ioc_compress_file(struct file *filp)
+>                   goto out;
+>           }
+> 
+> +       /* avoid race case between aio and ioc_compress_file */
+> +       if (F2FS_OPTION(sbi).compress_mode == COMPR_MODE_USER)
 
-The affected lines were resulting in a NULL pointer dereference on our
-platform because the device tree contained the following list of
-compatible strings:
+f2fs_ioc_compress_file() has already checked the mode?
 
-    power-sensor@40 {
-        compatible = "ti,ina232", "ti,ina231";
-        ...
-    };
+Thanks,
 
-Since the driver doesn't declare a compatible string "ti,ina232", the OF
-matching succeeds on "ti,ina231". But the I2C device ID info is
-populated via the first compatible string, cf. modalias population in
-of_i2c_get_board_info(). Since there is no "ina232" entry in the legacy
-I2C device ID table either, the struct i2c_device_id *id pointer in the
-probe function is NULL.
-
-Fix this by using the already populated type variable instead, which
-points to the proper driver data. Since the name is also wanted, add a
-generic one to the ina2xx_config table.
-
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
-Fixes: c43a102e67db ("iio: ina2xx: add support for TI INA2xx Power Monitors")
----
- drivers/iio/adc/ina2xx-adc.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/iio/adc/ina2xx-adc.c b/drivers/iio/adc/ina2xx-adc.c
-index 213526c1592f..aea83f369437 100644
---- a/drivers/iio/adc/ina2xx-adc.c
-+++ b/drivers/iio/adc/ina2xx-adc.c
-@@ -124,6 +124,7 @@ static const struct regmap_config ina2xx_regmap_config = {
- enum ina2xx_ids { ina219, ina226 };
- 
- struct ina2xx_config {
-+	const char *name;
- 	u16 config_default;
- 	int calibration_value;
- 	int shunt_voltage_lsb;	/* nV */
-@@ -155,6 +156,7 @@ struct ina2xx_chip_info {
- 
- static const struct ina2xx_config ina2xx_config[] = {
- 	[ina219] = {
-+		.name = "ina219",
- 		.config_default = INA219_CONFIG_DEFAULT,
- 		.calibration_value = 4096,
- 		.shunt_voltage_lsb = 10000,
-@@ -164,6 +166,7 @@ static const struct ina2xx_config ina2xx_config[] = {
- 		.chip_id = ina219,
- 	},
- 	[ina226] = {
-+		.name = "ina226",
- 		.config_default = INA226_CONFIG_DEFAULT,
- 		.calibration_value = 2048,
- 		.shunt_voltage_lsb = 2500,
-@@ -996,7 +999,7 @@ static int ina2xx_probe(struct i2c_client *client)
- 	/* Patch the current config register with default. */
- 	val = chip->config->config_default;
- 
--	if (id->driver_data == ina226) {
-+	if (type == ina226) {
- 		ina226_set_average(chip, INA226_DEFAULT_AVG, &val);
- 		ina226_set_int_time_vbus(chip, INA226_DEFAULT_IT, &val);
- 		ina226_set_int_time_vshunt(chip, INA226_DEFAULT_IT, &val);
-@@ -1015,7 +1018,7 @@ static int ina2xx_probe(struct i2c_client *client)
- 	}
- 
- 	indio_dev->modes = INDIO_DIRECT_MODE;
--	if (id->driver_data == ina226) {
-+	if (type == ina226) {
- 		indio_dev->channels = ina226_channels;
- 		indio_dev->num_channels = ARRAY_SIZE(ina226_channels);
- 		indio_dev->info = &ina226_info;
-@@ -1024,7 +1027,7 @@ static int ina2xx_probe(struct i2c_client *client)
- 		indio_dev->num_channels = ARRAY_SIZE(ina219_channels);
- 		indio_dev->info = &ina219_info;
- 	}
--	indio_dev->name = id->name;
-+	indio_dev->name = id ? id->name : chip->config->name;
- 
- 	ret = devm_iio_kfifo_buffer_setup(&client->dev, indio_dev,
- 					  &ina2xx_setup_ops);
--- 
-2.40.0
-
+> +               inode_dio_wait(inode);
+> +
+>           ret = filemap_write_and_wait_range(inode->i_mapping, 0, LLONG_MAX);
+>           if (ret)
+>                   goto out;
+> 
+> 
+> Thanks,
+> 
+> 
+>>
+>> Thanks,
+>>
+>>>
+>>>
+>>> 4691 static ssize_t f2fs_file_write_iter(struct kiocb *iocb, struct
+>>> iov_iter *from)
+>>> 4692 {
+>>> 4693         struct inode *inode = file_inode(iocb->ki_filp);
+>>> 4694         const loff_t orig_pos = iocb->ki_pos;
+>>> 4695         const size_t orig_count = iov_iter_count(from);
+>>> 4696         loff_t target_size;
+>>> 4697         bool dio;
+>>> 4698         bool may_need_sync = true;
+>>> 4699         int preallocated;
+>>> 4700         ssize_t ret;
+>>> 4701
+>>> 4702         if (unlikely(f2fs_cp_error(F2FS_I_SB(inode)))) {
+>>> 4703                 ret = -EIO;
+>>> 4704                 goto out;
+>>> 4705         }
+>>> 4706
+>>> 4707         if (!f2fs_is_compress_backend_ready(inode)) {
+>>> 4708                 ret = -EOPNOTSUPP;
+>>> 4709                 goto out;
+>>> 4710         }
+>>> 4711
+>>> 4712         if (iocb->ki_flags & IOCB_NOWAIT) {
+>>> 4713                 if (!inode_trylock(inode)) {
+>>> 4714                         ret = -EAGAIN;
+>>> 4715                         goto out;
+>>> 4716                 }
+>>> 4717         } else {
+>>> 4718                 inode_lock(inode);
+>>> 4719         }
+>>>
+>>>
+>>> 4115 static int f2fs_ioc_compress_file(struct file *filp)
+>>> 4116 {
+>>> 4117         struct inode *inode = file_inode(filp);
+>>> 4118         struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+>>> 4119         pgoff_t page_idx = 0, last_idx;
+>>> 4120         unsigned int blk_per_seg = sbi->blocks_per_seg;
+>>> 4121         int cluster_size = F2FS_I(inode)->i_cluster_size;
+>>> 4122         int count, ret;
+>>> 4123
+>>> 4124         if (!f2fs_sb_has_compression(sbi) ||
+>>> 4125                         F2FS_OPTION(sbi).compress_mode !=
+>>> COMPR_MODE_USER)
+>>> 4126                 return -EOPNOTSUPP;
+>>> 4127
+>>> 4128         if (!(filp->f_mode & FMODE_WRITE))
+>>> 4129                 return -EBADF;
+>>> 4130
+>>> 4131         if (!f2fs_compressed_file(inode))
+>>> 4132                 return -EINVAL;
+>>> 4133
+>>> 4134         f2fs_balance_fs(sbi, true);
+>>> 4135
+>>> 4136         file_start_write(filp);
+>>> 4137         inode_lock(inode);
+>>>
+>>>
+>>> Thanks,
+>>>
+>>>>
+>>>> Thanks,
+>>>>
+>>>>>
+>>>>>
+>>>>> Thanks,
+>>>>>
+>>>>>> Thanks,
+>>>>>>
+>>>>>>> +        is_inode_flag_set(inode, FI_COMPRESS_RELEASED) ||
+>>>>>>> +        is_inode_flag_set(inode, FI_ENABLE_COMPRESS))
+>>>>>>> +        return true;
+>>>>>>> +
+>>>>>>> +    return false;
+>>>>>>> +}
+>>>>>>> +
+>>>>>>>     static inline bool f2fs_need_compress_data(struct inode *inode)
+>>>>>>>     {
+>>>>>>>         int compress_mode =
+>>>>>>> F2FS_OPTION(F2FS_I_SB(inode)).compress_mode;
+>>>>>>> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+>>>>>>> index 74ecc9e20619..0698129b2165 100644
+>>>>>>> --- a/fs/f2fs/file.c
+>>>>>>> +++ b/fs/f2fs/file.c
+>>>>>>> @@ -821,7 +821,7 @@ static bool f2fs_force_buffered_io(struct inode
+>>>>>>> *inode, int rw)
+>>>>>>>             return true;
+>>>>>>>         if (fsverity_active(inode))
+>>>>>>>             return true;
+>>>>>>> -    if (f2fs_compressed_file(inode))
+>>>>>>> +    if (f2fs_is_compressed_file(inode))
+>>>>>>>             return true;
+>>>>>>>           /* disallow direct IO if any of devices has unaligned
+>>>>>>> blksize */
