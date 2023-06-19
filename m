@@ -2,130 +2,382 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E30997350D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69F267350E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 11:50:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjFSJsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 05:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37614 "EHLO
+        id S231453AbjFSJuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 05:50:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbjFSJsP (ORCPT
+        with ESMTP id S231945AbjFSJt5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 05:48:15 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2056.outbound.protection.outlook.com [40.107.243.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE731A8;
-        Mon, 19 Jun 2023 02:48:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ka0WNT+4ULvT+XAqg5J0EMhVcH9IX/N04gYmjs0Q5ck9b8+gL//hBZcERug/YzbVWjbRFYAjRIXippzY76sh2VMfziMwmGxaI+DirKbMBKBBAzaXt5eEQE37j6PfbGaeCbuZOqIFjMjkFc+L11SQUeIY68PsU45P/CckeQozkXxxLYiArHfR7f4R6ouxsBT8fGbjExZe2LQ52a6QvFoFcoRd/0zeF93xUGd2bpT16ngIJJj2AN186W2fOhj+Lm1jSh7BwaX8760InOWiUK/34Z/sn1V2XGp1lxAp1dFLxMnA8KObjlYQbLUvz0yx+q9UvqG0SO6oYOJyaoYtxBW5mw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SgsSS87+1UOGoTbd/wunjfEVKBIg41SFTW/GIOZd+dI=;
- b=OzQZMerH7khRCzaswlC3gncb9+64L/D8VSquUlq3ATEC1w1OECt6SfdhfEnhiEk2IrRhviZoVHq+GTRbOPKDORPZiypFqKjcTspeCqg/EDASgM1zn31gwSVJiR0pLyfKNdZeDa8RQPUmtD7AfGk5qwIJ1J12KFkOVFdJVy9SrbtLUNinrDM1q8XsEtQmPTzRlmq0IdA583gUVmpDfe3VODUZ5hWrsJPXEfB7N4wextf8I+CPWgwSj6v09Zqd2t/9+8oo9VgkqrU9g/4vR5BJiV/lJ23DkPi8bc1U7FHBODB05kKRgHFZCedZJkHPzReDEqzM25mQ9FWWlihm3hVRcA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SgsSS87+1UOGoTbd/wunjfEVKBIg41SFTW/GIOZd+dI=;
- b=Ot/QiHUQUvutL8rh+eEAu+h3Jova/DiuvXK+V7z9if342NfLdAUWnwT6Mc0hEIRpfvqFmrRsYnCt/0cF44fU99p289VXcTdWH8kLzUC/DvUD/2qdQCkoym1kjeV2V8UZGTP1RZ7kcl2QnCuv0xYbgnzJCkCA9rJ/RZZEs2GtPBc=
-Received: from BN7PR12MB2835.namprd12.prod.outlook.com (2603:10b6:408:30::31)
- by IA1PR12MB6044.namprd12.prod.outlook.com (2603:10b6:208:3d4::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Mon, 19 Jun
- 2023 09:48:04 +0000
-Received: from BN7PR12MB2835.namprd12.prod.outlook.com
- ([fe80::d277:e70c:5a24:45b6]) by BN7PR12MB2835.namprd12.prod.outlook.com
- ([fe80::d277:e70c:5a24:45b6%3]) with mapi id 15.20.6500.036; Mon, 19 Jun 2023
- 09:48:04 +0000
-From:   "Maftei, Alex" <alex.maftei@amd.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-CC:     "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-Subject: Re: [PATCH net 1/2] selftests/ptp: Add -x option for testing
- PTP_SYS_OFFSET_EXTENDED
-Thread-Topic: [PATCH net 1/2] selftests/ptp: Add -x option for testing
- PTP_SYS_OFFSET_EXTENDED
-Thread-Index: AQHZoKTa8WeRAYs9nkac9J649TkaHa+R4okAgAACEwU=
-Date:   Mon, 19 Jun 2023 09:48:04 +0000
-Message-ID: <BN7PR12MB28358D20A59F18F07E031652F15FA@BN7PR12MB2835.namprd12.prod.outlook.com>
-References: <cover.1686955631.git.alex.maftei@amd.com>
- <e3e14166f0e92065d08a024159e29160b815d2bf.1686955631.git.alex.maftei@amd.com>
- <20230619093916.xxfkzj576hwz4tjq@soft-dev3-1>
-In-Reply-To: <20230619093916.xxfkzj576hwz4tjq@soft-dev3-1>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN7PR12MB2835:EE_|IA1PR12MB6044:EE_
-x-ms-office365-filtering-correlation-id: f26b8e1c-442d-4bb1-d2e3-08db70aa4733
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nkD8tG8ZdPYjdYqq411vaV2B5cxaflvSJFW79RQlkdzGoZfvAlAqq0XzoJfL6VPggz/SBj48xN9dZLbX30yMiAWKgbZchIdc5u/RsNBYuP4xPxfkvS7pmtQD2NkQd1GKLQc5FWwKbQZPXdRB/azAtYBHgllnZbClp5SCq/Nn9SugHTs7HzSR6sSvUPEA5TnbQdMbT6oV0vasGqmcr1u6qG0u7Cvr56UwBfzhWmfxftrm6yYZSGzWb2QaFD+0wU57ZjT0HQDvnQxAYYVgWsX3jXyW4m3FD8S256Ny9qvFeKAJSE6CdB52jhqq7cqwUKlp1nil9mrqow2F4BzspZdkm1NaYfE/XejceLNXkc2PHxwjwJzMARK+8y7Av7EJlOEu59Gt3JDCzycuGhqI9Rja77qkgm/wZWMyH4qTg0TB3AiJuQt46k3DS1q4mKhkjNLbqKLCmC837RdkEG+yPjyGrX9Tglec71p81aRkjqRC5AYh18ojTMDJPNL8yLOUEHLCqUTrHFi+IETU3lfQfuEFLCODX6lBmyIWqtKsavzgQ+/EX8S8DQWO4AiBHUJ+Th7NEu5uis+v7/4IsrhnbnY2cJ7df4hOGEnnPDwi7uajS8FNbGByTwrdi6IUx2CZAKgy
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN7PR12MB2835.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(39860400002)(396003)(376002)(136003)(451199021)(66946007)(8936002)(8676002)(66556008)(64756008)(76116006)(66446008)(66476007)(38070700005)(26005)(186003)(6506007)(9686003)(41300700001)(38100700002)(91956017)(5660300002)(4326008)(6916009)(316002)(52536014)(54906003)(7696005)(558084003)(55016003)(478600001)(2906002)(33656002)(122000001)(71200400001)(86362001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?SqmzW0AGL+GHAFYVktTnrUeqpcJrsw6FohZi7KiG21KImES1glbZ5F5XWy?=
- =?iso-8859-1?Q?sgGSVQHNZUE1Swh0er/yGSJMm0ubInCbsa8/CpT+9FnfajUc9/yhfgOtlv?=
- =?iso-8859-1?Q?7yy8eK1VwF44ZVRlI4/7adKJcVMoHgK3WChKATumVUfa/LQt4aJa5BG/s4?=
- =?iso-8859-1?Q?Z2LC49phgNkOal/UzZTT9VlthHJ3Q+H8EogUg97t2WRJNfTZQQ6FGYKny7?=
- =?iso-8859-1?Q?gAPHusLFG2BX5hKK0b2OvZx7FByB/TX165/rlZkPD0thr3SoUktHCeQbwE?=
- =?iso-8859-1?Q?vSqOnC50ry81N/GRRWZWHrLDkcczxe9U/CFPUjmZbtkNhxjoD/+Z1mN9i8?=
- =?iso-8859-1?Q?nvWz4hZxNFitQOo4WFaRb/DMsQbb1PDrL6SmKvqHURe3nyeAuAthrl7S2O?=
- =?iso-8859-1?Q?XZom4zfiI2KHoWGcbb51+KriD8jrAznoCTZ7vL+IZPv7SIn958s5Mft/8K?=
- =?iso-8859-1?Q?X+QATqwc/v/AeSpU1SzJBNDjRZT0A5zo+d1a6GJ8PC3gA5uWMjR+Cbwgzl?=
- =?iso-8859-1?Q?4QpGwt8V3fujmkRTwLICnP4erXI99x6hULoq9Sghyoq/P6vCPO2Wi9hZVZ?=
- =?iso-8859-1?Q?hZfhYLqWQsVDPt77OEwT3L5IdO8VxWg8tY2qGXv2q+7YdXPET7sKOP5f2T?=
- =?iso-8859-1?Q?pp4jkZMyXRqgcl9HOtUC7ZN2oGXL8bwVdwQ7pPuKKSCHxvgg5mjM1iW27A?=
- =?iso-8859-1?Q?YbkzJQ8+sFiNPizlm5jP65sDvZ3yu8NZCwcKVsNnsy2rIh0Tu1SyDm4csZ?=
- =?iso-8859-1?Q?pjlxR24Fc2sOEn+1WTgGqG7bk/F8yOAUOuEhx2/OYCmRbqeCQWOmTE2qNI?=
- =?iso-8859-1?Q?hNk6q2tGEx327TmJML/cDLC2uHh0sDiuuSj3hWB4gYyIUlTEW82ak3pxih?=
- =?iso-8859-1?Q?cpMZBYmKpOJ6uWA79U0dtWsa4eTkhzK77NS2/0sNK4QcraMAe0Y/sQQoj+?=
- =?iso-8859-1?Q?UztVep4J6p4DSirlDtX+M5BWS0MJlkBQkTbtCMtwiOhgNpmCujiZJGO0bH?=
- =?iso-8859-1?Q?mjYpzgg8BUmtLbz5B/Vmw4Ym1JO4D6s2WR0HeKYIgwWAZan0xqHsLsI8X2?=
- =?iso-8859-1?Q?BBGW9OFJvZwxHfTTZozWO2jFBX6gsw6Mcr16f/4Fh/5An3TYg9zGqor/ru?=
- =?iso-8859-1?Q?GmIhPvRABjJS6EWs8YXS5VOCcJemb9i7xJZuF3KcvU8SMyYdi6swH/P3rJ?=
- =?iso-8859-1?Q?ozSIZvB/uoXENvCfv8cx6/NT6JkgdTOlgaAoLuTY/fFHVC+gz/L6eR+SSw?=
- =?iso-8859-1?Q?I/+xhmSR71EplyvBkbfgmRdubWU9+AUQYiwjr+KOWKcjZKAGd9ELw72qAY?=
- =?iso-8859-1?Q?22UIl7mHruqXWGlQKpme32iW9NRv1otRuc62Oe578zsYdDv3viOro6aesf?=
- =?iso-8859-1?Q?58PtHk2OGS6jbcjrpNNsG+CnWLsWdUFQBc/tTr0x+q72TS9hhd6DWKZr9/?=
- =?iso-8859-1?Q?hkL2PoWsRfVVJiof8EK0TFNNPEx6G6uOgXIj/iG389uU0RZ/sLGooKQ+ZS?=
- =?iso-8859-1?Q?O4FMUX4WiYvR7cZkjBSibKybQFGYjOeaWsuz6xcGwAPBI2ywZdRDtKoYAY?=
- =?iso-8859-1?Q?TjmBgjcjZPDsvR5xh95prx6JfbGMMqb8F0/SfbHvD3pg9LFmDVYRHgg+8b?=
- =?iso-8859-1?Q?jyhc55TzCCMOU=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 19 Jun 2023 05:49:57 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63D88E74
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:49:26 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3113306a595so1943868f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 02:49:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687168164; x=1689760164;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ufa16yfHg1UfYlFcId+qjKJpIKBcEo4CXfpKbltJ6KE=;
+        b=1Ub0G9OJ3TJ81RkK0SxJkqcnUm5wrQytH+F33vxYOX/Uu6TN/0w6AN89i+8m062Eax
+         1y25P4YNKikwclhlCKMfD52SqOy7ztZh7czWl0x/s7oBLyHQppgjusRpQrq8eSxeBoP1
+         1Ip8BET6mifDOIXCrNMpeiyckLgKrCQ6ldVV5BKa+zvvB2bpLuCczA27cgDLhombunI9
+         LefsOyUf0YkPnugSIS9TNMhsCr8vZv6HMrKb/7vJbC9WL4keOqpbqYRVMXlwveUfc6uz
+         hrnVtQm0QtBzI1GC9LKSP7ZeEv69nbeJnebFye6hoVcoYxGwEfE+tph4o/h0E18hgngF
+         i29g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687168164; x=1689760164;
+        h=content-transfer-encoding:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ufa16yfHg1UfYlFcId+qjKJpIKBcEo4CXfpKbltJ6KE=;
+        b=kT9VH0nYYn9Sj7EEV6WI+DC5tYdu6Bt79NQGc8fvRpF9OyvWsd/g/47dP7rgLrp4hr
+         /X5BkHB0Jk7oMedyMoMGnKqyWur+OFdYC1u35H2N3Hvrir34JCgdmPH32+vc6MoBoKhS
+         9uNt1TsRl9XeySCTM8LqX8PABgdjUNeEDj5tf+o2lo/xGk7mMuNOpiRySvGNH+Hg8Zjw
+         hNt7c663aNZ66dUyKxtibm7YhaIv1bRJNU9MSrTWbZxzmHQ7xiKFmUs83lb037UHiGZ5
+         DNnZk8lVhNy0T63x54r9eIcq6Pdb3r2sRkU3S3JuZy0FqwvBSQyqklboM6TzK1f1T5T8
+         +V9w==
+X-Gm-Message-State: AC+VfDzRR8y6nRdM4tVEYm9A8NqiKl9qebmYDj9hEMF5CcIKz+dJ8uez
+        hcIIrvi4zcLY43o3yxbsf5apF+BSKr9977NmL6o40g==
+X-Google-Smtp-Source: ACHHUZ6T/j24USN/3db4YO9ETaLLLVVA0hQph5G5QQ36wEUXpcKABd/IbKv7GTVdrbSQ1S0CgJ2eWI2dQqnYCai5i/Y=
+X-Received: by 2002:adf:fd8d:0:b0:30f:bff8:3f67 with SMTP id
+ d13-20020adffd8d000000b0030fbff83f67mr9987250wrr.38.1687168164096; Mon, 19
+ Jun 2023 02:49:24 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN7PR12MB2835.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f26b8e1c-442d-4bb1-d2e3-08db70aa4733
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Jun 2023 09:48:04.3906
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kZ3q9TN1NVJn9WYAH0jSLrO2S3H9hjy9oubemILJBWwlX1HoCdvnuTZ6m1VK+6QA
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6044
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230619094705.51337-1-alexghiti@rivosinc.com>
+In-Reply-To: <20230619094705.51337-1-alexghiti@rivosinc.com>
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+Date:   Mon, 19 Jun 2023 11:49:13 +0200
+Message-ID: <CAHVXubjOUeEtnFnERjT2YOG+h5=2YX7kxeEBFSStO3WZvcv36A@mail.gmail.com>
+Subject: Re: [PATCH 1/2] Documentation: riscv: Add early boot document
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Sunil V L <sunilvl@ventanamicro.com>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        Atish Kumar Patra <atishp@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Horatiu,=0A=
-=0A=
-v2 of the series will have that fixed.=0A=
-I've accidentally sent an older revision of this patch series, before I've =
-rebased the changes properly.=0A=
+@Sunil V L Something about ACPI is more than welcome :)
+
+And thanks to @Bj=C3=B6rn T=C3=B6pel and @Atish Kumar Patra for helping in
+writing this document!
+
+On Mon, Jun 19, 2023 at 11:47=E2=80=AFAM Alexandre Ghiti <alexghiti@rivosin=
+c.com> wrote:
+>
+> This document describes the constraints and requirements of the early
+> boot process in a RISC-V kernel.
+>
+> Szigned-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> ---
+>  Documentation/riscv/boot-image-header.rst |   3 -
+>  Documentation/riscv/boot.rst              | 181 ++++++++++++++++++++++
+>  Documentation/riscv/index.rst             |   1 +
+>  3 files changed, 182 insertions(+), 3 deletions(-)
+>  create mode 100644 Documentation/riscv/boot.rst
+>
+> diff --git a/Documentation/riscv/boot-image-header.rst b/Documentation/ri=
+scv/boot-image-header.rst
+> index d7752533865f..a4a45310c4c4 100644
+> --- a/Documentation/riscv/boot-image-header.rst
+> +++ b/Documentation/riscv/boot-image-header.rst
+> @@ -7,9 +7,6 @@ Boot image header in RISC-V Linux
+>
+>  This document only describes the boot image header details for RISC-V Li=
+nux.
+>
+> -TODO:
+> -  Write a complete booting guide.
+> -
+>  The following 64-byte header is present in decompressed Linux kernel ima=
+ge::
+>
+>         u32 code0;                /* Executable code */
+> diff --git a/Documentation/riscv/boot.rst b/Documentation/riscv/boot.rst
+> new file mode 100644
+> index 000000000000..b02230818b79
+> --- /dev/null
+> +++ b/Documentation/riscv/boot.rst
+> @@ -0,0 +1,181 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +Early boot requirements/constraints on RISC-V
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +:Author: Alexandre Ghiti <alexghiti@rivosinc.com>
+> +:Date: 23 May 2023
+> +
+> +This document describes what the RISC-V kernel expects from the previous=
+ stages
+> +and the firmware, but also the constraints that any developer must have =
+in mind
+> +when touching the early boot process, e.g. before the final virtual mapp=
+ing is
+> +setup.
+> +
+> +Pre-kernel boot (Expectations from firmware)
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +Registers state
+> +---------------
+> +
+> +The RISC-V kernel expects:
+> +
+> +  * `$a0` to contain the hartid of the current core.
+> +  * `$a1` to contain the address of the device tree in memory.
+> +
+> +CSR state
+> +---------
+> +
+> +The RISC-V kernel expects:
+> +
+> +  * `$satp =3D 0`: the MMU must be disabled.
+> +
+> +Reserved memory for resident firmware
+> +-------------------------------------
+> +
+> +The RISC-V kernel expects the firmware to mark any resident memory with =
+the
+> +`no-map` flag, thus the kernel won't map those regions in the direct map=
+ping
+> +(avoiding issues with hibernation, speculative accesses and probably oth=
+er
+> +subsystems).
+> +
+> +Kernel location
+> +---------------
+> +
+> +The RISC-V kernel expects to be placed at a PMD boundary (2MB for rv64 a=
+nd 4MB
+> +for rv32). Note though that the EFI stub will physically relocate the ke=
+rnel if
+> +that's not the case.
+> +
+> +Device-tree
+> +-----------
+> +
+> +The RISC-V kernel always expects a device tree, it is:
+> +
+> +- either passed directly to the kernel from the previous stage using the=
+ `$a1`
+> +  register,
+> +- or when booting with UEFI, the device tree will be retrieved by the EF=
+I stub
+> +  using the EFI configuration table or it will be created.
+> +
+> +Bootflow
+> +--------
+> +
+> +There exist 2 methods to enter the kernel:
+> +
+> +- `RISCV_BOOT_SPINWAIT`: the firmware releases all harts in the kernel, =
+one hart
+> +  wins a lottery and executes the early boot code while the other harts =
+are
+> +  parked waiting for the initialization to finish. This method is now
+> +  **deprecated**.
+> +- Ordered booting: the firmware releases only one hart that will execute=
+ the
+> +  initialization phase and then will start all other harts using the SBI=
+ HSM
+> +  extension.
+> +
+> +UEFI
+> +----
+> +
+> +UEFI memory map
+> +~~~~~~~~~~~~~~~
+> +
+> +When booting with UEFI, the RISC-V kernel will use only the EFI memory m=
+ap to
+> +populate the system memory.
+> +
+> +The UEFI firmware must parse the subnodes of the `/reserved-memory` devi=
+ce tree
+> +node and abide by the device tree specification to convert the attribute=
+s of
+> +those subnodes (`no-map` and `reusable`) into their correct EFI equivale=
+nt
+> +(refer to section "3.5.4 /reserved-memory and UEFI" of the device tree
+> +specification).
+> +
+> +RISCV_EFI_BOOT_PROTOCOL
+> +~~~~~~~~~~~~~~~~~~~~~~~
+> +
+> +When booting with UEFI, the EFI stub requires the boot hartid in order t=
+o pass
+> +it to the RISC-V kernel in `$a1`. The EFI stub retrieves the boot hartid=
+ using
+> +one of the following methods:
+> +
+> +- `RISCV_EFI_BOOT_PROTOCOL` (**preferred**).
+> +- `boot-hartid` device tree subnode (**deprecated**).
+> +
+> +Any new firmware must implement `RISCV_EFI_BOOT_PROTOCOL` as the device =
+tree
+> +based approach is deprecated now.
+> +
+> +During kernel boot: (Kernel internals)
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> +
+> +EFI stub and device tree
+> +------------------------
+> +
+> +When booting with UEFI, the device tree is supplemented by the EFI stub =
+with the
+> +following parameters (largely shared with arm64 in Documentation/arm/uef=
+i.rst):
+> +
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D  =3D=3D=3D=3D=3D=3D   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> +Name                        Size     Description
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D  =3D=3D=3D=3D=3D=3D   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> +linux,uefi-system-table     64-bit   Physical address of the UEFI System=
+ Table.
+> +
+> +linux,uefi-mmap-start       64-bit   Physical address of the UEFI memory=
+ map,
+> +                                     populated by the UEFI GetMemoryMap(=
+) call.
+> +
+> +linux,uefi-mmap-size        32-bit   Size in bytes of the UEFI memory ma=
+p
+> +                                     pointed to in previous entry.
+> +
+> +linux,uefi-mmap-desc-size   32-bit   Size in bytes of each entry in the =
+UEFI
+> +                                     memory map.
+> +
+> +linux,uefi-mmap-desc-ver    32-bit   Version of the mmap descriptor form=
+at.
+> +
+> +kaslr-seed                  64-bit   Entropy used to randomize the kerne=
+l image
+> +                                     base address location.
+> +
+> +bootargs                             Kernel command line
+> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D  =3D=3D=3D=3D=3D=3D   =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+> +
+> +Virtual mapping setup
+> +---------------------
+> +
+> +The installation of the virtual mapping is done in 2 steps in the RISC-V=
+ kernel:
+> +
+> +1. :c:func:`setup_vm` installs a temporary kernel mapping in
+> +   :c:var:`early_pg_dir` which allows to discover the system memory: onl=
+y the
+> +   kernel text/data are mapped at this point. When establishing this map=
+ping,
+> +   no allocation can be done (since the system memory is not known yet),=
+ so
+> +   :c:var:`early_pg_dir` page table is statically allocated (using only =
+one
+> +   table for each level).
+> +
+> +2. :c:func:`setup_vm_final` creates the final kernel mapping in
+> +   :c:var:`swapper_pg_dir` and takes advantage of the discovered system =
+memory
+> +   to create the linear mapping. When establishing this mapping, the ker=
+nel
+> +   can allocate memory but cannot access it directly (since the direct m=
+apping
+> +   is not present yet), so it uses temporary mappings in the fixmap regi=
+on to
+> +   be able to access the newly allocated page table levels.
+> +
+> +For :c:func:`virt_to_phys` and :c:func:`phys_to_virt` to be able to corr=
+ectly
+> +convert direct mapping addresses to physical addresses, it needs to know=
+ the
+> +start of the DRAM: this happens after 1, right before 2 installs the dir=
+ect
+> +mapping (see :c:func:`setup_bootmem` function in arch/riscv/mm/init.c). =
+So
+> +any usage of those macros before the final virtual mapping is installed =
+must be
+> +carefully examined.
+> +
+> +Device-tree mapping via fixmap
+> +------------------------------
+> +
+> +The RISC-V kernel uses the fixmap region to map the device tree because =
+the
+> +device tree virtual mapping must remain the same between :c:func:`setup_=
+vm` and
+> +:c:func:`setup_vm_final` calls since :c:var:`reserved_mem` array is init=
+ialized
+> +with virtual addresses established by :c:func:`setup_vm` and used with t=
+he
+> +mapping established by :c:func:`setup_vm_final`.
+> +
+> +Pre-MMU execution
+> +-----------------
+> +
+> +Any code that executes before even the first virtual mapping is establis=
+hed
+> +must be very carefully compiled as:
+> +
+> +- `-fno-pie`: This is needed for relocatable kernels which use `-fPIE`, =
+since
+> +  otherwise, any access to a global symbol would go through the GOT whic=
+h is
+> +  only relocated virtually.
+> +- `-mcmodel=3Dmedany`: Any access to a global symbol must be PC-relative=
+ to avoid
+> +  any relocations to happen before the MMU is setup.
+> +- Also note that *all* instrumentation must also be disabled (that inclu=
+des
+> +  KASAN, ftrace and others).
+> +
+> +As using a symbol from a different compilation unit requires this unit t=
+o be
+> +compiled with those flags, we advise, as much as possible, not to use ex=
+ternal
+> +symbols.
+> diff --git a/Documentation/riscv/index.rst b/Documentation/riscv/index.rs=
+t
+> index 175a91db0200..1f66062def6d 100644
+> --- a/Documentation/riscv/index.rst
+> +++ b/Documentation/riscv/index.rst
+> @@ -5,6 +5,7 @@ RISC-V architecture
+>  .. toctree::
+>      :maxdepth: 1
+>
+> +    boot
+>      boot-image-header
+>      vm-layout
+>      hwprobe
+> --
+> 2.39.2
+>
