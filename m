@@ -2,120 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FFE07349AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 03:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4BE7349AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 03:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjFSBSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 18 Jun 2023 21:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
+        id S229612AbjFSBUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 18 Jun 2023 21:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjFSBSB (ORCPT
+        with ESMTP id S229507AbjFSBUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 18 Jun 2023 21:18:01 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DED61B4;
-        Sun, 18 Jun 2023 18:18:00 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sun, 18 Jun 2023 21:20:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9283710C4
+        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 18:18:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687137531;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VJcFjV6pMmGhhQ74b6q47TJilbjK91hK2Te/yYvvcKY=;
+        b=HH83hPVobLJJVwVaJZbbud3WXOFijc7zV54zcaVE7/ZWL3D9UUuuJtbr6KDOQrygKRpNLY
+        TJeGiLpDnyNXyhLnFPbj2bsVqJWRl6A+K1GPz0X5cUfajnbF2VWJNcYXvx+aEPdP0qVvMX
+        jZfzrQSCr8v4GA0M2/IVOVCz8stx5yA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-587-V6JgilncMMe0GUh746NMGw-1; Sun, 18 Jun 2023 21:18:44 -0400
+X-MC-Unique: V6JgilncMMe0GUh746NMGw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QksMT5PTjz4x0B;
-        Mon, 19 Jun 2023 11:17:57 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687137478;
-        bh=3GkgCEb+I0Mdl4Zdw8oQq3JXp496a5S+tCyi6fFcyEE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=eOBZJ5LJIVq1z65Qm9w/Rq1cPme57oMCPkwhzfW5r0YQqJkBVbpzmWns4FSYJBUbh
-         julOp30RTo4F5KjopvWwZ7YSeRhBgaX2QFdlimCTQY4TVJB5Nszc+F3ThHDSkR/EvL
-         P1ZaxxEfxI+WkHOei2/vLT5iuwhGShhWcPba3oXoK+yumIqpfkwdmdD+xlGQz4octd
-         wJpArpy0aIFlUuVq5u8JXRp1LYSo+3IoanEdhBORX51digpEFwSiNnbAH11z1RMO4K
-         Hr84NMxnCn10zzuVlqakQDXMYFwXK4okzmwb48EDyAXV1p7VLCL+3mLUnjnMY7XqXv
-         FeZ84TuQMxEgw==
-Date:   Mon, 19 Jun 2023 11:17:56 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Dave Airlie <airlied@redhat.com>
-Cc:     DRI <dri-devel@lists.freedesktop.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Philip Yang <Philip.Yang@amd.com>
-Subject: linux-next: manual merge of the drm tree with Linus' tree
-Message-ID: <20230619111756.452d0129@canb.auug.org.au>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7359F101A528;
+        Mon, 19 Jun 2023 01:18:43 +0000 (UTC)
+Received: from [10.22.16.51] (unknown [10.22.16.51])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D6FDB112132C;
+        Mon, 19 Jun 2023 01:18:41 +0000 (UTC)
+Message-ID: <55219f3b-992d-ccc3-ba29-7bf33465b5cc@redhat.com>
+Date:   Sun, 18 Jun 2023 21:18:41 -0400
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Sx=Nyc1AJ_H3UC9q_ot56pt";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 0/5] x86/speculation: Disable IBRS when idle
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Robin Jarry <rjarry@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H.Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        Joe Mario <jmario@redhat.com>
+References: <20230616200003.745742-1-longman@redhat.com>
+ <CTECMFWMMST3.9FTWRDG7FFKQ@ringo>
+ <20230617122115.GA1830050@hirez.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230617122115.GA1830050@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Sx=Nyc1AJ_H3UC9q_ot56pt
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 6/17/23 08:21, Peter Zijlstra wrote:
+> On Fri, Jun 16, 2023 at 10:14:52PM +0200, Robin Jarry wrote:
+>> Waiman Long, Jun 16, 2023 at 21:59:
+>>> For Intel processors that need to turn on IBRS to protect against
+>>> Spectre v2 and Retbleed, the IBRS bit in the SPEC_CTRL MSR affects
+>>> the performance of the whole core even if only one thread is turning
+>>> it on when running in the kernel. For user space heavy applications,
+>>> the performance impact of occasionally turning IBRS on during syscalls
+>>> shouldn't be significant. Unfortunately, that is not the case when the
+>>> sibling thread is idling in the kernel. In that case, the performance
+>>> impact can be significant.
+>>>
+>>> When DPDK is running on an isolated CPU thread processing network packets
+>>> in user space while its sibling thread is idle. The performance of the
+>>> busy DPDK thread with IBRS on and off in the sibling idle thread are:
+>>>
+>>>                                  IBRS on               IBRS off
+>>>                                  -------               --------
+>>>    packets/second:                  7.8M                  10.4M
+>>>    avg tsc cycles/packet:         282.26                 209.86
+>>>
+>>> This is a 25% performance degradation. The test system is a Intel Xeon
+>>> 4114 CPU @ 2.20GHz.
+>>>
+>>> This patch series turns off IBRS when in various idle mode to eliminate
+>>> the performance impact of the idling thread on its busy sibling thread.
+>> Hi Longman,
+>>
+>> thanks a lot for the quick turnaround on this issue.
+>>
+>> Tested-by: Robin Jarry <rjarry@redhat.com>
+> I can't see the patches -- they didn't arrive in my mailbox nor can I
+> find them in the archive, in fact this here mail is the only evidence
+> they exist at all.
 
-Hi all,
+I got a rebound message from your mail server about incorrect message 
+format. It is probably caused by some problem in my end.
 
-Today's linux-next merge of the drm tree got a conflict in:
 
-  drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
+> However, did you all see intel_idle_ibrs() and how that is selected for
+> C6 and up?
+>
+> What exactly isn't working there?
 
-between commit:
+We were testing on the RHEL9.2 kernel which doesn't have your 
+intel_idle_ibrs() patch yet. My preliminary testing does indicate your 
+patch will likely work. I will ask Jerry to test a newer RHEL9.3 kernel 
+with the intel_idle_ibrs() patch to see if it helps.
 
-  34e5a54327dc ("Revert "drm/amdgpu: remove TOPDOWN flags when allocating V=
-RAM in large bar system"")
+> Also, instead of investing more in this IBRS trainwreck, did you all try
+> call-depth-stuffing ?
 
-from Linus' tree and commit:
+Yes, we are planning to backport your call-depth-stuffing code, but I 
+believe there is still some issue outstanding that you need to address. 
+So we need a solution to work around this issue in the mean time.
 
-  7f6db89418f9 ("drm/amdgpu: dGPU mode placement support memory partition")
-
-from the drm tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
 Cheers,
-Stephen Rothwell
+Longman
 
-diff --cc drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
-index a70103ac0026,f76649e523a0..000000000000
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_object.c
-@@@ -139,8 -149,8 +149,8 @@@ void amdgpu_bo_placement_from_domain(st
-  		places[c].flags =3D 0;
- =20
-  		if (flags & AMDGPU_GEM_CREATE_CPU_ACCESS_REQUIRED)
-- 			places[c].lpfn =3D visible_pfn;
-+ 			places[c].lpfn =3D min_not_zero(places[c].lpfn, visible_pfn);
- -		else if (adev->gmc.real_vram_size !=3D adev->gmc.visible_vram_size)
- +		else
-  			places[c].flags |=3D TTM_PL_FLAG_TOPDOWN;
- =20
-  		if (flags & AMDGPU_GEM_CREATE_VRAM_CONTIGUOUS)
-
---Sig_/Sx=Nyc1AJ_H3UC9q_ot56pt
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSPrMQACgkQAVBC80lX
-0GxaDQf/Yya5+wwBnWUhQ71mkV9FJuG0vgv44/j3JjsUyFWi9gEZhVmXL6aLBd3Q
-kph+xmMNJbISAQ+NPv/euPSl8lP9M5UIG5h+6ELPOqe74r/QXlI8gzc9sLz7U7UG
-r5PY2JCJhh2++EYIq+z+iYLtDzDUNQCEZcOoKuyUbFkx0u/REoRKHcWTOscZHbsD
-nhkOoya3cDSkhuEdr00mg03IwC3rX135WSQ2Vc0sVLMXW2KiaSYijMP+iACUPtvz
-9V+ax6kTJlHHKc7pmjl29pFRDXDeOQPgCbWUEC9gwsO0JnzrnVTZMpMxmc2y+UBt
-eHCHopbw85Jm87YT8hpR2CO9JVB6Vw==
-=JQkm
------END PGP SIGNATURE-----
-
---Sig_/Sx=Nyc1AJ_H3UC9q_ot56pt--
