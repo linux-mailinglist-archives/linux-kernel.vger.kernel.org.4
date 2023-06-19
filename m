@@ -2,82 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A195373581F
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C88673582B
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:13:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbjFSNMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 09:12:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51674 "EHLO
+        id S231356AbjFSNNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 09:13:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231128AbjFSNMZ (ORCPT
+        with ESMTP id S231449AbjFSNNL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 09:12:25 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75196E60
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 06:12:22 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f762b3227dso4141073e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 06:12:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687180341; x=1689772341;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8c+PKgYSaMUQpe5P7IcFPccIwoeRkhCGol6IejFiVag=;
-        b=BCAk4DTYBZqlNLS0BODZwt8pA70k36Me2R9Pl9GoXYoLLIokwJjkiEZdyoDUZ2qjnC
-         q47J/E0fZ3XEfSBoXou/XxShwTtnlGV/+dIg/HLo+RkghrjwRqlRsr3L3fHF9O6XM4up
-         gLp+fTMit/MRConp5oNRS9pcAWtUhvmUY341Ki/bndolzUmoyFUhvnbjw+EaF3bxfFVi
-         J7aY2KbeTz20xjgg7EcAE115F3MzjgvNETEj2lf1u80hD3ehiuLfnKMsAng2BHjTbAEb
-         PfnGH5X6x6U+8OsHLDTpCipAyC0pTTqixK8AUQ3/2mTjYKJh8wSq19dI6SI2HfI9+kvf
-         airg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687180341; x=1689772341;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8c+PKgYSaMUQpe5P7IcFPccIwoeRkhCGol6IejFiVag=;
-        b=Go2osDlhViM2KNDsRXjVfR0UerqkOrNeEYoOJKjn7NgFy8C0mN+GClx7Vw0mUfOGJz
-         0EONjWs7GkE4iINru1TsYWx6RhihRTr9THA8sBLDWF7pqfKUyGj62jIKwiJp3fv0/kWY
-         GiqcwObZdubST9xi+sg4cguJzdsf0nfM9TVM9KN8Unzb519g3sd7KDakkujB35iXq5lJ
-         wz72mvad3tNVH9pwRqXMyYarQIZiJe6pVi7yIgbUDv0wAUndWsXAnsVv/FIE3IjYSFYy
-         5drDfoYCmtTqKP7oepHOXzOtQZJBbgowPB/RJ0kWlCMQE0Ov3LTKKeN9Bp5rLEffRAVN
-         XCJQ==
-X-Gm-Message-State: AC+VfDw81JN/+MqpAl1kSqBo26YNYNpL6JP6OeoNsshatCkkunJqdiDV
-        qvhEf7FdGfbS0rrG1RRRbaKgfg==
-X-Google-Smtp-Source: ACHHUZ6KrcJEUvsbFSOWx1Gpv1Tuu4+yk8DyuCgl4FliCyVzK6Bt7M277Ive/mtM4G/luQ4t0lEnSw==
-X-Received: by 2002:a05:6512:3d12:b0:4f7:557b:fca4 with SMTP id d18-20020a0565123d1200b004f7557bfca4mr5820428lfv.26.1687180340830;
-        Mon, 19 Jun 2023 06:12:20 -0700 (PDT)
-Received: from [192.168.1.101] (abyl242.neoplus.adsl.tpnet.pl. [83.9.31.242])
-        by smtp.gmail.com with ESMTPSA id c15-20020ac2414f000000b004f861e64f24sm1088925lfi.113.2023.06.19.06.12.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 06:12:20 -0700 (PDT)
-Message-ID: <48db4706-de69-04ff-2733-ab05ecfaa9df@linaro.org>
-Date:   Mon, 19 Jun 2023 15:12:19 +0200
+        Mon, 19 Jun 2023 09:13:11 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7E6E65
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 06:12:58 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35JDCeC3059237;
+        Mon, 19 Jun 2023 08:12:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1687180360;
+        bh=FJIIHAmXoaiCGIqcuKuUJxhCHTFzaAGVbgF4ezSG05U=;
+        h=From:To:CC:Subject:Date;
+        b=m9sn3eY717GVxrmLn77PYIuoh+QWrRTjbDJDxTX0Cy4bQQgjvfN/1bDUHi1ZK7yWh
+         dT9OHW+UgkmNo05zq86mthBEdiuLMXuFGcxYhT2b+H0PUKTiE3qOIJOnZ+KM0ION6F
+         4H6utzCVeYRXHsRTnvZq6iFGmmR/iCYzR4EpmQqg=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35JDCedP130672
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 19 Jun 2023 08:12:40 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 19
+ Jun 2023 08:12:40 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 19 Jun 2023 08:12:39 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35JDCeJG001213;
+        Mon, 19 Jun 2023 08:12:40 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Santosh Shilimkar <ssantosh@kernel.org>,
+        Tero Kristo <kristo@kernel.org>, Nishanth Menon <nm@ti.com>
+CC:     Francesco Dolcini <francesco@dolcini.it>,
+        Wadim Egorov <w.egorov@phytec.de>, <vigneshr@ti.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <d-gole@ti.com>
+Subject: [PATCH] firmware: ti_sci: Use system_state to determine polling
+Date:   Mon, 19 Jun 2023 08:12:36 -0500
+Message-ID: <20230619131236.3285069-1-nm@ti.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 04/15] arm64: dts: qcom: apq8096-db820c: drop label from
- I2C
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        cros-qcom-dts-watchers@chromium.org,
-        Nikita Travkin <nikita@trvn.ru>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230617171541.286957-1-krzysztof.kozlowski@linaro.org>
- <20230617171541.286957-4-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230617171541.286957-4-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,47 +65,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.06.2023 19:15, Krzysztof Kozlowski wrote:
-> I2C controller bindings do not allow label property:
-> 
->   apq8096-db820c.dtb: i2c@7577000: Unevaluated properties are not allowed ('label' was unexpected)
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Commit b9e8a7d950ff ("firmware: ti_sci: Switch transport to polled
+mode during system suspend") aims to resolve issues with tisci
+operations during system suspend operation. However, the system may
+enter a no_irq stage in various other usage modes, including power-off
+and restart. To determine if polling mode is appropriate, use the
+system_state instead.
 
-Konrad
->  arch/arm64/boot/dts/qcom/apq8096-db820c.dts | 9 +++------
->  1 file changed, 3 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/apq8096-db820c.dts b/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
-> index 537547b97459..002cf5806d83 100644
-> --- a/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
-> +++ b/arch/arm64/boot/dts/qcom/apq8096-db820c.dts
-> @@ -138,8 +138,7 @@ wlan_en: wlan-en-1-8v {
->  };
->  
->  &blsp1_i2c3 {
-> -	/* On Low speed expansion */
-> -	label = "LS-I2C0";
-> +	/* On Low speed expansion: LS-I2C0 */
->  	status = "okay";
->  };
->  
-> @@ -168,14 +167,12 @@ &adsp_pil {
->  };
->  
->  &blsp2_i2c1 {
-> -	/* On High speed expansion */
-> -	label = "HS-I2C2";
-> +	/* On High speed expansion: HS-I2C2 */
->  	status = "okay";
->  };
->  
->  &blsp2_i2c1 {
-> -	/* On Low speed expansion */
-> -	label = "LS-I2C1";
-> +	/* On Low speed expansion: LS-I2C1 */
->  	status = "okay";
->  };
->  
+While at this, drop the unused is_suspending state variable and
+related helpers.
+
+Reported-by: Francesco Dolcini <francesco@dolcini.it>
+Reported-by: Wadim Egorov <w.egorov@phytec.de>
+Link: https://lore.kernel.org/all/ZGeHMjlnob2GFyHF@francesco-nb.int.toradex.com/
+Signed-off-by: Nishanth Menon <nm@ti.com>
+---
+ drivers/firmware/ti_sci.c | 35 ++---------------------------------
+ 1 file changed, 2 insertions(+), 33 deletions(-)
+
+diff --git a/drivers/firmware/ti_sci.c b/drivers/firmware/ti_sci.c
+index 039d92a595ec..dc7906e38f09 100644
+--- a/drivers/firmware/ti_sci.c
++++ b/drivers/firmware/ti_sci.c
+@@ -97,7 +97,6 @@ struct ti_sci_desc {
+  * @node:	list head
+  * @host_id:	Host ID
+  * @users:	Number of users of this instance
+- * @is_suspending: Flag set to indicate in suspend path.
+  */
+ struct ti_sci_info {
+ 	struct device *dev;
+@@ -116,7 +115,6 @@ struct ti_sci_info {
+ 	u8 host_id;
+ 	/* protected by ti_sci_list_mutex */
+ 	int users;
+-	bool is_suspending;
+ };
+ 
+ #define cl_to_ti_sci_info(c)	container_of(c, struct ti_sci_info, cl)
+@@ -418,14 +416,14 @@ static inline int ti_sci_do_xfer(struct ti_sci_info *info,
+ 
+ 	ret = 0;
+ 
+-	if (!info->is_suspending) {
++	if (system_state <= SYSTEM_RUNNING) {
+ 		/* And we wait for the response. */
+ 		timeout = msecs_to_jiffies(info->desc->max_rx_timeout_ms);
+ 		if (!wait_for_completion_timeout(&xfer->done, timeout))
+ 			ret = -ETIMEDOUT;
+ 	} else {
+ 		/*
+-		 * If we are suspending, we cannot use wait_for_completion_timeout
++		 * If we are !running, we cannot use wait_for_completion_timeout
+ 		 * during noirq phase, so we must manually poll the completion.
+ 		 */
+ 		ret = read_poll_timeout_atomic(try_wait_for_completion, done_state,
+@@ -3281,35 +3279,6 @@ static int tisci_reboot_handler(struct notifier_block *nb, unsigned long mode,
+ 	return NOTIFY_BAD;
+ }
+ 
+-static void ti_sci_set_is_suspending(struct ti_sci_info *info, bool is_suspending)
+-{
+-	info->is_suspending = is_suspending;
+-}
+-
+-static int ti_sci_suspend(struct device *dev)
+-{
+-	struct ti_sci_info *info = dev_get_drvdata(dev);
+-	/*
+-	 * We must switch operation to polled mode now as drivers and the genpd
+-	 * layer may make late TI SCI calls to change clock and device states
+-	 * from the noirq phase of suspend.
+-	 */
+-	ti_sci_set_is_suspending(info, true);
+-
+-	return 0;
+-}
+-
+-static int ti_sci_resume(struct device *dev)
+-{
+-	struct ti_sci_info *info = dev_get_drvdata(dev);
+-
+-	ti_sci_set_is_suspending(info, false);
+-
+-	return 0;
+-}
+-
+-static DEFINE_SIMPLE_DEV_PM_OPS(ti_sci_pm_ops, ti_sci_suspend, ti_sci_resume);
+-
+ /* Description for K2G */
+ static const struct ti_sci_desc ti_sci_pmmc_k2g_desc = {
+ 	.default_host_id = 2,
+-- 
+2.40.0
+
