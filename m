@@ -2,97 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1199D7358E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37D7D7358DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:46:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbjFSNq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 09:46:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
+        id S232027AbjFSNqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 09:46:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232037AbjFSNqY (ORCPT
+        with ESMTP id S230098AbjFSNqJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 09:46:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CD9E71
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 06:45:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687182341;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=PS1H7ecy55y2u3/0fP4naIM7dhIersvr58xb+WGx2Qs=;
-        b=iVyt7yCFJib3IDHPmvMiOFA/2Mc7wa7g1PKyoVpV/GrfkRVoLBkDZr2ALfIDYyMoVylvtJ
-        BVAOMdx/5FrZRWZtRyxY3Z4S4VBnCAGMdWF5IkOwDiZa910ZBeYtfRDPuPVI4ptRj8cppK
-        7us9rE1MmmpwfIo75+Tl9KekPXhR/ck=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-654-XmP41knuO72Zk6wGslVZow-1; Mon, 19 Jun 2023 09:45:40 -0400
-X-MC-Unique: XmP41knuO72Zk6wGslVZow-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 210A785A58A;
-        Mon, 19 Jun 2023 13:45:40 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7235E492C1B;
-        Mon, 19 Jun 2023 13:45:39 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <20230619134204.922713-1-dhowells@redhat.com>
-References: <20230619134204.922713-1-dhowells@redhat.com>
-Cc:     dhowells@redhat.com,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-afs@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] afs: Fix writeback
+        Mon, 19 Jun 2023 09:46:09 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB495E54;
+        Mon, 19 Jun 2023 06:46:08 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-66654d019d4so2997035b3a.0;
+        Mon, 19 Jun 2023 06:46:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687182368; x=1689774368;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HIvdumOuZ+uzm//Q8KqLv/f6YpyXoaXW/Ro3RALrI/U=;
+        b=i5JwtQKBWoT7sFG1Fz+c1EUCLWTvAE5jMeEASpHbMoh01TnNF9UmqC2IPXAoJP3aR8
+         T9nG5bTy8MNs5pFbNnJO0d7O4Npy4u1KDkoS50uNjPKsZeI4z+GimUX8CKsCiTQGwnkH
+         +n+nheztzivYSMXB3JK+ska/rRsTrVT7DfqBa4KyQJ2f8Lf2StTw3dRogxoaLCRVqfNk
+         AWm/wdzOf2D7piok/Dx50jXQswd6N3i2ky37qnyE8Bu8H2+Z4xpg48EoYammTBZw7ult
+         oBGG5az58ZqKgK5ySnWWRo+kew80XKrXC9acPnDI1b42S22npEJ77dGiDPlfzHRP9ygV
+         PO/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687182368; x=1689774368;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HIvdumOuZ+uzm//Q8KqLv/f6YpyXoaXW/Ro3RALrI/U=;
+        b=QJPUH3Rmho+BBjjduRq45BmabvYxm2JQACy1WMX2J95917RaHEaDkQ+eoby1cjrWeR
+         JHjNmCMLjgvSfBpt6UNWIzfHM2urRmcWTU6Inz8qa8PvdZsZWOkPe/nlGVTWq6OfGkMs
+         vGxrG77v+OKVdu2HZKnzU4iVanG+tL04WrMDAbC2VgKkhzisIRdzK0ci9SpYA329C9lT
+         IYmoHTXHlru6Vil6/auDJhEnVm3a8kku2vTZvZh959fHIKRe6BNHi8RAE0woTVoLp2ML
+         xOGnEgLtMRsYn879Xqf2HsCD1LbiWLgtZ9coX9KtPHnU+SXhfctYjYeF0ZLiYvmvlvlV
+         i2YA==
+X-Gm-Message-State: AC+VfDwdZz6SVG8HVwELm+x8ilcGOX8WdfLzOzjUqdVqhmhP4Wl8Ijp+
+        tP8qukZjmvDsN7/zgKt8x3o=
+X-Google-Smtp-Source: ACHHUZ6hVtaSRXVcpARz9bDj143Ijftd/mu+PCLpAfX3sCeNiBfBb4EpdXjUvSU7RP2RZrry2BXVow==
+X-Received: by 2002:a05:6a20:8424:b0:103:b436:aef7 with SMTP id c36-20020a056a20842400b00103b436aef7mr20689920pzd.16.1687182368045;
+        Mon, 19 Jun 2023 06:46:08 -0700 (PDT)
+Received: from [10.178.67.29] ([192.19.248.250])
+        by smtp.gmail.com with ESMTPSA id 201-20020a6302d2000000b00553d42a7cb5sm1177513pgc.68.2023.06.19.06.46.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 06:46:07 -0700 (PDT)
+Message-ID: <c8fd738d-cedc-9a2f-f093-0a5b49ab0131@gmail.com>
+Date:   Mon, 19 Jun 2023 14:46:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <922833.1687182338.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Mon, 19 Jun 2023 14:45:38 +0100
-Message-ID: <922834.1687182338@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 5.15 000/107] 5.15.118-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230619102141.541044823@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20230619102141.541044823@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Howells <dhowells@redhat.com> wrote:
 
-> Hi Linus,
-> =
 
-> Could you apply these fixes to AFS writeback code from Vishal?
-> =
+On 6/19/2023 11:29 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.118 release.
+> There are 107 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 21 Jun 2023 10:21:12 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.118-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
->  (1) Release the acquired batch before returning if we got >=3D5 skips.
-> =
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
->  (2) Retry a page we had to wait for rather than skipping over it after =
-the
->      wait.
-> =
-
-> The patches can be found here:
-> =
-
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/l=
-og/?h=3Dafs-fixes
-
-Let me do that with a signed tag.
-
-David
-
+Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
+-- 
+Florian
