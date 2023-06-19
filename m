@@ -2,158 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41FBE735D70
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 20:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93DCE735D79
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 20:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbjFSSWo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 19 Jun 2023 14:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51876 "EHLO
+        id S232348AbjFSS3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 14:29:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231918AbjFSSWn (ORCPT
+        with ESMTP id S231322AbjFSS3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 14:22:43 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2079118;
-        Mon, 19 Jun 2023 11:22:38 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1qBJVV-000Ryh-FD; Mon, 19 Jun 2023 20:21:41 +0200
-Received: from p57bd9486.dip0.t-ipconnect.de ([87.189.148.134] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1qBJVV-000OlA-36; Mon, 19 Jun 2023 20:21:41 +0200
-Message-ID: <5c66d9a869e24e795ae242598935eddfea095730.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH v2 13/13] sh/kexec: refactor for kernel/Kconfig.kexec
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Eric DeVolder <eric.devolder@oracle.com>, linux@armlinux.org.uk,
-        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
-        geert@linux-m68k.org, tsbogend@alpha.franken.de,
-        James.Bottomley@HansenPartnership.com, deller@gmx.de,
-        ysato@users.sourceforge.jp, dalias@libc.org, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org
-Cc:     kernel@xen0n.name, mpe@ellerman.id.au, npiggin@gmail.com,
-        christophe.leroy@csgroup.eu, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, hpa@zytor.com,
-        keescook@chromium.org, paulmck@kernel.org, peterz@infradead.org,
-        frederic@kernel.org, akpm@linux-foundation.org, ardb@kernel.org,
-        samitolvanen@google.com, juerg.haefliger@canonical.com,
-        arnd@arndb.de, rmk+kernel@armlinux.org.uk,
-        linus.walleij@linaro.org, sebastian.reichel@collabora.com,
-        rppt@kernel.org, kirill.shutemov@linux.intel.com,
-        anshuman.khandual@arm.com, ziy@nvidia.com, masahiroy@kernel.org,
-        ndesaulniers@google.com, mhiramat@kernel.org, ojeda@kernel.org,
-        thunder.leizhen@huawei.com, xin3.li@intel.com, tj@kernel.org,
-        gregkh@linuxfoundation.org, tsi@tuyoix.net, bhe@redhat.com,
-        hbathini@linux.ibm.com, sourabhjain@linux.ibm.com,
-        boris.ostrovsky@oracle.com, konrad.wilk@oracle.com
-Date:   Mon, 19 Jun 2023 20:21:38 +0200
-In-Reply-To: <20230619145801.1064716-14-eric.devolder@oracle.com>
-References: <20230619145801.1064716-1-eric.devolder@oracle.com>
-         <20230619145801.1064716-14-eric.devolder@oracle.com>
+        Mon, 19 Jun 2023 14:29:53 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470F01A8;
+        Mon, 19 Jun 2023 11:29:50 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:15:c623::7a9])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nicolas)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9A9846606F91;
+        Mon, 19 Jun 2023 19:29:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687199388;
+        bh=TQWW8juW2UtWzPnJZmxaz5aQLcUrScTrb1oeb43glSM=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=GBeLl4NYbN8fFu6f2fQAJUVogONfJePDNDID1lNWYFBNZ2Y7DA4uQ5qNtk4ZI9TYd
+         XM/kHPbtUO1FFQzas4pVtL3N5tFBr6f0GZVNF+7d931FJtM45VYzieDk3UhLJqQG9w
+         aSb7kmYAVGZPapk8hZqNjhRwG9bnJ4DGo8dFT4E7BRtLhBdBMe5SdsPkHvU3SotuxW
+         gZwuQhhiERY99OEnxdMXt/jgTftdjbC1v23t27x20c2Mu2TuDkF6gbv7ts2UbOCiOF
+         EWQw3e+zhWb6FAvyYL9PgpPSa/AEYM+pBM5KIuAu2Gn3KeHekzgPZTV30IrzfvUC2C
+         OlYu6p/cbBrNg==
+Message-ID: <d9f088d1d548c8735b393a15d5a16dbd914ddeca.camel@collabora.com>
+Subject: Re: [PATCH 2/2] media: verisilicon: change confusingly named
+ relaxed register access
+From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
+To:     Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 19 Jun 2023 14:29:38 -0400
+In-Reply-To: <063a8886-fd31-425f-901c-fc830512eca3@app.fastmail.com>
+References: <20230616144854.3818934-1-arnd@kernel.org>
+         <20230616144854.3818934-2-arnd@kernel.org>
+         <e264ac3a15e0f115aa7e941a77eb312429b8f65e.camel@collabora.com>
+         <063a8886-fd31-425f-901c-fc830512eca3@app.fastmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.3 
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.148.134
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Eric!
+Le lundi 19 juin 2023 =C3=A0 16:49 +0200, Arnd Bergmann a =C3=A9crit=C2=A0:
+> On Mon, Jun 19, 2023, at 16:41, Nicolas Dufresne wrote:
+> > Le vendredi 16 juin 2023 =C3=A0 16:48 +0200, Arnd Bergmann a =C3=A9crit=
+=C2=A0:
+> > > From: Arnd Bergmann <arnd@arndb.de>
+> > >=20
+> > > The register abstraction has wrappers around both the normal writel()
+> > > and its writel_relaxed() counterpart, but this has led to a lot of us=
+ers
+> > > ending up with the relaxed version.
+> > >=20
+> > > There is sometimes a need to intentionally pick the relaxed accessor =
+for
+> > > performance critical functions, but I noticed that each hantro_reg_wr=
+ite()
+> > > call also contains a non-relaxed readl(), which is typically much mor=
+e
+> > > expensive than a writel, so there is little benefit here but an added
+> > > risk of missing a serialization against DMA.
+> > >=20
+> > > To make this behave like other interfaces, use the normal accessor by
+> > > default and only provide the relaxed version as an alternative for
+> > > performance critical code. hantro_postproc.c is the only place that
+> > > used both the relaxed and normal writel, but this does not seem
+> > > cricital either, so change it all to the normal ones.
+> >=20
+> > In this text you spoke about potential performance side effects of exis=
+ting code
+> > and your changes, but its left all very vague and theoretical. Have you=
+ done any
+> > measurement ? Do you need help with the manner ?
+>=20
+> I don't have this hardware and have not done any measurements.
+> Obviously the only point of using relaxed accessors is to
+> improve performance in critical code paths, but from the way they
+> are used here it seems that this was instead just an accident
+> and nobody else did any comparisons either.
+>=20
+> My guess would be that if one wanted to speed up the register
+> access, a better way would be to use a regmap cache to avoid
+> reading registers when the contents are already known.
 
-On Mon, 2023-06-19 at 10:58 -0400, Eric DeVolder wrote:
-> The kexec and crash kernel options are provided in the common
-> kernel/Kconfig.kexec. Utilize the common options and provide
-> the ARCH_SUPPORTS_ and ARCH_SELECTS_ entries to recreate the
-> equivalent set of KEXEC and CRASH options.
-> 
-> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
-> ---
->  arch/sh/Kconfig | 46 ++++++++--------------------------------------
->  1 file changed, 8 insertions(+), 38 deletions(-)
-> 
-> diff --git a/arch/sh/Kconfig b/arch/sh/Kconfig
-> index 9652d367fc37..d52e0beed7e9 100644
-> --- a/arch/sh/Kconfig
-> +++ b/arch/sh/Kconfig
-> @@ -546,44 +546,14 @@ menu "Kernel features"
->  
->  source "kernel/Kconfig.hz"
->  
-> -config KEXEC
-> -	bool "kexec system call (EXPERIMENTAL)"
-> -	depends on MMU
-> -	select KEXEC_CORE
-> -	help
-> -	  kexec is a system call that implements the ability to shutdown your
-> -	  current kernel, and to start another kernel.  It is like a reboot
-> -	  but it is independent of the system firmware.  And like a reboot
-> -	  you can start any kernel with it, not just Linux.
-> -
-> -	  The name comes from the similarity to the exec system call.
-> -
-> -	  It is an ongoing process to be certain the hardware in a machine
-> -	  is properly shutdown, so do not be surprised if this code does not
-> -	  initially work for you.  As of this writing the exact hardware
-> -	  interface is strongly in flux, so no good recommendation can be
-> -	  made.
-> -
-> -config CRASH_DUMP
-> -	bool "kernel crash dumps (EXPERIMENTAL)"
-> -	depends on BROKEN_ON_SMP
-> -	help
-> -	  Generate crash dump after being started by kexec.
-> -	  This should be normally only set in special crash dump kernels
-> -	  which are loaded in the main kernel with kexec-tools into
-> -	  a specially reserved region and then later executed after
-> -	  a crash by kdump/kexec. The crash dump kernel must be compiled
-> -	  to a memory address not used by the main kernel using
-> -	  PHYSICAL_START.
-> -
-> -	  For more details see Documentation/admin-guide/kdump/kdump.rst
-> -
-> -config KEXEC_JUMP
-> -	bool "kexec jump (EXPERIMENTAL)"
-> -	depends on KEXEC && HIBERNATION
-> -	help
-> -	  Jump between original kernel and kexeced kernel and invoke
-> -	  code via KEXEC
-> +config ARCH_SUPPORTS_KEXEC
-> +	def_bool MMU
-> +
-> +config ARCH_SUPPORTS_CRASH_DUMP
-> +	def_bool BROKEN_ON_SMP
-> +
-> +config ARCH_SUPPORTS_KEXEC_JUMP
-> +	def_bool y
->  
->  config PHYSICAL_START
->  	hex "Physical address where the kernel is loaded" if (EXPERT || CRASH_DUMP)
+All I know is that for the majority of registers when programming stateless
+codecs, each 32bit word of registers are fully written too, the read value =
+is
+not always meaningful (its a value from last time the HW has been triggered=
+) and
+should be ignored, so better to not do that. As for regmap, there is folks =
+that
+have reported regmap to be completely overkill for this type of hardware.
 
-Acked-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+That discussion highlight my concern, which is that this specific patch sho=
+uld
+require a Tested-by before being merged. A clearer note to say that this pa=
+tch
+is not tested could have helped.
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+regards,
+Nicolas
+
+>=20
+>      Arnd
+
