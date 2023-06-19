@@ -2,171 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A97735ACE
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51DFF735AD5
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229953AbjFSPH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 11:07:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54346 "EHLO
+        id S229674AbjFSPKO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:10:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjFSPHm (ORCPT
+        with ESMTP id S231920AbjFSPKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:07:42 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C862410E3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:07:26 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f8fa2cf847so33263055e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:07:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1687187243; x=1689779243;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bF1I6NOSdp0boAf3cXOANw0nNn9CysmZuzWnMKWJE0I=;
-        b=SrPWQcAEv7ZEoYcC8y8MMQNNWLHc1GpyA6auFe7qqTmoSTdAG4zGOFlWJMGDKWtS5x
-         xWIbPEYVAOeIYpHIyQgMD7aS+RTuzuorwpbw3bHVG1HuI4QbMzrEII71nS/fm1lD2Z+g
-         bxLOHKnGz+27eJo0cqJ+Fd3oJ8PTB1syga2KiQeUNG6x9NxpEYYIyPtdW76Gw/dQQn4y
-         QyqD/x7KbePA1kfEMKvXitvWgcGsKC+TlB3t+1alItQJ7/liWQERVcVdeVSktrnN2v1H
-         Xq97jb7GQjKCqvLSkclRKhfuH4EwWVrgsRPZ7SObpFy02wRLUxgK8sSj7F5N+4NrSWZ5
-         7aYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687187243; x=1689779243;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bF1I6NOSdp0boAf3cXOANw0nNn9CysmZuzWnMKWJE0I=;
-        b=NeWakUGCIMIDQxYtsuHAkfZACWr/V5F4cbrllRJnFtHABAEK4llVuzkcUM0RA3WtIm
-         zoKbITj4Ed3NszwM4Kg9VUeyYxbkyNvkJxhtSwQRZs3o/dnlz3P900+u0EMe2vhX3Oj7
-         JVDPRW1PhXt67i8T/a6dN6S0tj6h2iore0UPhMRdePa4ok+AdC4yGjGTEvZwG3P6AGVO
-         Ao2GY634ONHXcEN+auMjJ3DTWmPFXnXCheR6/lZ1DKUk9qW/9c8n2Mx1QHFdw2b6JnHs
-         BME07R0PlTcQ26Q6zee9zAFZgXojqaiH72TqM1weCyLOkB3eetvgDc/2odGVL7oaD+pq
-         hRYQ==
-X-Gm-Message-State: AC+VfDxAZqnj9I43AOPJ5bX79b/TgAHPH1manlBmqUD7UpG3+1KQux8/
-        6L9j9wiYMHGDaQQVgpQhM1Xq4Q==
-X-Google-Smtp-Source: ACHHUZ4QpXrVdOPChzthrRJNQWsZ8TKLv4ekV8Mc6yMvkXImHSiDzCzJNSGfU3pYEHGWIyzBS27jMQ==
-X-Received: by 2002:a05:600c:ad9:b0:3f6:2ee:6993 with SMTP id c25-20020a05600c0ad900b003f602ee6993mr8284670wmr.4.1687187242946;
-        Mon, 19 Jun 2023 08:07:22 -0700 (PDT)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id h22-20020a1ccc16000000b003f7ed463954sm11023934wmb.25.2023.06.19.08.07.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 08:07:22 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 17:07:21 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Petr Oros <poros@redhat.com>
-Cc:     netdev@vger.kernel.org, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        michal.swiatkowski@linux.intel.com, jacob.e.keller@intel.com,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org,
-        pmenzel@molgen.mpg.de
-Subject: Re: [PATCH net v2] ice: Unregister netdev and devlink_port only once
-Message-ID: <ZJBvKVf7Yfh6WpsO@nanopsycho>
-References: <20230619105813.369912-1-poros@redhat.com>
+        Mon, 19 Jun 2023 11:10:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BEC2F9;
+        Mon, 19 Jun 2023 08:09:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0A6260D17;
+        Mon, 19 Jun 2023 15:09:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C823DC433C0;
+        Mon, 19 Jun 2023 15:09:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687187386;
+        bh=GxkfFiD3FPUB0uLvuilF9gvjzRT76yd6Rs02FVbihhc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=o0VoNJf4eC1pSRDjQJk+s3aJUzAeS2Sr88XbW0kl+dXDsjO5Zj5JuqfG6vvufxAkp
+         KI/ce6Fm33ihLFWVgwWDDu1XhLC7S2KS1QdvmIn6de333bSLKI28xrq3ip2lBU7Dhl
+         YqxSDXlREeNzzzLiwIfV5sTc9WKk4pkxJJuXfWfixd0koeSGpFMn2Qy1LiNhgOtgJQ
+         9CLB/pDxD2zz5sWkaE1ebCkt++0+dtclSoxPNHXlG0HUFmoNl7tzCNMOMVPqm/GJNW
+         p0G+NsTKzpC+Fvx33uvrISHD8JuzCQUNGQgcBYFGqQhBs7hWXE1jQVClEC5/0jnrfJ
+         t7+mGPfIh6MvQ==
+Date:   Mon, 19 Jun 2023 10:09:44 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Lukas Wunner <lukas@wunner.de>, linux-pci@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Wilczy??ski <kw@linux.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Stefan =?iso-8859-1?Q?M=E4tje?= <stefan.maetje@esd.eu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jesse Barnes <jbarnes@virtuousgeek.org>,
+        Matthew Garrett <mjg59@srcf.ucam.org>,
+        Shaohua Li <shaohua.li@intel.com>,
+        Thomas Renninger <trenn@suse.de>,
+        Greg Kroah-Hartman <gregkh@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dean Luick <dean.luick@cornelisnetworks.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 3/9] PCI/ASPM: Use RMW accessors for changing LNKCTL
+Message-ID: <20230619150944.GA8560@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230619105813.369912-1-poros@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f6397fe9-bc77-fe1f-b941-f8aac91bea65@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mon, Jun 19, 2023 at 12:58:13PM CEST, poros@redhat.com wrote:
->Since commit 6624e780a577fc ("ice: split ice_vsi_setup into smaller
->functions") ice_vsi_release does things twice. There is unregister
->netdev which is unregistered in ice_deinit_eth also.
-
-You need to describe more relationship between ice_vsi_release() and
-ice_deinit_eth(). From a quick look, I don't see that ice_deinit_eth()
-is always called before/afeter ice_vsi_release().
-
-Ice init/release flows are very hard to follow :/
-
-
->
->It also unregisters the devlink_port twice which is also unregistered
->in ice_deinit_eth(). This double deregistration is hidden because
->devl_port_unregister ignores the return value of xa_erase.
-
-This call for another patch, doesn't it? :)
-
-
->
->[   68.642167] Call Trace:
->[   68.650385]  ice_devlink_destroy_pf_port+0xe/0x20 [ice]
->[   68.655656]  ice_vsi_release+0x445/0x690 [ice]
->[   68.660147]  ice_deinit+0x99/0x280 [ice]
->[   68.664117]  ice_remove+0x1b6/0x5c0 [ice]
->
->[  171.103841] Call Trace:
->[  171.109607]  ice_devlink_destroy_pf_port+0xf/0x20 [ice]
->[  171.114841]  ice_remove+0x158/0x270 [ice]
->[  171.118854]  pci_device_remove+0x3b/0xc0
->[  171.122779]  device_release_driver_internal+0xc7/0x170
->[  171.127912]  driver_detach+0x54/0x8c
->[  171.131491]  bus_remove_driver+0x77/0xd1
->[  171.135406]  pci_unregister_driver+0x2d/0xb0
->[  171.139670]  ice_module_exit+0xc/0x55f [ice]
->
->Fixes: 6624e780a577 ("ice: split ice_vsi_setup into smaller functions")
->Signed-off-by: Petr Oros <poros@redhat.com>
->---
->v2: reword subject
->
->v1: https://lore.kernel.org/netdev/20230619084948.360128-1-poros@redhat.com/
->---
-> drivers/net/ethernet/intel/ice/ice_lib.c | 27 ------------------------
-> 1 file changed, 27 deletions(-)
->
->diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
->index 11ae0e41f518a1..284a1f0bfdb545 100644
->--- a/drivers/net/ethernet/intel/ice/ice_lib.c
->+++ b/drivers/net/ethernet/intel/ice/ice_lib.c
->@@ -3272,39 +3272,12 @@ int ice_vsi_release(struct ice_vsi *vsi)
-> 		return -ENODEV;
-> 	pf = vsi->back;
+On Mon, Jun 19, 2023 at 05:45:06PM +0300, Ilpo Järvinen wrote:
+> On Fri, 16 Jun 2023, Lukas Wunner wrote:
+> > On Wed, May 17, 2023 at 01:52:29PM +0300, Ilpo Järvinen wrote:
+> > > Don't assume that the device is fully under the control of ASPM and use
+> > > RMW capability accessors which do proper locking to avoid losing
+> > > concurrent updates to the register values.
+> > > 
+> > > If configuration fails in pcie_aspm_configure_common_clock(), the
+> > > function attempts to restore the old PCI_EXP_LNKCTL_CCC settings. Store
+> > > only the old PCI_EXP_LNKCTL_CCC bit for the relevant devices rather
+> > > than the content of the whole LNKCTL registers. It aligns better with
+> > > how pcie_lnkctl_clear_and_set() expects its parameter and makes the
+> > > code more obvious to understand.
+> > [...]
+> > > @@ -224,17 +223,14 @@ static bool pcie_retrain_link(struct pcie_link_state *link)
+> > >  	if (!pcie_wait_for_retrain(parent))
+> > >  		return false;
+> > >  
+> > > -	pcie_capability_read_word(parent, PCI_EXP_LNKCTL, &reg16);
+> > > -	reg16 |= PCI_EXP_LNKCTL_RL;
+> > > -	pcie_capability_write_word(parent, PCI_EXP_LNKCTL, reg16);
+> > > +	pcie_capability_set_word(parent, PCI_EXP_LNKCTL, PCI_EXP_LNKCTL_RL);
+> > >  	if (parent->clear_retrain_link) {
+> > 
+> > This and several other RMW operations in drivers/pci/pcie/aspm.c
+> > are touched by commit b1689799772a ("PCI/ASPM: Use distinct local
+> > vars in pcie_retrain_link()") which got applied to pci/enumeration
+> > this week:
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git/commit/?h=enumeration&id=b1689799772a6f4180f918b0ff66e264a3db9796
+> > 
+> > As a result the $SUBJECT_PATCH no longer applies cleanly and needs
+> > to be respun.
 > 
->-	/* do not unregister while driver is in the reset recovery pending
->-	 * state. Since reset/rebuild happens through PF service task workqueue,
->-	 * it's not a good idea to unregister netdev that is associated to the
->-	 * PF that is running the work queue items currently. This is done to
->-	 * avoid check_flush_dependency() warning on this wq
->-	 */
->-	if (vsi->netdev && !ice_is_reset_in_progress(pf->state) &&
->-	    (test_bit(ICE_VSI_NETDEV_REGISTERED, vsi->state))) {
->-		unregister_netdev(vsi->netdev);
->-		clear_bit(ICE_VSI_NETDEV_REGISTERED, vsi->state);
->-	}
->-
->-	if (vsi->type == ICE_VSI_PF)
->-		ice_devlink_destroy_pf_port(pf);
->-
-> 	if (test_bit(ICE_FLAG_RSS_ENA, pf->flags))
-> 		ice_rss_clean(vsi);
-> 
-> 	ice_vsi_close(vsi);
-> 	ice_vsi_decfg(vsi);
-> 
->-	if (vsi->netdev) {
->-		if (test_bit(ICE_VSI_NETDEV_REGISTERED, vsi->state)) {
->-			unregister_netdev(vsi->netdev);
->-			clear_bit(ICE_VSI_NETDEV_REGISTERED, vsi->state);
->-		}
->-		if (test_bit(ICE_VSI_NETDEV_ALLOCD, vsi->state)) {
->-			free_netdev(vsi->netdev);
->-			vsi->netdev = NULL;
->-			clear_bit(ICE_VSI_NETDEV_ALLOCD, vsi->state);
->-		}
->-	}
->-
-> 	/* retain SW VSI data structure since it is needed to unregister and
-> 	 * free VSI netdev when PF is not in reset recovery pending state,\
-> 	 * for ex: during rmmod.
->-- 
->2.41.0
->
->
+> Okay but I'm a bit lost which commit/head in pci repo I should now base 
+> this series because there's a conflict between pci/aspm and 
+> pci/enumeration which is not resolved in the repo because pci/enumeration 
+> hasn't advanced into pci/next yet. Any suggestion?
+
+Generally speaking I prefer patches based on the PCI "main" branch
+(usually -rc1) because I base topic branches on that.  If there are
+conflicts with other pending material, it's great if you can mention
+them, but I can resolve them when applying, so no need to repost just
+for that.
+
+Bjorn
