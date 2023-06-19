@@ -2,47 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61BB7735FE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 00:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6CB735FFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 01:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229731AbjFSWek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 18:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37022 "EHLO
+        id S229680AbjFSXLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 19:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjFSWej (ORCPT
+        with ESMTP id S229454AbjFSXLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 18:34:39 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5AAE53;
-        Mon, 19 Jun 2023 15:34:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QlPhW3vGxz4wgq;
-        Tue, 20 Jun 2023 08:34:34 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687214075;
-        bh=pTjKQ2C9I7ZmwoDMbVuHDYYyzG2ICG3OkCyb656W3Lo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=FIpIDACKpFfOe0EhCazWGCJWS/y0Lqc6UGj//AIK1R0GW5GNLukkYxznu20tp1lDd
-         Y9y7uuBcq6Fp2jtncyt9V3DtDw+qvbD+fVynpJqTKGMyzSoDVcv2zApLPqdSUtWLqp
-         JQ3Sx7OPv1sO1TAh4ILRHPZMsNas5jZiiViJ3v90AKVrDqiUsB0fzE/nPTvDCJ2B8B
-         GjqyYiK10MhyYoJUuuDdX0l0oV0Fzip+myczWnRCasOA2u07HH5EebCNFMel8NxEfN
-         65rzcS4LXxG5qKHeJW/JbVrsGf/Prb/cR7MXpNqXA/dvtAphAfygyYxdj8iSVAGTBQ
-         eA0HyEtrlroGg==
-Date:   Tue, 20 Jun 2023 08:34:32 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Corey Minyard <cminyard@mvista.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the ipmi tree
-Message-ID: <20230620083432.24e9a1e0@canb.auug.org.au>
+        Mon, 19 Jun 2023 19:11:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796F3124
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 16:10:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687216248;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AUaeznawE2H/34P9AfcQNnXrIV7Bu4arSjeauz3YDCg=;
+        b=MmwJarQudm45Z98tIryToFH5aY31N8Ehd9VrE3TNHk9mWuRhKcgeVmJXvPiu9SOn2fa6IC
+        sZrlXOpbzBfMLqueEh/eFgcvIfzJB6LzelZYgXY/LxPnyhY5JahsjMQOgjPxLndVAl6UXw
+        3ZOv8egF/bggPdP1DHOX14wf2mBcIds=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-622-PNMUq2FcPuGOLyqlqHlCOg-1; Mon, 19 Jun 2023 19:10:47 -0400
+X-MC-Unique: PNMUq2FcPuGOLyqlqHlCOg-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-76248f3057bso37225085a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 16:10:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687216247; x=1689808247;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AUaeznawE2H/34P9AfcQNnXrIV7Bu4arSjeauz3YDCg=;
+        b=NSzyV1DDuKPBoTCkK2U75LxUAFISSMKpjxTemQSe94IkwG/Aqa4OPQIZtBQm40SmZY
+         yS1C36dgv1f1xFydXjg49/zbnHv3dcDGu6Sm94JuvQPujXI4fC2ocVBNtg38IUtqrGFF
+         xU58lxi8ed4w+HzggphxmdJIGW3me84WIoKjc3Ypeq1PI61n92C04w09Aetu8zx7+uuD
+         +2f6luIi3vOuTTqPbNYWJH8okR4q/4x3UBup4dAVud6+7GBweLDIHhgLpT6aGRxIM5Sc
+         zkzFNpiJtsat4RcRPpY47gB1hOcw6gcV35y9V7uTkgyyLomzF/2HWqJ49LErRAqU1iYM
+         xGGw==
+X-Gm-Message-State: AC+VfDypWW/44MNMmYR4qEKzFPvMrjORS2kiFn74E7UqKwgvEGZ6Upmw
+        EwCHGs+imynyYYxr4gdGAxaz3IaR8w3OEEEiJfzH2RNs3tYaZj6OpWz9Qr43TvNDz20nHjKWRux
+        7wAPL+6N4jzb9nqAOHCj5Enfk14J//Y3X
+X-Received: by 2002:a05:620a:319f:b0:760:3db8:fd60 with SMTP id bi31-20020a05620a319f00b007603db8fd60mr13281490qkb.2.1687216246751;
+        Mon, 19 Jun 2023 16:10:46 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5yLXEGioUkQ6kxFUHescmZ4/AFJ0/pLhn+Fkj0MhekOj9iGEpHY/TNfhwUEe6ENzFyXD4h2Q==
+X-Received: by 2002:a05:620a:319f:b0:760:3db8:fd60 with SMTP id bi31-20020a05620a319f00b007603db8fd60mr13281472qkb.2.1687216246410;
+        Mon, 19 Jun 2023 16:10:46 -0700 (PDT)
+Received: from x1n.. (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id t15-20020a05620a034f00b007592f2016f4sm405864qkm.110.2023.06.19.16.10.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 16:10:46 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     Andrea Arcangeli <aarcange@redhat.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        John Hubbard <jhubbard@nvidia.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        James Houghton <jthoughton@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Hugh Dickins <hughd@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>, peterx@redhat.com,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: [PATCH v2 0/8] mm/gup: Unify hugetlb, speed up thp
+Date:   Mon, 19 Jun 2023 19:10:36 -0400
+Message-Id: <20230619231044.112894-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.40.1
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/uYXQLfrN75V5mOCPjcR7=sS";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,46 +87,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/uYXQLfrN75V5mOCPjcR7=sS
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+v2:
+- Added R-bs
+- Merged patch 2 & 4 into a single patch [David, Mike]
+- Remove redundant compound_head() [Matthew]
+- Still handle failure cases of try_get_folio/page() [Lorenzo]
+- Modified more comments in the last removal patch [Lorenzo]
+- Fixed hugetlb npages>1 longterm pin issue
+- Added two testcase patches at last
 
-Hi all,
+Hugetlb has a special path for slow gup that follow_page_mask() is actually
+skipped completely along with faultin_page().  It's not only confusing, but
+also duplicating a lot of logics that generic gup already has, making
+hugetlb slightly special.
 
-In commit
+This patchset tries to dedup the logic, by first touching up the slow gup
+code to be able to handle hugetlb pages correctly with the current follow
+page and faultin routines (where we're mostly there.. due to 10 years ago
+we did try to optimize thp, but half way done; more below), then at the
+last patch drop the special path, then the hugetlb gup will always go the
+generic routine too via faultin_page().
 
-  1d5244190c46 ("ipmi:ssif: Fix a memory leak when scanning for an adapter")
+Note that hugetlb is still special for gup, mostly due to the pgtable
+walking (hugetlb_walk()) that we rely on which is currently per-arch.  But
+this is still one small step forward, and the diffstat might be a proof
+too that this might be worthwhile.
 
-Fixes tag
+Then for the "speed up thp" side: as a side effect, when I'm looking at the
+chunk of code, I found that thp support is actually partially done.  It
+doesn't mean that thp won't work for gup, but as long as **pages pointer
+passed over, the optimization will be skipped too.  Patch 6 should address
+that, so for thp we now get full speed gup.
 
-  Fixes: c4436c9149c ("ipmi_ssif: avoid registering duplicate ssif interfac=
-e")
+For a quick number, "chrt -f 1 ./gup_test -m 512 -t -L -n 1024 -r 10" gives
+me 13992.50us -> 378.50us.  Gup_test is an extreme case, but just to show
+how it affects thp gups.
 
-has these problem(s):
+Patch 1-5:   prepares for the switch
+Patch 6:     switchover to the new code and remove the old
+Patch 7-8:   added some gup test matrix into run_vmtests.sh
 
-  - SHA1 should be at least 12 digits long
-    This can be fixed for the future by setting core.abbrev to 12 (or
-    more) or (for git v2.11 or later) just making sure it is not set
-    (or set to "auto").
+Please review, thanks.
 
---=20
-Cheers,
-Stephen Rothwell
+Peter Xu (8):
+  mm/hugetlb: Handle FOLL_DUMP well in follow_page_mask()
+  mm/hugetlb: Prepare hugetlb_follow_page_mask() for FOLL_PIN
+  mm/hugetlb: Add page_mask for hugetlb_follow_page_mask()
+  mm/gup: Cleanup next_page handling
+  mm/gup: Accelerate thp gup even for "pages != NULL"
+  mm/gup: Retire follow_hugetlb_page()
+  selftests/mm: Add -a to run_vmtests.sh
+  selftests/mm: Add gup test matrix in run_vmtests.sh
 
---Sig_/uYXQLfrN75V5mOCPjcR7=sS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+ fs/userfaultfd.c                          |   2 +-
+ include/linux/hugetlb.h                   |  20 +-
+ mm/gup.c                                  |  83 ++++---
+ mm/hugetlb.c                              | 256 +++-------------------
+ tools/testing/selftests/mm/run_vmtests.sh |  48 +++-
+ 5 files changed, 119 insertions(+), 290 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.40.1
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSQ1/gACgkQAVBC80lX
-0Gxa6gf/QSsaO9hEFjW5+N1VGv2spMvyyzqNoSOKR5uWkyiLmSkFBNAEMVmnEiDc
-GaT2/lR/TRqN2BTpqyTb5VMVExVShWGw4iCdj6T0ELulV/UNbBsR0bNy/gtEodYU
-o4WzB0hGsUxqk+GANm1M5hw8HERRy8//1fPmJAHT+PWDK1eoHj8xVho88FNJQN3T
-zPMjV/jfimUoXmS5o5qA2pXfAIRbcV7fMP/XNNTGyTbHdLq4QK/ZGR6PUezgKCX2
-+PLMkkloniKeDvH2NCTnxd7ygehuwSIYwNXebr7m29kkLtBNGuQfLokREJzIr3/S
-4hPfNnygKExqSgEbGDGpDwp0E1TiHQ==
-=fMPA
------END PGP SIGNATURE-----
-
---Sig_/uYXQLfrN75V5mOCPjcR7=sS--
