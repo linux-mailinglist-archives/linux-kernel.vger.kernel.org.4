@@ -2,108 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4C66734B7F
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 08:03:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBCA7734B80
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 08:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjFSGDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 02:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34144 "EHLO
+        id S229688AbjFSGE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 02:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjFSGDc (ORCPT
+        with ESMTP id S229518AbjFSGE0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 02:03:32 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20010A9
-        for <linux-kernel@vger.kernel.org>; Sun, 18 Jun 2023 23:03:31 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 8C98732001E9;
-        Mon, 19 Jun 2023 02:03:28 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 19 Jun 2023 02:03:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1687154608; x=1687241008; bh=bc7ZXX6MFX
-        B90to3uQmcdd1P2M2ygAGGajXNV59dtrk=; b=Qho1HUx7sRkZSmM/C+HOLx0z8q
-        Cxf3WT7BnoOyVNW3DSkZZ1WkH8EMPmKLTmW+EJLInP9ovlBWSr0BCDECTvVMAEdY
-        ooCVg9JjrIAP7yezUBJSdvUzIvk8y+2ZN/j321Uiu8l/XCvAA1wo8gelZt4e59XU
-        9F8lDxmKVNxxVxb/NI2iNKGynpbCfDu9CD6eedLE4lW1syz+k5OB0w2LBH6GB8Cm
-        IFd9CmEiA9VQHW4NviEt5r34rUgXiNwNcmvMmYo8Bqln7FSvICs7W2U+cIzHdqwb
-        aOwgl1cQQuNxVyPlZBcXvNjj1b7iVbPpq1V+lDYLGMfAYTPw1Z6QYOChUyww==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687154608; x=1687241008; bh=bc7ZXX6MFXB90
-        to3uQmcdd1P2M2ygAGGajXNV59dtrk=; b=ax0TtflL8XtQ9jmptPE0upqDmzA5X
-        Uy50VGrtQVmXJOBqvZo8Vztn9qpRoX0a387nBPSrL0HV5tf4siyr7ggqUF6D8BoN
-        UpbU9Xn+jRWo10nrjaJMzIYKm1Q6Kqtd4PHjaF3xo8dEmHGQP1Pcy5ESyqZ+UF04
-        GgBBXil///IEi3wC1lN/SeuKTQM+KkubWtIMo+QWf5iL3vUxdt24ickJQLcdc78I
-        T3LkU4usFLGNXSwTct4yn/Ta5hdjOJthnrgSyXXZEDanCotMsBDJAE87wEgVA4dZ
-        CMm6nyz0v/T5wcqcoZxoPdbPrTw3ssQxIvXYcg7v0XHuftD2DmDUAKgOw==
-X-ME-Sender: <xms:r--PZMLoN5wQleIR02QX-bO4xZCEQglQq8Bm9zSxsePDVr1ypblwiQ>
-    <xme:r--PZMKCutU7i_kjeWTmC1EytHii2bL5M65J5z0JGmW-eOohIMLKQSyqIpCazgQrA
-    x61xGLp_y4z3eGVChE>
-X-ME-Received: <xmr:r--PZMtQHFDlPH42q54ouO4xKYMR4LprwAk4ddrAQxS0HDAge2_bsyaKxppN>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefuddguddtudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecunecujfgurhephffvvefufffkofgggfestdekre
-    dtredttdenucfhrhhomhepfdfnuhhkvgcuffdrucflohhnvghsfdcuoehluhhkvgeslhhj
-    ohhnvghsrdguvghvqeenucggtffrrghtthgvrhhnpefgudejtdfhuddukefffeekiefftd
-    dtvdfhgeduudeuffeuhfefgfegfeetvedvgeenucevlhhushhtvghrufhiiigvpedtnecu
-    rfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvgeslhhjohhnvghsrdguvghv
-X-ME-Proxy: <xmx:r--PZJY0rFbrwTCqilmpQfONqI7MTDVa_m2FSopLMQgG8mbkJbWDNQ>
-    <xmx:r--PZDbsHGnTaZOvEvdN9a9AnRlMGe7_5nT744tI0DPAelYMjYybxg>
-    <xmx:r--PZFCzN9Q5qGCD_pwzcmPnwE01eNrYkVLdfOh1-CBmA_pn80_Zuw>
-    <xmx:sO-PZPEyxXPklBLy0mXKg4CLHrW5alvS0XU134LxOYxext-6F00Tmw>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 19 Jun 2023 02:03:25 -0400 (EDT)
-From:   "Luke D. Jones" <luke@ljones.dev>
-To:     tiwai@suse.com
-Cc:     perex@perex.cz, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, sbinding@opensource.cirrus.com,
-        "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH] ALSA: hda/realtek: Add quirk for ASUS ROG G634Z
-Date:   Mon, 19 Jun 2023 18:03:20 +1200
-Message-Id: <20230619060320.1336455-1-luke@ljones.dev>
-X-Mailer: git-send-email 2.40.1
+        Mon, 19 Jun 2023 02:04:26 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D56583;
+        Sun, 18 Jun 2023 23:04:24 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 0C6C86019E;
+        Mon, 19 Jun 2023 08:04:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1687154661; bh=lcUEwvKHK/l3w8XrZyVJ+ORIPhjtF1cO4oSiOEidZBU=;
+        h=Date:To:Cc:From:Subject:From;
+        b=dj7GFA5gwtVHTf9DdsJRmF7ne5pi6S459/2Rj0Dk/2lec0vI7dpXlFPagjIcEGmVA
+         mY7dw2KCVruzLZZ6z3BY0V0mQgBVuCX/DhCuxdsSMR5WD2N7E9H9znrnVvEbb+RNu6
+         smJ6i+82Q7QQBUfuPzIdFua8mvg9ojMQLrVVneVt7LPw7tGSejB1CzllWQNMydtdWq
+         NaZ8yFaE4IxgphezV6rsy+42JhG9hAiLzyUA23jV9vsQC9yYjmNbpT0hcatNiuViBO
+         serQtx/3bB4D0s+BRxNkeZA7avcdAZEA4GcuLrwZgITterjwkt+DfIW8o/1hRT+plM
+         hRt0pE7l3KZzQ==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 2OAE_F3fERkR; Mon, 19 Jun 2023 08:04:18 +0200 (CEST)
+Received: from [10.0.2.76] (grf-nat.grf.hr [161.53.83.23])
+        by domac.alu.hr (Postfix) with ESMTPSA id E453F6019C;
+        Mon, 19 Jun 2023 08:04:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1687154658; bh=lcUEwvKHK/l3w8XrZyVJ+ORIPhjtF1cO4oSiOEidZBU=;
+        h=Date:To:Cc:From:Subject:From;
+        b=HiSHzB457ln5+e3T0TK7htfDAn2KaBZKGDzSBlhRqeVRLvFCZaZQpfKa6eCmwk1OQ
+         wmJn5eUERr7qDLU5SIl6T64/+LwpTlDpRUbCN+rG0Q3d7Ujd6/NjmD+THm5EkqHlRe
+         ObFirPIGt2Xx4OVIfZArF9/MOxCq8GdHQXwSMC4KlMu5r9Qjk+aXSjGWFG+onbOoni
+         5kYQVtvr++vbene9ccsI7ivX/91S7jygGY9bfFEMO61jaHtr41Ne7xHEjOrPyBjTPA
+         k4WDnTnyKVUN/0r3ezQZZgYwkgSiDCkAQ9+EqnOuc0WV2Hqn7bVYyAXrm0xBY53W3y
+         aw5DHWcNAYdGQ==
+Message-ID: <643f6e7c-60f3-4667-ff5d-ee62985a99e7@alu.unizg.hr>
+Date:   Mon, 19 Jun 2023 08:04:12 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US, hr
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: Pinging the Ethernet address
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds the required quirk to enable the Cirrus amp and correct pins
-on the ASUS ROG G634Z series.
+Hi,
 
-While this works if the related _DSD properties are made available, these
-aren't included in the ACPI of these laptops (yet).
+I see some applications where it would be good to bypass the IP stack and ping directly
+HW MAC address (i.e. in Wi-Fi scanner where IP address might not be available).
 
-Signed-off-by: Luke D. Jones <luke@ljones.dev>
----
- sound/pci/hda/patch_realtek.c | 1 +
- 1 file changed, 1 insertion(+)
+I understood that RARP support was removed from Linux kernel as early as in 2.x.
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index a5d55a7063d3..437cf13d10d2 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -9552,6 +9552,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x1043, 0x1c23, "Asus X55U", ALC269_FIXUP_LIMIT_INT_MIC_BOOST),
- 	SND_PCI_QUIRK(0x1043, 0x1c62, "ASUS GU603", ALC289_FIXUP_ASUS_GA401),
- 	SND_PCI_QUIRK(0x1043, 0x1c92, "ASUS ROG Strix G15", ALC285_FIXUP_ASUS_G533Z_PINS),
-+	SND_PCI_QUIRK(0x1043, 0x1caf, "ASUS G634JYR/JZR", ALC285_FIXUP_ASUS_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x1043, 0x1ccd, "ASUS X555UB", ALC256_FIXUP_ASUS_MIC),
- 	SND_PCI_QUIRK(0x1043, 0x1d42, "ASUS Zephyrus G14 2022", ALC289_FIXUP_ASUS_GA401),
- 	SND_PCI_QUIRK(0x1043, 0x1d4e, "ASUS TM420", ALC256_FIXUP_ASUS_HPE),
+What would be the recommended way to ping a HW MAC address?
+
+Thanks,
+Mirsad
+
 -- 
-2.40.1
+Mirsad Todorovac
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb
+Republic of Croatia, the European Union
 
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
