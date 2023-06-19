@@ -2,234 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A641B735B18
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A242735B1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 17:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231761AbjFSPZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 11:25:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39512 "EHLO
+        id S231815AbjFSPZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 11:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231690AbjFSPYu (ORCPT
+        with ESMTP id S231782AbjFSPYy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 11:24:50 -0400
-Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1EF1102
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:24:47 -0700 (PDT)
-Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-341c6c4ef93so30544795ab.3
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 08:24:47 -0700 (PDT)
+        Mon, 19 Jun 2023 11:24:54 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664E2FA;
+        Mon, 19 Jun 2023 08:24:53 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b46f5f4d79so21804781fa.1;
+        Mon, 19 Jun 2023 08:24:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687188291; x=1689780291;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tvsv/WghBZtMVC+4mKl//bfuiXAwAB2g1EzwWwnS4WY=;
+        b=hmTfkVb+5LmAraeoRlAOtQU14wJrr/lgzvR+pDJxJ7X2TCQxz9veq5BwYSt39JR1um
+         fKJGbSp1IWE5aslsjXPVUho0EMDZ4bRE6wJkt768yw0v+lxdELB77ZDd9nAmmmZLEbVs
+         D5VHK5W0jz9fPmJsuYlOrMqoaZsr1vOK50OzAz39gP4y7j64wNGVM9ekZSm1jDo7bCrc
+         4tnCoZrgax2KIniW6LeEd1BtaYeYEgjtXZI2VS5n/n+3+R6XGkHtZKJiuNAVGUdP64Tp
+         jnx6X0d68TpmsanR2eHuE4wuWo0Y9n4ZGdtl29klrSRgrKYxtDCQEt1lu0b/ZrmfwuxK
+         5k7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687188287; x=1689780287;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+        d=1e100.net; s=20221208; t=1687188291; x=1689780291;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=dd9mLnsTgoIMT3DnkpH3y2thLKhOTY9gRQ8MaRlhcyY=;
-        b=fbb+xCrjpQfxcC+kzgmQOUrdHSKxnvN9jnoD5EyErJ8pi4Fxey4lBJr+Q3z1oYsYts
-         8BW2xtSM12JKe84JSi4OeYZ0tws4s1uZFxwNHFf7qscuSFFhcDrhhMr+Ecqx8574YRev
-         rWqzS5TaELvDWLNG0RU27laVnPDpzfP6XnW+iA28H/v7Lv3Yit0pmhRpmBG9GD+z6MTK
-         js/dGRTmEt4bs+NUVRNu+4w5hs7S6oMqBeyTkx6hhmRtevj+dK3SLJB0kE1Fv6F9YZvT
-         6x1S1nzTdt7oOVMet2tNtLzi4spMh6rsiGYp0ogmXqpPMfOFkdgMF7xrr1olNYx5QIDK
-         MueA==
-X-Gm-Message-State: AC+VfDxlsF6DemhEHEMbOpN8inZZcvQGXn6S2voXQweiqh1CDaMopxy5
-        eACH6CSq9yi6zVueKGVlC+RmEIjPXeQ/y8QbBHoRzVjpYiW8
-X-Google-Smtp-Source: ACHHUZ78A6gGKmXn+JLgBm1Cp8SVfVMxu4juCBP2/hsbcEcaXcVbAIwcZJoZXZTWK1vTwS9MlBZse2MePa++xLq0ej/4kjY4tALQ
-MIME-Version: 1.0
-X-Received: by 2002:a92:d4ce:0:b0:331:3c0d:5a20 with SMTP id
- o14-20020a92d4ce000000b003313c0d5a20mr2996028ilm.0.1687188287205; Mon, 19 Jun
- 2023 08:24:47 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 08:24:47 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000873a0f05fe7d2229@google.com>
-Subject: [syzbot] [reiserfs?] possible deadlock in vfs_removexattr
-From:   syzbot <syzbot+309478c06ab5fcc08e1f@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+        bh=tvsv/WghBZtMVC+4mKl//bfuiXAwAB2g1EzwWwnS4WY=;
+        b=X/wCmEFUwOZ/+K0qwwxL1AgRoIdNjP8RFj69XJQSji7lvkcrwUFoDYFA6JK4aKvfbS
+         d+mWpD3HmmuV0itMSDfFMgtYVJCKaEXWYfkEq6bNBCoV3p0WjBmgkV1z22taOqXiXbRq
+         9GBPFqEqVZYuRLrw8PEzlnvrnm8gYVg/hEtXPlythFYzrbw1A4bYEnnoGil6ngjb006m
+         Ae67xZZNeU4tXRuoEPHIRjKrQU7RWhRvnHKq2qcppwiP3Ko7ftd3/BBzuOOUvdYYIlAz
+         bCe9DokyFeUp1sKZFp+z1HUNWaWU8Zf3HV45gyY0AiuX7Be7eeLd/25V6Y2IYFR+jwHw
+         8aRA==
+X-Gm-Message-State: AC+VfDxTPmiMHOp1z4Jn8I4ezXq5Yycnb0TdGowJmso3Wdz7Hli1l/nR
+        ybd4cZu/IPRoC7UpBI8KwD8=
+X-Google-Smtp-Source: ACHHUZ7A1W0yVDwzsTAdsr/IbmVvuV/7c1xvRqXSQlsbE31LJj2Z0Ti8MaZzcSuz6xpu+pZnnF0n4A==
+X-Received: by 2002:a2e:b5cc:0:b0:2b4:7500:3094 with SMTP id g12-20020a2eb5cc000000b002b475003094mr1308798ljn.3.1687188291342;
+        Mon, 19 Jun 2023 08:24:51 -0700 (PDT)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id 15-20020a05651c008f00b002b47e824518sm388769ljq.76.2023.06.19.08.24.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 08:24:50 -0700 (PDT)
+Message-ID: <478f608e3b8de1218798c792b34dca75fa91f6a9.camel@gmail.com>
+Subject: Re: [PATCH bpf] bpf/btf: Accept function names that contain dots
+From:   Eduard Zingerman <eddyz87@gmail.com>
+To:     Florent Revest <revest@chromium.org>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, martin.lau@linux.dev, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+        stable@vger.kernel.org
+Date:   Mon, 19 Jun 2023 18:24:49 +0300
+In-Reply-To: <CABRcYmKY_4_udQtsu7E9CVPruPphnejcgCvGnfHzzu-yc4Kshg@mail.gmail.com>
+References: <20230615145607.3469985-1-revest@chromium.org>
+         <CABRcYm+C+tPwXAGnaDRR_U2hzyt+09fjkKBp3tPx6iKT4wBE2Q@mail.gmail.com>
+         <fbd79f5f2b250ec913c78d91b94ca96fb96f67ee.camel@gmail.com>
+         <CABRcYmLaummOg=Nf0qXVN2eci=25OqXLD0zpCUz4CgmTjvo9LA@mail.gmail.com>
+         <CABRcYmKY_4_udQtsu7E9CVPruPphnejcgCvGnfHzzu-yc4Kshg@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu1 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, 2023-06-19 at 15:55 +0200, Florent Revest wrote:
+> On Mon, Jun 19, 2023 at 1:20=E2=80=AFPM Florent Revest <revest@chromium.o=
+rg> wrote:
+> >=20
+> > On Thu, Jun 15, 2023 at 7:05=E2=80=AFPM Eduard Zingerman <eddyz87@gmail=
+.com> wrote:
+> > >=20
+> > > On Thu, 2023-06-15 at 17:44 +0200, Florent Revest wrote:
+> > > > An easy reproducer is:
+> > > >=20
+> > > > $ touch pwet.c
+> > > >=20
+> > > > $ clang -g -fsanitize=3Dkernel-address -c -o pwet.o pwet.c
+> > > > $ llvm-dwarfdump pwet.o | grep module_ctor
+> > > >=20
+> > > > $ clang -fno-integrated-as -g -fsanitize=3Dkernel-address -c -o pwe=
+t.o pwet.c
+> > > > $ llvm-dwarfdump pwet.o | grep module_ctor
+> > > >                 DW_AT_name      ("asan.module_ctor")
+> > >=20
+> > > Interestingly, I am unable to reproduce it using either
+> > > clang version 14.0.0-1ubuntu1 or clang main (bd66f4b1da30).
+> >=20
+> > Somehow, I didn't think of trying other clang versions! Thanks, that's
+> > a good point Eduard. :)
+> >=20
+> > I also can't reproduce it on a 14x build.
+> >=20
+> > However, I seem to be able to reproduce it on main:
+> >=20
+> >   git clone https://github.com/llvm/llvm-project.git
+> >   mkdir llvm-project/build
+> >   cd llvm-project/build
+> >   git checkout bd66f4b1da30
+> >   cmake -DLLVM_ENABLE_PROJECTS=3Dclang -DCMAKE_BUILD_TYPE=3DRelease -G
+> > "Unix Makefiles" ../llvm
+> >   make -j $(nproc)
+> >=20
+> >   bin/clang -fno-integrated-as -g -fsanitize=3Dkernel-address -c -o
+> > ~/pwet.o ~/pwet.c
+> >   bin/llvm-dwarfdump ~/pwet.o | grep module_ctor
+> >   # Shows module_ctor
+> >=20
+> > I started a bisection, hopefully that will point to something interesti=
+ng
+>=20
+> The bisection pointed to a LLVM patch from Nick in October 2022:
+> e3bb359aacdd ("[clang][Toolchains][Gnu] pass -g through to assembler")
+>=20
+> Based on the context I have, that commit sounds fair enough. I don't
+> think LLVM does anything wrong here, it seems like BPF should be the
+> one dealing with dots in function debug info.
 
-syzbot found the following issue on:
+That explains why I could not reproduce the issue: I tried with gas 2.38.
+Using gas 2.40 I see the same behavior as you.
 
-HEAD commit:    f86b85033b8c Merge branch 'for-next/core', remote-tracking..
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=11590ef7280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bd4213541e5ab26f
-dashboard link: https://syzkaller.appspot.com/bug?extid=309478c06ab5fcc08e1f
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+If one tries to generate assembly file with '-fsanitize':
 
-Unfortunately, I don't have any reproducer for this issue yet.
+  $ clang -fno-integrated-as -g -fsanitize=3Dkernel-address -S -o pwet.s pw=
+et.c
+  $ cat pwet.s
+  	.text
+  	.file	"pwet.c"
+  	.p2align	4, 0x90                         # -- Begin function asan.module=
+_ctor
+  	.type	asan.module_ctor,@function
+  asan.module_ctor:                       # @asan.module_ctor
+  .Lfunc_begin0:
+      ...
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/3b1a81c2e44b/disk-f86b8503.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/2cda1b607bbd/vmlinux-f86b8503.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/fcac528565e1/Image-f86b8503.gz.xz
+And then compile it using Gnu assembler:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+309478c06ab5fcc08e1f@syzkaller.appspotmail.com
+  $ as --64 -o pwet.o pwet.s -g -gdwarf-5
 
-REISERFS (device loop2): using 3.5.x disk format
-REISERFS warning (device loop2): jdm-13090 reiserfs_new_inode: ACLs aren't enabled in the fs, but vfs thinks they are!
-REISERFS (device loop2): Created .reiserfs_priv - reserved for xattr storage.
-======================================================
-WARNING: possible circular locking dependency detected
-6.4.0-rc5-syzkaller-gf86b85033b8c #0 Not tainted
-------------------------------------------------------
-syz-executor.2/7662 is trying to acquire lock:
-ffff00012da302e0 (&type->i_mutex_dir_key#15){+.+.}-{3:3}, at: inode_lock include/linux/fs.h:775 [inline]
-ffff00012da302e0 (&type->i_mutex_dir_key#15){+.+.}-{3:3}, at: vfs_removexattr+0xcc/0x23c fs/xattr.c:575
+The behavior differs between 2.38 and 2.40, the older version does not
+produce debug entry for 'asan.module_ctor', while newer does.
 
-but task is already holding lock:
-ffff0000da4de460 (sb_writers#23){.+.+}-{0:0}, at: mnt_want_write_file+0x64/0x1e8 fs/namespace.c:438
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #2 (sb_writers#23){.+.+}-{0:0}:
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write include/linux/fs.h:1494 [inline]
-       sb_start_write+0x60/0x2ec include/linux/fs.h:1569
-       mnt_want_write_file+0x64/0x1e8 fs/namespace.c:438
-       reiserfs_ioctl+0x184/0x454 fs/reiserfs/ioctl.c:103
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl fs/ioctl.c:856 [inline]
-       __arm64_sys_ioctl+0x14c/0x1c8 fs/ioctl.c:856
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
-       el0_svc_common+0x138/0x244 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:191
-       el0_svc+0x4c/0x160 arch/arm64/kernel/entry-common.c:647
-       el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:665
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-
--> #1 (&sbi->lock){+.+.}-{3:3}:
-       __mutex_lock_common+0x190/0x21a0 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x2c/0x38 kernel/locking/mutex.c:799
-       reiserfs_write_lock+0x7c/0xe8 fs/reiserfs/lock.c:27
-       reiserfs_lookup+0x128/0x45c fs/reiserfs/namei.c:364
-       __lookup_slow+0x250/0x374 fs/namei.c:1690
-       lookup_one_len+0x178/0x28c fs/namei.c:2742
-       reiserfs_lookup_privroot+0x8c/0x184 fs/reiserfs/xattr.c:976
-       reiserfs_fill_super+0x15b4/0x2028 fs/reiserfs/super.c:2192
-       mount_bdev+0x274/0x370 fs/super.c:1380
-       get_super_block+0x44/0x58 fs/reiserfs/super.c:2601
-       legacy_get_tree+0xd4/0x16c fs/fs_context.c:610
-       vfs_get_tree+0x90/0x274 fs/super.c:1510
-       do_new_mount+0x25c/0x8c4 fs/namespace.c:3039
-       path_mount+0x590/0xe04 fs/namespace.c:3369
-       do_mount fs/namespace.c:3382 [inline]
-       __do_sys_mount fs/namespace.c:3591 [inline]
-       __se_sys_mount fs/namespace.c:3568 [inline]
-       __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3568
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
-       el0_svc_common+0x138/0x244 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:191
-       el0_svc+0x4c/0x160 arch/arm64/kernel/entry-common.c:647
-       el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:665
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-
--> #0 (&type->i_mutex_dir_key#15){+.+.}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3113 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3232 [inline]
-       validate_chain kernel/locking/lockdep.c:3847 [inline]
-       __lock_acquire+0x3308/0x7604 kernel/locking/lockdep.c:5088
-       lock_acquire+0x23c/0x71c kernel/locking/lockdep.c:5705
-       down_write+0x50/0xc0 kernel/locking/rwsem.c:1573
-       inode_lock include/linux/fs.h:775 [inline]
-       vfs_removexattr+0xcc/0x23c fs/xattr.c:575
-       removexattr+0x148/0x1c4 fs/xattr.c:918
-       __do_sys_fremovexattr fs/xattr.c:965 [inline]
-       __se_sys_fremovexattr fs/xattr.c:955 [inline]
-       __arm64_sys_fremovexattr+0x14c/0x1c4 fs/xattr.c:955
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
-       el0_svc_common+0x138/0x244 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:191
-       el0_svc+0x4c/0x160 arch/arm64/kernel/entry-common.c:647
-       el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:665
-       el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-
-other info that might help us debug this:
-
-Chain exists of:
-  &type->i_mutex_dir_key#15 --> &sbi->lock --> sb_writers#23
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  rlock(sb_writers#23);
-                               lock(&sbi->lock);
-                               lock(sb_writers#23);
-  lock(&type->i_mutex_dir_key#15);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor.2/7662:
- #0: ffff0000da4de460 (sb_writers#23){.+.+}-{0:0}, at: mnt_want_write_file+0x64/0x1e8 fs/namespace.c:438
-
-stack backtrace:
-CPU: 1 PID: 7662 Comm: syz-executor.2 Not tainted 6.4.0-rc5-syzkaller-gf86b85033b8c #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-Call trace:
- dump_backtrace+0x1b8/0x1e4 arch/arm64/kernel/stacktrace.c:233
- show_stack+0x2c/0x44 arch/arm64/kernel/stacktrace.c:240
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
- dump_stack+0x1c/0x28 lib/dump_stack.c:113
- print_circular_bug+0x150/0x1b8 kernel/locking/lockdep.c:2066
- check_noncircular+0x2cc/0x378 kernel/locking/lockdep.c:2188
- check_prev_add kernel/locking/lockdep.c:3113 [inline]
- check_prevs_add kernel/locking/lockdep.c:3232 [inline]
- validate_chain kernel/locking/lockdep.c:3847 [inline]
- __lock_acquire+0x3308/0x7604 kernel/locking/lockdep.c:5088
- lock_acquire+0x23c/0x71c kernel/locking/lockdep.c:5705
- down_write+0x50/0xc0 kernel/locking/rwsem.c:1573
- inode_lock include/linux/fs.h:775 [inline]
- vfs_removexattr+0xcc/0x23c fs/xattr.c:575
- removexattr+0x148/0x1c4 fs/xattr.c:918
- __do_sys_fremovexattr fs/xattr.c:965 [inline]
- __se_sys_fremovexattr fs/xattr.c:955 [inline]
- __arm64_sys_fremovexattr+0x14c/0x1c4 fs/xattr.c:955
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x244 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:191
- el0_svc+0x4c/0x160 arch/arm64/kernel/entry-common.c:647
- el0t_64_sync_handler+0x84/0xfc arch/arm64/kernel/entry-common.c:665
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
