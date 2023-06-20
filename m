@@ -2,189 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3912736F06
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4183736F08
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233350AbjFTOqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 10:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52254 "EHLO
+        id S233379AbjFTOrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 10:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjFTOqs (ORCPT
+        with ESMTP id S233370AbjFTOrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 10:46:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7875D94;
-        Tue, 20 Jun 2023 07:46:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FA8A612B1;
-        Tue, 20 Jun 2023 14:46:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B5D3C433C0;
-        Tue, 20 Jun 2023 14:46:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687272406;
-        bh=9h3moI3hmvBROUz5q1Axpk+rEonTaQjmob+V2t6yt90=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Fv0FEULdwBVbcEb671R5392C7XGGHBM0hp/i2kxDhDumnr/REFDULU3rWv256UmVA
-         mbeat6mvRL09BNYFa4dZ+9uVgCNElfJX/mEfdnLa+5dpx4GcbcY4oyq95ZT6b2B3Hl
-         VEAKule0pTJzhUP82W0sHNN1cNP5PPpd+bHrz/eo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-integrity@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Ivan Orlov <ivan.orlov0322@gmail.com>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] tpm: make all 'class' structures const
-Date:   Tue, 20 Jun 2023 16:46:43 +0200
-Message-ID: <20230620144642.584926-2-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.41.0
+        Tue, 20 Jun 2023 10:47:43 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8CF95
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 07:47:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687272462; x=1718808462;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=LG0edqrvyHsDW/l6sS9e6UCd7Let6v/Fg5o7MAHvm2I=;
+  b=RzS3sbE9m/1kV185sTjYGauGTk+/OtLeHBSGs5cDUMi4ZEA4EwIwCk5T
+   RNSlZSqAIo6fpbOhR2xOqijlexa8CmkA+1dNN8hBHIkXDcCY2S8Y48lBv
+   WvOAVd3JIC2pBKHgv/xrdKjI3CXLd4P3FrwvLXxCAOISEjGY/mkicctoj
+   s9hzC/stu2bDbVPzpzb9kcFzC3t/PvMjCMWSQ9KyEng42XzH2hGHkh2oX
+   emyAXGY4FNPYqAZzW3VubcOq2E8cmvgCC+E/DQ/Vx4IRC/I9LHE513Ydi
+   nwAmet43s3+sThrwWJ7uZWeDeXwwuvufyb8AJuTeG3i67ATY+JaQ/NzDY
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="446251940"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="446251940"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 07:47:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="827023019"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="827023019"
+Received: from dshvarts-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.62.204])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 07:47:37 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Lucas De Marchi <lucas.demarchi@intel.com>,
+        intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>
+Subject: Re: [PATCH 2/3] linux/bits.h: Add fixed-width GENMASK and BIT macros
+In-Reply-To: <ZIs0CC2J7nu0LHEK@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230509051403.2748545-1-lucas.demarchi@intel.com>
+ <20230509051403.2748545-3-lucas.demarchi@intel.com>
+ <ZF4fi5B7PPlgZBOI@smile.fi.intel.com> <87pm75kd0h.fsf@intel.com>
+ <ZF4j0NPoBGMBT8CO@smile.fi.intel.com> <87mt29kc34.fsf@intel.com>
+ <ZIs0CC2J7nu0LHEK@smile.fi.intel.com>
+Date:   Tue, 20 Jun 2023 17:47:34 +0300
+Message-ID: <875y7igph5.fsf@intel.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4180; i=gregkh@linuxfoundation.org; h=from:subject; bh=VN6hocl/5QvlNrgSmEWZE73DMjrqR59jHD2825Axci0=; b=owGbwMvMwCRo6H6F97bub03G02pJDCkTd1/aXCjzKFjv09M+Tf2UeU0+Aiyf9yr1/p07s7Tm3 xVmV6OtHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCRrGsMc4WXMMlV/592ZvuT s3WOu3Y6T2e9eoNhfqXQJwZLz/uv57P5ynqUalwx4d5XBAA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ivan Orlov <ivan.orlov0322@gmail.com>
+On Thu, 15 Jun 2023, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> On Fri, May 12, 2023 at 02:45:19PM +0300, Jani Nikula wrote:
+>> On Fri, 12 May 2023, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+>> > On Fri, May 12, 2023 at 02:25:18PM +0300, Jani Nikula wrote:
+>> >> On Fri, 12 May 2023, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+>> >> > On Mon, May 08, 2023 at 10:14:02PM -0700, Lucas De Marchi wrote:
+>> >> >> Add GENMASK_U32(), GENMASK_U16() and GENMASK_U8()  macros to create
+>> >> >> masks for fixed-width types and also the corresponding BIT_U32(),
+>> >> >> BIT_U16() and BIT_U8().
+>> >> >
+>> >> > Why?
+>> >> 
+>> >> The main reason is that GENMASK() and BIT() size varies for 32/64 bit
+>> >> builds.
+>> >
+>> > When needed GENMASK_ULL() can be used (with respective castings perhaps)
+>> > and BIT_ULL(), no?
+>> 
+>> How does that help with making them the same 32-bit size on both 32 and
+>> 64 bit builds?
+>
+> 	u32 x = GENMASK();
+> 	u64 y = GENMASK_ULL();
+>
+> No? Then use in your code either x or y. Note that I assume that the parameters
+> to GENMASK*() are built-time constants. Is it the case for you?
 
-Now that the driver core allows for struct class to be in read-only
-memory, making all 'class' structures to be declared at build time
-placing them into read-only memory, instead of having to be dynamically
-allocated at load time.
+What's wrong with wanting to define macros with specific size, depending
+on e.g. hardware registers instead of build size?
 
-Cc: Peter Huewe <peterhuewe@gmx.de>
-Cc: Jarkko Sakkinen <jarkko@kernel.org>
-Cc: Jason Gunthorpe <jgg@ziepe.ca>
-Cc: linux-integrity@vger.kernel.org
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/char/tpm/tpm-chip.c      | 11 ++++++++---
- drivers/char/tpm/tpm-interface.c | 21 +++++++++------------
- drivers/char/tpm/tpm.h           |  4 ++--
- drivers/char/tpm/tpm2-space.c    |  2 +-
- 4 files changed, 20 insertions(+), 18 deletions(-)
+What would you use for printk format if you wanted to to print
+GENMASK()?
 
-diff --git a/drivers/char/tpm/tpm-chip.c b/drivers/char/tpm/tpm-chip.c
-index cd48033b804a..7c028f0b9d38 100644
---- a/drivers/char/tpm/tpm-chip.c
-+++ b/drivers/char/tpm/tpm-chip.c
-@@ -28,8 +28,13 @@
- DEFINE_IDR(dev_nums_idr);
- static DEFINE_MUTEX(idr_lock);
- 
--struct class *tpm_class;
--struct class *tpmrm_class;
-+const struct class tpm_class = {
-+	.name = "tpm",
-+	.shutdown_pre = tpm_class_shutdown,
-+};
-+const struct class tpmrm_class = {
-+	.name = "tmprm",
-+};
- dev_t tpm_devt;
- 
- static int tpm_request_locality(struct tpm_chip *chip)
-@@ -336,7 +341,7 @@ struct tpm_chip *tpm_chip_alloc(struct device *pdev,
- 
- 	device_initialize(&chip->dev);
- 
--	chip->dev.class = tpm_class;
-+	chip->dev.class = &tpm_class;
- 	chip->dev.release = tpm_dev_release;
- 	chip->dev.parent = pdev;
- 	chip->dev.groups = chip->groups;
-diff --git a/drivers/char/tpm/tpm-interface.c b/drivers/char/tpm/tpm-interface.c
-index 586ca10b0d72..66b16d26eecc 100644
---- a/drivers/char/tpm/tpm-interface.c
-+++ b/drivers/char/tpm/tpm-interface.c
-@@ -476,18 +476,15 @@ static int __init tpm_init(void)
- {
- 	int rc;
- 
--	tpm_class = class_create("tpm");
--	if (IS_ERR(tpm_class)) {
-+	rc = class_register(&tpm_class);
-+	if (rc) {
- 		pr_err("couldn't create tpm class\n");
--		return PTR_ERR(tpm_class);
-+		return rc;
- 	}
- 
--	tpm_class->shutdown_pre = tpm_class_shutdown;
--
--	tpmrm_class = class_create("tpmrm");
--	if (IS_ERR(tpmrm_class)) {
-+	rc = class_register(&tpmrm_class);
-+	if (rc) {
- 		pr_err("couldn't create tpmrm class\n");
--		rc = PTR_ERR(tpmrm_class);
- 		goto out_destroy_tpm_class;
- 	}
- 
-@@ -508,9 +505,9 @@ static int __init tpm_init(void)
- out_unreg_chrdev:
- 	unregister_chrdev_region(tpm_devt, 2 * TPM_NUM_DEVICES);
- out_destroy_tpmrm_class:
--	class_destroy(tpmrm_class);
-+	class_unregister(&tpmrm_class);
- out_destroy_tpm_class:
--	class_destroy(tpm_class);
-+	class_unregister(&tpm_class);
- 
- 	return rc;
- }
-@@ -518,8 +515,8 @@ static int __init tpm_init(void)
- static void __exit tpm_exit(void)
- {
- 	idr_destroy(&dev_nums_idr);
--	class_destroy(tpm_class);
--	class_destroy(tpmrm_class);
-+	class_unregister(&tpm_class);
-+	class_unregister(&tpmrm_class);
- 	unregister_chrdev_region(tpm_devt, 2*TPM_NUM_DEVICES);
- 	tpm_dev_common_exit();
- }
-diff --git a/drivers/char/tpm/tpm.h b/drivers/char/tpm/tpm.h
-index 460bb85dd142..61445f1dc46d 100644
---- a/drivers/char/tpm/tpm.h
-+++ b/drivers/char/tpm/tpm.h
-@@ -230,8 +230,8 @@ enum tpm2_pt_props {
-  * compiler warnings about stack frame size. */
- #define TPM_MAX_RNG_DATA	128
- 
--extern struct class *tpm_class;
--extern struct class *tpmrm_class;
-+extern const struct class tpm_class;
-+extern const struct class tpmrm_class;
- extern dev_t tpm_devt;
- extern const struct file_operations tpm_fops;
- extern const struct file_operations tpmrm_fops;
-diff --git a/drivers/char/tpm/tpm2-space.c b/drivers/char/tpm/tpm2-space.c
-index ffb35f0154c1..363afdd4d1d3 100644
---- a/drivers/char/tpm/tpm2-space.c
-+++ b/drivers/char/tpm/tpm2-space.c
-@@ -606,7 +606,7 @@ int tpm_devs_add(struct tpm_chip *chip)
- 
- 	device_initialize(&chip->devs);
- 	chip->devs.parent = chip->dev.parent;
--	chip->devs.class = tpmrm_class;
-+	chip->devs.class = &tpmrm_class;
- 
- 	/*
- 	 * Get extra reference on main device to hold on behalf of devs.
+
+BR,
+Jani.
+
+
 -- 
-2.41.0
-
+Jani Nikula, Intel Open Source Graphics Center
