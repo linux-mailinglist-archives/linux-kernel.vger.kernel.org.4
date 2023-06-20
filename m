@@ -2,361 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7992737683
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 23:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7197C737684
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 23:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbjFTVRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 17:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
+        id S230217AbjFTVRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 17:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjFTVRF (ORCPT
+        with ESMTP id S230184AbjFTVRK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 17:17:05 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688FB1727
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:17:00 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-763bd31d223so26541285a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:17:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1687295819; x=1689887819;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9+lU1iOzH0JYHL0tnMsXHMxNMnW9cnjxfw7NbbeeT9k=;
-        b=Yj2QVX53Fw+1mon5tH4IY14qcLlldykQRdTs9ybZsnZrNJDZk6dwY4IldEP5yGcWEb
-         yi7HHM/ZTWOv76ma7egJ1o7JXrdbxcrt+c7DSGndboQhD0bTQKRGlyVXUA1Q2UAd2L8H
-         21l3AexyK7XnNoIxWR7NImrcrkLh1RDYji0b8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687295819; x=1689887819;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9+lU1iOzH0JYHL0tnMsXHMxNMnW9cnjxfw7NbbeeT9k=;
-        b=LlocYje7PLz0P+SiHN2R5aWkshr4hfOeZTzXuu/1fQs26RXNVy3XbibUhQlFfZHjjd
-         PP9wMu8GOuF93AZuIEphNpP+il17dERRB0AQQGYchkqCI387QjaxEbu3cjmrJSZI78gB
-         0KVGoWO4QfwcWeM1/pDUYaQLTdbHo60+daPZaujFEhn5pZA/ljPWskHOYFqohNFYwPwo
-         2UOvGUE64NG6Bxl60i0wlhEP/A5v6Jj9VkATzUSZZXeQUJb/cVV5qmjEdDEbl7y6lXTT
-         v69jXqWhxpYdpzXNbxKpYljJJspMbDNJXyg2nI9EMIAIFHUIdZOlRZhzksWAoVwgr9b2
-         SilA==
-X-Gm-Message-State: AC+VfDzN0DcaLQMeKETBV7O6undMyJajDWDdkQ4VMEkOajIkvuZ3QRf1
-        sC1gwjSremhwhqXLMLb72aLR6g==
-X-Google-Smtp-Source: ACHHUZ4xbfW9KezmmcCLJNdjr99ASmS2ufrHWysJjhsE+cY/TB9a4xu9GZNLCbBFA1/pGAvmRfCELw==
-X-Received: by 2002:a05:620a:270e:b0:762:5ad0:59c5 with SMTP id b14-20020a05620a270e00b007625ad059c5mr7894137qkp.60.1687295819363;
-        Tue, 20 Jun 2023 14:16:59 -0700 (PDT)
-Received: from [192.168.0.140] (c-98-249-43-138.hsd1.va.comcast.net. [98.249.43.138])
-        by smtp.gmail.com with ESMTPSA id o21-20020a05620a131500b0075b35e72a21sm1524673qkj.86.2023.06.20.14.16.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jun 2023 14:16:58 -0700 (PDT)
-Message-ID: <e81b4534-54ce-466f-0d07-dc530cf137c2@joelfernandes.org>
-Date:   Tue, 20 Jun 2023 17:16:57 -0400
+        Tue, 20 Jun 2023 17:17:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 616A21730
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:17:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F201C6122E
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 21:17:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1C7CC433C9;
+        Tue, 20 Jun 2023 21:17:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687295825;
+        bh=VSt5kV5zA9koKw+yON45/sHrnzDV4SzSWC86WRbHIeY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KQGv0q9HX7IhJ8yP+50t80IdMhMWRtzzvDXTZEhNbTJH3ZV0WdqcrShRSDg5Bjkwb
+         BTfnQyNnkTAdD/JNyDqbqt13s6bOKsk62tuunQgHrTk+xC/nfCTIaBRLSkiJxXRAGN
+         NgJfGtEduvDnd42gkm4qnCjJXNx4dsGlR0ca9gWwldikrLKFCKnzLnP+aXsaoD2Jtw
+         Jz4VrM7ZNsxFA8G2eUm+xCa4UuUSQnlwsYr2afi+fFcitbgsPR+HoEthmk7IR9eWDO
+         Z5RXRSQ5lagEeDiSAwmqS3wdbvWGwS4SHLfpc8dxuOA1QIKLZxOGIV6V2N8wCRk0nC
+         BXhQjK+JT8RDg==
+Date:   Tue, 20 Jun 2023 23:16:59 +0200
+From:   Lorenzo Bianconi <lorenzo@kernel.org>
+To:     Alexander Duyck <alexander.duyck@gmail.com>
+Cc:     Jesper Dangaard Brouer <jbrouer@redhat.com>, brouer@redhat.com,
+        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Maryam Tahhan <mtahhan@redhat.com>, bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH net-next v3 3/4] page_pool: introduce page_pool_alloc()
+ API
+Message-ID: <ZJIXSyjxPf7FQQKo@lore-rh-laptop>
+References: <c06f6f59-6c35-4944-8f7a-7f6f0e076649@huawei.com>
+ <CAKgT0UccmDe+CE6=zDYQHi1=3vXf5MptzDo+BsPrKdmP5j9kgQ@mail.gmail.com>
+ <0ba1bf9c-2e45-cd44-60d3-66feeb3268f3@redhat.com>
+ <dcc9db4c-207b-e118-3d84-641677cd3d80@huawei.com>
+ <f8ce176f-f975-af11-641c-b56c53a8066a@redhat.com>
+ <CAKgT0UfzP30OiBQu+YKefLD+=32t+oA6KGzkvsW6k7CMTXU8KA@mail.gmail.com>
+ <699563f5-c4fa-0246-5e79-61a29e1a8db3@redhat.com>
+ <CAKgT0UcNOYwxRP_zkaBaZh-VBL-CriL8dFG-VY7-FUyzxfHDWw@mail.gmail.com>
+ <ZI8dP5+guKdR7IFE@lore-desk>
+ <CAKgT0UfFVFa4zT2DnPZEGaHp0uh5V1u1aGymgdL4Vu8Q1VV8hQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 1/7] mm/mremap: Optimize the start addresses in
- move_page_tables()
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Kirill A Shutemov <kirill@shutemov.name>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Vineeth Pillai <vineeth@bitbyteword.org>
-References: <20230531220807.2048037-1-joel@joelfernandes.org>
- <20230531220807.2048037-2-joel@joelfernandes.org>
- <f2f751ca-217e-4177-bb7f-1c9cd71e103e@lucifer.local>
- <b87df265-7e58-5907-e215-953630a87155@joelfernandes.org>
- <f28eadbc-f40e-4286-bf7e-af0ac360617e@lucifer.local>
-From:   Joel Fernandes <joel@joelfernandes.org>
-In-Reply-To: <f28eadbc-f40e-4286-bf7e-af0ac360617e@lucifer.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="IDE08eaH4RavKRtY"
+Content-Disposition: inline
+In-Reply-To: <CAKgT0UfFVFa4zT2DnPZEGaHp0uh5V1u1aGymgdL4Vu8Q1VV8hQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lorenzo,
 
-On 6/20/23 07:02, Lorenzo Stoakes wrote:
-> On Mon, Jun 19, 2023 at 11:55:08AM -0400, Joel Fernandes wrote:
->> Hi Lorenzo,
->> Thanks for the review! I replied below:
->>
->> On 6/17/23 18:49, Lorenzo Stoakes wrote:
->>> On Wed, May 31, 2023 at 10:08:01PM +0000, Joel Fernandes (Google) wrote:
->>>> Recently, we see reports [1] of a warning that triggers due to
->>>> move_page_tables() doing a downward and overlapping move on a
->>>> mutually-aligned offset within a PMD. By mutual alignment, I
->>>> mean the source and destination addresses of the mremap are at
->>>> the same offset within a PMD.
->>>>
->>>> This mutual alignment along with the fact that the move is downward is
->>>> sufficient to cause a warning related to having an allocated PMD that
->>>> does not have PTEs in it.
->>>>
->>>> This warning will only trigger when there is mutual alignment in the
->>>> move operation. A solution, as suggested by Linus Torvalds [2], is to
->>>> initiate the copy process at the PMD level whenever such alignment is
->>>> present. Implementing this approach will not only prevent the warning
->>>> from being triggered, but it will also optimize the operation as this
->>>> method should enhance the speed of the copy process whenever there's a
->>
->> [...]
->>
->>>> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
->>>> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
->>>> ---
->>>>    mm/mremap.c | 61 +++++++++++++++++++++++++++++++++++++++++++++++++++++
->>>>    1 file changed, 61 insertions(+)
->>>>
->>>> diff --git a/mm/mremap.c b/mm/mremap.c
->>>> index 411a85682b58..bf355e4d6bd4 100644
->>>> --- a/mm/mremap.c
->>>> +++ b/mm/mremap.c
->>>> @@ -478,6 +478,51 @@ static bool move_pgt_entry(enum pgt_entry entry, struct
->>>>    	return moved;
->>>>    }
->>>>
->>>> +/*
->>>> + * A helper to check if a previous mapping exists. Required for
->>>> + * move_page_tables() and realign_addr() to determine if a previous mapping
->>>> + * exists before we can do realignment optimizations.
->>>> + */
->>>> +static bool can_align_down(struct vm_area_struct *vma, unsigned long addr_to_align,
->>>> +			       unsigned long mask)
->>>> +{
->>>> +	unsigned long addr_masked = addr_to_align & mask;
->>>> +	struct vm_area_struct *prev = NULL, *cur = NULL;
->>>> +
->>>> +	/*
->>>> +	 * If @addr_to_align of either source or destination is not the beginning
->>>> +	 * of the corresponding VMA, we can't align down or we will destroy part
->>>> +	 * of the current mapping.
->>>> +	 */
->>>> +	if (vma->vm_start != addr_to_align)
->>>> +		return false;
->>>
->>> See below, I think we can eliminate this check.
->>>
->>>> +
->>>> +	/*
->>>> +	 * Find the VMA before @vma to see if it subsumes the masked address.
->>>> +	 * The mmap write lock is held here so the lookup is safe.
->>>> +	 */
->>>> +	cur = find_vma_prev(vma->vm_mm, vma->vm_start, &prev);
->>>> +	if (WARN_ON_ONCE(cur != vma))
->>>> +		return false;
->>>> +
->>>> +	return !prev || prev->vm_end <= addr_masked;
->>>
->>> This is a bit clunky, and I don't think we need the WARN_ON_ONCE() check if
->>> we're under the mmap_lock.
->>>
->>> How about something like:-
->>>
->>> return find_vma_intersection(vma->mm, addr_masked, vma->vm_start) == NULL;
->>>
->>> Which explicitly asserts that the range in [addr_masked, vma->vm_start) is
->>> empty.
->>>
->>> But actually, we should be able to go further and replace the previous
->>> check with:-
->>>
->>> return find_vma_intersection(vma->mm, addr_masked, addr_to_align) == NULL;
->>>
->>> Which will fail if addr_to_align is offset within the VMA.
->>
->> Your suggestion would mean that we do a full VMA search starting from the
->> root. That would not be a nice thing if say we've 1000s of VMAs?
->>
->> Actually Liam told me to use find_vma_prev() because given a VMA, the maple
->> tree would not have to work that hard for the common case to find the
->> previous VMA. Per conversing with him, there is a chance we may have to go
->> one step above in the tree if we hit the edge of a node, but that's not
->> supposed to be the common case. In previous code, the previous VMA could
->> just be obtained using the "previous VMA" pointer, however that pointer has
->> been remove since the maple tree changes and given a VMA, going to the
->> previous one using the maple tree is just as fast (as I'm told).
-> 
-> As far as I can tell, find_vma_prev() already does a walk? I mean this is
-> equivalent to find_vma() only retrieving the previous VMA right? I defer to
-> Liam, but I'm not sure this would be that much more involved? Perhaps he
-> can comment.
-> 
-> An alternative is to create an iterator and use vma_prev(). I find it
-> extremely clunky that we search for a VMA we already possess (and it's
-> previous one) while not needing the the former.
-> 
-> I'm not hugely familiar with the maple tree (perhaps Liam can comment) but
-> I suspect that'd be more performant if that's the concern. Either way I
-> would be surprised if this is the correct approach.
+--IDE08eaH4RavKRtY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I see your point. I am not sure myself, the maple tree functions for both APIs 
-are indeed similar. We already have looked up the VMA being aligned down. If 
-there is a way to get the previous VMA quickly, given an existing VMA, I can 
-incorporate that change.
+[...]
 
-Ideally, if I had access to the ma_state used for lookup of the VMA being 
-aligned down, I could perhaps reuse that somehow. But when I checked, that 
-seemed a lot more invasive to pass that state down to these align functions.
+> > I did some experiments using page_frag_cache/page_frag_alloc() instead =
+of
+> > page_pools in a simple environment I used to test XDP for veth driver.
+> > In particular, I allocate a new buffer in veth_convert_skb_to_xdp_buff(=
+) from
+> > the page_frag_cache in order to copy the full skb in the new one, actua=
+lly
+> > "linearizing" the packet (since we know the original skb length).
+> > I run an iperf TCP connection over a veth pair where the
+> > remote device runs the xdp_rxq_info sample (available in the kernel sou=
+rce
+> > tree, with action XDP_PASS):
+> >
+> > TCP clietn -- v0 =3D=3D=3D v1 (xdp_rxq_info) -- TCP server
+> >
+> > net-next (page_pool):
+> > - MTU 1500B: ~  7.5 Gbps
+> > - MTU 8000B: ~ 15.3 Gbps
+> >
+> > net-next + page_frag_alloc:
+> > - MTU 1500B: ~  8.4 Gbps
+> > - MTU 8000B: ~ 14.7 Gbps
+> >
+> > It seems there is no a clear "win" situation here (at least in this env=
+ironment
+> > and we this simple approach). Moreover:
+>=20
+> For the 1500B packets it is a win, but for 8000B it looks like there
+> is a regression. Any idea what is causing it?
 
-But there is a merit to your suggestion itself in the sense it cuts down a few 
-more lines of code.
+nope, I have not looked into it yet.
 
->> Considering this, I would keep the code as-is and perhaps you/we could
->> consider the replacement with another API in a subsequent patch as it does
->> the job for this patch.
-> 
-> See above. I don't think this kind of comment is helpful in code
-> review. Your disagreement above suffices, I've responded to it and of
-> course if there is no other way this is fine.
-> 
-> But I'd be surprised, and re-looking up a VMA we already have is just
-> horrid. It's not really a nitpick, it's a code quality issue in my view.
-> 
-> In any case, let's please try to avoid 'if you are bothered, write a follow
-> up patch' style responses. If you disagree with something just say so, it's
-> fine! :)
+>=20
+> > - can the linearization introduce any issue whenever we perform XDP_RED=
+IRECT
+> >   into a destination device?
+>=20
+> It shouldn't. If it does it would probably point to an issue w/ the
+> destination driver rather than an issue with the code doing this.
 
-I wasn't disagreeing :) Just saying that the find_vma_prev() suggested in a 
-previous conversation with Liam fixes the issue (and has been tested a lot in 
-this series, on my side) so I was hoping to stick to that and we could iterate 
-more on that in the future.
+ack, fine.
 
-However, after taking a deeper look at the maple tree, I'd like to give the 
-find_vma_intersection() option at least a try (with appropriate attribution to you).
+>=20
+> > - can the page_frag_cache introduce more memory fragmentation (IIRC we =
+were
+> >   experiencing this issue in mt76 before switching to page_pools).
+>=20
+> I think it largely depends on where the packets are ending up. I know
+> this is the approach we are using for sockets, see
+> skb_page_frag_refill(). If nothing else, if you took a similar
+> approach to it you might be able to bypass the need for the
+> page_frag_cache itself, although you would likely still end up
+> allocating similar structures.
 
-Apologies if the response style in my previous email came across badly. That 
-wasn't my intent and I will try to improve myself.
+ack.
 
-[..]
+Regards,
+Lorenzo
 
->>>> +		realign_addr(&old_addr, vma, &new_addr, new_vma, PMD_MASK);
->>>> +	}
->>>> +
->>>>    	if (is_vm_hugetlb_page(vma))
->>>>    		return move_hugetlb_page_tables(vma, new_vma, old_addr,
->>>>    						new_addr, len);
->>>> @@ -565,6 +619,13 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
->>>>
->>>>    	mmu_notifier_invalidate_range_end(&range);
->>>>
->>>> +	/*
->>>> +	 * Prevent negative return values when {old,new}_addr was realigned
->>>> +	 * but we broke out of the above loop for the first PMD itself.
->>>> +	 */
->>>> +	if (len + old_addr < old_end)
->>>> +		return 0;
->>>> +
->>>
->>> I find this a little iffy, I mean I see that if you align [old,new]_addr to
->>> PMD, then from then on in you're relying on the fact that the loop is just
->>> going from old_addr (now aligned) -> old_end and thus has the correct
->>> length.
->>>
->>> Can't we just fix this issue by correcting len? If you take my review above
->>> which checks len in [maybe_]realign_addr(), you could take that as a
->>> pointer and equally update that.
->>>
->>> Then you can drop this check.
->>
->> The drawback of adjusting len is it changes what move_page_tables() users
->> were previously expecting.
->>
->> I think we should look at the return value of move_page_tables() as well,
->> not just len independently.
->>
->> len is what the user requested.
->>
->> "len + old_addr - old_end" is how much was actually copied and is the return value.
->>
->> If everything was copied, old_addr == old_end and len is unchanged.
-> 
-> Ah yeah I see, sorry I missed the fact we're returning a value, that does
-> complicate things...
-> 
-> If we retain the hugetlb logic, then we could work around the issue with
-> that instance of len by storing the 'actual length' of the range in
-> a new var actual_len and passing that.
-> 
-> If we choose to instead just not do this for hugetlb (I wonder if the
-> hugetlb handling code actually does the equivalent of this since surely
-> these pages have to be handled a PMD at a time?) then we can drop the whole
-> actual_len idea [see below on response to hugetlb thing].
+--IDE08eaH4RavKRtY
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks. Yes, you are right. We should already b  good with hugetlb handling as 
-it does appear that hugetlb_move_page_tables() does copy by huge_page_size(h), 
-so the old_addr should already be PMD-aligned for it to be able to do that.
+-----BEGIN PGP SIGNATURE-----
 
-[..]
+iHUEABYKAB0WIQTquNwa3Txd3rGGn7Y6cBh0uS2trAUCZJIXSAAKCRA6cBh0uS2t
+rLojAP4vEPyrpT81w5Pjsfhued/eWj+HL/TUK74YFhQg7gHJ7gD/TpqIHLpG45Tn
+cY88letgy76oS6jrFFZlVyzqmkuDXwk=
+=dC3S
+-----END PGP SIGNATURE-----
 
->>>>    	return len + old_addr - old_end;	/* how much done */
->>>>    }
->>> Also I am concerned in the hugetlb case -> len is passed to
->>> move_hugetlb_page_tables() which is now strictly incorrect, I wonder if
->>> this could cause an issue?
->>>
->>> Correcting len seems the neat way of addressing this.
->>
->> That's a good point. I am wondering if we can just change that from:
->>
->> 	if (is_vm_hugetlb_page(vma))
->> 		return move_hugetlb_page_tables(vma, new_vma, old_addr,
->> 				new_addr, len);
->>
->> to:
->> 	if (is_vm_hugetlb_page(vma))
->> 		return move_hugetlb_page_tables(vma, new_vma, old_addr,
->> 				new_addr, old_addr - new_addr);
->>
->> Or, another option is to turn it off for hugetlb by just moving:
->>
->> 	if (len >= PMD_SIZE - (old_addr & ~PMD_MASK))
->> 		realign_addr(...);
->>
->> to after:
->>
->> 	if (is_vm_hugetlb_page(vma))
->> 		return move_hugetlb_page_tables(...);
->>
->> thanks,
-> 
-> I think the actual_len solution should sort this right? If not maybe better
-> to be conservative and disable for the hugetlb case (I'm not sure if this
-> would help given you'd need to be PMD aligned anyway right?), so not to
-> hold up the series.
-> 
-> If we do decide not to include hugetlb (the endless 'special case' for so
-> much code...) in this then we can drop the actual_len idea altogether.
-> 
-> (Yes I realise it's ironic I'm suggesting deferring to a later patch here
-> but there you go ;)
-
-;-). Considering our discussion above that hugetlb mremap addresses should 
-always starts at a PMD boundary, maybe I can just add a warning to the if() like 
-so to detect any potential?
-
-	if (is_vm_hugetlb_page(vma)) {
-		WARN_ON_ONCE(old_addr - old_end != len);
-		return move_hugetlb_page_tables(vma, new_vma, old_addr,
-						new_addr, len);
-         }
-
-
-Thank you so much and I learnt a lot from you and others in -mm community.
-
-- Joel
-
+--IDE08eaH4RavKRtY--
