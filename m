@@ -2,146 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29F3F736C68
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 14:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FE8736C6C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 14:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbjFTMz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 08:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
+        id S231745AbjFTMz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 08:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbjFTMz1 (ORCPT
+        with ESMTP id S229933AbjFTMzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 08:55:27 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424C510F8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 05:55:26 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1qBat4-0005HR-Bi; Tue, 20 Jun 2023 14:55:10 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1qBat2-008nEH-SB; Tue, 20 Jun 2023 14:55:08 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1qBat2-00A50M-7A; Tue, 20 Jun 2023 14:55:08 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH v1 1/1] net: phy: dp83td510: fix kernel stall during netboot in DP83TD510E PHY driver
-Date:   Tue, 20 Jun 2023 14:55:05 +0200
-Message-Id: <20230620125505.2402497-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
+        Tue, 20 Jun 2023 08:55:55 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8F31708;
+        Tue, 20 Jun 2023 05:55:54 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-39cc64e4a44so2321166b6e.0;
+        Tue, 20 Jun 2023 05:55:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687265753; x=1689857753;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GShgRfKOlKpaj1lYu1lbhujHhsIiz6oBYw+aZwN2suk=;
+        b=gT7XttF1usxTwCr5o1fye/3TbEl3DyoL4Si5Gq+549INcVZ4cITvxqRioY75rGzaXf
+         vY3DaIvXuVnTNXpd3PZ9qR7V5YkelgouSzwdUjpdGTQ37HuFYLFuTDsN69hBhNV9kpnn
+         B5godEPEYcOfzDuMLKw5MawmLp/PBi24zz2r9M/x0AGQalc9e4ui/Rdr8wS8dQyVzasv
+         zhweJ5FN3gYkAX0wGVFiuHALZXM0WMCx0QBlrEGmKro/5us4NXAw6qkKjddZUnf8ZCEU
+         S9U7cgjjDBFUYxFHstqtprFN2O6vci0P/wQnm8wZtfeJUFthfsNEgWiDp4ENAGhBNmTT
+         TA3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687265753; x=1689857753;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GShgRfKOlKpaj1lYu1lbhujHhsIiz6oBYw+aZwN2suk=;
+        b=aOMAVdgqb8MBZ8ZmzqSDzFq3b5ZoGcBZA1r5DFi6EnoBY9QclY5V1YY8iFcXN3GEvZ
+         AaPlgfxvXSGoKLdyazQZtrUr5Z135gihDeP3ducIDI4k93W7pmawnpfs3lJypH6TIYw4
+         PlE1P5XhNrBLCbcPAnKUhKNiMOi7OfANhpcr0KEmfDq63n9LYsDMKUnQlAhemzvvo/C4
+         Suyn/U+2CoLLfGAFfkTbzje9aFvtUlHJweGZ9WPEK+1MZooqz8IOCRak8Ldvhi65Yn4l
+         5L4sP+DPkUfpnYLA7WQvqA6WJRs3dNe5cvqXh9YeT3wvbteKFK7tATWLCdR9t4gOFSQc
+         7oUg==
+X-Gm-Message-State: AC+VfDxU5r3vicqIWi/p3wT/Ln9jkFH8Jc/hvvjP5ADpo5kK0fITC7Tn
+        DM/tj7SHvDY9ibOWS7uuySA4ILVNeMV8Wh54KxY=
+X-Google-Smtp-Source: ACHHUZ6EXdRg19WgE9D1h2RX/uXFxNvdR5GSzNLlrzNdXvNt3naipadmMZcuONmeryIn14ckDYYLfF+mGwE/WAAtLy4=
+X-Received: by 2002:a05:6808:2202:b0:39e:ae9e:b6ac with SMTP id
+ bd2-20020a056808220200b0039eae9eb6acmr11458931oib.49.1687265753695; Tue, 20
+ Jun 2023 05:55:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <OSYP286MB03120BABB25900E113ED42B7BC5CA@OSYP286MB0312.JPNP286.PROD.OUTLOOK.COM>
+In-Reply-To: <OSYP286MB03120BABB25900E113ED42B7BC5CA@OSYP286MB0312.JPNP286.PROD.OUTLOOK.COM>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Tue, 20 Jun 2023 14:55:41 +0200
+Message-ID: <CAMhs-H_OtDgJmBrcrN33goXDM19WJr1+Za+G9tibMZrO+9KL1A@mail.gmail.com>
+Subject: Re: [PATCH] mips: ralink: introduce commonly used remap node function
+To:     Shiji Yang <yangshiji66@outlook.com>
+Cc:     linux-mips@vger.kernel.org, john@phrozen.org,
+        tsbogend@alpha.franken.de, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix an issue where the kernel would stall during netboot, showing the
-"sched: RT throttling activated" message. This stall was triggered by
-the behavior of the mii_interrupt bit (Bit 7 - DP83TD510E_STS_MII_INT)
-in the DP83TD510E's PHY_STS Register (Address = 0x10). The DP83TD510E
-datasheet (2020) states that the bit clears on write, however, in
-practice, the bit clears on read.
+On Tue, Jun 20, 2023 at 1:46=E2=80=AFPM Shiji Yang <yangshiji66@outlook.com=
+> wrote:
+>
+> The ralink_of_remap() function is repeated several times on SoC specific
+> source files. They have the same structure, but just differ in compatible
+> strings. In order to make commonly use of these codes, this patch
+> introduces a newly designed mtmips_of_remap_node() function to match and
+> remap all supported system controller and memory controller nodes.
+>
+> Build and run tested on MT7620 and MT7628.
+>
+> Signed-off-by: Shiji Yang <yangshiji66@outlook.com>
+> ---
+>  arch/mips/ralink/common.h |  2 --
+>  arch/mips/ralink/mt7620.c |  9 ---------
+>  arch/mips/ralink/mt7621.c |  9 ---------
+>  arch/mips/ralink/of.c     | 42 ++++++++++++++++++++++++++++++++-------
+>  arch/mips/ralink/rt288x.c |  9 ---------
+>  arch/mips/ralink/rt305x.c |  9 ---------
+>  arch/mips/ralink/rt3883.c |  9 ---------
+>  7 files changed, 35 insertions(+), 54 deletions(-)
 
-This discrepancy had significant implications on the driver's interrupt
-handling. The PHY_STS Register was used by handle_interrupt() to check
-for pending interrupts and by read_status() to get the current link
-status. The call to read_status() was unintentionally clearing the
-mii_interrupt status bit without deasserting the IRQ pin, causing
-handle_interrupt() to miss other pending interrupts. This issue was most
-apparent during netboot.
+Awesome! More deletions than additions in arch folders is always a
+good thing :-).
 
-The fix refrains from using the PHY_STS Register for interrupt handling.
-Instead, we now solely rely on the INTERRUPT_REG_1 Register (Address =
-0x12) and INTERRUPT_REG_2 Register (Address = 0x13) for this purpose.
-These registers directly influence the IRQ pin state and are latched
-high until read.
+Changes look good to me. Thanks for doing this!
 
-Note: The INTERRUPT_REG_2 Register (Address = 0x13) exists and can also
-be used for interrupt handling, specifically for "Aneg page received
-interrupt" and "Polarity change interrupt". However, these features are
-currently not supported by this driver.
+Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 
-Fixes: 165cd04fe253 ("net: phy: dp83td510: Add support for the DP83TD510 Ethernet PHY")
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/phy/dp83td510.c | 23 +++++------------------
- 1 file changed, 5 insertions(+), 18 deletions(-)
-
-diff --git a/drivers/net/phy/dp83td510.c b/drivers/net/phy/dp83td510.c
-index 3cd9a77f9532..d7616b13c594 100644
---- a/drivers/net/phy/dp83td510.c
-+++ b/drivers/net/phy/dp83td510.c
-@@ -12,6 +12,11 @@
- 
- /* MDIO_MMD_VEND2 registers */
- #define DP83TD510E_PHY_STS			0x10
-+/* Bit 7 - mii_interrupt, active high. Clears on read.
-+ * Note: Clearing does not necessarily deactivate IRQ pin if interrupts pending.
-+ * This differs from the DP83TD510E datasheet (2020) which states this bit
-+ * clears on write 0.
-+ */
- #define DP83TD510E_STS_MII_INT			BIT(7)
- #define DP83TD510E_LINK_STATUS			BIT(0)
- 
-@@ -53,12 +58,6 @@ static int dp83td510_config_intr(struct phy_device *phydev)
- 	int ret;
- 
- 	if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
--		/* Clear any pending interrupts */
--		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_PHY_STS,
--				    0x0);
--		if (ret)
--			return ret;
--
- 		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2,
- 				    DP83TD510E_INTERRUPT_REG_1,
- 				    DP83TD510E_INT1_LINK_EN);
-@@ -81,10 +80,6 @@ static int dp83td510_config_intr(struct phy_device *phydev)
- 					 DP83TD510E_GENCFG_INT_EN);
- 		if (ret)
- 			return ret;
--
--		/* Clear any pending interrupts */
--		ret = phy_write_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_PHY_STS,
--				    0x0);
- 	}
- 
- 	return ret;
-@@ -94,14 +89,6 @@ static irqreturn_t dp83td510_handle_interrupt(struct phy_device *phydev)
- {
- 	int  ret;
- 
--	ret = phy_read_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_PHY_STS);
--	if (ret < 0) {
--		phy_error(phydev);
--		return IRQ_NONE;
--	} else if (!(ret & DP83TD510E_STS_MII_INT)) {
--		return IRQ_NONE;
--	}
--
- 	/* Read the current enabled interrupts */
- 	ret = phy_read_mmd(phydev, MDIO_MMD_VEND2, DP83TD510E_INTERRUPT_REG_1);
- 	if (ret < 0) {
--- 
-2.39.2
-
+Best regards,
+    Sergio Paracuellos
