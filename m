@@ -2,108 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7047369E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 714E97369FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232330AbjFTKvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 06:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
+        id S232382AbjFTKzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 06:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbjFTKvp (ORCPT
+        with ESMTP id S231351AbjFTKyn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 06:51:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8431ECC;
-        Tue, 20 Jun 2023 03:51:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BB8161083;
-        Tue, 20 Jun 2023 10:51:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E049EC433C8;
-        Tue, 20 Jun 2023 10:51:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687258303;
-        bh=i86LPEOlOqpx7HI3CWxGcRqaB9ZXh9sljcD8rZYOYO8=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=uuJQ0BEjYCGeN2dM1Ot4aAeFXYLM1uKNyCTpqUbi9vuX5uoLZgMd12vDMzn7ZG8C+
-         nDl3HMNYeXDL6jE4rhfKzfUTJAqu7YtB8frKrSBtx7xZ4SYFKQYumYszXY273whhvT
-         f/RSmRvFhVXSeMhgBxDH6Njc/FsIjG7cdVIIlnFqgUH9ElweY7hiXu0JUu67F7I/Mi
-         ZyIpXn+oyizgx5zTEo/IHlsFmhfLgla+oGzwRaPZmMP02/CLF2+Qc32kbjMNaKSSx1
-         hjL02+jlGUl3RMTGlDjkqRQ03qkOY70OBPmnH8WccCRbM/42e4iPKSr/pSEUJLKNxD
-         h/SkYIXEywigQ==
-Message-ID: <5728ebda22a723b0eb209ae078e8f132d7b4ac7b.camel@kernel.org>
-Subject: Re: [PATCH 2/3] fd/locks: allow get the lock owner by F_OFD_GETLK
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Stas Sergeev <stsp2@yandex.ru>, linux-kernel@vger.kernel.org
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Date:   Tue, 20 Jun 2023 06:51:41 -0400
-In-Reply-To: <20230620095507.2677463-3-stsp2@yandex.ru>
-References: <20230620095507.2677463-1-stsp2@yandex.ru>
-         <20230620095507.2677463-3-stsp2@yandex.ru>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+        Tue, 20 Jun 2023 06:54:43 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567291A8;
+        Tue, 20 Jun 2023 03:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1687258481; x=1718794481;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6c60X4ktkiqryPjhR2YrFgEi5A5JvrABnKX4YWhKjkk=;
+  b=WSiQhTmro5YNgG0GQJPZPzYQxYt09XW/USw+wTvvrkf7OgkwNvQDdOBE
+   0lCiCsILRRGiPz+DvpvLGKS9K8K00On1PRQIgwbKioyBuGGJxAl7vtKDN
+   6k8eAN+ZI1ZWUjxRC4l8IyzPw6ZomH5eVeew7q/gKaEJYbPVNYxOuf0BI
+   JhfrTHRGsuHWRM94ZqdKENgLfi4mTOaZ8+ypgcPsMwnAvwkXgMu5D4GRI
+   zmXPYnoKCVthL07GHrnGyBtb+Fys2TsxFPdspCkNcUp0BKwKsf1/ywjX4
+   HjbAvipmHzjK86UPI5A7NID3BMj0naCatE5Zo7n5A4K6R7fd9IfzHZyuX
+   w==;
+X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
+   d="asc'?scan'208";a="216812277"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Jun 2023 03:54:41 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 20 Jun 2023 03:54:03 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Tue, 20 Jun 2023 03:54:01 -0700
+Date:   Tue, 20 Jun 2023 11:53:34 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <stable@vger.kernel.org>, <patches@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>, <torvalds@linux-foundation.org>,
+        <akpm@linux-foundation.org>, <linux@roeck-us.net>,
+        <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
+        <rwarsow@gmx.de>
+Subject: Re: [PATCH 6.3 000/187] 6.3.9-rc1 review
+Message-ID: <20230620-squirt-ungloved-2ecf9b269e25@wendy>
+References: <20230619102157.579823843@linuxfoundation.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ajQMbeLtm/3tD0sS"
+Content-Disposition: inline
+In-Reply-To: <20230619102157.579823843@linuxfoundation.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-06-20 at 14:55 +0500, Stas Sergeev wrote:
-> Currently F_OFD_GETLK sets the pid of the lock owner to -1.
-> Remove such behavior to allow getting the proper owner's pid.
-> This may be helpful when you want to send some message (like SIGKILL)
-> to the offending locker.
->=20
-> Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
->=20
-> CC: Jeff Layton <jlayton@kernel.org>
-> CC: Chuck Lever <chuck.lever@oracle.com>
-> CC: Alexander Viro <viro@zeniv.linux.org.uk>
-> CC: Christian Brauner <brauner@kernel.org>
-> CC: linux-fsdevel@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
->=20
-> ---
->  fs/locks.c | 2 --
->  1 file changed, 2 deletions(-)
->=20
-> diff --git a/fs/locks.c b/fs/locks.c
-> index 210766007e63..ee265e166542 100644
-> --- a/fs/locks.c
-> +++ b/fs/locks.c
-> @@ -2158,8 +2158,6 @@ static pid_t locks_translate_pid(struct file_lock *=
-fl, struct pid_namespace *ns)
->  	pid_t vnr;
->  	struct pid *pid;
-> =20
-> -	if (IS_OFDLCK(fl))
-> -		return -1;
->  	if (IS_REMOTELCK(fl))
->  		return fl->fl_pid;
->  	/*
+--ajQMbeLtm/3tD0sS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-NACK on this one.
+On Mon, Jun 19, 2023 at 12:26:58PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.9 release.
+> There are 187 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-OFD locks are not owned by processes. They are owned by the file
-description (hence the name). Because of this, returning a pid here is
-wrong.
+Tested-by: Conor Dooley <conor.dooley@microchip.com>
 
-This precedent comes from BSD, where flock() and POSIX locks can
-conflict. BSD returns -1 for the pid if you call F_GETLK on a file
-locked with flock(). Since OFD locks have similar ownership semantics to
-flock() locks, we use the same convention here.
+Cheers,
+Conor.
 
-Cheers,=20
---=20
-Jeff Layton <jlayton@kernel.org>
+--ajQMbeLtm/3tD0sS
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJGFLgAKCRB4tDGHoIJi
+0sQWAPsFMcHjF/dOHgOA1emiRsTmHZYpSVpLD33CxSOm/vBM0gD9E89QUl1wpn8e
+lcgmMF6v8YS1Mf8+fzH7v1ARMrpl9gc=
+=pMl0
+-----END PGP SIGNATURE-----
+
+--ajQMbeLtm/3tD0sS--
