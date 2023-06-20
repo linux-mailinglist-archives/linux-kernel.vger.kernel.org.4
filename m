@@ -2,152 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C943737617
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B94D4737618
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjFTUco convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Jun 2023 16:32:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
+        id S229899AbjFTUcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 16:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjFTUcm (ORCPT
+        with ESMTP id S229595AbjFTUcp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 16:32:42 -0400
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B45CF1;
-        Tue, 20 Jun 2023 13:32:42 -0700 (PDT)
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-77e357f8faeso135969639f.3;
-        Tue, 20 Jun 2023 13:32:42 -0700 (PDT)
+        Tue, 20 Jun 2023 16:32:45 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0391A187
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:32:45 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-6300f31c3ecso22908576d6.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:32:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687293164; x=1689885164;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+sOBwXFmC0K7NYb6lxaOI7FbE7H576FmqzhPnZbh/RQ=;
+        b=tOqRhJiJuYS/iM7yaX5kRR0RI5J4yS1E5ocSFLwJFozah6ojYGDYEC3KMjqrchEHWN
+         V5olyJeF5sdAVGmyxtKzlPJwixv1c+gFrSleYLPVdQZtnWtBnPtfTroLHA1oHlfq6NDf
+         W6illmXhd6rNa/PIUTfFh2BSrLJMD/dE4ysNwbZpOroJXz0BTpxFlvGYRjt3C+Cs4d8e
+         h/9Qo+g/BCkG3gfjk50kDZi3H1Z6DIl++Vte2DrrQ80+9d2PI1Ka0jRiR54Gv/wlxsKr
+         xoljDYaj9RSg+l5SiIJnchoyU6QRqVoFXyi9s7wEvojivfMFhjAf3kYVjlrLEwk3TUR0
+         mmbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687293161; x=1689885161;
+        d=1e100.net; s=20221208; t=1687293164; x=1689885164;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wClhCQSLHlxJ7x+g/i0PKTHL3zUR+fkbCyijRsJiFko=;
-        b=NoojAPysl/2kNz37HmtNkdcRJerSffJsUYJUDrB9DlG5Ir9ESDyLr/3T+JSCEwAom7
-         WdZgjJFhdIKtcuQO9xkLt+afqUo6JISJ8AcK61lCz3ybPQg3bkQMR/+bgXSRTBRhYtHD
-         S+lO6Fc/6nVKtDhRTWBL6byqn+OFjkD+JIzLAwL+lf3c/d6MZZRnelZNiHgP0GsAJ4P6
-         scce7TahZHTWiXkuo4JAJ0sz+kOdkHJ1wfJm0vyngdJje0VYN1JrARYknBzZg9LbSYSk
-         WFIEowZfUR2sMRzbxAHcBlFPrgGFZg2ARZz8tLy0sQPdSaP/H1Dr/vx63IRMJ760yaSN
-         eeTA==
-X-Gm-Message-State: AC+VfDyNM0cPD+g1WvxoVswm3Wpp/sqqfpig20dvfz8HRfWcyXn591kp
-        hpYLJJYtyGorG+5Cuoc+1Dj8SggEy1dCeOrx0xM=
-X-Google-Smtp-Source: ACHHUZ4jDamatlr+DCWZd9B2Mh8oDMdheAGX0lUtgp5PIy/+aKcbRPV1h0OwfT9MclKi/MH/cMeM6gALpIKP9YPSuzA=
-X-Received: by 2002:a6b:5905:0:b0:77e:2883:13f3 with SMTP id
- n5-20020a6b5905000000b0077e288313f3mr11895581iob.14.1687293161237; Tue, 20
- Jun 2023 13:32:41 -0700 (PDT)
+        bh=+sOBwXFmC0K7NYb6lxaOI7FbE7H576FmqzhPnZbh/RQ=;
+        b=RWTmjUt7Yq+XzZFji52RLUpt95OOupbBJsuoJXl7Lvugt3g7y9HhagO5ZhmwqUO0Lw
+         Y/cCdTJiZtOUQhlJTF0lXNJKDiQN4BfdcR8G1Ws6wuIxly8CuKmLGRweGmgGJrVAMvYZ
+         qKxgpyRo4yFGqy4mCWl380w0FfWLUOeIU8fPFt7AD+Cgei981MymP0hUA2nYRsnT27c+
+         /8r9dkAmj8vCJrofV/whUiHOdKZ58gKxtLZo8ZvsvcYkxYcbk+c2Xp/mruJ1UVkIX5xC
+         58tcsuZby+y8F7RN7v9fLdqsDOtDiIlezgPUVVYfUL/uTgD4MG1/gx2okNr7++A0FHLe
+         7SzQ==
+X-Gm-Message-State: AC+VfDxVEVZHis8iKs1lWUpQBKSfxFRO+O1HDZGZyzeCH3KCtrRSy41+
+        +Vdzz1+s7nhK5U5Znd0j4RjKa679PVRSIVvEGHEM0g==
+X-Google-Smtp-Source: ACHHUZ6EhOw5QjdhJDMDyaak9jtIy0YjhsLT4zH/jrMO4dPXvi62mXQ76XWruSIP2mh7WnNIEl42KmnbfYo3WvG4pQQ=
+X-Received: by 2002:a05:6214:e4f:b0:62d:fd45:4d6a with SMTP id
+ o15-20020a0562140e4f00b0062dfd454d6amr16222761qvc.16.1687293164010; Tue, 20
+ Jun 2023 13:32:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230616024515.80814-1-yangjihong1@huawei.com>
-In-Reply-To: <20230616024515.80814-1-yangjihong1@huawei.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 20 Jun 2023 13:32:29 -0700
-Message-ID: <CAM9d7chJtidBnLYd27Us6aW5tJKbi_n_kHj=6SRUTbTiowwi5w@mail.gmail.com>
-Subject: Re: [PATCH] perf parse: Add missing newline to pr_debug message in evsel__compute_group_pmu_name()
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        kan.liang@linux.intel.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <mhng-41a06775-95dc-4747-aaab-2c5c83fd6422@palmer-ri-x1c9>
+ <mhng-57559277-afaa-4a85-a3ad-b9be6dba737f@palmer-ri-x1c9>
+ <CAKwvOdmsgMN5oQpDLh12D0X-CfQDtHC-EtxHcBnADkhnyitMKQ@mail.gmail.com> <20230620-gibberish-unblended-f4b50c7fe369@spud>
+In-Reply-To: <20230620-gibberish-unblended-f4b50c7fe369@spud>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 20 Jun 2023 16:32:32 -0400
+Message-ID: <CAKwvOdn_U+yjFBn6pq5XwP1rTEKA1MWBkd0f2N8wB_nuS1_sWw@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>, jszhang@kernel.org,
+        llvm@lists.linux.dev, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, Fangrui Song <maskray@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Jun 20, 2023 at 4:13=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
+te:
+>
+> On Tue, Jun 20, 2023 at 04:05:55PM -0400, Nick Desaulniers wrote:
+> > On Mon, Jun 19, 2023 at 6:06=E2=80=AFPM Palmer Dabbelt <palmer@dabbelt.=
+com> wrote:
+> > > On Thu, 15 Jun 2023 06:54:33 PDT (-0700), Palmer Dabbelt wrote:
+> > > > On Wed, 14 Jun 2023 09:25:49 PDT (-0700), jszhang@kernel.org wrote:
+> > > >> On Wed, Jun 14, 2023 at 07:49:17AM -0700, Palmer Dabbelt wrote:
+> > > >>> On Tue, 23 May 2023 09:54:58 PDT (-0700), jszhang@kernel.org wrot=
+e:
+>
+> > > >> Commit 3b90b09af5be ("riscv: Fix orphan section warnings caused by
+> > > >> kernel/pi") touches vmlinux.lds.S, so to make the merge easy, this
+> > > >> series is based on 6.4-rc2.
+> > > >
+> > > > Thanks.
+> > >
+> > > Sorry to be so slow here, but I think this is causing LLD to hang on
+> > > allmodconfig.  I'm still getting to the bottom of it, there's a few
+> > > other things I have in flight still.
+> >
+> > Confirmed with v3 on mainline (linux-next is pretty red at the moment).
+> > https://lore.kernel.org/linux-riscv/20230517082936.37563-1-falcon@tinyl=
+ab.org/
+>
+> Just FYI Nick, there's been some concurrent work here from different
+> people working on the same thing & the v3 you linked (from Zhangjin) was
+> superseded by this v2 (from Jisheng).
 
-On Thu, Jun 15, 2023 at 7:47 PM Yang Jihong <yangjihong1@huawei.com> wrote:
->
-> The newline is missing for pr_debug message in
-> evsel__compute_group_pmu_name(), fix it.
->
-> Before:
->
->   # perf --debug verbose=2 record -e cpu-clock true
->   <SNIP>
->   No PMU found for 'cycles:u'No PMU found for 'instructions:u'------------------------------------------------------------
->   perf_event_attr:
->     type                             1
->     size                             136
->     { sample_period, sample_freq }   4000
->     sample_type                      IP|TID|TIME|PERIOD
->     read_format                      ID|LOST
->     disabled                         1
->     inherit                          1
->     mmap                             1
->     comm                             1
->     freq                             1
->     enable_on_exec                   1
->     task                             1
->     sample_id_all                    1
->     exclude_guest                    1
->     mmap2                            1
->     comm_exec                        1
->     ksymbol                          1
->     bpf_event                        1
->   ------------------------------------------------------------
->   <SNIP>
->
-> After:
->
->   # perf --debug verbose=2 record -e cpu-clock true
->   <SNIP>
->   No PMU found for 'cycles:u'
->   No PMU found for 'instructions:u'
->   ------------------------------------------------------------
->   perf_event_attr:
->     type                             1
->     size                             136
->     { sample_period, sample_freq }   4000
->     sample_type                      IP|TID|TIME|PERIOD
->     read_format                      ID|LOST
->     disabled                         1
->     inherit                          1
->     mmap                             1
->     comm                             1
->     freq                             1
->     enable_on_exec                   1
->     task                             1
->     sample_id_all                    1
->     exclude_guest                    1
->     mmap2                            1
->     comm_exec                        1
->     ksymbol                          1
->     bpf_event                        1
->   ------------------------------------------------------------
->   <SNIP>
->
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+Ah! I've been testing the deprecated patch set, sorry I just looked on
+lore for "dead code" on riscv-linux and grabbed the first thread,
+without noticing the difference in authors or new version numbers for
+distinct series. ok, nevermind my noise.  I'll follow up with the
+correct patch set, sorry!
 
-Acked-by: Namhyung Kim <namhyung@kernel.org>
+>
+> Cheers,
+> Conor.
 
+
+
+--=20
 Thanks,
-Namhyung
-
-
-> ---
->  tools/perf/util/parse-events.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-> index 2d36cadf35ec..bc7274641f34 100644
-> --- a/tools/perf/util/parse-events.c
-> +++ b/tools/perf/util/parse-events.c
-> @@ -2036,7 +2036,7 @@ static int evsel__compute_group_pmu_name(struct evsel *evsel,
->                 pmu = perf_pmus__scan_core(NULL);
->         }
->         if (!pmu) {
-> -               pr_debug("No PMU found for '%s'", evsel__name(evsel));
-> +               pr_debug("No PMU found for '%s'\n", evsel__name(evsel));
->                 return -EINVAL;
->         }
->         group_pmu_name = pmu->name;
-> --
-> 2.30.GIT
->
+~Nick Desaulniers
