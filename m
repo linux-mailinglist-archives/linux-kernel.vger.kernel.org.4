@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF92736A7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E2A7736A84
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232573AbjFTLK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 07:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46584 "EHLO
+        id S232636AbjFTLLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 07:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232530AbjFTLKv (ORCPT
+        with ESMTP id S232596AbjFTLK5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 07:10:51 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB6210D5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:10:48 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f640e48bc3so5887319e87.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:10:48 -0700 (PDT)
+        Tue, 20 Jun 2023 07:10:57 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDDD10DC
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:10:49 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f8777caaa1so1597990e87.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:10:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687259445; x=1689851445;
+        d=linaro.org; s=google; t=1687259447; x=1689851447;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QFAqDiLltNdklyeWnFl2VhcGAm3uwoOV8Onj4m150Sc=;
-        b=INJmXdEmpvVXTm7i3mjAO0uySCULJiYlAGfi0xAC/HQG0TNF6pFPNOl3lRfnOcJmLV
-         YTAsarOxgMOd1VtScH9QWuJzdxutC+CQzcDTWZzAggCpPr5HFxLK8PzB2hMeth75CCsK
-         TDsMWhdivHMJC9nHTOEQnQCZZ9jgdgExA6AYseO9hp02lA4+ZoEnP/PJBsARms+8+2Uf
-         iblB322RwEQAfICyC2mTbMlhG0UpgCiM/jOj7kw8dbYWUrEh789B1K+iwllvIjipSm0k
-         UX68ERtZsgYYR7FQTUuBw4HXtDhcELRLDaiwqcFIrVqWn/AJvfNdJNW+vD3cDjKqRomQ
-         7Vvg==
+        bh=uceOjOeFYW3YrOQKTUQY3Yfirv5mMIrxQprXiD+0ONY=;
+        b=ztMM6FNqBkOpSwDiWJL2e7rSNq6VWJS8i56x3Kg1UAKPk0mqK5tp4Z1Yhfj5wkK3lN
+         deZ21ZkowskLeiZHgh7zmp7/Lhfuj/Cg9mLEwp6mbEpH5ubKPgFBqZ8zu30Av1kh3Vnd
+         VeAmnCDWoFAGVeG0iMCJ5B+MIi4+xOFb86cf62GiET18fIvyiejPMzBZ9Sy2VB7fDrbW
+         3Gm9yidK2o2UX1cdMyJMGrSsQ58BFD88ZMrhvX/K9nXFV/grqVT1Vp+mf559E/JD9Dnm
+         uFuc/WLqEaUi+hZmZPcLjl3Bq7AHXEwLwxiuccTkDcj9OAGRRXCEHfWucy1MMWyIeDT8
+         gzyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687259445; x=1689851445;
+        d=1e100.net; s=20221208; t=1687259447; x=1689851447;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QFAqDiLltNdklyeWnFl2VhcGAm3uwoOV8Onj4m150Sc=;
-        b=C1GB4C3H6viq37eLdhzdOkHtr9nR6EgSYj6ZsqPdCB5SJ604qkycFla1D2TBTx5dXD
-         QX4scacM1XFzWBzvqq3/nGFwrf0OnUAqFe0+2vDzzlxawu+aSDFN6mqhXnYLPpx/YWnP
-         UoqTSFp+Zyfy/M1BJH2rWASvFZ3j2Tt2OCTWYlp/Ogub/6i2ll4Rv1r+rwVcpdk0kpOt
-         AvuserInmEm9GpygrG8o3oGwKDx3MVMbbucHc7Z6BD6n0ZPksyeYrHhDqxlkdkCnqIPB
-         Le6VeU5Fe8c1YweA14PvZw51/RUN4oOlv2gc/LBq8j+UWutCsVO/BDB5A3zew+6GCQOQ
-         QaZg==
-X-Gm-Message-State: AC+VfDyJiyAPBjx06v+KEbvwo2XlSgeiohSJodvsJGRtX3OMfqRflvRe
-        +sGVRPvx3rureS6NEe9ikhTeyw==
-X-Google-Smtp-Source: ACHHUZ5eqZqdWUBigkTrmkmwCMGTjarq6T+1Y4fXQLi7UIXvf2LYvX4zPoiELEETJW3uy09iyxY4DQ==
-X-Received: by 2002:a19:8c18:0:b0:4f8:6ac4:84 with SMTP id o24-20020a198c18000000b004f86ac40084mr3396390lfd.8.1687259445484;
-        Tue, 20 Jun 2023 04:10:45 -0700 (PDT)
+        bh=uceOjOeFYW3YrOQKTUQY3Yfirv5mMIrxQprXiD+0ONY=;
+        b=TtnO3xgEBZur7S/e8bfCM96HoLQp736aAUNPqw853mQBwhwPjLnjBxI5eFFC5nnoKr
+         BwOIPg0+9kCN7K67ppNlXLeiRIQLP/JrjqP6+clhu+GR8wioFOj57SHyU773rx6KP4fK
+         oIIQo5dTwu1XolBPrOWf/JgdSr72StVw6pLlpiTIqBlFNHLX223v0IIVC2kn0s/dp6iA
+         UN86uAIAZ04/CTUJPcvX5Rs3Vhsk/lyXh24MKtZ3/aCgEMCHIj41sfvyDMiU9M0ON0c3
+         wufNT5xypASrPET8tDkRb2PgtOFjKPLFbj4FVizeGeEN+zMx6kC7U9mdvIw8hf2PUj35
+         0Oqw==
+X-Gm-Message-State: AC+VfDzjuWozTVGqjiM77qcxyfnbY9/lpeY1xJucMpXXKdbWdmLTHau3
+        ekFOwZKdnxKLdBSJuA7nCjDrBw==
+X-Google-Smtp-Source: ACHHUZ5GoUelrBI2jBp22Cnk9kJgAaRVAYUKGa+bVYNEbPWpkYGNAg7M/qz9AWyd4yy10AZApldGGg==
+X-Received: by 2002:a05:6512:47c:b0:4eb:3fb2:c56d with SMTP id x28-20020a056512047c00b004eb3fb2c56dmr6884482lfd.12.1687259446701;
+        Tue, 20 Jun 2023 04:10:46 -0700 (PDT)
 Received: from [192.168.1.101] (abxj193.neoplus.adsl.tpnet.pl. [83.9.3.193])
-        by smtp.gmail.com with ESMTPSA id u26-20020a056512041a00b004f764716afdsm314395lfk.257.2023.06.20.04.10.44
+        by smtp.gmail.com with ESMTPSA id u26-20020a056512041a00b004f764716afdsm314395lfk.257.2023.06.20.04.10.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 04:10:45 -0700 (PDT)
+        Tue, 20 Jun 2023 04:10:46 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 20 Jun 2023 13:10:39 +0200
-Subject: [PATCH v4 4/6] drm/msm/a6xx: Ensure clean GMU state in
- a6xx_gmu_fw_start
+Date:   Tue, 20 Jun 2023 13:10:40 +0200
+Subject: [PATCH v4 5/6] drm/msm/a6xx: Improve GMU force shutdown sequence
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230517-topic-a7xx_prep-v4-4-b16f273a91d4@linaro.org>
+Message-Id: <20230517-topic-a7xx_prep-v4-5-b16f273a91d4@linaro.org>
 References: <20230517-topic-a7xx_prep-v4-0-b16f273a91d4@linaro.org>
 In-Reply-To: <20230517-topic-a7xx_prep-v4-0-b16f273a91d4@linaro.org>
 To:     Rob Clark <robdclark@gmail.com>,
@@ -71,53 +70,49 @@ Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
         freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1687259438; l=1213;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687259438; l=999;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=xLnqc6AHpOSP+ED80kyz8V2j7nuk18OJ2Jy8h13Cf1I=;
- b=QopZRc6EUyhns0KVw6SVS/mXnt2VY3dxbBXKlHwjamd0sOsHi9ILo2buRVPW4sflNOLzCCv/3
- uwALjCxRCfDCC8KElFRyXVUV2TMrXf3AA/bOjOARIuUN8DEdT/p0VHy
+ bh=HgL0AdZtJqxx0twaid3jHnuqKqCDcBlTAxb3JHJlxVw=;
+ b=6OUxqP1UratNBHaIvk/AXKzEsNL/3F8JlTdQ9lFpHEpyOPk+LGEI4QiHbJ5NtMR/bxi4Su24H
+ 3Szj+ZmchkmAR44vkHol0KW08DCQRUASJZGxokA55rQj2A3CcjObSQ4
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While it's not very well understood, there is some sort of a fault
-handler implemented in the GMU firmware which triggers when a certain
-bit is set, resulting in the M3 core not booting up the way we expect
-it to.
-
-Write a magic value to a magic register to hopefully prevent that
-from happening.
+The GMU force shutdown sequence involves some additional register cleanup
+which was not implemented previously. Do so.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-index 5deb79924897..9929ff187368 100644
+index 9929ff187368..55b12a8066ee 100644
 --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
 +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
-@@ -790,6 +790,12 @@ static int a6xx_gmu_fw_start(struct a6xx_gmu *gmu, unsigned int state)
- 	gmu_write(gmu, REG_A6XX_GMU_AHB_FENCE_RANGE_0,
- 		(1 << 31) | (0xa << 18) | (0xa0));
+@@ -893,6 +893,13 @@ static void a6xx_gmu_force_off(struct a6xx_gmu *gmu)
+ 	/* Make sure there are no outstanding RPMh votes */
+ 	a6xx_gmu_rpmh_off(gmu);
  
-+	/*
-+	 * Snapshots toggle the NMI bit which will result in a jump to the NMI
-+	 * handler instead of __main. Set the M3 config value to avoid that.
-+	 */
-+	gmu_write(gmu, REG_A6XX_GMU_CM3_CFG, 0x4052);
++	/* Clear the WRITEDROPPED fields and put fence into allow mode */
++	gmu_write(gmu, REG_A6XX_GMU_AHB_FENCE_STATUS_CLR, 0x7);
++	gmu_write(gmu, REG_A6XX_GMU_AO_AHB_FENCE_CTRL, 0);
 +
- 	chipid = adreno_gpu->rev.core << 24;
- 	chipid |= adreno_gpu->rev.major << 16;
- 	chipid |= adreno_gpu->rev.minor << 12;
++	/* Make sure the above writes go through */
++	wmb();
++
+ 	/* Halt the gmu cm3 core */
+ 	gmu_write(gmu, REG_A6XX_GMU_CM3_SYSRESET, 1);
+ 
 
 -- 
 2.41.0
