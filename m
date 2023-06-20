@@ -2,92 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7104E73778F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71642737794
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjFTWnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 18:43:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46162 "EHLO
+        id S229978AbjFTWoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 18:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjFTWnQ (ORCPT
+        with ESMTP id S229854AbjFTWoS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 18:43:16 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E24010F4;
-        Tue, 20 Jun 2023 15:43:15 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-54fb23ff7d3so2576040a12.0;
-        Tue, 20 Jun 2023 15:43:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687300995; x=1689892995;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eaYNclQnysW8nQnar7C7SNLx+8CEj4DfdAfuicOOpRI=;
-        b=pU1baukBRjTQQYBYuAPLDBi9RVpOsHukczl2Ko8po1D4gQBMI0/cOfoaiNwcnEpfWh
-         bDbuAjk0QZ2Vk76QXFAoH5Tk3W4uLsT9ofwXrbUXeUyStOdqNLgEXtQ5GV/UNz4dxwjk
-         YJjsnZa+UdaznDag0Q8AmQDqOlv+fzYe3M47LPBmBUaNiItAyJLrbbJ47gGJxFMjzMNJ
-         wCzeKf+/KIlPTVos5YnwVnjNAjwdR60eeKUjL5dOr59EJ80yvJF/yECtOlFCJyahyyuc
-         DDHLe8WOkzJshBC6Ci8bo9LR0vrRAfdTDJNEGxuehRtDew27gSVsIyD5Svu+Gy2Cgk9z
-         5Szg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687300995; x=1689892995;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eaYNclQnysW8nQnar7C7SNLx+8CEj4DfdAfuicOOpRI=;
-        b=cANFj38cHFW2kK2nNvI2cgJf+OPmbKeI46Uv94dpkan8BNFzHL7UO7rEKt8BC/5tQf
-         QWZ1rUefm/zsQ7KUPdyBGYtPWR0jVrAyEzsdc12B60Xw/JLppL0fw03X4pa21Y0xS9+S
-         UrCCTTUv98u7eTGRhY9cPgzrHNNyzcSLB2Zic/8G+MJl79Z7jFQYV97qTxJYwFoW6sgZ
-         nWCFSRxooackI0d0Y2iES+F7sZt7TFBOeoTdmFSvSp3JxszY4dFQm2NQgl5qAeClq85a
-         XQC+hcL3CoV7479S4WN2cC1mMutR6tx1yCPkpXuVXvO9bYRPMrIFm/zv37in/HNAsmhN
-         18tg==
-X-Gm-Message-State: AC+VfDx2JPpiyScKpu42+FNCwukTmUrKR3GrkXjDd2LMexDbwjmwSmeu
-        dYEB6d2udEDcbIIKR6XMerk=
-X-Google-Smtp-Source: ACHHUZ6PT3wFSpXI54qDT4ka+RjCbfE7gmAYYq8N9vr80n2sSwbgap4WDNDBvflyXbo3TigjY3kbiQ==
-X-Received: by 2002:a17:90a:d90b:b0:256:dbfb:9b5e with SMTP id c11-20020a17090ad90b00b00256dbfb9b5emr8004910pjv.29.1687300994854;
-        Tue, 20 Jun 2023 15:43:14 -0700 (PDT)
-Received: from smtpclient.apple ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id il8-20020a17090b164800b0025b83c6227asm1956348pjb.3.2023.06.20.15.43.13
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 20 Jun 2023 15:43:14 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.600.7\))
-Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <bf22d1d1-ed6b-422d-9ea8-f778be841d8d@app.fastmail.com>
-Date:   Tue, 20 Jun 2023 15:43:02 -0700
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        "hch@infradead.org" <hch@infradead.org>,
-        linux-mm <linux-mm@kvack.org>, Kees Cook <keescook@chromium.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <E6B85BE5-10E8-4532-B599-1ACB83097A62@gmail.com>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-8-kent.overstreet@linux.dev>
- <ZJAdhBIvwFBOFQU/@FVFF77S0Q05N>
- <20230619104717.3jvy77y3quou46u3@moria.home.lan>
- <ZJBOVsFraksigfRF@FVFF77S0Q05N.cambridge.arm.com>
- <20230619191740.2qmlza3inwycljih@moria.home.lan>
- <5ef2246b-9fe5-4206-acf0-0ce1f4469e6c@app.fastmail.com>
- <20230620180839.oodfav5cz234pph7@moria.home.lan>
- <dcf8648b-c367-47a5-a2b6-94fb07a68904@app.fastmail.com>
- <37d2378e-72de-e474-5e25-656b691384ba@intel.com>
- <ff2006db-cd13-48c4-bc5b-1864f9ec9149@app.fastmail.com>
- <bf22d1d1-ed6b-422d-9ea8-f778be841d8d@app.fastmail.com>
-To:     Andy Lutomirski <luto@kernel.org>
-X-Mailer: Apple Mail (2.3731.600.7)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        Tue, 20 Jun 2023 18:44:18 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839A410F1;
+        Tue, 20 Jun 2023 15:44:14 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qm1s60M7Vz4wjD;
+        Wed, 21 Jun 2023 08:44:09 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1687301050;
+        bh=8MLzFgiZMqNPwZbnm6qtkPaARcc8RTEAjJoFn1BS6XA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mfc2DHqUh+oraUKnfuTT2N8G012QEWJIuSWOYT8Qc5pw4ymJw+rHtmHI2kx4JDBWJ
+         PoCBQMoSOY4S5lstsNk/DZDHMwsulyXFem7kg0UFoSzbeu6gQ/u4QjkwlHNwEZDj14
+         7LrsV2NSjT732K/A7/skMxxy6iubtokFJxsPK4L/tavMA/HJ3fPg0u9TNra/aEmYek
+         b/AOicd5liSfy71EB8QgNBA2h9+8n/4XbHv4yFv+fMTfPPRaQ2B9d+aS1SrDdlJtis
+         mfp/rVPaXFZUMJfQCgsUF7xTATIUf2XVtEJ8qHRN+jxw6loXHyYUrJ6clVxAYJjfc8
+         9azTZ7oRJcGqQ==
+Date:   Wed, 21 Jun 2023 08:43:55 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the loongarch tree
+Message-ID: <20230621084355.13df7a8c@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/Bjceb8tXi_taZ5FJgBXOb56";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,40 +50,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/Bjceb8tXi_taZ5FJgBXOb56
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> On Jun 20, 2023, at 3:32 PM, Andy Lutomirski <luto@kernel.org> wrote:
->=20
->> // out needs to be zeroed first
->> void unpack(struct uncompressed *out, const u64 *in, const struct=20
->> bitblock *blocks, int nblocks)
->> {
->>    u64 *out_as_words =3D (u64*)out;
->>    for (int i =3D 0; i < nblocks; i++) {
->>        const struct bitblock *b;
->>        out_as_words[b->target] |=3D (in[b->source] & b->mask) <<=20
->> b->shift;
->>    }
->> }
->>=20
->> void apply_offsets(struct uncompressed *out, const struct =
-uncompressed *offsets)
->> {
->>    out->a +=3D offsets->a;
->>    out->b +=3D offsets->b;
->>    out->c +=3D offsets->c;
->>    out->d +=3D offsets->d;
->>    out->e +=3D offsets->e;
->>    out->f +=3D offsets->f;
->> }
->>=20
->> Which generates nice code: https://godbolt.org/z/3fEq37hf5
->=20
-> Thinking about this a bit more, I think the only real performance =
-issue with my code is that it does 12 read-xor-write operations in =
-memory, which all depend on each other in horrible ways.
+Hi all,
 
-If you compare the generated code, just notice that you forgot to =
-initialize b in unpack() in this version.
+Commit
 
-I presume you wanted it to say "b =3D &blocks[i]=E2=80=9D.
+  c976fff79c12 ("LoongArch: Add kernel address sanitizer support")
 
+is missing a Signed-off-by from its committer.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/Bjceb8tXi_taZ5FJgBXOb56
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSSK6sACgkQAVBC80lX
+0GxNnQf+PbzXUogN5w6L739TuZ39mxy4mUmeMadufhTNEAcxpjsuMPI/3Gi32fuA
+/f4PB9CrMxssgEPw5nX4Zp5Y1etvVIp0I+hcsnbKipIjhNYQApRQuATBx48K4wCg
+NJDDxgiwANjYwKKNh+6dUR//1uLfYZQBigxUqwBm3YTbvy9D6Rd5UehVC88u1GnY
+eO+Akk3vY9//fgShwnvg38Q+QClJ2alLBaZDVbrhF/vm2Fmk35JdsNaqdS9LHDxJ
+rKVKlRwp+ff/TFsgevqmmt3DmK7qM4T6csjdZxHvCLiRyv6lEeQsGTR6w3/VQSnJ
+T1eaECwICeNig3QCf+oO+jss/kDGNQ==
+=gJbK
+-----END PGP SIGNATURE-----
+
+--Sig_/Bjceb8tXi_taZ5FJgBXOb56--
