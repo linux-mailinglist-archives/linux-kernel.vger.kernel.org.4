@@ -2,177 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE907736456
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C50673645D
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231131AbjFTHUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 03:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60932 "EHLO
+        id S231166AbjFTHVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 03:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229758AbjFTHUH (ORCPT
+        with ESMTP id S229758AbjFTHVg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 03:20:07 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE72EEA;
-        Tue, 20 Jun 2023 00:20:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687245605; x=1718781605;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AQehVaXeVezyZ1EIIBMhF2TW21RUDUgTxTT8HfMhib8=;
-  b=fdZg7NIB2VZbwrvnaHZI36LOXosRBWnX8EvqGQkHpLE5sqbsMBhv7muk
-   nFcZ2mhZymkoeMKbUWzJsqiD0744zpW0BvK4SBtSE8fO/zpsl+uKCXTIJ
-   wFMOs9DLvDPgDUmtcQdXLbfmmqesHLl5izv2l0gUvVRwk+AK7E0CNtHez
-   SxYxglCi1nmmpRrA/cNkmsyU01Je0xq0siELzwNKHqFhIDThm1U9CZKC1
-   /pzn3H5aKwgFJ99MBVtJX8/i0akDcoR8sMxQfTD8ApSWv1XgME+Usb3S2
-   A0GqdhDvJX4MMkLEbyY42Jo9y15LLO37UgOBMfSfaP/0qyf10xzLwjsZK
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="358657019"
-X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="358657019"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 00:20:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="803839635"
-X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="803839635"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Jun 2023 00:20:01 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qBVei-0005dS-2W;
-        Tue, 20 Jun 2023 07:20:00 +0000
-Date:   Tue, 20 Jun 2023 15:18:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     oe-kbuild-all@lists.linux.dev, Jonathan Marek <jonathan@marek.ca>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        freedreno@lists.freedesktop.org
-Subject: Re: [PATCH v3 2/6] drm/msm/a6xx: Use descriptive bitfield names for
- CP_PROTECT_CNTL
-Message-ID: <202306201502.pisn6tpR-lkp@intel.com>
-References: <20230517-topic-a7xx_prep-v3-2-a3ce3725385b@linaro.org>
+        Tue, 20 Jun 2023 03:21:36 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71A26E7;
+        Tue, 20 Jun 2023 00:21:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=uYLeKz7CtPLIuBievrQxgmZUSwGBkqjnNayiyMmgK3M=; b=jcPw1aVbWJ4FXuugKXEX0kTRZj
+        RffNTyB0eEcsVpSmqG2B7rIhT84FlDdB3ule03g1AfNUBsjktvGUbFT4736H3oNVkkKcSH7f8uO7Y
+        w1DBjsmNPR3i7AG+nMWNDuDcNokDha6GNQDsG7VkYzlJ10XXIygkXWKGf83NwQ1JMHQdjl3WgUtZg
+        C5NeDJLZbNqrsPwhtay5wpS3zswXL22SgbyZjwu1JHS+rmXDSx4wrZddK9Jk3Q/hw6R+ezpGc+ZFv
+        CtGNfTUPowA7O9w5Gosgrw5k3fWeIvXSi7PA+CeXifr+kVyBf54oE59kOZ1HMQQOYX46Xk/bhJmw7
+        SMGsgLFA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qBVfV-00Fxtf-2Q;
+        Tue, 20 Jun 2023 07:20:50 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C789A30020B;
+        Tue, 20 Jun 2023 09:20:47 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 4AF2F21440F48; Tue, 20 Jun 2023 09:20:47 +0200 (CEST)
+Date:   Tue, 20 Jun 2023 09:20:47 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Xin Li <xin3.li@intel.com>
+Cc:     linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        iommu@lists.linux.dev, linux-hyperv@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, x86@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, steve.wahl@hpe.com,
+        mike.travis@hpe.com, dimitri.sivanich@hpe.com,
+        russ.anderson@hpe.com, dvhart@infradead.org, andy@infradead.org,
+        joro@8bytes.org, suravee.suthikulpanit@amd.com, will@kernel.org,
+        robin.murphy@arm.com, kys@microsoft.com, haiyangz@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, dwmw2@infradead.org,
+        baolu.lu@linux.intel.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        seanjc@google.com, jiangshanlai@gmail.com, jgg@ziepe.ca,
+        yangtiezhu@loongson.cn
+Subject: Re: [PATCH 2/3] x86/vector: Replace IRQ_MOVE_CLEANUP_VECTOR with a
+ timer callback
+Message-ID: <20230620072047.GS4253@hirez.programming.kicks-ass.net>
+References: <20230619231611.2230-1-xin3.li@intel.com>
+ <20230619231611.2230-3-xin3.li@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230517-topic-a7xx_prep-v3-2-a3ce3725385b@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230619231611.2230-3-xin3.li@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Konrad,
+On Mon, Jun 19, 2023 at 04:16:10PM -0700, Xin Li wrote:
 
-kernel test robot noticed the following build errors:
+> +/*
+> + * Called with vector_lock held
+> + */
 
-[auto build test ERROR on 47045630bc409ce6606d97b790895210dd1d517d]
+Instead of comments like that, I tend to add a lockdep_assert*()
+statement to the same effect. Which unlike comment actually validate the
+claim and since it's code it tends to not go stale like comments do.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Konrad-Dybcio/drm-msm-a6xx-Add-some-missing-header-definitions/20230620-004639
-base:   47045630bc409ce6606d97b790895210dd1d517d
-patch link:    https://lore.kernel.org/r/20230517-topic-a7xx_prep-v3-2-a3ce3725385b%40linaro.org
-patch subject: [PATCH v3 2/6] drm/msm/a6xx: Use descriptive bitfield names for CP_PROTECT_CNTL
-config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20230620/202306201502.pisn6tpR-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230620/202306201502.pisn6tpR-lkp@intel.com/reproduce)
+> +static void __vector_cleanup(struct vector_cleanup *cl, bool check_irr)
+>  {
+>  	struct apic_chip_data *apicd;
+>  	struct hlist_node *tmp;
+> +	bool rearm = false;
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306201502.pisn6tpR-lkp@intel.com/
+	lockdep_assert_held(&vector_lock);
 
-All errors (new ones prefixed by >>):
-
-   drivers/gpu/drm/msm/adreno/a6xx_gpu.c: In function 'a6xx_set_cp_protect':
->> drivers/gpu/drm/msm/adreno/a6xx_gpu.c:934:19: error: 'A6XX_CP_PROTECT_CNTL_ACCESS_PROT_EN' undeclared (first use in this function)
-     934 |                   A6XX_CP_PROTECT_CNTL_ACCESS_PROT_EN |
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/gpu/drm/msm/adreno/a6xx_gpu.c:934:19: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/gpu/drm/msm/adreno/a6xx_gpu.c:935:19: error: 'A6XX_CP_PROTECT_CNTL_ACCESS_FAULT_ON_VIOL_EN' undeclared (first use in this function)
-     935 |                   A6XX_CP_PROTECT_CNTL_ACCESS_FAULT_ON_VIOL_EN |
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/msm/adreno/a6xx_gpu.c:936:19: error: 'A6XX_CP_PROTECT_CNTL_LAST_SPAN_INF_RANGE' undeclared (first use in this function)
-     936 |                   A6XX_CP_PROTECT_CNTL_LAST_SPAN_INF_RANGE);
-         |                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for SM_GCC_8350
-   Depends on [n]: COMMON_CLK [=y] && COMMON_CLK_QCOM [=m] && (ARM64 || COMPILE_TEST [=n])
-   Selected by [m]:
-   - SM_VIDEOCC_8350 [=m] && COMMON_CLK [=y] && COMMON_CLK_QCOM [=m]
-   WARNING: unmet direct dependencies detected for SM_GCC_8450
-   Depends on [n]: COMMON_CLK [=y] && COMMON_CLK_QCOM [=m] && (ARM64 || COMPILE_TEST [=n])
-   Selected by [m]:
-   - SM_GPUCC_8450 [=m] && COMMON_CLK [=y] && COMMON_CLK_QCOM [=m]
-   - SM_VIDEOCC_8450 [=m] && COMMON_CLK [=y] && COMMON_CLK_QCOM [=m]
-   WARNING: unmet direct dependencies detected for SM_GCC_8550
-   Depends on [n]: COMMON_CLK [=y] && COMMON_CLK_QCOM [=m] && (ARM64 || COMPILE_TEST [=n])
-   Selected by [m]:
-   - SM_GPUCC_8550 [=m] && COMMON_CLK [=y] && COMMON_CLK_QCOM [=m]
-   - SM_VIDEOCC_8550 [=m] && COMMON_CLK [=y] && COMMON_CLK_QCOM [=m]
-
-
-vim +/A6XX_CP_PROTECT_CNTL_ACCESS_PROT_EN +934 drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-
-   899	
-   900	static void a6xx_set_cp_protect(struct msm_gpu *gpu)
-   901	{
-   902		struct adreno_gpu *adreno_gpu = to_adreno_gpu(gpu);
-   903		const u32 *regs = a6xx_protect;
-   904		unsigned i, count, count_max;
-   905	
-   906		if (adreno_is_a650(adreno_gpu)) {
-   907			regs = a650_protect;
-   908			count = ARRAY_SIZE(a650_protect);
-   909			count_max = 48;
-   910			BUILD_BUG_ON(ARRAY_SIZE(a650_protect) > 48);
-   911		} else if (adreno_is_a690(adreno_gpu)) {
-   912			regs = a690_protect;
-   913			count = ARRAY_SIZE(a690_protect);
-   914			count_max = 48;
-   915			BUILD_BUG_ON(ARRAY_SIZE(a690_protect) > 48);
-   916		} else if (adreno_is_a660_family(adreno_gpu)) {
-   917			regs = a660_protect;
-   918			count = ARRAY_SIZE(a660_protect);
-   919			count_max = 48;
-   920			BUILD_BUG_ON(ARRAY_SIZE(a660_protect) > 48);
-   921		} else {
-   922			regs = a6xx_protect;
-   923			count = ARRAY_SIZE(a6xx_protect);
-   924			count_max = 32;
-   925			BUILD_BUG_ON(ARRAY_SIZE(a6xx_protect) > 32);
-   926		}
-   927	
-   928		/*
-   929		 * Enable access protection to privileged registers, fault on an access
-   930		 * protect violation and select the last span to protect from the start
-   931		 * address all the way to the end of the register address space
-   932		 */
-   933		gpu_write(gpu, REG_A6XX_CP_PROTECT_CNTL,
- > 934			  A6XX_CP_PROTECT_CNTL_ACCESS_PROT_EN |
- > 935			  A6XX_CP_PROTECT_CNTL_ACCESS_FAULT_ON_VIOL_EN |
- > 936			  A6XX_CP_PROTECT_CNTL_LAST_SPAN_INF_RANGE);
-   937	
-   938		for (i = 0; i < count - 1; i++)
-   939			gpu_write(gpu, REG_A6XX_CP_PROTECT(i), regs[i]);
-   940		/* last CP_PROTECT to have "infinite" length on the last entry */
-   941		gpu_write(gpu, REG_A6XX_CP_PROTECT(count_max - 1), regs[i]);
-   942	}
-   943	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +	hlist_for_each_entry_safe(apicd, tmp, &cl->head, clist) {
+>  		unsigned int irr, vector = apicd->prev_vector;
+>  
+>  		/*
+>  		 * Paranoia: Check if the vector that needs to be cleaned
+> +		 * up is registered at the APICs IRR. That's clearly a
+> +		 * hardware issue if the vector arrived on the old target
+> +		 * _after_ interrupts were disabled above. Keep @apicd
+> +		 * on the list and schedule the timer again to give the CPU
+> +		 * a chance to handle the pending interrupt.
+> +		 *
+> +		 * Do not check IRR when called from lapic_offline(), because
+> +		 * fixup_irqs() was just called to scan IRR for set bits and
+> +		 * forward them to new destination CPUs via IPIs.
+>  		 */
+> +		irr = check_irr ? apic_read(APIC_IRR + (vector / 32 * 0x10)) : 0;
+>  		if (irr & (1U << (vector % 32))) {
+> +			pr_warn_once("Moved interrupt pending in old target APIC %u\n", apicd->irq);
+> +			rearm = true;
+>  			continue;
+>  		}
+>  		free_moved_vector(apicd);
+>  	}
+>  
+> +	/*
+> +	 * Must happen under vector_lock to make the timer_pending() check
+> +	 * in __vector_schedule_cleanup() race free against the rearm here.
+> +	 */
+> +	if (rearm)
+> +		mod_timer(&cl->timer, jiffies + 1);
+> +}
+> +
+> +static void vector_cleanup_callback(struct timer_list *tmr)
+> +{
+> +	struct vector_cleanup *cl = container_of(tmr, typeof(*cl), timer);
+> +
+> +	/* Prevent vectors vanishing under us */
+> +	raw_spin_lock_irq(&vector_lock);
+> +	__vector_cleanup(cl, true);
+> +	raw_spin_unlock_irq(&vector_lock);
+>  }
