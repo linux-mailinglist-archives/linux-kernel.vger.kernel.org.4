@@ -2,194 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 922E47363E2
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 08:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB37B7363E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 08:58:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230195AbjFTG51 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 02:57:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
+        id S230231AbjFTG6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 02:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229693AbjFTG5Z (ORCPT
+        with ESMTP id S229693AbjFTG6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 02:57:25 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF502115;
-        Mon, 19 Jun 2023 23:57:23 -0700 (PDT)
+        Tue, 20 Jun 2023 02:58:07 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D067310E0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 23:58:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687244244; x=1718780244;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=qm1l+wzkw9wn1NvzcISs+C+GjiI6VTcMmagcAwaMrCs=;
-  b=SSpfx6MoXHfKuqpkkY9UbYojANYdmx3lp1qvA6IWum1yaCfgFmxYeKss
-   pnMMCPc/Se6NWINJEHeDWXMCYcnXos/Y/deutoMrqACD+9KaRxqZmPIro
-   VfmOIN2t2+GLdU0EDlbOdc6YL3s+MyxyWHKb6bHNxx3tE0BIxGHtHkDKP
-   Upq8BDU9dMwJAcTI9rGxOts8/K4iVE7YUovULoggPQqcuS4CH+c1ggBPf
-   SpMyd770WkL05Sa90OCAt/PrGBzQy0dG1bkAdA3p9tRIc3RfGQwIbGFYD
-   trAHzm91Lgt82QDCHFXt69bxpTkmicHU30h1vCQ6ItW26rv6MqXvptEjp
+  t=1687244282; x=1718780282;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=llTCWhOhR58T/sQpxEMD9zJnBcRiKi5Uwg2/ZHUp1zU=;
+  b=Dwp2s39jN0LCqHK7XDPmz6aQ0CsN3OPfV6yf0ZTpWcKkH2FJY3iqxGkR
+   4288EteTXsNoOH6aU2dPNuPPQBRzToVv3BpTIpp2dggi3We6RhGXLQHGK
+   GHzUBsVH5PreeJenWUYxwPNfnZYjJ7ROaWb+T8uVa4O8Vj9Srcy/sUqld
+   COIZP/nPwFqGvsgZoyXU4cYsYbgTCM7N5pNanRsy0J8DbwWfaDV5CrVLn
+   yl5ZnbIbmFSzYE5ZCHfHfoCIkRSGtlqkVtFBmvBbStKi4g7Sr6MQ1Btnh
+   b+eUf0+9XzhG9OF8F0a+MUXl/8EtHqf0czBl7k0k+lQ1Eg9TZehpCsOwu
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="362325053"
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="344527437"
 X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="362325053"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 23:57:19 -0700
+   d="scan'208";a="344527437"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 23:58:02 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="888141718"
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="838104196"
 X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="888141718"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga005.jf.intel.com with ESMTP; 19 Jun 2023 23:57:09 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 19 Jun 2023 23:57:09 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 19 Jun 2023 23:57:09 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.107)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 19 Jun 2023 23:57:08 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g+vCjgS4YMJY3j1aUcbJwsrQHxTxB9wuCkv+rQCvdCRIDxBHOEBK46IIY7py3CZQh3R8WpTFwJp8MQu67dIY0ehExSn6outyW+QdZcRxLgr0PkdB2Od08IwlXNf9Lg7yXXh9N7gOd4qCFPv0wWU36eOwrC9Ug14bT1XMZ/+C0iU/gdTl+76SZk+WorRId7nsr+UfRSZFFhdPu8V8KRnRQafLq9ioBQLXe22N1lZFa5Q6cF/z2cJ4UH+g6ziXOAbHPxDKnUFz4PI4m6q/NY7lBWiaEGnvCUz7mXq002odwSgOJpFAyYH/K/dtsa2lD0MgSSg0ec8Ld28sLgl0IGeciA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qm1l+wzkw9wn1NvzcISs+C+GjiI6VTcMmagcAwaMrCs=;
- b=X2ZHa2ASBi1KAwknvvJPZ0q/Fs9K8d3Dx+DtKgVt1jghsKwCg6SvOo542n9dTn5qoF0NZXG8Mc9J6V7IC33RMfA8bWMtBdTf+CoLmTx10cp4f1keQi+BEeGe451AMy1zz76X5m1aUgyN65j0D2vhLN8adBa0dvxzojZiUn/AMZhqGbv2dnATBLjmKovdh9hq/eBAWRjByGwW7TIrKNCne6MFfIdefouGU58XW7O9FV2bSB342MnT11BUILxuNBpWochDehfPiKlfBGP9GpDLdRx3tPzAxuKXTQw8ArrYPX4TRmBoBIBezTrW+wGnX2j5LDF5QRxB0/QCyZfam6elZg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM6PR11MB4316.namprd11.prod.outlook.com (2603:10b6:5:205::16)
- by PH0PR11MB4805.namprd11.prod.outlook.com (2603:10b6:510:32::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Tue, 20 Jun
- 2023 06:57:07 +0000
-Received: from DM6PR11MB4316.namprd11.prod.outlook.com
- ([fe80::9358:a28d:ae08:7ab8]) by DM6PR11MB4316.namprd11.prod.outlook.com
- ([fe80::9358:a28d:ae08:7ab8%4]) with mapi id 15.20.6500.036; Tue, 20 Jun 2023
- 06:57:07 +0000
-From:   "Wu, Wentong" <wentong.wu@intel.com>
-To:     Oliver Neukum <oneukum@suse.com>, "Ye, Xiang" <xiang.ye@intel.com>
-CC:     Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        "Lee Jones" <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
-        "Zhang, Lixu" <lixu.zhang@intel.com>
-Subject: RE: [PATCH v8 5/6] i2c: Add support for Intel LJCA USB I2C driver
-Thread-Topic: [PATCH v8 5/6] i2c: Add support for Intel LJCA USB I2C driver
-Thread-Index: AQHZhDKi+nLCjzIaUUmpTtrnIK8VLK9mHSqAgC1irkA=
-Date:   Tue, 20 Jun 2023 06:57:07 +0000
-Message-ID: <DM6PR11MB431671A0D56D284625ECD4FD8D5CA@DM6PR11MB4316.namprd11.prod.outlook.com>
-References: <20230511175844.185070-1-xiang.ye@intel.com>
- <20230511175844.185070-6-xiang.ye@intel.com>
- <a33654a6-71e0-07ac-a612-b1f7aedebb36@suse.com>
-In-Reply-To: <a33654a6-71e0-07ac-a612-b1f7aedebb36@suse.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM6PR11MB4316:EE_|PH0PR11MB4805:EE_
-x-ms-office365-filtering-correlation-id: d072b0f4-7297-434d-5fef-08db715b8fd7
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9+LJ0VXTz1MyiQ5NixZSZJIfX0hAPYlMOq/B45HOaWjMV+eweMoiH8vBJhBsBK9FOedEqqjI36YkBuz4jv8oEkrPi3i2BMYku4ELxkX3oIPCN8id53qUzkKRVDmb5t6TgjE/jWlrd9RT1WP3dWtWdJuQvqKP/lYhiMy0Kk0PMwlELiyxvH/dTRIPT4FE0PlCu6wB8Y2DqKrCaelZZQl8EPsczKjNvyrYSEooPxGbxm4NxqdC/SspkzGWCEiM4JULh3KmdTIBZ9g0TYLv353gMSav+fzUOmE0PStOZz1P+NvWwSx9V8DokEych/fZ7kz98mUGFx4KKQfv4+f1peen9YKXwktoqkBDWUwFs26dsgCPbYKMx3nPxSPqwO5aoH9y6NbaPofBM0rCVnrUHwh5JMVGG0GsvhaEbkcgRhg276EObBcgvay4MRZGyq04aoXg2vQYrJyknSoOTD0WU9nBMl3WilqgWs1UMSdFzje6+GdkORjDDPE8aVaoNpVRNrguAnBfzqat3A00b351y/w5xnAnjlCOeER/I7B5XzNO6FMCMlVoZtHo0khRO9RvhD0UBCvAkVKvl5YNzMsJkxtJ/ZCMOOQrnOg7+fL2Us3pbORjgAt80vHgPeNRD01Nl4ql
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4316.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(376002)(39860400002)(366004)(396003)(346002)(451199021)(71200400001)(7696005)(478600001)(33656002)(186003)(9686003)(6506007)(83380400001)(53546011)(26005)(38100700002)(86362001)(38070700005)(122000001)(82960400001)(55016003)(8936002)(52536014)(8676002)(5660300002)(316002)(2906002)(4744005)(4326008)(76116006)(6636002)(64756008)(66446008)(66476007)(66556008)(66946007)(41300700001)(7416002)(54906003)(110136005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VHl0WU9yVkVBeU9tNXo1WTc1OGgzNGxISCtkS3lnZHNJN01IaFY5dXlMUk1z?=
- =?utf-8?B?ZWw0MjYyM0VacGN0MHZnYTdmVTF4dWU4OXlqR001NnZBdFUvNS9SRm91dHlh?=
- =?utf-8?B?NnBhdjluTWs2TklXSi9GLzFWOFltQ1RaeHc2UTNJa0w3aVliYTBjZ1R5cjFT?=
- =?utf-8?B?TjdLMGhNS21tY0FReUxBYWF5K2doWUd3K2dxZU1JUzI5eUd6WElSa0lYUGtZ?=
- =?utf-8?B?V1R5d09aWFNrd1pITlFYU2JsOGxhaXpmMVpWMjZDWWJ0U0dLS1pqSGVOY0Yx?=
- =?utf-8?B?Sk9HNFdGZDl1eXdvRWRIVllCaU43cnIvVHN6N09HMmtscUNpT3B0WktONkRP?=
- =?utf-8?B?a2FmVUp1a2h0L25HaE5ERGh6NVBxQ0J5TVluWkxYelB1amxWS2ttZDZ4cE5H?=
- =?utf-8?B?dnMxb1M2UVo3UkNRVUFrdDVyY2RLUWVYNHJVa3RkM2ZsdzFMeDhmMEJUVGtH?=
- =?utf-8?B?eS9NU3FIL0M5QVN4K21iRDQ0TFVPUHViNUI1bWxKNnd0b1hpWmIwUis5RWFk?=
- =?utf-8?B?YlAxRGxqcWthR2xCemo4U2lzaUhsWGRwSFE0eXV2cklSVks4bElvZkRldG5E?=
- =?utf-8?B?NUhmV0IvTEtROE9KTnkwaXJKMDZISFc2TjhDTlRUTzMvOW90R2NQcXF1bmpy?=
- =?utf-8?B?bEFPa2RpVE53Y2RTenpUYUZHdzlkTkg2ZURlUWs3NFZUMHBQRC9kUzY2bjJG?=
- =?utf-8?B?dUFwL0FKWTkzYVo1aWZ5RU5DNjN4MU9Nd0ZKNUxOejExd2hzT3NXNjZwSlR6?=
- =?utf-8?B?bWdGbG1NSFY5SHVobXlGMFpFaGxnUDVvUGI5UVVxTUwvcG1YVU4zbk5GdDUz?=
- =?utf-8?B?MDZPSzlkajRZbXFsaE1PcHlqZXJLOGlsNDJzQ0ErR1ljUisveWJYMXpON1VV?=
- =?utf-8?B?R00zY29kYnlGcDJUbmpUSVZTcG41TmZGdzlNbmNVdlNuQ0tWazJabksyaC9N?=
- =?utf-8?B?Ym5WV3ljQjh6eUgrMGhiTENEbXJEOEloem1oU2lhTVpacHY5ZWxpcWJIdk41?=
- =?utf-8?B?aEFYaEFyZTJRMHJOUDAwOFRyR09mK0JZMnpJUjdoemNKSXN2THZMTE1KMEhJ?=
- =?utf-8?B?WEdTVHV1OWZBZ2F6MHg3dGxXQ0pMcmloZFdXSVZNTjdnYkRYaTN0elhqeGtP?=
- =?utf-8?B?VkVTcVpmdEZMSTl4YXFwMlVDUGM1amhQR2hTQUZrT2xWaVJockJpQ3hjbTUv?=
- =?utf-8?B?SXAvK2I2Vm5VZjBwcGh4bGJPVllCTWh4djFxYithY1ZLU1piWi9LYXVBOHI3?=
- =?utf-8?B?WURoZ1ljUnk1eW5xT0xsWnNiUDI4U0d5SUgzOWkxdmVEakw0dmRzSTNzUnlP?=
- =?utf-8?B?V0ZaRUxXT1dOUk9KcVQydzZBdmN0SGNQaU1PdGNBL2xOYWxNZUd0WlJUU3Ex?=
- =?utf-8?B?dUpWeHNkbnRmRGFzeTFTU2tlZmZkRktWalBIKzJINmppZXg5V0t6cG1wd0RI?=
- =?utf-8?B?YjBIVnZrZmR5L05vUncyNzdQanZzNzBEVzZJdHZVZ1BWQnRpVWpzMXA2VVBo?=
- =?utf-8?B?VHByMFdUZkwwV2Z1MGx6NzRaRW1YN0E4ZVA2NkpmYXpKTWtaRlpvTzB3SmRu?=
- =?utf-8?B?b3hDY0tMREtjVFlIVGJucUREWG1zR1ExckJYOERaelk3N3BqeE1ocGk3QkI1?=
- =?utf-8?B?QTE5LzZ2N0NqalBSWWtFb3BESnY4SWYvd09UZTcyZE1hRXcvejY1cVI0TDE2?=
- =?utf-8?B?NURSbGNWL2ord3JOY0dzekRBMmplaWdBTmdDbHJBNCsvTktsNEZsT2E5T2F2?=
- =?utf-8?B?K3VsZ0VLU3hXUWhvV2kzZlJBUUgzbjBpVE1NK2RSam1KdXYxeWZHRFYvelRE?=
- =?utf-8?B?V2JQak1ERFBVeUFDeWVmbWRWK3Z6MmdaL1VFbERZcUpTdnd1MW5ERUZlSWY4?=
- =?utf-8?B?aEpqNzVpT1dVaHhwdTZMQW1YWW1jKzVyMU5WSVVCU245cWRycEpYZ2dsYmVT?=
- =?utf-8?B?T3ZhZXVkTTkyMGljcmJHM3I1VXI2Z2psa1VYbGZqWmM5OWQ1cmxQWFVCQ08r?=
- =?utf-8?B?MEhSOGZHMGNQSXBGaW41Tis2SDg1Qnl5YnF2S01CcHN3TFE3MVh3c0JKb3hV?=
- =?utf-8?B?Z25kakZJUm12Z1Z6VGU3RDc5VDU0Z09wRnBzYjlEbkNtaExRalIwZGJoNkV4?=
- =?utf-8?Q?1vrhDw+NXycJF6kjWgV1bWqIz?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+   d="scan'208";a="838104196"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 19 Jun 2023 23:58:00 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qBVJQ-0005cG-00;
+        Tue, 20 Jun 2023 06:58:00 +0000
+Date:   Tue, 20 Jun 2023 14:57:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: arch/powerpc/platforms/fsl_uli1575.c:236:39: sparse: sparse:
+ incorrect type in assignment (different address spaces)
+Message-ID: <202306201429.YCHG0znZ-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4316.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d072b0f4-7297-434d-5fef-08db715b8fd7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jun 2023 06:57:07.1659
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iNQ/e9nkfgwi5ZNhCHhqzXsfCNTyrSjx1FrHQXgvDcx9hONnfvha6XrrKTCr1M61Pllkh3nXP/Evp9JUp4D8Sw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4805
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgT2xpdmVyLA0KDQpUaGFua3MgZm9yIHlvdXIgcmV2aWV3Lg0KDQo+IC0tLS0tT3JpZ2luYWwg
-TWVzc2FnZS0tLS0tDQo+IEZyb206IE9saXZlciBOZXVrdW0gPG9uZXVrdW1Ac3VzZS5jb20+DQo+
-IFNlbnQ6IE1vbmRheSwgTWF5IDIyLCAyMDIzIDU6NTAgUE0NCj4gDQo+IE9uIDExLjA1LjIzIDE5
-OjU4LCBZZSBYaWFuZyB3cm90ZToNCj4gPiBJbXBsZW1lbnRzIHRoZSBJMkMgZnVuY3Rpb24gb2Yg
-SW50ZWwgVVNCLUkyQy9HUElPL1NQSSBhZGFwdGVyIGRldmljZQ0KPiA+IG5hbWVkICJMYSBKb2xs
-YSBDb3ZlIEFkYXB0ZXIiIChMSkNBKS4gSXQgY29tbXVuaWNhdGUgd2l0aCBMSkNBIEkyYw0KPiA+
-IG1vZHVsZSB3aXRoIHNwZWNpZmljIHByb3RvY29sIHRocm91Z2ggaW50ZXJmYWNlcyBleHBvcnRl
-ZCBieSBMSkNBIFVTQg0KPiA+IGRyaXZlci4NCj4gDQo+ID4gKy8qIEkyQyBUcmFuc2ZlciAqLw0K
-PiA+ICtzdHJ1Y3QgaTJjX3hmZXIgew0KPiA+ICsJdTggaWQ7DQo+ID4gKwl1OCBzbGF2ZTsNCj4g
-PiArCXUxNiBmbGFnOyAvKiBzcGVlZCwgOC8xNmJpdCBhZGRyLCBhZGRyIGluY3JlYXNlLCBldGMg
-Ki8NCj4gPiArCXUxNiBhZGRyOw0KPiA+ICsJdTE2IGxlbjsNCj4gPiArCXU4IGRhdGFbXTsNCj4g
-PiArfSBfX3BhY2tlZDsNCj4gDQo+IFdoZXJlIGlzIHRoaXMgbmVlZGVkPw0KDQpZZXMsIHlvdSdy
-ZSByaWdodCwgd2UgZG9u4oCZdCBuZWVkIHRoaXMgc3RydWN0dXJlLiBUaGFua3MgDQoNCj4gV2h5
-IGlzIGl0IGRlZmluZWQgX19wYWNrZWQsIHlldCB0aGUgaW50ZXJuYWwgZW5kaWFubmVzcyBpcyBu
-b3QgZGVjbGFyZWQ/DQo+IA0KPiAJUmVnYXJkcw0KPiAJCU9saXZlcg0K
+Hi Pali,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   692b7dc87ca6d55ab254f8259e6f970171dc9d01
+commit: 22fdf79171e8509db54599fd2c05ef0022ee83f5 powerpc/fsl_uli1575: Allow to disable FSL_ULI1575 support
+date:   9 weeks ago
+config: powerpc-randconfig-s043-20230620 (https://download.01.org/0day-ci/archive/20230620/202306201429.YCHG0znZ-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230620/202306201429.YCHG0znZ-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306201429.YCHG0znZ-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> arch/powerpc/platforms/fsl_uli1575.c:236:39: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned char [usertype] *dummy @@     got void [noderef] __iomem * @@
+   arch/powerpc/platforms/fsl_uli1575.c:236:39: sparse:     expected unsigned char [usertype] *dummy
+   arch/powerpc/platforms/fsl_uli1575.c:236:39: sparse:     got void [noderef] __iomem *
+   arch/powerpc/platforms/fsl_uli1575.c:238:39: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected unsigned char [usertype] *dummy @@     got void [noderef] __iomem * @@
+   arch/powerpc/platforms/fsl_uli1575.c:238:39: sparse:     expected unsigned char [usertype] *dummy
+   arch/powerpc/platforms/fsl_uli1575.c:238:39: sparse:     got void [noderef] __iomem *
+>> arch/powerpc/platforms/fsl_uli1575.c:240:38: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected unsigned char const volatile [noderef] [usertype] __iomem *addr @@     got unsigned char [usertype] *dummy @@
+   arch/powerpc/platforms/fsl_uli1575.c:240:38: sparse:     expected unsigned char const volatile [noderef] [usertype] __iomem *addr
+   arch/powerpc/platforms/fsl_uli1575.c:240:38: sparse:     got unsigned char [usertype] *dummy
+>> arch/powerpc/platforms/fsl_uli1575.c:241:41: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got unsigned char [usertype] *dummy @@
+   arch/powerpc/platforms/fsl_uli1575.c:241:41: sparse:     expected void volatile [noderef] __iomem *addr
+   arch/powerpc/platforms/fsl_uli1575.c:241:41: sparse:     got unsigned char [usertype] *dummy
+>> arch/powerpc/platforms/fsl_uli1575.c:338:26: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected restricted __be32 const [usertype] *addr @@     got unsigned int * @@
+   arch/powerpc/platforms/fsl_uli1575.c:338:26: sparse:     expected restricted __be32 const [usertype] *addr
+   arch/powerpc/platforms/fsl_uli1575.c:338:26: sparse:     got unsigned int *
+
+vim +236 arch/powerpc/platforms/fsl_uli1575.c
+
+b66510cb9992d2 Kumar Gala         2007-08-16  217  
+b66510cb9992d2 Kumar Gala         2007-08-16  218  /* We have to do a dummy read on the P2P for the RTC to work, WTF */
+cad5cef62a5a0c Greg Kroah-Hartman 2012-12-21  219  static void quirk_final_uli5249(struct pci_dev *dev)
+b66510cb9992d2 Kumar Gala         2007-08-16  220  {
+b66510cb9992d2 Kumar Gala         2007-08-16  221  	int i;
+b66510cb9992d2 Kumar Gala         2007-08-16  222  	u8 *dummy;
+b66510cb9992d2 Kumar Gala         2007-08-16  223  	struct pci_bus *bus = dev->bus;
+89a74ecccd1f78 Bjorn Helgaas      2010-02-23  224  	struct resource *res;
+1fce2d01dff65a Kumar Gala         2008-10-02  225  	resource_size_t end = 0;
+1fce2d01dff65a Kumar Gala         2008-10-02  226  
+1fce2d01dff65a Kumar Gala         2008-10-02  227  	for (i = PCI_BRIDGE_RESOURCES; i < PCI_BRIDGE_RESOURCES+3; i++) {
+1fce2d01dff65a Kumar Gala         2008-10-02  228  		unsigned long flags = pci_resource_flags(dev, i);
+1fce2d01dff65a Kumar Gala         2008-10-02  229  		if ((flags & (IORESOURCE_MEM|IORESOURCE_PREFETCH)) == IORESOURCE_MEM)
+1fce2d01dff65a Kumar Gala         2008-10-02  230  			end = pci_resource_end(dev, i);
+1fce2d01dff65a Kumar Gala         2008-10-02  231  	}
+b66510cb9992d2 Kumar Gala         2007-08-16  232  
+89a74ecccd1f78 Bjorn Helgaas      2010-02-23  233  	pci_bus_for_each_resource(bus, res, i) {
+89a74ecccd1f78 Bjorn Helgaas      2010-02-23  234  		if (res && res->flags & IORESOURCE_MEM) {
+89a74ecccd1f78 Bjorn Helgaas      2010-02-23  235  			if (res->end == end)
+89a74ecccd1f78 Bjorn Helgaas      2010-02-23 @236  				dummy = ioremap(res->start, 0x4);
+1fce2d01dff65a Kumar Gala         2008-10-02  237  			else
+89a74ecccd1f78 Bjorn Helgaas      2010-02-23  238  				dummy = ioremap(res->end - 3, 0x4);
+b66510cb9992d2 Kumar Gala         2007-08-16  239  			if (dummy) {
+b66510cb9992d2 Kumar Gala         2007-08-16 @240  				in_8(dummy);
+b66510cb9992d2 Kumar Gala         2007-08-16 @241  				iounmap(dummy);
+b66510cb9992d2 Kumar Gala         2007-08-16  242  			}
+b66510cb9992d2 Kumar Gala         2007-08-16  243  			break;
+b66510cb9992d2 Kumar Gala         2007-08-16  244  		}
+b66510cb9992d2 Kumar Gala         2007-08-16  245  	}
+b66510cb9992d2 Kumar Gala         2007-08-16  246  }
+b66510cb9992d2 Kumar Gala         2007-08-16  247  
+b66510cb9992d2 Kumar Gala         2007-08-16  248  DECLARE_PCI_FIXUP_EARLY(PCI_VENDOR_ID_AL, 0x5249, early_uli5249);
+b66510cb9992d2 Kumar Gala         2007-08-16  249  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_AL, 0x1575, quirk_uli1575);
+b66510cb9992d2 Kumar Gala         2007-08-16  250  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_AL, 0x5288, quirk_uli5288);
+b66510cb9992d2 Kumar Gala         2007-08-16  251  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_AL, 0x5229, quirk_uli5229);
+b66510cb9992d2 Kumar Gala         2007-08-16  252  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AL, 0x5249, quirk_final_uli5249);
+b66510cb9992d2 Kumar Gala         2007-08-16  253  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_AL, 0x1575, quirk_final_uli1575);
+1433fa7d8da608 Jason Jin          2008-12-04  254  DECLARE_PCI_FIXUP_RESUME(PCI_VENDOR_ID_AL, 0x5229, quirk_uli5229);
+b66510cb9992d2 Kumar Gala         2007-08-16  255  
+cad5cef62a5a0c Greg Kroah-Hartman 2012-12-21  256  static void hpcd_quirk_uli1575(struct pci_dev *dev)
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  257  {
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  258  	u32 temp32;
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  259  
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  260  	if (!machine_is(mpc86xx_hpcd))
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  261  		return;
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  262  
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  263  	/* Disable INTx */
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  264  	pci_read_config_dword(dev, 0x48, &temp32);
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  265  	pci_write_config_dword(dev, 0x48, (temp32 | 1<<26));
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  266  
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  267  	/* Enable sideband interrupt */
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  268  	pci_read_config_dword(dev, 0x90, &temp32);
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  269  	pci_write_config_dword(dev, 0x90, (temp32 | 1<<22));
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  270  }
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  271  
+cad5cef62a5a0c Greg Kroah-Hartman 2012-12-21  272  static void hpcd_quirk_uli5288(struct pci_dev *dev)
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  273  {
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  274  	unsigned char c;
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  275  
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  276  	if (!machine_is(mpc86xx_hpcd))
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  277  		return;
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  278  
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  279  	pci_read_config_byte(dev, 0x83, &c);
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  280  	c |= 0x80;
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  281  	pci_write_config_byte(dev, 0x83, c);
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  282  
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  283  	pci_write_config_byte(dev, PCI_CLASS_PROG, 0x01);
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  284  	pci_write_config_byte(dev, PCI_CLASS_DEVICE, 0x06);
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  285  
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  286  	pci_read_config_byte(dev, 0x83, &c);
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  287  	c &= 0x7f;
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  288  	pci_write_config_byte(dev, 0x83, c);
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  289  }
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  290  
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  291  /*
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  292   * Since 8259PIC was disabled on the board, the IDE device can not
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  293   * use the legacy IRQ, we need to let the IDE device work under
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  294   * native mode and use the interrupt line like other PCI devices.
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  295   * IRQ14 is a sideband interrupt from IDE device to CPU and we use this
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  296   * as the interrupt for IDE device.
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  297   */
+cad5cef62a5a0c Greg Kroah-Hartman 2012-12-21  298  static void hpcd_quirk_uli5229(struct pci_dev *dev)
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  299  {
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  300  	unsigned char c;
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  301  
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  302  	if (!machine_is(mpc86xx_hpcd))
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  303  		return;
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  304  
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  305  	pci_read_config_byte(dev, 0x4b, &c);
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  306  	c |= 0x10;
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  307  	pci_write_config_byte(dev, 0x4b, c);
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  308  }
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  309  
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  310  /*
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  311   * SATA interrupt pin bug fix
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  312   * There's a chip bug for 5288, The interrupt pin should be 2,
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  313   * not the read only value 1, So it use INTB#, not INTA# which
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  314   * actually used by the IDE device 5229.
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  315   * As of this bug, during the PCI initialization, 5288 read the
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  316   * irq of IDE device from the device tree, this function fix this
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  317   * bug by re-assigning a correct irq to 5288.
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  318   *
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  319   */
+cad5cef62a5a0c Greg Kroah-Hartman 2012-12-21  320  static void hpcd_final_uli5288(struct pci_dev *dev)
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  321  {
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  322  	struct pci_controller *hose = pci_bus_to_host(dev->bus);
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  323  	struct device_node *hosenode = hose ? hose->dn : NULL;
+530210c7814e83 Grant Likely       2013-09-15  324  	struct of_phandle_args oirq;
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  325  	u32 laddr[3];
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  326  
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  327  	if (!machine_is(mpc86xx_hpcd))
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  328  		return;
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  329  
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  330  	if (!hosenode)
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  331  		return;
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  332  
+2361613206e66c Grant Likely       2013-09-15  333  	oirq.np = hosenode;
+2361613206e66c Grant Likely       2013-09-15  334  	oirq.args[0] = 2;
+2361613206e66c Grant Likely       2013-09-15  335  	oirq.args_count = 1;
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  336  	laddr[0] = (hose->first_busno << 16) | (PCI_DEVFN(31, 0) << 8);
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  337  	laddr[1] = laddr[2] = 0;
+2361613206e66c Grant Likely       2013-09-15 @338  	of_irq_parse_raw(laddr, &oirq);
+e6d30ab1e7d128 Grant Likely       2013-09-15  339  	dev->irq = irq_create_of_mapping(&oirq);
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  340  }
+52ddd1cdc92380 Anton Vorontsov    2008-06-12  341  
+
+:::::: The code at line 236 was first introduced by commit
+:::::: 89a74ecccd1f78e51faf6287e5c0e93a92ac096e PCI: add pci_bus_for_each_resource(), remove direct bus->resource[] refs
+
+:::::: TO: Bjorn Helgaas <bjorn.helgaas@hp.com>
+:::::: CC: Jesse Barnes <jbarnes@virtuousgeek.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
