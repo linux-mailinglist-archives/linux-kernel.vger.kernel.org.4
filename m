@@ -2,77 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6992D737672
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 23:12:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A12A8737679
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 23:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbjFTVMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 17:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46510 "EHLO
+        id S229694AbjFTVOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 17:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjFTVMU (ORCPT
+        with ESMTP id S229554AbjFTVOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 17:12:20 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25451988
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:12:16 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id a1e0cc1a2514c-791b8500a21so270486241.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:12:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687295536; x=1689887536;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=aJopb8VA1/D5IZOn/wqbLMk8IC0K1ywAj5CnbTia8Q4=;
-        b=bGzSqG/eJD+Lmz6iezEdxQ5trUo38U5xkNiY0PbVzcuIhuTlBPOFaxRF8myyfQBVEy
-         lrci3tJHhzEa1bHRVr1tWpjaYPgVZxGg++G1qhDIGXT448Y2js4o1YGYDmzfvyEIlfyx
-         zKkidlYu+EVQCKr7JYrNoVOuL9XlHko+olgLAHrbwdZrmdyZhArKp1IY5jLE2CFuXQlA
-         DJ71DPcNpNbNQjBXC/3mhmxrUbc4t0smTOR6NyIwR3F9mOVQjjhunRjfcP73ZhYfeUD8
-         Vn2FlN7F1Xqx0j0rI6JHahiCACwZthtBuJ4qaHYOj6vFioVsM6LfaSdoblno22VruJkD
-         UfIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687295536; x=1689887536;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aJopb8VA1/D5IZOn/wqbLMk8IC0K1ywAj5CnbTia8Q4=;
-        b=aq3U4vDm8s3Q/z36z11pn8X10rZEmvB7jGaqF/2Du2BpUlEux5OwA016Q/rXr7wIcJ
-         ygNtwSZ3tqD6UU7N4/yMxXOHlA+jgoMQMCOxKEb4GBCt1A9qcr11iPZyyVFWHD+4Py7/
-         omacsSHQSYTo9kO63qugPBdCmWocNFXZKpT6FfGW9d0qVV05z5eS+Fh25dQSMQ2Of0jA
-         MnfMPD9jlihDYGMEiKUws8VQFiyQOgEVyUMVYPOHTa6LsHqdC6zogNcJPkZX2VZs/NrE
-         Kjr72wplQOpccw5z2iD+V82q7mnJiYH/WOaoQjm4uXjy6xokHjFAAQSVetUJ48Ygv7bC
-         qPnw==
-X-Gm-Message-State: AC+VfDyVf36SkJ1yHqrMa8FKwBg1E0kMQnWc9RJCaOlnp4iCErE5PxMw
-        LuFOjYv9K3UGpf6Smkr9qUzEHw==
-X-Google-Smtp-Source: ACHHUZ6++vAJnMilyVeqgAWY+CY3TaGCKbukUm7qekdxxXQz//Bu4esTTZYpLckXu3qzU5zIJnU5qw==
-X-Received: by 2002:a67:fbc4:0:b0:43f:4779:49ce with SMTP id o4-20020a67fbc4000000b0043f477949cemr3249133vsr.3.1687295535956;
-        Tue, 20 Jun 2023 14:12:15 -0700 (PDT)
-Received: from fedora (072-189-067-006.res.spectrum.com. [72.189.67.6])
-        by smtp.gmail.com with ESMTPSA id l15-20020ab053cf000000b0078cf32c7d3dsm415147uaa.12.2023.06.20.14.12.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 14:12:15 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 17:12:13 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Cameron <jic23@kernel.org>
-Cc:     linux-iio@vger.kernel.org,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        andy.shevchenko@gmail.com
-Subject: Re: [PATCH] counter: Fix menuconfig "Counter support" submenu
- entries disappearance
-Message-ID: <ZJIWLYtl6BEHfDZQ@fedora>
-References: <20230620170159.556788-1-william.gray@linaro.org>
- <4341aa87-c3b1-b0a4-4f82-c903c3085df3@infradead.org>
+        Tue, 20 Jun 2023 17:14:43 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BBC9E2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:14:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687295681; x=1718831681;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=lpyMpVpgjd4tmVpC7advXYeHhDC6/5DpY8mZm2fkz1E=;
+  b=kBG5l7wD+sfWzNBpjtuSpR2KuOsCl+XbR8tppcR9XGsZ9I4viHjICO8Z
+   Y3DrvFiIDxswiCymMgftYIpsM7e00OY/DjwUTEcLUHt9LsAfQ7AC7IZc7
+   JnIzOk1E7GObd34HzTh9rRCSuTFsY/MQfeu2KN1U+FqQr3ocvnsaRY1W6
+   gqKRF/HWkYA4BC5tfvXOFsM/27KN+ZJgn+M4GbgYla1xvQA3L4YatHRof
+   Gu/+5PgZALLoVOB7Tvu/14tMUc+r/9gV5swGhsJGH5mP73EYcINtPjy50
+   6mlRc1rkx3StKhN5oKltC6OXFmMnXSACBiLMfpBrn0tvyrsH+GJgDNVGg
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="363407869"
+X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
+   d="scan'208";a="363407869"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 14:14:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="960927293"
+X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
+   d="scan'208";a="960927293"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 20 Jun 2023 14:14:39 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qBigR-0006G8-0j;
+        Tue, 20 Jun 2023 21:14:39 +0000
+Date:   Wed, 21 Jun 2023 05:13:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: arch/sparc/kernel/traps_64.c:2839:13: error: no previous prototype
+ for 'trap_init'
+Message-ID: <202306210547.QTEAjNch-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="A4eykhRWKS+hjpBE"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <4341aa87-c3b1-b0a4-4f82-c903c3085df3@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,55 +62,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Rob,
 
---A4eykhRWKS+hjpBE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+FYI, the error/warning still remains.
 
-On Tue, Jun 20, 2023 at 02:00:37PM -0700, Randy Dunlap wrote:
-> Hi,
->=20
-> On 6/20/23 10:01, William Breathitt Gray wrote:
-> > The current placement of the I8254 Kconfig entry results in the
-> > disappearance of the "Counter support" submenu items in menuconfig. Move
-> > the I8254 above the menuconfig COUNTER entry to restore the intended
-> > submenu behavior.
-> >=20
-> > Fixes: d428487471ba ("counter: i8254: Introduce the Intel 8254 interfac=
-e library module")
-> > Reported-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
-> > Closes: https://lore.kernel.org/all/32ddaa7b-53a8-d61f-d526-b545bd56133=
-7@linux.intel.com/
-> > Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
->=20
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
->=20
-> but why is I8254 here at all? Users cannot enable it
-> and nothing selects it.  Is it a WIP?
->=20
-> Thanks.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   99ec1ed7c2ed358280588ab1d013387e8c7a9333
+commit: 7e09cb0b84ac5d17086a65ca21479dfec600a232 of: Drop cpu.h include from of_device.h
+date:   10 weeks ago
+config: sparc64-randconfig-c003-20230620 (https://download.01.org/0day-ci/archive/20230621/202306210547.QTEAjNch-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230621/202306210547.QTEAjNch-lkp@intel.com/reproduce)
 
-There are pending patches for two drivers to use it: 104-dio-48e[^1] and
-stx104[^2]. Those will be picked up in their respective subsystem trees
-(by Bart and Jonathan I presume).
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306210547.QTEAjNch-lkp@intel.com/
 
-William Breathitt Gray
+All errors (new ones prefixed by >>):
 
-[^1]: https://lore.kernel.org/all/dc4d0d5ca6ea28eda18815df114ecb21226cb345.=
-1681665189.git.william.gray@linaro.org/
-[^2]: https://lore.kernel.org/all/45d35b6f6e8d51df788b2bc85c456bfd45476b1a.=
-1681665189.git.william.gray@linaro.org/
+   arch/sparc/kernel/traps_64.c:252:6: error: no previous prototype for 'is_no_fault_exception' [-Werror=missing-prototypes]
+     252 | bool is_no_fault_exception(struct pt_regs *regs)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+   arch/sparc/kernel/traps_64.c:2034:6: error: no previous prototype for 'do_mcd_err' [-Werror=missing-prototypes]
+    2034 | void do_mcd_err(struct pt_regs *regs, struct sun4v_error_entry ent)
+         |      ^~~~~~~~~~
+   arch/sparc/kernel/traps_64.c:2152:6: error: no previous prototype for 'sun4v_nonresum_error_user_handled' [-Werror=missing-prototypes]
+    2152 | bool sun4v_nonresum_error_user_handled(struct pt_regs *regs,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> arch/sparc/kernel/traps_64.c:2839:13: error: no previous prototype for 'trap_init' [-Werror=missing-prototypes]
+    2839 | void __init trap_init(void)
+         |             ^~~~~~~~~
+   cc1: all warnings being treated as errors
 
---A4eykhRWKS+hjpBE
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+vim +/trap_init +2839 arch/sparc/kernel/traps_64.c
 
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZJIWLQAKCRC1SFbKvhIj
-K2MWAQDzsNnr/aAKHqCpA2oNej+hu4vXpjpf0WjWhm5mCEzCeAD/UkBzweb3tXlj
-dQODjvZU4WCWV4qi/bQHZASKZizYqwU=
-=CuWO
------END PGP SIGNATURE-----
+^1da177e4c3f41 arch/sparc64/kernel/traps.c Linus Torvalds 2005-04-16  2837  
+^1da177e4c3f41 arch/sparc64/kernel/traps.c Linus Torvalds 2005-04-16  2838  /* Only invoked on boot processor. */
+^1da177e4c3f41 arch/sparc64/kernel/traps.c Linus Torvalds 2005-04-16 @2839  void __init trap_init(void)
 
---A4eykhRWKS+hjpBE--
+:::::: The code at line 2839 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
+
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
