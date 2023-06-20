@@ -2,58 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72F5A736BFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 14:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B44D736BFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 14:34:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232653AbjFTMec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 08:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55618 "EHLO
+        id S231993AbjFTMek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 08:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231805AbjFTMea (ORCPT
+        with ESMTP id S232681AbjFTMef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 08:34:30 -0400
-Received: from forward502c.mail.yandex.net (forward502c.mail.yandex.net [178.154.239.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0764410DA;
-        Tue, 20 Jun 2023 05:34:27 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-63.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-63.sas.yp-c.yandex.net [IPv6:2a02:6b8:c14:6e01:0:640:627f:0])
-        by forward502c.mail.yandex.net (Yandex) with ESMTP id 0F98F5E8DC;
-        Tue, 20 Jun 2023 15:34:22 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-63.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id 5Ygda0tDguQ0-z3EyeGZo;
-        Tue, 20 Jun 2023 15:34:21 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687264461;
-        bh=djyFSMQCvvi3PtQek0qog/X/Y7hUR7MnMTmzr3nhW4g=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=nObO3tXw07UF99ZwPSgfjLyWQ6W5or7uUaW9qg/A9XS4ufoP7v0XmdeIhYXT3Q7jO
-         9036yWJW/zNO05uL8vNS0vIIV7gJvV5AESjcLKVqELuqzkDbjjAe1YdUNydqLiIcdQ
-         Pn2aHPUXgrgschLMqNT6dzUSgnzMnImKEs2NAOOg=
-Authentication-Results: mail-nwsmtp-smtp-production-main-63.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-Message-ID: <d70b6831-3443-51d0-f64c-6f6996367a85@yandex.ru>
-Date:   Tue, 20 Jun 2023 17:34:00 +0500
+        Tue, 20 Jun 2023 08:34:35 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C27310F4;
+        Tue, 20 Jun 2023 05:34:34 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qBaZ5-0001MI-KF; Tue, 20 Jun 2023 14:34:31 +0200
+Message-ID: <7e18f4f2-a05a-2738-426b-31482c58af35@leemhuis.info>
+Date:   Tue, 20 Jun 2023 14:34:30 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/3] fd/locks: allow get the lock owner by F_OFD_GETLK
-Content-Language: en-US
-To:     Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org
-References: <20230620095507.2677463-1-stsp2@yandex.ru>
- <20230620095507.2677463-3-stsp2@yandex.ru>
- <5728ebda22a723b0eb209ae078e8f132d7b4ac7b.camel@kernel.org>
- <a1e7f5c1-76ef-19e5-91db-a62f7615b28a@yandex.ru>
- <eaccc14ddc6b546e5913eb557fec55f77cb5424d.camel@kernel.org>
- <5f644a24-90b5-a02f-b593-49336e8e0f5a@yandex.ru>
- <2eb8566726e95a01536b61a3b8d0343379092b94.camel@kernel.org>
-From:   stsp <stsp2@yandex.ru>
-In-Reply-To: <2eb8566726e95a01536b61a3b8d0343379092b94.camel@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 1/3] wifi: rtw88: Move register access from
+ rtw_bf_assoc() outside the RCU
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Sascha Hauer <s.hauer@pengutronix.de>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     linux-wireless@vger.kernel.org, tony0620emma@gmail.com,
+        kvalo@kernel.org, pkshih@realtek.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
+          Linux regressions mailing list 
+          <regressions@lists.linux.dev>
+References: <20230108211324.442823-1-martin.blumenstingl@googlemail.com>
+ <20230108211324.442823-2-martin.blumenstingl@googlemail.com>
+ <20230331125906.GF15436@pengutronix.de>
+ <8ab36d80-8417-628f-9f51-e75eaf6b1a51@leemhuis.info>
+In-Reply-To: <8ab36d80-8417-628f-9f51-e75eaf6b1a51@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1687264474;636107cb;
+X-HE-SMSGID: 1qBaZ5-0001MI-KF
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,30 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 02.04.23 13:30, Linux regression tracking #adding (Thorsten Leemhuis)
+wrote:
+> On 31.03.23 14:59, Sascha Hauer wrote:
+>> On Sun, Jan 08, 2023 at 10:13:22PM +0100, Martin Blumenstingl wrote:
+>>> USB and (upcoming) SDIO support may sleep in the read/write handlers.
+>>> Shrink the RCU critical section so it only cover the call to
+>>> ieee80211_find_sta() and finding the ic_vht_cap/vht_cap based on the
+>>> found station. This moves the chip's BFEE configuration outside the
+>>> rcu_read_lock section and thus prevent "scheduling while atomic" or
+>>> "Voluntary context switch within RCU read-side critical section!"
+>>> warnings when accessing the registers using an SDIO card (which is
+>>> where this issue has been spotted in the real world - but it also
+>>> affects USB cards).
+>>
+>> Unfortunately this introduces a regression on my RTW8821CU chip. With
+>> this it constantly looses connection to the AP and reconnects shortly
+>> after:
+> 
+> #regzbot ^introduced c7eca79def44
+> #regzbot title net: wifi: rtw88: RTW8821CU constantly looses connection
+> to the AP and reconnects shortly after
+> #regzbot ignore-activity
 
-20.06.2023 17:02, Jeff Layton пишет:
-> Suppose I start a process (call it pid 100), and then spawn a thread
-> (101). I then have 101 open a file and set an OFD lock on it (such that
-> the resulting fl_pid field in the file_lock is set to 101).
+Forgot to resolve this in regzbot:
 
-How come?
-There are multiple places in locks.c
-with this line:
-fl->fl_pid = current->tgid;
+#regzbot resolve: turn's out this wasn't a regression, see
+https://lore.kernel.org/lkml/20230403100043.GT19113@pengutronix.de/
+#regzbot ignore-activity
 
-And I've yet to see the line like:
-fl->fl_pid = current->pid;
-Its simply not there.
-
-No, we put tgid into l_pid!
-tgid will still be 100, no matter how
-many threads you spawn or destroy.
-Or what am I misseng?
-
-
-> That's just one example, of course. The underlying problem is that OFD
-> locks are not owned by processes in the same way that traditional POSIX
-> locks are, so reporting a pid there is unreliable, at best.
-But we report tgid.
-It doesn't depend on threads.
-I don't understand. :)
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
