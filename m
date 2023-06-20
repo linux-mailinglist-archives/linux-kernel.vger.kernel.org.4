@@ -2,131 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF2EE7372A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6132B7372AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:25:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbjFTRXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 13:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57576 "EHLO
+        id S230228AbjFTRY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 13:24:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjFTRXl (ORCPT
+        with ESMTP id S229821AbjFTRYz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 13:23:41 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC23210C1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:23:39 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-312863a983fso40791f8f.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:23:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687281818; x=1689873818;
-        h=user-agent:in-reply-to:content-transfer-encoding
-         :content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=s9mWYfGROnySR6uue4WG7vLMYCpdaHNd7ovm5oIrCjM=;
-        b=sjjrqJuC8PtXRZT+5ho8yuTY2RZb87MRMx42D91FylA8zy7UMk2YpWvEyJCAJal1b6
-         Y0kRm37nwj9f+T/Cwqsz7krNQ+i18PGH0LOxj66r7TJDy5pxVw26z/VEwlKYSSx+XGE8
-         wz52XXQJ0/e2DhlkqGFyt3J/IpFe3JqZYjQcDPuAl2kKymDu/0qNz8mtv8eQcxpW5zG8
-         24z2T+nHBY7ld2xxKWJ8JG1i8kE8bhe3wVd8Qz2ZrjdA3E6JYa3r8DJWfpR+pS6tyiNy
-         lrx7viRfFKHW0VGpHt0RRHaVrX3ZOI5wjftMsTv0O6/Y0YpVNMX6yElyJK2957vFOC4M
-         qxTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687281818; x=1689873818;
-        h=user-agent:in-reply-to:content-transfer-encoding
-         :content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=s9mWYfGROnySR6uue4WG7vLMYCpdaHNd7ovm5oIrCjM=;
-        b=WjvL0YDr3kbhfNNFbfSzBi2wsUohuPahcCy336UgansotbmH2CpwOWEMnuAJmhJoHS
-         qhjfkg2TdAqwwx6hGUy2Kkma4F1ik2k10sTTy0KEiT/dE6d1JdfCWYw207GKepkgPNgT
-         wEWjQKw+Pg1xdXgOHZOR1Qag9q8cw5J7BA/6m1p+99MIM44AjfaekC7SAqwHBX9aFMAo
-         wLX5uJuvPIE/7cQzA8SaaaSGUuIwq0z8kyT3wBhgbIykZ6vGvZXZLtomi3+rvcD6fMuN
-         ysNcSh6VbXSmNOP01d5XCr/LLceJTKTXeSqH+RnmYBo7ypi37pBqRdL6/P0/bwDzT+Wt
-         E/jA==
-X-Gm-Message-State: AC+VfDzaRq1+v1DjWTNw9w7Nh5Snbo1S5wqQHTsplZwepslO5s4ZduPP
-        JBk4lhvFmGGhV2h8tK7xIY+VFw==
-X-Google-Smtp-Source: ACHHUZ6wW1/zMPhc3JJbi6ECRYVjtyECOJO389GeUQGew9ZCiR6IuKO24ckak353ubn1mfb8xc+nNA==
-X-Received: by 2002:adf:f004:0:b0:311:1df7:3e05 with SMTP id j4-20020adff004000000b003111df73e05mr9335340wro.22.1687281818234;
-        Tue, 20 Jun 2023 10:23:38 -0700 (PDT)
-Received: from elver.google.com ([2a00:79e0:9c:201:8530:a6a3:373f:683c])
-        by smtp.gmail.com with ESMTPSA id g18-20020a7bc4d2000000b003f8d0308604sm14028860wmk.9.2023.06.20.10.23.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 10:23:37 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 19:23:31 +0200
-From:   Marco Elver <elver@google.com>
-To:     Andrey Konovalov <andreyknvl@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>, kasan-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Catalin Marinas <catalin.marinas@arm.com>
-Subject: Re: [PATCH] kasan: add support for kasan.fault=panic_on_write
-Message-ID: <ZJHgkxdnlSXfXLkn@elver.google.com>
-References: <20230614095158.1133673-1-elver@google.com>
- <CA+fCnZdy4TmMacvsPkoenCynUYsyKZ+kU1fx7cDpbh_6=cEPAQ@mail.gmail.com>
- <CANpmjNOSnVNy14xAVe6UHD0eHuMpxweg86+mYLQHpLM1k0H_cg@mail.gmail.com>
- <CA+fCnZccdLNqtxubVVtGPTOXcSoYfpM9CHk-nrYsZK7csC77Eg@mail.gmail.com>
- <ZJGSqdDQPs0sRQTb@elver.google.com>
- <CA+fCnZdZ0=kKN6hE_OF7jV_r_FjTh3FZtkGHBD57ZfqCXStKHg@mail.gmail.com>
- <ZJG8WiamZvEJJKUc@elver.google.com>
- <CA+fCnZdStZDyTGJfiW1uZVhhb-DraZmHnam0cdrB83-nnoottA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+fCnZdStZDyTGJfiW1uZVhhb-DraZmHnam0cdrB83-nnoottA@mail.gmail.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 20 Jun 2023 13:24:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91699A3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:24:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25EDE6131F
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 17:24:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFB89C433C0;
+        Tue, 20 Jun 2023 17:24:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687281893;
+        bh=Rd2KQT7Sg/jj2vpD/+cypNQq21vO707uBhL4Wt60ONQ=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=S0nBKMBymT7QgN7x8a89rfrJmeCB9n8O7Yfrne22w/1XbfEHmFl1Rqalu8V/ctdwS
+         YreKhbQDy/vrV6XZmrrg4bizue1smNoWLhFBgswQZanSO4Ro92yaaAarg99MPxLbzh
+         yKpDLNdRGTmfjIOljRoFNpPZHwH7wQAxmm3pHmr/BMx7AD4TENI+Rdqs8cBj0HzkcA
+         AtzbtBIHLvIwmOtc7p98zex7yFJwdycS0VkoDAf/l+jTz0QeCFN00hEKQ7OjiUPAvB
+         1clLx9hEwjZPVs40/3CKaXd3OODSbCepYMVDnv8Im1RrAg3NVZTc3mdnFGl41caa5W
+         PQziUw7BgRvUg==
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id C920427C005A;
+        Tue, 20 Jun 2023 13:24:51 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute3.internal (MEProxy); Tue, 20 Jun 2023 13:24:51 -0400
+X-ME-Sender: <xms:4uCRZGPuv7m8KaXFojrVeCbfWrMZ7IJoui-4aoDexdm_V34ZG0-I6g>
+    <xme:4uCRZE-OH2xt14uLz-FF7dbdv-gHG5w14JwsdNtUTTBditVKBbvq_q8tXxJx8iDzO
+    WaowhDX_m63-nZ50aI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefhedgleduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeduveffvdegvdefhfegjeejlefgtdffueekudfgkeduvdetvddu
+    ieeluefgjeeggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
+    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
+    hugidrlhhuthhordhush
+X-ME-Proxy: <xmx:4uCRZNTpfg2cGu-JZbGK0lauKT6LTXTvSpjwrRQTqsoePCHX_VolEg>
+    <xmx:4uCRZGtzcXFiHy54TUV3vETkj3W0NygxpQUty3hSE43wjAfN8bvT-A>
+    <xmx:4uCRZOcK6KfTYx9uY7noUEoncUDShNm2IP8FjLgB4nFv3QpkDL6MpA>
+    <xmx:4-CRZOAOrENLDeV3AOynkkTJ3wDHPyrZf0jxchqFsnzGmPnTrQoXvQ>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 85C9831A0063; Tue, 20 Jun 2023 13:24:50 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <6145cabf-d016-4dba-b5d2-0fb793352058@app.fastmail.com>
+In-Reply-To: <7F566E60-C371-449B-992B-0C435AD6016B@gmail.com>
+References: <20230616085038.4121892-1-rppt@kernel.org>
+ <20230616085038.4121892-3-rppt@kernel.org>
+ <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
+ <20230618080027.GA52412@kernel.org>
+ <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com>
+ <7F566E60-C371-449B-992B-0C435AD6016B@gmail.com>
+Date:   Tue, 20 Jun 2023 10:24:29 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Nadav Amit" <nadav.amit@gmail.com>, "Song Liu" <song@kernel.org>
+Cc:     "Mike Rapoport" <rppt@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Kees Cook" <keescook@chromium.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Dinh Nguyen" <dinguyen@kernel.org>,
+        "Heiko Carstens" <hca@linux.ibm.com>,
+        "Helge Deller" <deller@gmx.de>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "Kent Overstreet" <kent.overstreet@linux.dev>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Puranjay Mohan" <puranjay12@gmail.com>,
+        "Rick P Edgecombe" <rick.p.edgecombe@intel.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Will Deacon" <will@kernel.org>, bpf <bpf@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-mm <linux-mm@kvack.org>, linux-modules@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-s390 <linux-s390@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        loongarch@lists.linux.dev, netdev@vger.kernel.org,
+        sparclinux@vger.kernel.org,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and jit_text_alloc()
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 06:27PM +0200, Andrey Konovalov wrote:
-> On Tue, Jun 20, 2023 at 4:49 PM Marco Elver <elver@google.com> wrote:
-> >
-> > On Tue, Jun 20, 2023 at 03:56PM +0200, Andrey Konovalov wrote:
-> > ...
-> > > Could you move this to the section that describes the kasan.fault
-> > > flag? This seems more consistent.
-> >
-> > Like this?
-> >
-> >
-> > diff --git a/Documentation/dev-tools/kasan.rst b/Documentation/dev-tools/kasan.rst
-> > index 7f37a46af574..f4acf9c2e90f 100644
-> > --- a/Documentation/dev-tools/kasan.rst
-> > +++ b/Documentation/dev-tools/kasan.rst
-> > @@ -110,7 +110,9 @@ parameter can be used to control panic and reporting behaviour:
-> >  - ``kasan.fault=report``, ``=panic``, or ``=panic_on_write`` controls whether
-> >    to only print a KASAN report, panic the kernel, or panic the kernel on
-> >    invalid writes only (default: ``report``). The panic happens even if
-> > -  ``kasan_multi_shot`` is enabled.
-> > +  ``kasan_multi_shot`` is enabled. Note that when using asynchronous mode of
-> > +  Hardware Tag-Based KASAN, ``kasan.fault=panic_on_write`` always panics on
-> > +  asynchronously checked accesses (including reads).
-> >
-> >  Software and Hardware Tag-Based KASAN modes (see the section about various
-> >  modes below) support altering stack trace collection behavior:
-> 
-> Yes, this looks great! Thanks!
 
-The patch here is already in mm-stable (which I recall doesn't do
-rebases?), so I sent
 
- https://lkml.kernel.org/r/ZJHfL6vavKUZ3Yd8@elver.google.com
+On Mon, Jun 19, 2023, at 1:18 PM, Nadav Amit wrote:
+>> On Jun 19, 2023, at 10:09 AM, Andy Lutomirski <luto@kernel.org> wrote:
+>>=20
+>> But jit_text_alloc() can't do this, because the order of operations d=
+oesn't match.  With jit_text_alloc(), the executable mapping shows up be=
+fore the text is populated, so there is no atomic change from not-there =
+to populated-and-executable.  Which means that there is an opportunity f=
+or CPUs, speculatively or otherwise, to start filling various caches wit=
+h intermediate states of the text, which means that various architecture=
+s (even x86!) may need serialization.
+>>=20
+>> For eBPF- and module- like use cases, where JITting/code gen is quite=
+ coarse-grained, perhaps something vaguely like:
+>>=20
+>> jit_text_alloc() -> returns a handle and an executable virtual addres=
+s, but does *not* map it there
+>> jit_text_write() -> write to that handle
+>> jit_text_map() -> map it and synchronize if needed (no sync needed on=
+ x86, I think)
+>
+> Andy, would you mind explaining why you think a sync is not needed? I=20
+> mean I have a =E2=80=9Cfeeling=E2=80=9D that perhaps TSO can guarantee=
+ something based=20
+> on the order of write and page-table update. Is that the argument?
 
-to be used as a fixup or just added to mm-stable by Andrew at one point
-or another as well.
+Sorry, when I say "no sync" I mean no cross-CPU synchronization.  I'm as=
+suming the underlying sequence of events is:
 
-Thanks,
--- Marco
+allocate physical pages (jit_text_alloc)
+
+write to them (with MOV, memcpy, whatever), via the direct map or via a =
+temporary mm
+
+do an appropriate *local* barrier (which, on x86, is probably implied by=
+ TSO, as the subsequent pagetable change is at least a release; also, an=
+y any previous temporary mm stuff would have done MOV CR3 afterwards, wh=
+ich is a full "serializing" barrier)
+
+optionally zap the direct map via IPI, assuming the pages are direct map=
+ped (but this could be avoided with a smart enough allocator and tempora=
+ry_mm above)
+
+install the final RX PTE (jit_text_map), which does a MOV or maybe a LOC=
+K CMPXCHG16B.  Note that the virtual address in question was not readabl=
+e or executable before this, and all CPUs have serialized since the last=
+ time it was executable.
+
+either jump to the new text locally, or:
+
+1. Do a store-release to tell other CPUs that the text is mapped
+2. Other CPU does a load-acquire to detect that the text is mapped and j=
+umps to the text
+
+This is all approximately the same thing that plain old mmap(..., PROT_E=
+XEC, ...) does.
+
+>
+> On this regard, one thing that I clearly do not understand is why=20
+> *today* it is ok for users of bpf_arch_text_copy() not to call=20
+> text_poke_sync(). Am I missing something?
+
+I cannot explain this, because I suspect the current code is wrong.  But=
+ it's only wrong across CPUs, because bpf_arch_text_copy goes through te=
+xt_poke_copy, which calls unuse_temporary_mm(), which is serializing.  A=
+nd it's plausible that most eBPF use cases don't actually cause the load=
+ed program to get used on a different CPU without first serializing on t=
+he CPU that ends up using it.  (Context switches and interrupts are seri=
+alizing.)
+
+FRED could make interrupts non-serializing. I sincerely hope that FRED d=
+oesn't cause this all to fall apart.
+
+--Andy
