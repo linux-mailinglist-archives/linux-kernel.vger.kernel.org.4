@@ -2,296 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FFF47376F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:00:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A9A73772C
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjFTWAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 18:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60336 "EHLO
+        id S229646AbjFTWAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 18:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjFTWAH (ORCPT
+        with ESMTP id S229567AbjFTWAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 18:00:07 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05FB0107;
-        Tue, 20 Jun 2023 15:00:06 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-3112f5ab0b1so3191060f8f.0;
-        Tue, 20 Jun 2023 15:00:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687298404; x=1689890404;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zzT9JowwR4WrNgD4+M6vydnUzUQdWJgu/dR3PcW05zQ=;
-        b=Y/NP7+OR5ppHjZromXh4ABh23CjtUmmGZm0UF8X3bB93LEN07hvkvHjDemIdK7EWO9
-         PtvJQ4y+VvWoZIifE9BJ0VbH8kv3Y9wp47vQ0gn3orbpBzHrVbpIXKfkFwvn7sGTMv3Z
-         WG9/IZaGkr7F0TY00yxemdkqNWQD2acLpE82OuuRoti4Bg87NDA37Ws7FbXwwNZ00GRJ
-         ZpJTwK497uxRBeFzHL4CD7IWZS53tJ4BSY0OgMy50JWWi2v97hGV3MKYN20XcXU1VP9u
-         9+rbcxzPPi9vWv6+3sNfVHHl3igrMOthEDXBRl73PwG1OyXSavMNqKohMcQjQq7sYaI8
-         7Lzg==
+        Tue, 20 Jun 2023 18:00:35 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DC85E69;
+        Tue, 20 Jun 2023 15:00:34 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-77e2df49a91so156510239f.2;
+        Tue, 20 Jun 2023 15:00:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687298404; x=1689890404;
+        d=1e100.net; s=20221208; t=1687298433; x=1689890433;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zzT9JowwR4WrNgD4+M6vydnUzUQdWJgu/dR3PcW05zQ=;
-        b=alQ0855OZbpbAuoMNPXEeRhcU4en5ZhD+7DtuUQ8eTzS3222wJUGDsrlI6XHoAro+e
-         bOjb6mCwAi5aA4x/I8oYdjKxAWBCP9C1SW0ZX4GhOmdyMR5Kns01QiUyJD1YbHZqGM2+
-         +uFnUpCP8NGdP/rPDEDzQjt4/jBYN/D+SE/uqzqGk7dgcyeC/cnKs7WijeT2zk/hR9kf
-         cXh91NVQmSesPoKdEwOujVv8+ZBcZeyYttEEBcFBC3MYV9lE15Bdo/5TffvuOR8RPo0K
-         CpUi8XXipHmaCUKT4pRh6yhCY42T9PqpjtZg2vFvACEHI49Hgny5wuWFOanvQCefqNru
-         o+1Q==
-X-Gm-Message-State: AC+VfDz44NAkfDZoLaQajCiHGomBX1Vu8Z92gBtWso8P/AC7gipD/+s/
-        rQ++9K99vr5fsFHIe8dK4cY=
-X-Google-Smtp-Source: ACHHUZ6IICTm9FTjV1sa6qUnPvWEPwisMhdtmi3Vz/I/iOyMjeVt36OvYAGMcFnUihK7yN/ctscF1Q==
-X-Received: by 2002:a5d:644d:0:b0:30e:3d3d:4329 with SMTP id d13-20020a5d644d000000b0030e3d3d4329mr9297009wrw.35.1687298404265;
-        Tue, 20 Jun 2023 15:00:04 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id j18-20020adff012000000b0030e56a9ff25sm2850780wro.31.2023.06.20.15.00.03
+        bh=WkvWnaNInIKYQwmLtqQyrYXWIuuVDNI4W1xbI4+bKeE=;
+        b=JXaILNa3MoZWrR2rHXGWFk7wOxPf9eZ+0vZMHyKPlHOdMdDipmtR+3XhttyoFRzONa
+         G22V+BukJaaGnOKAnS1kqsJn+ZhUuE1HaEKl8xr79hhvEKDrXFG6Qb92W3FfllUq4zxb
+         d0KE/6COb581HlV8RZPaT/l5h8tS2i4rOIhMWtM/b7wzZ2+ZsVl67YXcmDVozAm0bteG
+         jyqr8+tWh4oi6xPwQerVr1Fe9sjOLZD97LVq7RLSP2nFhdu33jmnoQ/TBBCsgWDpdEg6
+         /WcT6V47/lGhWZDC/Q6YO0TV0rIdxPSEyQ2HP5VKam/Idv5spDtriM7nddpLY4vzWqX6
+         c27g==
+X-Gm-Message-State: AC+VfDxddViKlJbTvAyZlz9OPZEZvAnc+aY9QnxjBOsaX61ZaddkfNZ6
+        L811xtu/3wYWt3Hdl4pRYs/SJZaxaA==
+X-Google-Smtp-Source: ACHHUZ5at612OHC/BW9tJh9UamKyFCTk9abmHhxBPb2vcmMYzrmfS2mUTOYPzxEKk1eBHFvqM95i7A==
+X-Received: by 2002:a6b:a14:0:b0:777:aa2c:c2ab with SMTP id z20-20020a6b0a14000000b00777aa2cc2abmr10535634ioi.12.1687298433323;
+        Tue, 20 Jun 2023 15:00:33 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id h13-20020a02cd2d000000b0041a9022c3dasm853702jaq.118.2023.06.20.15.00.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 15:00:03 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 23:00:02 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Kirill A Shutemov <kirill@shutemov.name>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Vineeth Pillai <vineeth@bitbyteword.org>
-Subject: Re: [PATCH v4 1/7] mm/mremap: Optimize the start addresses in
- move_page_tables()
-Message-ID: <28e641d6-37ba-44a7-b7a8-76e797fab1f7@lucifer.local>
-References: <20230531220807.2048037-1-joel@joelfernandes.org>
- <20230531220807.2048037-2-joel@joelfernandes.org>
- <f2f751ca-217e-4177-bb7f-1c9cd71e103e@lucifer.local>
- <b87df265-7e58-5907-e215-953630a87155@joelfernandes.org>
- <f28eadbc-f40e-4286-bf7e-af0ac360617e@lucifer.local>
- <e81b4534-54ce-466f-0d07-dc530cf137c2@joelfernandes.org>
+        Tue, 20 Jun 2023 15:00:32 -0700 (PDT)
+Received: (nullmailer pid 411428 invoked by uid 1000);
+        Tue, 20 Jun 2023 22:00:31 -0000
+Date:   Tue, 20 Jun 2023 16:00:31 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Lizhi Hou <lizhi.hou@amd.com>
+Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, max.zhen@amd.com,
+        sonal.santan@amd.com, stefano.stabellini@xilinx.com
+Subject: Re: [PATCH V9 4/6] PCI: Add ranges property for pci endpoint
+Message-ID: <20230620220031.GA384833-robh@kernel.org>
+References: <1686847842-33780-1-git-send-email-lizhi.hou@amd.com>
+ <1686847842-33780-5-git-send-email-lizhi.hou@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e81b4534-54ce-466f-0d07-dc530cf137c2@joelfernandes.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1686847842-33780-5-git-send-email-lizhi.hou@amd.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 05:16:57PM -0400, Joel Fernandes wrote:
-> Hi Lorenzo,
->
-> > As far as I can tell, find_vma_prev() already does a walk? I mean this is
-> > equivalent to find_vma() only retrieving the previous VMA right? I defer to
-> > Liam, but I'm not sure this would be that much more involved? Perhaps he
-> > can comment.
-> >
-> > An alternative is to create an iterator and use vma_prev(). I find it
-> > extremely clunky that we search for a VMA we already possess (and it's
-> > previous one) while not needing the the former.
-> >
-> > I'm not hugely familiar with the maple tree (perhaps Liam can comment) but
-> > I suspect that'd be more performant if that's the concern. Either way I
-> > would be surprised if this is the correct approach.
->
-> I see your point. I am not sure myself, the maple tree functions for both
-> APIs are indeed similar. We already have looked up the VMA being aligned
-> down. If there is a way to get the previous VMA quickly, given an existing
-> VMA, I can incorporate that change.
->
-> Ideally, if I had access to the ma_state used for lookup of the VMA being
-> aligned down, I could perhaps reuse that somehow. But when I checked, that
-> seemed a lot more invasive to pass that state down to these align functions.
->
-> But there is a merit to your suggestion itself in the sense it cuts down a
-> few more lines of code.
+On Thu, Jun 15, 2023 at 09:50:40AM -0700, Lizhi Hou wrote:
+> For PCI endpoint defined quirks to generate device tree node, it requires
+> 'ranges' property to translate iomem addresses for its downstream devices.
 
-Yeah it's thorny, the maple tree seems to add a separation between the vmi
-and vma that didn't exist previously, and you'd have to thread through the
-mas or vmi that was used in the first instance or end up having to rewalk
-the tree anyway.
+I'm not following why this patch is separate from patch 2 nor how patch 
+3 would function without it.
 
-I have spesnt too much time staring at v6 code where it was trivial :)
+> 
+> Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
+> ---
+>  drivers/pci/of_property.c | 33 ++++++++++++++++++++++-----------
+>  drivers/pci/quirks.c      |  1 +
+>  2 files changed, 23 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/pci/of_property.c b/drivers/pci/of_property.c
+> index bdd756c8d7de..08654740f314 100644
+> --- a/drivers/pci/of_property.c
+> +++ b/drivers/pci/of_property.c
+> @@ -84,15 +84,22 @@ static int of_pci_prop_ranges(struct pci_dev *pdev, struct of_changeset *ocs,
+>  	struct of_pci_range *rp;
+>  	struct resource *res;
+>  	int i = 0, j, ret;
+> +	u32 flags, num;
+>  	u64 val64;
+> -	u32 flags;
+>  
+> -	rp = kcalloc(PCI_BRIDGE_RESOURCE_NUM, sizeof(*rp), GFP_KERNEL);
+> +	if (pci_is_bridge(pdev)) {
+> +		num = PCI_BRIDGE_RESOURCE_NUM;
+> +		res = &pdev->resource[PCI_BRIDGE_RESOURCES];
+> +	} else {
+> +		num = PCI_STD_NUM_BARS;
+> +		res = &pdev->resource[PCI_STD_RESOURCES];
+> +	}
+> +
+> +	rp = kcalloc(num, sizeof(*rp), GFP_KERNEL);
+>  	if (!rp)
+>  		return -ENOMEM;
+>  
+> -	res = &pdev->resource[PCI_BRIDGE_RESOURCES];
+> -	for (j = 0; j < PCI_BRIDGE_RESOURCE_NUM; j++) {
+> +	for (j = 0; j < num; j++) {
+>  		if (!resource_size(&res[j]))
+>  			continue;
+>  
+> @@ -102,8 +109,12 @@ static int of_pci_prop_ranges(struct pci_dev *pdev, struct of_changeset *ocs,
+>  		val64 = res[j].start;
+>  		of_pci_set_address(pdev, rp[i].parent_addr, val64, 0, flags,
+>  				   false);
+> -		memcpy(rp[i].child_addr, rp[i].parent_addr,
+> -		       sizeof(rp[i].child_addr));
+> +		if (pci_is_bridge(pdev)) {
+> +			memcpy(rp[i].child_addr, rp[i].parent_addr,
+> +			       sizeof(rp[i].child_addr));
+> +		} else {
+> +			rp[i].child_addr[0] = j;
 
-I think given we have to walk the tree either way, we may as well do the
-find_vma_intersection() [happy to stand corrected by Liam if this turns out
-not to be less efficient but I don't think it is].
+A comment that child address lower 64-bits is always 0x0 would be 
+helpful here.
 
->
-> > > Considering this, I would keep the code as-is and perhaps you/we could
-> > > consider the replacement with another API in a subsequent patch as it does
-> > > the job for this patch.
-> >
-> > See above. I don't think this kind of comment is helpful in code
-> > review. Your disagreement above suffices, I've responded to it and of
-> > course if there is no other way this is fine.
-> >
-> > But I'd be surprised, and re-looking up a VMA we already have is just
-> > horrid. It's not really a nitpick, it's a code quality issue in my view.
-> >
-> > In any case, let's please try to avoid 'if you are bothered, write a follow
-> > up patch' style responses. If you disagree with something just say so, it's
-> > fine! :)
->
-> I wasn't disagreeing :) Just saying that the find_vma_prev() suggested in a
-> previous conversation with Liam fixes the issue (and has been tested a lot
-> in this series, on my side) so I was hoping to stick to that and we could
-> iterate more on that in the future.
->
-> However, after taking a deeper look at the maple tree, I'd like to give the
-> find_vma_intersection() option at least a try (with appropriate attribution
-> to you).
-
-Cheers appreciate it, sorry to be a pain and nitpicky but I think if that
-works as well it could be quite a nice solution.
-
->
-> Apologies if the response style in my previous email came across badly. That
-> wasn't my intent and I will try to improve myself.
-
-No worries, text is a sucky medium and likely I misinterpreted you in any
-case. We're having a productive discussion which is what matters! :)
-
->
-> [..]
->
-> > > > > +		realign_addr(&old_addr, vma, &new_addr, new_vma, PMD_MASK);
-> > > > > +	}
-> > > > > +
-> > > > >    	if (is_vm_hugetlb_page(vma))
-> > > > >    		return move_hugetlb_page_tables(vma, new_vma, old_addr,
-> > > > >    						new_addr, len);
-> > > > > @@ -565,6 +619,13 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
-> > > > >
-> > > > >    	mmu_notifier_invalidate_range_end(&range);
-> > > > >
-> > > > > +	/*
-> > > > > +	 * Prevent negative return values when {old,new}_addr was realigned
-> > > > > +	 * but we broke out of the above loop for the first PMD itself.
-> > > > > +	 */
-> > > > > +	if (len + old_addr < old_end)
-> > > > > +		return 0;
-> > > > > +
-> > > >
-> > > > I find this a little iffy, I mean I see that if you align [old,new]_addr to
-> > > > PMD, then from then on in you're relying on the fact that the loop is just
-> > > > going from old_addr (now aligned) -> old_end and thus has the correct
-> > > > length.
-> > > >
-> > > > Can't we just fix this issue by correcting len? If you take my review above
-> > > > which checks len in [maybe_]realign_addr(), you could take that as a
-> > > > pointer and equally update that.
-> > > >
-> > > > Then you can drop this check.
-> > >
-> > > The drawback of adjusting len is it changes what move_page_tables() users
-> > > were previously expecting.
-> > >
-> > > I think we should look at the return value of move_page_tables() as well,
-> > > not just len independently.
-> > >
-> > > len is what the user requested.
-> > >
-> > > "len + old_addr - old_end" is how much was actually copied and is the return value.
-> > >
-> > > If everything was copied, old_addr == old_end and len is unchanged.
-> >
-> > Ah yeah I see, sorry I missed the fact we're returning a value, that does
-> > complicate things...
-> >
-> > If we retain the hugetlb logic, then we could work around the issue with
-> > that instance of len by storing the 'actual length' of the range in
-> > a new var actual_len and passing that.
-> >
-> > If we choose to instead just not do this for hugetlb (I wonder if the
-> > hugetlb handling code actually does the equivalent of this since surely
-> > these pages have to be handled a PMD at a time?) then we can drop the whole
-> > actual_len idea [see below on response to hugetlb thing].
->
-> Thanks. Yes, you are right. We should already b  good with hugetlb handling
-> as it does appear that hugetlb_move_page_tables() does copy by
-> huge_page_size(h), so the old_addr should already be PMD-aligned for it to
-> be able to do that.
-
-Cool, in which case we can drop the actual_len idea as this is really the
-only place we'd need it.
-
->
-> [..]
->
-> > > > >    	return len + old_addr - old_end;	/* how much done */
-> > > > >    }
-> > > > Also I am concerned in the hugetlb case -> len is passed to
-> > > > move_hugetlb_page_tables() which is now strictly incorrect, I wonder if
-> > > > this could cause an issue?
-> > > >
-> > > > Correcting len seems the neat way of addressing this.
-> > >
-> > > That's a good point. I am wondering if we can just change that from:
-> > >
-> > > 	if (is_vm_hugetlb_page(vma))
-> > > 		return move_hugetlb_page_tables(vma, new_vma, old_addr,
-> > > 				new_addr, len);
-> > >
-> > > to:
-> > > 	if (is_vm_hugetlb_page(vma))
-> > > 		return move_hugetlb_page_tables(vma, new_vma, old_addr,
-> > > 				new_addr, old_addr - new_addr);
-> > >
-> > > Or, another option is to turn it off for hugetlb by just moving:
-> > >
-> > > 	if (len >= PMD_SIZE - (old_addr & ~PMD_MASK))
-> > > 		realign_addr(...);
-> > >
-> > > to after:
-> > >
-> > > 	if (is_vm_hugetlb_page(vma))
-> > > 		return move_hugetlb_page_tables(...);
-> > >
-> > > thanks,
-> >
-> > I think the actual_len solution should sort this right? If not maybe better
-> > to be conservative and disable for the hugetlb case (I'm not sure if this
-> > would help given you'd need to be PMD aligned anyway right?), so not to
-> > hold up the series.
-> >
-> > If we do decide not to include hugetlb (the endless 'special case' for so
-> > much code...) in this then we can drop the actual_len idea altogether.
-> >
-> > (Yes I realise it's ironic I'm suggesting deferring to a later patch here
-> > but there you go ;)
->
-> ;-). Considering our discussion above that hugetlb mremap addresses should
-> always starts at a PMD boundary, maybe I can just add a warning to the if()
-> like so to detect any potential?
->
-> 	if (is_vm_hugetlb_page(vma)) {
-> 		WARN_ON_ONCE(old_addr - old_end != len);
-> 		return move_hugetlb_page_tables(vma, new_vma, old_addr,
-> 						new_addr, len);
->         }
->
-
-Yeah looks good [ack your follow up that it should be old_end - old_addr],
-maybe adding a comment explaining why this is a problem here too.
-
->
-> Thank you so much and I learnt a lot from you and others in -mm community.
-
-No worries, thanks very much for this patch series, this is a nice fixup
-for a quite stupid failure we were experiencing before with a neat
-solution. Your hard work is appreciated!
-
->
-> - Joel
->
+> +		}
+>  
+>  		val64 = resource_size(&res[j]);
+>  		rp[i].size[0] = upper_32_bits(val64);
+> @@ -161,13 +172,13 @@ int of_pci_add_properties(struct pci_dev *pdev, struct of_changeset *ocs,
+>  	if (pci_is_bridge(pdev)) {
+>  		ret |= of_changeset_add_prop_string(ocs, np, "device_type",
+>  						    "pci");
+> -		ret |= of_changeset_add_prop_u32(ocs, np, "#address-cells",
+> -						 OF_PCI_ADDRESS_CELLS);
+> -		ret |= of_changeset_add_prop_u32(ocs, np, "#size-cells",
+> -						 OF_PCI_SIZE_CELLS);
+> -		ret |= of_pci_prop_ranges(pdev, ocs, np);
+>  	}
+>  
+> +	ret |= of_pci_prop_ranges(pdev, ocs, np);
+> +	ret |= of_changeset_add_prop_u32(ocs, np, "#address-cells",
+> +					 OF_PCI_ADDRESS_CELLS);
+> +	ret |= of_changeset_add_prop_u32(ocs, np, "#size-cells",
+> +					 OF_PCI_SIZE_CELLS);
+>  	ret |= of_pci_prop_reg(pdev, ocs, np);
+>  	ret |= of_pci_prop_compatible(pdev, ocs, np);
+>  
+> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+> index c8f3acea752d..51945b631628 100644
+> --- a/drivers/pci/quirks.c
+> +++ b/drivers/pci/quirks.c
+> @@ -6052,3 +6052,4 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a31, dpc_log_size);
+>   */
+>  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_XILINX, 0x5020, of_pci_make_dev_node);
+>  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_XILINX, 0x5021, of_pci_make_dev_node);
+> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_REDHAT, 0x0005, of_pci_make_dev_node);
+> -- 
+> 2.34.1
+> 
