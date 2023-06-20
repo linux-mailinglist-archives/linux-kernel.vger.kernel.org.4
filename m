@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35F3E737369
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:01:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2CF5737367
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230430AbjFTSBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 14:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
+        id S229985AbjFTSBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 14:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbjFTSBo (ORCPT
+        with ESMTP id S229574AbjFTSBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 14:01:44 -0400
+        Tue, 20 Jun 2023 14:01:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7A11712;
-        Tue, 20 Jun 2023 11:01:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593D51712;
+        Tue, 20 Jun 2023 11:01:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2571961335;
-        Tue, 20 Jun 2023 18:01:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31585C433C0;
-        Tue, 20 Jun 2023 18:01:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E980F61355;
+        Tue, 20 Jun 2023 18:01:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 045A3C433C0;
+        Tue, 20 Jun 2023 18:01:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687284102;
-        bh=8quhV2tbMNIcgNf0FhcdhJPJLP35KK5ja15vVIBxFig=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dJGwm2likr5rT11+8rajKw5U/eZHzuSqZCyiV2suyc1xrg82/ACKXFepTzj0OIj9T
-         nRND2povsk8RV9FaIP66Ot7MiiCUddSyao0ot0Dh5PLQhZIRsjYXQnFnmLXdjm7/2Y
-         iA4GPYwWhZCbALjdLqr/pn9X1Edo125ekomqkvWk=
+        s=korg; t=1687284099;
+        bh=HV0EXm2PTPBmuK1pyyW2SD5b0SA8DKNQE3c4Wc9+gZU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JEaOfD0kafoBD7yYx4EFXHOns4LK47Aa82TSb7lf8vKc/3osmgUWt/T6vejITIrEI
+         m6vxiQJ5AA9+4I1n7CrjSpLSnhz9xLCqtUeYGUZpDB/vJHF/GRoNcwr0ugyH+ksN1X
+         cLqvFpfVNDdd1aFuURg5jLlX2cdNoroofCDRvTfg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-block@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Ivan Orlov <ivan.orlov0322@gmail.com>,
-        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
-        Jack Wang <jinpu.wang@ionos.com>, Jens Axboe <axboe@kernel.dk>,
+        Justin Sanders <justin@coraid.com>,
+        Jens Axboe <axboe@kernel.dk>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 1/4] block/rnbd: make all 'class' structures const
-Date:   Tue, 20 Jun 2023 20:01:30 +0200
-Message-ID: <20230620180129.645646-5-gregkh@linuxfoundation.org>
+Subject: [PATCH 2/4] aoe: make aoe_class a static const structure
+Date:   Tue, 20 Jun 2023 20:01:31 +0200
+Message-ID: <20230620180129.645646-6-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230620180129.645646-5-gregkh@linuxfoundation.org>
+References: <20230620180129.645646-5-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4016; i=gregkh@linuxfoundation.org; h=from:subject; bh=N9xk1YXDw7PpnjqnEHXwkGzYSFFfX4Ar5jAK0R5WDu0=; b=owGbwMvMwCRo6H6F97bub03G02pJDCkTX1Z2Xt7isuaT03bzgzPMlk1q09R2SXAQchQ+6te67 m9IwZtdHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCR/RIM82Mm7LOJC5nOfu/b P8tNJrvd7yk38TIs2NqVHxtkMe2z2uYXavpfqrZ1Pj/VDgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2704; i=gregkh@linuxfoundation.org; h=from:subject; bh=Gr78tCXAeIamp3Zv2PTkxoxZaAkwXTJCd+sAddc+WLo=; b=owGbwMvMwCRo6H6F97bub03G02pJDCkTX1aZaAumHN0ZseVeBcv1gj+3mq8eFOFQS/Pl05Avn 8okscejI5aFQZCJQVZMkeXLNp6j+ysOKXoZ2p6GmcPKBDKEgYtTACYyYRrD/PrpVXzsyu5z9W6W aS777bzkG/u87QzzPa/GfKjb5u9xxSDDa2b564L5ZcuaAQ==
 X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -58,128 +60,93 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 From: Ivan Orlov <ivan.orlov0322@gmail.com>
 
 Now that the driver core allows for struct class to be in read-only
-memory, making all 'class' structures to be declared at build time
-placing them into read-only memory, instead of having to be dynamically
-allocated at load time.
+memory, move the aoe_class structure to be declared at build time
+placing it into read-only memory, instead of having to be dynamically
+allocated at boot time.
 
-Cc: "Md. Haris Iqbal" <haris.iqbal@ionos.com>
-Cc: Jack Wang <jinpu.wang@ionos.com>
+Cc: Justin Sanders <justin@coraid.com>
 Cc: Jens Axboe <axboe@kernel.dk>
 Cc: linux-block@vger.kernel.org
 Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/block/rnbd/rnbd-clt-sysfs.c | 20 +++++++++++---------
- drivers/block/rnbd/rnbd-srv-sysfs.c | 22 ++++++++++++----------
- 2 files changed, 23 insertions(+), 19 deletions(-)
+ drivers/block/aoe/aoechr.c | 30 +++++++++++++++++-------------
+ 1 file changed, 17 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/block/rnbd/rnbd-clt-sysfs.c b/drivers/block/rnbd/rnbd-clt-sysfs.c
-index 8c6087949794..e84abac04f4f 100644
---- a/drivers/block/rnbd/rnbd-clt-sysfs.c
-+++ b/drivers/block/rnbd/rnbd-clt-sysfs.c
-@@ -24,7 +24,9 @@
- #include "rnbd-clt.h"
+diff --git a/drivers/block/aoe/aoechr.c b/drivers/block/aoe/aoechr.c
+index 4c666f72203f..a42c4bcc85ba 100644
+--- a/drivers/block/aoe/aoechr.c
++++ b/drivers/block/aoe/aoechr.c
+@@ -49,7 +49,7 @@ static int emsgs_head_idx, emsgs_tail_idx;
+ static struct completion emsgs_comp;
+ static spinlock_t emsgs_lock;
+ static int nblocked_emsgs_readers;
+-static struct class *aoe_class;
++
+ static struct aoe_chardev chardevs[] = {
+ 	{ MINOR_ERR, "err" },
+ 	{ MINOR_DISCOVER, "discover" },
+@@ -58,6 +58,16 @@ static struct aoe_chardev chardevs[] = {
+ 	{ MINOR_FLUSH, "flush" },
+ };
  
- static struct device *rnbd_dev;
--static struct class *rnbd_dev_class;
-+static const struct class rnbd_dev_class = {
-+	.name = "rnbd_client",
++static char *aoe_devnode(const struct device *dev, umode_t *mode)
++{
++	return kasprintf(GFP_KERNEL, "etherd/%s", dev_name(dev));
++}
++
++static const struct class aoe_class = {
++	.name = "aoe",
++	.devnode = aoe_devnode,
 +};
- static struct kobject *rnbd_devs_kobj;
- 
- enum {
-@@ -646,11 +648,11 @@ int rnbd_clt_create_sysfs_files(void)
++
+ static int
+ discover(void)
  {
- 	int err;
+@@ -273,11 +283,6 @@ static const struct file_operations aoe_fops = {
+ 	.llseek = noop_llseek,
+ };
  
--	rnbd_dev_class = class_create("rnbd-client");
--	if (IS_ERR(rnbd_dev_class))
--		return PTR_ERR(rnbd_dev_class);
-+	err = class_register(&rnbd_dev_class);
-+	if (err)
-+		return err;
- 
--	rnbd_dev = device_create_with_groups(rnbd_dev_class, NULL,
-+	rnbd_dev = device_create_with_groups(&rnbd_dev_class, NULL,
- 					      MKDEV(0, 0), NULL,
- 					      default_attr_groups, "ctl");
- 	if (IS_ERR(rnbd_dev)) {
-@@ -666,9 +668,9 @@ int rnbd_clt_create_sysfs_files(void)
- 	return 0;
- 
- dev_destroy:
--	device_destroy(rnbd_dev_class, MKDEV(0, 0));
-+	device_destroy(&rnbd_dev_class, MKDEV(0, 0));
- cls_destroy:
--	class_destroy(rnbd_dev_class);
-+	class_unregister(&rnbd_dev_class);
- 
- 	return err;
- }
-@@ -678,6 +680,6 @@ void rnbd_clt_destroy_sysfs_files(void)
- 	sysfs_remove_group(&rnbd_dev->kobj, &default_attr_group);
- 	kobject_del(rnbd_devs_kobj);
- 	kobject_put(rnbd_devs_kobj);
--	device_destroy(rnbd_dev_class, MKDEV(0, 0));
--	class_destroy(rnbd_dev_class);
-+	device_destroy(&rnbd_dev_class, MKDEV(0, 0));
-+	class_unregister(&rnbd_dev_class);
- }
-diff --git a/drivers/block/rnbd/rnbd-srv-sysfs.c b/drivers/block/rnbd/rnbd-srv-sysfs.c
-index d5d9267e1fa5..5e69c0112e23 100644
---- a/drivers/block/rnbd/rnbd-srv-sysfs.c
-+++ b/drivers/block/rnbd/rnbd-srv-sysfs.c
-@@ -20,7 +20,9 @@
- #include "rnbd-srv.h"
- 
- static struct device *rnbd_dev;
--static struct class *rnbd_dev_class;
-+static const struct class rnbd_dev_class = {
-+	.name = "rnbd-server",
-+};
- static struct kobject *rnbd_devs_kobj;
- 
- static void rnbd_srv_dev_release(struct kobject *kobj)
-@@ -215,12 +217,12 @@ int rnbd_srv_create_sysfs_files(void)
+-static char *aoe_devnode(const struct device *dev, umode_t *mode)
+-{
+-	return kasprintf(GFP_KERNEL, "etherd/%s", dev_name(dev));
+-}
+-
+ int __init
+ aoechr_init(void)
  {
- 	int err;
+@@ -290,15 +295,14 @@ aoechr_init(void)
+ 	}
+ 	init_completion(&emsgs_comp);
+ 	spin_lock_init(&emsgs_lock);
+-	aoe_class = class_create("aoe");
+-	if (IS_ERR(aoe_class)) {
++	n = class_register(&aoe_class);
++	if (n) {
+ 		unregister_chrdev(AOE_MAJOR, "aoechr");
+-		return PTR_ERR(aoe_class);
++		return n;
+ 	}
+-	aoe_class->devnode = aoe_devnode;
  
--	rnbd_dev_class = class_create("rnbd-server");
--	if (IS_ERR(rnbd_dev_class))
--		return PTR_ERR(rnbd_dev_class);
-+	err = class_register(&rnbd_dev_class);
-+	if (err)
-+		return err;
+ 	for (i = 0; i < ARRAY_SIZE(chardevs); ++i)
+-		device_create(aoe_class, NULL,
++		device_create(&aoe_class, NULL,
+ 			      MKDEV(AOE_MAJOR, chardevs[i].minor), NULL,
+ 			      chardevs[i].name);
  
--	rnbd_dev = device_create(rnbd_dev_class, NULL,
--				  MKDEV(0, 0), NULL, "ctl");
-+	rnbd_dev = device_create(&rnbd_dev_class, NULL,
-+				 MKDEV(0, 0), NULL, "ctl");
- 	if (IS_ERR(rnbd_dev)) {
- 		err = PTR_ERR(rnbd_dev);
- 		goto cls_destroy;
-@@ -234,9 +236,9 @@ int rnbd_srv_create_sysfs_files(void)
- 	return 0;
+@@ -311,8 +315,8 @@ aoechr_exit(void)
+ 	int i;
  
- dev_destroy:
--	device_destroy(rnbd_dev_class, MKDEV(0, 0));
-+	device_destroy(&rnbd_dev_class, MKDEV(0, 0));
- cls_destroy:
--	class_destroy(rnbd_dev_class);
-+	class_unregister(&rnbd_dev_class);
- 
- 	return err;
+ 	for (i = 0; i < ARRAY_SIZE(chardevs); ++i)
+-		device_destroy(aoe_class, MKDEV(AOE_MAJOR, chardevs[i].minor));
+-	class_destroy(aoe_class);
++		device_destroy(&aoe_class, MKDEV(AOE_MAJOR, chardevs[i].minor));
++	class_unregister(&aoe_class);
+ 	unregister_chrdev(AOE_MAJOR, "aoechr");
  }
-@@ -245,6 +247,6 @@ void rnbd_srv_destroy_sysfs_files(void)
- {
- 	kobject_del(rnbd_devs_kobj);
- 	kobject_put(rnbd_devs_kobj);
--	device_destroy(rnbd_dev_class, MKDEV(0, 0));
--	class_destroy(rnbd_dev_class);
-+	device_destroy(&rnbd_dev_class, MKDEV(0, 0));
-+	class_unregister(&rnbd_dev_class);
- }
+ 
 -- 
 2.41.0
 
