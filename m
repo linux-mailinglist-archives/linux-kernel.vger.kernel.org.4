@@ -2,103 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02809736BE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 14:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E14D736BE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 14:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232545AbjFTMZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 08:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
+        id S232289AbjFTM0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 08:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbjFTMZw (ORCPT
+        with ESMTP id S231825AbjFTM0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 08:25:52 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60855E71
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 05:25:51 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1687263949;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PI/H55BDJsoGpeJInU2i92oFiehPg5S80icORgiJn5A=;
-        b=uwHLfdAruaoAt9x0r9NyU1U1dDeV5Iw/Q16G921rh4dyW89i3wkaGf6rmuuyXMb55DWyZh
-        dx7Nm+3FOu7rbPMXwz1dMmNriAsaGaAExYYHs0XEbSdAGx2rzsJhFIbMymgJqZQltUaCOb
-        o9jxSujIRbZfIVsRlAaIEgHDW/i/msR0DqNwbTrTlcWroCrzn98+6nKaJkE/jVaQoRWDLL
-        c88B/i3TZYWNDpZGbZKZkbeo1I1/n8lULWq147gZwzz1/ejAQmI7TYJ3jsotB3QYJHB81A
-        yCVeYVEtIemgfmFcfPc2YpYXvvXDakWLhxMhpdTo9BNJWzNKLgqthuFjTYol0A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1687263949;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PI/H55BDJsoGpeJInU2i92oFiehPg5S80icORgiJn5A=;
-        b=LUo2lP5lXi1Ya7ZYhXPxwax2NUKoCPomaA+pUaDTRvD0SQ55gUL5LTVw1iEUXgs49Amy7J
-        T2sevr5cr5+jOBDw==
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Tony Battersby <tonyb@cybernetics.com>,
-        Ashok Raj <ashok.raj@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: Re: [patch v3 5/7] x86/smp: Cure kexec() vs. mwait_play_dead()
- breakage
-In-Reply-To: <20230620092324.GWZJFwDDVo3TRUI0Ck@fat_crate.local>
-References: <20230615190036.898273129@linutronix.de>
- <20230615193330.492257119@linutronix.de>
- <20230620092324.GWZJFwDDVo3TRUI0Ck@fat_crate.local>
-Date:   Tue, 20 Jun 2023 14:25:48 +0200
-Message-ID: <87bkha8gmr.ffs@tglx>
+        Tue, 20 Jun 2023 08:26:15 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F2F170A;
+        Tue, 20 Jun 2023 05:26:10 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-666eb03457cso1779513b3a.1;
+        Tue, 20 Jun 2023 05:26:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687263970; x=1689855970;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XMzjdDcWatbWNdORl/WAlXXoG9KE2sOD4/NeGpll6Ck=;
+        b=Ml7p19DiZD3pT0kEU2uO1Mu/goUuQAHgi/2wWxr7MaBcsQ8dQesQMuX1yInGohwad/
+         m3fCxnvmqtg2vh31Kyd/dq5oqCFPMn82HvRLHJ1yBpTGQno5DvZDr0FSqCFTWopotmCu
+         1i3wzlWFiylAeLSeqM+4HGmrVpp3jP5NZlIcYmRr4MT71xz15Vkw5s5fZ4BCnXIVQgJO
+         KAaxMoc11boG4n+t3kwdCoLWk8nfbdAP2lNURcKIFwPRoAongUbjhvJJdzDiEPp9dbos
+         zTebr1pQkSpBGndNeeINDKIaKMH3Q1coW3UNNL2sxusH1etrmhpaufGP/VkP+YBlJosK
+         rObQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687263970; x=1689855970;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XMzjdDcWatbWNdORl/WAlXXoG9KE2sOD4/NeGpll6Ck=;
+        b=BJjI/LLOmovs9HRlnLrB3bSmpedg1PL9OZB4otdrfvGTcje4cW+bkP3h28l3N++lMa
+         liwp8zuVC4j8238MhYv0TEolnBjKEFTgzz0mvl0wjXWZe4dwOve2tNiN60QcccOVnC15
+         4BwyGoDV89hBTGWTMo9WlOxAiw1ZfkLueaQ8kwHwY8JRsQI8kLN3B4kWQ0335YTnpXD3
+         PSIsKWwsQKZhxhhGoZhp5/2CtmAFZEfADbRHweuaiKDfP01xH1keO+AhpegcLNM2Tstb
+         TwmC7ySw8rdAG4EVOUovWACCARG0krYScSNQ8g+Ao0dQWQtSRoMzzMdJEX6EyyHOPuGk
+         RX4w==
+X-Gm-Message-State: AC+VfDyROFxUNqnyr2t+OeNEj84QWZh9Pxv4SWoYsC30NJkMpuUoA0C/
+        Re35SZ9ovH3R5+vLGNmO011L30R+HLSbhQ==
+X-Google-Smtp-Source: ACHHUZ7h+AU05ndOleXii7rbNbOSmHtEb7hInHvBQ/nPNlLR7lRc7IunpV+ugkjECtjwRZRFGXnPsA==
+X-Received: by 2002:a05:6a20:48a:b0:111:1bd6:270b with SMTP id 10-20020a056a20048a00b001111bd6270bmr6990892pzc.7.1687263970104;
+        Tue, 20 Jun 2023 05:26:10 -0700 (PDT)
+Received: from [192.168.0.103] ([103.131.18.64])
+        by smtp.gmail.com with ESMTPSA id c24-20020aa78818000000b00640f588b36dsm1278693pfo.8.2023.06.20.05.26.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 05:26:09 -0700 (PDT)
+Message-ID: <4ce78431-d397-a7a5-cb3d-905c61d47cc4@gmail.com>
+Date:   Tue, 20 Jun 2023 19:25:50 +0700
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: Fwd: iosm: detected field-spanning write for XMM7360
+Content-Language: en-US
+To:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Wireless <linux-wireless@vger.kernel.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        M Chetan Kumar <m.chetan.kumar@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Florian Klink <flokli@flokli.de>
+References: <dbfa25f5-64c8-5574-4f5d-0151ba95d232@gmail.com>
+ <0826b484-8bbc-d58f-2caf-7015bd30f827@leemhuis.info>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <0826b484-8bbc-d58f-2caf-7015bd30f827@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20 2023 at 11:23, Borislav Petkov wrote:
-> On Thu, Jun 15, 2023 at 10:33:57PM +0200, Thomas Gleixner wrote:
->> TLDR: It's a mess.
->>  	while (1) {
->> @@ -1824,10 +1836,57 @@ static inline void mwait_play_dead(void)
->
-> JFYI: that last hunk has some conflicts applying to latest tip/master.
-> Might need merge resolving...
+On 6/20/23 16:12, Linux regression tracking (Thorsten Leemhuis) wrote:
+> On 20.06.23 10:44, Bagas Sanjaya wrote:
+>>
+>> I notice a regression report on Bugzilla [1]. Quoting from it:
+> 
+> Bagas, you can't know this, as we didn't have such a sitaution until
+> now, so FYI:
+> 
+> Please don't add "field-spanning write" warnings to the regression
+> tracking, that's not worth the trouble (at least for the time beeing).
+> Just forward them to Kees, who might look into them if the developer in
+> question doesn't care. That was the approach we agreed on here:
+> 
+> https://lore.kernel.org/all/f1ca3cea-01ae-998a-2aa8-c3e40cf46975@leemhuis.info/
+> 
 
-Yes, I know.
+OK, thanks for another tip! I always forgot to double-check everywhere...
 
->> +/*
->> + * Kick all "offline" CPUs out of mwait on kexec(). See comment in
->> + * mwait_play_dead().
->> + */
->> +void smp_kick_mwait_play_dead(void)
->> +{
->> +	u32 newstate = CPUDEAD_MWAIT_KEXEC_HLT;
->
-> Do you even need this newstate thing?
+-- 
+An old man doll... just what I always wanted! - Clara
 
-Yes, for two reasons:
-
-  1) To explicitely tell the other CPU to go into HLT. MWAIT can resume
-     execution due to SMIs or NMIs, so we don't want to go them into HLT
-     unconditionally. TLD; .... :)
-
-  2) Two have the state feedback from the other CPU.
-
->> +
->> +		if (READ_ONCE(md->status) != newstate)
->> +			pr_err("CPU%u is stuck in mwait_play_dead()\n", cpu);
->
-> Shouldn't this be a pr_err_once thing so that it doesn't flood the
-> console unnecessarily?
-
-Yes, no, do not know :)
