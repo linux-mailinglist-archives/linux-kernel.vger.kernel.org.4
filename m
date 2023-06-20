@@ -2,114 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 582B773747E
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4454737482
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:48:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbjFTSnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 14:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37510 "EHLO
+        id S229845AbjFTSr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 14:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbjFTSm6 (ORCPT
+        with ESMTP id S229462AbjFTSr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 14:42:58 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466931735
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 11:42:52 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-668711086f4so2104381b3a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 11:42:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687286571; x=1689878571;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=l+Plwr1huw+Iprthw8GSo9mwUqiU0W0HO5ZTEyvRXxM=;
-        b=ky7pjJzMtQWP1zNtVfoPIiocJ5Jjmz3iNOCu22pPgRJ4IKBDArGJn/fwGyzo3UioAR
-         He6IkG//7leBnBUqOmTMyScv+sRQmvzUHonIIvdPFuBCHhc9olFgH1HsitbSs7F7lvml
-         fT25rEFkDoERwbsxJYyGjK+WRwU/fdTKFC/0c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687286571; x=1689878571;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l+Plwr1huw+Iprthw8GSo9mwUqiU0W0HO5ZTEyvRXxM=;
-        b=N4TrooD10fUZ8YimqTXPPSkPMDB+AnsayqXuhcS8lM8prX5JSBPCddYSSKBi4zxvB2
-         JOob/xTcJgDCuhvN3DfnzOQH+ZV82LumxndsmMbPq7nLrQh4a/6jnRICOQlgS7t3HsEB
-         vzuni+mZGDqkklxLyDEo+NUc+PBo4xbkdCNlMREidsS1PfcSycYDt8pDy3XTWmU202wD
-         hd6jgn7LYUIzyOTzRJORkJUMCCSB3DWoeNV7IwzgPLp0d41nrP8EFfjBlqmxfEYoqtVk
-         LHl+3JXWvXcuvJb/ADwAjBhhUFe1iy9ObtztLcmXrmYLdTPp6oNW3nBRzEjQ4oykU6Dh
-         0Nvg==
-X-Gm-Message-State: AC+VfDwMz8Mka9Wd12X6aHIj1QEw8KIONiKD4b01XmZ7Vzp0M1W7zMOu
-        4/YTKqpZMDSBnCX9rNzED10yqA==
-X-Google-Smtp-Source: ACHHUZ6xyUn85z6Ohu6udB7Pzp4abdWNuTB2aieXWsmYAErGG6uR+KUaoZPZKjpuZDilSEYoGKMxhA==
-X-Received: by 2002:a05:6a00:2353:b0:666:b22d:c6e0 with SMTP id j19-20020a056a00235300b00666b22dc6e0mr16497710pfj.11.1687286571456;
-        Tue, 20 Jun 2023 11:42:51 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id r23-20020a62e417000000b0063d670ad850sm1662655pfh.92.2023.06.20.11.42.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 11:42:50 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 11:42:50 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] readdir: Replace one-element arrays with
- flexible-array members
-Message-ID: <202306201142.235D900@keescook>
-References: <ZJHiPJkNKwxkKz1c@work>
+        Tue, 20 Jun 2023 14:47:58 -0400
+Received: from mail.manjaro.org (mail.manjaro.org [IPv6:2a01:4f8:c0c:51f3::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B93B9DC;
+        Tue, 20 Jun 2023 11:47:56 -0700 (PDT)
+From:   Furkan Kardame <f.kardame@manjaro.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
+        t=1687286875;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=x5Ty4pCnpwGR7JhrU4QbNphR7Ex1qOB/BOQRkHNf7iY=;
+        b=TsqWWY2qIfNlMBfSe+2Mdfr7D45iOXSDGrxYIRYVSZlkNZuaAvrJHTUFsDS5U7UvOH2p81
+        ubx1lhwY3veyGiD6yO7unhOQfSiU0InRti1nMdAgwynfAg02keW/m4Zb+Ba4lQP2Z8S3PT
+        TJGa3z9lUDWZcuY4G4YbWK1brohjK8en1rm7uf5FeATS6h2nWvRctDYZ621RB+kF9X6SPg
+        wDIOCHBUpBHc/VwWV8RH65ji8Ao6tfsJk0G36QeK/pjwxGaLlFKGJ4ky18bRfpaV6HEgFP
+        sWCE7N9L6IpnlxQx31qA2xU7JFanZ+EC+LMOVkiWjplg6+hLJ8KGWPPJfexgLA==
+To:     robh+dt@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        heiko@sntech.de, broonie@kernel.org, deller@gmx.de,
+        dsterba@suse.com, arnd@arndb.de, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Furkan Kardame <f.kardame@manjaro.org>
+Subject: [PATCHv4 0/2] Add support for Firefly Station P2 aka rk3568-roc-pc
+Date:   Tue, 20 Jun 2023 21:47:44 +0300
+Message-Id: <20230620184746.55391-1-f.kardame@manjaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZJHiPJkNKwxkKz1c@work>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Authentication-Results: ORIGINATING;
+        auth=pass smtp.auth=f.kardame@manjaro.org smtp.mailfrom=f.kardame@manjaro.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 11:30:36AM -0600, Gustavo A. R. Silva wrote:
-> One-element arrays are deprecated, and we are replacing them with flexible
-> array members instead. So, replace one-element arrays with flexible-array
-> members in multiple structures.
-> 
-> Address the following -Wstringop-overflow warnings seen when built
-> m68k architecture with m5307c3_defconfig configuration:
-> In function '__put_user_fn',
->     inlined from 'fillonedir' at fs/readdir.c:170:2:
-> include/asm-generic/uaccess.h:49:35: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
->    49 |                 *(u8 __force *)to = *(u8 *)from;
->       |                 ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-> fs/readdir.c: In function 'fillonedir':
-> fs/readdir.c:134:25: note: at offset 1 into destination object 'd_name' of size 1
->   134 |         char            d_name[1];
->       |                         ^~~~~~
-> In function '__put_user_fn',
->     inlined from 'filldir' at fs/readdir.c:257:2:
-> include/asm-generic/uaccess.h:49:35: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
->    49 |                 *(u8 __force *)to = *(u8 *)from;
->       |                 ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
-> fs/readdir.c: In function 'filldir':
-> fs/readdir.c:211:25: note: at offset 1 into destination object 'd_name' of size 1
->   211 |         char            d_name[1];
->       |                         ^~~~~~
-> 
-> This helps with the ongoing efforts to globally enable
-> -Wstringop-overflow.
-> 
-> This results in no differences in binary output.
-> 
-> Link: https://github.com/KSPP/linux/issues/79
-> Link: https://github.com/KSPP/linux/issues/312
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+Patch 1 adds the requisite dt-binding.
+Patch 2 adds Firefly Station P2 device tree
 
-Thanks! We're getting closer every day to killing this code pattern
-for good. :)
+Please review and I hope it is all good this time :)
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Furkan Kardame
+
+--- 
+V4: 
+- Fix indentation
+- Remove unused regulator nodes
+- Add space before the property.
+
+V3:  https://lore.kernel.org/all/20230619184856.23066-1-f.kardame@manjaro.org/
+- Change tab to space in devicetree binding.
+
+v2: https://lore.kernel.org/all/20230617135315.25441-1-f.kardame@manjaro.org/
+- Add regulator suffix to nodes
+- Fix indentation
+- Remove sdio_pwrseq node as it's not needed until sdmmc2 is added
+- Remove underscore from pinctrl node name
+- Fix dt-binding compatible name
+
+v1: https://lore.kernel.org/all/20230616211020.55755-3-f.kardame@manjaro.org/
+
+Furkan Kardame (2):
+  dt-bindings: arm: rockchip: Add Firefly Station P2
+  arm64: dts: rockchip: add dts for Firefly Station P2 aka rk3568-roc-pc
+
+ .../devicetree/bindings/arm/rockchip.yaml     |   5 +
+ arch/arm64/boot/dts/rockchip/Makefile         |   1 +
+ .../arm64/boot/dts/rockchip/rk3568-roc-pc.dts | 654 ++++++++++++++++++
+ 3 files changed, 660 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3568-roc-pc.dts
 
 -- 
-Kees Cook
+2.40.1
+
