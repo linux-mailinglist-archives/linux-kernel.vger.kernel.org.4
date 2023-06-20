@@ -2,101 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF27A736C20
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 14:42:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A095736C28
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 14:45:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbjFTMmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 08:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
+        id S232632AbjFTMpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 08:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbjFTMmF (ORCPT
+        with ESMTP id S232429AbjFTMox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 08:42:05 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C4C10DD;
-        Tue, 20 Jun 2023 05:42:04 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qBagI-000343-QS; Tue, 20 Jun 2023 14:41:58 +0200
-Message-ID: <2d7ed7bb-38ba-8840-6629-d210937b8513@leemhuis.info>
-Date:   Tue, 20 Jun 2023 14:41:58 +0200
+        Tue, 20 Jun 2023 08:44:53 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809BA10FA
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 05:44:51 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-519f6e1a16cso5495465a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 05:44:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=futuring-girl-com.20221208.gappssmtp.com; s=20221208; t=1687265090; x=1689857090;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Woy9uXIbm09rqBjX1mw8Ry8Yy7O1r7e9UR5ScGw9hbM=;
+        b=bUq6B/fjuqhJGJhb5F4omVZxP5j6n2opJA03bG7H4M8PKjLi+kiu7BFjM5zAtTgx5v
+         akG2by3SZjL0jaePtm/ixtTEeXpaxulBN1B0PtzRj5OytQtu6CGquxk9LYtodMY/zn98
+         yQW4O0UVPAixNUg5QC7ADwdj5ZXawlmiuoucNKFezIhyfofpC3AKNQnvyifz2e1kiTM3
+         s8l9gnD0ERusHwVd9bsfhyigW5MTch2mUkCcWUAjjlXWutQBPdc4FxjJWxxfpZvtYO7x
+         anf+UraBULroMpoqLiZpH6y7jbV439DB7y72/cOqEFT1mdITl5uVPmiQYC2xWAA15Plu
+         1Cww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687265090; x=1689857090;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Woy9uXIbm09rqBjX1mw8Ry8Yy7O1r7e9UR5ScGw9hbM=;
+        b=e7GYRZvET9dHDF/J9P0bLbKn+s7jGxDZXOacrVmv0G4kWU860Bi8QQoRbBiXJNy6Co
+         u6aVy8BAr8nGFtKp/EmrYWiPpV8wlqtB0WzOeCNXvtJqn3+QfqgjpUr93bGFQ5sQ/AQr
+         CH5eI7V8aZE03S3hF2cRae8nawIjZlAgYiS8pkcDLmrqkDoXkK5GWgU9Zo6s+4zt9ZzI
+         qxqkRsSwyjq4yTLN6g6gNuMVhSIOJuKyovYWBYFRSgTW9bGsGPfK0SOGfoMbbywDt8gH
+         gK7arioCe/8+qvgIpY6QuWiFsEadoo6LOsiuKvv0plaPkVuisMCpnEzqzO9gZLoTBji+
+         mkZQ==
+X-Gm-Message-State: AC+VfDyNgKhesMJqh235Zut3PiV6E4DzQRluO8q8qU97pcchPFKFd3bE
+        PDG5MIgWg2VC4oBu1elDL7HqVZ4WVptmNmMxsfpO3Q==
+X-Google-Smtp-Source: ACHHUZ6+prkdM6kZZEktw29hRWVkIfpIaf/jCzXL1Y0+PKO/f1QZdU2GYr6hdrLVYRpcWNFABBLfvyTb+4mDWXeI71Y=
+X-Received: by 2002:aa7:d605:0:b0:518:92a2:1697 with SMTP id
+ c5-20020aa7d605000000b0051892a21697mr7702125edr.15.1687265089834; Tue, 20 Jun
+ 2023 05:44:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: New kernel warning after updating from LTS 5.15.110 to 5.15.112
- (and 5.15.113)
-Content-Language: en-US, de-DE
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Linux Kernel Integrity <linux-integrity@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        stable@vger.kernel.org
-References: <fe6f7aa0-56c2-3729-ce8c-0f2d943b33f4@alliedtelesis.co.nz>
- <ZHQIFLWvrWUNMVxb@debian.me>
- <6e470461-1a9b-ec51-bac5-f2beb1dc11c9@alliedtelesis.co.nz>
- <2b09d2ed-0852-bbc9-b792-aad92235c7fa@gmail.com>
- <03daca5c-e468-8889-4dc2-e625a664d571@alliedtelesis.co.nz>
- <ec5245bd-3103-f0c7-d3ef-85aabb4d4712@alliedtelesis.co.nz>
- <ZH6TIjXeXJVMvSKa@debian.me> <2023060606-unlatch-yiddish-a45f@gregkh>
- <ac5b76af-87dc-b04d-6035-8eda8ba5ed12@kunbus.com>
- <2023060736-immodest-doormat-f957@gregkh>
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <2023060736-immodest-doormat-f957@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1687264924;c426119d;
-X-HE-SMSGID: 1qBagI-000343-QS
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230619102154.568541872@linuxfoundation.org>
+In-Reply-To: <20230619102154.568541872@linuxfoundation.org>
+From:   ogasawara takeshi <takeshi.ogasawara@futuring-girl.com>
+Date:   Tue, 20 Jun 2023 21:44:38 +0900
+Message-ID: <CAKL4bV6nbRsiufHPdGEQQgCKRBDE84ApYCoAB2pJEhhfP6wdcQ@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/166] 6.1.35-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: This mail in primarily relevant for Linux kernel regression
-tracking. See link in footer if these mails annoy you.]
+Hi Greg
 
-On 07.06.23 19:49, Greg KH wrote:
-> On Wed, Jun 07, 2023 at 05:47:57PM +0200, Lino Sanfilippo wrote:
->> On 06.06.23 08:45, Greg KH wrote:
->>>>
->>>> Lino, it looks like this regression is caused by (backported) commit of yours.
->>>> Would you like to take a look on it?
+On Mon, Jun 19, 2023 at 7:44=E2=80=AFPM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.1.35 release.
+> There are 166 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 21 Jun 2023 10:21:12 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
+6.1.35-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
 
->>>> Anyway, telling regzbot:
->>>>
->>>> #regzbot introduced: 51162b05a44cb5
->>>
->>> There's some tpm backports to 5.15.y that were suspect and I'll look
->>> into reverting them and see if this was one of the ones that was on that
->>> list.  Give me a few days...
->>
->> Could you please consider to apply (mainline) commit 0c7e66e5fd69 ("tpm, tpm_tis: Request threaded
->> interrupt handler") to 5.15.y?
->>
->> As Chris confirmed it fixes the regression caused by 51162b05a44cb5 ("tpm, tpm_tis: Claim locality
->> before writing interrupt registers").
->>
->> Commit 0c7e66e5fd69 is also needed for 5.10.y, 6.1.y and 6.3.y.
-> 
-> Now queued up, thanks.
+6.1.35-rc1 tested.
 
-#regzbot fix: 0c7e66e5fd69
-#regzbot ignore-activity
+Build successfully completed.
+Boot successfully completed.
+No dmesg regressions.
+Video output normal.
+Sound output normal.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+Lenovo ThinkPad X1 Carbon Gen10(Intel i7-1260P(x86_64), arch linux)
+
+Thanks
+
+Tested-by: Takeshi Ogasawara <takeshi.ogasawara@futuring-girl.com>
