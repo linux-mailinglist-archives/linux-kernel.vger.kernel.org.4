@@ -2,109 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33FE73676B
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BCB673674E
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231675AbjFTJOk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 05:14:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
+        id S232070AbjFTJNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 05:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbjFTJOI (ORCPT
+        with ESMTP id S231713AbjFTJMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 05:14:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E0D1FDE
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 02:12:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687252348;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j+DstClbbuIYoLgiuHR0ngP8+VmdOxHjqeCjdjYlEa0=;
-        b=YX9MDgCOIsE7cMjKzIwx4EUV/E+VmSf0IdlAiR1OcDNCLbx9f0NLEJEkc+3azOk/NsB6Td
-        W+1/i8NXgkaK8SnyA/kp0PBbnCwTfHGbM7SQZQymWb2lYinsa5s5Pi2dd4Np3spQyAfVC0
-        3uxAhoPy078ReGbzkSL3YEm1/n9aZ74=
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
- [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-454-7amf2Pi_OLqUNYbrrM7uXw-1; Tue, 20 Jun 2023 05:12:26 -0400
-X-MC-Unique: 7amf2Pi_OLqUNYbrrM7uXw-1
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-25f02317e40so1679634a91.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 02:12:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687252345; x=1689844345;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j+DstClbbuIYoLgiuHR0ngP8+VmdOxHjqeCjdjYlEa0=;
-        b=Cro8g/D5A9+c0jRp3DnpIjzNXDh6k9gbWUGpgLrjIZXeA+k6sKxv5MdZ8bTIDGDEqY
-         EGi5dHkOV+zPmxsodlyXLPDTIBJJGmcA2wSuBGmBdEuph4ds9fivjU4yp5/9n+m+wRzJ
-         D0geIwfVF9RpsMhSmTK4ABdNIM4aj7CiT5hjt3qdQxNOrT2cDVQHorgSpM2p3rCU1tbZ
-         IaNORGfbhzd9LLpWoHzdQNsb6kEjTqg53DRStL/14OkkRFa/yu7ghnv+lgWEgNeJLoxu
-         +9glxW7hx8sNW1y69nnjXLIYHtfCgyReaAOnf8obpa890M1o3hyD1DAKr8UJ8Hr9twA8
-         n+Iw==
-X-Gm-Message-State: AC+VfDz1lrjAzV+pqoLlPj3XRDmhglinfcKMi1dnira7yzq1FMAYk1Do
-        4oBfQMntnwrmHi74/viuwUBuJKLjnD1hy/3CFnlX4cBuMifkyS8aL3cGqikllnFhDOrIWSfG/O9
-        pSaSK8CbFB/hxM4WngcZdx1j16t7CmLCaE9Bb/HwV
-X-Received: by 2002:a17:90a:38a1:b0:25e:886b:c6b with SMTP id x30-20020a17090a38a100b0025e886b0c6bmr10183567pjb.48.1687252345441;
-        Tue, 20 Jun 2023 02:12:25 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5yf4FPi/w3rtXTM9KFhnWJaEmjdafqvs3GuqucUyaXBBPbxjvZ8esvPhO3pQcCESORqo2VmW2rh9OP3FsbCMQ=
-X-Received: by 2002:a17:90a:38a1:b0:25e:886b:c6b with SMTP id
- x30-20020a17090a38a100b0025e886b0c6bmr10183561pjb.48.1687252345241; Tue, 20
- Jun 2023 02:12:25 -0700 (PDT)
+        Tue, 20 Jun 2023 05:12:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA5A1A1;
+        Tue, 20 Jun 2023 02:12:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DC3661087;
+        Tue, 20 Jun 2023 09:12:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B572C433C8;
+        Tue, 20 Jun 2023 09:12:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687252341;
+        bh=Kz1VJjObJlh7O7SFllyvvnKC+T2YPg+YAnme017Z+eo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sKw0SzTUl8EvZLljd09yKbjyqdp5cahtABMGDY1iwDmCb1VOY9z74+2ES4BLZA/AO
+         4sAy0D7YMlnQ3P+IF+uj6AOwXLxoOdot2nWB43Ea8G+vrAo0x37Mt9zXmDP2EJK12H
+         jimw4imn6eO2hgUFqATFnUBHz9bQ21H4NJWxiOxjsW0quR9xzxivP7A2rhsJ/KgHOx
+         Al9r++4Ad6rjwQs0zTZJekDcBy4lTuQWuDnwOoEWKubdC1LmzYiNs6lUxYN6NxPSYC
+         acv8X3WVdJG23Z+3cBmywa94bWJV3ByfVBBvBF/tl26jJcuYvMJ1EwILkPUh1M/RZy
+         ZWzKxSpU89Jbg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1qBXPR-0007fU-GL; Tue, 20 Jun 2023 11:12:21 +0200
+Date:   Tue, 20 Jun 2023 11:12:21 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 4/5] gnss: ubx: add support for the reset gpio
+Message-ID: <ZJFtdWK5I13YUUcu@hovoldconsulting.com>
+References: <20230523064310.3005-1-wsa+renesas@sang-engineering.com>
+ <20230523064310.3005-5-wsa+renesas@sang-engineering.com>
+ <ZJFSjrf41PHe400c@hovoldconsulting.com>
+ <ZJFsGWepuvkSjL9a@shikoro>
 MIME-Version: 1.0
-References: <20230619204826.755559-1-yukuai1@huaweicloud.com> <20230619204826.755559-8-yukuai1@huaweicloud.com>
-In-Reply-To: <20230619204826.755559-8-yukuai1@huaweicloud.com>
-From:   Xiao Ni <xni@redhat.com>
-Date:   Tue, 20 Jun 2023 17:12:14 +0800
-Message-ID: <CALTww2-_CTY3b9L1OYz0yJUBtNJPmANmw1-RWpDhEQgKCbhewQ@mail.gmail.com>
-Subject: Re: [PATCH -next 7/8] md/md-linear: enable io accounting
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     song@kernel.org, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com, yangerkun@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="M5C+drIlaUYiTH3C"
+Content-Disposition: inline
+In-Reply-To: <ZJFsGWepuvkSjL9a@shikoro>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 8:50=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.com> w=
-rote:
->
-> From: Yu Kuai <yukuai3@huawei.com>
->
-> use md_account_bio() to enable io accounting, also make sure
-> mddev_suspend() will wait for all io to be done.
->
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> ---
->  drivers/md/md-linear.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/md/md-linear.c b/drivers/md/md-linear.c
-> index 4eb72b9dd933..71ac99646827 100644
-> --- a/drivers/md/md-linear.c
-> +++ b/drivers/md/md-linear.c
-> @@ -238,6 +238,7 @@ static bool linear_make_request(struct mddev *mddev, =
-struct bio *bio)
->                 bio =3D split;
->         }
->
-> +       md_account_bio(mddev, &bio);
->         bio_set_dev(bio, tmp_dev->rdev->bdev);
->         bio->bi_iter.bi_sector =3D bio->bi_iter.bi_sector -
->                 start_sector + data_offset;
-> --
-> 2.39.2
->
 
-Reviewed-by: Xiao Ni <xni@redhat.com>
+--M5C+drIlaUYiTH3C
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Jun 20, 2023 at 11:06:33AM +0200, Wolfram Sang wrote:
+>=20
+> > > Tested with a Renesas KingFisher board. The chip correctly disappears
+> > > from the I2C bus when the 'gnss0' device is not opened.
+> >=20
+> > What do you mean by "disappears from the I2C bus"?
+> >=20
+> > Does this device support both I2C and UART?
+>=20
+> Yes, and on my board, both are wired.
+
+Ah, yes, it was ublox device.
+
+But can you elaborate on the "disappearing" bit? How exactly does it
+"disappear" when the gnss0 device is *not* opened?
+
+Johan
+
+--M5C+drIlaUYiTH3C
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQQHbPq+cpGvN/peuzMLxc3C7H1lCAUCZJFtcQAKCRALxc3C7H1l
+CEBpAQDg4l5eDw7fijbkeQJPqL6qCxJNnHQFO137fzjo8UOZpgD7BsiFgclS6pCZ
+4SYB9I0X23b9VCOxi6Mh8c42CDK7mQs=
+=Pv+G
+-----END PGP SIGNATURE-----
+
+--M5C+drIlaUYiTH3C--
