@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D8E736235
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 05:37:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50E8C736236
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 05:37:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbjFTDhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 23:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
+        id S230225AbjFTDha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 23:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbjFTDhQ (ORCPT
+        with ESMTP id S229489AbjFTDhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 23:37:16 -0400
+        Mon, 19 Jun 2023 23:37:17 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCE110C2
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FAA10CB
         for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 20:37:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1687232232; x=1718768232;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=pK1VeDOjkDkrNAELAM1rtg3Vev/TmJI42Cl4S2Jok0g=;
-  b=ITj7E/NgzGWA3PzIrwouHHozUCuviJ9BXfZdtCxKCtznnj/NINT7Y8uY
-   dZ36sMCgXOSFDQXfMgrl/8Salpe1XC7BRP6O6DRkUCiGojEWG/oetIy+1
-   GXAFzFkD7dOYLw4Z14COZzsZjhBljtZX+VvK5UQtjkjwUeiV8h2fKnSQW
-   LmrbmJ7R+Fr53DzoXZyEPi1KMgDhj6LaMQ8roHyjyHdNrvEax5Pf6qhzz
-   QBEBWceBkrk7hEnXgCayBYmQiDnk717XVGl+j4Y9RVF7FKApu6cdxuYQv
-   X2IHOqkqF6L0XdNdUTM4SDwgLTk8vKHvhXBkHKJYXATbMBViOWD1XlE4j
+  bh=aKH1pqAWneRkf6TbhNWYl8q3mAZnVaK9Hx9fQnJwfoc=;
+  b=OVIt8tNnKtXeGHfBqudET45ivF5GqMXvwHo6ZI0naHalqq3qMa13OYgn
+   mEoSWJCojzfTdas6rbw6YeVRNcLHbqkTzLyWMuDWxVltQzjAn9EpnQtj7
+   LargTyujnUiFDI9dQjF5EoE5iNeow31/T3vFcenkvZTo4WrmrdI4ICfN6
+   V+ORZM7AcQwp8H+WsAu2AnAYt9QBDZqNESdm/0SJAG5x9rydQ2W/vJZ59
+   10Y71iUcGvbdbH799mB1Du2ILq4iSEqb7jVBT3YIit9YerwTo0BXE5qUP
+   K09f9lA52cwMoIn8XbNc/gk4B2h+pvoSo/Xdn69L4zrBvQ5leTzQixsLJ
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="344501394"
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="344501412"
 X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="344501394"
+   d="scan'208";a="344501412"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 20:37:09 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 20:37:10 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="717079118"
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="717079121"
 X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="717079118"
+   d="scan'208";a="717079121"
 Received: from agluck-desk3.sc.intel.com ([172.25.222.74])
   by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 20:37:09 -0700
 From:   Tony Luck <tony.luck@intel.com>
@@ -60,9 +60,9 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         Kevin Hilman <khilman@baylibre.com>, aricciardi@baylibre.com,
         x86@kernel.org, linux-kernel@vger.kernel.org,
         patches@lists.linux.dev, Tony Luck <tony.luck@intel.com>
-Subject: [RFC PATCH 1/2] resctrl2: Add all the generic code
-Date:   Mon, 19 Jun 2023 20:37:01 -0700
-Message-Id: <20230620033702.33344-2-tony.luck@intel.com>
+Subject: [RFC PATCH 2/2] resctrl2: Arch x86 modules for most of the legacy control/monitor functions
+Date:   Mon, 19 Jun 2023 20:37:02 -0700
+Message-Id: <20230620033702.33344-3-tony.luck@intel.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230620033702.33344-1-tony.luck@intel.com>
 References: <20230620033702.33344-1-tony.luck@intel.com>
@@ -78,1899 +78,1840 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Generic resctrly code is responsible for:
+Missing:
+1) "mba_MBps" feedback from MBM
+2) Pseudo-locking
+3) AMD SMBA/BMEC
+4) Fixes and additions after v6.4-rc6
+5) Other stuff I haven't noticed
 
-0) Mounting and unmounting /sys/fs/resctrl
-1) Creating and removing groups
-2) Associating tasks with groups
-3) Associating CPUs with groups
-4) Context switch, calling architecture code to begin control/monitor
-   for the nex task based on which groups it is in, and which CPU it
-   is running on.
-5) Registering and unregistering architecture modules for all control
-   and monitor functions.
-
-N.B. Much of this code is just the old resctrl code with a bunch of
-renaming and refactoring.
+N.B. This is proof-of-concept code ... the locking (or lack thereof)
+for most of the files controlled by modules needs to be addressed.
 
 Signed-off-by: Tony Luck <tony.luck@intel.com>
 ---
- include/linux/resctrl.h | 107 ++++++++++++++
- include/linux/sched.h   |   3 +
- fs/resctrl2/internal.h  | 110 ++++++++++++++
- fs/resctrl2/cpu.c       | 315 ++++++++++++++++++++++++++++++++++++++++
- fs/resctrl2/directory.c | 295 +++++++++++++++++++++++++++++++++++++
- fs/resctrl2/domain.c    |  99 +++++++++++++
- fs/resctrl2/info.c      |  99 +++++++++++++
- fs/resctrl2/kernfs.c    |  58 ++++++++
- fs/resctrl2/locking.c   |  52 +++++++
- fs/resctrl2/resources.c |  85 +++++++++++
- fs/resctrl2/root.c      | 173 ++++++++++++++++++++++
- fs/resctrl2/schemata.c  | 110 ++++++++++++++
- fs/resctrl2/tasks.c     | 193 ++++++++++++++++++++++++
- fs/Kconfig              |   1 +
- fs/Makefile             |   1 +
- fs/resctrl2/Kconfig     |   5 +
- fs/resctrl2/Makefile    |  14 ++
- 17 files changed, 1720 insertions(+)
- create mode 100644 fs/resctrl2/internal.h
- create mode 100644 fs/resctrl2/cpu.c
- create mode 100644 fs/resctrl2/directory.c
- create mode 100644 fs/resctrl2/domain.c
- create mode 100644 fs/resctrl2/info.c
- create mode 100644 fs/resctrl2/kernfs.c
- create mode 100644 fs/resctrl2/locking.c
- create mode 100644 fs/resctrl2/resources.c
- create mode 100644 fs/resctrl2/root.c
- create mode 100644 fs/resctrl2/schemata.c
- create mode 100644 fs/resctrl2/tasks.c
- create mode 100644 fs/resctrl2/Kconfig
- create mode 100644 fs/resctrl2/Makefile
+ arch/x86/include/asm/resctrl.h             |  38 ++
+ fs/resctrl2/arch/x86/rdt.h                 |  22 +
+ arch/x86/kernel/cpu/amd.c                  |   3 +
+ arch/x86/kernel/cpu/intel.c                |   3 +
+ arch/x86/kernel/process_32.c               |   1 +
+ arch/x86/kernel/process_64.c               |   3 +
+ fs/resctrl2/arch/x86/alloc.c               | 119 +++++
+ fs/resctrl2/arch/x86/rdt_l2_cat.c          |   1 +
+ fs/resctrl2/arch/x86/rdt_l2_cdp.c          |   1 +
+ fs/resctrl2/arch/x86/rdt_l3_cat.c          | 349 +++++++++++++++
+ fs/resctrl2/arch/x86/rdt_l3_cdp.c          |   1 +
+ fs/resctrl2/arch/x86/rdt_l3_mba.c          | 251 +++++++++++
+ fs/resctrl2/arch/x86/rdt_llc_occupancy.c   | 100 +++++
+ fs/resctrl2/arch/x86/rdt_mbm_adjust.c      |  91 ++++
+ fs/resctrl2/arch/x86/rdt_mbm_local_bytes.c |   1 +
+ fs/resctrl2/arch/x86/rdt_mbm_local_rate.c  |   1 +
+ fs/resctrl2/arch/x86/rdt_mbm_total_bytes.c |   1 +
+ fs/resctrl2/arch/x86/rdt_mbm_total_rate.c  |   1 +
+ fs/resctrl2/arch/x86/rdt_monitor.c         | 491 +++++++++++++++++++++
+ arch/x86/Kconfig                           |  81 +++-
+ fs/resctrl2/arch/x86/Makefile              |  29 ++
+ 21 files changed, 1586 insertions(+), 2 deletions(-)
+ create mode 100644 fs/resctrl2/arch/x86/rdt.h
+ create mode 100644 fs/resctrl2/arch/x86/alloc.c
+ create mode 120000 fs/resctrl2/arch/x86/rdt_l2_cat.c
+ create mode 120000 fs/resctrl2/arch/x86/rdt_l2_cdp.c
+ create mode 100644 fs/resctrl2/arch/x86/rdt_l3_cat.c
+ create mode 120000 fs/resctrl2/arch/x86/rdt_l3_cdp.c
+ create mode 100644 fs/resctrl2/arch/x86/rdt_l3_mba.c
+ create mode 100644 fs/resctrl2/arch/x86/rdt_llc_occupancy.c
+ create mode 100644 fs/resctrl2/arch/x86/rdt_mbm_adjust.c
+ create mode 120000 fs/resctrl2/arch/x86/rdt_mbm_local_bytes.c
+ create mode 120000 fs/resctrl2/arch/x86/rdt_mbm_local_rate.c
+ create mode 120000 fs/resctrl2/arch/x86/rdt_mbm_total_bytes.c
+ create mode 120000 fs/resctrl2/arch/x86/rdt_mbm_total_rate.c
+ create mode 100644 fs/resctrl2/arch/x86/rdt_monitor.c
+ create mode 100644 fs/resctrl2/arch/x86/Makefile
 
-diff --git a/include/linux/resctrl.h b/include/linux/resctrl.h
-index 8334eeacfec5..889d9c65d8d9 100644
---- a/include/linux/resctrl.h
-+++ b/include/linux/resctrl.h
-@@ -2,6 +2,8 @@
- #ifndef _RESCTRL_H
- #define _RESCTRL_H
+diff --git a/arch/x86/include/asm/resctrl.h b/arch/x86/include/asm/resctrl.h
+index 255a78d9d906..efbad3175680 100644
+--- a/arch/x86/include/asm/resctrl.h
++++ b/arch/x86/include/asm/resctrl.h
+@@ -96,6 +96,44 @@ static inline void resctrl_sched_in(struct task_struct *tsk)
  
-+#ifdef CONFIG_X86_CPU_RESCTRL
-+
- #include <linux/kernel.h>
- #include <linux/list.h>
- #include <linux/pid.h>
-@@ -264,4 +266,109 @@ void resctrl_arch_reset_rmid_all(struct rdt_resource *r, struct rdt_domain *d);
- extern unsigned int resctrl_rmid_realloc_threshold;
- extern unsigned int resctrl_rmid_realloc_limit;
+ void resctrl_cpu_detect(struct cpuinfo_x86 *c);
  
-+#endif /* CONFIG_X86_CPU_RESCTRL */
++#elif defined(CONFIG_X86_CPU_RESCTRL2)
 +
-+#ifdef CONFIG_RESCTRL2_FS
++bool arch_alloc_resctrl_ids(struct resctrl_group *rg);
++void arch_free_resctrl_ids(struct resctrl_group *rg);
++bool arch_init_alloc_ids(struct resctrl_resource *r);
++int rmid_alloc(int prmid);
++void rmid_free(int rmid);
++void arch_add_monitor(int mon_event);
++void arch_del_monitor(int mon_event);
++u64 rdt_rmid_read(int domain_id, int rmid, int event);
++void rdt_mbm_apply_quirk(int num_rmids);
++u64 get_corrected_mbm_count(u32 rmid, unsigned long val);
 +
-+#include <linux/sched.h>
-+#include <linux/jump_label.h>
-+
-+bool arch_check_resctrl_support(void);
-+void arch_resctrl_apply_ids(u64 resctrl_ids);
-+extern u64 arch_resctrl_default_ids;
-+
-+DECLARE_STATIC_KEY_FALSE(resctrl_enable_key);
-+
-+struct resctrl_per_cpu_state {
-+	u64	cached_resctrl_ids;
-+	u64	default_resctrl_ids;
-+};
-+
-+DECLARE_PER_CPU(struct resctrl_per_cpu_state, resctrl_per_cpu_state);
-+
-+static inline void resctrl_sched_in(struct task_struct *tsk)
++static inline bool is_closid_match(struct task_struct *t, struct resctrl_group *rg)
 +{
-+	struct resctrl_per_cpu_state *state;
-+	u64 new_resctrl_ids;
-+
-+	if (!static_branch_likely(&resctrl_enable_key))
-+		return;
-+
-+	state = this_cpu_ptr(&resctrl_per_cpu_state);
-+	new_resctrl_ids = state->default_resctrl_ids;
-+
-+	if (tsk->resctrl_ids != arch_resctrl_default_ids)
-+		new_resctrl_ids = tsk->resctrl_ids;
-+
-+	if (new_resctrl_ids != state->cached_resctrl_ids) {
-+		state->cached_resctrl_ids = new_resctrl_ids;
-+		arch_resctrl_apply_ids(new_resctrl_ids);
-+	}
++	return (t->resctrl_ids >> 32) == (rg->resctrl_ids >> 32);
 +}
 +
-+/* Unclear if this is still useful */
-+static inline void resctrl_cpu_detect(struct cpuinfo_x86 *c) {}
++static inline bool arch_is_resctrl_id_match(struct task_struct *t, struct resctrl_group *rg)
++{
++	if (rg->type == DIR_MON)
++		return t->resctrl_ids == rg->resctrl_ids;
++	return is_closid_match(t, rg);
++}
 +
-+enum resctrl_type {
-+	RESCTRL_CONTROL,
-+	RESCTRL_MONITOR,
-+};
++static inline bool arch_set_task_ids(struct task_struct *t, struct resctrl_group *rg)
++{
++	if (rg->type == DIR_MON) {
++		if (!is_closid_match(t, rg)) {
++			//rdt_last_cmd_puts("Can't move task to different control group\n");
++			return false;
++		}
++	}
 +
-+enum resctrl_scope {
-+	RESCTRL_CORE,
-+	RESCTRL_L2CACHE,
-+	RESCTRL_L3CACHE,
-+	RESCTRL_SOCKET,
-+};
++	WRITE_ONCE(t->resctrl_ids, rg->resctrl_ids);
 +
-+enum resctrl_domain_update {
-+	RESCTRL_DOMAIN_ADD,
-+	RESCTRL_DOMAIN_ADD_CPU,
-+	RESCTRL_DOMAIN_DELETE_CPU,
-+	RESCTRL_DOMAIN_DELETE,
-+};
-+
-+struct resctrl_domain {
-+	struct list_head	list;
-+	struct cpumask		cpu_mask;
-+	int			id;
-+};
-+
-+struct resctrl_fileinfo {
-+	char			*name;
-+	struct kernfs_ops	*ops;
-+	void			*priv;
-+};
-+
-+struct resctrl_resource {
-+	char			*name;
-+	int			archtag;
-+	struct list_head	list;
-+	int			type;
-+	enum resctrl_scope	scope;
-+	size_t			domain_size;
-+	struct list_head	domains;
-+	void			(*domain_update)(struct resctrl_resource *r, int what, int cpu, struct resctrl_domain *d);
-+
-+	char			*infodir;
-+	struct resctrl_fileinfo	*infofiles;
-+
-+	// bits for control resources
-+	int			num_alloc_ids;
-+	void			(*show)(struct resctrl_resource *r, struct seq_file *m, u64 resctrl_ids);
-+	void			(*resetstaging)(struct resctrl_resource *r, u64 resctrl_ids);
-+	int			(*parse)(struct resctrl_resource *r, char *tok, u64 resctrl_ids);
-+	void			(*applychanges)(struct resctrl_resource *r, u64 resctrl_ids);
-+
-+	// bits for monitor resources
-+	char			*mon_domain_dir;
-+	char			*mon_domain_file;
-+	struct kernfs_ops	*mod_domain_ops;
-+	int			mon_event;
-+};
-+
-+int resctrl_register_ctrl_resource(struct resctrl_resource *r);
-+void resctrl_unregister_ctrl_resource(struct resctrl_resource *r);
-+
-+#endif /* CONFIG_RESCTRL2_FS */
- #endif /* _RESCTRL_H */
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index eed5d65b8d1f..ab5e861bcb80 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1228,6 +1228,9 @@ struct task_struct {
- 	u32				closid;
- 	u32				rmid;
- #endif
-+#ifdef CONFIG_RESCTRL2_FS
-+	u64				resctrl_ids;
-+#endif
- #ifdef CONFIG_FUTEX
- 	struct robust_list_head __user	*robust_list;
- #ifdef CONFIG_COMPAT
-diff --git a/fs/resctrl2/internal.h b/fs/resctrl2/internal.h
++	return true;
++}
+ #else
+ 
+ static inline void resctrl_sched_in(struct task_struct *tsk) {}
+diff --git a/fs/resctrl2/arch/x86/rdt.h b/fs/resctrl2/arch/x86/rdt.h
 new file mode 100644
-index 000000000000..8b56f23e95b8
+index 000000000000..98c8147bac8e
 --- /dev/null
-+++ b/fs/resctrl2/internal.h
-@@ -0,0 +1,110 @@
++++ b/fs/resctrl2/arch/x86/rdt.h
+@@ -0,0 +1,22 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/* Copyright(c) 2023 Intel Corporation. */
 +
-+#include <linux/cpu.h>
-+#include <linux/kernfs.h>
++/* H/W supported RDT monitor events */
++#define EV_LLC		1
++#define EV_TOT		2
++#define EV_LOC		3
++#define EV_MAX		4
++
++/* S/W events */
++#define EV_TOTRATE	4
++#define EV_LOCRATE	5
++
++#define RESCTRL_FILE_DEF(X, fmt)			\
++static int X##_show(struct seq_file *sf, void *v)	\
++{							\
++	seq_printf(sf, fmt, X);				\
++	return 0;					\
++}							\
++static struct kernfs_ops X##_ops = {			\
++	.seq_show	= X##_show			\
++};
+diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+index 571abf808ea3..fbd95edcd75b 100644
+--- a/arch/x86/kernel/cpu/amd.c
++++ b/arch/x86/kernel/cpu/amd.c
+@@ -9,6 +9,7 @@
+ #include <linux/sched/clock.h>
+ #include <linux/random.h>
+ #include <linux/topology.h>
 +#include <linux/resctrl.h>
-+#include <linux/seq_buf.h>
-+#include <linux/seq_file.h>
-+
-+#undef pr_fmt
-+#define pr_fmt(fmt) "resctrl2: " fmt
-+
-+enum directory_type {
-+	DIR_ROOT,
-+	DIR_CTRL_MON,
-+	DIR_MONGROUP,
-+	DIR_MONDATA,
-+	DIR_MON,
-+	DIR_INFO,
-+};
-+
-+struct resctrl_group {
-+	enum directory_type	type;
-+	atomic_t		waitcount;
-+
-+	struct kernfs_node	*kn;
-+	u32			flags;
-+	u64			resctrl_ids;
-+	struct list_head	list;
-+
-+	struct resctrl_group	*parent;
-+	struct list_head	child_list;
-+	struct kernfs_node	*mondata;
-+
-+	struct cpumask		cpu_mask;
-+};
-+
-+#include <asm/resctrl.h>
-+
-+extern struct resctrl_group resctrl_default;
-+
-+/* resctrl_group.flags */
-+#define RESCTRL_DELETED	1
-+
-+#define for_each_resource(r)						\
-+	list_for_each_entry(r, &resctrl_all_resources, list)
-+
-+#define for_each_control_resource(r)					\
-+	list_for_each_entry(r, &resctrl_all_resources, list)		\
-+		if (r->type == RESCTRL_CONTROL)
-+
-+#define for_each_monitor_resource(r)					\
-+	list_for_each_entry(r, &resctrl_all_resources, list)		\
-+		if (r->type == RESCTRL_MONITOR)
-+
-+// cpu.c
-+int resctrl_cpu_init(void);
-+void resctrl_cpu_exit(void);
-+bool resctrl_add_cpus_file(struct kernfs_node *parent_kn);
-+void update_resctrl_ids(const struct cpumask *cpu_mask, struct resctrl_group *r);
-+
-+// directory.c
-+int resctrl_mkdir(struct kernfs_node *parent_kn, const char *name, umode_t mode);
-+int resctrl_rmdir(struct kernfs_node *kn);
-+void resctrl_rmdir_all_sub(void);
-+bool resctrl_populate_dir(struct kernfs_node *parent_kn, struct resctrl_group *rg);
-+void resctrl_create_domain_files(struct kernfs_node *parent_kn, struct resctrl_resource *r,
-+				 struct resctrl_group *rg);
-+void resctrl_remove_domain_files(struct kernfs_node *parent_kn, struct resctrl_resource *r,
-+				 struct resctrl_group *rg);
-+void resctrl_group_remove(struct resctrl_group *rg);
-+
-+// domain.c
-+void resctrl_domain_add_cpu(unsigned int cpu, struct resctrl_resource *r);
-+void resctrl_domain_remove_cpu(unsigned int cpu, struct resctrl_resource *r);
-+
-+// info.c
-+bool resctrl_add_info_dir(struct kernfs_node *parent_kn);
-+void resctrl_addinfofiles(char *name, struct resctrl_fileinfo *files);
-+void resctrl_delinfofiles(char *name);
-+void resctrl_last_cmd_clear(void);
-+void resctrl_last_cmd_puts(const char *s);
-+void resctrl_last_cmd_printf(const char *fmt, ...);
-+
-+// kernfs.c
-+struct kernfs_node *resctrl_add_file(struct kernfs_node *parent_kn, char *name, umode_t mode,
-+				     const struct kernfs_ops *ops, void *priv);
-+struct kernfs_node *resctrl_add_dir(struct kernfs_node *parent_kn, const char *name,
-+				    void *priv);
-+
-+// locking.c
-+struct resctrl_group *resctrl_group_kn_lock_live(struct kernfs_node *kn);
-+void resctrl_group_kn_unlock(struct kernfs_node *kn);
-+struct resctrl_group *kernfs_to_resctrl_group(struct kernfs_node *kn);
-+
-+extern struct mutex resctrl_mutex;
-+
-+// resources.c
-+extern struct list_head resctrl_all_resources;
-+
-+// root.c
-+extern struct list_head all_ctrl_groups;
-+
-+// schemata.c
-+bool resctrl_add_schemata_file(struct kernfs_node *parent_kn);
-+
-+// tasks.c
-+bool resctrl_add_task_file(struct kernfs_node *parent_kn);
-+void resctrl_move_group_tasks(struct resctrl_group *from, struct resctrl_group *to,
-+			      struct cpumask *mask);
-diff --git a/fs/resctrl2/cpu.c b/fs/resctrl2/cpu.c
-new file mode 100644
-index 000000000000..576f5c62fc4d
---- /dev/null
-+++ b/fs/resctrl2/cpu.c
-@@ -0,0 +1,315 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright(c) 2023 Intel Corporation. */
-+
-+#include <linux/cpuhotplug.h>
-+
-+#include "internal.h"
-+
-+static int cpu_seq_show(struct seq_file *m, void *arg)
-+{
-+	struct kernfs_open_file *of = m->private;
-+	struct resctrl_group *rg;
-+	int ret = 0;
-+
-+	rg = resctrl_group_kn_lock_live(of->kn);
-+	if (rg) {
-+		seq_printf(m, of->kn->priv ? "%*pb\n" : "%*pbl\n",
-+			   cpumask_pr_args(&rg->cpu_mask));
-+	} else {
-+		ret = -ENOENT;
-+	}
-+
-+	resctrl_group_kn_unlock(of->kn);
-+
-+	return ret;
-+}
-+
-+/*
-+ * This is safe against resctrl_sched_in() called from __switch_to()
-+ * because __switch_to() is executed with interrupts disabled. A local call
-+ * from update_resctrl_ids() is protected against __switch_to() because
-+ * preemption is disabled.
-+ */
-+static void update_cpu_resctrl_ids(void *info)
-+{
-+	struct resctrl_group *r = info;
-+
-+	if (r)
-+		this_cpu_write(resctrl_per_cpu_state.default_resctrl_ids, r->resctrl_ids);
-+
-+	/*
-+	 * Re-use the context switch code, current running
-+	 * task may have its own reasctrl_ids selected.
-+	 */
-+	resctrl_sched_in(current);
-+}
-+
-+/*
-+ * Update the resctrl_ids on all cpus in @cpu_mask.
-+ * Per task resctrl_ids must have been set up before calling this function.
-+ */
-+void update_resctrl_ids(const struct cpumask *cpu_mask, struct resctrl_group *r)
-+{
-+	on_each_cpu_mask(cpu_mask, update_cpu_resctrl_ids, r, 1);
-+}
-+
-+static void cpumask_resctrl_group_clear(struct resctrl_group *r, struct cpumask *m)
-+{
-+	struct resctrl_group *crgrp;
-+
-+	cpumask_andnot(&r->cpu_mask, &r->cpu_mask, m);
-+	/* update the child mon group masks as well*/
-+	list_for_each_entry(crgrp, &r->child_list, list)
-+		cpumask_and(&crgrp->cpu_mask, &r->cpu_mask, &crgrp->cpu_mask);
-+}
-+
-+static int cpus_ctrl_write(struct resctrl_group *rg, cpumask_var_t newmask,
-+			   cpumask_var_t tmpmask, cpumask_var_t tmpmask1)
-+{
-+	struct resctrl_group *r, *crgrp;
-+	struct list_head *head;
-+
-+	/* Check whether cpus are dropped from this group */
-+	cpumask_andnot(tmpmask, &rg->cpu_mask, newmask);
-+	if (!cpumask_empty(tmpmask)) {
-+		/* Can't drop from default group */
-+		if (rg->type == DIR_ROOT) {
-+			resctrl_last_cmd_puts("Can't drop CPUs from default group\n");
-+			return -EINVAL;
-+		}
-+
-+		/* Give any dropped cpus to resctrl_default */
-+		cpumask_or(&resctrl_default.cpu_mask,
-+			   &resctrl_default.cpu_mask, tmpmask);
-+		update_resctrl_ids(tmpmask, &resctrl_default);
-+	}
-+
-+	/*
-+	 * If we added cpus, remove them from previous group and
-+	 * the prev group's child groups that owned them
-+	 * and update per-cpu resctrl_ids.
-+	 */
-+	cpumask_andnot(tmpmask, newmask, &rg->cpu_mask);
-+	if (!cpumask_empty(tmpmask)) {
-+		list_for_each_entry(r, &all_ctrl_groups, list) {
-+			if (r == rg)
-+				continue;
-+			cpumask_and(tmpmask1, &r->cpu_mask, tmpmask);
-+			if (!cpumask_empty(tmpmask1))
-+				cpumask_resctrl_group_clear(r, tmpmask1);
-+		}
-+		update_resctrl_ids(tmpmask, rg);
-+	}
-+
-+	/* Done pushing/pulling - update this group with new mask */
-+	cpumask_copy(&rg->cpu_mask, newmask);
-+
-+	/*
-+	 * Clear child mon group masks since there is a new parent mask
-+	 * now and update the resctrl_ids for the cpus the child lost.
-+	 */
-+	head = &rg->child_list;
-+	list_for_each_entry(crgrp, head, list) {
-+		cpumask_and(tmpmask, &rg->cpu_mask, &crgrp->cpu_mask);
-+		update_resctrl_ids(tmpmask, rg);
-+		cpumask_clear(&crgrp->cpu_mask);
-+	}
-+
-+	return 0;
-+}
-+
-+static int cpus_mon_write(struct resctrl_group *rg, cpumask_var_t newmask,
-+			  cpumask_var_t tmpmask)
-+{
-+	struct resctrl_group *prgrp = rg->parent, *crgrp;
-+	struct list_head *head;
-+
-+	/* Check whether cpus belong to parent ctrl group */
-+	cpumask_andnot(tmpmask, newmask, &prgrp->cpu_mask);
-+	if (!cpumask_empty(tmpmask)) {
-+		resctrl_last_cmd_puts("Can only add CPUs to mongroup that belong to parent\n");
-+		return -EINVAL;
-+	}
-+
-+	/* Check whether cpus are dropped from this group */
-+	cpumask_andnot(tmpmask, &rg->cpu_mask, newmask);
-+	if (!cpumask_empty(tmpmask)) {
-+		/* Give any dropped cpus to parent group */
-+		cpumask_or(&prgrp->cpu_mask, &prgrp->cpu_mask, tmpmask);
-+		update_resctrl_ids(tmpmask, prgrp);
-+	}
-+
-+	/*
-+	 * If we added cpus, remove them from previous group that owned them
-+	 * and update per-cpu resctrl_ids
-+	 */
-+	cpumask_andnot(tmpmask, newmask, &rg->cpu_mask);
-+	if (!cpumask_empty(tmpmask)) {
-+		head = &prgrp->child_list;
-+		list_for_each_entry(crgrp, head, list) {
-+			if (crgrp == rg)
-+				continue;
-+			cpumask_andnot(&crgrp->cpu_mask, &crgrp->cpu_mask,
-+				       tmpmask);
-+		}
-+		update_resctrl_ids(tmpmask, rg);
-+	}
-+
-+	/* Done pushing/pulling - update this group with new mask */
-+	cpumask_copy(&rg->cpu_mask, newmask);
-+
-+	return 0;
-+}
-+
-+static ssize_t cpu_write(struct kernfs_open_file *of, char *buf,
-+			 size_t nbytes, loff_t off)
-+{
-+	cpumask_var_t tmpmask, newmask, tmpmask1;
-+	struct resctrl_group *rg;
-+	int ret;
-+
-+	if (!buf)
-+		return -EINVAL;
-+
-+	if (!zalloc_cpumask_var(&tmpmask, GFP_KERNEL))
-+		return -ENOMEM;
-+	if (!zalloc_cpumask_var(&newmask, GFP_KERNEL)) {
-+		free_cpumask_var(tmpmask);
-+		return -ENOMEM;
-+	}
-+	if (!zalloc_cpumask_var(&tmpmask1, GFP_KERNEL)) {
-+		free_cpumask_var(tmpmask);
-+		free_cpumask_var(newmask);
-+		return -ENOMEM;
-+	}
-+
-+	rg = resctrl_group_kn_lock_live(of->kn);
-+	if (!rg) {
-+		ret = -ENOENT;
-+		goto unlock;
-+	}
-+
-+	if (of->kn->priv)
-+		ret = cpumask_parse(buf, newmask);
-+	else
-+		ret = cpulist_parse(buf, newmask);
-+
-+	if (ret) {
-+		resctrl_last_cmd_puts("Bad CPU list/mask\n");
-+		goto unlock;
-+	}
-+
-+	/* check that user didn't specify any offline cpus */
-+	cpumask_andnot(tmpmask, newmask, cpu_online_mask);
-+	if (!cpumask_empty(tmpmask)) {
-+		ret = -EINVAL;
-+		resctrl_last_cmd_puts("Can only assign online CPUs\n");
-+		goto unlock;
-+	}
-+
-+	if (rg->type == DIR_ROOT || rg->type == DIR_CTRL_MON)
-+		ret = cpus_ctrl_write(rg, newmask, tmpmask, tmpmask1);
-+	else if (rg->type == DIR_MON)
-+		ret = cpus_mon_write(rg, newmask, tmpmask);
-+	else
-+		ret = -EINVAL;
-+
-+unlock:
-+	resctrl_group_kn_unlock(of->kn);
-+	free_cpumask_var(tmpmask);
-+	free_cpumask_var(newmask);
-+	free_cpumask_var(tmpmask1);
-+
-+	return ret ?: nbytes;
-+}
-+
-+static const struct kernfs_ops cpu_ops = {
-+	.atomic_write_len	= PAGE_SIZE,
-+	.write			= cpu_write,
-+	.seq_show		= cpu_seq_show,
-+};
-+
-+bool resctrl_add_cpus_file(struct kernfs_node *parent_kn)
-+{
-+	struct kernfs_node *kn;
-+
-+	kn = resctrl_add_file(parent_kn, "cpus", 0644, &cpu_ops, (void *)1);
-+	if (IS_ERR(kn))
-+		return false;
-+
-+	kn = resctrl_add_file(parent_kn, "cpus_list", 0644, &cpu_ops, (void *)0);
-+	if (IS_ERR(kn))
-+		return false;
-+
-+	return true;
-+}
-+
-+static void reset_resctrl_ids(void)
-+{
-+	struct resctrl_per_cpu_state *state = this_cpu_ptr(&resctrl_per_cpu_state);
-+
-+	state->cached_resctrl_ids = arch_resctrl_default_ids;
-+	state->default_resctrl_ids = arch_resctrl_default_ids;
-+
-+	arch_resctrl_apply_ids(arch_resctrl_default_ids);
-+}
-+
-+static int resctrl_online_cpu(unsigned int cpu)
-+{
-+	struct resctrl_resource *r;
-+
-+	mutex_lock(&resctrl_mutex);
-+	for_each_control_resource(r)
-+		resctrl_domain_add_cpu(cpu, r);
-+	/* The cpu is set in default group after online. */
-+	cpumask_set_cpu(cpu, &resctrl_default.cpu_mask);
-+	reset_resctrl_ids();
-+	mutex_unlock(&resctrl_mutex);
-+
-+	return 0;
-+}
-+
-+static void clear_childcpus(struct resctrl_group *rg, unsigned int cpu)
-+{
-+	struct resctrl_group *crg;
-+
-+	list_for_each_entry(crg, &rg->child_list, list) {
-+		if (cpumask_test_and_clear_cpu(cpu, &crg->cpu_mask))
-+			break;
-+	}
-+}
-+
-+static int resctrl_offline_cpu(unsigned int cpu)
-+{
-+	struct resctrl_resource *r;
-+	struct resctrl_group *rg;
-+
-+	mutex_lock(&resctrl_mutex);
-+	for_each_control_resource(r)
-+		resctrl_domain_remove_cpu(cpu, r);
-+	list_for_each_entry(rg, &all_ctrl_groups, list) {
-+		if (cpumask_test_and_clear_cpu(cpu, &rg->cpu_mask)) {
-+			clear_childcpus(rg, cpu);
-+			break;
-+		}
-+	}
-+	reset_resctrl_ids();
-+	mutex_unlock(&resctrl_mutex);
-+
-+	return 0;
-+}
-+
-+static enum cpuhp_state cpu_hp_state;
-+
-+int resctrl_cpu_init(void)
-+{
-+	cpu_hp_state = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
-+					 "resctrl2/cpu:online",
-+					 resctrl_online_cpu, resctrl_offline_cpu);
-+	return cpu_hp_state;
-+}
-+
-+void resctrl_cpu_exit(void)
-+{
-+	cpuhp_remove_state(cpu_hp_state);
-+}
-diff --git a/fs/resctrl2/directory.c b/fs/resctrl2/directory.c
-new file mode 100644
-index 000000000000..b8b2c13faaec
---- /dev/null
-+++ b/fs/resctrl2/directory.c
-@@ -0,0 +1,295 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright(c) 2023 Intel Corporation. */
-+
-+#include "internal.h"
-+
-+static struct resctrl_group mongroup_header = {
-+	.type = DIR_MONGROUP
-+};
-+
-+static struct resctrl_group mondata_header = {
-+	.type = DIR_MONDATA
-+};
-+
-+void resctrl_create_domain_files(struct kernfs_node *parent_kn, struct resctrl_resource *r,
-+				 struct resctrl_group *rg)
-+{
-+	struct resctrl_domain *d;
-+	struct kernfs_node *kn;
-+	char name[20];
-+
-+	list_for_each_entry(d, &r->domains, list) {
-+		sprintf(name, r->mon_domain_dir, d->id);
-+		kn = kernfs_find_and_get_ns(parent_kn, name, NULL);
-+		if (!kn)
-+			kn = resctrl_add_dir(parent_kn, name, (void *)(long)d->id);
-+		resctrl_add_file(kn, r->mon_domain_file, 0444, r->mod_domain_ops,
-+				 (void *)rg->resctrl_ids);
-+	}
-+	kernfs_activate(parent_kn);
-+}
-+
-+void resctrl_remove_domain_files(struct kernfs_node *parent_kn, struct resctrl_resource *r,
-+				 struct resctrl_group *rg)
-+{
-+	struct resctrl_domain *d;
-+	struct kernfs_node *kn;
-+	char name[20];
-+
-+	list_for_each_entry(d, &r->domains, list) {
-+		sprintf(name, r->mon_domain_dir, d->id);
-+		kn = kernfs_find_and_get_ns(parent_kn, name, NULL);
-+		kn = kernfs_find_and_get_ns(kn, r->mon_domain_file, NULL);
-+		kernfs_remove(kn);
-+	}
-+}
-+
-+bool resctrl_populate_dir(struct kernfs_node *parent_kn, struct resctrl_group *rg)
-+{
-+	struct resctrl_resource *r;
-+	struct kernfs_node *kn;
-+
-+	if (!resctrl_add_task_file(parent_kn))
-+		return false;
-+
-+	if ((rg->type == DIR_ROOT || rg->type == DIR_CTRL_MON) &&
-+	    !resctrl_add_schemata_file(parent_kn))
-+		return false;
-+
-+	if (!resctrl_add_cpus_file(parent_kn))
-+		return false;
-+
-+	if (!resctrl_add_dir(parent_kn, "mon_groups", &mongroup_header))
-+		return false;
-+
-+	kn = resctrl_add_dir(parent_kn, "mon_data", &mondata_header);
-+	if (!kn)
-+		return false;
-+	rg->mondata = kn;
-+
-+	for_each_monitor_resource(r)
-+		if (r->mon_domain_dir)
-+			resctrl_create_domain_files(rg->mondata, r, rg);
-+
-+	return true;
-+}
-+
-+void resctrl_group_remove(struct resctrl_group *rg)
-+{
-+	kernfs_put(rg->kn);
-+	kfree(rg);
-+}
-+
-+int resctrl_mkdir(struct kernfs_node *parent_kn, const char *name, umode_t mode)
-+{
-+	struct resctrl_group *rg, *prg;
-+	struct kernfs_node *kn;
-+	int ret = 0;
-+
-+	if (strchr(name, '\n'))
-+		return -EINVAL;
-+
-+	rg = kzalloc(sizeof(*rg), GFP_KERNEL);
-+	if (!rg)
-+		return -ENOMEM;
-+
-+	prg = resctrl_group_kn_lock_live(parent_kn);
-+	if (!prg) {
-+		kfree(rg);
-+		ret = -ENOENT;
-+		goto unlock;
-+	}
-+
-+	switch (prg->type) {
-+	case DIR_ROOT:
-+		rg->type = DIR_CTRL_MON;
-+		rg->parent = kernfs_to_resctrl_group(parent_kn);
-+		if (!arch_alloc_resctrl_ids(rg)) {
-+			kfree(rg);
-+			ret = -ENOSPC;
-+			goto unlock;
-+		}
-+		list_add(&rg->list, &all_ctrl_groups);
-+		INIT_LIST_HEAD(&rg->child_list);
-+		break;
-+	case DIR_MONGROUP:
-+		rg->type = DIR_MON;
-+		rg->parent = kernfs_to_resctrl_group(parent_kn->parent);
-+		if (!arch_alloc_resctrl_ids(rg)) {
-+			kfree(rg);
-+			ret = -ENOSPC;
-+			goto unlock;
-+		}
-+		list_add(&rg->list, &rg->parent->child_list);
-+		break;
-+	default:
-+		kfree(rg);
-+		ret = -EPERM;
-+		goto unlock;
-+	}
-+
-+	kn = resctrl_add_dir(parent_kn, name, rg);
-+	if (!kn) {
-+		list_del(&rg->list);
-+		kfree(rg);
-+		ret = -EINVAL;
-+		goto unlock;
-+	}
-+	rg->kn = kn;
-+	kernfs_get(kn);
-+
-+	resctrl_populate_dir(kn, rg);
-+
-+	kernfs_activate(kn);
-+unlock:
-+	resctrl_group_kn_unlock(parent_kn);
-+
-+	return ret;
-+}
-+
-+static void free_all_child_resctrlgrp(struct resctrl_group *rg)
-+{
-+	struct resctrl_group *sentry, *stmp;
-+	struct list_head *head;
-+
-+	head = &rg->child_list;
-+	list_for_each_entry_safe(sentry, stmp, head, list) {
-+		arch_free_resctrl_ids(sentry);
-+		list_del(&sentry->list);
-+
-+		if (atomic_read(&sentry->waitcount) != 0)
-+			sentry->flags = RESCTRL_DELETED;
-+		else
-+			resctrl_group_remove(sentry);
-+	}
-+}
-+
-+static void resctrl_rmdir_ctrl(struct resctrl_group *rg, struct cpumask *mask)
-+{
-+	int cpu;
-+
-+	/* Give any tasks back to the default group */
-+	resctrl_move_group_tasks(rg, rg->parent, mask);
-+
-+	/* Give any CPUs back to the default group */
-+	cpumask_or(&resctrl_default.cpu_mask,
-+		   &resctrl_default.cpu_mask, &rg->cpu_mask);
-+
-+	/* Update resctrl_ids of the moved CPUs first */
-+	for_each_cpu(cpu, &rg->cpu_mask)
-+		per_cpu(resctrl_per_cpu_state.default_resctrl_ids, cpu) = arch_resctrl_default_ids;
-+
-+	/*
-+	 * Update the MSR on moved CPUs and CPUs which have moved
-+	 * task running on them.
-+	 */
-+	cpumask_or(mask, mask, &rg->cpu_mask);
-+	update_resctrl_ids(mask, NULL);
-+
-+	/*
-+	 * Free all the child monitor groups.
-+	 */
-+	free_all_child_resctrlgrp(rg);
-+
-+	arch_free_resctrl_ids(rg);
-+	list_del(&rg->list);
-+
-+	rg->flags = RESCTRL_DELETED;
-+	kernfs_remove(rg->kn);
-+}
-+
-+static void resctrl_rmdir_mon(struct resctrl_group *rg, struct cpumask *mask)
-+{
-+	struct resctrl_group *prg = rg->parent;
-+	int cpu;
-+
-+	/* Give any tasks back to the parent group */
-+	resctrl_move_group_tasks(rg, prg, mask);
-+
-+	/* Update per cpu resctrl_ids of the moved CPUs first */
-+	for_each_cpu(cpu, &rg->cpu_mask)
-+		per_cpu(resctrl_per_cpu_state.default_resctrl_ids, cpu) = prg->resctrl_ids;
-+	/*
-+	 * Update the MSR on moved CPUs and CPUs which have moved
-+	 * task running on them.
-+	 */
-+	cpumask_or(mask, mask, &rg->cpu_mask);
-+	update_resctrl_ids(mask, NULL);
-+
-+	rg->flags = RESCTRL_DELETED;
-+	arch_free_resctrl_ids(rg);
-+
-+	/*
-+	 * Remove the group from parent's list of children
-+	 */
-+	WARN_ON(list_empty(&prg->child_list));
-+	list_del(&rg->list);
-+
-+	kernfs_remove(rg->kn);
-+}
-+
-+int resctrl_rmdir(struct kernfs_node *kn)
-+{
-+	struct resctrl_group *rg;
-+	cpumask_var_t tmpmask;
-+	int ret = 0;
-+
-+	if (!zalloc_cpumask_var(&tmpmask, GFP_KERNEL))
-+		return -ENOMEM;
-+	rg = resctrl_group_kn_lock_live(kn);
-+	if (!rg || (rg->type != DIR_CTRL_MON && rg->type != DIR_MON)) {
-+		ret = -EPERM;
-+		goto out;
-+	}
-+
-+	if (rg->type == DIR_CTRL_MON)
-+		resctrl_rmdir_ctrl(rg, tmpmask);
-+	else
-+		resctrl_rmdir_mon(rg, tmpmask);
-+
-+out:
-+	resctrl_group_kn_unlock(kn);
-+	free_cpumask_var(tmpmask);
-+
-+	return ret;
-+}
-+
-+void resctrl_rmdir_all_sub(void)
-+{
-+	struct resctrl_group *rg, *tmp;
-+
-+	list_for_each_entry_safe(rg, tmp, &all_ctrl_groups, list) {
-+		/* Free any child resource ids */
-+		free_all_child_resctrlgrp(rg);
-+
-+		/* Remove each group other than root */
-+		if (rg->type == DIR_ROOT)
-+			continue;
-+
-+		/*
-+		 * Give any CPUs back to the default group. We cannot copy
-+		 * cpu_online_mask because a CPU might have executed the
-+		 * offline callback already, but is still marked online.
-+		 */
-+		cpumask_or(&resctrl_default.cpu_mask,
-+			   &resctrl_default.cpu_mask, &rg->cpu_mask);
-+
-+		arch_free_resctrl_ids(rg);
-+
-+		kernfs_remove(rg->kn);
-+		list_del(&rg->list);
-+
-+		if (atomic_read(&rg->waitcount) != 0)
-+			rg->flags = RESCTRL_DELETED;
-+		else
-+			resctrl_group_remove(rg);
-+	}
-+	/* Notify online CPUs to update per cpu storage and PQR_ASSOC MSR */
-+	update_resctrl_ids(cpu_online_mask, &resctrl_default);
-+
-+#if 0
-+	kernfs_remove(kn_info);
-+	kernfs_remove(kn_mongrp);
-+	kernfs_remove(kn_mondata);
+ #include <asm/processor.h>
+ #include <asm/apic.h>
+ #include <asm/cacheinfo.h>
+@@ -19,7 +20,9 @@
+ #include <asm/pci-direct.h>
+ #include <asm/delay.h>
+ #include <asm/debugreg.h>
++#ifndef CONFIG_RESCTRL2_FS
+ #include <asm/resctrl.h>
 +#endif
-+}
-diff --git a/fs/resctrl2/domain.c b/fs/resctrl2/domain.c
+ 
+ #ifdef CONFIG_X86_64
+ # include <asm/mmconfig.h>
+diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+index 1c4639588ff9..66829e06b01f 100644
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -14,6 +14,7 @@
+ #include <linux/workqueue.h>
+ #include <linux/delay.h>
+ #include <linux/cpuhotplug.h>
++#include <linux/resctrl.h>
+ 
+ #include <asm/cpufeature.h>
+ #include <asm/msr.h>
+@@ -26,7 +27,9 @@
+ #include <asm/cpu_device_id.h>
+ #include <asm/cmdline.h>
+ #include <asm/traps.h>
++#ifndef CONFIG_RESCTRL2_FS
+ #include <asm/resctrl.h>
++#endif
+ #include <asm/numa.h>
+ #include <asm/thermal.h>
+ 
+diff --git a/arch/x86/kernel/process_32.c b/arch/x86/kernel/process_32.c
+index 708c87b88cc1..8cf70973a331 100644
+--- a/arch/x86/kernel/process_32.c
++++ b/arch/x86/kernel/process_32.c
+@@ -38,6 +38,7 @@
+ #include <linux/io.h>
+ #include <linux/kdebug.h>
+ #include <linux/syscalls.h>
++#include <linux/resctrl.h>
+ 
+ #include <asm/ldt.h>
+ #include <asm/processor.h>
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 3d181c16a2f6..7df3cf1dbcaa 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -40,6 +40,7 @@
+ #include <linux/ftrace.h>
+ #include <linux/syscalls.h>
+ #include <linux/iommu.h>
++#include <linux/resctrl.h>
+ 
+ #include <asm/processor.h>
+ #include <asm/pkru.h>
+@@ -53,7 +54,9 @@
+ #include <asm/switch_to.h>
+ #include <asm/xen/hypervisor.h>
+ #include <asm/vdso.h>
++#ifndef CONFIG_RESCTRL2_FS
+ #include <asm/resctrl.h>
++#endif
+ #include <asm/unistd.h>
+ #include <asm/fsgsbase.h>
+ #ifdef CONFIG_IA32_EMULATION
+diff --git a/fs/resctrl2/arch/x86/alloc.c b/fs/resctrl2/arch/x86/alloc.c
 new file mode 100644
-index 000000000000..51eec5f41e61
+index 000000000000..d39f93150180
 --- /dev/null
-+++ b/fs/resctrl2/domain.c
-@@ -0,0 +1,99 @@
++++ b/fs/resctrl2/arch/x86/alloc.c
+@@ -0,0 +1,119 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/* Copyright(c) 2023 Intel Corporation. */
 +
-+#include <linux/cacheinfo.h>
-+#include "internal.h"
++#include <asm/cpufeatures.h>
++
++#include "../../internal.h"
++
++DEFINE_STATIC_KEY_FALSE(resctrl_enable_key);
++DEFINE_PER_CPU(struct resctrl_per_cpu_state, resctrl_per_cpu_state);
 +
 +/*
-+ * find_domain - Find a domain in a resource that matches input resource id
++ * Trivial allocator for CLOSIDs. Since h/w only supports a small number,
++ * we can keep a bitmap of free CLOSIDs in a single integer.
 + *
-+ * Search resource r's domain list to find the resource id. If the resource
-+ * id is found in a domain, return the domain. Otherwise, if requested by
-+ * caller, return the first domain whose id is bigger than the input id.
-+ * The domain list is sorted by id in ascending order.
++ * Using a global CLOSID across all resources has some advantages and
++ * some drawbacks:
++ * + We can simply use a field in the task structure to assign a task to a resource
++ *   group.
++ * + Context switch code can avoid extra memory references deciding which
++ *   CLOSID to load into the PQR_ASSOC MSR
++ * - We give up some options in configuring resource groups across multi-socket
++ *   systems.
++ * - Our choices on how to configure each resource become progressively more
++ *   limited as the number of resources grows.
 + */
-+static struct resctrl_domain *find_domain(struct resctrl_resource *r, int id,
-+					  struct list_head **pos)
++static int arch_ids;
++static int closid_free_map;
++u64 arch_resctrl_default_ids;
++
++void arch_resctrl_apply_ids(u64 resctrl_ids)
 +{
-+	struct resctrl_domain *d;
-+	struct list_head *l;
-+
-+	if (id < 0)
-+		return ERR_PTR(-ENODEV);
-+
-+	list_for_each(l, &r->domains) {
-+		d = list_entry(l, struct resctrl_domain, list);
-+		/* When id is found, return its domain. */
-+		if (id == d->id)
-+			return d;
-+		/* Stop searching when finding id's position in sorted list. */
-+		if (id < d->id)
-+			break;
-+	}
-+
-+	if (pos)
-+		*pos = l;
-+
-+	return NULL;
++	wrmsrl(MSR_IA32_PQR_ASSOC, resctrl_ids);
 +}
 +
-+static int get_domain_id(unsigned int cpu, enum resctrl_scope scope)
++static void closid_init(void)
 +{
-+	switch (scope) {
-+	case RESCTRL_CORE: return topology_core_id(cpu);
-+	case RESCTRL_L2CACHE: return get_cpu_cacheinfo_id(cpu, 2);
-+	case RESCTRL_L3CACHE: return get_cpu_cacheinfo_id(cpu, 3);
-+	case RESCTRL_SOCKET: return topology_physical_package_id(cpu);
-+	}
-+	return -1;
++	closid_free_map = BIT_MASK(arch_ids) - 1;
++
++	/* CLOSID 0 is always reserved for the default group */
++	closid_free_map &= ~1;
 +}
 +
-+void resctrl_domain_add_cpu(unsigned int cpu, struct resctrl_resource *r)
++static int closid_alloc(void)
 +{
-+	int id = get_domain_id(cpu, r->scope);
-+	struct list_head *add_pos = NULL;
-+	struct resctrl_domain *d;
++	u32 closid = ffs(closid_free_map);
 +
-+	d = find_domain(r, id, &add_pos);
-+	if (IS_ERR(d)) {
-+		pr_warn("Couldn't find domain id for CPU %d\n", cpu);
-+		return;
-+	}
++	if (closid == 0)
++		return -ENOSPC;
++	closid--;
++	closid_free_map &= ~(1 << closid);
 +
-+	if (d) {
-+		cpumask_set_cpu(cpu, &d->cpu_mask);
-+		r->domain_update(r, RESCTRL_DOMAIN_ADD_CPU, cpu, d);
-+		return;
-+	}
-+
-+	d = kzalloc_node(r->domain_size, GFP_KERNEL, cpu_to_node(cpu));
-+	if (!d)
-+		return;
-+
-+	d->id = id;
-+	cpumask_set_cpu(cpu, &d->cpu_mask);
-+	r->domain_update(r, RESCTRL_DOMAIN_ADD, cpu, d);
-+
-+	list_add_tail(&d->list, add_pos);
++	return closid;
 +}
 +
-+void resctrl_domain_remove_cpu(unsigned int cpu, struct resctrl_resource *r)
++void closid_free(int closid)
 +{
-+	int id = get_domain_id(cpu, r->scope);
-+	struct resctrl_domain *d;
-+
-+	d = find_domain(r, id, NULL);
-+	if (IS_ERR_OR_NULL(d)) {
-+		pr_warn("Couldn't find domain id for CPU %d\n", cpu);
-+		return;
-+	}
-+
-+	cpumask_clear_cpu(cpu, &d->cpu_mask);
-+	if (cpumask_empty(&d->cpu_mask)) {
-+		r->domain_update(r, RESCTRL_DOMAIN_DELETE, cpu, d);
-+		list_del(&d->list);
-+		kfree(d);
-+	} else {
-+		r->domain_update(r, RESCTRL_DOMAIN_DELETE_CPU, cpu, d);
-+	}
-+}
-diff --git a/fs/resctrl2/info.c b/fs/resctrl2/info.c
-new file mode 100644
-index 000000000000..043c2dcd4dd7
---- /dev/null
-+++ b/fs/resctrl2/info.c
-@@ -0,0 +1,99 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright(c) 2023 Intel Corporation. */
-+
-+#include "internal.h"
-+
-+static struct kernfs_node *kn_info;
-+
-+static struct resctrl_group info_header = {
-+	.type = DIR_INFO
-+};
-+
-+static struct seq_buf last_cmd_status;
-+static char last_cmd_status_buf[512];
-+
-+void resctrl_last_cmd_clear(void)
-+{
-+	seq_buf_clear(&last_cmd_status);
++	closid_free_map |= 1 << closid;
 +}
 +
-+void resctrl_last_cmd_puts(const char *s)
++#define RESCTRL_ID(c, r) (((u64)(c) << 32) | (r))
++
++bool arch_check_resctrl_support(void)
 +{
-+	seq_buf_puts(&last_cmd_status, s);
++	return boot_cpu_has(X86_FEATURE_CQM) || boot_cpu_has(X86_FEATURE_RDT_A);
 +}
 +
-+void resctrl_last_cmd_printf(const char *fmt, ...)
++bool arch_init_alloc_ids(struct resctrl_resource *r)
 +{
-+	va_list ap;
-+
-+	va_start(ap, fmt);
-+	seq_buf_vprintf(&last_cmd_status, fmt, ap);
-+	va_end(ap);
-+}
-+
-+static int last_cmd_status_seq_show(struct seq_file *m, void *arg)
-+{
-+	struct kernfs_open_file *of = m->private;
-+	int len;
-+
-+	resctrl_group_kn_lock_live(of->kn);
-+	len = seq_buf_used(&last_cmd_status);
-+	if (len)
-+		seq_printf(m, "%.*s", len, last_cmd_status_buf);
-+	else
-+		seq_puts(m, "ok\n");
-+
-+	resctrl_group_kn_unlock(of->kn);
-+
-+	return 0;
-+}
-+
-+static struct kernfs_ops cmd_status_ops = {
-+	.seq_show = last_cmd_status_seq_show,
-+};
-+
-+bool resctrl_add_info_dir(struct kernfs_node *parent_kn)
-+{
-+	struct kernfs_node *kn;
-+
-+	seq_buf_init(&last_cmd_status, last_cmd_status_buf,
-+		     sizeof(last_cmd_status_buf));
-+
-+	kn_info = resctrl_add_dir(parent_kn, "info", &info_header);
-+	if (!kn_info)
++	if (r->num_alloc_ids < arch_ids)
 +		return false;
++	if (arch_ids != 0) {
++		if (r->num_alloc_ids > arch_ids)
++			r->num_alloc_ids = arch_ids;
++		return true;
++	}
++	arch_ids = r->num_alloc_ids;
 +
-+	kn = resctrl_add_file(kn_info, "last_cmd_status", 0444, &cmd_status_ops, NULL);
-+	if (!kn)
-+		return false;
++	closid_init();
 +
 +	return true;
 +}
 +
-+void resctrl_addinfofiles(char *name, struct resctrl_fileinfo *files)
++bool arch_alloc_resctrl_ids(struct resctrl_group *rg)
 +{
-+	struct resctrl_fileinfo *f;
-+	struct kernfs_node *pkn, *kn;
-+	umode_t mode;
++	int c, r;
 +
-+	pkn = resctrl_add_dir(kn_info, name, NULL);
-+	if (!pkn)
-+		return;
++	switch (rg->type) {
++	case DIR_CTRL_MON:
++		c = closid_alloc();
++		if (c < 0)
++			return false;
++		r = rmid_alloc(-1);
++		if (r < 0) {
++			closid_free(c);
++			return false;
++		}
++		rg->resctrl_ids = RESCTRL_ID(c, r);
++		return true;
 +
-+	for (f = files; f->name; f++) {
-+		mode = (f->ops->write) ? 0644 : 0444;
-+		kn = resctrl_add_file(pkn, f->name, mode, f->ops, NULL);
-+		if (!kn)
-+			return;
++	case DIR_MON:
++		/* monitor groups have same CLOSID as parent */
++		c = rg->parent->resctrl_ids >> 32;
++		r = rmid_alloc(rg->parent->resctrl_ids & 0xffff);
++		if (r < 0)
++			return false;
++		rg->resctrl_ids = RESCTRL_ID(c, r);
++		return true;
++
++	default:
++		return false;
 +	}
-+	kernfs_activate(pkn);
 +}
 +
-+void resctrl_delinfofiles(char *name)
++void arch_free_resctrl_ids(struct resctrl_group *rg)
 +{
-+	struct kernfs_node *kn;
++	closid_free(rg->resctrl_ids >> 32);
 +
-+	kn = kernfs_find_and_get_ns(kn_info, name, NULL);
-+	if (kn)
-+		kernfs_remove(kn);
++	rmid_free(rg->resctrl_ids & 0xffff);
 +}
-diff --git a/fs/resctrl2/kernfs.c b/fs/resctrl2/kernfs.c
-new file mode 100644
-index 000000000000..b22d75332339
+diff --git a/fs/resctrl2/arch/x86/rdt_l2_cat.c b/fs/resctrl2/arch/x86/rdt_l2_cat.c
+new file mode 120000
+index 000000000000..d25679af550e
 --- /dev/null
-+++ b/fs/resctrl2/kernfs.c
-@@ -0,0 +1,58 @@
++++ b/fs/resctrl2/arch/x86/rdt_l2_cat.c
+@@ -0,0 +1 @@
++rdt_l3_cat.c
+\ No newline at end of file
+diff --git a/fs/resctrl2/arch/x86/rdt_l2_cdp.c b/fs/resctrl2/arch/x86/rdt_l2_cdp.c
+new file mode 120000
+index 000000000000..d25679af550e
+--- /dev/null
++++ b/fs/resctrl2/arch/x86/rdt_l2_cdp.c
+@@ -0,0 +1 @@
++rdt_l3_cat.c
+\ No newline at end of file
+diff --git a/fs/resctrl2/arch/x86/rdt_l3_cat.c b/fs/resctrl2/arch/x86/rdt_l3_cat.c
+new file mode 100644
+index 000000000000..1cb9a99e93b4
+--- /dev/null
++++ b/fs/resctrl2/arch/x86/rdt_l3_cat.c
+@@ -0,0 +1,349 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/* Copyright(c) 2023 Intel Corporation. */
 +
-+#include "internal.h"
-+
-+/* Set uid and gid of dirs and files to that of the creator */
-+static int kn_set_ugid(struct kernfs_node *kn)
-+{
-+	struct iattr iattr = { .ia_valid = ATTR_UID | ATTR_GID,
-+				.ia_uid = current_fsuid(),
-+				.ia_gid = current_fsgid(), };
-+
-+	if (uid_eq(iattr.ia_uid, GLOBAL_ROOT_UID) &&
-+	    gid_eq(iattr.ia_gid, GLOBAL_ROOT_GID))
-+		return 0;
-+
-+	return kernfs_setattr(kn, &iattr);
-+}
-+
-+struct kernfs_node *resctrl_add_file(struct kernfs_node *parent_kn, char *name, umode_t mode,
-+				     const struct kernfs_ops *ops, void *priv)
-+{
-+	struct kernfs_node *kn;
-+	int ret;
-+
-+	kn = __kernfs_create_file(parent_kn, name, mode,
-+				  GLOBAL_ROOT_UID, GLOBAL_ROOT_GID,
-+				  0, ops, priv, NULL, NULL);
-+	if (IS_ERR(kn))
-+		return NULL;
-+
-+	ret = kn_set_ugid(kn);
-+	if (ret) {
-+		kernfs_remove(kn);
-+		return NULL;
-+	}
-+
-+	return kn;
-+}
-+
-+struct kernfs_node *resctrl_add_dir(struct kernfs_node *parent_kn, const char *name,
-+				    void *priv)
-+{
-+	struct kernfs_node *kn;
-+	int ret;
-+
-+	kn = kernfs_create_dir(parent_kn, name, parent_kn->mode, priv);
-+	if (IS_ERR(kn))
-+		return NULL;
-+
-+	ret = kn_set_ugid(kn);
-+	if (ret) {
-+		kernfs_remove(kn);
-+		return NULL;
-+	}
-+
-+	return kn;
-+}
-diff --git a/fs/resctrl2/locking.c b/fs/resctrl2/locking.c
-new file mode 100644
-index 000000000000..ef948b243f13
---- /dev/null
-+++ b/fs/resctrl2/locking.c
-@@ -0,0 +1,52 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright(c) 2023 Intel Corporation. */
-+
-+#include "internal.h"
-+
-+/* Mutex to protect resctrl group access. */
-+DEFINE_MUTEX(resctrl_mutex);
-+
-+struct resctrl_group *kernfs_to_resctrl_group(struct kernfs_node *kn)
-+{
-+	if (kernfs_type(kn) == KERNFS_DIR)
-+		return kn->priv;
-+	else
-+		return kn->parent->priv;
-+}
-+
-+struct resctrl_group *resctrl_group_kn_lock_live(struct kernfs_node *kn)
-+{
-+	struct resctrl_group *rg = kernfs_to_resctrl_group(kn);
-+
-+	if (!rg)
-+		return NULL;
-+
-+	atomic_inc(&rg->waitcount);
-+	kernfs_break_active_protection(kn);
-+
-+	mutex_lock(&resctrl_mutex);
-+
-+	/* Was this group deleted while we waited? */
-+	if (rg->flags & RESCTRL_DELETED)
-+		return NULL;
-+
-+	return rg;
-+}
-+
-+void resctrl_group_kn_unlock(struct kernfs_node *kn)
-+{
-+	struct resctrl_group *rg = kernfs_to_resctrl_group(kn);
-+
-+	if (!rg)
-+		return;
-+
-+	mutex_unlock(&resctrl_mutex);
-+
-+	if (atomic_dec_and_test(&rg->waitcount) &&
-+	    (rg->flags & RESCTRL_DELETED)) {
-+		kernfs_unbreak_active_protection(kn);
-+		resctrl_group_remove(rg);
-+	} else {
-+		kernfs_unbreak_active_protection(kn);
-+	}
-+}
-diff --git a/fs/resctrl2/resources.c b/fs/resctrl2/resources.c
-new file mode 100644
-index 000000000000..ccac4a85dcfe
---- /dev/null
-+++ b/fs/resctrl2/resources.c
-@@ -0,0 +1,85 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright(c) 2023 Intel Corporation. */
-+
-+#include "internal.h"
-+
-+LIST_HEAD(resctrl_all_resources);
-+
-+int resctrl_register_ctrl_resource(struct resctrl_resource *r)
-+{
-+	struct resctrl_resource *t;
-+	struct resctrl_group *rg, *crg;
-+	int cpu, ret = 0;
-+
-+	cpus_read_lock();
-+	mutex_lock(&resctrl_mutex);
-+
-+	if (r->type == RESCTRL_CONTROL) {
-+		for_each_resource(t) {
-+			if (r->archtag == t->archtag) {
-+				ret = -EEXIST;
-+				goto out;
-+			}
-+		}
-+		if (r->num_alloc_ids) {
-+			if (!arch_init_alloc_ids(r)) {
-+				ret = -ENOSPC;
-+				goto out;
-+			}
-+		}
-+	}
-+
-+	if (r->domain_size)
-+		for_each_online_cpu(cpu)
-+			resctrl_domain_add_cpu(cpu, r);
-+	if (r->infodir)
-+		resctrl_addinfofiles(r->infodir, r->infofiles);
-+
-+	if (r->type == RESCTRL_MONITOR) {
-+		if (r->mon_domain_dir) {
-+			list_for_each_entry(rg, &all_ctrl_groups, list) {
-+				resctrl_create_domain_files(rg->mondata, r, rg);
-+				list_for_each_entry(crg, &rg->child_list, list)
-+					resctrl_create_domain_files(crg->mondata, r, crg);
-+			}
-+		}
-+		if (r->mon_domain_file)
-+			arch_add_monitor(r->mon_event);
-+	}
-+
-+	list_add(&r->list, &resctrl_all_resources);
-+out:
-+	mutex_unlock(&resctrl_mutex);
-+	cpus_read_unlock();
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(resctrl_register_ctrl_resource);
-+
-+void resctrl_unregister_ctrl_resource(struct resctrl_resource *r)
-+{
-+	struct resctrl_group *rg, *crg;
-+	int cpu;
-+
-+	cpus_read_lock();
-+	mutex_lock(&resctrl_mutex);
-+	if (r->type == RESCTRL_MONITOR && r->mon_domain_file)
-+		arch_del_monitor(r->mon_event);
-+
-+	if (r->mon_domain_dir) {
-+		list_for_each_entry(rg, &all_ctrl_groups, list) {
-+			resctrl_remove_domain_files(rg->mondata, r, rg);
-+			list_for_each_entry(crg, &rg->child_list, list)
-+				resctrl_remove_domain_files(crg->mondata, r, crg);
-+		}
-+	}
-+	if (r->infodir)
-+		resctrl_delinfofiles(r->infodir);
-+	if (r->domain_size)
-+		for_each_online_cpu(cpu)
-+			resctrl_domain_remove_cpu(cpu, r);
-+	list_del(&r->list);
-+	mutex_unlock(&resctrl_mutex);
-+	cpus_read_unlock();
-+}
-+EXPORT_SYMBOL_GPL(resctrl_unregister_ctrl_resource);
-diff --git a/fs/resctrl2/root.c b/fs/resctrl2/root.c
-new file mode 100644
-index 000000000000..2784f50c2dfa
---- /dev/null
-+++ b/fs/resctrl2/root.c
-@@ -0,0 +1,173 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright(c) 2023 Intel Corporation. */
-+
++/*
++ *  X86 Resource Control Driver For L2 and L3 cache allocation
++ */
 +#include <linux/module.h>
 +#include <linux/kernel.h>
-+#include <linux/fs_context.h>
-+#include <linux/user_namespace.h>
-+#include <linux/fs_parser.h>
 +#include <linux/resctrl.h>
++#include <linux/seq_file.h>
 +
-+#include "internal.h"
++#include "rdt.h"
 +
 +#undef pr_fmt
-+#define pr_fmt(fmt)       KBUILD_MODNAME ": " fmt
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 +
-+#define RESCTRL_SUPER_MAGIC 0x4145474C
++#ifdef CDP
++#define SUFFIX_D	"DATA"
++#define SUFFIX_C	"CODE"
++#define MULDIV		2
++#else
++#define SUFFIX_D	""
++#define SUFFIX_C	""
++#define MULDIV		1
++#endif
 +
-+static struct kernfs_root *resctrl_root;
++#if CACHE_LEVEL == 3
++#define NAME		"L3"
++#define MSR		MSR_IA32_L3_CBM_BASE
++#define MSRCDP		MSR_IA32_L3_QOS_CFG
++#define LEAF_BIT	1
++#define SCOPE		RESCTRL_L3CACHE
++#elif CACHE_LEVEL == 2
++#define NAME		"L2"
++#define MSR		MSR_IA32_L2_CBM_BASE
++#define MSRCDP		MSR_IA32_L2_QOS_CFG
++#define LEAF_BIT	2
++#define SCOPE		RESCTRL_L2CACHE
++#else
++#error "CACHE_LEVEL not defined"
++#endif
 +
-+struct resctrl_fs_context {
-+	struct kernfs_fs_context kfc;
++struct cbm_masks {
++	u64	now;
++	u64	staged;
++	bool	need_update;
 +};
 +
-+LIST_HEAD(all_ctrl_groups);
-+
-+struct resctrl_group resctrl_default;
-+
-+static void resctrl_fs_context_free(struct fs_context *fc)
-+{
-+	struct kernfs_fs_context *kfc = fc->fs_private;
-+	struct resctrl_fs_context *ctx = container_of(kfc, struct resctrl_fs_context, kfc);
-+
-+	kernfs_free_fs_context(fc);
-+	kfree(ctx);
-+}
-+
-+static const struct fs_parameter_spec resctrl_fs_parameters[] = {
-+	{}
++struct mydomain {
++	int			cbm_len;
++	struct cbm_masks	cbm_masks[];
 +};
++#define get_mydomain(d) ((struct mydomain *)&d[1])
 +
-+static int resctrl_parse_param(struct fs_context *fc, struct fs_parameter *param)
++static struct resctrl_resource cat;
++
++static u32 cbm_mask;
++static int min_cbm_bits = 1;
++static int num_closids;
++static u32 shareable_bits;
++static bool arch_has_sparse_bitmaps;
++
++static void show(struct resctrl_resource *r, struct seq_file *m, u64 resctrl_ids)
 +{
-+	return 0;
++	int closid = (resctrl_ids >> 32);
++	struct resctrl_domain *d;
++	struct cbm_masks *cbm;
++	char *sep = "";
++
++	list_for_each_entry(d, &r->domains, list) {
++		cbm = get_mydomain(d)->cbm_masks;
++		seq_printf(m, "%s%d=%llx", sep, d->id, cbm[closid].now);
++		sep = ";";
++	}
++	seq_puts(m, "\n");
 +}
 +
-+static int resctrl_get_tree(struct fs_context *fc)
++static void resetstaging(struct resctrl_resource *r, u64 resctrl_ids)
 +{
++	int closid = (resctrl_ids >> 32);
++	struct resctrl_domain *d;
++	struct cbm_masks *cbm;
++
++	list_for_each_entry(d, &r->domains, list) {
++		cbm = get_mydomain(d)->cbm_masks;
++		cbm[closid].need_update = false;
++	}
++}
++
++static bool validate_mask(struct resctrl_domain *d, char *buf, struct cbm_masks *c)
++{
++	unsigned long first_bit, last_bit, val;
++	struct mydomain *m = get_mydomain(d);
 +	int ret;
 +
-+	cpus_read_lock();
-+	mutex_lock(&resctrl_mutex);
-+	ret = kernfs_get_tree(fc);
-+	static_branch_enable_cpuslocked(&resctrl_enable_key);
-+	mutex_unlock(&resctrl_mutex);
-+	cpus_read_unlock();
-+	return ret;
-+}
-+
-+static const struct fs_context_operations resctrl_fs_context_ops = {
-+	.free		= resctrl_fs_context_free,
-+	.parse_param	= resctrl_parse_param,
-+	.get_tree	= resctrl_get_tree,
-+};
-+
-+static struct kernfs_syscall_ops resctrl_kf_syscall_ops = {
-+	.mkdir	= resctrl_mkdir,
-+	.rmdir	= resctrl_rmdir,
-+};
-+
-+static int resctrl_init_fs_context(struct fs_context *fc)
-+{
-+	struct resctrl_fs_context *ctx;
-+
-+	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
-+	if (!ctx)
-+		return -ENOMEM;
-+
-+	ctx->kfc.root = resctrl_root;
-+	ctx->kfc.magic = RESCTRL_SUPER_MAGIC;
-+	fc->fs_private = &ctx->kfc;
-+	fc->ops = &resctrl_fs_context_ops;
-+	put_user_ns(fc->user_ns);
-+	fc->user_ns = get_user_ns(&init_user_ns);
-+	fc->global = true;
-+
-+	return 0;
-+}
-+
-+static void resctrl_kill_sb(struct super_block *sb)
-+{
-+	cpus_read_lock();
-+	mutex_lock(&resctrl_mutex);
-+
-+	resctrl_move_group_tasks(NULL, &resctrl_default, NULL);
-+	resctrl_rmdir_all_sub();
-+	static_branch_disable_cpuslocked(&resctrl_enable_key);
-+	kernfs_kill_sb(sb);
-+
-+	mutex_unlock(&resctrl_mutex);
-+	cpus_read_unlock();
-+}
-+
-+static struct file_system_type resctrl_fs_type = {
-+	.name			= "resctrl",
-+	.init_fs_context	= resctrl_init_fs_context,
-+	.parameters		= resctrl_fs_parameters,
-+	.kill_sb		= resctrl_kill_sb,
-+};
-+
-+static int __init resctrl_setup_root(void)
-+{
-+	resctrl_root = kernfs_create_root(&resctrl_kf_syscall_ops,
-+					  KERNFS_ROOT_CREATE_DEACTIVATED |
-+					  KERNFS_ROOT_EXTRA_OPEN_PERM_CHECK,
-+					  &resctrl_default);
-+	if (IS_ERR(resctrl_root))
-+		return PTR_ERR(resctrl_root);
-+
-+	resctrl_default.resctrl_ids = arch_resctrl_default_ids;
-+	resctrl_default.kn = kernfs_root_to_node(resctrl_root);
-+	resctrl_default.type = DIR_ROOT;
-+	INIT_LIST_HEAD(&resctrl_default.child_list);
-+
-+	list_add(&resctrl_default.list, &all_ctrl_groups);
-+
-+	if (!resctrl_add_info_dir(resctrl_default.kn) ||
-+	    !resctrl_populate_dir(resctrl_default.kn, &resctrl_default)) {
-+		// TODO cleanup
-+		return -EINVAL;
++	ret = kstrtoul(buf, 16, &val);
++	if (ret) {
++		// rdt_last_cmd_printf("Non-hex character in the mask %s\n", buf);
++		return false;
 +	}
 +
-+	kernfs_activate(resctrl_default.kn);
++	/* User didn't change this value */
++	if (val == c->now)
++		return true;
 +
-+	return 0;
++	if ((min_cbm_bits > 0 && val == 0) || val > (1u << (m->cbm_len + 1)) - 1) {
++		// rdt_last_cmd_puts("Mask out of range\n");
++		return false;
++	}
++	if (val == 0)
++		goto ok;
++	first_bit = __ffs(val);
++	last_bit = __fls(val);
++	if ((last_bit - first_bit) + 1 < min_cbm_bits) {
++		// rdt_last_cmd_printf("Need at least %d bits in the mask\n", min_cbm_bits);
++		return false;
++	}
++	if (!arch_has_sparse_bitmaps && val != (((1u << (last_bit + 1)) - 1) & ~((1u << first_bit) - 1))) {
++		// rdt_last_cmd_printf("The mask %lx has non-consecutive 1-bits\n", val);
++		return false;
++	}
++
++ok:
++	c->need_update = true;
++	c->staged = val;
++
++	return true;
 +}
 +
-+static int resctrl_init(void)
++static int parse(struct resctrl_resource *r, char *line, u64 resctrl_ids)
 +{
++	int closid = (resctrl_ids >> 32);
++	struct cbm_masks *cbm;
++	char *dom = NULL, *id;
++	struct resctrl_domain *d;
++	unsigned long dom_id;
++
++next:
++	if (!line || line[0] == '\0')
++		return 0;
++	dom = strsep(&line, ";");
++	id = strsep(&dom, "=");
++	id = strim(id);
++	if (!dom || kstrtoul(id, 10, &dom_id)) {
++		// rdt_last_cmd_puts("Missing '=' or non-numeric domain\n");
++		return -EINVAL;
++	}
++	dom = strim(dom);
++	list_for_each_entry(d, &r->domains, list) {
++		if (d->id != dom_id)
++			continue;
++		cbm = get_mydomain(d)->cbm_masks;
++		if (!validate_mask(d, dom, cbm + closid))
++			return -EINVAL;
++		goto next;
++	}
++	return -EINVAL;
++}
++
++struct rdt_msr_info {
++	int	msr_base;
++	struct cbm_masks *cbm;
++};
++
++static void update_msrs(void *info)
++{
++	struct rdt_msr_info *mi = info;
++
++	for (int i = 0; i < cat.num_alloc_ids; i++) {
++		if (mi->cbm[i].need_update) {
++			mi->cbm[i].now = mi->cbm[i].staged;
++			mi->cbm[i].need_update = false;
++			wrmsrl(mi->msr_base + i * MULDIV, mi->cbm[i].now);
++		}
++	}
++}
++
++static void applychanges(struct resctrl_resource *r, u64 resctrl_ids)
++{
++	int closid = (resctrl_ids >> 32);
++	struct resctrl_domain *d;
++	struct cbm_masks *cbm;
++	struct rdt_msr_info mi;
++
++	list_for_each_entry(d, &r->domains, list) {
++		cbm = get_mydomain(d)->cbm_masks;
++		if (!cbm[closid].need_update)
++			continue;
++		mi.msr_base = r->archtag;
++		mi.cbm = cbm;
++		smp_call_function_single(cpumask_first(&d->cpu_mask), update_msrs, &mi, 1);
++	}
++}
++
++	u64 val;
++
++#ifdef CDP
++static void update_cdp(void *info)
++{
++	u64 val;
++
++	rdmsrl(MSRCDP, val);
++	if (info)
++		val |= BIT(0);
++	else
++		val &= ~BIT(0);
++	wrmsrl(MSRCDP, val);
++}
++#endif
++
++/*
++ * On domain discovery (duing module load, or CPU hotplug) set
++ * all controls to allow full access to all of cache. Ditto on
++ * module unload or domain removal.
++ */
++static void domain_update(struct resctrl_resource *r, int what, int cpu, struct resctrl_domain *d)
++{
++	struct mydomain *m = get_mydomain(d);
++	unsigned int eax, ebx, ecx, edx;
++	struct rdt_msr_info mi;
++	struct cbm_masks *cbm;
++
++	cbm = (struct cbm_masks *)(m + 1);
++	if (what == RESCTRL_DOMAIN_ADD || what == RESCTRL_DOMAIN_DELETE) {
++		cpuid_count(0x10, LEAF_BIT, &eax, &ebx, &ecx, &edx);
++		shareable_bits = ebx;
++		m->cbm_len = eax & 0x1f;
++		cbm_mask = (1u << (m->cbm_len + 1)) - 1;
++		for (int i = 0; i < cat.num_alloc_ids; i++) {
++			cbm[i].staged = cbm_mask;
++			cbm[i].need_update = true;
++		}
++		mi.msr_base = r->archtag;
++		mi.cbm = cbm;
++		smp_call_function_single(cpu, update_msrs, &mi, 1);
++	}
++#ifdef CDP
++	if (what == RESCTRL_DOMAIN_ADD)
++		smp_call_function_single(cpu, update_cdp, (void *)1, 1);
++	else if (what == RESCTRL_DOMAIN_DELETE)
++		smp_call_function_single(cpu, update_cdp, NULL, 1);
++#endif
++}
++
++RESCTRL_FILE_DEF(cbm_mask, "%x\n")
++RESCTRL_FILE_DEF(min_cbm_bits, "%d\n")
++RESCTRL_FILE_DEF(num_closids, "%d\n")
++RESCTRL_FILE_DEF(shareable_bits, "%x\n")
++
++static struct resctrl_fileinfo cat_files[] = {
++	{ .name = "cbm_mask", .ops = &cbm_mask_ops },
++	{ .name = "min_cbm_bits", .ops = &min_cbm_bits_ops },
++	{ .name = "num_closids", .ops = &num_closids_ops },
++	{ .name = "shareable_bits", .ops = &shareable_bits_ops },
++	{ }
++};
++
++static struct resctrl_resource cat = {
++	.name		= NAME SUFFIX_D,
++	.archtag	= MSR,
++	.type		= RESCTRL_CONTROL,
++	.show		= show,
++	.resetstaging	= resetstaging,
++	.parse		= parse,
++	.applychanges	= applychanges,
++	.scope		= SCOPE,
++	.domain_size	= sizeof(struct resctrl_domain) + sizeof(struct mydomain),
++	.domains	= LIST_HEAD_INIT(cat.domains),
++	.domain_update	= domain_update,
++	.infodir	= "L3",
++	.infofiles	= cat_files,
++};
++
++#ifdef CDP
++static struct resctrl_resource cat_code = {
++	.name		= NAME SUFFIX_C,
++	.archtag	= MSR + 1,
++	.type		= RESCTRL_CONTROL,
++	.show		= show,
++	.resetstaging	= resetstaging,
++	.parse		= parse,
++	.applychanges	= applychanges,
++	.scope		= SCOPE,
++	.domain_size	= sizeof(struct resctrl_domain) + sizeof(struct mydomain),
++	.domains	= LIST_HEAD_INIT(cat_code.domains),
++	.domain_update	= domain_update,
++};
++#endif
++
++static int __init cat_init(void)
++{
++	unsigned int eax, ebx, ecx, edx, cat_features;
 +	int ret;
 +
-+	if (!arch_check_resctrl_support())
-+		return -EINVAL;
++	if (!boot_cpu_has(X86_FEATURE_RDT_A)) {
++		pr_debug("No RDT allocation support\n");
++		return -ENODEV;
++	}
 +
-+	if (resctrl_cpu_init() < 0)
-+		return -ENOTTY;
++	cat_features = cpuid_ebx(0x10);
 +
-+	ret = resctrl_setup_root();
++	if (!(cat_features & BIT(LEAF_BIT))) {
++		pr_debug("No RDT allocation for L%d cache\n", CACHE_LEVEL);
++		return -ENODEV;
++	}
++
++	cpuid_count(0x10, LEAF_BIT, &eax, &ebx, &ecx, &edx);
++#ifdef CDP
++	if (!(ecx & BIT(2))) {
++		pr_debug("No CDP mode for L%d cache\n", CACHE_LEVEL);
++		return -ENODEV;
++	}
++#endif
++	num_closids = (edx + 1) / MULDIV;
++
++	cat.domain_size += num_closids * sizeof(struct cbm_masks);
++	cat.num_alloc_ids = num_closids;
++#ifdef CDP
++	cat_code.domain_size += num_closids * sizeof(struct cbm_masks);
++	cat_code.num_alloc_ids = num_closids;
++#endif
++
++	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD) {
++		min_cbm_bits = 0;
++		arch_has_sparse_bitmaps = true;
++	}
++
++	ret = resctrl_register_ctrl_resource(&cat);
++#ifdef CDP
++	if (!ret)
++		ret = resctrl_register_ctrl_resource(&cat_code);
 +	if (ret)
-+		goto cpu_exit;
-+
-+	ret = sysfs_create_mount_point(fs_kobj, "resctrl");
-+	if (ret)
-+		goto cleanup_root;
-+
-+	ret = register_filesystem(&resctrl_fs_type);
-+	if (ret)
-+		goto cleanup_mountpoint;
-+
-+	return 0;
-+
-+cleanup_mountpoint:
-+	sysfs_remove_mount_point(fs_kobj, "resctrl");
-+cleanup_root:
-+	kernfs_destroy_root(resctrl_root);
-+cpu_exit:
-+	resctrl_cpu_exit();
-+
++		resctrl_unregister_ctrl_resource(&cat);
++#endif
 +	return ret;
 +}
 +
-+fs_initcall(resctrl_init);
++static void __exit cat_cleanup(void)
++{
++	resctrl_unregister_ctrl_resource(&cat);
++#ifdef CDP
++	resctrl_unregister_ctrl_resource(&cat_code);
++#endif
++}
++
++module_init(cat_init);
++module_exit(cat_cleanup);
 +
 +MODULE_LICENSE("GPL");
-diff --git a/fs/resctrl2/schemata.c b/fs/resctrl2/schemata.c
-new file mode 100644
-index 000000000000..8c4addf1428f
+diff --git a/fs/resctrl2/arch/x86/rdt_l3_cdp.c b/fs/resctrl2/arch/x86/rdt_l3_cdp.c
+new file mode 120000
+index 000000000000..d25679af550e
 --- /dev/null
-+++ b/fs/resctrl2/schemata.c
-@@ -0,0 +1,110 @@
++++ b/fs/resctrl2/arch/x86/rdt_l3_cdp.c
+@@ -0,0 +1 @@
++rdt_l3_cat.c
+\ No newline at end of file
+diff --git a/fs/resctrl2/arch/x86/rdt_l3_mba.c b/fs/resctrl2/arch/x86/rdt_l3_mba.c
+new file mode 100644
+index 000000000000..f937fb02697e
+--- /dev/null
++++ b/fs/resctrl2/arch/x86/rdt_l3_mba.c
+@@ -0,0 +1,251 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/* Copyright(c) 2023 Intel Corporation. */
 +
-+#include "internal.h"
++/*
++ *  X86 Resource Control Driver For L2 and L3 cache allocation
++ */
++#include <linux/module.h>
++#include <linux/kernel.h>
++#include <linux/resctrl.h>
++#include <linux/seq_file.h>
 +
-+static ssize_t schemata_write(struct kernfs_open_file *of, char *buf,
-+			      size_t nbytes, loff_t off)
-+{
-+	struct resctrl_resource *r;
-+	struct resctrl_group *rg;
-+	char *tok, *resname;
-+	bool foundresource;
-+	int ret = 0;
++#include "rdt.h"
 +
-+	/* Valid input requires a trailing newline */
-+	if (nbytes == 0 || buf[nbytes - 1] != '\n')
-+		return -EINVAL;
-+	buf[nbytes - 1] = '\0';
++#undef pr_fmt
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 +
-+	cpus_read_lock();
-+	rg = resctrl_group_kn_lock_live(of->kn);
-+	if (!rg) {
-+		ret = -ENOENT;
-+		goto out;
-+	}
-+
-+	resctrl_last_cmd_clear();
-+
-+	for_each_control_resource(r)
-+		r->resetstaging(r, rg->resctrl_ids);
-+
-+	while ((tok = strsep(&buf, "\n")) != NULL) {
-+		resname = strim(strsep(&tok, ":"));
-+		if (!tok) {
-+			resctrl_last_cmd_puts("Missing ':'\n");
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+		if (tok[0] == '\0') {
-+			resctrl_last_cmd_printf("Missing '%s' value\n", resname);
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+		foundresource = false;
-+		for_each_control_resource(r) {
-+			if (!strcmp(resname, r->name)) {
-+				ret = r->parse(r, tok, rg->resctrl_ids);
-+				if (ret < 0)
-+					goto out;
-+				foundresource = true;
-+				break;
-+			}
-+		}
-+		if (!foundresource) {
-+			resctrl_last_cmd_printf("Unknown resource '%s'\n", resname);
-+			ret = -EINVAL;
-+			goto out;
-+		}
-+	}
-+
-+	for_each_control_resource(r)
-+		r->applychanges(r, rg->resctrl_ids);
-+out:
-+	for_each_control_resource(r)
-+		r->resetstaging(r, rg->resctrl_ids);
-+
-+	resctrl_group_kn_unlock(of->kn);
-+	cpus_read_unlock();
-+	return ret ?: nbytes;
-+}
-+
-+static int schemata_seq_show(struct seq_file *m, void *arg)
-+{
-+	struct kernfs_open_file *of = m->private;
-+	struct resctrl_resource *r;
-+	struct resctrl_group *rg;
-+	int ret = 0;
-+
-+	rg = resctrl_group_kn_lock_live(of->kn);
-+	if (!rg) {
-+		ret = -ENOENT;
-+		goto out;
-+	}
-+
-+	for_each_control_resource(r) {
-+		seq_printf(m, "%s: ", r->name);
-+		r->show(r, m, rg->resctrl_ids);
-+	}
-+
-+out:
-+	resctrl_group_kn_unlock(of->kn);
-+	return ret;
-+}
-+
-+static const struct kernfs_ops schemata_ops = {
-+	.atomic_write_len	= PAGE_SIZE,
-+	.write			= schemata_write,
-+	.seq_show		= schemata_seq_show,
++struct throttle_values {
++	u64	now;
++	u64	staged;
++	bool	need_update;
 +};
 +
-+bool resctrl_add_schemata_file(struct kernfs_node *parent_kn)
-+{
-+	struct kernfs_node *schemata;
++struct mydomain {
++	int			max_throttle;
++	struct throttle_values	throttle_values[];
++};
++#define get_mydomain(d) ((struct mydomain *)(&d[1]))
 +
-+	schemata = resctrl_add_file(parent_kn, "schemata", 0644, &schemata_ops, NULL);
-+	if (IS_ERR(schemata))
++static struct resctrl_resource mba;
++
++static int bandwidth_gran, delay_linear, min_bandwidth, num_closids;
++
++static void show(struct resctrl_resource *r, struct seq_file *m, u64 resctrl_ids)
++{
++	int closid = (resctrl_ids >> 32);
++	struct resctrl_domain *d;
++	struct throttle_values *tvalues;
++	char *sep = "";
++
++	list_for_each_entry(d, &r->domains, list) {
++		tvalues = get_mydomain(d)->throttle_values;
++		seq_printf(m, "%s%d=%lld", sep, d->id, tvalues[closid].now);
++		sep = ";";
++	}
++	seq_puts(m, "\n");
++}
++
++static void resetstaging(struct resctrl_resource *r, u64 resctrl_ids)
++{
++	int closid = (resctrl_ids >> 32);
++	struct resctrl_domain *d;
++	struct throttle_values *tvalues;
++
++	list_for_each_entry(d, &r->domains, list) {
++		tvalues = get_mydomain(d)->throttle_values;
++		tvalues[closid].need_update = false;
++	}
++}
++
++static bool validate_throttle(struct resctrl_domain *d, char *buf, struct throttle_values *c)
++{
++	unsigned long val;
++	struct mydomain *m = get_mydomain(d);
++	int ret;
++
++	ret = kstrtoul(buf, 10, &val);
++	if (ret) {
++		// rdt_last_cmd_printf("Non-decimal character in the value %s\n", buf);
 +		return false;
++	}
++
++	/* User didn't change this value */
++	if (val == c->now)
++		return true;
++
++	if (val > m->max_throttle) {
++		// rdt_last_cmd_puts("Throttle value out of range\n");
++		return false;
++	}
++	if (val % bandwidth_gran) {
++		// rdt_last_cmd_printf("Throttle must be multiple of %lld\n", bandwidth_gran);
++		return false;
++	}
++
++	c->need_update = true;
++	c->staged = val;
 +
 +	return true;
 +}
-diff --git a/fs/resctrl2/tasks.c b/fs/resctrl2/tasks.c
++
++static int parse(struct resctrl_resource *r, char *line, u64 resctrl_ids)
++{
++	int closid = (resctrl_ids >> 32);
++	struct throttle_values *tvalues;
++	char *dom = NULL, *id;
++	struct resctrl_domain *d;
++	unsigned long dom_id;
++
++next:
++	if (!line || line[0] == '\0')
++		return 0;
++	dom = strsep(&line, ";");
++	id = strsep(&dom, "=");
++	id = strim(id);
++	if (!dom || kstrtoul(id, 10, &dom_id)) {
++		// rdt_last_cmd_puts("Missing '=' or non-numeric domain\n");
++		return -EINVAL;
++	}
++	dom = strim(dom);
++	list_for_each_entry(d, &r->domains, list) {
++		if (d->id != dom_id)
++			continue;
++		tvalues = get_mydomain(d)->throttle_values;
++		if (!validate_throttle(d, dom, tvalues + closid))
++			return -EINVAL;
++		goto next;
++	}
++	return -EINVAL;
++}
++
++struct rdt_msr_info {
++	int	msr_base;
++	struct throttle_values *tvalues;
++};
++
++static void update_msrs(void *info)
++{
++	struct rdt_msr_info *mi = info;
++
++	for (int i = 0; i < mba.num_alloc_ids; i++) {
++		if (mi->tvalues[i].need_update) {
++			mi->tvalues[i].now = mi->tvalues[i].staged;
++			mi->tvalues[i].need_update = false;
++			wrmsrl(mi->msr_base + i, mi->tvalues[i].now);
++		}
++	}
++}
++
++static void applychanges(struct resctrl_resource *r, u64 resctrl_ids)
++{
++	int closid = (resctrl_ids >> 32);
++	struct resctrl_domain *d;
++	struct throttle_values *tvalues;
++	struct rdt_msr_info mi;
++
++	list_for_each_entry(d, &r->domains, list) {
++		tvalues = get_mydomain(d)->throttle_values;
++		if (!tvalues[closid].need_update)
++			continue;
++		mi.msr_base = r->archtag;
++		mi.tvalues = tvalues;
++		smp_call_function_single(cpumask_first(&d->cpu_mask), update_msrs, &mi, 1);
++	}
++}
++
++	u64 val;
++
++/*
++ * On domain discovery (duing module load, or CPU hotplug) set
++ * all controls to allow full access to all of cache. Ditto on
++ * module unload or domain removal.
++ */
++static void domain_update(struct resctrl_resource *r, int what, int cpu, struct resctrl_domain *d)
++{
++	struct mydomain *m = get_mydomain(d);
++	unsigned int eax, ebx, ecx, edx;
++	struct rdt_msr_info mi;
++	struct throttle_values *tvalues;
++
++	tvalues = (struct throttle_values *)(m + 1);
++	if (what == RESCTRL_DOMAIN_ADD || what == RESCTRL_DOMAIN_DELETE) {
++		cpuid_count(0x10, 3, &eax, &ebx, &ecx, &edx);
++		m->max_throttle = (eax & 0xfff) + 1;
++		bandwidth_gran = 100 - m->max_throttle;
++		min_bandwidth = 100 - m->max_throttle;
++		for (int i = 0; i < mba.num_alloc_ids; i++) {
++			tvalues[i].staged = 0;
++			tvalues[i].need_update = true;
++		}
++		mi.msr_base = r->archtag;
++		mi.tvalues = tvalues;
++		smp_call_function_single(cpu, update_msrs, &mi, 1);
++	}
++}
++
++RESCTRL_FILE_DEF(bandwidth_gran, "%d\n")
++RESCTRL_FILE_DEF(delay_linear, "%d\n")
++RESCTRL_FILE_DEF(min_bandwidth, "%d\n")
++RESCTRL_FILE_DEF(num_closids, "%d\n")
++
++static struct resctrl_fileinfo mb_files[] = {
++	{ .name = "bandwidth_gran", .ops = &bandwidth_gran_ops },
++	{ .name = "delay_linear", .ops = &delay_linear_ops },
++	{ .name = "min_bandwidth", .ops = &min_bandwidth_ops },
++	{ .name = "num_closids", .ops = &num_closids_ops },
++	{ }
++};
++
++static struct resctrl_resource mba = {
++	.name		= "MB",
++	.archtag	= MSR_IA32_MBA_THRTL_BASE,
++	.type		= RESCTRL_CONTROL,
++	.show		= show,
++	.resetstaging	= resetstaging,
++	.parse		= parse,
++	.applychanges	= applychanges,
++	.scope		= RESCTRL_L3CACHE,
++	.domain_size	= sizeof(struct resctrl_domain) + sizeof(struct mydomain),
++	.domains	= LIST_HEAD_INIT(mba.domains),
++	.domain_update	= domain_update,
++	.infodir	= "MB",
++	.infofiles	= mb_files,
++};
++
++static int __init mba_init(void)
++{
++	unsigned int eax, ebx, ecx, edx, mba_features;
++	int ret;
++
++	if (!boot_cpu_has(X86_FEATURE_RDT_A)) {
++		pr_debug("No RDT allocation support\n");
++		return -ENODEV;
++	}
++
++	mba_features = cpuid_ebx(0x10);
++
++	if (!(mba_features & BIT(3))) {
++		pr_debug("No RDT MBA allocation\n");
++		return -ENODEV;
++	}
++
++	cpuid_count(0x10, 3, &eax, &ebx, &ecx, &edx);
++	num_closids = edx + 1;
++	delay_linear = !!(ecx & BIT(2));
++
++	mba.domain_size += num_closids * sizeof(struct throttle_values);
++	mba.num_alloc_ids = num_closids;
++
++	ret = resctrl_register_ctrl_resource(&mba);
++	return ret;
++}
++
++static void __exit mba_cleanup(void)
++{
++	resctrl_unregister_ctrl_resource(&mba);
++}
++
++module_init(mba_init);
++module_exit(mba_cleanup);
++
++MODULE_LICENSE("GPL");
+diff --git a/fs/resctrl2/arch/x86/rdt_llc_occupancy.c b/fs/resctrl2/arch/x86/rdt_llc_occupancy.c
 new file mode 100644
-index 000000000000..40dbb1167f99
+index 000000000000..e2f96776c2f2
 --- /dev/null
-+++ b/fs/resctrl2/tasks.c
-@@ -0,0 +1,193 @@
++++ b/fs/resctrl2/arch/x86/rdt_llc_occupancy.c
+@@ -0,0 +1,100 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/* Copyright(c) 2023 Intel Corporation. */
 +
-+#include "internal.h"
++#include <asm/cpufeatures.h>
 +
-+/*
-+ * Interrupt running tasks to make sure that update to
-+ * new alloc/monitor ids.
-+ */
-+static void resctrl_kick_task(struct task_struct *t)
++#include "../../internal.h"
++
++#include "rdt.h"
++
++#ifndef EVENT
++#error "Need definition of which EVENT this module tracks"
++#endif
++
++static int mon_show(struct seq_file *sf, void *v)
 +{
-+	// TODO
-+}
++	struct kernfs_open_file *of = sf->private;
++	struct kernfs_node *kn = of->kn;
++	long resctrl_ids = (long)kn->priv;
++	long domain_id = (long)kn->parent->priv;
 +
-+/*
-+ * Move tasks from one to the other group. If @from is NULL, then all tasks
-+ * in the systems are moved unconditionally (used for teardown).
-+ *
-+ * If @mask is not NULL the cpus on which moved tasks are running are set
-+ * in that mask so the update smp function call is restricted to affected
-+ * cpus.
-+ */
-+void resctrl_move_group_tasks(struct resctrl_group *from, struct resctrl_group *to,
-+			      struct cpumask *mask)
-+{
-+	struct task_struct *p, *t;
-+
-+	read_lock(&tasklist_lock);
-+	for_each_process_thread(p, t) {
-+		if (!from || arch_is_resctrl_id_match(t, from)) {
-+			/* Change ID in task structure first */
-+			arch_set_task_ids(t, to);
-+
-+			/* Ensure above update is visible */
-+			smp_mb();
-+
-+			/*
-+			 * If the task is on a CPU, set the CPU in the mask.
-+			 * The detection is inaccurate as tasks might move or
-+			 * schedule before the smp function call takes place.
-+			 * In such a case the function call is pointless, but
-+			 * there is no other side effect.
-+			 */
-+			if (IS_ENABLED(CONFIG_SMP) && mask && task_curr(t))
-+				cpumask_set_cpu(task_cpu(t), mask);
-+		}
-+	}
-+	read_unlock(&tasklist_lock);
-+}
-+
-+static int __resctrl_move_task(struct task_struct *tsk,
-+			       struct resctrl_group *rg)
-+{
-+	/* If the task is already in group, no need to move the task. */
-+	if (tsk->resctrl_ids == rg->resctrl_ids)
-+		return 0;
-+
-+	/* Change ID in task structure first */
-+	if (!arch_set_task_ids(tsk, rg))
-+		return -EINVAL;
-+
-+	/* Ensure above update is visible before kicking task */
-+	smp_mb();
-+
-+	/*
-+	 * By now, the task's resctrl ids are set. If the task is current
-+	 * on a CPU, need to kick the task to make the ids take effect.
-+	 * If the task is not current, the update will happen when the
-+	 * task is scheduled in.
-+	 */
-+	resctrl_kick_task(tsk);
++	seq_printf(sf, "%llu\n", rdt_rmid_read(domain_id, resctrl_ids & 0xffff, EVENT));
 +
 +	return 0;
 +}
 +
-+static int resctrl_task_write_permission(struct task_struct *task,
-+					 struct kernfs_open_file *of)
++static void domain_update(struct resctrl_resource *r, int what, int cpu, struct resctrl_domain *d)
 +{
-+	const struct cred *tcred = get_task_cred(task);
-+	const struct cred *cred = current_cred();
-+	int ret = 0;
-+
-+	/*
-+	 * Even if we're attaching all tasks in the thread group, we only
-+	 * need to check permissions on one of them.
-+	 */
-+	if (!uid_eq(cred->euid, GLOBAL_ROOT_UID) &&
-+	    !uid_eq(cred->euid, tcred->uid) &&
-+	    !uid_eq(cred->euid, tcred->suid)) {
-+		resctrl_last_cmd_printf("No permission to move task %d\n", task->pid);
-+		ret = -EPERM;
-+	}
-+
-+	put_cred(tcred);
-+	return ret;
 +}
 +
-+static void show_resctrl_tasks(struct resctrl_group *rg, struct seq_file *s)
-+{
-+	struct task_struct *p, *t;
-+
-+	rcu_read_lock();
-+	for_each_process_thread(p, t)
-+		if (arch_is_resctrl_id_match(t, rg))
-+			seq_printf(s, "%d\n", t->pid);
-+	rcu_read_unlock();
-+}
-+
-+static int resctrl_move_task(pid_t pid, struct resctrl_group *rg, struct kernfs_open_file *of)
-+{
-+	struct task_struct *tsk;
-+	int ret;
-+
-+	rcu_read_lock();
-+	if (pid) {
-+		tsk = find_task_by_vpid(pid);
-+		if (!tsk) {
-+			rcu_read_unlock();
-+			resctrl_last_cmd_printf("No task %d\n", pid);
-+			return -ESRCH;
-+		}
-+	} else {
-+		tsk = current;
-+	}
-+
-+	get_task_struct(tsk);
-+	rcu_read_unlock();
-+
-+	ret = resctrl_task_write_permission(tsk, of);
-+	if (!ret)
-+		ret = __resctrl_move_task(tsk, rg);
-+
-+	put_task_struct(tsk);
-+	return ret;
-+}
-+
-+static ssize_t tasks_write(struct kernfs_open_file *of, char *buf,
-+			   size_t nbytes, loff_t off)
-+{
-+	struct resctrl_group *rg;
-+	int ret = 0;
-+	pid_t pid;
-+
-+	if (kstrtoint(strstrip(buf), 0, &pid) || pid < 0)
-+		return -EINVAL;
-+	rg = resctrl_group_kn_lock_live(of->kn);
-+	if (!rg) {
-+		ret = -ENOENT;
-+		goto unlock;
-+	}
-+
-+	resctrl_last_cmd_clear();
-+
-+	ret = resctrl_move_task(pid, rg, of);
-+
-+unlock:
-+	resctrl_group_kn_unlock(of->kn);
-+
-+	return ret ?: nbytes;
-+}
-+
-+static int tasks_seq_show(struct seq_file *m, void *arg)
-+{
-+	struct kernfs_open_file *of = m->private;
-+	struct resctrl_group *rg;
-+	int ret = 0;
-+
-+	rg = resctrl_group_kn_lock_live(of->kn);
-+	if (rg)
-+		show_resctrl_tasks(rg, m);
-+	else
-+		ret = -ENOENT;
-+	resctrl_group_kn_unlock(of->kn);
-+
-+	return ret;
-+}
-+
-+static const struct kernfs_ops task_ops = {
-+	.atomic_write_len	= PAGE_SIZE,
-+	.write			= tasks_write,
-+	.seq_show		= tasks_seq_show,
++static struct kernfs_ops ops = {
++	.seq_show	= mon_show,
 +};
 +
-+bool resctrl_add_task_file(struct kernfs_node *parent_kn)
++static struct resctrl_resource mon = {
++	.name		= "L3",
++	.archtag	= MSR_IA32_QM_EVTSEL,
++	.type		= RESCTRL_MONITOR,
++	.scope		= RESCTRL_L3CACHE,
++	.domain_size	= sizeof(struct resctrl_domain),
++	.domains	= LIST_HEAD_INIT(mon.domains),
++	.domain_update	= domain_update,
++	.mon_domain_dir	= "mon_L3_%02d",
++#if EVENT == EV_LLC
++	.mon_domain_file= "llc_occupancy",
++#elif EVENT == EV_TOT
++	.mon_domain_file= "mbm_total_bytes",
++#elif EVENT == EV_LOC
++	.mon_domain_file= "mbm_local_bytes",
++#elif EVENT == EV_TOTRATE
++	.mon_domain_file= "mbm_total_rate",
++#elif EVENT == EV_LOCRATE
++	.mon_domain_file= "mbm_local_rate",
++#else
++#error "Unknown EVENT type"
++#endif
++	.mod_domain_ops	= &ops,
++	.mon_event	= EVENT,
++};
++
++static int rdt_monitor_init(void)
 +{
-+	struct kernfs_node *tasks;
++	u32 eax, ebx, ecx, edx;
++	int bit;
 +
-+	tasks = resctrl_add_file(parent_kn, "tasks", 0644, &task_ops, NULL);
-+	if (IS_ERR(tasks))
-+		return false;
++	switch (EVENT) {
++	case EV_LLC: case EV_TOT: case EV_LOC:
++		bit = EVENT - 1;
++		break;
++	case EV_TOTRATE:
++		bit = EV_TOT - 1;
++		break;
++	case EV_LOCRATE:
++		bit = EV_LOC - 1;
++		break;
++	}
++	if (!boot_cpu_has(X86_FEATURE_CQM))
++		return -ENODEV;
 +
-+	return true;
++	cpuid_count(0xf, 0, &eax, &ebx, &ecx, &edx);
++	if (!(edx & BIT(1)))
++		return -ENODEV;
++
++	cpuid_count(0xf, 1, &eax, &ebx, &ecx, &edx);
++	if (!(edx & BIT(bit)))
++		return -ENODEV;
++
++	resctrl_register_ctrl_resource(&mon);
++
++	return 0;
 +}
-diff --git a/fs/Kconfig b/fs/Kconfig
-index 18d034ec7953..f4ebf8f5204b 100644
---- a/fs/Kconfig
-+++ b/fs/Kconfig
-@@ -45,6 +45,7 @@ source "fs/btrfs/Kconfig"
- source "fs/nilfs2/Kconfig"
- source "fs/f2fs/Kconfig"
- source "fs/zonefs/Kconfig"
-+source "fs/resctrl2/Kconfig"
- 
- endif # BLOCK
- 
-diff --git a/fs/Makefile b/fs/Makefile
-index 5bfdbf0d7037..0aab615ceb4d 100644
---- a/fs/Makefile
-+++ b/fs/Makefile
-@@ -135,3 +135,4 @@ obj-$(CONFIG_EFIVAR_FS)		+= efivarfs/
- obj-$(CONFIG_EROFS_FS)		+= erofs/
- obj-$(CONFIG_VBOXSF_FS)		+= vboxsf/
- obj-$(CONFIG_ZONEFS_FS)		+= zonefs/
-+obj-$(CONFIG_RESCTRL2_FS)	+= resctrl2/
-diff --git a/fs/resctrl2/Kconfig b/fs/resctrl2/Kconfig
++
++static void rdt_monitor_exit(void)
++{
++	resctrl_unregister_ctrl_resource(&mon);
++}
++
++module_init(rdt_monitor_init);
++module_exit(rdt_monitor_exit);
++
++MODULE_LICENSE("GPL");
+diff --git a/fs/resctrl2/arch/x86/rdt_mbm_adjust.c b/fs/resctrl2/arch/x86/rdt_mbm_adjust.c
 new file mode 100644
-index 000000000000..6ee9162b96c1
+index 000000000000..430cce257f32
 --- /dev/null
-+++ b/fs/resctrl2/Kconfig
-@@ -0,0 +1,5 @@
-+#
-+# Architectures that support resource control will select this
-+#
-+config RESCTRL2_FS
-+	bool
-diff --git a/fs/resctrl2/Makefile b/fs/resctrl2/Makefile
++++ b/fs/resctrl2/arch/x86/rdt_mbm_adjust.c
+@@ -0,0 +1,91 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright(c) 2023 Intel Corporation. */
++
++#include <asm/cpufeatures.h>
++#include <asm/intel-family.h>
++
++#include "../../internal.h"
++
++#define CF(cf)	((unsigned long)(1048576 * (cf) + 0.5))
++
++/*
++ * The correction factor table is documented in Documentation/arch/x86/resctrl.rst.
++ * If rmid > rmid threshold, MBM total and local values should be multiplied
++ * by the correction factor.
++ *
++ * The original table is modified for better code:
++ *
++ * 1. The threshold 0 is changed to rmid count - 1 so don't do correction
++ *    for the case.
++ * 2. MBM total and local correction table indexed by core counter which is
++ *    equal to (x86_cache_max_rmid + 1) / 8 - 1 and is from 0 up to 27.
++ * 3. The correction factor is normalized to 2^20 (1048576) so it's faster
++ *    to calculate corrected value by shifting:
++ *    corrected_value = (original_value * correction_factor) >> 20
++ */
++static const struct mbm_correction_factor_table {
++	u32 rmidthreshold;
++	u64 cf;
++} mbm_cf_table[] __initconst = {
++	{7,	CF(1.000000)},
++	{15,	CF(1.000000)},
++	{15,	CF(0.969650)},
++	{31,	CF(1.000000)},
++	{31,	CF(1.066667)},
++	{31,	CF(0.969650)},
++	{47,	CF(1.142857)},
++	{63,	CF(1.000000)},
++	{63,	CF(1.185115)},
++	{63,	CF(1.066553)},
++	{79,	CF(1.454545)},
++	{95,	CF(1.000000)},
++	{95,	CF(1.230769)},
++	{95,	CF(1.142857)},
++	{95,	CF(1.066667)},
++	{127,	CF(1.000000)},
++	{127,	CF(1.254863)},
++	{127,	CF(1.185255)},
++	{151,	CF(1.000000)},
++	{127,	CF(1.066667)},
++	{167,	CF(1.000000)},
++	{159,	CF(1.454334)},
++	{183,	CF(1.000000)},
++	{127,	CF(0.969744)},
++	{191,	CF(1.280246)},
++	{191,	CF(1.230921)},
++	{215,	CF(1.000000)},
++	{191,	CF(1.143118)},
++};
++
++static u32 mbm_cf_rmidthreshold __read_mostly = UINT_MAX;
++static u64 mbm_cf __read_mostly;
++
++u64 get_corrected_mbm_count(u32 rmid, unsigned long val)
++{
++	/* Correct MBM value. */
++	if (rmid > mbm_cf_rmidthreshold)
++		val = (val * mbm_cf) >> 20;
++
++	return val;
++}
++
++void __init rdt_mbm_apply_quirk(int num_rmids)
++{
++	int cf_index;
++
++	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL ||
++	    boot_cpu_data.x86 != 6)
++		return;
++	if (boot_cpu_data.x86_model != INTEL_FAM6_BROADWELL_X &&
++	    boot_cpu_data.x86_model != INTEL_FAM6_SKYLAKE_X)
++		return;
++
++	cf_index = num_rmids / 8 - 1;
++	if (cf_index >= ARRAY_SIZE(mbm_cf_table)) {
++		pr_info("No MBM correction factor available\n");
++		return;
++	}
++
++	mbm_cf_rmidthreshold = mbm_cf_table[cf_index].rmidthreshold;
++	mbm_cf = mbm_cf_table[cf_index].cf;
++}
+diff --git a/fs/resctrl2/arch/x86/rdt_mbm_local_bytes.c b/fs/resctrl2/arch/x86/rdt_mbm_local_bytes.c
+new file mode 120000
+index 000000000000..e15bfdd4143e
+--- /dev/null
++++ b/fs/resctrl2/arch/x86/rdt_mbm_local_bytes.c
+@@ -0,0 +1 @@
++rdt_llc_occupancy.c
+\ No newline at end of file
+diff --git a/fs/resctrl2/arch/x86/rdt_mbm_local_rate.c b/fs/resctrl2/arch/x86/rdt_mbm_local_rate.c
+new file mode 120000
+index 000000000000..e15bfdd4143e
+--- /dev/null
++++ b/fs/resctrl2/arch/x86/rdt_mbm_local_rate.c
+@@ -0,0 +1 @@
++rdt_llc_occupancy.c
+\ No newline at end of file
+diff --git a/fs/resctrl2/arch/x86/rdt_mbm_total_bytes.c b/fs/resctrl2/arch/x86/rdt_mbm_total_bytes.c
+new file mode 120000
+index 000000000000..e15bfdd4143e
+--- /dev/null
++++ b/fs/resctrl2/arch/x86/rdt_mbm_total_bytes.c
+@@ -0,0 +1 @@
++rdt_llc_occupancy.c
+\ No newline at end of file
+diff --git a/fs/resctrl2/arch/x86/rdt_mbm_total_rate.c b/fs/resctrl2/arch/x86/rdt_mbm_total_rate.c
+new file mode 120000
+index 000000000000..e15bfdd4143e
+--- /dev/null
++++ b/fs/resctrl2/arch/x86/rdt_mbm_total_rate.c
+@@ -0,0 +1 @@
++rdt_llc_occupancy.c
+\ No newline at end of file
+diff --git a/fs/resctrl2/arch/x86/rdt_monitor.c b/fs/resctrl2/arch/x86/rdt_monitor.c
 new file mode 100644
-index 000000000000..debf91ebcb6a
+index 000000000000..66523bcdffc8
 --- /dev/null
-+++ b/fs/resctrl2/Makefile
-@@ -0,0 +1,14 @@
++++ b/fs/resctrl2/arch/x86/rdt_monitor.c
+@@ -0,0 +1,491 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Copyright(c) 2023 Intel Corporation. */
++
++#include <asm/cpufeatures.h>
++
++#include "../../internal.h"
++#include "rdt.h"
++
++#define MBM_POLL_DELAY	1000	// milliseconds
++
++char *stpcpy(char *__restrict__ dest, const char *__restrict__ src);
++
++struct rmid {
++	struct list_head	list;
++	struct list_head	child_list;
++	bool			is_parent;
++	u64			llc_busy_domains;
++};
++
++struct mbm_event_state {
++	u64	chunks;
++	u64	prev_msr;
++	u64	prev_jiffies;
++	u64	rate;
++};
++
++struct arch_mbm_state {
++	struct mbm_event_state state[2];
++};
++
++struct mydomain {
++	int			cpu;
++	spinlock_t		msr_lock;
++	struct delayed_work	worker;
++	struct arch_mbm_state	state[];
++};
++#define get_mydomain(d) ((struct mydomain *)&d[1])
++
++struct rmid_info {
++	struct mydomain *mydomain;
++	u32	eventmap;
++	bool	init;
++};
++
++static LIST_HEAD(active_rmids);
++static LIST_HEAD(free_rmids);
++static LIST_HEAD(limbo_rmids);
++
++static struct rmid *rmid_array;
++static int num_rmids;
++static int upscale;
++static int max_threshold_occupancy;
++static int mbm_width = 24;
++static char mon_features[64];
++static struct resctrl_resource monitor;
++static int active_events[EV_MAX];
++
++static void init_rmids(int mon_event);
++static void update_rmids(void *info);
++static bool rmid_polling;
++static u64 llc_busy_threshold;
++unsigned int resctrl_rmid_realloc_limit;
++
++static void check_limbo(struct resctrl_domain *d)
++{
++	struct rmid *r, *tmp;
++
++	list_for_each_entry_safe(r, tmp, &limbo_rmids, list) {
++		u64 rmid = r - rmid_array;
++		u64 chunks;
++
++		if (!(r->llc_busy_domains & BIT(d->id)))
++			continue;
++		wrmsrl(MSR_IA32_QM_EVTSEL, (rmid << 32) | EV_LLC);
++		rdmsrl(MSR_IA32_QM_CTR, chunks);
++
++		if (chunks <= llc_busy_threshold) {
++			r->llc_busy_domains &= ~BIT(d->id);
++			if (!r->llc_busy_domains)
++				list_move_tail(&r->list, &free_rmids);
++		}
++	}
++}
++
++static bool mbm_is_active(void)
++{
++	return (active_events[EV_TOT] + active_events[EV_LOC]) > 0;
++}
++
++static void mbm_poll(struct work_struct *work)
++{
++	struct resctrl_domain *d;
++	struct rmid_info ri;
++	unsigned long flags;
++	struct mydomain *m;
++
++	m = container_of(work, struct mydomain, worker.work);
++	d = (struct resctrl_domain *)m - 1;
++	ri.mydomain = m;
++	ri.eventmap = 0;
++	if (active_events[EV_TOT])
++		ri.eventmap |= BIT(EV_TOT);
++	if (active_events[EV_LOC])
++		ri.eventmap |= BIT(EV_LOC);
++	ri.init = false;
++
++	spin_lock_irqsave(&m->msr_lock, flags);
++	update_rmids(&ri);
++
++	if (!list_empty(&limbo_rmids))
++		check_limbo(d);
++
++	if (!list_empty(&limbo_rmids) || mbm_is_active())
++		schedule_delayed_work_on(m->cpu, &m->worker, msecs_to_jiffies(MBM_POLL_DELAY));
++	else
++		rmid_polling = false;
++	spin_unlock_irqrestore(&m->msr_lock, flags);
++}
++
++static void init_rmid_polling(void)
++{
++	struct resctrl_domain *d;
++	struct mydomain *m;
++
++	rmid_polling = true;
++	list_for_each_entry(d, &monitor.domains, list) {
++		m = get_mydomain(d);
++		INIT_DELAYED_WORK(&m->worker, mbm_poll);
++		m->cpu = cpumask_any(&d->cpu_mask);
++		schedule_delayed_work_on(m->cpu, &m->worker, msecs_to_jiffies(MBM_POLL_DELAY));
++	}
++}
++
++void arch_add_monitor(int mon_event)
++{
++	switch (mon_event) {
++	case EV_LOCRATE:
++		mon_event = EV_LOC;
++		break;
++	case EV_TOTRATE:
++		mon_event = EV_TOT;
++		break;
++	}
++
++	active_events[mon_event]++;
++
++	if (mon_event == EV_TOT || mon_event == EV_LOC) {
++		if (active_events[mon_event] == 1)
++			init_rmids(mon_event);
++		if (!rmid_polling && mbm_is_active())
++			init_rmid_polling();
++	}
++}
++
++void arch_del_monitor(int mon_event)
++{
++	switch (mon_event) {
++	case EV_LOCRATE:
++		mon_event = EV_LOC;
++		break;
++	case EV_TOTRATE:
++		mon_event = EV_TOT;
++		break;
++	}
++
++	active_events[mon_event]--;
++}
++
++int rmid_alloc(int prmid)
++{
++	struct rmid *r;
++
++	if (!num_rmids)
++		return 0;
++
++	if (list_empty(&free_rmids))
++		return list_empty(&limbo_rmids) ? -ENOSPC : -EBUSY;
++
++	r = list_first_entry(&free_rmids, struct rmid, list);
++
++	if (prmid < 0) {
++		r->is_parent = true;
++		INIT_LIST_HEAD(&r->child_list);
++	} else {
++		r->is_parent = false;
++		list_add(&r->child_list, &rmid_array[prmid].child_list);
++	}
++
++	list_move(&r->list, &active_rmids);
++
++	return r - rmid_array;
++}
++
++void rmid_free(int rmid)
++{
++	struct rmid *r = &rmid_array[rmid];
++	struct resctrl_domain *d;
++
++	if (active_events[EV_LLC]) {
++		list_for_each_entry(d, &monitor.domains, list)
++			r->llc_busy_domains |= BIT(d->id);
++		list_move_tail(&r->list, &limbo_rmids);
++		if (!rmid_polling)
++			init_rmid_polling();
++	} else {
++		list_move_tail(&r->list, &free_rmids);
++	}
++	if (r->is_parent)
++		WARN_ON(!list_empty(&r->child_list));
++	else
++		list_del(&r->child_list);
++}
++
++static u64 wrap(u64 old, u64 new)
++{
++	u64 shift = 64 - mbm_width, chunks;
++
++	chunks = (new << shift) - (old << shift);
++
++	return chunks >> shift;
++}
++
++static u64 adjust(struct mydomain *m, u64 rmid, u64 event, u64 chunks)
++{
++	struct mbm_event_state *s;
++	u64 rawchunks;
++
++
++	switch (event) {
++	case EV_LLC:
++		rawchunks = chunks;
++		break;
++	case EV_TOT:
++		s = &m->state[rmid].state[0];
++		rawchunks = get_corrected_mbm_count(rmid, s->chunks + wrap(s->prev_msr, chunks));
++		break;
++	case EV_LOC:
++		s = &m->state[rmid].state[1];
++		rawchunks = get_corrected_mbm_count(rmid, s->chunks + wrap(s->prev_msr, chunks));
++		break;
++	case EV_TOTRATE:
++		s = &m->state[rmid].state[0];
++		rawchunks = get_corrected_mbm_count(rmid, s->rate);
++		break;
++	case EV_LOCRATE:
++		s = &m->state[rmid].state[0];
++		rawchunks = get_corrected_mbm_count(rmid, s->rate);
++		break;
++	}
++	return rawchunks;
++}
++
++struct rrmid_info {
++	struct resctrl_domain	*domain;
++	u64			rmid;
++	u64			event;
++	u64			chunks;
++};
++
++static void __rdt_rmid_read(void *info)
++{
++	struct rrmid_info *rr = info;
++	unsigned long flags;
++	struct rmid *cr, *r;
++	struct mydomain *m;
++	u64 chunks;
++
++	m = get_mydomain(rr->domain);
++
++	if (rr->event <= EV_LOC) {
++		spin_lock_irqsave(&m->msr_lock, flags);
++		wrmsrl(MSR_IA32_QM_EVTSEL, (rr->rmid << 32) | rr->event);
++		rdmsrl(MSR_IA32_QM_CTR, chunks);
++	} else {
++		chunks = 0;
++	}
++
++	rr->chunks = adjust(m, rr->rmid, rr->event, chunks);
++
++	r = &rmid_array[rr->rmid];
++	if (r->is_parent && !list_empty(&r->child_list)) {
++		list_for_each_entry(cr, &r->child_list, child_list) {
++			u64 crmid = cr - rmid_array;
++
++			if (rr->event <= EV_LOC) {
++				wrmsrl(MSR_IA32_QM_EVTSEL, (crmid << 32) | rr->event);
++				rdmsrl(MSR_IA32_QM_CTR, chunks);
++			} else {
++				chunks = 0;
++			}
++
++			rr->chunks += adjust(m, crmid, rr->event, chunks);
++		}
++	}
++
++	if (rr->event <= EV_LOC)
++		spin_unlock_irqrestore(&m->msr_lock, flags);
++}
++
++u64 rdt_rmid_read(int domain_id, int rmid, int event)
++{
++	struct resctrl_domain *d;
++	struct rrmid_info rr;
++	struct mydomain *m;
++
++	list_for_each_entry(d, &monitor.domains, list)
++		if (d->id == domain_id)
++			goto found;
++	return ~0ull;
++found:
++	m = get_mydomain(d);
++
++	rr.domain = d;
++	rr.rmid = rmid;
++	rr.event = event;
++
++	if (event <= EV_LOC)
++		smp_call_function_any(&d->cpu_mask, __rdt_rmid_read, &rr, 1);
++	else
++		__rdt_rmid_read(&rr);
++
++	return rr.chunks * upscale;
++}
++EXPORT_SYMBOL_GPL(rdt_rmid_read);
++
++static void update_rmids(void *info)
++{
++	struct rmid_info *ri = info;
++	struct mbm_event_state *s;
++	u64 addchunks, now;
++	u32 map, event;
++	struct rmid *r;
++
++	list_for_each_entry(r, &active_rmids, list) {
++		u64 msr, rmid = r - rmid_array;
++
++		for (map = ri->eventmap; map; map &= ~BIT(event)) {
++			event = __ffs(map);
++
++			if (event == EV_TOT)
++				s = &ri->mydomain->state[rmid].state[0];
++			else
++				s = &ri->mydomain->state[rmid].state[1];
++			wrmsrl(MSR_IA32_QM_EVTSEL, (rmid << 32) | event);
++			rdmsrl(MSR_IA32_QM_CTR, msr);
++			now = jiffies;
++			addchunks = wrap(s->prev_msr, msr);
++			if (ri->init) {
++				s->chunks = 0;
++				s->rate = 0;
++			} else {
++				s->chunks += addchunks;
++				s->rate = addchunks * HZ / (now - s->prev_jiffies);
++			}
++			s->prev_jiffies = now;
++			s->prev_msr = msr;
++		}
++	}
++}
++
++static void init_rmids(int mon_event)
++{
++	struct resctrl_domain *d;
++	struct rmid_info ri;
++
++	ri.init = true;
++
++	list_for_each_entry(d, &monitor.domains, list) {
++		ri.mydomain = get_mydomain(d);
++		ri.eventmap = BIT(mon_event);
++		smp_call_function_any(&d->cpu_mask, update_rmids, &ri, 1);
++	}
++}
++
++static void domain_update(struct resctrl_resource *r, int what, int cpu, struct resctrl_domain *d)
++{
++	struct mydomain *m = get_mydomain(d);
++
++	if (what == RESCTRL_DOMAIN_ADD ||
++	    (what == RESCTRL_DOMAIN_DELETE_CPU && cpu == m->cpu)) {
++		if (what == RESCTRL_DOMAIN_DELETE_CPU)
++			cancel_delayed_work(&m->worker);
++		spin_lock_init(&m->msr_lock);
++		INIT_DELAYED_WORK(&m->worker, mbm_poll);
++		m->cpu = cpumask_any(&d->cpu_mask);
++		schedule_delayed_work_on(m->cpu, &m->worker, msecs_to_jiffies(MBM_POLL_DELAY));
++	}
++}
++
++static ssize_t max_threshold_occupancy_write(struct kernfs_open_file *of, char *buf,
++					     size_t nbytes, loff_t off)
++{
++	unsigned int bytes;
++	int ret;
++
++	ret = kstrtouint(buf, 0, &bytes);
++	if (ret)
++		return ret;
++
++	if (bytes > resctrl_rmid_realloc_limit)
++		return -EINVAL;
++
++	llc_busy_threshold = bytes / upscale;
++	max_threshold_occupancy = llc_busy_threshold * upscale;
++
++	return nbytes;
++}
++
++RESCTRL_FILE_DEF(max_threshold_occupancy, "%d\n")
++RESCTRL_FILE_DEF(mon_features, "%s")
++RESCTRL_FILE_DEF(num_rmids, "%d\n")
++
++static struct resctrl_fileinfo monitor_files[] = {
++	{ .name = "max_threshold_occupancy", .ops = &max_threshold_occupancy_ops },
++	{ .name = "mon_features", .ops = &mon_features_ops },
++	{ .name = "num_rmids", .ops = &num_rmids_ops },
++	{ }
++};
++
++static struct resctrl_resource monitor = {
++	.name		= "L3",
++	.archtag	= MSR_IA32_QM_EVTSEL,
++	.type		= RESCTRL_MONITOR,
++	.scope		= RESCTRL_L3CACHE,
++	.domain_size	= sizeof(struct resctrl_domain),
++	.domains	= LIST_HEAD_INIT(monitor.domains),
++	.domain_update	= domain_update,
++	.infodir	= "L3_MON",
++	.infofiles	= monitor_files,
++};
++
++static int __init rdt_monitor_init(void)
++{
++	u32 eax, ebx, ecx, edx;
++	char *s;
++
++	if (!boot_cpu_has(X86_FEATURE_CQM))
++		return -ENODEV;
++
++	cpuid_count(0xf, 0, &eax, &ebx, &ecx, &edx);
++	if (!(edx & BIT(1)))
++		return -ENODEV;
++
++	cpuid_count(0xf, 1, &eax, &ebx, &ecx, &edx);
++	mbm_width += eax & 0xff;
++	upscale = ebx;
++	num_rmids = ecx + 1;
++	rdt_mbm_apply_quirk(num_rmids);
++
++	monitor.domain_size += num_rmids * sizeof(struct arch_mbm_state);
++
++	max_threshold_occupancy_ops.write = max_threshold_occupancy_write;
++
++	/*
++	 * A reasonable upper limit on the max threshold is the number
++	 * of lines tagged per RMID if all RMIDs have the same number of
++	 * lines tagged in the LLC.
++	 *
++	 * For a 35MB LLC and 56 RMIDs, this is ~1.8% of the LLC.
++	 */
++	resctrl_rmid_realloc_limit = boot_cpu_data.x86_cache_size * 1024;
++	llc_busy_threshold = (resctrl_rmid_realloc_limit / num_rmids) / upscale;
++	max_threshold_occupancy = llc_busy_threshold * upscale;
++
++	s = mon_features;
++	if (edx & BIT(0))
++		s = stpcpy(s, "llc_occupancy\n");
++	if (edx & BIT(1))
++		s = stpcpy(s, "mbm_total_bytes\n");
++	if (edx & BIT(2))
++		s = stpcpy(s, "mbm_local_bytes\n");
++
++	rmid_array = kzalloc(sizeof *rmid_array * num_rmids, GFP_KERNEL);
++	if (!rmid_array)
++		return -ENOMEM;
++
++	rmid_array[0].is_parent = true;
++	INIT_LIST_HEAD(&rmid_array[0].child_list);
++	list_add(&rmid_array[0].list, &active_rmids);
++
++	for (int i = 1; i < num_rmids; i++)
++		list_add_tail(&rmid_array[i].list, &free_rmids);
++
++	resctrl_register_ctrl_resource(&monitor);
++
++	return 0;
++}
++
++late_initcall(rdt_monitor_init);
++
++MODULE_LICENSE("GPL");
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 53bab123a8ee..1b7bea469334 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -480,9 +480,16 @@ config GOLDFISH
+ 	def_bool y
+ 	depends on X86_GOLDFISH
+ 
++choice
++	prompt "Resource Control"
++	default X86_CPU_RESCTRL_OFF
++	depends on X86 && (CPU_SUP_INTEL || CPU_SUP_AMD)
++
++config X86_CPU_RESCTRL_OFF
++	bool "No support for x86 CPU resource control"
++
+ config X86_CPU_RESCTRL
+ 	bool "x86 CPU resource control support"
+-	depends on X86 && (CPU_SUP_INTEL || CPU_SUP_AMD)
+ 	select KERNFS
+ 	select PROC_CPU_RESCTRL		if PROC_FS
+ 	help
+@@ -499,7 +506,77 @@ config X86_CPU_RESCTRL
+ 	  More information about AMD QoS can be found in the AMD64 Technology
+ 	  Platform Quality of Service Extensions manual.
+ 
+-	  Say N if unsure.
++config X86_CPU_RESCTRL2
++	bool "resctrl2 filesystem support"
++	select KERNFS
++	select RESCTRL2_FS
++	help
++	  Enable x86 CPU resource control support.
++
++	  Experimental software loadable module driven version
++	  of support for resource control.
++
++endchoice
++
++config X86_RDT_L3_CAT
++	tristate "RDT L3 cache control"
++	depends on X86_CPU_RESCTRL2
++	help
++	  Loadable module for RDT L3 cache allocation
++
++config X86_RDT_L2_CAT
++	tristate "RDT L2 cache control"
++	depends on X86_CPU_RESCTRL2
++	help
++	  Loadable module for RDT L2 cache allocation
++
++config X86_RDT_L3_CDP
++	tristate "RDT L3 CDP cache control"
++	depends on X86_CPU_RESCTRL2
++	help
++	  Loadable module for RDT L3 CDP cache allocation
++
++config X86_RDT_L2_CDP
++	tristate "RDT L2 CDP cache control"
++	depends on X86_CPU_RESCTRL2
++	help
++	  Loadable module for RDT L2 CDP cache allocation
++
++config X86_RDT_L3_MBA
++	tristate "RDT L3 Memory bandwidth allocation"
++	depends on X86_CPU_RESCTRL2
++	help
++	  Loadable module for RDT L3 memory bandwidth allocation
++
++config X86_RDT_LLC_OCCUPANCY
++	tristate "RDT L3 cache occupancy monitor"
++	depends on X86_CPU_RESCTRL2
++	help
++	  Loadable module for RDT L3 cache occupancy monitor
++
++config X86_RDT_MBM_TOTAL_BYTES
++	tristate "RDT L3 total memory bandwidth monitor"
++	depends on X86_CPU_RESCTRL2
++	help
++	  Loadable module for RDT L3 total memory bandwidth monitor
++
++config X86_RDT_MBM_LOCAL_BYTES
++	tristate "RDT L3 local memory bandwidth monitor"
++	depends on X86_CPU_RESCTRL2
++	help
++	  Loadable module for RDT L3 local memory bandwidth monitor
++
++config X86_RDT_MBM_TOTAL_RATE
++	tristate "RDT L3 total memory bandwidth rate monitor"
++	depends on X86_CPU_RESCTRL2
++	help
++	  Loadable module for RDT L3 total memory bandwidth rate monitor
++
++config X86_RDT_MBM_LOCAL_RATE
++	tristate "RDT L3 local memory bandwidth rate monitor"
++	depends on X86_CPU_RESCTRL2
++	help
++	  Loadable module for RDT L3 local memory bandwidth rate monitor
+ 
+ if X86_32
+ config X86_BIGSMP
+diff --git a/fs/resctrl2/arch/x86/Makefile b/fs/resctrl2/arch/x86/Makefile
+new file mode 100644
+index 000000000000..393a9412f151
+--- /dev/null
++++ b/fs/resctrl2/arch/x86/Makefile
+@@ -0,0 +1,29 @@
 +# SPDX-License-Identifier: GPL-2.0
 +
-+obj-$(CONFIG_RESCTRL2_FS) += cpu.o
-+obj-$(CONFIG_RESCTRL2_FS) += directory.o
-+obj-$(CONFIG_RESCTRL2_FS) += domain.o
-+obj-$(CONFIG_RESCTRL2_FS) += info.o
-+obj-$(CONFIG_RESCTRL2_FS) += kernfs.o
-+obj-$(CONFIG_RESCTRL2_FS) += locking.o
-+obj-$(CONFIG_RESCTRL2_FS) += resources.o
-+obj-$(CONFIG_RESCTRL2_FS) += root.o
-+obj-$(CONFIG_RESCTRL2_FS) += schemata.o
-+obj-$(CONFIG_RESCTRL2_FS) += tasks.o
++obj-$(CONFIG_X86_CPU_RESCTRL2) += alloc.o
++obj-$(CONFIG_X86_CPU_RESCTRL2) += rdt_monitor.o
++obj-$(CONFIG_X86_CPU_RESCTRL2) += rdt_mbm_adjust.o
 +
-+obj-$(CONFIG_X86_CPU_RESCTRL2) += arch/x86/
++CFLAGS_rdt_l3_cat.o += -DCACHE_LEVEL=3
++CFLAGS_rdt_l2_cat.o += -DCACHE_LEVEL=2
++CFLAGS_rdt_l3_cdp.o += -DCACHE_LEVEL=3 -DCDP
++CFLAGS_rdt_l2_cdp.o += -DCACHE_LEVEL=2 -DCDP
++
++obj-$(CONFIG_X86_RDT_L3_CAT)		+= rdt_l3_cat.o
++obj-$(CONFIG_X86_RDT_L2_CAT)		+= rdt_l2_cat.o
++obj-$(CONFIG_X86_RDT_L3_CDP)		+= rdt_l3_cdp.o
++obj-$(CONFIG_X86_RDT_L2_CDP)		+= rdt_l2_cdp.o
++
++CFLAGS_rdt_llc_occupancy.o		+= -DEVENT=1
++CFLAGS_rdt_mbm_total_bytes.o		+= -DEVENT=2
++CFLAGS_rdt_mbm_local_bytes.o		+= -DEVENT=3
++CFLAGS_rdt_mbm_total_rate.o		+= -DEVENT=4
++CFLAGS_rdt_mbm_local_rate.o		+= -DEVENT=5
++
++obj-$(CONFIG_X86_RDT_LLC_OCCUPANCY)	+= rdt_llc_occupancy.o
++obj-$(CONFIG_X86_RDT_MBM_TOTAL_BYTES)	+= rdt_mbm_total_bytes.o
++obj-$(CONFIG_X86_RDT_MBM_LOCAL_BYTES)	+= rdt_mbm_local_bytes.o
++obj-$(CONFIG_X86_RDT_MBM_TOTAL_RATE)	+= rdt_mbm_total_rate.o
++obj-$(CONFIG_X86_RDT_MBM_LOCAL_RATE)	+= rdt_mbm_local_rate.o
++
++obj-$(CONFIG_X86_RDT_L3_MBA)		+= rdt_l3_mba.o
 -- 
 2.40.1
 
