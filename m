@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5C22736D92
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49247736D94
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbjFTNm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 09:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41428 "EHLO
+        id S233085AbjFTNma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 09:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232699AbjFTNmT (ORCPT
+        with ESMTP id S233030AbjFTNmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 09:42:19 -0400
+        Tue, 20 Jun 2023 09:42:25 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740D010F9;
-        Tue, 20 Jun 2023 06:42:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED14171B;
+        Tue, 20 Jun 2023 06:42:22 -0700 (PDT)
 Received: from umang.jainideasonboard.com (unknown [103.86.18.208])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id EB39F209A;
-        Tue, 20 Jun 2023 15:41:37 +0200 (CEST)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 383892C93;
+        Tue, 20 Jun 2023 15:41:43 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687268502;
-        bh=FYswsBqlGTJd9Uyph3V+TQd6xP/1Bv4ExB0Kmxk7mY4=;
+        s=mail; t=1687268506;
+        bh=XFgDh+fTQMRiqKvrJjuyeVA6evMq+BgXAzNfMVVf5k4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S7TvmEp78aXFYxW4TY0P3B3uvZLtmJPAl4EmlSZoCYyNSNgbMurCLCnfBeBOpsCO7
-         eF/3CdKXyeqsH+0Obdorc9JlmFJPz5PqcY+rlPspPZQeZOJ3ip3Lx+3Ic4wIWqA1Ck
-         Wx8BPcdj8BEeKl8Q6CxkUBjGXtLZ9U8yToe0Gw+Q=
+        b=jBPvG4ru44VD/W7tOrJ/wXFrlfT/n6anFrfbtX51scGzDKOdC5HpnW/UHLgpZDcxB
+         pCXaazqUAQA4PtPoClxfZhFF4JLx8I2CgkRSXEPCADQqWLikttUqAuzV4qLx+nm4Vn
+         d8xPKAvdFZSo7ULhXT3nuooH+aRg3qq/zuZzDl5o=
 From:   Umang Jain <umang.jain@ideasonboard.com>
 To:     linux-staging@lists.linux.dev,
         linux-rpi-kernel@lists.infradead.org,
@@ -35,9 +35,9 @@ Cc:     stefan.wahren@i2se.com, gregkh@linuxfoundation.org,
         dave.stevenson@raspberrypi.com, kieran.bingham@ideasonboard.com,
         laurent.pinchart@ideasonboard.com,
         Umang Jain <umang.jain@ideasonboard.com>
-Subject: [PATCH v7 3/5] staging: bcm2835-camera: Register bcm2835-camera with vchiq_bus_type
-Date:   Tue, 20 Jun 2023 19:11:50 +0530
-Message-Id: <20230620134152.383569-4-umang.jain@ideasonboard.com>
+Subject: [PATCH v7 4/5] staging: bcm2835-audio: Register bcm2835-audio with vchiq_bus_type
+Date:   Tue, 20 Jun 2023 19:11:51 +0530
+Message-Id: <20230620134152.383569-5-umang.jain@ideasonboard.com>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230620134152.383569-1-umang.jain@ideasonboard.com>
 References: <20230620134152.383569-1-umang.jain@ideasonboard.com>
@@ -53,143 +53,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Register the bcm2835-camera with the vchiq_bus_type instead of using
-platform driver/device.
-
-Also the VCHIQ firmware doesn't support device enumeration, hence
-one has to maintain a list of devices to be registered in the interface.
+Similar to how bcm2385-camera device is registered, register the
+bcm2835-audio with vchiq_bus_type as well.
 
 Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
 ---
- .../bcm2835-camera/bcm2835-camera.c           | 16 +++++++-------
- .../interface/vchiq_arm/vchiq_arm.c           | 21 ++++++++++++++++---
- 2 files changed, 26 insertions(+), 11 deletions(-)
+ .../vc04_services/bcm2835-audio/bcm2835.c       | 17 ++++++++---------
+ .../interface/vchiq_arm/vchiq_arm.c             |  6 +-----
+ 2 files changed, 9 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-index 346d00df815a..f37b2a881d92 100644
---- a/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-+++ b/drivers/staging/vc04_services/bcm2835-camera/bcm2835-camera.c
-@@ -24,8 +24,9 @@
- #include <media/v4l2-event.h>
- #include <media/v4l2-common.h>
- #include <linux/delay.h>
+diff --git a/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c b/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c
+index 00bc898b0189..f81a9a4fbd5d 100644
+--- a/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c
++++ b/drivers/staging/vc04_services/bcm2835-audio/bcm2835.c
+@@ -1,12 +1,12 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright 2011 Broadcom Corporation.  All rights reserved. */
+ 
 -#include <linux/platform_device.h>
+-
+ #include <linux/init.h>
+ #include <linux/slab.h>
+ #include <linux/module.h>
  
 +#include "../interface/vchiq_arm/vchiq_arm.h"
 +#include "../interface/vchiq_arm/vchiq_device.h"
- #include "../vchiq-mmal/mmal-common.h"
- #include "../vchiq-mmal/mmal-encodings.h"
- #include "../vchiq-mmal/mmal-vchiq.h"
-@@ -1841,7 +1842,7 @@ static struct v4l2_format default_v4l2_format = {
- 	.fmt.pix.sizeimage = 1024 * 768,
- };
+ #include "bcm2835.h"
  
--static int bcm2835_mmal_probe(struct platform_device *pdev)
-+static int bcm2835_mmal_probe(struct vchiq_device *device)
- {
- 	int ret;
- 	struct bcm2835_mmal_dev *dev;
-@@ -1896,7 +1897,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
- 						       &camera_instance);
- 		ret = v4l2_device_register(NULL, &dev->v4l2_dev);
- 		if (ret) {
--			dev_err(&pdev->dev, "%s: could not register V4L2 device: %d\n",
-+			dev_err(&device->dev, "%s: could not register V4L2 device: %d\n",
- 				__func__, ret);
- 			goto free_dev;
- 		}
-@@ -1976,7 +1977,7 @@ static int bcm2835_mmal_probe(struct platform_device *pdev)
- 	return ret;
+ static bool enable_hdmi;
+@@ -268,9 +268,9 @@ static int snd_add_child_devices(struct device *device, u32 numchans)
+ 	return 0;
  }
  
--static void bcm2835_mmal_remove(struct platform_device *pdev)
-+static void bcm2835_mmal_remove(struct vchiq_device *device)
+-static int snd_bcm2835_alsa_probe(struct platform_device *pdev)
++static int snd_bcm2835_alsa_probe(struct vchiq_device *device)
  {
- 	int camera;
- 	struct vchiq_mmal_instance *instance = gdev[0]->instance;
-@@ -1988,17 +1989,16 @@ static void bcm2835_mmal_remove(struct platform_device *pdev)
- 	vchiq_mmal_finalise(instance);
+-	struct device *dev = &pdev->dev;
++	struct device *dev = &device->dev;
+ 	int err;
+ 
+ 	if (num_channels <= 0 || num_channels > MAX_SUBSTREAMS) {
+@@ -292,20 +292,20 @@ static int snd_bcm2835_alsa_probe(struct platform_device *pdev)
+ 
+ #ifdef CONFIG_PM
+ 
+-static int snd_bcm2835_alsa_suspend(struct platform_device *pdev,
++static int snd_bcm2835_alsa_suspend(struct vchiq_device *device,
+ 				    pm_message_t state)
+ {
+ 	return 0;
  }
  
--static struct platform_driver bcm2835_camera_driver = {
-+static struct vchiq_driver bcm2835_camera_driver = {
- 	.probe		= bcm2835_mmal_probe,
--	.remove_new	= bcm2835_mmal_remove,
-+	.remove		= bcm2835_mmal_remove,
- 	.driver		= {
- 		.name	= "bcm2835-camera",
+-static int snd_bcm2835_alsa_resume(struct platform_device *pdev)
++static int snd_bcm2835_alsa_resume(struct vchiq_device *device)
+ {
+ 	return 0;
+ }
+ 
+ #endif
+ 
+-static struct platform_driver bcm2835_alsa_driver = {
++static struct vchiq_driver bcm2835_alsa_driver = {
+ 	.probe = snd_bcm2835_alsa_probe,
+ #ifdef CONFIG_PM
+ 	.suspend = snd_bcm2835_alsa_suspend,
+@@ -315,9 +315,8 @@ static struct platform_driver bcm2835_alsa_driver = {
+ 		.name = "bcm2835_audio",
  	},
  };
+-module_platform_driver(bcm2835_alsa_driver);
++module_vchiq_driver(bcm2835_alsa_driver);
  
--module_platform_driver(bcm2835_camera_driver)
-+module_vchiq_driver(bcm2835_camera_driver)
- 
- MODULE_DESCRIPTION("Broadcom 2835 MMAL video capture");
- MODULE_AUTHOR("Vincent Sanders");
+ MODULE_AUTHOR("Dom Cobley");
+ MODULE_DESCRIPTION("Alsa driver for BCM2835 chip");
  MODULE_LICENSE("GPL");
--MODULE_ALIAS("platform:bcm2835-camera");
+-MODULE_ALIAS("platform:bcm2835_audio");
 diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-index e8d40f891449..79d4d0eeb5fb 100644
+index 79d4d0eeb5fb..75da37fa6372 100644
 --- a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
 +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c
-@@ -67,7 +67,6 @@ int vchiq_susp_log_level = VCHIQ_LOG_ERROR;
+@@ -67,8 +67,6 @@ int vchiq_susp_log_level = VCHIQ_LOG_ERROR;
  DEFINE_SPINLOCK(msg_queue_spinlock);
  struct vchiq_state g_state;
  
--static struct platform_device *bcm2835_camera;
- static struct platform_device *bcm2835_audio;
- 
+-static struct platform_device *bcm2835_audio;
+-
  struct vchiq_drvdata {
-@@ -134,6 +133,15 @@ struct vchiq_pagelist_info {
- 	unsigned int scatterlist_mapped;
+ 	const unsigned int cache_line_size;
+ 	struct rpi_firmware *fw;
+@@ -139,6 +137,7 @@ struct vchiq_pagelist_info {
+  * the interface.
+  */
+ static const char *const vchiq_devices[] = {
++	"bcm2835_audio",
+ 	"bcm2835-camera",
  };
  
-+/*
-+ * The devices implemented in the VCHIQ firmware are not discoverable,
-+ * so we need to maintain a list of them in order to register them with
-+ * the interface.
-+ */
-+static const char *const vchiq_devices[] = {
-+	"bcm2835-camera",
-+};
-+
- static void __iomem *g_regs;
- /* This value is the size of the L2 cache lines as understood by the
-  * VPU firmware, which determines the required alignment of the
-@@ -1798,6 +1806,7 @@ static int vchiq_probe(struct platform_device *pdev)
- 	struct device_node *fw_node;
- 	const struct of_device_id *of_id;
- 	struct vchiq_drvdata *drvdata;
-+	unsigned int i;
- 	int err;
- 
- 	of_id = of_match_node(vchiq_of_match, pdev->dev.of_node);
-@@ -1840,9 +1849,15 @@ static int vchiq_probe(struct platform_device *pdev)
+@@ -1849,8 +1848,6 @@ static int vchiq_probe(struct platform_device *pdev)
  		goto error_exit;
  	}
  
--	bcm2835_camera = vchiq_register_child(pdev, "bcm2835-camera");
- 	bcm2835_audio = vchiq_register_child(pdev, "bcm2835_audio");
+-	bcm2835_audio = vchiq_register_child(pdev, "bcm2835_audio");
+-
+ 	for (i = 0; i < ARRAY_SIZE(vchiq_devices); i++) {
+ 		err = vchiq_device_register(&pdev->dev, vchiq_devices[i]);
+ 		if (err)
+@@ -1868,7 +1865,6 @@ static int vchiq_probe(struct platform_device *pdev)
  
-+	for (i = 0; i < ARRAY_SIZE(vchiq_devices); i++) {
-+		err = vchiq_device_register(&pdev->dev, vchiq_devices[i]);
-+		if (err)
-+			dev_err(&pdev->dev, "Failed to register %s vchiq device\n",
-+			vchiq_devices[i]);
-+	}
-+
- 	return 0;
- 
- failed_platform_init:
-@@ -1854,7 +1869,7 @@ static int vchiq_probe(struct platform_device *pdev)
  static void vchiq_remove(struct platform_device *pdev)
  {
- 	platform_device_unregister(bcm2835_audio);
--	platform_device_unregister(bcm2835_camera);
-+	bus_for_each_dev(&vchiq_bus_type, NULL, NULL, vchiq_device_unregister);
+-	platform_device_unregister(bcm2835_audio);
+ 	bus_for_each_dev(&vchiq_bus_type, NULL, NULL, vchiq_device_unregister);
  	vchiq_debugfs_deinit();
  	vchiq_deregister_chrdev();
- }
 -- 
 2.39.1
 
