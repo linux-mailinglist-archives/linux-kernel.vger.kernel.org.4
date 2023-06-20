@@ -2,79 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 486C573636C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 08:13:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88AC873636F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 08:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230511AbjFTGNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 02:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
+        id S230518AbjFTGOE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 02:14:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjFTGNH (ORCPT
+        with ESMTP id S230218AbjFTGOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 02:13:07 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A607AC6
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 23:13:05 -0700 (PDT)
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 04869423EC
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:13:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1687241581;
-        bh=9wIeiW1ZFsba/KXCWD2PyQ1wr/96tQbFZf3Edkh0XnI=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=XNMOL5G9XfhvvZEQhn0g7g0XAPI9nAIu9t4w85D11Co3Zn8I/mLSN5MUgiFeYdKLh
-         rOp6FZaFa4N7vnABf5lgjVDR8mzeAdIM0lp8VYxBmn1ch0h01N294KrQS8oQigfoSu
-         GVzW0wOKt3pskwzDVts/WkaBPmFXlMNmYbTETRw13Arh7Fd0ZJFK4CMbwkVi4ScyEn
-         /wq3QjZ5T5L5lkfIDPog3j38S98ii4pa0g/iPubxdipJDWpyWd2EnsYgo4cuoaHcIq
-         u8sEnfUxSzRmM9GAhHuxTO1iQcMP7S6eaDu1XhOV165dPO2OoMGmca5J4Esg2EOkTC
-         gOj8Ht2ptFDpA==
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-30fb1f3c30aso1506028f8f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 23:13:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687241577; x=1689833577;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9wIeiW1ZFsba/KXCWD2PyQ1wr/96tQbFZf3Edkh0XnI=;
-        b=XOfLLgrqxaTNwHjig0ZdpcL3oMP+JKl992fzI+qU8PL6t+i4YryZyeDfdt9r/iTO4C
-         wK+b0yXbUlZ1RL5VW9sPkFcd/anMhtoj4lD7iNU/LT3Wp87jJ1VjiwDF/5kvw+UFcxXY
-         A608e+KoVYdpMdZGO/xJDdyIWCVCa1RlCYpEjbEjpccwwvbK4FnUYg0LmH++WCeQAKrv
-         8P75gxR+qBDKjT/i4DWjsCNXs4Ld8SiSCWtDaJFEbuzxCaTUcWnZUzRe9RCaZZ1TTezQ
-         UEsSELlDaS8aacq52hbMEPzzNA8SxA0G7aaBEWhii/fOD9D8qv9GQH+Z8Ek735YimhVl
-         joCQ==
-X-Gm-Message-State: AC+VfDxRnWhFRN8YFJMY2X9GOVpzf5DgifYd/Qw6GeQSpBBSOtXDIeK6
-        mtwIsx0qj73MqtpvGJRdDGp0vTdECmcmAYIH4+CVmYHRSUR5cG3gYmWeAjveO5603Ok+RwB24hJ
-        MWvjr9NmTOpUladXOr0Mh3VsIzGaCP9ABptRBk3L9eQ==
-X-Received: by 2002:a5d:5642:0:b0:311:13e6:6504 with SMTP id j2-20020a5d5642000000b0031113e66504mr7172945wrw.47.1687241577594;
-        Mon, 19 Jun 2023 23:12:57 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ53VbcjaaSaVOP7ZfF1U8PlZ6CnaKfIspgMD4HVg9YmI8nsBXcQDmAFnqzTcFArMw2i9VXRcA==
-X-Received: by 2002:a5d:5642:0:b0:311:13e6:6504 with SMTP id j2-20020a5d5642000000b0031113e66504mr7172930wrw.47.1687241577282;
-        Mon, 19 Jun 2023 23:12:57 -0700 (PDT)
-Received: from localhost ([194.191.244.86])
-        by smtp.gmail.com with ESMTPSA id y10-20020adff6ca000000b0030f9c3219aasm1163729wrp.47.2023.06.19.23.12.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 23:12:56 -0700 (PDT)
-From:   Juerg Haefliger <juerg.haefliger@canonical.com>
-To:     rfoss@kernel.org
-Cc:     Laurent.pinchart@ideasonboard.com, airlied@gmail.com,
-        andrzej.hajda@intel.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, jernej.skrabec@gmail.com,
-        jonas@kwiboo.se, juerg.haefliger@canonical.com,
-        linux-kernel@vger.kernel.org, neil.armstrong@linaro.org
-Subject: [PATCH v2] drm/bridge: lt9611uxc: Add MODULE_FIRMWARE macro
-Date:   Tue, 20 Jun 2023 08:12:54 +0200
-Message-Id: <20230620061254.1210248-1-juerg.haefliger@canonical.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <CAN6tsi4jdDD20DY5sKL+ALC_Mk2UHRArOrQnjzKoyF30QZi8jw@mail.gmail.com>
-References: <CAN6tsi4jdDD20DY5sKL+ALC_Mk2UHRArOrQnjzKoyF30QZi8jw@mail.gmail.com>
+        Tue, 20 Jun 2023 02:14:02 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1E4310D7;
+        Mon, 19 Jun 2023 23:14:01 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35K5xOJn013840;
+        Tue, 20 Jun 2023 06:13:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=Q5zsPzlifA3wE+OG3e0VDwThrrdWXITSvpqMnJmucHU=;
+ b=JdNYKTfZ7ifClpiiUHQEfK/AIVe5t4VQFeAdPOpn+CdcjOtXtjB0+5XgfI2+BByMyaes
+ rSr0SkcJ/hTgX6AdoqJPn9mB+mo1Hn76g/0bLgy50tEXcVur7pw4Wu3ICbH2efen2q6Q
+ WnINBPv/kGCjqr20HAEPQgeeaDMaj6GODviwKX91OV9t6LWg+4zXAlDKcN5F/FLfwZJC
+ FLTNPhmyvv6dv0mfPjvFip12ltovLNbUiI9zFIgZf3Nka1dYKHdBecFoeqwlAC8Twk+U
+ E1IS0ryophx9U5zAgkEyok/lgqykUBszJzDLYpOvm+qet1HO6kGCkHXRroWSycwSWKog kA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rb3gur8yg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jun 2023 06:13:32 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35K6DWFt016918
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jun 2023 06:13:32 GMT
+Received: from [10.201.2.96] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 19 Jun
+ 2023 23:13:29 -0700
+Message-ID: <2f915104-952f-3e3d-b3d5-4c0400b4f331@quicinc.com>
+Date:   Tue, 20 Jun 2023 11:43:26 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.0
+Subject: Re: [PATCH V2] firmware: qcom_scm: use the SCM_CONVENTION based on
+ ARM / ARM64
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Elliot Berman <eberman@codeaurora.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <quic_eberman@quicinc.com>, <stable@vger.kernel.org>
+References: <20230607045345.25049-1-quic_kathirav@quicinc.com>
+Content-Language: en-US
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+In-Reply-To: <20230607045345.25049-1-quic_kathirav@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: vMdxPtZbujt0GBwjLluTsjyv7uqxDZ6G
+X-Proofpoint-GUID: vMdxPtZbujt0GBwjLluTsjyv7uqxDZ6G
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-20_03,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ spamscore=0 suspectscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999
+ priorityscore=1501 phishscore=0 clxscore=1011 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306200056
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,47 +83,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The module loads firmware so add a MODULE_FIRMWARE macro to provide that
-information via modinfo.
 
-Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
-Reviewed-by: Robert Foss <rfoss@kernel.org>
----
-v2:
-  - Introduce FW_FILE macro
-  - Add Rob's r-b
----
- drivers/gpu/drm/bridge/lontium-lt9611uxc.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+On 6/7/2023 10:23 AM, Kathiravan T wrote:
+> During SCM probe, to identify the SCM convention, scm call is made with
+> SMC_CONVENTION_ARM_64 followed by SMC_CONVENTION_ARM_32. Based on the
+> result what convention to be used is decided.
+>
+> IPQ chipsets starting from IPQ807x, supports both 32bit and 64bit kernel
+> variants, however TZ firmware runs in 64bit mode. When running on 32bit
+> kernel, scm call is made with SMC_CONVENTION_ARM_64 is causing the
+> system crash, due to the difference in the register sets between ARM and
+> AARCH64, which is accessed by the TZ.
+>
+> To avoid this, use SMC_CONVENTION_ARM_64 only on ARM64 builds.
 
-diff --git a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
-index 2a57e804ea02..22c84d29c2bc 100644
---- a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
-+++ b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
-@@ -28,6 +28,8 @@
- #define EDID_BLOCK_SIZE	128
- #define EDID_NUM_BLOCKS	2
- 
-+#define FW_FILE "lt9611uxc_fw.bin"
-+
- struct lt9611uxc {
- 	struct device *dev;
- 	struct drm_bridge bridge;
-@@ -754,7 +756,7 @@ static int lt9611uxc_firmware_update(struct lt9611uxc *lt9611uxc)
- 		REG_SEQ0(0x805a, 0x00),
- 	};
- 
--	ret = request_firmware(&fw, "lt9611uxc_fw.bin", lt9611uxc->dev);
-+	ret = request_firmware(&fw, FW_FILE, lt9611uxc->dev);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -1019,3 +1021,5 @@ module_i2c_driver(lt9611uxc_driver);
- 
- MODULE_AUTHOR("Dmitry Baryshkov <dmitry.baryshkov@linaro.org>");
- MODULE_LICENSE("GPL v2");
-+
-+MODULE_FIRMWARE(FW_FILE);
--- 
-2.37.2
 
+Gentle Reminder...
+
+
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 9a434cee773a ("firmware: qcom_scm: Dynamically support SMCCC and legacy conventions")
+> Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
+> ---
+> Changes in V2:
+> 	- Added the Fixes tag and cc'd stable mailing list
+>
+>   drivers/firmware/qcom_scm.c | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> index fde33acd46b7..db6754db48a0 100644
+> --- a/drivers/firmware/qcom_scm.c
+> +++ b/drivers/firmware/qcom_scm.c
+> @@ -171,6 +171,7 @@ static enum qcom_scm_convention __get_convention(void)
+>   	if (likely(qcom_scm_convention != SMC_CONVENTION_UNKNOWN))
+>   		return qcom_scm_convention;
+>   
+> +#if IS_ENABLED(CONFIG_ARM64)
+>   	/*
+>   	 * Device isn't required as there is only one argument - no device
+>   	 * needed to dma_map_single to secure world
+> @@ -191,6 +192,7 @@ static enum qcom_scm_convention __get_convention(void)
+>   		forced = true;
+>   		goto found;
+>   	}
+> +#endif
+>   
+>   	probed_convention = SMC_CONVENTION_ARM_32;
+>   	ret = __scm_smc_call(NULL, &desc, probed_convention, &res, true);
