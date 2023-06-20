@@ -1,226 +1,268 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22DFC737731
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:05:24 +0200 (CEST)
+Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
+	by mail.lfdr.de (Postfix) with ESMTP id 930E073773D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjFTWFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 18:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
+        id S229684AbjFTWIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 18:08:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjFTWFT (ORCPT
+        with ESMTP id S229567AbjFTWIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 18:05:19 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D211731
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 15:05:18 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-514ad92d1e3so80a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 15:05:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687298717; x=1689890717;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6QnZ16+cR3SKz8OZyy5d1CsXcXjkIRyncSh8yNxkG1M=;
-        b=B8QESZcPS8IOqAQ9veug7dutrAkK9Ty1tsh2jQp6IbIscVsQ3171n8gu4ay4YA1jka
-         SkkY8idwFT4BOwqktrmuEbxD0Q/eYeyQGlApPqQBEFgsOCmzBHnvaRCdjry6zWAgVZ4G
-         yyFUmiO18E4j8x97g+1K1kjmm85SQxOEFP0ccV/TiJVtZ2muvDpMiypubUXTcZdN/Hk6
-         vQ570hXUuFVnwEmSHLwMjj9UoRrL3kKGlkVcqEUvhhOT2ok9Y2mDTVOnKKEQQvCbbpHD
-         b9luoM6mpvHQG2q9UDVJ10SdF0+qSH5L0gjwTYjn8fi3DenuPM9N1G70ZZFBE3/zqrBq
-         ZVaQ==
+        Tue, 20 Jun 2023 18:08:22 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384331A3;
+        Tue, 20 Jun 2023 15:08:21 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-77e4126badcso58703239f.0;
+        Tue, 20 Jun 2023 15:08:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687298717; x=1689890717;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6QnZ16+cR3SKz8OZyy5d1CsXcXjkIRyncSh8yNxkG1M=;
-        b=Uc34hTkVV2qiWy089w2IVe1BuMFBW5wmM8W3u43P5eIxV3sJ4Xrqn3lOszOex1a1OE
-         xRqFLuaCAdbl5Yp0pZWcwyzvZAh2jgt1xuy9h0W8wgTnOGQR3fvEC3WC0GVlgYzfVh7F
-         OzYuDmp2i50UkVk98e20wWz255C49QxNvV7W/43W9eWJEYoRbwgeeIab9noqSbSICh1S
-         znffsi6TwtvZxmfDa6JmCVtUGZQEnh4Cr4gE5U7iW7l8yKlolDLRDhFyQDvvAYls7JtY
-         AiKmDMIfEkK+DSX0c3VcJzGybek+h8cpdpiEjoRRRjNvKHULwVgCiwOrQ6lpi4W9mQ+x
-         fMDA==
-X-Gm-Message-State: AC+VfDwojCasyns/1s9aKlzjiv56lqeRIs35j3ZG3uoZoSVD0OeHZ09L
-        KbJ8qXBppDZniZp+LRJTIqs2IZ3bJozcav7mqfjGVw==
-X-Google-Smtp-Source: ACHHUZ59qq5aWENB/BjU7unJQ0/yUrpV9cMPMC3H9gw6cRwjKcqMmpGu7hrOaqCTn7aGXRAjC3awXkHyEymz3yE+18M=
-X-Received: by 2002:a50:9e07:0:b0:50b:f6ce:2f3d with SMTP id
- z7-20020a509e07000000b0050bf6ce2f3dmr574426ede.0.1687298716727; Tue, 20 Jun
- 2023 15:05:16 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687298900; x=1689890900;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8xKzKR2Jor9yZCbhpw4RdY2UISdl+Ggxh4g2WL/oLeg=;
+        b=WtJlr+dupl9DWA+Wh18J+J4B9GNAft1925aNh0bC8odvMg6yQmSC/uJGUQNvAy4xv/
+         BJlFmq6Lw57BE9S/VJUt+NwSKqG/SEVq/jc1tLUremLeu331gHThCScxpuQHONCgbx56
+         lRl71AWQeHepbXqo48RssRBxEU/wA03u66eN8rsveh4OCIdklGpAwMtVBafiy1/WKMag
+         2zSexwoQ6mhgrRRx7ruhpBHsJ9NvJDRUFujRWLwU4ziti1d7eB3s5sgUUfJzbNc2cOe2
+         6JXuyVil5PQ5MPFrPebM8ECOw+6CoxZDec7RN+AlqPToVI+BZ7Z0j4UJNzUE8SrlnROc
+         KD9A==
+X-Gm-Message-State: AC+VfDwXC+gs1rZoCA3AMMipIvv4yr/c7f1JvfZ6qHujmVi/Ez16btMO
+        0HUkOlaveZ4NkKyh5K2BWA==
+X-Google-Smtp-Source: ACHHUZ6unWPBNLKgchBLuE7qgRlqFSbqyeauk8e+P+n4dec4D7VMgpColOqNBilDMBuemoSIDpRgKw==
+X-Received: by 2002:a5d:9e58:0:b0:774:871d:6a06 with SMTP id i24-20020a5d9e58000000b00774871d6a06mr8353213ioi.2.1687298900431;
+        Tue, 20 Jun 2023 15:08:20 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id i25-20020a02ca59000000b0041d759c451asm876162jal.166.2023.06.20.15.08.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 15:08:19 -0700 (PDT)
+Received: (nullmailer pid 424551 invoked by uid 1000);
+        Tue, 20 Jun 2023 22:08:18 -0000
+Date:   Tue, 20 Jun 2023 16:08:18 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Lizhi Hou <lizhi.hou@amd.com>, Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, max.zhen@amd.com,
+        sonal.santan@amd.com, stefano.stabellini@xilinx.com
+Subject: Re: [PATCH V9 0/6] Generate device tree node for pci devices
+Message-ID: <20230620220818.GA418170-robh@kernel.org>
+References: <1686847842-33780-1-git-send-email-lizhi.hou@amd.com>
 MIME-Version: 1.0
-References: <20230613102905.2808371-1-usama.anjum@collabora.com>
- <20230613102905.2808371-3-usama.anjum@collabora.com> <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
- <0db01d90-09d6-08a4-bbb8-70670d3baa94@collabora.com> <CABb0KFEn5TU480A=YiN82nLRtGyKMABi8cZjuiGUU_jFZZo+8g@mail.gmail.com>
- <34203acf-7270-7ade-a60e-ae0f729dcf70@collabora.com> <CABb0KFFaXgJD99pWfx3MC+qrq5jUaPis_kZo6U8yL_8xdp0GJA@mail.gmail.com>
- <96b7cc00-d213-ad7d-1b48-b27f75b04d22@collabora.com> <CABb0KFEy_mRaT86TEOQ-BoTe_XOVw3Kp5VdzOfEEaiZJuT754g@mail.gmail.com>
- <39bc8212-9ee8-dbc1-d468-f6be438b683b@collabora.com> <CABb0KFHx2hV9M7oinCdKnagRmcrGHagH9eAO3TkVTQH+o9x=5A@mail.gmail.com>
- <2e1b80f1-0385-0674-ae5f-9703a6ef975d@collabora.com> <CABb0KFGOx69Sz6w9JenYUwSTFmW-Cmcns3X-oDyWsC+H57vkvg@mail.gmail.com>
- <444ed144-a2ee-cb16-880a-128383c83a08@collabora.com>
-In-Reply-To: <444ed144-a2ee-cb16-880a-128383c83a08@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Wed, 21 Jun 2023 00:05:05 +0200
-Message-ID: <CABb0KFEqJasf9nM3wL1oaK9ObcYzwzjtrRBcWRc3wGqdZRUpXg@mail.gmail.com>
-Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1686847842-33780-1-git-send-email-lizhi.hou@amd.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Jun 2023 at 13:16, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> On 6/19/23 1:16=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Fri, 16 Jun 2023 at 08:57, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-> >>
-> >> On 6/16/23 1:07=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
-> >>> On Thu, 15 Jun 2023 at 17:11, Muhammad Usama Anjum
-> >>> <usama.anjum@collabora.com> wrote:
-> >>>> On 6/15/23 7:52=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> >>>>> On Thu, 15 Jun 2023 at 15:58, Muhammad Usama Anjum
-> >>>>> <usama.anjum@collabora.com> wrote:
-> >>>>>> I'll send next revision now.
-> >>>>>> On 6/14/23 11:00=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> >>>>>>> (A quick reply to answer open questions in case they help the nex=
-t version.)
-> > [...]
-> >>>>>>> I guess this will be reworked anyway, but I'd prefer this didn't =
-need
-> >>>>>>> custom errors etc. If we agree to decoupling the selection and GE=
-T
-> >>>>>>> output, it could be:
-> >>>>>>>
-> >>>>>>> bool is_interesting_page(p, flags); // this one does the
-> >>>>>>> required/anyof/excluded match
-> >>>>>>> size_t output_range(p, start, len, flags); // this one fills the
-> >>>>>>> output vector and returns how many pages were fit
-> >>>>>>>
-> >>>>>>> In this setup, `is_interesting_page() && (n_out =3D output_range(=
-)) <
-> >>>>>>> n_pages` means this is the final range, no more will fit. And if
-> >>>>>>> `n_out =3D=3D 0` then no pages fit and no WP is needed (no other =
-special
-> >>>>>>> cases).
-> >>>>>> Right now, pagemap_scan_output() performs the work of both of thes=
-e two
-> >>>>>> functions. The part can be broken into is_interesting_pages() and =
-we can
-> >>>>>> leave the remaining part as it is.
-> >>>>>>
-> >>>>>> Saying that n_out < n_pages tells us the buffer is full covers one=
- case.
-> >>>>>> But there is case of maximum pages have been found and walk needs =
-to be
-> >>>>>> aborted.
-> >>>>>
-> >>>>> This case is exactly what `n_out < n_pages` will cover (if scan_out=
-put
-> >>>>> uses max_pages properly to limit n_out).
-> >>>>> Isn't it that when the buffer is full we want to abort the scan alw=
-ays
-> >>>>> (with WP if `n_out > 0`)?
-> >>>> Wouldn't it be duplication of condition if buffer is full inside
-> >>>> pagemap_scan_output() and just outside it. Inside pagemap_scan_outpu=
-t() we
-> >>>> check if we have space before putting data inside it. I'm using this=
- same
-> >>>> condition to indicate that buffer is full.
-> >>>
-> >>> I'm not sure what do you mean? The buffer-full conditions would be
-> >>> checked in ..scan_output() and communicated to the caller by returnin=
-g
-> >>> N less than `n_pages` passed in. This is exactly how e.g. read()
-> >>> works: if you get less than requested you've hit the end of the file.
-> >>> If the file happens to have size that is equal to the provided buffer
-> >>> length, the next read() will return 0.
-> >> Right now we have:
-> >>
-> >> pagemap_scan_output():
-> >>         if (p->vec_buf_index >=3D p->vec_buf_len)
-> >>                 return PM_SCAN_BUFFER_FULL;
-> >>         if (p->found_pages =3D=3D p->max_pages)
-> >>                 return PM_SCAN_FOUND_MAX_PAGES;
-> >
-> > Why do you need to differentiate between those cases?
-> >
-> >> pagemap_scan_pmd_entry():
-> >>         ret =3D pagemap_scan_output(bitmap, p, start, n_pages);
-> >>         if (ret >=3D 0) // success
-> >>                 make_UFFD_WP and flush
-> >>         else
-> >>                 buffer_error
-> >>
-> >> You are asking me to do:
-> >>
-> >> pagemap_scan_output():
-> >>         if (p->vec_buf_index >=3D p->vec_buf_len)
-> >>                 return 0;
-> >
-> >>         if (p->found_pages =3D=3D p->max_pages)
-> >>                 return PM_SCAN_FOUND_MAX_PAGES;
-> >
-> > This should be instead:
-> >
-> > n_pages =3D min(p->max_pags - p_found_pages, n_pages)
-> > ...
-> > return n_pages;
-> You are missing the optimization here that we check for full buffer every
-> time adding to user buffer. This was added to remove extra iteration of
-> page walk if buffer is full already. The way you are suggesting will remo=
-ve it.
->
-> So you are returning remaining pages to be found now. This doesn't seem
-> right. If max_pages is 520, found_pages is 0 and n_pages is 512 before
-> calling pagemap_scan_output(). found_pages would become 512 after adding
-> 512 pages to output buffer. But n_pages would return 8 instead of 512. Yo=
-u
-> were saying we should return the number of pages added to the output buff=
-er.
+On Thu, Jun 15, 2023 at 09:50:36AM -0700, Lizhi Hou wrote:
+> This patch series introduces OF overlay support for PCI devices which
+> primarily addresses two use cases. First, it provides a data driven method
+> to describe hardware peripherals that are present in a PCI endpoint and
+> hence can be accessed by the PCI host. Second, it allows reuse of a OF
+> compatible driver -- often used in SoC platforms -- in a PCI host based
+> system.
+> 
+> There are 2 series devices rely on this patch:
+> 
+>   1) Xilinx Alveo Accelerator cards (FPGA based device)
+>   2) Microchip LAN9662 Ethernet Controller
+> 
+>      Please see: https://lore.kernel.org/lkml/20220427094502.456111-1-clement.leger@bootlin.com/
+> 
+> Normally, the PCI core discovers PCI devices and their BARs using the
+> PCI enumeration process. However, the process does not provide a way to
+> discover the hardware peripherals that are present in a PCI device, and
+> which can be accessed through the PCI BARs. Also, the enumeration process
+> does not provide a way to associate MSI-X vectors of a PCI device with the
+> hardware peripherals that are present in the device. PCI device drivers
+> often use header files to describe the hardware peripherals and their
+> resources as there is no standard data driven way to do so. This patch
+> series proposes to use flattened device tree blob to describe the
+> peripherals in a data driven way. Based on previous discussion, using
+> device tree overlay is the best way to unflatten the blob and populate
+> platform devices. To use device tree overlay, there are three obvious
+> problems that need to be resolved.
+> 
+> First, we need to create a base tree for non-DT system such as x86_64. A
+> patch series has been submitted for this:
+> https://lore.kernel.org/lkml/20220624034327.2542112-1-frowand.list@gmail.com/
+> https://lore.kernel.org/lkml/20220216050056.311496-1-lizhi.hou@xilinx.com/
+> 
+> Second, a device tree node corresponding to the PCI endpoint is required
+> for overlaying the flattened device tree blob for that PCI endpoint.
+> Because PCI is a self-discoverable bus, a device tree node is usually not
+> created for PCI devices. This series adds support to generate a device
+> tree node for a PCI device which advertises itself using PCI quirks
+> infrastructure.
+> 
+> Third, we need to generate device tree nodes for PCI bridges since a child
+> PCI endpoint may choose to have a device tree node created.
+> 
+> This patch series is made up of three patches.
+> 
+> The first patch is adding OF interface to create or destroy OF node
+> dynamically.
+> 
+> The second patch introduces a kernel option, CONFIG_DYNAMIC_PCI_OF_NODEX.
+> When the option is turned on, the kernel will generate device tree nodes
+> for all PCI bridges unconditionally. The patch also shows how to use the
+> PCI quirks infrastructure, DECLARE_PCI_FIXUP_FINAL to generate a device
+> tree node for a device. Specifically, the patch generates a device tree
+> node for Xilinx Alveo U50 PCIe accelerator device. The generated device
+> tree nodes do not have any property.
+> 
+> The third patch adds basic properties ('reg', 'compatible' and
+> 'device_type') to the dynamically generated device tree nodes. More
+> properties can be added in the future.
+> 
+> Here is the example of device tree nodes generated within the ARM64 QEMU.
+> # lspci -t
+> -[0000:00]-+-00.0
+>            +-01.0
+>            +-03.0-[01-03]----00.0-[02-03]----00.0-[03]----00.0
+>            +-03.1-[04]--
+>            \-04.0-[05-06]----00.0-[06]--
+> # tree /sys/firmware/devicetree/base/pcie\@10000000
+> /sys/firmware/devicetree/base/pcie@10000000
+> |-- #address-cells
+> |-- #interrupt-cells
+> |-- #size-cells
+> |-- bus-range
+> |-- compatible
+> |-- device_type
+> |-- dma-coherent
+> |-- interrupt-map
+> |-- interrupt-map-mask
+> |-- linux,pci-domain
+> |-- msi-map
+> |-- name
+> |-- pci@3,0
+> |   |-- #address-cells
+> |   |-- #size-cells
+> |   |-- compatible
+> |   |-- device_type
+> |   |-- pci@0,0
+> |   |   |-- #address-cells
+> |   |   |-- #size-cells
+> |   |   |-- compatible
+> |   |   |-- device_type
+> |   |   |-- pci@0,0
+> |   |   |   |-- #address-cells
+> |   |   |   |-- #size-cells
+> |   |   |   |-- compatible
+> |   |   |   |-- dev@0,0
+> |   |   |   |   |-- #address-cells
+> |   |   |   |   |-- #size-cells
+> |   |   |   |   |-- compatible
+> |   |   |   |   |-- ranges
+> |   |   |   |   `-- reg
+> |   |   |   |-- device_type
+> |   |   |   |-- ranges
+> |   |   |   `-- reg
+> |   |   |-- ranges
+> |   |   `-- reg
+> |   |-- ranges
+> |   `-- reg
+> |-- pci@3,1
+> |   |-- #address-cells
+> |   |-- #size-cells
+> |   |-- compatible
+> |   |-- device_type
+> |   |-- ranges
+> |   `-- reg
+> |-- pci@4,0
+> |   |-- #address-cells
+> |   |-- #size-cells
+> |   |-- compatible
+> |   |-- device_type
+> |   |-- pci@0,0
+> |   |   |-- #address-cells
+> |   |   |-- #size-cells
+> |   |   |-- compatible
+> |   |   |-- device_type
+> |   |   |-- ranges
+> |   |   `-- reg
+> |   |-- ranges
+> |   `-- reg
+> |-- ranges
+> `-- reg
+> 
+> Changes since v8:
+> - Added patches to create unit test to verifying address translation
+>     The test relies on QEMU PCI Test Device, please see
+>         https://github.com/houlz0507/xoclv2/blob/pci-dt-0329/pci-dt-patch-0329/README
+>     for test setup
+> - Minor code review fixes
+> 
+> Changes since v7:
+> - Modified dynamic node creation interfaces
+> - Added unittest for new added interfaces
+> 
+> Changes since v6:
+> - Removed single line wrapper functions
+> - Added Signed-off-by Clément Léger <clement.leger@bootlin.com>
+> 
+> Changes since v5:
+> - Fixed code review comments
+> - Fixed incorrect 'ranges' and 'reg' properties
+> 
+> Changes since RFC v4:
+> - Fixed code review comments
+> 
+> Changes since RFC v3:
+> - Split the Xilinx Alveo U50 PCI quirk to a separate patch
+> - Minor changes in commit description and code comment
+> 
+> Changes since RFC v2:
+> - Merged patch 3 with patch 2
+> - Added OF interfaces of_changeset_add_prop_* and use them to create
+>   properties.
+> - Added '#address-cells', '#size-cells' and 'ranges' properties.
+> 
+> Changes since RFC v1:
+> - Added one patch to create basic properties.
+> - To move DT related code out of PCI subsystem, replaced of_node_alloc()
+>   with of_create_node()/of_destroy_node()
+> 
+> Lizhi Hou (6):
+>   of: dynamic: Add interfaces for creating device node dynamically
+>   PCI: Create device tree node for selected devices
+>   PCI: Add PCI quirks to generate device tree node for Xilinx Alveo U50
+>   PCI: Add ranges property for pci endpoint
+>   of: overlay: Extend of_overlay_fdt_apply() to specify the target node
+>   of: unittest: Add pci_dt_testdrv pci driver
+> 
+>  drivers/of/dynamic.c                          | 164 ++++++++++++++
+>  drivers/of/overlay.c                          |  42 +++-
+>  drivers/of/unittest-data/Makefile             |   3 +-
+>  .../of/unittest-data/overlay_pci_node.dtso    |  22 ++
+>  drivers/of/unittest.c                         | 210 +++++++++++++++++-
+>  drivers/pci/Kconfig                           |  12 +
+>  drivers/pci/Makefile                          |   1 +
+>  drivers/pci/bus.c                             |   2 +
+>  drivers/pci/of.c                              |  81 ++++++-
+>  drivers/pci/of_property.c                     | 190 ++++++++++++++++
+>  drivers/pci/pci.h                             |  19 ++
+>  drivers/pci/quirks.c                          |  12 +
+>  drivers/pci/remove.c                          |   1 +
+>  include/linux/of.h                            |  25 ++-
+>  14 files changed, 768 insertions(+), 16 deletions(-)
+>  create mode 100644 drivers/of/unittest-data/overlay_pci_node.dtso
+>  create mode 100644 drivers/pci/of_property.c
 
-Ok, if we want this optimization, then i'd rework it so that we have:
+Bjorn, I think this is pretty close to being in shape for merging. Do 
+you have any comments on the PCI bits? Would you prefer that I ack the 
+DT bit and you take it or vice-versa?
 
-bool pagemap_scan_output(..., int *n_pages)
-{
-   limit n_pages;
-  ...
-  return have_more_room_in_output;
-}
-
-The compiler should remove the pointer and memory storage for
-`n_pages` when inlining the function.
-
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+Rob
