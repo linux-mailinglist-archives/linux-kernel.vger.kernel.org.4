@@ -2,134 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150DB7367BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:29:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B441C7367C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232158AbjFTJ31 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 05:29:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49230 "EHLO
+        id S231577AbjFTJcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 05:32:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbjFTJ3W (ORCPT
+        with ESMTP id S231246AbjFTJcJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 05:29:22 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C2D7A3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 02:29:22 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id C0EF41EC0501;
-        Tue, 20 Jun 2023 11:29:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1687253360;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NWlzqwP8gXqCjOeiTZrHCHSwFsaiVGQQHxxm8rqptqM=;
-        b=B0aUpAERk1IopMf2Khd4zGW6Wn9a/ort/0UVezU46OE9py/bdyCxnSj6y0d44t5ybIhOvA
-        lEJk6xl2MfoR5Op7fNthvcUerBEDzSGlAXOLqp2eNktXQvTMEi5rIqbVtG1EM1DW/Vk8g3
-        Zt2Pl7SCOGwBD1y5nUyWp0AMWTSfCjI=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
-        reason="fail (body has been altered)" header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id nx4PQjQFOyxD; Tue, 20 Jun 2023 09:29:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1687253358; bh=9JayRLsZBA6Sk1eXjgqLPKc/yY0N4SwLjV8/HmRDOpo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WkgMKjMzBfvCniOZSgGUV4SMMY5K/hg2z7YrYDDrMEAmLatVTUtYSegRAam36QFWj
-         wN/5YPkDxRMA1fQBqOqZP89TSgEcXiCL6PmH2GXL6dEIdDSifVEcmk1cogFjRYD1uD
-         nwhfxpt+pHGY26MbpvUz18YrCzVmPT/9tleaEHitRmuErEj6okk7ZrkF2bFghRN2/3
-         JYeJcQqI9uj189Mzx/HsHEI4ePm584oMK6lj81S4ajz/oWutQMtGN5twVJBm7eUSze
-         +uJwokimCEWbBCnuoq+D3dRG2u/KCIH+xjnzzZlqe5b/pn+nP5C8b9haVROyJ0G7In
-         uHe7U7bjVvOqEQFFLPXGSWl4KHNKDk4bTxkPqiiIXNKO2GlZmuOeISFU007Jlnmzmw
-         mARdMPmXR7hDXrbH2FQGjY1+0Ofgih93MPZODLWaDXQbxTJTyruWJTMNQ6etF7y3aR
-         sh/2b1k2zn0E8BZ0107yfOzBMZhgCKpcM7JX/CivDk6UWrXePdoS8gJF6YiYNEyqRr
-         ygbeooz7BiegjbEJ7xVTXQfo3q/ooa7IMsgIGvb6CPOwoRjQIg6NNLH1QtkJ4Wn73h
-         nZ4idxCsaiMXqNlXpckpYCFwYI6px/p1dt/RGjiCuLQKjBF/UIm3hOQTN41VJAItvM
-         +Py6CTNbHDjgveIjuXs50Kl0=
-Received: from zn.tnic (p200300Ea971Dc5B2329c23FffeA6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c5b2:329c:23ff:fea6:a903])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 60C4140E0034;
-        Tue, 20 Jun 2023 09:29:07 +0000 (UTC)
-Date:   Tue, 20 Jun 2023 11:29:06 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Tony Battersby <tonyb@cybernetics.com>,
-        Ashok Raj <ashok.raj@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: Re: [patch v3 6/7] x86/smp: Split sending INIT IPI out into a helper
- function
-Message-ID: <20230620092906.GXZJFxYpyR2Sf9PM84@fat_crate.local>
-References: <20230615190036.898273129@linutronix.de>
- <20230615193330.551157083@linutronix.de>
+        Tue, 20 Jun 2023 05:32:09 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4B2A3;
+        Tue, 20 Jun 2023 02:32:08 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b45e347266so52743361fa.0;
+        Tue, 20 Jun 2023 02:32:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687253524; x=1689845524;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=g6RkSlx8XrZO42soMnBgsxTLxMlxCujpuFknxlHA8No=;
+        b=dErJ47XQjru8Dnpwi9O3bsjz0RkdABiKWekKtr6D+rp4ScIUbSBBTab5ykpNkeqpk5
+         GGx7VSKgpWRXEfEL/o6U0LY9mp9lxcsRjxo2dlL+HD81r8iVx9MoIrwBqHPLb3bPy9Rv
+         5DybStrHiQYDfUMRzbYQjX7BH+rSvAQYLcxZsjkVwpv32gXT9IIScbNIYoRXNLI7tHT6
+         Ly0UuLapXIwAAFfDuW4iGMWhUbTrVHnaw4V5r8vL2TVQkN386rPbHd//rEmINMn6zESq
+         CYS1CsS+V+zhlLl0dE8angqDDEcdmko5rGi00JOjo0Xf8LSKUPZxmWU1ogRMCmwGJiKC
+         xR5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687253524; x=1689845524;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g6RkSlx8XrZO42soMnBgsxTLxMlxCujpuFknxlHA8No=;
+        b=UTMUMbo+YOyzEkPsl4YCpQVFKUFss7P/IAYxDisoJdTlRQ27N8cqhm3fGKQG8JqNYK
+         2qO8Xk7rasiSaaQBQLRJxDHbCG62OpmZAe3flrssGisbj6pUS4NMq5py+2MedWeQHxfS
+         SR8u369BC9MomIAnl6s3t13aak6qlIfXzdqgedEelMbTAbbC/YQFYpO7fVtr5HmBjeLK
+         +PwNPBUtPTI/jsjlfxzQnBQUc3UKHlIr5psarC4gMfcWcmNahefg6lF6OfjATNBsu0cc
+         Cx5ad9elgdj6HWZ90NlueN0tvQvhBW8SdBPcEmK5HumynBl0+vAK+lnIQbj5ZZyn0aB/
+         c+rw==
+X-Gm-Message-State: AC+VfDwPh68oIASMhxajSpmSf2IIJni0t/VXEPdPUe//gTiTvaKyGMrv
+        l54xxYCfRjUpWTcgZlmUfTg=
+X-Google-Smtp-Source: ACHHUZ7QGXkEQcR1w/mpgxAX9QYVbM7QjYWB7mf7+ASrvwJ5KxydoASvzKSFPmgYaRiRwE1L6qaUgA==
+X-Received: by 2002:a2e:8088:0:b0:2b4:7f66:8c92 with SMTP id i8-20020a2e8088000000b002b47f668c92mr2968973ljg.31.1687253523620;
+        Tue, 20 Jun 2023 02:32:03 -0700 (PDT)
+Received: from mobilestation.baikal.int ([94.125.187.42])
+        by smtp.gmail.com with ESMTPSA id n10-20020a2e878a000000b002ad8fc8dda6sm330032lji.17.2023.06.20.02.32.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 02:32:03 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 12:32:01 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     =?utf-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
+Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>
+Subject: Re: [PATCH 3/9] dmaengine: dw-edma: Add HDMA remote interrupt
+ configuration
+Message-ID: <20230620093201.33vmdmgczwma5iat@mobilestation.baikal.int>
+References: <20230609081654.330857-1-kory.maincent@bootlin.com>
+ <20230609081654.330857-4-kory.maincent@bootlin.com>
+ <20230618214800.5h4ni43vu2admho5@mobilestation>
+ <20230619201647.7cfe12c9@kmaincent-XPS-13-7390>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230615193330.551157083@linutronix.de>
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230619201647.7cfe12c9@kmaincent-XPS-13-7390>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 10:33:58PM +0200, Thomas Gleixner wrote:
-> Putting CPUs into INIT is a safer place during kexec() to park CPUs.
->=20
-> Split the INIT assert/deassert sequence out so it can be reused.
->=20
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-> Reviewed-by: Ashok Raj <ashok.raj@intel.com>
-> ---
-> V2: Fix rebase screwup
-> ---
->  arch/x86/kernel/smpboot.c |   49 ++++++++++++++++++-------------------=
----------
->  1 file changed, 20 insertions(+), 29 deletions(-)
->=20
-> --- a/arch/x86/kernel/smpboot.c
-> +++ b/arch/x86/kernel/smpboot.c
-> @@ -853,47 +853,38 @@ wakeup_secondary_cpu_via_nmi(int apicid,
->  	return (send_status | accept_status);
->  }
-> =20
-> -static int
-> -wakeup_secondary_cpu_via_init(int phys_apicid, unsigned long start_eip=
-)
-> +static void send_init_sequence(int phys_apicid)
->  {
-> -	unsigned long send_status =3D 0, accept_status =3D 0;
-> -	int maxlvt, num_starts, j;
-> -
-> -	maxlvt =3D lapic_get_maxlvt();
-> +	int maxlvt =3D lapic_get_maxlvt();
+On Mon, Jun 19, 2023 at 08:16:47PM +0200, Köry Maincent wrote:
+> On Mon, 19 Jun 2023 00:48:00 +0300
+> Serge Semin <fancer.lancer@gmail.com> wrote:
+> 
+> > Seems reasonable especially seeing there is a code with a similar
+> > semantic in the dw_hdma_v0_core_write_chunk() method.
+> > 
+> > Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+> > 
+> > Just curious whether we really need to have the local IRQs left
+> > enabled for the remote device setup... The only case I have in mind is
+> > that it would be useful to signal a remote end-point host of such
+> > event in some application-specific environment. It sounds exotic but
+> > still possible.
+> 
+> Thanks for your review.
+> Yes, we do need to let local IRQs enabled. I have tested to remove them and it
+> prevent the remote setup to function correctly on my board. Maybe it needs to be
+> set to know internally when the transfer is done, but it seems weird. I haven't
+> a full explanation for now.
 
-Whoops:
+Ok. Thanks for checking it out.
 
-arch/x86/kernel/smpboot.c: In function =E2=80=98send_init_sequence=E2=80=99=
-:
-arch/x86/kernel/smpboot.c:860:9: warning: ISO C90 forbids mixed declarati=
-ons and code [-Wdeclaration-after-statement]
-  860 |         int maxlvt =3D lapic_get_maxlvt();
-      |         ^~~
-
---=20
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+-Serge(y)
