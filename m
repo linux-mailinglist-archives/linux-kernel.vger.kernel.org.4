@@ -2,64 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 038A37368E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C10227368EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbjFTKLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 06:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
+        id S231594AbjFTKNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 06:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231334AbjFTKLr (ORCPT
+        with ESMTP id S231232AbjFTKN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 06:11:47 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D667132;
-        Tue, 20 Jun 2023 03:11:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687255902; x=1718791902;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=t6aBv/t9yUrGliuBhpX5NCpuckz6oBkr9Qm3pAgcp78=;
-  b=OD1xY3oD+OHPyaZRsjIdybhXuAFXbLO5NE1O8UU1HM8vbpm+Rr7WdBx/
-   yxEu1giciQ3nb5FFmcDotRWECz/Cdh+1Bp4wVxp0wuUvEt7t3n6lSGP8B
-   1maci7ZGEJTm1Pr7W1Sl0eNKJC7PzEKWQhOKebzL1FKRxlTHayITBRsKq
-   e9Z7KKk0rLsudnwq17RLfc9MdJ7rREcNnPKyBl9WZCAmsLAmevCgqjJdg
-   9BVikt3RZZznA37eY+gohfOzh7g9Ub3sa6Zc1L5dN0aoxhYXo9x+ICLnf
-   PV1LhiF4u49ZlIaOr7HouSqfUB8mSU/kplXn0TdOEVpw7BCaemi43WDEb
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="339431023"
-X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="339431023"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 03:11:14 -0700
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="748013955"
-X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="748013955"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 20 Jun 2023 03:11:11 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qBYKM-0005nY-20;
-        Tue, 20 Jun 2023 10:11:10 +0000
-Date:   Tue, 20 Jun 2023 18:10:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Md Sadre Alam <quic_mdalam@quicinc.com>, mani@kernel.org,
-        miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, quic_srichara@quicinc.com,
-        quic_mdalam@quicinc.com
-Subject: Re: [PATCH v4 1/5] mtd: rawnand: qcom: Implement exec_op()
-Message-ID: <202306201734.SmmrhWYJ-lkp@intel.com>
-References: <20230615073143.25079-1-quic_mdalam@quicinc.com>
+        Tue, 20 Jun 2023 06:13:27 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6059DA2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 03:13:26 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b505665e2fso37151495ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 03:13:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1687256006; x=1689848006;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hfUr1e9aEQZRasLBwYauLBgpBkHg6F78JJmqZq7mi1o=;
+        b=kGAeI2k3c7yrjwWMuk9zKQSyRj2fyG04oBVEuSGxLYzlpdg1RRLqQ7vgmusYieQWNq
+         rXUbQkyU5cdc14ox53xkgIKMau5Mhro6ux/G7dWapSTmk8pZBq89mctgu8eisA/8O9HC
+         p40SMFfbn+a8xjDhJKTdGZqslkEP9dtUhf0LDMYYoMLa7YrxSZXtv/eUdwZ953rE+6iC
+         tftSJje1HVjU3LUTDS/mcmPRnKsRcq2b0WuDCgPda5ilR5CLwbsqMOFjPXLhWSOR4JCr
+         /xwzY0vHRGiYhFLclXS5Bb8OzE674jpHuR24JOYdlWXtkWpO65LmiZmQ9T/6YIk4JSGy
+         pcmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687256006; x=1689848006;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hfUr1e9aEQZRasLBwYauLBgpBkHg6F78JJmqZq7mi1o=;
+        b=kuVzWnBm9bFaBiH2/tVjWkuo5vRkKJfXRbniW1zKcSCxFtLp3KRrpryAKKgIly0YD6
+         J/1q2RHFnfgHi2DCO+8Ko3MtQa+OFt2Dpc9WY/nzNP0d9AeUhFqFMBC1dh/WwGsjIUVl
+         21AO+w8Tn54OIjmxaaNORAuvQuaGZULncK8hr6e6oiUUeDIH/kBVoETwzagHqdgLVtCm
+         xd30Qj6mtjjdpoZzg8NN12Rp1G3HtT+gMIH1HjY+SKViAZs8L7q7rXEDDJd4QAg1T42O
+         e9zHKgpQyL13uXkugwn5A/3T8upw1vur1kt2j9kuSEscoIOh6+uOtFTaV51ALMtmStM8
+         QSAA==
+X-Gm-Message-State: AC+VfDwXco5Q0EbePaDx4LryJJh2UySA+hbTlB08eefbBma0dtEHZutf
+        S55WTtzfybik7gERitHr00VKUA==
+X-Google-Smtp-Source: ACHHUZ4WtJhG0PPz3SFJZ/k2bW8clbE97J78XfZQ7GBV0JaALbG0TDAUZwHyCzssBTaOzSYxJlv5pQ==
+X-Received: by 2002:a17:902:d2ca:b0:1b0:5ce9:adc7 with SMTP id n10-20020a170902d2ca00b001b05ce9adc7mr23389792plc.28.1687256005848;
+        Tue, 20 Jun 2023 03:13:25 -0700 (PDT)
+Received: from [10.94.58.170] ([203.208.167.146])
+        by smtp.gmail.com with ESMTPSA id n21-20020a170902969500b001ab1b7bae5asm1270189plp.184.2023.06.20.03.13.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 03:13:25 -0700 (PDT)
+Message-ID: <23d45f7e-3a34-44b3-f1a0-b992bbb5076f@bytedance.com>
+Date:   Tue, 20 Jun 2023 18:13:18 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615073143.25079-1-quic_mdalam@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: Re: [PATCH net-next] inet: Save one atomic op if no memcg to
+ charge
+Content-Language: en-US
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:NETWORKING [IPv4/IPv6]" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230619082547.73929-1-wuyun.abel@bytedance.com>
+ <CANn89i+deprQWB0dmsUD1sRmy1VQCQwKnZUkLu_AEGV=ow=PKQ@mail.gmail.com>
+ <6ed78c81-c1ac-dba4-059c-12f6b2bb9c53@bytedance.com>
+ <CANn89iK4hme4XmUyZVjTXMZYqAm8w+9tbwnrtHyJ3N28cAFYTw@mail.gmail.com>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <CANn89iK4hme4XmUyZVjTXMZYqAm8w+9tbwnrtHyJ3N28cAFYTw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,99 +83,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Md,
+On 6/20/23 4:46 PM, Eric Dumazet wrote:
+> On Tue, Jun 20, 2023 at 5:04 AM Abel Wu <wuyun.abel@bytedance.com> wrote:
+>>
+>> On 6/19/23 6:08 PM, Eric Dumazet wrote:
+>>> On Mon, Jun 19, 2023 at 10:26 AM Abel Wu <wuyun.abel@bytedance.com> wrote:
+>>>>
+>>>> If there is no net-memcg associated with the sock, don't bother
+>>>> calculating its memory usage for charge.
+>>>>
+>>>> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+>>>> ---
+>>>>    net/ipv4/inet_connection_sock.c | 18 +++++++++++-------
+>>>>    1 file changed, 11 insertions(+), 7 deletions(-)
+>>>>
+>>>> diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connection_sock.c
+>>>> index 65ad4251f6fd..73798282c1ef 100644
+>>>> --- a/net/ipv4/inet_connection_sock.c
+>>>> +++ b/net/ipv4/inet_connection_sock.c
+>>>> @@ -706,20 +706,24 @@ struct sock *inet_csk_accept(struct sock *sk, int flags, int *err, bool kern)
+>>>>    out:
+>>>>           release_sock(sk);
+>>>>           if (newsk && mem_cgroup_sockets_enabled) {
+>>>> -               int amt;
+>>>> +               int amt = 0;
+>>>>
+>>>>                   /* atomically get the memory usage, set and charge the
+>>>>                    * newsk->sk_memcg.
+>>>>                    */
+>>>>                   lock_sock(newsk);
+>>>>
+>>>> -               /* The socket has not been accepted yet, no need to look at
+>>>> -                * newsk->sk_wmem_queued.
+>>>> -                */
+>>>> -               amt = sk_mem_pages(newsk->sk_forward_alloc +
+>>>> -                                  atomic_read(&newsk->sk_rmem_alloc));
+>>>>                   mem_cgroup_sk_alloc(newsk);
+>>>> -               if (newsk->sk_memcg && amt)
+>>>> +               if (newsk->sk_memcg) {
+>>>> +                       /* The socket has not been accepted yet, no need
+>>>> +                        * to look at newsk->sk_wmem_queued.
+>>>> +                        */
+>>>> +                       amt = sk_mem_pages(newsk->sk_forward_alloc +
+>>>> +                                          atomic_read(&newsk->sk_rmem_alloc));
+>>>> +
+>>>> +               }
+>>>> +
+>>>> +               if (amt)
+>>>>                           mem_cgroup_charge_skmem(newsk->sk_memcg, amt,
+>>>>                                                   GFP_KERNEL | __GFP_NOFAIL);
+>>>
+>>> This looks correct, but claiming reading an atomic_t is an 'atomic op'
+>>> is a bit exaggerated.
+>>
+>> Yeah, shall I change subject to 'inet: Skip usage calculation if no
+>> memcg to charge'? Or do you have any suggestions?
+> 
+> I would call this a cleanup or refactoring, maybe...
 
-kernel test robot noticed the following build warnings:
+Alright, I have changed to 'cleanup', please take a look at v2.
 
-[auto build test WARNING on mtd/nand/next]
-[also build test WARNING on linus/master v6.4-rc7 next-20230620]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Yet I have another question about this condition:
+	'if (newsk && mem_cgroup_sockets_enabled)'
+IMHO in the scope of cgroup v1, 'mem_cgroup_sockets_enabled' doesn't
+imply socket accounting enabled for current's memcg. As the listening
+socket and the newly accepted socket are processing same traffic, can
+we make this condition more specific like this:
+	'if (newsk && mem_cgroup_sockets_enabled && sk->sk_memcg)'
+would you mind shedding some light please?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Md-Sadre-Alam/mtd-rawnand-qcom-Add-support-for-reset-readid-status-exec_op/20230615-153448
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
-patch link:    https://lore.kernel.org/r/20230615073143.25079-1-quic_mdalam%40quicinc.com
-patch subject: [PATCH v4 1/5] mtd: rawnand: qcom: Implement exec_op()
-config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20230620/202306201734.SmmrhWYJ-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230620/202306201734.SmmrhWYJ-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306201734.SmmrhWYJ-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/mtd/nand/raw/qcom_nandc.c: In function 'qcom_parse_instructions':
->> drivers/mtd/nand/raw/qcom_nandc.c:2944:38: warning: variable 'naddrs' set but not used [-Wunused-but-set-variable]
-    2944 |                 unsigned int offset, naddrs;
-         |                                      ^~~~~~
-   drivers/mtd/nand/raw/qcom_nandc.c: At top level:
-   drivers/mtd/nand/raw/qcom_nandc.c:2932:13: warning: 'qcom_parse_instructions' defined but not used [-Wunused-function]
-    2932 | static void qcom_parse_instructions(struct nand_chip *chip,
-         |             ^~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/naddrs +2944 drivers/mtd/nand/raw/qcom_nandc.c
-
-  2930	
-  2931	/* NAND framework ->exec_op() hooks and related helpers */
-  2932	static void qcom_parse_instructions(struct nand_chip *chip,
-  2933					    const struct nand_subop *subop,
-  2934						struct qcom_op *q_op)
-  2935	{
-  2936		struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
-  2937		const struct nand_op_instr *instr = NULL;
-  2938		unsigned int op_id;
-  2939		int i;
-  2940	
-  2941		memset(q_op, 0, sizeof(*q_op));
-  2942	
-  2943		for (op_id = 0; op_id < subop->ninstrs; op_id++) {
-> 2944			unsigned int offset, naddrs;
-  2945			const u8 *addrs;
-  2946	
-  2947			instr = &subop->instrs[op_id];
-  2948	
-  2949			switch (instr->type) {
-  2950			case NAND_OP_CMD_INSTR:
-  2951				q_op->cmd_reg = qcom_op_cmd_mapping(nandc, instr->ctx.cmd.opcode, q_op);
-  2952				q_op->rdy_delay_ns = instr->delay_ns;
-  2953				break;
-  2954	
-  2955			case NAND_OP_ADDR_INSTR:
-  2956				offset = nand_subop_get_addr_start_off(subop, op_id);
-  2957				naddrs = nand_subop_get_num_addr_cyc(subop, op_id);
-  2958				addrs = &instr->ctx.addr.addrs[offset];
-  2959				for (i = 0; i < MAX_ADDRESS_CYCLE; i++) {
-  2960					if (i < 4)
-  2961						q_op->addr1_reg |= (u32)addrs[i] << i * 8;
-  2962					else
-  2963						q_op->addr2_reg |= addrs[i];
-  2964				}
-  2965				q_op->rdy_delay_ns = instr->delay_ns;
-  2966				break;
-  2967	
-  2968			case NAND_OP_DATA_IN_INSTR:
-  2969				q_op->data_instr = instr;
-  2970				q_op->data_instr_idx = op_id;
-  2971				q_op->rdy_delay_ns = instr->delay_ns;
-  2972				fallthrough;
-  2973			case NAND_OP_DATA_OUT_INSTR:
-  2974				q_op->rdy_delay_ns = instr->delay_ns;
-  2975				break;
-  2976	
-  2977			case NAND_OP_WAITRDY_INSTR:
-  2978				q_op->rdy_timeout_ms = instr->ctx.waitrdy.timeout_ms;
-  2979				q_op->rdy_delay_ns = instr->delay_ns;
-  2980				break;
-  2981			}
-  2982		}
-  2983	}
-  2984	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks!
+	Abel
