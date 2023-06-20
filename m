@@ -2,218 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 208F3736CD4
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13179736CFB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232060AbjFTNP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 09:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48424 "EHLO
+        id S229601AbjFTNSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 09:18:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbjFTNPZ (ORCPT
+        with ESMTP id S231949AbjFTNS1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 09:15:25 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EC01716;
-        Tue, 20 Jun 2023 06:15:24 -0700 (PDT)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35KD94PA016292;
-        Tue, 20 Jun 2023 13:14:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=H3BTlpVBypn/HUSJmwRVHEmC2PE6s+8bLrqyH4SKjio=;
- b=rykL9/vrDus2UGuiv2B8ecixd3wfY+XxpMSZ6LrzBTuN7m+sKbwfiLTU7tu2keZhZLj3
- hRavxxIt0FeMvmHP65mj2U2F6pz9DzEqXXaesH4JzTtnFK3kh+sxfZ16XXdInAFaiVfF
- pT/miH0IXMZUlQsWVtusjm1e4YmBgutEEHYs4qvGORiJ0r38cnkNRmOsCRDMoJnfc88J
- 6uTFOAK1OG5Sbuv+TKlqmUcCVWyjWxY/CVg2OqmSKs9ecvJRjZ60U1Y8Ar02InAS4FFa
- ZO7N7E46cB8FPWCbCZ70deKDJxt/Wg/9dy7cHf//dA96N+VWJ2lIkPvfStDi1IMlfVPP xA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rbcg88jqe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Jun 2023 13:14:51 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35KDBWBl000800;
-        Tue, 20 Jun 2023 13:14:51 GMT
-Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rbcg88jpj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Jun 2023 13:14:50 +0000
-Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
-        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35K2uqrY021786;
-        Tue, 20 Jun 2023 13:14:48 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3r94f52309-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Jun 2023 13:14:48 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35KDEkL642337012
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 20 Jun 2023 13:14:46 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2135720040;
-        Tue, 20 Jun 2023 13:14:46 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 53CFC20043;
-        Tue, 20 Jun 2023 13:14:42 +0000 (GMT)
-Received: from tarunpc (unknown [9.199.157.25])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Tue, 20 Jun 2023 13:14:42 +0000 (GMT)
-From:   Tarun Sahu <tsahu@linux.ibm.com>
-To:     Vishal Verma <vishal.l.verma@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, nvdimm@lists.linux.dev,
-        linux-cxl@vger.kernel.org, Huang Ying <ying.huang@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        aneesh.kumar@linux.ibm.com
-Subject: Re: [PATCH 3/3] dax/kmem: Always enroll hotplugged memory for
- memmap_on_memory
-In-Reply-To: <20230613-vv-kmem_memmap-v1-3-f6de9c6af2c6@intel.com>
-References: <20230613-vv-kmem_memmap-v1-0-f6de9c6af2c6@intel.com>
- <20230613-vv-kmem_memmap-v1-3-f6de9c6af2c6@intel.com>
-Date:   Tue, 20 Jun 2023 18:44:40 +0530
-Message-ID: <87zg4uwa0v.fsf@linux.ibm.com>
+        Tue, 20 Jun 2023 09:18:27 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 177BD19A9
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:18:03 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2b46bfa66d2so43780571fa.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:18:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687267082; x=1689859082;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EVOdNiEd3QtveZDzDg3FsMJG7kxU4f80fKhWvEhaEaM=;
+        b=vaXlCq4mGEiZSlvEza4Habx9SP/IfH2ZIfp57+w94uElLSArC5U2D5cVcE1HNVadKp
+         NsoYpFT/T2SfnFNlbyqoEGaxgMZmpT6Mx+rDQ1MX1Jb+q8cFTFo20YCwxOl76kse0pCD
+         Q1J/+sO/KVGTLLHiS1PuCr7Siy6NwN9cZm/gy8EmFDmtVDKpZJnwAy0htnUTez+pPd3Y
+         8c3rNl/uAt3HxtXW/GtsxdP6lUI21W8Too/JDKyTH3et4WPJROVSFhnwSe0PP5eUFj9N
+         GgSTvBJ10W6WUKC5icGx6OnVh2ruLkFET/VqkjVm/KTaXoCoI2cd9zsnAx5b6aPPmRgE
+         JZOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687267082; x=1689859082;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EVOdNiEd3QtveZDzDg3FsMJG7kxU4f80fKhWvEhaEaM=;
+        b=d0B8hA0jjvq8/XKXzCRyNQmhSjthIZxZOyxaTbGoEcgRL6i5F3cQJh3R922vGnlbj+
+         tUCjMg1L4NI8vWsJXhpzz3H4FYfpZ/2erH8bPmXsWwiGlQHl06wY+LBUvouGLmath1MI
+         77WQxORc13fpkpfp0LkrcONLLH0opbrTpCROi0fx82N226FIt2RiFB1wC9FeRbjrAuT3
+         Vm+maz5RBe/DC8mRruCtSZtRDpJEdf8YdlfKQp+YrCDc8E3iDL5o65TZVqhz5bJY+HmF
+         sq7RkaA1/WX+rQ80CEKmlWKxhz6pp5vKg0Ua54qC6AIH3LsCGGXb4l7WY7qKp1wnN22Z
+         tK0w==
+X-Gm-Message-State: AC+VfDwTbZit8s8Mp3BtCj3vhn3Edmi6goLEzjFCzjv8R6AExc9s/kSW
+        Mm3tQuXq/oNZ2IVwZhtrWnrC7g==
+X-Google-Smtp-Source: ACHHUZ79ZlCn0m4GZ9VNXHrUz7bP9VIrjrMLch6qLGBufeZH5e0N65/dSWFpYQgWpd3LgCZnu0t9Mg==
+X-Received: by 2002:a2e:b0f0:0:b0:2b4:8251:7c89 with SMTP id h16-20020a2eb0f0000000b002b482517c89mr3028384ljl.28.1687267080873;
+        Tue, 20 Jun 2023 06:18:00 -0700 (PDT)
+Received: from [192.168.1.101] (abxj193.neoplus.adsl.tpnet.pl. [83.9.3.193])
+        by smtp.gmail.com with ESMTPSA id h19-20020a2eb0f3000000b002b3318c8d6fsm414433ljl.28.2023.06.20.06.17.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 06:18:00 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/4] A610 enablement, J606F display
+Date:   Tue, 20 Jun 2023 15:17:44 +0200
+Message-Id: <20230620-topic-gpu_tablet_disp-v1-0-7bb02bec8dc0@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: k445iHDRACRzPCIxEzPCR5_a3eK4s88q
-X-Proofpoint-GUID: uz0hnxRkr9FUlWfHMTCrnrTx7dGX1Mqi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-20_09,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 mlxscore=0 suspectscore=0 lowpriorityscore=0 impostorscore=0
- mlxlogscore=999 phishscore=0 malwarescore=0 bulkscore=0 clxscore=1011
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306200117
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPimkWQC/x2N0QqDMAwAf0XyvELtVNh+ZQxJ00wDpZa2joH47
+ ws+3sFxB1QuwhWe3QGFv1JlSwr9rQNaMS1sJCiDs+5uJ2dN27KQWfI+N/SR2xykZkOBJsLxMfQ
+ 0gLYeKxtfMNGqddpjVJkLf+R3zV7v8/wDgOGlM3wAAAA=
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687267079; l=846;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=zivfHVW7lha8lc01hiAsybuK9fAUZIvzRT5Lhvc+9EQ=;
+ b=vcPPYNv0dOWEXpk3byHiurjBTlH7DgDagTMg5Dw8ar23lf3hZhW/NS+ORSay13wqPOOzf/kXN
+ UxEpUwQ8Oh2Cr3i68027Usz7Og5UgW04e59NBtxmC9rujiFz8/K006N
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Enable the A610 GPU on SM6115, as well as on the RB2 and J606F boards.
+Add display support for the latter.
 
-Hi Vishal,
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (4):
+      arm64: dts: qcom: sm6115: Add GPU nodes
+      arm64: dts: qcom: sm6115p-j606f: Hook up display
+      arm64: dts: qcom: sm6115p-j606f: Enable GPU
+      arm64: dts: qcom: qrb4210-rb2: Enable GPU
 
-Vishal Verma <vishal.l.verma@intel.com> writes:
+ arch/arm64/boot/dts/qcom/qrb4210-rb2.dts          |   8 ++
+ arch/arm64/boot/dts/qcom/sm6115.dtsi              | 103 ++++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sm6115p-lenovo-j606f.dts |  65 ++++++++++++--
+ 3 files changed, 171 insertions(+), 5 deletions(-)
+---
+base-commit: 9dbf40840551df336c95ce2a3adbdd25ed53c0ef
+change-id: 20230620-topic-gpu_tablet_disp-cdc6ca5941c4
 
-> With DAX memory regions originating from CXL memory expanders or
-> NVDIMMs, the kmem driver may be hot-adding huge amounts of system memory
-> on a system without enough 'regular' main memory to support the memmap
-> for it. To avoid this, ensure that all kmem managed hotplugged memory is
-> added with the MHP_MEMMAP_ON_MEMORY flag to place the memmap on the
-> new memory region being hot added.
->
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Some architectures doesn't have support for MEMMAP_ON_MEMORY, bypassing
-the check mhp_memmap_on_memory() might cause problems on such
-architectures (for e.g PPC64).
-
-> To do this, call add_memory() in chunks of memory_block_size_bytes() as
-> that is a requirement for memmap_on_memory. Additionally, Use the
-> mhp_flag to force the memmap_on_memory checks regardless of the
-> respective module parameter setting.
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: Dan Williams <dan.j.williams@intel.com>
-> Cc: Dave Jiang <dave.jiang@intel.com>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: Huang Ying <ying.huang@intel.com>
-> Signed-off-by: Vishal Verma <vishal.l.verma@intel.com>
-> ---
->  drivers/dax/kmem.c | 49 ++++++++++++++++++++++++++++++++++++-------------
->  1 file changed, 36 insertions(+), 13 deletions(-)
->
-> diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
-> index 7b36db6f1cbd..0751346193ef 100644
-> --- a/drivers/dax/kmem.c
-> +++ b/drivers/dax/kmem.c
-> @@ -12,6 +12,7 @@
->  #include <linux/mm.h>
->  #include <linux/mman.h>
->  #include <linux/memory-tiers.h>
-> +#include <linux/memory_hotplug.h>
->  #include "dax-private.h"
->  #include "bus.h"
->  
-> @@ -105,6 +106,7 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
->  	data->mgid = rc;
->  
->  	for (i = 0; i < dev_dax->nr_range; i++) {
-> +		u64 cur_start, cur_len, remaining;
->  		struct resource *res;
->  		struct range range;
->  
-> @@ -137,21 +139,42 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
->  		res->flags = IORESOURCE_SYSTEM_RAM;
->  
->  		/*
-> -		 * Ensure that future kexec'd kernels will not treat
-> -		 * this as RAM automatically.
-> +		 * Add memory in chunks of memory_block_size_bytes() so that
-> +		 * it is considered for MHP_MEMMAP_ON_MEMORY
-> +		 * @range has already been aligned to memory_block_size_bytes(),
-> +		 * so the following loop will always break it down cleanly.
->  		 */
-> -		rc = add_memory_driver_managed(data->mgid, range.start,
-> -				range_len(&range), kmem_name, MHP_NID_IS_MGID);
-> +		cur_start = range.start;
-> +		cur_len = memory_block_size_bytes();
-> +		remaining = range_len(&range);
-> +		while (remaining) {
-> +			mhp_t mhp_flags = MHP_NID_IS_MGID;
->  
-> -		if (rc) {
-> -			dev_warn(dev, "mapping%d: %#llx-%#llx memory add failed\n",
-> -					i, range.start, range.end);
-> -			remove_resource(res);
-> -			kfree(res);
-> -			data->res[i] = NULL;
-> -			if (mapped)
-> -				continue;
-> -			goto err_request_mem;
-> +			if (mhp_supports_memmap_on_memory(cur_len,
-> +							  MHP_MEMMAP_ON_MEMORY))
-> +				mhp_flags |= MHP_MEMMAP_ON_MEMORY;
-> +			/*
-> +			 * Ensure that future kexec'd kernels will not treat
-> +			 * this as RAM automatically.
-> +			 */
-> +			rc = add_memory_driver_managed(data->mgid, cur_start,
-> +						       cur_len, kmem_name,
-> +						       mhp_flags);
-> +
-> +			if (rc) {
-> +				dev_warn(dev,
-> +					 "mapping%d: %#llx-%#llx memory add failed\n",
-> +					 i, cur_start, cur_start + cur_len - 1);
-> +				remove_resource(res);
-> +				kfree(res);
-> +				data->res[i] = NULL;
-> +				if (mapped)
-> +					continue;
-> +				goto err_request_mem;
-> +			}
-> +
-> +			cur_start += cur_len;
-> +			remaining -= cur_len;
->  		}
->  		mapped++;
->  	}
->
-> -- 
-> 2.40.1
