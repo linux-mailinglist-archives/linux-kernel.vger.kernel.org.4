@@ -2,186 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 828B8737129
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:05:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 051A3737125
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233070AbjFTQFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 12:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45032 "EHLO
+        id S232834AbjFTQEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 12:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231330AbjFTQFK (ORCPT
+        with ESMTP id S233080AbjFTQEj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 12:05:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D7BE6E
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:04:19 -0700 (PDT)
+        Tue, 20 Jun 2023 12:04:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDB6E65
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:04:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687277058;
+        s=mimecast20190719; t=1687277039;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3LcOrS6cknEcAz4IzFsrfkY0KBDg1wCLzWoEd8Eb3Y4=;
-        b=JI2iDcaqhzUp+vOEoyo3GVVMfO0Pf2fCJGc6OJnXjAk2nDwokWVgch0TzPToN1AhZvYXjB
-        QFd0sv3Lk2yGbRFIVA77t0+aBeVCzOpJYIQmNsdEfyjxNTeZbuvs3MrRuk4x6kdHeCjvPw
-        PYRy4L298s3+MPszyxzKmOjxTq7UUq0=
-Received: from mail-vk1-f198.google.com (mail-vk1-f198.google.com
- [209.85.221.198]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=+QqdU7GkDQhFCN54Fcp3vfTEcL3yBRMC5K6R5qPbNUw=;
+        b=H/HPaw366ACW4i9q/q9b7cv7BFlDirnrtXwdjfa4k4P41XRzdidLMVyhePRYzStn6/+kyW
+        7TuimYsT8K0Bi1GAYKs4uF+AxJImfOYqYA152wHmMFsOx1LGgl2EHjlZnu9t+NPb0bROqX
+        lSjxd9j3mM3er5mvjOzmcH+uLSHKBcM=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-658-EHFe4ijyPaClMgGFU--oxA-1; Tue, 20 Jun 2023 12:03:31 -0400
-X-MC-Unique: EHFe4ijyPaClMgGFU--oxA-1
-Received: by mail-vk1-f198.google.com with SMTP id 71dfb90a1353d-471cd52f621so110834e0c.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:03:19 -0700 (PDT)
+ us-mta-659-wRCJdI39O8C1rPPVk6XSzg-1; Tue, 20 Jun 2023 12:03:47 -0400
+X-MC-Unique: wRCJdI39O8C1rPPVk6XSzg-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f7e7cfcae4so26368325e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:03:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687276995; x=1689868995;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3LcOrS6cknEcAz4IzFsrfkY0KBDg1wCLzWoEd8Eb3Y4=;
-        b=ZYlOcftL99b13zBw8TdAYzsBAVrIZth+10TD/bhS1dsGHV6aceVtlzjmfgdG2jHNGT
-         T9gwpusRas5lLrD+kAHTi27jGUYSWujfK5sPe5dZ3Z4GJZuggXYxwEWNEz9pz0JRG9je
-         PsoVpmz+Nzer3PhwRLOwiHvhkU15uKQDbyixYwrbDZUfgHAYidVKepmUyv5K7dXfkh4z
-         3q+CJR0qzvOF8H0H0SX/Qifv7TTZjVwkuTPLXNUicqvOZogQG+btH0cz152/sw1cOkdP
-         mOyRaMKlVVxpekdYyZoHZHsoESKs7KINltqZFh94CAEd8owq4FbwNywK+NVc2OV/PW9G
-         i5cA==
-X-Gm-Message-State: AC+VfDylc6+DiDeztVq6AGDReLxJcPE9AHGUWZns8bBDipYr39fTW5R+
-        7kDe7v1j6XeMNwCpAmmbm0a7k80Gcm9GSDzsP7dkXrQ+Sqc1PeRkxyICtIRFbOOtVYe42EzCawd
-        GYf+Q1DsuDmh0wKu6DJGnSWUO
-X-Received: by 2002:a67:c410:0:b0:440:afb0:2d3c with SMTP id c16-20020a67c410000000b00440afb02d3cmr2469003vsk.2.1687276994982;
-        Tue, 20 Jun 2023 09:03:14 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4RNYw1RaqvJfK03dNilpUmT/+OXHmI9rtvkJOktQOIrKg7RJTysHreFAJhaFScS2g631BngA==
-X-Received: by 2002:a67:c410:0:b0:440:afb0:2d3c with SMTP id c16-20020a67c410000000b00440afb02d3cmr2468990vsk.2.1687276994718;
-        Tue, 20 Jun 2023 09:03:14 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id g5-20020a0cdf05000000b00630c0ed6339sm1362675qvl.64.2023.06.20.09.03.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 09:03:14 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 12:03:12 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        James Houghton <jthoughton@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Hugh Dickins <hughd@google.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: Re: [PATCH v2 2/8] mm/hugetlb: Prepare hugetlb_follow_page_mask()
- for FOLL_PIN
-Message-ID: <ZJHNwE+YKcOMCIpT@x1n>
-References: <20230619231044.112894-1-peterx@redhat.com>
- <20230619231044.112894-3-peterx@redhat.com>
- <c77f6aeb-ddfc-3b46-55f4-aff7cf40e6b9@redhat.com>
+        d=1e100.net; s=20221208; t=1687277012; x=1689869012;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+QqdU7GkDQhFCN54Fcp3vfTEcL3yBRMC5K6R5qPbNUw=;
+        b=e3w3a0MJEOyBUxWzvH58uJAcyDfx1LrICKCfMFbLL3t5tCX8UBzJzshHAp1EXsUOrP
+         QEfGz5T2GH2sKvzJMHzUqCxtbH1wwvUXi4qmP+tZ5rxL/tHXiSaUlIPgr862vBuGpNyV
+         lyQ+ztDS9B2XBWk9w1AqbkKr4xRTwnWd0UahuKZQL4NYvME9JGYlsgNz431mjmxjjCvH
+         Sp80TVtqcs5HDORHmkWJCKyMJoWP1il8EGdYrb6uMS8L6GR8iAhKqOhjQtvg/NNnOTco
+         BIlD2ghWejSkYV7EF90wtBWVHng9pXg4jNOy2badVwwO+arRaZMr5aroXo9mO7VLkXDx
+         AmUQ==
+X-Gm-Message-State: AC+VfDyHLwes9e1huTUfDHCzq9ezMoTvnFt3DzzNpzFjqcrnCIB/NFMC
+        dM5yMxDt6Mri49+8CiVubVipCuMPKijHHMsTqKbfZ39iqPk+GbVMQAOprNbrUK7hzFMvUXD04qA
+        D/h4vUvWOYz5wX/U8Y7zpr+zU
+X-Received: by 2002:a7b:cd89:0:b0:3f9:137:af7c with SMTP id y9-20020a7bcd89000000b003f90137af7cmr10011864wmj.10.1687277012288;
+        Tue, 20 Jun 2023 09:03:32 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ61lrarMfjZlrZkjJ/W1vUZw/v7MfmOMrcSXIPEfWRJscK2bUg0DxFkiod61KlmAL7Fgz7IcA==
+X-Received: by 2002:a7b:cd89:0:b0:3f9:137:af7c with SMTP id y9-20020a7bcd89000000b003f90137af7cmr10011844wmj.10.1687277011873;
+        Tue, 20 Jun 2023 09:03:31 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c739:d200:8745:c520:8bf6:b587? (p200300cbc739d2008745c5208bf6b587.dip0.t-ipconnect.de. [2003:cb:c739:d200:8745:c520:8bf6:b587])
+        by smtp.gmail.com with ESMTPSA id k4-20020a05600c0b4400b003f727764b10sm2714531wmr.4.2023.06.20.09.03.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 09:03:31 -0700 (PDT)
+Message-ID: <216753fd-c659-711e-12d0-d12e34110efc@redhat.com>
+Date:   Tue, 20 Jun 2023 18:03:30 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <c77f6aeb-ddfc-3b46-55f4-aff7cf40e6b9@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, kirill.shutemov@linux.intel.com,
+        tony.luck@intel.com, peterz@infradead.org, tglx@linutronix.de,
+        seanjc@google.com, pbonzini@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ying.huang@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <86f2a8814240f4bbe850f6a09fc9d0b934979d1b.1685887183.git.kai.huang@intel.com>
+ <723dd9da-ebd5-edb0-e9e5-2d8c14aaffe2@redhat.com>
+ <f64ee1a5-d96f-d888-14a7-8b4c5e7a9a2f@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v11 04/20] x86/cpu: Detect TDX partial write machine check
+ erratum
+In-Reply-To: <f64ee1a5-d96f-d888-14a7-8b4c5e7a9a2f@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 05:22:02PM +0200, David Hildenbrand wrote:
-> On 20.06.23 01:10, Peter Xu wrote:
-> > follow_page() doesn't use FOLL_PIN, meanwhile hugetlb seems to not be the
-> > target of FOLL_WRITE either.  However add the checks.
-> > 
-> > Namely, either the need to CoW due to missing write bit, or proper CoR on
+On 20.06.23 17:39, Dave Hansen wrote:
+> On 6/19/23 05:21, David Hildenbrand wrote:
+>> So, ordinary writes to TD private memory are not a problem? I thought
+>> one motivation for the unmapped-guest-memory discussion was to prevent
+>> host (userspace) writes to such memory because it would trigger a MC and
+>> eventually crash the host.
 > 
-> s/CoR/unsharing/
+> Those are two different problems.
 > 
-> > !AnonExclusive pages over R/O pins to reject the follow page.  That brings
-> > this function closer to follow_hugetlb_page().
-> > 
-> > So we don't care before, and also for now.  But we'll care if we switch
-> > over slow-gup to use hugetlb_follow_page_mask().  We'll also care when to
-> > return -EMLINK properly, as that's the gup internal api to mean "we should
-> > do CoR".  Not really needed for follow page path, though.
+> Problem #1 (this patch): The host encounters poison when going about its
+> normal business accessing normal memory.  This happens when something in
+> the host accidentally clobbers some TDX memory and *then* reads it.
+> Only occurs with partial writes.
 > 
-> "we should unshare".
+> Problem #2 (addressed with unmapping): Host *userspace* intentionally
+> and maliciously clobbers some TDX memory and then the TDX module or a
+> TDX guest can't run because the memory integrity checks (checksum or TD
+> bit) fail.  This can also take the system down because #MC's are nasty.
 > 
-> > 
-> > When at it, switching the try_grab_page() to use WARN_ON_ONCE(), to be
-> > clear that it just should never fail.
-> > 
-> > Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-> > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > ---
-> >   mm/hugetlb.c | 24 +++++++++++++++---------
-> >   1 file changed, 15 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> > index f75f5e78ff0b..9a6918c4250a 100644
-> > --- a/mm/hugetlb.c
-> > +++ b/mm/hugetlb.c
-> > @@ -6463,13 +6463,6 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
-> >   	spinlock_t *ptl;
-> >   	pte_t *pte, entry;
-> > -	/*
-> > -	 * FOLL_PIN is not supported for follow_page(). Ordinary GUP goes via
-> > -	 * follow_hugetlb_page().
-> > -	 */
-> > -	if (WARN_ON_ONCE(flags & FOLL_PIN))
-> > -		return NULL;
-> > -
-> >   	hugetlb_vma_lock_read(vma);
-> >   	pte = hugetlb_walk(vma, haddr, huge_page_size(h));
-> >   	if (!pte)
-> > @@ -6478,8 +6471,21 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
-> >   	ptl = huge_pte_lock(h, mm, pte);
-> >   	entry = huge_ptep_get(pte);
-> >   	if (pte_present(entry)) {
-> > -		page = pte_page(entry) +
-> > -				((address & ~huge_page_mask(h)) >> PAGE_SHIFT);
-> > +		page = pte_page(entry);
-> > +
-> > +		if (gup_must_unshare(vma, flags, page)) {
-> 
-> All other callers (like follow_page_pte(), including
-> __follow_hugetlb_must_fault())
-> 
-> (a) check for write permissions first.
-> 
-> (b) check for gup_must_unshare() only if !pte_write(entry)
-> 
-> I'd vote to keep these checks as similar as possible to the other GUP code.
+> Host userspace unmapping doesn't prevent problem #1 because it's the
+> kernel who screwed up with the _kernel_ mapping.
 
-I'm pretty sure the order doesn't matter here since one for read and one
-for write.. but sure I can switch the order.
+Ahh, thanks for verifying. I was hoping that problem #2 would get fixed 
+in HW as well (and treated like a BUG).
 
-> 
-> > +			/* Tell the caller to do Copy-On-Read */
-> 
-> "Tell the caller to unshare".
-> 
-> > +			page = ERR_PTR(-EMLINK);
-> > +			goto out;
-> > +		}
-> > +
-> > +		if ((flags & FOLL_WRITE) && !pte_write(entry)) {
-> > +			page = NULL;
-> > +			goto out;
-> > +		}
-> 
-> 
-> I'm confused about pte_write() vs. huge_pte_write(), and I don't know what's
-> right or wrong here.
 
-AFAICT, they should always be identical in code. But yeah.. I should just
-use the huge_ version.
+Because problem #2 also sounds like something that directly violates the 
+first paragraph of this patch description "violations of
+this integrity protection are supposed to only affect TDX operations and
+are never supposed to affect the host kernel itself."
 
-Thanks,
+So I would expect the TDX guest to fail hard, but not other TDX guests 
+(or the host kernel).
 
 -- 
-Peter Xu
+Cheers,
+
+David / dhildenb
 
