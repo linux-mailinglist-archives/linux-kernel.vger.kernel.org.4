@@ -2,195 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 782EA737303
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B30737304
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:36:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjFTRef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 13:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35978 "EHLO
+        id S229737AbjFTRge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 13:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjFTRed (ORCPT
+        with ESMTP id S229576AbjFTRgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 13:34:33 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 253CDA3;
-        Tue, 20 Jun 2023 10:34:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687282471; x=1718818471;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=e2o1S+sKExaEXn1ZV6nZyxSHhqPdkcT93L/bOk9KogA=;
-  b=URwFkDqfh5Vtd6EazEHpcrHPgPFbH5pCU1ksYzmr31vKHsk3rjZeR4NN
-   4AEwUm/BW7mg5dWWxUYOvXVW907/6DNICz6eGG8pGiZm8mxduWI/QgFGI
-   Er6M0zGtMpTX3ddoS7iIQ9Xy/J3+jKaRqyp4bd9xkqyCf3Lyb2Y8SEaJe
-   HOSRVCHV3ZTnvdhLvqgrD5v+3QNPC/B7R60OxewITl5A61msbiiZ3XAF9
-   ooRa2ZNNkPREVq0sgsoUHCwMFhlwR6bYTY72ExEUtuXBpD+frqvNJjKDR
-   glqDJ3us9KUuBJk1g8dwFL8S6kErBAUBTr7gtOTNICG0cYqMpQzjeEJb/
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="363354165"
-X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
-   d="scan'208";a="363354165"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 10:33:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="804029333"
-X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
-   d="scan'208";a="804029333"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by FMSMGA003.fm.intel.com with ESMTP; 20 Jun 2023 10:33:53 -0700
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 20 Jun 2023 10:33:48 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 20 Jun 2023 10:33:48 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.172)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 20 Jun 2023 10:33:48 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W8Xi/B4+mSZypBZDUU2ND9NUA8xFB2dPIiVLbClahsBvHsHqIeaW+OqI+raPNKPOA3RoVI1YsfHT0vj5TlE7d6XejR+9Xd2NJKuUJHWdzvzfvYaO/vDLy6WmtQEEeo2fxWkdtR3loKwfjMoUWn24Mi5g/Sr5zIi+pH+V9huoDNR/iFw9fkvGVp4gpJpttHn4I5Jt2yKx0pqH8/K5Igd7BCx5pdULR6LgenPLgXeaHoZoaZW7WxwQK9cqEVWR076ucdtZ1Cvk7bLe3qxU7vPpsSa1+5ke/ngd1cpbZClpjZlhnMwIY9na5dsiw0wskZABgznOw9hTjVkteecoFUO5Yg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DOfcSklZ8fCYfzrEQ0oEPLp8HM5G+qt6AmeF2jigd0U=;
- b=LrTzBe1YqCKAYTBl2vQ5g/4D81ZLmCAVbHLK15gYuyF9a7atvWzMjhbKtl/Gx/QiFERk9/IHkouV37SVbTKUnK+X0eVy5s/q41NKfxqwStyMZupAyVUw3q4Ik6b16OsEvKbmYvZwOos3ufsuQwzZjxCKMX20drdKeu6ma5S5PLK8BmEtEJqjVL/avWpje//XdxmfRh/DjcBBF4zG9uuKre45+ZcF/ZIRxdz84UA4OfA3OktxWSUjq+K9MxDrXxTcuLZzSdSyz6UMxqNa/oHAKMF1d8PlPLzgeZfaxNtiVrcruiHjwuOBWmocgALWsSb1BZbljuFADxUx6MRmSvEshg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com (2603:10b6:806:25d::22)
- by DS0PR11MB7579.namprd11.prod.outlook.com (2603:10b6:8:14d::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Tue, 20 Jun
- 2023 17:33:45 +0000
-Received: from SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::c016:653d:c037:44fc]) by SA1PR11MB6734.namprd11.prod.outlook.com
- ([fe80::c016:653d:c037:44fc%7]) with mapi id 15.20.6500.036; Tue, 20 Jun 2023
- 17:33:46 +0000
-From:   "Li, Xin3" <xin3.li@intel.com>
-To:     Steve Wahl <steve.wahl@hpe.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Sivanich, Dimitri" <dimitri.sivanich@hpe.com>,
-        "Anderson, Russ" <russ.anderson@hpe.com>,
-        "dvhart@infradead.org" <dvhart@infradead.org>,
-        "andy@infradead.org" <andy@infradead.org>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "kys@microsoft.com" <kys@microsoft.com>,
-        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        "Cui, Dexuan" <decui@microsoft.com>,
-        "dwmw2@infradead.org" <dwmw2@infradead.org>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "acme@kernel.org" <acme@kernel.org>,
-        "mark.rutland@arm.com" <mark.rutland@arm.com>,
-        "alexander.shishkin@linux.intel.com" 
-        <alexander.shishkin@linux.intel.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "namhyung@kernel.org" <namhyung@kernel.org>,
-        "irogers@google.com" <irogers@google.com>,
-        "Hunter, Adrian" <adrian.hunter@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "jiangshanlai@gmail.com" <jiangshanlai@gmail.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "yangtiezhu@loongson.cn" <yangtiezhu@loongson.cn>
-Subject: RE: [PATCH 1/3] x86/vector: Rename send_cleanup_vector() to
- vector_schedule_cleanup()
-Thread-Topic: [PATCH 1/3] x86/vector: Rename send_cleanup_vector() to
- vector_schedule_cleanup()
-Thread-Index: AQHZowfeI8fQPreObE+J5qFxBiqZxK+T4jSAgAASHOA=
-Date:   Tue, 20 Jun 2023 17:33:46 +0000
-Message-ID: <SA1PR11MB67341EFA507898919165D050A85CA@SA1PR11MB6734.namprd11.prod.outlook.com>
-References: <20230619231611.2230-1-xin3.li@intel.com>
- <20230619231611.2230-2-xin3.li@intel.com>
- <ZJHTYUrKA/mclxRZ@swahl-home.5wahls.com>
-In-Reply-To: <ZJHTYUrKA/mclxRZ@swahl-home.5wahls.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR11MB6734:EE_|DS0PR11MB7579:EE_
-x-ms-office365-filtering-correlation-id: 61878690-0f31-402c-5f08-08db71b48053
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: FPZ71XkbcShJck3mfxEt7T6d10xJkI0PkwU8SgXUJdisA4kNMXlpO+8qkTx0/4kI5ZUZQDNUkinoZ0ZLv9wToixRVT0NGN5ITFOL3u25N8xpR6YW1GRI4vn3A8TjKxHrPgc19fmA4/H386/Jz/2TIbDucV0aDs4lQZWNUaYpV+nF0hkOtNWnYHiIpJioyvmBOw4XAxLifXoPwYWH3e2fqMKlEm7EZeVCNmfkKvWExffifiYuu2z/8OHyrAvGGZpG6XJLBQabwS1sdrdL+u6U/JCgWM0ALVl25VpnpXlO8Vo3RrtfcqhsKDM5bVTr8/5cELEeKUAoQLXtFIUo+FiySKBZjarlANXLIMmB04rQltmo8Wp7IE9Ou2f+Qjz0YRNVwbWd+RhU5JrGyjhzbdojXCFSRmXKoYg6b2WpoPRbu4QNWxAAO/U+z5CR7v8b03e3cs5LUVdUF455DlKtKX9RILrO5bbK/EwSYNveQneHvOpkR6oPvW88zrN6gSamVJNRV06X+ASWyBP7ZCdvlyR+gHZxf86aznDB3UoInkH8f3my25QMZyj7xMv5Je55nYUvt61dz7P1uU2wP7XiMFnUQMtNCFQFAovW2QMJzChviplXTyqz3YHGuSztyxChT2Rg
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6734.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(366004)(396003)(346002)(376002)(136003)(451199021)(478600001)(26005)(7696005)(71200400001)(54906003)(6506007)(9686003)(2906002)(186003)(52536014)(7416002)(5660300002)(7406005)(33656002)(558084003)(38100700002)(122000001)(55016003)(4326008)(66946007)(316002)(296002)(82960400001)(76116006)(86362001)(8676002)(41300700001)(8936002)(6916009)(64756008)(66446008)(66476007)(38070700005)(66556008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?eE2nZo9FtuqFW83TLZYybhWTz1veaeVrSjlgwvJwXJGufkjFOgyxqCiIgpz8?=
- =?us-ascii?Q?XDinYgO6sZYXkTPgfpRLw7o5F5mbjVIGH2ZI3pCJF8sf0KmH1/ietIPoEVTF?=
- =?us-ascii?Q?688bhHszyjotwJ9OKccupqfQlOQl8lArVWoCDaxz43TSLHJtBN+iu1RQBn0y?=
- =?us-ascii?Q?KGRkyD5/s5kfaFmzHY/10y3IE09pwxlkohI+IeB8ozRr4a1GBnfSkN963Alz?=
- =?us-ascii?Q?dn6kf9lovKKcUZPBfcHAdhWPcwCXpixeJBsVizLN43g9uweGJVb/36uFGnsL?=
- =?us-ascii?Q?aSQvnbD2b4gKkXyvTpC1RWY51P7KA04DS3ycFW+GMs2loYXiWMluXDaOVWd1?=
- =?us-ascii?Q?16LWMaGSqciSu+ODflDhqT/+QtsCfWGJFOvG5dSiOQhG2Hc5yByP6OfuONCG?=
- =?us-ascii?Q?mtTU8QVk41YK9B9axQ4xGWpN0kVkJPFhbBDzvBdx588AAj/dOJRP1ypg6ODR?=
- =?us-ascii?Q?fqR1eAWuPoNdkG+CP2K6M3gQRjlw4Oc+vm9ptXszTcipd62/4gubWP0dInD6?=
- =?us-ascii?Q?RzEhplfCRnlcOYNDWGyb76Hweh8NMbKBM8HXuRcZbpTTC0b464VbUMYb0tVF?=
- =?us-ascii?Q?LSZCI7Zwzz10GyMLwo/gNkC1gUZjkYzg70iDFqJLjVoNcCS+3hQKXrel1GNp?=
- =?us-ascii?Q?T646gqUEgw2/3zNsDjaZ+QR4Ujlr0attbMIZuECHdo2ki3ztmSOB2p5iLj1i?=
- =?us-ascii?Q?gaSQAgECZvZelv8JM/kq5DXaBUgCGjZFTCVAl8XT3pPEFWgQ/IjAbe3WjJzx?=
- =?us-ascii?Q?lDLW5L48/Y+pWLR86KyKR1A6ct8Hu3xii+vJ3HjCmXNdw0aBJlZEZZLdw21v?=
- =?us-ascii?Q?A6Gye9ZX/demXX2691rJ+9q1STKVrPZ6/M4q0c/ahezfpUI6JlDVCvpww91O?=
- =?us-ascii?Q?omtfZ45C5Yja0wFz7YpHnwtG98nlZ8C/V2vc3SzlZrI77VQaN91XQudF7i/x?=
- =?us-ascii?Q?RpITm24mUXnhj9jhahFGFArTGhlzXob6x3gZhmdK3WKdNs9UGJR6eCIbShPd?=
- =?us-ascii?Q?egHp2pnptEb3kvi8E7JcEseEbxYMpXbdkVuRvY5oNnWaVmq3pjKE+9c5yZm0?=
- =?us-ascii?Q?xmbJVNXQlAceP6bxEo4um0x+OcMayhLJpQCgh1OhNMRY3648DwbZk8wAfHym?=
- =?us-ascii?Q?4LubcKADKO1yAF13mOXq6ZkAVvKOSC3vXqliwS0/K1eY7gnbvmrrr87Omkoj?=
- =?us-ascii?Q?Cfj9nwcteObMcT+AhlVWMXKXxpMYc7P16lPxwPbHe6BHFFhBgYuHLYwh7N2Y?=
- =?us-ascii?Q?cth8XqStP+cPNvuDSve+PY94zzbytaEEGSWLdh89nctXkx9UMS7Exf5iPBN3?=
- =?us-ascii?Q?fO5bIw0lmh4sZGfLdLr4MmBUrJLUP2pu0E1F7B1o0P+vdoePElQ6PDnwErqD?=
- =?us-ascii?Q?Rgj5ORX8zV/cSKTynMfefubidGHd0ao/1NA5ZWHX7n5W0bTzgIDsB8KQxyRb?=
- =?us-ascii?Q?L9GAGJhZ/QwYYKpVsI2RnnZqs6jw/LYYe0fjhE6y5jueyYdAJsVWpoEe9fSf?=
- =?us-ascii?Q?AL3iVciHzyIQiUQKaTNoo+P285TEZJuGhbWcafvLgvsAZeK2XERgx+9W7ddF?=
- =?us-ascii?Q?CJQyDT09NrrJwmzSZvc=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 20 Jun 2023 13:36:32 -0400
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFD011D
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:36:30 -0700 (PDT)
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-763a3699b9aso167437385a.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:36:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687282589; x=1689874589;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Llu7FUuSTNxADUHCSjGaK3Rlf3j6dAJpKQ0mQsrZg5I=;
+        b=FTq97vR1xPQhTLxWm5IfD8uJYEZDc7eXRMAlcDBhkpAs8mfTpPbj9WjcrmNe8yU0aw
+         5bu8eq/eKvAb+UrDsc7v9MucAnyxRD/zxU7bmCzW6SnP27HXtTREIky8Gev7jYK9vAvG
+         OOoL7psSs8OWGU+TEF/9lTMSfvPb+aM2b9781TIxoKQYaTZDafDIJm2nRLsChr03x0GS
+         iay5l/Hj7PO2qFBer/mAl/v0HGu3C6O28vC7UKswLsYduiqPzEDw/Fn7f8Wp22Z27YAR
+         py2J6HZnTtqmMDO//0xLpJkhzwHtRUYQZTWONgDoaktIYnNQTBcYfr54q3DOvlUiQUBO
+         CM1g==
+X-Gm-Message-State: AC+VfDzq0zN/U2cX5ZPkRRAS9Df8Mf0SvvqtLBeH9JlPAkRK5LVEJN54
+        Iy8CKuHI9JNawJAVovPCRhI=
+X-Google-Smtp-Source: ACHHUZ7HRyirnqN0kYX7Zk+JxBVF8Yso+pLglnHRUkXXDBmdZF9mgWuEuMQ97gfUFXcbMKXjJp67dg==
+X-Received: by 2002:a05:6214:1c0b:b0:630:1732:7084 with SMTP id u11-20020a0562141c0b00b0063017327084mr9576817qvc.61.1687282588962;
+        Tue, 20 Jun 2023 10:36:28 -0700 (PDT)
+Received: from maniforge ([2620:10d:c091:400::5:2cf0])
+        by smtp.gmail.com with ESMTPSA id jo30-20020a056214501e00b006301819be40sm1485276qvb.49.2023.06.20.10.36.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 10:36:28 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 12:36:26 -0500
+From:   David Vernet <void@manifault.com>
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, dietmar.eggemann@arm.com, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        joshdon@google.com, roman.gushchin@linux.dev, tj@kernel.org,
+        kernel-team@meta.com
+Subject: Re: [RFC PATCH 3/3] sched: Implement shared wakequeue in CFS
+Message-ID: <20230620173626.GA3027191@maniforge>
+References: <20230613052004.2836135-1-void@manifault.com>
+ <20230613052004.2836135-4-void@manifault.com>
+ <20230613083203.GR4253@hirez.programming.kicks-ass.net>
+ <20230614043529.GA1942@ziqianlu-dell>
+ <20230615000103.GC2883716@maniforge>
+ <20230615044917.GA109334@ziqianlu-dell>
+ <20230615073153.GA110814@ziqianlu-dell>
+ <20230615232605.GB2915572@maniforge>
+ <20230616005338.GA115001@ziqianlu-dell>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6734.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 61878690-0f31-402c-5f08-08db71b48053
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jun 2023 17:33:46.3504
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: u1a0BEx7Ms6D8cbaQvL3AYv49ILGWzIVqN3TOPB0V8Wk3cpNVKKbXDPZFU1y9ZAcV6qlKCgoWScDnpUD9u6+vA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7579
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230616005338.GA115001@ziqianlu-dell>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Reviewed-by: Steve Wahl <steve.wahl@hpe.com>
+On Fri, Jun 16, 2023 at 08:53:38AM +0800, Aaron Lu wrote:
+> On Thu, Jun 15, 2023 at 06:26:05PM -0500, David Vernet wrote:
+>  
+> > Ok, it seems that the issue is that I wasn't creating enough netperf
+> > clients. I assumed that -n $(nproc) was sufficient. I was able to repro
+> 
+> Yes that switch is confusing.
+> 
+> > the contention on my 26 core / 52 thread skylake client as well:
+> > 
+> > 
+>  
+> > Thanks for the help in getting the repro on my end.
+> 
+> You are welcome.
+> 
+> > So yes, there is certainly a scalability concern to bear in mind for
+> > swqueue for LLCs with a lot of cores. If you have a lot of tasks quickly
+> > e.g. blocking and waking on futexes in a tight loop, I expect a similar
+> > issue would be observed.
+> > 
+> > On the other hand, the issue did not occur on my 7950X. I also wasn't
+> 
+> Using netperf/UDP_RR?
 
-Thanks, will add your RB to this patch in the next iteration.
+Correct
 
-  Xin
+> > able to repro the contention on the Skylake if I ran with the default
+> > netperf workload rather than UDP_RR (even with the additional clients).
+> 
+> I also tried that on the 18cores/36threads/LLC Skylake and the contention
+> is indeed much smaller than UDP_RR:
+> 
+>      7.30%     7.29%  [kernel.vmlinux]      [k]      native_queued_spin_lock_slowpath
+> 
+> But I wouldn't say it's entirely gone. Also consider Skylake has a lot
+> fewer cores per LLC than later Intel servers like Icelake and Sapphire
+> Rapids and I expect things would be worse on those two machines.
+
+I cannot reproduce this contention locally, even on a slightly larger
+Skylake. Not really sure what to make of the difference here. Perhaps
+it's because you're running with CONFIG_SCHED_CORE=y? What is the
+change in throughput when you run the default workload on your SKL?
+
+> > I didn't bother to take the mean of all of the throughput results
+> > between NO_SWQUEUE and SWQUEUE, but they looked roughly equal.
+> > 
+> > So swqueue isn't ideal for every configuration, but I'll echo my
+> > sentiment from [0] that this shouldn't on its own necessarily preclude
+> > it from being merged given that it does help a large class of
+> > configurations and workloads, and it's disabled by default.
+> > 
+> > [0]: https://lore.kernel.org/all/20230615000103.GC2883716@maniforge/
+> 
+> I was wondering: does it make sense to do some divide on machines with
+> big LLCs? Like converting the per-LLC swqueue to per-group swqueue where
+> the group can be made of ~8 cpus of the same LLC. This will have a
+> similar effect of reducing the number of CPUs in a single LLC so the
+> scalability issue can hopefully be fixed while at the same time, it
+> might still help some workloads. I realized this isn't ideal in that
+> wakeup happens at LLC scale so the group thing may not fit very well
+> here.
+> 
+> Just a thought, feel free to ignore it if you don't think this is
+> feasible :-)
+
+That's certainly an idea we could explore, but my inclination would be
+to keep everything at a per-LLC granularity. It makes it easier to
+reason about performance; both in terms of work conservation per-LLC
+(again, not every workload suffers from having large LLCs even if others
+do, and halving the size of a swqueue in an LLC could harm other
+workloads which benefit from the increased work conservation), and in
+terms of contention. To the latter point, I think it would be difficult
+to choose an LLC size that wasn't somewhat artificial and workload
+specific. If someone has that requirement, I think sched_ext would be a
+better alternative.
+
+Thanks,
+David
