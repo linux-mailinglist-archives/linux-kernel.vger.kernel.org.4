@@ -2,96 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFDE2736214
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 05:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4049C73621A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 05:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230128AbjFTDNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 23:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53744 "EHLO
+        id S230162AbjFTDPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 23:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjFTDNv (ORCPT
+        with ESMTP id S230175AbjFTDOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 23:13:51 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92AFB1B0;
-        Mon, 19 Jun 2023 20:13:48 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8DxDetqGZFkrwcHAA--.14552S3;
-        Tue, 20 Jun 2023 11:13:46 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxbMpnGZFkax4hAA--.18888S3;
-        Tue, 20 Jun 2023 11:13:43 +0800 (CST)
-Message-ID: <5c3b5f2e-00c6-efba-1239-cdf96285d6a2@loongson.cn>
-Date:   Tue, 20 Jun 2023 11:13:43 +0800
+        Mon, 19 Jun 2023 23:14:48 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB361B0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 20:14:46 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f7677a94d1so5488754e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 20:14:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1687230885; x=1689822885;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uqyo5lF4AwdBTzGc1HNFwSE64aWc0p6L5cBBmEt7Tpc=;
+        b=i/EUqGMyUXa9aG6pPFn0r02UAFn+MavJrb9ApbyAaak83jn+3pyNYz6C6vhJkpZjGl
+         STArlSqWxB6SCQPvMmZM2ej3jZJt9X8DVNtSnmSdfRBpDYqJal4rpP6m+nEQYDdm3JaT
+         N/yZzr52RjN1EeaHz38psuMSshz1wuHsGW6jCczk7dxhcod3789zhFvqHKGMiMigZ9tJ
+         //XtKOTbeDzYg2SB7kmgfB7rKx+vG7HJFyCEB8852iMc9bZKj6MK6hN7Z9AjzIlzhjS2
+         KgpZkQKOopwysEcRKJRNSDMtqZd1dDW2vaEIcF6IURyh5ja3LbVF87Rbg5GwaT9HR9Bn
+         8kKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687230885; x=1689822885;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uqyo5lF4AwdBTzGc1HNFwSE64aWc0p6L5cBBmEt7Tpc=;
+        b=eZL6e9gbK+UTAnyEQ+OAslBciBrWNed/Qdbn6KiIXTO9I+9wva1eRo0/+4oHT4OL+P
+         ctDexyjAlzXlNAsAzieF9gYw4qBuePFjJW9HOF03eJ3+EIt0AtWmMEl0Fjw3w8RYe159
+         AveBt2rsnKDlc3kyyq/Z02GFIRvRVZRX49/YEwcK7mOxkMW1UxAaoPiSnwkUnBxEQEej
+         Xi8dVCAqLgHoHqDWmlfTxchRKHQTY6dwwQTyjjYkitENKSF+qtielyns0NiUGa+01Br9
+         PvwOZPXICAxHTnd+nXJJ1/VSaMGL3Q4DdwoAUEWqfGiquyHDKhuXxZzpcIVJqV5nynzK
+         bI+w==
+X-Gm-Message-State: AC+VfDyEcZk45elfam4vjQG38ie6X+Xzn7W556p93iDddUgOYqO06Kim
+        sgWZrUAvSyUOyKiHXKqat4tgFmVrDbsHRUIKZWClIA==
+X-Google-Smtp-Source: ACHHUZ6vqEjLRW4QLCzyiLQ48x1Nfy69MYGkWlDCTNK0yoj1tcpO2ZxAZS7wqqWmeiELbNh5hu82AcEGOEWj4D1qOzs=
+X-Received: by 2002:a05:6512:554:b0:4f8:66db:8235 with SMTP id
+ h20-20020a056512055400b004f866db8235mr3417503lfl.39.1687230884819; Mon, 19
+ Jun 2023 20:14:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v6 2/8] PCI/VGA: Deal only with VGA class devices
-Content-Language: en-US
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Sui Jingfeng <15330273260@189.cn>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian Konig <christian.koenig@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        Karol Herbst <kherbst@redhat.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        Bokun Zhang <Bokun.Zhang@amd.com>,
-        Ville Syrjala <ville.syrjala@linux.intel.com>,
-        Li Yi <liyi@loongson.cn>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Abhishek Sahu <abhsahu@nvidia.com>, Yi Liu <yi.l.liu@intel.com>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        nouveau@lists.freedesktop.org, linux-pci@vger.kernel.org,
-        kvm@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-References: <20230612192550.197053-1-15330273260@189.cn>
- <20230612192550.197053-3-15330273260@189.cn>
- <5b6fdf65-b354-94a9-f883-be820157efad@amd.com>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <5b6fdf65-b354-94a9-f883-be820157efad@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxbMpnGZFkax4hAA--.18888S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxGF4UCF4xWFy8AFW5CF1Dtwc_yoW5KrWDpF
-        ykJFW5GryUWwn7Gw12qr1UXFy5XrWUJa4DJr409a4jkr4UAryjqFy8XryYgr1UJrWkJF1U
-        Jr1Utr17Z3W7JabCm3ZEXasCq-sJn29KB7ZKAUJUUUUJ529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6r4UJVWxJr1ln4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q
-        6rW5McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
-        1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWrXVW3AwCF04k20xvY0x0EwIxG
-        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Wrv_Gr1UMIIY
-        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14
-        v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUD1EEUU
-        UUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+References: <20230616063210.19063-1-eric.lin@sifive.com> <20230616063210.19063-3-eric.lin@sifive.com>
+ <20230616-revision-speed-a83dc926b334@wendy>
+In-Reply-To: <20230616-revision-speed-a83dc926b334@wendy>
+From:   Eric Lin <eric.lin@sifive.com>
+Date:   Tue, 20 Jun 2023 11:14:32 +0800
+Message-ID: <CAPqJEFo5genyjY7qJBaESzeppbEnTiDe9qzv98ETLhWfMZeG4A@mail.gmail.com>
+Subject: Re: [PATCH 2/3] soc: sifive: Add SiFive private L2 cache PMU driver
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     conor@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu, maz@kernel.org,
+        chenhuacai@kernel.org, baolu.lu@linux.intel.com, will@kernel.org,
+        kan.liang@linux.intel.com, nnac123@linux.ibm.com,
+        pierre.gondois@arm.com, jgross@suse.com, chao.gao@intel.com,
+        maobibo@loongson.cn, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dslin1010@gmail.com, Greentime Hu <greentime.hu@sifive.com>,
+        Zong Li <zong.li@sifive.com>, Nick Hu <nick.hu@sifive.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -100,98 +78,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 2023/6/20 02:12, Limonciello, Mario wrote:
+On Fri, Jun 16, 2023 at 6:13=E2=80=AFPM Conor Dooley <conor.dooley@microchi=
+p.com> wrote:
 >
-> On 6/12/2023 2:25 PM, Sui Jingfeng wrote:
->> From: Sui Jingfeng <suijingfeng@loongson.cn>
->>
->> Deal only with the VGA devcie(pdev->class == 0x0300), so replace the
->> pci_get_subsys() function with pci_get_class(). Filter the non-PCI 
->> display
->> device(pdev->class != 0x0300) out. There no need to process the 
->> non-display
->> PCI device.
->>
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->> ---
-> This also means that deleting a PCI device no longer needs
-> to walk the list.
+> On Fri, Jun 16, 2023 at 02:32:09PM +0800, Eric Lin wrote:
+> > From: Greentime Hu <greentime.hu@sifive.com>
+> >
+> > This adds SiFive private L2 cache PMU driver. User
+> > can use perf tool to profile by event name and event id.
+> >
+> > Example:
+> > $ perf stat -C 0 -e /sifive_pl2_pmu/inner_acquire_block_btot/
+> >                 -e /sifive_pl2_pmu/inner_acquire_block_ntob/
+> >                 -e /sifive_pl2_pmu/inner_acquire_block_ntot/ ls
+> >
+> >  Performance counter stats for 'CPU(s) 0':
+> >
+> >                300      sifive_pl2_pmu/inner_acquire_block_btot/
+> >              17801      sifive_pl2_pmu/inner_acquire_block_ntob/
+> >               5253      sifive_pl2_pmu/inner_acquire_block_ntot/
+> >
+> >        0.088917326 seconds time elapsed
+> >
+> > $ perf stat -C 0 -e /sifive_pl2_pmu/event=3D0x10001/
+> >                 -e /sifive_pl2_pmu/event=3D0x4001/
+> >                 -e /sifive_pl2_pmu/event=3D0x8001/ ls
+> >
+> >  Performance counter stats for 'CPU(s) 0':
+> >
+> >                251      sifive_pl2_pmu/event=3D0x10001/
+> >               2620      sifive_pl2_pmu/event=3D0x4001/
+> >                644      sifive_pl2_pmu/event=3D0x8001/
+> >
+> >        0.092827110 seconds time elapsed
+> >
+> > Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
+> > Signed-off-by: Eric Lin <eric.lin@sifive.com>
+> > Reviewed-by: Zong Li <zong.li@sifive.com>
+> > Reviewed-by: Nick Hu <nick.hu@sifive.com>
+> > ---
+> >  drivers/soc/sifive/Kconfig            |   9 +
+> >  drivers/soc/sifive/Makefile           |   1 +
+> >  drivers/soc/sifive/sifive_pl2.h       |  20 +
+> >  drivers/soc/sifive/sifive_pl2_cache.c |  16 +
+> >  drivers/soc/sifive/sifive_pl2_pmu.c   | 669 ++++++++++++++++++++++++++
 >
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+> Perf drivers should be in drivers/perf, no?
 >
-Thanks a lot,
 
-can you help to resend this precious R-B to the V7 of this series [1],
+Hi Conor,
 
-This is V6.
+Yes, I see most of the drivers are in the drivers/perf.
 
-[1] https://patchwork.freedesktop.org/series/119250/
+But I grep perf_pmu_register(), it seems not all the pmu drivers are
+in drivers/perf as below:
 
->>   drivers/pci/vgaarb.c | 22 ++++++++++++----------
->>   1 file changed, 12 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
->> index c1bc6c983932..22a505e877dc 100644
->> --- a/drivers/pci/vgaarb.c
->> +++ b/drivers/pci/vgaarb.c
->> @@ -754,10 +754,6 @@ static bool vga_arbiter_add_pci_device(struct 
->> pci_dev *pdev)
->>       struct pci_dev *bridge;
->>       u16 cmd;
->>   -    /* Only deal with VGA class devices */
->> -    if ((pdev->class >> 8) != PCI_CLASS_DISPLAY_VGA)
->> -        return false;
->> -
->>       /* Allocate structure */
->>       vgadev = kzalloc(sizeof(struct vga_device), GFP_KERNEL);
->>       if (vgadev == NULL) {
->> @@ -1500,7 +1496,9 @@ static int pci_notify(struct notifier_block 
->> *nb, unsigned long action,
->>       struct pci_dev *pdev = to_pci_dev(dev);
->>       bool notify = false;
->>   -    vgaarb_dbg(dev, "%s\n", __func__);
->> +    /* Only deal with VGA class devices */
->> +    if (pdev->class != PCI_CLASS_DISPLAY_VGA << 8)
->> +        return 0;
->>         /* For now we're only intereted in devices added and removed. 
->> I didn't
->>        * test this thing here, so someone needs to double check for the
->> @@ -1510,6 +1508,8 @@ static int pci_notify(struct notifier_block 
->> *nb, unsigned long action,
->>       else if (action == BUS_NOTIFY_DEL_DEVICE)
->>           notify = vga_arbiter_del_pci_device(pdev);
->>   +    vgaarb_dbg(dev, "%s: action = %lu\n", __func__, action);
->> +
->>       if (notify)
->>           vga_arbiter_notify_clients();
->>       return 0;
->> @@ -1534,8 +1534,8 @@ static struct miscdevice vga_arb_device = {
->>     static int __init vga_arb_device_init(void)
->>   {
->> +    struct pci_dev *pdev = NULL;
->>       int rc;
->> -    struct pci_dev *pdev;
->>         rc = misc_register(&vga_arb_device);
->>       if (rc < 0)
->> @@ -1545,11 +1545,13 @@ static int __init vga_arb_device_init(void)
->>         /* We add all PCI devices satisfying VGA class in the arbiter by
->>        * default */
->> -    pdev = NULL;
->> -    while ((pdev =
->> -        pci_get_subsys(PCI_ANY_ID, PCI_ANY_ID, PCI_ANY_ID,
->> -                   PCI_ANY_ID, pdev)) != NULL)
->> +    while (1) {
->> +        pdev = pci_get_class(PCI_CLASS_DISPLAY_VGA << 8, pdev);
->> +        if (!pdev)
->> +            break;
->> +
->>           vga_arbiter_add_pci_device(pdev);
->> +    }
->>         pr_info("loaded\n");
->>       return rc;
+arch/arm/mach-imx/mmdc.c:517:   ret =3D
+perf_pmu_register(&(pmu_mmdc->pmu), name, -1);
+arch/arm/mm/cache-l2x0-pmu.c:552:       ret =3D
+perf_pmu_register(l2x0_pmu, l2x0_name, -1);
+...
+drivers/dma/idxd/perfmon.c:627: rc =3D perf_pmu_register(&idxd_pmu->pmu,
+idxd_pmu->name, -1);
+drivers/fpga/dfl-fme-perf.c:904:static int
+fme_perf_pmu_register(struct platform_device *pdev,
+drivers/fpga/dfl-fme-perf.c:929:        ret =3D perf_pmu_register(pmu, name=
+, -1);
+...
+drivers/gpu/drm/amd/amdgpu/amdgpu_pmu.c:549:    ret =3D
+perf_pmu_register(&pmu_entry->pmu, pmu_name, -1);
+drivers/gpu/drm/i915/i915_pmu.c:1190:   ret =3D
+perf_pmu_register(&pmu->base, pmu->name, -1);
+drivers/hwtracing/coresight/coresight-etm-perf.c:907:   ret =3D
+perf_pmu_register(&etm_pmu, CORESIGHT_ETM_PMU_NAME, -1);
+drivers/hwtracing/ptt/hisi_ptt.c:895:   ret =3D
+perf_pmu_register(&hisi_ptt->hisi_ptt_pmu, pmu_name, -1);
+drivers/iommu/intel/perfmon.c:570:      return
+perf_pmu_register(&iommu_pmu->pmu, iommu_pmu->pmu.name, -1);
+drivers/nvdimm/nd_perf.c:309:   rc =3D perf_pmu_register(&nd_pmu->pmu,
+nd_pmu->pmu.name, -1);
+...
 
--- 
-Jingfeng
+I just wondering what kind of pmu drivers should be in drivers/perf
+and what kind of pmu drivers should not be in drivers/perf.
+Thanks.
 
+
+Best regards,
+Eric Lin
+
+> Cheers,
+> Conor.
