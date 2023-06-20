@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75D1737595
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:04:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DA8373759A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:04:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjFTUD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 16:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43276 "EHLO
+        id S229975AbjFTUD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 16:03:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjFTUDj (ORCPT
+        with ESMTP id S229521AbjFTUDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 16:03:39 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 520D21716
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:03:38 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-988883b0d8fso453052466b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:03:38 -0700 (PDT)
+        Tue, 20 Jun 2023 16:03:40 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C671726
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:03:39 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-98934f000a5so137592466b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:03:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20221208; t=1687291417; x=1689883417;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9l13haq03wlXgATRrsgZ5ZfRpocQcq44XJv0jdOrYlg=;
-        b=YGrQI43m4E54uNmB8Zafq03ZrTAyz1sh8TPap01+PcwlC+PBtufuWyGXxDQVAl0R9m
-         dh8CNt76w0EfHjNLZUkwd646fMYpsJHpxsh8Af5V5Qul1Dsaw0sPM2zX9rAZ1JFm/y80
-         THL3iVO5trpVtfFw6yqoFxUu2aKvfMmU4LeggwCDi0clvCSA8PwZAJKXtIx+8CndXiAY
-         RGM4dvWJwu8vtd9Ih2n40ZSbcW+K4BtJNubRBBX/jJSiz0AhtHycuaZlU53VguQs1Y54
-         ejYV9q98A3Gs0VKcmIoWVnOa1aUNj40/a6cTNva90u4xEk/YUXMRVXgLGCIrJyfkufyk
-         g5ew==
+        bh=p8jfpdKH0fFzjA8Web6QRbnSKKAkYrL/UQcXZfCIDJU=;
+        b=KBOjswneiJ+wctkMg8hkQH4cU9SDT9ijrERRYyhkTyXu6Bw+GLleNaeKrIY3DaQtkT
+         L4ivG2jFZjppHpokA0mlmN28izpa7UDdWVU+w4B6Af5nhou+hIkXvRA2ht2+GrmAtL1e
+         NGuN6H1XX0gcIOKgghYFZcOrKa9v1IlIsFggvYGbcdoO5yXQy5n6xMxjNaVYv3UIX4Hh
+         3RfG99THfkwCoRZMUgT+7tjCFG1i1vozp6FMHxxC13u/Hp4I25Ry3Sfrm22688JHzG6s
+         lJxtaf9cm6dLCvdDNzTNtlAgoUjJF87Rx6sRnpsbNJlzfHM0xnFEbhcg047ggOEA/V3x
+         U2vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1687291417; x=1689883417;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9l13haq03wlXgATRrsgZ5ZfRpocQcq44XJv0jdOrYlg=;
-        b=Anb5n0/qM9LEXhyg9Joo4dRDRCrWQOIEJ4Br/KlcbPJmAAVRHkjJ+QkTR7aWAl1QZd
-         Ax7vqY3/7utkA7Fjz3hBXlmhI4hKc1UAn9tz8F19BdFca2Y3WwQI/ShkE50PUeLNOcCi
-         amyI+gGYssYvU4Rynbuu/7PmPWvVeGOb4Echinhz9BcuX9D6Xs4wWbMUZuWEc8uwcvjv
-         xE/r2m61YkyDKzYzSxCS/uJd08rNa3on+AAREOayJQrCWq3DgKsZuRfUT5SPWXthkDAl
-         tS+ndGMuqwi/dqShEBHvEsn6ilfblNcxVE3sO80esTvYvZIxG0PoYjzM+yHS+nOClmR3
-         paqQ==
-X-Gm-Message-State: AC+VfDwVWbCctPOwLuymbqO6wmDkqwCMzcPNEwIVjmJCpx9/PpVaxhI7
-        9znRAb4/AjXqv5UmvXKzrwU=
-X-Google-Smtp-Source: ACHHUZ66/hxFe9ul2BHHokE+Qbhy1oveqY7SRuCqKme0IObB0TxNSnmpoaKNKYxXT4i67m6qpPEgOA==
-X-Received: by 2002:a17:907:969f:b0:947:335f:5a0d with SMTP id hd31-20020a170907969f00b00947335f5a0dmr12159426ejc.62.1687291416778;
-        Tue, 20 Jun 2023 13:03:36 -0700 (PDT)
+        bh=p8jfpdKH0fFzjA8Web6QRbnSKKAkYrL/UQcXZfCIDJU=;
+        b=S0ki4ONdmTqeCl7/ATZvwk9TNAIit7/Tf3icly0ek+QdeBdXsAMeY/6WmZoKJ4uzJZ
+         4YCF7ABvM9gv4P6cR0g7J2n1hPB1zMYyf0OcwvoDDeNvjAp+cfHo3uGR9Ap5zSoiA3la
+         q3oj8zseny2yjsDu4VvN6H6a17+W8Z61EaFTLgvXm4CF4cTj7gEIpJX/ZhAfUcJ5h6hz
+         fdAuWtkwjGPGUGAvaErUrRQv/RZhGQL7+pICE7PllyJKfORQs17WDwy/aEtLxOCYzsI+
+         3NyMX/GX2dSeNc87DSGu53kGOAhWyoQ7jO9pqPflegEjPey7P1gbTkzJ6x5zgJZHF12W
+         xyMg==
+X-Gm-Message-State: AC+VfDzeG63/gB3PXp+q7GEyiY0VOCgbCzgIPuiELaWdVT2EDq1/WPb+
+        lVBkNJKjVJniK1navXQZ/yo=
+X-Google-Smtp-Source: ACHHUZ6F29c4fsU8BMMP2TV7m1XjWd4RTw6VBgO6ETEP6Ez5JQuIfCNiIoT7iFjdAi0oY+drw4tEGg==
+X-Received: by 2002:a17:906:58ce:b0:988:ffb9:b944 with SMTP id e14-20020a17090658ce00b00988ffb9b944mr3756956ejs.29.1687291417474;
+        Tue, 20 Jun 2023 13:03:37 -0700 (PDT)
 Received: from [127.0.1.1] ([91.230.2.244])
         by smtp.gmail.com with ESMTPSA id u21-20020a17090617d500b00977e0bcff1esm1947064eje.10.2023.06.20.13.03.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 13:03:36 -0700 (PDT)
+        Tue, 20 Jun 2023 13:03:37 -0700 (PDT)
 From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Tue, 20 Jun 2023 22:02:58 +0200
-Subject: [PATCH RFC v4 05/13] regulator: introduce properties for
- monitoring workarounds
+Date:   Tue, 20 Jun 2023 22:02:59 +0200
+Subject: [PATCH RFC v4 06/13] regulator: set required ops for monitoring
+ workarounds
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230419-dynamic-vmon-v4-5-4d3734e62ada@skidata.com>
+Message-Id: <20230419-dynamic-vmon-v4-6-4d3734e62ada@skidata.com>
 References: <20230419-dynamic-vmon-v4-0-4d3734e62ada@skidata.com>
 In-Reply-To: <20230419-dynamic-vmon-v4-0-4d3734e62ada@skidata.com>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
@@ -81,54 +81,64 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Benjamin Bara <benjamin.bara@skidata.com>
 
-These are useful when the state of the regulator might change during
-runtime, but the monitors state (in hardware) are not implicitly changed
-with the change of the regulator state or mode (in hardware). Also, when
-the monitors should be disabled while ramping after a set_value() or
-when the regulator can enter a certain mode in which the monitoring does
-not result in a valid state.
+If the core should be able to handle the monitoring workarounds, certain
+regulator ops are required:
+- is_enabled() to decide whether a monitor should be turned off or not.
+- get_active_protections() to find out if the device-tree is missing
+  active protections.
+- get_mode() if the regulator is in a mode where monitoring is not
+  supported.
 
 Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
 ---
- include/linux/regulator/driver.h | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ drivers/regulator/core.c | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
 
-diff --git a/include/linux/regulator/driver.h b/include/linux/regulator/driver.h
-index 9a9163cae769..ce204ecd20e1 100644
---- a/include/linux/regulator/driver.h
-+++ b/include/linux/regulator/driver.h
-@@ -367,6 +367,19 @@ enum regulator_type {
-  *                     the regulator was actually enabled. Max upto enable_time.
-  *
-  * @of_map_mode: Maps a hardware mode defined in a DeviceTree to a standard mode
-+ *
-+ * @mon_disable_reg_disabled: Disables the regulator's monitors while it is
-+ *                            disabled. Affected REGULATOR_MONITOR_* are OR'ed.
-+ * @mon_disable_reg_set_higher: Disables regulator's monitors while it is
-+ *                              changing its value to a higher one. Affected
-+ *                              REGULATOR_MONITOR_* are OR'ed.
-+ * @mon_disable_reg_set_lower: Disables regulator's monitors while it is
-+ *                             changing its value to a lower one. Affected
-+ *                             REGULATOR_MONITOR_* are OR'ed.
-+ * @mon_unsupported_reg_modes: Disables regulator's monitors before an
-+ *                             unsupported mode is entered. REGULATOR_MODE_* are
-+ *                             OR'ed. REGULATOR_MODE_INVALID means all modes can
-+ *                             be monitored.
-  */
- struct regulator_desc {
- 	const char *name;
-@@ -441,6 +454,11 @@ struct regulator_desc {
- 	unsigned int poll_enabled_time;
+diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
+index dc741ac156c3..ca5d6ba889dc 100644
+--- a/drivers/regulator/core.c
++++ b/drivers/regulator/core.c
+@@ -5540,6 +5540,40 @@ regulator_register(struct device *dev,
+ 		goto rinse;
+ 	}
  
- 	unsigned int (*of_map_mode)(unsigned int mode);
++	/* monitor workaround properties require ops to ensure functionality. */
++	if (regulator_desc->mon_disable_reg_disabled ||
++	    regulator_desc->mon_disable_reg_set_higher ||
++	    regulator_desc->mon_disable_reg_set_lower ||
++	    regulator_desc->mon_unsupported_reg_modes) {
++		/*
++		 * is_enabled() to make sure the monitors aren't disabled on
++		 * disabled regulators.
++		 */
++		if (!regulator_desc->ops->is_enabled) {
++			ret = -EINVAL;
++			goto rinse;
++		}
 +
-+	unsigned int mon_disable_reg_disabled;
-+	unsigned int mon_disable_reg_set_higher;
-+	unsigned int mon_disable_reg_set_lower;
-+	unsigned int mon_unsupported_reg_modes;
- };
- 
- /**
++		/*
++		 * get_active_protections() to know if a regulator is monitored
++		 * without the device-tree being aware of it.
++		 */
++		if (!regulator_desc->ops->get_active_protections) {
++			ret = -EINVAL;
++			goto rinse;
++		}
++
++		/*
++		 * mon_unsupported_reg_modes property requires get_mode() to get
++		 * the old state in case a state switch is failing.
++		 */
++		if (regulator_desc->mon_unsupported_reg_modes &&
++		    !regulator_desc->ops->get_mode) {
++			ret = -EINVAL;
++			goto rinse;
++		}
++	}
++
+ 	rdev = kzalloc(sizeof(struct regulator_dev), GFP_KERNEL);
+ 	if (rdev == NULL) {
+ 		ret = -ENOMEM;
 
 -- 
 2.34.1
