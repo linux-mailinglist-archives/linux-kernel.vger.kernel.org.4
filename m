@@ -2,114 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DA67363AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 08:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 861B47363B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 08:39:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbjFTGgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 02:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44410 "EHLO
+        id S230360AbjFTGjg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 02:39:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjFTGgl (ORCPT
+        with ESMTP id S229618AbjFTGje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 02:36:41 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62DBDE6E;
-        Mon, 19 Jun 2023 23:36:40 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1b50e309602so35311265ad.0;
-        Mon, 19 Jun 2023 23:36:40 -0700 (PDT)
+        Tue, 20 Jun 2023 02:39:34 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADB85CE
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 23:39:32 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6b58351327eso1411020a34.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 23:39:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687243000; x=1689835000;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=bytedance.com; s=google; t=1687243172; x=1689835172;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZGEmrwD87vPFZUFP2nZhIGYTM3YLut9ycTQ9fNJPTvM=;
-        b=nBYjkIB7Fl5l9oZIti5KfGcFEFHV7nBN3fW7O1ANniaQgyfDO+/hk7i8PTgRYQ7kdP
-         sP8SoY8l5R5nxBFMt9nhD7Q7MfYoKaz/AOF/rnS4ZEdMb59NA39JwadA511mdG4rBaD6
-         N9rZDoet1bKBS30VQZNfqi9oBdB9nlGydX2WybtUCwsdvR3GpzljdgwQXgfDBBWuS7rt
-         evvZ/+rnb8V99NrOrlTU1FZkIdO29Of+VAi2iuIhaVO+ZeVxm/T+PvTak+QU9JLtSLch
-         VIrmItN/GxQXiuyXOetquNt3Wp51mEw7EL+FDjhCnJ/K1mofwiTN2X00MsWpRNpyq1v0
-         Ibhg==
+        bh=auJ6EJaNEhBlb5WUEu9u5pzfD1n3KesDYvPGRacKRpY=;
+        b=Q0x5ZOGt4/v3wQppV0vu3j4kjyVREZuzdlXMoLL29N7NXduun7x+/qMKtZI9/fJvkE
+         uXAJEwy/vwqunPx2kBUjpJnwRZJYHPKEU135M3wz8Lbji0KHP6SAo8dzYCyUA91hD2hK
+         qQFY1wwfxb6zZ2hcn39cy6SQgMduj6ZO6UnIgFsg/LsEwb5s1ohxYtTnc3+lnKX4c4up
+         9b0HQQSe2NnahNMiG0Ue1NNNiQHRN1pqAwwNk3vqHBW6OZsxoTORWGTDR/hX/gVasPBI
+         RgeSOvQLSLXUsLXt6N2Sx/C/uwmT3Q+vwAAehP4zPVzFD3vAPrUxgSq1xPAf2WLJ68Is
+         nDzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687243000; x=1689835000;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1687243172; x=1689835172;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZGEmrwD87vPFZUFP2nZhIGYTM3YLut9ycTQ9fNJPTvM=;
-        b=BDT4uGMK6ubiMvub/aMhB0euXqb74Y8vqBdz+t/SET8Q0AeAKE9nj4fNLN1sN/lgL+
-         AceSEHDVUGv/Fug56Im1apHa+dDssCHAIDE5Nce9kD0ZaX2ID9dzlm2k0mvN9OWOavDY
-         LFRgIcIGzCgHgkw2pUbA/Bs7TGqIVdGWElpX5pwppBxctYVJ4z9U0EW4KN5bLWOYBMQy
-         gGPmI1w8wz0ZigDLgKyd4T6qCHMMZwalM9b4KvwV7NbJNbkyv6VYa0CTRypq1xcKyorI
-         Znu4SF0+svf6z0foNLkHoHw+24KyhdVqnEedIwEZSDHly7L+C7oYvCPJgPiwv9w77pSY
-         a1Cw==
-X-Gm-Message-State: AC+VfDxRNBitD6xt+898AB+WaEYAXaQD55noIUMzN2sQ2u4b5+rEcRp2
-        uJMvOJ0YYkWAEZncTUeqvIA=
-X-Google-Smtp-Source: ACHHUZ4/AFBPIzSfplimyzKmDs1iXEkO4b1qEdNgAdAIuPilnx/NFiqQYyVkMBt5HwtM38RTfL8b5A==
-X-Received: by 2002:a17:903:2284:b0:1b6:66f1:358f with SMTP id b4-20020a170903228400b001b666f1358fmr4576736plh.24.1687242999526;
-        Mon, 19 Jun 2023 23:36:39 -0700 (PDT)
-Received: from [172.19.1.47] (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id q21-20020a170902b11500b001b414fae374sm787522plr.291.2023.06.19.23.36.35
+        bh=auJ6EJaNEhBlb5WUEu9u5pzfD1n3KesDYvPGRacKRpY=;
+        b=MgdgVKG0DZ3+EJCL9hZf2AljPAHyEcbqEQ0kRDXzXLAi56K6CCw7LbWkn14ao7+N0G
+         JhlwsvueFrhKVOz98k+6GgBy2tFb8gJvPLarInU2Mqllur5YDpOs+A3eW4fHhwkyA/eQ
+         AmpQAbnIyKfzhmcrQ4A1Qr0XOTXb0ivDOgcYKY2Ku7pRe/f8ghvI4y8YUTIr8YjwZn4q
+         lzowKs2W7E3q1QzV+2EizLAD30cBeqppctm70IwYDWvCjlGcG/iaE3Ux1wLQe/DoYBxR
+         C+72CmgHbytzAeOH80ro355Qb6UKXKSg0YFgqxMAJjlwSlU8xiOYGbdhJF+IO3MxZya6
+         hvow==
+X-Gm-Message-State: AC+VfDx+A8LPefond7vBmoXykqwjSUB/1a2PkOrvqNa9Lm2ixM2tfRO1
+        saOlqBzwd+vV1IBFxLWDOsmFqQ==
+X-Google-Smtp-Source: ACHHUZ7MXbwUUZMP5G5VW1Wv8zl+x/+Um3sJyQyvUnyO9ywOp/LLZEb0Mxk8lkxfS1aPkLdMl9HoVQ==
+X-Received: by 2002:a05:6808:198a:b0:39e:deb3:e1f with SMTP id bj10-20020a056808198a00b0039edeb30e1fmr6248467oib.40.1687243171988;
+        Mon, 19 Jun 2023 23:39:31 -0700 (PDT)
+Received: from [10.94.58.170] ([203.208.167.146])
+        by smtp.gmail.com with ESMTPSA id jn9-20020a170903050900b001b679ec20f2sm843151plb.31.2023.06.19.23.39.22
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 23:36:39 -0700 (PDT)
-Message-ID: <c229876f-5a0f-fab9-c006-adf42bfd892d@gmail.com>
-Date:   Tue, 20 Jun 2023 14:36:34 +0800
+        Mon, 19 Jun 2023 23:39:31 -0700 (PDT)
+Message-ID: <8ac1034d-4ddf-86a6-a7dc-769bc5080fac@bytedance.com>
+Date:   Tue, 20 Jun 2023 14:39:20 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v16 1/1] clk: nuvoton: Use clk_parent_data instead and add
- a header file
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, tmaimon77@gmail.com, catalin.marinas@arm.com,
-        will@kernel.org
-Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-serial@vger.kernel.org, arnd@arndb.de, soc@kernel.org,
-        schung@nuvoton.com, mjchen@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-References: <20230620015120.234041-1-ychuang570808@gmail.com>
- <20230620015120.234041-2-ychuang570808@gmail.com>
- <e847c114-224b-fb69-e2b1-7881b8f8ec90@linaro.org>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: Re: [RFC PATCH net-next] sock: Propose socket.urgent for sockmem
+ isolation
 Content-Language: en-US
-From:   Jacky Huang <ychuang570808@gmail.com>
-In-Reply-To: <e847c114-224b-fb69-e2b1-7881b8f8ec90@linaro.org>
+To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
+Cc:     Eric Dumazet <edumazet@google.com>, Tejun Heo <tj@kernel.org>,
+        Christian Warloe <cwarloe@google.com>,
+        Wei Wang <weiwan@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Ahern <dsahern@kernel.org>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Yu Zhao <yuzhao@google.com>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Martin KaFai Lau <martin.lau@kernel.org>,
+        Xin Long <lucien.xin@gmail.com>,
+        Jason Xing <kernelxing@tencent.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        "open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" 
+        <cgroups@vger.kernel.org>,
+        "open list:CONTROL GROUP - MEMORY RESOURCE CONTROLLER (MEMCG)" 
+        <linux-mm@kvack.org>
+References: <20230609082712.34889-1-wuyun.abel@bytedance.com>
+ <CANn89i+Qqq5nV0oRLh_KEHRV6VmSbS5PsSvayVHBi52FbB=sKA@mail.gmail.com>
+ <b879d810-132b-38ab-c13d-30fabdc8954a@bytedance.com>
+ <4p22vtjrpu4obmbjivgpe635gbpjmhsfisnxghgsson2g6yy5r@ovawhchw7maq>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <4p22vtjrpu4obmbjivgpe635gbpjmhsfisnxghgsson2g6yy5r@ovawhchw7maq>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Michal,
 
+On 6/20/23 1:30 AM, Michal Koutný wrote:
+> On Tue, Jun 13, 2023 at 02:46:32PM +0800, Abel Wu <wuyun.abel@bytedance.com> wrote:
+>> Memory protection (memory.{min,low}) helps the important jobs less
+>> affected by memstalls. But once low priority jobs use lots of kernel
+>> memory like sockmem, the protection might become much less efficient.
+> 
+> What would happen if you applied memory.{min,low} to the important jobs
+> and memory.{max,high} to the low prio ones?
 
-On 2023/6/20 下午 02:22, Krzysztof Kozlowski wrote:
-> On 20/06/2023 03:51, Jacky Huang wrote:
->> From: Jacky Huang <ychuang3@nuvoton.com>
->>
->> 1. Update all parent clock string arrays with clk_parent_data structure,
->>     and replace the usage of clk_hw_register_mux() with
->>     clk_hw_register_mux_parent_data().
->> 2. Introduce the header file clk-ma35d1.h to include shared external
->>     functions.
-> These are two things thus commits.
->
-> This is not v16. It's your first version of this patch.
->
-> Best regards,
-> Krzysztof
->
-Dear Krzysztof,
-
-Thanks for your advice.
-Okay, this is the first version, and I will split it into two separate
-commits and resubmit it as v2.
-
+I might expect that the memory of low prio jobs gets reclaimed first.
+Specifically we set memory.low to protect the working-set for important
+jobs. Due to the best-effort behavior of 'low', the important jobs can
+still be affected if not enough memory reclaimed from the low prio ones.
+And we don't use 'min' (yet?) because the need for flexibility when
+memory is tight.
 
 Best Regards,
-Jacky Huang
+	Abel
