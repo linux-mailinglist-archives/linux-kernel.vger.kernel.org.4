@@ -2,185 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5465736591
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48EE1736596
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbjFTIAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 04:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
+        id S231714AbjFTIBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 04:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231985AbjFTIAT (ORCPT
+        with ESMTP id S231211AbjFTIBZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 04:00:19 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA4F19AE
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:59:55 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-5700b37da3fso39520867b3.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:59:55 -0700 (PDT)
+        Tue, 20 Jun 2023 04:01:25 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80F5E72
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 01:01:23 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3ff25ca795eso288981cf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 01:01:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687247995; x=1689839995;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Aa5HWe45UW6rQUJiJNVLC4MPu6AngULI5k321Sbm9Ew=;
-        b=PTqSZx2nNI4PV4JwXAt99NVosmlLWlQ/KYn1Uf1f3Yd1Z3NVe7obF1sAci/vRU4j/I
-         /dODEkNukKEVJX5QJOgx8A4SVofs7E+EBk4aUKnEe/gxIGiuFO4K0lGYei4SR6tcYKnK
-         AduYU9eLhwRb6vByQAsUQ6tUe6SjjlibwcGiUn9EmoAEYZk/fTkwOJxts/LviFdlBYyU
-         2HDG5towuNEQ5CvzS8P4/0FmCn98RyYyORjokeprTYbqe1PhIQYQex8ifvvnbwDxRbO6
-         McJrcKmHoDDBglMt6fs5aQdKWv2A5unXxMstk7k6pfo7pQ4FA/PbwXapoPL1ZYXTeDU7
-         ON7A==
+        d=google.com; s=20221208; t=1687248083; x=1689840083;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y0soM3eBW17TUN7zlLidBNvK+EaFBcT8rKMwsr5hx58=;
+        b=6oEmMLuUKY8JFmpDg5+v8E4MdTfurRjLoX1ABWiD8rzU/LoDjwWm0ElBunYvvTrVA9
+         8jootSjhRUZ8mYyleJGBxXK5CcUGV9LC89/FsE1fwM3MFc18DbQLdNMT/KUlg2oXiLnf
+         3hYu82RMtbq9gvVpHdRYAhY1c5cul9XOj4lfNfa8XuMmfActB+whqEOf7AttaUfJ7c0C
+         3vzpiNwE1EtKzD+/va+/gJE+1XGIbiurMGkbGIv3LXcIiB+WsYskiA7/AEN02+rUbgu0
+         NlCzIuWkeu5kq2y4PCTaglIB6hcUeYig1h/77sLoDyWgn/n47w+phuzDHthZW/SS7dfY
+         7K6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687247995; x=1689839995;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Aa5HWe45UW6rQUJiJNVLC4MPu6AngULI5k321Sbm9Ew=;
-        b=YHjnx/Cu8l1EhhQLx4hbiZgvRBnSGXPm5FnS9I6Kv7faln3ipixdHk4lFdhSJsyZjZ
-         aTPLDKJygXoFGyxmP+FWVZYrrpLqgn08fqguKSrmoo1O8udI010kgvT4uSsyrNic9vZ6
-         Kn8OqDovTvEbd4zdOCtRuJmCHj3t+LFpSXVDSbHiWE1OYe0tqeWLrLZsh7fPwib/04Az
-         noKZfOQmEN5t6J1UPvWAU2FCrmIFxYGrsGgX5aTnJSaiTHnGHnfDhRqwaB/YY4GT9lz1
-         lV6nFidDe/fH7wH7/Aj37lzVvZU2XVDQ8IdiIDQToPRBpQxlawATgGhssx+Lb2Qncx2d
-         R+Rw==
-X-Gm-Message-State: AC+VfDy0cgta/aWfbMPT1Xk1Q2TjilHtG5qlVGtk0VsaEdqairTz2v3e
-        6p7LO+ldZUT/ELU8e33p1V3tQQ==
-X-Google-Smtp-Source: ACHHUZ515t86hS4ZGbNoo4Ty1vmElBXGedGoznKelWut2eqFES40KQtwKfY1cJoUB4hv3Ba9PnrZlQ==
-X-Received: by 2002:a5b:bc9:0:b0:bb4:14a2:fb4a with SMTP id c9-20020a5b0bc9000000b00bb414a2fb4amr2548922ybr.9.1687247993367;
-        Tue, 20 Jun 2023 00:59:53 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id v190-20020a257ac7000000b00ba88763e5b5sm268132ybc.2.2023.06.20.00.59.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 00:59:53 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 00:59:48 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 12/12] mm: delete mmap_write_trylock() and
- vma_try_start_write()
-In-Reply-To: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
-Message-ID: <27505a8-e717-61ce-ab70-5f79d9bf646b@google.com>
-References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
+        d=1e100.net; s=20221208; t=1687248083; x=1689840083;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Y0soM3eBW17TUN7zlLidBNvK+EaFBcT8rKMwsr5hx58=;
+        b=G1lgWUzYDChO9yAwkPCJnkV0e60fY09sDjs/3e51eFxm76vToqtlEgxhOHppenymM5
+         u2lHma4o+05GpC3Ao65kaRmOCt4KfcDEaHlHSiHmAd2Exv/n+zIo/Oj1qg3zYAWU2SxG
+         VP3L1vxGJGqgJJiPng4Huo78fBxm5OxPgNMbvjqavF00Q2Jod5rGHKiwg4P+JCNQo3LT
+         gAzBNB8LzIGCAaGub7gMmlfkIgn9Lk31XC7U8A1heJZz+J5vwmE1dZFzhZJ3Sos77Wfl
+         r46uJaCSfDnbK2HEWBQZ8nT+7tzFJOXTkprRRNyLBf/LU3oLCBpfc38tXNJVumrlHAXv
+         03tw==
+X-Gm-Message-State: AC+VfDwVAi18bzEqNajpSVZgizcpGkvGHcwKIpMheCoeZLx86hAJtwRm
+        VWcrqMS/4hGxD13+EipIl3S5scqFsDaFY0Qh/L0ptg==
+X-Google-Smtp-Source: ACHHUZ4xBX0RlLFDAXi6zryiB7+5YG80ltFJqS/gHVwlzdVsIwOci9YnZ/I3ji95of7DLw9rWv+GufohPkCcn7y0vzA=
+X-Received: by 2002:a05:622a:589:b0:3ed:210b:e698 with SMTP id
+ c9-20020a05622a058900b003ed210be698mr1007941qtb.7.1687248082908; Tue, 20 Jun
+ 2023 01:01:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20230526234435.662652-1-yuzhao@google.com> <20230526234435.662652-7-yuzhao@google.com>
+ <CTH9N6UYDUM2.1974CRL32YFQC@wheely>
+In-Reply-To: <CTH9N6UYDUM2.1974CRL32YFQC@wheely>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Tue, 20 Jun 2023 02:00:46 -0600
+Message-ID: <CAOUHufY8egkNrxQwd6ms4j6ziyUW5uDjD=yhkxHLqAAOGB4Ccw@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable v2 06/10] kvm/powerpc: make radix page tables
+ RCU safe
+To:     Nicholas Piggin <npiggin@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Anup Patel <anup@brainfault.org>,
+        Ben Gardon <bgardon@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Gavin Shan <gshan@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Larabel <michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+        linux-mm@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mmap_write_trylock() and vma_try_start_write() were added just for
-khugepaged, but now it has no use for them: delete.
+On Tue, Jun 20, 2023 at 12:33=E2=80=AFAM Nicholas Piggin <npiggin@gmail.com=
+> wrote:
+>
+> On Sat May 27, 2023 at 9:44 AM AEST, Yu Zhao wrote:
+> > KVM page tables are currently not RCU safe against remapping, i.e.,
+> > kvmppc_unmap_free_pmd_entry_table() et al. The previous
+>
+> Minor nit but the "page table" is not RCU-safe against something. It
+> is RCU-freed, and therefore some algorithm that accesses it can have
+> the existence guarantee provided by RCU (usually there still needs
+> to be more to it).
+>
+> > mmu_notifier_ops members rely on kvm->mmu_lock to synchronize with
+> > that operation.
+> >
+> > However, the new mmu_notifier_ops member test_clear_young() provides
+> > a fast path that does not take kvm->mmu_lock. To implement
+> > kvm_arch_test_clear_young() for that path, orphan page tables need to
+> > be freed by RCU.
+>
+> Short version: clear the referenced bit using RCU instead of MMU lock
+> to protect against page table freeing, and there is no problem with
+> clearing the bit in a table that has been freed.
+>
+> Seems reasonable.
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
- include/linux/mm.h        | 17 -----------------
- include/linux/mmap_lock.h | 10 ----------
- 2 files changed, 27 deletions(-)
+Thanks. All above points taken.
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 3c2e56980853..9b24f8fbf899 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -690,21 +690,6 @@ static inline void vma_start_write(struct vm_area_struct *vma)
- 	up_write(&vma->vm_lock->lock);
- }
- 
--static inline bool vma_try_start_write(struct vm_area_struct *vma)
--{
--	int mm_lock_seq;
--
--	if (__is_vma_write_locked(vma, &mm_lock_seq))
--		return true;
--
--	if (!down_write_trylock(&vma->vm_lock->lock))
--		return false;
--
--	vma->vm_lock_seq = mm_lock_seq;
--	up_write(&vma->vm_lock->lock);
--	return true;
--}
--
- static inline void vma_assert_write_locked(struct vm_area_struct *vma)
- {
- 	int mm_lock_seq;
-@@ -730,8 +715,6 @@ static inline bool vma_start_read(struct vm_area_struct *vma)
- 		{ return false; }
- static inline void vma_end_read(struct vm_area_struct *vma) {}
- static inline void vma_start_write(struct vm_area_struct *vma) {}
--static inline bool vma_try_start_write(struct vm_area_struct *vma)
--		{ return true; }
- static inline void vma_assert_write_locked(struct vm_area_struct *vma) {}
- static inline void vma_mark_detached(struct vm_area_struct *vma,
- 				     bool detached) {}
-diff --git a/include/linux/mmap_lock.h b/include/linux/mmap_lock.h
-index aab8f1b28d26..d1191f02c7fa 100644
---- a/include/linux/mmap_lock.h
-+++ b/include/linux/mmap_lock.h
-@@ -112,16 +112,6 @@ static inline int mmap_write_lock_killable(struct mm_struct *mm)
- 	return ret;
- }
- 
--static inline bool mmap_write_trylock(struct mm_struct *mm)
--{
--	bool ret;
--
--	__mmap_lock_trace_start_locking(mm, true);
--	ret = down_write_trylock(&mm->mmap_lock) != 0;
--	__mmap_lock_trace_acquire_returned(mm, true, ret);
--	return ret;
--}
--
- static inline void mmap_write_unlock(struct mm_struct *mm)
- {
- 	__mmap_lock_trace_released(mm, true);
--- 
-2.35.3
+> > Unmapping, specifically kvm_unmap_radix(), does not free page tables,
+> > hence not a concern.
+>
+> Not sure if you really need to make the distinction about why the page
+> table is freed, we might free them via unmapping. The point is just
+> anything that frees them while there can be concurrent access, right?
 
+Correct.
+
+> > Signed-off-by: Yu Zhao <yuzhao@google.com>
+> > ---
+> >  arch/powerpc/kvm/book3s_64_mmu_radix.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/powerpc/kvm/book3s_64_mmu_radix.c b/arch/powerpc/kvm/=
+book3s_64_mmu_radix.c
+> > index 461307b89c3a..3b65b3b11041 100644
+> > --- a/arch/powerpc/kvm/book3s_64_mmu_radix.c
+> > +++ b/arch/powerpc/kvm/book3s_64_mmu_radix.c
+> > @@ -1469,13 +1469,15 @@ int kvmppc_radix_init(void)
+> >  {
+> >       unsigned long size =3D sizeof(void *) << RADIX_PTE_INDEX_SIZE;
+> >
+> > -     kvm_pte_cache =3D kmem_cache_create("kvm-pte", size, size, 0, pte=
+_ctor);
+> > +     kvm_pte_cache =3D kmem_cache_create("kvm-pte", size, size,
+> > +                                       SLAB_TYPESAFE_BY_RCU, pte_ctor)=
+;
+> >       if (!kvm_pte_cache)
+> >               return -ENOMEM;
+> >
+> >       size =3D sizeof(void *) << RADIX_PMD_INDEX_SIZE;
+> >
+> > -     kvm_pmd_cache =3D kmem_cache_create("kvm-pmd", size, size, 0, pmd=
+_ctor);
+> > +     kvm_pmd_cache =3D kmem_cache_create("kvm-pmd", size, size,
+> > +                                       SLAB_TYPESAFE_BY_RCU, pmd_ctor)=
+;
+> >       if (!kvm_pmd_cache) {
+> >               kmem_cache_destroy(kvm_pte_cache);
+> >               return -ENOMEM;
+>
+> KVM PPC HV radix PUD level page tables use the arch/powerpc allocators
+> (for some reason), which are not RCU freed. I think you need them too?
+
+We don't. The use of the arch/powerpc allocator for PUD tables seems
+appropriate to me because, unlike PMD/PTE tables, we never free PUD
+tables during the lifetime of a VM:
+* We don't free PUD/PMD/PTE tables when they become empty, i.e., not
+mapping any pages but still attached. (We could in theory, as
+x86/aarch64 do.)
+* We have to free PMD/PTE tables when we replace them with 1GB/2MB
+pages. (Otherwise we'd lose track of detached tables.) And we
+currently don't support huge pages at P4D level, so we never detach
+and free PUD tables.
