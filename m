@@ -2,153 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11B6873780C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 01:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C25773780E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 01:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjFTXzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 19:55:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
+        id S229692AbjFTX5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 19:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjFTXzS (ORCPT
+        with ESMTP id S229490AbjFTX5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 19:55:18 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9D91720
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 16:55:17 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-76252a14c3aso48052085a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 16:55:17 -0700 (PDT)
+        Tue, 20 Jun 2023 19:57:31 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91636184
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 16:57:30 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-be7e1d31646so4685638276.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 16:57:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687305317; x=1689897317;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qvYBTiphPPRPT5+hO9jZpKNPWRDv1tR24AaBUI4OCGk=;
-        b=EoNzEKcfuajMaWketmFLMrGuE5EFlsy8C8mV3BIChxc8rJH2NVAvoFZgzb6WZN5ujG
-         8NU4ZW6xpFmI+BnoqWlg/IEljocC7Yhc74xUwbfIYtBhh9xzY3XP+K9lrnGVSdv8dEJi
-         JVLly1QgonZDSOxOZPygDueZZM7fHfC+pIP4YEhbkY4VXvIyW+/hQwthJaGMsrhm1soL
-         9DTAnLnXckRssehi1hzJvVAUztXG9/mA/byJHxJ119AOLTQE9eOMoBH53mHmNtcwn4hL
-         NLB/h2qYITSw5zZkg0j3XjFxQtmvISkdOSuhGoFayLbuAf5Mk0Fic7IObfVCW49AXEtC
-         Vl1Q==
+        d=google.com; s=20221208; t=1687305450; x=1689897450;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6My5zaxRwCubM/znAlFWMrzsQs0o4/hMLfIyqDwIdCM=;
+        b=CSSYpE6o2vAYB+EczjNxHQoW9ZZEIQkPp00UpPzxbzxvXBVI4La9GGnHYy8QOAimev
+         sfzfDqWb0009TEU/RKdrkDPXynJU93p0tuZD9SmZGHcLexKdiOKqZWJHOqcUGvtktcrY
+         6STtqvnsGmXhMto4nbyL6fX0OZ5Mm8HfxnS/LYv9XTquxzNy8LHbClyPaVrhoICYyZ/2
+         g7WkUN6m7pcrbGPcMrAUVmt45VALmV9NtE5bNAkafpbx7TM/rk6YC/Ke8TslHhaYfECz
+         8sS3IXfjPcEJnj01RFYOknIlwJz0+ih21+BBteNcARxJv49L9w0p5ZwII+bz34K/JCZ/
+         JX1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687305317; x=1689897317;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qvYBTiphPPRPT5+hO9jZpKNPWRDv1tR24AaBUI4OCGk=;
-        b=ge6UaOf0gX0Hutihyapny81QXpaE9whrzeakdzIiP391JENHgXtz4tmUeywVad6kkp
-         AMDb+EHEx1NU3BjVdMzr//u9QDEDk3JAMZbx+2yrrnBHhJThFVLpyNRtQIU7HMWTNEnc
-         aUDT8xXneiz7lHIDeyROZN6MXwiE5p3pFTSpepwfwDkHh5g8c0g1TY9eRYFyKIxQ6gxJ
-         0KO86pFqIok1/k6rZPQ1ATZISyEXAkxCVz5oRTlCbXCFItLjVNBZAPUnbYHckFz/v1ol
-         t6tcws6DX45PvFt+S4LLu/bvWJdvZUha/hP/Xv8q2+cHkvjXEmD61ZZyb/kKBKmtGuih
-         wPlA==
-X-Gm-Message-State: AC+VfDxUPriEjuKyy9eQXBsrWpxlYcnd6rsO2AJorE3bl6++7eTiwXEZ
-        e6UbHrjUvDu2ELZi1ZO6itE14OfZhcE=
-X-Google-Smtp-Source: ACHHUZ7+9hKYkH1JObUrjbFJ3bjNTQ8VbHWRH6P8+yF15Ygw8Jiquq7ZBX2XWSIWuYLmxi84dx3xug==
-X-Received: by 2002:a05:620a:4901:b0:75b:23a1:82a3 with SMTP id ed1-20020a05620a490100b0075b23a182a3mr15869997qkb.4.1687305316747;
-        Tue, 20 Jun 2023 16:55:16 -0700 (PDT)
-Received: from localhost.localdomain ([173.23.87.62])
-        by smtp.gmail.com with ESMTPSA id x7-20020a056902102700b00be8e8772025sm621009ybt.45.2023.06.20.16.55.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 16:55:16 -0700 (PDT)
-From:   Matthew Anderson <ruinairas1992@gmail.com>
-To:     tiwai@suse.com
-Cc:     perex@perex.cz, luke@ljones.dev, sbinding@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org,
-        Matthew Anderson <ruinairas1992@gmail.com>
-Subject: [PATCH] ALSA: hda/realtek: Add quirks for Asus ROG Ally handheld using CS35L41
-Date:   Tue, 20 Jun 2023 18:55:09 -0500
-Message-ID: <20230620235509.35608-1-ruinairas1992@gmail.com>
-X-Mailer: git-send-email 2.41.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687305450; x=1689897450;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6My5zaxRwCubM/znAlFWMrzsQs0o4/hMLfIyqDwIdCM=;
+        b=fTP2dqNH0Qu7La1q98t1+3nzBVN642i2q5U6p5/75d1RieybWwialCmzZ5hzWtCbkt
+         CAmwdpOlGRq3I5NvoQT++1lh1h5zRv5JDPvrLrv3i3u9deduzctweLzOfGp2rmmS5HX+
+         diJMRAJXBiZZfBniZIpU1s6hjOwZeJaAtIwcM4MMX2R6aZKvUlDATACIZIRZq5L7eb14
+         2GncxBl2M1ghttmHjKlEEh6W6+IvDCOX71WWsnR2e+5FR4rdft9rFmKSpmLc+EJPj6V2
+         RZeF1VU9fcOzc2rN0TN+i6HS3G1qo7GlPbdNlh5pFttDm3uFOE6vx+M18MpJ63L57ym1
+         oI0Q==
+X-Gm-Message-State: AC+VfDxYLaKjnr6gBZpLriNFpQeRYmi7GiQGNI4YhQOOxk6G6gdwx+0y
+        viT3fQJOkjsoxNWY7ukaGE5VidBl7Rk=
+X-Google-Smtp-Source: ACHHUZ7lmHtfjY/K80Z1E48r7yvyTtsMdx0YbswhxFGrQ9sy28TJt2rAbO44vsYSrvgTnZ1JPXOfT1sdcAc=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:3f57:9854:e19:8906])
+ (user=surenb job=sendgmr) by 2002:a05:6902:91:b0:ba8:6dc0:cacf with SMTP id
+ h17-20020a056902009100b00ba86dc0cacfmr1731864ybs.12.1687305449890; Tue, 20
+ Jun 2023 16:57:29 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 16:57:24 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230620235726.3873043-1-surenb@google.com>
+Subject: [PATCH 1/3] mm: change vma_start_read to fail if VMA got detached
+ from under it
+From:   Suren Baghdasaryan <surenb@google.com>
+To:     akpm@linux-foundation.org
+Cc:     willy@infradead.org, torvalds@linuxfoundation.org,
+        vegard.nossum@oracle.com, mpe@ellerman.id.au,
+        Liam.Howlett@oracle.com, lrh2000@pku.edu.cn, mgorman@suse.de,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com, surenb@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This requires a patched ACPI table or a firmware from ASUS to work because
-the system does not come with the _DSD field for the CSC3551.
+Current implementation of vma_start_read() checks VMA for being locked
+before taking vma->vm_lock and then checks that again. This mechanism
+fails to detect a case when the VMA gets write-locked, modified and
+unlocked after the first check but before the vma->vm_lock is obtained.
+While this is not strictly a problem (vma_start_read would not produce
+a false unlocked result), this allows it to successfully lock a VMA which
+got detached from the VMA tree while vma_start_read was locking it.
+New condition checks for any change in vma->vm_lock_seq after we obtain
+vma->vm_lock and will cause vma_start_read() to fail if the above race
+occurs.
 
-Signed-off-by: Matthew Anderson <ruinairas1992@gmail.com>
+Fixes: 5e31275cc997 ("mm: add per-VMA lock and helper functions to control it")
+Suggested-by: Matthew Wilcox <willy@infradead.org>
+Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- sound/pci/hda/patch_realtek.c | 46 +++++++++++++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+ include/linux/mm.h | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 308ec7034cc9..b918b0046144 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -7120,6 +7120,10 @@ enum {
- 	ALC294_FIXUP_ASUS_DUAL_SPK,
- 	ALC285_FIXUP_THINKPAD_X1_GEN7,
- 	ALC285_FIXUP_THINKPAD_HEADSET_JACK,
-+	ALC294_FIXUP_ASUS_ALLY,
-+	ALC294_FIXUP_ASUS_ALLY_PINS,
-+	ALC294_FIXUP_ASUS_ALLY_VERBS,
-+	ALC294_FIXUP_ASUS_ALLY_SPEAKER,
- 	ALC294_FIXUP_ASUS_HPE,
- 	ALC294_FIXUP_ASUS_COEF_1B,
- 	ALC294_FIXUP_ASUS_GX502_HP,
-@@ -8432,6 +8436,47 @@ static const struct hda_fixup alc269_fixups[] = {
- 		.chained = true,
- 		.chain_id = ALC294_FIXUP_SPK2_TO_DAC1
- 	},
-+	[ALC294_FIXUP_ASUS_ALLY] = {
-+		.type = HDA_FIXUP_FUNC,
-+		.v.func = cs35l41_fixup_i2c_two,
-+		.chained = true,
-+		.chain_id = ALC294_FIXUP_ASUS_ALLY_PINS
-+	},
-+	[ALC294_FIXUP_ASUS_ALLY_PINS] = {
-+		.type = HDA_FIXUP_PINS,
-+		.v.pins = (const struct hda_pintbl[]) {
-+						{ 0x19, 0x03a11050 },
-+						{ 0x1a, 0x03a11C30 },
-+						{ 0x21, 0x03211420 },
-+						{ }
-+				},
-+		.chained = true,
-+		.chain_id = ALC294_FIXUP_ASUS_ALLY_VERBS
-+	},
-+	[ALC294_FIXUP_ASUS_ALLY_VERBS] = {
-+		.type = HDA_FIXUP_VERBS,
-+		.v.verbs = (const struct hda_verb[]) {
-+						{ 0x20, AC_VERB_SET_COEF_INDEX, 0x45 },
-+						{ 0x20, AC_VERB_SET_PROC_COEF, 0x5089 },
-+						{ 0x20, AC_VERB_SET_COEF_INDEX, 0x46 },
-+						{ 0x20, AC_VERB_SET_PROC_COEF, 0x0004 },
-+						{ 0x20, AC_VERB_SET_COEF_INDEX, 0x47 },
-+						{ 0x20, AC_VERB_SET_PROC_COEF, 0xA47A },
-+						{ 0x20, AC_VERB_SET_COEF_INDEX, 0x49 },
-+						{ 0x20, AC_VERB_SET_PROC_COEF, 0x0049},
-+						{ 0x20, AC_VERB_SET_COEF_INDEX, 0x4A },
-+						{ 0x20, AC_VERB_SET_PROC_COEF, 0x201B },
-+						{ 0x20, AC_VERB_SET_COEF_INDEX, 0x6B },
-+						{ 0x20, AC_VERB_SET_PROC_COEF, 0x4278},
-+						{ }
-+				},
-+				.chained = true,
-+				.chain_id = ALC294_FIXUP_ASUS_ALLY_SPEAKER
-+		},
-+	[ALC294_FIXUP_ASUS_ALLY_SPEAKER] = {
-+		.type = HDA_FIXUP_FUNC,
-+		.v.func = alc285_fixup_speaker2_to_dac1,
-+	},
- 	[ALC285_FIXUP_THINKPAD_X1_GEN7] = {
- 		.type = HDA_FIXUP_FUNC,
- 		.v.func = alc285_fixup_thinkpad_x1_gen7,
-@@ -9596,6 +9641,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x10ec, 0x1254, "Intel Reference board", ALC295_FIXUP_CHROME_BOOK),
- 	SND_PCI_QUIRK(0x10ec, 0x12cc, "Intel Reference board", ALC225_FIXUP_HEADSET_JACK),
- 	SND_PCI_QUIRK(0x10f7, 0x8338, "Panasonic CF-SZ6", ALC269_FIXUP_HEADSET_MODE),
-+	SND_PCI_QUIRK(0x1043, 0x17F3, "ROG Ally RC71L_RC71L", ALC294_FIXUP_ASUS_ALLY),
- 	SND_PCI_QUIRK(0x144d, 0xc109, "Samsung Ativ book 9 (NP900X3G)", ALC269_FIXUP_INV_DMIC),
- 	SND_PCI_QUIRK(0x144d, 0xc169, "Samsung Notebook 9 Pen (NP930SBE-K01US)", ALC298_FIXUP_SAMSUNG_AMP),
- 	SND_PCI_QUIRK(0x144d, 0xc176, "Samsung Notebook 9 Pro (NP930MBE-K04US)", ALC298_FIXUP_SAMSUNG_AMP),
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 27ce77080c79..8410da79c570 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -639,23 +639,24 @@ static inline void vma_numab_state_free(struct vm_area_struct *vma) {}
+  */
+ static inline bool vma_start_read(struct vm_area_struct *vma)
+ {
+-	/* Check before locking. A race might cause false locked result. */
+-	if (vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
++	int vm_lock_seq = READ_ONCE(vma->vm_lock_seq);
++
++	/*
++	 * Check if VMA is locked before taking vma->vm_lock. A race or
++	 * mm_lock_seq overflow might cause false locked result.
++	 */
++	if (vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))
+ 		return false;
+ 
+ 	if (unlikely(down_read_trylock(&vma->vm_lock->lock) == 0))
+ 		return false;
+ 
+-	/*
+-	 * Overflow might produce false locked result.
+-	 * False unlocked result is impossible because we modify and check
+-	 * vma->vm_lock_seq under vma->vm_lock protection and mm->mm_lock_seq
+-	 * modification invalidates all existing locks.
+-	 */
+-	if (unlikely(vma->vm_lock_seq == READ_ONCE(vma->vm_mm->mm_lock_seq))) {
++	/* Fail if VMA was write-locked after we checked it earlier */
++	if (unlikely(vm_lock_seq != READ_ONCE(vma->vm_lock_seq))) {
+ 		up_read(&vma->vm_lock->lock);
+ 		return false;
+ 	}
++
+ 	return true;
+ }
+ 
 -- 
-2.41.0
+2.41.0.162.gfafddb0af9-goog
 
