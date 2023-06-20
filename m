@@ -2,181 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584BA7363A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 08:33:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65C967363A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 08:34:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbjFTGdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 02:33:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42922 "EHLO
+        id S231147AbjFTGev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 02:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbjFTGdM (ORCPT
+        with ESMTP id S231201AbjFTGes (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 02:33:12 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92E6E53;
-        Mon, 19 Jun 2023 23:33:11 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-763a2e39b88so128291585a.1;
-        Mon, 19 Jun 2023 23:33:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687242791; x=1689834791;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W5+evG04UMHwwjirukN0kb+RSrnzU5xpsvDPn540ciQ=;
-        b=RYErAH+mi2zc86r5KWWfsFA8LP9PiwTUwejliV9x5CX3ukRT4UyxAdu8oUINH7+o71
-         BABXTb+Al0ui9J0tqzVpEDRuSZr7tolLidH0mp1NHU5h6r01OFWQA5apd8IF14gcAjCV
-         ZRWOtKnC/zvWenVhjSYiKmkcKYt4CTOYw+0eRsHFKMmo9NQRqlAgaYQ2+wCBJ5fPad2y
-         deRzUvOljVXlVzy6NidHkJvcZ2hSlA4NU0ZEdVHUogrHjN1a2N62u1KbIFT0+ns5rGr1
-         FqDT8PFagV1HC5m3wV6nfyjNesWAJV5ePIm4nguSY52ho/FLBHehJd28qB1ZFHtWJmFE
-         tW4Q==
+        Tue, 20 Jun 2023 02:34:48 -0400
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911E7E7E
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 23:34:47 -0700 (PDT)
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-7778eb7966eso349789339f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 23:34:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687242791; x=1689834791;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=W5+evG04UMHwwjirukN0kb+RSrnzU5xpsvDPn540ciQ=;
-        b=IvazCjDnHFLalKeUak6p8Nvi3cIEUqHXmp7qTN8zDz+U4leCFJ3V0k9tNqRwoRI08S
-         zL8QuGQvwg254/6bNwEgiA9WIeiEbQx/amyuQBPaq86mhJiMVnGfUx9HO68tM09aG8SI
-         F5YT356SoinGopb2D9RsQZTrb9tjZBECXmvbB5+4eF58LvFXwPNI4B4lZjU7AkedZKNi
-         aWE7TqCzcqFhLDIY+wYjjPmFzYzLDv60e7UC8fwVFIU++UEgC+bssNaIarPRXbunK4Xz
-         N66J3WhUvjQsa1wYVqZK0O1wMO0XrW/OBzEzTL7XhNV+wnwWCNiUWNNymE4qH5td3k9h
-         ACaQ==
-X-Gm-Message-State: AC+VfDxdVn5pdoAIe+2R/OtgmGw3lPucAZIokcrgNPq3iCrB15VorDEE
-        gFkC2TpHYQ3L43S1KhCUw2w0rTZvhg0=
-X-Google-Smtp-Source: ACHHUZ5n5K5aPC9bYUBHTpIjgZaXZzWq6qemowxSHihC3bO7xjOaMj7H/aLUT30sH+RFyR4rpOLqsQ==
-X-Received: by 2002:a05:620a:3c90:b0:763:a610:bb64 with SMTP id tp16-20020a05620a3c9000b00763a610bb64mr2766292qkn.25.1687242790830;
-        Mon, 19 Jun 2023 23:33:10 -0700 (PDT)
-Received: from localhost (193-116-195-252.tpgi.com.au. [193.116.195.252])
-        by smtp.gmail.com with ESMTPSA id i14-20020aa78d8e000000b0064f708ca12asm622133pfr.70.2023.06.19.23.32.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 19 Jun 2023 23:33:10 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 20 Jun 2023 16:32:47 +1000
-Message-Id: <CTH9N6UYDUM2.1974CRL32YFQC@wheely>
-Cc:     "Alistair Popple" <apopple@nvidia.com>,
-        "Anup Patel" <anup@brainfault.org>,
-        "Ben Gardon" <bgardon@google.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Chao Peng" <chao.p.peng@linux.intel.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "Fabiano Rosas" <farosas@linux.ibm.com>,
-        "Gaosheng Cui" <cuigaosheng1@huawei.com>,
-        "Gavin Shan" <gshan@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        "James Morse" <james.morse@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Marc Zyngier" <maz@kernel.org>,
-        "Masami Hiramatsu" <mhiramat@kernel.org>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Michael Larabel" <michael@michaellarabel.com>,
-        "Mike Rapoport" <rppt@kernel.org>,
-        "Oliver Upton" <oliver.upton@linux.dev>,
-        "Paul Mackerras" <paulus@ozlabs.org>,
-        "Peter Xu" <peterx@redhat.com>,
-        "Sean Christopherson" <seanjc@google.com>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        "Suzuki K Poulose" <suzuki.poulose@arm.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Thomas Huth" <thuth@redhat.com>, "Will Deacon" <will@kernel.org>,
-        "Zenghui Yu" <yuzenghui@huawei.com>, <kvmarm@lists.linux.dev>,
-        <kvm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <linuxppc-dev@lists.ozlabs.org>,
-        <linux-trace-kernel@vger.kernel.org>, <x86@kernel.org>,
-        <linux-mm@google.com>
-Subject: Re: [PATCH mm-unstable v2 06/10] kvm/powerpc: make radix page
- tables RCU safe
-From:   "Nicholas Piggin" <npiggin@gmail.com>
-To:     "Yu Zhao" <yuzhao@google.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Paolo Bonzini" <pbonzini@redhat.com>
-X-Mailer: aerc 0.14.0
-References: <20230526234435.662652-1-yuzhao@google.com>
- <20230526234435.662652-7-yuzhao@google.com>
-In-Reply-To: <20230526234435.662652-7-yuzhao@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687242887; x=1689834887;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=We8YE5EQAIFaYQr+MuMXLwd+wbKERUdwgznUFduzeu4=;
+        b=BzarM05hJG012SlelzmRDVyBEhq3pXZpQYg0KtI9d3jahStco+7D6auxXzuSy8ind7
+         btWGm77U/HPIPhR8OCubctcjfR91NTJ6WUBzW8lxLkiFEYlShPA/sJTyQOJ3HhXgaapc
+         TDvvrmHC8hXKAgYztyWcfKZU4bdXQ0fUqtd2I5mK+ffxkHZ2sHXBHQysII0sFdFjLdZO
+         VDQPfhUvG4prcjU8OMWL/z7Qb8IjmK9JQ1FytyPH0+Yyh7cXV2S35CpDHCyJPYTQd93k
+         28FuYjS7d8YZ/saVVwMIlaUdWfIH2QU1qbT3QRDwwnRyYPaSILOOwOCUsWkS59hv4F5o
+         LDtg==
+X-Gm-Message-State: AC+VfDy+s/aQVPiqyMPjqZH8evI4E+yqEfBqfiKQAP25WdLIw955HNR/
+        6TMdQLkTZC+ZQLmaYKeFDv3MBuEGjRv85uZV+7jNsu0kxYOJ
+X-Google-Smtp-Source: ACHHUZ4/vE6+hr+shvKp1owmc/f//ZyGYFWQ9XOqR9wpJfYctdNNESalvhfzYzAyQMzMSQ/DGOACTqJ/inT08ZKX8hiMuatP/Z+W
+MIME-Version: 1.0
+X-Received: by 2002:a05:6638:111c:b0:423:13e1:8092 with SMTP id
+ n28-20020a056638111c00b0042313e18092mr3056182jal.5.1687242886913; Mon, 19 Jun
+ 2023 23:34:46 -0700 (PDT)
+Date:   Mon, 19 Jun 2023 23:34:46 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000eca59805fe89d845@google.com>
+Subject: [syzbot] [udf?] WARNING in udf_rmdir
+From:   syzbot <syzbot+a2437d95d06a2981a064@syzkaller.appspotmail.com>
+To:     jack@suse.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat May 27, 2023 at 9:44 AM AEST, Yu Zhao wrote:
-> KVM page tables are currently not RCU safe against remapping, i.e.,
-> kvmppc_unmap_free_pmd_entry_table() et al. The previous
+Hello,
 
-Minor nit but the "page table" is not RCU-safe against something. It
-is RCU-freed, and therefore some algorithm that accesses it can have
-the existence guarantee provided by RCU (usually there still needs
-to be more to it).
+syzbot found the following issue on:
 
-> mmu_notifier_ops members rely on kvm->mmu_lock to synchronize with
-> that operation.
->
-> However, the new mmu_notifier_ops member test_clear_young() provides
-> a fast path that does not take kvm->mmu_lock. To implement
-> kvm_arch_test_clear_young() for that path, orphan page tables need to
-> be freed by RCU.
+HEAD commit:    62d8779610bb Merge tag 'ext4_for_linus_stable' of git://gi..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=141c82cf280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7ff8f87c7ab0e04e
+dashboard link: https://syzkaller.appspot.com/bug?extid=a2437d95d06a2981a064
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Short version: clear the referenced bit using RCU instead of MMU lock
-to protect against page table freeing, and there is no problem with
-clearing the bit in a table that has been freed.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-Seems reasonable.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ccba1c442e42/disk-62d87796.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/440c5fc50bd7/vmlinux-62d87796.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/868795f3b102/bzImage-62d87796.xz
 
->
-> Unmapping, specifically kvm_unmap_radix(), does not free page tables,
-> hence not a concern.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a2437d95d06a2981a064@syzkaller.appspotmail.com
 
-Not sure if you really need to make the distinction about why the page
-table is freed, we might free them via unmapping. The point is just
-anything that frees them while there can be concurrent access, right?
+UDF-fs: INFO Mounting volume 'LinuxUDF', timestamp 2022/11/22 14:59 (1000)
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 950 at fs/udf/udfdecl.h:123 udf_add_fid_counter fs/udf/namei.c:350 [inline]
+WARNING: CPU: 1 PID: 950 at fs/udf/udfdecl.h:123 udf_rmdir+0x7f5/0x8f0 fs/udf/namei.c:529
+Modules linked in:
+CPU: 1 PID: 950 Comm: syz-executor.3 Not tainted 6.4.0-rc6-syzkaller-00049-g62d8779610bb #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:udf_updated_lvid fs/udf/udfdecl.h:121 [inline]
+RIP: 0010:udf_add_fid_counter fs/udf/namei.c:350 [inline]
+RIP: 0010:udf_rmdir+0x7f5/0x8f0 fs/udf/namei.c:529
+Code: fe 48 8d 9c 24 70 01 00 00 e9 4c fa ff ff e8 72 66 8b fe 4c 89 ef e8 0a bf 01 00 bb d9 ff ff ff e9 4e ff ff ff e8 5b 66 8b fe <0f> 0b e9 f2 fc ff ff 89 f9 80 e1 07 38 c1 0f 8c 30 f9 ff ff be 06
+RSP: 0018:ffffc9000efdfb00 EFLAGS: 00010287
+RAX: ffffffff83001945 RBX: 000000000d1c1470 RCX: 0000000000040000
+RDX: ffffc90004243000 RSI: 0000000000002abd RDI: 0000000000002abe
+RBP: ffffc9000efdfd98 R08: ffffffff83001631 R09: fffffbfff1cabb6e
+R10: 0000000000000000 R11: dffffc0000000001 R12: 1ffff11003f038cf
+R13: ffff888038af401c R14: ffff88801f81c678 R15: dffffc0000000000
+FS:  00007fd39ef2f700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020020000 CR3: 0000000033b6f000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ vfs_rmdir+0x35f/0x4c0 fs/namei.c:4198
+ do_rmdir+0x3a7/0x6a0 fs/namei.c:4257
+ __do_sys_rmdir fs/namei.c:4276 [inline]
+ __se_sys_rmdir fs/namei.c:4274 [inline]
+ __x64_sys_rmdir+0x49/0x50 fs/namei.c:4274
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fd39e28c389
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fd39ef2f168 EFLAGS: 00000246
+ ORIG_RAX: 0000000000000054
+RAX: ffffffffffffffda RBX: 00007fd39e3abf80 RCX: 00007fd39e28c389
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000640
+RBP: 00007fd39e2d7493 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffd527f4b7f R14: 00007fd39ef2f300 R15: 0000000000022000
+ </TASK>
 
->
-> Signed-off-by: Yu Zhao <yuzhao@google.com>
-> ---
->  arch/powerpc/kvm/book3s_64_mmu_radix.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/powerpc/kvm/book3s_64_mmu_radix.c b/arch/powerpc/kvm/bo=
-ok3s_64_mmu_radix.c
-> index 461307b89c3a..3b65b3b11041 100644
-> --- a/arch/powerpc/kvm/book3s_64_mmu_radix.c
-> +++ b/arch/powerpc/kvm/book3s_64_mmu_radix.c
-> @@ -1469,13 +1469,15 @@ int kvmppc_radix_init(void)
->  {
->  	unsigned long size =3D sizeof(void *) << RADIX_PTE_INDEX_SIZE;
-> =20
-> -	kvm_pte_cache =3D kmem_cache_create("kvm-pte", size, size, 0, pte_ctor)=
-;
-> +	kvm_pte_cache =3D kmem_cache_create("kvm-pte", size, size,
-> +					  SLAB_TYPESAFE_BY_RCU, pte_ctor);
->  	if (!kvm_pte_cache)
->  		return -ENOMEM;
-> =20
->  	size =3D sizeof(void *) << RADIX_PMD_INDEX_SIZE;
-> =20
-> -	kvm_pmd_cache =3D kmem_cache_create("kvm-pmd", size, size, 0, pmd_ctor)=
-;
-> +	kvm_pmd_cache =3D kmem_cache_create("kvm-pmd", size, size,
-> +					  SLAB_TYPESAFE_BY_RCU, pmd_ctor);
->  	if (!kvm_pmd_cache) {
->  		kmem_cache_destroy(kvm_pte_cache);
->  		return -ENOMEM;
 
-KVM PPC HV radix PUD level page tables use the arch/powerpc allocators
-(for some reason), which are not RCU freed. I think you need them too?
-I wouldn't mind if the kvm pud table slab was moved in here instead of
-shared.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Thanks,
-Nick
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
