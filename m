@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7225737153
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E92A1737157
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232626AbjFTQTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 12:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
+        id S233212AbjFTQVn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 12:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbjFTQTm (ORCPT
+        with ESMTP id S230347AbjFTQVk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 12:19:42 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB28F4;
-        Tue, 20 Jun 2023 09:19:41 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-54fac329a71so2568340a12.1;
-        Tue, 20 Jun 2023 09:19:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687277981; x=1689869981;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qxeRKqZloEV05cBOWmo0jqMiX1LFFLYwZEnNITp6IQQ=;
-        b=RsFgKJIz6dEbL9T/u+OdGLsZkW+w40m/B5JsO6fhgVd8Yn/1tMuxVJ6zQpPxINhMPK
-         gFG7JfjEmEmjBHumUpy3Po9LSXnI4kNZIWiOPyQ1/Jvu15UbhdVPqKHj5RrDkjpG1nnb
-         cwRACe93rFACWTRBfEV1edY0sDgzaphWQHwZDAfNGifBJj/lvw9IUA5Py6m08fHNIar6
-         lBAGm64DY/42NEyYvkWH3Pjjx3XJhfsZlmvWPQSfg0NlcU7vYDkp8YYVxmTVAua8Q+BH
-         e8VsbdTerUBY+OpFzgZocGu+gybSTMzwqLfgZyRy3WiHf11rZDy2kqN/tZIvlT8eDN/b
-         mUcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687277981; x=1689869981;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qxeRKqZloEV05cBOWmo0jqMiX1LFFLYwZEnNITp6IQQ=;
-        b=kJ1kQMdbIEvOwMmBGUXB4fCKbwUcvxOoRMcwogwKqls39sIi/YI0ITS2dUB0wR5kU8
-         JsR7Ih0iWyZtm0DF3yhbzY0kafPZRhREriEDKed56J7Wk8FxUL21QEiL0/GvohdUklgZ
-         kFEbgXYQSkN1HtxuaOCrVZdv8Mdszsmnkbt2cqs4p5ISBiFJCrRTvQhsKBMleHrYLxaN
-         M0Rc7swto8mckIYE1rXM+oKg03bMuQO2q6btXRkAR24B0EkeRVH2J3mb3YlAPDFYc1BE
-         LNz09pcR3ewZZc7mv2kOIl9rP14MzF6hyT+vSN9dzMnA1coMtAwIDflxvYLe7gNINnDF
-         Vhgg==
-X-Gm-Message-State: AC+VfDyUrN35n29ZceXlGeQ9K5iXZ3Ht7nbPxmfJVb8Cvt9+88kJk4AR
-        0hOTdzAUCxgCPnG5uOrfDo2A4CTGeOlM792VZHE=
-X-Google-Smtp-Source: ACHHUZ5Qpl2yWkqLcvHzi767hXr7PQw2Wy4VZjWP41NQ9B9p4GncFLSM63HTEzz65AXPTDssVVwRaE1v85qMycq9a1A=
-X-Received: by 2002:a05:6a20:394a:b0:121:b1fc:1a48 with SMTP id
- r10-20020a056a20394a00b00121b1fc1a48mr5233275pzg.3.1687277980691; Tue, 20 Jun
- 2023 09:19:40 -0700 (PDT)
+        Tue, 20 Jun 2023 12:21:40 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B1FBE2;
+        Tue, 20 Jun 2023 09:21:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687278099; x=1718814099;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JdugfFBFPuP9CneMUY34icuY2vnuoN7wjB/Ecq9vP+0=;
+  b=m0itpQk1n0pnzk6ED4hMaA2fm1YY4rbk0U0R578bjxuPf2EsK1KHu3RS
+   9vk0zjqdBaI3ye0M5JGDlMFBsio2aXaDDVMTs0mqCxsvXzzdYNZkdFVJ4
+   amGPpmBtHnmsIt6TL2JlnjtvJXA4mGruC1sFIHgfDoxE5ttIDi2Jtcs7s
+   NFlV8bwOFc1lcPrJTdHwmdhj+nqOX4YRvUbmRsGPKO+GDMb8ig8WZQRZQ
+   YtOOOfZrHvDeIolunE9qDKf/r/9Nw3YYDmWN1zAR3YCXnOWp2apYV+6bh
+   eiLKLezYz+vPsj0dHxeFzKY7q3b4ybNRUsVwK7MsIJnEyoJxfcf1g9Q1S
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="344650732"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="344650732"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 09:21:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="714094674"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="714094674"
+Received: from rashmigh-mobl.amr.corp.intel.com (HELO [10.255.228.28]) ([10.255.228.28])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 09:21:38 -0700
+Message-ID: <b96f42c7-c05b-9795-630c-940f8692aa2d@intel.com>
+Date:   Tue, 20 Jun 2023 09:21:38 -0700
 MIME-Version: 1.0
-References: <36366741-8df2-1137-0dd9-d498d0f770e4@huawei.com>
- <CAKgT0UdXTSv1fDHBX4UC6Ok9NXKMJ_9F88CEv5TK+mpzy0N21g@mail.gmail.com>
- <c06f6f59-6c35-4944-8f7a-7f6f0e076649@huawei.com> <CAKgT0UccmDe+CE6=zDYQHi1=3vXf5MptzDo+BsPrKdmP5j9kgQ@mail.gmail.com>
- <0ba1bf9c-2e45-cd44-60d3-66feeb3268f3@redhat.com> <dcc9db4c-207b-e118-3d84-641677cd3d80@huawei.com>
- <f8ce176f-f975-af11-641c-b56c53a8066a@redhat.com> <CAKgT0UfzP30OiBQu+YKefLD+=32t+oA6KGzkvsW6k7CMTXU8KA@mail.gmail.com>
- <699563f5-c4fa-0246-5e79-61a29e1a8db3@redhat.com> <CAKgT0UcNOYwxRP_zkaBaZh-VBL-CriL8dFG-VY7-FUyzxfHDWw@mail.gmail.com>
- <ZI8dP5+guKdR7IFE@lore-desk>
-In-Reply-To: <ZI8dP5+guKdR7IFE@lore-desk>
-From:   Alexander Duyck <alexander.duyck@gmail.com>
-Date:   Tue, 20 Jun 2023 09:19:03 -0700
-Message-ID: <CAKgT0UfFVFa4zT2DnPZEGaHp0uh5V1u1aGymgdL4Vu8Q1VV8hQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 3/4] page_pool: introduce page_pool_alloc() API
-To:     Lorenzo Bianconi <lorenzo@kernel.org>
-Cc:     Jesper Dangaard Brouer <jbrouer@redhat.com>, brouer@redhat.com,
-        Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Maryam Tahhan <mtahhan@redhat.com>, bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v11 04/20] x86/cpu: Detect TDX partial write machine check
+ erratum
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>,
+        Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     linux-mm@kvack.org, kirill.shutemov@linux.intel.com,
+        tony.luck@intel.com, peterz@infradead.org, tglx@linutronix.de,
+        seanjc@google.com, pbonzini@redhat.com, dan.j.williams@intel.com,
+        rafael.j.wysocki@intel.com, ying.huang@intel.com,
+        reinette.chatre@intel.com, len.brown@intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, chao.gao@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, bagasdotme@gmail.com,
+        sagis@google.com, imammedo@redhat.com,
+        "Raj, Ashok" <ashok.raj@intel.com>
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <86f2a8814240f4bbe850f6a09fc9d0b934979d1b.1685887183.git.kai.huang@intel.com>
+ <723dd9da-ebd5-edb0-e9e5-2d8c14aaffe2@redhat.com>
+ <f64ee1a5-d96f-d888-14a7-8b4c5e7a9a2f@intel.com>
+ <216753fd-c659-711e-12d0-d12e34110efc@redhat.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <216753fd-c659-711e-12d0-d12e34110efc@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,78 +78,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 18, 2023 at 8:05=E2=80=AFAM Lorenzo Bianconi <lorenzo@kernel.or=
-g> wrote:
->
-> [...]
-> > >
-> > > Yes, precisely.
-> > > I distinctly remember what I tried to poke you and Eric on this appro=
-ach
-> > > earlier, but I cannot find a link to that email.
-> > >
-> > > I would really appreciate, if you Alex, could give the approach in
-> > > veth_convert_skb_to_xdp_buff() some review, as I believe that is a hu=
-ge
-> > > potential for improvements that will lead to large performance
-> > > improvements. (I'm sure Maryam will be eager to help re-test performa=
-nce
-> > > for her use-cases).
-> >
-> > Well just looking at it the quick and dirty answer would be to look at
-> > making use of something like page_frag_cache. I won't go into details
-> > since it isn't too different from the frag allocator, but it is much
-> > simpler since it is just doing reference count hacks instead of having
-> > to do the extra overhead to keep the DMA mapping in place. The veth
-> > would then just be sitting on at most an order 3 page while it is
-> > waiting to fully consume it rather than waiting on a full pool of
-> > pages.
->
-> Hi,
->
-> I did some experiments using page_frag_cache/page_frag_alloc() instead of
-> page_pools in a simple environment I used to test XDP for veth driver.
-> In particular, I allocate a new buffer in veth_convert_skb_to_xdp_buff() =
-from
-> the page_frag_cache in order to copy the full skb in the new one, actuall=
-y
-> "linearizing" the packet (since we know the original skb length).
-> I run an iperf TCP connection over a veth pair where the
-> remote device runs the xdp_rxq_info sample (available in the kernel sourc=
-e
-> tree, with action XDP_PASS):
->
-> TCP clietn -- v0 =3D=3D=3D v1 (xdp_rxq_info) -- TCP server
->
-> net-next (page_pool):
-> - MTU 1500B: ~  7.5 Gbps
-> - MTU 8000B: ~ 15.3 Gbps
->
-> net-next + page_frag_alloc:
-> - MTU 1500B: ~  8.4 Gbps
-> - MTU 8000B: ~ 14.7 Gbps
->
-> It seems there is no a clear "win" situation here (at least in this envir=
-onment
-> and we this simple approach). Moreover:
+On 6/20/23 09:03, David Hildenbrand wrote:
+> On 20.06.23 17:39, Dave Hansen wrote:
+>> On 6/19/23 05:21, David Hildenbrand wrote:
+>>> So, ordinary writes to TD private memory are not a problem? I thought
+>>> one motivation for the unmapped-guest-memory discussion was to prevent
+>>> host (userspace) writes to such memory because it would trigger a MC and
+>>> eventually crash the host.
+>>
+>> Those are two different problems.
+>>
+>> Problem #1 (this patch): The host encounters poison when going about its
+>> normal business accessing normal memory.  This happens when something in
+>> the host accidentally clobbers some TDX memory and *then* reads it.
+>> Only occurs with partial writes.
+>>
+>> Problem #2 (addressed with unmapping): Host *userspace* intentionally
+>> and maliciously clobbers some TDX memory and then the TDX module or a
+>> TDX guest can't run because the memory integrity checks (checksum or TD
+>> bit) fail.  This can also take the system down because #MC's are nasty.
+>>
+>> Host userspace unmapping doesn't prevent problem #1 because it's the
+>> kernel who screwed up with the _kernel_ mapping.
+> 
+> Ahh, thanks for verifying. I was hoping that problem #2 would get fixed
+> in HW as well (and treated like a BUG).
 
-For the 1500B packets it is a win, but for 8000B it looks like there
-is a regression. Any idea what is causing it?
+No, it's really working as designed.
 
-> - can the linearization introduce any issue whenever we perform XDP_REDIR=
-ECT
->   into a destination device?
+#1 _can_ be fixed because the hardware can just choose to let the host
+run merrily along corrupting TDX data and blissfully unaware of the
+carnage until TDX stumbles on the mess.  Blissful ignorance really is a
+useful feature here.  It means, for instance, that if the kernel screws
+up, it can still blissfully kexec(), reboot , boot a new kernel, or dump
+to the console without fear of #MC.
 
-It shouldn't. If it does it would probably point to an issue w/ the
-destination driver rather than an issue with the code doing this.
+#2 is much harder because the TDX data is destroyed and yet the TDX side
+still wants to run.  The SEV folks chose page faults on write to stop
+SEV from running and the TDX folks chose #MC on reads as the mechanism.
 
-> - can the page_frag_cache introduce more memory fragmentation (IIRC we we=
-re
->   experiencing this issue in mt76 before switching to page_pools).
+All of the nastiness on the TDX side is (IMNHO) really a consequence of
+that decision to use machine checks.
 
-I think it largely depends on where the packets are ending up. I know
-this is the approach we are using for sockets, see
-skb_page_frag_refill(). If nothing else, if you took a similar
-approach to it you might be able to bypass the need for the
-page_frag_cache itself, although you would likely still end up
-allocating similar structures.
+(Aside: I'm not specifically crapping on the TDX CPU designers here.  I
+ don't particularly like the SEV approach either.  But this mess is a
+ result of the TDX design choices.  There are other messes in other
+ patch series from SEV. )
+
+> Because problem #2 also sounds like something that directly violates the
+> first paragraph of this patch description "violations of
+> this integrity protection are supposed to only affect TDX operations and
+> are never supposed to affect the host kernel itself."
+> 
+> So I would expect the TDX guest to fail hard, but not other TDX guests
+> (or the host kernel).
+
+This is more fallout from the #MC design choice.
+
+Let's use page faults as an example since our SEV friends are using
+them.  *ANY* instruction that reads memory can page fault, have the
+kernel fix up the fault, and continue merrily along its way.
+
+#MC is fundamentally different.  The exceptions can be declared to be
+unrecoverable.  The CPU says, "whoopsie, I managed to deliver this #MC,
+but it would be too hard for me so I can't continue."  These "too hard"
+scenarios are shrinking over time, but they do exist.  They're fatal.
+
+
