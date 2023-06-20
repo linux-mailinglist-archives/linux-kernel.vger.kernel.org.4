@@ -2,168 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A1B1736519
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:46:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85F4973651D
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbjFTHqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 03:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
+        id S230064AbjFTHrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 03:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbjFTHpl (ORCPT
+        with ESMTP id S229597AbjFTHrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 03:45:41 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9151110E2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:45:32 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5703cb4bcb4so39361647b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:45:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687247132; x=1689839132;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7tbEFbFk5pzLjwVra+37SCseEW8dJexk2Np2YDtZH+c=;
-        b=jZI7lGkGOA9VplRFSG9/39QEHLqEHFn81AVfRltHoq/8iNx7aAWlNrNyFe+XyF0lml
-         Bnzro2qd7JBTjoGR7k3DplV7l1biYn3/LoxKNyegFiBFIRoYqaL2y+rd8Ux0pQmhTgvs
-         IUPCYgX4z0WdKLSspIafzLUn3c05nMTizwc56jirtYHMfRSc/oqFfK7oTa/fwkNDoThq
-         2HdR/Am0ViDDg3zBY7MZWP/MVjmD1Yx9xMfwqoDnIfAkP9LmxM3rFBDQvW9AFIfnglmj
-         paE2iSuMCCu/tpYLxht5C/v0kudDdPO6A0RSV0ftjBtK/MFrCHoTJHxirOjy2uYrAODS
-         XFsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687247132; x=1689839132;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7tbEFbFk5pzLjwVra+37SCseEW8dJexk2Np2YDtZH+c=;
-        b=BJIW9+SlLrJ+bBrEqXhzca6+Om2c2pcpsvpMWRtSruZdo1EgVEP6LXDBsYUOF/V8fr
-         KTz0RU7Llmtasy7LZ7UIi2Y95g+IvXEgAuFsEXnRdouq+X40tkVtvWfSpcoSrmbgPRyW
-         0JvuIaSqiDaU9lgXevwS++m6HYXxY1e8fW/AcVtDB1JErIOcA8STOmS+WgSheidz12Z0
-         GslEcNm4zwETb4YNK85CS7Re6SW2Sn3ob8A8u/LhzEEcU8hNUBN/e67SR2wtTgRftERU
-         3YK27pXuGjeE53ejM9vAKeCKjY7ubVgamLSZTcBA7cYMMnmBLAUf7yDS8NE5z3e0LpnT
-         YQ+Q==
-X-Gm-Message-State: AC+VfDy8A09wHqjW/yLWaWdP0skqDmNy0hgKC2DZ0r6Sen1FXii5V741
-        zZhmwRaxaCVOJumC1FhpyTaOeQ==
-X-Google-Smtp-Source: ACHHUZ6lVvN31sBriyHtQUo4iIlWjUc8vgsx+qnIrz5Kb8Jhe8UJO9QGV+cM44ErYZUti1LdEdlZpw==
-X-Received: by 2002:a81:7189:0:b0:54f:9cd0:990 with SMTP id m131-20020a817189000000b0054f9cd00990mr2846044ywc.18.1687247131680;
-        Tue, 20 Jun 2023 00:45:31 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id o9-20020a0dcc09000000b0056d2fce4e09sm379759ywd.42.2023.06.20.00.45.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 00:45:31 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 00:45:26 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
+        Tue, 20 Jun 2023 03:47:07 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97BB0188;
+        Tue, 20 Jun 2023 00:47:04 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8Dx_+t2WZFkcBoHAA--.14516S3;
+        Tue, 20 Jun 2023 15:47:02 +0800 (CST)
+Received: from bogon.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxK8pvWZFkJGYhAA--.19652S2;
+        Tue, 20 Jun 2023 15:46:55 +0800 (CST)
+From:   Youling Tang <tangyouling@loongson.cn>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 04/12] powerpc: assert_pte_locked() use
- pte_offset_map_nolock()
-In-Reply-To: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
-Message-ID: <7ae6836b-b612-23f1-63e0-babda6e96e2c@google.com>
-References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Huacai Chen <chenhuacai@kernel.org>,
+        madvenka@linux.microsoft.com
+Cc:     chenzhongjin@huawei.com, WANG Xuerui <kernel@xen0n.name>,
+        Xi Ruoyao <xry111@xry111.site>, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        tangyouling00@gmail.com, youling.tang@outlook.com
+Subject: [RFC PATCH v1 00/23] LoongArch: Add objtool and ORC unwinder support
+Date:   Tue, 20 Jun 2023 15:46:26 +0800
+Message-Id: <1687247209-31676-1-git-send-email-tangyouling@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8DxK8pvWZFkJGYhAA--.19652S2
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoW3JF17Xw17XrWktr17AF1xXrc_yoW3Cw1UpF
+        srCrZ3GF4UWr93Zw1Ut3WUurWDJan7Wr12g3ZrXry8CFW2qrnrJrsakr1DAF9Fqw4rKFy0
+        qFn5Wrn8WF4jvabCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUB2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
+        AKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
+        6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
+        xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
+        jxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
+        0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+        67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU4SoGDUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of pte_lockptr(), use the recently added pte_offset_map_nolock()
-in assert_pte_locked().  BUG if pte_offset_map_nolock() fails: this is
-stricter than the previous implementation, which skipped when pmd_none()
-(with a comment on khugepaged collapse transitions): but wouldn't we want
-to know, if an assert_pte_locked() caller can be racing such transitions?
+This series of patches adds objtool and ORC unwinder support for
+LoongArch.
 
-This mod might cause new crashes: which either expose my ignorance, or
-indicate issues to be fixed, or limit the usage of assert_pte_locked().
+Patch 01 - 07 are from "Madhavan T. Venkataraman" [1] with minor
+code tweaks. The "objtool: Reorganize ORC types" patch was not
+added, because LoongArch cannot share `strcut orc_entry`, it also
+needs to include ra_offset and ra_reg.
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
- arch/powerpc/mm/pgtable.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+Since the changes in Patch 01 - 08 in [1] are architecture-independent,
+it might be better if they could be separated separately from the series
+of patches.
 
-diff --git a/arch/powerpc/mm/pgtable.c b/arch/powerpc/mm/pgtable.c
-index cb2dcdb18f8e..16b061af86d7 100644
---- a/arch/powerpc/mm/pgtable.c
-+++ b/arch/powerpc/mm/pgtable.c
-@@ -311,6 +311,8 @@ void assert_pte_locked(struct mm_struct *mm, unsigned long addr)
- 	p4d_t *p4d;
- 	pud_t *pud;
- 	pmd_t *pmd;
-+	pte_t *pte;
-+	spinlock_t *ptl;
- 
- 	if (mm == &init_mm)
- 		return;
-@@ -321,16 +323,10 @@ void assert_pte_locked(struct mm_struct *mm, unsigned long addr)
- 	pud = pud_offset(p4d, addr);
- 	BUG_ON(pud_none(*pud));
- 	pmd = pmd_offset(pud, addr);
--	/*
--	 * khugepaged to collapse normal pages to hugepage, first set
--	 * pmd to none to force page fault/gup to take mmap_lock. After
--	 * pmd is set to none, we do a pte_clear which does this assertion
--	 * so if we find pmd none, return.
--	 */
--	if (pmd_none(*pmd))
--		return;
--	BUG_ON(!pmd_present(*pmd));
--	assert_spin_locked(pte_lockptr(mm, pmd));
-+	pte = pte_offset_map_nolock(mm, pmd, addr, &ptl);
-+	BUG_ON(!pte);
-+	assert_spin_locked(ptl);
-+	pte_unmap(pte);
- }
- #endif /* CONFIG_DEBUG_VM */
- 
+ORC unwinder can get a reliable stack trace, which provides a prerequisite
+for the subsequent addition of livepatch support.
+
+
+Instruction decoder
+===================
+
+To do this, an instruction decoder needs to be implemented. I have implemented
+a simple, table-driven decoder for LoongArch. Only a subset of the instructions
+needs to be fully decoded for this purpose:
+
+	- Load-Store instructions
+	- Add instructions
+	- Branch instructions
+	- Call instructions
+	- Return instructions
+	- Stack pointer authentication instruction
+
+
+Unwind hints
+============
+
+Unwind hints are collected in a special section. Objtool converts unwind hints
+to ORC data. The unwinder processes unwind hints to handle special cases
+mentioned above.
+
+
+ORC unwinder
+============
+
+Before vmlinux created, we check all metadata, find the stack operation,
+note stack state and create orc data. Objtool insert two sections into
+vmlinux. '.orc_unwind_ip' and '.orc_unwind'. (For modules, insert
+'.rela.orc_unwind_ip' to relocate '.orc_unwind_ip'.) Each insn has only
+one stack state in .orc_unwind and orc_unwind_ip hint its pc address.
+Through unwinding orc data, we can get stack info both kernel and module.
+
+
+This is a series of RFC patches, which may require long-term discussions
+and revisions. It is not based on the latest code but based on 6.3-rc3.
+Any ideas or suggestions are welcome.
+
+base-commit: e8d018dd0257f744ca50a729e3d042cf2ec9da65 (Linux 6.3-rc3)
+
+Link:
+[1]: https://lore.kernel.org/lkml/20230202074036.507249-1-madvenka@linux.microsoft.com/#r
+
+Madhavan T. Venkataraman (7):
+  objtool: Reorganize CFI code
+  objtool: Reorganize instruction-related code
+  objtool: Move decode_instructions() to a separate file
+  objtool: Reorganize Unwind hint code
+  objtool: Reorganize ORC code
+  objtool: Reorganize ORC kernel code
+  objtool: Introduce STATIC_CHECK
+
+Youling Tang (16):
+  tools: LoongArch: Copy inst.h and asm.h to tools
+  objtool: LoongArch: Add base definition for LoongArch
+  objtool: LoongArch: Implement decoder
+  objtool: Add annotate_reachable() for objtools
+  LoongArch: bug: Add reachable annotation to warning macros
+  objtool: Add next member in struct reloc
+  objtool: Add orc_print_dump() package
+  objtool: Add ORC support for LoongArch
+  LoongArch: Add ORC unwinder support
+  LoongArch: Support R_LARCH_32_PCREL relocation type in kernel module
+  LoongArch: Fix fpu.S objtool warning
+  LoongArch: Annotate unwind_hint
+  LoongArch: Move some data definitions into the .data section
+  objtool: Add arch-specific "noreturn" function handling
+  objtool: Make update_cfi_state() arch-specific function
+  LoongArch: objtool: Mark non-standard object files and directories
+
+ arch/loongarch/Kconfig                        |   2 +
+ arch/loongarch/Kconfig.debug                  |  11 +
+ arch/loongarch/Makefile                       |   4 +
+ arch/loongarch/include/asm/bug.h              |   1 +
+ arch/loongarch/include/asm/module.h           |   7 +
+ arch/loongarch/include/asm/orc_types.h        |  58 ++
+ arch/loongarch/include/asm/stackframe.h       |   3 +
+ arch/loongarch/include/asm/unwind.h           |  17 +-
+ arch/loongarch/include/asm/unwind_hints.h     | 110 +++
+ arch/loongarch/kernel/Makefile                |   3 +
+ arch/loongarch/kernel/entry.S                 |   2 +
+ arch/loongarch/kernel/fpu.S                   |  11 +-
+ arch/loongarch/kernel/genex.S                 |   2 +
+ arch/loongarch/kernel/head.S                  |   1 +
+ arch/loongarch/kernel/module.c                |  21 +-
+ arch/loongarch/kernel/relocate_kernel.S       |  12 +-
+ arch/loongarch/kernel/setup.c                 |   2 +
+ arch/loongarch/kernel/stacktrace.c            |   1 +
+ arch/loongarch/kernel/unwind_orc.c            | 301 +++++++++
+ arch/loongarch/kernel/vmlinux.lds.S           |   3 +
+ arch/loongarch/power/Makefile                 |   2 +
+ arch/loongarch/vdso/Makefile                  |   2 +
+ arch/x86/include/asm/unwind.h                 |   5 -
+ arch/x86/include/asm/unwind_hints.h           |  86 +++
+ arch/x86/kernel/module.c                      |   7 +-
+ arch/x86/kernel/unwind_orc.c                  | 268 +-------
+ arch/x86/kernel/vmlinux.lds.S                 |   2 +-
+ .../asm => include/asm-generic}/orc_lookup.h  |  43 ++
+ include/linux/compiler.h                      |   9 +
+ include/linux/objtool.h                       |  70 --
+ kernel/Makefile                               |   2 +
+ kernel/orc_lookup.c                           | 261 ++++++++
+ scripts/Makefile                              |   5 +-
+ tools/arch/loongarch/include/asm/asm.h        | 201 ++++++
+ tools/arch/loongarch/include/asm/inst.h       | 629 ++++++++++++++++++
+ tools/arch/loongarch/include/asm/orc_types.h  |  58 ++
+ .../arch/loongarch/include/asm/unwind_hints.h | 110 +++
+ tools/arch/x86/include/asm/unwind_hints.h     | 160 +++++
+ tools/include/linux/bitops.h                  |  10 +
+ tools/include/linux/objtool.h                 |  70 --
+ tools/objtool/Build                           |   8 +-
+ tools/objtool/Makefile                        |   9 +-
+ tools/objtool/arch/loongarch/Build            |   3 +
+ tools/objtool/arch/loongarch/decode.c         | 352 ++++++++++
+ .../arch/loongarch/include/arch/cfi_regs.h    |  14 +
+ .../objtool/arch/loongarch/include/arch/elf.h |  15 +
+ .../arch/loongarch/include/arch/special.h     |  21 +
+ tools/objtool/arch/loongarch/orc.c            | 155 +++++
+ tools/objtool/arch/loongarch/special.c        |  25 +
+ tools/objtool/arch/powerpc/special.c          |   3 +
+ tools/objtool/arch/x86/Build                  |   1 +
+ tools/objtool/arch/x86/include/arch/elf.h     |   1 +
+ tools/objtool/arch/x86/orc.c                  | 164 +++++
+ tools/objtool/arch/x86/special.c              |   4 +
+ tools/objtool/cfi.c                           | 108 +++
+ tools/objtool/check.c                         | 568 +---------------
+ tools/objtool/decode.c                        | 136 ++++
+ tools/objtool/elf.c                           |  11 +-
+ tools/objtool/include/objtool/arch.h          |   3 +
+ tools/objtool/include/objtool/cfi.h           |  12 +
+ tools/objtool/include/objtool/check.h         |  97 +--
+ tools/objtool/include/objtool/elf.h           |   1 +
+ tools/objtool/include/objtool/insn.h          | 166 +++++
+ tools/objtool/include/objtool/objtool.h       |   3 +
+ tools/objtool/include/objtool/orc.h           |  15 +
+ tools/objtool/include/objtool/special.h       |   3 +
+ tools/objtool/insn.c                          | 195 ++++++
+ tools/objtool/orc_dump.c                      |  67 +-
+ tools/objtool/orc_gen.c                       |  79 +--
+ tools/objtool/sync-check.sh                   |   9 +
+ tools/objtool/unwind_hints.c                  | 107 +++
+ 71 files changed, 3721 insertions(+), 1206 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/orc_types.h
+ create mode 100644 arch/loongarch/include/asm/unwind_hints.h
+ create mode 100644 arch/loongarch/kernel/unwind_orc.c
+ rename {arch/x86/include/asm => include/asm-generic}/orc_lookup.h (50%)
+ create mode 100644 kernel/orc_lookup.c
+ create mode 100644 tools/arch/loongarch/include/asm/asm.h
+ create mode 100644 tools/arch/loongarch/include/asm/inst.h
+ create mode 100644 tools/arch/loongarch/include/asm/orc_types.h
+ create mode 100644 tools/arch/loongarch/include/asm/unwind_hints.h
+ create mode 100644 tools/arch/x86/include/asm/unwind_hints.h
+ create mode 100644 tools/objtool/arch/loongarch/Build
+ create mode 100644 tools/objtool/arch/loongarch/decode.c
+ create mode 100644 tools/objtool/arch/loongarch/include/arch/cfi_regs.h
+ create mode 100644 tools/objtool/arch/loongarch/include/arch/elf.h
+ create mode 100644 tools/objtool/arch/loongarch/include/arch/special.h
+ create mode 100644 tools/objtool/arch/loongarch/orc.c
+ create mode 100644 tools/objtool/arch/loongarch/special.c
+ create mode 100644 tools/objtool/arch/x86/orc.c
+ create mode 100644 tools/objtool/cfi.c
+ create mode 100644 tools/objtool/decode.c
+ create mode 100644 tools/objtool/include/objtool/insn.h
+ create mode 100644 tools/objtool/include/objtool/orc.h
+ create mode 100644 tools/objtool/insn.c
+ create mode 100644 tools/objtool/unwind_hints.c
+
 -- 
-2.35.3
+2.39.2
 
