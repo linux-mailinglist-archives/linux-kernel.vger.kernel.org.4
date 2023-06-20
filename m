@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C18736D12
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BEC736D1B
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232885AbjFTNTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 09:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
+        id S231612AbjFTNUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 09:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232883AbjFTNSp (ORCPT
+        with ESMTP id S232907AbjFTNTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 09:18:45 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E391FD4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:18:23 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-760dff4b701so59550439f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:18:23 -0700 (PDT)
+        Tue, 20 Jun 2023 09:19:04 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC90B1BFA
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:18:28 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-66872dbc2efso759334b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:18:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687267101; x=1689859101;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687267104; x=1689859104;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qLVHgwkUvI5frBa0zQY5JXyD7/vRwXg7Z/40OmKjKWY=;
-        b=vfbwQ/arg0v8WEFSyRtGXp8mzfaAnK3jv3bBI9ziMOBB1rMZ6GsnXqTQEeE8KJ71aX
-         BNXttGGbEXIypNDUJ4e+E2pfH1Rcar0vJ+wXMyaJUEfUHgPfd1AEctNUQUoVvlqyIKkL
-         6iy/I9vWnpzN7eRu9wvaZw12W0OQUjb0yUat4yrvKFEM2YGglzhI6Zqpqtfm8bO48GoF
-         46rqM16HYQf3XDrBoJ0j4bjw9okt/sPkLl/stSntcmwCYqg4G6y95fX/SpAxEK4G2KPh
-         bXzR2eJ3ylHuIcs48Qi3xlK0vKCX02DQLyKIcWU16yp4rR87LtPRMoSG+zQf1SUcsHEn
-         hCgg==
+        bh=qGyDV6BAlg2AW/b3jzXgRhCmGRr6ZLpwHtOc10fjN3o=;
+        b=j+JSnZaHENkk6/gyOUztdn3Bz7GVJiGgbR2rn91th1p+H5cIq6OskGo/CrHrzH9r0J
+         3Q1kk3beuF8Ihyxzi2rUZMUPd18f9Xb0O0Y9TxLQOYvOky1Ko3gULNob6mFcjeBSc0vb
+         5ANtL2EhMJaAg+0fY1UoylFmGteRl/0e8eV6bcU9L9t/K80CpFtePvT2e94HOplf6w9b
+         OZJymRSOdf+uLxDObA6QxLhzb+gc6CLrf/CBJ4Bj271Ifma7t6oZzp2qPqhDijr90syL
+         tyzXj/Slr11cRhbQt/iMIKclr3q+y1FhNqAcKNhPPq4TH1fzw7E4NNz1d3NAxjupdPXC
+         zgtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687267101; x=1689859101;
+        d=1e100.net; s=20221208; t=1687267104; x=1689859104;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qLVHgwkUvI5frBa0zQY5JXyD7/vRwXg7Z/40OmKjKWY=;
-        b=RYUhW/N0NuiTugk5oK5vdIduoVsO1E4fZE8INVKLnzmA4hn3Mx8UNp7mJC1yI7nlYY
-         gOkDkd2zLzB3P++R93BNzbezWL5DBcwZiRIcbEiNYZv+aw2CAJFNPS/6ISek6+7gnbS9
-         nGmrFWzAZmGElEc2v40vPZlBzyQEQ90Q39EZ0GfjNJrHYljtIjSYZ0x4y+Pnpi7DaKB5
-         m1GoNKVArELMJkrBsC+MrNBlaB8zxWVY3uEh2uF7562TASyHzl+/eyipCuTEkzM4LyIX
-         RW99vIbeYk4KPJFb0bmiGcu/VSR0AYhkDjIGimde9+LqAOjzzg/OV80UH6lxCl75hTID
-         IxRg==
-X-Gm-Message-State: AC+VfDyamu3ooVaT3ta4Kg01cfOC5noi5ib3RCQv+cCNzvRB8gdrOeKm
-        KeVESf9JOdWy/drQhY3/ITbfdQ==
-X-Google-Smtp-Source: ACHHUZ7i6NQjY2D0sHTWi3V0GJgHJ2MKRNFUPsDrcm+rxtrkHypCG6HQLTj9Xum/4/+rwfmuZB58Vw==
-X-Received: by 2002:a05:6e02:2182:b0:343:9470:4ee8 with SMTP id j2-20020a056e02218200b0034394704ee8mr3878694ila.3.1687267101454;
-        Tue, 20 Jun 2023 06:18:21 -0700 (PDT)
+        bh=qGyDV6BAlg2AW/b3jzXgRhCmGRr6ZLpwHtOc10fjN3o=;
+        b=SM11lrx7nbSWr1fIrAHfmaZRihRBcTIsB/Nb59OKEAvURxZrx+Y0kruMJjr29oAmLp
+         xL7K2Yobq5ZHNCuBGqhTPN2Js2KSmhJiEZjVhSlVmY5nEyM2hdt+/IACwsLxD+MvcbDT
+         znXjeS/xA+0y6WxrRljUJQknKUocWNIn+cQ2uC5e1MRJ74I8R+vGU7YwyzV9mS1keuq+
+         UlkXNP9eRMRemwCK5U2Y67hlAu0FAjIvh8IFnsEJzfjn/P2q4XpC87AQfGsAxqKA1pO3
+         bwNcxafu1+XEyA1U1ndJu+LJyg5/6VJYntOGjw87yKpHpfRwXhrPaPCcAIoyiGCukAAv
+         xEhg==
+X-Gm-Message-State: AC+VfDzP4ohCtZQqdbR1voN2ZHL9jUXUPS96ZMEqmeeNCPMj5uTntW94
+        lvbeLbu6Fd9NrTIEUvv4zCbOsg==
+X-Google-Smtp-Source: ACHHUZ5gYPvoG00x00nmpR0yqB5Lt+RQG9FPGP61KvB/cZ+yjJBGT7Mb+6dVhaCB8APIEa2UxlxcJQ==
+X-Received: by 2002:a05:6a20:a10d:b0:121:84ce:c629 with SMTP id q13-20020a056a20a10d00b0012184cec629mr8053947pzk.0.1687267104438;
+        Tue, 20 Jun 2023 06:18:24 -0700 (PDT)
 Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id r23-20020a634417000000b005143448896csm1399994pga.58.2023.06.20.06.18.20
+        by smtp.gmail.com with ESMTPSA id r23-20020a634417000000b005143448896csm1399994pga.58.2023.06.20.06.18.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 06:18:20 -0700 (PDT)
+        Tue, 20 Jun 2023 06:18:23 -0700 (PDT)
 From:   Jens Axboe <axboe@kernel.dk>
-To:     Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     hch@lst.de, brauner@kernel.org, dsterba@suse.com, hare@suse.de,
+        jinpu.wang@ionos.com, Yu Kuai <yukuai1@huaweicloud.com>
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@infradead.org>, stable@vger.kernel.org
-In-Reply-To: <20230607170837.1559-1-demi@invisiblethingslab.com>
-References: <20230607170837.1559-1-demi@invisiblethingslab.com>
-Subject: Re: [PATCH] block: increment diskseq on all media change events
-Message-Id: <168726710016.3595534.9633662613974186996.b4-ty@kernel.dk>
-Date:   Tue, 20 Jun 2023 07:18:20 -0600
+        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com
+In-Reply-To: <20230618140402.7556-1-yukuai1@huaweicloud.com>
+References: <20230618140402.7556-1-yukuai1@huaweicloud.com>
+Subject: Re: [PATCH -next v2] block: fix wrong mode for blkdev_get_by_dev()
+ from disk_scan_partitions()
+Message-Id: <168726710308.3595534.13269294720973239157.b4-ty@kernel.dk>
+Date:   Tue, 20 Jun 2023 07:18:23 -0600
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -74,30 +76,22 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Wed, 07 Jun 2023 13:08:37 -0400, Demi Marie Obenour wrote:
-> Currently, associating a loop device with a different file descriptor
-> does not increment its diskseq.  This allows the following race
-> condition:
+On Sun, 18 Jun 2023 22:04:02 +0800, Yu Kuai wrote:
+> After commit 2736e8eeb0cc ("block: use the holder as indication for
+> exclusive opens"), blkdev_get_by_dev() will warn if holder is NULL and
+> mode contains 'FMODE_EXCL'.
 > 
-> 1. Program X opens a loop device
-> 2. Program X gets the diskseq of the loop device.
-> 3. Program X associates a file with the loop device.
-> 4. Program X passes the loop device major, minor, and diskseq to
->    something.
-> 5. Program X exits.
-> 6. Program Y detaches the file from the loop device.
-> 7. Program Y attaches a different file to the loop device.
-> 8. The opener finally gets around to opening the loop device and checks
->    that the diskseq is what it expects it to be.  Even though the
->    diskseq is the expected value, the result is that the opener is
->    accessing the wrong file.
+> holder from blkdev_get_by_dev() from disk_scan_partitions() is always NULL,
+> hence it should not use 'FMODE_EXCL', which is broben by the commit. For
+> consequence, WARN_ON_ONCE() will be triggered from blkdev_get_by_dev()
+> if user scan partitions with device opened exclusively.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/1] block: increment diskseq on all media change events
-      commit: b90ecc0379eb7bbe79337b0c7289390a98752646
+[1/1] block: fix wrong mode for blkdev_get_by_dev() from disk_scan_partitions()
+      commit: 985958b8584cc143555f1bd735e7ab5066c944a7
 
 Best regards,
 -- 
