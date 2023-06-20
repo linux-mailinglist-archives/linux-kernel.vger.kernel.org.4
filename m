@@ -2,143 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ECFD7376B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 23:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 107DA7376B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 23:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjFTVev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 17:34:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53158 "EHLO
+        id S230004AbjFTVhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 17:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjFTVes (ORCPT
+        with ESMTP id S229740AbjFTVhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 17:34:48 -0400
-Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636D1170D
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:34:47 -0700 (PDT)
-Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-77da0200928so463934239f.3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:34:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687296886; x=1689888886;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C8h56+Nw3PHyDQJJw90SrezeFvT6bY7SsQPlbTisbW4=;
-        b=bEEfnaa4yq2KazHi0JiAaBl/9oM6cVdFmXQTi4we/SaowkHyYvmhaTHwYJyrUNR++I
-         PkN4djFwl/fzzL0+yjctdklc6//443/U/C6vL0Rr6+UqPUljSW6ZBNpuuqr8i1tMTTdz
-         tYz/TfU2kwpSa+KrFJaZdezD00qEO3SFDfl1zz/gYw7vte/8s+uYuJBgUzBjD6yFVAzD
-         mRAdbLPPxsKZLfuud+7Hlwt0dvIpHsdx6qKCcJ1QEv6OarKRVOfe87PU0gxWdfo9gKnQ
-         tZhoNmw/yAD0hmMfRC1dgovaJDgkw3G4mcvpCux+Nc1W604mnyZaAzaJNJM2St3GFCDE
-         uAfg==
-X-Gm-Message-State: AC+VfDzCkiHA/g6dKtMgmdNCohEIwOoqjoJA99dUAI9pqvkm9xA+woTh
-        tJ1D86eqE1NZImDD35ws252BOVGhO7b+l0i2pggWN5RAE7Hy
-X-Google-Smtp-Source: ACHHUZ7s5BWFtaXX+GD4lynOIab5pCHEzcyo6r3PEcvVeW2mggSZKq9Ayak/l8gDoBuo3aw7MHc/f0YbOeEtl0xtF8xd1vExtr95
+        Tue, 20 Jun 2023 17:37:13 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAD0122;
+        Tue, 20 Jun 2023 14:37:12 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35KKO3ow014004;
+        Tue, 20 Jun 2023 21:37:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=E8IiX3xq5Kaz6WnoYLQCLeytrsRxL9XqVvHBESze5jo=;
+ b=mxLapoMH6eStL/MFEkHtAV51FLwl8sSL8/7L3+WODX/X3uAN5/j6O6VAAcCGJo3KhON3
+ T7dVUnlVYtrwS/zZ/MzFdrdKOTZ30745CbDbr0loCDPZiwRDHDpvptfzFxb/vqPIIiN6
+ dm8MW2gfliMuSR3uvKnfU4MoGdcrsONMGTXp131Wgqn3k87+OUrgrNk5oF8Ad9+7yPKF
+ c0Uw69QdlIjXZhaTFb3R+iwF8z75M74rMbgYMotr4fW+YPvU3xOrdClOr+JomCcayIVd
+ 9ThNwUXuE9byQliloy/D8etPpMs2iHHZT7QA64NwcHpONFTf5DdtV93zhBBUL8GY0mVD +A== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rb3fhtcwx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jun 2023 21:37:09 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35KLb8ho027782
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jun 2023 21:37:08 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 20 Jun 2023 14:37:08 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] soc: qcom: cmd-db: Drop NUL bytes from debugfs output
+Date:   Tue, 20 Jun 2023 14:37:03 -0700
+Message-ID: <20230620213703.283583-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:95a3:0:b0:41d:9cf2:f41d with SMTP id
- b32-20020a0295a3000000b0041d9cf2f41dmr4280642jai.0.1687296886770; Tue, 20 Jun
- 2023 14:34:46 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 14:34:46 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000091164305fe966bdd@google.com>
-Subject: [syzbot] [btrfs?] WARNING in emit_fiemap_extent
-From:   syzbot <syzbot+9992306148b06272f3bb@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: OSds_C6vNQpbyw-PS_0ZAS9IPaK0VthZ
+X-Proofpoint-ORIG-GUID: OSds_C6vNQpbyw-PS_0ZAS9IPaK0VthZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-20_16,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 clxscore=1015 impostorscore=0 adultscore=0
+ suspectscore=0 malwarescore=0 lowpriorityscore=0 phishscore=0 mlxscore=0
+ mlxlogscore=999 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306200195
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The debugfs dump of Command DB relies uses %*pEp to print the resource
+identifiers, with escaping of non-printable characters.
+But p (ESCAPE_NP) does not escape NUL characters, so for identifiers
+less than 8 bytes in length the output will retain these.
 
-syzbot found the following issue on:
+This does not cause an issue while looking at the dump in the terminal
+(no known complaints at least), but when programmatically consuming the
+debugfs output the extra characters are unwanted.
 
-HEAD commit:    40f71e7cd3c6 Merge tag 'net-6.4-rc7' of git://git.kernel.o..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=166d2acf280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7ff8f87c7ab0e04e
-dashboard link: https://syzkaller.appspot.com/bug?extid=9992306148b06272f3bb
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10c65e87280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1094a78b280000
+Change the fixed 8-byte sizeof() to a dynamic strnlen() to avoid
+printing these NUL characters.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/2dc89d5fee38/disk-40f71e7c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/0ced5a475218/vmlinux-40f71e7c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/d543a4f69684/bzImage-40f71e7c.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/7cde8d2312ae/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9992306148b06272f3bb@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 5351 at fs/btrfs/extent_io.c:2824 emit_fiemap_extent+0xee/0x410
-Modules linked in:
-CPU: 1 PID: 5351 Comm: syz-executor148 Not tainted 6.4.0-rc6-syzkaller-00195-g40f71e7cd3c6 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-RIP: 0010:emit_fiemap_extent+0xee/0x410 fs/btrfs/extent_io.c:2824
-Code: d8 24 52 fe 49 8b 45 00 48 89 04 24 48 8b 4c 24 28 48 8d 2c 08 48 89 ef 4c 89 f6 e8 3c 4f fa fd 4c 39 f5 76 1b e8 22 4d fa fd <0f> 0b bd ea ff ff ff e9 25 02 00 00 e8 11 4d fa fd e9 97 01 00 00
-RSP: 0018:ffffc90004b7f4a8 EFLAGS: 00010293
-RAX: ffffffff8391327e RBX: ffffc90004b7f8e0 RCX: ffff88807658bb80
-RDX: 0000000000000000 RSI: 00000000000b3000 RDI: 0000000000101000
-RBP: 0000000000101000 R08: ffffffff83913274 R09: 0000000000000800
-R10: ffffc90004b7f478 R11: dffffc0000000001 R12: 1ffff9200096ff1f
-R13: ffffc90004b7f8f0 R14: 00000000000b3000 R15: 1ffff9200096ff1e
-FS:  00007f2063529700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055dbf02d3668 CR3: 0000000079ce7000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- fiemap_process_hole+0xa27/0xaf0 fs/btrfs/extent_io.c:3104
- extent_fiemap+0xe7d/0x1fc0
- btrfs_fiemap+0x178/0x1e0 fs/btrfs/inode.c:7802
- ioctl_fiemap fs/ioctl.c:219 [inline]
- do_vfs_ioctl+0x19ba/0x2b10 fs/ioctl.c:810
- __do_sys_ioctl fs/ioctl.c:868 [inline]
- __se_sys_ioctl+0x81/0x160 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f206a99eae9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 a1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f20635292f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f206aa287f0 RCX: 00007f206a99eae9
-RDX: 00000000200012c0 RSI: 00000000c020660b RDI: 0000000000000004
-RBP: 00007f206a9f5290 R08: 00007f2063529700 R09: 0000000000000000
-R10: 00007f2063529700 R11: 0000000000000246 R12: 5f65646f6e696f6e
-R13: 0032656c69662f2e R14: 8000000000000001 R15: 00007f206aa287f8
- </TASK>
-
-
+Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/soc/qcom/cmd-db.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/soc/qcom/cmd-db.c b/drivers/soc/qcom/cmd-db.c
+index 33856abd560c..34c40368d5b5 100644
+--- a/drivers/soc/qcom/cmd-db.c
++++ b/drivers/soc/qcom/cmd-db.c
+@@ -284,7 +284,7 @@ static int cmd_db_debugfs_dump(struct seq_file *seq, void *p)
+ 		ent = rsc_to_entry_header(rsc);
+ 		for (j = 0; j < le16_to_cpu(rsc->cnt); j++, ent++) {
+ 			seq_printf(seq, "0x%05x: %*pEp", le32_to_cpu(ent->addr),
+-				   (int)sizeof(ent->id), ent->id);
++				   (int)strnlen(ent->id, sizeof(ent->id)), ent->id);
+ 
+ 			len = le16_to_cpu(ent->len);
+ 			if (len) {
+-- 
+2.25.1
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
