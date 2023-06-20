@@ -2,116 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 790D6737347
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A6B773734A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjFTRwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 13:52:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
+        id S230416AbjFTRwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 13:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjFTRwi (ORCPT
+        with ESMTP id S229832AbjFTRws (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 13:52:38 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6446B1729
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:52:36 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-518ff822360so6132991a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:52:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687283555; x=1689875555;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gs0JaMdxaK1cDSK+TclP/9U4A4K+O/89wzrG8AQc9xI=;
-        b=mjmHOOAqBwAxZzSllQNJxf665tsGphMNTFp77Y2bw+g48Flapr6EP2l/0RRjjLheCf
-         +/2mjdMD+NX9c2KX0vodQwNGtZc4OOotE8XIrVYLUSUV30H1VuYoPzQDo6IQIVxfndJb
-         wbUMackc0dtA4x+jLAVPJ4i/Vm+zYpjU7aKWDYnvOBET1f9Kp6GrNbIVOVlbXREQ3M4x
-         YkhZZTLxRAQg0PdpwHvvctApE7GjwUC7uwdoVnBnWvKJcAgYwl5gu3eVWlLbKiCcHD31
-         i3rYIlTl2tgPkQF9sbnWuLqFDIDl5JVQR9rcAl291I9aeTi0Fe/HASY+xEu7Zzwa/0Hk
-         QrgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687283555; x=1689875555;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gs0JaMdxaK1cDSK+TclP/9U4A4K+O/89wzrG8AQc9xI=;
-        b=gRSS+Rat7aP3LCYcgc3/pDWLK2cFe3TL0dWEV/l0AE+uKLMrPmpkXtN8pG7f1Q7UyM
-         GGArLndvAxxux4oHI90W+4VqG4sD8sCfUWKv1SWTIOvRkIFIAmE0+1xgOj4u9Vo3F1A9
-         JMh4GeNQeITRlR/2vkQ2HKkWlxqrCR50v1wQAz+IKeRq/DCNA9caNU+9j6R2gWjBbP9H
-         4NlAy92/3myY5zV9P9LbcJBedgdu0A7iBxBlRR2PEswM207O6P4d3E3cOummonw9dBld
-         TwmrjVh4tBoeJ9VR+ncnUzvlRDaTTBBCjVGQ9diELEVK1ISptyuXsjadGnM0KSIrjYHl
-         UKTQ==
-X-Gm-Message-State: AC+VfDwhl6ECcVeybteSt99LZTf58Nxb2iL46qxtGj2dpDyfbv3C0GtK
-        9tsjvufyczw+KF8R9i2jt9HJmA==
-X-Google-Smtp-Source: ACHHUZ4Em/Ifysew+y1s7Iw/jNPQp6xq0vy6/GtUvreRdDs/WnjMo3QTxpW0ZCC9qOFrwQpK8dyXCg==
-X-Received: by 2002:aa7:cb17:0:b0:50c:2215:317e with SMTP id s23-20020aa7cb17000000b0050c2215317emr8192954edt.15.1687283554877;
-        Tue, 20 Jun 2023 10:52:34 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id ca22-20020aa7cd76000000b0051bc7483bc7sm1522173edb.78.2023.06.20.10.52.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jun 2023 10:52:34 -0700 (PDT)
-Message-ID: <f038a41a-bed5-38f3-889c-39c42f024393@linaro.org>
-Date:   Tue, 20 Jun 2023 19:52:31 +0200
+        Tue, 20 Jun 2023 13:52:48 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 787211728;
+        Tue, 20 Jun 2023 10:52:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AE5841063;
+        Tue, 20 Jun 2023 10:53:29 -0700 (PDT)
+Received: from [10.57.24.104] (unknown [10.57.24.104])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AD4D43F64C;
+        Tue, 20 Jun 2023 10:52:42 -0700 (PDT)
+Message-ID: <a0101269-1d8b-d4e1-52b4-250a99b395fa@arm.com>
+Date:   Tue, 20 Jun 2023 18:52:59 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: pinctrl: qcom,sm8350-lpass-lpi: add
- SM8350 LPASS TLMM
+ Thunderbird/102.11.0
+Subject: Re: [RESEND][PATCH v2 3/3] schedutil: trace: Add tracing to capture
+ filter out requests
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230619092735.20323-1-krzysztof.kozlowski@linaro.org>
- <20230620172753.GA3858158-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230620172753.GA3858158-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org, rostedt@goodmis.org,
+        mhiramat@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, delyank@fb.com,
+        qyousef@google.com, kernel test robot <lkp@intel.com>
+References: <20230522145702.2419654-1-lukasz.luba@arm.com>
+ <20230522145702.2419654-4-lukasz.luba@arm.com>
+ <20230531183105.r5tqpdx5axoogkzp@airbuntu>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20230531183105.r5tqpdx5axoogkzp@airbuntu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/06/2023 19:27, Rob Herring wrote:
-> On Mon, Jun 19, 2023 at 11:27:33AM +0200, Krzysztof Kozlowski wrote:
->> Add bidings for pin controller in SM8350 Low Power Audio SubSystem
-> 
-> bidings?
+Hi Qais,
 
-It's actually real word...
-https://en.wiktionary.org/wiki/bidings
+I have somehow missed your feedback on this series.
 
-:)
-
->> +examples:
->> +  - |
->> +    #include <dt-bindings/sound/qcom,q6afe.h>
+On 5/31/23 19:31, Qais Yousef wrote:
+> On 05/22/23 15:57, Lukasz Luba wrote:
+>> Some of the frequency update requests coming form the task scheduler
+>> might be filter out. It can happen when the previous request was served
+>> not that long ago (in a period smaller than provided by the cpufreq driver
+>> as minimum for frequency update). In such case, we want to know if some of
+>> the frequency updates cannot make through.
+>> Export the new tracepoint as well. That would allow to handle it by a
+>> toolkit for trace analyzes.
+>>
+>> Reported-by: kernel test robot <lkp@intel.com> # solved tricky build
+>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>> ---
+>>   include/trace/events/sched.h     |  4 ++++
+>>   kernel/sched/cpufreq_schedutil.c | 10 ++++++++--
+>>   2 files changed, 12 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
+>> index dbfb30809f15..e34b7cd5de73 100644
+>> --- a/include/trace/events/sched.h
+>> +++ b/include/trace/events/sched.h
+>> @@ -739,6 +739,10 @@ DECLARE_TRACE(uclamp_update_tsk_tp,
+>>   	TP_PROTO(struct task_struct *tsk, int uclamp_id,  unsigned int value),
+>>   	TP_ARGS(tsk, uclamp_id, value));
+>>   
+>> +DECLARE_TRACE(schedutil_update_filtered_tp,
+>> +	TP_PROTO(int cpu),
+>> +	TP_ARGS(cpu));
 >> +
->> +    lpass_tlmm: pinctrl@33c0000 {
+>>   #endif /* _TRACE_SCHED_H */
+>>   
+>>   /* This part must be outside protection */
+>> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+>> index f462496e5c07..4f9daf258a65 100644
+>> --- a/kernel/sched/cpufreq_schedutil.c
+>> +++ b/kernel/sched/cpufreq_schedutil.c
+>> @@ -6,6 +6,8 @@
+>>    * Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>    */
+>>   
+>> +EXPORT_TRACEPOINT_SYMBOL_GPL(schedutil_update_filtered_tp);
+>> +
+>>   #define IOWAIT_BOOST_MIN	(SCHED_CAPACITY_SCALE / 8)
+>>   
+>>   struct sugov_tunables {
+>> @@ -318,8 +320,10 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
+>>   
+>>   	ignore_dl_rate_limit(sg_cpu);
+>>   
+>> -	if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
+>> +	if (!sugov_should_update_freq(sg_cpu->sg_policy, time)) {
+>> +		trace_schedutil_update_filtered_tp(sg_cpu->cpu);
+>>   		return false;
+>> +	}
 > 
-> Drop unused label.
+> Can't we have something more generic here too? Are you interested to count
+> these events? How do you plan to use it?
+
+The plan is to record those events, count them and maybe adjust the FW
+if the frequency switching capabilities are too low, e.g. 4ms...
+
+We need those numbers to point out that there is a need for faster
+FW micro-controller to serve those incoming requests.
+
 > 
-> With those,
+> I think this will be a very noisy event by the way.
 
-It is used through gpio-ranges below:
+Could be, but on the other hand for those statistical analysis
+'the more the better'. It will also depend on number of
+CPUs in the cluster, e.g. 4 CPUs vs 1 CPU.
 
-gpio-ranges = <&lpass_tlmm 0 0 15>;
+I don't know when we will switch to this per-cpu cpufreq mode
+when all CPUs behave like independent DVFS. Juno mainline kernel and FW
+supports that mode. We would have to compare those two modes and
+measure how much we gain/loose when using one and not the other.
 
-Best regards,
-Krzysztof
+Furthermore, we already suspect some of our integration testing for
+EAS-mainline (on Juno) failing due to filtered out requests. How much
+that would impact other boards - it would be nice to see in traces.
 
+Thanks for your feedback!
+Lukasz
