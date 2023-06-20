@@ -2,75 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D720736DFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B36736E16
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:57:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231985AbjFTN41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 09:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53358 "EHLO
+        id S232397AbjFTN5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 09:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231486AbjFTN4Z (ORCPT
+        with ESMTP id S232381AbjFTN5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 09:56:25 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BB510A;
-        Tue, 20 Jun 2023 06:56:23 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-39ec45b22f6so2146699b6e.0;
-        Tue, 20 Jun 2023 06:56:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687269383; x=1689861383;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xu/aiaH31TZLMVI9Tp+a0lmhaF9umbZZEeQm47dZ8JI=;
-        b=CnJeqkL3ZzkSmcdCSOkUt4xDGbdWTfBD9wl0ylaMOlqI2xPnNVZzwO2QZ3QfjpuKBT
-         CbhB2sgp2Fie6iY/IYbZOyYOaY4LO9ZxAT4dCb2CiF0dRB9s6cmP/LId/jxJNi5VQDrd
-         NjVUiWyNZHhQgUIH3ncvvgMHijgrvc1qBHwqf+I8IQip4dQnqUAuY6CP8qLAO8AbZCIx
-         MZ6I5IkWFqLOLxpt1rsGPeqZBQGquBA8eyTl2gzTQoeNHA5iYHCRkyugMwCjSfkSybFB
-         RssckhgYXhNcvjeqi4wQz6OGu1pabVgySO1l3Q4K3L1vAfVkbNSTHe89T/OdwlTkvaOu
-         5B5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687269383; x=1689861383;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Xu/aiaH31TZLMVI9Tp+a0lmhaF9umbZZEeQm47dZ8JI=;
-        b=JB9dQCRXDFTOlg7lA5ZR/AUZ92MozrnygrrTLA7RWQJNhaqDK5t41r0PyYVt7rwedl
-         Utj4Dm4izwJ35KL+SjGf7JaOgTe9CDvEEZ6itA6hfqVLsEhXeIDylsvcsA/dboPDNVk0
-         FSPbirJFsoHuPpQzcn6g2g5BXDd6FQuVH/kKykr0jUTjEUfD5NWnFbIdD+P1Q1xje/tu
-         QEyyrJDU7yLDyYc5a7pTfeCv3BlTMHVNONKuCeirGbx/T9A1FmS0Q/eaiifYk8o1UZMq
-         Z8t8kFhS1Bog/dzbExgovQ5AYBwy09u+c0gRcx2XiaIdq5OI3v3lYdvyhe+2+o/NxeC6
-         rTXw==
-X-Gm-Message-State: AC+VfDyIduL82FbY/RLkDfWdxDVBAIDTIW3beIyUSdBUxD+TH+upUYHa
-        VmqCXGkphc3G/U6tLqgd7fhKa2wLFQifcL+ZQ6Q=
-X-Google-Smtp-Source: ACHHUZ76Quqktp3zHudolMcMsRYtqnxo/hI1u1UexkjnqkDAG0iaKT+k6idf61xtF/ADg/Dr9l3UsFl/R6wztd8sVOI=
-X-Received: by 2002:a05:6808:6397:b0:39c:767e:bfc6 with SMTP id
- ec23-20020a056808639700b0039c767ebfc6mr11697031oib.10.1687269382925; Tue, 20
- Jun 2023 06:56:22 -0700 (PDT)
+        Tue, 20 Jun 2023 09:57:50 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA41A4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:57:48 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qBbre-0003CE-4D; Tue, 20 Jun 2023 15:57:46 +0200
+Message-ID: <6872f437-03e9-32dd-b473-9a984df8915b@leemhuis.info>
+Date:   Tue, 20 Jun 2023 15:57:45 +0200
 MIME-Version: 1.0
-References: <20230614095158.1133673-1-elver@google.com> <CA+fCnZdy4TmMacvsPkoenCynUYsyKZ+kU1fx7cDpbh_6=cEPAQ@mail.gmail.com>
- <CANpmjNOSnVNy14xAVe6UHD0eHuMpxweg86+mYLQHpLM1k0H_cg@mail.gmail.com>
- <CA+fCnZccdLNqtxubVVtGPTOXcSoYfpM9CHk-nrYsZK7csC77Eg@mail.gmail.com> <ZJGSqdDQPs0sRQTb@elver.google.com>
-In-Reply-To: <ZJGSqdDQPs0sRQTb@elver.google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 20 Jun 2023 15:56:10 +0200
-Message-ID: <CA+fCnZdZ0=kKN6hE_OF7jV_r_FjTh3FZtkGHBD57ZfqCXStKHg@mail.gmail.com>
-Subject: Re: [PATCH] kasan: add support for kasan.fault=panic_on_write
-To:     Marco Elver <elver@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>, kasan-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Catalin Marinas <catalin.marinas@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: =?UTF-8?Q?Re=3a_=5bregression=5d_Bug=c2=a0216818_-_The_microphone_m?=
+ =?UTF-8?Q?ute_led_not_working_after_linux_6?=
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     sonic82003@gmail.com, plum <plumerlis@gmail.com>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>,
+        alsa-devel@alsa-project.org, LKML <linux-kernel@vger.kernel.org>
+References: <bf52f4c5-5cca-26d7-7fb2-ac8ecb5b24c5@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <bf52f4c5-5cca-26d7-7fb2-ac8ecb5b24c5@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1687269468;2cc23710;
+X-HE-SMSGID: 1qBbre-0003CE-4D
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,43 +48,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 1:51=E2=80=AFPM Marco Elver <elver@google.com> wrot=
-e:
->
-> > Ah, right. I did a quick google to check when I was writing the
-> > response and found this: https://lwn.net/Articles/882963/. But looks
-> > like that cover letter is wrong and the documentation is right. I
-> > wonder what the point of the asymmetric mode is then.
->
-> Maybe not as strong, but asymm mode makes sense from a microarch point
-> of view, where writes are always committed into a store buffer, but
-> reads can only commit when the data (incl. tag) is available.
+[TLDR: This mail in primarily relevant for Linux kernel regression
+tracking. See link in footer if these mails annoy you.]
 
-Yeah, I get that it can be a bit better than async with a similar
-slowdown, but there's little value in catching only reads from the
-security standpoint.
+On 19.12.22 10:17, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker speaking.
+> 
+> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+> kernel developer don't keep an eye on it, I decided to forward it by
+> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=216818 :
 
-> > So the current code that you have should work perfectly. The only
-> > change I'd like to see is in the documentation.
->
-> Something like this (or more?)
->
-> diff --git a/Documentation/dev-tools/kasan.rst b/Documentation/dev-tools/=
-kasan.rst
-> index 7f37a46af574..3c58392d931e 100644
-> --- a/Documentation/dev-tools/kasan.rst
-> +++ b/Documentation/dev-tools/kasan.rst
-> @@ -135,6 +135,8 @@ disabling KASAN altogether or controlling its feature=
-s:
->    fault occurs, the information is stored in hardware (in the TFSR_EL1
->    register for arm64). The kernel periodically checks the hardware and
->    only reports tag faults during these checks.
-> +  Note that ``kasan.fault=3Dpanic_on_write`` results in panic for all
-> +  asynchronously checked accesses.
->    Asymmetric mode: a bad access is detected synchronously on reads and
->    asynchronously on writes.
+Not really sure if this issue was handled appropriately, but whatever,
+at this point it's likely not worth making fuzz about:
 
-Could you move this to the section that describes the kasan.fault
-flag? This seems more consistent.
+#regzbot inconclusive: likely unresolved (see thread and bugzilla for
+details; Jaroslav argued it's not a regression)
+#regzbot ignore-activity
 
-Thanks!
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
+
+
+
+
+
