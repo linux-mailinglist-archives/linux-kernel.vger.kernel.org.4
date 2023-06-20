@@ -2,108 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D774736F12
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E942D736F36
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbjFTOs6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 10:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53236 "EHLO
+        id S232756AbjFTOw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 10:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233096AbjFTOs4 (ORCPT
+        with ESMTP id S231954AbjFTOwy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 10:48:56 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A85D95;
-        Tue, 20 Jun 2023 07:48:55 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-57059626276so54309167b3.3;
-        Tue, 20 Jun 2023 07:48:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687272534; x=1689864534;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=P/BJYkX6bywThpMtgw8TodK1xxjg+6M9424vm6AiX+Y=;
-        b=lgOaNfjNi640O9ZZHKv/WLheDYiuIbH18qLmGDyCLONcthMEFX+H5LSmG9gOVzksDc
-         CQLFSTiuRlk1VWwhUbieZipxET0Zc/GAVPhzolyepEoZygQotuQZVRD4nYvzGaZn3PMC
-         WXvs926H2+4CKi5nARSFzigY4G/qCPjPOyomRJuWmIzfmVoL5hLT6xD++D+33HDh3YMr
-         1cqM3g2fkpfHrsN2JbWw5fstY/OCkyK5XGks3hfOCC7dlfBe7YuijuzHYaingCIMGyhO
-         7A7hUXQGBFqCTSLv4y8EyFKzwPGWCcONQVgOV5kPQTLtSvEcUnhORCwwAO4m6perxe7W
-         w98g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687272534; x=1689864534;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P/BJYkX6bywThpMtgw8TodK1xxjg+6M9424vm6AiX+Y=;
-        b=WeTSeXY9WRjxeItbrVA+Ij32CY7KUIaEpAvePLhQZb0YB2YuIBOpUSdgsaueESc/ns
-         kozn0WnQka/fTErsply24EtVUXmOse9K8dbMW86k72ITADWj00u7mHBC7E0so2/gfLyI
-         opiNBd0UPnYk2xqLaEMo5+kJYLzZeBg57Wka1cSK4mxW62pu0cwaQd8Blym4GCs0PsxQ
-         3rWrmmU/XYwlYG8fd27Aq2noePq+z5UD+/VMgPgPacayOkvL/KW+CN4qpLOHSQHec0FK
-         VeUTJ59pYeWBOcZXwUDu39q/LwTKQ2f7hlmrMLQfDAOL90uYg6eGiG/ZuTaRDgSVcuHs
-         15kA==
-X-Gm-Message-State: AC+VfDwH5jEwatinT1uK5KqvBXRxXX9En5VK/G94Zwd04c4uobrgUrnP
-        fxcdEkijVo8l+CmNE8QrRa1wKD6fAL/iubD0RGI=
-X-Google-Smtp-Source: ACHHUZ53FgFHl4GIT8XPufVJ5Bcyl9yhhVb0g6Za2zAKdfIAPBal6veXmG1rjZwhgPo+3i8UpRxR6fhd5byzeSU2tg4=
-X-Received: by 2002:a25:424b:0:b0:ba8:3a86:15ca with SMTP id
- p72-20020a25424b000000b00ba83a8615camr10675163yba.60.1687272534290; Tue, 20
- Jun 2023 07:48:54 -0700 (PDT)
+        Tue, 20 Jun 2023 10:52:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49701716
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 07:52:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687272722;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ELfQweYC/8dcGoZH9AqfrEpzRTMlTZCKvStu6Pf4W0w=;
+        b=f0J3Y1poW/SlPh66cw+iHLrjZo37PgCBHAXxjVBekPafLQQoz/a32OlBOllV5K7WyvEXW/
+        GjrM2fMY6B0HhHmR8euVJhWc00/j1DoSFdQUT0FQNKA7p9BfARRTEcQJNB2Lqb1wbMFv31
+        wgdzn8rGZpdeGJi9v5NtuWO0O56h628=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-119-bNBdKun_PNWBBkWTQYd94g-1; Tue, 20 Jun 2023 10:51:56 -0400
+X-MC-Unique: bNBdKun_PNWBBkWTQYd94g-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B55B1104459E;
+        Tue, 20 Jun 2023 14:48:57 +0000 (UTC)
+Received: from p1.luc.cera.cz (unknown [10.43.2.89])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 895012166B26;
+        Tue, 20 Jun 2023 14:48:56 +0000 (UTC)
+From:   Ivan Vecera <ivecera@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     Michael Chan <michael.chan@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH net-next] bnxt_en: Link representors to PCI device
+Date:   Tue, 20 Jun 2023 16:48:55 +0200
+Message-Id: <20230620144855.288443-1-ivecera@redhat.com>
 MIME-Version: 1.0
-References: <20230314141904.1210824-1-tvrtko.ursulin@linux.intel.com>
- <20230314141904.1210824-3-tvrtko.ursulin@linux.intel.com> <CACvgo52Bb3kBua8dh+eac6dhSwiJLMGAdGDAa+LQYoOwCLPLNA@mail.gmail.com>
- <77587046-aede-f625-6a35-55bf9c5f1179@linux.intel.com>
-In-Reply-To: <77587046-aede-f625-6a35-55bf9c5f1179@linux.intel.com>
-From:   Emil Velikov <emil.l.velikov@gmail.com>
-Date:   Tue, 20 Jun 2023 15:48:42 +0100
-Message-ID: <CACvgo51DmeM7Tbboozxu3Yn-Pe-eALVTkiq4vZBJJHKfqP_HeA@mail.gmail.com>
-Subject: Re: [RFC 02/10] drm: Update file owner during use
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc:     Intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Brian Welty <brian.welty@intel.com>, Kenny.Ho@amd.com,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?St=C3=A9phane_Marchesin?= <marcheu@chromium.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Dave Airlie <airlied@redhat.com>, Tejun Heo <tj@kernel.org>,
-        cgroups@vger.kernel.org, "T . J . Mercier" <tjmercier@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tvrtko
+Link VF representors to parent PCI device to benefit from
+systemd defined naming scheme.
 
-Sorry for the delay, real life and other obligations got in the way.
+Without this change the representor is visible as ethN.
 
-On Thu, 8 Jun 2023 at 15:26, Tvrtko Ursulin
-<tvrtko.ursulin@linux.intel.com> wrote:
-> On 21/04/2023 13:13, Emil Velikov wrote:
+Signed-off-by: Ivan Vecera <ivecera@redhat.com>
+---
+ drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Are you okay if I just paste your very fine explanation verbatim, with
-> credits?
->
+diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.c
+index 2f1a1f2d2157..1467b94a6427 100644
+--- a/drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.c
++++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.c
+@@ -468,6 +468,7 @@ static void bnxt_vf_rep_netdev_init(struct bnxt *bp, struct bnxt_vf_rep *vf_rep,
+ 	struct net_device *pf_dev = bp->dev;
+ 	u16 max_mtu;
+ 
++	SET_NETDEV_DEV(dev, &bp->pdev->dev);
+ 	dev->netdev_ops = &bnxt_vf_rep_netdev_ops;
+ 	dev->ethtool_ops = &bnxt_vf_rep_ethtool_ops;
+ 	/* Just inherit all the featues of the parent PF as the VF-R
+-- 
+2.39.3
 
-Yes, feel free to use as much of if as you see reasonable.
-
-> > I also had a brief look at 01/10, although I cannot find many
-> > references for the pid <> tguid mappings. Be that on the kernel side
-> > or userspace - do you have any links that I can educate myself?
->
-> TGID or thread group leader. For single threaded userspace TGID equals
-> to PID, while for multi-threaded first thread TGID equals PID/TID, while
-> additional threads PID/TID does not equal TGID. Clear, as mud? :) My
-> POSIX book is misplaced somewhere having not consulted it years... :)
->
-
-Ack. /me looks into actually buying one, perhaps
-
-Thanks
-Emil
