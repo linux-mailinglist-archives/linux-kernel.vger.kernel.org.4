@@ -2,101 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D097371ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E8CB7371F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:42:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbjFTQlk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 12:41:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37020 "EHLO
+        id S231144AbjFTQm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 12:42:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjFTQlg (ORCPT
+        with ESMTP id S229650AbjFTQmz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 12:41:36 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F8DC0;
-        Tue, 20 Jun 2023 09:41:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687279296; x=1718815296;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Ixbk6Is2biXcZua8H62STJO3xjYtt2Imiuj7LbOAMf0=;
-  b=YRidF2qtcMHUUCSDF55mqav/cTHpZyUphHHo/v5i1lNkQ+W0Eby9nHYV
-   MuVyO9pXiAT59lj23oUJt+l3Klr3XPWLJG9NQx+DXjQnpRl6/icF+cl+A
-   RS7WInxh4fwhVICYC7pMF+hmVespcrRD3f81xZGLRCfXkg+cXrM7eNteu
-   erZelrLMmHvuBtRbG2p/M4gUSuh761kb45B4gM4bGVMp4IyCHMlV9VtaF
-   mgkEOKicot/8x8umWWu0CiHcLnt4Ss3r24+upJXOGvHl0gtN0xUcKfnXb
-   BAPIla23RyxNJMqOBJoTxU/q+F1GEgDVZKhpxovHhFBIAUBqrS7aAykrL
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="358785603"
-X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
-   d="scan'208";a="358785603"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 09:40:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="743838745"
-X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
-   d="scan'208";a="743838745"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 20 Jun 2023 09:40:24 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qBeOz-005Ikn-2E;
-        Tue, 20 Jun 2023 19:40:21 +0300
-Date:   Tue, 20 Jun 2023 19:40:21 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-mm <linux-mm@kvack.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Pengfei Xu <pengfei.xu@intel.com>, yi1.lai@intel.com
-Subject: Re: selftests: gpio: crash on arm64
-Message-ID: <ZJHWdcP+PDaNrw07@smile.fi.intel.com>
-References: <CA+G9fYv94gx8+-JMzbmQaue3q3y6QdBmsGUCdD-26X5XavL3Ag@mail.gmail.com>
- <ZAocZRZh4FQRH3lc@smile.fi.intel.com>
- <CA+G9fYsOttth+k3Ki8LK_ZiayvXa0bAg-DmQAaFHZeEyR=6Lrw@mail.gmail.com>
- <CACRpkdbUYWcFiRh+Y=MOekv2RjSP4sB2t5tVrSsz54Eez6wmVg@mail.gmail.com>
+        Tue, 20 Jun 2023 12:42:55 -0400
+Received: from sender-of-o51.zoho.in (sender-of-o51.zoho.in [103.117.158.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BABBC0;
+        Tue, 20 Jun 2023 09:42:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1687279320; cv=none; 
+        d=zohomail.in; s=zohoarc; 
+        b=IOZtmLgZDADmJSjzSQ51F4PlLBd4cp53RGLr7LF+QWXelBrTbhJN6PjZisTZNJUDPm7c+y2I8ByXXrJIBgqTAMO+6kDVHtLIu/GRAvFFyHI08Vc+Cp4KPetrOlTE157AnAK8WPpgHhMZvq03LC51Z4oKoOb3dPASorNnt7geTlg=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+        t=1687279320; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=qJi69R81WJTJUXdtcjhBcxv9lDqnm8in4CQ0BRYzBHk=; 
+        b=Jb5sTL9AgfDfwL6sWiqC2QoEdO/WRDWJUK7xk458XuD2p1XSuu6OgqtgIIKNUIAHlGIy5sdR3tEdjXLztJFvgZUzlGuuPbr3T/6YrRzO79QcXs3CDP5OKpA+XocZjRjX0CqxLQUm3RG3EoW9SrOun0EpHqj2lsCJFDffJBS69lU=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+        dkim=pass  header.i=siddh.me;
+        spf=pass  smtp.mailfrom=code@siddh.me;
+        dmarc=pass header.from=<code@siddh.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1687279320;
+        s=zmail; d=siddh.me; i=code@siddh.me;
+        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=qJi69R81WJTJUXdtcjhBcxv9lDqnm8in4CQ0BRYzBHk=;
+        b=QUn0+eZZE9p4z9aiuHiaNFWed+IwW02PqYZlNjruEiJ1X7xiTwTk+pmX04PcX+bG
+        bPMJxc8a9VPSknZsuS+zS2effZQ8iignMjwfPh6kG86LK4bkthgJzNrLnTqn7QwsGB2
+        GjS3jMPx8DR9fl1EWcj0+54llvSXV+UK/hlucuW8=
+Received: from mail.zoho.in by mx.zoho.in
+        with SMTP id 1687279290236435.1731206576702; Tue, 20 Jun 2023 22:11:30 +0530 (IST)
+Date:   Tue, 20 Jun 2023 22:11:30 +0530
+From:   Siddh Raman Pant <code@siddh.me>
+To:     "Dave Kleikamp" <dave.kleikamp@oracle.com>,
+        "Hoi Pok Wu" <wuhoipok@gmail.com>,
+        "Liu Shixin" <liushixin2@huawei.com>,
+        "Dongliang Mu" <mudongliangabcd@gmail.com>
+Cc:     "jfs-discussion" <jfs-discussion@lists.sourceforge.net>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "syzbot+d2cd27dcf8e04b232eb2" 
+        <syzbot+d2cd27dcf8e04b232eb2@syzkaller.appspotmail.com>,
+        "stable" <stable@vger.kernel.org>
+Message-ID: <188d9aec760.2dfe3b2e316758.4209928399951806088@siddh.me>
+In-Reply-To: <20230619131644.118332-1-code@siddh.me>
+References: <20230619131644.118332-1-code@siddh.me>
+Subject: Re: [PATCH v2] jfs: jfs_dmap: Validate db_l2nbperpage while
+ mounting
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACRpkdbUYWcFiRh+Y=MOekv2RjSP4sB2t5tVrSsz54Eez6wmVg@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 10:57:28AM +0200, Linus Walleij wrote:
-> On Mon, Apr 10, 2023 at 11:16 AM Naresh Kamboju
-> <naresh.kamboju@linaro.org> wrote:
+On Mon, 19 Jun 2023 18:46:44 +0530 I wrote:
+> Max number of pages = Page size / Min block size
 
-...
+Sorry for this typo, it should be max number of blocks (per page).
 
-> Add a pr_info() devm_gpio_chip_release() in drivers/gpio/gpiolib-devres.c
-> and see if the callback is even called. I think this could be the
-> problem: if that isn't cleaned up, there will be dangling references.
+Will fix and send.
 
-Side note: Since we have devres tracepoints, your patch seems an overkill :-)
-Just enable devres tracepoints and filter out by the function name. I believe
-that should work.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks,
+Siddh
