@@ -2,132 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CEC3737216
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:50:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B7C1737219
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbjFTQuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 12:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
+        id S231764AbjFTQuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 12:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjFTQuF (ORCPT
+        with ESMTP id S231736AbjFTQuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 12:50:05 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4492172C
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:50:03 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-25695bb6461so4086612a91.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:50:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=osandov-com.20221208.gappssmtp.com; s=20221208; t=1687279803; x=1689871803;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bSEahIWuWvh3A7BBDnL3sX3amCBedgDlTKV+iX+mItU=;
-        b=SxhmsbX6Uvs7i8kbMxodpZR+QM/TeG5Q9/PTbbf+nTBjNmZNZOIKh42iZEsrRuHeeF
-         Za2QQqgN/0XBz3zQ3YTVUZp5DtXQSK5A5Zwf8tBAmDZW+SS3fnGTD34ycbx29Al92BhO
-         35/b7SkO7kVeliy0yEr06uneHtycCB8sm33VyVIWxz+7xDGW8L4Mi7zYZYxmxkrcBkzJ
-         4IC/h1iG8McWH7Zte2mCOSCnb3MdR+c1C5YN5A94+aboMoHUtKT0bA+43YHMRzrOMG4S
-         DwjRkZm1CJHGCHg6BLv4jspf8oYa+YAAN8qntSwPW5g95H6Dux3/RpprTCvyHCzzZcNr
-         Ht7g==
+        Tue, 20 Jun 2023 12:50:32 -0400
+Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33451726;
+        Tue, 20 Jun 2023 09:50:31 -0700 (PDT)
+Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-3416b5df9b3so24759085ab.3;
+        Tue, 20 Jun 2023 09:50:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687279803; x=1689871803;
+        d=1e100.net; s=20221208; t=1687279831; x=1689871831;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bSEahIWuWvh3A7BBDnL3sX3amCBedgDlTKV+iX+mItU=;
-        b=Ph23qIyCOxtP73mybw+MazAfw8UqjVT5fImveiFZSfRBlfZ/GK2Ot70iDGLp7hM4U1
-         2RZplXBZK2om9YdpTANQUX3M7uxpU5wosL03KByKXDWdOhq8RAjlaqCoVC2uDjHVMCyV
-         ATrprocoMJlwm5MRkVg8yjwj0N1BNYG04Ark3ncKKOxo9y+oK7srkiYCaHNRVsueQbgt
-         xwzTvlI29Drf4XtX9vzd1savPA77nUWCERimgUjEA+znYikRhJhhywzvbB9e9qnkabMo
-         sYf22ZDdiyzzZgxVSdteCN26XRLcZpq/4wIUHA8FlJqUmvZMudT1ya89gtJ6WN7vUSnL
-         lf9g==
-X-Gm-Message-State: AC+VfDyV2KQj5WXN4ZjFEkI0TffdnHaAtA42djewdsrzQeZ/HxBITKI7
-        yGNQGg14uF7R7s6T1W71UvaDZdzXxWmd9XZq85g=
-X-Google-Smtp-Source: ACHHUZ5q1Ps0wpcvbhXOnSBBv6lSB4opr6Fio6gzh+fZ89ASCBCd62gJtbCxrdaFhw0jzwbhox4FCw==
-X-Received: by 2002:a17:90a:430a:b0:259:bff8:17a2 with SMTP id q10-20020a17090a430a00b00259bff817a2mr25100145pjg.0.1687279802961;
-        Tue, 20 Jun 2023 09:50:02 -0700 (PDT)
-Received: from telecaster ([2620:10d:c090:400::5:ea8e])
-        by smtp.gmail.com with ESMTPSA id na12-20020a17090b4c0c00b0023b3d80c76csm1753518pjb.4.2023.06.20.09.50.01
+        bh=3J+twO/vjQM/qWkeIhcjjpl1ciXpaPP0MAnGxmiVji8=;
+        b=f3HFScl/wxXBMJuWdyyi+4CoJoucPCDPf16feLtNyj8cwdgNRUP2TDlb522nrn64hZ
+         Cl6HliuBOONmhTLqdx1pbJeigrd9D05xfhUob4hC7BGkK3FLC9f0YFTYPNpwY7P3+nRS
+         JGdmmvRrJboq2NLisf9f+aLUMaGcEVVBZxtTTvL4LyW4QD+LMeld7vU7DG+xNlnGHB2z
+         5f8zTiVbuWrZhA4sjBb7FBhST+EP+RmvlXZv3LHFYnTuXfNNT+O2UMR/jDtG7uXEzTdJ
+         TLdG7ZAlaCGQ4j93BKgR+Y3mvTmwj338e+aq7WBq1xv0wA3pHT4VjUdMQoqNv6TZyZ+u
+         p4VQ==
+X-Gm-Message-State: AC+VfDzP+8f4weyCfEM7jSAGfLAqtyOsWdl9MagEA52po53uP6xYW0IB
+        6RlemfQX8JywmyxDKNqvgBTlZFimZA==
+X-Google-Smtp-Source: ACHHUZ7kWXURanD12QIIx+0GBD7ocA/PUqlmXY+3EM7bAaEKXip+6jUcuL1koF4S5eHi+04b0fdzHA==
+X-Received: by 2002:a92:de08:0:b0:342:28f1:75ae with SMTP id x8-20020a92de08000000b0034228f175aemr9154292ilm.12.1687279830895;
+        Tue, 20 Jun 2023 09:50:30 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id r27-20020a056638101b00b0041627abe120sm543091jab.160.2023.06.20.09.50.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 09:50:02 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 09:50:00 -0700
-From:   Omar Sandoval <osandov@osandov.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-debuggers@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [PATCH v2] x86/unwind/orc: add ELF section with ORC version
- identifier
-Message-ID: <ZJHYuH/DD6tqJ+bu@telecaster>
-References: <aef9c8dc43915b886a8c48509a12ec1b006ca1ca.1686690801.git.osandov@osandov.com>
- <20230614091751.GE1639749@hirez.programming.kicks-ass.net>
+        Tue, 20 Jun 2023 09:50:30 -0700 (PDT)
+Received: (nullmailer pid 3806154 invoked by uid 1000);
+        Tue, 20 Jun 2023 16:50:28 -0000
+Date:   Tue, 20 Jun 2023 10:50:28 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     jaswinder.singh@linaro.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, ilias.apalodimas@linaro.org,
+        masahisa.kojima@linaro.org
+Subject: Re: [PATCH] dt-bindings: arm: socionext: add bindings for the
+ Synquacer platform
+Message-ID: <20230620165028.GA3805350-robh@kernel.org>
+References: <20230616035813.255062-1-jaswinder.singh@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230614091751.GE1639749@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230616035813.255062-1-jaswinder.singh@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 11:17:51AM +0200, Peter Zijlstra wrote:
-> On Tue, Jun 13, 2023 at 02:14:56PM -0700, Omar Sandoval wrote:
-> > From: Omar Sandoval <osandov@fb.com>
-> > 
-> > Commits ffb1b4a41016 ("x86/unwind/orc: Add 'signal' field to ORC
-> > metadata") and fb799447ae29 ("x86,objtool: Split UNWIND_HINT_EMPTY in
-> > two") changed the ORC format. Although ORC is internal to the kernel,
-> > it's the only way for external tools to get reliable kernel stack traces
-> > on x86-64. In particular, the drgn debugger [1] uses ORC for stack
-> > unwinding, and these format changes broke it [2]. As the drgn
-> > maintainer, I don't care how often or how much the kernel changes the
-> > ORC format as long as I have a way to detect the change.
-> > 
-> > It suffices to store a version identifier in the vmlinux and kernel
-> > module ELF files (to use when parsing ORC sections from ELF), and in
-> > kernel memory (to use when parsing ORC from a core dump+symbol table).
-> > Rather than hard-coding a version number that needs to be manually
-> > bumped, Peterz suggested hashing the definitions from orc_types.h. If
-> > there is a format change that isn't caught by this, the hashing script
-> > can be updated.
-> > 
-> > This patch adds an .orc_header allocated ELF section containing the
-> > 20-byte hash to vmlinux and kernel modules, along with the corresponding
-> > __start_orc_header and __stop_orc_header symbols in vmlinux.
-> > 
-> > 1: https://github.com/osandov/drgn
-> > 2: https://github.com/osandov/drgn/issues/303
-> > 
-> > Signed-off-by: Omar Sandoval <osandov@fb.com>
+On Thu, Jun 15, 2023 at 10:58:13PM -0500, jaswinder.singh@linaro.org wrote:
+> From: Jassi Brar <jaswinder.singh@linaro.org>
 > 
-> Patch looks good to me; as a follow up I suppose we could verify the orc
-> hash on module load, to ensure the module and main kernel agree on the
-> ORC version used -- but we can do that later.
+> Socionext's DeveloperBox is based on the SC2A11B SoC (Synquacer).
+> Specify bindings for the platform and boards based on that.
 > 
-> > ---
-> > Hi,
-> > 
-> > This is v2 of my patch to make it possible for external tools like drgn
-> > to identify versions of the ORC format. As stated in v1 [1], I don't
-> > want ORC to be stable ABI; I just need a way to identify the format
-> > being used.
-> > 
-> > This version incorporates Peter's suggestion to hash the ORC definitions
-> > instead of requiring a manual version number; this is easier to maintain
-> > and more resilient to backports.
-> > 
-> > I would love to get this in before 6.4 is released, and then hopefully
-> > backport it to 6.3-stable.
-> 
-> So we're fairly late in the cycle and it would need justification to go
-> into objtool/urgent -- preferably only fixes at this point.
-> 
-> But given we 'broke' the ORC layout this cycle, we can mark this with
-> Fixes: for the two mentioned commits.
-> 
-> Josh?
+> Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
+> ---
+>  .../bindings/arm/socionext/synquacer.yaml     | 28 +++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/arm/socionext/synquacer.yaml
 
-Ping, Josh, any chance of getting this in to 6.4? Sorry to be cutting it
-so close.
+Should I pick this up or Socionext maintainers will?
