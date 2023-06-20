@@ -2,166 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B807E7376C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 23:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59ED97376CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 23:43:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229696AbjFTVlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 17:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56198 "EHLO
+        id S230017AbjFTVnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 17:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjFTVlM (ORCPT
+        with ESMTP id S229806AbjFTVno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 17:41:12 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 102F6170D
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:41:11 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 59608320091D;
-        Tue, 20 Jun 2023 17:41:07 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 20 Jun 2023 17:41:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
-        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1687297266; x=1687383666; bh=IF
-        jjY5roZiwIkKPSUbI5fcD7pRZU5oiVbQVG2wmNIyk=; b=h1fsw2NWh5JvfJotED
-        pWAHMvSeuUWwgN6ejG3ulwtxY01wU4Bx3GlAnbfz1blo++XmLfnxHXu5q4uhEg7F
-        +eYLNbG6BoJQ5pRcU5Cj6mdwbCYP6KGF63IR/OZua+A9/TlfNI4tbViujV44QOEs
-        eJ+A1QV2WW2PF9/QZBLhiyrDLnJH0+LJN/vsQvpePaCrxNO8t76TL+UBrhZhmktH
-        LinlWnVdLjxKPSGAd7nPewPGq8+2GADYL66Qi56cApOipg3zouDIsdaZpNISoKEN
-        XKNQ/rz1bMqc641hFOnMTVQRDKuHqKqFDD9aVLSTVA3YCQLv6O544XkAEMdj0kPF
-        JFow==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687297266; x=1687383666; bh=IFjjY5roZiwIk
-        KPSUbI5fcD7pRZU5oiVbQVG2wmNIyk=; b=eQVIyGYPd5rS5NNsI653/DGuL5SUK
-        zfEVfjFjKFYyoEX42Mj9taTFKf9Hj1miWpJEAxCHc2kgcdzXvIxgmxVJLC6QpMBh
-        FQF+ow+RfBVHLJC5YdQNGgYpR0eCQWSUq6ZMPVcvI2QIQrS1/H+qUCnwwl7HRAXG
-        H3XCAvT+yEJP1E7MiQdz92pc6oiR2EsO5weP6hyZd1eeh8n6Iovo58AgkEWezbHB
-        P7IUXc/0YuuMuCipInZ/A9Q7IDPtEk43/ap3+XudS15BIho0Yp+tlS/8SOgd7hPh
-        zzhYNjV89pOm0nKV5RD4DidRR/lNXZ8lqsMc+ytjAq1pOo9O7XQcZWrtA==
-X-ME-Sender: <xms:8hySZNIMIlgcTtc8vq-Cet9x9RyYvo4O1YfIPefGDxvbhBOJUp7J4A>
-    <xme:8hySZJI9klPjfnjBN05N5UrpBXO6HK3oj8nxM8OtHP9ExT9sB1RPfwJmtFEWGPsxM
-    CzsW4M5N1FcZAp_4w>
-X-ME-Received: <xmr:8hySZFu7jU7ucc5uMsZm3Pl03Ze9BJMuMf9Tq33aoikH0IklD-fWN1fYDKgrXgd8O3vUWOl-5kleHbK1d9RRmgq81vYSU2GuiJ8F0MNKuBhJjH8-4QLwppgEqnHY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefiedgtddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehnughr
-    vghsucfhrhgvuhhnugcuoegrnhgurhgvshesrghnrghrrgiivghlrdguvgeqnecuggftrf
-    grthhtvghrnhepueelhedvkeehvddvgeevleektefhteefueefhefhteeigffgtdegkeek
-    geeigeeunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnhgurhgvshesrghnrghrrgiivghl
-    rdguvg
-X-ME-Proxy: <xmx:8hySZObzc6904TBtXY1rG1ULqGHOca2QZIe3QIk7sdvS8-yd39Kecg>
-    <xmx:8hySZEZBy2n069RmgmNkPql71Ezw28Pt1gYeCwxCB0OYEdaPQ6Rg-A>
-    <xmx:8hySZCBLngn1_K_dXbDGHhypRzqpiip6M6n-Z5E5Qu_uE8QROUeM4w>
-    <xmx:8hySZCnapVWhKAW2-ZPTe9TKOkxSK0whOm8l8FtHlSp8d-bojD4eaQ>
-Feedback-ID: id4a34324:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 20 Jun 2023 17:41:06 -0400 (EDT)
-Date:   Tue, 20 Jun 2023 14:41:05 -0700
-From:   Andres Freund <andres@anarazel.de>
+        Tue, 20 Jun 2023 17:43:44 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3B7172C
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:43:42 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-30fbf253dc7so4139301f8f.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:43:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687297421; x=1689889421;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OFOIV5n7LYzSxODkxerJSJAEZ596/FRwMkn7FgiJCPM=;
+        b=OW3C6O+zZOenJS3jTySNr7Xrwf1eS4GHjg0AiTKXTVvRFNnvkZupDNuh8ErLLKUKX+
+         NdxOc25lYONtyKd40AZGJBWVqC4313oQ10voKXdNV/lkJJmit2E+7RKf5ZlZ8+4ydL3E
+         69WSh5Y83A+OhCkl2Q6CIRwBLOjzob8TdlEzK2XwyX03H5fAjNHnC0WpWBe0+uBLCTjH
+         XyfqIFG6X7uLBHyA/+v8ZjFFqi6cH8rIdZqB9qUJW7OlrBiTdVEBjIqX5fT/ggfY+8Bn
+         QAaMBF3acmbInhir+dzE/DQAaHKKmR73+E0Zl/e09CCidEa+gQN0xva+mlHSOMDpH+DB
+         Izmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687297421; x=1689889421;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OFOIV5n7LYzSxODkxerJSJAEZ596/FRwMkn7FgiJCPM=;
+        b=je8Nwh0GsuJSV48z1gifJuJGUry1/Qzl1iJHbVd6eJ3Q+6+aPX2UWAevEpwNfPNynh
+         pflK3uNyziKMkNu2H7h/efRheugi3Igd6SK5tTg1WpGAowsA/csxkwlEbGMbCQxCmXcx
+         psL9pU7NB7d12Hpn44eJtC6FCfwoxkZo7WojT2TNHEtyGtTRoKHqjySpfcYimf+Io2Si
+         aT7uSqzlhI26GX/42e1jaEs8ioPeEnrhmzKnIMDk8MGZ31fa78VT7t4fDhOp0WvipfGT
+         HIkXSdZWI1nNs6bn6S50nNLqLs9q2nUKXyafUP45cO8yuocs9ZDzQ0ZfNUfCJJF2YVPT
+         VKlA==
+X-Gm-Message-State: AC+VfDw2j5sBx/AtBhXCZhQiobDvYB+jpioiSZJe0yRZCu4PvnJZ75Kg
+        XCYI/cObyoRAJ0UuzuXsIX4=
+X-Google-Smtp-Source: ACHHUZ45fYpIIZajjBz0hE2VIpo921OqmDAvp90wUO1IreQfyV3apYvKNRUnEVb4DlVT1q98uSd7lw==
+X-Received: by 2002:a5d:45c3:0:b0:311:1944:ad33 with SMTP id b3-20020a5d45c3000000b003111944ad33mr10814813wrs.12.1687297421070;
+        Tue, 20 Jun 2023 14:43:41 -0700 (PDT)
+Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.gmail.com with ESMTPSA id t16-20020a5d49d0000000b0030aed4223e0sm2784675wrs.105.2023.06.20.14.43.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 14:43:40 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 22:43:39 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
 To:     Peter Xu <peterx@redhat.com>
-Cc:     David Stevens <stevensd@chromium.org>, linux-mm@kvack.org,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Yang Shi <shy828301@gmail.com>,
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mike Rapoport <rppt@kernel.org>,
         David Hildenbrand <david@redhat.com>,
-        Jiaqi Yan <jiaqiyan@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 4/4] mm/khugepaged: maintain page cache uptodate flag
-Message-ID: <20230620214105.3d4tm54gzodcx3uk@awork3.anarazel.de>
-References: <20230404120117.2562166-1-stevensd@google.com>
- <20230404120117.2562166-5-stevensd@google.com>
- <20230620205547.qzmivkjox2hkpzmm@awork3.anarazel.de>
- <ZJIWAvTczl0rHJBv@x1n>
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        John Hubbard <jhubbard@nvidia.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        James Houghton <jthoughton@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [PATCH v2 5/8] mm/gup: Accelerate thp gup even for "pages !=
+ NULL"
+Message-ID: <956f7c72-4c7d-43a5-8786-5fdaa9010f7b@lucifer.local>
+References: <20230619231044.112894-1-peterx@redhat.com>
+ <20230619231044.112894-6-peterx@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZJIWAvTczl0rHJBv@x1n>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230619231044.112894-6-peterx@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, Jun 19, 2023 at 07:10:41PM -0400, Peter Xu wrote:
+> The acceleration of THP was done with ctx.page_mask, however it'll be
+> ignored if **pages is non-NULL.
+>
+> The old optimization was introduced in 2013 in 240aadeedc4a ("mm:
+> accelerate mm_populate() treatment of THP pages").  It didn't explain why
+> we can't optimize the **pages non-NULL case.  It's possible that at that
+> time the major goal was for mm_populate() which should be enough back then.
+>
+> Optimize thp for all cases, by properly looping over each subpage, doing
+> cache flushes, and boost refcounts / pincounts where needed in one go.
+>
+> This can be verified using gup_test below:
+>
+>   # chrt -f 1 ./gup_test -m 512 -t -L -n 1024 -r 10
+>
+> Before:    13992.50 ( +-8.75%)
+> After:       378.50 (+-69.62%)
+>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>  mm/gup.c | 51 ++++++++++++++++++++++++++++++++++++++++++++-------
+>  1 file changed, 44 insertions(+), 7 deletions(-)
+>
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 4a00d609033e..b50272012e49 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -1199,16 +1199,53 @@ static long __get_user_pages(struct mm_struct *mm,
+>  			goto out;
+>  		}
+>  next_page:
+> -		if (pages) {
+> -			pages[i] = page;
+> -			flush_anon_page(vma, page, start);
+> -			flush_dcache_page(page);
+> -			ctx.page_mask = 0;
+> -		}
+> -
+>  		page_increm = 1 + (~(start >> PAGE_SHIFT) & ctx.page_mask);
+>  		if (page_increm > nr_pages)
+>  			page_increm = nr_pages;
+> +
+> +		if (pages) {
+> +			struct page *subpage;
+> +			unsigned int j;
+> +
+> +			/*
+> +			 * This must be a large folio (and doesn't need to
+> +			 * be the whole folio; it can be part of it), do
+> +			 * the refcount work for all the subpages too.
+> +			 *
+> +			 * NOTE: here the page may not be the head page
+> +			 * e.g. when start addr is not thp-size aligned.
+> +			 * try_grab_folio() should have taken care of tail
+> +			 * pages.
+> +			 */
+> +			if (page_increm > 1) {
+> +				struct folio *folio;
+> +
+> +				/*
+> +				 * Since we already hold refcount on the
+> +				 * large folio, this should never fail.
+> +				 */
+> +				folio = try_grab_folio(page, page_increm - 1,
+> +						       foll_flags);
+> +				if (WARN_ON_ONCE(!folio)) {
+> +					/*
+> +					 * Release the 1st page ref if the
+> +					 * folio is problematic, fail hard.
+> +					 */
+> +					gup_put_folio(page_folio(page), 1,
+> +						      foll_flags);
+> +					ret = -EFAULT;
+> +					goto out;
+> +				}
 
-On 2023-06-20 17:11:30 -0400, Peter Xu wrote:
-> On Tue, Jun 20, 2023 at 01:55:47PM -0700, Andres Freund wrote:
-> > On 2023-04-04 21:01:17 +0900, David Stevens wrote:
-> > > From: David Stevens <stevensd@chromium.org>
-> > > 
-> > > Make sure that collapse_file doesn't interfere with checking the
-> > > uptodate flag in the page cache by only inserting hpage into the page
-> > > cache after it has been updated and marked uptodate. This is achieved by
-> > > simply not replacing present pages with hpage when iterating over the
-> > > target range.
-> > > 
-> > > The present pages are already locked, so replacing them with the locked
-> > > hpage before the collapse is finalized is unnecessary. However, it is
-> > > necessary to stop freezing the present pages after validating them,
-> > > since leaving long-term frozen pages in the page cache can lead to
-> > > deadlocks. Simply checking the reference count is sufficient to ensure
-> > > that there are no long-term references hanging around that would the
-> > > collapse would break. Similar to hpage, there is no reason that the
-> > > present pages actually need to be frozen in addition to being locked.
-> > > 
-> > > This fixes a race where folio_seek_hole_data would mistake hpage for
-> > > an fallocated but unwritten page. This race is visible to userspace via
-> > > data temporarily disappearing from SEEK_DATA/SEEK_HOLE. This also fixes
-> > > a similar race where pages could temporarily disappear from mincore.
-> > > 
-> > > Fixes: f3f0e1d2150b ("khugepaged: add support of collapse for tmpfs/shmem pages")
-> > > Signed-off-by: David Stevens <stevensd@chromium.org>
-> > 
-> > I noticed that recently MADV_COLLAPSE stopped being able to collapse a
-> > binary's executable code, always failing with EAGAIN. I bisected it down to
-> > a2e17cc2efc7 - this commit.
-> > 
-> > Using perf trace -e 'huge_memory:*' -a I see
-> > 
-> >   1000.433 postgres.2/1872144 huge_memory:mm_khugepaged_collapse_file(mm: 0xffff889e800bdf00, hpfn: 46720000, index: 1537, is_shmem: 1, filename: "postgres.2", result: 17)
-> >   1000.445 postgres.2/1872144 huge_memory:mm_khugepaged_scan_file(mm: 0xffff889e800bdf00, pfn: -1, filename: "postgres.2", present: 512, result: 17)
-> >   1000.485 postgres.2/1872144 huge_memory:mm_khugepaged_collapse_file(mm: 0xffff889e800bdf00, hpfn: 46720000, index: 2049, is_shmem: 1, filename: "postgres.2", result: 17)
-> >   1000.489 postgres.2/1872144 huge_memory:mm_khugepaged_scan_file(mm: 0xffff889e800bdf00, pfn: -1, filename: "postgres.2", present: 512, result: 17)
-> >   1000.526 postgres.2/1872144 huge_memory:mm_khugepaged_collapse_file(mm: 0xffff889e800bdf00, hpfn: 46720000, index: 2561, is_shmem: 1, filename: "postgres.2", result: 17)
-> >   1000.532 postgres.2/1872144 huge_memory:mm_khugepaged_scan_file(mm: 0xffff889e800bdf00, pfn: -1, filename: "postgres.2", present: 512, result: 17)
-> >   1000.570 postgres.2/1872144 huge_memory:mm_khugepaged_collapse_file(mm: 0xffff889e800bdf00, hpfn: 46720000, index: 3073, is_shmem: 1, filename: "postgres.2", result: 17)
-> >   1000.575 postgres.2/1872144 huge_memory:mm_khugepaged_scan_file(mm: 0xffff889e800bdf00, pfn: -1, filename: "postgres.2", present: 512, result: 17)
-> > 
-> > for every attempt at doing madvise(MADV_COLLAPSE).
-> > 
-> > 
-> > I'm sad about that, because MADV_COLLAPSE was the first thing that allowed
-> > using huge pages for executable code that wasn't entirely completely gross.
-> > 
-> > 
-> > I don't yet have a standalone repro, but can write one if that's helpful.
-> 
-> There's a fix:
-> 
-> https://lore.kernel.org/all/20230607053135.2087354-1-stevensd@google.com/
-> 
-> Already in today's Andrew's pull for rc7:
-> 
-> https://lore.kernel.org/all/20230620123828.813b1140d9c13af900e8edb3@linux-foundation.org/
+Thanks this looks good to me, I agree it'd be quite surprising for us not
+to retrieve folio here and probably something has gone wrong if so, so not
+actually too unreasonable to warn, as long as we error out.
 
-Ah, great!
+> +			}
+> +
+> +			for (j = 0; j < page_increm; j++) {
+> +				subpage = nth_page(page, j);
+> +				pages[i+j] = subpage;
+> +				flush_anon_page(vma, subpage, start + j * PAGE_SIZE);
+> +				flush_dcache_page(subpage);
+> +			}
+> +		}
+> +
+>  		i += page_increm;
+>  		start += page_increm * PAGE_SIZE;
+>  		nr_pages -= page_increm;
+> --
+> 2.40.1
+>
 
-I can confirm that the fix unbreaks our use of MADV_COLLAPSE for executable
-code...
+Looks good to me overall,
 
-Greetings,
-
-Andres Freund
+Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
