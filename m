@@ -2,146 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2696E736897
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EEA37368E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232227AbjFTKAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 06:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
+        id S231575AbjFTKLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 06:11:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232686AbjFTKAE (ORCPT
+        with ESMTP id S231231AbjFTKLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 06:00:04 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043A0DB;
-        Tue, 20 Jun 2023 02:58:31 -0700 (PDT)
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id EFAFD61E5FE03;
-        Tue, 20 Jun 2023 11:57:52 +0200 (CEST)
-Message-ID: <6f05e7b4-461c-68db-20c5-e3bfd52cc7f6@molgen.mpg.de>
-Date:   Tue, 20 Jun 2023 11:57:52 +0200
+        Tue, 20 Jun 2023 06:11:20 -0400
+X-Greylist: delayed 538 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 20 Jun 2023 03:11:19 PDT
+Received: from forward200a.mail.yandex.net (forward200a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC12A2;
+        Tue, 20 Jun 2023 03:11:19 -0700 (PDT)
+Received: from forward103a.mail.yandex.net (forward103a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d103])
+        by forward200a.mail.yandex.net (Yandex) with ESMTP id 2DCC64A0D8;
+        Tue, 20 Jun 2023 12:55:42 +0300 (MSK)
+Received: from mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net [IPv6:2a02:6b8:c1f:5e51:0:640:23ee:0])
+        by forward103a.mail.yandex.net (Yandex) with ESMTP id EE78C46C91;
+        Tue, 20 Jun 2023 12:55:32 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id Utd7jIuDca60-FHm4Ipak;
+        Tue, 20 Jun 2023 12:55:32 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687254932;
+        bh=hY46ZClPP9+NLwarO4tWKAup6MP0se1suvHpVvDPsAU=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=qoqaIRpV3bFWmt1BFyIn7vZbg/hftQx1uYO+qvw/KxsKHbW5ZWMtnm5QW+g/+jeEq
+         4GY5kmtRUAZD7fo+3M/qrIiPzJ17r7P+ge4ysmKdPswEUHKTYwtYqvsY17Gnigo4PL
+         Mk97FVN2y6v+meBriWpBDi5fgO9/0QGEPdCA3owk=
+Authentication-Results: mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+From:   Stas Sergeev <stsp2@yandex.ru>
+To:     linux-kernel@vger.kernel.org
+Cc:     Stas Sergeev <stsp2@yandex.ru>, Jeff Layton <jlayton@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/3] RFC: F_OFD_GETLK should provide more info
+Date:   Tue, 20 Jun 2023 14:55:04 +0500
+Message-Id: <20230620095507.2677463-1-stsp2@yandex.ru>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH -next 3/8] raid5: fix missing io accounting in
- raid5_align_endio()
-Content-Language: en-US
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     xni@redhat.com, song@kernel.org, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com, yangerkun@huawei.com
-References: <20230619204826.755559-1-yukuai1@huaweicloud.com>
- <20230619204826.755559-4-yukuai1@huaweicloud.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20230619204826.755559-4-yukuai1@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Yu,
+This patch-set implements 2 small extensions to the current F_OFD_GETLK,
+allowing it to gather more information than it currently returns.
+
+First extension allows to use F_UNLCK on query, which currently returns
+EINVAL. Instead it can be used to query the locks on a particular fd -
+something that is not currently possible. The basic idea is that on
+F_OFD_GETLK, F_UNLCK would "conflict" with (or query) any types of the
+lock on the same fd, and ignore any locks on other fds.
+
+Use-cases:
+
+1. CRIU-alike scenario when you want to read the locking info from an
+fd for the later reconstruction. This can now be done by setting
+l_start and l_len to 0 to cover entire file range, and do F_OFD_GETLK.
+In the loop you need to advance l_start past the returned lock ranges,
+to eventually collect all locked ranges.
+
+2. Implementing the lock checking/enforcing policy.
+Say you want to implement an "auditor" module in your program,
+that checks that the I/O is done only after the proper locking is
+applied on a file region. In this case you need to know if the
+particular region is locked on that fd, and if so - with what type
+of the lock. If you would do that currently (without this extension)
+then you can only check for the write locks, and for that you need to
+probe the lock on your fd and then open the same file via nother fd and
+probe there. That way you can identify the write lock on a particular
+fd, but such trick is non-atomic and complex. As for finding out the
+read lock on a particular fd - impossible.
+This extension allows to do such queries without any extra efforts.
+
+3. Implementing the mandatory locking policy.
+Suppose you want to make a policy where the write lock inhibits any
+unlocked readers and writers. Currently you need to check if the
+write lock is present on some other fd, and if it is not there - allow
+the I/O operation. But because the write lock can appear at any moment,
+you need to do that under some global lock, which can be released only
+when the I/O operation is finished.
+With the proposed extension you can instead just check the write lock
+on your own fd first, and if it is there - allow the I/O operation on
+that fd without using any global lock. Only if there is no write lock
+on this fd, then you need to take global lock and check for a write
+lock on other fds.
 
 
-Thank you for your patch.
-
-Am 19.06.23 um 22:48 schrieb Yu Kuai:
-> From: Yu Kuai <yukuai3@huawei.com>
-> 
-> Io will only be accounted as done from raid5_align_endio() if the io
-> succeed, and io inflight counter will be leaked if such io failed.
-
-succeed*s* or succeed*ed*?
-
-> Fix this problem by switching to use md_account_bio() for io accounting.
-
-How can this be tested?
-
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> ---
->   drivers/md/raid5.c | 29 ++++++++---------------------
->   1 file changed, 8 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-> index cef0b400b2ee..4cdb35e54251 100644
-> --- a/drivers/md/raid5.c
-> +++ b/drivers/md/raid5.c
-> @@ -5468,26 +5468,17 @@ static struct bio *remove_bio_from_retry(struct r5conf *conf,
->    */
->   static void raid5_align_endio(struct bio *bi)
->   {
-> -	struct md_io_clone *md_io_clone = bi->bi_private;
-> -	struct bio *raid_bi = md_io_clone->orig_bio;
-> -	struct mddev *mddev;
-> -	struct r5conf *conf;
-> -	struct md_rdev *rdev;
-> +	struct bio *raid_bi = bi->bi_private;
-> +	struct md_rdev *rdev = (void *)raid_bi->bi_next;
-> +	struct mddev *mddev = rdev->mddev;
-> +	struct r5conf *conf = mddev->private;
->   	blk_status_t error = bi->bi_status;
-> -	unsigned long start_time = md_io_clone->start_time;
->   
->   	bio_put(bi);
-> -
-> -	rdev = (void*)raid_bi->bi_next;
->   	raid_bi->bi_next = NULL;
-> -	mddev = rdev->mddev;
-> -	conf = mddev->private;
-> -
-
-This looks like unnecessary refactoring. No idea what the preferred 
-style for the subsystem is though. If it is wanted, maybe make it a 
-separate commit?
-
->   	rdev_dec_pending(rdev, conf->mddev);
->   
->   	if (!error) {
-> -		if (blk_queue_io_stat(raid_bi->bi_bdev->bd_disk->queue))
-> -			bio_end_io_acct(raid_bi, start_time);
->   		bio_endio(raid_bi);
->   		if (atomic_dec_and_test(&conf->active_aligned_reads))
->   			wake_up(&conf->wait_for_quiescent);
-> @@ -5506,7 +5497,6 @@ static int raid5_read_one_chunk(struct mddev *mddev, struct bio *raid_bio)
->   	struct md_rdev *rdev;
->   	sector_t sector, end_sector, first_bad;
->   	int bad_sectors, dd_idx;
-> -	struct md_io_clone *md_io_clone;
->   	bool did_inc;
->   
->   	if (!in_chunk_boundary(mddev, raid_bio)) {
-> @@ -5543,16 +5533,13 @@ static int raid5_read_one_chunk(struct mddev *mddev, struct bio *raid_bio)
->   		return 0;
->   	}
->   
-> -	align_bio = bio_alloc_clone(rdev->bdev, raid_bio, GFP_NOIO,
-> -				    &mddev->io_clone_set);
-> -	md_io_clone = container_of(align_bio, struct md_io_clone, bio_clone);
-> +	md_account_bio(mddev, &raid_bio);
->   	raid_bio->bi_next = (void *)rdev;
-> -	if (blk_queue_io_stat(raid_bio->bi_bdev->bd_disk->queue))
-> -		md_io_clone->start_time = bio_start_io_acct(raid_bio);
-> -	md_io_clone->orig_bio = raid_bio;
->   
-> +	align_bio = bio_alloc_clone(rdev->bdev, raid_bio, GFP_NOIO,
-> +				    &mddev->bio_set);
->   	align_bio->bi_end_io = raid5_align_endio;
-> -	align_bio->bi_private = md_io_clone;
-> +	align_bio->bi_private = raid_bio;
->   	align_bio->bi_iter.bi_sector = sector;
->   
->   	/* No reshape active, so we can trust rdev->data_offset */
+The second patch implements another extension.
+Currently F_OFD_GETLK returns -1 in the l_pid member.
+This patch removes the code that writes -1 there, so that the proper
+pid is returned. I am not sure why it was decided to deliberately hide
+the owner's pid. It may be needed in case you want to send some
+message to the offending locker, like eg SIGKILL.
 
 
-Kind regards,
+The third patch adds a test-case for OFD locks.
+It tests both the generic things and the proposed extensions.
 
-Paul
+Stas Sergeev (3):
+  fs/locks: F_UNLCK extension for F_OFD_GETLK
+  fd/locks: allow get the lock owner by F_OFD_GETLK
+  selftests: add OFD lock tests
+
+ fs/locks.c                                 |  25 +++-
+ tools/testing/selftests/locking/Makefile   |   2 +
+ tools/testing/selftests/locking/ofdlocks.c | 135 +++++++++++++++++++++
+ 3 files changed, 157 insertions(+), 5 deletions(-)
+ create mode 100644 tools/testing/selftests/locking/ofdlocks.c
+
+CC: Jeff Layton <jlayton@kernel.org>
+CC: Chuck Lever <chuck.lever@oracle.com>
+CC: Alexander Viro <viro@zeniv.linux.org.uk>
+CC: Christian Brauner <brauner@kernel.org>
+CC: linux-fsdevel@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+CC: Shuah Khan <shuah@kernel.org>
+CC: linux-kselftest@vger.kernel.org
+
+-- 
+2.39.2
+
