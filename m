@@ -2,168 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3FDF736D81
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:39:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DBB6736D83
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231713AbjFTNjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 09:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39138 "EHLO
+        id S233106AbjFTNjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 09:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231411AbjFTNjJ (ORCPT
+        with ESMTP id S233129AbjFTNjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 09:39:09 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F7E173B;
-        Tue, 20 Jun 2023 06:38:29 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qlnl20n7Yz4f3mWj;
-        Tue, 20 Jun 2023 21:38:06 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgAHoZS9q5FklceJMA--.2039S3;
-        Tue, 20 Jun 2023 21:38:06 +0800 (CST)
-Subject: Re: [PATCH -next 4/8] md/raid1: switch to use md_account_bio() for io
- accounting
-To:     Xiao Ni <xni@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     song@kernel.org, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230619204826.755559-1-yukuai1@huaweicloud.com>
- <20230619204826.755559-5-yukuai1@huaweicloud.com>
- <CALTww28AYb3Gi0qKHqsRuFrS0_P9-Fo1BYhsvTsrTFKnu084SA@mail.gmail.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <ae66036a-0673-297a-69b8-81721d6b8efc@huaweicloud.com>
-Date:   Tue, 20 Jun 2023 21:38:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 20 Jun 2023 09:39:37 -0400
+Received: from forward101b.mail.yandex.net (forward101b.mail.yandex.net [IPv6:2a02:6b8:c02:900:1:45:d181:d101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2FD19B1;
+        Tue, 20 Jun 2023 06:39:22 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-54.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-54.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:1380:0:640:6985:0])
+        by forward101b.mail.yandex.net (Yandex) with ESMTP id 9061D6010C;
+        Tue, 20 Jun 2023 16:39:09 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-54.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id 7dhJcbqWm4Y0-WeZ40bE5;
+        Tue, 20 Jun 2023 16:39:08 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687268348;
+        bh=PhlDJFhZ9kE6LkIjRQx8p4TngH1FPLd3OMinLEFLzfY=;
+        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+        b=ItTqvOVqvkCAfiVFI1M31Jkz73JWqryhUEXI9rlV+wp57O8YF7xbVJ4L6z3cuY7O4
+         Izs8wX1RCYj3ZaXKoQQkObXfDRSUuSZskxEVcI1NQpQXRL/9t9bCbOxO+5XrhuMfx0
+         C2VFAKxKIGVEEJ0QcObQfzzCjjVSdgXtPKuTE+sM=
+Authentication-Results: mail-nwsmtp-smtp-production-main-54.iva.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+Message-ID: <ddb48e05-ab26-ae5d-86d5-01e47f0f0cd2@yandex.ru>
+Date:   Tue, 20 Jun 2023 18:39:07 +0500
 MIME-Version: 1.0
-In-Reply-To: <CALTww28AYb3Gi0qKHqsRuFrS0_P9-Fo1BYhsvTsrTFKnu084SA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/3] fd/locks: allow get the lock owner by F_OFD_GETLK
+Content-Language: en-US
+To:     Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org
+References: <20230620095507.2677463-1-stsp2@yandex.ru>
+ <20230620095507.2677463-3-stsp2@yandex.ru>
+ <5728ebda22a723b0eb209ae078e8f132d7b4ac7b.camel@kernel.org>
+ <a1e7f5c1-76ef-19e5-91db-a62f7615b28a@yandex.ru>
+ <eaccc14ddc6b546e5913eb557fec55f77cb5424d.camel@kernel.org>
+ <5f644a24-90b5-a02f-b593-49336e8e0f5a@yandex.ru>
+ <2eb8566726e95a01536b61a3b8d0343379092b94.camel@kernel.org>
+ <d70b6831-3443-51d0-f64c-6f6996367a85@yandex.ru>
+ <d0c18369245db91a3b78017fabdc81417418af67.camel@kernel.org>
+From:   stsp <stsp2@yandex.ru>
+In-Reply-To: <d0c18369245db91a3b78017fabdc81417418af67.camel@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHoZS9q5FklceJMA--.2039S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxJFy3Xr1xAF13CryfZw4fKrg_yoW5Cry3pa
-        1DGFWrCFWrJayj93sFqa47uF1Fyw4FgFy8CrWI9w17ZFnIqF90ga18WFWFgr1kAF93GFy7
-        t3WvkFsruF47tFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
-        Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
-        UUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-在 2023/06/20 17:07, Xiao Ni 写道:
-> On Mon, Jun 19, 2023 at 8:49 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> Two problems can be fixed this way:
->>
->> 1) 'active_io' will represent inflight io instead of io that is
->> dispatching.
->>
->> 2) If io accounting is enabled or disabled while io is still inflight,
->> bio_start_io_acct() and bio_end_io_acct() is not balanced and io
->> inflight counter will be leaked.
->>
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->> ---
->>   drivers/md/raid1.c | 14 ++++++--------
->>   drivers/md/raid1.h |  1 -
->>   2 files changed, 6 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/md/raid1.c b/drivers/md/raid1.c
->> index dd25832eb045..06fa1580501f 100644
->> --- a/drivers/md/raid1.c
->> +++ b/drivers/md/raid1.c
->> @@ -304,8 +304,6 @@ static void call_bio_endio(struct r1bio *r1_bio)
->>          if (!test_bit(R1BIO_Uptodate, &r1_bio->state))
->>                  bio->bi_status = BLK_STS_IOERR;
->>
->> -       if (blk_queue_io_stat(bio->bi_bdev->bd_disk->queue))
->> -               bio_end_io_acct(bio, r1_bio->start_time);
->>          bio_endio(bio);
->>   }
->>
->> @@ -1303,10 +1301,10 @@ static void raid1_read_request(struct mddev *mddev, struct bio *bio,
->>          }
->>
->>          r1_bio->read_disk = rdisk;
->> -
->> -       if (!r1bio_existed && blk_queue_io_stat(bio->bi_bdev->bd_disk->queue))
->> -               r1_bio->start_time = bio_start_io_acct(bio);
->> -
->> +       if (!r1bio_existed) {
->> +               md_account_bio(mddev, &bio);
->> +               r1_bio->master_bio = bio;
->> +       }
->>          read_bio = bio_alloc_clone(mirror->rdev->bdev, bio, gfp,
->>                                     &mddev->bio_set);
->>
->> @@ -1500,8 +1498,8 @@ static void raid1_write_request(struct mddev *mddev, struct bio *bio,
->>                  r1_bio->sectors = max_sectors;
->>          }
->>
->> -       if (blk_queue_io_stat(bio->bi_bdev->bd_disk->queue))
->> -               r1_bio->start_time = bio_start_io_acct(bio);
->> +       md_account_bio(mddev, &bio);
->> +       r1_bio->master_bio = bio;
->>          atomic_set(&r1_bio->remaining, 1);
->>          atomic_set(&r1_bio->behind_remaining, 0);
->>
->> diff --git a/drivers/md/raid1.h b/drivers/md/raid1.h
->> index 468f189da7a0..14d4211a123a 100644
->> --- a/drivers/md/raid1.h
->> +++ b/drivers/md/raid1.h
->> @@ -157,7 +157,6 @@ struct r1bio {
->>          sector_t                sector;
->>          int                     sectors;
->>          unsigned long           state;
->> -       unsigned long           start_time;
->>          struct mddev            *mddev;
->>          /*
->>           * original bio going to /dev/mdx
->> --
->> 2.39.2
->>
-> 
-> Hi Kuai
-> 
-> After this patch, raid1 will have one more memory allocation in the
-> I/O path. Not sure if it can affect performance. Beside this, the
-> patch is good for me.
+20.06.2023 18:19, Jeff Layton пишет:
+> The bottom line is that these locks are specifically not owned by a
+> process, so returning the l_pid field is unreliable (at best). There is
+> no guarantee that the pid returned will still represent the task that
+> set the lock.
 
-Yes, I'm aware of this additional memory allocation, however, raid1(and
-similar to other levels) already need to allocate r1bio and some bios(1
-for read, and copies for write), so this is not a none -> new case,
-it's just a allocate 2 -> allocate 3 case.
+Though it will, for sure, represent the
+task that _owns_ the lock.
 
-I think performance under memory pressure are both bad with or without
-this patch, and one one bio clone latency without memory reclaim should
-be fine.
+> You may want to review this article. They're called "File-private" locks
+> here, but the name was later changed to "Open file description" (OFD)
+> locks:
+>
+>      https://lwn.net/Articles/586904/
+>
+> The rationale for why -1 is reported is noted there.
+Well, they point to fork() and SCM_RIGHTS.
+Yes, these 2 beasts can make the same lock
+owned by more than one process.
+Yet l_pid returned, is going to be always valid:
+it will still represent one of the valid owners.
+So my call is to be brave and just re-consider
+the conclusion of that article, made 10 years
+ago! :)
 
-Thanks,
-Kuai
-> 
-> Reviewed-by: Xiao Ni <xni@redhat.com>
-> 
-> .
-> 
-
+Of course if returning just 1 of possibly multiple
+owners is a problem, then oh well, I'll drop
+this patch.
