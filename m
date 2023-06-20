@@ -2,129 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92542736E6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA96736E71
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233195AbjFTOMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 10:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33650 "EHLO
+        id S233215AbjFTONT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 10:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233249AbjFTOMm (ORCPT
+        with ESMTP id S233222AbjFTONL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 10:12:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67D41701
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 07:12:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4926F61283
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:12:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57E27C433CA;
-        Tue, 20 Jun 2023 14:12:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687270356;
-        bh=Sdim3nHPJvGgZkt1kDiWy46jb7Kx94z4BqprQBITB/0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tm9uC9/ywxMsbkMuEEs5Eea1Pjc8UAM1SOEbG+6CGAppg/9RZCc6iwY3X11gBXF97
-         Y4bYG/xIistPSUBFNmXP2YV7AjW2C/CGBkHIyxuYts5j7AfCuVWH6RdWJ0ZlCAEJ8w
-         k5V4FZUf2nL3qETOTyum+fynig2eT0saOFr5cUSg=
-Date:   Tue, 20 Jun 2023 16:12:33 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Franziska Naepelt <franziska.naepelt@googlemail.com>
-Cc:     eperi1024@gmail.com, franziska.naepelt@gmail.com,
-        hdegoede@redhat.com, johannes.berg@intel.com,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        quic_vjakkam@quicinc.com, tegongkang@gmail.com
-Subject: Re: [PATCH 2/5] staging: rtl8723bs: Fix space issues
-Message-ID: <2023062012-regain-vintage-2c6d@gregkh>
-References: <20230619175703.18826-1-franziska.naepelt@gmail.com>
- <20230619180753.18998-1-franziska.naepelt@gmail.com>
+        Tue, 20 Jun 2023 10:13:11 -0400
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06596B1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 07:13:10 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-3f9085f97a4so8704625e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 07:13:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687270388; x=1689862388;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nWpDQmZNg8zKVk12QskQ7NNS05C4fI/JmZBKLdKyu8Q=;
+        b=e9scUHTPuiRjsrMvyUQ5D2oRSKA11naC7MHXAkmYN1QbYNtqGqP/SpfHxwPljENz0l
+         GAVjReO1VxnPid3fj5bHsBRUX3N/52efo99ezl5EnaIUhRMgUJKHtSTChBCrpkx+EqTX
+         oBhBDNUqpI7bNfuz1BM2lNgXjc1EQaH8AYwSvSeRbbnD6wO5Txzm2UzN+oGqZYhd28rn
+         bC9/6U72fB/WJ3LRIajGPpNtsbulqd8jw4KxNFC/Igs7dctu7Hs7yTPqtXEqYMGGV9l8
+         kn0a6v0xhoqZWxCXkKFuSa9cOuYzgaJHsOZvjQRfTYsIHCz60MHRh+hbJb7CSd9l5Yuh
+         0Hzw==
+X-Gm-Message-State: AC+VfDy8DswDcQkXDJTBCe9v/OVrKE9i5ZvUG82owIuAeSZp+SBb442e
+        vzQWVviaXUJLEWvYsyDwL7E=
+X-Google-Smtp-Source: ACHHUZ4g3isyRwCrwcjd2Om7u+FTf0FHHIAZ/J9ebt+mRhj31XdhigHftz/TVnLibCmotJ54wqtjTA==
+X-Received: by 2002:a05:600c:3c87:b0:3f8:efad:31ee with SMTP id bg7-20020a05600c3c8700b003f8efad31eemr11170736wmb.2.1687270388436;
+        Tue, 20 Jun 2023 07:13:08 -0700 (PDT)
+Received: from [192.168.64.192] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
+        by smtp.gmail.com with ESMTPSA id f23-20020a7bc8d7000000b003f907bdeef3sm9769924wml.26.2023.06.20.07.13.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 07:13:08 -0700 (PDT)
+Message-ID: <eb0d768d-d395-e49f-c478-394f5ce9f656@grimberg.me>
+Date:   Tue, 20 Jun 2023 17:13:06 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230619180753.18998-1-franziska.naepelt@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2] nvme: Print capabilities changes just once
+Content-Language: en-US
+To:     Breno Leitao <leitao@debian.org>, Keith Busch <kbusch@kernel.org>,
+        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>
+Cc:     leit@fb.com,
+        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230615094903.1341683-1-leitao@debian.org>
+From:   Sagi Grimberg <sagi@grimberg.me>
+In-Reply-To: <20230615094903.1341683-1-leitao@debian.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 08:07:53PM +0200, Franziska Naepelt wrote:
-> Fix the following checkpatch space issues:
-> - CHECK: spaces preferred around that '*' (ctx:VxV)
-> - CHECK: spaces preferred around that '+' (ctx:VxV)
-> - CHECK: spaces preferred around that '-' (ctx:VxV)
-> - CHECK: spaces preferred around that '|' (ctx:VxV)
-> - CHECK: No space is necessary after a cast
-> - WARNING: please, no spaces at the start of a line
-> 
-> Signed-off-by: Franziska Naepelt <franziska.naepelt@gmail.com>
-> ---
->  .../staging/rtl8723bs/os_dep/ioctl_cfg80211.c | 77 +++++++++----------
->  1 file changed, 38 insertions(+), 39 deletions(-)
-> 
-> diff --git a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
-> index 1afd1a93bcee..abda4e0f0bf5 100644
-> --- a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
-> +++ b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
-> @@ -95,14 +95,14 @@ static struct ieee80211_channel rtw_2ghz_channels[] = {
->  static void rtw_2g_channels_init(struct ieee80211_channel *channels)
->  {
->  	memcpy((void *)channels, (void *)rtw_2ghz_channels,
-> -		sizeof(struct ieee80211_channel)*RTW_2G_CHANNELS_NUM
-> +		sizeof(struct ieee80211_channel) * RTW_2G_CHANNELS_NUM
->  	);
->  }
->  
->  static void rtw_2g_rates_init(struct ieee80211_rate *rates)
->  {
->  	memcpy(rates, rtw_g_rates,
-> -		sizeof(struct ieee80211_rate)*RTW_G_RATES_NUM
-> +		sizeof(struct ieee80211_rate) * RTW_G_RATES_NUM
->  	);
->  }
->  
-> @@ -126,8 +126,8 @@ static struct ieee80211_supported_band *rtw_spt_band_alloc(
->  	if (!spt_band)
->  		goto exit;
->  
-> -	spt_band->channels = (struct ieee80211_channel *)(((u8 *)spt_band)+sizeof(struct ieee80211_supported_band));
-> -	spt_band->bitrates = (struct ieee80211_rate *)(((u8 *)spt_band->channels)+sizeof(struct ieee80211_channel)*n_channels);
-> +	spt_band->channels = (struct ieee80211_channel *)(((u8 *)spt_band) + sizeof(struct ieee80211_supported_band));
-> +	spt_band->bitrates = (struct ieee80211_rate *)(((u8 *)spt_band->channels) + sizeof(struct ieee80211_channel) * n_channels);
->  	spt_band->band = band;
->  	spt_band->n_channels = n_channels;
->  	spt_band->n_bitrates = n_bitrates;
-> @@ -247,10 +247,10 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
->  		u32 wpsielen = 0;
->  		u8 *wpsie = NULL;
->  
-> -		wpsie = rtw_get_wps_ie(pnetwork->network.ies+_FIXED_IE_LENGTH_, pnetwork->network.ie_length-_FIXED_IE_LENGTH_, NULL, &wpsielen);
-> +		wpsie = rtw_get_wps_ie(pnetwork->network.ies + _FIXED_IE_LENGTH_, pnetwork->network.ie_length - _FIXED_IE_LENGTH_, NULL, &wpsielen);
->  
->  		if (wpsie && wpsielen > 0)
-> -			psr = rtw_get_wps_attr_content(wpsie,  wpsielen, WPS_ATTR_SELECTED_REGISTRAR, (u8 *)(&sr), NULL);
-> +			psr = rtw_get_wps_attr_content(wpsie, wpsielen, WPS_ATTR_SELECTED_REGISTRAR, (u8 *)(&sr), NULL);
->  
->  		if (sr != 0) {
->  			/* it means under processing WPS */
-> @@ -266,7 +266,6 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
->  	}
->  	/* spin_unlock_bh(&pwdev_priv->scan_req_lock); */
->  
-> -
-
-This was an extra blank line issue that you did not mention in the
-changelog :(
-
-Please be more careful.
-
-thanks,
-
-greg k-h
+Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
