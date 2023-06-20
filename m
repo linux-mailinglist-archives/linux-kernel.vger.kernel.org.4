@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15C75736CA2
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3938736CA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:01:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232775AbjFTNB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 09:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42436 "EHLO
+        id S232802AbjFTNBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 09:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232748AbjFTNBP (ORCPT
+        with ESMTP id S232756AbjFTNBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 09:01:15 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CA519A1;
-        Tue, 20 Jun 2023 06:00:52 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 13:00:50 -0000
+        Tue, 20 Jun 2023 09:01:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FF319A7;
+        Tue, 20 Jun 2023 06:00:53 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 13:00:51 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1687266051;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kGO0N+b4VLs0S7U3M2s5rSy9XlrIT13PxXT3rsvwIKk=;
-        b=DOzLFvshbTzVdh2JY8agz/fN71GEG5OEPiywNaa+KRIp+lsiQWbp2xcjy+JL4AwKNkmxD5
-        j5Nli93/0/R5cgDzf9nxIARwSDg/ZgtInF+NNr5SLrGuHtkmw5VnR1m72PjHWg5d9NPprk
-        NQz5+hGm5uL4d09mcv21FrwQGe6pGNh3McS+Potdqt+19P4g3TQNS8ic0DJodZH1Xo6w+T
-        90qM8g5lqbAcasTDGghY7qIT1cUZQLOUPy0JaxVthLVsADYyRHXgDjUyzhhC+oBLHpQE5U
-        tU6ruO15qU9I99Yse1KeI4K0w7sJlls/s4HuRFs8kuwuesTd3n6yjIhTk0Vjlg==
+        bh=iQWwYgNWQFdPkD+2uT8p3Wf1mUDeQcjcVwJqecz8ss8=;
+        b=zaTmYCNQnKN+YNnZZ208LviJu1xlo5l3PczYt1DJ3zg9tJQS1dbRFrFxJyLIqZiOQyZw7N
+        P/CLrNURfFgXmAMw9u5AxqvVT9orAtYH5VRZwsQj80Co40mCUYSg+CEnfvjY9M3gB39X0l
+        +vmE0s8kavXa6I7cj3GQEljWcadVjAPEI8eRz99uH0K9doq85xBeOhSnXciHSqF4PB8nCF
+        ezf9px6duD9V18q18PwkTO0W//gpVv/FmJIhMOoVuoAJjRbO9rZgDj1pyxSqdL2oBVfIDF
+        g1Jlp1fWfpPafn0MNVvYBlmphegOwuX3tII4/lwnOYyW1JiN5xdQu1zi5KOX3Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1687266051;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,21 +36,22 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=kGO0N+b4VLs0S7U3M2s5rSy9XlrIT13PxXT3rsvwIKk=;
-        b=T2qEEqtsD9ZC2exBe7zz1q1Cnyl9MNRoZs90IgrEctmzlnGaNLl5hYRBCRlXzXv3BPfG0E
-        K6eNpyBJKwNwrLCA==
+        bh=iQWwYgNWQFdPkD+2uT8p3Wf1mUDeQcjcVwJqecz8ss8=;
+        b=ybV8hW6AERQjmzRMuNPzpq8Pxl67hQDOJjbc6nKndIeSNoulXC5NW99PwbC67eqPeSKfPw
+        fH3FmqFGVURqdmDg==
 From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] x86/smp: Split sending INIT IPI out into a helper function
+Subject: [tip: x86/core] x86/smp: Use dedicated cache-line for mwait_play_dead()
 Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ashok Raj <ashok.raj@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230615193330.551157083@linutronix.de>
-References: <20230615193330.551157083@linutronix.de>
+        Ashok Raj <ashok.raj@intel.com>,
+        "Borislav Petkov (AMD)" <bp@alien8.de>, stable@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230615193330.434553750@linutronix.de>
+References: <20230615193330.434553750@linutronix.de>
 MIME-Version: 1.0
-Message-ID: <168726605053.404.8610488673779596542.tip-bot2@tip-bot2>
+Message-ID: <168726605135.404.14181848725041591301.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,95 +68,96 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     6087dd5e86ff03a8cd4cffdf463a7f457e65cbff
-Gitweb:        https://git.kernel.org/tip/6087dd5e86ff03a8cd4cffdf463a7f457e65cbff
+Commit-ID:     f9c9987bf52f4e42e940ae217333ebb5a4c3b506
+Gitweb:        https://git.kernel.org/tip/f9c9987bf52f4e42e940ae217333ebb5a4c3b506
 Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Thu, 15 Jun 2023 22:33:58 +02:00
+AuthorDate:    Thu, 15 Jun 2023 22:33:55 +02:00
 Committer:     Thomas Gleixner <tglx@linutronix.de>
 CommitterDate: Tue, 20 Jun 2023 14:51:47 +02:00
 
-x86/smp: Split sending INIT IPI out into a helper function
+x86/smp: Use dedicated cache-line for mwait_play_dead()
 
-Putting CPUs into INIT is a safer place during kexec() to park CPUs.
+Monitoring idletask::thread_info::flags in mwait_play_dead() has been an
+obvious choice as all what is needed is a cache line which is not written
+by other CPUs.
 
-Split the INIT assert/deassert sequence out so it can be reused.
+But there is a use case where a "dead" CPU needs to be brought out of
+MWAIT: kexec().
+
+This is required as kexec() can overwrite text, pagetables, stacks and the
+monitored cacheline of the original kernel. The latter causes MWAIT to
+resume execution which obviously causes havoc on the kexec kernel which
+results usually in triple faults.
+
+Use a dedicated per CPU storage to prepare for that.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Ashok Raj <ashok.raj@intel.com>
-Link: https://lore.kernel.org/r/20230615193330.551157083@linutronix.de
+Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
+Cc: stable@vger.kernel.org
+Link: https://lore.kernel.org/r/20230615193330.434553750@linutronix.de
+
 ---
- arch/x86/kernel/smpboot.c | 49 +++++++++++++++-----------------------
- 1 file changed, 20 insertions(+), 29 deletions(-)
+ arch/x86/kernel/smpboot.c | 24 ++++++++++++++----------
+ 1 file changed, 14 insertions(+), 10 deletions(-)
 
 diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 483df04..b403ead 100644
+index 352f0ce..c5ac5d7 100644
 --- a/arch/x86/kernel/smpboot.c
 +++ b/arch/x86/kernel/smpboot.c
-@@ -853,47 +853,38 @@ wakeup_secondary_cpu_via_nmi(int apicid, unsigned long start_eip)
- 	return (send_status | accept_status);
- }
+@@ -101,6 +101,17 @@ EXPORT_PER_CPU_SYMBOL(cpu_die_map);
+ DEFINE_PER_CPU_READ_MOSTLY(struct cpuinfo_x86, cpu_info);
+ EXPORT_PER_CPU_SYMBOL(cpu_info);
  
--static int
--wakeup_secondary_cpu_via_init(int phys_apicid, unsigned long start_eip)
-+static void send_init_sequence(int phys_apicid)
++struct mwait_cpu_dead {
++	unsigned int	control;
++	unsigned int	status;
++};
++
++/*
++ * Cache line aligned data for mwait_play_dead(). Separate on purpose so
++ * that it's unlikely to be touched by other CPUs.
++ */
++static DEFINE_PER_CPU_ALIGNED(struct mwait_cpu_dead, mwait_cpu_dead);
++
+ /* Logical package management. We might want to allocate that dynamically */
+ unsigned int __max_logical_packages __read_mostly;
+ EXPORT_SYMBOL(__max_logical_packages);
+@@ -1758,10 +1769,10 @@ EXPORT_SYMBOL_GPL(cond_wakeup_cpu0);
+  */
+ static inline void mwait_play_dead(void)
  {
--	unsigned long send_status = 0, accept_status = 0;
--	int maxlvt, num_starts, j;
-+	int maxlvt = lapic_get_maxlvt();
++	struct mwait_cpu_dead *md = this_cpu_ptr(&mwait_cpu_dead);
+ 	unsigned int eax, ebx, ecx, edx;
+ 	unsigned int highest_cstate = 0;
+ 	unsigned int highest_subcstate = 0;
+-	void *mwait_ptr;
+ 	int i;
  
--	maxlvt = lapic_get_maxlvt();
--
--	/*
--	 * Be paranoid about clearing APIC errors.
--	 */
-+	/* Be paranoid about clearing APIC errors. */
- 	if (APIC_INTEGRATED(boot_cpu_apic_version)) {
--		if (maxlvt > 3)		/* Due to the Pentium erratum 3AP.  */
-+		/* Due to the Pentium erratum 3AP.  */
-+		if (maxlvt > 3)
- 			apic_write(APIC_ESR, 0);
- 		apic_read(APIC_ESR);
+ 	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
+@@ -1796,13 +1807,6 @@ static inline void mwait_play_dead(void)
+ 			(highest_subcstate - 1);
  	}
  
--	pr_debug("Asserting INIT\n");
--
 -	/*
--	 * Turn INIT on target chip
+-	 * This should be a memory location in a cache line which is
+-	 * unlikely to be touched by other processors.  The actual
+-	 * content is immaterial as it is not actually modified in any way.
 -	 */
--	/*
--	 * Send IPI
--	 */
--	apic_icr_write(APIC_INT_LEVELTRIG | APIC_INT_ASSERT | APIC_DM_INIT,
--		       phys_apicid);
+-	mwait_ptr = &current_thread_info()->flags;
 -
--	pr_debug("Waiting for send to finish...\n");
--	send_status = safe_apic_wait_icr_idle();
-+	/* Assert INIT on the target CPU */
-+	apic_icr_write(APIC_INT_LEVELTRIG | APIC_INT_ASSERT | APIC_DM_INIT, phys_apicid);
-+	safe_apic_wait_icr_idle();
+ 	wbinvd();
  
- 	udelay(init_udelay);
- 
--	pr_debug("Deasserting INIT\n");
--
--	/* Target chip */
--	/* Send IPI */
-+	/* Deassert INIT on the target CPU */
- 	apic_icr_write(APIC_INT_LEVELTRIG | APIC_DM_INIT, phys_apicid);
-+	safe_apic_wait_icr_idle();
-+}
- 
--	pr_debug("Waiting for send to finish...\n");
--	send_status = safe_apic_wait_icr_idle();
-+/*
-+ * Wake up AP by INIT, INIT, STARTUP sequence.
-+ */
-+static int wakeup_secondary_cpu_via_init(int phys_apicid, unsigned long start_eip)
-+{
-+	unsigned long send_status = 0, accept_status = 0;
-+	int num_starts, j, maxlvt = lapic_get_maxlvt();
-+
-+	send_init_sequence(phys_apicid);
- 
- 	mb();
+ 	while (1) {
+@@ -1814,9 +1818,9 @@ static inline void mwait_play_dead(void)
+ 		 * case where we return around the loop.
+ 		 */
+ 		mb();
+-		clflush(mwait_ptr);
++		clflush(md);
+ 		mb();
+-		__monitor(mwait_ptr, 0, 0);
++		__monitor(md, 0, 0);
+ 		mb();
+ 		__mwait(eax, 0);
  
