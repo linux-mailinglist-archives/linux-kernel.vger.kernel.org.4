@@ -2,92 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B8B73724D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:08:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D2DE737250
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjFTRI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 13:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49422 "EHLO
+        id S230418AbjFTRIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 13:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjFTRI1 (ORCPT
+        with ESMTP id S230473AbjFTRIj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 13:08:27 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D122A10D0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:08:26 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1a9db19d663so4517542fac.3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:08:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687280906; x=1689872906;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BPlUpaESmFXmAV66+b1zbSLli4Uazi7WstGyzYnlL8Q=;
-        b=evyhWqxMmaFSN4XuTAFRQEtpaufofDUDF/BnAJGZgSN3JIRiQOdj6YwRDBU8a/VjdY
-         kuAXp1WiBdRnWXrKNqA+21Hb86pePqUHt4zQ1cp54Vl278noNJ9eDttgLLZ/Tfi4Z+kM
-         iMMnQu4hO8ocKqWOYFOX17upmg9fUB3udIHipM/IVLJOU6OMQpPXuj09Hr7ZGvONJGXM
-         tQ+srGQ5rYHpeIL7Ib4ZVpxIoEUs/18S4+L6tIIQxizl7zbVnE6jYQz8vMmAEE96s6w+
-         YOxllz80fnEqi4p8vflN1LeRLh1JfomVc1w8301UCFFErbe74Kxj9Cr1tC2JtQwIxDXJ
-         ftlA==
+        Tue, 20 Jun 2023 13:08:39 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83021728;
+        Tue, 20 Jun 2023 10:08:37 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-76c64da0e46so221680839f.0;
+        Tue, 20 Jun 2023 10:08:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687280906; x=1689872906;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BPlUpaESmFXmAV66+b1zbSLli4Uazi7WstGyzYnlL8Q=;
-        b=TQu/OJTvs44T8Bxb5T3uGDqeHjXYtR52Kc6SodDSTwPCoYadetVBj83AeuvUEa065L
-         SXLUcWghWHKO2/GDOYjtUAk7uCbTRY3qUhcujSsGqVu1me/0tIPxmdWC7R+DSkt7p50M
-         uvTPctqFoV2WxdMou8fbjZBECTGF0yeSsvKHPls7q8vZvOBzuuq+P0yP2x7VooqPkonA
-         vgsn/7ric0s9/aCf14p9MfbCPR+jt+xjFul+OYkRB3TOdn0PSxkqizQgBCxuQJ7VVfiE
-         k2coRxnu0onN9Slx2IP9KC0fDDs+8rwVObBAR0ikFIBet7nJSU26502duMSJw+3QtwWH
-         wMQQ==
-X-Gm-Message-State: AC+VfDx+OR8LKsaxenwYWc7ixLq0v75GUJ4LGvpDpp4vkAi2ftsnaSoS
-        DBpnJYHQ3loGslkNB+OmmNZbg6FKhFuIOJIOu/WpOg==
-X-Google-Smtp-Source: ACHHUZ4RFHPGUZU1HKDnnXGV3LuEfxMOZ6TY2ggl/uGIjn7aYRfweo73+LErL1NW11Sm/GbAkOb45mZgSAFkhjVteBw=
-X-Received: by 2002:a05:6870:d897:b0:1a6:d702:f03e with SMTP id
- dv23-20020a056870d89700b001a6d702f03emr9703837oab.1.1687280906189; Tue, 20
- Jun 2023 10:08:26 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687280917; x=1689872917;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gJcsNw9M8GOd71NQMFbyfiNslmnbg2Ev97OtD/n6IA8=;
+        b=MkRSKavmE92H2cx52IyNqmPVr/Lcs++eBvFmJLr4ApQtRSIRwml792Og/iEVxhOWnC
+         baPTiGxnVzZPOFeWmEOwPhewsfyNlXlOkvaWxtye6WwOTbYwm/hHuoCowBWWZbQDQhvF
+         Dt5MHLNo/8mC4KBoTiU1sy7bv1j0QBDgRgDVcRtXuHULupyjPAidQvgIOOCStLTfP/b2
+         h8owKkEwC7Tc4JxqON9Ol8aMCakz6QDtD7vWQ37HPgsukIwVbBwXJhJFE0tiEIZZSgdR
+         esimBNSXloaHjiXk6/7lA5rRAdWzTWzH+5HhB2GOFpbTBDwWONGHNCT+zUB7XXX/1gdM
+         37TQ==
+X-Gm-Message-State: AC+VfDzCAEuJtnv/l50+IGyhemOm00CcSaWL77f4jJafn7hbUvIV3bp4
+        PrFpxN7FnMLl1LJpEOOElfW3Pj2jxQ==
+X-Google-Smtp-Source: ACHHUZ4LW3ZZ/cBYhYhRQFPFEU1u8KrW05QGpnRnMNVV6p1GfqQBCDIZtWRbIiboQdX+bfk3YUT6Jw==
+X-Received: by 2002:a5e:db05:0:b0:778:82d1:39a3 with SMTP id q5-20020a5edb05000000b0077882d139a3mr12005610iop.13.1687280916907;
+        Tue, 20 Jun 2023 10:08:36 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id w17-20020a02cf91000000b00422e02bff00sm764914jar.84.2023.06.20.10.08.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 10:08:36 -0700 (PDT)
+Received: (nullmailer pid 3833675 invoked by uid 1000);
+        Tue, 20 Jun 2023 17:08:34 -0000
+Date:   Tue, 20 Jun 2023 11:08:34 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     kernel@collabora.com, linux-rockchip@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Simon Xue <xxm@rock-chips.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH v1 1/4] dt-bindings: PCI: dwc: rockchip: Fix
+ interrupt-names issue
+Message-ID: <168728091385.3833618.8845528184695868032.robh@kernel.org>
+References: <20230616170022.76107-1-sebastian.reichel@collabora.com>
+ <20230616170022.76107-2-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-References: <20230616035813.255062-1-jaswinder.singh@linaro.org> <20230620165028.GA3805350-robh@kernel.org>
-In-Reply-To: <20230620165028.GA3805350-robh@kernel.org>
-From:   Jassi Brar <jaswinder.singh@linaro.org>
-Date:   Tue, 20 Jun 2023 12:08:15 -0500
-Message-ID: <CAJe_ZhdEgucXJk0B3uRqsEaQ4r3AiixL1H0PBYZTX8rfpTgkbA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: arm: socionext: add bindings for the
- Synquacer platform
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, ilias.apalodimas@linaro.org,
-        masahisa.kojima@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230616170022.76107-2-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Jun 2023 at 11:50, Rob Herring <robh@kernel.org> wrote:
->
-> On Thu, Jun 15, 2023 at 10:58:13PM -0500, jaswinder.singh@linaro.org wrote:
-> > From: Jassi Brar <jaswinder.singh@linaro.org>
-> >
-> > Socionext's DeveloperBox is based on the SC2A11B SoC (Synquacer).
-> > Specify bindings for the platform and boards based on that.
-> >
-> > Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
-> > ---
-> >  .../bindings/arm/socionext/synquacer.yaml     | 28 +++++++++++++++++++
-> >  1 file changed, 28 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/arm/socionext/synquacer.yaml
->
-> Should I pick this up or Socionext maintainers will?
->
-Please consider Patch-v2 that changes the subject line and specifies
-the SoC compatible 'sc2a11b' (Synquacer is the brand name).
 
-Thanks
+On Fri, 16 Jun 2023 19:00:19 +0200, Sebastian Reichel wrote:
+> The RK356x (and RK3588) have 5 ganged interrupts. For example the
+> "legacy" interrupt combines "inta/intb/intc/intd" with a register
+> providing the details.
+> 
+> Currently the binding is not specifying these interrupts resulting
+> in a bunch of errors for all rk356x boards using PCIe.
+> 
+> Fix this by specifying the interrupts and add them to the example
+> to prevent regressions.
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  .../bindings/pci/rockchip-dw-pcie.yaml         | 18 ++++++++++++++++++
+>  .../devicetree/bindings/pci/snps,dw-pcie.yaml  | 15 ++++++++++++++-
+>  2 files changed, 32 insertions(+), 1 deletion(-)
+> 
 
--jassi
+Reviewed-by: Rob Herring <robh@kernel.org>
+
