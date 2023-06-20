@@ -2,73 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3477973750D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 21:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 663E473750F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 21:28:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbjFTT2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 15:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
+        id S230409AbjFTT2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 15:28:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbjFTT2l (ORCPT
+        with ESMTP id S230242AbjFTT2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 15:28:41 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1BB1B6;
-        Tue, 20 Jun 2023 12:28:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=wv2H4gRrgWftVHyvUxA7jfonUlGoWajnFkHFHQqMGlc=; b=W9QCZLRUqgLqFaY900qUZFRgLP
-        G/2cXlQYYil53FWS3q0TzUiY+0ZvU9vnZw2Vh1uxkjKrNWdr8i+AqwxMToRZOO6cu4xgOc1Tijuct
-        n8oYO3S+IhZ2mdmu+bOahI/CF7uftZG56SlHZpnGI+GQkKlSdz9sEMmjUcnxdhGY6xz0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1qBh1Z-00H3Cq-HA; Tue, 20 Jun 2023 21:28:21 +0200
-Date:   Tue, 20 Jun 2023 21:28:21 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 3/3] net: dsa: microchip: fix writes to phy
- registers >= 0x10
-Message-ID: <88474092-70cb-40fc-9c01-1fc8527d5bcb@lunn.ch>
-References: <20230620113855.733526-1-linux@rasmusvillemoes.dk>
- <20230620113855.733526-4-linux@rasmusvillemoes.dk>
+        Tue, 20 Jun 2023 15:28:46 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99309170A
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:28:45 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-988883b0d8fso448241266b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:28:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google; t=1687289324; x=1689881324;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XH1eTCKvssGWMBfvFrdgcklOsCxNlyt2GIpnc07LELQ=;
+        b=BlynXctAWH1QRQ92/1liGst5sDK4J+VQcZkeHhN/JzMTNaMJ1YVs/a+8TpEn7V+e2z
+         5rsT4otCl2HBLFcn3UZI9U8/bLdOsI5BJgt9hPBTvRlotni4E07NsF/Dwxb5rbyEmVrn
+         Cp4ves6PTyv0l/TrGTJFH5VxYdufbQ6URbqso=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687289324; x=1689881324;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XH1eTCKvssGWMBfvFrdgcklOsCxNlyt2GIpnc07LELQ=;
+        b=aFR9SY3Y8BXzRPZMqmbv4/QkyH1093NLxXqBnjrpnUNTcm9czH/tk/AUh0GJS2LW8a
+         oOaJGNJmbqodKfeQXMVZZe4Y7fNTMg/6JbdfPVUdywqethYT/n2obGOSj+Nx1fcMxjHr
+         r5UIofusKGqDYmkeVdmv/ahraxiafQv2exbtWnlOtPVpOlotBm5w3NkA1ViMt2DeGWXY
+         ccBbvGvcsHzIT/tlvnnyB/l8mk7+DnkuR8U6Jx7eoStTZ4Xr9qMtFImKN8cMNfUzFBGV
+         iQ5dBT2djSPGsN4VqTN+XDVRmoG7nQnJY5hgd9Tw4XGvppSfqbV4EUB3+ccQtkMSBBlx
+         y5TQ==
+X-Gm-Message-State: AC+VfDyN44VQspNcNiQOfXI19T7/CKvkv2bbbyjxEJlGMwLm4FklzCnA
+        /M2Lcgjrfilg92OFNNkno/lC5DqySWrpi+oHM7pOsQ==
+X-Google-Smtp-Source: ACHHUZ54HsxZXLKER+8ewm47xglhax+CzJ5iDEH3HsDCWTmmUgIaC+ahifuhHR5ouh2PxWWWI4v7558KxZAH1+RIWm0=
+X-Received: by 2002:a17:906:6a0c:b0:988:bb33:53a8 with SMTP id
+ qw12-20020a1709066a0c00b00988bb3353a8mr5382005ejc.9.1687289324011; Tue, 20
+ Jun 2023 12:28:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230620113855.733526-4-linux@rasmusvillemoes.dk>
+References: <20230620151328.1637569-1-keiichiw@chromium.org> <20230620151328.1637569-3-keiichiw@chromium.org>
+In-Reply-To: <20230620151328.1637569-3-keiichiw@chromium.org>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Tue, 20 Jun 2023 21:28:32 +0200
+Message-ID: <CAJfpegton83boLEL7n-Tf6ON4Nq_g2=mTus7vhX2n0C+yuUC4w@mail.gmail.com>
+Subject: Re: [PATCH 2/3] fuse: Add negative_dentry_timeout option
+To:     Keiichi Watanabe <keiichiw@chromium.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, mhiramat@google.com,
+        takayas@chromium.org, drosen@google.com, sarthakkukreti@google.com,
+        uekawa@chromium.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 01:38:54PM +0200, Rasmus Villemoes wrote:
-> According to the errata sheets for ksz9477 and ksz9567, writes to the
-> PHY registers 0x10-0x1f (i.e. those located at addresses 0xN120 to
-> 0xN13f) must be done as a 32 bit write to the 4-byte aligned address
-> containing the register, hence requires a RMW in order not to change
-> the adjacent PHY register.
+On Tue, 20 Jun 2023 at 17:14, Keiichi Watanabe <keiichiw@chromium.org> wrote:
+>
+> Add `negative_dentry_timeout` mount option for FUSE to cache negative
+> dentries for the specified duration.
 
-ASIC engineers do see to come up with novel ways to break things.
+This is already possible, no kernel changes needed.  See e.g.
+xmp_init() in libfuse/example/passthrough.c.
 
-I assume you have not seen real problems with this, which is why it is
-not for net and a Fixes: tag?
-
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-
-    Andrew
+Thanks,
+Miklos
