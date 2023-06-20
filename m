@@ -2,148 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C74ED7366C7
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EDB77366C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbjFTI6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 04:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
+        id S231633AbjFTI6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 04:58:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbjFTI6X (ORCPT
+        with ESMTP id S231748AbjFTI6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 04:58:23 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D4F10DB;
-        Tue, 20 Jun 2023 01:58:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=dNcfVblJVY+zLncrG+sL2zTOo9XdHdTH5fIK479aTXQ=; b=jZafrTEi6+i9joWWuwVLuOUlv6
-        s+6kibmkrLE+337dcbLt1lEfYdOFd9PkEwyQGfEXyfwYyHD8VC+KHkj0s3oDzqjw35V7rmDiHKO4K
-        z6h8tq2aExj3mvbOkX0FniVWq1njcQbDl+m1LGcaN+H/cVPzdVL0ecKW3uQcm5/F1aiPmHJmvj9SZ
-        ssnjqpxagYQRNfyXDxC0/XLbbdajwi8PTifAKsuQhOXYQ0Q3YX02PyGeEwHMmaqOrmhiThIETiHzz
-        OSbxMPOznxpntfq3JFouOkLY7PcRHCEPj5v0q7oHf4l/ITlRye74I3ftF7aULJrcbPCHoAsAapXt5
-        bOnAHTww==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qBXBN-00G0Xr-1C;
-        Tue, 20 Jun 2023 08:57:49 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3A31B3002F0;
-        Tue, 20 Jun 2023 10:57:46 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 134DF21440F42; Tue, 20 Jun 2023 10:57:46 +0200 (CEST)
-Date:   Tue, 20 Jun 2023 10:57:46 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Youling Tang <tangyouling@loongson.cn>
-Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        madvenka@linux.microsoft.com, chenzhongjin@huawei.com,
-        WANG Xuerui <kernel@xen0n.name>,
-        Xi Ruoyao <xry111@xry111.site>, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        tangyouling00@gmail.com, youling.tang@outlook.com,
-        Jinyang He <hejinyang@loongson.cn>
-Subject: Re: [RFC PATCH v1 13/23] objtool: Add next member in struct reloc
-Message-ID: <20230620085746.GY4253@hirez.programming.kicks-ass.net>
-References: <1687247415-32057-1-git-send-email-tangyouling@loongson.cn>
- <1687247415-32057-4-git-send-email-tangyouling@loongson.cn>
+        Tue, 20 Jun 2023 04:58:07 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-pr2fra01on2043.outbound.protection.outlook.com [40.107.12.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C4331708;
+        Tue, 20 Jun 2023 01:57:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HSIx/PAIIU7HuhVAsC8IEmVEPaNFl9MFQRWQpb2wO3ER9Clo+Bk5fgvr6wL3LMdXY+aHq3dG0ek1ypThv/tfggzMXPh6xq5imlSJ+8g0JVPwBggU+nJFAtlY9FQcYugkVdtevQTbBomu0qhtTasYcciz+TIzyUKWCHqtuXIsv7jZYMBuNV5CWA64kv4h0bsygELm7Uiiax83wMRKIQ/m2hZEiJOF/hTHrE9CBB2hQ8mZcygDxyr7xmVajY3uVoXMC58RGyAI9CYHg/5ilIBFpkUjlrVxiEnDkKiM2RoeoVcfuKfgFEW/4sLErySraE5I6xqusni3/WlZYA7/SUudDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fC/Jb6R30cGYs/J87811RrpiPE2r2t7JMNktTYK0uik=;
+ b=HBufZU7LrlXRMYzQivhdqzfRHZdhPsppZ/4mdOyKozkKRhT282+qsbRdofLVIcrCfZQ99P1aV5nVUNb9MFk4lve9W+vdOyTadpOTyJSDEfFy1B/c8ZnTB4O9dzdLKP4CJ9xkYQvGRy0XjT096MzFzJp6df8G7H19xRNwdkPrMvoGySTqgktcY/hLtCMRYFNyuyyMzRATPYl+eaoN9Dmi/Xsd83kYLUsjLXmpzDYHX7cfQ0ixxx6BcwI8RvCfzqtiiEi/BNY6MjGV9oOX4+MOD/WI7xoi29JqicMk9d4C7ETuaVZOHIm4wbfjNl4uNtVILa9SEUaQkXc1xjMRlrFmVg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.6.166.170) smtp.rcpttodomain=davemloft.net smtp.mailfrom=softathome.com;
+ dmarc=bestguesspass action=none header.from=softathome.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=softathome1.onmicrosoft.com; s=selector1-softathome1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fC/Jb6R30cGYs/J87811RrpiPE2r2t7JMNktTYK0uik=;
+ b=RDWQLvklk97tdWaW8DdQMGf/T+pGpQ4vi8MLsaEZA+QbmVYI1iwgI+DSUeFx/LLO6B7CqtftchkDDB2GsyZmOa+UAt9qf+ssynHLLUqPzCKDSfHrPwXFZybuT3KWTk/+JIMdOGmfGg7hOz6QbQBUvfRPDQUo49vClnAnInnqAJ6kZuEjPU45ANpNK/LtLTyG9nl7zzj04r6L6cE0Gn6Do7uhh8xjgYMhX6dRPZpLunlsQ5ktcHK96gCwumlCAL/mEGDPXv1jqvDDB4W77vHRqcbo6RzbV29fiFPxHX3BYxkyWoR8fH7Me8lWSe6aGNmVkL70rAb4uFguAByb3J7Raw==
+Received: from MR2P264CA0051.FRAP264.PROD.OUTLOOK.COM (2603:10a6:500:31::15)
+ by PAYP264MB3439.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:126::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Tue, 20 Jun
+ 2023 08:57:55 +0000
+Received: from MR2FRA01FT002.eop-fra01.prod.protection.outlook.com
+ (2603:10a6:500:31:cafe::7) by MR2P264CA0051.outlook.office365.com
+ (2603:10a6:500:31::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37 via Frontend
+ Transport; Tue, 20 Jun 2023 08:57:54 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.6.166.170)
+ smtp.mailfrom=softathome.com; dkim=none (message not signed)
+ header.d=none;dmarc=bestguesspass action=none header.from=softathome.com;
+Received-SPF: Pass (protection.outlook.com: domain of softathome.com
+ designates 149.6.166.170 as permitted sender)
+ receiver=protection.outlook.com; client-ip=149.6.166.170;
+ helo=proxy.softathome.com; pr=C
+Received: from proxy.softathome.com (149.6.166.170) by
+ MR2FRA01FT002.mail.protection.outlook.com (10.152.50.92) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6500.27 via Frontend Transport; Tue, 20 Jun 2023 08:57:53 +0000
+Received: from sah1lpt481.softathome.com (unknown [192.168.75.142])
+        by proxy.softathome.com (Postfix) with ESMTPSA id C0A811FF1E;
+        Tue, 20 Jun 2023 10:57:53 +0200 (CEST)
+From:   "quentin.feraboli" <quentin.feraboli@softathome.com>
+To:     johannes@sipsolutions.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quentin.feraboli@softathome.com
+Subject: [PATCH 1/1] wifi: cfg80211: Allow multiple userpsace applications to receive the same registered management frame.
+Date:   Tue, 20 Jun 2023 10:57:51 +0200
+Message-Id: <20230620085751.31329-1-quentin.feraboli@softathome.com>
+X-Mailer: git-send-email 2.17.1
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MR2FRA01FT002:EE_|PAYP264MB3439:EE_
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1687247415-32057-4-git-send-email-tangyouling@loongson.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+X-MS-Office365-Filtering-Correlation-Id: 3ed9ebe7-94b4-40c0-325c-08db716c6f28
+Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: WFvu8aFI1n8xathtM16Fm8GE6Qzfkhs+o0yLxo/NJkVqxGnkFuMwYySQymtNQzbARsjlGsA2iJWbDebRIZabQFE8F3DBrjB3tpEIS6l8DrYJiRNebVavVbE1y/UHp92N/lncvNQRnIP/HEwm4DPj3zitS3lHrk+wtDvHwyhDMDlSyJvI1nGAq1LXE/i/LFnkXJYW7oH0PA/GGM7lCVemswDPbBYwG3H9ZcQ+LFqjJHeQdYWxFbWgNaTglqilX+CEWmNek/qma+eAgY2GD+0XVpOJ8RpFbjZ2+Au4KWhd1ZnpgZ2gVC6ZyGUEntnPBwjtyy1AidJrWbKlD/nr74tSMhW23Kml2c7TR4fW04NHsc4lp2FS2+pTbBqTTtCQspBoWE5+qYK8eNS0ptSgxHWCrDo0NTFfDJG29ueBnvcc1sImlARVHmqG7Qk0N4f58yVdliHwjvTKUmP0GK/wjspRQ4YyI2819ixNxn8iK9uIzvIm51XwPigzicX5UyTmcYO2s4MCRDpCcTv6W18WvIho39hbq9sOpMv7Giu5QGaq9ajVcL32YsnaAT2XrwNYFyU70g3FqFPEoP1G/O5qQNnjqpohsA6v5jORBcY5tvzaeSk+JQfgpeSigdvBG3YR2gUSS6OtYLN9wX19NwUs0NlXkqSNeoSfg0kTCH2hnhSv4DbYeFTPYpIIwf5qKMkxgwJPQnyumPb1crsOM/LjTJBFNTE1T+MnqlXH8GOzgeTphinmnHpFuiDJFWPRgxbMxQNW87y46dD5ZaU53buGg11ylA==
+X-Forefront-Antispam-Report: CIP:149.6.166.170;CTRY:FR;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:proxy.softathome.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39850400004)(346002)(396003)(136003)(376002)(451199021)(36840700001)(40470700004)(46966006)(40460700003)(2906002)(186003)(7696005)(82310400005)(82740400003)(356005)(2616005)(81166007)(83380400001)(82960400001)(426003)(1076003)(26005)(336012)(6266002)(47076005)(36860700001)(41300700001)(86362001)(478600001)(6966003)(316002)(40480700001)(70586007)(70206006)(8676002)(8936002)(36756003)(5660300002)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: softathome.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 08:57:53.7587
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ed9ebe7-94b4-40c0-325c-08db716c6f28
+X-MS-Exchange-CrossTenant-Id: aa10e044-e405-4c10-8353-36b4d0cce511
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=aa10e044-e405-4c10-8353-36b4d0cce511;Ip=[149.6.166.170];Helo=[proxy.softathome.com]
+X-MS-Exchange-CrossTenant-AuthSource: MR2FRA01FT002.eop-fra01.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAYP264MB3439
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 03:50:09PM +0800, Youling Tang wrote:
-> In LoongArch, there may be multiple relocation information in one location,
-> so the next member is added to handle this situation.
+Currently, only one application can listen to a management frame type.
 
-So Josh did a shrink on struct reloc because there are too many of them;
-ideally we find another way to link them for the case where it is
-needed.
+Signed-off-by: quentin.feraboli <quentin.feraboli@softathome.com>
+---
+ net/wireless/mlme.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> The following warning appears when the next member is not added,
-> warning: objtool: unexpected relocation symbol type in .rela.discard.unreachable
-> 
-> Relocation section '.rela.discard.unreachable' at offset 0x1a58 contains 4 entries:
->     Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
-> 0000000000000000  0000000200000032 R_LARCH_ADD32          0000000000000000 .text + 354
-> 0000000000000000  0000000900000037 R_LARCH_SUB32          0000000000000000 L0^A + 0
-> 
-> Co-developed-by: Jinyang He <hejinyang@loongson.cn>
-> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
-> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
-> ---
->  tools/objtool/elf.c                 | 11 ++++++++++-
->  tools/objtool/include/objtool/elf.h |  1 +
->  2 files changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-> index 6806ce01d933..d345300d269b 100644
-> --- a/tools/objtool/elf.c
-> +++ b/tools/objtool/elf.c
-> @@ -895,7 +895,7 @@ static int read_relocs(struct elf *elf)
->  {
->  	unsigned long nr_reloc, max_reloc = 0, tot_reloc = 0;
->  	struct section *sec;
-> -	struct reloc *reloc;
-> +	struct reloc *reloc, *next_reloc;
->  	unsigned int symndx;
->  	struct symbol *sym;
->  	int i;
-> @@ -915,6 +915,7 @@ static int read_relocs(struct elf *elf)
->  			return -1;
->  		}
->  
-> +		next_reloc = NULL;
->  		sec->base->reloc = sec;
->  
->  		nr_reloc = 0;
-> @@ -946,6 +947,14 @@ static int read_relocs(struct elf *elf)
->  				return -1;
->  			}
->  
-> +			if (next_reloc && reloc->offset == next_reloc->offset) {
-> +				next_reloc->next = reloc;
-> +				next_reloc = reloc;
-> +				continue;
-> +			}
-> +
-> +			next_reloc = reloc;
+diff --git a/net/wireless/mlme.c b/net/wireless/mlme.c
+index ac059cefbeb3..0f2e83fa63cb 100644
+--- a/net/wireless/mlme.c
++++ b/net/wireless/mlme.c
+@@ -572,7 +572,7 @@ int cfg80211_mlme_register_mgmt(struct wireless_dev *wd=
+ev, u32 snd_portid,
+        list_for_each_entry(reg, &wdev->mgmt_registrations, list) {
+                int mlen =3D min(match_len, reg->match_len);
 
-This seems to rely on 'linked' reloc being adjecent in the ELF tables;
-is this required by the LoongArch ELF spec? If not, you really should
-not rely on it.
+-               if (frame_type !=3D le16_to_cpu(reg->frame_type))
++               if (frame_type !=3D le16_to_cpu(reg->frame_type) || snd_por=
+tid !=3D nreg->nlportid)
+                        continue;
 
-> +
->  			list_add_tail(&reloc->sym_reloc_entry, &sym->reloc_list);
->  			list_add_tail(&reloc->list, &sec->reloc_list);
->  			elf_hash_add(reloc, &reloc->hash, reloc_hash(reloc));
-> diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-> index ad0024da262b..7877298fe401 100644
-> --- a/tools/objtool/include/objtool/elf.h
-> +++ b/tools/objtool/include/objtool/elf.h
-> @@ -68,6 +68,7 @@ struct symbol {
->  struct reloc {
->  	struct list_head list;
->  	struct hlist_node hash;
-> +	struct reloc *next;
->  	union {
->  		GElf_Rela rela;
->  		GElf_Rel  rel;
-> -- 
-> 2.39.2
-> 
+                if (memcmp(reg->match, match_data, mlen) =3D=3D 0) {
+--
+2.17.1
+
+-- This message and any attachments herein are confidential, intended solel=
+y for the addressees and are SoftAtHome=E2=80=99s ownership. Any unauthoriz=
+ed use or dissemination is prohibited. If you are not the intended addresse=
+e of this message, please cancel it immediately and inform the sender.
