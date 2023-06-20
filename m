@@ -2,121 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8137737400
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B542737407
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:22:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbjFTSVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 14:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54472 "EHLO
+        id S229861AbjFTSWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 14:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjFTSU7 (ORCPT
+        with ESMTP id S229544AbjFTSVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 14:20:59 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCCA199;
-        Tue, 20 Jun 2023 11:20:58 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 258692B3;
-        Tue, 20 Jun 2023 20:20:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687285221;
-        bh=sD1PKV7f7iXFcTk9Cp6Tb3XJE7rld19ReTuqZZXis4k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iG4rP0MTxRyFxBalRPcEerDsmXq1CeolMkm7bEEGOfK5TNr8sqU1mm9TJJY+8ZIgS
-         1Zwx82iXbcoNmen7ZmrIQEQtakzFb9Dw/kcwLrXzKjpOyQ5UcD3q8m33/NYDv+tEST
-         XAMrUSsvbCo5SBsiZQsTdXTSgXDIV63116XP7Sz4=
-Date:   Tue, 20 Jun 2023 21:20:54 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Umang Jain <umang.jain@ideasonboard.com>,
-        linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stefan.wahren@i2se.com,
-        f.fainelli@gmail.com, athierry@redhat.com, error27@gmail.com,
-        dave.stevenson@raspberrypi.com, kieran.bingham@ideasonboard.com
-Subject: Re: [PATCH v7 1/5] staging: vc04_services: vchiq_arm: Add new bus
- type and device type
-Message-ID: <20230620182054.GA14686@pendragon.ideasonboard.com>
-References: <20230620134152.383569-1-umang.jain@ideasonboard.com>
- <20230620134152.383569-2-umang.jain@ideasonboard.com>
- <2023062022-whimsical-hasty-b012@gregkh>
+        Tue, 20 Jun 2023 14:21:31 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925E61A8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 11:21:30 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1a98a7fdf3bso3367724fac.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 11:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687285290; x=1689877290;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jYkDBz2Ev1FOQnndf+//oaOu8V4lb9uno7gOrDIO5xE=;
+        b=Dk3BPGxzKJIfDm7CbAU0rHekEMYlzV3TGO3dSN6z0zi0iRA7H+VSvc5VG/gUSBHGh3
+         MXFtJvX9Z3z/YqSDyVBqHaUfUug00X1RYWJuGzXQy8PzfCcHqqVOM/0xBkhPxmcHDo0f
+         9h9Abme1MUgLZGAsadbF+4oZgiOaYrvr1sf2XjJEZodDEmWzx6+zz5KXsoDX/xmsTa5i
+         wXTJGriWvg6xDNYEvb+uR/pzLsQj17E757OAXZEpRE1R05xzlpRb9u2HbZJguW2zU64u
+         mdFRT1Igg8mU4ElqxYXQ1JU1MJk8RsggTKHfT8A6I8Q5cb/jmzEUaTqDHa7HV9Zoobxu
+         y/Kg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687285290; x=1689877290;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jYkDBz2Ev1FOQnndf+//oaOu8V4lb9uno7gOrDIO5xE=;
+        b=VgIwvQl64cW8/JUtlT4ad8fldfQ8daEPrNj4sQ460oskmW5+VGp5JbJYnl27EgT7yw
+         hhMpxpm1rA9Xpe5wA21Jh5KguDI2ZpYUT2j4vPBVJfmEqvfr/EperWVkatG+ifOoReyj
+         otQdG93LO+EYeLO5aNta25UFTzPGIu/LqPpew6hBCD2Uy1/sznYIqu4k/L3lKzAEDA7u
+         ytTPFfC+23zVgBwFLohGIi/hHgXUVRgZ6RTUujRpgdIp3ju7iCGlXBaIfYsxFcV3NmZw
+         5yiTcBbhLY0iy+8bk8VjvRBGQFKzz1KlzU6DbkbVmOUbc1c5rVnOqGlml0l1IKb6qnnc
+         cIiA==
+X-Gm-Message-State: AC+VfDzsdZJv1bsQN1R+mq7+L3zFyNEwspovgZsNq1LOstYOlqDYDwqs
+        OKkRGNEEMOUeT9thYgumtYsbU//FDKr6T9P3GCngyw==
+X-Google-Smtp-Source: ACHHUZ7dAvG8wBqWgkxNmSuVOmQfHdBZWlkPXuat6Q7haa8X0FbTORuhXwY7OaTBexgplG+gHQ6YCKI4nZ+vbsyXkFs=
+X-Received: by 2002:a05:6870:c8a9:b0:1a6:8911:61a9 with SMTP id
+ er41-20020a056870c8a900b001a6891161a9mr5381475oab.29.1687285289959; Tue, 20
+ Jun 2023 11:21:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2023062022-whimsical-hasty-b012@gregkh>
+References: <20230616035813.255062-1-jaswinder.singh@linaro.org>
+ <20230620170725.13794-1-jaswinder.singh@linaro.org> <5ae8c143-64cf-469d-b4f2-bed5bd9ee87b@linaro.org>
+ <CAJe_Zhc7-LU0X6epmOoo3nE0j+e_zROsA+J0s0vSUA-sTJ6jBw@mail.gmail.com> <dce591cb-ee6c-15cf-e5aa-6b2dc739984a@linaro.org>
+In-Reply-To: <dce591cb-ee6c-15cf-e5aa-6b2dc739984a@linaro.org>
+From:   Jassi Brar <jaswinder.singh@linaro.org>
+Date:   Tue, 20 Jun 2023 13:21:19 -0500
+Message-ID: <CAJe_ZheWkOK8kB_NGp7E=+31ZO6JgO1QMmc5Kbkx_8ESbp8GTA@mail.gmail.com>
+Subject: Re: [PATCHv2] dt-bindings: arm: socionext: add Synquacer platforms
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh@kernel.org,
+        ilias.apalodimas@linaro.org, masahisa.kojima@linaro.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 04:17:05PM +0200, Greg KH wrote:
-> On Tue, Jun 20, 2023 at 07:11:48PM +0530, Umang Jain wrote:
-> > The devices that the vchiq interface registers (bcm2835-audio,
-> > bcm2835-camera) are implemented and exposed by the VC04 firmware.
-> > The device tree describes the VC04 itself with the resources required
-> > to communicate with it through a mailbox interface. However, the
-> > vchiq interface registers these devices as platform devices. This
-> > also means the specific drivers for these devices are getting
-> > registered as platform drivers. This is not correct and a blatant
-> > abuse of platform device/driver.
-> > 
-> > Add a new bus type, vchiq_bus_type and device type (struct vchiq_device)
-> > which will be used to migrate child devices that the vchiq interfaces
-> > creates/registers from the platform device/driver.
-> > 
-> > Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-> > ---
-> >  drivers/staging/vc04_services/Makefile        |  1 +
-> >  .../interface/vchiq_arm/vchiq_device.c        | 78 +++++++++++++++++++
-> >  .../interface/vchiq_arm/vchiq_device.h        | 43 ++++++++++
-> >  3 files changed, 122 insertions(+)
-> >  create mode 100644 drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
-> >  create mode 100644 drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.h
-> > 
-> > diff --git a/drivers/staging/vc04_services/Makefile b/drivers/staging/vc04_services/Makefile
-> > index 44794bdf6173..2d071e55e175 100644
-> > --- a/drivers/staging/vc04_services/Makefile
-> > +++ b/drivers/staging/vc04_services/Makefile
-> > @@ -5,6 +5,7 @@ vchiq-objs := \
-> >     interface/vchiq_arm/vchiq_core.o  \
-> >     interface/vchiq_arm/vchiq_arm.o \
-> >     interface/vchiq_arm/vchiq_debugfs.o \
-> > +   interface/vchiq_arm/vchiq_device.o \
-> >     interface/vchiq_arm/vchiq_connected.o \
-> >  
-> >  ifdef CONFIG_VCHIQ_CDEV
-> > diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
-> > new file mode 100644
-> > index 000000000000..e16279a25126
-> > --- /dev/null
-> > +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
-> > @@ -0,0 +1,78 @@
-> > +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-> 
-> Code that directly interacts with the driver core can, for obvious
-> reasons, not be BSD-3 licensed, sorry.
-> 
-> Also, why is any of this dual licensed?  What good is any of that?  In
-> order for me to accept new dual-licensed code, it needs to be documented
-> in the changelog very very well as to exactly why this is required, as
-> the legal issues involved in maintaining dual-licensed code like this is
-> tricky and easy to get wrong (as proven here already in this patch...)
+On Tue, 20 Jun 2023 at 12:54, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 20/06/2023 19:24, Jassi Brar wrote:
+> >>> +properties:
+> >>> +  $nodename:
+> >>> +    const: '/'
+> >>> +  compatible:
+> >>> +    oneOf:
+> >>> +      - items:
+> >>> +          - enum:
+> >>> +              - socionext,developer-box
+> >>> +              - socionext,synquacer
+> >>> +          - const: socionext,sc2a11b
+> >>
+> >> That's quite different change.
+> >>
+> > So it is not carrying your ack.
+> >
+> >> What is synquacer in this case? You claim
+> >> now it is a board, but based on previous discussions and U-Boot source
+> >> it does not look like such.
+> >>
+> > I never made that claim. I said Kojima-san will confirm. He informed
+> > Synquacer is a brand name.
+> >
+> > Currently no code internally or externally differentiates between
+> > SC2A11B and Synquacer and we might as well keep living with Synquacer
+> > only. This patch is an attempt to be accurate.
+>
+> Then the patch is not correct, because synquacer is not a board. We
+> should anyway choose only one for adding to documentation.
+>
+OK. I will revert to using the brand name Synquacer.
 
-The whole vchiq_arm layer is dual licensed GPL-2.0 + BSD-3. I assume
-this is why Umang used the same licensing terms. We can use GPL-2.0 only
-if this patch qualifies as original work and not derived work of the
-existing code.
-
-This being said, I have no objection changing the license of the whole
-vchiq_arm layer to GPL-2.0 only. Dave, any opinion on this ?
-
--- 
-Regards,
-
-Laurent Pinchart
+thnkx
