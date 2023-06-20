@@ -2,279 +2,255 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9160737377
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:03:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43BA1737379
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjFTSDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 14:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
+        id S230519AbjFTSEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 14:04:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbjFTSDZ (ORCPT
+        with ESMTP id S231147AbjFTSDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 14:03:25 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF88D19B9
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 11:03:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687284191; x=1718820191;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=q26PdLKjmruhrx2IjIayzJ8ibcZXzoU/Lsieqj2qfF0=;
-  b=K6RoPWmhPeIZ+tVXsiy3GyTsEZTX1bAc9BYTZtZlg/hmJgpkC4Hy7fdc
-   g2bH+da0asnENtMnAlxmL/fO6H4mlVDPgZWkCRQGdVAGy1tn9Ipi78foE
-   BLdNyoZmI9ptkCXfrQ0G4culyBQgNp9y7mrz0KWxODwrNWI7cuwJuUi52
-   RImXNu4kwY0i21seDS53SDG2db0Sa8CXvxOa9fyvlD8FFvj7ru4RmFq8z
-   VHImm78+y7aigUH9fa50+sBpuWu+0eGL/pUIONv7ZV5xzFLnSN60nefuu
-   CM+uU3iU9K72OFJSc1u8y1dpZNPG3FDF8qgJoK7sXHFoF9gKafM1Mh1TD
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="425898554"
-X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
-   d="scan'208";a="425898554"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 11:02:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="858677105"
-X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
-   d="scan'208";a="858677105"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Jun 2023 11:02:32 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 20 Jun 2023 11:02:32 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 20 Jun 2023 11:02:31 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 20 Jun 2023 11:02:31 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 20 Jun 2023 11:02:31 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZRqRjfpyNwJiVbtnCXlUYhe5ICtxxSvZHh5QDP7wfYxKyS5FF/q8Vqyt+EHBWGo2V98/soDXaFUYeiAWzs2M4+0szS5biq0YzhRO5NfO6YGYTQT91akXy814Cf95vVqIjTmlKx/AdLXfB+cRTuUclT5jPoCO7rU9bTQy64Kt4UFCanwCqfQLHPaeqKgIx0/TQ57csopSMxlu1tICYxE3aL8hx2J9N2TqF+iUkHDl6FC+t4baLf2HwsZ30P3/gJQKlf2IWM6XVl2fF7uBntl48BOIk5N6usSJWaSwR57J2sNO30vo9pwD/6pedO1oQ76yOBr+2m90N+ZwZ87suuCOaw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DQCyHS2wyurrmL1O3hojqRzpZ59mU42n7rlUmErzEMQ=;
- b=PHIonu86TmIYTQQXfOyitByamJmytNorGXaqIhlW0k57YJwYajIhe4WgPrXIIXy8UA2Q5fmAPCyPrz/7Jy2kpjZYO+aD6xTDNb/cWJzWdaydCpGGNc1gjZKESjFI/8yUOio78Dhde98FQ6MqP6gnsdYR8xcGa7HpkssJ+XrvszxsWtZtePRFI7rFt3vLT01aDhWV/TTnEB4vwOgU35AuJHnFerVHFwNOzt+9SD7NmefP+m55LHmehLlbAG18yoW4e+xUxZ8R/m+ts7ksRHnFhc+F+1nnjNUUv/RBS6Gf2/T1kHOYQdJHapJVROwSPo3Dn9/fNmrdXYvH7MQ6k6gkdw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by SN7PR11MB7114.namprd11.prod.outlook.com (2603:10b6:806:299::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.35; Tue, 20 Jun
- 2023 18:02:29 +0000
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::44e7:c479:62f4:3eb4]) by CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::44e7:c479:62f4:3eb4%7]) with mapi id 15.20.6500.036; Tue, 20 Jun 2023
- 18:02:28 +0000
-Date:   Tue, 20 Jun 2023 11:02:26 -0700
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <intel-gfx@lists.freedesktop.org>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        <intel-xe@lists.freedesktop.org>
-Subject: Re: [Intel-xe] [PATCH 2/3] linux/bits.h: Add fixed-width GENMASK and
- BIT macros
-Message-ID: <itxb3tdwvyxzwlzvvbwv75jssjwfpve2k4b4bcfzyp5x5rb6wu@tzlzdn6dem46>
-References: <20230509051403.2748545-3-lucas.demarchi@intel.com>
- <ZF4fi5B7PPlgZBOI@smile.fi.intel.com>
- <87pm75kd0h.fsf@intel.com>
- <ZF4j0NPoBGMBT8CO@smile.fi.intel.com>
- <87mt29kc34.fsf@intel.com>
- <ZIs0CC2J7nu0LHEK@smile.fi.intel.com>
- <875y7igph5.fsf@intel.com>
- <ZJG91zMQW3Rnvdbe@smile.fi.intel.com>
- <amgwl5mthhqgvgkqnor6tjfcr3x3pgwvpqin5efwwjfpdhvvpa@vhzhiq5mzsdg>
- <ZJHkthMktY83pwvy@smile.fi.intel.com>
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <ZJHkthMktY83pwvy@smile.fi.intel.com>
-X-ClientProxiedBy: MW4PR03CA0328.namprd03.prod.outlook.com
- (2603:10b6:303:dd::33) To CY5PR11MB6139.namprd11.prod.outlook.com
- (2603:10b6:930:29::17)
+        Tue, 20 Jun 2023 14:03:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CCF919A8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 11:02:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687284168;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GRm4yc4qMtunLBzXmR/1ejUxdVZnW/vHIX1yfFUZTks=;
+        b=TXgSO/RdmWPf5qw3KVWvs1h00MmKKnxLV7GThSFpHtqo2yT3vpQJCknUp/065oawqlARtA
+        BylydCLwrP0F8oKCZO878rKmYq4s8ojFXM8uG/mB7hpCLu4xPbCeaWszFL0sf7XqugtxoB
+        yXB21LnGkTEw7lXQeAQebqcjXOXTVyk=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-510-704YdHKzOiSyckwxL6ZcQQ-1; Tue, 20 Jun 2023 14:02:45 -0400
+X-MC-Unique: 704YdHKzOiSyckwxL6ZcQQ-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f41a04a297so19768765e9.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 11:02:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687284163; x=1689876163;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GRm4yc4qMtunLBzXmR/1ejUxdVZnW/vHIX1yfFUZTks=;
+        b=NFVO7xYERtrnby+RqMTeAZZQXuKol6I7fAu2IjYQs+WtZ8TtTGF7MpgF4dlFACkhvi
+         tj+w0IFRHvTgCwZnSJjvFT2A5riFUUoycw7MRpToE3CPw94zsIhYXjzcnhDqWX0Cl7iI
+         Tms1FtOG3FyMz66vpoDypqL/3BbkTdaEIA919VG00nCw7GcNtrm8Ua87vi1eL38uC8SK
+         gEyklm97Z/o8eGD44w1nTSZUnLPTSEnr2Tegr1vFq9NQOkGLI+4m1tsBlbraluIrcqUw
+         q8SZNPtK0r38iT/7MipMSdvv7m/m+ttjwsM5b5Pc7Ss0BxOMD7syGBjHHnFwvX+lnj8U
+         5y6w==
+X-Gm-Message-State: AC+VfDzQH5TAgWP2v99rQr+1wWjHh9RZAP1728tvOcQO7CfsuzXDPe9b
+        vKT4eKbxL8DrENc4bZ7U2lQ7P9vlzim57NjmI3nDyve6+1BGA+UF7UyoUT95D4SWgAM4BR4yT1i
+        WuyOR0whsJlIr5pmZSjyjcIA+
+X-Received: by 2002:a05:600c:ad4:b0:3f9:b8b8:20df with SMTP id c20-20020a05600c0ad400b003f9b8b820dfmr1677422wmr.33.1687284162968;
+        Tue, 20 Jun 2023 11:02:42 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ61L1i5+eB0b2iW8qyt23nne+c+R+ficSGQ1kzLD8tgpFdbtBQFblzWO68kvfr8ugu5ddb5eg==
+X-Received: by 2002:a05:600c:ad4:b0:3f9:b8b8:20df with SMTP id c20-20020a05600c0ad400b003f9b8b820dfmr1677403wmr.33.1687284162551;
+        Tue, 20 Jun 2023 11:02:42 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c739:d200:8745:c520:8bf6:b587? (p200300cbc739d2008745c5208bf6b587.dip0.t-ipconnect.de. [2003:cb:c739:d200:8745:c520:8bf6:b587])
+        by smtp.gmail.com with ESMTPSA id h9-20020a5d4fc9000000b0031134bcdacdsm2487036wrw.42.2023.06.20.11.02.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 11:02:42 -0700 (PDT)
+Message-ID: <a73ed9f3-97f7-5822-f894-fce57ac02dc7@redhat.com>
+Date:   Tue, 20 Jun 2023 20:02:41 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|SN7PR11MB7114:EE_
-X-MS-Office365-Filtering-Correlation-Id: f57df83b-56ce-4115-e33b-08db71b882ce
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XGBcruQKVaB7vU52hyOMStCA4BnYoM1jIAIIxX7bPyJV5gRbGCNqE5sJPhzC2h0mWX5rL0Xd/IYzXtNCosvxBiHMt4LIqTZVDu7l+XZaiJPAbA6JT+7nHmi1T/Ywsinddgas+YKQbVqgT6U3tGKVLl403qkDZkvbzXNPn/LsYJBE96w2Z0g94CjtLSDJ+l3SyqE2EK/iMQWbNxPxzymGSoF5i0YYaPFNltF8U9zTzIBeH8N2t1ueENqze2oxWUrKpL5PAej6yw6RoIUsXzYXGe4O2ylITrf91kbWNpObY+VO5SwZG9xZRIM6JunqJYG1CBgbry7XK1qOlA3olboQm68qfpuPEUMI4AnYczIs1U2TRiSE0nhXpaRouI4MRjbRCcOySqYNmoY+QkkDcNDt0QwVvp1qED2HtR0pgd1Rf8aJZ+at5v87mFDgePeXolcjFjxWp+ZtoF/Pgmmz/lRjsmLn5mUlPFzT536IekosSvlJVva8tLyPw24ZAfXe089naweIxS6Y3ZhfugG2tHMksJcLK1cPhtuYJtFM+vJmvGcJaKzJVQv/og4UNNb1672+
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(346002)(136003)(396003)(366004)(39860400002)(376002)(451199021)(38100700002)(82960400001)(86362001)(478600001)(6512007)(9686003)(186003)(6506007)(26005)(2906002)(8936002)(8676002)(316002)(7416002)(5660300002)(4326008)(41300700001)(54906003)(66556008)(66476007)(66946007)(6916009)(33716001)(6486002)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QedjxB2CVfjvmK47jaxKL84l2aLofUUQGVW94fZDxTTciXuZ6UzCWDKVvhVy?=
- =?us-ascii?Q?wA5g/ti2Vmkr3HtOjo3h3hrrH1RdwdVPYUjyqa6vcAAAxqWjkC/guedFx5bq?=
- =?us-ascii?Q?6Cb3vdst3KU4R5b/eoAER1mksSIkHB17KFaT3S3ZUPDJKW7L+bVh9JWpczhi?=
- =?us-ascii?Q?5SP9aIg7Cgr9Ux8W8/3hQ/0xXHLeywqSFODkhsA4tEHJAkp8A2B3gTtuq858?=
- =?us-ascii?Q?/u7KDeDXm6uWgCiIs/c/aQXdL7MQy/Mwn2s9XmKhB9e2MFALnIbVbUSoI5OE?=
- =?us-ascii?Q?ZCii7AzGirADQd8Wz9MHudlFSigqn9TCLXgTRSMXJQuZquACxF7PobXhO07x?=
- =?us-ascii?Q?l6epUoLRADQbx9a7JLWW3TOU3N0P2ilL/a6hO1qYwCuJMv06KXYC/0Uma0Uk?=
- =?us-ascii?Q?SKBZ/qbHUqG8f/cER6P5qrKogKAXnWxuCcqrgogzQ5ikUv9uJsvJFLrnjH4Q?=
- =?us-ascii?Q?ttiW/wlY6rnbIGBvjgZamTL10LG7W+mUx5DVWd6ZbVGS4OM53I7KOLochvxy?=
- =?us-ascii?Q?8rvjNdAjlDUYcfrPxYLzRV7T9fpEPRbvmT2+veOIMFauKjUGn5HqneIF8bxs?=
- =?us-ascii?Q?NNxxPc1IL9EU5jZvpOGe9kxcs8Rqb6NGl/TSruySMnnYWEsAf/taq6S3Mnnd?=
- =?us-ascii?Q?aFXCa3FqlAA9YrB4tmgsSN7Ii8aDGHxK3Hluy88Uvxrv3d+IQu4RtbNL1ADY?=
- =?us-ascii?Q?V/vGr0crOOqL19VFnTAZBcOYQWTXqSomfwOKiBB8UONkp1SiF4dywMzYh23T?=
- =?us-ascii?Q?FQpxL12HYa0MtLgSqWBz8nFlXDhBsRf7uPZQ6adbRqZ1m0emeQqRtODGzWHg?=
- =?us-ascii?Q?e+cw26l4wAd/nGKpQ9UHyWgkuWGjm+EbYF07R7Se5IT/PHS5ThfOIJuELV17?=
- =?us-ascii?Q?ed0BrI3Pnj8YJ3DJWbHQLfxpq3EU3dBDRHiRIHrXXjO0AUsjtRrc4twpUyTo?=
- =?us-ascii?Q?/W5eb+tLUYUOYcNuZdl36OeLpecesMiwX9kvoFKxM4EdnTm5IR1H/0frJiGI?=
- =?us-ascii?Q?sEIITYpTQ4ZUg89Rty4DkHtsrFhxYoik/cidXC/7POv8HsaiahvJ865GSVHq?=
- =?us-ascii?Q?QJpKC/6SBt00QwepL92gxpYH/yopgjkcbXo7BM+nqplYm0JIE3QREiJCGN7h?=
- =?us-ascii?Q?sjQUSiGhUggmaAe8dAGoUnJJmLD1YgbIAscSiki+3pvpiX6PN21igpnngQL4?=
- =?us-ascii?Q?EpgkFPW0mPdculgBdd24AfdxUWH33T8V2cO3+Jratl/OmfkdAMCMRseSWT8X?=
- =?us-ascii?Q?VXipKQjl99f0FhKB33KRYlMz92P6C+AjMptYz/E+OKd83pBiXUdlJKz00ubs?=
- =?us-ascii?Q?Nl30G4wMzo7m0686HHj9YxkwlHwYV5SsgmBd5x2eZyEOwTNVoIR33sGhuR/y?=
- =?us-ascii?Q?vf6MmSFqRvTclVzzD7vMVsMOngkcQNUGaXKLzGl81QMpV214URS2xKqIcX0O?=
- =?us-ascii?Q?RZewRQUSl8PKvocB9QAsY4ke3pFdmgjgrS66JZUjIrss/n5T/DaKcHHNy09P?=
- =?us-ascii?Q?9/95r3UXDc4zUrPhJ8i6an+N6w96ioMpjHOxY8iTKg/U/MLohqXGPbOvmf5e?=
- =?us-ascii?Q?u1GumkmevTyRTZ3zpoj+phYaBkgS3yDrQcaE6v88gtER/um01OpB8U7/wZa+?=
- =?us-ascii?Q?kQ=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f57df83b-56ce-4115-e33b-08db71b882ce
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 18:02:28.7099
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EdzEgRi3xKlfUfRe8iOpOjmHFu2fKA0jE2/UPPAHd6liODoOFYP2uuhITpyPp3oUAkEei2rKGjqw7Wcwqfo4MLxgKv6UE++kHVCb3T1o8Fc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7114
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        John Hubbard <jhubbard@nvidia.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        James Houghton <jthoughton@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Hugh Dickins <hughd@google.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+References: <20230619231044.112894-1-peterx@redhat.com>
+ <20230619231044.112894-6-peterx@redhat.com>
+ <02a057a3-3d9e-4013-8762-25ceb1beec86@redhat.com> <ZJHSm/UbEy3JndZ4@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v2 5/8] mm/gup: Accelerate thp gup even for "pages !=
+ NULL"
+In-Reply-To: <ZJHSm/UbEy3JndZ4@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 08:41:10PM +0300, Andy Shevchenko wrote:
->On Tue, Jun 20, 2023 at 10:25:21AM -0700, Lucas De Marchi wrote:
->> On Tue, Jun 20, 2023 at 05:55:19PM +0300, Andy Shevchenko wrote:
->> > On Tue, Jun 20, 2023 at 05:47:34PM +0300, Jani Nikula wrote:
->> > > On Thu, 15 Jun 2023, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
->> > > > On Fri, May 12, 2023 at 02:45:19PM +0300, Jani Nikula wrote:
->> > > >> On Fri, 12 May 2023, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
->> > > >> > On Fri, May 12, 2023 at 02:25:18PM +0300, Jani Nikula wrote:
->> > > >> >> On Fri, 12 May 2023, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
->> > > >> >> > On Mon, May 08, 2023 at 10:14:02PM -0700, Lucas De Marchi wrote:
->> > > >> >> >> Add GENMASK_U32(), GENMASK_U16() and GENMASK_U8()  macros to create
->> > > >> >> >> masks for fixed-width types and also the corresponding BIT_U32(),
->> > > >> >> >> BIT_U16() and BIT_U8().
->
->> > > >> >> > Why?
->> > > >> >>
->> > > >> >> The main reason is that GENMASK() and BIT() size varies for 32/64 bit
->> > > >> >> builds.
->> > > >> >
->> > > >> > When needed GENMASK_ULL() can be used (with respective castings perhaps)
->> > > >> > and BIT_ULL(), no?
->> > > >>
->> > > >> How does that help with making them the same 32-bit size on both 32 and
->> > > >> 64 bit builds?
->> > > >
->> > > > 	u32 x = GENMASK();
->> > > > 	u64 y = GENMASK_ULL();
->> > > >
->> > > > No? Then use in your code either x or y. Note that I assume that the parameters
->> > > > to GENMASK*() are built-time constants. Is it the case for you?
->> > >
->> > > What's wrong with wanting to define macros with specific size, depending
->> > > on e.g. hardware registers instead of build size?
->> >
->> > Nothing, but I think the problem is smaller than it's presented.
+On 20.06.23 18:23, Peter Xu wrote:
+> On Tue, Jun 20, 2023 at 05:43:35PM +0200, David Hildenbrand wrote:
+>> On 20.06.23 01:10, Peter Xu wrote:
+>>> The acceleration of THP was done with ctx.page_mask, however it'll be
+>>> ignored if **pages is non-NULL.
+>>>
+>>> The old optimization was introduced in 2013 in 240aadeedc4a ("mm:
+>>> accelerate mm_populate() treatment of THP pages").  It didn't explain why
+>>> we can't optimize the **pages non-NULL case.  It's possible that at that
+>>> time the major goal was for mm_populate() which should be enough back then.
 >>
->> not sure about big/small problem you are talking about. It's a problem
->> for when the *device* register is a 32b fixed width, which is
->> independent from the CPU you are running on. We also have registers that
->> are u16 and u64. Having fixed-width GENMASK and BIT helps avoiding
->> mistakes like below. Just to use one example, the diff below builds
->> fine on my 64b machine, yet it's obviously wrong:
+>> In the past we had these sub-page refcounts for THP. My best guess (and I
+>> didn't check if that was still the case in 2013) would be that it was
+>> simpler regarding refcount handling to to do it one-subpage at a time.
 >>
->> 	$ git diff 	diff --git a/drivers/gpu/drm/i915/gt/intel_gt_mcr.c
->> b/drivers/gpu/drm/i915/gt/intel_gt_mcr.c
->> 	index 0b414eae1683..692a0ad9a768 100644
->> 	--- a/drivers/gpu/drm/i915/gt/intel_gt_mcr.c
->> 	+++ b/drivers/gpu/drm/i915/gt/intel_gt_mcr.c
->> 	@@ -261,8 +261,8 @@ static u32 rw_with_mcr_steering_fw(struct intel_gt *gt,
->> 			 * No need to save old steering reg value.
->> 			 */
->> 			intel_uncore_write_fw(uncore, MTL_MCR_SELECTOR,
->> 	-                                     REG_FIELD_PREP(MTL_MCR_GROUPID, group) |
->> 	-                                     REG_FIELD_PREP(MTL_MCR_INSTANCEID, instance) |
->> 	+                                     FIELD_PREP(MTL_MCR_GROUPID, group) |
->> 	+                                     FIELD_PREP(MTL_MCR_INSTANCEID, instance) |
->> 					      (rw_flag == FW_REG_READ ? GEN11_MCR_MULTICAST : 0));
->> 		} else if (GRAPHICS_VER(uncore->i915) >= 11) {
->> 			mcr_mask = GEN11_MCR_SLICE_MASK | GEN11_MCR_SUBSLICE_MASK;
->> 	diff --git a/drivers/gpu/drm/i915/gt/intel_gt_regs.h b/drivers/gpu/drm/i915/gt/intel_gt_regs.h
->> 	index 718cb2c80f79..c42bc2900c6a 100644
->> 	--- a/drivers/gpu/drm/i915/gt/intel_gt_regs.h
->> 	+++ b/drivers/gpu/drm/i915/gt/intel_gt_regs.h
->> 	@@ -80,8 +80,8 @@
->> 	 #define   GEN11_MCR_SLICE_MASK                 GEN11_MCR_SLICE(0xf)
->> 	 #define   GEN11_MCR_SUBSLICE(subslice)         (((subslice) & 0x7) << 24)
->> 	 #define   GEN11_MCR_SUBSLICE_MASK              GEN11_MCR_SUBSLICE(0x7)
->> 	-#define   MTL_MCR_GROUPID                      REG_GENMASK(11, 8)
->> 	-#define   MTL_MCR_INSTANCEID                   REG_GENMASK(3, 0)
->> 	+#define   MTL_MCR_GROUPID                      GENMASK(32, 8)
->> 	+#define   MTL_MCR_INSTANCEID                   GENMASK(3, 0)
->> 	 	 #define IPEIR_I965                             _MMIO(0x2064)
->> 	 #define IPEHR_I965                             _MMIO(0x2068)
+>> But I might be just wrong.
 >>
->> If the driver didn't support 32b CPUs, this would even go unnoticed.
->
->So, what does prevent you from using GENMASK_ULL()?
-
-nothing is preventing me to write the wrong code, which is what we are
-trying to solve. GENMASK_ULL() would generate the wrong code as that
-particular register is 32b, not 64b, on the GPU.
-
->
->Another point, you may teach GENMASK() to issue a warning if hi and/or lo
->bigger than BITS_PER_LONG.
-
-Which varies depending on the CPU you are building for, so it misses the
-point.  GENMASK_U32/GENMASK_U16/GENMASK_U8 and BIT counterparts would
-emit a warning if hi is bigger than _exactly_ 32, 16 or 8, regardless
-of the CPU you built the code for.
-
-Lucas De Marchi
-
->
->I still don't see the usefulness of that churn.
->
->> Lucas De Marchi
+>>>
+>>> Optimize thp for all cases, by properly looping over each subpage, doing
+>>> cache flushes, and boost refcounts / pincounts where needed in one go.
+>>>
+>>> This can be verified using gup_test below:
+>>>
+>>>     # chrt -f 1 ./gup_test -m 512 -t -L -n 1024 -r 10
+>>>
+>>> Before:    13992.50 ( +-8.75%)
+>>> After:       378.50 (+-69.62%)
+>>>
+>>> Signed-off-by: Peter Xu <peterx@redhat.com>
+>>> ---
+>>>    mm/gup.c | 51 ++++++++++++++++++++++++++++++++++++++++++++-------
+>>>    1 file changed, 44 insertions(+), 7 deletions(-)
+>>>
+>>> diff --git a/mm/gup.c b/mm/gup.c
+>>> index 4a00d609033e..b50272012e49 100644
+>>> --- a/mm/gup.c
+>>> +++ b/mm/gup.c
+>>> @@ -1199,16 +1199,53 @@ static long __get_user_pages(struct mm_struct *mm,
+>>>    			goto out;
+>>>    		}
+>>>    next_page:
+>>> -		if (pages) {
+>>> -			pages[i] = page;
+>>> -			flush_anon_page(vma, page, start);
+>>> -			flush_dcache_page(page);
+>>> -			ctx.page_mask = 0;
+>>> -		}
+>>> -
+>>>    		page_increm = 1 + (~(start >> PAGE_SHIFT) & ctx.page_mask);
+>>>    		if (page_increm > nr_pages)
+>>>    			page_increm = nr_pages;
+>>> +
+>>> +		if (pages) {
+>>> +			struct page *subpage;
+>>> +			unsigned int j;
+>>> +
+>>> +			/*
+>>> +			 * This must be a large folio (and doesn't need to
+>>> +			 * be the whole folio; it can be part of it), do
+>>> +			 * the refcount work for all the subpages too.
+>>> +			 *
+>>> +			 * NOTE: here the page may not be the head page
+>>> +			 * e.g. when start addr is not thp-size aligned.
+>>> +			 * try_grab_folio() should have taken care of tail
+>>> +			 * pages.
+>>> +			 */
+>>> +			if (page_increm > 1) {
+>>> +				struct folio *folio;
+>>> +
+>>> +				/*
+>>> +				 * Since we already hold refcount on the
+>>> +				 * large folio, this should never fail.
+>>> +				 */
+>>> +				folio = try_grab_folio(page, page_increm - 1,
+>>> +						       foll_flags);
+>>> +				if (WARN_ON_ONCE(!folio)) {
+>>> +					/*
+>>> +					 * Release the 1st page ref if the
+>>> +					 * folio is problematic, fail hard.
+>>> +					 */
+>>> +					gup_put_folio(page_folio(page), 1,
+>>> +						      foll_flags);
+>>> +					ret = -EFAULT;
+>>> +					goto out;
+>>> +				}
+>>> +			}
+>>> +
+>>> +			for (j = 0; j < page_increm; j++) {
+>>> +				subpage = nth_page(page, j);
+>>> +				pages[i+j] = subpage;
 >>
->> > And there are already header for bitfields with a lot of helpers
->> > for (similar) cases if not yours.
->> >
->> > > What would you use for printk format if you wanted to to print
->> > > GENMASK()?
->> >
->> > %lu, no?
->
->-- 
->With Best Regards,
->Andy Shevchenko
->
->
+>> Doe checkpatch like pages[i+j]? I'd have used spaces around the +.
+> 
+> Can do.
+> 
+>>
+>>> +				flush_anon_page(vma, subpage, start + j * PAGE_SIZE);
+>>> +				flush_dcache_page(subpage);
+>>> +			}
+>>> +		}
+>>> +
+>>>    		i += page_increm;
+>>>    		start += page_increm * PAGE_SIZE;
+>>>    		nr_pages -= page_increm;
+>>
+>>
+>> So, we did the first try_grab_folio() while our page was PMD-mapped udner
+>> the PT lock and we had sufficient permissions (e.g., mapped writable, no
+>> unsharing required). With FOLL_PIN, we incremented the pincount.
+>>
+>>
+>> I was wondering if something could have happened ever since we unlocked the
+>> PT table lock and possibly PTE-mapped the THP. ... but as it's already
+>> pinned, it cannot get shared during fork() [will stay exclusive].
+>>
+>> So we can just take additional pins on that folio.
+>>
+>>
+>> LGTM, although I do like the GUP-fast way of recording+ref'ing it at a
+>> central place (see gup_huge_pmd() with record_subpages() and friends), not
+>> after the effects.
+> 
+> My read on this is follow_page_mask() is also used in follow page, which
+> does not need page*.
+
+Right ... maybe one day we can do that "better".
+
+> 
+> No strong opinion here. Maybe we leave this as a follow up even if it can
+> be justified?  This patch is probably still the smallest (and still clean)
+> change to speed this whole thing up over either thp or hugetlb.
+
+Sure, we can leave that as a follow-up.
+
+
+Thinking about why we have the flush_anon_page/flush_dcache_page stuff 
+here and not in GUP-fast ... I suspect that all GUP-fast archs don't 
+need that stuff.
+
+I was wondering if there are some possible races with the 
+flush_anon_page() / flush_dcache_page() on a page that might have been 
+unmapped in the meantime (as we dropped the PT lock ...).
+
+Some flush_dcache_page() implementations do some IMHO confusing 
+page_mapcount() things (like in arch/arc/mm/cache.c). But maybe the 
+unmap code handles that as well ... and most likely these archs don't 
+support THP.
+
+Anyhow, just a note that the flush_anon_page/flush_dcache_page left me 
+confused.
+
+-- 
+Cheers,
+
+David / dhildenb
+
