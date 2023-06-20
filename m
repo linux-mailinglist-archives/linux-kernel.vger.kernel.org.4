@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DB8736B2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1CD1736B28
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232359AbjFTLlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 07:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
+        id S231965AbjFTLlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 07:41:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231429AbjFTLlA (ORCPT
+        with ESMTP id S229933AbjFTLk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 07:41:00 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 974BC10F8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:40:59 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so5979774e87.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:40:59 -0700 (PDT)
+        Tue, 20 Jun 2023 07:40:59 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF654A1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:40:58 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f85966b0f2so5369591e87.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:40:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1687261256; x=1689853256;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wR3UhI9Px6pcSpLtyKW9Hd7WsxrSJTWg4zx4ad17nMs=;
-        b=QRWWnpSCq0KXZlXJwV2+G1Ek0GR0s69ya8kvNoy6iQ3xjs4p3k5ohlA8K+ofWwkGP7
-         UpPxtDTYeAI812rYxp/H9dB2RmuyX6NDlC0e7j1aGhQiR/O99SwNLGYrFxpUGWptI/IP
-         951fmr88HC1UohE0RBYLWOGL8Rgb17PaaTNCE=
+        d=rasmusvillemoes.dk; s=google; t=1687261257; x=1689853257;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZNFZpEh4/cl7s83JmJ5khDQ6aml5OmK6AW+M363aFjU=;
+        b=biDDrOKTzHLYitPYod0RIO44Z1JCB7Vq+G/s+gIYRJ2XB3b8jr5tsk0/Ye8+Kzh0LE
+         Eh+8lJrPZvu97GzuuyWh78xXH1gh8GVwXM9ymXeSG3xrnPYwkR20MrEBXlcBtDrp2gUD
+         pmxc6LeLO/SoMTCZtrJz2gDxUEYFN7NpO4t9Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687261256; x=1689853256;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wR3UhI9Px6pcSpLtyKW9Hd7WsxrSJTWg4zx4ad17nMs=;
-        b=IseyBkSMLWsbTk8Ypbd7BSLT5UKUS/xG4UdJWl+u8bHdiRF9iUJFO7Yz69Kn5LFx4G
-         JoI59KxwmPHy+4QQRPDR5KU+5sWJ6se5t/E2cELBkuX0rbv1A+HtTL3ahpzTOGK2D4+r
-         xfyYb1OdlkOBrijlMTALT+h7t3yFib0mwmYD4HFmpR/wKv5/INkWYg9m+LQboYIigFoo
-         mqvEwGHt5hPNwQPecfCfy0TwVx3zY7yqFgjksEruSlO1052sYb4LUhFUpvYeW1Q4CaXh
-         ICaFjcnFla32jL94Lxm+eNVJLBHS81lcLO+tSU2Wz3cWPVPaEGFzKUdDDhWHZuqupYUz
-         GRMw==
-X-Gm-Message-State: AC+VfDypx4PeH5j06Mun4W/6ZVNoM3bh8bg4UjjST0UvCTuYkJ3nzl69
-        65UJHgBEvx39qgYuKTirIgoIzA==
-X-Google-Smtp-Source: ACHHUZ6A7kVJNkFsn+BH2hHUMaLcTITzl7R7pmguVWQ+irWwJN0drVojSM1MHj0yPz84vP6Coc6jbw==
-X-Received: by 2002:a19:f201:0:b0:4f7:42de:3a8f with SMTP id q1-20020a19f201000000b004f742de3a8fmr6438174lfh.56.1687261253812;
-        Tue, 20 Jun 2023 04:40:53 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687261257; x=1689853257;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZNFZpEh4/cl7s83JmJ5khDQ6aml5OmK6AW+M363aFjU=;
+        b=bmH+bsOE1f2i8p55AqRn9/w7xdPWgByvGIUACAhccJ41WVNTU/tNH9n3nD461VjAey
+         c8imF1x6uASA+ML6otHxHPSKL4KGwcOOCCO6tZWASBzwdK4dGJTzALDIcNiAdD6ykqxN
+         4QBoULWEZl4yoTHOnOWNZAtsDXXGDfq6vQzvrwe/xyvAAUGvwEnwG2dCwPhjEWbWaYZy
+         Zus40OeaIL2V6vRVrmeCHrvGmrlbC7hQV/UAE50fim6mZkKJhAh9DEIZR0qyzdmGhtkv
+         4vGbRsvgjSS2whLVAXXP8UF2pr0QwSP4LT2W2E+LdGv6Zs3CuyMeN4+sAIZgP6gS6vdv
+         EdcA==
+X-Gm-Message-State: AC+VfDy7ev67MsaD4+BfqO/VXWgbH7R/8p3Fw4PpFLfOmCbsh1k1yfRy
+        8cOVkD9sN8Jhz2YIALPZHg1tZvuyNjmP30lxhh37ig==
+X-Google-Smtp-Source: ACHHUZ7q/79IAx2fL0zq/CrCtVLiuxKFTR+X1CC55xo2T25ZTgPLBk21UNhluCFwBxX9meKQmLwfHg==
+X-Received: by 2002:a05:6512:3284:b0:4f8:692a:6492 with SMTP id p4-20020a056512328400b004f8692a6492mr4413487lfe.32.1687261256749;
+        Tue, 20 Jun 2023 04:40:56 -0700 (PDT)
 Received: from localhost.localdomain ([87.54.42.112])
-        by smtp.gmail.com with ESMTPSA id d12-20020ac2544c000000b004f84162e08bsm329879lfn.185.2023.06.20.04.40.52
+        by smtp.gmail.com with ESMTPSA id d12-20020ac2544c000000b004f84162e08bsm329879lfn.185.2023.06.20.04.40.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 04:40:53 -0700 (PDT)
+        Tue, 20 Jun 2023 04:40:56 -0700 (PDT)
 From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
 To:     Woojung Huh <woojung.huh@microchip.com>,
         UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
@@ -54,49 +55,59 @@ To:     Woojung Huh <woojung.huh@microchip.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: [PATCH net-next 0/3] net: dsa: microchip: fix writes to phy registers >= 0x10
-Date:   Tue, 20 Jun 2023 13:38:51 +0200
-Message-Id: <20230620113855.733526-1-linux@rasmusvillemoes.dk>
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net-next 1/3] net: dsa: microchip: simplify ksz_prmw8()
+Date:   Tue, 20 Jun 2023 13:38:52 +0200
+Message-Id: <20230620113855.733526-2-linux@rasmusvillemoes.dk>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230620113855.733526-1-linux@rasmusvillemoes.dk>
+References: <20230620113855.733526-1-linux@rasmusvillemoes.dk>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Patch 1 is just a simplification, technically unrelated to the other
-two patches. But it would be a bit inconsistent to have the new
-ksz_prmw32() introduced in patch 2 use ksz_rmw32() while leaving
-ksz_prmw8() as-is.
+Implement ksz_prmw8() in terms of ksz_rmw8(), just as all the other
+ksz_pX are implemented in terms of ksz_X. No functional change.
 
-The actual fix is of course patch 3. I can definitely see some weird
-behaviour on our ksz9567 when writing to phy registers 0x1e and 0x1f
-(with phytool from userspace), though it does not seem that the effect
-is always to write zeroes to the buddy register as the errata sheet
-says would be the case. In our case, the switch is connected via i2c;
-I hope somebody with other switches and/or the SPI variants can test
-this.
+Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+---
+ drivers/net/dsa/microchip/ksz_common.h | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
-Rasmus Villemoes (3):
-  net: dsa: microchip: simplify ksz_prmw8()
-  net: dsa: microchip: add ksz_prmw32() helper
-  net: dsa: microchip: fix writes to phy registers >= 0x10
-
- drivers/net/dsa/microchip/ksz9477.c    | 18 +++++++++++++++++-
- drivers/net/dsa/microchip/ksz_common.h | 18 ++++++++----------
- 2 files changed, 25 insertions(+), 11 deletions(-)
-
+diff --git a/drivers/net/dsa/microchip/ksz_common.h b/drivers/net/dsa/microchip/ksz_common.h
+index a66b56857ec6..2453c43c48a5 100644
+--- a/drivers/net/dsa/microchip/ksz_common.h
++++ b/drivers/net/dsa/microchip/ksz_common.h
+@@ -578,17 +578,8 @@ static inline int ksz_pwrite32(struct ksz_device *dev, int port, int offset,
+ static inline int ksz_prmw8(struct ksz_device *dev, int port, int offset,
+ 			    u8 mask, u8 val)
+ {
+-	int ret;
+-
+-	ret = regmap_update_bits(ksz_regmap_8(dev),
+-				 dev->dev_ops->get_port_addr(port, offset),
+-				 mask, val);
+-	if (ret)
+-		dev_err(dev->dev, "can't rmw 8bit reg 0x%x: %pe\n",
+-			dev->dev_ops->get_port_addr(port, offset),
+-			ERR_PTR(ret));
+-
+-	return ret;
++	return ksz_rmw8(dev, dev->dev_ops->get_port_addr(port, offset),
++			mask, val);
+ }
+ 
+ static inline void ksz_regmap_lock(void *__mtx)
 -- 
 2.37.2
 
