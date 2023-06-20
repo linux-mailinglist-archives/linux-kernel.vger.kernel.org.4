@@ -2,128 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC81736219
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 05:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B44B7362D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 06:52:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjFTDPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 23:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54284 "EHLO
+        id S230142AbjFTEwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 00:52:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjFTDOy (ORCPT
+        with ESMTP id S230299AbjFTEv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 23:14:54 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA13DE42;
-        Mon, 19 Jun 2023 20:14:52 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QlWvr49lVz4f4WX0;
-        Tue, 20 Jun 2023 11:14:48 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgAHcLOmGZFkMPZpMA--.49085S4;
-        Tue, 20 Jun 2023 11:14:48 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     hch@lst.de, axboe@kernel.dk, jack@suse.cz, jinpu.wang@ionos.com,
-        dchinner@redhat.com, hare@suse.de, trix@redhat.com,
-        bvanassche@acm.org, yukuai3@huawei.com, willy@infradead.org,
-        yi.zhang@huawei.com, dsterba@suse.com, brauner@kernel.org
-Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai1@huaweicloud.com, yangerkun@huawei.com
-Subject: [PATCH -next] reiserfs: fix blkdev_put() warning from release_journal_dev()
-Date:   Tue, 20 Jun 2023 19:13:22 +0800
-Message-Id: <20230620111322.1014775-1-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHcLOmGZFkMPZpMA--.49085S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxJF4rWr13urWkWFyfCr4Durg_yoW5XrWDpa
-        1rCF40kryjvF1DJa1xZws7WrWrXa9YkayUGrsIkrZaya1Syw17Gw4xKr17G3yv9FZ5Kw15
-        Xw4UA39akr1ktr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9a14x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2ocxC64kIII
-        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xv
-        wVC0I7IYx2IY6xkF7I0E14v26F4UJVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7
-        xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
-        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
-        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8v
-        x2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4
-        IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1r
-        MI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJV
-        WUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3
-        Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8Jr
-        UvcSsGvfC2KfnxnUUI43ZEXa7sRi38nUUUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        KHOP_HELO_FCRDNS,MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 20 Jun 2023 00:51:57 -0400
+Received: from mo-csw-fb.securemx.jp (mo-csw-fb1115.securemx.jp [210.130.202.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66CDE1732
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 21:51:49 -0700 (PDT)
+Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1115) id 35K3HPtg018262; Tue, 20 Jun 2023 12:17:25 +0900
+Received: by mo-csw.securemx.jp (mx-mo-csw1115) id 35K3GgL9010403; Tue, 20 Jun 2023 12:16:42 +0900
+X-Iguazu-Qid: 2wHHDpROIE2K2upkJ7
+X-Iguazu-QSIG: v=2; s=0; t=1687231002; q=2wHHDpROIE2K2upkJ7; m=E+RVEeJopNuTV/4JvggiCsa3R+/efoS/M1haM1kzYFI=
+Received: from imx12-a.toshiba.co.jp ([38.106.60.135])
+        by relay.securemx.jp (mx-mr1110) id 35K3Gdix040355
+        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 20 Jun 2023 12:16:40 +0900
+X-SA-MID: 2172047
+From:   Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+To:     Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v6 1/5] dt-bindings: media: platform: visconti: Add Toshiba Visconti Video Input Interface bindings
+Date:   Tue, 20 Jun 2023 12:11:07 +0900
+X-TSB-HOP2: ON
+Message-Id: <20230620031111.3776-2-yuji2.ishikawa@toshiba.co.jp>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230620031111.3776-1-yuji2.ishikawa@toshiba.co.jp>
+References: <20230620031111.3776-1-yuji2.ishikawa@toshiba.co.jp>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+Adds the Device Tree binding documentation that allows to describe
+the Video Input Interface found in Toshiba Visconti SoCs.
 
-In journal_init_dev(), if super bdev is used as 'j_dev_bd', then
-blkdev_get_by_dev() is called with NULL holder, otherwise, holder will
-be journal. However, later in release_journal_dev(), blkdev_put() is
-called with journal unconditionally, cause following warning:
-
-WARNING: CPU: 1 PID: 5034 at block/bdev.c:617 bd_end_claim block/bdev.c:617 [inline]
-WARNING: CPU: 1 PID: 5034 at block/bdev.c:617 blkdev_put+0x562/0x8a0 block/bdev.c:901
-RIP: 0010:blkdev_put+0x562/0x8a0 block/bdev.c:901
-Call Trace:
- <TASK>
- release_journal_dev fs/reiserfs/journal.c:2592 [inline]
- free_journal_ram+0x421/0x5c0 fs/reiserfs/journal.c:1896
- do_journal_release fs/reiserfs/journal.c:1960 [inline]
- journal_release+0x276/0x630 fs/reiserfs/journal.c:1971
- reiserfs_put_super+0xe4/0x5c0 fs/reiserfs/super.c:616
- generic_shutdown_super+0x158/0x480 fs/super.c:499
- kill_block_super+0x64/0xb0 fs/super.c:1422
- deactivate_locked_super+0x98/0x160 fs/super.c:330
- deactivate_super+0xb1/0xd0 fs/super.c:361
- cleanup_mnt+0x2ae/0x3d0 fs/namespace.c:1247
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xadc/0x2a30 kernel/exit.c:874
- do_group_exit+0xd4/0x2a0 kernel/exit.c:1024
- __do_sys_exit_group kernel/exit.c:1035 [inline]
- __se_sys_exit_group kernel/exit.c:1033 [inline]
- __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1033
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-Fix this problem by passing in NULL holder in this case.
-
-Reported-by: syzbot+04625c80899f4555de39@syzkaller.appspotmail.com
-Link: https://syzkaller.appspot.com/bug?extid=04625c80899f4555de39
-Fixes: 2736e8eeb0cc ("block: use the holder as indication for exclusive opens")
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
 ---
- fs/reiserfs/journal.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+Changelog v2:
+- no change
 
-diff --git a/fs/reiserfs/journal.c b/fs/reiserfs/journal.c
-index 62beee3c62b6..479aa4a57602 100644
---- a/fs/reiserfs/journal.c
-+++ b/fs/reiserfs/journal.c
-@@ -2589,7 +2589,12 @@ static void release_journal_dev(struct super_block *super,
- 			       struct reiserfs_journal *journal)
- {
- 	if (journal->j_dev_bd != NULL) {
--		blkdev_put(journal->j_dev_bd, journal);
-+		void *holder = NULL;
+Changelog v3:
+- no change
+
+Changelog v4:
+- fix style problems at the v3 patch
+- remove "index" member
+- update example
+
+Changelog v5:
+- no change
+
+Changelog v6:
+- add register definition of BUS-IF and MPU
+
+ .../bindings/media/toshiba,visconti-viif.yaml | 102 ++++++++++++++++++
+ 1 file changed, 102 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
+
+diff --git a/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml b/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
+new file mode 100644
+index 000000000..19ef4242e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
+@@ -0,0 +1,102 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/media/toshiba,visconti-viif.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+		if (journal->j_dev_bd->bd_dev != super->s_dev)
-+			holder = journal;
++title: Toshiba Visconti5 SoC Video Input Interface Device Tree Bindings
 +
-+		blkdev_put(journal->j_dev_bd, holder);
- 		journal->j_dev_bd = NULL;
- 	}
- }
++maintainers:
++  - Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
++
++description:
++  Toshiba Visconti5 SoC Video Input Interface (VIIF)
++  receives MIPI CSI2 video stream,
++  processes the stream with embedded image signal processor (L1ISP, L2ISP),
++  then stores pictures to main memory.
++
++properties:
++  compatible:
++    const: toshiba,visconti-viif
++
++  reg:
++    items:
++      - description: registers for capture control
++      - description: registers for CSI2 receiver control
++      - description: registers for bus interface unit control
++      - description: registers for Memory Protection Unit
++
++  interrupts:
++    items:
++      - description: Sync Interrupt
++      - description: Status (Error) Interrupt
++      - description: CSI2 Receiver Interrupt
++      - description: L1ISP Interrupt
++
++  port:
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    unevaluatedProperties: false
++    description: Input port, single endpoint describing the CSI-2 transmitter.
++
++    properties:
++      endpoint:
++        $ref: video-interfaces.yaml#
++        unevaluatedProperties: false
++
++        properties:
++          data-lanes:
++            description: VIIF supports 2 or 4 data lines
++            $ref: /schemas/types.yaml#/definitions/uint32-array
++            minItems: 1
++            maxItems: 4
++            items:
++              minimum: 1
++              maximum: 4
++
++          clock-lanes:
++            description: VIIF supports 1 clock line
++            const: 0
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - port
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        viif@1c000000 {
++            compatible = "toshiba,visconti-viif";
++            reg = <0 0x1c000000 0 0x6000>,
++                  <0 0x1c008000 0 0x400>,
++                  <0 0x1c00E000 0 0x1000>,
++                  <0 0x2417A000 0 0x1000>;
++            interrupts = <GIC_SPI 64 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 67 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 73 IRQ_TYPE_LEVEL_HIGH>,
++                         <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
++
++            port {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                csi_in0: endpoint {
++                    remote-endpoint = <&imx219_out0>;
++                    bus-type = <4>;
++                    data-lanes = <1 2>;
++                    clock-lanes = <0>;
++                    clock-noncontinuous;
++                    link-frequencies = /bits/ 64 <456000000>;
++                };
++            };
++        };
++    };
 -- 
-2.39.2
+2.25.1
+
 
