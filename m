@@ -2,243 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8AD5737268
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5F7737269
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbjFTRNI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Jun 2023 13:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
+        id S230098AbjFTRNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 13:13:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjFTRNG (ORCPT
+        with ESMTP id S230073AbjFTRNa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 13:13:06 -0400
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C49C10E2;
-        Tue, 20 Jun 2023 10:13:05 -0700 (PDT)
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-94ea38c90ccso150016366b.1;
-        Tue, 20 Jun 2023 10:13:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687281184; x=1689873184;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2wpSEuA3rvhtFPmWePbVbFfYSViTlY0ARfPzV78qlSI=;
-        b=fGpHMn6gMeGt5GHwp3S7yFkxbGl8RC3lKJL4yaWadkJlSIZ5GEWE/Xpi/C0brDfoVS
-         kefo9fTkv2DI65Xc8E0N9jy237cbcFG/WEfu595fPIHjQVXj2tfi18hpRGINnNDyCQFi
-         fiHCB2jsKygYHI+xMTnbxqKDavvF2X9/cqxdCNgJIx/oc5P/QTMgcIso11W0Vq3wIvqP
-         3wMTGykuNB6zcoyJSzA7G2O62UuA5hr7ZpYavC8ntXExazu907cAt7AbXnHXmINyFw0R
-         XeC7qumeJxEwl8Ya+ZPu3FjcW3+pSnz687dTpFUNedi2y0Bp0by6xIuLA/nVkdsuuR3C
-         Q0Kw==
-X-Gm-Message-State: AC+VfDyvkd5hLlrXdzWVpUxptEV/DCzRdXk5AoCTpIxUjNtv/54I8L13
-        Y8JMgLw2baaby+ar+YQh8f1NeAybkgk66v3B8qx7nDi4
-X-Google-Smtp-Source: ACHHUZ5Cp5VAoojuV31TdQKDdiFw4tokCaWIr0LxImR2c45d0B43ugelgE4B3SQphadMWv1xWpva89hY+8QNPm4OlTM=
-X-Received: by 2002:a17:906:77ca:b0:989:1ed3:d010 with SMTP id
- m10-20020a17090677ca00b009891ed3d010mr2006867ejn.2.1687281183627; Tue, 20 Jun
- 2023 10:13:03 -0700 (PDT)
+        Tue, 20 Jun 2023 13:13:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB0C1710;
+        Tue, 20 Jun 2023 10:13:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 636D361337;
+        Tue, 20 Jun 2023 17:13:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C431C433C8;
+        Tue, 20 Jun 2023 17:13:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687281206;
+        bh=6P2RYz2pKYvAhsFqeavj7P9pbG1HmamkYK9RGXeKqoM=;
+        h=Date:To:Cc:From:Subject:From;
+        b=p+AJx4UGMfr0iqh4hxnqMYYnaoS5BxFjPkKFXqOiqtqkFN2MHwcbtCr97mdGQ/xwu
+         FQMaMFm+TY7uNhZk4kk/NnOgU9Dq4xwy2omVvEQ4oSfGgJCv+tjOw1ZTNSgc+vpR3/
+         NWpKTDQAy++c/NQrkJV+JcqPOsI0PI7I3v6hxKlbuh14Vb/o1vQ9QNF3YohGQTmmXE
+         Is0db80Mzmf5B91O/U3rvfQQTe1tx8XbgeFQNw2dN4mJtfBu5fD7oHX2rRY7jehDQL
+         d/o8dv2mgK35EBJJui5dJNudX3NVm2bo3LhDO9qbwj5/6jRSS6zZItEwgE6CqQ/MpN
+         0ZG+1AULWB6jg==
+Message-ID: <d6113bec-6591-2efc-2255-66867e5db899@kernel.org>
+Date:   Tue, 20 Jun 2023 19:13:04 +0200
 MIME-Version: 1.0
-References: <20230519032719.2581689-1-evalenti@kernel.org> <20230519032719.2581689-3-evalenti@kernel.org>
-In-Reply-To: <20230519032719.2581689-3-evalenti@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 20 Jun 2023 19:12:52 +0200
-Message-ID: <CAJZ5v0hqGg9h+iOpKDLr=BXGk3p6sBTMM3nVok97yhRj5EdQ3g@mail.gmail.com>
-Subject: Re: [PATCH 2/7] thermal: stats: track number of change requests due
- to tz
-To:     Eduardo Valentin <evalenti@kernel.org>
-Cc:     eduval@amazon.com, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Content-Language: en-US
+To:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     Abel Wu <wuyun.abel@bytedance.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        Barry Song <song.bao.hua@hisilicon.com>,
+        Chengming Zhou <zhouchengming@bytedance.com>,
+        Christoph Hellwig <hch@lst.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Hao Jia <jiahao.os@bytedance.com>,
+        Huaixin Chang <changhuaixin@linux.alibaba.com>,
+        Huang Ying <ying.huang@intel.com>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Josh Don <joshdon@google.com>,
+        Konstantin Khlebnikov <khlebnikov@yandex-team.ru>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Odin Ugedal <odin@uged.al>,
+        Patrick Bellasi <patrick.bellasi@arm.com>,
+        Peng Wang <rocking@linux.alibaba.com>,
+        Phil Auld <pauld@redhat.com>,
+        Qais Yousef <qais.yousef@arm.com>, Qian Cai <cai@lca.pw>,
+        Quentin Perret <qperret@google.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Donnefort <vincent.donnefort@arm.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Waiman Long <longman@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Yafang Shao <laoar.shao@gmail.com>,
+        YueHaibing <yuehaibing@huawei.com>,
+        Zhen Ni <nizhen@uniontech.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Clark Williams <williams@redhat.com>,
+        Will Deacon <will@kernel.org>, Mel Gorman <mgorman@suse.de>,
+        Ben Segall <bsegall@google.com>,
+        John Stultz <jstultz@google.com>,
+        David Vernet <void@manifault.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Chris Mason <clm@fb.com>,
+        Tejun Heo <tj@kernel.org>,
+        Luca Abeni <luca.abeni@santannapisa.it>,
+        John Kacur <jkacur@redhat.com>,
+        John Ogness <john.ogness@linutronix.de>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vineeth Remanan Pillai <vineeth@bitbyteword.org>,
+        Kate Carcia <kcarcia@redhat.com>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Min Yu <myu@linuxfoundation.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        =?UTF-8?Q?Luis_Claudio_R=2e_Gon=c3=a7alves?= <lclaudio@redhat.com>,
+        Daniel Wagner <wagi@monom.org>,
+        Tom Zanussi <zanussi@kernel.org>,
+        Mark Brown <mark.brown@linaro.org>,
+        joseph.salisbury@canonical.com,
+        Morten Rasmussen <Morten.Rasmussen@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "bristot@kernel.org" <bristot@kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+From:   Daniel Bristot de Oliveira <bristot@kernel.org>
+Subject: [ANNOUNCEMENT] CFP: Real-time and Scheduling MC at LPC
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 5:27 AM Eduardo Valentin <evalenti@kernel.org> wrote:
->
-> From: Eduardo Valentin <eduval@amazon.com>
->
-> This patch improves the current cooling device
-> statistics by adding a new file under
-> cdev/stats/requests_of_thermal_zone
->
-> to represent the number of times each thermal zone
-> requested the cooling device to effectively change.
-> If the request associated was not serviced because
-> another thermal zone asked for a higher cooling level,
-> this counter does not increase.
+The real-time and scheduling micro-conference joins these two
+intrinsically connected communities to discuss the next steps together.
 
-What if the cdev is associated with two thermal zones asking for the
-same state of it?
+Over the past decade, many parts of PREEMPT_RT have been included
+in the official Linux codebase. Examples include real-time mutexes,
+high-resolution timers, lockdep, ftrace, RCU_PREEMPT, threaded interrupt
+handlers, and more. The number of patches that need integration has been
+significantly reduced, and the rest is mature enough to make their way
+into mainline Linux.
 
-> The file format is:
-> thermal_zone: <type> <count>
->
-> Samples:
-> $ cat cdev0/stats/requests_of_thermal_zone
-> thermal_zone: amb0      2
+The scheduler is at the core of Linux performance. With different
+topologies and workloads, giving the user the best experience possible is
+challenging, from low latency to high throughput and from small
+power-constrained devices to HPC, where CPU isolation is critical.
 
-The "one value per attribute" sysfs rule violation.
+The following accomplishments have been made as a result of last
+year’s micro-conference:
 
->
-> In this example, it means the thermal zone 'amb0' has requested
-> 2 times for cdev0 to change state.
+ - Progress on rtla/osnoise to support any workload [1]
+ - Progress on adding tracepoints for IPI [2]
+ - Improvements in RCU to reduce noise
+ - Progress on the latency-nice patch set [3]
 
-Like in the previous patch, it would be good to explain the use case.
+Ideas of topics to be discussed include (but are not limited to):
 
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
-> Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
-> Cc: Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
-> Cc: Jonathan Corbet <corbet@lwn.net> (maintainer:DOCUMENTATION)
-> Cc: linux-pm@vger.kernel.org (open list:THERMAL)
-> Cc: linux-doc@vger.kernel.org (open list:DOCUMENTATION)
-> Cc: linux-kernel@vger.kernel.org (open list)
->
-> Signed-off-by: Eduardo Valentin <eduval@amazon.com>
-> ---
->  .../driver-api/thermal/sysfs-api.rst          |  2 +
->  drivers/thermal/thermal_core.h                |  1 +
->  drivers/thermal/thermal_sysfs.c               | 52 +++++++++++++++++++
->  3 files changed, 55 insertions(+)
->
-> diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation/driver-api/thermal/sysfs-api.rst
-> index caa50d61a5bc..75309a51d9b3 100644
-> --- a/Documentation/driver-api/thermal/sysfs-api.rst
-> +++ b/Documentation/driver-api/thermal/sysfs-api.rst
-> @@ -369,6 +369,8 @@ Thermal cooling device sys I/F, created once it's registered::
->      |---stats/trans_table:     Cooling state transition table
->      |---stats/time_in_thermal_zone_ms: Time that this cooling device was driven
->                                  each associated thermal zone.
-> +    |---stats/requests_of_thermal_zone:        Total number of times this cooling device
-> +                                changed due to each associated thermal zone.
+ - Improve responsiveness for CFS tasks - e.g., latency-nice patch
+ - The new EEVDF scheduler proposal [4]
+ - Impact of new topology on CFS including hybrid or heterogeneous system
+ - Taking into account task profile with IPCC or uclamp
+ - Improvements in CPU Isolation
+ - The status of PREEMPT_RT
+ - Locking improvements - e.g., proxy execution [5]
+ - Improvements on SCHED_DEADLINE
+ - Tooling for debugging scheduling and real-time
 
-The meaning of the above description is not clear to me.
+It is fine if you have a new topic that is not on the list.
+People are encouraged to submit any topic related to real-time
+and scheduling.
 
->
->
->  Then next two dynamic attributes are created/removed in pairs. They represent
-> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-> index 3cce60c6e065..ed6511c3b794 100644
-> --- a/drivers/thermal/thermal_core.h
-> +++ b/drivers/thermal/thermal_core.h
-> @@ -103,6 +103,7 @@ struct thermal_instance {
->         unsigned int weight; /* The weight of the cooling device */
->         bool upper_no_limit;
->  #if IS_ENABLED(CONFIG_THERMAL_STATISTICS)
-> +       unsigned long total_requests;
->         ktime_t time_in; /* time spent in this instance */
->  #endif
->  };
-> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-> index a3b71f03db75..0bce1415f7e8 100644
-> --- a/drivers/thermal/thermal_sysfs.c
-> +++ b/drivers/thermal/thermal_sysfs.c
-> @@ -723,6 +723,7 @@ void thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
->         stats->trans_table[stats->state * (cdev->max_state + 1) + new_state]++;
->         stats->state = new_state;
->         stats->total_trans++;
-> +       stats->curr_instance->total_requests++;
->
->  unlock:
->         spin_unlock(&stats->lock);
-> @@ -867,6 +868,54 @@ time_in_thermal_zone_ms_show(struct device *dev, struct device_attribute *attr,
->         return ret < 0 ? ret : len;
->  }
->
-> +static ssize_t
-> +requests_of_thermal_zone_show(struct device *dev, struct device_attribute *attr,
-> +                             char *buf)
-> +{
-> +       LIST_HEAD(cdev_thermal_zone_list);
-> +       struct thermal_cooling_device *cdev = to_cooling_device(dev);
-> +       struct cooling_dev_stats *stats = cdev->stats;
-> +       struct cdev_thermal_zone_residency *res, *next;
-> +       struct thermal_instance *instance;
-> +       ssize_t len = 0, ret = 0;
-> +
-> +       mutex_lock(&cdev->lock);
-> +
-> +       spin_lock(&stats->lock);
-> +       update_time_in_state(stats, stats->curr_instance);
-> +       spin_unlock(&stats->lock);
-> +
-> +       build_cdev_thermal_zone_residency(&cdev_thermal_zone_list, cdev);
-> +
-> +       list_for_each_entry(instance, &cdev->thermal_instances, cdev_node)
-> +               list_for_each_entry(res, &cdev_thermal_zone_list, node)
-> +                       if (strncmp(res->thermal_zone, instance->tz->type,
-> +                                   THERMAL_NAME_LENGTH) == 0)
-> +                               res->counter += instance->total_requests;
-> +
-> +       mutex_unlock(&cdev->lock);
-> +
-> +       list_for_each_entry_safe(res, next, &cdev_thermal_zone_list, node) {
+Please consider that the goal is to discuss open problems, preferably
+with patch set submissions already in discussion on LKML. The
+presentations are very short, and the main portion of the time should
+be given to the debate - thus, the importance of having an
+open and relevant problem, with people in the community engaged
+in the solution.
 
-Why is the _safe variant needed here?
+Submissions are made via LPC submission systems, selecting *Track Real-time
+and Scheduling MC*
 
-> +               ret = sprintf(buf + len, "thermal_zone: %s\t%lu\n",
-> +                             res->thermal_zone, res->counter);
-> +
-> +               if (ret == 0)
-> +                       ret = -EOVERFLOW;
-> +
-> +               if (ret < 0)
-> +                       break;
-> +
-> +               len += ret;
-> +       }
-> +
-> +       list_for_each_entry_safe(res, next, &cdev_thermal_zone_list, node) {
-> +               list_del(&res->node);
-> +               kfree(res);
-> +       }
-> +
-> +       return ret < 0 ? ret : len;
+Please, forward this email for people interested on this subject (it not easy to
+build the Cc: list for this email without forgetting important people :-))!
 
-I would prefer
+[1] https://lore.kernel.org/lkml/f5cfbd37aefd419eefe9243b4d2fc38ed5753fe4.1668692096.git.bristot@kernel.org/
+[2] https://lore.kernel.org/lkml/20230307143558.294354-1-vschneid@redhat.com/T/
+[3] https://lore.kernel.org/lkml/20230224093454.956298-3-vincent.guittot@linaro.org/
+[4] https://lore.kernel.org/lkml/20230328092622.062917921@infradead.org/T/
+[5] https://lore.kernel.org/lkml/20230411042511.1606592-1-jstultz@google.com/
 
-if (ret < 0)
-        return ret;
+Thanks!
 
-return len;
-
-> +}
-> +
->  static ssize_t
->  reset_store(struct device *dev, struct device_attribute *attr, const char *buf,
->             size_t count)
-> @@ -897,6 +946,7 @@ reset_store(struct device *dev, struct device_attribute *attr, const char *buf,
->
->         /* Make sure we reset all counters per instance */
->         list_for_each_entry(instance, &cdev->thermal_instances, cdev_node) {
-> +               instance->total_requests = 0;
->                 instance->time_in = ktime_set(0, 0);
->         }
->
-> @@ -971,6 +1021,7 @@ static ssize_t trans_table_show(struct device *dev,
->  static DEVICE_ATTR_RO(total_trans);
->  static DEVICE_ATTR_RO(time_in_state_ms);
->  static DEVICE_ATTR_RO(time_in_thermal_zone_ms);
-> +static DEVICE_ATTR_RO(requests_of_thermal_zone);
->  static DEVICE_ATTR_WO(reset);
->  static DEVICE_ATTR_RO(trans_table);
->
-> @@ -978,6 +1029,7 @@ static struct attribute *cooling_device_stats_attrs[] = {
->         &dev_attr_total_trans.attr,
->         &dev_attr_time_in_state_ms.attr,
->         &dev_attr_time_in_thermal_zone_ms.attr,
-> +       &dev_attr_requests_of_thermal_zone.attr,
->         &dev_attr_reset.attr,
->         &dev_attr_trans_table.attr,
->         NULL
-> --
+-- Organizers:
+ - Daniel Bristot de Oliveira
+ - Juri Lelli
+ - Vincent Guittot
+ - Steven Rostedt
