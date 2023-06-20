@@ -2,59 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9EB5737732
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:05:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22DFC737731
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbjFTWFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 18:05:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34094 "EHLO
+        id S229805AbjFTWFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 18:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjFTWFq (ORCPT
+        with ESMTP id S229684AbjFTWFT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 18:05:46 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1591713
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 15:05:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687298742; x=1718834742;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=WCAxJ2yKOcSnS6zOTMV3gR2/FLkdoSakLnUYnkQKTx8=;
-  b=AsRVfildIvIW8j2qCtZPgFIPvS3FOJYEFd+fSwDnbShvMMH74Vf3OrXo
-   wmMs3Lc80KZ594GeWHXtuS+U1xp4ZcgqkHoDJv2DpMXRJNX/26WkV5pH7
-   Y7NQVvgKSGdG8nrViOV++HkjFyGqbkXXjMpX81qcLCIfiG7gBl3w9LRXA
-   yGC5Wynnp6x2VbtI+bfJZ2iKb/7O5hX38mJ5Eq7H7yBpybdy9vY6sATUd
-   nv1WhcTxj1+1H2FGCJ3vcmOSmntUmnUt4XZv2LbOYsQ7tZaaIDW2sPBc+
-   WrdLZlygwZSzlpKjGz+pE27oqQNx+Hb3qbOeLV7pmVijK1zq4QM+HNHeB
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="425951831"
-X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
-   d="scan'208";a="425951831"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 15:05:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="664407696"
-X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
-   d="scan'208";a="664407696"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 20 Jun 2023 15:05:41 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qBjTo-0006Hj-1U;
-        Tue, 20 Jun 2023 22:05:40 +0000
-Date:   Wed, 21 Jun 2023 06:05:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: io_uring/net.c:206:25: sparse: sparse: incorrect type in assignment
- (different address spaces)
-Message-ID: <202306210654.mDMcyMuB-lkp@intel.com>
+        Tue, 20 Jun 2023 18:05:19 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65D211731
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 15:05:18 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-514ad92d1e3so80a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 15:05:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687298717; x=1689890717;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6QnZ16+cR3SKz8OZyy5d1CsXcXjkIRyncSh8yNxkG1M=;
+        b=B8QESZcPS8IOqAQ9veug7dutrAkK9Ty1tsh2jQp6IbIscVsQ3171n8gu4ay4YA1jka
+         SkkY8idwFT4BOwqktrmuEbxD0Q/eYeyQGlApPqQBEFgsOCmzBHnvaRCdjry6zWAgVZ4G
+         yyFUmiO18E4j8x97g+1K1kjmm85SQxOEFP0ccV/TiJVtZ2muvDpMiypubUXTcZdN/Hk6
+         vQ570hXUuFVnwEmSHLwMjj9UoRrL3kKGlkVcqEUvhhOT2ok9Y2mDTVOnKKEQQvCbbpHD
+         b9luoM6mpvHQG2q9UDVJ10SdF0+qSH5L0gjwTYjn8fi3DenuPM9N1G70ZZFBE3/zqrBq
+         ZVaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687298717; x=1689890717;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6QnZ16+cR3SKz8OZyy5d1CsXcXjkIRyncSh8yNxkG1M=;
+        b=Uc34hTkVV2qiWy089w2IVe1BuMFBW5wmM8W3u43P5eIxV3sJ4Xrqn3lOszOex1a1OE
+         xRqFLuaCAdbl5Yp0pZWcwyzvZAh2jgt1xuy9h0W8wgTnOGQR3fvEC3WC0GVlgYzfVh7F
+         OzYuDmp2i50UkVk98e20wWz255C49QxNvV7W/43W9eWJEYoRbwgeeIab9noqSbSICh1S
+         znffsi6TwtvZxmfDa6JmCVtUGZQEnh4Cr4gE5U7iW7l8yKlolDLRDhFyQDvvAYls7JtY
+         AiKmDMIfEkK+DSX0c3VcJzGybek+h8cpdpiEjoRRRjNvKHULwVgCiwOrQ6lpi4W9mQ+x
+         fMDA==
+X-Gm-Message-State: AC+VfDwojCasyns/1s9aKlzjiv56lqeRIs35j3ZG3uoZoSVD0OeHZ09L
+        KbJ8qXBppDZniZp+LRJTIqs2IZ3bJozcav7mqfjGVw==
+X-Google-Smtp-Source: ACHHUZ59qq5aWENB/BjU7unJQ0/yUrpV9cMPMC3H9gw6cRwjKcqMmpGu7hrOaqCTn7aGXRAjC3awXkHyEymz3yE+18M=
+X-Received: by 2002:a50:9e07:0:b0:50b:f6ce:2f3d with SMTP id
+ z7-20020a509e07000000b0050bf6ce2f3dmr574426ede.0.1687298716727; Tue, 20 Jun
+ 2023 15:05:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230613102905.2808371-1-usama.anjum@collabora.com>
+ <20230613102905.2808371-3-usama.anjum@collabora.com> <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
+ <0db01d90-09d6-08a4-bbb8-70670d3baa94@collabora.com> <CABb0KFEn5TU480A=YiN82nLRtGyKMABi8cZjuiGUU_jFZZo+8g@mail.gmail.com>
+ <34203acf-7270-7ade-a60e-ae0f729dcf70@collabora.com> <CABb0KFFaXgJD99pWfx3MC+qrq5jUaPis_kZo6U8yL_8xdp0GJA@mail.gmail.com>
+ <96b7cc00-d213-ad7d-1b48-b27f75b04d22@collabora.com> <CABb0KFEy_mRaT86TEOQ-BoTe_XOVw3Kp5VdzOfEEaiZJuT754g@mail.gmail.com>
+ <39bc8212-9ee8-dbc1-d468-f6be438b683b@collabora.com> <CABb0KFHx2hV9M7oinCdKnagRmcrGHagH9eAO3TkVTQH+o9x=5A@mail.gmail.com>
+ <2e1b80f1-0385-0674-ae5f-9703a6ef975d@collabora.com> <CABb0KFGOx69Sz6w9JenYUwSTFmW-Cmcns3X-oDyWsC+H57vkvg@mail.gmail.com>
+ <444ed144-a2ee-cb16-880a-128383c83a08@collabora.com>
+In-Reply-To: <444ed144-a2ee-cb16-880a-128383c83a08@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Wed, 21 Jun 2023 00:05:05 +0200
+Message-ID: <CABb0KFEqJasf9nM3wL1oaK9ObcYzwzjtrRBcWRc3wGqdZRUpXg@mail.gmail.com>
+Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,188 +100,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   692b7dc87ca6d55ab254f8259e6f970171dc9d01
-commit: cac9e4418f4cbd548ccb065b3adcafe073f7f7d2 io_uring/net: save msghdr->msg_control for retries
-date:   7 days ago
-config: i386-randconfig-s001-20230620 (https://download.01.org/0day-ci/archive/20230621/202306210654.mDMcyMuB-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20230621/202306210654.mDMcyMuB-lkp@intel.com/reproduce)
+On Tue, 20 Jun 2023 at 13:16, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+> On 6/19/23 1:16=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Fri, 16 Jun 2023 at 08:57, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+> >>
+> >> On 6/16/23 1:07=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>> On Thu, 15 Jun 2023 at 17:11, Muhammad Usama Anjum
+> >>> <usama.anjum@collabora.com> wrote:
+> >>>> On 6/15/23 7:52=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>>>> On Thu, 15 Jun 2023 at 15:58, Muhammad Usama Anjum
+> >>>>> <usama.anjum@collabora.com> wrote:
+> >>>>>> I'll send next revision now.
+> >>>>>> On 6/14/23 11:00=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> >>>>>>> (A quick reply to answer open questions in case they help the nex=
+t version.)
+> > [...]
+> >>>>>>> I guess this will be reworked anyway, but I'd prefer this didn't =
+need
+> >>>>>>> custom errors etc. If we agree to decoupling the selection and GE=
+T
+> >>>>>>> output, it could be:
+> >>>>>>>
+> >>>>>>> bool is_interesting_page(p, flags); // this one does the
+> >>>>>>> required/anyof/excluded match
+> >>>>>>> size_t output_range(p, start, len, flags); // this one fills the
+> >>>>>>> output vector and returns how many pages were fit
+> >>>>>>>
+> >>>>>>> In this setup, `is_interesting_page() && (n_out =3D output_range(=
+)) <
+> >>>>>>> n_pages` means this is the final range, no more will fit. And if
+> >>>>>>> `n_out =3D=3D 0` then no pages fit and no WP is needed (no other =
+special
+> >>>>>>> cases).
+> >>>>>> Right now, pagemap_scan_output() performs the work of both of thes=
+e two
+> >>>>>> functions. The part can be broken into is_interesting_pages() and =
+we can
+> >>>>>> leave the remaining part as it is.
+> >>>>>>
+> >>>>>> Saying that n_out < n_pages tells us the buffer is full covers one=
+ case.
+> >>>>>> But there is case of maximum pages have been found and walk needs =
+to be
+> >>>>>> aborted.
+> >>>>>
+> >>>>> This case is exactly what `n_out < n_pages` will cover (if scan_out=
+put
+> >>>>> uses max_pages properly to limit n_out).
+> >>>>> Isn't it that when the buffer is full we want to abort the scan alw=
+ays
+> >>>>> (with WP if `n_out > 0`)?
+> >>>> Wouldn't it be duplication of condition if buffer is full inside
+> >>>> pagemap_scan_output() and just outside it. Inside pagemap_scan_outpu=
+t() we
+> >>>> check if we have space before putting data inside it. I'm using this=
+ same
+> >>>> condition to indicate that buffer is full.
+> >>>
+> >>> I'm not sure what do you mean? The buffer-full conditions would be
+> >>> checked in ..scan_output() and communicated to the caller by returnin=
+g
+> >>> N less than `n_pages` passed in. This is exactly how e.g. read()
+> >>> works: if you get less than requested you've hit the end of the file.
+> >>> If the file happens to have size that is equal to the provided buffer
+> >>> length, the next read() will return 0.
+> >> Right now we have:
+> >>
+> >> pagemap_scan_output():
+> >>         if (p->vec_buf_index >=3D p->vec_buf_len)
+> >>                 return PM_SCAN_BUFFER_FULL;
+> >>         if (p->found_pages =3D=3D p->max_pages)
+> >>                 return PM_SCAN_FOUND_MAX_PAGES;
+> >
+> > Why do you need to differentiate between those cases?
+> >
+> >> pagemap_scan_pmd_entry():
+> >>         ret =3D pagemap_scan_output(bitmap, p, start, n_pages);
+> >>         if (ret >=3D 0) // success
+> >>                 make_UFFD_WP and flush
+> >>         else
+> >>                 buffer_error
+> >>
+> >> You are asking me to do:
+> >>
+> >> pagemap_scan_output():
+> >>         if (p->vec_buf_index >=3D p->vec_buf_len)
+> >>                 return 0;
+> >
+> >>         if (p->found_pages =3D=3D p->max_pages)
+> >>                 return PM_SCAN_FOUND_MAX_PAGES;
+> >
+> > This should be instead:
+> >
+> > n_pages =3D min(p->max_pags - p_found_pages, n_pages)
+> > ...
+> > return n_pages;
+> You are missing the optimization here that we check for full buffer every
+> time adding to user buffer. This was added to remove extra iteration of
+> page walk if buffer is full already. The way you are suggesting will remo=
+ve it.
+>
+> So you are returning remaining pages to be found now. This doesn't seem
+> right. If max_pages is 520, found_pages is 0 and n_pages is 512 before
+> calling pagemap_scan_output(). found_pages would become 512 after adding
+> 512 pages to output buffer. But n_pages would return 8 instead of 512. Yo=
+u
+> were saying we should return the number of pages added to the output buff=
+er.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306210654.mDMcyMuB-lkp@intel.com/
+Ok, if we want this optimization, then i'd rework it so that we have:
 
-sparse warnings: (new ones prefixed by >>)
-   io_uring/net.c: note: in included file (through io_uring/io_uring.h):
-   include/linux/io_uring_types.h:179:37: sparse: sparse: array of flexible structures
->> io_uring/net.c:206:25: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __user *msg_control @@     got void *msg_control @@
-   io_uring/net.c:206:25: sparse:     expected void [noderef] __user *msg_control
-   io_uring/net.c:206:25: sparse:     got void *msg_control
->> io_uring/net.c:305:39: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *msg_control @@     got void [noderef] __user *msg_control @@
-   io_uring/net.c:305:39: sparse:     expected void *msg_control
-   io_uring/net.c:305:39: sparse:     got void [noderef] __user *msg_control
+bool pagemap_scan_output(..., int *n_pages)
+{
+   limit n_pages;
+  ...
+  return have_more_room_in_output;
+}
 
-vim +206 io_uring/net.c
+The compiler should remove the pointer and memory storage for
+`n_pages` when inlining the function.
 
-   194	
-   195	static int io_sendmsg_copy_hdr(struct io_kiocb *req,
-   196				       struct io_async_msghdr *iomsg)
-   197	{
-   198		struct io_sr_msg *sr = io_kiocb_to_cmd(req, struct io_sr_msg);
-   199		int ret;
-   200	
-   201		iomsg->msg.msg_name = &iomsg->addr;
-   202		iomsg->free_iov = iomsg->fast_iov;
-   203		ret = sendmsg_copy_msghdr(&iomsg->msg, sr->umsg, sr->msg_flags,
-   204						&iomsg->free_iov);
-   205		/* save msg_control as sys_sendmsg() overwrites it */
- > 206		sr->msg_control = iomsg->msg.msg_control;
-   207		return ret;
-   208	}
-   209	
-   210	int io_send_prep_async(struct io_kiocb *req)
-   211	{
-   212		struct io_sr_msg *zc = io_kiocb_to_cmd(req, struct io_sr_msg);
-   213		struct io_async_msghdr *io;
-   214		int ret;
-   215	
-   216		if (!zc->addr || req_has_async_data(req))
-   217			return 0;
-   218		io = io_msg_alloc_async_prep(req);
-   219		if (!io)
-   220			return -ENOMEM;
-   221		ret = move_addr_to_kernel(zc->addr, zc->addr_len, &io->addr);
-   222		return ret;
-   223	}
-   224	
-   225	static int io_setup_async_addr(struct io_kiocb *req,
-   226				      struct sockaddr_storage *addr_storage,
-   227				      unsigned int issue_flags)
-   228	{
-   229		struct io_sr_msg *sr = io_kiocb_to_cmd(req, struct io_sr_msg);
-   230		struct io_async_msghdr *io;
-   231	
-   232		if (!sr->addr || req_has_async_data(req))
-   233			return -EAGAIN;
-   234		io = io_msg_alloc_async(req, issue_flags);
-   235		if (!io)
-   236			return -ENOMEM;
-   237		memcpy(&io->addr, addr_storage, sizeof(io->addr));
-   238		return -EAGAIN;
-   239	}
-   240	
-   241	int io_sendmsg_prep_async(struct io_kiocb *req)
-   242	{
-   243		int ret;
-   244	
-   245		if (!io_msg_alloc_async_prep(req))
-   246			return -ENOMEM;
-   247		ret = io_sendmsg_copy_hdr(req, req->async_data);
-   248		if (!ret)
-   249			req->flags |= REQ_F_NEED_CLEANUP;
-   250		return ret;
-   251	}
-   252	
-   253	void io_sendmsg_recvmsg_cleanup(struct io_kiocb *req)
-   254	{
-   255		struct io_async_msghdr *io = req->async_data;
-   256	
-   257		kfree(io->free_iov);
-   258	}
-   259	
-   260	int io_sendmsg_prep(struct io_kiocb *req, const struct io_uring_sqe *sqe)
-   261	{
-   262		struct io_sr_msg *sr = io_kiocb_to_cmd(req, struct io_sr_msg);
-   263	
-   264		if (req->opcode == IORING_OP_SEND) {
-   265			if (READ_ONCE(sqe->__pad3[0]))
-   266				return -EINVAL;
-   267			sr->addr = u64_to_user_ptr(READ_ONCE(sqe->addr2));
-   268			sr->addr_len = READ_ONCE(sqe->addr_len);
-   269		} else if (sqe->addr2 || sqe->file_index) {
-   270			return -EINVAL;
-   271		}
-   272	
-   273		sr->umsg = u64_to_user_ptr(READ_ONCE(sqe->addr));
-   274		sr->len = READ_ONCE(sqe->len);
-   275		sr->flags = READ_ONCE(sqe->ioprio);
-   276		if (sr->flags & ~IORING_RECVSEND_POLL_FIRST)
-   277			return -EINVAL;
-   278		sr->msg_flags = READ_ONCE(sqe->msg_flags) | MSG_NOSIGNAL;
-   279		if (sr->msg_flags & MSG_DONTWAIT)
-   280			req->flags |= REQ_F_NOWAIT;
-   281	
-   282	#ifdef CONFIG_COMPAT
-   283		if (req->ctx->compat)
-   284			sr->msg_flags |= MSG_CMSG_COMPAT;
-   285	#endif
-   286		sr->done_io = 0;
-   287		return 0;
-   288	}
-   289	
-   290	int io_sendmsg(struct io_kiocb *req, unsigned int issue_flags)
-   291	{
-   292		struct io_sr_msg *sr = io_kiocb_to_cmd(req, struct io_sr_msg);
-   293		struct io_async_msghdr iomsg, *kmsg;
-   294		struct socket *sock;
-   295		unsigned flags;
-   296		int min_ret = 0;
-   297		int ret;
-   298	
-   299		sock = sock_from_file(req->file);
-   300		if (unlikely(!sock))
-   301			return -ENOTSOCK;
-   302	
-   303		if (req_has_async_data(req)) {
-   304			kmsg = req->async_data;
- > 305			kmsg->msg.msg_control = sr->msg_control;
-   306		} else {
-   307			ret = io_sendmsg_copy_hdr(req, &iomsg);
-   308			if (ret)
-   309				return ret;
-   310			kmsg = &iomsg;
-   311		}
-   312	
-   313		if (!(req->flags & REQ_F_POLLED) &&
-   314		    (sr->flags & IORING_RECVSEND_POLL_FIRST))
-   315			return io_setup_async_msg(req, kmsg, issue_flags);
-   316	
-   317		flags = sr->msg_flags;
-   318		if (issue_flags & IO_URING_F_NONBLOCK)
-   319			flags |= MSG_DONTWAIT;
-   320		if (flags & MSG_WAITALL)
-   321			min_ret = iov_iter_count(&kmsg->msg.msg_iter);
-   322	
-   323		ret = __sys_sendmsg_sock(sock, &kmsg->msg, flags);
-   324	
-   325		if (ret < min_ret) {
-   326			if (ret == -EAGAIN && (issue_flags & IO_URING_F_NONBLOCK))
-   327				return io_setup_async_msg(req, kmsg, issue_flags);
-   328			if (ret > 0 && io_net_retry(sock, flags)) {
-   329				sr->done_io += ret;
-   330				req->flags |= REQ_F_PARTIAL_IO;
-   331				return io_setup_async_msg(req, kmsg, issue_flags);
-   332			}
-   333			if (ret == -ERESTARTSYS)
-   334				ret = -EINTR;
-   335			req_set_fail(req);
-   336		}
-   337		/* fast path, check for non-NULL to avoid function call */
-   338		if (kmsg->free_iov)
-   339			kfree(kmsg->free_iov);
-   340		req->flags &= ~REQ_F_NEED_CLEANUP;
-   341		io_netmsg_recycle(req, issue_flags);
-   342		if (ret >= 0)
-   343			ret += sr->done_io;
-   344		else if (sr->done_io)
-   345			ret = sr->done_io;
-   346		io_req_set_res(req, ret, 0);
-   347		return IOU_OK;
-   348	}
-   349	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Best Regards
+Micha=C5=82 Miros=C5=82aw
