@@ -2,117 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E7AE736D07
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C18736D12
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:19:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232908AbjFTNTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 09:19:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
+        id S232885AbjFTNTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 09:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232204AbjFTNSe (ORCPT
+        with ESMTP id S232883AbjFTNSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 09:18:34 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A3C1BC6
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:18:11 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b4790ff688so32956401fa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:18:11 -0700 (PDT)
+        Tue, 20 Jun 2023 09:18:45 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E391FD4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:18:23 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-760dff4b701so59550439f.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:18:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687267087; x=1689859087;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KFA5rv0lr1oloQt1B0KnKq65YwKUj3TfUmZ2SAZq8Ag=;
-        b=RON1O4AVw5GQPnoihbBBHmP/RAjBaLj9OeDg4bebBJ8ug9w3jGSrvrarIrHPcX3gFq
-         A2l5Z9SDG1GBqXGZKg6yJWW9gyVed1veuzvSvMTFuxoejyZOqsjHoSxP5uNey2Tv4EVx
-         wtIR6/BFWB8RrKBilbzSlYFXvMPqMI+1Gj+P5RuMLJQjsQcNW9GdYIbL6E4x/CWbKDZp
-         rnKaEuRnNcWeVHp5RrZG21iFjhnTUv9gjorl4TTJUs/34fHyH/olnu++X3syqTrhnK7p
-         A9qM+xJJpOtfJ0q6NoCIzSUzPKcFcSPqVaDUqvuL5KWCy/vn+cr7q3ngyEo59zqyJZFY
-         oVjw==
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687267101; x=1689859101;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qLVHgwkUvI5frBa0zQY5JXyD7/vRwXg7Z/40OmKjKWY=;
+        b=vfbwQ/arg0v8WEFSyRtGXp8mzfaAnK3jv3bBI9ziMOBB1rMZ6GsnXqTQEeE8KJ71aX
+         BNXttGGbEXIypNDUJ4e+E2pfH1Rcar0vJ+wXMyaJUEfUHgPfd1AEctNUQUoVvlqyIKkL
+         6iy/I9vWnpzN7eRu9wvaZw12W0OQUjb0yUat4yrvKFEM2YGglzhI6Zqpqtfm8bO48GoF
+         46rqM16HYQf3XDrBoJ0j4bjw9okt/sPkLl/stSntcmwCYqg4G6y95fX/SpAxEK4G2KPh
+         bXzR2eJ3ylHuIcs48Qi3xlK0vKCX02DQLyKIcWU16yp4rR87LtPRMoSG+zQf1SUcsHEn
+         hCgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687267087; x=1689859087;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1687267101; x=1689859101;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KFA5rv0lr1oloQt1B0KnKq65YwKUj3TfUmZ2SAZq8Ag=;
-        b=FfUv9umnpqA+jMaCjGve5x6/mguUuBDxjL8rbhq70bWRrU8DtlTwOldUj4otxv5k2N
-         oSBOg2nxaqyQO1siDqjIITW2RrXAKzdSGP4tO9Z3g5hkY9MF0S7F/2JiZGyQPmQ0w+mH
-         kTXccpnuFAOXUmYHMtimfRJZMSdrzCuuWDcTSZ0zasuOaqPEaBEp5vt0l+4HnJkNxR3h
-         bP2WBcmHXbLSzkAep/8UUV7N3bEyAaG9uwBJrPF0pDk/IyP1WVKB+YdBI5lWCNJOpu+/
-         rBi51+qtN84IHs+cEbFSgikSBeAqxnbRILhah/enR0KIVddkJvuJVDI5jENw/Yc8UAha
-         g+9g==
-X-Gm-Message-State: AC+VfDwEf9Ipkk6wBqvIv1zNeTJBEk4JB/hTnRzBALaVc0n8b0iowdWv
-        yKmhJ8w4tp1OdCfdS0cdttSJqg==
-X-Google-Smtp-Source: ACHHUZ7Q/ikJ/iv+/FD4VwJg7o/OJSJUN/e0qTeCUy4kD6D003Kg+fIHBf8YubyubYyJVYXONxHONA==
-X-Received: by 2002:a2e:b050:0:b0:2b4:734a:35fa with SMTP id d16-20020a2eb050000000b002b4734a35famr4369815ljl.42.1687267086775;
-        Tue, 20 Jun 2023 06:18:06 -0700 (PDT)
-Received: from [192.168.1.101] (abxj193.neoplus.adsl.tpnet.pl. [83.9.3.193])
-        by smtp.gmail.com with ESMTPSA id h19-20020a2eb0f3000000b002b3318c8d6fsm414433ljl.28.2023.06.20.06.18.05
+        bh=qLVHgwkUvI5frBa0zQY5JXyD7/vRwXg7Z/40OmKjKWY=;
+        b=RYUhW/N0NuiTugk5oK5vdIduoVsO1E4fZE8INVKLnzmA4hn3Mx8UNp7mJC1yI7nlYY
+         gOkDkd2zLzB3P++R93BNzbezWL5DBcwZiRIcbEiNYZv+aw2CAJFNPS/6ISek6+7gnbS9
+         nGmrFWzAZmGElEc2v40vPZlBzyQEQ90Q39EZ0GfjNJrHYljtIjSYZ0x4y+Pnpi7DaKB5
+         m1GoNKVArELMJkrBsC+MrNBlaB8zxWVY3uEh2uF7562TASyHzl+/eyipCuTEkzM4LyIX
+         RW99vIbeYk4KPJFb0bmiGcu/VSR0AYhkDjIGimde9+LqAOjzzg/OV80UH6lxCl75hTID
+         IxRg==
+X-Gm-Message-State: AC+VfDyamu3ooVaT3ta4Kg01cfOC5noi5ib3RCQv+cCNzvRB8gdrOeKm
+        KeVESf9JOdWy/drQhY3/ITbfdQ==
+X-Google-Smtp-Source: ACHHUZ7i6NQjY2D0sHTWi3V0GJgHJ2MKRNFUPsDrcm+rxtrkHypCG6HQLTj9Xum/4/+rwfmuZB58Vw==
+X-Received: by 2002:a05:6e02:2182:b0:343:9470:4ee8 with SMTP id j2-20020a056e02218200b0034394704ee8mr3878694ila.3.1687267101454;
+        Tue, 20 Jun 2023 06:18:21 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id r23-20020a634417000000b005143448896csm1399994pga.58.2023.06.20.06.18.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 06:18:06 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 20 Jun 2023 15:17:48 +0200
-Subject: [PATCH 4/4] arm64: dts: qcom: qrb4210-rb2: Enable GPU
+        Tue, 20 Jun 2023 06:18:20 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Demi Marie Obenour <demi@invisiblethingslab.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>, stable@vger.kernel.org
+In-Reply-To: <20230607170837.1559-1-demi@invisiblethingslab.com>
+References: <20230607170837.1559-1-demi@invisiblethingslab.com>
+Subject: Re: [PATCH] block: increment diskseq on all media change events
+Message-Id: <168726710016.3595534.9633662613974186996.b4-ty@kernel.dk>
+Date:   Tue, 20 Jun 2023 07:18:20 -0600
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230620-topic-gpu_tablet_disp-v1-4-7bb02bec8dc0@linaro.org>
-References: <20230620-topic-gpu_tablet_disp-v1-0-7bb02bec8dc0@linaro.org>
-In-Reply-To: <20230620-topic-gpu_tablet_disp-v1-0-7bb02bec8dc0@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1687267079; l=706;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=JBonNiZe3CxDbV4Fmz0+WuWgEzcdGj7FHxWoDNsHw3g=;
- b=Vfz4R/euuwcF82gpDVjvdr+26Q1fZ8KWx4ICfhU1LOFk/KTVQ0K3Pu8h6L+3cHmszJd/lG8ER
- JXvmcWKJhI7D4jGM99KohrodZtSH68dDs+TgZYtOZRHY/LdhB987VkG
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the A610 GPU and provide a firmware path to the ZAP blob.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 8 ++++++++
- 1 file changed, 8 insertions(+)
+On Wed, 07 Jun 2023 13:08:37 -0400, Demi Marie Obenour wrote:
+> Currently, associating a loop device with a different file descriptor
+> does not increment its diskseq.  This allows the following race
+> condition:
+> 
+> 1. Program X opens a loop device
+> 2. Program X gets the diskseq of the loop device.
+> 3. Program X associates a file with the loop device.
+> 4. Program X passes the loop device major, minor, and diskseq to
+>    something.
+> 5. Program X exits.
+> 6. Program Y detaches the file from the loop device.
+> 7. Program Y attaches a different file to the loop device.
+> 8. The opener finally gets around to opening the loop device and checks
+>    that the diskseq is what it expects it to be.  Even though the
+>    diskseq is the expected value, the result is that the opener is
+>    accessing the wrong file.
+> 
+> [...]
 
-diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-index e23a0406eacc..a7278a9472ed 100644
---- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-+++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-@@ -179,6 +179,14 @@ &gpi_dma0 {
- 	status = "okay";
- };
- 
-+&gpu {
-+	status = "okay";
-+
-+	zap-shader {
-+		firmware-name = "qcom/qrb4210/a610_zap.mbn";
-+	};
-+};
-+
- &i2c2 {
- 	clock-frequency = <400000>;
- 	status = "okay";
+Applied, thanks!
 
+[1/1] block: increment diskseq on all media change events
+      commit: b90ecc0379eb7bbe79337b0c7289390a98752646
+
+Best regards,
 -- 
-2.41.0
+Jens Axboe
+
+
 
