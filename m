@@ -2,89 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 775657366C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB837366D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:01:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231748AbjFTI7L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 04:59:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56264 "EHLO
+        id S232068AbjFTJBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 05:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229976AbjFTI7I (ORCPT
+        with ESMTP id S232065AbjFTJA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 04:59:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A65C2;
-        Tue, 20 Jun 2023 01:59:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84E2A60F78;
-        Tue, 20 Jun 2023 08:59:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0DB1C433C9;
-        Tue, 20 Jun 2023 08:59:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687251546;
-        bh=Q76e9KS89JkCi6z+8bBTIgdM00Yu5UYDLIbWK9nqQPs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z6aKi3mthlK9NFT+ZqMLhFez1ZEp6G+H7Jp8AV9W/lFmmhergRz7pcpTe8jQFT2yR
-         Y0PBzxyV8JCNKRkwXh7Sgsrkh941eFOS9njY9/pt6erg3VE0XdmNI6uEd4FaOo80Ge
-         9L69BjrWaQ6ECE2nVSeS2WrShZh8YzFbVHuTTcf0CVXwaNeXDrMxYMP6qnW/jH6m4z
-         xpiBG+CWPVRuEvHZTis8HNBliy6y4XKJeXkCG4kBQS5qG0+ugBlFfUdkYOsvZVoErQ
-         t1GfkPM0rCQ4YOJD+QjyCnY7ASe/NMhVyR0C/T5qbh0Eo88sinBic0FyTOjyBXr8hF
-         wY3DYmctOZe6w==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1qBXCc-0007YJ-Rr; Tue, 20 Jun 2023 10:59:06 +0200
-Date:   Tue, 20 Jun 2023 10:59:06 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] gnss: ubx: Use devm_regulator_get_enable_optional()
-Message-ID: <ZJFqWuKgoQfH7PMP@hovoldconsulting.com>
-References: <c398861197e9d5e28fa2420089abd9c3adb61a87.1686996063.git.christophe.jaillet@wanadoo.fr>
+        Tue, 20 Jun 2023 05:00:56 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88EAB10FB;
+        Tue, 20 Jun 2023 02:00:53 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 35K8xwmaF000412, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 35K8xwmaF000412
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Tue, 20 Jun 2023 16:59:58 +0800
+Received: from RTEXMBS02.realtek.com.tw (172.21.6.95) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Tue, 20 Jun 2023 17:00:18 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS02.realtek.com.tw (172.21.6.95) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Tue, 20 Jun 2023 17:00:18 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Tue, 20 Jun 2023 17:00:18 +0800
+From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
+        <stanley_chang@realtek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Douglas Anderson" <dianders@chromium.org>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Ray Chi <raychi@google.com>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: RE: [PATCH v4 3/5] phy: realtek: usb: Add driver for the Realtek SoC USB 3.0 PHY
+Thread-Topic: [PATCH v4 3/5] phy: realtek: usb: Add driver for the Realtek SoC
+ USB 3.0 PHY
+Thread-Index: AQHZnqKu2e8zIA9siU2Lwklo+4Zzaa+OKdoAgAVD7IA=
+Date:   Tue, 20 Jun 2023 09:00:18 +0000
+Message-ID: <ebe51f77c5c44936820c4ee36fb3b8b6@realtek.com>
+References: <20230614092850.21460-1-stanley_chang@realtek.com>
+ <20230614092850.21460-3-stanley_chang@realtek.com>
+ <2341d5c2-1865-b7fa-b0a1-b281563490d5@linaro.org>
+In-Reply-To: <2341d5c2-1865-b7fa-b0a1-b281563490d5@linaro.org>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.190.159]
+x-kse-serverinfo: RTEXMBS02.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c398861197e9d5e28fa2420089abd9c3adb61a87.1686996063.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 12:01:22PM +0200, Christophe JAILLET wrote:
-> Use devm_regulator_get_enable_optional() instead of hand writing it. It
-> saves some line of code.
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
- 
-> -	data->v_bckp = devm_regulator_get_optional(&serdev->dev, "v-bckp");
-> -	if (IS_ERR(data->v_bckp)) {
-> -		ret = PTR_ERR(data->v_bckp);
-> -		if (ret == -ENODEV)
-> -			data->v_bckp = NULL;
-> -		else
-> -			goto err_free_gserial;
-> -	}
-> -
-> -	if (data->v_bckp) {
-> -		ret = regulator_enable(data->v_bckp);
-> -		if (ret)
-> -			goto err_free_gserial;
-> -	}
-> +	ret = devm_regulator_get_enable_optional(&serdev->dev, "v-bckp");
-> +	if (ret)
-> +		goto err_free_gserial;
-
-Same here, this breaks the driver as -ENODEV is returned when the
-optional resource is not present.
-
-Johan
+SGkgS3J6eXN6dG9mLA0KPiANCj4gDQo+IE9uIDE0LzA2LzIwMjMgMTE6MjgsIFN0YW5sZXkgQ2hh
+bmcgd3JvdGU6DQo+ID4gUmVhbHRlayBESEMgKGRpZ2l0YWwgaG9tZSBjZW50ZXIpIFJURCBTb0Nz
+IHN1cHBvcnQgRFdDMyBYSENJIFVTQg0KPiA+IGNvbnRyb2xsZXIuIEFkZGVkIHRoZSBkcml2ZXIg
+dG8gZHJpdmUgdGhlIFVTQiAzLjAgUEhZIHRyYW5zY2VpdmVycy4NCj4gPg0KPiA+IFNpZ25lZC1v
+ZmYtYnk6IFN0YW5sZXkgQ2hhbmcgPHN0YW5sZXlfY2hhbmdAcmVhbHRlay5jb20+DQo+ID4gLS0t
+DQo+IA0KPiBBbGwgbXkgY29tbWVudHMgYXBwbHkgaGVyZSBhcyB3ZWxsLg0KPiANCkkgd2lsbCBy
+ZWZlciB0aGUgY29tbWVudHMgb2YgdGhlIHNlY29uZCBwYXRjaC4NCg0KVGhhbmtzLA0KU3Rhbmxl
+eQ0KDQo=
