@@ -2,179 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53FB5736E26
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02809736BE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 14:25:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232617AbjFTN76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 09:59:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55114 "EHLO
+        id S232545AbjFTMZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 08:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232806AbjFTN74 (ORCPT
+        with ESMTP id S231299AbjFTMZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 09:59:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7055D1B0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:59:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687269548;
+        Tue, 20 Jun 2023 08:25:52 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60855E71
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 05:25:51 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1687263949;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QTLnyrCbOY1xAfP5SqHK9oZhSTIFzQoN+FT5nbHO/xo=;
-        b=Po6iXdT5DTxUsegb02fk1lJpyzT1Th8RVgzw/+ozWbpkpa8/EeGXPot8x1Hvi7hgKMzAzI
-        Izmp0fZklzU2tho1fJoVUHP3fxmV11Xb6vPxqbBBUWT2ZxebNUgIBlN5+XIAvgATRuDQeL
-        haYcD+WoFpNVVqpWrc/hF54MrpcHQNw=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-426-NncwLYzgNjibUpxFWFIyQw-1; Tue, 20 Jun 2023 09:59:05 -0400
-X-MC-Unique: NncwLYzgNjibUpxFWFIyQw-1
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-51a1f0f93e2so3112103a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:59:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687269544; x=1689861544;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QTLnyrCbOY1xAfP5SqHK9oZhSTIFzQoN+FT5nbHO/xo=;
-        b=COCufIisg9YCMDH+9lE/LHX4Lw/K5S62C7aKFN5LF3yq3URCP2vh5zw8Sz/WozYHk5
-         V9N5vkgsOjvysvj0CXfnNxaIbaSmyS1tFuXLFDW7oIR4yhX4Ge8UFHUG/IB4Qit3kw/B
-         8KkX2O+U+KBWcdkNRVgiMHXWvKZGKH72jUsYUT8Y5CryiP7zbLXc0GfKXi757IeeNvEK
-         g+yOdrfrnciyObXfsiduBvj2Oe64WZlFjXzm3ENYyCsZKqc21KzeNHXj4w4Xy8ZNQOdV
-         0RXqz1p6K/ZF6fkhChEtx2O0uIJJ0+/TLmAJAQnuPqbAYKcsbbidPBNjwwFj6RywkKQS
-         NX9g==
-X-Gm-Message-State: AC+VfDzADEvM6aWHwBLkDStxh6nLPuSx7I8w/F4rcsY4JmPxEtpEGdAJ
-        GUY1iDtso5GMmWzi/Mxkq8RYmWACGhQ0ZLPxtuTKqVaP98i4iNoqHcpUWjkPe0fRazYT4MOt7Is
-        PY2lJhHtZAOTR+IU0Ws/GJxVR
-X-Received: by 2002:aa7:d888:0:b0:51a:23fb:355c with SMTP id u8-20020aa7d888000000b0051a23fb355cmr8076349edq.10.1687269543796;
-        Tue, 20 Jun 2023 06:59:03 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6b5AT6QAAjfNGSFqHnSqiPb5mv+npztwci67WB0CYLQf6lJNAROx+U2HhYdxy7fYnS0gvCQg==
-X-Received: by 2002:aa7:d888:0:b0:51a:23fb:355c with SMTP id u8-20020aa7d888000000b0051a23fb355cmr8076320edq.10.1687269543440;
-        Tue, 20 Jun 2023 06:59:03 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:4b3f:de9c:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de9c:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id x22-20020aa7dad6000000b0050d83a39e6fsm1278687eds.4.2023.06.20.06.59.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jun 2023 06:59:02 -0700 (PDT)
-Message-ID: <a8edf75b-e0f7-a6c7-7d29-f0d39923549b@redhat.com>
-Date:   Tue, 20 Jun 2023 14:23:25 +0200
+        bh=PI/H55BDJsoGpeJInU2i92oFiehPg5S80icORgiJn5A=;
+        b=uwHLfdAruaoAt9x0r9NyU1U1dDeV5Iw/Q16G921rh4dyW89i3wkaGf6rmuuyXMb55DWyZh
+        dx7Nm+3FOu7rbPMXwz1dMmNriAsaGaAExYYHs0XEbSdAGx2rzsJhFIbMymgJqZQltUaCOb
+        o9jxSujIRbZfIVsRlAaIEgHDW/i/msR0DqNwbTrTlcWroCrzn98+6nKaJkE/jVaQoRWDLL
+        c88B/i3TZYWNDpZGbZKZkbeo1I1/n8lULWq147gZwzz1/ejAQmI7TYJ3jsotB3QYJHB81A
+        yCVeYVEtIemgfmFcfPc2YpYXvvXDakWLhxMhpdTo9BNJWzNKLgqthuFjTYol0A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1687263949;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PI/H55BDJsoGpeJInU2i92oFiehPg5S80icORgiJn5A=;
+        b=LUo2lP5lXi1Ya7ZYhXPxwax2NUKoCPomaA+pUaDTRvD0SQ55gUL5LTVw1iEUXgs49Amy7J
+        T2sevr5cr5+jOBDw==
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Tony Battersby <tonyb@cybernetics.com>,
+        Ashok Raj <ashok.raj@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Ashok Raj <ashok.raj@intel.com>
+Subject: Re: [patch v3 5/7] x86/smp: Cure kexec() vs. mwait_play_dead()
+ breakage
+In-Reply-To: <20230620092324.GWZJFwDDVo3TRUI0Ck@fat_crate.local>
+References: <20230615190036.898273129@linutronix.de>
+ <20230615193330.492257119@linutronix.de>
+ <20230620092324.GWZJFwDDVo3TRUI0Ck@fat_crate.local>
+Date:   Tue, 20 Jun 2023 14:25:48 +0200
+Message-ID: <87bkha8gmr.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH drm-next v5 03/14] drm: manager to keep track of GPUs VA
- mappings
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        airlied@gmail.com, daniel@ffwll.ch, tzimmermann@suse.de,
-        mripard@kernel.org, corbet@lwn.net, bskeggs@redhat.com,
-        Liam.Howlett@oracle.com, matthew.brost@intel.com,
-        boris.brezillon@collabora.com, alexdeucher@gmail.com,
-        ogabbay@kernel.org, bagasdotme@gmail.com, willy@infradead.org,
-        jason@jlekstrand.net
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Donald Robson <donald.robson@imgtec.com>,
-        Dave Airlie <airlied@redhat.com>
-References: <20230620004217.4700-1-dakr@redhat.com>
- <20230620004217.4700-4-dakr@redhat.com>
- <cf6846ea-5bd0-0b41-b7e6-901c70701751@amd.com>
-From:   Danilo Krummrich <dakr@redhat.com>
-Organization: RedHat
-In-Reply-To: <cf6846ea-5bd0-0b41-b7e6-901c70701751@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian,
+On Tue, Jun 20 2023 at 11:23, Borislav Petkov wrote:
+> On Thu, Jun 15, 2023 at 10:33:57PM +0200, Thomas Gleixner wrote:
+>> TLDR: It's a mess.
+>>  	while (1) {
+>> @@ -1824,10 +1836,57 @@ static inline void mwait_play_dead(void)
+>
+> JFYI: that last hunk has some conflicts applying to latest tip/master.
+> Might need merge resolving...
 
-On 6/20/23 08:45, Christian König wrote:
-> Hi Danilo,
-> 
-> sorry for the delayed reply. I've trying to dig myself out of a hole at 
-> the moment.
+Yes, I know.
 
-No worries, thank you for taking a look anyway!
+>> +/*
+>> + * Kick all "offline" CPUs out of mwait on kexec(). See comment in
+>> + * mwait_play_dead().
+>> + */
+>> +void smp_kick_mwait_play_dead(void)
+>> +{
+>> +	u32 newstate = CPUDEAD_MWAIT_KEXEC_HLT;
+>
+> Do you even need this newstate thing?
 
-> 
-> Am 20.06.23 um 02:42 schrieb Danilo Krummrich:
->> [SNIP]
->> diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
->> index bbc721870c13..5ec8148a30ee 100644
->> --- a/include/drm/drm_gem.h
->> +++ b/include/drm/drm_gem.h
->> @@ -36,6 +36,8 @@
->>   #include <linux/kref.h>
->>   #include <linux/dma-resv.h>
->> +#include <linux/list.h>
->> +#include <linux/mutex.h>
->>   #include <drm/drm_vma_manager.h>
->> @@ -379,6 +381,18 @@ struct drm_gem_object {
->>        */
->>       struct dma_resv _resv;
->> +    /**
->> +     * @gpuva:
->> +     *
->> +     * Provides the list of GPU VAs attached to this GEM object.
->> +     *
->> +     * Drivers should lock list accesses with the GEMs &dma_resv lock
->> +     * (&drm_gem_object.resv).
->> +     */
->> +    struct {
->> +        struct list_head list;
->> +    } gpuva;
+Yes, for two reasons:
+
+  1) To explicitely tell the other CPU to go into HLT. MWAIT can resume
+     execution due to SMIs or NMIs, so we don't want to go them into HLT
+     unconditionally. TLD; .... :)
+
+  2) Two have the state feedback from the other CPU.
+
 >> +
->>       /**
->>        * @funcs:
->>        *
-> 
-> I'm pretty sure that it's not a good idea to attach this directly to the 
-> GEM object.
+>> +		if (READ_ONCE(md->status) != newstate)
+>> +			pr_err("CPU%u is stuck in mwait_play_dead()\n", cpu);
+>
+> Shouldn't this be a pr_err_once thing so that it doesn't flood the
+> console unnecessarily?
 
-Why do you think so? IMHO having a common way to connect mappings to 
-their backing buffers is a good thing, since every driver needs this 
-connection anyway.
-
-E.g. when a BO gets evicted, drivers can just iterate the list of 
-mappings and, as the circumstances require, invalidate the corresponding 
-mappings or to unmap all existing mappings of a given buffer.
-
-What would be the advantage to let every driver implement a driver 
-specific way of keeping this connection? Do you see cases where this 
-kind of connection between mappings and backing buffers wouldn't be good 
-enough? If so, which cases do you have in mind? Maybe we can cover them 
-in a common way as well?
-
-> 
-> As you wrote in the commit message it's highly driver specific what to 
-> map and where to map it.
-
-In the end the common case should be that in a VA space at least every 
-mapping being backed by a BO is represented by a struct drm_gpuva.
-
-> 
-> Instead I suggest to have a separate structure for mappings in a VA 
-> space which driver can then add to their GEM objects or whatever they 
-> want to map into their VMs.
-
-Which kind of separate structure for mappings? Another one analogous to 
-struct drm_gpuva?
-
-- Danilo
-
-> 
-> Regards,
-> Christian.
-> 
-> 
-
+Yes, no, do not know :)
