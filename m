@@ -2,211 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3EE9736986
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBF89736990
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjFTKjr convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Jun 2023 06:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
+        id S232239AbjFTKkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 06:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbjFTKjj (ORCPT
+        with ESMTP id S231602AbjFTKkr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 06:39:39 -0400
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C68187;
-        Tue, 20 Jun 2023 03:39:28 -0700 (PDT)
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-988a4a7be58so63971466b.0;
-        Tue, 20 Jun 2023 03:39:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687257567; x=1689849567;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=e1n1kXu+nQ5Nxn8G6oU4vSP2FZpq1dRdfMZ9CJBaaQw=;
-        b=HeGEMTAz1lnOGY37l5Y4PqfjxNk8MSDCZbicsw341OBtjwrmAGJX614yduvyapsY99
-         Nfdqyqyxku6iV6icjQ0dbeYD3/IVKBwUU8ba4DjgLYCstIKI1BuQCmHm2ccdky960tNG
-         Hwd+lzTYRmZaDplh14Sle+kRBZBz9DEuJB7cSJRymHJnC3UPW/GZvVtEK6j2bwi2237R
-         k8i2t4Nm6RRDPRvRsbQwJgridC/Of0je4q80mXnXuXpO/6JX9RuPQWocZNRIdFk/YpYn
-         wpvZNLhfQD2vXgdh2iIHhJS3clyd21E6br6G/aaRdcvbvRXGPwN9Gf2EQapEZTymnJIl
-         RFNw==
-X-Gm-Message-State: AC+VfDxbSYsvEWKoxgv2VXjVJYm/sMeHh3RqyZA4O3N8o1hqotL8gbkA
-        bpInMfbA7eX58CldPZwPFRAYWgQT0Dfao4wG4sw=
-X-Google-Smtp-Source: ACHHUZ4jAeQO/pXeMsHcHRY7M4XIZLifCp+i3JXq39n0tyTa2WZd6RDFnRRMraHkPuniu8F8X4wG/EKeKhTdCPD/puQ=
-X-Received: by 2002:a17:906:100a:b0:987:81d:9d49 with SMTP id
- 10-20020a170906100a00b00987081d9d49mr7517549ejm.7.1687257567174; Tue, 20 Jun
- 2023 03:39:27 -0700 (PDT)
+        Tue, 20 Jun 2023 06:40:47 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B0119A5;
+        Tue, 20 Jun 2023 03:40:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687257627; x=1718793627;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=yWHHRSpdzEQ+3edWjDGQ6AGaIlHfxAaH16a+AM9cVZY=;
+  b=ehKI0vvAXo0tkPs2jhXwpKYf38amsofkaTtNV0DCVlGFqEGy1y39qN+A
+   niAUVmKsLpN5juvvx0qINCKiWP4uvy4LPyQ6E/syGR94nVKYiwMrNXt/Z
+   42pN7yO+I9cPj92bGCTmOLBjG+41jBz2CkFpTEQXZTJSHNHrx3yC5Ykk0
+   XByncU39t7/I82u/u9qHvn3YJH7phktlHFzCmXzhckwe8RQS08LwvdwSe
+   +kK0HGSuKjOg4CU6KYGVQn/GR+G6U6aQiwoabLj7zH6esuoVuOc7S2UbT
+   HQJqO0Wa+W8SXdOqIwlt+ESzfJshuVxwsYC667/2k41PiyTGao9o6cV/P
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="363247657"
+X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
+   d="scan'208";a="363247657"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 03:40:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="691380744"
+X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
+   d="scan'208";a="691380744"
+Received: from unknown (HELO localhost.localdomain) ([10.226.216.116])
+  by orsmga006.jf.intel.com with ESMTP; 20 Jun 2023 03:40:22 -0700
+From:   wen.ping.teh@intel.com
+To:     krzysztof.kozlowski@linaro.org
+Cc:     adrian.ho.yin.ng@intel.com, andrew@lunn.ch, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, dinguyen@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
+        netdev@vger.kernel.org, niravkumar.l.rabara@intel.com,
+        p.zabel@pengutronix.de, richardcochran@gmail.com,
+        robh+dt@kernel.org, sboyd@kernel.org, wen.ping.teh@intel.com
+Subject: Re: [PATCH 2/4] dt-bindings: clock: Add Intel Agilex5 clocks and resets
+Date:   Tue, 20 Jun 2023 18:39:30 +0800
+Message-Id: <20230620103930.2451721-1-wen.ping.teh@intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <8d5f38e6-2ca6-2c61-da29-1d4d2a3df569@linaro.org>
+References: <8d5f38e6-2ca6-2c61-da29-1d4d2a3df569@linaro.org>
 MIME-Version: 1.0
-References: <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org>
- <20230619063534.12831-1-di.shen@unisoc.com> <CAJZ5v0i9fyfNYyhAMqr0iYPbUNwrcvL7mxK1rMo+00mNRWKV6w@mail.gmail.com>
- <CAJZ5v0gHBxbU7Q0KYKsSVk+9nzSxot_JxUkcaAXrDxQx5_a7_Q@mail.gmail.com> <dbfe2b14-794a-e4d9-caf4-15d69ef86091@arm.com>
-In-Reply-To: <dbfe2b14-794a-e4d9-caf4-15d69ef86091@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 20 Jun 2023 12:39:10 +0200
-Message-ID: <CAJZ5v0iOSWDBU0d4QPpsKwAW9N2u1mf-BLdKCtJ_49e8P0ZD7g@mail.gmail.com>
-Subject: Re: [PATCH V4] thermal/core/power_allocator: reset thermal governor
- when trip point is changed
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, daniel.lezcano@linaro.org,
-        rui.zhang@intel.com, Di Shen <di.shen@unisoc.com>,
-        amitk@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xuewen.yan@unisoc.com,
-        jeson.gao@unisoc.com, zhanglyra@gmail.com, orsonzhai@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 12:19 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+>> 
+>> Add clock and reset ID definitions for Intel Agilex5 SoCFPGA
+>> 
+>> Co-developed-by: Teh Wen Ping <wen.ping.teh@intel.com>
+>> Signed-off-by: Teh Wen Ping <wen.ping.teh@intel.com>
+>> Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+>> ---
+>>  .../bindings/clock/intel,agilex5.yaml         |  42 ++++++++
+>>  include/dt-bindings/clock/agilex5-clock.h     | 100 ++++++++++++++++++
+>>  .../dt-bindings/reset/altr,rst-mgr-agilex5.h  |  79 ++++++++++++++
+>>  3 files changed, 221 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/clock/intel,agilex5.yaml
+>>  create mode 100644 include/dt-bindings/clock/agilex5-clock.h
+>>  create mode 100644 include/dt-bindings/reset/altr,rst-mgr-agilex5.h
+>> 
+>> diff --git a/Documentation/devicetree/bindings/clock/intel,agilex5.yaml b/Documentation/devicetree/bindings/clock/intel,agilex5.yaml
+>> new file mode 100644
+>> index 000000000000..e408c52deefa
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/clock/intel,agilex5.yaml
 >
-> Hi Rafael,
+>Filename matching compatible, so missing "clk"
+>
+
+Will update in V2 patch, rename file to intel,agilex5-clk.yaml
+
+>> @@ -0,0 +1,42 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/clock/intel,agilex5.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Intel SoCFPGA Agilex5 platform clock controller binding
+>
+>Drop "binding"
+>
+
+Will update in V2 patch.
+
+>> +
+>> +maintainers:
+>> +  - Teh Wen Ping <wen.ping.teh@intel.com>
+>> +  - Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+>> +
+>> +description:
+>> +  The Intel Agilex5 Clock controller is an integrated clock controller, which
+>> +  generates and supplies to all modules.
+>
+>"generates and supplies" what?
+
+Will change to "generates and supplies clock" in V2 patch.
+
+>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: intel,agilex5-clkmgr
 >
 >
-> On 6/20/23 11:07, Rafael J. Wysocki wrote:
-> > On Tue, Jun 20, 2023 at 11:46 AM Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >>
-> >> On Mon, Jun 19, 2023 at 8:36 AM Di Shen <di.shen@unisoc.com> wrote:
-> >>>
-> >>> When the thermal trip point is changed, the governor should
-> >>> be reset so that the policy algorithm be updated to adapt to the
-> >>> new trip point.
-> >>>
-> >>> This patch adds an ops for thermal the governor structure to reset
-> >>> the governor. The ops is called when the trip point is changed.
-> >>> For power allocator, the parameters of pid controller and the states
-> >>> of power cooling devices can be reset when the passive trip point
-> >>> is changed.
-> >>>
-> >>> Signed-off-by: Di Shen <di.shen@unisoc.com>
-> >>>
-> >>> ---
-> >>> V4:
-> >>> - Compared to V3, handle it in thermal core instead of in governor.
-> >>>
-> >>> - Add an ops to the governor structure, and call it when a trip
-> >>>    point is changed.
-> >>>
-> >>> - Define reset ops for power allocator.
-> >>>
-> >>> V3:
-> >>> - Add fix tag.
-> >>>
-> >>> V2:
-> >>> - Compared to v1, do not revert.
-> >>>
-> >>> - Add a variable(last_switch_on_temp) in power_allocator_params
-> >>>    to record the last switch_on_temp value.
-> >>>
-> >>> - Adds a function to renew the update flag and update the
-> >>>    last_switch_on_temp when thermal trips are writable.
-> >>>
-> >>> V1:
-> >>> - Revert commit 0952177f2a1f.
-> >>> ---
-> >>> ---
-> >>>   drivers/thermal/gov_power_allocator.c | 21 +++++++++++++++++++++
-> >>>   drivers/thermal/thermal_trip.c        |  6 ++++++
-> >>>   include/linux/thermal.h               |  1 +
-> >>>   3 files changed, 28 insertions(+)
-> >>>
-> >>> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-> >>> index 8642f1096b91..41d155adc616 100644
-> >>> --- a/drivers/thermal/gov_power_allocator.c
-> >>> +++ b/drivers/thermal/gov_power_allocator.c
-> >>> @@ -729,10 +729,31 @@ static int power_allocator_throttle(struct thermal_zone_device *tz, int trip_id)
-> >>>          return allocate_power(tz, trip.temperature);
-> >>>   }
-> >>>
-> >>> +static int power_allocator_reset(struct thermal_zone_device *tz, int trip_id)
-> >>> +{
-> >>> +       int ret = 0;
-> >>> +       struct thermal_trip trip;
-> >>> +       struct power_allocator_params *params = tz->governor_data;
-> >>> +
-> >>> +       ret = __thermal_zone_get_trip(tz, trip_id, &trip);
-> >>> +       if (ret)
-> >>> +               return ret;
-> >>> +
-> >>> +       /* Only need reset for passive trips */
-> >>> +       if (trip.type != THERMAL_TRIP_PASSIVE)
-> >>> +               return -EINVAL;
-> >>> +
-> >>> +       reset_pid_controller(params);
-> >>> +       allow_maximum_power(tz, true);
-> >>> +
-> >>> +       return ret;
-> >>> +}
-> >>> +
-> >>>   static struct thermal_governor thermal_gov_power_allocator = {
-> >>>          .name           = "power_allocator",
-> >>>          .bind_to_tz     = power_allocator_bind,
-> >>>          .unbind_from_tz = power_allocator_unbind,
-> >>>          .throttle       = power_allocator_throttle,
-> >>> +       .reset          = power_allocator_reset,
-> >>>   };
-> >>>   THERMAL_GOVERNOR_DECLARE(thermal_gov_power_allocator);
-> >>> diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
-> >>> index 907f3a4d7bc8..52eb768fada8 100644
-> >>> --- a/drivers/thermal/thermal_trip.c
-> >>> +++ b/drivers/thermal/thermal_trip.c
-> >>> @@ -173,6 +173,12 @@ int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
-> >>>          if (tz->trips && (t.temperature != trip->temperature || t.hysteresis != trip->hysteresis))
-> >>>                  tz->trips[trip_id] = *trip;
-> >>>
-> >>> +       if (t.temperature != trip->temperature && tz->governor && tz->governor->reset) {
-> >>> +               ret = tz->governor->reset(tz, trip_id);
-> >>> +               if (ret)
-> >>> +                       pr_warn_once("Failed to reset thermal governor\n");
-> >>
-> >> I'm not really sure if it is useful to print this message here.
-> >>
-> >> First off, the governors may print more precise diagnostic messages if
-> >> they care.
-> >>
-> >> Second, what is the sysadmin supposed to do in response to this message?
-> >
-> > In addition to the above, trip point temperatures may be updated in
-> > other places too, for instance in response to notifications from
-> > platform firmware and IMV this new callback should be also used in
-> > those cases.  However, in those cases multiple trip points may change
-> > at a time and the critical/hot trip point temperatures may be updated
-> > too AFAICS.
+>Why "clkmgr", not "clk"? You did not call it Clock manager anywhere in
+>the description or title.
 >
-> IIRC the critical/hot trip points are handled differently, not using the
-> governors. The governors' 'throttle' callback would be called only
-> after we pass the test of 'critical/hot' [1].
 
-OK, but is it actually useful to return an error code from the
-->reset() callback when passed a non-passive trip point?
+The register in Agilex5 handling the clock is named clock_mgr.
+Previous IntelSocFPGA, Agilex and Stratix10, are also named clkmgr.
 
-> What Di is facing is in the issue under the bucket of
-> 'handle_non_critical_trips()' when the governor just tries to
-> work on stale data - old trip temp.
+>> +
+>> +  '#clock-cells':
+>> +    const: 1
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - '#clock-cells'
+>
+>Keep the same order as in properties:
+>
 
-Well, fair enough, but what about the other governors?  Is this
-problem limited to power_allocator?
+Will update in V2 patch.
 
-> For the 2nd case IIUC the code, we pass the 'trip.temperature'
-> and should be ready for what you said (modification of that value).
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  # Clock controller node:
+>> +  - |
+>> +    clkmgr: clock-controller@10d10000 {
+>> +      compatible = "intel,agilex5-clkmgr";
+>> +      reg = <0x10d10000 0x1000>;
+>> +      #clock-cells = <1>;
+>> +    };
+>> +...
+>> diff --git a/include/dt-bindings/clock/agilex5-clock.h b/include/dt-bindings/clock/agilex5-clock.h
+>> new file mode 100644
+>> index 000000000000..4505b352cd83
+>> --- /dev/null
+>> +++ b/include/dt-bindings/clock/agilex5-clock.h
+>
+>Filename the same as binding. Missing vendor prefix, entirely different
+>device name.
+>
 
-Generally speaking, it needs to be prepared for a simultaneous change
-of multiple trip points (including active), in which case it may not
-be useful to invoke the ->reset() callback for each of them
-individually.
+Will change filename to intel,agilex5-clock.h in V2.
 
-Moreover, Daniel wants trip points to be sorted by temperature
-eventually and in that case indices may change overall even on one
-trip point update.
+>> @@ -0,0 +1,100 @@
+>> +/* SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause */
+>> +/*
+>> + * Copyright (C) 2022, Intel Corporation
+>> + */
+>
+>...
+>
+>> +
+>> +#endif	/* __AGILEX5_CLOCK_H */
+>> diff --git a/include/dt-bindings/reset/altr,rst-mgr-agilex5.h b/include/dt-bindings/reset/altr,rst-mgr-agilex5.h
+>> new file mode 100644
+>> index 000000000000..81e5e8c89893
+>> --- /dev/null
+>> +++ b/include/dt-bindings/reset/altr,rst-mgr-agilex5.h
+>
+>Same filename as binding.
+>
+>But why do you need this file? Your device is not a reset controller.
 
-> Furthermore, the critical/hot situation is handled w/o governor
-> assistance, so we should be safe:
-> tz->ops->critical(tz) or tz->ops->hot(tz) and not
-> tz->governor->throttle(tz, trip)
+Because Agilex5 device tree uses the reset definition from this file.
 
-That's fine.
+Best Regards,
+Wen Ping
