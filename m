@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CF5973719C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:31:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0076D73719E
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbjFTQbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 12:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56452 "EHLO
+        id S231504AbjFTQbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 12:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbjFTQal (ORCPT
+        with ESMTP id S231748AbjFTQal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 20 Jun 2023 12:30:41 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A36DC
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1041733
         for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:30:38 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f883420152so1769502e87.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:30:37 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f909853509so28658795e9.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:30:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1687278636; x=1689870636;
+        d=tessares.net; s=google; t=1687278637; x=1689870637;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=M+3rYDno64lq4pcOQfs2XEYgkB99jAmuRJnUEJYNOIc=;
-        b=zB+la/wggc1VC58H6IB/lIYOcJsNn6WE5cXkeRqAcHQjo0mcJAdWLsO01M29imNHQs
-         aFVQxeown/tMeaceP+i+gwmlYnerZvIAkxtMwAnvgKgviBqWiinXGGGmNZJFWwmTYCde
-         l4vIo5530D1BQtAvAB/1ck2FurAumcJHAZLQZBe/Hs6w4GfKSfWPcT9qrkB2vmm1Pk8v
-         PST2/f/57g4YtU6h2A6t0ELt3TbnxfFr/l6Ph7EQDfCdjSEZg3fBpYBvQPvRwnliU02y
-         668LZ3qMny5GCpor7KvXSIF6Y0rg2zbEkJOIVeQf0j/nlMEbXV5/MzvyUQeQomEy3yMn
-         Vvjg==
+        bh=a7elg4draWHNpGjD0HLDzJ+3OyRSgUqMtc+y+geeEHc=;
+        b=fhdDkTczBb6rVV12XCSs39fdpf55epJ4y5zRoQJT4xQoM9iIJRmDufHZHlIIcb7Qyo
+         h+6PVjFheamz0VSQ78gJKyXdF3yENiH5+dS9AO2Vgqt9dQ3MEEtXyi/1ySdCS53TcZxA
+         zQtSpbckW/mT68NuBh3ibnXPoleFYgEEBufh4Tp6QS9xVrpYVZr0fBQpMpLRROVRaqfd
+         aFC1/0yE6n7xYkWVgUuFQyLTIK+TuFMCNm5ln5wqaNgLz27HNiBMS2Vk9trpk+BPs/+q
+         wlkEgh/7ThT+IxasDcGdlWeksqxnSVXO4rJRsSNy0Ouz5P9gG96knLndmxy+IJSmfP0k
+         Jl7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687278636; x=1689870636;
+        d=1e100.net; s=20221208; t=1687278637; x=1689870637;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=M+3rYDno64lq4pcOQfs2XEYgkB99jAmuRJnUEJYNOIc=;
-        b=jZTY6dciX76RBUAz93qNWDL1IRB2zM9S8gRLjd3Ose92kNmdH0kUOz1/CS0LVh/bQo
-         JFmGMh6gc1kVvreGqotLvIiQlOTe11xMDAW2bWnX8Uvx62+mEMcnihrBzgvAqzYHRQaU
-         x3g+3YJs62M31ueW3T8LL38HMyX9O0R8rzrj6vNLDrqURsMNM7BpObpBIfbl9D8u5X6A
-         R/UI9ViVQP4IAcZS/vEBIfWHJTOSGhED4zYG2vrmNl76gJ4BrfYGtbulne9lJj1UNI5D
-         GV/j+r4MBbmJhOD6DG1wNIhnGGZ/kQBH5uICRczhNwemkgN3X+8rtdb1X/EW5Dl4bD+M
-         +Ttw==
-X-Gm-Message-State: AC+VfDy8twIux1bmwt4/e9K/TwOlTADd3ynRlhkz9DqyDGwLuUniW5N/
-        fAt+r9G66q6IoFoZGr/ei3zbOA==
-X-Google-Smtp-Source: ACHHUZ7u+1/2yjl6pxvJhAWopF9M5YW66PajsfPqku5w3sCkjPNexoxww6Nrrv5Va8TYG+oUp4TCGA==
-X-Received: by 2002:a19:ab12:0:b0:4f8:6aec:1a7b with SMTP id u18-20020a19ab12000000b004f86aec1a7bmr3900454lfe.67.1687278636276;
-        Tue, 20 Jun 2023 09:30:36 -0700 (PDT)
+        bh=a7elg4draWHNpGjD0HLDzJ+3OyRSgUqMtc+y+geeEHc=;
+        b=Oc1LC0QMz6r26Nv8GB6MlFnQzMRXP8WABL7fjfQwtyotqTNJYqZEvfWNLxyTJk3b7x
+         KnPBtxCLLB4t2M13G+nB3fT1Z4mxHNE3fBIgfQGpgElJWyrAInAPhclEbLyBQrBvS7rT
+         tGkaksmn38bQaeMR/FqJAGi48dD2im3kfcc0DjVtys62iOG6P0/Qbg3obb9LcZsrLJ/K
+         EwWsE3oiZlQb4ev9lF0B2ebWGAXElx9YA84UFJ/9zfckszrL819tedXgdeBJADhzXIiY
+         5AHxtNSJCXZ2z+gSHId694zLjfWJT02lSAYNzKXxqnDBGgTtLrWqoklz5KJKFsQTyNzA
+         qgIw==
+X-Gm-Message-State: AC+VfDz2jw8wieyqqY4LTl+4ZLaAQCcMhlWPTttivEEt689V9JnhcVTG
+        5ciKCII7frZkxx8DRkEmLRLkWg==
+X-Google-Smtp-Source: ACHHUZ7fwNWKNT8E7GKIMsrZniopnHnIcGVJJdgTDGjgIYfQYpGyRFGJw4lFtdWwUQZ0WA+585VQjg==
+X-Received: by 2002:a7b:c449:0:b0:3f4:a09f:1877 with SMTP id l9-20020a7bc449000000b003f4a09f1877mr8650689wmi.23.1687278637169;
+        Tue, 20 Jun 2023 09:30:37 -0700 (PDT)
 Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id y7-20020a05600c364700b003f8fbe3bf7asm12064342wmq.32.2023.06.20.09.30.35
+        by smtp.gmail.com with ESMTPSA id y7-20020a05600c364700b003f8fbe3bf7asm12064342wmq.32.2023.06.20.09.30.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 20 Jun 2023 09:30:36 -0700 (PDT)
 From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Tue, 20 Jun 2023 18:30:20 +0200
-Subject: [PATCH net-next 7/9] selftests: mptcp: join: skip check if MIB
- counter not supported (part 2)
+Date:   Tue, 20 Jun 2023 18:30:21 +0200
+Subject: [PATCH net-next 8/9] mptcp: consolidate transition to TCP_CLOSE in
+ mptcp_do_fastclose()
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230620-upstream-net-next-20230620-mptcp-expose-more-info-and-misc-v1-7-62b9444bfd48@tessares.net>
+Message-Id: <20230620-upstream-net-next-20230620-mptcp-expose-more-info-and-misc-v1-8-62b9444bfd48@tessares.net>
 References: <20230620-upstream-net-next-20230620-mptcp-expose-more-info-and-misc-v1-0-62b9444bfd48@tessares.net>
 In-Reply-To: <20230620-upstream-net-next-20230620-mptcp-expose-more-info-and-misc-v1-0-62b9444bfd48@tessares.net>
 To:     mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
@@ -69,21 +69,21 @@ Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         Matthieu Baerts <matthieu.baerts@tessares.net>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3948;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1968;
  i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=abzxrEVNoJ7Ql/J02Q0CV6m2IPXwAB1iOgYr8iLGxmU=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkkdQk0zIu54dctAVesZxRVGsIecrhRI5w9cjgz
- zfT+ppbciGJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZJHUJAAKCRD2t4JPQmmg
- cxo6EACEBIPC0qbn1q/GyzrHITIhcUE8AhlAcrTKBQUfcdQqeDoZCWshA+mVK4fxmTYelZHYN/F
- Mjd+B8zpObxG6YfUCAFqE3nQ8mLJpIpt6aKa1/vY154D1VqVjVCkLLOWj7FEQ7WgOqO982JPcNq
- 4eyaVFg8MWQFJI6Iwf5G0ent82gmYg/cWrypgjvJK1xt5QONq/OLZnNNmraEBuIOlJAHGrrNaDG
- xpMicm5UAxKNf2DEWdQd6JbJ96FoKOiflJgrs7+Kechi5gwvz6kS5o5K3KlaAgPJAQ++DgWotwe
- TmpYA2RRds2STezDSghGy/O6WLauaIjhMV/Sd9dRzXijXhWIqZ1kqpbN5XueGKjmKPyd1TiklWH
- dCAUcJtmKYB5OQf4HE2Vh/GrSJqPvYGBlosSgCVQH7Km53keJUIT73qISzhMxbaz9GReiAboZ/2
- g3rz0+y03ExpRQS7BQFuHVKGT5zqbo46Te1+MOTzoW6NASyU5Q/16TOuBr/QTPrJnKjEXJBtpvs
- ptv8BVY/1OJpK5RKk/K6RH0YZq+bptu53g/KG55QLPkmyb3co16BGBH9+Hmf6ck+iCFL0xfPhFx
- wezRXLI3XrLA2f0UBcqiQ8kZpjrubTvxczMqgDYGPNeEJCLsE1hzd9qgHbYI/jDPgBCpLC8zxdn
- ywXqCGdrR5kbUVw==
+ bh=J0hbphqDnBQXxAYln3jyFeuXYGpPLcu5bRjMLswg8ew=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkkdQkQp7ZphscCESHFoCADk9udZaIhfe1hxTej
+ uZAKnNJS0KJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZJHUJAAKCRD2t4JPQmmg
+ c6YaEADNIuJ+BTrKv0+V9hcb8zkqWKeXlBnXPs8LCezMBeJqm0szcDC6fUlr5nUouQpf+qsL63a
+ wwdQvNvpgHDbMH6oVGOOaEmAtnqX/guDsqid6bKqbsXqhvh4GwRAHQfHncVyGVZSG9+incwolfK
+ eDVmThQo4GhatAajhbFaCufHV4FgBeF8eT7CQ4jjIY7U3zBDJUmQRCOBwfDvzCd7JJkVN2VEuLo
+ oqblrQ/hrbBYKHZ5NHwXsJHheT7ZOC1DItwjpc/MbC+RPd9BpopS8WFHKxwtjNkQPjJBjkeYiI3
+ 6/R+evhOwDMnCmV/X/rvOqhTpssdtIoo1n4m3gFCJWG6TePolrNrclszyAG6yvJSEzgTR8oF1oQ
+ aqvYsgYa29lB+GjnYyawfTThAXpWnjN3ERRk3Doi0KT3sRxGMmWL7OfJokKR5iQFf0w+MXdGBXK
+ MjGb7FsNHXtbLBivuPndenEuRk0EGi2xm4vPecXNyswzx2gqMm9nwF+3Q4z367STZJj/u6Bzd3k
+ Jg1z0AqzVaSnjuc1BgYKsl1fpl9Gzb7VAcmHdQWwAe4R10bBLI1GjK9c2fyK++Auhycn3ED1DEI
+ bwfwRNr1ajskPGDpP6rG28b5iyEglNRAoJEs3UYOcc3gHbIQM2lcNNmv9ymjyHb8OmrDDSvRwTT
+ Lj5X395gifMiS5g==
 X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -96,105 +96,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Selftests are supposed to run on any kernels, including the old ones not
-supporting all MPTCP features.
+From: Paolo Abeni <pabeni@redhat.com>
 
-One of them is the MPTCP MIB counters introduced in commit fc518953bc9c
-("mptcp: add and use MIB counter infrastructure") and more later. The
-MPTCP Join selftest heavily relies on these counters.
+The MPTCP code always set the msk state to TCP_CLOSE before
+calling performing the fast-close. Move such state transition in
+mptcp_do_fastclose() to avoid some code duplication.
 
-If a counter is not supported by the kernel, it is not displayed when
-using 'nstat -z'. We can then detect that and skip the verification. A
-new helper (get_counter()) has been added recently in the -net tree to
-do the required checks and return an error if the counter is not
-available.
-
-This commit is similar to the one with the same title applied in the
--net tree but it modifies code only present in net-next for the moment,
-see the Fixes commit below.
-
-While at it, we can also remove the use of ${extra_msg} variable which
-is never assigned in chk_rm_tx_nr() function and use 'echo' without '-n'
-parameter.
-
-Link: https://github.com/multipath-tcp/mptcp_net-next/issues/368
-Fixes: 0639fa230a21 ("selftests: mptcp: add explicit check for new mibs")
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
 ---
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 33 +++++++++++++------------
- 1 file changed, 17 insertions(+), 16 deletions(-)
+ net/mptcp/protocol.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index 1b68fe1c0885..a7973d6a40a0 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -1683,12 +1683,12 @@ chk_add_tx_nr()
- 	timeout=$(ip netns exec $ns1 sysctl -n net.mptcp.add_addr_timeout)
+diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
+index 4ebd6e9aa949..f65eec3e0d22 100644
+--- a/net/mptcp/protocol.c
++++ b/net/mptcp/protocol.c
+@@ -2655,6 +2655,7 @@ static void mptcp_do_fastclose(struct sock *sk)
+ 	struct mptcp_subflow_context *subflow, *tmp;
+ 	struct mptcp_sock *msk = mptcp_sk(sk);
  
- 	printf "%-${nr_blank}s %s" " " "add TX"
--	count=$(ip netns exec $ns1 nstat -as MPTcpExtAddAddrTx | grep MPTcpExtAddAddrTx | awk '{print $2}')
--	[ -z "$count" ] && count=0
--
-+	count=$(get_counter ${ns1} "MPTcpExtAddAddrTx")
-+	if [ -z "$count" ]; then
-+		echo -n "[skip]"
- 	# if the test configured a short timeout tolerate greater then expected
- 	# add addrs options, due to retransmissions
--	if [ "$count" != "$add_tx_nr" ] && { [ "$timeout" -gt 1 ] || [ "$count" -lt "$add_tx_nr" ]; }; then
-+	elif [ "$count" != "$add_tx_nr" ] && { [ "$timeout" -gt 1 ] || [ "$count" -lt "$add_tx_nr" ]; }; then
- 		echo "[fail] got $count ADD_ADDR[s] TX, expected $add_tx_nr"
- 		fail_test
- 	else
-@@ -1696,9 +1696,10 @@ chk_add_tx_nr()
- 	fi
- 
- 	echo -n " - echo TX "
--	count=$(ip netns exec $ns2 nstat -as MPTcpExtEchoAddTx | grep MPTcpExtEchoAddTx | awk '{print $2}')
--	[ -z "$count" ] && count=0
--	if [ "$count" != "$echo_tx_nr" ]; then
-+	count=$(get_counter ${ns2} "MPTcpExtEchoAddTx")
-+	if [ -z "$count" ]; then
-+		echo "[skip]"
-+	elif [ "$count" != "$echo_tx_nr" ]; then
- 		echo "[fail] got $count ADD_ADDR echo[s] TX, expected $echo_tx_nr"
- 		fail_test
- 	else
-@@ -1734,9 +1735,10 @@ chk_rm_nr()
- 	fi
- 
- 	printf "%-${nr_blank}s %s" " " "rm "
--	count=$(ip netns exec $addr_ns nstat -as MPTcpExtRmAddr | grep MPTcpExtRmAddr | awk '{print $2}')
--	[ -z "$count" ] && count=0
--	if [ "$count" != "$rm_addr_nr" ]; then
-+	count=$(get_counter ${addr_ns} "MPTcpExtRmAddr")
-+	if [ -z "$count" ]; then
-+		echo -n "[skip]"
-+	elif [ "$count" != "$rm_addr_nr" ]; then
- 		echo "[fail] got $count RM_ADDR[s] expected $rm_addr_nr"
- 		fail_test
- 	else
-@@ -1778,16 +1780,15 @@ chk_rm_tx_nr()
- 	local rm_addr_tx_nr=$1
- 
- 	printf "%-${nr_blank}s %s" " " "rm TX "
--	count=$(ip netns exec $ns2 nstat -as MPTcpExtRmAddrTx | grep MPTcpExtRmAddrTx | awk '{print $2}')
--	[ -z "$count" ] && count=0
--	if [ "$count" != "$rm_addr_tx_nr" ]; then
-+	count=$(get_counter ${ns2} "MPTcpExtRmAddrTx")
-+	if [ -z "$count" ]; then
-+		echo "[skip]"
-+	elif [ "$count" != "$rm_addr_tx_nr" ]; then
- 		echo "[fail] got $count RM_ADDR[s] expected $rm_addr_tx_nr"
- 		fail_test
- 	else
--		echo -n "[ ok ]"
-+		echo "[ ok ]"
- 	fi
--
--	echo "$extra_msg"
++	inet_sk_state_store(sk, TCP_CLOSE);
+ 	mptcp_for_each_subflow_safe(msk, subflow, tmp)
+ 		__mptcp_close_ssk(sk, mptcp_subflow_tcp_sock(subflow),
+ 				  subflow, MPTCP_CF_FASTCLOSE);
+@@ -2692,10 +2693,9 @@ static void mptcp_worker(struct work_struct *work)
+ 	 * even if it is orphaned and in FIN_WAIT2 state
+ 	 */
+ 	if (sock_flag(sk, SOCK_DEAD)) {
+-		if (mptcp_should_close(sk)) {
+-			inet_sk_state_store(sk, TCP_CLOSE);
++		if (mptcp_should_close(sk))
+ 			mptcp_do_fastclose(sk);
+-		}
++
+ 		if (sk->sk_state == TCP_CLOSE) {
+ 			__mptcp_destroy_sock(sk);
+ 			goto unlock;
+@@ -2938,7 +2938,6 @@ static void __mptcp_destroy_sock(struct sock *sk)
+ void __mptcp_unaccepted_force_close(struct sock *sk)
+ {
+ 	sock_set_flag(sk, SOCK_DEAD);
+-	inet_sk_state_store(sk, TCP_CLOSE);
+ 	mptcp_do_fastclose(sk);
+ 	__mptcp_destroy_sock(sk);
  }
- 
- chk_prio_nr()
+@@ -2980,7 +2979,6 @@ bool __mptcp_close(struct sock *sk, long timeout)
+ 		/* If the msk has read data, or the caller explicitly ask it,
+ 		 * do the MPTCP equivalent of TCP reset, aka MPTCP fastclose
+ 		 */
+-		inet_sk_state_store(sk, TCP_CLOSE);
+ 		mptcp_do_fastclose(sk);
+ 		timeout = 0;
+ 	} else if (mptcp_close_state(sk)) {
 
 -- 
 2.40.1
