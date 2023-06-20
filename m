@@ -2,181 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB837370EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 17:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D8177370F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 17:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbjFTPuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 11:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
+        id S232718AbjFTPum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 11:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233218AbjFTPuA (ORCPT
+        with ESMTP id S232675AbjFTPub (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 11:50:00 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6222F197
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 08:49:33 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-bf5f41a87ceso1719232276.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 08:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687276172; x=1689868172;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7hSwWr4ilbhNVRAbZ4VQSJviq6a2rgWHoZh27c9gZiM=;
-        b=BsRT4IKL1+abd2TIQLoG3oZy7f74BTePBHX5gGyvOK/V//QFzEWc3ZRhCG5b+ZsBPS
-         u19EJ1GGmXNj9WNdhG9MD0QvsHUjH9QohfzIXtZOJXuQzQ02vMuPQVEas3nRm3w0XT0n
-         iu1pXNYPFv07C7b+NNMl25E1VtM4ipS1cQOaagdUhBQFtDhv38qbQJNXmOWN800uhRfZ
-         tJVFugYtU86OgqSRnLo0lMP+wCCicS8G3f/7+ExGtyeJRC5hDlJ//bhZlyVdQaEq/xw0
-         YahNIp6njhAIa5e7yU5RdU2XrIEfNMf76ZOAZ8fnYxu0qewSlAjByLTQiaZFBEU9gYya
-         BD/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687276172; x=1689868172;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7hSwWr4ilbhNVRAbZ4VQSJviq6a2rgWHoZh27c9gZiM=;
-        b=GgzqdwRTeeFhdGAoBQhoGvMfdYkBkkROqVu7Geuh6+L+JzJpucr4BlqdVNqITW/dl5
-         NG7TaNUnMbV5Q1uLmX0Fc0FKavbQh+b7zcFsHMUHdz0g22/vkHsfFEM0CN2WGndhkjDH
-         T+oFCj6yFDB8LTUFsAwuzSxT4MEWV6JrskHOqAzeMslWk4212eXVHcS/BpxHYf0ZLg4S
-         5W2lprrh+30YF7vgv6A9JhN2C+zHrm+OR+dexPXTfAnyEw+i+G6huUF19qe4ULWOpu1H
-         wnN9+pmHaKcnXUNjgFa6QVSLkJBnjOgEn/qCGIVvvW6kORQZ5SgGfknZdN/tqkYYQn1i
-         +1Nw==
-X-Gm-Message-State: AC+VfDyk8oUC849NUE+9SpUTZCGfHEVMunl0Tdul8ECbHqqlgF6E1O0Z
-        wFO7d9QMPxRGo6fGdTd+H/VN/QG5HfecDKtaAzH++smF2FNyTB1PxmY=
-X-Google-Smtp-Source: ACHHUZ65UwmZUZ02+o6V2mSvQ1sXOCKh789ZbmRzYwoK0LX0SaJAmg4+EimQIu1LAouSz0leUPYNQNWCFRNjtXM+w98=
-X-Received: by 2002:a25:a2cb:0:b0:bf5:76c:d654 with SMTP id
- c11-20020a25a2cb000000b00bf5076cd654mr4012673ybn.14.1687276172420; Tue, 20
- Jun 2023 08:49:32 -0700 (PDT)
-MIME-Version: 1.0
-References: <461dba105f644867a6687858d51324e8@hyperstone.com>
- <CAPDyKFr7=z5RyeOOBiSaGrtHRxCrTHqwYvMsUjgGmn7cvLa3ZA@mail.gmail.com> <0bb75439f50b4e3e99b31956a6f43c45@hyperstone.com>
-In-Reply-To: <0bb75439f50b4e3e99b31956a6f43c45@hyperstone.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 20 Jun 2023 17:48:56 +0200
-Message-ID: <CAPDyKFq=x4M1o6dVr-op_zZuiJB00TOCMsUcwFoz0Y6e4DJL5Q@mail.gmail.com>
-Subject: Re: [PATCHv2 2/2] mmc: block: ioctl: Add PROG-error aggregation
-To:     Christian Loehle <CLoehle@hyperstone.com>
-Cc:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Avri Altman <avri.altman@wdc.com>
+        Tue, 20 Jun 2023 11:50:31 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EA31729
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 08:50:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687276229; x=1718812229;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=eSVFD+4yBD0pLFM2u9/DDQZcxV7J5MSdm9GhEMLl2TY=;
+  b=h13L3grCz82QX5aJcGYzOr3FuGESFpoyKPSIxFxrhRy+/dYiZby4tiFr
+   fnQNmIKq0aWM+z2C+ayq4WsHjG2ai9tCqdhtA2aqCYqDMJNadJjzds+c+
+   GLBLMHOF3dmngbGgzzJaX8ixj++WD9TTQA6qa43bq77jwOVWC5awadCrq
+   OA/uvUFLkNcltG8Yd3JEMXaZchEIdDCiCELI39Mov8zuCcCnc4hha4RDK
+   SfPMd2XAqr8CZfy+AZYGGcb3Ck4uS+7ht2Q6YRiTKK+HFYpfNr74yRxyF
+   4OSSYqvpNMCdpJd70qdovxefJxQkcgjlE26+lmvXOg7H3PJYiQDeao1qS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="423561222"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="423561222"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 08:50:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="960827230"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="960827230"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga006.fm.intel.com with ESMTP; 20 Jun 2023 08:50:28 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 20 Jun 2023 08:50:27 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 20 Jun 2023 08:50:27 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 20 Jun 2023 08:50:27 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.175)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Tue, 20 Jun 2023 08:50:26 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HCN3M3LvxKpGpn1XR7j8yMBjU2Q43Af3Lu62x1OeGOvgbu/XHxf+2BUkAJXWDOw4XM7ROLR+ukb+2Ryc1iNub7N+a0TvYkZQrNzQo6u17VqcYYSR21cBzxCc29H7zP6iQn8CoUyiJg3PdQsQmEqt5qnDaCCR7uPTIhlMEVUdbihxTN7Rc85xioHACvckt9FatHcWqjCf/tjyfoa00FsFOvKuTzRJkiIEG/4nv/8ngLdr9VJt3pUdEf0BIispS5KRaAJHFCf2AcRbx2yZoRujabe6sO+rknUdHEG/5eH8wUWypJmelRkjDh72XRsjaVIqQFMeth9nQk8EgEvAqDpaUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xaDnDofSHLk+L77MKFdSYjh+JvqeRnHuWpNKlblU4nY=;
+ b=J7DN1jcg5+gyOLYoa2LOEKmOQClwJ9JRXp7l7HYHWK8bg2ikm8hdDpqWePaF5TBd5B59CiJN/IHO23qD8B4DkFgQ3SuHmWJPSOcd6heTcgKkCIpO4Vi1ITs0B5MRVndVAL+TD19Nl/nE1IRWAc/wWtV+7q5xgjUY5/LrZohJBVZXd7sI9nI83+0u0UA7wlY9lrQJXx7zf3/b6032Gywd6QxMK+2j7lgbMv76Z3EiHnqGk3e6LnpIOZFEjvLzNWut/3lYTAubY98Zw1vu3TGx4dKA0q7vjuC1vxQv8u7KnHFBhYe0Pby85YGrCizM1xxLucnyDOP5dT9+/XR1UR0/0A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
+ by SJ2PR11MB8422.namprd11.prod.outlook.com (2603:10b6:a03:542::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Tue, 20 Jun
+ 2023 15:50:25 +0000
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::591f:4873:fd80:9a6d]) by SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::591f:4873:fd80:9a6d%6]) with mapi id 15.20.6500.036; Tue, 20 Jun 2023
+ 15:50:25 +0000
+Message-ID: <f470afd1-2c13-b208-7e8c-7a8564f87b89@intel.com>
+Date:   Tue, 20 Jun 2023 08:50:22 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.12.0
+Subject: Re: [PATCH 3/3] x86/resctrl: make pseudo_lock_class a static const
+ structure
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, <x86@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>,
+        Ivan Orlov <ivan.orlov0322@gmail.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>
+References: <20230620144431.583290-4-gregkh@linuxfoundation.org>
+ <20230620144431.583290-6-gregkh@linuxfoundation.org>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <20230620144431.583290-6-gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR03CA0109.namprd03.prod.outlook.com
+ (2603:10b6:303:b7::24) To SJ2PR11MB7573.namprd11.prod.outlook.com
+ (2603:10b6:a03:4d2::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|SJ2PR11MB8422:EE_
+X-MS-Office365-Filtering-Correlation-Id: 650353c7-3286-4383-eadb-08db71a6101c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SdsQJr4x38wU1TWFk2VSlUcrsTnrY9c30GxgNmroof29uti3gcoHmRn94VDLqMpQCE9WRe1G6oAfBxmUbDlmh/iNPW85eY6G+Scex73btFIUDXXhRb1Wnu39tOh53q1CdlBlMrmVPQG5AbIMNjAHl5fr3559jgxx6BCrCOL9WjGiBo/UgOo5xplf4FQZJy05SHJ2TgB5Td2yLtsRiAYXWqhhP0Hw2eG321VXZZK5JOSZCk2wpOX4uGUU7kqpidNG1FiPa81cEFHrJNmYtpJCjnJhA1ZKQuTpZcfDdYhYpyiVL6pJP5e9SCiPQgerwvBda9lnN3Y/ssl0BEvsMJGyxBsJC/TyDAriBR7+JFzp+n9JBRy6bIWkDqufXqhbs8+YqUFnA/6Y6/lzCy9DkiwbW2sEXK+Vk6gxDXrVQDJQAe9yzpAyrnxHkRf5Bw2nuk7w3GgRjZJ0xmFlCCq+mHPBnHozwuzWcIRxbQe58ZcVk5fN8m73LkxJ2Z7XeO1Us+Oqc3EfwnLC+u2GCekoEzPuStTZNqK2oJmlpbwRJ2HRcinAFWeFHvB+JizWUYMhiwnWGijDL6sCu7sAYU/mBDGZN4I+X/ls3YGD9hA46cbvnE+DNvNLIbQVs0X0DAQIr3p85lf5R/PmIVEq/eAcRCH0zw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(376002)(136003)(39860400002)(346002)(451199021)(4744005)(2906002)(2616005)(83380400001)(8676002)(478600001)(6486002)(6666004)(54906003)(5660300002)(6506007)(6512007)(53546011)(8936002)(44832011)(316002)(66946007)(66556008)(66476007)(4326008)(26005)(186003)(41300700001)(38100700002)(82960400001)(31696002)(86362001)(36756003)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SUpsSWgrNDZhaEZkVHU1RXZCbXpsekR2eHN1bnNBbXJzSTI3MzByVTRJUlBK?=
+ =?utf-8?B?ZENRdThoQTQ0L0tpS0JVZzY3YWhmVStLa2tRQnkyZ25aUWFPc1ZTYVcwV3R1?=
+ =?utf-8?B?bGt6Z3p5cmdMUFZOYzdPTFd3L0hXdm5ramdzd3dLU0tsMUVlbHNqSGlpVk42?=
+ =?utf-8?B?QmJwcURSek93amVYK09oVjVhQnQzZm9BWUZuTHE2bGVzRGlqNDliY0hGSU1P?=
+ =?utf-8?B?RkprUmw3MFZDYTJTWmU4RjVuRnVHdU5LQzR5NDNWMVZkQis3bGUwQ0w1dG83?=
+ =?utf-8?B?OStwbXV1MnRBRGd0T1RFcmJlbU1hN2Nad0grelVDbXo1Y0w0YjlWcmFGZ1Nh?=
+ =?utf-8?B?MytJb1lweFJaZGNwZnh6N2lXZTBhbi9YeVZlUFhTVFVpT2dyUlhsQzFQUFBW?=
+ =?utf-8?B?WWV5SW5CSE45ck5qTlJqTG10RmtNdk9IK203SUFrSHB6ZW03aFdKL2grUHd3?=
+ =?utf-8?B?UVlOeHFzQUF3Q21aTEVzbjVtUTBSVXpwdHp2RmRyTUtkd3pPNWhLeEdCdWcx?=
+ =?utf-8?B?SExnNjVnZTVnWlNFL0l2bDYrenk2a2liV1NBSWxPUnB4QlgyL2VrcHlJbXky?=
+ =?utf-8?B?bXFacjZJOHJ6ZWsyampUK1BqR2Z1TWxIbitDYWd6WjJjM20xaTVXOWV6RXFZ?=
+ =?utf-8?B?dVJWdUZqSjhBajROd0VtcHBUczc4SUlwa2RvMU1IQ0VlTndMOEsrd0QyZVk3?=
+ =?utf-8?B?ak5SZm1CU3lxQ04vTmR5b1U1NGkrTE5UQUpkZGtUSVhLbzQ2NENsQThua3A1?=
+ =?utf-8?B?QU5NdEVNVUFJK2w0ZmJrOHJmWnNFMDNYNUdCdU1ESXdHdTNMZVBKeXVreVY5?=
+ =?utf-8?B?aStWaGtIcmI2WHRRSVFLcWp0UVJUUFNVL2FqVmNFdm14U1pZbzhIcmZ0ZVFs?=
+ =?utf-8?B?bDVHU3FHMFREbC9NMlZPcm1QbVB0TkUxdTJHWmtVbUszdmx6SFBkUlJNNnVi?=
+ =?utf-8?B?ZCtpaGZwY1pqRTJXMlZlTzV4cHBWZCt0YWxkWHJ0R0oySVQvaTFRdVdkVXBV?=
+ =?utf-8?B?d2Y3dURpS0Jtb2gxWm5PSm4vbExDLzRpVW42ZVBNbE1YbUVudXlabFBOUXRQ?=
+ =?utf-8?B?djNUbVdhS1JJeDBjKzZtdHdtSlgyc0FieC9oTUd3Q3FYQWZMNXhJa3lmaUQ3?=
+ =?utf-8?B?MFpCWlJzUStYd0hCQVNpWU12Q2pDS2luZHl3Q3RjQnpVaWxtTHA3MVlxNjdJ?=
+ =?utf-8?B?cE50VEd1MDJyL2FreG5iTXprUXZwN3R1OW4vT0VGdWJQYUU5VnVqVzVNTTZC?=
+ =?utf-8?B?aUQvOWFjMzBGSFlLTjdCSUhoVFFMcUV2RXRVUFlkTnRBUzE3WTBubGdLQmNy?=
+ =?utf-8?B?cktLdDhUMUtWTW1Ea2FORFVzQVJweHNHcUxBQ0tFVEpvdE1WNlhTUlE2bllW?=
+ =?utf-8?B?R1JVVFlmc2k4VjRFUjJjY0FZTUJuaHRZM0RaYmtIVVUzT1RDQzk4bkFDbTRS?=
+ =?utf-8?B?TmdWVXAvcjZlSHhjZDB6eUJDTHUvRUdUYnczR2hvcUh6VjZ2QUljRnBVSFNL?=
+ =?utf-8?B?S1BIUzMzZkg3N0t4R2dTVDRLWmFpdVpPOEV1Qk9UUkNBazVNK2xFQ25rQVJ1?=
+ =?utf-8?B?VE9TQTdaQklXTXlvUnBGek9VK1N1bDlrTGVRd3hIMFdqbmRjZm1RY0QyL3M4?=
+ =?utf-8?B?MEtoYnpoako3TlN1UnFEN0JtUTlzY1BuVkhpekc1TkRpR1U4ZHQ3NXRKK3ky?=
+ =?utf-8?B?SHFHMm4za05wUTNHa2oxZVRTRVkvMWNLcGpoWjhCTTZNbU9RTmtodmdHNVFR?=
+ =?utf-8?B?Y043eDM5YUdrb0tORUZNQUlidGxxWkc4SW03UnJ1Y1ozQ0FvVUZOTUxwRFRB?=
+ =?utf-8?B?UTFSSWxUYjlxV2hZSEp1M2JXSDBGNEhiNTU5a3dnU2NBQngwR1JVMjJxc2Y3?=
+ =?utf-8?B?YUNxdFoyYk04Y1ZSdHNIR29tYjR5MnhTMGNTOGJteDdBQmgxLzdvVEJmdDZK?=
+ =?utf-8?B?YzVyZXVHLzNZaEZWZlk5Qnlrd1ptZzYxUkdvaFlVWURMckRhaWpzUW9vWmEv?=
+ =?utf-8?B?QXlZY2xLTzBWeElkRFhBM1ZaOXBvY0NXbExpMThyRGR3bjgwTUVYVE1JL0ZU?=
+ =?utf-8?B?YnV0Ykk3djk1RFNYZThrZ281eGgweThSWGxZQW0zV01pWStMemQzR09NM0Zj?=
+ =?utf-8?B?RVIzOGxFME9QN0VmQU8yZXgzTkl6dm56c3hYVmRlWHIrL2dCWVJXUnJ5cTVV?=
+ =?utf-8?B?MFE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 650353c7-3286-4383-eadb-08db71a6101c
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 15:50:25.3266
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QYTjfvk+23kVR66yrTxA7nCzdJBJDjio8smaR69CtVbAvgAw0TsSCHRinT45kYcqaiDAYLxqSQuiGt36y6MDjVCABbgNvzBNYsjzvLkC/ok=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB8422
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Jun 2023 at 13:23, Christian Loehle <CLoehle@hyperstone.com> wrote:
->
-> >>
-> >> Userspace currently has no way of checking for error bits of detection
-> >> mode X. These are error bits that are only detected by the card when
-> >> executing the command. For e.g. a sanitize operation this may be
-> >> minutes after the RSP was seen by the host.
-> >>
-> >> Currently userspace programs cannot see these error bits reliably.
-> >> They could issue a multi ioctl cmd with a CMD13 immediately following
-> >> it, but since errors of detection mode X are automatically cleared
-> >> (they are all clear condition B).
-> >> mmc_poll_for_busy of the first ioctl may have already hidden such an
-> >> error flag.
-> >>
-> >> In case of the security operations: sanitize, secure erases and RPMB
-> >> writes, this could lead to the operation not being performed
-> >> successfully by the card with the user not knowing.
-> >> If the user trusts that this operation is completed (e.g. their data
-> >> is sanitized), this could be a security issue.
-> >> An attacker could e.g. provoke a eMMC (VCC) flash fail, where a
-> >> successful sanitize of a card is not possible. A card may move out of
-> >> PROG state but issue a bit 19 R1 error.
-> >>
-> >> This patch therefore will also have the consequence of a mmc-utils
-> >> patch, which enables the bit for the security-sensitive operations.
-> >>
-> >> Signed-off-by: Christian Loehle <cloehle@hyperstone.com>
-> >> ---
-> >>  drivers/mmc/core/block.c   | 17 ++++++-----------
-> >>  drivers/mmc/core/mmc_ops.c | 25 ++++++++++++++++++++++++-
-> >> drivers/mmc/core/mmc_ops.h |  3 +++
-> >>  3 files changed, 33 insertions(+), 12 deletions(-)
-> >>
-> >> diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c index
-> >> e46330815484..44c1b2825032 100644
-> >> --- a/drivers/mmc/core/block.c
-> >> +++ b/drivers/mmc/core/block.c
-> >> @@ -470,7 +470,7 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
-> >>         struct mmc_data data = {};
-> >>         struct mmc_request mrq = {};
-> >>         struct scatterlist sg;
-> >> -       bool r1b_resp, use_r1b_resp = false;
-> >> +       bool r1b_resp;
-> >>         unsigned int busy_timeout_ms;
-> >>         int err;
-> >>         unsigned int target_part;
-> >> @@ -551,8 +551,7 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
-> >>         busy_timeout_ms = idata->ic.cmd_timeout_ms ? : MMC_BLK_TIMEOUT_MS;
-> >>         r1b_resp = (cmd.flags & MMC_RSP_R1B) == MMC_RSP_R1B;
-> >>         if (r1b_resp)
-> >> -               use_r1b_resp = mmc_prepare_busy_cmd(card->host, &cmd,
-> >> -                                                   busy_timeout_ms);
-> >> +               mmc_prepare_busy_cmd(card->host, &cmd,
-> >> + busy_timeout_ms);
-> >>
-> >>         mmc_wait_for_req(card->host, &mrq);
-> >>         memcpy(&idata->ic.response, cmd.resp, sizeof(cmd.resp)); @@
-> >> -605,19 +604,15 @@ static int __mmc_blk_ioctl_cmd(struct mmc_card *card, struct mmc_blk_data *md,
-> >>         if (idata->ic.postsleep_min_us)
-> >>                 usleep_range(idata->ic.postsleep_min_us,
-> >> idata->ic.postsleep_max_us);
-> >>
-> >> -       /* No need to poll when using HW busy detection. */
-> >> -       if ((card->host->caps & MMC_CAP_WAIT_WHILE_BUSY) && use_r1b_resp)
-> >> -               return 0;
-> >> -
-> >>         if (mmc_host_is_spi(card->host)) {
-> >>                 if (idata->ic.write_flag || r1b_resp || cmd.flags & MMC_RSP_SPI_BUSY)
-> >>                         return mmc_spi_err_check(card);
-> >>                 return err;
-> >>         }
-> >> -       /* Ensure RPMB/R1B command has completed by polling with CMD13. */
-> >> -       if (idata->rpmb || r1b_resp)
-> >> -               err = mmc_poll_for_busy(card, busy_timeout_ms, false,
-> >> -                                       MMC_BUSY_IO);
-> >> +       /* Poll for write/R1B execution errors */
-> >> +       if (idata->ic.write_flag || r1b_resp)
-> >
-> > Earlier we polled for requests that were targeted to rpmb, no matter if they were write or reads. Are you intentionally changing this? If so, can you explain why?
-> >
-> Will re-introduce. I cant really think of a reason right now to do this after rpmb reads, but thats a different story.
 
-Okay, good.
 
-My main point is, if we want to change that, let's do that as a separate patch.
+On 6/20/2023 7:44 AM, Greg Kroah-Hartman wrote:
+> From: Ivan Orlov <ivan.orlov0322@gmail.com>
+> 
+> Now that the driver core allows for struct class to be in read-only
+> memory, move the pseudo_lock_class structure to be declared at build
+> time placing it into read-only memory, instead of having to be
+> dynamically allocated at boot time.
+> 
+> Cc: Fenghua Yu <fenghua.yu@intel.com>
+> Cc: Reinette Chatre <reinette.chatre@intel.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Borislav Petkov <bp@alien8.de>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: x86@kernel.org
+> Cc: "H. Peter Anvin" <hpa@zytor.com>
+> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
->
-> >> +               err = mmc_poll_for_busy_err_flags(card, busy_timeout_ms, false,
-> >> +                                       MMC_BUSY_IO,
-> >> + &idata->ic.response[0]);
-> >
-> > I think it's better to extend the mmc_blk_busy_cb, rather than introducing an entirely new polling function.
-> >
-> > Then you can call __mmc_poll_for_busy() here instead.
->
-> Not sure if I understood you right, but I will send a new version with __mmc_poll_for_busy call directly.
-> It does feel a bit more awkward, at least to me, because both mmc_blk_busy_cb nor mmc_busy_data are currently only in mmc_ops.c
->
-> Anyway, both versions "extend the mmc_blk_busy_cb", so I'm not sure if I understood you correctly, we will see.
-> I may also just send both and you pick whichever you prefer.
+Thank you very much.
 
-I was thinking that mmc_blk_card_busy() calls __mmc_poll_for_busy().
-While doing that, it uses the mmc_blk_busy_cb() - which seems to be
-almost what we want to do here too.
+Acked-by: Reinette Chatre <reinette.chatre@intel.com>
 
-Did that make sense?
-
-Kind regards
-Uffe
+Reinette
