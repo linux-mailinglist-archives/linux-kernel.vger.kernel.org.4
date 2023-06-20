@@ -2,108 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D84BD736E69
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84759736E66
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231966AbjFTOMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 10:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33318 "EHLO
+        id S231862AbjFTOLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 10:11:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233191AbjFTOMQ (ORCPT
+        with ESMTP id S233204AbjFTOLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 10:12:16 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C74E72
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 07:12:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=VmM0Nc3LtyvvmpukuP4nGr0cZ1knJlu8u3HNcvubAaw=; b=hm0iJgo4ztBsmZPctKxioshyft
-        ZpurZs5YOMn0tybmwtDzZ26ulMwGO+q8Ug9sWYwSrySeGGgJONlCiviE5nxghdkhl7Fc+yVWDVpKp
-        vNlJzJub/+yh6VwpjHlvDJRa12pIwZqkqZMJKyQ04yIFS0Ja4DChE0Likncf8MfZGzs4GLEkJ0Fob
-        9lRcbK3qYzDPjyXtQG9ItqgL7zHCndZpLgw4gnaT6LyjvcMa5RkUUmxNNZ0cGFQFuu2GQX1WwZebG
-        aAp2YhyBSIOrKFAFh4ZPBiivTOZKA4IxgLPhwKiugqsC+blAamhKRZTG0dtS2IN5HcWpoYeqaL3Ta
-        +mgshOFA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qBc4o-00G6C2-24;
-        Tue, 20 Jun 2023 14:11:22 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        Tue, 20 Jun 2023 10:11:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24232E6E
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 07:11:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 84B17300137;
-        Tue, 20 Jun 2023 16:11:20 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3BF96241C2230; Tue, 20 Jun 2023 16:11:20 +0200 (CEST)
-Date:   Tue, 20 Jun 2023 16:11:20 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched/topology: remove unneeded do while loop in
- cpu_attach_domain()
-Message-ID: <20230620141120.GA2016469@hirez.programming.kicks-ass.net>
-References: <20230617081926.2035113-1-linmiaohe@huawei.com>
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B22DA6127D
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:11:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C18A0C433CA;
+        Tue, 20 Jun 2023 14:11:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687270296;
+        bh=BySw7zeEB+zqgTdSK07c1pD8YXeUFZjxQogJ1e5vW+I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WqW7UZIwMPujOd37QYsJAwDjyW9IfiLgFlA1DZ4rwi3pYToXRoN5ycs/OLYxtX0X8
+         NaYpi+6iNl8kSjeKbWmcPrUxJ8BDkPB2FvTXMqHjWv8XFDN2k4k/jcbjurI6CwC2zB
+         jB0e9WOD3ZRdO3Y/gmUWM7dpDqlrSCyQvLPL1pEs=
+Date:   Tue, 20 Jun 2023 16:11:33 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Umang Jain <umang.jain@ideasonboard.com>
+Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Adrien Thierry <athierry@redhat.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH] staging: vchiq_arm: Remove extra struct vchiq_instance
+ declaration
+Message-ID: <2023062022-emerald-bartender-4065@gregkh>
+References: <20221221074047.233473-1-umang.jain@ideasonboard.com>
+ <52a40c60-f044-c757-f8fd-241f456fb722@ideasonboard.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230617081926.2035113-1-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <52a40c60-f044-c757-f8fd-241f456fb722@ideasonboard.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 04:19:26PM +0800, Miaohe Lin wrote:
-> When sg != sd->groups, the do while loop would cause deadloop here. But
-> that won't occur because sg is always equal to sd->groups now. Remove
-> this unneeded do while loop.
-
-This Changelog makes no sense to me.. Yes, as is the do {} while loop is
-dead code, but it *should* have read like:
-
-	do {
-		sg->flags = 0;
-		sg = sg->next;
-	} while (sg != sd->groups);
-
-as I noted here:
-
-  https://lore.kernel.org/all/20230523105935.GN83892@hirez.programming.kicks-ass.net/T/#u
-
-So what this changelog should argue is how there cannot be multiple
-groups here -- or if there can be, add the missing iteration.
-
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  kernel/sched/topology.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
+On Tue, Jun 20, 2023 at 07:16:15PM +0530, Umang Jain wrote:
+> Hi again,
 > 
-> diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-> index ca4472281c28..9010c93c3fdb 100644
-> --- a/kernel/sched/topology.c
-> +++ b/kernel/sched/topology.c
-> @@ -750,10 +750,7 @@ cpu_attach_domain(struct sched_domain *sd, struct root_domain *rd, int cpu)
->  			 * domain for convenience. Clear such flags since
->  			 * the child is being destroyed.
->  			 */
-> -			do {
-> -				sg->flags = 0;
-> -			} while (sg != sd->groups);
-> -
-> +			sg->flags = 0;
->  			sd->child = NULL;
->  		}
->  	}
-> -- 
-> 2.27.0
-> 
+> Can this be collected please?. The series has two R-b tags and I think it
+> got skipped during the last window?
+
+SOrry for the delay, this got dropped somewhere, now queued up.
+
+greg k-h
