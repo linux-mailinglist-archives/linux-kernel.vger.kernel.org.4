@@ -2,66 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C607371DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63BEE7371E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjFTQgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 12:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33276 "EHLO
+        id S229889AbjFTQiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 12:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232079AbjFTQgH (ORCPT
+        with ESMTP id S229601AbjFTQiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 12:36:07 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BE32106;
-        Tue, 20 Jun 2023 09:35:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687278944; x=1718814944;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=MU6h0bQC0vAge5es6R0v/1fr1IoAPMvkrNIAnaSKRwM=;
-  b=OWDeK3t688m5Vu25OHOVjthdpTd0X3o0WHWZ791OfI1mwaedOXOWuBJI
-   ac7LW/rNlK3nkUzyt5/IF6mX2cN0z9okQ2nZPuBAEfr7Zcf2mld0az3jS
-   AyoRvh8vgEsr7CwBhT9QWUFh6cGyi7HnhpqyU9Jk5Wapehz3OUq0/9GXs
-   G2C0fScAA5DnlXtrZWIdOOz8KOjrXwMNs6nFaYe6XURh0yJo7UCi1mPfK
-   0L5xafC1bFpX5ZLU9lqTmRP0qNGntKVdR0pjxyB1yRwhLTTL/h1gJwLok
-   +ZEWKu5Pt5LpLL5P6iBQI5UnIDRZNP07QZ43cnEYbZn/pC5liOVtQ/91S
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="423575845"
-X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
-   d="scan'208";a="423575845"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 09:35:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="838268291"
-X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
-   d="scan'208";a="838268291"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga004.jf.intel.com with ESMTP; 20 Jun 2023 09:35:39 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 4ED3E690; Tue, 20 Jun 2023 19:35:50 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Wolfram Sang <wsa@kernel.org>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        acpica-devel@lists.linuxfoundation.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Robert Moore <robert.moore@intel.com>
-Subject: [PATCH v1 2/2] ACPI: platform: Move SMB0001 HID to the header and reuse
-Date:   Tue, 20 Jun 2023 19:35:34 +0300
-Message-Id: <20230620163534.1042-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
-In-Reply-To: <20230620163534.1042-1-andriy.shevchenko@linux.intel.com>
-References: <20230620163534.1042-1-andriy.shevchenko@linux.intel.com>
+        Tue, 20 Jun 2023 12:38:10 -0400
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B204D1988;
+        Tue, 20 Jun 2023 09:37:54 -0700 (PDT)
+Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3422d37d316so13553895ab.3;
+        Tue, 20 Jun 2023 09:37:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687279074; x=1689871074;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lzHhBcGehlWwZFYVf8Mcmgg1mKcLxdLW5Zggyy+CCXM=;
+        b=ODGNDLhtIbPyhP04QC6TtKSlOk07ThJV19EBv+7/X9uWcufbAJTqUo28rreIIXFjVQ
+         0SoQfZoQ3N1iDeKBsE5atI2vWkHq/iNIDIArXGRqiGsjEGhXKb7TVB9hS6ZER331XFUc
+         FlpLN0Itrh6gw1SaQGJ7AymTIt2VI6iKOrzk3K9iOnALGQXfV4AvTeZoAjBrK9q8ko8e
+         4NsAoxkKrRUIEJRQu5aJscGQfe19CG/jJ4njdDsPC0Kumh8ioW2XARr2iJ4VtXS55MoY
+         ZBfQJEvoG+6jevxsIoAK/aymtZs8myolVVntTDJ6W5Zqef+b2uVR2ueNOQDkLsk0eiwG
+         F2Jw==
+X-Gm-Message-State: AC+VfDxptBaPzMhXbu68RzrwcEeguSHYDPJnEl/xMbFu7HPx4RqXF4SS
+        rE0dQvFIHVmTaPBKgofw7g==
+X-Google-Smtp-Source: ACHHUZ4zJSh5ti9pvnIfdniu0E1NqvpspqRuuhbVpluLjMmbPmBKj+IVLp/KcN4Qlye8SWQ/35QrFw==
+X-Received: by 2002:a92:c80a:0:b0:341:c806:a8cd with SMTP id v10-20020a92c80a000000b00341c806a8cdmr8907661iln.6.1687279073923;
+        Tue, 20 Jun 2023 09:37:53 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id a12-20020a056638018c00b0041f4bd6f285sm741308jaq.37.2023.06.20.09.37.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 09:37:53 -0700 (PDT)
+Received: (nullmailer pid 3789063 invoked by uid 1000);
+        Tue, 20 Jun 2023 16:37:51 -0000
+Date:   Tue, 20 Jun 2023 10:37:51 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     devicetree@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Mark Brown <broonie@kernel.org>, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        alsa-devel@alsa-project.org,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>
+Subject: Re: [PATCH v5 01/13] ASoC: dt-bindings: Add audio-iio-aux
+Message-ID: <168727907001.3788984.8001897155371948964.robh@kernel.org>
+References: <20230615152631.224529-1-herve.codina@bootlin.com>
+ <20230615152631.224529-2-herve.codina@bootlin.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230615152631.224529-2-herve.codina@bootlin.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,58 +78,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are at least two places in the kernel that are using
-the SMB0001 HID. Make it to be available via acpi_drivers.h
-header file. While at it, replace hard coded one with a
-definition.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/acpi/acpi_platform.c  | 2 +-
- drivers/i2c/busses/i2c-scmi.c | 3 ---
- include/acpi/acpi_drivers.h   | 2 ++
- 3 files changed, 3 insertions(+), 4 deletions(-)
+On Thu, 15 Jun 2023 17:26:19 +0200, Herve Codina wrote:
+> Industrial I/O devices can be present in the audio path.
+> These devices needs to be viewed as audio components in order to be
+> fully integrated in the audio path.
+> 
+> audio-iio-aux allows to consider these Industrial I/O devices as
+> auxliary audio devices.
+> 
+> Signed-off-by: Herve Codina <herve.codina@bootlin.com>
+> ---
+>  .../bindings/sound/audio-iio-aux.yaml         | 64 +++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/audio-iio-aux.yaml
+> 
 
-diff --git a/drivers/acpi/acpi_platform.c b/drivers/acpi/acpi_platform.c
-index 089a98bd18bf..e86f76ee3473 100644
---- a/drivers/acpi/acpi_platform.c
-+++ b/drivers/acpi/acpi_platform.c
-@@ -20,7 +20,7 @@
- #include "internal.h"
- 
- static const struct acpi_device_id forbidden_id_with_resourses[] = {
--	{"SMB0001",  0},	/* ACPI SMBUS virtual device */
-+	{ACPI_SMBUS_MS_HID,  0},	/* ACPI SMBUS virtual device */
- 	{ }
- };
- 
-diff --git a/drivers/i2c/busses/i2c-scmi.c b/drivers/i2c/busses/i2c-scmi.c
-index 104570292241..421735acfa14 100644
---- a/drivers/i2c/busses/i2c-scmi.c
-+++ b/drivers/i2c/busses/i2c-scmi.c
-@@ -13,9 +13,6 @@
- #include <linux/i2c.h>
- #include <linux/acpi.h>
- 
--/* SMBUS HID definition as supported by Microsoft Windows */
--#define ACPI_SMBUS_MS_HID		"SMB0001"
--
- struct smbus_methods_t {
- 	char *mt_info;
- 	char *mt_sbr;
-diff --git a/include/acpi/acpi_drivers.h b/include/acpi/acpi_drivers.h
-index 8372b0e7fd15..b14d165632e7 100644
---- a/include/acpi/acpi_drivers.h
-+++ b/include/acpi/acpi_drivers.h
-@@ -27,6 +27,8 @@
- #define ACPI_BAY_HID			"LNXIOBAY"
- #define ACPI_DOCK_HID			"LNXDOCK"
- #define ACPI_ECDT_HID			"LNXEC"
-+/* SMBUS HID definition as supported by Microsoft Windows */
-+#define ACPI_SMBUS_MS_HID		"SMB0001"
- /* Quirk for broken IBM BIOSes */
- #define ACPI_SMBUS_IBM_HID		"SMBUSIBM"
- 
--- 
-2.40.0.1.gaa8946217a0b
+Reviewed-by: Rob Herring <robh@kernel.org>
 
