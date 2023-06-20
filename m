@@ -2,151 +2,452 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D147F736A21
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 132A0736A36
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231751AbjFTLAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 07:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
+        id S232457AbjFTLCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 07:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjFTLAu (ORCPT
+        with ESMTP id S231561AbjFTLCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 07:00:50 -0400
-Received: from forward502b.mail.yandex.net (forward502b.mail.yandex.net [178.154.239.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B136100;
-        Tue, 20 Jun 2023 04:00:49 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-42.myt.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-42.myt.yp-c.yandex.net [IPv6:2a02:6b8:c12:5329:0:640:44d3:0])
-        by forward502b.mail.yandex.net (Yandex) with ESMTP id 6E77C5ED9C;
-        Tue, 20 Jun 2023 14:00:38 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-42.myt.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id Z0f0EvsDfiE0-oVPxsKpL;
-        Tue, 20 Jun 2023 14:00:37 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687258837;
-        bh=q5JZcXugVzzP13B3EGAtz/ROr1sjE6Mec5v2xBPhibE=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=kxBh9UJXLbuj6natLcxCMKYEtDIUl1ylGrahln92dIIIQ/103LMbtu2GIDS2nC5bP
-         ldtfHS/P/cIf6BveNm2v2IvlN2ayAlboJCvE5mkxf6ZuO6HTikHpz8wTiFKdeyPjTo
-         k+YvsNeIYMt2tDEiUY0Qz8Id3CZ0pHbNRwwWkag8=
-Authentication-Results: mail-nwsmtp-smtp-production-main-42.myt.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-Message-ID: <e7586b46-ff65-27ff-e829-c6009d7d4808@yandex.ru>
-Date:   Tue, 20 Jun 2023 16:00:35 +0500
+        Tue, 20 Jun 2023 07:02:36 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4021DB;
+        Tue, 20 Jun 2023 04:02:33 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f918922954so21904715e9.2;
+        Tue, 20 Jun 2023 04:02:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687258952; x=1689850952;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xe+NKftJfawlrJMf9TpUjPPNTPzcBJ+qa20yCQQD74I=;
+        b=G1aC9NtB14txFc6tVPEcteYgDqPAwE1jLH/zYLAXyMLS7oGaEJGO1z24gJjoqYsyoU
+         FK3LhR1PWkeeLB5aZRTDtNzKOSBB9DH1Q353HUNwW8fNjcUqXbQrKW4qGMzQTvtp7Vyj
+         zLA/xUmBpGDKYBN6e6xR4E9k8+65GNrF/KJ+wMMMLilDw3fl+PXqbST4e2DFYUxCSpLd
+         efsu2VTLvzIt644An22VzxtAZlRjo+jpqOs83fVOc0y1mv0jdBp8kR2UNLRyJ2Bhsp2o
+         UaaU2CUi9TkGc0Sp7D8+9pF1iC3LxlMBeID7HsBlZAp8rq6Z7XpLVGlren7te4T0UnkK
+         TssQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687258952; x=1689850952;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xe+NKftJfawlrJMf9TpUjPPNTPzcBJ+qa20yCQQD74I=;
+        b=MxeDPMzKw1djH5h0SBADeNv7KN3QF6FQMsyNRiAkp3yvKcggsflNp+FAFYvm5+6CVo
+         mT30oq5PZLmCVtfS+tfsYsp8sT4Q8DQyYv/tCAj6ivrfqu9oyh1veWPGlM2KYuXuLHC/
+         P6ThxAQWTtEGnNxtTe25e4JRgwqCad6/okRiinMaoSk/C3Gocp7xX5UA+h/lVvSBw/Cy
+         sCSYNfPQQK2NsNWRpp1/PEVu7jUoE/V8+28O7CxRf6aW44+Kh8IA9nV5aHT8CdYI6XKn
+         vtjYAu2bJsZWUiBzdOjYsbJpKlP1Nv//zBVDTrzj28kT5Jb91s3DpUFOLHqySKqNVsQF
+         QiOA==
+X-Gm-Message-State: AC+VfDwMOgFyTVTAqzFQbUf+zkznH9bDmwqem91CsA1oiHjFBXPAkfIu
+        XeoahW1cK/jkp7hIRedXYQI=
+X-Google-Smtp-Source: ACHHUZ7qq/tLESOKfJvQtQPEnPMdLZh0oA2AtQBpdmFHaguouOntU6aeLR6rV0aCxFRtkb3kGTunig==
+X-Received: by 2002:a7b:cb93:0:b0:3f9:b0aa:ae7a with SMTP id m19-20020a7bcb93000000b003f9b0aaae7amr3567290wmi.15.1687258950624;
+        Tue, 20 Jun 2023 04:02:30 -0700 (PDT)
+Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.gmail.com with ESMTPSA id e14-20020adfef0e000000b0030c2e3c7fb3sm1711879wro.101.2023.06.20.04.02.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 04:02:29 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 12:02:28 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Kirill A Shutemov <kirill@shutemov.name>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Vineeth Pillai <vineeth@bitbyteword.org>
+Subject: Re: [PATCH v4 1/7] mm/mremap: Optimize the start addresses in
+ move_page_tables()
+Message-ID: <f28eadbc-f40e-4286-bf7e-af0ac360617e@lucifer.local>
+References: <20230531220807.2048037-1-joel@joelfernandes.org>
+ <20230531220807.2048037-2-joel@joelfernandes.org>
+ <f2f751ca-217e-4177-bb7f-1c9cd71e103e@lucifer.local>
+ <b87df265-7e58-5907-e215-953630a87155@joelfernandes.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/3] fs/locks: F_UNLCK extension for F_OFD_GETLK
-Content-Language: en-US
-To:     Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org
-References: <20230620095507.2677463-1-stsp2@yandex.ru>
- <20230620095507.2677463-2-stsp2@yandex.ru>
- <c6d4e620cad72da5f85df03443a64747b5719939.camel@kernel.org>
-From:   stsp <stsp2@yandex.ru>
-In-Reply-To: <c6d4e620cad72da5f85df03443a64747b5719939.camel@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b87df265-7e58-5907-e215-953630a87155@joelfernandes.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-20.06.2023 15:46, Jeff Layton пишет:
-> On Tue, 2023-06-20 at 14:55 +0500, Stas Sergeev wrote:
->> Currently F_UNLCK with F_OFD_GETLK returns -EINVAL.
->> The proposed extension allows to use it for getting the lock
->> information from the particular fd.
->>
->> Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
->>
->> CC: Jeff Layton <jlayton@kernel.org>
->> CC: Chuck Lever <chuck.lever@oracle.com>
->> CC: Alexander Viro <viro@zeniv.linux.org.uk>
->> CC: Christian Brauner <brauner@kernel.org>
->> CC: linux-fsdevel@vger.kernel.org
->> CC: linux-kernel@vger.kernel.org
->>
->> ---
->>   fs/locks.c | 23 ++++++++++++++++++++---
->>   1 file changed, 20 insertions(+), 3 deletions(-)
->>
->> diff --git a/fs/locks.c b/fs/locks.c
->> index df8b26a42524..210766007e63 100644
->> --- a/fs/locks.c
->> +++ b/fs/locks.c
->> @@ -868,6 +868,21 @@ static bool posix_locks_conflict(struct file_lock *caller_fl,
->>   	return locks_conflict(caller_fl, sys_fl);
->>   }
->>   
->> +/* Determine if lock sys_fl blocks lock caller_fl. Used on xx_GETLK
->> + * path so checks for additional GETLK-specific things like F_UNLCK.
->> + */
->> +static bool posix_test_locks_conflict(struct file_lock *caller_fl,
->> +				      struct file_lock *sys_fl)
->> +{
->> +	/* F_UNLCK checks any locks on the same fd. */
->> +	if (caller_fl->fl_type == F_UNLCK) {
->> +		if (!posix_same_owner(caller_fl, sys_fl))
->> +			return false;
->> +		return locks_overlap(caller_fl, sys_fl);
->> +	}
->> +	return posix_locks_conflict(caller_fl, sys_fl);
->> +}
->> +
->>   /* Determine if lock sys_fl blocks lock caller_fl. FLOCK specific
->>    * checking before calling the locks_conflict().
->>    */
->> @@ -901,7 +916,7 @@ posix_test_lock(struct file *filp, struct file_lock *fl)
->>   retry:
->>   	spin_lock(&ctx->flc_lock);
->>   	list_for_each_entry(cfl, &ctx->flc_posix, fl_list) {
->> -		if (!posix_locks_conflict(fl, cfl))
->> +		if (!posix_test_locks_conflict(fl, cfl))
->>   			continue;
->>   		if (cfl->fl_lmops && cfl->fl_lmops->lm_lock_expirable
->>   			&& (*cfl->fl_lmops->lm_lock_expirable)(cfl)) {
->> @@ -2207,7 +2222,8 @@ int fcntl_getlk(struct file *filp, unsigned int cmd, struct flock *flock)
->>   	if (fl == NULL)
->>   		return -ENOMEM;
->>   	error = -EINVAL;
->> -	if (flock->l_type != F_RDLCK && flock->l_type != F_WRLCK)
->> +	if (cmd != F_OFD_GETLK && flock->l_type != F_RDLCK
->> +			&& flock->l_type != F_WRLCK)
->>   		goto out;
->>   
->>   	error = flock_to_posix_lock(filp, fl, flock);
->> @@ -2414,7 +2430,8 @@ int fcntl_getlk64(struct file *filp, unsigned int cmd, struct flock64 *flock)
->>   		return -ENOMEM;
->>   
->>   	error = -EINVAL;
->> -	if (flock->l_type != F_RDLCK && flock->l_type != F_WRLCK)
->> +	if (cmd != F_OFD_GETLK && flock->l_type != F_RDLCK
->> +			&& flock->l_type != F_WRLCK)
->>   		goto out;
->>   
->>   	error = flock64_to_posix_lock(filp, fl, flock);
-> This seems like a reasonable sort of interface to add, particularly for
-> the CRIU case.
-
-Just for the record: my own cases are
-the remaining 2. CRIU case is not mine
-and I haven't talked to CRIU people
-about that.
-
-
->   Using F_UNLCK for this is a bit kludgey, but adding a new
-> constant is probably worse.
+On Mon, Jun 19, 2023 at 11:55:08AM -0400, Joel Fernandes wrote:
+> Hi Lorenzo,
+> Thanks for the review! I replied below:
 >
-> I'm willing to take this in with an eye toward v6.6. Are you also
-> willing to draft up some manpage patches that detail this new interface?
-Sure thing.
-As soon as its applied, I'll prepare a man
-patch, or should it be done before that point?
+> On 6/17/23 18:49, Lorenzo Stoakes wrote:
+> > On Wed, May 31, 2023 at 10:08:01PM +0000, Joel Fernandes (Google) wrote:
+> >> Recently, we see reports [1] of a warning that triggers due to
+> >> move_page_tables() doing a downward and overlapping move on a
+> >> mutually-aligned offset within a PMD. By mutual alignment, I
+> >> mean the source and destination addresses of the mremap are at
+> >> the same offset within a PMD.
+> >>
+> >> This mutual alignment along with the fact that the move is downward is
+> >> sufficient to cause a warning related to having an allocated PMD that
+> >> does not have PTEs in it.
+> >>
+> >> This warning will only trigger when there is mutual alignment in the
+> >> move operation. A solution, as suggested by Linus Torvalds [2], is to
+> >> initiate the copy process at the PMD level whenever such alignment is
+> >> present. Implementing this approach will not only prevent the warning
+> >> from being triggered, but it will also optimize the operation as this
+> >> method should enhance the speed of the copy process whenever there's a
+>
+> [...]
+>
+> >> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> >> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> >> ---
+> >>   mm/mremap.c | 61 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+> >>   1 file changed, 61 insertions(+)
+> >>
+> >> diff --git a/mm/mremap.c b/mm/mremap.c
+> >> index 411a85682b58..bf355e4d6bd4 100644
+> >> --- a/mm/mremap.c
+> >> +++ b/mm/mremap.c
+> >> @@ -478,6 +478,51 @@ static bool move_pgt_entry(enum pgt_entry entry, struct
+> >>   	return moved;
+> >>   }
+> >>
+> >> +/*
+> >> + * A helper to check if a previous mapping exists. Required for
+> >> + * move_page_tables() and realign_addr() to determine if a previous mapping
+> >> + * exists before we can do realignment optimizations.
+> >> + */
+> >> +static bool can_align_down(struct vm_area_struct *vma, unsigned long addr_to_align,
+> >> +			       unsigned long mask)
+> >> +{
+> >> +	unsigned long addr_masked = addr_to_align & mask;
+> >> +	struct vm_area_struct *prev = NULL, *cur = NULL;
+> >> +
+> >> +	/*
+> >> +	 * If @addr_to_align of either source or destination is not the beginning
+> >> +	 * of the corresponding VMA, we can't align down or we will destroy part
+> >> +	 * of the current mapping.
+> >> +	 */
+> >> +	if (vma->vm_start != addr_to_align)
+> >> +		return false;
+> >
+> > See below, I think we can eliminate this check.
+> >
+> >> +
+> >> +	/*
+> >> +	 * Find the VMA before @vma to see if it subsumes the masked address.
+> >> +	 * The mmap write lock is held here so the lookup is safe.
+> >> +	 */
+> >> +	cur = find_vma_prev(vma->vm_mm, vma->vm_start, &prev);
+> >> +	if (WARN_ON_ONCE(cur != vma))
+> >> +		return false;
+> >> +
+> >> +	return !prev || prev->vm_end <= addr_masked;
+> >
+> > This is a bit clunky, and I don't think we need the WARN_ON_ONCE() check if
+> > we're under the mmap_lock.
+> >
+> > How about something like:-
+> >
+> > return find_vma_intersection(vma->mm, addr_masked, vma->vm_start) == NULL;
+> >
+> > Which explicitly asserts that the range in [addr_masked, vma->vm_start) is
+> > empty.
+> >
+> > But actually, we should be able to go further and replace the previous
+> > check with:-
+> >
+> > return find_vma_intersection(vma->mm, addr_masked, addr_to_align) == NULL;
+> >
+> > Which will fail if addr_to_align is offset within the VMA.
+>
+> Your suggestion would mean that we do a full VMA search starting from the
+> root. That would not be a nice thing if say we've 1000s of VMAs?
+>
+> Actually Liam told me to use find_vma_prev() because given a VMA, the maple
+> tree would not have to work that hard for the common case to find the
+> previous VMA. Per conversing with him, there is a chance we may have to go
+> one step above in the tree if we hit the edge of a node, but that's not
+> supposed to be the common case. In previous code, the previous VMA could
+> just be obtained using the "previous VMA" pointer, however that pointer has
+> been remove since the maple tree changes and given a VMA, going to the
+> previous one using the maple tree is just as fast (as I'm told).
+
+As far as I can tell, find_vma_prev() already does a walk? I mean this is
+equivalent to find_vma() only retrieving the previous VMA right? I defer to
+Liam, but I'm not sure this would be that much more involved? Perhaps he
+can comment.
+
+An alternative is to create an iterator and use vma_prev(). I find it
+extremely clunky that we search for a VMA we already possess (and it's
+previous one) while not needing the the former.
+
+I'm not hugely familiar with the maple tree (perhaps Liam can comment) but
+I suspect that'd be more performant if that's the concern. Either way I
+would be surprised if this is the correct approach.
+
+>
+> Considering this, I would keep the code as-is and perhaps you/we could
+> consider the replacement with another API in a subsequent patch as it does
+> the job for this patch.
+
+See above. I don't think this kind of comment is helpful in code
+review. Your disagreement above suffices, I've responded to it and of
+course if there is no other way this is fine.
+
+But I'd be surprised, and re-looking up a VMA we already have is just
+horrid. It's not really a nitpick, it's a code quality issue in my view.
+
+In any case, let's please try to avoid 'if you are bothered, write a follow
+up patch' style responses. If you disagree with something just say so, it's
+fine! :)
+
+>
+> >> +			 unsigned long *new_addr, struct vm_area_struct *new_vma,
+> >> +			 unsigned long mask)
+> >> +{
+> >> +	bool mutually_aligned = (*old_addr & ~mask) == (*new_addr & ~mask);
+> >> +
+> >> +	if ((*old_addr & ~mask) && mutually_aligned
+> >
+> > I may be misunderstanding something here, but doesn't the first condition
+> > here disallow for offset into PMD == 0? Why?
+>
+> Because in such a situation, the alignment is already done and there's
+> nothing to align. The patch wants to align down to the PMD and we would not
+> want to waste CPU cycles if there's nothing to do.
+
+OK, makes sense. It'd be useful to have a comment to this effect.
+
+>
+> >> +	    && can_align_down(old_vma, *old_addr, mask)
+> >> +	    && can_align_down(new_vma, *new_addr, mask)) {
+> >> +		*old_addr = *old_addr & mask;
+> >> +		*new_addr = *new_addr & mask;
+> >> +	}
+> >> +}
+> >> +
+> >>   unsigned long move_page_tables(struct vm_area_struct *vma,
+> >>   		unsigned long old_addr, struct vm_area_struct *new_vma,
+> >>   		unsigned long new_addr, unsigned long len,
+> >> @@ -493,6 +538,15 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
+> >>
+> >>   	old_end = old_addr + len;
+> >>
+> >> +	/*
+> >> +	 * If possible, realign addresses to PMD boundary for faster copy.
+> >> +	 * Don't align for intra-VMA moves as we may destroy existing mappings.
+> >> +	 */
+> >> +	if ((vma != new_vma)
+> >
+> > Nit but these parens aren't needed.
+>
+> Sure, I can drop the parens.
+
+Thanks.
+
+>
+> > Also if we're deferring the decision as
+> > to whether we realign to this function, why are we doing this check here
+> > and not here?
+>
+> Hmm, well the function name is realign_addr() so I kept some of the initial
+> checks outside of it where we should "obviously" not realign. I could do
+> what you're suggesting and change it to try_realign_addr() or something. And
+> move those checks in there. That would be a bit better.
+
+Thanks.
+
+>
+> > It feels like it'd be neater to keep all the conditions (including the
+> > length one) together in one place.
+> >
+> >
+> >> +		&& (len >= PMD_SIZE - (old_addr & ~PMD_MASK))) {
+>
+> Well, yeah maybe. I'll look into it, thanks.
+
+I mean it's not a huge big deal, but reading your code having a bunch of
+conditions in two different places is a little hard to parse and jarring.
+
+>
+> > You don't mention this condition in the above comment (if we have this
+> > altogether as part of the realign function could comment separately there)
+>
+> Ok, sounds good -- I will add a comment with some of the explanation above.
+>
+> > - so we only go ahead and do this optimisation if the length of the remap
+> > is such that the entire of old_addr -> end of its PMD (and thus the same
+> > for new_addr) is copied?
+>
+> Yes, correct. And in the future that could also be optimized (if say there
+> is no subsequent mapping, so we can copy the tail PMD as well, however one
+> step at a time and all that.)
+>
+
+OK cool makes sense.
+
+> > I may be missing something/being naive here, but can't we just do a similar
+> > check to the one done for space _below_ the VMA to see if [end, (end of
+> > PMD)) is equally empty?
+>
+> We can, but the warning that was triggering does not really need that to be
+> silenced. I am happy to do that in a later patch if needed, or you can. ;-)
+> But I'd like to keep the risk low since this was itself hard enough to get
+> right.
+
+(see above about 'later patch' comments...)
+
+Sure, this is not a big deal.
+
+>
+> >> +		realign_addr(&old_addr, vma, &new_addr, new_vma, PMD_MASK);
+> >> +	}
+> >> +
+> >>   	if (is_vm_hugetlb_page(vma))
+> >>   		return move_hugetlb_page_tables(vma, new_vma, old_addr,
+> >>   						new_addr, len);
+> >> @@ -565,6 +619,13 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
+> >>
+> >>   	mmu_notifier_invalidate_range_end(&range);
+> >>
+> >> +	/*
+> >> +	 * Prevent negative return values when {old,new}_addr was realigned
+> >> +	 * but we broke out of the above loop for the first PMD itself.
+> >> +	 */
+> >> +	if (len + old_addr < old_end)
+> >> +		return 0;
+> >> +
+> >
+> > I find this a little iffy, I mean I see that if you align [old,new]_addr to
+> > PMD, then from then on in you're relying on the fact that the loop is just
+> > going from old_addr (now aligned) -> old_end and thus has the correct
+> > length.
+> >
+> > Can't we just fix this issue by correcting len? If you take my review above
+> > which checks len in [maybe_]realign_addr(), you could take that as a
+> > pointer and equally update that.
+> >
+> > Then you can drop this check.
+>
+> The drawback of adjusting len is it changes what move_page_tables() users
+> were previously expecting.
+>
+> I think we should look at the return value of move_page_tables() as well,
+> not just len independently.
+>
+> len is what the user requested.
+>
+> "len + old_addr - old_end" is how much was actually copied and is the return value.
+>
+> If everything was copied, old_addr == old_end and len is unchanged.
+
+Ah yeah I see, sorry I missed the fact we're returning a value, that does
+complicate things...
+
+If we retain the hugetlb logic, then we could work around the issue with
+that instance of len by storing the 'actual length' of the range in
+a new var actual_len and passing that.
+
+If we choose to instead just not do this for hugetlb (I wonder if the
+hugetlb handling code actually does the equivalent of this since surely
+these pages have to be handled a PMD at a time?) then we can drop the whole
+actual_len idea [see below on response to hugetlb thing].
+
+>
+> The users of move_page_tables(), like move_vma() should not care whether we
+> copied a full PMD or not. In fact telling them anything like may cause
+> problems with the interpretation of the return value I think.
+>
+> They asked us to copy len, did we copy it? hell yeah.
+>
+> Note that after the first loop iteration's PMD copy, old_addr is now at the
+> PMD boundary and the functionality of this function is not changed with this
+> patch. We end up doing a PMD-copy just like we used to without this patch.
+> So this patch does not really change anything from before.
+>
+> The following are the cases:
+>
+> 1. If we realign and copy, yes we copied a PMD, but really it was to satisfy
+> the requested length. In this situation, "len + old_addr - old_end"  is
+> accurate and just like before. We copied whatever the user requested. Yes we
+> copied a little more, but who cares? We copied into a mapping that does not
+> exist anyway. It may be absurd for us to return a len that is greater than
+> the requested len IMO.
+>
+> 2. If there are no errors (example first PMD copy did not fail), "len +
+> old_addr - old_end" is identical to what it was without this patch -- as it
+> should be. That's true whether we realigned or not.
+>
+> 3. If we realigned and the first PMD copy failed (unlikely error) -- that's
+> where there's a problem. We would end up returning a negative value. That's
+> what Linus found and suggested to correct. Because (old_addr - old_end) will
+> be greater than len in such a situation, however unlikely.
+>
+
+Right. Yeah that is thorny, sorry I did miss the degree of the complexity
+with that... ugh ye gods. Probably then this has to be retained.
+
+I was thinking we could use min(actual_len + old_addr - old_end, len), but
+then we'd over-report what was 'copied' (actually not copied) because
+that'd include the address range spanned by the empty PTE entries up to the
+start of the PMD entry.
+
+> >>   	return len + old_addr - old_end;	/* how much done */
+> >>   }
+> > Also I am concerned in the hugetlb case -> len is passed to
+> > move_hugetlb_page_tables() which is now strictly incorrect, I wonder if
+> > this could cause an issue?
+> >
+> > Correcting len seems the neat way of addressing this.
+>
+> That's a good point. I am wondering if we can just change that from:
+>
+> 	if (is_vm_hugetlb_page(vma))
+> 		return move_hugetlb_page_tables(vma, new_vma, old_addr,
+> 				new_addr, len);
+>
+> to:
+> 	if (is_vm_hugetlb_page(vma))
+> 		return move_hugetlb_page_tables(vma, new_vma, old_addr,
+> 				new_addr, old_addr - new_addr);
+>
+> Or, another option is to turn it off for hugetlb by just moving:
+>
+> 	if (len >= PMD_SIZE - (old_addr & ~PMD_MASK))
+> 		realign_addr(...);
+>
+> to after:
+>
+> 	if (is_vm_hugetlb_page(vma))
+> 		return move_hugetlb_page_tables(...);
+>
+> thanks,
+
+I think the actual_len solution should sort this right? If not maybe better
+to be conservative and disable for the hugetlb case (I'm not sure if this
+would help given you'd need to be PMD aligned anyway right?), so not to
+hold up the series.
+
+If we do decide not to include hugetlb (the endless 'special case' for so
+much code...) in this then we can drop the actual_len idea altogether.
+
+(Yes I realise it's ironic I'm suggesting deferring to a later patch here
+but there you go ;)
+
+>
+>  - Joel
+>
