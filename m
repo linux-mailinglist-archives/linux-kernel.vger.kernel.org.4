@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 212E573684A
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2255736850
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:48:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbjFTJsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 05:48:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56638 "EHLO
+        id S231500AbjFTJsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 05:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231857AbjFTJsB (ORCPT
+        with ESMTP id S232171AbjFTJsE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 05:48:01 -0400
+        Tue, 20 Jun 2023 05:48:04 -0400
 Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D63E6F1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 02:47:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D87F3F1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 02:48:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version:
-        Content-Type; bh=XU0Fg2KaF1xcsfWW4v0Y+xi9FWHK/c2RL/uvt8tfibM=;
-        b=SYJk9LdyJhPjfLKMgCx73S9NtUWTih27uuWU9rq/6ldf3OoWdEaG0ogiK9bse7
-        XT3b4Xoh6KQqOFpazPOam6O3wJg23kmcF8lldzsuAaAEAUDS0wips5cDqbJTnudv
-        OvRnqM6H0vBtTFhROYrfjlFFtjdUS5C9AoWslDCnu86no=
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=wU8Ie
+        13gmhuczqUhzOFuP6vAwh58ReysXrVNUirzfUE=; b=GC2ldmreyh2Saxl/FHTUO
+        VrQpzdOc2TsGLUTx/Nhhlugkz/WvUJaZrMGBAC/AxDlVQQ1hTV+CBh8XbGVubpZY
+        DsBj1eUl/eV/MY/U+bmhSKlW0MMNTfyLknSX9vM54ISSM1Vu/hoa2b6Cx0tuLrrV
+        obbESOjNDz0UuZjtZNSBmw=
 Received: from openarena.loongson.cn (unknown [114.242.206.180])
-        by zwqz-smtp-mta-g4-0 (Coremail) with SMTP id _____wAXg3CldZFkB8yiAQ--.11241S2;
-        Tue, 20 Jun 2023 17:47:17 +0800 (CST)
+        by zwqz-smtp-mta-g4-0 (Coremail) with SMTP id _____wAXg3CldZFkB8yiAQ--.11241S3;
+        Tue, 20 Jun 2023 17:47:18 +0800 (CST)
 From:   Sui Jingfeng <18949883232@163.com>
 To:     Lucas Stach <l.stach@pengutronix.de>,
         Russell King <linux+etnaviv@armlinux.org.uk>,
@@ -32,21 +32,24 @@ To:     Lucas Stach <l.stach@pengutronix.de>,
         Daniel Vetter <daniel@ffwll.ch>
 Cc:     linux-kernel@vger.kernel.org, etnaviv@lists.freedesktop.org,
         dri-devel@lists.freedesktop.org,
-        Sui Jingfeng <suijingfeng@loongson.cn>
-Subject: [PATCH v10 00/11] drm/etnaviv: Add pci device driver support
-Date:   Tue, 20 Jun 2023 17:47:05 +0800
-Message-Id: <20230620094716.2231414-1-18949883232@163.com>
+        Sui Jingfeng <suijingfeng@loongson.cn>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH v10 01/11] drm/etnaviv: Add a dedicated function to register an irq handler
+Date:   Tue, 20 Jun 2023 17:47:06 +0800
+Message-Id: <20230620094716.2231414-2-18949883232@163.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230620094716.2231414-1-18949883232@163.com>
+References: <20230620094716.2231414-1-18949883232@163.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wAXg3CldZFkB8yiAQ--.11241S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxWr4UJrWkGrW7WF4rWrWruFg_yoW5GF4xpF
-        4UGFyYyry8urW3Kw17JFn5JFy3C3WxWF9Y93srt3s09w45AryjvryDKF45Jr9xJr4rAF12
-        qr1a9r13WF1UArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jD5r7UUUUU=
+X-CM-TRANSID: _____wAXg3CldZFkB8yiAQ--.11241S3
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Cw1UXr15Kr4rtw13uw43trb_yoW8uw4Dpa
+        n7JFyYkr18Ca42g34fAF98XFyYkr1xuayIywnrt3sIk398Jrs8tryFyF1jqFyfAr95Ga13
+        tr1jqFWUu3W5ZrJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jLiSdUUUUU=
 X-Originating-IP: [114.242.206.180]
-X-CM-SenderInfo: jprymkizyyjjits6il2tof0z/xtbBdQeU0VaEE2i9qQACsI
+X-CM-SenderInfo: jprymkizyyjjits6il2tof0z/1tbiEwmU0WE17eMXkQACsB
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,FROM_LOCAL_DIGITS,FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,
@@ -60,64 +63,71 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Sui Jingfeng <suijingfeng@loongson.cn>
 
-There is a Vivante GC1000 (v5037) in LS2K1000 and LS7A1000, this GPU is a
-PCI device, and it has 2D and 3D cores in the same core. This series is
-trying to add PCI device driver support to drm/etnaviv.
+Because getting IRQ from a device is platform-dependent, PCI devices have
+different methods for getting an IRQ. This patch is a preparation to extend
+this driver for supporting the PCI devices.
 
-v6:
-	* Fix build issue on system without CONFIG_PCI enabled
-v7:
-	* Add a separate patch for the platform driver rearrangement (Bjorn)
-	* Switch to runtime check if the GPU is dma coherent or not (Lucas)
-	* Add ETNAVIV_PARAM_GPU_COHERENT to allow userspace to query (Lucas)
-	* Remove etnaviv_gpu.no_clk member (Lucas)
-	* Various Typos and coding style fixed (Bjorn)
-v8:
-	* Fix typos and remove unnecessary header included (Bjorn).
-	* Add a dedicated function to create the virtual master platform
-	  device.
-v9:
-	* Use PCI_VDEVICE() macro (Bjorn)
-	* Add trivial stubs for the PCI driver (Bjorn)
-	* Remove a redundant dev_err() usage (Bjorn)
-	* Clean up etnaviv_pdev_probe() with etnaviv_of_first_available_node()
-v10:
-	* Add one more cleanup patch
-	* Resolve the conflict with a patch from Rob
-	* Make the dummy PCI stub inlined
-	* Print only if the platform is dma-coherrent
+Cc: Lucas Stach <l.stach@pengutronix.de>
+Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
+Cc: Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Bjorn Helgaas <bhelgaas@google.com>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+---
+ drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 32 +++++++++++++++++++--------
+ 1 file changed, 23 insertions(+), 9 deletions(-)
 
-Rob Herring (1):
-  drm/etnaviv: Replace of_platform.h with explicit includes
-
-Sui Jingfeng (10):
-  drm/etnaviv: Add a dedicated function to register an irq handler
-  drm/etnaviv: Add a dedicated function to get various clocks
-  drm/etnaviv: Add dedicated functions to create and destroy platform
-    device
-  drm/etnaviv: Add helpers for private data construction and destruction
-  drm/etnaviv: Allow bypass component framework
-  drm/etnaviv: Add driver support for the PCI devices
-  drm/etnaviv: Add support for the dma coherent device
-  drm/etnaviv: Add a dedicated function to create the virtual master
-  drm/etnaviv: Clean up etnaviv_pdev_probe() function
-  drm/etnaviv: Keep the curly brace aligned
-
- drivers/gpu/drm/etnaviv/Kconfig             |  10 +
- drivers/gpu/drm/etnaviv/Makefile            |   2 +
- drivers/gpu/drm/etnaviv/etnaviv_drv.c       | 322 ++++++++++++++------
- drivers/gpu/drm/etnaviv/etnaviv_drv.h       |  10 +
- drivers/gpu/drm/etnaviv/etnaviv_gem.c       |  22 +-
- drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c |   7 +-
- drivers/gpu/drm/etnaviv/etnaviv_gpu.c       | 166 ++++++----
- drivers/gpu/drm/etnaviv/etnaviv_gpu.h       |   9 +
- drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c   |  75 +++++
- drivers/gpu/drm/etnaviv/etnaviv_pci_drv.h   |  18 ++
- include/uapi/drm/etnaviv_drm.h              |   1 +
- 11 files changed, 481 insertions(+), 161 deletions(-)
- create mode 100644 drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c
- create mode 100644 drivers/gpu/drm/etnaviv/etnaviv_pci_drv.h
-
+diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+index de8c9894967c..a03e81337d8f 100644
+--- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
++++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+@@ -1817,6 +1817,27 @@ static const struct of_device_id etnaviv_gpu_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, etnaviv_gpu_match);
+ 
++static int etnaviv_gpu_register_irq(struct etnaviv_gpu *gpu, int irq)
++{
++	struct device *dev = gpu->dev;
++	int err;
++
++	if (irq < 0)
++		return irq;
++
++	err = devm_request_irq(dev, irq, irq_handler, 0, dev_name(dev), gpu);
++	if (err) {
++		dev_err(dev, "failed to request irq %u: %d\n", irq, err);
++		return err;
++	}
++
++	gpu->irq = irq;
++
++	dev_info(dev, "irq(%d) handler registered\n", irq);
++
++	return 0;
++}
++
+ static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+@@ -1837,16 +1858,9 @@ static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
+ 		return PTR_ERR(gpu->mmio);
+ 
+ 	/* Get Interrupt: */
+-	gpu->irq = platform_get_irq(pdev, 0);
+-	if (gpu->irq < 0)
+-		return gpu->irq;
+-
+-	err = devm_request_irq(&pdev->dev, gpu->irq, irq_handler, 0,
+-			       dev_name(gpu->dev), gpu);
+-	if (err) {
+-		dev_err(dev, "failed to request IRQ%u: %d\n", gpu->irq, err);
++	err = etnaviv_gpu_register_irq(gpu, platform_get_irq(pdev, 0));
++	if (err)
+ 		return err;
+-	}
+ 
+ 	/* Get Clocks: */
+ 	gpu->clk_reg = devm_clk_get_optional(&pdev->dev, "reg");
 -- 
 2.25.1
 
