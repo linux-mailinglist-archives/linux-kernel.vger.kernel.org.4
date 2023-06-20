@@ -2,192 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 470FF736D54
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 240D6736E2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232913AbjFTN1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 09:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
+        id S232847AbjFTOAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 10:00:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232720AbjFTN1V (ORCPT
+        with ESMTP id S232719AbjFTOAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 09:27:21 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE191A5;
-        Tue, 20 Jun 2023 06:27:19 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id AE1631F86B;
-        Tue, 20 Jun 2023 13:27:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1687267638; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mslHR0E96Ru1KBDgtfzc/TQeGRugMHwpdwx8xTSeZLI=;
-        b=u1Y6gAvWfLwIMKwpqnUclWDht7+JiU/eaT0Gc6viAweQwelf9bVzxymRMXv/bQFD1z0Cw4
-        FzFbWcIsbqfRwn0TYr542AERzdcESF0h3IXlS3G4bww666VG8MyKpoFnPJFalctsup98q4
-        8Y9DPB+i+2w1ECg12BCt+MEp52PwjLQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1687267638;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mslHR0E96Ru1KBDgtfzc/TQeGRugMHwpdwx8xTSeZLI=;
-        b=ZlzgfU+pWRMK1Uh0Apu/qRfRDHxbbpCdUKer/8PHL3tW8Pb0DmdhbvE3zcV2XAsd484RHq
-        mtnTeEr14c+Tt9Cg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9FC361346D;
-        Tue, 20 Jun 2023 13:27:18 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id MS/oJjapkWSlOAAAMHmgww
-        (envelope-from <dwagner@suse.de>); Tue, 20 Jun 2023 13:27:18 +0000
-From:   Daniel Wagner <dwagner@suse.de>
-To:     linux-nvme@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Hannes Reinecke <hare@suse.de>,
-        James Smart <jsmart2021@gmail.com>,
-        Martin Belanger <Martin.Belanger@dell.com>,
-        Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH blktests v1 3/3] nvme/{041,042,043,044,045}: Use default hostnqn and hostid
-Date:   Tue, 20 Jun 2023 15:27:03 +0200
-Message-ID: <20230620132703.20648-4-dwagner@suse.de>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230620132703.20648-1-dwagner@suse.de>
-References: <20230620132703.20648-1-dwagner@suse.de>
+        Tue, 20 Jun 2023 10:00:12 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 203E5A4;
+        Tue, 20 Jun 2023 07:00:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=naZEnvmVHGGLbfZLbhTkxbQ/pztHxoOXvvXSluXZFDw=; b=LdJKPnMTXGQVxOZ/CtT3rXX9j4
+        +YyN7FGFydfu6UAbEqTYj3Tndqk/ckJNjknA4XHautgzDcpT81xOJZ4Rmm2IxboqHU20FnaQfsA8B
+        uBjgzGMNBOrFccaK+IILeqPWfKl/XeC8h4GLA1E1D2qTsSa0+DTix8aeW6CPSnrmaNB0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qBbPs-00H018-Ad; Tue, 20 Jun 2023 15:29:04 +0200
+Date:   Tue, 20 Jun 2023 15:29:04 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Guo Samin <samin.guo@starfivetech.com>
+Cc:     Conor Dooley <conor@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Peter Geis <pgwipeout@gmail.com>,
+        Frank <Frank.Sae@motor-comm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: net: motorcomm: Add pad driver
+ strength cfg
+Message-ID: <b0a61cf4-adb1-4261-b6a5-aeb1e3c1b1aa@lunn.ch>
+References: <20230526090502.29835-1-samin.guo@starfivetech.com>
+ <20230526090502.29835-2-samin.guo@starfivetech.com>
+ <20230526-glutinous-pristine-fed571235b80@spud>
+ <1dbf113c-7592-68bd-6aaf-05ff1d8c538c@starfivetech.com>
+ <15eb4ffe-ea12-9a2c-ae9d-c34860384b60@starfivetech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <15eb4ffe-ea12-9a2c-ae9d-c34860384b60@starfivetech.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The host might have enabled the udev/systemd auto connect feature.
-This disturbs the blktests for the fc transport. nvme-cli is able
-to distinguish between the different invocations via the --context
-option. In order to get this working we have to use the default
-hostnqn and hostid and not randon generated IDs for every single
-run.
+> I just got the detailed data of Driver Strength(DS) from Motorcomm ,
+> which applies to both rx_clk and rx_data.
+> 
+> |----------------------|
+> |     ds map table     |
+> |----------------------|
+> | DS(3b) | Current (mA)|
+> |--------|-------------|
+> |   000  |     1.20    |
+> |   001  |     2.10    |
+> |   010  |     2.70    |
+> |   011  |     2.91    |
+> |   100  |     3.11    |
+> |   101  |     3.60    |
+> |   110  |     3.97    |
+> |   111  |     4.35    |
+> |--------|-------------|
+>
+> Since these currents are not integer values
 
-Signed-off-by: Daniel Wagner <dwagner@suse.de>
----
- tests/nvme/041 | 8 ++------
- tests/nvme/042 | 8 ++------
- tests/nvme/043 | 8 ++------
- tests/nvme/044 | 8 ++------
- tests/nvme/045 | 8 ++------
- 5 files changed, 10 insertions(+), 30 deletions(-)
+Integers is not a problem. Simply use uA.
 
-diff --git a/tests/nvme/041 b/tests/nvme/041
-index 308655dd6090..5b04b99b128e 100755
---- a/tests/nvme/041
-+++ b/tests/nvme/041
-@@ -30,12 +30,8 @@ test() {
- 
- 	echo "Running ${TEST_NAME}"
- 
--	hostid="$(uuidgen)"
--	if [ -z "$hostid" ] ; then
--		echo "uuidgen failed"
--		return 1
--	fi
--	hostnqn="nqn.2014-08.org.nvmexpress:uuid:${hostid}"
-+	hostid="${def_hostid}"
-+	hostnqn="${def_hostnqn}"
- 	hostkey="$(nvme gen-dhchap-key -n ${subsys_name} 2> /dev/null)"
- 	if [ -z "$hostkey" ] ; then
- 		echo "nvme gen-dhchap-key failed"
-diff --git a/tests/nvme/042 b/tests/nvme/042
-index fed2efead013..8df5ed37aacc 100755
---- a/tests/nvme/042
-+++ b/tests/nvme/042
-@@ -32,12 +32,8 @@ test() {
- 
- 	echo "Running ${TEST_NAME}"
- 
--	hostid="$(uuidgen)"
--	if [ -z "$hostid" ] ; then
--		echo "uuidgen failed"
--		return 1
--	fi
--	hostnqn="nqn.2014-08.org.nvmexpress:uuid:${hostid}"
-+	hostid="${def_hostid}"
-+	hostnqn="${def_hostnqn}"
- 
- 	_setup_nvmet
- 
-diff --git a/tests/nvme/043 b/tests/nvme/043
-index a030884aa4ed..b591e39d0706 100755
---- a/tests/nvme/043
-+++ b/tests/nvme/043
-@@ -33,12 +33,8 @@ test() {
- 
- 	echo "Running ${TEST_NAME}"
- 
--	hostid="$(uuidgen)"
--	if [ -z "$hostid" ] ; then
--		echo "uuidgen failed"
--		return 1
--	fi
--	hostnqn="nqn.2014-08.org.nvmexpress:uuid:${hostid}"
-+	hostid="${def_hostid}"
-+	hostnqn="${def_hostnqn}"
- 
- 	_setup_nvmet
- 
-diff --git a/tests/nvme/044 b/tests/nvme/044
-index 9928bcc55397..fca0897af27b 100755
---- a/tests/nvme/044
-+++ b/tests/nvme/044
-@@ -32,12 +32,8 @@ test() {
- 
- 	echo "Running ${TEST_NAME}"
- 
--	hostid="$(uuidgen)"
--	if [ -z "$hostid" ] ; then
--		echo "uuidgen failed"
--		return 1
--	fi
--	hostnqn="nqn.2014-08.org.nvmexpress:uuid:${hostid}"
-+	hostid="${def_hostid}"
-+	hostnqn="${def_hostnqn}"
- 
- 	hostkey="$(nvme gen-dhchap-key -n ${subsys_name} 2> /dev/null)"
- 	if [ -z "$hostkey" ] ; then
-diff --git a/tests/nvme/045 b/tests/nvme/045
-index 26a55335a92c..eca629a18691 100755
---- a/tests/nvme/045
-+++ b/tests/nvme/045
-@@ -36,12 +36,8 @@ test() {
- 
- 	echo "Running ${TEST_NAME}"
- 
--	hostid="$(uuidgen)"
--	if [ -z "$hostid" ] ; then
--		echo "uuidgen failed"
--		return 1
--	fi
--	hostnqn="nqn.2014-08.org.nvmexpress:uuid:${hostid}"
-+	hostid="${def_hostid}"
-+	hostnqn="${def_hostnqn}"
- 
- 	hostkey="$(nvme gen-dhchap-key -n ${subsys_name} 2> /dev/null)"
- 	if [ -z "$hostkey" ] ; then
--- 
-2.41.0
+> and have no regularity, it is not very good to use in the drive/dts
+> in my opinion.
 
+I think they are fine to use. Add a lookup table, microamps to
+register value. Return -EINVAL if the requested value is not in the
+table. List the valid values in the schema, so the checker tool might
+point out problems.
+
+      Andrew
