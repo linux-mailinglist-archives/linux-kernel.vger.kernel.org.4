@@ -2,117 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F395736532
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B5A736537
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:50:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjFTHtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 03:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47950 "EHLO
+        id S230262AbjFTHuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 03:50:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231449AbjFTHs7 (ORCPT
+        with ESMTP id S229595AbjFTHuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 03:48:59 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E1BF199A;
-        Tue, 20 Jun 2023 00:48:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=tDwACWsZWyvQQ7KO5OXodC3aVuzBmZwAsrzP9VHieio=; b=pjkEIqNAZVkLNrHA0rYEme4LqJ
-        95b/SIiPlio8YOMhBRCW8VyOFKLb6nZ6K9wC9OtgcZa0kU4BXJLJf4W164EPMu/FbzjVxrDWYWkkv
-        LrjiKSqbtYt7ViPqo45PVjlQBxCvQzrPqr+rxhcNpPQ3DozUrKQhY2NhEoXxmpLVMC0jzQuYCo76s
-        je2w+weJT3MlR6shRDoT6R8biQLtMxiRva/z6P+k4UkZAapX7zZxwJ4APYDyntWjQwEwSUoRWU5f4
-        TQxJ+jek5OwM4rGBcRLfd4TVkASJRaim3Z4qDEDIxPmfbnMsxe3xQP73GIbfG0McQstvN8D5aI38R
-        z+lhkQcA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qBW5u-00Fyhm-2p;
-        Tue, 20 Jun 2023 07:48:07 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C0DFF300322;
-        Tue, 20 Jun 2023 09:48:05 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A143D23BE1E49; Tue, 20 Jun 2023 09:48:05 +0200 (CEST)
-Date:   Tue, 20 Jun 2023 09:48:05 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v11 18/20] x86: Handle TDX erratum to reset TDX private
- memory during kexec() and reboot
-Message-ID: <20230620074805.GT4253@hirez.programming.kicks-ass.net>
-References: <5aa7506d4fedbf625e3fe8ceeb88af3be1ce97ea.1685887183.git.kai.huang@intel.com>
- <20230609132301.uvvp27yr5kpenl6f@box.shutemov.name>
- <58f34b4b81b6d6b37d3386dec0f073e6eb7a97ff.camel@intel.com>
- <20230612075830.jbrdd6ysz4qq7wdf@box.shutemov.name>
- <4c7effc3abe71aa1cbee41f3bd46b97aed40be26.camel@intel.com>
- <48d5a29a-878c-665d-6ac2-6f0563bf6f3c@intel.com>
- <5782c8c2bb3e76a802e4a81c553a21edbaee7c47.camel@intel.com>
- <be258af9-a329-6f03-fcf9-9dafad42c97f@intel.com>
- <20230619144651.kvmscndienyfr3my@box.shutemov.name>
- <63477d22-26ef-dd08-a3b0-93931b7d1d16@intel.com>
+        Tue, 20 Jun 2023 03:50:09 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F67B172B
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:49:41 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5704fce0f23so47448457b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:49:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687247379; x=1689839379;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JyT8tmsQKzrYxiMI/rVOY2yPaVbA/RNeIBfphNdBMF4=;
+        b=Wlyhpqj5qzfuvutrjOa/4V6PuPsDCDOgWHtSW/4kwbuOkurc1q0KurhYLqHW1JVDng
+         ocfjumMCL+5VTdlkv6JFAWzHFSaf/DQcTveKuW/F1nUw+Sj6E3jgL+8I+UQrrKTcSspC
+         zGEBBcceErIi3jvfUdE8XIwgkG18lQEbl2V2HS4GGiBXkvY4t9/NkaOVpMEahcggUUzl
+         u8oefzeOOrLLnM3RkTGo6WsoKQCjwWkScujGOaUdyRth+pzrlMusEw0XYP/BcTSABeYV
+         rleoq5m+PuifcHOelghsbpsP6kubTOIzWI9OP98uqMngj6OJlbnVDdZn1qt2293RkTnb
+         aaaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687247379; x=1689839379;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JyT8tmsQKzrYxiMI/rVOY2yPaVbA/RNeIBfphNdBMF4=;
+        b=XoQY8njBodNgYq1P3TlimrNmOxG3YHXYUduQhekqceTfaarVvS9NKqnZxT9RqqbQ9r
+         aP+uP3iwNRqeQMihzzz9/+/y4E3fi0taQa/6rkkF3i9fYZAHNrcEguxCl58i8B7Cnv9A
+         UEif3LqayRlv7BazoHeTn8GODOIuBfMvtShx7UoU8eaJZy6oWWgR+vv+4oqqpiwPp9YD
+         LsW5zBBtNBLJve19lRvhVRwM0tqIl3yJe2XWeWxxywJYOIKkn3S8+UDoFvjUg3ktgib4
+         bSvV31CRok2hCEhO2gs+ztIsxK/4au+Eo7dghPEYbUWmY6z8Nc7gDrjjKXRQDJghHL9W
+         32tA==
+X-Gm-Message-State: AC+VfDz/82W14wFjkaQXHSD35OK9KfZs+0DLOHYIrC6y7QCSh7+pqxy6
+        mHCBhgx09hVR0l123I90d1TWIw==
+X-Google-Smtp-Source: ACHHUZ5+IOPW+qBQbjfJiBwfK7g3HrB1Jv9bM1vDxBV2sAeLMGBBrGsscHleOg916F+4k1/7bPeS5w==
+X-Received: by 2002:a81:8311:0:b0:568:d63e:dd2c with SMTP id t17-20020a818311000000b00568d63edd2cmr10308263ywf.11.1687247379257;
+        Tue, 20 Jun 2023 00:49:39 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id o17-20020a0dcc11000000b005702597583fsm381836ywd.26.2023.06.20.00.49.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 00:49:38 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 00:49:34 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jann Horn <jannh@google.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v2 06/12] sparc: add pte_free_defer() for pte_t *pgtable_t
+In-Reply-To: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
+Message-ID: <cb3feef8-f49e-7a54-a6d6-2e9b188f7564@google.com>
+References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <63477d22-26ef-dd08-a3b0-93931b7d1d16@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 04:41:13PM -0700, Dave Hansen wrote:
-> On 6/19/23 07:46, kirill.shutemov@linux.intel.com wrote:
-> >>>
-> >>> Using atomic_set() requires changing tdmr->pamt_4k_base to atomic_t, which is a
-> >>> little bit silly or overkill IMHO.  Looking at the code, it seems
-> >>> arch_atomic_set() simply uses __WRITE_ONCE():
-> >> How about _adding_ a variable that protects tdmr->pamt_4k_base?
-> >> Wouldn't that be more straightforward than mucking around with existing
-> >> types?
-> > What's wrong with simple global spinlock that protects all tdmr->pamt_*?
-> > It is much easier to follow than a custom serialization scheme.
-> 
-> Quick, what prevents a:
-> 
-> 	spin_lock() => #MC => spin_lock()
-> 
-> deadlock?
-> 
-> Plain old test/sets don't deadlock ever.
+Add sparc-specific pte_free_defer(), to call pte_free() via call_rcu().
+pte_free_defer() will be called inside khugepaged's retract_page_tables()
+loop, where allocating extra memory cannot be relied upon.  This precedes
+the generic version to avoid build breakage from incompatible pgtable_t.
 
-Depends on what you mean; anything that spin-waits will deadlock,
-doesn't matter if its a test-and-set or not.
+sparc32 supports pagetables sharing a page, but does not support THP;
+sparc64 supports THP, but does not support pagetables sharing a page.
+So the sparc-specific pte_free_defer() is as simple as the generic one,
+except for converting between pte_t *pgtable_t and struct page *.
 
-The thing with these non-maskable exceptions/interrupts is that they
-must be wait-free. If serialization is required it needs to be try based
-and accept failure without waiting.
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+ arch/sparc/include/asm/pgalloc_64.h |  4 ++++
+ arch/sparc/mm/init_64.c             | 16 ++++++++++++++++
+ 2 files changed, 20 insertions(+)
+
+diff --git a/arch/sparc/include/asm/pgalloc_64.h b/arch/sparc/include/asm/pgalloc_64.h
+index 7b5561d17ab1..caa7632be4c2 100644
+--- a/arch/sparc/include/asm/pgalloc_64.h
++++ b/arch/sparc/include/asm/pgalloc_64.h
+@@ -65,6 +65,10 @@ pgtable_t pte_alloc_one(struct mm_struct *mm);
+ void pte_free_kernel(struct mm_struct *mm, pte_t *pte);
+ void pte_free(struct mm_struct *mm, pgtable_t ptepage);
+ 
++/* arch use pte_free_defer() implementation in arch/sparc/mm/init_64.c */
++#define pte_free_defer pte_free_defer
++void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable);
++
+ #define pmd_populate_kernel(MM, PMD, PTE)	pmd_set(MM, PMD, PTE)
+ #define pmd_populate(MM, PMD, PTE)		pmd_set(MM, PMD, PTE)
+ 
+diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
+index 04f9db0c3111..0d7fd793924c 100644
+--- a/arch/sparc/mm/init_64.c
++++ b/arch/sparc/mm/init_64.c
+@@ -2930,6 +2930,22 @@ void pgtable_free(void *table, bool is_page)
+ }
+ 
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
++static void pte_free_now(struct rcu_head *head)
++{
++	struct page *page;
++
++	page = container_of(head, struct page, rcu_head);
++	__pte_free((pgtable_t)page_address(page));
++}
++
++void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable)
++{
++	struct page *page;
++
++	page = virt_to_page(pgtable);
++	call_rcu(&page->rcu_head, pte_free_now);
++}
++
+ void update_mmu_cache_pmd(struct vm_area_struct *vma, unsigned long addr,
+ 			  pmd_t *pmd)
+ {
+-- 
+2.35.3
+
