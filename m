@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C1E7369C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 175B37369C6
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232148AbjFTKrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 06:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34334 "EHLO
+        id S232271AbjFTKrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 06:47:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232183AbjFTKqz (ORCPT
+        with ESMTP id S231501AbjFTKrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 06:46:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C351A8;
-        Tue, 20 Jun 2023 03:46:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6656E61027;
-        Tue, 20 Jun 2023 10:46:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FB50C433C8;
-        Tue, 20 Jun 2023 10:46:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687258012;
-        bh=lWjifKf2FqCNvCK8X0R9it3LY9aiFl5yBJrM3U6vEDA=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=DFbs4vp/37QViUs9RoMT1km2vJ8Au8sNPfqXgC7CadroS7dk/qWbnDACJwMpRwYPc
-         AOUCi19c2ntjTvizNCoeKVYwF6rukjBReVBWC02Y7UIu/JNqG/Dvx2zIZuO/y7oXc+
-         IOpQn3y2Dxf9lZ1puT7RfRXHkG7yJHxCkDa8tqGYk4MKHzXCPUXFsYsurgTH6hR3Ws
-         OrWCZ4u5LZa3QVdFBCEUsVhqBOqgZccDgW4XgQrI6A9qgfaNNn87vjq+xBFul/G3Qr
-         x4LTpDKdXC2PPhs2G1hVg4eBcSCcFdcuuAyCncneQ3WO8xOWXwvOtv+7NiK+XyduBd
-         Ii8Ii2LxYs5gA==
-Message-ID: <c6d4e620cad72da5f85df03443a64747b5719939.camel@kernel.org>
-Subject: Re: [PATCH 1/3] fs/locks: F_UNLCK extension for F_OFD_GETLK
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Stas Sergeev <stsp2@yandex.ru>, linux-kernel@vger.kernel.org
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Date:   Tue, 20 Jun 2023 06:46:50 -0400
-In-Reply-To: <20230620095507.2677463-2-stsp2@yandex.ru>
-References: <20230620095507.2677463-1-stsp2@yandex.ru>
-         <20230620095507.2677463-2-stsp2@yandex.ru>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+        Tue, 20 Jun 2023 06:47:21 -0400
+Received: from smtp-fw-52004.amazon.com (smtp-fw-52004.amazon.com [52.119.213.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267F7109;
+        Tue, 20 Jun 2023 03:47:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1687258041; x=1718794041;
+  h=message-id:date:mime-version:from:subject:to:
+   content-transfer-encoding;
+  bh=LiGyIi5cy9gnVhBQtlAYxlUvt+Ow2pTos1J0+GkAM+0=;
+  b=dOn+UaXg7j75cDKnDSIk98Om8H6aF1m6WxlGd85hzTcTNa3FYAW12v9+
+   yxgkkNkvuhShM2udcGfEMQ3J+imzppgajjeaU5rcgIy2EM2y9xmEqdjAF
+   ykY4S4I+SJZNnqHPUv3qmaIoXC99ukHf1YrJvA8d+sTg2GBeVKW7d4HC7
+   A=;
+X-IronPort-AV: E=Sophos;i="6.00,256,1681171200"; 
+   d="scan'208";a="137975961"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-1cca8d67.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-52004.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 10:47:19 +0000
+Received: from EX19D001EUA003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-m6i4x-1cca8d67.us-west-2.amazon.com (Postfix) with ESMTPS id 36C5C8076B;
+        Tue, 20 Jun 2023 10:47:18 +0000 (UTC)
+Received: from [192.168.6.72] (10.1.212.33) by EX19D001EUA003.ant.amazon.com
+ (10.252.50.232) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Tue, 20 Jun
+ 2023 10:47:15 +0000
+Message-ID: <f8f62216-ffaa-2f4e-ac5f-7dcd86e80a84@amazon.com>
+Date:   Tue, 20 Jun 2023 13:47:10 +0300
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Content-Language: en-US
+From:   "Shenhar, Talel" <talel@amazon.com>
+Subject: Inquiring about Debugging Platform Drivers using Crash Utility for
+ Kernel Coredump
+To:     <linux-debuggers@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.1.212.33]
+X-ClientProxiedBy: EX19D043UWA004.ant.amazon.com (10.13.139.41) To
+ EX19D001EUA003.ant.amazon.com (10.252.50.232)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,90 +61,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-06-20 at 14:55 +0500, Stas Sergeev wrote:
-> Currently F_UNLCK with F_OFD_GETLK returns -EINVAL.
-> The proposed extension allows to use it for getting the lock
-> information from the particular fd.
->=20
-> Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
->=20
-> CC: Jeff Layton <jlayton@kernel.org>
-> CC: Chuck Lever <chuck.lever@oracle.com>
-> CC: Alexander Viro <viro@zeniv.linux.org.uk>
-> CC: Christian Brauner <brauner@kernel.org>
-> CC: linux-fsdevel@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
->=20
-> ---
->  fs/locks.c | 23 ++++++++++++++++++++---
->  1 file changed, 20 insertions(+), 3 deletions(-)
->=20
-> diff --git a/fs/locks.c b/fs/locks.c
-> index df8b26a42524..210766007e63 100644
-> --- a/fs/locks.c
-> +++ b/fs/locks.c
-> @@ -868,6 +868,21 @@ static bool posix_locks_conflict(struct file_lock *c=
-aller_fl,
->  	return locks_conflict(caller_fl, sys_fl);
->  }
-> =20
-> +/* Determine if lock sys_fl blocks lock caller_fl. Used on xx_GETLK
-> + * path so checks for additional GETLK-specific things like F_UNLCK.
-> + */
-> +static bool posix_test_locks_conflict(struct file_lock *caller_fl,
-> +				      struct file_lock *sys_fl)
-> +{
-> +	/* F_UNLCK checks any locks on the same fd. */
-> +	if (caller_fl->fl_type =3D=3D F_UNLCK) {
-> +		if (!posix_same_owner(caller_fl, sys_fl))
-> +			return false;
-> +		return locks_overlap(caller_fl, sys_fl);
-> +	}
-> +	return posix_locks_conflict(caller_fl, sys_fl);
-> +}
-> +
->  /* Determine if lock sys_fl blocks lock caller_fl. FLOCK specific
->   * checking before calling the locks_conflict().
->   */
-> @@ -901,7 +916,7 @@ posix_test_lock(struct file *filp, struct file_lock *=
-fl)
->  retry:
->  	spin_lock(&ctx->flc_lock);
->  	list_for_each_entry(cfl, &ctx->flc_posix, fl_list) {
-> -		if (!posix_locks_conflict(fl, cfl))
-> +		if (!posix_test_locks_conflict(fl, cfl))
->  			continue;
->  		if (cfl->fl_lmops && cfl->fl_lmops->lm_lock_expirable
->  			&& (*cfl->fl_lmops->lm_lock_expirable)(cfl)) {
-> @@ -2207,7 +2222,8 @@ int fcntl_getlk(struct file *filp, unsigned int cmd=
-, struct flock *flock)
->  	if (fl =3D=3D NULL)
->  		return -ENOMEM;
->  	error =3D -EINVAL;
-> -	if (flock->l_type !=3D F_RDLCK && flock->l_type !=3D F_WRLCK)
-> +	if (cmd !=3D F_OFD_GETLK && flock->l_type !=3D F_RDLCK
-> +			&& flock->l_type !=3D F_WRLCK)
->  		goto out;
-> =20
->  	error =3D flock_to_posix_lock(filp, fl, flock);
-> @@ -2414,7 +2430,8 @@ int fcntl_getlk64(struct file *filp, unsigned int c=
-md, struct flock64 *flock)
->  		return -ENOMEM;
-> =20
->  	error =3D -EINVAL;
-> -	if (flock->l_type !=3D F_RDLCK && flock->l_type !=3D F_WRLCK)
-> +	if (cmd !=3D F_OFD_GETLK && flock->l_type !=3D F_RDLCK
-> +			&& flock->l_type !=3D F_WRLCK)
->  		goto out;
-> =20
->  	error =3D flock64_to_posix_lock(filp, fl, flock);
+Dear Linux Kernel Community,
 
-This seems like a reasonable sort of interface to add, particularly for
-the CRIU case. Using F_UNLCK for this is a bit kludgey, but adding a new
-constant is probably worse.
+I hope this message finds you well.
 
-I'm willing to take this in with an eye toward v6.6. Are you also
-willing to draft up some manpage patches that detail this new interface?
+I'd like to use crash utility for postmortem of my kernel coredump 
+analysis.
 
---=20
-Jeff Layton <jlayton@kernel.org>
+I was able to collect coredump and able to use various operation from 
+within the crash utility such as irq -s,  log, files and others.
+
+I am using: crash-arm64 version: 7.3.0, gdb version: 7.6, kernel version 
+4.19.
+
+My specific interest lies in debugging drivers internal state, e.g. 
+platform drivers.
+
+For some hands-on experience with crash utility I'd like to start by 
+iterating over all the platform drivers and print their names,
+
+However, I am finding it challenging to get started with this process 
+and I am uncertain of the best approach to achieve this. I have scoured 
+various resources for insights, but the information related to this 
+specific usage seems to be scattered and not exhaustive.
+
+Given the collective expertise on this mailing list, I thought it would 
+be the best place to seek guidance. Specifically, I would appreciate it 
+if you could provide:
+
+Any relevant documentation, guides, or tutorials to debug platform 
+drivers using the crash utility for kernel coredump analysis.
+Some simple examples of using the crash utility to debug platform 
+drivers, if possible.
+Any important points or common pitfalls to keep in mind while performing 
+this kind of analysis.
+Any other tips, best practices, or recommendations to effectively debug 
+platform drivers using the crash utility would also be greatly appreciated.
+
+Thank you for your time and assistance. I look forward to hearing from you.
+
+Best regards,
+Talel, Shenhar.
+
