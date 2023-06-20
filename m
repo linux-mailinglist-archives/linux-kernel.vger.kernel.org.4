@@ -2,121 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D678A736901
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:19:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBC9B736908
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231887AbjFTKTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 06:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46028 "EHLO
+        id S231911AbjFTKT7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Jun 2023 06:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjFTKTJ (ORCPT
+        with ESMTP id S229731AbjFTKTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 06:19:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85E9A2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 03:18:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687256304;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ul8gzt2rqlqhcr1utmhEwWbBX32h2e3MNmkpVb/h7mU=;
-        b=Ta8a04Q8v1TDsOGk4yl/3khEC7JKP4cEZestc0FCnNQm6nQVTONbViC7m64CqTkUPzXedm
-        YL4RFn0YYqBqtrZwfIaTA+R4z5t7phDCoEGPNhzoTDw3HTkEWPpcUNDjzX/Io4Gp59qAG3
-        P3h5G88Lz5Jf6jMNqOp0SB0Me4tIlyc=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-668-_3WtNkV-OEunb5nbBqetAQ-1; Tue, 20 Jun 2023 06:18:23 -0400
-X-MC-Unique: _3WtNkV-OEunb5nbBqetAQ-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-31283f4d22fso21244f8f.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 03:18:22 -0700 (PDT)
+        Tue, 20 Jun 2023 06:19:54 -0400
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC38CA2;
+        Tue, 20 Jun 2023 03:19:53 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-98273ae42d0so143882266b.0;
+        Tue, 20 Jun 2023 03:19:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687256302; x=1689848302;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ul8gzt2rqlqhcr1utmhEwWbBX32h2e3MNmkpVb/h7mU=;
-        b=UHqP02xbfjosQ0EwhLjvDldX3vFKJveFWMY1csc2wyzU10sUofiz4dgMrCOEPW4L1W
-         brEna9Ase2J0dMwNVpEl69cNmdO7atpoMDv1FLgyceGTrr4cyaOsDAUBV0LG3G1G2Mjl
-         NzR15d7OXIZLDC4Mc+1nY5D22RrlCNHsVJzGPSURjIIeFtoT2J4mFdW2H5ZnepN3iyO7
-         iXQdoxsxm2RoTwjLOTK2UHN3dWmC8dL7C+XX0TdOernbeT0p2pjY1G73GgldZ6M3jCtp
-         CZY4tpQuikzw4wytaXK+02laAHgbORyIsdAObyp0j7hNgZ1diam0LGemJ0HfH6hX87Fg
-         ipaQ==
-X-Gm-Message-State: AC+VfDwbYfCQgw+akMr+xJR9iSuhKd16MpICQDSQX0N1nalK0/uf5X71
-        N7fURAUGoHk94QPuwjR3TA6xGiMlMZ7ebWyURuR42IpumUokpLni8i8S4Awz89PW0JD/arNlKXn
-        fWswBYntmZ//QXONTCW9NetHm
-X-Received: by 2002:adf:eb42:0:b0:30f:b7b4:3e55 with SMTP id u2-20020adfeb42000000b0030fb7b43e55mr7309576wrn.19.1687256301855;
-        Tue, 20 Jun 2023 03:18:21 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7HRI2F0AQylpx3uL7mfns9KK5U8KdfYEgbExjOtghnkni4a1tLKu8LAGtMktVeV/7TXJgvpg==
-X-Received: by 2002:adf:eb42:0:b0:30f:b7b4:3e55 with SMTP id u2-20020adfeb42000000b0030fb7b43e55mr7309562wrn.19.1687256301420;
-        Tue, 20 Jun 2023 03:18:21 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c739:d200:8745:c520:8bf6:b587? (p200300cbc739d2008745c5208bf6b587.dip0.t-ipconnect.de. [2003:cb:c739:d200:8745:c520:8bf6:b587])
-        by smtp.gmail.com with ESMTPSA id h9-20020a5d4fc9000000b0031134bcdacdsm1653936wrw.42.2023.06.20.03.18.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jun 2023 03:18:20 -0700 (PDT)
-Message-ID: <a96f95e1-ad7e-1d23-191e-014d3befe5a3@redhat.com>
-Date:   Tue, 20 Jun 2023 12:18:20 +0200
+        d=1e100.net; s=20221208; t=1687256392; x=1689848392;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KZUCH9LTrRvHBUjWoUivrfovuP0Wd096/5/MmH/TQL8=;
+        b=eLuz4UIOmmij43ihld2YnBT3tV2Pxs0CQcZsv6MTd9X63R+JRAVyfovS5+tyIcg1CM
+         gvFaWrej0X4oklXzoe26ntM/3LJq5Do+KA/Ni8TNSA6gtk+rYvaR5xpSpqY94atcT8A+
+         bKZUdkHfTCtj+W8lUB7hlNZTu1agzWgkOSQgcN9fH9CpVKi9wnUhCR+UHXdQaRUYdTy/
+         W5LnS9Dvf+kiAoA4PkkTpOqf7HijrqZq9xpRJQ/FdhZ/JjaGga8eWf5YWZ1xXLWrb0tB
+         YoifPHtMY/5u7uoXlbHYyakHxLIdGn5OBFhJRE1tGfcvq8DFQfSMRmBF+cx2mU2PlILQ
+         2Frw==
+X-Gm-Message-State: AC+VfDz1upcOKTbBKzOPIqOMtAHDInYM3EoIasAyGQ512NcxHgiafk1Z
+        FUgR8pqj87D8VQSgVm4gm16jbfO9dCZ2/ZNbv50=
+X-Google-Smtp-Source: ACHHUZ7mNfssA+opB1qFOLJgxd1MESUlm1hIrfsU1mTGIqwgdXpGWpC16FHZw1zvG6ewXHsz6WMI8xoyRrzu/RBAoFs=
+X-Received: by 2002:a17:906:151:b0:988:3a6d:fb80 with SMTP id
+ 17-20020a170906015100b009883a6dfb80mr6801815ejh.1.1687256392277; Tue, 20 Jun
+ 2023 03:19:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 08/11] selftests/mm: fix uffd-unit-tests.c build
- failure due to missing MADV_COLLAPSE
-Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Oscar Salvador <osalvador@suse.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        Peter Xu <peterx@redhat.com>
-References: <20230620011719.155379-1-jhubbard@nvidia.com>
- <20230620011719.155379-10-jhubbard@nvidia.com>
- <575a395c-0608-00da-3aa3-cbe4a5bd157e@collabora.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <575a395c-0608-00da-3aa3-cbe4a5bd157e@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230612030321.3097627-1-perry.yuan@amd.com>
+In-Reply-To: <20230612030321.3097627-1-perry.yuan@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 20 Jun 2023 12:19:35 +0200
+Message-ID: <CAJZ5v0isvR-cKN7x7THEN_sbzdNYUMNXx9OVwgif_TQ0tYgvoA@mail.gmail.com>
+Subject: Re: [PATCH v2] cpufreq: amd-pstate: Set default governor to schedutil
+To:     Perry Yuan <perry.yuan@amd.com>
+Cc:     rafael.j.wysocki@intel.com, viresh.kumar@linaro.org,
+        Ray.Huang@amd.com, Mario.Limonciello@amd.com,
+        Deepak.Sharma@amd.com, Wyes.Karny@amd.com, gautham.shenoy@amd.com,
+        Sunpeng.Li@amd.com, Xinmei.Huang@amd.com, Xiaojian.Du@amd.com,
+        Li.Meng@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.06.23 12:17, Muhammad Usama Anjum wrote:
-> On 6/20/23 6:17 AM, John Hubbard wrote:
->> MADV_PAGEOUT, MADV_POPULATE_READ, MADV_COLLAPSE are conditionally
->> defined as necessary. However, that was being done in .c files, and a
->> new build failure came up that would have been automatically avoided had
->> these been in a common header file.
->>
->> So consolidate and move them all to vm_util.h, which fixes the build
->> failure.
->>
->> An alternative approach from Muhammad Usama Anjum was: rely on "make
->> headers" being required, and include asm-generic/mman-common.h. This
->> works in the sense that it builds, but it still generates warnings about
->> duplicate MADV_* symbols, and the goal here is to get a fully clean (no
->> warnings) build here.
-> I've not looked in detail. But it seems like your first revision was merged
-> and after that my cleanup has also been merged. My cleanup patch is adding
-> correct header files and removing these duplicate defines: It is in
-> mm-stable now.
-> https://lore.kernel.org/all/20230619232244.81CB3C433C0@smtp.kernel.org
+On Mon, Jun 12, 2023 at 5:04 AM Perry Yuan <perry.yuan@amd.com> wrote:
+>
+> From: Mario Limonciello <mario.limonciello@amd.com>
+>
+> The Kconfig currently defaults the governor to schedutil on x86_64
+> only when intel-pstate and SMP have been selected.
+>
+> If the kernel is built only with amd-pstate, the default governor
+> should also be schedutil.
+>
+> Cc: Sun Peng (Leo) Li <sunpeng.li@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> Reviewed-by: Leo Li <sunpeng.li@amd.com>
+> Acked-by: Huang Rui <ray.huang@amd.com>
+> Tested-by: Perry Yuan <Perry.Yuan@amd.com>
+> ---
+>  drivers/cpufreq/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
+> index 2c839bd2b051..a1c51abddbc5 100644
+> --- a/drivers/cpufreq/Kconfig
+> +++ b/drivers/cpufreq/Kconfig
+> @@ -38,7 +38,7 @@ choice
+>         prompt "Default CPUFreq governor"
+>         default CPU_FREQ_DEFAULT_GOV_USERSPACE if ARM_SA1110_CPUFREQ
+>         default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if ARM64 || ARM
+> -       default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if X86_INTEL_PSTATE && SMP
+> +       default CPU_FREQ_DEFAULT_GOV_SCHEDUTIL if (X86_INTEL_PSTATE || X86_AMD_PSTATE) && SMP
+>         default CPU_FREQ_DEFAULT_GOV_PERFORMANCE
+>         help
+>           This option sets which CPUFreq governor shall be loaded at
+> --
 
-See
-
-https://lkml.kernel.org/r/0379db8e-744d-2876-7304-2a6db8c9cac0@nvidia.com
-
--- 
-Cheers,
-
-David / dhildenb
-
+Applied as 6.5 material, thanks!
