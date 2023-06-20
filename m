@@ -2,69 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84759736E66
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:11:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDB1736E68
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbjFTOLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 10:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32784 "EHLO
+        id S233188AbjFTOMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 10:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233204AbjFTOLi (ORCPT
+        with ESMTP id S232982AbjFTOL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 10:11:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24232E6E
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 07:11:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B22DA6127D
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:11:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C18A0C433CA;
-        Tue, 20 Jun 2023 14:11:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687270296;
-        bh=BySw7zeEB+zqgTdSK07c1pD8YXeUFZjxQogJ1e5vW+I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WqW7UZIwMPujOd37QYsJAwDjyW9IfiLgFlA1DZ4rwi3pYToXRoN5ycs/OLYxtX0X8
-         NaYpi+6iNl8kSjeKbWmcPrUxJ8BDkPB2FvTXMqHjWv8XFDN2k4k/jcbjurI6CwC2zB
-         jB0e9WOD3ZRdO3Y/gmUWM7dpDqlrSCyQvLPL1pEs=
-Date:   Tue, 20 Jun 2023 16:11:33 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Umang Jain <umang.jain@ideasonboard.com>
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Adrien Thierry <athierry@redhat.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Subject: Re: [PATCH] staging: vchiq_arm: Remove extra struct vchiq_instance
- declaration
-Message-ID: <2023062022-emerald-bartender-4065@gregkh>
-References: <20221221074047.233473-1-umang.jain@ideasonboard.com>
- <52a40c60-f044-c757-f8fd-241f456fb722@ideasonboard.com>
+        Tue, 20 Jun 2023 10:11:58 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F4AE72;
+        Tue, 20 Jun 2023 07:11:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687270314; x=1718806314;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=1L0EtD4x6UtEsw0OVqTd1tIuAoRanKqllhmqxwyA4PA=;
+  b=A6ZdD9yNq8ncEo6o4E6TanYsaRZRr6VOs3lAAD1mO3WI+7vdLKDnMj3j
+   FAlMdJitsmz4YNYNPU1VIOHCNl7RuzOezkPPosmpa+aoKCpbyHJ7dJU17
+   lZsmTaLyFytyvxL8b3I4F8k0a8AkWYhqj7IKsVsUGpukdSt6G9td7ZsYO
+   YsvOmd3wia1MopEQGDQuUZzWiDnyOVFyEiy58VhiajYECFeNE8wMK+VsG
+   KIdqGdZCDe4dAHuvpTa9JC7qvfzqAlCQgTF7xppvVQOLLtpG0tmf52QIP
+   rZXdBiUZT5/LEWHAMWHK6ru7fKVrCmx5NMyje55PT37ARFIQnrW+GZalN
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="340210854"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="340210854"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 07:11:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="888248886"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="888248886"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga005.jf.intel.com with ESMTP; 20 Jun 2023 07:11:49 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qBc5D-005H2d-0N;
+        Tue, 20 Jun 2023 17:11:47 +0300
+Date:   Tue, 20 Jun 2023 17:11:46 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Jonas =?iso-8859-1?Q?Dre=DFler?= <verdre@v0yd.nl>
+Cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Dean Luick <dean.luick@cornelisnetworks.com>
+Subject: Re: [PATCH v3 00/10] PCI: Improve PCIe Capability RMW concurrency
+ control
+Message-ID: <ZJGzov7J2rJRLmgC@smile.fi.intel.com>
+References: <20230620134624.99688-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <52a40c60-f044-c757-f8fd-241f456fb722@ideasonboard.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230620134624.99688-1-ilpo.jarvinen@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 07:16:15PM +0530, Umang Jain wrote:
-> Hi again,
++Cc: Jonas
+
+Jonas, might be interesting material in scope of Marvell WiFi PM flow.
+Also shows that some WiFi chips disable ASPM which might be good to
+have on Marvell as well.
+
+On Tue, Jun 20, 2023 at 04:46:14PM +0300, Ilpo Järvinen wrote:
+> PCI Express Capability RMW accessors don't properly protect against
+> concurrent access. Link Control Register is written by a number of
+> things in the kernel in a RMW fashion without any concurrency control.
+> This could in the unlucky case lead to losing one of the updates. One
+> of the most obvious path which can race with most of the other LNKCTL
+> RMW operations seems to be ASPM policy sysfs write which triggers
+> LNKCTL update. Similarly, Root Control Register can be concurrently
+> accessed by AER and PME.
 > 
-> Can this be collected please?. The series has two R-b tags and I think it
-> got skipped during the last window?
+> Make pcie_capability_clear_and_set_word() (and other RMW accessors that
+> call it) to use a per device spinlock to protect the RMW operations to
+> the Capability Registers that require locking. Convert open-coded
+> LNKCTL RMW operations to use pcie_capability_clear_and_set_word() to
+> benefit from the locking.
+> 
+> There's also a related series which improves ASPM service driver and
+> device driver coordination by removing out-of-band ASPM state
+> management from device drivers (which will remove some of the code
+> fragments changed by this series but it has higher regression
+> potential which is why it seems prudent to do these changes in two
+> steps):
+>   https://lore.kernel.org/linux-pci/20230602114751.19671-1-ilpo.jarvinen@linux.intel.com/T/#t
 
-SOrry for the delay, this got dropped somewhere, now queued up.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-greg k-h
+
