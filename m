@@ -2,120 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D6D737232
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5E3737234
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbjFTQ7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 12:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
+        id S229573AbjFTRAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 13:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229725AbjFTQ73 (ORCPT
+        with ESMTP id S229808AbjFTRAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 12:59:29 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BF6E42
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:59:27 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-30adc51b65cso5085057f8f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:59:27 -0700 (PDT)
+        Tue, 20 Jun 2023 13:00:17 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEDF91
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:00:16 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-666e97fcc60so2115465b3a.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:00:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google; t=1687280366; x=1689872366;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iFGev71zOSbUwc9Ipdme/ZAxUB7isGkByEQJ4BO7RuU=;
-        b=csYtTXyre+3fJAdfsJmH5x4q253rZjhqSL6nkUR9EbWvn0z4eQn99DEpJcvyMz/N2B
-         xvG4xNctd5VW6P54WYaxari2Ksw/Ave6KKjVIMOXWEjYwEp4EAgNGjbI2i4/r1VBbRkj
-         XG2G6E50aTAUO1Y4YwUKTkNyDt7N3bTtRJzVzkoN/Fu0OYTxCfnna5U9lKomemVvAKqx
-         2iJAdKjqb5jcsva8gs+2WF9d4HVAcC6DdkSDx051c+yZRtucnwVj+2KL1P+A/FyU7uzA
-         U8zci+DmIAG6SJMR1QdzgOcLgS5VjIf4SXO0+XMjNhliHWaFN92HkwPt+gKTDJ1QnyfB
-         VUmw==
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687280415; x=1689872415;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QK+YTzQYirL13Os91ZaovYkQTYBm+sE9lgoxCY58ads=;
+        b=jlbqn+apNr6F9PTo3mvJqssWrFtPJbIQl9jmkvBjaCv9yVtDiI0KAvHeyRetatf6vV
+         F+khgMF6VN4e7go0v9Rtx9aDZ8O6DceoA5SrZdgOyto5gru93jWY/9dzVKCuGy6EFGz6
+         Hgnv4uOAd4a8Ze8Wq4NUEUp1XC4b2bjpYvw1WkCx2rFASy/Y5Q6oj/DSOT8gCjpatXs6
+         epH1VMaY+wyzrhZGJCjre15E2JhTddDERTAT0clo9GOJDKG8x4S7JQ18KXtn/UTupic/
+         C/2ele7/LGT+iv/Kv3dEo3GOVGkU7mD7q4ICs5fYO/zNkTQOdHNZBCNIDbM5R9XXIHKD
+         L93w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687280366; x=1689872366;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iFGev71zOSbUwc9Ipdme/ZAxUB7isGkByEQJ4BO7RuU=;
-        b=P1o7U3vM5JKfIJXdvqKFBYVI1Jw2agDN3HuSzbYxSuRYSGdPhiHsFT1T5VXDx4RaDo
-         XSxVk9apwI5Dh/v2CY1Gc8vA5UthH6wm/Xcfk71z7BXofPsO9B4gur2fGd4LizJ0VdDG
-         P5R+ElMp4FDe8mwT5vVu0O6MUt+n7DBTzTINUHj8OqfRWo5oUqtbyoHxZ3oBV4mqLp44
-         e9UDdNuzIQa/Hrao4ghrpj/ykK0DS0QR+rmkivXdUBTbENi3Os9nBh451TcR6OKT4wf7
-         7mOhe2zHh65D9SFExCI+oXj7cQRY5TaGAMgDEM8bKEDr84BQr8S0H3e4YmkBIqSJVsA/
-         zTbQ==
-X-Gm-Message-State: AC+VfDw7B3BOV9B/M4EXqa1LPAvNI2mfnwRiBecjucjsJIlO9RMTq0RT
-        eiDEbAdSLQaDJltnLaU55vxOWQ==
-X-Google-Smtp-Source: ACHHUZ4Od9jnD8B4wGHwa48B70g3JbHTkdUhQakX8BFWBVnF3ui5jOimXG0SRMmf1h+Z4StEnd5Prw==
-X-Received: by 2002:adf:e848:0:b0:311:15ae:2cd2 with SMTP id d8-20020adfe848000000b0031115ae2cd2mr12172066wrn.15.1687280366354;
-        Tue, 20 Jun 2023 09:59:26 -0700 (PDT)
-Received: from [10.83.37.24] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id t13-20020adff60d000000b003119633ecb5sm2364328wrp.88.2023.06.20.09.59.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jun 2023 09:59:25 -0700 (PDT)
-Message-ID: <973f8619-15ff-608e-250b-356f5c140a2a@arista.com>
-Date:   Tue, 20 Jun 2023 17:59:24 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [v2 PATCH] crypto: api - Add __crypto_alloc_tfmgfp
-Content-Language: en-US
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     linux-kernel@vger.kernel.org, Bob Gilligan <gilligan@arista.com>,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Francesco Ruggeri <fruggeri05@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        linux-crypto@vger.kernel.org
-References: <20230614174643.3836590-1-dima@arista.com>
- <20230614174643.3836590-3-dima@arista.com>
- <ZIrTQ1tN5LMuRB/5@gondor.apana.org.au>
- <6aa4521f-e5d2-ed12-ab49-1132409ab358@arista.com>
-From:   Dmitry Safonov <dima@arista.com>
-In-Reply-To: <6aa4521f-e5d2-ed12-ab49-1132409ab358@arista.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687280415; x=1689872415;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QK+YTzQYirL13Os91ZaovYkQTYBm+sE9lgoxCY58ads=;
+        b=JcPPNt75bd9QMxrkd0eSxmriBMV5PqEhJgd4cKN1fiVZNipVwjepVpcQavMyeFU1u9
+         bFcThmvQKAvxtUuaxmR3CPcYwvgln4J7sdxJZhSdmfD6+qBezmtLsJRnM2R4A1jV+mdT
+         unO6MCAHCjw8tgC++G0wmYB3Oe392JSCaQVi8wuZ+I8bG76Oj5HW3mYNJmJu1QaXoYDQ
+         W5/deoko5AlPgDZhxy04CDp0Dew0fFBobC6oP/dbCxtb2tNumm1LpXgs1ce8DmGUp7xC
+         OVXJon8X7zYU8kQ75RJFi2y/8z/dmL4ncslYmj2j7TyX/KL5beVIvADaPs7IxlvMcmE8
+         cSYQ==
+X-Gm-Message-State: AC+VfDxpSjyaZKiqHS8wZvKUMHkMBlCl76XkA25RY7c4coozj6R52SjM
+        T0z2Sj9GB4A7iGMbKEVpdzUJQw==
+X-Google-Smtp-Source: ACHHUZ5YTS2ZtJb6TMHkwov/SWafsEKbx/kSL9Eef8V1L8C+MUfF8AMHNWCY+1vck4/7YVBsS7pDWw==
+X-Received: by 2002:a05:6a21:9983:b0:121:bf66:a715 with SMTP id ve3-20020a056a21998300b00121bf66a715mr4753743pzb.45.1687280415224;
+        Tue, 20 Jun 2023 10:00:15 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id q25-20020a62ae19000000b00666e17004a4sm557666pff.58.2023.06.20.10.00.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 10:00:14 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 10:00:14 -0700 (PDT)
+X-Google-Original-Date: Tue, 20 Jun 2023 09:59:33 PDT (-0700)
+Subject:     Re: [PATCH v2 0/2] dt-bindings: riscv: cpus: switch to unevaluatedProperties: false
+In-Reply-To: <20230615-creamer-emu-ade0fa0bdb68@spud>
+CC:     Conor Dooley <conor@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Conor Dooley <conor@kernel.org>
+Message-ID: <mhng-9b234a44-e770-48a9-8a7b-d71a9ed671e7@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herbert,
+On Thu, 15 Jun 2023 15:50:13 PDT (-0700), Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+>
+> Do the various bits needed to drop the additionalProperties: true that
+> we currently have in riscv/cpu.yaml, to permit actually enforcing what
+> people put in cpus nodes.
+>
+> Changes in v2:
+> - drop patches 2 -> 5, they're now standard in dt-schema
+>
+> CC: Rob Herring <robh+dt@kernel.org>
+> CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> CC: Paul Walmsley <paul.walmsley@sifive.com>
+> CC: Palmer Dabbelt <palmer@dabbelt.com>
+> CC: linux-riscv@lists.infradead.org
+> CC: devicetree@vger.kernel.org
+> CC: linux-kernel@vger.kernel.org
+>
+> Conor Dooley (2):
+>   dt-bindings: riscv: cpus: add a ref the common cpu schema
+>   dt-bindings: riscv: cpus: switch to unevaluatedProperties: false
+>
+>  Documentation/devicetree/bindings/riscv/cpus.yaml | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
 
-On 6/15/23 17:19, Dmitry Safonov wrote:
-> On 6/15/23 10:00, Herbert Xu wrote:
-> [..]
->>
->> Good catch.  Though I'd rather add the gfp argument to a separate
->> function because I'm in the process of replacing ciphers with
->> something that uses the new crypto_types API.
->>
->> Once that happens ciphers will switch over to the normal cloning
->> call and this can be removed.
-> 
-> LGTM, thanks!
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-Would you prefer me to resend this v2 or you're happy to apply with your
-proposed changes?
-
->> ---8<---
->> Use it straight away in crypto_clone_cipher(), as that is not meant to
->> sleep.
->>
->> Fixes: 51d8d6d0f4be ("crypto: cipher - Add crypto_clone_cipher")
->> Signed-off-by: Dmitry Safonov <dima@arista.com>
->> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
->>
->> diff --git a/crypto/api.c b/crypto/api.c
-> [..]
-
-Thanks,
-          Dmitry
-
+LMK if you wanted me to pick these up?
