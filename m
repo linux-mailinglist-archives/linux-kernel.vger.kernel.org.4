@@ -2,143 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA4B473762C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BAEB737632
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjFTUj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 16:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37560 "EHLO
+        id S229997AbjFTUlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 16:41:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjFTUj0 (ORCPT
+        with ESMTP id S229709AbjFTUla (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 16:39:26 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F02310F8;
-        Tue, 20 Jun 2023 13:39:25 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35KKOOZ9029442;
-        Tue, 20 Jun 2023 20:39:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=vjEUtfRMYEzg6ZBkM91Ygp6f+3k9ctL2YixmyIx8ZO4=;
- b=SLMi6kTuD1a8gHOKi7bXFFre3GB34l9LVN6g/mAydctz7q2G1Yr7jUbIWEJ69bPi04I2
- +giAw9Q7AYPrARsSae9oeWptiqZ5L+i/KtNBAv/O0pUg01E40uaTeiL3Jp7xYuIudFl6
- i7hKeZ2PZBKbkEyQcYiU4uTG6BNFaz8mowJN+8xM5bJunr/K8Vs5g2Y5Xfd3QnkBSoBm
- O8KSYtKS2j1TdSNhL+/mvW38BLzSfKarFJ29U4XFcmkl9T7Ln5OMFDmea+IOJ+ei9y7m
- xbO55SHWkVMDpD6eof6tv+/rkESXV5UzZ8bqOe46C/w3ykX4EgW/qqW/8WXDA2BoyHxz Iw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rb7susxxp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Jun 2023 20:39:21 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35KKdLCw019893
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Jun 2023 20:39:21 GMT
-Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
- nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 20 Jun 2023 13:39:20 -0700
-From:   Bjorn Andersson <quic_bjorande@quicinc.com>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] arm64: dts: qcom: sc8280xp-crd: Fix naming of regulators
-Date:   Tue, 20 Jun 2023 13:39:15 -0700
-Message-ID: <20230620203915.141337-2-quic_bjorande@quicinc.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230620203915.141337-1-quic_bjorande@quicinc.com>
-References: <20230620203915.141337-1-quic_bjorande@quicinc.com>
-MIME-Version: 1.0
+        Tue, 20 Jun 2023 16:41:30 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E26010F8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:41:29 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-54290603887so2669005a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:41:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687293688; x=1689885688;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5z9pNcxTbLEfuGKBKG4TC9lAt5ChqheSmY8pbRkKfL4=;
+        b=kTkoFl/hOE6DUn0o/TxNy8ei8a0pwF3wJ8WdqIIbNXUDBDjEdeDGAmfD2+RKWGXJTd
+         T3K28E5f3GbYQN1zmSPmZIin3KKlSUuGyR86CjJT1U2jBF/N3FKoBM9bMwkagOXfEehr
+         LE1fzTMO5bKWhTaPLlsyizdUF9TGPy6aFiOY/vnQgdbBWCVEGtA3s/FI33EEAwItrMJh
+         VjtW979fJDNufkx776qo5gq8zTqT3t96sPZU5T73gmbYeidCAK2U6H9M5XTJ3SV4eQVW
+         XmwzVsS4j/HUUONtDF+aGJdqhuO6ywBlWfNmAig3j5c9MqBK1xx+AEcWUY6eaTj23qt/
+         6u3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687293688; x=1689885688;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5z9pNcxTbLEfuGKBKG4TC9lAt5ChqheSmY8pbRkKfL4=;
+        b=AI5j9rVTAiYP90WZt9saWQmaW20yi4FSaz46rgoMIJyMH17FsOa3AV82GXCZYHFB/x
+         GsCaQxg+ISyfiuBhCT260HqAQHy08Gen4/wuxdPtB+ad8PMJcfrbEgbRWOREG3s+I1HD
+         7d5JpPRTzuLXPQg7fgawPgcyy1kcXT2WHDaZxhDjdEXUC3/KBlB1ifCCQSaz3pDpT+as
+         YfIHnTWVEHiVXoUWKoQYpzL1bj802s4MMsF7QPX41NFDdNSbMhg+AQlO0I1upTscdGxo
+         Ev56kPsMOpy4ZUJ7qABhCa2JI05c4WtP5xRP+HV6Y6VEEIlvaFhy5cvgUD5hkU+5NlCH
+         4zxQ==
+X-Gm-Message-State: AC+VfDyjHPLnCsfgjzXG0mlaWIBQjg7GsokfT1XBucQ0bvpqjkZlolrQ
+        Ir+0S1QG6rQon/kw/Hg52WktXg==
+X-Google-Smtp-Source: ACHHUZ4aN+60FiuHJ8u8JkwcNH+wuIJ6cgDETNgmrC7TB9kOIDKZRE8DYgI1KARaEW/l8jTpFSXGNw==
+X-Received: by 2002:a05:6a20:432a:b0:115:5910:c82d with SMTP id h42-20020a056a20432a00b001155910c82dmr4124776pzk.43.1687293688585;
+        Tue, 20 Jun 2023 13:41:28 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id 5-20020aa79145000000b006689ecd0ff4sm1442001pfi.208.2023.06.20.13.41.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 13:41:27 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 13:41:27 -0700 (PDT)
+X-Google-Original-Date: Tue, 20 Jun 2023 13:40:46 PDT (-0700)
+Subject:     Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+In-Reply-To: <CAKwvOdn_U+yjFBn6pq5XwP1rTEKA1MWBkd0f2N8wB_nuS1_sWw@mail.gmail.com>
+CC:     Conor Dooley <conor@kernel.org>, jszhang@kernel.org,
+        llvm@lists.linux.dev, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, maskray@google.com,
+        Ard Biesheuvel <ardb@kernel.org>
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     ndesaulniers@google.com
+Message-ID: <mhng-16f1b957-5cf5-4786-a760-e4ab1fbe83ce@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: -zaMcbFB0ndLlTJVhl3nv28ztf6gw4z5
-X-Proofpoint-ORIG-GUID: -zaMcbFB0ndLlTJVhl3nv28ztf6gw4z5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-20_16,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 priorityscore=1501 bulkscore=0 phishscore=0
- mlxlogscore=999 suspectscore=0 spamscore=0 mlxscore=0 adultscore=0
- clxscore=1015 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306200187
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The external regulators in the CRD seems to have inherited their names
-from the X13s DeviceTree, correct them.
+On Tue, 20 Jun 2023 13:32:32 PDT (-0700), ndesaulniers@google.com wrote:
+> On Tue, Jun 20, 2023 at 4:13 PM Conor Dooley <conor@kernel.org> wrote:
+>>
+>> On Tue, Jun 20, 2023 at 04:05:55PM -0400, Nick Desaulniers wrote:
+>> > On Mon, Jun 19, 2023 at 6:06 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>> > > On Thu, 15 Jun 2023 06:54:33 PDT (-0700), Palmer Dabbelt wrote:
+>> > > > On Wed, 14 Jun 2023 09:25:49 PDT (-0700), jszhang@kernel.org wrote:
+>> > > >> On Wed, Jun 14, 2023 at 07:49:17AM -0700, Palmer Dabbelt wrote:
+>> > > >>> On Tue, 23 May 2023 09:54:58 PDT (-0700), jszhang@kernel.org wrote:
+>>
+>> > > >> Commit 3b90b09af5be ("riscv: Fix orphan section warnings caused by
+>> > > >> kernel/pi") touches vmlinux.lds.S, so to make the merge easy, this
+>> > > >> series is based on 6.4-rc2.
+>> > > >
+>> > > > Thanks.
+>> > >
+>> > > Sorry to be so slow here, but I think this is causing LLD to hang on
+>> > > allmodconfig.  I'm still getting to the bottom of it, there's a few
+>> > > other things I have in flight still.
+>> >
+>> > Confirmed with v3 on mainline (linux-next is pretty red at the moment).
+>> > https://lore.kernel.org/linux-riscv/20230517082936.37563-1-falcon@tinylab.org/
+>>
+>> Just FYI Nick, there's been some concurrent work here from different
+>> people working on the same thing & the v3 you linked (from Zhangjin) was
+>> superseded by this v2 (from Jisheng).
+>
+> Ah! I've been testing the deprecated patch set, sorry I just looked on
+> lore for "dead code" on riscv-linux and grabbed the first thread,
+> without noticing the difference in authors or new version numbers for
+> distinct series. ok, nevermind my noise.  I'll follow up with the
+> correct patch set, sorry!
 
-Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Ya, I hadn't even noticed the v3 because I pretty much only look at 
+patchwork these days.  Like we talked about in IRC, I'm going to go test 
+the merge of this one and see what's up -- I've got it staged at 
+<https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?h=for-next&id=1bd2963b21758a773206a1cb67c93e7a8ae8a195>, 
+though that won't be a stable hash if it's actually broken...
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-index b21b41a066b6..678cdf253f2e 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
-@@ -133,7 +133,7 @@ vreg_edp_3p3: regulator-edp-3p3 {
- 	vreg_edp_bl: regulator-edp-bl {
- 		compatible = "regulator-fixed";
- 
--		regulator-name = "VBL9";
-+		regulator-name = "VREG_EDP_BL";
- 		regulator-min-microvolt = <3600000>;
- 		regulator-max-microvolt = <3600000>;
- 
-@@ -149,7 +149,7 @@ vreg_edp_bl: regulator-edp-bl {
- 	vreg_nvme: regulator-nvme {
- 		compatible = "regulator-fixed";
- 
--		regulator-name = "VCC3_SSD";
-+		regulator-name = "VREG_NVME_3P3";
- 		regulator-min-microvolt = <3300000>;
- 		regulator-max-microvolt = <3300000>;
- 
-@@ -163,7 +163,7 @@ vreg_nvme: regulator-nvme {
- 	vreg_misc_3p3: regulator-misc-3p3 {
- 		compatible = "regulator-fixed";
- 
--		regulator-name = "VCC3B";
-+		regulator-name = "VREG_MISC_3P3";
- 		regulator-min-microvolt = <3300000>;
- 		regulator-max-microvolt = <3300000>;
- 
-@@ -180,7 +180,7 @@ vreg_misc_3p3: regulator-misc-3p3 {
- 	vreg_wlan: regulator-wlan {
- 		compatible = "regulator-fixed";
- 
--		regulator-name = "VCC_WLAN_3R9";
-+		regulator-name = "VPH_PWR_WLAN";
- 		regulator-min-microvolt = <3900000>;
- 		regulator-max-microvolt = <3900000>;
- 
-@@ -196,7 +196,7 @@ vreg_wlan: regulator-wlan {
- 	vreg_wwan: regulator-wwan {
- 		compatible = "regulator-fixed";
- 
--		regulator-name = "VCC3B_WAN";
-+		regulator-name = "SDX_VPH_PWR";
- 		regulator-min-microvolt = <3300000>;
- 		regulator-max-microvolt = <3300000>;
- 
--- 
-2.25.1
-
+>
+>>
+>> Cheers,
+>> Conor.
+>
+>
+>
+> -- 
+> Thanks,
+> ~Nick Desaulniers
