@@ -2,82 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4525173693F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED20573694A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:30:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbjFTK2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 06:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
+        id S231799AbjFTKab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 06:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231437AbjFTK2G (ORCPT
+        with ESMTP id S231437AbjFTKa0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 06:28:06 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37D8E3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 03:28:04 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 07E251EC0102;
-        Tue, 20 Jun 2023 12:28:03 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1687256883;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=WMa0LnZkBXxQNKLeNhC+gz8cv2VqKSrh+yg6hYUFUg4=;
-        b=R4tJpPbdCVN266Ied84fmoxaVwu2bOc3Fg+zYwLowQF3GKJ6quoOG3idOsk4tKK6u7MbcT
-        +aC9SkS+quy0BWEhS8uKRjzQ/dy58fJee6DBwE1rdSewgRaAtNoCxJzRBIs9YtSSDTYntu
-        PxDFi+cVxs2GTD2o+Qd/lweMNdZd+4c=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id hgt8RgwxcCut; Tue, 20 Jun 2023 10:28:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1687256880; bh=WMa0LnZkBXxQNKLeNhC+gz8cv2VqKSrh+yg6hYUFUg4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gUxofOom2X1lPZ8WiaT/q/i7IRU+MaXmxb8AS2/ZQYfgr2aEw6Y5Mkhfrab1vKQIr
-         iRaS54eFjBR6BNkZb+PN9OahsfSTgJFyuFm37szS+ojvs/QpEBqm1FyiRWtBaklTsF
-         V5aQUQewmQTg9+lGGPdc7u1RTsz4V1W6KZkMF1qdVBMxB8doeXonFw1BoonB7yPv9r
-         fKCdui2Vvf/hRnr5VJhb5k7Ii4GBfecRYerf2XMctM9nu7mZgyGj8xXgTqJCaWBNnh
-         4StDdN+Wl+lgEwJ3FxYeJPm2vpE1TYIO0eFU7gZUNKMVlEd7kUERH9pmQurozBkzgh
-         zyBd90NrHSpHEiAOn0jIsx2+kX/mMed8qH2ZwotEt72rBlygnjhKm4cgV3Hamvu4fG
-         GCBseTVY1jpc6ZNLQt4rAtsAFkc+kg0L4Gjj0Bithj4FwNYrHs0qwHBs+YvasGl/ya
-         1/8LOAEPHjj3LuMU5IXLzG3CFQyr2fTORoLrb3Ymi24MEpcM0WfKcYMQj4EH/rFc8/
-         XMdsX19tjUMmJNtuPFCDtWisU+1kxYAaEWNF2cSUuwdkJiPEGq2C3vKSmjtjtyqd0l
-         UCO7Nuo9pX2Uskb9mUDQpz+m6bd3s8hOd4eksr2l7nXVroNAfMUUN+z7IqicngDp2j
-         XK7Yqw6ePzOqCHoi8WjuL+AU=
-Received: from zn.tnic (p200300Ea971dc5B2329c23FffEA6A903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c5b2:329c:23ff:fea6:a903])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 18B7740E01DE;
-        Tue, 20 Jun 2023 10:27:49 +0000 (UTC)
-Date:   Tue, 20 Jun 2023 12:27:43 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Tony Battersby <tonyb@cybernetics.com>,
-        Ashok Raj <ashok.raj@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: Re: [patch v3 7/7] x86/smp: Put CPUs into INIT on shutdown if
- possible
-Message-ID: <20230620102743.GYZJF/H4R1tYmsR/r6@fat_crate.local>
-References: <20230615190036.898273129@linutronix.de>
- <20230615193330.608657211@linutronix.de>
+        Tue, 20 Jun 2023 06:30:26 -0400
+Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75046102
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 03:30:25 -0700 (PDT)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 2507410042D18
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:30:25 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id BYczqdbtWNX2aBYczq7ux0; Tue, 20 Jun 2023 10:30:25 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=NMAQR22g c=1 sm=1 tr=0 ts=64917fc1
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=of4jigFt-DYA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=g5iKa5+k8vHcAcRvgANwJL0N4rW2yRGd1qJoxBpvbw8=; b=XJ5SWevGLlAT/o9vapNL8u9Wz1
+        63xWfTlmA6I9T2GdMrz0y8Lnj30BvqXpbsXaxUYu0zlpmPBMxaEkQ5+VbZHaimqdt+cNCBenuuHh4
+        hwLuNl+x4uj0/XVJLW8AQXeGzWjU3OXMkRMCZBlxXoLuvGdsBIBDkHkaMyueEnBMotiBvFKirf6rk
+        FQV3Ahgyx+NjoDd+yU8L0YEM3uN7uuc8UiGDgKxRSw5m7i1KmZ5dBbKtjNyVUdvISiYfl107qBCzZ
+        zHe5kDq9VRjT/ck1EcsgCpbwaryt80wIUiRtp4YoUz79LOWEZfpBOQIsmyGfRvWc9d6d/pugzcPC/
+        ci0fxTwQ==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:44648 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1qBYcy-003lP2-Ah;
+        Tue, 20 Jun 2023 04:30:24 -0600
+Subject: Re: [PATCH 6.1 000/166] 6.1.35-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230619102154.568541872@linuxfoundation.org>
+In-Reply-To: <20230619102154.568541872@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <4df0fd90-1067-162f-13c5-129394834c0a@w6rz.net>
+Date:   Tue, 20 Jun 2023 03:30:22 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230615193330.608657211@linutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1qBYcy-003lP2-Ah
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:44648
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,30 +95,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 10:34:00PM +0200, Thomas Gleixner wrote:
-> @@ -202,7 +206,27 @@ static void native_stop_other_cpus(int w
->  			udelay(1);
->  	}
->  
-> -	/* if the REBOOT_VECTOR didn't work, try with the NMI */
-> +	/*
-> +	 * Park all other CPUs in INIT including "offline" CPUs, if
-> +	 * possible. That's a safe place where they can't resume execution
-> +	 * of HLT and then execute the HLT loop from overwritten text or
-> +	 * page tables.
-> +	 *
-> +	 * The only downside is a broadcast MCE, but up to the point where
-> +	 * the kexec() kernel brought all APs online again an MCE will just
-> +	 * make HLT resume and handle the MCE. The machine crashs and burns
+On 6/19/23 3:27 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.35 release.
+> There are 166 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 21 Jun 2023 10:21:12 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.35-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-"crashes"
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-With that
+Tested-by: Ron Economos <re@w6rz.net>
 
-Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
