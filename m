@@ -2,108 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF8D73625C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 05:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F62A736262
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 05:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbjFTDy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 23:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
+        id S230294AbjFTDzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 23:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbjFTDyX (ORCPT
+        with ESMTP id S230285AbjFTDzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 23:54:23 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0112710D2;
-        Mon, 19 Jun 2023 20:54:21 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 624D35C01BF;
-        Mon, 19 Jun 2023 23:54:21 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 19 Jun 2023 23:54:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-id:content-type
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1687233261; x=
-        1687319661; bh=R9f3a1o9mdbc+HYYy6GLvEOqJb10bmncA9C0HjKJ42s=; b=B
-        S+tlmoB+GwsMwSq396SS8fRfAsjI0qmSAkvr/azBgDpPofSkvogMGqbPRyr6n+F+
-        eHcw+GBwrayo8FPEJb4MzGCPE2/wSuGPcFNZ2g6DrrkFGUfqPMBPXQ9CBflv0Ex3
-        L0DG3UibXmPWMutojuN3RWGFONaz57VMBYr1TRM9Bnp9vItEU6w3R2ju23kBledF
-        Z4yMXCjIbe1WLhsG9sUxOzzTFFEnPcEp5mvxsCHiTMJdbX/tkSmH5CDKVwgPMGTh
-        cNhENQe1k2gcAhGAV46mqFrWJj0v60dxqVwlxPXoTLAJUc+YcVeCS8nVdg8EZiRX
-        ZxGKiih9aUmAoxXQVKtVg==
-X-ME-Sender: <xms:7SKRZH1RBCtAMKdls3DWggc8R31oFrvhOoMpBFCpEE7MUrOggpJhTQ>
-    <xme:7SKRZGEcP_8pEIAEpvWzkGtmccPhvqU7zWYA3VK86m5-1VuUyqPh1EmU-3atbzofU
-    -vNWizzABxXM8wJF68>
-X-ME-Received: <xmr:7SKRZH6TKqCcUO1QDWOBeRnHtPJPLcVl6CRfzj3EH8oIz6tHiDdLUjZ5Xh5WaKZc7pyrYx_VlXwpDzZ3K9kGLBMVjgyd3FT41Wc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefgedgfeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevufgjkfhfgggtsehmtderredttdejnecuhfhrohhmpefhihhnnhcu
-    vfhhrghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrg
-    htthgvrhhnpeelfeeklefggfetkedukeevfffgvdeuheetffekledtfeejteelieejteeh
-    geelieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hfthhhrghinheslhhinhhugidqmheikehkrdhorhhg
-X-ME-Proxy: <xmx:7SKRZM1sr_OnX-UrUf_9lydv1iDuOULhFu3D7HbdFksINiT-UjGz8Q>
-    <xmx:7SKRZKFFsax4v2bjVyiLwkhTaSEYX61hycTsGMtqPGIjJqZlLzoMaw>
-    <xmx:7SKRZN_nWxtihZ26sxei_y_RAZONw02wnPToUNw-ffbeXi-A1e1Stw>
-    <xmx:7SKRZHPUacvy4ZhTwH97vH4f_YeDwx_du-RlSBLIHnjMrH5K7eW7BQ>
-Feedback-ID: i58a146ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 19 Jun 2023 23:54:18 -0400 (EDT)
-Date:   Tue, 20 Jun 2023 13:54:37 +1000 (AEST)
-From:   Finn Thain <fthain@linux-m68k.org>
-To:     Kees Cook <keescook@chromium.org>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        tech-board-discuss@lists.linux-foundation.org,
-        Theodore Ts'o <tytso@mit.edu>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Documentation: Linux Contribution Maturity Model and
- the wider community
-In-Reply-To: <202306191247.3CA085BA64@keescook>
-Message-ID: <7f26d19e-2aed-c03f-e59c-c36164cdfb19@linux-m68k.org>
-References: <cd1786eadd1ff05d9ca053b72eb5f06ceb0c470d.1687167717.git.fthain@linux-m68k.org> <202306191247.3CA085BA64@keescook>
+        Mon, 19 Jun 2023 23:55:42 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1B019A;
+        Mon, 19 Jun 2023 20:55:40 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QlXpy6HHFz4x09;
+        Tue, 20 Jun 2023 13:55:38 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1687233339;
+        bh=H0D72pDX88zY6XJY90Z9rgzpbpZsOV6cMUGsZheQV0w=;
+        h=Date:From:To:Cc:Subject:From;
+        b=MZ/JQ0j6kXnn3OjM33VEcgppIkvCzddZZPBRtvdLbN9benaiKWBoqRs5PZl9KxFlF
+         lhEX+bO11KbA6lVFvhvayvqehh7NLVVewc5Zolj/jB9I8IIyJHhVfYyd8++Xgw8S1u
+         cnmGosMgEPOsZwsSburVIVqQxjS/SgPgYuqGw9tKmqq45JNwR9UY2KNXqm/8FbZT27
+         O5PSTo0upNXXNc27huWimwInopsHidi9BcamIeWAVVHSYWzgZUt7hiyMXJVNlvHxCa
+         L0EZmIn9am5S3g7mzzh61FBQDqi5NHRE/v8j63Hm2T2wwVtZ5GvD5ZYpPjYjRCtSfo
+         o8dNC/TvL1bjQ==
+Date:   Tue, 20 Jun 2023 13:55:36 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the landlock tree with the tip tree
+Message-ID: <20230620135536.1f820a48@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="-1463811774-526003913-1687231289=:26354"
-Content-ID: <f58cfba7-0db2-e714-a931-aa5b02c72b9e@nippy.intranet>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/rVzvofnNsXH6DkvE.1SuJkO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+--Sig_/rVzvofnNsXH6DkvE.1SuJkO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
----1463811774-526003913-1687231289=:26354
-Content-Type: text/plain; CHARSET=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <833f7255-6cf7-1760-8087-49cb24a6c819@nippy.intranet>
+Hi all,
 
-On Mon, 19 Jun 2023, Kees Cook wrote:
+Today's linux-next merge of the landlock tree got a conflict in:
 
-> > @@ -103,7 +103,6 @@ Level 5
-> > =20
-> >  * Upstream kernel development is considered a formal job position, wit=
-h
-> >    at least a third of the engineer=E2=80=99s time spent doing Upstream=
- Work.
-> > -* Organizations will actively seek out community member feedback as a
-> > -  factor in official performance reviews.
->=20
-> This really cannot be dropped -- companies must factor upstream work=20
-> into performance reviews or it will continue to be seen as "free time"=20
-> work, and employees won't be recognized for their upstream=20
-> contributions. If an org has no perf reviews, this item is already=20
-> nullified, IMO.
->=20
+  arch/um/Kconfig
 
-I believe that I've now addressed this in my reply to Greg.
----1463811774-526003913-1687231289=:26354--
+between commit:
+
+  9349b5cd0908 ("um/cpu: Switch to arch_cpu_finalize_init()")
+
+from the tip tree and commit:
+
+  74ce793bcbde ("hostfs: Fix ephemeral inodes")
+
+from the landlock tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/um/Kconfig
+index 887cfb636c26,4057d5267c6a..000000000000
+--- a/arch/um/Kconfig
++++ b/arch/um/Kconfig
+@@@ -5,8 -5,6 +5,7 @@@ menu "UML-specific options
+  config UML
+  	bool
+  	default y
+- 	select ARCH_EPHEMERAL_INODES
+ +	select ARCH_HAS_CPU_FINALIZE_INIT
+  	select ARCH_HAS_FORTIFY_SOURCE
+  	select ARCH_HAS_GCOV_PROFILE_ALL
+  	select ARCH_HAS_KCOV
+
+--Sig_/rVzvofnNsXH6DkvE.1SuJkO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSRIzgACgkQAVBC80lX
+0GzSKAf/cYoafs/G3UmkOMMPzX/p88kJVqsttnjtYGoHCGuM2DTjNGjy3vsQ17dp
+EVzsH/ZWmkuHXVoEdBmFGjCpkd1gwEycyJZYxuKZK+9sP/U1pPILstJZvzj8+A2+
+f4DVOE2FUWh0ni7vE2MeD/Kv/wcmYMhzaRkhyiyOW+tnPEpul7k6Ma3TLaeYL9HS
+e6JLhw+ZHUD0KGADxCzIX3bzfsUGnoFcm65NPapg4FrOKaP7H2dL92JslrEe8pkI
+2AXPZPpLoxIBh5hSarO7If/EZY5/SGi+3tWGkM6S9LElntHqRJoskZLz0kBZ97t/
+VYpHNK67qJomV/LzDSWK6VIw4vchnw==
+=kuWi
+-----END PGP SIGNATURE-----
+
+--Sig_/rVzvofnNsXH6DkvE.1SuJkO--
