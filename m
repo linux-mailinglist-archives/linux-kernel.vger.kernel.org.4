@@ -2,62 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B015737057
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 17:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3B8737059
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 17:20:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233733AbjFTPUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 11:20:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49950 "EHLO
+        id S233688AbjFTPUr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 11:20:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233710AbjFTPUh (ORCPT
+        with ESMTP id S233730AbjFTPUh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 20 Jun 2023 11:20:37 -0400
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634C91731;
-        Tue, 20 Jun 2023 08:20:21 -0700 (PDT)
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1b516978829so38925465ad.1;
-        Tue, 20 Jun 2023 08:20:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687274420; x=1689866420;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UkZu9jCa+XfTRWAAYoCY/vLwn0a63A/ySsQ0zgyB474=;
-        b=L0x1BAnwFa8BFZQ4hToy/iV50n0NLNAGN7MOypsL4GO1AriFND1yIEozdfCZIctNx/
-         21OTi383nSISxDKCRVbHVpB1ySmJnwNvxSZlluZSU4A6zj2yDerr1CVLU0nSVxXlPe05
-         n4aEa9gPY6VV2U17l1obZsilbmsgHYy4PlwNcI1PgZh1s4mIAsLPYuvkrnyqGoATADT5
-         4tAZ2JTMsKsyDCA714rZZOw7aKWS4Kcn5l49oco3fdeUjiuwwqmthHsc8xxmUQoEoEtl
-         i2nW57UQtJYo+J/u9vxWJSynv+VqeQ0rLr2++P7zxFJ3Ab0sxliT1fTIiNv8tYi1lBCx
-         ia7w==
-X-Gm-Message-State: AC+VfDykkyVwiZBeDcddNgKebKIpVnmphIusevo+CDvFpvzl0Jd2zbj7
-        c8nc0PFmL98jlfAiOSlApg3ugK7IZ+0=
-X-Google-Smtp-Source: ACHHUZ4MBCV85dCRuk8kuCC6OKtP+c8S5PbvkPPSGNSbIMj9FbJf+UpfzIjIHJMl61Q9dF+caejt3Q==
-X-Received: by 2002:a17:902:f693:b0:1b0:577c:2cb with SMTP id l19-20020a170902f69300b001b0577c02cbmr17114944plg.25.1687274420516;
-        Tue, 20 Jun 2023 08:20:20 -0700 (PDT)
-Received: from [192.168.50.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id i1-20020a170902c94100b001ae7fad1598sm1786314pla.29.2023.06.20.08.20.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jun 2023 08:20:19 -0700 (PDT)
-Message-ID: <4c9fea33-9c30-4ab9-c210-95e09d323837@acm.org>
-Date:   Tue, 20 Jun 2023 08:20:16 -0700
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815A31733
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 08:20:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E8374612D0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 15:20:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 56A3EC433C9;
+        Tue, 20 Jun 2023 15:20:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687274420;
+        bh=2k98mMgOMgUh8cLLc+tlihNRAWbOo5x8TfgYwQ3JGX4=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=qgybfX2wCwdbHduQ5+Ea1UCHKTz9CvouMTUwP9qSWHEe816u1/L2Z07zUJLF5Y0Nn
+         a3u6TqI2aWwZDqUS9bs3dYHAsUe4vq4HiElqQ1uMUYRQp+51xiI5Gs8CTT4ZlH5yzS
+         3TVKbA3disNOuG/c6dwfPfBTRLVTrrcjhlnu09+Z2BhXHNHcJlBZCb7NNYg24OT08W
+         foACLLFhrMCdGcJ+2NeSaOTkfM0wn3bm8YnZkf3hCpcp5QosC7y7SPrf3pXF7oIbY7
+         7ORc8vgG8M+U+9JOGext6/YVi77I8vYhvjII2mn+gcS0woY+nwasvvETYzBIyfkkk1
+         4EjybJHbaVWcA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3C82CE21EDB;
+        Tue, 20 Jun 2023 15:20:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH RFC 0/7] blk-mq: improve tag fair sharing
-Content-Language: en-US
-To:     Yu Kuai <yukuai1@huaweicloud.com>, axboe@kernel.dk
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com,
-        Christoph Hellwig <hch@lst.de>
-References: <20230618160738.54385-1-yukuai1@huaweicloud.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230618160738.54385-1-yukuai1@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2] riscv: mm: Pre-allocate PGD entries for vmalloc/modules
+ area
+From:   patchwork-bot+linux-riscv@kernel.org
+Message-Id: <168727442024.569.16572247474971535604.git-patchwork-notify@kernel.org>
+Date:   Tue, 20 Jun 2023 15:20:20 +0000
+References: <20230531093817.665799-1-bjorn@kernel.org>
+In-Reply-To: <20230531093817.665799-1-bjorn@kernel.org>
+To:     =?utf-8?b?QmrDtnJuIFTDtnBlbCA8Ympvcm5Aa2VybmVsLm9yZz4=?=@ci.codeaurora.org
+Cc:     linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, bjorn@rivosinc.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux@rivosinc.com, alexghiti@rivosinc.com, joro@8bytes.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,14 +61,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/18/23 09:07, Yu Kuai wrote:
-> This is not a formal version and not fully tested, I send this RFC
-> because I want to make sure if people think doing this is meaningful,
-> before I spend too much time on this.
-The approach looks good to me but I'd like to hear from Jens and 
-Christoph what their opinion is about the approach of this patch series 
-before doing an in-depth review.
+Hello:
 
-Thanks,
+This patch was applied to riscv/linux.git (for-next)
+by Palmer Dabbelt <palmer@rivosinc.com>:
 
-Bart.
+On Wed, 31 May 2023 11:38:17 +0200 you wrote:
+> From: Björn Töpel <bjorn@rivosinc.com>
+> 
+> The RISC-V port requires that kernel PGD entries are to be
+> synchronized between MMs. This is done via the vmalloc_fault()
+> function, that simply copies the PGD entries from init_mm to the
+> faulting one.
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2] riscv: mm: Pre-allocate PGD entries for vmalloc/modules area
+    https://git.kernel.org/riscv/c/7d3332be011e
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
