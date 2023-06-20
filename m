@@ -2,181 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B078173728C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53AA3737287
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:17:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjFTRR3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Jun 2023 13:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54854 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbjFTRRZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230203AbjFTRRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 20 Jun 2023 13:17:25 -0400
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1777E1710;
-        Tue, 20 Jun 2023 10:17:22 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-987f13f8d21so106901966b.0;
-        Tue, 20 Jun 2023 10:17:22 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54820 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230042AbjFTRRW (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 20 Jun 2023 13:17:22 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F04E1733
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:17:20 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b455855fb2so68458041fa.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:17:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687281438; x=1689873438;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/XabCVCnKN/+LbuMDododZmkqW6HATgL+WSAC/bjcDk=;
+        b=NJqn42QJSscKRFEldVznl4jsn9FWxMZtL7Ma5dT9YIOSe63Nr1VhEfwVfkN4MaNrtw
+         FRMZEIh6RDVvfy/jvZQJwxXdsn/3BWZEmQuALvm8VVJ/kU6D6J0h4YMNokKxL/8DYCR7
+         DMU/TWF0CEoynWmHIPgzcHrH1RsGwJ9slDo1YDW40VbjXZ+UUztdOsraaPseyu86RakZ
+         psl7jkeu/T58P92Gm4iS3V2Bl3Dcd4Ijc5dsIl9olj84wbaRpKfgzeOQRJX+HitDg3/3
+         sRuaST+ntMyhI8P/darxU94uG+c8fTWUEShA3xmOC9F525FoQqZi52wE0C5dfEQwXno9
+         uXbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687281440; x=1689873440;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kCU3E02m6ju/0TXJ6baw1sJty3puMTXr+sZagM9mSPU=;
-        b=hA3s7NUXyX2T1a5g49xLCh6vkHJyqL9oK3UXSdVIXOQqcr8IxWR2qCgUO2Mi5qBsf0
-         m5zneaJkCSjPrL4c4fFb2FGCdb32UyuTekazzxEYhKcARX4uO1RnG1XI8C+fYEx+yzms
-         GbqKo4HD4pxrU6UvP8DjwFJgVakfEMCQRM2ULZK7VVMnrUiSLpFMQjRfHCdct4wtebcT
-         n3qItkGsuq+YMaOlz/cjLRSjX8PUT1j9anKLwuXxxFEb8hveaR1JcIwDhnKxXVD0NaPr
-         N9gdwymS5llS720jMNdK9ci43WYSypdZksVaG9H2524e/AUCdL1z/2C9XqCFG58hAr2U
-         f05g==
-X-Gm-Message-State: AC+VfDziUo+EKesPZ7jPLYq1hfbAvxU8W6ivbVOonR3igXTqZMWWQYQf
-        9nSMYW4T2UmkgcwA2UPDc8u27Ou7ZWnI4m8InAQ=
-X-Google-Smtp-Source: ACHHUZ7Er9JkdZMGk9wrHGUnyshKtbpIg5WLO6EtfUQI2HZ/BkLmDgcCZNRPgohpa+k9Zi/YlpOaEkQU8ICt6ZP+Fbo=
-X-Received: by 2002:a17:906:7a52:b0:988:9dea:ab9c with SMTP id
- i18-20020a1709067a5200b009889deaab9cmr4817988ejo.1.1687281440413; Tue, 20 Jun
- 2023 10:17:20 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687281438; x=1689873438;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/XabCVCnKN/+LbuMDododZmkqW6HATgL+WSAC/bjcDk=;
+        b=enUlnkLaEpEM0kZaI7BnFsczYv6dZv6DUrzvO9qaTKCwss7lds1v4mt9E+Z2a0aSat
+         Xnda/7Whca2KgKw2Oh8tQZYbze0Z7Usv3D7S1Tls8msWd1bzC51IlPQJYEwgAIqw0zYz
+         BFURGbkmxV/6OlrA/TKAefPK4a5HwMcfpcOaM9lVIIyldBc/EP/VMzywNWKbYRmb0rN8
+         TmODw4f/idSHPtqcbQq0hJ/tV2wxe3IX8+Hw2OhoKP5rPybXgK1b90fMxMNAoHAkhQtQ
+         DyPF9go9uq0DKDVRvfOgbE0pL7QNHZq09ag5Ud6sxBtwUk+DGaZFUvq9G55zPrJKEJkg
+         /iag==
+X-Gm-Message-State: AC+VfDy99/8042GqcK1jIHokOUWaipn4c17IrFd0tF042sW6tid4cL8a
+        w2kLiEB2CA6T56zx7WtzP0XtMQ==
+X-Google-Smtp-Source: ACHHUZ7HmOZ5iUHATH17EiFwU86g/fw8G/0/mk89VyaIIpiZGcHhgt6Azbs6QiCq7zflkCAlb4U2XA==
+X-Received: by 2002:a2e:a413:0:b0:2b4:6c47:6253 with SMTP id p19-20020a2ea413000000b002b46c476253mr5577460ljn.38.1687281438388;
+        Tue, 20 Jun 2023 10:17:18 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id by19-20020a170906a2d300b00982bf866f9esm1712568ejb.66.2023.06.20.10.17.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 10:17:17 -0700 (PDT)
+Message-ID: <ff9045bd-1030-b3c6-9692-e223846b0ee5@linaro.org>
+Date:   Tue, 20 Jun 2023 19:17:15 +0200
 MIME-Version: 1.0
-References: <20230519032719.2581689-1-evalenti@kernel.org> <20230519032719.2581689-5-evalenti@kernel.org>
-In-Reply-To: <20230519032719.2581689-5-evalenti@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 20 Jun 2023 19:17:09 +0200
-Message-ID: <CAJZ5v0iSgC4LQMX6XsquaVbFX30SArfWGYtNGXsLaet00kzknw@mail.gmail.com>
-Subject: Re: [PATCH 4/7] thermal: stats: introduce thermal zone stats/min_gradient
-To:     Eduardo Valentin <evalenti@kernel.org>
-Cc:     eduval@amazon.com, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCHv3 2/2] arm64: dts: rockchip: add dts for Firefly Station
+ P2 aka rk3568-roc-pc
+Content-Language: en-US
+To:     Furkan Kardame <f.kardame@manjaro.org>, robh+dt@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        heiko@sntech.de, broonie@kernel.org, deller@gmx.de,
+        dsterba@suse.com, arnd@arndb.de, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <c020531e-c56e-7606-1846-5ca7332de96f@linaro.org>
+ <1687280004029.3690769854.982412891@manjaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1687280004029.3690769854.982412891@manjaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 5:27 AM Eduardo Valentin <evalenti@kernel.org> wrote:
->
-> From: Eduardo Valentin <eduval@amazon.com>
->
-> The patch adds a statistic to track
-> the minimum gradient (dT/dt) to the thermal zone
-> stats/ folder.
->
-> Samples:
->
-> $ echo 1000 > emul_temp
-> $ cat stats/min_gradient
-> 0
-> $ echo 2000 > emul_temp
-> $ echo 1000 > emul_temp
-> $ cat stats/min_gradient
-> -3460
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
-> Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
-> Cc: Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
-> Cc: Jonathan Corbet <corbet@lwn.net> (maintainer:DOCUMENTATION)
-> Cc: linux-pm@vger.kernel.org (open list:THERMAL)
-> Cc: linux-doc@vger.kernel.org (open list:DOCUMENTATION)
-> Cc: linux-kernel@vger.kernel.org (open list)
->
-> Signed-off-by: Eduardo Valentin <eduval@amazon.com>
+On 20/06/2023 19:05, Furkan Kardame wrote:
+>>
+>>> +	};
+>>> +
+>>> +	hdmi-con {
+>>> +		compatible = "hdmi-connector";
+>>> +		type = "a";
+>>> +
+>>> +		port {
+>>> +			hdmi_con_in: endpoint {
+>>> +			remote-endpoint = <&hdmi_out_con>;
+>>
+>> Missing indentation.
+> 
+> I am not able to see any missing indentation in the patch. 
+> I did run checkpatch and did not find any such warning.
+> Please advice in detail ?
 
-This can be easily folded into the previous patch IMO.
 
-> ---
->  .../driver-api/thermal/sysfs-api.rst          |  1 +
->  drivers/thermal/thermal_sysfs.c               | 23 +++++++++++++++++++
->  2 files changed, 24 insertions(+)
->
-> diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation/driver-api/thermal/sysfs-api.rst
-> index 18140dbb1ce1..ed5e6ba4e0d7 100644
-> --- a/Documentation/driver-api/thermal/sysfs-api.rst
-> +++ b/Documentation/driver-api/thermal/sysfs-api.rst
-> @@ -358,6 +358,7 @@ Thermal zone device sys I/F, created once it's registered::
->      |---stats:                 Directory containing thermal zone device's stats
->      |---stats/reset_tz_stats:  Writes to this file resets the statistics.
->      |---stats/max_gradient:    The maximum recorded dT/dt in uC/ms.
-> +    |---stats/min_gradient:    The minimum recorded dT/dt in uC/ms.
->
->  Thermal cooling device sys I/F, created once it's registered::
->
-> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-> index aa28c1cae916..f89ec9a7e8c8 100644
-> --- a/drivers/thermal/thermal_sysfs.c
-> +++ b/drivers/thermal/thermal_sysfs.c
-> @@ -542,6 +542,7 @@ static void destroy_trip_attrs(struct thermal_zone_device *tz)
->  struct thermal_zone_device_stats {
->         spinlock_t lock; /* protects this struct */
->         s64 max_gradient;
-> +       s64 min_gradient;
->         ktime_t last_time;
->  };
->
-> @@ -569,6 +570,10 @@ static void temperature_stats_update(struct thermal_zone_device *tz)
->         /* update fastest temperature rise from our perspective */
->         if (cur_gradient > stats->max_gradient)
->                 stats->max_gradient = cur_gradient;
-> +
-> +       /* update fastest temperature decay from our perspective */
-> +       if (cur_gradient < stats->min_gradient)
-> +               stats->min_gradient = cur_gradient;
->  }
->
->  void thermal_zone_device_stats_update(struct thermal_zone_device *tz)
-> @@ -595,6 +600,21 @@ static ssize_t max_gradient_show(struct device *dev,
->         return ret;
->  }
->
-> +static ssize_t min_gradient_show(struct device *dev,
-> +                                struct device_attribute *attr, char *buf)
-> +{
-> +       struct thermal_zone_device *tz = to_thermal_zone(dev);
-> +       struct thermal_zone_device_stats *stats = tz->stats;
-> +       int ret;
-> +
-> +       spin_lock(&stats->lock);
-> +       temperature_stats_update(tz);
-> +       ret = snprintf(buf, PAGE_SIZE, "%lld\n", stats->min_gradient);
-> +       spin_unlock(&stats->lock);
-> +
-> +       return ret;
-> +}
-> +
->  static ssize_t
->  reset_tz_stats_store(struct device *dev, struct device_attribute *attr,
->                      const char *buf, size_t count)
-> @@ -604,6 +624,7 @@ reset_tz_stats_store(struct device *dev, struct device_attribute *attr,
->
->         spin_lock(&stats->lock);
->
-> +       stats->min_gradient = 0;
->         stats->max_gradient = 0;
->         stats->last_time = ktime_get();
->
-> @@ -612,10 +633,12 @@ reset_tz_stats_store(struct device *dev, struct device_attribute *attr,
->         return count;
->  }
->
-> +static DEVICE_ATTR_RO(min_gradient);
->  static DEVICE_ATTR_RO(max_gradient);
->  static DEVICE_ATTR_WO(reset_tz_stats);
->
->  static struct attribute *thermal_zone_device_stats_attrs[] = {
-> +       &dev_attr_min_gradient.attr,
->         &dev_attr_max_gradient.attr,
->         &dev_attr_reset_tz_stats.attr,
->         NULL
-> --
-> 2.34.1
->
+remote-endpoint is a property within a node, so it cannot have same
+indentation as the node.
+
+Best regards,
+Krzysztof
+
