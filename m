@@ -2,554 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F519736145
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 03:50:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE0DA736149
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 03:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjFTBuv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 21:50:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
+        id S229759AbjFTBvn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 21:51:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjFTBuo (ORCPT
+        with ESMTP id S229729AbjFTBvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 21:50:44 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 320F410C4;
-        Mon, 19 Jun 2023 18:50:41 -0700 (PDT)
-Received: from loongson.cn (unknown [10.40.46.158])
-        by gateway (Coremail) with SMTP id _____8BxY+jvBZFk7gMHAA--.388S3;
-        Tue, 20 Jun 2023 09:50:39 +0800 (CST)
-Received: from [192.168.124.126] (unknown [10.40.46.158])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxauXtBZFkegghAA--.27417S3;
-        Tue, 20 Jun 2023 09:50:38 +0800 (CST)
-Subject: Re: [PATCH v14 01/30] LoongArch: KVM: Add kvm related header files
-To:     Huacai Chen <chenhuacai@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
-        Xi Ruoyao <xry111@xry111.site>, tangyouling@loongson.cn
-References: <20230619083255.3841777-1-zhaotianrui@loongson.cn>
- <20230619083255.3841777-2-zhaotianrui@loongson.cn>
- <CAAhV-H61FpoRA=F6iaHA9E=V4VUoQ5CGAF1YGBs-f9P2QNE+=g@mail.gmail.com>
-From:   zhaotianrui <zhaotianrui@loongson.cn>
-Message-ID: <7409e2f3-7079-6ecd-7a7d-f6c0b8e36ee3@loongson.cn>
-Date:   Tue, 20 Jun 2023 09:50:37 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 19 Jun 2023 21:51:41 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DE6E42;
+        Mon, 19 Jun 2023 18:51:30 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-666eef03ebdso1267097b3a.1;
+        Mon, 19 Jun 2023 18:51:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687225890; x=1689817890;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PB+zWJazs4L4JdPzcmpzNhJsuWHk7uSora7gwTZHuyg=;
+        b=g8EcvQ06uO57p0yCA4k4Mh8wO7kNGVK4ExX2mde0ypkrss4LQamM4eWw4p4qyzdtN0
+         10trrf3y0ds4Zm/R7HtfigCHHVHIsudY7TWRKuGNmhysDO/Xvra7lpXnR5tC+fBv6YoB
+         J5+3Bj/xbA2gzOMmv1iuiPHd7sIo61jRMj3PSRJuNwAqH9rtZodkOs1KK1QW2z4YgAhB
+         TiDOuVlROkGHEwOOiFupvL3aqcas6FzpognB6MkKmkVXnR/lQvfAgN9yJ/PNio0BUkxv
+         xV2k3FEMPnwsstASDHeYF9f8OKyFRBW4KIwP3UcLtrZCIcPzP7QXgWc8+ynkBtFhHrUC
+         3TAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687225890; x=1689817890;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PB+zWJazs4L4JdPzcmpzNhJsuWHk7uSora7gwTZHuyg=;
+        b=jJwD41iE1ZlAeg3ZLImi4+ZYzS+8B6RkiCIZkrslzyDnSq2/m0mu0lqMuJaxcZI7AY
+         iLtiSy0Xag3+2WZj8J0VwsUvlBuMPghK26O4dcCDc7DC6YN0c40VPOykx5HR5grIAzBy
+         wtI0dhbC7eQ7JMWlXhsoD6azCUfAeiVTHGYRED8n/8hnoKTgEZnHhGWGrVj21+nGHApY
+         Gh7AZ5wuamexB4JK3JL91y7ttmqXD+n3orKYMXe2JDfFLQjfWs/NLqI1unMNTt1z0g4S
+         qRANRNimjxywir6lq3fFW6epCwIM41IFFFyKRmxEv9acBShpB7FRoSzRCy3cT5UmBb53
+         FeMA==
+X-Gm-Message-State: AC+VfDwKmN+kbuRSrXaq1KzEgq0yGG20ESZt2CQM1CQ/qJsBfWTes54N
+        IImEoroaO4Cg7Xv9jRwynhI=
+X-Google-Smtp-Source: ACHHUZ4+OMn7xe6jKDHH6vjIJoMvBjztdfYRDG/gXLNs8Uk0OkSEJ8+Oi+c8LGIuXXrNIiTwqjB0fQ==
+X-Received: by 2002:a05:6a00:21d4:b0:668:9bf9:fa70 with SMTP id t20-20020a056a0021d400b006689bf9fa70mr224508pfj.34.1687225889683;
+        Mon, 19 Jun 2023 18:51:29 -0700 (PDT)
+Received: from a28aa0606c51.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id g2-20020aa78742000000b0064f46570bb7sm240457pfo.167.2023.06.19.18.51.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 18:51:29 -0700 (PDT)
+From:   Jacky Huang <ychuang570808@gmail.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, tmaimon77@gmail.com, catalin.marinas@arm.com,
+        will@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-serial@vger.kernel.org, arnd@arndb.de, soc@kernel.org,
+        schung@nuvoton.com, mjchen@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+Subject: [PATCH v16 0/1] Introduce Nuvoton ma35d1 SoC
+Date:   Tue, 20 Jun 2023 01:51:19 +0000
+Message-Id: <20230620015120.234041-1-ychuang570808@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H61FpoRA=F6iaHA9E=V4VUoQ5CGAF1YGBs-f9P2QNE+=g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-CM-TRANSID: AQAAf8AxauXtBZFkegghAA--.27417S3
-X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj9fXoW3Cw1rCr4xAr1DJFy8Xr15KFX_yoW8XrW8Wo
-        W7tFs2gr48Gw15Cw45C342qa45Z34F9w47Aa13C3s3X3W7ta4UWr4UKw4FqF43ur15KrW7
-        CasxX3WDZaySvwn5l-sFpf9Il3svdjkaLaAFLSUrUUUUeb8apTn2vfkv8UJUUUU8wcxFpf
-        9Il3svdxBIdaVrn0xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3
-        UjIYCTnIWjp_UUUOb7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI
-        8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
-        Y2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14
-        v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6r4j6r4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
-        Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_
-        Jw1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrw
-        CYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48J
-        MxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1l
-        IxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUcbAwUUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Jacky Huang <ychuang3@nuvoton.com>
 
-在 2023/6/19 下午5:59, Huacai Chen 写道:
-> Hi, Tianrui,
->
-> On Mon, Jun 19, 2023 at 4:33 PM Tianrui Zhao <zhaotianrui@loongson.cn> wrote:
->> Add LoongArch KVM related header files, including kvm.h,
->> kvm_host.h, kvm_types.h. All of those are about LoongArch
->> virtualization features and kvm interfaces.
->>
->> Reviewed-by: Bibo Mao <maobibo@loongson.cn>
->> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
->> ---
->>   arch/loongarch/include/asm/kvm_host.h  | 253 +++++++++++++++++++++++++
->>   arch/loongarch/include/asm/kvm_types.h |  11 ++
->>   arch/loongarch/include/uapi/asm/kvm.h  | 106 +++++++++++
->>   include/uapi/linux/kvm.h               |   9 +
->>   4 files changed, 379 insertions(+)
->>   create mode 100644 arch/loongarch/include/asm/kvm_host.h
->>   create mode 100644 arch/loongarch/include/asm/kvm_types.h
->>   create mode 100644 arch/loongarch/include/uapi/asm/kvm.h
->>
->> diff --git a/arch/loongarch/include/asm/kvm_host.h b/arch/loongarch/include/asm/kvm_host.h
->> new file mode 100644
->> index 000000000000..a8ff3ef9cd55
->> --- /dev/null
->> +++ b/arch/loongarch/include/asm/kvm_host.h
->> @@ -0,0 +1,253 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
->> + */
->> +
->> +#ifndef __ASM_LOONGARCH_KVM_HOST_H__
->> +#define __ASM_LOONGARCH_KVM_HOST_H__
->> +
->> +#include <linux/cpumask.h>
->> +#include <linux/mutex.h>
->> +#include <linux/hrtimer.h>
->> +#include <linux/interrupt.h>
->> +#include <linux/types.h>
->> +#include <linux/kvm.h>
->> +#include <linux/kvm_types.h>
->> +#include <linux/threads.h>
->> +#include <linux/spinlock.h>
->> +
->> +#include <asm/inst.h>
->> +#include <asm/loongarch.h>
->> +
->> +/* Loongarch KVM register ids */
->> +#define LOONGARCH_CSR_32(_R, _S)       \
->> +       (KVM_REG_LOONGARCH_CSR | KVM_REG_SIZE_U32 | (8 * (_R) + (_S)))
->> +
->> +#define LOONGARCH_CSR_64(_R, _S)       \
->> +       (KVM_REG_LOONGARCH_CSR | KVM_REG_SIZE_U64 | (8 * (_R) + (_S)))
->> +
->> +#define KVM_IOC_CSRID(id)              LOONGARCH_CSR_64(id, 0)
->> +#define KVM_GET_IOC_CSRIDX(id)         ((id & KVM_CSR_IDX_MASK) >> 3)
->> +
->> +#define KVM_MAX_VCPUS                  256
->> +/* memory slots that does not exposed to userspace */
->> +#define KVM_PRIVATE_MEM_SLOTS          0
->> +
->> +#define KVM_HALT_POLL_NS_DEFAULT       500000
->> +
->> +struct kvm_vm_stat {
->> +       struct kvm_vm_stat_generic generic;
->> +};
->> +
->> +struct kvm_vcpu_stat {
->> +       struct kvm_vcpu_stat_generic generic;
->> +       u64 idle_exits;
->> +       u64 signal_exits;
->> +       u64 int_exits;
->> +       u64 cpucfg_exits;
->> +};
->> +
->> +struct kvm_arch_memory_slot {
->> +};
->> +
->> +struct kvm_context {
->> +       unsigned long vpid_cache;
->> +       struct kvm_vcpu *last_vcpu;
->> +};
->> +
->> +struct kvm_world_switch {
->> +       int (*guest_eentry)(void);
->> +       int (*enter_guest)(struct kvm_run *run, struct kvm_vcpu *vcpu);
->> +       unsigned long page_order;
->> +};
->> +
->> +struct kvm_arch {
->> +       /* Guest physical mm */
->> +       struct mm_struct gpa_mm;
->> +       /* Mask of CPUs needing GPA ASID flush */
->> +       cpumask_t asid_flush_mask;
->> +
->> +       unsigned char online_vcpus;
->> +       unsigned char is_migrate;
-> is_migrating is better.
-Thanks, I will rename it to is_migrating.
->
->> +       s64 time_offset;
->> +       struct kvm_context __percpu *vmcs;
->> +       unsigned long gpa_size;
-> Move gpa_size under gpa_mm seems better.
-Thanks, I will re-order it.
->> +};
->> +
->> +#define CSR_MAX_NUMS           0x800
->> +
->> +struct loongarch_csrs {
->> +       unsigned long csrs[CSR_MAX_NUMS];
->> +};
->> +
->> +/* Resume Flags */
->> +#define RESUME_GUEST           1
->> +#define RESUME_HOST            0
-> Exchange their order seems better.
-Thanks, I will exchange the two macros.
->
->> +
->> +enum emulation_result {
->> +       EMULATE_DONE,           /* no further processing */
->> +       EMULATE_DO_MMIO,        /* kvm_run filled with MMIO request */
->> +       EMULATE_FAIL,           /* can't emulate this instruction */
->> +       EMULATE_WAIT,           /* WAIT instruction */
-> EMULATE_IDLE? also the comments should be modified.
-This also could be removed, as it is not used and the idle instruction 
-has been emulated in KVM.
->
->> +       EMULATE_EXCEPT,         /* A guest exception has been generated */
->> +       EMULATE_DO_IOCSR,       /* handle IOCSR request */
->> +};
->> +
->> +#define KVM_LARCH_FPU          (0x1 << 0)
->> +#define KVM_LARCH_CSR          (0x1 << 1)
-> I want to change their order, just because we will add LSX/LASX, it is
-> better to let LSX/LASX be together with FPU.
-Thanks, I will re-order them.
->
->> +
->> +struct kvm_vcpu_arch {
->> +       /*
->> +        * Switch pointer-to-function type to unsigned long
->> +        * for loading the value into register directly.
->> +        */
->> +       unsigned long guest_eentry;
->> +       unsigned long host_eentry;
-> Exchange their order seems better, as above.
-Thanks, I will exchange them.
->
->> +
->> +       /* Pointers stored here for easy accessing from assembly code */
->> +       int (*handle_exit)(struct kvm_run *run, struct kvm_vcpu *vcpu);
->> +
->> +       /* Host registers preserved across guest mode execution */
->> +       unsigned long host_sp;
->> +       unsigned long host_tp;
->> +       unsigned long host_pgd;
->> +
->> +       /* Host CSRs are used when handling exits from guest */
->> +       unsigned long badi;
->> +       unsigned long badv;
->> +       unsigned long host_ecfg;
->> +       unsigned long host_estat;
->> +       unsigned long host_percpu;
->> +
->> +       /* GPRs */
->> +       unsigned long gprs[32];
->> +       unsigned long pc;
->> +
->> +       /* FPU state */
->> +       struct loongarch_fpu fpu FPU_ALIGN;
->> +       /* Which auxiliary state is loaded (KVM_LOONGARCH_AUX_*) */
->> +       unsigned int aux_inuse;
-> I also want to change the order of aux_inuse and fpu, just because we
-> may add lbt after fpu in future.
-I will also re-order them, thanks.
->
->> +
->> +       /* CSR state */
->> +       struct loongarch_csrs *csr;
->> +
->> +       /* GPR used as IO source/target */
->> +       u32 io_gpr;
->> +
->> +       struct hrtimer swtimer;
->> +       /* KVM register to control count timer */
->> +       u32 count_ctl;
->> +
->> +       /* Bitmask of exceptions that are pending */
->> +       unsigned long irq_pending;
->> +       /* Bitmask of pending exceptions to be cleared */
->> +       unsigned long irq_clear;
->> +
->> +       /* Cache for pages needed inside spinlock regions */
->> +       struct kvm_mmu_memory_cache mmu_page_cache;
->> +
->> +       /* vcpu's vpid */
->> +       u64 vpid;
->> +
->> +       /* Period of stable timer tick in ns */
->> +       u64 timer_period_ns;
->> +       /* Frequency of stable timer in Hz */
->> +       u64 timer_mhz;
->> +       /* Stable bias from the raw time */
->> +       u64 timer_bias;
->> +       /* Dynamic nanosecond bias (multiple of timer_period_ns) to avoid overflow */
->> +       s64 timer_dyn_bias;
->> +
->> +       ktime_t stable_ktime_saved;
->> +
->> +       u64 core_ext_ioisr[4];
->> +
->> +       /* Last CPU the vCPU state was loaded on */
->> +       int last_sched_cpu;
->> +       /* Last CPU the vCPU actually executed guest code on */
->> +       int last_exec_cpu;
->> +       /* mp state */
->> +       struct kvm_mp_state mp_state;
->> +};
->> +
->> +static inline unsigned long readl_sw_gcsr(struct loongarch_csrs *csr, int reg)
->> +{
->> +       return csr->csrs[reg];
->> +}
->> +
->> +static inline void writel_sw_gcsr(struct loongarch_csrs *csr, int reg,
->> +               unsigned long val)
-> Don't split here, long lines is acceptable now.
-Thanks, I will make it in one line.
->
->> +{
->> +       csr->csrs[reg] = val;
->> +}
->> +
->> +/* Helpers */
->> +static inline bool _kvm_guest_has_fpu(struct kvm_vcpu_arch *arch)
->> +{
->> +       return cpu_has_fpu;
->> +}
->> +
->> +void _kvm_init_fault(void);
->> +
->> +/* Debug: dump vcpu state */
->> +int kvm_arch_vcpu_dump_regs(struct kvm_vcpu *vcpu);
->> +
->> +/* MMU handling */
->> +int kvm_handle_mm_fault(struct kvm_vcpu *vcpu, unsigned long badv, bool write);
->> +void kvm_flush_tlb_all(void);
->> +void _kvm_destroy_mm(struct kvm *kvm);
->> +pgd_t *kvm_pgd_alloc(void);
->> +
->> +#define KVM_ARCH_WANT_MMU_NOTIFIER
->> +int kvm_unmap_hva_range(struct kvm *kvm,
->> +                       unsigned long start, unsigned long end, bool blockable);
->> +void kvm_set_spte_hva(struct kvm *kvm, unsigned long hva, pte_t pte);
->> +int kvm_age_hva(struct kvm *kvm, unsigned long start, unsigned long end);
->> +int kvm_test_age_hva(struct kvm *kvm, unsigned long hva);
->> +
->> +static inline void update_pc(struct kvm_vcpu_arch *arch)
->> +{
->> +       arch->pc += 4;
->> +}
->> +
->> +/**
->> + * kvm_is_ifetch_fault() - Find whether a TLBL exception is due to ifetch fault.
->> + * @vcpu:      Virtual CPU.
->> + *
->> + * Returns:    Whether the TLBL exception was likely due to an instruction
->> + *             fetch fault rather than a data load fault.
->> + */
->> +static inline bool kvm_is_ifetch_fault(struct kvm_vcpu_arch *arch)
->> +{
->> +       return arch->pc == arch->badv;
->> +}
->> +
->> +/* Misc */
->> +static inline void kvm_arch_hardware_unsetup(void) {}
->> +static inline void kvm_arch_sync_events(struct kvm *kvm) {}
->> +static inline void kvm_arch_memslots_updated(struct kvm *kvm, u64 gen) {}
->> +static inline void kvm_arch_sched_in(struct kvm_vcpu *vcpu, int cpu) {}
->> +static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu) {}
->> +static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {}
->> +static inline void kvm_arch_vcpu_block_finish(struct kvm_vcpu *vcpu) {}
->> +static inline void kvm_arch_free_memslot(struct kvm *kvm,
->> +                                  struct kvm_memory_slot *slot) {}
->> +void _kvm_check_vmid(struct kvm_vcpu *vcpu);
->> +enum hrtimer_restart kvm_swtimer_wakeup(struct hrtimer *timer);
->> +int kvm_flush_tlb_gpa(struct kvm_vcpu *vcpu, unsigned long gpa);
->> +void kvm_arch_flush_remote_tlbs_memslot(struct kvm *kvm,
->> +                                       const struct kvm_memory_slot *memslot);
->> +void kvm_init_vmcs(struct kvm *kvm);
->> +void kvm_vector_entry(void);
->> +int  kvm_enter_guest(struct kvm_run *run, struct kvm_vcpu *vcpu);
->> +extern const unsigned long kvm_vector_size;
->> +extern const unsigned long kvm_enter_guest_size;
->> +extern unsigned long vpid_mask;
->> +extern struct kvm_world_switch *kvm_loongarch_ops;
->> +
->> +#define SW_GCSR                (1 << 0)
->> +#define HW_GCSR                (1 << 1)
->> +#define INVALID_GCSR   (1 << 2)
->> +int get_gcsr_flag(int csr);
->> +extern void set_hw_gcsr(int csr_id, unsigned long val);
->> +#endif /* __ASM_LOONGARCH_KVM_HOST_H__ */
->> diff --git a/arch/loongarch/include/asm/kvm_types.h b/arch/loongarch/include/asm/kvm_types.h
->> new file mode 100644
->> index 000000000000..060647b5fe2e
->> --- /dev/null
->> +++ b/arch/loongarch/include/asm/kvm_types.h
->> @@ -0,0 +1,11 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +/*
->> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
->> + */
->> +
->> +#ifndef _ASM_LOONGARCH_KVM_TYPES_H
->> +#define _ASM_LOONGARCH_KVM_TYPES_H
->> +
->> +#define KVM_ARCH_NR_OBJS_PER_MEMORY_CACHE      4
->> +
->> +#endif /* _ASM_LOONGARCH_KVM_TYPES_H */
->> diff --git a/arch/loongarch/include/uapi/asm/kvm.h b/arch/loongarch/include/uapi/asm/kvm.h
->> new file mode 100644
->> index 000000000000..3ccadb73ad8d
->> --- /dev/null
->> +++ b/arch/loongarch/include/uapi/asm/kvm.h
->> @@ -0,0 +1,106 @@
->> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
->> +/*
->> + * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
->> + */
->> +
->> +#ifndef __UAPI_ASM_LOONGARCH_KVM_H
->> +#define __UAPI_ASM_LOONGARCH_KVM_H
->> +
->> +#include <linux/types.h>
->> +
->> +/*
->> + * KVM Loongarch specific structures and definitions.
->> + *
->> + * Some parts derived from the x86 version of this file.
->> + */
->> +
->> +#define __KVM_HAVE_READONLY_MEM
->> +
->> +#define KVM_COALESCED_MMIO_PAGE_OFFSET 1
->> +
->> +/*
->> + * for KVM_GET_REGS and KVM_SET_REGS
->> + */
->> +struct kvm_regs {
->> +       /* out (KVM_GET_REGS) / in (KVM_SET_REGS) */
->> +       __u64 gpr[32];
->> +       __u64 pc;
->> +};
->> +
->> +/*
->> + * for KVM_GET_FPU and KVM_SET_FPU
->> + */
->> +struct kvm_fpu {
->> +       __u32 fcsr;
->> +       __u64 fcc;    /* 8x8 */
->> +       struct kvm_fpureg {
->> +               __u64 val64[4];
->> +       } fpr[32];
->> +};
->> +
->> +/*
->> + * For LoongArch, we use KVM_SET_ONE_REG and KVM_GET_ONE_REG to access various
->> + * registers.  The id field is broken down as follows:
->> + *
->> + *  bits[63..52] - As per linux/kvm.h
->> + *  bits[51..32] - Must be zero.
->> + *  bits[31..16] - Register set.
->> + *
->> + * Register set = 0: GP registers from kvm_regs (see definitions below).
->> + *
->> + * Register set = 1: CSR registers.
->> + *
->> + * Register set = 2: KVM specific registers (see definitions below).
->> + *
->> + * Register set = 3: FPU / SIMD registers (see definitions below).
->> + *
->> + * Other sets registers may be added in the future.  Each set would
->> + * have its own identifier in bits[31..16].
->> + */
->> +
->> +#define KVM_REG_LOONGARCH_GP           (KVM_REG_LOONGARCH | 0x00000ULL)
-> Maybe KVM_REG_LOONGARCH_GPR is better.
->
-> Huacai
-I will change it to KVM_REG_LOONGARCH_GPR.
+This patchset adds initial support for the Nuvoton ma35d1 SoC, including
+initial device tree, clock driver, reset driver, and serial driver.
 
-Thanks
-Tianrui Zhao
->> +#define KVM_REG_LOONGARCH_CSR          (KVM_REG_LOONGARCH | 0x10000ULL)
->> +#define KVM_REG_LOONGARCH_KVM          (KVM_REG_LOONGARCH | 0x20000ULL)
->> +#define KVM_REG_LOONGARCH_FPU          (KVM_REG_LOONGARCH | 0x30000ULL)
->> +#define KVM_REG_LOONGARCH_MASK         (KVM_REG_LOONGARCH | 0x30000ULL)
->> +#define KVM_CSR_IDX_MASK               (0x10000 - 1)
->> +
->> +/*
->> + * KVM_REG_LOONGARCH_KVM - KVM specific control registers.
->> + */
->> +
->> +#define KVM_REG_LOONGARCH_COUNTER      (KVM_REG_LOONGARCH_KVM | KVM_REG_SIZE_U64 | 3)
->> +#define KVM_REG_LOONGARCH_VCPU_RESET   (KVM_REG_LOONGARCH_KVM | KVM_REG_SIZE_U64 | 4)
->> +
->> +struct kvm_debug_exit_arch {
->> +};
->> +
->> +/* for KVM_SET_GUEST_DEBUG */
->> +struct kvm_guest_debug_arch {
->> +};
->> +
->> +/* definition of registers in kvm_run */
->> +struct kvm_sync_regs {
->> +};
->> +
->> +/* dummy definition */
->> +struct kvm_sregs {
->> +};
->> +
->> +struct kvm_iocsr_entry {
->> +       __u32 addr;
->> +       __u32 pad;
->> +       __u64 data;
->> +};
->> +
->> +struct kvm_loongarch_interrupt {
->> +       /* in */
->> +       __u32 cpu;
->> +       __u32 irq;
->> +};
->> +
->> +#define KVM_NR_IRQCHIPS                1
->> +#define KVM_IRQCHIP_NUM_PINS   64
->> +#define KVM_MAX_CORES          256
->> +
->> +#endif /* __UAPI_ASM_LOONGARCH_KVM_H */
->> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
->> index 737318b1c1d9..74d9766277e7 100644
->> --- a/include/uapi/linux/kvm.h
->> +++ b/include/uapi/linux/kvm.h
->> @@ -264,6 +264,7 @@ struct kvm_xen_exit {
->>   #define KVM_EXIT_RISCV_SBI        35
->>   #define KVM_EXIT_RISCV_CSR        36
->>   #define KVM_EXIT_NOTIFY           37
->> +#define KVM_EXIT_LOONGARCH_IOCSR  38
->>
->>   /* For KVM_EXIT_INTERNAL_ERROR */
->>   /* Emulate instruction failed. */
->> @@ -336,6 +337,13 @@ struct kvm_run {
->>                          __u32 len;
->>                          __u8  is_write;
->>                  } mmio;
->> +               /* KVM_EXIT_LOONGARCH_IOCSR */
->> +               struct {
->> +                       __u64 phys_addr;
->> +                       __u8  data[8];
->> +                       __u32 len;
->> +                       __u8  is_write;
->> +               } iocsr_io;
->>                  /* KVM_EXIT_HYPERCALL */
->>                  struct {
->>                          __u64 nr;
->> @@ -1360,6 +1368,7 @@ struct kvm_dirty_tlb {
->>   #define KVM_REG_ARM64          0x6000000000000000ULL
->>   #define KVM_REG_MIPS           0x7000000000000000ULL
->>   #define KVM_REG_RISCV          0x8000000000000000ULL
->> +#define KVM_REG_LOONGARCH      0x9000000000000000ULL
->>
->>   #define KVM_REG_SIZE_SHIFT     52
->>   #define KVM_REG_SIZE_MASK      0x00f0000000000000ULL
->> --
->> 2.39.1
->>
+This patchset cover letter is based from the initial support for Nuvoton
+ma35d1 to keep tracking the version history.
+
+This patchset had been applied to Linux kernel 6.4.0-rc6
+and tested on the Nuvoton ma35d1 SOM evaluation board.
+
+(ma35d1 information: https://www.nuvoton.com/products/microprocessors/arm-cortex-a35-mpus/)
+MA35D1 porting on linux-5.10.y can be found at: https://github.com/OpenNuvoton/MPU-Family
+
+v16:
+  - Removed the patch [PATCH v15 1/2] for the ma35d1 serial driver
+    since it has already been added to tty-testing.
+  - Updated the patch for the ma35d1 clock driver.
+    There are no modifications to the driver itself compared to the
+    previous version. Since the ma35d1 clock driver was picked at v13,
+    we should submit modifications based on that version instead of
+    sending a complete update to replace it. Create a new patch based
+    on the following patch.
+	[v13,08/10] clk: nuvoton: Add clock driver for ma35d1 clock controller
+        https://git.kernel.org/soc/soc/c/691521a367cf
+
+v15:
+  - Modified the serial driver
+    - Instead of adding a new port type PORT_MA35 to serial_core.h,
+      now using port->type = 1.
+    - Updated Kconfig descriptions.
+    - Added a description about the name ttyNVT to the patch log.
+  - Modified the clock driver
+    - Added clk-ma35d1.h for external functions.
+    - Updated all parent strings as clk_parent_data.
+
+v14:
+  - Removed patches PATCH v13 1/10 ~ 9/10 as they were applied
+  - Modify serial driver
+    - Fixed coding style issues
+
+v13:
+  - Modify serial driver
+    - Added a check for oops_in_progress in ma35d1serial_console_write to
+      determine whether to perform the spin_lock.
+    - Rebased drivers/tty/serial/Kconfig and recreate the patch
+    - Rebased MAINTAINERS and recreate the patch
+
+v12:
+  - Modify serial driver
+    - Added PORT_MA35 to include/uapi/linux/serial_core.h, and apply to
+      the port->type of ma35d1 serial driver
+    - Added check for the return value of ioremap()
+    - Fixed several coding issues
+  - Rebase MAINTAINERS and recreate the patch
+
+v11:
+  - Rebase on top of 2023.05.24
+  - Modify serial driver
+    - Fixed several coding style issues
+    - Fixed ma35d1serial_set_mctrl()
+    - Added the 'MA35_' prefix to all register and bit field definitions.
+    - Used 'ttyNVT' instead of 'ttyS'
+  - Modify clock driver
+    - Added 'source nuvoton/Kconfig' to drivers/clk/Kconfig
+    - Fixed several coding issues
+    - Removed unnecessary inline specifier
+  - Modify reset driver
+    - Fixed typo and added comments
+  - Modify ma35d1.dtsi l2-cache node
+    - Added cache-unified and cache-size properties
+
+v10:
+  - Change from using ARCH_NUVOTON to using ARCH_MA35. The following patch files
+    have been modified:
+    - patch 1 arch/arm64/Kconfig.platforms
+    - patch 2 arch/arm64/configs/defconfig
+    - patch 7 arch/arm64/boot/dts/nuvoton/Makefile
+    - patch 8 drivers/clk/Makefile
+              drivers/clk/nuvoton/Kconfig
+              drivers/clk/nuvoton/Makefile
+    - patch 9 drivers/reset/Kconfig
+    - patch 10 drivers/tty/serial/Kconfig
+
+v9:
+  - Combine MAINTAINERS patch into patch 5 'dt-bindings: arm: Add initial bindings
+    for Nuvoton platform'
+  - Modify clock driver
+    - Use the helper function for 64-bit division
+    - Fixed minor issues
+  - Modify reset driver
+    - Refine coding style and add required header files
+    - Add spin_lock protection
+  - Add error return handling to the serial driver probe function
+
+v8:
+  - Remove '0005-dt-bindings-mfd-syscon-Add-nuvoton-ma35d1-sys-compat.patch' as it was applied.
+  - Modify MAINTAINERS NUVOTON MA35 and NPCM path settings
+  - Remove 'syscon' from dtsi 'sys' node and modify the corresponding yaml
+  - Modify clock driver
+    - Remove the header file and move definitions into .c files.
+    - Use parent_data instead of parent name.
+  - Modify serial driver
+  - Modify reset driver
+    - Modify reset register/offset lookup table to be indexed by reset id
+    - Combined reset and reboot structure
+
+v7:
+  - Fixed dts system-management node and compatible driver
+  - move 'nuvoton,npcm-gcr.yaml' from 'binding/arm/nuvoton' to 'binding/soc/nuvoton'
+  - In ma35d1.dtsi, create the soc node for ma35d1 SoC
+  - Modify the issues found in serial driver
+  - Modify the issues found in clock driver
+  - Modify the IDs of reset driver to be contiguous numbers and use lookup table
+    to find register offset and bit position.
+  - Modify MAINTAINERS NUVOTON NPCM path as npcm directory name to nuvoton
+
+v6:
+  - Combine nuvoton,ma35d1-clk.yaml and nuvoton,ma35d1-clk.h into one patch
+  - Combine nuvoton,ma35d1-reset.yaml and nuvoton,ma35d1-reset.h into one patch
+  - rename Documentation/devicetree/bindings/arm/npcm directory as nuvoton
+  - Remove patch for adding include/linux/mfd/ma35d1-sys.h as it's not required
+  - Update dtsi & dts files and move board-specific nodes to dts
+  - Modify reset driver
+  - Modify serial driver, fix coding style issues
+  - Modify clock driver, rewrite the PLL calculation functions
+
+v5:
+  - Add ARCH_NUVOTON to arm64 Kconfig
+  - Add ARCH_NUVOTON to defconfig
+  - Add the clock driver
+  - Add the reset driver
+  - Add the serial driver
+  - Add us to the maintainer
+
+v4:
+  - patch 4/5 is a resend
+  - Fixed dt_binding_check errors of nuvoton,ma35d1-clk.yaml
+  - Modify ma35d1.dtsi
+    1. Add a node hxt_24m
+    2. Fixed the base address of gic node
+    3. Add clocks and clock-names to clock node
+  - Fixed board binding mistakes of nuvoton.yaml
+
+v3:
+  - added patch 4/5 and 5/5
+  - introduce CONFIG_ARCH_NUVOTON option
+  - add initial bindings for Nuvoton Platform boards
+  - fixed coding style problem of nuvoton,ma35d1-clk.h
+  - added CAPLL to clock-controller node
+  - modify the chosen node of ma35d1-evb.dts
+  - modify clock yaml "clk-pll-mode" to "nuvoton,clk-pll-mode"
+
+v2:
+  - fixed dt_binding_check failed of nuvoton,ma35d1-clk.yaml
+
+Jacky Huang (1):
+  clk: nuvoton: Use clk_parent_data instead and add a header file
+
+ drivers/clk/nuvoton/clk-ma35d1-divider.c |   7 +-
+ drivers/clk/nuvoton/clk-ma35d1-pll.c     |   5 +-
+ drivers/clk/nuvoton/clk-ma35d1.c         | 737 +++++++++++++----------
+ drivers/clk/nuvoton/clk-ma35d1.h         |  18 +
+ 4 files changed, 447 insertions(+), 320 deletions(-)
+ create mode 100644 drivers/clk/nuvoton/clk-ma35d1.h
+
+-- 
+2.34.1
 
