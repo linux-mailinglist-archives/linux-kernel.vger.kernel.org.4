@@ -2,125 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BAEB737632
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE063737635
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjFTUlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 16:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38512 "EHLO
+        id S229576AbjFTUl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 16:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbjFTUla (ORCPT
+        with ESMTP id S230071AbjFTUlt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 16:41:30 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E26010F8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:41:29 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-54290603887so2669005a12.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:41:29 -0700 (PDT)
+        Tue, 20 Jun 2023 16:41:49 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10E51728
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:41:46 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f870247d6aso3981972e87.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:41:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687293688; x=1689885688;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5z9pNcxTbLEfuGKBKG4TC9lAt5ChqheSmY8pbRkKfL4=;
-        b=kTkoFl/hOE6DUn0o/TxNy8ei8a0pwF3wJ8WdqIIbNXUDBDjEdeDGAmfD2+RKWGXJTd
-         T3K28E5f3GbYQN1zmSPmZIin3KKlSUuGyR86CjJT1U2jBF/N3FKoBM9bMwkagOXfEehr
-         LE1fzTMO5bKWhTaPLlsyizdUF9TGPy6aFiOY/vnQgdbBWCVEGtA3s/FI33EEAwItrMJh
-         VjtW979fJDNufkx776qo5gq8zTqT3t96sPZU5T73gmbYeidCAK2U6H9M5XTJ3SV4eQVW
-         XmwzVsS4j/HUUONtDF+aGJdqhuO6ywBlWfNmAig3j5c9MqBK1xx+AEcWUY6eaTj23qt/
-         6u3w==
+        d=linaro.org; s=google; t=1687293705; x=1689885705;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Wpug8VhRP2/VT+JyFchtkKrbhG9HevQQcX4lce3tENI=;
+        b=A8w1ZkT3yNt7CK9O+S/xHjWcZXZWRaXyqeeVkXAxXyovhgWLNM1ItEMiCPYqtab/bC
+         0+TyODBzpCQ8pd3o2fyL0LbFo5FADVujEaltjqDI/7ZmaxtcANTLPgiiSwA2LflyQWQ7
+         LeCZVZntYY/R0vvZzmryloqVEBhUVxF3EYQbgal69GvlUBnNcWZ1OG1SoVgzxTBPmgoW
+         6czDds2ebIbuuNtq40h7Ui5GO4vFM7HNvIYAvDLYm7ziLU+FbHmN4s2rJc8KIQ4yPo4t
+         EGDVL2BN1i+cWqKQyHg+mccO0B89S+ZrC7HTDbW8KBjtR/yQK76qWu+TLOoZDdwKb75G
+         tENQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687293688; x=1689885688;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5z9pNcxTbLEfuGKBKG4TC9lAt5ChqheSmY8pbRkKfL4=;
-        b=AI5j9rVTAiYP90WZt9saWQmaW20yi4FSaz46rgoMIJyMH17FsOa3AV82GXCZYHFB/x
-         GsCaQxg+ISyfiuBhCT260HqAQHy08Gen4/wuxdPtB+ad8PMJcfrbEgbRWOREG3s+I1HD
-         7d5JpPRTzuLXPQg7fgawPgcyy1kcXT2WHDaZxhDjdEXUC3/KBlB1ifCCQSaz3pDpT+as
-         YfIHnTWVEHiVXoUWKoQYpzL1bj802s4MMsF7QPX41NFDdNSbMhg+AQlO0I1upTscdGxo
-         Ev56kPsMOpy4ZUJ7qABhCa2JI05c4WtP5xRP+HV6Y6VEEIlvaFhy5cvgUD5hkU+5NlCH
-         4zxQ==
-X-Gm-Message-State: AC+VfDyjHPLnCsfgjzXG0mlaWIBQjg7GsokfT1XBucQ0bvpqjkZlolrQ
-        Ir+0S1QG6rQon/kw/Hg52WktXg==
-X-Google-Smtp-Source: ACHHUZ4aN+60FiuHJ8u8JkwcNH+wuIJ6cgDETNgmrC7TB9kOIDKZRE8DYgI1KARaEW/l8jTpFSXGNw==
-X-Received: by 2002:a05:6a20:432a:b0:115:5910:c82d with SMTP id h42-20020a056a20432a00b001155910c82dmr4124776pzk.43.1687293688585;
-        Tue, 20 Jun 2023 13:41:28 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id 5-20020aa79145000000b006689ecd0ff4sm1442001pfi.208.2023.06.20.13.41.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 13:41:27 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 13:41:27 -0700 (PDT)
-X-Google-Original-Date: Tue, 20 Jun 2023 13:40:46 PDT (-0700)
-Subject:     Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-In-Reply-To: <CAKwvOdn_U+yjFBn6pq5XwP1rTEKA1MWBkd0f2N8wB_nuS1_sWw@mail.gmail.com>
-CC:     Conor Dooley <conor@kernel.org>, jszhang@kernel.org,
-        llvm@lists.linux.dev, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, maskray@google.com,
-        Ard Biesheuvel <ardb@kernel.org>
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     ndesaulniers@google.com
-Message-ID: <mhng-16f1b957-5cf5-4786-a760-e4ab1fbe83ce@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687293705; x=1689885705;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wpug8VhRP2/VT+JyFchtkKrbhG9HevQQcX4lce3tENI=;
+        b=L2s0HjprDPi1aYJcVAcg0pkm1GBsSPj2J1fMxUZwrl/E0mTepXLmUeJPeFUMScPw+l
+         Oy7KRn4I5xGgVRNLcHyE/hwKoiJoxqDT8eVokhqC69njeD7HaDCHVxOzOO23IphM84wu
+         e/DTDKn7NeNjU9925yVFSyQWKL9H87qq2TKqiEkXupMU2txtSd06MhBBiKhFgkaaevsA
+         zwI/fiAYCoe58DO54LSiHH66/EULyccqnfZMCnpyfZbyxY3g+EjqCYDJWANowaST4Fs3
+         3fpylkHiIKC6eP5KMG75aPs+BifnTzZYs9uFx1xoF70fYV4pa99XsGPwSV91hyak9Vl6
+         sQpg==
+X-Gm-Message-State: AC+VfDwJmuXND3gPZE18vRQwtJRo+T3bWX8Lo/iB44kiGeqes++XJG3Q
+        TyjfYQjE6w0iFwh167Cd7xu73Q==
+X-Google-Smtp-Source: ACHHUZ6yH189W7MFWh7b967M1bIkZVxHQdVxLnp/gfp9Jrxu4e9WfcAfJceB3OgIN1robmhVrBqCuw==
+X-Received: by 2002:a19:651b:0:b0:4f9:51b7:a19c with SMTP id z27-20020a19651b000000b004f951b7a19cmr1774132lfb.19.1687293704923;
+        Tue, 20 Jun 2023 13:41:44 -0700 (PDT)
+Received: from [192.168.1.101] (abxj193.neoplus.adsl.tpnet.pl. [83.9.3.193])
+        by smtp.gmail.com with ESMTPSA id l28-20020ac2555c000000b004f867193f17sm496534lfk.39.2023.06.20.13.41.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 13:41:44 -0700 (PDT)
+Message-ID: <2c068a70-65f7-fb55-a95e-0673fb16cb6f@linaro.org>
+Date:   Tue, 20 Jun 2023 22:41:42 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/2] arm64: dts: qcom: sc8280xp-crd: Correct vreg_misc_3p3
+ GPIO
+Content-Language: en-US
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230620203915.141337-1-quic_bjorande@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230620203915.141337-1-quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Jun 2023 13:32:32 PDT (-0700), ndesaulniers@google.com wrote:
-> On Tue, Jun 20, 2023 at 4:13 PM Conor Dooley <conor@kernel.org> wrote:
->>
->> On Tue, Jun 20, 2023 at 04:05:55PM -0400, Nick Desaulniers wrote:
->> > On Mon, Jun 19, 2023 at 6:06 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->> > > On Thu, 15 Jun 2023 06:54:33 PDT (-0700), Palmer Dabbelt wrote:
->> > > > On Wed, 14 Jun 2023 09:25:49 PDT (-0700), jszhang@kernel.org wrote:
->> > > >> On Wed, Jun 14, 2023 at 07:49:17AM -0700, Palmer Dabbelt wrote:
->> > > >>> On Tue, 23 May 2023 09:54:58 PDT (-0700), jszhang@kernel.org wrote:
->>
->> > > >> Commit 3b90b09af5be ("riscv: Fix orphan section warnings caused by
->> > > >> kernel/pi") touches vmlinux.lds.S, so to make the merge easy, this
->> > > >> series is based on 6.4-rc2.
->> > > >
->> > > > Thanks.
->> > >
->> > > Sorry to be so slow here, but I think this is causing LLD to hang on
->> > > allmodconfig.  I'm still getting to the bottom of it, there's a few
->> > > other things I have in flight still.
->> >
->> > Confirmed with v3 on mainline (linux-next is pretty red at the moment).
->> > https://lore.kernel.org/linux-riscv/20230517082936.37563-1-falcon@tinylab.org/
->>
->> Just FYI Nick, there's been some concurrent work here from different
->> people working on the same thing & the v3 you linked (from Zhangjin) was
->> superseded by this v2 (from Jisheng).
->
-> Ah! I've been testing the deprecated patch set, sorry I just looked on
-> lore for "dead code" on riscv-linux and grabbed the first thread,
-> without noticing the difference in authors or new version numbers for
-> distinct series. ok, nevermind my noise.  I'll follow up with the
-> correct patch set, sorry!
+On 20.06.2023 22:39, Bjorn Andersson wrote:
+> The vreg_misc_3p3 regulator is controlled by PMC8280_1 GPIO 2, not 1, on
+> the CRD.
+> 
+> Fixes: ccd3517faf18 ("arm64: dts: qcom: sc8280xp: Add reference device")
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Ya, I hadn't even noticed the v3 because I pretty much only look at 
-patchwork these days.  Like we talked about in IRC, I'm going to go test 
-the merge of this one and see what's up -- I've got it staged at 
-<https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?h=for-next&id=1bd2963b21758a773206a1cb67c93e7a8ae8a195>, 
-though that won't be a stable hash if it's actually broken...
-
->
->>
->> Cheers,
->> Conor.
->
->
->
-> -- 
-> Thanks,
-> ~Nick Desaulniers
+Konrad
+>  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> index b566e403d1db..b21b41a066b6 100644
+> --- a/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-crd.dts
+> @@ -167,7 +167,7 @@ vreg_misc_3p3: regulator-misc-3p3 {
+>  		regulator-min-microvolt = <3300000>;
+>  		regulator-max-microvolt = <3300000>;
+>  
+> -		gpio = <&pmc8280_1_gpios 1 GPIO_ACTIVE_HIGH>;
+> +		gpio = <&pmc8280_1_gpios 2 GPIO_ACTIVE_HIGH>;
+>  		enable-active-high;
+>  
+>  		pinctrl-names = "default";
+> @@ -757,7 +757,7 @@ edp_bl_reg_en: edp-bl-reg-en-state {
+>  	};
+>  
+>  	misc_3p3_reg_en: misc-3p3-reg-en-state {
+> -		pins = "gpio1";
+> +		pins = "gpio2";
+>  		function = "normal";
+>  	};
+>  };
