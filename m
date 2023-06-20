@@ -2,56 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D60D736A57
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 473A3736A5A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:07:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231301AbjFTLHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 07:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43906 "EHLO
+        id S231585AbjFTLHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 07:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232511AbjFTLHG (ORCPT
+        with ESMTP id S231282AbjFTLHJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 07:07:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167A91991;
-        Tue, 20 Jun 2023 04:06:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F9F2611EF;
-        Tue, 20 Jun 2023 11:06:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17477C433C0;
-        Tue, 20 Jun 2023 11:06:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687259190;
-        bh=hVUuY5x5g9EGPajdBvb661xphx1c0Xsm7QeY6bqtW3M=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=hjTWHpL23/rXyCUBKVzdoc0hyunbDzZN+1w5gkgtjtENJuoyeKk+cuX4PA2YuNlSM
-         pjLaSH9XI1M3bK35JiKUoLlUQFWBPDEMkYyGt5v/OfVM5RE/TFAfYRwDUa1rDG79O5
-         qfUSQHcQ6Pzz9BNsYHTxxJoHJH4m50cch9Nrhd46+JoE41H9iRMlrhNrpbWqoOguDV
-         yKZVT/Ype8eUSVlQ2SzB6IsZeK/GV5AGaFim/EJ1dG2T6CWUtGRcUs0dVqYQGznEQ3
-         gNJk0fmEXggDFxjjfMuTjLGJpnyEIDaUQ4hjx3SJT09/qnL5oNCWW7Pz65EKdhp6va
-         N7DRr3V1hLUNg==
-Message-ID: <4c110d97043aa70384da5ad2379b03c3d6e737ff.camel@kernel.org>
-Subject: Re: [PATCH 3/3] selftests: add OFD lock tests
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Stas Sergeev <stsp2@yandex.ru>, linux-kernel@vger.kernel.org
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Date:   Tue, 20 Jun 2023 07:06:28 -0400
-In-Reply-To: <20230620095507.2677463-4-stsp2@yandex.ru>
-References: <20230620095507.2677463-1-stsp2@yandex.ru>
-         <20230620095507.2677463-4-stsp2@yandex.ru>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+        Tue, 20 Jun 2023 07:07:09 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EA510FA
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:06:42 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-307d20548adso3544921f8f.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:06:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687259192; x=1689851192;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KT1ofLh67QbHzizNPx+KKb1VFMOfDe7sYVySqlC78CE=;
+        b=vvm0o8KzU8OoT0ntmU/pUfSjvvC49nx3S7FTzzzPJlvAsWtAy6C6brLF7Fj8PxM9Vm
+         iGC8sMJ6tPeDfy0IDEWUsiphrnvQA8IhuYzbZX1MbbiyWQ1n/sZ+wlaH+H3tmnb/c7WG
+         pJIMNsJt3IGpTFv66jR2x9SerfmU5dZ3LUWwZf2Msd0woFy6XDpNLwqU/LsrJFUcx5S8
+         iyBUv0b7tRkFhw4IUxKEAly8O1hMCTXgp6CFW4hgfNYjDpcSvVlqL+KPeqm+xBPkXQlJ
+         NkBOYSx9XUg48T5aVY2n3+TPRbIrwYE61DNNYSt5HeoqTIlQuBVHsLNYBqUSaUfdQYEk
+         BTbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687259192; x=1689851192;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KT1ofLh67QbHzizNPx+KKb1VFMOfDe7sYVySqlC78CE=;
+        b=UX58YjD/DTNIjb5J3/fSwIkv39sTmcI4/EzkBMoUAcm/dEj4uIStH52mNyysZN+SIW
+         Eo8mo2vhH/fQ0BhG5dPQJRCl1t7Fqg73BZCBg5utCA9ZD4/0e/LPHEabuNDJmHYC6+fd
+         ISc8z99D/4p6B66zqcpM1A2MHBzbTO0Vyi0flCzpSCBn3U9WxmR6tK6ix0Gs72oeJdXh
+         +8GPWEmm+sK2XctG+xG9qqvC4eTZlvGGKRIlSvftOel7rb2dXjTulSozpIx88efZTxNK
+         IYencfEmYketMbrAO6Y3neTWsApndZsGo9ErtNozM6Sqv2HOuTIMlDb3yt/T7ks9nVP5
+         O7hA==
+X-Gm-Message-State: AC+VfDyt7KTUbtzjgbxdISev0li5vXI3VGyrKtT87JWdiR9SLCs4YwFc
+        noGfmloEJK/Mk71WERPi3bYbnw==
+X-Google-Smtp-Source: ACHHUZ4duUXd2dKsPPFa5YwcAu5daqLG6JvhFde9VZTF4QDI938552Au7e9Zc7cCpSzLkMqrSxXzUg==
+X-Received: by 2002:a5d:4fc1:0:b0:30f:c1ab:a039 with SMTP id h1-20020a5d4fc1000000b0030fc1aba039mr7735138wrw.40.1687259192356;
+        Tue, 20 Jun 2023 04:06:32 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id o16-20020a5d6850000000b003047ae72b14sm1736958wrw.82.2023.06.20.04.06.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 04:06:31 -0700 (PDT)
+Message-ID: <ed6f9ab8-9c4e-ec9f-efb7-81974d75f074@linaro.org>
+Date:   Tue, 20 Jun 2023 13:06:29 +0200
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 2/4] dt-bindings: clock: Add Intel Agilex5 clocks and
+ resets
+Content-Language: en-US
+To:     wen.ping.teh@intel.com
+Cc:     adrian.ho.yin.ng@intel.com, andrew@lunn.ch, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, dinguyen@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
+        netdev@vger.kernel.org, niravkumar.l.rabara@intel.com,
+        p.zabel@pengutronix.de, richardcochran@gmail.com,
+        robh+dt@kernel.org, sboyd@kernel.org
+References: <8d5f38e6-2ca6-2c61-da29-1d4d2a3df569@linaro.org>
+ <20230620103930.2451721-1-wen.ping.teh@intel.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230620103930.2451721-1-wen.ping.teh@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,192 +82,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-06-20 at 14:55 +0500, Stas Sergeev wrote:
-> Test the basic locking stuff on 2 fds: multiple read locks,
-> conflicts between read and write locks, use of len=3D=3D0 for queries.
-> Also test for pid and F_UNLCK F_OFD_GETLK extensions.
->=20
-> Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
->=20
-> CC: Shuah Khan <shuah@kernel.org>
-> CC: linux-kernel@vger.kernel.org
-> CC: linux-kselftest@vger.kernel.org
-> CC: Jeff Layton <jlayton@kernel.org>
-> CC: Chuck Lever <chuck.lever@oracle.com>
-> CC: Alexander Viro <viro@zeniv.linux.org.uk>
-> CC: Christian Brauner <brauner@kernel.org>
-> CC: linux-fsdevel@vger.kernel.org
->=20
-> ---
->  tools/testing/selftests/locking/Makefile   |   2 +
->  tools/testing/selftests/locking/ofdlocks.c | 138 +++++++++++++++++++++
->  2 files changed, 140 insertions(+)
->  create mode 100644 tools/testing/selftests/locking/ofdlocks.c
->=20
-> diff --git a/tools/testing/selftests/locking/Makefile b/tools/testing/sel=
-ftests/locking/Makefile
-> index 6e7761ab3536..a83ced1626de 100644
-> --- a/tools/testing/selftests/locking/Makefile
-> +++ b/tools/testing/selftests/locking/Makefile
-> @@ -7,4 +7,6 @@ all:
-> =20
->  TEST_PROGS :=3D ww_mutex.sh
-> =20
-> +TEST_GEN_PROGS :=3D ofdlocks
-> +
->  include ../lib.mk
-> diff --git a/tools/testing/selftests/locking/ofdlocks.c b/tools/testing/s=
-elftests/locking/ofdlocks.c
-> new file mode 100644
-> index 000000000000..1cff350e2c81
-> --- /dev/null
-> +++ b/tools/testing/selftests/locking/ofdlocks.c
-> @@ -0,0 +1,138 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#define _GNU_SOURCE
-> +#include <fcntl.h>
-> +#include <assert.h>
-> +#include <stdio.h>
-> +#include <unistd.h>
-> +#include <string.h>
-> +#include "../kselftest.h"
-> +
-> +static int lock_set(int fd, struct flock *fl)
-> +{
-> +	int ret;
-> +
-> +	fl->l_pid =3D 0;		// needed for OFD locks
-> +	fl->l_whence =3D SEEK_SET;
-> +	ret =3D fcntl(fd, F_OFD_SETLK, fl);
-> +	if (ret)
-> +		perror("fcntl()");
-> +	return ret;
-> +}
-> +
-> +static int lock_get(int fd, struct flock *fl)
-> +{
-> +	int ret;
-> +
-> +	fl->l_pid =3D 0;		// needed for OFD locks
-> +	fl->l_whence =3D SEEK_SET;
-> +	ret =3D fcntl(fd, F_OFD_GETLK, fl);
-> +	if (ret)
-> +		perror("fcntl()");
-> +	return ret;
-> +}
-> +
-> +int main(void)
-> +{
-> +	int rc;
-> +	struct flock fl, fl2;
-> +	int fd =3D open("/tmp/aa", O_RDWR | O_CREAT | O_EXCL, 0600);
-> +	int fd2 =3D open("/tmp/aa", O_RDONLY);
-> +
-> +	unlink("aa");
-> +	assert(fd !=3D -1);
-> +	assert(fd2 !=3D -1);
-> +	ksft_print_msg("[INFO] opened fds %i %i\n", fd, fd2);
-> +
-> +	/* Set some read lock */
-> +	fl.l_type =3D F_RDLCK;
-> +	fl.l_start =3D 5;
-> +	fl.l_len =3D 3;
-> +	rc =3D lock_set(fd, &fl);
-> +	if (rc =3D=3D 0) {
-> +		ksft_print_msg
-> +		    ("[SUCCESS] set OFD read lock on first fd\n");
-> +	} else {
-> +		ksft_print_msg("[FAIL] to set OFD read lock on first fd\n");
-> +		return -1;
-> +	}
-> +	/* Make sure read locks do not conflict on different fds. */
-> +	fl.l_type =3D F_RDLCK;
-> +	fl.l_start =3D 5;
-> +	fl.l_len =3D 1;
-> +	rc =3D lock_get(fd2, &fl);
-> +	if (rc !=3D 0)
-> +		return -1;
-> +	if (fl.l_type !=3D F_UNLCK) {
-> +		ksft_print_msg("[FAIL] read locks conflicted\n");
-> +		return -1;
-> +	}
-> +	/* Make sure read/write locks do conflict on different fds. */
-> +	fl.l_type =3D F_WRLCK;
-> +	fl.l_start =3D 5;
-> +	fl.l_len =3D 1;
-> +	rc =3D lock_get(fd2, &fl);
-> +	if (rc !=3D 0)
-> +		return -1;
-> +	if (fl.l_type !=3D F_UNLCK) {
-> +		ksft_print_msg
-> +		    ("[SUCCESS] read and write locks conflicted\n");
-> +	} else {
-> +		ksft_print_msg
-> +		    ("[SUCCESS] read and write locks not conflicted\n");
-> +		return -1;
-> +	}
-> +	/* Get info about the lock on first fd. */
-> +	fl.l_type =3D F_UNLCK;
-> +	fl.l_start =3D 5;
-> +	fl.l_len =3D 1;
-> +	rc =3D lock_get(fd, &fl);
-> +	if (rc !=3D 0) {
-> +		ksft_print_msg
-> +		    ("[FAIL] F_OFD_GETLK with F_UNLCK not supported\n");
-> +		return -1;
-> +	}
-> +	if (fl.l_type !=3D F_UNLCK) {
-> +		if (fl.l_pid !=3D getpid()) {
-> +			ksft_print_msg
-> +			    ("[FAIL] F_OFD_GETLK does not return pid, %i\n",
-> +			    fl.l_pid);
-> +			return -1;
-> +		}
+On 20/06/2023 12:39, wen.ping.teh@intel.com wrote:
+>>
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    const: intel,agilex5-clkmgr
+>>
+>>
+>> Why "clkmgr", not "clk"? You did not call it Clock manager anywhere in
+>> the description or title.
+>>
+> 
+> The register in Agilex5 handling the clock is named clock_mgr.
+> Previous IntelSocFPGA, Agilex and Stratix10, are also named clkmgr.
 
-A selftest seems like a reasonable thing to add. The above check will
-need to be fixed to not expect a real pid on a OFD lock, of course.
+So use it in description.
 
-> +		ksft_print_msg
-> +		    ("[SUCCESS] F_UNLCK test returns: locked, type %i pid %i len %zi\n=
-",
-> +		     fl.l_type, fl.l_pid, fl.l_len);
-> +	} else {
-> +		ksft_print_msg
-> +		    ("[FAIL] F_OFD_GETLK with F_UNLCK did not return lock info\n");
-> +		return -1;
-> +	}
-> +	/* Try the same but by locking everything by len=3D=3D0. */
-> +	fl2.l_type =3D F_UNLCK;
-> +	fl2.l_start =3D 0;
-> +	fl2.l_len =3D 0;
-> +	rc =3D lock_get(fd, &fl2);
-> +	if (rc !=3D 0) {
-> +		ksft_print_msg
-> +		    ("[FAIL] F_OFD_GETLK with F_UNLCK not supported\n");
-> +		return -1;
-> +	}
-> +	if (memcmp(&fl, &fl2, sizeof(fl))) {
-> +		ksft_print_msg
-> +		    ("[FAIL] F_UNLCK test returns: locked, type %i pid %i len %zi\n",
-> +		     fl.l_type, fl.l_pid, fl.l_len);
-> +		return -1;
-> +	}
-> +	ksft_print_msg("[SUCCESS] F_UNLCK with len=3D=3D0 returned the same\n")=
-;
-> +	/* Get info about the lock on second fd - no locks on it. */
-> +	fl.l_type =3D F_UNLCK;
-> +	fl.l_start =3D 0;
-> +	fl.l_len =3D 0;
-> +	lock_get(fd2, &fl);
-> +	if (fl.l_type !=3D F_UNLCK) {
-> +		ksft_print_msg
-> +		    ("[FAIL] F_OFD_GETLK with F_UNLCK return lock info from another fd=
-\n");
-> +		return -1;
-> +	}
-> +	return 0;
-> +}
+> 
+>>> +
+>>> +  '#clock-cells':
+>>> +    const: 1
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - '#clock-cells'
+>>
+>> Keep the same order as in properties:
+>>
+> 
+> Will update in V2 patch.
+> 
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
+>>> +  # Clock controller node:
+>>> +  - |
+>>> +    clkmgr: clock-controller@10d10000 {
+>>> +      compatible = "intel,agilex5-clkmgr";
+>>> +      reg = <0x10d10000 0x1000>;
+>>> +      #clock-cells = <1>;
+>>> +    };
+>>> +...
+>>> diff --git a/include/dt-bindings/clock/agilex5-clock.h b/include/dt-bindings/clock/agilex5-clock.h
+>>> new file mode 100644
+>>> index 000000000000..4505b352cd83
+>>> --- /dev/null
+>>> +++ b/include/dt-bindings/clock/agilex5-clock.h
+>>
+>> Filename the same as binding. Missing vendor prefix, entirely different
+>> device name.
+>>
+> 
+> Will change filename to intel,agilex5-clock.h in V2.
 
---=20
-Jeff Layton <jlayton@kernel.org>
+Read the comment - same as binding. You did not call binding that way...
+unless you rename the binding.
+
+>>
+>>> +
+>>> +#endif	/* __AGILEX5_CLOCK_H */
+>>> diff --git a/include/dt-bindings/reset/altr,rst-mgr-agilex5.h b/include/dt-bindings/reset/altr,rst-mgr-agilex5.h
+>>> new file mode 100644
+>>> index 000000000000..81e5e8c89893
+>>> --- /dev/null
+>>> +++ b/include/dt-bindings/reset/altr,rst-mgr-agilex5.h
+>>
+>> Same filename as binding.
+>>
+>> But why do you need this file? Your device is not a reset controller.
+> 
+> Because Agilex5 device tree uses the reset definition from this file.
+
+That's not the correct reason. The binding header has nothing to do with
+this device. You miss another patch adding support for your device
+(compatible) with this header.
+
+Best regards,
+Krzysztof
+
