@@ -2,194 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D15897367CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D99F57367CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232346AbjFTJda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 05:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
+        id S232351AbjFTJdn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Jun 2023 05:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbjFTJd0 (ORCPT
+        with ESMTP id S232349AbjFTJdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 05:33:26 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF42A3;
-        Tue, 20 Jun 2023 02:33:24 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35K7qkfO030100;
-        Tue, 20 Jun 2023 09:32:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=ky61XlTFvnA7lVh5OyfvaMQHiiNipeR+9XCFDt37Dwk=;
- b=WJJudu5ihbSzoI/GwMqVJJs6kk+CC9UMvWpbMMTS6FL7ccnm0bl1q635GOd6dEug4d1n
- uqP6+503Oawhj8muKEIWZmukfDBV2x+8CQlGrlHSkImP+4mhuj0v32GQTAXXT50CuxD2
- f3/T030jYt4PtLfFo+JQXYy800Nx1YB+H2GdFZHcuIiPqpzSjpD+h7eWrrP4OfPYEHt5
- Ftw6lW4YbXGFHsGvJrYEsBcWXnKYqNxcrosY/rE9NgThETpcA02MDqQkDRnCMzPSqZq3
- yzrh6L+XrN+Vo46Q7VRFvurCYIVANXa4SYdAJ261EuKqqeQkoBSBSb5XzpR+oDbj0rC3 cA== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rb1dtgykj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Jun 2023 09:32:53 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35K9WqXi010487
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Jun 2023 09:32:52 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 20 Jun 2023 02:32:43 -0700
-Date:   Tue, 20 Jun 2023 15:02:33 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
-        <kishon@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <p.zabel@pengutronix.de>, <arnd@arndb.de>,
-        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
-        <nfraprado@collabora.com>, <broonie@kernel.org>,
-        <rafal@milecki.pl>, <quic_srichara@quicinc.com>,
-        <quic_varada@quicinc.org>, <quic_wcheng@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>
-Subject: Re: [PATCH 2/9] dt-bindings: phy: qcom,m31: Document qcom,m31 USB phy
-Message-ID: <20230620093225.GA9966@varda-linux.qualcomm.com>
-References: <cover.1686126439.git.quic_varada@quicinc.com>
- <14f60578e2935c0844537eab162af3afa52ffe39.1686126439.git.quic_varada@quicinc.com>
- <98960024-7dbc-91a3-75de-90b529637916@linaro.org>
- <20230615052746.GB22186@varda-linux.qualcomm.com>
- <aca54f67-cc09-ff4f-93ca-6973d153db2c@linaro.org>
+        Tue, 20 Jun 2023 05:33:33 -0400
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5195810C;
+        Tue, 20 Jun 2023 02:33:32 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-9877dfee81dso81021066b.0;
+        Tue, 20 Jun 2023 02:33:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687253611; x=1689845611;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8veRSDO+c1M/NiRRX3/FkkNJU7eYtpoHEqkfDswtu0w=;
+        b=IHJoJAECwtRQYdIzBcNDhWoI1gHjDC3JrQwWxOAhZkDL5gkHFF1l6Uu8SR+m249pJn
+         VfbLyvSqAK3gCXZt/NPrNy1mz5EzZOblF9XWsvgyuuIVTMwUQHWoXX3kWg8s0NTo0WzL
+         lNj3dpgiWbIA+Y/XZv/K1b+vwM7Y25VFbBomQ0VIRUBTjxMY+xa8hf/htGFBY1iTO3AX
+         2lqD42iI83isVt7SMHJcgq14qX9CaOk+RzZ+82YAJ7ONw3vexiiQkBpCURfro7hPMKdR
+         9Tbkv+ceNUz8sKw9fLX6fihFfy4IH3mqEbAFjSO/lwMnvBzmla1I6PpYiLBbscB9/ivq
+         RJbA==
+X-Gm-Message-State: AC+VfDzp0mIVmYozh2tC3aHgYjhtptc6+GBZkF+ESdwNief7OF2/BvM9
+        rptJ+tJBa2fO/jRqICWeHJAgK6Em3PuduIEcpso=
+X-Google-Smtp-Source: ACHHUZ4bCq6wxyvc/H4FGm61qtq17pfT2rg6hJnklKykWQgTmtgucZ/X9KgalH+0mvWM5GV4COKbFH0t8NtrBXBV+Zc=
+X-Received: by 2002:a17:906:2243:b0:987:3ea6:1af4 with SMTP id
+ 3-20020a170906224300b009873ea61af4mr6392851ejr.0.1687253610612; Tue, 20 Jun
+ 2023 02:33:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <aca54f67-cc09-ff4f-93ca-6973d153db2c@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: aP3VCaexHP-8vPhMErFKpkN7DtlWrrC8
-X-Proofpoint-GUID: aP3VCaexHP-8vPhMErFKpkN7DtlWrrC8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-20_06,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- bulkscore=0 impostorscore=0 lowpriorityscore=0 phishscore=0 adultscore=0
- suspectscore=0 mlxscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306200084
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <73ad37e4-1689-ed01-f5de-a92dfdaa25c2@kernel.org>
+In-Reply-To: <73ad37e4-1689-ed01-f5de-a92dfdaa25c2@kernel.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 20 Jun 2023 11:33:13 +0200
+Message-ID: <CAJZ5v0jQYf26g7qfp9GKUVwD7PDe-7jJg-2gj-9AsQHCus+Vsg@mail.gmail.com>
+Subject: Re: [GIT PULL] devfreq next for 6.5
+To:     Chanwoo Choi <chanwoo@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "open list:DEVICE FREQUENCY (DEVFREQ)" <linux-pm@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 10:48:41AM +0200, Krzysztof Kozlowski wrote:
-> On 15/06/2023 07:27, Varadarajan Narayanan wrote:
-> >>> +          - enum:
-> >>> +              - qcom,m31-usb-hsphy
-> >>
-> >> I am confused what's this. If m31 is coming from some IP block provider,
-> >> then you are using wrong vendor prefix.
-> >> https://www.m31tech.com/download_file/M31_USB.pdf
-> >>
-> >>
-> >>> +              - qcom,ipq5332-m31-usb-hsphy
-> >>
-> >> This confuses me even more. IPQ m31?
-> >
-> > Will change this to m31,usb-hsphy and m31,ipq5332-usb-hsphy respectively.
-> > Will that be acceptable?
+On Mon, Jun 19, 2023 at 4:11 PM Chanwoo Choi <chanwoo@kernel.org> wrote:
 >
-> m31,ipq5332 seems wrong, as m31 did not create ipq5332. Does the m31
-> device have some name/version/model? If it is not really known, then I
-> would just propose to go with qcom,ipq5332-usb-hsphy.
+> Dear Rafael,
 >
-> Skip generic compatible ("usb-hsphy") entirely.
-
-Ok.
-
-> And then we have... existing bindings qcom,usb-hs-phy.yaml. Don't create
-> something similar with difference in the hyphen. Just use device
-> specific compatible thus device specific filename.
-
-qcom,usb-hs-phy.yaml seems to be for ULPI mode phy and the
-driver we are introducing is for UTMI. We would have to
-modify phy-qcom-usb-hs.c to accomodate M31. Will that be
-acceptable to phy-qcom-usb-hs.c owners/maintainers?
-
-> >>> +
-> >>> +  reg:
-> >>> +    description:
-> >>> +      Offset and length of the M31 PHY register set
-> >>
-> >> Drop description, obvious.
-> >
-> > Ok.
-> >
-> >>> +    maxItems: 2
-> >>> +
-> >>> +  reg-names:
-> >>> +    items:
-> >>> +      - const: m31usb_phy_base
-> >>> +      - const: qscratch_base
-> >>
-> >> Drop "_base" from both.
-> >
-> > Ok. Will drop qscratch_base. This is in the controller space.
-> > Should not come here.
+> This is devfreq-next pull request for v6.5. I add detailed description of
+> this pull request on the following tag. Please pull devfreq with
+> following updates.
 >
-> Then drop reg-names entirely.
-
-Ok.
-
-> >>> +
-> >>> +  phy_type:
-> >>> +    oneOf:
-> >>> +      - items:
-> >>> +          - enum:
-> >>> +              - utmi
-> >>> +              - ulpi
-> >>
-> >> This does not belong to phy, but to USB node.
-> >
-> > This is used by the driver to set a bit during phy init. Hence
-> > have it as a replication of the USB node's entry. If this is not
-> > permissible, is there some way to get this from the USB node,
-> > or any other alternative mechanism?
+> Best Regards,
+> Chanwoo Choi
 >
-> Shouldn't USB controller choose what type of PHY type it wants?
-
-Will remove this. IPQ5332 uses it in UTMI mode only.
-
-> >>> +
-> >>> +additionalProperties: false
-> >>> +
-> >>> +examples:
-> >>> +  - |
-> >>> +    #include <dt-bindings/clock/qcom,ipq5332-gcc.h>
-> >>> +    hs_m31phy_0: hs_m31phy@5b00 {
-> >>
-> >> Node names should be generic. See also explanation and list of examples
-> >> in DT specification:
-> >> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-> >>
-> >> Also, no underscores in node names.
-> >
-> > Will change this as usbphy0:hs_m31phy@7b000
 >
-> This does not solve my comments. I did not write "label" but "node name".
+> The following changes since commit 7877cb91f1081754a1487c144d85dc0d2e2e7fc4:
+>
+>   Linux 6.4-rc4 (2023-05-28 07:49:00 -0400)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git tags/devfreq-next-for-6.5
+>
+> for you to fetch changes up to a83bfdca8b2098999e3edfb87e98925e019eb818:
+>
+>   PM / devfreq: mtk-cci: Fix variable deferencing before NULL check (2023-05-29 23:25:31 +0900)
+>
+> ----------------------------------------------------------------
+> Update devfreq next for v6.5
+>
+> Detailed description for this pull request:
+> 1. Reorder fieldls in 'struct devfreq_dev_status' in order to shrinks the size
+> of 'struct devfreqw_dev_status' without any behavior changes.
+>
+> 2. Add exynos-ppmu.c driver as a soft module dependency in order to prevent
+> the freeze issue between exynos-bus.c devfreq driver and exynos-ppmu.c devfreq
+> event driver.
+>
+> 3. Fix variable deferencing before NULL check on mtk-cci-devfreq.c
+> ----------------------------------------------------------------
+>
+> Christophe JAILLET (1):
+>       PM / devfreq: Reorder fields in 'struct devfreq_dev_status'
+>
+> Marek Szyprowski (1):
+>       PM / devfreq: exynos: add Exynos PPMU as a soft module dependency
+>
+> Sukrut Bellary (1):
+>       PM / devfreq: mtk-cci: Fix variable deferencing before NULL check
+>
+>  drivers/devfreq/exynos-bus.c      | 1 +
+>  drivers/devfreq/mtk-cci-devfreq.c | 3 ++-
+>  include/linux/devfreq.h           | 3 ++-
+>  3 files changed, 5 insertions(+), 2 deletions(-)
 
-Sorry. will fix it.
-
-Thanks
-Varada
+Pulled and added to the linux-next branch of linux-pm.git, thanks!
