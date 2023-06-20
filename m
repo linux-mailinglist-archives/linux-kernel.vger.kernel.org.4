@@ -2,167 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D85E77366B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 708BF7366B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:55:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbjFTIxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 04:53:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53738 "EHLO
+        id S229849AbjFTIzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 04:55:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjFTIxg (ORCPT
+        with ESMTP id S229618AbjFTIzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 04:53:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1858EE7E
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 01:52:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687251169;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JPkt6qjqi1sD2NXj3pKbMA7Q//woLWYUK4JqSn2/djk=;
-        b=ba/ivDwrk0rcJRUaVOhMmLE21OJxlICcF0WyXCccvBiwuGUKQb/yC0piaeHQ5wEYl96pPS
-        Pexn4IUBOGGwhBSqjiC7L5r6MddlePPKE9T01QxD/U2x+AVMTbH2DfZhtZ3nE37ZHQaR05
-        TzBx6HxV7/igMugOmjWBddLMnCtpqNI=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-252-GAD0MhuVMDy2CvD9lnfz1g-1; Tue, 20 Jun 2023 04:52:47 -0400
-X-MC-Unique: GAD0MhuVMDy2CvD9lnfz1g-1
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-763a7abf1c5so137479285a.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 01:52:47 -0700 (PDT)
+        Tue, 20 Jun 2023 04:55:12 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C832E7E
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 01:55:11 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f9083d8849so37476195e9.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 01:55:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687251310; x=1689843310;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4iS2y1OnqzJKxw2HMxOkBjHX6AOsUPw+JImGbUMIxFg=;
+        b=f4JsLlCxHec5vVldrlb1HMkH9i7QC2zxrPMaYwzIjp/HDDLN1HRV4NwopXumEmW9C/
+         xOS/eeLg/uR9ir61is14Ve0SJfuJu3t+W7/nMTrKWjCOOAQ96LZwDvQYMZoFe73ImJgd
+         clCa7NDVHHM6/RGf2ROZIgO/PGPvjq++0F+F8JSPDFXeLszY/Qnw9cVlr7U8srL2ALFo
+         bbMVAkGEwQ6p26WLPXh9kTa8W/qDvZ97c5rEnHDVCJXU55Ud9vmCcss8IGI08NhztPl8
+         4xZNHlvQHigdA1YalBiEAd0jW36yzTHjQr9U+aazJzXB3+Qp3L2Sa9ygBtokYzT3u0dS
+         TjHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687251167; x=1689843167;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JPkt6qjqi1sD2NXj3pKbMA7Q//woLWYUK4JqSn2/djk=;
-        b=OX6KN5vdDfEJ1H/n5/suTk0WtqRaseFW3EFl+6UMWPIpaokD97seBC7VjCh+Ay2edc
-         DOLKbMdtj97HUceTGJgH0TGQ9avaAE9PRS/EVeCyeiRfBCPn+8soBjj0+0pz7Zaf4/wA
-         8WyBNTlNLeJGTGZssTUUh35MhqNqPRlp/SLu0YZmmLLJzPPRRjLWy0qSCO2vGkO34FuB
-         R+7TC6+Q7rHed48UPjcW5Gb+ue504AKAw9i0QeXfEkla204H+JXjLpEJ50S9BD4hqe3c
-         EwSi7HlanWoLCaUP0lmL77nCS6goexVy68ONOoBwBxeJVTqqFDFWPmEwneWc0N/y1OmW
-         vvmQ==
-X-Gm-Message-State: AC+VfDzbLNOdN/WbJrmvdPXpPGRV3zJJTo8iZfVjuVQpS2jGVNwtU0ww
-        J6ChrJvvBtksmRJQ/s0ssuDzYs34kszlwWXIu79/42SaPWZuqdSIxf3bBCwi1Rrs4MAn+MLN+hX
-        9cYp/lY0vfiohubGOngMOw5LMVohUNf3dtgiTVer6
-X-Received: by 2002:a05:620a:8e17:b0:762:55b8:cf89 with SMTP id re23-20020a05620a8e1700b0076255b8cf89mr5715924qkn.21.1687251166818;
-        Tue, 20 Jun 2023 01:52:46 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6IBRZc0xfZRJ8GgWYl3nrqNufoaJNHd5yD2Fh+mDlDMQjIJDCPXrknO/6JAe954R9KXiefbpzFdJSnhLUlrcM=
-X-Received: by 2002:a05:620a:8e17:b0:762:55b8:cf89 with SMTP id
- re23-20020a05620a8e1700b0076255b8cf89mr5715910qkn.21.1687251166599; Tue, 20
- Jun 2023 01:52:46 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687251310; x=1689843310;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4iS2y1OnqzJKxw2HMxOkBjHX6AOsUPw+JImGbUMIxFg=;
+        b=iipGuyCoFEP25xKlyhiv3l/8lu0fl0mmA8tTapVqQ3wJ+EZ4qut1oKLd4VMcsU5Avc
+         F6xvDLLtKSVfBqsb0Pwnx7gductDQX+2cxKjepFub4eefcj57F7h8ppGImaNsIvblQXf
+         dRepNitjooDopmw9T1Cp/prsnwi8usSeh1iZ+zPbSLUhRO2d1q5j5GX3YCkiQddGP81d
+         KiZ+lArNs6B7cnm8zK/5+P4HauA26ixNvpK9FrVkOcYLsiBUzI8Tlw1ZbJerVYzx3KEe
+         pV5s/VpRP9K1SO5HzK68SNCDClIzD59haqG+OHK3NGp8dVMIGkjBc+2ge2Ys4IAmDVR8
+         VuWQ==
+X-Gm-Message-State: AC+VfDz++PnYFTojv49rfiCxvoBjAt8OaFaXUbVgkSwux1OwPtC3ceu8
+        aQ2ayUyrhFlZp7+YjgVTXzSuVA==
+X-Google-Smtp-Source: ACHHUZ5VCu5k4nHF4t4LkDOSbvpBchpWq0tIlTiaANTgj8U6JwAarF7fg48kO+5pn74BlAToa9pfzw==
+X-Received: by 2002:a7b:cc99:0:b0:3f9:b88a:f9aa with SMTP id p25-20020a7bcc99000000b003f9b88af9aamr831636wma.11.1687251310048;
+        Tue, 20 Jun 2023 01:55:10 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id i2-20020a05600c290200b003f42d8dd7d1sm12932116wmd.7.2023.06.20.01.55.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 01:55:09 -0700 (PDT)
+Message-ID: <1a5c39d8-812f-4a8d-bc65-205695661973@linaro.org>
+Date:   Tue, 20 Jun 2023 10:55:06 +0200
 MIME-Version: 1.0
-References: <20230619204826.755559-1-yukuai1@huaweicloud.com> <20230619204826.755559-4-yukuai1@huaweicloud.com>
-In-Reply-To: <20230619204826.755559-4-yukuai1@huaweicloud.com>
-From:   Xiao Ni <xni@redhat.com>
-Date:   Tue, 20 Jun 2023 16:52:35 +0800
-Message-ID: <CALTww2_jEw+vOn+jp_p=b9mUO-7ovmdn=0-gzCmYD1O0HHqQUw@mail.gmail.com>
-Subject: Re: [PATCH -next 3/8] raid5: fix missing io accounting in raid5_align_endio()
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     song@kernel.org, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com, yangerkun@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: net: motorcomm: Add pad driver
+ strength cfg
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Guo Samin <samin.guo@starfivetech.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Conor Dooley <conor@kernel.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, Peter Geis <pgwipeout@gmail.com>,
+        Frank <Frank.Sae@motor-comm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+References: <20230526090502.29835-1-samin.guo@starfivetech.com>
+ <20230526090502.29835-2-samin.guo@starfivetech.com>
+ <20230526-glutinous-pristine-fed571235b80@spud>
+ <1dbf113c-7592-68bd-6aaf-05ff1d8c538c@starfivetech.com>
+ <15eb4ffe-ea12-9a2c-ae9d-c34860384b60@starfivetech.com>
+ <20230620-clicker-antivirus-99e24a06954e@wendy>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230620-clicker-antivirus-99e24a06954e@wendy>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 8:50=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.com> w=
-rote:
->
-> From: Yu Kuai <yukuai3@huawei.com>
->
-> Io will only be accounted as done from raid5_align_endio() if the io
-> succeed, and io inflight counter will be leaked if such io failed.
->
-> Fix this problem by switching to use md_account_bio() for io accounting.
->
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> ---
->  drivers/md/raid5.c | 29 ++++++++---------------------
->  1 file changed, 8 insertions(+), 21 deletions(-)
->
-> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
-> index cef0b400b2ee..4cdb35e54251 100644
-> --- a/drivers/md/raid5.c
-> +++ b/drivers/md/raid5.c
-> @@ -5468,26 +5468,17 @@ static struct bio *remove_bio_from_retry(struct r=
-5conf *conf,
->   */
->  static void raid5_align_endio(struct bio *bi)
->  {
-> -       struct md_io_clone *md_io_clone =3D bi->bi_private;
-> -       struct bio *raid_bi =3D md_io_clone->orig_bio;
-> -       struct mddev *mddev;
-> -       struct r5conf *conf;
-> -       struct md_rdev *rdev;
-> +       struct bio *raid_bi =3D bi->bi_private;
-> +       struct md_rdev *rdev =3D (void *)raid_bi->bi_next;
-> +       struct mddev *mddev =3D rdev->mddev;
-> +       struct r5conf *conf =3D mddev->private;
->         blk_status_t error =3D bi->bi_status;
-> -       unsigned long start_time =3D md_io_clone->start_time;
->
->         bio_put(bi);
-> -
-> -       rdev =3D (void*)raid_bi->bi_next;
->         raid_bi->bi_next =3D NULL;
-> -       mddev =3D rdev->mddev;
-> -       conf =3D mddev->private;
-> -
->         rdev_dec_pending(rdev, conf->mddev);
->
->         if (!error) {
-> -               if (blk_queue_io_stat(raid_bi->bi_bdev->bd_disk->queue))
-> -                       bio_end_io_acct(raid_bi, start_time);
->                 bio_endio(raid_bi);
->                 if (atomic_dec_and_test(&conf->active_aligned_reads))
->                         wake_up(&conf->wait_for_quiescent);
-> @@ -5506,7 +5497,6 @@ static int raid5_read_one_chunk(struct mddev *mddev=
-, struct bio *raid_bio)
->         struct md_rdev *rdev;
->         sector_t sector, end_sector, first_bad;
->         int bad_sectors, dd_idx;
-> -       struct md_io_clone *md_io_clone;
->         bool did_inc;
->
->         if (!in_chunk_boundary(mddev, raid_bio)) {
-> @@ -5543,16 +5533,13 @@ static int raid5_read_one_chunk(struct mddev *mdd=
-ev, struct bio *raid_bio)
->                 return 0;
->         }
->
-> -       align_bio =3D bio_alloc_clone(rdev->bdev, raid_bio, GFP_NOIO,
-> -                                   &mddev->io_clone_set);
-> -       md_io_clone =3D container_of(align_bio, struct md_io_clone, bio_c=
-lone);
-> +       md_account_bio(mddev, &raid_bio);
->         raid_bio->bi_next =3D (void *)rdev;
-> -       if (blk_queue_io_stat(raid_bio->bi_bdev->bd_disk->queue))
-> -               md_io_clone->start_time =3D bio_start_io_acct(raid_bio);
-> -       md_io_clone->orig_bio =3D raid_bio;
->
-> +       align_bio =3D bio_alloc_clone(rdev->bdev, raid_bio, GFP_NOIO,
-> +                                   &mddev->bio_set);
->         align_bio->bi_end_io =3D raid5_align_endio;
-> -       align_bio->bi_private =3D md_io_clone;
-> +       align_bio->bi_private =3D raid_bio;
->         align_bio->bi_iter.bi_sector =3D sector;
->
->         /* No reshape active, so we can trust rdev->data_offset */
-> --
-> 2.39.2
->
+On 20/06/2023 10:26, Conor Dooley wrote:
+> Hey,
+> 
+> On Tue, Jun 20, 2023 at 11:09:52AM +0800, Guo Samin wrote:
+>> From: Guo Samin <samin.guo@starfivetech.com>
+>>> From: Conor Dooley <conor@kernel.org>
+>>>> On Fri, May 26, 2023 at 05:05:01PM +0800, Samin Guo wrote:
+>>>>> The motorcomm phy (YT8531) supports the ability to adjust the drive
+>>>>> strength of the rx_clk/rx_data, the value range of pad driver
+>>>>> strength is 0 to 7.
+> 
+>>>>> +  motorcomm,rx-clk-driver-strength:
+>>>>> +    description: drive strength of rx_clk pad.
+>>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>>> +    enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+>>>>
+>>>> I think you should use minimum & maximum instead of these listed out
+>>>> enums.
+> 
+>>>  You have also had this comment since v1 & were reminded of it on
+>>>> v2 by Krzysztof: "What do the numbers mean? What are the units? mA?"
+> 
+>>> The good news is that we just got some data about units from Motorcomm. 
+>>> Maybe I can post the data show of the unit later after I get the complete data.
+> 
+>> Sorry, haven't updated in a while.
+> 
+> NW chief.
+> 
+>> I just got the detailed data of Driver Strength(DS) from Motorcomm , which applies to both rx_clk and rx_data.
+>>
+>> |----------------------|
+>> |     ds map table     |
+>> |----------------------|
+>> | DS(3b) | Current (mA)|
+>> |--------|-------------|
+>> |   000  |     1.20    |
+>> |   001  |     2.10    |
+>> |   010  |     2.70    |
+>> |   011  |     2.91    |
+>> |   100  |     3.11    |
+>> |   101  |     3.60    |
+>> |   110  |     3.97    |
+>> |   111  |     4.35    |
+>> |--------|-------------|
+>>
+>> Since these currents are not integer values and have no regularity,
 
-Reviewed-by: Xiao Ni <xni@redhat.com>
+There is no mA unit in DT schema, so I don't see what by "not integer
+values". 1200 uA is an integer.
+
+>> it is not very good to use in the drive/dts in my opinion.
+> 
+> Who says you have to use mA? What about uA?
+
+Yep
+
+> 
+>> Therefore, I tend to continue to use DS(0-7) in dts/driver, and adding
+>> a description of the current value corresponding to DS in dt-bindings. 
+> 
+> I think this goes against not putting register values into the dts &
+> that the accurate description of the hardware are the currents.
+
+For vendor properties register values are often accepted, but logical
+unit is much more readable in the DTS. Also allows further customization
+or extending when new variant appears. You cannot do extend a property
+easily when it holds a register value, without changing the meaning per
+variant.
+
+> 
+>> Like This:
+>>
+>> +  motorcomm,rx-clk-driver-strength:
+>> +    description: drive strength of rx_clk pad.
+> 
+> You need "description: |" to preserve the formatting if you add tables,
+> but I don't think that this is a good idea. Put the values in here that
+> describe the hardware (IOW the currents) and then you don't need to have
+> this table.
+> 
+>> +      |----------------------|
+>> +      | rx_clk ds map table  |
+>> +      |----------------------|
+>> +      | DS(3b) | Current (mA)|
+>> +      |   000  |     1.20    |
+>> +      |   001  |     2.10    |
+>> +      |   010  |     2.70    |
+>> +      |   011  |     2.91    |
+>> +      |   100  |     3.11    |
+>> +      |   101  |     3.60    |
+>> +      |   110  |     3.97    |
+>> +      |   111  |     4.35    |
+>> +      |--------|-------------|
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+>> +    default: 3
+>> +
+> 
+>> Or use minimum & maximum instead of these listed out enums
+> 
+> With the actual current values, enum rather than min + max.
+
+
+
+Best regards,
+Krzysztof
 
