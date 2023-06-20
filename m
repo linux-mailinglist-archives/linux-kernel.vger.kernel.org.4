@@ -2,148 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44D39736AA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5B5736AAC
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232240AbjFTLP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 07:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
+        id S229995AbjFTLPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 07:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbjFTLPZ (ORCPT
+        with ESMTP id S231334AbjFTLPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 07:15:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2066DB
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:14:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687259681;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mu3ZQzCMoDG/BdFJ4c8DVA27suqD5RiJoI5p+Cmymt4=;
-        b=OWlVsml/39/YkE0agg5rZuZ8ZVgLCCqGV4k9xQBvrarcU61ErE0qfhhiaLQ8gf2SAuEvKi
-        0oZpntp5XqXhUC5zQ+xWjse4OyXGvJ2YUm6uv58JyXNt8D7BzbIgndTlgAv27mBjuAvtG7
-        U9LAU726B7o0aRYphEltmhBokKfuxi4=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-447-Fck9umUFNu2kfS7xz5oT_w-1; Tue, 20 Jun 2023 07:14:39 -0400
-X-MC-Unique: Fck9umUFNu2kfS7xz5oT_w-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f9b8e0896aso2339925e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:14:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687259678; x=1689851678;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mu3ZQzCMoDG/BdFJ4c8DVA27suqD5RiJoI5p+Cmymt4=;
-        b=J29AqVgJ0lmkl8kNFfeK2jXiue0swEmv+qjjBkxKMO8MvDVN/s7ys/kCqwvBd+ZZ/l
-         ButZmHHrKRZ1jrYGKlmXDR4M0rzDhI2eu4FwGTwg3L1l28S1CJnFit2OPXJtxTxWFnua
-         pDrVGrMlAlM6cJvDB9j8Dk0F0utYUZnAVV7qJUdWS9WbPu5+gYUmvxUUPYvUdDqtoXK9
-         lOVsnNhfW/flDAkJw9kG7u+98kPBvZ8JGnbm0bnz1KaQF8cFCX6CuH1WrRBK7siq7g6s
-         D0ivEH6n3FUJLbaVmjOWekDslPGBy7vsMNauIEohzYZ5+qoNCgb/eVnOF4+2M6xTE0og
-         HJQQ==
-X-Gm-Message-State: AC+VfDzzMyfz+/JYTau6TgRpGWXNu2nP8/ViXsQM9r51Ngm3fR4AnkmE
-        TwGbKE6qOV9VcwnOZrcuxShvFCrOaJyw1zQwQZW6h0T8w1D+N9EOxXWJijjuCTAr4A8eCaTVDyH
-        8sbOeO2ylRytTRxVIZoOqiTSB
-X-Received: by 2002:a05:600c:ad7:b0:3f9:991:61da with SMTP id c23-20020a05600c0ad700b003f9099161damr6086204wmr.39.1687259678528;
-        Tue, 20 Jun 2023 04:14:38 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6u6jldeAOsB6wg1qa0UPiJcOns6sSKWJbgG0tPJvfJ3eO3oLpf80/A1fUaVkJjziN4kC9ERA==
-X-Received: by 2002:a05:600c:ad7:b0:3f9:991:61da with SMTP id c23-20020a05600c0ad700b003f9099161damr6086174wmr.39.1687259678152;
-        Tue, 20 Jun 2023 04:14:38 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c739:d200:8745:c520:8bf6:b587? (p200300cbc739d2008745c5208bf6b587.dip0.t-ipconnect.de. [2003:cb:c739:d200:8745:c520:8bf6:b587])
-        by smtp.gmail.com with ESMTPSA id p19-20020a05600c469300b003f7f475c3bcsm22876375wmo.1.2023.06.20.04.14.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jun 2023 04:14:37 -0700 (PDT)
-Message-ID: <193d0e6d-27b6-b50e-8a3e-35c1816b20fc@redhat.com>
-Date:   Tue, 20 Jun 2023 13:14:36 +0200
+        Tue, 20 Jun 2023 07:15:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0EC170D;
+        Tue, 20 Jun 2023 04:15:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 15B21611D7;
+        Tue, 20 Jun 2023 11:15:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D368BC433C8;
+        Tue, 20 Jun 2023 11:15:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687259740;
+        bh=gY7r5fhXjGMEV4iMCERo0oKWNzD4Sri8qWgbpiUBRcc=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=t3BnSv/S97c1CPksUHzlRRMHJk93SzMJYVD5kDScBhoYNXLdICZ4ki8BaEYMNN0To
+         s8NvrQH41CoosUfjRv5gUbDqA6vCVfM/VNA7yMQmbghpBOrTlpKiC4GWdolzQ/+L2m
+         2F9x/JVhA8SojTnk2DLsNwXHHjcnnV1/DZsu2JPFPS8MR9GiMif7lGwqKW8biyXU7v
+         1rbSaOAqtqUB8HbU1BVjD4J99gG5nCWgsLIVRk2BG5lGtrk/7wSYiOU+iog7HTVqvY
+         jrLAIqa4DZwCOmvNOMUK0krmpMiz0rhoIxMBbDIjv+rD0Yg0f3HwWuDkxh4TdCAJ1l
+         4hZA64ZMLEYqQ==
+Message-ID: <e1a59fa3eb821e66cdc95fcecc68ef9f9434ddf5.camel@kernel.org>
+Subject: Re: [PATCH 1/3] fs/locks: F_UNLCK extension for F_OFD_GETLK
+From:   Jeff Layton <jlayton@kernel.org>
+To:     stsp <stsp2@yandex.ru>, linux-kernel@vger.kernel.org
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Date:   Tue, 20 Jun 2023 07:15:38 -0400
+In-Reply-To: <e7586b46-ff65-27ff-e829-c6009d7d4808@yandex.ru>
+References: <20230620095507.2677463-1-stsp2@yandex.ru>
+         <20230620095507.2677463-2-stsp2@yandex.ru>
+         <c6d4e620cad72da5f85df03443a64747b5719939.camel@kernel.org>
+         <e7586b46-ff65-27ff-e829-c6009d7d4808@yandex.ru>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v11 06/20] x86/virt/tdx: Handle SEAMCALL running out of
- entropy error
-Content-Language: en-US
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     "Hansen, Dave" <dave.hansen@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-References: <cover.1685887183.git.kai.huang@intel.com>
- <9b3582c9f3a81ae68b32d9997fcd20baecb63b9b.1685887183.git.kai.huang@intel.com>
- <dfb59553-2777-15ed-d523-6a7cc5b68e53@redhat.com>
- <1cc1879691fcd077fed1a485de799594d751a8ec.camel@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <1cc1879691fcd077fed1a485de799594d751a8ec.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.06.23 12:39, Huang, Kai wrote:
-> 
->>> @@ -33,12 +34,24 @@ static int __always_unused seamcall(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
->>>    				    struct tdx_module_output *out)
->>>    {
->>>    	int cpu, ret = 0;
->>> +	int retry;
->>>    	u64 sret;
->>>    
->>>    	/* Need a stable CPU id for printing error message */
->>>    	cpu = get_cpu();
->>>    
->>> -	sret = __seamcall(fn, rcx, rdx, r8, r9, out);
->>> +	/*
->>> +	 * Certain SEAMCALL leaf functions may return error due to
->>> +	 * running out of entropy, in which case the SEAMCALL should
->>> +	 * be retried.  Handle this in SEAMCALL common function.
->>> +	 *
->>> +	 * Mimic the existing rdrand_long() to retry
->>> +	 * RDRAND_RETRY_LOOPS times.
->>> +	 */
->>> +	retry = RDRAND_RETRY_LOOPS;
->>
->> Nit: I'd just do a "int retry = RDRAND_RETRY_LOOPS" and simplify this
->> comment to "Mimic rdrand_long() retry behavior."
-> 
-> OK will do.
-> 
-> But I think you are talking about replacing the second paragraph but not the
-> entire comment?
->
+On Tue, 2023-06-20 at 16:00 +0500, stsp wrote:
+> Hello,
+>=20
+> 20.06.2023 15:46, Jeff Layton =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > On Tue, 2023-06-20 at 14:55 +0500, Stas Sergeev wrote:
+> > > Currently F_UNLCK with F_OFD_GETLK returns -EINVAL.
+> > > The proposed extension allows to use it for getting the lock
+> > > information from the particular fd.
+> > >=20
+> > > Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
+> > >=20
+> > > CC: Jeff Layton <jlayton@kernel.org>
+> > > CC: Chuck Lever <chuck.lever@oracle.com>
+> > > CC: Alexander Viro <viro@zeniv.linux.org.uk>
+> > > CC: Christian Brauner <brauner@kernel.org>
+> > > CC: linux-fsdevel@vger.kernel.org
+> > > CC: linux-kernel@vger.kernel.org
+> > >=20
+> > > ---
+> > >   fs/locks.c | 23 ++++++++++++++++++++---
+> > >   1 file changed, 20 insertions(+), 3 deletions(-)
+> > >=20
+> > > diff --git a/fs/locks.c b/fs/locks.c
+> > > index df8b26a42524..210766007e63 100644
+> > > --- a/fs/locks.c
+> > > +++ b/fs/locks.c
+> > > @@ -868,6 +868,21 @@ static bool posix_locks_conflict(struct file_loc=
+k *caller_fl,
+> > >   	return locks_conflict(caller_fl, sys_fl);
+> > >   }
+> > >  =20
+> > > +/* Determine if lock sys_fl blocks lock caller_fl. Used on xx_GETLK
+> > > + * path so checks for additional GETLK-specific things like F_UNLCK.
+> > > + */
+> > > +static bool posix_test_locks_conflict(struct file_lock *caller_fl,
+> > > +				      struct file_lock *sys_fl)
+> > > +{
+> > > +	/* F_UNLCK checks any locks on the same fd. */
+> > > +	if (caller_fl->fl_type =3D=3D F_UNLCK) {
+> > > +		if (!posix_same_owner(caller_fl, sys_fl))
+> > > +			return false;
+> > > +		return locks_overlap(caller_fl, sys_fl);
+> > > +	}
+> > > +	return posix_locks_conflict(caller_fl, sys_fl);
+> > > +}
+> > > +
+> > >   /* Determine if lock sys_fl blocks lock caller_fl. FLOCK specific
+> > >    * checking before calling the locks_conflict().
+> > >    */
+> > > @@ -901,7 +916,7 @@ posix_test_lock(struct file *filp, struct file_lo=
+ck *fl)
+> > >   retry:
+> > >   	spin_lock(&ctx->flc_lock);
+> > >   	list_for_each_entry(cfl, &ctx->flc_posix, fl_list) {
+> > > -		if (!posix_locks_conflict(fl, cfl))
+> > > +		if (!posix_test_locks_conflict(fl, cfl))
+> > >   			continue;
+> > >   		if (cfl->fl_lmops && cfl->fl_lmops->lm_lock_expirable
+> > >   			&& (*cfl->fl_lmops->lm_lock_expirable)(cfl)) {
+> > > @@ -2207,7 +2222,8 @@ int fcntl_getlk(struct file *filp, unsigned int=
+ cmd, struct flock *flock)
+> > >   	if (fl =3D=3D NULL)
+> > >   		return -ENOMEM;
+> > >   	error =3D -EINVAL;
+> > > -	if (flock->l_type !=3D F_RDLCK && flock->l_type !=3D F_WRLCK)
+> > > +	if (cmd !=3D F_OFD_GETLK && flock->l_type !=3D F_RDLCK
+> > > +			&& flock->l_type !=3D F_WRLCK)
+> > >   		goto out;
+> > >  =20
+> > >   	error =3D flock_to_posix_lock(filp, fl, flock);
+> > > @@ -2414,7 +2430,8 @@ int fcntl_getlk64(struct file *filp, unsigned i=
+nt cmd, struct flock64 *flock)
+> > >   		return -ENOMEM;
+> > >  =20
+> > >   	error =3D -EINVAL;
+> > > -	if (flock->l_type !=3D F_RDLCK && flock->l_type !=3D F_WRLCK)
+> > > +	if (cmd !=3D F_OFD_GETLK && flock->l_type !=3D F_RDLCK
+> > > +			&& flock->l_type !=3D F_WRLCK)
+> > >   		goto out;
+> > >  =20
+> > >   	error =3D flock64_to_posix_lock(filp, fl, flock);
+> > This seems like a reasonable sort of interface to add, particularly for
+> > the CRIU case.
+>=20
+> Just for the record: my own cases are
+> the remaining 2. CRIU case is not mine
+> and I haven't talked to CRIU people
+> about that.
+>=20
+>=20
+> >   Using F_UNLCK for this is a bit kludgey, but adding a new
+> > constant is probably worse.
+> >=20
+> > I'm willing to take this in with an eye toward v6.6. Are you also
+> > willing to draft up some manpage patches that detail this new interface=
+?
+> Sure thing.
+> As soon as its applied, I'll prepare a man
+> patch, or should it be done before that point?
 
-Yes.
+These days, it's a good idea to go ahead and draft that up early. You'll
+be surprised what sort of details you notice once you have to start
+writing documentation. ;)
 
--- 
-Cheers,
-
-David / dhildenb
-
+You can post it as part of this set on the next posting and just mention
+that it's a draft manpage patch. You should also include the linux-api
+mailing list on the next posting so we get some feedback on the
+interface itself.
+--=20
+Jeff Layton <jlayton@kernel.org>
