@@ -2,135 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D0A1737275
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50805737285
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:17:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229640AbjFTRQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 13:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
+        id S230139AbjFTRRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 13:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjFTRQa (ORCPT
+        with ESMTP id S229677AbjFTRRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 13:16:30 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827A51731
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:16:29 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-970028cfb6cso777729066b.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:16:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687281388; x=1689873388;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4pF+pbuKwnnUSf7HjydZZ4Y6kXmV3E8StMoT4kTs5Yk=;
-        b=J4qs28kqJpyhRb76QRp0I40cAnEaxKxBKkXMXnsUK1SP/LyXeHWqxRClnHzdvqv2eP
-         JRaLqIv7GOpgvUuNPQbEXebCYL0itLC7W6Bq5X3NVXuEK164vSfo9eZ2L0lQ6CbwmZ61
-         TfzVDrpwKoGcsimDrCPZL10b3/O8Fv1MroAtHDfLK4A2B5ilxRmpQN4vwAaGNVUeyvRZ
-         HKu3SSS5+2N4Yc2OFuiX2QC5NTDZ+lHlR5yehThHBUyUVhOxn4x10ImF+bvqEJZS9B6r
-         B3Z7vc0g3dmxmyyP9tBvhO4IP0RZhNm3znLMy3aOMQj5Dus/3431mApyqcPIfEDqwXqz
-         ic5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687281388; x=1689873388;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4pF+pbuKwnnUSf7HjydZZ4Y6kXmV3E8StMoT4kTs5Yk=;
-        b=jl5GRieNMnz8IYozNl4yWoUT2FDvuHhIMa5PDbUV1NOj/8pf7d7CKEbm6ukjTtP+0m
-         weXk1rly1TGooyCXX4UKyxmszo/icx/YsXAw0MV/mtFMVeWyeqWcOZIpm/DlsZflEq7Z
-         HHH3EN0t2g74h1epyvIUzRMFmfwApxkqgJCqyxQ9+MVoFOJdo1lasKKWanuTnZ5cR5o5
-         xUuwINgYFYwjnahQy1ROt0usduaMMmOTeOwKZACyxcJ9t5MnvzrPzux48SD+K5BK5tF5
-         tlb4v+w9852wNQfC4AGgXStrPpF8CsnnF7mBYB5dFSutbLdPw8WSNIfdw8D6TP1hC9le
-         zSBQ==
-X-Gm-Message-State: AC+VfDyCiKoFLE3FCCeOMSzjq8fCEhgHVhd61UsYHmHdHcfs/FeKFQq3
-        0IpAF1nnTyrIpn0AeXaMHFXliA==
-X-Google-Smtp-Source: ACHHUZ6JpIdZ+DsHzq/hrEBvw1zDmz7mGJJKZVMQvPZoMnHUZFDF9712tTzeKqGk+c3TMjn0w5lLjQ==
-X-Received: by 2002:a17:907:d0b:b0:974:55ea:1ad8 with SMTP id gn11-20020a1709070d0b00b0097455ea1ad8mr14239950ejc.63.1687281387968;
-        Tue, 20 Jun 2023 10:16:27 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id y19-20020a17090614d300b00982d0563b11sm1715211ejc.197.2023.06.20.10.16.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jun 2023 10:16:27 -0700 (PDT)
-Message-ID: <5ae8c143-64cf-469d-b4f2-bed5bd9ee87b@linaro.org>
-Date:   Tue, 20 Jun 2023 19:16:25 +0200
+        Tue, 20 Jun 2023 13:17:09 -0400
+Received: from smtp.smtpout.orange.fr (smtp-15.smtpout.orange.fr [80.12.242.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A68DE65
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:17:06 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id BeyRq9Ac9Axl5BeySqLWtt; Tue, 20 Jun 2023 19:17:05 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1687281425;
+        bh=99hiLLnAyI5yDRgBpH9IVWLw2LVj2GwUR2aCEsKndXY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=rDvZx7HN/iruLYrTntNDAskOWqRRTycBqIqYGvcSdq/10hfbHinNiEEQw6CfQtgOj
+         hU5kqVgOfMlDGDT8sq7LK29UrsS7KxHfBd9GKJlN9RUuchiXxC+aH5seNscmODDNXs
+         7gt4hVyfA7hGZyBRWoqtg6W6mwxSGmVmAmPhdwjE/IGrBINMoPRw9rXMp9WWy2NHCx
+         o3V0CLkfGgaz/yfsjVLd+wHHqQo6B49um1pve8Db6kpC2ox12e9u/Z5vIxaPiLOe2x
+         eOXYaR6fTeypLQOUA0VJfi/uuZFFuhTBUSXdNZIxtYULL4dVnb/qvV3fyiUFMvWzaN
+         qHJCCo6KCPK/g==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Tue, 20 Jun 2023 19:17:05 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <458e18b0-cdf7-1a27-ed18-00dd6858615e@wanadoo.fr>
+Date:   Tue, 20 Jun 2023 19:16:59 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCHv2] dt-bindings: arm: socionext: add Synquacer platforms
-To:     jaswinder.singh@linaro.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, robh@kernel.org,
-        ilias.apalodimas@linaro.org, masahisa.kojima@linaro.org
-References: <20230616035813.255062-1-jaswinder.singh@linaro.org>
- <20230620170725.13794-1-jaswinder.singh@linaro.org>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230620170725.13794-1-jaswinder.singh@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] gnss: Use devm_regulator_get_enable_optional()
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <62effa7aa1a2023a77709e6416c57d9cb79a5ccc.1686995765.git.christophe.jaillet@wanadoo.fr>
+ <ZJFqCQ8bbBoX3l1g@hovoldconsulting.com>
+Content-Language: fr, en-GB
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <ZJFqCQ8bbBoX3l1g@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/06/2023 19:07, jaswinder.singh@linaro.org wrote:
-> From: Jassi Brar <jaswinder.singh@linaro.org>
+Le 20/06/2023 à 10:57, Johan Hovold a écrit :
+> On Sat, Jun 17, 2023 at 11:57:09AM +0200, Christophe JAILLET wrote:
+>> Use devm_regulator_get_enable_optional() instead of hand writing it. It
+>> saves some line of code.
+>>
+>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+>> ---
+>> Note that regulator_disable() is now called after gnss_serial_free() in
+>> the error handling path of the probe and in the remove function, but it
+>> looks harmless to me.
 > 
-> Socionext's DeveloperBox is based on the SC2A11B SoC (Synquacer).
-> Specify bindings for the platform and boards based on that.
+> Yeah, that bit should be fine.
 > 
-> Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
-> ---
-
-Attach changelog after ---.
-
->  .../bindings/arm/socionext/synquacer.yaml     | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/socionext/synquacer.yaml
+>> ---
+>>   drivers/gnss/mtk.c | 26 ++++----------------------
+>>   1 file changed, 4 insertions(+), 22 deletions(-)
+>>
+>> diff --git a/drivers/gnss/mtk.c b/drivers/gnss/mtk.c
+>> index c62b1211f4fe..d3d31295d4e0 100644
+>> --- a/drivers/gnss/mtk.c
+>> +++ b/drivers/gnss/mtk.c
+>> @@ -17,7 +17,6 @@
+>>   #include "serial.h"
+>>   
+>>   struct mtk_data {
+>> -	struct regulator *vbackup;
+>>   	struct regulator *vcc;
+>>   };
+>>   
+>> @@ -87,30 +86,16 @@ static int mtk_probe(struct serdev_device *serdev)
+>>   		goto err_free_gserial;
+>>   	}
+>>   
+>> -	data->vbackup = devm_regulator_get_optional(&serdev->dev, "vbackup");
+>> -	if (IS_ERR(data->vbackup)) {
+>> -		ret = PTR_ERR(data->vbackup);
+>> -		if (ret == -ENODEV)
+>> -			data->vbackup = NULL;
+>> -		else
+>> -			goto err_free_gserial;
+>> -	}
+>> -
+>> -	if (data->vbackup) {
+>> -		ret = regulator_enable(data->vbackup);
+>> -		if (ret)
+>> -			goto err_free_gserial;
+>> -	}
+>> +	ret = devm_regulator_get_enable_optional(&serdev->dev, "vbackup");
+>> +	if (ret)
+>> +		goto err_free_gserial;
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/socionext/synquacer.yaml b/Documentation/devicetree/bindings/arm/socionext/synquacer.yaml
-> new file mode 100644
-> index 000000000000..c582d9c31213
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/arm/socionext/synquacer.yaml
-> @@ -0,0 +1,29 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/arm/socionext/synquacer.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Socionext Synquacer platform
-> +
-> +maintainers:
-> +  - Masahisa Kojima <masahisa.kojima@linaro.org>
-> +  - Jassi Brar <jaswinder.singh@linaro.org>
-> +
-> +description:
-> +  Socionext SC2A11B (Synquacer) SoC based boards
-> +
-> +properties:
-> +  $nodename:
-> +    const: '/'
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - socionext,developer-box
-> +              - socionext,synquacer
-> +          - const: socionext,sc2a11b
+> But this breaks the driver as the new helper still returns -ENODEV when
+> the optional is resource is not present.
 
-That's quite different change. What is synquacer in this case? You claim
-now it is a board, but based on previous discussions and U-Boot source
-it does not look like such. What's more, it does not match U-Boot
-sources and there is no Linux user of this, so it contradicts points of
-our previous discussion.
+Ouch!
 
+Thanks for the feedback. I urgently need to double check some other 
+similar proposals I've made.
 
-Best regards,
-Krzysztof
+Sorry for the broken patch :(
+
+CJ
+
+> 
+> Wolfram already suggested using this new helper here:
+> 
+> 	https://lore.kernel.org/lkml/20230523064310.3005-3-wsa+renesas@sang-engineering.com
+> 
+> and also got the error handling right even if that patch will require a
+> respin for other reasons.
+> 
+> As I mentioned in my reply to Wolfram, I'm generally sceptical of
+> helpers like this one, but in this case where there are no dependencies
+> on other resources I guess it's ok.
+> 
+> Johan
+> 
 
