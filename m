@@ -2,90 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB37736AB2
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D79736AB3
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbjFTLQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 07:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49830 "EHLO
+        id S232230AbjFTLQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 07:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232248AbjFTLQJ (ORCPT
+        with ESMTP id S230326AbjFTLQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 07:16:09 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81130E41;
-        Tue, 20 Jun 2023 04:16:07 -0700 (PDT)
-Received: from [192.168.10.54] (unknown [119.155.63.248])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 625B56606F8B;
-        Tue, 20 Jun 2023 12:15:59 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687259765;
-        bh=9GLoBafzRKep+sfRcHSOXwHpBcUQH7mDHyYgcZt+Ayo=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=nuRdlc/dlE4e+aZlxWLESNo2ASmaZ9pydw7shRqKbOuVl6ZV2pE7U+gUqVBjVjmqE
-         XKrx1Fi8LV5uvNBV7NzQcQA+FlyVHDifO4VuB50ITuTeqjQxbXyBF+T+kA+nu+9KnP
-         eEnfoUPlAlMkw5ELiNCnI+gCVnTPw4zl6uFzI8aKeqr/B4SpVDz1mZMiBxyG9qTo+p
-         cVubvh598HIQVoF0HMAEHsvvHqe8Wgu1ieFCf6y21KRvwIdVt8W3G262bFPOu7GX2/
-         u47jq44EqqR2k+MaUSV2BBDlx/7d5xwDa4380MFiMfITvxCXPD8RoC3DlTZQpThO+0
-         QiUUrZYoND6pg==
-Message-ID: <444ed144-a2ee-cb16-880a-128383c83a08@collabora.com>
-Date:   Tue, 20 Jun 2023 16:15:55 +0500
+        Tue, 20 Jun 2023 07:16:13 -0400
+Received: from smtp1.axis.com (smtp1.axis.com [195.60.68.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1907C4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:16:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1687259767;
+  x=1718795767;
+  h=from:date:subject:mime-version:content-transfer-encoding:
+   message-id:to:cc;
+  bh=jUSYZgaftLFTXoGuck09rxFUuGbEnF1/FEdMdmbgZCI=;
+  b=hkjBAvWiZafNtu1YNGsxATAgmD0ywmAPKDoZmo90K28CUkdqvgXsP4vm
+   etZT4DlhojMVl7kwVl9/yg7y/udmS51lHVj2t5tYm34NwbqNLmA6U2aRs
+   eW+o7ST/rCq1tbys4c4zJZLssO5bKmqqh8LKsEmAlhEPN4eI86ztSS3bP
+   dRIRmJ9qp1MB23wy5peVJLodDRunxc3tgDitUxe+Sct5WuJAJh7iw53zx
+   gOj6yotnxUJ1AEu3IIDHqTMAbD95d+RsYGj/hhcdX4fES5+sJn3MokOpi
+   z109Pudk+cleh1aRCk+3zuUoMjO6lSCZiCO65Kv7BVNRG+lrzZtzgWxax
+   Q==;
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+Date:   Tue, 20 Jun 2023 13:16:00 +0200
+Subject: [PATCH v2] genirq: Fix nested thread vs synchronize_hardirq()
+ deadlock
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Content-Language: en-US
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-References: <20230613102905.2808371-1-usama.anjum@collabora.com>
- <20230613102905.2808371-3-usama.anjum@collabora.com>
- <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
- <0db01d90-09d6-08a4-bbb8-70670d3baa94@collabora.com>
- <CABb0KFEn5TU480A=YiN82nLRtGyKMABi8cZjuiGUU_jFZZo+8g@mail.gmail.com>
- <34203acf-7270-7ade-a60e-ae0f729dcf70@collabora.com>
- <CABb0KFFaXgJD99pWfx3MC+qrq5jUaPis_kZo6U8yL_8xdp0GJA@mail.gmail.com>
- <96b7cc00-d213-ad7d-1b48-b27f75b04d22@collabora.com>
- <CABb0KFEy_mRaT86TEOQ-BoTe_XOVw3Kp5VdzOfEEaiZJuT754g@mail.gmail.com>
- <39bc8212-9ee8-dbc1-d468-f6be438b683b@collabora.com>
- <CABb0KFHx2hV9M7oinCdKnagRmcrGHagH9eAO3TkVTQH+o9x=5A@mail.gmail.com>
- <2e1b80f1-0385-0674-ae5f-9703a6ef975d@collabora.com>
- <CABb0KFGOx69Sz6w9JenYUwSTFmW-Cmcns3X-oDyWsC+H57vkvg@mail.gmail.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFGOx69Sz6w9JenYUwSTFmW-Cmcns3X-oDyWsC+H57vkvg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-ID: <20230613-genirq-nested-v2-1-fd5114b1e90c@axis.com>
+X-B4-Tracking: v=1; b=H4sIAG+KkWQC/3WNQQ6CMBAAv0L27BpaQhVP/sNwaMsCe7CVLiEYw
+ t8t3D3OJJPZQCgxCTyKDRItLBxDBn0pwI82DITcZQZd6qo0qsKBAqcJA8lMHRpdG6Wt6W1ZQ26
+ cFUKXbPDjUfUxVof+JOp5PTevNvPIMsf0Pa+LOuy/waJQob43nVe1uxnTPO3KcvXxDe2+7z8u8
+ RQOwAAAAA==
+To:     Thomas Gleixner <tglx@linutronix.de>
+CC:     <linux-kernel@vger.kernel.org>, <kernel@axis.com>,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -94,124 +54,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/19/23 1:16 PM, Michał Mirosław wrote:
-> On Fri, 16 Jun 2023 at 08:57, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
->>
->> On 6/16/23 1:07 AM, Michał Mirosław wrote:
->>> On Thu, 15 Jun 2023 at 17:11, Muhammad Usama Anjum
->>> <usama.anjum@collabora.com> wrote:
->>>> On 6/15/23 7:52 PM, Michał Mirosław wrote:
->>>>> On Thu, 15 Jun 2023 at 15:58, Muhammad Usama Anjum
->>>>> <usama.anjum@collabora.com> wrote:
->>>>>> I'll send next revision now.
->>>>>> On 6/14/23 11:00 PM, Michał Mirosław wrote:
->>>>>>> (A quick reply to answer open questions in case they help the next version.)
-> [...]
->>>>>>> I guess this will be reworked anyway, but I'd prefer this didn't need
->>>>>>> custom errors etc. If we agree to decoupling the selection and GET
->>>>>>> output, it could be:
->>>>>>>
->>>>>>> bool is_interesting_page(p, flags); // this one does the
->>>>>>> required/anyof/excluded match
->>>>>>> size_t output_range(p, start, len, flags); // this one fills the
->>>>>>> output vector and returns how many pages were fit
->>>>>>>
->>>>>>> In this setup, `is_interesting_page() && (n_out = output_range()) <
->>>>>>> n_pages` means this is the final range, no more will fit. And if
->>>>>>> `n_out == 0` then no pages fit and no WP is needed (no other special
->>>>>>> cases).
->>>>>> Right now, pagemap_scan_output() performs the work of both of these two
->>>>>> functions. The part can be broken into is_interesting_pages() and we can
->>>>>> leave the remaining part as it is.
->>>>>>
->>>>>> Saying that n_out < n_pages tells us the buffer is full covers one case.
->>>>>> But there is case of maximum pages have been found and walk needs to be
->>>>>> aborted.
->>>>>
->>>>> This case is exactly what `n_out < n_pages` will cover (if scan_output
->>>>> uses max_pages properly to limit n_out).
->>>>> Isn't it that when the buffer is full we want to abort the scan always
->>>>> (with WP if `n_out > 0`)?
->>>> Wouldn't it be duplication of condition if buffer is full inside
->>>> pagemap_scan_output() and just outside it. Inside pagemap_scan_output() we
->>>> check if we have space before putting data inside it. I'm using this same
->>>> condition to indicate that buffer is full.
->>>
->>> I'm not sure what do you mean? The buffer-full conditions would be
->>> checked in ..scan_output() and communicated to the caller by returning
->>> N less than `n_pages` passed in. This is exactly how e.g. read()
->>> works: if you get less than requested you've hit the end of the file.
->>> If the file happens to have size that is equal to the provided buffer
->>> length, the next read() will return 0.
->> Right now we have:
->>
->> pagemap_scan_output():
->>         if (p->vec_buf_index >= p->vec_buf_len)
->>                 return PM_SCAN_BUFFER_FULL;
->>         if (p->found_pages == p->max_pages)
->>                 return PM_SCAN_FOUND_MAX_PAGES;
-> 
-> Why do you need to differentiate between those cases?
-> 
->> pagemap_scan_pmd_entry():
->>         ret = pagemap_scan_output(bitmap, p, start, n_pages);
->>         if (ret >= 0) // success
->>                 make_UFFD_WP and flush
->>         else
->>                 buffer_error
->>
->> You are asking me to do:
->>
->> pagemap_scan_output():
->>         if (p->vec_buf_index >= p->vec_buf_len)
->>                 return 0;
-> 
->>         if (p->found_pages == p->max_pages)
->>                 return PM_SCAN_FOUND_MAX_PAGES;
-> 
-> This should be instead:
-> 
-> n_pages = min(p->max_pags - p_found_pages, n_pages)
-> ...
-> return n_pages;
-You are missing the optimization here that we check for full buffer every
-time adding to user buffer. This was added to remove extra iteration of
-page walk if buffer is full already. The way you are suggesting will remove it.
+There is a possibility of deadlock if synchronize_hardirq() is called
+when the nested threaded interrupt is active.  The following scenario
+was observed on a uniprocessor PREEMPT_NONE system:
 
-So you are returning remaining pages to be found now. This doesn't seem
-right. If max_pages is 520, found_pages is 0 and n_pages is 512 before
-calling pagemap_scan_output(). found_pages would become 512 after adding
-512 pages to output buffer. But n_pages would return 8 instead of 512. You
-were saying we should return the number of pages added to the output buffer.
+ Thread 1                      Thread 2
 
-> 
->> pagemap_scan_pmd_entry():
->>         ret = pagemap_scan_output(bitmap, p, start, n_pages);
->>         if (ret > 0) // success
->>                 make_UFFD_WP and flush
->>         else if (ret == 0) // buffer full
->>                 return PM_SCAN_BUFFER_FULL;
->>         else //other errors
->>                 buffer_error
-> 
-> And this would be:
-> 
-> if (ret > 0 && WP)
->    WP + flush
-> 
-> if (ret < n_pages)
->    return -ENOSPC;
-> 
->> So you are asking me to go from consie code to write more lines of code. I
->> would write more lines without any issue if it improves readability and
->> logical sense. But I don't see here any benefit.
-> 
-> Please see the clarifications above.
-> 
-> Best Regards
-> Michał Mirosław
+ handle_nested_thread()
+  Set INPROGRESS
+  Call ->thread_fn()
+   thread_fn goes to sleep
 
+                              free_irq()
+                               __synchronize_hardirq()
+                                Busy-loop forever waiting for INPROGRESS
+                                to be cleared
+
+The INPROGRESS flag is only supposed to be used for hard interrupt
+handlers.  Remove the incorrect usage in the nested threaded interrupt
+case and instead re-use the threads_active / wait_for_threads mechanism
+to wait for nested threaded interrupts to complete.
+
+Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+---
+Changes in v2:
+- Reword commit message.
+- Refactor and reuse synchronize_irq() instead of ending up open coding
+  it.
+- Link to v1: https://lore.kernel.org/r/20230613-genirq-nested-v1-1-289dc15b7669@axis.com
+---
+ kernel/irq/chip.c   |  5 +++--
+ kernel/irq/manage.c | 26 +++++++++++++++-----------
+ 2 files changed, 18 insertions(+), 13 deletions(-)
+
+diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+index 49e7bc871fece..3e4b4c6de8195 100644
+--- a/kernel/irq/chip.c
++++ b/kernel/irq/chip.c
+@@ -476,7 +476,7 @@ void handle_nested_irq(unsigned int irq)
+ 	}
+ 
+ 	kstat_incr_irqs_this_cpu(desc);
+-	irqd_set(&desc->irq_data, IRQD_IRQ_INPROGRESS);
++	atomic_inc(&desc->threads_active);
+ 	raw_spin_unlock_irq(&desc->lock);
+ 
+ 	action_ret = IRQ_NONE;
+@@ -487,7 +487,8 @@ void handle_nested_irq(unsigned int irq)
+ 		note_interrupt(desc, action_ret);
+ 
+ 	raw_spin_lock_irq(&desc->lock);
+-	irqd_clear(&desc->irq_data, IRQD_IRQ_INPROGRESS);
++	if (atomic_dec_and_test(&desc->threads_active))
++		wake_up(&desc->wait_for_threads);
+ 
+ out_unlock:
+ 	raw_spin_unlock_irq(&desc->lock);
+diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+index d2742af0f0fd8..b38c2c7c5c705 100644
+--- a/kernel/irq/manage.c
++++ b/kernel/irq/manage.c
+@@ -108,6 +108,18 @@ bool synchronize_hardirq(unsigned int irq)
+ }
+ EXPORT_SYMBOL(synchronize_hardirq);
+ 
++static void __synchronize_irq(struct irq_desc *desc)
++{
++	__synchronize_hardirq(desc, true);
++	/*
++	 * We made sure that no hardirq handler is
++	 * running. Now verify that no threaded handlers are
++	 * active.
++	 */
++	wait_event(desc->wait_for_threads,
++		   !atomic_read(&desc->threads_active));
++}
++
+ /**
+  *	synchronize_irq - wait for pending IRQ handlers (on other CPUs)
+  *	@irq: interrupt number to wait for
+@@ -127,16 +139,8 @@ void synchronize_irq(unsigned int irq)
+ {
+ 	struct irq_desc *desc = irq_to_desc(irq);
+ 
+-	if (desc) {
+-		__synchronize_hardirq(desc, true);
+-		/*
+-		 * We made sure that no hardirq handler is
+-		 * running. Now verify that no threaded handlers are
+-		 * active.
+-		 */
+-		wait_event(desc->wait_for_threads,
+-			   !atomic_read(&desc->threads_active));
+-	}
++	if (desc)
++		__synchronize_irq(desc);
+ }
+ EXPORT_SYMBOL(synchronize_irq);
+ 
+@@ -1944,7 +1948,7 @@ static struct irqaction *__free_irq(struct irq_desc *desc, void *dev_id)
+ 	 * supports it also make sure that there is no (not yet serviced)
+ 	 * interrupt in flight at the hardware level.
+ 	 */
+-	__synchronize_hardirq(desc, true);
++	__synchronize_irq(desc);
+ 
+ #ifdef CONFIG_DEBUG_SHIRQ
+ 	/*
+
+---
+base-commit: 858fd168a95c5b9669aac8db6c14a9aeab446375
+change-id: 20230613-genirq-nested-625612a6fa05
+
+Best regards,
 -- 
-BR,
-Muhammad Usama Anjum
+Vincent Whitchurch <vincent.whitchurch@axis.com>
+
