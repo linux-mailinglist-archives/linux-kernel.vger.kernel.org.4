@@ -2,56 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 567DE737432
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8585273743B
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbjFTSac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 14:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57348 "EHLO
+        id S229974AbjFTSbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 14:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjFTSa1 (ORCPT
+        with ESMTP id S230055AbjFTSbt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 14:30:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9339710E6;
-        Tue, 20 Jun 2023 11:30:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 308A061408;
-        Tue, 20 Jun 2023 18:30:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 821DDC433CD;
-        Tue, 20 Jun 2023 18:30:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687285824;
-        bh=dmdXO9EOYaPTDvdSJBnvA6ZG2eBsDyhXoF36rRwzS3U=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=HX/7fMO/S4aAENDKMTbje1k9LH7K5j5D4cx3kzyNLELuzAASgOw8zVG/+74soZWn+
-         e0kwt/26rZdhKJ3x0j2pCFXMN7Xpdf1ZOxy9UqO1Di3g4ICvzSs34qNvf6bKDNUeWk
-         iHmbXi4meSkAlZvTZk25futRCTyvR597EtcjR8jrBQW0M3a0z7JaXrM6WweL5UHmVN
-         MaMRZtj+M3wAHYQtRsTYHDbHtrwneVvEZr+FqGFZtvxQ8G6/9QJO7J61u+2DxB3J/2
-         sofQnK4/b8QFpxKFtvXfWDvUuyju3J+tlanxjxDR0cusRQOyf23yKnpYXNKc8/7YV9
-         40RKjgtoVi3Lw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 58C9CE301FA;
-        Tue, 20 Jun 2023 18:30:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 20 Jun 2023 14:31:49 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BEE19AD;
+        Tue, 20 Jun 2023 11:31:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687285892; x=1718821892;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=MGK1v29PlpQ4gM+C4AVD7bAgauo2HgqlxyHUJfasklE=;
+  b=JdplwFrkdpQJ9xkLf+JaDG9YL3ukiu7IIUZmpNlNg0M6dB3TE4o8QMFQ
+   Mj2uWNATEqcMbD6SMYWiR6ZdiVlAQ+Q9dBcCZCbsqsAhnRbow/9LoGQF+
+   A4YtSBJZ6QaevrCa8JxJki/N/BSh5QDjtN5125n6Rq6B+XqVGfNU9VxSK
+   qTJR17BTo3ugfWxRmiXdpLyCc2fDRWBxuk3QGCjUG6+QtAVaau5bkUEcU
+   Ac0eai/F6j20EFAebr3PUllQAcPIKNI1dCg3PGfv6/2/BIRWrE424l0PS
+   0MErYx/lpvyQd9rJy5OUdSJ7KbDOj1Gm/GXjB2F3kAW+7s2plzzs6oQzh
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="344693992"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="344693992"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 11:30:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="888347339"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="888347339"
+Received: from oyloh-mobl.amr.corp.intel.com (HELO [10.209.25.231]) ([10.209.25.231])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 11:30:51 -0700
+Message-ID: <49cb0f01-f1c2-8812-7f2f-9a70ff576085@linux.intel.com>
+Date:   Tue, 20 Jun 2023 11:30:51 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] Bluetooth: hci_sysfs: make bt_class a static const structure
-From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <168728582435.12887.8737547745115004930.git-patchwork-notify@kernel.org>
-Date:   Tue, 20 Jun 2023 18:30:24 +0000
-References: <20230620144051.580683-2-gregkh@linuxfoundation.org>
-In-Reply-To: <20230620144051.580683-2-gregkh@linuxfoundation.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ivan.orlov0322@gmail.com, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH v8 1/2] x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
+To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
+        dan.j.williams@intel.com, dave.hansen@intel.com,
+        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
+        jane.chu@oracle.com, kirill.shutemov@linux.intel.com,
+        kys@microsoft.com, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, rostedt@goodmis.org, seanjc@google.com,
+        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
+        x86@kernel.org, mikelley@microsoft.com
+Cc:     linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com,
+        rick.p.edgecombe@intel.com
+References: <20230620154830.25442-1-decui@microsoft.com>
+ <20230620154830.25442-2-decui@microsoft.com>
+Content-Language: en-US
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20230620154830.25442-2-decui@microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,28 +75,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi,
 
-This patch was applied to bluetooth/bluetooth-next.git (master)
-by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
-
-On Tue, 20 Jun 2023 16:40:52 +0200 you wrote:
-> From: Ivan Orlov <ivan.orlov0322@gmail.com>
+On 6/20/23 8:48 AM, Dexuan Cui wrote:
+> GHCI spec for TDX 1.0 says that the MapGPA call may fail with the R10
+> error code = TDG.VP.VMCALL_RETRY (1), and the guest must retry this
+> operation for the pages in the region starting at the GPA specified
+> in R11.
 > 
-> Now that the driver core allows for struct class to be in read-only
-> memory, move the bt_class structure to be declared at build time
-> placing it into read-only memory, instead of having to be dynamically
-> allocated at load time.
+> When a fully enlightened TDX guest runs on Hyper-V, Hyper-V can return
+> the retry error when set_memory_decrypted() is called to decrypt up to
+> 1GB of swiotlb bounce buffers.
 > 
-> [...]
+> Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+> Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> ---
+> 
+>  arch/x86/coco/tdx/tdx.c           | 63 +++++++++++++++++++++++++------
+>  arch/x86/include/asm/shared/tdx.h |  2 +
+>  2 files changed, 53 insertions(+), 12 deletions(-)
+> 
+> Changes in v2:
+>   Used __tdx_hypercall() directly in tdx_map_gpa().
+>   Added a max_retry_cnt of 1000.
+>   Renamed a few variables, e.g., r11 -> map_fail_paddr.
+> 
+> Changes in v3:
+>   Changed max_retry_cnt from 1000 to 3.
+> 
+> Changes in v4:
+>   __tdx_hypercall(&args, TDX_HCALL_HAS_OUTPUT) -> __tdx_hypercall_ret()
+>   Added Kirill's Acked-by.
+> 
+> Changes in v5:
+>   Added Michael's Reviewed-by.
+> 
+> Changes in v6: None.
+> 
+> Changes in v7:
+>   Addressed Dave's comments:
+>   see https://lwn.net/ml/linux-kernel/SA1PR21MB1335736123C2BCBBFD7460C3BF46A@SA1PR21MB1335.namprd21.prod.outlook.com
+> 
+> Changes in v8:
+>   Rebased to tip.git's master branch.
+> 
+> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+> index 1d6b863c42b0..0c198ab73aa7 100644
+> --- a/arch/x86/coco/tdx/tdx.c
+> +++ b/arch/x86/coco/tdx/tdx.c
+> @@ -703,14 +703,16 @@ static bool tdx_cache_flush_required(void)
+>  }
+>  
+>  /*
+> - * Inform the VMM of the guest's intent for this physical page: shared with
+> - * the VMM or private to the guest.  The VMM is expected to change its mapping
+> - * of the page in response.
+> + * Notify the VMM about page mapping conversion. More info about ABI
+> + * can be found in TDX Guest-Host-Communication Interface (GHCI),
+> + * section "TDG.VP.VMCALL<MapGPA>".
+>   */
+> -static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+> +static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
+>  {
+> -	phys_addr_t start = __pa(vaddr);
+> -	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
+> +	const int max_retries_per_page = 3;
 
-Here is the summary with links:
-  - Bluetooth: hci_sysfs: make bt_class a static const structure
-    https://git.kernel.org/bluetooth/bluetooth-next/c/665baafde870
+Add some details about why you chose 3? Maybe you can also use macro for it.
 
-You are awesome, thank you!
+> +	struct tdx_hypercall_args args;
+> +	u64 map_fail_paddr, ret;
+> +	int retry_count = 0;
+>  
+>  	if (!enc) {
+>  		/* Set the shared (decrypted) bits: */
+> @@ -718,12 +720,49 @@ static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+>  		end   |= cc_mkdec(0);
+>  	}
+>  
+> -	/*
+> -	 * Notify the VMM about page mapping conversion. More info about ABI
+> -	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
+> -	 * section "TDG.VP.VMCALL<MapGPA>"
+> -	 */
+> -	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
+> +	while (retry_count < max_retries_per_page) {
+> +		memset(&args, 0, sizeof(args));
+> +		args.r10 = TDX_HYPERCALL_STANDARD;
+> +		args.r11 = TDVMCALL_MAP_GPA;
+> +		args.r12 = start;
+> +		args.r13 = end - start;
+> +
+> +		ret = __tdx_hypercall_ret(&args);
+> +		if (ret != TDVMCALL_STATUS_RETRY)
+> +			return !ret;
+> +		/*
+> +		 * The guest must retry the operation for the pages in the
+> +		 * region starting at the GPA specified in R11. R11 comes
+> +		 * from the untrusted VMM. Sanity check it.
+> +		 */
+> +		map_fail_paddr = args.r11;
+
+Do you really need map_fail_paddr? Why not directly use args.r11?
+
+> +		if (map_fail_paddr < start || map_fail_paddr >= end)
+> +			return false;
+> +
+> +		/* "Consume" a retry without forward progress */
+> +		if (map_fail_paddr == start) {
+> +			retry_count++;
+> +			continue;
+> +		}
+> +
+> +		start = map_fail_paddr;
+> +		retry_count = 0;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +/*
+> + * Inform the VMM of the guest's intent for this physical page: shared with
+> + * the VMM or private to the guest.  The VMM is expected to change its mapping
+> + * of the page in response.
+> + */
+> +static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+> +{
+> +	phys_addr_t start = __pa(vaddr);
+> +	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
+> +
+> +	if (!tdx_map_gpa(start, end, enc))
+>  		return false;
+>  
+>  	/* shared->private conversion requires memory to be accepted before use */
+> diff --git a/arch/x86/include/asm/shared/tdx.h b/arch/x86/include/asm/shared/tdx.h
+> index 90ea813c4b99..9db89a99ae5b 100644
+> --- a/arch/x86/include/asm/shared/tdx.h
+> +++ b/arch/x86/include/asm/shared/tdx.h
+> @@ -24,6 +24,8 @@
+>  #define TDVMCALL_MAP_GPA		0x10001
+>  #define TDVMCALL_REPORT_FATAL_ERROR	0x10003
+>  
+> +#define TDVMCALL_STATUS_RETRY		1
+> +
+>  #ifndef __ASSEMBLY__
+>  
+>  /*
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
