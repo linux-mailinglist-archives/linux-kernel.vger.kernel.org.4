@@ -2,114 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C97D47360FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 03:06:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F34736103
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 03:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjFTBGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 21:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
+        id S229958AbjFTBOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 21:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFTBGe (ORCPT
+        with ESMTP id S229453AbjFTBOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 21:06:34 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93BD9C;
-        Mon, 19 Jun 2023 18:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687223193; x=1718759193;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=VHof60/+vU8A0IEg7SMylUsXJOqbW8P6DsjVQClaj6M=;
-  b=LGo9aCAqlCCtMp668IHW5/RXUDWilcU395bMRHfwidpx61QdhEuj5vH0
-   meBBzA/X7z6hT9x14RQUIlJkjPpinxA4fLcpA3lozYBbmuAqobVjnNm1R
-   7rFcePaCSCGD0dnMvWMc9m5iE7+P3XMtUjYhihyq21ap5KtfTiseMQ+u8
-   KCz7sppnZ7FHhZNQKbTm1UnkqTcQ+3GfcvazsWTvW6OiVDVGk+VigQWBY
-   Y1ciiwFeVyrglBEidrPMsXDIJO59GFnd82qOklScpX97AoR8i1lyQcYy+
-   HhIbDvUjzepYYfme7VOk3uvcPejdTLae5DZJj56m0SeCEZGB69Pb4mKH2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="362277231"
-X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
-   d="scan'208";a="362277231"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 18:06:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="858376029"
-X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
-   d="scan'208";a="858376029"
-Received: from alaird-mobl2.amr.corp.intel.com (HELO [10.212.177.39]) ([10.212.177.39])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 18:06:30 -0700
-Message-ID: <4069285d-1653-4cbf-a3b3-24727697754b@intel.com>
-Date:   Mon, 19 Jun 2023 18:06:30 -0700
+        Mon, 19 Jun 2023 21:14:07 -0400
+Received: from pb-smtp1.pobox.com (pb-smtp1.pobox.com [64.147.108.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 911B4FC
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 18:14:05 -0700 (PDT)
+Received: from pb-smtp1.pobox.com (unknown [127.0.0.1])
+        by pb-smtp1.pobox.com (Postfix) with ESMTP id F0F7018F078;
+        Mon, 19 Jun 2023 21:14:01 -0400 (EDT)
+        (envelope-from tdavies@darkphysics.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=pobox.com; h=date:from
+        :to:cc:subject:message-id:mime-version:content-type; s=sasl; bh=
+        aS0J1Uw8m29Aa7EWYyWo8GVsTFRzUqH8W+PrIeCFfvg=; b=dXqhzhraXtMUCUqt
+        AuqXDfx6iQkvPTwJImUX2G9iwwNfA1ueEVTROZozs01xqevfUhVgKfQfiptYa2Gd
+        BQzCl3+oQrkGvWYsXVCG4vLJ88c673YCggWUJlOIidJeXxa92OujxsQCV1cwkiwN
+        6NeNF1joVtJCfCTY5Z7eUFRSBSc=
+Received: from pb-smtp1.nyi.icgroup.com (unknown [127.0.0.1])
+        by pb-smtp1.pobox.com (Postfix) with ESMTP id E36A418F077;
+        Mon, 19 Jun 2023 21:14:01 -0400 (EDT)
+        (envelope-from tdavies@darkphysics.net)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed; d=darkphysics.net;
+ h=date:from:to:cc:subject:message-id:mime-version:content-type;
+ s=2019-09.pbsmtp; bh=aS0J1Uw8m29Aa7EWYyWo8GVsTFRzUqH8W+PrIeCFfvg=;
+ b=U2WJC2STyw10C9GkrouthrA2HFj5FW2iJ8xmJEzwKUgbXR2MkeGzz43wUIzqm/cokpchQ8rm6EdNQEzgXpCZHmgHrgmJltswfkxuln7gnTpCjBbvB6MXUWuhsIlLBfcbc9u1pA5LWX1S1TMMsgVSvQgsDm7ML/OFBnzyBU4lFRI=
+Received: from tacos.darkphysics (unknown [76.146.178.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by pb-smtp1.pobox.com (Postfix) with ESMTPSA id A292618F075;
+        Mon, 19 Jun 2023 21:14:00 -0400 (EDT)
+        (envelope-from tdavies@darkphysics.net)
+Date:   Mon, 19 Jun 2023 18:13:55 -0700
+From:   Tree Davies <tdavies@darkphysics.net>
+To:     gregkh@linuxfoundation.org, philipp.g.hortmann@gmail.com,
+        t4rmin@zohomail.com, colin.i.king@gmail.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers/staging/rtl8192e Style guide whitespace cleanup
+Message-ID: <ZJD9U6y9RGIpeVDh@tacos.darkphysics>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v11 18/20] x86: Handle TDX erratum to reset TDX private
- memory during kexec() and reboot
-Content-Language: en-US
-To:     "Huang, Kai" <kai.huang@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-References: <cover.1685887183.git.kai.huang@intel.com>
- <5aa7506d4fedbf625e3fe8ceeb88af3be1ce97ea.1685887183.git.kai.huang@intel.com>
- <20230609132301.uvvp27yr5kpenl6f@box.shutemov.name>
- <58f34b4b81b6d6b37d3386dec0f073e6eb7a97ff.camel@intel.com>
- <20230612075830.jbrdd6ysz4qq7wdf@box.shutemov.name>
- <4c7effc3abe71aa1cbee41f3bd46b97aed40be26.camel@intel.com>
- <48d5a29a-878c-665d-6ac2-6f0563bf6f3c@intel.com>
- <5782c8c2bb3e76a802e4a81c553a21edbaee7c47.camel@intel.com>
- <be258af9-a329-6f03-fcf9-9dafad42c97f@intel.com>
- <20230619144651.kvmscndienyfr3my@box.shutemov.name>
- <63477d22-26ef-dd08-a3b0-93931b7d1d16@intel.com>
- <0be5634f390015ee6badb3f2b2154ad90eb70434.camel@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <0be5634f390015ee6badb3f2b2154ad90eb70434.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="QD+4AXfZG5t6pQfx"
+Content-Disposition: inline
+X-Pobox-Relay-ID: BD54B3C0-0F07-11EE-BD6A-C65BE52EC81B-45285927!pb-smtp1.pobox.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NO_DNS_FOR_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/19/23 17:56, Huang, Kai wrote:
-> Any comments to below?
 
-Nothing that I haven't already said in this thread:
-
-> Just use a normal old atomic_t or set_bit()/test_bit().  They have
-> built-in memory barriers are are less likely to get botched.
-
-I kinda made a point of literally suggesting "atomic_t or
-set_bit()/test_bit()".  I even told you why: "built-in memory barriers".
-
-Guess what READ/WRITE_ONCE() *don't* have.  Memory barriers.
+--QD+4AXfZG5t6pQfx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
 
+--QD+4AXfZG5t6pQfx
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-drivers-staging-rtl8192e-Style-guide-whitespace-clea.patch"
 
+From 25f4faf714f0e957996b9245f7e8c219080ad69b Mon Sep 17 00:00:00 2001
+From: Tree Davies <tdavies@darkphysics.net>
+Date: Mon, 19 Jun 2023 17:31:47 -0700
+Subject: [PATCH] drivers/staging/rtl8192e Style guide whitespace cleanup
+
+This patch cleans up extraneous whitespace for the
+struct rt_hi_throughput definition.
+
+Signed-off-by: Tree Davies <tdavies@darkphysics.net>
+---
+ drivers/staging/rtl8192e/rtl819x_HT.h | 63 ++++++++++-----------------
+ 1 file changed, 23 insertions(+), 40 deletions(-)
+
+diff --git a/drivers/staging/rtl8192e/rtl819x_HT.h b/drivers/staging/rtl8192e/rtl819x_HT.h
+index f4e9fa849796..f5ab19694f1a 100644
+--- a/drivers/staging/rtl8192e/rtl819x_HT.h
++++ b/drivers/staging/rtl8192e/rtl819x_HT.h
+@@ -96,70 +96,53 @@ enum ht_aggre_mode {
+ 
+ 
+ struct rt_hi_throughput {
+-	u8				enable_ht;
+-	u8				bCurrentHTSupport;
+-
+-	u8				bRegBW40MHz;
+-	u8				bCurBW40MHz;
+-
+-	u8				bRegShortGI40MHz;
+-	u8				bCurShortGI40MHz;
+-
+-	u8				bRegShortGI20MHz;
+-	u8				bCurShortGI20MHz;
+-
+-	u8				bRegSuppCCK;
+-	u8				bCurSuppCCK;
+-
++	u8 enable_ht;
++	u8 bCurrentHTSupport;
++	u8 bRegBW40MHz;
++	u8 bCurBW40MHz;
++	u8 bRegShortGI40MHz;
++	u8 bCurShortGI40MHz;
++	u8 bRegShortGI20MHz;
++	u8 bCurShortGI20MHz;
++	u8 bRegSuppCCK;
++	u8 bCurSuppCCK;
+ 	enum ht_spec_ver ePeerHTSpecVer;
+-
+-
+ 	struct ht_capab_ele SelfHTCap;
+ 	struct ht_info_ele SelfHTInfo;
+-
+-	u8				PeerHTCapBuf[32];
+-	u8				PeerHTInfoBuf[32];
+-
+-
+-	u8				bAMSDU_Support;
+-	u16				nAMSDU_MaxSize;
+-	u8				bCurrent_AMSDU_Support;
+-	u16				nCurrent_AMSDU_MaxSize;
+-
+-	u8				bAMPDUEnable;
+-	u8				bCurrentAMPDUEnable;
+-	u8				AMPDU_Factor;
+-	u8				CurrentAMPDUFactor;
+-	u8				MPDU_Density;
++	u8 PeerHTCapBuf[32];
++	u8 PeerHTInfoBuf[32];
++	u8 bAMSDU_Support;
++	u16	nAMSDU_MaxSize;
++	u8 bCurrent_AMSDU_Support;
++	u16	nCurrent_AMSDU_MaxSize;
++	u8 bAMPDUEnable;
++	u8 bCurrentAMPDUEnable;
++	u8 AMPDU_Factor;
++	u8 CurrentAMPDUFactor;
++	u8 MPDU_Density;
+ 	u8 current_mpdu_density;
+-
+ 	enum ht_aggre_mode ForcedAMPDUMode;
+ 	u8 forced_ampdu_factor;
+ 	u8 forced_mpdu_density;
+-
+ 	enum ht_aggre_mode ForcedAMSDUMode;
+ 	u8 forced_short_gi;
+-
+ 	u8 current_op_mode;
+-
+ 	u8 self_mimo_ps;
+ 	u8 peer_mimo_ps;
+-
+ 	enum ht_extchnl_offset CurSTAExtChnlOffset;
+ 	u8 cur_tx_bw40mhz;
+ 	u8 sw_bw_in_progress;
+ 	u8 reg_rt2rt_aggregation;
+-	u8				RT2RT_HT_Mode;
++	u8 RT2RT_HT_Mode;
+ 	u8 current_rt2rt_aggregation;
+ 	u8 current_rt2rt_long_slot_time;
+ 	u8 sz_rt2rt_agg_buf[10];
+-
+ 	u8 reg_rx_reorder_enable;
+ 	u8 cur_rx_reorder_enable;
+ 	u8 rx_reorder_win_size;
+ 	u8 rx_reorder_pending_time;
+ 	u16 rx_reorder_drop_counter;
+-	u8				IOTPeer;
++	u8 IOTPeer;
+ 	u32 iot_action;
+ 	u8 iot_ra_func;
+ } __packed;
+-- 
+2.39.2
+
+
+--QD+4AXfZG5t6pQfx--
