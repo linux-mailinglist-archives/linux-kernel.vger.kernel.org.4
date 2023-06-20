@@ -2,56 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AABD7367A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:24:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B84C67367A6
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232266AbjFTJYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 05:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
+        id S232290AbjFTJ0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 05:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231561AbjFTJYf (ORCPT
+        with ESMTP id S232295AbjFTJ0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 05:24:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8A6D1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 02:24:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4AC5861034
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:24:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F120C433C0;
-        Tue, 20 Jun 2023 09:24:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687253073;
-        bh=9N6EIJ38Xk+9+ewliRVUBI3DulDbnvVkXDhlrDbSKFI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kBn50GNBszeGoHi+Y44dG5B218OG3oc1Ieqb86NZDmEckz0UkrdXEq1YD16W0OeZe
-         ocWl4ntMap/XL6+QUsZagw6La/LVOW/Vihvm01pIjp748HGGWXYmd8H9qfmbIIXmm4
-         RGa6oWj2VJi69vCgQLzSrABBIcQIxWl8GH8oUq70=
-Date:   Tue, 20 Jun 2023 11:24:30 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Prathu Baronia <prathubaronia2011@gmail.com>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Khadija Kamran <kamrankhadijadj@gmail.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, dan.carpenter@linaro.org,
-        error27@gmail.com, lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        oe-kbuild@lists.linux.dev
-Subject: Re: [PATCH v6 1/2] axis-fifo: use devm_kasprintf() for allocating
- formatted strings
-Message-ID: <2023062015-snipping-wanted-276b@gregkh>
-References: <ZI/5H+GZU6/2osGT@redkillpc>
- <20230619162246.33007-1-prathubaronia2011@gmail.com>
+        Tue, 20 Jun 2023 05:26:14 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2122.outbound.protection.outlook.com [40.107.243.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C6A199;
+        Tue, 20 Jun 2023 02:26:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WnTnfZNLwthokGa7fiXEZio/V+INtLOX48RI/Gw6gVTCZYUAqZ+/6dgxFmQeLWCp32EvuGlKCM9vC34VRRcb/nJQXmlXYt3vg8BFquk7wmRFZJZBkJNW2u7pp1ZbXy4NKZC+NfbmM7lchqJRzEVMT73H5LHpQP2Lba1QG5N2jv0XxZ1UH7hGZMuQxXXlX/RetBLW2y2HboPcsLF/mSIInwUBqGJ7P9YXTYt3J6v73B/vWRsvF/Lt4eYqJTNfkmfS4s6mudoSsk9syLx2C3ykOmv7R+OBQzk+k9SIsGz+5WogqVmN2Q6HS5zLQYnfzgyQhQS4V0K/R+yzY/JVsNjm0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UYfC0l4wvtFoQONPNJyShqIhpgoXsSKVft5TGLg+Olg=;
+ b=NTcp2xfM/3gKXjyX4uPilYkFb2LXxRYfGocxvTBg8BHDdQOWKDecjox792xqhCOCfHh8NODtWDp1mTQQ5MpYwAcZ62N7oAFr10Lnrhq76i3xaQdwRnmydKbM9t7V+1LoUiRwdgvOSJJrTlvddKMh2m0fIyiX+5AIctthSnabEGlIMalnYOgcRCX7OBYf3ULiUSy7FO5UjY3epxgLPXqyqWAba33mPleINF2PfgakooD2n0GKThdxQYSvyWqsbngOb/Hd2z55az1XkeScEVd/hJ9c/FtSmk5skTDodIAxk7KE7/354zFNH2ePRXnxg5NxIYpPhgC0txHygt8tn5psSQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UYfC0l4wvtFoQONPNJyShqIhpgoXsSKVft5TGLg+Olg=;
+ b=KjZLrXPCdTldpdIxBjQplq4aAdg+Jb/X/Mogs3/7UMSrqUBwZOVFF/jvUeNfph4x7edOaXcDDu022DlQNE/jKAXLpXlM+WM+crjuDe5oAT7WW8JqqhKqHZ3EXoQz1LBVEpusZqK/qUFfFsg+tRMJ17NsbwPvsGybyI7ZSuGACEs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from DS0PR01MB8010.prod.exchangelabs.com (2603:10b6:8:151::19) by
+ IA0PR01MB8237.prod.exchangelabs.com (2603:10b6:208:48d::20) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6500.35; Tue, 20 Jun 2023 09:26:03 +0000
+Received: from DS0PR01MB8010.prod.exchangelabs.com
+ ([fe80::e439:70c2:7d19:45e]) by DS0PR01MB8010.prod.exchangelabs.com
+ ([fe80::e439:70c2:7d19:45e%6]) with mapi id 15.20.6521.020; Tue, 20 Jun 2023
+ 09:26:03 +0000
+From:   Chanh Nguyen <chanh@os.amperecomputing.com>
+To:     OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Cc:     Chanh Nguyen <chanh@os.amperecomputing.com>
+Subject: [PATCH v3 0/3] Update the device tree for Ampere's Mt.Mitchell BMC
+Date:   Tue, 20 Jun 2023 16:25:34 +0700
+Message-Id: <20230620092537.20007-1-chanh@os.amperecomputing.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0023.apcprd02.prod.outlook.com
+ (2603:1096:4:195::11) To DS0PR01MB8010.prod.exchangelabs.com
+ (2603:10b6:8:151::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230619162246.33007-1-prathubaronia2011@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR01MB8010:EE_|IA0PR01MB8237:EE_
+X-MS-Office365-Filtering-Correlation-Id: cdc517cc-0d46-44b5-217a-08db71705de8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: unUWF2uqtrPj8IlHcX2CYu2zrzA2P5Ssaj2gT8NO0W6MXtLsPH5aLbJ2zmMVu/u/XEYLz4XFSf6uziw8oU8+4fp/ddeT+OHfZg84nVx/XjfNVhLxAtEorGThWpsR8Rs+UtjtcnJ7GFr1F+Luyeef++V2KOx9NURox7Ig+HEWbzKXpIw92YzuyIZZUNjJAIktVaTPo2AskGeA4QAGDNXFDq5zJWze9l5bQzaRo/gWTT+MevTJztIdyfY6iXcD3cONaOLgriT6zsI6ozyJMU66bsslvb6QXCCixM/Sy57IYIZHXtueQwivQvaIyGMGnpaSaOxkcPKTfjPPkP0CADUlgNOxteuSW4uOAMBF8l81G0SyaXyfW9lrN/jpDCmsKofp6WffffHU1UAZA/Li1SvxnKysmiOrzm+i29ftLxd7Bc3/KijSfiBuZ/znJmtiA0WS66fozyA/nUcgSwvC7LXXfb5kElOIbY4QvCQLZwBFaixiW1anBoOJsHh8YTIUyx8UWLv9ZYctFy/EHPnYLvm6lehxRZK6A/0v+kmhH7NEo5gKatPLtY0RyPZIeaI21OItV+Ee4xhPBxVFM9ZSEgZfn0f+Mhld1EJ5a1VVC2ZmBJSi7NyD0BMNuFZU3kPajquq
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR01MB8010.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(376002)(366004)(39860400002)(136003)(451199021)(6666004)(6486002)(478600001)(107886003)(1076003)(6506007)(52116002)(5660300002)(86362001)(15650500001)(4744005)(2906002)(110136005)(19627235002)(8676002)(41300700001)(8936002)(66476007)(66556008)(66946007)(316002)(2616005)(38100700002)(38350700002)(83380400001)(4326008)(26005)(6512007)(186003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XXUZ4qsQPe5YFBdQOlLUaY9C2UGZIY8pIMcu/QweR/CJyH0YZqp4phNAgDfF?=
+ =?us-ascii?Q?WBJl064H+oujBT7+xn4jmNOyPc8j6ojpofZXcoGIy4tsXPedlBn3MofaqBmJ?=
+ =?us-ascii?Q?G+kaqanb6ygUy5gq2s+kokyerociBrVHYHnPDvVuw67yf46AvBVDgI1JN1rL?=
+ =?us-ascii?Q?BmCgAxm3UKl0BPhjjY/jbEQLJjeO9a/m9wdw/AwMr2bdu9L6CLtdmYrOgrAg?=
+ =?us-ascii?Q?eTqP+qphNn/GpgAi+OE75c4DXcPFATbBc8VTGU7Ee4Ou0GSpkCyBgnnoxwFH?=
+ =?us-ascii?Q?sVCwuV1+GipvPFMhBYATV/YyX/aRU2BTwxsld1wGjzJOOs1hbvuc8ScVaxKz?=
+ =?us-ascii?Q?tP4eCNdaRO4WQWGdDZ0QmV5a/WJFEEHgjwFA3nC30uSYiLB57zEjC0TWxDMR?=
+ =?us-ascii?Q?5Y4yipdP3GKSWQvQ0/YgFC/pZSTJ9K48u27L8G1hGN51Zv+gdXLpNpFeXuiq?=
+ =?us-ascii?Q?tDeN/zzpekpYAxonyRC09shqdPBszJ+jXQZxOTniynY48EUCYfxFQFYWrre9?=
+ =?us-ascii?Q?5UO2MtmnWdN4ix5y4cA2pfnrpMdF4Bt0IR0HzUyGo/6U1wNdLdz7xU8IgFzu?=
+ =?us-ascii?Q?HmsWqzEOQlFrzD186Lgj3NjX5bfpXrOAonwGKELX4vpBFw5E/BZv4LsOgkjr?=
+ =?us-ascii?Q?6h8G/MG1Q3yUyjOBJQQJPLIPeVamy9sfbNf4ju7PfmM2xxPIecmgvM3aH/Pg?=
+ =?us-ascii?Q?bDBVoorbRhvfESS8o18ttGnsRhPzroBfs5ckQEoGru1+/sUPN9BoAOOcpy6l?=
+ =?us-ascii?Q?HgOmY1sTHHyDvBz5u7J0Yqtf0TQeye4sz938ctMdd/LRoeOEYun4k7qsP0E5?=
+ =?us-ascii?Q?Ha2eCkTa1MU+F1INZwRryj0wPEjmw8DYtgDYBw/XBOaS+lBxOgfbnZagD5jW?=
+ =?us-ascii?Q?PK4seajuKQZGOoWRQ1LqOf3gwdDYiV4gxyEzw9hDHet2RlYUewa3EQz68uq4?=
+ =?us-ascii?Q?JXUlv9GVV7U9Z5sxQH7V9qf5EIbyDT27QCFk2RdEcgUz0REMQkSK3YbZH/ET?=
+ =?us-ascii?Q?9Rka4Y6KH8A0AFv3NwzP+m+8QUaUIAk3UyV3y77c28gXGQOWaHiM4HnfgjCk?=
+ =?us-ascii?Q?UGq64XrU31CHe34V/0pgxpIcvI3XBitC5uuiLCKsBJoIC7Q5pcA3/xAaGvpn?=
+ =?us-ascii?Q?6G5cZk60vAX/zLlPuMxzq+Fc3THG3HfD1Q/SuUE8G2NSWePq9eumSaf0omWj?=
+ =?us-ascii?Q?VA0uJjm6Znr6XKEPRz6VqfjWDol23s/HOiYoGrUO/RCbPTbu0Ceq5UF7j7Rn?=
+ =?us-ascii?Q?4L6zU1wKGWR9+ahqWIH7AheYXXPZL0PnwF2+FOLvhrRwMICEqyvlLEXA/+n/?=
+ =?us-ascii?Q?iOV5CO9qqFThLSRgf8bgc7gSewXckWwkrddqtV3vusvT8pKuLOXbb0GRPsED?=
+ =?us-ascii?Q?5nVMwGXbiD9MuEi0C4Z1Sl9X9FMU74926jeTQeSb7WmL47Y68kA8C+8AJeNk?=
+ =?us-ascii?Q?RjtNoAsZ5E/OmyrvcLfdoAwfRqkjezsVnY5F8f7PfJgoCCRxx6gAkDDMydRK?=
+ =?us-ascii?Q?58KLHozcJBmY8xrpUZ6GR1MuHtLxm1M2HVLJM4f0x+82ZpBAB8rMyfw7YErK?=
+ =?us-ascii?Q?KJWp2b1gXVSkRAW/OWozIKXYdjbcu2EV3+o3pAAV9LNKJkTJJhCO8hTMKkKG?=
+ =?us-ascii?Q?RX62gwX4VyUkNOdXR8pwqqI=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: cdc517cc-0d46-44b5-217a-08db71705de8
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR01MB8010.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 09:26:03.3188
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Y8dbft0csw+ZwKsxrQ6ylELgiNlJKZCM7BeQDKo51acLTp4K5mARJOEjyNSXrH/7UCMZiv0KUWk8+eLld61gwCArXPTz93ln6PWvODJT+zJtlGqDu1il7wSFNNzExbL4
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR01MB8237
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,45 +117,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 09:52:44PM +0530, Prathu Baronia wrote:
-> In various places, string buffers of a fixed size are allocated, and
-> filled using snprintf() with the same fixed size, which is error-prone.
-> 
-> Replace this by calling devm_kasprintf() instead, which always uses the
-> appropriate size.
-> 
-> Signed-off-by: Prathu Baronia <prathubaronia2011@gmail.com>
-> ---
-> V5 -> V6: Split into api change and name change commits
-> V4 -> V5: Remove the dev_info() and use a unique identifier for dev name
-> V3 -> V4: Split into warning fixing and cleanup commits
-> V2 -> V3: Fix smatch warnings from kernel test robot
-> V1 -> V2: Split into logical commits and fix commit message
-> 
->  drivers/staging/axis-fifo/axis-fifo.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
-> index 7a21f2423204..7d8da9ce2db8 100644
-> --- a/drivers/staging/axis-fifo/axis-fifo.c
-> +++ b/drivers/staging/axis-fifo/axis-fifo.c
-> @@ -816,10 +816,6 @@ static int axis_fifo_probe(struct platform_device *pdev)
->  	 * ----------------------------
->  	 */
->  
-> -	device_name = devm_kzalloc(dev, 32, GFP_KERNEL);
-> -	if (!device_name)
-> -		return -ENOMEM;
-> -
->  	/* allocate device wrapper memory */
->  	fifo = devm_kzalloc(dev, sizeof(*fifo), GFP_KERNEL);
->  	if (!fifo)
-> @@ -857,7 +853,11 @@ static int axis_fifo_probe(struct platform_device *pdev)
->  	dev_dbg(fifo->dt_device, "remapped memory to 0x%p\n", fifo->base_addr);
->  
->  	/* create unique device name */
-> -	snprintf(device_name, 32, "%s_%pa", DRIVER_NAME, &r_mem->start);
-> +	device_name = devm_kasprintf(dev, GFP_KERNEL, "%s_%p", DRIVER_NAME, &r_mem->start);
+Updates the device tree to support some features on Ampere's
+Mt.Mitchell BMC.
 
-As Dan points out, you are changing the name here :(
+v3:
+  - Fix build error.                                  [kernel test robot]
+v2:
+  - Drop 0002-ARM-dts-aspeed-mtmitchell-Add-I2C-Fan.patch because
+    "maxim,max31790" is undocumented.                 [Krzysztof]
+  - Update reg for mctp node.                         [Andrew]
+
+Chanh Nguyen (3):
+  ARM: dts: aspeed: mtmitchell: Enable the BMC UART8 and UART9
+  ARM: dts: aspeed: mtmitchell: Update ADC sensors for Mt.Mitchell DVT
+    systems
+  ARM: dts: aspeed: mtmitchell: Add MCTP
+
+ .../boot/dts/aspeed-bmc-ampere-mtmitchell.dts | 127 ++++++++++++------
+ 1 file changed, 86 insertions(+), 41 deletions(-)
+
+-- 
+2.17.1
 
