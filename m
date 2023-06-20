@@ -2,202 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A6EC736349
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 07:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8B473634B
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 07:52:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbjFTFuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 01:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60856 "EHLO
+        id S230467AbjFTFws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 01:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbjFTFuY (ORCPT
+        with ESMTP id S229949AbjFTFwo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 01:50:24 -0400
+        Tue, 20 Jun 2023 01:52:44 -0400
 Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFDC120;
-        Mon, 19 Jun 2023 22:50:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9117CA3
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 22:52:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687240222; x=1718776222;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HU0TJCnDADAHo4xUvPfOmB9TjsX2d5d2secntr1+sKU=;
-  b=egL7wjX4O6CNtbCDkxaEgALgjcVingICk+jQqoZe1UJMyLpVcCEHaOYm
-   XyAyibqQ+BZMIz3vkCzS5HPdRnuf9MkeTuwuOzf1DsoOWvNhwzPpj0394
-   OB5G8icZIOPme1+b6I2MAOQlRDEJ9uEV6YBkulG249ao17t44+fxgdAb+
-   1JEQjrDUsbwDyh1O/GwBYKUAd3Sn0t/PorkiXqrmJd1urgGBkEDuRB9wN
-   JReHkDS4iblTsqYNJOpcUuqJmJoZcqL50OcsI09J+4oCtNTwGmLj1DCZd
-   RvkPGubMRSgtCRtPmCPCH+BRLkeY0X+dDxOUavC/mIbi8/+hcSMxXW985
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="425727867"
+  t=1687240363; x=1718776363;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version:content-transfer-encoding;
+  bh=Rqvr4YyURkE4nPzbTAie6hA5PbPUm2XZ5R7BM4IarUI=;
+  b=RDuWPrXzHpZ7ZGbHFEjIMB8KUotElDcjdwt7qhpFW7rpKDqkipI8ozvQ
+   jSgpsi/NLDF6tP1aBkt5761kh6H7jVdxevhS4SV/tbt74+GB+jaKlyzuV
+   V170MrHJCkqY2WCORFuLU4TWhfzHe/vzsB2i+KibLKFeyWYXMQgG6kNkd
+   Zy26sTB54IETPxVDXUEzmbHm+R0zRNGt1Stsi6NcQHThJZM5CjRabCrXp
+   dBb5BOoX4iPrNI3yg97cIg0S+b8n4rMQrYgvM10BBzX/skNHyGWkOt7TP
+   wflHA13BYYzkmLzO5sZsfsUFkSWpn5XnDn1mILJPA64qZg4GWtuupSyMl
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="425728403"
 X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="425727867"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 22:50:21 -0700
+   d="scan'208";a="425728403"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 22:52:00 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="691305194"
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="708126918"
 X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="691305194"
-Received: from sorinaau-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.61.49])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 22:50:18 -0700
-Message-ID: <4763f802-6d14-635e-6e7d-e0fc68af3453@intel.com>
-Date:   Tue, 20 Jun 2023 08:50:13 +0300
+   d="scan'208";a="708126918"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 22:51:56 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     liuq <liuq131@chinatelecom.cn>
+Cc:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH] mm/min_free_kbytes: modify min_free_kbytes calculation
+ rules
+References: <20230609032552.218010-1-liuq131@chinatelecom.cn>
+        <87edm88765.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <4f3bac46-6dbe-653b-bcb9-ace46c4d4c9e@chinatelecom.cn>
+Date:   Tue, 20 Jun 2023 13:50:27 +0800
+In-Reply-To: <4f3bac46-6dbe-653b-bcb9-ace46c4d4c9e@chinatelecom.cn> (liuq's
+        message of "Mon, 19 Jun 2023 20:42:51 +0800")
+Message-ID: <87y1ke7kd8.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.12.0
-Subject: Re: [PATCH V2 2/2] mmc: sdhci-pci-o2micro: add Bayhub new chip GG8
- support for express card
-Content-Language: en-US
-To:     Chevron Li <chevron_li@126.com>, ulf.hansson@linaro.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     shaper.liu@bayhubtech.com, xiaoguang.yu@bayhubtech.com,
-        shirley.her@bayhubtech.com, chevron.li@bayhubtech.com
-References: <20230615095012.30856-1-chevron_li@126.com>
- <20230615095012.30856-2-chevron_li@126.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20230615095012.30856-2-chevron_li@126.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/06/23 12:50, Chevron Li wrote:
-> From: Chevron Li <chevron.li@bayhubtech.com>
-> 
-> Add Bayhub new chip GG8 support for SD express card.
-> This patch depends on patch 1/2.
-> 
-> Signed-off-by: Chevron Li <chevron.li@bayhubtech.com>
-
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
-
-> ---
-> Change in V1:
-> 1.Implement the SD express card callback routine.
-> 2.Add SD express card support for Bayhub GG8 chip.
-> 
-> Change in V2:
-> 1.updated some typo in patch and modified title.
-> 2.updated patch format according to reviewer's comments.
-> 3.updated the logical to try UHSI when express card initializatio failed.
-> ---
->  drivers/mmc/host/sdhci-pci-o2micro.c | 65 +++++++++++++++++++++++++++-
->  drivers/mmc/host/sdhci.h             |  3 ++
->  2 files changed, 67 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci-pci-o2micro.c b/drivers/mmc/host/sdhci-pci-o2micro.c
-> index 539bbafb3ff7..ad5502f3aa95 100644
-> --- a/drivers/mmc/host/sdhci-pci-o2micro.c
-> +++ b/drivers/mmc/host/sdhci-pci-o2micro.c
-> @@ -21,6 +21,7 @@
->   * O2Micro device registers
->   */
->  
-> +#define O2_SD_PCIE_SWITCH	0x54
->  #define O2_SD_MISC_REG5		0x64
->  #define O2_SD_LD0_CTRL		0x68
->  #define O2_SD_DEV_CTRL		0x88
-> @@ -631,6 +632,67 @@ static void sdhci_pci_o2_set_clock(struct sdhci_host *host, unsigned int clock)
->  	sdhci_o2_enable_clk(host, clk);
->  }
->  
-> +static int sdhci_pci_o2_init_sd_express(struct mmc_host *mmc, struct mmc_ios *ios)
-> +{
-> +	struct sdhci_host *host = mmc_priv(mmc);
-> +	struct sdhci_pci_slot *slot = sdhci_priv(host);
-> +	struct sdhci_pci_chip *chip = slot->chip;
-> +	u8 scratch8;
-> +	u16 scratch16;
-> +	int ret;
-> +
-> +	/* Disable clock */
-> +	sdhci_writeb(host, 0, SDHCI_CLOCK_CONTROL);
-> +
-> +	/* Set VDD2 voltage*/
-> +	scratch8 = sdhci_readb(host, SDHCI_POWER_CONTROL);
-> +	scratch8 &= 0x0F;
-> +	if (host->mmc->ios.timing == MMC_TIMING_SD_EXP_1_2V &&
-> +	    host->mmc->caps2 & MMC_CAP2_SD_EXP_1_2V) {
-> +		scratch8 |= SDHCI_VDD2_POWER_ON | SDHCI_VDD2_POWER_120;
-> +	} else {
-> +		scratch8 |= SDHCI_VDD2_POWER_ON | SDHCI_VDD2_POWER_180;
-> +	}
-> +
-> +	sdhci_writeb(host, scratch8, SDHCI_POWER_CONTROL);
-> +
-> +	/* UnLock WP */
-> +	pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch8);
-> +	scratch8 &= 0x7f;
-> +	pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch8);
-> +
-> +	/* Wait for express card clkreqn assert */
-> +	ret = read_poll_timeout(sdhci_readb, scratch8, !(scratch8 & BIT(0)),
-> +				1, 30000, false, host, O2_SD_EXP_INT_REG);
-> +
-> +	if (!ret) {
-> +		/* Switch to PCIe mode */
-> +		scratch16 = sdhci_readw(host, O2_SD_PCIE_SWITCH);
-> +		scratch16 |= BIT(8);
-> +		sdhci_writew(host, scratch16, O2_SD_PCIE_SWITCH);
-> +	} else {
-> +		/* Power off VDD2 voltage*/
-> +		scratch8 = sdhci_readb(host, SDHCI_POWER_CONTROL);
-> +		scratch8 &= 0x0F;
-> +		sdhci_writeb(host, scratch8, SDHCI_POWER_CONTROL);
-> +
-> +		/* Keep mode as UHSI */
-> +		pci_read_config_word(chip->pdev, O2_SD_PARA_SET_REG1, &scratch16);
-> +		scratch16 &= ~BIT(11);
-> +		pci_write_config_word(chip->pdev, O2_SD_PARA_SET_REG1, scratch16);
-> +
-> +		host->mmc->ios.timing = MMC_TIMING_LEGACY;
-> +		pr_info("%s: Express card initialization failed, falling back to Legacy\n",
-> +			mmc_hostname(host->mmc));
-> +	}
-> +	/* Lock WP */
-> +	pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch8);
-> +	scratch8 |= 0x80;
-> +	pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch8);
-> +
-> +	return 0;
-> +}
-> +
->  static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
->  {
->  	struct sdhci_pci_chip *chip;
-> @@ -703,10 +765,11 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
->  	case PCI_DEVICE_ID_O2_GG8_9861:
->  	case PCI_DEVICE_ID_O2_GG8_9862:
->  	case PCI_DEVICE_ID_O2_GG8_9863:
-> -		host->mmc->caps2 |= MMC_CAP2_NO_SDIO;
-> +		host->mmc->caps2 |= MMC_CAP2_NO_SDIO | MMC_CAP2_SD_EXP | MMC_CAP2_SD_EXP_1_2V;
->  		host->mmc->caps |= MMC_CAP_HW_RESET;
->  		host->quirks2 |= SDHCI_QUIRK2_PRESET_VALUE_BROKEN;
->  		slot->host->mmc_host_ops.get_cd = sdhci_o2_get_cd;
-> +		host->mmc_host_ops.init_sd_express = sdhci_pci_o2_init_sd_express;
->  		break;
->  	default:
->  		break;
-> diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
-> index f4f2085c274c..d09640840171 100644
-> --- a/drivers/mmc/host/sdhci.h
-> +++ b/drivers/mmc/host/sdhci.h
-> @@ -99,6 +99,9 @@
->  #define  SDHCI_POWER_180	0x0A
->  #define  SDHCI_POWER_300	0x0C
->  #define  SDHCI_POWER_330	0x0E
-> +#define  SDHCI_VDD2_POWER_ON	0x10
-> +#define  SDHCI_VDD2_POWER_180	0xA0
-> +#define  SDHCI_VDD2_POWER_120	0x80
->  
->  #define SDHCI_BLOCK_GAP_CONTROL	0x2A
->  
-
+bGl1cSA8bGl1cTEzMUBjaGluYXRlbGVjb20uY24+IHdyaXRlczoNCg0KPiDlnKggMjAyMy82LzE5
+IDExOjI1LCBIdWFuZywgWWluZyDlhpnpgZM6DQo+PiBBZGRlZCBNZWwgYW5kIFZsYXN0aW1pbC4N
+Cj4+DQo+PiBsaXVxIDxsaXVxMTMxQGNoaW5hdGVsZWNvbS5jbj4gd3JpdGVzOg0KPj4NCj4+PiBU
+aGUgY3VycmVudCBjYWxjdWxhdGlvbiBvZiBtaW5fZnJlZV9rYnl0ZXMgb25seSB1c2VzIFpPTkVf
+RE1BIGFuZA0KPj4+IFpPTkVfTk9STUFMIHBhZ2VzLGJ1dCB0aGUgWk9ORV9NT1ZBQkxFIHpvbmUt
+Pl93YXRlcm1hcmtbV01BUktfTUlOXQ0KPj4+IHdpbGwgYWxzbyBkaXZpZGUgcGFydCBvZiBtaW5f
+ZnJlZV9rYnl0ZXMuVGhpcyB3aWxsIGNhdXNlIHRoZSBtaW4NCj4+PiB3YXRlcm1hcmsgb2YgWk9O
+RV9OT1JNQUwgdG8gYmUgdG9vIHNtYWxsIGluIHRoZSBwcmVzZW5jZSBvZiBaT05FX01PVkVBQkxF
+Lg0KPj4gVGhpcyBzZWVtcyBsaWtlIGEgcmVhbCBwcm9ibGVtIHBlciBteSB1bmRlcnN0YW5kaW5n
+LiAgQ2FuIHlvdSBzaG93IHRoZQ0KPj4gY29udGVudHMgb2YgL3Byb2Mvem9uZWluZm8gb24gYSBw
+cm9ibGVtIHN5c3RlbT8NCj4+DQo+PiBCdXQsIHBlciBteSB1bmRlcnN0YW5kaW5nLCBtaW5fZnJl
+ZV9rYnl0ZXMgYXJlIHVzZWQgZm9yIF9fR0ZQX0hJR0ggYW5kDQo+PiBQRl9NRU1BTExPQyBhbGxv
+Y2F0aW9ucy4gIFdoaWxlIFpPTkVfTU9WQUJMRSB3aWxsIG5vdCBiZSB1c2VkIGZvciB0aGVtDQo+
+PiB1c3VhbGx5LiAgU28gSSB0aGluayB3ZSBzaG91bGQgdHJlYXQgWk9ORV9NT1ZBQkxFIGFzIFpP
+TkVfSElHSE1FTSBpbg0KPj4gX19zZXR1cF9wZXJfem9uZV93bWFya3MoKS4NCj4+DQo+PiBCZXN0
+IFJlZ2FyZHMsDQo+PiBIdWFuZywgWWluZw0KPiBPbiBteSB0ZXN0aW5nIG1hY2hpbmUgd2l0aCAx
+NkdCIG9mIG1lbW9yeSAodHJhbnNwYXJlbnQgaHVnZXBhZ2UgaXMNCj4gdHVybmVkIG9mZiBieSBk
+ZWZhdWx0KSwgd2hlbiBtb3ZhYmxlIHpvbmUgaXMgbm90IGNvbmZpZ3VyZWQsDQo+IG1pbl9mcmVl
+X2tieXRlc8KgIGlzIDE1ODA2ICgxNTgwNioxNTgwNi8xNj0xNTYxNDM1MmtieXRlcywgYXBwcm94
+aW1hdGVsDQo+IHkgMTZHKS4NCj4gVGhlIGRldGFpbGVkIGluZm8gaXMgYXMgZm9sbG93czoNCj4g
+W3Jvb3RAbHEtd29ya3N0YXRpb24gfl0jIGNhdCAvcHJvYy9jbWRsaW5lDQo+IEJPT1RfSU1BR0U9
+L3ZtbGludXotNi4yLjAtcmM3LTAwMDE4LWcwOTgzZjZiZjJiZmMtZGlydHkNCj4gcm9vdD0vZGV2
+L21hcHBlci9jdHl1bm9zMDAtcm9vdCBybyByZXN1bWU9L2Rldi9tYXBwZXIvY3R5dW5vczAwLXN3
+YXANCj4gcmQubHZtLmx2PWN0eXVub3MwMC9yb290IHJkLmx2bS5sdj1jdHl1bm9zMDAvc3dhcCBj
+cmFzaGtlcm5lbD01MTJNDQo+IFtyb290QGxxLXdvcmtzdGF0aW9uIH5dI8KgIGNhdCAvcHJvYy96
+b25laW5mbyB8Z3JlcCAtQSA1IG1pbg0KPiDCoMKgwqDCoMKgwqDCoCBtaW7CoMKgwqDCoMKgIDMN
+Cj4gwqDCoMKgwqDCoMKgwqAgbG93wqDCoMKgwqDCoCA2DQo+IMKgwqDCoMKgwqDCoMKgIGhpZ2jC
+oMKgwqDCoCA5DQo+IMKgwqDCoMKgwqDCoMKgIHNwYW5uZWTCoCA0MDk1DQo+IMKgwqDCoMKgwqDC
+oMKgIHByZXNlbnTCoCAzOTk4DQo+IMKgwqDCoMKgwqDCoMKgIG1hbmFnZWTCoCAzODQwDQo+IC0t
+DQo+IMKgwqDCoMKgwqDCoMKgIG1pbsKgwqDCoMKgwqAgMzI4DQo+IMKgwqDCoMKgwqDCoMKgIGxv
+d8KgwqDCoMKgwqAgNjUyDQo+IMKgwqDCoMKgwqDCoMKgIGhpZ2jCoMKgwqDCoCA5NzYNCj4gwqDC
+oMKgwqDCoMKgwqAgc3Bhbm5lZMKgIDEwNDQ0ODANCj4gwqDCoMKgwqDCoMKgwqAgcHJlc2VudMKg
+IDQ3ODgwMg0KPiDCoMKgwqDCoMKgwqDCoCBtYW5hZ2VkwqAgMzMwOTY5DQo+IC0tDQo+IMKgwqDC
+oMKgwqDCoMKgIG1pbsKgwqDCoMKgwqAgMzYxOA0KPiDCoMKgwqDCoMKgwqDCoCBsb3fCoMKgwqDC
+oMKgIDcxOTMNCj4gwqDCoMKgwqDCoMKgwqAgaGlnaMKgwqDCoMKgIDEwNzY4DQo+IMKgwqDCoMKg
+wqDCoMKgIHNwYW5uZWTCoCAzNjU1NjgwDQo+IMKgwqDCoMKgwqDCoMKgIHByZXNlbnTCoCAzNjU1
+NjgwDQo+IMKgwqDCoMKgwqDCoMKgIG1hbmFnZWTCoCAzNTc1Nzg3DQo+IC0tDQo+IMKgwqDCoMKg
+wqDCoMKgIG1pbsKgwqDCoMKgwqAgMA0KPiDCoMKgwqDCoMKgwqDCoCBsb3fCoMKgwqDCoMKgIDAN
+Cj4gwqDCoMKgwqDCoMKgwqAgaGlnaMKgwqDCoMKgIDANCj4gwqDCoMKgwqDCoMKgwqAgc3Bhbm5l
+ZMKgIDANCj4gwqDCoMKgwqDCoMKgwqAgcHJlc2VudMKgIDANCj4gwqDCoMKgwqDCoMKgwqAgbWFu
+YWdlZMKgIDANCj4gW3Jvb3RAbHEtd29ya3N0YXRpb24gfl0jIGNhdCAvcHJvYy9zeXMvdm0vbWlu
+X2ZyZWVfa2J5dGVzDQo+IDE1ODA2DQo+DQo+IElmIG1vdmFibGVjb3JlPTEyRyBpcyBjb25maWd1
+cmVkLCBhdCB0aGlzIHRpbWUsIG1pbl9mcmVlX2tieXRlcyBpcw0KPiA3MzI2ICg3MzI2ICogNzMy
+Ni8xNj0zMzU0MzkyLCBhcHByb3hpbWF0ZWx5IDE2Ry0xMkcpDQo+IFRoZSBkZXRhaWxlZCBpbmZv
+IGlzIGFzIGZvbGxvd3M6DQo+IFtyb290QGxxLXdvcmtzdGF0aW9uIH5dIyBjYXQgL3Byb2MvY21k
+bGluZQ0KPiBCT09UX0lNQUdFPS92bWxpbnV6LTYuMi4wLXJjNy0wMDAxOC1nMDk4M2Y2YmYyYmZj
+LWRpcnR5DQo+IHJvb3Q9L2Rldi9tYXBwZXIvY3R5dW5vczAwLXJvb3Qgcm8gcmVzdW1lPS9kZXYv
+bWFwcGVyL2N0eXVub3MwMC1zd2FwDQo+IHJkLmx2bS5sdj1jdHl1bm9zMDAvcm9vdCByZC5sdm0u
+bHY9Y3R5dW5vczAwL3N3YXAgY3Jhc2hrZXJuZWw9NTEyTQ0KPiBtb3ZhYmxlY29yZT0xMkcNCj4g
+W3Jvb3RAbHEtd29ya3N0YXRpb24gfl0jIGNhdCAvcHJvYy96b25laW5mbyB8Z3JlcCAtQSA1IG1p
+bg0KPiDCoMKgwqDCoMKgwqDCoCBtaW7CoMKgwqDCoMKgIDENCj4gwqDCoMKgwqDCoMKgwqAgbG93
+wqDCoMKgwqDCoCA0DQo+IMKgwqDCoMKgwqDCoMKgIGhpZ2jCoMKgwqDCoCA3DQo+IMKgwqDCoMKg
+wqDCoMKgIHNwYW5uZWTCoCA0MDk1DQo+IMKgwqDCoMKgwqDCoMKgIHByZXNlbnTCoCAzOTk4DQo+
+IMKgwqDCoMKgwqDCoMKgIG1hbmFnZWTCoCAzODQwDQo+IC0tDQo+IMKgwqDCoMKgwqDCoMKgIG1p
+bsKgwqDCoMKgwqAgMTUyDQo+IMKgwqDCoMKgwqDCoMKgIGxvd8KgwqDCoMKgwqAgNDc2DQo+IMKg
+wqDCoMKgwqDCoMKgIGhpZ2jCoMKgwqDCoCA4MDANCj4gwqDCoMKgwqDCoMKgwqAgc3Bhbm5lZMKg
+IDEwNDQ0ODANCj4gwqDCoMKgwqDCoMKgwqAgcHJlc2VudMKgIDQ3ODgwMg0KPiDCoMKgwqDCoMKg
+wqDCoCBtYW5hZ2VkwqAgMzMwOTY5DQo+IC0tDQo+IMKgwqDCoMKgwqDCoMKgIG1pbsKgwqDCoMKg
+wqAgMjM5DQo+IMKgwqDCoMKgwqDCoMKgIGxvd8KgwqDCoMKgwqAgNzQ4DQo+IMKgwqDCoMKgwqDC
+oMKgIGhpZ2jCoMKgwqDCoCAxMjU3DQo+IMKgwqDCoMKgwqDCoMKgIHNwYW5uZWTCoCA1MDk5NTIN
+Cj4gwqDCoMKgwqDCoMKgwqAgcHJlc2VudMKgIDUwOTk1Mg0KPiDCoMKgwqDCoMKgwqDCoCBtYW5h
+Z2VkwqAgNTA5OTUyDQo+IC0tDQo+IMKgwqDCoMKgwqDCoMKgIG1pbsKgwqDCoMKgwqAgMTQzNw0K
+PiDCoMKgwqDCoMKgwqDCoCBsb3fCoMKgwqDCoMKgIDQ1MDINCj4gwqDCoMKgwqDCoMKgwqAgaGln
+aMKgwqDCoMKgIDc1NjcNCj4gwqDCoMKgwqDCoMKgwqAgc3Bhbm5lZMKgIDMxNDU3MjgNCj4gwqDC
+oMKgwqDCoMKgwqAgcHJlc2VudMKgIDMxNDU3MjgNCj4gwqDCoMKgwqDCoMKgwqAgbWFuYWdlZMKg
+IDMwNjU4MzMNCj4gW3Jvb3RAbHEtd29ya3N0YXRpb24gfl0jIGNhdCAvcHJvYy9zeXMvdm0vbWlu
+X2ZyZWVfa2J5dGVzDQo+IDczMjYNCg0KVGhhbmsgeW91IHZlcnkgbXVjaCBmb3IgZGF0YSEgIFBl
+ciBteSB1bmRlcnN0YW5kaW5nLCB0aGlzIHZlcmlmaWVzIGENCnJlYWwgcHJvYmxlbS4NCg0KWW91
+IHBhdGNoIGNhbiBmaXggdGhlIHRvbyBzbWFsbCAibWluIiBmb3IgWk9ORV9OT1JNQUwvWk9ORV9E
+TUEuICBCdXQsDQpJTUhPLCBpdCBpbmNyZWFzZXMgIm1pbiIgZm9yIFpPTkVfTU9WQUJMRSB1bm5l
+Y2Vzc2FyaWx5LiAgQmVjYXVzZSB3ZQ0KZG9uJ3QgYWxsb2NhdGUgZnJvbSBaT05FX01PVkFCTEUg
+Zm9yIF9fR0ZQX0hJR0ggb3IgUEZfTUVNQUxMT0MNCmFsbG9jYXRpb25zLiAgU28sIElNSE8sIHdl
+IHNob3VsZCB0cmVhdCBaT05FX01PVkFCTEUgYXMgWk9ORV9ISUdITUVNIGluDQpfX3NldHVwX3Bl
+cl96b25lX3dtYXJrcygpLg0KDQpCZXN0IFJlZ2FyZHMsDQpIdWFuZywgWWluZw0KDQo+IEFmdGVy
+IHRoaXMgcGF0Y2ggaXMgYWRkZWQsIHRoZSBjb25maWd1cmF0aW9uIG9mIHRoZSBtb3ZhYmxlIHpv
+bmUgbm8NCj4gbG9uZ2VyIGFmZmVjdHMgdGhlIHNpemUgb2YgdGhlIG1pbl9mcmVlX2tieXRlcywg
+d2hpY2ggaXMgb25seSBhZmZlY3RlZA0KPiBieSB0aGUgc2l6ZSBvZiB0aGUgYXZhaWxhYmxlIG1l
+bW9yeS4NCj4+PiBTaWduZWQtb2ZmLWJ5OiBsaXVxIDxsaXVxMTMxQGNoaW5hdGVsZWNvbS5jbj4N
+Cj4+PiAtLS0NCj4+PiAgIGluY2x1ZGUvbGludXgvbW0uaCB8ICAxICsNCj4+PiAgIG1tL2todWdl
+cGFnZWQuYyAgICB8ICAyICstDQo+Pj4gICBtbS9wYWdlX2FsbG9jLmMgICAgfCAxNSArKysrKysr
+KysrKysrKy0NCj4+PiAgIDMgZmlsZXMgY2hhbmdlZCwgMTYgaW5zZXJ0aW9ucygrKSwgMiBkZWxl
+dGlvbnMoLSkNCj4+Pg0KPj4+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L21tLmggYi9pbmNs
+dWRlL2xpbnV4L21tLmgNCj4+PiBpbmRleCBjZjNkMGQ2NzNmNmIuLjFmOTFkMDM1YmNhZiAxMDA2
+NDQNCj4+PiAtLS0gYS9pbmNsdWRlL2xpbnV4L21tLmgNCj4+PiArKysgYi9pbmNsdWRlL2xpbnV4
+L21tLmgNCj4+PiBAQCAtODYzLDYgKzg2Myw3IEBAIHZvaWQgc3BsaXRfcGFnZShzdHJ1Y3QgcGFn
+ZSAqcGFnZSwgdW5zaWduZWQgaW50IG9yZGVyKTsNCj4+PiAgIHZvaWQgZm9saW9fY29weShzdHJ1
+Y3QgZm9saW8gKmRzdCwgc3RydWN0IGZvbGlvICpzcmMpOw0KPj4+ICAgICB1bnNpZ25lZCBsb25n
+IG5yX2ZyZWVfYnVmZmVyX3BhZ2VzKHZvaWQpOw0KPj4+ICt1bnNpZ25lZCBsb25nIG5yX2ZyZWVf
+cGFnZWNhY2hlX3BhZ2VzKHZvaWQpOw0KPj4+ICAgICAvKg0KPj4+ICAgICogQ29tcG91bmQgcGFn
+ZXMgaGF2ZSBhIGRlc3RydWN0b3IgZnVuY3Rpb24uICBQcm92aWRlIGENCj4+PiBkaWZmIC0tZ2l0
+IGEvbW0va2h1Z2VwYWdlZC5jIGIvbW0va2h1Z2VwYWdlZC5jDQo+Pj4gaW5kZXggMTZiZTYyZDQ5
+M2NkLi42NjMyMjY0Yjk1MWMgMTAwNjQ0DQo+Pj4gLS0tIGEvbW0va2h1Z2VwYWdlZC5jDQo+Pj4g
+KysrIGIvbW0va2h1Z2VwYWdlZC5jDQo+Pj4gQEAgLTIzNDIsNyArMjM0Miw3IEBAIHN0YXRpYyB2
+b2lkIHNldF9yZWNvbW1lbmRlZF9taW5fZnJlZV9rYnl0ZXModm9pZCkNCj4+PiAgICAgCS8qIGRv
+bid0IGV2ZXIgYWxsb3cgdG8gcmVzZXJ2ZSBtb3JlIHRoYW4gNSUgb2YgdGhlIGxvd21lbSAqLw0K
+Pj4+ICAgCXJlY29tbWVuZGVkX21pbiA9IG1pbihyZWNvbW1lbmRlZF9taW4sDQo+Pj4gLQkJCSAg
+ICAgICh1bnNpZ25lZCBsb25nKSBucl9mcmVlX2J1ZmZlcl9wYWdlcygpIC8gMjApOw0KPj4+ICsJ
+CQkgICAgICAodW5zaWduZWQgbG9uZykgbnJfZnJlZV9wYWdlY2FjaGVfcGFnZXMoKSAvIDIwKTsN
+Cj4+PiAgIAlyZWNvbW1lbmRlZF9taW4gPDw9IChQQUdFX1NISUZULTEwKTsNCj4+PiAgICAgCWlm
+IChyZWNvbW1lbmRlZF9taW4gPiBtaW5fZnJlZV9rYnl0ZXMpIHsNCj4+PiBkaWZmIC0tZ2l0IGEv
+bW0vcGFnZV9hbGxvYy5jIGIvbW0vcGFnZV9hbGxvYy5jDQo+Pj4gaW5kZXggZTAwOGEzZGYwNDg1
+Li40ODliNTY0NTI2ZGQgMTAwNjQ0DQo+Pj4gLS0tIGEvbW0vcGFnZV9hbGxvYy5jDQo+Pj4gKysr
+IGIvbW0vcGFnZV9hbGxvYy5jDQo+Pj4gQEAgLTU3NzUsNiArNTc3NSwxOSBAQCB1bnNpZ25lZCBs
+b25nIG5yX2ZyZWVfYnVmZmVyX3BhZ2VzKHZvaWQpDQo+Pj4gICB9DQo+Pj4gICBFWFBPUlRfU1lN
+Qk9MX0dQTChucl9mcmVlX2J1ZmZlcl9wYWdlcyk7DQo+Pj4gICArLyoqDQo+Pj4gKyAqIG5yX2Zy
+ZWVfcGFnZWNhY2hlX3BhZ2VzIC0gY291bnQgbnVtYmVyIG9mIHBhZ2VzIGJleW9uZCBoaWdoIHdh
+dGVybWFyaw0KPj4+ICsgKg0KPj4+ICsgKiBucl9mcmVlX3BhZ2VjYWNoZV9wYWdlcygpIGNvdW50
+cyB0aGUgbnVtYmVyIG9mIHBhZ2VzIHdoaWNoIGFyZSBiZXlvbmQgdGhlDQo+Pj4gKyAqIGhpZ2gg
+d2F0ZXJtYXJrIHdpdGhpbiBhbGwgem9uZXMuDQo+Pj4gKyAqDQo+Pj4gKyAqIFJldHVybjogbnVt
+YmVyIG9mIHBhZ2VzIGJleW9uZCBoaWdoIHdhdGVybWFyayB3aXRoaW4gYWxsIHpvbmVzLg0KPj4+
+ICsgKi8NCj4+PiArdW5zaWduZWQgbG9uZyBucl9mcmVlX3BhZ2VjYWNoZV9wYWdlcyh2b2lkKQ0K
+Pj4+ICt7DQo+Pj4gKwlyZXR1cm4gbnJfZnJlZV96b25lX3BhZ2VzKGdmcF96b25lKEdGUF9ISUdI
+VVNFUl9NT1ZBQkxFKSk7DQo+Pj4gK30NCj4+PiArDQo+Pj4gICBzdGF0aWMgaW5saW5lIHZvaWQg
+c2hvd19ub2RlKHN0cnVjdCB6b25lICp6b25lKQ0KPj4+ICAgew0KPj4+ICAgCWlmIChJU19FTkFC
+TEVEKENPTkZJR19OVU1BKSkNCj4+PiBAQCAtODY1MSw3ICs4NjY0LDcgQEAgdm9pZCBjYWxjdWxh
+dGVfbWluX2ZyZWVfa2J5dGVzKHZvaWQpDQo+Pj4gICAJdW5zaWduZWQgbG9uZyBsb3dtZW1fa2J5
+dGVzOw0KPj4+ICAgCWludCBuZXdfbWluX2ZyZWVfa2J5dGVzOw0KPj4+ICAgLQlsb3dtZW1fa2J5
+dGVzID0gbnJfZnJlZV9idWZmZXJfcGFnZXMoKSAqIChQQUdFX1NJWkUgPj4gMTApOw0KPj4+ICsJ
+bG93bWVtX2tieXRlcyA9IG5yX2ZyZWVfcGFnZWNhY2hlX3BhZ2VzKCkgKiAoUEFHRV9TSVpFID4+
+IDEwKTsNCj4+PiAgIAluZXdfbWluX2ZyZWVfa2J5dGVzID0gaW50X3NxcnQobG93bWVtX2tieXRl
+cyAqIDE2KTsNCj4+PiAgICAgCWlmIChuZXdfbWluX2ZyZWVfa2J5dGVzID4gdXNlcl9taW5fZnJl
+ZV9rYnl0ZXMpDQo=
