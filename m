@@ -2,114 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03565736B4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 579AF736B4F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:44:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232340AbjFTLnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 07:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34402 "EHLO
+        id S232195AbjFTLof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 07:44:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231913AbjFTLne (ORCPT
+        with ESMTP id S231890AbjFTLod (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 07:43:34 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75531727
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:43:32 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f87592eccfso2226786e87.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:43:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687261409; x=1689853409;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RI8zJ2B4Z2X5IcHWBKS5WPAJQqO4aBjX6c2mtTI8B2Q=;
-        b=CCTRNsgvR2UPVb1xJXQQZiCUabVKolwzo7UTGIODyexvGu2GPrMRg1g7UxVbFYZYfB
-         cP5yDros9mziT2CV7bMqFjA8wdpqFgjHjmUfNaXgECkgjdJbiXMeDZQbbEuA5NiqatIK
-         fEJ2j9ZTacjoL+sBLp1nX6WZNveNeZ0AI2MT5pXkTz6zZZ2MR3E2UwoCMhfOvVd4kWxf
-         Vjk8E4gSdo04E8YYSvjrDE9ie2YDpNieF449TUUATWR+ayI0uaGb0VZaGDon4i28HAki
-         82tLQvVV3CibPCH8uVNDzSPqeRRkak/Wuy/CwEshNRxxSv/cTmy1jYe4Qa36Zj0yPMLk
-         LPXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687261409; x=1689853409;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RI8zJ2B4Z2X5IcHWBKS5WPAJQqO4aBjX6c2mtTI8B2Q=;
-        b=cuMUyV3O7kiR+vr+a9K53ElupDf7I3nJl9K8UpREwW/9Y9mtbyR+mgl51Rf+C5RAP5
-         ya2mgLAUJtsNr2HvS9OFv6ijBHWUe96mCjcO6M4hKVD7XTebdMxjiVYljdXOK9BpV/ih
-         q3moZjSXnRK9lCgBOv1cxH/H33GPrzi43sDamTcyND2u9z/FgRAZ6TGb0h7jaww2mWc/
-         6p2U+dqA+cH1EM/GPVT5W9DDSr0H9NzWiG+LrR1qqGYv1Q/9vSXjRpZfNKOGSg992lKn
-         xEGLXwiM/HGnS5ngo4EGBDMb/HAx1qkpWkQPIXUlkK0x7zpu3mW1NoG/5hjsQIHDyw6d
-         bZ6w==
-X-Gm-Message-State: AC+VfDx8/MnIRgdLqutj6zZWYwESK8A089XXFtoWD5+i7dDiHi4v6ssc
-        yfR9bh0XaSOxGtGRZPQOZvPjlg==
-X-Google-Smtp-Source: ACHHUZ4brkblTOFRd/aUUHxZjq1zHbMhvCCj6HWtCPfsrSx/hxBC/7I663A9U2A8XTdEhYztMwW5oA==
-X-Received: by 2002:a19:4350:0:b0:4f8:4919:2dd5 with SMTP id m16-20020a194350000000b004f849192dd5mr6575126lfj.30.1687261409551;
-        Tue, 20 Jun 2023 04:43:29 -0700 (PDT)
-Received: from [192.168.1.101] (abxj193.neoplus.adsl.tpnet.pl. [83.9.3.193])
-        by smtp.gmail.com with ESMTPSA id v17-20020ac25591000000b004f640b0fb04sm324158lfg.212.2023.06.20.04.43.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 04:43:29 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 20 Jun 2023 13:43:21 +0200
-Subject: [PATCH v2 2/2] drm/msm/dsi: Enable runtime PM
+        Tue, 20 Jun 2023 07:44:33 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DBC9D102;
+        Tue, 20 Jun 2023 04:44:31 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B3D741063;
+        Tue, 20 Jun 2023 04:45:14 -0700 (PDT)
+Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BD5E93F64C;
+        Tue, 20 Jun 2023 04:44:29 -0700 (PDT)
+Message-ID: <7a8c0ac8-4e5d-fd55-92bc-c42064d34a66@arm.com>
+Date:   Tue, 20 Jun 2023 12:44:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 3/4] perf: arm_cspmu: Support implementation specific
+ validation
+Content-Language: en-GB
+To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Besar Wicaksono <bwicaksono@nvidia.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230607083139.3498788-1-ilkka@os.amperecomputing.com>
+ <20230607083139.3498788-4-ilkka@os.amperecomputing.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20230607083139.3498788-4-ilkka@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230620-topic-dsiphy_rpm-v2-2-a11a751f34f0@linaro.org>
-References: <20230620-topic-dsiphy_rpm-v2-0-a11a751f34f0@linaro.org>
-In-Reply-To: <20230620-topic-dsiphy_rpm-v2-0-a11a751f34f0@linaro.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1687261406; l=898;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=iR0+YI1D9awhWod+Sc5nGzcONvn3jPDAmrCRI6Yrb7M=;
- b=VXt0CmEZJgqL4MCbC8F8Mojwr2O2qliYJQRqyaxSfqgW8xqo1xrUAiXuEgFa1sXkhE/W9UIrX
- bMwaD2UuaKvCaVzwZHX20kE7AInt4nccV5Tl9zu6jVR+uwOOhLf/b9q
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some devices power the DSI PHY/PLL through a power rail that we model
-as a GENPD. Enable runtime PM to make it suspendable.
+On 07/06/2023 9:31 am, Ilkka Koskinen wrote:
+> Some platforms may use e.g. different filtering mechanism and, thus,
+> may need different way to validate the events and group.
+> 
+> Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
+> ---
+>   drivers/perf/arm_cspmu/arm_cspmu.c | 13 ++++++++++++-
+>   drivers/perf/arm_cspmu/arm_cspmu.h |  4 ++++
+>   2 files changed, 16 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c b/drivers/perf/arm_cspmu/arm_cspmu.c
+> index 72ca4f56347c..9021d1878250 100644
+> --- a/drivers/perf/arm_cspmu/arm_cspmu.c
+> +++ b/drivers/perf/arm_cspmu/arm_cspmu.c
+> @@ -559,7 +559,7 @@ static void arm_cspmu_disable(struct pmu *pmu)
+>   static int arm_cspmu_get_event_idx(struct arm_cspmu_hw_events *hw_events,
+>   				struct perf_event *event)
+>   {
+> -	int idx;
+> +	int idx, ret;
+>   	struct arm_cspmu *cspmu = to_arm_cspmu(event->pmu);
+>   
+>   	if (supports_cycle_counter(cspmu)) {
+> @@ -593,6 +593,12 @@ static int arm_cspmu_get_event_idx(struct arm_cspmu_hw_events *hw_events,
+>   	if (idx >= cspmu->num_logical_ctrs)
+>   		return -EAGAIN;
+>   
+> +	if (cspmu->impl.ops.validate_event) {
+> +		ret = cspmu->impl.ops.validate_event(cspmu, event);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>   	set_bit(idx, hw_events->used_ctrs);
+>   
+>   	return idx;
+> @@ -618,6 +624,7 @@ static bool arm_cspmu_validate_event(struct pmu *pmu,
+>    */
+>   static bool arm_cspmu_validate_group(struct perf_event *event)
+>   {
+> +	struct arm_cspmu *cspmu = to_arm_cspmu(event->pmu);
+>   	struct perf_event *sibling, *leader = event->group_leader;
+>   	struct arm_cspmu_hw_events fake_hw_events;
+>   
+> @@ -635,6 +642,10 @@ static bool arm_cspmu_validate_group(struct perf_event *event)
+>   			return false;
+>   	}
+>   
+> +	if (cspmu->impl.ops.validate_group &&
+> +	    cspmu->impl.ops.validate_group(event))
+> +		return false;
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/gpu/drm/msm/dsi/phy/dsi_phy.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Hmm, this means that any driver wanting to use it has to duplicate all 
+the group iteration logic, which isn't ideal. More than that, though, 
+the way you've implemented it in patch #4 I'm not sure even does 
+anything, since it only appears to be repeating the same checks that 
+already happen in this path:
 
-diff --git a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-index 2f319e0eb74f..22431e106529 100644
---- a/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-+++ b/drivers/gpu/drm/msm/dsi/phy/dsi_phy.c
-@@ -689,6 +689,10 @@ static int dsi_phy_driver_probe(struct platform_device *pdev)
- 		return dev_err_probe(dev, PTR_ERR(phy->ahb_clk),
- 				     "Unable to get ahb clk\n");
- 
-+	ret = devm_pm_runtime_enable(&pdev->dev);
-+	if (ret)
-+		return ret;
-+
- 	/* PLL init will call into clk_register which requires
- 	 * register access, so we need to enable power and ahb clock.
- 	 */
+   arm_csmpu_validate_group()
+     arm_cspmu_validate_event()
+       arm_cspmu_get_event_idx()
+         ops.validate_event() -> ampere_cspmu_validate_params()
 
--- 
-2.41.0
+so there's no need for the ops.validate_group hook to just call 
+ampere_cspmu_validate_params() a second time when it's guaranteed to 
+succeed (because otherwise we'd have bailed out already).
 
+I think what we want overall is an "is this event config valid at all" 
+hook from arm_cspmu_event_init() (which we don't really need to 
+implement yet unless you want to start sanity-checking your actual 
+rank/bank/threshold values), plus an "is this event schedulable in the 
+given PMU context" hook from arm_cspmu_get_event_idx(), which should 
+serve for both group validation via the fake context in event_init and 
+actual scheduling in the real context in add.
+
+Thanks,
+Robin.
+
+> +
+>   	return arm_cspmu_validate_event(event->pmu, &fake_hw_events, event);
+>   }
+>   
+> diff --git a/drivers/perf/arm_cspmu/arm_cspmu.h b/drivers/perf/arm_cspmu/arm_cspmu.h
+> index f89ae2077164..291cedb196ea 100644
+> --- a/drivers/perf/arm_cspmu/arm_cspmu.h
+> +++ b/drivers/perf/arm_cspmu/arm_cspmu.h
+> @@ -106,6 +106,10 @@ struct arm_cspmu_impl_ops {
+>   	void (*set_ev_filter)(struct arm_cspmu *cspmu,
+>   			      struct hw_perf_event *hwc,
+>   			      u32 filter);
+> +	/* Implementation specific group validation */
+> +	int (*validate_group)(struct perf_event *event);
+> +	/* Implementation specific event validation */
+> +	int (*validate_event)(struct arm_cspmu *cspmu, struct perf_event *new);
+>   	/* Hide/show unsupported events */
+>   	umode_t (*event_attr_is_visible)(struct kobject *kobj,
+>   					 struct attribute *attr, int unused);
