@@ -2,56 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5D937360F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 03:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97D47360FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 03:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjFTBAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 21:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
+        id S229716AbjFTBGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 21:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229984AbjFTBA0 (ORCPT
+        with ESMTP id S229453AbjFTBGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 21:00:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 409AA10C2
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 18:00:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 270DB60F77
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 01:00:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 24D5FC433CB;
-        Tue, 20 Jun 2023 01:00:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687222824;
-        bh=i+bkBGyvWdYTzpAuClogxpBwgpL1xJGlOgV4zpfwFvk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=i5TrPzeDUtdGThVJUdeeuXnGMhhXwNhK/o2qo6Y/66rnbiQYM0elJY5AAPIptSjWW
-         fW9xRDTR8TMh2QxLP3nk79+Ms81jithGN2MljY7/J+itMQe17PdJxCcr9ByBcnV4B9
-         /m0bAqZEbt03RxTht4uehz6x5R3ElON8qmiHD3xb5Gz4vHabq0htYhiKYJNgqrV4uk
-         25gDhHX1K6y1+c4f2MW/AVDuqZ285pXphFYyyh2gA+g+7E/JlDlOTerDfV+t0VrLyH
-         nX80a+FvzSI8LqllpkqORmxNbDmC7cA/MVfxmZm05qsJ7t9rG8V82OwO+B8m/x6RuZ
-         Qbbg2tZR/fvVg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0DAC7E301F8;
-        Tue, 20 Jun 2023 01:00:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 19 Jun 2023 21:06:34 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93BD9C;
+        Mon, 19 Jun 2023 18:06:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687223193; x=1718759193;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=VHof60/+vU8A0IEg7SMylUsXJOqbW8P6DsjVQClaj6M=;
+  b=LGo9aCAqlCCtMp668IHW5/RXUDWilcU395bMRHfwidpx61QdhEuj5vH0
+   meBBzA/X7z6hT9x14RQUIlJkjPpinxA4fLcpA3lozYBbmuAqobVjnNm1R
+   7rFcePaCSCGD0dnMvWMc9m5iE7+P3XMtUjYhihyq21ap5KtfTiseMQ+u8
+   KCz7sppnZ7FHhZNQKbTm1UnkqTcQ+3GfcvazsWTvW6OiVDVGk+VigQWBY
+   Y1ciiwFeVyrglBEidrPMsXDIJO59GFnd82qOklScpX97AoR8i1lyQcYy+
+   HhIbDvUjzepYYfme7VOk3uvcPejdTLae5DZJj56m0SeCEZGB69Pb4mKH2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="362277231"
+X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
+   d="scan'208";a="362277231"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 18:06:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="858376029"
+X-IronPort-AV: E=Sophos;i="6.00,255,1681196400"; 
+   d="scan'208";a="858376029"
+Received: from alaird-mobl2.amr.corp.intel.com (HELO [10.212.177.39]) ([10.212.177.39])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 18:06:30 -0700
+Message-ID: <4069285d-1653-4cbf-a3b3-24727697754b@intel.com>
+Date:   Mon, 19 Jun 2023 18:06:30 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] riscv: mm: stub extable related functions/macros for !MMU
-From:   patchwork-bot+linux-riscv@kernel.org
-Message-Id: <168722282405.22807.12021813710687983255.git-patchwork-notify@kernel.org>
-Date:   Tue, 20 Jun 2023 01:00:24 +0000
-References: <20230509152641.805-1-jszhang@kernel.org>
-In-Reply-To: <20230509152641.805-1-jszhang@kernel.org>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
-        palmer@dabbelt.com, aou@eecs.berkeley.edu,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v11 18/20] x86: Handle TDX erratum to reset TDX private
+ memory during kexec() and reboot
+Content-Language: en-US
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <5aa7506d4fedbf625e3fe8ceeb88af3be1ce97ea.1685887183.git.kai.huang@intel.com>
+ <20230609132301.uvvp27yr5kpenl6f@box.shutemov.name>
+ <58f34b4b81b6d6b37d3386dec0f073e6eb7a97ff.camel@intel.com>
+ <20230612075830.jbrdd6ysz4qq7wdf@box.shutemov.name>
+ <4c7effc3abe71aa1cbee41f3bd46b97aed40be26.camel@intel.com>
+ <48d5a29a-878c-665d-6ac2-6f0563bf6f3c@intel.com>
+ <5782c8c2bb3e76a802e4a81c553a21edbaee7c47.camel@intel.com>
+ <be258af9-a329-6f03-fcf9-9dafad42c97f@intel.com>
+ <20230619144651.kvmscndienyfr3my@box.shutemov.name>
+ <63477d22-26ef-dd08-a3b0-93931b7d1d16@intel.com>
+ <0be5634f390015ee6badb3f2b2154ad90eb70434.camel@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <0be5634f390015ee6badb3f2b2154ad90eb70434.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,28 +98,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On 6/19/23 17:56, Huang, Kai wrote:
+> Any comments to below?
 
-This patch was applied to riscv/linux.git (for-next)
-by Palmer Dabbelt <palmer@rivosinc.com>:
+Nothing that I haven't already said in this thread:
 
-On Tue,  9 May 2023 23:26:41 +0800 you wrote:
-> extable relies on the MMU to work properly, so it's useless to
-> include __ex_table sections and build extable related functions for
-> !MMU case.
-> 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> ---
-> 
-> [...]
+> Just use a normal old atomic_t or set_bit()/test_bit().  They have
+> built-in memory barriers are are less likely to get botched.
 
-Here is the summary with links:
-  - [v2] riscv: mm: stub extable related functions/macros for !MMU
-    https://git.kernel.org/riscv/c/de658bcf0333
+I kinda made a point of literally suggesting "atomic_t or
+set_bit()/test_bit()".  I even told you why: "built-in memory barriers".
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Guess what READ/WRITE_ONCE() *don't* have.  Memory barriers.
+
 
 
