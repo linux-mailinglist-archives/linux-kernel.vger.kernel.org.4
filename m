@@ -2,79 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53FFC736B5D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 408B1736B60
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:46:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232738AbjFTLqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 07:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36728 "EHLO
+        id S232815AbjFTLqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 07:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232808AbjFTLp7 (ORCPT
+        with ESMTP id S232796AbjFTLqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 07:45:59 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3631BC8;
-        Tue, 20 Jun 2023 04:45:45 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f871c93a5fso2805747e87.2;
-        Tue, 20 Jun 2023 04:45:45 -0700 (PDT)
+        Tue, 20 Jun 2023 07:46:05 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018FA1BDC
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:45:49 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-668711086f4so1765611b3a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:45:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687261543; x=1689853543;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0iwoXCLY7rYQ+Ak1ourPXpO19PkvpuhqSpoWlG2eDc4=;
-        b=c9Aj5pPFiBu7bgr+dk585VXJAGQdiE1ZW8xmClLlzabao8j5axa0sibKfdvLjbzrS2
-         YwCIB1yhQSw76BVQADJiWxFiYaXH0opmAXOHN4oHZHdisjkLKRMEjGyq2AcvSa+JOGD8
-         UVVZXrLT/HxVX87stzjc5wdaGhBJ9SVgmbfW8RyB/kYpi2vOWmGpaLGAEpc8RuDFAuNV
-         BF/HXCYhQmhq22DFkYjCqHSvKiTQGw2ZvAmAYUBzB/wKM/Bf7Io5v93RA43g54Fy1fP3
-         3PuMQgJonbAJOE+SFpOkF9Sa6Sl9LFWL4mqUt/Zr/GPuJFPOQOW36KP0vIHO/mElWYH3
-         uHkA==
+        d=ziepe.ca; s=google; t=1687261549; x=1689853549;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eWdugmL7jiCCazRwRTiCxhXSGGIdZDMM/iY0UbvTdUM=;
+        b=cnn8IRs9UEV2IyxM2/dyNE8Ybbqmsnj6tLoR8M1bmXQAVunFEwC20TKu6DUOVKG4AB
+         L2Yp6/XPUf6F5Xy+nc7uJZfoC02InmQWSMblYoG/4uAdrA9GIFvL7kwUb/yEeNhYFGr1
+         bkwG9DCJKJm7UPMDVOHOR7oHEfHhzz1mYZlMGy4Z2i7tBudfceWk0OsWq4cf8C2qfKpV
+         w9kz4Q6fy8cbK1P9tLY7jnan9hyd8ZaBomTDWQJ4IaOPbEXOkOCCXRQOiThAn1UjmjTv
+         PMpNa0lpCABevs0dIyQN5iH+zWSS9D1PjlkqlJwomy4rRdkHiQnPe7pPZunP1WQZBtR3
+         zPdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687261543; x=1689853543;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0iwoXCLY7rYQ+Ak1ourPXpO19PkvpuhqSpoWlG2eDc4=;
-        b=ArYVHlvsZDdt3s2hA0tevBgIRsUUb/elprg8n6NQYzklUG3RDVqORQAhNNGXLfEqQp
-         lBm6pjp3cgKL81fbeuJLrYwk2nuiOrywWFXc3rFuMDyVwvLg+AuR8rCRejtWEtvH7ox1
-         piPvNY8zyv0iwuNAdFzlYLAeX9RcXM5/KupzBW1zE8kVrAT7K0zA9P/bEBAlUfZZ/u26
-         Msink08vtvvdZIV1TnLGd46668Svg7JR4QCBtAdiibZChYGP/F+fn5izczIn2/JtXi93
-         Dw8ZAume/ndKMDiSdn7JGPgoYQ5DJ7WeU5wqNIL6sCyKPsxqNSn2tCNj/2Udw7U/rNnc
-         8eyw==
-X-Gm-Message-State: AC+VfDzsYgpMyf8jbNqSBVfOcTNo/Ka+/L8EJ7kjzUkSNN9J3r/Y4ttY
-        Ky8EXigkmYjUQNJ+v60sb+gUPN6L52U=
-X-Google-Smtp-Source: ACHHUZ6OjIYaD2GyUjeh5GtNXs+8DYN5lRtt58Vk74YFK2NtGeLYimYTb0tAxynG70Ttyr44gTEnSg==
-X-Received: by 2002:ac2:5bda:0:b0:4f8:64f5:f595 with SMTP id u26-20020ac25bda000000b004f864f5f595mr4671036lfn.60.1687261543187;
-        Tue, 20 Jun 2023 04:45:43 -0700 (PDT)
-Received: from mobilestation.baikal.int (srv1.baikalchip.ru. [87.245.175.227])
-        by smtp.gmail.com with ESMTPSA id d12-20020ac2544c000000b004f84162e08bsm331384lfn.185.2023.06.20.04.45.42
+        d=1e100.net; s=20221208; t=1687261549; x=1689853549;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eWdugmL7jiCCazRwRTiCxhXSGGIdZDMM/iY0UbvTdUM=;
+        b=mBCCp78sqSiTRhyJYdTvv1pTjATRcrq8fXpYxcsbhRVI8tOT7nDOdE4wIMyAfHdoRQ
+         H5ZPbcUnqtOvMHZqT8SV2F2n2ryksllvLwDt5N9X0Bw5Gik7KuACLrMSsH/0QQicSsXe
+         o1mTIqhElAQvG4YiTny3VCY6hEYuYk8H4CE6zi3kW43bjnIdiNK2OXEwrVd2pg0mT53t
+         CLMc0WOWh36eMJFgNWyYa+fw6Yxv5AScf7h1VRRLBiXLK/2AvWiRzameL9Nnnaux61no
+         JuAnMjkVCq7FL+T5rx6682Xl+4UsRddnPWioqvCWG3kXDYDZAmYA2rYWclixmraTo1aL
+         6qxA==
+X-Gm-Message-State: AC+VfDzugxO3kwS/TeiyTsjo4O8j+6//EOAle2VY9FwjlAzTCM79Aq/+
+        P5I9xU8PLXdxdsht2jRQciwgcQ==
+X-Google-Smtp-Source: ACHHUZ4X6nDwRKfeDuMyEgMyTrD6VgfsYjM5cSKUHYx3cAu4vDqqHRc1ln2Pqg94YC+C6bvDGfs7/g==
+X-Received: by 2002:a05:6a00:1820:b0:668:732d:7d9f with SMTP id y32-20020a056a00182000b00668732d7d9fmr10033336pfa.2.1687261549460;
+        Tue, 20 Jun 2023 04:45:49 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
+        by smtp.gmail.com with ESMTPSA id d17-20020aa78e51000000b0062d859a33d1sm1207199pfr.84.2023.06.20.04.45.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 04:45:42 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 14:45:40 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     =?utf-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
-Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>
-Subject: Re: [PATCH 4/9] dmaengine: dw-edma: HDMA: Add memory barrier before
- starting the DMA transfer in remote setup
-Message-ID: <tpowhctppelni47dosc27cg4vmzwdqnuvf3rukvmju2guoxzsr@wgxomqzfv6ch>
-References: <20230609081654.330857-1-kory.maincent@bootlin.com>
- <20230609081654.330857-5-kory.maincent@bootlin.com>
- <20230619170201.5hbgte2optjlbx55@mobilestation.baikal.int>
- <20230619203207.694bfac6@kmaincent-XPS-13-7390>
+        Tue, 20 Jun 2023 04:45:48 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qBZnv-007KSY-BA;
+        Tue, 20 Jun 2023 08:45:47 -0300
+Date:   Tue, 20 Jun 2023 08:45:47 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David Sc. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jann Horn <jannh@google.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 05/12] powerpc: add pte_free_defer() for pgtables
+ sharing page
+Message-ID: <ZJGRa4zvsXfc43vB@ziepe.ca>
+References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
+ <5cd9f442-61da-4c3d-eca-b7f44d22aa5f@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230619203207.694bfac6@kmaincent-XPS-13-7390>
+In-Reply-To: <5cd9f442-61da-4c3d-eca-b7f44d22aa5f@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,116 +122,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 08:32:07PM +0200, Köry Maincent wrote:
-> On Mon, 19 Jun 2023 20:02:01 +0300
-> Serge Semin <fancer.lancer@gmail.com> wrote:
+On Tue, Jun 20, 2023 at 12:47:54AM -0700, Hugh Dickins wrote:
+> Add powerpc-specific pte_free_defer(), to call pte_free() via call_rcu().
+> pte_free_defer() will be called inside khugepaged's retract_page_tables()
+> loop, where allocating extra memory cannot be relied upon.  This precedes
+> the generic version to avoid build breakage from incompatible pgtable_t.
 > 
-> > On Fri, Jun 09, 2023 at 10:16:49AM +0200, Köry Maincent wrote:
-> > > From: Kory Maincent <kory.maincent@bootlin.com>
-> > >   
-> > 
-> > > The Linked list element and pointer are not stored in the same memory as
-> > > the HDMA controller register. If the doorbell register is toggled before
-> > > the full write of the linked list a race condition error can appears.
-> > > In remote setup we can only use a readl to the memory to assured the full
-> > > write has occurred.
-> > > 
-> > > Fixes: e74c39573d35 ("dmaengine: dw-edma: Add support for native HDMA")
-> > > Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>  
-> > 
-> > Is this a hypothetical bug? Have you actually experienced the
-> > described problem? If so are you sure that it's supposed to be fixed
-> > as you suggest?
-> 
+> This is awkward because the struct page contains only one rcu_head, but
+> that page may be shared between PTE_FRAG_NR pagetables, each wanting to
+> use the rcu_head at the same time: account concurrent deferrals with a
+> heightened refcount, only the first making use of the rcu_head, but
+> re-deferring if more deferrals arrived during its grace period.
 
-> I do experienced this problem and this patch fixed it.
+You didn't answer my question why we can't just move the rcu to the
+actual free page?
 
-Could you give more details of how often does it happen? Is it stably
-reproducible or does it happen at very rare occasion?
+Since PPC doesn't recycle the frags, we don't need to carefully RCU
+free each frag, we just need to RCU free the entire page when it
+becomes eventually free?
 
-> 
-> > 
-> > I am asking because based on the kernel doc
-> > (Documentation/memory-barriers.txt):
-> > 
-> > *    1. All readX() and writeX() accesses to the same peripheral are ordered
-> > *       with respect to each other. This ensures that MMIO register accesses
-> > *       by the same CPU thread to a particular device will arrive in program
-> > *       order.
-> > * ...
-> > * The ordering properties of __iomem pointers obtained with non-default
-> > * attributes (e.g. those returned by ioremap_wc()) are specific to the
-> > * underlying architecture and therefore the guarantees listed above cannot
-> > * generally be relied upon for accesses to these types of mappings.
-> > 
-> > the IOs performed by the accessors are supposed to arrive in the
-> > program order. Thus SET_CH_32(..., HDMA_V0_DOORBELL_START) performed
-> > after all the previous SET_CH_32(...) are finished looks correct with
-> > no need in additional barriers. The results of the later operations
-> > are supposed to be seen by the device (in our case it's a remote DW
-> > eDMA controller) before the doorbell update from scratch. From that
-> > perspective your problem looks as if the IO operations preceding the
-> > doorbell CSR update aren't finished yet. So you are sure that the LL
-> > memory is mapped with no additional flags like Write-Combine or some
-> > caching optimizations? Are you sure that the PCIe IOs are correctly
-> > implemented in your platform?
-> 
-> No, I don't know if there is extra flags or optimizations.
-
-Well, I can't know that either.) The only one who can figure it out is
-you, at least at this stage (I doubt Gustavo will ever get back to
-reviewing and testing the driver on his remote eDMA device). I can
-help if you provide some more details about the platform you are
-using, about the low-level driver (is it
-drivers/dma/dw-edma/dw-edma-pcie.o?) which gets to detect the DW eDMA
-remote device and probes it by the DW eDMA core.
-
-* Though I don't have hardware with the remote DW eDMA setup to try to
-reproduce and debug the problem discovered by you.
-
-> 
-> > 
-> > I do understand that the eDMA CSRs and the LL memory are mapped by
-> > different BARs in the remote eDMA setup. But they still belong to the
-> > same device. So the IO accessors semantic described in the kernel doc
-> > implies no need in additional barrier.
-> 
-> Even if they are on the same device it is two type of memory.
-
-What do you mean by "two types of memory"? From the CPU perspective
-they are the same. Both are mapped via MMIO by means of a PCIe Root
-Port outbound memory window.
-
-> I am not an PCIe expert but I suppose the PCIe controller of the board is
-> sending to both memory and if one of them (LL memory here) is slower in the
-> write process then we faced this race issue. We can not find out that the write
-> to LL memory has finished before the CSRs even if the write command has been
-> sent earlier.
-
-From your description there is no guarantee that reading from the
-remote device solves the race for sure. If writes have been collected
-in a cache, then the intermediate read shall return a data from the
-cache with no data being flushed to the device memory. It might be
-possible that in your case the read just adds some delay enough for
-some independent activity to flush the cache. Thus the problem you
-discovered may get back in some other circumstance. Moreover based on
-the PCI Express specification "A Posted Request must not pass another
-Posted Request unless a TLP has RO (Relaxed ordering) or IDO (ID-based
-ordering) flag set." So neither intermediate PCIe switches nor the
-PCIe host controller is supposed to re-order simple writes unless the
-Root Port outbound MW is configure to set the denoted flags. In anyway
-all of that is platform specific. So in order to have it figured out
-we need more details from the platform from you.
-
-Meanwhile:
-
-Q1 are you sure that neither dma_wmb() nor io_stop_wc() help to solve
-the problem in your case?
-
-Q2 Does specifying a delay instead of the dummy read before the
-doorbell update solve the problem?
-
--Serge(y)
-
-> 
-> Köry,
+Jason
