@@ -2,101 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F4044736412
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3451B736420
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbjFTHKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 03:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55744 "EHLO
+        id S231204AbjFTHMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 03:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjFTHKp (ORCPT
+        with ESMTP id S229579AbjFTHMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 03:10:45 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CD0CC
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:10:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Ak1na8GbY5x4+XXN0A9MfARgJ99cd/S+45Z1mbNGHDM=; b=Qfx4iSwmEU0wrndFg+bhUU71CJ
-        WSXMR57xcYsp6J6A7JG8bhxgS0nfDiM5r14j5FCwTdRXWA+cUIKyuUluush1FZfpWkBCK/4H3nV8e
-        w2xrI+cVdgeF0M7Ht04eo2mQkHYb+5cBq1Bgm3wZsoNUfhdbPVkBvp03mBWyKOFBJSgqYecTk9RKK
-        7NVnLCb0VhPirp26pVVSa3FJOfGAdIp30vUyCXQqFkakQsdA1WYjCRREQ2cdRS1AEcEHVXZ311am5
-        BNW8zWbFCdnDc1+a+dvOmVG7bYbTiz1vp8ccQWLXpuqvhOqvt1d5fF1jeUM7Kl5PPwBYitEJTqqJI
-        mTq8IMlw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qBVVB-00CmmP-QS; Tue, 20 Jun 2023 07:10:09 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1D673300137;
-        Tue, 20 Jun 2023 09:10:06 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0237D20A3B6D3; Tue, 20 Jun 2023 09:10:05 +0200 (CEST)
-Date:   Tue, 20 Jun 2023 09:10:05 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Naveen N Rao <naveen@kernel.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Subject: Re: [RFC PATCH v1 1/3] Revert "powerpc/bug: Provide better
- flexibility to WARN_ON/__WARN_FLAGS() with asm goto"
-Message-ID: <20230620071005.GR4253@hirez.programming.kicks-ass.net>
-References: <cover.1686922583.git.christophe.leroy@csgroup.eu>
- <8dd72199549e76e0e9c2aba1c89d5fe2b0cb1663.1686922583.git.christophe.leroy@csgroup.eu>
- <1687237941.1wok7iiqm0.naveen@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1687237941.1wok7iiqm0.naveen@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 20 Jun 2023 03:12:51 -0400
+Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B346E7;
+        Tue, 20 Jun 2023 00:12:48 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VlamlVY_1687245158;
+Received: from srmbuffer011165236051.sqa.net(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VlamlVY_1687245158)
+          by smtp.aliyun-inc.com;
+          Tue, 20 Jun 2023 15:12:44 +0800
+From:   Jing Zhang <renyu.zj@linux.alibaba.com>
+To:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        John Garry <john.g.garry@oracle.com>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Ian Rogers <irogers@google.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, linux-doc@vger.kernel.org,
+        Zhuo Song <zhuo.song@linux.alibaba.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>
+Subject: [PATCH v4 0/4] Add JSON metrics for Yitian710 DDR
+Date:   Tue, 20 Jun 2023 15:12:32 +0800
+Message-Id: <1687245156-61215-1-git-send-email-renyu.zj@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 10:51:25AM +0530, Naveen N Rao wrote:
-> Christophe Leroy wrote:
-> > This reverts commit 1e688dd2a3d6759d416616ff07afc4bb836c4213.
-> > 
-> > That commit aimed at optimising the code around generation of
-> > WARN_ON/BUG_ON but this leads to a lot of dead code erroneously
-> > generated by GCC.
-> > 
-> >      text	   data	    bss	    dec	    hex	filename
-> >   9551585	3627834	 224376	13403795	 cc8693	vmlinux.before
-> >   9535281	3628358	 224376	13388015	 cc48ef	vmlinux.after
-> > 
-> > Once this change is reverted, in a standard configuration (pmac32 +
-> > function tracer) the text is reduced by 16k which is around 1.7%
-> 
-> Aneesh recently reported a build failure due to the use of 'asm goto' in
-> WARN_ON(). We were able to root-cause it to the use of 'asm goto' with two
-> config options: CONFIG_CC_OPTIMIZE_FOR_SIZE and
-> CONFIG_DEBUG_SECTION_MISMATCH.
+Hi all,
 
-FWIW;
+I add an identifier sysfs file for the yitian710 SoC DDR to allow
+userspace to identify the specific implementation of the device,
+so that the perf tool can match the corresponding uncore events and
+metrics through the identifier. Then added yitian710 SoC DDR
+metrics and events alias.
 
-I recently had clang-powerpc report a very dodgy build error that was
-due to a combination of these asm-goto and the usage of __cleanup__.
-For some reason the label of the asm-goto crossed over the __cleanup__
-variable declaration -- which is not valid, but also was completely
-insane for that's not what the code called for.
+Change since v3:
+- Split the CMN and ali_drw patches. This patchset only contains
+  ali_drw PMU related patches. The CMN metric related patches will
+  be in another patchset.
+- Link: https://lore.kernel.org/all/1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com/
 
-  https://lkml.kernel.org/r/20230610082005.GB1370249@hirez.programming.kicks-ass.net
+$perf list:
+...
+ali_drw:
+  chi_rxdat
+       [A packet at CHI RXDAT interface (write data). Unit: ali_drw]
+  chi_rxrsp
+       [A packet at CHI RXRSP interface. Unit: ali_drw]
+  chi_txdat
+       [A packet at CHI TXDAT interface (read data). Unit: ali_drw]
+  chi_txreq
+       [A packet at CHI TXREQ interface (request). Unit: ali_drw]
+  cycle
+       [The ddr cycle. Unit: ali_drw]
+...
+ali_drw:
+  ddr_read_bandwidth.all
+       [The ddr read bandwidth(MB/s). Unit: ali_drw ]
+  ddr_write_bandwidth.all
+       [The ddr write bandwidth(MB/s). Unit: ali_drw ]
+...
 
-But in my book that's a compiler issue, not a kernel issue and I'd be
-hesitant to pull the asm-goto use just for that.
+$perf stat -M ddr_read_bandwidth.all ./test
 
+Performance counter stats for 'system wide':
+
+            38,150      hif_rd        #  2.4 MB/s  ddr_read_bandwidth.all
+     1,000,957,941 ns   duration_time
+
+       1.000957941 seconds time elapsed
+
+Jing Zhang (4):
+  driver/perf: Add identifier sysfs file for Yitian 710 DDR
+  perf jevents: Add support for Yitian 710 DDR PMU aliasing
+  perf vendor events: Add JSON metrics for Yitian 710 DDR
+  docs: perf: Update metric usage for Alibaba's T-Head PMU driver
+
+ Documentation/admin-guide/perf/alibaba_pmu.rst     |   5 +
+ drivers/perf/alibaba_uncore_drw_pmu.c              |  27 ++
+ .../arm64/freescale/yitian710/sys/ali_drw.json     | 373 +++++++++++++++++++++
+ .../arm64/freescale/yitian710/sys/metrics.json     |  20 ++
+ tools/perf/pmu-events/jevents.py                   |   1 +
+ 5 files changed, 426 insertions(+)
+ create mode 100644 tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/ali_drw.json
+ create mode 100644 tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/metrics.json
+
+-- 
+1.8.3.1
 
