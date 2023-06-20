@@ -2,98 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B60237363D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 08:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C1C7363D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 08:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbjFTGuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 02:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49482 "EHLO
+        id S229639AbjFTGyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 02:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbjFTGuO (ORCPT
+        with ESMTP id S229506AbjFTGyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 02:50:14 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABD5B1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 23:50:13 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-57083a06b71so35803397b3.1
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 23:50:13 -0700 (PDT)
+        Tue, 20 Jun 2023 02:54:38 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74394E4D
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 23:54:36 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-5187aa18410so4521496a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 23:54:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687243813; x=1689835813;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I/bRJJ7HKAxHd08pJcszqvVk2aL6jH9Ld13vowySjkQ=;
-        b=Vz0vexlm8Fi1kRWWLKFH0afGyZbpoHfUCJFGK5u6d1yfX9pcmaTaF8B9KhDWYwm1jW
-         Z3OHmDGoXUe3JhXcUAbF965Onew9srRDivZSbN3wndiTA6j7qLe46+c7OONnoi1awyTP
-         PxuAvKUdhV9NZgbHaRPq9uuToBYnY7B3RKXHUc3DgHDN4+2mhVMJWHieVVS5XvM7nsua
-         94bKAJ2uPjOf+d8ibOrtydWioDkIQYoSfFcweFsuWKU+f3lbQACGTY8l9iGBLIH2Kqz6
-         q1zwm0178oZv/vq0nCnIzWVviStyiAH7Q6JscZHrNhFJ3utksGPBC2KEKTxPj80uNjMh
-         YJOA==
+        d=linaro.org; s=google; t=1687244075; x=1689836075;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RHu+NkMzqrH0464bp3H0UR8X3Xh2cwMlvvEyc29F4/o=;
+        b=hvXhMlsaDSHljn/iQL+wAUIsXvYnFkURkgRmpZmprSNHQQ1jvuglXK347aHmP2eM/Q
+         WonOw43LoXkH7ahUb+QX9Xs8uquo+gqLt8AzkGhL0CZUVF8VDc4V1G30KZmO+z1ngnSH
+         J6ybJmYAmIxAGSNOWmz9uJj1hHjkrXICVb4pNCNcPdgLWPHBYhkjBlRQjA14IiUuy9ms
+         7aKe1THGVBHJ+u1sPq5a5ypgx7wGVDYYGdK1a7IUazW1+tWnIm/a5zZMXz3RGojXAIQq
+         UOR0zdRyquXYLcHB09TQldGpIJ/aPA/oSDKord7ri1NhnuJ9VJRs6KxtPVFSf/qEFqpT
+         OqdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687243813; x=1689835813;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I/bRJJ7HKAxHd08pJcszqvVk2aL6jH9Ld13vowySjkQ=;
-        b=jgRpP0eRYcwv67MHXXt+nhBc4MMmClldGBOK5kO0TNgYrwiBc+Hmlj/LGP9lEsKoJt
-         xhFxT0zTniCotLriBs2GkJ3nifdw+61OAi7+f1lL/PHHXpaKkhyDT7EUJUkL/M5FkTZQ
-         aDIPnWzaorJX4b1PErKeLxZFPmz9B7NleGCsp1o0axv74bKfBV5LCIjbs0gr4gMscwDe
-         RY3KKlbYeuQhPAQ2WQon1wWfeLyKM0molfLZE+/KQyhf97ETAjXtsBO4KdLU9NwCSBrB
-         EfNPgadF78h9AEBXVL7SndSSZwWrSTN11YGAWbAdCbAG/7pRP9RtmxFFWwPt/aChvX22
-         tK1Q==
-X-Gm-Message-State: AC+VfDxqM012fqSK3m3/UB54OziMHK5twEP5zop3uS40O1j+FwJfy6Uw
-        SgNvQRF+V1IDUzwgQoIN1f779Q==
-X-Google-Smtp-Source: ACHHUZ6xe3gTMi2H2TKLGiqQf2yXBFKo4zstK8P2uGDdenyDLR1k6x+/t7pyX3iqc5ah0hb++0ZtyQ==
-X-Received: by 2002:a0d:d412:0:b0:56d:3402:b9a0 with SMTP id w18-20020a0dd412000000b0056d3402b9a0mr11226869ywd.14.1687243812830;
-        Mon, 19 Jun 2023 23:50:12 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id w1-20020a818601000000b0057328423a05sm356123ywf.80.2023.06.19.23.50.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Jun 2023 23:50:12 -0700 (PDT)
-Date:   Mon, 19 Jun 2023 23:50:00 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH] mm/swapfile: delete outdated pte_offset_map() comment
-In-Reply-To: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
-Message-ID: <9022632b-ba9d-8cb0-c25-4be9786481b5@google.com>
-References: <c1c9a74a-bc5b-15ea-e5d2-8ec34bc921d@google.com>
+        d=1e100.net; s=20221208; t=1687244075; x=1689836075;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RHu+NkMzqrH0464bp3H0UR8X3Xh2cwMlvvEyc29F4/o=;
+        b=KI+tzHjMS79uERzYi/9oFhFPNu627P9V+UHALzMUxpF7yEE6tSH1OIkQPaMIMRvZxY
+         6pN0Z1LkUtDuab4LpuBj7OCkMICLGM2KWn2bqQXc6lHMzHWYc1qOZzJI0HXialrFvpVm
+         7I7Q5bs7pi68nMK+/VNJOyjKpikPVff4zb9y9QDdWEarspQ3+DO0l5O1qnxqbrqC/1pr
+         m1G5OOkpBYHc2RUKyNJzdKqvhEZjYihA9QAGWUjsN9I/Y74ZrC5wUOmqJj4C/pPKDq5S
+         WWPaGHyrusOB0GPY4e/i9/0ezxkZx/Ks+ud5UfQmEWmXQfbL5lj7bPVpoBmVNB5HLyy4
+         ViYA==
+X-Gm-Message-State: AC+VfDxlPeptOliBXoOnfcUT7hztOrO9OB0+4VjNu58UfL7saoyfe87K
+        vyi4DrShY+0JLOnSfQQ4BL5asg==
+X-Google-Smtp-Source: ACHHUZ43B2VPU7TMOZvj2PX+FF53M27z8ouHa2MimhQa1X8PJqcPLyCiANbz4hVvB6Hhc1wNfX/bug==
+X-Received: by 2002:aa7:d6c3:0:b0:51a:4ac3:b7e2 with SMTP id x3-20020aa7d6c3000000b0051a4ac3b7e2mr5083958edr.19.1687244074846;
+        Mon, 19 Jun 2023 23:54:34 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id l13-20020a056402344d00b0051879c4f598sm627907edc.66.2023.06.19.23.54.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 23:54:34 -0700 (PDT)
+Message-ID: <eea945ce-9b9e-42d6-0387-48ec0c88cc89@linaro.org>
+Date:   Tue, 20 Jun 2023 08:54:31 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v6 1/5] dt-bindings: media: platform: visconti: Add
+ Toshiba Visconti Video Input Interface bindings
+Content-Language: en-US
+To:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Sakari Ailus <sakari.ailus@iki.fi>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230620031111.3776-1-yuji2.ishikawa@toshiba.co.jp>
+ <20230620031111.3776-2-yuji2.ishikawa@toshiba.co.jp>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230620031111.3776-2-yuji2.ishikawa@toshiba.co.jp>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,34 +85,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete a triply out-of-date comment from add_swap_count_continuation():
-1. vmalloc_to_page() changed from pte_offset_map() to pte_offset_kernel()
-2. pte_offset_map() changed from using kmap_atomic() to kmap_local_page()
-3. kmap_atomic() changed from using fixed FIX_KMAP addresses in 2.6.37.
+On 20/06/2023 05:11, Yuji Ishikawa wrote:
+> Adds the Device Tree binding documentation that allows to describe
+> the Video Input Interface found in Toshiba Visconti SoCs.
+> 
+> Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+> Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+> ---
+> Changelog v2:
+> - no change
+> 
+> Changelog v3:
+> - no change
+> 
+> Changelog v4:
+> - fix style problems at the v3 patch
+> - remove "index" member
+> - update example
+> 
+> Changelog v5:
+> - no change
+> 
+> Changelog v6:
+> - add register definition of BUS-IF and MPU
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
-Here's a late "33/32" to the series just moved to mm-stable - thank you!
+You ignored the comments from v4->v5. I pointed this out. You still
+ignored them.
 
- mm/swapfile.c | 5 -----
- 1 file changed, 5 deletions(-)
+You keep sending the same wrong patch ignoring review. This is not
+acceptable.
 
-diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 12d204e6dae2..0a17d85b50cb 100644
---- a/mm/swapfile.c
-+++ b/mm/swapfile.c
-@@ -3470,11 +3470,6 @@ int add_swap_count_continuation(swp_entry_t entry, gfp_t gfp_mask)
- 		goto out;
- 	}
- 
--	/*
--	 * We are fortunate that although vmalloc_to_page uses pte_offset_map,
--	 * no architecture is using highmem pages for kernel page tables: so it
--	 * will not corrupt the GFP_ATOMIC caller's atomic page table kmaps.
--	 */
- 	head = vmalloc_to_page(si->swap_map + offset);
- 	offset &= ~PAGE_MASK;
- 
--- 
-2.35.3
+NAK
+
+Best regards,
+Krzysztof
 
