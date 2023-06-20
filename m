@@ -2,103 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D79577375E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A37F17375EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbjFTUQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 16:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53320 "EHLO
+        id S229902AbjFTUSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 16:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbjFTUQO (ORCPT
+        with ESMTP id S230250AbjFTUSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 16:16:14 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADFDF1FC1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:15:44 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-668689ce13fso1753433b3a.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:15:44 -0700 (PDT)
+        Tue, 20 Jun 2023 16:18:09 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B883D1996
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:17:43 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id ca18e2360f4ac-77de8cc1370so57019739f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:17:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687292117; x=1689884117;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ugg5Bn6O5nwawhDuTl20N+YQmkiNRZWUsdUMwl/ozoM=;
-        b=eisvxZmVwycNuQOHor0Vhx2McMYxaUxYRyBHGhZapsWz+dARtltTBA9muZw0VNx8O5
-         KI7Cnhbi7j+8/K/SRnIj9Mp9UpWH3l/vApI+5jovdL1d3YtofCxK/0h+5RAC8vKW0MWQ
-         ZjgoYQS62LU+Ci7mZEGBpePdyojjDbX60jhH0=
+        d=linuxfoundation.org; s=google; t=1687292261; x=1689884261;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7VUNyOpD7UjHXpWrEPFOTh+iR0pIdYAc7/OPkzR6Y3s=;
+        b=R1wJLNcmY/vqUNLf0V9PdKWGFzljenfA/lhmc+IDxCQ0uDZA8hA87x21I5Y6sAaV7n
+         mFGNl5p5dAgZlTINvK4q3xpxpWhjZUG1WOcfAPIlWoZ29i1HidG72N28FUITN8Qk19J5
+         3Am0x+aYVN99Pd+TdKO9V7urBhYx9K7+ygXpQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687292117; x=1689884117;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ugg5Bn6O5nwawhDuTl20N+YQmkiNRZWUsdUMwl/ozoM=;
-        b=JXnnY5irP2vGPA5egctWo24RAz8MN3LlD9W38Gb04rdVZykAO4vXLl8OxhtBMOuFsc
-         vcY/mULSFk+n2k4nvJ8AFH43NKdUT5W3Wbz8cUCH7xlIknJH8Vu112aYKHKT2Bc0UK6H
-         JlGYyF1OLKjWUiFxvlPuLEh7Pp8Uo5G/pThykFRvZvG8F+x/O/S4lf2knsiAmfJP//VR
-         oH0ZtovV+9gia9DWTxXiqGFECP1Ys7+nv0LO0r+zxm0H/tHBtiMnwIduhK7unWrCa/Sl
-         GyWLnBGQT5ScvwL5YJMp0Fh2WZ5QpfHTrnLErZYRnuoD6m/XHdS1v/C/vnXGcwn2C9ML
-         xVww==
-X-Gm-Message-State: AC+VfDzBMDI+Cq4l+YHx075l93HtVYd1N/PKbz33XdosL6JxZX1DHW5x
-        vcYreLdWmCBk6mui1CEnDyK5Aqd9s+4HnSu6QM0=
-X-Google-Smtp-Source: ACHHUZ7DHmliAxTvQVIqBr73bQmGkR82MdiWfo2PN+3zZtYfizCQt7jsEa85Fp+cEDXJ6T7X+ljRXw==
-X-Received: by 2002:a05:6a20:394d:b0:122:2bc1:8855 with SMTP id r13-20020a056a20394d00b001222bc18855mr4355231pzg.10.1687292117365;
-        Tue, 20 Jun 2023 13:15:17 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id g11-20020aa7818b000000b0064fd4a6b306sm1671184pfi.76.2023.06.20.13.15.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 13:15:16 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 13:15:15 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     Azeem Shaikh <azeemshaikh38@gmail.com>,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] nios2: Replace all non-returning strlcpy with strscpy
-Message-ID: <202306201313.C425BCB@keescook>
-References: <20230530162358.984149-1-azeemshaikh38@gmail.com>
- <202305301620.346CC541@keescook>
- <45ed31e0-9ecd-56ea-c0d4-3c68a3fd8cf5@kernel.org>
+        d=1e100.net; s=20221208; t=1687292261; x=1689884261;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7VUNyOpD7UjHXpWrEPFOTh+iR0pIdYAc7/OPkzR6Y3s=;
+        b=Wd3GOkL/y5AEbfMfVGfXcjr98BBIaBrkZuFbYUX2ejCSNIZp/BWMYHYWzh0F1jQgSv
+         JzgTS4PmUhNmiwhbqn1sUP4i5MX1rfSViC02oh8vYKcim0NkuMYQmKXFyz/hS9XGW7uq
+         s5tL0I6G1Z/XVDR0uzhyLlFz4Jadxr1wxKzm5S9C90Av3lE8k68NVAcwFwEE2lUqllIH
+         HTk2VB2jIno8tq20DWc95jDdyC436OfXYgIAFSSM7iRaLGL+AkV3rEXko6sSZjhvHurm
+         wUZ92ELwmQ66XjbUOwVHJsG36Lp3kr1MZ41FpjYQe0XLCA84GsteIUQcQhE9IWVzgfFQ
+         ugSg==
+X-Gm-Message-State: AC+VfDx4DPQPWA8aQSs4vAv2FGFckFHtsaaMhIhGYOt8xHdvKNbuuDAM
+        EL0rQPmmbI5LPJEocd/uWJsopg==
+X-Google-Smtp-Source: ACHHUZ4b6WI3yGdHwyFzHgt/5IhDV+v9tOmhBgvZK+Z9ydxscF2SYMrILjsbDdB/094bq/mKF+PfIA==
+X-Received: by 2002:a05:6602:1a06:b0:780:ad9c:ce57 with SMTP id bo6-20020a0566021a0600b00780ad9cce57mr1279410iob.1.1687292261020;
+        Tue, 20 Jun 2023 13:17:41 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id c4-20020a02a604000000b0040f91082a4fsm840105jam.75.2023.06.20.13.17.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 13:17:40 -0700 (PDT)
+Message-ID: <31a77b25-1ecf-eb61-4c29-e0f9efbdc1c1@linuxfoundation.org>
+Date:   Tue, 20 Jun 2023 14:17:39 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <45ed31e0-9ecd-56ea-c0d4-3c68a3fd8cf5@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 6.3 000/187] 6.3.9-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230619102157.579823843@linuxfoundation.org>
+Content-Language: en-US
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230619102157.579823843@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 13, 2023 at 05:15:41PM -0500, Dinh Nguyen wrote:
+On 6/19/23 04:26, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.9 release.
+> There are 187 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
+> Responses should be made by Wed, 21 Jun 2023 10:21:12 +0000.
+> Anything received after that time might be too late.
 > 
-> On 5/30/23 18:20, Kees Cook wrote:
-> > On Tue, May 30, 2023 at 04:23:58PM +0000, Azeem Shaikh wrote:
-> > > strlcpy() reads the entire source buffer first.
-> > > This read may exceed the destination size limit.
-> > > This is both inefficient and can lead to linear read
-> > > overflows if a source string is not NUL-terminated [1].
-> > > In an effort to remove strlcpy() completely [2], replace
-> > > strlcpy() here with strscpy().
-> > > No return values were used, so direct replacement is safe.
-> > > 
-> > > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-> > > [2] https://github.com/KSPP/linux/issues/89
-> > > 
-> > > Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
-> > 
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.3.9-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.3.y
+> and the diffstat can be found below.
 > 
-> Applied!
+> thanks,
+> 
+> greg k-h
+> 
 
-Thanks for taking this patch! I just wanted to double-check, though; I
-haven't seen it show up in -next yet. Is this still queued?
+Compiled and booted on my test system. No dmesg regressions.
 
-Thanks!
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
--Kees
-
--- 
-Kees Cook
+thanks,
+-- Shuah
