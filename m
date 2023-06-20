@@ -2,68 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42D9F73678D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBFA673679A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229522AbjFTJUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 05:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44926 "EHLO
+        id S232252AbjFTJXm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Jun 2023 05:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232508AbjFTJUI (ORCPT
+        with ESMTP id S232018AbjFTJXk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 05:20:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E1B69D
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 02:20:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01B5F60E9D
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:20:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69B91C433C0;
-        Tue, 20 Jun 2023 09:20:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687252806;
-        bh=XVX4CCnLdVg7zSRDRhJD0ERZfLbPES+c03e6Dc9ccew=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ABp2kW72kpi04XgYlwADXbnIlzXILtkjyW1gC0kB38gfhMgpnNy1rexazJVndEz+o
-         GpAh8gTDR3DF7UL+4Nz4HFIbe+uwr24PZEeZslUc4rdsJzEkkzecxrnwACRHu25qHy
-         QfvofI9kATF2z/+xrhdV1FPK954ucw6fNLlKWwnYRUnEZWKrJIYpudgDLOf+XUOnLd
-         kyvdzoM0iNuSRswU9T8+vacyupbKhoPRd9A9JL2bNo/N5GV+5H+Cc5eTejSPQbeg32
-         RATmh9jueNs64Mscq2SW6kxTaKP4WQZbpVZWJVtdSWA9IovNQkGMQxJBnIrw1DDFYg
-         HVG9kZYUAwW/A==
-Message-ID: <a6b7bd99-cd2c-69ef-a021-29a4baf7569d@kernel.org>
-Date:   Tue, 20 Jun 2023 17:20:03 +0800
+        Tue, 20 Jun 2023 05:23:40 -0400
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0220FD1;
+        Tue, 20 Jun 2023 02:23:40 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-988a4a7be58so61679366b.0;
+        Tue, 20 Jun 2023 02:23:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687253018; x=1689845018;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vn06othrxyUbjjcGIg6BI9HKgyVRJBi0nYrYtjCy59c=;
+        b=NX+DItotG3JDe8jfuORZbDCJHMJLCkJgBojoP5E/b/8MrlSf+jSQRN16XU9UGVRSpc
+         IQsewfTepgfc2IzyT0F5TIblswo7Sjdbg2evNmO43rtHMFEpIrF902SBrJDhRknLJ7Lh
+         cWhkA93cSKGpxeU2xCZHy7USqVokz9Wivbrv9+nqZEfhLIn4gZYUagu6aD5N8wSKwgS1
+         rYf4q1Zbr8ub51O3qkLvLgUCqKEW2QWUl/Er2IxNzUX6UoVHod3OJhyEqJOAJNR6dkMs
+         lFXbXiEsKXLrDn8xraYYPgw1aPq+e+GTHgGjQtOsa5TApJIv8iF1lwR5COJqGCepA2WX
+         BZ2Q==
+X-Gm-Message-State: AC+VfDx8FNdZGVcT0CGCNRiGy3svaNscIwNYF//+25ifJPN0cMtQnX9m
+        kGSks/3t/PLz2dIKNGxV4SAJSgFWE7AjUg7/OOo=
+X-Google-Smtp-Source: ACHHUZ5DpoEOSGfriQ0VGQySempiEBTP+uJPizlOBgqmx3cVtWzLdqTfib10VpahFy8o/f+vf2hTbngsKSUKtUP5H0Q=
+X-Received: by 2002:a17:906:74da:b0:974:5480:6270 with SMTP id
+ z26-20020a17090674da00b0097454806270mr8285432ejl.0.1687253018265; Tue, 20 Jun
+ 2023 02:23:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [f2fs-dev][PATCH] f2fs: remove unneeded page uptodate check/set
-Content-Language: en-US
-To:     Yunlei He <heyunlei@oppo.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20230619151353.2168306-1-heyunlei@oppo.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230619151353.2168306-1-heyunlei@oppo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230615063333.4030395-1-perry.yuan@amd.com> <CAJZ5v0hMEuiv71RoEfyBJ_Z83AvMWXfEvt9kBU2SmZyXvKSx4w@mail.gmail.com>
+ <6973890d-3366-0fdb-6306-77a763a979d5@amd.com>
+In-Reply-To: <6973890d-3366-0fdb-6306-77a763a979d5@amd.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 20 Jun 2023 11:23:21 +0200
+Message-ID: <CAJZ5v0hw7eCAE+5NVyc_D=qriK21kZ8aJFOD0G4MBr0qjMLfUA@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] cpufreq: intel_pstate: Use the acpi_pm_profile_server()
+ symbol
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Perry Yuan <perry.yuan@amd.com>, rafael.j.wysocki@intel.com,
+        viresh.kumar@linaro.org, Ray.Huang@amd.com, Deepak.Sharma@amd.com,
+        Wyes.Karny@amd.com, gautham.shenoy@amd.com, Sunpeng.Li@amd.com,
+        Xinmei.Huang@amd.com, Xiaojian.Du@amd.com, Li.Meng@amd.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/19 23:13, Yunlei He wrote:
-> This patch remove unneeded page uptodate check/set in
-> f2fs_vm_page_mkwrite, which already done in set_page_dirty.
-> 
-> Signed-off-by: Yunlei He <heyunlei@oppo.com>
+On Mon, Jun 19, 2023 at 4:53 AM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> On 6/15/23 10:57, Rafael J. Wysocki wrote:
+> > On Thu, Jun 15, 2023 at 8:35 AM Perry Yuan <perry.yuan@amd.com> wrote:
+> >>
+> >> From: Mario Limonciello <mario.limonciello@amd.com>
+> >>
+> >> Avoid duplication of functionality by using the generic symbol.
+> >> This does have a functional change that intel-pstate will now
+> >> match "SOHO server" as well.
+> >
+> > And why do you think that it is a good idea to change this behavior?
+>
+> The idea was to cover all possible server types. It seemed that it could
+> be an oversight that it wasn't included initially.
+>
+> Is that not the case and it is "intentionally" not including "SOHO server"?
 
-Reviewed-by: Chao Yu <chao@kernel.org>
-
-Thanks,
+Yes, it is.
