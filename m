@@ -2,279 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1BD17365AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:05:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BB407365B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbjFTIFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 04:05:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
+        id S231321AbjFTIG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 04:06:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231767AbjFTIFc (ORCPT
+        with ESMTP id S231279AbjFTIGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 04:05:32 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A6E91739;
-        Tue, 20 Jun 2023 01:05:16 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 357066606F57;
-        Tue, 20 Jun 2023 09:05:14 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687248314;
-        bh=zFYnaavyn4NmpZM6dhni0PzwKPg7fxu53se1DsR5BOw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NSlSvcCRR2+TmcJXKoE0F1oVkSZDm4c0LABWU8uiGa8cMijMXvrIw5saZutmOi11u
-         Z4CVstbSyqAVYUT6eqaOiWwMFOIK5WVh+G6cQE1juURCM0i8/nsIHaJZHjzgo40XSa
-         EdPQjzKbwwLHx/zCTEgo/rxEUcztP071suDg7IxBiEDg99O4xCILwQ/xJbt3dKvECC
-         iRD59impe0jc1nsqDbt4gdVROfw+TKrqLWPO+TQDRicoztJc1THZUtc/kFZfnVHTpg
-         diQ+5/Xz3liCQ7nZK/srdgjBcQ+1TsEmC2E2eOndYFb60IOoeS3UCtqPhXOBH4RRPU
-         /ZpvQXp8QgNRg==
-Message-ID: <50ca3e03-2d4d-f385-6405-990fd9619661@collabora.com>
-Date:   Tue, 20 Jun 2023 10:05:11 +0200
+        Tue, 20 Jun 2023 04:06:25 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2444912C;
+        Tue, 20 Jun 2023 01:06:23 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f7deee339dso5319739e87.0;
+        Tue, 20 Jun 2023 01:06:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687248381; x=1689840381;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=f+inFlG1QWKjrrXswQCdliXKK/JRx4YOgAjgRQSu/iY=;
+        b=CDq4kcHFj7gXvDWsR5MDMtOLIRdaweAQlZcfiLmu8p9/HDCuhqtmJLbTIZ0EbsN0Z8
+         nkxa00OAxyyL+wz4p8+7K+VTtwu7bRB/bDinSYBYXf3buONcbmY1jNnDGFTIZ1/ZpSUY
+         r/hHYmT4XSu5/14jDszVMfm+IcWt9Jbv2+TY07NxPeFlFDBVu/lhphWIAstMdWHXpGWj
+         AqcQx3aj1qfDOy0IqNXOC5JJlpM5gUivnhdnUv+Xv4kaTz+kxZymlojNWsoJB9ZIjUA9
+         AbKATJuAJSpdtkRmhFhiy6wKP1AeTcrkpvnBMLuWluARACcov+HNnUZJQOo+WJ92ff0M
+         xvPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687248381; x=1689840381;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f+inFlG1QWKjrrXswQCdliXKK/JRx4YOgAjgRQSu/iY=;
+        b=X2ntPh0wSR3g66IM6boFDr12upMr+xh4ZRUzRR0m/SWKhURIqirAQt8q3ZjN/GNfz4
+         cHXRanXk/sc7os6rfU5w4SBf9HL5gZQ2eprISrNQ+BdQK7CbtoYiNHP37V0crhxuFPa1
+         28Laqs7YD8MQkBhyrmAVDN5ITrXYYvVoVnrAycAEc09bC0qSSSKhYdGIqPybn/xlyiYj
+         RkiA7wE0mQQWEIdboEslgwx6/hP5jFC+ORp/6E2jctRSOEEYyWabcb1ie2Os3TvfsEpg
+         680N7Ix1eyi9IZPimh+2Eylall4ClG2oSt23ZvQu0Cfl6572dKpZyavIuMPGZaMpj4aU
+         QBOg==
+X-Gm-Message-State: AC+VfDyg3SyXqYVSxtvADcnrydQjbkqgB4yGpnAW5s+m/bi/ep0Zuw8S
+        nC/xr0VLjK5JIRFpzmnRt+M=
+X-Google-Smtp-Source: ACHHUZ6Dy6gkaSpkR0pOUOdy1WDyokggP/3bdFdKO4qlktFeUG0JWqM1F6w54sXQE4Cp7mOzE9/OSQ==
+X-Received: by 2002:a19:4f09:0:b0:4f8:4a87:53f1 with SMTP id d9-20020a194f09000000b004f84a8753f1mr6255702lfb.28.1687248380644;
+        Tue, 20 Jun 2023 01:06:20 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f8:1500::1? (dc78bmyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f8:1500::1])
+        by smtp.gmail.com with ESMTPSA id k11-20020ac2456b000000b004f76a1437b2sm254555lfm.289.2023.06.20.01.06.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 01:06:20 -0700 (PDT)
+Message-ID: <ac0ea4f9-1a22-adf9-97a5-4bab4f3d162b@gmail.com>
+Date:   Tue, 20 Jun 2023 11:06:19 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 5/6] media: mediatek: vcodec: Read HW active status
- from syscon on MT8183
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     kernel@collabora.com, Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20230620000349.2122191-1-nfraprado@collabora.com>
- <20230620000349.2122191-6-nfraprado@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230620000349.2122191-6-nfraprado@collabora.com>
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 3/3] iio: light: bd27008: Support BD27010 RGB
+Content-Language: en-US, en-GB
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, linux-iio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1686650184.git.mazziesaccount@gmail.com>
+ <327fde7f6e5e76908af474de3e348fe7626f39b2.1686651445.git.mazziesaccount@gmail.com>
+ <20230617205702.29bdd84a@jic23-huawei>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20230617205702.29bdd84a@jic23-huawei>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 20/06/23 02:03, Nícolas F. R. A. Prado ha scritto:
-> Remove the requirement of a VDEC_SYS reg iospace for MT8183. To achieve
-> that, rely on a vdecsys syscon to be passed through the DT, and use it
-> to directly read the VDEC_HW_ACTIVE bit during IRQ handling to check
-> whether the HW is active.
+On 6/17/23 22:57, Jonathan Cameron wrote:
+> On Tue, 13 Jun 2023 13:20:26 +0300
+> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 > 
-> The old behavior is still present when reg-names aren't supplied, as
-> MT8173 still relies on it.
+>> The ROHM BU27010 is an RGBC sensor with a flickering detection FIFO. The
+>> RGBC+IR sensor functionality is largely similar to what the BU27008 has.
+>> There are some notable things though:
+>>    - gain setting is once again new and exotic. Now, there is 6bit gain
+>>      setting where 4 of the bits are common to all channels and 2 bits
+>>      can be configured separately for each channel. The BU27010 has
+>>      similar "1X on other channels vs 2X on IR when selector is 0x0"
+>>      gain design as BU27008 had. So, we use same gain setting policy for
+>>      BU27010 as we did for BU27008 - driver sets same gain selector for all
+>>      channels but shows the gains separately for all channels so users
+>>      can (at least in theory) detect this 1X vs 2X madness...
+>>    - BU27010 has suffled all the control register bitfields to new
+>>      addresses and bit positions while still keeping the register naming
+>>      same.
+>>    - Some more power/reset control is added.
+>>    - FIFO for "flickering detection" is added.
+>>
+>> The control register suffling made this slightly nasty. Still, it is
+>> easier for maintenance perspective to add the BU27010 support in BU27008
+>> driver because - even though the bit positions/addresses were changed -
+>> most of the driver structure can be re-used. Writing own driver for
+>> BU27010 would mean plenty of duplicate code albeit a tad more clarity.
+>>
+>> The flickering FIFO is not supported by the driver.
+>>
+>> Add BU27010 RGBC+IR support to rohm-bu27008 driver.
+>>
+>> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+>>
 > 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> 
-> ---
-> I dropped the tags from this commit since a syscon is now used instead
-> of an extra clock.
-> 
-> Changes in v3:
-> - Switched handling of VDEC_HW_ACTIVE to use a syscon instead of the
->    'active' clock
-> - Reworded commit
-> - Removed changes to subdev part of driver, since they aren't used by
->    MT8183
-> 
->   .../mediatek/vcodec/mtk_vcodec_dec_drv.c      | 71 ++++++++++++++++---
->   .../platform/mediatek/vcodec/mtk_vcodec_drv.h |  1 +
->   2 files changed, 61 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-> index 83780d29a9cf..387ed26d6d5d 100644
-> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_drv.c
-> @@ -8,10 +8,12 @@
->   #include <linux/slab.h>
->   #include <linux/interrupt.h>
->   #include <linux/irq.h>
-> +#include <linux/mfd/syscon.h>
->   #include <linux/module.h>
->   #include <linux/of_device.h>
->   #include <linux/of.h>
->   #include <linux/pm_runtime.h>
-> +#include <linux/regmap.h>
->   #include <media/v4l2-event.h>
->   #include <media/v4l2-mem2mem.h>
->   #include <media/videobuf2-dma-contig.h>
-> @@ -38,22 +40,37 @@ static int mtk_vcodec_get_hw_count(struct mtk_vcodec_dev *dev)
->   	}
->   }
->   
-> +static bool mtk_vcodec_is_hw_active(struct mtk_vcodec_dev *dev)
-> +{
-> +	u32 cg_status = 0;
-> +	int val, ret;
-> +
-> +	if (!dev->reg_base[VDEC_SYS]) {
-> +		ret = regmap_read(dev->vdecsys_regmap, VDEC_HW_ACTIVE_ADDR, &val);
-> +		if (ret) {
-> +			mtk_v4l2_err("Failed to read VDEC active status");
-> +			return false;
-> +		}
-> +
-> +		return (val & VDEC_HW_ACTIVE_MASK) == 0;
-> +	}
-> +
-> +	cg_status = readl(dev->reg_base[VDEC_SYS] + VDEC_HW_ACTIVE_ADDR);
-> +	return (cg_status & VDEC_HW_ACTIVE_MASK) == 0;
+> Resulting code looks more or less fine, but there is stuff in here that
+> belongs in previous patch - so send a v2 with the refactors all done
+> there and just support for the new part in here.
 
-You can either do...
+Thanks for the review! I appreciate it. And sorry for sending a messy 
+version. I'll try re-organizing the stuff between these two patches when 
+re-spinning. A bit busy now as I said when replying to review of PATCH 
+2/3 - but I'll see when I get a moment to rework this :) Thanks!
 
-{
-	if (dev->vdecsys_regmap) {
-		ret = regmap_read(......., &cg_status);
-		if (ret) {
-			mtk_v4l2_err(...)
-			return false;
-		}
-	} else {
-		cg_status = readl(....)
-	}
-	return !FIELD_GET(VDEC_HW_ACTIVE_MASK, cg_status);
-}
+Yours,
+	-- Matti
 
-.... or ....
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
-{
-	if (dev->vdecsys_regmap)
-		return !regmap_test_bits(dev->vdecsys_regmap, VDEC_HW_ACTIVE_ADDR,
-					 VDEC_HW_ACTIVE_MASK);
+~~ When things go utterly wrong vim users can always type :help! ~~
 
-	cg_status = readl(....);
-	return !FIELD_GET(VDEC_HW_ACTIVE_MASK, cg_status);
-}
-
-That's way cleaner :-)
-
-> +}
-> +
->   static irqreturn_t mtk_vcodec_dec_irq_handler(int irq, void *priv)
->   {
->   	struct mtk_vcodec_dev *dev = priv;
->   	struct mtk_vcodec_ctx *ctx;
-> -	u32 cg_status = 0;
->   	unsigned int dec_done_status = 0;
->   	void __iomem *vdec_misc_addr = dev->reg_base[VDEC_MISC] +
->   					VDEC_IRQ_CFG_REG;
->   
->   	ctx = mtk_vcodec_get_curr_ctx(dev, MTK_VDEC_CORE);
->   
-> -	/* check if HW active or not */
-> -	cg_status = readl(dev->reg_base[0] + VDEC_HW_ACTIVE_ADDR);
-> -	if ((cg_status & VDEC_HW_ACTIVE_MASK) != 0) {
-> -		mtk_v4l2_err("DEC ISR, VDEC active is not 0x0 (0x%08x)",
-> -			     cg_status);
-> +	if (!mtk_vcodec_is_hw_active(dev)) {
-> +		mtk_v4l2_err("DEC ISR, VDEC active is not 0x0");
->   		return IRQ_HANDLED;
->   	}
->   
-> @@ -82,6 +99,25 @@ static int mtk_vcodec_get_reg_bases(struct mtk_vcodec_dev *dev)
->   {
->   	struct platform_device *pdev = dev->plat_dev;
->   	int reg_num, i;
-> +	struct resource *res;
-> +	bool no_vdecsys_reg = false;
-
-bool has_vdecsys_reg;
-
-> +	static const char * const mtk_dec_reg_names[] = {
-> +		"misc",
-> +		"ld",
-> +		"top",
-> +		"cm",
-> +		"ad",
-> +		"av",
-> +		"pp",
-> +		"hwd",
-> +		"hwq",
-> +		"hwb",
-> +		"hwg"
-> +	};
-> +
-> +	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "misc");
-
-
-	/*
-	 * If we have reg-names in devicetree, this means that we're on a new
-	 * register organization, which implies that the VDEC_SYS iospace gets
-	 * R/W through a syscon (regmap).
-	 * Here we try to get the "misc" iostart only to check if we have reg-names
-	 */
-	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "misc");
-	if (res)
-		has_vdecsys_reg = false;
-	else
-		has_vdecsys_reg = true;
-
-> +	if (res)
-> +		no_vdecsys_reg = true;
->   
->   	/* Sizeof(u32) * 4 bytes for each register base. */
->   	reg_num = of_property_count_elems_of_size(pdev->dev.of_node, "reg",
-> @@ -91,12 +127,22 @@ static int mtk_vcodec_get_reg_bases(struct mtk_vcodec_dev *dev)
->   		return -EINVAL;
->   	}
->   
-> -	for (i = 0; i < reg_num; i++) {
-> -		dev->reg_base[i] = devm_platform_ioremap_resource(pdev, i);
-> -		if (IS_ERR(dev->reg_base[i]))
-> -			return PTR_ERR(dev->reg_base[i]);
-> +	if (!no_vdecsys_reg) {
-
-...so here you invert the branch
-
-	if (has_vdecsys_reg) {
-		.... byname ioremap ....
-		parse syscon regmap here, not later!
-	} else {
-		.... by id ioremap ....
-	}
-
-> +		for (i = 0; i < reg_num; i++) {
-> +			dev->reg_base[i] = devm_platform_ioremap_resource(pdev, i);
-> +			if (IS_ERR(dev->reg_base[i]))
-> +				return PTR_ERR(dev->reg_base[i]);
-> +
-> +			mtk_v4l2_debug(2, "reg[%d] base=%p", i, dev->reg_base[i]);
-> +		}
-> +	} else {
-> +		for (i = 0; i < reg_num; i++) {
-> +			dev->reg_base[i+1] = devm_platform_ioremap_resource_byname(pdev, mtk_dec_reg_names[i]);
-> +			if (IS_ERR(dev->reg_base[i+1]))
-> +				return PTR_ERR(dev->reg_base[i+1]);
->   
-> -		mtk_v4l2_debug(2, "reg[%d] base=%p", i, dev->reg_base[i]);
-> +			mtk_v4l2_debug(2, "reg[%d] base=%p", i+1, dev->reg_base[i+1]);
-> +		}
->   	}
->   
->   	return 0;
-> @@ -118,6 +164,9 @@ static int mtk_vcodec_init_dec_resources(struct mtk_vcodec_dev *dev)
->   	if (dev->dec_irq < 0)
->   		return dev->dec_irq;
->   
-> +	dev->vdecsys_regmap = syscon_regmap_lookup_by_phandle_optional(pdev->dev.of_node,
-> +								       "mediatek,vdecsys");
-> +
-
-It makes no sense to try to get a handle to this syscon if we're on the older
-layout with vdecsys in the `reg` list: in that case, we can safely assume that
-we don't have any mediatek,vdecsys syscon.
-
-Cheers,
-Angelo
