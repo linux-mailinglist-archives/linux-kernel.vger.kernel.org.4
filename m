@@ -2,189 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C163D73756D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 21:54:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A25873757C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjFTTyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 15:54:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        id S229798AbjFTUA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 16:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjFTTyt (ORCPT
+        with ESMTP id S229676AbjFTUAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 15:54:49 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BECD173B
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:54:46 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b52d14df27so23888485ad.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:54:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687290886; x=1689882886;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RsIaqKRLY/w55XA5LB9E3AHeTBdImbhhaSspjOmTz+k=;
-        b=vQNccOY1KmXZzmbpNdP7pNP+MGN+VFDpqBaXrFLe4BPVoy0GqRf5L1qcnF3R5mR1ar
-         iRa5MKJp0hqSDMwuMZ+jX5hc6S2Vrhbhb9mDzX0xgrvK9X0d4dQjwNDHpcguTuZZB/XU
-         SXfdhzPvzMURg2rHJk+8bx2kuVIJkLQ4E6jQ65u3IU1r0qna5Z1dgE+LVQ460QQ/erb2
-         4GK1smNIW1+qGDi80nQD7j/Va9D5gMPABFXJ8e9rfIlgiShEgzPu11pUvvnSDB1Ibia/
-         GXn6gE/uw6JtBS3YAuWOZI/C93SRIP0kbb5rGKdr9MFt2JO/353px5ga5qz2LqtS6tu3
-         lqTQ==
+        Tue, 20 Jun 2023 16:00:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A374D7
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:59:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687291176;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=8nDkX/u4zkhYkl8D9Eltwlq6VfSNd8Ak1NeiW21WxpE=;
+        b=D3MC0iRmwPZBPkZsjV8WloELn0nLUdG8jbdVSFMZogWHbDGj1Jxsj7n+jygB3Wui3U7hif
+        zNsGrxwXTcOQIJcdPnnvnke4Z+f8N3WKPLx0ItQlSJrRQMM/xtzep0PRPd36QlbOqAxYZG
+        ot+S2Ne/yhuHPLKwa/W7gJ2s8HKuSKc=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-616-jAQ4UGkGOAqOjW_hZzO4-A-1; Tue, 20 Jun 2023 15:59:35 -0400
+X-MC-Unique: jAQ4UGkGOAqOjW_hZzO4-A-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-763a2e8a67aso264307485a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:59:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687290886; x=1689882886;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RsIaqKRLY/w55XA5LB9E3AHeTBdImbhhaSspjOmTz+k=;
-        b=RUgY4N5DkNIzyzFh7K/2lLMArfD0eImIF8fLibqpQXfySYoha3r4R85tyhkjmdNwSR
-         yjOGoJI9RGaWXfIGZF7QMsWLRmyH+756uc+pMKKNQP/az3Wu+w3Yry52A/PBtjqLQ69X
-         xezpHWfjitfDRhAfTNU8i4zWmbAiPocT5viTgWrHnXmkru+/nVP4BmrwY724A89Sj7lY
-         uf5ix7FDgMXu/Jh+Bdr/zlXGQcfP3HFK3rQxIS6H5j4+N455wkduKsw0TUYGxh4FrI4z
-         xaC+xn36dRKwBHW5ZaeCSSbOZ0hawyripOM0kePYwU4K2dOI8pSDkf1E4cBZKcuUomx6
-         IpXw==
-X-Gm-Message-State: AC+VfDzvx98vnZHqosZatAQdKGnIwpEkGpSeNT3TKIUQzPFUqLkPgEqV
-        DqCyGLmqpJ85g5Og8ZImxSCIRw==
-X-Google-Smtp-Source: ACHHUZ4Kpx293K87FtkleDrYAYa0rwjXy2nPbgIEJGuxBo6nVZF7ASkOQcfG7zuhiqz3kJZ1Xdj1hQ==
-X-Received: by 2002:a17:902:e884:b0:1b5:16f2:a4e3 with SMTP id w4-20020a170902e88400b001b516f2a4e3mr9879390plg.30.1687290885633;
-        Tue, 20 Jun 2023 12:54:45 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id n21-20020a170902969500b001b016313b1esm2010616plp.82.2023.06.20.12.54.44
+        d=1e100.net; s=20221208; t=1687291166; x=1689883166;
+        h=mime-version:user-agent:content-transfer-encoding:organization
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8nDkX/u4zkhYkl8D9Eltwlq6VfSNd8Ak1NeiW21WxpE=;
+        b=cO/bzCfZI8Vo54pq6IECzioS/6MBjG2ZPZJPLrg/QSqHP8l7dkUsmBU9Z1z7EnKiNT
+         pPFKK+dZ4nyyFNaDNWW6uQk7e4L39vTq50j+Mf/dTJgOL9gTvr/XRkC8PYrgw/ChbC7Z
+         PbkVenU+PY/U3FHCA8BsvxsuigWTf9GPVxclhxmKCALGTSC1tw/hILKVwkUMCiN0JEq/
+         GQsHNvrEgF6vi/0UpPQ8ID3UVYbvLKg67R0ciOT4swnTPgXvNwd3xMdyxThFXC1MAiPX
+         gd/4dlBtb5ZmwF9rK82gtFhbJdTsygIYCLTRsD5WarCDnoeRJwlLp/gtobGR54IbyaWJ
+         Hwng==
+X-Gm-Message-State: AC+VfDyNGym8YidDVUc12rNCY8Ns3KbyEOyF9oP5m85hNOvOj09Lo35U
+        eQZUONgkI2Tv/r3hlLHmfADnmmVjXYhZaLXppdQ7FkKTw5isjxcDJ9DJtH3BuvbNgJCOCdxuC81
+        ZVAk7cwMoElUb+0MRYm3VcZev
+X-Received: by 2002:a05:6214:f01:b0:62f:ef74:a304 with SMTP id gw1-20020a0562140f0100b0062fef74a304mr18705156qvb.8.1687291166195;
+        Tue, 20 Jun 2023 12:59:26 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ55Mx2TzRMVHfHKAyGs/tY2KtKOTOfrkOmTeeVyvfrBXj5Ae2gO6QDSWX3vIRrBM2lq/om3Sw==
+X-Received: by 2002:a05:6214:f01:b0:62f:ef74:a304 with SMTP id gw1-20020a0562140f0100b0062fef74a304mr18705150qvb.8.1687291165967;
+        Tue, 20 Jun 2023 12:59:25 -0700 (PDT)
+Received: from ?IPv6:2600:4040:5c62:8200::feb? ([2600:4040:5c62:8200::feb])
+        by smtp.gmail.com with ESMTPSA id j16-20020a0cf310000000b006301bc80875sm1591652qvl.60.2023.06.20.12.59.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 12:54:44 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 12:54:44 -0700 (PDT)
-X-Google-Original-Date: Tue, 20 Jun 2023 12:54:05 PDT (-0700)
-Subject:     Re: [PATCH v11 5/8] riscv: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
-In-Reply-To: <20230608215834.729cfda2@gandalf.local.home>
-CC:     pengdonglin@sangfor.com.cn, mhiramat@kernel.org,
-        linux@armlinux.org.uk, Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        rmk+kernel@armlinux.org.uk,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, tglx@linutronix.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, bp@alien8.de,
-        hpa@zytor.com, chenhuacai@kernel.org, zhangqing@loongson.cn,
-        kernel@xen0n.name, mingo@redhat.com, peterz@infradead.org,
-        xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
-        linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     rostedt@goodmis.org
-Message-ID: <mhng-672b0efa-aeba-4cb2-808d-6ef271844449@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 20 Jun 2023 12:59:25 -0700 (PDT)
+Message-ID: <3d47da79a59817b69d5ed7cdaf4fbec227be00d9.camel@redhat.com>
+Subject: Re: [PATCH v2] drm: use mgr->dev in drm_dbg_kms in
+ drm_dp_add_payload_part2
+From:   Lyude Paul <lyude@redhat.com>
+To:     Jeff Layton <jlayton@kernel.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Wayne.Lin@amd.com, alexdeucher@gmail.com,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Date:   Tue, 20 Jun 2023 15:59:24 -0400
+In-Reply-To: <dd8edd9405049b09cd30ea13e5ae5562a437a2d3.camel@redhat.com>
+References: <20230419112447.18471-1-jlayton@kernel.org>
+         <d0b9654c756069a6f0edcca6f4d410f7af592784.camel@redhat.com>
+         <4400e47d6555ed773d1e9cab5566c03429d43ae9.camel@kernel.org>
+         <dd8edd9405049b09cd30ea13e5ae5562a437a2d3.camel@redhat.com>
+Organization: Red Hat Inc.
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 08 Jun 2023 18:58:34 PDT (-0700), rostedt@goodmis.org wrote:
->
-> Can I get an ack from a RISC-V maintainer?
+Also since I forgot, so patchwork picks this up:
 
-Sorry I missed this.
+Reviewed-by: Lyude Paul <lyude@redhat.com>
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+On Tue, 2023-06-20 at 15:50 -0400, Lyude Paul wrote:
+> Eek - this might have been a situation where everyone involved assumed so=
+meone
+> else would push it, whoops. I'll make sure this is pushed upstream :).
+>=20
+> FWIW: You could definitely send an MR to the fedora kernel's gitlab to ge=
+t
+> this included earlier. If you don't get to it before me I'll try to do th=
+at
+> today
+>=20
+> On Tue, 2023-06-20 at 07:18 -0400, Jeff Layton wrote:
+> > I've noticed that this patch is not included in linux-next currently.
+> >=20
+> > Can I get some confirmation that this is going to be included in v6.5?
+> > Currently, I've been having to rebuild Fedora kernels to avoid this
+> > panic, and I'd like to know there is a light at the end of that tunnel.
+> >=20
+> > Thanks,
+> > Jeff
+> >=20
+> > On Wed, 2023-04-19 at 16:54 -0400, Lyude Paul wrote:
+> > > Reviewed-by: Lyude Paul <lyude@redhat.com>
+> > >=20
+> > > Thanks!
+> > >=20
+> > > On Wed, 2023-04-19 at 07:24 -0400, Jeff Layton wrote:
+> > > > I've been experiencing some intermittent crashes down in the displa=
+y
+> > > > driver code. The symptoms are ususally a line like this in dmesg:
+> > > >=20
+> > > >     amdgpu 0000:30:00.0: [drm] Failed to create MST payload for por=
+t 000000006d3a3885: -5
+> > > >=20
+> > > > ...followed by an Oops due to a NULL pointer dereference.
+> > > >=20
+> > > > Switch to using mgr->dev instead of state->dev since "state" can be
+> > > > NULL in some cases.
+> > > >=20
+> > > > Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D2184855
+> > > > Suggested-by: Jani Nikula <jani.nikula@linux.intel.com>
+> > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > > > ---
+> > > >  drivers/gpu/drm/display/drm_dp_mst_topology.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >=20
+> > > > I've been running this patch for a couple of days, but the problem
+> > > > hasn't occurred again as of yet. It seems sane though as long as we=
+ can
+> > > > assume that mgr->dev will be valid even when "state" is a NULL poin=
+ter.
+> > > >=20
+> > > > diff --git a/drivers/gpu/drm/display/drm_dp_mst_topology.c b/driver=
+s/gpu/drm/display/drm_dp_mst_topology.c
+> > > > index 38dab76ae69e..e2e21ce79510 100644
+> > > > --- a/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> > > > +++ b/drivers/gpu/drm/display/drm_dp_mst_topology.c
+> > > > @@ -3404,7 +3404,7 @@ int drm_dp_add_payload_part2(struct drm_dp_ms=
+t_topology_mgr *mgr,
+> > > > =20
+> > > >  	/* Skip failed payloads */
+> > > >  	if (payload->vc_start_slot =3D=3D -1) {
+> > > > -		drm_dbg_kms(state->dev, "Part 1 of payload creation for %s faile=
+d, skipping part 2\n",
+> > > > +		drm_dbg_kms(mgr->dev, "Part 1 of payload creation for %s failed,=
+ skipping part 2\n",
+> > > >  			    payload->port->connector->name);
+> > > >  		return -EIO;
+> > > >  	}
+> > >=20
+> >=20
+>=20
 
->
-> -- Steve
->
->
-> On Sat,  8 Apr 2023 05:42:19 -0700
-> Donglin Peng <pengdonglin@sangfor.com.cn> wrote:
->
->> The previous patch ("function_graph: Support recording and printing
->> the return value of function") has laid the groundwork for the for
->> the funcgraph-retval, and this modification makes it available on
->> the RISC-V platform.
->>
->> We introduce a new structure called fgraph_ret_regs for the RISC-V
->> platform to hold return registers and the frame pointer. We then
->> fill its content in the return_to_handler and pass its address to
->> the function ftrace_return_to_handler to record the return value.
->>
->> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
->> ---
->> v10:
->>  - Use CONFIG_FUNCTION_GRAPH_TRACER to control fgraph_ret_regs definition
->>
->> v9:
->>  - Update the commit message
->>
->> v8:
->>  - Modify the control range of CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
->> ---
->>  arch/riscv/Kconfig              |  1 +
->>  arch/riscv/include/asm/ftrace.h | 21 +++++++++++++++++++++
->>  arch/riscv/kernel/mcount.S      |  7 +------
->>  3 files changed, 23 insertions(+), 6 deletions(-)
->>
->> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> index eb7f29a412f8..108538815309 100644
->> --- a/arch/riscv/Kconfig
->> +++ b/arch/riscv/Kconfig
->> @@ -139,6 +139,7 @@ config RISCV
->>  	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && $(cc-option,-fpatchable-function-entry=8)
->>  	select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
->>  	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
->> +	select HAVE_FUNCTION_GRAPH_RETVAL if HAVE_FUNCTION_GRAPH_TRACER
->>  	select HAVE_FUNCTION_GRAPH_TRACER
->>  	select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !PREEMPTION
->>
->> diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftrace.h
->> index d47d87c2d7e3..740a979171e5 100644
->> --- a/arch/riscv/include/asm/ftrace.h
->> +++ b/arch/riscv/include/asm/ftrace.h
->> @@ -111,4 +111,25 @@ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
->>
->>  #endif /* CONFIG_DYNAMIC_FTRACE */
->>
->> +#ifndef __ASSEMBLY__
->> +#ifdef CONFIG_FUNCTION_GRAPH_TRACER
->> +struct fgraph_ret_regs {
->> +	unsigned long a1;
->> +	unsigned long a0;
->> +	unsigned long s0;
->> +	unsigned long ra;
->> +};
->> +
->> +static inline unsigned long fgraph_ret_regs_return_value(struct fgraph_ret_regs *ret_regs)
->> +{
->> +	return ret_regs->a0;
->> +}
->> +
->> +static inline unsigned long fgraph_ret_regs_frame_pointer(struct fgraph_ret_regs *ret_regs)
->> +{
->> +	return ret_regs->s0;
->> +}
->> +#endif /* ifdef CONFIG_FUNCTION_GRAPH_TRACER */
->> +#endif
->> +
->>  #endif /* _ASM_RISCV_FTRACE_H */
->> diff --git a/arch/riscv/kernel/mcount.S b/arch/riscv/kernel/mcount.S
->> index 30102aadc4d7..8a6e5a9e842a 100644
->> --- a/arch/riscv/kernel/mcount.S
->> +++ b/arch/riscv/kernel/mcount.S
->> @@ -65,13 +65,8 @@ ENTRY(return_to_handler)
->>   * So alternatively we check the *old* frame pointer position, that is, the
->>   * value stored in -16(s0) on entry, and the s0 on return.
->>   */
->> -#ifdef HAVE_FUNCTION_GRAPH_FP_TEST
->> -	mv	t6, s0
->> -#endif
->>  	SAVE_RET_ABI_STATE
->> -#ifdef HAVE_FUNCTION_GRAPH_FP_TEST
->> -	mv	a0, t6
->> -#endif
->> +	mv	a0, sp
->>  	call	ftrace_return_to_handler
->>  	mv	a2, a0
->>  	RESTORE_RET_ABI_STATE
+--=20
+Cheers,
+ Lyude Paul (she/her)
+ Software Engineer at Red Hat
 
