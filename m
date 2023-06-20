@@ -2,123 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 461A873729F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CFAC7372A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjFTRTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 13:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56258 "EHLO
+        id S230256AbjFTRWE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 13:22:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjFTRTT (ORCPT
+        with ESMTP id S229896AbjFTRWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 13:19:19 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3320511C;
-        Tue, 20 Jun 2023 10:19:18 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id 5614622812f47-394c7ba4cb5so3256667b6e.1;
-        Tue, 20 Jun 2023 10:19:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687281557; x=1689873557;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WmCprH+idanaTAuo2dvFzhcGXyTLAiyj5xkHxuQVXTU=;
-        b=b9lHqrbagfr1RSGyhYN77p4kcA/eHb4NKgN16tHcbxlk8o72r0HdwtasyTOHARltWD
-         C/E82gKtEmrd4NpGBjaRFuww/h40qL0AfXOHeEvlXReEGa/3ENiah0Gce1po/Hu5MBfH
-         NHqy0OE1EXnomjjuY1iicVoEUf4vyoVYLymygmw2KKkeT8i+ZrPnKE96GdYrgTDyaRIB
-         ZV9hvI/ilx024AGepjkwoOEVvWApcD9JvxTUX52ZVxsF0+6FGcbPM+c4i00rm1N1iv2h
-         dOp4RnvtAyaI5f9WpFdroMUvIvKJd+mcut+phNZHdiuqhx2VDf9Usn7eDjWnp+i/62rX
-         FL0w==
+        Tue, 20 Jun 2023 13:22:03 -0400
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D028DC;
+        Tue, 20 Jun 2023 10:22:02 -0700 (PDT)
+Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-341dd309b6fso23550985ab.1;
+        Tue, 20 Jun 2023 10:22:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687281557; x=1689873557;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WmCprH+idanaTAuo2dvFzhcGXyTLAiyj5xkHxuQVXTU=;
-        b=DJgzcBFcTbA3JmKKOWpmhLqZtFz3/KudB7HtcZ5MFNYwU7wP2bw/6ivA8RV5YsOJD3
-         gMgH6jcd1jYyHN0LI4DaFFmVBu4YlNQGLptj1QevWwZWovCc8cjtweIaPe7siVhh/wms
-         0C63yvZ0p/KrxXmxKBM8I++G1DpbeTO/29CQXeyMqxkt+ZZP8mjD4k0fkloBx8D6PqTT
-         f4Sgdsq7BhtM8rL+q/B54585odxGpn7PjwA4AZrUdBItaVGv0n78p/X8F52bMqfMLZ9R
-         1D6/F+mf/mDHJLgC6ZuC0zgeT/8uu00GACoQR4FRhBun9lwrdjlqCSKu8H0zOc3c1KkX
-         fqEw==
-X-Gm-Message-State: AC+VfDyRpe4WEBUA0OQfooq6JcQQPL6Ga+Fay4G/RYRvm+Y68OEot+t6
-        jweqyt7Et9cCA3bJv3vnwBigH6NIMrpy70mKS6g=
-X-Google-Smtp-Source: ACHHUZ48AUCk89CwU1xZqpN0N9tbmO9d1ar83T9TqB8/AUAW9KqhF6B8cLTq3zwM5FrnfvvltVLs7q41z0lnrCLjlyM=
-X-Received: by 2002:a05:6808:1b0f:b0:39a:aafd:dda7 with SMTP id
- bx15-20020a0568081b0f00b0039aaafddda7mr15864716oib.35.1687281557150; Tue, 20
- Jun 2023 10:19:17 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687281722; x=1689873722;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZzArzRV9yR1n8VbuBTY+7vvGWbg9qkwrVAJHEY9NNQk=;
+        b=X0uc0P5eStFazRju5uNUCGvgoUQjEXrTuZmAbJ5cHVYeFS7vLlD4EsEUp39H7meU5I
+         2TLlooNX6f+n/Gj7cN6FAQ/TlNSmcjtIiZGLur8ElRlzZEjFmeMao2Khqfe7tZKzN8/D
+         638rhCj82Z3B1py9v0ShR/IzPPCgWJmk9U2UCLoma5jbcUnXfM1YxOpxvnijFuRvtKMz
+         9323Q60oCuO+v415WXWvhw2kWnuJEhdGlR6u4gambwx86kVeAnuVAygepUwsRAUQGDKj
+         8DbuI+wZedzmvQAsjHpEMA501LZePqCDQtkUwwGZs5ts14WXGM6qxt9niZunCG35bjAt
+         pqnA==
+X-Gm-Message-State: AC+VfDxfjMipe1T1bIbh2vUZmwGea9tu4DKD8CvMmD2pGQpJx7gLV5NS
+        La4Qp3NsGvVT1jsI4NhZSA==
+X-Google-Smtp-Source: ACHHUZ6hfk+zVOKl7DLQhfEUaoMDMo+kVVI9ImHz54JzzMg4HMzi6mdhb4jWHiyvv+6DTs38E9XflQ==
+X-Received: by 2002:a92:da83:0:b0:341:da26:d2f4 with SMTP id u3-20020a92da83000000b00341da26d2f4mr12636140iln.23.1687281721777;
+        Tue, 20 Jun 2023 10:22:01 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id c5-20020a92d3c5000000b0034202d05fadsm718889ilh.72.2023.06.20.10.21.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 10:22:01 -0700 (PDT)
+Received: (nullmailer pid 3851810 invoked by uid 1000);
+        Tue, 20 Jun 2023 17:21:58 -0000
+Date:   Tue, 20 Jun 2023 11:21:58 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, kernel@collabora.com,
+        Conor Dooley <conor+dt@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Simon Xue <xxm@rock-chips.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        linux-arm-kernel@lists.infradead.org, linux-pci@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+Subject: Re: [PATCH v1 3/4] dt-bindings: PCI: dwc: rockchip: Update for RK3588
+Message-ID: <168728171828.3851756.10954343791219685425.robh@kernel.org>
+References: <20230616170022.76107-1-sebastian.reichel@collabora.com>
+ <20230616170022.76107-4-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-References: <20230614095158.1133673-1-elver@google.com> <CA+fCnZdy4TmMacvsPkoenCynUYsyKZ+kU1fx7cDpbh_6=cEPAQ@mail.gmail.com>
- <CANpmjNOSnVNy14xAVe6UHD0eHuMpxweg86+mYLQHpLM1k0H_cg@mail.gmail.com>
- <CA+fCnZccdLNqtxubVVtGPTOXcSoYfpM9CHk-nrYsZK7csC77Eg@mail.gmail.com>
- <ZJGSqdDQPs0sRQTb@elver.google.com> <CA+fCnZdZ0=kKN6hE_OF7jV_r_FjTh3FZtkGHBD57ZfqCXStKHg@mail.gmail.com>
- <ZJG8WiamZvEJJKUc@elver.google.com> <CA+fCnZdStZDyTGJfiW1uZVhhb-DraZmHnam0cdrB83-nnoottA@mail.gmail.com>
- <ZJHfL6vavKUZ3Yd8@elver.google.com>
-In-Reply-To: <ZJHfL6vavKUZ3Yd8@elver.google.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 20 Jun 2023 19:19:06 +0200
-Message-ID: <CA+fCnZe4cetv53bGM0cOxLGB+ZDiNU7eeSb2LKNkO2j4xCPkYQ@mail.gmail.com>
-Subject: Re: [PATCH] kasan, doc: note kasan.fault=panic_on_write behaviour for
- async modes
-To:     Marco Elver <elver@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Alexander Potapenko <glider@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Aleksandr Nogikh <nogikh@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>, kasan-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Catalin Marinas <catalin.marinas@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230616170022.76107-4-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 7:17=E2=80=AFPM Marco Elver <elver@google.com> wrot=
-e:
->
-> Note the behaviour of kasan.fault=3Dpanic_on_write for async modes, since
-> all asynchronous faults will result in panic (even if they are reads).
->
-> Fixes: 452c03fdbed0 ("kasan: add support for kasan.fault=3Dpanic_on_write=
-")
-> Signed-off-by: Marco Elver <elver@google.com>
-> ---
->  Documentation/dev-tools/kasan.rst | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/Documentation/dev-tools/kasan.rst b/Documentation/dev-tools/=
-kasan.rst
-> index 7f37a46af574..f4acf9c2e90f 100644
-> --- a/Documentation/dev-tools/kasan.rst
-> +++ b/Documentation/dev-tools/kasan.rst
-> @@ -110,7 +110,9 @@ parameter can be used to control panic and reporting =
-behaviour:
->  - ``kasan.fault=3Dreport``, ``=3Dpanic``, or ``=3Dpanic_on_write`` contr=
-ols whether
->    to only print a KASAN report, panic the kernel, or panic the kernel on
->    invalid writes only (default: ``report``). The panic happens even if
-> -  ``kasan_multi_shot`` is enabled.
-> +  ``kasan_multi_shot`` is enabled. Note that when using asynchronous mod=
-e of
-> +  Hardware Tag-Based KASAN, ``kasan.fault=3Dpanic_on_write`` always pani=
-cs on
-> +  asynchronously checked accesses (including reads).
->
->  Software and Hardware Tag-Based KASAN modes (see the section about vario=
-us
->  modes below) support altering stack trace collection behavior:
-> --
-> 2.41.0.185.g7c58973941-goog
->
 
-Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
+On Fri, 16 Jun 2023 19:00:21 +0200, Sebastian Reichel wrote:
+> The PCIe 2.0 controllers on RK3588 need one additional clock,
+> one additional reset line and one for ranges entry.
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  .../bindings/pci/rockchip-dw-pcie.yaml           | 16 +++++++++++++---
+>  1 file changed, 13 insertions(+), 3 deletions(-)
+> 
+
+Reviewed-by: Rob Herring <robh@kernel.org>
+
