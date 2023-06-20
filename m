@@ -2,225 +2,328 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF20737479
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5502D73747C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjFTSkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 14:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36594 "EHLO
+        id S230100AbjFTSmm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Jun 2023 14:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229931AbjFTSkm (ORCPT
+        with ESMTP id S229876AbjFTSmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 14:40:42 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C8C0DC;
-        Tue, 20 Jun 2023 11:40:41 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1159)
-        id 9BD3921C1E6D; Tue, 20 Jun 2023 11:40:38 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 9BD3921C1E6D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1687286438;
-        bh=iCzyGwffGnwO8ZEB3IZCpwiNa8XaOywtNyIWOP4HGgo=;
-        h=From:To:Cc:Subject:Date:From;
-        b=sZD3vJiKM8LNDshcV5jtR/6F13HysN7P8u+JXev5GrKpOVQE1epnmacbMBCuVFa7X
-         wY4rNjW8qpm//ADz0G7EH1Sr6gIQvx8xEZxjLfjkDq3INdIPdKQj85KttcYQHLk0mn
-         uCwR/wDHA9ekB1MilHbPCT/PyCtI7ILjIFh3Q19s=
-From:   Nischala Yelchuri <niyelchu@linux.microsoft.com>
-To:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     mikelley@microsoft.com, "K. Y. Srinivasan"@linux.microsoft.com,
-        kys@microsoft.com, Haiyang@linux.microsoft.com,
-        Zhang@linux.microsoft.com, haiyangz@microsoft.com,
-        Wei@linux.microsoft.com, Liu@linux.microsoft.com,
-        wei.liu@kernel.org, Dexuan@linux.microsoft.com,
-        Cui@linux.microsoft.com, decui@microsoft.com,
-        Thomas@linux.microsoft.com, Gleixner@linux.microsoft.com,
-        tglx@linutronix.de, Ingo@linux.microsoft.com,
-        Molnar@linux.microsoft.com, mingo@redhat.com,
-        Borislav@linux.microsoft.com, Petkov@linux.microsoft.com,
-        bp@alien8.de, Dave@linux.microsoft.com, Hansen@linux.microsoft.com,
-        dave.hansen@linux.intel.com, x86@kernel.org,
-        "H. Peter Anvin"@linux.microsoft.com, hpa@zytor.com,
-        Tyler@linux.microsoft.com, Hicks@linux.microsoft.com,
-        code@tyhicks.com, niyelchu@microsoft.com
-Subject: [PATCH] x86/hyperv: Improve code for referencing hyperv_pcpu_input_arg
-Date:   Tue, 20 Jun 2023 11:40:38 -0700
-Message-Id: <1687286438-9421-1-git-send-email-niyelchu@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 20 Jun 2023 14:42:40 -0400
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31986DC;
+        Tue, 20 Jun 2023 11:42:39 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-77e457319a6so72913239f.1;
+        Tue, 20 Jun 2023 11:42:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687286558; x=1689878558;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sCtMr8ijFx2CrFh9ZGovTyfqeQbUmmEvN/2Rn9Z2qpQ=;
+        b=Is5zqw8te+z6zLolRfjtZeG56es4WN4izEWadogetXeF0tVUgOeDJpF35BxPDifggy
+         Yyc5Myj3wZ6UGsGeZEI/WT2Zq1EN1HkK5FiiGV8qw/TKeS7Hzhe8eARs9qpjIcsh8jEc
+         MNh30GO2KlTI6C/b21SzJT+I9XNyfvf2/doXtHEHxXitBfgB0NvhiMWLE6plE8Xf+9t6
+         BBnvTXDFWSiXHvx3cGI8TyIFTPghir3GuUnsL1kJUSjjrS1TJPUie5fOW4uvkDsr4ByV
+         rKonPPR05RYQ3QSL8mxxHVGBOQK63VjWNoKUQrTcjKAOx7/3vn1j9KsDH/Dct28GlArq
+         Hi5g==
+X-Gm-Message-State: AC+VfDzZ2tvwjZWPKh2+qNAK56NjqvUBfJUDtT9BtxTOogKeKgd/eikc
+        NNjrAirxxKeLhH8zB+PkAyjC+mvQDVK1uiD9yJrt9oei
+X-Google-Smtp-Source: ACHHUZ5UypJ0++pBV6Hqw8rqiWPP/lwWp2zQMiRMqtjM8mucthRU+AAM+/bTiYec3dtoQpaSXydIJ2YfK6X/YRv3cxA=
+X-Received: by 2002:a6b:fd07:0:b0:777:ce47:6c5a with SMTP id
+ c7-20020a6bfd07000000b00777ce476c5amr9165132ioi.21.1687286557979; Tue, 20 Jun
+ 2023 11:42:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230620132025.105563-1-wangrui@loongson.cn>
+In-Reply-To: <20230620132025.105563-1-wangrui@loongson.cn>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 20 Jun 2023 11:42:26 -0700
+Message-ID: <CAM9d7chjhFNjDMADJTTz5TNgCCuyPzy8VCDvZxw5K5girfWu1A@mail.gmail.com>
+Subject: Re: [PATCH] perf annotate: Fix instruction association and parsing
+ for LoongArch
+To:     WANG Rui <wangrui@loongson.cn>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        loongarch@lists.linux.dev, Tiezhu Yang <yangtiezhu@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Several places in code for Hyper-V reference the
-per-CPU variable hyperv_pcpu_input_arg. Older code uses a multi-line
-sequence to reference the variable, and usually includes a cast.
-Newer code does a much simpler direct assignment. The latter is
-preferable as the complexity of the older code is unnecessary.
+Hello,
 
-Update older code to use the simpler direct assignment.
+On Tue, Jun 20, 2023 at 6:21 AM WANG Rui <wangrui@loongson.cn> wrote:
+>
+> In the perf annotate view for LoongArch, there is no arrowed line
+> pointing to the target from the branch instruction. This issue is
+> caused by incorrect instruction association and parsing.
+>
+> $ perf record alloc-6276705c94ad1398 # rust benchmark
+> $ perf report
+>
+>   0.28 │       ori        $a1, $zero, 0x63
+>        │       move       $a2, $zero
+>  10.55 │       addi.d     $a3, $a2, 1(0x1)
+>        │       sltu       $a4, $a3, $s7
+>   9.53 │       masknez    $a4, $s7, $a4
+>        │       sub.d      $a3, $a3, $a4
+>  12.12 │       st.d       $a1, $fp, 24(0x18)
+>        │       st.d       $a3, $fp, 16(0x10)
+>  16.29 │       slli.d     $a2, $a2, 0x2
+>        │       ldx.w      $a2, $s8, $a2
+>  12.77 │       st.w       $a2, $sp, 724(0x2d4)
+>        │       st.w       $s0, $sp, 720(0x2d0)
+>   7.03 │       addi.d     $a2, $sp, 720(0x2d0)
+>        │       addi.d     $a1, $a1, -1(0xfff)
+>  12.03 │       move       $a2, $a3
+>        │     → bne        $a1, $s3, -52(0x3ffcc)  # 82ce8 <test::bench::Bencher::iter+0x3f4>
+>   2.50 │       addi.d     $a0, $a0, 1(0x1)
+>
+> This patch fixes instruction association issues, such as associating
+> branch instructions with jump_ops instead of call_ops, and corrects
+> false instruction matches. It also implements branch instruction parsing
+> specifically for LoongArch. With this patch, we will be able to see the
+> arrowed line.
+>
+>   0.79 │3ec:   ori        $a1, $zero, 0x63
+>        │       move       $a2, $zero
+>  10.32 │3f4:┌─→addi.d     $a3, $a2, 1(0x1)
+>        │    │  sltu       $a4, $a3, $s7
+>  10.44 │    │  masknez    $a4, $s7, $a4
+>        │    │  sub.d      $a3, $a3, $a4
+>  14.17 │    │  st.d       $a1, $fp, 24(0x18)
+>        │    │  st.d       $a3, $fp, 16(0x10)
+>  13.15 │    │  slli.d     $a2, $a2, 0x2
+>        │    │  ldx.w      $a2, $s8, $a2
+>  11.00 │    │  st.w       $a2, $sp, 724(0x2d4)
+>        │    │  st.w       $s0, $sp, 720(0x2d0)
+>   8.00 │    │  addi.d     $a2, $sp, 720(0x2d0)
+>        │    │  addi.d     $a1, $a1, -1(0xfff)
+>  11.99 │    │  move       $a2, $a3
+>        │    └──bne        $a1, $s3, 3f4
+>   3.17 │       addi.d     $a0, $a0, 1(0x1)
+>
+> Signed-off-by: WANG Rui <wangrui@loongson.cn>
 
-Signed-off-by: Nischala Yelchuri <niyelchu@linux.microsoft.com>
----
- arch/x86/hyperv/hv_apic.c |  4 +---
- arch/x86/hyperv/ivm.c     |  7 +++----
- arch/x86/hyperv/mmu.c     | 12 ++----------
- arch/x86/hyperv/nested.c  | 11 ++---------
- drivers/hv/hv_balloon.c   |  2 +-
- 5 files changed, 9 insertions(+), 27 deletions(-)
+Just a nitpick.  Otherwise looks good.
 
-diff --git a/arch/x86/hyperv/hv_apic.c b/arch/x86/hyperv/hv_apic.c
-index 1fbda2f94..b21335e6a 100644
---- a/arch/x86/hyperv/hv_apic.c
-+++ b/arch/x86/hyperv/hv_apic.c
-@@ -107,7 +107,6 @@ static bool cpu_is_self(int cpu)
- static bool __send_ipi_mask_ex(const struct cpumask *mask, int vector,
- 		bool exclude_self)
- {
--	struct hv_send_ipi_ex **arg;
- 	struct hv_send_ipi_ex *ipi_arg;
- 	unsigned long flags;
- 	int nr_bank = 0;
-@@ -117,9 +116,8 @@ static bool __send_ipi_mask_ex(const struct cpumask *mask, int vector,
- 		return false;
- 
- 	local_irq_save(flags);
--	arg = (struct hv_send_ipi_ex **)this_cpu_ptr(hyperv_pcpu_input_arg);
-+	ipi_arg = *this_cpu_ptr(hyperv_pcpu_input_arg);
- 
--	ipi_arg = *arg;
- 	if (unlikely(!ipi_arg))
- 		goto ipi_mask_ex_done;
- 
-diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
-index 14f46ad2c..28be6df88 100644
---- a/arch/x86/hyperv/ivm.c
-+++ b/arch/x86/hyperv/ivm.c
-@@ -247,7 +247,7 @@ EXPORT_SYMBOL_GPL(hv_ghcb_msr_read);
- static int hv_mark_gpa_visibility(u16 count, const u64 pfn[],
- 			   enum hv_mem_host_visibility visibility)
- {
--	struct hv_gpa_range_for_visibility **input_pcpu, *input;
-+	struct hv_gpa_range_for_visibility *input;
- 	u16 pages_processed;
- 	u64 hv_status;
- 	unsigned long flags;
-@@ -263,9 +263,8 @@ static int hv_mark_gpa_visibility(u16 count, const u64 pfn[],
- 	}
- 
- 	local_irq_save(flags);
--	input_pcpu = (struct hv_gpa_range_for_visibility **)
--			this_cpu_ptr(hyperv_pcpu_input_arg);
--	input = *input_pcpu;
-+	input = *this_cpu_ptr(hyperv_pcpu_input_arg);
-+
- 	if (unlikely(!input)) {
- 		local_irq_restore(flags);
- 		return -EINVAL;
-diff --git a/arch/x86/hyperv/mmu.c b/arch/x86/hyperv/mmu.c
-index 8460bd35e..1cc113200 100644
---- a/arch/x86/hyperv/mmu.c
-+++ b/arch/x86/hyperv/mmu.c
-@@ -61,7 +61,6 @@ static void hyperv_flush_tlb_multi(const struct cpumask *cpus,
- 				   const struct flush_tlb_info *info)
- {
- 	int cpu, vcpu, gva_n, max_gvas;
--	struct hv_tlb_flush **flush_pcpu;
- 	struct hv_tlb_flush *flush;
- 	u64 status;
- 	unsigned long flags;
-@@ -74,10 +73,7 @@ static void hyperv_flush_tlb_multi(const struct cpumask *cpus,
- 
- 	local_irq_save(flags);
- 
--	flush_pcpu = (struct hv_tlb_flush **)
--		     this_cpu_ptr(hyperv_pcpu_input_arg);
--
--	flush = *flush_pcpu;
-+	flush = *this_cpu_ptr(hyperv_pcpu_input_arg);
- 
- 	if (unlikely(!flush)) {
- 		local_irq_restore(flags);
-@@ -178,17 +174,13 @@ static u64 hyperv_flush_tlb_others_ex(const struct cpumask *cpus,
- 				      const struct flush_tlb_info *info)
- {
- 	int nr_bank = 0, max_gvas, gva_n;
--	struct hv_tlb_flush_ex **flush_pcpu;
- 	struct hv_tlb_flush_ex *flush;
- 	u64 status;
- 
- 	if (!(ms_hyperv.hints & HV_X64_EX_PROCESSOR_MASKS_RECOMMENDED))
- 		return HV_STATUS_INVALID_PARAMETER;
- 
--	flush_pcpu = (struct hv_tlb_flush_ex **)
--		     this_cpu_ptr(hyperv_pcpu_input_arg);
--
--	flush = *flush_pcpu;
-+	flush = *this_cpu_ptr(hyperv_pcpu_input_arg);
- 
- 	if (info->mm) {
- 		/*
-diff --git a/arch/x86/hyperv/nested.c b/arch/x86/hyperv/nested.c
-index 5d70968c8..9dc259fa3 100644
---- a/arch/x86/hyperv/nested.c
-+++ b/arch/x86/hyperv/nested.c
-@@ -19,7 +19,6 @@
- 
- int hyperv_flush_guest_mapping(u64 as)
- {
--	struct hv_guest_mapping_flush **flush_pcpu;
- 	struct hv_guest_mapping_flush *flush;
- 	u64 status;
- 	unsigned long flags;
-@@ -30,10 +29,7 @@ int hyperv_flush_guest_mapping(u64 as)
- 
- 	local_irq_save(flags);
- 
--	flush_pcpu = (struct hv_guest_mapping_flush **)
--		this_cpu_ptr(hyperv_pcpu_input_arg);
--
--	flush = *flush_pcpu;
-+	flush = *this_cpu_ptr(hyperv_pcpu_input_arg);
- 
- 	if (unlikely(!flush)) {
- 		local_irq_restore(flags);
-@@ -90,7 +86,6 @@ EXPORT_SYMBOL_GPL(hyperv_fill_flush_guest_mapping_list);
- int hyperv_flush_guest_mapping_range(u64 as,
- 		hyperv_fill_flush_list_func fill_flush_list_func, void *data)
- {
--	struct hv_guest_mapping_flush_list **flush_pcpu;
- 	struct hv_guest_mapping_flush_list *flush;
- 	u64 status;
- 	unsigned long flags;
-@@ -102,10 +97,8 @@ int hyperv_flush_guest_mapping_range(u64 as,
- 
- 	local_irq_save(flags);
- 
--	flush_pcpu = (struct hv_guest_mapping_flush_list **)
--		this_cpu_ptr(hyperv_pcpu_input_arg);
-+	flush = *this_cpu_ptr(hyperv_pcpu_input_arg);
- 
--	flush = *flush_pcpu;
- 	if (unlikely(!flush)) {
- 		local_irq_restore(flags);
- 		goto fault;
-diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-index dffcc894f..0d7a3ba66 100644
---- a/drivers/hv/hv_balloon.c
-+++ b/drivers/hv/hv_balloon.c
-@@ -1628,7 +1628,7 @@ static int hv_free_page_report(struct page_reporting_dev_info *pr_dev_info,
- 	WARN_ON_ONCE(nents > HV_MEMORY_HINT_MAX_GPA_PAGE_RANGES);
- 	WARN_ON_ONCE(sgl->length < (HV_HYP_PAGE_SIZE << page_reporting_order));
- 	local_irq_save(flags);
--	hint = *(struct hv_memory_hint **)this_cpu_ptr(hyperv_pcpu_input_arg);
-+	hint = *this_cpu_ptr(hyperv_pcpu_input_arg);
- 	if (!hint) {
- 		local_irq_restore(flags);
- 		return -ENOSPC;
--- 
-2.25.1
+> ---
+>  .../arch/loongarch/annotate/instructions.c    | 116 ++++++++++++++++--
+>  tools/perf/arch/s390/annotate/instructions.c  |   3 -
+>  tools/perf/util/annotate.c                    |   8 +-
+>  3 files changed, 109 insertions(+), 18 deletions(-)
+>
+> diff --git a/tools/perf/arch/loongarch/annotate/instructions.c b/tools/perf/arch/loongarch/annotate/instructions.c
+> index ab21bf122135..98e19c5366ac 100644
+> --- a/tools/perf/arch/loongarch/annotate/instructions.c
+> +++ b/tools/perf/arch/loongarch/annotate/instructions.c
+> @@ -5,25 +5,115 @@
+>   * Copyright (C) 2020-2023 Loongson Technology Corporation Limited
+>   */
+>
+> +static int loongarch_call__parse(struct arch *arch, struct ins_operands *ops, struct map_symbol *ms)
+> +{
+> +       char *c, *endptr, *tok, *name;
+> +       struct map *map = ms->map;
+> +       struct addr_map_symbol target = {
+> +               .ms = { .map = map, },
 
+Looking here...
+
+> +       };
+> +
+> +       c = strchr(ops->raw, '#');
+> +       if (c++ == NULL)
+> +               return -1;
+> +
+> +       ops->target.addr = strtoull(c, &endptr, 16);
+> +
+> +       name = strchr(endptr, '<');
+> +       name++;
+> +
+> +       if (arch->objdump.skip_functions_char &&
+> +           strchr(name, arch->objdump.skip_functions_char))
+> +               return -1;
+> +
+> +       tok = strchr(name, '>');
+> +       if (tok == NULL)
+> +               return -1;
+> +
+> +       *tok = '\0';
+> +       ops->target.name = strdup(name);
+> +       *tok = '>';
+> +
+> +       if (ops->target.name == NULL)
+> +               return -1;
+> +
+> +       target.addr = map__objdump_2mem(map, ops->target.addr);
+> +
+> +       if (maps__find_ams(ms->maps, &target) == 0 &&
+> +           map__rip_2objdump(target.ms.map, map__map_ip(target.ms.map, target.addr)) == ops->target.addr)
+
+So the target.ms.map is 'map', right?  Then we can reduce the line.
+
+
+> +               ops->target.sym = target.ms.sym;
+> +
+> +       return 0;
+> +}
+> +
+> +static struct ins_ops loongarch_call_ops = {
+> +       .parse     = loongarch_call__parse,
+> +       .scnprintf = call__scnprintf,
+> +};
+> +
+> +static int loongarch_jump__parse(struct arch *arch, struct ins_operands *ops, struct map_symbol *ms)
+> +{
+> +       struct map *map = ms->map;
+> +       struct symbol *sym = ms->sym;
+> +       struct addr_map_symbol target = {
+> +               .ms = { .map = map, },
+> +       };
+> +       const char *c = strchr(ops->raw, '#');
+> +       u64 start, end;
+> +
+> +       ops->raw_comment = strchr(ops->raw, arch->objdump.comment_char);
+> +       ops->raw_func_start = strchr(ops->raw, '<');
+> +
+> +       if (ops->raw_func_start && c > ops->raw_func_start)
+> +               c = NULL;
+> +
+> +       if (c++ != NULL)
+> +               ops->target.addr = strtoull(c, NULL, 16);
+> +       else
+> +               ops->target.addr = strtoull(ops->raw, NULL, 16);
+> +
+> +       target.addr = map__objdump_2mem(map, ops->target.addr);
+> +       start = map__unmap_ip(map, sym->start);
+> +       end = map__unmap_ip(map, sym->end);
+> +
+> +       ops->target.outside = target.addr < start || target.addr > end;
+> +
+> +       if (maps__find_ams(ms->maps, &target) == 0 &&
+> +           map__rip_2objdump(target.ms.map, map__map_ip(target.ms.map, target.addr)) == ops->target.addr)
+
+Ditto.
+
+Thanks,
+Namhyung
+
+
+> +               ops->target.sym = target.ms.sym;
+> +
+> +       if (!ops->target.outside) {
+> +               ops->target.offset = target.addr - start;
+> +               ops->target.offset_avail = true;
+> +       } else {
+> +               ops->target.offset_avail = false;
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +static struct ins_ops loongarch_jump_ops = {
+> +       .parse     = loongarch_jump__parse,
+> +       .scnprintf = jump__scnprintf,
+> +};
+> +
+>  static
+>  struct ins_ops *loongarch__associate_ins_ops(struct arch *arch, const char *name)
+>  {
+>         struct ins_ops *ops = NULL;
+>
+> -       if (!strncmp(name, "beqz", 4) ||
+> -           !strncmp(name, "bnez", 4) ||
+> -           !strncmp(name, "beq", 3) ||
+> -           !strncmp(name, "bne", 3) ||
+> -           !strncmp(name, "blt", 3) ||
+> -           !strncmp(name, "bge", 3) ||
+> -           !strncmp(name, "bltu", 4) ||
+> -           !strncmp(name, "bgeu", 4) ||
+> -           !strncmp(name, "bl", 2))
+> -               ops = &call_ops;
+> -       else if (!strncmp(name, "jirl", 4))
+> +       if (!strcmp(name, "bl"))
+> +               ops = &loongarch_call_ops;
+> +       else if (!strcmp(name, "jirl"))
+>                 ops = &ret_ops;
+> -       else if (name[0] == 'b')
+> -               ops = &jump_ops;
+> +       else if (!strcmp(name, "b") ||
+> +                !strncmp(name, "beq", 3) ||
+> +                !strncmp(name, "bne", 3) ||
+> +                !strncmp(name, "blt", 3) ||
+> +                !strncmp(name, "bge", 3) ||
+> +                !strncmp(name, "bltu", 4) ||
+> +                !strncmp(name, "bgeu", 4))
+> +               ops = &loongarch_jump_ops;
+>         else
+>                 return NULL;
+>
+> diff --git a/tools/perf/arch/s390/annotate/instructions.c b/tools/perf/arch/s390/annotate/instructions.c
+> index de925b0e35ce..da5aa3e1f04c 100644
+> --- a/tools/perf/arch/s390/annotate/instructions.c
+> +++ b/tools/perf/arch/s390/annotate/instructions.c
+> @@ -45,9 +45,6 @@ static int s390_call__parse(struct arch *arch, struct ins_operands *ops,
+>         return 0;
+>  }
+>
+> -static int call__scnprintf(struct ins *ins, char *bf, size_t size,
+> -                          struct ins_operands *ops, int max_ins_name);
+> -
+>  static struct ins_ops s390_call_ops = {
+>         .parse     = s390_call__parse,
+>         .scnprintf = call__scnprintf,
+> diff --git a/tools/perf/util/annotate.c b/tools/perf/util/annotate.c
+> index cdd1924a4418..ad40adbd8895 100644
+> --- a/tools/perf/util/annotate.c
+> +++ b/tools/perf/util/annotate.c
+> @@ -61,6 +61,10 @@ static regex_t        file_lineno;
+>  static struct ins_ops *ins__find(struct arch *arch, const char *name);
+>  static void ins__sort(struct arch *arch);
+>  static int disasm_line__parse(char *line, const char **namep, char **rawp);
+> +static int call__scnprintf(struct ins *ins, char *bf, size_t size,
+> +                         struct ins_operands *ops, int max_ins_name);
+> +static int jump__scnprintf(struct ins *ins, char *bf, size_t size,
+> +                         struct ins_operands *ops, int max_ins_name);
+>
+>  struct arch {
+>         const char      *name;
+> @@ -323,7 +327,7 @@ static struct ins_ops call_ops = {
+>
+>  bool ins__is_call(const struct ins *ins)
+>  {
+> -       return ins->ops == &call_ops || ins->ops == &s390_call_ops;
+> +       return ins->ops == &call_ops || ins->ops == &s390_call_ops || ins->ops == &loongarch_call_ops;
+>  }
+>
+>  /*
+> @@ -464,7 +468,7 @@ static struct ins_ops jump_ops = {
+>
+>  bool ins__is_jump(const struct ins *ins)
+>  {
+> -       return ins->ops == &jump_ops;
+> +       return ins->ops == &jump_ops || ins->ops == &loongarch_jump_ops;
+>  }
+>
+>  static int comment__symbol(char *raw, char *comment, u64 *addrp, char **namep)
+> --
+> 2.41.0
+>
