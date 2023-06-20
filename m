@@ -2,175 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F87736121
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 03:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FDD7736133
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 03:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjFTB34 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 21:29:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56564 "EHLO
+        id S229632AbjFTBiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 21:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjFTB3y (ORCPT
+        with ESMTP id S229462AbjFTBiH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 21:29:54 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C14D1A8;
-        Mon, 19 Jun 2023 18:29:51 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8Cxc+gOAZFkJAMHAA--.371S3;
-        Tue, 20 Jun 2023 09:29:50 +0800 (CST)
-Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxFOQJAZFkEQIhAA--.27139S3;
-        Tue, 20 Jun 2023 09:29:49 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v15 2/2] thermal: dt-bindings: add loongson-2 thermal
-Date:   Tue, 20 Jun 2023 09:29:44 +0800
-Message-Id: <20230620012944.28877-2-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230620012944.28877-1-zhuyinbo@loongson.cn>
-References: <20230620012944.28877-1-zhuyinbo@loongson.cn>
+        Mon, 19 Jun 2023 21:38:07 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13592119;
+        Mon, 19 Jun 2023 18:38:04 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QlTmC05Myz4wgk;
+        Tue, 20 Jun 2023 11:38:02 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1687225083;
+        bh=4KyqwkMLpA8d4g7V9+oDFKaAaBX3iSBt4eegpKSuZXc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GLc/ZVkjdiPtAfg9Sl/qnh5Jeljw+7FUTI67co5wH1IzQfuxbjbxQvjpyZ6kz4peY
+         pMuubEErgtBz9msOEFk1t98HcDOMTs+vqgeU89tny+jJKBSr869F4tPioGuR7s0fly
+         l6ewdWkcNekUB11ZCAhIUfvjywI7JL5SFdoyHx0wohw0trl8RKbalTdB3Sz9YYrDkQ
+         C8Lm3Y67c5qjW1sEmoi59KQ57ZqDUUxa7haG16sfl4QE1MwPHgI5+U9A0HxzIkjm86
+         UJU5H0o8onxPSUhMgdZFJXwPsP8PE5pm77YwmAAx8NyOWxbS6+8+F9czVGeXOGiR9J
+         TZQGaqbjt61gg==
+Date:   Tue, 20 Jun 2023 11:38:00 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Helge Deller <deller@gmx.de>, Dave Airlie <airlied@redhat.com>
+Cc:     DRI <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: linux-next: manual merge of the fbdev tree with the drm tree
+Message-ID: <20230620113800.5e76a964@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxFOQJAZFkEQIhAA--.27139S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3UbIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnUUvcSsGvfC2Kfnx
-        nUUI43ZEXa7xR_UUUUUUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/qYumKycpnKA=iqL9zaIm9aI";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Loongson-2 thermal binding with DT schema format using
-json-schema.
+--Sig_/qYumKycpnKA=iqL9zaIm9aI
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-Change in v15:
-		1. Use the specific compatible.
-Change in v14:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v13:
-		1. Drop the sensor id.
-Change in v12:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v11:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v10:
-		1. Add all history change log information.
-Change in v9:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v8:
-                1. Replace string Loongson2/loongson2 with Loongson-2/loongson-2.
-Change in v7:
-		1. Split the modification of patch 3 and merge it into this patch.
-Change in v6:
-		1. Fix the warning "reg: [[0, 534779136], [0, 48]] is too long"
-		   when compile the yaml.
-Change in v5:
-		1. Keep use same quotes "'" in all places. 
-Change in v4:
-		1. Fixup the compatible.
-		2. Update the binding file name.
-		3. Include irq.h to fix compile issue.
-Change in v3:
-		1. Remove the sensor id.
-		2. Remove the interrupt-parent in thermal required property.
-		3. Update the thermal binding file name.
-		4. Fixup the commit log information.
-Change in v2:
-		1. Add description and type about the "id".	
-		2. Make the filename was based on compatible.
+Hi all,
 
- .../thermal/loongson,ls2k-thermal.yaml        | 44 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 45 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
+Today's linux-next merge of the fbdev tree got a conflict in:
 
-diff --git a/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-new file mode 100644
-index 000000000000..7538469997f9
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-@@ -0,0 +1,44 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/loongson,ls2k-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Thermal sensors on Loongson-2 SoCs
-+
-+maintainers:
-+  - zhanghongchen <zhanghongchen@loongson.cn>
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+properties:
-+  compatible:
-+    oneOf:
-+      - enum:
-+          - loongson,ls2k1000-thermal
-+      - items:
-+          - enum:
-+              - loongson,ls2k2000-thermal
-+          - const: loongson,ls2k1000-thermal
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    thermal: thermal-sensor@1fe01500 {
-+        compatible = "loongson,ls2k1000-thermal";
-+        reg = <0x1fe01500 0x30>;
-+        interrupt-parent = <&liointc0>;
-+        interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f9277fa2a728..0833eb09b2e4 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12203,6 +12203,7 @@ M:	zhanghongchen <zhanghongchen@loongson.cn>
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-pm@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
- F:	drivers/thermal/loongson2_thermal.c
- 
- LOONGSON GPIO DRIVER
--- 
-2.20.1
+  drivers/video/fbdev/hitfb.c
 
+between commit:
+
+  bb47f218fd01 ("fbdev/hitfb: Cast I/O offset to address")
+
+from the drm tree and commit:
+
+  dadeeffbe525 ("fbdev: hitfb: Use NULL for pointers")
+
+from the fbdev tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/video/fbdev/hitfb.c
+index 7737923b7a0a,5f544a177033..000000000000
+--- a/drivers/video/fbdev/hitfb.c
++++ b/drivers/video/fbdev/hitfb.c
+@@@ -444,10 -428,10 +444,10 @@@ static int hitfb_suspend(struct device=20
+  {
+  	u16 v;
+ =20
+- 	hitfb_blank(1,0);
++ 	hitfb_blank(1, NULL);
+ -	v =3D fb_readw(HD64461_STBCR);
+ +	v =3D hitfb_readw(HD64461_STBCR);
+  	v |=3D HD64461_STBCR_SLCKE_IST;
+ -	fb_writew(v, HD64461_STBCR);
+ +	hitfb_writew(v, HD64461_STBCR);
+ =20
+  	return 0;
+  }
+@@@ -456,13 -440,13 +456,13 @@@ static int hitfb_resume(struct device *
+  {
+  	u16 v;
+ =20
+ -	v =3D fb_readw(HD64461_STBCR);
+ +	v =3D hitfb_readw(HD64461_STBCR);
+  	v &=3D ~HD64461_STBCR_SLCKE_OST;
+  	msleep(100);
+ -	v =3D fb_readw(HD64461_STBCR);
+ +	v =3D hitfb_readw(HD64461_STBCR);
+  	v &=3D ~HD64461_STBCR_SLCKE_IST;
+ -	fb_writew(v, HD64461_STBCR);
+ +	hitfb_writew(v, HD64461_STBCR);
+- 	hitfb_blank(0,0);
++ 	hitfb_blank(0, NULL);
+ =20
+  	return 0;
+  }
+
+--Sig_/qYumKycpnKA=iqL9zaIm9aI
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSRAvgACgkQAVBC80lX
+0GySsQf7BWsuWkG09mM1yj5GkzofDWLSNeehyg1YSbzCLtQPlroldzHeApLNNGbX
+2LWoXyXwYhemgA5PYN6uqIg9qzSmsrmYa0T/+6vNZt6rBKgiS4dhVZoppyUQAfcz
+m6bMdCXnKzUR+4xXz8HR1SIE3S8gvY7wyM2d7shahdgHbmqmLZsLmbroacIhjjaN
+PHSa7Eaa2yRl2nSaewY3IwgXOCKpqXY2pccw8o366PiauUDvcCb/H5sYprZJQcYT
+PKDET2QryaEx4mGfqaws1hF8xfoFny52iEENuMMsCov2RhfZe8Hb6BOi6iBXEQMl
+AWXlZ+WuePmORLxZzO/fC+K2Ate1KQ==
+=et4K
+-----END PGP SIGNATURE-----
+
+--Sig_/qYumKycpnKA=iqL9zaIm9aI--
