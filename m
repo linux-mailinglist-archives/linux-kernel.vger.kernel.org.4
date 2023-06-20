@@ -2,146 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F31F736D67
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:34:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F39736D69
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232627AbjFTNeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 09:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35524 "EHLO
+        id S232853AbjFTNfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 09:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231495AbjFTNeO (ORCPT
+        with ESMTP id S231495AbjFTNfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 09:34:14 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E67BB7
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:34:12 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 289F721842;
-        Tue, 20 Jun 2023 13:34:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1687268051; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j+g7f4R0DwF4FaxDOQ8yJtMXFiMiE/Afni5THZWxYk4=;
-        b=OG4Wi1Co9aZVqCHKxsHujLoG3Ye+pvYO/WsjfwvJO6IgJKRGZM6qJvhlX8rxXoNQauTjHE
-        xHodpMXYbKYUtizxY0U5RCobw34c/j/iyvoesp3qoU/+EJZ6aJNRX6bsrUhs9RVAcwMv5m
-        rabDzSfrjuOm2HVFYBLsKE7koKDe+DI=
-Received: from suse.cz (unknown [10.100.201.202])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 984C12C141;
-        Tue, 20 Jun 2023 13:34:09 +0000 (UTC)
-Date:   Tue, 20 Jun 2023 15:34:09 +0200
-From:   Petr Mladek <pmladek@suse.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     David Laight <David.Laight@aculab.com>,
-        'Demi Marie Obenour' <demi@invisiblethingslab.com>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Lee Jones <lee@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>
-Subject: Re: [PATCH v3 0/4] Make sscanf() stricter
-Message-ID: <ZJGq0UTHPdEuIMal@alley>
-References: <6ab6adce-2318-4ae6-bde6-4317485639fd@p183>
- <ZId/IA41c2sJyvE0@itl-email>
- <ZIeHfBf3aB3vUgRM@smile.fi.intel.com>
- <ZIeMyQXU49OcoxY2@itl-email>
- <ec3d7ebe62654e949329785bb32c3822@AcuMS.aculab.com>
- <ZIiMrDxI5Ts0s8fK@itl-email>
- <23df90dd35874fd89c64906e6a6de164@AcuMS.aculab.com>
- <ZIoeVjC6offUywop@itl-email>
- <e354268a4efe48c9a8023a30c7292d12@AcuMS.aculab.com>
- <ZIr0z6u17xogE5+n@smile.fi.intel.com>
+        Tue, 20 Jun 2023 09:35:15 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877E0E42
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:35:14 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1qBbVj-000348-FJ; Tue, 20 Jun 2023 15:35:07 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id F0B151DDB73;
+        Tue, 20 Jun 2023 13:35:05 +0000 (UTC)
+Date:   Tue, 20 Jun 2023 15:35:05 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Simon Horman <simon.horman@corigine.com>,
+        "linux-can@vger.kernel.org" <linux-can@vger.kernel.org>,
+        "Thomas.Kopp@microchip.com" <Thomas.Kopp@microchip.com>,
+        "socketcan@hartkopp.net" <socketcan@hartkopp.net>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "marex@denx.de" <marex@denx.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 1/3] can: length: fix bitstuffing count
+Message-ID: <20230620-carmaker-carmaker-c9c2260cee1f-mkl@pengutronix.de>
+References: <PAVPR10MB7209CEA1F5AD12B2E5C8ED86B15AA@PAVPR10MB7209.EURPRD10.PROD.OUTLOOK.COM>
+ <ZIrC6DpjjtmpIsI9@corigine.com>
+ <CAMZ6RqKzkEL+zfNyqn_f46K_h3_cX-BwGQJb8X5hH-vms0P=cw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5vqvtfit6tmnyh4c"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZIr0z6u17xogE5+n@smile.fi.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMZ6RqKzkEL+zfNyqn_f46K_h3_cX-BwGQJb8X5hH-vms0P=cw@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 2023-06-15 14:23:59, Andy Shevchenko wrote:
-> On Thu, Jun 15, 2023 at 08:06:46AM +0000, David Laight wrote:
-> > From: Demi Marie Obenour
-> > > Sent: 14 June 2023 21:09
-> 
-> ...
-> 
-> > > > What sort of formats and data are being used?
-> > > 
-> > > Base-10 or base-16 integers, with whitespace never being valid.
-> > 
-> > In which case sscanf() really isn't what you are looking for.
-> > 
-> > > > The "%s" format terminates on whitespace.
-> > > > Even stroul() (and friends) will skip leading whitespace.
-> > > 
-> > > Yes, which is a reason that strto*l() are just broken IMO.
-> >
-> > They are not 'broken', that is what is useful most of the time.
-> > The usual problem is that "020" is treated as octal.
 
-I do not know how many users depend on this behavior. But I believe
-that there are such users. And breaking compatibility with userspace
-implementation would make more harm then good in this case.
+--5vqvtfit6tmnyh4c
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > > I’m trying to replace their uses in Xen with custom parsing code.
-> > 
-> > Then write a custom parser :-)
+On 15.06.2023 18:58:04, Vincent MAILHOL wrote:
+> > Lastly, I'm not a CAN maintainer. But I think it's usual to separate
+> > fixes and enhancements into different series, likely the former
+> > targeting the can tree while the latter targets the can-next tree
+> > (I could be way off here).
+>=20
+> Hmm... The fact is that only the first two patches are fixes. The
+> third one is not.  The fixes being really minor, there is no urgency.
+> So I was thinking of having the full series go to the next branch and
+> as long as there is the Fix: tag, the two first patches will
+> eventually be picked by the stable team. I thought that this approach
+> was easier than sending two fixes to the stable branch, wait for these
+> to propagate to next and then send a second series of a single patch
+> for next.
+>=20
+> @Marc, let me know what you prefer. I am fine to split if this works
+> best for you. Also, I will wait for your answer before doing any
+> resend.
+>=20
+> > If on the other hand, the patches in this series are not bug fixes,
+> > then it is probably best to drop the 'fixes' language.
+>=20
+> I will keep the Fix tags. Even if minor (probably no visible
+> repercussions) it still fixes an existing inaccuracy (whether you call
+> it bug or not is another debate, but I often see typo fixes being
+> backported, and these are a bit more than a typo fix).
 
-Honestly, I dislike any sscanf() modification which have been suggested
-so far:
+I've taken the whole series as is to linux-can-next.
 
-  + %!d is not acceptable because it produces compiler errors
+Thanks,
+Marc
 
-  + %d! is not acceptable because "use 64!" is a realistic string.
-    We could not be sure that "<number>!" will never be parsed
-    in kernel.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-  + %d%[!] produces compiler error either. It is hard to parse by eyes.
-    Also the meaning of such a format would be far from obvious.
+--5vqvtfit6tmnyh4c
+Content-Type: application/pgp-signature; name="signature.asc"
 
-  + %pj or another %p modifiers would be hard to understand either.
+-----BEGIN PGP SIGNATURE-----
 
-    Yes, we have %pe but I think that only few people really use it.
-    And it is kind of self-explanatory because it is typically
-    used together with ERR_PTR() and with variables called
-    "err" or "ret".
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmSRqwcACgkQvlAcSiqK
+BOiuAAgAsiTi4KQX+ACCtDflRuoZXbnAbf69UfUlZuprEeZ1Onk1p/x+nYh5fR7U
+BBgojXIVMau34lTCIDJYiDD1p8YKu/KV54UHtHL4bfZ+y3e65+5amrLb1ceoAd6n
+DVSnUJv8fbgPxC5GKDwRT+6pMCFzGuaHJsWXSWrgCuNzQGV2tUtFOGzah/0iE13G
+z+CvRwG3ZnUAsuixmcN8DgixMnhOX/nXcFYz4bB5g3Ux9X5nfwrCZj9RJkzF1iw/
+B4TkqxW99Dq35ptvGa59yFA3BYDZBkbyBawAijnaqgIyE5rUhF1wQRGMWxOqfE8H
+I9yORnmFb9xnoimX/WYyjg/9Iwx6bw==
+=VLYR
+-----END PGP SIGNATURE-----
 
-
-> Hmm... Usually we are against zillion implementations of the same with zillion
-> bugs hidden (each buggy implementation with its own bugs).
-
-I would really like to see the code depending on it. The cover letter
-suggests that there already is a patch with such a custom parser.
-I am sorry if it has already been mentioned. There were so many threads.
-
-Sure, we do not want two full featured sscanf() implementations. But a
-wrapper checking for leading whitespace and using kstrto<foo>
-family does not sound too complex.
-
-There should always be a good reason to introduce an incompatibility
-between the kernel and the userspace implementation of a commonly
-used API.
-
-Best Regards,
-Petr
+--5vqvtfit6tmnyh4c--
