@@ -2,266 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5B3373774D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:11:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4AFA737752
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjFTWLV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 18:11:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
+        id S229925AbjFTWPp convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Jun 2023 18:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229849AbjFTWLT (ORCPT
+        with ESMTP id S229618AbjFTWPn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 18:11:19 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DDE1729
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 15:11:17 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-bd61dd9a346so5256691276.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 15:11:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687299076; x=1689891076;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=CO8OejPC4gZPbUKY20BuZtiY+JX/he1vANgb25qIZbQ=;
-        b=fE85Zrqy3r+kdR8ArHB/hTwzAJCRL3cxC7Bqrp9pSD9NxadKuWpGfoSXOaTM5fhCNU
-         N41+vFxRLZbuLnx/3iSPkGVT7Tibyqb3LhVJToc2zB88jQ1cq5IVQumA99Algn8tmXMN
-         uCb7p/2Lx2+YGQFqFF3YHHrR0nVBDr2GppheKlx2Io4tXo5XSpvP1e/fkwFvP0PFB82K
-         9ERAJQEBAIm32J2pbItz+7q4y/5mefWVIy+h5B0pN0ZshrFFKU7pjr2U5dXPd9O/0XeD
-         lVO/+s8rJhEjo1USkfSWx6hmKCZIhiVLjo2TFsycpbLVEBi95a2vYKKToDq7a+xGLMpG
-         ohKQ==
+        Tue, 20 Jun 2023 18:15:43 -0400
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F748E7E;
+        Tue, 20 Jun 2023 15:15:42 -0700 (PDT)
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-77de67139ccso240477239f.0;
+        Tue, 20 Jun 2023 15:15:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687299076; x=1689891076;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CO8OejPC4gZPbUKY20BuZtiY+JX/he1vANgb25qIZbQ=;
-        b=IUsukpvk9IClJJ2o2hne/apExu+6hnGFDyn3Mg6rof+jbsLLQxsLrWHb3hTycqXqmo
-         gjMzdMpKoxatgTxiJ3BxzgT+XtuhdolvmL4Sjia8vogtk593EVsyhUZePEuxOo9WsaYS
-         h8tnlAlk7RaqlmxOeIrbAWPI9oWY4ZmHgaz3kUzzf5OMKwN57RAeziWfsFVWPyQzP9UN
-         0RE/mAv7t3vD0alLD+3P7/gdETJYc0aDFAzb6eIo6kZhdF/5wXS6nTDBu0aJjryx1iLf
-         t3pru+6oeKdmKXHE7dPaTAsppHRjNCB2wYtt/5qIQY+zNy27F5LpGW3GdN4gUJTv4P2E
-         MCnw==
-X-Gm-Message-State: AC+VfDxcea++yr1pis62ssFMXCFz9fxJfNdNd5IfLhrwQspUSRTntwk2
-        dTjaB6UiKWQIVE54ogTx5vcjGkgY4Lb9ztrWI9AuLA==
-X-Google-Smtp-Source: ACHHUZ7fDE/rhQSyqOpD/BAWYftdNsswcG/R8gyuckSNMsS8k6rkqW5n1rTgRj17TRg5ZHST0ZFDpaevX5ayDwfzcMs=
-X-Received: by 2002:a25:ac20:0:b0:bff:bcc:a51e with SMTP id
- w32-20020a25ac20000000b00bff0bcca51emr92081ybi.19.1687299076560; Tue, 20 Jun
- 2023 15:11:16 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687299342; x=1689891342;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rY6PVpR7o3TFuP4JziuKWXeauOK+7yv/dqaW2WujMlQ=;
+        b=RVFTB68I0OCD+ik9HykqtOdbTVBU7rlfJPsS/QNMhBE36xS84JALBMrOtHJYp6US86
+         GgWB2NS5U+N29t5d4HeeNMbNcUxzamAHwaqJ/33yjTkoD02t5Dv5g/om0DjCfMLGtzs8
+         +XvDG+EYy2GmJN7bV10x4Hk3N4n6h0k4W8g9dbdTPWoCaSrq5br8WKHx315l8gIGYgrE
+         TQzAd/+Q6ggaVmUPbQolI0cCWd0zQBry5BjlWDsnFn/YXdnFJwxoxOr4pAIVoEZblUbz
+         d/ijjt7f4fVDuBICRmO5OZq8xfWmmQd4NBikSPcIb1rWLhLGAn62fdD6wI5IfgCjIFWl
+         90Xg==
+X-Gm-Message-State: AC+VfDzjAW0/cOyOEGM6AK1VQ0advMl3L+bk1n6mV8qRLclVa/z1zy2c
+        F7qc8ilLrG3NVBLlQsNLIttLusQ8CbkcJyxJ2c4=
+X-Google-Smtp-Source: ACHHUZ6ziGrl9UymvMjiNr+y7FEEsmOAbX3YI/mMsoMzNZugV0E9oDvPANZk09oH8Iexocth05lLNZG2rXbkM1w8uxI=
+X-Received: by 2002:a5e:dd08:0:b0:76c:595a:6b5f with SMTP id
+ t8-20020a5edd08000000b0076c595a6b5fmr9023687iop.20.1687299341696; Tue, 20 Jun
+ 2023 15:15:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
- <20230525-add-widebus-support-v1-1-c7069f2efca1@quicinc.com>
- <wpjxrnhbcanbc5iatxnff25yrrdfrtmgb24sgwyo457dz2oyjz@e2docpcb6337>
- <f4fb042c-1458-6077-3c49-8cc02638b27c@linaro.org> <ycgei43x4kfmjk7g7gbeglehtiiinfbqmrjbdzcy56frxbtd2z@yk2f5kgrkbrt>
- <e23de804-060d-3278-5045-1ed03f0de80d@quicinc.com> <c5cfc132-effb-8269-ac5d-ed8c988d1a16@quicinc.com>
- <08b6aaf4-6edd-4f41-5d98-11ffc27e766e@quicinc.com> <6d11e420-1b95-0029-ec7a-17fbc8acb5ca@linaro.org>
- <827875ad-a446-10e7-6608-f9b0fa830a00@quicinc.com> <2b01b53a-9d8a-3b7d-d1bd-7d25eb77a9c0@linaro.org>
- <6ebab21c-5b1a-f9d7-e0c6-6a091e27761a@quicinc.com>
-In-Reply-To: <6ebab21c-5b1a-f9d7-e0c6-6a091e27761a@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Wed, 21 Jun 2023 01:11:05 +0300
-Message-ID: <CAA8EJpoqnW08rtx0T5OhOUs5+5k8jgza7sLwqwqyU2_o-wH1cg@mail.gmail.com>
-Subject: Re: [Freedreno] [PATCH 1/3] drm/msm/dpu: Add DPU_INTF_DATABUS_WIDEN
- feature flag for DPU >= 5.0
-To:     Jessica Zhang <quic_jesszhan@quicinc.com>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Sean Paul <sean@poorly.run>
+References: <20230615040715.2064350-1-irogers@google.com>
+In-Reply-To: <20230615040715.2064350-1-irogers@google.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 20 Jun 2023 15:15:30 -0700
+Message-ID: <CAM9d7cigCUz4i-t2rHaz9Ch0oWxjYWmvnVB73uV1cm+47DtpXw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] perf sharded_mutex: Introduce sharded_mutex
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Yuan Can <yuancan@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Andres Freund <andres@anarazel.de>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 at 00:37, Jessica Zhang <quic_jesszhan@quicinc.com> wrote:
+On Wed, Jun 14, 2023 at 9:07 PM Ian Rogers <irogers@google.com> wrote:
 >
+> Per object mutexes may come with significant memory cost while a
+> global mutex can suffer from unnecessary contention. A sharded mutex
+> is a compromise where objects are hashed and then a particular mutex
+> for the hash of the object used. Contention can be controlled by the
+> number of shards.
 >
->
-> On 6/16/2023 5:37 PM, Dmitry Baryshkov wrote:
-> > On 17/06/2023 00:10, Abhinav Kumar wrote:
-> >>
-> >>
-> >> On 6/14/2023 1:43 PM, Dmitry Baryshkov wrote:
-> >>> On 14/06/2023 23:39, Abhinav Kumar wrote:
-> >>>>
-> >>>>
-> >>>> On 6/14/2023 12:54 PM, Abhinav Kumar wrote:
-> >>>>>
-> >>>>>
-> >>>>> On 6/14/2023 12:35 PM, Abhinav Kumar wrote:
-> >>>>>>
-> >>>>>>
-> >>>>>> On 6/14/2023 5:23 AM, Marijn Suijten wrote:
-> >>>>>>> On 2023-06-14 15:01:59, Dmitry Baryshkov wrote:
-> >>>>>>>> On 14/06/2023 14:42, Marijn Suijten wrote:
-> >>>>>>>>> On 2023-06-13 18:57:11, Jessica Zhang wrote:
-> >>>>>>>>>> DPU 5.x+ supports a databus widen mode that allows more data
-> >>>>>>>>>> to be sent
-> >>>>>>>>>> per pclk. Enable this feature flag on all relevant chipsets.
-> >>>>>>>>>>
-> >>>>>>>>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
-> >>>>>>>>>> ---
-> >>>>>>>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 3 ++-
-> >>>>>>>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 2 ++
-> >>>>>>>>>>    2 files changed, 4 insertions(+), 1 deletion(-)
-> >>>>>>>>>>
-> >>>>>>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> >>>>>>>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> >>>>>>>>>> index 36ba3f58dcdf..0be7bf0bfc41 100644
-> >>>>>>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> >>>>>>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> >>>>>>>>>> @@ -103,7 +103,8 @@
-> >>>>>>>>>>        (BIT(DPU_INTF_INPUT_CTRL) | \
-> >>>>>>>>>>         BIT(DPU_INTF_TE) | \
-> >>>>>>>>>>         BIT(DPU_INTF_STATUS_SUPPORTED) | \
-> >>>>>>>>>> -     BIT(DPU_DATA_HCTL_EN))
-> >>>>>>>>>> +     BIT(DPU_DATA_HCTL_EN) | \
-> >>>>>>>>>> +     BIT(DPU_INTF_DATABUS_WIDEN))
-> >>>>>>>>>
-> >>>>>>>>> This doesn't work.  DPU 5.0.0 is SM8150, which has DSI 6G 2.3.
-> >>>>>>>>> In the
-> >>>>>>>>> last patch for DSI you state and enable widebus for DSI 6G 2.5+
-> >>>>>>>>> only,
-> >>>>>>>>> meaning DPU and DSI are now desynced, and the output is completely
-> >>>>>>>>> corrupted.
-> >>>>>>>
-> >>>>
-> >>>> I looked at the internal docs and also this change. This change is
-> >>>> incorrect because this will try to enable widebus for DPU >= 5.0 and
-> >>>> DSI  >= 2.5
-> >>>>
-> >>>> That was not the intended right condition as thats not what the docs
-> >>>> say.
-> >>>>
-> >>>> We should enable for DPU >= 7.0 and DSI >= 2.5
-> >>>>
-> >>>> Is there any combination where this compatibility is broken? That
-> >>>> would be the strange thing for me ( not DPU 5.0 and DSI 2.5 as that
-> >>>> was incorrect)
-> >>>>
-> >>>> Part of this confusion is because of catalog macro re-use again.
-> >>>>
-> >>>> This series is a good candidate and infact I think we should only do
-> >>>> core_revision based check on DPU and DSI to avoid bringing the
-> >>>> catalog mess into this.
-> >>>
-> >>> I have just a single request here: can we please have the same
-> >>> approach for both DSI and DP? I don't mind changing DP code if it
-> >>> makes it better. If you don't have better reasons, I like the idea of
-> >>> DSI/DP dictating whether wide bus should be used on the particular
-> >>> interface. It allows us to handle possible errata or corner cases
-> >>> there. Another option would be to make DPU tell DSI / DP whether the
-> >>> wide bus is enabled or not, but I'd say, this is slightly worse
-> >>> solution.
-> >>>
-> >>
-> >> Today, DP's widebus does not check if DPU supports that or not.
-> >>
-> >> DPU encoder queries the DP whether widebus is available and enables it.
-> >>
-> >> We can also do the same thing for DSI.
-> >>
-> >> So for intf_type of DSI, DPU encoder will query DSI if it supports
-> >> widebus.
-> >
-> > Not if it supports wide bus. But the check is whether enabling wide bus
-> > is requested by the output driver (DSI/DP).
->
-> Hi Dmitry,
->
-> Can you explain what you mean by "requested by output driver"? FWIW, if
-> the DSI version supports wide bus && if DSC is enabled, then wide bus
-> will be enabled in DSI.
+> Signed-off-by: Ian Rogers <irogers@google.com>
 
-Like for DP, let DSI select whether a wide bus should be enabled or
-not, then let DPU get this flag from DSI.
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+
+Thanks,
+Namhyung
 
 >
-> Thanks,
+> v2. Use hashmap.h's hash_bits in case of contention from alignment of
+>     objects.
+> ---
+>  tools/perf/util/Build           |  1 +
+>  tools/perf/util/sharded_mutex.c | 33 +++++++++++++++++++++++++++++++++
+>  tools/perf/util/sharded_mutex.h | 29 +++++++++++++++++++++++++++++
+>  3 files changed, 63 insertions(+)
+>  create mode 100644 tools/perf/util/sharded_mutex.c
+>  create mode 100644 tools/perf/util/sharded_mutex.h
 >
-> Jessica Zhang
+> diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+> index ff2fd1a36bb8..96f4ea1d45c5 100644
+> --- a/tools/perf/util/Build
+> +++ b/tools/perf/util/Build
+> @@ -145,6 +145,7 @@ perf-y += mem2node.o
+>  perf-y += clockid.o
+>  perf-y += list_sort.o
+>  perf-y += mutex.o
+> +perf-y += sharded_mutex.o
 >
-> >
-> >>
-> >> Then DSI will do its version checks and for DSC it will say yes.
-> >>
-> >> This way, we will never check for the DPU's core revision for DSI and
-> >> purely rely of DP/DSI's hw revisions.
-> >>
-> >> Thats fine with me because that way we again just rely on the hw
-> >> revision to enable the feature.
-> >>
-> >> But as a result I am still going to drop this patch which adds widebus
-> >> to the catalog as a dpu cap which I always wanted to do anyway as we
-> >> will just rely on the DSI and DP hw revisions.
-> >
-> > Yep.
-> >
-> >>
-> >>>>
-> >>>>>>> Tested this on SM8350 which actually has DSI 2.5, and it is also
-> >>>>>>> corrupted with this series so something else on this series might be
-> >>>>>>> broken.
-> >>>>>>>
-> >>>>>
-> >>>>> Missed this response. That seems strange.
-> >>>>>
-> >>>>> This series was tested on SM8350 HDK with a command mode panel.
-> >>>>>
-> >>>>> We will fix the DPU-DSI handshake and post a v2 but your issue
-> >>>>> needs investigation in parallel.
-> >>>>>
-> >>>>> So another bug to track that would be great.
-> >>>>>
-> >>>>>>>>> Is the bound in dsi_host wrong, or do DPU and DSI need to
-> >>>>>>>>> communicate
-> >>>>>>>>> when widebus will be enabled, based on DPU && DSI supporting it?
-> >>>>>>>>
-> >>>>>>>> I'd prefer to follow the second approach, as we did for DP. DPU
-> >>>>>>>> asks the
-> >>>>>>>> actual video output driver if widebus is to be enabled.
-> >>>>>>>
-> >>>>>>
-> >>>>>> I was afraid of this. This series was made on an assumption that
-> >>>>>> the DPU version of widebus and DSI version of widebus would be
-> >>>>>> compatible but looks like already SM8150 is an outlier.
-> >>>>>>
-> >>>>>> Yes, I think we have to go with second approach.
-> >>>>>>
-> >>>>>> DPU queries DSI if it supports widebus and enables it.
-> >>>>>>
-> >>>>>> Thanks for your responses. We will post a v2.
-> >>>>>>
-> >>>>>>> Doesn't it seem very strange that DPU 5.x+ comes with a widebus
-> >>>>>>> feature,
-> >>>>>>> but the DSI does not until two revisions later?  Or is this
-> >>>>>>> available on
-> >>>>>>> every interface, but only for a different (probably DP) encoder
-> >>>>>>> block?
-> >>>>>>>
-> >>>>>>
-> >>>>>> Yes its strange.
-> >>>>>>
-> >>>>
-> >>>> I have clarified this above. Its not strange but appeared strange
-> >>>> because we were checking wrong conditions.
-> >>>>
-> >>>>
-> >>>>>>> - Marijn
-> >>>
-> >
-> > --
-> > With best wishes
-> > Dmitry
-> >
-
-
-
--- 
-With best wishes
-Dmitry
+>  perf-$(CONFIG_LIBBPF) += bpf-loader.o
+>  perf-$(CONFIG_LIBBPF) += bpf_map.o
+> diff --git a/tools/perf/util/sharded_mutex.c b/tools/perf/util/sharded_mutex.c
+> new file mode 100644
+> index 000000000000..e11e8d0945a7
+> --- /dev/null
+> +++ b/tools/perf/util/sharded_mutex.c
+> @@ -0,0 +1,33 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include "sharded_mutex.h"
+> +
+> +#include <stdlib.h>
+> +
+> +struct sharded_mutex *sharded_mutex__new(size_t num_shards)
+> +{
+> +       struct sharded_mutex *result;
+> +       size_t size;
+> +       unsigned int bits;
+> +
+> +       for (bits = 0; ((size_t)1 << bits) < num_shards; bits++)
+> +               ;
+> +
+> +       size = sizeof(*result) + sizeof(struct mutex) * (1 << bits);
+> +       result = malloc(size);
+> +       if (!result)
+> +               return NULL;
+> +
+> +       result->cap_bits = bits;
+> +       for (size_t i = 0; i < ((size_t)1 << bits); i++)
+> +               mutex_init(&result->mutexes[i]);
+> +
+> +       return result;
+> +}
+> +
+> +void sharded_mutex__delete(struct sharded_mutex *sm)
+> +{
+> +       for (size_t i = 0; i < ((size_t)1 << sm->cap_bits); i++)
+> +               mutex_destroy(&sm->mutexes[i]);
+> +
+> +       free(sm);
+> +}
+> diff --git a/tools/perf/util/sharded_mutex.h b/tools/perf/util/sharded_mutex.h
+> new file mode 100644
+> index 000000000000..7325e969eee3
+> --- /dev/null
+> +++ b/tools/perf/util/sharded_mutex.h
+> @@ -0,0 +1,29 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +#ifndef PERF_SHARDED_MUTEX_H
+> +#define PERF_SHARDED_MUTEX_H
+> +
+> +#include "mutex.h"
+> +#include "hashmap.h"
+> +
+> +/*
+> + * In a situation where a lock is needed per object, having a mutex can be
+> + * relatively memory expensive (40 bytes on x86-64). If the object can be
+> + * constantly hashed, a sharded mutex is an alternative global pool of mutexes
+> + * where the mutex is looked up from a hash value. This can lead to collisions
+> + * if the number of shards isn't large enough.
+> + */
+> +struct sharded_mutex {
+> +       /* mutexes array is 1<<cap_bits in size. */
+> +       unsigned int cap_bits;
+> +       struct mutex mutexes[];
+> +};
+> +
+> +struct sharded_mutex *sharded_mutex__new(size_t num_shards);
+> +void sharded_mutex__delete(struct sharded_mutex *sm);
+> +
+> +static inline struct mutex *sharded_mutex__get_mutex(struct sharded_mutex *sm, size_t hash)
+> +{
+> +       return &sm->mutexes[hash_bits(hash, sm->cap_bits)];
+> +}
+> +
+> +#endif  /* PERF_SHARDED_MUTEX_H */
+> --
+> 2.41.0.162.gfafddb0af9-goog
+>
