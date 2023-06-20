@@ -2,107 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B441C7367C4
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D15897367CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231577AbjFTJcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 05:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
+        id S232346AbjFTJda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 05:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbjFTJcJ (ORCPT
+        with ESMTP id S231246AbjFTJd0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 05:32:09 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B4B2A3;
-        Tue, 20 Jun 2023 02:32:08 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2b45e347266so52743361fa.0;
-        Tue, 20 Jun 2023 02:32:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687253524; x=1689845524;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=g6RkSlx8XrZO42soMnBgsxTLxMlxCujpuFknxlHA8No=;
-        b=dErJ47XQjru8Dnpwi9O3bsjz0RkdABiKWekKtr6D+rp4ScIUbSBBTab5ykpNkeqpk5
-         GGx7VSKgpWRXEfEL/o6U0LY9mp9lxcsRjxo2dlL+HD81r8iVx9MoIrwBqHPLb3bPy9Rv
-         5DybStrHiQYDfUMRzbYQjX7BH+rSvAQYLcxZsjkVwpv32gXT9IIScbNIYoRXNLI7tHT6
-         Ly0UuLapXIwAAFfDuW4iGMWhUbTrVHnaw4V5r8vL2TVQkN386rPbHd//rEmINMn6zESq
-         CYS1CsS+V+zhlLl0dE8angqDDEcdmko5rGi00JOjo0Xf8LSKUPZxmWU1ogRMCmwGJiKC
-         xR5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687253524; x=1689845524;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g6RkSlx8XrZO42soMnBgsxTLxMlxCujpuFknxlHA8No=;
-        b=UTMUMbo+YOyzEkPsl4YCpQVFKUFss7P/IAYxDisoJdTlRQ27N8cqhm3fGKQG8JqNYK
-         2qO8Xk7rasiSaaQBQLRJxDHbCG62OpmZAe3flrssGisbj6pUS4NMq5py+2MedWeQHxfS
-         SR8u369BC9MomIAnl6s3t13aak6qlIfXzdqgedEelMbTAbbC/YQFYpO7fVtr5HmBjeLK
-         +PwNPBUtPTI/jsjlfxzQnBQUc3UKHlIr5psarC4gMfcWcmNahefg6lF6OfjATNBsu0cc
-         Cx5ad9elgdj6HWZ90NlueN0tvQvhBW8SdBPcEmK5HumynBl0+vAK+lnIQbj5ZZyn0aB/
-         c+rw==
-X-Gm-Message-State: AC+VfDwPh68oIASMhxajSpmSf2IIJni0t/VXEPdPUe//gTiTvaKyGMrv
-        l54xxYCfRjUpWTcgZlmUfTg=
-X-Google-Smtp-Source: ACHHUZ7QGXkEQcR1w/mpgxAX9QYVbM7QjYWB7mf7+ASrvwJ5KxydoASvzKSFPmgYaRiRwE1L6qaUgA==
-X-Received: by 2002:a2e:8088:0:b0:2b4:7f66:8c92 with SMTP id i8-20020a2e8088000000b002b47f668c92mr2968973ljg.31.1687253523620;
-        Tue, 20 Jun 2023 02:32:03 -0700 (PDT)
-Received: from mobilestation.baikal.int ([94.125.187.42])
-        by smtp.gmail.com with ESMTPSA id n10-20020a2e878a000000b002ad8fc8dda6sm330032lji.17.2023.06.20.02.32.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 02:32:03 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 12:32:01 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     =?utf-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
-Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>
-Subject: Re: [PATCH 3/9] dmaengine: dw-edma: Add HDMA remote interrupt
- configuration
-Message-ID: <20230620093201.33vmdmgczwma5iat@mobilestation.baikal.int>
-References: <20230609081654.330857-1-kory.maincent@bootlin.com>
- <20230609081654.330857-4-kory.maincent@bootlin.com>
- <20230618214800.5h4ni43vu2admho5@mobilestation>
- <20230619201647.7cfe12c9@kmaincent-XPS-13-7390>
+        Tue, 20 Jun 2023 05:33:26 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF42A3;
+        Tue, 20 Jun 2023 02:33:24 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35K7qkfO030100;
+        Tue, 20 Jun 2023 09:32:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=ky61XlTFvnA7lVh5OyfvaMQHiiNipeR+9XCFDt37Dwk=;
+ b=WJJudu5ihbSzoI/GwMqVJJs6kk+CC9UMvWpbMMTS6FL7ccnm0bl1q635GOd6dEug4d1n
+ uqP6+503Oawhj8muKEIWZmukfDBV2x+8CQlGrlHSkImP+4mhuj0v32GQTAXXT50CuxD2
+ f3/T030jYt4PtLfFo+JQXYy800Nx1YB+H2GdFZHcuIiPqpzSjpD+h7eWrrP4OfPYEHt5
+ Ftw6lW4YbXGFHsGvJrYEsBcWXnKYqNxcrosY/rE9NgThETpcA02MDqQkDRnCMzPSqZq3
+ yzrh6L+XrN+Vo46Q7VRFvurCYIVANXa4SYdAJ261EuKqqeQkoBSBSb5XzpR+oDbj0rC3 cA== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rb1dtgykj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jun 2023 09:32:53 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35K9WqXi010487
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jun 2023 09:32:52 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Tue, 20 Jun 2023 02:32:43 -0700
+Date:   Tue, 20 Jun 2023 15:02:33 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <p.zabel@pengutronix.de>, <arnd@arndb.de>,
+        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <rafal@milecki.pl>, <quic_srichara@quicinc.com>,
+        <quic_varada@quicinc.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH 2/9] dt-bindings: phy: qcom,m31: Document qcom,m31 USB phy
+Message-ID: <20230620093225.GA9966@varda-linux.qualcomm.com>
+References: <cover.1686126439.git.quic_varada@quicinc.com>
+ <14f60578e2935c0844537eab162af3afa52ffe39.1686126439.git.quic_varada@quicinc.com>
+ <98960024-7dbc-91a3-75de-90b529637916@linaro.org>
+ <20230615052746.GB22186@varda-linux.qualcomm.com>
+ <aca54f67-cc09-ff4f-93ca-6973d153db2c@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230619201647.7cfe12c9@kmaincent-XPS-13-7390>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <aca54f67-cc09-ff4f-93ca-6973d153db2c@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: aP3VCaexHP-8vPhMErFKpkN7DtlWrrC8
+X-Proofpoint-GUID: aP3VCaexHP-8vPhMErFKpkN7DtlWrrC8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-20_06,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ bulkscore=0 impostorscore=0 lowpriorityscore=0 phishscore=0 adultscore=0
+ suspectscore=0 mlxscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306200084
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 08:16:47PM +0200, Köry Maincent wrote:
-> On Mon, 19 Jun 2023 00:48:00 +0300
-> Serge Semin <fancer.lancer@gmail.com> wrote:
-> 
-> > Seems reasonable especially seeing there is a code with a similar
-> > semantic in the dw_hdma_v0_core_write_chunk() method.
-> > 
-> > Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
-> > 
-> > Just curious whether we really need to have the local IRQs left
-> > enabled for the remote device setup... The only case I have in mind is
-> > that it would be useful to signal a remote end-point host of such
-> > event in some application-specific environment. It sounds exotic but
-> > still possible.
-> 
-> Thanks for your review.
-> Yes, we do need to let local IRQs enabled. I have tested to remove them and it
-> prevent the remote setup to function correctly on my board. Maybe it needs to be
-> set to know internally when the transfer is done, but it seems weird. I haven't
-> a full explanation for now.
+On Sat, Jun 17, 2023 at 10:48:41AM +0200, Krzysztof Kozlowski wrote:
+> On 15/06/2023 07:27, Varadarajan Narayanan wrote:
+> >>> +          - enum:
+> >>> +              - qcom,m31-usb-hsphy
+> >>
+> >> I am confused what's this. If m31 is coming from some IP block provider,
+> >> then you are using wrong vendor prefix.
+> >> https://www.m31tech.com/download_file/M31_USB.pdf
+> >>
+> >>
+> >>> +              - qcom,ipq5332-m31-usb-hsphy
+> >>
+> >> This confuses me even more. IPQ m31?
+> >
+> > Will change this to m31,usb-hsphy and m31,ipq5332-usb-hsphy respectively.
+> > Will that be acceptable?
+>
+> m31,ipq5332 seems wrong, as m31 did not create ipq5332. Does the m31
+> device have some name/version/model? If it is not really known, then I
+> would just propose to go with qcom,ipq5332-usb-hsphy.
+>
+> Skip generic compatible ("usb-hsphy") entirely.
 
-Ok. Thanks for checking it out.
+Ok.
 
--Serge(y)
+> And then we have... existing bindings qcom,usb-hs-phy.yaml. Don't create
+> something similar with difference in the hyphen. Just use device
+> specific compatible thus device specific filename.
+
+qcom,usb-hs-phy.yaml seems to be for ULPI mode phy and the
+driver we are introducing is for UTMI. We would have to
+modify phy-qcom-usb-hs.c to accomodate M31. Will that be
+acceptable to phy-qcom-usb-hs.c owners/maintainers?
+
+> >>> +
+> >>> +  reg:
+> >>> +    description:
+> >>> +      Offset and length of the M31 PHY register set
+> >>
+> >> Drop description, obvious.
+> >
+> > Ok.
+> >
+> >>> +    maxItems: 2
+> >>> +
+> >>> +  reg-names:
+> >>> +    items:
+> >>> +      - const: m31usb_phy_base
+> >>> +      - const: qscratch_base
+> >>
+> >> Drop "_base" from both.
+> >
+> > Ok. Will drop qscratch_base. This is in the controller space.
+> > Should not come here.
+>
+> Then drop reg-names entirely.
+
+Ok.
+
+> >>> +
+> >>> +  phy_type:
+> >>> +    oneOf:
+> >>> +      - items:
+> >>> +          - enum:
+> >>> +              - utmi
+> >>> +              - ulpi
+> >>
+> >> This does not belong to phy, but to USB node.
+> >
+> > This is used by the driver to set a bit during phy init. Hence
+> > have it as a replication of the USB node's entry. If this is not
+> > permissible, is there some way to get this from the USB node,
+> > or any other alternative mechanism?
+>
+> Shouldn't USB controller choose what type of PHY type it wants?
+
+Will remove this. IPQ5332 uses it in UTMI mode only.
+
+> >>> +
+> >>> +additionalProperties: false
+> >>> +
+> >>> +examples:
+> >>> +  - |
+> >>> +    #include <dt-bindings/clock/qcom,ipq5332-gcc.h>
+> >>> +    hs_m31phy_0: hs_m31phy@5b00 {
+> >>
+> >> Node names should be generic. See also explanation and list of examples
+> >> in DT specification:
+> >> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+> >>
+> >> Also, no underscores in node names.
+> >
+> > Will change this as usbphy0:hs_m31phy@7b000
+>
+> This does not solve my comments. I did not write "label" but "node name".
+
+Sorry. will fix it.
+
+Thanks
+Varada
