@@ -2,67 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 203E073665F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:37:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8FD2736670
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbjFTIhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 04:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
+        id S231976AbjFTIiw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 04:38:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbjFTIhK (ORCPT
+        with ESMTP id S230433AbjFTIiu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 04:37:10 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74ECDB;
-        Tue, 20 Jun 2023 01:37:08 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1687250226;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xnki0r5y4TroSJ8P6p+PySOa093W7Oqe6Ng8UJe+axY=;
-        b=hTZCKfB0Dm0qkGSiW0lNQniI9H/ypBbK7XnHzIc5Wwxs9kiU1bYYKN1DCX73COz8El7lMD
-        8xfUtjV7cwd0WLJNkhTh17eB7bVthya5jhWunDMV78HExnjqeBj0OUeD8Xq9e/1AMhvJw2
-        iseST0n/ECErlpj0huXQ7hSNp+6zbeewlnRpl/wxviFKgHyUIQkllbQVQ4Xznqb37Ywx5f
-        Qqzi+TVZsG+PyNX3p0HAIkRlR0outyujAcjrhaIue/bDvgd+tbQvghO4y3A5FtjcHmLYuS
-        Ek3XJZCQn+zMr6blc5ym9tm5qvEEZZVEh9fY5qX50MDwBP2qFoFsU2SKRzP83g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1687250226;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xnki0r5y4TroSJ8P6p+PySOa093W7Oqe6Ng8UJe+axY=;
-        b=fom0Ekn1nFU9HjMfw1gEd0/2MwYHr82fLAnc+vgq8OJvpEvu6ubNuyRjR3ADXM7DS+wvFE
-        LljsU4/9A0poFpCw==
-To:     Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, iommu@lists.linux.dev,
-        linux-hyperv@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        x86@kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, steve.wahl@hpe.com, mike.travis@hpe.com,
-        dimitri.sivanich@hpe.com, russ.anderson@hpe.com,
-        dvhart@infradead.org, andy@infradead.org, joro@8bytes.org,
-        suravee.suthikulpanit@amd.com, will@kernel.org,
-        robin.murphy@arm.com, kys@microsoft.com, haiyangz@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, dwmw2@infradead.org,
-        baolu.lu@linux.intel.com, peterz@infradead.org, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
-        adrian.hunter@intel.com, xin3.li@intel.com, seanjc@google.com,
-        jiangshanlai@gmail.com, jgg@ziepe.ca, yangtiezhu@loongson.cn
-Subject: Re: [PATCH 2/3] x86/vector: Replace IRQ_MOVE_CLEANUP_VECTOR with a
- timer callback
-In-Reply-To: <20230619231611.2230-3-xin3.li@intel.com>
-References: <20230619231611.2230-1-xin3.li@intel.com>
- <20230619231611.2230-3-xin3.li@intel.com>
-Date:   Tue, 20 Jun 2023 10:37:05 +0200
-Message-ID: <87h6r2pm1a.ffs@tglx>
+        Tue, 20 Jun 2023 04:38:50 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92944A2;
+        Tue, 20 Jun 2023 01:38:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2sAaLrskooSi8nvsTT1gZutPHlD/k3n7r5xvvnLiOwo=; b=QBd7SbC+MJyV7/yXKjWB2RO34d
+        KMb7IKnce/09nxUE59vX+DyrMq3+3ksde80hRvh74PSaSNpx9BExmPl1tT8hQDlY0RRCJd27mzHGK
+        jTdeDIlO0hT18cIDPNCv2sWkLYNVbQxKO/F8FFpL0xhC5EahRo6sBAWNxNYjkiU+yZTnaeMoZDi7N
+        vOQtOf6oo94YWl5q6+Gq5wOBDtAnP8PQqGVvANP8rV9pNAVKAVwt2pMg7JxVv5Aw7DqavmpWtWPaO
+        CZhjIO7ekSgd79XNaCXwEwqMMGk+HQle3BUi7KXOMEMggh5H/UUpQepU1YJ5vAjCWdgbeSfwJCEPw
+        SsMRkJ2g==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qBWsX-00Crm5-4u; Tue, 20 Jun 2023 08:38:21 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D951F3002F0;
+        Tue, 20 Jun 2023 10:38:18 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BCF1521440F49; Tue, 20 Jun 2023 10:38:18 +0200 (CEST)
+Date:   Tue, 20 Jun 2023 10:38:18 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Youling Tang <tangyouling@loongson.cn>
+Cc:     Xi Ruoyao <xry111@xry111.site>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        madvenka@linux.microsoft.com, chenzhongjin@huawei.com,
+        WANG Xuerui <kernel@xen0n.name>, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        tangyouling00@gmail.com, youling.tang@outlook.com
+Subject: Re: [RFC PATCH v1 00/23] LoongArch: Add objtool and ORC unwinder
+ support
+Message-ID: <20230620083818.GW4253@hirez.programming.kicks-ass.net>
+References: <1687247209-31676-1-git-send-email-tangyouling@loongson.cn>
+ <bed4d386c16701d14a2ea395edeb0368cb3d04ad.camel@xry111.site>
+ <62d25870-2caa-18ab-e58c-cee0bc383e16@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <62d25870-2caa-18ab-e58c-cee0bc383e16@loongson.cn>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,22 +66,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19 2023 at 16:16, Xin Li wrote:
-> +/*
-> + * Called with vector_lock held
-> + */
+On Tue, Jun 20, 2023 at 04:29:12PM +0800, Youling Tang wrote:
+> Hi, Ruoyao
+> 
+> On 06/20/2023 04:15 PM, Xi Ruoyao wrote:
+> > It looks like only 19 patches are successfully delivered, out of 23.
+> I'm sorry, somehow the patchset didn't reach the mailing list. Probably
+> due to the sending limit being reached.
 
-Such a comment is patently bad. 
-
-> +static void __vector_cleanup(struct vector_cleanup *cl, bool check_irr)
->  {
-        ....
-
-        lockdep_assert_held(&vector_lock);
-
-Documents the requirement clearly _and_ catches any caller which does not
-hold the lock when lockdep is enabled.
-
-Thanks,
-
-        tglx
+I got all the patches, but their threading is broken, they come in
+chunks of 5 or :/
