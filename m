@@ -2,113 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F5873656F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:56:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E1B736574
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbjFTH4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 03:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52058 "EHLO
+        id S231744AbjFTH5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 03:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbjFTH4W (ORCPT
+        with ESMTP id S231655AbjFTH5H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 03:56:22 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33E31BC5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:55:02 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-76242a24e3aso254347485a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:55:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687247701; x=1689839701;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EoggPrivOwaF6YYpZ0mcfv9qnK5xaGr29ovQpplAZx8=;
-        b=J8nzRWA0uvpss9wXeQOicc8Ot9y4/UFuc6plZhigByzD/E6z56SmcPuzuWHVg6RLIr
-         zeSwVuKlgmRjiVprT2c29o+LY/xl0mKSG7EI+HK+ZmF9VRuRMDrYHfurcBSQUvbGMDJM
-         BrTznrXs5U8ERPP2CrQPh2E6mB/xxogY+UVNmpVE8mP4PFPg1/HAfaCo5DqPYBJr1jNU
-         jJBNI0/yqplj0fpPoW7vqJFOdNB1zyVXocOEAXeD5BoEwwZ8uu8OHUDQYXH1raSp0ip4
-         Z7eB2HLsP8hFBVrCu74QJhwf7v/CbG+Ae1Bf3UqUxfhWUQfg52/Gluq44YXQQXKCwSWh
-         Wn8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687247701; x=1689839701;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EoggPrivOwaF6YYpZ0mcfv9qnK5xaGr29ovQpplAZx8=;
-        b=BuZYTa3ITu4AVH5suB1x/AjTzNxT2aw7VAQBnf2a9QTQezC8T23Kjgcfb0GYXAVF8Z
-         WfFaSH9CBeoLf11yRznalPzavTC0NdUpcpWqiTuRaaYffvHFNfnRGCXra4u6JvT3QaMU
-         i+64/mzf6MHVR9C5imjrF4GPXftb41BnY2kHVj8gKjbmzdvEJtp6MbJwrWyMLWBilyZ+
-         AT6sd6TOsoHWK9aFfW1tduSvi6I1R4QStIoFzWZ94IldUvixJT4jwrbivzF2Vp6M4GBI
-         8fArfGMLgJdQMyFeE1Jji9RJt5uZVIOdsbg8pswQV2Gv1NKzcRtaQb8Ab/Vz3HfkafSA
-         b5fQ==
-X-Gm-Message-State: AC+VfDwztcP9iwsjpjgkN7Hulnf3Z51RdB5nJXPdRR5k8L7nnx3NjiAT
-        sWoOA/53X2kTkmRvlthEdEC20g==
-X-Google-Smtp-Source: ACHHUZ4DJO4EDwJbG0wgrFZYngaLjP4vE5bfDEN/dCam98OaAjzy+Vc4NRjPKMFiq2LjNC4HChBWFA==
-X-Received: by 2002:a05:620a:2890:b0:75d:4145:154e with SMTP id j16-20020a05620a289000b0075d4145154emr12424317qkp.65.1687247701263;
-        Tue, 20 Jun 2023 00:55:01 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id j1-20020a0df901000000b0054f50f71834sm368662ywf.124.2023.06.20.00.54.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 00:55:00 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 00:54:56 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 09/12] mm/khugepaged: retract_page_tables() without mmap
- or vma lock
-In-Reply-To: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
-Message-ID: <f03ea9a-5386-eb78-50d7-b6a93959d01e@google.com>
-References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
+        Tue, 20 Jun 2023 03:57:07 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31922112;
+        Tue, 20 Jun 2023 00:55:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687247758; x=1718783758;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=P5Q4IPOXLjX+bleM9UppIEFXIxY65YYGq2VuQfRRpIw=;
+  b=BsDM27hNlSlDqX8dLPQCWtqqS+vodVA33tqfYCnzARkejeUEqekM8chF
+   eVJE3i4nX15HqeobEW/d6bBLI/A/nZg0CmeehQG6Q1mN2ik+e9JzgPxN8
+   qUgvCk/JHkx2Kq86LIWVJHVA/y+XWFqfs6akp1qSd+8CsfsvPRHFAwHz4
+   YPYXnmGh4FdPeapy8LZ6xx9BMsvZobD0rb2K+vVyBvN8T7LJbQ1Qo20ZP
+   0kJ+KzsYhsN4K20Ad9/xjglxbhIxAXn+uORCvrm5huxyu5phvNHrnPeR/
+   SDxo0AhgOP1qulVVA2Pgk9Fq08uAYmtECKRUVkzoE6nr26vY/XPQX7hXM
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="446172782"
+X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
+   d="scan'208";a="446172782"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 00:55:58 -0700
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="747958363"
+X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
+   d="scan'208";a="747958363"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga001.jf.intel.com with ESMTP; 20 Jun 2023 00:55:58 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 20 Jun 2023 00:55:57 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 20 Jun 2023 00:55:57 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 20 Jun 2023 00:55:57 -0700
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.171)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Tue, 20 Jun 2023 00:55:57 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RaIzpsxDkS/vlO+i6BqiI/KQRDO9Nwwr6JuLkuIw1R9q5IJf3CTNS2iq6+wJD0YhdGgFTF3pVmX7rd0c0F4ye7MqWnUop1g1Y097h1kr+ZhHGVOADaLBF6OeI845E8+NdJeu3xwJzBtuxHkeiAUsBIw9Be2dz1/6yU/s+hRDbhrDaNNUHGKXJFHmRNQD/ylf4BiuJJmGByfaXVF9E85Zqe63m46EfoRVOjC04SlZnkHmUIPeaoxymlU1zthy8f89fgLpd3nTyXd+fgmhHzjmC4v1ZD0HntpZGH3SMcj6bHIP9rz+d7aew9uzV+wtKkOpFusLKbYGsAFT35FAjBdXDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jPPuQu3f98FWEUEThECp3Dr4fOyiO6nHpSBjs9zA3Wk=;
+ b=kEiH6aN/lKNet6M2ztw0fRuw4Ad64HCvXOeAZ9UAsGtixyF+ibT7yeZ/vIl/MhtzMw1q5SWR5PLicGCRsFNI1ixjMG9bL4I7Uo+Fuw66/px2TjDHJ1iiEmbyTi6DguAVXxb+39bDlVzhuJxYwvFAcmNXwps/8QlJ3+KSRaxnos+A5HbIqtIZiWtAXGAf/Sj3y1+88kf6zl7aNBEyslD2pz3h6EKWYsjlhC9zdV9X1GJFCzHmG2Ff0ik30SCMN3ISOH6jqc526K1sZTY9brlAHZgeKrE0kdfxuaXguoeDxVTelLVPziG/R4N5wwrOYl4+2ZlYl8mGrKTpTP4dxMbOcg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com (2603:10b6:8:b3::19) by
+ MW3PR11MB4762.namprd11.prod.outlook.com (2603:10b6:303:5d::21) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6500.37; Tue, 20 Jun 2023 07:55:49 +0000
+Received: from DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::9e4f:80cc:e0aa:6809]) by DM4PR11MB6117.namprd11.prod.outlook.com
+ ([fe80::9e4f:80cc:e0aa:6809%2]) with mapi id 15.20.6500.036; Tue, 20 Jun 2023
+ 07:55:49 +0000
+Date:   Tue, 20 Jun 2023 09:55:41 +0200
+From:   Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+To:     Jiri Pirko <jiri@resnulli.us>
+CC:     Petr Oros <poros@redhat.com>, <netdev@vger.kernel.org>,
+        <jesse.brandeburg@intel.com>, <anthony.l.nguyen@intel.com>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <michal.swiatkowski@linux.intel.com>,
+        <jacob.e.keller@intel.com>, <intel-wired-lan@lists.osuosl.org>,
+        <linux-kernel@vger.kernel.org>, <pmenzel@molgen.mpg.de>
+Subject: Re: [PATCH net v2] ice: Unregister netdev and devlink_port only once
+Message-ID: <ZJFbfQaQkkfhZjFY@boxer>
+References: <20230619105813.369912-1-poros@redhat.com>
+ <ZJBvKVf7Yfh6WpsO@nanopsycho>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZJBvKVf7Yfh6WpsO@nanopsycho>
+X-ClientProxiedBy: DU2PR04CA0052.eurprd04.prod.outlook.com
+ (2603:10a6:10:234::27) To DM4PR11MB6117.namprd11.prod.outlook.com
+ (2603:10b6:8:b3::19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB6117:EE_|MW3PR11MB4762:EE_
+X-MS-Office365-Filtering-Correlation-Id: a10ee551-900d-48bb-c144-08db7163c305
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Ald5KiWM9Lr+yp7Q0Ntkrxg0GOD+Ie+2zdu4v6j1cCoIa7icPIBkgKGF9DoACLno2k29DerBHWLhwhbkZhjrSVrRpPfdGCCt0YTlkwL2vwOuQq0donLVbev0ti1zMyab2xS5CDb2v0Rh/+YrFV0w0HTzJVBh6W9ha5F+WXidZMezXU+tP7Mt1vphwydafwKmW4O1MgoNvoEnQC/KZU/ao61aSpGIdKee1ajT8b3Cu7YHWTLZOxg6nn0bFksZE88eJ2wY7pkBuw8SdYWos3wwp4KDTKPpzqPnBz/Dz4ptSa036Pcl/PNHlypf2NzvIimnr0AAXZn1m51tKsi6m1zSO9J0lemYOD7K0u9FM9srj8Rc4QuKF8iluMwxrztMj1p7YUuXTVKAsa+Yj+UiXgDVnKo36E/e/j9p9rU2iFI2E0GWKr0MvwDf9E/6+zz1r+JTZxnFYsIW+l8RSZRPsCsHVJ0nlQN3e/lXURya0IS0UaxDRqjD3WZfiAcZMgm5ZGhpe7N/hHKFA+tmBR46KLEWBs/bWWK5oMuH/lGyEwKhtVI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6117.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(376002)(39860400002)(136003)(366004)(346002)(451199021)(478600001)(2906002)(966005)(6486002)(6666004)(86362001)(33716001)(26005)(186003)(6506007)(6512007)(9686003)(8676002)(8936002)(66476007)(66556008)(66946007)(7416002)(5660300002)(38100700002)(316002)(44832011)(6916009)(4326008)(83380400001)(82960400001)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TvwGfKRi/ngKOeL7DCHxru4Kvav+z7gjBXehJzT7q8ad4pE47zx6wDpXyv/n?=
+ =?us-ascii?Q?VneGRWWi9TKrtylqlzleDTj90WrZbN5++nrOX5+U1Wb2wqbnh5fuBb9qkzfC?=
+ =?us-ascii?Q?/uhXk5sTt1BNVZhPRJJbUkaAdbGe+tBXyOwJE6yc157Zpp7Jaf2zOsa95v6g?=
+ =?us-ascii?Q?VPmKCq9bA7OWjjJZIYCEXLYL2/l01kMbaMx+0iybuFEpaoi7QsgRBd7dcUB2?=
+ =?us-ascii?Q?YhmbLJqDft7r92ssF3UVDPEzZjMokCzGiHlFJn9UY4gqREQtNIFdWH8Nz/Hf?=
+ =?us-ascii?Q?xhYfsF+wCoxQ7OtrIYv+VSBstaPGzG/ZZunBUhftlNmQd89alHZ3231Lulc2?=
+ =?us-ascii?Q?euK2vPCn7x8+yqiUyktMvLCL6Fs817SOw1l1xa+ihMH5ZPu3G6CM2dhf/3qf?=
+ =?us-ascii?Q?Dg0ECGGegQcd/iAjNA6qXQvj+fOTnTwqzqZaEowyNqMltXCmUAUGlT+iqqm3?=
+ =?us-ascii?Q?WcX0cCGWpD9BIvwarFYGt3DKAvIHleZ/18i9glu5MkpH8ZLZB3un7C5xsNSq?=
+ =?us-ascii?Q?jSdhLqVKVIOwdoGc++buiyTmHn3KTQuZXgSVxGINhM4I1oDnHKLnahIVL+p8?=
+ =?us-ascii?Q?mH3bXO0GJ/5rc+xsT535+XMhOneLwm8J06PUwTqDmo65mtFwYzR4x+02SOZN?=
+ =?us-ascii?Q?oZ4osIvMrVOFKnOcCvKfTrGfFJEsqVPhOS0UpxPhh/6A2IheDqk46fPkJ3JI?=
+ =?us-ascii?Q?BQxHikmhOKgMJWup5jmZTUfOVo4Auihio+a/RMxn0JZ3sbmBxnSSh0CPz6BL?=
+ =?us-ascii?Q?xaxfuZsfTk5Dxfzw0k+z1QbAqD5g6BjjNFyLx2W2hk6FQjdNRlqLE8FxHxvr?=
+ =?us-ascii?Q?Ez+E9kJKgYdn9ojCgWOCrOm35YRd638o+V1+PpuNZ0g5DEhcbQDZBzqpsE4F?=
+ =?us-ascii?Q?Y4jUzLDJViomqVMw6XtjrU0zfKTj+cyMemrJ8Y7hKq45KzWlTbS12Z559bNG?=
+ =?us-ascii?Q?p705IP73Ph5plQC8SwQbv93IfkxvxFckbEAQUn+H6HWtBFFo9BzhLRXduLAQ?=
+ =?us-ascii?Q?Cp9F5gA/lNjolePWIhvJ106KhSZbjBb/+ekUGTPEmLuANPQ94Cypa/YNGyDn?=
+ =?us-ascii?Q?oqTMWwMWbbf1bCmaiMnozS65SczO9SNnxRPP+VqfG2Qg8lkxkWx/gqr8vNgW?=
+ =?us-ascii?Q?KExm8Zhnlx5zXLESwCnWj+t0RAWwvd26loHyq16na2E7upO895kIAh0VPjNC?=
+ =?us-ascii?Q?3uQSqFmV8BMAob2lrCLRPVCNI1/fphaOgPAcM9/MR2RIRbwzqnw3E66ax8tz?=
+ =?us-ascii?Q?Xr15qEy6W6DQQh5L1cBNRI3Gybzx8qYfDh32EBk2x17HcMRArZ1pcg56P0rO?=
+ =?us-ascii?Q?JZg7lu17ixoyu1YzPBP3yPi9IB5eE83ohcI3g5CH9y+HSVo9KT5EFVSYp//2?=
+ =?us-ascii?Q?0f0Xrg55pam1g/gkgAM/trrjf//yOd7nMyUk28iTuZdFPmOeqGBUy62c7aHi?=
+ =?us-ascii?Q?ev5ZJSPCQdXerj5D+lwuzhat3MdkM+04TxPt5NLOE02+NfxO8c9cehAnqYZ3?=
+ =?us-ascii?Q?3XN3yJs+sXlmEp5Y2ojbEPpfeSssuP+9Nq/HxDKQEzHSGCinOeduXHED8kt1?=
+ =?us-ascii?Q?Vj7+NolPii6dU22vMNg3pmGwEKcOVjPH7rllXcBFOK3led3Iuer8uwhXbiiG?=
+ =?us-ascii?Q?HA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: a10ee551-900d-48bb-c144-08db7163c305
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6117.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 07:55:49.3213
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ih+ohaOlAAHGH7LEe/JHbpCog+VuKTdFP0wJR3lRuRQoaPm5oY2XIIZLfR+qMD4bk4iyUB3LO8AQ7CvFvAvE+mfuAmD8bQvAnXwyb+3sFtM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4762
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,270 +153,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify shmem and file THP collapse's retract_page_tables(), and relax
-its locking: to improve its success rate and to lessen impact on others.
+On Mon, Jun 19, 2023 at 05:07:21PM +0200, Jiri Pirko wrote:
+> Mon, Jun 19, 2023 at 12:58:13PM CEST, poros@redhat.com wrote:
+> >Since commit 6624e780a577fc ("ice: split ice_vsi_setup into smaller
+> >functions") ice_vsi_release does things twice. There is unregister
+> >netdev which is unregistered in ice_deinit_eth also.
+> 
+> You need to describe more relationship between ice_vsi_release() and
+> ice_deinit_eth(). From a quick look, I don't see that ice_deinit_eth()
+> is always called before/afeter ice_vsi_release().
+> 
 
-Instead of its MADV_COLLAPSE case doing set_huge_pmd() at target_addr of
-target_mm, leave that part of the work to madvise_collapse() calling
-collapse_pte_mapped_thp() afterwards: just adjust collapse_file()'s
-result code to arrange for that.  That spares retract_page_tables() four
-arguments; and since it will be successful in retracting all of the page
-tables expected of it, no need to track and return a result code itself.
+Only relation between them is that they both are called on .remove() pci
+callback. Clearly ice_vsi_release() should not be cleaning up stuff that
+ice_init_eth() has brought up. I was staring at the code and jumping
+around these flows and fix seems reasonable.
 
-It needs i_mmap_lock_read(mapping) for traversing the vma interval tree,
-but it does not need i_mmap_lock_write() for that: page_vma_mapped_walk()
-allows for pte_offset_map_lock() etc to fail, and uses pmd_lock() for
-THPs.  retract_page_tables() just needs to use those same spinlocks to
-exclude it briefly, while transitioning pmd from page table to none: so
-restore its use of pmd_lock() inside of which pte lock is nested.
+> Ice init/release flows are very hard to follow :/
+> 
+> 
+> >
+> >It also unregisters the devlink_port twice which is also unregistered
+> >in ice_deinit_eth(). This double deregistration is hidden because
+> >devl_port_unregister ignores the return value of xa_erase.
+> 
+> This call for another patch, doesn't it? :)
 
-Users of pte_offset_map_lock() etc all now allow for them to fail:
-so retract_page_tables() now has no use for mmap_write_trylock() or
-vma_try_start_write().  In common with rmap and page_vma_mapped_walk(),
-it does not even need the mmap_read_lock().
++1 :)
 
-But those users do expect the page table to remain a good page table,
-until they unlock and rcu_read_unlock(): so the page table cannot be
-freed immediately, but rather by the recently added pte_free_defer().
-
-Use the (usually a no-op) pmdp_get_lockless_sync() to send an interrupt
-when PAE, and pmdp_collapse_flush() did not already do so: to make sure
-that the start,pmdp_get_lockless(),end sequence in __pte_offset_map()
-cannot pick up a pmd entry with mismatched pmd_low and pmd_high.
-
-retract_page_tables() can be enhanced to replace_page_tables(), which
-inserts the final huge pmd without mmap lock: going through an invalid
-state instead of pmd_none() followed by fault.  But that enhancement
-does raise some more questions: leave it until a later release.
-
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
- mm/khugepaged.c | 184 ++++++++++++++++++++----------------------------
- 1 file changed, 75 insertions(+), 109 deletions(-)
-
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index 1083f0e38a07..f7a0f7673127 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -1617,9 +1617,8 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
- 		break;
- 	case SCAN_PMD_NONE:
- 		/*
--		 * In MADV_COLLAPSE path, possible race with khugepaged where
--		 * all pte entries have been removed and pmd cleared.  If so,
--		 * skip all the pte checks and just update the pmd mapping.
-+		 * All pte entries have been removed and pmd cleared.
-+		 * Skip all the pte checks and just update the pmd mapping.
- 		 */
- 		goto maybe_install_pmd;
- 	default:
-@@ -1748,123 +1747,88 @@ static void khugepaged_collapse_pte_mapped_thps(struct khugepaged_mm_slot *mm_sl
- 	mmap_write_unlock(mm);
- }
- 
--static int retract_page_tables(struct address_space *mapping, pgoff_t pgoff,
--			       struct mm_struct *target_mm,
--			       unsigned long target_addr, struct page *hpage,
--			       struct collapse_control *cc)
-+static void retract_page_tables(struct address_space *mapping, pgoff_t pgoff)
- {
- 	struct vm_area_struct *vma;
--	int target_result = SCAN_FAIL;
- 
--	i_mmap_lock_write(mapping);
-+	i_mmap_lock_read(mapping);
- 	vma_interval_tree_foreach(vma, &mapping->i_mmap, pgoff, pgoff) {
--		int result = SCAN_FAIL;
--		struct mm_struct *mm = NULL;
--		unsigned long addr = 0;
--		pmd_t *pmd;
--		bool is_target = false;
-+		struct mmu_notifier_range range;
-+		struct mm_struct *mm;
-+		unsigned long addr;
-+		pmd_t *pmd, pgt_pmd;
-+		spinlock_t *pml;
-+		spinlock_t *ptl;
-+		bool skipped_uffd = false;
- 
- 		/*
- 		 * Check vma->anon_vma to exclude MAP_PRIVATE mappings that
--		 * got written to. These VMAs are likely not worth investing
--		 * mmap_write_lock(mm) as PMD-mapping is likely to be split
--		 * later.
--		 *
--		 * Note that vma->anon_vma check is racy: it can be set up after
--		 * the check but before we took mmap_lock by the fault path.
--		 * But page lock would prevent establishing any new ptes of the
--		 * page, so we are safe.
--		 *
--		 * An alternative would be drop the check, but check that page
--		 * table is clear before calling pmdp_collapse_flush() under
--		 * ptl. It has higher chance to recover THP for the VMA, but
--		 * has higher cost too. It would also probably require locking
--		 * the anon_vma.
-+		 * got written to. These VMAs are likely not worth removing
-+		 * page tables from, as PMD-mapping is likely to be split later.
- 		 */
--		if (READ_ONCE(vma->anon_vma)) {
--			result = SCAN_PAGE_ANON;
--			goto next;
--		}
-+		if (READ_ONCE(vma->anon_vma))
-+			continue;
-+
- 		addr = vma->vm_start + ((pgoff - vma->vm_pgoff) << PAGE_SHIFT);
- 		if (addr & ~HPAGE_PMD_MASK ||
--		    vma->vm_end < addr + HPAGE_PMD_SIZE) {
--			result = SCAN_VMA_CHECK;
--			goto next;
--		}
--		mm = vma->vm_mm;
--		is_target = mm == target_mm && addr == target_addr;
--		result = find_pmd_or_thp_or_none(mm, addr, &pmd);
--		if (result != SCAN_SUCCEED)
--			goto next;
--		/*
--		 * We need exclusive mmap_lock to retract page table.
--		 *
--		 * We use trylock due to lock inversion: we need to acquire
--		 * mmap_lock while holding page lock. Fault path does it in
--		 * reverse order. Trylock is a way to avoid deadlock.
--		 *
--		 * Also, it's not MADV_COLLAPSE's job to collapse other
--		 * mappings - let khugepaged take care of them later.
--		 */
--		result = SCAN_PTE_MAPPED_HUGEPAGE;
--		if ((cc->is_khugepaged || is_target) &&
--		    mmap_write_trylock(mm)) {
--			/* trylock for the same lock inversion as above */
--			if (!vma_try_start_write(vma))
--				goto unlock_next;
--
--			/*
--			 * Re-check whether we have an ->anon_vma, because
--			 * collapse_and_free_pmd() requires that either no
--			 * ->anon_vma exists or the anon_vma is locked.
--			 * We already checked ->anon_vma above, but that check
--			 * is racy because ->anon_vma can be populated under the
--			 * mmap lock in read mode.
--			 */
--			if (vma->anon_vma) {
--				result = SCAN_PAGE_ANON;
--				goto unlock_next;
--			}
--			/*
--			 * When a vma is registered with uffd-wp, we can't
--			 * recycle the pmd pgtable because there can be pte
--			 * markers installed.  Skip it only, so the rest mm/vma
--			 * can still have the same file mapped hugely, however
--			 * it'll always mapped in small page size for uffd-wp
--			 * registered ranges.
--			 */
--			if (hpage_collapse_test_exit(mm)) {
--				result = SCAN_ANY_PROCESS;
--				goto unlock_next;
--			}
--			if (userfaultfd_wp(vma)) {
--				result = SCAN_PTE_UFFD_WP;
--				goto unlock_next;
--			}
--			collapse_and_free_pmd(mm, vma, addr, pmd);
--			if (!cc->is_khugepaged && is_target)
--				result = set_huge_pmd(vma, addr, pmd, hpage);
--			else
--				result = SCAN_SUCCEED;
--
--unlock_next:
--			mmap_write_unlock(mm);
--			goto next;
--		}
--		/*
--		 * Calling context will handle target mm/addr. Otherwise, let
--		 * khugepaged try again later.
--		 */
--		if (!is_target) {
--			khugepaged_add_pte_mapped_thp(mm, addr);
-+		    vma->vm_end < addr + HPAGE_PMD_SIZE)
- 			continue;
-+
-+		mm = vma->vm_mm;
-+		if (find_pmd_or_thp_or_none(mm, addr, &pmd) != SCAN_SUCCEED)
-+			continue;
-+
-+		if (hpage_collapse_test_exit(mm))
-+			continue;
-+		/*
-+		 * When a vma is registered with uffd-wp, we cannot recycle
-+		 * the page table because there may be pte markers installed.
-+		 * Other vmas can still have the same file mapped hugely, but
-+		 * skip this one: it will always be mapped in small page size
-+		 * for uffd-wp registered ranges.
-+		 */
-+		if (userfaultfd_wp(vma))
-+			continue;
-+
-+		/* PTEs were notified when unmapped; but now for the PMD? */
-+		mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, mm,
-+					addr, addr + HPAGE_PMD_SIZE);
-+		mmu_notifier_invalidate_range_start(&range);
-+
-+		pml = pmd_lock(mm, pmd);
-+		ptl = pte_lockptr(mm, pmd);
-+		if (ptl != pml)
-+			spin_lock_nested(ptl, SINGLE_DEPTH_NESTING);
-+
-+		/*
-+		 * Huge page lock is still held, so normally the page table
-+		 * must remain empty; and we have already skipped anon_vma
-+		 * and userfaultfd_wp() vmas.  But since the mmap_lock is not
-+		 * held, it is still possible for a racing userfaultfd_ioctl()
-+		 * to have inserted ptes or markers.  Now that we hold ptlock,
-+		 * repeating the anon_vma check protects from one category,
-+		 * and repeating the userfaultfd_wp() check from another.
-+		 */
-+		if (unlikely(vma->anon_vma || userfaultfd_wp(vma))) {
-+			skipped_uffd = true;
-+		} else {
-+			pgt_pmd = pmdp_collapse_flush(vma, addr, pmd);
-+			pmdp_get_lockless_sync();
-+		}
-+
-+		if (ptl != pml)
-+			spin_unlock(ptl);
-+		spin_unlock(pml);
-+
-+		mmu_notifier_invalidate_range_end(&range);
-+
-+		if (!skipped_uffd) {
-+			mm_dec_nr_ptes(mm);
-+			page_table_check_pte_clear_range(mm, addr, pgt_pmd);
-+			pte_free_defer(mm, pmd_pgtable(pgt_pmd));
- 		}
--next:
--		if (is_target)
--			target_result = result;
- 	}
--	i_mmap_unlock_write(mapping);
--	return target_result;
-+	i_mmap_unlock_read(mapping);
- }
- 
- /**
-@@ -2261,9 +2225,11 @@ static int collapse_file(struct mm_struct *mm, unsigned long addr,
- 
- 	/*
- 	 * Remove pte page tables, so we can re-fault the page as huge.
-+	 * If MADV_COLLAPSE, adjust result to call collapse_pte_mapped_thp().
- 	 */
--	result = retract_page_tables(mapping, start, mm, addr, hpage,
--				     cc);
-+	retract_page_tables(mapping, start);
-+	if (cc && !cc->is_khugepaged)
-+		result = SCAN_PTE_MAPPED_HUGEPAGE;
- 	unlock_page(hpage);
- 
- 	/*
--- 
-2.35.3
-
+> 
+> 
+> >
+> >[   68.642167] Call Trace:
+> >[   68.650385]  ice_devlink_destroy_pf_port+0xe/0x20 [ice]
+> >[   68.655656]  ice_vsi_release+0x445/0x690 [ice]
+> >[   68.660147]  ice_deinit+0x99/0x280 [ice]
+> >[   68.664117]  ice_remove+0x1b6/0x5c0 [ice]
+> >
+> >[  171.103841] Call Trace:
+> >[  171.109607]  ice_devlink_destroy_pf_port+0xf/0x20 [ice]
+> >[  171.114841]  ice_remove+0x158/0x270 [ice]
+> >[  171.118854]  pci_device_remove+0x3b/0xc0
+> >[  171.122779]  device_release_driver_internal+0xc7/0x170
+> >[  171.127912]  driver_detach+0x54/0x8c
+> >[  171.131491]  bus_remove_driver+0x77/0xd1
+> >[  171.135406]  pci_unregister_driver+0x2d/0xb0
+> >[  171.139670]  ice_module_exit+0xc/0x55f [ice]
+> >
+> >Fixes: 6624e780a577 ("ice: split ice_vsi_setup into smaller functions")
+> >Signed-off-by: Petr Oros <poros@redhat.com>
+> >---
+> >v2: reword subject
+> >
+> >v1: https://lore.kernel.org/netdev/20230619084948.360128-1-poros@redhat.com/
+> >---
+> > drivers/net/ethernet/intel/ice/ice_lib.c | 27 ------------------------
+> > 1 file changed, 27 deletions(-)
+> >
+> >diff --git a/drivers/net/ethernet/intel/ice/ice_lib.c b/drivers/net/ethernet/intel/ice/ice_lib.c
+> >index 11ae0e41f518a1..284a1f0bfdb545 100644
+> >--- a/drivers/net/ethernet/intel/ice/ice_lib.c
+> >+++ b/drivers/net/ethernet/intel/ice/ice_lib.c
+> >@@ -3272,39 +3272,12 @@ int ice_vsi_release(struct ice_vsi *vsi)
+> > 		return -ENODEV;
+> > 	pf = vsi->back;
+> > 
+> >-	/* do not unregister while driver is in the reset recovery pending
+> >-	 * state. Since reset/rebuild happens through PF service task workqueue,
+> >-	 * it's not a good idea to unregister netdev that is associated to the
+> >-	 * PF that is running the work queue items currently. This is done to
+> >-	 * avoid check_flush_dependency() warning on this wq
+> >-	 */
+> >-	if (vsi->netdev && !ice_is_reset_in_progress(pf->state) &&
+> >-	    (test_bit(ICE_VSI_NETDEV_REGISTERED, vsi->state))) {
+> >-		unregister_netdev(vsi->netdev);
+> >-		clear_bit(ICE_VSI_NETDEV_REGISTERED, vsi->state);
+> >-	}
+> >-
+> >-	if (vsi->type == ICE_VSI_PF)
+> >-		ice_devlink_destroy_pf_port(pf);
+> >-
+> > 	if (test_bit(ICE_FLAG_RSS_ENA, pf->flags))
+> > 		ice_rss_clean(vsi);
+> > 
+> > 	ice_vsi_close(vsi);
+> > 	ice_vsi_decfg(vsi);
+> > 
+> >-	if (vsi->netdev) {
+> >-		if (test_bit(ICE_VSI_NETDEV_REGISTERED, vsi->state)) {
+> >-			unregister_netdev(vsi->netdev);
+> >-			clear_bit(ICE_VSI_NETDEV_REGISTERED, vsi->state);
+> >-		}
+> >-		if (test_bit(ICE_VSI_NETDEV_ALLOCD, vsi->state)) {
+> >-			free_netdev(vsi->netdev);
+> >-			vsi->netdev = NULL;
+> >-			clear_bit(ICE_VSI_NETDEV_ALLOCD, vsi->state);
+> >-		}
+> >-	}
+> >-
+> > 	/* retain SW VSI data structure since it is needed to unregister and
+> > 	 * free VSI netdev when PF is not in reset recovery pending state,\
+> > 	 * for ex: during rmmod.
+> >-- 
+> >2.41.0
+> >
+> >
+> 
