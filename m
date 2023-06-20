@@ -2,170 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74CF373763F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C730E737647
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:47:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbjFTUnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 16:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
+        id S229632AbjFTUrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 16:47:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbjFTUnh (ORCPT
+        with ESMTP id S229836AbjFTUrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 16:43:37 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2054.outbound.protection.outlook.com [40.107.243.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C93125;
-        Tue, 20 Jun 2023 13:43:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g9JADzDuirTzkC7AgMIjHRP6cy7Z5w3Hx1DTHJCWQV/VAGpTUQQZt5clWExcyzOGq2r0BAYMv/WBJflVnFoKgIArqocrrqC+sljNgnhrTQl1Kxx0SbF0o5dQT1fEBG5nrFYUlF729fCOyM+9Y4j67GL8JpCi2VTuSd/U76qswMOqpACPt3m22Y+WjfbSh/vhs0Nt3J2zPr2RQBm/5XuzD9wd+F9qntnu5dT2xY5LJ+YkAg70IKihcTmLrTGTyaMIMSqzMOFxoLuEWAl4cUOKVQRYw1I2a9JcIogUZWldw8fJt5DgWcxF+lCcby0Mwu4BxVYbuUy1R4eVljG7nC6a9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CwfQ/e8+tBEbHK2zEBAEbADi5TLtFWo+s3gGjkRKKUY=;
- b=CZ19TV+vtkmPAYGyLERQU3ZerlBV5v642q4T5pDd2BadMyqK7nmwez59uB88UFe4nrODlPf2k9oKnnEOcOoxBMR8G8h63OarVQdMSAAqzPmXcYa7uXv+DKwXOaqOmbE8IMsGAQbQZvu6KkbXcZwNO+CINh6TLBKzgqF81F1peDaPVQ/Q1esgsjSEgt685k4OvMObLTUwb2JlwqaOwizP1cid/tsBLr76TeMP3+04gsMx2o8Go9Ibb7EOahP3Rez95a5oiJDaSLi5cE+BoScyb3pFnn/4OYCLVJ6uQGEawZIVt+0PieQY99RLMcaR4wt5RsoyAjJzR7+6uVE+rDuEvQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=alien8.de smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CwfQ/e8+tBEbHK2zEBAEbADi5TLtFWo+s3gGjkRKKUY=;
- b=jOrhUkERAcvHTz2Moeq6j7MsBildnvfoh/4jkvYd414kZQqni5OVCBmfnZ9LUVL39ABaifGDt2VYnrcBu4QuVWv5In4+gSynzByjztLUJy7btXeDyx9TUbJt/6fVPdJn5q5wrBk+1jSudmrtVvcyWL2YOqBgfTKkoYNU4qbEemo=
-Received: from SA1P222CA0179.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:3c4::9)
- by BY5PR12MB4999.namprd12.prod.outlook.com (2603:10b6:a03:1da::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Tue, 20 Jun
- 2023 20:43:30 +0000
-Received: from SN1PEPF0002636B.namprd02.prod.outlook.com
- (2603:10b6:806:3c4:cafe::f1) by SA1P222CA0179.outlook.office365.com
- (2603:10b6:806:3c4::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.45 via Frontend
- Transport; Tue, 20 Jun 2023 20:43:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SN1PEPF0002636B.mail.protection.outlook.com (10.167.241.136) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6521.17 via Frontend Transport; Tue, 20 Jun 2023 20:43:30 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 20 Jun
- 2023 15:43:29 -0500
-Date:   Tue, 20 Jun 2023 15:43:15 -0500
-From:   Michael Roth <michael.roth@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
-        <linux-mm@kvack.org>, <linux-crypto@vger.kernel.org>,
-        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <jroedel@suse.de>,
-        <thomas.lendacky@amd.com>, <hpa@zytor.com>, <ardb@kernel.org>,
-        <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
-        <jmattson@google.com>, <luto@kernel.org>,
-        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
-        <pgonda@google.com>, <peterz@infradead.org>,
-        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
-        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <vbabka@suse.cz>,
-        <kirill@shutemov.name>, <ak@linux.intel.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
-        <ashish.kalra@amd.com>, <nikunj.dadhania@amd.com>,
-        <liam.merwick@oracle.com>, <zhi.a.wang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH RFC v9 05/51] x86/coco: move CONFIG_HAS_CC_PLATFORM check
- down into coco/Makefile
-Message-ID: <20230620204315.xr7wtcrowc7oprka@amd.com>
-References: <20230612042559.375660-1-michael.roth@amd.com>
- <20230612042559.375660-6-michael.roth@amd.com>
- <20230620120920.GAZJGW8B6XHrsoLGCJ@fat_crate.local>
+        Tue, 20 Jun 2023 16:47:21 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A131E7E
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:47:20 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id af79cd13be357-76245581814so289106585a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:47:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687294039; x=1689886039;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rA3i2opblg9AHF1F2rlGv1v4lotXDt+23xIwyDkolDY=;
+        b=mo8QWb4ccpQbDOhOajnjX4GpXsPkN6vj8KMB45EVj+cKZ9yB/OmK8Q8efQ55ZiK52z
+         kAUSB2YNV6eb6Ss6jDDLA6a/3qyELGXwYF+eb2Q7i1KCtaxQTJ3dj1B3NWIoF7Squ0Ke
+         CSHYdQQbTT4oFSDOJAgGkzIY1H8H1YVeiEbxrPo5ye9BlG8awpkWXWhd0JC7gpQxVac9
+         9NmEVDglP1v7F+PRA8cx6t8vAVZqHzWIXw1H6bnk9CHvm7EGWjS/V9TEs/eYjXcw3+AL
+         QOTiuwMTQZFk2pvbVkwihO44E6CKg1mmFu+0U0yRqsMjeAunPeYLBUXN0mNyY1x3sbX1
+         YDVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687294039; x=1689886039;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rA3i2opblg9AHF1F2rlGv1v4lotXDt+23xIwyDkolDY=;
+        b=Px1xAoTng4pO6lTHhLbXwXLFrI5d9l4789OLylqvjbUUTRmksWe+jbtWKnOf/9v+sd
+         2dWOzz1Vvz4DISgZdN+BPDETd/u72OPiuJTXrCBy+toOyJ/CmBfVycnUZggFGAL+6F7Y
+         QNymOoOLOpRimtbeK8k7lFI72FIM8YckZWk8FncToP/mJhD0bLpCakug8CLeGele1ut8
+         OkCpIu2ZaLvHPBSe8zHvGjzu6SNEvgZtypHErSRgEYKjAXwuDLjtWRYQCllCgPVwwUb3
+         PniYBXndknCd7UNAd3Q6YEA0DMu9jJJvF4N9nHIycsRl7xIYiHxcHrverW/7E2UI0CPi
+         Rt9Q==
+X-Gm-Message-State: AC+VfDzTLAstYoQ53keHwKuxYojvoyo8OE8R1QDOOaItxW8qX98y7FhK
+        mzMeDQovXZXgUgHpEbZEpavpshsrDDY53BGY56qG5A==
+X-Google-Smtp-Source: ACHHUZ6UItpw2LPCk1xMc27GiRDBKedo6AyfjmO6DAgYOkoG5EFO12A+M83vVJshZiaOHJI8CRKa8frMLgIu+Nenrlk=
+X-Received: by 2002:a05:6214:27cb:b0:626:e55:dfb2 with SMTP id
+ ge11-20020a05621427cb00b006260e55dfb2mr15688866qvb.39.1687294039262; Tue, 20
+ Jun 2023 13:47:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230620120920.GAZJGW8B6XHrsoLGCJ@fat_crate.local>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF0002636B:EE_|BY5PR12MB4999:EE_
-X-MS-Office365-Filtering-Correlation-Id: ba0eb223-25c3-4014-2738-08db71cf0182
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QFJwbo8fmV8FuP8nhC59bSKnyQVLXUBBKPXdnrooa+wPHLQOm4bb0v4M8gJZT0DlwjyrqgtsLJLpk6U8aM5X1gGG9Sa4QvX52bwCXgFnyOHZxHAVCOIgzAFOL4gZJVqRxSVJnDSKsQIEByZDihILWfyR/zgJiyfTbxd+Yn1Mcb+M67vPWQLDJgOTWskdY4+r9TLGqP5P8wlUe0pKWyIRKZ6hxR6u8ySn8UHPHcg1WPiiWd9Lkp/4pTikrtfcjZ8nzkBMrskYeoNEKAyHvSE1W3/nbYxoHFjAEYsU+jngGVZvZ9a8d/cA9BEN7+wygiAGeLj3sLZfiKWCW2npqZuTiZCLePis/84qi1ALSi7i7DhZn964ciXbFwwIVXIRdZpAnOeeGx61gAiZhbb2Bqv7jvHRu9NXv+zrASFsBB1ahdVjrP6BFalbzYro56r/RzBCMA6oMqqD4J7VXAq6YOWM6nfXSfJQN9MIDuNtwD/+X66orc6LFzuRzOSvgThor5SrMnLJHxI+Pd1D6OpbsE5HJF5AroMJi+bKbmtpu5qTc7ReYue8AkFOto1kjFWAeKz9RtJn04Hgb+ZhjOTMdlxKy79iP70JkBFO7XcyQkJKnrr9cjqm+eOjh2vV8ttdvi1oroFXh8mXU6dmDRaiwNGW8KAAgpof8NKpkU142AhbWCe4oK97MQx6WYzPnIvBnQCxHwlqnyrZw07Eiog0rz33tT8931VmsOsftTS6TcWQQbksVJDGpMu2y+ejDVkp3wzcpu7eW/LNMwTpq+vUvDvcE0kz1PqtUNWfruJLEh2GJBk=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(136003)(396003)(39860400002)(451199021)(46966006)(36840700001)(40470700004)(478600001)(186003)(16526019)(966005)(6666004)(47076005)(86362001)(26005)(1076003)(54906003)(2616005)(316002)(336012)(426003)(82740400003)(70206006)(81166007)(6916009)(70586007)(4326008)(356005)(36860700001)(8936002)(5660300002)(7416002)(44832011)(7406005)(2906002)(40460700003)(8676002)(41300700001)(36756003)(40480700001)(82310400005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 20:43:30.0064
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba0eb223-25c3-4014-2738-08db71cf0182
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: SN1PEPF0002636B.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4999
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <CAKwvOdn_U+yjFBn6pq5XwP1rTEKA1MWBkd0f2N8wB_nuS1_sWw@mail.gmail.com>
+ <mhng-16f1b957-5cf5-4786-a760-e4ab1fbe83ce@palmer-ri-x1c9a>
+In-Reply-To: <mhng-16f1b957-5cf5-4786-a760-e4ab1fbe83ce@palmer-ri-x1c9a>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 20 Jun 2023 16:47:07 -0400
+Message-ID: <CAKwvOdm4FLSq41WTzmPqCeNh-WBX1_rtKpT3zwyGez7bZ-jE7w@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Conor Dooley <conor@kernel.org>, jszhang@kernel.org,
+        llvm@lists.linux.dev, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 02:09:20PM +0200, Borislav Petkov wrote:
-> On Sun, Jun 11, 2023 at 11:25:13PM -0500, Michael Roth wrote:
-> > Currently CONFIG_HAS_CC_PLATFORM is a prereq for building anything in
-> 					^^^^^^
-> 
-> Use proper english words pls.
-> 
-> > arch/x86/coco, but that is generally only applicable for guest support.
-> > 
-> > For SEV-SNP, helpers related purely to host support will also live in
-> > arch/x86/coco. To allow for CoCo-related host support code in
-> > arch/x86/coco, move that check down into the Makefile and check for it
-> > specifically when needed.
-> 
-> I have no clue what that means. Example?
+On Tue, Jun 20, 2023 at 4:41=E2=80=AFPM Palmer Dabbelt <palmer@dabbelt.com>=
+ wrote:
+>
+> On Tue, 20 Jun 2023 13:32:32 PDT (-0700), ndesaulniers@google.com wrote:
+> > On Tue, Jun 20, 2023 at 4:13=E2=80=AFPM Conor Dooley <conor@kernel.org>=
+ wrote:
+> >>
+> >> On Tue, Jun 20, 2023 at 04:05:55PM -0400, Nick Desaulniers wrote:
+> >> > On Mon, Jun 19, 2023 at 6:06=E2=80=AFPM Palmer Dabbelt <palmer@dabbe=
+lt.com> wrote:
+> >> > > On Thu, 15 Jun 2023 06:54:33 PDT (-0700), Palmer Dabbelt wrote:
+> >> > > > On Wed, 14 Jun 2023 09:25:49 PDT (-0700), jszhang@kernel.org wro=
+te:
+> >> > > >> On Wed, Jun 14, 2023 at 07:49:17AM -0700, Palmer Dabbelt wrote:
+> >> > > >>> On Tue, 23 May 2023 09:54:58 PDT (-0700), jszhang@kernel.org w=
+rote:
+> >>
+> >> > > >> Commit 3b90b09af5be ("riscv: Fix orphan section warnings caused=
+ by
+> >> > > >> kernel/pi") touches vmlinux.lds.S, so to make the merge easy, t=
+his
+> >> > > >> series is based on 6.4-rc2.
+> >> > > >
+> >> > > > Thanks.
+> >> > >
+> >> > > Sorry to be so slow here, but I think this is causing LLD to hang =
+on
+> >> > > allmodconfig.  I'm still getting to the bottom of it, there's a fe=
+w
+> >> > > other things I have in flight still.
+> >> >
+> >> > Confirmed with v3 on mainline (linux-next is pretty red at the momen=
+t).
+> >> > https://lore.kernel.org/linux-riscv/20230517082936.37563-1-falcon@ti=
+nylab.org/
+> >>
+> >> Just FYI Nick, there's been some concurrent work here from different
+> >> people working on the same thing & the v3 you linked (from Zhangjin) w=
+as
+> >> superseded by this v2 (from Jisheng).
+> >
+> > Ah! I've been testing the deprecated patch set, sorry I just looked on
+> > lore for "dead code" on riscv-linux and grabbed the first thread,
+> > without noticing the difference in authors or new version numbers for
+> > distinct series. ok, nevermind my noise.  I'll follow up with the
+> > correct patch set, sorry!
+>
+> Ya, I hadn't even noticed the v3 because I pretty much only look at
+> patchwork these days.  Like we talked about in IRC, I'm going to go test
+> the merge of this one and see what's up -- I've got it staged at
+> <https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/=
+?h=3Dfor-next&id=3D1bd2963b21758a773206a1cb67c93e7a8ae8a195>,
+> though that won't be a stable hash if it's actually broken...
 
-Basically, arch/x86/coco/Makefile is never processed if arch/x86/Kbuild
-indicates that CONFIG_HAS_CC_PLATFORM is not set. So if we want to have
-stuff in arch/x86/coco/Makefile that build for !CONFIG_HAS_CC_PLATFORM,
-like SNP host support, which does not rely on CONFIG_HAS_CC_PLATFORM
-being set, that check needs to be moved down into arch/x86/coco/Makefile.
+Ok, https://lore.kernel.org/linux-riscv/20230523165502.2592-1-jszhang@kerne=
+l.org/
+built for me.  If you're seeing a hang, please let me know what
+version of LLD you're using and I'll build that tag from source to see
+if I can reproduce, then bisect if so.
 
-> 
-> The last time we talked about paths, we ended up agreeing on:
-> 
-> https://lore.kernel.org/all/Yg5nh1RknPRwIrb8@zn.tnic/
-> 
-> So your "helpers related purely to host support" should go to
-> 
-> arch/x86/virt/svm/sev*.c
-> 
-> And just to keep it simple, that should be
-> 
-> arch/x86/virt/svm/sev.c
-> 
-> and if there's real need to split that, we can do that later.
+$ ARCH=3Driscv LLVM=3D1 /usr/bin/time -v make -j128 allmodconfig vmlinux
+...
+        Elapsed (wall clock) time (h:mm:ss or m:ss): 2:35.68
+...
 
-Ok, makes sense.
+Tested-by: Nick Desaulniers <ndesaulniers@google.com> # build
 
+>
+> >
+> >>
+> >> Cheers,
+> >> Conor.
+> >
+> >
+> >
+> > --
+> > Thanks,
+> > ~Nick Desaulniers
+
+
+
+--=20
 Thanks,
-
-Mike
-
-> 
-> Thx.
-> 
-> -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+~Nick Desaulniers
