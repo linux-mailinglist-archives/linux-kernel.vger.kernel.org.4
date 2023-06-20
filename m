@@ -2,163 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723057374F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 21:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B11A7374FD
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 21:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbjFTTNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 15:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54050 "EHLO
+        id S230383AbjFTTTV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Jun 2023 15:19:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230204AbjFTTNU (ORCPT
+        with ESMTP id S229478AbjFTTTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 15:13:20 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC14170A
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:13:19 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id af79cd13be357-7623fdb3637so342873385a.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:13:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687288398; x=1689880398;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3kUloHMpKPl3I/kTERvQHtZG7RFGaCO4HmKGMBk+KKQ=;
-        b=A0HYjhvugScSa3knhYTG7rhIjQObez8K1qq1G0AtXnV79V5m5IS1o76BvHfV8ZdcMw
-         Oz/t8xN/A9VCSvACpWBzMKR5VB4fiSIIABKQaPCoXEUi03i1ulvCCDzNV4CVWLYvh/AF
-         IUvHIxPU/tUt0uE6yX68pyoRiYT+b1CHaqnB1bsYxnTusTZWfiXQ9TH8+11uRemnLxoh
-         vfuVslSJodu0SHi+IvOqMBgGYECKkS6SBc7IQQUuKQpd9cEG1p2VzKKxhRMuzz6vL5Vy
-         TCvD7K1ZsP5DA9TdItw3zzyfiJTWYK+bji8NrZR6xlJafiphmEYAgf0L60mkeucaTf3I
-         7ORw==
+        Tue, 20 Jun 2023 15:19:20 -0400
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0F41B6;
+        Tue, 20 Jun 2023 12:19:19 -0700 (PDT)
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-77e35128efdso111899939f.1;
+        Tue, 20 Jun 2023 12:19:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687288398; x=1689880398;
+        d=1e100.net; s=20221208; t=1687288758; x=1689880758;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3kUloHMpKPl3I/kTERvQHtZG7RFGaCO4HmKGMBk+KKQ=;
-        b=EHt/igqxDy5k49+UOeBCLrMWh8OEzs7H81p6by+aDLzn6qgtBY0IgwVQkLzcRTO0dj
-         ZinyXi4nfb/hUhd/35+KprB5NY5wc5kmwGj+SsO/wwGG+mDsTtNqQIxQjLh0ptBA/UKD
-         7+J+BDX8056E2saMppvoEwTVQp4bNOMJPk3clPLL6KYkG4onTQZheNfTd2T+nf3YB1p3
-         QEkotFvv4mg9HorzB14VmgQcCAERM4zAbGMjFotRST1lfKodiUlIjR60BPPHztgYkgOR
-         ZvK/QagJ6vFQtDlS8mge6+KfjiUotB3cVp60Iky+nLN2yu63rxXQpO/GiGWiWE/iUI8r
-         kCSg==
-X-Gm-Message-State: AC+VfDx8JmPRPqj1ff7bzgPNpnzL7PZo9RZ5wFF1smJf5gncZocgqUOq
-        lfgyjwhArec4w7T7rRkiMuik4WqQ/1JeoNTCnBU55g==
-X-Google-Smtp-Source: ACHHUZ4f93lS9fAyCW0th4pVT6EEMEJoKBxqQtIQrPiuVU2P3u22aqPHDokFIKYPJ9ZclFi0j1mjAlZH66OuKr6hi50=
-X-Received: by 2002:a05:6214:5098:b0:630:1faa:a404 with SMTP id
- kk24-20020a056214509800b006301faaa404mr6575734qvb.39.1687288398288; Tue, 20
- Jun 2023 12:13:18 -0700 (PDT)
+        bh=ZWhE2qlCRRxv0B8Sdv0uBimMEuGi6wFtwjWB8BFO2Z8=;
+        b=lo+lBdFIU3Y8JSqdom5KZ5PYd+LgAnnelgOh5s4UeLAnVZ2D6K3iF6a8npaCeHHxis
+         sOqyu4YxliOE33S1qI5XTZw0UVV5GE6W4IwtZBeXhqyWFSszAKXVtDykliP9m9fXIbPE
+         D1U86f+Ant478vzfQ+Y++abE7TrBCc38KzGRbYjxA/28AW+LC7FUjMKmFPBJHDfQtRrx
+         tHg1KRwtsZeN8PKOMg9cB02WVoCKfa9+cdscYIqTSN3k+GCPQc/UspzSlnJfie6IrKlx
+         QzLMfhyCkuQR9RspXzewxIfqoYsK4tzRpZ8Asm7FHZzKJQT2wObVsFq8ZV0ed9Uw+7y8
+         rSgw==
+X-Gm-Message-State: AC+VfDy5NjI2CFdggfJRpp9ydozUndRIC7/wx558gEo5UWzymSPXX5DT
+        ddk4v8EhvNeJ8Bb0oQbeF9OdZYGpTXkrk0npQsw=
+X-Google-Smtp-Source: ACHHUZ50PWipzLXuS/sQyXd6BqFC+DEdDtC42iLOT8o+ld6GdNwe2kR4YUdGQWeerzIh5BR1iwhu8tat3xKLjIR7CV8=
+X-Received: by 2002:a05:6602:2258:b0:777:b1ac:30af with SMTP id
+ o24-20020a056602225800b00777b1ac30afmr4651294ioo.12.1687288758466; Tue, 20
+ Jun 2023 12:19:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230619143725.57967-1-masahiroy@kernel.org>
-In-Reply-To: <20230619143725.57967-1-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 20 Jun 2023 15:13:06 -0400
-Message-ID: <CAKwvOdkX993kCaGVj5jd9-xeUwU5w9XmP4gUoSjOndfG-DhWHg@mail.gmail.com>
-Subject: Re: [PATCH] ARM: change link order of $(mmy-y) to avoid veneers
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>
+References: <20230619082036.410-1-lidong@vivo.com>
+In-Reply-To: <20230619082036.410-1-lidong@vivo.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 20 Jun 2023 12:19:07 -0700
+Message-ID: <CAM9d7chHMH-uJryUVBYZ6emrGLVH8Huc5frDz4YqG7TU29G-6A@mail.gmail.com>
+Subject: Re: [PATCH] tools: Fix incorrect calculation of object size by sizeof
+To:     Li Dong <lidong@vivo.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-perf-users@vger.kernel.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-kernel@vger.kernel.org>, opensource.kernel@vivo.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 10:37=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.=
-org> wrote:
->
-> The kernel compiled with multi_v7_defconfig + CONFIG_KASAN=3Dy +
-> CONFIG_KASAN_INLINE=3Dy does not boot.
->
-> I do not think KASAN is the direct reason of the boot failure.
-> CONFIG_KASAN_INLINE is just one example configuration that grows the
-> image size significantly and makes a big distance between function
-> callers and callees.
->
-> I see some veneers for __get_user_* in the bad kernel image. I am
-> not perfectly clear, but __get_user_* may not work with veneers for
-> some reasons.
+Hello,
 
-I'm kind of curious to know more about this.  Has there been other
-instances in the ARCH=3Darm port where "there must not be a veneer from
-X to Y for reason Z?"
+On Mon, Jun 19, 2023 at 1:21 AM Li Dong <lidong@vivo.com> wrote:
+>
+> What we need to calculate is the size of the object, not the size of the
+> pointer.
+>
+> Signed-off-by: Li Dong <lidong@vivo.com>
 
-I thought the linker inserted veneers were meant to be transparent
-here.  If you disassemble ____get_user_1_veneer, do they themselves
-branch to different symbols, or the same symbol? (Perhaps they
-trampoline to each other then the final one is the "call" to the
-original symbol).  But perhaps the symbol at the end of the chain
-gives us more clues. I'd bet it's the KASAN callback, though does
-KASAN_INLINE inline those?  Perhaps the veneer is corrupting a
-register?  Maybe inline asm in the caller is missing a clobber for
-that register...
+Since this problem was introduced in the current dev cycle and not in the
+mainline yet, I think we can skip the Fixes tag.
 
->
-> If I move the link order of arch/arm/lib/getuser.S, the veneers are
-> gone, and the kernel gets working again.
->
-> I do not see a good reason that $(mmu-y) must be added to lib-y because
-> all the code in $(mmu-y) is mandatory. Add it to obj-y to move the code
-> to lower address.
->
-> [1] multi_v7_defconfig (works)
->
->  $ arm-linux-gnueabihf-nm vmlinux | grep __get_user_1
->  c072a450 T __get_user_1
->  c17ea033 r __kstrtab___get_user_1
->  c18119fe r __kstrtabns___get_user_1
->  c17c4878 r __ksymtab___get_user_1
->
-> [2] multi_v7_defconfig + CONFIG_KASAN_INLINE (does not work)
->
->  $ arm-linux-gnueabihf-nm vmlinux | grep __get_user_1
->  c341ec2c T __get_user_1
->  c06e3580 t ____get_user_1_veneer
->  c0adc6c0 t ____get_user_1_veneer
->  c12cf054 t ____get_user_1_veneer
->  c43f42cc r __kstrtab___get_user_1
->  c441c128 r __kstrtabns___get_user_1
->  c43cead8 r __ksymtab___get_user_1
->
-> [3] multi_v7_defconfig + CONFIG_KASAN_INLINE + this patch (works)
->
->  $ arm-linux-gnueabihf-nm vmlinux | grep __get_user_1
->  c10975b0 T __get_user_1
->  c43f42cc r __kstrtab___get_user_1
->  c441c128 r __kstrtabns___get_user_1
->  c43cead8 r __ksymtab___get_user_1
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
->  arch/arm/lib/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/arm/lib/Makefile b/arch/arm/lib/Makefile
-> index 650404be6768..4d092ef87a1d 100644
-> --- a/arch/arm/lib/Makefile
-> +++ b/arch/arm/lib/Makefile
-> @@ -28,7 +28,7 @@ endif
->  # using lib_ here won't override already available weak symbols
->  obj-$(CONFIG_UACCESS_WITH_MEMCPY) +=3D uaccess_with_memcpy.o
->
-> -lib-$(CONFIG_MMU) +=3D $(mmu-y)
-> +obj-$(CONFIG_MMU) +=3D $(mmu-y)
->
->  ifeq ($(CONFIG_CPU_32v3),y)
->    lib-y        +=3D io-readsw-armv3.o io-writesw-armv3.o
-> --
-> 2.39.2
->
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-
---=20
 Thanks,
-~Nick Desaulniers
+Namhyung
+
+
+> ---
+>  tools/perf/util/scripting-engines/trace-event-python.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/perf/util/scripting-engines/trace-event-python.c b/tools/perf/util/scripting-engines/trace-event-python.c
+> index 59063ec98619..25fcd6630a4d 100644
+> --- a/tools/perf/util/scripting-engines/trace-event-python.c
+> +++ b/tools/perf/util/scripting-engines/trace-event-python.c
+> @@ -771,12 +771,12 @@ static void set_regs_in_dict(PyObject *dict,
+>         int size = __sw_hweight64(attr->sample_regs_intr) * 28;
+>         char *bf = malloc(size);
+>
+> -       regs_map(&sample->intr_regs, attr->sample_regs_intr, arch, bf, sizeof(bf));
+> +       regs_map(&sample->intr_regs, attr->sample_regs_intr, arch, bf, size);
+>
+>         pydict_set_item_string_decref(dict, "iregs",
+>                         _PyUnicode_FromString(bf));
+>
+> -       regs_map(&sample->user_regs, attr->sample_regs_user, arch, bf, sizeof(bf));
+> +       regs_map(&sample->user_regs, attr->sample_regs_user, arch, bf, size);
+>
+>         pydict_set_item_string_decref(dict, "uregs",
+>                         _PyUnicode_FromString(bf));
+> --
+> 2.31.1.windows.1
+>
