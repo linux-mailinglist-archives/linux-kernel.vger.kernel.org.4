@@ -2,102 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39BA47371B3
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 978387371BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232531AbjFTQdu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 12:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
+        id S231892AbjFTQef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 12:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231968AbjFTQdf (ORCPT
+        with ESMTP id S232292AbjFTQeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 12:33:35 -0400
-Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BE8B19B3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:33:03 -0700 (PDT)
-Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-1a98a7fde3eso4272340fac.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:33:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687278781; x=1689870781;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mLP18OTLuSxDA7X3Px473B0FeVYKNM0xRJJ/SFynJwI=;
-        b=o31p5LIvFiVKhZu9V6cVtnjVrKY6GtqHhXXiJxAwAcXl+SRT/9KeqtYlXQqoKYjv+5
-         mTaYbOce7ZBZEIdu4NUUFnBnB0HihDw2NEeZtFoQ/jhTn4d2gM4ph71FewBzFbSKT5eC
-         S8DeLziWqrpNhzXpstRJ3VA9bqSnmUbVI0KAe2LOOMJ6hvOCPZXFLNrZwLz4pv2G4MQg
-         v1XmHETnRzm1D2iBH6GHLLUzjYRfEQ5tbNNc2JMJ6RoopEu1ylPwWHaLl2y/+j6iEOBD
-         r1TYFjg+xolEPKC5J7+4rStAgRQgg1S8x+SxqFewfgD/eazy5vRwhCKcUGL2aIQSOeqz
-         AH9Q==
+        Tue, 20 Jun 2023 12:34:20 -0400
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44F21994;
+        Tue, 20 Jun 2023 09:34:19 -0700 (PDT)
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-341d62e78d3so23300715ab.3;
+        Tue, 20 Jun 2023 09:34:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687278781; x=1689870781;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mLP18OTLuSxDA7X3Px473B0FeVYKNM0xRJJ/SFynJwI=;
-        b=GJMBR9N6cmboyRpBbhhkxEW+mymXNeGergdgGm8Cu2KNwhL3SRoALFhDc6zM5PqHOC
-         imDmDWal2M4g/ylJnTxWavHGhmMqutGiUUshUj7E6ztz7s2EXldrUnjYjJerLGqDHwaa
-         RjcWo15ZBVt0XcPg9gGXyyvvU5S6wQsnzuQT8lU5vJA5IQTp94pZ3kGdYN3jCHf6fO8E
-         UmhZ3zY/IpWgsF4yG3IUedU6++eyhAeshnTNp6lmJ2Od0jYI8nkD0hCfGrMbfJK81Wzz
-         +lLXtqQN50PAyYbNTpbK0pPYJRDUvRPNyR34UrARWeXrvAsfPergjJD6KBZPPEd7xl/7
-         fiWQ==
-X-Gm-Message-State: AC+VfDwogQuZPWCWjcZdZL+jcCFhmYRGlg7f9yDpiUmeHsyjAfEnlSzQ
-        VqEAnKZYknAePLD2U99MMYqJA+Mezkbrwq9Iqlu+OWsP
-X-Google-Smtp-Source: ACHHUZ7DO6D2dQ0ZmQ8k/BVTqGqAshW7CrdZc4YG8/ye5TedtV+oQcGX+OmSVKut8CriOL9Z3w7J2vydjhVPBDteri0=
-X-Received: by 2002:a05:6808:1b06:b0:39e:dbb3:5528 with SMTP id
- bx6-20020a0568081b0600b0039edbb35528mr7280934oib.47.1687278781003; Tue, 20
- Jun 2023 09:33:01 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687278859; x=1689870859;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MYYM1B8WZ008PRRYsWGZJgntHIjgR8NgheJyM+29+wI=;
+        b=atd5XzzxQMmTbssBWc2AruBUCVIWutwsThpf4lVqLqyxctDa0WKUWbEKerDdj/D3rX
+         ocbLjSrFdQeWCMAGqGPGou5Jq29VmuwPeUo+0xdWd7GkD5M91MSYNqcGPJb0r5cVMXNS
+         r2B832rLCl8MdKgwD1ZG7nutvI4APFGt5qTfbGLa2S6YNY0SG+PlbLWCeRWCjLaIKJ0f
+         yXrXzNV3gxlVpV1XUpZ+MD1Pf875OmYh9geygU3SpOADw3CnKasvjRvER8XLCM77d0bo
+         uS/+xm2CXUFZWzItz0R6nYgU8AUN8LKTVgrLUjZVz67tKC0tu8Wrf77ldP2MMWHHXvcD
+         mRbA==
+X-Gm-Message-State: AC+VfDwbGhZZBuU2E80NWmwrbc9j1O0PZFa+OW4ZaS3KpRg3fQW+bXXw
+        x5iUUjejpAX5Rb2o195i+g==
+X-Google-Smtp-Source: ACHHUZ6+t2UPXqAsSFQKWOOlowteotBbfJ5qQLgww4AsGzPCbj1xYEXbMQ3AlemNlkbQyMZkKSSZkg==
+X-Received: by 2002:a92:cc0f:0:b0:33e:6d38:8f88 with SMTP id s15-20020a92cc0f000000b0033e6d388f88mr12570534ilp.2.1687278858875;
+        Tue, 20 Jun 2023 09:34:18 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id b18-20020a92dcd2000000b003312915e615sm704171ilr.28.2023.06.20.09.34.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 09:34:18 -0700 (PDT)
+Received: (nullmailer pid 3784097 invoked by uid 1000);
+        Tue, 20 Jun 2023 16:34:15 -0000
+Date:   Tue, 20 Jun 2023 10:34:15 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Bastien Nocera <hadess@hadess.net>,
+        Rob Herring <robh+dt@kernel.org>, linux-input@vger.kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-arm-msm@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+        devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, Henrik Rydberg <rydberg@bitmath.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: input: document Goodix Berlin
+ Touchscreen IC
+Message-ID: <168727885502.3784019.6096341617892638945.robh@kernel.org>
+References: <20230606-topic-goodix-berlin-upstream-initial-v2-0-26bc8fe1e90e@linaro.org>
+ <20230606-topic-goodix-berlin-upstream-initial-v2-1-26bc8fe1e90e@linaro.org>
 MIME-Version: 1.0
-References: <20230619101224.22978-1-chanho.min@lge.com> <CACT4Y+Zn49-6R00buq-y_H0qs=4gBh6PBsJDFBptL8=h6GPQYA@mail.gmail.com>
- <CANpmjNMSfVeDa-YC-RQcZ-V=wvHGi43xvXSvaR0GQkEP0OOmOQ@mail.gmail.com>
-In-Reply-To: <CANpmjNMSfVeDa-YC-RQcZ-V=wvHGi43xvXSvaR0GQkEP0OOmOQ@mail.gmail.com>
-From:   Andrey Konovalov <andreyknvl@gmail.com>
-Date:   Tue, 20 Jun 2023 18:32:50 +0200
-Message-ID: <CA+fCnZfi_o6QbfDamUjsPXjtnEwKyBn8y+T8=zxV2mEpA=DUyQ@mail.gmail.com>
-Subject: Re: [PATCH] kasan: fix mention for KASAN_HW_TAGS
-To:     Marco Elver <elver@google.com>, Chanho Min <chanho.min@lge.com>
-Cc:     Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, gunho.lee@lge.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230606-topic-goodix-berlin-upstream-initial-v2-1-26bc8fe1e90e@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 1:36=E2=80=AFPM Marco Elver <elver@google.com> wrot=
-e:
->
-> On Mon, 19 Jun 2023 at 12:15, Dmitry Vyukov <dvyukov@google.com> wrote:
-> > On Mon, 19 Jun 2023 at 12:12, Chanho Min <chanho.min@lge.com> wrote:
-> > >
-> > > This patch removes description of the KASAN_HW_TAGS's memory consumpt=
-ion.
-> > > KASAN_HW_TAGS does not set 1/32nd shadow memory.
-> >
-> > The hardware still allocates/uses shadow in MTE.
-> > Though, it may be 1/16-th, not sure.
 
-1/32 is correct: 4 bits for every 16 bytes.
+On Thu, 15 Jun 2023 12:27:00 +0200, Neil Armstrong wrote:
+> Document the Goodix GT9916 wich is part of the "Berlin" serie
+> of Touchscreen controllers IC from Goodix.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  .../bindings/input/touchscreen/goodix,gt9916.yaml  | 95 ++++++++++++++++++++++
+>  1 file changed, 95 insertions(+)
+> 
 
-> I think the point is that it depends on the hardware implementation of
-> MTE. There are a range of possibilities, but enabling KASAN_HW_TAGS
-> doesn't consume any extra memory for tags itself if the hardware has
-> to enable MTE and provision tag space via firmware to begin with.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
-Yeah, saying that HW_TAGS consumes memory is wrong.
-
-But it might reasonable to spell out what happens with memory in the
-config options description. Something like:
-
-"Does not consume memory by itself but relies on the 1/32nd of
-available memory being reserved by the firmware when MTE is enabled."
