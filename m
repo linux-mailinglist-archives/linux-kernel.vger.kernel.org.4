@@ -2,49 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2CF5737367
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F3273736E
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:02:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjFTSBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 14:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46428 "EHLO
+        id S231156AbjFTSCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 14:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229574AbjFTSBl (ORCPT
+        with ESMTP id S230326AbjFTSBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 14:01:41 -0400
+        Tue, 20 Jun 2023 14:01:48 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593D51712;
-        Tue, 20 Jun 2023 11:01:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17E7812C;
+        Tue, 20 Jun 2023 11:01:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E980F61355;
-        Tue, 20 Jun 2023 18:01:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 045A3C433C0;
-        Tue, 20 Jun 2023 18:01:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EB5961344;
+        Tue, 20 Jun 2023 18:01:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0A2FC433C0;
+        Tue, 20 Jun 2023 18:01:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687284099;
-        bh=HV0EXm2PTPBmuK1pyyW2SD5b0SA8DKNQE3c4Wc9+gZU=;
+        s=korg; t=1687284107;
+        bh=Llf/Ned9bWpyUTNIfPeCq9J4fpBpz1vG2VKuVCLRwac=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JEaOfD0kafoBD7yYx4EFXHOns4LK47Aa82TSb7lf8vKc/3osmgUWt/T6vejITIrEI
-         m6vxiQJ5AA9+4I1n7CrjSpLSnhz9xLCqtUeYGUZpDB/vJHF/GRoNcwr0ugyH+ksN1X
-         cLqvFpfVNDdd1aFuURg5jLlX2cdNoroofCDRvTfg=
+        b=Ns+nAnC4eMK5h5ZIz6RjMrmSOWY80bGcgQooJ1EyFVs3c0vbd8t5a1A3pAExv4IPR
+         8rbTypyZQ1jMkTayjKdlg/6APp+1IRhEnIMxC2/3LRAxuQYAlMFmplKiQku5B6M1aq
+         KVGtDAkwXoOzFQxIG5Qn0kDGylBn0vmqjppcKtcE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-block@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
         Ivan Orlov <ivan.orlov0322@gmail.com>,
-        Justin Sanders <justin@coraid.com>,
-        Jens Axboe <axboe@kernel.dk>,
+        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 2/4] aoe: make aoe_class a static const structure
-Date:   Tue, 20 Jun 2023 20:01:31 +0200
-Message-ID: <20230620180129.645646-6-gregkh@linuxfoundation.org>
+Subject: [PATCH 3/4] ublk: make ublk_chr_class a static const structure
+Date:   Tue, 20 Jun 2023 20:01:32 +0200
+Message-ID: <20230620180129.645646-7-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230620180129.645646-5-gregkh@linuxfoundation.org>
 References: <20230620180129.645646-5-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2704; i=gregkh@linuxfoundation.org; h=from:subject; bh=Gr78tCXAeIamp3Zv2PTkxoxZaAkwXTJCd+sAddc+WLo=; b=owGbwMvMwCRo6H6F97bub03G02pJDCkTX1aZaAumHN0ZseVeBcv1gj+3mq8eFOFQS/Pl05Avn 8okscejI5aFQZCJQVZMkeXLNp6j+ysOKXoZ2p6GmcPKBDKEgYtTACYyYRrD/PrpVXzsyu5z9W6W aS777bzkG/u87QzzPa/GfKjb5u9xxSDDa2b564L5ZcuaAQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2002; i=gregkh@linuxfoundation.org; h=from:subject; bh=hLzPZz0rmzh84KgaQgMKacJTL3bxIGNFuZVcbSsrVZE=; b=owGbwMvMwCRo6H6F97bub03G02pJDCkTX1btfqTzUDKi+PEs1czAv1JPi8IEP6ya+y/OXm/u8 Tm9hTPNOmJZGASZGGTFFFm+bOM5ur/ikKKXoe1pmDmsTCBDGLg4BWAiztYM87MOhog8OjxdQP4g v//nzr+WE3wNbzLML72UWhy4llXr0WY19/9N22IT1n24AwA=
 X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -60,93 +59,68 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 From: Ivan Orlov <ivan.orlov0322@gmail.com>
 
 Now that the driver core allows for struct class to be in read-only
-memory, move the aoe_class structure to be declared at build time
+memory, move the ublk_chr_class structure to be declared at build time
 placing it into read-only memory, instead of having to be dynamically
 allocated at boot time.
 
-Cc: Justin Sanders <justin@coraid.com>
+Cc: Ming Lei <ming.lei@redhat.com>
 Cc: Jens Axboe <axboe@kernel.dk>
 Cc: linux-block@vger.kernel.org
 Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/block/aoe/aoechr.c | 30 +++++++++++++++++-------------
- 1 file changed, 17 insertions(+), 13 deletions(-)
+ drivers/block/ublk_drv.c | 15 ++++++++-------
+ 1 file changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/block/aoe/aoechr.c b/drivers/block/aoe/aoechr.c
-index 4c666f72203f..a42c4bcc85ba 100644
---- a/drivers/block/aoe/aoechr.c
-+++ b/drivers/block/aoe/aoechr.c
-@@ -49,7 +49,7 @@ static int emsgs_head_idx, emsgs_tail_idx;
- static struct completion emsgs_comp;
- static spinlock_t emsgs_lock;
- static int nblocked_emsgs_readers;
--static struct class *aoe_class;
-+
- static struct aoe_chardev chardevs[] = {
- 	{ MINOR_ERR, "err" },
- 	{ MINOR_DISCOVER, "discover" },
-@@ -58,6 +58,16 @@ static struct aoe_chardev chardevs[] = {
- 	{ MINOR_FLUSH, "flush" },
+diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
+index 33d3298a0da1..f25d93365701 100644
+--- a/drivers/block/ublk_drv.c
++++ b/drivers/block/ublk_drv.c
+@@ -183,7 +183,9 @@ struct ublk_params_header {
  };
  
-+static char *aoe_devnode(const struct device *dev, umode_t *mode)
-+{
-+	return kasprintf(GFP_KERNEL, "etherd/%s", dev_name(dev));
-+}
-+
-+static const struct class aoe_class = {
-+	.name = "aoe",
-+	.devnode = aoe_devnode,
+ static dev_t ublk_chr_devt;
+-static struct class *ublk_chr_class;
++static const struct class ublk_chr_class = {
++	.name = "ublk-char",
 +};
+ 
+ static DEFINE_IDR(ublk_index_idr);
+ static DEFINE_SPINLOCK(ublk_idr_lock);
+@@ -1547,7 +1549,7 @@ static int ublk_add_chdev(struct ublk_device *ub)
+ 
+ 	dev->parent = ublk_misc.this_device;
+ 	dev->devt = MKDEV(MAJOR(ublk_chr_devt), minor);
+-	dev->class = ublk_chr_class;
++	dev->class = &ublk_chr_class;
+ 	dev->release = ublk_cdev_rel;
+ 	device_initialize(dev);
+ 
+@@ -2347,11 +2349,10 @@ static int __init ublk_init(void)
+ 	if (ret)
+ 		goto unregister_mis;
+ 
+-	ublk_chr_class = class_create("ublk-char");
+-	if (IS_ERR(ublk_chr_class)) {
+-		ret = PTR_ERR(ublk_chr_class);
++	ret = class_register(&ublk_chr_class);
++	if (ret)
+ 		goto free_chrdev_region;
+-	}
 +
- static int
- discover(void)
- {
-@@ -273,11 +283,6 @@ static const struct file_operations aoe_fops = {
- 	.llseek = noop_llseek,
- };
+ 	return 0;
  
--static char *aoe_devnode(const struct device *dev, umode_t *mode)
--{
--	return kasprintf(GFP_KERNEL, "etherd/%s", dev_name(dev));
--}
--
- int __init
- aoechr_init(void)
- {
-@@ -290,15 +295,14 @@ aoechr_init(void)
- 	}
- 	init_completion(&emsgs_comp);
- 	spin_lock_init(&emsgs_lock);
--	aoe_class = class_create("aoe");
--	if (IS_ERR(aoe_class)) {
-+	n = class_register(&aoe_class);
-+	if (n) {
- 		unregister_chrdev(AOE_MAJOR, "aoechr");
--		return PTR_ERR(aoe_class);
-+		return n;
- 	}
--	aoe_class->devnode = aoe_devnode;
+ free_chrdev_region:
+@@ -2369,7 +2370,7 @@ static void __exit ublk_exit(void)
+ 	idr_for_each_entry(&ublk_index_idr, ub, id)
+ 		ublk_remove(ub);
  
- 	for (i = 0; i < ARRAY_SIZE(chardevs); ++i)
--		device_create(aoe_class, NULL,
-+		device_create(&aoe_class, NULL,
- 			      MKDEV(AOE_MAJOR, chardevs[i].minor), NULL,
- 			      chardevs[i].name);
+-	class_destroy(ublk_chr_class);
++	class_unregister(&ublk_chr_class);
+ 	misc_deregister(&ublk_misc);
  
-@@ -311,8 +315,8 @@ aoechr_exit(void)
- 	int i;
- 
- 	for (i = 0; i < ARRAY_SIZE(chardevs); ++i)
--		device_destroy(aoe_class, MKDEV(AOE_MAJOR, chardevs[i].minor));
--	class_destroy(aoe_class);
-+		device_destroy(&aoe_class, MKDEV(AOE_MAJOR, chardevs[i].minor));
-+	class_unregister(&aoe_class);
- 	unregister_chrdev(AOE_MAJOR, "aoechr");
- }
- 
+ 	idr_destroy(&ublk_index_idr);
 -- 
 2.41.0
 
