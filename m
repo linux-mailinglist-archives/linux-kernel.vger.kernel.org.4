@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F25736D7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3B16736D7F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233051AbjFTNhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 09:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
+        id S233068AbjFTNhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 09:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233008AbjFTNhX (ORCPT
+        with ESMTP id S233014AbjFTNhY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 09:37:23 -0400
+        Tue, 20 Jun 2023 09:37:24 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8902C10F9;
-        Tue, 20 Jun 2023 06:37:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9A81BB;
+        Tue, 20 Jun 2023 06:37:23 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 3FEA71F88C;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E005C1F88F;
         Tue, 20 Jun 2023 13:37:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1687268241; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BjqQt4D7bz3ycKlBkDP6byX+9ncqyQX2u0PfjF3kOqU=;
-        b=bZPMqWQ/ZKEK1kFvUpeCocMqDCRGCEMfHUdlXWEljoX0XBPPiQTfZHTu7rI0SC1/EBEwj2
-        gN9CVEVtyIRqEoyUl4nGMsJqksYol1ZWE3vIuYLKVruYDL7x6TIH1+H5/aB0LHvGU/e9g+
-        8vvMP9014ek2uQBX14/TzdsvHJzNJdY=
+        bh=W2dcMlco4IaX1eYG+QaSwRA5SCo5zMhvqpPQKpXYteE=;
+        b=G3zNI7xIRS4BGhdLruB4zto97XoVHG4t1yJ94Ic72x1llG3iXjlJNYS1Cl4P64FTeOnkP1
+        ba5PtHYsZL+o2My5IJ0xUsCq06E81go5qx4vB+HiRl3KDWxi/aCBIejWBHTgMX8l/y/z/N
+        kj1SzfeYkb5jqFLobujjdCNlQbr5DIs=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1687268241;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=BjqQt4D7bz3ycKlBkDP6byX+9ncqyQX2u0PfjF3kOqU=;
-        b=ZdB051TkUH69jvTTCVTUawhCT/PK5HHoGCsBhqqe/FbwrYRR/hnE9PslGO38owzEBC8IYF
-        NDHs8foTLRHjZ3Ag==
+        bh=W2dcMlco4IaX1eYG+QaSwRA5SCo5zMhvqpPQKpXYteE=;
+        b=QPyaU8DDuLSEf3IezpMohcmGhrB/Vqfa3ck8yQeA3TXeuhIkkmZazyA9Gu3LGLPS6nhgEj
+        PQq9qfg1vqVl2dDg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 308AB133A9;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D1FC8133A9;
         Tue, 20 Jun 2023 13:37:21 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id fnPKC5GrkWTGPQAAMHmgww
+        id GA0+M5GrkWTKPQAAMHmgww
         (envelope-from <dwagner@suse.de>); Tue, 20 Jun 2023 13:37:21 +0000
 From:   Daniel Wagner <dwagner@suse.de>
 To:     linux-nvme@lists.infradead.org
@@ -58,9 +58,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
         Hannes Reinecke <hare@suse.de>,
         James Smart <jsmart2021@gmail.com>,
         Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH v2 4/5] nvme-fc: Make initial connect attempt synchronous
-Date:   Tue, 20 Jun 2023 15:37:10 +0200
-Message-ID: <20230620133711.22840-5-dwagner@suse.de>
+Subject: [PATCH v2 5/5] nvme-fc: do no free ctrl opts
+Date:   Tue, 20 Jun 2023 15:37:11 +0200
+Message-ID: <20230620133711.22840-6-dwagner@suse.de>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230620133711.22840-1-dwagner@suse.de>
 References: <20230620133711.22840-1-dwagner@suse.de>
@@ -76,82 +76,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 4c984154efa1 ("nvme-fc: change controllers first connect to use
-reconnect path") made the connection attempt asynchronous in order to
-make the connection attempt from autoconnect/boot via udev/systemd up
-case a bit more reliable.
+Since the initial additional of the FC transport
+e399441de911 ("nvme-fabrics: Add host support for FC transport"), the
+transport also freed the options. Since nvme_free_ctrl() is freeing the
+options too commit de41447aac03 ("nvme-fc: avoid memory corruption
+caused by calling nvmf_free_options() twice") was added to avoid double
+frees.
 
-Unfortunately, one side effect of this is that any wrong parameters
-provided from userspace will not be directly reported as invalid, e.g.
-auth keys.
+With the change to make the initial connection attempt synchronous
+again, the life time of all object is known also in the error case. All
+resources will be freed in the same context.
 
-So instead having the policy code inside the kernel it's better to
-address this in userspace, for example in nvme-cli or nvme-stas.
+The FC transport should not free the options as the generic auth code is
+relying to be able to read the options even in the shutdown path (see
+nvme_auth_free is calling ctrl_max_dhchaps which relies on opts being a
+valid pointer).
 
-This aligns the fc transport with tcp and rdma.
+TCP and RDMA also avoid freeing the options, so make the FC transport
+behave the same.
 
 Signed-off-by: Daniel Wagner <dwagner@suse.de>
 ---
- drivers/nvme/host/fc.c | 19 ++++++++-----------
- 1 file changed, 8 insertions(+), 11 deletions(-)
+ drivers/nvme/host/fc.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
 diff --git a/drivers/nvme/host/fc.c b/drivers/nvme/host/fc.c
-index 472ed285fd45..aa2911f07c6c 100644
+index aa2911f07c6c..6f5cfa47fee5 100644
 --- a/drivers/nvme/host/fc.c
 +++ b/drivers/nvme/host/fc.c
-@@ -2943,6 +2943,8 @@ nvme_fc_create_io_queues(struct nvme_fc_ctrl *ctrl)
- 	/* force put free routine to ignore io queues */
- 	ctrl->ctrl.tagset = NULL;
+@@ -2413,8 +2413,6 @@ nvme_fc_ctrl_free(struct kref *ref)
+ 	nvme_fc_rport_put(ctrl->rport);
  
-+	if (ret > 0)
-+		ret = -EIO;
- 	return ret;
+ 	ida_free(&nvme_fc_ctrl_cnt, ctrl->cnum);
+-	if (ctrl->ctrl.opts)
+-		nvmf_free_options(ctrl->ctrl.opts);
+ 	kfree(ctrl);
  }
  
-@@ -3545,21 +3547,15 @@ nvme_fc_init_ctrl(struct device *dev, struct nvmf_ctrl_options *opts,
- 	list_add_tail(&ctrl->ctrl_list, &rport->ctrl_list);
- 	spin_unlock_irqrestore(&rport->lock, flags);
- 
--	if (!nvme_change_ctrl_state(&ctrl->ctrl, NVME_CTRL_RESETTING) ||
--	    !nvme_change_ctrl_state(&ctrl->ctrl, NVME_CTRL_CONNECTING)) {
-+	if (!nvme_change_ctrl_state(&ctrl->ctrl, NVME_CTRL_CONNECTING)) {
- 		dev_err(ctrl->ctrl.device,
- 			"NVME-FC{%d}: failed to init ctrl state\n", ctrl->cnum);
- 		goto fail_ctrl;
- 	}
- 
--	if (!queue_delayed_work(nvme_wq, &ctrl->connect_work, 0)) {
--		dev_err(ctrl->ctrl.device,
--			"NVME-FC{%d}: failed to schedule initial connect\n",
--			ctrl->cnum);
-+	ret = nvme_fc_create_association(ctrl);
-+	if (ret)
- 		goto fail_ctrl;
--	}
--
--	flush_delayed_work(&ctrl->connect_work);
- 
- 	dev_info(ctrl->ctrl.device,
- 		"NVME-FC{%d}: new ctrl: NQN \"%s\"\n",
-@@ -3568,7 +3564,6 @@ nvme_fc_init_ctrl(struct device *dev, struct nvmf_ctrl_options *opts,
- 	return &ctrl->ctrl;
- 
- fail_ctrl:
--	nvme_change_ctrl_state(&ctrl->ctrl, NVME_CTRL_DELETING);
- 	cancel_work_sync(&ctrl->ioerr_work);
+@@ -3568,8 +3566,6 @@ nvme_fc_init_ctrl(struct device *dev, struct nvmf_ctrl_options *opts,
  	cancel_work_sync(&ctrl->ctrl.reset_work);
  	cancel_delayed_work_sync(&ctrl->connect_work);
-@@ -3590,7 +3585,9 @@ nvme_fc_init_ctrl(struct device *dev, struct nvmf_ctrl_options *opts,
- 	 */
- 	nvme_fc_rport_get(rport);
  
--	return ERR_PTR(-EIO);
-+	if (ret > 0)
-+		ret = -EIO;
-+	return ERR_PTR(ret);
+-	ctrl->ctrl.opts = NULL;
+-
+ 	/* initiate nvme ctrl ref counting teardown */
+ 	nvme_uninit_ctrl(&ctrl->ctrl);
  
- out_free_queues:
- 	kfree(ctrl->queues);
 -- 
 2.41.0
 
