@@ -2,99 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5711C73778D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7104E73778F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbjFTWml convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Jun 2023 18:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45782 "EHLO
+        id S229956AbjFTWnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 18:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjFTWmj (ORCPT
+        with ESMTP id S229796AbjFTWnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 18:42:39 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C918E10F1;
-        Tue, 20 Jun 2023 15:42:38 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-77e2f2ad553so186846539f.2;
-        Tue, 20 Jun 2023 15:42:38 -0700 (PDT)
+        Tue, 20 Jun 2023 18:43:16 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E24010F4;
+        Tue, 20 Jun 2023 15:43:15 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-54fb23ff7d3so2576040a12.0;
+        Tue, 20 Jun 2023 15:43:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687300995; x=1689892995;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eaYNclQnysW8nQnar7C7SNLx+8CEj4DfdAfuicOOpRI=;
+        b=pU1baukBRjTQQYBYuAPLDBi9RVpOsHukczl2Ko8po1D4gQBMI0/cOfoaiNwcnEpfWh
+         bDbuAjk0QZ2Vk76QXFAoH5Tk3W4uLsT9ofwXrbUXeUyStOdqNLgEXtQ5GV/UNz4dxwjk
+         YJjsnZa+UdaznDag0Q8AmQDqOlv+fzYe3M47LPBmBUaNiItAyJLrbbJ47gGJxFMjzMNJ
+         wCzeKf+/KIlPTVos5YnwVnjNAjwdR60eeKUjL5dOr59EJ80yvJF/yECtOlFCJyahyyuc
+         DDHLe8WOkzJshBC6Ci8bo9LR0vrRAfdTDJNEGxuehRtDew27gSVsIyD5Svu+Gy2Cgk9z
+         5Szg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687300958; x=1689892958;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1687300995; x=1689892995;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4H5CggCHHSoUjV0wAgcwF61+kh3EMGwOfr9WqhDgAN8=;
-        b=jXJB3fMXET2zf6FgYvvZXi8Fa3/AHMg1TY17V3PFihX3EkuwSiLnnzl8ZW2uSVDCc9
-         4wmpitQs9jFBP3bAfGIzDshWLl4CX1rMFTdlzXuwO6CG6/XsdCU2DVPjdmCq0gcszg7r
-         3QYY01IRfz/3Bf+CKoDBFb38DWWfZTK2aLYKXaGN8Q6QmnOZhLimUdEV2VB9EyXfJr81
-         YI4yqaljMpUUv6pyybGdkd9NmwzO83mjV30XJTjnW3SF3Nk116s0/7Rh8WfBul7L0RKL
-         3sWAcmXB6Cd3JE3Wjk666IVPEDkEPo0QDlBquYimh1c09y3C7VsQKkvLmNxmejscB7Of
-         5jSQ==
-X-Gm-Message-State: AC+VfDwf+qO+L1jKwJG8U6EhjiU6wZ3eNEG84kW9uXUKozvJMUyPqQsB
-        kmsVOneLGGBacrqOx+JAlNZya4jQf5cEXxTaRjE=
-X-Google-Smtp-Source: ACHHUZ7NR3d1W0rG8kIMdNaawU+eMWi73gH5JrW5qsaJ96o9I8k0237Wfjudf9f5N0nkQ7bpp64Pggw3rnfudF+p02g=
-X-Received: by 2002:a5e:c012:0:b0:77a:c741:b73d with SMTP id
- u18-20020a5ec012000000b0077ac741b73dmr14703953iol.3.1687300958019; Tue, 20
- Jun 2023 15:42:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230619082036.410-1-lidong@vivo.com> <CAM9d7chHMH-uJryUVBYZ6emrGLVH8Huc5frDz4YqG7TU29G-6A@mail.gmail.com>
- <CA+JHD93f_c8OJf4Kg68C_Xo=_rcO669G0QJ_mjL78upLmUwfoA@mail.gmail.com>
-In-Reply-To: <CA+JHD93f_c8OJf4Kg68C_Xo=_rcO669G0QJ_mjL78upLmUwfoA@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 20 Jun 2023 15:42:26 -0700
-Message-ID: <CAM9d7cj-t-jko=7mBb_dLrXFCC7s03W0Jz7jrO4nZkWZKeJAAA@mail.gmail.com>
-Subject: Re: [PATCH] tools: Fix incorrect calculation of object size by sizeof
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Li Dong <lidong@vivo.com>, Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        bh=eaYNclQnysW8nQnar7C7SNLx+8CEj4DfdAfuicOOpRI=;
+        b=cANFj38cHFW2kK2nNvI2cgJf+OPmbKeI46Uv94dpkan8BNFzHL7UO7rEKt8BC/5tQf
+         QWZ1rUefm/zsQ7KUPdyBGYtPWR0jVrAyEzsdc12B60Xw/JLppL0fw03X4pa21Y0xS9+S
+         UrCCTTUv98u7eTGRhY9cPgzrHNNyzcSLB2Zic/8G+MJl79Z7jFQYV97qTxJYwFoW6sgZ
+         nWCFSRxooackI0d0Y2iES+F7sZt7TFBOeoTdmFSvSp3JxszY4dFQm2NQgl5qAeClq85a
+         XQC+hcL3CoV7479S4WN2cC1mMutR6tx1yCPkpXuVXvO9bYRPMrIFm/zv37in/HNAsmhN
+         18tg==
+X-Gm-Message-State: AC+VfDx2JPpiyScKpu42+FNCwukTmUrKR3GrkXjDd2LMexDbwjmwSmeu
+        dYEB6d2udEDcbIIKR6XMerk=
+X-Google-Smtp-Source: ACHHUZ6PT3wFSpXI54qDT4ka+RjCbfE7gmAYYq8N9vr80n2sSwbgap4WDNDBvflyXbo3TigjY3kbiQ==
+X-Received: by 2002:a17:90a:d90b:b0:256:dbfb:9b5e with SMTP id c11-20020a17090ad90b00b00256dbfb9b5emr8004910pjv.29.1687300994854;
+        Tue, 20 Jun 2023 15:43:14 -0700 (PDT)
+Received: from smtpclient.apple ([66.170.99.1])
+        by smtp.gmail.com with ESMTPSA id il8-20020a17090b164800b0025b83c6227asm1956348pjb.3.2023.06.20.15.43.13
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 20 Jun 2023 15:43:14 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.600.7\))
+Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <bf22d1d1-ed6b-422d-9ea8-f778be841d8d@app.fastmail.com>
+Date:   Tue, 20 Jun 2023 15:43:02 -0700
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
         Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-kernel@vger.kernel.org>, opensource.kernel@vivo.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        linux-mm <linux-mm@kvack.org>, Kees Cook <keescook@chromium.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <E6B85BE5-10E8-4532-B599-1ACB83097A62@gmail.com>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-8-kent.overstreet@linux.dev>
+ <ZJAdhBIvwFBOFQU/@FVFF77S0Q05N>
+ <20230619104717.3jvy77y3quou46u3@moria.home.lan>
+ <ZJBOVsFraksigfRF@FVFF77S0Q05N.cambridge.arm.com>
+ <20230619191740.2qmlza3inwycljih@moria.home.lan>
+ <5ef2246b-9fe5-4206-acf0-0ce1f4469e6c@app.fastmail.com>
+ <20230620180839.oodfav5cz234pph7@moria.home.lan>
+ <dcf8648b-c367-47a5-a2b6-94fb07a68904@app.fastmail.com>
+ <37d2378e-72de-e474-5e25-656b691384ba@intel.com>
+ <ff2006db-cd13-48c4-bc5b-1864f9ec9149@app.fastmail.com>
+ <bf22d1d1-ed6b-422d-9ea8-f778be841d8d@app.fastmail.com>
+To:     Andy Lutomirski <luto@kernel.org>
+X-Mailer: Apple Mail (2.3731.600.7)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaldo,
 
-On Tue, Jun 20, 2023 at 3:06 PM Arnaldo Carvalho de Melo
-<arnaldo.melo@gmail.com> wrote:
->
->
->
-> On Tue, Jun 20, 2023, 3:19 PM Namhyung Kim <namhyung@kernel.org> wrote:
->>
->> Hello,
->>
->> On Mon, Jun 19, 2023 at 1:21 AM Li Dong <lidong@vivo.com> wrote:
->> >
->> > What we need to calculate is the size of the object, not the size of the
->> > pointer.
->> >
->> > Signed-off-by: Li Dong <lidong@vivo.com>
->>
->> Since this problem was introduced in the current dev cycle and not in the
->> mainline yet, I think we can skip the Fixes tag.
->>
->> Acked-by: Namhyung Kim <namhyung@kernel.org>
->
->
-> I think we should have it anyway, if not for the stable guys to pick it up, for documentation sake :-)
+> On Jun 20, 2023, at 3:32 PM, Andy Lutomirski <luto@kernel.org> wrote:
+>=20
+>> // out needs to be zeroed first
+>> void unpack(struct uncompressed *out, const u64 *in, const struct=20
+>> bitblock *blocks, int nblocks)
+>> {
+>>    u64 *out_as_words =3D (u64*)out;
+>>    for (int i =3D 0; i < nblocks; i++) {
+>>        const struct bitblock *b;
+>>        out_as_words[b->target] |=3D (in[b->source] & b->mask) <<=20
+>> b->shift;
+>>    }
+>> }
+>>=20
+>> void apply_offsets(struct uncompressed *out, const struct =
+uncompressed *offsets)
+>> {
+>>    out->a +=3D offsets->a;
+>>    out->b +=3D offsets->b;
+>>    out->c +=3D offsets->c;
+>>    out->d +=3D offsets->d;
+>>    out->e +=3D offsets->e;
+>>    out->f +=3D offsets->f;
+>> }
+>>=20
+>> Which generates nice code: https://godbolt.org/z/3fEq37hf5
+>=20
+> Thinking about this a bit more, I think the only real performance =
+issue with my code is that it does 12 read-xor-write operations in =
+memory, which all depend on each other in horrible ways.
 
-Ok, I'll add that.  Thanks for the reply while on your vacation. :)
+If you compare the generated code, just notice that you forgot to =
+initialize b in unpack() in this version.
 
-Thanks,
-Namhyung
+I presume you wanted it to say "b =3D &blocks[i]=E2=80=9D.
+
