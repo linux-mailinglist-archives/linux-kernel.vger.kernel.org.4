@@ -2,106 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53AA3737287
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D57A73729A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbjFTRRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 13:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54820 "EHLO
+        id S230231AbjFTRR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 13:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbjFTRRW (ORCPT
+        with ESMTP id S229693AbjFTRRy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 13:17:22 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F04E1733
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:17:20 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b455855fb2so68458041fa.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:17:20 -0700 (PDT)
+        Tue, 20 Jun 2023 13:17:54 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3AF1199B
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:17:43 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-312826ffedbso706673f8f.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:17:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687281438; x=1689873438;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/XabCVCnKN/+LbuMDododZmkqW6HATgL+WSAC/bjcDk=;
-        b=NJqn42QJSscKRFEldVznl4jsn9FWxMZtL7Ma5dT9YIOSe63Nr1VhEfwVfkN4MaNrtw
-         FRMZEIh6RDVvfy/jvZQJwxXdsn/3BWZEmQuALvm8VVJ/kU6D6J0h4YMNokKxL/8DYCR7
-         DMU/TWF0CEoynWmHIPgzcHrH1RsGwJ9slDo1YDW40VbjXZ+UUztdOsraaPseyu86RakZ
-         psl7jkeu/T58P92Gm4iS3V2Bl3Dcd4Ijc5dsIl9olj84wbaRpKfgzeOQRJX+HitDg3/3
-         sRuaST+ntMyhI8P/darxU94uG+c8fTWUEShA3xmOC9F525FoQqZi52wE0C5dfEQwXno9
-         uXbQ==
+        d=google.com; s=20221208; t=1687281462; x=1689873462;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kdF5fJc3RpQKsA1Z6nsArhtDlSIHXXx5950e0HmHoSI=;
+        b=BCP+qIWJFcis7g5pw0oTrdChdSQ2PHL2PHvNLYUt1z7g1FZ3kxPFc2jvshApPKMEfk
+         B3Zr6bpf0EXBZxhGfRWmAHuFl0w3+KH0BFKs3/uV/YQCVihgDTYhZbY0Sd13Q6iZDZvI
+         Bz6grrFI62lVk4Mbja4ssOH7wu8Tkv9b8C9Od5qTfSaaTPMdyAo8nTDdSx7ElIqDOO0y
+         nVgKHnz7iBJAQw3biY1jhZwdJm8WJerNP6q5u6onygBh93tmKnazKnyYneayY5IgmOTU
+         Cw4/3H2ScXKnRIB+Xb/TSEiIPjJ2uKsGGy6wO3vTbxXmzcZWwWdZQZsAY4ROCkNm7YD+
+         6yRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687281438; x=1689873438;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/XabCVCnKN/+LbuMDododZmkqW6HATgL+WSAC/bjcDk=;
-        b=enUlnkLaEpEM0kZaI7BnFsczYv6dZv6DUrzvO9qaTKCwss7lds1v4mt9E+Z2a0aSat
-         Xnda/7Whca2KgKw2Oh8tQZYbze0Z7Usv3D7S1Tls8msWd1bzC51IlPQJYEwgAIqw0zYz
-         BFURGbkmxV/6OlrA/TKAefPK4a5HwMcfpcOaM9lVIIyldBc/EP/VMzywNWKbYRmb0rN8
-         TmODw4f/idSHPtqcbQq0hJ/tV2wxe3IX8+Hw2OhoKP5rPybXgK1b90fMxMNAoHAkhQtQ
-         DyPF9go9uq0DKDVRvfOgbE0pL7QNHZq09ag5Ud6sxBtwUk+DGaZFUvq9G55zPrJKEJkg
-         /iag==
-X-Gm-Message-State: AC+VfDy99/8042GqcK1jIHokOUWaipn4c17IrFd0tF042sW6tid4cL8a
-        w2kLiEB2CA6T56zx7WtzP0XtMQ==
-X-Google-Smtp-Source: ACHHUZ7HmOZ5iUHATH17EiFwU86g/fw8G/0/mk89VyaIIpiZGcHhgt6Azbs6QiCq7zflkCAlb4U2XA==
-X-Received: by 2002:a2e:a413:0:b0:2b4:6c47:6253 with SMTP id p19-20020a2ea413000000b002b46c476253mr5577460ljn.38.1687281438388;
-        Tue, 20 Jun 2023 10:17:18 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id by19-20020a170906a2d300b00982bf866f9esm1712568ejb.66.2023.06.20.10.17.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jun 2023 10:17:17 -0700 (PDT)
-Message-ID: <ff9045bd-1030-b3c6-9692-e223846b0ee5@linaro.org>
-Date:   Tue, 20 Jun 2023 19:17:15 +0200
+        d=1e100.net; s=20221208; t=1687281462; x=1689873462;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kdF5fJc3RpQKsA1Z6nsArhtDlSIHXXx5950e0HmHoSI=;
+        b=Nsmklh28Y7bGCqv9HwIl+rOdH2ZTTyFGpHT3krsDoYzfcZS6S5PT1oJ4lPv/3uK040
+         waROmWHgyPODb96UuEDZiFOJrCUEp6/MJq7Hu3O2b0JIFCSlSfczCulAKoVme97/VNzG
+         gAW4p09TkCbH6XuwAWcwsnkpNVHGrAWbLCCg43LY3TUjrp86APTyvkogJ5p8DdFwXR2x
+         DnrqEDnZI0+wKiufz58mKS9WzxWxnjPOvETxd0cIziBkpmwZeMm+QW7MCW5JSW6bJyUN
+         6X4Bji3chVE27zwRycaW10xbTDEBTEr4LKivODKQQ9NoJWHunv3oxU6BKnNWxc8kUZyb
+         Q7QQ==
+X-Gm-Message-State: AC+VfDwai9Agabv1VnIFKuw0R+DRVUnq41FuNZw/8p9pOG+vjylOz6o9
+        rW09u5+5xDisMjj7ZhYNe4R47Q==
+X-Google-Smtp-Source: ACHHUZ5Cbn9oh78M9g89VcoH3bD7gPz8OkjEvkSJEUejoWV5ErLmGgx4cFnTaCqES1AsIJeVmtr5Ag==
+X-Received: by 2002:adf:ea8d:0:b0:311:1b8d:e566 with SMTP id s13-20020adfea8d000000b003111b8de566mr10135149wrm.52.1687281462168;
+        Tue, 20 Jun 2023 10:17:42 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:9c:201:8530:a6a3:373f:683c])
+        by smtp.gmail.com with ESMTPSA id y10-20020adfe6ca000000b0030fd23381ffsm2469591wrm.11.2023.06.20.10.17.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 10:17:41 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 19:17:35 +0200
+From:   Marco Elver <elver@google.com>
+To:     Andrey Konovalov <andreyknvl@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Aleksandr Nogikh <nogikh@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>, kasan-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Catalin Marinas <catalin.marinas@arm.com>
+Subject: [PATCH] kasan, doc: note kasan.fault=panic_on_write behaviour for
+ async modes
+Message-ID: <ZJHfL6vavKUZ3Yd8@elver.google.com>
+References: <20230614095158.1133673-1-elver@google.com>
+ <CA+fCnZdy4TmMacvsPkoenCynUYsyKZ+kU1fx7cDpbh_6=cEPAQ@mail.gmail.com>
+ <CANpmjNOSnVNy14xAVe6UHD0eHuMpxweg86+mYLQHpLM1k0H_cg@mail.gmail.com>
+ <CA+fCnZccdLNqtxubVVtGPTOXcSoYfpM9CHk-nrYsZK7csC77Eg@mail.gmail.com>
+ <ZJGSqdDQPs0sRQTb@elver.google.com>
+ <CA+fCnZdZ0=kKN6hE_OF7jV_r_FjTh3FZtkGHBD57ZfqCXStKHg@mail.gmail.com>
+ <ZJG8WiamZvEJJKUc@elver.google.com>
+ <CA+fCnZdStZDyTGJfiW1uZVhhb-DraZmHnam0cdrB83-nnoottA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCHv3 2/2] arm64: dts: rockchip: add dts for Firefly Station
- P2 aka rk3568-roc-pc
-Content-Language: en-US
-To:     Furkan Kardame <f.kardame@manjaro.org>, robh+dt@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        heiko@sntech.de, broonie@kernel.org, deller@gmx.de,
-        dsterba@suse.com, arnd@arndb.de, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <c020531e-c56e-7606-1846-5ca7332de96f@linaro.org>
- <1687280004029.3690769854.982412891@manjaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1687280004029.3690769854.982412891@manjaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+fCnZdStZDyTGJfiW1uZVhhb-DraZmHnam0cdrB83-nnoottA@mail.gmail.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/06/2023 19:05, Furkan Kardame wrote:
->>
->>> +	};
->>> +
->>> +	hdmi-con {
->>> +		compatible = "hdmi-connector";
->>> +		type = "a";
->>> +
->>> +		port {
->>> +			hdmi_con_in: endpoint {
->>> +			remote-endpoint = <&hdmi_out_con>;
->>
->> Missing indentation.
-> 
-> I am not able to see any missing indentation in the patch. 
-> I did run checkpatch and did not find any such warning.
-> Please advice in detail ?
+Note the behaviour of kasan.fault=panic_on_write for async modes, since
+all asynchronous faults will result in panic (even if they are reads).
 
+Fixes: 452c03fdbed0 ("kasan: add support for kasan.fault=panic_on_write")
+Signed-off-by: Marco Elver <elver@google.com>
+---
+ Documentation/dev-tools/kasan.rst | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-remote-endpoint is a property within a node, so it cannot have same
-indentation as the node.
-
-Best regards,
-Krzysztof
+diff --git a/Documentation/dev-tools/kasan.rst b/Documentation/dev-tools/kasan.rst
+index 7f37a46af574..f4acf9c2e90f 100644
+--- a/Documentation/dev-tools/kasan.rst
++++ b/Documentation/dev-tools/kasan.rst
+@@ -110,7 +110,9 @@ parameter can be used to control panic and reporting behaviour:
+ - ``kasan.fault=report``, ``=panic``, or ``=panic_on_write`` controls whether
+   to only print a KASAN report, panic the kernel, or panic the kernel on
+   invalid writes only (default: ``report``). The panic happens even if
+-  ``kasan_multi_shot`` is enabled.
++  ``kasan_multi_shot`` is enabled. Note that when using asynchronous mode of
++  Hardware Tag-Based KASAN, ``kasan.fault=panic_on_write`` always panics on
++  asynchronously checked accesses (including reads).
+ 
+ Software and Hardware Tag-Based KASAN modes (see the section about various
+ modes below) support altering stack trace collection behavior:
+-- 
+2.41.0.185.g7c58973941-goog
 
