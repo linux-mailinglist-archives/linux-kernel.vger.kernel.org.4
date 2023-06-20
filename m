@@ -2,92 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B7077376DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 23:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D46A7376DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 23:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbjFTV41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 17:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59274 "EHLO
+        id S229863AbjFTV5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 17:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbjFTV4Z (ORCPT
+        with ESMTP id S229490AbjFTV5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 17:56:25 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DA751730
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:56:24 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-543c6a2aa07so2889525a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:56:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687298184; x=1689890184;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mfPFecbkGQnl+lZbzEtCF3B0GD8CMvopuSef+xtXtws=;
-        b=d+TmiCDlK3YlhE+l/jzqzrm6zC6N3UVVNGZR8/F4fQXBAID/AztjzN5u/hUbU8iMMf
-         N97vnxsp3pdQaj3LYlzKDgSin95e59++FaJED2+f1TC8BFwBGXZyW4FcL+gTny82sgCn
-         MUlhpMYlYscmhSnNtbGmxbbCguk7AV15asK24=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687298184; x=1689890184;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mfPFecbkGQnl+lZbzEtCF3B0GD8CMvopuSef+xtXtws=;
-        b=CgJmeXsSX3V5PxB9+US1c177HkyJTRaLFU+AdNSkIODFo2sTw7f674RFhspznjNKZH
-         7+3REJ8NYKPRswK+Se9lG/GPTif42L6xEZoWQrJJPiGNau2GwELZawequOu6XoHbl1Pg
-         BKcLjbjMNNKeN+kZtU1ceZBrqor1V07QEkDo9LxY+aKI8rBZaxoNeEmVOsvFDrlB2I86
-         mSYNBEsoLnZPJb3HZflZ/iPZ8T2PaoLT3XRj7IBG9JgFQCYZsdnl3qUUM6gVEbEP38Kz
-         P51aobdK4I946nK/rZZ21w8UrvNy3IcTEa3N0jWpk3L8EJ34UoHMtcEtg/GcRFVUFgUW
-         j/5w==
-X-Gm-Message-State: AC+VfDwtEj9cmEcV/5nbtfgGORkIngTk3bS9uB2UBt6jLNp+b6X/CxFf
-        zAKNuffat+eJdaTcnmnbTdusuQ==
-X-Google-Smtp-Source: ACHHUZ5OKSfC4T12VYGmlam6MgcVnsQQO+vUPp4HzWWHoShZutpRi6s9CnMLA9BdO60c1xdc7OurcQ==
-X-Received: by 2002:a05:6a20:9143:b0:122:6fd2:7a2a with SMTP id x3-20020a056a20914300b001226fd27a2amr3793205pzc.55.1687298183768;
-        Tue, 20 Jun 2023 14:56:23 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id u21-20020a62ed15000000b00660d80087a0sm1708300pfh.199.2023.06.20.14.56.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 14:56:23 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 14:56:22 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, alyssa.milburn@linux.intel.com,
-        linux-kernel@vger.kernel.org, samitolvanen@google.com,
-        jpoimboe@kernel.org, joao@overdrivepizza.com,
-        tim.c.chen@linux.intel.com
-Subject: Re: [PATCH 1/2] x86/cfi: Fix ret_from_fork indirect calls
-Message-ID: <202306201455.AF16F617A@keescook>
-References: <20230615193546.949657149@infradead.org>
- <20230615193722.127844423@infradead.org>
+        Tue, 20 Jun 2023 17:57:50 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FDC107;
+        Tue, 20 Jun 2023 14:57:49 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35KLvMo5004932;
+        Tue, 20 Jun 2023 21:57:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=19TJ2pJemAtAw7vnSuSEyq+CEd+TRYUzI0XXaVONu3c=;
+ b=J8VpndoeW6mOiNe9WhmKjn9euyTSmvWwvWq1XoT3KajYxM2xzgCbcT3fLqYi9LL1newo
+ FxXSnfSIFPg97gPplQcLdNDQ7WR11ChA2LgPipE4RkUpW/ikO/sw1Ab3aqpxPnEi2nRI
+ 0ne4qbsnslRwc45SmWcRfywoztyb7/sEqRfv/5hihsPYvF+yjij7ubcBAeUFXPIUBDrK
+ dXzkOdK4erT7KiJnuTH3Wzs9CsPdZD3rR/owxUi7v2vPBxnJ8BYpIjzSqNgpFmPa9l5x
+ tjHRZcfE7sCMho+kSU7XoDhX0CEGgdlaJOqk6VY6Gz3xRTWRDWMxM2QwwS0NTU3T/mIK Mw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rb8f6hv7h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jun 2023 21:57:45 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35KLvikK017749
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jun 2023 21:57:44 GMT
+Received: from [10.111.161.191] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 20 Jun
+ 2023 14:57:43 -0700
+Message-ID: <37dcbd3c-1e41-023c-8bbd-19cf9c9f151b@quicinc.com>
+Date:   Tue, 20 Jun 2023 14:57:17 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615193722.127844423@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH RESEND v2] interconnect: drop unused icc_get() interface
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>
+CC:     Bjorn Andersson <andersson@kernel.org>, <linux-pm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Odelu Kukatla <quic_okukatla@quicinc.com>
+References: <20230523095248.25211-1-johan+linaro@kernel.org>
+Content-Language: en-US
+From:   Mike Tipton <quic_mdtipton@quicinc.com>
+In-Reply-To: <20230523095248.25211-1-johan+linaro@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: c6bC6S3MzGJ0YvHkFxWGjUPqzwGhnWS-
+X-Proofpoint-ORIG-GUID: c6bC6S3MzGJ0YvHkFxWGjUPqzwGhnWS-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-20_16,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ mlxlogscore=626 mlxscore=0 lowpriorityscore=0 suspectscore=0
+ priorityscore=1501 impostorscore=0 adultscore=0 clxscore=1011 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306200198
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 09:35:47PM +0200, Peter Zijlstra wrote:
-> The ret_from_fork stub does an indirect call to the kthread function,
-> but only knows about Retpolines. Instead of making the asm more
-> complicated, punt to C and let the compiler figure it out.
+On 5/23/2023 2:52 AM, Johan Hovold wrote:
+> The icc_get() interface can be used to lookup an interconnect path based
+> on global node ids. There has never been any users of this interface and
+> all lookups are currently done from the devicetree.
 > 
-> Specifically, this makes it a proper kCFI indirect call when needed (in
-> fact, it is nearly impossible to code a kCFI indirect call in asm).
+> Remove the unused icc_get() interface.
 > 
-> This was the only callsite that was still calling func()+0 on regular
-> indirect functions.
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
 > 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Hi Georgi,
+> 
+> I just noticed that this patch never made it into 6.4 along with the
+> rest of the series:
+> 
+> 	https://lore.kernel.org/lkml/20230306075651.2449-23-johan+linaro@kernel.org/
+> 
+> This interface is still unused in mainline and should be removed so
+> resending the patch again.
+> 
+> Johan
+> 
+> 
+>   drivers/interconnect/core.c  | 52 ++----------------------------------
+>   include/linux/interconnect.h |  8 ------
+>   2 files changed, 2 insertions(+), 58 deletions(-)
+> 
 
-I worry this creates a calling gadget, but I don't think it really
-counts since it's just converting between two prototypes. Regardless:
+We have downstream debug/test modules that removing icc_get() will 
+break. I'd like to get equivalent debug support in mainline, but until 
+then I'd prefer we not remove this.
 
-Acked-by: Kees Cook <keescook@chromium.org>
+Our debug module adds debugfs files for requesting a path and voting BW 
+to it. The path is defined by supplying the raw src_id / dst_id and 
+calling icc_get() for them. This allows us to issue any request to any 
+path from debugfs without needing to recompile or reflash devicetree. We 
+use this extensively.
 
--- 
-Kees Cook
+That said, I don't like the current implementation of icc_get(). It 
+should take strings for src/dst rather than integer IDs. This would be 
+similar to other interfaces like clk_get() and regulator_get(). And 
+would allow users to specify their path in debugfs using logical names 
+rather than raw integers.
+
+I suspect having a mainline approach for voting paths from debugfs would 
+be useful to others as well. There are similar debugfs control 
+mechanisms in other frameworks already, e.g. clock.
+
+Instead of removing icc_get() immediately, can we wait for a future 
+patch series that adds debugfs as a consumer?
