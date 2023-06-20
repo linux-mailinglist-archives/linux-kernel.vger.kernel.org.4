@@ -2,80 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E176736C13
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 14:38:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 702C6736C1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 14:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231357AbjFTMis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 08:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58294 "EHLO
+        id S231465AbjFTMkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 08:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232206AbjFTMip (ORCPT
+        with ESMTP id S232596AbjFTMkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 08:38:45 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E1B10E2;
-        Tue, 20 Jun 2023 05:38:43 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qBad3-0002Ja-8H; Tue, 20 Jun 2023 14:38:37 +0200
-Message-ID: <984f4eb8-2d47-45ad-184f-7f5637820101@leemhuis.info>
-Date:   Tue, 20 Jun 2023 14:38:36 +0200
+        Tue, 20 Jun 2023 08:40:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BFB5A3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 05:39:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687264784;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YzJ7108xTwIu88GLE/qRI+Iax0/CQlmT7pn76unR1PU=;
+        b=I7Zc4XB5JrD1QvTtGh52zAVwbMSkpHXfiAG6AA8hIwDZiFlHnQvhf6gWL4yJpjhcWbLw1R
+        GdRq6HGzAy03sqZCgjMTzO8YoMp6BX25f7460myCUSSqwmcmDtiB511cTrXSslAgThvAq4
+        jJBtAfjRPxFThMKnB1B0ggpC6VaIoJY=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-76-usAPMevMPGKhLuD9KIN8lQ-1; Tue, 20 Jun 2023 08:39:43 -0400
+X-MC-Unique: usAPMevMPGKhLuD9KIN8lQ-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-31126581e13so6399905f8f.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 05:39:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687264782; x=1689856782;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YzJ7108xTwIu88GLE/qRI+Iax0/CQlmT7pn76unR1PU=;
+        b=ADIdnnP+uEq7vhfPfLvEC4ct0d9rSRyzXnqyzZyWzGTJn6ugIgkkO2TmRYyr/SvdsK
+         qYKgbBcUmKnK+aEEmlVn2ZTSOLNLPz7vSxKpeefwsCOemWsp8HqSWiQP2gNtF2TY7d3G
+         cYZSDVLegxyljPFqR0wiYGJvsZAWgwKF4jZJGEPxoMAqi2kZ4YQZzHkCZ/CpdDwLRI7O
+         b+38NvKbxw8v4WD29DIWkxSCtw4Dvt0jc/R1HlIZTs0ITEHb7e5/vS1roMustwiyyegL
+         zCtD2BjN0LIbEStY/qtqvcSYOU3Yjc5zK4RC+6t8p1B4tGPkY74GGDTQe8VneK3erriz
+         Fkdg==
+X-Gm-Message-State: AC+VfDznWolsb+5tkDCEjCkVQi5Zid7AtuU98OVHrLGAcV5i/zRXGQXS
+        E/gwZsiuX5AOlG64paqy/8cptdDc+c7XYUlJzuX+hBi8I8ELbIcZmnaxmtaGTw6/kKsu2xQ5yyQ
+        VutN4ARh5AtB4ZAGdOGog8Lbu
+X-Received: by 2002:adf:e6c4:0:b0:30f:b7be:4089 with SMTP id y4-20020adfe6c4000000b0030fb7be4089mr10806434wrm.3.1687264782090;
+        Tue, 20 Jun 2023 05:39:42 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5HTHYlwgQ+xGObwBP48Z9IId+NXMyWjJ8wfh52wmpPzmLxdwzUG/6rLGEfs6iArIJAuGz4DQ==
+X-Received: by 2002:adf:e6c4:0:b0:30f:b7be:4089 with SMTP id y4-20020adfe6c4000000b0030fb7be4089mr10806419wrm.3.1687264781695;
+        Tue, 20 Jun 2023 05:39:41 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c739:d200:8745:c520:8bf6:b587? (p200300cbc739d2008745c5208bf6b587.dip0.t-ipconnect.de. [2003:cb:c739:d200:8745:c520:8bf6:b587])
+        by smtp.gmail.com with ESMTPSA id f14-20020adfe90e000000b003111a9a8dbfsm1924320wrm.44.2023.06.20.05.39.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 05:39:41 -0700 (PDT)
+Message-ID: <8ea65567-ec8a-3361-e78c-c51a1d8aad47@redhat.com>
+Date:   Tue, 20 Jun 2023 14:39:39 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [REGRESSION][BISECT] perf/core: Remove pmu linear searching code
-Content-Language: en-US, de-DE
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Cc:     mark.rutland@arm.com, jolsa@kernel.org, irogers@google.com,
-        bp@alien8.de, adrian.hunter@intel.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "linux-samsung-soc@vger.kernel.org" 
-        <linux-samsung-soc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-References: <3abd3693-ad87-9abf-a762-337076638fcc@linaro.org>
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <3abd3693-ad87-9abf-a762-337076638fcc@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Subject: Re: [PATCH v11 05/20] x86/virt/tdx: Add SEAMCALL infrastructure
+Content-Language: en-US
+To:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "imammedo@redhat.com" <imammedo@redhat.com>,
+        "Gao, Chao" <chao.gao@intel.com>,
+        "Brown, Len" <len.brown@intel.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>
+References: <cover.1685887183.git.kai.huang@intel.com>
+ <ec640452a4385d61bec97f8b761ed1ff38898504.1685887183.git.kai.huang@intel.com>
+ <759e3af5-6aec-7e50-c432-c5e0a0c3cf36@redhat.com>
+ <8e7d6b83347688bb013d7ebb660d0a74a1949d52.camel@intel.com>
+ <20230620122012.mnlgko443qrpfrzg@box.shutemov.name>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230620122012.mnlgko443qrpfrzg@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1687264723;ff7c3218;
-X-HE-SMSGID: 1qBad3-0002Ja-8H
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: This mail in primarily relevant for Linux regression tracking. A
-change or fix related to the regression discussed in this thread was
-posted or applied, but it did not use a Closes: tag to point to the
-report, as Linus and the documentation call for. Things happen, no
-worries -- but now the regression tracking bot needs to be told manually
-about the fix. See link in footer if these mails annoy you.]
-
-On 04.06.23 13:38, Krzysztof Kozlowski wrote:
+On 20.06.23 14:20, kirill.shutemov@linux.intel.com wrote:
+> On Tue, Jun 20, 2023 at 10:37:16AM +0000, Huang, Kai wrote:
+>>>> +	/*
+>>>> +	 * SEAMCALL caused #GP or #UD.  By reaching here %eax contains
+>>>> +	 * the trap number.  Convert the trap number to the TDX error
+>>>> +	 * code by setting TDX_SW_ERROR to the high 32-bits of %rax.
+>>>> +	 *
+>>>> +	 * Note cannot OR TDX_SW_ERROR directly to %rax as OR instruction
+>>>> +	 * only accepts 32-bit immediate at most.
+>>>
+>>> Not sure if that comment is really helpful here. It's a common pattern
+>>> for large immediates, no?
+>>
+>> I am not sure.  I guess I am not expert of x86 assembly but only casual writer.
+>>
+>> Hi Dave, Kirill,
+>>
+>> Are you OK to remove it?
 > 
-> #regzbot introduced: 9551fbb64d09
+> I would rather keep it. I wanted to ask why separate MOV is needed here,
+> before I read the comment. Also size of $TDX_SW_ERROR is not visible here,
+> so it contributes to possible confusion without the comment.
 > 
-> Bisect pointed to commit 9551fbb64d09 ("perf/core: Remove pmu linear
-> searching code") as first one where all hardware events are gone from
-> perf for ARMv7 Exynos5422 board.
 
-#regzbot fix: 228020b490eda91
-#regzbot ignore-activity
+Fine with me, but I'd assume that the assembler will simply complain in 
+case we'd try to use a large immediate.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+-- 
+Cheers,
 
+David / dhildenb
 
