@@ -2,248 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9A887364FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14F2B7364FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbjFTHmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 03:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
+        id S231529AbjFTHm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 03:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231322AbjFTHl6 (ORCPT
+        with ESMTP id S231468AbjFTHl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 03:41:58 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3690FE4D
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:41:15 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-543c6a2aa07so2309817a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:41:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1687246874; x=1689838874;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=VNlkE9w8+4f9Owz1VR7DDy4a4R4dy/xTsJ/TjLKMtek=;
-        b=bIFBmbK7FiaHLaGDgWmmB8jUjaecxgDpHm0ygwpqqg5bHBVtNXttGwGxPwQo1YYQ7Y
-         ZYlopM4IUXYJTd9dQvjq7ZsHlFV6SDvOM0ePY0PyCktChM1feYusty5BHSInAs1Td43g
-         nc11Q98qxk0UJzEZ1zwFu8gtOAL3ZLkQtCnkMneDVIEJTVe9ttfRLgQdm7xE0tduQIBB
-         uaxQ/DaCgChdzcJ3h0cvQslVCVDWrj5T8TpJj8LUBZycoBSfkmEKVsXzpfW/m+IXAetN
-         DcEWlT04weeu/jZAvmCiw5LBjQmAlVpkN6e67RhWhdS/40ees722j8iArp1zPRh96yj1
-         h2kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687246874; x=1689838874;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VNlkE9w8+4f9Owz1VR7DDy4a4R4dy/xTsJ/TjLKMtek=;
-        b=H7JTN9115HM/DxwyHGX7zsakFwqKvu7KPnufWEFZGvEfXfWrbXCmdq5HKeVpj442V9
-         v5EmKK20EvEDo/lqIEYoCjClcmZAQZv3vqaZtvXqERkIiDy75gk3nayG9wLZBhe6uKfT
-         b52n+FdCP8xM2WEMtugMtjSodjqDIPfxsNIDIiB7yzNNXlcBJhjcirzNT0k54qaoKKIx
-         PsuAcvqI9GWUANhZzzjrAurR/xBXC62rSdBe8FEIFEzWrPNMMGfzymdE1uTHx0avHjBV
-         oLIzWWcBj6FVQ4hyheV6fZ5KkllkrPj2+XSQ2VWP8xeqP+scSM85K8d8sEE1OeUfr0IX
-         hZKw==
-X-Gm-Message-State: AC+VfDwhdkXy4AcwzRfRlocUn3XvvRl93AaHtNpMIwffr91EIvljOly3
-        LTIvVlIc14P04726Sx4gkmm5kg==
-X-Google-Smtp-Source: ACHHUZ5/e/h5oqwfG3pVdVPiHyiKMor0pHhGX3SJ5BK89WAqKnQnNXoBBy0OZtgzAZuM8gP+Tw3exQ==
-X-Received: by 2002:a05:6a21:339a:b0:115:dfb:da59 with SMTP id yy26-20020a056a21339a00b001150dfbda59mr10678421pzb.3.1687246874592;
-        Tue, 20 Jun 2023 00:41:14 -0700 (PDT)
-Received: from sunil-laptop ([106.51.184.72])
-        by smtp.gmail.com with ESMTPSA id r1-20020a1709028bc100b001a1b66af22fsm975645plo.62.2023.06.20.00.41.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 00:41:14 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 13:11:07 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Atish Kumar Patra <atishp@rivosinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] Documentation: riscv: Add early boot document
-Message-ID: <ZJFYE+Ss/OgMIjda@sunil-laptop>
-References: <20230619094705.51337-1-alexghiti@rivosinc.com>
- <20230619-kerchief-unmixed-cfdbeb1cf242@wendy>
- <CAHVXubjV=0HNyc0-UMAQRQfi4ZUnwH8dmghV-BGogZsJiumtZA@mail.gmail.com>
+        Tue, 20 Jun 2023 03:41:59 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2126.outbound.protection.outlook.com [40.107.255.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B779510E2;
+        Tue, 20 Jun 2023 00:41:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SdumK9c/0aDJwkbRAUaEqMRnN7Z7Hdiz6aoRhsMyGxz5LLxu5Q6+VVtryrJUUbKrBMT4RuB7ZPhyCL5QU1RA7us5ZxCHkI9Zkkow7FtZTRWSMz4BbpnS164ChjkDp8jFqbRCzP7GwzrXC79n+4JD9PCuwYcazfbEqAu6ngLIWIIxyTGZ75ltwnfoebYM+EHh++z9y4okPaHathlV9v06NE+4+6vjyHl3mgmRCU59KeN9nR19XxETYdQPUHQvBchuWBIRHqOqZ0mPLMAG+x1EUh912ksPufODs1C7bbyTFEstUBCTfcIpY+cy+bUn9DiMtSlIGm1I8xxhc2qbpjg6bA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UHr3xjszEkD6D4UBjPuFCwjvacPYHbZoQzEkZAteURk=;
+ b=mKZAi13a1VuAHOZF0+NGg4MgH/wh6Wio1BI98N6/R8/ifPQvZhvS3h41Pmeb2eliOAYbRvq35rSi5u6lgJnHPHHTR9I2wPYOJfBrvIea8QF5yZp27BfjHkZwquef9HCGPAxOD5riSZYZoRorSIneh2xlzvm9f6SXI1vKCMRSMfuUYEKR0s/ZwoHXKUmGbccAjiex3xrUc6y2SoMqUJfapp0ASacSzpNkuK9QnKQ/5KE8zAWXmAJ+81lbItb4s0GvRlvWNa8YOwBCeyV4E6wucZITi94EgTSaFnpFxIRKy20yhgoikNLT5XAxCIOFycE/aoyRKbuUYBTOpeOK5dZhUw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UHr3xjszEkD6D4UBjPuFCwjvacPYHbZoQzEkZAteURk=;
+ b=aWquvRA7192Vxfv2dWAjhxWmqipCgTh11ObWNgLIXAdf8viO2JuAHoI7JLUqANGxrchZHEuWJLjVqC7USqxdNDDPYfiY13LZKO4AdmxXOqdelc/YIjCvodybd80I9ry9YV2kUZj6hThqMxh8SPdbBaihh2sSqqqUixB1d68eteo=
+Received: from PUZP153MB0749.APCP153.PROD.OUTLOOK.COM (2603:1096:301:e6::8) by
+ SEYP153MB0779.APCP153.PROD.OUTLOOK.COM (2603:1096:101:b2::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.0; Tue, 20 Jun 2023 07:41:18 +0000
+Received: from PUZP153MB0749.APCP153.PROD.OUTLOOK.COM
+ ([fe80::1cc2:aa38:1d02:9a11]) by PUZP153MB0749.APCP153.PROD.OUTLOOK.COM
+ ([fe80::1cc2:aa38:1d02:9a11%2]) with mapi id 15.20.6521.013; Tue, 20 Jun 2023
+ 07:41:18 +0000
+From:   Saurabh Singh Sengar <ssengar@microsoft.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     Saurabh Sengar <ssengar@linux.microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: RE: [EXTERNAL] Re: [PATCH v2 1/5] uio: Add hv_vmbus_client driver
+Thread-Topic: [EXTERNAL] Re: [PATCH v2 1/5] uio: Add hv_vmbus_client driver
+Thread-Index: AQHZnwURGv1AAiMyG0eDJttQESSN76+TLQsggAAghICAAAf+QA==
+Date:   Tue, 20 Jun 2023 07:41:18 +0000
+Message-ID: <PUZP153MB074979236806588A7D1B953DBE5CA@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
+References: <1686766512-2589-1-git-send-email-ssengar@linux.microsoft.com>
+ <1686766512-2589-2-git-send-email-ssengar@linux.microsoft.com>
+ <2023061419-probe-velocity-b276@gregkh>
+ <PUZP153MB07490FDBBB8CC3099CFF126BBE5CA@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
+ <2023062007-coral-nicotine-856c@gregkh>
+In-Reply-To: <2023062007-coral-nicotine-856c@gregkh>
+Accept-Language: en-IN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=3b273513-75ba-4fbf-9905-2f2df98f427f;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-06-20T07:35:33Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PUZP153MB0749:EE_|SEYP153MB0779:EE_
+x-ms-office365-filtering-correlation-id: e5c2c79d-489f-4c3e-920a-08db7161bc1f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: T/FmQW7S9wtSWploayZsvbaIu2tOYHepBDkfZUFeagzoOb0tPKX/nySkmO1sh6fU1FYljZfIGAD0nyXFHViQD7jSfykftSjHeavQNR6h5VvuDjIrJDYjH4L0TsEi/AHfPYzGl14zebuGzm2yuIUPNlSy23AlWsTmVar0O4i60REb2F/rH1q3MW4kvn56HNbmRAxJv3bGcstiEW2uff9xsWgzpEJ6b0Qg22bqZxLzcXkv0pVIPCMvDk0BzDbQt2GYnKd0rTI8+mo5DlJd3iWNaJTA0SCup4T5X+PQoXpbqLbtmCpePSDZS4R5NDSJXQz/cySMsA14eIgsmig2UZ7PweCX+ds6hi8AIo9xaZ6XT/XYZhVTCEZlqHj82K8OuDiaLGKQ6NP0CWb+56aMF9gWx0lONCDTRIhCH7NIAkRglYSEt91BdMxmDEfHt0Fh5pkGqSGmENmLwceSiZCTywIpIDreXYz54X0D8r2G+ePwiY3FYoeABdzenU/Gzgg+ldpAA+pPurv2sbmJym3jtJTNOCg6TVpnGYYEOdgR3aHVvawns440Xwn9lEpOxyHzDYddHlDUbQ98qaORCp1lTAYPihOtlxfp6G1ACOJutzZYyxYYsXYSS+xkTxoV6TrHdBrNZyz77v3nDKtwqkVkivq26FS+G38ASBippAGxsDRfnQE=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZP153MB0749.APCP153.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(366004)(39860400002)(136003)(376002)(451199021)(10290500003)(41300700001)(316002)(7696005)(5660300002)(52536014)(76116006)(8676002)(6916009)(478600001)(71200400001)(66446008)(54906003)(8936002)(66946007)(64756008)(4326008)(66556008)(66476007)(38070700005)(86362001)(53546011)(186003)(9686003)(6506007)(38100700002)(33656002)(82960400001)(82950400001)(2906002)(8990500004)(122000001)(55016003)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?MG5lKLaZkqX4eCi5Fd09SWyY4XRJMtUOBIrpbRLyvBuL5onYnuvrVy6AYTVn?=
+ =?us-ascii?Q?9IuSq+l3+hCU3GpHwwf9kzVKK/4bTGSDXQsk2KwwRXrC5G+HY/4RCtlbHgEb?=
+ =?us-ascii?Q?GgQWKm5DAZxW+xfThzhmvuvOyChvOmvTjXNTI/qa9fw0i7sUdtx0F1jdCu7f?=
+ =?us-ascii?Q?QdDTsAP0fyhWAuxNGbPW1JMB79DFDOzZ1o2RaLn8X2G1N65bDtioi5LJZfWw?=
+ =?us-ascii?Q?22VZJkNGbXsNij4Qlxil8mRj4PhiA6DkMjtcQGFCI8N+kV5Fr9QYqdbCetGN?=
+ =?us-ascii?Q?zlCRiSHt9mdef7o3Byb/xr+kd6CC4v+FyDT8sZbgT1mDEaacOjWV6kb03vuH?=
+ =?us-ascii?Q?pncxHobQKlZsGOxL/4TTOuFBBKwDuSKwUdDMv+Mm5nV/qQ69zDytyJtt+urn?=
+ =?us-ascii?Q?h2ofHJM+T6YzxO8psDIjMOYEKF5f4r4+XmEy1113tbge2lSmiKMMcYZ+DDO7?=
+ =?us-ascii?Q?CoWxTgiUbd/m7Xep+/dEJVDr364bHzIglGbzj1Yw/GjcwtoaFkT7Efw89DmH?=
+ =?us-ascii?Q?G7juRuMN8NHsLt4TJm+3eB/ipuJXvhQZVTw3htEsE8gI3ZThrdAlJDxLJaxR?=
+ =?us-ascii?Q?p8tCaJkfIRDfC29b9BNS7QzSt980jx7ii5iVkAD3AYUOndn+RJwcBDSZUkY7?=
+ =?us-ascii?Q?Dk3670rueoaLMVlxLRdSNpkZRDxIiGAHxl7biHFiBGd7c2GeR8yD3SWX6qwq?=
+ =?us-ascii?Q?7Xc0jSQoj/uheuQSwi7ufeRJj6pXqkMFJNmi8wK9WD+LkWDwG3A8fUnNSMb+?=
+ =?us-ascii?Q?dL670zHlnWR3Qm6FaPntPscQBGpMJlJtd6QME28+tXvvQKi16S0repfl5d1u?=
+ =?us-ascii?Q?FBb5+2I96HKyAT1OuEZcglcapbnsa4rLKn2ZlL5fpJBLfWStoNdmPJw7UqOP?=
+ =?us-ascii?Q?TBlao3YkLWnJivgoP/2wgK8vTxrQJ65xePUNlYBhW+5+MD63BKsNW6DioX6W?=
+ =?us-ascii?Q?T6brf1zQXPCbjiXo7Q0l7NIV25A9IWYiMEL8B/eDYiFjIpkCth2i3CeySQ+j?=
+ =?us-ascii?Q?d9UyBa8icIl0xzx0iijXbc/hdFY5tYvbGFPbceFL5H0LQ3LU5Xt5Uutur7GV?=
+ =?us-ascii?Q?TYPIF7S4DG7SLkDz053wWpWxxq2SbdAMsQliiNXymnU7OuZv/mrhMgpcfQPV?=
+ =?us-ascii?Q?ibADvJwalS4kfKeEZ4147B0WeBfyi9iKnnq9FoZYhoobOqgAgq0EZjbn2YSx?=
+ =?us-ascii?Q?kD7lsDHkHftA5EHZmFWgtaKyGtuPFZ8WMU3XJNkwF8mQaa0vsggO72z+VNtI?=
+ =?us-ascii?Q?BqUup+uFqQ/unKIiBATQpUerBtD+Qmvon3VRxzcXSLPGMnHhcPzfesvAJMEK?=
+ =?us-ascii?Q?+BQlw7rwPUsdKznwX53VcEOyXvpwOTsfZKWU4fpNFa/8Dain03pacd6Sln5Z?=
+ =?us-ascii?Q?qa87rtxhumuV96o6ukPk2fJeBA6LHbhQaARBbbCXN5xSDBZyEWPJ7tv7+ejh?=
+ =?us-ascii?Q?ZSYhG0T9XIYIa8RXPPSPxzyHNGwa2x9+yVIE8fKLEHAeJ8lrPVhK5kUhtq0p?=
+ =?us-ascii?Q?LnXwpsab6Er+Bn64p0xqUc2tqrwNvvR9U/LjNMkPxmYnICnPZ79Bt0RyYjCo?=
+ =?us-ascii?Q?9v7lsAxWmeCXeUR2fCx6vCOtRC8sDsdGNrI0Muc/?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHVXubjV=0HNyc0-UMAQRQfi4ZUnwH8dmghV-BGogZsJiumtZA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PUZP153MB0749.APCP153.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: e5c2c79d-489f-4c3e-920a-08db7161bc1f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jun 2023 07:41:18.4606
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FL9JVXUz56FnRLFVIs3SQW3PnET/ES9UkjG5hSD3wPK4leB0X04dDY7K4GTkK/XHuMcbke6XcoY2L0T2jB0MRw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYP153MB0779
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 04:04:52PM +0200, Alexandre Ghiti wrote:
-> On Mon, Jun 19, 2023 at 2:26 PM Conor Dooley <conor.dooley@microchip.com> wrote:
-> >
-> > Hey Alex,
-> >
-> > Thanks for working on this :) I've got a mix of suggestions and
-> > questions below. Hopefully it is not too disjoint, since I didn't write
-> > them in order.
-> >
-> > On Mon, Jun 19, 2023 at 11:47:04AM +0200, Alexandre Ghiti wrote:
-> > > This document describes the constraints and requirements of the early
-> > > boot process in a RISC-V kernel.
-> > >
-> > > Szigned-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> > > ---
-> > >  Documentation/riscv/boot-image-header.rst |   3 -
-> > >  Documentation/riscv/boot.rst              | 181 ++++++++++++++++++++++
-> > >  Documentation/riscv/index.rst             |   1 +
-> > >  3 files changed, 182 insertions(+), 3 deletions(-)
-> > >  create mode 100644 Documentation/riscv/boot.rst
-> > >
-> > > diff --git a/Documentation/riscv/boot-image-header.rst b/Documentation/riscv/boot-image-header.rst
-> > > index d7752533865f..a4a45310c4c4 100644
-> > > --- a/Documentation/riscv/boot-image-header.rst
-> > > +++ b/Documentation/riscv/boot-image-header.rst
-> > > @@ -7,9 +7,6 @@ Boot image header in RISC-V Linux
-> > >
-> > >  This document only describes the boot image header details for RISC-V Linux.
-> > >
-> > > -TODO:
-> > > -  Write a complete booting guide.
-> > > -
-> > >  The following 64-byte header is present in decompressed Linux kernel image::
-> > >
-> > >       u32 code0;                /* Executable code */
-> > > diff --git a/Documentation/riscv/boot.rst b/Documentation/riscv/boot.rst
-> > > new file mode 100644
-> > > index 000000000000..b02230818b79
-> > > --- /dev/null
-> > > +++ b/Documentation/riscv/boot.rst
-> > > @@ -0,0 +1,181 @@
-> > > +.. SPDX-License-Identifier: GPL-2.0
-> > > +
-> > > +=============================================
-> > > +Early boot requirements/constraints on RISC-V
-> > > +=============================================
-> >
-> > Please use "title case", here and elsewhere in the doc.
-> 
-> You mean using "title: " instead of "===="? Or using uppercase for the
-> first letter of each word? FYI I followed
-> https://docs.kernel.org/doc-guide/sphinx.html?highlight=title#specific-guidelines-for-the-kernel-documentation
-> 
-> > I'd also be inclined to drop the "Early" from here, as it permits more
-> > natural section headings. Perhaps "RISC-V Kernel Boot Requirements and
-> > Constraints"?
-> 
-> Good suggestion, I'll go with that, thanks
-> 
-> >
-> > > +
-> > > +:Author: Alexandre Ghiti <alexghiti@rivosinc.com>
-> > > +:Date: 23 May 2023
-> > > +
-> > > +This document describes what the RISC-V kernel expects from the previous stages
-> >
-> > "the previous stages" is a bit vague IMO. You mean bootloader stages I
-> > assume, but I think it should be explicit. Perhaps:
-> > "...what a RISC-V kernel expects from bootloaders and firmware, and the
-> > constraints..."
-> >
-> > > +and the firmware, but also the constraints that any developer must have in mind
-> > > +when touching the early boot process, e.g. before the final virtual mapping is
-> > > +setup.
-> >
-> > s/setup./set up./
-> >
-> > Do you mean to have "For example" here? Or is "before the final virtual
-> > mapping is set up" the definition or "early boot"? If the latter, I
-> > would reword this as something like:
-> > "...when modifying the early boot process. For the purposes of this
-> > document, the 'early boot process' refers to any code that runs before
-> > the final virtual mapping is set up."
-> 
-> Thanks, that's what I meant.
-> 
-> >
-> > > +Pre-kernel boot (Expectations from firmware)
-> >
-> > Firmware or bootloaders? TBH, I would just drop the section in () and
-> > do something like:
-> >         Pre-kernel Requirements and Constraints
-> >         =======================================
-> >
-> >         The RISC-V kernel expects the following of bootloaders and platform
-> >         firmware:
-> >
-> 
-> Ok
-> 
-> > > +
-> > > +Registers state
-> >
-> > s/Registers state/Register State/
-> 
-> Ok
-> 
-> >
-> > > +---------------
-> > > +
-> > > +The RISC-V kernel expects:
-> > > +
-> > > +  * `$a0` to contain the hartid of the current core.
-> > > +  * `$a1` to contain the address of the device tree in memory.
-> > > +
-> > > +CSR state
-> > > +---------
-> > > +
-> > > +The RISC-V kernel expects:
-> > > +
-> > > +  * `$satp = 0`: the MMU must be disabled.
-> >
-> > "the MMU, if present, must be disabled." ;)
-> 
-> Ahah forgot the !mmu case, thanks :)
-> 
-> >
-> > > +
-> > > +Reserved memory for resident firmware
-> > > +-------------------------------------
-> > > +
-> > > +The RISC-V kernel expects the firmware to mark any resident memory with the
-> >
-> > Should this be
-> > "...resident memory, or memory it has protected with PMPs, with..."
-> > ?
-> 
-> I used "resident" memory instead of "PMP" memory because it was more
-> general. I mean you can have a region that is resident but not
-> protected by PMP, and I don't think the kernel should ask for this
-> resident memory to be protected with PMP right?
-> 
-> >
-> > > +`no-map` flag, thus the kernel won't map those regions in the direct mapping
-> >
-> > "no-map" is a DT specific term, should this section be moved down under
-> > DT, as a sub-section of that?
-> 
-> Maybe I can rephrase with something like that:
-> 
-> "The RISC-V kernel must not map any resident memory in the direct
-> mapping, so the firmware must correctly mark those regions as follows:
-> - when using a devicetree, using the `no-map` flag,
-> - when booting with UEFI without devicetree, either as
-> `EfiRuntimeServicesData/Code` or `EfiReserved`."
-> 
-Hi Alex,
 
-I am not sure about the idea behind mentioning only UEFI boot without
-DT since UEFI boot is supported with DT also. Should we just mention
-that "when booting with UEFI, resident firmware ranges must be marked as
-per UEFI specification" ? Converting reserved-memory node in DT to UEFI
-memory map is anyway mentioned separately under UEFI memory map section
-right?
 
-Thanks,
-Sunil
+> -----Original Message-----
+> From: Greg KH <gregkh@linuxfoundation.org>
+> Sent: Tuesday, June 20, 2023 12:37 PM
+> To: Saurabh Singh Sengar <ssengar@microsoft.com>
+> Cc: Saurabh Sengar <ssengar@linux.microsoft.com>; KY Srinivasan
+> <kys@microsoft.com>; Haiyang Zhang <haiyangz@microsoft.com>;
+> wei.liu@kernel.org; Dexuan Cui <decui@microsoft.com>; Michael Kelley
+> (LINUX) <mikelley@microsoft.com>; corbet@lwn.net; linux-
+> kernel@vger.kernel.org; linux-hyperv@vger.kernel.org; linux-
+> doc@vger.kernel.org
+> Subject: Re: [EXTERNAL] Re: [PATCH v2 1/5] uio: Add hv_vmbus_client drive=
+r
+>=20
+> On Tue, Jun 20, 2023 at 05:19:14AM +0000, Saurabh Singh Sengar wrote:
+> > > And you are defining a "global" variable that can be modified by an
+> > > individual sysfs file for ANY device bound to this driver, messing
+> > > with the other device's ring buffer size, right?  This needs to be
+> > > per-device, or explain in huge detail here why not.
+> >
+> > The global variable is expected to be set by userspace per device
+> > before opening, the particular uio device. For a particular Hyper-v
+> > device this value be same, and once device is open the ring buffer is
+> > allocated and there won't be any impact afterwards changing it. I can
+> elaborate more of this in sysfs documentation.
+>=20
+> That's totally confusing, please make this per-device properly, as you wi=
+ll find
+> out when you try to document it, what you are describing is unlike any ot=
+her
+> per-device interface we have.
+
+Ok, will make this per device. Thanks.
+
+- Saurabh
+
+>=20
+> greg k-h
