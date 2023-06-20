@@ -2,50 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6340736ED4
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBCFA736ED5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233367AbjFTOip (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 10:38:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45498 "EHLO
+        id S233330AbjFTOis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 10:38:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233392AbjFTOi2 (ORCPT
+        with ESMTP id S233371AbjFTOi3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 10:38:28 -0400
+        Tue, 20 Jun 2023 10:38:29 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF0A172B
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 07:38:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482B619B9
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 07:38:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E67616127D
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:38:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0506CC433C8;
-        Tue, 20 Jun 2023 14:38:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B61E7612CE
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:38:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C55D3C433CA;
+        Tue, 20 Jun 2023 14:38:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687271898;
-        bh=r01Ce+uFN5l69uwQajJdVCAt0c3WpiUEnlsvOOYEMa8=;
+        s=korg; t=1687271901;
+        bh=SBqR0b/G7NdQJEKcKs88hL5JacXmXZMe/k0Egq41e/4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=svs41yi6oaWZeeC6/Ryxenj1XnC0Rbb8E7tRjVu8pX2CXPcsnsojqjPZBSQo/Mgw5
-         vcW2pGhbZnxK0WlNw1xRKPSj6S06tVSHC0hwpOvwMYOIFo+8+5JguS8/myEPCi5E0t
-         ZIr5zkDde4bYkzH4fdksU6ItLabxH0rtizCmUUSA=
+        b=jCixr9sUu60TyJnN7hJpLHQfwGbO5RrBRSvaTfpbQr0FEMyN2FMIpubV3lU22NcxB
+         fCjiOIwlmVzgzI1042LHWeFqT4Ai/NuaflTBjpph0LasJEW7TWjyWzrrHEWqRuczBM
+         WqIb/DIk5OyhTswFudsvwmgkniZhcifeBMbFcHaE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>,
+        Eli Billauer <eli.billauer@gmail.com>,
         Arnd Bergmann <arnd@arndb.de>,
-        Michal Simek <michal.simek@amd.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 8/9] xilinx_hwicap: make icap_class a static const structure
-Date:   Tue, 20 Jun 2023 16:37:59 +0200
-Message-ID: <20230620143751.578239-17-gregkh@linuxfoundation.org>
+Subject: [PATCH 9/9] char: xillybus: make xillybus_class a static const structure
+Date:   Tue, 20 Jun 2023 16:38:00 +0200
+Message-ID: <20230620143751.578239-18-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230620143751.578239-10-gregkh@linuxfoundation.org>
 References: <20230620143751.578239-10-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2451; i=gregkh@linuxfoundation.org; h=from:subject; bh=/cyDMgy52LAJMOSZNEeNJ5NFiqDPHi3FK27Ni2u6me8=; b=owGbwMvMwCRo6H6F97bub03G02pJDCkTdx7gZzz158bZT2UKbaxJJ39ySizelqmeHXs0Uc+1r Vj1VMeejlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZiIXAfDgv32fOfZXk/smF+l 8PfjRgX38uN7LjEsuNlin+hw9/nb4CMPbzyTkDGp/HhNEwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2566; i=gregkh@linuxfoundation.org; h=from:subject; bh=LzwP0BkjV3W+sXqBaEm9wchHpeRuVoG6aFsdXlWGz6g=; b=owGbwMvMwCRo6H6F97bub03G02pJDCkTdx4o+vnvW0DA7hL7zQWfZumynZ2Wb/I8Mkj3S+3zE y7ltzhedcSyMAgyMciKKbJ82cZzdH/FIUUvQ9vTMHNYmUCGMHBxCsBEPNgY5plpfJsT2HJ94rtZ Pe9Z+Uxda5afbWWYpy3W4CaVvriS1+r93+M7HPtXfNgtCwA=
 X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -61,75 +59,83 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 From: Ivan Orlov <ivan.orlov0322@gmail.com>
 
 Now that the driver core allows for struct class to be in read-only
-memory, move the icap_class structure to be declared at build time
+memory, move the xillybus_class structure to be declared at build time
 placing it into read-only memory, instead of having to be dynamically
 allocated at load time.
 
+Cc: Eli Billauer <eli.billauer@gmail.com>
 Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Michal Simek <michal.simek@amd.com>
-Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: Ivan Orlov <ivan.orlov0322@gmail.com>
-Cc: linux-arm-kernel@lists.infradead.org
 Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/xilinx_hwicap/xilinx_hwicap.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+ drivers/char/xillybus/xillybus_class.c | 21 ++++++++-------------
+ 1 file changed, 8 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/char/xilinx_hwicap/xilinx_hwicap.c b/drivers/char/xilinx_hwicap/xilinx_hwicap.c
-index a46f637da959..527153313a30 100644
---- a/drivers/char/xilinx_hwicap/xilinx_hwicap.c
-+++ b/drivers/char/xilinx_hwicap/xilinx_hwicap.c
-@@ -113,7 +113,9 @@ static DEFINE_MUTEX(hwicap_mutex);
- static bool probed_devices[HWICAP_DEVICES];
- static struct mutex icap_sem;
+diff --git a/drivers/char/xillybus/xillybus_class.c b/drivers/char/xillybus/xillybus_class.c
+index 89926fe9d813..c92a628e389e 100644
+--- a/drivers/char/xillybus/xillybus_class.c
++++ b/drivers/char/xillybus/xillybus_class.c
+@@ -23,7 +23,9 @@ MODULE_LICENSE("GPL v2");
  
--static struct class *icap_class;
-+static const struct class icap_class = {
-+	.name = "xilinx_config",
+ static DEFINE_MUTEX(unit_mutex);
+ static LIST_HEAD(unit_list);
+-static struct class *xillybus_class;
++static const struct class xillybus_class = {
++	.name = "xillybus",
 +};
  
- #define UNIMPLEMENTED 0xFFFF
+ #define UNITNAMELEN 16
  
-@@ -687,7 +689,7 @@ static int hwicap_setup(struct device *dev, int id,
- 		goto failed3;
- 	}
+@@ -121,7 +123,7 @@ int xillybus_init_chrdev(struct device *dev,
+ 		len -= namelen + 1;
+ 		idt += namelen + 1;
  
--	device_create(icap_class, dev, devt, NULL, "%s%d", DRIVER_NAME, id);
-+	device_create(&icap_class, dev, devt, NULL, "%s%d", DRIVER_NAME, id);
- 	return 0;		/* success */
+-		device = device_create(xillybus_class,
++		device = device_create(&xillybus_class,
+ 				       NULL,
+ 				       MKDEV(unit->major,
+ 					     i + unit->lowest_minor),
+@@ -152,7 +154,7 @@ int xillybus_init_chrdev(struct device *dev,
  
-  failed3:
-@@ -730,7 +732,7 @@ static int hwicap_remove(struct device *dev)
- 	if (!drvdata)
- 		return 0;
+ unroll_device_create:
+ 	for (i--; i >= 0; i--)
+-		device_destroy(xillybus_class, MKDEV(unit->major,
++		device_destroy(&xillybus_class, MKDEV(unit->major,
+ 						     i + unit->lowest_minor));
  
--	device_destroy(icap_class, drvdata->devt);
-+	device_destroy(&icap_class, drvdata->devt);
- 	cdev_del(&drvdata->cdev);
- 	iounmap(drvdata->base_address);
- 	release_mem_region(drvdata->mem_start, drvdata->mem_size);
-@@ -856,7 +858,9 @@ static int __init hwicap_module_init(void)
- 	dev_t devt;
- 	int retval;
+ 	cdev_del(unit->cdev);
+@@ -193,7 +195,7 @@ void xillybus_cleanup_chrdev(void *private_data,
+ 	for (minor = unit->lowest_minor;
+ 	     minor < (unit->lowest_minor + unit->num_nodes);
+ 	     minor++)
+-		device_destroy(xillybus_class, MKDEV(unit->major, minor));
++		device_destroy(&xillybus_class, MKDEV(unit->major, minor));
  
--	icap_class = class_create("xilinx_config");
-+	retval = class_register(&icap_class);
-+	if (retval)
-+		return retval;
- 	mutex_init(&icap_sem);
+ 	cdev_del(unit->cdev);
  
- 	devt = MKDEV(XHWICAP_MAJOR, XHWICAP_MINOR);
-@@ -882,7 +886,7 @@ static void __exit hwicap_module_cleanup(void)
+@@ -242,19 +244,12 @@ EXPORT_SYMBOL(xillybus_find_inode);
+ 
+ static int __init xillybus_class_init(void)
  {
- 	dev_t devt = MKDEV(XHWICAP_MAJOR, XHWICAP_MINOR);
+-	xillybus_class = class_create("xillybus");
+-
+-	if (IS_ERR(xillybus_class)) {
+-		pr_warn("Failed to register xillybus class\n");
+-
+-		return PTR_ERR(xillybus_class);
+-	}
+-	return 0;
++	return class_register(&xillybus_class);
+ }
  
--	class_destroy(icap_class);
-+	class_unregister(&icap_class);
+ static void __exit xillybus_class_exit(void)
+ {
+-	class_destroy(xillybus_class);
++	class_unregister(&xillybus_class);
+ }
  
- 	platform_driver_unregister(&hwicap_platform_driver);
- 
+ module_init(xillybus_class_init);
 -- 
 2.41.0
 
