@@ -2,125 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AEAA736D24
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5963736D2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232916AbjFTNVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 09:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
+        id S232937AbjFTNVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 09:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232907AbjFTNU5 (ORCPT
+        with ESMTP id S233011AbjFTNVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 09:20:57 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC211FEA
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:19:44 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-25edb2433b8so655314a91.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:19:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687267180; x=1689859180;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xVUN/UeiDfdpA4Wf+eSb0/ZWuKlO/eBPU0TJTZdGiJU=;
-        b=FIpNdsuz91q5A7kLQ0j0ZfYx8Rg2FiCOpmGc8uV7yDNVSy89++Zlmlt8pSCdJPivFo
-         /Uz5y6XMRFoJcXmt7Ci7y7ipXlv9iXlvZ1Py4iFTRBLAm5KJkyrf1KPOI/IzjKYRaLSM
-         YbjINvsaxuferhK1tfQSbaY3Krmh66rQA2vaePkoHuIzajOy6a/LaAQmGjDx1U/Zb7ha
-         oiYIfTz5UqzE78DtCLNAi2FHa6eWlh10RisFvHa8Nzd5DGPjb+afJm9CB5s/CxiIc23j
-         OqbjFBuPg0QSqqsskAKgfoaw3J0G3s9/t5NLz1cggR17+Bf+GW3rtROnE7Ui0t96wqe/
-         SmGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687267180; x=1689859180;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xVUN/UeiDfdpA4Wf+eSb0/ZWuKlO/eBPU0TJTZdGiJU=;
-        b=TuWfGZ9ciQ2W692xGCaT5W6Tnn08ipCsQskEzZfiPsxTLefwdu1Ze2uEATIPLNMLzb
-         /2rnqIGWCa4KGnFqv6TeljMRpJBuNuDQHQid8zb1NJRYOvUj2+kqCQqzR357ycs/desU
-         fGSysHEZdXXX73VF43SVnNQ4/yZ+WDnT9vD0g4zi/tLsKd7eDIdkiYVTvWKduilSdPME
-         sju9u5GMHgxBQBALZ9bXsawsu4ayzS6LHilXpDWam/No2fUPCK7Xt12c7wfS9r7qP6w+
-         Pl8dB/gHkj/rMc6izn0uaj3elStRWYtsgT6rJifZXZ5YgWEbYEAEVlejk9qItpjxmpte
-         Ebfw==
-X-Gm-Message-State: AC+VfDwm4Zdn+ta7gqvpheWo50OYVa0Eydv5MA74NPi7/d7VC5LtpG/W
-        01y7I5vcGN7xGQa1tHF+peGMSiQpco1aKf7S5/w=
-X-Google-Smtp-Source: ACHHUZ439jswv/SXgv/CmKXTfq/lZyFwq/ZU8iTJxKlOQ5HLoq/MxPCQ51T1RKCEQGdLU30umIxZ0w==
-X-Received: by 2002:a17:90b:350f:b0:255:54c4:9a75 with SMTP id ls15-20020a17090b350f00b0025554c49a75mr15065844pjb.2.1687267180146;
-        Tue, 20 Jun 2023 06:19:40 -0700 (PDT)
-Received: from [127.0.0.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id j16-20020a17090ae61000b002532ddc3a00sm7372589pjy.15.2023.06.20.06.19.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 06:19:39 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     hch@lst.de, jack@suse.cz, jinpu.wang@ionos.com,
-        dchinner@redhat.com, hare@suse.de, trix@redhat.com,
-        bvanassche@acm.org, yukuai3@huawei.com, willy@infradead.org,
-        yi.zhang@huawei.com, dsterba@suse.com, brauner@kernel.org,
-        Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yangerkun@huawei.com
-In-Reply-To: <20230620111322.1014775-1-yukuai1@huaweicloud.com>
-References: <20230620111322.1014775-1-yukuai1@huaweicloud.com>
-Subject: Re: [PATCH -next] reiserfs: fix blkdev_put() warning from
- release_journal_dev()
-Message-Id: <168726717847.3595984.4839375056813352937.b4-ty@kernel.dk>
-Date:   Tue, 20 Jun 2023 07:19:38 -0600
+        Tue, 20 Jun 2023 09:21:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D908E1997;
+        Tue, 20 Jun 2023 06:20:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E3FB56123C;
+        Tue, 20 Jun 2023 13:20:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC2D1C433C8;
+        Tue, 20 Jun 2023 13:19:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687267200;
+        bh=GXGZ0Ff+rSYBLHjOWgny4b4PWRciMPgUl5UkVam9brE=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=qu7qnkFPf/dMqD1eXcbOfOI2FjVMAmyu4YHHfL4SuLk9zERNVjxSJFPDQKlaE0vDI
+         QVQi/Kw/mJ8gKIt+ocJoUmunTg8vqnEXT+Vsk1TmdH2EwlAtvUtLvR5hP1FD8NSmZ2
+         z/eqkW1/gxAk5idPr4ViPh/1Pk3Y01IHHX9m9ugpUnAY2A+EPKPgpNdYLRvEDNLuAJ
+         5Vt9/WwhRPCcpurnVzLZf/DvBljPYILCOeDf02x951yupCt/9P32xBVZd61JoqgJ67
+         5vnfUGakhx3ucUsp99fU4CdFlosjVB4I4q3TOp5iFD84Zb4PcZ4HEszAKig8gWRUH4
+         LYmqXZfWOPPFg==
+Message-ID: <d0c18369245db91a3b78017fabdc81417418af67.camel@kernel.org>
+Subject: Re: [PATCH 2/3] fd/locks: allow get the lock owner by F_OFD_GETLK
+From:   Jeff Layton <jlayton@kernel.org>
+To:     stsp <stsp2@yandex.ru>, linux-kernel@vger.kernel.org
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Date:   Tue, 20 Jun 2023 09:19:58 -0400
+In-Reply-To: <d70b6831-3443-51d0-f64c-6f6996367a85@yandex.ru>
+References: <20230620095507.2677463-1-stsp2@yandex.ru>
+         <20230620095507.2677463-3-stsp2@yandex.ru>
+         <5728ebda22a723b0eb209ae078e8f132d7b4ac7b.camel@kernel.org>
+         <a1e7f5c1-76ef-19e5-91db-a62f7615b28a@yandex.ru>
+         <eaccc14ddc6b546e5913eb557fec55f77cb5424d.camel@kernel.org>
+         <5f644a24-90b5-a02f-b593-49336e8e0f5a@yandex.ru>
+         <2eb8566726e95a01536b61a3b8d0343379092b94.camel@kernel.org>
+         <d70b6831-3443-51d0-f64c-6f6996367a85@yandex.ru>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-c6835
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 2023-06-20 at 17:34 +0500, stsp wrote:
+> 20.06.2023 17:02, Jeff Layton =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > Suppose I start a process (call it pid 100), and then spawn a thread
+> > (101). I then have 101 open a file and set an OFD lock on it (such that
+> > the resulting fl_pid field in the file_lock is set to 101).
+>=20
+> How come?
+> There are multiple places in locks.c
+> with this line:
+> fl->fl_pid =3D current->tgid;
+>=20
+> And I've yet to see the line like:
+> fl->fl_pid =3D current->pid;
+> Its simply not there.
+>=20
+> No, we put tgid into l_pid!
+> tgid will still be 100, no matter how
+> many threads you spawn or destroy.
+> Or what am I misseng?
+>=20
+>
+> > That's just one example, of course. The underlying problem is that OFD
+> > locks are not owned by processes in the same way that traditional POSIX
+> > locks are, so reporting a pid there is unreliable, at best.
+> But we report tgid.
+> It doesn't depend on threads.
+> I don't understand. :)
 
-On Tue, 20 Jun 2023 19:13:22 +0800, Yu Kuai wrote:
-> In journal_init_dev(), if super bdev is used as 'j_dev_bd', then
-> blkdev_get_by_dev() is called with NULL holder, otherwise, holder will
-> be journal. However, later in release_journal_dev(), blkdev_put() is
-> called with journal unconditionally, cause following warning:
-> 
-> WARNING: CPU: 1 PID: 5034 at block/bdev.c:617 bd_end_claim block/bdev.c:617 [inline]
-> WARNING: CPU: 1 PID: 5034 at block/bdev.c:617 blkdev_put+0x562/0x8a0 block/bdev.c:901
-> RIP: 0010:blkdev_put+0x562/0x8a0 block/bdev.c:901
-> Call Trace:
->  <TASK>
->  release_journal_dev fs/reiserfs/journal.c:2592 [inline]
->  free_journal_ram+0x421/0x5c0 fs/reiserfs/journal.c:1896
->  do_journal_release fs/reiserfs/journal.c:1960 [inline]
->  journal_release+0x276/0x630 fs/reiserfs/journal.c:1971
->  reiserfs_put_super+0xe4/0x5c0 fs/reiserfs/super.c:616
->  generic_shutdown_super+0x158/0x480 fs/super.c:499
->  kill_block_super+0x64/0xb0 fs/super.c:1422
->  deactivate_locked_super+0x98/0x160 fs/super.c:330
->  deactivate_super+0xb1/0xd0 fs/super.c:361
->  cleanup_mnt+0x2ae/0x3d0 fs/namespace.c:1247
->  task_work_run+0x16f/0x270 kernel/task_work.c:179
->  exit_task_work include/linux/task_work.h:38 [inline]
->  do_exit+0xadc/0x2a30 kernel/exit.c:874
->  do_group_exit+0xd4/0x2a0 kernel/exit.c:1024
->  __do_sys_exit_group kernel/exit.c:1035 [inline]
->  __se_sys_exit_group kernel/exit.c:1033 [inline]
->  __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1033
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> [...]
+Good point. I had forgotten that we stuffed the l_pid in there. So in
+principle, that example would be OK. But...there is still the problem of
+passing file descriptors via unix sockets.
 
-Applied, thanks!
+The bottom line is that these locks are specifically not owned by a
+process, so returning the l_pid field is unreliable (at best). There is
+no guarantee that the pid returned will still represent the task that
+set the lock.
 
-[1/1] reiserfs: fix blkdev_put() warning from release_journal_dev()
-      commit: c576c4bf9ecfa3fb9f7b11681cc2f60aba5276c4
+You may want to review this article. They're called "File-private" locks
+here, but the name was later changed to "Open file description" (OFD)
+locks:
 
-Best regards,
--- 
-Jens Axboe
+    https://lwn.net/Articles/586904/
 
-
-
+The rationale for why -1 is reported is noted there.
+--=20
+Jeff Layton <jlayton@kernel.org>
