@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF35736110
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 03:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBC0736109
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 03:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbjFTBSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 21:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
+        id S230095AbjFTBRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 21:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbjFTBRm (ORCPT
+        with ESMTP id S230051AbjFTBRh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 21:17:42 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2068.outbound.protection.outlook.com [40.107.220.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF3F1B0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 18:17:39 -0700 (PDT)
+        Mon, 19 Jun 2023 21:17:37 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A882197
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 18:17:32 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nENOMRcIwHu9FxJu9qd6AAdd8QDYw8kNg2FZGBi9c/vslCNxZB5LaOPDz7/cujE86Yo7yq8N6aSzN4MKdpRBc3lTJUf3WC04anQol+qHM/oon8UymhsnF7cX1aK5TxcDaywakCaeEdx3mQTjFvjC67Fano1uju1Pq73g21lauz7EVWJIBsuceiLVCDm2jTFr8ZKw/ZldbD/0jm88CnvzYo6kFS+Iw0VEfUQRx6BPHAxUGjGvqKbeTp07V3VZvKOWY0bn13pAj85lLmqBe71hOCYsGbEjSJ+xat8GhPrl84lh0niSXXEA7MLPdaIumcp5HDQc7UEOZvtRTisglfdM5g==
+ b=Z/qCte+UO/aJxYx6S7Sg3Cn9tvL181TKnyO5EiPsRm1AeRX4b5b62+F4Dro/QF0a56xst0vRwzr3GSGADoXYYqKvJGQHRBK6m98sCUTq1Zd53SVEK2eqp3rTh+Gd1ILDnb3MICguCH0YIWrOo8O80SysAXXFACoXiTuZdUV+49/kkMUYrkGSpWU0iBGzjVqfRe+yEHMp5x8aPakaW+8Xf3HfPeKiZj53xG+ZKkSSBJQbRExoxikNvgxp+gwRAfe3hb1ET3fGFZCKNWqfm+0Azo3rKsqaOfHFhJhQ9jhP787W6pFFliowCazGjTLQDyB5iXNHYmm3p4xyVjszcS6J6g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PNITXhlW7/50q8EibhFIrDa2v1XwHbp1VFAUfpMqVhA=;
- b=mzN+PuZwZR5bssL/hDJJlC38S/OD/IJCUm3ySJqOwhJDyUgkFJs10kE2Wl0KaLtUpysnOhvxj2RQOEcLTSJBQodHO5KwVR13hjbVyrBmCl+odUc5P0HQbx/5c0LmWtz21eY/Ta7SgRgBY/qsUmP+VFUGosUvbFzuY4FTZHODhMyazIuQBeHu4yXR4OwSX7xFV+Em6prssPr5onUIA4m88K6u+1tRcLXeqtpPVmDXJ8S6R2KMmi7vS+1joDWKdpwRmqQK9eNpTM5AIh7Gi+ESrPmjrZJPLH1AZ2GKa3R2dqvnDDm/9tCubd1GNXjQtoO1Y9BiQ3hiBKhYR9eYPzbMqQ==
+ bh=NAgHsicGbXE7/y+61Ec/TG4fp5QK6NCUPay76C4Qy/s=;
+ b=fEGVmKbVOGd/81SKuP1P7NH3EchbLJJa6Gbyo4vG7knSIMDN4gCcKYA0XJ5y/5DapHnlpISXb5Chei22plekwtXr+Xr3RLoWikwsUnmRljwBxm6na/W4FObthgLP02i4kRrHvosHIKJ4mRl8omr2GYk/rB4lKGlLMvZLquei9iTS2nDdLGUSk4X4yC9a6UYaV0sYpPXAa5YbZ9XQFC2Sb9LnssNWcffiiRbgEAHPqaRVWnEDJ6hWno+06zDM+fHbN6xQlplNpLPAghny1schny1Q2CqxCcSPTsY5Pw2VmaMpnOF4P/zAR8I57qT/XyYTONCc+WT5xKA7dTVJ6H0L7A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ 216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PNITXhlW7/50q8EibhFIrDa2v1XwHbp1VFAUfpMqVhA=;
- b=jR8oVN9AU2BcZsmuXx5nDrjtpnFTeB/Vo8Ye9vTxV5XyGec10HaoU0FM22v9GxLx62L6iocpzXF+gnRXrrnpNOJgZSHRKVLYuVxp1765M2xnxTlnBOgoXrfn1hQXIt7g+48tAXGe4t3UHquM+/NFZ9jgSGVmfdqDlCCGdNIf7GffHv8YQSwmmpoBQVLfGBTn7OKd35a7ZwYAF+G2FVLSW3UqoKS+GzAR/Dr27yYMlOVZ+pVTn7Y99H9DPPKRcKxxcUETudcOskiCRGNtMKlrE8csicxMwkN9+S0xu5P00Ek1uaufz1HcXxzLRBwmCeLDGmy8TqUYoNRxjh29EpELiw==
-Received: from SJ0PR13CA0066.namprd13.prod.outlook.com (2603:10b6:a03:2c4::11)
- by PH7PR12MB5902.namprd12.prod.outlook.com (2603:10b6:510:1d6::8) with
+ bh=NAgHsicGbXE7/y+61Ec/TG4fp5QK6NCUPay76C4Qy/s=;
+ b=TQtaRKoTsRXcos7BLB+e3jHbLm7EbjxS7jw8ivJN474NSEKa5ZwkvH3MQuEJ+OXQmmmLTx+YD3oywXHccZuWxH6KM79heldyGPg6IGezn0xFdDf9QoP3L+2yGNrymNzoKDdyhDA04PJhY5RrmUWnCpCnRyaWWULaYKKhgazTOwAPCb3f6adCoQKVnK/IdiLiNuOLJVTzBsiV68CYrMOax6f7RTiN28cFFeNp5Re7DNUl2mv7sPFaaxEzjmDl3we3Ws8Rb2eg+AKWu1uDf8fLgU2qnYzzy+E5Wc6D0upPtcotcLZaD7KTripJbNi0cysUVpvAXlcaHzVjtaHxDmjfXQ==
+Received: from SA1PR02CA0006.namprd02.prod.outlook.com (2603:10b6:806:2cf::15)
+ by DM4PR12MB6375.namprd12.prod.outlook.com (2603:10b6:8:a2::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Tue, 20 Jun
- 2023 01:17:32 +0000
-Received: from DM6NAM11FT069.eop-nam11.prod.protection.outlook.com
- (2603:10b6:a03:2c4:cafe::f7) by SJ0PR13CA0066.outlook.office365.com
- (2603:10b6:a03:2c4::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.20 via Frontend
- Transport; Tue, 20 Jun 2023 01:17:32 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Tue, 20 Jun
+ 2023 01:17:30 +0000
+Received: from SA2PEPF0000150B.namprd04.prod.outlook.com
+ (2603:10b6:806:2cf:cafe::5d) by SA1PR02CA0006.outlook.office365.com
+ (2603:10b6:806:2cf::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37 via Frontend
+ Transport; Tue, 20 Jun 2023 01:17:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT069.mail.protection.outlook.com (10.13.173.202) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6500.37 via Frontend Transport; Tue, 20 Jun 2023 01:17:32 +0000
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SA2PEPF0000150B.mail.protection.outlook.com (10.167.242.43) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.17 via Frontend Transport; Tue, 20 Jun 2023 01:17:29 +0000
 Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 19 Jun 2023
  18:17:23 -0700
 Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail203.nvidia.com
  (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 19 Jun
- 2023 18:17:22 -0700
+ 2023 18:17:23 -0700
 Received: from blueforge.nvidia.com (10.127.8.13) by mail.nvidia.com
  (10.129.68.6) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Mon, 19 Jun 2023 18:17:22 -0700
+ Transport; Mon, 19 Jun 2023 18:17:23 -0700
 From:   John Hubbard <jhubbard@nvidia.com>
 To:     David Hildenbrand <david@redhat.com>,
         Oscar Salvador <osalvador@suse.de>
@@ -69,9 +69,9 @@ CC:     Andrew Morton <akpm@linux-foundation.org>,
         LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
         John Hubbard <jhubbard@nvidia.com>,
         Peter Xu <peterx@redhat.com>
-Subject: [PATCH v2 06/11] selftests/mm: fix two -Wformat-security warnings in uffd builds
-Date:   Mon, 19 Jun 2023 18:17:14 -0700
-Message-ID: <20230620011719.155379-8-jhubbard@nvidia.com>
+Subject: [PATCH v2 07/11] selftests/mm: fix a "possibly uninitialized" warning in pkey-x86.h
+Date:   Mon, 19 Jun 2023 18:17:15 -0700
+Message-ID: <20230620011719.155379-9-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230620011719.155379-1-jhubbard@nvidia.com>
 References: <20230620011719.155379-1-jhubbard@nvidia.com>
@@ -82,23 +82,23 @@ Content-Type: text/plain
 X-NV-OnPremToCloud: ExternallySecured
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT069:EE_|PH7PR12MB5902:EE_
-X-MS-Office365-Filtering-Correlation-Id: f6f40616-c612-420e-4e75-08db712c1f6d
+X-MS-TrafficTypeDiagnostic: SA2PEPF0000150B:EE_|DM4PR12MB6375:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8bbed8b2-9385-4bca-a469-08db712c1e17
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: T/3n+HgODfg6Zo2JstGcGTNFtgVJwUyjMO1+NqAi5xXJN7ptMQ2JkIZorqaL25VkWZurttFVpj8VtmK2XlQRs5jSW7ZrKBxo8tDaxMxhRm8UL88IERW7+sqzzE7KZl7LQ1cMLR82RIwCxH2HC1YRZcBf/F8MHvkGngoI3S6XwzyPMCUHORiddhzN9GlRhqQE6iWBKSx25sAOX3SfFBXPXPMUtyRGO34Nznh0e1JPmSeBozk4/mGUjUY/tyhcFCm2iIJRSqRaq7qhofPQsEgVtVFRPePLzhg6zsKaBxLrenhiN0nbvWn5Ioh8U2MBOhrdkoKSUXqBcwKOiFO/z/CXoJI50T/DrRYT/p95wCMed2UvxV1v70+X7QBfSkfuYB1UnN7EjbqebVxlmOBd/veHpUHOzKtLxIRVUUCINoXkh3zKaalpiwjuQdglkI7KxLsbkvZznJD3LzPM2FvO45Fujii1zHayXufaNKawU8trRd7wV+8fsSpuY25djJ0b4z7m5H6YX2jA2VsGoaW/KgjbNfDkj8RfkuWeQha1LLNMbAbRwJl9hBUXjcL2751KVX99GlHs2pmNsZhPhXwB+MUXiRkpEBno2o2UAW8HcrUGwIBwRPsV742ltuenaYIop3BjWhV+qR8uuHMyX62VM8p8Pn5/me51/0mXBRYRBJtnIFPJpbL2t/8QHLqABsgJe2OQwvXjCkuAC+mPWkhSTBD/fyb5zzKif51lOYbYTLxVlIHrCMywB+GjyK2+NJEJtCuL
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(136003)(376002)(451199021)(40470700004)(46966006)(36840700001)(186003)(26005)(1076003)(82740400003)(36860700001)(40460700003)(2616005)(40480700001)(47076005)(7636003)(356005)(336012)(426003)(83380400001)(82310400005)(478600001)(4326008)(41300700001)(70206006)(70586007)(36756003)(8676002)(316002)(8936002)(54906003)(110136005)(15650500001)(7696005)(86362001)(6666004)(2906002)(5660300002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: xVPHgg1hlmhmbWUPHlyyt00twUTOkvQAv6CECljfOtJ4GKCbBDJMlzFeH6hA0FAO5SPhQ+jDdhP6mP9GQ8AH7zwvQkOaTTCiBfg3jD7mUrZdGS/53tmny+1Z/zRtrWNby4g+OuRoQ1n70O81u8Ay46ctJD4HNkMGIUbU8KgOErwRvxB4NP1khgbNXkBvpHuLaLmhHLwYKjEDebxNcSIWcu5PfGw6ROmLMYRXT3JIQgdRlSw7xxKfBTGz0GT/YVVUCP1BlTi/5sCVblclh68bGFz0tZt3mtYpNeNP0hVzWcBa1AUTurb4AAxe0wqR6+YhdHlLGGuQDACTk0XnC07nhK8u2GXT//sadiqYAPYxYAUODMJ6vA3oswZfhyFfhgRKnBXlYzR+AO486nkGCcZ07UMwzSfCLN5YWjBLWM6uohs3hVnzC97bbzMkcOC/j0xrWsGJw6GEXz2+I0HXBAwhY436wwUBS6s/PKGGRIA4MN1X2UOdAL0Sj3bK+2/PjvENXlzmd1yYg6ULpHygE3y5T/UuwBKLH1dcrSvucejW8fLEx/2YpwAE2i+CnBBtBf/x2GGzFQeUvcwhu8JwHHu1vQMwcQsKA3qflbTRBtZVMW9S/PLlkCYGFRCDMtVl/iHSa+RWsqNlSVsokYZ4BV3RVJ0sw77Xd5kOwqTYshI2Bpxhx5MN+8bWBQKaUnAqpsuLFvKj00a+Un209nd42c+hIayOIRydBUQA4cK0SCrwaOr2w7H8Vjye5nbEqlG2xSz5
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(396003)(39860400002)(376002)(451199021)(46966006)(36840700001)(40470700004)(8676002)(8936002)(82740400003)(356005)(5660300002)(7636003)(26005)(1076003)(186003)(7696005)(6666004)(40480700001)(47076005)(86362001)(36860700001)(2616005)(83380400001)(336012)(426003)(40460700003)(478600001)(110136005)(54906003)(41300700001)(36756003)(316002)(4326008)(70206006)(4744005)(70586007)(2906002)(82310400005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 01:17:32.1407
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 01:17:29.9172
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6f40616-c612-420e-4e75-08db712c1f6d
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8bbed8b2-9385-4bca-a469-08db712c1e17
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT069.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: SA2PEPF0000150B.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5902
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6375
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -110,68 +110,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The uffd tests generate two compile time warnings from clang's
--Wformat-security setting. These trigger at the call sites for
-uffd_test_start() and uffd_test_skip().
+This fixes a real bug, too, because xstate_size()  was assuming that
+the stack variable xstate_size was initialized to zero. That's not
+guaranteed nor even especially likely.
 
-1) Fix the uffd_test_start() issue by removing the intermediate
-test_name variable (thanks to David Hildenbrand for showing how to do
-this).
-
-2) Fix the uffd_test_skip() issue by observing that there is no need for
-a macro and a variable args approach, because all callers of
-uffd_test_skip() pass in a simple char* string, without any format
-specifiers. So just change uffd_test_skip() into a regular C function.
-
-Cc: David Hildenbrand <david@redhat.com>
+Reviewed-by: David Hildenbrand <david@redhat.com>
 Cc: Peter Xu <peterx@redhat.com>
 Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- tools/testing/selftests/mm/uffd-unit-tests.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ tools/testing/selftests/mm/pkey-x86.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index 269c86768a02..04d91f144d1c 100644
---- a/tools/testing/selftests/mm/uffd-unit-tests.c
-+++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -109,12 +109,11 @@ static void uffd_test_pass(void)
- 		ksft_inc_fail_cnt();		\
- 	} while (0)
+diff --git a/tools/testing/selftests/mm/pkey-x86.h b/tools/testing/selftests/mm/pkey-x86.h
+index 72c14cd3ddc7..e32ae8a1cd99 100644
+--- a/tools/testing/selftests/mm/pkey-x86.h
++++ b/tools/testing/selftests/mm/pkey-x86.h
+@@ -132,7 +132,7 @@ int pkey_reg_xstate_offset(void)
+ 	unsigned int ecx;
+ 	unsigned int edx;
+ 	int xstate_offset;
+-	int xstate_size;
++	int xstate_size = 0;
+ 	unsigned long XSTATE_CPUID = 0xd;
+ 	int leaf;
  
--#define  uffd_test_skip(...)  do {		\
--		printf("skipped [reason: ");	\
--		printf(__VA_ARGS__);		\
--		printf("]\n");			\
--		ksft_inc_xskip_cnt();		\
--	} while (0)
-+static void uffd_test_skip(const char *message)
-+{
-+	printf("skipped [reason: %s]\n", message);
-+	ksft_inc_xskip_cnt();
-+}
- 
- /*
-  * Returns 1 if specific userfaultfd supported, 0 otherwise.  Note, we'll
-@@ -1149,7 +1148,6 @@ int main(int argc, char *argv[])
- 	uffd_test_case_t *test;
- 	mem_type_t *mem_type;
- 	uffd_test_args_t args;
--	char test_name[128];
- 	const char *errmsg;
- 	int has_uffd, opt;
- 	int i, j;
-@@ -1192,10 +1190,8 @@ int main(int argc, char *argv[])
- 			mem_type = &mem_types[j];
- 			if (!(test->mem_targets & mem_type->mem_flag))
- 				continue;
--			snprintf(test_name, sizeof(test_name),
--				 "%s on %s", test->name, mem_type->name);
- 
--			uffd_test_start(test_name);
-+			uffd_test_start("%s on %s", test->name, mem_type->name);
- 			if (!uffd_feature_supported(test)) {
- 				uffd_test_skip("feature missing");
- 				continue;
 -- 
 2.40.1
 
