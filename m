@@ -2,54 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF56736A13
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CCE3736A10
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbjFTK5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 06:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39452 "EHLO
+        id S232462AbjFTK5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 06:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232458AbjFTK5n (ORCPT
+        with ESMTP id S231560AbjFTK52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 06:57:43 -0400
-Received: from forward101b.mail.yandex.net (forward101b.mail.yandex.net [178.154.239.148])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D591510E2;
-        Tue, 20 Jun 2023 03:57:37 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-59.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-59.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:1e2b:0:640:94b5:0])
-        by forward101b.mail.yandex.net (Yandex) with ESMTP id 332E36012D;
-        Tue, 20 Jun 2023 13:57:27 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-59.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id Ove6axoDbKo0-nCAOC5kc;
-        Tue, 20 Jun 2023 13:57:26 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687258646;
-        bh=8FUU/Xa/yU6MIGBp4GSl/zvrLBpWLS521oJYuRHSseE=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=xFE/ov3F6+ItKmJ6eOk67Vb1CbEyk+vE9zyZrtnnNVF1WxL0IKQoKeteIuvNBtACA
-         FY4NmEVVZahjsVl9v/Tx47AqBadSyoNOn6Sk+pzn1qd321IrrDRfAr0bhs7GRKd+S7
-         pCj/UFepciTUNyFi5wHraMfy1IDZiJKaaBvbaeDI=
-Authentication-Results: mail-nwsmtp-smtp-production-main-59.iva.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-Message-ID: <a1e7f5c1-76ef-19e5-91db-a62f7615b28a@yandex.ru>
-Date:   Tue, 20 Jun 2023 15:57:23 +0500
+        Tue, 20 Jun 2023 06:57:28 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD74F101;
+        Tue, 20 Jun 2023 03:57:27 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3094910b150so4544366f8f.0;
+        Tue, 20 Jun 2023 03:57:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687258646; x=1689850646;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=12MHpXVfV5/4NMPgWQ0+SabaxFmiyGuGrPFVvOL1TDA=;
+        b=N4W7GsufFgmP6oHtlt9Q1p8seFK+wS3lXJ9dyNPgdJUGjAzzp6AaPtChargp3nIhXE
+         hkSoxyLoT8DK0oUX+iwKIJNQetG8CK9gx+0WuVcEkEkLVYQlidvOP82tcSYyFRi/as/B
+         HBp/pLZLysaJBJm/b3zbRgK1cFBmJ1qhqEuxmKN1a0dbwQzEt2d9SKdx8MfZSqiKcrfb
+         L6RBYAiv/RI+2L1mdZJKoaEDHh8SIwTYEOvwWket7x4IfzoyjdSC6IrTCJR3VNhhZC4p
+         iW2pwd6qykK+IZVmtDE04umldg+eWbkDNTdlxVgbifwQEyJHhe9INA/WwXyj6YWWfbk2
+         xqaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687258646; x=1689850646;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=12MHpXVfV5/4NMPgWQ0+SabaxFmiyGuGrPFVvOL1TDA=;
+        b=Sz+qTuDgd+edRE7LK2S95OQLuZYP3MEeXPZW4ljWOO62l7KZXPtXaToO9SYdgiioBR
+         24Sq5EPmyHvuTAsx9eqRWzfrmxmG6ivzH3F8sDtfnQSKHKuWDUbj1eKGW3iCg5x7s0eR
+         M6fsewFzXfePHNyXtcbhsxbdSYVe4h706/iVO9g7pQIQAeSq2O53fOHC4lz+hTLGS7de
+         Nl9keBCdRWemUsvTZyvQLh/w6nx5s47b61aEYAP2aasfs4mmborNu9vyAAuDOYYeaKjg
+         AZhcGiqmGxXWxDE9vWspaHpKGBdxIUTX1eq6TERN2S2QsOHEuV+pf4Y5SQaa3iQOtxW6
+         /9cw==
+X-Gm-Message-State: AC+VfDx0S+25riMYT7gxdNdU9uj1XNpGL7AaZ/Fk1WUIuZ3nJoJt4Z3l
+        VNiMrCd5vh/f5DNKKroFGK4=
+X-Google-Smtp-Source: ACHHUZ49J3mc1NBJrhjMDak0Nllb38q8xGqs3Yq3y4XRXRcxCJ3z7KE1nqBdaw1gUYYEI1AgxaYxAA==
+X-Received: by 2002:a5d:453b:0:b0:311:1b8d:e565 with SMTP id j27-20020a5d453b000000b003111b8de565mr9229426wra.34.1687258646031;
+        Tue, 20 Jun 2023 03:57:26 -0700 (PDT)
+Received: from debian ([63.135.72.41])
+        by smtp.gmail.com with ESMTPSA id x5-20020adff645000000b0031276f8be22sm1701779wrp.97.2023.06.20.03.57.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 03:57:25 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 11:57:24 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 5.4 00/64] 5.4.248-rc1 review
+Message-ID: <ZJGGFPe1KWMyC891@debian>
+References: <20230619102132.808972458@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/3] fd/locks: allow get the lock owner by F_OFD_GETLK
-Content-Language: en-US
-To:     Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org
-References: <20230620095507.2677463-1-stsp2@yandex.ru>
- <20230620095507.2677463-3-stsp2@yandex.ru>
- <5728ebda22a723b0eb209ae078e8f132d7b4ac7b.camel@kernel.org>
-From:   stsp <stsp2@yandex.ru>
-In-Reply-To: <5728ebda22a723b0eb209ae078e8f132d7b4ac7b.camel@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230619102132.808972458@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,64 +75,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Greg,
 
-20.06.2023 15:51, Jeff Layton пишет:
-> On Tue, 2023-06-20 at 14:55 +0500, Stas Sergeev wrote:
->> Currently F_OFD_GETLK sets the pid of the lock owner to -1.
->> Remove such behavior to allow getting the proper owner's pid.
->> This may be helpful when you want to send some message (like SIGKILL)
->> to the offending locker.
->>
->> Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
->>
->> CC: Jeff Layton <jlayton@kernel.org>
->> CC: Chuck Lever <chuck.lever@oracle.com>
->> CC: Alexander Viro <viro@zeniv.linux.org.uk>
->> CC: Christian Brauner <brauner@kernel.org>
->> CC: linux-fsdevel@vger.kernel.org
->> CC: linux-kernel@vger.kernel.org
->>
->> ---
->>   fs/locks.c | 2 --
->>   1 file changed, 2 deletions(-)
->>
->> diff --git a/fs/locks.c b/fs/locks.c
->> index 210766007e63..ee265e166542 100644
->> --- a/fs/locks.c
->> +++ b/fs/locks.c
->> @@ -2158,8 +2158,6 @@ static pid_t locks_translate_pid(struct file_lock *fl, struct pid_namespace *ns)
->>   	pid_t vnr;
->>   	struct pid *pid;
->>   
->> -	if (IS_OFDLCK(fl))
->> -		return -1;
->>   	if (IS_REMOTELCK(fl))
->>   		return fl->fl_pid;
->>   	/*
-> NACK on this one.
->
-> OFD locks are not owned by processes. They are owned by the file
-> description (hence the name). Because of this, returning a pid here is
-> wrong.
+On Mon, Jun 19, 2023 at 12:29:56PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.248 release.
+> There are 64 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
-But fd is owned by a process.
-PID has a meaning, you can send SIGKILL
-to the returned PID, and the lock is clear.
-Was there any reason to hide the PID at
-a first place?
+Build test (gcc version 11.3.1 20230511):
+mips: 65 configs -> 3 failures
+arm: 106 configs -> no failure
+arm64: 2 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
+
+Note:
+mips db1xxx_defconfig, gpr_defconfig and mtx1_defconfig failed to build with:
+
+arch/mips/alchemy/common/dbdma.c:33:10: fatal error: linux/dma-map-ops.h: No such file or directory
+   33 | #include <linux/dma-map-ops.h> /* for dma_default_coherent */
+      |          ^~~~~~~~~~~~~~~~~~~~~
 
 
-> This precedent comes from BSD, where flock() and POSIX locks can
-> conflict. BSD returns -1 for the pid if you call F_GETLK on a file
-> locked with flock(). Since OFD locks have similar ownership semantics to
-> flock() locks, we use the same convention here.
-OK if you insist I can drop this one and
-search the PID by some other means.
-Just a bit unsure what makes it so important
-to overwrite the potentially useful info
-with -1.
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
 
-So in case you insist on that, then should
-I send a v2 or can you just drop the patch
-yourself?
+[1]. https://openqa.qa.codethink.co.uk/tests/4066
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+-- 
+Regards
+Sudip
