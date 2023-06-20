@@ -2,214 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CAFA73619D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 04:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE2A7361A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 04:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjFTCnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 22:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
+        id S229988AbjFTCpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 22:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbjFTCnP (ORCPT
+        with ESMTP id S229690AbjFTCpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 22:43:15 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CE510C1;
-        Mon, 19 Jun 2023 19:43:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687228993; x=1718764993;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=nnUYMrJWUnVY6vgXDEl6oTzlpnT26K/ZW/xcdKImzyQ=;
-  b=DlOGyXlKGTkiZIuDhU+OA4iu/GFek0C5He20fRRV/ttoMHPjRxRPCWD/
-   IgRDVh7nQav78kQGlJYCT9pOnjq4PaZ3B1/kHjU2oYNSMvjvUOp2P1OkB
-   3fssKE6d4iWBioBPtR2PVMZvEcZKyXVavClStVhzWAX7u7pekYsKId7tT
-   74zqrG27c9PMQ/AYf557Mm4zIUt1YRtR9oRjKmi3z8BOpnRBMi3Uywed4
-   dkqFTO7XftZh3fmANp/f1Ec6CaJC9VP2X3P0PwDyrBx/TGKZ4lRqhzMSX
-   tUE9KVYFqQSv+3atEtV8lF4Ly8UOoAcrWX0GrtCHe2ehQy5/bO9ykbKFJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="344494227"
-X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="344494227"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 19:43:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="960599383"
-X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="960599383"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga006.fm.intel.com with ESMTP; 19 Jun 2023 19:43:13 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 19 Jun 2023 19:43:12 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 19 Jun 2023 19:43:12 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.169)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 19 Jun 2023 19:43:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YWb4QHwpySeLyolQiZ/mUY08GjVKfS3Kfh+CfQjrItBgaUoLcnzxoOs+S2yi4AwT6gIRBNKHeWgwqaerYlhEtDDk8hh7k0SoT2xxamy3WX/QRJvOZlG/v5pnEDmRJoqQjhJ9fw0iTqkiwSVo3Rg7brQ6q38y53sqJdg5PmR9GRtSkSCJnLHqmRx178gsffUpjruZUTebNkNikDXMlJhoRnI0mu2TSGP469H493gV4IRLdgaeATi+x+7Sw46cYA9fDuX+act9gQjP6VebXvSkTVXiEuP3AGqIXVfdSIuh3MI1IIWwW+0gUMzkPAWmWPH63O5f8c8ahM4vVQ2BuwwQVA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Od5W5jniSgztpYHVhpBGOLzcoqWsLgTZP+W82MJqBhE=;
- b=fO4b7Pd4I0Adtwb3f0ybDfpJndKk85LjgMEp+hGPh8DkSS/nzfht+bExaWcRAbN7pqQJHDJbLojOZPZ62crOgyu8iIm0EMeUu+Xo3Ma5a3RWJiTH3mPxWcDM7NdwYoxGUqFDJYYP5VZh08xMo5sujk7xUVie/ZniUNyX8DLDA7nxXpoL+JERkybqzEBsfL1zvRSltB2oNWyryOblJMC5O4lUWSe5fmPJiTfOZZ5pOtySyro00oH1YBOKk/71Qi/CTtiLdnuVledItNJgvv5V/MpjfGKy9Je5cNAtoJLYordbk1L/ANlnFgsO1QMTSGr0bwJFwwj7cRHDzyQo/xnTrQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB6780.namprd11.prod.outlook.com (2603:10b6:510:1cb::11)
- by SA1PR11MB6870.namprd11.prod.outlook.com (2603:10b6:806:2b4::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Tue, 20 Jun
- 2023 02:43:08 +0000
-Received: from PH8PR11MB6780.namprd11.prod.outlook.com
- ([fe80::5817:cb8f:c2b7:f1e5]) by PH8PR11MB6780.namprd11.prod.outlook.com
- ([fe80::5817:cb8f:c2b7:f1e5%4]) with mapi id 15.20.6455.028; Tue, 20 Jun 2023
- 02:43:08 +0000
-Date:   Tue, 20 Jun 2023 10:42:57 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <pbonzini@redhat.com>, <seanjc@google.com>, <kai.huang@intel.com>,
-        <robert.hoo.linux@gmail.com>
-Subject: Re: [PATCH v3 07/11] KVM: VMX: drop IPAT in memtype when CD=1 for
- KVM_X86_QUIRK_CD_NW_CLEARED
-Message-ID: <ZJESMaG5Thb5LWtt@chao-email>
-References: <20230616023101.7019-1-yan.y.zhao@intel.com>
- <20230616023815.7439-1-yan.y.zhao@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230616023815.7439-1-yan.y.zhao@intel.com>
-X-ClientProxiedBy: SG2PR02CA0034.apcprd02.prod.outlook.com
- (2603:1096:3:18::22) To PH8PR11MB6780.namprd11.prod.outlook.com
- (2603:10b6:510:1cb::11)
+        Mon, 19 Jun 2023 22:45:43 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBF310C1;
+        Mon, 19 Jun 2023 19:45:41 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QlWG70ZxGz4wgn;
+        Tue, 20 Jun 2023 12:45:34 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1687229136;
+        bh=WyVTCXi2M4ockHdssmMw4QkwO3NRemhqMisvdiRWy6A=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RHnFnrXGv6jrHeCCYLLT7QmdNfBxDnfxOYsAC6v5NgNlHws2YBp+BCYC8kakwhknh
+         qcD2IhTtmgtr+NUFGk/7MW79WyTi/ChfPqq1MHfvAqH9grZdrbFXnih4oioc17m3C3
+         6FHSALF7xkJn76BUZjXY58JCnyoBb6w7is0HZdbF6roQdgEpVU1+F0ZpzDjdgYdWB6
+         uQykGa75o8FL8UZcMYOuDpM/uGFiWC5poqIz3ESVvtogPuCra01C6QrNKTPyFK3YXW
+         MOIw6aA4vAnmtg+HN8XIMKadiD8OhfgPxcjWuyjZnYt2oJtUdBxLX5zE08qgn5XitJ
+         MzvxnJNcsmruw==
+Date:   Tue, 20 Jun 2023 12:45:33 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Anup Patel <anup@brainfault.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul@pwsan.com>
+Cc:     Andy Chiu <andy.chiu@sifive.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Vincent Chen <vincent.chen@sifive.com>
+Subject: linux-next: manual merge of the kvm-riscv tree with the risc-v tree
+Message-ID: <20230620124533.45c18fee@canb.auug.org.au>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB6780:EE_|SA1PR11MB6870:EE_
-X-MS-Office365-Filtering-Correlation-Id: a8d9974d-d008-42e5-1242-08db71381452
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: EMCZddYLRH7BA0Ob3Pxw/isHJQnx6wEmEUapvyFvrDjPe/0ZiI9y+OF6WOi9Trq3T7/WAfuESDoje02/E0wS5t0biQcE3/imQ8OG3X7/pBgxtPNh94GcKjmwLlBcz5ANxebXcc2iHCd7i9FFCLYYKRACevs8dtu4fc4vNJLVoojbuka71l8csWPyq4SEgYDSS0o58i/rzslbSKpBOpTRDf7+ggt9hpUqz0rRxs7Zn3ISYV7WRPl8z5Rqlqgf1/3ejE/oP/Ni9K7MNBtE0C6jATp5G5C2Y9VKEsBQzxPEm5VaRUvomvUDDj9rwAqtZVIB1GWRusPu8f3VirKKvc/B1FCui9ixHqX5aKJ0uDkpABYaGWjL4tLdL176TVvK9CvKTzHW6wJYFg+uYR2aOrSPbFoecbxCkZoDq4WXWOl5mlXYL2UVQE3NZ0sU0U3jcJFWdgNMMai4dslQBMbb3+Ov3RuHdPqAHu33OlkVeMWkHhnYcG5htaaYEah0t9LllRhGf2AQ5aIUpLA0o6CDmA28oV/GtHwliwEB2OIkVeOc3iuuwrVjWfUL2ViGx697EoHU
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB6780.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(346002)(366004)(39860400002)(136003)(376002)(396003)(451199021)(66946007)(8676002)(66556008)(8936002)(66476007)(26005)(186003)(6506007)(6512007)(9686003)(82960400001)(83380400001)(41300700001)(38100700002)(5660300002)(6862004)(44832011)(4326008)(6636002)(316002)(6486002)(6666004)(478600001)(2906002)(33716001)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Rg99VO7qzo8O4ca8C9cZNSguIUkOa4e+hp4Q08oCFckyC03UgVde2CU4l2WD?=
- =?us-ascii?Q?JUiM+ula0TqyZKzK4JmdoLiTV4l3doQ5YLcwJCJV/p22UMnfPeka0AtlZHbu?=
- =?us-ascii?Q?New/i8CFIBq+nR+xO2VwlQlXg2ipohyl1W/S+mtdq2gVFiZlHskRM/ggS39G?=
- =?us-ascii?Q?6aGNpbnLn5HWX5CzFPSMaO3VgUJzumqR4T8/fm1waKWmr07su0YKyzlveWSA?=
- =?us-ascii?Q?NC/owl54aROT/Xih/kNRdE/EBvei4ScpEWjNqFyonUma/zkPh/i/9JijxXHq?=
- =?us-ascii?Q?Da32F2AVEEr68orq7HSbrkK/GrQ+UkFsO3o9krf287P/dDj06WZcyNojdGbz?=
- =?us-ascii?Q?WZf7+nsdIxDmn3PTEPoJWneMyaIltP2wq+c3/IKyASsFdES69l4DtPPQn2lm?=
- =?us-ascii?Q?BhQs042EIYuFrZEcJRjE1r8uoyKGPYjEwZPL/qcful540vF6s8UmRKQSWks0?=
- =?us-ascii?Q?8WF9cuetmB7MqdM+usHxWGQS5wEo2W9TpH1sVp/7CJNedqCYb9iFnr6aYXfJ?=
- =?us-ascii?Q?J+E/YmDZ5mQ83QdJdruIB5BBLgSZ94yGLCjI1Rcn3y+/4sb36f4Mu0fWjJME?=
- =?us-ascii?Q?EBab8kv8+Y7C1sM2lFgaIsZLXurgSnhw5Y87vPaLMSF+LWxqffwrk7yXO3Jw?=
- =?us-ascii?Q?DoTV26Z0DxrMEfmLLYBOrswXJGMUUFUxq7hFkwoT3KBtlEo0R1Wsan/4ioAr?=
- =?us-ascii?Q?5Wq4AZy1u1WlAUify6V+zIBeb6oiFXbYUsI3qzf7HvEbZ9qvSdOciJ3RHUhm?=
- =?us-ascii?Q?aHyLHAxIG8ND3gtvcJlGzTyJG4A4umlhPuiXKyJLfGd+LlMfsOP53CyWMhea?=
- =?us-ascii?Q?RyYywlmY7YHCRQ6Qdf/kJqrkkayE980+8j2KZc+3fu+kr2cF1Hr878uSrLWK?=
- =?us-ascii?Q?B5SdRzxUYO+PreUQuxUDJdYwjVdmhI2Xn+L9bnnyNgSHHtdKT8jEfA6RuN9X?=
- =?us-ascii?Q?cFCVI8gNgOCFUYtAVacdHFeQ0D9puQvNjJjGACF0aLEKmpZ4r5rORvYizuve?=
- =?us-ascii?Q?aQNzWQy+QeynPivZDV2P6et7ya6/ceDImKjzGSy9zW1G88SnNfQtz1/Q6Wmh?=
- =?us-ascii?Q?iPN8Mzr3kPMyC4iXqK7fIBMUBPy0ndyPtonsjHxyAto0jbVjJ47cxPPG3nH4?=
- =?us-ascii?Q?u9iR61tmkA3v67mrjUGz8lISYoGJcdVLRz9jt7K4hjSFWNh6SHgYJ70ye5l3?=
- =?us-ascii?Q?9xfWOl8TM9nBYaw1L1enffr1eZsiRFnGaX3UYnaZuMBTiieUOQ05Iu7tO1M0?=
- =?us-ascii?Q?j27a8XaZBBWUffWIeKaH3u53/y8vfVXMzSwUI9UlYcxGeiUsKMsQN4X4oLGX?=
- =?us-ascii?Q?2ej77Q3NYTPUXXaYj9Bhw7O6E72t52jr5bXy0uyYT3kGkbYcKPXLezvhqdCW?=
- =?us-ascii?Q?PnAVipYQ+P8/cB8u3p2/zcSBb9G2O6mwhw/laav7O+xfoSNvuMr9XljHb7/o?=
- =?us-ascii?Q?1eNTBxK+3Y9V+YOASwc2t/FANWQXkDP5inirNnoGNnimQ7H8abWWWFvcYI0Y?=
- =?us-ascii?Q?ARv1slfSnr5NNu+jIBoR81oxHfp2OHAyBCZM0YY44Ejg2LW5PJyUjx8QFYiO?=
- =?us-ascii?Q?P3O5z6OEcS0xLTpqCSfPh4R35u0INK8/gS3bcPOF?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a8d9974d-d008-42e5-1242-08db71381452
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB6780.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 02:43:07.8555
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: p7mdGYDl2bo/ka509HsSK6pM50himyYnGN7mxSVKmwmZipFv5Bp7sh6RN2BIHKBV5paoZk113FD2l6spEI7Jgw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6870
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/PjyC9NhbwDykvFby/Tjgm_O";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 10:38:15AM +0800, Yan Zhao wrote:
->For KVM_X86_QUIRK_CD_NW_CLEARED, remove the ignore PAT bit in EPT memory
->types when cache is disabled and non-coherent DMA are present.
->
->With the quirk KVM_X86_QUIRK_CD_NW_CLEARED, WB + IPAT are returned as the
->EPT memory type when guest cache is disabled before this patch.
->Removing the IPAT bit in this patch will allow effective memory type to
->honor PAT values as well, which will make the effective memory type
+--Sig_/PjyC9NhbwDykvFby/Tjgm_O
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Given guest sets CR0.CD, what's the point of honoring (guest) PAT? e.g.,
-which guests can benefit from this change?
+Hi all,
 
->stronger than WB as WB is the weakest memtype. However, this change is
->acceptable as it doesn't make the memory type weaker,
+Today's linux-next merge of the kvm-riscv tree got a conflict in:
 
->consider without
->this quirk, the original memtype for cache disabled is UC + IPAT.
+  arch/riscv/include/uapi/asm/kvm.h
 
-This change impacts only the case where the quirk is enabled. Maybe you
-mean:
+between commit:
 
-_with_ the quirk, the original memtype for cached disabled is _WB_ + IPAT.
+  bf78f1ea6e51 ("riscv: kvm: Add V extension to KVM ISA")
 
+from the risc-v tree and commit:
 
->
->Suggested-by: Sean Christopherson <seanjc@google.com>
->Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
->---
-> arch/x86/kvm/vmx/vmx.c | 9 +++------
-> 1 file changed, 3 insertions(+), 6 deletions(-)
->
->diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
->index 0ecf4be2c6af..c1e93678cea4 100644
->--- a/arch/x86/kvm/vmx/vmx.c
->+++ b/arch/x86/kvm/vmx/vmx.c
->@@ -7548,8 +7548,6 @@ static int vmx_vm_init(struct kvm *kvm)
-> 
-> static u8 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
-> {
->-	u8 cache;
->-
-> 	/* We wanted to honor guest CD/MTRR/PAT, but doing so could result in
-> 	 * memory aliases with conflicting memory types and sometimes MCEs.
-> 	 * We have to be careful as to what are honored and when.
->@@ -7576,11 +7574,10 @@ static u8 vmx_get_mt_mask(struct kvm_vcpu *vcpu, gfn_t gfn, bool is_mmio)
-> 
-> 	if (kvm_read_cr0_bits(vcpu, X86_CR0_CD)) {
-> 		if (kvm_check_has_quirk(vcpu->kvm, KVM_X86_QUIRK_CD_NW_CLEARED))
->-			cache = MTRR_TYPE_WRBACK;
->+			return MTRR_TYPE_WRBACK << VMX_EPT_MT_EPTE_SHIFT;
+  3177011788ee ("RISC-V: KVM: Allow Svnapot extension for Guest/VM")
 
-Shouldn't KVM honor guest MTRRs as well? i.e., as if CR0.CD isn't set.
+from the kvm-riscv tree.
 
-> 		else
->-			cache = MTRR_TYPE_UNCACHABLE;
->-
->-		return (cache << VMX_EPT_MT_EPTE_SHIFT) | VMX_EPT_IPAT_BIT;
->+			return (MTRR_TYPE_UNCACHABLE << VMX_EPT_MT_EPTE_SHIFT) |
->+				VMX_EPT_IPAT_BIT;
-> 	}
-> 
-> 	return kvm_mtrr_get_guest_memory_type(vcpu, gfn) << VMX_EPT_MT_EPTE_SHIFT;
->-- 
->2.17.1
->
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc arch/riscv/include/uapi/asm/kvm.h
+index 855c047e86d4,a1ca18408bbd..000000000000
+--- a/arch/riscv/include/uapi/asm/kvm.h
++++ b/arch/riscv/include/uapi/asm/kvm.h
+@@@ -121,7 -122,7 +122,8 @@@ enum KVM_RISCV_ISA_EXT_ID=20
+  	KVM_RISCV_ISA_EXT_ZICBOZ,
+  	KVM_RISCV_ISA_EXT_ZBB,
+  	KVM_RISCV_ISA_EXT_SSAIA,
+ +	KVM_RISCV_ISA_EXT_V,
++ 	KVM_RISCV_ISA_EXT_SVNAPOT,
+  	KVM_RISCV_ISA_EXT_MAX,
+  };
+ =20
+@@@ -204,13 -205,77 +206,84 @@@ enum KVM_RISCV_SBI_EXT_ID=20
+  #define KVM_REG_RISCV_SBI_MULTI_REG_LAST	\
+  		KVM_REG_RISCV_SBI_MULTI_REG(KVM_RISCV_SBI_EXT_MAX - 1)
+ =20
+ +/* V extension registers are mapped as type 9 */
+ +#define KVM_REG_RISCV_VECTOR		(0x09 << KVM_REG_RISCV_TYPE_SHIFT)
+ +#define KVM_REG_RISCV_VECTOR_CSR_REG(name)	\
+ +		(offsetof(struct __riscv_v_ext_state, name) / sizeof(unsigned long))
+ +#define KVM_REG_RISCV_VECTOR_REG(n)	\
+ +		((n) + sizeof(struct __riscv_v_ext_state) / sizeof(unsigned long))
+ +
++ /* Device Control API: RISC-V AIA */
++ #define KVM_DEV_RISCV_APLIC_ALIGN		0x1000
++ #define KVM_DEV_RISCV_APLIC_SIZE		0x4000
++ #define KVM_DEV_RISCV_APLIC_MAX_HARTS		0x4000
++ #define KVM_DEV_RISCV_IMSIC_ALIGN		0x1000
++ #define KVM_DEV_RISCV_IMSIC_SIZE		0x1000
++=20
++ #define KVM_DEV_RISCV_AIA_GRP_CONFIG		0
++ #define KVM_DEV_RISCV_AIA_CONFIG_MODE		0
++ #define KVM_DEV_RISCV_AIA_CONFIG_IDS		1
++ #define KVM_DEV_RISCV_AIA_CONFIG_SRCS		2
++ #define KVM_DEV_RISCV_AIA_CONFIG_GROUP_BITS	3
++ #define KVM_DEV_RISCV_AIA_CONFIG_GROUP_SHIFT	4
++ #define KVM_DEV_RISCV_AIA_CONFIG_HART_BITS	5
++ #define KVM_DEV_RISCV_AIA_CONFIG_GUEST_BITS	6
++=20
++ /*
++  * Modes of RISC-V AIA device:
++  * 1) EMUL (aka Emulation): Trap-n-emulate IMSIC
++  * 2) HWACCEL (aka HW Acceleration): Virtualize IMSIC using IMSIC guest f=
+iles
++  * 3) AUTO (aka Automatic): Virtualize IMSIC using IMSIC guest files when=
+ever
++  *    available otherwise fallback to trap-n-emulation
++  */
++ #define KVM_DEV_RISCV_AIA_MODE_EMUL		0
++ #define KVM_DEV_RISCV_AIA_MODE_HWACCEL		1
++ #define KVM_DEV_RISCV_AIA_MODE_AUTO		2
++=20
++ #define KVM_DEV_RISCV_AIA_IDS_MIN		63
++ #define KVM_DEV_RISCV_AIA_IDS_MAX		2048
++ #define KVM_DEV_RISCV_AIA_SRCS_MAX		1024
++ #define KVM_DEV_RISCV_AIA_GROUP_BITS_MAX	8
++ #define KVM_DEV_RISCV_AIA_GROUP_SHIFT_MIN	24
++ #define KVM_DEV_RISCV_AIA_GROUP_SHIFT_MAX	56
++ #define KVM_DEV_RISCV_AIA_HART_BITS_MAX		16
++ #define KVM_DEV_RISCV_AIA_GUEST_BITS_MAX	8
++=20
++ #define KVM_DEV_RISCV_AIA_GRP_ADDR		1
++ #define KVM_DEV_RISCV_AIA_ADDR_APLIC		0
++ #define KVM_DEV_RISCV_AIA_ADDR_IMSIC(__vcpu)	(1 + (__vcpu))
++ #define KVM_DEV_RISCV_AIA_ADDR_MAX		\
++ 		(1 + KVM_DEV_RISCV_APLIC_MAX_HARTS)
++=20
++ #define KVM_DEV_RISCV_AIA_GRP_CTRL		2
++ #define KVM_DEV_RISCV_AIA_CTRL_INIT		0
++=20
++ /*
++  * The device attribute type contains the memory mapped offset of the
++  * APLIC register (range 0x0000-0x3FFF) and it must be 4-byte aligned.
++  */
++ #define KVM_DEV_RISCV_AIA_GRP_APLIC		3
++=20
++ /*
++  * The lower 12-bits of the device attribute type contains the iselect
++  * value of the IMSIC register (range 0x70-0xFF) whereas the higher order
++  * bits contains the VCPU id.
++  */
++ #define KVM_DEV_RISCV_AIA_GRP_IMSIC		4
++ #define KVM_DEV_RISCV_AIA_IMSIC_ISEL_BITS	12
++ #define KVM_DEV_RISCV_AIA_IMSIC_ISEL_MASK	\
++ 		((1U << KVM_DEV_RISCV_AIA_IMSIC_ISEL_BITS) - 1)
++ #define KVM_DEV_RISCV_AIA_IMSIC_MKATTR(__vcpu, __isel)	\
++ 		(((__vcpu) << KVM_DEV_RISCV_AIA_IMSIC_ISEL_BITS) | \
++ 		 ((__isel) & KVM_DEV_RISCV_AIA_IMSIC_ISEL_MASK))
++ #define KVM_DEV_RISCV_AIA_IMSIC_GET_ISEL(__attr)	\
++ 		((__attr) & KVM_DEV_RISCV_AIA_IMSIC_ISEL_MASK)
++ #define KVM_DEV_RISCV_AIA_IMSIC_GET_VCPU(__attr)	\
++ 		((__attr) >> KVM_DEV_RISCV_AIA_IMSIC_ISEL_BITS)
++=20
++ /* One single KVM irqchip, ie. the AIA */
++ #define KVM_NR_IRQCHIPS			1
++=20
+  #endif
+ =20
+  #endif /* __LINUX_KVM_RISCV_H */
+
+--Sig_/PjyC9NhbwDykvFby/Tjgm_O
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSREs0ACgkQAVBC80lX
+0GxfBAf/SsCxNDBA9KNLA6Qn9rIoC1x2Ai23E5rORkX07RTcer9V21RQj0Whd2TS
+EovPsWVipIVuCIUzDCr74caogm1zgdaXQbuATDuthq4D3jTN63jiA77p3flqQ9FE
+z0CgJdLq+bVXOXOgcsDvWpXGrr0j+CB3vwgKlCC8qjCSTmRn0crC+X1oRccww9xl
+9fYphLOPhjGBTKJzXut9N3uZfT+DfBa0wePzcQaY+aHNM8+Y3Wb1rfDFRw3V4duW
+dvrXtBnxzMKyuDQ6REYF/1/IBoMOCtnBTHEMQqiQ7nL3p3fBW3B9/L+SU0NbF0xb
+JMhOgl6LFEbbuxRdcGAGOOpqlypBPQ==
+=LLTa
+-----END PGP SIGNATURE-----
+
+--Sig_/PjyC9NhbwDykvFby/Tjgm_O--
