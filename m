@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BC01735894
-	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:30:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF78735899
+	for <lists+linux-kernel@lfdr.de>; Mon, 19 Jun 2023 15:31:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbjFSNar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 09:30:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36670 "EHLO
+        id S231206AbjFSNbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 09:31:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbjFSNao (ORCPT
+        with ESMTP id S229875AbjFSNaz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 09:30:44 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB2C1A4;
-        Mon, 19 Jun 2023 06:30:41 -0700 (PDT)
-Received: from dggpeml500012.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Ql9Zg5ZdFzLmq5;
-        Mon, 19 Jun 2023 21:28:43 +0800 (CST)
+        Mon, 19 Jun 2023 09:30:55 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4196BE66;
+        Mon, 19 Jun 2023 06:30:54 -0700 (PDT)
+Received: from dggpeml500012.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Ql9d15Zgmz1GD5Y;
+        Mon, 19 Jun 2023 21:30:45 +0800 (CST)
 Received: from localhost.localdomain (10.67.175.61) by
  dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Mon, 19 Jun 2023 21:30:39 +0800
+ 15.1.2507.27; Mon, 19 Jun 2023 21:30:50 +0800
 From:   Zheng Yejian <zhengyejian1@huawei.com>
 To:     <gregkh@linuxfoundation.org>, <rostedt@goodmis.org>,
         <mhiramat@kernel.org>
 CC:     <linux-kernel@vger.kernel.org>,
         <linux-trace-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
         <zhengyejian1@huawei.com>
-Subject: [PATCH 5.15] tracing: Add tracing_reset_all_online_cpus_unlocked() function
-Date:   Tue, 20 Jun 2023 09:30:52 +0800
-Message-ID: <20230620013052.1127047-1-zhengyejian1@huawei.com>
+Subject: [PATCH 5.10] tracing: Add tracing_reset_all_online_cpus_unlocked() function
+Date:   Tue, 20 Jun 2023 09:31:04 +0800
+Message-ID: <20230620013104.1127100-1-zhengyejian1@huawei.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-Originating-IP: [10.67.175.61]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
  dggpeml500012.china.huawei.com (7.185.36.15)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
@@ -72,10 +72,10 @@ Cc: Andrew Morton <akpm@linux-foundation.org>
 Cc: Zheng Yejian <zhengyejian1@huawei.com>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-[Refers to commit message of 417d5ea6e735e5d88ffb6c436cf2938f3f476dd1,
+[Refers to commit message of be111ebd8868d4b7c041cb3c6102e1ae27d6dc1d,
 this patch is pre-depended, and tracing_reset_all_online_cpus() should
 be called after trace_types_lock is held as its comment describes.]
-Fixes: 417d5ea6e735 ("tracing: Free buffers when a used dynamic event is removed")
+Fixes: be111ebd8868 ("tracing: Free buffers when a used dynamic event is removed")
 Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
 ---
  kernel/trace/trace.c              | 11 ++++++++++-
@@ -85,10 +85,10 @@ Signed-off-by: Zheng Yejian <zhengyejian1@huawei.com>
  4 files changed, 12 insertions(+), 4 deletions(-)
 
 diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index f8b5abd6e36c..0202f23ae960 100644
+index 482ec6606b7b..70526400e05c 100644
 --- a/kernel/trace/trace.c
 +++ b/kernel/trace/trace.c
-@@ -2175,10 +2175,12 @@ void tracing_reset_online_cpus(struct array_buffer *buf)
+@@ -2178,10 +2178,12 @@ void tracing_reset_online_cpus(struct array_buffer *buf)
  }
  
  /* Must have trace_types_lock held */
@@ -102,7 +102,7 @@ index f8b5abd6e36c..0202f23ae960 100644
  	list_for_each_entry(tr, &ftrace_trace_arrays, list) {
  		if (!tr->clear_trace)
  			continue;
-@@ -2190,6 +2192,13 @@ void tracing_reset_all_online_cpus(void)
+@@ -2193,6 +2195,13 @@ void tracing_reset_all_online_cpus(void)
  	}
  }
  
@@ -117,10 +117,10 @@ index f8b5abd6e36c..0202f23ae960 100644
   * The tgid_map array maps from pid to tgid; i.e. the value stored at index i
   * is the tgid last observed corresponding to pid=i.
 diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index 66b6c8395fbc..2c3d9b6ce148 100644
+index 37f616bf5fa9..e5b505b5b7d0 100644
 --- a/kernel/trace/trace.h
 +++ b/kernel/trace/trace.h
-@@ -580,6 +580,7 @@ int tracing_is_enabled(void);
+@@ -725,6 +725,7 @@ int tracing_is_enabled(void);
  void tracing_reset_online_cpus(struct array_buffer *buf);
  void tracing_reset_current(int cpu);
  void tracing_reset_all_online_cpus(void);
@@ -129,10 +129,10 @@ index 66b6c8395fbc..2c3d9b6ce148 100644
  int tracing_open_generic_tr(struct inode *inode, struct file *filp);
  bool tracing_is_disabled(void);
 diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 1aadc9a6487b..160298d285c0 100644
+index bac13f24a96e..f8ed66f38175 100644
 --- a/kernel/trace/trace_events.c
 +++ b/kernel/trace/trace_events.c
-@@ -2974,7 +2974,7 @@ static void trace_module_remove_events(struct module *mod)
+@@ -2661,7 +2661,7 @@ static void trace_module_remove_events(struct module *mod)
  	 * over from this module may be passed to the new module events and
  	 * unexpected results may occur.
  	 */
@@ -142,10 +142,10 @@ index 1aadc9a6487b..160298d285c0 100644
  
  static int trace_module_notify(struct notifier_block *self,
 diff --git a/kernel/trace/trace_events_synth.c b/kernel/trace/trace_events_synth.c
-index 2fdf3fd591e1..08c7df42ade7 100644
+index 18291ab35657..ee174de0b8f6 100644
 --- a/kernel/trace/trace_events_synth.c
 +++ b/kernel/trace/trace_events_synth.c
-@@ -1416,7 +1416,6 @@ int synth_event_delete(const char *event_name)
+@@ -1363,7 +1363,6 @@ int synth_event_delete(const char *event_name)
  	mutex_unlock(&event_mutex);
  
  	if (mod) {
@@ -153,7 +153,7 @@ index 2fdf3fd591e1..08c7df42ade7 100644
  		/*
  		 * It is safest to reset the ring buffer if the module
  		 * being unloaded registered any events that were
-@@ -1428,7 +1427,6 @@ int synth_event_delete(const char *event_name)
+@@ -1375,7 +1374,6 @@ int synth_event_delete(const char *event_name)
  		 * occur.
  		 */
  		tracing_reset_all_online_cpus();
