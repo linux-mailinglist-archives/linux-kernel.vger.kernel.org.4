@@ -2,133 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0228F7367FC
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1F9B736804
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbjFTJkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 05:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53124 "EHLO
+        id S231956AbjFTJlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 05:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231486AbjFTJk0 (ORCPT
+        with ESMTP id S231486AbjFTJlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 05:40:26 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539C6F4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 02:40:25 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9883123260fso319325266b.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 02:40:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687254024; x=1689846024;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eYEa9yHPw2YhwKkNs2WpNu2/p4gZsC1rNIsqGGYjvpY=;
-        b=hFpP02AXM4T1GUs7RMTbg98bfrTK1Z/fhu8v+2tSEJouj3UkdOl0p7vAv41i8VUvcD
-         TyG5pScpxO9i42Vbg6i0KnNPjvD5sZfWAMJ4gB/OSIL01ZXsyXZY4vKs+CnuiaBTiAkG
-         RcdEpVRtrDWCezW7/3B5Vv2v959491Qvc/k5sevABp3n4zuQJFjgH2xYxpmMKbyYGr/4
-         bVvHRVLl5ACjgkluBYk7CtjmuzocLSWravezzkTlRzNM4WK2v/OujOs7+Ov2n4MTNS83
-         VZmoZl0kopnq+GkuMsG5603tzeQK9rX92VKCXDlsh1WafaAhu98Zx5VrAz+zBy7cYX6m
-         VjGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687254024; x=1689846024;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eYEa9yHPw2YhwKkNs2WpNu2/p4gZsC1rNIsqGGYjvpY=;
-        b=Xkfd0Mv7xL6WS2ZD8lCvXT1xK1FvtncKmTBfRAPq2pgLR03+AUdTjXmU9uASrJouBq
-         CDpqwQdOzxw7rlWpSb2GpbEyXbn4LDOAihH93GKV9DlhMwHjZgx7WB0soZxMbfaDnp5y
-         A/ZN7gLIMXQ4xwke2cnAmCFPDw9D8AqcHIZlDuz62PhrlFTHWAKkU9Ls9uvg5sfUlaGH
-         A3f8kU8MYyepGJEY9+rHuHMAQvgwTKjyi+iYi0qL5mT962Jghw97yf0B1CTVP3inbOWv
-         jRoXknEiHFhdNxtA1d8df8BHfsaFn6LIw8O/u10H9uurOy2yfzuGp0k1zsM4bHihFcrb
-         xiHA==
-X-Gm-Message-State: AC+VfDwMZSofS7l4IUwBjD6WN5UUqr620h6FynWmK7j3ER60coYNsNv0
-        JHEKF0u1TjWTH8+GDIF9BHHaTw==
-X-Google-Smtp-Source: ACHHUZ64d48IejsFY3AyhcSWEo9Xzbqw3YvlaDfSqUllkQ4PHpOJqNHJZnYelAyKQq+iB0ojyIzytg==
-X-Received: by 2002:a17:907:c23:b0:988:8d17:53bc with SMTP id ga35-20020a1709070c2300b009888d1753bcmr5005707ejc.54.1687254023743;
-        Tue, 20 Jun 2023 02:40:23 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id p1-20020a170906a00100b0098242730348sm1058146ejy.72.2023.06.20.02.40.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jun 2023 02:40:23 -0700 (PDT)
-Message-ID: <9b0d5439-24dd-2c32-f13a-110f758591fb@linaro.org>
-Date:   Tue, 20 Jun 2023 11:40:21 +0200
+        Tue, 20 Jun 2023 05:41:42 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 475DFD1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 02:41:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        date:from:to:cc:subject:message-id:references:mime-version
+        :content-type:in-reply-to; s=k1; bh=tfMpnnW+3guYPzLCJJ8Mv1jIbr4E
+        bescqvJbvy3K258=; b=vTzTY9y2y1t3QEQl87oUYGiJc/omQ4j0dEIYhUMQUDo0
+        r7izDzZBGAC5P/9pbRh/sgyreONoKIuonUgfwWtBTZItLaLfY/bULHYz0X9QXQad
+        6DgidPwBltDuEBxX9tnP62I901rgByGlBxoGlw73/u/B/Nc/cyi1TxvRI3Y5Gys=
+Received: (qmail 582700 invoked from network); 20 Jun 2023 11:41:39 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Jun 2023 11:41:39 +0200
+X-UD-Smtp-Session: l3s3148p1@mvY8dYz+WpdehhtC
+Date:   Tue, 20 Jun 2023 11:41:39 +0200
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 4/5] gnss: ubx: add support for the reset gpio
+Message-ID: <ZJF0U/mIniEksVwZ@ninjato>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Johan Hovold <johan@kernel.org>, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230523064310.3005-1-wsa+renesas@sang-engineering.com>
+ <20230523064310.3005-5-wsa+renesas@sang-engineering.com>
+ <ZJFSjrf41PHe400c@hovoldconsulting.com>
+ <ZJFsGWepuvkSjL9a@shikoro>
+ <ZJFtdWK5I13YUUcu@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] dt-bindings: timer: add Ralink SoCs timer documentation
-Content-Language: en-US
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        devicetree@vger.kernel.org
-Cc:     daniel.lezcano@linaro.org, tglx@linutronix.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org
-References: <20230620093409.1411399-1-sergio.paracuellos@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230620093409.1411399-1-sergio.paracuellos@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="TA9zqrB6i6FlXnUD"
+Content-Disposition: inline
+In-Reply-To: <ZJFtdWK5I13YUUcu@hovoldconsulting.com>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/06/2023 11:34, Sergio Paracuellos wrote:
-> Add YAML documentation for the timer which is present on Ralink SoCs.
 
-If there is going to be new version:
-A nit, subject: drop second/last, redundant "documentation". The
-"dt-bindings" prefix is already stating that these are bindings in
-documentation.
+--TA9zqrB6i6FlXnUD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> ---
->  .../bindings/timer/ralink,rt2880-timer.yaml   | 49 +++++++++++++++++++
->  1 file changed, 49 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/timer/ralink,rt2880-timer.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/timer/ralink,rt2880-timer.yaml b/Documentation/devicetree/bindings/timer/ralink,rt2880-timer.yaml
-> new file mode 100644
-> index 000000000000..9a315449f73e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/timer/ralink,rt2880-timer.yaml
-> @@ -0,0 +1,49 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/timer/ralink,rt2880-timer.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Timer present in Ralink family SoCs
-> +
-> +maintainers:
-> +  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: ralink,rt2880-timer
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    const: timer
 
-Names matching the module name are not really helpful, so drop it,
-unless any existing user needs it.
+> But can you elaborate on the "disappearing" bit? How exactly does it
+> "disappear" when the gnss0 device is *not* opened?
 
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
+When you send an I2C message with the address of the device, it usually
+ACKs it to say "Hi, I am here". When the ublox device is in reset state,
+it does not ACK its address. So, tools like "i2cdetect" will not report
+the device as "someone is listening there".
 
-Best regards,
-Krzysztof
+Here is the i2cdetect output with the GNSS device open:
 
+# i2cdetect -y -r 15
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- --=20
+10: 10 -- -- -- -- -- -- -- -- -- -- -- -- 1d -- --=20
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --=20
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --=20
+40: -- -- 42 -- -- -- -- -- -- -- -- -- -- -- -- UU=20
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --=20
+60: -- -- -- -- -- -- -- -- -- -- -- 6b -- -- -- --=20
+70: -- UU -- -- UU UU -- --                        =20
+
+And with the device closed. Note address 0x42 disappearing:
+
+# i2cdetect -y -r 15
+     0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
+00:                         -- -- -- -- -- -- -- --=20
+10: 10 -- -- -- -- -- -- -- -- -- -- -- -- 1d -- --=20
+20: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --=20
+30: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --=20
+40: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- UU=20
+50: -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --=20
+60: -- -- -- -- -- -- -- -- -- -- -- 6b -- -- -- --=20
+70: -- UU -- -- UU UU -- --                        =20
+
+
+--TA9zqrB6i6FlXnUD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSRdE8ACgkQFA3kzBSg
+KbarfA/+On0rLpkEJ+z3vMEgM7eJICiUy+MeY3d/u7A2Ryur9LhIFz8UmqJYxovG
+kTk7Au9WjjnkGKmpNi3lLT0TQEp7HipluRrlKo/uwnedeI2KMrb00qEh1rQUDPn9
+Lhj1Q0OhvmrmKEBvypihc47r2ePPPzTNk2HCqhtW3uIBg369zkwKoqudDTPBHw8q
+SxJbb92mtUAssqh8rjiqzEQvEwr2y8xYDO30VHJefzWIuazUM4TCwN8OqtSHp+0y
+VyVvmG1pSjjDZuAFT13VpmI6/6hABlivVWQT70U4ShnUIL1hBo8ePBF/ehwKa7RH
+P+VayQ3eFzGx60IyDPTNJ+hDxwWRXVsNotO472cs3fmg/Nobvs/dN85us4oA61AR
+cHZ8CkjQOdwP6w/jsOxg/uZjyoNqANckC1jq848eoCk9nNNgO8G74nG/RYBIH9uA
+phpMlgTv5UcHvD6MyN1Vh431SpapYUVdleiMasd/cjP4yq8rKJbrAWI4JKcYpa4y
+Qpd+im6XPS0TNZhQQehYFJJJ5aZyCSeVD2cG+SQxKGWCYD1Ce0ZOwSYU3cLNhZIM
+Vf5J2zXps5PwGlCjr129Ut+vOfkmDdANiFWxnxALqZjDY0sAhGAritm2XvgXiV3s
+BZIMhNQSz0NdW/2FS6YQQnP1cQrGWBGlVu/gev9JLw7wrGtCNSw=
+=8voC
+-----END PGP SIGNATURE-----
+
+--TA9zqrB6i6FlXnUD--
