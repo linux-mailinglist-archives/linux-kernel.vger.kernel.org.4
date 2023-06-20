@@ -2,150 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27057736919
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBAE5736930
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:24:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232111AbjFTKV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 06:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47350 "EHLO
+        id S232161AbjFTKYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 06:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232030AbjFTKVx (ORCPT
+        with ESMTP id S232105AbjFTKXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 06:21:53 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2045.outbound.protection.outlook.com [40.107.94.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FB54E6C;
-        Tue, 20 Jun 2023 03:21:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lYUAS1BWrCWyZx32mDLoU7hs2fL+T0rxGDPLcHo5/wbJf0nbU8OVVFn/yr6nrO5K62AKQCgyPnJWXNc++ftPzj8SGAKWBcSLE1nXr6nIwpaPngUHAOCkyr9vfVdft6AOfKFoCufgLZqxol7RISBxAjkomYPoCKZMm8rSIzhedcSpejJ0tbkZRTGtwscJo+v92j7stHsPpv30cTHGTgn14r4+KesslOxKbyg8QObjlJcsm+sePu4eKAvllJCQ/ahDBzp8rANennMYq9a4gZas8tOiMgJJIqtIJXLl+qXmx5dc5HZAP4+yxsz2x89bhrhrJVFRkTITWAMNRh2aueYBWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GBNBKwIcP2ZjMM7xsISpgLAuBMu1PwFzr0zRmfQp8Js=;
- b=d/kJEBdLhcwfNfox151TZL6tBOLRAyeDQY1WLAfH+X4C+Rkul58xwiGTQN8TPVwpg8iUJIXqSw/SC2nqRK4xF1PJ/1rh5NMkkPzbj2h1dcwvNmw4eGw6X6t5ULmltJaHIjr694yHLY1h5FK5zDIZyA4Q35KAweHSCrkMPxbkuBnO1GiAEGWVnl0au0zhOzN7dAZ8RKx53LpOIrUF5DWzTr5H88h5ealBFsPp6FRqAlN+rWIegd+mbolzk36gJAcoBirpIirqoVmT9nghyGTQ1WNi+9CwqqHPTH85L+Qw86q/05NQDdk+FKpQlo3Q9vb8YtImf24DYVc089Yzri/qvg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=GBNBKwIcP2ZjMM7xsISpgLAuBMu1PwFzr0zRmfQp8Js=;
- b=r+GEGDBmddp+EOWfTh63rutacTuoGSzLfUoZ8bDVVVjPz3bMttvj73qRwQDNFTb66tJ0Pbaq3PyIvse5FX+LxPeQoCrWb/eZGIPUY4irwFpx605JQ4rXUceqUvjWkngSY6cWMVGVlc0Nhc/WyFMVSs6mkgDvCHtBjQx3v/7OATUoa+DcCPOOQd4pp8RgNxZ15Rwh2nzeGNlnZMNbsitxJicsPoFn74FEptb3FI7E8rQNV7UyxTGcCIEw8I1PZh7b+bH/MiuA4PFU0HfGMUx8ABcYfZDismnsU3AYzAuCn7eUplifkicaDGahe/As85UZ5x+8rlDzuU/e/VoCZ2BbNw==
-Received: from DM6PR07CA0081.namprd07.prod.outlook.com (2603:10b6:5:337::14)
- by LV2PR12MB6016.namprd12.prod.outlook.com (2603:10b6:408:14e::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Tue, 20 Jun
- 2023 10:21:36 +0000
-Received: from SA2PEPF000015C9.namprd03.prod.outlook.com
- (2603:10b6:5:337:cafe::4) by DM6PR07CA0081.outlook.office365.com
- (2603:10b6:5:337::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37 via Frontend
- Transport; Tue, 20 Jun 2023 10:21:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- SA2PEPF000015C9.mail.protection.outlook.com (10.167.241.199) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6521.19 via Frontend Transport; Tue, 20 Jun 2023 10:21:36 +0000
-Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 20 Jun 2023
- 03:21:19 -0700
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Tue, 20 Jun 2023 03:21:19 -0700
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
- Transport; Tue, 20 Jun 2023 03:21:19 -0700
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>,
-        <stable@vger.kernel.org>
-Subject: Re: [PATCH 6.1 000/166] 6.1.35-rc1 review
-In-Reply-To: <20230619102154.568541872@linuxfoundation.org>
-References: <20230619102154.568541872@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Tue, 20 Jun 2023 06:23:37 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E47A19AB
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 03:23:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687256591; x=1718792591;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5ZYsZOvfPxA0b3dXDGRauovDUG8AX9HxRyYI5k76mgY=;
+  b=XA0JbBcg/3sRGFFK66ESewd7LKf/eNmWW2MSQuskrygZuKJc0q8Bsyx6
+   K43XlxDb4y+KyAnNkEquUxwEq77Hu6XFAN+6rVHlfarQDyO0B4v/nNA8J
+   58DiawNi3+WjtVMcT4l809gmdn5iYCq3ndWiDSBLDynU6F/+z2k9DeGaS
+   2NNshG93bMHZ3Fx7t4qTnyDZYZaxfNIHE8oYGS5OIEnEJ88M4vzUS4jr3
+   ONe5inF1Wo4o4tWaLQ6iuV/Qyg1M5OezTMt1/3IvCG7IrlfvII6q0Qf3e
+   2jiHVAOrE137Y1Bn5v4L/JSAY5JHnPcEucR4vOy1gKie8v+OrqkA5Tk5K
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="339432945"
+X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
+   d="scan'208";a="339432945"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 03:22:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="826937107"
+X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
+   d="scan'208";a="826937107"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 20 Jun 2023 03:22:11 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qBYV0-0005nu-2o;
+        Tue, 20 Jun 2023 10:22:10 +0000
+Date:   Tue, 20 Jun 2023 18:21:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Michael Shavit <mshavit@google.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>
+Cc:     oe-kbuild-all@lists.linux.dev, Michael Shavit <mshavit@google.com>,
+        jean-philippe@linaro.org, nicolinc@nvidia.com, jgg@nvidia.com,
+        baolu.lu@linux.intel.com, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 07/13] iommu/arm-smmu-v3: Keep track of attached ssids
+Message-ID: <202306201817.Cn7Xxzds-lkp@intel.com>
+References: <20230614154304.2860121-8-mshavit@google.com>
 MIME-Version: 1.0
-Message-ID: <b56904a4-16d6-4d56-becd-b25ec0f95d76@drhqmail201.nvidia.com>
-Date:   Tue, 20 Jun 2023 03:21:19 -0700
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF000015C9:EE_|LV2PR12MB6016:EE_
-X-MS-Office365-Filtering-Correlation-Id: 236b9394-d79e-468f-91d7-08db717820b7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qHNiieYg0f9MSJ9jnKWb2eEeSSZyVDDd8sngmuvv4yDAUV9DbB2gRRyWxbVYrylTEwrkJbTYqkQFTWLNajbx0BgQiP28EVL6x+vPdB+CCEj4dY8Y0hpap5j6z2GI5F4pdr9cVJiP1xKhf3lfFbCAeRtSTSbGJmzQg1O7eYyMffb46rrN3vxZMymrom6FrhMaGeQZSUlXbOygikSU0Y9I2Zq7c5mlOYjbxeadRxYveZzWUtBuOIm+9+iB+jlr64jMn1UG+MQmVvV9FElYzAGiU3Z5fiVvCl7wyOvtrwqSgmq+7EvnXwlcE+YtIiQEn692ItpOe1Y14Mv6y4xZR2iJ5A99tdPRm7UmmZRy8HTfr2qp7i93a8NlPCxu/LrFGxLFwxD2Kxhl2HasZR3i3cd/VgnPsNtTZVOhsqAIHrax69UdVyKOmpJa2lTxKEFYfcIsageVklS9J6iOgOhaxt/d9WjBt3JinkkEZMR5kXCyX7J1Aofu1SXaYTdDMgNj2G6t3mlyv9XJeKhqeMGN3IjcVU9UIFiiTv4kTvefGq3TVnSBGeozFOk0DnwFUUxe+Tx4Q1vhrOHJZwoWSlE9ybemZdjDu7uSS0enJHaGZ3vXQ6eFma/RpBlHutYxFXiQmNYyz7oBG/eYQ40Mck5l4Vd6lq0XnvYvKDranqS3q3/qpSDWwsN7MssJG1ZBVq7UukTz22pPm88x7O6+M26CNFTLyQ6w6I2ryRj2wzMtmvHKpod6hFlNspx0TjYYGc+GQezwDn3oEKMz8ILArZqpkvloE+qzWjVZwqOU0uCc3phuDgU=
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(376002)(136003)(39860400002)(451199021)(46966006)(40470700004)(36840700001)(4326008)(478600001)(54906003)(26005)(40460700003)(40480700001)(186003)(966005)(2906002)(8676002)(41300700001)(70586007)(70206006)(6916009)(316002)(5660300002)(8936002)(7416002)(31696002)(82310400005)(426003)(47076005)(86362001)(31686004)(336012)(356005)(7636003)(36860700001)(82740400003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 10:21:36.0722
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 236b9394-d79e-468f-91d7-08db717820b7
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: SA2PEPF000015C9.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB6016
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230614154304.2860121-8-mshavit@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Jun 2023 12:27:57 +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.35 release.
-> There are 166 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 21 Jun 2023 10:21:12 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.35-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Hi Michael,
 
-All tests passing for Tegra ...
+kernel test robot noticed the following build warnings:
 
-Test results for stable-v6.1:
-    11 builds:	11 pass, 0 fail
-    28 boots:	28 pass, 0 fail
-    130 tests:	130 pass, 0 fail
+[auto build test WARNING on b6dad5178ceaf23f369c3711062ce1f2afc33644]
 
-Linux version:	6.1.35-rc1-g1781b36a0958
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
-                tegra20-ventana, tegra210-p2371-2180,
-                tegra210-p3450-0000, tegra30-cardhu-a04
+url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Shavit/iommu-arm-smmu-v3-Move-ctx_desc-out-of-s1_cfg/20230614-234725
+base:   b6dad5178ceaf23f369c3711062ce1f2afc33644
+patch link:    https://lore.kernel.org/r/20230614154304.2860121-8-mshavit%40google.com
+patch subject: [PATCH v3 07/13] iommu/arm-smmu-v3: Keep track of attached ssids
+config: arm64-defconfig (https://download.01.org/0day-ci/archive/20230620/202306201817.Cn7Xxzds-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230620/202306201817.Cn7Xxzds-lkp@intel.com/reproduce)
 
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306201817.Cn7Xxzds-lkp@intel.com/
 
-Jon
+All warnings (new ones prefixed by >>):
+
+>> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:1863:5: warning: no previous prototype for 'arm_smmu_atc_inv_domain' [-Wmissing-prototypes]
+    1863 | int arm_smmu_atc_inv_domain(struct arm_smmu_domain *smmu_domain,
+         |     ^~~~~~~~~~~~~~~~~~~~~~~
+   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c: In function 'arm_smmu_attach_dev':
+   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:2456:31: error: 'struct arm_smmu_master' has no member named 'domain'
+    2456 |                         master->domain = NULL;
+         |                               ^~
+
+
+vim +/arm_smmu_atc_inv_domain +1863 drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+
+  1862	
+> 1863	int arm_smmu_atc_inv_domain(struct arm_smmu_domain *smmu_domain,
+  1864				    unsigned long iova, size_t size)
+  1865	{
+  1866		return arm_smmu_atc_inv_domain_ssid(smmu_domain, 0, iova, size);
+  1867	}
+  1868	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
