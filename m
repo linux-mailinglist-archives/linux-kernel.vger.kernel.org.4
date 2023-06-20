@@ -2,191 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B46736FCB
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 17:06:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F599736FD2
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 17:07:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233527AbjFTPGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 11:06:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39864 "EHLO
+        id S233552AbjFTPH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 11:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233495AbjFTPGt (ORCPT
+        with ESMTP id S233516AbjFTPHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 11:06:49 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2046.outbound.protection.outlook.com [40.107.95.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8887C100;
-        Tue, 20 Jun 2023 08:06:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZwQ5lj0d4lJKn0S/Z+BeqfvDuZUVuivQoMDyZzpE+fE/j1Ey+zi6xHonbHgnLpDDlRlgH9P9SR/2OeYscf/uy5uGyVy5jvd3AtNkv5Zag0uB/bXFthOZZ3ku/FRcOc4+iOOkf5m9k/HD3z4ngk+2/LZxRYQ65cSci9pC6eIoAmT2YBg9AbQUkXVPpVvbnQSt220jhZK0iwTAW1KLuxw00j6d0M3vyt0mND5ifAPOhxQoT6NXXgjhkj653opQhLtlWh7isTmDJTWIbKW+RkdD39SgsNjyVRaKgnyxANen1tfwdInJUIeAvrPSLlKN+snj3KW4F0VKazg/EuxjxgfCmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mXDuJpXj7WBrC+3ZFOfwgcI8vDJ1k/tMpgxHPBjlw4A=;
- b=gnIQJNV8a5jA9ZPomhMWWvHk6ErOtsBPhIAybYpoIq156paKt4RYVDNyC0PZOW0cdoNgiNHIf+bLprdtAbXP6GOCieFjaTbQRiLA51MFumpbsqoO3FkCO1V9cMUMltAd0C1d1t/Wd1udHqFVtaMIxQ/i2gvf9F1mMzUzsRO2chxLmBwukREg7snfBcmZao9+4UKvHhw0izrwdbA2ul5LqHusuIraWN7fSuFxwjRIpYBzXoYdNLlPzr4VeE85ALbG2Di1B67kKImsxe2G8y+Md3OdrP/qQin+sN/ELA53bNKiti/+n5Zx0YzxGvJiV3oYSRciuG/pWjQ5pxYFDwD7mQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mXDuJpXj7WBrC+3ZFOfwgcI8vDJ1k/tMpgxHPBjlw4A=;
- b=GqPAyY7oGAutKACDKKBMMwDDjRYB2k4O4JKoiTqvv3Lrdj8Ta6OrGjrLKK3eQQcwUh54wS+5GtSGgL6I2c/ep+OdSS4eQgt7rT0pB2OFKstEbcYJz0ffaZ8nW+WGp9iasRLWWpr5rGbndSTniMx9CPp0PFcEwqk7Hx/ECOitWus=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com (2603:10b6:4:b5::19) by
- SJ0PR12MB6733.namprd12.prod.outlook.com (2603:10b6:a03:477::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6521.21; Tue, 20 Jun 2023 15:06:44 +0000
-Received: from DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::8a7:d4dc:7ac8:9017]) by DM5PR12MB2504.namprd12.prod.outlook.com
- ([fe80::8a7:d4dc:7ac8:9017%5]) with mapi id 15.20.6500.036; Tue, 20 Jun 2023
- 15:06:43 +0000
-Date:   Tue, 20 Jun 2023 23:06:18 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Karny, Wyes" <Wyes.Karny@amd.com>,
-        "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
-        "Li, Sun peng (Leo)" <Sunpeng.Li@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/4] cpufreq: amd-pstate: Set a fallback policy based
- on preferred_profile
-Message-ID: <ZJHAatXe+iVzM/JS@amd.com>
-References: <20230615063225.4029929-1-perry.yuan@amd.com>
- <ZJG+Xhun1Ltw9ox/@amd.com>
- <bffb7ba1-c8cd-2653-94a6-e0b5cb52bc49@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bffb7ba1-c8cd-2653-94a6-e0b5cb52bc49@amd.com>
-X-ClientProxiedBy: SI2PR02CA0042.apcprd02.prod.outlook.com
- (2603:1096:4:196::19) To DM5PR12MB2504.namprd12.prod.outlook.com
- (2603:10b6:4:b5::19)
+        Tue, 20 Jun 2023 11:07:25 -0400
+Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AE718C
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 08:07:23 -0700 (PDT)
+Received: by mail-ua1-x92c.google.com with SMTP id a1e0cc1a2514c-78701841ccbso1770422241.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 08:07:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687273643; x=1689865643;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nu+Xr6h3aJ6hrDihAENTAwjE21lX4dsN0DdvvEc0zpY=;
+        b=4uNSAlI4tPJM+0kDEQ3Xs8m8o+h885+DYvUyEEqM1Q3xUaL/Zkac4rYDVD5VV3k69y
+         QnJ+X6pZflYUWAfDmGx3KQbOCUfSElOR8MWCOyxMQigZTQB0F5U/vXfgQz+nVHm7JgFe
+         zPxHHx0QiAS6zIRh5LTna1ZDaAT0LM1d3CYeqQBXg8Lvxt+HiMz1jiJCsSLDmHtZX11G
+         EpfV9JeKtWMhTkP+hF8WhgfPf+D0P5ODet5RxxWMwun9woKcQyCvPe794rr3cZawXdtp
+         J25Wo4tc74aotGpx3E9VgQhnLQmyiDFwzEmS7CM7u6MHsfy/y7YIEbkaEg3cgkWmLefz
+         C2+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687273643; x=1689865643;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nu+Xr6h3aJ6hrDihAENTAwjE21lX4dsN0DdvvEc0zpY=;
+        b=dYfkcGfwNmgcApzGV/Z6KtqZS/UN7NAEBuqkXCxvacgl0XET6q0h/tIkjEEdZY4Q4n
+         iX/xA0cPSWn+/izC9pYIT8p9Ses6OemUeKGis4r0ll+p1Vmwek5ywSxqF4eznu+qRtAz
+         LUw+G6nrDe8+5XGb+VhhsX5JtWbOXuiebRXEUv4xYbVnExSBb8dDDg9xy9MZ6OFyHw12
+         YID+mWi90GeNxn6GTotnlNe91B4bZkRZXdoTKlCQH77bYcfJMWrGAT5w3RRdggGnMRFs
+         y27tkk3qF9zkkikXoTohvAHB1R3Z/mphIA4ly+eTHjxyqnkT13ogaP8y3SPTszHnbtGS
+         u+IQ==
+X-Gm-Message-State: AC+VfDzOUbuIq4tHNfFbza/hWiG1S56PPxmdXpvao/VVRUxEyF4kSplK
+        J2C0VOmLSEhgQk3kIZFTtbUnd96tFnBryJ6U2adoTw==
+X-Google-Smtp-Source: ACHHUZ5vngzvnC7UegKxQKg2uyHGXDbhDi5IOIg/YI2HnKU4l09bZNgBzggiucC0ZQ4lI+/z7uZrliKEuxvWJA1puIM=
+X-Received: by 2002:a67:ce84:0:b0:440:b0eb:4fd7 with SMTP id
+ c4-20020a67ce84000000b00440b0eb4fd7mr3963408vse.23.1687273642685; Tue, 20 Jun
+ 2023 08:07:22 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR12MB2504:EE_|SJ0PR12MB6733:EE_
-X-MS-Office365-Filtering-Correlation-Id: 27214518-51f5-4d52-6c24-08db719ff517
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FyO/2Z8D5ZN/J0LMZkJGQIl7vfuqpJuIYSKeYMgoCyF0rncjkDkdQr/JMbtd68bxBigRot3c9BKCCOIU5XOWbe6bu4mc0Zp7r8ny6qrqmMf4VXc5lCjGFpHclYrAY5+/HanJxAj7CPwlQqPPaL0YDFAOx033JFmmCyUf7+i4m+954gAHHB6z6QIMYmXLvfve5+vBz9jBBrTikh4R/vWETCj8mQc2fca/xRUFjalXdhQKAWsX7RsPXK0jmkkJhX0OlmlXVl0aLmJmyNOqMsTuZtQtLGE0Sa34disXQbVdFuWdfWsdvRgzJseffa8UkT2uNTtkWTIA4KgWak7n67FTtTC94XIzIneo7moBFZbDUrGJWTT9T51eTcMCRc8daCfEsF3SfBqCk4FaWwYWjia9JqmjOQF3Y2lUpRyH+3pP/n0SkNtaPkL+lXc+UVTxRuT9ZF7ZFNsbl/ZBXMzAH7SYrmF9fN2aiNVsqugRxq4eGY74Nr3PuEzJ5B2ac0I5c6X9mC0OwRWWrs4Opr8K16mMXZmC7OwK11xxws/M4zfjHkQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR12MB2504.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(376002)(39860400002)(366004)(346002)(451199021)(2906002)(316002)(5660300002)(8936002)(4326008)(6636002)(41300700001)(6862004)(8676002)(37006003)(54906003)(66476007)(66556008)(66946007)(478600001)(966005)(6666004)(6486002)(6512007)(6506007)(186003)(2616005)(26005)(53546011)(83380400001)(38100700002)(36756003)(86362001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+xqtEyKoZMTNhWZTk/Ujz/tEVb0/vJX6sQkYvQkVG/22s1NuHpRoubFPmhfP?=
- =?us-ascii?Q?qVkHcQPCegJwtQ4yCmX5C++VnowwGo4bJtdiO7CjaG9B8YRBP/h4N6G+BdLF?=
- =?us-ascii?Q?jBpiNbcjajVQb+nb7HIgbDV8pBwBmQ9l67A9sOJHM6fC1ks6jRGLzo/VZGBJ?=
- =?us-ascii?Q?ObRhKW09FoOcRUx3+Is4m23e4TqILbb2hHAW39d3U6nVww+RPVTJhDSEgDvz?=
- =?us-ascii?Q?yQC+CcROb2HCl1Wr5aclpWDwoYU8NDHnaTtQm8F8IXdHLzyt71pzHc5SPKmi?=
- =?us-ascii?Q?UtbL76+xuSWcJlMcSyAKq5t/qx38VUz7nwObhjZDejUr4mk2DjhiVMakPYxX?=
- =?us-ascii?Q?58ryVN56DC2FqLj6YJTJ9knICt8ySEY920EcXRfx169CxX9p+5wO/UIDrpZ/?=
- =?us-ascii?Q?evL/9/5w/IbrlNjHEl+v8OD62hDLq3OTAh/BJPx6Zoo1wzvWYLo9X/lSx0a5?=
- =?us-ascii?Q?TBmDga82vobhXUkFs6P6T5qNEa0tLkQ5dec8e0G415jbq31kTPlhmaTFzf5r?=
- =?us-ascii?Q?lQySVc6yt3hMlMRjNX/g5c/R3K3StY6jYIAmoe9YTrTr1UAG1CxmMj9Kb4xJ?=
- =?us-ascii?Q?HutiCmYzNtS3C1ppW/mIuF7Tgy/rDcLwKdJepWEji13CUMbjFhPUaGVSXCj/?=
- =?us-ascii?Q?731pjpzStYX4bbpy6ghaf9nnHz7YafDNuOuNk5n5OFsOgxaipsUhI7DIhXGo?=
- =?us-ascii?Q?0AuBSYpGzkUtmNxt2KYaPylGcoNEKIEcIORusoTVNkc2BNAC5yxc8+Ze13MG?=
- =?us-ascii?Q?DmkEjZHBtTBEso5JZ5RHySuP4TXQtUdFDETPtm5oE/nq5kFKB3CpkM5UGpIX?=
- =?us-ascii?Q?E+53alHGZliLBIZL8o9+0t2UVyZHsYYOwE3VqHw6elSfraR2i7NTmdH6ZjPV?=
- =?us-ascii?Q?x+17Dv/71ChHAgeqwAuKbUOhLikjz9iU92xbMNtoSqQlIt9ovAwazB5q4Lcp?=
- =?us-ascii?Q?ll7Rjg3ndUJE298MI4zP+sLz+9EPNiQd6SUWHbFxVnHl91UG1YDCM1U4gM9/?=
- =?us-ascii?Q?9gN/8izAw9rA3XsZPHSBszU63avbEPivguyt0WMH79TyEX0OkowbLwLiZx8F?=
- =?us-ascii?Q?0jT+ZbY/RmRTiIdzoO4/JKtKNaYbfqb/6esvUeiICUqs2TntoQHumCLPkVHE?=
- =?us-ascii?Q?WF3OG6JnTOUaiM9Oexh4I8WkO6FxImhiEVtklgYvzQoNvNQZLMJueGCHA96d?=
- =?us-ascii?Q?j0A1R8Jv1/S0T2Z5Qf+II6tOw3++6bETXHVweM6nhp9bcLeME1Umn9h94Lwg?=
- =?us-ascii?Q?e1y6muubSZ3iCXnYWpEKRVRzpuAaVjnKSSWeZ7GbUft4kfPBq4WD64ZUoz1D?=
- =?us-ascii?Q?3GcZ3Cv4tMSgHZe8V5dA0GU6alqRJ3qrv4RGDNzmtDmE6cIY+vSh+nXiYUWk?=
- =?us-ascii?Q?1T4pyD2y7BAIA93477WhWUmsb1iZXGReB2a6iM0D/ST6bvzPMjuQTPsp9eG6?=
- =?us-ascii?Q?EARDDte8Jy3CA3lAg3lAz8gDb9hvXqrcPLJkxxq2DUlgW6wrv2ivvxoHosPi?=
- =?us-ascii?Q?1qLIgks+DMDtnkEfKjgNAyXOhWwGIg93L2GIUGAgAloIrQwvm5NfjFq3K7Dj?=
- =?us-ascii?Q?p7v/NJ83ORmR0JbPlQd97f9/61AHGn30x3ZWjnjt?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 27214518-51f5-4d52-6c24-08db719ff517
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR12MB2504.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 15:06:43.0092
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +TFUdre8/USsGwUq2CMShDCtMm7EQ7zBu4PxKrki+DYX4AmgYhjLVcHQUXZEBd1Q97O5yirEmark2RB0toxiVw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6733
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230615145607.3469985-1-revest@chromium.org> <CAEf4BzbjCt3tKJ40tg12rMjCLXrm7UoGuOdC62vGnpTTt8-buw@mail.gmail.com>
+ <CABRcYmK=yXDumZj3tdW7341+sSV1zmZw1UpQkfSF6RFgnBQjew@mail.gmail.com>
+ <c26de68d-4a56-03a0-2625-25c7e2997d45@meta.com> <CAKwvOdnehNwrDNV5LvBBwM=jqPJvL7vB9HwF0YU-X5=zbByrmg@mail.gmail.com>
+ <6b63301f-96b2-74b9-c156-3a34fb5ad346@meta.com>
+In-Reply-To: <6b63301f-96b2-74b9-c156-3a34fb5ad346@meta.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Tue, 20 Jun 2023 11:07:10 -0400
+Message-ID: <CAKwvOdna=1Sg4Aab=BE6F86H9ZE7kPRM=VTkqQuGiF-Jdze-cA@mail.gmail.com>
+Subject: Re: [PATCH bpf] bpf/btf: Accept function names that contain dots
+To:     Yonghong Song <yhs@meta.com>
+Cc:     Florent Revest <revest@chromium.org>,
+        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, martin.lau@linux.dev, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
+        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
+        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
+        nathan@kernel.org, trix@redhat.com, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 11:02:00PM +0800, Limonciello, Mario wrote:
-> 
-> On 6/20/2023 9:58 AM, Huang Rui wrote:
-> > On Thu, Jun 15, 2023 at 02:32:25PM +0800, Yuan, Perry wrote:
-> >> From: Mario Limonciello <mario.limonciello@amd.com>
+On Tue, Jun 20, 2023 at 10:53=E2=80=AFAM Yonghong Song <yhs@meta.com> wrote=
+:
+>
+>
+>
+> On 6/20/23 7:38 AM, Nick Desaulniers wrote:
+> > 3. you did not run defconfig/menuconfig to have kconfig check for
+> > DWARFv5 support.
+>
+> Yes, I didn't run defconfig/menuconfig.
+
+That doesn't mean the odd combo of clang+gas doesn't work.
+
+Just like how using scripts/config is a hazard since it also doesn't
+run kconfig and allows you to set incompatible configurations. Garbage
+in; garbage out.
+
+>
+> >
+> > The kconfigs should prevent you from selecting DWARFv5 if your
+> > toolchain combination doesn't support it; if you run kconfig.
+> >
+> >> /tmp/video-bios-59fa52.s:4: Error: file number less than one
+> >> /tmp/video-bios-59fa52.s:5: Error: junk at end of line, first
+> >> unrecognized character is `"'
+> >> /tmp/video-bios-59fa52.s:6: Error: junk at end of line, first
+> >> unrecognized character is `"'
+> >> /tmp/video-bios-59fa52.s:7: Error: junk at end of line, first
+> >> unrecognized character is `"'
+> >> /tmp/video-bios-59fa52.s:8: Error: junk at end of line, first
+> >> unrecognized character is `"'
+> >> /tmp/video-bios-59fa52.s:9: Error: junk at end of line, first
+> >> unrecognized character is `"'
+> >> /tmp/video-bios-59fa52.s:10: Error: junk at end of line, first
+> >> unrecognized character is `"'
+> >> /tmp/video-bios-59fa52.s:68: Error: junk at end of line, first
+> >> unrecognized character is `"'
+> >> clang: error: assembler command failed with exit code 1 (use -v to see
+> >> invocation)
+> >> make[4]: *** [/home/yhs/work/bpf-next/scripts/Makefile.build:252:
+> >> arch/x86/realmode/rm/video-bios.o] Error 1
+> >> make[4]: *** Waiting for unfinished jobs....
+> >> /tmp/wakemain-88777c.s: Assembler messages:
+> >> /tmp/wakemain-88777c.s:4: Error: junk at end of line, first unrecogniz=
+ed
+> >> character is `"'
+> >> /tmp/wakemain-88777c.s:4: Error: file number less than one
+> >> /tmp/wakemain-88777c.s:5: Error: junk at end of line, first unrecogniz=
+ed
+> >> character is `"'
+> >> /tmp/wakemain-88777c.s:6: Error: junk at end of line, first unrecogniz=
+ed
+> >> character is `"'
+> >> /tmp/wakemain-88777c.s:7: Error: junk at end of line, first unrecogniz=
+ed
+> >> character is `"'
+> >> /tmp/wakemain-88777c.s:8: Error: junk at end of line, first unrecogniz=
+ed
+> >> character is `"'
+> >> /tmp/wakemain-88777c.s:81: Error: junk at end of line, first
+> >> unrecognized character is `"'
+> >> /tmp/wakemain-88777c.s:312: Error: junk at end of line, first
+> >> unrecognized character is `"'
+> >> clang: error: assembler command failed with exit code 1 (use -v to see
+> >> invocation)
 > >>
-> >> If a user's configuration doesn't explicitly specify the cpufreq
-> >> scaling governor then the code currently explicitly falls back to
-> >> 'powersave'. This default is fine for notebooks and desktops, but
-> > May I know if the processor is powerful desktop such as threadripper,
-> > whether it will be default to 'performance' or 'powersave'?
-> It's currently defaulting to 'powersave' for desktops and
-> workstations.
-> 
-> Do you think we should adopt performance for these?
+> >> Potentially because of my local gnu assembler 2.30-120.el8 won't work
+> >
+> > It's recorded in lib/Kconfig.debug that 2.35.2 is required for DWARFv5
+> > support if you're using GAS.  My machine has 2.40.
+> >
+> >> with some syntax generated by clang. Mixing clang compiler and arbitra=
+ry
+> >> gnu assembler are not a good idea (see the above example). It might
+> >
+> > I agree, but for older branches of stable which are still supported,
+> > we didn't quite have clang assembler support usable.  We still need to
+> > support those branches of stable.
+>
+> Thanks Florent pointing out 5.10 stable kernels which have this issue.
 
-Yes, I didn't see any different use cases here between server and
-threadripper here. Or I missed anything?
+No, all kernels have this issue, when using `LLVM=3D1 LLVM_IAS=3D0`.  It's
+more likely that someone is using that combination for branches of
+stable that predate 4.19 (such as 4.14) but we do still try to support
+that combination somewhat, even if we recommend just using `LLVM=3D1`.
+Interop between toolchains is still important, even if "why would you
+do that?"
 
-Do we have a way to separate them?
+> I am okay with backporting to old stable kernels if that is needed.
+> But the patch going to bpf-next should not have a bug-fix tag and
+> the patch commit message can be tweaked for backport to 5.10 though.
+>
+> >
+> >> work with close-to-latest gnu assembler.
+> >>
+> >> To support function name like '<fname>.isra', some llvm work will be
+> >> needed, and it may take some time.
+> >>
+> >> So in my opinion, this patch is NOT a bug fix. It won't affect distro.
+> >> Whether we should backport to the old kernel, I am not sure whether it
+> >> is absolutely necessary as casual build can always remove LLVM_IAS=3D0=
+ or
+> >> hack the kernel source itself.
+> >
+> >
+> >
 
+
+
+--=20
 Thanks,
-Ray
-
-> 
-> >
-> > Thanks,
-> > Ray
-> >
-> >> servers and undefined machines should default to 'performance'.
-> >>
-> >> Look at the 'preferred_profile' field from the FADT to set this
-> >> policy accordingly.
-> >>
-> >> Link: https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/05_ACPI_Software_Programming_Model/ACPI_Software_Programming_Model.html#fixed-acpi-description-table-fadt
-> >> Suggested-by: Wyes Karny <Wyes.Karny@amd.com>
-> >> Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-> >> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> >> ---
-> >>   drivers/cpufreq/amd-pstate.c | 7 +++++--
-> >>   1 file changed, 5 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> >> index ddd346a239e0..c9d296ebf81e 100644
-> >> --- a/drivers/cpufreq/amd-pstate.c
-> >> +++ b/drivers/cpufreq/amd-pstate.c
-> >> @@ -1102,10 +1102,13 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
-> >>   	policy->max = policy->cpuinfo.max_freq;
-> >>   
-> >>   	/*
-> >> -	 * Set the policy to powersave to provide a valid fallback value in case
-> >> +	 * Set the policy to provide a valid fallback value in case
-> >>   	 * the default cpufreq governor is neither powersave nor performance.
-> >>   	 */
-> >> -	policy->policy = CPUFREQ_POLICY_POWERSAVE;
-> >> +	if (acpi_pm_profile_server() || acpi_pm_profile_undefined())
-> >> +		policy->policy = CPUFREQ_POLICY_PERFORMANCE;
-> >> +	else
-> >> +		policy->policy = CPUFREQ_POLICY_POWERSAVE;
-> >>   
-> >>   	if (boot_cpu_has(X86_FEATURE_CPPC)) {
-> >>   		ret = rdmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ, &value);
-> >> -- 
-> >> 2.34.1
-> >>
+~Nick Desaulniers
