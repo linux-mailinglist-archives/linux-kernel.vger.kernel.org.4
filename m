@@ -2,198 +2,437 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3CD0736D9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:43:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1587736DA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232586AbjFTNnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 09:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43022 "EHLO
+        id S232766AbjFTNn5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Jun 2023 09:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbjFTNnm (ORCPT
+        with ESMTP id S233070AbjFTNnw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 09:43:42 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9DFFC
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:43:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687268622; x=1718804622;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=wJFT45mXHu2VYSBTid4Fx2G7pBq4rpZdnv2B9GIjYAw=;
-  b=oAseMAdAW8x4RmlF/NH2y831zUbzY5drQl57ZJtoz72M5iUkdxyzDDnx
-   p2FBT/ALmKB9UO78Ly6lweqlWBaDRKg+F2d3LpMNsW28+X1z6z+f9AAY7
-   j+8geXd2JYVg+UiY0z01otNRuWsHMklS7RdJVL+Cxwm64jHhJcIPxsPCS
-   20uYzL0XFfJMPo5BiT9xgEeG52M0E9T6F/RSCwE/VEnEo2i4weIN7sC86
-   MX9wndeKEhYV5PzhEelzGe3fO2WrFs1GCYIKgCFuM9GfPaSgEdxl7UMJ+
-   +ZPRbzwCoMfoexRY/ItAMx/nhxK/v/CWTjYsM7q6YKb40Vio5Dj8fw6WP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="446235004"
-X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
-   d="scan'208";a="446235004"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 06:43:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="743788080"
-X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
-   d="scan'208";a="743788080"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga008.jf.intel.com with ESMTP; 20 Jun 2023 06:43:40 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 20 Jun 2023 06:43:40 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 20 Jun 2023 06:43:40 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 20 Jun 2023 06:43:40 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.43) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 20 Jun 2023 06:43:40 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Rw4PwNL60/fljLpEXNz1Po+O5raul9IsvbQR3BLvK7+CztHSI5CLXVGSKwuwthg1Wmd+RVazbUqwhLvUAQL3DqLpMfauktvij6fFmB3jHCKZAUG6WLsVY0cTaoqhm4KAjzydNT61F6xFitANuZ4MQSYy7Gt/cwDCq2bltBLvPZeKe2dc8IAs53czNZGsEQZAwV+4Yq1YUfMWcTnDO8UfiGDTb7xYN8J1MX+C+jJT0zu1qDyPf6lXDimoLdkk8UXcK6Tp9yMM3zDx6qZIQE5ggzo7FCcxNddksWWcQUFGEFTvT3A4V1BU/oOldhyHkfEZ9WP1vNLpPPb+r2DmHYGoLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=suEmMTw4eS6QBQuN60SUo9m6DdYo6YkiUJInAX+Ys5M=;
- b=hRA+7DWyjVeavpfOk+Bc7i3LzEgh3Br2GuCqkmuOEG+91aOHt07y08sYx5d0RnKLjOgOjq/L4NjMBZ29Ww0AodC0FM7ioDyRNbBncCMRek6ip4ka1a8+skj/OKEFKsWGCpdmvIqbNrl8YdL7n2osrPNQQb25+08xIxZoRBDQFRftsK6TZKtV16VLavwye6fIfPcxC7ZxcVNXTWgdRxeFvBiIR+LLDGm84x96zAjEePdJkDHAqDVxCkrKyEmUHG63PFR0gHSwz2SNo9SVrZ5ssGn3sMobrSx8eVFj0NyESyb6TjvELVEXgcVroodcrNdIyeeq5v53MqnIrO1akzQsyA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
- by BN9PR11MB5452.namprd11.prod.outlook.com (2603:10b6:408:101::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Tue, 20 Jun
- 2023 13:43:38 +0000
-Received: from SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::7237:cab8:f7f:52a5]) by SA1PR11MB6733.namprd11.prod.outlook.com
- ([fe80::7237:cab8:f7f:52a5%7]) with mapi id 15.20.6500.036; Tue, 20 Jun 2023
- 13:43:38 +0000
-Date:   Tue, 20 Jun 2023 06:43:31 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, <dan.j.williams@intel.com>,
-        <vishal.l.verma@intel.com>, <dave.jiang@intel.com>,
-        <ira.weiny@intel.com>, <oohall@gmail.com>,
-        <aneesh.kumar@linux.ibm.com>
-CC:     <nvdimm@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: [PATCH] libnvdimm/of_pmem: Add check and kfree for kstrdup
-Message-ID: <6491ad03658ff_28e7294a5@iweiny-mobl.notmuch>
-References: <20230619033623.11044-1-jiasheng@iscas.ac.cn>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230619033623.11044-1-jiasheng@iscas.ac.cn>
-X-ClientProxiedBy: BY5PR17CA0014.namprd17.prod.outlook.com
- (2603:10b6:a03:1b8::27) To SA1PR11MB6733.namprd11.prod.outlook.com
- (2603:10b6:806:25c::17)
+        Tue, 20 Jun 2023 09:43:52 -0400
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1EB1703;
+        Tue, 20 Jun 2023 06:43:48 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-51a519843c8so553857a12.0;
+        Tue, 20 Jun 2023 06:43:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687268627; x=1689860627;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uVp5pstIXGggt7mxpnMI6k+vZptERvNDTg9t7gTgbzM=;
+        b=OrJ376uLykT9u6FZHGe6XTMbLqRwczY9TNUqovwUsboxHIsYTlbJAx7s1t4Nv2xmKb
+         wa/S7d4VrpN808pqR90W//OHtUSYpJQ7NAlfPzLLL5XSePD3txdPUQob3dslWZsZyOvt
+         rTub4tBsdHayvJsxqep6ZhgM8GBuf/xV5YFTk+TELziaQ0m2cWMoBXicX00IYayg/3Lu
+         qN++nN2uz/b2XWuUuQoKj4JYQA197j9Ldb51BEkxX7gGytiGZOKWcvk2tdBYOdGoepZX
+         Ku8NS/RhNZh723CSGPuiWIBIYorFSf052hB45MuG+pfcQbIUkcijKiNONlS7w6GhduQU
+         t/xQ==
+X-Gm-Message-State: AC+VfDzaVr/GsWGxDW+5lZHo47sPU09XdNZQMrOUg37IcIAWr4N/ref6
+        63yXHoP4JHZSBgOiv54KBOr03tK1jPoKo1PK3/1N4U/I
+X-Google-Smtp-Source: ACHHUZ77z1p5CSny6QkjJnU4C94TtXha+TA+OW0CuRCPl1NwPUwKGTyNlx4KcXit2I/LBOtPlJcNsmKUhfVgbR6f2rs=
+X-Received: by 2002:a17:906:244:b0:974:ae1d:ad0b with SMTP id
+ 4-20020a170906024400b00974ae1dad0bmr8837802ejl.3.1687268627206; Tue, 20 Jun
+ 2023 06:43:47 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|BN9PR11MB5452:EE_
-X-MS-Office365-Filtering-Correlation-Id: 14f25aee-440c-47ff-20dc-08db719459d9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WUtP9SOHT2iFXkQ9COQuPwMNPXUPasHBfJ/uG+hlptWIrIbaWzPt9DDVNSUdefSHZuQpnS0tZkBjtkYua4QtjQgo9Hi9hdaaPjKWkUacjUr6RfEPlu0uwL+p3mHREiMDe2o7aSZx0IhYcmnJRUoYsQRma1AIgP6yeD/aV9yaTIwJjOJktoBMmh3w/FW2Xy8BbXKA7rvXQEcdx4IwBNMv3UrSk0TQ4skNwSFUFn/ADngaKPw38RD1kRwyNn+w7ysgsv4xWPedd8KGdqj3crVMwuUxqxkgyWHL7+Aw36V/fL3519c7S+zWutXdDGaZkJQsjTFns77t6F0X96wgyOOnN1pS9nwwgQ2BS3J4akalRt+OMl8Yh6/5Noemnslm8DaMH1foNQfJAVZ8buWgc11pUaclUh66xA05ZyR50u3ERNq3pjRpFsfUzAHDbXldZ66RWuCYDDR4cfttRypzKOb9X/3agtCH2FxblGbxpgiFQEX/ki7PyNxAYegFaYtN8PlR0ZDIPuwKldoymUVdRJ2AgEPXFsam+OzHc9C4cY+biG/YinYTSzv2x30IisUIvUQK
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(136003)(346002)(366004)(396003)(376002)(451199021)(6666004)(6486002)(478600001)(83380400001)(186003)(9686003)(6512007)(6506007)(26005)(38100700002)(86362001)(82960400001)(8676002)(5660300002)(8936002)(316002)(2906002)(41300700001)(4326008)(66476007)(66556008)(66946007)(44832011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sDkd815OyUBThUPoHwn771XYtbfeufAV75MebyeA8Bg4jbQd0TinDKpt2Lk/?=
- =?us-ascii?Q?8PqxvUxWnNpF1a3/WKWXv8sfT+UJBhTTGsYTXrERdhshjDuGehr2vv6p2DnX?=
- =?us-ascii?Q?gs9t+u0+jEu2XuiIXU2EC1ETWt+S7At3d+0W5s5e+F7h6XcRWFCMRRj1V45A?=
- =?us-ascii?Q?70hUJ9pbkW/RK6+9TaddNHM2nFiKnPIm2IqY4lz9WASkYBMLvfE115CnxIL3?=
- =?us-ascii?Q?ncLlXc5Y6Vn7cDP2OmarxPfwgHeEwz1G7Nav19Sbr+rPTqu4cw3nMEhyeZ6A?=
- =?us-ascii?Q?t5CKASaabIYfvs/znJ2AdHe16c64B//kYv4p0Hu6xlkg+cTaoCAV+IK37BIK?=
- =?us-ascii?Q?OrIwTi5W5Kw5YMe0do+SRgHfkJ1DYdNIIcGvlYYPpln9fqlFQvlvDQ4d5sFg?=
- =?us-ascii?Q?8xa8B7vMEAw+JC5wxYaRcTF5yJUd4540/SQg12y+ZHoIHlQBBwzQmoLzWgSs?=
- =?us-ascii?Q?2otYjLtZckMCSzNaRSVsIeBg07RbWiAJewIKh17Oz7yMhEfOcXvbvf1QToaq?=
- =?us-ascii?Q?u2eT/n/PrTpOSx9WfDdlWpSEGdy37rrv0u6SFTsa7jIcLJaco8aQg/QhS4sV?=
- =?us-ascii?Q?A9K11f1MTnXZeRG/rNbDALyL5EM/2i+705Oqed5FLkA6S9FBbFEOHq8s26ls?=
- =?us-ascii?Q?UWFOQ9w0FRl9gr7jaLuduVhPtJnmiHrr5KB+Xr8EbWJqyXHscqrcW0ArG3v8?=
- =?us-ascii?Q?AzJ1zI98XjzrNXHncXPqo26HLvTeEWwc16q5DQHRg1ALFw4Erzb/TFo5LA6s?=
- =?us-ascii?Q?KszyYJkAIhXEm/1dPgfBKEXy7Ri6D/RScU5t9O24nsLykxAmWj+B/t23tR41?=
- =?us-ascii?Q?At3/FZRuLanAfiGxs7oJ/OxMqkmUiYe7Ue7JF+ODFO2NjacG8t72NxbbnEd8?=
- =?us-ascii?Q?Te0O+nC75NgRvN/9ZgGgUndN0UOjutzJ9/XTpTm3P2YEGd+3Oa5/DOhXgji4?=
- =?us-ascii?Q?yrjvGhWr8bykCWXAXOkP3P0KiGjcs0k/bs2kYVwUgsH9EQ4QgpuY+4LnrkUu?=
- =?us-ascii?Q?smWhlHyke5ZVuYrzRnUgzIMOkJO8cf8ZPzisD46hm4Hmkf3CmIff1IKSfQ94?=
- =?us-ascii?Q?FudVjA1GW3wrDgPTrwFZF9S9gJi1rV7n2z/bHiHMAYMo0PYd82N9mrxHndAb?=
- =?us-ascii?Q?ht1YV+PW1zpisqZt15cV4MjB8T5aBRD3+xMY3W4M/d3Q6ewS7++JzLp6GQH+?=
- =?us-ascii?Q?zFiZRTTf9RHrunsIAOb6iRLBMnCuWxwfTM0p2PU/eN4Vv5oDjKIB8ht1aDI+?=
- =?us-ascii?Q?Y+b+XOXWd1rijDorUJie80o5pb8uyaEZcbvNeqwl4WlNCEeHofr8wmMx0G3j?=
- =?us-ascii?Q?xLTb4aOjVg2lRcN54C0pt+/XP3sXwFWA48PSThikZ0cwtCtoPKhQYi68DWZ+?=
- =?us-ascii?Q?ix304T1bQSW42BRKD/9IGHG5DHRqzlucFyOiNf4YcARbSp6GCFwXU50omn0j?=
- =?us-ascii?Q?JkwkgXBG9A8itJBsfvJ880lI/4j6bmQcXOqry1VAudjYou9X/IbjWpbI5DEf?=
- =?us-ascii?Q?CLuLqeb8QUYy/+g6+qSWVZwjAAzMh0DOOuHgsWaQKnR951StxSwGyMA1tV87?=
- =?us-ascii?Q?e6/Cm/Su4dncbBR13h1Iqn9H3lEG6Y2b0kF9QMK5?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 14f25aee-440c-47ff-20dc-08db719459d9
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 13:43:38.3250
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9P0vehPMRW0y2eT+TzuN9/IvKqzgVqGh+EzG+RDQFjbo9Lm4aX2VrUhf3acOFyapnHotAzu/c3JZRsAzvt5f1w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5452
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230519032719.2581689-1-evalenti@kernel.org> <20230519032719.2581689-2-evalenti@kernel.org>
+In-Reply-To: <20230519032719.2581689-2-evalenti@kernel.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 20 Jun 2023 15:43:35 +0200
+Message-ID: <CAJZ5v0j6-c5Jb1E+ZvFTasoTrUThaq_mxdm44sGnA5XdsJTBsQ@mail.gmail.com>
+Subject: Re: [PATCH 1/7] thermal: stats: track time each dev changes due to tz
+To:     Eduardo Valentin <evalenti@kernel.org>
+Cc:     eduval@amazon.com, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jiasheng Jiang wrote:
-> Add check for the return value of kstrdup() and return the error
-> if it fails in order to avoid NULL pointer dereference.
-> Moreover, use kfree() in the later error handling in order to avoid
-> memory leak.
-> 
-> Fixes: 49bddc73d15c ("libnvdimm/of_pmem: Provide a unique name for bus provider")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+On Fri, May 19, 2023 at 5:27 AM Eduardo Valentin <evalenti@kernel.org> wrote:
+>
+> From: Eduardo Valentin <eduval@amazon.com>
+>
+> This patch improves the current cooling device
+> statistics by adding a new file under
+> cdev/stats/time_in_thermal_zone_ms
+> to represent the time in milliseconds
+> that the cooling device was driven by each
+> associated thermal zone.
+
+Can you please explain the use case addressed by this?
+
+>
+> The file format is:
+> thermal_zone: <type> <time_in_ms>
+
+So there is the "one value per sysfs attribute" rule ...
+
+> Samples:
+> $ cat /sys/class/thermal/cooling_device0/stats/time_in_thermal_zone_ms
+> thermal_zone: amb0      117496
+>
+> Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
+> Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
+> Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
+> Cc: Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
+> Cc: Jonathan Corbet <corbet@lwn.net> (maintainer:DOCUMENTATION)
+> Cc: linux-pm@vger.kernel.org (open list:THERMAL)
+> Cc: linux-doc@vger.kernel.org (open list:DOCUMENTATION)
+> Cc: linux-kernel@vger.kernel.org (open list)
+>
+> Signed-off-by: Eduardo Valentin <eduval@amazon.com>
 > ---
->  drivers/nvdimm/of_pmem.c | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/drivers/nvdimm/of_pmem.c b/drivers/nvdimm/of_pmem.c
-> index 10dbdcdfb9ce..fe6edb7e6631 100644
-> --- a/drivers/nvdimm/of_pmem.c
-> +++ b/drivers/nvdimm/of_pmem.c
-> @@ -31,11 +31,17 @@ static int of_pmem_region_probe(struct platform_device *pdev)
->  		return -ENOMEM;
->  
->  	priv->bus_desc.provider_name = kstrdup(pdev->name, GFP_KERNEL);
-> +	if (!priv->bus_desc.provider_name) {
-> +		kfree(priv);
-> +		return -ENOMEM;
-> +	}
+>  .../driver-api/thermal/sysfs-api.rst          |   2 +
+>  drivers/thermal/thermal_core.c                |   2 +-
+>  drivers/thermal/thermal_core.h                |   5 +
+>  drivers/thermal/thermal_helpers.c             |  11 +-
+>  drivers/thermal/thermal_sysfs.c               | 128 +++++++++++++++++-
+>  5 files changed, 139 insertions(+), 9 deletions(-)
+>
+> diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation/driver-api/thermal/sysfs-api.rst
+> index 6c1175c6afba..caa50d61a5bc 100644
+> --- a/Documentation/driver-api/thermal/sysfs-api.rst
+> +++ b/Documentation/driver-api/thermal/sysfs-api.rst
+> @@ -367,6 +367,8 @@ Thermal cooling device sys I/F, created once it's registered::
+>      |---stats/time_in_state_ms:        Time (msec) spent in various cooling states
+>      |---stats/total_trans:     Total number of times cooling state is changed
+>      |---stats/trans_table:     Cooling state transition table
+> +    |---stats/time_in_thermal_zone_ms: Time that this cooling device was driven
+> +                                each associated thermal zone.
+
+I think that "by" is missing from the above description, but in any
+case I'm not quite sure what exactly it means.
+
+A cooling device may be shared by multiple thermal zones which is what
+instances are for IIUC, so is this going to measure how much time the
+given thermal zone was that caused the cdev to stay in the given
+state?  Like say there are two thermal zone sharing a cdev and one of
+them says "don't care" and the other says "turn on", so the second one
+causes the cdev to enter the "on" state?
+
+But what if both thermal zones in this example say "turn on"?
+
+>  Then next two dynamic attributes are created/removed in pairs. They represent
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 842f678c1c3e..4bb77af6a6f4 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -1078,7 +1078,7 @@ void thermal_cooling_device_update(struct thermal_cooling_device *cdev)
+>         if (cdev->ops->get_cur_state(cdev, &state) || state > cdev->max_state)
+>                 goto unlock;
+>
+> -       thermal_cooling_device_stats_update(cdev, state);
+> +       thermal_cooling_device_stats_update(cdev, NULL, state);
+>
+>  unlock:
+>         mutex_unlock(&cdev->lock);
+> diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
+> index 3d4a787c6b28..3cce60c6e065 100644
+> --- a/drivers/thermal/thermal_core.h
+> +++ b/drivers/thermal/thermal_core.h
+> @@ -102,6 +102,9 @@ struct thermal_instance {
+>         struct list_head cdev_node; /* node in cdev->thermal_instances */
+>         unsigned int weight; /* The weight of the cooling device */
+>         bool upper_no_limit;
+> +#if IS_ENABLED(CONFIG_THERMAL_STATISTICS)
+> +       ktime_t time_in; /* time spent in this instance */
+> +#endif
+>  };
+>
+>  #define to_thermal_zone(_dev) \
+> @@ -137,10 +140,12 @@ ssize_t weight_store(struct device *, struct device_attribute *, const char *,
+>
+>  #ifdef CONFIG_THERMAL_STATISTICS
+>  void thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
+> +                                        struct thermal_instance *instance,
+>                                          unsigned long new_state);
+>  #else
+>  static inline void
+>  thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
+> +                                   struct thermal_instance *instance,
+>                                     unsigned long new_state) {}
+>  #endif /* CONFIG_THERMAL_STATISTICS */
+>
+> diff --git a/drivers/thermal/thermal_helpers.c b/drivers/thermal/thermal_helpers.c
+> index cfba0965a22d..ec8e86394977 100644
+> --- a/drivers/thermal/thermal_helpers.c
+> +++ b/drivers/thermal/thermal_helpers.c
+> @@ -149,18 +149,19 @@ int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
+>  EXPORT_SYMBOL_GPL(thermal_zone_get_temp);
+>
+>  static void thermal_cdev_set_cur_state(struct thermal_cooling_device *cdev,
+> +                                      struct thermal_instance *target_instance,
+>                                        int target)
+>  {
+>         if (cdev->ops->set_cur_state(cdev, target))
+>                 return;
+>
+>         thermal_notify_cdev_state_update(cdev->id, target);
+> -       thermal_cooling_device_stats_update(cdev, target);
+> +       thermal_cooling_device_stats_update(cdev, target_instance, target);
+>  }
+>
+>  void __thermal_cdev_update(struct thermal_cooling_device *cdev)
+>  {
+> -       struct thermal_instance *instance;
+> +       struct thermal_instance *instance, *target_instance = NULL;
+>         unsigned long target = 0;
+>
+>         /* Make sure cdev enters the deepest cooling state */
+> @@ -169,11 +170,13 @@ void __thermal_cdev_update(struct thermal_cooling_device *cdev)
+>                         instance->tz->id, instance->target);
+>                 if (instance->target == THERMAL_NO_TARGET)
+>                         continue;
+> -               if (instance->target > target)
+> +               if (instance->target > target) {
+>                         target = instance->target;
+> +                       target_instance = instance;
+> +               }
+>         }
+>
+> -       thermal_cdev_set_cur_state(cdev, target);
+> +       thermal_cdev_set_cur_state(cdev, target_instance, target);
+>
+>         trace_cdev_update(cdev, target);
+>         dev_dbg(&cdev->device, "set to state %lu\n", target);
+> diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+> index 6c20c9f90a05..a3b71f03db75 100644
+> --- a/drivers/thermal/thermal_sysfs.c
+> +++ b/drivers/thermal/thermal_sysfs.c
+> @@ -632,7 +632,7 @@ cur_state_store(struct device *dev, struct device_attribute *attr,
+>
+>         result = cdev->ops->set_cur_state(cdev, state);
+>         if (!result)
+> -               thermal_cooling_device_stats_update(cdev, state);
+> +               thermal_cooling_device_stats_update(cdev, NULL, state);
+>
+>         mutex_unlock(&cdev->lock);
+>         return result ? result : count;
+> @@ -661,6 +661,7 @@ static const struct attribute_group *cooling_device_attr_groups[] = {
+>  };
+>
+>  #ifdef CONFIG_THERMAL_STATISTICS
+> +/* thermal cooling device statistics handling */
+>  struct cooling_dev_stats {
+>         spinlock_t lock;
+>         unsigned int total_trans;
+> @@ -668,9 +669,29 @@ struct cooling_dev_stats {
+>         ktime_t last_time;
+>         ktime_t *time_in_state;
+>         unsigned int *trans_table;
+> +       struct thermal_instance *last_instance;
+> +       struct thermal_instance *curr_instance;
+>  };
+>
+> -static void update_time_in_state(struct cooling_dev_stats *stats)
+> +static void update_time_in_instance(struct cooling_dev_stats *stats,
+> +                                   struct thermal_instance *instance,
+> +                                   ktime_t now, ktime_t delta)
+> +{
+> +       if (!instance)
+> +               return;
 > +
->  	priv->bus_desc.module = THIS_MODULE;
->  	priv->bus_desc.of_node = np;
->  
->  	priv->bus = bus = nvdimm_bus_register(&pdev->dev, &priv->bus_desc);
->  	if (!bus) {
-> +		kfree(priv->bus_desc.provider_name);
+> +       stats->last_instance = stats->curr_instance;
+> +       stats->curr_instance = instance;
+> +
+> +       if (!stats->last_instance)
+> +               stats->last_instance = instance;
+> +
+> +       stats->last_instance->time_in =
+> +                       ktime_add(stats->last_instance->time_in, delta);
+> +}
+> +
+> +static void update_time_in_state(struct cooling_dev_stats *stats,
+> +                                struct thermal_instance *instance)
+>  {
+>         ktime_t now = ktime_get(), delta;
+>
+> @@ -678,9 +699,12 @@ static void update_time_in_state(struct cooling_dev_stats *stats)
+>         stats->time_in_state[stats->state] =
+>                 ktime_add(stats->time_in_state[stats->state], delta);
+>         stats->last_time = now;
+> +
+> +       update_time_in_instance(stats, instance, now, delta);
+>  }
+>
+>  void thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
+> +                                        struct thermal_instance *instance,
+>                                          unsigned long new_state)
+>  {
+>         struct cooling_dev_stats *stats = cdev->stats;
+> @@ -695,7 +719,7 @@ void thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
+>         if (stats->state == new_state)
+>                 goto unlock;
+>
+> -       update_time_in_state(stats);
+> +       update_time_in_state(stats, instance);
+>         stats->trans_table[stats->state * (cdev->max_state + 1) + new_state]++;
+>         stats->state = new_state;
+>         stats->total_trans++;
+> @@ -744,7 +768,7 @@ time_in_state_ms_show(struct device *dev, struct device_attribute *attr,
+>
+>         spin_lock(&stats->lock);
+>
+> -       update_time_in_state(stats);
+> +       update_time_in_state(stats, stats->curr_instance);
+>
+>         for (i = 0; i <= cdev->max_state; i++) {
+>                 len += sprintf(buf + len, "state%u\t%llu\n", i,
+> @@ -758,12 +782,98 @@ time_in_state_ms_show(struct device *dev, struct device_attribute *attr,
+>         return len;
+>  }
+>
+> +struct cdev_thermal_zone_residency {
+> +       char thermal_zone[THERMAL_NAME_LENGTH];
+> +       ktime_t time_in;
+> +       unsigned long counter;
+> +       struct list_head node; /* we build this as we go */
+> +};
 
-Nice catch!
+What is represented by this structure?
 
-However, this free needs to happen in of_pmem_region_remove() as well.
+> +
+> +static void
+> +build_cdev_thermal_zone_residency(struct list_head *list,
+> +                                 struct thermal_cooling_device *cdev)
+> +{
+> +       struct cdev_thermal_zone_residency *res, *update_res;
+> +       struct thermal_instance *instance;
+> +
+> +       /*
+> +        * Build an array of pairs <thermal zone, time> to represent
+> +        * how this cooling device was driven by each thermal zone
+> +        */
+> +       list_for_each_entry(instance, &cdev->thermal_instances, cdev_node) {
+> +               update_res = NULL;
+> +
+> +               list_for_each_entry(res, list, node) {
+> +                       if (strncmp(res->thermal_zone, instance->tz->type,
+> +                                   THERMAL_NAME_LENGTH) == 0)
+> +                               update_res = res;
+> +               }
+> +               if (!update_res) {
+> +                       update_res = kzalloc(sizeof(*update_res), GFP_KERNEL);
+> +                       strscpy(update_res->thermal_zone,
+> +                               instance->tz->type, THERMAL_NAME_LENGTH);
+> +                       list_add_tail(&update_res->node, list);
+> +               }
+> +       }
+> +}
+> +
+> +static ssize_t
+> +time_in_thermal_zone_ms_show(struct device *dev, struct device_attribute *attr,
+> +                            char *buf)
+> +{
+> +       LIST_HEAD(cdev_thermal_zone_list);
+> +       struct thermal_cooling_device *cdev = to_cooling_device(dev);
+> +       struct cooling_dev_stats *stats = cdev->stats;
+> +       struct cdev_thermal_zone_residency *res, *next;
+> +       struct thermal_instance *instance;
+> +       ssize_t len = 0, ret = 0;
+> +
+> +       mutex_lock(&cdev->lock);
+> +
+> +       spin_lock(&stats->lock);
+> +       update_time_in_state(stats, stats->curr_instance);
+> +       spin_unlock(&stats->lock);
+> +
+> +       build_cdev_thermal_zone_residency(&cdev_thermal_zone_list, cdev);
+> +
+> +       list_for_each_entry(instance, &cdev->thermal_instances, cdev_node)
+> +               list_for_each_entry(res, &cdev_thermal_zone_list, node)
+> +                       if (strncmp(res->thermal_zone, instance->tz->type,
+> +                                   THERMAL_NAME_LENGTH) == 0)
+> +                               res->time_in = ktime_add(res->time_in,
+> +                                                        instance->time_in);
+> +
+> +       mutex_unlock(&cdev->lock);
+> +
+> +       list_for_each_entry_safe(res, next, &cdev_thermal_zone_list, node) {
+> +               ret = snprintf(buf + len, PAGE_SIZE - len,
+> +                              "thermal_zone: %s\t%llu\n",
+> +                              res->thermal_zone, ktime_to_ms(res->time_in));
+> +
+> +               if (ret == 0)
+> +                       ret = -EOVERFLOW;
+> +
+> +               if (ret < 0)
+> +                       break;
+> +
+> +               len += ret;
+> +       }
 
-Ira
+Why does the above loop need to use the _safe variant?
 
->  		kfree(priv);
->  		return -ENODEV;
->  	}
-> -- 
-> 2.25.1
-> 
-
-
+> +
+> +       list_for_each_entry_safe(res, next, &cdev_thermal_zone_list, node) {
+> +               list_del(&res->node);
+> +               kfree(res);
+> +       }
+> +
+> +       return ret < 0 ? ret : len;
+> +}
+> +
+>  static ssize_t
+>  reset_store(struct device *dev, struct device_attribute *attr, const char *buf,
+>             size_t count)
+>  {
+>         struct thermal_cooling_device *cdev = to_cooling_device(dev);
+>         struct cooling_dev_stats *stats;
+> +       struct thermal_instance *instance;
+>         int i, states;
+>
+>         mutex_lock(&cdev->lock);
+> @@ -774,6 +884,7 @@ reset_store(struct device *dev, struct device_attribute *attr, const char *buf,
+>
+>         states = cdev->max_state + 1;
+>
+> +       mutex_lock(&cdev->lock);
+>         spin_lock(&stats->lock);
+>
+>         stats->total_trans = 0;
+> @@ -784,7 +895,14 @@ reset_store(struct device *dev, struct device_attribute *attr, const char *buf,
+>         for (i = 0; i < states; i++)
+>                 stats->time_in_state[i] = ktime_set(0, 0);
+>
+> +       /* Make sure we reset all counters per instance */
+> +       list_for_each_entry(instance, &cdev->thermal_instances, cdev_node) {
+> +               instance->time_in = ktime_set(0, 0);
+> +       }
+> +
+>         spin_unlock(&stats->lock);
+> +       mutex_unlock(&cdev->lock);
+> +
+>
+>  unlock:
+>         mutex_unlock(&cdev->lock);
+> @@ -852,12 +970,14 @@ static ssize_t trans_table_show(struct device *dev,
+>
+>  static DEVICE_ATTR_RO(total_trans);
+>  static DEVICE_ATTR_RO(time_in_state_ms);
+> +static DEVICE_ATTR_RO(time_in_thermal_zone_ms);
+>  static DEVICE_ATTR_WO(reset);
+>  static DEVICE_ATTR_RO(trans_table);
+>
+>  static struct attribute *cooling_device_stats_attrs[] = {
+>         &dev_attr_total_trans.attr,
+>         &dev_attr_time_in_state_ms.attr,
+> +       &dev_attr_time_in_thermal_zone_ms.attr,
+>         &dev_attr_reset.attr,
+>         &dev_attr_trans_table.attr,
+>         NULL
+> --
