@@ -2,177 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2015736560
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D46F8736563
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:53:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231248AbjFTHxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 03:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52316 "EHLO
+        id S231690AbjFTHxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 03:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231394AbjFTHxZ (ORCPT
+        with ESMTP id S230500AbjFTHx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 03:53:25 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E5CE1738;
-        Tue, 20 Jun 2023 00:53:06 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Dxi+qtWpFkTBwHAA--.14445S3;
-        Tue, 20 Jun 2023 15:52:13 +0800 (CST)
-Received: from bogon.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxauWoWpFkdmghAA--.28374S6;
-        Tue, 20 Jun 2023 15:52:12 +0800 (CST)
-From:   Youling Tang <tangyouling@loongson.cn>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Tue, 20 Jun 2023 03:53:28 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693CC19AE
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:53:10 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5707b429540so53753347b3.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:53:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687247588; x=1689839588;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q5R0zcB6mybnkU9NBbTtghvpq67JAa0crCVDjZ9SpHk=;
+        b=2GY6tb59UZYGOHu8Jpard49Ijl8S41fZ8HDgfi6a4gvFJ5750jQeYrmu9nVrvi1jW2
+         tp8ypG/banZ4ws6Js9iQQN9cGknEmtht9BWd32J2yMcrVqteXUvW9YR9uMMhKiTOhwCj
+         DlNulmZyq+f8KzKXIgNcUSNUMmKGW1CGHEEgbEp/J7IxewrE//XtQewkerpcgsbwL40t
+         WfRaz/SdO8RzSMtTrw2rYV18y0/dvvOSll1UA2/d8Zuh32W7Pnj2B4fhDdSSvEN+0aoF
+         9f1IZjfj8naj8IynmrWiGUnfEPBGZdaKRscDXhw1Sy1gWU3iNWnHKGQGUPwpRy5JQoX9
+         lMYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687247588; x=1689839588;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q5R0zcB6mybnkU9NBbTtghvpq67JAa0crCVDjZ9SpHk=;
+        b=lOmEDasdW4/fOgBNdtj0689XasxNOQTfz6pqRIEaGH3A3Aayth0Kp0LGUAlSb0LBwj
+         x0xDIYjR6H5PU3rcCfzDCGfHWgzglkqe7SabVn/qPNOjR2yxdgR2RrLNBd6gVsVAJ4cc
+         lw/Us7QyBNLnBYJ/t3WLpMsQ/6nNfHYqAYBPGViPTfZazhThr7U6iBc1DjA945ktxieU
+         qlcDMpFitrgDJlaBU46jRdf81Fz0wRh1DPDZtZ1ADbRUitgnVeX5aKCCPbVKorJWbOdV
+         Abg2Hq90MABt/YqSbIARjb6CWQtJWZyG5ro+L9Z5T4YeF/VJ+iBqhyw2388nyOHGVNPC
+         uPOA==
+X-Gm-Message-State: AC+VfDxlO+D1Y7NperHWrtDJcXFqg1ptIq8slCzwNyKPg+n0vXohxoTp
+        GeD9AX0qi1qYfQMLtYnNTfUmwQ==
+X-Google-Smtp-Source: ACHHUZ5uDhFE53584OsFJztx7V9NmKNE+1aQZMwUHlsEN2oJtZCLrBIKo4HQBYW6kI7RzecFkIc3yA==
+X-Received: by 2002:a81:6c11:0:b0:56f:f83f:618 with SMTP id h17-20020a816c11000000b0056ff83f0618mr10840742ywc.19.1687247587950;
+        Tue, 20 Jun 2023 00:53:07 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id x11-20020a81630b000000b0056ffca5fb01sm370775ywb.117.2023.06.20.00.53.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 00:53:07 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 00:53:03 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        madvenka@linux.microsoft.com
-Cc:     chenzhongjin@huawei.com, WANG Xuerui <kernel@xen0n.name>,
-        Xi Ruoyao <xry111@xry111.site>, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        tangyouling00@gmail.com, youling.tang@outlook.com,
-        Jinyang He <hejinyang@loongson.cn>
-Subject: [RFC PATCH v1 19/23] LoongArch: Annotate unwind_hint
-Date:   Tue, 20 Jun 2023 15:52:06 +0800
-Message-Id: <1687247526-32258-5-git-send-email-tangyouling@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1687247526-32258-1-git-send-email-tangyouling@loongson.cn>
-References: <1687247526-32258-1-git-send-email-tangyouling@loongson.cn>
-X-CM-TRANSID: AQAAf8AxauWoWpFkdmghAA--.28374S6
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxCw47Wry3uF4DXFW3tF45XFc_yoW5KFWrpF
-        nrZrn7JrZYgrn7Aw1DJa4Y9rWUJw1DWw1agF1qka4rC3ZFqr15Xr1kZr1qgF1qqa1rKw40
-        gFyFgwsFqa1UJacCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUm2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
-        xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-        Gryq6s0DMcIj6I8E87Iv67AKxVW8Jr0_Cr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0x
-        vY0x0EwIxGrwACjcxG6xCI17CEII8vrVW3JVW8Jr1lc7CjxVAaw2AFwI0_JF0_Jw1l42xK
-        82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2
-        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
-        6r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_tr0E3s1lIxAIcVC0I7IYx2
-        IY6xkF7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
-        jsIE14v26r4UJVWxJr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvj
-        DU0xZFpf9x07b3iihUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jann Horn <jannh@google.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v2 08/12] mm/pgtable: add pte_free_defer() for pgtable as
+ page
+In-Reply-To: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
+Message-ID: <3e5961a2-26e5-d1ab-5c4c-527e273e3cc5@google.com>
+References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some assembly symbols contain code that might be executed with an
-unspecified stack state (e.g. invalid stack pointer,no stackframe, ...).
+Add the generic pte_free_defer(), to call pte_free() via call_rcu().
+pte_free_defer() will be called inside khugepaged's retract_page_tables()
+loop, where allocating extra memory cannot be relied upon.  This version
+suits all those architectures which use an unfragmented page for one page
+table (none of whose pte_free()s use the mm arg which was passed to it).
 
-Annotate those symbol with UNWIND_HINT_EMPTY to let objtool be aware of
-them.
-
-When taking an exception/interrupt, add UNWIND_HINT_REGS to indicate
-from which point the pt_regs is on stack.
-
-Whether returning to userland or creating a new task, sp is
-pointing to a pt_regs frame, add UNWIND_HINT_REGS after that.
-
-Co-developed-by: Jinyang He <hejinyang@loongson.cn>
-Signed-off-by: Jinyang He <hejinyang@loongson.cn>
-Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
- arch/loongarch/include/asm/stackframe.h | 3 +++
- arch/loongarch/kernel/entry.S           | 2 ++
- arch/loongarch/kernel/head.S            | 1 +
- arch/loongarch/kernel/relocate_kernel.S | 5 +++++
- 4 files changed, 11 insertions(+)
+ include/linux/mm_types.h |  4 ++++
+ include/linux/pgtable.h  |  2 ++
+ mm/pgtable-generic.c     | 20 ++++++++++++++++++++
+ 3 files changed, 26 insertions(+)
 
-diff --git a/arch/loongarch/include/asm/stackframe.h b/arch/loongarch/include/asm/stackframe.h
-index 7df80e6ae9d2..ab16f2d10257 100644
---- a/arch/loongarch/include/asm/stackframe.h
-+++ b/arch/loongarch/include/asm/stackframe.h
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 1667a1bdb8a8..09335fa28c41 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -144,6 +144,10 @@ struct page {
+ 		struct {	/* Page table pages */
+ 			unsigned long _pt_pad_1;	/* compound_head */
+ 			pgtable_t pmd_huge_pte; /* protected by page->ptl */
++			/*
++			 * A PTE page table page might be freed by use of
++			 * rcu_head: which overlays those two fields above.
++			 */
+ 			unsigned long _pt_pad_2;	/* mapping */
+ 			union {
+ 				struct mm_struct *pt_mm; /* x86 pgd, s390 */
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index 525f1782b466..d18d3e963967 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -112,6 +112,8 @@ static inline void pte_unmap(pte_t *pte)
+ }
+ #endif
+ 
++void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable);
++
+ /* Find an entry in the second-level page table.. */
+ #ifndef pmd_offset
+ static inline pmd_t *pmd_offset(pud_t *pud, unsigned long address)
+diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
+index 5e85a625ab30..ab3741064bb8 100644
+--- a/mm/pgtable-generic.c
++++ b/mm/pgtable-generic.c
 @@ -13,6 +13,7 @@
- #include <asm/asm-offsets.h>
- #include <asm/loongarch.h>
- #include <asm/thread_info.h>
-+#include <asm/unwind_hints.h>
+ #include <linux/swap.h>
+ #include <linux/swapops.h>
+ #include <linux/mm_inline.h>
++#include <asm/pgalloc.h>
+ #include <asm/tlb.h>
  
- /* Make the addition of cfi info a little easier. */
- 	.macro cfi_rel_offset reg offset=0 docfi=0
-@@ -158,6 +159,7 @@
- 	cfi_st  u0, PT_R21, \docfi
- 	csrrd	u0, PERCPU_BASE_KS
- 9:
-+	UNWIND_HINT_REGS
- 	.endm
- 
- 	.macro	SAVE_ALL docfi=0
-@@ -215,6 +217,7 @@
- 
- 	.macro	RESTORE_SP_AND_RET docfi=0
- 	cfi_ld	sp, PT_R3, \docfi
-+	UNWIND_HINT_FUNC
- 	ertn
- 	.endm
- 
-diff --git a/arch/loongarch/kernel/entry.S b/arch/loongarch/kernel/entry.S
-index d737e3cf42d3..458d4e8e126f 100644
---- a/arch/loongarch/kernel/entry.S
-+++ b/arch/loongarch/kernel/entry.S
-@@ -70,6 +70,7 @@ SYM_FUNC_END(handle_syscall)
- _ASM_NOKPROBE(handle_syscall)
- 
- SYM_CODE_START(ret_from_fork)
-+	UNWIND_HINT_REGS
- 	bl		schedule_tail		# a0 = struct task_struct *prev
- 	move		a0, sp
- 	bl 		syscall_exit_to_user_mode
-@@ -79,6 +80,7 @@ SYM_CODE_START(ret_from_fork)
- SYM_CODE_END(ret_from_fork)
- 
- SYM_CODE_START(ret_from_kernel_thread)
-+	UNWIND_HINT_REGS
- 	bl		schedule_tail		# a0 = struct task_struct *prev
- 	move		a0, s1
- 	jirl		ra, s0, 0
-diff --git a/arch/loongarch/kernel/head.S b/arch/loongarch/kernel/head.S
-index aa64b179744f..73e5ec0006bb 100644
---- a/arch/loongarch/kernel/head.S
-+++ b/arch/loongarch/kernel/head.S
-@@ -43,6 +43,7 @@ SYM_DATA(kernel_offset, .long kernel_offset - _text);
- 	.align 12
- 
- SYM_CODE_START(kernel_entry)			# kernel entry point
-+	UNWIND_HINT_EMPTY
- 
- 	/* Config direct window and set PG */
- 	li.d		t0, CSR_DMW0_INIT	# UC, PLV0, 0x8000 xxxx xxxx xxxx
-diff --git a/arch/loongarch/kernel/relocate_kernel.S b/arch/loongarch/kernel/relocate_kernel.S
-index d13252553a7c..d0123fa2b511 100644
---- a/arch/loongarch/kernel/relocate_kernel.S
-+++ b/arch/loongarch/kernel/relocate_kernel.S
-@@ -13,8 +13,11 @@
- #include <asm/loongarch.h>
- #include <asm/stackframe.h>
- #include <asm/addrspace.h>
-+#include <asm/unwind_hints.h>
- 
- SYM_CODE_START(relocate_new_kernel)
-+	UNWIND_HINT_EMPTY
+ /*
+@@ -230,6 +231,25 @@ pmd_t pmdp_collapse_flush(struct vm_area_struct *vma, unsigned long address,
+ 	return pmd;
+ }
+ #endif
 +
- 	/*
- 	 * a0: EFI boot flag for the new kernel
- 	 * a1: Command line pointer for the new kernel
-@@ -91,6 +94,8 @@ SYM_CODE_END(relocate_new_kernel)
-  * then start at the entry point from LOONGARCH_IOCSR_MBUF0.
-  */
- SYM_CODE_START(kexec_smp_wait)
-+	UNWIND_HINT_EMPTY
++/* arch define pte_free_defer in asm/pgalloc.h for its own implementation */
++#ifndef pte_free_defer
++static void pte_free_now(struct rcu_head *head)
++{
++	struct page *page;
 +
- 1:	li.w		t0, 0x100			/* wait for init loop */
- 2:	addi.w		t0, t0, -1			/* limit mailbox access */
- 	bnez		t0, 2b
++	page = container_of(head, struct page, rcu_head);
++	pte_free(NULL /* mm not passed and not used */, (pgtable_t)page);
++}
++
++void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable)
++{
++	struct page *page;
++
++	page = pgtable;
++	call_rcu(&page->rcu_head, pte_free_now);
++}
++#endif /* pte_free_defer */
+ #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+ 
+ #if defined(CONFIG_GUP_GET_PXX_LOW_HIGH) && \
 -- 
-2.39.2
+2.35.3
 
