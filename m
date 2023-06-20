@@ -2,159 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C730E737647
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:47:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 782A873764C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbjFTUrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 16:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41318 "EHLO
+        id S229836AbjFTUzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 16:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229836AbjFTUrV (ORCPT
+        with ESMTP id S229597AbjFTUzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 16:47:21 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A131E7E
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:47:20 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id af79cd13be357-76245581814so289106585a.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:47:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687294039; x=1689886039;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rA3i2opblg9AHF1F2rlGv1v4lotXDt+23xIwyDkolDY=;
-        b=mo8QWb4ccpQbDOhOajnjX4GpXsPkN6vj8KMB45EVj+cKZ9yB/OmK8Q8efQ55ZiK52z
-         kAUSB2YNV6eb6Ss6jDDLA6a/3qyELGXwYF+eb2Q7i1KCtaxQTJ3dj1B3NWIoF7Squ0Ke
-         CSHYdQQbTT4oFSDOJAgGkzIY1H8H1YVeiEbxrPo5ye9BlG8awpkWXWhd0JC7gpQxVac9
-         9NmEVDglP1v7F+PRA8cx6t8vAVZqHzWIXw1H6bnk9CHvm7EGWjS/V9TEs/eYjXcw3+AL
-         QOTiuwMTQZFk2pvbVkwihO44E6CKg1mmFu+0U0yRqsMjeAunPeYLBUXN0mNyY1x3sbX1
-         YDVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687294039; x=1689886039;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rA3i2opblg9AHF1F2rlGv1v4lotXDt+23xIwyDkolDY=;
-        b=Px1xAoTng4pO6lTHhLbXwXLFrI5d9l4789OLylqvjbUUTRmksWe+jbtWKnOf/9v+sd
-         2dWOzz1Vvz4DISgZdN+BPDETd/u72OPiuJTXrCBy+toOyJ/CmBfVycnUZggFGAL+6F7Y
-         QNymOoOLOpRimtbeK8k7lFI72FIM8YckZWk8FncToP/mJhD0bLpCakug8CLeGele1ut8
-         OkCpIu2ZaLvHPBSe8zHvGjzu6SNEvgZtypHErSRgEYKjAXwuDLjtWRYQCllCgPVwwUb3
-         PniYBXndknCd7UNAd3Q6YEA0DMu9jJJvF4N9nHIycsRl7xIYiHxcHrverW/7E2UI0CPi
-         Rt9Q==
-X-Gm-Message-State: AC+VfDzTLAstYoQ53keHwKuxYojvoyo8OE8R1QDOOaItxW8qX98y7FhK
-        mzMeDQovXZXgUgHpEbZEpavpshsrDDY53BGY56qG5A==
-X-Google-Smtp-Source: ACHHUZ6UItpw2LPCk1xMc27GiRDBKedo6AyfjmO6DAgYOkoG5EFO12A+M83vVJshZiaOHJI8CRKa8frMLgIu+Nenrlk=
-X-Received: by 2002:a05:6214:27cb:b0:626:e55:dfb2 with SMTP id
- ge11-20020a05621427cb00b006260e55dfb2mr15688866qvb.39.1687294039262; Tue, 20
- Jun 2023 13:47:19 -0700 (PDT)
+        Tue, 20 Jun 2023 16:55:52 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4441718
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:55:51 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id C76E0320092D;
+        Tue, 20 Jun 2023 16:55:49 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 20 Jun 2023 16:55:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1687294549; x=1687380949; bh=jL
+        wjxXidYR03NQqMGEOwIDdRP2UTQNWbZ7zItOdShrw=; b=kzzsNaPOa0XFhhBycA
+        nWaMtSnqQ2DvpJ4s5KDSKzQwhuOmszKazGGgeWxgvQv/h+atmCnR105Dba7pOpEr
+        qyw+mYIAvvX0oSLnhpWuWvU1OuEwc/dIDUtx+hNsd4tYulYIyUtc9gvcjMjb3qXe
+        qlgV/hXaRg/dJWnzFTDl4u8WJpxuUAWBwfatNNnMqC1Ain9KegGGPrKQnmH4zWkG
+        H9I7cnIxgSgFeZgR3a1T8jVSTIJXusCHWae1VN+iKEdO19lKDdBsMK/t94BJ0ILw
+        lWqNDrvWfT9JTSK04wJ6Ky7f2FSViN3O7Qe6kwViGrxwj9WQLcrwhkQw8VTyUymF
+        QwUw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687294549; x=1687380949; bh=jLwjxXidYR03N
+        QqMGEOwIDdRP2UTQNWbZ7zItOdShrw=; b=e0ziG89/qBaJj7UwzLjoc27dXQsOZ
+        BVr0/4VI1Js1J8jF9H/Avt19GDmxYUn1t3bK+d19Rp525X9ySAxy+psiPxcC/XhO
+        KBDOzPJ7SYGAli+KMkUsqCCtNi9Bvj4JJ22EpYZ1eiuf+EDpYxzu5vgLXQk8pEfK
+        KfPkGxSUEVm3E7nTzG7BhwfDILGb+YLPo/lzI7pOxHEQi1mQqXqNIA6ewGO6Gn94
+        RMWUu8mWvdeeKw1icLdncsDIfizCCgJNTxERiy1M7wiDQ6rDomO8fvoahr4CYpdo
+        dtUFgUCHrojWVwb8/Q6zFQfpCcyBVLGKeusE8EdcxuvUnzN7+kk2JJ5ag==
+X-ME-Sender: <xms:VBKSZHSya69zvadFqQ2g3IRMMg4klPpEbV_Nw7uOp7O6QYfDjXoksQ>
+    <xme:VBKSZIxPFdYsnZFo_hzlcSn2wgnhoO2KH0jRcbXrby_D911F2-GDDI4YjkN1B-6sX
+    IdSwCXjBt-imJzeJQ>
+X-ME-Received: <xmr:VBKSZM3--gBMU_0Z-qxq1ZTLckn8RXSID02QOa-Mxt2fdouzTd27a9QrSrdffXrnbluYltESw63mAB1fdjgrhUSPjJaTba-S8pja0WO5OpKzyO_84fpXVdW8cj3d>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefhedgudefhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetnhgu
+    rhgvshcuhfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucggtf
+    frrghtthgvrhhnpedvffefvefhteevffegieetfefhtddvffejvefhueetgeeludehteev
+    udeitedtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpegrnhgurhgvshesrghnrghrrgiivghlrdguvg
+X-ME-Proxy: <xmx:VRKSZHAXqttydf6bZkV2jF_HhEAbVA5WNbtrlBGGFQTVWpoJbNMABw>
+    <xmx:VRKSZAhf_k_2S1xN_70UgzNCp5isdUUt34K_hApRhQUwyGaeVm0JoQ>
+    <xmx:VRKSZLpC9qS_vBlHeQOUF80K4XXSCByMAkAzR8uopUSM2mBIJkbmYA>
+    <xmx:VRKSZDP0M9a29fbW4a_8bGe7STs6lOzBWY8LbTmxkmqTeVXvu8MzVg>
+Feedback-ID: id4a34324:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 20 Jun 2023 16:55:48 -0400 (EDT)
+Date:   Tue, 20 Jun 2023 13:55:47 -0700
+From:   Andres Freund <andres@anarazel.de>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     linux-mm@kvack.org, Peter Xu <peterx@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Yang Shi <shy828301@gmail.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jiaqi Yan <jiaqiyan@google.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 4/4] mm/khugepaged: maintain page cache uptodate flag
+Message-ID: <20230620205547.qzmivkjox2hkpzmm@awork3.anarazel.de>
+References: <20230404120117.2562166-1-stevensd@google.com>
+ <20230404120117.2562166-5-stevensd@google.com>
 MIME-Version: 1.0
-References: <CAKwvOdn_U+yjFBn6pq5XwP1rTEKA1MWBkd0f2N8wB_nuS1_sWw@mail.gmail.com>
- <mhng-16f1b957-5cf5-4786-a760-e4ab1fbe83ce@palmer-ri-x1c9a>
-In-Reply-To: <mhng-16f1b957-5cf5-4786-a760-e4ab1fbe83ce@palmer-ri-x1c9a>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Tue, 20 Jun 2023 16:47:07 -0400
-Message-ID: <CAKwvOdm4FLSq41WTzmPqCeNh-WBX1_rtKpT3zwyGez7bZ-jE7w@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Conor Dooley <conor@kernel.org>, jszhang@kernel.org,
-        llvm@lists.linux.dev, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230404120117.2562166-5-stevensd@google.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 4:41=E2=80=AFPM Palmer Dabbelt <palmer@dabbelt.com>=
- wrote:
->
-> On Tue, 20 Jun 2023 13:32:32 PDT (-0700), ndesaulniers@google.com wrote:
-> > On Tue, Jun 20, 2023 at 4:13=E2=80=AFPM Conor Dooley <conor@kernel.org>=
- wrote:
-> >>
-> >> On Tue, Jun 20, 2023 at 04:05:55PM -0400, Nick Desaulniers wrote:
-> >> > On Mon, Jun 19, 2023 at 6:06=E2=80=AFPM Palmer Dabbelt <palmer@dabbe=
-lt.com> wrote:
-> >> > > On Thu, 15 Jun 2023 06:54:33 PDT (-0700), Palmer Dabbelt wrote:
-> >> > > > On Wed, 14 Jun 2023 09:25:49 PDT (-0700), jszhang@kernel.org wro=
-te:
-> >> > > >> On Wed, Jun 14, 2023 at 07:49:17AM -0700, Palmer Dabbelt wrote:
-> >> > > >>> On Tue, 23 May 2023 09:54:58 PDT (-0700), jszhang@kernel.org w=
-rote:
-> >>
-> >> > > >> Commit 3b90b09af5be ("riscv: Fix orphan section warnings caused=
- by
-> >> > > >> kernel/pi") touches vmlinux.lds.S, so to make the merge easy, t=
-his
-> >> > > >> series is based on 6.4-rc2.
-> >> > > >
-> >> > > > Thanks.
-> >> > >
-> >> > > Sorry to be so slow here, but I think this is causing LLD to hang =
-on
-> >> > > allmodconfig.  I'm still getting to the bottom of it, there's a fe=
-w
-> >> > > other things I have in flight still.
-> >> >
-> >> > Confirmed with v3 on mainline (linux-next is pretty red at the momen=
-t).
-> >> > https://lore.kernel.org/linux-riscv/20230517082936.37563-1-falcon@ti=
-nylab.org/
-> >>
-> >> Just FYI Nick, there's been some concurrent work here from different
-> >> people working on the same thing & the v3 you linked (from Zhangjin) w=
-as
-> >> superseded by this v2 (from Jisheng).
-> >
-> > Ah! I've been testing the deprecated patch set, sorry I just looked on
-> > lore for "dead code" on riscv-linux and grabbed the first thread,
-> > without noticing the difference in authors or new version numbers for
-> > distinct series. ok, nevermind my noise.  I'll follow up with the
-> > correct patch set, sorry!
->
-> Ya, I hadn't even noticed the v3 because I pretty much only look at
-> patchwork these days.  Like we talked about in IRC, I'm going to go test
-> the merge of this one and see what's up -- I've got it staged at
-> <https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/=
-?h=3Dfor-next&id=3D1bd2963b21758a773206a1cb67c93e7a8ae8a195>,
-> though that won't be a stable hash if it's actually broken...
+Hi,
 
-Ok, https://lore.kernel.org/linux-riscv/20230523165502.2592-1-jszhang@kerne=
-l.org/
-built for me.  If you're seeing a hang, please let me know what
-version of LLD you're using and I'll build that tag from source to see
-if I can reproduce, then bisect if so.
+On 2023-04-04 21:01:17 +0900, David Stevens wrote:
+> From: David Stevens <stevensd@chromium.org>
+> 
+> Make sure that collapse_file doesn't interfere with checking the
+> uptodate flag in the page cache by only inserting hpage into the page
+> cache after it has been updated and marked uptodate. This is achieved by
+> simply not replacing present pages with hpage when iterating over the
+> target range.
+> 
+> The present pages are already locked, so replacing them with the locked
+> hpage before the collapse is finalized is unnecessary. However, it is
+> necessary to stop freezing the present pages after validating them,
+> since leaving long-term frozen pages in the page cache can lead to
+> deadlocks. Simply checking the reference count is sufficient to ensure
+> that there are no long-term references hanging around that would the
+> collapse would break. Similar to hpage, there is no reason that the
+> present pages actually need to be frozen in addition to being locked.
+> 
+> This fixes a race where folio_seek_hole_data would mistake hpage for
+> an fallocated but unwritten page. This race is visible to userspace via
+> data temporarily disappearing from SEEK_DATA/SEEK_HOLE. This also fixes
+> a similar race where pages could temporarily disappear from mincore.
+> 
+> Fixes: f3f0e1d2150b ("khugepaged: add support of collapse for tmpfs/shmem pages")
+> Signed-off-by: David Stevens <stevensd@chromium.org>
 
-$ ARCH=3Driscv LLVM=3D1 /usr/bin/time -v make -j128 allmodconfig vmlinux
-...
-        Elapsed (wall clock) time (h:mm:ss or m:ss): 2:35.68
-...
+I noticed that recently MADV_COLLAPSE stopped being able to collapse a
+binary's executable code, always failing with EAGAIN. I bisected it down to
+a2e17cc2efc7 - this commit.
 
-Tested-by: Nick Desaulniers <ndesaulniers@google.com> # build
+Using perf trace -e 'huge_memory:*' -a I see
 
->
-> >
-> >>
-> >> Cheers,
-> >> Conor.
-> >
-> >
-> >
-> > --
-> > Thanks,
-> > ~Nick Desaulniers
+  1000.433 postgres.2/1872144 huge_memory:mm_khugepaged_collapse_file(mm: 0xffff889e800bdf00, hpfn: 46720000, index: 1537, is_shmem: 1, filename: "postgres.2", result: 17)
+  1000.445 postgres.2/1872144 huge_memory:mm_khugepaged_scan_file(mm: 0xffff889e800bdf00, pfn: -1, filename: "postgres.2", present: 512, result: 17)
+  1000.485 postgres.2/1872144 huge_memory:mm_khugepaged_collapse_file(mm: 0xffff889e800bdf00, hpfn: 46720000, index: 2049, is_shmem: 1, filename: "postgres.2", result: 17)
+  1000.489 postgres.2/1872144 huge_memory:mm_khugepaged_scan_file(mm: 0xffff889e800bdf00, pfn: -1, filename: "postgres.2", present: 512, result: 17)
+  1000.526 postgres.2/1872144 huge_memory:mm_khugepaged_collapse_file(mm: 0xffff889e800bdf00, hpfn: 46720000, index: 2561, is_shmem: 1, filename: "postgres.2", result: 17)
+  1000.532 postgres.2/1872144 huge_memory:mm_khugepaged_scan_file(mm: 0xffff889e800bdf00, pfn: -1, filename: "postgres.2", present: 512, result: 17)
+  1000.570 postgres.2/1872144 huge_memory:mm_khugepaged_collapse_file(mm: 0xffff889e800bdf00, hpfn: 46720000, index: 3073, is_shmem: 1, filename: "postgres.2", result: 17)
+  1000.575 postgres.2/1872144 huge_memory:mm_khugepaged_scan_file(mm: 0xffff889e800bdf00, pfn: -1, filename: "postgres.2", present: 512, result: 17)
+
+for every attempt at doing madvise(MADV_COLLAPSE).
 
 
+I'm sad about that, because MADV_COLLAPSE was the first thing that allowed
+using huge pages for executable code that wasn't entirely completely gross.
 
---=20
-Thanks,
-~Nick Desaulniers
+
+I don't yet have a standalone repro, but can write one if that's helpful.
+
+Greetings,
+
+Andres Freund
