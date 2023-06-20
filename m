@@ -2,177 +2,506 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51B5A736537
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC3973653E
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbjFTHuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 03:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
+        id S231454AbjFTHu3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 03:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjFTHuJ (ORCPT
+        with ESMTP id S231192AbjFTHuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 03:50:09 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F67B172B
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:49:41 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5704fce0f23so47448457b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:49:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687247379; x=1689839379;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JyT8tmsQKzrYxiMI/rVOY2yPaVbA/RNeIBfphNdBMF4=;
-        b=Wlyhpqj5qzfuvutrjOa/4V6PuPsDCDOgWHtSW/4kwbuOkurc1q0KurhYLqHW1JVDng
-         ocfjumMCL+5VTdlkv6JFAWzHFSaf/DQcTveKuW/F1nUw+Sj6E3jgL+8I+UQrrKTcSspC
-         zGEBBcceErIi3jvfUdE8XIwgkG18lQEbl2V2HS4GGiBXkvY4t9/NkaOVpMEahcggUUzl
-         u8oefzeOOrLLnM3RkTGo6WsoKQCjwWkScujGOaUdyRth+pzrlMusEw0XYP/BcTSABeYV
-         rleoq5m+PuifcHOelghsbpsP6kubTOIzWI9OP98uqMngj6OJlbnVDdZn1qt2293RkTnb
-         aaaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687247379; x=1689839379;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JyT8tmsQKzrYxiMI/rVOY2yPaVbA/RNeIBfphNdBMF4=;
-        b=XoQY8njBodNgYq1P3TlimrNmOxG3YHXYUduQhekqceTfaarVvS9NKqnZxT9RqqbQ9r
-         aP+uP3iwNRqeQMihzzz9/+/y4E3fi0taQa/6rkkF3i9fYZAHNrcEguxCl58i8B7Cnv9A
-         UEif3LqayRlv7BazoHeTn8GODOIuBfMvtShx7UoU8eaJZy6oWWgR+vv+4oqqpiwPp9YD
-         LsW5zBBtNBLJve19lRvhVRwM0tqIl3yJe2XWeWxxywJYOIKkn3S8+UDoFvjUg3ktgib4
-         bSvV31CRok2hCEhO2gs+ztIsxK/4au+Eo7dghPEYbUWmY6z8Nc7gDrjjKXRQDJghHL9W
-         32tA==
-X-Gm-Message-State: AC+VfDz/82W14wFjkaQXHSD35OK9KfZs+0DLOHYIrC6y7QCSh7+pqxy6
-        mHCBhgx09hVR0l123I90d1TWIw==
-X-Google-Smtp-Source: ACHHUZ5+IOPW+qBQbjfJiBwfK7g3HrB1Jv9bM1vDxBV2sAeLMGBBrGsscHleOg916F+4k1/7bPeS5w==
-X-Received: by 2002:a81:8311:0:b0:568:d63e:dd2c with SMTP id t17-20020a818311000000b00568d63edd2cmr10308263ywf.11.1687247379257;
-        Tue, 20 Jun 2023 00:49:39 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id o17-20020a0dcc11000000b005702597583fsm381836ywd.26.2023.06.20.00.49.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 00:49:38 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 00:49:34 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
+        Tue, 20 Jun 2023 03:50:19 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DFA510E2;
+        Tue, 20 Jun 2023 00:49:58 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8BxL_AkWpFkJxsHAA--.14619S3;
+        Tue, 20 Jun 2023 15:49:56 +0800 (CST)
+Received: from bogon.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxG8oiWpFkN2chAA--.19346S2;
+        Tue, 20 Jun 2023 15:49:54 +0800 (CST)
+From:   Youling Tang <tangyouling@loongson.cn>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 06/12] sparc: add pte_free_defer() for pte_t *pgtable_t
-In-Reply-To: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
-Message-ID: <cb3feef8-f49e-7a54-a6d6-2e9b188f7564@google.com>
-References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Huacai Chen <chenhuacai@kernel.org>,
+        madvenka@linux.microsoft.com
+Cc:     chenzhongjin@huawei.com, WANG Xuerui <kernel@xen0n.name>,
+        Xi Ruoyao <xry111@xry111.site>, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        tangyouling00@gmail.com, youling.tang@outlook.com
+Subject: [RFC PATCH v1 05/23] objtool: Reorganize ORC code
+Date:   Tue, 20 Jun 2023 15:49:46 +0800
+Message-Id: <1687247390-31979-1-git-send-email-tangyouling@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8CxG8oiWpFkN2chAA--.19346S2
+X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoWfGF4kGr1kur15XF13GF45urX_yoWkJF4xpF
+        n8CrWDGrW7XFy3Awn2qan7u3y5Cws7WryktrnxG34xZ3yIqw1fJrsIkryjvF98Wws5Way3
+        uFZIqF4YkF4qvrcCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUBvb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
+        wI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
+        xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
+        Wrv_ZF1lYx0Ex4A2jsIE14v26F4j6r4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2
+        Ij64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Y
+        z7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Ar0_tr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6x
+        AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jxxhdUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add sparc-specific pte_free_defer(), to call pte_free() via call_rcu().
-pte_free_defer() will be called inside khugepaged's retract_page_tables()
-loop, where allocating extra memory cannot be relied upon.  This precedes
-the generic version to avoid build breakage from incompatible pgtable_t.
+From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
 
-sparc32 supports pagetables sharing a page, but does not support THP;
-sparc64 supports THP, but does not support pagetables sharing a page.
-So the sparc-specific pte_free_defer() is as simple as the generic one,
-except for converting between pte_t *pgtable_t and struct page *.
+The ORC code needs to be reorganized into arch-specific and generic parts
+so that architectures other than X86 can avail the generic parts.
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
+Some arch-specific ORC code is present in orc_gen.c and orc_dump.c. Create
+the following two files for such code:
+
+        - tools/objtool/include/objtool/orc.h
+        - tools/objtool/arch/x86/orc.c
+
+Move the following arch-specific function from tools/objtool/orc_gen.c
+to tools/objtool/arch/x86/orc.c:
+
+        - init_orc_entry()
+
+Move the following arch-specific functions from tools/objtool/orc_dump.c
+to tools/objtool/arch/x86/orc.c:
+
+        - reg_name()
+        - orc_type_name()
+        - print_reg()
+
+Create arch-specific functions to print the names of the SP and FP
+registers.
+
+The relocation type for relocation entries for ORC structures is
+arch-specific. Define it in tools/objtool/arch/x86/include/arch/elf.h:
+
+        #define R_PCREL R_X86_64_PC32
+
+and use that in orc_gen.c so each architecture can provide its own
+relocation type.
+
+Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
 ---
- arch/sparc/include/asm/pgalloc_64.h |  4 ++++
- arch/sparc/mm/init_64.c             | 16 ++++++++++++++++
- 2 files changed, 20 insertions(+)
+ tools/objtool/arch/x86/Build              |   1 +
+ tools/objtool/arch/x86/include/arch/elf.h |   1 +
+ tools/objtool/arch/x86/orc.c              | 151 ++++++++++++++++++++++
+ tools/objtool/include/objtool/orc.h       |  18 +++
+ tools/objtool/orc_dump.c                  |  63 +--------
+ tools/objtool/orc_gen.c                   |  80 +-----------
+ 6 files changed, 180 insertions(+), 134 deletions(-)
+ create mode 100644 tools/objtool/arch/x86/orc.c
+ create mode 100644 tools/objtool/include/objtool/orc.h
 
-diff --git a/arch/sparc/include/asm/pgalloc_64.h b/arch/sparc/include/asm/pgalloc_64.h
-index 7b5561d17ab1..caa7632be4c2 100644
---- a/arch/sparc/include/asm/pgalloc_64.h
-+++ b/arch/sparc/include/asm/pgalloc_64.h
-@@ -65,6 +65,10 @@ pgtable_t pte_alloc_one(struct mm_struct *mm);
- void pte_free_kernel(struct mm_struct *mm, pte_t *pte);
- void pte_free(struct mm_struct *mm, pgtable_t ptepage);
+diff --git a/tools/objtool/arch/x86/Build b/tools/objtool/arch/x86/Build
+index 9f7869b5c5e0..77b9a66cd6da 100644
+--- a/tools/objtool/arch/x86/Build
++++ b/tools/objtool/arch/x86/Build
+@@ -1,5 +1,6 @@
+ objtool-y += special.o
+ objtool-y += decode.o
++objtool-$(BUILD_ORC) += orc.o
  
-+/* arch use pte_free_defer() implementation in arch/sparc/mm/init_64.c */
-+#define pte_free_defer pte_free_defer
-+void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable);
+ inat_tables_script = ../arch/x86/tools/gen-insn-attr-x86.awk
+ inat_tables_maps = ../arch/x86/lib/x86-opcode-map.txt
+diff --git a/tools/objtool/arch/x86/include/arch/elf.h b/tools/objtool/arch/x86/include/arch/elf.h
+index ac14987cf687..30147417f08c 100644
+--- a/tools/objtool/arch/x86/include/arch/elf.h
++++ b/tools/objtool/arch/x86/include/arch/elf.h
+@@ -4,5 +4,6 @@
+ #define R_NONE R_X86_64_NONE
+ #define R_ABS64 R_X86_64_64
+ #define R_ABS32 R_X86_64_32
++#define R_PCREL R_X86_64_PC32
+ 
+ #endif /* _OBJTOOL_ARCH_ELF */
+diff --git a/tools/objtool/arch/x86/orc.c b/tools/objtool/arch/x86/orc.c
+new file mode 100644
+index 000000000000..a0c00e136089
+--- /dev/null
++++ b/tools/objtool/arch/x86/orc.c
+@@ -0,0 +1,151 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * Copyright (C) 2017 Josh Poimboeuf <jpoimboe@redhat.com>
++ */
 +
- #define pmd_populate_kernel(MM, PMD, PTE)	pmd_set(MM, PMD, PTE)
- #define pmd_populate(MM, PMD, PTE)		pmd_set(MM, PMD, PTE)
- 
-diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
-index 04f9db0c3111..0d7fd793924c 100644
---- a/arch/sparc/mm/init_64.c
-+++ b/arch/sparc/mm/init_64.c
-@@ -2930,6 +2930,22 @@ void pgtable_free(void *table, bool is_page)
- }
- 
- #ifdef CONFIG_TRANSPARENT_HUGEPAGE
-+static void pte_free_now(struct rcu_head *head)
++#include <stdlib.h>
++#include <string.h>
++
++#include <linux/objtool.h>
++
++#include <objtool/check.h>
++#include <objtool/orc.h>
++#include <objtool/warn.h>
++#include <objtool/endianness.h>
++
++int init_orc_entry(struct orc_entry *orc, struct cfi_state *cfi,
++		   struct instruction *insn)
 +{
-+	struct page *page;
++	struct cfi_reg *bp = &cfi->regs[CFI_BP];
 +
-+	page = container_of(head, struct page, rcu_head);
-+	__pte_free((pgtable_t)page_address(page));
++	memset(orc, 0, sizeof(*orc));
++
++	if (!cfi) {
++		orc->end = 0;
++		orc->sp_reg = ORC_REG_UNDEFINED;
++		return 0;
++	}
++
++	orc->end = cfi->end;
++	orc->signal = cfi->signal;
++
++	if (cfi->cfa.base == CFI_UNDEFINED) {
++		orc->sp_reg = ORC_REG_UNDEFINED;
++		return 0;
++	}
++
++	switch (cfi->cfa.base) {
++	case CFI_SP:
++		orc->sp_reg = ORC_REG_SP;
++		break;
++	case CFI_SP_INDIRECT:
++		orc->sp_reg = ORC_REG_SP_INDIRECT;
++		break;
++	case CFI_BP:
++		orc->sp_reg = ORC_REG_BP;
++		break;
++	case CFI_BP_INDIRECT:
++		orc->sp_reg = ORC_REG_BP_INDIRECT;
++		break;
++	case CFI_R10:
++		orc->sp_reg = ORC_REG_R10;
++		break;
++	case CFI_R13:
++		orc->sp_reg = ORC_REG_R13;
++		break;
++	case CFI_DI:
++		orc->sp_reg = ORC_REG_DI;
++		break;
++	case CFI_DX:
++		orc->sp_reg = ORC_REG_DX;
++		break;
++	default:
++		WARN_FUNC("unknown CFA base reg %d",
++			  insn->sec, insn->offset, cfi->cfa.base);
++		return -1;
++	}
++
++	switch (bp->base) {
++	case CFI_UNDEFINED:
++		orc->bp_reg = ORC_REG_UNDEFINED;
++		break;
++	case CFI_CFA:
++		orc->bp_reg = ORC_REG_PREV_SP;
++		break;
++	case CFI_BP:
++		orc->bp_reg = ORC_REG_BP;
++		break;
++	default:
++		WARN_FUNC("unknown BP base reg %d",
++			  insn->sec, insn->offset, bp->base);
++		return -1;
++	}
++
++	orc->sp_offset = cfi->cfa.offset;
++	orc->bp_offset = bp->offset;
++	orc->type = cfi->type;
++
++	return 0;
 +}
 +
-+void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable)
++static const char *reg_name(unsigned int reg)
 +{
-+	struct page *page;
-+
-+	page = virt_to_page(pgtable);
-+	call_rcu(&page->rcu_head, pte_free_now);
++	switch (reg) {
++	case ORC_REG_PREV_SP:
++		return "prevsp";
++	case ORC_REG_DX:
++		return "dx";
++	case ORC_REG_DI:
++		return "di";
++	case ORC_REG_BP:
++		return "bp";
++	case ORC_REG_SP:
++		return "sp";
++	case ORC_REG_R10:
++		return "r10";
++	case ORC_REG_R13:
++		return "r13";
++	case ORC_REG_BP_INDIRECT:
++		return "bp(ind)";
++	case ORC_REG_SP_INDIRECT:
++		return "sp(ind)";
++	default:
++		return "?";
++	}
 +}
 +
- void update_mmu_cache_pmd(struct vm_area_struct *vma, unsigned long addr,
- 			  pmd_t *pmd)
++const char *orc_type_name(unsigned int type)
++{
++	switch (type) {
++	case UNWIND_HINT_TYPE_CALL:
++		return "call";
++	case UNWIND_HINT_TYPE_REGS:
++		return "regs";
++	case UNWIND_HINT_TYPE_REGS_PARTIAL:
++		return "regs (partial)";
++	default:
++		return "?";
++	}
++}
++
++void orc_print_reg(unsigned int reg, int offset)
++{
++	if (reg == ORC_REG_BP_INDIRECT)
++		printf("(bp%+d)", offset);
++	else if (reg == ORC_REG_SP_INDIRECT)
++		printf("(sp)%+d", offset);
++	else if (reg == ORC_REG_UNDEFINED)
++		printf("(und)");
++	else
++		printf("%s%+d", reg_name(reg), offset);
++}
++
++void orc_print_sp(void)
++{
++	printf(" sp:");
++}
++
++void orc_print_fp(void)
++{
++	printf(" bp:");
++}
+diff --git a/tools/objtool/include/objtool/orc.h b/tools/objtool/include/objtool/orc.h
+new file mode 100644
+index 000000000000..bf141134c56f
+--- /dev/null
++++ b/tools/objtool/include/objtool/orc.h
+@@ -0,0 +1,18 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
++/*
++ * Copyright (C) 2015-2017 Josh Poimboeuf <jpoimboe@redhat.com>
++ */
++
++#ifndef _OBJTOOL_ORC_H
++#define _OBJTOOL_ORC_H
++
++#include <asm/orc_types.h>
++
++int init_orc_entry(struct orc_entry *orc, struct cfi_state *cfi,
++		   struct instruction *insn);
++const char *orc_type_name(unsigned int type);
++void orc_print_reg(unsigned int reg, int offset);
++void orc_print_sp(void);
++void orc_print_fp(void);
++
++#endif /* _OBJTOOL_ORC_H */
+diff --git a/tools/objtool/orc_dump.c b/tools/objtool/orc_dump.c
+index 2d8ebdcd1db3..82bdd33dbc39 100644
+--- a/tools/objtool/orc_dump.c
++++ b/tools/objtool/orc_dump.c
+@@ -5,63 +5,12 @@
+ 
+ #include <unistd.h>
+ #include <linux/objtool.h>
+-#include <asm/orc_types.h>
+ #include <objtool/objtool.h>
++#include <objtool/check.h>
++#include <objtool/orc.h>
+ #include <objtool/warn.h>
+ #include <objtool/endianness.h>
+ 
+-static const char *reg_name(unsigned int reg)
+-{
+-	switch (reg) {
+-	case ORC_REG_PREV_SP:
+-		return "prevsp";
+-	case ORC_REG_DX:
+-		return "dx";
+-	case ORC_REG_DI:
+-		return "di";
+-	case ORC_REG_BP:
+-		return "bp";
+-	case ORC_REG_SP:
+-		return "sp";
+-	case ORC_REG_R10:
+-		return "r10";
+-	case ORC_REG_R13:
+-		return "r13";
+-	case ORC_REG_BP_INDIRECT:
+-		return "bp(ind)";
+-	case ORC_REG_SP_INDIRECT:
+-		return "sp(ind)";
+-	default:
+-		return "?";
+-	}
+-}
+-
+-static const char *orc_type_name(unsigned int type)
+-{
+-	switch (type) {
+-	case UNWIND_HINT_TYPE_CALL:
+-		return "call";
+-	case UNWIND_HINT_TYPE_REGS:
+-		return "regs";
+-	case UNWIND_HINT_TYPE_REGS_PARTIAL:
+-		return "regs (partial)";
+-	default:
+-		return "?";
+-	}
+-}
+-
+-static void print_reg(unsigned int reg, int offset)
+-{
+-	if (reg == ORC_REG_BP_INDIRECT)
+-		printf("(bp%+d)", offset);
+-	else if (reg == ORC_REG_SP_INDIRECT)
+-		printf("(sp)%+d", offset);
+-	else if (reg == ORC_REG_UNDEFINED)
+-		printf("(und)");
+-	else
+-		printf("%s%+d", reg_name(reg), offset);
+-}
+-
+ int orc_dump(const char *_objname)
  {
+ 	int fd, nr_entries, i, *orc_ip = NULL, orc_size = 0;
+@@ -203,13 +152,13 @@ int orc_dump(const char *_objname)
+ 		}
+ 
+ 
+-		printf(" sp:");
++		orc_print_sp();
+ 
+-		print_reg(orc[i].sp_reg, bswap_if_needed(&dummy_elf, orc[i].sp_offset));
++		orc_print_reg(orc[i].sp_reg, bswap_if_needed(&dummy_elf, orc[i].sp_offset));
+ 
+-		printf(" bp:");
++		orc_print_fp();
+ 
+-		print_reg(orc[i].bp_reg, bswap_if_needed(&dummy_elf, orc[i].bp_offset));
++		orc_print_reg(orc[i].bp_reg, bswap_if_needed(&dummy_elf, orc[i].bp_offset));
+ 
+ 		printf(" type:%s signal:%d end:%d\n",
+ 		       orc_type_name(orc[i].type), orc[i].signal, orc[i].end);
+diff --git a/tools/objtool/orc_gen.c b/tools/objtool/orc_gen.c
+index 57a4527d5988..08c5a27252a2 100644
+--- a/tools/objtool/orc_gen.c
++++ b/tools/objtool/orc_gen.c
+@@ -7,87 +7,13 @@
+ #include <string.h>
+ 
+ #include <linux/objtool.h>
+-#include <asm/orc_types.h>
++#include <arch/elf.h>
+ 
+ #include <objtool/check.h>
++#include <objtool/orc.h>
+ #include <objtool/warn.h>
+ #include <objtool/endianness.h>
+ 
+-static int init_orc_entry(struct orc_entry *orc, struct cfi_state *cfi,
+-			  struct instruction *insn)
+-{
+-	struct cfi_reg *bp = &cfi->regs[CFI_BP];
+-
+-	memset(orc, 0, sizeof(*orc));
+-
+-	if (!cfi) {
+-		orc->end = 0;
+-		orc->sp_reg = ORC_REG_UNDEFINED;
+-		return 0;
+-	}
+-
+-	orc->end = cfi->end;
+-	orc->signal = cfi->signal;
+-
+-	if (cfi->cfa.base == CFI_UNDEFINED) {
+-		orc->sp_reg = ORC_REG_UNDEFINED;
+-		return 0;
+-	}
+-
+-	switch (cfi->cfa.base) {
+-	case CFI_SP:
+-		orc->sp_reg = ORC_REG_SP;
+-		break;
+-	case CFI_SP_INDIRECT:
+-		orc->sp_reg = ORC_REG_SP_INDIRECT;
+-		break;
+-	case CFI_BP:
+-		orc->sp_reg = ORC_REG_BP;
+-		break;
+-	case CFI_BP_INDIRECT:
+-		orc->sp_reg = ORC_REG_BP_INDIRECT;
+-		break;
+-	case CFI_R10:
+-		orc->sp_reg = ORC_REG_R10;
+-		break;
+-	case CFI_R13:
+-		orc->sp_reg = ORC_REG_R13;
+-		break;
+-	case CFI_DI:
+-		orc->sp_reg = ORC_REG_DI;
+-		break;
+-	case CFI_DX:
+-		orc->sp_reg = ORC_REG_DX;
+-		break;
+-	default:
+-		WARN_FUNC("unknown CFA base reg %d",
+-			  insn->sec, insn->offset, cfi->cfa.base);
+-		return -1;
+-	}
+-
+-	switch (bp->base) {
+-	case CFI_UNDEFINED:
+-		orc->bp_reg = ORC_REG_UNDEFINED;
+-		break;
+-	case CFI_CFA:
+-		orc->bp_reg = ORC_REG_PREV_SP;
+-		break;
+-	case CFI_BP:
+-		orc->bp_reg = ORC_REG_BP;
+-		break;
+-	default:
+-		WARN_FUNC("unknown BP base reg %d",
+-			  insn->sec, insn->offset, bp->base);
+-		return -1;
+-	}
+-
+-	orc->sp_offset = cfi->cfa.offset;
+-	orc->bp_offset = bp->offset;
+-	orc->type = cfi->type;
+-
+-	return 0;
+-}
+-
+ static int write_orc_entry(struct elf *elf, struct section *orc_sec,
+ 			   struct section *ip_sec, unsigned int idx,
+ 			   struct section *insn_sec, unsigned long insn_off,
+@@ -102,7 +28,7 @@ static int write_orc_entry(struct elf *elf, struct section *orc_sec,
+ 	orc->bp_offset = bswap_if_needed(elf, orc->bp_offset);
+ 
+ 	/* populate reloc for ip */
+-	if (elf_add_reloc_to_insn(elf, ip_sec, idx * sizeof(int), R_X86_64_PC32,
++	if (elf_add_reloc_to_insn(elf, ip_sec, idx * sizeof(int), R_PCREL,
+ 				  insn_sec, insn_off))
+ 		return -1;
+ 
 -- 
-2.35.3
+2.39.2
 
