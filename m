@@ -2,130 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4212C737380
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 831E6737385
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjFTSID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 14:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
+        id S230087AbjFTSIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 14:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjFTSIB (ORCPT
+        with ESMTP id S230009AbjFTSIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 14:08:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C39DB198;
-        Tue, 20 Jun 2023 11:07:59 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 540291063;
-        Tue, 20 Jun 2023 11:08:43 -0700 (PDT)
-Received: from [10.57.24.104] (unknown [10.57.24.104])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 983373F64C;
-        Tue, 20 Jun 2023 11:07:55 -0700 (PDT)
-Message-ID: <a464e8ee-a1b9-10dd-5be0-d9dee994d7b8@arm.com>
-Date:   Tue, 20 Jun 2023 19:08:12 +0100
+        Tue, 20 Jun 2023 14:08:48 -0400
+Received: from out-18.mta1.migadu.com (out-18.mta1.migadu.com [IPv6:2001:41d0:203:375::12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02771A8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 11:08:46 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 14:08:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1687284524;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uieB0uDJdV3Z2GtXLTESpNEU2SaPfLYBzXkq3w1FWM4=;
+        b=l9LNQKCRfl5hVxGylNeDu6+QvrufJx1VRN3rZ9aNaIZx+ebGT73VOxZXGQCCmrH1zf3UQ4
+        /ZCqggGHY4tXz4lK5ZfhHEO8UgXc0MuyuiLKyj4QvMCbcQ4bklk72tfx6Hir6jzovBQWVo
+        ztIqCXAuKSpqJRhecuoiRwPnw97z/Sc=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        "hch@infradead.org" <hch@infradead.org>, linux-mm@kvack.org,
+        Kees Cook <keescook@chromium.org>,
+        the arch/x86 maintainers <x86@kernel.org>
+Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
+Message-ID: <20230620180839.oodfav5cz234pph7@moria.home.lan>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-8-kent.overstreet@linux.dev>
+ <ZJAdhBIvwFBOFQU/@FVFF77S0Q05N>
+ <20230619104717.3jvy77y3quou46u3@moria.home.lan>
+ <ZJBOVsFraksigfRF@FVFF77S0Q05N.cambridge.arm.com>
+ <20230619191740.2qmlza3inwycljih@moria.home.lan>
+ <5ef2246b-9fe5-4206-acf0-0ce1f4469e6c@app.fastmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RESEND][PATCH v2 3/3] schedutil: trace: Add tracing to capture
- filter out requests
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
-        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, delyank@fb.com, qyousef@google.com,
-        qyousef@layalina.io, kernel test robot <lkp@intel.com>
-References: <20230522145702.2419654-1-lukasz.luba@arm.com>
- <20230522145702.2419654-4-lukasz.luba@arm.com>
- <CAJZ5v0g45=0+uLqPD5jib8aQrw8syjMxzd9uPqnTUzxgVCDVkQ@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0g45=0+uLqPD5jib8aQrw8syjMxzd9uPqnTUzxgVCDVkQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5ef2246b-9fe5-4206-acf0-0ce1f4469e6c@app.fastmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rafael,
+On Tue, Jun 20, 2023 at 10:42:02AM -0700, Andy Lutomirski wrote:
+> Code is either correct, and comes with an explanation as to how it is
+> correct, or it doesn't go in.  Saying that something is like BPF is
+> not an explanation as to how it's correct.  Saying that someone has
+> not come up with the chain of events that causes a mere violation of
+> architecture rules to actual incorrect execution is not an explanation
+> as to how something is correct.
 
-On 6/20/23 18:40, Rafael J. Wysocki wrote:
-> On Mon, May 22, 2023 at 4:57 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Some of the frequency update requests coming form the task scheduler
->> might be filter out. It can happen when the previous request was served
->> not that long ago (in a period smaller than provided by the cpufreq driver
->> as minimum for frequency update). In such case, we want to know if some of
->> the frequency updates cannot make through.
->> Export the new tracepoint as well. That would allow to handle it by a
->> toolkit for trace analyzes.
->>
->> Reported-by: kernel test robot <lkp@intel.com> # solved tricky build
->> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
->> ---
->>   include/trace/events/sched.h     |  4 ++++
->>   kernel/sched/cpufreq_schedutil.c | 10 ++++++++--
->>   2 files changed, 12 insertions(+), 2 deletions(-)
->>
->> diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
->> index dbfb30809f15..e34b7cd5de73 100644
->> --- a/include/trace/events/sched.h
->> +++ b/include/trace/events/sched.h
->> @@ -739,6 +739,10 @@ DECLARE_TRACE(uclamp_update_tsk_tp,
->>          TP_PROTO(struct task_struct *tsk, int uclamp_id,  unsigned int value),
->>          TP_ARGS(tsk, uclamp_id, value));
->>
->> +DECLARE_TRACE(schedutil_update_filtered_tp,
->> +       TP_PROTO(int cpu),
->> +       TP_ARGS(cpu));
->> +
->>   #endif /* _TRACE_SCHED_H */
->>
->>   /* This part must be outside protection */
->> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
->> index f462496e5c07..4f9daf258a65 100644
->> --- a/kernel/sched/cpufreq_schedutil.c
->> +++ b/kernel/sched/cpufreq_schedutil.c
->> @@ -6,6 +6,8 @@
->>    * Author: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>    */
->>
->> +EXPORT_TRACEPOINT_SYMBOL_GPL(schedutil_update_filtered_tp);
->> +
->>   #define IOWAIT_BOOST_MIN       (SCHED_CAPACITY_SCALE / 8)
->>
->>   struct sugov_tunables {
->> @@ -318,8 +320,10 @@ static inline bool sugov_update_single_common(struct sugov_cpu *sg_cpu,
->>
->>          ignore_dl_rate_limit(sg_cpu);
->>
->> -       if (!sugov_should_update_freq(sg_cpu->sg_policy, time))
->> +       if (!sugov_should_update_freq(sg_cpu->sg_policy, time)) {
->> +               trace_schedutil_update_filtered_tp(sg_cpu->cpu);
-> 
-> It looks like the tracepoint can be added to
-> sugov_should_update_freq() for less code duplication.
-> 
+No, I'm saying your concerns are baseless and too vague to address.
 
-Make sense. I will move that trace there.
+> text_poke() by itself is *not* the proper API, as discussed.  It
+> doesn't serialize adequately, even on x86.  We have text_poke_sync()
+> for that.
 
-In such case, of movement that trace call...
-Based on your comment for patch 2/3 I got impression
-that you still want it. For me it looks more 'aligned' w/ that
-patch 2/3. The two functions code flows:
-sugov_update_shared() and sugov_update_single_common() - how
-they call and interpret result from
-sugov_should_update_freq() - is more clear IMO.
-
-So I will keep that patch 2/3 in the next version. Although,
-if you don't like it - please tell me and I will drop it.
-
-Thanks for the review!
-
-Lukasz
+Andy, I replied explaining the difference between text_poke() and
+text_poke_sync(). It's clear you have no idea what you're talking about,
+so I'm not going to be wasting my time on further communications with
+you.
