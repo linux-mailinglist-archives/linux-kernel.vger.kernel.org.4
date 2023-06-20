@@ -2,278 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FBB737777
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:28:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB2D73777B
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:29:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230114AbjFTW2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 18:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
+        id S229821AbjFTW3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 18:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230088AbjFTW16 (ORCPT
+        with ESMTP id S229690AbjFTW3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 18:27:58 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08371992
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 15:27:55 -0700 (PDT)
-Received: from localhost (unknown [188.27.34.213])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: cristicc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 422646606F8A;
-        Tue, 20 Jun 2023 23:27:54 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687300074;
-        bh=AABODhCwuN310nfbb59NmJs3LQPMprqxWGfMIvFY3mQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lUo+ML6SNU3j6mdfvL0VPxuazXyHIUsbSvRx5TX0sUIT7AbUCSZiz7AR7Kd2vfqpr
-         E97MCrekGllfOfKE6LaF5HIT1sSGU/32ocNgkrbmgZlgcXvoXIs/t+NR1RN2xv4SAx
-         u+VnYUY0qgEPHTdj17gYBV9kQCcX4OUADBpjG4b0SgeDddLE60qHQJk45ne+VQo9SK
-         c3MWMzb7ZbuixO5nkn5wHDfd3YKieoBmt/Veac0wWhULte5C92dUMc5xfWnmTc/bg0
-         Ae6ORipDm47y75JFd5C8ZpfGPhT0x34iJkNGV3SrOV1H3fdi6sFWxR9TZbA0Owmirh
-         FeGqtG0m+eKOQ==
-From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
-        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-        Venkata Prasad Potturu <venkataprasad.potturu@amd.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: [PATCH 2/2] ASoC: amd: vangogh: Add support for NAU8821/MAX98388 variant
-Date:   Wed, 21 Jun 2023 01:27:43 +0300
-Message-ID: <20230620222743.274432-3-cristian.ciocaltea@collabora.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230620222743.274432-1-cristian.ciocaltea@collabora.com>
-References: <20230620222743.274432-1-cristian.ciocaltea@collabora.com>
+        Tue, 20 Jun 2023 18:29:49 -0400
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBE21737
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 15:29:47 -0700 (PDT)
+Received: by mail-oo1-xc2e.google.com with SMTP id 006d021491bc7-5608a4eb782so1135037eaf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 15:29:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687300186; x=1689892186;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=737y4GyRKpqE91gxSPyOenREhA5BzvvW+7hP1UZx97Y=;
+        b=UOyd0SqfeJgjhXQSRp176NRZYdP7jXBIUwyWyjy9o2GHZalWpMTMxx/ULyTCXJLjcO
+         VxnHQbRksc+9saHehv+vc4iI4O3WP73yzFRSzFTsMi6Y5r7foNdSNvSBerZNxrWF+Vhe
+         Vtc8fz4c44M5POvOs+oxJilbwBw+uozTOHVbU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687300186; x=1689892186;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=737y4GyRKpqE91gxSPyOenREhA5BzvvW+7hP1UZx97Y=;
+        b=MZz4dr1gLL3HpZ1foLF8hNDp/gUoZHHi444wXxO3uCGExpOQNYLAWonGPkFmsSJFqW
+         5Q9iSMXVFkeplJX6YdTuBClgAGaYsEHzbvGdFTz//36YWipGUaPfYBfx+sTepzhetg4J
+         HWcKCUkStpcq4Hnv79BpIkHLWxwuQDdAzownIIwUhFmxC3pfllW9IoW7RWC1DPZ0VSK5
+         MTA0dUerVghFWJH4FqZPECRvRF5CYCUpJrBwG4YK2NEO0wq+wFWGVY1Bjw9lpGlovmhI
+         Y2rnF+gBXMLdjJE5Cop97uhDJm6MsnRBilOuvG79gEAP1T/wKMRxxFKFkx30Cz24Sm08
+         yu2Q==
+X-Gm-Message-State: AC+VfDyZDFm9TxK5VnKiEZeHIJlg5jSG/WilQ7pX9+rN/4IS0KZnmha8
+        siampCXbUPDLkHUJpxVr85s97WHU2SFDQsloBTxyNw==
+X-Google-Smtp-Source: ACHHUZ4o4Qo09sbgerKhKFBt3uDUXaRfWTXfdNBwHm3LbMd5T9IVxxNte6h21MAZepg91DnddrV44fMX/rci9N6oSqg=
+X-Received: by 2002:a05:6808:1294:b0:3a0:3249:b29e with SMTP id
+ a20-20020a056808129400b003a03249b29emr5459279oiw.44.1687300186491; Tue, 20
+ Jun 2023 15:29:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CABi2SkWx_BnEHzGqqqbDMJi+vi-5a7XkQUCkyesN5PUtk23SgQ@mail.gmail.com>
+ <CABi2SkXw6ZD-M1ZrcXNL7abtM=RzQXv716PPM_k=1Tay=5rUFA@mail.gmail.com>
+ <ZIjOlU5EfVNt6NRU@x1n> <CABi2SkXE4pUhHucZ_c-_4Ux-VcLKic0+HY_DN2wUEC6DGkDvQQ@mail.gmail.com>
+ <20230614011814.sz2l6z6wbaubabk2@revolver> <20230614125731.GY52412@kernel.org>
+In-Reply-To: <20230614125731.GY52412@kernel.org>
+From:   Jeff Xu <jeffxu@chromium.org>
+Date:   Tue, 20 Jun 2023 15:29:34 -0700
+Message-ID: <CABi2SkXySaoRxB0dfhhTQz6P5jCL8iWpY_ti=LC7Qi49+2F01w@mail.gmail.com>
+Subject: Re: inconsistence in mprotect_fixup mlock_fixup madvise_update_vma
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
+        linux-hardening@vger.kernel.org, zhangpeng.00@bytedance.com,
+        akpm@linux-foundation.org, koct9i@gmail.com, david@redhat.com,
+        ak@linux.intel.com, hughd@google.com, emunson@akamai.com,
+        rppt@linux.ibm.com, aarcange@redhat.com,
+        linux-kernel@vger.kernel.org, Lorenzo Stoakes <lstoakes@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend the Vangogh machine driver to support a variant based on the
-Nuvoton NAU88L21 Codec and the Analog Devices MAX98388 Speaker
-Amplifier.
+On Wed, Jun 14, 2023 at 5:58=E2=80=AFAM Mike Rapoport <rppt@kernel.org> wro=
+te:
+>
+> On Tue, Jun 13, 2023 at 09:18:14PM -0400, Liam R. Howlett wrote:
+> > * Jeff Xu <jeffxu@chromium.org> [230613 17:29]:
+> > > Hello Peter,
+> > >
+> > > Thanks for responding.
+> > >
+> > > On Tue, Jun 13, 2023 at 1:16=E2=80=AFPM Peter Xu <peterx@redhat.com> =
+wrote:
+> > > >
+> > > > Hi, Jeff,
+> > > >
+> > > > On Tue, Jun 13, 2023 at 08:26:26AM -0700, Jeff Xu wrote:
+> > > > > + more ppl to the list.
+> > > > >
+> > > > > On Mon, Jun 12, 2023 at 6:04=E2=80=AFPM Jeff Xu <jeffxu@chromium.=
+org> wrote:
+> > > > > >
+> > > > > > Hello,
+> > > > > >
+> > > > > > There seems to be inconsistency in different VMA fixup
+> > > > > > implementations, for example:
+> > > > > > mlock_fixup will skip VMA that is hugettlb, etc, but those chec=
+ks do
+> > > > > > not exist in mprotect_fixup and madvise_update_vma. Wouldn't th=
+is be a
+> > > > > > problem? the merge/split skipped by mlock_fixup, might get acte=
+d on in
+> > > > > > the madvice/mprotect case.
+> > > > > >
+> > > > > > mlock_fixup currently check for
+> > > > > > if (newflags =3D=3D oldflags ||
+> >
+> > newflags =3D=3D oldflags, then we don't need to do anything here, it's
+> > already at the desired mlock.  mprotect does this, madvise does this..
+> > probably.. it's ugly.
+> >
+> > > > > > (oldflags & VM_SPECIAL) ||
+> >
+> > It's special, merging will fail always.  I don't know about splitting,
+> > but I guess we don't want to alter the mlock state on special mappings.
+> >
+> > > > > > is_vm_hugetlb_page(vma) || vma =3D=3D get_gate_vma(current->mm)=
+ ||
+> > > > > > vma_is_dax(vma) || vma_is_secretmem(vma))
+> > > >
+> > > > The special handling you mentioned in mlock_fixup mostly makes sens=
+e to me.
+> > > >
+> > > > E.g., I think we can just ignore mlock a hugetlb page if it won't b=
+e
+> > > > swapped anyway.
+> > > >
+> > > > Do you encounter any issue with above?
+> > > >
+> > > > > > Should there be a common function to handle VMA merge/split ?
+> > > >
+> > > > IMHO vma_merge() and split_vma() are the "common functions".  Copy =
+Lorenzo
+> > > > as I think he has plan to look into the interface to make it even e=
+asier to
+> > > > use.
+> > > >
+> > > The mprotect_fixup doesn't have the same check as mlock_fixup. When
+> > > userspace calls mlock(), two VMAs might not merge or split because of
+> > > vma_is_secretmem check, However, when user space calls mprotect() wit=
+h
+> > > the same address range, it will merge/split.  If mlock() is doing the
+> > > right thing to merge/split the VMAs, then mprotect() is not ?
+> >
+> > It looks like secretmem is mlock'ed to begin with so they don't want it
+> > to be touched.  So, I think they will be treated differently and I thin=
+k
+> > it is correct.
+>
+> Right, they don't :)
+>
+> secretmem VMAs are always mlocked, they cannot be munlocked and there is =
+no
+> point trying to mlock them again.
+>
+> The mprotect for secretmem is Ok though, so e.g. if we (unlikely) have tw=
+o
+> adjacent secretmem VMAs in a range passed to mprotect, it's fine to merge
+> them.
+>
 
-Co-developed-by: Lucas Tanure <lucas.tanure@collabora.com>
-Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
-Signed-off-by: Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
----
- sound/soc/amd/Kconfig              |   5 +-
- sound/soc/amd/vangogh/acp5x-mach.c | 132 +++++++++++++++++++++++++++--
- 2 files changed, 130 insertions(+), 7 deletions(-)
+I m thinking/brainstorming below, assuming:
+Address range 1: 0x5000 to 0x6000 (regular mmap)
+Address range 2: 0x6000 to 0x7000 (allocated to secretmem)
+Address range 3: 0x7000 to 0x8000 (regular mmap)
 
-diff --git a/sound/soc/amd/Kconfig b/sound/soc/amd/Kconfig
-index 57d5e342a8eb..fb6bee51ad03 100644
---- a/sound/soc/amd/Kconfig
-+++ b/sound/soc/amd/Kconfig
-@@ -79,14 +79,15 @@ config SND_SOC_AMD_ACP5x
- 	 ACP DMA driver, CPU DAI driver.
- 
- config SND_SOC_AMD_VANGOGH_MACH
--	tristate "AMD Vangogh support for NAU8821 CS35L41"
-+	tristate "AMD Vangogh support for NAU8821/CS35L41/MAX98388"
- 	select SND_SOC_NAU8821
- 	select SND_SOC_CS35L41_SPI
-+	select SND_SOC_MAX98388
- 	select SND_AMD_ACP_CONFIG
- 	depends on SND_SOC_AMD_ACP5x && I2C && SPI_MASTER
- 	help
- 	  This option enables machine driver for Vangogh platform
--	  using NAU8821 and CS35L41 codecs.
-+	  using NAU8821 and either CS35L41 or MAX98388 codecs.
- 	  Say m if you have such a device.
- 	  If unsure select "N".
- 
-diff --git a/sound/soc/amd/vangogh/acp5x-mach.c b/sound/soc/amd/vangogh/acp5x-mach.c
-index 1b54eadc4979..0870eb027a84 100644
---- a/sound/soc/amd/vangogh/acp5x-mach.c
-+++ b/sound/soc/amd/vangogh/acp5x-mach.c
-@@ -1,7 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0+
- /*
-- * Machine driver for AMD Vangogh platform using NAU8821 & CS35L41
-- * codecs.
-+ * Machine driver for AMD Vangogh platform using either
-+ * NAU8821 & CS35L41 or NAU8821 & MAX98388 codecs.
-  *
-  * Copyright 2021 Advanced Micro Devices, Inc.
-  */
-@@ -29,6 +29,9 @@
- #define ACP5X_CS35L41_COMP_LNAME	"spi-VLV1776:00"
- #define ACP5X_CS35L41_COMP_RNAME	"spi-VLV1776:01"
- #define ACP5X_CS35L41_DAI_NAME		"cs35l41-pcm"
-+#define ACP5X_M98388_COMP_LNAME		"i2c-ADS8388:00"
-+#define ACP5X_M98388_COMP_RNAME		"i2c-ADS8388:01"
-+#define ACP5X_M98388_DAI_NAME		"max98388-aif1"
- 
- static struct snd_soc_jack vg_headset;
- 
-@@ -290,8 +293,6 @@ static struct snd_soc_dai_link acp5x_8821_35l41_dai[] = {
- 	},
- };
- 
--
--
- static const struct snd_soc_dapm_widget acp5x_8821_35l41_widgets[] = {
- 	SND_SOC_DAPM_HP("Headphone", NULL),
- 	SND_SOC_DAPM_MIC("Headset Mic", NULL),
-@@ -329,6 +330,126 @@ static struct snd_soc_card acp5x_8821_35l41_card = {
- 	.num_controls = ARRAY_SIZE(acp5x_8821_controls),
- };
- 
-+static int acp5x_max98388_startup(struct snd_pcm_substream *substream)
-+{
-+	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
-+	struct acp5x_platform_info *machine = snd_soc_card_get_drvdata(rtd->card);
-+	struct snd_pcm_runtime *runtime = substream->runtime;
-+
-+	machine->play_i2s_instance = I2S_HS_INSTANCE;
-+
-+	runtime->hw.channels_max = DUAL_CHANNEL;
-+	snd_pcm_hw_constraint_list(runtime, 0, SNDRV_PCM_HW_PARAM_CHANNELS,
-+				   &constraints_channels);
-+	snd_pcm_hw_constraint_list(runtime, 0, SNDRV_PCM_HW_PARAM_RATE,
-+				   &constraints_rates);
-+	return 0;
-+}
-+
-+static int acp5x_max98388_hw_params(struct snd_pcm_substream *substream,
-+				    struct snd_pcm_hw_params *params)
-+{
-+	struct snd_soc_pcm_runtime *rtd = asoc_substream_to_rtd(substream);
-+	struct snd_soc_dai *dai = snd_soc_card_get_codec_dai(rtd->card,
-+							     ACP5X_M98388_DAI_NAME);
-+	int ret;
-+
-+	ret = snd_soc_dai_set_fmt(dai,
-+				  SND_SOC_DAIFMT_CBS_CFS | SND_SOC_DAIFMT_I2S |
-+				  SND_SOC_DAIFMT_NB_NF);
-+	if (ret < 0)
-+		dev_err(dai->dev, "Failed to set format: %d\n", ret);
-+
-+	return ret;
-+}
-+
-+static const struct snd_soc_ops acp5x_max98388_play_ops = {
-+	.startup = acp5x_max98388_startup,
-+	.hw_params = acp5x_max98388_hw_params,
-+};
-+
-+static struct snd_soc_codec_conf acp5x_max98388_conf[] = {
-+	{
-+		.dlc = COMP_CODEC_CONF(ACP5X_M98388_COMP_LNAME),
-+		.name_prefix = "Left",
-+	},
-+	{
-+		.dlc = COMP_CODEC_CONF(ACP5X_M98388_COMP_RNAME),
-+		.name_prefix = "Right",
-+	},
-+};
-+
-+SND_SOC_DAILINK_DEF(max98388, DAILINK_COMP_ARRAY(COMP_CODEC(ACP5X_M98388_COMP_LNAME,
-+							    ACP5X_M98388_DAI_NAME),
-+						 COMP_CODEC(ACP5X_M98388_COMP_RNAME,
-+							    ACP5X_M98388_DAI_NAME)));
-+
-+static struct snd_soc_dai_link acp5x_8221_98388_dai[] = {
-+	{
-+		.name = "acp5x-8821-play",
-+		.stream_name = "Playback/Capture",
-+		.dai_fmt = SND_SOC_DAIFMT_I2S |
-+			   SND_SOC_DAIFMT_NB_NF |
-+			   SND_SOC_DAIFMT_CBC_CFC,
-+		.dpcm_playback = 1,
-+		.dpcm_capture = 1,
-+		.ops = &acp5x_8821_ops,
-+		.init = acp5x_8821_init,
-+		SND_SOC_DAILINK_REG(acp5x_i2s, nau8821, platform),
-+	},
-+	{
-+		.name = "acp5x-max98388-play",
-+		.stream_name = "MAX98388 Playback",
-+		.dai_fmt = SND_SOC_DAIFMT_I2S |
-+			   SND_SOC_DAIFMT_NB_NF |
-+			   SND_SOC_DAIFMT_CBC_CFC,
-+		.dpcm_playback = 1,
-+		.playback_only = 1,
-+		.ops = &acp5x_max98388_play_ops,
-+		SND_SOC_DAILINK_REG(acp5x_bt, max98388, platform),
-+	},
-+};
-+
-+static const struct snd_soc_dapm_widget acp5x_8821_98388_widgets[] = {
-+	SND_SOC_DAPM_HP("Headphone", NULL),
-+	SND_SOC_DAPM_MIC("Headset Mic", NULL),
-+	SND_SOC_DAPM_MIC("Int Mic", NULL),
-+	SND_SOC_DAPM_SUPPLY("Platform Clock", SND_SOC_NOPM, 0, 0,
-+			    platform_clock_control,
-+			    SND_SOC_DAPM_PRE_PMU | SND_SOC_DAPM_POST_PMD),
-+	SND_SOC_DAPM_SPK("SPK", NULL),
-+};
-+
-+static const struct snd_soc_dapm_route acp5x_8821_98388_route[] = {
-+	{ "Headphone", NULL, "HPOL" },
-+	{ "Headphone", NULL, "HPOR" },
-+	{ "MICL", NULL, "Headset Mic" },
-+	{ "MICR", NULL, "Headset Mic" },
-+	{ "DMIC", NULL, "Int Mic" },
-+
-+	{ "Headphone", NULL, "Platform Clock" },
-+	{ "Headset Mic", NULL, "Platform Clock" },
-+	{ "Int Mic", NULL, "Platform Clock" },
-+
-+	{ "SPK", NULL, "Left BE_OUT" },
-+	{ "SPK", NULL, "Right BE_OUT" },
-+};
-+
-+static struct snd_soc_card acp5x_8221_max98388_card = {
-+	.name = "acp5x-98388",
-+	.owner = THIS_MODULE,
-+	.dai_link = acp5x_8221_98388_dai,
-+	.num_links = ARRAY_SIZE(acp5x_8221_98388_dai),
-+	.dapm_widgets = acp5x_8821_98388_widgets,
-+	.num_dapm_widgets = ARRAY_SIZE(acp5x_8821_98388_widgets),
-+	.dapm_routes = acp5x_8821_98388_route,
-+	.num_dapm_routes = ARRAY_SIZE(acp5x_8821_98388_route),
-+	.codec_conf = acp5x_max98388_conf,
-+	.num_configs = ARRAY_SIZE(acp5x_max98388_conf),
-+	.controls = acp5x_8821_controls,
-+	.num_controls = ARRAY_SIZE(acp5x_8821_controls),
-+};
-+
- static int acp5x_probe(struct platform_device *pdev)
- {
- 	struct acp5x_platform_info *machine;
-@@ -357,6 +478,7 @@ static int acp5x_probe(struct platform_device *pdev)
- 
- static const struct acpi_device_id acp5x_acpi_match[] = {
- 	{ "AMDI3541", (kernel_ulong_t)&acp5x_8821_35l41_card },
-+	{ "AMDI8821", (kernel_ulong_t)&acp5x_8221_max98388_card },
- 	{},
- };
- MODULE_DEVICE_TABLE(acpi, acp5x_acpi_match);
-@@ -373,6 +495,6 @@ static struct platform_driver acp5x_mach_driver = {
- module_platform_driver(acp5x_mach_driver);
- 
- MODULE_AUTHOR("Vijendar.Mukunda@amd.com");
--MODULE_DESCRIPTION("NAU8821 & CS35L41 audio support");
-+MODULE_DESCRIPTION("NAU8821/CS35L41 & NAU8821/MAX98388 audio support");
- MODULE_LICENSE("GPL v2");
- MODULE_ALIAS("platform:" DRV_NAME);
--- 
-2.41.0
+User space call: mlock(0x5000,0x3000)
+range 1 and 2 won't merge.
+range 2 and 3  could merge, when mlock_fixup  checks current vma
+(range 3), it is not secretmem, so it will merge with prev vma.
 
+user space call: mprotect(0x5000,0x3000)
+range 1 2 3 could merge,  all three can have the same flags.
+Note: vma_is_secretmem() isn't checked in mprotect_fixup, same for
+vma_is_dax and get_gate_vma, those doesn't have included in
+vma->vm_flags
+
+Once 1 and 2 are merged, maybe user space is able to use
+munlock(0x5000,0x3000)
+to unlock range 1 to 3, this will include 2, right ? (haven't used the
+code to prove it)
+
+I'm using secretmem as an example here, having 3 different _fixup
+implementations seems to be error prone to me.
+
+Thanks
+-Jeff
+
+
+
+
+
+> > Although, it would have been nice to have the comment above the functio=
+n
+> > kept up to date on why certain VMAs are filtered out.
+> >
+> > >
+> > > Also skipping merge of VMA might be OK, but skipping split doesn't,
+> > > wouldn't that cause inconsistent between vma->vm_flags and what is
+> > > provisioned in the page ?
+> >
+> > I don't quite follow what you mean.  It seems like the mlock_fixup() is
+> > skipped when we don't want the flag to be altered on a particular VMA.
+> > Where do they get out of sync?
+> >
+> >
+>
+> --
+> Sincerely yours,
+> Mike.
