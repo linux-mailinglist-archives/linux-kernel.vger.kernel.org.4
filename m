@@ -2,87 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E942D736F36
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:52:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2CB7736F16
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232756AbjFTOw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 10:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55948 "EHLO
+        id S233397AbjFTOtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 10:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231954AbjFTOwy (ORCPT
+        with ESMTP id S233404AbjFTOtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 10:52:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49701716
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 07:52:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687272722;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ELfQweYC/8dcGoZH9AqfrEpzRTMlTZCKvStu6Pf4W0w=;
-        b=f0J3Y1poW/SlPh66cw+iHLrjZo37PgCBHAXxjVBekPafLQQoz/a32OlBOllV5K7WyvEXW/
-        GjrM2fMY6B0HhHmR8euVJhWc00/j1DoSFdQUT0FQNKA7p9BfARRTEcQJNB2Lqb1wbMFv31
-        wgdzn8rGZpdeGJi9v5NtuWO0O56h628=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-119-bNBdKun_PNWBBkWTQYd94g-1; Tue, 20 Jun 2023 10:51:56 -0400
-X-MC-Unique: bNBdKun_PNWBBkWTQYd94g-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B55B1104459E;
-        Tue, 20 Jun 2023 14:48:57 +0000 (UTC)
-Received: from p1.luc.cera.cz (unknown [10.43.2.89])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 895012166B26;
-        Tue, 20 Jun 2023 14:48:56 +0000 (UTC)
-From:   Ivan Vecera <ivecera@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Michael Chan <michael.chan@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net-next] bnxt_en: Link representors to PCI device
-Date:   Tue, 20 Jun 2023 16:48:55 +0200
-Message-Id: <20230620144855.288443-1-ivecera@redhat.com>
+        Tue, 20 Jun 2023 10:49:06 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2C81717
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 07:49:05 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f8fb0e7709so45605815e9.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 07:49:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687272544; x=1689864544;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tFBJCFv89ibLGDxP64+KT5RKVRcJ4ABThqZOUh/7S8U=;
+        b=u/nNunrJJa6/pTEdqFGYPAhtOAsS9D0F0Anp3vZDPkfxNCw2tMiHHZcg6GSyR8nblh
+         CNboKm+SxYJjYaFoXBPLi7zB10yrVnRTrlx+KejPLgk9SlKVgzkg9MlbIvtSsvURzXlf
+         6/8H1AsUpPrUWvtYsLb6Uz3IQ0FqOD8+Nvyk8FempvIx7zVA5tMD4XJ0wQvB/ziNDViK
+         vyZISyFCCkt5AC9InX2i8JjC6kDmpphGiiaJN8blfT9IYQCbL4eeQ38tTNKebViEPuo+
+         D9mJkOCfxfhU0sjTaiw1603JgWXxKT5DGz77RpQVXdGXeUm8h6ALOhXtetH/FNZCT4ZZ
+         zMAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687272544; x=1689864544;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tFBJCFv89ibLGDxP64+KT5RKVRcJ4ABThqZOUh/7S8U=;
+        b=dWXm2L3pv7na6oumNe1Q8nMMSdoA6TMIgvIL1C3ONRoZ+BK/XdSGvxc/VjW3opuxhv
+         7FvxFQeTC0ZLfa3FzklbiLwEsJnDJacdN7gV6AmJGJJov0ypRqeyajXBkLms7pIiakvZ
+         PuN2CX9m2+nSR8yBXeMtGgC6eKb6tg2c8CLCsNjuZe2gibaMwjguSEGhPWkEpeyE9Fbw
+         XVB0waqcbzMJegJAMiddmXoBQL+EQyZaIcBE2mEzTvkQBfC0vhLYfuEKiTwWEv7iraXU
+         8dJSN16lXFGoeOFUJkytAIGLSapnb5UOMjEXmT9/P3Rqc+JWo4/AcAsi4YbC52GUYL2S
+         epeg==
+X-Gm-Message-State: AC+VfDxuZHV9KzpLByP2HdGUkRtu2g4PJT4n3hyN2c/wtBl2E1oeLC6M
+        rpjmNXdviwuZ8x1pBY82vuCr7Q==
+X-Google-Smtp-Source: ACHHUZ7LDr1h7a0YR+y1QSbkuQ+nwXK7muhEZDUzjJ87F1Pyf+gCx4EV1rE49ZD6t+JhlLe/MGCHXQ==
+X-Received: by 2002:a05:600c:231a:b0:3f9:b430:199b with SMTP id 26-20020a05600c231a00b003f9b430199bmr3194468wmo.15.1687272543652;
+        Tue, 20 Jun 2023 07:49:03 -0700 (PDT)
+Received: from elver.google.com ([2a00:79e0:9c:201:8530:a6a3:373f:683c])
+        by smtp.gmail.com with ESMTPSA id i2-20020a05600c290200b003f42d8dd7d1sm13668387wmd.7.2023.06.20.07.49.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 07:49:03 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 16:48:58 +0200
+From:   Marco Elver <elver@google.com>
+To:     Andrey Konovalov <andreyknvl@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Aleksandr Nogikh <nogikh@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>, kasan-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Catalin Marinas <catalin.marinas@arm.com>
+Subject: Re: [PATCH] kasan: add support for kasan.fault=panic_on_write
+Message-ID: <ZJG8WiamZvEJJKUc@elver.google.com>
+References: <20230614095158.1133673-1-elver@google.com>
+ <CA+fCnZdy4TmMacvsPkoenCynUYsyKZ+kU1fx7cDpbh_6=cEPAQ@mail.gmail.com>
+ <CANpmjNOSnVNy14xAVe6UHD0eHuMpxweg86+mYLQHpLM1k0H_cg@mail.gmail.com>
+ <CA+fCnZccdLNqtxubVVtGPTOXcSoYfpM9CHk-nrYsZK7csC77Eg@mail.gmail.com>
+ <ZJGSqdDQPs0sRQTb@elver.google.com>
+ <CA+fCnZdZ0=kKN6hE_OF7jV_r_FjTh3FZtkGHBD57ZfqCXStKHg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+fCnZdZ0=kKN6hE_OF7jV_r_FjTh3FZtkGHBD57ZfqCXStKHg@mail.gmail.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Link VF representors to parent PCI device to benefit from
-systemd defined naming scheme.
+On Tue, Jun 20, 2023 at 03:56PM +0200, Andrey Konovalov wrote:
+...
+> Could you move this to the section that describes the kasan.fault
+> flag? This seems more consistent.
 
-Without this change the representor is visible as ethN.
+Like this?
 
-Signed-off-by: Ivan Vecera <ivecera@redhat.com>
----
- drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.c b/drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.c
-index 2f1a1f2d2157..1467b94a6427 100644
---- a/drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.c
-+++ b/drivers/net/ethernet/broadcom/bnxt/bnxt_vfr.c
-@@ -468,6 +468,7 @@ static void bnxt_vf_rep_netdev_init(struct bnxt *bp, struct bnxt_vf_rep *vf_rep,
- 	struct net_device *pf_dev = bp->dev;
- 	u16 max_mtu;
+diff --git a/Documentation/dev-tools/kasan.rst b/Documentation/dev-tools/kasan.rst
+index 7f37a46af574..f4acf9c2e90f 100644
+--- a/Documentation/dev-tools/kasan.rst
++++ b/Documentation/dev-tools/kasan.rst
+@@ -110,7 +110,9 @@ parameter can be used to control panic and reporting behaviour:
+ - ``kasan.fault=report``, ``=panic``, or ``=panic_on_write`` controls whether
+   to only print a KASAN report, panic the kernel, or panic the kernel on
+   invalid writes only (default: ``report``). The panic happens even if
+-  ``kasan_multi_shot`` is enabled.
++  ``kasan_multi_shot`` is enabled. Note that when using asynchronous mode of
++  Hardware Tag-Based KASAN, ``kasan.fault=panic_on_write`` always panics on
++  asynchronously checked accesses (including reads).
  
-+	SET_NETDEV_DEV(dev, &bp->pdev->dev);
- 	dev->netdev_ops = &bnxt_vf_rep_netdev_ops;
- 	dev->ethtool_ops = &bnxt_vf_rep_ethtool_ops;
- 	/* Just inherit all the featues of the parent PF as the VF-R
--- 
-2.39.3
-
+ Software and Hardware Tag-Based KASAN modes (see the section about various
+ modes below) support altering stack trace collection behavior:
