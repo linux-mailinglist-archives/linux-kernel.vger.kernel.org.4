@@ -2,93 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72FCB73739F
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 221237373A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:19:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbjFTSQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 14:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
+        id S229778AbjFTSTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 14:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjFTSQW (ORCPT
+        with ESMTP id S229675AbjFTST3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 14:16:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDEA1A8;
-        Tue, 20 Jun 2023 11:16:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C7D3C61373;
-        Tue, 20 Jun 2023 18:16:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90F75C433C0;
-        Tue, 20 Jun 2023 18:16:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687284980;
-        bh=8/x6FlS2rdNYsdrdl/GrGUwfaFDrHFmp22LUn9md4KU=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=HzyKSuS6Rvzj9LJHbW41RA3tTfiERV2LElnMulbM0jOTGlMbCHbEWUXUHdNFoO388
-         mjXw+NoYnVhjwr0fL7/11n+AuaNt5xUzSnjAIhQjwlHflOjfbP8y6HHHVE8//uNEWr
-         oYAt6c1ZgNG8nOJOVbpiiVKJyPfqgEz/uKg40ExaglW71HwvPBwB6SPfGJiEcEex7Z
-         z5UTlpCWIa7VnEPVS9w9KIbVrVCZxORZxXD//6CymjGD1A+I/E/J/I3cRHqcbDR2N1
-         By5HeAMstlV4xK71qUyVjLtLZKNuwXSelKmHOSuX9I15MpoT/TW7dAthwt/7v741Rk
-         MGhtj/zvkzpcQ==
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 8A0FB27C0054;
-        Tue, 20 Jun 2023 14:16:18 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute3.internal (MEProxy); Tue, 20 Jun 2023 14:16:18 -0400
-X-ME-Sender: <xms:8uyRZIEsuGCfsP3CqUs7Gv4kKy9lTcSMl_ILHzFHzcrEiUMmSAOF3A>
-    <xme:8uyRZBX1SNNypgeKBvO5cC5U_7bN3A8QB6ibgi8DGR634p_fW78V3SMoqeMTEGlOG
-    373n63YlbXN3AjdW9Y>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefhedguddtudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpedvhfeuvddthfdufffhkeekffetgffhledtleegffetheeugeej
-    ffduhefgteeihfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
-    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
-    hugidrlhhuthhordhush
-X-ME-Proxy: <xmx:8uyRZCKQ_Z7tnA2xlKU-D_5FECW4et0RavTPNQN-q5CEVkFPFzhmEg>
-    <xmx:8uyRZKFWsCFfXzOJ6R_bKukeXevFCYJmGVzSEWQ-b0G-T3MxXyHArQ>
-    <xmx:8uyRZOVMmXzl5YhD8xfdEQnBBA8lKR5doBrVDwSuVqYafg0ecMdhTQ>
-    <xmx:8uyRZKRhfKyhAes21w9qVkFZ6aJRBzuZK6RwaJVgYcS2XZQMf_YmVA>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1671831A0063; Tue, 20 Jun 2023 14:16:18 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <dcf8648b-c367-47a5-a2b6-94fb07a68904@app.fastmail.com>
-In-Reply-To: <20230620180839.oodfav5cz234pph7@moria.home.lan>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-8-kent.overstreet@linux.dev>
- <ZJAdhBIvwFBOFQU/@FVFF77S0Q05N>
- <20230619104717.3jvy77y3quou46u3@moria.home.lan>
- <ZJBOVsFraksigfRF@FVFF77S0Q05N.cambridge.arm.com>
- <20230619191740.2qmlza3inwycljih@moria.home.lan>
- <5ef2246b-9fe5-4206-acf0-0ce1f4469e6c@app.fastmail.com>
- <20230620180839.oodfav5cz234pph7@moria.home.lan>
-Date:   Tue, 20 Jun 2023 11:15:25 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Kent Overstreet" <kent.overstreet@linux.dev>
-Cc:     "Mark Rutland" <mark.rutland@arm.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
-        "Kent Overstreet" <kent.overstreet@gmail.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Uladzislau Rezki" <urezki@gmail.com>,
-        "hch@infradead.org" <hch@infradead.org>, linux-mm@kvack.org,
-        "Kees Cook" <keescook@chromium.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
+        Tue, 20 Jun 2023 14:19:29 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA351A8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 11:19:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687285168; x=1718821168;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=fxp7O1IFxzgSra3+U3m4CdtMmU0xIakqiwOKj7ZMuzc=;
+  b=OKRX26P2xfDuDXHuogAZlOLCQshO1ptM5SxETE2boW46K7DgWFrCdkcU
+   foQhNqw8ImGIez0fQI6CY88jv1D8rYrZBqb+1qCZ9+5UIYh2XsNlII5yp
+   rEjCSC6h+PmgMC0U5qAOabhM0SvO2JlJzoZLjw1bLw9zQzh76UzggDPJa
+   duYeranOu1vfID7rz1ie1f4XU34qDvuRroq/2yr89hXuqhtqNWIkhE18Y
+   1ekqmBbQtsM4b3+Tc7sCWgsC948JdOMLaA85SGg67CH1De8XNMYR6ON+y
+   /9YyyQeGl+BCl9nyYntDsb7iF4rxj7gCAWeFwKrLnFUwpm+4QwzjA0dBF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="363368698"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="363368698"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 11:19:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="838309700"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="838309700"
+Received: from dshvarts-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.62.204])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 11:19:23 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        intel-gfx@lists.freedesktop.org,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        intel-xe@lists.freedesktop.org
+Subject: Re: [Intel-xe] [PATCH 2/3] linux/bits.h: Add fixed-width GENMASK
+ and BIT macros
+In-Reply-To: <ZJHkthMktY83pwvy@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230509051403.2748545-1-lucas.demarchi@intel.com>
+ <20230509051403.2748545-3-lucas.demarchi@intel.com>
+ <ZF4fi5B7PPlgZBOI@smile.fi.intel.com> <87pm75kd0h.fsf@intel.com>
+ <ZF4j0NPoBGMBT8CO@smile.fi.intel.com> <87mt29kc34.fsf@intel.com>
+ <ZIs0CC2J7nu0LHEK@smile.fi.intel.com> <875y7igph5.fsf@intel.com>
+ <ZJG91zMQW3Rnvdbe@smile.fi.intel.com>
+ <amgwl5mthhqgvgkqnor6tjfcr3x3pgwvpqin5efwwjfpdhvvpa@vhzhiq5mzsdg>
+ <ZJHkthMktY83pwvy@smile.fi.intel.com>
+Date:   Tue, 20 Jun 2023 21:19:20 +0300
+Message-ID: <87ttv2f13r.fsf@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,33 +77,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023, at 11:08 AM, Kent Overstreet wrote:
-> On Tue, Jun 20, 2023 at 10:42:02AM -0700, Andy Lutomirski wrote:
->> Code is either correct, and comes with an explanation as to how it is
->> correct, or it doesn't go in.  Saying that something is like BPF is
->> not an explanation as to how it's correct.  Saying that someone has
->> not come up with the chain of events that causes a mere violation of
->> architecture rules to actual incorrect execution is not an explanation
->> as to how something is correct.
+On Tue, 20 Jun 2023, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> So, what does prevent you from using GENMASK_ULL()?
 >
-> No, I'm saying your concerns are baseless and too vague to address.
+> Another point, you may teach GENMASK() to issue a warning if hi and/or lo
+> bigger than BITS_PER_LONG.
 
-If you don't address them, the NAK will stand forever, or at least until a different group of people take over x86 maintainership.  That's fine with me.
+What good does that do if you want the warning for a fixed size
+different from unsigned long or long long? Worse, sizeof(long) depends
+on arch, while the GENMASK you want depends on the use case.
 
-I'm generally pretty happy about working with people to get their Linux code right.  But no one is obligated to listen to me.
+> I still don't see the usefulness of that churn.
 
->
->> text_poke() by itself is *not* the proper API, as discussed.  It
->> doesn't serialize adequately, even on x86.  We have text_poke_sync()
->> for that.
->
-> Andy, I replied explaining the difference between text_poke() and
-> text_poke_sync(). It's clear you have no idea what you're talking about,
-> so I'm not going to be wasting my time on further communications with
-> you.
+This thread is turning into a prime example of why drivers and
+subsystems reinvent their own wheels instead of trying to get generally
+useful stuff merged in kernel headers. :p
 
-No problem.  Then your x86 code will not be merged upstream.
 
-Best of luck with the actual filesystem parts!
+BR,
+Jani.
 
---Andy
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center
