@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A8E736D53
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 470FF736D54
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbjFTN10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 09:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59526 "EHLO
+        id S232913AbjFTN1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 09:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232506AbjFTN1U (ORCPT
+        with ESMTP id S232720AbjFTN1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 09:27:20 -0400
+        Tue, 20 Jun 2023 09:27:21 -0400
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFCE185;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE191A5;
         Tue, 20 Jun 2023 06:27:19 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 165491F38A;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AE1631F86B;
         Tue, 20 Jun 2023 13:27:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1687267638; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QGmZ/olQcis6+UwkuO2nwZxUQO0u8CCpdn9kXeK69lI=;
-        b=p2LyCrwU9BVcEuKucE5EYfVVjhCTR2cBrL3CyOm3m11u09Fy+PSShBnRPWiN3oRvXtlnwv
-        yX2onXbW7xqn62c/pxQgXavz+u48Ni+7Vjkxcl8J+UaxwH9VITke98KJHpAVzSH2iPX/HU
-        LK9zJz7Z8WnBpNN1tIar+M/zlASJknM=
+        bh=mslHR0E96Ru1KBDgtfzc/TQeGRugMHwpdwx8xTSeZLI=;
+        b=u1Y6gAvWfLwIMKwpqnUclWDht7+JiU/eaT0Gc6viAweQwelf9bVzxymRMXv/bQFD1z0Cw4
+        FzFbWcIsbqfRwn0TYr542AERzdcESF0h3IXlS3G4bww666VG8MyKpoFnPJFalctsup98q4
+        8Y9DPB+i+2w1ECg12BCt+MEp52PwjLQ=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1687267638;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QGmZ/olQcis6+UwkuO2nwZxUQO0u8CCpdn9kXeK69lI=;
-        b=ePCe6gPxYXv8wXkMXq1XXyCUnZhao+eGWj+8V9InX/BxhCBQqn1cRLqblGj/9ES/Rz1RPw
-        ceL6JMYchPVHO4CA==
+        bh=mslHR0E96Ru1KBDgtfzc/TQeGRugMHwpdwx8xTSeZLI=;
+        b=ZlzgfU+pWRMK1Uh0Apu/qRfRDHxbbpCdUKer/8PHL3tW8Pb0DmdhbvE3zcV2XAsd484RHq
+        mtnTeEr14c+Tt9Cg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0658C1346D;
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9FC361346D;
         Tue, 20 Jun 2023 13:27:18 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id NVk8ATapkWSfOAAAMHmgww
+        id MS/oJjapkWSlOAAAMHmgww
         (envelope-from <dwagner@suse.de>); Tue, 20 Jun 2023 13:27:18 +0000
 From:   Daniel Wagner <dwagner@suse.de>
 To:     linux-nvme@lists.infradead.org
@@ -59,9 +59,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
         James Smart <jsmart2021@gmail.com>,
         Martin Belanger <Martin.Belanger@dell.com>,
         Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH blktests v1 2/3] nvme/rc: Avoid triggering host nvme-cli autoconnect
-Date:   Tue, 20 Jun 2023 15:27:02 +0200
-Message-ID: <20230620132703.20648-3-dwagner@suse.de>
+Subject: [PATCH blktests v1 3/3] nvme/{041,042,043,044,045}: Use default hostnqn and hostid
+Date:   Tue, 20 Jun 2023 15:27:03 +0200
+Message-ID: <20230620132703.20648-4-dwagner@suse.de>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230620132703.20648-1-dwagner@suse.de>
 References: <20230620132703.20648-1-dwagner@suse.de>
@@ -77,143 +77,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When the host has enabled the udev/systemd autoconnect services for the
-fc transport it interacts with blktests and make tests break.
-
-nvme-cli learned to ignore connects attemps when using the
---context command line option paired with a volatile configuration. Thus
-we can mark all the resources created by blktests and avoid any
-interaction with the systemd autoconnect scripts.
+The host might have enabled the udev/systemd auto connect feature.
+This disturbs the blktests for the fc transport. nvme-cli is able
+to distinguish between the different invocations via the --context
+option. In order to get this working we have to use the default
+hostnqn and hostid and not randon generated IDs for every single
+run.
 
 Signed-off-by: Daniel Wagner <dwagner@suse.de>
 ---
- tests/nvme/rc | 73 ++++++++++++++++++++++++++++++++++++++++++++-------
- 1 file changed, 63 insertions(+), 10 deletions(-)
+ tests/nvme/041 | 8 ++------
+ tests/nvme/042 | 8 ++------
+ tests/nvme/043 | 8 ++------
+ tests/nvme/044 | 8 ++------
+ tests/nvme/045 | 8 ++------
+ 5 files changed, 10 insertions(+), 30 deletions(-)
 
-diff --git a/tests/nvme/rc b/tests/nvme/rc
-index 191f3e2e0c43..00117d314a38 100644
---- a/tests/nvme/rc
-+++ b/tests/nvme/rc
-@@ -14,8 +14,8 @@ def_remote_wwnn="0x10001100aa000001"
- def_remote_wwpn="0x20001100aa000001"
- def_local_wwnn="0x10001100aa000002"
- def_local_wwpn="0x20001100aa000002"
--def_hostnqn="$(cat /etc/nvme/hostnqn 2> /dev/null)"
--def_hostid="$(cat /etc/nvme/hostid 2> /dev/null)"
-+def_hostnqn="nqn.2014-08.org.nvmexpress:uuid:242d4a24-2484-4a80-8234-d0169409c5e8"
-+def_hostid="242d4a24-2484-4a80-8234-d0169409c5e8"
- nvme_trtype=${nvme_trtype:-"loop"}
- nvme_img_size=${nvme_img_size:-"1G"}
- nvme_num_iter=${nvme_num_iter:-"1000"}
-@@ -161,6 +161,50 @@ _nvme_calc_rand_io_size() {
- 	echo "${io_size_kb}k"
- }
+diff --git a/tests/nvme/041 b/tests/nvme/041
+index 308655dd6090..5b04b99b128e 100755
+--- a/tests/nvme/041
++++ b/tests/nvme/041
+@@ -30,12 +30,8 @@ test() {
  
-+_nvme_cli_supports_context() {
-+	if ! nvme connect --help 2>&1 | grep -q context > /dev/null; then
-+		    return 1
-+	fi
-+	return 0
-+}
-+
-+_setup_nvme_cli() {
-+	if ! _nvme_cli_supports_context; then
-+		return
-+	fi
-+
-+	mkdir -p /run/nvme
-+	cat >> /run/nvme/blktests.json <<-EOF
-+	[
-+	  {
-+	    "hostnqn": "${def_hostnqn}",
-+	    "hostid": "${def_hostid}",
-+	    "subsystems": [
-+	      {
-+	        "application": "blktests",
-+	        "nqn": "blktests-subsystem-1",
-+	        "ports": [
-+	          {
-+	            "transport": "fc",
-+	            "traddr": "nn-${def_remote_wwnn}:pn-${def_remote_wwpn}",
-+	            "host_traddr": "nn-${def_local_wwnn}:pn-${def_local_wwpn}"
-+	          }
-+	        ]
-+	      }
-+	    ]
-+	  }
-+	]
-+	EOF
-+}
-+
-+_cleanup_nvme_cli() {
-+	if ! _nvme_cli_supports_context; then
-+		return
-+	fi
-+
-+	rm -f /run/nvme/blktests.json
-+}
-+
- _nvme_fcloop_add_rport() {
- 	local local_wwnn="$1"
- 	local local_wwpn="$2"
-@@ -235,6 +279,8 @@ _cleanup_fcloop() {
- 	_nvme_fcloop_del_lport "${local_wwnn}" "${local_wwpn}"
- 	_nvme_fcloop_del_rport "${local_wwnn}" "${local_wwpn}" \
- 			       "${remote_wwnn}" "${remote_wwpn}"
-+
-+	_cleanup_nvme_cli
- }
+ 	echo "Running ${TEST_NAME}"
  
- _cleanup_nvmet() {
-@@ -337,6 +383,8 @@ _setup_nvmet() {
- 		def_host_traddr=$(printf "nn-%s:pn-%s" \
- 					 "${def_local_wwnn}" \
- 					 "${def_local_wwpn}")
-+
-+		_setup_nvme_cli
- 	fi
- }
- 
-@@ -436,18 +484,18 @@ _nvme_connect_subsys() {
- 	trtype="$1"
- 	subsysnqn="$2"
- 
--	ARGS=(-t "${trtype}" -n "${subsysnqn}")
-+	ARGS=(-t "${trtype}"
-+	      -n "${subsysnqn}"
-+	      --hostnqn="${hostnqn}"
-+	      --hostid="${hostid}")
-+	if _nvme_cli_supports_context; then
-+		ARGS+=(--context="blktests")
-+	fi
- 	if [[ "${trtype}" == "fc" ]] ; then
- 		ARGS+=(-a "${traddr}" -w "${host_traddr}")
- 	elif [[ "${trtype}" != "loop" ]]; then
- 		ARGS+=(-a "${traddr}" -s "${trsvcid}")
- 	fi
--	if [[ "${hostnqn}" != "$def_hostnqn" ]]; then
--		ARGS+=(--hostnqn="${hostnqn}")
+-	hostid="$(uuidgen)"
+-	if [ -z "$hostid" ] ; then
+-		echo "uuidgen failed"
+-		return 1
 -	fi
--	if [[ "${hostid}" != "$def_hostid" ]]; then
--		ARGS+=(--hostid="${hostid}")
--	fi
- 	if [[ -n "${hostkey}" ]]; then
- 		ARGS+=(--dhchap-secret="${hostkey}")
- 	fi
-@@ -482,7 +530,12 @@ _nvme_discover() {
- 	local host_traddr="${3:-$def_host_traddr}"
- 	local trsvcid="${3:-$def_trsvcid}"
+-	hostnqn="nqn.2014-08.org.nvmexpress:uuid:${hostid}"
++	hostid="${def_hostid}"
++	hostnqn="${def_hostnqn}"
+ 	hostkey="$(nvme gen-dhchap-key -n ${subsys_name} 2> /dev/null)"
+ 	if [ -z "$hostkey" ] ; then
+ 		echo "nvme gen-dhchap-key failed"
+diff --git a/tests/nvme/042 b/tests/nvme/042
+index fed2efead013..8df5ed37aacc 100755
+--- a/tests/nvme/042
++++ b/tests/nvme/042
+@@ -32,12 +32,8 @@ test() {
  
--	ARGS=(-t "${trtype}")
-+	ARGS=(-t "${trtype}"
-+	      --hostnqn="${def_hostnqn}"
-+	      --hostid="${def_hostid}")
-+	if _nvme_cli_supports_context; then
-+		ARGS+=(--context="blktests")
-+	fi
- 	if [[ "${trtype}" = "fc" ]]; then
- 		ARGS+=(-a "${traddr}" -w "${host_traddr}")
- 	elif [[ "${trtype}" != "loop" ]]; then
+ 	echo "Running ${TEST_NAME}"
+ 
+-	hostid="$(uuidgen)"
+-	if [ -z "$hostid" ] ; then
+-		echo "uuidgen failed"
+-		return 1
+-	fi
+-	hostnqn="nqn.2014-08.org.nvmexpress:uuid:${hostid}"
++	hostid="${def_hostid}"
++	hostnqn="${def_hostnqn}"
+ 
+ 	_setup_nvmet
+ 
+diff --git a/tests/nvme/043 b/tests/nvme/043
+index a030884aa4ed..b591e39d0706 100755
+--- a/tests/nvme/043
++++ b/tests/nvme/043
+@@ -33,12 +33,8 @@ test() {
+ 
+ 	echo "Running ${TEST_NAME}"
+ 
+-	hostid="$(uuidgen)"
+-	if [ -z "$hostid" ] ; then
+-		echo "uuidgen failed"
+-		return 1
+-	fi
+-	hostnqn="nqn.2014-08.org.nvmexpress:uuid:${hostid}"
++	hostid="${def_hostid}"
++	hostnqn="${def_hostnqn}"
+ 
+ 	_setup_nvmet
+ 
+diff --git a/tests/nvme/044 b/tests/nvme/044
+index 9928bcc55397..fca0897af27b 100755
+--- a/tests/nvme/044
++++ b/tests/nvme/044
+@@ -32,12 +32,8 @@ test() {
+ 
+ 	echo "Running ${TEST_NAME}"
+ 
+-	hostid="$(uuidgen)"
+-	if [ -z "$hostid" ] ; then
+-		echo "uuidgen failed"
+-		return 1
+-	fi
+-	hostnqn="nqn.2014-08.org.nvmexpress:uuid:${hostid}"
++	hostid="${def_hostid}"
++	hostnqn="${def_hostnqn}"
+ 
+ 	hostkey="$(nvme gen-dhchap-key -n ${subsys_name} 2> /dev/null)"
+ 	if [ -z "$hostkey" ] ; then
+diff --git a/tests/nvme/045 b/tests/nvme/045
+index 26a55335a92c..eca629a18691 100755
+--- a/tests/nvme/045
++++ b/tests/nvme/045
+@@ -36,12 +36,8 @@ test() {
+ 
+ 	echo "Running ${TEST_NAME}"
+ 
+-	hostid="$(uuidgen)"
+-	if [ -z "$hostid" ] ; then
+-		echo "uuidgen failed"
+-		return 1
+-	fi
+-	hostnqn="nqn.2014-08.org.nvmexpress:uuid:${hostid}"
++	hostid="${def_hostid}"
++	hostnqn="${def_hostnqn}"
+ 
+ 	hostkey="$(nvme gen-dhchap-key -n ${subsys_name} 2> /dev/null)"
+ 	if [ -z "$hostkey" ] ; then
 -- 
 2.41.0
 
