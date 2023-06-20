@@ -2,193 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D140736619
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6261873662C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231901AbjFTI1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 04:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42082 "EHLO
+        id S231932AbjFTI2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 04:28:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbjFTI1b (ORCPT
+        with ESMTP id S231445AbjFTI2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 04:27:31 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B10CC;
-        Tue, 20 Jun 2023 01:27:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687249650; x=1718785650;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZvWIZLnGk6a1F90IX6hAyqx9Id0pSBm9JE6pewSSCMo=;
-  b=hWosyP0TWAl9EbdDx/f6Hkq77fGs6JiIuFLOuY++L0WvpMxnvZGjquda
-   s8PHC+hG06PU4nBWXF0sJaq3CIew3kwiWpeS+NeP4n4JwKRmtB28N67yn
-   +MgQ+b2JGOkdrgIV+RLrSA5Cd+6Hjvsem3Xgf+PUALo6330j8gHqnOgV9
-   l+QKGM0KXIrB4sZ5nZEclj0acaZC/4jLGD7aLicJV1Zmb3mjmFL+96S0F
-   6RPDauHYXRHFftbYKbGDib7b8nZVCGXI6PlwrM/VJaQ1br5mKfQ92LGZg
-   NoTCosiARQQfSYEcJ/RKBXAylw31EumWENDPxUfYJqSyxqvCKE6cSVgTF
-   A==;
-X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="asc'?scan'208";a="231073094"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Jun 2023 01:27:29 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 20 Jun 2023 01:27:26 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Tue, 20 Jun 2023 01:27:23 -0700
-Date:   Tue, 20 Jun 2023 09:26:57 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Guo Samin <samin.guo@starfivetech.com>
-CC:     Andrew Lunn <andrew@lunn.ch>, Conor Dooley <conor@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>, Peter Geis <pgwipeout@gmail.com>,
-        Frank <Frank.Sae@motor-comm.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Tue, 20 Jun 2023 04:28:30 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAA4619B;
+        Tue, 20 Jun 2023 01:28:26 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35K8SHrn078194;
+        Tue, 20 Jun 2023 03:28:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1687249697;
+        bh=1TtkVf2Tto/at6H2rAWfzX+S3Mo+7puUHIeHSEn+4H4=;
+        h=From:Subject:Date:To:CC;
+        b=j734Dq1ofAbK3MH/BTM8Je4qqJPzI+CFojroH4Shxyp7jMrKgyTUzU9TEwtVbNpcI
+         Xkcd1mn7UvUSQAvBPcOisjmUnGqGIWEvvac7wMKXzFYJRL331qNhG/fuqRXCHtJQRs
+         iXMjzgOUhNqkBODCpYFbpFC8/SeyXXigRNG+C3zU=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35K8SHgG022379
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 20 Jun 2023 03:28:17 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 20
+ Jun 2023 03:28:16 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 20 Jun 2023 03:28:16 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35K8SGlj094303;
+        Tue, 20 Jun 2023 03:28:16 -0500
+From:   Kamlesh Gurudasani <kamlesh@ti.com>
+Subject: [PATCH v4 0/2] Remove power-domains property for devices with
+ compatible ti,am62-sa3ul
+Date:   Tue, 20 Jun 2023 13:56:58 +0530
+Message-ID: <20230614-sa3ul-v4-0-7c969f626796@ti.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANJikWQC/22NQQ7CIBBFr9KwdgwwRNGV9zAuGDpaEtsaqETT9
+ O5CFy6My/fnv/mzSBwDJ3FsZhE5hxTGoYDZNMJ3brgxhLaw0FKj3CkDyeHzDp4MtYrItNKK0iW
+ XGCi6wXe13bs0cayHR+RreK0D50vhLqRpjO91L+ua/r7OGhSgs6jJasSDP01h68deVD3jXwVBg
+ mYmqyTqvVNfZVmWDy7m3cnjAAAA
+To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: net: motorcomm: Add pad driver
- strength cfg
-Message-ID: <20230620-clicker-antivirus-99e24a06954e@wendy>
-References: <20230526090502.29835-1-samin.guo@starfivetech.com>
- <20230526090502.29835-2-samin.guo@starfivetech.com>
- <20230526-glutinous-pristine-fed571235b80@spud>
- <1dbf113c-7592-68bd-6aaf-05ff1d8c538c@starfivetech.com>
- <15eb4ffe-ea12-9a2c-ae9d-c34860384b60@starfivetech.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="NvJVgXFV5BWCi8Zi"
-Content-Disposition: inline
-In-Reply-To: <15eb4ffe-ea12-9a2c-ae9d-c34860384b60@starfivetech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jayesh Choudhary <j-choudhary@ti.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Kamlesh Gurudasani <kamlesh@ti.com>,
+        Conor Dooley <conor.dooley@microchip.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687249695; l=1328;
+ i=kamlesh@ti.com; s=20230614; h=from:subject:message-id;
+ bh=ST262oFisiDch2+16ED+cqDo/T9OI2VS2nMCHWhazhQ=;
+ b=bvHAdJliZCMkZWv/NeVdt/8gtovLbM+iTnBJTd1PB5tpt9OclS/szWE8Lwvd+tu2sJt219bXG
+ apLBya26aj0BNv6KkMvhnKJr6eRGz/G5qb6dxSFkoRaKCpX+TadeRwv
+X-Developer-Key: i=kamlesh@ti.com; a=ed25519;
+ pk=db9XKPVWDGJVqj2jDqgnPQd6uQf3GZ3oaQa4bq1odGo=
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS,TVD_SUBJ_WIPE_DEBT,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---NvJVgXFV5BWCi8Zi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+SYSFW don't allow access to power of devices with compatible ti,am62-sa3ul
+from main domain.
 
-Hey,
+Power-domains property, if present will try to access the power of the
+device, which will result into failure in probing of driver for that
+device.
 
-On Tue, Jun 20, 2023 at 11:09:52AM +0800, Guo Samin wrote:
-> From: Guo Samin <samin.guo@starfivetech.com>
-> > From: Conor Dooley <conor@kernel.org>
-> >> On Fri, May 26, 2023 at 05:05:01PM +0800, Samin Guo wrote:
-> >>> The motorcomm phy (YT8531) supports the ability to adjust the drive
-> >>> strength of the rx_clk/rx_data, the value range of pad driver
-> >>> strength is 0 to 7.
+Make power-domains property as false for devices with compatible
+ti,am62-sa3ul.
 
-> >>> +  motorcomm,rx-clk-driver-strength:
-> >>> +    description: drive strength of rx_clk pad.
-> >>> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >>> +    enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
-> >>
-> >> I think you should use minimum & maximum instead of these listed out
-> >> enums.
+Signed-off-by: Kamlesh Gurudasani <kamlesh@ti.com>
+---
+Changes in v4:
+- s/items/contains/ for dt-binding patch
+- Added "fixes commit" for dt-binding patch
+- Link to v3: https://lore.kernel.org/r/20230614-sa3ul-v3-0-2eeb810327a1@ti.com
 
-> >  You have also had this comment since v1 & were reminded of it on
-> >> v2 by Krzysztof: "What do the numbers mean? What are the units? mA?"
+Changes in v3:
+- Add patch dt-bindings: crypto: ti,sa2ul: make power-domains conditional
+- Link to v2: https://lore.kernel.org/r/20230614-sa3ul-v2-1-3a832b82339c@ti.com
 
-> > The good news is that we just got some data about units from Motorcomm.=
-=20
-> > Maybe I can post the data show of the unit later after I get the comple=
-te data.
+Changes in v2:
+- Make commit message clearer
 
-> Sorry, haven't updated in a while.
+---
+Kamlesh Gurudasani (2):
+      dt-bindings: crypto: ti,sa2ul: make power-domains conditional
+      arm64: dts: ti: k3-am62-main: Remove power-domains from crypto node
 
-NW chief.
+ Documentation/devicetree/bindings/crypto/ti,sa2ul.yaml | 14 +++++++++++++-
+ arch/arm64/boot/dts/ti/k3-am62-main.dtsi               |  1 -
+ 2 files changed, 13 insertions(+), 2 deletions(-)
+---
+base-commit: 53ab6975c12d1ad86c599a8927e8c698b144d669
+change-id: 20230614-sa3ul-cb4bd1bb4d08
 
-> I just got the detailed data of Driver Strength(DS) from Motorcomm , whic=
-h applies to both rx_clk and rx_data.
->=20
-> |----------------------|
-> |     ds map table     |
-> |----------------------|
-> | DS(3b) | Current (mA)|
-> |--------|-------------|
-> |   000  |     1.20    |
-> |   001  |     2.10    |
-> |   010  |     2.70    |
-> |   011  |     2.91    |
-> |   100  |     3.11    |
-> |   101  |     3.60    |
-> |   110  |     3.97    |
-> |   111  |     4.35    |
-> |--------|-------------|
->=20
-> Since these currents are not integer values and have no regularity,
-> it is not very good to use in the drive/dts in my opinion.
+Best regards,
+-- 
+Kamlesh Gurudasani <kamlesh@ti.com>
 
-Who says you have to use mA? What about uA?
-
-> Therefore, I tend to continue to use DS(0-7) in dts/driver, and adding
-> a description of the current value corresponding to DS in dt-bindings.=20
-
-I think this goes against not putting register values into the dts &
-that the accurate description of the hardware are the currents.
-
-> Like This:
->=20
-> +  motorcomm,rx-clk-driver-strength:
-> +    description: drive strength of rx_clk pad.
-
-You need "description: |" to preserve the formatting if you add tables,
-but I don't think that this is a good idea. Put the values in here that
-describe the hardware (IOW the currents) and then you don't need to have
-this table.
-
-> +      |----------------------|
-> +      | rx_clk ds map table  |
-> +      |----------------------|
-> +      | DS(3b) | Current (mA)|
-> +      |   000  |     1.20    |
-> +      |   001  |     2.10    |
-> +      |   010  |     2.70    |
-> +      |   011  |     2.91    |
-> +      |   100  |     3.11    |
-> +      |   101  |     3.60    |
-> +      |   110  |     3.97    |
-> +      |   111  |     4.35    |
-> +      |--------|-------------|
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
-> +    default: 3
-> +
-
-> Or use minimum & maximum instead of these listed out enums
-
-With the actual current values, enum rather than min + max.
-
-Cheers,
-Conor.
-
---NvJVgXFV5BWCi8Zi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJFi0QAKCRB4tDGHoIJi
-0jkZAQD0AdtEo8r1ss1UMAX71qHvpw4XtFiP6Xp6aLVVVsyKfwEAzivJCNzTBl+1
-IBDsXO2BNofaxXz2KLZ8JtK/8Lp0vww=
-=+VHM
------END PGP SIGNATURE-----
-
---NvJVgXFV5BWCi8Zi--
