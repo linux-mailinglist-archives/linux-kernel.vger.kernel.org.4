@@ -2,136 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD027372AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD5F7372B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbjFTRYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 13:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58006 "EHLO
+        id S229960AbjFTRZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 13:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231135AbjFTRYu (ORCPT
+        with ESMTP id S229652AbjFTRZP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 13:24:50 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B63AFC
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:24:49 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1acfce1fc0bso460829fac.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:24:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687281888; x=1689873888;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KRN5tzGweg8LErYfcrxjZ1KmGTE3sKhMIQTVdGenkIU=;
-        b=Usjnz0IqQahZbMcDM0lEsP3d4I8nCqUfG8kT+14iuDuvrKAJTFr+WwPKudbnm6Y+j6
-         ztyfCzpJ+7BCnTpsSOHWwlQ9cR4eIF2u4BD/fTGxBOoafI1/saUyKl5Iuz8cdqodWFMp
-         Pqoa5g018fMi0+iV/9GL3889I3bDRqe1P9qY8E72KECK2yuFOiuLfC/dQwbID6lYPRci
-         FG/6bgwild1VvaQdrkfbwpV8OqJBTrRC7PMjr65Z6+B69ctXFBg4P4y45T4Im++0Gf/T
-         js7WPmRci62wf3Sh/TOtEfSYXV3EFnjo2i5f9A6LY/rl9BSMORaSdArcKQ0zxuPzuFKz
-         HowA==
+        Tue, 20 Jun 2023 13:25:15 -0400
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106C11987;
+        Tue, 20 Jun 2023 10:25:09 -0700 (PDT)
+Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-340b8d6aabbso13931915ab.0;
+        Tue, 20 Jun 2023 10:25:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687281888; x=1689873888;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KRN5tzGweg8LErYfcrxjZ1KmGTE3sKhMIQTVdGenkIU=;
-        b=ef4tKVEztRvPJEEL8IIaIWcteLMVpwrUhSAv5dT1wBCptRDi1qdbPZHRXt5yx2I2DR
-         ltBTq3iPDNE9LBvAoFWtA2EdnslFLTOXBCPJLy5y8IPtJbT4D0GRE3D9URKfUcU+ZNvs
-         JgPklHR5B+fOcQxdZSNuARJ7T8zRair96sbNoJSuRDmpTjoR6f5JCYr8J1TMtPGKsM1B
-         DL9QD583b7zeMrdLJWa8JxXIKVhEN7QJFxO0b+O/NU+Pu1xllltXiGgCdMsJiECQxvmf
-         4f7gIgpGqZxfbGlJ+dEhSK1EoXPEoxn2Kct3JIYRbV8BTFb8dm2QnBvq+DvjLxs/FTi7
-         f/uA==
-X-Gm-Message-State: AC+VfDwqlIuJRip6j0BCzX215G9jeD86Wcmrst7HkpJCe5W4LVCEcKnl
-        nD1nmyXzp8IGiUlebolHm9NMLzduZW3GVc0mx9ljwhwm6b37zf8Y
-X-Google-Smtp-Source: ACHHUZ5Utdl0V9qTJ29ktbaxPrSyDw+hSKuoiO5/DDMSHktSe7P1zryVOx5jWnV3I2ia4SHYy5HhbbDmQkhulvO+m64=
-X-Received: by 2002:a05:6870:499a:b0:1a6:b74e:afd9 with SMTP id
- ho26-20020a056870499a00b001a6b74eafd9mr4658024oab.35.1687281888568; Tue, 20
- Jun 2023 10:24:48 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687281908; x=1689873908;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eZJ+hfBpoF28qpVP1tAqIlMpScd7lp8C36ke23sPJp8=;
+        b=VB9rGNXCcLOLsMQrmtNapN1Xu4nsBJPVfsvIbX6/Dk/YAlITjVOXPlwRHurlYoGokG
+         XkQ3/LsotcmcMhBl+YbPA/zbj5H2x2vFv7y8UhwXSrW3I3eFx7A6jcZftIToarx128Sf
+         Gz3UiLxPwxsiz14KTaU+/YP92G0tV6q5KBrVg2sZ1VSa8okXyp2Wx/505D42lXBDJUeq
+         +X8cyZqUWilCu4fz8Xsb+v+EHMNOEHH9oPD54sSTKJO3myuv5Atbffe9bQQVOcGpYR4w
+         NSzwgDQ8r0bJwsA9VQGbTmdMKtU4SnQ+x1CSnRkUdZnaqKC4mrFCBdbwdOzmBlLtfESu
+         QV8g==
+X-Gm-Message-State: AC+VfDz4CDOUd7IlTQz6qIGGBuVWiSmPIyUXS9eHuH9+2HC7RsuWw5QL
+        VP2TT53+0DbA68lgG+PVPA==
+X-Google-Smtp-Source: ACHHUZ4H/q0T8pya673w/shwpYZ9QN8Qh4OiR7wXve8GAzm2Vls6m0Ux1AK9FTWt+Wu0v+SRZI3bgg==
+X-Received: by 2002:a92:d3cb:0:b0:342:2b27:725c with SMTP id c11-20020a92d3cb000000b003422b27725cmr7398168ilh.6.1687281908194;
+        Tue, 20 Jun 2023 10:25:08 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id z12-20020a92cecc000000b003428aca64bdsm723883ilq.84.2023.06.20.10.25.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 10:25:07 -0700 (PDT)
+Received: (nullmailer pid 3856420 invoked by uid 1000);
+        Tue, 20 Jun 2023 17:25:05 -0000
+Date:   Tue, 20 Jun 2023 11:25:05 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc:     miquel.raynal@bootlin.com, robh+dt@kernel.org, richard@nod.at,
+        linux-mtd@lists.infradead.org, krzysztof.kozlowski+dt@linaro.org,
+        vigneshr@ti.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Vadym Kochan <vadym.kochan@plvision.eu>
+Subject: Re: [PATCH v10 1/1] dt-bindings: mtd: marvell-nand: Convert to YAML
+ DT scheme
+Message-ID: <168728190550.3856357.9055862614036194300.robh@kernel.org>
+References: <20230619040742.1108172-1-chris.packham@alliedtelesis.co.nz>
+ <20230619040742.1108172-2-chris.packham@alliedtelesis.co.nz>
 MIME-Version: 1.0
-References: <20230616035813.255062-1-jaswinder.singh@linaro.org>
- <20230620170725.13794-1-jaswinder.singh@linaro.org> <5ae8c143-64cf-469d-b4f2-bed5bd9ee87b@linaro.org>
-In-Reply-To: <5ae8c143-64cf-469d-b4f2-bed5bd9ee87b@linaro.org>
-From:   Jassi Brar <jaswinder.singh@linaro.org>
-Date:   Tue, 20 Jun 2023 12:24:38 -0500
-Message-ID: <CAJe_Zhc7-LU0X6epmOoo3nE0j+e_zROsA+J0s0vSUA-sTJ6jBw@mail.gmail.com>
-Subject: Re: [PATCHv2] dt-bindings: arm: socionext: add Synquacer platforms
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, robh@kernel.org,
-        ilias.apalodimas@linaro.org, masahisa.kojima@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230619040742.1108172-2-chris.packham@alliedtelesis.co.nz>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Jun 2023 at 12:16, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 20/06/2023 19:07, jaswinder.singh@linaro.org wrote:
-> > From: Jassi Brar <jaswinder.singh@linaro.org>
-> >
-> > Socionext's DeveloperBox is based on the SC2A11B SoC (Synquacer).
-> > Specify bindings for the platform and boards based on that.
-> >
-> > Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
-> > ---
->
-> Attach changelog after ---.
->
-> >  .../bindings/arm/socionext/synquacer.yaml     | 29 +++++++++++++++++++
-> >  1 file changed, 29 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/arm/socionext/synquacer.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/arm/socionext/synquacer.yaml b/Documentation/devicetree/bindings/arm/socionext/synquacer.yaml
-> > new file mode 100644
-> > index 000000000000..c582d9c31213
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/arm/socionext/synquacer.yaml
-> > @@ -0,0 +1,29 @@
-> > +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/arm/socionext/synquacer.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Socionext Synquacer platform
-> > +
-> > +maintainers:
-> > +  - Masahisa Kojima <masahisa.kojima@linaro.org>
-> > +  - Jassi Brar <jaswinder.singh@linaro.org>
-> > +
-> > +description:
-> > +  Socionext SC2A11B (Synquacer) SoC based boards
-> > +
-> > +properties:
-> > +  $nodename:
-> > +    const: '/'
-> > +  compatible:
-> > +    oneOf:
-> > +      - items:
-> > +          - enum:
-> > +              - socionext,developer-box
-> > +              - socionext,synquacer
-> > +          - const: socionext,sc2a11b
->
-> That's quite different change.
->
-So it is not carrying your ack.
 
-> What is synquacer in this case? You claim
-> now it is a board, but based on previous discussions and U-Boot source
-> it does not look like such.
->
-I never made that claim. I said Kojima-san will confirm. He informed
-Synquacer is a brand name.
+On Mon, 19 Jun 2023 16:07:42 +1200, Chris Packham wrote:
+> From: Vadym Kochan <vadym.kochan@plvision.eu>
+> 
+> Switch the DT binding to a YAML schema to enable the DT validation.
+> 
+> There was also an incorrect reference to dma-names being "rxtx" where
+> the driver and existing device trees actually use dma-names = "data" so
+> this is corrected in the conversion.
+> 
+> Signed-off-by: Vadym Kochan <vadym.kochan@plvision.eu>
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
+> 
+> Notes:
+>     Changes in v10:
+>     - Formatting for description
+>     - Restrict clocks to 1 item for non-8K devices
+>     - Don't allow "marvell,armada-8k-nand-controller" without
+>       "marvell,armada370-nand-controller" (undoes a change from v8)
+> 
+>     Changes in v9:
+>     - depend on series from Miquel
+>       https://lore.kernel.org/linux-mtd/20230606175246.190465-1-miquel.raynal@bootlin.com/
+>     - enforce minimum/maximum for nand-rb
+>     - move required: block for controller
+>     - move unevaluatedProperties: for nand chip
+>     - remove label, partitions and nand-on-flash-bbt which are covered by
+>       generic schema
+> 
+>     Changes in v8:
+>     - Mark deprecated compatible values as such
+>     - Allow "marvell,armada-8k-nand-controller" without
+>       "marvell,armada370-nand-controller"
+>     - Make dma-names usage reflect reality
+>     - Update commit message
+> 
+>     Changes in v7:
+>     - Restore "label" and "partitions" properties (should be picked up via
+>       nand-controller.yaml but aren't)
+>     - Add/restore nand-on-flash-bbt and nand-ecc-mode which aren't covered
+>       by nand-controller.yaml.
+>     - Use "unevalautedProperties: false"
+>     - Corrections for clock-names, dma-names, nand-rb and nand-ecc-strength
+>     - Add pxa3xx-nand-controller example
+> 
+>     Changes in v6:
+>     - remove properties covered by nand-controller.yaml
+>     - add example using armada-8k compatible
+> 
+>     earlier changes:
+> 
+>     v5:
+>        1) Get back "label" and "partitions" properties but without
+>           ref to the "partition.yaml" which was wrongly used.
+> 
+>        2) Add "additionalProperties: false" for nand@ because all possible
+>           properties are described.
+> 
+>     v4:
+>        1) Remove "label" and "partitions" properties
+> 
+>        2) Use 2 clocks for A7K/8K platform which is a requirement
+> 
+>     v3:
+>       1) Remove txt version from the MAINTAINERS list
+> 
+>       2) Use enum for some of compatible strings
+> 
+>       3) Drop:
+>             #address-cells
+>             #size-cells:
+> 
+>          as they are inherited from the nand-controller.yaml
+> 
+>       4) Add restriction to use 2 clocks for A8K SoC
+> 
+>       5) Dropped description for clock-names and extend it with
+>          minItems: 1
+> 
+>       6) Drop description for "dmas"
+> 
+>       7) Use "unevalautedProperties: false"
+> 
+>       8) Drop quites from yaml refs.
+> 
+>       9) Use 4-space indentation for the example section
+> 
+>     v2:
+>       1) Fixed warning by yamllint with incorrect indentation for compatible list
+> 
+>  .../bindings/mtd/marvell,nand-controller.yaml | 226 ++++++++++++++++++
+>  .../devicetree/bindings/mtd/marvell-nand.txt  | 126 ----------
+>  MAINTAINERS                                   |   1 -
+>  3 files changed, 226 insertions(+), 127 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/mtd/marvell,nand-controller.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/mtd/marvell-nand.txt
+> 
 
-Currently no code internally or externally differentiates between
-SC2A11B and Synquacer and we might as well keep living with Synquacer
-only. This patch is an attempt to be accurate.
+Reviewed-by: Rob Herring <robh@kernel.org>
 
--j
