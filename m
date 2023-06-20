@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB09F736107
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 03:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41A9736106
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 03:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjFTBRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 21:17:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
+        id S230038AbjFTBRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 21:17:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjFTBRb (ORCPT
+        with ESMTP id S229489AbjFTBRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 19 Jun 2023 21:17:31 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on20611.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::611])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A51419A
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2042.outbound.protection.outlook.com [40.107.101.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46820197
         for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 18:17:30 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FlvJv67lxOYFQcXQ1l/j1w2GdPy6UMW0Z747ygdko2qaam7M6UmkKmD2bPjUOhpUTVh1Gjb2ehFayqX7RH6ZNAsNr6g3U5kiRgnX4fbQp5JbLoEO53/vJx2JSdC9R78E1Mn6dKUr2HuTXtMNECOrwqX/lQUrjACfhM+7F3M0CDre9SIBJAp/prTdqctyNf5meYHUnfSET7BY5YE5JP9xV38aB1y8+YyQP35XySptwo+oeAqzsxU02SuHSBbNHMwrHmbQbGKi3x9Z07JE9Oj8llwLHczzzjRqeL5Wd9gfyfB6kht8p1X88XPIj2EcZWsvgv/YFi0ocvaiI/437Y6ayQ==
+ b=gJh/ElfXvtySmgnjlyNkeXRiq9BFzj5R2n1acYXzC38k295aSHHkAjOEVMYMpyhIn1ID5lPUd4+4dzM2qFiFr2p5gFk5QhUWkx0mk90St+3LbvRaAt+hO7njJWns5KHvsdo2hNOJfsabJGrzyrjyPq38g/BdLX/XJMEBcS0duKf3V6yP23kWVKd25a+MBumIg+ghMdy6R/hmDZQhHAOhathvLk3ubP5W4fwbd44Np31qC0rIg4SIfwHA330OfHgmi9QhFfIfdRLDL5u3JkdpyNf4HcJ4HaeuGb0R1yde0Z/+iTl98XdAn/RVz6eMpsL2k7WAgDktHyIxrjfWnJKtDw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lQZhGUwkoU04C3ryaMpvsp8ELkjH/HHSIJHZlngWhEc=;
- b=fif1m3bUE2JzsfkjvuwZPzE/DpcJbA22WWXwovqKtuLSWZfGMFWTlYKwg6QXROyOjL720EuDZick404G5rrD1MDCzh741qRumv+JYXzXXx10BauWleodrIfxfd2fB5+9HmVEZkimXXG6AgpPn8mv4uKvP07VHomvKG+4qOWtNj35qpmJYfCfOa8kAFJ32tuPzYeI05PJIMzwxz7TGApUDzecFnmp3QX6Z6zjYNUkcmD65GwZtR8dLz6qQ0Bs7fl3YfoZuB/DcvNdrcKApNbOTrNXpcUB9B9ZP18DPkTxicr5+6WALs+vIAB3utrg/QeeGf8XvZfMpxjDbHDnJyKAgA==
+ bh=S08M6qCxf7uj+kvbpIUgDzdHbXyg5xFGSG/3z4Es1Z0=;
+ b=LbzunH2C7NTPTh9MIZ9lAjGBJH+odC6Ym1EcrKHmXfISRJpOaiTVmyY74caDHQHEsTryOuBmCN2wTFCUaa5WgWx6chgG47C4oIVZzM+2f4CF+Ik2DQXyWCYHwiA3SrqNY0SLrYLhPnAkJfsKh6xjU0Bh6DETX7ZdmnJppcXR8fh3ou8HBLdPfAVBbtBJiK7zphukCK0rIV3pMDkvo9L4XPAmiAm7XNj5VqSn82rOsNsVfBydWzLJ8MJ1XcW67AzbpPr8tFalN9X4UUmAiAn4K7vy1SOcJUDP7uuEcJGKgOFI+yP0SdlxfPrCtkeBMA5V/oOE4In5z2uGQ1TKAeK03g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.117.161) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -29,18 +29,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lQZhGUwkoU04C3ryaMpvsp8ELkjH/HHSIJHZlngWhEc=;
- b=DuFfD3/+AK6g1xZB4WJ6v1rZk72ET9aSyc037210l3K4drrCZL2G8ID+qYWzWT7DqfTTf0/lvGYDNHZ1J/XxLYnKarM9FDSFpvWFMPxG/s5lvRBY6qfzal628OHxgUGVydJ2VITPpUbB3x7sSaWElfy7gLfUzSnILHk4in9DGHSr3/KB2R86XsrhBa0cMkqkpiO2r58KyhVPJKvzZIy/lXjwB2sKSM9JFtUcggD7JhwuQg9WhiAhhhZ5DpaRHhbKVWcWLq9i5LIGeiO032GhmCpnU51D5Mh/wYxbDEt4EwDbzqJG9A+rPaw1ysl+SzDSCERQi6iAo2zfVuivVvUExw==
-Received: from SA1PR02CA0007.namprd02.prod.outlook.com (2603:10b6:806:2cf::18)
- by MN2PR12MB4288.namprd12.prod.outlook.com (2603:10b6:208:1d2::22) with
+ bh=S08M6qCxf7uj+kvbpIUgDzdHbXyg5xFGSG/3z4Es1Z0=;
+ b=qRrXPykzU07YXHBWaouyzmJ2ngdu8d1Oqm/M2PUnQY0LQCm+W5bER51V0K84vvfMQdT/qvz+t/P7JfeKjimE3bmRaH4VF001839ny0XRw9v79JEMG74ypSgO5+MYMp+d154RRWfWUdL2Wd3PCHCaJzyvRsQ1WqFxxo+EN2w3hsnwzHxnKlyPk7rOna+gV/gI+PP5k9raWM5nw4iVctGmyxdGEofK71QIegaD4qCSE86rIVGLy/ZMsGPQoNIB5yJuQ0TgnvLwtzvBW2keiPlK97lW4dN0qCrXfTVPZKuiGL/FOF8qZCGRDHLVQs+Tx2FhoTjzF8WW2iParTmpdRMKpw==
+Received: from SA1P222CA0010.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:22c::12)
+ by PH0PR12MB5629.namprd12.prod.outlook.com (2603:10b6:510:141::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Tue, 20 Jun
- 2023 01:17:27 +0000
-Received: from SA2PEPF0000150B.namprd04.prod.outlook.com
- (2603:10b6:806:2cf:cafe::ad) by SA1PR02CA0007.outlook.office365.com
- (2603:10b6:806:2cf::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37 via Frontend
- Transport; Tue, 20 Jun 2023 01:17:26 +0000
+ 2023 01:17:28 +0000
+Received: from SA2PEPF00001504.namprd04.prod.outlook.com
+ (2603:10b6:806:22c:cafe::d8) by SA1P222CA0010.outlook.office365.com
+ (2603:10b6:806:22c::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.44 via Frontend
+ Transport; Tue, 20 Jun 2023 01:17:25 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -48,17 +48,17 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.117.161 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.117.161) by
- SA2PEPF0000150B.mail.protection.outlook.com (10.167.242.43) with Microsoft
+ SA2PEPF00001504.mail.protection.outlook.com (10.167.242.36) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6521.17 via Frontend Transport; Tue, 20 Jun 2023 01:17:27 +0000
+ 15.20.6521.17 via Frontend Transport; Tue, 20 Jun 2023 01:17:28 +0000
 Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
  (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 19 Jun 2023
- 18:17:21 -0700
+ 18:17:22 -0700
 Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail203.nvidia.com
  (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 19 Jun
- 2023 18:17:21 -0700
+ 2023 18:17:22 -0700
 Received: from blueforge.nvidia.com (10.127.8.13) by mail.nvidia.com
  (10.129.68.6) with Microsoft SMTP Server id 15.2.986.37 via Frontend
  Transport; Mon, 19 Jun 2023 18:17:21 -0700
@@ -69,9 +69,9 @@ CC:     Andrew Morton <akpm@linux-foundation.org>,
         LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
         John Hubbard <jhubbard@nvidia.com>,
         Peter Xu <peterx@redhat.com>
-Subject: [PATCH v2 02/11] selftests/mm: fix unused variable warnings in hugetlb-madvise.c, migration.c
-Date:   Mon, 19 Jun 2023 18:17:10 -0700
-Message-ID: <20230620011719.155379-4-jhubbard@nvidia.com>
+Subject: [PATCH v2 03/11] selftests/mm: fix "warning: expression which evaluates to zero..." in mlock2-tests.c
+Date:   Mon, 19 Jun 2023 18:17:11 -0700
+Message-ID: <20230620011719.155379-5-jhubbard@nvidia.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230620011719.155379-1-jhubbard@nvidia.com>
 References: <20230620011719.155379-1-jhubbard@nvidia.com>
@@ -82,93 +82,60 @@ Content-Type: text/plain
 X-NV-OnPremToCloud: ExternallySecured
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF0000150B:EE_|MN2PR12MB4288:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7a834292-c643-4a9d-dceb-08db712c1caa
+X-MS-TrafficTypeDiagnostic: SA2PEPF00001504:EE_|PH0PR12MB5629:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5dc43935-c505-4b20-cc17-08db712c1d15
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NyohEzqtaKpeQcuMKVUtYdyEL0NrUli5DUZW5KA/QcsRw3PjayjMpfi3Tk85Rzj5i7lsmDIegP2WV4IE6ymUoOh1sto4GqNWq2J8bYv87eysj3PH7rfgVjsv/AqaJmld2VpBXnUgfBIfmBM7I0VB7nxcfGNGGuZcGsM+hW65vVJ5EWCxmwvY7bPnAf9T91VKEldtDUc0/4qlomaF9vAwfyN2RZnPzzGPGZ/zjZcWFtxMPetjam6eaJV+8Qc+gGEbCDUsHBNkXJJsyTvh8e7TyuLJw9wjaoGS2kvJy0aDFSjCKKSaqlf2/E117rBC8dBfNIZSVRMKZWQfRXz8cRWOKkDz63NGY+XJ4bMA/jTWFfE2FyYzx6+4JZ43fKwKa4RkxtaVixL0ypeFcrDlawHxevlQ/GoytqH+1xfJ4BhYMV9B5xtIFvmgHfTQr0Dqk+fmjjdg97Dh61Wc0QBlHjXlRQ0B9PE51uacCUpbvlYVve/aavrSmI5IBoFpwKDMweyLVH2CMr7Z6l36L3QjRfg2p6u0AdBY5fqaigsPR59mk+Mstbg1+K3nnhJkGxNRvb/DLe4a3bJmryYX9ROnvU2j0UKAp8fmBAu/39ETWDgFqHuBbLJJNXA5minUAZ7rIqN0oNJP5ExJDgBJWJAUoH8QYl7JrHGTIN9WRrMWmyUXxjx0nHB1v5RtSkCWVJ9obdvK5cxJrUkJ2aNm5DayYE3afQ3LocMb5Ob4rzTO/e57WhJsQm2jsdeToCAUzmMr1izz
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(39860400002)(396003)(376002)(451199021)(46966006)(36840700001)(40470700004)(478600001)(336012)(83380400001)(426003)(47076005)(86362001)(6666004)(7696005)(7636003)(356005)(54906003)(70586007)(82740400003)(110136005)(316002)(70206006)(26005)(1076003)(4326008)(186003)(2616005)(8676002)(8936002)(5660300002)(2906002)(40460700003)(41300700001)(40480700001)(36756003)(36860700001)(82310400005);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: ao0QKS/BWIR/4K+dSl1hpv/tFm7clkZKgDV72RcTulKklp9YYH5eeVA7to2OnPEywNmrE9UKlRK073iigo0f+yFRJrcP0Np2yx9A2VHB1JDTcBRmS3BQ7Q41GaBAVJcnTZd9dWGY+AhUJZV2mlvfbNKyOpSFNjetEJnmMEkJdcuvTNYjwFIWy/4aA0ZG1b+3CuEOhXYuZvHd0TOV3nAl0+JIHMJ8QKdN3ibGGHyypMeUX+cH7lqxYemvMawXClUbZJaIjnWad/EsE1UrgBuygeUMUtFrcdnWMgWlMnSVcwQVKRiuHBJDdvpYFn6DSZ0HvxaCp2KqLp49wCE8f5wauelXofbG2Y87QBmVtN3f7mK0iugXeVnaSOy/EVRTPV8WvLcU4vJ+cytF3og1O1I+jod0GxYEkzhbGXDg8RF/izcXVbX01kACuI8axMwHFZwVCoY9l23wdDW7OfgQQjQYQLGNj6/bTJutKz5WVFdC9Fvx5XCHAlZ6i7fKeR0F2oXYdx9yVuP3wvG78+qIKxQ3bDcXahaix2Tqt+y8AsXo2E/0lf0Y52NZ/xJFTp4o+cTpTFUfU3VgQL4OmtOaPH+Rpfk82JwML2DuK+Qx+TTQbYkezZ6nBdPMI2/1XPLANaB8rDe5mejUzdTuVqcERR4jG90VF9OfBgKOJJiXCWB6JzjD+AykkzRHGJgNr5jeNBGoud/OP1OmTsodqmbslt+TVMsnipwqKuDdJPfd/PYzXzKUg4J1nJ/6mIopEiqrurm6
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(346002)(376002)(39860400002)(396003)(451199021)(36840700001)(40470700004)(46966006)(356005)(336012)(426003)(2616005)(86362001)(7636003)(83380400001)(4744005)(47076005)(36860700001)(2906002)(5660300002)(82740400003)(4326008)(40460700003)(54906003)(110136005)(82310400005)(70586007)(186003)(8676002)(70206006)(8936002)(478600001)(36756003)(41300700001)(40480700001)(1076003)(26005)(7696005)(6666004)(316002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 01:17:27.5266
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 01:17:28.2274
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7a834292-c643-4a9d-dceb-08db712c1caa
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5dc43935-c505-4b20-cc17-08db712c1d15
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: SA2PEPF0000150B.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: SA2PEPF00001504.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4288
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5629
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dummy variables are required in order to make these two (similar)
-routines work, so in both cases, declare the variables as volatile in
-order to avoid the clang compiler warning.
+The stop variable is a char*, and the code was assigning a char value to
+it. This was generating a warning when compiling with clang.
 
-Furthermore, in order to ensure that each test actually does what is
-intended, add an asm volatile invocation (thanks to David Hildenbrand
-for the suggestion), with a clarifying comment so that it survives
-future maintenance.
+However, as both David and Peter pointed out, stop is not even used
+after the problematic assignment to a char type. So just delete that
+line entirely.
 
 Cc: David Hildenbrand <david@redhat.com>
 Cc: Peter Xu <peterx@redhat.com>
 Signed-off-by: John Hubbard <jhubbard@nvidia.com>
 ---
- tools/testing/selftests/mm/hugetlb-madvise.c | 8 ++++++--
- tools/testing/selftests/mm/migration.c       | 5 ++++-
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ tools/testing/selftests/mm/mlock2-tests.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
-index 28426e30d9bc..d55322df4b73 100644
---- a/tools/testing/selftests/mm/hugetlb-madvise.c
-+++ b/tools/testing/selftests/mm/hugetlb-madvise.c
-@@ -65,11 +65,15 @@ void write_fault_pages(void *addr, unsigned long nr_pages)
+diff --git a/tools/testing/selftests/mm/mlock2-tests.c b/tools/testing/selftests/mm/mlock2-tests.c
+index 11b2301f3aa3..80cddc0de206 100644
+--- a/tools/testing/selftests/mm/mlock2-tests.c
++++ b/tools/testing/selftests/mm/mlock2-tests.c
+@@ -50,7 +50,6 @@ static int get_vm_area(unsigned long addr, struct vm_boundaries *area)
+ 			printf("cannot parse /proc/self/maps\n");
+ 			goto out;
+ 		}
+-		stop = '\0';
  
- void read_fault_pages(void *addr, unsigned long nr_pages)
- {
--	unsigned long dummy = 0;
-+	volatile unsigned long dummy = 0;
- 	unsigned long i;
- 
--	for (i = 0; i < nr_pages; i++)
-+	for (i = 0; i < nr_pages; i++) {
- 		dummy += *((unsigned long *)(addr + (i * huge_page_size)));
-+
-+		/* Prevent the compiler from optimizing out the entire loop: */
-+		asm volatile("" : "+r" (dummy));
-+	}
- }
- 
- int main(int argc, char **argv)
-diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
-index 1cec8425e3ca..379581567f27 100644
---- a/tools/testing/selftests/mm/migration.c
-+++ b/tools/testing/selftests/mm/migration.c
-@@ -95,12 +95,15 @@ int migrate(uint64_t *ptr, int n1, int n2)
- 
- void *access_mem(void *ptr)
- {
--	uint64_t y = 0;
-+	volatile uint64_t y = 0;
- 	volatile uint64_t *x = ptr;
- 
- 	while (1) {
- 		pthread_testcancel();
- 		y += *x;
-+
-+		/* Prevent the compiler from optimizing out the writes to y: */
-+		asm volatile("" : "+r" (y));
- 	}
- 
- 	return NULL;
+ 		sscanf(line, "%lx", &start);
+ 		sscanf(end_addr, "%lx", &end);
 -- 
 2.40.1
 
