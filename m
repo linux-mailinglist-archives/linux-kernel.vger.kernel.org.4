@@ -2,81 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36CA737311
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:41:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5BB4737314
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjFTRlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 13:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
+        id S229958AbjFTRma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 13:42:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjFTRlS (ORCPT
+        with ESMTP id S229538AbjFTRm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 13:41:18 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C48FDC2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:41:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687282876; x=1718818876;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YU32wILb4tnhc0im+7dQGm/pq5C2AUFMvZXmoqqj258=;
-  b=OX0s698rgSbYgdux98NNPrzmiR1YPKjlI6gwKnvZMxo4UAKz4qgzW2ik
-   wzhDlXowIsl/WKIxYtwwUeGC7LWLY2n0RIHtJ8T6Ev6o9D6LNpekTpNPo
-   jcNKeHHnOoJfaEgOKi+jnrEDCjgQMOF9u5P2Scnzvvb3cD8pyiV98xU7G
-   0dyWvP4M/WB7Odxldzd0zUtKpNsx9A9TN2qS04qKfDXmoB9q01xT7P6dO
-   adsLx9Zm0WUIEan6uduiHzJVv3Jk4Sj+xdX9DPdDSs/Am6WWhG+xrYktZ
-   bIGTz0JjD8Q6imgRMlAyrdnWXklIIQX2jYzjKCMmsPlVib2msyO0ytuVW
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="357427861"
-X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
-   d="scan'208";a="357427861"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 10:41:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="691531828"
-X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
-   d="scan'208";a="691531828"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 20 Jun 2023 10:41:12 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qBfLq-005JYh-1p;
-        Tue, 20 Jun 2023 20:41:10 +0300
-Date:   Tue, 20 Jun 2023 20:41:10 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        intel-gfx@lists.freedesktop.org,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        intel-xe@lists.freedesktop.org
-Subject: Re: [Intel-xe] [PATCH 2/3] linux/bits.h: Add fixed-width GENMASK and
- BIT macros
-Message-ID: <ZJHkthMktY83pwvy@smile.fi.intel.com>
-References: <20230509051403.2748545-1-lucas.demarchi@intel.com>
- <20230509051403.2748545-3-lucas.demarchi@intel.com>
- <ZF4fi5B7PPlgZBOI@smile.fi.intel.com>
- <87pm75kd0h.fsf@intel.com>
- <ZF4j0NPoBGMBT8CO@smile.fi.intel.com>
- <87mt29kc34.fsf@intel.com>
- <ZIs0CC2J7nu0LHEK@smile.fi.intel.com>
- <875y7igph5.fsf@intel.com>
- <ZJG91zMQW3Rnvdbe@smile.fi.intel.com>
- <amgwl5mthhqgvgkqnor6tjfcr3x3pgwvpqin5efwwjfpdhvvpa@vhzhiq5mzsdg>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <amgwl5mthhqgvgkqnor6tjfcr3x3pgwvpqin5efwwjfpdhvvpa@vhzhiq5mzsdg>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Tue, 20 Jun 2023 13:42:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B5F10F8;
+        Tue, 20 Jun 2023 10:42:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8464061347;
+        Tue, 20 Jun 2023 17:42:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47344C433C0;
+        Tue, 20 Jun 2023 17:42:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687282945;
+        bh=HqPSWIaowE4nj5clj2k3JH4V3AbdDov4B8Rb4Patkfo=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=s9339xQyC0XBKYSx0zEQ4dFF/ahukeax3w/RKWqvx7TT7ZJ7GRStLt1BnylGu1Gam
+         Fw4rsznAdu1fiSViLVt+OpO2XHctAYsz1uyYa/cqpHNsuHmtwpz4dxAE/R5Sc6gyF+
+         hZjVpSzhbWQQ/b+f7tOJ/usvDxSj09R99gxfklRToSZPVR3w466sG7kpO7cDKT0QAT
+         SqA41wCiDuXRb1McOCqYoz+2IFjfv5x8AsKFF0Y6oQBLQh4oIXwN6tzhIvHEEi6a8I
+         zAspRdgqXHatVMKHs6T8ISpg90hOsS5aIaqikisTvWksXpKhoeolozwTPp1t3VX49G
+         6EIsTI2sFKAEA==
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 3A59727C0054;
+        Tue, 20 Jun 2023 13:42:24 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute3.internal (MEProxy); Tue, 20 Jun 2023 13:42:24 -0400
+X-ME-Sender: <xms:_-SRZKxsZMGFSxhBm5vRIo2EoKSGS8PpdQ_wugFe3zouweIOzSbx3Q>
+    <xme:_-SRZGTp6i9qiZioW-dK_LNkg8xwsH4bsPCcZSen7ae9TjPmgUPyk9dEULN-D0MI3
+    topYDn6ZtfAalKwFFo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefhedgleehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepvdfhuedvtdfhudffhfekkefftefghfeltdelgeffteehueegjeff
+    udehgfetiefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
+    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
+    igrdhluhhtohdruhhs
+X-ME-Proxy: <xmx:_-SRZMWPRUyDhdMWDnDD7do9LqcwVDUrkhdEhlplOUG6DzGrAmaeAw>
+    <xmx:_-SRZAihSJ0YPyqsvXgdSSG3PoFHsCfe9Rb_iiYwjJQ6TbJObK0ylw>
+    <xmx:_-SRZMCEPdi2mA8OAEnJ1wUaXGyuTw_TiaHoWkOlDTgQeu6K_zXblA>
+    <xmx:AOWRZMsTaJULl8zgHzhqmEqR8dg-NFprFlff4PCAbRGKO8uNJIFOdQ>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B26A831A0063; Tue, 20 Jun 2023 13:42:23 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <5ef2246b-9fe5-4206-acf0-0ce1f4469e6c@app.fastmail.com>
+In-Reply-To: <20230619191740.2qmlza3inwycljih@moria.home.lan>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-8-kent.overstreet@linux.dev>
+ <ZJAdhBIvwFBOFQU/@FVFF77S0Q05N>
+ <20230619104717.3jvy77y3quou46u3@moria.home.lan>
+ <ZJBOVsFraksigfRF@FVFF77S0Q05N.cambridge.arm.com>
+ <20230619191740.2qmlza3inwycljih@moria.home.lan>
+Date:   Tue, 20 Jun 2023 10:42:02 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Kent Overstreet" <kent.overstreet@linux.dev>,
+        "Mark Rutland" <mark.rutland@arm.com>
+Cc:     "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org,
+        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
+        "Kent Overstreet" <kent.overstreet@gmail.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Uladzislau Rezki" <urezki@gmail.com>,
+        "hch@infradead.org" <hch@infradead.org>, linux-mm@kvack.org,
+        "Kees Cook" <keescook@chromium.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>
+Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,100 +94,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 10:25:21AM -0700, Lucas De Marchi wrote:
-> On Tue, Jun 20, 2023 at 05:55:19PM +0300, Andy Shevchenko wrote:
-> > On Tue, Jun 20, 2023 at 05:47:34PM +0300, Jani Nikula wrote:
-> > > On Thu, 15 Jun 2023, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > > > On Fri, May 12, 2023 at 02:45:19PM +0300, Jani Nikula wrote:
-> > > >> On Fri, 12 May 2023, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > > >> > On Fri, May 12, 2023 at 02:25:18PM +0300, Jani Nikula wrote:
-> > > >> >> On Fri, 12 May 2023, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > > >> >> > On Mon, May 08, 2023 at 10:14:02PM -0700, Lucas De Marchi wrote:
-> > > >> >> >> Add GENMASK_U32(), GENMASK_U16() and GENMASK_U8()  macros to create
-> > > >> >> >> masks for fixed-width types and also the corresponding BIT_U32(),
-> > > >> >> >> BIT_U16() and BIT_U8().
+On Mon, Jun 19, 2023, at 12:17 PM, Kent Overstreet wrote:
+> On Mon, Jun 19, 2023 at 01:47:18PM +0100, Mark Rutland wrote:
+>> Sorry, but I do have an engineering rationale here: I want to make sure that
+>> this actually works, on architectures that I care about, and will be
+>> maintanable long-term.
+>> 
+>> We've had a bunch of problems with other JITs ranging from JIT-local "we got
+>> the encoding wrong" to major kernel infrastructure changes like tasks RCU rude
+>> synchronization. I'm trying to figure out whether any of those are likely to
+>> apply and/or whether we should be refactoring other infrastructure for use here
+>> (e.g. the factoring the acutal instruction generation from arch code, or
+>> perhaps reusing eBPF so this can be arch-neutral).
+>> 
+>> I appreciate that's not clear from my initial mail, but please don't jump
+>> straight to assuming I'm adversarial here.
+>
+> I know you're not trying to be adversarial, but vague negative feedback
+> _is_ hostile, because productive technical discussions can't happen
+> without specifics and you're putting all the onus on the other person to
+> make that happen.
 
-> > > >> >> > Why?
-> > > >> >>
-> > > >> >> The main reason is that GENMASK() and BIT() size varies for 32/64 bit
-> > > >> >> builds.
-> > > >> >
-> > > >> > When needed GENMASK_ULL() can be used (with respective castings perhaps)
-> > > >> > and BIT_ULL(), no?
-> > > >>
-> > > >> How does that help with making them the same 32-bit size on both 32 and
-> > > >> 64 bit builds?
-> > > >
-> > > > 	u32 x = GENMASK();
-> > > > 	u64 y = GENMASK_ULL();
-> > > >
-> > > > No? Then use in your code either x or y. Note that I assume that the parameters
-> > > > to GENMASK*() are built-time constants. Is it the case for you?
-> > > 
-> > > What's wrong with wanting to define macros with specific size, depending
-> > > on e.g. hardware registers instead of build size?
-> > 
-> > Nothing, but I think the problem is smaller than it's presented.
-> 
-> not sure about big/small problem you are talking about. It's a problem
-> for when the *device* register is a 32b fixed width, which is
-> independent from the CPU you are running on. We also have registers that
-> are u16 and u64. Having fixed-width GENMASK and BIT helps avoiding
-> mistakes like below. Just to use one example, the diff below builds
-> fine on my 64b machine, yet it's obviously wrong:
-> 
-> 	$ git diff 	diff --git a/drivers/gpu/drm/i915/gt/intel_gt_mcr.c
-> b/drivers/gpu/drm/i915/gt/intel_gt_mcr.c
-> 	index 0b414eae1683..692a0ad9a768 100644
-> 	--- a/drivers/gpu/drm/i915/gt/intel_gt_mcr.c
-> 	+++ b/drivers/gpu/drm/i915/gt/intel_gt_mcr.c
-> 	@@ -261,8 +261,8 @@ static u32 rw_with_mcr_steering_fw(struct intel_gt *gt,
-> 			 * No need to save old steering reg value.
-> 			 */
-> 			intel_uncore_write_fw(uncore, MTL_MCR_SELECTOR,
-> 	-                                     REG_FIELD_PREP(MTL_MCR_GROUPID, group) |
-> 	-                                     REG_FIELD_PREP(MTL_MCR_INSTANCEID, instance) |
-> 	+                                     FIELD_PREP(MTL_MCR_GROUPID, group) |
-> 	+                                     FIELD_PREP(MTL_MCR_INSTANCEID, instance) |
-> 					      (rw_flag == FW_REG_READ ? GEN11_MCR_MULTICAST : 0));
-> 		} else if (GRAPHICS_VER(uncore->i915) >= 11) {
-> 			mcr_mask = GEN11_MCR_SLICE_MASK | GEN11_MCR_SUBSLICE_MASK;
-> 	diff --git a/drivers/gpu/drm/i915/gt/intel_gt_regs.h b/drivers/gpu/drm/i915/gt/intel_gt_regs.h
-> 	index 718cb2c80f79..c42bc2900c6a 100644
-> 	--- a/drivers/gpu/drm/i915/gt/intel_gt_regs.h
-> 	+++ b/drivers/gpu/drm/i915/gt/intel_gt_regs.h
-> 	@@ -80,8 +80,8 @@
-> 	 #define   GEN11_MCR_SLICE_MASK                 GEN11_MCR_SLICE(0xf)
-> 	 #define   GEN11_MCR_SUBSLICE(subslice)         (((subslice) & 0x7) << 24)
-> 	 #define   GEN11_MCR_SUBSLICE_MASK              GEN11_MCR_SUBSLICE(0x7)
-> 	-#define   MTL_MCR_GROUPID                      REG_GENMASK(11, 8)
-> 	-#define   MTL_MCR_INSTANCEID                   REG_GENMASK(3, 0)
-> 	+#define   MTL_MCR_GROUPID                      GENMASK(32, 8)
-> 	+#define   MTL_MCR_INSTANCEID                   GENMASK(3, 0)
-> 	 	 #define IPEIR_I965                             _MMIO(0x2064)
-> 	 #define IPEHR_I965                             _MMIO(0x2068)
-> 
-> If the driver didn't support 32b CPUs, this would even go unnoticed.
+I'm sorry, but this isn't how correct code gets written, and this isn't how at least x86 maintenance operates.
 
-So, what does prevent you from using GENMASK_ULL()?
+Code is either correct, and comes with an explanation as to how it is correct, or it doesn't go in.  Saying that something is like BPF is not an explanation as to how it's correct.  Saying that someone has not come up with the chain of events that causes a mere violation of architecture rules to actual incorrect execution is not an explanation as to how something is correct.
 
-Another point, you may teach GENMASK() to issue a warning if hi and/or lo
-bigger than BITS_PER_LONG.
+So, without intending any particular hostility:
 
-I still don't see the usefulness of that churn.
+<puts on maintainer hat>
 
-> Lucas De Marchi
-> 
-> > And there are already header for bitfields with a lot of helpers
-> > for (similar) cases if not yours.
-> > 
-> > > What would you use for printk format if you wanted to to print
-> > > GENMASK()?
-> > 
-> > %lu, no?
+bcachefs's x86 JIT is:
+Nacked-by: Andy Lutomirski <luto@kernel.org> # for x86
 
--- 
-With Best Regards,
-Andy Shevchenko
+<takes off maintainer hat>
 
+This makes me sad, because I like bcachefs.  But you can get it merged without worrying about my NAK by removing the x86 part.
 
+>
+> When you're raising an issue, try be specific - don't make people dig.
+> If you're unable to be specific, perhaps you're not the right person to
+> be raising the issue.
+>
+> I'm of course happy to answer questions that haven't already been asked.
+>
+> This code is pretty simple as JITs go. With the existing, vmalloc_exec()
+> based code, there aren't any fancy secondary mappings going on, so no
+> crazy cache coherency games, and no crazy syncronization issues to worry
+> about: the jit functions are protected by the per-btree-node locks.
+>
+> vmalloc_exec() isn't being upstreamed however, since people don't want
+> WX mappings.
+>
+> The infrastructure changes we need (and not just for bcachefs) are
+>  - better executable memory allocation API, with support for sub-page
+>    allocations: this is already being worked on, the prototype slab
+>    allocator I posted is probably going to be the basis for part of this
+>
+>  - an arch indepenendent version of text_poke(): we don't want user code
+>    to be flipping page permissions to update text, text_poke() is the
+>    proper API but it's x86 only. No one has volunteered for this yet.
+>
+
+text_poke() by itself is *not* the proper API, as discussed.  It doesn't serialize adequately, even on x86.  We have text_poke_sync() for that.
+
+--Andy
