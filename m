@@ -2,51 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5DCB737455
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB49673745E
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjFTSde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 14:33:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60418 "EHLO
+        id S229779AbjFTSen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 14:34:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjFTSdY (ORCPT
+        with ESMTP id S229665AbjFTSel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 14:33:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7553D1984
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 11:33:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DD51B6140F
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 18:33:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1EC1C433C8;
-        Tue, 20 Jun 2023 18:33:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687285998;
-        bh=SqvhAodB465EsF7b1FR43lL1U65Vj+cZWCGrIetux8Y=;
-        h=From:To:Cc:Subject:Date:From;
-        b=chu0PrrFYy6l4aQH5YUrizUqIiYD5ldCLqo6p3KLUKCB3y9OH7OTLvMN2HFEd9QtI
-         Q5t/2k4Knhg8mR9SBGuJtIi9QeslPAyiSm/vYJgzqfvV6uzfdUP7w/CCAz7wJVNH4I
-         haHcyMwPEXYUcyKw3aWWCIxq33z/CymbhGiodCTE=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Ivan Orlov <ivan.orlov0322@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH] mm: backing-dev: make bdi_class a static const structure
-Date:   Tue, 20 Jun 2023 20:33:15 +0200
-Message-ID: <20230620183314.682822-2-gregkh@linuxfoundation.org>
-X-Mailer: git-send-email 2.41.0
+        Tue, 20 Jun 2023 14:34:41 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66D410C2;
+        Tue, 20 Jun 2023 11:34:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687286079; x=1718822079;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7wOYvg1PU199MGs3s9q0fJPuRo9zPR+Rxyq5xsvig9s=;
+  b=fNfm000NvG30KuV79I1/O/qHl7r8GxEZ5uVLVzl4dyiwLeJuqphaj5jt
+   E2RVHj2Gt8WfS9XiSbpOxSJU2gQoNHAw6y4rwwQTV/1i5D3MOJ+UoycuP
+   flJisCPgeOsREcG2fYcXszrq4dsS6vUiI7tzx0371FSSlXsRgA/Jjl+PI
+   oq3s7chx32cO5bXFAC1EfjfMaML7aeFmqKniuvQwZwEq7+ECewTJBvSS5
+   xFSuyIwc3L0O1PF77tSdlXb9cbgmUXGW5SM0lmQxO8A0mwp630nqXIe5E
+   pm0E+3YOgPRU9J1AJ9YGupUmTRmWTY+towwa2So5xZr+QgmCD+XgvSf7c
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="340291597"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="340291597"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 11:34:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="960883657"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="960883657"
+Received: from oyloh-mobl.amr.corp.intel.com (HELO [10.209.25.231]) ([10.209.25.231])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 11:34:18 -0700
+Message-ID: <d20baf1e-a736-667f-2082-0c0539013f2b@linux.intel.com>
+Date:   Tue, 20 Jun 2023 11:34:17 -0700
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1837; i=gregkh@linuxfoundation.org; h=from:subject; bh=K0CQkPBo/+H1fLv6yQzfATV1NVqEuRkRSTLa+uZOhmc=; b=owGbwMvMwCRo6H6F97bub03G02pJDCkTP7zKtLnNftK6O6B49SrPd9OirXJfye8w0fhjYLXqx FF3B+3dHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCRPY8Y5mfE3Hxy/ITP3dVT NtxxiN0b3pq0aQXD/NpZH1rF94j09Hdw3VuT/lPH/5ZmJwA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH v8 2/2] x86/tdx: Support vmalloc() for
+ tdx_enc_status_changed()
+Content-Language: en-US
+To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
+        dan.j.williams@intel.com, dave.hansen@intel.com,
+        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
+        jane.chu@oracle.com, kirill.shutemov@linux.intel.com,
+        kys@microsoft.com, linux-arch@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
+        peterz@infradead.org, rostedt@goodmis.org, seanjc@google.com,
+        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
+        x86@kernel.org, mikelley@microsoft.com
+Cc:     linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com,
+        rick.p.edgecombe@intel.com
+References: <20230620154830.25442-1-decui@microsoft.com>
+ <20230620154830.25442-3-decui@microsoft.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20230620154830.25442-3-decui@microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,67 +76,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ivan Orlov <ivan.orlov0322@gmail.com>
+Hi,
 
-Now that the driver core allows for struct class to be in read-only
-memory, move the bdi_class structure to be declared at build time
-placing it into read-only memory, instead of having to be dynamically
-allocated at load time.
+On 6/20/23 8:48 AM, Dexuan Cui wrote:
+> When a TDX guest runs on Hyper-V, the hv_netvsc driver's netvsc_init_buf()
+> allocates buffers using vzalloc(), and needs to share the buffers with the
+> host OS by calling set_memory_decrypted(), which is not working for
+> vmalloc() yet. Add the support by handling the pages one by one.
+> 
+> Co-developed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+> Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> ---
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: linux-mm@kvack.org
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- mm/backing-dev.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+Looks good to me.
 
-diff --git a/mm/backing-dev.c b/mm/backing-dev.c
-index 7da9727fcdf3..3ffc3cfa7a14 100644
---- a/mm/backing-dev.c
-+++ b/mm/backing-dev.c
-@@ -20,7 +20,6 @@
- struct backing_dev_info noop_backing_dev_info;
- EXPORT_SYMBOL_GPL(noop_backing_dev_info);
- 
--static struct class *bdi_class;
- static const char *bdi_unknown_name = "(unknown)";
- 
- /*
-@@ -345,13 +344,19 @@ static struct attribute *bdi_dev_attrs[] = {
- };
- ATTRIBUTE_GROUPS(bdi_dev);
- 
-+static const struct class bdi_class = {
-+	.name		= "bdi",
-+	.dev_groups	= bdi_dev_groups,
-+};
-+
- static __init int bdi_class_init(void)
- {
--	bdi_class = class_create("bdi");
--	if (IS_ERR(bdi_class))
--		return PTR_ERR(bdi_class);
-+	int ret;
-+
-+	ret = class_register(&bdi_class);
-+	if (ret)
-+		return ret;
- 
--	bdi_class->dev_groups = bdi_dev_groups;
- 	bdi_debug_init();
- 
- 	return 0;
-@@ -1001,7 +1006,7 @@ int bdi_register_va(struct backing_dev_info *bdi, const char *fmt, va_list args)
- 		return 0;
- 
- 	vsnprintf(bdi->dev_name, sizeof(bdi->dev_name), fmt, args);
--	dev = device_create(bdi_class, NULL, MKDEV(0, 0), bdi, bdi->dev_name);
-+	dev = device_create(&bdi_class, NULL, MKDEV(0, 0), bdi, bdi->dev_name);
- 	if (IS_ERR(dev))
- 		return PTR_ERR(dev);
- 
+Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+
+>  arch/x86/coco/tdx/tdx.c | 35 +++++++++++++++++++++++++++++------
+>  1 file changed, 29 insertions(+), 6 deletions(-)
+> 
+> Changes in v2:
+>   Changed tdx_enc_status_changed() in place.
+> 
+> Changes in v3:
+>   No change since v2.
+> 
+> Changes in v4:
+>   Added Kirill's Co-developed-by since Kirill helped to improve the
+>     code by adding tdx_enc_status_changed_phys().
+> 
+>   Thanks Kirill for the clarification on load_unaligned_zeropad()!
+> 
+> Changes in v5:
+>   Added Kirill's Signed-off-by.
+>   Added Michael's Reviewed-by.
+> 
+> Changes in v6: None.
+> 
+> Changes in v7: None.
+>   Note: there was a race between set_memory_encrypted() and
+>   load_unaligned_zeropad(), which has been fixed by the 3 patches of
+>   Kirill in the x86/tdx branch of the tip tree.
+> 
+> Changes in v8:
+>   Rebased to tip.git's master branch.
+> 
+> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+> index 0c198ab73aa7..a313d5ab42f1 100644
+> --- a/arch/x86/coco/tdx/tdx.c
+> +++ b/arch/x86/coco/tdx/tdx.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/export.h>
+>  #include <linux/io.h>
+> +#include <linux/mm.h>
+>  #include <asm/coco.h>
+>  #include <asm/tdx.h>
+>  #include <asm/vmx.h>
+>  #include <asm/insn.h>
+> @@ -752,6 +753,19 @@ static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
+>  	return false;
+>  }
+>  
+> +static bool tdx_enc_status_changed_phys(phys_addr_t start, phys_addr_t end,
+> +					bool enc)
+> +{
+> +	if (!tdx_map_gpa(start, end, enc))
+> +		return false;
+> +
+> +	/* shared->private conversion requires memory to be accepted before use */
+> +	if (enc)
+> +		return tdx_accept_memory(start, end);
+> +
+> +	return true;
+> +}
+> +
+>  /*
+>   * Inform the VMM of the guest's intent for this physical page: shared with
+>   * the VMM or private to the guest.  The VMM is expected to change its mapping
+> @@ -759,15 +773,24 @@ static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
+>   */
+>  static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+>  {
+> -	phys_addr_t start = __pa(vaddr);
+> -	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
+> +	unsigned long start = vaddr;
+> +	unsigned long end = start + numpages * PAGE_SIZE;
+>  
+> -	if (!tdx_map_gpa(start, end, enc))
+> +	if (offset_in_page(start) != 0)
+>  		return false;
+>  
+> -	/* shared->private conversion requires memory to be accepted before use */
+> -	if (enc)
+> -		return tdx_accept_memory(start, end);
+> +	if (!is_vmalloc_addr((void *)start))
+> +		return tdx_enc_status_changed_phys(__pa(start), __pa(end), enc);
+> +
+> +	while (start < end) {
+> +		phys_addr_t start_pa = slow_virt_to_phys((void *)start);
+> +		phys_addr_t end_pa = start_pa + PAGE_SIZE;
+> +
+> +		if (!tdx_enc_status_changed_phys(start_pa, end_pa, enc))
+> +			return false;
+> +
+> +		start += PAGE_SIZE;
+> +	}
+>  
+>  	return true;
+>  }
+
 -- 
-2.41.0
-
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
