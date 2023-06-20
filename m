@@ -2,112 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6530E7377EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 01:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CDC17377F3
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 01:34:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229702AbjFTX1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 19:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60420 "EHLO
+        id S229762AbjFTXeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 19:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjFTX1a (ORCPT
+        with ESMTP id S229516AbjFTXeU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 19:27:30 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD3341703
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 16:27:28 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f76a0a19d4so7133004e87.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 16:27:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687303647; x=1689895647;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vqBWxLJJaJ1q1UaOrctBt8PsQCamxn0xOOj4PYBN/lQ=;
-        b=T/cvWIn8DTUMpnusme8zEVb8TWXIznEVvjPaUSEtNoFNlR+BnrrscN5r9CC8zk1Ogi
-         +vS1nJ8FQNKge0SCRrZUfo/7l9CVDdCEbASpAxOCN2AehaRfFOcdj6pJj9OOFR1pjTrZ
-         NO5MegG7AIY4RXYjIAHc9PdPTL83r77KZ+eTrkVjCTc+FJnJpn71i4lClZeHPAMX/gHe
-         /Kgzb3Nt6h3QuQmtBHJALTmF50PROcG42y6O5K8sig4Z+5MDRfVgTLe5VWW/XUAXk/ff
-         5eWZ/Ot6OzvXltNUHMH/HqKVb2Jr54Y8EdwCdI+NVJ0yPT+JzaoS+wwFotzRwpjINMbq
-         p6Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687303647; x=1689895647;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vqBWxLJJaJ1q1UaOrctBt8PsQCamxn0xOOj4PYBN/lQ=;
-        b=ldQIdVvBq16ODMIPd3bAAwTmOr9d27XKm0svRoCZV/rDmIXsmKZPtv0AAztlzMnwQl
-         pNI59gAv7Q1uZQnYxwT5a46bpd59xYqz22DBkz/zpIXe+7888+yCknnXBmfv0z229SXP
-         KQnFNEt02h35sUeGacKNC9YQMBtPiyC9vEQth2Ejm3Neuf7Zg3Qq0TQZW+QKG9VawYzx
-         cQNSD+HVhB3TIae6jjJWab7OtWa+HQN36/68PwHHM7+QLQzWEQTLy6S39RypgSkSUWnD
-         VS7aoOqHMssY9DiCm22PGlZ+0lUc7PJAsXTBiKBsCSPNuj7uRzurLU/7+zpSAwtzFCKk
-         KkDA==
-X-Gm-Message-State: AC+VfDzye1UTetmpRACnE90IU2ASzZEIfV99NUTW8b+SHkv7RJtiE6V6
-        RwcBVMUb/EukfUW+DJo3upEJdFF3LWduOt93+8k=
-X-Google-Smtp-Source: ACHHUZ6eZy+L3YgQaDBd7s9jjqbiGJiZdM9j29myhoa4pO7PjcKYTHBgAf2F2gzH/zmdK6WhVnG8Zw==
-X-Received: by 2002:a19:8c04:0:b0:4f8:587e:cbe0 with SMTP id o4-20020a198c04000000b004f8587ecbe0mr7142321lfd.52.1687303646744;
-        Tue, 20 Jun 2023 16:27:26 -0700 (PDT)
-Received: from [192.168.1.101] (abxj193.neoplus.adsl.tpnet.pl. [83.9.3.193])
-        by smtp.gmail.com with ESMTPSA id j3-20020ac253a3000000b004f13c3cb9ffsm525686lfh.200.2023.06.20.16.27.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jun 2023 16:27:26 -0700 (PDT)
-Message-ID: <f68afd0e-d2a6-37df-e037-27248f9c5519@linaro.org>
-Date:   Wed, 21 Jun 2023 01:27:24 +0200
+        Tue, 20 Jun 2023 19:34:20 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE2C170A;
+        Tue, 20 Jun 2023 16:34:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687304059; x=1718840059;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4p6fgptBfYm9lNriizCwBuqL8+VvZ2ABtujsr03ZCJo=;
+  b=fD7GQoQNEbsu3puNr7fQohOXatF+Xve7gpetXbwWYJZHcVhUvXrt2i5r
+   vcaiVXh8AAjHDKxuLaFQVK/qBh8YiR9QHvcUzolzUv5PuubFNmhacht2B
+   RecZ/nBFt6UlWiz6DBzJEVihaChgPy7EUqdGwl8kQiRBTEMdp7ZCsyBUD
+   FpeqkrffPIzGYxjhl/b4v/0G8PDFHDHZUoMGv2qeqBXLJc0Cm4ztkucdo
+   R8CYj80455B3u8yYqOGPAA1qYZnaS1+hwpjSsgV4pY5lDBFXDCxNLCs4q
+   f6ShiDW3p57XMUgRLRyRwN13iG4bJhbHlnx/ZPHqMyTcyn7SWgzjRAC5N
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="340352261"
+X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
+   d="scan'208";a="340352261"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 16:34:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="888427785"
+X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
+   d="scan'208";a="888427785"
+Received: from rashmigh-mobl.amr.corp.intel.com (HELO [10.255.228.28]) ([10.255.228.28])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 16:34:08 -0700
+Message-ID: <90ff7c36-9b2e-c791-dc26-3644b9ff20df@intel.com>
+Date:   Tue, 20 Jun 2023 16:34:08 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] soc: qcom: cmd-db: Drop NUL bytes from debugfs output
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v8 1/2] x86/tdx: Retry TDVMCALL_MAP_GPA() when needed
 Content-Language: en-US
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230620213703.283583-1-quic_bjorande@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230620213703.283583-1-quic_bjorande@quicinc.com>
+To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
+        dan.j.williams@intel.com, dave.hansen@linux.intel.com,
+        haiyangz@microsoft.com, hpa@zytor.com, jane.chu@oracle.com,
+        kirill.shutemov@linux.intel.com, kys@microsoft.com,
+        linux-arch@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        luto@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        rostedt@goodmis.org, sathyanarayanan.kuppuswamy@linux.intel.com,
+        seanjc@google.com, tglx@linutronix.de, tony.luck@intel.com,
+        wei.liu@kernel.org, x86@kernel.org, mikelley@microsoft.com
+Cc:     linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com,
+        rick.p.edgecombe@intel.com
+References: <20230620154830.25442-1-decui@microsoft.com>
+ <20230620154830.25442-2-decui@microsoft.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230620154830.25442-2-decui@microsoft.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.06.2023 23:37, Bjorn Andersson wrote:
-> The debugfs dump of Command DB relies uses %*pEp to print the resource
-> identifiers, with escaping of non-printable characters.
-> But p (ESCAPE_NP) does not escape NUL characters, so for identifiers
-> less than 8 bytes in length the output will retain these.
-> 
-> This does not cause an issue while looking at the dump in the terminal
-> (no known complaints at least), but when programmatically consuming the
-> debugfs output the extra characters are unwanted.
-> 
-> Change the fixed 8-byte sizeof() to a dynamic strnlen() to avoid
-> printing these NUL characters.
-> 
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  drivers/soc/qcom/cmd-db.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soc/qcom/cmd-db.c b/drivers/soc/qcom/cmd-db.c
-> index 33856abd560c..34c40368d5b5 100644
-> --- a/drivers/soc/qcom/cmd-db.c
-> +++ b/drivers/soc/qcom/cmd-db.c
-> @@ -284,7 +284,7 @@ static int cmd_db_debugfs_dump(struct seq_file *seq, void *p)
->  		ent = rsc_to_entry_header(rsc);
->  		for (j = 0; j < le16_to_cpu(rsc->cnt); j++, ent++) {
->  			seq_printf(seq, "0x%05x: %*pEp", le32_to_cpu(ent->addr),
-> -				   (int)sizeof(ent->id), ent->id);
-> +				   (int)strnlen(ent->id, sizeof(ent->id)), ent->id);
+On 6/20/23 08:48, Dexuan Cui wrote:
+> -static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+> +static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
+>  {
+> -	phys_addr_t start = __pa(vaddr);
+> -	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
+> +	const int max_retries_per_page = 3;
+> +	struct tdx_hypercall_args args;
+> +	u64 map_fail_paddr, ret;
+> +	int retry_count = 0;
 >  
->  			len = le16_to_cpu(ent->len);
->  			if (len) {
+>  	if (!enc) {
+>  		/* Set the shared (decrypted) bits: */
+> @@ -718,12 +720,49 @@ static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
+>  		end   |= cc_mkdec(0);
+>  	}
+>  
+> -	/*
+> -	 * Notify the VMM about page mapping conversion. More info about ABI
+> -	 * can be found in TDX Guest-Host-Communication Interface (GHCI),
+> -	 * section "TDG.VP.VMCALL<MapGPA>"
+> -	 */
+> -	if (_tdx_hypercall(TDVMCALL_MAP_GPA, start, end - start, 0, 0))
+> +	while (retry_count < max_retries_per_page) {
+> +		memset(&args, 0, sizeof(args));
+> +		args.r10 = TDX_HYPERCALL_STANDARD;
+> +		args.r11 = TDVMCALL_MAP_GPA;
+> +		args.r12 = start;
+> +		args.r13 = end - start;
+> +
+
+What's wrong with:
+
+	while (retry_count < max_retries_per_page) {
+		struct tdx_hypercall_args args = {
+			.r10 = TDX_HYPERCALL_STANDARD,
+			.r11 = TDVMCALL_MAP_GPA,
+			.r12 = start,
+			.r13 = end - start };
+
+?
+
+Or maybe with the brackets slightly differently arranged.
+
+Why'd you declare all the variables outside the while() loop anyway?
