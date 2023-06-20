@@ -2,67 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7B16736419
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F4044736412
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbjFTHMF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 03:12:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56086 "EHLO
+        id S229949AbjFTHKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 03:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjFTHMD (ORCPT
+        with ESMTP id S229579AbjFTHKp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 03:12:03 -0400
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A844BCC;
-        Tue, 20 Jun 2023 00:11:22 -0700 (PDT)
-Received: from rd02-sz.amlogic.software (10.28.11.83) by mail-sh.amlogic.com
- (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.13; Tue, 20 Jun 2023
- 15:11:09 +0800
-From:   Huqiang Qin <huqiang.qin@amlogic.com>
-To:     <tglx@linutronix.de>, <maz@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <neil.armstrong@linaro.org>, <khilman@baylibre.com>,
-        <jbrunet@baylibre.com>, <martin.blumenstingl@googlemail.com>
-CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        Huqiang Qin <huqiang.qin@amlogic.com>
-Subject: [PATCH] dt-bindings: interrupt-controller: New binding for Meson-C3 SoCs
-Date:   Tue, 20 Jun 2023 15:08:49 +0800
-Message-ID: <20230620070849.2059451-1-huqiang.qin@amlogic.com>
-X-Mailer: git-send-email 2.37.1
+        Tue, 20 Jun 2023 03:10:45 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CD0CC
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:10:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Ak1na8GbY5x4+XXN0A9MfARgJ99cd/S+45Z1mbNGHDM=; b=Qfx4iSwmEU0wrndFg+bhUU71CJ
+        WSXMR57xcYsp6J6A7JG8bhxgS0nfDiM5r14j5FCwTdRXWA+cUIKyuUluush1FZfpWkBCK/4H3nV8e
+        w2xrI+cVdgeF0M7Ht04eo2mQkHYb+5cBq1Bgm3wZsoNUfhdbPVkBvp03mBWyKOFBJSgqYecTk9RKK
+        7NVnLCb0VhPirp26pVVSa3FJOfGAdIp30vUyCXQqFkakQsdA1WYjCRREQ2cdRS1AEcEHVXZ311am5
+        BNW8zWbFCdnDc1+a+dvOmVG7bYbTiz1vp8ccQWLXpuqvhOqvt1d5fF1jeUM7Kl5PPwBYitEJTqqJI
+        mTq8IMlw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qBVVB-00CmmP-QS; Tue, 20 Jun 2023 07:10:09 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1D673300137;
+        Tue, 20 Jun 2023 09:10:06 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0237D20A3B6D3; Tue, 20 Jun 2023 09:10:05 +0200 (CEST)
+Date:   Tue, 20 Jun 2023 09:10:05 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Naveen N Rao <naveen@kernel.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Subject: Re: [RFC PATCH v1 1/3] Revert "powerpc/bug: Provide better
+ flexibility to WARN_ON/__WARN_FLAGS() with asm goto"
+Message-ID: <20230620071005.GR4253@hirez.programming.kicks-ass.net>
+References: <cover.1686922583.git.christophe.leroy@csgroup.eu>
+ <8dd72199549e76e0e9c2aba1c89d5fe2b0cb1663.1686922583.git.christophe.leroy@csgroup.eu>
+ <1687237941.1wok7iiqm0.naveen@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.28.11.83]
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1687237941.1wok7iiqm0.naveen@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update dt-binding document for GPIO interrupt controller of Meson-C3 SoCs
+On Tue, Jun 20, 2023 at 10:51:25AM +0530, Naveen N Rao wrote:
+> Christophe Leroy wrote:
+> > This reverts commit 1e688dd2a3d6759d416616ff07afc4bb836c4213.
+> > 
+> > That commit aimed at optimising the code around generation of
+> > WARN_ON/BUG_ON but this leads to a lot of dead code erroneously
+> > generated by GCC.
+> > 
+> >      text	   data	    bss	    dec	    hex	filename
+> >   9551585	3627834	 224376	13403795	 cc8693	vmlinux.before
+> >   9535281	3628358	 224376	13388015	 cc48ef	vmlinux.after
+> > 
+> > Once this change is reverted, in a standard configuration (pmac32 +
+> > function tracer) the text is reduced by 16k which is around 1.7%
+> 
+> Aneesh recently reported a build failure due to the use of 'asm goto' in
+> WARN_ON(). We were able to root-cause it to the use of 'asm goto' with two
+> config options: CONFIG_CC_OPTIMIZE_FOR_SIZE and
+> CONFIG_DEBUG_SECTION_MISMATCH.
 
-Signed-off-by: Huqiang Qin <huqiang.qin@amlogic.com>
----
- .../bindings/interrupt-controller/amlogic,meson-gpio-intc.txt    | 1 +
- 1 file changed, 1 insertion(+)
+FWIW;
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/amlogic,meson-gpio-intc.txt b/Documentation/devicetree/bindings/interrupt-controller/amlogic,meson-gpio-intc.txt
-index bde63f8f090e..fdea0488a98c 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/amlogic,meson-gpio-intc.txt
-+++ b/Documentation/devicetree/bindings/interrupt-controller/amlogic,meson-gpio-intc.txt
-@@ -19,6 +19,7 @@ Required properties:
-     "amlogic,meson-sm1-gpio-intc" for SM1 SoCs (S905D3, S905X3, S905Y3)
-     "amlogic,meson-a1-gpio-intc" for A1 SoCs (A113L)
-     "amlogic,meson-s4-gpio-intc" for S4 SoCs (S802X2, S905Y4, S805X2G, S905W2)
-+    "amlogic,meson-c3-gpio-intc" for C3 SoCs (C308L, C302X)
- - reg : Specifies base physical address and size of the registers.
- - interrupt-controller : Identifies the node as an interrupt controller.
- - #interrupt-cells : Specifies the number of cells needed to encode an
--- 
-2.37.1
+I recently had clang-powerpc report a very dodgy build error that was
+due to a combination of these asm-goto and the usage of __cleanup__.
+For some reason the label of the asm-goto crossed over the __cleanup__
+variable declaration -- which is not valid, but also was completely
+insane for that's not what the code called for.
+
+  https://lkml.kernel.org/r/20230610082005.GB1370249@hirez.programming.kicks-ass.net
+
+But in my book that's a compiler issue, not a kernel issue and I'd be
+hesitant to pull the asm-goto use just for that.
+
 
