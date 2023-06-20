@@ -2,100 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2917362C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 06:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 610C07362C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 06:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbjFTEsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 00:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45478 "EHLO
+        id S229944AbjFTEsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 00:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjFTEsM (ORCPT
+        with ESMTP id S229655AbjFTEsU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 00:48:12 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D8210E4;
-        Mon, 19 Jun 2023 21:48:09 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1qBTHE-004xjz-Qx; Tue, 20 Jun 2023 12:47:37 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Tue, 20 Jun 2023 12:47:36 +0800
-Date:   Tue, 20 Jun 2023 12:47:36 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org,
-        syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com,
-        syzbot+14234ccf6d0ef629ec1a@syzkaller.appspotmail.com,
-        syzbot+4e2e47f32607d0f72d43@syzkaller.appspotmail.com,
-        syzbot+472626bb5e7c59fb768f@syzkaller.appspotmail.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] crypto: af_alg/hash: Fix recvmsg() after
- sendmsg(MSG_MORE)
-Message-ID: <ZJEvaGyiRj509XY8@gondor.apana.org.au>
-References: <ZIw8y2w+A+t5u+IJ@gondor.apana.org.au>
- <ZIw4+Go7ZIth+CsY@gondor.apana.org.au>
- <1679829.1686785273@warthog.procyon.org.uk>
- <426353.1686911878@warthog.procyon.org.uk>
- <1132301.1687193246@warthog.procyon.org.uk>
+        Tue, 20 Jun 2023 00:48:20 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8220C10F2;
+        Mon, 19 Jun 2023 21:48:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=IJtc0dSmvrdtDpxoBDdBZLPgMK+CrBpfQaCUFRKuZTE=; b=xysdKIXlVYrGJm8AdxF81CHfTL
+        R53hTcAtaIK4/Wdz2V7GPaDDAbVjZWeX2sAImKPCWK4xbFGJJvUSc3GxJp3S/LOYjldEPyH8TnG6b
+        OSmMAZMj1hL5tJsg5vmjXv6o95zaE88JIzozG5KoYd/Q0Vf8v6ql+TGdo3fmkGWitY+tXP5yMElce
+        8FT7VE+/j2D8PpL4YVgaQTdKSoDhXcUKhdlleUL7ioMqtNANohbBA5ikhfqHQl7IjkDmhXjBAILEy
+        BWPRN7lY2pgW0mLNsUKH5nECS9M/a/v9XfPP4vSISPnRbAEU770rSiUuKC7s9QPoZ2qVkMacR0We4
+        FyxEX4gQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1qBTHn-00A8vD-0V;
+        Tue, 20 Jun 2023 04:48:11 +0000
+Date:   Mon, 19 Jun 2023 21:48:11 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Bean Huo <beanhuo@iokpp.de>
+Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org,
+        akpm@linux-foundation.org, jack@suse.cz, jack@suse.com,
+        tytso@mit.edu, adilger.kernel@dilger.ca, mark@fasheh.com,
+        jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ocfs2-devel@oss.oracle.com,
+        beanhuo@micron.com
+Subject: Re: [PATCH v2 2/5] ext4: No need to check return value of
+ block_commit_write()
+Message-ID: <ZJEvi8CJddmpeluC@infradead.org>
+References: <20230619211827.707054-1-beanhuo@iokpp.de>
+ <20230619211827.707054-3-beanhuo@iokpp.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1132301.1687193246@warthog.procyon.org.uk>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: **
+In-Reply-To: <20230619211827.707054-3-beanhuo@iokpp.de>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 05:47:26PM +0100, David Howells wrote:
->
-> The free here:
+On Mon, Jun 19, 2023 at 11:18:24PM +0200, Bean Huo wrote:
+> From: Bean Huo <beanhuo@micron.com>
 > 
-> 	if (!continuing) {
-> 		if ((msg->msg_flags & MSG_MORE))
-> 			hash_free_result(sk, ctx);
-> 
-> only happens in the following case:
-> 
-> 	send(hashfd, "", 0, 0);
-> 	send(hashfd, "", 0, MSG_MORE);  <--- by this
+> Remove unnecessary check on the return value of block_commit_write(),
+> because it always returns 0.
 
-Yes and that's what I'm complaining about.
-
-> and the patch changes how this case works if no data is given.  In Linus's
-> tree, it will create a result, init the crypto and finalise it in
-> hash_sendmsg(); with this patch that case is then handled by hash_recvmsg().
-> If you consider the following sequence:
-> 
-> 	send(hashfd, "", 0, 0);
-> 	send(hashfd, "", 0, 0);
-> 	send(hashfd, "", 0, 0);
-> 	send(hashfd, "", 0, 0);
-> 
-> Upstream, the first one will create a result and then each of them will init
-> and finalise a hash, whereas with my patch, the first one will release any
-> outstanding result and then none of them will do any crypto ops.
-
-This is correct.  If MSG_MORE is not set, then the hash will be
-finalised.  In which case if there is already a result allocated
-then we should reuse it and not free it.
-
-If MSG_MORE is set, then we can delay the allocation of the result,
-in which case it makes sense to free any previous results since
-the next request may not come for a very long time (or perhaps even
-never).
-
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Dropping the error check before the function signature is changes is
+really odd.  I'd suggest to merge this and the following patches into
+a single one.
