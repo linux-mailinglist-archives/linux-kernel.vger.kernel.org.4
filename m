@@ -2,179 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74EC573756C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 21:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C50737570
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 21:55:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbjFTTya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 15:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40112 "EHLO
+        id S229840AbjFTTy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 15:54:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjFTTy2 (ORCPT
+        with ESMTP id S229547AbjFTTyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 15:54:28 -0400
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122A6D7
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:54:27 -0700 (PDT)
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6237faa8677so34369436d6.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:54:27 -0700 (PDT)
+        Tue, 20 Jun 2023 15:54:52 -0400
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C5E1982
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:54:47 -0700 (PDT)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-56fff21c2ebso55292767b3.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:54:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687290887; x=1689882887;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IiBraH1gFEtLq0Kn5mTuDR7eletLpb8dAh5y2pzul9A=;
+        b=GnK6zVktB4fTweKikYzUukoKZGCmVusKP/x6uUrsa1IZh7Lcf11VRj9767YwL28zyx
+         J4JKcGvTfTr/LvFgYj5pm1tfEFEJ8PKkMTUvowkeEnkdtgmC9135h58fxQzErHTduUCX
+         +m+UG/mn18iCUxOKOQQ3TboQqPdTC4trrhg3CdFjun1ZClZ8tNP63vy0pMK4T8o5rwHN
+         Ev/CkGwjSSWdgG/b37eVTxoy7CA9K7VH5ECYT9iqlmvWSv+gngjFQijyE1bOMwoZXb/s
+         MCqGmsFWL/xCVoRj8nY9T1uCu7dqqcS1sL95WKPUvtYF9Sc63RHc6WC/aK2yPQNdgDcy
+         QIWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687290866; x=1689882866;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YuFavfnhiMmbwTAYkIV6m5x4hZaZCCkA7kIrJB889Sc=;
-        b=D7e1KFWoqGgQMf+p4x5t+xGiVp4l2Ewv7okPshm+GKy9slgXiDJAJfiu/yEf708oRV
-         ueoBx3j6weCk5qN+AS39GbHqV6CEA9ULpqI5ZzgdaBj8x6xsI89XS8vwrLOCoPHPE0jq
-         jAqyMTepfwDVulJbE9ZPM+HCyjJ5ZfF/zXCWvk9oy7kaC/9M5RV2KqaJR8g/oGelKqby
-         /i8QcwhU7hN1tJVlQ1uJ6Pb1dYuvjMLbwrqh7ALjwexmluEsei0odYXfGz+fBuT6IycA
-         DdSVqS10wr7Ya1OGpJfyXOYEOO6PBs2G27tRJ2fxRIoOYB2uG+2ga9dNtwD0Nn6VHFNa
-         xojw==
-X-Gm-Message-State: AC+VfDzrKOCXzhXnh1R/hOgO3biOxxpgYU3TfPMeEmrI01JB9IvYy7+8
-        OL53LNXrxuIMPz1U472AvU4=
-X-Google-Smtp-Source: ACHHUZ6myNE/Xmx+rE8XqVBQmLG4Y8k85rHAA8/UNDy97P/hmmYOrx10fgISHS09IrhSwc9KGY2Hrg==
-X-Received: by 2002:a05:6214:c8a:b0:632:c2e:57ae with SMTP id r10-20020a0562140c8a00b006320c2e57aemr561274qvr.54.1687290865909;
-        Tue, 20 Jun 2023 12:54:25 -0700 (PDT)
-Received: from maniforge ([2620:10d:c091:400::5:2cf0])
-        by smtp.gmail.com with ESMTPSA id e17-20020a0cf351000000b005e37909a7fcsm1622025qvm.13.2023.06.20.12.54.24
+        d=1e100.net; s=20221208; t=1687290887; x=1689882887;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IiBraH1gFEtLq0Kn5mTuDR7eletLpb8dAh5y2pzul9A=;
+        b=bAQ/VoMtcaAzyVCMijP74XdHRnanDNMZDi4N9PrHZIFD/F8ugP3K0ZGKIuauza3CwC
+         NvhAm22vfAdMUTN2dBiS11KLOrsR4LOWW0DeSJ5fg5DqAPQ5utUk7irwDQVhFKY9dRCk
+         9ZiVMDaUL1a3vbOMnDSh9WUijjxavEXT98J0QWKT5YjRJ7ZCCm2CJQDg7zrbMXMT7ibh
+         nL4EvqHFj2BPIIKma5gnLkcPzhbdcD/Hr9pZzDgSqiDNpyaQ2CLosI5gL+Cz3nVq7pgL
+         bb612hfx3amddjW2whLYv+51tcZfDHfKAUgeCmMJykW8Iog8ovn+EhzIhyI8WgGyQ7V+
+         HGBw==
+X-Gm-Message-State: AC+VfDzWsk7aoXTtnVfOjZRwEmulODBmip21XMmHwgT7kRXILyipUErm
+        AFAKQC5PpB+OwPDAYfqMsVAlXg==
+X-Google-Smtp-Source: ACHHUZ5CjW+DD7ghkPvVJFGUBN1BQG+qQA/ISq9t6lWLEboPHQzho8N1caYYSPmYBruWUqH6Cq9/Mw==
+X-Received: by 2002:a0d:d106:0:b0:56d:45ec:2e64 with SMTP id t6-20020a0dd106000000b0056d45ec2e64mr14660924ywd.43.1687290886830;
+        Tue, 20 Jun 2023 12:54:46 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id n20-20020a819e54000000b005705cbba0bcsm649525ywj.98.2023.06.20.12.54.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 12:54:25 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 14:54:23 -0500
-From:   David Vernet <void@manifault.com>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com, rostedt@goodmis.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, joshdon@google.com,
-        roman.gushchin@linux.dev, tj@kernel.org, kernel-team@meta.com
-Subject: Re: [RFC PATCH 3/3] sched: Implement shared wakequeue in CFS
-Message-ID: <20230620195423.GB3027191@maniforge>
-References: <20230613052004.2836135-1-void@manifault.com>
- <20230613052004.2836135-4-void@manifault.com>
- <CAKfTPtCT==N_r1Vp-e_cFtVmcdo_YN1aD45AfbLMSpGpu1oU=w@mail.gmail.com>
+        Tue, 20 Jun 2023 12:54:45 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 12:54:25 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David Sc. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jann Horn <jannh@google.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 05/12] powerpc: add pte_free_defer() for pgtables
+ sharing page
+In-Reply-To: <ZJGRa4zvsXfc43vB@ziepe.ca>
+Message-ID: <2ad8b6cf-692a-ff89-ecc-586c20c5e07f@google.com>
+References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com> <5cd9f442-61da-4c3d-eca-b7f44d22aa5f@google.com> <ZJGRa4zvsXfc43vB@ziepe.ca>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtCT==N_r1Vp-e_cFtVmcdo_YN1aD45AfbLMSpGpu1oU=w@mail.gmail.com>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 10:08:57AM +0200, Vincent Guittot wrote:
-> On Tue, 13 Jun 2023 at 07:20, David Vernet <void@manifault.com> wrote:
-> >
-> > Overview
-> > ========
-> >
-> > The scheduler must constantly strike a balance between work
-> > conservation, and avoiding costly migrations which harm performance due
-> > to e.g. decreased cache locality. The matter is further complicated by
-> > the topology of the system. Migrating a task between cores on the same
-> > LLC may be more optimal than keeping a task local to the CPU, whereas
-> > migrating a task between LLCs or NUMA nodes may tip the balance in the
-> > other direction.
-> >
-> > With that in mind, while CFS is by and large mostly a work conserving
-> > scheduler, there are certain instances where the scheduler will choose
-> > to keep a task local to a CPU, when it would have been more optimal to
-> > migrate it to an idle core.
-> >
-> > An example of such a workload is the HHVM / web workload at Meta. HHVM
-> > is a VM that JITs Hack and PHP code in service of web requests. Like
-> > other JIT / compilation workloads, it tends to be heavily CPU bound, and
-> > exhibit generally poor cache locality. To try and address this, we set
-> > several debugfs (/sys/kernel/debug/sched) knobs on our HHVM workloads:
-> >
-> > - migration_cost_ns -> 0
-> > - latency_ns -> 20000000
-> > - min_granularity_ns -> 10000000
-> > - wakeup_granularity_ns -> 12000000
-> >
-> > These knobs are intended both to encourage the scheduler to be as work
-> > conserving as possible (migration_cost_ns -> 0), and also to keep tasks
-> > running for relatively long time slices so as to avoid the overhead of
-> > context switching (the other knobs). Collectively, these knobs provide a
-> > substantial performance win; resulting in roughly a 20% improvement in
-> > throughput. Worth noting, however, is that this improvement is _not_ at
-> > full machine saturation.
-> >
-> > That said, even with these knobs, we noticed that CPUs were still going
-> > idle even when the host was overcommitted. In response, we wrote the
-> > "shared wakequeue" (swqueue) feature proposed in this patch set. The
-> > idea behind swqueue is simple: it enables the scheduler to be
-> > aggressively work conserving by placing a waking task into a per-LLC
-> > FIFO queue that can be pulled from by another core in the LLC FIFO queue
-> > which can then be pulled from before it goes idle.
+On Tue, 20 Jun 2023, Jason Gunthorpe wrote:
+> On Tue, Jun 20, 2023 at 12:47:54AM -0700, Hugh Dickins wrote:
+> > Add powerpc-specific pte_free_defer(), to call pte_free() via call_rcu().
+> > pte_free_defer() will be called inside khugepaged's retract_page_tables()
+> > loop, where allocating extra memory cannot be relied upon.  This precedes
+> > the generic version to avoid build breakage from incompatible pgtable_t.
+> > 
+> > This is awkward because the struct page contains only one rcu_head, but
+> > that page may be shared between PTE_FRAG_NR pagetables, each wanting to
+> > use the rcu_head at the same time: account concurrent deferrals with a
+> > heightened refcount, only the first making use of the rcu_head, but
+> > re-deferring if more deferrals arrived during its grace period.
 > 
-> This seems to be just another newly idle load balance outside the current one !
+> You didn't answer my question why we can't just move the rcu to the
+> actual free page?
 
-Hi Vincent,
+I thought that I had answered it, perhaps not to your satisfaction:
 
-I can bring the swqueue logic inside of newidle_balance(). In hindsight
-I think it makes more sense there.
+https://lore.kernel.org/linux-mm/9130acb-193-6fdd-f8df-75766e663978@google.com/
 
-To answer your point more generally though, yes, this is a new approach
-to load balancing that eschews tracking migration costs, scanning
-runqueues, etc in favor of optimizing for work conservation, and
-tracking runnable tasks in a shared data structure. More on this below
-in response to your other points.
+My conclusion then was:
+Not very good reasons: good enough, or can you supply a better patch?
+
+Hugh
 
 > 
-> The knobs above are not the only thing preventing a rq to pull a new
-> task. We have rq->avg_idle, curr_cost and sd->max_newidle_lb_cost
-> stuff which might be one main root cause for one of your cpu not
-> pulling a waiting task
->
-> It's not clear in your explanation why fixing newly_idle_load_balance
-> was not possible instead of adding outside code and what prevents
-> newly_idle_load balance from picking a task in your case ?
+> Since PPC doesn't recycle the frags, we don't need to carefully RCU
+> free each frag, we just need to RCU free the entire page when it
+> becomes eventually free?
 > 
-> For example, have you tried to disable the early break because of avg_idle ?
-
-The goal of swqueue is to enable work conservation using a shared, per-LLC data
-structure. The shared data structure is really the salient point as to why just
-updating newidle_balance() wouldn't achieve the same result. newidle_balance()
-finds tasks to migrate by (sometimes) iterating over runqueues and scanning for
-tasks. It's an expensive operation, which doesn't scale to large machines or to
-being performed on every idle path. swqueue, on the other hand, is shared
-across all cores in an LLC, so pulling a runnable task is simply a matter of a
-spinlock acquire and a list operation. This doesn't scale to every single
-configuration as Aaron pointed out in [0], but it works well in many other
-configurations.
-
-[0]: https://lore.kernel.org/all/20230614043529.GA1942@ziqianlu-dell/
-
-Another consideration is that even if we could adjust newidle_balance()
-to load balance well enough for our specific purpose, we're still
-relying on heuristics to determine when it's appropriate to load
-balance; and that will 
-
-a) Inevitably be suboptimal for certain workloads and configurations. For
-example, if we got rid of the following check:
-
-12021         for_each_domain(this_cpu, sd) {
-12022                 int continue_balancing = 1;
-12023                 u64 domain_cost;
-12024
-12025                 update_next_balance(sd, &next_balance);
-12026
-12027                 if (this_rq->avg_idle < curr_cost + sd->max_newidle_lb_cost)
-12028                         break;
-
-we may end up load balancing too frequently, which could be a regression in and
-of itself per the scalability concerns mentioned above. Or, for certain
-workloads, we'll load balance too aggressively and miss out on L1/L2 locality.
-
-b) Be harder for users to effectively tune or use. At OSPM, Peter made it quite
-clear that users should not be tuning any of the debugfs knobs. Relying on
-heuristics and knobs like this feels antithetical to that policy. swqueue feels
-like a reasonable, self-contained alternative to that.
-
-Thanks,
-David
+> Jason
