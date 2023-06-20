@@ -2,92 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47177377FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 01:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A696737805
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 01:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229657AbjFTXkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 19:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
+        id S229809AbjFTXtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 19:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjFTXki (ORCPT
+        with ESMTP id S229478AbjFTXtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 19:40:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7896D1712
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 16:40:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE1F161326
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:40:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2E8A2C433C0;
-        Tue, 20 Jun 2023 23:40:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687304432;
-        bh=MzePdahtLZw6+jL8v2zldGkseoJjdfgMR1ZbnZIcMew=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=UVDlDRZgv9sXJbrpBdjjsfOwRl9EHMmr2QlzkgQ1EwEMc9xE2g/tLx1PxvcoLQkEG
-         P5lYo26BBy7MOElPW+yibJpNYyTLCYFf1HCaHdzB3tskU3JfWD/WIVbuWo56LugKpk
-         28wxxPQNRm2lDQgl2fYIUkUqPTd14rG/FrdZDGcKl0b0vhFK4nS6PPZQOgTGECnMJ0
-         6TuXbGG+HaIZXpL2uCgsPxfdRZViB8z/VVc/adtN9D52kvTr/ct6L14F3Dxd/gBgjN
-         cqU2c5e5fG6PCsUEVauXwPnchX2QRcTGVecI5rACO3EZwJaUb9d0PyqaE/nB4APJ94
-         uqsGsya/7doYw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 116EBE21EDB;
-        Tue, 20 Jun 2023 23:40:32 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 20 Jun 2023 19:49:50 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603F9E2;
+        Tue, 20 Jun 2023 16:49:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687304988; x=1718840988;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yjG5HbXpzyMj0TodosWe+wCE8+H6yKMdv5B0rKBSF0w=;
+  b=A13lpcQBddZOoNYsdtjQvFe9Mu+XZjF7ziDlzfiJ+jwI/IJLABhiiaU6
+   iD4H1CD28cwLR/UgAzoWUIUWXxkVgTy0kivCKE5aoF2OdgIJMMpLeu4zz
+   MafNv+P+zJPQU7d9ZTzg08RrGVRe6x11ay6z5DpiMrd6uZvXE583CicWh
+   YQrqPK7Ad2LPk+KatXPtAbrV+pMpF+r+qCJ5PCxC1UT02jsbE50/xFWCq
+   vlUZ5Aakk+Ed8fNCHUZEkO18eGmGbWxTlpQ26M4JJ3vDD6oGbZ0PqDvBZ
+   j+TUHC3qAfdBurwpcFQ1xPSwSMzzkNvWrfB2H6SwBv99E4Cz7e5fBe76K
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="357508091"
+X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
+   d="scan'208";a="357508091"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 16:49:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="804142637"
+X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
+   d="scan'208";a="804142637"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 20 Jun 2023 16:49:44 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qBl6W-0006Lg-07;
+        Tue, 20 Jun 2023 23:49:44 +0000
+Date:   Wed, 21 Jun 2023 07:49:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Luke D. Jones" <luke@ljones.dev>, hdegoede@redhat.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, markgross@kernel.org,
+        jdelvare@suse.com, linux@roeck-us.net,
+        "Luke D. Jones" <luke@ljones.dev>
+Subject: Re: [PATCH v3 1/1] platform/x86: asus-wmi: add support for ASUS
+ screenpad
+Message-ID: <202306210717.OFFdFt8Q-lkp@intel.com>
+References: <20230620030033.55033-2-luke@ljones.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 0/3] bpf,
- arm64: use BPF prog pack allocator in BPF JIT
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168730443206.21092.6381881646118757164.git-patchwork-notify@kernel.org>
-Date:   Tue, 20 Jun 2023 23:40:32 +0000
-References: <20230619100121.27534-1-puranjay12@gmail.com>
-In-Reply-To: <20230619100121.27534-1-puranjay12@gmail.com>
-To:     Puranjay Mohan <puranjay12@gmail.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, catalin.marinas@arm.com,
-        mark.rutland@arm.com, bpf@vger.kernel.org, kpsingh@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620030033.55033-2-luke@ljones.dev>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Luke,
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+kernel test robot noticed the following build warnings:
 
-On Mon, 19 Jun 2023 10:01:18 +0000 you wrote:
-> BPF programs currently consume a page each on ARM64. For systems with many BPF
-> programs, this adds significant pressure to instruction TLB. High iTLB pressure
-> usually causes slow down for the whole system.
-> 
-> Song Liu introduced the BPF prog pack allocator[1] to mitigate the above issue.
-> It packs multiple BPF programs into a single huge page. It is currently only
-> enabled for the x86_64 BPF JIT.
-> 
-> [...]
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.4-rc7 next-20230620]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Here is the summary with links:
-  - [bpf-next,v3,1/3] bpf: make bpf_prog_pack allocator portable
-    https://git.kernel.org/bpf/bpf-next/c/9a44df2a4f2a
-  - [bpf-next,v3,2/3] arm64: patching: Add aarch64_insn_copy()
-    https://git.kernel.org/bpf/bpf-next/c/a7ed8ed92482
-  - [bpf-next,v3,3/3] bpf, arm64: use bpf_jit_binary_pack_alloc
-    https://git.kernel.org/bpf/bpf-next/c/49703aa2adfa
+url:    https://github.com/intel-lab-lkp/linux/commits/Luke-D-Jones/platform-x86-asus-wmi-add-support-for-ASUS-screenpad/20230620-110305
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230620030033.55033-2-luke%40ljones.dev
+patch subject: [PATCH v3 1/1] platform/x86: asus-wmi: add support for ASUS screenpad
+config: x86_64-randconfig-a001-20230620 (https://download.01.org/0day-ci/archive/20230621/202306210717.OFFdFt8Q-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20230621/202306210717.OFFdFt8Q-lkp@intel.com/reproduce)
 
-You are awesome, thank you!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306210717.OFFdFt8Q-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/platform/x86/asus-wmi.c:3293:41: warning: variable 'bd' is uninitialized when used here [-Wuninitialized]
+           brightness = read_screenpad_brightness(bd);
+                                                  ^~
+   drivers/platform/x86/asus-wmi.c:3285:29: note: initialize the variable 'bd' to silence this warning
+           struct backlight_device *bd;
+                                      ^
+                                       = NULL
+   1 warning generated.
+
+
+vim +/bd +3293 drivers/platform/x86/asus-wmi.c
+
+  3282	
+  3283	static int asus_screenpad_init(struct asus_wmi *asus)
+  3284	{
+  3285		struct backlight_device *bd;
+  3286		struct backlight_properties props;
+  3287		int power, brightness;
+  3288	
+  3289		power = read_screenpad_backlight_power(asus);
+  3290		if (power < 0)
+  3291			return power;
+  3292	
+> 3293		brightness = read_screenpad_brightness(bd);
+  3294		if (brightness < 0)
+  3295			return brightness;
+  3296	
+  3297		memset(&props, 0, sizeof(struct backlight_properties));
+  3298		props.type = BACKLIGHT_RAW; /* ensure this bd is last to be picked */
+  3299		props.max_brightness = 255;
+  3300		bd = backlight_device_register("asus_screenpad",
+  3301					       &asus->platform_device->dev, asus,
+  3302					       &asus_screenpad_bl_ops, &props);
+  3303		if (IS_ERR(bd)) {
+  3304			pr_err("Could not register backlight device\n");
+  3305			return PTR_ERR(bd);
+  3306		}
+  3307	
+  3308		asus->screenpad_backlight_device = bd;
+  3309		/*
+  3310		 * Counter an odd behaviour where default is set to < 13 if it was 0 on boot.
+  3311		 * 60 is subjective, but accepted as a good compromise to retain visibility.
+  3312		 */
+  3313		if (brightness < 60)
+  3314			brightness = 60;
+  3315	
+  3316		asus->driver->screenpad_brightness = brightness;
+  3317		bd->props.brightness = brightness;
+  3318		bd->props.power = power;
+  3319		backlight_update_status(bd);
+  3320	
+  3321		return 0;
+  3322	}
+  3323	
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
