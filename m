@@ -2,82 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 474FA73642D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:14:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA563736435
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:14:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229888AbjFTHOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 03:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
+        id S231136AbjFTHOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 03:14:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjFTHOH (ORCPT
+        with ESMTP id S230318AbjFTHOR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 03:14:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 639FB1731
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:13:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687245179;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sl2grgufuGzfS3XSwpjzJA7IILsYC/N9nHuDHXJPqDQ=;
-        b=SigvpLy+rag5CKU0cQoGIMUtvQ+bCtN5UCsVPBumC49ST/8RT6kaezKyv8TTsBNrfPrJvn
-        69o/dVKgUrIlcg6wrKrNlEQ7BvJLj7moLOVNFj4WrR0pO3+56Atll3SiQ6sUCMDgafIJCS
-        ltqixuNfvLVJgCJDQFXBc1OqEu5jU6o=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-217-oq8bGElqMTmFEkY5oJ0-4A-1; Tue, 20 Jun 2023 03:12:57 -0400
-X-MC-Unique: oq8bGElqMTmFEkY5oJ0-4A-1
-Received: by mail-lj1-f200.google.com with SMTP id 38308e7fff4ca-2b45e987207so27536051fa.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:12:54 -0700 (PDT)
+        Tue, 20 Jun 2023 03:14:17 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED16119;
+        Tue, 20 Jun 2023 00:13:47 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-988689a5f44so264018866b.1;
+        Tue, 20 Jun 2023 00:13:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687245224; x=1689837224;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cHYZLznLEupvmNgdz85Wsrh9nTfIdkBiscUX255Az7M=;
+        b=KS2MlNlXd3y1nTza3BQfUQefl0hUFRyaHJjF0aNqen8fNC0xrWWq2Wqj4BXSO/TymI
+         7ZYHqb9Q0z2YI2jLz3j5V3n5Ti55PCYI2DNo0FHlYiLkbjgBrKE94yVJbYGGRKO2JNie
+         swEfgr00n17CznG0qqtGxiT9LXeKUpAqB8fL9K0Wiz5Fv4c9DZuG7zH27UlHU+IpIXwj
+         /74r3NxBxFV57roZ9AojpB2d+cobw2MJdSENRHLkn+1RSHeZreF8MTrO09njiqaaSNXW
+         jaqzeslntv7BXyd++oVljfTIIA2Inss/uW3+u+Ol8tO7biaME1caakBq2wFMkXEmVjx/
+         SE8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687245173; x=1689837173;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sl2grgufuGzfS3XSwpjzJA7IILsYC/N9nHuDHXJPqDQ=;
-        b=kd+2l9/n0NG1Y6qLPZajJwMCb40s856eLZkpFTCohhC1aRSefe5YVARFZCW3S59S8L
-         qwHAnUHLf2eXbgvtBQmsXLzWmiZ2VJrdSwwJi9DM0XzPhn0BxpyfKQfUTP8zBKAwnDH5
-         9mkTpSGmAWHqXbCIT5btJ+NHFTM3S/6wNo9QIACNg9KPsyJEMC03QbT9cJ7ICVnbne7v
-         hR2g6dUMGkOWZxTDU1sd/5ISLRu9dREDi5N6QpEcHNiZMKEqQPnUebJNn/l4DArlAsBw
-         SXwKCCuJD/5Gss5w8odUwwbqx2vakkKaZ7Z7z2W9FTRDFNXbQ6yyxixmTE5vhLKtg0+j
-         mRYw==
-X-Gm-Message-State: AC+VfDxwPf8/C17ff35XHa65Y+DYtzOWHW/mv4vhKaUXGwGATmsuynsM
-        WoptNa6EMwtEa3OUVOKhIM3Kt2lFwoC9BKFwDU80rdewptIUK6DHRwDKJzLaZWa1N1FfWpwKMzA
-        Cmh31O6BqjbQ04leCDc+j5oLxq8RUSvhS
-X-Received: by 2002:a2e:8443:0:b0:2b1:bb66:7b69 with SMTP id u3-20020a2e8443000000b002b1bb667b69mr6470913ljh.32.1687245173361;
-        Tue, 20 Jun 2023 00:12:53 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5UwtHUVNvptYW894cJKPC9dIxSY6AG/GHv9dPoLT1wlZUuP8uibPLIVZY2HwDYi22XCLmmEw==
-X-Received: by 2002:a2e:8443:0:b0:2b1:bb66:7b69 with SMTP id u3-20020a2e8443000000b002b1bb667b69mr6470893ljh.32.1687245172825;
-        Tue, 20 Jun 2023 00:12:52 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c739:d200:8745:c520:8bf6:b587? (p200300cbc739d2008745c5208bf6b587.dip0.t-ipconnect.de. [2003:cb:c739:d200:8745:c520:8bf6:b587])
-        by smtp.gmail.com with ESMTPSA id m7-20020a7bce07000000b003f9b155b148sm4455052wmc.34.2023.06.20.00.12.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jun 2023 00:12:52 -0700 (PDT)
-Message-ID: <ed83df65-f785-7077-ddd0-4e53d6fa6056@redhat.com>
-Date:   Tue, 20 Jun 2023 09:12:51 +0200
+        d=1e100.net; s=20221208; t=1687245224; x=1689837224;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cHYZLznLEupvmNgdz85Wsrh9nTfIdkBiscUX255Az7M=;
+        b=Yk0oCVh5gZ2fJTX1aWMD+YoQKwivtwZRm0JUQ1S1gyAntqnSk3k7kLqRO+cz/ux6TK
+         TlRqECa41/n0R1cVagxF/Kyj2HhzXBmIjnI93osR+98NQAaXeuso67XxAe93ErUU3TTz
+         aags5qDR8hdh08653L80SHdaolHqpUP7zLnOtE07Lri4KxcTUV6smzXoPk/G9n6SvO6p
+         8FCoXWq9ZYtN8OFSIRRiVi3moLKdq3iZEoVHGeeBuMELYb6H2WOO6NCatsKKSJQvP2Dr
+         Gk6+YlXv+xHb5hZGvkdYuB6iPN4Jzn3NkhTnC0/YSXW1L/0j0UTP8ZHEsc4bfobJS/IH
+         860g==
+X-Gm-Message-State: AC+VfDwVFm/BSyFDEAhdpK+jZ2y5avUwmqCP3kN9RJYGD8H+8CfqLJ8f
+        N3tkD1Mt0G6Z9gddZbJj03Eq2etPDKrYFCyPYiM=
+X-Google-Smtp-Source: ACHHUZ6F96J1yKxnlaxPS5FMbR2w71s7opnQjEhCe3UpSiAY5D8Q7lBEBoaoOSJHfUY5/idqlvCgI9wkZMATl0p2xeQ=
+X-Received: by 2002:a17:907:a412:b0:989:d9d:d911 with SMTP id
+ sg18-20020a170907a41200b009890d9dd911mr1975412ejc.69.1687245224382; Tue, 20
+ Jun 2023 00:13:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Content-Language: en-US
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Oscar Salvador <osalvador@suse.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org
-References: <20230620011719.155379-1-jhubbard@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH] mm/memory_hotplug.c: don't fail hot unplug quite so
- eagerly
-In-Reply-To: <20230620011719.155379-1-jhubbard@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20230620004217.4700-1-dakr@redhat.com> <2c92bae3-0003-3c53-8ef1-6e12e5413995@redhat.com>
+ <CAPM=9tzMzfuMN_iGD-97_o=QQEDT6Mbb9_u=z_o49TeT7=XUFA@mail.gmail.com> <CAFCwf11OwnoxPWHuS_55OXKE7wfHH++1Bk_37DATeCiT07GtMQ@mail.gmail.com>
+In-Reply-To: <CAFCwf11OwnoxPWHuS_55OXKE7wfHH++1Bk_37DATeCiT07GtMQ@mail.gmail.com>
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Tue, 20 Jun 2023 17:13:31 +1000
+Message-ID: <CAPM=9tyv5Fje0iL0-2oJQBKEsg-nc-YV9q4BSg5SwnBvGvrzDw@mail.gmail.com>
+Subject: Re: [PATCH drm-next v5 00/14] [RFC] DRM GPUVA Manager & Nouveau
+ VM_BIND UAPI
+To:     Oded Gabbay <ogabbay@kernel.org>
+Cc:     Danilo Krummrich <dakr@redhat.com>,
+        Donald Robson <Donald.Robson@imgtec.com>, daniel@ffwll.ch,
+        tzimmermann@suse.de, mripard@kernel.org, corbet@lwn.net,
+        christian.koenig@amd.com, bskeggs@redhat.com,
+        Liam.Howlett@oracle.com, matthew.brost@intel.com,
+        boris.brezillon@collabora.com, alexdeucher@gmail.com,
+        bagasdotme@gmail.com, willy@infradead.org, jason@jlekstrand.net,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,87 +79,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.06.23 03:17, John Hubbard wrote:
-> mm/memory_hotplug.c: don't fail hot unplug quite so eagerly
-> 
-> Some device drivers add memory to the system via memory hotplug. When
-> the driver is unloaded, that memory is hot-unplugged.
+On Tue, 20 Jun 2023 at 17:06, Oded Gabbay <ogabbay@kernel.org> wrote:
+>
+> On Tue, Jun 20, 2023 at 7:05=E2=80=AFAM Dave Airlie <airlied@gmail.com> w=
+rote:
+> >
+> > Since this is feature is nouveau only currently and doesn't disturb
+> > the current nouveau code paths, I'd like to try and get this work in
+> > tree so other drivers can work from it.
+> >
+> > If there are any major objections to this, I'm happy to pull it back
+> > out again, but I'd like to get some acks/rb in the next couple of days
+> > in order to land some of it.
+> >
+> > Dave.
+> >
+> >
+> > >
+> > > forgot to add your email address to the patch series - sorry about th=
+at.
+> > >
+> > > This series (v5) contains the Documentation changes you requested.
+> > >
+> > > - Danilo
+> > >
+> > > On 6/20/23 02:42, Danilo Krummrich wrote:
+> > > > This patch series provides a new UAPI for the Nouveau driver in ord=
+er to
+> > > > support Vulkan features, such as sparse bindings and sparse residen=
+cy.
+> > > >
+> > > > Furthermore, with the DRM GPUVA manager it provides a new DRM core =
+feature to
+> > > > keep track of GPU virtual address (VA) mappings in a more generic w=
+ay.
+> > > >
+> > > > The DRM GPUVA manager is indented to help drivers implement userspa=
+ce-manageable
+> > > > GPU VA spaces in reference to the Vulkan API. In order to achieve t=
+his goal it
+> > > > serves the following purposes in this context.
+> > > >
+> > > >      1) Provide infrastructure to track GPU VA allocations and mapp=
+ings,
+> > > >         making use of the maple_tree.
+> > > >
+> > > >      2) Generically connect GPU VA mappings to their backing buffer=
+s, in
+> > > >         particular DRM GEM objects.
+> Will this manager be able to connect GPU VA mappings to host memory
+> allocations (aka user pointers) ?
+>
+> I only skimmed over the uapi definitions, but from that quick glance I
+> saw you can only pass a (gem) handle to the vm bind uapi.
+>
+> I think it is an important feature because you don't want to have two
+> GPU VA managers running in your driver (if that's even possible).
+> Maybe we should at least try to make sure the uapi is/will be
+> compatible with such an extension.
+>
 
-Which interfaces are they using to add/remove memory?
+I think that would have to be a new uAPI entry point anyways, since
+managing user ptrs is extra, but the uAPI is nouveau specific and
+nouveau has no hostptr support as of now.
 
-> 
-> However, memory hot unplug can fail. And these days, it fails a little
-> too easily, with respect to the above case. Specifically, if a signal is
-> pending on the process, hot unplug fails. This leads directly to: the
-> user must reboot the machine in order to unload the driver, and
-> therefore the device is unusable until the machine is rebooted.
+The gpuva manager is kernel internal, I think adding host ptr tracking
+is useful, but I don't think it's a blocker right now.
 
-Why can't they retry in user space when offlining fails with -EINTR, or 
-re-trigger driver unloading?
+One of the reasons I'd like to get this in the tree is to add things
+like that instead of overloading this initial patchset with feature
+creep.
 
-> 
-> During teardown paths in the kernel, a higher tolerance for failures or
-> imperfections is often best. That is, it is often better to continue
-> with the teardown, than to error out too early.
-> 
-> So in this case, other things (unmovable pages, un-splittable huge
-> pages) can also cause the above problem. However, those are demonstrably
-> less common than simply having a pending signal. I've got bug reports
-> from users who can trivially reproduce this by killing their process
-> with a "kill -9", for example.
-> 
-> Fix this by soldering on with memory hot plug, even in the presence of
-> pending signals.
-> 
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->   mm/memory_hotplug.c | 6 ------
->   1 file changed, 6 deletions(-)
-> 
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index 8e0fa209d533..57a46620a667 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -1879,12 +1879,6 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
->   	do {
->   		pfn = start_pfn;
->   		do {
-> -			if (signal_pending(current)) {
-> -				ret = -EINTR;
-> -				reason = "signal backoff";
-> -				goto failed_removal_isolated;
-> -			}
-> -
->   			cond_resched();
->   
->   			ret = scan_movable_pages(pfn, end_pfn, &pfn);
-
-No, we can't remove that. It's documented behavior that exists precisely 
-for that reason:
-
-https://docs.kernel.org/admin-guide/mm/memory-hotplug.html#id21
-
-"
-When offlining is triggered from user space, the offlining context can 
-be terminated by sending a fatal signal. A timeout based offlining can 
-easily be implemented via:
-
-% timeout $TIMEOUT offline_block | failure_handling
-"
-
-Otherwise, there is no way to stop an userspace-triggered offline 
-operation that loops forever in the kernel.
-
-I guess switching to fatal_signal_pending() might help to some degree, 
-it should keep the timeout trick working.
-
-But it wouldn't help in your case because where root kills arbitrary 
-processes. I'm not sure if that is something we should be paying 
-attention to.
-
-
--- 
-Cheers,
-
-David / dhildenb
-
+Dave.
