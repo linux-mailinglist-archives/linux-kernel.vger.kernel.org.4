@@ -2,98 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2DE737250
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:08:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AEF8737254
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbjFTRIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 13:08:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49602 "EHLO
+        id S231244AbjFTRIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 13:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230473AbjFTRIj (ORCPT
+        with ESMTP id S229966AbjFTRIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 13:08:39 -0400
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83021728;
-        Tue, 20 Jun 2023 10:08:37 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-76c64da0e46so221680839f.0;
-        Tue, 20 Jun 2023 10:08:37 -0700 (PDT)
+        Tue, 20 Jun 2023 13:08:52 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB4F1727;
+        Tue, 20 Jun 2023 10:08:50 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-6687466137bso1515741b3a.0;
+        Tue, 20 Jun 2023 10:08:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687280929; x=1689872929;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wFGdUhJIBvjZjZSPOJLH/5SirsIlZFmwYpBcX309B40=;
+        b=KOr/w2LE0N+lCMF3SiWPHFIGKhNRgDIwIgVr++EtSOr/zcJTtOm8HemTs8EfdZHmDF
+         7DcNWayUhu78jIwTwgvOjefkpit9nyPWFPB/Yf47V5V7f1Djgw/7oMdm04fbkLqT7FuJ
+         lxMVY6ByRaP9IQoLPySikUf/XW5l3575AS0UvFSVqsU0soHamSRx8OqyBaZOk/2HJq+K
+         AsbdkdFW4xtC3oiHa2wEnllSnwfyD9h/vnJ7TjRAaFrlP2K3eRDIa4UhY8PybY8spXYx
+         M5tihhJpvKlkAuoJqV4uCUkdvvvuXYRViHivbRL7UcaEAIvN/yFkFoeI61O7BScyw4Dv
+         H/4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687280917; x=1689872917;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gJcsNw9M8GOd71NQMFbyfiNslmnbg2Ev97OtD/n6IA8=;
-        b=MkRSKavmE92H2cx52IyNqmPVr/Lcs++eBvFmJLr4ApQtRSIRwml792Og/iEVxhOWnC
-         baPTiGxnVzZPOFeWmEOwPhewsfyNlXlOkvaWxtye6WwOTbYwm/hHuoCowBWWZbQDQhvF
-         Dt5MHLNo/8mC4KBoTiU1sy7bv1j0QBDgRgDVcRtXuHULupyjPAidQvgIOOCStLTfP/b2
-         h8owKkEwC7Tc4JxqON9Ol8aMCakz6QDtD7vWQ37HPgsukIwVbBwXJhJFE0tiEIZZSgdR
-         esimBNSXloaHjiXk6/7lA5rRAdWzTWzH+5HhB2GOFpbTBDwWONGHNCT+zUB7XXX/1gdM
-         37TQ==
-X-Gm-Message-State: AC+VfDzCAEuJtnv/l50+IGyhemOm00CcSaWL77f4jJafn7hbUvIV3bp4
-        PrFpxN7FnMLl1LJpEOOElfW3Pj2jxQ==
-X-Google-Smtp-Source: ACHHUZ4LW3ZZ/cBYhYhRQFPFEU1u8KrW05QGpnRnMNVV6p1GfqQBCDIZtWRbIiboQdX+bfk3YUT6Jw==
-X-Received: by 2002:a5e:db05:0:b0:778:82d1:39a3 with SMTP id q5-20020a5edb05000000b0077882d139a3mr12005610iop.13.1687280916907;
-        Tue, 20 Jun 2023 10:08:36 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id w17-20020a02cf91000000b00422e02bff00sm764914jar.84.2023.06.20.10.08.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 10:08:36 -0700 (PDT)
-Received: (nullmailer pid 3833675 invoked by uid 1000);
-        Tue, 20 Jun 2023 17:08:34 -0000
-Date:   Tue, 20 Jun 2023 11:08:34 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     kernel@collabora.com, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        devicetree@vger.kernel.org, linux-pci@vger.kernel.org,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Simon Xue <xxm@rock-chips.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH v1 1/4] dt-bindings: PCI: dwc: rockchip: Fix
- interrupt-names issue
-Message-ID: <168728091385.3833618.8845528184695868032.robh@kernel.org>
-References: <20230616170022.76107-1-sebastian.reichel@collabora.com>
- <20230616170022.76107-2-sebastian.reichel@collabora.com>
+        d=1e100.net; s=20221208; t=1687280929; x=1689872929;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wFGdUhJIBvjZjZSPOJLH/5SirsIlZFmwYpBcX309B40=;
+        b=VtjBEGdLSNTzTG+dpXexxp4AATByASUEeZi7KW0ooaK2UnBLNINn1DV0HwtIjuBtvz
+         C/gTXkD2EORVAaUrH8ldN0XQzvIsn0ISsTJuc6+u5eWBBby2wcbLxVajDllXCd8gQYuy
+         ZAQf05Zs0xivqfdsU3haYlVHhi7cYgr5vocxghrpiqG8njoFhjbzdKO1TwowVfU44xAX
+         HPLxW7WLY5wjDVV8mFnXKNT26680h6FeaZjj5sQUhOLS85nxWhEE2xhtC7kdij76tFWC
+         V7mEJSCniqBuv9uv5LSxYlhJechjZwVT3jtsMByk/fqWZAv3zQwXL4FBwqkk9r5YEFb5
+         EFhQ==
+X-Gm-Message-State: AC+VfDwFgK2z0J657WUdTj7HQppVMKSpbE0TcEAdL5+9W8SzU6hOvTa7
+        U9GN8OZyhF/gYLAoHNgG22ZfaH4IescRJQAXqbs=
+X-Google-Smtp-Source: ACHHUZ4/bWOvXG/fzvHtGlvOXO5Gtz33y3AeFhTF7rRywTl8W5azhHtx7zPZjjr/kbSPEcTz6LztSakmX4O5lUiqEho=
+X-Received: by 2002:a05:6a00:3a24:b0:668:83b7:fd02 with SMTP id
+ fj36-20020a056a003a2400b0066883b7fd02mr4524235pfb.31.1687280929614; Tue, 20
+ Jun 2023 10:08:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616170022.76107-2-sebastian.reichel@collabora.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230619102138.279161276@linuxfoundation.org>
+In-Reply-To: <20230619102138.279161276@linuxfoundation.org>
+From:   Allen Pais <stable.kernel.dev@gmail.com>
+Date:   Tue, 20 Jun 2023 10:08:38 -0700
+Message-ID: <CAJq+SaCOKpEFEt7G2fxtV4ahX=7Zb2P=4CGEVEmtqvhgbED6sw@mail.gmail.com>
+Subject: Re: [PATCH 5.10 00/89] 5.10.185-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+>
+> This is the start of the stable review cycle for the 5.10.185 release.
+> There are 89 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 21 Jun 2023 10:21:12 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.185-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+>
 
-On Fri, 16 Jun 2023 19:00:19 +0200, Sebastian Reichel wrote:
-> The RK356x (and RK3588) have 5 ganged interrupts. For example the
-> "legacy" interrupt combines "inta/intb/intc/intd" with a register
-> providing the details.
-> 
-> Currently the binding is not specifying these interrupts resulting
-> in a bunch of errors for all rk356x boards using PCIe.
-> 
-> Fix this by specifying the interrupts and add them to the example
-> to prevent regressions.
-> 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  .../bindings/pci/rockchip-dw-pcie.yaml         | 18 ++++++++++++++++++
->  .../devicetree/bindings/pci/snps,dw-pcie.yaml  | 15 ++++++++++++++-
->  2 files changed, 32 insertions(+), 1 deletion(-)
-> 
+Compiled and booted on my x86_64 and ARM64 test systems. No errors or
+regressions.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Tested-by: Allen Pais <apais@linux.microsoft.com>
 
+Thanks.
