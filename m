@@ -2,113 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC917364F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:41:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9A887364FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230373AbjFTHlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 03:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42086 "EHLO
+        id S231490AbjFTHmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 03:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231455AbjFTHlT (ORCPT
+        with ESMTP id S231322AbjFTHl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 03:41:19 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FBB01FC6
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:40:14 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-5701e8f2b79so49562237b3.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:40:14 -0700 (PDT)
+        Tue, 20 Jun 2023 03:41:58 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3690FE4D
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:41:15 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-543c6a2aa07so2309817a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:41:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687246813; x=1689838813;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Xgtva00uaRjPQjQYWCbyYlUVerqtzlz4H3/JM5nRsA=;
-        b=0LMD2/Bp9LkZIBYgPbN4jKWx5l3xqsV5p+9EAezDq6xR/SWmyYTEAe1FdDy1xbMmRb
-         H8PBsbrNU4fYI4mKZfhyMwB/CU4nG5b31JuXXrIAyWt0sajI0olzTibXN+ktWNYF0oep
-         x0ccngPNp6kQepRw/XRcKOWVrIwm+WEupexqrFO6FFWjiu1SlHy8yMCBdGb2CGeJXPQe
-         rQ6klP2gqbiJAoxVWslA7bD8MQXYp6OVctc8Pm9x7E9rZqqXloCfaCSI/DExJxOsqSJT
-         4d6fjthovhopd44fEKacEstPh46MmIG/u5ZNkKED0IyMDYNloqJ4rKSwMXR8oHsnZsZm
-         /6EA==
+        d=ventanamicro.com; s=google; t=1687246874; x=1689838874;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=VNlkE9w8+4f9Owz1VR7DDy4a4R4dy/xTsJ/TjLKMtek=;
+        b=bIFBmbK7FiaHLaGDgWmmB8jUjaecxgDpHm0ygwpqqg5bHBVtNXttGwGxPwQo1YYQ7Y
+         ZYlopM4IUXYJTd9dQvjq7ZsHlFV6SDvOM0ePY0PyCktChM1feYusty5BHSInAs1Td43g
+         nc11Q98qxk0UJzEZ1zwFu8gtOAL3ZLkQtCnkMneDVIEJTVe9ttfRLgQdm7xE0tduQIBB
+         uaxQ/DaCgChdzcJ3h0cvQslVCVDWrj5T8TpJj8LUBZycoBSfkmEKVsXzpfW/m+IXAetN
+         DcEWlT04weeu/jZAvmCiw5LBjQmAlVpkN6e67RhWhdS/40ees722j8iArp1zPRh96yj1
+         h2kA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687246813; x=1689838813;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2Xgtva00uaRjPQjQYWCbyYlUVerqtzlz4H3/JM5nRsA=;
-        b=M2kI2BfSxb5OwIoQs7CGagC+IMfq7sUAXO2+ptSWjiBqf7mG2H5cqREYW588Xp8vJR
-         WsYsPTSa0uviSfKT1FQBtsltKV71LCwhiB7I/vDdt/POxFiEv8iLcPJnuwdT86vZXCcE
-         ufWMIltFsAoyu3knUYTK2Tqbsg22/GnL/A/t24/CaiBMCXfMRUMUDuZ5fhH/+rXRsURv
-         T10DqpRTB7WLP/+0NR3fYUmgOvTPTsgpm/kEFrMWvC8soLhYeO0vGs/gpTVV+2/1FGCZ
-         S4PFwNcYL2oYmN0eOVOs3TSuZyprBfAnL7cNd0+EZTIAFxojs6W1VvVQ0Xb1Zv+5fggr
-         kXnA==
-X-Gm-Message-State: AC+VfDzF93sSe2Y1MGcCowLw/ja39f7r4a4gkSJvaaAIoEjsuGYE5aKF
-        luaoYWKmSHW+nrnwzUL8C3YfVg==
-X-Google-Smtp-Source: ACHHUZ75OBuUzMptMwBPGDkg2ahPnjw/MJzrATJW6OVlCqaB4pyoJIMCLPp7Z4SL32qkhEKJol5B6w==
-X-Received: by 2002:a81:75d6:0:b0:56d:b98:cc16 with SMTP id q205-20020a8175d6000000b0056d0b98cc16mr13330173ywc.45.1687246813120;
-        Tue, 20 Jun 2023 00:40:13 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id x8-20020a817c08000000b005623ae13106sm368166ywc.100.2023.06.20.00.40.09
+        d=1e100.net; s=20221208; t=1687246874; x=1689838874;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VNlkE9w8+4f9Owz1VR7DDy4a4R4dy/xTsJ/TjLKMtek=;
+        b=H7JTN9115HM/DxwyHGX7zsakFwqKvu7KPnufWEFZGvEfXfWrbXCmdq5HKeVpj442V9
+         v5EmKK20EvEDo/lqIEYoCjClcmZAQZv3vqaZtvXqERkIiDy75gk3nayG9wLZBhe6uKfT
+         b52n+FdCP8xM2WEMtugMtjSodjqDIPfxsNIDIiB7yzNNXlcBJhjcirzNT0k54qaoKKIx
+         PsuAcvqI9GWUANhZzzjrAurR/xBXC62rSdBe8FEIFEzWrPNMMGfzymdE1uTHx0avHjBV
+         oLIzWWcBj6FVQ4hyheV6fZ5KkllkrPj2+XSQ2VWP8xeqP+scSM85K8d8sEE1OeUfr0IX
+         hZKw==
+X-Gm-Message-State: AC+VfDwhdkXy4AcwzRfRlocUn3XvvRl93AaHtNpMIwffr91EIvljOly3
+        LTIvVlIc14P04726Sx4gkmm5kg==
+X-Google-Smtp-Source: ACHHUZ5/e/h5oqwfG3pVdVPiHyiKMor0pHhGX3SJ5BK89WAqKnQnNXoBBy0OZtgzAZuM8gP+Tw3exQ==
+X-Received: by 2002:a05:6a21:339a:b0:115:dfb:da59 with SMTP id yy26-20020a056a21339a00b001150dfbda59mr10678421pzb.3.1687246874592;
+        Tue, 20 Jun 2023 00:41:14 -0700 (PDT)
+Received: from sunil-laptop ([106.51.184.72])
+        by smtp.gmail.com with ESMTPSA id r1-20020a1709028bc100b001a1b66af22fsm975645plo.62.2023.06.20.00.41.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 00:40:12 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 00:40:00 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Gerald Shaefer <gerald.schaefer@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH v2 01/12] mm/pgtable: add rcu_read_lock() and
- rcu_read_unlock()s
-In-Reply-To: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
-Message-ID: <53514a65-9053-1e8a-c76a-c158f8965@google.com>
-References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com>
+        Tue, 20 Jun 2023 00:41:14 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 13:11:07 +0530
+From:   Sunil V L <sunilvl@ventanamicro.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Atish Kumar Patra <atishp@rivosinc.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] Documentation: riscv: Add early boot document
+Message-ID: <ZJFYE+Ss/OgMIjda@sunil-laptop>
+References: <20230619094705.51337-1-alexghiti@rivosinc.com>
+ <20230619-kerchief-unmixed-cfdbeb1cf242@wendy>
+ <CAHVXubjV=0HNyc0-UMAQRQfi4ZUnwH8dmghV-BGogZsJiumtZA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHVXubjV=0HNyc0-UMAQRQfi4ZUnwH8dmghV-BGogZsJiumtZA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -116,61 +80,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before putting them to use (several commits later), add rcu_read_lock()
-to pte_offset_map(), and rcu_read_unlock() to pte_unmap().  Make this a
-separate commit, since it risks exposing imbalances: prior commits have
-fixed all the known imbalances, but we may find some have been missed.
+On Mon, Jun 19, 2023 at 04:04:52PM +0200, Alexandre Ghiti wrote:
+> On Mon, Jun 19, 2023 at 2:26 PM Conor Dooley <conor.dooley@microchip.com> wrote:
+> >
+> > Hey Alex,
+> >
+> > Thanks for working on this :) I've got a mix of suggestions and
+> > questions below. Hopefully it is not too disjoint, since I didn't write
+> > them in order.
+> >
+> > On Mon, Jun 19, 2023 at 11:47:04AM +0200, Alexandre Ghiti wrote:
+> > > This document describes the constraints and requirements of the early
+> > > boot process in a RISC-V kernel.
+> > >
+> > > Szigned-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > > ---
+> > >  Documentation/riscv/boot-image-header.rst |   3 -
+> > >  Documentation/riscv/boot.rst              | 181 ++++++++++++++++++++++
+> > >  Documentation/riscv/index.rst             |   1 +
+> > >  3 files changed, 182 insertions(+), 3 deletions(-)
+> > >  create mode 100644 Documentation/riscv/boot.rst
+> > >
+> > > diff --git a/Documentation/riscv/boot-image-header.rst b/Documentation/riscv/boot-image-header.rst
+> > > index d7752533865f..a4a45310c4c4 100644
+> > > --- a/Documentation/riscv/boot-image-header.rst
+> > > +++ b/Documentation/riscv/boot-image-header.rst
+> > > @@ -7,9 +7,6 @@ Boot image header in RISC-V Linux
+> > >
+> > >  This document only describes the boot image header details for RISC-V Linux.
+> > >
+> > > -TODO:
+> > > -  Write a complete booting guide.
+> > > -
+> > >  The following 64-byte header is present in decompressed Linux kernel image::
+> > >
+> > >       u32 code0;                /* Executable code */
+> > > diff --git a/Documentation/riscv/boot.rst b/Documentation/riscv/boot.rst
+> > > new file mode 100644
+> > > index 000000000000..b02230818b79
+> > > --- /dev/null
+> > > +++ b/Documentation/riscv/boot.rst
+> > > @@ -0,0 +1,181 @@
+> > > +.. SPDX-License-Identifier: GPL-2.0
+> > > +
+> > > +=============================================
+> > > +Early boot requirements/constraints on RISC-V
+> > > +=============================================
+> >
+> > Please use "title case", here and elsewhere in the doc.
+> 
+> You mean using "title: " instead of "===="? Or using uppercase for the
+> first letter of each word? FYI I followed
+> https://docs.kernel.org/doc-guide/sphinx.html?highlight=title#specific-guidelines-for-the-kernel-documentation
+> 
+> > I'd also be inclined to drop the "Early" from here, as it permits more
+> > natural section headings. Perhaps "RISC-V Kernel Boot Requirements and
+> > Constraints"?
+> 
+> Good suggestion, I'll go with that, thanks
+> 
+> >
+> > > +
+> > > +:Author: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > > +:Date: 23 May 2023
+> > > +
+> > > +This document describes what the RISC-V kernel expects from the previous stages
+> >
+> > "the previous stages" is a bit vague IMO. You mean bootloader stages I
+> > assume, but I think it should be explicit. Perhaps:
+> > "...what a RISC-V kernel expects from bootloaders and firmware, and the
+> > constraints..."
+> >
+> > > +and the firmware, but also the constraints that any developer must have in mind
+> > > +when touching the early boot process, e.g. before the final virtual mapping is
+> > > +setup.
+> >
+> > s/setup./set up./
+> >
+> > Do you mean to have "For example" here? Or is "before the final virtual
+> > mapping is set up" the definition or "early boot"? If the latter, I
+> > would reword this as something like:
+> > "...when modifying the early boot process. For the purposes of this
+> > document, the 'early boot process' refers to any code that runs before
+> > the final virtual mapping is set up."
+> 
+> Thanks, that's what I meant.
+> 
+> >
+> > > +Pre-kernel boot (Expectations from firmware)
+> >
+> > Firmware or bootloaders? TBH, I would just drop the section in () and
+> > do something like:
+> >         Pre-kernel Requirements and Constraints
+> >         =======================================
+> >
+> >         The RISC-V kernel expects the following of bootloaders and platform
+> >         firmware:
+> >
+> 
+> Ok
+> 
+> > > +
+> > > +Registers state
+> >
+> > s/Registers state/Register State/
+> 
+> Ok
+> 
+> >
+> > > +---------------
+> > > +
+> > > +The RISC-V kernel expects:
+> > > +
+> > > +  * `$a0` to contain the hartid of the current core.
+> > > +  * `$a1` to contain the address of the device tree in memory.
+> > > +
+> > > +CSR state
+> > > +---------
+> > > +
+> > > +The RISC-V kernel expects:
+> > > +
+> > > +  * `$satp = 0`: the MMU must be disabled.
+> >
+> > "the MMU, if present, must be disabled." ;)
+> 
+> Ahah forgot the !mmu case, thanks :)
+> 
+> >
+> > > +
+> > > +Reserved memory for resident firmware
+> > > +-------------------------------------
+> > > +
+> > > +The RISC-V kernel expects the firmware to mark any resident memory with the
+> >
+> > Should this be
+> > "...resident memory, or memory it has protected with PMPs, with..."
+> > ?
+> 
+> I used "resident" memory instead of "PMP" memory because it was more
+> general. I mean you can have a region that is resident but not
+> protected by PMP, and I don't think the kernel should ask for this
+> resident memory to be protected with PMP right?
+> 
+> >
+> > > +`no-map` flag, thus the kernel won't map those regions in the direct mapping
+> >
+> > "no-map" is a DT specific term, should this section be moved down under
+> > DT, as a sub-section of that?
+> 
+> Maybe I can rephrase with something like that:
+> 
+> "The RISC-V kernel must not map any resident memory in the direct
+> mapping, so the firmware must correctly mark those regions as follows:
+> - when using a devicetree, using the `no-map` flag,
+> - when booting with UEFI without devicetree, either as
+> `EfiRuntimeServicesData/Code` or `EfiReserved`."
+> 
+Hi Alex,
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
- include/linux/pgtable.h | 4 ++--
- mm/pgtable-generic.c    | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+I am not sure about the idea behind mentioning only UEFI boot without
+DT since UEFI boot is supported with DT also. Should we just mention
+that "when booting with UEFI, resident firmware ranges must be marked as
+per UEFI specification" ? Converting reserved-memory node in DT to UEFI
+memory map is anyway mentioned separately under UEFI memory map section
+right?
 
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index a1326e61d7ee..8b0fc7fdc46f 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -99,7 +99,7 @@ static inline pte_t *pte_offset_kernel(pmd_t *pmd, unsigned long address)
- 	((pte_t *)kmap_local_page(pmd_page(*(pmd))) + pte_index((address)))
- #define pte_unmap(pte)	do {	\
- 	kunmap_local((pte));	\
--	/* rcu_read_unlock() to be added later */	\
-+	rcu_read_unlock();	\
- } while (0)
- #else
- static inline pte_t *__pte_map(pmd_t *pmd, unsigned long address)
-@@ -108,7 +108,7 @@ static inline pte_t *__pte_map(pmd_t *pmd, unsigned long address)
- }
- static inline void pte_unmap(pte_t *pte)
- {
--	/* rcu_read_unlock() to be added later */
-+	rcu_read_unlock();
- }
- #endif
- 
-diff --git a/mm/pgtable-generic.c b/mm/pgtable-generic.c
-index c7ab18a5fb77..674671835631 100644
---- a/mm/pgtable-generic.c
-+++ b/mm/pgtable-generic.c
-@@ -236,7 +236,7 @@ pte_t *__pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp)
- {
- 	pmd_t pmdval;
- 
--	/* rcu_read_lock() to be added later */
-+	rcu_read_lock();
- 	pmdval = pmdp_get_lockless(pmd);
- 	if (pmdvalp)
- 		*pmdvalp = pmdval;
-@@ -250,7 +250,7 @@ pte_t *__pte_offset_map(pmd_t *pmd, unsigned long addr, pmd_t *pmdvalp)
- 	}
- 	return __pte_map(&pmdval, addr);
- nomap:
--	/* rcu_read_unlock() to be added later */
-+	rcu_read_unlock();
- 	return NULL;
- }
- 
--- 
-2.35.3
-
+Thanks,
+Sunil
