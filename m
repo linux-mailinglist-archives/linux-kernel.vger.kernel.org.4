@@ -2,173 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E467B7375FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 940D37375FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:20:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbjFTUUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 16:20:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
+        id S230155AbjFTUUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 16:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229973AbjFTUUj (ORCPT
+        with ESMTP id S229949AbjFTUUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 16:20:39 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D76F1BD5
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:20:17 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51a200fc3eeso6808866a12.3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:20:17 -0700 (PDT)
+        Tue, 20 Jun 2023 16:20:43 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D3A8CC
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:20:22 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-760dff4b701so68517039f.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:20:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687292415; x=1689884415;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2Zy9E39IJgeyzmvbXlZlqFtNdvkFQRFNcCLclJAn3Dk=;
-        b=w7nUpfulgg5cVpdAqhG2Xt87fp+T4OHkUaUAAHNTM5RqhmEqgDa+Eq/iezw9tpQc2g
-         rB4y3XXbzSHodfyyJ2fcvFBOX4t1l5fvxzPDV8K158mDoC3D6RSqN8HaWllO1jiHck+a
-         EF0ElzRbdWu8NE0gQUYTT1XW7nJMk16fudN8dQc6BIApzpEsUcI+w/VpM1X9SFmCDrgE
-         7k5f3sW0hVpjZje7oO3U3k2s4/vUAY91azC8VAW+0pDB1PLq4zT4QbvjeFjUMMTIGnJU
-         ftcKSF5l/6By5dHPdtDLRcPIikVcjMYdVgKKfzjdnRUg8AsvjJrMlJh2etXoLalRnfcR
-         LBDA==
+        d=linuxfoundation.org; s=google; t=1687292421; x=1689884421;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SAU0bCQDfaWeQQcZMARHMr/mQ05K05NW42OZYQoDD9I=;
+        b=NmtnABWAabO8gsDl2yLzFJTJkqCqcpLEXRaRCjfnQdF25iwNWkicyBt1KrmG7AcZbD
+         YRhZx8fhVqQovtYz7hdLW0amX7knX7flOf19kghho3QxRdV2uaVAo4YeNVsoPv+YZHM2
+         xbR/JrKYxrBpxi7eI6DRr/pTQKzx7XxY72Qtc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687292415; x=1689884415;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2Zy9E39IJgeyzmvbXlZlqFtNdvkFQRFNcCLclJAn3Dk=;
-        b=JTdoib9hqWxLHaN+3D4kRRg7evpu4sU5ePoNsPMC3zluoFKtZA+bn1Wem4y78acmPU
-         LRDdeI3KNcMV1lia8QUVSkFy8wBM5Z0wGW0NtEzJEx9fwQHchvg/7HKLroNLEPK037US
-         7/LwOZRl1N8TpzFh2X0gs/SvfGVVd27Fa37GTzqZTnVUfxi6sAdk2jWtL8uWEnuljVvL
-         zqdX9D7pzzMjzYC9VgM7b5BCgAeAurgmhoImtg586NgIhRHyk1J066nG71pEec+Xrb+j
-         pJv8r1BA+C6t9iItdGcy/ys4Kq9cad40A56cbZL0wO6alxXH2x1zNyuR/FzkXENRJNiW
-         TMoQ==
-X-Gm-Message-State: AC+VfDx5Z0w8zMw6mizRMTxdODMjW2mc+ME/7yqZKgy6cmhm7My5aaTF
-        Qct/BZ7pUCoEbXjRKRL0zqLGyzjdCKGpyIqjf3keMA==
-X-Google-Smtp-Source: ACHHUZ4F1CiTZ+c9pAohA09rIRP6Qf5cYoYVb0ympDQgfKqCJ3aijqKOesZFVWTbdAIVjt+MYTHTHY9ehWV3hzkRzJs=
-X-Received: by 2002:a17:907:808:b0:977:ceab:3996 with SMTP id
- wv8-20020a170907080800b00977ceab3996mr11622602ejb.76.1687292414702; Tue, 20
- Jun 2023 13:20:14 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687292421; x=1689884421;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SAU0bCQDfaWeQQcZMARHMr/mQ05K05NW42OZYQoDD9I=;
+        b=gs27wO5REG9nPp5L0Q7s0d0E11sRHv8AFbAG+Jzzp9CHIKx0y/5hHPUUso+MJIxcCZ
+         NAr1/MF9kXou5qXRk9raGmUdBKlBZz19UWz6kVYSUdXOX18HUydLJ/hY88tULPYfm4KV
+         UP53MhJLf561qC55hCGdWRYyrkiSGYS0FhV24EwwfTyuYNKZ1hYeYHY6y31PTjvtEvzd
+         L3QCHX67oslB9Yhfu7b/o9mV64knY2I79nPl3f1j/xDVOJtU+nA3pwzJyu/m9Y8th+hh
+         YjddPewLmiblBaenwAlXnC7IkbKtu8BzPf22yw3/ggfvrC+hd8N6yTFnPwFT333AD+hE
+         3BqA==
+X-Gm-Message-State: AC+VfDzY0BEfEjKD7uJNND2Vnw/SJVQWlrX3Zsd1TtN+qvRjFvLK8xU6
+        GgHaKLf2Pfe+ow7UCnbtcNlfRA==
+X-Google-Smtp-Source: ACHHUZ5qLF5YGtIgsIFZ5nLQufIMRoj7oggdbC461d/Lt7J56XQo2v5v7dhI2WolDYlcP83BlamFUA==
+X-Received: by 2002:a05:6e02:13e2:b0:341:c98a:529 with SMTP id w2-20020a056e0213e200b00341c98a0529mr10102365ilj.0.1687292421399;
+        Tue, 20 Jun 2023 13:20:21 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id y7-20020a92c747000000b003383276d260sm795767ilp.40.2023.06.20.13.20.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 13:20:21 -0700 (PDT)
+Message-ID: <249cf242-ca56-77a3-a775-172951f1d0bb@linuxfoundation.org>
+Date:   Tue, 20 Jun 2023 14:20:20 -0600
 MIME-Version: 1.0
-References: <20230619193821.2710944-1-yuzhao@google.com>
-In-Reply-To: <20230619193821.2710944-1-yuzhao@google.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Tue, 20 Jun 2023 13:19:38 -0700
-Message-ID: <CAJD7tkb=5kOiuYZxYQVCpjZZriCf2wrx9sgenrpP_Bct=GWfcw@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable v1] mm/mglru: make memcg_lru->lock irq safe
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+87c490fd2be656269b6a@syzkaller.appspotmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 6.1 000/166] 6.1.35-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230619102154.568541872@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230619102154.568541872@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 12:38=E2=80=AFPM Yu Zhao <yuzhao@google.com> wrote:
->
-> lru_gen_rotate_memcg() can happen in softirq if
-> memory.soft_limit_in_bytes is set. This requires memcg_lru->lock to be
-> irq safe.
->
-> This problem only affects memcg v1.
->
-> Reported-by: syzbot+87c490fd2be656269b6a@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=3D87c490fd2be656269b6a
-> Fixes: e4dde56cd208 ("mm: multi-gen LRU: per-node lru_gen_folio lists")
-> Signed-off-by: Yu Zhao <yuzhao@google.com>
-> ---
->  mm/vmscan.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
->
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index 45d17c7cc555..27f90896f789 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -4759,10 +4759,11 @@ static void lru_gen_rotate_memcg(struct lruvec *l=
-ruvec, int op)
->  {
->         int seg;
->         int old, new;
-> +       unsigned long flags;
->         int bin =3D get_random_u32_below(MEMCG_NR_BINS);
->         struct pglist_data *pgdat =3D lruvec_pgdat(lruvec);
->
-> -       spin_lock(&pgdat->memcg_lru.lock);
-> +       spin_lock_irqsave(&pgdat->memcg_lru.lock, flags);
+On 6/19/23 04:27, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.1.35 release.
+> There are 166 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 21 Jun 2023 10:21:12 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.35-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-Nit: I think it might be useful to add a comment here that this is
-needed due to the call path from memcg_check_events() ->
-mem_cgroup_update_tree() -- so that if that call path changes we can
-come back and remove the irq-disablement.
+Compiled and booted on my test system. No dmesg regressions.
 
-FWIW:
-Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
->
->         VM_WARN_ON_ONCE(hlist_nulls_unhashed(&lruvec->lrugen.list));
->
-> @@ -4797,7 +4798,7 @@ static void lru_gen_rotate_memcg(struct lruvec *lru=
-vec, int op)
->         if (!pgdat->memcg_lru.nr_memcgs[old] && old =3D=3D get_memcg_gen(=
-pgdat->memcg_lru.seq))
->                 WRITE_ONCE(pgdat->memcg_lru.seq, pgdat->memcg_lru.seq + 1=
-);
->
-> -       spin_unlock(&pgdat->memcg_lru.lock);
-> +       spin_unlock_irqrestore(&pgdat->memcg_lru.lock, flags);
->  }
->
->  void lru_gen_online_memcg(struct mem_cgroup *memcg)
-> @@ -4810,7 +4811,7 @@ void lru_gen_online_memcg(struct mem_cgroup *memcg)
->                 struct pglist_data *pgdat =3D NODE_DATA(nid);
->                 struct lruvec *lruvec =3D get_lruvec(memcg, nid);
->
-> -               spin_lock(&pgdat->memcg_lru.lock);
-> +               spin_lock_irq(&pgdat->memcg_lru.lock);
->
->                 VM_WARN_ON_ONCE(!hlist_nulls_unhashed(&lruvec->lrugen.lis=
-t));
->
-> @@ -4821,7 +4822,7 @@ void lru_gen_online_memcg(struct mem_cgroup *memcg)
->
->                 lruvec->lrugen.gen =3D gen;
->
-> -               spin_unlock(&pgdat->memcg_lru.lock);
-> +               spin_unlock_irq(&pgdat->memcg_lru.lock);
->         }
->  }
->
-> @@ -4845,7 +4846,7 @@ void lru_gen_release_memcg(struct mem_cgroup *memcg=
-)
->                 struct pglist_data *pgdat =3D NODE_DATA(nid);
->                 struct lruvec *lruvec =3D get_lruvec(memcg, nid);
->
-> -               spin_lock(&pgdat->memcg_lru.lock);
-> +               spin_lock_irq(&pgdat->memcg_lru.lock);
->
->                 VM_WARN_ON_ONCE(hlist_nulls_unhashed(&lruvec->lrugen.list=
-));
->
-> @@ -4857,7 +4858,7 @@ void lru_gen_release_memcg(struct mem_cgroup *memcg=
-)
->                 if (!pgdat->memcg_lru.nr_memcgs[gen] && gen =3D=3D get_me=
-mcg_gen(pgdat->memcg_lru.seq))
->                         WRITE_ONCE(pgdat->memcg_lru.seq, pgdat->memcg_lru=
-.seq + 1);
->
-> -               spin_unlock(&pgdat->memcg_lru.lock);
-> +               spin_unlock_irq(&pgdat->memcg_lru.lock);
->         }
->  }
->
-> --
-> 2.41.0.185.g7c58973941-goog
->
->
+thanks,
+-- Shuah
