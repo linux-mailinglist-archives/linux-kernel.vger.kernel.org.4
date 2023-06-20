@@ -2,96 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07DAF737798
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B029973779D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjFTWul convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Jun 2023 18:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
+        id S230031AbjFTWxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 18:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjFTWuj (ORCPT
+        with ESMTP id S229941AbjFTWw4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 18:50:39 -0400
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30CDD10F1;
-        Tue, 20 Jun 2023 15:50:39 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-77e3ba2fbbfso127793539f.1;
-        Tue, 20 Jun 2023 15:50:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687301438; x=1689893438;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lmW8lXIaP8PwEo3dSA48LLiV2xfz+uHaKuQPPpRKTPE=;
-        b=ZZ7H8LAS7uaOB0/TtE6kHnwZfDKDmk9TTGCj9C57dCyzAcl8E44HFXSacFfsF2OXWr
-         EeDRWwyFH5R6+mVro9ON5cKU9TiS4K4g7wKmcnR7bF+Dijtamf0C7sFY3e456amEPC37
-         W9EJ785nXeCSj22iY8Si7is2ilmOnMbp8+DCvGCcEAeb+pSitK0B9LRTicuQHvFDSV2V
-         gq4/8UXn09QXLXCYFKk401lZNVBxbrusIPN9ToFAjRSjpAWWS8illp7tHZf9N+boUYk3
-         Y0JGsaQ0JBCTEUI8UfrvoJTa2t87Hm/Fo4pWgkPT6YiqVKCIdxO1o87UGUZcCni7tVKh
-         2rYw==
-X-Gm-Message-State: AC+VfDwcJZlhJTFrcA2MBpG7u3knp9WrNGXPlwY8ym5fEcp7yztF+8Cl
-        gXepKBiqaVfTzRnouHGJt7SDsSHzVPhcvI9pp8/0vjyU
-X-Google-Smtp-Source: ACHHUZ4anAk43NhBtl2TgAB7Q2c6dBrGPEX3igWbtzYnc3AywzQ8UqLeAW1Sul2ClLHi+Uo1Zbo8C1niYk4voog61N4=
-X-Received: by 2002:a5e:db05:0:b0:778:82d1:39a3 with SMTP id
- q5-20020a5edb05000000b0077882d139a3mr12741055iop.13.1687301438410; Tue, 20
- Jun 2023 15:50:38 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230614080937.54937-1-luojianhong@cdjrlc.com> <2c733a91717eae93119ba2226420fd8f@208suo.com>
-In-Reply-To: <2c733a91717eae93119ba2226420fd8f@208suo.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 20 Jun 2023 15:50:26 -0700
-Message-ID: <CAM9d7chMMQcnV+hTwyEDbcQrO0ELtQTnhQ5bZptF6g_k+m0mAg@mail.gmail.com>
-Subject: Re: [PATCH] perf parse-events: Remove unneeded semicolon
-To:     baomingtong001@208suo.com
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        kan.liang@linux.intel.com, zhengjun.xing@linux.intel.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+        Tue, 20 Jun 2023 18:52:56 -0400
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A32491703;
+        Tue, 20 Jun 2023 15:52:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1687301566;
+        bh=zs2PR8BnoBNeCG8m9yaBb0c55LdBttZyLue3jnCjvnE=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=hhLTYSLaQEJJCXbKmfhm2W7yZCBqjWGxOLPHfogIMLaiGGv/1HWr8raKXtQGFs44u
+         a1XFq2fBt0husKXHQ3h02yuWf1lcQI9NwfvERQiUGeFmqn5nTQZy+rJe5BHf9Yn/jg
+         qN5ruyXMrGGm8umyS6G1cZilpmn+anIyrO10oqaU=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id A543B12819DC;
+        Tue, 20 Jun 2023 18:52:46 -0400 (EDT)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id IfQ-VT9XKtPc; Tue, 20 Jun 2023 18:52:46 -0400 (EDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1687301564;
+        bh=zs2PR8BnoBNeCG8m9yaBb0c55LdBttZyLue3jnCjvnE=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=r3LnEOvh0IY2cCDJNP2XrVdZXinOFnWOgYKM/bn3fmW4jCk6H5t44RjS+KksZRnlZ
+         zjD0dxc882ViaeFLh5v9SDjlOUWxzFOJMFVplCvHHXbQPXb0n0R4cfrLSpv1fAGDwG
+         qoVbc/T2mD9qpIUqwik4dm22dqZCWLEZ59aLAieY=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::c14])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 563271281446;
+        Tue, 20 Jun 2023 18:52:44 -0400 (EDT)
+Message-ID: <1a631328115eaecbfebf8e435b9224bf2ff248af.camel@HansenPartnership.com>
+Subject: Re: [Tech-board-discuss] [PATCH] Documentation: Linux Contribution
+ Maturity Model and the wider community
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Finn Thain <fthain@linux-m68k.org>
+Cc:     linux-doc@vger.kernel.org,
+        tech-board-discuss@lists.linux-foundation.org,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org
+Date:   Tue, 20 Jun 2023 18:52:42 -0400
+In-Reply-To: <7fef2bbb-4c5a-52b8-8e85-400a8fbb8786@linux-m68k.org>
+References: <e78eef83a50a558aae765baafcf9c571788a02a5.camel@HansenPartnership.com>
+         <7fef2bbb-4c5a-52b8-8e85-400a8fbb8786@linux-m68k.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.42.4 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, 2023-06-20 at 13:50 +1000, Finn Thain wrote:
+> On Mon, 19 Jun 2023, James Bottomley wrote:
+> 
+> > On Mon, Jun 19, 2023 at 07:41:57PM +1000, Finn Thain wrote:
+> > > The Linux Contribution Maturity Model methodology is notionally
+> > > based on the Open source Maturity Model (OMM) which was in turn
+> > > based on the Capability Maturity Model Integration (CMMI).
+> > > 
+> > > According to Petrinja et al., the goal of the OMM was to extend
+> > > the  CMMI so as to be useful both for companies and for
+> > > communities [1][2].   However, the Linux Contribution Maturity
+> > > Model considers only companies and businesses.
+> > 
+> > That's not a correct characterization.  The model is designed to
+> > measure and be useful to businesses, but it definitely considers
+> > the community because it's progress is built around being more
+> > useful to and working more effectively with the community.
+> > 
+> 
+> You're right, the characterization I gave does exaggerate the bias. I
+> shall moderate that if I resubmit the patch.
+> 
+> > > This patch addresses this bias as it could hinder collaboration
+> > > with  not-for-profit organisations and individuals, which would
+> > > be a loss to  any stakeholder.
+> > 
+> > I don't really think changing 'Businesses' to 'Organizations'
+> > entirely addresses what you claim is the bias because individuals
+> > would still be excluded from the term 'Organizations'.  I also
+> > don't really think it matters.  Part of the reason this whole thing
+> > doesn't matter is that sometimes people do know who a contributor
+> > they work with works for, but most of the time they don't.
+> 
+> This is not just about patches, it's also about incentives and
+> influence.
 
-On Wed, Jun 14, 2023 at 1:13 AM <baomingtong001@208suo.com> wrote:
->
-> ./tools/perf/util/parse-events.c:1466:2-3: Unneeded semicolon
->
-> Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
-> ---
->   tools/perf/util/parse-events.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/perf/util/parse-events.c
-> b/tools/perf/util/parse-events.c
-> index 629f7bd9fd59..42f84f61fabc 100644
-> --- a/tools/perf/util/parse-events.c
-> +++ b/tools/perf/util/parse-events.c
-> @@ -1463,7 +1463,7 @@ static int __parse_events_add_numeric(struct
-> parse_events_state *parse_state,
->       if (extended_type && (type == PERF_TYPE_HARDWARE || type ==
-> PERF_TYPE_HW_CACHE)) {
+I mentioned contributor interaction, which covers influence.  I'm not
+sure what you mean by incentives or how it is covered by changing
+Businesses -> Organizations.
 
-The format is broken, please fix your mail client not fix wrap long lines.
-This time I fixed it manually, but you need to update your config.
+> 
+> > If you really want this to be inclusive, you could change it to
+> > 'other contributors' but I'm still not sure it's worth it.
+> > 
+> > > 
+> > > Level 5 is amended to remove the invitation to exercise the same
+> > > bias i.e. employees rewarded indirectly by other companies.
+> > 
+> > I also wouldn't remove the bit about seeking upstream feedback on
+> > employees; I know from personal experience it happens a lot.
+> > 
+> 
+> If it happens a lot already, why compel employers to seek it?
 
-Thanks,
-Namhyung
+Because it's a sign of open source maturity on behalf of a company. 
+Lots do it, but lots don't.  By putting it in the maturity model we
+want to encourage it.
 
+> It's worth noting that the model compels employers to seek "community
+> member feedback" which is not the same as the "upstream feedback"
+> that you describe.
 
->           assert(perf_pmus__supports_extended_type());
->           attr.config |= (u64)extended_type << PERF_PMU_TYPE_SHIFT;
-> -    };
-> +    }
->
->       if (head_config) {
->           if (config_attr(&attr, head_config, parse_state->error,
+It isn't?  How else does a community express itself except by its
+agents which are ipso facto community members?  Not all community
+members have identical opinions, but if you talk to several you'll get
+a good sense of community feedback.
+
+James
+
