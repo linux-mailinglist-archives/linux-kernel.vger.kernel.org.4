@@ -2,70 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3D59736DA8
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:46:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C69D736DAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232841AbjFTNqL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 09:46:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
+        id S233100AbjFTNqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 09:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbjFTNqJ (ORCPT
+        with ESMTP id S233119AbjFTNqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 09:46:09 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7CBA4;
-        Tue, 20 Jun 2023 06:46:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=keI+2flqm4to7Jr8mzcSDDgqcShbyqtzxfzQgnZ0qog=; b=jTq+IV5h59rvjlOO6YYrNtjjPt
-        bAmKiz6/Ep2DxxTi8VFXiBjJfFUOYIPXz/kLau8BTzX8Mp7BZI5Fr9B+LIVGJDyMGcARdZNYj46iS
-        rpnBf66HcTp+gmS8AOdeVprArWsmm+kASoPjbBvmHYEGB9NLFMaXljmShUPSwc92TILDPakpK57De
-        TJc8pRr+QYEQb0RI/C+xggcmVH0N/iD4S1kOQYbkB2GYLv6qjyHX1fVBoMYuS6lSJ6HjVbA6BtQbc
-        mQtP1E/EauBHxH8IOelOLl7maOIWBolLAttvH8qZ5Xhn4aqdXM5CcPp0Eb5j9vtjRBismujWeWv//
-        kQwR++4A==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qBbgI-00D8bI-Mh; Tue, 20 Jun 2023 13:46:02 +0000
-Date:   Tue, 20 Jun 2023 14:46:02 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     stsp <stsp2@yandex.ru>
-Cc:     Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: [PATCH 2/3] fd/locks: allow get the lock owner by F_OFD_GETLK
-Message-ID: <ZJGtmrej8LraEsjj@casper.infradead.org>
-References: <20230620095507.2677463-1-stsp2@yandex.ru>
- <20230620095507.2677463-3-stsp2@yandex.ru>
- <5728ebda22a723b0eb209ae078e8f132d7b4ac7b.camel@kernel.org>
- <a1e7f5c1-76ef-19e5-91db-a62f7615b28a@yandex.ru>
- <eaccc14ddc6b546e5913eb557fec55f77cb5424d.camel@kernel.org>
- <5f644a24-90b5-a02f-b593-49336e8e0f5a@yandex.ru>
- <2eb8566726e95a01536b61a3b8d0343379092b94.camel@kernel.org>
- <d70b6831-3443-51d0-f64c-6f6996367a85@yandex.ru>
- <d0c18369245db91a3b78017fabdc81417418af67.camel@kernel.org>
- <ddb48e05-ab26-ae5d-86d5-01e47f0f0cd2@yandex.ru>
+        Tue, 20 Jun 2023 09:46:47 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F05AB170F;
+        Tue, 20 Jun 2023 06:46:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687268796; x=1718804796;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ylPye6jciyJjtMMCu96/PJn40ZJb9WI9dBE1nm/Ef0A=;
+  b=kaXrJgwfmWNf69ZmREJh+/gbQzv8e5qzNC2jo5j2vAw4o59/umef2WCD
+   wGiJXpzYCeqq1sjLYhC/SOABblvRxoBsAK5Vw7oO+3yrAJJxLkNlAFhrL
+   H09MvXekToev0el/eMG2cyA4T9tFu4gdjsZLY2b0yQyjcmPcKk0Ondcqs
+   qV5cwm7KihICZ9Em8FsiVwfhBzuFIwp8vPXtKU2xRBSl/ZON/44PGXKTd
+   jcMMLuSNEE1OfG1YlFtpSL9gA4OosUnAIfKxInJ6yvZT5Rz+rbl7qt/k5
+   sDztcAazJ+pFLFJXkZQvTbD9/fA6gfa65qEkjcCoQUwUMiMJy28mUbltW
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="362401245"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="362401245"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 06:46:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="827006532"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="827006532"
+Received: from eshaanan-mobl.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.252.61.137])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 06:46:32 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Dean Luick <dean.luick@cornelisnetworks.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v3 00/10] PCI: Improve PCIe Capability RMW concurrency control
+Date:   Tue, 20 Jun 2023 16:46:14 +0300
+Message-Id: <20230620134624.99688-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ddb48e05-ab26-ae5d-86d5-01e47f0f0cd2@yandex.ru>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 06:39:07PM +0500, stsp wrote:
-> Though it will, for sure, represent the
-> task that _owns_ the lock.
+PCI Express Capability RMW accessors don't properly protect against
+concurrent access. Link Control Register is written by a number of
+things in the kernel in a RMW fashion without any concurrency control.
+This could in the unlucky case lead to losing one of the updates. One
+of the most obvious path which can race with most of the other LNKCTL
+RMW operations seems to be ASPM policy sysfs write which triggers
+LNKCTL update. Similarly, Root Control Register can be concurrently
+accessed by AER and PME.
 
-No, it *DOESN'T*.  I can open a file, SCM_RIGHTS pass it to another task
-and then exit.  Now the only owner of that lock is the recipient ...
-who may not even have received the fd yet.
+Make pcie_capability_clear_and_set_word() (and other RMW accessors that
+call it) to use a per device spinlock to protect the RMW operations to
+the Capability Registers that require locking. Convert open-coded
+LNKCTL RMW operations to use pcie_capability_clear_and_set_word() to
+benefit from the locking.
+
+There's also a related series which improves ASPM service driver and
+device driver coordination by removing out-of-band ASPM state
+management from device drivers (which will remove some of the code
+fragments changed by this series but it has higher regression
+potential which is why it seems prudent to do these changes in two
+steps):
+  https://lore.kernel.org/linux-pci/20230602114751.19671-1-ilpo.jarvinen@linux.intel.com/T/#t
+
+v3:
+- Split link retraining change off from ASPM patch & reorder it earlier
+- Adjust changelog to take into account the move of link retraining
+  code into PCI core and no longer refer to ASPM (currently in
+  pci/enumeration branch)
+- based on top of pci/main
+
+v2:
+- Keep the RMW ops caller API the same
+- Make pcie_capability_clear_and_set_word() a wrapper that uses
+  locked/unlocked variant based on the capability reg
+- Extracted LNKCTL2 changes out from this series to keep this purely
+  a series which fixes something (LNKCTL2 RMW lock is necessary only
+  when PCIe BW control is introduced).
+- Added Fixes tags (it's a bit rathole but yeah, they're there now).
+- Renamed cap_lock to pcie_cap_lock
+- Changed ath1* to clear the ASPMC field before setting it
+
+
+Ilpo Järvinen (10):
+  PCI: Add locking to RMW PCI Express Capability Register accessors
+  PCI: Make link retraining use RMW accessors for changing LNKCTL
+  PCI: pciehp: Use RMW accessors for changing LNKCTL
+  PCI/ASPM: Use RMW accessors for changing LNKCTL
+  drm/amdgpu: Use RMW accessors for changing LNKCTL
+  drm/radeon: Use RMW accessors for changing LNKCTL
+  net/mlx5: Use RMW accessors for changing LNKCTL
+  wifi: ath11k: Use RMW accessors for changing LNKCTL
+  wifi: ath12k: Use RMW accessors for changing LNKCTL
+  wifi: ath10k: Use RMW accessors for changing LNKCTL
+
+ drivers/gpu/drm/amd/amdgpu/cik.c              | 36 +++++-------------
+ drivers/gpu/drm/amd/amdgpu/si.c               | 36 +++++-------------
+ drivers/gpu/drm/radeon/cik.c                  | 36 +++++-------------
+ drivers/gpu/drm/radeon/si.c                   | 37 +++++-------------
+ .../ethernet/mellanox/mlx5/core/fw_reset.c    |  9 +----
+ drivers/net/wireless/ath/ath10k/pci.c         |  9 +++--
+ drivers/net/wireless/ath/ath11k/pci.c         | 10 +++--
+ drivers/net/wireless/ath/ath12k/pci.c         | 10 +++--
+ drivers/pci/access.c                          | 20 ++++++++--
+ drivers/pci/hotplug/pciehp_hpc.c              | 12 ++----
+ drivers/pci/pcie/aspm.c                       | 38 ++++++++-----------
+ drivers/pci/probe.c                           |  1 +
+ include/linux/pci.h                           | 34 ++++++++++++++++-
+ 13 files changed, 128 insertions(+), 160 deletions(-)
+
+-- 
+2.30.2
 
