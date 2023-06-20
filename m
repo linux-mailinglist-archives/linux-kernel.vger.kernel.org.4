@@ -2,122 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26448736497
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7435F736491
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:31:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjFTHbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 03:31:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35110 "EHLO
+        id S229757AbjFTHbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 03:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbjFTHb3 (ORCPT
+        with ESMTP id S229966AbjFTHbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 03:31:29 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26F541700
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:31:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687246274; x=1718782274;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=i7kG41A2Xomj8VRTEMb1+3KdeQRecNejJAW3tC1g1UE=;
-  b=ccHTMhpHLEjGeu6F+qFs9qG7J/owmRZ1lhXFmhWKslTIC32dIDZq0hEC
-   zfDJ38OaZTYx8KPdSlb1zSPf4+lgTC4Xx09F+g2hgM3iSr/B21PVsVcRS
-   4xhW1LWvatrpDt6OCgcTtS9tNGFBNnGNYOlQFkXf3M+V2Nix7YySJvTup
-   zn0PlbKIrnJa2NqO7JGhtBNqWrzbpf6ATKnSt+DSDAgIvHKuCcymtZisF
-   Echb0HPkK1mkAScBHIGcd/cpolc54aY+TI4IvVyMOqvuqRFVBrdoCS85o
-   QzRmqREZdS2u4WY0j7Q3aaFWFzphwVLxZ7kN8hq1wXFo67n/NicKw6P8m
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="358659182"
-X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="358659182"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 00:31:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="708153740"
-X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="708153740"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 20 Jun 2023 00:31:01 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qBVpM-0005do-38;
-        Tue, 20 Jun 2023 07:31:00 +0000
-Date:   Tue, 20 Jun 2023 15:30:48 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     tien.sung.ang@intel.com, Dinh Nguyen <dinguyen@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Ang Tien Sung <tien.sung.ang@intel.com>
-Subject: Re: [PATCH 1/2] firmware: stratix10-svc: Support up to N SVC clients
-Message-ID: <202306201523.U6yvKscG-lkp@intel.com>
-References: <20230620035205.1158032-1-tien.sung.ang@intel.com>
+        Tue, 20 Jun 2023 03:31:17 -0400
+Received: from forward500c.mail.yandex.net (forward500c.mail.yandex.net [178.154.239.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D945FE4D;
+        Tue, 20 Jun 2023 00:30:56 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net [IPv6:2a02:6b8:c14:c83:0:640:84f9:0])
+        by forward500c.mail.yandex.net (Yandex) with ESMTP id 379B75EDBD;
+        Tue, 20 Jun 2023 10:30:54 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id pUbQt2qDVKo0-eL4OdmlW;
+        Tue, 20 Jun 2023 10:30:53 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1687246253;
+        bh=3rtRPYT14HBdyVacf+D4l8FmRddXv2uGiiB1drmivrY=;
+        h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
+        b=n1eSasTp6ajRtQvhnqv+1Y30fetreVfCGaUbhe/ONKZruw5nR7lYLfj65my4PUj+5
+         IZvD+PJ7iQ3899jqYpUbdsJXAhi09TfZfIIxC6b/ByuAPe1cnvC7d1I0PTvZag9iIB
+         Bsyp5Bq6nr4OPZW4a54OFVGbAum1HQMsQTITJu9I=
+Authentication-Results: mail-nwsmtp-smtp-production-main-45.sas.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
+Message-ID: <e6c68580df0bb8441bf5beabfa978bfe15e0a39d.camel@maquefel.me>
+Subject: Re: [PATCH v1 29/43] dt-bindings: rtc: Add ST M48T86
+From:   Nikita Shubin <nikita.shubin@maquefel.me>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Michael Peters <mpeters@embeddedTS.com>,
+        Kris Bahnsen <kris@embeddedTS.com>, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 20 Jun 2023 10:30:54 +0300
+In-Reply-To: <a2b286a5-32c1-213d-49df-129f2d94d771@linaro.org>
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+         <20230601054549.10843-11-nikita.shubin@maquefel.me>
+         <a2b286a5-32c1-213d-49df-129f2d94d771@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.3 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230620035205.1158032-1-tien.sung.ang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello Krzysztof!
 
-kernel test robot noticed the following build warnings:
+On Thu, 2023-06-01 at 10:18 +0200, Krzysztof Kozlowski wrote:
+> On 01/06/2023 07:45, Nikita Shubin wrote:
+> > Add YAML bindings for ST M48T86 / Dallas DS12887 RTC.
+> >=20
+> > Signed-off-by: Nikita Shubin <nikita.shubin@maquefel.me>
+> > ---
+> >=20
+> > Notes:
+> > =C2=A0=C2=A0=C2=A0 v0 -> v1:
+> > =C2=A0=C2=A0=C2=A0=20
+> > =C2=A0=C2=A0=C2=A0 - s/dallas/st/
+> > =C2=A0=C2=A0=C2=A0 - description for regs
+> > =C2=A0=C2=A0=C2=A0 - s/additionalProperties/unevaluatedProperties/
+> > =C2=A0=C2=A0=C2=A0 - add ref rtc.yaml
+> > =C2=A0=C2=A0=C2=A0 - changed compatible to st,m48t86
+> > =C2=A0=C2=A0=C2=A0 - dropped label in example
+> > =C2=A0=C2=A0=C2=A0 - replaced Alessandro Alessandro to Alexandre Bellon=
+i
+> >=20
+> > =C2=A0.../bindings/rtc/st,m48t86-rtc.yaml=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 38
+> > +++++++++++++++++++
+> > =C2=A01 file changed, 38 insertions(+)
+> > =C2=A0create mode 100644
+> > Documentation/devicetree/bindings/rtc/st,m48t86-rtc.yaml
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/rtc/st,m48t86-
+> > rtc.yaml b/Documentation/devicetree/bindings/rtc/st,m48t86-rtc.yaml
+> > new file mode 100644
+> > index 000000000000..eb8e6451d7c8
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/rtc/st,m48t86-rtc.yaml
+>=20
+> Filename based on compatible, so drop "rtc".
+>=20
+> > @@ -0,0 +1,38 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/rtc/st,m48t86-rtc.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: ST M48T86 / Dallas DS12887 RTC wirh SRAM
+>=20
+> typo: with
+>=20
+> > +
+> > +maintainers:
+> > +=C2=A0 - Alexandre Belloni <alexandre.belloni@bootlin.com>
+> > +
+> > +properties:
+> > +=C2=A0 compatible:
+> > +=C2=A0=C2=A0=C2=A0 enum:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - st,m48t86
+> > +
+> > +=C2=A0 reg:
+> > +=C2=A0=C2=A0=C2=A0 items:
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - description: index register
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - description: data register
+> > +
+> > +allOf:
+> > +=C2=A0 - $ref: rtc.yaml
+> > +
+> > +unevaluatedProperties: false
+> > +
+> > +required:
+> > +=C2=A0 - compatible
+> > +=C2=A0 - reg
+>=20
+> required goes after properties:
+>=20
+> Keep the same order in all your patches.
+>=20
+> > +
+> > +examples:
+> > +=C2=A0 - |
+> > +=C2=A0=C2=A0=C2=A0 rtc@10800000 {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 compatible =3D "st,m48t86";
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 reg =3D <0x10800000 0x1>, <0x11700000 0=
+x1>;
+>=20
+> One byte long? Not a word?
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.4-rc7 next-20230619]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+They are indeed one byte long:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/tien-sung-ang-intel-com/firmware-stratix10-svc-Support-up-to-N-SVC-clients/20230620-115443
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230620035205.1158032-1-tien.sung.ang%40intel.com
-patch subject: [PATCH 1/2] firmware: stratix10-svc: Support up to N SVC clients
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230620/202306201523.U6yvKscG-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230620/202306201523.U6yvKscG-lkp@intel.com/reproduce)
+https://elixir.bootlin.com/linux/v6.4-rc7/source/drivers/rtc/rtc-m48t86.c#L=
+46
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306201523.U6yvKscG-lkp@intel.com/
+>=20
+> > +=C2=A0=C2=A0=C2=A0 };
+> > +
+> > +...
+>=20
+> Best regards,
+> Krzysztof
+>=20
 
-All warnings (new ones prefixed by >>):
-
-   drivers/firmware/stratix10-svc.c: In function 'stratix10_svc_free_channels':
->> drivers/firmware/stratix10-svc.c:1149:21: warning: the comparison will always evaluate as 'true' for the address of 'svc_fifo' will never be NULL [-Waddress]
-    1149 |                 if (&ctrl->chans[i].svc_fifo)
-         |                     ^
-   drivers/firmware/stratix10-svc.c:167:22: note: 'svc_fifo' declared here
-     167 |         struct kfifo svc_fifo;
-         |                      ^~~~~~~~
-
-
-vim +1149 drivers/firmware/stratix10-svc.c
-
-  1138	
-  1139	static void stratix10_svc_free_channels(struct stratix10_svc_controller *ctrl)
-  1140	{
-  1141		int i;
-  1142	
-  1143		for (i = 0; i < SVC_NUM_CHANNEL; i++) {
-  1144			if (ctrl->chans[i].task) {
-  1145				kthread_stop(ctrl->chans[i].task);
-  1146				ctrl->chans[i].task = NULL;
-  1147			}
-  1148	
-> 1149			if (&ctrl->chans[i].svc_fifo)
-  1150				kfifo_free(&ctrl->chans[i].svc_fifo);
-  1151		}
-  1152	}
-  1153	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
