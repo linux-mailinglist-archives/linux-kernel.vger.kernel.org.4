@@ -2,115 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1A89736325
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 07:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0FC0736327
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 07:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbjFTF0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 01:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
+        id S229960AbjFTF1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 01:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbjFTF0q (ORCPT
+        with ESMTP id S230129AbjFTF1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 01:26:46 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EECC1AC;
-        Mon, 19 Jun 2023 22:26:31 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 35K5Q01n8003506, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 35K5Q01n8003506
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Tue, 20 Jun 2023 13:26:00 +0800
-Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Tue, 20 Jun 2023 13:26:21 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Tue, 20 Jun 2023 13:26:20 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Tue, 20 Jun 2023 13:26:20 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "Lukas F. Hartmann" <lukas@mntre.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>
-Subject: RE: wifi: rtw88: question about SDIO RX aggregation limiting
-Thread-Topic: wifi: rtw88: question about SDIO RX aggregation limiting
-Thread-Index: AQHZnKKRatqDIe8IxUOv8mL1iw8+va+H/hkQgAoeggCAARZ68A==
-Date:   Tue, 20 Jun 2023 05:26:20 +0000
-Message-ID: <e87abbe35f4945cba3440232880424b1@realtek.com>
-References: <CAFBinCBaXtebixKbjkWKW_WXc5k=NdGNaGUjVE8NCPNxOhsb2g@mail.gmail.com>
- <9ab8cc85d4d440bfa63dcade4e4f9ecf@realtek.com>
- <CAFBinCBsg8jPhpqSOr9w2JhwN5YjPeME1Uye7meSY8h=b_N4Qg@mail.gmail.com>
-In-Reply-To: <CAFBinCBsg8jPhpqSOr9w2JhwN5YjPeME1Uye7meSY8h=b_N4Qg@mail.gmail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Tue, 20 Jun 2023 01:27:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2EA185;
+        Mon, 19 Jun 2023 22:27:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 47FD260F38;
+        Tue, 20 Jun 2023 05:27:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E00FC433D9;
+        Tue, 20 Jun 2023 05:27:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687238830;
+        bh=tiI3VGfsL8gKc/bRU3EleHUPx2M61lfNJEcBUuB9vq0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Jo5XT1eH8P9E1q9rMYFPNxTTfxBO4FO181LfsG6wKE2KIzeB7qiTR0zzqL9Y5aZZm
+         HA0uqEnlC1U/j8swQtMPARhkivxwBykY1b3ee5cv4tkgZFaZK9Rve2CSGuXNtCcc4g
+         WmP+TaGYaI2kF2ZsWJNfzMvgUKo3mcCeK6rxRVAisO5tL+wrQI3oH4SYTG+0mToZkl
+         jx7yZIYQpHlhjn3rZuTrBiP2b4fOUK4KXNQ0Se+GAar/zA5TXDlPt6FQyC4kQrt41F
+         lgwwpT9CTp+PsZHgolTIDizdyVv5FuHjy7eMZzBSzWdQu2qoaVjVVHygE+jGaQ+SeY
+         bRxVyTL3iYOiQ==
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-558a79941c6so2874463eaf.3;
+        Mon, 19 Jun 2023 22:27:10 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwgFS0n1na18gAvvg+ha1EYlAU4bc/nMejaDkVicyEmKDIpxDkw
+        NQP/VID3HAUwypsBzsXkcbRpcTAjQmVHsFuNlTg=
+X-Google-Smtp-Source: ACHHUZ4kT05bFp2F2OhC5RWNtAb18rJ72zRh1SDV2eWBsz3V+QuG9vxyaYsjeed4LIGpthO6PGccOVOyynF8Mx3pv5Y=
+X-Received: by 2002:a4a:a7cd:0:b0:55e:54db:c453 with SMTP id
+ n13-20020a4aa7cd000000b0055e54dbc453mr3955562oom.7.1687238829822; Mon, 19 Jun
+ 2023 22:27:09 -0700 (PDT)
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230616001631.463536-1-ojeda@kernel.org> <20230616001631.463536-5-ojeda@kernel.org>
+In-Reply-To: <20230616001631.463536-5-ojeda@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 20 Jun 2023 14:26:33 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARWkqKNGKNWJpzFLxSLjE5NhJ0rzbbM3QGTahfsrF2ccQ@mail.gmail.com>
+Message-ID: <CAK7LNARWkqKNGKNWJpzFLxSLjE5NhJ0rzbbM3QGTahfsrF2ccQ@mail.gmail.com>
+Subject: Re: [PATCH v2 04/11] kbuild: rust_is_available: print docs reference
+To:     Miguel Ojeda <ojeda@kernel.org>
+Cc:     Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Alice Ryhl <aliceryhl@google.com>,
+        Andreas Hindborg <nmi@metaspace.dk>,
+        linux-kbuild@vger.kernel.org, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Finn Behrens <fin@nyantec.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTWFydGluIEJsdW1lbnN0
-aW5nbCA8bWFydGluLmJsdW1lbnN0aW5nbEBnb29nbGVtYWlsLmNvbT4NCj4gU2VudDogVHVlc2Rh
-eSwgSnVuZSAyMCwgMjAyMyA0OjM4IEFNDQo+IFRvOiBQaW5nLUtlIFNoaWggPHBrc2hpaEByZWFs
-dGVrLmNvbT4NCj4gQ2M6IGxpbnV4LXdpcmVsZXNzQHZnZXIua2VybmVsLm9yZzsgTHVrYXMgRi4g
-SGFydG1hbm4gPGx1a2FzQG1udHJlLmNvbT47IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7
-DQo+IHRvbnkwNjIwZW1tYUBnbWFpbC5jb207IGplcm5lai5za3JhYmVjQGdtYWlsLmNvbQ0KPiBT
-dWJqZWN0OiBSZTogd2lmaTogcnR3ODg6IHF1ZXN0aW9uIGFib3V0IFNESU8gUlggYWdncmVnYXRp
-b24gbGltaXRpbmcNCj4gDQo+IEhlbGxvIFBpbmctS2UsDQo+IA0KPiBhcG9sb2dpZXMgZm9yIHRo
-ZSBsb25nIGRlbGF5Lg0KPiANCj4gT24gVHVlLCBKdW4gMTMsIDIwMjMgYXQgNDoyMOKAr0FNIFBp
-bmctS2UgU2hpaCA8cGtzaGloQHJlYWx0ZWsuY29tPiB3cm90ZToNCj4gWy4uLl0NCj4gPiBUaGUg
-dW5pdCBvZiBCSVRfUlhETUFfQUdHX1BHX1RIIGlzIDFrIGJ5dGVzLCBzbyBJIHRoaW5rIHlvdSBj
-YW4NCj4gPiBzZXQgbW1jX2hvc3QtPm1heF9yZXFfc2l6ZS8xMDI0Lg0KPiBJIHRyaWVkIHRoaXMg
-YnV0IEkgZ290IGEgcmVzdWx0IHRoYXQgSSBkb24ndCB1bmRlcnN0YW5kLg0KPiBJJ3ZlIGJlZW4g
-dGVzdGluZyB3aXRoIHRocmVlIEJJVF9SWERNQV9BR0dfUEdfVEggdmFsdWVzIG9uIGEgU29DIHRo
-YXQNCj4gY2FuIGhhbmRsZSAyNTUgKiAxMDI0IGJ5dGVzLiBFYWNoIHRpbWUgSSBjb25uZWN0ZWQg
-dG8gdGhlIHNhbWUgQVAgYW5kDQo+IGRvd25sb2FkZWQgYSBiaWdnZXIgZmlsZSBvdmVyIGh0dHAo
-cykuDQo+IEJJVF9SWERNQV9BR0dfUEdfVEg6IGJpZ2dlc3Qgb2JzZXJ2ZWQgcnhfbGVuIGluIHJ0
-d19zZGlvX3J4Zmlmb19yZWN2KCkNCj4gMjU1OiAyMDk2OA0KPiA2OiA1MTIyDQo+IDE6IDE2MDIN
-Cg0KUGxlYXNlIGFsc28gcHJpbnQgb3V0IG51bWJlciBvZiBwYWNrZXRzIHlvdSByZWNlaXZlLCBh
-bmQgdGhlbiB3ZSBjYW4gc2VlIGhvdw0KbWFueSBwYWNrZXRzIGFnZ3JlZ2F0ZS4NCg0KPiANCj4g
-VGhlIGJpZ2dlc3QgcnhfbGVuIEkgaGF2ZSBvYnNlcnZlZCBmb3IgQklUX1JYRE1BX0FHR19QR19U
-SCAxIGxvb2tzIHN1c3BpY2lvdXM6DQo+IE15IHVuZGVyc3RhbmRpbmcgaXMgdGhhdCBJIHNob3Vs
-ZG4ndCBiZSBzZWVpbmcgcnhfbGVuIGxhcmdlciB0aGFuDQo+IEJJVF9SWERNQV9BR0dfUEdfVEgg
-KiAxMDI0Lg0KPiBCSVRfUlhETUFfQUdHX1BHX1RIID0gNiBpcyB3aXRoaW4gdGhpcyBsaW1pdCBi
-dXQgQklUX1JYRE1BX0FHR19QR19USCA9DQo+IDEgaXNuJ3QgKEknbSBzZWVpbmcgNTc4IGV4dHJh
-IGJ5dGVzIGluIGFkZGl0aW9uIHRvIHRoZSAxMDI0IGJ5dGVzIHRoYXQNCj4gSSB3YXMgZXhwZWN0
-aW5nKS4NCg0KQXNzdW1lIHRocmVzaG9sZCBpcyAxaywgYW5kIHNpbmdsZSBvbmUgcGFja2V0IGlz
-IGxhcmdlciB0aGFuIDFrLiBIYXJkd2FyZQ0Kd2lsbCBub3Qgc3BsaXQgaXQgaW50byB0d28uIEFs
-c28sIHBsZWFzZSBtYWtlIHN1cmUgMHgyODBbMjldIEJJVF9FTl9QUkVfQ0FMQw0KaXMgMS4gT3Ro
-ZXJ3aXNlLCBpdCB3aWxsIHBvc3NpYmx5IGFnZ3JlZ2F0ZSBhZGRpdGlvbmFsIG9uZSBwYWNrZXQg
-dG8gb3Zlcg0KdGhlIHRocmVzaG9sZC4NCg0KMHgyODBbMTU6OF0gaXMgdGltZW91dCB0aW1lIGlu
-IHVuaXQgb2YgMXVzIGZvciBTRElPIGludGVyZmFjZS4gV2hlbiBzZXQNCnRocmVzaG9sZCB0byAy
-NTUsIHlvdSBjYW4gZW5sYXJnZSB0aGlzIHRvIHNlZSBpZiBpdCBjYW4gYWdncmVnYXRlIG1vcmUg
-YXMNCmV4cGVjdGVkLiANCg0KPiBEbyB5b3UgaGF2ZSBhbnkgaWRlYSB3aGVyZSB0aGlzIGlzIGNv
-bWluZyBmcm9tPyBJJ20gd29ycmllZCB0aGF0IHdlDQo+IGNhbiBzdGlsbCBlbmQgdXAgd2l0aCB0
-aGUgcHJvYmxlbSB0aGF0IEx1a2FzIGRlc2NyaWJlZCBidXQgc2VlbXMgdG8NCj4gbm90IGhhdmUg
-aGl0IGluIGhpcyB0ZXN0aW5nIHdpdGggQklUX1JYRE1BX0FHR19QR19USCA9IDYNCj4gDQo+ID4g
-SSB3b25kZXIgd2h5IDB4NiB3b3JrcyBvbiBBbWxvZ2ljIFNvQ3MuIENvdWxkIHlvdSBvciBMdWth
-cyBjb21wYXJlIHBlcmZvcm1hbmNlDQo+ID4gYmV0d2VlbiB0aGUgc2V0dGluZ3Mgb2YgMHgxIGFu
-ZCAweDY/DQo+IEkgY2FuIGRvIHRoaXMgbGF0ZXIgdGhpcyB3ZWVrIGJ1dCBJJ2QgbGlrZSB0byB1
-bmRlcnN0YW5kIHRoZSBhYm92ZQ0KPiByZXN1bHRzIGZpcnN0Lg0KPiANCg0KUGluZy1LZQ0KDQo=
+On Fri, Jun 16, 2023 at 9:17=E2=80=AFAM Miguel Ojeda <ojeda@kernel.org> wro=
+te:
+>
+> People trying out the Rust support in the kernel may get
+> warnings and errors from `scripts/rust_is_available.sh`
+> from the `rustavailable` target or the build step.
+>
+> Some of those users may be following the Quick Start guide,
+> but others may not (likely those getting warnings from
+> the build step instead of the target).
+>
+> While the messages are fairly clear on what the problem is,
+> it may not be clear how to solve the particular issue,
+> especially for those not aware of the documentation.
+>
+> We could add all sorts of details on the script for each one,
+> but it is better to point users to the documentation instead,
+> where it is easily readable in different formats. It also
+> avoids duplication.
+>
+> Thus add a reference to the documentation whenever the script
+> fails or there is at least a warning.
+>
+> Reviewed-by: Finn Behrens <fin@nyantec.com>
+> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
+> ---
+>  scripts/rust_is_available.sh | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+>
+> diff --git a/scripts/rust_is_available.sh b/scripts/rust_is_available.sh
+> index 0c9be438e4cd..6b8131d5b547 100755
+> --- a/scripts/rust_is_available.sh
+> +++ b/scripts/rust_is_available.sh
+> @@ -19,6 +19,20 @@ get_canonical_version()
+>         echo $((100000 * $1 + 100 * $2 + $3))
+>  }
+>
+> +# Print a reference to the Quick Start guide in the documentation.
+> +print_docs_reference()
+> +{
+> +       echo >&2 "***"
+> +       echo >&2 "*** Please see Documentation/rust/quick-start.rst for d=
+etails"
+> +       echo >&2 "*** on how to set up the Rust support."
+> +       echo >&2 "***"
+> +}
+> +
+> +# If the script fails for any reason, or if there was any warning, then
+> +# print a reference to the documentation on exit.
+> +warning=3D0
+> +trap 'if [ $? -ne 0 ] || [ $warning -ne 0 ]; then print_docs_reference; =
+fi' EXIT
+
+
+I confirmed that
+pressing Ctrl-C while rust_is_available.sh is running
+does not invoke print_docs_reference().
+(and I believe that is the right behavior).
+
+I also checked bash and dash work in the same way.
+(I usually test both because the POSIX does not define the exact
+condition when the EXIT handler is invoked.)
+
+
+Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+
+
+
+
+
+
+
+
+
+
+
+
+> +
+>  # Check that the Rust compiler exists.
+>  if ! command -v "$RUSTC" >/dev/null; then
+>         echo >&2 "***"
+> @@ -60,6 +74,7 @@ if [ "$rust_compiler_cversion" -gt "$rust_compiler_min_=
+cversion" ]; then
+>         echo >&2 "***   Your version:     $rust_compiler_version"
+>         echo >&2 "***   Expected version: $rust_compiler_min_version"
+>         echo >&2 "***"
+> +       warning=3D1
+>  fi
+>
+>  # Check that the Rust bindings generator is suitable.
+> @@ -87,6 +102,7 @@ if [ "$rust_bindings_generator_cversion" -gt "$rust_bi=
+ndings_generator_min_cvers
+>         echo >&2 "***   Your version:     $rust_bindings_generator_versio=
+n"
+>         echo >&2 "***   Expected version: $rust_bindings_generator_min_ve=
+rsion"
+>         echo >&2 "***"
+> +       warning=3D1
+>  fi
+>
+>  # Check that the `libclang` used by the Rust bindings generator is suita=
+ble.
+> @@ -126,6 +142,7 @@ if [ "$cc_name" =3D Clang ]; then
+>                 echo >&2 "***   libclang version: $bindgen_libclang_versi=
+on"
+>                 echo >&2 "***   Clang version:    $clang_version"
+>                 echo >&2 "***"
+> +               warning=3D1
+>         fi
+>  fi
+>
+> --
+> 2.41.0
+>
+
+
+--
+Best Regards
+Masahiro Yamada
