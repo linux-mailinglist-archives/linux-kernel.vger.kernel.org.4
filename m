@@ -2,79 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22922736880
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44622736888
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbjFTJ5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 05:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33430 "EHLO
+        id S232469AbjFTJ6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 05:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232500AbjFTJ4e (ORCPT
+        with ESMTP id S231602AbjFTJ6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 05:56:34 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BE3E42115;
-        Tue, 20 Jun 2023 02:54:05 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id BC22792009C; Tue, 20 Jun 2023 11:54:04 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id B4F1492009B;
-        Tue, 20 Jun 2023 10:54:04 +0100 (BST)
-Date:   Tue, 20 Jun 2023 10:54:04 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Eric Dumazet <edumazet@google.com>,
-        Oliver O'Halloran <oohall@gmail.com>,
-        Stefan Roese <sr@denx.de>, Leon Romanovsky <leon@kernel.org>,
-        linux-rdma@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jim Wilson <wilson@tuliptree.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        David Abdurachmanov <david.abdurachmanov@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Lukas Wunner <lukas@wunner.de>, netdev@vger.kernel.org,
-        =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
-        Saeed Mahameed <saeedm@nvidia.com>
-Subject: Re: [PATCH v9 00/14] pci: Work around ASMedia ASM2824 PCIe link
- training failures
-In-Reply-To: <20230616202900.GA1540115@bhelgaas>
-Message-ID: <alpine.DEB.2.21.2306201040200.14084@angie.orcam.me.uk>
-References: <20230616202900.GA1540115@bhelgaas>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Tue, 20 Jun 2023 05:58:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967D92708;
+        Tue, 20 Jun 2023 02:55:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DB0261191;
+        Tue, 20 Jun 2023 09:54:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AF94C433C8;
+        Tue, 20 Jun 2023 09:54:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687254892;
+        bh=MGSj0T3Hz1NmRE+DVfowe7rl9N0DCqQccat2XVjZRvo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dtv8MPc60KOw1Xt9X0ZVsxqPYN8Y3MnXDedkPZ5urhuVuIIowcoyTrZHGoHXweEqy
+         GcT0cuvumPbRgL/+HRi9+8RO8agJY8F5WABI4a/f4vHffiG4YGsPIKw55JU60CkXoI
+         VFssdd7kcjPefvsVr5TvONZ32/pAQVaTz4ihcFteeOX5poBaxmPW9Kq8wwao5bAHfC
+         yUDUlLl7DNaSYDjnKIL5cOWMeK+phnw27mPnlVOMqUuDD5IoMYHPHPvmgkf29Rbefn
+         DEcnwXu4wPR9xHl/7g+03sk3XGB1RfqKxpwErRPeMyOyZ/c8dnoWNhMVx6fiuDINdK
+         qWnkC6jetUs+Q==
+Date:   Tue, 20 Jun 2023 11:54:47 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     hch@lst.de, axboe@kernel.dk, dsterba@suse.com, hare@suse.de,
+        jinpu.wang@ionos.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: Re: [PATCH -next v2] block: fix wrong mode for blkdev_get_by_dev()
+ from disk_scan_partitions()
+Message-ID: <20230620-hektar-ansah-4ab1a6108a82@brauner>
+References: <20230618140402.7556-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230618140402.7556-1-yukuai1@huaweicloud.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 16 Jun 2023, Bjorn Helgaas wrote:
+On Sun, Jun 18, 2023 at 10:04:02PM +0800, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> After commit 2736e8eeb0cc ("block: use the holder as indication for
+> exclusive opens"), blkdev_get_by_dev() will warn if holder is NULL and
+> mode contains 'FMODE_EXCL'.
+> 
+> holder from blkdev_get_by_dev() from disk_scan_partitions() is always NULL,
+> hence it should not use 'FMODE_EXCL', which is broben by the commit. For
+> consequence, WARN_ON_ONCE() will be triggered from blkdev_get_by_dev()
+> if user scan partitions with device opened exclusively.
+> 
+> Fix this problem by removing 'FMODE_EXCL' from disk_scan_partitions(),
+> as it used to be.
+> 
+> Reported-by: syzbot+00cd27751f78817f167b@syzkaller.appspotmail.com
+> Link: https://syzkaller.appspot.com/bug?extid=00cd27751f78817f167b
+> Fixes: 2736e8eeb0cc ("block: use the holder as indication for exclusive opens")
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
 
-> I agree that as I rearranged it, the workaround doesn't apply in all
-> cases simultaneously.  Maybe not ideal, but maybe not terrible either.
-> Looking at it again, maybe it would have made more sense to move the
-> pcie_wait_for_link_delay() change to the last patch along with the
-> pci_dev_wait() change.  I dunno.
-
- I think the order of the changes is not important enough to justify 
-spending a lot of time and mental effort on it.  You decided, so be it.  
-Thank you for your effort made with this review.
-
- With this series out of the way I have now posted a small clean-up for 
-SBR code duplication between PCI core and an InfiniBand driver I came 
-across in the course of working on this series.  See 
-<https://lore.kernel.org/r/alpine.DEB.2.21.2306200153110.14084@angie.orcam.me.uk/>.
-
- Please have a look at your convenience.
-
-  Maciej
+Looks good to me,
+Reviewed-by: Christian Brauner <brauner@kernel.org>
