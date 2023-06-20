@@ -2,89 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 321547365D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 742077365D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:12:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231796AbjFTIL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 04:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
+        id S230517AbjFTIMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 04:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230517AbjFTILw (ORCPT
+        with ESMTP id S231398AbjFTIMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 04:11:52 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463E6DD;
-        Tue, 20 Jun 2023 01:11:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QeFioVa/tT3b1wnnpMGvpj+qCiUmg3JZi11EixpKVqs=; b=dUn5+0Uyr4akY3p1SUMDzGKKBT
-        QAdLAKK4E+C+Yt3BU3DoZZrHeqVxULXclOs60yQktH/UFwl/P0NZZDA2xhZuJxJqr1iVmwV5zVCHP
-        tsSYF8K/hT7Gt3OA5J0anCxH5Z7qdo06kyQVe0u/G/M5ufZwHZA3Jlvl2qszVfM7GgccEgMYHwTFF
-        BE5aR+d1mWXB1jMPO9TvKbdjCPLbgBQyfW0HxPjUpHUECScS8icqDPkzcTXSwnHNYZiWWLP7Wcbwy
-        ARYPhLd08VfBHmgJ6kBcxm8mmZEI5SG4BY/GRh6YJwEOnZXXTXaFgd6B64nu+fOQwwv4Dr08k5Rjc
-        4tISiuNw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qBWSa-00CqQg-Vu; Tue, 20 Jun 2023 08:11:33 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BA2383002F0;
-        Tue, 20 Jun 2023 10:11:31 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A00FB21440F48; Tue, 20 Jun 2023 10:11:31 +0200 (CEST)
-Date:   Tue, 20 Jun 2023 10:11:31 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v11 18/20] x86: Handle TDX erratum to reset TDX private
- memory during kexec() and reboot
-Message-ID: <20230620081131.GV4253@hirez.programming.kicks-ass.net>
-References: <cover.1685887183.git.kai.huang@intel.com>
- <5aa7506d4fedbf625e3fe8ceeb88af3be1ce97ea.1685887183.git.kai.huang@intel.com>
- <20230609132301.uvvp27yr5kpenl6f@box.shutemov.name>
- <58f34b4b81b6d6b37d3386dec0f073e6eb7a97ff.camel@intel.com>
+        Tue, 20 Jun 2023 04:12:19 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1229A186
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 01:12:18 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f901f87195so23926975e9.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 01:12:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687248736; x=1689840736;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2KRzE3IxHv0D72WxLTYYk5f9VrvCEP7kc7aTHTFKOSI=;
+        b=qNDBWvbudemDgPmOjnbu080AyvX8nOks7ZLsys7A4wfr+7VWtU26irPr90roJ30HcM
+         GbWu6dlSkQX77ZWpwWA6jSUeISJ5jxEs82+08vFEDzk/hN4oQH0/mwyq+ziJq0FQkNGw
+         Of+e9HOUY/sUl8Iz/A3o4o1oLV4BiWQuXJfHcdvg5tdRXDQK8bMhoE7yov2rYSvKQHY8
+         78+Q9+bHG3srLrD1hF2i9ACQ0zFDUoQkYbylSUsxNrCWRVXmTLCgu+shGZgrFTWZ8L3k
+         2KRrwrLEVI8z927SBQ1RfzUkCRmOL8DEN9j29rrbw0vzH+nP1nIqQDn1JdQnxo54UgIB
+         xt2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687248736; x=1689840736;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2KRzE3IxHv0D72WxLTYYk5f9VrvCEP7kc7aTHTFKOSI=;
+        b=gAOHNSIHAxhVkJQpPD0LdX2HDgNjXek86oMuF8XS8O+xLp8rucFSLpPk6oJspOWngi
+         +4SK/icc721zYpJF547ssiL9Za5exLKyHMKbZMWexE3qStEAufhRN2yy5xv16E1uv+4Q
+         Ey4MUJkuWpxWAWej4smXXTgCaQGrftpDPjXNUwqBnnO5Dhv9S3S25RGKfsopItliUKtK
+         dqZVN4Kmcx/eSWBLzFN9/7ubNXe+UXAUgtOS+c7/cIeIcyTjwiOcbWz0eLbiyPohfAh2
+         ilDiTcCrQWUOfnnE5Kq37aPvQtGDXBa7hynGYFYaf8lVjcsGa6oWNVeivB8Y/K8a5dPJ
+         KxJg==
+X-Gm-Message-State: AC+VfDzHDR+JMhybgAYXlCorc8dD8xo7a7oHS2CMwIUjEXw5WHnZ+xWV
+        2F2fyEmMD1cuBvO7QJYtflEIFg==
+X-Google-Smtp-Source: ACHHUZ5VCMlfw7GJ9Qf2HaNFEaUXnZ28ODluape1E5lbYbI6NEx+mawbOnCdpFyStP6LzFieyg4ZUw==
+X-Received: by 2002:a7b:c450:0:b0:3f7:367a:bd28 with SMTP id l16-20020a7bc450000000b003f7367abd28mr10053356wmi.4.1687248736480;
+        Tue, 20 Jun 2023 01:12:16 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id p25-20020a1c7419000000b003f8fac0ad4bsm1674906wmc.17.2023.06.20.01.12.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 01:12:16 -0700 (PDT)
+Message-ID: <8b5e4a9b-7496-02a1-d3b6-a0be8ea85798@linaro.org>
+Date:   Tue, 20 Jun 2023 10:12:14 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <58f34b4b81b6d6b37d3386dec0f073e6eb7a97ff.camel@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 3/6] media: dt-bindings: mediatek,vcodec: Remove
+ VDEC_SYS for mt8183
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20230620000349.2122191-1-nfraprado@collabora.com>
+ <20230620000349.2122191-4-nfraprado@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230620000349.2122191-4-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 12, 2023 at 03:06:48AM +0000, Huang, Kai wrote:
+On 20/06/2023 02:03, Nícolas F. R. A. Prado wrote:
+> The binding expects the first register space to be VDEC_SYS. But on
+> mt8183, which uses the stateless decoders, this space is used only for
+> controlling clocks and resets, which are better described as separate
+> clock-controller and reset-controller nodes.
+> 
+> In fact, in mt8173's devicetree there are already such separate
+> clock-controller nodes, which cause duplicate addresses between the
+> vdecsys node and the vcodec node. But for this SoC, since the stateful
+> decoder code makes other uses of the VDEC_SYS register space, it's not
+> straightforward to remove it.
+> 
+> In order to avoid the same address conflict to happen on mt8183,
+> since the only current use of the VDEC_SYS register space in
+> the driver is to read the status of a hardware controlled clock, remove
+> the VDEC_SYS register space from the binding and describe an extra
+> syscon that will be used to directly check the hardware status.
+> 
+> Also add reg-names to be able to tell that this new register schema is
+> used, so the driver can keep backward compatibility.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> 
+> ---
+> I dropped the tags from this commit since a syscon is now used instead
+> of an extra clock.
+> 
+> Changes in v3:
+> - Removed the active clock
+> - Added a mediatek,vdecsys syscon property
+> 
+> Changes in v2:
+> - Merged with patch 1 (media: dt-bindings: mediatek,vcodec: Allow single
+>   clock for mt8183) to avoid changing number of clocks twice
+> - Added maxItems to reg-names
+> - Constrained clocks for each compatible
+> - Reordered properties for each compatible
+> 
+>  .../media/mediatek,vcodec-decoder.yaml        | 30 +++++++++++++++++++
+>  1 file changed, 30 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
+> index 1e56ece44aee..2f625c50bbfe 100644
+> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
+> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
+> @@ -21,8 +21,13 @@ properties:
+>        - mediatek,mt8183-vcodec-dec
+>  
+>    reg:
+> +    minItems: 11
+>      maxItems: 12
+>  
+> +  reg-names:
+> +    minItems: 11
+> +    maxItems: 11
 
-> +       __mb();
+maxItems: 12
 
-__mb() is not a valid interface to use.
+> +
+>    interrupts:
+>      maxItems: 1
+>  
+> @@ -60,6 +65,10 @@ properties:
+>      description:
+>        Describes point to scp.
+>  
+> +  mediatek,vdecsys:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: Phandle to the vdecsys syscon node.
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -79,8 +88,26 @@ allOf:
+>      then:
+>        required:
+>          - mediatek,scp
+> +        - mediatek,vdecsys
+>  
+>        properties:
+> +        reg:
+> +          maxItems: 11
+> +
+> +        reg-names:
+> +          items:
+> +            - const: misc
+> +            - const: ld
+> +            - const: top
+> +            - const: cm
+> +            - const: ad
+> +            - const: av
+> +            - const: pp
+> +            - const: hwd
+> +            - const: hwq
+> +            - const: hwb
+> +            - const: hwg
+> +
+>          clocks:
+>            minItems: 1
+>            maxItems: 1
+> @@ -101,6 +128,9 @@ allOf:
+>          - mediatek,vpu
+>  
+>        properties:
+> +        reg:
+> +          minItems: 12
+
+
+What about reg-names here? They should be also defined and in sync with
+regs.
+
+Best regards,
+Krzysztof
+
