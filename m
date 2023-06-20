@@ -2,84 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71642737794
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07DAF737798
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjFTWoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 18:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
+        id S229832AbjFTWul convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Jun 2023 18:50:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjFTWoS (ORCPT
+        with ESMTP id S229538AbjFTWuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 18:44:18 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839A410F1;
-        Tue, 20 Jun 2023 15:44:14 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Qm1s60M7Vz4wjD;
-        Wed, 21 Jun 2023 08:44:09 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687301050;
-        bh=8MLzFgiZMqNPwZbnm6qtkPaARcc8RTEAjJoFn1BS6XA=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mfc2DHqUh+oraUKnfuTT2N8G012QEWJIuSWOYT8Qc5pw4ymJw+rHtmHI2kx4JDBWJ
-         PoCBQMoSOY4S5lstsNk/DZDHMwsulyXFem7kg0UFoSzbeu6gQ/u4QjkwlHNwEZDj14
-         7LrsV2NSjT732K/A7/skMxxy6iubtokFJxsPK4L/tavMA/HJ3fPg0u9TNra/aEmYek
-         b/AOicd5liSfy71EB8QgNBA2h9+8n/4XbHv4yFv+fMTfPPRaQ2B9d+aS1SrDdlJtis
-         mfp/rVPaXFZUMJfQCgsUF7xTATIUf2XVtEJ8qHRN+jxw6loXHyYUrJ6clVxAYJjfc8
-         9azTZ7oRJcGqQ==
-Date:   Wed, 21 Jun 2023 08:43:55 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the loongarch tree
-Message-ID: <20230621084355.13df7a8c@canb.auug.org.au>
+        Tue, 20 Jun 2023 18:50:39 -0400
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30CDD10F1;
+        Tue, 20 Jun 2023 15:50:39 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-77e3ba2fbbfso127793539f.1;
+        Tue, 20 Jun 2023 15:50:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687301438; x=1689893438;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lmW8lXIaP8PwEo3dSA48LLiV2xfz+uHaKuQPPpRKTPE=;
+        b=ZZ7H8LAS7uaOB0/TtE6kHnwZfDKDmk9TTGCj9C57dCyzAcl8E44HFXSacFfsF2OXWr
+         EeDRWwyFH5R6+mVro9ON5cKU9TiS4K4g7wKmcnR7bF+Dijtamf0C7sFY3e456amEPC37
+         W9EJ785nXeCSj22iY8Si7is2ilmOnMbp8+DCvGCcEAeb+pSitK0B9LRTicuQHvFDSV2V
+         gq4/8UXn09QXLXCYFKk401lZNVBxbrusIPN9ToFAjRSjpAWWS8illp7tHZf9N+boUYk3
+         Y0JGsaQ0JBCTEUI8UfrvoJTa2t87Hm/Fo4pWgkPT6YiqVKCIdxO1o87UGUZcCni7tVKh
+         2rYw==
+X-Gm-Message-State: AC+VfDwcJZlhJTFrcA2MBpG7u3knp9WrNGXPlwY8ym5fEcp7yztF+8Cl
+        gXepKBiqaVfTzRnouHGJt7SDsSHzVPhcvI9pp8/0vjyU
+X-Google-Smtp-Source: ACHHUZ4anAk43NhBtl2TgAB7Q2c6dBrGPEX3igWbtzYnc3AywzQ8UqLeAW1Sul2ClLHi+Uo1Zbo8C1niYk4voog61N4=
+X-Received: by 2002:a5e:db05:0:b0:778:82d1:39a3 with SMTP id
+ q5-20020a5edb05000000b0077882d139a3mr12741055iop.13.1687301438410; Tue, 20
+ Jun 2023 15:50:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Bjceb8tXi_taZ5FJgBXOb56";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230614080937.54937-1-luojianhong@cdjrlc.com> <2c733a91717eae93119ba2226420fd8f@208suo.com>
+In-Reply-To: <2c733a91717eae93119ba2226420fd8f@208suo.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 20 Jun 2023 15:50:26 -0700
+Message-ID: <CAM9d7chMMQcnV+hTwyEDbcQrO0ELtQTnhQ5bZptF6g_k+m0mAg@mail.gmail.com>
+Subject: Re: [PATCH] perf parse-events: Remove unneeded semicolon
+To:     baomingtong001@208suo.com
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        kan.liang@linux.intel.com, zhengjun.xing@linux.intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Bjceb8tXi_taZ5FJgBXOb56
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello,
 
-Hi all,
+On Wed, Jun 14, 2023 at 1:13 AM <baomingtong001@208suo.com> wrote:
+>
+> ./tools/perf/util/parse-events.c:1466:2-3: Unneeded semicolon
+>
+> Signed-off-by: Mingtong Bao <baomingtong001@208suo.com>
+> ---
+>   tools/perf/util/parse-events.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/util/parse-events.c
+> b/tools/perf/util/parse-events.c
+> index 629f7bd9fd59..42f84f61fabc 100644
+> --- a/tools/perf/util/parse-events.c
+> +++ b/tools/perf/util/parse-events.c
+> @@ -1463,7 +1463,7 @@ static int __parse_events_add_numeric(struct
+> parse_events_state *parse_state,
+>       if (extended_type && (type == PERF_TYPE_HARDWARE || type ==
+> PERF_TYPE_HW_CACHE)) {
 
-Commit
+The format is broken, please fix your mail client not fix wrap long lines.
+This time I fixed it manually, but you need to update your config.
 
-  c976fff79c12 ("LoongArch: Add kernel address sanitizer support")
+Thanks,
+Namhyung
 
-is missing a Signed-off-by from its committer.
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/Bjceb8tXi_taZ5FJgBXOb56
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSSK6sACgkQAVBC80lX
-0GxNnQf+PbzXUogN5w6L739TuZ39mxy4mUmeMadufhTNEAcxpjsuMPI/3Gi32fuA
-/f4PB9CrMxssgEPw5nX4Zp5Y1etvVIp0I+hcsnbKipIjhNYQApRQuATBx48K4wCg
-NJDDxgiwANjYwKKNh+6dUR//1uLfYZQBigxUqwBm3YTbvy9D6Rd5UehVC88u1GnY
-eO+Akk3vY9//fgShwnvg38Q+QClJ2alLBaZDVbrhF/vm2Fmk35JdsNaqdS9LHDxJ
-rKVKlRwp+ff/TFsgevqmmt3DmK7qM4T6csjdZxHvCLiRyv6lEeQsGTR6w3/VQSnJ
-T1eaECwICeNig3QCf+oO+jss/kDGNQ==
-=gJbK
------END PGP SIGNATURE-----
-
---Sig_/Bjceb8tXi_taZ5FJgBXOb56--
+>           assert(perf_pmus__supports_extended_type());
+>           attr.config |= (u64)extended_type << PERF_PMU_TYPE_SHIFT;
+> -    };
+> +    }
+>
+>       if (head_config) {
+>           if (config_attr(&attr, head_config, parse_state->error,
