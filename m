@@ -2,23 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3451B736420
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE20D736423
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbjFTHMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 03:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
+        id S231241AbjFTHMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 03:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjFTHMv (ORCPT
+        with ESMTP id S230499AbjFTHMv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 20 Jun 2023 03:12:51 -0400
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B346E7;
-        Tue, 20 Jun 2023 00:12:48 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VlamlVY_1687245158;
-Received: from srmbuffer011165236051.sqa.net(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VlamlVY_1687245158)
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02415EA;
+        Tue, 20 Jun 2023 00:12:49 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R681e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0VlamlZa_1687245164;
+Received: from srmbuffer011165236051.sqa.net(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VlamlZa_1687245164)
           by smtp.aliyun-inc.com;
-          Tue, 20 Jun 2023 15:12:44 +0800
+          Tue, 20 Jun 2023 15:12:45 +0800
 From:   Jing Zhang <renyu.zj@linux.alibaba.com>
 To:     Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -38,79 +38,76 @@ Cc:     Robin Murphy <robin.murphy@arm.com>,
         linux-perf-users@vger.kernel.org, linux-doc@vger.kernel.org,
         Zhuo Song <zhuo.song@linux.alibaba.com>,
         Jing Zhang <renyu.zj@linux.alibaba.com>
-Subject: [PATCH v4 0/4] Add JSON metrics for Yitian710 DDR
-Date:   Tue, 20 Jun 2023 15:12:32 +0800
-Message-Id: <1687245156-61215-1-git-send-email-renyu.zj@linux.alibaba.com>
+Subject: [PATCH v4 1/4] driver/perf: Add identifier sysfs file for Yitian 710 DDR
+Date:   Tue, 20 Jun 2023 15:12:33 +0800
+Message-Id: <1687245156-61215-2-git-send-email-renyu.zj@linux.alibaba.com>
 X-Mailer: git-send-email 1.8.3.1
+In-Reply-To: <1687245156-61215-1-git-send-email-renyu.zj@linux.alibaba.com>
+References: <1687245156-61215-1-git-send-email-renyu.zj@linux.alibaba.com>
 X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+To allow userspace to identify the specific implementation of the device,
+add an "identifier" sysfs file.
 
-I add an identifier sysfs file for the yitian710 SoC DDR to allow
-userspace to identify the specific implementation of the device,
-so that the perf tool can match the corresponding uncore events and
-metrics through the identifier. Then added yitian710 SoC DDR
-metrics and events alias.
+The perf tool can match the Yitian 710 DDR metric through the identifier.
 
-Change since v3:
-- Split the CMN and ali_drw patches. This patchset only contains
-  ali_drw PMU related patches. The CMN metric related patches will
-  be in another patchset.
-- Link: https://lore.kernel.org/all/1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com/
+Signed-off-by: Jing Zhang <renyu.zj@linux.alibaba.com>
+Acked-by: Ian Rogers <irogers@google.com>
+Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
+---
+ drivers/perf/alibaba_uncore_drw_pmu.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-$perf list:
-...
-ali_drw:
-  chi_rxdat
-       [A packet at CHI RXDAT interface (write data). Unit: ali_drw]
-  chi_rxrsp
-       [A packet at CHI RXRSP interface. Unit: ali_drw]
-  chi_txdat
-       [A packet at CHI TXDAT interface (read data). Unit: ali_drw]
-  chi_txreq
-       [A packet at CHI TXREQ interface (request). Unit: ali_drw]
-  cycle
-       [The ddr cycle. Unit: ali_drw]
-...
-ali_drw:
-  ddr_read_bandwidth.all
-       [The ddr read bandwidth(MB/s). Unit: ali_drw ]
-  ddr_write_bandwidth.all
-       [The ddr write bandwidth(MB/s). Unit: ali_drw ]
-...
-
-$perf stat -M ddr_read_bandwidth.all ./test
-
-Performance counter stats for 'system wide':
-
-            38,150      hif_rd        #  2.4 MB/s  ddr_read_bandwidth.all
-     1,000,957,941 ns   duration_time
-
-       1.000957941 seconds time elapsed
-
-Jing Zhang (4):
-  driver/perf: Add identifier sysfs file for Yitian 710 DDR
-  perf jevents: Add support for Yitian 710 DDR PMU aliasing
-  perf vendor events: Add JSON metrics for Yitian 710 DDR
-  docs: perf: Update metric usage for Alibaba's T-Head PMU driver
-
- Documentation/admin-guide/perf/alibaba_pmu.rst     |   5 +
- drivers/perf/alibaba_uncore_drw_pmu.c              |  27 ++
- .../arm64/freescale/yitian710/sys/ali_drw.json     | 373 +++++++++++++++++++++
- .../arm64/freescale/yitian710/sys/metrics.json     |  20 ++
- tools/perf/pmu-events/jevents.py                   |   1 +
- 5 files changed, 426 insertions(+)
- create mode 100644 tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/ali_drw.json
- create mode 100644 tools/perf/pmu-events/arch/arm64/freescale/yitian710/sys/metrics.json
-
+diff --git a/drivers/perf/alibaba_uncore_drw_pmu.c b/drivers/perf/alibaba_uncore_drw_pmu.c
+index a7689fe..fe075fd 100644
+--- a/drivers/perf/alibaba_uncore_drw_pmu.c
++++ b/drivers/perf/alibaba_uncore_drw_pmu.c
+@@ -236,10 +236,37 @@ static ssize_t ali_drw_pmu_cpumask_show(struct device *dev,
+ 	.attrs = ali_drw_pmu_cpumask_attrs,
+ };
+ 
++static ssize_t ali_drw_pmu_identifier_show(struct device *dev,
++					struct device_attribute *attr,
++					char *page)
++{
++	return sysfs_emit(page, "%s\n", "ali_drw_pmu");
++}
++
++static umode_t ali_drw_pmu_identifier_attr_visible(struct kobject *kobj,
++						struct attribute *attr, int n)
++{
++	return attr->mode;
++}
++
++static struct device_attribute ali_drw_pmu_identifier_attr =
++	__ATTR(identifier, 0444, ali_drw_pmu_identifier_show, NULL);
++
++static struct attribute *ali_drw_pmu_identifier_attrs[] = {
++	&ali_drw_pmu_identifier_attr.attr,
++	NULL
++};
++
++static const struct attribute_group ali_drw_pmu_identifier_attr_group = {
++	.attrs = ali_drw_pmu_identifier_attrs,
++	.is_visible = ali_drw_pmu_identifier_attr_visible
++};
++
+ static const struct attribute_group *ali_drw_pmu_attr_groups[] = {
+ 	&ali_drw_pmu_events_attr_group,
+ 	&ali_drw_pmu_cpumask_attr_group,
+ 	&ali_drw_pmu_format_group,
++	&ali_drw_pmu_identifier_attr_group,
+ 	NULL,
+ };
+ 
 -- 
 1.8.3.1
 
