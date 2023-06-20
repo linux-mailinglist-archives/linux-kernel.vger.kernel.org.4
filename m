@@ -2,124 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57543736B2D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A85736B25
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232713AbjFTLlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 07:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
+        id S231755AbjFTLjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 07:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbjFTLlD (ORCPT
+        with ESMTP id S231429AbjFTLjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 07:41:03 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE4DE71
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:41:01 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f4b2bc1565so5979835e87.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:41:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1687261259; x=1689853259;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rc0VF9QAKItzIoQIN+TGeSbpZSwD884ZJlY6XLWEwnQ=;
-        b=OSo/IOjpcTOvWjExcqsUbvuVyXnARS++fI0WVy3bVnpKwZGoSPB4IrOxk/VnscG8BF
-         FfeSlGKun5ERhfnpb5CLB13pbyP1lWPKhVHkcU8hsfjhGbLJJtwZAFIiMr/anJHqRSP1
-         +eIcUHFwHvqjxUsQOzyIPT2Qmnbt5eDVXiQBE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687261259; x=1689853259;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rc0VF9QAKItzIoQIN+TGeSbpZSwD884ZJlY6XLWEwnQ=;
-        b=dRAGp31KW0QsnNOcvgb/iGkxWhFynsVxRhWtrrvLdq/FdqBUnwIxVV8TNaDnCr7wOm
-         wW+K6mOtUTXAvzJ5PwhWLGHQw52F0plp3+GdViPxjJGoc3ufyp8uFqL98yc5WM/6ztlr
-         pISE/gm/x1AZ55EYDns04q1k4XqN9X175IETpQ89f4Qzvr1U1IN5thTh8HnyEQ9np15F
-         IxLGoudOnCYkxAQXgNcP13H5IOd1oqMOgFsLdSCSnbFYxvua5bhWDvCbxbimTJ/cMUwA
-         dsjdTjrvoMgn7zcLTgCnWa2oQduXSg+XqjqJRq46aSnjPAwLugtcPwKoZL32I1Z67IU6
-         J69A==
-X-Gm-Message-State: AC+VfDyzCt4yvO/LTyBFIN6oX3s+T3GNRe/egGUmmPQHrW1TiX8/OWW2
-        CKNI6oqdY2Iy5Y0dj2RwFtiKEg==
-X-Google-Smtp-Source: ACHHUZ7vTB7KJs+ED1EvGxXyIkcZbS3zd6TkV0QsQM3gGOpK8DiScTUsVPoFeq/WVfuUiSUwiOZvhQ==
-X-Received: by 2002:ac2:5b12:0:b0:4f3:dd96:bf55 with SMTP id v18-20020ac25b12000000b004f3dd96bf55mr7093121lfn.11.1687261258951;
-        Tue, 20 Jun 2023 04:40:58 -0700 (PDT)
-Received: from localhost.localdomain ([87.54.42.112])
-        by smtp.gmail.com with ESMTPSA id d12-20020ac2544c000000b004f84162e08bsm329879lfn.185.2023.06.20.04.40.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 04:40:58 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 3/3] net: dsa: microchip: fix writes to phy registers >= 0x10
-Date:   Tue, 20 Jun 2023 13:38:54 +0200
-Message-Id: <20230620113855.733526-4-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230620113855.733526-1-linux@rasmusvillemoes.dk>
-References: <20230620113855.733526-1-linux@rasmusvillemoes.dk>
+        Tue, 20 Jun 2023 07:39:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50207A1;
+        Tue, 20 Jun 2023 04:39:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA9B96101B;
+        Tue, 20 Jun 2023 11:39:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77360C433C8;
+        Tue, 20 Jun 2023 11:39:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687261158;
+        bh=9UVOE8Cz1DsWBg3eucEFy8b5dI8qWQk4N+oAeWZJiHI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CGQaYXeFqY0uyDWCnOxfZEn/Vem4fSxgIjT6iEQGEB76XzdHtm8SMgPyVTiGclCrd
+         OJHgBi07UogJDHYETygVTciE0ZwhTbtvq4KSV6GfYIZ6AhMFiZCIfN5yVEQODaY2Q+
+         rfZXJNYZWzyN1EYtORWyvXeXyUhM74sOlvryMpVaqJ0HT0kYi0JPCaJ6jScplEi0yT
+         KMfTOlOEs2Mim76X3Ozkk4ws8rIvmFRqe0aBWe0Dzhbjq7vrOE3FiZpZe0oWMRCOYs
+         aLMTE8EVwFnp1oB+rqVBW6ZtEFuCfMGfbpAL+wsWj0ZPHUcVNsbrEAGmBQMXUTu4RS
+         RryAMhDp8allw==
+Date:   Tue, 20 Jun 2023 12:39:09 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Wu, Wentong" <wentong.wu@intel.com>
+Cc:     "Ye, Xiang" <xiang.ye@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
+        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
+        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
+        "Zhang, Lixu" <lixu.zhang@intel.com>
+Subject: Re: [PATCH v8 6/6] spi: Add support for Intel LJCA USB SPI driver
+Message-ID: <7b9192d1-6b63-4ab7-a41d-1a122fa69480@sirena.org.uk>
+References: <20230511175844.185070-1-xiang.ye@intel.com>
+ <20230511175844.185070-7-xiang.ye@intel.com>
+ <ZF2+C0CqaBff2hl+@finisterre.sirena.org.uk>
+ <DM6PR11MB4316E9530309ACCEF55AD0D18D5CA@DM6PR11MB4316.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6vhFdTOxhYEajwKy"
+Content-Disposition: inline
+In-Reply-To: <DM6PR11MB4316E9530309ACCEF55AD0D18D5CA@DM6PR11MB4316.namprd11.prod.outlook.com>
+X-Cookie: Chocolate chip.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to the errata sheets for ksz9477 and ksz9567, writes to the
-PHY registers 0x10-0x1f (i.e. those located at addresses 0xN120 to
-0xN13f) must be done as a 32 bit write to the 4-byte aligned address
-containing the register, hence requires a RMW in order not to change
-the adjacent PHY register.
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- drivers/net/dsa/microchip/ksz9477.c | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
+--6vhFdTOxhYEajwKy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/net/dsa/microchip/ksz9477.c b/drivers/net/dsa/microchip/ksz9477.c
-index fc5157a10af5..83b7f2d5c1ea 100644
---- a/drivers/net/dsa/microchip/ksz9477.c
-+++ b/drivers/net/dsa/microchip/ksz9477.c
-@@ -329,11 +329,27 @@ int ksz9477_r_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 *data)
- 
- int ksz9477_w_phy(struct ksz_device *dev, u16 addr, u16 reg, u16 val)
- {
-+	u32 mask, val32;
-+
- 	/* No real PHY after this. */
- 	if (!dev->info->internal_phy[addr])
- 		return 0;
- 
--	return ksz_pwrite16(dev, addr, 0x100 + (reg << 1), val);
-+	if (reg < 0x10)
-+		return ksz_pwrite16(dev, addr, 0x100 + (reg << 1), val);
-+
-+	/* Errata: When using SPI, I2C, or in-band register access,
-+	 * writes to certain PHY registers should be performed as
-+	 * 32-bit writes instead of 16-bit writes.
-+	 */
-+	val32 = val;
-+	mask = 0xffff;
-+	if ((reg & 1) == 0) {
-+		val32 <<= 16;
-+		mask <<= 16;
-+	}
-+	reg &= ~1;
-+	return ksz_prmw32(dev, addr, 0x100 + (reg << 1), mask, val32);
- }
- 
- void ksz9477_cfg_port_member(struct ksz_device *dev, int port, u8 member)
--- 
-2.37.2
+On Tue, Jun 20, 2023 at 06:47:11AM +0000, Wu, Wentong wrote:
 
+> > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > +/*
+> > > + * Intel La Jolla Cove Adapter USB-SPI driver
+
+> > Please make the entire comment a C++ one so things look more intentiona=
+l.
+
+> I see lots of drivers are commenting like current one.=20
+> But sorry, you mean the entire comment start with /* and end with */ ? Th=
+anks
+
+Other way around, use // for all the lines in this comment block please.
+
+--6vhFdTOxhYEajwKy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSRj9wACgkQJNaLcl1U
+h9C0kwf+P5WR5e8HGsaUTr3bxMcjGPrWXvavqs+q5qEvE0tyVRo+SAqub9c74fyW
+vScdJYyrO4Ah8v0IsOIkyW+UDIWK/wgZ125S3aVKkgtzVXpI0gTCqC9xGXR8GVEZ
+4+5o293GihaPW4kGy/8zqzqszu9A3y2lvjEaARFgMwN+pC5mFXPIJ+wDTtftcyNG
+Mi12BYb5wgTlrtPLO0/qY+agcsbOI3puA48GhNxOSme8EWpAlOxlJxdNdivdVIQW
+mDRZ6h15xm06jTDEtOFFqk4bqZU8Ethw0SQLPzo/FcZw9CBXaK7qXDURXMvCo80G
+G27kz7xr6LmWBJhAxuFL3sE6NrHEbg==
+=4nOU
+-----END PGP SIGNATURE-----
+
+--6vhFdTOxhYEajwKy--
