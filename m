@@ -2,266 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D72736A67
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C9D8736A71
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:10:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbjFTLKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 07:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
+        id S232396AbjFTLKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 07:10:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbjFTLJr (ORCPT
+        with ESMTP id S230148AbjFTLKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 07:09:47 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 874AEB2;
-        Tue, 20 Jun 2023 04:09:45 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-4f8735ac3e3so2649590e87.2;
-        Tue, 20 Jun 2023 04:09:45 -0700 (PDT)
+        Tue, 20 Jun 2023 07:10:43 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE1DC4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:10:42 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f865f0e16cso4013104e87.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 04:10:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687259378; x=1689851378;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NyVoXLuENFitZwuqipeOyk5DeCK/RcbT1jLlgSzCRug=;
-        b=T5dEjUIT58ViTHHaFyPCToPH5niimEXrThAQxVanqQZv/6LItw1EVa/Z8boMr2o5F+
-         xsV988X+GlUBh0M2jSP701APiKjBbfn5T5eXLN9GeUeXVf+sjKjNY3d3EuP1MOD46OT4
-         EbVZoMTb4neQmxW9eLe4yq5poiuwTtzlAu3txZ+ydJT8NeZD79MsLkzxBkpOMOE3b7d/
-         y2DLAsdG5eM5xKd1qKZnDq0rKou4YWDh2Xh/iYGdNLY5DJtGb59Qu2qbkTP0pqBlGegJ
-         KXZiDmSspfW9kTgmIEEoi8/QpYgz/wnzOFoe37QPG5dxQ6aNM7hOrTYQUnhThhfKxWky
-         7J8Q==
+        d=linaro.org; s=google; t=1687259440; x=1689851440;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IoT2GR/Uoi2aGgdfRzromK+7BmskPgx1PJTo67yINu0=;
+        b=SjWj58M0HawcUhEnQUhjDM2rl2u3ACNUOQeMLzsfSi0fTfnUMqvhrYeKRIRujPz8eW
+         O7EEYwV0QGDFDPaCpuyfIx23shDmD5szRESu4SFz70X5NOVfeNgexNX7qzjUAgWn4v6h
+         FwyolvZ1znYI46bFZgQcjoaCwKRHBQ2+Imxbz9y139MVOilQxeRvXK2XLDyqp3JUwCKU
+         LUcRfiEI6VcFsvIQ9Ll7TwR/L9A7nVmyDthePNoE5cr6DgJ9mMcA70dsrYIJK9GWyuxY
+         hLgXz/e7892voLDN5mNhNxyw3NuYJMK2nO8PWJZu4VKw7rMMyzFK0WzB0ebL9rcW0Rv8
+         BQKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687259378; x=1689851378;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NyVoXLuENFitZwuqipeOyk5DeCK/RcbT1jLlgSzCRug=;
-        b=VhJIb6EldstxIqIb3XSHza9J1mOTwv5C/xUyp0LzHjFq/PWeio5mgkPLOZ7HSOgyZJ
-         QOk/wP2s8c9ZPPBQKG1NBygIu6mXEZNub5Yp2qgaE+pZa0kXK3qzQ0yg4mVxunx2UCt2
-         ywOnCXW8CRjXQOegjiAgn9ouyX7XmBsdRNEjNTK32JUsYzlMDl6XmRVXazkt+ZLvKAJK
-         j6kGetSVzejxONE4mdQMCT7x542HAeRlaKoPmNySHOpaJgVYj3xBsdOx9uTeolVjSViz
-         ybs4SPnHzqhVUge/9kiz88Kst+1V32R8WGqSDimV1/o6NQq6Q0hKXFXbti/Nz9UUW8VC
-         +AzQ==
-X-Gm-Message-State: AC+VfDwpQeqYqRARL/Las9g9Ak/cdz/biguSbXNIJxXtkrvSFCF4vGbu
-        mRs3xbQyuGYfQVfv+DTjE24=
-X-Google-Smtp-Source: ACHHUZ7mG6muv83CTUA41jcJfLnnzXdN7/ldwGH//hMimsb+703Somv0u4l9a3kLTq3qIG7PIHK3/g==
-X-Received: by 2002:a05:6512:68:b0:4f6:3ab6:3d9e with SMTP id i8-20020a056512006800b004f63ab63d9emr6036379lfo.59.1687259377360;
-        Tue, 20 Jun 2023 04:09:37 -0700 (PDT)
-Received: from tom-HP-ZBook-Fury-15-G7-Mobile-Workstation (net-2-39-142-242.cust.vodafonedsl.it. [2.39.142.242])
-        by smtp.gmail.com with ESMTPSA id c12-20020aa7d60c000000b0051b4a25fab1sm1015265edr.41.2023.06.20.04.09.35
+        d=1e100.net; s=20221208; t=1687259440; x=1689851440;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IoT2GR/Uoi2aGgdfRzromK+7BmskPgx1PJTo67yINu0=;
+        b=G6V/LwKFa2rFFH0KhW/QnAEeYk3iqc5wqxSBJsvlzQLm6Zs4cEVKVyOPdW9f5zzcfD
+         ++Amk5WysAME+8Uo+aYsu8E6oZHflKtSVtvuUi4/y0Dqw6PbYyBCBpxYYb2Nz1JdGCRr
+         QJnXWett2QN6vjgBCyFea5b0rGwg55yljv6y4DJD8XnhpawA60Ay0Obhd3ZrZS8yMBZ0
+         GTwU8S4wIdJqbR6Rm24F773rNuz89Dv0nF479xFMIEcbTcsNXouULOue5LI/Akzsiw5/
+         nuBEPAy+oyFe7b+b1oYX39craFZXlSybop11e5MPlOjbrmiHZhSpHkxNtRNwLXfASptS
+         2bUg==
+X-Gm-Message-State: AC+VfDyBj65UP7da3y9CHNiye+87Dr7au7linDcGc6o1KD3riUs+1HQ3
+        oWAWG6Qi8eNBavb+5sfDfdwLmg==
+X-Google-Smtp-Source: ACHHUZ45duw0feSQ/bSA0cRlMKEsqbS53ljbZe0BeA7XZhGamKkfrfynxW77p5B4lFpDMQzTPbmzPQ==
+X-Received: by 2002:a05:6512:288:b0:4f3:a99f:1ea1 with SMTP id j8-20020a056512028800b004f3a99f1ea1mr7040192lfp.45.1687259440360;
+        Tue, 20 Jun 2023 04:10:40 -0700 (PDT)
+Received: from [192.168.1.101] (abxj193.neoplus.adsl.tpnet.pl. [83.9.3.193])
+        by smtp.gmail.com with ESMTPSA id u26-20020a056512041a00b004f764716afdsm314395lfk.257.2023.06.20.04.10.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 04:09:36 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 13:09:34 +0200
-From:   Tommaso Merciai <tomm.merciai@gmail.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        jacopo.mondi@ideasonboard.com, martin.hecht@avnet.eu,
-        michael.roeder@avnet.eu, linuxfancy@googlegroups.com,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Marco Felsch <m.felsch@pengutronix.de>,
-        Gerald Loacker <gerald.loacker@wolfvision.net>,
-        Nicholas Roth <nicholas@rothemail.net>,
-        Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Mikhail Rudenko <mike.rudenko@gmail.com>,
-        Shawn Tu <shawnx.tu@intel.com>, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v5 3/3] media: i2c: Add support for alvium camera
-Message-ID: <ZJGI7o4b1Pp6lYxs@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
-References: <20230608083127.545750-1-tomm.merciai@gmail.com>
- <20230608083127.545750-4-tomm.merciai@gmail.com>
- <ZILuNrA9cMaI9ihP@kekkonen.localdomain>
- <ZIMklWtBW8fx/Ddd@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
- <ZJAy4vRxI9uEUwQj@kekkonen.localdomain>
- <20230619142458.GE10462@pendragon.ideasonboard.com>
- <ZJExEwhVK+8IVaB8@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
- <20230620094328.GA26467@pendragon.ideasonboard.com>
- <ZJGB7vkJpxd3JrSh@tom-HP-ZBook-Fury-15-G7-Mobile-Workstation>
- <20230620105335.GC26467@pendragon.ideasonboard.com>
+        Tue, 20 Jun 2023 04:10:39 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v4 0/6] Adreno QoL changes
+Date:   Tue, 20 Jun 2023 13:10:35 +0200
+Message-Id: <20230517-topic-a7xx_prep-v4-0-b16f273a91d4@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230620105335.GC26467@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACuJkWQC/4XNQQrCMBAF0KtI1kbSiW2MK+8hIpM0sYGSlKSWi
+ vTuju5EpMs/zH//yYrLwRV23DxZdlMoIUUK++2G2Q7jzfHQUmYgQIq6UnxMQ7Ac1Txfh+wGrg4
+ KG21VK7xn1DJYHDcZo+2oF+99T0f69GH+zJwvlLtQxpQfn9Wpel//D0wVF1yhbvYenNYWTn2Im
+ NMu5Rt7YxOsAEBAbXSLCAasFz+AXAEkASitkwpqeajNF7AsywvpOsZDRgEAAA==
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687259438; l=1738;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=eX5ZTxH/9LwPpvZBJk24YxyZZoovg4iLjcTUF8O57GU=;
+ b=eYdW9DwxTwYnC48PMFoXBqN4XCttHvlsNmTdrnieqG6ADJHwq4DgAv5Euo8IT8Sgs6KGjoJYS
+ bcv2VpLfEIlB4d9XqRNEN7KOTFEqoKzs66a9BGbti6xQED2Id7N9kH3
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+This series brings some niceties in preparation for A7xx introduction.
 
-On Tue, Jun 20, 2023 at 01:53:35PM +0300, Laurent Pinchart wrote:
-> Hi Tommaso,
-> 
-> On Tue, Jun 20, 2023 at 12:39:42PM +0200, Tommaso Merciai wrote:
-> > On Tue, Jun 20, 2023 at 12:43:28PM +0300, Laurent Pinchart wrote:
-> > > On Tue, Jun 20, 2023 at 06:54:43AM +0200, Tommaso Merciai wrote:
-> > > > On Mon, Jun 19, 2023 at 05:24:58PM +0300, Laurent Pinchart wrote:
-> > > > > On Mon, Jun 19, 2023 at 10:50:10AM +0000, Sakari Ailus wrote:
-> > > > > > On Fri, Jun 09, 2023 at 03:09:41PM +0200, Tommaso Merciai wrote:
-> > > > > > > On Fri, Jun 09, 2023 at 09:17:42AM +0000, Sakari Ailus wrote:
-> > > > > > > > On Thu, Jun 08, 2023 at 10:31:16AM +0200, Tommaso Merciai wrote:
-> > > > > > > > > The Alvium camera is shipped with sensor + isp in the same housing.
-> > > > > > > > > The camera can be equipped with one out of various sensor and abstract
-> > > > > > > > > the user from this. Camera is connected via MIPI CSI-2.
-> > > > > > > > > 
-> > > > > > > > > Most of the camera module features are supported, with the main exception
-> > > > > > > > > being fw update.
-> > > > > > > > > 
-> > > > > > > > > The driver provides all mandatory, optional and recommended V4L2 controls
-> > > > > > > > > for maximum compatibility with libcamera
-> > > > > > > > > 
-> > > > > > > > > References:
-> > > > > > > > >  - https://www.alliedvision.com/en/products/embedded-vision-solutions
-> > > > > > > > > 
-> > > > > > > > > Signed-off-by: Tommaso Merciai <tomm.merciai@gmail.com>
-> > > > > > > > > ---
-> > > > > > > > > Changes since v2:
-> > > > > > > > >  - Removed gpios/clock handling as suggested by LPinchart
-> > > > > > > > >  - Added vcc-ext-in supply support as suggested by LPinchart
-> > > > > > > > >  - Fixed alvium_setup_mipi_fmt funct as suggested by CJAILLET
-> > > > > > > > >  - Removed upside_down/hshake_bit priv data as suggested by CJAILLET
-> > > > > > > > >  - Fixed commit body as suggested by LPinchart
-> > > > > > > > >  - Mv alvium_set_streamon_delay to yalvium_set_lp2hs_delay
-> > > > > > > > >  - Fixed comment on lp2hs prop as suggested by LPinchart
-> > > > > > > > >  - Added pm resume/suspend functs as suggested by LPinchart
-> > > > > > > > >  - Dropped alvium_link_setup/alvium_s_power as suggested by LPinchart
-> > > > > > > > >  - Fixed regs defines as suggested by LPinchart
-> > > > > > > > >  - Fixed typedef as suggested by LPinchart
-> > > > > > > > >  - Dropped bcrm_v/fw_v from priv data as suggested by LPinchart
-> > > > > > > > >  - Now driver use the subdev active state to store the active format and crop
-> > > > > > > > >    as suggested by LPinchart
-> > > > > > > > >  - Dropped alvium_is_csi2/i2c_to_alvium as suggested by LPinchart
-> > > > > > > > > 
-> > > > > > > > > Changes since v3:
-> > > > > > > > >  - Fixed warnings Reported-by: kernel test robot <lkp@intel.com>
-> > > > > > > > > 
-> > > > > > > > > Changes since v4:
-> > > > > > > > >  - Removed print into alvium_get_dt_data for alliedvision,lp2hs-delay-us as
-> > > > > > > > >    suggested by CDooley
-> > > > > > > > > 
-> > > > > > > > >  drivers/media/i2c/Kconfig       |   10 +
-> > > > > > > > >  drivers/media/i2c/Makefile      |    1 +
-> > > > > > > > >  drivers/media/i2c/alvium-csi2.c | 3479 +++++++++++++++++++++++++++++++
-> > > > > > > > >  drivers/media/i2c/alvium-csi2.h |  485 +++++
-> > > > > > > > >  4 files changed, 3975 insertions(+)
-> > > > > > > > >  create mode 100644 drivers/media/i2c/alvium-csi2.c
-> > > > > > > > >  create mode 100644 drivers/media/i2c/alvium-csi2.h
-> > > > > 
-> > > > > [snip]
-> > > > > 
-> > > > > > > > > diff --git a/drivers/media/i2c/alvium-csi2.c b/drivers/media/i2c/alvium-csi2.c
-> > > > > > > > > new file mode 100644
-> > > > > > > > > index 000000000000..52c9263075cf
-> > > > > > > > > --- /dev/null
-> > > > > > > > > +++ b/drivers/media/i2c/alvium-csi2.c
-> > > > > > > > > @@ -0,0 +1,3479 @@
-> > > > > 
-> > > > > [snip]
-> > > > > 
-> > > > > > > > > +static int alvium_get_img_width_params(struct alvium_dev *alvium)
-> > > > > > > > > +{
-> > > > > > > > > +	struct device *dev = &alvium->i2c_client->dev;
-> > > > > > > > > +	int ret;
-> > > > > > > > > +	u64 val;
-> > > > > > > > > +
-> > > > > > > > > +	if (!alvium->bcrm_addr)
-> > > > > > > > > +		return -EINVAL;
-> > > > > > > > > +
-> > > > > > > > > +	ret = alvium_read(alvium,
-> > > > > > > > > +			  REG_BCRM_IMG_WIDTH_MIN_R,
-> > > > > > > > > +			  &val);
-> > > > > > > > > +	if (ret) {
-> > > > > > > > > +		dev_err(dev, "Fail to read img min width reg\n");
-> > > > > > > > > +		return ret;
-> > > > > > > > > +	}
-> > > > > > > > 
-> > > > > > > > Could you add a macro that assigns the value to the variable (or a struct
-> > > > > > > > field in this case) when the read is successful? Add the print if you think
-> > > > > > > > you need it.
-> > > > > > > 
-> > > > > > > I don't get this comment.
-> > > > > > > Can you explain me better your plan please.
-> > > > > > 
-> > > > > > You have exactly the same pattern repeated over and over in a number of
-> > > > > > functions. I'd like you to add a macro (or a function) that takes what
-> > > > > > varies as arguments, and call that function here. It would reduce a lot of
-> > > > > > the repeated lines code here.
-> > > > > > 
-> > > > > > ...
-> > > > > 
-> > > > > The best option is to print an error message in alvium_read() and drop
-> > > > > all error messages from the callers.
-> > > > 
-> > > > What about don't print anything? We already have prints that comes from
-> > > > CCI API if some errors occurs. Laurent suggest me this into some
-> > > > previous comments. Let me know.
-> > > 
-> > > We need to print something somewhere as silent failures are bad. The
-> > > messages printed by the CCI helpers are good enough, so no need to print
-> > > anything specific in the alvium driver.
-> > 
-> > Oooks I'll follow your way on v7, thanks Laurent.
-> > My plan is to switch to the following implementation:
-> > 
-> > 
-> > static int alvium_get_img_width_params(struct alvium_dev *alvium)
-> > {
-> > 	struct device *dev = &alvium->i2c_client->dev;
-> > 	u64 val;
-> > 	int ret = 0;
-> > 
-> > 	if (!alvium->bcrm_addr)
-> > 		return -EINVAL;
-> > 
-> > 	alvium_read(alvium, REG_BCRM_IMG_WIDTH_MIN_R, &val, &ret);
-> > 	alvium->img_min_width = val;
-> > 	dev_dbg(dev, "Min img width: %d\n", alvium->img_min_width);
-> > 
-> > 	alvium_read(alvium, REG_BCRM_IMG_WIDTH_MAX_R, &val, NULL);
-> 
-> I assume you mean &ret and not NULL here.
+It should be fully independent of the GMU wrapper series.
 
-Yes, sorry.
-Wrong paste.
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Changes in v4:
+- Fix an issue where half of patch 1 got squashed into the cover letter..
+- Link to v3: https://lore.kernel.org/r/20230517-topic-a7xx_prep-v3-0-a3ce3725385b@linaro.org
 
-> 
-> > 	alvium->img_max_width = val;
-> > 	dev_dbg(dev, "Max img width: %d\n", alvium->img_max_width);
-> > 
-> > 	alvium_read(alvium, REG_BCRM_IMG_WIDTH_INC_R, &val, &ret);
-> > 	alvium->img_inc_width = val;
-> > 	dev_dbg(dev, "img width increment: %d px\n", alvium->img_inc_width);
-> > 
-> > 	return ret;
-> > }
-> > 
-> > Like you suggest. :)
-> > What do you think about?
-> 
-> I would probably drop the debug messages, or at least group them all in
-> a single message at the end of the function to print all three values.
-> You should also not print the values if an error occurs during the
-> reads, as they will be undefined.
-> 
-> In general, while debug messages are useful, they should be used with
-> parcimony. Printing every single parameter passed by userspace, or
-> adding a debug message at the beginning of every function, would make
-> the kernel log very noisy and doesn't bring that much value.
+Changes in v3:
+- Pull more definitions from mesa
+- Decode CP_PROTECT_CNTL bitfields
+- Rebase on next-20230619
+- Link to v2: https://lore.kernel.org/r/20230517-topic-a7xx_prep-v2-0-5b9daa2b2cf0@linaro.org
 
-Ok, I'll try to collect your hints in v7.
+Changes in v2:
+- Drop switching to using the GMU_AO counter in timestamp
+- Add a definition for REG_A6XX_GMU_AHB_FENCE_STATUS_CLR, may be subbed
+  with a register sync after mesa MR22901
+- Link to v1: https://lore.kernel.org/r/20230517-topic-a7xx_prep-v1-0-7a964f2e99c2@linaro.org
 
-Thanks,
-Tommaso
+---
+Konrad Dybcio (6):
+      drm/msm/a6xx: Add some missing header definitions
+      drm/msm/a6xx: Use descriptive bitfield names for CP_PROTECT_CNTL
+      drm/msm/a6xx: Skip empty protection ranges entries
+      drm/msm/a6xx: Ensure clean GMU state in a6xx_gmu_fw_start
+      drm/msm/a6xx: Improve GMU force shutdown sequence
+      drm/msm/a6xx: Fix up GMU region reservations
 
-> 
-> -- 
-> Regards,
-> 
-> Laurent Pinchart
+ drivers/gpu/drm/msm/adreno/a6xx.xml.h     |  3 +++
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c     | 21 +++++++++++++++++----
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.xml.h |  2 ++
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c     | 14 ++++++++++----
+ 4 files changed, 32 insertions(+), 8 deletions(-)
+---
+base-commit: 9dbf40840551df336c95ce2a3adbdd25ed53c0ef
+change-id: 20230517-topic-a7xx_prep-787a69c7d0ff
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
+
