@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BFE3736055
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 02:04:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0130736053
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 02:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjFTAEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 20:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
+        id S229896AbjFTAEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 20:04:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjFTAEG (ORCPT
+        with ESMTP id S229726AbjFTAEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 20:04:06 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E963E1AD;
-        Mon, 19 Jun 2023 17:04:04 -0700 (PDT)
+        Mon, 19 Jun 2023 20:04:09 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2179E4A;
+        Mon, 19 Jun 2023 17:04:07 -0700 (PDT)
 Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2244F6606EEE;
-        Tue, 20 Jun 2023 01:04:00 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 16D756606F6C;
+        Tue, 20 Jun 2023 01:04:03 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687219443;
-        bh=oL8x3kiYbUoDvILJoZNWHsiSmB2xU/ZPVSowy65Dw1M=;
+        s=mail; t=1687219446;
+        bh=9a46aNnESj501/E03oYlm9sAjEXaazXllJOV13stIS8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DR4KIai6nxkCtFZdtfTS0T0oJtmBxcn3RP+Fo4c1yzE1wUsTkyQgGB7BDp70I68U6
-         /iqfAQ73WscOSP7pdMCgndkqo90cQk8ejwvF5/TPZ87uBzItx0jeAA3i7XtpB3Y98z
-         ZUjcv9FMHhQTwx+JyCZ47ZIrIfjTn/gEqYvvOhE/4BRLgHBmEi2MT2sVsORPJ7K3GY
-         t7X2fR+WlNqqz9spEAV8hH5Gra9vgbSQYXGqVdNi45U9sE8+bprKagvR9g7+W1vb1l
-         dGF4ryn3LJO9uBal4+7EerhTdec1MgxKRKYOPqBv0z3hgvTKY95OrZdqU/I94q6a5f
-         ljt7n0s0Jfhpg==
+        b=NOzUtIjFSr2clm3a6T2fzUKteoU+kcoP8OHu2+TsI5DEmtENrpe47KpB4ST2XlTxl
+         gYRKarP7wiyatbDwaUrJ/a5wAlZdBwOETlaxwCWNZ7GFqC0bam9Z35QzSIx3sThSIa
+         57Pu5JP/JYQ2r+C/ip82AyPj4CH1XL+dNR4Y4u1ulkEwcLbx4SiCipehQpUOzev3Dv
+         myhMTJcFCBZYPTLpkT5RnHFTALqDEkws3p6BfEPIPMLH2VkZaMdtortpaF040ZByu4
+         SSWbxojrlVU8Vhiw/x+hDgy/DBguU9wBaGs37ERXh6aMLMazs6yR9sY8FRNlO6V9YF
+         PBB4SUHth9svg==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     Matthias Brugger <matthias.bgg@gmail.com>,
@@ -50,9 +50,9 @@ Cc:     AngeloGioacchino Del Regno
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH v3 1/6] media: dt-bindings: mediatek,vcodec: Allow single clock for mt8183
-Date:   Mon, 19 Jun 2023 20:03:34 -0400
-Message-ID: <20230620000349.2122191-2-nfraprado@collabora.com>
+Subject: [PATCH v3 2/6] media: dt-bindings: mediatek,vcodec: Don't require assigned-clocks
+Date:   Mon, 19 Jun 2023 20:03:35 -0400
+Message-ID: <20230620000349.2122191-3-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230620000349.2122191-1-nfraprado@collabora.com>
 References: <20230620000349.2122191-1-nfraprado@collabora.com>
@@ -69,88 +69,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MT8173 and MT8183 have different clocks, and consequently clock-names.
-Relax the number of clocks and set clock-names based on compatible.
+On MT8183 it's not necessary to configure the parent for the clocks.
+Remove the assigned-clocks and assigned-clock-parents from the required
+list.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-
+Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
 
-Changes in v3:
-- Reintroduced this commit from v1 since the active clock is no longer
-  used.
-- Further constrained clocks as suggested in v1.
+(no changes since v1)
 
- .../media/mediatek,vcodec-decoder.yaml        | 37 ++++++++++++++-----
- 1 file changed, 28 insertions(+), 9 deletions(-)
+ .../devicetree/bindings/media/mediatek,vcodec-decoder.yaml      | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
-index fad59b486d5d..1506d2693f7d 100644
+index 1506d2693f7d..1e56ece44aee 100644
 --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
 +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
-@@ -27,18 +27,12 @@ properties:
-     maxItems: 1
+@@ -67,8 +67,6 @@ required:
+   - clocks
+   - clock-names
+   - iommus
+-  - assigned-clocks
+-  - assigned-clock-parents
  
-   clocks:
-+    minItems: 1
-     maxItems: 8
- 
-   clock-names:
--    items:
--      - const: vcodecpll
--      - const: univpll_d2
--      - const: clk_cci400_sel
--      - const: vdec_sel
--      - const: vdecpll
--      - const: vencpll
--      - const: venc_lt_sel
--      - const: vdec_bus_clk_src
-+    minItems: 1
-+    maxItems: 8
- 
-   assigned-clocks: true
- 
-@@ -88,6 +82,15 @@ allOf:
-       required:
-         - mediatek,scp
- 
-+      properties:
-+        clocks:
-+          minItems: 1
-+          maxItems: 1
-+
-+        clock-names:
-+          items:
-+            - const: vdec
-+
+ allOf:
    - if:
-       properties:
-         compatible:
-@@ -99,6 +102,22 @@ allOf:
-       required:
-         - mediatek,vpu
- 
-+      properties:
-+        clocks:
-+          minItems: 8
-+          maxItems: 8
-+
-+        clock-names:
-+          items:
-+            - const: vcodecpll
-+            - const: univpll_d2
-+            - const: clk_cci400_sel
-+            - const: vdec_sel
-+            - const: vdecpll
-+            - const: vencpll
-+            - const: venc_lt_sel
-+            - const: vdec_bus_clk_src
-+
- additionalProperties: false
- 
- examples:
 -- 
 2.41.0
 
