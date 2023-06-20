@@ -2,89 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 782A873764C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:56:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE69737657
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 23:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjFTUzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 16:55:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
+        id S229866AbjFTVAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 17:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjFTUzw (ORCPT
+        with ESMTP id S229576AbjFTVAm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 16:55:52 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4441718
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:55:51 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id C76E0320092D;
-        Tue, 20 Jun 2023 16:55:49 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 20 Jun 2023 16:55:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
-        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1687294549; x=1687380949; bh=jL
-        wjxXidYR03NQqMGEOwIDdRP2UTQNWbZ7zItOdShrw=; b=kzzsNaPOa0XFhhBycA
-        nWaMtSnqQ2DvpJ4s5KDSKzQwhuOmszKazGGgeWxgvQv/h+atmCnR105Dba7pOpEr
-        qyw+mYIAvvX0oSLnhpWuWvU1OuEwc/dIDUtx+hNsd4tYulYIyUtc9gvcjMjb3qXe
-        qlgV/hXaRg/dJWnzFTDl4u8WJpxuUAWBwfatNNnMqC1Ain9KegGGPrKQnmH4zWkG
-        H9I7cnIxgSgFeZgR3a1T8jVSTIJXusCHWae1VN+iKEdO19lKDdBsMK/t94BJ0ILw
-        lWqNDrvWfT9JTSK04wJ6Ky7f2FSViN3O7Qe6kwViGrxwj9WQLcrwhkQw8VTyUymF
-        QwUw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687294549; x=1687380949; bh=jLwjxXidYR03N
-        QqMGEOwIDdRP2UTQNWbZ7zItOdShrw=; b=e0ziG89/qBaJj7UwzLjoc27dXQsOZ
-        BVr0/4VI1Js1J8jF9H/Avt19GDmxYUn1t3bK+d19Rp525X9ySAxy+psiPxcC/XhO
-        KBDOzPJ7SYGAli+KMkUsqCCtNi9Bvj4JJ22EpYZ1eiuf+EDpYxzu5vgLXQk8pEfK
-        KfPkGxSUEVm3E7nTzG7BhwfDILGb+YLPo/lzI7pOxHEQi1mQqXqNIA6ewGO6Gn94
-        RMWUu8mWvdeeKw1icLdncsDIfizCCgJNTxERiy1M7wiDQ6rDomO8fvoahr4CYpdo
-        dtUFgUCHrojWVwb8/Q6zFQfpCcyBVLGKeusE8EdcxuvUnzN7+kk2JJ5ag==
-X-ME-Sender: <xms:VBKSZHSya69zvadFqQ2g3IRMMg4klPpEbV_Nw7uOp7O6QYfDjXoksQ>
-    <xme:VBKSZIxPFdYsnZFo_hzlcSn2wgnhoO2KH0jRcbXrby_D911F2-GDDI4YjkN1B-6sX
-    IdSwCXjBt-imJzeJQ>
-X-ME-Received: <xmr:VBKSZM3--gBMU_0Z-qxq1ZTLckn8RXSID02QOa-Mxt2fdouzTd27a9QrSrdffXrnbluYltESw63mAB1fdjgrhUSPjJaTba-S8pja0WO5OpKzyO_84fpXVdW8cj3d>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefhedgudefhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetnhgu
-    rhgvshcuhfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucggtf
-    frrghtthgvrhhnpedvffefvefhteevffegieetfefhtddvffejvefhueetgeeludehteev
-    udeitedtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrnhgurhgvshesrghnrghrrgiivghlrdguvg
-X-ME-Proxy: <xmx:VRKSZHAXqttydf6bZkV2jF_HhEAbVA5WNbtrlBGGFQTVWpoJbNMABw>
-    <xmx:VRKSZAhf_k_2S1xN_70UgzNCp5isdUUt34K_hApRhQUwyGaeVm0JoQ>
-    <xmx:VRKSZLpC9qS_vBlHeQOUF80K4XXSCByMAkAzR8uopUSM2mBIJkbmYA>
-    <xmx:VRKSZDP0M9a29fbW4a_8bGe7STs6lOzBWY8LbTmxkmqTeVXvu8MzVg>
-Feedback-ID: id4a34324:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 20 Jun 2023 16:55:48 -0400 (EDT)
-Date:   Tue, 20 Jun 2023 13:55:47 -0700
-From:   Andres Freund <andres@anarazel.de>
-To:     David Stevens <stevensd@chromium.org>
-Cc:     linux-mm@kvack.org, Peter Xu <peterx@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Yang Shi <shy828301@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jiaqi Yan <jiaqiyan@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 4/4] mm/khugepaged: maintain page cache uptodate flag
-Message-ID: <20230620205547.qzmivkjox2hkpzmm@awork3.anarazel.de>
-References: <20230404120117.2562166-1-stevensd@google.com>
- <20230404120117.2562166-5-stevensd@google.com>
+        Tue, 20 Jun 2023 17:00:42 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED60C10C2;
+        Tue, 20 Jun 2023 14:00:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=YcvY7QOtHwan3q4NreVnuR76TIbxVuHusS3f68VDMV0=; b=GM2uklojChzXnKbemQWZ/HGMrr
+        i07Yix95B3kAmwkG/XpxFd/MYy75xqDmI6Q2t/eZIC7+rYfo6nUt6+Nl7NSGeJswO1cqh7jE1QW6j
+        oE5Tmvdrf4j9Fo/DpJjNMH8mxbCmZnWpawEgtMvn/BccvWtT5qzbx8VQevYwK2pB3tetcL5/AZxEi
+        shDBA/7X18ioj3c7TgCo/gmJUUow8VWJ5dhM2vMtoAvyD3ukHzX7W8FtEzB9/LaJ2NCo8xVlo6EQL
+        XD8X4nSE4Ac5+3UJGKj+1yCOGmYlDqQZFOyJmXkiGE3fzIlElBYmXrzy639Lc4JLE3a0sBgZjbWWi
+        pkDzO60A==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qBiSs-00CLfB-2p;
+        Tue, 20 Jun 2023 21:00:38 +0000
+Message-ID: <4341aa87-c3b1-b0a4-4f82-c903c3085df3@infradead.org>
+Date:   Tue, 20 Jun 2023 14:00:37 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230404120117.2562166-5-stevensd@google.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] counter: Fix menuconfig "Counter support" submenu entries
+ disappearance
+Content-Language: en-US
+To:     William Breathitt Gray <william.gray@linaro.org>,
+        linux-iio@vger.kernel.org,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        andy.shevchenko@gmail.com
+References: <20230620170159.556788-1-william.gray@linaro.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230620170159.556788-1-william.gray@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -93,56 +63,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 2023-04-04 21:01:17 +0900, David Stevens wrote:
-> From: David Stevens <stevensd@chromium.org>
+On 6/20/23 10:01, William Breathitt Gray wrote:
+> The current placement of the I8254 Kconfig entry results in the
+> disappearance of the "Counter support" submenu items in menuconfig. Move
+> the I8254 above the menuconfig COUNTER entry to restore the intended
+> submenu behavior.
 > 
-> Make sure that collapse_file doesn't interfere with checking the
-> uptodate flag in the page cache by only inserting hpage into the page
-> cache after it has been updated and marked uptodate. This is achieved by
-> simply not replacing present pages with hpage when iterating over the
-> target range.
+> Fixes: d428487471ba ("counter: i8254: Introduce the Intel 8254 interface library module")
+> Reported-by: Jarkko Nikula <jarkko.nikula@linux.intel.com>
+> Closes: https://lore.kernel.org/all/32ddaa7b-53a8-d61f-d526-b545bd561337@linux.intel.com/
+> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+
+but why is I8254 here at all? Users cannot enable it
+and nothing selects it.  Is it a WIP?
+
+Thanks.
+
+> ---
+>  drivers/counter/Kconfig | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
 > 
-> The present pages are already locked, so replacing them with the locked
-> hpage before the collapse is finalized is unnecessary. However, it is
-> necessary to stop freezing the present pages after validating them,
-> since leaving long-term frozen pages in the page cache can lead to
-> deadlocks. Simply checking the reference count is sufficient to ensure
-> that there are no long-term references hanging around that would the
-> collapse would break. Similar to hpage, there is no reason that the
-> present pages actually need to be frozen in addition to being locked.
+> diff --git a/drivers/counter/Kconfig b/drivers/counter/Kconfig
+> index a61a4b9b8ec6..86536c2cc531 100644
+> --- a/drivers/counter/Kconfig
+> +++ b/drivers/counter/Kconfig
+> @@ -3,13 +3,6 @@
+>  # Counter devices
+>  #
+>  
+> -menuconfig COUNTER
+> -	tristate "Counter support"
+> -	help
+> -	  This enables counter device support through the Generic Counter
+> -	  interface. You only need to enable this, if you also want to enable
+> -	  one or more of the counter device drivers below.
+> -
+>  config I8254
+>  	tristate
+>  	select COUNTER
+> @@ -25,6 +18,13 @@ config I8254
+>  
+>  	  If built as a module its name will be i8254.
+>  
+> +menuconfig COUNTER
+> +	tristate "Counter support"
+> +	help
+> +	  This enables counter device support through the Generic Counter
+> +	  interface. You only need to enable this, if you also want to enable
+> +	  one or more of the counter device drivers below.
+> +
+>  if COUNTER
+>  
+>  config 104_QUAD_8
 > 
-> This fixes a race where folio_seek_hole_data would mistake hpage for
-> an fallocated but unwritten page. This race is visible to userspace via
-> data temporarily disappearing from SEEK_DATA/SEEK_HOLE. This also fixes
-> a similar race where pages could temporarily disappear from mincore.
-> 
-> Fixes: f3f0e1d2150b ("khugepaged: add support of collapse for tmpfs/shmem pages")
-> Signed-off-by: David Stevens <stevensd@chromium.org>
+> base-commit: d428487471ba6640ee8bcdabaf830aec08b85400
 
-I noticed that recently MADV_COLLAPSE stopped being able to collapse a
-binary's executable code, always failing with EAGAIN. I bisected it down to
-a2e17cc2efc7 - this commit.
-
-Using perf trace -e 'huge_memory:*' -a I see
-
-  1000.433 postgres.2/1872144 huge_memory:mm_khugepaged_collapse_file(mm: 0xffff889e800bdf00, hpfn: 46720000, index: 1537, is_shmem: 1, filename: "postgres.2", result: 17)
-  1000.445 postgres.2/1872144 huge_memory:mm_khugepaged_scan_file(mm: 0xffff889e800bdf00, pfn: -1, filename: "postgres.2", present: 512, result: 17)
-  1000.485 postgres.2/1872144 huge_memory:mm_khugepaged_collapse_file(mm: 0xffff889e800bdf00, hpfn: 46720000, index: 2049, is_shmem: 1, filename: "postgres.2", result: 17)
-  1000.489 postgres.2/1872144 huge_memory:mm_khugepaged_scan_file(mm: 0xffff889e800bdf00, pfn: -1, filename: "postgres.2", present: 512, result: 17)
-  1000.526 postgres.2/1872144 huge_memory:mm_khugepaged_collapse_file(mm: 0xffff889e800bdf00, hpfn: 46720000, index: 2561, is_shmem: 1, filename: "postgres.2", result: 17)
-  1000.532 postgres.2/1872144 huge_memory:mm_khugepaged_scan_file(mm: 0xffff889e800bdf00, pfn: -1, filename: "postgres.2", present: 512, result: 17)
-  1000.570 postgres.2/1872144 huge_memory:mm_khugepaged_collapse_file(mm: 0xffff889e800bdf00, hpfn: 46720000, index: 3073, is_shmem: 1, filename: "postgres.2", result: 17)
-  1000.575 postgres.2/1872144 huge_memory:mm_khugepaged_scan_file(mm: 0xffff889e800bdf00, pfn: -1, filename: "postgres.2", present: 512, result: 17)
-
-for every attempt at doing madvise(MADV_COLLAPSE).
-
-
-I'm sad about that, because MADV_COLLAPSE was the first thing that allowed
-using huge pages for executable code that wasn't entirely completely gross.
-
-
-I don't yet have a standalone repro, but can write one if that's helpful.
-
-Greetings,
-
-Andres Freund
+-- 
+~Randy
