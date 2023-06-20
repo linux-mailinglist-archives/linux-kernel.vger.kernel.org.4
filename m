@@ -2,105 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B76F973722E
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80D6D737232
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:59:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbjFTQ50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 12:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43568 "EHLO
+        id S230431AbjFTQ7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 12:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230518AbjFTQ5X (ORCPT
+        with ESMTP id S229725AbjFTQ73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 12:57:23 -0400
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD480E68;
-        Tue, 20 Jun 2023 09:57:21 -0700 (PDT)
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3420ed1a745so20220715ab.3;
-        Tue, 20 Jun 2023 09:57:21 -0700 (PDT)
+        Tue, 20 Jun 2023 12:59:29 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BF6E42
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:59:27 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-30adc51b65cso5085057f8f.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:59:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google; t=1687280366; x=1689872366;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iFGev71zOSbUwc9Ipdme/ZAxUB7isGkByEQJ4BO7RuU=;
+        b=csYtTXyre+3fJAdfsJmH5x4q253rZjhqSL6nkUR9EbWvn0z4eQn99DEpJcvyMz/N2B
+         xvG4xNctd5VW6P54WYaxari2Ksw/Ave6KKjVIMOXWEjYwEp4EAgNGjbI2i4/r1VBbRkj
+         XG2G6E50aTAUO1Y4YwUKTkNyDt7N3bTtRJzVzkoN/Fu0OYTxCfnna5U9lKomemVvAKqx
+         2iJAdKjqb5jcsva8gs+2WF9d4HVAcC6DdkSDx051c+yZRtucnwVj+2KL1P+A/FyU7uzA
+         U8zci+DmIAG6SJMR1QdzgOcLgS5VjIf4SXO0+XMjNhliHWaFN92HkwPt+gKTDJ1QnyfB
+         VUmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687280241; x=1689872241;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fC5LTzrdW72AjRfXsobL8u3UH+veW/fbZ9ZJyUEUeyc=;
-        b=HUq7mKQKWf19VJTMTtdEIlIgrZ00Ywq3wZFaiDIVMXwgdMPHSz/HCNpR9Nk9/S5aZU
-         UZmQ/U5zRX4A2yXwa23ixgaRzQ1RKwXPaymuVOEe9Mzh6uKSXxtzsBqzuMgUmIGbo/UD
-         tBlMs8Ib0Az3ufqNunqkyIl2M30Q4fVDnywdUcg7o4K34gis0PL8O2WtoIYdrGUOiIj4
-         dGjUNRCXTElpOSOeqY3rSkIpjgt2lwfvwQw2MqD12VmBVSUoLnAU7VjeFNFvnPCJAEb5
-         ZmR9Q5cSJFXXlXibA7aYbWlSqJ1xxi662NDmRQiFIK75z8IOlTgKALPUCqcAc0PvVCmm
-         3B2w==
-X-Gm-Message-State: AC+VfDx6as3OUzNSkjIdu5yeo3LqOlQho+78oSc8v+HvcYJ6rodLShce
-        ch+NqEtJlVW10GCi37Ob3w==
-X-Google-Smtp-Source: ACHHUZ6Wepi8qaaAa7+QyMTVgGI7G32JZdMVMM6o+c/Yvv5Tqm/Ued6aJXSw2qrtLL6F4MGXPFOwjQ==
-X-Received: by 2002:a92:c806:0:b0:341:c484:1c36 with SMTP id v6-20020a92c806000000b00341c4841c36mr11987996iln.8.1687280240930;
-        Tue, 20 Jun 2023 09:57:20 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id p17-20020a92d491000000b0034248a56432sm703724ilg.32.2023.06.20.09.57.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 09:57:20 -0700 (PDT)
-Received: (nullmailer pid 3815844 invoked by uid 1000);
-        Tue, 20 Jun 2023 16:57:18 -0000
-Date:   Tue, 20 Jun 2023 10:57:18 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Banajit Goswami <bgoswami@quicinc.com>, devicetree@vger.kernel.org,
-        Patrick Lai <quic_plai@quicinc.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Conor Dooley <conor+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH v4 1/2] ASoC: dt-bindings: qcom,wsa8840: Add WSA884x
- family of speakers
-Message-ID: <168728023784.3815805.7354509685855772862.robh@kernel.org>
-References: <20230616115751.392886-1-krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20221208; t=1687280366; x=1689872366;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iFGev71zOSbUwc9Ipdme/ZAxUB7isGkByEQJ4BO7RuU=;
+        b=P1o7U3vM5JKfIJXdvqKFBYVI1Jw2agDN3HuSzbYxSuRYSGdPhiHsFT1T5VXDx4RaDo
+         XSxVk9apwI5Dh/v2CY1Gc8vA5UthH6wm/Xcfk71z7BXofPsO9B4gur2fGd4LizJ0VdDG
+         P5R+ElMp4FDe8mwT5vVu0O6MUt+n7DBTzTINUHj8OqfRWo5oUqtbyoHxZ3oBV4mqLp44
+         e9UDdNuzIQa/Hrao4ghrpj/ykK0DS0QR+rmkivXdUBTbENi3Os9nBh451TcR6OKT4wf7
+         7mOhe2zHh65D9SFExCI+oXj7cQRY5TaGAMgDEM8bKEDr84BQr8S0H3e4YmkBIqSJVsA/
+         zTbQ==
+X-Gm-Message-State: AC+VfDw7B3BOV9B/M4EXqa1LPAvNI2mfnwRiBecjucjsJIlO9RMTq0RT
+        eiDEbAdSLQaDJltnLaU55vxOWQ==
+X-Google-Smtp-Source: ACHHUZ4Od9jnD8B4wGHwa48B70g3JbHTkdUhQakX8BFWBVnF3ui5jOimXG0SRMmf1h+Z4StEnd5Prw==
+X-Received: by 2002:adf:e848:0:b0:311:15ae:2cd2 with SMTP id d8-20020adfe848000000b0031115ae2cd2mr12172066wrn.15.1687280366354;
+        Tue, 20 Jun 2023 09:59:26 -0700 (PDT)
+Received: from [10.83.37.24] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id t13-20020adff60d000000b003119633ecb5sm2364328wrp.88.2023.06.20.09.59.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 09:59:25 -0700 (PDT)
+Message-ID: <973f8619-15ff-608e-250b-356f5c140a2a@arista.com>
+Date:   Tue, 20 Jun 2023 17:59:24 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616115751.392886-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [v2 PATCH] crypto: api - Add __crypto_alloc_tfmgfp
+Content-Language: en-US
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     linux-kernel@vger.kernel.org, Bob Gilligan <gilligan@arista.com>,
+        David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Francesco Ruggeri <fruggeri05@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        linux-crypto@vger.kernel.org
+References: <20230614174643.3836590-1-dima@arista.com>
+ <20230614174643.3836590-3-dima@arista.com>
+ <ZIrTQ1tN5LMuRB/5@gondor.apana.org.au>
+ <6aa4521f-e5d2-ed12-ab49-1132409ab358@arista.com>
+From:   Dmitry Safonov <dima@arista.com>
+In-Reply-To: <6aa4521f-e5d2-ed12-ab49-1132409ab358@arista.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Herbert,
 
-On Fri, 16 Jun 2023 13:57:50 +0200, Krzysztof Kozlowski wrote:
-> Add binding for WSA8840/WSA8845/WSA8845H smart speaker amplifiers used
-> in Qualcomm QRD8550 board with SM8550 SoC.
+On 6/15/23 17:19, Dmitry Safonov wrote:
+> On 6/15/23 10:00, Herbert Xu wrote:
+> [..]
+>>
+>> Good catch.  Though I'd rather add the gfp argument to a separate
+>> function because I'm in the process of replacing ciphers with
+>> something that uses the new crypto_types API.
+>>
+>> Once that happens ciphers will switch over to the normal cloning
+>> call and this can be removed.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Changes in v4:
-> 1. None.
-> 
-> Changes in v3:
-> 1. None.
-> 
-> Changes in v2:
-> 1. Correct compatible (sdw version 1 -> 2).
-> 
-> Cc: Patrick Lai <quic_plai@quicinc.com>
-> Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> ---
->  .../bindings/sound/qcom,wsa8840.yaml          | 66 +++++++++++++++++++
->  1 file changed, 66 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/sound/qcom,wsa8840.yaml
-> 
+> LGTM, thanks!
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Would you prefer me to resend this v2 or you're happy to apply with your
+proposed changes?
+
+>> ---8<---
+>> Use it straight away in crypto_clone_cipher(), as that is not meant to
+>> sleep.
+>>
+>> Fixes: 51d8d6d0f4be ("crypto: cipher - Add crypto_clone_cipher")
+>> Signed-off-by: Dmitry Safonov <dima@arista.com>
+>> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+>>
+>> diff --git a/crypto/api.c b/crypto/api.c
+> [..]
+
+Thanks,
+          Dmitry
 
