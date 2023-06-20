@@ -2,105 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7FB6737668
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 23:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128B273766B
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 23:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbjFTVGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 17:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
+        id S230009AbjFTVIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 17:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjFTVG2 (ORCPT
+        with ESMTP id S229478AbjFTVIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 17:06:28 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E271728
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:06:27 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-760dff4b701so69415139f.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:06:27 -0700 (PDT)
+        Tue, 20 Jun 2023 17:08:36 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FC9B1727
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:08:35 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-1aa291b3fc7so2368553fac.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:08:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1687295187; x=1689887187;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/7FX3ei7WxljWiN/f0vRH44gl13P4MQNxcfvKkmN450=;
-        b=hl+HSCKh1jjpj7EVjSOdcH3FNkKmXDISO0FSTWbCfn4dpCn6jnkbHh//C2uON2Et5D
-         bPxxfDz+QhWnCzonzREEGrUcI0MQG/k7AvYIhIeEfxy0JMZ+SAucDo0v2uaoJfwaNlif
-         F3nj8ixRR5xYdwLITnF0ubkugPDIVaAZ+RUD0=
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687295314; x=1689887314;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WmQQrNKBdrthlpawxC6xSdaVyb+Lurpl8t3TyJczrHw=;
+        b=eu8qAVzcVZ8viHWEn7DJKQysOyHmyN3H358TpGlWOUq5rxusTRo5WvKJvwfkIAiC7e
+         y8+IjksmtlSZE+llEeSTVW1JGeFoshOOW2tRaT17CmyyZw/HhqK5fvMGi2zQYoGhxnBz
+         8qr/i9D+fjBbGnjTbB/WayODTELNKjEtRust9SgKeAryQdSeLh+RqIMFBZyeUgQmi28E
+         P4Gf7tpI/jEUkm8uH4sGRiTycLmKS5QTRkMBK7NCFmvnRYkK/41BvGkKyv/CBAFAc7dY
+         VU7klFXImiTY9qwJChlkdax0uD5zErezTXP3Ub7lCADlqhIDW3DVw8PFtZi3igb4B3sH
+         kXRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687295187; x=1689887187;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/7FX3ei7WxljWiN/f0vRH44gl13P4MQNxcfvKkmN450=;
-        b=gaituN9WsiokxH5nRut7FAf/9lqIV/5OtqJCTcERLEDY3h/np5Gb+WP1+Z7FYrc08M
-         KAhGJfaduFx+JfXq7TNuc8aqKnmjKA478TrifIXJBjne1QjN2+dlWXwnScqwamyHs4nR
-         mWqq8gVfTM95z/mjuYTzJFM0Tj1hcA0vZkeAQ9Cv78N4KjzKWmaDg+B2xVOiGgfNzfKA
-         p8yeEeqlSwMaaNspysuP4IwetXbV1JEVL6Rj/VqeUp4I9SW4ERBPvVe1FjbEP7NE0J68
-         uzxfT/aAfJVCB3AYTYNCcE9tB03w5652Sz3S0rgU8mK8u9SuIXXo6FEuE4Gj7nNUuiDU
-         2N0g==
-X-Gm-Message-State: AC+VfDwnHIj/kEilTtKU3Qh77bmE8tG7PLZJ3TDp/U/49V0MvH3Onu2X
-        zECJSUCYX6L6VpuwX3MUsTd9Ig==
-X-Google-Smtp-Source: ACHHUZ5ub/upUVXfagLIdSXqCeAq1WjOIQyGj28Ycc/XO8AfL1PFN4uT/IAL+nW4ERq301c21CELVA==
-X-Received: by 2002:a05:6e02:ee6:b0:343:ce12:d51 with SMTP id j6-20020a056e020ee600b00343ce120d51mr1182393ilk.2.1687295186938;
-        Tue, 20 Jun 2023 14:06:26 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id k24-20020a02cb58000000b0041ab9b6f5b0sm880647jap.128.2023.06.20.14.06.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jun 2023 14:06:26 -0700 (PDT)
-Message-ID: <ccc8f0d2-d397-21b1-80bc-fe1002f7179c@linuxfoundation.org>
-Date:   Tue, 20 Jun 2023 15:06:25 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 5.4 00/64] 5.4.248-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230619102132.808972458@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230619102132.808972458@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687295314; x=1689887314;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WmQQrNKBdrthlpawxC6xSdaVyb+Lurpl8t3TyJczrHw=;
+        b=cvRqk623eeUv6HvKRAIbug+syENMxiDkC4qB75hcvq41rjxrJWycXSFlPTzRlZYwfn
+         0pdI6dAl73Sku3Gj/u+WHW+WWiLsYToQd7a6aRK44+2u1snjvEPwmG4HCj4Ty3r+A5ft
+         5OMJyaEvOYHqHOx+46Oy/9YBiPeVZ9OYqTPuE3v6wwR1LNTEdmEtSX6aywJVRmMR+9OX
+         VYtoqbAUi5yFTsm6htwv+zw3InHJxA1Ucs/duRvmT61fRIHUAhgx8kLqhJwqnnBNi0CT
+         eIRNbmVi+IL7vZaDfMbiHpAv/4QDr1hAmLo7266Aea2ENdkuNek/C0P1oUmxXoI5pDQ7
+         FMgQ==
+X-Gm-Message-State: AC+VfDzGJzRIpha/Kocj+n9tRtqiVGfpYdTAfA/E9IjLAjg1JX1k0M/I
+        OOsZ4FTrmdQOLnMufoBtP4A9nA==
+X-Google-Smtp-Source: ACHHUZ4q7GAPvNl9PhSyjVJz8XZjp4tybptAmSud0iv4ZRcmwfCg4iYtk4YoFllY6NDuIZ/YAfkmsg==
+X-Received: by 2002:a05:6870:2206:b0:1ad:f52:81c7 with SMTP id i6-20020a056870220600b001ad0f5281c7mr109198oaf.17.1687295314287;
+        Tue, 20 Jun 2023 14:08:34 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id t12-20020a17090ad50c00b0025e2b703adesm1863846pju.41.2023.06.20.14.08.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 14:08:33 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 14:08:33 -0700 (PDT)
+X-Google-Original-Date: Tue, 20 Jun 2023 14:07:54 PDT (-0700)
+Subject:     Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+In-Reply-To: <CAKwvOdm4FLSq41WTzmPqCeNh-WBX1_rtKpT3zwyGez7bZ-jE7w@mail.gmail.com>
+CC:     Conor Dooley <conor@kernel.org>, jszhang@kernel.org,
+        llvm@lists.linux.dev, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     ndesaulniers@google.com
+Message-ID: <mhng-3ceb19b1-0af6-451e-816d-8ab5c68b5fea@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/19/23 04:29, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.248 release.
-> There are 64 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 21 Jun 2023 10:21:12 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.248-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+On Tue, 20 Jun 2023 13:47:07 PDT (-0700), ndesaulniers@google.com wrote:
+> On Tue, Jun 20, 2023 at 4:41 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>>
+>> On Tue, 20 Jun 2023 13:32:32 PDT (-0700), ndesaulniers@google.com wrote:
+>> > On Tue, Jun 20, 2023 at 4:13 PM Conor Dooley <conor@kernel.org> wrote:
+>> >>
+>> >> On Tue, Jun 20, 2023 at 04:05:55PM -0400, Nick Desaulniers wrote:
+>> >> > On Mon, Jun 19, 2023 at 6:06 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>> >> > > On Thu, 15 Jun 2023 06:54:33 PDT (-0700), Palmer Dabbelt wrote:
+>> >> > > > On Wed, 14 Jun 2023 09:25:49 PDT (-0700), jszhang@kernel.org wrote:
+>> >> > > >> On Wed, Jun 14, 2023 at 07:49:17AM -0700, Palmer Dabbelt wrote:
+>> >> > > >>> On Tue, 23 May 2023 09:54:58 PDT (-0700), jszhang@kernel.org wrote:
+>> >>
+>> >> > > >> Commit 3b90b09af5be ("riscv: Fix orphan section warnings caused by
+>> >> > > >> kernel/pi") touches vmlinux.lds.S, so to make the merge easy, this
+>> >> > > >> series is based on 6.4-rc2.
+>> >> > > >
+>> >> > > > Thanks.
+>> >> > >
+>> >> > > Sorry to be so slow here, but I think this is causing LLD to hang on
+>> >> > > allmodconfig.  I'm still getting to the bottom of it, there's a few
+>> >> > > other things I have in flight still.
+>> >> >
+>> >> > Confirmed with v3 on mainline (linux-next is pretty red at the moment).
+>> >> > https://lore.kernel.org/linux-riscv/20230517082936.37563-1-falcon@tinylab.org/
+>> >>
+>> >> Just FYI Nick, there's been some concurrent work here from different
+>> >> people working on the same thing & the v3 you linked (from Zhangjin) was
+>> >> superseded by this v2 (from Jisheng).
+>> >
+>> > Ah! I've been testing the deprecated patch set, sorry I just looked on
+>> > lore for "dead code" on riscv-linux and grabbed the first thread,
+>> > without noticing the difference in authors or new version numbers for
+>> > distinct series. ok, nevermind my noise.  I'll follow up with the
+>> > correct patch set, sorry!
+>>
+>> Ya, I hadn't even noticed the v3 because I pretty much only look at
+>> patchwork these days.  Like we talked about in IRC, I'm going to go test
+>> the merge of this one and see what's up -- I've got it staged at
+>> <https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?h=for-next&id=1bd2963b21758a773206a1cb67c93e7a8ae8a195>,
+>> though that won't be a stable hash if it's actually broken...
+>
+> Ok, https://lore.kernel.org/linux-riscv/20230523165502.2592-1-jszhang@kernel.org/
+> built for me.  If you're seeing a hang, please let me know what
+> version of LLD you're using and I'll build that tag from source to see
+> if I can reproduce, then bisect if so.
+>
+> $ ARCH=riscv LLVM=1 /usr/bin/time -v make -j128 allmodconfig vmlinux
+> ...
+>         Elapsed (wall clock) time (h:mm:ss or m:ss): 2:35.68
+> ...
+>
+> Tested-by: Nick Desaulniers <ndesaulniers@google.com> # build
 
-Compiled and booted on my test system. No dmesg regressions.
+OK, it triggered enough of a rebuild that it might take a bit for 
+anything to filter out.
 
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
+Thanks!
 
-thanks,
--- Shuah
+>
+>>
+>> >
+>> >>
+>> >> Cheers,
+>> >> Conor.
+>> >
+>> >
+>> >
+>> > --
+>> > Thanks,
+>> > ~Nick Desaulniers
+>
+>
+>
+> -- 
+> Thanks,
+> ~Nick Desaulniers
