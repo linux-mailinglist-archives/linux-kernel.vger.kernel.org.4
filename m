@@ -2,139 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A36CB7372DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E81E17372DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:29:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjFTR2o convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Jun 2023 13:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60836 "EHLO
+        id S231130AbjFTR3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 13:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjFTR2m (ORCPT
+        with ESMTP id S231142AbjFTR3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 13:28:42 -0400
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42E27198E;
-        Tue, 20 Jun 2023 10:28:20 -0700 (PDT)
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-98502b12fd4so146808466b.1;
-        Tue, 20 Jun 2023 10:28:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687282089; x=1689874089;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fQlXsYrTkFXO69Z3GZpG+j7FcAnDp1PsJvQS6+DCsQk=;
-        b=hXPtMFqZsOxVNZM4/T2eYmSs3B26xoMf6lltnkLTnipeH+/RMklvlhRwQpEIuCoi3x
-         JC2jz0L8YIVLtNexuH1+ebiCogy4mm31x5VTfbLaLanDmg4jg+KnatHzMFFwkh/f1Yy2
-         0zPFqcyQnD140CmUcowt631+jKee2Rp37YoRgKk7zVPmarg+8/R7Pk3NOJE6ZbRfXEUN
-         mxayP36SdtcowGwrWBE/wm+8ZAmFfviJzwbrV6uKC4OfYSTOYmSsVv8OUPIbgCJxiyjF
-         QA2pWHmaUsOcE8HvbpC57IEWm09xHFSNg/WihAhNg48R4KkjwHoyHlxSCK4VlFduLTiC
-         nILQ==
-X-Gm-Message-State: AC+VfDzi71dNuD5+ZzRQRQAGYl5+Y6oU1tkzWMRHXnR0ogy8liMEUn/E
-        IFIh5pb6acfAVxU6njEEePRpyohidFkNc83u1kY=
-X-Google-Smtp-Source: ACHHUZ6MjozgLXsxnyuXKl480P6hjgcEpRvIYd/fSNe5bzFOhhO62ZowEfAm5Aql3TydPieM4TFRRsT9FXiEDDOJd9s=
-X-Received: by 2002:a17:906:7793:b0:974:5de8:b5ce with SMTP id
- s19-20020a170906779300b009745de8b5cemr9175401ejm.2.1687282089288; Tue, 20 Jun
- 2023 10:28:09 -0700 (PDT)
+        Tue, 20 Jun 2023 13:29:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CB71995;
+        Tue, 20 Jun 2023 10:29:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68D4F61316;
+        Tue, 20 Jun 2023 17:29:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40909C433C0;
+        Tue, 20 Jun 2023 17:29:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687282154;
+        bh=lioq7mex040QABLYI2qsir/2Ee7Vlv3H1GUQrVC7a1g=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=AX/ucCzosrfmmUjihrXZ3Jg0wYzmj2LxqptcCPX9l82bXdhFy6lLM7RPLJ7vUYD0W
+         weIh5TYKkap/EMk/jiLL/wVvS1mlSVRXs8/5gBOw5Ou6iU28ZPwuPQd1I+0FQw9ait
+         CX1dpjYuKqhtXbQKqWbZdX2k8pnLfEE1wWKDL8z4L7EWF2Yj3NlSrz/KYGgRuoDvyB
+         sW9AHehm8X0F55BpKVlJVI4TCSKOYX8pFfnPJgQg21AfqOKccmMSCKxbeyivcHPW6A
+         P+84JtUO7wpckJpq0adzFYcO5aLQXGthq4hAu+J5ZxHuDX2bHt6lte70lnOfcoY2Db
+         mjkybMX9H1Iig==
+From:   Mark Brown <broonie@kernel.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Shenghao Ding <13916275206@139.com>,
+        alsa-devel@alsa-project.org,
+        Colin Ian King <colin.i.king@gmail.com>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230620095620.2522058-1-colin.i.king@gmail.com>
+References: <20230620095620.2522058-1-colin.i.king@gmail.com>
+Subject: Re: [PATCH][next] ASoC: tas2781: Fix spelling mistake
+ "calibraiton" -> "calibration"
+Message-Id: <168728215296.92979.15498830214406273531.b4-ty@kernel.org>
+Date:   Tue, 20 Jun 2023 18:29:12 +0100
 MIME-Version: 1.0
-References: <20230519032719.2581689-1-evalenti@kernel.org> <20230519032719.2581689-6-evalenti@kernel.org>
-In-Reply-To: <20230519032719.2581689-6-evalenti@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 20 Jun 2023 19:27:57 +0200
-Message-ID: <CAJZ5v0hho1B6TiwshT4kYhs+Z4Q6xvnbgf8aoEZop=owkJHqxg@mail.gmail.com>
-Subject: Re: [PATCH 5/7] thermal: stats: introduce tz time in trip
-To:     Eduardo Valentin <evalenti@kernel.org>
-Cc:     eduval@amazon.com, linux-pm@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 5:27 AM Eduardo Valentin <evalenti@kernel.org> wrote:
->
-> From: Eduardo Valentin <eduval@amazon.com>
->
-> This patch adds a statistic to report how long
-> the thermal zone spent on temperature intervals
-> created by each trip point. The first interval
-> is the range below the first trip point. All
-> subsequent intervals are accounted when temperature
-> is above the trip point temperature value.
->
-> Samples:
-> $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
-> trip-1  0       0
+On Tue, 20 Jun 2023 10:56:20 +0100, Colin Ian King wrote:
+> There is a spelling mistake in a dev_err message. Fix it. Also fix
+> grammar and add space between last word and (%d)".
+> 
+> 
 
-The above line is confusing.
+Applied to
 
-> trip0   -10000  35188
-> trip1   25000   0
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-And the format violates the "one value per attribute" sysfs rule.
+Thanks!
 
-> $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
-> trip-1  0       0
-> trip0   -10000  36901
-> trip1   25000   0
-> $ echo 25001 > /sys//class/thermal/thermal_zone0/emul_temp
-> $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
-> trip-1  0       0
-> trip0   -10000  47810
-> trip1   25000   2259
-> $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
-> trip-1  0       0
-> trip0   -10000  47810
-> trip1   25000   3224
-> $ echo 24001 > /sys//class/thermal/thermal_zone0/emul_temp
-> $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
-> trip-1  0       0
-> trip0   -10000  48960
-> trip1   25000   10080
-> $ cat /sys//class/thermal/thermal_zone0/stats/time_in_trip_ms
-> trip-1  0       0
-> trip0   -10000  49844
-> trip1   25000   10080
->
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
-> Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
-> Cc: Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
-> Cc: Jonathan Corbet <corbet@lwn.net> (maintainer:DOCUMENTATION)
-> Cc: linux-pm@vger.kernel.org (open list:THERMAL)
-> Cc: linux-doc@vger.kernel.org (open list:DOCUMENTATION)
-> Cc: linux-kernel@vger.kernel.org (open list)
->
-> Signed-off-by: Eduardo Valentin <eduval@amazon.com>
-> ---
->  .../driver-api/thermal/sysfs-api.rst          |  2 +
->  drivers/thermal/thermal_sysfs.c               | 86 +++++++++++++++++++
->  2 files changed, 88 insertions(+)
->
-> diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation/driver-api/thermal/sysfs-api.rst
-> index ed5e6ba4e0d7..4a2b92a7488c 100644
-> --- a/Documentation/driver-api/thermal/sysfs-api.rst
-> +++ b/Documentation/driver-api/thermal/sysfs-api.rst
-> @@ -359,6 +359,8 @@ Thermal zone device sys I/F, created once it's registered::
->      |---stats/reset_tz_stats:  Writes to this file resets the statistics.
->      |---stats/max_gradient:    The maximum recorded dT/dt in uC/ms.
->      |---stats/min_gradient:    The minimum recorded dT/dt in uC/ms.
-> +    |---stats/time_in_trip_ms: Time spent on each temperature interval of
-> +                               trip points.
+[1/1] ASoC: tas2781: Fix spelling mistake "calibraiton" -> "calibration"
+      commit: 0a08778126284481c300336f1ba3d7b1906851a5
 
-I would write "in each temperature interval between consecutive trip points".
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Doesn't this assume a specific temperature ordering of trip points?
-And so what if they are not ordered?
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
