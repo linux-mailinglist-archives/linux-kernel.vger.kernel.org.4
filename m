@@ -2,130 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7C567374E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 21:09:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 682DF7374EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 21:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbjFTTJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 15:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52590 "EHLO
+        id S230365AbjFTTK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 15:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjFTTJb (ORCPT
+        with ESMTP id S229694AbjFTTKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 15:09:31 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E16110A
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:09:30 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-25e89791877so2336804a91.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:09:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687288170; x=1689880170;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ytH528+6WpSb0dZHhh81EzPmGbD3lujTa1m5kVVR73U=;
-        b=Vg7aRJiobSB8vabvycHKxt9jE2Zod2WVtG+dK8ZV/AkXk074E7eGpkxQ8ePIp35vEh
-         pDsjlWfj3tK6z0wZ1HtQ8O9vrEklZ2CoKxKPcwPuA4QWzQySfxnycGv48wnVht6n8CvJ
-         Jnb8/hsYpeX2PHzTgFGK+NhgCTcZsLANNcuWlJbyPsMElPzb+C+K/8znFfqWHlQfiGaU
-         W8L7VIjSSTD9MJqC4BlkBIyfwMgVdyHOjJvo+EKKJdMZA1saAfIZ/vIYB0k6WoCIXKMM
-         u/LmeBaQIKzhff8qH3wnigbi9pDYb2AizucCgP+oYvfFdENBb4xiPdWRKh8DdlTNSCtd
-         ROfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687288170; x=1689880170;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ytH528+6WpSb0dZHhh81EzPmGbD3lujTa1m5kVVR73U=;
-        b=Mey4PH+F6v/D5aAqh4GP3Znjt2XcXb/yzGtF9QsA6dXeMGx7+VMmNUTlPu35ZZFDD6
-         Qgm8uo2z7Dim75+zXH/nrSChMRjlQfz3oN4zG3PXdQ3p09Y2t90UhqiHO5268hGJS8WQ
-         Xs+fcxgvpvwPYKAIjk8n3i5QF29oKOtZr9PiU5Wul8umKY4TBMYKH+K9TqnvpNTdJcAy
-         yYWOHto06gdKBaQfpZGCly0+byhq0staJ4HgefpBjeuAx3KAVnAI+pYrkya/s1jtj+ZL
-         95/Gps8tFApl9W15zveDnMCLlL0F2ut2V/om9Ieb3o+hQFeTnEAxfjGwHWcptZHb3aPy
-         oTLg==
-X-Gm-Message-State: AC+VfDwbyETgz2upCVZl/tKLhOHVjR9B5SrNOYGOgD5A3ZMmUT7XvkQ5
-        r+xaoCe4EZJPdZq0g5dLnQvrZA==
-X-Google-Smtp-Source: ACHHUZ72JLPQLZAYpsNebvtJdqti/7re0M1kuGAadWiHswxLCmxzbR3HDZS0v6hY64vy34weYmzHGQ==
-X-Received: by 2002:a17:90a:43e5:b0:25e:d013:c22c with SMTP id r92-20020a17090a43e500b0025ed013c22cmr5639863pjg.47.1687288169637;
-        Tue, 20 Jun 2023 12:09:29 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id l2-20020a17090b078200b00259b53dccddsm1813287pjz.34.2023.06.20.12.09.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 12:09:28 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 12:09:28 -0700 (PDT)
-X-Google-Original-Date: Tue, 20 Jun 2023 12:08:47 PDT (-0700)
-Subject:     Re: [PATCH v5 1/4] RISC-V: add Zbc extension detection
-In-Reply-To: <20230612-unstable-tilt-1835f84363b1@spud>
-CC:     heiko@sntech.de, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, herbert@gondor.apana.org.au,
-        davem@davemloft.net, Conor Dooley <conor.dooley@microchip.com>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, christoph.muellner@vrull.eu,
-        heiko.stuebner@vrull.eu
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor Dooley <conor@kernel.org>
-Message-ID: <mhng-919a6ed5-c8b0-4311-9a8f-8c204b81a8e0@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Tue, 20 Jun 2023 15:10:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA22810A
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:10:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E56361403
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 19:10:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B7EB3C433C9;
+        Tue, 20 Jun 2023 19:10:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687288221;
+        bh=bAG0iRvuyDGrA5ue3CDODowB+oGZsOWqL4rn8pf0hR8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Sl9Ntx+QeT9grEA+dsN9wfthlhTDnUIgLZwJs5e9aB5oNfA0/Q/Y/jQkSVSXOAivO
+         USRGT8gD+poMva9B70eO4WIOPri1ci4Zuq65eY9CrjbB/jy3v9eqpJ1ZlXzvgQ6sSG
+         fiu/cQ7WcTi15oBF46r/UDvgZoTe4KLKnpHFIQxQ6iqMlFx57pBDhqlmwbCldFKV59
+         RRNcyffeQ9MOMEOi0MXPLHrE6oda3WpylIf4qumau0ECwCm//pMoh86gfR+ShvQa5E
+         3ZCJlvl8kvM8fK404/WtmqaPN9f3fuWqZ3NAHB36+hDKD9bYxQs/wLuyW7B2XJ3xwj
+         BY3TobRhUhucA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 92A78C395D9;
+        Tue, 20 Jun 2023 19:10:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] net: phy: mediatek: fix compile-test dependencies
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <168728822159.4938.14447454868774866597.git-patchwork-notify@kernel.org>
+Date:   Tue, 20 Jun 2023 19:10:21 +0000
+References: <20230616093009.3511692-1-arnd@kernel.org>
+In-Reply-To: <20230616093009.3511692-1-arnd@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, arnd@arndb.de,
+        linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com,
+        ramon.nordin.rodriguez@ferroamp.se,
+        Parthiban.Veerasooran@microchip.com, Frank.Sae@motor-comm.com,
+        michael@walle.cc, daniel@makrotopia.org,
+        piergiorgio.beruto@gmail.com, vladimir.oltean@nxp.com,
+        jonathan.lemon@gmail.com, rdunlap@infradead.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 12 Jun 2023 14:31:14 PDT (-0700), Conor Dooley wrote:
-> Hey Heiko,
->
-> On Mon, Jun 12, 2023 at 11:04:39PM +0200, Heiko Stuebner wrote:
->> From: Heiko Stuebner <heiko.stuebner@vrull.eu>
->> 
->> Add handling for Zbc extension.
->> 
->> Zbc provides instruction for carry-less multiplication.
->> 
->> Signed-off-by: Heiko Stuebner <heiko.stuebner@vrull.eu>
->> ---
->>  arch/riscv/Kconfig             | 22 ++++++++++++++++++++++
->>  arch/riscv/include/asm/hwcap.h |  1 +
->>  arch/riscv/kernel/cpu.c        |  1 +
->>  arch/riscv/kernel/cpufeature.c |  1 +
->>  4 files changed, 25 insertions(+)
->
-> Plumbing into the hwprobe stuff would be nice, but that's not a
-> requirement for getting stuff merged :)
+Hello:
 
-IIRC we talked about this on IRC, but IMO we shouldn't require something 
-be user visible for it to be merged in the kernel.
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
->> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
->> index a3d54cd14fca..754cd154eca5 100644
->> --- a/arch/riscv/Kconfig
->> +++ b/arch/riscv/Kconfig
->> @@ -523,6 +523,28 @@ config RISCV_ISA_ZBB
->>  
->>  	   If you don't know what to do here, say Y.
->>  
->> +config TOOLCHAIN_HAS_ZBC
->> +	bool
->> +	default y
->> +	depends on !64BIT || $(cc-option,-mabi=lp64 -march=rv64ima_zbc)
->> +	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zbc)
->> +	depends on LLD_VERSION >= 150000 || LD_VERSION >= 23900
->> +	depends on AS_IS_GNU
->> +
->> +config RISCV_ISA_ZBC
->> +	bool "Zbc extension support for bit manipulation instructions"
->> +	depends on TOOLCHAIN_HAS_ZBC
->> +	depends on !XIP_KERNEL && MMU
->> +	default y
->> +	help
->> +	   Adds support to dynamically detect the presence of the ZBC
->
-> Nit: s/ZBC/Zbc/
->
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->
-> Cheers,
-> Conor.
+On Fri, 16 Jun 2023 11:29:54 +0200 you wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The new phy driver attempts to select a driver from another subsystem,
+> but that fails when the NVMEM subsystem is disabled:
+> 
+> WARNING: unmet direct dependencies detected for NVMEM_MTK_EFUSE
+>   Depends on [n]: NVMEM [=n] && (ARCH_MEDIATEK [=n] || COMPILE_TEST [=y]) && HAS_IOMEM [=y]
+>   Selected by [y]:
+>   - MEDIATEK_GE_SOC_PHY [=y] && NETDEVICES [=y] && PHYLIB [=y] && (ARM64 && ARCH_MEDIATEK [=n] || COMPILE_TEST [=y])
+> 
+> [...]
+
+Here is the summary with links:
+  - net: phy: mediatek: fix compile-test dependencies
+    https://git.kernel.org/netdev/net-next/c/462a3daad679
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
