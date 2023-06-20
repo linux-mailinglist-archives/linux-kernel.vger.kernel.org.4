@@ -2,269 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D50736F3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:54:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57761736F7D
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:59:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbjFTOyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 10:54:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
+        id S233449AbjFTO7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 10:59:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231396AbjFTOyC (ORCPT
+        with ESMTP id S232859AbjFTO6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 10:54:02 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F14495;
-        Tue, 20 Jun 2023 07:54:01 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35KE0E1I021700;
-        Tue, 20 Jun 2023 07:53:35 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=MRMxToDpyjMoFISGOlDOXWkl35fqaC//qvBAJ1fkJoM=;
- b=CPFAC5GzTPrQQN0qocuHZKV1bH5nbY79U2yLP1LwtsnkDRPkPegbBX6omrDfP2D1Aqd5
- H77a0MZQ9v8lSOSSZ/Cv3mPk/1R84HUbNkQAdcl1hlflYk/ijh/GRrOWKDPuw6v2L/Y9
- QNMa0Hz7qAR4ogGT1GW0sG5aaQlM65F3tdHpUjZVzzVetb9BAFmPADE8P2a3nGGvqCGk
- zsrrRgllVVHXvQIJ7ueN+r6Jv0sO3xRDF/N/pwJ9KD8sXy91LGSqD7mq7FMK1nGPw/ia
- Mv95pYEjz9k0YJbEBED4EyWk7/sNu5O8N4+jYgcOlA9X+9SFCPYY8yYksDdGVDSQbJ3U pA== 
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2100.outbound.protection.outlook.com [104.47.70.100])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rb1cy4t7j-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Jun 2023 07:53:35 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F8k9RzYudAetA7M3oTQOT4rK9zYEyMratLY5ExsX2IUV32nk1KEnKPwv75bM+S1y+BCxt5NU90Vjh2D0BXGV6poESspaxzzZYdYvZKP9BIqToGqbrQg56Cy7Fn698I6+dLugk5PQCV+yB7Jht33WDIiTdXYwD1mw23/aKgTwZiKOX/wbd4vUPhr0mDPsjYSSG7MqctNL7/BGTtrZKvUHdrNKB+ZIFRF3Y2HdOFgocxBSOYEPwcUmKLZEdvwZA22sJSRez48x54R2zn38wizqIGaV8EbPyDB01EuLhMnPnYiGxCTLqVZEdzVYIUF324Q9foupx8RB+46+3Gy0J9ZJJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MRMxToDpyjMoFISGOlDOXWkl35fqaC//qvBAJ1fkJoM=;
- b=O4azG7dqv4bI+rHmZKaODRNDTeqbrxQD38nI7oUlGW83f7GpOBbz+4QS3oDCJadmLd2RMhtRVZvGx5W+AlTX0gb7OUhXYzJ+OfN1KDOKKJFbFR9RG2dXU13M8uS5kt2/mFWuRFhJ10zOMilgbFbfcnUGoNyAJxLj4Wt5UC9LzNxLrGLD/o4Nbs+XgXfEL2TBwnMCWNeKaCPE9NIczNCtjQ86PLwHOmnrIJVZ3ZnISbqOSGRHqL15VN9rBGKb7Jz7iPD9Z+BNDjF25Un/qUAp8w1QuGucl1Jryrb7N2neXrJRSr8G65MDGirQTGQGHl6KUw+xAPm/6ZmaWHRwLWwKtA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by PH0PR15MB5165.namprd15.prod.outlook.com (2603:10b6:510:14a::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.35; Tue, 20 Jun
- 2023 14:53:33 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::428f:acec:2c1f:c812]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::428f:acec:2c1f:c812%6]) with mapi id 15.20.6500.036; Tue, 20 Jun 2023
- 14:53:32 +0000
-Message-ID: <6b63301f-96b2-74b9-c156-3a34fb5ad346@meta.com>
-Date:   Tue, 20 Jun 2023 07:53:28 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH bpf] bpf/btf: Accept function names that contain dots
-Content-Language: en-US
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Florent Revest <revest@chromium.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, martin.lau@linux.dev, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        nathan@kernel.org, trix@redhat.com, stable@vger.kernel.org
-References: <20230615145607.3469985-1-revest@chromium.org>
- <CAEf4BzbjCt3tKJ40tg12rMjCLXrm7UoGuOdC62vGnpTTt8-buw@mail.gmail.com>
- <CABRcYmK=yXDumZj3tdW7341+sSV1zmZw1UpQkfSF6RFgnBQjew@mail.gmail.com>
- <c26de68d-4a56-03a0-2625-25c7e2997d45@meta.com>
- <CAKwvOdnehNwrDNV5LvBBwM=jqPJvL7vB9HwF0YU-X5=zbByrmg@mail.gmail.com>
-From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <CAKwvOdnehNwrDNV5LvBBwM=jqPJvL7vB9HwF0YU-X5=zbByrmg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BYAPR01CA0017.prod.exchangelabs.com (2603:10b6:a02:80::30)
- To SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+        Tue, 20 Jun 2023 10:58:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09E91BEB
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 07:57:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687273046;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kX6Xzyb5DYMqpSrTmxybyUGZQ2hNwo35+Ji3qVw7rrY=;
+        b=XtfZnuboBiIr6C5qukcWb9WHvFuYiruLl5511F1GWJtxEnbGG4Ollh3DAI+sMc2+OzVpQv
+        1SzFP8u8mNff5+9KBv5ocN6UPE7voghzgCpiCNE99V7CE26TSSBmVzKweL33UpuTACKJqG
+        ZOsLqBFePTMPh2j8BqrW6ktttUwJ4K0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-481-ICwZLUEsPqKT1b5qYpONaQ-1; Tue, 20 Jun 2023 10:57:22 -0400
+X-MC-Unique: ICwZLUEsPqKT1b5qYpONaQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6D7458B5AF6;
+        Tue, 20 Jun 2023 14:54:25 +0000 (UTC)
+Received: from warthog.procyon.org.com (unknown [10.42.28.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 554F914682FA;
+        Tue, 20 Jun 2023 14:54:23 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     David Howells <dhowells@redhat.com>,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Sagi Grimberg <sagi@grimberg.me>,
+        Willem de Bruijn <willemb@google.com>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org
+Subject: [PATCH net-next v3 10/18] nvme/host: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
+Date:   Tue, 20 Jun 2023 15:53:29 +0100
+Message-ID: <20230620145338.1300897-11-dhowells@redhat.com>
+In-Reply-To: <20230620145338.1300897-1-dhowells@redhat.com>
+References: <20230620145338.1300897-1-dhowells@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|PH0PR15MB5165:EE_
-X-MS-Office365-Filtering-Correlation-Id: f03b62d4-d6d7-4d51-c49b-08db719e1e03
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3CxrEy+1NDFsZIh80ztiqgq4QEJKWTFSjhcGxqWhWs5Q6b9fHVaYCXp7jIgFChJ9PrL8LbMjtRZCHhSM+IO9Ukg24uLzJ4kBGs/wCNaG28Xpij6KjlQUOBEAaVaD4ZNcCUEGGjbdepUOfKM1aDfO6yQW9SkmVp3zwwW/d6aoY1lklOsgZM1QUKEnFQ+LAcxgixA8a3XkgcY30C8XKnoom3vIRimy9xrhUL5fFLsUTYrrGIH9akqP0WzOO/MNvJ1xpUZe8qM7Up+ireJ59sUrft/1XqyldokG3/70p6AfppCe8sHC5e5AeMzc9oBqDSaMlQWxVdDE98vS0h1SItSSKzzc5Xz+TpouOuIu2DsbxAXyKchyGpnpZPL3A2x+Gpfp1AnY5tXr6DcD0PGcEbcIvATYF2asW87cGXlxbuhqQesNRw0xlzdWAT4SiX+WcY8qd2ltFRcs//3ejRKfS7EAjeQ01VS/hodQsMkv+Rxg97P+HmFWGb7XF4m6VtNlNBLZ2o4STv9FEzvbcJv2DeS4LK29dTJM6qq7bVbfqJ/5X1s/Rg1eTWFC8FaPLN1NmMv0IBiUC5OnOQ5mHEw7Lw2kXEGaOrRxiNpyyLf71FiiMTAsA3AR7Uhsly5pB85BM54TM7ul0kj261f1OzVilWwZJA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(396003)(346002)(136003)(376002)(451199021)(7416002)(31686004)(83380400001)(2616005)(31696002)(86362001)(2906002)(54906003)(5660300002)(66476007)(8676002)(186003)(66946007)(8936002)(66556008)(4326008)(478600001)(36756003)(41300700001)(38100700002)(53546011)(6916009)(6512007)(6506007)(6666004)(316002)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UXBpbHVBK1N6WjdWbXNFVWY5MlM2ejBBZTFyWmJPQ2hBais3dmhuZytBTVNm?=
- =?utf-8?B?T05iakZEY0VvSjUzWEp3QlFQTnJTZ3pvL002cG9ib2dRUzhFVDBMTTFwR1BM?=
- =?utf-8?B?cnN5SXRBZ3hwZXllaGV5NytFY2paaEtqWUt6Qm5NTzI3Tm40MThvZEdyNVRO?=
- =?utf-8?B?cWpnUitjenZNU21GbWhVZXJ3SGNQbGhiRVo0SlZCUktVZXFTNk1oS3BrYTZE?=
- =?utf-8?B?SWp4ZUxIZWJoUCs4MUpSKzZKbHZlY1BMVXhLOFBKME5OTUFHZjN6ZW1LNWN3?=
- =?utf-8?B?S1ZqSjVQRWw0dGNaRWhvMFplNkJTOUV4UEsyYkdNaTBMYVp6WGl6QjNDaXY3?=
- =?utf-8?B?eWRBU1NnU0RUT2Y2TkZ2YVZKOUlzaVRueE9xcDl0bnljZHp4WTcvZHFrWi84?=
- =?utf-8?B?aTZ2cHR2TDJxSDBIT0JiWG80TXYrOU5GRFhMN3ZKZExoYVVqWEVTVGNGK3VH?=
- =?utf-8?B?WE9IWlRRM3o2NWp4Y3ViSGYveTlvMHg2Z204MDA0aTJFRGZuUmtucnJLT3h2?=
- =?utf-8?B?OGlOQkExYytZR1FYZkJOb0draThXaHRDMDMrei9sUUFQdHBwUkFwM1MrVnZO?=
- =?utf-8?B?eXdXTTUySi8zbFFlalU3OVRQVXNHZlZTUzJVeXJoeHVWTFE0OENwTDF3WmJw?=
- =?utf-8?B?ekNtWVdkczBzejlYUVFnb2dZN3lmVDIzSHcxU01iY3d4SzIzZ1JPd2EycFhS?=
- =?utf-8?B?TkFlRXFjYWNGWWFSdXUza25aNDRLSGpGSmg0ajE1NUVCZVBBZXl1eVEwb08r?=
- =?utf-8?B?Q2dlOUN6cU80VTZ2YXcrMmxvc3RMNGFrc0RhVzhJdTJuMXRBYXhlczFOUFJx?=
- =?utf-8?B?TGdMQTZ2MDBtNE9lZEIzZlo1Mng1ZWpsQnJUWHA4Q0VqYjlpaEdiSjM2bGUw?=
- =?utf-8?B?d2VDYXRrY3R3WXNyK0l4MWc0UGpvSUlqUDlIVTF6QVgxNThXckVqa0EyMWo3?=
- =?utf-8?B?RnV2TXZRNFpQQXY3anRaQTN5ODFSc0tFekYzQ2MwUGs0U2tSQ09UNWtHNkVq?=
- =?utf-8?B?K0g3UmlXQ0VIbG5scHlMb3YrODVGRVNySlNrb3pPWXlIL0JYOWtRSVdVbHpC?=
- =?utf-8?B?K1FhR05XaWRNeTY2YlZ6RytYb1VXWlhjUHN5SzdSVnJpZVh2Um9BVXNSeVhX?=
- =?utf-8?B?OTJ6aGtGMFpGOG04QndaQ0R1aTdpOE5aT05FQjRMZnJYR0dVMTVFRXc2V2Nz?=
- =?utf-8?B?RFdpVTVzS3F5QW9UZXZhQ1MzNytMeHBDN0p0dE4yUmd2QTlQRUd4RzZjMHJQ?=
- =?utf-8?B?R0xiVUNwOTY3NjJTckZ2cVNXdVg1NmpUaUdJeE9XTXF6WUViME1VT1VLeHhU?=
- =?utf-8?B?bHk1a1NMaElxaFhvUVZUNzJzSzRJMkVoNlRjdXkyYmIxbHk5bWYwOTBFLzhj?=
- =?utf-8?B?SEowaXYrbmV5OGRmeG45dUVhOG9xTE5xNkUyTnl2eFR4VVlvLy9xbGVJSjJM?=
- =?utf-8?B?OWozRENaOVR1bTREejlVd1htYitrNEFmLzMzNTdKa3pjaWl2MERlQzJvMHkv?=
- =?utf-8?B?L0hFbkZoUkFGNlBDcGNwQjZvaGlTVys2RktxOTVzMnk0V2RzWXRhRTRXVVJE?=
- =?utf-8?B?d3NlWmsvS3cxRWZEblJuNkRWcHRvQUd5SlNaTW50WXRGZUo2Z0hBSjR5LzZW?=
- =?utf-8?B?Q3ZJV3I3eVpmUUhDU1ZCQXZ5K0UweEVWZjZMM25qSWlhcmQvOVNrbEFQVEhO?=
- =?utf-8?B?S2pFS3g2K0owMWJ1MTlCVm05WDF2Ui9RMU1OdGUvT3g1VU9BTGRtejlHdnRl?=
- =?utf-8?B?ajVuVDJ6anZTM29IdzJxSTYvWmJIMnREZEpkZUJLUmJLOHo1NmZHaDEvZmhr?=
- =?utf-8?B?M3gzdkVBWnlGUTd4MVpYYlBoQ1p6aVAxM0JrU20za3g3djlxU3RzbTdkSnlQ?=
- =?utf-8?B?YWNnZUp2d1h0L2V6MGNON00vVlc5cmFVMXZlQXBVQmdtN0ZtQ0ZvemF5SVky?=
- =?utf-8?B?cXhpRkpzd25CMHRxUlNkc2YrNCtsRG5WSERyeTJCOEo3MDFCdnNUby9hMnJL?=
- =?utf-8?B?ZGt2dEFCeHc4SlpuRTR5R3prcW1SVzFWcmZkR2FRUTRPUkFTYVB0VnUwNkdh?=
- =?utf-8?B?WW5sN0JCTERrY2Z4MDhyQlQvZHVPYmZlWkc3RmVqNDdyU1VhTXpTUDlHS083?=
- =?utf-8?B?SWhrcDc1WG1xYVA1YjZndGN3eHBsVUxSRU4rd2xQUTdPZVpKUmlJUFJWY2FH?=
- =?utf-8?B?R3c9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f03b62d4-d6d7-4d51-c49b-08db719e1e03
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 14:53:32.6677
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DNkIF54Rinj9Heznz6y6A2aUNYKYgbiRdGxlJSzffLbuPW4MBXv4Mp8qK6YAEsXp
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR15MB5165
-X-Proofpoint-ORIG-GUID: Lgzu7zW_0iCuI-VX6jBb81qooeztpBHw
-X-Proofpoint-GUID: Lgzu7zW_0iCuI-VX6jBb81qooeztpBHw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-20_10,2023-06-16_01,2023-05-22_02
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When transmitting data, call down into TCP using a single sendmsg with
+MSG_SPLICE_PAGES to indicate that content should be spliced rather than
+performing several sendmsg and sendpage calls to transmit header, data
+pages and trailer.
 
+Signed-off-by: David Howells <dhowells@redhat.com>
+Tested-by: Sagi Grimberg <sagi@grimberg.me>
+Acked-by: Willem de Bruijn <willemb@google.com>
+cc: Keith Busch <kbusch@kernel.org>
+cc: Jens Axboe <axboe@fb.com>
+cc: Christoph Hellwig <hch@lst.de>
+cc: Chaitanya Kulkarni <kch@nvidia.com>
+cc: "David S. Miller" <davem@davemloft.net>
+cc: Eric Dumazet <edumazet@google.com>
+cc: Jakub Kicinski <kuba@kernel.org>
+cc: Paolo Abeni <pabeni@redhat.com>
+cc: Jens Axboe <axboe@kernel.dk>
+cc: Matthew Wilcox <willy@infradead.org>
+cc: linux-nvme@lists.infradead.org
+cc: netdev@vger.kernel.org
+---
 
-On 6/20/23 7:38 AM, Nick Desaulniers wrote:
-> On Mon, Jun 19, 2023 at 2:17 PM Yonghong Song <yhs@meta.com> wrote:
->>
->> How many people really build the kernel with
->>      LLVM=1 LLVM_IAS=0
->> which uses clang compiler ans gcc 'as'.
->> I think distro most likely won't do this if they intend to
->> build the kernel with clang.
->>
->> Note that
->>      LLVM=1
->> implies to use both clang compiler and clang assembler.
-> 
-> Yes, we prefer folks to build with LLVM=1.  The problem exists for
-> users of stable kernels that predate LLVM_IAS=1 support working well
-> (4.19 is when we had most of the assembler related issues sorted out,
-> actually later but we backported most fixes to 4.19).
-> 
->>
->> Using clang17 and 'LLVM=1 LLVM_IAS=0', with latest bpf-next,
->> I actually hit some build errors like:
->>
->> /tmp/video-bios-59fa52.s: Assembler messages:
->> /tmp/video-bios-59fa52.s:4: Error: junk at end of line, first
->> unrecognized character is `"'
-> 
-> Probably because:
-> 1. CONFIG_DEBUG_INFO_DWARF5=y was set or
-> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y and you're using a version
-> of clang which implicitly defaults to DWARFv5.
-> 2. you're using a version of GAS that does not understand DWARFv5.
-> 3. you did not run defconfig/menuconfig to have kconfig check for
-> DWARFv5 support.
+Notes:
+    ver #2)
+     - Wrap lines at 80.
+    
+    ver #3)
+     - Split nvme/host from nvme/target changes.
 
-Yes, I am using llvm17 which I think the default dwarf is v5, and
-indeed I have
-   CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ drivers/nvme/host/tcp.c | 46 +++++++++++++++++++++--------------------
+ 1 file changed, 24 insertions(+), 22 deletions(-)
 
-My gas is 2.30, probably too old to support dwarf 5.
+diff --git a/drivers/nvme/host/tcp.c b/drivers/nvme/host/tcp.c
+index bf0230442d57..6f31cdbb696a 100644
+--- a/drivers/nvme/host/tcp.c
++++ b/drivers/nvme/host/tcp.c
+@@ -997,25 +997,25 @@ static int nvme_tcp_try_send_data(struct nvme_tcp_request *req)
+ 	u32 h2cdata_left = req->h2cdata_left;
+ 
+ 	while (true) {
++		struct bio_vec bvec;
++		struct msghdr msg = {
++			.msg_flags = MSG_DONTWAIT | MSG_SPLICE_PAGES,
++		};
+ 		struct page *page = nvme_tcp_req_cur_page(req);
+ 		size_t offset = nvme_tcp_req_cur_offset(req);
+ 		size_t len = nvme_tcp_req_cur_length(req);
+ 		bool last = nvme_tcp_pdu_last_send(req, len);
+ 		int req_data_sent = req->data_sent;
+-		int ret, flags = MSG_DONTWAIT;
++		int ret;
+ 
+ 		if (last && !queue->data_digest && !nvme_tcp_queue_more(queue))
+-			flags |= MSG_EOR;
++			msg.msg_flags |= MSG_EOR;
+ 		else
+-			flags |= MSG_MORE | MSG_SENDPAGE_NOTLAST;
++			msg.msg_flags |= MSG_MORE;
+ 
+-		if (sendpage_ok(page)) {
+-			ret = kernel_sendpage(queue->sock, page, offset, len,
+-					flags);
+-		} else {
+-			ret = sock_no_sendpage(queue->sock, page, offset, len,
+-					flags);
+-		}
++		bvec_set_page(&bvec, page, len, offset);
++		iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &bvec, 1, len);
++		ret = sock_sendmsg(queue->sock, &msg);
+ 		if (ret <= 0)
+ 			return ret;
+ 
+@@ -1054,22 +1054,24 @@ static int nvme_tcp_try_send_cmd_pdu(struct nvme_tcp_request *req)
+ {
+ 	struct nvme_tcp_queue *queue = req->queue;
+ 	struct nvme_tcp_cmd_pdu *pdu = nvme_tcp_req_cmd_pdu(req);
++	struct bio_vec bvec;
++	struct msghdr msg = { .msg_flags = MSG_DONTWAIT | MSG_SPLICE_PAGES, };
+ 	bool inline_data = nvme_tcp_has_inline_data(req);
+ 	u8 hdgst = nvme_tcp_hdgst_len(queue);
+ 	int len = sizeof(*pdu) + hdgst - req->offset;
+-	int flags = MSG_DONTWAIT;
+ 	int ret;
+ 
+ 	if (inline_data || nvme_tcp_queue_more(queue))
+-		flags |= MSG_MORE | MSG_SENDPAGE_NOTLAST;
++		msg.msg_flags |= MSG_MORE;
+ 	else
+-		flags |= MSG_EOR;
++		msg.msg_flags |= MSG_EOR;
+ 
+ 	if (queue->hdr_digest && !req->offset)
+ 		nvme_tcp_hdgst(queue->snd_hash, pdu, sizeof(*pdu));
+ 
+-	ret = kernel_sendpage(queue->sock, virt_to_page(pdu),
+-			offset_in_page(pdu) + req->offset, len,  flags);
++	bvec_set_virt(&bvec, (void *)pdu + req->offset, len);
++	iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &bvec, 1, len);
++	ret = sock_sendmsg(queue->sock, &msg);
+ 	if (unlikely(ret <= 0))
+ 		return ret;
+ 
+@@ -1093,6 +1095,8 @@ static int nvme_tcp_try_send_data_pdu(struct nvme_tcp_request *req)
+ {
+ 	struct nvme_tcp_queue *queue = req->queue;
+ 	struct nvme_tcp_data_pdu *pdu = nvme_tcp_req_data_pdu(req);
++	struct bio_vec bvec;
++	struct msghdr msg = { .msg_flags = MSG_DONTWAIT | MSG_MORE, };
+ 	u8 hdgst = nvme_tcp_hdgst_len(queue);
+ 	int len = sizeof(*pdu) - req->offset + hdgst;
+ 	int ret;
+@@ -1101,13 +1105,11 @@ static int nvme_tcp_try_send_data_pdu(struct nvme_tcp_request *req)
+ 		nvme_tcp_hdgst(queue->snd_hash, pdu, sizeof(*pdu));
+ 
+ 	if (!req->h2cdata_left)
+-		ret = kernel_sendpage(queue->sock, virt_to_page(pdu),
+-				offset_in_page(pdu) + req->offset, len,
+-				MSG_DONTWAIT | MSG_MORE | MSG_SENDPAGE_NOTLAST);
+-	else
+-		ret = sock_no_sendpage(queue->sock, virt_to_page(pdu),
+-				offset_in_page(pdu) + req->offset, len,
+-				MSG_DONTWAIT | MSG_MORE);
++		msg.msg_flags |= MSG_SPLICE_PAGES;
++
++	bvec_set_virt(&bvec, (void *)pdu + req->offset, len);
++	iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &bvec, 1, len);
++	ret = sock_sendmsg(queue->sock, &msg);
+ 	if (unlikely(ret <= 0))
+ 		return ret;
+ 
 
-Yes, I didn't run defconfig/menuconfig.
-
-> 
-> The kconfigs should prevent you from selecting DWARFv5 if your
-> toolchain combination doesn't support it; if you run kconfig.
-> 
->> /tmp/video-bios-59fa52.s:4: Error: file number less than one
->> /tmp/video-bios-59fa52.s:5: Error: junk at end of line, first
->> unrecognized character is `"'
->> /tmp/video-bios-59fa52.s:6: Error: junk at end of line, first
->> unrecognized character is `"'
->> /tmp/video-bios-59fa52.s:7: Error: junk at end of line, first
->> unrecognized character is `"'
->> /tmp/video-bios-59fa52.s:8: Error: junk at end of line, first
->> unrecognized character is `"'
->> /tmp/video-bios-59fa52.s:9: Error: junk at end of line, first
->> unrecognized character is `"'
->> /tmp/video-bios-59fa52.s:10: Error: junk at end of line, first
->> unrecognized character is `"'
->> /tmp/video-bios-59fa52.s:68: Error: junk at end of line, first
->> unrecognized character is `"'
->> clang: error: assembler command failed with exit code 1 (use -v to see
->> invocation)
->> make[4]: *** [/home/yhs/work/bpf-next/scripts/Makefile.build:252:
->> arch/x86/realmode/rm/video-bios.o] Error 1
->> make[4]: *** Waiting for unfinished jobs....
->> /tmp/wakemain-88777c.s: Assembler messages:
->> /tmp/wakemain-88777c.s:4: Error: junk at end of line, first unrecognized
->> character is `"'
->> /tmp/wakemain-88777c.s:4: Error: file number less than one
->> /tmp/wakemain-88777c.s:5: Error: junk at end of line, first unrecognized
->> character is `"'
->> /tmp/wakemain-88777c.s:6: Error: junk at end of line, first unrecognized
->> character is `"'
->> /tmp/wakemain-88777c.s:7: Error: junk at end of line, first unrecognized
->> character is `"'
->> /tmp/wakemain-88777c.s:8: Error: junk at end of line, first unrecognized
->> character is `"'
->> /tmp/wakemain-88777c.s:81: Error: junk at end of line, first
->> unrecognized character is `"'
->> /tmp/wakemain-88777c.s:312: Error: junk at end of line, first
->> unrecognized character is `"'
->> clang: error: assembler command failed with exit code 1 (use -v to see
->> invocation)
->>
->> Potentially because of my local gnu assembler 2.30-120.el8 won't work
-> 
-> It's recorded in lib/Kconfig.debug that 2.35.2 is required for DWARFv5
-> support if you're using GAS.  My machine has 2.40.
-> 
->> with some syntax generated by clang. Mixing clang compiler and arbitrary
->> gnu assembler are not a good idea (see the above example). It might
-> 
-> I agree, but for older branches of stable which are still supported,
-> we didn't quite have clang assembler support usable.  We still need to
-> support those branches of stable.
-
-Thanks Florent pointing out 5.10 stable kernels which have this issue.
-I am okay with backporting to old stable kernels if that is needed.
-But the patch going to bpf-next should not have a bug-fix tag and
-the patch commit message can be tweaked for backport to 5.10 though.
-
-> 
->> work with close-to-latest gnu assembler.
->>
->> To support function name like '<fname>.isra', some llvm work will be
->> needed, and it may take some time.
->>
->> So in my opinion, this patch is NOT a bug fix. It won't affect distro.
->> Whether we should backport to the old kernel, I am not sure whether it
->> is absolutely necessary as casual build can always remove LLVM_IAS=0 or
->> hack the kernel source itself.
-> 
-> 
-> 
