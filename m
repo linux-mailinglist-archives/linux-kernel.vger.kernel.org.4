@@ -2,244 +2,366 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B9473632C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 07:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AAC673632E
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 07:30:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjFTFaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 01:30:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
+        id S230410AbjFTFal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 01:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230129AbjFTFaB (ORCPT
+        with ESMTP id S230129AbjFTFai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 01:30:01 -0400
-Received: from mail-ua1-x92c.google.com (mail-ua1-x92c.google.com [IPv6:2607:f8b0:4864:20::92c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3540010D5
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 22:30:00 -0700 (PDT)
-Received: by mail-ua1-x92c.google.com with SMTP id a1e0cc1a2514c-78f3f8ecc42so802053241.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 22:30:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687238999; x=1689830999;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=801oa+DLA4Ef9kDMkAwEab4R+1WW+i+tgb6pOy6o1MY=;
-        b=bywN+ROadmbYEi+zWpU+PUtZTpC2Plg10u9tqckzJsfSr2C6Th4SVDoL4EfBulUDrC
-         xz3IvnD7ALxdVLQSvPutW7Ykxwe6Lg2zirtBEBGy4WWwfbQQpbTv97OU/bi1mq1aUnHb
-         hzIYYPgWDf5p2iuRaG98bGv54hOz/+tvWasN+pA6BPWtMeGE+oiQMwbw2QaKsBxQZCZV
-         1uOzqkMU0PJtg1wC3mpLBXZJStNUfGeWv4iQD/15ynslzgxoxjtdsoPVIBJ9IdkZ7wIb
-         sBmp26M5qh1TOOtayY1zJME+UYOGEHF3dgUxi8owL8Ys7QXVQYXOMgA+U3Qs1k2Nbb8j
-         RGKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687238999; x=1689830999;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=801oa+DLA4Ef9kDMkAwEab4R+1WW+i+tgb6pOy6o1MY=;
-        b=Ff93swpZGdTtJ3b5R6OzJqZtDEChz0xchGNpwKOawedxeRdn9wlQsmE5HBEmvSNFAZ
-         pwbKlpb6gsDM3qPuRsvZEiFlg4CxgMkOnlGBMQalYbVNsAn2HUG2PUYF1oETihz6lgy0
-         tBkl7UItj9yd9Y/9iF/GRzFsyAdZPw1Uw+id8mTOWH8YdbDz/n+06D6AsIefyDwh2oDe
-         dSviZeotNg4KvB5WSc08OqB+g5ximW6pk4/QXsWMckOgmFTlrGhlZxsYYG6UkP3+xK3H
-         LVDW2Z1rp6KHAqHxv/BEByMed/Ef8bWNpyZ9+cG6XF5uFCvELIjM6HYDCcT4k9LfWwWV
-         bMHA==
-X-Gm-Message-State: AC+VfDzqFJpd+V25M6zYvepGjLhlWAwdlVqB8shp2M6NRmICKufdbkiY
-        CCWLMAEaz4HkVP2s0GNrjeXZBwiLmYPgKfVXrlKJQJhE1Jo4uzf+aA2i5A==
-X-Google-Smtp-Source: ACHHUZ4vlUUcBSkw3SYLsCg6Zuqv1wWvojRjlGXb7Uhi4Q75I4wVrEfAF4UbAV3+Tfu5H+e+wLtEUhvT/Fp4S9lv62w=
-X-Received: by 2002:a1f:5e48:0:b0:473:4e4d:8a8d with SMTP id
- s69-20020a1f5e48000000b004734e4d8a8dmr84082vkb.11.1687238999085; Mon, 19 Jun
- 2023 22:29:59 -0700 (PDT)
+        Tue, 20 Jun 2023 01:30:38 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37D410D5;
+        Mon, 19 Jun 2023 22:30:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687239036; x=1718775036;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=3m+HVS6rlYaz6X+JpHayGM0jWzNECtBH7x7lonkKDfY=;
+  b=ichzsPw8LcJWHyFuT2JIu38q8FtNA0FV8tIzF5vEraslo7nqFJbVXVHi
+   260POPS9w57hTHEPqeaVRhS4Zv5s0dmJSSG22AF6E3DmZR8rDlVxo4w+O
+   CPNFP0PecL5fg5Tj/ED+6xxXCvHiiwvHErPdBYuYdb4BbyPWD8QRFMage
+   WvYh5rfARzE7gcvH3LkPWHV2Tr0j72ssQU9hHsZm7NAzkf3zwgq7nhA9c
+   RLBPdRRGHSQbJmtz9cKNuTXIfVYWGPf+LFzxE7dVsxOiIxFK+OdCgZNFz
+   lEn8VbUNkCTf2NP3pNd9CyCRH50CEE5/Z5rx5sEwQ2F3MLhdl18AFWEUG
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="425723641"
+X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
+   d="scan'208";a="425723641"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 22:30:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="708123509"
+X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
+   d="scan'208";a="708123509"
+Received: from sorinaau-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.61.49])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 22:30:33 -0700
+Message-ID: <89f2f92b-2420-40a2-f624-c0b1545ba6f6@intel.com>
+Date:   Tue, 20 Jun 2023 08:30:29 +0300
 MIME-Version: 1.0
-References: <20230619102157.579823843@linuxfoundation.org>
-In-Reply-To: <20230619102157.579823843@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 20 Jun 2023 10:59:47 +0530
-Message-ID: <CA+G9fYv9fWPCKndjk3Fy6rF2v-MusMarhV5Ppd70TEVCzDYvnQ@mail.gmail.com>
-Subject: Re: [PATCH 6.3 000/187] 6.3.9-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.12.0
+Subject: Re: [PATCH V2 1/2] mmc: sdhci-pci-o2micro: add Bayhub new chip GG8
+ support for UHS-I
+To:     Chevron Li <chevron_li@126.com>, ulf.hansson@linaro.org,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     shaper.liu@bayhubtech.com, xiaoguang.yu@bayhubtech.com,
+        shirley.her@bayhubtech.com, chevron.li@bayhubtech.com
+References: <20230615095012.30856-1-chevron_li@126.com>
+Content-Language: en-US
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230615095012.30856-1-chevron_li@126.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Jun 2023 at 16:02, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 6.3.9 release.
-> There are 187 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 21 Jun 2023 10:21:12 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-=
-6.3.9-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-6.3.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 15/06/23 12:50, Chevron Li wrote:
+> From: Chevron Li <chevron.li@bayhubtech.com>
+> 
+> Add Bayhub new chip GG8 support for UHS-I function
+> 
+> Signed-off-by: Chevron Li <chevron.li@bayhubtech.com>
 
+One very minor cosmetic comment below.  Fix that and add:
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> ---
+> Change in V1:
+> 1.Add GG8 chip IDs in sdhci-pci-core.c and sdhci-pci.h
+> 2.Add GG8 chip initialization flow at sdhci-pci-o2micro.c
+> 
+> Change in V2:
+> 1.updated typo description for the patch title.
+> 2.updated patch format according to reviewer's comments.
+> ---
+>  drivers/mmc/host/sdhci-pci-core.c    |   4 +
+>  drivers/mmc/host/sdhci-pci-o2micro.c | 148 ++++++++++++++++++++-------
+>  drivers/mmc/host/sdhci-pci.h         |   4 +
+>  3 files changed, 120 insertions(+), 36 deletions(-)
+> 
+> diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
+> index 01975d145200..1d14300691f4 100644
+> --- a/drivers/mmc/host/sdhci-pci-core.c
+> +++ b/drivers/mmc/host/sdhci-pci-core.c
+> @@ -1898,6 +1898,10 @@ static const struct pci_device_id pci_ids[] = {
+>  	SDHCI_PCI_DEVICE(O2, SDS1,     o2),
+>  	SDHCI_PCI_DEVICE(O2, SEABIRD0, o2),
+>  	SDHCI_PCI_DEVICE(O2, SEABIRD1, o2),
+> +	SDHCI_PCI_DEVICE(O2, GG8_9860, o2),
+> +	SDHCI_PCI_DEVICE(O2, GG8_9861, o2),
+> +	SDHCI_PCI_DEVICE(O2, GG8_9862, o2),
+> +	SDHCI_PCI_DEVICE(O2, GG8_9863, o2),
+>  	SDHCI_PCI_DEVICE(ARASAN, PHY_EMMC, arasan),
+>  	SDHCI_PCI_DEVICE(SYNOPSYS, DWC_MSHC, snps),
+>  	SDHCI_PCI_DEVICE(GLI, 9750, gl9750),
+> diff --git a/drivers/mmc/host/sdhci-pci-o2micro.c b/drivers/mmc/host/sdhci-pci-o2micro.c
+> index 620f52ad9667..539bbafb3ff7 100644
+> --- a/drivers/mmc/host/sdhci-pci-o2micro.c
+> +++ b/drivers/mmc/host/sdhci-pci-o2micro.c
+> @@ -36,6 +36,7 @@
+>  #define O2_SD_INF_MOD		0xF1
+>  #define O2_SD_MISC_CTRL4	0xFC
+>  #define O2_SD_MISC_CTRL		0x1C0
+> +#define O2_SD_EXP_INT_REG	0x1E0
+>  #define O2_SD_PWR_FORCE_L0	0x0002
+>  #define O2_SD_TUNING_CTRL	0x300
+>  #define O2_SD_PLL_SETTING	0x304
+> @@ -49,6 +50,9 @@
+>  #define O2_SD_UHS2_L1_CTRL	0x35C
+>  #define O2_SD_FUNC_REG3		0x3E0
+>  #define O2_SD_FUNC_REG4		0x3E4
+> +#define O2_SD_PARA_SET_REG1 0x444
+> +#define O2_SD_VDDX_CTRL_REG	0x508
+> +#define O2_SD_GPIO_CTRL_REG1	0x510
 
-## Build
-* kernel: 6.3.9-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-6.3.y
-* git commit: c4f2a2d855d4abab5f904b8deec55ff390f954e0
-* git describe: v6.3.8-188-gc4f2a2d855d4
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v6.3.8=
--188-gc4f2a2d855d4
+O2_SD_PARA_SET_REG1 still does not line up.
 
-## Test Regressions (compared to v6.3.7)
+>  #define O2_SD_LED_ENABLE	BIT(6)
+>  #define O2_SD_FREG0_LEDOFF	BIT(13)
+>  #define O2_SD_SEL_DLL		BIT(16)
+> @@ -334,33 +338,45 @@ static int sdhci_o2_execute_tuning(struct mmc_host *mmc, u32 opcode)
+>  	scratch |= O2_SD_PWR_FORCE_L0;
+>  	sdhci_writew(host, scratch, O2_SD_MISC_CTRL);
+>  
+> -	/* Stop clk */
+> -	reg_val = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+> -	reg_val &= ~SDHCI_CLOCK_CARD_EN;
+> -	sdhci_writew(host, reg_val, SDHCI_CLOCK_CONTROL);
+> -
+> -	if ((host->timing == MMC_TIMING_MMC_HS200) ||
+> -		(host->timing == MMC_TIMING_UHS_SDR104)) {
+> -		/* UnLock WP */
+> -		pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch_8);
+> -		scratch_8 &= 0x7f;
+> -		pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch_8);
+> -
+> -		/* Set pcr 0x354[16] to choose dll clock, and set the default phase */
+> -		pci_read_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, &reg_val);
+> -		reg_val &= ~(O2_SD_SEL_DLL | O2_SD_PHASE_MASK);
+> -		reg_val |= (O2_SD_SEL_DLL | O2_SD_FIX_PHASE);
+> -		pci_write_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, reg_val);
+> +	/* Update output phase */
+> +	switch (chip->pdev->device) {
+> +	case PCI_DEVICE_ID_O2_SDS0:
+> +	case PCI_DEVICE_ID_O2_SEABIRD0:
+> +	case PCI_DEVICE_ID_O2_SEABIRD1:
+> +	case PCI_DEVICE_ID_O2_SDS1:
+> +	case PCI_DEVICE_ID_O2_FUJIN2:
+> +		/* Stop clk */
+> +		reg_val = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+> +		reg_val &= ~SDHCI_CLOCK_CARD_EN;
+> +		sdhci_writew(host, reg_val, SDHCI_CLOCK_CONTROL);
+> +
+> +		if (host->timing == MMC_TIMING_MMC_HS200 ||
+> +		    host->timing == MMC_TIMING_UHS_SDR104) {
+> +			/* UnLock WP */
+> +			pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch_8);
+> +			scratch_8 &= 0x7f;
+> +			pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch_8);
+> +
+> +			/* Set pcr 0x354[16] to choose dll clock, and set the default phase */
+> +			pci_read_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, &reg_val);
+> +			reg_val &= ~(O2_SD_SEL_DLL | O2_SD_PHASE_MASK);
+> +			reg_val |= (O2_SD_SEL_DLL | O2_SD_FIX_PHASE);
+> +			pci_write_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, reg_val);
+> +
+> +			/* Lock WP */
+> +			pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch_8);
+> +			scratch_8 |= 0x80;
+> +			pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch_8);
+> +		}
+>  
+> -		/* Lock WP */
+> -		pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch_8);
+> -		scratch_8 |= 0x80;
+> -		pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch_8);
+> +		/* Start clk */
+> +		reg_val = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+> +		reg_val |= SDHCI_CLOCK_CARD_EN;
+> +		sdhci_writew(host, reg_val, SDHCI_CLOCK_CONTROL);
+> +		break;
+> +	default:
+> +		break;
+>  	}
+> -	/* Start clk */
+> -	reg_val = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
+> -	reg_val |= SDHCI_CLOCK_CARD_EN;
+> -	sdhci_writew(host, reg_val, SDHCI_CLOCK_CONTROL);
+>  
+>  	/* wait DLL lock, timeout value 5ms */
+>  	if (readx_poll_timeout(sdhci_o2_pll_dll_wdt_control, host,
+> @@ -563,6 +579,7 @@ static void sdhci_pci_o2_set_clock(struct sdhci_host *host, unsigned int clock)
+>  	u16 clk;
+>  	u8 scratch;
+>  	u32 scratch_32;
+> +	u32 dmdn_208m, dmdn_200m;
+>  	struct sdhci_pci_slot *slot = sdhci_priv(host);
+>  	struct sdhci_pci_chip *chip = slot->chip;
+>  
+> @@ -578,16 +595,27 @@ static void sdhci_pci_o2_set_clock(struct sdhci_host *host, unsigned int clock)
+>  	scratch &= 0x7f;
+>  	pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch);
+>  
+> +	if (chip->pdev->device == PCI_DEVICE_ID_O2_GG8_9860 ||
+> +	    chip->pdev->device == PCI_DEVICE_ID_O2_GG8_9861 ||
+> +	    chip->pdev->device == PCI_DEVICE_ID_O2_GG8_9862 ||
+> +	    chip->pdev->device == PCI_DEVICE_ID_O2_GG8_9863) {
+> +		dmdn_208m = 0x2c500000;
+> +		dmdn_200m = 0x25200000;
+> +	} else {
+> +		dmdn_208m = 0x2c280000;
+> +		dmdn_200m = 0x25100000;
+> +	}
+> +
+>  	if ((host->timing == MMC_TIMING_UHS_SDR104) && (clock == 200000000)) {
+>  		pci_read_config_dword(chip->pdev, O2_SD_PLL_SETTING, &scratch_32);
+>  
+> -		if ((scratch_32 & 0xFFFF0000) != 0x2c280000)
+> -			o2_pci_set_baseclk(chip, 0x2c280000);
+> +		if ((scratch_32 & 0xFFFF0000) != dmdn_208m)
+> +			o2_pci_set_baseclk(chip, dmdn_208m);
+>  	} else {
+>  		pci_read_config_dword(chip->pdev, O2_SD_PLL_SETTING, &scratch_32);
+>  
+> -		if ((scratch_32 & 0xFFFF0000) != 0x25100000)
+> -			o2_pci_set_baseclk(chip, 0x25100000);
+> +		if ((scratch_32 & 0xFFFF0000) != dmdn_200m)
+> +			o2_pci_set_baseclk(chip, dmdn_200m);
+>  	}
+>  
+>  	pci_read_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, &scratch_32);
+> @@ -624,6 +652,11 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
+>  	if (caps & SDHCI_CAN_DO_8BIT)
+>  		host->mmc->caps |= MMC_CAP_8_BIT_DATA;
+>  
+> +	host->quirks2 |= SDHCI_QUIRK2_BROKEN_DDR50;
+> +
+> +	sdhci_pci_o2_enable_msi(chip, host);
+> +
+> +	host->mmc_host_ops.execute_tuning = sdhci_o2_execute_tuning;
+>  	switch (chip->pdev->device) {
+>  	case PCI_DEVICE_ID_O2_SDS0:
+>  	case PCI_DEVICE_ID_O2_SEABIRD0:
+> @@ -634,10 +667,6 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
+>  		if (reg & 0x1)
+>  			host->quirks |= SDHCI_QUIRK_MULTIBLOCK_READ_ACMD12;
+>  
+> -		host->quirks2 |= SDHCI_QUIRK2_BROKEN_DDR50;
+> -
+> -		sdhci_pci_o2_enable_msi(chip, host);
+> -
+>  		if (chip->pdev->device == PCI_DEVICE_ID_O2_SEABIRD0) {
+>  			ret = pci_read_config_dword(chip->pdev,
+>  						    O2_SD_MISC_SETTING, &reg);
+> @@ -663,15 +692,21 @@ static int sdhci_pci_o2_probe_slot(struct sdhci_pci_slot *slot)
+>  			host->quirks2 |= SDHCI_QUIRK2_PRESET_VALUE_BROKEN;
+>  		}
+>  
+> -		host->mmc_host_ops.execute_tuning = sdhci_o2_execute_tuning;
+> -
+>  		if (chip->pdev->device != PCI_DEVICE_ID_O2_FUJIN2)
+>  			break;
+>  		/* set dll watch dog timer */
+>  		reg = sdhci_readl(host, O2_SD_VENDOR_SETTING2);
+>  		reg |= (1 << 12);
+>  		sdhci_writel(host, reg, O2_SD_VENDOR_SETTING2);
+> -
+> +		break;
+> +	case PCI_DEVICE_ID_O2_GG8_9860:
+> +	case PCI_DEVICE_ID_O2_GG8_9861:
+> +	case PCI_DEVICE_ID_O2_GG8_9862:
+> +	case PCI_DEVICE_ID_O2_GG8_9863:
+> +		host->mmc->caps2 |= MMC_CAP2_NO_SDIO;
+> +		host->mmc->caps |= MMC_CAP_HW_RESET;
+> +		host->quirks2 |= SDHCI_QUIRK2_PRESET_VALUE_BROKEN;
+> +		slot->host->mmc_host_ops.get_cd = sdhci_o2_get_cd;
+>  		break;
+>  	default:
+>  		break;
+> @@ -684,6 +719,7 @@ static int sdhci_pci_o2_probe(struct sdhci_pci_chip *chip)
+>  {
+>  	int ret;
+>  	u8 scratch;
+> +	u16 scratch16;
+>  	u32 scratch_32;
+>  
+>  	switch (chip->pdev->device) {
+> @@ -893,6 +929,46 @@ static int sdhci_pci_o2_probe(struct sdhci_pci_chip *chip)
+>  		scratch |= 0x80;
+>  		pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch);
+>  		break;
+> +	case PCI_DEVICE_ID_O2_GG8_9860:
+> +	case PCI_DEVICE_ID_O2_GG8_9861:
+> +	case PCI_DEVICE_ID_O2_GG8_9862:
+> +	case PCI_DEVICE_ID_O2_GG8_9863:
+> +		/* UnLock WP */
+> +		ret = pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch);
+> +		if (ret)
+> +			return ret;
+> +		scratch &= 0x7f;
+> +		pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch);
+> +
+> +		/* Select mode switch source as software control */
+> +		pci_read_config_word(chip->pdev, O2_SD_PARA_SET_REG1, &scratch16);
+> +		scratch16 &= 0xF8FF;
+> +		scratch16 |= BIT(9);
+> +		pci_write_config_word(chip->pdev, O2_SD_PARA_SET_REG1, scratch16);
+> +
+> +		/* set VDD1 supply source */
+> +		pci_read_config_word(chip->pdev, O2_SD_VDDX_CTRL_REG, &scratch16);
+> +		scratch16 &= 0xFFE3;
+> +		scratch16 |= BIT(3);
+> +		pci_write_config_word(chip->pdev, O2_SD_VDDX_CTRL_REG, scratch16);
+> +
+> +		/* Set host drive strength*/
+> +		scratch16 = 0x0025;
+> +		pci_write_config_word(chip->pdev, O2_SD_PLL_SETTING, scratch16);
+> +
+> +		/* Set output delay*/
+> +		pci_read_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, &scratch_32);
+> +		scratch_32 &= 0xFF0FFF00;
+> +		scratch_32 |= 0x00B0003B;
+> +		pci_write_config_dword(chip->pdev, O2_SD_OUTPUT_CLK_SOURCE_SWITCH, scratch_32);
+> +
+> +		/* Lock WP */
+> +		ret = pci_read_config_byte(chip->pdev, O2_SD_LOCK_WP, &scratch);
+> +		if (ret)
+> +			return ret;
+> +		scratch |= 0x80;
+> +		pci_write_config_byte(chip->pdev, O2_SD_LOCK_WP, scratch);
+> +		break;
+>  	}
+>  
+>  	return 0;
+> diff --git a/drivers/mmc/host/sdhci-pci.h b/drivers/mmc/host/sdhci-pci.h
+> index 3661a224fb04..d680a030f3bf 100644
+> --- a/drivers/mmc/host/sdhci-pci.h
+> +++ b/drivers/mmc/host/sdhci-pci.h
+> @@ -11,6 +11,10 @@
+>  #define PCI_DEVICE_ID_O2_FUJIN2		0x8520
+>  #define PCI_DEVICE_ID_O2_SEABIRD0	0x8620
+>  #define PCI_DEVICE_ID_O2_SEABIRD1	0x8621
+> +#define PCI_DEVICE_ID_O2_GG8_9860	0x9860
+> +#define PCI_DEVICE_ID_O2_GG8_9861	0x9861
+> +#define PCI_DEVICE_ID_O2_GG8_9862	0x9862
+> +#define PCI_DEVICE_ID_O2_GG8_9863	0x9863
+>  
+>  #define PCI_DEVICE_ID_INTEL_PCH_SDIO0	0x8809
+>  #define PCI_DEVICE_ID_INTEL_PCH_SDIO1	0x880a
+> 
+> base-commit: 9e87b63ed37e202c77aa17d4112da6ae0c7c097c
 
-## Metric Regressions (compared to v6.3.7)
-
-## Test Fixes (compared to v6.3.7)
-
-## Metric Fixes (compared to v6.3.7)
-
-## Test result summary
-total: 181373, pass: 152623, fail: 3225, skip: 25380, xfail: 145
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 145 total, 144 passed, 1 failed
-* arm64: 54 total, 53 passed, 1 failed
-* i386: 41 total, 40 passed, 1 failed
-* mips: 30 total, 28 passed, 2 failed
-* parisc: 4 total, 4 passed, 0 failed
-* powerpc: 38 total, 36 passed, 2 failed
-* riscv: 26 total, 25 passed, 1 failed
-* s390: 16 total, 14 passed, 2 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 46 total, 46 passed, 0 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-exec
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-mincore
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-user_events
-* kselftest-vDSO
-* kselftest-watchdog
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
