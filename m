@@ -2,71 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF29A736BBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 14:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C23D736BCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 14:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231972AbjFTMTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 08:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48672 "EHLO
+        id S232735AbjFTMUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 08:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbjFTMTU (ORCPT
+        with ESMTP id S232348AbjFTMUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 08:19:20 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81917128;
-        Tue, 20 Jun 2023 05:19:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=E5QUUBOujBKv+gztbLya39h7W7rLwvJjpjCrvA62fL4=; b=q8pPW/CMb3NPPRXd2htA4UuS5y
-        ORv47SxAac/b008gU7UOTJSUHz6GNsDktaLvZdBjtYGyvQf1qCJHQ1D13KQRyhl3jXXCSnUzSJ9e7
-        v/XlVE5EPNMthDD3tNm0b5WO7yFo6hIXfgREbx9redDW9VbbJvohyhFmg7D3DC41P1MjxbyAarlUg
-        VcQONfFztZNqUSpyFbQFknU7kCE2bQkLqLVrPdcXgDFBoSpQ/8eH6BxX+7wZCS/HnRMxgmrLz/e26
-        pCz16eRyByMQ/btJ6S/6A8A37hD/AVGA/XXhAQL0Z+L3JVXIDMNMiO2b28Pu3tGtTIk46r61tRg79
-        9IfM+kZg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qBaK4-00D489-Np; Tue, 20 Jun 2023 12:19:00 +0000
-Date:   Tue, 20 Jun 2023 13:19:00 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Bean Huo <huobean@gmail.com>
-Cc:     Bean Huo <beanhuo@iokpp.de>, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, akpm@linux-foundation.org, jack@suse.cz,
-        jack@suse.com, tytso@mit.edu, adilger.kernel@dilger.ca,
-        mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
-        linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ocfs2-devel@oss.oracle.com,
-        beanhuo@micron.com
-Subject: Re: [PATCH v2 1/5] fs/buffer: clean up block_commit_write
-Message-ID: <ZJGZNGyIhJEeYagR@casper.infradead.org>
-References: <20230619211827.707054-1-beanhuo@iokpp.de>
- <20230619211827.707054-2-beanhuo@iokpp.de>
- <ZJE6Nf6XmeHIlFJI@casper.infradead.org>
- <9513017b07522373d9e886478f889867b7cae54d.camel@gmail.com>
+        Tue, 20 Jun 2023 08:20:13 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADEFD10E2;
+        Tue, 20 Jun 2023 05:20:11 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f90b51ab39so31992635e9.1;
+        Tue, 20 Jun 2023 05:20:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687263610; x=1689855610;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YN4XeAAW9Msbpq4rVR/lXtHCKRrTEhKEAVXjSUlPPNY=;
+        b=busncoqU/9hcpDtBZvdrY/THUyqTAoJ5hkQDAzgfzxZR0IMV4l3dNoPjUFYYHLZetW
+         jf/5wunI/AU+rA3VTswiPQjns5p8diTzP77zE52hCdHQiAPpMcXHYEAmtIHkTbvqdK+J
+         H7PZ+2zM47UXgZlwaf0IOx81ieDhrjh3HBaAawyVmDdw4wQseSZ+HGtw1TBIc5R5Vik1
+         8lNpgWpUxYt3ZxLoWP5ssxtbTsnRruSzADbspW5ZAQoxMxwA7ZShMm58QapqMtI+kYus
+         dvGl9BdBT1ztwqoaxIz2nbgdExHCYQeNBPLmUvqyZBXtW9UEnrx1d6cY0Cdjzy1Re/v8
+         aN5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687263610; x=1689855610;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YN4XeAAW9Msbpq4rVR/lXtHCKRrTEhKEAVXjSUlPPNY=;
+        b=VsjmkuPkEJ3jNTpyQCErjRvLPhs4b9L8fpc77Iy4nvpMP6iabFY7udnrSuNGg7ToMX
+         VIvzNzgf62sbJwv86Ev9FZzZUwZlaqp+Yl8A24JNP1BwXhWP2gI3KddhxJawzHMr2gQP
+         dZEX+anHnvlDU3ivjQBJj4coQJHYT3ikUqsu1qzkrEsPkyKIAitN5lIYj2KnRXofp/Dh
+         yMH5sJ0hSilis2qnsbHrAh14879LwF19JOcLgkJoPs0py5fOtKTIaA/WcDQuQEJV5n4m
+         lZhT5CrCSBDIEis5kIICODvFtAxgFY+VupMt6NJN7h6M6WccIQVXxujN3uPTcAt23n63
+         qHXQ==
+X-Gm-Message-State: AC+VfDyVP/ceyQp4/wiTBs/h5XCFwi6F4TsRfa0nYaaNg1KZPjEr6aeK
+        y06xnfwvj1KqkjwC790lAkM=
+X-Google-Smtp-Source: ACHHUZ4O+NZZj+sKZX5xYKL3BHLJ2/pBF7IkPd8LnTYybGpvOtE4qgprz+QVS3Y/LdEwKd/Fp2xQWg==
+X-Received: by 2002:a7b:c391:0:b0:3f9:b3f5:b8f with SMTP id s17-20020a7bc391000000b003f9b3f50b8fmr2994679wmj.34.1687263609980;
+        Tue, 20 Jun 2023 05:20:09 -0700 (PDT)
+Received: from debian ([63.135.72.41])
+        by smtp.gmail.com with ESMTPSA id q19-20020a1cf313000000b003f7361ca753sm13081501wmq.24.2023.06.20.05.20.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 05:20:09 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 13:20:08 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 6.3 000/187] 6.3.9-rc1 review
+Message-ID: <ZJGZeFafSMZGszdg@debian>
+References: <20230619102157.579823843@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9513017b07522373d9e886478f889867b7cae54d.camel@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230619102157.579823843@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 12:57:11PM +0200, Bean Huo wrote:
-> On Tue, 2023-06-20 at 06:33 +0100, Matthew Wilcox wrote:
-> > You're going to need to redo these patches, I'm afraid.  A series of
-> > patches I wrote just went in that convert __block_commit_write (but
-> > not block_commit_write) to take a folio instead of a page.
-> 
-> Do you know which git repo merged with your patches? 
+Hi Greg,
 
-They're in git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-It's usually easiest to just work against
-git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next
+On Mon, Jun 19, 2023 at 12:26:58PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.3.9 release.
+> There are 187 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 
+Build test (gcc version 12.2.1 20230511):
+mips: 52 configs -> no failure
+arm: 71 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+csky allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+mips: Booted on ci20 board. No regression. [3]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/4085
+[2]. https://openqa.qa.codethink.co.uk/tests/4081
+[3]. https://openqa.qa.codethink.co.uk/tests/4079
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+-- 
+Regards
+Sudip
