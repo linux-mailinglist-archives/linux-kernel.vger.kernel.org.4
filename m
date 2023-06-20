@@ -2,205 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D9F7362D9
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 06:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9EE7362D7
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 06:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230273AbjFTEyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 00:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47980 "EHLO
+        id S230173AbjFTEyG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 00:54:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjFTEyK (ORCPT
+        with ESMTP id S230015AbjFTEyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 00:54:10 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE0DF1;
-        Mon, 19 Jun 2023 21:54:07 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35K4nSdv000605;
-        Tue, 20 Jun 2023 04:54:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=tMbOqLbkGaSzt59019hzF7GgEpt3cvTf1DsQRZdhl58=;
- b=WTFWHT+SX89wLj93dj1a7Tq0DjFWuLG+1BsOY7n6Xvn69wvK0r+7jhaQxC5YQbmO/J4I
- 7wkgQLqi/WDzbnscwdaQEepKY3qjW7CEUAFAfnXmAm/qh+0ydw2V4Um6h0+3Jrp5D0bl
- d708MBtZHJlBYHOHZqVNG3hdOu9aMRubZmTSyq2tuUQeeCI9pfaXKVKPZ30jYaWMPB/A
- 5ni2QRz7KcddlNoXtMj6eBfCBeH76MqnPkbgkUpIXcsJeOplxBpbAqLKqNmCkLsquXJ0
- jlng8i68l4SVUYUFUtYCpqVwcQo2ejGcZxYO4jWaRo+FPdVF8x9n7nSkQOtAegyzJ/go hg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rarwes2ar-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Jun 2023 04:54:02 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35K4s1NL009854
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Jun 2023 04:54:01 GMT
-Received: from [10.217.219.188] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 19 Jun
- 2023 21:53:58 -0700
-Message-ID: <7efa451e-2601-f448-af33-b844091db264@quicinc.com>
-Date:   Tue, 20 Jun 2023 10:23:55 +0530
+        Tue, 20 Jun 2023 00:54:04 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D758C6;
+        Mon, 19 Jun 2023 21:54:02 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QlZ6H3YwSz4wjF;
+        Tue, 20 Jun 2023 14:53:59 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1687236840;
+        bh=suI4KpgbK5VrndPgV8n5VWkerfSeVjf7EIddwu6JhPE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=FtaTnuHyEJ7LsLOTF6Ajy1Lo+1lKGhRP2cEcSN1+BH66o3IBGrLApaqL4pqpzmmlF
+         Rbh3Mwa0YXEapbFTdIykAt6VDScYBfrnO9XT/9tkxySqS9e8FLUn3PV/4E2PV+VCwp
+         blkkW8Ov+1nrj6W/8gKV9zLm0WHFNWcZBLahvNesPt+BHSv7wmWEIO0PqoDcVCkLK1
+         qW4Lnu/K9ZpjoCmef5RsEswwZWeXyyStJ0xIhiI7N22o+0R9eTl5EbUyODcrH5T1rZ
+         85EtseqiyIIIEjAwpj2vkkLCWheBjP1+XPPPwRN0OMLSXPEcYJxA7lXgxAUkZwZP72
+         7t95DTZicKpVQ==
+Date:   Tue, 20 Jun 2023 14:53:57 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the tip tree
+Message-ID: <20230620145357.12d6b23f@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.1
-Subject: Re: [PATCH v3] usb: dwc3: gadget: Propagate core init errors to UDC
- during pullup
-To:     Johan Hovold <johan@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>
-References: <20230618120949.14868-1-quic_kriskura@quicinc.com>
- <ZI_-c5g20DSJOSu2@hovoldconsulting.com>
- <fca531e0-88ec-ba19-2c11-e8965ac653b2@quicinc.com>
- <ZJBvBE-xy2X_wWO0@hovoldconsulting.com>
-Content-Language: en-US
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <ZJBvBE-xy2X_wWO0@hovoldconsulting.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 5xlJuWBHArZYLgWMTiUDCdVmtxD5AaUm
-X-Proofpoint-ORIG-GUID: 5xlJuWBHArZYLgWMTiUDCdVmtxD5AaUm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-20_02,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- mlxlogscore=999 spamscore=0 mlxscore=0 malwarescore=0 bulkscore=0
- phishscore=0 impostorscore=0 adultscore=0 suspectscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306200043
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/qKbab17/XbTXiSu=AKDKWc_";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/qKbab17/XbTXiSu=AKDKWc_
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 6/19/2023 8:36 PM, Johan Hovold wrote:
-> On Mon, Jun 19, 2023 at 06:20:43PM +0530, Krishna Kurapati PSSNV wrote:
->> On 6/19/2023 12:36 PM, Johan Hovold wrote:
->>> On Sun, Jun 18, 2023 at 05:39:49PM +0530, Krishna Kurapati wrote:
-> 
->>>> @@ -2747,7 +2747,9 @@ static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
->>>>    	ret = pm_runtime_get_sync(dwc->dev);
->>>>    	if (!ret || ret < 0) {
->>>>    		pm_runtime_put(dwc->dev);
->>>> -		return 0;
->>>> +		if (ret < 0)
->>>> +			pm_runtime_set_suspended(dwc->dev);
->>>
->>> This bit is broken and is also not mentioned or explained in the commit
->>> message. What are you trying to achieve here?
->>>
->>> You cannot set the state like this after runtime PM is enabled and the
->>> above call will always fail.
-> 
->> The reason why I an returning ret is because, when the first get_sync
->> fails because of core_init failure and we return 0 instead of ret, the
->> UDC thinks that controller has started successfully but we never set the
->> run stop bit.
-> 
-> That bit is clear.
-> 
->> So when we plug out the cable,  the disconnect event won't
->> be generated and we never send on systems like android the user space
->> will never clear the UDC upon disconnect. Its a sort of mismatch between
->> controller and udc.
-> 
-> Ok, but the controller is an error state after the resume failure. And
-> here you rely on user space to retry gadget activation in order to
-> eventually detect the disconnect event?
->   
->> Also once the first get_sync fails, the dwc->dev->power.runtime_error
->> flag is set and successive calls to get_sync always return -EINVAL. In
->> this situation even if UDC/configfs retry pullup, resume_common will
->> never be called and we never actually start the controller or resume
->> dwc->dev.
->>
->> By calling set_suspended, I am trying to clear the runtime_error flag so
->> that the next retry to pullup will call resume_common and retry
->> core_init and set run_stop.
-> 
-> Ok, thanks, that's the bit I was missing in the commit message.
-> 
-> First, I perhaps mistakingly thought pm_runtime_set_suspended() may only
-> be called with PM runtime disabled, but it appears it may indeed be
-> valid to call also after an error but with the caveat that the device
-> must then actually be in the suspended state.
-> 
-> The documentation and implementation is inconsistent here as the kernel
-> doc for pm_runtime_set_suspended() clearly states:
-> 
-> 	It is not valid to call this function for devices with runtime
-> 	PM enabled.
-> 
-> and it also looks like we'd end up with an active-child counter
-> imbalance if anyone actually tries to do so.
-> 
-> But either way, it also seems like the controller is not guaranteed to
-> be suspended here as pm_runtime_get_sync() may also fail after a
-> previous errors that have left the controller in the active state?
->  > Also, what kind of errors would cause core_init and resume to fail here?
-> 
-Hi Johan,
+After merging the tip tree, today's linux-next build (x86_64 allnoconfig)
+failed like this:
 
-   As per the comment just above the get_sync during pullup, the 
-resume_common path is used to resume the controller and start peripheral 
-mode incase the dwc3 was in suspended state. So if we are entering 
-gadget_resume we are in suspended state the first time it is called.
+In file included from include/linux/mem_encrypt.h:17,
+                 from arch/x86/include/asm/page_types.h:7,
+                 from arch/x86/include/asm/page.h:9,
+                 from arch/x86/include/asm/thread_info.h:12,
+                 from include/linux/thread_info.h:60,
+                 from arch/x86/include/asm/preempt.h:9,
+                 from include/linux/preempt.h:78,
+                 from include/linux/spinlock.h:56,
+                 from include/linux/swait.h:7,
+                 from include/linux/completion.h:12,
+                 from include/linux/crypto.h:15,
+                 from arch/x86/kernel/asm-offsets.c:9:
+arch/x86/include/asm/mem_encrypt.h:23:20: error: static declaration of 'mem=
+_encrypt_init' follows non-static declaration
+   23 | static inline void mem_encrypt_init(void) { }
+      |                    ^~~~~~~~~~~~~~~~
+In file included from include/linux/printk.h:6,
+                 from include/linux/kernel.h:30,
+                 from arch/x86/include/asm/percpu.h:27,
+                 from arch/x86/include/asm/preempt.h:6:
+include/linux/init.h:158:6: note: previous declaration of 'mem_encrypt_init=
+' with type 'void(void)'
+  158 | void mem_encrypt_init(void);
+      |      ^~~~~~~~~~~~~~~~
 
-Regarding the errors that might leave controller in active state, I have 
-faced issue in core init, and in that function there is a cleanup 
-happening in case something fails. So controller was actually not in 
-active state after cleanup was done. In resume common, if 
-core_init_for_resume is failing, we cleanup everything initialized up 
-until that point.
+Caused by commits
 
-The scenario you mentioned would be applicable in case gadget_resume 
-fails. We are not having a return value check and I am not sure what 
-would be the side effect of not having that check there. Either ways, 
-since it was failing for core init, I went ahead and made this patch.
+  439e17576eb4 ("init, x86: Move mem_encrypt_init() into arch_cpu_finalize_=
+init()")
+  0a9567ac5e6a ("x86/mem_encrypt: Unbreak the AMD_MEM_ENCRYPT=3Dn build")
 
-As per the reason for failure in core init, the following is what was 
-happening at customer's end:
+from the tip tree interacting with commit
 
-1. Cable plug-in
-2. get_sync calls resume common which inturn calls core_init
-3. core soft reset fails in core init, we cleanup and return -110
-4. After applying this patch, the -110 was propagated to UDC properly
-5. We got a second call to pullup via connect_control and this time 
-reset was successful.
+  ad1a48301f65 ("init: consolidate prototypes in linux/init.h")
 
-The behavior was similar to [1]. There as well, on all Gen-2 targets, 
-after the retry happens I see soft reset is passing but failing for 
-first attempt.
+=46rom the mm tree.
 
-[1]: 
-https://lore.kernel.org/all/20230510075252.31023-2-quic_kriskura@quicinc.com/
+I have applied the following merge fix patch for today (but I think it
+can be consolidated into the mm tree commit - along with removing the
+parts that remove this declaration from elsewhere).
 
-Regards,
-Krishna,
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 20 Jun 2023 14:30:52 +1000
+Subject: [PATCH] fix up for "init: consolidate prototypes in linux/init.h"
 
-> If this is something that you see during normal operation then this
-> seems to suggest that something is wrong with the runtime pm
-> implementation.
-> 
-> Note that virtually all drivers treat resume failures as fatal errors
-> and do not implement any recovery from that.
-> 
-> In fact, the only other example of this kind of usage that I could find
-> is also for a Qualcomm driver...
-> 
-> Johan
+interacting with commits
+
+  439e17576eb4 ("init, x86: Move mem_encrypt_init() into arch_cpu_finalize_=
+init()")
+  0a9567ac5e6a ("x86/mem_encrypt: Unbreak the AMD_MEM_ENCRYPT=3Dn build")
+
+from the tip tree.
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ include/linux/init.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/include/linux/init.h b/include/linux/init.h
+index 1200fa99e848..266c3e1640d4 100644
+--- a/include/linux/init.h
++++ b/include/linux/init.h
+@@ -155,7 +155,6 @@ void __init init_rootfs(void);
+=20
+ void init_IRQ(void);
+ void time_init(void);
+-void mem_encrypt_init(void);
+ void poking_init(void);
+ void pgtable_cache_init(void);
+=20
+--=20
+2.39.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/qKbab17/XbTXiSu=AKDKWc_
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSRMOUACgkQAVBC80lX
+0Gz4Cgf/aihCAXnUlNd5x7sInWtQDM4gJO8xiHXmz5CiVlVmpDwYzzuplX6UlKwH
+6R9Toqt9aLQQhCorWQCW08QsnoiUmV0FOqHdB+TdMr6/ew5LoHnxMcrNXNFEn55Q
+8nJDYgPZoNXh+6F0Bc3AY2CsVy1lGpABkR7I3gICmyEvimwaH5PLTAKjK1tPeRA7
+ThORHH5hcdLbGRtPwAYqRNwJaYfXX1jm/NhhZpR+NU5hX5gu4C8M2VG4PeofUcoS
+xe/WciQNaa75KmnBhXHHSLrFtmuRexYp7JIwrCsPO8HnuRmZ4qLSma/0PCnDzmIb
+k+wvTU9odtBvy7hzv7GDrlGP/Ct3EA==
+=fgjL
+-----END PGP SIGNATURE-----
+
+--Sig_/qKbab17/XbTXiSu=AKDKWc_--
