@@ -2,250 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B75B736694
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AEB4736696
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232016AbjFTIqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 04:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49916 "EHLO
+        id S231279AbjFTIqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 04:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232014AbjFTIqM (ORCPT
+        with ESMTP id S232020AbjFTIqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 04:46:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D436E72
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 01:46:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0935E61049
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 08:46:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54080C433C0;
-        Tue, 20 Jun 2023 08:46:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687250770;
-        bh=TQjPtAYxTNuXGasBPn7DviEY9IbqSVODbZ5OTQJzlDA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ERSorwLzotKCYA7nLdIx8+nEcpGIIEqMMwz1RxTBzfi0JEjB1LTH6CntGV/xnrElf
-         HY26odflX72zv/1dHt3ZucTnLJ1SnsxfO8BNySz3YZkaTLHoErUT9sRWPxasPc9Fjb
-         yTb3tLckFhTim9Tsy/asVZOFqQl9+m36mjUu6VTrNsfBcMmXl7RVfdjPHEFe6T77nX
-         Pk+YpVfZEK5mKVWO/DPaPeeWfT7LEMYO9DPiZwKI/9SC/S0GTL1UB18zzmh61cNtCq
-         SHAQeK2pQhD/YirKg6RGh5nYTfW2oMaWT9Y2qXx4Yb5iwCp9u/Fptk0F5NqaCj6OWQ
-         U6Cb+/LoVjG5Q==
-Date:   Tue, 20 Jun 2023 11:45:30 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Yajun Deng <yajun.deng@linux.dev>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v4] mm: pass nid to reserve_bootmem_region()
-Message-ID: <20230620084530.GD52412@kernel.org>
-References: <20230619023406.424298-1-yajun.deng@linux.dev>
+        Tue, 20 Jun 2023 04:46:32 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4639EE7E
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 01:46:31 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3ff242aae7aso302261cf.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 01:46:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687250790; x=1689842790;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WpMN46255pLt0PRsCdWTS+xfZSx8+DsL9WPhOXxZ9yk=;
+        b=PUqQz1EyhdM75s0SWzyaBzQzX0HnVw8z2tsr6Op5/cN/cUW4/9lVAm4tjUratYJjg6
+         SAa1qHvWrjcDlnMecddAd8WdeBu5dKN6auGzZvp0P3LIZh1iETIFzdrWTUvD2wJE77qs
+         2mLe8avFtMO/Ojubc766CY+rkfUD6VLkkeJ2sAPs9vMP+Iwa80zNJWBCR80BFGoGUkhi
+         Fel8EfzQOxpGz9H+TJM8B0dV0ED1LULnMJPqQjmOoK+IbKR6NSdoy6B1QGfJ8QBASrbb
+         VSrGJh6JuDJhShsGdLPxvy8QD+vwPBIL/1kPhfa45ywAyoSQiWFdkEBIbwP21rucqh1B
+         nmeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687250790; x=1689842790;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WpMN46255pLt0PRsCdWTS+xfZSx8+DsL9WPhOXxZ9yk=;
+        b=AmeB5XET1JfuR1SEiof6ODhujBrylvvCvTAtYq0yW8o1AlN6zjkidm3hLfio2pilQW
+         zmaLRz9znklpPXKqiHWxR907y7mMwyWmTTJbXppXeHROlEvYcwKKKOfv1MvpwzAQK1B5
+         GEz3UDTpVEdeXA+vVy2cJE2jtVAzEFIrT6Mw426l+EA/vXEBw3rWqyLaWfw62gZQpfbw
+         LNCx+66HCCSx/wIXrP12lMWQXZegHKuEpN2G3KxlI/R4mBtYNCyuY/7NY1dcNxiG4mko
+         Kv6CE+ASPq2dydkClAD+2ci9NTzu8w7Q/48pQAEx6FdFyILJlwXHDujnYHel47ALzK1+
+         3sBA==
+X-Gm-Message-State: AC+VfDx2j/ZmRGB/ufbforpRauh0B0ReVTK4FVuipBEcXVzcxI/TBAqu
+        +H4ZEpuqXmmzbKCi0nocMYtBrUM+u/tNAvG97C7YDQ==
+X-Google-Smtp-Source: ACHHUZ7c7mEXwzWWmZ4Mt+o83/SYAZ8LwUtMYoMBccyXZedPSaPV4i/RlxgZcYvPYMXK14Xt5u73mUccGJ/IHDfsjYE=
+X-Received: by 2002:ac8:5c4d:0:b0:3f9:ab2c:88b9 with SMTP id
+ j13-20020ac85c4d000000b003f9ab2c88b9mr1096161qtj.25.1687250790235; Tue, 20
+ Jun 2023 01:46:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230619023406.424298-1-yajun.deng@linux.dev>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230619082547.73929-1-wuyun.abel@bytedance.com>
+ <CANn89i+deprQWB0dmsUD1sRmy1VQCQwKnZUkLu_AEGV=ow=PKQ@mail.gmail.com> <6ed78c81-c1ac-dba4-059c-12f6b2bb9c53@bytedance.com>
+In-Reply-To: <6ed78c81-c1ac-dba4-059c-12f6b2bb9c53@bytedance.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Tue, 20 Jun 2023 10:46:19 +0200
+Message-ID: <CANn89iK4hme4XmUyZVjTXMZYqAm8w+9tbwnrtHyJ3N28cAFYTw@mail.gmail.com>
+Subject: Re: Re: [PATCH net-next] inet: Save one atomic op if no memcg to charge
+To:     Abel Wu <wuyun.abel@bytedance.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:NETWORKING [IPv4/IPv6]" <netdev@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 10:34:06AM +0800, Yajun Deng wrote:
-> early_pfn_to_nid() is called frequently in init_reserved_page(), it
-> returns the node id of the PFN. These PFN are probably from the same
-> memory region, they have the same node id. It's not necessary to call
-> early_pfn_to_nid() for each PFN.
-> 
-> Pass nid to reserve_bootmem_region() and drop the call to
-> early_pfn_to_nid() in init_reserved_page(). Also, set nid on all
-> reserved pages before doing this, as some reserved memory regions may
-> not be set nid.
-> 
-> The most beneficial function is memmap_init_reserved_pages() if
-> CONFIG_DEFERRED_STRUCT_PAGE_INIT is enabled.
-> 
-> The following data was tested on an x86 machine with 190GB of RAM.
-> 
-> before:
-> memmap_init_reserved_pages()  67ms
-> 
-> after:
-> memmap_init_reserved_pages()  20ms
-> 
-> Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202306160145.juJMr3Bi-lkp@intel.com
+On Tue, Jun 20, 2023 at 5:04=E2=80=AFAM Abel Wu <wuyun.abel@bytedance.com> =
+wrote:
+>
+> On 6/19/23 6:08 PM, Eric Dumazet wrote:
+> > On Mon, Jun 19, 2023 at 10:26=E2=80=AFAM Abel Wu <wuyun.abel@bytedance.=
+com> wrote:
+> >>
+> >> If there is no net-memcg associated with the sock, don't bother
+> >> calculating its memory usage for charge.
+> >>
+> >> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+> >> ---
+> >>   net/ipv4/inet_connection_sock.c | 18 +++++++++++-------
+> >>   1 file changed, 11 insertions(+), 7 deletions(-)
+> >>
+> >> diff --git a/net/ipv4/inet_connection_sock.c b/net/ipv4/inet_connectio=
+n_sock.c
+> >> index 65ad4251f6fd..73798282c1ef 100644
+> >> --- a/net/ipv4/inet_connection_sock.c
+> >> +++ b/net/ipv4/inet_connection_sock.c
+> >> @@ -706,20 +706,24 @@ struct sock *inet_csk_accept(struct sock *sk, in=
+t flags, int *err, bool kern)
+> >>   out:
+> >>          release_sock(sk);
+> >>          if (newsk && mem_cgroup_sockets_enabled) {
+> >> -               int amt;
+> >> +               int amt =3D 0;
+> >>
+> >>                  /* atomically get the memory usage, set and charge th=
+e
+> >>                   * newsk->sk_memcg.
+> >>                   */
+> >>                  lock_sock(newsk);
+> >>
+> >> -               /* The socket has not been accepted yet, no need to lo=
+ok at
+> >> -                * newsk->sk_wmem_queued.
+> >> -                */
+> >> -               amt =3D sk_mem_pages(newsk->sk_forward_alloc +
+> >> -                                  atomic_read(&newsk->sk_rmem_alloc))=
+;
+> >>                  mem_cgroup_sk_alloc(newsk);
+> >> -               if (newsk->sk_memcg && amt)
+> >> +               if (newsk->sk_memcg) {
+> >> +                       /* The socket has not been accepted yet, no ne=
+ed
+> >> +                        * to look at newsk->sk_wmem_queued.
+> >> +                        */
+> >> +                       amt =3D sk_mem_pages(newsk->sk_forward_alloc +
+> >> +                                          atomic_read(&newsk->sk_rmem=
+_alloc));
+> >> +
+> >> +               }
+> >> +
+> >> +               if (amt)
+> >>                          mem_cgroup_charge_skmem(newsk->sk_memcg, amt,
+> >>                                                  GFP_KERNEL | __GFP_NO=
+FAIL);
+> >
+> > This looks correct, but claiming reading an atomic_t is an 'atomic op'
+> > is a bit exaggerated.
+>
+> Yeah, shall I change subject to 'inet: Skip usage calculation if no
+> memcg to charge'? Or do you have any suggestions?
 
-Reviewed-by: Mike Rapoport (IBM) <rppt@kernel.org>
-
-> ---
-> V3 -> V4: make the test for early_page_initialised() inside if
-> 	  (IS_ENABLED(CONFIG_DEFERRED_STRUCT_PAGE_INIT))
-> V2 -> V3: set nid on all reserved pages before pass nid.
-> V1 -> V2: fix build error when CONFIG_NUMA is not enabled.
-> ---
->  include/linux/mm.h |  3 ++-
->  mm/memblock.c      | 31 +++++++++++++++++++++----------
->  mm/mm_init.c       | 30 +++++++++++++++++-------------
->  3 files changed, 40 insertions(+), 24 deletions(-)
-> 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index fdd966b11f79..a7a0e692d44d 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -2960,7 +2960,8 @@ extern unsigned long free_reserved_area(void *start, void *end,
->  
->  extern void adjust_managed_page_count(struct page *page, long count);
->  
-> -extern void reserve_bootmem_region(phys_addr_t start, phys_addr_t end);
-> +extern void reserve_bootmem_region(phys_addr_t start,
-> +				   phys_addr_t end, int nid);
->  
->  /* Free the reserved page into the buddy system, so it gets managed. */
->  static inline void free_reserved_page(struct page *page)
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index ff0da1858778..f9e61e565a53 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -2091,19 +2091,30 @@ static void __init memmap_init_reserved_pages(void)
->  {
->  	struct memblock_region *region;
->  	phys_addr_t start, end;
-> -	u64 i;
-> +	int nid;
-> +
-> +	/*
-> +	 * set nid on all reserved pages and also treat struct
-> +	 * pages for the NOMAP regions as PageReserved
-> +	 */
-> +	for_each_mem_region(region) {
-> +		nid = memblock_get_region_node(region);
-> +		start = region->base;
-> +		end = start + region->size;
-> +
-> +		if (memblock_is_nomap(region))
-> +			reserve_bootmem_region(start, end, nid);
-> +
-> +		memblock_set_node(start, end, &memblock.reserved, nid);
-> +	}
->  
->  	/* initialize struct pages for the reserved regions */
-> -	for_each_reserved_mem_range(i, &start, &end)
-> -		reserve_bootmem_region(start, end);
-> +	for_each_reserved_mem_region(region) {
-> +		nid = memblock_get_region_node(region);
-> +		start = region->base;
-> +		end = start + region->size;
->  
-> -	/* and also treat struct pages for the NOMAP regions as PageReserved */
-> -	for_each_mem_region(region) {
-> -		if (memblock_is_nomap(region)) {
-> -			start = region->base;
-> -			end = start + region->size;
-> -			reserve_bootmem_region(start, end);
-> -		}
-> +		reserve_bootmem_region(start, end, nid);
->  	}
->  }
->  
-> diff --git a/mm/mm_init.c b/mm/mm_init.c
-> index d393631599a7..a1963c3322af 100644
-> --- a/mm/mm_init.c
-> +++ b/mm/mm_init.c
-> @@ -646,10 +646,8 @@ static inline void pgdat_set_deferred_range(pg_data_t *pgdat)
->  }
->  
->  /* Returns true if the struct page for the pfn is initialised */
-> -static inline bool __meminit early_page_initialised(unsigned long pfn)
-> +static inline bool __meminit early_page_initialised(unsigned long pfn, int nid)
->  {
-> -	int nid = early_pfn_to_nid(pfn);
-> -
->  	if (node_online(nid) && pfn >= NODE_DATA(nid)->first_deferred_pfn)
->  		return false;
->  
-> @@ -695,15 +693,14 @@ defer_init(int nid, unsigned long pfn, unsigned long end_pfn)
->  	return false;
->  }
->  
-> -static void __meminit init_reserved_page(unsigned long pfn)
-> +static void __meminit init_reserved_page(unsigned long pfn, int nid)
->  {
->  	pg_data_t *pgdat;
-> -	int nid, zid;
-> +	int zid;
->  
-> -	if (early_page_initialised(pfn))
-> +	if (early_page_initialised(pfn, nid))
->  		return;
->  
-> -	nid = early_pfn_to_nid(pfn);
->  	pgdat = NODE_DATA(nid);
->  
->  	for (zid = 0; zid < MAX_NR_ZONES; zid++) {
-> @@ -717,7 +714,7 @@ static void __meminit init_reserved_page(unsigned long pfn)
->  #else
->  static inline void pgdat_set_deferred_range(pg_data_t *pgdat) {}
->  
-> -static inline bool early_page_initialised(unsigned long pfn)
-> +static inline bool early_page_initialised(unsigned long pfn, int nid)
->  {
->  	return true;
->  }
-> @@ -727,7 +724,7 @@ static inline bool defer_init(int nid, unsigned long pfn, unsigned long end_pfn)
->  	return false;
->  }
->  
-> -static inline void init_reserved_page(unsigned long pfn)
-> +static inline void init_reserved_page(unsigned long pfn, int nid)
->  {
->  }
->  #endif /* CONFIG_DEFERRED_STRUCT_PAGE_INIT */
-> @@ -738,7 +735,8 @@ static inline void init_reserved_page(unsigned long pfn)
->   * marks the pages PageReserved. The remaining valid pages are later
->   * sent to the buddy page allocator.
->   */
-> -void __meminit reserve_bootmem_region(phys_addr_t start, phys_addr_t end)
-> +void __meminit reserve_bootmem_region(phys_addr_t start,
-> +				      phys_addr_t end, int nid)
->  {
->  	unsigned long start_pfn = PFN_DOWN(start);
->  	unsigned long end_pfn = PFN_UP(end);
-> @@ -747,7 +745,7 @@ void __meminit reserve_bootmem_region(phys_addr_t start, phys_addr_t end)
->  		if (pfn_valid(start_pfn)) {
->  			struct page *page = pfn_to_page(start_pfn);
->  
-> -			init_reserved_page(start_pfn);
-> +			init_reserved_page(start_pfn, nid);
->  
->  			/* Avoid false-positive PageTail() */
->  			INIT_LIST_HEAD(&page->lru);
-> @@ -2579,8 +2577,14 @@ void __init set_dma_reserve(unsigned long new_dma_reserve)
->  void __init memblock_free_pages(struct page *page, unsigned long pfn,
->  							unsigned int order)
->  {
-> -	if (!early_page_initialised(pfn))
-> -		return;
-> +
-> +	if (IS_ENABLED(CONFIG_DEFERRED_STRUCT_PAGE_INIT)) {
-> +		int nid = early_pfn_to_nid(pfn);
-> +
-> +		if (!early_page_initialised(pfn, nid))
-> +			return;
-> +	}
-> +
->  	if (!kmsan_memblock_free_pages(page, order)) {
->  		/* KMSAN will take care of these pages. */
->  		return;
-> -- 
-> 2.25.1
-> 
-
--- 
-Sincerely yours,
-Mike.
+I would call this a cleanup or refactoring, maybe...
