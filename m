@@ -2,851 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E57736525
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:47:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41503736528
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjFTHrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 03:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46626 "EHLO
+        id S231311AbjFTHsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 03:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230465AbjFTHrb (ORCPT
+        with ESMTP id S231377AbjFTHrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 03:47:31 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2427CE4D;
-        Tue, 20 Jun 2023 00:47:23 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxEemKWZFkthoHAA--.12525S3;
-        Tue, 20 Jun 2023 15:47:22 +0800 (CST)
-Received: from bogon.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxK8pvWZFkJGYhAA--.19652S6;
-        Tue, 20 Jun 2023 15:47:21 +0800 (CST)
-From:   Youling Tang <tangyouling@loongson.cn>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        madvenka@linux.microsoft.com
-Cc:     chenzhongjin@huawei.com, WANG Xuerui <kernel@xen0n.name>,
-        Xi Ruoyao <xry111@xry111.site>, live-patching@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        tangyouling00@gmail.com, youling.tang@outlook.com
-Subject: [RFC PATCH v1 04/23] objtool: Reorganize Unwind hint code
-Date:   Tue, 20 Jun 2023 15:46:30 +0800
-Message-Id: <1687247209-31676-5-git-send-email-tangyouling@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1687247209-31676-1-git-send-email-tangyouling@loongson.cn>
-References: <1687247209-31676-1-git-send-email-tangyouling@loongson.cn>
-X-CM-TRANSID: AQAAf8DxK8pvWZFkJGYhAA--.19652S6
-X-CM-SenderInfo: 5wdqw5prxox03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj9fXoWfCrWkWryDWw15Xr4kArW3CFX_yoW8Kr45Co
-        WSqr4Fkw43Xry5CFyDJ348GFsYqw4kKFW5JrZ0qrZxZ3Z5C3y29r4Iqa17AanxtF4kKrWD
-        AFWaq3yfJrWDGFn3l-sFpf9Il3svdjkaLaAFLSUrUUUUnb8apTn2vfkv8UJUUUU8wcxFpf
-        9Il3svdxBIdaVrn0xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3
-        UjIYCTnIWjp_UUUYt7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI
-        8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xG
-        Y2AK021l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14
-        v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E
-        14v26r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6x
-        kI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v2
-        6rWY6Fy7McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48Icx
-        kI7VAKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCj
-        c4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26F1j6w1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcV
-        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jxxhdUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 20 Jun 2023 03:47:53 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BE51A5;
+        Tue, 20 Jun 2023 00:47:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687247259; x=1718783259;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=AvW6FvDKLs48OB05W5i9A8xyHwB+7rTDh0Nq8MSsEXU=;
+  b=XzgvhZRD0r/EORVFfcAq6M6yLx5mAL/XGyszruhUwY3J+SoUeAu8aGPi
+   MsvCcsSN5l28hxzPBWlnWqLXwmFemrhbGNuxEPQV4NVDVefRV8+xSMoJo
+   znwKT/IVwQ3f3NTyZtpBpekKnN5yXQ/sYAEu6VAvH9Nkk7LbIB80nFPqu
+   SoQGkPIHAwLXvIQTZomwYIrseCjw/F6CLpAt8kvKj0ORGwtOV3dF1Ujmo
+   5MzPciRvUJpOGxfK2njxHgw5mo9Nl8MPJklYGRG2zWn07CHa+Vs4w9V0v
+   zxM24K1zDxoh/NrAgrqdVn4VgmYazNEvAeL+CWgsq+PG5Pda86Ecxlgtt
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="446171306"
+X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
+   d="scan'208";a="446171306"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 00:47:37 -0700
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="747955902"
+X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
+   d="scan'208";a="747955902"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga001.jf.intel.com with ESMTP; 20 Jun 2023 00:47:36 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 20 Jun 2023 00:47:35 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Tue, 20 Jun 2023 00:47:35 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Tue, 20 Jun 2023 00:47:35 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.48) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Tue, 20 Jun 2023 00:47:35 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LvlcR5C6Zp7nT62HdWNe6nG/w4SkQTZOrMCTu0kYstvsQ5gDzll4g+wy28trVLhP62etRJzzDJfHjKALcjiFweiJsUxZqPIkFdJZncZDSceO/HF95nXuaWfHj+evt8CrvvMINIvWh1HNW7NCN/oa1U0nhseRmgav3mEyNkPHGpddILlp6WqEE3KLNhNbc3sJNgfo4Ig7izqR9xkszNXHSwZmDWd891/CBt2BxWXwTHHo3oo2/+twRasr0RlgosXU2N+kZ+2o03rGWnjkQW53VgJKAXx7r8ZKN8dQfDW6MjNV/mgjWi3Zy0LoaNFVK7VSF8foTYUCGfxoGXQLqG9BUA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TVsdoCEAvMk2DKX+6XFBZiGhYy1UhMA1+hTbGJu1yks=;
+ b=REOs8iOhJH3NcnOHeYuwHPB7dQ1EXSFUZ+1jcWhFneea2EiWjpVmZX6nqPM5VAaWU1gYcvMQ8rIikiDz7Vp7OMrHdlma5eNC47klqVxEsRG1fejgCpIPmOnzhr0tWauVCKNzbABv2EVKHJH63xzOD+gWA6snrsRMD+ig7WOchgMi0p7Ctqkl4FRPRM2bOnxcH9kMSc+Ci+YymAGVKmvG4x2fgUivF5S+zPdnl/cVUD7nTs0pXI5Dcxu0sy2zCKYT731dIgA5UK8dTgxrRKZFLDHb1Gqu4LM3tMgP/ws8NBco3k8E4BGAila07rPOye8eIR4ySPUby11ZxHb5do2EWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SA1PR11MB6734.namprd11.prod.outlook.com (2603:10b6:806:25d::22)
+ by PH7PR11MB5796.namprd11.prod.outlook.com (2603:10b6:510:13b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Tue, 20 Jun
+ 2023 07:47:27 +0000
+Received: from SA1PR11MB6734.namprd11.prod.outlook.com
+ ([fe80::c016:653d:c037:44fc]) by SA1PR11MB6734.namprd11.prod.outlook.com
+ ([fe80::c016:653d:c037:44fc%7]) with mapi id 15.20.6500.036; Tue, 20 Jun 2023
+ 07:47:27 +0000
+From:   "Li, Xin3" <xin3.li@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "steve.wahl@hpe.com" <steve.wahl@hpe.com>,
+        "mike.travis@hpe.com" <mike.travis@hpe.com>,
+        "Sivanich, Dimitri" <dimitri.sivanich@hpe.com>,
+        "Anderson, Russ" <russ.anderson@hpe.com>,
+        "dvhart@infradead.org" <dvhart@infradead.org>,
+        "andy@infradead.org" <andy@infradead.org>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "Cui, Dexuan" <decui@microsoft.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "acme@kernel.org" <acme@kernel.org>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        "alexander.shishkin@linux.intel.com" 
+        <alexander.shishkin@linux.intel.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "namhyung@kernel.org" <namhyung@kernel.org>,
+        "irogers@google.com" <irogers@google.com>,
+        "Hunter, Adrian" <adrian.hunter@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "jiangshanlai@gmail.com" <jiangshanlai@gmail.com>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "yangtiezhu@loongson.cn" <yangtiezhu@loongson.cn>
+Subject: RE: [PATCH 2/3] x86/vector: Replace IRQ_MOVE_CLEANUP_VECTOR with a
+ timer callback
+Thread-Topic: [PATCH 2/3] x86/vector: Replace IRQ_MOVE_CLEANUP_VECTOR with a
+ timer callback
+Thread-Index: AQHZowfgzs/ltzhQV02KS6H0RArmlq+TSWeAgAAE1kA=
+Date:   Tue, 20 Jun 2023 07:47:27 +0000
+Message-ID: <SA1PR11MB67340612B7984EADA4CF5461A85CA@SA1PR11MB6734.namprd11.prod.outlook.com>
+References: <20230619231611.2230-1-xin3.li@intel.com>
+ <20230619231611.2230-3-xin3.li@intel.com>
+ <20230620072047.GS4253@hirez.programming.kicks-ass.net>
+In-Reply-To: <20230620072047.GS4253@hirez.programming.kicks-ass.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR11MB6734:EE_|PH7PR11MB5796:EE_
+x-ms-office365-filtering-correlation-id: aae76458-ade4-4f68-8aa7-08db71629828
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: wivGHqueSDiaOjJ0VtzpjaTUMmSfiKO7ydHxzGEk1oZR1t/CDrQA5HttjS63wtWJ5JdqL707cL2TYgvvbol97gxw4fGJdex4jxWflNbG4OtMr1vMONCobcq6v4CDRfhBsTgFji70WNYEzoeePAg8m0C2LD4rODPWdPesFVPZZeGv+7SPM/2Q4edwyScK2lz9XumLBMA1SNfFiZ1AIoB33fSvDI4IFRZeVA6FOFdeG1IV9kzFTenNIh2jMJg3eUHk55y522pQuANiiexFDgolJz50ECbxVXhk4Qjihf590XjvwHI1/ZuByqIGoGIrkcGORLBY3njQF7iZNxpuruDS+KkaKkTxBRusonTutFLUB7DrAlkqjGCKkqK7BcpZ0fS5GrGr3WRQvLmjISdsUxqBKMPlmWMBVGntToq+LRI0aShdJ0AiQb3kTwt7dqf82YuRtZRiHe6rysn3jh7geLkEP6Y7KZdyINNxg1WYKt7QwCY+qGjKvBM2kjKZ+XT1A8UAGF7KRx5FaZpuPpgip0lgq5+djb7gGzoiuuAUDdZpAEge43fnuoV9VfqIzMPCdLFvLjC8HttkjA7SiOqgOdHFKLFZZuBJVpahJUwj2zFWYFmAGCrX90dP+BWCyQbolnXA
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6734.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(376002)(366004)(39860400002)(396003)(346002)(451199021)(7416002)(7406005)(122000001)(82960400001)(52536014)(86362001)(83380400001)(4744005)(38070700005)(2906002)(76116006)(5660300002)(4326008)(54906003)(66556008)(186003)(66946007)(8676002)(8936002)(64756008)(66446008)(66476007)(478600001)(41300700001)(6916009)(55016003)(9686003)(6506007)(38100700002)(26005)(71200400001)(7696005)(316002)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vBlsi7c8Z8zaZntO6c9CzeG5P510qJtmFkMKRgVK1SZEG7kqcJ+Ch1zNqzRZ?=
+ =?us-ascii?Q?Vbc4XIyJrKUXXjAuTy7jEqD+N3SNmCwnoLd2F6iK2lHaS6UfCUSueFvqPvfd?=
+ =?us-ascii?Q?IMWLUhvVn1/iz9AekpTpoQxJBtfICEJNuVwG9YlyMI7NVyKzFoQK2caOH/p6?=
+ =?us-ascii?Q?qBwE7+7VcVQW1cWPzgwyRgJs507ZwziwRqI/zBbBwNHmJKZXs9dTh5UnpSVv?=
+ =?us-ascii?Q?CLbB2MqZ0tp/uKNhzHVvOohAHrCKlDagGi9TkfjVygBuX4DZHvHGoGUD3JhW?=
+ =?us-ascii?Q?bkYJZGeEBGBKudt6IlRxhu76Bwdf5Uu5vcVUO2mOMcU9vfEc+0bM8wTlGty1?=
+ =?us-ascii?Q?jtE4ntbtV2Wpxapt5lIFtwZVhSZ9Z9LJqPwjZI/pwtuz5uDTyaJBxH+fX3vt?=
+ =?us-ascii?Q?NSS7X45fDoVtdBLS8ixbYXcU+DisxF+qSRBC2tm4f3lUFOrgoTCDWBoNiZyR?=
+ =?us-ascii?Q?DYUFlQFYNyQOZfXf0qvCRBAZQUtK2nkWhfzwR9g/mcRClBsK8No1lyPB0EgL?=
+ =?us-ascii?Q?7U4LxIrCGhh7e5xoU+zXRgJp0qKcc3G06WkTD/fNncVTHh7zE4wp6nDZlQpt?=
+ =?us-ascii?Q?11o4tZ48rKosYyTRBMNqyJmIF0pkapiiRYAQLxM/oo/aAjT38pHfEhh2k9gO?=
+ =?us-ascii?Q?fqy5q1f5Vwtvo2n+eDVah3uIRSZ3Q7cdG29L9YjCJVwm/g2Ki3JkhBQ7c8RD?=
+ =?us-ascii?Q?Std/UwlmtiRiMNJ1dyarjA6ksLND9y+39zMJQfZRSm6NuqosYP/0yAX1b7m5?=
+ =?us-ascii?Q?AUh9YhWr39OvpC72evzB0+W6+xfhDIfgusS8CY73mCtTLz2jF98YNkfug/Mn?=
+ =?us-ascii?Q?9Ka496je0uocUzNAJhv/U9PFy4nDMaYSzXdK7e/lreQin0H+saNW3Y5l//+t?=
+ =?us-ascii?Q?j5i6KplkAcRiC/+FxSDp/WPzLnTcvmNZOdx0DmHOdoZd2E2YbQ7ZLA4iDz+n?=
+ =?us-ascii?Q?mZUNlGHbK5qtD3EWwWdavlPrZJwlZMQ1DICrmL2qUvJV+URlTjXo+CEz84pW?=
+ =?us-ascii?Q?nH7IZpwOGx8Evm9DmkXYFuwHkfpuxi8mMGrmGA/lHDSRLjTPI5EdZjQvFYPg?=
+ =?us-ascii?Q?iBsSJsxLP9k8ZBg4WhIvt4zTrjlsCj9ArjF9V0DDp/HGQtUOErMFgJo2ezzF?=
+ =?us-ascii?Q?BGBxTR2ytyLpFq6dz7B+1EKkC8w8V+MqkyyHwzeJvwdmCaJSFq+YmGqTEIG1?=
+ =?us-ascii?Q?b+pyfjtb5K8AIU18m0TqwJtz7MV8KHem4A93RRnj8v+bUVf1BmulSwyQbJVm?=
+ =?us-ascii?Q?6sITa/jGqvT/iCbw1v2vbwnYaCg7LM1Cbrft7/Kkan7GzQmiO+YbdLkrWwLX?=
+ =?us-ascii?Q?KIoTfPJDlruDvBaKlCvhRx8jthRlq7/1uvLCf4vyr/LcYz1WoYBkBzapaS4/?=
+ =?us-ascii?Q?iac3PU07WJOZ6zZEVF0DAKihR+2bODAADcsLMPoaSr5ZpvAcgc4ptggYej1i?=
+ =?us-ascii?Q?0qDaqgErisPJRFP3nNXLj1ZeZa9UEgXMx8CYOi92dWZIWXtpmDlOkOJ7VzQD?=
+ =?us-ascii?Q?XqWBmnMx9DjwcI/J+H+Ux4AJG3VUQm4JuWFK8tIDCCj0IIKCvNShA6keaQno?=
+ =?us-ascii?Q?fd5LZGQz0faAxavvQxI=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6734.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aae76458-ade4-4f68-8aa7-08db71629828
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 Jun 2023 07:47:27.5981
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Bl1Rc+yY6SuX62odDsvZNx5gsYgnhxQb+4zXBonOExCdOa5JPHwWdANLKfYkyg5GM0RhpOtpTm2WI5ILtF1WVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB5796
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
+> > +/*
+> > + * Called with vector_lock held
+> > + */
+>=20
+> Instead of comments like that, I tend to add a lockdep_assert*() statemen=
+t to the
+> same effect. Which unlike comment actually validate the claim and since i=
+t's code
+> it tends to not go stale like comments do.
 
-Unwind hint macros and struct unwind_hint are arch-specific. Move them
-into the arch-specific file asm/unwind_hints.h. But the unwind hint
-types are generic. Retain them in linux/objtool.h.
+neat, will do!
 
-Unwind hints can be used with static stack validation as well as other
-forms of validation such as dynamic FP validation. Move the function
-read_unwind_hints() from check.c to a new file unwind_hints.c so that
-it can be shared across validation schemes.
+> > +	bool rearm =3D false;
+>=20
+> 	lockdep_assert_held(&vector_lock);
 
-Signed-off-by: Madhavan T. Venkataraman <madvenka@linux.microsoft.com>
----
- arch/x86/include/asm/unwind_hints.h       |  86 ++++++++++++
- arch/x86/kernel/unwind_orc.c              |   2 +-
- include/linux/objtool.h                   |  70 ----------
- tools/arch/x86/include/asm/unwind_hints.h | 160 ++++++++++++++++++++++
- tools/include/linux/objtool.h             |  70 ----------
- tools/objtool/Build                       |   1 +
- tools/objtool/check.c                     |  97 -------------
- tools/objtool/include/objtool/insn.h      |   1 +
- tools/objtool/sync-check.sh               |   1 +
- tools/objtool/unwind_hints.c              | 107 +++++++++++++++
- 10 files changed, 357 insertions(+), 238 deletions(-)
- create mode 100644 tools/arch/x86/include/asm/unwind_hints.h
- create mode 100644 tools/objtool/unwind_hints.c
+My bad, didn't notice that quite a few functions in the file already do tha=
+t.=20
 
-diff --git a/arch/x86/include/asm/unwind_hints.h b/arch/x86/include/asm/unwind_hints.h
-index e7c71750b309..2570edfa8c35 100644
---- a/arch/x86/include/asm/unwind_hints.h
-+++ b/arch/x86/include/asm/unwind_hints.h
-@@ -1,10 +1,96 @@
- #ifndef _ASM_X86_UNWIND_HINTS_H
- #define _ASM_X86_UNWIND_HINTS_H
- 
-+#ifndef __ASSEMBLY__
-+
-+#include <linux/types.h>
-+
-+/*
-+ * This struct is used by asm and inline asm code to manually annotate the
-+ * location of registers on the stack.
-+ */
-+struct unwind_hint {
-+	u32		ip;
-+	s16		sp_offset;
-+	u8		sp_reg;
-+	u8		type;
-+	u8		signal;
-+	u8		end;
-+};
-+#endif
-+
- #include <linux/objtool.h>
- 
- #include "orc_types.h"
- 
-+#ifdef CONFIG_OBJTOOL
-+
-+#ifndef __ASSEMBLY__
-+
-+#define UNWIND_HINT(sp_reg, sp_offset, type, signal, end)	\
-+	"987: \n\t"						\
-+	".pushsection .discard.unwind_hints\n\t"		\
-+	/* struct unwind_hint */				\
-+	".long 987b - .\n\t"					\
-+	".short " __stringify(sp_offset) "\n\t"			\
-+	".byte " __stringify(sp_reg) "\n\t"			\
-+	".byte " __stringify(type) "\n\t"			\
-+	".byte " __stringify(signal) "\n\t"			\
-+	".byte " __stringify(end) "\n\t"			\
-+	".balign 4 \n\t"					\
-+	".popsection\n\t"
-+
-+#else /* __ASSEMBLY__ */
-+
-+/*
-+ * In asm, there are two kinds of code: normal C-type callable functions and
-+ * the rest.  The normal callable functions can be called by other code, and
-+ * don't do anything unusual with the stack.  Such normal callable functions
-+ * are annotated with the ENTRY/ENDPROC macros.  Most asm code falls in this
-+ * category.  In this case, no special debugging annotations are needed because
-+ * objtool can automatically generate the ORC data for the ORC unwinder to read
-+ * at runtime.
-+ *
-+ * Anything which doesn't fall into the above category, such as syscall and
-+ * interrupt handlers, tends to not be called directly by other functions, and
-+ * often does unusual non-C-function-type things with the stack pointer.  Such
-+ * code needs to be annotated such that objtool can understand it.  The
-+ * following CFI hint macros are for this type of code.
-+ *
-+ * These macros provide hints to objtool about the state of the stack at each
-+ * instruction.  Objtool starts from the hints and follows the code flow,
-+ * making automatic CFI adjustments when it sees pushes and pops, filling out
-+ * the debuginfo as necessary.  It will also warn if it sees any
-+ * inconsistencies.
-+ */
-+.macro UNWIND_HINT type:req sp_reg=0 sp_offset=0 signal=0 end=0
-+.Lunwind_hint_ip_\@:
-+	.pushsection .discard.unwind_hints
-+		/* struct unwind_hint */
-+		.long .Lunwind_hint_ip_\@ - .
-+		.short \sp_offset
-+		.byte \sp_reg
-+		.byte \type
-+		.byte \signal
-+		.byte \end
-+		.balign 4
-+	.popsection
-+.endm
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#else /* !CONFIG_OBJTOOL */
-+
-+#ifndef __ASSEMBLY__
-+#define UNWIND_HINT(sp_reg, sp_offset, type, signal, end)	\
-+	"\n\t"
-+#else
-+.macro UNWIND_HINT type:req sp_reg=0 sp_offset=0 signal=0 end=0
-+.endm
-+#endif
-+
-+#endif /* CONFIG_OBJTOOL */
-+
- #ifdef __ASSEMBLY__
- 
- .macro UNWIND_HINT_EMPTY
-diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
-index 37307b40f8da..01b89f2039c3 100644
---- a/arch/x86/kernel/unwind_orc.c
-+++ b/arch/x86/kernel/unwind_orc.c
-@@ -1,10 +1,10 @@
- // SPDX-License-Identifier: GPL-2.0-only
--#include <linux/objtool.h>
- #include <linux/module.h>
- #include <linux/sort.h>
- #include <asm/ptrace.h>
- #include <asm/stacktrace.h>
- #include <asm/unwind.h>
-+#include <asm/unwind_hints.h>
- #include <asm/orc_types.h>
- #include <asm/orc_lookup.h>
- 
-diff --git a/include/linux/objtool.h b/include/linux/objtool.h
-index 9ac3df3fccf0..1af295efc12c 100644
---- a/include/linux/objtool.h
-+++ b/include/linux/objtool.h
-@@ -2,24 +2,6 @@
- #ifndef _LINUX_OBJTOOL_H
- #define _LINUX_OBJTOOL_H
- 
--#ifndef __ASSEMBLY__
--
--#include <linux/types.h>
--
--/*
-- * This struct is used by asm and inline asm code to manually annotate the
-- * location of registers on the stack.
-- */
--struct unwind_hint {
--	u32		ip;
--	s16		sp_offset;
--	u8		sp_reg;
--	u8		type;
--	u8		signal;
--	u8		end;
--};
--#endif
--
- /*
-  * UNWIND_HINT_TYPE_CALL: Indicates that sp_reg+sp_offset resolves to PREV_SP
-  * (the caller's SP right before it made the call).  Used for all callable
-@@ -50,19 +32,6 @@ struct unwind_hint {
- 
- #ifndef __ASSEMBLY__
- 
--#define UNWIND_HINT(sp_reg, sp_offset, type, signal, end)	\
--	"987: \n\t"						\
--	".pushsection .discard.unwind_hints\n\t"		\
--	/* struct unwind_hint */				\
--	".long 987b - .\n\t"					\
--	".short " __stringify(sp_offset) "\n\t"			\
--	".byte " __stringify(sp_reg) "\n\t"			\
--	".byte " __stringify(type) "\n\t"			\
--	".byte " __stringify(signal) "\n\t"			\
--	".byte " __stringify(end) "\n\t"			\
--	".balign 4 \n\t"					\
--	".popsection\n\t"
--
- /*
-  * This macro marks the given function's stack frame as "non-standard", which
-  * tells objtool to ignore the function when doing stack metadata validation.
-@@ -110,41 +79,6 @@ struct unwind_hint {
- 	.long 999b;						\
- 	.popsection;
- 
--/*
-- * In asm, there are two kinds of code: normal C-type callable functions and
-- * the rest.  The normal callable functions can be called by other code, and
-- * don't do anything unusual with the stack.  Such normal callable functions
-- * are annotated with the ENTRY/ENDPROC macros.  Most asm code falls in this
-- * category.  In this case, no special debugging annotations are needed because
-- * objtool can automatically generate the ORC data for the ORC unwinder to read
-- * at runtime.
-- *
-- * Anything which doesn't fall into the above category, such as syscall and
-- * interrupt handlers, tends to not be called directly by other functions, and
-- * often does unusual non-C-function-type things with the stack pointer.  Such
-- * code needs to be annotated such that objtool can understand it.  The
-- * following CFI hint macros are for this type of code.
-- *
-- * These macros provide hints to objtool about the state of the stack at each
-- * instruction.  Objtool starts from the hints and follows the code flow,
-- * making automatic CFI adjustments when it sees pushes and pops, filling out
-- * the debuginfo as necessary.  It will also warn if it sees any
-- * inconsistencies.
-- */
--.macro UNWIND_HINT type:req sp_reg=0 sp_offset=0 signal=0 end=0
--.Lunwind_hint_ip_\@:
--	.pushsection .discard.unwind_hints
--		/* struct unwind_hint */
--		.long .Lunwind_hint_ip_\@ - .
--		.short \sp_offset
--		.byte \sp_reg
--		.byte \type
--		.byte \signal
--		.byte \end
--		.balign 4
--	.popsection
--.endm
--
- .macro STACK_FRAME_NON_STANDARD func:req
- 	.pushsection .discard.func_stack_frame_non_standard, "aw"
- 	_ASM_PTR \func
-@@ -177,16 +111,12 @@ struct unwind_hint {
- 
- #ifndef __ASSEMBLY__
- 
--#define UNWIND_HINT(sp_reg, sp_offset, type, signal, end) \
--	"\n\t"
- #define STACK_FRAME_NON_STANDARD(func)
- #define STACK_FRAME_NON_STANDARD_FP(func)
- #define ANNOTATE_NOENDBR
- #define ASM_REACHABLE
- #else
- #define ANNOTATE_INTRA_FUNCTION_CALL
--.macro UNWIND_HINT type:req sp_reg=0 sp_offset=0 signal=0 end=0
--.endm
- .macro STACK_FRAME_NON_STANDARD func:req
- .endm
- .macro ANNOTATE_NOENDBR
-diff --git a/tools/arch/x86/include/asm/unwind_hints.h b/tools/arch/x86/include/asm/unwind_hints.h
-new file mode 100644
-index 000000000000..2570edfa8c35
---- /dev/null
-+++ b/tools/arch/x86/include/asm/unwind_hints.h
-@@ -0,0 +1,160 @@
-+#ifndef _ASM_X86_UNWIND_HINTS_H
-+#define _ASM_X86_UNWIND_HINTS_H
-+
-+#ifndef __ASSEMBLY__
-+
-+#include <linux/types.h>
-+
-+/*
-+ * This struct is used by asm and inline asm code to manually annotate the
-+ * location of registers on the stack.
-+ */
-+struct unwind_hint {
-+	u32		ip;
-+	s16		sp_offset;
-+	u8		sp_reg;
-+	u8		type;
-+	u8		signal;
-+	u8		end;
-+};
-+#endif
-+
-+#include <linux/objtool.h>
-+
-+#include "orc_types.h"
-+
-+#ifdef CONFIG_OBJTOOL
-+
-+#ifndef __ASSEMBLY__
-+
-+#define UNWIND_HINT(sp_reg, sp_offset, type, signal, end)	\
-+	"987: \n\t"						\
-+	".pushsection .discard.unwind_hints\n\t"		\
-+	/* struct unwind_hint */				\
-+	".long 987b - .\n\t"					\
-+	".short " __stringify(sp_offset) "\n\t"			\
-+	".byte " __stringify(sp_reg) "\n\t"			\
-+	".byte " __stringify(type) "\n\t"			\
-+	".byte " __stringify(signal) "\n\t"			\
-+	".byte " __stringify(end) "\n\t"			\
-+	".balign 4 \n\t"					\
-+	".popsection\n\t"
-+
-+#else /* __ASSEMBLY__ */
-+
-+/*
-+ * In asm, there are two kinds of code: normal C-type callable functions and
-+ * the rest.  The normal callable functions can be called by other code, and
-+ * don't do anything unusual with the stack.  Such normal callable functions
-+ * are annotated with the ENTRY/ENDPROC macros.  Most asm code falls in this
-+ * category.  In this case, no special debugging annotations are needed because
-+ * objtool can automatically generate the ORC data for the ORC unwinder to read
-+ * at runtime.
-+ *
-+ * Anything which doesn't fall into the above category, such as syscall and
-+ * interrupt handlers, tends to not be called directly by other functions, and
-+ * often does unusual non-C-function-type things with the stack pointer.  Such
-+ * code needs to be annotated such that objtool can understand it.  The
-+ * following CFI hint macros are for this type of code.
-+ *
-+ * These macros provide hints to objtool about the state of the stack at each
-+ * instruction.  Objtool starts from the hints and follows the code flow,
-+ * making automatic CFI adjustments when it sees pushes and pops, filling out
-+ * the debuginfo as necessary.  It will also warn if it sees any
-+ * inconsistencies.
-+ */
-+.macro UNWIND_HINT type:req sp_reg=0 sp_offset=0 signal=0 end=0
-+.Lunwind_hint_ip_\@:
-+	.pushsection .discard.unwind_hints
-+		/* struct unwind_hint */
-+		.long .Lunwind_hint_ip_\@ - .
-+		.short \sp_offset
-+		.byte \sp_reg
-+		.byte \type
-+		.byte \signal
-+		.byte \end
-+		.balign 4
-+	.popsection
-+.endm
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#else /* !CONFIG_OBJTOOL */
-+
-+#ifndef __ASSEMBLY__
-+#define UNWIND_HINT(sp_reg, sp_offset, type, signal, end)	\
-+	"\n\t"
-+#else
-+.macro UNWIND_HINT type:req sp_reg=0 sp_offset=0 signal=0 end=0
-+.endm
-+#endif
-+
-+#endif /* CONFIG_OBJTOOL */
-+
-+#ifdef __ASSEMBLY__
-+
-+.macro UNWIND_HINT_EMPTY
-+	UNWIND_HINT type=UNWIND_HINT_TYPE_CALL end=1
-+.endm
-+
-+.macro UNWIND_HINT_ENTRY
-+	UNWIND_HINT type=UNWIND_HINT_TYPE_ENTRY end=1
-+.endm
-+
-+.macro UNWIND_HINT_REGS base=%rsp offset=0 indirect=0 extra=1 partial=0 signal=1
-+	.if \base == %rsp
-+		.if \indirect
-+			.set sp_reg, ORC_REG_SP_INDIRECT
-+		.else
-+			.set sp_reg, ORC_REG_SP
-+		.endif
-+	.elseif \base == %rbp
-+		.set sp_reg, ORC_REG_BP
-+	.elseif \base == %rdi
-+		.set sp_reg, ORC_REG_DI
-+	.elseif \base == %rdx
-+		.set sp_reg, ORC_REG_DX
-+	.elseif \base == %r10
-+		.set sp_reg, ORC_REG_R10
-+	.else
-+		.error "UNWIND_HINT_REGS: bad base register"
-+	.endif
-+
-+	.set sp_offset, \offset
-+
-+	.if \partial
-+		.set type, UNWIND_HINT_TYPE_REGS_PARTIAL
-+	.elseif \extra == 0
-+		.set type, UNWIND_HINT_TYPE_REGS_PARTIAL
-+		.set sp_offset, \offset + (16*8)
-+	.else
-+		.set type, UNWIND_HINT_TYPE_REGS
-+	.endif
-+
-+	UNWIND_HINT sp_reg=sp_reg sp_offset=sp_offset type=type signal=\signal
-+.endm
-+
-+.macro UNWIND_HINT_IRET_REGS base=%rsp offset=0 signal=1
-+	UNWIND_HINT_REGS base=\base offset=\offset partial=1 signal=\signal
-+.endm
-+
-+.macro UNWIND_HINT_FUNC
-+	UNWIND_HINT sp_reg=ORC_REG_SP sp_offset=8 type=UNWIND_HINT_TYPE_FUNC
-+.endm
-+
-+.macro UNWIND_HINT_SAVE
-+	UNWIND_HINT type=UNWIND_HINT_TYPE_SAVE
-+.endm
-+
-+.macro UNWIND_HINT_RESTORE
-+	UNWIND_HINT type=UNWIND_HINT_TYPE_RESTORE
-+.endm
-+
-+#else
-+
-+#define UNWIND_HINT_FUNC \
-+	UNWIND_HINT(ORC_REG_SP, 8, UNWIND_HINT_TYPE_FUNC, 0, 0)
-+
-+#endif /* __ASSEMBLY__ */
-+
-+#endif /* _ASM_X86_UNWIND_HINTS_H */
-diff --git a/tools/include/linux/objtool.h b/tools/include/linux/objtool.h
-index 9ac3df3fccf0..1af295efc12c 100644
---- a/tools/include/linux/objtool.h
-+++ b/tools/include/linux/objtool.h
-@@ -2,24 +2,6 @@
- #ifndef _LINUX_OBJTOOL_H
- #define _LINUX_OBJTOOL_H
- 
--#ifndef __ASSEMBLY__
--
--#include <linux/types.h>
--
--/*
-- * This struct is used by asm and inline asm code to manually annotate the
-- * location of registers on the stack.
-- */
--struct unwind_hint {
--	u32		ip;
--	s16		sp_offset;
--	u8		sp_reg;
--	u8		type;
--	u8		signal;
--	u8		end;
--};
--#endif
--
- /*
-  * UNWIND_HINT_TYPE_CALL: Indicates that sp_reg+sp_offset resolves to PREV_SP
-  * (the caller's SP right before it made the call).  Used for all callable
-@@ -50,19 +32,6 @@ struct unwind_hint {
- 
- #ifndef __ASSEMBLY__
- 
--#define UNWIND_HINT(sp_reg, sp_offset, type, signal, end)	\
--	"987: \n\t"						\
--	".pushsection .discard.unwind_hints\n\t"		\
--	/* struct unwind_hint */				\
--	".long 987b - .\n\t"					\
--	".short " __stringify(sp_offset) "\n\t"			\
--	".byte " __stringify(sp_reg) "\n\t"			\
--	".byte " __stringify(type) "\n\t"			\
--	".byte " __stringify(signal) "\n\t"			\
--	".byte " __stringify(end) "\n\t"			\
--	".balign 4 \n\t"					\
--	".popsection\n\t"
--
- /*
-  * This macro marks the given function's stack frame as "non-standard", which
-  * tells objtool to ignore the function when doing stack metadata validation.
-@@ -110,41 +79,6 @@ struct unwind_hint {
- 	.long 999b;						\
- 	.popsection;
- 
--/*
-- * In asm, there are two kinds of code: normal C-type callable functions and
-- * the rest.  The normal callable functions can be called by other code, and
-- * don't do anything unusual with the stack.  Such normal callable functions
-- * are annotated with the ENTRY/ENDPROC macros.  Most asm code falls in this
-- * category.  In this case, no special debugging annotations are needed because
-- * objtool can automatically generate the ORC data for the ORC unwinder to read
-- * at runtime.
-- *
-- * Anything which doesn't fall into the above category, such as syscall and
-- * interrupt handlers, tends to not be called directly by other functions, and
-- * often does unusual non-C-function-type things with the stack pointer.  Such
-- * code needs to be annotated such that objtool can understand it.  The
-- * following CFI hint macros are for this type of code.
-- *
-- * These macros provide hints to objtool about the state of the stack at each
-- * instruction.  Objtool starts from the hints and follows the code flow,
-- * making automatic CFI adjustments when it sees pushes and pops, filling out
-- * the debuginfo as necessary.  It will also warn if it sees any
-- * inconsistencies.
-- */
--.macro UNWIND_HINT type:req sp_reg=0 sp_offset=0 signal=0 end=0
--.Lunwind_hint_ip_\@:
--	.pushsection .discard.unwind_hints
--		/* struct unwind_hint */
--		.long .Lunwind_hint_ip_\@ - .
--		.short \sp_offset
--		.byte \sp_reg
--		.byte \type
--		.byte \signal
--		.byte \end
--		.balign 4
--	.popsection
--.endm
--
- .macro STACK_FRAME_NON_STANDARD func:req
- 	.pushsection .discard.func_stack_frame_non_standard, "aw"
- 	_ASM_PTR \func
-@@ -177,16 +111,12 @@ struct unwind_hint {
- 
- #ifndef __ASSEMBLY__
- 
--#define UNWIND_HINT(sp_reg, sp_offset, type, signal, end) \
--	"\n\t"
- #define STACK_FRAME_NON_STANDARD(func)
- #define STACK_FRAME_NON_STANDARD_FP(func)
- #define ANNOTATE_NOENDBR
- #define ASM_REACHABLE
- #else
- #define ANNOTATE_INTRA_FUNCTION_CALL
--.macro UNWIND_HINT type:req sp_reg=0 sp_offset=0 signal=0 end=0
--.endm
- .macro STACK_FRAME_NON_STANDARD func:req
- .endm
- .macro ANNOTATE_NOENDBR
-diff --git a/tools/objtool/Build b/tools/objtool/Build
-index 64ccae49cd5f..4e9ec210f134 100644
---- a/tools/objtool/Build
-+++ b/tools/objtool/Build
-@@ -8,6 +8,7 @@ objtool-y += builtin-check.o
- objtool-y += cfi.o
- objtool-y += insn.o
- objtool-y += decode.o
-+objtool-y += unwind_hints.o
- objtool-y += elf.o
- objtool-y += objtool.o
- 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 26ed9b0b8f49..f91723010d6b 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -1842,103 +1842,6 @@ static int add_jump_table_alts(struct objtool_file *file)
- 	return 0;
- }
- 
--static int read_unwind_hints(struct objtool_file *file)
--{
--	struct cfi_state cfi = init_cfi;
--	struct section *sec, *relocsec;
--	struct unwind_hint *hint;
--	struct instruction *insn;
--	struct reloc *reloc;
--	int i;
--
--	sec = find_section_by_name(file->elf, ".discard.unwind_hints");
--	if (!sec)
--		return 0;
--
--	relocsec = sec->reloc;
--	if (!relocsec) {
--		WARN("missing .rela.discard.unwind_hints section");
--		return -1;
--	}
--
--	if (sec->sh.sh_size % sizeof(struct unwind_hint)) {
--		WARN("struct unwind_hint size mismatch");
--		return -1;
--	}
--
--	file->hints = true;
--
--	for (i = 0; i < sec->sh.sh_size / sizeof(struct unwind_hint); i++) {
--		hint = (struct unwind_hint *)sec->data->d_buf + i;
--
--		reloc = find_reloc_by_dest(file->elf, sec, i * sizeof(*hint));
--		if (!reloc) {
--			WARN("can't find reloc for unwind_hints[%d]", i);
--			return -1;
--		}
--
--		insn = find_insn(file, reloc->sym->sec, reloc->addend);
--		if (!insn) {
--			WARN("can't find insn for unwind_hints[%d]", i);
--			return -1;
--		}
--
--		insn->hint = true;
--
--		if (hint->type == UNWIND_HINT_TYPE_SAVE) {
--			insn->hint = false;
--			insn->save = true;
--			continue;
--		}
--
--		if (hint->type == UNWIND_HINT_TYPE_RESTORE) {
--			insn->restore = true;
--			continue;
--		}
--
--		if (hint->type == UNWIND_HINT_TYPE_REGS_PARTIAL) {
--			struct symbol *sym = find_symbol_by_offset(insn->sec, insn->offset);
--
--			if (sym && sym->bind == STB_GLOBAL) {
--				if (opts.ibt && insn->type != INSN_ENDBR && !insn->noendbr) {
--					WARN_FUNC("UNWIND_HINT_IRET_REGS without ENDBR",
--						  insn->sec, insn->offset);
--				}
--
--				insn->entry = 1;
--			}
--		}
--
--		if (hint->type == UNWIND_HINT_TYPE_ENTRY) {
--			hint->type = UNWIND_HINT_TYPE_CALL;
--			insn->entry = 1;
--		}
--
--		if (hint->type == UNWIND_HINT_TYPE_FUNC) {
--			insn->cfi = &func_cfi;
--			continue;
--		}
--
--		if (insn->cfi)
--			cfi = *(insn->cfi);
--
--		if (arch_decode_hint_reg(hint->sp_reg, &cfi.cfa.base)) {
--			WARN_FUNC("unsupported unwind_hint sp base reg %d",
--				  insn->sec, insn->offset, hint->sp_reg);
--			return -1;
--		}
--
--		cfi.cfa.offset = bswap_if_needed(file->elf, hint->sp_offset);
--		cfi.type = hint->type;
--		cfi.signal = hint->signal;
--		cfi.end = hint->end;
--
--		insn->cfi = cfi_hash_find_or_add(&cfi);
--	}
--
--	return 0;
--}
--
- static int read_noendbr_hints(struct objtool_file *file)
- {
- 	struct section *sec;
-diff --git a/tools/objtool/include/objtool/insn.h b/tools/objtool/include/objtool/insn.h
-index 92f8f1ff6c09..0b37d72f06eb 100644
---- a/tools/objtool/include/objtool/insn.h
-+++ b/tools/objtool/include/objtool/insn.h
-@@ -128,6 +128,7 @@ bool is_first_func_insn(struct objtool_file *file,
- 
- 
- int decode_instructions(struct objtool_file *file);
-+int read_unwind_hints(struct objtool_file *file);
- 
- #define for_each_insn(file, insn)					\
- 	for (struct section *__sec, *__fake = (struct section *)1;	\
-diff --git a/tools/objtool/sync-check.sh b/tools/objtool/sync-check.sh
-index 105a291ff8e7..ee49b4e9e72c 100755
---- a/tools/objtool/sync-check.sh
-+++ b/tools/objtool/sync-check.sh
-@@ -14,6 +14,7 @@ arch/x86/include/asm/nops.h
- arch/x86/include/asm/inat_types.h
- arch/x86/include/asm/orc_types.h
- arch/x86/include/asm/emulate_prefix.h
-+arch/x86/include/asm/unwind_hints.h
- arch/x86/lib/x86-opcode-map.txt
- arch/x86/tools/gen-insn-attr-x86.awk
- include/linux/static_call_types.h
-diff --git a/tools/objtool/unwind_hints.c b/tools/objtool/unwind_hints.c
-new file mode 100644
-index 000000000000..a5aaeaafc16e
---- /dev/null
-+++ b/tools/objtool/unwind_hints.c
-@@ -0,0 +1,107 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Copyright (C) 2015-2017 Josh Poimboeuf <jpoimboe@redhat.com>
-+ */
-+#include <asm/unwind_hints.h>
-+
-+#include <objtool/builtin.h>
-+#include <objtool/endianness.h>
-+#include <objtool/insn.h>
-+#include <objtool/warn.h>
-+
-+int read_unwind_hints(struct objtool_file *file)
-+{
-+	struct cfi_state cfi = init_cfi;
-+	struct section *sec, *relocsec;
-+	struct unwind_hint *hint;
-+	struct instruction *insn;
-+	struct reloc *reloc;
-+	int i;
-+
-+	sec = find_section_by_name(file->elf, ".discard.unwind_hints");
-+	if (!sec)
-+		return 0;
-+
-+	relocsec = sec->reloc;
-+	if (!relocsec) {
-+		WARN("missing .rela.discard.unwind_hints section");
-+		return -1;
-+	}
-+
-+	if (sec->sh.sh_size % sizeof(struct unwind_hint)) {
-+		WARN("struct unwind_hint size mismatch");
-+		return -1;
-+	}
-+
-+	file->hints = true;
-+
-+	for (i = 0; i < sec->sh.sh_size / sizeof(struct unwind_hint); i++) {
-+		hint = (struct unwind_hint *)sec->data->d_buf + i;
-+
-+		reloc = find_reloc_by_dest(file->elf, sec, i * sizeof(*hint));
-+		if (!reloc) {
-+			WARN("can't find reloc for unwind_hints[%d]", i);
-+			return -1;
-+		}
-+
-+		insn = find_insn(file, reloc->sym->sec, reloc->addend);
-+		if (!insn) {
-+			WARN("can't find insn for unwind_hints[%d]", i);
-+			return -1;
-+		}
-+
-+		insn->hint = true;
-+
-+		if (hint->type == UNWIND_HINT_TYPE_SAVE) {
-+			insn->hint = false;
-+			insn->save = true;
-+			continue;
-+		}
-+
-+		if (hint->type == UNWIND_HINT_TYPE_RESTORE) {
-+			insn->restore = true;
-+			continue;
-+		}
-+
-+		if (hint->type == UNWIND_HINT_TYPE_REGS_PARTIAL) {
-+			struct symbol *sym = find_symbol_by_offset(insn->sec, insn->offset);
-+
-+			if (sym && sym->bind == STB_GLOBAL) {
-+				if (opts.ibt && insn->type != INSN_ENDBR && !insn->noendbr) {
-+					WARN_FUNC("UNWIND_HINT_IRET_REGS without ENDBR",
-+						  insn->sec, insn->offset);
-+				}
-+
-+				insn->entry = 1;
-+			}
-+		}
-+
-+		if (hint->type == UNWIND_HINT_TYPE_ENTRY) {
-+			hint->type = UNWIND_HINT_TYPE_CALL;
-+			insn->entry = 1;
-+		}
-+
-+		if (hint->type == UNWIND_HINT_TYPE_FUNC) {
-+			insn->cfi = &func_cfi;
-+			continue;
-+		}
-+
-+		if (insn->cfi)
-+			cfi = *(insn->cfi);
-+
-+		if (arch_decode_hint_reg(hint->sp_reg, &cfi.cfa.base)) {
-+			WARN_FUNC("unsupported unwind_hint sp base reg %d",
-+				  insn->sec, insn->offset, hint->sp_reg);
-+			return -1;
-+		}
-+
-+		cfi.cfa.offset = bswap_if_needed(file->elf, hint->sp_offset);
-+		cfi.type = hint->type;
-+		cfi.signal = hint->signal;
-+		cfi.end = hint->end;
-+
-+		insn->cfi = cfi_hash_find_or_add(&cfi);
-+	}
-+
-+	return 0;
-+}
--- 
-2.39.2
 
