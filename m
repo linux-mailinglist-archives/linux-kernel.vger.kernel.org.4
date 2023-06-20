@@ -2,155 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 194E4736B98
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 14:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FEE1736B9B
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 14:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232642AbjFTMHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 08:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45132 "EHLO
+        id S232390AbjFTMKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 08:10:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232036AbjFTMHt (ORCPT
+        with ESMTP id S231723AbjFTMKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 08:07:49 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36557F1;
-        Tue, 20 Jun 2023 05:07:43 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f122ff663eso6039797e87.2;
-        Tue, 20 Jun 2023 05:07:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687262860; x=1689854860;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=hIxyfJn46stbA6TKyi/zMvK8a4YI0RbVarM5jbmdCAI=;
-        b=dkuIt6osufFzTki+hy/uy6RdR9DsDdJiZGrP6NI7OaCvLOdGgP7CfO0odxg7ldZoPQ
-         QShVdSHclEcpPl+4R9CaSLRLxj6jhqVbwOLsSQyPDGd2hbGdJZq7n2Ntn+Xk1JhOWgmy
-         jurch4Kqc5RXuHYmK0xOby9chWtbjUKeFO/8qFBTyuSGThWO+RwhZTf7Ccqmy1FnOjln
-         Wr7WBeEMzA6AEcj434yracH0yzQoYPVLQ5JETmadZju+qBN6nAMv8MLcmDxpqOZ4ORS5
-         lzvb28rZPyo1JkuofxIh7sAzPqlK1tvkPjRcAO6Bk4JpJY4S3VlwQpsERRqGu/B4nHvF
-         KWmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687262860; x=1689854860;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hIxyfJn46stbA6TKyi/zMvK8a4YI0RbVarM5jbmdCAI=;
-        b=HjxWwvWH52ueVaQWs5DF19+DCiImYrN+aiMwHklK5+rZoMQUDQxePS3JUKADtCcP33
-         +iZJ6HwV6yvHR/AhWW1/md/Rtzq53o1LTK4vEHz1dx5eU31u6N4fy+GCEpUPKaRo18Fh
-         X8Zs8TInki/5MsV2qRqkk4Sx+3crqsB6nunpBtT0tQ3D4pJcQ4eVu0U1v/nGXsqA/qhG
-         f5tHkrutCfnLL90sS1VTKcVgIpW3ct3GeSOAmdaYxi1aWzYYuEDjt43tGC+do+XYz0a3
-         vc18RyyHwxKmZsOerXZ8DBGqstQ+H3FkDUNjfnbRLgdozNkFMDIf1m4uA7mbLME3IKP0
-         7FfA==
-X-Gm-Message-State: AC+VfDz/t8ibYEtzxNWawWfRbpkufI2FM+yNGdI/cJIhcLqjxIA6ihn1
-        JDS1CBKBKRKjqeDyePt4vsM=
-X-Google-Smtp-Source: ACHHUZ4IIgcrz0VmldYF7wcBKEgY95O5jWYzrGR+Szk9ZQiUVZrfiaKmKImH7VUgbVKmbK0ick+wfw==
-X-Received: by 2002:a19:6909:0:b0:4f8:7513:8cb0 with SMTP id e9-20020a196909000000b004f875138cb0mr2555748lfc.2.1687262859758;
-        Tue, 20 Jun 2023 05:07:39 -0700 (PDT)
-Received: from mobilestation.baikal.int (srv1.baikalchip.ru. [87.245.175.227])
-        by smtp.gmail.com with ESMTPSA id f26-20020a19ae1a000000b004f3b3f5751bsm333936lfc.275.2023.06.20.05.07.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 05:07:39 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 15:07:37 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     =?utf-8?B?S8O2cnk=?= Maincent <kory.maincent@bootlin.com>
-Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>
-Subject: Re: [PATCH 5/9] dmaengine: dw-edma: HDMA: Fix possible race
- condition in remote setup
-Message-ID: <wqixf5z7yjbcubjhpkormriptrcihcjezjujmwxihdcagzpzom@igfkbjwuwy7e>
-References: <20230609081654.330857-1-kory.maincent@bootlin.com>
- <20230609081654.330857-6-kory.maincent@bootlin.com>
- <20230619171550.3iyujmbre3dpe5oq@mobilestation.baikal.int>
- <20230619204105.620f87e6@kmaincent-XPS-13-7390>
+        Tue, 20 Jun 2023 08:10:12 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62B7C6;
+        Tue, 20 Jun 2023 05:10:10 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 52D6D1EC0589;
+        Tue, 20 Jun 2023 14:10:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1687263009;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Ql+U7fdRXmA/T5FzVBClcEAj8T+8ofxD8UdRBhS4onc=;
+        b=WjEsimMgK0SDv+cwlHliRtOENHTrsh91vMlUj76a3SY0Rc6H+E1QML4j0hkmoDQidVH8Jo
+        iXeveYuyVhZCavOAbekzryJbODT1+1WzsAlpLWeLbvTXnmWdxcNWhwVhZgfkinI/0jEWz6
+        GPtY+3bfzVSiL0QsI9sT/GtaoNxGfp0=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 18CQLNStf_-r; Tue, 20 Jun 2023 12:10:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1687263006; bh=Ql+U7fdRXmA/T5FzVBClcEAj8T+8ofxD8UdRBhS4onc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hfOUBxtBtBjPXF39oOF3ZUvN61XjQe3LmVhjKtWxJsHC/101LS7/ZwEAyCLXrtDos
+         6rV65BENcyyyWRLr06AnSLHuPXyYBP8k8Xku12SM1wyuoQ3Kt7xKdjkycFp66hKDeI
+         tFuA9sZRcDfWPUaFLFmL9M3d8fJU46JD2A9HhsxeXeaEyPL1MYk7jgUgshZnl0oZAw
+         OgRuwWp1I1HEPoirhwvgfY/c1X5by8s5P5gOw3pP8I8emQDdyYknlRJuLQgo31u10O
+         Jk+ojyM8mG0G6b2kJ5L0JpD5WSMAWgQ0sytpzO/R9X8XJt4S4PLWWkg6QpaXqhaO6+
+         X+XI3G+Wq8YDfZEGURuoru8FEWkLjNEwD6KAFabpurzjQPQbNuZOAMar3QqiqdycQ4
+         uDOihd2sUnMyBYqaLil+kQxq+50zc+tis817YK1HglsVOg/HvJeyupBjjO2cT+gHMM
+         dOR61duo+TRp5kxEpjcmIJQXulRbaURS/xFMoH7MoED/2Ky/h5xU7sUczEOG44CZFz
+         1bjOrgBSvWNgYLNzPwUoG+11pqfR/yFvht+38G03bd5wsnae6D/9ccuMfHQ64U5wZ4
+         tsmJXHXJbtLyApTEr6gMiQS/0RNFXcGdJzXW8hqDoM72Z/gUH4o1a2wvYS9PjVWPxB
+         DtXgq+0bY4yEUrlbXMaWY9ug=
+Received: from zn.tnic (p200300eA971dC592329C23ffFEa6A903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c592:329c:23ff:fea6:a903])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1E74440E01DE;
+        Tue, 20 Jun 2023 12:09:26 +0000 (UTC)
+Date:   Tue, 20 Jun 2023 14:09:20 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        nikunj.dadhania@amd.com, liam.merwick@oracle.com,
+        zhi.a.wang@intel.com,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH RFC v9 05/51] x86/coco: move CONFIG_HAS_CC_PLATFORM check
+ down into coco/Makefile
+Message-ID: <20230620120920.GAZJGW8B6XHrsoLGCJ@fat_crate.local>
+References: <20230612042559.375660-1-michael.roth@amd.com>
+ <20230612042559.375660-6-michael.roth@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230619204105.620f87e6@kmaincent-XPS-13-7390>
+In-Reply-To: <20230612042559.375660-6-michael.roth@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 08:41:05PM +0200, Köry Maincent wrote:
-> On Mon, 19 Jun 2023 20:15:50 +0300
-> Serge Semin <fancer.lancer@gmail.com> wrote:
-> 
-> > On Fri, Jun 09, 2023 at 10:16:50AM +0200, Köry Maincent wrote:
-> > > From: Kory Maincent <kory.maincent@bootlin.com>
-> > > 
-> > > When writing the linked list elements and pointer the control need to be
-> > > written at the end. If the control is written and the SAR and DAR not
-> > > stored we could face a race condition.
-> > > 
-> > > Fixes: e74c39573d35 ("dmaengine: dw-edma: Add support for native HDMA")
-> > > Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>  
-> > 
-> > Once again. Is this a hypothetical bug or have you actually
-> > experienced the denoted problem? If you do please describe the
-> > circumstances, give more details. Otherwise it sounds weird. Here is
-> > why.
-> > 
-> > DW eDMA HW manual states that the control LL DWORD is indeed supposed
-> > to be written after the rest of the descriptor DWORDs are written. But
-> > AFAICS it's only relevant for the LL tree entries recycling. Current
-> > DW eDMA driver design doesn't truly implement that pattern. Instead
-> > the DMA transfer is halted at the end of the chunk. Then the engine is
-> > recharged with the next chunk and execution is started over. So the
-> > runtime recycling isn't implemented (alas) for which the CB flag of
-> > the control DWORD needs to be updated only after the rest of the LLI
-> > fields.
-> 
+On Sun, Jun 11, 2023 at 11:25:13PM -0500, Michael Roth wrote:
+> Currently CONFIG_HAS_CC_PLATFORM is a prereq for building anything in
+					^^^^^^
 
-> This one is only hypothetical. It appears to me that writing the control
-> after the configuration of sar and dar is more relevant to prevent race issues
-> and should be the usual coding choice. Also you are right saying that it will
-> be relevant only for the LL tree entries recycling.
-> Simple question from non DMA expert: isn't cyclic DMA mode recycle the LL tree
-> entries? 
+Use proper english words pls.
 
-Ideally the driver should have been designed in the way you say:
-define a ring of the Linked List entries and recycle the already used
-entries while the already enabled entries are being handled by the
-DMA-engine (a similar approach is described in the DW PCIe/eDMA hw
-manual). DW eDMA engine CSRs and LLI descriptor provide enough
-functionality for that. Alas the driver implementation is more
-straightforward:
-1. Each DMA-engine config: SG-list, cyclic, interleaved is split up
-into the "burst" entries. SG-list entries are directly mapped to the
-eDMA "burst" entries. Cyclic iterations are unrolled into the
-respective number of eDMA "burst" entries. A similar story with the
-interleaved transactions.
-2. If there is no enough entries in the Linked-List memory to fully
-execute the requested DMA-transfers, then another so called DW eDMA
-"chunk" is allocated.
-3. DW eDMA engine executes the "chunks" one after another stopping at
-the end of each one and recharging the engine with the next "chunk" until
-the last one is finished.
-
-It isn't the most effective architecture, but that's how it was
-originally developed by Gustavo. Anyway discussing it is a good food
-for thoughts for the driver refactoring though.)
-
--Serge(y)
-
+> arch/x86/coco, but that is generally only applicable for guest support.
 > 
-> > 
-> > If you described a hypothetical problem then it would be ok to accept
-> > the change for the sake of consistency but I would have dropped the
-> > Fixes tag and updated the patch description with more details of the
-> > race condition you are talking about.
-> 
-> Alright, I will do that.
-> 
-> Köry
+> For SEV-SNP, helpers related purely to host support will also live in
+> arch/x86/coco. To allow for CoCo-related host support code in
+> arch/x86/coco, move that check down into the Makefile and check for it
+> specifically when needed.
+
+I have no clue what that means. Example?
+
+The last time we talked about paths, we ended up agreeing on:
+
+https://lore.kernel.org/all/Yg5nh1RknPRwIrb8@zn.tnic/
+
+So your "helpers related purely to host support" should go to
+
+arch/x86/virt/svm/sev*.c
+
+And just to keep it simple, that should be
+
+arch/x86/virt/svm/sev.c
+
+and if there's real need to split that, we can do that later.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
