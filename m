@@ -2,75 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA6D736368
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 08:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 486C573636C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 08:13:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbjFTGHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 02:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36042 "EHLO
+        id S230511AbjFTGNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 02:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229803AbjFTGHu (ORCPT
+        with ESMTP id S229757AbjFTGNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 02:07:50 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37EAC6
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 23:07:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687241269; x=1718777269;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dveNRvgnk0T7wEHMtgIvyEJb90QX++cVm6POy0ZjG+I=;
-  b=mA151xN43EaDJNMh8Kk7dZz7JPyht2r6gjRaVqBCLk1Yh4ptT2ruq1c1
-   viI22dRiV7IGnW++DfKqG/d4Zo7NES9jSLIcHtXMcN2QS5S2ZTXUV7XHt
-   FSlkex2SBk/P3FUoTj5aSUetB75th0lSOta5B+TeGzN11/zp7tgwjmSXc
-   AgAPTwowFo8qlZpqc+Jx5q9h6s4Zfy3r3qLtgdbAGKS0FZz8yxb7NJ7dm
-   J7p2GRsfWZS27f6LIGVIWmRArhNdZV6/dnC3J0oxJ4/NVOcKzDcvi4iid
-   tZPTLcuXGjz/+UpM0g128g1W2jDxnsQ6eCLvexpmll9Wdxr59HVZbNxJm
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="446154049"
-X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="446154049"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 23:07:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="838092896"
-X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="838092896"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 19 Jun 2023 23:06:58 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qBUW1-0005Zo-1Y;
-        Tue, 20 Jun 2023 06:06:57 +0000
-Date:   Tue, 20 Jun 2023 14:06:22 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     William Zhang <william.zhang@broadcom.com>,
-        Broadcom Kernel List <bcm-kernel-feedback-list@broadcom.com>,
-        Linux MTD List <linux-mtd@lists.infradead.org>
-Cc:     oe-kbuild-all@lists.linux.dev, f.fainelli@gmail.com,
-        rafal@milecki.pl, kursad.oney@broadcom.com,
-        joel.peshkin@broadcom.com, computersforpeace@gmail.com,
-        anand.gore@broadcom.com, dregan@mail.com, kamal.dasu@broadcom.com,
-        tomer.yacoby@broadcom.com, dan.beygelman@broadcom.com,
-        William Zhang <william.zhang@broadcom.com>,
-        Florian Fainelli <florian.fainelli@broadcom.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        linux-kernel@vger.kernel.org,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>,
-        Kamal Dasu <kdasu.kdev@gmail.com>
-Subject: Re: [PATCH v2 4/4] mtd: rawnand: brcmnand: Fix potential
- out-of-bounds access in oob write
-Message-ID: <202306201340.C2Y4kmFL-lkp@intel.com>
-References: <20230617022920.67173-5-william.zhang@broadcom.com>
+        Tue, 20 Jun 2023 02:13:07 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A607AC6
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 23:13:05 -0700 (PDT)
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com [209.85.221.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 04869423EC
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:13:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1687241581;
+        bh=9wIeiW1ZFsba/KXCWD2PyQ1wr/96tQbFZf3Edkh0XnI=;
+        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+         MIME-Version;
+        b=XNMOL5G9XfhvvZEQhn0g7g0XAPI9nAIu9t4w85D11Co3Zn8I/mLSN5MUgiFeYdKLh
+         rOp6FZaFa4N7vnABf5lgjVDR8mzeAdIM0lp8VYxBmn1ch0h01N294KrQS8oQigfoSu
+         GVzW0wOKt3pskwzDVts/WkaBPmFXlMNmYbTETRw13Arh7Fd0ZJFK4CMbwkVi4ScyEn
+         /wq3QjZ5T5L5lkfIDPog3j38S98ii4pa0g/iPubxdipJDWpyWd2EnsYgo4cuoaHcIq
+         u8sEnfUxSzRmM9GAhHuxTO1iQcMP7S6eaDu1XhOV165dPO2OoMGmca5J4Esg2EOkTC
+         gOj8Ht2ptFDpA==
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-30fb1f3c30aso1506028f8f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 23:13:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687241577; x=1689833577;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9wIeiW1ZFsba/KXCWD2PyQ1wr/96tQbFZf3Edkh0XnI=;
+        b=XOfLLgrqxaTNwHjig0ZdpcL3oMP+JKl992fzI+qU8PL6t+i4YryZyeDfdt9r/iTO4C
+         wK+b0yXbUlZ1RL5VW9sPkFcd/anMhtoj4lD7iNU/LT3Wp87jJ1VjiwDF/5kvw+UFcxXY
+         A608e+KoVYdpMdZGO/xJDdyIWCVCa1RlCYpEjbEjpccwwvbK4FnUYg0LmH++WCeQAKrv
+         8P75gxR+qBDKjT/i4DWjsCNXs4Ld8SiSCWtDaJFEbuzxCaTUcWnZUzRe9RCaZZ1TTezQ
+         UEsSELlDaS8aacq52hbMEPzzNA8SxA0G7aaBEWhii/fOD9D8qv9GQH+Z8Ek735YimhVl
+         joCQ==
+X-Gm-Message-State: AC+VfDxRnWhFRN8YFJMY2X9GOVpzf5DgifYd/Qw6GeQSpBBSOtXDIeK6
+        mtwIsx0qj73MqtpvGJRdDGp0vTdECmcmAYIH4+CVmYHRSUR5cG3gYmWeAjveO5603Ok+RwB24hJ
+        MWvjr9NmTOpUladXOr0Mh3VsIzGaCP9ABptRBk3L9eQ==
+X-Received: by 2002:a5d:5642:0:b0:311:13e6:6504 with SMTP id j2-20020a5d5642000000b0031113e66504mr7172945wrw.47.1687241577594;
+        Mon, 19 Jun 2023 23:12:57 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ53VbcjaaSaVOP7ZfF1U8PlZ6CnaKfIspgMD4HVg9YmI8nsBXcQDmAFnqzTcFArMw2i9VXRcA==
+X-Received: by 2002:a5d:5642:0:b0:311:13e6:6504 with SMTP id j2-20020a5d5642000000b0031113e66504mr7172930wrw.47.1687241577282;
+        Mon, 19 Jun 2023 23:12:57 -0700 (PDT)
+Received: from localhost ([194.191.244.86])
+        by smtp.gmail.com with ESMTPSA id y10-20020adff6ca000000b0030f9c3219aasm1163729wrp.47.2023.06.19.23.12.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Jun 2023 23:12:56 -0700 (PDT)
+From:   Juerg Haefliger <juerg.haefliger@canonical.com>
+To:     rfoss@kernel.org
+Cc:     Laurent.pinchart@ideasonboard.com, airlied@gmail.com,
+        andrzej.hajda@intel.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, jernej.skrabec@gmail.com,
+        jonas@kwiboo.se, juerg.haefliger@canonical.com,
+        linux-kernel@vger.kernel.org, neil.armstrong@linaro.org
+Subject: [PATCH v2] drm/bridge: lt9611uxc: Add MODULE_FIRMWARE macro
+Date:   Tue, 20 Jun 2023 08:12:54 +0200
+Message-Id: <20230620061254.1210248-1-juerg.haefliger@canonical.com>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <CAN6tsi4jdDD20DY5sKL+ALC_Mk2UHRArOrQnjzKoyF30QZi8jw@mail.gmail.com>
+References: <CAN6tsi4jdDD20DY5sKL+ALC_Mk2UHRArOrQnjzKoyF30QZi8jw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230617022920.67173-5-william.zhang@broadcom.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,81 +83,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi William,
+The module loads firmware so add a MODULE_FIRMWARE macro to provide that
+information via modinfo.
 
-kernel test robot noticed the following build warnings:
+Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
+Reviewed-by: Robert Foss <rfoss@kernel.org>
+---
+v2:
+  - Introduce FW_FILE macro
+  - Add Rob's r-b
+---
+ drivers/gpu/drm/bridge/lontium-lt9611uxc.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-[auto build test WARNING on mtd/nand/next]
-[also build test WARNING on linus/master v6.4-rc7 next-20230619]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/William-Zhang/mtd-rawnand-brcmnand-Fix-ECC-level-field-setting-for-v7-2-controller/20230617-103050
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mtd/linux.git nand/next
-patch link:    https://lore.kernel.org/r/20230617022920.67173-5-william.zhang%40broadcom.com
-patch subject: [PATCH v2 4/4] mtd: rawnand: brcmnand: Fix potential out-of-bounds access in oob write
-config: arm64-randconfig-s043-20230619 (https://download.01.org/0day-ci/archive/20230620/202306201340.C2Y4kmFL-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230620/202306201340.C2Y4kmFL-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306201340.C2Y4kmFL-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/mtd/nand/raw/brcmnand/brcmnand.c:1500:54: sparse: sparse: incorrect type in argument 3 (different base types) @@     expected unsigned int [usertype] data @@     got restricted __be32 [usertype] @@
-   drivers/mtd/nand/raw/brcmnand/brcmnand.c:1500:54: sparse:     expected unsigned int [usertype] data
-   drivers/mtd/nand/raw/brcmnand/brcmnand.c:1500:54: sparse:     got restricted __be32 [usertype]
-   drivers/mtd/nand/raw/brcmnand/brcmnand.c:1836:42: sparse: sparse: cast to restricted __be32
-   drivers/mtd/nand/raw/brcmnand/brcmnand.c:1836:42: sparse: sparse: cast to restricted __be32
-   drivers/mtd/nand/raw/brcmnand/brcmnand.c:1836:42: sparse: sparse: cast to restricted __be32
-   drivers/mtd/nand/raw/brcmnand/brcmnand.c:1836:42: sparse: sparse: cast to restricted __be32
-   drivers/mtd/nand/raw/brcmnand/brcmnand.c:1836:42: sparse: sparse: cast to restricted __be32
-   drivers/mtd/nand/raw/brcmnand/brcmnand.c:1836:42: sparse: sparse: cast to restricted __be32
-   drivers/mtd/nand/raw/brcmnand/brcmnand.c:2065:41: sparse: sparse: dubious: x | !y
-
-vim +1500 drivers/mtd/nand/raw/brcmnand/brcmnand.c
-
-  1468	
-  1469	/*
-  1470	 * write_oob_to_regs - write data to OOB registers
-  1471	 * @i: sub-page sector index
-  1472	 * @oob: buffer to write from
-  1473	 * @sas: spare area sector size (i.e., OOB size per FLASH_CACHE)
-  1474	 * @sector_1k: 1 for 1KiB sectors, 0 for 512B, other values are illegal
-  1475	 */
-  1476	static int write_oob_to_regs(struct brcmnand_controller *ctrl, int i,
-  1477				     const u8 *oob, int sas, int sector_1k)
-  1478	{
-  1479		int tbytes = sas << sector_1k;
-  1480		int j, k = 0;
-  1481		u32 last = 0xffffffff;
-  1482		u8 *plast = (u8 *)&last;
-  1483	
-  1484		/* Adjust OOB values for 1K sector size */
-  1485		if (sector_1k && (i & 0x01))
-  1486			tbytes = max(0, tbytes - (int)ctrl->max_oob);
-  1487		tbytes = min_t(int, tbytes, ctrl->max_oob);
-  1488	
-  1489		for (j = 0; (j + 3) < tbytes; j += 4)
-  1490			oob_reg_write(ctrl, j,
-  1491					(oob[j + 0] << 24) |
-  1492					(oob[j + 1] << 16) |
-  1493					(oob[j + 2] <<  8) |
-  1494					(oob[j + 3] <<  0));
-  1495	
-  1496		while (j < tbytes)
-  1497			plast[k++] = oob[j++];
-  1498	
-  1499		if (tbytes & 0x3)
-> 1500			oob_reg_write(ctrl, (tbytes & ~0x3), cpu_to_be32(last));
-  1501	
-  1502		return tbytes;
-  1503	}
-  1504	
-
+diff --git a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
+index 2a57e804ea02..22c84d29c2bc 100644
+--- a/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
++++ b/drivers/gpu/drm/bridge/lontium-lt9611uxc.c
+@@ -28,6 +28,8 @@
+ #define EDID_BLOCK_SIZE	128
+ #define EDID_NUM_BLOCKS	2
+ 
++#define FW_FILE "lt9611uxc_fw.bin"
++
+ struct lt9611uxc {
+ 	struct device *dev;
+ 	struct drm_bridge bridge;
+@@ -754,7 +756,7 @@ static int lt9611uxc_firmware_update(struct lt9611uxc *lt9611uxc)
+ 		REG_SEQ0(0x805a, 0x00),
+ 	};
+ 
+-	ret = request_firmware(&fw, "lt9611uxc_fw.bin", lt9611uxc->dev);
++	ret = request_firmware(&fw, FW_FILE, lt9611uxc->dev);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -1019,3 +1021,5 @@ module_i2c_driver(lt9611uxc_driver);
+ 
+ MODULE_AUTHOR("Dmitry Baryshkov <dmitry.baryshkov@linaro.org>");
+ MODULE_LICENSE("GPL v2");
++
++MODULE_FIRMWARE(FW_FILE);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.37.2
+
