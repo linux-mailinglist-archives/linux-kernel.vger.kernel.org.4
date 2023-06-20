@@ -2,81 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F63D736FB5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 17:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F020736FBE
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 17:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233139AbjFTPD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 11:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34944 "EHLO
+        id S233344AbjFTPF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 11:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233564AbjFTPDm (ORCPT
+        with ESMTP id S233506AbjFTPEh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 11:03:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4279D2102;
-        Tue, 20 Jun 2023 08:02:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5A7B612CE;
-        Tue, 20 Jun 2023 15:02:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CF3BC433C8;
-        Tue, 20 Jun 2023 15:02:29 +0000 (UTC)
-Date:   Tue, 20 Jun 2023 11:02:27 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Ajay Kaher <akaher@vmware.com>
-Cc:     "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Ching-lin Yu <chinglinyu@google.com>,
-        Nadav Amit <namit@vmware.com>,
-        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
-        Tapas Kundu <tkundu@vmware.com>,
-        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>
-Subject: Re: [PATCH v3 00/10] tracing: introducing eventfs
-Message-ID: <20230620110227.6a944a19@gandalf.local.home>
-In-Reply-To: <34E6364B-2B3D-4597-8143-1EEA645B6CDD@vmware.com>
-References: <1685610013-33478-1-git-send-email-akaher@vmware.com>
-        <34E6364B-2B3D-4597-8143-1EEA645B6CDD@vmware.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 20 Jun 2023 11:04:37 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7731BF1;
+        Tue, 20 Jun 2023 08:04:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687273444; x=1718809444;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ivrsLAv5ei2pZb4Fe2LCuh5oh+6GLbCVwN4d6QsS9D8=;
+  b=Ls+OE77fthsZ7s/JXh7RdhQD3L6XDslz042uflQhqPqtvD021cTH2Z3H
+   BCVUet9v/HzWkHj2+g4W23VDSrch38e8iVY+kLSK7RmdwXLdb/yM8U6DF
+   9KbozY016ZC1OwFEn9d3HWD0F8PVjjUZYRVjldX7TL6lSJP5aSJ9yppu2
+   p/hqFtajuzq898WvqJ13+fDWJNaLc/bhGb3HYv0pJtkhXqMnlrvbqz+Nl
+   Yta5ATv7vUDj48Uc0tlJRe4KT3e0Shp6zvI0K3uh2FhWNbMBsl1sVmEVs
+   nvSlsYYh3wRCqZOjpa4Na1yRYyYfDdtwBrJOJCrPSe43/G0KO/bvrQrqV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="423546437"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="423546437"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 08:03:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="708309489"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="708309489"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 20 Jun 2023 08:03:19 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qBct4-005Had-02;
+        Tue, 20 Jun 2023 18:03:18 +0300
+Date:   Tue, 20 Jun 2023 18:03:17 +0300
+From:   'Andy Shevchenko' <andriy.shevchenko@linux.intel.com>
+To:     David Laight <David.Laight@aculab.com>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 1/1] pktcdvd: Use clamp_val() instead of min()+max()
+Message-ID: <ZJG/tfh7kKauoMZJ@smile.fi.intel.com>
+References: <20230616142614.36206-1-andriy.shevchenko@linux.intel.com>
+ <9258be5d31104805b63bb1a64317a448@AcuMS.aculab.com>
+ <ZJGooPbZQq6G2BjI@smile.fi.intel.com>
+ <cd039ed4855c4e78a0867c4b5173e879@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cd039ed4855c4e78a0867c4b5173e879@AcuMS.aculab.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Jun 2023 05:38:25 +0000
-Ajay Kaher <akaher@vmware.com> wrote:
+On Tue, Jun 20, 2023 at 01:35:11PM +0000, David Laight wrote:
+> From: 'Andy Shevchenko'
+> > Sent: 20 June 2023 14:25
+> > On Tue, Jun 20, 2023 at 12:06:49PM +0000, David Laight wrote:
 
-> # of passed:  65
-> # of failed:  3
+...
 
-Unrelated to your patches, but have you checked why these fail? Do you have
-the latest tests running on the latest kernel?
-
-> # of unresolved:  6
-> # of untested:  0
-> # of unsupported:  44
-> # of xfailed:  0
-> # of undefined(test bug):  0
+> > > > +		*hi = clamp_val(*hi, 500, 1000000);
+> > >
+> > > (standard rant about minmax.h)
+> > >
+> > > clamp_val() is pretty much broken by design.
+> > > It MIGHT be ok here but it casts both limits to the
+> > > type of the value being compared.
+> > > In general that is just plain wrong.
+> > >
+> > > Like min_t() it is generally ok because the kernel only uses
+> > > unsigned values between 0 and MAXINT.
+> > >
+> > > If min/max were ok, then using clamp() should also be ok.
+> > 
+> > Submit a patch to fix it, if you think you can make it better.
+> > Obviously your comment can be addressed separately if we even
+> > need that.
 > 
-> These results are same with/without eventfs.
+> Did you try using clamp() ?
+> 
+> To see why clamp_val() is broken consider?
+> 	unsigned char val = 200;
+> 	...
+> 	xxx = clamp_val(val, 10, 300);
+>  
+> This sets xxx to 44 - not exactly expected.
 
-I'm hoping to look at these patches this week.
+Right, clamp_val() has to be improved.
+However this is not the case in this driver.
 
-Thanks!
+I have just sent a v2 with clamp().
 
--- Steve
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
