@@ -2,92 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4726B7368F0
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 350C7736900
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbjFTKOY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 06:14:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44026 "EHLO
+        id S231867AbjFTKRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 06:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231735AbjFTKOT (ORCPT
+        with ESMTP id S230050AbjFTKRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 06:14:19 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CFDDB
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 03:14:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=OtkSZMqVwXfHlvtazHdX2c34BCi7
-        IFfkmHYyFwDhrDo=; b=wQM4SOvKfmiavNdCYoSo2Evpj1WCKS8/byv7llT6u5lV
-        H8JgnGjSNpazMB/seov+vgkhvLztXC9AzRfMk326uW3BTnDTzsVBWNO9lRpk+Qn1
-        lUiBmbJJfv2Vbpw3+Kregm8rsEXkC4ghx1gaOX3K8MEvhALXHHRuAcHSnU9YQPM=
-Received: (qmail 593364 invoked from network); 20 Jun 2023 12:14:12 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 20 Jun 2023 12:14:12 +0200
-X-UD-Smtp-Session: l3s3148p1@WUuk6Yz+HLJehhtC
-Date:   Tue, 20 Jun 2023 12:14:12 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 4/5] gnss: ubx: add support for the reset gpio
-Message-ID: <ZJF79EoY8YGasY3S@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Johan Hovold <johan@kernel.org>, linux-renesas-soc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230523064310.3005-1-wsa+renesas@sang-engineering.com>
- <20230523064310.3005-5-wsa+renesas@sang-engineering.com>
- <ZJFSjrf41PHe400c@hovoldconsulting.com>
- <ZJFsGWepuvkSjL9a@shikoro>
- <ZJFtdWK5I13YUUcu@hovoldconsulting.com>
- <ZJF0U/mIniEksVwZ@ninjato>
- <ZJF56yaeyIGiK9qu@hovoldconsulting.com>
+        Tue, 20 Jun 2023 06:17:23 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0FBEA2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 03:17:22 -0700 (PDT)
+Received: from [192.168.10.54] (unknown [119.155.63.248])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 934E46603219;
+        Tue, 20 Jun 2023 11:17:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687256241;
+        bh=yWkS6pO416E5oq9sw7CdY2vXXy8yufI+SlXkoSBh3TY=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=mQJjtR8IcDbWExW9CfMbofKiPKmgOyXTZWjmobyxBDjDK6DQuFB1SsHjRzZAKabMG
+         CvxLOPZ2n2/Rba+PL7BRfZYjbR+iReSA9GCMf6MKNoAJ+oSqm3Z9ptP03l3k7E7HDi
+         thObNF7YFCWPEv1AbU6PSyLuj2nxR7CDZLhnlrz7tQLgZYtt5D4h3c+ZMUWuKkIYtF
+         8pK94nfjilWkWscv2iof7cU9prhPpKJc5bStqiQDeDamPHhCCNmloGL8AW1wxMpQ03
+         SDq5x4u7UvSqBjl8QHVGsGUfkDldHEIA2HSh+m4k+hzBdP13OAzF5OZ5iV9YpxNZFG
+         ySkR95cc5JukA==
+Message-ID: <575a395c-0608-00da-3aa3-cbe4a5bd157e@collabora.com>
+Date:   Tue, 20 Jun 2023 15:17:15 +0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="KVe3SAa9teWuowhV"
-Content-Disposition: inline
-In-Reply-To: <ZJF56yaeyIGiK9qu@hovoldconsulting.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        Peter Xu <peterx@redhat.com>
+Subject: Re: [PATCH v2 08/11] selftests/mm: fix uffd-unit-tests.c build
+ failure due to missing MADV_COLLAPSE
+Content-Language: en-US
+To:     John Hubbard <jhubbard@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>
+References: <20230620011719.155379-1-jhubbard@nvidia.com>
+ <20230620011719.155379-10-jhubbard@nvidia.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20230620011719.155379-10-jhubbard@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 6/20/23 6:17 AM, John Hubbard wrote:
+> MADV_PAGEOUT, MADV_POPULATE_READ, MADV_COLLAPSE are conditionally
+> defined as necessary. However, that was being done in .c files, and a
+> new build failure came up that would have been automatically avoided had
+> these been in a common header file.
+> 
+> So consolidate and move them all to vm_util.h, which fixes the build
+> failure.
+> 
+> An alternative approach from Muhammad Usama Anjum was: rely on "make
+> headers" being required, and include asm-generic/mman-common.h. This
+> works in the sense that it builds, but it still generates warnings about
+> duplicate MADV_* symbols, and the goal here is to get a fully clean (no
+> warnings) build here.
+I've not looked in detail. But it seems like your first revision was merged
+and after that my cleanup has also been merged. My cleanup patch is adding
+correct header files and removing these duplicate defines: It is in
+mm-stable now.
+https://lore.kernel.org/all/20230619232244.81CB3C433C0@smtp.kernel.org
 
---KVe3SAa9teWuowhV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+> 
+> Reviewed-by: David Hildenbrand <david@redhat.com>
+> Cc: Peter Xu <peterx@redhat.com>
+> Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>  tools/testing/selftests/mm/cow.c        |  7 -------
+>  tools/testing/selftests/mm/khugepaged.c | 10 ----------
+>  tools/testing/selftests/mm/vm_util.h    | 10 ++++++++++
+>  3 files changed, 10 insertions(+), 17 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
+> index dc9d6fe86028..8882b05ec9c8 100644
+> --- a/tools/testing/selftests/mm/cow.c
+> +++ b/tools/testing/selftests/mm/cow.c
+> @@ -30,13 +30,6 @@
+>  #include "../kselftest.h"
+>  #include "vm_util.h"
+>  
+> -#ifndef MADV_PAGEOUT
+> -#define MADV_PAGEOUT 21
+> -#endif
+> -#ifndef MADV_COLLAPSE
+> -#define MADV_COLLAPSE 25
+> -#endif
+> -
+>  static size_t pagesize;
+>  static int pagemap_fd;
+>  static size_t thpsize;
+> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> index 97adc0f34f9c..e88ee039d0eb 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -22,16 +22,6 @@
+>  
+>  #include "vm_util.h"
+>  
+> -#ifndef MADV_PAGEOUT
+> -#define MADV_PAGEOUT 21
+> -#endif
+> -#ifndef MADV_POPULATE_READ
+> -#define MADV_POPULATE_READ 22
+> -#endif
+> -#ifndef MADV_COLLAPSE
+> -#define MADV_COLLAPSE 25
+> -#endif
+> -
+>  #define BASE_ADDR ((void *)(1UL << 30))
+>  static unsigned long hpage_pmd_size;
+>  static unsigned long page_size;
+> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+> index b950bd16083a..07f39ed2efba 100644
+> --- a/tools/testing/selftests/mm/vm_util.h
+> +++ b/tools/testing/selftests/mm/vm_util.h
+> @@ -63,3 +63,13 @@ int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
+>  
+>  #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
+>  #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
+> +
+> +#ifndef MADV_PAGEOUT
+> +#define MADV_PAGEOUT 21
+> +#endif
+> +#ifndef MADV_POPULATE_READ
+> +#define MADV_POPULATE_READ 22
+> +#endif
+> +#ifndef MADV_COLLAPSE
+> +#define MADV_COLLAPSE 25
+> +#endif
 
-
-> Rereading the commit message now it makes more sense, I guess I was
-> thrown off by the reference to I2C. Perhaps adding a sentence or two
-> about the alternate interface and using it as a means of verification
-> would make things a bit more clear.
-
-Will do!
-
-
---KVe3SAa9teWuowhV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmSRe/AACgkQFA3kzBSg
-KbbkbA//eZDCLJoNplAWx/1jp66jPagr3kA3MhMiMW2tV027C4OvJouyil3cBp/t
-is+myAkZC2pUrhZlLO7TO27jhT/Dj50HGIf5uJpKy3HB4jKw9RVM9i9rknTnR2uR
-ggQ988maYjcRg6ZDHoGGs+JefAnuhR6IQAP4g4Dx+fWKGv2iWgXbhnQR8OdDI3EJ
-ptWqJxY6H1LlB+2nMcHo5GVUQa7i7jPzJSZXFSCFoc8eFDSXzDiGx6WGF18COydK
-SrCCQAZZ7MUVjtLFe9f6Mn+HwTB+Vr3VtsDIBJKEUCU+B4mUXGzv87NGIKlchBto
-wMt1djz8WbdoJeuH+mz8WS0ie2A3xq7/5MkU2QI0AKjg6DhG1PU2DgEoHQZiQKq3
-1Rm6h1f1vXwlVxdIgcd+c5/Fj5/zZES63fTcx+PgcDQXMLB7dR02iW943vizxLNI
-x2aQbmjsWSz66uebBbDzkCcMBFQcdEAt0GYjnAzIYOzJoSScEdEAMgAx0uNvhv6w
-KPmvZ13QdGsdyzIPV1AarXYH6gmOtuXeY1REytsxP4sFGFswInzWKPahFv6vvT8g
-2g4yCY84YoQHt0uyZME2aCCAxBuE8OIYny3ZUW2nSltFExAOdoIfAdCq9JTTq3EW
-A6n30P2O61HDLYBgn6gEfLufQ0M3FkN2N5wbTCkjDZ8CyYKwR9g=
-=FUHq
------END PGP SIGNATURE-----
-
---KVe3SAa9teWuowhV--
+-- 
+BR,
+Muhammad Usama Anjum
