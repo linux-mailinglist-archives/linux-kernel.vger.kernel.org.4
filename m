@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF9773688D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78987736896
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232597AbjFTJ7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 05:59:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34046 "EHLO
+        id S232062AbjFTKAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 06:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbjFTJ7L (ORCPT
+        with ESMTP id S232661AbjFTJ77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 05:59:11 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4E619AC;
-        Tue, 20 Jun 2023 02:56:23 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-3112f256941so2509825f8f.1;
-        Tue, 20 Jun 2023 02:56:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687254982; x=1689846982;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2nzfSnFwwgUKGBxhz4K3sxN6CVZIzUqaHD5LMCxLNTs=;
-        b=nQZMj+0R5+KtxAXE0ZEN5ZZdFles83qKs8iX+fsg0noiCxN6QmGAD6ma8fz06kMDaR
-         XQNjrEiFt3dtK1/l3kNeazgIIK42SDIEKr96LHiUIxWZJjIQv5V4iY0IFAPENO16ZAQo
-         FVOmaLdV5jFqjVz2hHie1anPFYgc9EzCMcN5WBFl7npcHDdF8GgLkMWKtKS+z9mCnwz0
-         30VCojhkx80O0xpnXMG/JSkVIK4hnts0+yZU8+9hBov0VwbMe0E5jJgKRiAPVvRP/MIO
-         2XDGBf5iVoPFE2jvS7WVxE8nPGRuMj/xvjWkIAB9QfPodQnO0ivRf/ouX7DLff1t4/EX
-         /ZMQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687254982; x=1689846982;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2nzfSnFwwgUKGBxhz4K3sxN6CVZIzUqaHD5LMCxLNTs=;
-        b=d8JCC38dOHkwSs81sBmdxf7rRWYOAFwj1Oa61wU6cqTDO4AMHxGjCo2hcvwazSvgeH
-         hv2ofQrOv3+R9Lj7CupyLpY1fwsnZRE/zpt+lpXxFIQgAixYjeXMUcVvhgQ27aD/MDvu
-         IhuvxjWKEtJppEq+jAnr0wNlN7CICGgVNw8+QodEtELjZKxslt8T+mno3ecRzRSl7IP2
-         i4Fl3B0SmOy/9+BUOQCdDdKumNEjMYAvdQ4Ws1VZOwP36KatrsDNpR0vxhAHIC8glA6P
-         nrA4DAHOQOVEND+JmaDJ8wEPMiMYpOuaZc7uznUuL5XnphUNIvWlxPuRXp2JsXqHmr11
-         iakw==
-X-Gm-Message-State: AC+VfDxU2ZbxpkDXomBkif1CLW/mTgdVo1SZioMe39GDKLiyJhH4uyx3
-        2QEt+ZuW1HevaW/WeUbL6t/hyyBxXeHGCw==
-X-Google-Smtp-Source: ACHHUZ57QTB7wxq1J7LAwX05NJAArS4vx/ZblH3A3rVBL1H9ewMMGIwbkkwag/Q5ylBcYjKIpX35/g==
-X-Received: by 2002:adf:e7c2:0:b0:30f:c764:189a with SMTP id e2-20020adfe7c2000000b0030fc764189amr7427650wrn.39.1687254982152;
-        Tue, 20 Jun 2023 02:56:22 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id i11-20020adffdcb000000b002fda1b12a0bsm1659046wrs.2.2023.06.20.02.56.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 02:56:21 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Shenghao Ding <13916275206@139.com>,
-        alsa-devel@alsa-project.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] ASoC: tas2781: Fix spelling mistake "calibraiton" -> "calibration"
-Date:   Tue, 20 Jun 2023 10:56:20 +0100
-Message-Id: <20230620095620.2522058-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Tue, 20 Jun 2023 05:59:59 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B601FD4;
+        Tue, 20 Jun 2023 02:57:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1687255070; x=1718791070;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4oXu7FJQwjSx64LQSoiKpv9H6LNtuO8vmXzyXeUjBE8=;
+  b=BEdYxwC38DgLvNyYOeNsjJmdq31VOhlI1Kl2MqWAJftS/FHYehwrCctA
+   s4hstB+InU5cNYTGDTc6/4upU8Me2kyfKKfkzHbBnZEcfGp+q4hLpN6Dq
+   zipxaHKZxoH7hjMC+rJyzOCsc2VGn2ldhORnRlt/Hdr0im9WQgC81Ro5o
+   3WFuELz5GF+AKMVNVKyvYEmG/FBuO6oOPDzbifR3Wk5O1ycAxqGGaa9WP
+   x2d2GVzHIn23a+3plm1ZY2pamEYa+ZhpSbo5tPqhnSoUYU0dMxmyI0RPW
+   eQgj9Hv354sMLDFyzw32Akdouhi5lnEb0o15q1TWL2VgaeIcMLI167qKR
+   Q==;
+X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
+   d="asc'?scan'208";a="221063445"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 20 Jun 2023 02:57:49 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 20 Jun 2023 02:57:48 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Tue, 20 Jun 2023 02:57:46 -0700
+Date:   Tue, 20 Jun 2023 10:57:20 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Jonathan Corbet <corbet@lwn.net>
+CC:     Conor Dooley <conor@kernel.org>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Atish Kumar Patra <atishp@rivosinc.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, <linux-doc@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] Documentation: riscv: Add early boot document
+Message-ID: <20230620-slot-bobtail-4f41b59f4cf9@wendy>
+References: <20230619094705.51337-1-alexghiti@rivosinc.com>
+ <20230619-kerchief-unmixed-cfdbeb1cf242@wendy>
+ <CAHVXubjV=0HNyc0-UMAQRQfi4ZUnwH8dmghV-BGogZsJiumtZA@mail.gmail.com>
+ <20230619-sponge-armful-6beeaf4a8624@spud>
+ <87r0q7v1o9.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="HyYzIEwuf18tdy7k"
+Content-Disposition: inline
+In-Reply-To: <87r0q7v1o9.fsf@meer.lwn.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,27 +74,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a spelling mistake in a dev_err message. Fix it. Also fix
-grammar and add space between last word and (%d)".
+--HyYzIEwuf18tdy7k
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- sound/soc/codecs/tas2781-fmwlib.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Mon, Jun 19, 2023 at 10:48:06AM -0600, Jonathan Corbet wrote:
+> Conor Dooley <conor@kernel.org> writes:
+>=20
+> > On Mon, Jun 19, 2023 at 04:04:52PM +0200, Alexandre Ghiti wrote:
+> >> On Mon, Jun 19, 2023 at 2:26=E2=80=AFPM Conor Dooley <conor.dooley@mic=
+rochip.com> wrote:
+> >> > On Mon, Jun 19, 2023 at 11:47:04AM +0200, Alexandre Ghiti wrote:
+> >
+> >> > > diff --git a/Documentation/riscv/boot.rst b/Documentation/riscv/bo=
+ot.rst
+> >> > > new file mode 100644
+> >> > > index 000000000000..b02230818b79
+> >> > > --- /dev/null
+> >> > > +++ b/Documentation/riscv/boot.rst
+> >> > > @@ -0,0 +1,181 @@
+> >> > > +.. SPDX-License-Identifier: GPL-2.0
+> >> > > +
+> >> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >> > > +Early boot requirements/constraints on RISC-V
+> >> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >> >
+> >> > Please use "title case", here and elsewhere in the doc.
+> >>=20
+> >> You mean using "title: " instead of "=3D=3D=3D=3D"? Or using uppercase=
+ for the
+> >> first letter of each word? FYI I followed
+> >> https://docs.kernel.org/doc-guide/sphinx.html?highlight=3Dtitle#specif=
+ic-guidelines-for-the-kernel-documentation
+> >
+> > The latter. That's weird, I guess it would be nice to see what Jon
+> > thinks about that.
+>=20
+> I have Never Been Fond of Excessive Use of Capital Letters, so my
+> preference would be capitalization as in a normal sentence.
+>=20
+> That said, I don't really feel that something like this is important
+> enough that we need to define and enforce a policy around it.  If the
+> maintainers for specific subsystems feel differently, then I guess
+> that's up to them.
 
-diff --git a/sound/soc/codecs/tas2781-fmwlib.c b/sound/soc/codecs/tas2781-fmwlib.c
-index 432b19ccec8c..cbf0aef2c001 100644
---- a/sound/soc/codecs/tas2781-fmwlib.c
-+++ b/sound/soc/codecs/tas2781-fmwlib.c
-@@ -1863,7 +1863,7 @@ static int fw_parse_calibration_data(struct tasdevice_priv *tas_priv,
- 
- 	if (tas_fmw->nr_calibrations != 1) {
- 		dev_err(tas_priv->dev,
--			"%s: only support one calibraiton(%d)!\n",
-+			"%s: only supports one calibration (%d)!\n",
- 			__func__, tas_fmw->nr_calibrations);
- 		goto out;
- 	}
--- 
-2.39.2
+Okay, thanks.
 
+--HyYzIEwuf18tdy7k
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJF3/wAKCRB4tDGHoIJi
+0gG8AP9nAmYRkCd6aA3KqwDS5VO/mXdodl6DpCx3vgU2BjkDYgEAu1/lkHz2Ig9k
+R2kxyNWLJ055DoTuTXnCUGXDO043/Qs=
+=plo2
+-----END PGP SIGNATURE-----
+
+--HyYzIEwuf18tdy7k--
