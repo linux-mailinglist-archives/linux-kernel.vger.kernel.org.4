@@ -2,150 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C50737570
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 21:55:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C163D73756D
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 21:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjFTTy6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 15:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
+        id S229784AbjFTTyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 15:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjFTTyw (ORCPT
+        with ESMTP id S229547AbjFTTyt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 15:54:52 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1C5E1982
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:54:47 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-56fff21c2ebso55292767b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:54:47 -0700 (PDT)
+        Tue, 20 Jun 2023 15:54:49 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BECD173B
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:54:46 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b52d14df27so23888485ad.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:54:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687290887; x=1689882887;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IiBraH1gFEtLq0Kn5mTuDR7eletLpb8dAh5y2pzul9A=;
-        b=GnK6zVktB4fTweKikYzUukoKZGCmVusKP/x6uUrsa1IZh7Lcf11VRj9767YwL28zyx
-         J4JKcGvTfTr/LvFgYj5pm1tfEFEJ8PKkMTUvowkeEnkdtgmC9135h58fxQzErHTduUCX
-         +m+UG/mn18iCUxOKOQQ3TboQqPdTC4trrhg3CdFjun1ZClZ8tNP63vy0pMK4T8o5rwHN
-         Ev/CkGwjSSWdgG/b37eVTxoy7CA9K7VH5ECYT9iqlmvWSv+gngjFQijyE1bOMwoZXb/s
-         MCqGmsFWL/xCVoRj8nY9T1uCu7dqqcS1sL95WKPUvtYF9Sc63RHc6WC/aK2yPQNdgDcy
-         QIWA==
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687290886; x=1689882886;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RsIaqKRLY/w55XA5LB9E3AHeTBdImbhhaSspjOmTz+k=;
+        b=vQNccOY1KmXZzmbpNdP7pNP+MGN+VFDpqBaXrFLe4BPVoy0GqRf5L1qcnF3R5mR1ar
+         iRa5MKJp0hqSDMwuMZ+jX5hc6S2Vrhbhb9mDzX0xgrvK9X0d4dQjwNDHpcguTuZZB/XU
+         SXfdhzPvzMURg2rHJk+8bx2kuVIJkLQ4E6jQ65u3IU1r0qna5Z1dgE+LVQ460QQ/erb2
+         4GK1smNIW1+qGDi80nQD7j/Va9D5gMPABFXJ8e9rfIlgiShEgzPu11pUvvnSDB1Ibia/
+         GXn6gE/uw6JtBS3YAuWOZI/C93SRIP0kbb5rGKdr9MFt2JO/353px5ga5qz2LqtS6tu3
+         lqTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687290887; x=1689882887;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IiBraH1gFEtLq0Kn5mTuDR7eletLpb8dAh5y2pzul9A=;
-        b=bAQ/VoMtcaAzyVCMijP74XdHRnanDNMZDi4N9PrHZIFD/F8ugP3K0ZGKIuauza3CwC
-         NvhAm22vfAdMUTN2dBiS11KLOrsR4LOWW0DeSJ5fg5DqAPQ5utUk7irwDQVhFKY9dRCk
-         9ZiVMDaUL1a3vbOMnDSh9WUijjxavEXT98J0QWKT5YjRJ7ZCCm2CJQDg7zrbMXMT7ibh
-         nL4EvqHFj2BPIIKma5gnLkcPzhbdcD/Hr9pZzDgSqiDNpyaQ2CLosI5gL+Cz3nVq7pgL
-         bb612hfx3amddjW2whLYv+51tcZfDHfKAUgeCmMJykW8Iog8ovn+EhzIhyI8WgGyQ7V+
-         HGBw==
-X-Gm-Message-State: AC+VfDzWsk7aoXTtnVfOjZRwEmulODBmip21XMmHwgT7kRXILyipUErm
-        AFAKQC5PpB+OwPDAYfqMsVAlXg==
-X-Google-Smtp-Source: ACHHUZ5CjW+DD7ghkPvVJFGUBN1BQG+qQA/ISq9t6lWLEboPHQzho8N1caYYSPmYBruWUqH6Cq9/Mw==
-X-Received: by 2002:a0d:d106:0:b0:56d:45ec:2e64 with SMTP id t6-20020a0dd106000000b0056d45ec2e64mr14660924ywd.43.1687290886830;
-        Tue, 20 Jun 2023 12:54:46 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id n20-20020a819e54000000b005705cbba0bcsm649525ywj.98.2023.06.20.12.54.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        d=1e100.net; s=20221208; t=1687290886; x=1689882886;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RsIaqKRLY/w55XA5LB9E3AHeTBdImbhhaSspjOmTz+k=;
+        b=RUgY4N5DkNIzyzFh7K/2lLMArfD0eImIF8fLibqpQXfySYoha3r4R85tyhkjmdNwSR
+         yjOGoJI9RGaWXfIGZF7QMsWLRmyH+756uc+pMKKNQP/az3Wu+w3Yry52A/PBtjqLQ69X
+         xezpHWfjitfDRhAfTNU8i4zWmbAiPocT5viTgWrHnXmkru+/nVP4BmrwY724A89Sj7lY
+         uf5ix7FDgMXu/Jh+Bdr/zlXGQcfP3HFK3rQxIS6H5j4+N455wkduKsw0TUYGxh4FrI4z
+         xaC+xn36dRKwBHW5ZaeCSSbOZ0hawyripOM0kePYwU4K2dOI8pSDkf1E4cBZKcuUomx6
+         IpXw==
+X-Gm-Message-State: AC+VfDzvx98vnZHqosZatAQdKGnIwpEkGpSeNT3TKIUQzPFUqLkPgEqV
+        DqCyGLmqpJ85g5Og8ZImxSCIRw==
+X-Google-Smtp-Source: ACHHUZ4Kpx293K87FtkleDrYAYa0rwjXy2nPbgIEJGuxBo6nVZF7ASkOQcfG7zuhiqz3kJZ1Xdj1hQ==
+X-Received: by 2002:a17:902:e884:b0:1b5:16f2:a4e3 with SMTP id w4-20020a170902e88400b001b516f2a4e3mr9879390plg.30.1687290885633;
         Tue, 20 Jun 2023 12:54:45 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 12:54:25 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David Sc. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 05/12] powerpc: add pte_free_defer() for pgtables
- sharing page
-In-Reply-To: <ZJGRa4zvsXfc43vB@ziepe.ca>
-Message-ID: <2ad8b6cf-692a-ff89-ecc-586c20c5e07f@google.com>
-References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com> <5cd9f442-61da-4c3d-eca-b7f44d22aa5f@google.com> <ZJGRa4zvsXfc43vB@ziepe.ca>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id n21-20020a170902969500b001b016313b1esm2010616plp.82.2023.06.20.12.54.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 12:54:44 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 12:54:44 -0700 (PDT)
+X-Google-Original-Date: Tue, 20 Jun 2023 12:54:05 PDT (-0700)
+Subject:     Re: [PATCH v11 5/8] riscv: ftrace: Enable HAVE_FUNCTION_GRAPH_RETVAL
+In-Reply-To: <20230608215834.729cfda2@gandalf.local.home>
+CC:     pengdonglin@sangfor.com.cn, mhiramat@kernel.org,
+        linux@armlinux.org.uk, Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        rmk+kernel@armlinux.org.uk,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, tglx@linutronix.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, bp@alien8.de,
+        hpa@zytor.com, chenhuacai@kernel.org, zhangqing@loongson.cn,
+        kernel@xen0n.name, mingo@redhat.com, peterz@infradead.org,
+        xiehuan09@gmail.com, dinghui@sangfor.com.cn,
+        huangcun@sangfor.com.cn, dolinux.peng@gmail.com,
+        linux-trace-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     rostedt@goodmis.org
+Message-ID: <mhng-672b0efa-aeba-4cb2-808d-6ef271844449@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Jun 2023, Jason Gunthorpe wrote:
-> On Tue, Jun 20, 2023 at 12:47:54AM -0700, Hugh Dickins wrote:
-> > Add powerpc-specific pte_free_defer(), to call pte_free() via call_rcu().
-> > pte_free_defer() will be called inside khugepaged's retract_page_tables()
-> > loop, where allocating extra memory cannot be relied upon.  This precedes
-> > the generic version to avoid build breakage from incompatible pgtable_t.
-> > 
-> > This is awkward because the struct page contains only one rcu_head, but
-> > that page may be shared between PTE_FRAG_NR pagetables, each wanting to
-> > use the rcu_head at the same time: account concurrent deferrals with a
-> > heightened refcount, only the first making use of the rcu_head, but
-> > re-deferring if more deferrals arrived during its grace period.
-> 
-> You didn't answer my question why we can't just move the rcu to the
-> actual free page?
+On Thu, 08 Jun 2023 18:58:34 PDT (-0700), rostedt@goodmis.org wrote:
+>
+> Can I get an ack from a RISC-V maintainer?
 
-I thought that I had answered it, perhaps not to your satisfaction:
+Sorry I missed this.
 
-https://lore.kernel.org/linux-mm/9130acb-193-6fdd-f8df-75766e663978@google.com/
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-My conclusion then was:
-Not very good reasons: good enough, or can you supply a better patch?
+>
+> -- Steve
+>
+>
+> On Sat,  8 Apr 2023 05:42:19 -0700
+> Donglin Peng <pengdonglin@sangfor.com.cn> wrote:
+>
+>> The previous patch ("function_graph: Support recording and printing
+>> the return value of function") has laid the groundwork for the for
+>> the funcgraph-retval, and this modification makes it available on
+>> the RISC-V platform.
+>>
+>> We introduce a new structure called fgraph_ret_regs for the RISC-V
+>> platform to hold return registers and the frame pointer. We then
+>> fill its content in the return_to_handler and pass its address to
+>> the function ftrace_return_to_handler to record the return value.
+>>
+>> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
+>> ---
+>> v10:
+>>  - Use CONFIG_FUNCTION_GRAPH_TRACER to control fgraph_ret_regs definition
+>>
+>> v9:
+>>  - Update the commit message
+>>
+>> v8:
+>>  - Modify the control range of CONFIG_HAVE_FUNCTION_GRAPH_RETVAL
+>> ---
+>>  arch/riscv/Kconfig              |  1 +
+>>  arch/riscv/include/asm/ftrace.h | 21 +++++++++++++++++++++
+>>  arch/riscv/kernel/mcount.S      |  7 +------
+>>  3 files changed, 23 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>> index eb7f29a412f8..108538815309 100644
+>> --- a/arch/riscv/Kconfig
+>> +++ b/arch/riscv/Kconfig
+>> @@ -139,6 +139,7 @@ config RISCV
+>>  	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && $(cc-option,-fpatchable-function-entry=8)
+>>  	select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
+>>  	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
+>> +	select HAVE_FUNCTION_GRAPH_RETVAL if HAVE_FUNCTION_GRAPH_TRACER
+>>  	select HAVE_FUNCTION_GRAPH_TRACER
+>>  	select HAVE_FUNCTION_TRACER if !XIP_KERNEL && !PREEMPTION
+>>
+>> diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftrace.h
+>> index d47d87c2d7e3..740a979171e5 100644
+>> --- a/arch/riscv/include/asm/ftrace.h
+>> +++ b/arch/riscv/include/asm/ftrace.h
+>> @@ -111,4 +111,25 @@ int ftrace_init_nop(struct module *mod, struct dyn_ftrace *rec);
+>>
+>>  #endif /* CONFIG_DYNAMIC_FTRACE */
+>>
+>> +#ifndef __ASSEMBLY__
+>> +#ifdef CONFIG_FUNCTION_GRAPH_TRACER
+>> +struct fgraph_ret_regs {
+>> +	unsigned long a1;
+>> +	unsigned long a0;
+>> +	unsigned long s0;
+>> +	unsigned long ra;
+>> +};
+>> +
+>> +static inline unsigned long fgraph_ret_regs_return_value(struct fgraph_ret_regs *ret_regs)
+>> +{
+>> +	return ret_regs->a0;
+>> +}
+>> +
+>> +static inline unsigned long fgraph_ret_regs_frame_pointer(struct fgraph_ret_regs *ret_regs)
+>> +{
+>> +	return ret_regs->s0;
+>> +}
+>> +#endif /* ifdef CONFIG_FUNCTION_GRAPH_TRACER */
+>> +#endif
+>> +
+>>  #endif /* _ASM_RISCV_FTRACE_H */
+>> diff --git a/arch/riscv/kernel/mcount.S b/arch/riscv/kernel/mcount.S
+>> index 30102aadc4d7..8a6e5a9e842a 100644
+>> --- a/arch/riscv/kernel/mcount.S
+>> +++ b/arch/riscv/kernel/mcount.S
+>> @@ -65,13 +65,8 @@ ENTRY(return_to_handler)
+>>   * So alternatively we check the *old* frame pointer position, that is, the
+>>   * value stored in -16(s0) on entry, and the s0 on return.
+>>   */
+>> -#ifdef HAVE_FUNCTION_GRAPH_FP_TEST
+>> -	mv	t6, s0
+>> -#endif
+>>  	SAVE_RET_ABI_STATE
+>> -#ifdef HAVE_FUNCTION_GRAPH_FP_TEST
+>> -	mv	a0, t6
+>> -#endif
+>> +	mv	a0, sp
+>>  	call	ftrace_return_to_handler
+>>  	mv	a2, a0
+>>  	RESTORE_RET_ABI_STATE
 
-Hugh
-
-> 
-> Since PPC doesn't recycle the frags, we don't need to carefully RCU
-> free each frag, we just need to RCU free the entire page when it
-> becomes eventually free?
-> 
-> Jason
