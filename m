@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA8373759A
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F7973759F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbjFTUD6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 16:03:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43284 "EHLO
+        id S230036AbjFTUEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 16:04:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjFTUDk (ORCPT
+        with ESMTP id S229918AbjFTUDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 16:03:40 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17C671726
+        Tue, 20 Jun 2023 16:03:41 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F7F10F0
         for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:03:39 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-98934f000a5so137592466b.2
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-519f6e1a16cso6065336a12.2
         for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:03:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687291417; x=1689883417;
+        d=gmail.com; s=20221208; t=1687291418; x=1689883418;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=p8jfpdKH0fFzjA8Web6QRbnSKKAkYrL/UQcXZfCIDJU=;
-        b=KBOjswneiJ+wctkMg8hkQH4cU9SDT9ijrERRYyhkTyXu6Bw+GLleNaeKrIY3DaQtkT
-         L4ivG2jFZjppHpokA0mlmN28izpa7UDdWVU+w4B6Af5nhou+hIkXvRA2ht2+GrmAtL1e
-         NGuN6H1XX0gcIOKgghYFZcOrKa9v1IlIsFggvYGbcdoO5yXQy5n6xMxjNaVYv3UIX4Hh
-         3RfG99THfkwCoRZMUgT+7tjCFG1i1vozp6FMHxxC13u/Hp4I25Ry3Sfrm22688JHzG6s
-         lJxtaf9cm6dLCvdDNzTNtlAgoUjJF87Rx6sRnpsbNJlzfHM0xnFEbhcg047ggOEA/V3x
-         U2vw==
+        bh=2RVAC+ZaZODWJ+QFQBc3rYxuHiijX92xEaSVhSFgl3o=;
+        b=mrVUpP3jn3SF8dK4Gd4pciXBMZDMGoWleyLtt8d4i0veouLd5ObXCGZhqq0qS8tZpS
+         LHWE09xVNGj7BeUgVg1UYLBLa4lOjz9ghVQBYCOY7kdssPocZuEhZhSJJqiTutcR+O6Z
+         vN9HKSNk4gPyIkyxNnWbq2uJFBmV8gW5gUB1aYN18CiuCVB0t5Wao8I2tIidUiHi8Fni
+         4PqNZNU1aiYdWsD2fKEOljz6nx3GITQCBdjjZVoaAn6mDv4DKQ+G2rcTrhOL9pC/jI6T
+         4aT0I+e0AFcs8sGGZ293V7yhku4PsJOhO285z/DIhUbUQaWEeSKz000q+SYSJ9Er++bq
+         xh6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687291417; x=1689883417;
+        d=1e100.net; s=20221208; t=1687291418; x=1689883418;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=p8jfpdKH0fFzjA8Web6QRbnSKKAkYrL/UQcXZfCIDJU=;
-        b=S0ki4ONdmTqeCl7/ATZvwk9TNAIit7/Tf3icly0ek+QdeBdXsAMeY/6WmZoKJ4uzJZ
-         4YCF7ABvM9gv4P6cR0g7J2n1hPB1zMYyf0OcwvoDDeNvjAp+cfHo3uGR9Ap5zSoiA3la
-         q3oj8zseny2yjsDu4VvN6H6a17+W8Z61EaFTLgvXm4CF4cTj7gEIpJX/ZhAfUcJ5h6hz
-         fdAuWtkwjGPGUGAvaErUrRQv/RZhGQL7+pICE7PllyJKfORQs17WDwy/aEtLxOCYzsI+
-         3NyMX/GX2dSeNc87DSGu53kGOAhWyoQ7jO9pqPflegEjPey7P1gbTkzJ6x5zgJZHF12W
-         xyMg==
-X-Gm-Message-State: AC+VfDzeG63/gB3PXp+q7GEyiY0VOCgbCzgIPuiELaWdVT2EDq1/WPb+
-        lVBkNJKjVJniK1navXQZ/yo=
-X-Google-Smtp-Source: ACHHUZ6F29c4fsU8BMMP2TV7m1XjWd4RTw6VBgO6ETEP6Ez5JQuIfCNiIoT7iFjdAi0oY+drw4tEGg==
-X-Received: by 2002:a17:906:58ce:b0:988:ffb9:b944 with SMTP id e14-20020a17090658ce00b00988ffb9b944mr3756956ejs.29.1687291417474;
-        Tue, 20 Jun 2023 13:03:37 -0700 (PDT)
+        bh=2RVAC+ZaZODWJ+QFQBc3rYxuHiijX92xEaSVhSFgl3o=;
+        b=V5/zO1qUNKCAK5KQxzZauKyd62VUapC23OfqWKofhkbXD5CChnvg3b64c/D0laybJd
+         fx/GoykqkMtxVwyU/UZzYY5tx5p0kCc8rAITN/43D/oLWZnJjJj/Jttoix8FeAtIWSZP
+         6FZJvntduBuatk6F2iL6sJQj4LTl1neIfbaSJkwfAmQ9eYP6pysvJU3ZYS5Npsmj0HNj
+         1CvdEgu52nSGdMoPqKVFQuDC4k779IioTvKqYr6o/w2Y7payqoFH+kA33g8QUNBOaQdI
+         IKupNQM7v3URvEoX2cSJ7s9VLBCwWMJRyvIsjKKYGgyR3uCX5ODK/LiMTrgmPNBfi33b
+         pSSg==
+X-Gm-Message-State: AC+VfDyUm+sxOaEeLBUgrvK0RiMHnfWCGJ4lqxt7/zOhh2qgyuPfcSBm
+        FnTJlfSzgG7XMiaEtoJ4zoH0LSfjLZ+jZQ==
+X-Google-Smtp-Source: ACHHUZ5bp7x5munn1VtEk7+2qSwrdlsaEXcT/zqtu43LDIo0364bHeI2Z5XRriP+opDt0q/EU4hBqg==
+X-Received: by 2002:a17:907:9453:b0:987:47b3:6e34 with SMTP id dl19-20020a170907945300b0098747b36e34mr8704687ejc.67.1687291418327;
+        Tue, 20 Jun 2023 13:03:38 -0700 (PDT)
 Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id u21-20020a17090617d500b00977e0bcff1esm1947064eje.10.2023.06.20.13.03.36
+        by smtp.gmail.com with ESMTPSA id u21-20020a17090617d500b00977e0bcff1esm1947064eje.10.2023.06.20.13.03.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 20 Jun 2023 13:03:37 -0700 (PDT)
 From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Tue, 20 Jun 2023 22:02:59 +0200
-Subject: [PATCH RFC v4 06/13] regulator: set required ops for monitoring
- workarounds
+Date:   Tue, 20 Jun 2023 22:03:00 +0200
+Subject: [PATCH RFC v4 07/13] regulator: find active protections during
+ initialization
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230419-dynamic-vmon-v4-6-4d3734e62ada@skidata.com>
+Message-Id: <20230419-dynamic-vmon-v4-7-4d3734e62ada@skidata.com>
 References: <20230419-dynamic-vmon-v4-0-4d3734e62ada@skidata.com>
 In-Reply-To: <20230419-dynamic-vmon-v4-0-4d3734e62ada@skidata.com>
 To:     Liam Girdwood <lgirdwood@gmail.com>,
@@ -81,64 +81,78 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Benjamin Bara <benjamin.bara@skidata.com>
 
-If the core should be able to handle the monitoring workarounds, certain
-regulator ops are required:
-- is_enabled() to decide whether a monitor should be turned off or not.
-- get_active_protections() to find out if the device-tree is missing
-  active protections.
-- get_mode() if the regulator is in a mode where monitoring is not
-  supported.
+It can happen that monitors are activated before the kernel is started,
+e.g. by bootloader or by OTP. If monitoring workarounds are active on a
+regulator, the core shouldn't perform the state changes without applying
+the workaround to the regulator. Therefore, warn the user already during
+initialization that the device-tree should be adapted.
+
+Warning can be fixed by enabling (or disabling) monitoring in the DT,
+e.g.:
+regulator-uv-protection-microvolt = <1>;
+or
+regulator-ov-error-microvolt = <0>;
+
+Constraints regarding the monitoring of a regulator can usually be found
+in the docu.
 
 Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
 ---
- drivers/regulator/core.c | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ drivers/regulator/core.c | 41 +++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
 diff --git a/drivers/regulator/core.c b/drivers/regulator/core.c
-index dc741ac156c3..ca5d6ba889dc 100644
+index ca5d6ba889dc..9bddab17450e 100644
 --- a/drivers/regulator/core.c
 +++ b/drivers/regulator/core.c
-@@ -5540,6 +5540,40 @@ regulator_register(struct device *dev,
- 		goto rinse;
+@@ -1564,6 +1564,47 @@ static int set_machine_constraints(struct regulator_dev *rdev)
+ 		}
  	}
  
-+	/* monitor workaround properties require ops to ensure functionality. */
-+	if (regulator_desc->mon_disable_reg_disabled ||
-+	    regulator_desc->mon_disable_reg_set_higher ||
-+	    regulator_desc->mon_disable_reg_set_lower ||
-+	    regulator_desc->mon_unsupported_reg_modes) {
-+		/*
-+		 * is_enabled() to make sure the monitors aren't disabled on
-+		 * disabled regulators.
-+		 */
-+		if (!regulator_desc->ops->is_enabled) {
-+			ret = -EINVAL;
-+			goto rinse;
-+		}
++	/*
++	 * When the core is in charge of handling monitoring workarounds,
++	 * it is essential to know if a monitor is already active during
++	 * initialization.
++	 */
++	if (rdev->desc->mon_disable_reg_disabled ||
++	    rdev->desc->mon_disable_reg_set_higher ||
++	    rdev->desc->mon_disable_reg_set_lower ||
++	    rdev->desc->mon_unsupported_reg_modes) {
++		unsigned int monitor_state = REGULATOR_MONITOR_NONE;
 +
-+		/*
-+		 * get_active_protections() to know if a regulator is monitored
-+		 * without the device-tree being aware of it.
-+		 */
-+		if (!regulator_desc->ops->get_active_protections) {
-+			ret = -EINVAL;
-+			goto rinse;
-+		}
++		ret = ops->get_active_protections(rdev, &monitor_state);
++		if (ret)
++			return ret;
 +
-+		/*
-+		 * mon_unsupported_reg_modes property requires get_mode() to get
-+		 * the old state in case a state switch is failing.
-+		 */
-+		if (regulator_desc->mon_unsupported_reg_modes &&
-+		    !regulator_desc->ops->get_mode) {
-+			ret = -EINVAL;
-+			goto rinse;
++		if (!rdev->constraints->over_voltage_detection &&
++		    (monitor_state & REGULATOR_MONITOR_OVER_VOLTAGE)) {
++			rdev_err(rdev, "dt unaware of active %s monitor!\n",
++				       "over-voltage");
++			return -EINVAL;
++		}
++		if (!rdev->constraints->under_voltage_detection &&
++		    (monitor_state & REGULATOR_MONITOR_UNDER_VOLTAGE)) {
++			rdev_err(rdev, "dt unaware of active %s monitor!\n",
++				       "under-voltage");
++			return -EINVAL;
++		}
++		if (!rdev->constraints->over_current_detection &&
++		    (monitor_state & REGULATOR_MONITOR_OVER_CURRENT)) {
++			rdev_err(rdev, "dt unaware of active %s monitor!\n",
++				       "over-current");
++			return -EINVAL;
++		}
++		if (!rdev->constraints->over_temp_detection &&
++		    (monitor_state & REGULATOR_MONITOR_OVER_TEMPERATURE)) {
++			rdev_err(rdev, "dt unaware of active %s monitor!\n",
++				       "over-temperature");
++			return -EINVAL;
 +		}
 +	}
 +
- 	rdev = kzalloc(sizeof(struct regulator_dev), GFP_KERNEL);
- 	if (rdev == NULL) {
- 		ret = -ENOMEM;
+ 	if (rdev->constraints->over_current_detection)
+ 		ret = handle_notify_limits(rdev,
+ 					   ops->set_over_current_protection,
 
 -- 
 2.34.1
