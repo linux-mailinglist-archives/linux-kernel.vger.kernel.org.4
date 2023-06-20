@@ -2,55 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC74736829
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7C89736841
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 11:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232399AbjFTJoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 05:44:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54770 "EHLO
+        id S232190AbjFTJqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 05:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231855AbjFTJoX (ORCPT
+        with ESMTP id S231256AbjFTJps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 05:44:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1BAF1;
-        Tue, 20 Jun 2023 02:44:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45328610AB;
-        Tue, 20 Jun 2023 09:44:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71195C433C9;
-        Tue, 20 Jun 2023 09:44:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687254261;
-        bh=TZyJoiijizJIfdppKOKgW0H+ofylm830zll6I94VB48=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EAqG3PbCYRe4DZlIRwPg2bILfOF0TzOQXMY3bProAtlevE6HUhvWcVzabjggh+fXP
-         kh95RqIkTCHXW+mrtSHKet7Znc5qoq5ZAxB5DPbnQX+PdxEP8DEejCzfHpG9zqtFuJ
-         8oYGnt7SxsDy/UA5xJvh0r+5dhOrT1OGxMOi96T2rCTEEefoP5op11UK+TFP/3eLmF
-         tmat0oA93Rg75lzuIUJ/4tyMc0HwNGSPYyaXurYv3ClxWexkxltEfPf7LgeNTA0LqJ
-         kOc/mtYqx7ZXA196vGez9Jxs/kjRCPZ7F3fDGTKU1cjNkotYwMvIgDqF4iUwq5uwHx
-         khHlgDr3yPeTg==
-Date:   Tue, 20 Jun 2023 11:44:17 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Li Dong <lidong@vivo.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        "open list:FILESYSTEMS (VFS and infrastructure)" 
-        <linux-fsdevel@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        opensource.kernel@vivo.com
-Subject: Re: [PATCH] fs: Fix bug in lock_rename_child that can cause deadlock
-Message-ID: <20230620-abfertigung-notlage-8b1c217bddf3@brauner>
-References: <20230619133734.851-1-lidong@vivo.com>
+        Tue, 20 Jun 2023 05:45:48 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF83F4;
+        Tue, 20 Jun 2023 02:45:46 -0700 (PDT)
+Received: from canpemm500007.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QlhWw58JwztQrx;
+        Tue, 20 Jun 2023 17:43:08 +0800 (CST)
+Received: from localhost (10.174.179.215) by canpemm500007.china.huawei.com
+ (7.192.104.62) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 20 Jun
+ 2023 17:45:44 +0800
+From:   YueHaibing <yuehaibing@huawei.com>
+To:     <rafael@kernel.org>, <len.brown@intel.com>, <pavel@ucw.cz>,
+        <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <yuehaibing@huawei.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH -next] x86/acpi: Remove unused extern declaration acpi_copy_wakeup_routine()
+Date:   Tue, 20 Jun 2023 17:45:19 +0800
+Message-ID: <20230620094519.15300-1-yuehaibing@huawei.com>
+X-Mailer: git-send-email 2.10.2.windows.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230619133734.851-1-lidong@vivo.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.174.179.215]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500007.china.huawei.com (7.192.104.62)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,33 +48,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 09:37:14PM +0800, Li Dong wrote:
-> Function xx causes a deadlock，because s_vfs_rename_mutex was not released when return
-> 
-> Signed-off-by: Li Dong <lidong@vivo.com>
-> ---
+This is now unused, so can be removed.
 
-This is a cross-directory rename which requires s_vfs_rename_mutex to be
-held. You're suggesting to drop it, violating basic locking assumptions
-with dire consequences:
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+---
+ arch/x86/kernel/acpi/sleep.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-lock_rename_child()
-{
-        c1->d_parent != p2
-        -> acquire s_vfs_rename_mutex
-}
+diff --git a/arch/x86/kernel/acpi/sleep.h b/arch/x86/kernel/acpi/sleep.h
+index 171a40c74db6..054c15a2f860 100644
+--- a/arch/x86/kernel/acpi/sleep.h
++++ b/arch/x86/kernel/acpi/sleep.h
+@@ -12,7 +12,6 @@ extern int wakeup_pmode_return;
+ 
+ extern u8 wake_sleep_flags;
+ 
+-extern unsigned long acpi_copy_wakeup_routine(unsigned long);
+ extern void wakeup_long64(void);
+ 
+ extern void do_suspend_lowlevel(void);
+-- 
+2.34.1
 
-pairs with
-
-old_parent = c1->d_parent;
-unlock_rename(old_parent, p2)
-{
-        if (old_parent != p2)
-        -> release s_vfs_rename_mutex
-}
-
-See the usage in ksmbd:
-
-trap = lock_rename_child(old_child, new_path.dentry);
-old_parent = dget(old_child->d_parent);
-unlock_rename(old_parent, new_path.dentry);
