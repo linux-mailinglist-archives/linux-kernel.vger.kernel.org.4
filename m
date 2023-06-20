@@ -2,269 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2AAC7376BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 23:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7AB97376BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 23:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbjFTViI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 17:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
+        id S230222AbjFTViQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 17:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229702AbjFTViG (ORCPT
+        with ESMTP id S230216AbjFTViO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 17:38:06 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5CA170D;
-        Tue, 20 Jun 2023 14:38:05 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35KKdmPP015208;
-        Tue, 20 Jun 2023 21:37:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ZxfjTOL/Bn9YrhXSc61e0Mkq9PrRfxa4UHo9HvQZ1jk=;
- b=lf9QsiQE/V/c8qlkgaMcXeep5B8bHx0EU8ma0f0NvOoPZIklVrZSCshl+jDCKACa/RH8
- S1F5a86pKrje/CsZ7urswrgWyqBeDzY/st+76JuPdBwGOjDRozyb35Wy8li1ljTXVjtM
- pq+VB3DVmpf8Hb1eASGF5iCJFLs98XBmYKYZG958ldr105Z8MHrIQOWD9nwdNZkqFydQ
- jyZIhKp3zP0UdTLwg92v6mieYq1EE8KfvD1fhdCbvQdbO6BFz0dEo/4e1JoY/MBih46c
- WewjHOuYWD5M7bUldAnRcIJDCDNmEm/gLgplIGmINbKZhwOTGuyTc5kTq6isAuA2w9vp 5g== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rax7n2q2r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Jun 2023 21:37:58 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35KLbuRI031506
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Jun 2023 21:37:57 GMT
-Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 20 Jun
- 2023 14:37:56 -0700
-Message-ID: <6ebab21c-5b1a-f9d7-e0c6-6a091e27761a@quicinc.com>
-Date:   Tue, 20 Jun 2023 14:37:47 -0700
+        Tue, 20 Jun 2023 17:38:14 -0400
+Received: from out-30.mta1.migadu.com (out-30.mta1.migadu.com [95.215.58.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD5C1739
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:38:12 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 14:37:49 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1687297088;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=60OO0jtISCjEIpK8se6Yga1g7BdYQxPXZlUI/Wu6eR8=;
+        b=maobrQhqDPMa6kqlZYyRmRMiWZQJV1OE5tw0GIUzqjHOZQF5zAMhYG7nscpeu2QRxGQctj
+        h91mTb1asvSa3L6CzjGPHR8PgPGR8e42a+gN3MBvgoFuGw+wb0+nMcDlPfyZZejFE8AMf5
+        w6PSIEKlPigBJrZaUM/c5K44ZyxaIHI=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     David Vernet <void@manifault.com>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com, rostedt@goodmis.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, joshdon@google.com,
+        tj@kernel.org, kernel-team@meta.com
+Subject: Re: [RFC PATCH 3/3] sched: Implement shared wakequeue in CFS
+Message-ID: <ZJIcLf0489kLMtjQ@P9FQF9L96D.corp.robot.car>
+References: <20230613052004.2836135-1-void@manifault.com>
+ <20230613052004.2836135-4-void@manifault.com>
+ <CAKfTPtCT==N_r1Vp-e_cFtVmcdo_YN1aD45AfbLMSpGpu1oU=w@mail.gmail.com>
+ <20230620195423.GB3027191@maniforge>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [Freedreno] [PATCH 1/3] drm/msm/dpu: Add DPU_INTF_DATABUS_WIDEN
- feature flag for DPU >= 5.0
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-CC:     <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        Sean Paul <sean@poorly.run>
-References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
- <20230525-add-widebus-support-v1-1-c7069f2efca1@quicinc.com>
- <wpjxrnhbcanbc5iatxnff25yrrdfrtmgb24sgwyo457dz2oyjz@e2docpcb6337>
- <f4fb042c-1458-6077-3c49-8cc02638b27c@linaro.org>
- <ycgei43x4kfmjk7g7gbeglehtiiinfbqmrjbdzcy56frxbtd2z@yk2f5kgrkbrt>
- <e23de804-060d-3278-5045-1ed03f0de80d@quicinc.com>
- <c5cfc132-effb-8269-ac5d-ed8c988d1a16@quicinc.com>
- <08b6aaf4-6edd-4f41-5d98-11ffc27e766e@quicinc.com>
- <6d11e420-1b95-0029-ec7a-17fbc8acb5ca@linaro.org>
- <827875ad-a446-10e7-6608-f9b0fa830a00@quicinc.com>
- <2b01b53a-9d8a-3b7d-d1bd-7d25eb77a9c0@linaro.org>
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-In-Reply-To: <2b01b53a-9d8a-3b7d-d1bd-7d25eb77a9c0@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Vz4YXzcAcdO-tlb8_r7dgm6VRuJd6TH-
-X-Proofpoint-ORIG-GUID: Vz4YXzcAcdO-tlb8_r7dgm6VRuJd6TH-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-20_16,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- adultscore=0 priorityscore=1501 malwarescore=0 phishscore=0
- mlxlogscore=999 impostorscore=0 spamscore=0 bulkscore=0 clxscore=1015
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306200195
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620195423.GB3027191@maniforge>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/16/2023 5:37 PM, Dmitry Baryshkov wrote:
-> On 17/06/2023 00:10, Abhinav Kumar wrote:
->>
->>
->> On 6/14/2023 1:43 PM, Dmitry Baryshkov wrote:
->>> On 14/06/2023 23:39, Abhinav Kumar wrote:
->>>>
->>>>
->>>> On 6/14/2023 12:54 PM, Abhinav Kumar wrote:
->>>>>
->>>>>
->>>>> On 6/14/2023 12:35 PM, Abhinav Kumar wrote:
->>>>>>
->>>>>>
->>>>>> On 6/14/2023 5:23 AM, Marijn Suijten wrote:
->>>>>>> On 2023-06-14 15:01:59, Dmitry Baryshkov wrote:
->>>>>>>> On 14/06/2023 14:42, Marijn Suijten wrote:
->>>>>>>>> On 2023-06-13 18:57:11, Jessica Zhang wrote:
->>>>>>>>>> DPU 5.x+ supports a databus widen mode that allows more data 
->>>>>>>>>> to be sent
->>>>>>>>>> per pclk. Enable this feature flag on all relevant chipsets.
->>>>>>>>>>
->>>>>>>>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->>>>>>>>>> ---
->>>>>>>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 3 ++-
->>>>>>>>>>    drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 2 ++
->>>>>>>>>>    2 files changed, 4 insertions(+), 1 deletion(-)
->>>>>>>>>>
->>>>>>>>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c 
->>>>>>>>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>>>>>> index 36ba3f58dcdf..0be7bf0bfc41 100644
->>>>>>>>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>>>>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->>>>>>>>>> @@ -103,7 +103,8 @@
->>>>>>>>>>        (BIT(DPU_INTF_INPUT_CTRL) | \
->>>>>>>>>>         BIT(DPU_INTF_TE) | \
->>>>>>>>>>         BIT(DPU_INTF_STATUS_SUPPORTED) | \
->>>>>>>>>> -     BIT(DPU_DATA_HCTL_EN))
->>>>>>>>>> +     BIT(DPU_DATA_HCTL_EN) | \
->>>>>>>>>> +     BIT(DPU_INTF_DATABUS_WIDEN))
->>>>>>>>>
->>>>>>>>> This doesn't work.  DPU 5.0.0 is SM8150, which has DSI 6G 2.3. 
->>>>>>>>> In the
->>>>>>>>> last patch for DSI you state and enable widebus for DSI 6G 2.5+ 
->>>>>>>>> only,
->>>>>>>>> meaning DPU and DSI are now desynced, and the output is completely
->>>>>>>>> corrupted.
->>>>>>>
->>>>
->>>> I looked at the internal docs and also this change. This change is 
->>>> incorrect because this will try to enable widebus for DPU >= 5.0 and 
->>>> DSI  >= 2.5
->>>>
->>>> That was not the intended right condition as thats not what the docs 
->>>> say.
->>>>
->>>> We should enable for DPU >= 7.0 and DSI >= 2.5
->>>>
->>>> Is there any combination where this compatibility is broken? That 
->>>> would be the strange thing for me ( not DPU 5.0 and DSI 2.5 as that 
->>>> was incorrect)
->>>>
->>>> Part of this confusion is because of catalog macro re-use again.
->>>>
->>>> This series is a good candidate and infact I think we should only do 
->>>> core_revision based check on DPU and DSI to avoid bringing the 
->>>> catalog mess into this.
->>>
->>> I have just a single request here: can we please have the same 
->>> approach for both DSI and DP? I don't mind changing DP code if it 
->>> makes it better. If you don't have better reasons, I like the idea of 
->>> DSI/DP dictating whether wide bus should be used on the particular 
->>> interface. It allows us to handle possible errata or corner cases 
->>> there. Another option would be to make DPU tell DSI / DP whether the 
->>> wide bus is enabled or not, but I'd say, this is slightly worse 
->>> solution.
->>>
->>
->> Today, DP's widebus does not check if DPU supports that or not.
->>
->> DPU encoder queries the DP whether widebus is available and enables it.
->>
->> We can also do the same thing for DSI.
->>
->> So for intf_type of DSI, DPU encoder will query DSI if it supports 
->> widebus.
+On Tue, Jun 20, 2023 at 02:54:23PM -0500, David Vernet wrote:
+> On Fri, Jun 16, 2023 at 10:08:57AM +0200, Vincent Guittot wrote:
+> > On Tue, 13 Jun 2023 at 07:20, David Vernet <void@manifault.com> wrote:
+> > >
+> > > Overview
+> > > ========
+> > >
+> > > The scheduler must constantly strike a balance between work
+> > > conservation, and avoiding costly migrations which harm performance due
+> > > to e.g. decreased cache locality. The matter is further complicated by
+> > > the topology of the system. Migrating a task between cores on the same
+> > > LLC may be more optimal than keeping a task local to the CPU, whereas
+> > > migrating a task between LLCs or NUMA nodes may tip the balance in the
+> > > other direction.
+> > >
+> > > With that in mind, while CFS is by and large mostly a work conserving
+> > > scheduler, there are certain instances where the scheduler will choose
+> > > to keep a task local to a CPU, when it would have been more optimal to
+> > > migrate it to an idle core.
+> > >
+> > > An example of such a workload is the HHVM / web workload at Meta. HHVM
+> > > is a VM that JITs Hack and PHP code in service of web requests. Like
+> > > other JIT / compilation workloads, it tends to be heavily CPU bound, and
+> > > exhibit generally poor cache locality. To try and address this, we set
+> > > several debugfs (/sys/kernel/debug/sched) knobs on our HHVM workloads:
+> > >
+> > > - migration_cost_ns -> 0
+> > > - latency_ns -> 20000000
+> > > - min_granularity_ns -> 10000000
+> > > - wakeup_granularity_ns -> 12000000
+> > >
+> > > These knobs are intended both to encourage the scheduler to be as work
+> > > conserving as possible (migration_cost_ns -> 0), and also to keep tasks
+> > > running for relatively long time slices so as to avoid the overhead of
+> > > context switching (the other knobs). Collectively, these knobs provide a
+> > > substantial performance win; resulting in roughly a 20% improvement in
+> > > throughput. Worth noting, however, is that this improvement is _not_ at
+> > > full machine saturation.
+> > >
+> > > That said, even with these knobs, we noticed that CPUs were still going
+> > > idle even when the host was overcommitted. In response, we wrote the
+> > > "shared wakequeue" (swqueue) feature proposed in this patch set. The
+> > > idea behind swqueue is simple: it enables the scheduler to be
+> > > aggressively work conserving by placing a waking task into a per-LLC
+> > > FIFO queue that can be pulled from by another core in the LLC FIFO queue
+> > > which can then be pulled from before it goes idle.
+> > 
+> > This seems to be just another newly idle load balance outside the current one !
 > 
-> Not if it supports wide bus. But the check is whether enabling wide bus 
-> is requested by the output driver (DSI/DP).
-
-Hi Dmitry,
-
-Can you explain what you mean by "requested by output driver"? FWIW, if 
-the DSI version supports wide bus && if DSC is enabled, then wide bus 
-will be enabled in DSI.
-
-Thanks,
-
-Jessica Zhang
-
+> Hi Vincent,
 > 
->>
->> Then DSI will do its version checks and for DSC it will say yes.
->>
->> This way, we will never check for the DPU's core revision for DSI and 
->> purely rely of DP/DSI's hw revisions.
->>
->> Thats fine with me because that way we again just rely on the hw 
->> revision to enable the feature.
->>
->> But as a result I am still going to drop this patch which adds widebus 
->> to the catalog as a dpu cap which I always wanted to do anyway as we 
->> will just rely on the DSI and DP hw revisions.
+> I can bring the swqueue logic inside of newidle_balance(). In hindsight
+> I think it makes more sense there.
 > 
-> Yep.
+> To answer your point more generally though, yes, this is a new approach
+> to load balancing that eschews tracking migration costs, scanning
+> runqueues, etc in favor of optimizing for work conservation, and
+> tracking runnable tasks in a shared data structure. More on this below
+> in response to your other points.
 > 
->>
->>>>
->>>>>>> Tested this on SM8350 which actually has DSI 2.5, and it is also
->>>>>>> corrupted with this series so something else on this series might be
->>>>>>> broken.
->>>>>>>
->>>>>
->>>>> Missed this response. That seems strange.
->>>>>
->>>>> This series was tested on SM8350 HDK with a command mode panel.
->>>>>
->>>>> We will fix the DPU-DSI handshake and post a v2 but your issue 
->>>>> needs investigation in parallel.
->>>>>
->>>>> So another bug to track that would be great.
->>>>>
->>>>>>>>> Is the bound in dsi_host wrong, or do DPU and DSI need to 
->>>>>>>>> communicate
->>>>>>>>> when widebus will be enabled, based on DPU && DSI supporting it?
->>>>>>>>
->>>>>>>> I'd prefer to follow the second approach, as we did for DP. DPU 
->>>>>>>> asks the
->>>>>>>> actual video output driver if widebus is to be enabled.
->>>>>>>
->>>>>>
->>>>>> I was afraid of this. This series was made on an assumption that 
->>>>>> the DPU version of widebus and DSI version of widebus would be 
->>>>>> compatible but looks like already SM8150 is an outlier.
->>>>>>
->>>>>> Yes, I think we have to go with second approach.
->>>>>>
->>>>>> DPU queries DSI if it supports widebus and enables it.
->>>>>>
->>>>>> Thanks for your responses. We will post a v2.
->>>>>>
->>>>>>> Doesn't it seem very strange that DPU 5.x+ comes with a widebus 
->>>>>>> feature,
->>>>>>> but the DSI does not until two revisions later?  Or is this 
->>>>>>> available on
->>>>>>> every interface, but only for a different (probably DP) encoder 
->>>>>>> block?
->>>>>>>
->>>>>>
->>>>>> Yes its strange.
->>>>>>
->>>>
->>>> I have clarified this above. Its not strange but appeared strange 
->>>> because we were checking wrong conditions.
->>>>
->>>>
->>>>>>> - Marijn
->>>
+> > 
+> > The knobs above are not the only thing preventing a rq to pull a new
+> > task. We have rq->avg_idle, curr_cost and sd->max_newidle_lb_cost
+> > stuff which might be one main root cause for one of your cpu not
+> > pulling a waiting task
+> >
+> > It's not clear in your explanation why fixing newly_idle_load_balance
+> > was not possible instead of adding outside code and what prevents
+> > newly_idle_load balance from picking a task in your case ?
+> > 
+> > For example, have you tried to disable the early break because of avg_idle ?
 > 
-> -- 
-> With best wishes
-> Dmitry
-> 
+> The goal of swqueue is to enable work conservation using a shared, per-LLC data
+> structure. The shared data structure is really the salient point as to why just
+> updating newidle_balance() wouldn't achieve the same result. newidle_balance()
+> finds tasks to migrate by (sometimes) iterating over runqueues and scanning for
+> tasks. It's an expensive operation, which doesn't scale to large machines or to
+> being performed on every idle path. swqueue, on the other hand, is shared
+> across all cores in an LLC, so pulling a runnable task is simply a matter of a
+> spinlock acquire and a list operation. This doesn't scale to every single
+> configuration as Aaron pointed out in [0], but it works well in many other
+> configurations.
+
++1
+
+Additionally, swqueue minimizes the number of races when two tasks pick
+the same cpu for being woken up.
+It's also serializing the wakeup order, which effectively pessimises tasks
+which are woken very often and promotes cpu-bound tasks, which usually
+positively affects the throughput.
+
+I agree that swqueue can be seen as an alternative form of the idle load balancing,
+I thought this way when I was working on it.
+Can it replace it completely? Idk, maybe. But maybe we need some sort of a balancing
+between multiple wait queues. E.g. if there are two swqueues on the system, one is empty
+and another is long, load idle balancing can borrow some tasks from the "foreign" swqueue.
+Just some ideas.
+
+Thanks!
