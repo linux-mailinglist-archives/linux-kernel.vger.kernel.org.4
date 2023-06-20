@@ -2,87 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB6D736DAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB274736DB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233095AbjFTNqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 09:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44516 "EHLO
+        id S233151AbjFTNrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 09:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233092AbjFTNq2 (ORCPT
+        with ESMTP id S233113AbjFTNrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 09:46:28 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E027AFC
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 06:46:24 -0700 (PDT)
-Received: from [192.168.1.108] (unknown [103.86.18.208])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 29D7915E9;
-        Tue, 20 Jun 2023 15:45:45 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687268748;
-        bh=210yMTE/YnxmjqCowrx9IHlGko5mFvl1PAVuwmvyK44=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LBM3zWZ209vtCznxpTvPEJjZLirco60wNXT7WM9mOuQLf12r4gtGb/cmZkDyrcSlF
-         3apGkQi52fYoT2MLKQBkuDe0s5DjUwJsYX37R7LFnzI0KjGj86uLEWRIGQSxeGS6IZ
-         ob5Zjxm2m+Bddsdw6B1y72B3jTLjsyC637NQTEZ0=
-Message-ID: <52a40c60-f044-c757-f8fd-241f456fb722@ideasonboard.com>
-Date:   Tue, 20 Jun 2023 19:16:15 +0530
+        Tue, 20 Jun 2023 09:47:01 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328081718;
+        Tue, 20 Jun 2023 06:47:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687268820; x=1718804820;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=KdmhiibePV/4HK2zA0Ez8F9OGPcYXPdUzaI7QpnJGNs=;
+  b=P4/FsBZlHyVOaEJtgqAg4UNZ4xqE8j1jZRIR54NTfLKppB1T9eUlOqnJ
+   oG97zokji7wSHQrygYrqaDA6uURyegJqi+mHRDD9ZgjIL3WQPZ771BVnr
+   8Rcc1QTcfsNFtHWNgXGgczWzc/YcArkRoK5r8PK2uPQd2wdPv1YT1psWN
+   IFYGPU5jaxc9a4SfTFV6yRCvPwzn3Gua9mlm/puQGHbPTBffMuuYXzVm6
+   uqSufbws1T11rGSUcS7bpjPr579oODsRGUw/EXZCNkg6OzT/BZLtkTOWC
+   ARUHJojnerEMq9YD7xGXnLmvQiNv+vz0mz6WGXaFeelPeVeUfGcaUfE3V
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="362401341"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="362401341"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 06:46:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="827006663"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="827006663"
+Received: from eshaanan-mobl.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.252.61.137])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 06:46:54 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?q?Stefan=20M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        Shaohua Li <shaohua.li@intel.com>,
+        Greg Kroah-Hartman <gregkh@suse.de>,
+        linux-kernel@vger.kernel.org
+Cc:     Dean Luick <dean.luick@cornelisnetworks.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        stable@vger.kernel.org
+Subject: [PATCH v3 02/10] PCI: Make link retraining use RMW accessors for changing LNKCTL
+Date:   Tue, 20 Jun 2023 16:46:16 +0300
+Message-Id: <20230620134624.99688-3-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230620134624.99688-1-ilpo.jarvinen@linux.intel.com>
+References: <20230620134624.99688-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] staging: vchiq_arm: Remove extra struct vchiq_instance
- declaration
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Adrien Thierry <athierry@redhat.com>,
-        Stefan Wahren <stefan.wahren@i2se.com>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-References: <20221221074047.233473-1-umang.jain@ideasonboard.com>
-From:   Umang Jain <umang.jain@ideasonboard.com>
-In-Reply-To: <20221221074047.233473-1-umang.jain@ideasonboard.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi again,
+Don't assume that the device is fully under the control of PCI core.
+Use RMW capability accessors in link retraining which do proper locking
+to avoid losing concurrent updates to the register values.
 
-Can this be collected please?. The series has two R-b tags and I think 
-it got skipped during the last window?
+Fixes: 4ec73791a64b ("PCI: Work around Pericom PCIe-to-PCI bridge Retrain Link erratum")
+Fixes: 7d715a6c1ae5 ("PCI: add PCI Express ASPM support")
+Suggested-by: Lukas Wunner <lukas@wunner.de>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+Cc: stable@vger.kernel.org
+---
 
-On 12/21/22 1:10 PM, Umang Jain wrote:
-> Additional declaration of struct vchiq_instance was introduced in the
-> commit 726e79f8a648 ("staging: vchiq_arm: pass vchiq instance to
-> service callbacks"). Drop the extra declaration.
->
-> Fixes: 726e79f8a648 ("staging: vchiq_arm: pass vchiq instance to service callbacks")
-> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
-> ---
->   drivers/staging/vc04_services/include/linux/raspberrypi/vchiq.h | 2 --
->   1 file changed, 2 deletions(-)
->
-> diff --git a/drivers/staging/vc04_services/include/linux/raspberrypi/vchiq.h b/drivers/staging/vc04_services/include/linux/raspberrypi/vchiq.h
-> index 66965da11443..52e106f117da 100644
-> --- a/drivers/staging/vc04_services/include/linux/raspberrypi/vchiq.h
-> +++ b/drivers/staging/vc04_services/include/linux/raspberrypi/vchiq.h
-> @@ -78,8 +78,6 @@ struct vchiq_service_params_kernel {
->   	short version_min;   /* Update for incompatible changes */
->   };
->   
-> -struct vchiq_instance;
-> -
->   extern int vchiq_initialise(struct vchiq_instance **pinstance);
->   extern int vchiq_shutdown(struct vchiq_instance *instance);
->   extern int vchiq_connect(struct vchiq_instance *instance);
+pci/enumeration branch moves the link retraining code into PCI core and
+also conflicts with a link retraining fix in pci/aspm. The changelog
+(and patch splitting) takes the move into account by not referring to
+ASPM while the change itself is not based on pci/enumeration (as per
+Bjorn's preference).
+
+---
+ drivers/pci/pcie/aspm.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+index 66d7514ca111..50e32bda4656 100644
+--- a/drivers/pci/pcie/aspm.c
++++ b/drivers/pci/pcie/aspm.c
+@@ -199,17 +199,14 @@ static bool pcie_retrain_link(struct pcie_link_state *link)
+ 	unsigned long end_jiffies;
+ 	u16 reg16;
+ 
+-	pcie_capability_read_word(parent, PCI_EXP_LNKCTL, &reg16);
+-	reg16 |= PCI_EXP_LNKCTL_RL;
+-	pcie_capability_write_word(parent, PCI_EXP_LNKCTL, reg16);
++	pcie_capability_set_word(parent, PCI_EXP_LNKCTL, PCI_EXP_LNKCTL_RL);
+ 	if (parent->clear_retrain_link) {
+ 		/*
+ 		 * Due to an erratum in some devices the Retrain Link bit
+ 		 * needs to be cleared again manually to allow the link
+ 		 * training to succeed.
+ 		 */
+-		reg16 &= ~PCI_EXP_LNKCTL_RL;
+-		pcie_capability_write_word(parent, PCI_EXP_LNKCTL, reg16);
++		pcie_capability_clear_word(parent, PCI_EXP_LNKCTL, PCI_EXP_LNKCTL_RL);
+ 	}
+ 
+ 	/* Wait for link training end. Break out after waiting for timeout */
+-- 
+2.30.2
 
