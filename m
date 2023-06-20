@@ -2,145 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDC773617A
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 04:19:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9D3736181
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 04:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjFTCTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 22:19:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
+        id S229827AbjFTCWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 22:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjFTCTu (ORCPT
+        with ESMTP id S229454AbjFTCWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 22:19:50 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9594AE74
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 19:19:48 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3ff242aae7aso241931cf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 19:19:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687227587; x=1689819587;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3EPXA9p2JzuvzKzWgCYYXlon3hk90pdnuUAk2cg5+oQ=;
-        b=jSijuw7X4DVOl/gcJeGmpxPfObtZeHzM/kRouNnow3lf3toxpNV1RRCp3JeAUXAEL+
-         iI70y/J5y5xneoxSH6lE1u2JjNb0sxP+WH/AcOV6J04IM66xuGr7kVVJvlJSVYl2nzdw
-         GpO9zFbTU/Jt9P+AzXUBhThLJZOMv2S6GysxYZc9QRsartfZ/Ng1pFrBF4i1QYEA0ja5
-         v+DJgaciPtBrnG+fF3nFrq1OXvndAf9QJ9iH3cDovlvik+Boqnlxq+8ktld9BK552lGf
-         9SQiMGWZ6yfz+SN6OYZeEIGzY2Jw4LCJPZ9hxA2TtbBcyZj9yfzbfjehAIRUIUV41fPH
-         6wuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687227587; x=1689819587;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3EPXA9p2JzuvzKzWgCYYXlon3hk90pdnuUAk2cg5+oQ=;
-        b=ONFRXi9A/15gOPJxT9FL4EibRt5uua5n4sA+oEqCM3zrn76jeYc6LOYLLUVlf7uTo3
-         kMrEyVmKvt/OpHd0oGUqNAt+b1vwfxVOFkXNo6eBAdzlBVCGetoEx1Ps0nOH8NtyC96H
-         aTyPxGbgCsZg1uOAP5gYGS8JcjMNoIMkVhNCZiYrGCDxnMr0WHl1fOLZ1njnMOByF8pO
-         +JbnOeIxkLF/47HskeAEs27z0inCBiwxiUwJC6hybBxjN7SB6bEbRABQ7T7telS9/i9C
-         7y5pGqjCfJdrmldPxO1SPhSFv0KgYm/bW4/akUyJdnmSwSjTQTrYX0jtEJWzOiZ2wqR7
-         gWGA==
-X-Gm-Message-State: AC+VfDxK8elltxoJOZORlrFACYSdEwlFs20YlDmNowp1i+YQ8hLBOhdb
-        gNqP0QVkCJKw2S7uCMdUjG4y7OK257qSELmt48/jAQ==
-X-Google-Smtp-Source: ACHHUZ4X3CzpwwHdrmJnCxXIBAk6HQXykSsn31iNLJMOP1aC/6DP8FnJZ+MTQ6AdfTjiGdmwOfd3hduXZamO7zy5qTQ=
-X-Received: by 2002:ac8:7f93:0:b0:3ef:404a:b291 with SMTP id
- z19-20020ac87f93000000b003ef404ab291mr104628qtj.7.1687227587619; Mon, 19 Jun
- 2023 19:19:47 -0700 (PDT)
+        Mon, 19 Jun 2023 22:22:42 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C29C3;
+        Mon, 19 Jun 2023 19:22:40 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QlVlc2vghz4f42RM;
+        Tue, 20 Jun 2023 10:22:36 +0800 (CST)
+Received: from [10.174.178.129] (unknown [10.174.178.129])
+        by APP1 (Coremail) with SMTP id cCh0CgCX8RtpDZFkIrnELQ--.23772S2;
+        Tue, 20 Jun 2023 10:22:34 +0800 (CST)
+Subject: Re: [PATCH] fs: ext4: Fix traditional comparison using max/min method
+To:     Li Dong <lidong@vivo.com>, Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        "open list:EXT4 FILE SYSTEM" <linux-ext4@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     opensource.kernel@vivo.com
+References: <20230619134503.1277-1-lidong@vivo.com>
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+Message-ID: <c4d1822c-1c4d-376a-1a35-80ddb990a9a4@huaweicloud.com>
+Date:   Tue, 20 Jun 2023 10:22:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.5.0
 MIME-Version: 1.0
-References: <20230526234435.662652-1-yuzhao@google.com> <26cf0b0a-cda5-08a9-a669-6966f9e626b1@redhat.com>
-In-Reply-To: <26cf0b0a-cda5-08a9-a669-6966f9e626b1@redhat.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Mon, 19 Jun 2023 20:19:11 -0600
-Message-ID: <CAOUHufagkd2Jk3_HrVoFFptRXM=hX2CV8f+M-dka-hJU4bP8kw@mail.gmail.com>
-Subject: Re: [PATCH mm-unstable v2 00/10] mm/kvm: locklessly clear the
- accessed bit
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alistair Popple <apopple@nvidia.com>,
-        Anup Patel <anup@brainfault.org>,
-        Ben Gardon <bgardon@google.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Gavin Shan <gshan@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Michael Larabel <michael@michaellarabel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Paul Mackerras <paulus@ozlabs.org>,
-        Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
-        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
-        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
-        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
-        linux-mm@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230619134503.1277-1-lidong@vivo.com>
+Content-Type: text/plain; charset=gbk
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: cCh0CgCX8RtpDZFkIrnELQ--.23772S2
+X-Coremail-Antispam: 1UD129KBjvJXoWrKw1UCr4kCFy5tw4rGrWxWFg_yoW8JrWUpF
+        47XF1rKr4Yvw1vg3W7CryfKr45X34xGr48J3y5Xa15XF9rXFyDWa4qkrn5ZFyxA3yxXFyj
+        va4qkFn8G39Fk37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUzsqWUUUUU
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 9, 2023 at 3:08=E2=80=AFAM Paolo Bonzini <pbonzini@redhat.com> =
-wrote:
->
-> On 5/27/23 01:44, Yu Zhao wrote:
-> > TLDR
-> > =3D=3D=3D=3D
-> > This patchset adds a fast path to clear the accessed bit without
-> > taking kvm->mmu_lock. It can significantly improve the performance of
-> > guests when the host is under heavy memory pressure.
-> >
-> > ChromeOS has been using a similar approach [1] since mid 2021 and it
-> > was proven successful on tens of millions devices.
-> >
-> > This v2 addressed previous requests [2] on refactoring code, removing
-> > inaccurate/redundant texts, etc.
-> >
-> > [1]https://crrev.com/c/2987928
-> > [2]https://lore.kernel.org/r/20230217041230.2417228-1-yuzhao@google.com=
-/
->
->  From the KVM point of view the patches look good (though I wouldn't
-> mind if Nicholas took a look at the ppc part).  Jason's comment on the
-> MMU notifier side are promising as well.  Can you send v3 with Oliver's
-> comments addressed?
 
-Thanks. I'll address all the comments in v3 and post it asap.
 
-Meanwhile, some updates on the recent progress from my side:
-1. I've asked some downstream kernels to pick up v2 for testing, the
-Archlinux Zen kernel did. I don't really expect its enthusiastic
-testers to find this series relevant to their use cases. But who
-knows.
-2. I've also asked openbenchmarking.org to run their popular highmem
-benchmark suites with v2. Hopefully they'll have some independent
-results soon.
-3. I've backported v2 to v5.15 and v6.1 and started an A/B experiment
-involving ~1 million devices, as I mentioned in another email in this
-thread. I should have some results to share when posting v3.
+on 6/19/2023 9:44 PM, Li Dong wrote:
+> It would be better to replace the traditional ternary conditional operator with max()/min()
+Hi Li, thanks for the patch, but this is a duplicate of [1] :)
+
+[1] https://lore.kernel.org/linux-ext4/51be7b9a-726c-c232-146b-7785c50e875a@huaweicloud.com/
+> Signed-off-by: Li Dong <lidong@vivo.com>
+> ---
+>  fs/ext4/balloc.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/ext4/balloc.c b/fs/ext4/balloc.c
+> index 1f72f977c6db..90ff655ddddb 100644
+> --- a/fs/ext4/balloc.c
+> +++ b/fs/ext4/balloc.c
+> @@ -111,10 +111,8 @@ static unsigned ext4_num_overhead_clusters(struct super_block *sb,
+>  	itbl_blk_start = ext4_inode_table(sb, gdp);
+>  	itbl_blk_end = itbl_blk_start + sbi->s_itb_per_group - 1;
+>  	if (itbl_blk_start <= end && itbl_blk_end >= start) {
+> -		itbl_blk_start = itbl_blk_start >= start ?
+> -			itbl_blk_start : start;
+> -		itbl_blk_end = itbl_blk_end <= end ?
+> -			itbl_blk_end : end;
+> +		itbl_blk_start = max(itbl_blk_start, start);
+> +		itbl_blk_end = min(itbl_blk_end, end);
+>  
+>  		itbl_cluster_start = EXT4_B2C(sbi, itbl_blk_start - start);
+>  		itbl_cluster_end = EXT4_B2C(sbi, itbl_blk_end - start);
+> 
+
+-- 
+Best wishes
+Kemeng Shi
+
