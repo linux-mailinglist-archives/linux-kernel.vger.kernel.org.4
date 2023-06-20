@@ -2,96 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BAB737774
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:27:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 201D6737775
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 00:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbjFTW1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 18:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41184 "EHLO
+        id S230063AbjFTW1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 18:27:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjFTW1e (ORCPT
+        with ESMTP id S229593AbjFTW1v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 18:27:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 196481735;
-        Tue, 20 Jun 2023 15:27:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 20 Jun 2023 18:27:51 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B681985
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 15:27:50 -0700 (PDT)
+Received: from localhost (unknown [188.27.34.213])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 77F0961291;
-        Tue, 20 Jun 2023 22:27:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10869C433C8;
-        Tue, 20 Jun 2023 22:27:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687300051;
-        bh=PYb/T++jC5C/v/zU5chufo7iMHm0QuoDKNyvVuNCbzo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kCaLqxuhAT5zzAt4Lz/LSU6TgxQ7tEaSYEwCXGthjQterhLrhLRNmDwtQzYmXG1sV
-         AIwdz2Gu7+u4lLGh34WOL2xHDRuOc14qWGfA4Eov2QjOxNaY1qPz+jHDkzSGTAfIq4
-         TiWWi30LfG4CCH8eSXBKziNgk5SoBIClrtZVzoDWRNa4kMHJHGMtMLBIDK3awMqIhV
-         6+F5Pj5kfmKVkSsKIRVYfgAmz5/2bne1b6fu5UHOGAXCUVaWpMHCGcCk68EXZCesOM
-         KvIq0RefYs8+8Ahe6nIt5ydfRikP06wpvEXbYOW1neey8gZqVSgxpbuz1kg9jWwb25
-         d32/hJYTXgyAA==
-Message-ID: <40af3815-b0ee-e96f-f7a8-9f0fe9f938d0@kernel.org>
-Date:   Tue, 20 Jun 2023 17:27:29 -0500
+        (Authenticated sender: cristicc)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D31576606F5C;
+        Tue, 20 Jun 2023 23:27:48 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687300069;
+        bh=pMukWB0Dc/yW8XeN7gZs3fKsPLiPAntaM6BWAC5s3ZI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VaulE6xZq8PG0Q2I2jrEKrBsPSG46Sr1cnARHj08qnwGyG1VVilmE+1ruQ0E3U7h6
+         I2x0VPpvtag6a73EWOiZE0x04qC/mayOpWtQoC+5tj7uwERkcLHogohfZF/VF2ZzdP
+         3MiM9DO5q+fRIW54u5dCMTfEUrsUYD1EQRK+JkqoZ+mAZgOSvHABqLJ4BIMOowPzvO
+         +8DHy3nImcICOCiY1jr5tw97vsMgAzfei2WbdUXeyB3yyI4SDJCKA6BOKi+nN+xtBI
+         +WXRRVrdq2s/TEw/LkpSrdj9Cb+FRpe0208oZKeDWf+/2CHDLz/YDqlo54WQ6lik16
+         MyhH0mYD4tBvQ==
+From:   Cristian Ciocaltea <cristian.ciocaltea@collabora.com>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Vijendar Mukunda <Vijendar.Mukunda@amd.com>,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Venkata Prasad Potturu <venkataprasad.potturu@amd.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com
+Subject: [PATCH 0/2] AMD Vangogh support for NAU8821/MAX98388
+Date:   Wed, 21 Jun 2023 01:27:41 +0300
+Message-ID: <20230620222743.274432-1-cristian.ciocaltea@collabora.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] nios2: Replace all non-returning strlcpy with strscpy
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Azeem Shaikh <azeemshaikh38@gmail.com>,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230530162358.984149-1-azeemshaikh38@gmail.com>
- <202305301620.346CC541@keescook>
- <45ed31e0-9ecd-56ea-c0d4-3c68a3fd8cf5@kernel.org>
- <202306201313.C425BCB@keescook>
-From:   Dinh Nguyen <dinguyen@kernel.org>
-In-Reply-To: <202306201313.C425BCB@keescook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series extends the Vangogh machine driver to support a variant based
+on the Nuvoton NAU88L21 Codec and the Analog Devices MAX98388 Speaker Amplifier.
 
+Cristian Ciocaltea (2):
+  ASoC: amd: vangogh: Add ACPI probe support
+  ASoC: amd: vangogh: Add support for NAU8821/MAX98388 variant
 
-On 6/20/23 15:15, Kees Cook wrote:
-> On Tue, Jun 13, 2023 at 05:15:41PM -0500, Dinh Nguyen wrote:
->>
->>
->> On 5/30/23 18:20, Kees Cook wrote:
->>> On Tue, May 30, 2023 at 04:23:58PM +0000, Azeem Shaikh wrote:
->>>> strlcpy() reads the entire source buffer first.
->>>> This read may exceed the destination size limit.
->>>> This is both inefficient and can lead to linear read
->>>> overflows if a source string is not NUL-terminated [1].
->>>> In an effort to remove strlcpy() completely [2], replace
->>>> strlcpy() here with strscpy().
->>>> No return values were used, so direct replacement is safe.
->>>>
->>>> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
->>>> [2] https://github.com/KSPP/linux/issues/89
->>>>
->>>> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
->>>
->>> Reviewed-by: Kees Cook <keescook@chromium.org>
->>>
->>
->> Applied!
-> 
-> Thanks for taking this patch! I just wanted to double-check, though; I
-> haven't seen it show up in -next yet. Is this still queued?
-> 
-> Thanks!
+ sound/soc/amd/Kconfig              |   5 +-
+ sound/soc/amd/vangogh/acp5x-mach.c | 155 ++++++++++++++++++++++++-----
+ sound/soc/amd/vangogh/acp5x.h      |   2 +-
+ sound/soc/amd/vangogh/pci-acp5x.c  |   3 -
+ 4 files changed, 134 insertions(+), 31 deletions(-)
 
-I've queued it for v6.5. Do you need it in v6.4?
+-- 
+2.41.0
 
-Dinh
