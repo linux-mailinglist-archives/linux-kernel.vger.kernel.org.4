@@ -2,198 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A283873650D
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:45:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A770673650C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 09:44:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbjFTHoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 03:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
+        id S231480AbjFTHok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 03:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbjFTHoN (ORCPT
+        with ESMTP id S229788AbjFTHoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 03:44:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66DF81706
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:43:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687246994;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VKzVYTJU+Kltp7JOyEJXeiIKJE1OQId0BQJZ+m/qLVY=;
-        b=YPVgSCpj6mrecIZgPi3zIwC8m/2UVUDDE+rJfqkdf7Tni9BfAhVtgeRM/3/SH29FT13eip
-        K4lm7f6LRAoFCrDEB1U2LGTR6gUglFCTl4+0jbRjeUrl3bEpEYY74P9xMpRoxsIMHhSj9w
-        Ko+py18S991J1ZiSZ4/yBLu6ALqvzyo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-76-C9n_X4hTPNCb8NjxbJyQtg-1; Tue, 20 Jun 2023 03:43:10 -0400
-X-MC-Unique: C9n_X4hTPNCb8NjxbJyQtg-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 10CBA809F8F;
-        Tue, 20 Jun 2023 07:43:10 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 0746B112132D;
-        Tue, 20 Jun 2023 07:43:08 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <000000000000c6527105fe7fdab8@google.com>
-References: <000000000000c6527105fe7fdab8@google.com>
-To:     syzbot <syzbot+88f4b1e6cf88da11f5cd@syzkaller.appspotmail.com>
-Cc:     dhowells@redhat.com, davem@davemloft.net,
-        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [crypto?] general protection fault in shash_ahash_update
+        Tue, 20 Jun 2023 03:44:11 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB731716
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 00:43:53 -0700 (PDT)
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35K7f4JD015190;
+        Tue, 20 Jun 2023 07:43:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=fjrabIf4HS+xzHGwit1Rg45PNAxZkLQNHIOhQQVNugE=;
+ b=n3WrWDETlTbShH8SjKvcY+TjosLZdL1eXtLge/wbGHiLDKdfr32XWzIGNlK/3p6FNl1m
+ Gj/3MoGY6yi6Mogxwnxj45jek4EMgCSP6emlZ9wGVMEJ7sJC2IHrqguvCVM6jZvJR+S5
+ CE4UB9wG/FWbvQsT7eMKWPR51AFE848YSBYPQWe+BU1FATgKTmCzNh1ZWQj14YVE0CMY
+ H6RR9ZJ9vIofK9+V8HDqPOusJntbbmbUDmrgp0zs39VIPMuS31WsjhulbXfwxJ5tg/1w
+ oD4Srn+xv5Wegbvf+LsYXj0DZE9TY2rkbq2zBNcCqHoPEAF2hR0GEG2qDM4nVylIFkBf bg== 
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rb7kt8r7s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jun 2023 07:43:32 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35K3S3J1028011;
+        Tue, 20 Jun 2023 07:43:29 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma06ams.nl.ibm.com (PPS) with ESMTPS id 3r943e1x3k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 20 Jun 2023 07:43:29 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35K7hRq810420824
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 20 Jun 2023 07:43:27 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 4C1B72004B;
+        Tue, 20 Jun 2023 07:43:27 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0BBB220040;
+        Tue, 20 Jun 2023 07:43:27 +0000 (GMT)
+Received: from [9.101.4.34] (unknown [9.101.4.34])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 20 Jun 2023 07:43:26 +0000 (GMT)
+Message-ID: <b75bb8b1-6d55-8062-00f2-dff4ff59efdd@linux.ibm.com>
+Date:   Tue, 20 Jun 2023 09:43:26 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.1
+Subject: Re: [PATCH] cxl/ocxl: Possible repeated word
+Content-Language: en-US
+To:     zhumao001@208suo.com, ajd@linux.ibm.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+References: <20230618150648.1123-1-dengshaomin@cdjrlc.com>
+ <787f5a712a0459bc21d83bb388770b58@208suo.com>
+From:   Frederic Barrat <fbarrat@linux.ibm.com>
+In-Reply-To: <787f5a712a0459bc21d83bb388770b58@208suo.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: fgj1IvywEEuKdP1K7-hS11tDgkbwWIGL
+X-Proofpoint-ORIG-GUID: fgj1IvywEEuKdP1K7-hS11tDgkbwWIGL
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1221048.1687246988.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Tue, 20 Jun 2023 08:43:08 +0100
-Message-ID: <1221049.1687246988@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-20_04,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ malwarescore=0 mlxlogscore=999 clxscore=1011 impostorscore=0
+ lowpriorityscore=0 adultscore=0 phishscore=0 priorityscore=1501
+ suspectscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306200067
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.g=
-it main
 
-    crypto: af_alg/hash: Fix recvmsg() after sendmsg(MSG_MORE)
-    =
+Hello,
 
-    If an AF_ALG socket bound to a hashing algorithm is sent a zero-length
-    message with MSG_MORE set and then recvmsg() is called without first
-    sending another message without MSG_MORE set to end the operation, an =
-oops
-    will occur because the crypto context and result doesn't now get set u=
-p in
-    advance because hash_sendmsg() now defers that as long as possible in =
-the
-    hope that it can use crypto_ahash_digest() - and then because the mess=
-age
-    is zero-length, it the data wrangling loop is skipped.
-    =
+While the correction in the comment is of course ok, the patch was sent 
+as html. You may want to check/fix how it was submitted.
 
-    Fix this by always making a pass of the loop, even in the case that no=
- data
-    is provided to the sendmsg().
-    =
+   Fred
 
-    Fix also extract_iter_to_sg() to handle a zero-length iterator by retu=
-rning
-    0 immediately.
-    =
 
-    Whilst we're at it, remove the code to create a kvmalloc'd scatterlist=
- if
-    we get more than ALG_MAX_PAGES - this shouldn't happen.
-    =
-
-    Fixes: c662b043cdca ("crypto: af_alg/hash: Support MSG_SPLICE_PAGES")
-    Reported-by: syzbot+13a08c0bf4d212766c3c@syzkaller.appspotmail.com
-    Link: https://lore.kernel.org/r/000000000000b928f705fdeb873a@google.co=
-m/
-    Signed-off-by: David Howells <dhowells@redhat.com>
-    cc: Herbert Xu <herbert@gondor.apana.org.au>
-    cc: "David S. Miller" <davem@davemloft.net>
-    cc: Eric Dumazet <edumazet@google.com>
-    cc: Jakub Kicinski <kuba@kernel.org>
-    cc: Paolo Abeni <pabeni@redhat.com>
-    cc: Jens Axboe <axboe@kernel.dk>
-    cc: Matthew Wilcox <willy@infradead.org>
-    cc: linux-crypto@vger.kernel.org
-    cc: netdev@vger.kernel.org
-
-diff --git a/crypto/algif_hash.c b/crypto/algif_hash.c
-index dfb048cefb60..1176533a55c9 100644
---- a/crypto/algif_hash.c
-+++ b/crypto/algif_hash.c
-@@ -83,26 +83,14 @@ static int hash_sendmsg(struct socket *sock, struct ms=
-ghdr *msg,
- =
-
- 	ctx->more =3D false;
- =
-
--	while (msg_data_left(msg)) {
-+	do {
- 		ctx->sgl.sgt.sgl =3D ctx->sgl.sgl;
- 		ctx->sgl.sgt.nents =3D 0;
- 		ctx->sgl.sgt.orig_nents =3D 0;
- =
-
- 		err =3D -EIO;
- 		npages =3D iov_iter_npages(&msg->msg_iter, max_pages);
--		if (npages =3D=3D 0)
--			goto unlock_free;
--
--		if (npages > ARRAY_SIZE(ctx->sgl.sgl)) {
--			err =3D -ENOMEM;
--			ctx->sgl.sgt.sgl =3D
--				kvmalloc(array_size(npages,
--						    sizeof(*ctx->sgl.sgt.sgl)),
--					 GFP_KERNEL);
--			if (!ctx->sgl.sgt.sgl)
--				goto unlock_free;
--		}
--		sg_init_table(ctx->sgl.sgl, npages);
-+		sg_init_table(ctx->sgl.sgl, max_t(size_t, npages, 1));
- =
-
- 		ctx->sgl.need_unpin =3D iov_iter_extract_will_pin(&msg->msg_iter);
- =
-
-@@ -111,7 +99,8 @@ static int hash_sendmsg(struct socket *sock, struct msg=
-hdr *msg,
- 		if (err < 0)
- 			goto unlock_free;
- 		len =3D err;
--		sg_mark_end(ctx->sgl.sgt.sgl + ctx->sgl.sgt.nents - 1);
-+		if (len > 0)
-+			sg_mark_end(ctx->sgl.sgt.sgl + ctx->sgl.sgt.nents - 1);
- =
-
- 		if (!msg_data_left(msg)) {
- 			err =3D hash_alloc_result(sk, ctx);
-@@ -148,7 +137,7 @@ static int hash_sendmsg(struct socket *sock, struct ms=
-ghdr *msg,
- =
-
- 		copied +=3D len;
- 		af_alg_free_sg(&ctx->sgl);
--	}
-+	} while (msg_data_left(msg));
- =
-
- 	ctx->more =3D msg->msg_flags & MSG_MORE;
- 	err =3D 0;
-diff --git a/lib/scatterlist.c b/lib/scatterlist.c
-index e97d7060329e..77a7b18ee751 100644
---- a/lib/scatterlist.c
-+++ b/lib/scatterlist.c
-@@ -1340,7 +1340,7 @@ ssize_t extract_iter_to_sg(struct iov_iter *iter, si=
-ze_t maxsize,
- 			   struct sg_table *sgtable, unsigned int sg_max,
- 			   iov_iter_extraction_t extraction_flags)
- {
--	if (maxsize =3D=3D 0)
-+	if (!maxsize || !iter->count)
- 		return 0;
- =
-
- 	switch (iov_iter_type(iter)) {
-
+On 18/06/2023 17:08, zhumao001@208suo.com wrote:
+> Delete repeated word in comment. Signed-off-by: Zhu Mao <zhumao001@ 
+>  208suo. com> --- drivers/misc/cxl/native. c | 2 +- 1 file changed, 1 
+> insertion(+), 1 deletion(-) diff --git a/drivers/misc/cxl/native. c 
+> b/drivers/misc/cxl/native. cindex
+> ZjQcmQRYFpfptBannerStart
+> This Message Is From an External Sender
+> This message came from outside your organization.
+> Report Suspicious
+> <https://us-phishalarm-ewt.proofpoint.com/EWT/v1/PjiDSg!2k-hI76VihO6WgXx-IHFLxDVOAL2DdWMKjPu4ApiehtDXYjNrTR1Cj6nYDmD8SP9M8AZ7TpWUloL0Ixn_2IX60uI2MsuBkM$>
+> ZjQcmQRYFpfptBannerEnd
+> Delete repeated word in comment.
+> 
+> Signed-off-by: Zhu Mao <zhumao001@208suo.com>
+> ---
+>   drivers/misc/cxl/native.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/misc/cxl/native.c b/drivers/misc/cxl/native.c
+> index 50b0c44bb8d7..6957946a6463 100644
+> --- a/drivers/misc/cxl/native.c
+> +++ b/drivers/misc/cxl/native.c
+> @@ -920,7 +920,7 @@ int cxl_attach_dedicated_process_psl9(struct 
+> cxl_context *ctx, u64 wed, u64 amr)
+>        * Ideally we should do a wmb() here to make sure the changes to the
+>        * PE are visible to the card before we call afu_enable.
+>        * On ppc64 though all mmios are preceded by a 'sync' instruction 
+> hence
+> -     * we dont dont need one here.
+> +     * we dont need one here.
+>        */
+> 
+>       result = cxl_ops->afu_reset(afu);
