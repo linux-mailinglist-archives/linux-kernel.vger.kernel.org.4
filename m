@@ -2,151 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CA11736393
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 08:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D36F736397
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 08:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjFTGY7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 02:24:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
+        id S230159AbjFTG1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 02:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbjFTGY4 (ORCPT
+        with ESMTP id S229597AbjFTG1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 02:24:56 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0EB3E2;
-        Mon, 19 Jun 2023 23:24:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1687242275; x=1687847075; i=deller@gmx.de;
- bh=P4yET/ii6laUO0c0nA2w7JL4IyFthpA/vzXPBsUXChM=;
- h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
- b=hEfNUGv4oZFo6i7NeRr66V8+HC0Z19w49eyJegnYHUaTis3VcK+QjCzm+nxZIARZybq5iz1
- E2brAqU4PyV11XT8w/2ofjvNvlpPCS4FOh6ilx2VTUCYYYZbHNGkqulblBDBZfLxVRhFcTK7B
- oIMUzsgLqTjDzFde63HcfJdgSahV4I4F2cDi82he1WBLKot5r3sgNB1GMQ25Dsm1wa0Hz3jZz
- kg0v5NHrrU4wWOq0AXG7YQuLdN1rRb9rwI+Y7qc1x1Qp+bTCCguNJidtuRxxBkyDpY6nxxZWi
- iseO8qo1qex/MTeK1HCZptluKskuwvN/FM2DGJCSpNA7LLTbc/OQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.157.8]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MpUYu-1pkBv518uK-00ps7o; Tue, 20
- Jun 2023 08:24:35 +0200
-Message-ID: <3d8c3a8c-68be-422a-c4ff-6d2e99c3f01b@gmx.de>
-Date:   Tue, 20 Jun 2023 08:24:34 +0200
+        Tue, 20 Jun 2023 02:27:23 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C041A7
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 23:27:21 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-988a2715b8cso353650266b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 23:27:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687242440; x=1689834440;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=h1yE8tz9H3rEN65rD4mY8DHlzDlGjHODVIcSxoMimnI=;
+        b=ZPJi/Kd8F8hNT7+d3OGHtmgUCgnk8jfwgxxWk09roHyJkt/t9yEroDiRyhb6JRE/Fa
+         fN4DuvRahmWtV1VmKxACMtLenHSFBcLLxH5BmgkCga0zgKoaVDCLh52QHn9Kq19SLpGU
+         A0vn85Csof6gFk6JPEIqfqIM7OXhop76NXvE9FcI7I6dS7aT4Tr59+eilfRmvw3QB1DT
+         DaAO7vzbTAn+YcbvrmDf8QUpnZIokra5J5FU502BPWo5JUAB5t+5+mrNpfrT6cz/HEvD
+         5Wof5pKJe/Yn2HDJZzg25OcmhW01bHmsE7Z8fDEQeA7RQ2Uf80Z983ajon1mdoKdC1Rr
+         uBlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687242440; x=1689834440;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h1yE8tz9H3rEN65rD4mY8DHlzDlGjHODVIcSxoMimnI=;
+        b=OTsCJPemNNScf8X/8Ut2Ss9kiTTdVj+CzYqnriKocArVLi1na/N5fU0zVvS3MI4dQd
+         tp6cUy0ngQ3IostlBK7ogLpDAVgNJrrYFLX+IIdXq3yOqDd6XkbB7q7unFEgHruiKhTf
+         a3i3BFvJF1mjsekAO11oB5ITmTglooMxwSjqcTHd39bW1xWTJwOQFgHFMlmKtaSjyBv1
+         UAcUa4N4cFueN9ydGNI1xSMd1Wktm+QT7KizBlVAXIJDDpP3plZK4luU59rz+YbX5WXb
+         68DVe65bQ40xUzWwxnWbpEj+/7ZVO/Ws8QIhZSgpIE2RibXUT7M2/LawUhU9Gxeut5ri
+         5yRg==
+X-Gm-Message-State: AC+VfDx8BUhixwrCZxCpE3IHOLdOF96PtKeXPuip4Ea6MvaKNygRDq0V
+        yu9J/5PLOuYo3A2a7YCroRII1w==
+X-Google-Smtp-Source: ACHHUZ63jQcKGHNuHANtSDzad8/JzE/X9SIEeQppC0X7BXLvG+L9jzx38DYjtshNsaf3p2+y3M2Sbw==
+X-Received: by 2002:a17:907:1c2a:b0:988:84a9:bd64 with SMTP id nc42-20020a1709071c2a00b0098884a9bd64mr4625151ejc.0.1687242440232;
+        Mon, 19 Jun 2023 23:27:20 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id le15-20020a170907170f00b00985bdb7dd5fsm723077ejc.201.2023.06.19.23.27.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 19 Jun 2023 23:27:19 -0700 (PDT)
+Message-ID: <544a723b-20de-563b-6cc3-5efdeec0aef7@linaro.org>
+Date:   Tue, 20 Jun 2023 08:27:17 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] dt-bindings: arm: socionext: add bindings for the
+ Synquacer platform
 Content-Language: en-US
-To:     Cyril Brulebois <cyril@debamax.com>, Rob Herring <robh@kernel.org>
-Cc:     =?UTF-8?Q?Michal_Such=c3=a1nek?= <msuchanek@suse.de>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, stable@vger.kernel.org
-References: <20230412095509.2196162-1-cyril@debamax.com>
- <20230412095509.2196162-2-cyril@debamax.com> <ZDvrY7X9mpJ7WZ3z@eldamar.lan>
- <11b342dc-1a46-d1be-5fdd-c6eee661e15a@leemhuis.info>
- <fe3b90b0-b52f-9677-0245-a201975c3e0c@suse.de>
- <20230615132107.GA9196@kitsune.suse.cz>
- <20230615200901.GA1572644-robh@kernel.org>
- <20230615211924.cf2qs52cfaf7m3f7@debamax.com>
-From:   Helge Deller <deller@gmx.de>
-Subject: Re: [PATCH 1/2] fbdev/offb: Update expected device name
-In-Reply-To: <20230615211924.cf2qs52cfaf7m3f7@debamax.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:/5EbFHqdTR5VZsqWRgQuO1B3pFhNypJeYz67/Gfk+zk8oU7VQHh
- +VZIjwowX5PZ3z2zjHqKgFfyQGf8bdNU9PEU7PzE3mCVgiKu5kTkeUxVi7c1Bvp5pOoxEwF
- 3BCkiWoE7TRt3R514QqSXbDTf0vyL2jyRzqdymHfNt2l8YdEAYAiOyQKzzEmymdGqa0m8mY
- SNP16ZtzRxLCfHo3AYECg==
-UI-OutboundReport: notjunk:1;M01:P0:zbmZ87N98Vw=;mfvc1cgsO73dUvNLnQLh1n/hqru
- ji2qD0q7adNzvSs2na/gU8PIC28GNHDnx4Gy+NZgMC8n5dQenxQz9nkoKM/2RQXMQTZDpbBN6
- AIPFsSouYdTtry00NaNzIqPz4blCvHHsUA52OOkrk+OimQ4eZd0DebT9+e1fUUmdcRg8YtbHy
- pF2S9PXcNKeQs+p/4wNGuUptSi+CE5+AG6dKYqVMJLJWiwF0yhf2EKqdceS7zl4YP2t9QPake
- NNZpU9qann2QCr4BoAAyjCakXodNYUQmltm8jNbEYpjwY6HtuLBzI4QSLrfdUwHGqQwEkViRc
- RpIKXO0ii+pBneR7zu5u7sGY95DotNxUGHbu5s/jbZgsIGFDWxPAJeD+aMi8qBw4QtbO/oTh7
- 1zjS/l201UCQPN3ryMPiERbCgOHuAdDwUcnX4MPx0Rhu0UyTcNgk4gjZ+RyQIyjprFccFSE+b
- v0pXLiAueJ1A1FsQVoQ3lUFcAFUqJrrvYrbCnsfWIsceoUMu1fC5xzkfXL2+MmrTNOH2L9CgO
- PUs5Lw57XmZ1HKSN/lreKvucnVnBBJHW4EMhOgRVTZGczltM6hILr0AcH7seNBq7xW7p92Nqz
- HWpgTnAQVPBC1cDpJS443BRaoG+RclTS9WVVxgR18kDJA74rlB0cR/aYAsY3aF6bE9a6J+cc4
- 3viGZN6VgPBv+SPmNzd4oEEszvoLo3biHhvHAas9PK4Z6Z7s81Gz51lafN8c0TQPMEnY2XLuo
- 3XLBro8r9GAaOJ3VpWnH57Z9pt6Lah2Jr44KNKIlm6HRF2UbcGepYwHgd43UoJQP3BrKyuo29
- DrnEN6v4nnxAFStVj19KK4Jjd8r4cLWCjLJm/9/ByRlcuUMgm0yuFg35ioAC0+UqC2oRv41/e
- 1tmR4rxD9hnrleliemSKb9itdhUSIOqA9tBp1PezLz/NDcatUgZHPcltOCD5mCJ9ULa2kugiU
- PxYbSmWZbRu5W6tZibZAgSNNYDQ=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Jassi Brar <jaswinder.singh@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh@kernel.org,
+        ilias.apalodimas@linaro.org, masahisa.kojima@linaro.org
+References: <20230616035813.255062-1-jaswinder.singh@linaro.org>
+ <165dd295-1b3a-5062-772a-613a7bf6fd45@linaro.org>
+ <CAJe_ZhdV3yaKUVD43duO4hkGMByJhq7x9bN+eBXJdBXdxgDneg@mail.gmail.com>
+ <e2b98d80-8e9a-6083-3bc5-677bef0d3263@linaro.org>
+ <CAJe_ZhfeYmxjR7Hcht0F9rc97VG2JCFEEFB+S5kUhSCmsut3Cg@mail.gmail.com>
+ <661800ab-c363-49f2-4889-c458a7b298c4@linaro.org>
+ <CAJe_Zhe9CKNC_B6y_YxEY_Nz765GQghg1ivYSOROJH8A7FKcnA@mail.gmail.com>
+ <1531062a-ce5f-8af0-b569-1b9eac3e7eac@linaro.org>
+ <CAJe_Zhct9KGVD1t9CTaFhL05oxa9Rawf5g1OVmWOd-NYVNAErA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAJe_Zhct9KGVD1t9CTaFhL05oxa9Rawf5g1OVmWOd-NYVNAErA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/15/23 23:19, Cyril Brulebois wrote:
-> Hi Rob,
->
-> Rob Herring <robh@kernel.org> (2023-06-15):
->> On Thu, Jun 15, 2023 at 03:21:07PM +0200, Michal Such=C3=A1nek wrote:
->>> At the time this was proposed it was said that "of-display", is wrong,
->>> and that "of-display.0" must be used for the first device instead, and
->>> if something breaks an alias can be provided.
->>>
->>> So how does one provide an alias so that offb can find "of-display.0"
->>> as "of-display"?
+On 19/06/2023 21:17, Jassi Brar wrote:
+>>>>>> Can we fix them as well?
+>>>>>>
+>>>>> ??
+>>>> What else I can say to such argument?
+>>>>
+>>> It was not an argument, I agreed to remove it. I just observed that
+>>> the nit-pick was arbitrary.
+>>> And frankly
+>>>    "dt-bindings: arm: socionext: add Synquacer"   is as misleading as
+>>>    "dt-bindings: arm: socionext: add bindings for the Synquacer"   is improper.
 >>
->> I'm not aware of any way. There isn't because device names and paths ar=
-e
->> not considered ABI. There are mechanisms for getting stable class devic=
-e
->> indices (e.g. i2c0, mmcblk0, fb0, fb1, etc.) though not implemented for
->> fbN (and please don't add it).
+>> "add Synquacer boards"
+>> it is both precise and correct. No misleading.
 >>
->> In any case, this should be an easy fix. Though if "linux,opened" or
->> "linux,boot-display" is not set, then you'd still get "of-display.0":
+> Ok. I am going to do that. Are you going to enforce this practice for
+> all submissions in future?
+
+How many cases can you find that I did not enforce it? That I provided a
+review and accepted other subject? It's nothing new...
+
+> 
+> 
+>>>>
+>>>> Bindings without user (so no DTSI and no driver)? Just few, not countless.
+>>>>
+>>> I disagree. But I don't have time to write a script to find
+>>> compatibles/enums and properties in yaml/txt files that are not in any
+>>> dts/dtsi file.
+>>>  By that logic synquacer's spi/netsec/i2c/exiu bindings and drivers in
+>>> kernel are illegit too?
 >>
->> diff --git a/drivers/of/platform.c b/drivers/of/platform.c
->> index 78ae84187449..e46482cef9c7 100644
->> --- a/drivers/of/platform.c
->> +++ b/drivers/of/platform.c
->> @@ -553,7 +553,7 @@ static int __init of_platform_default_populate_init=
-(void)
->>                          if (!of_get_property(node, "linux,opened", NUL=
-L) ||
->>                              !of_get_property(node, "linux,boot-display=
-", NULL))
->>                                  continue;
->> -                       dev =3D of_platform_device_create(node, "of-dis=
-play.0", NULL);
->> +                       dev =3D of_platform_device_create(node, "of-dis=
-play", NULL);
->>                          of_node_put(node);
->>                          if (WARN_ON(!dev))
->>                                  return -ENOMEM;
+>> Don't know which one you talk about.
+>>
+> Documentation/devicetree/bindings/
+>   {
+>      i2c/socionext,synquacer-i2c.yaml
 
-Michal, does that patch look correct?
-I don't have that hardware, but that way the boot-display gets named
-"of-display" while all others get "of-display.x"....
+There is a user. What do you want to prove with this one?
 
-> I've just replaced my clueless workaround with this patch on top of the
-> kernel found in Debian 12 (Bookworm), i.e. 6.1.27 at this point, and it
-> indeed fixes the black screen problem in the installer's context.
+>      interrupt-controller/socionext,synquacer-exiu.yaml
+>      net/socionext,synquacer-netsec.yaml
+>      spi/socionext,synquacer-spi.yaml
+>    }
+> and corresponding code in drivers/
+> 
+> 
+>>> The synquacer dts/dtsi are in u-boot upstream. SR testsuite looks up
+>>
+>> Sure, can you point it? U-Boot upstream is a valid project. Just like
+>> many other upstream ones.
+>>
+> Location of dts/dtsi in u-boot upstream is
+>      https://elixir.bootlin.com/u-boot/latest/source/arch/arm/dts
 
-... at least it fixes the issue.
 
-> I didn't run a full installation to check whether this kernel is also fi=
-ne
-> after rebooting into the installed system, but as far as I understood fo=
-r
-> the original bug report[1], it wasn't affected in the first place.
->
->   1. https://bugs.debian.org/1033058
->
-> Will somebody else pick up the torch from here, and submit that for
-> inclusion in master? Or should I re-submit the above patch on my own?
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-It would be good to get some more feedback, but in general if you
-or Rob send me a patch I can include it in the fbdev git tree for futher
-testing (and if nobody else disagrees).
+Best regards,
+Krzysztof
 
-Helge
