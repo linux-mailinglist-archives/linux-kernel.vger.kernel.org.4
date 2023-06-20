@@ -2,115 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E246736E1B
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:58:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9786736E2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232566AbjFTN6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 09:58:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
+        id S232752AbjFTOAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 10:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231949AbjFTN6n (ORCPT
+        with ESMTP id S232661AbjFTOAK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 09:58:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFE41A1;
-        Tue, 20 Jun 2023 06:58:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D20B161243;
-        Tue, 20 Jun 2023 13:58:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98641C433C0;
-        Tue, 20 Jun 2023 13:58:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687269521;
-        bh=tZo3p85HeGAGWRgzT1telI+TDb2NCX9nBe9orj25FVQ=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=OtGmZBktQqi81FOB+n45VLSw4hscMcOf3TswBrX6O8Lh1z9+X4ld6Nzj/Yw7606Er
-         35/p7724zkw6B4KqYGAyy8whzjJPPTg7fmBplPk/hJh3klph7nZVOBHJInDbSdGGHH
-         YeNPuI+e5HqhMKlmaOTV5tAnZ9nqpQd+2cZwWbeaJc0DEFahzUP3qiphZVOQBjHjVu
-         svYskiJQsHuVM7gZDg8lH/a4yXmTFjdR3w+xmEZM4K0H5kJyME//IUwx5pu0trif4R
-         UPyzzQJGbWXzA5ZJ+C7UwJOI8NTJ0jrIIoEHN528vPeuqtIks/fVd3QDGeF9CW7PoF
-         i2BSZhNpN6NPg==
-Message-ID: <e8c8c7d8bf871a0282f3e629d017c09ed38e2c5e.camel@kernel.org>
-Subject: Re: [PATCH 2/3] fd/locks: allow get the lock owner by F_OFD_GETLK
-From:   Jeff Layton <jlayton@kernel.org>
-To:     stsp <stsp2@yandex.ru>, linux-kernel@vger.kernel.org
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Date:   Tue, 20 Jun 2023 09:58:39 -0400
-In-Reply-To: <ddb48e05-ab26-ae5d-86d5-01e47f0f0cd2@yandex.ru>
-References: <20230620095507.2677463-1-stsp2@yandex.ru>
-         <20230620095507.2677463-3-stsp2@yandex.ru>
-         <5728ebda22a723b0eb209ae078e8f132d7b4ac7b.camel@kernel.org>
-         <a1e7f5c1-76ef-19e5-91db-a62f7615b28a@yandex.ru>
-         <eaccc14ddc6b546e5913eb557fec55f77cb5424d.camel@kernel.org>
-         <5f644a24-90b5-a02f-b593-49336e8e0f5a@yandex.ru>
-         <2eb8566726e95a01536b61a3b8d0343379092b94.camel@kernel.org>
-         <d70b6831-3443-51d0-f64c-6f6996367a85@yandex.ru>
-         <d0c18369245db91a3b78017fabdc81417418af67.camel@kernel.org>
-         <ddb48e05-ab26-ae5d-86d5-01e47f0f0cd2@yandex.ru>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+        Tue, 20 Jun 2023 10:00:10 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24CF4E65;
+        Tue, 20 Jun 2023 07:00:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=GdFs+TWfdnzasotJ75VrXISngbpJZNZxemLtPJOd8gU=; b=57fPC07sOHvE7GaZutM9buZcIw
+        17JX9CXplffxiFW6K1Otm+XMhoTpqkN2ey0Wmo5SPQC8/hiQ/1rvQQGlourKMOxHzz1ABZOLnjWPu
+        QcYxxQbgl7TQS9U0MPre8qZWrPSyX8bMW6B/xHDSS9J+TeS5GIcNNrE4h/6PqJnRgqr8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qBbth-00H0FV-Tw; Tue, 20 Jun 2023 15:59:53 +0200
+Date:   Tue, 20 Jun 2023 15:59:53 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Christian Marangi <ansuelsmth@gmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        "David S. Miller" <davem@davemloft.net>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [net-next PATCH v4 0/3] leds: trigger: netdev: add additional
+ modes
+Message-ID: <0462a658-8908-4b8c-9859-8d188f794283@lunn.ch>
+References: <20230617115355.22868-1-ansuelsmth@gmail.com>
+ <20230619104030.GB1472962@google.com>
+ <dd82d1bd-a225-4452-a9a6-fb447bdb070e@lunn.ch>
+ <20230620102629.GD1472962@google.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620102629.GD1472962@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-06-20 at 18:39 +0500, stsp wrote:
-> 20.06.2023 18:19, Jeff Layton =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > The bottom line is that these locks are specifically not owned by a
-> > process, so returning the l_pid field is unreliable (at best). There is
-> > no guarantee that the pid returned will still represent the task that
-> > set the lock.
->=20
-> Though it will, for sure, represent the
-> task that _owns_ the lock.
->=20
-> > You may want to review this article. They're called "File-private" lock=
-s
-> > here, but the name was later changed to "Open file description" (OFD)
-> > locks:
-> >=20
-> >      https://lwn.net/Articles/586904/
-> >=20
-> > The rationale for why -1 is reported is noted there.
-> Well, they point to fork() and SCM_RIGHTS.
-> Yes, these 2 beasts can make the same lock
-> owned by more than one process.
-> Yet l_pid returned, is going to be always valid:
-> it will still represent one of the valid owners.
+> > If you do decided to wait, you are going to need to create another
+> > stable branch to pull into netdev. I know it is not a huge overhead,
+> > but it is still work, coordination etc.
+> 
+> Can you clarify you last point for me please?
 
-No, it won't. The l_pid field is populated from the file_lock->fl_pid.
-That field is set when the lock is set, and never updated. So it's quite
-possible for F_GETLK to return the pid of a process that no longer
-exists.
+This patchset extends the conditions on which the trigger blinks the
+LED. It adds a couple more values to enum led_trigger_netdev_modes in
+include/linux/leds.h. Once it gets merged, i will have a followup
+patch extending the Marvell PHY driver to make us of them. It will
+need these additional enum values. I also expect other PHY drivers to
+gain support for them. Probably the dp83867.c driver since Alexander
+Stein already has a patch merged adding support for what the current
+API supports.
 
-In principle, we could try to address that by changing how we track lock
-ownership, but that's a fairly major overhaul, and I'm not clear on any
-use-cases where that matters.
+If we merge this patchset now via netdev, -rc1 should have everything
+we need for this continuing development work. If we wait to merge
+these patches until -rc1, only the LED tree has the needed patches, so
+these network drivers will need a stable branch we can pull into
+netdev.
 
-> So my call is to be brave and just re-consider
-> the conclusion of that article, made 10 years
-> ago! :)
->=20
+Both ways work, we can do either. But it is probably easier for
+everybody to merge now via netdev.
 
-I think my foot has too many bullet wounds for that sort of bravery.
-
-> Of course if returning just 1 of possibly multiple
-> owners is a problem, then oh well, I'll drop
-> this patch.
-
-
---=20
-Jeff Layton <jlayton@kernel.org>
+	  Andrew
