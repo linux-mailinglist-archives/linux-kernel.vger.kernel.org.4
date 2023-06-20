@@ -2,144 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142B1736233
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 05:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97125736234
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 05:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjFTDfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 23:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57728 "EHLO
+        id S229833AbjFTDhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 23:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjFTDe6 (ORCPT
+        with ESMTP id S229489AbjFTDhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 23:34:58 -0400
+        Mon, 19 Jun 2023 23:37:13 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F4025E61;
-        Mon, 19 Jun 2023 20:34:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 067A7E61
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 20:37:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687232097; x=1718768097;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=tqLwrVs2oRdgzw7ekDobrt62lRcyDYnab28X6KRiWbM=;
-  b=aMeZlaXNLVeUObPAZHht/nz2ceSxB9L52QMqlxKpSDw0JxwUyGHtl+ZN
-   tV5wULKehXvE0Y8KZKU042qc5YdxqFXEfldRv4tMuQw25/ouqx5AQy8nA
-   F8uyP8U1vZLoz5jqf7NXNcrrpzydaFz7DZqdmSZTpMrKcEk2mybypXlYo
-   C1xG4zAZmKrvKuaC6sY9ajtCN80YYJrNgY5kEV2fuhkX5ljlsdrCdRQV8
-   plZN+VJmri/rsJVcjAioGA7f9c2J5jaJSnLOSneFK+gWg5S4VTM/h79go
-   weZPdD1ExrZpoF3m0/bxTki+zacr116ics29xhXGy/IdDdBQOSfh+A5l1
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="344501082"
+  t=1687232231; x=1718768231;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=s/6FNJ36cpKkGIIN6K6tf6WHqI24nU6huhp3TGsVNG8=;
+  b=gMDlpPcfuo/7gTdJBl1U+YZ5bFRtuCEcqH7Ky4wc+Atcsbj8/bt0jdtZ
+   //uh3biltm51yNOpwpCS9gJf2fFPgQcGtfDmaoBCrpZNv20jLBnfuxZwl
+   Q4Ch6Oc1D56W5cjckPksZgFu00WE0X4e+MynZzMIhAqJyZxln7z/9P4jM
+   hr0bxm2v/+9SznnyW4lfMCs2Ai1r2d7sYmDkFrZ8eRDnBO7ma/SJFJGVe
+   oRZrItzDT6Sw2gkXwEMHajK1un90uJMEOnln8+9ayPm2Xun6kcjEsOUpU
+   /TfGQ/UsvEYn9mnexa/+KIxDzDf+tXDK1FsWl97AXHSx3a21YyV9QCiCK
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="344501375"
 X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="344501082"
+   d="scan'208";a="344501375"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 20:34:56 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 20:37:09 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="717078657"
+X-IronPort-AV: E=McAfee;i="6600,9927,10746"; a="717079115"
 X-IronPort-AV: E=Sophos;i="6.00,256,1681196400"; 
-   d="scan'208";a="717078657"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga007.fm.intel.com with ESMTP; 19 Jun 2023 20:34:56 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 19 Jun 2023 20:34:55 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 19 Jun 2023 20:34:55 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.108)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 19 Jun 2023 20:34:55 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Mjm1FnCEpr2OIPzgSRzAtRhoRPNwwwBck1kor7WUuza6hD7+ZjNQI+cM40sg1ivOUbBhhomdRck/hIHtQhJrKikCHyiEo0xkm8DpGV/FLrenPWMb+ZpIQy2OT5KEz9YzzvTphTTUCGRyp381QUT0X+rAK24eYtD34yqyt3hPwWfZVupz6xyRiemZNDmYdieNFA66GCGBh+dcUACImPdA0mBiEKdkwlUL1FX8qrmHDj1KkCD3bxHPNFgss4o2A5EApSr40+OW0u3qp3W0eXcoHgvRhyWvEcG/hu4hCkrJV9llLCDqm6+8bsQAwodVoVCpq/56GH9XOwMbelUfm8kz+w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=58ysYbUoUG7SnzN9kFBDHepikHTT1tQGcQZqsVFHxis=;
- b=NuNvFxGnpVMIds01sFMxIN70H/+pLVVKhJNecZdLiXse1L0pJbwk+ePxiUNhJPMauzMbwbG6R7/G40HVU1IvKmpG1B+SIx9gRoF6AMEZujykKmBNO1X9kpvbP+8q3gMksNstSepxlyA1qn0Kh7FGQkB4lwFIDPMWAkB8RsZnGJwrTh7ZXQMPvh/q5Bay7aWo75hMBHO830lL+MPW7EbkYfWxxfWKX596GChnyimpiiY6xUXoDxI+7vSUWgVgEkisOqoMhegiB/+ddeWHBDz2Tu8JK2fQloKlxiNY5zyxZMjUTI2SeorBd2tOmO5WiI+yuqvhduIDIgfczKM7kFCQKA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB6780.namprd11.prod.outlook.com (2603:10b6:510:1cb::11)
- by DS0PR11MB7733.namprd11.prod.outlook.com (2603:10b6:8:dc::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6477.29; Tue, 20 Jun
- 2023 03:34:53 +0000
-Received: from PH8PR11MB6780.namprd11.prod.outlook.com
- ([fe80::5817:cb8f:c2b7:f1e5]) by PH8PR11MB6780.namprd11.prod.outlook.com
- ([fe80::5817:cb8f:c2b7:f1e5%4]) with mapi id 15.20.6455.028; Tue, 20 Jun 2023
- 03:34:53 +0000
-Date:   Tue, 20 Jun 2023 11:34:43 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <pbonzini@redhat.com>, <seanjc@google.com>, <kai.huang@intel.com>,
-        <robert.hoo.linux@gmail.com>
-Subject: Re: [PATCH v3 07/11] KVM: VMX: drop IPAT in memtype when CD=1 for
- KVM_X86_QUIRK_CD_NW_CLEARED
-Message-ID: <ZJEeUywBg5q/bSYi@chao-email>
-References: <20230616023101.7019-1-yan.y.zhao@intel.com>
- <20230616023815.7439-1-yan.y.zhao@intel.com>
- <ZJESMaG5Thb5LWtt@chao-email>
- <ZJEQNTvfwOSsSzrf@yzhao56-desk.sh.intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZJEQNTvfwOSsSzrf@yzhao56-desk.sh.intel.com>
-X-ClientProxiedBy: SI2PR01CA0054.apcprd01.prod.exchangelabs.com
- (2603:1096:4:193::22) To PH8PR11MB6780.namprd11.prod.outlook.com
- (2603:10b6:510:1cb::11)
+   d="scan'208";a="717079115"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.74])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Jun 2023 20:37:09 -0700
+From:   Tony Luck <tony.luck@intel.com>
+To:     James Morse <james.morse@arm.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Drew Fustini <dfustini@baylibre.com>,
+        Babu Moger <Babu.Moger@amd.com>,
+        Peter Newman <peternewman@google.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        H Peter Anvin <hpa@zytor.com>,
+        shameerali.kolothum.thodi@huawei.com,
+        D Scott Phillips OS <scott@os.amperecomputing.com>,
+        carl@os.amperecomputing.com, lcherian@marvell.com,
+        bobo.shaobowang@huawei.com, tan.shaopeng@fujitsu.com,
+        xingxin.hx@openanolis.org, baolin.wang@linux.alibaba.com,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        Xin Hao <xhao@linux.alibaba.com>,
+        Nicolas Pitre <npitre@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>, aricciardi@baylibre.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        patches@lists.linux.dev, Tony Luck <tony.luck@intel.com>
+Subject: [RFC PATCH 0/2] Resctrl - rewrite (WIP)
+Date:   Mon, 19 Jun 2023 20:37:00 -0700
+Message-Id: <20230620033702.33344-1-tony.luck@intel.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB6780:EE_|DS0PR11MB7733:EE_
-X-MS-Office365-Filtering-Correlation-Id: e4abfd90-cfb8-41ec-5179-08db713f4f0b
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FuoLCSCZFTEp2loUUVyhTx3NHqlutqv9WIoeTy1jUm1IqylzC53Of9oDszXtY3r2y+jPrdB9OLZbtzutveRQ6xik+yoy00n5tWB4otWs0L9HMzb7tmAMqHJ0OPpBFQyD0LYtdINvZWgto72m0XnAh6KjR47LqoPiHifomvLzcdEAkXDMQ/5pLpiiZAwUF0VEH+6/NHmFS1E7VEvotFaQcm3XaOom0hSPHRC1sq9V6WqnWXuKuP9AHhrtWEmnfVi/kil7QqFEBZXVwG29R7ToWkzGPwoUvwh9SLybtT3RJGVR8e3JB8BX6uh0gMQjSIInDfsRB1NO0Pyad70eMj0jPGyqrHQxbnAB3jv2/YaXQgVhP5tHUmyFWx2djMRq+GHqixjPXa9HmWFoYOYZqhiV3Q1JdT22UgorYqTGzDHraSaHynFyqy32+ilg14jdFUmnsO2+0uZNl9Nk+a/a7af3cfw+N+J+G99BZC2y0U/1Ge5I40tYf/RHJYTOa4W08hEWOlceBPoNFSS5DjS68blJIsyNAP8AtnMW7hKWgbykwDD2dXbIDORWiEyYPrBZEPQ3
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB6780.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(366004)(39860400002)(136003)(376002)(346002)(451199021)(82960400001)(33716001)(38100700002)(6666004)(86362001)(66556008)(66476007)(66946007)(478600001)(9686003)(6506007)(6486002)(186003)(26005)(6512007)(6636002)(2906002)(4326008)(83380400001)(44832011)(316002)(6862004)(8936002)(5660300002)(8676002)(41300700001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?R/fun/yXw02NmSWlJCxy6ifOIVTr/uSzIiHgXdZN9tjZ0kA/kNyvsB8aoAoz?=
- =?us-ascii?Q?Z/LS79E/bEefAA73juJ1RjJlwUXCs/rUCt6OsuKzhcCoZVCz46vF+KRJ2dm+?=
- =?us-ascii?Q?YqruM1JOA5N2F+WVpzzuRlslPiwFPFQBuVxCigAicYs9LgBnLYmTk9VtDo1B?=
- =?us-ascii?Q?Zkr/gzN4ZrgXV5zd0TpFu1WCbQKCoBJoiD7gI5s7aSfCwosyCJm2d+kgioGU?=
- =?us-ascii?Q?MjtMbYRD+UxYdZmJQApTqtDt+YUTcFZT4NaQ52/mY/cdpBEpHLwqJx55xTfQ?=
- =?us-ascii?Q?buKuBWVcYtbuXib/JcMJghKpnBUJBlf7uYGgb1mLvu2SAQCOs9AsBpmcnG8+?=
- =?us-ascii?Q?lGZE9DgcmI0gQ3PpZv3OtuOqY+yy1ji9R72yRxgyZu3hc+R8TevfoOdkJmqq?=
- =?us-ascii?Q?5ExlzG7zzyqZ/23uMpfGhnFp3BftojU/0iCR2j58FZRq+fAorGMeR6yDjn+S?=
- =?us-ascii?Q?+Y4+4Dc69E0KfuBxKKfl5d4hZkq9BH0K4w1V+HJJtgMop99mV8s4yjzeeNcr?=
- =?us-ascii?Q?tpvUJvBuk9bnO6MypWCsi+pei524t9O1wB/S3Ox5ckx+Co3hcl7vSuIbQg53?=
- =?us-ascii?Q?OVbqtjV0BHafijnVZ32cXLsYPWEDC178GjTRlocifAfD8EoWFdpd+MyqLLOa?=
- =?us-ascii?Q?uM01zPjHOOcsfgc1XuYDi2t8TF4Dv+NutR05kpWRfqNr4Si+lSoQAIrLq1Vf?=
- =?us-ascii?Q?Am3ziwFwHQI3lLOYpVfHS2+iZAF423FQwtRc4n52f1sDdcOI2aQ0XkWHFUGO?=
- =?us-ascii?Q?8Sjf1My6o7nF86Cxb+d0bpHALxj3NWu/xFWv0LJQTzmUAnyLQ1Gydsz7JKAm?=
- =?us-ascii?Q?/jpmTY/ooWFUzHdnqMo/ch9RxKsWpjMV2nsL6qwpGQwwLVqqkA1gso7LGOHN?=
- =?us-ascii?Q?lKCRjH1gkzaVBcUoQx36bcdL4dC+WTXppGZa4ZoH1vBy6DQ9rzIHLBNsK8e6?=
- =?us-ascii?Q?x1z3XU+wuqHRQVcufDybCnv9P4wVMbR1ivtakk9eiYXNYFtQEUXhhS19aV1n?=
- =?us-ascii?Q?/A0jEr1eEV2V94InrDr5BlOHwsZ3CyOttVVh5St8sN1HVsXPSs5cH9XZy20C?=
- =?us-ascii?Q?QJLd+Q7Q8Eu3CjWVPrsN+OJPnesFGTaMYoNqHqNBziGPfesMdAwezaKP7czA?=
- =?us-ascii?Q?d5jMjWwYpfLCGolof6buOrGoWhR252prD+KTnXXfLLfXIgrjl1HU+KoCxjEU?=
- =?us-ascii?Q?0ptz2MneSD4pWyelBjYtVKr80y+4v+7e1D3TIUpvZ8QAdy5MlFA9qmYVh3Qi?=
- =?us-ascii?Q?YQ7bMUcTuVg/WFkYLTRnrysvQ4xmeOOEtVdH+j+UMFOd6DHVzAfDh/rOaUau?=
- =?us-ascii?Q?seUFjIplNGc8ZbZRpgAyRlyM6CmX4IO9zDTA/Vuf3aSLBUM9vRawM4UolUGm?=
- =?us-ascii?Q?EFnBy7s0VeG6dMEp5385ONE0qsMXpJpqI5s9AATFvGGn+MryjB/xljn8xyiR?=
- =?us-ascii?Q?1XbdQK11pWcxGTinDMXTQI+97g+GMX+1VooYWzrtEbWjtNHKN5Os8XRuETZf?=
- =?us-ascii?Q?b8ZBAJRTZ7fryhe1Udt/vmKmFsoyPxtOnjVk7kjAcPMNvBGLN5ubv7uzavLW?=
- =?us-ascii?Q?jND3a934yPQTZe71Kx0DmHEUs2cxBsIT77KJ+wns?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4abfd90-cfb8-41ec-5179-08db713f4f0b
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB6780.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 03:34:53.0597
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: u5+C2ylgQ8Ky0jruDBxFJ1yGYXRGkBYfgWBUTtI6vnsCNjBXr7xeEgw8TXg3owosXGuFRmiXF7vcesBR2uC9bg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7733
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -150,29 +76,174 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 10:34:29AM +0800, Yan Zhao wrote:
->On Tue, Jun 20, 2023 at 10:42:57AM +0800, Chao Gao wrote:
->> On Fri, Jun 16, 2023 at 10:38:15AM +0800, Yan Zhao wrote:
->> >For KVM_X86_QUIRK_CD_NW_CLEARED, remove the ignore PAT bit in EPT memory
->> >types when cache is disabled and non-coherent DMA are present.
->> >
->> >With the quirk KVM_X86_QUIRK_CD_NW_CLEARED, WB + IPAT are returned as the
->> >EPT memory type when guest cache is disabled before this patch.
->> >Removing the IPAT bit in this patch will allow effective memory type to
->> >honor PAT values as well, which will make the effective memory type
->> 
->> Given guest sets CR0.CD, what's the point of honoring (guest) PAT? e.g.,
->> which guests can benefit from this change?
->This patch is actually a preparation for later patch 10 to implement
->fine-grained zap.
->If when CR0.CD=1 the EPT type is WB + IPAT, and
->when CR0.CD=0 + mtrr enabled, EPT type is WB or UC or ..., which are
->without IPAT, then we have to always zap all EPT entries.
+Back in April I posted some RFC patches that added a "driver
+registration" interface to the core resctrl code so that additional
+resource control and monitor features could be added without further
+complicating the core code. Link to that discussion:
 
-OK. The goal is to reduce the cost of toggling CR0.CD. The key is if KVM sets
-the IPAT, then when CR0.CD is cleared by guest, KVM has to zap _all_ EPT entries
-at least to clear IPAT.
+https://lore.kernel.org/all/20230420220636.53527-1-tony.luck@intel.com/
 
-Can kvm honor guest MTRRs as well when CR0.CD=1 && with the quirk? then later
-clearing CR0.CD needn't zap _any_ EPT entry. But the optimization is exactly the
-one removed in patch 6. Maybe I miss something important.
+Reinette gave the feedback that it would be better to base the module
+registration on the resctrl resource structure. Reinette also pointed
+me to work from James Morse, and some additional discussion happened
+here:
+
+https://lore.kernel.org/all/ZG%2FMZVrWYrCHm%2Ffr@agluck-desk3/
+
+James provided details on where ARM's MPAM has similarities and
+differences from the Intel Resource Director Technology and AMD's
+similar implementation. Drew Fustini was also pulled into that
+conversation to comment on RISC-V CBQRI.
+
+From those discussions I believed we need a do-over on the core
+/sys/fs/resctrl implementation to make it friendlier for architecural
+variations. Here's what I have so far.
+
+=========================================================================
+| N.B. This is a general direction check. There are many obvious        |
+| rough edges (e.g. some careful thought needs to happen on locking     |
+| for the files in /sys/fs/resctrl that are "owned" by modules that     |
+| can be unloaded). I'm mostly looking for feedback from AMD, ARM and   |
+| RISCV on whether this is a foundation to build on, whether some small |
+| tweaks could make it better, or if this is still going to be really   |
+| hard for architectures that have radical divergence from the Intel    |
+| model.                                                                |
+=========================================================================
+
+First patch is my attempt at architecture neutral code. All mention
+of "RDT", "CLOSID" and "RMID" have been expunged. When creating a
+new group this code calls arch_alloc_resctrl_ids() to allocate an
+opaque "resctrl_ids" value.
+
+Q: I made this a "u64" because that neatly allows storage of both an
+x86 CLOSID and RMID (in a handy representation that matches the bit
+layout of the Intel IA32_PQR_ASSOC model specific register). If other
+architectures need something more complex it could be a "typedef
+resctrl_id_t" ... there are a couple of places where we would need
+a comparison function.
+
+I broke the code into several source files that handle different
+sub-functions of core code to make it easier to navigate. Much of
+the code here should look familiar as I did a lot of
+s/rdtgroup/resctrl_group/ on functions from the original resctrl
+code.
+
+By itself the core code is useless. Cannot even be built as the
+controlling Kconfig option "CONFIG_RESCTRL2_FS" must be invoked by
+a "select" request from architecture specific code that provides
+the necessary "arch_*()" functions to make everything work.
+
+Module registration is handled in fs/resctrl2/resources.c and
+can be done before or after mounting /sys/fs/resctrl. Current
+code won't let you make any new resource groups until a module
+implementing a control function is loaded to supply the information
+on how many groups the architecture supports.
+
+Second patch is all the Intel X86 code (with some of the AMD bits
+included, but by no means all of them).
+
+I've implemented modules for most of the legacy Intel control
+and monitor functions. Many of these share common code (by means
+of a symlinked source file ... I couldn't figure out how to make
+Kconfig build both rdt_l3_cat.ko and rdt_l3_cdp.ko from the same
+source file with a different set of $(CFLAGS)).
+
+Users can pick which features they want by loading modules that
+implement the bits they want. E.g. CDP is enabled by loading 
+that rdt_l3_cdp.ko module instead of rdt_l3_cat.ko (there's some
+code to prevent both being loaded together).
+
+I started on the hooks for the "mba_MBps" feedback from MBM driver,
+but in this code drop I just have a simple module that reports the
+bandwidth for each group instead of the byte count. I just need to
+create a module that has both MBA control and MBM monitoring resources
+with a periodic comparison of actual bandwidth with desired, that
+then tweaks the MBA controls up/down as needed.
+
+I haven't ventured to read all the pseudo-locking code, but it looks
+as though providing the driver with a way to tell core code that a
+group is exclusive instead of shared (which tells core code not to
+allow assignment of tasks or CPUs to the group) may be all the
+surgery needed to core code. The x86 module will be more complex
+that the toys I've produced so far, but should be able to leverage
+much from the existing resctrl implementation.
+
+
+Tony Luck (2):
+  resctrl2: Add all the generic code
+  resctrl2: Arch x86 modules for most of the legacy control/monitor
+    functions
+
+ include/linux/resctrl.h                    | 107 +++++
+ include/linux/sched.h                      |   3 +
+ arch/x86/include/asm/resctrl.h             |  38 ++
+ fs/resctrl2/arch/x86/rdt.h                 |  22 +
+ fs/resctrl2/internal.h                     | 110 +++++
+ arch/x86/kernel/cpu/amd.c                  |   3 +
+ arch/x86/kernel/cpu/intel.c                |   3 +
+ arch/x86/kernel/process_32.c               |   1 +
+ arch/x86/kernel/process_64.c               |   3 +
+ fs/resctrl2/arch/x86/alloc.c               | 119 +++++
+ fs/resctrl2/arch/x86/rdt_l2_cat.c          |   1 +
+ fs/resctrl2/arch/x86/rdt_l2_cdp.c          |   1 +
+ fs/resctrl2/arch/x86/rdt_l3_cat.c          | 349 +++++++++++++++
+ fs/resctrl2/arch/x86/rdt_l3_cdp.c          |   1 +
+ fs/resctrl2/arch/x86/rdt_l3_mba.c          | 251 +++++++++++
+ fs/resctrl2/arch/x86/rdt_llc_occupancy.c   | 100 +++++
+ fs/resctrl2/arch/x86/rdt_mbm_adjust.c      |  91 ++++
+ fs/resctrl2/arch/x86/rdt_mbm_local_bytes.c |   1 +
+ fs/resctrl2/arch/x86/rdt_mbm_local_rate.c  |   1 +
+ fs/resctrl2/arch/x86/rdt_mbm_total_bytes.c |   1 +
+ fs/resctrl2/arch/x86/rdt_mbm_total_rate.c  |   1 +
+ fs/resctrl2/arch/x86/rdt_monitor.c         | 491 +++++++++++++++++++++
+ fs/resctrl2/cpu.c                          | 315 +++++++++++++
+ fs/resctrl2/directory.c                    | 295 +++++++++++++
+ fs/resctrl2/domain.c                       |  99 +++++
+ fs/resctrl2/info.c                         |  99 +++++
+ fs/resctrl2/kernfs.c                       |  58 +++
+ fs/resctrl2/locking.c                      |  52 +++
+ fs/resctrl2/resources.c                    |  85 ++++
+ fs/resctrl2/root.c                         | 173 ++++++++
+ fs/resctrl2/schemata.c                     | 110 +++++
+ fs/resctrl2/tasks.c                        | 193 ++++++++
+ arch/x86/Kconfig                           |  81 +++-
+ fs/Kconfig                                 |   1 +
+ fs/Makefile                                |   1 +
+ fs/resctrl2/Kconfig                        |   5 +
+ fs/resctrl2/Makefile                       |  14 +
+ fs/resctrl2/arch/x86/Makefile              |  29 ++
+ 38 files changed, 3306 insertions(+), 2 deletions(-)
+ create mode 100644 fs/resctrl2/arch/x86/rdt.h
+ create mode 100644 fs/resctrl2/internal.h
+ create mode 100644 fs/resctrl2/arch/x86/alloc.c
+ create mode 120000 fs/resctrl2/arch/x86/rdt_l2_cat.c
+ create mode 120000 fs/resctrl2/arch/x86/rdt_l2_cdp.c
+ create mode 100644 fs/resctrl2/arch/x86/rdt_l3_cat.c
+ create mode 120000 fs/resctrl2/arch/x86/rdt_l3_cdp.c
+ create mode 100644 fs/resctrl2/arch/x86/rdt_l3_mba.c
+ create mode 100644 fs/resctrl2/arch/x86/rdt_llc_occupancy.c
+ create mode 100644 fs/resctrl2/arch/x86/rdt_mbm_adjust.c
+ create mode 120000 fs/resctrl2/arch/x86/rdt_mbm_local_bytes.c
+ create mode 120000 fs/resctrl2/arch/x86/rdt_mbm_local_rate.c
+ create mode 120000 fs/resctrl2/arch/x86/rdt_mbm_total_bytes.c
+ create mode 120000 fs/resctrl2/arch/x86/rdt_mbm_total_rate.c
+ create mode 100644 fs/resctrl2/arch/x86/rdt_monitor.c
+ create mode 100644 fs/resctrl2/cpu.c
+ create mode 100644 fs/resctrl2/directory.c
+ create mode 100644 fs/resctrl2/domain.c
+ create mode 100644 fs/resctrl2/info.c
+ create mode 100644 fs/resctrl2/kernfs.c
+ create mode 100644 fs/resctrl2/locking.c
+ create mode 100644 fs/resctrl2/resources.c
+ create mode 100644 fs/resctrl2/root.c
+ create mode 100644 fs/resctrl2/schemata.c
+ create mode 100644 fs/resctrl2/tasks.c
+ create mode 100644 fs/resctrl2/Kconfig
+ create mode 100644 fs/resctrl2/Makefile
+ create mode 100644 fs/resctrl2/arch/x86/Makefile
+
+
+base-commit: 45a3e24f65e90a047bef86f927ebdc4c710edaa1
+-- 
+2.40.1
+
