@@ -2,117 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A85736B25
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:39:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D34736B3B
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 13:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbjFTLjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 07:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
+        id S231501AbjFTLmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 07:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231429AbjFTLjU (ORCPT
+        with ESMTP id S232430AbjFTLmB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 07:39:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50207A1;
-        Tue, 20 Jun 2023 04:39:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DA9B96101B;
-        Tue, 20 Jun 2023 11:39:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77360C433C8;
-        Tue, 20 Jun 2023 11:39:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687261158;
-        bh=9UVOE8Cz1DsWBg3eucEFy8b5dI8qWQk4N+oAeWZJiHI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CGQaYXeFqY0uyDWCnOxfZEn/Vem4fSxgIjT6iEQGEB76XzdHtm8SMgPyVTiGclCrd
-         OJHgBi07UogJDHYETygVTciE0ZwhTbtvq4KSV6GfYIZ6AhMFiZCIfN5yVEQODaY2Q+
-         rfZXJNYZWzyN1EYtORWyvXeXyUhM74sOlvryMpVaqJ0HT0kYi0JPCaJ6jScplEi0yT
-         KMfTOlOEs2Mim76X3Ozkk4ws8rIvmFRqe0aBWe0Dzhbjq7vrOE3FiZpZe0oWMRCOYs
-         aLMTE8EVwFnp1oB+rqVBW6ZtEFuCfMGfbpAL+wsWj0ZPHUcVNsbrEAGmBQMXUTu4RS
-         RryAMhDp8allw==
-Date:   Tue, 20 Jun 2023 12:39:09 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Wu, Wentong" <wentong.wu@intel.com>
-Cc:     "Ye, Xiang" <xiang.ye@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "Pandruvada, Srinivas" <srinivas.pandruvada@intel.com>,
-        "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
-        "Wang, Zhifeng" <zhifeng.wang@intel.com>,
-        "Zhang, Lixu" <lixu.zhang@intel.com>
-Subject: Re: [PATCH v8 6/6] spi: Add support for Intel LJCA USB SPI driver
-Message-ID: <7b9192d1-6b63-4ab7-a41d-1a122fa69480@sirena.org.uk>
-References: <20230511175844.185070-1-xiang.ye@intel.com>
- <20230511175844.185070-7-xiang.ye@intel.com>
- <ZF2+C0CqaBff2hl+@finisterre.sirena.org.uk>
- <DM6PR11MB4316E9530309ACCEF55AD0D18D5CA@DM6PR11MB4316.namprd11.prod.outlook.com>
+        Tue, 20 Jun 2023 07:42:01 -0400
+Received: from www530.your-server.de (www530.your-server.de [188.40.30.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12157132;
+        Tue, 20 Jun 2023 04:41:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=geanix.com;
+        s=default2211; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:
+        Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:In-Reply-To:References;
+        bh=T0dcoPCLaDYQMrHuXNE7wQ+1ki8yqQNoSM6auWBUDjc=; b=BkaeQa1E1ONMNWypH+DuEDeO2Z
+        KZvjsR8RJ1Wym7TT0dFNjnJtdQ/uEQbsR4OzvjQSiZVDziKYDeEq6hwdVyP4xe0+9KZczlV3uGiF2
+        wOctPygUW7qlr33uidWKQJ19yWWiCYnmGHnY2jue/wNYRUUjoJz+Y9TZ3UxO0d3k/wdMdxClB4wPV
+        fs3ZsGDnWywuY8nR8bd4DPfeAfkkoq239k3ZqJz8yBlEPZT+pZx0wmjeKhUCui+7/dyYFLCintVQJ
+        w46MGcn5zZ18PZtajYjfGpRKzgCEzkajSlytKtfx10IKQtFyWU9iRwQC9JNZyBker4hFlZ9iZHI/V
+        8ThvNOUQ==;
+Received: from sslproxy01.your-server.de ([78.46.139.224])
+        by www530.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <sean@geanix.com>)
+        id 1qBZkB-000NAg-IT; Tue, 20 Jun 2023 13:41:55 +0200
+Received: from [185.17.218.86] (helo=zen..)
+        by sslproxy01.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sean@geanix.com>)
+        id 1qBZkB-000ATD-15; Tue, 20 Jun 2023 13:41:55 +0200
+From:   Sean Nyekjaer <sean@geanix.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     Sean Nyekjaer <sean@geanix.com>, dantuguf14105@gmail.com,
+        Olivier Moysan <olivier.moysan@foss.st.com>,
+        devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/5] ARM: dts: stm32: Add alternate pinmux for i2s pins
+Date:   Tue, 20 Jun 2023 13:41:34 +0200
+Message-Id: <20230620114138.959812-1-sean@geanix.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6vhFdTOxhYEajwKy"
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB4316E9530309ACCEF55AD0D18D5CA@DM6PR11MB4316.namprd11.prod.outlook.com>
-X-Cookie: Chocolate chip.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: sean@geanix.com
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26945/Tue Jun 20 09:30:24 2023)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add another mux option for i2s pins, this is used on Octavo OSD32MP1-RED board.
 
---6vhFdTOxhYEajwKy
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Sean Nyekjaer <sean@geanix.com>
+Reviewed-by: Olivier Moysan <olivier.moysan@foss.st.com>
+---
+ arch/arm/boot/dts/stm32mp15-pinctrl.dtsi | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-On Tue, Jun 20, 2023 at 06:47:11AM +0000, Wu, Wentong wrote:
+diff --git a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+index e86d989dd351..d79f89f37bc7 100644
+--- a/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
++++ b/arch/arm/boot/dts/stm32mp15-pinctrl.dtsi
+@@ -686,6 +686,25 @@ pins {
+ 		};
+ 	};
+ 
++	i2s2_pins_b: i2s2-1 {
++		pins {
++			pinmux = <STM32_PINMUX('C',  3, AF5)>, /* I2S2_SDO */
++				 <STM32_PINMUX('B', 12, AF5)>, /* I2S2_WS */
++				 <STM32_PINMUX('B', 13, AF5)>; /* I2S2_CK */
++			bias-disable;
++			drive-push-pull;
++			slew-rate = <1>;
++		};
++	};
++
++	i2s2_sleep_pins_b: i2s2-sleep-1 {
++		pins {
++			pinmux = <STM32_PINMUX('C', 3, ANALOG)>, /* I2S2_SDO */
++				 <STM32_PINMUX('B', 12, ANALOG)>, /* I2S2_WS */
++				 <STM32_PINMUX('B', 13, ANALOG)>; /* I2S2_CK */
++		};
++	};
++
+ 	ltdc_pins_a: ltdc-0 {
+ 		pins {
+ 			pinmux = <STM32_PINMUX('G',  7, AF14)>, /* LCD_CLK */
+-- 
+2.40.0
 
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * Intel La Jolla Cove Adapter USB-SPI driver
-
-> > Please make the entire comment a C++ one so things look more intentiona=
-l.
-
-> I see lots of drivers are commenting like current one.=20
-> But sorry, you mean the entire comment start with /* and end with */ ? Th=
-anks
-
-Other way around, use // for all the lines in this comment block please.
-
---6vhFdTOxhYEajwKy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSRj9wACgkQJNaLcl1U
-h9C0kwf+P5WR5e8HGsaUTr3bxMcjGPrWXvavqs+q5qEvE0tyVRo+SAqub9c74fyW
-vScdJYyrO4Ah8v0IsOIkyW+UDIWK/wgZ125S3aVKkgtzVXpI0gTCqC9xGXR8GVEZ
-4+5o293GihaPW4kGy/8zqzqszu9A3y2lvjEaARFgMwN+pC5mFXPIJ+wDTtftcyNG
-Mi12BYb5wgTlrtPLO0/qY+agcsbOI3puA48GhNxOSme8EWpAlOxlJxdNdivdVIQW
-mDRZ6h15xm06jTDEtOFFqk4bqZU8Ethw0SQLPzo/FcZw9CBXaK7qXDURXMvCo80G
-G27kz7xr6LmWBJhAxuFL3sE6NrHEbg==
-=4nOU
------END PGP SIGNATURE-----
-
---6vhFdTOxhYEajwKy--
