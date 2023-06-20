@@ -2,69 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA4F736169
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 04:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FDC773617A
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 04:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjFTCNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 22:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
+        id S229934AbjFTCTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 22:19:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFTCNK (ORCPT
+        with ESMTP id S229921AbjFTCTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 22:13:10 -0400
-Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EA3E6C;
-        Mon, 19 Jun 2023 19:13:07 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0VlZl6x1_1687227181;
-Received: from 30.221.149.207(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VlZl6x1_1687227181)
-          by smtp.aliyun-inc.com;
-          Tue, 20 Jun 2023 10:13:02 +0800
-Message-ID: <777e06ae-fd9c-8fd3-6976-7b80594e1942@linux.alibaba.com>
-Date:   Tue, 20 Jun 2023 10:12:58 +0800
+        Mon, 19 Jun 2023 22:19:50 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9594AE74
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 19:19:48 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3ff242aae7aso241931cf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 19 Jun 2023 19:19:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687227587; x=1689819587;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3EPXA9p2JzuvzKzWgCYYXlon3hk90pdnuUAk2cg5+oQ=;
+        b=jSijuw7X4DVOl/gcJeGmpxPfObtZeHzM/kRouNnow3lf3toxpNV1RRCp3JeAUXAEL+
+         iI70y/J5y5xneoxSH6lE1u2JjNb0sxP+WH/AcOV6J04IM66xuGr7kVVJvlJSVYl2nzdw
+         GpO9zFbTU/Jt9P+AzXUBhThLJZOMv2S6GysxYZc9QRsartfZ/Ng1pFrBF4i1QYEA0ja5
+         v+DJgaciPtBrnG+fF3nFrq1OXvndAf9QJ9iH3cDovlvik+Boqnlxq+8ktld9BK552lGf
+         9SQiMGWZ6yfz+SN6OYZeEIGzY2Jw4LCJPZ9hxA2TtbBcyZj9yfzbfjehAIRUIUV41fPH
+         6wuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687227587; x=1689819587;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3EPXA9p2JzuvzKzWgCYYXlon3hk90pdnuUAk2cg5+oQ=;
+        b=ONFRXi9A/15gOPJxT9FL4EibRt5uua5n4sA+oEqCM3zrn76jeYc6LOYLLUVlf7uTo3
+         kMrEyVmKvt/OpHd0oGUqNAt+b1vwfxVOFkXNo6eBAdzlBVCGetoEx1Ps0nOH8NtyC96H
+         aTyPxGbgCsZg1uOAP5gYGS8JcjMNoIMkVhNCZiYrGCDxnMr0WHl1fOLZ1njnMOByF8pO
+         +JbnOeIxkLF/47HskeAEs27z0inCBiwxiUwJC6hybBxjN7SB6bEbRABQ7T7telS9/i9C
+         7y5pGqjCfJdrmldPxO1SPhSFv0KgYm/bW4/akUyJdnmSwSjTQTrYX0jtEJWzOiZ2wqR7
+         gWGA==
+X-Gm-Message-State: AC+VfDxK8elltxoJOZORlrFACYSdEwlFs20YlDmNowp1i+YQ8hLBOhdb
+        gNqP0QVkCJKw2S7uCMdUjG4y7OK257qSELmt48/jAQ==
+X-Google-Smtp-Source: ACHHUZ4X3CzpwwHdrmJnCxXIBAk6HQXykSsn31iNLJMOP1aC/6DP8FnJZ+MTQ6AdfTjiGdmwOfd3hduXZamO7zy5qTQ=
+X-Received: by 2002:ac8:7f93:0:b0:3ef:404a:b291 with SMTP id
+ z19-20020ac87f93000000b003ef404ab291mr104628qtj.7.1687227587619; Mon, 19 Jun
+ 2023 19:19:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [PATCH v3 2/7] perf metric: Event "Compat" value supports
- matching multiple identifiers
-To:     John Garry <john.g.garry@oracle.com>
-Cc:     James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Zhuo Song <zhuo.song@linux.alibaba.com>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Robin Murphy <robin.murphy@arm.com>
-References: <1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1685438374-33287-3-git-send-email-renyu.zj@linux.alibaba.com>
- <c1d8ee9b-4839-1011-4dad-c4777d8f8224@oracle.com>
- <452e724b-2a2c-52fd-274b-60db7a7f730e@linux.alibaba.com>
- <c4b2fca8-602d-9c76-90a7-3eafd92da8bc@oracle.com>
- <76fcb062-61a8-5f90-b39d-b5fb6da35652@linux.alibaba.com>
- <5f38ef6c-8c50-5df9-19dd-c3c9fe590452@oracle.com>
- <e4be7189-a1ba-7758-bff3-e7b8d8ff1419@linux.alibaba.com>
- <892f57c7-8ce2-634c-26f3-4d4ab8b2f2ce@oracle.com>
- <079d7920-2030-2e00-a833-5ec6d450f7dc@oracle.com>
- <552eebae-76bb-a2fe-ccdc-11e8a01717da@linux.alibaba.com>
- <045a49c9-b9ae-bf0e-c4be-858d905bcc55@oracle.com>
- <7c765e0f-ca76-d212-0496-f9c56369e389@linux.alibaba.com>
- <d1ab4947-6bdf-2b9c-5b26-52c572611ca6@oracle.com>
- <a6e1114c-b37c-6999-0668-039aa495db84@linux.alibaba.com>
- <71c4ef1e-0982-1ef4-5135-001303b43cd3@oracle.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <71c4ef1e-0982-1ef4-5135-001303b43cd3@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED,
+References: <20230526234435.662652-1-yuzhao@google.com> <26cf0b0a-cda5-08a9-a669-6966f9e626b1@redhat.com>
+In-Reply-To: <26cf0b0a-cda5-08a9-a669-6966f9e626b1@redhat.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Mon, 19 Jun 2023 20:19:11 -0600
+Message-ID: <CAOUHufagkd2Jk3_HrVoFFptRXM=hX2CV8f+M-dka-hJU4bP8kw@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable v2 00/10] mm/kvm: locklessly clear the
+ accessed bit
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alistair Popple <apopple@nvidia.com>,
+        Anup Patel <anup@brainfault.org>,
+        Ben Gardon <bgardon@google.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Gavin Shan <gshan@redhat.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Michael Larabel <michael@michaellarabel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paul Mackerras <paulus@ozlabs.org>,
+        Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Thomas Huth <thuth@redhat.com>, Will Deacon <will@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
+        linux-trace-kernel@vger.kernel.org, x86@kernel.org,
+        linux-mm@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
         USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,112 +106,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 9, 2023 at 3:08=E2=80=AFAM Paolo Bonzini <pbonzini@redhat.com> =
+wrote:
+>
+> On 5/27/23 01:44, Yu Zhao wrote:
+> > TLDR
+> > =3D=3D=3D=3D
+> > This patchset adds a fast path to clear the accessed bit without
+> > taking kvm->mmu_lock. It can significantly improve the performance of
+> > guests when the host is under heavy memory pressure.
+> >
+> > ChromeOS has been using a similar approach [1] since mid 2021 and it
+> > was proven successful on tens of millions devices.
+> >
+> > This v2 addressed previous requests [2] on refactoring code, removing
+> > inaccurate/redundant texts, etc.
+> >
+> > [1]https://crrev.com/c/2987928
+> > [2]https://lore.kernel.org/r/20230217041230.2417228-1-yuzhao@google.com=
+/
+>
+>  From the KVM point of view the patches look good (though I wouldn't
+> mind if Nicholas took a look at the ppc part).  Jason's comment on the
+> MMU notifier side are promising as well.  Can you send v3 with Oliver's
+> comments addressed?
 
+Thanks. I'll address all the comments in v3 and post it asap.
 
-在 2023/6/19 下午5:31, John Garry 写道:
-> On 19/06/2023 09:59, Jing Zhang wrote:
->>> Please verify running these metrics with 'perf stat', like 'perf stat -v -M slc_miss_rate'
->>>
->> Ok, it shows:
->> #./perf stat -v -M slc_miss_rate sleep 1
->>
->> metric expr hnf_cache_miss / hnf_slc_sf_cache_access for slc_miss_rate
->> found event duration_time
->> found event hnf_slc_sf_cache_access
-> 
-> In the earlier RFC series you had tools/perf/pmu-events/arch/arm64/arm/cmn700/sys/cmn.json, which describes event hnf_slc_sf_cache_access
-> 
-> But that JSON is not in this series. Why is it not included?
-> 
-
-Because the RFC version of the cmn.json file does not define the EventCode for each event, this will not take effect, so I temporarily removed it.
-The EventID of CMN events is different from other events. For example, hnf_slc_sf_cache_access corresponds to arm_cmn_0/type=0x5,eventid=0x2/.
-The current JSON format parsing does not support this EventID, and jevent.py needs to be extended.
-
-> The cmn kernel driver exposes event hnf_slc_sf_cache_access, but I did not think that perf tool metric code matches those events described in /bus/event_sourcs/devices/<PMU>/events
-> 
-
-If there is no alias defined, other events with the same name may be matched, it is indeed necessary to define an alias for each event first,
-and I will add it in the next version. But first I need to extend jevent.py to support cmn EventID.
-
->> found event hnf_cache_miss
->> Parsing metric events '{hnf_slc_sf_cache_access/metric-id=hnf_slc_sf_cache_access/,hnf_cache_miss/metric-id=hnf_cache_miss/}:W,duration_time'
->> hnf_slc_sf_cache_access -> arm_cmn_0/type=0x5,eventid=0x2/
->> hnf_slc_sf_cache_access -> arm_cmn_1/type=0x5,eventid=0x2/
->> hnf_cache_miss -> arm_cmn_0/type=0x5,eventid=0x1/
->> hnf_cache_miss -> arm_cmn_1/type=0x5,eventid=0x1/
->> Control descriptor is not initialized
->> hnf_slc_sf_cache_access: 127615 1001344900 1001344900
->> hnf_cache_miss: 36829 1001344900 1001344900
->> hnf_slc_sf_cache_access: 131526 1001343540 1001343540
->> hnf_cache_miss: 40587 1001343540 1001343540
->> duration_time: 1001381687 1001381687 1001381687
->>
->>   Performance counter stats for 'system wide':
->>
->>             259,141      hnf_slc_sf_cache_access   #     29.9 %  slc_miss_rate
->>              77,416      hnf_cache_miss
->>       1,001,381,687 ns   duration_time
->>
->>         1.001381687 seconds time elapsed
->>
->>
->>
->> #./perf list
->> ...
->>   arm_cmn_0/hnf_cache_miss/                          [Kernel PMU event]
->>   arm_cmn_0/hnf_slc_sf_cache_access/                 [Kernel PMU event]
->> ...
->>   arm_cmn_1/hnf_cache_miss/                          [Kernel PMU event]
->>   arm_cmn_1/hnf_slc_sf_cache_access/                 [Kernel PMU event]
->> ...
->>
->>>> In the past, I always thought that the function of the alias was to explain the meaning of these events in the perf list.
->>>> Or maybe I'm missing something?
->>> Event aliases do give the ability to describe the event in perf list. But we can also run them for 'perf stat', like:
->>>
->>> ./perf list uncore
->>> List of pre-defined events (to be used in -e or -M):
->>>
->>>    uncore_cbox_0/clockticks/                          [Kernel PMU event]
->>>    uncore_cbox_1/clockticks/                          [Kernel PMU event]
->>>    uncore_imc/data_reads/                             [Kernel PMU event]
->>>    uncore_imc/data_writes/                            [Kernel PMU event]
->>>    uncore_imc/gt_requests/                            [Kernel PMU event]
->>>    uncore_imc/ia_requests/                            [Kernel PMU event]
->>>    uncore_imc/io_requests/                            [Kernel PMU event]
->>>
->>> uncore cache:
->>>    unc_cbo_cache_lookup.any_es
->>>         [L3 Lookup any request that access cache and found line in E or S-state. Unit: uncore_cbox]
->>> ...
->>>
->>> sudo ./perf stat -v -e unc_cbo_cache_lookup.any_es
->>> Using CPUID GenuineIntel-6-3D-4
->>> unc_cbo_cache_lookup.any_es -> uncore_cbox_0/event=0x34,umask=0x86/
->>> unc_cbo_cache_lookup.any_es -> uncore_cbox_1/event=0x34,umask=0x86/
->>> Control descriptor is not initialized
->>> ^Cunc_cbo_cache_lookup.any_es: 14361103 1853372468 1853372468
->>> unc_cbo_cache_lookup.any_es: 14322188 1853360415 1853360415
->>>
->>>   Performance counter stats for 'system wide':
->>>
->>>          14,361,103      unc_cbo_cache_lookup.any_es
->>>          14,322,188      unc_cbo_cache_lookup.any_es
->>>
->>>         1.853388227 seconds time elapsed
->>>
->> Ok, thanks. If I use events without a prefix, such as perf stat -e clockticks sleep 1, will this also work?
-> 
-> In this case, yes - it would work for uncore_cbox_0/clockticks/ and uncore_cbox_1/clockticks/
-> 
-> But you need to be careful to here - if another PMU has same event name, then it might also match.
-> 
-
-Ok, I got it.
-
-Thanks,
-Jing
-
-> Thanks,
-> John
+Meanwhile, some updates on the recent progress from my side:
+1. I've asked some downstream kernels to pick up v2 for testing, the
+Archlinux Zen kernel did. I don't really expect its enthusiastic
+testers to find this series relevant to their use cases. But who
+knows.
+2. I've also asked openbenchmarking.org to run their popular highmem
+benchmark suites with v2. Hopefully they'll have some independent
+results soon.
+3. I've backported v2 to v5.15 and v6.1 and started an A/B experiment
+involving ~1 million devices, as I mentioned in another email in this
+thread. I should have some results to share when posting v3.
