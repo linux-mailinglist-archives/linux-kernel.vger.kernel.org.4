@@ -2,61 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D119D736976
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 447CC736974
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232106AbjFTKiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 06:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55512 "EHLO
+        id S232095AbjFTKiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 06:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232081AbjFTKiK (ORCPT
+        with ESMTP id S229519AbjFTKiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 06:38:10 -0400
-Received: from baidu.com (mx20.baidu.com [111.202.115.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70342A0;
+        Tue, 20 Jun 2023 06:38:09 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D03DE3;
+        Tue, 20 Jun 2023 03:38:08 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0E9B31063;
+        Tue, 20 Jun 2023 03:38:52 -0700 (PDT)
+Received: from [10.57.26.18] (unknown [10.57.26.18])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 697463F64C;
         Tue, 20 Jun 2023 03:38:06 -0700 (PDT)
-From:   "Duan,Muquan" <duanmuquan@baidu.com>
-To:     Eric Dumazet <edumazet@google.com>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        "dsahern@kernel.org" <dsahern@kernel.org>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] tcp: fix connection reset due to tw hashdance race.
-Thread-Topic: [PATCH v2] tcp: fix connection reset due to tw hashdance race.
-Thread-Index: AQHZmEIvBn0+XWKPJ0K4vDCWGljg2q981HwAgAHkBoCAABoBgIAAHXsAgAACgQCAANIxAIAAA7oAgAB4gQCAAAhSgIALBeGAgAA1TACABxQTAIAAV6MAgAAfqAA=
-Date:   Tue, 20 Jun 2023 10:37:27 +0000
-Message-ID: <D984749A-EACD-4408-9C8F-0B3222281C39@baidu.com>
-References: <20230606064306.9192-1-duanmuquan@baidu.com>
- <CANn89iKwzEtNWME+1Xb57DcT=xpWaBf59hRT4dYrw-jsTdqeLA@mail.gmail.com>
- <DFBEBE81-34A5-4394-9C5B-1A849A6415F1@baidu.com>
- <CANn89iLm=UeSLBVjACnqyaLo7oMTrY7Ok8RXP9oGDHVwe8LVng@mail.gmail.com>
- <D8D0327E-CEF0-4DFC-83AB-BC20EE3DFCDE@baidu.com>
- <CANn89iKXttFLj4WCVjWNeograv=LHta4erhtqm=fpfiEWscJCA@mail.gmail.com>
- <8C32A1F5-1160-4863-9201-CF9346290115@baidu.com>
- <CANn89i+JBhj+g564rfVd9gK7OH48v3N+Ln0vAgJehM5xJh32-g@mail.gmail.com>
- <7FD2F3ED-A3B5-40EF-A505-E7A642D73208@baidu.com>
- <CANn89iJ5kHmksR=nGSMVjacuV0uqu5Hs0g1s343gvAM9Yf=+Bg@mail.gmail.com>
- <FD0FE67D-378D-4DDE-BB35-6FFDE2AD3AA5@baidu.com>
- <CANn89iK1yo6R4kZneD_1OZYocQCWp1sxviYzjJ+BBn4HeFSNhw@mail.gmail.com>
- <AF8804B1-D096-4B80-9A1F-37FA03B04123@baidu.com>
- <CANn89i+fNWbRLYx7gvF7q_AGdQOhRxgFnwMqnpZK91kkEEg=Uw@mail.gmail.com>
-In-Reply-To: <CANn89i+fNWbRLYx7gvF7q_AGdQOhRxgFnwMqnpZK91kkEEg=Uw@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.14.117.47]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BD1E75636C0AB44DA371567B9E8C5AB5@internal.baidu.com>
-Content-Transfer-Encoding: base64
+Message-ID: <1a921c36-1959-65e0-aaf7-da2683cdb8c4@arm.com>
+Date:   Tue, 20 Jun 2023 11:38:23 +0100
 MIME-Version: 1.0
-X-FEAS-Client-IP: 172.31.51.19
-X-FE-Last-Public-Client-IP: 100.100.100.49
-X-FE-Policy-ID: 15:10:21:SYSTEM
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V4] thermal/core/power_allocator: reset thermal governor
+ when trip point is changed
+Content-Language: en-US
+To:     Di Shen <di.shen@unisoc.com>
+Cc:     amitk@kernel.org, linux-pm@vger.kernel.org, rui.zhang@intel.com,
+        daniel.lezcano@linaro.org, linux-kernel@vger.kernel.org,
+        xuewen.yan@unisoc.com, jeson.gao@unisoc.com, zhanglyra@gmail.com,
+        orsonzhai@gmail.com, rafael@kernel.org
+References: <6aad180f-410c-5b11-b30b-c7bc02cbe054@linaro.org>
+ <20230619063534.12831-1-di.shen@unisoc.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20230619063534.12831-1-di.shen@unisoc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,64 +49,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGksIEVyaWMsDQoNClRoYW5rcyBmb3IgeW91ciByZXBseSENCg0KDQo+PiBXaHkgbm90IHNwZWFr
-IG9mIHRoZSBGSU46DQo+PiBGb3IgY3VycmVudCBpbXBsZW1lbnRhdGlvbiwgaGFzaGRhbmNlIGNh
-biBiZSBkb25lIG9uIHN0YXRlIEZJTl9XQUlUMiwgIGl0IG1heSByYWNlIHdpdGggdGhlIGVoYXNo
-IGxvb2t1cCBwcm9jZXNzIG9mICBwYXNzaXZlIGNsb3NlcuKAmXMgRklOLiBNeSBuZXcgcGF0Y2gg
-MyBkb2VzIHRoZSB0dyBoYXNoZGFuY2UgdW50aWwgcmVjZWl2aW5nIHBhc3NpdmUgY2xvc2VyJ3Mg
-RklOKHJlYWwgVElNRV9XQUlUKSwgIHNvIHRoaXMgcmFjZSBkb2VzIG5vdCBleGlzdCBhbmQgIHRo
-ZSAnY29ubmVjdGlvbiByZWZ1c2VkJyBpc3N1ZSB3aWxsIG5vdCBvY2N1ciwgc28gSSBkaWQgbm90
-IHNwZWFrIG9mIHRoZSBGSU4gYWdhaW4gd2l0aCB0aGUgbmV3IHBhdGNoLg0KPj4gDQo+IHNoZGFu
-Y2UgYmVnaW5zLCB0aGUgRklOIG1heSBiZSBkcm9wcGVkIGluIGZ1cnRoZXIgcHJvY2VzcyBpZiB0
-aGUgc29jaw0KPiBpcyBkZXN0cm95ZWQgb24gYW5vdGhlciBDUFUgYWZ0ZXIgaGFzaGRhbmNlLg0K
-ICAgDQpXaXRoIG15IHBhdGNoIDMsIHBhc3NpdmUgY2xvc2Vy4oCZcyBGSU4gd2lsbCBmaW5kIG9y
-aWdpbmFsIHNvY2sgYmVjYXVzZSBoYXNoZGFuY2Ugd2lsbCBub3QgYmUgZG9uZSBiZWZvcmUgcmVj
-ZWl2aW5nIGl0LA0KQWZ0ZXIgaGFzaGRhbmNlLCB0aGUgdHcgc29ja+KAmXMgc3RhdGUgaXMgc2V0
-IHRvIFRJTUVfV0FJVCBhbHJlYWR5LCBpdCBjYW4gYWNjZXB0IG5ldyBTWU4gd2l0aCB0aGUgc2Ft
-cGUgNC10dXBsZXMuIA0KSWYgdGhlIG9yaWdpbmFsIHNvY2sgaXMgZGVzdHJveWVkIG9uIGFub3Ro
-ZXIgQ1BVIG9yIHRoZSBGSU4gaXMgZHJvcGVkIGFmdGVyIGhhc2hkYW5jZSwgIGl0IHdpbGwgbm90
-IGFmZmVjdCB0aGUgdHcgc29jay4NCkkgZG9u4oCZdCBrbm93IHdoZXRoZXIgSSBnZXQgeW91ciBw
-b2ludCBjb3JyZWN0bHk/DQoNCg0KPj4gDQo+PiBJIHRvb2sgYSBsb29rIGF0IEZyZWVCU0QsIGl0
-IHVzZXMgaGFzaCB0YWJsZSBsb2NrIGFuZCBwZXIgc29jayBsZXZlbCBsb2NrLkl0IGFsc28gbmVl
-ZHMgc29tZSB0cmlja3MgdG8gcmV0cnkgZm9yIHNvbWUgY2FzZXMsIGZvciBleGFtcGxlLCBzb2Nr
-IGRyb3BwZWQgYnkgYW5vdGhlciB0aHJlYWQgd2hlbiB3YWl0aW5nIGZvciBwZXIgc29jayBsb2Nr
-IGR1cmluZyB0aGUgbG9va3VwOg0KPj4gICAvKg0KPj4gICAgICogV2hpbGUgd2FpdGluZyBmb3Ig
-aW5wIGxvY2sgZHVyaW5nIHRoZSBsb29rdXAsIGFub3RoZXIgdGhyZWFkDQo+PiAgICAgKiBjYW4g
-aGF2ZSBkcm9wcGVkIHRoZSBpbnBjYiwgaW4gd2hpY2ggY2FzZSB3ZSBuZWVkIHRvIGxvb3AgYmFj
-aw0KPj4gICAgICogYW5kIHRyeSB0byBmaW5kIGEgbmV3IGlucGNiIHRvIGRlbGl2ZXIgdG8uDQo+
-PiAgICAgKi8NCj4+ICAgIGlmIChpbnAtPmlucF9mbGFncyAmIElOUF9EUk9QUEVEKSB7DQo+PiAg
-ICAgICAgSU5QX1dVTkxPQ0soaW5wKTsNCj4+ICAgICAgICBpbnAgPSBOVUxMOw0KPj4gICAgICAg
-IGdvdG8gZmluZHBjYjsNCj4+IH0NCj4+IA0KPiANCj4gVGhpcyBpcyB0aGUgbGFzdCB0aW1lIHlv
-dSBicmluZyBGcmVlQlNEIGNvZGUgaGVyZS4NCj4gDQo+IFdlIGRvIG5vdCBjb3B5IEZyZWVCU0Qg
-Y29kZSBmb3Igb2J2aW91cyByZWFzb25zLg0KPiBJIG5ldmVyIGxvb2tlZCBhdCBGcmVlQlNEIGNv
-ZGUgYW5kIG5ldmVyIHdpbGwuDQo+IA0KPiBTdG9wIHRoaXMsIHBsZWFzZSwgb3IgSSB3aWxsIGln
-bm9yZSB5b3VyIGZ1dHVyZSBlbWFpbHMuDQoNCg0KSSBhbSB2ZXJ5IHNvcnJ5LCBJIHdpbGwgbm90
-IGRvIHRoaXMgYWdhaW4uDQoNCg0KDQoNCg0KDQpSZWdhcmRzIQ0KRHVhbm11cXVhbg0KDQo+IDIw
-MjPlubQ25pyIMjDml6Ug5LiL5Y2INDo0NO+8jEVyaWMgRHVtYXpldCA8ZWR1bWF6ZXRAZ29vZ2xl
-LmNvbT4g5YaZ6YGT77yaDQo+IA0KPiBPbiBUdWUsIEp1biAyMCwgMjAyMyBhdCA1OjMw4oCvQU0g
-RHVhbixNdXF1YW4gPGR1YW5tdXF1YW5AYmFpZHUuY29tPiB3cm90ZToNCj4+IA0KPj4gSGksIEVy
-aWMsDQo+PiANCj4+IFRoYW5rcyBmb3IgeW91ciBjb21tZW50cyENCj4+IA0KPj4gV2h5IG5vdCBz
-cGVhayBvZiB0aGUgRklOOg0KPj4gRm9yIGN1cnJlbnQgaW1wbGVtZW50YXRpb24sIGhhc2hkYW5j
-ZSBjYW4gYmUgZG9uZSBvbiBzdGF0ZSBGSU5fV0FJVDIsICBpdCBtYXkgcmFjZSB3aXRoIHRoZSBl
-aGFzaCBsb29rdXAgcHJvY2VzcyBvZiAgcGFzc2l2ZSBjbG9zZXLigJlzIEZJTi4gTXkgbmV3IHBh
-dGNoIDMgZG9lcyB0aGUgdHcgaGFzaGRhbmNlIHVudGlsIHJlY2VpdmluZyBwYXNzaXZlIGNsb3Nl
-cidzIEZJTihyZWFsIFRJTUVfV0FJVCksICBzbyB0aGlzIHJhY2UgZG9lcyBub3QgZXhpc3QgYW5k
-ICB0aGUgJ2Nvbm5lY3Rpb24gcmVmdXNlZCcgaXNzdWUgd2lsbCBub3Qgb2NjdXIsIHNvIEkgZGlk
-IG5vdCBzcGVhayBvZiB0aGUgRklOIGFnYWluIHdpdGggdGhlIG5ldyBwYXRjaC4NCj4+IA0KPiBz
-aGRhbmNlIGJlZ2lucywgdGhlIEZJTiBtYXkgYmUgZHJvcHBlZCBpbiBmdXJ0aGVyIHByb2Nlc3Mg
-aWYgdGhlIHNvY2sNCj4gaXMgZGVzdHJveWVkIG9uIGFub3RoZXIgQ1BVIGFmdGVyIGhhc2hkYW5j
-ZS4NCj4+IA0KPj4gSSB0b29rIGEgbG9vayBhdCBGcmVlQlNELCBpdCB1c2VzIGhhc2ggdGFibGUg
-bG9jayBhbmQgcGVyIHNvY2sgbGV2ZWwgbG9jay5JdCBhbHNvIG5lZWRzIHNvbWUgdHJpY2tzIHRv
-IHJldHJ5IGZvciBzb21lIGNhc2VzLCBmb3IgZXhhbXBsZSwgc29jayBkcm9wcGVkIGJ5IGFub3Ro
-ZXIgdGhyZWFkIHdoZW4gd2FpdGluZyBmb3IgcGVyIHNvY2sgbG9jayBkdXJpbmcgdGhlIGxvb2t1
-cDoNCj4+ICAgLyoNCj4+ICAgICAqIFdoaWxlIHdhaXRpbmcgZm9yIGlucCBsb2NrIGR1cmluZyB0
-aGUgbG9va3VwLCBhbm90aGVyIHRocmVhZA0KPj4gICAgICogY2FuIGhhdmUgZHJvcHBlZCB0aGUg
-aW5wY2IsIGluIHdoaWNoIGNhc2Ugd2UgbmVlZCB0byBsb29wIGJhY2sNCj4+ICAgICAqIGFuZCB0
-cnkgdG8gZmluZCBhIG5ldyBpbnBjYiB0byBkZWxpdmVyIHRvLg0KPj4gICAgICovDQo+PiAgICBp
-ZiAoaW5wLT5pbnBfZmxhZ3MgJiBJTlBfRFJPUFBFRCkgew0KPj4gICAgICAgIElOUF9XVU5MT0NL
-KGlucCk7DQo+PiAgICAgICAgaW5wID0gTlVMTDsNCj4+ICAgICAgICBnb3RvIGZpbmRwY2I7DQo+
-PiB9DQo+PiANCj4gDQo+IFRoaXMgaXMgdGhlIGxhc3QgdGltZSB5b3UgYnJpbmcgRnJlZUJTRCBj
-b2RlIGhlcmUuDQo+IA0KPiBXZSBkbyBub3QgY29weSBGcmVlQlNEIGNvZGUgZm9yIG9idmlvdXMg
-cmVhc29ucy4NCj4gSSBuZXZlciBsb29rZWQgYXQgRnJlZUJTRCBjb2RlIGFuZCBuZXZlciB3aWxs
-Lg0KPiANCj4gU3RvcCB0aGlzLCBwbGVhc2UsIG9yIEkgd2lsbCBpZ25vcmUgeW91ciBmdXR1cmUg
-ZW1haWxzLg0KDQo=
+Hi Di,
+
+I have missed your v4 because it landed below your v3 thread.
+
+On 6/19/23 07:35, Di Shen wrote:
+> When the thermal trip point is changed, the governor should
+> be reset so that the policy algorithm be updated to adapt to the
+> new trip point.
+> 
+> This patch adds an ops for thermal the governor structure to reset
+
+s/ops/callback
+
+> the governor. The ops is called when the trip point is changed.
+> For power allocator, the parameters of pid controller and the states
+> of power cooling devices can be reset when the passive trip point
+> is changed.
+> 
+> Signed-off-by: Di Shen <di.shen@unisoc.com>
+> 
+> ---
+> V4:
+> - Compared to V3, handle it in thermal core instead of in governor.
+> 
+> - Add an ops to the governor structure, and call it when a trip
+>    point is changed.
+> 
+> - Define reset ops for power allocator.
+> 
+> V3:
+> - Add fix tag.
+> 
+> V2:
+> - Compared to v1, do not revert.
+> 
+> - Add a variable(last_switch_on_temp) in power_allocator_params
+>    to record the last switch_on_temp value.
+> 
+> - Adds a function to renew the update flag and update the
+>    last_switch_on_temp when thermal trips are writable.
+> 
+> V1:
+> - Revert commit 0952177f2a1f.
+> ---
+> ---
+>   drivers/thermal/gov_power_allocator.c | 21 +++++++++++++++++++++
+>   drivers/thermal/thermal_trip.c        |  6 ++++++
+>   include/linux/thermal.h               |  1 +
+>   3 files changed, 28 insertions(+)
+> 
+> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+> index 8642f1096b91..41d155adc616 100644
+> --- a/drivers/thermal/gov_power_allocator.c
+> +++ b/drivers/thermal/gov_power_allocator.c
+> @@ -729,10 +729,31 @@ static int power_allocator_throttle(struct thermal_zone_device *tz, int trip_id)
+>   	return allocate_power(tz, trip.temperature);
+>   }
+>   
+> +static int power_allocator_reset(struct thermal_zone_device *tz, int trip_id)
+> +{
+> +	int ret = 0;
+> +	struct thermal_trip trip;
+> +	struct power_allocator_params *params = tz->governor_data;
+> +
+> +	ret = __thermal_zone_get_trip(tz, trip_id, &trip);
+> +	if (ret)
+> +		return ret;
+> +
+> +	/* Only need reset for passive trips */
+> +	if (trip.type != THERMAL_TRIP_PASSIVE)
+> +		return -EINVAL;
+> +
+> +	reset_pid_controller(params);
+> +	allow_maximum_power(tz, true);
+> +
+> +	return ret;
+> +}
+> +
+>   static struct thermal_governor thermal_gov_power_allocator = {
+>   	.name		= "power_allocator",
+>   	.bind_to_tz	= power_allocator_bind,
+>   	.unbind_from_tz	= power_allocator_unbind,
+>   	.throttle	= power_allocator_throttle,
+> +	.reset		= power_allocator_reset,
+>   };
+>   THERMAL_GOVERNOR_DECLARE(thermal_gov_power_allocator);
+> diff --git a/drivers/thermal/thermal_trip.c b/drivers/thermal/thermal_trip.c
+> index 907f3a4d7bc8..52eb768fada8 100644
+> --- a/drivers/thermal/thermal_trip.c
+> +++ b/drivers/thermal/thermal_trip.c
+> @@ -173,6 +173,12 @@ int thermal_zone_set_trip(struct thermal_zone_device *tz, int trip_id,
+>   	if (tz->trips && (t.temperature != trip->temperature || t.hysteresis != trip->hysteresis))
+>   		tz->trips[trip_id] = *trip;
+>   
+> +	if (t.temperature != trip->temperature && tz->governor && tz->governor->reset) {
+> +		ret = tz->governor->reset(tz, trip_id);
+> +		if (ret)
+> +			pr_warn_once("Failed to reset thermal governor\n");
+> +	}
+
+I agree with Rafael. Maybe change that to debug print, so that can be
+checked during the product testing. We cannot do much if that happens.
+
+> +
+>   	thermal_notify_tz_trip_change(tz->id, trip_id, trip->type,
+>   				      trip->temperature, trip->hysteresis);
+>   
+> diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> index 87837094d549..155ce2291fa5 100644
+> --- a/include/linux/thermal.h
+> +++ b/include/linux/thermal.h
+> @@ -204,6 +204,7 @@ struct thermal_governor {
+>   	int (*bind_to_tz)(struct thermal_zone_device *tz);
+>   	void (*unbind_from_tz)(struct thermal_zone_device *tz);
+>   	int (*throttle)(struct thermal_zone_device *tz, int trip);
+> +	int (*reset)(struct thermal_zone_device *tz, int trip);
+>   	struct list_head	governor_list;
+>   };
+>   
+
+That thermal_governor::reset() callback is what I had im mind while
+giving you the feedback for the v1. Now it's much cleaner what is going
+on and why.
+
+Apart from some small bits, LGTM. Please adjust the comment in the patch
+header and this debug print and you can add:
+
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+
+Please send the next version as separate new thread.
+
+Regards,
+Lukasz
