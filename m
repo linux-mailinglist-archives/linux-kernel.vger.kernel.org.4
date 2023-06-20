@@ -2,107 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27CDA7375F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E467B7375FA
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbjFTUTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 16:19:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
+        id S230064AbjFTUUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 16:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbjFTUTT (ORCPT
+        with ESMTP id S229973AbjFTUUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 16:19:19 -0400
-Received: from out-26.mta0.migadu.com (out-26.mta0.migadu.com [91.218.175.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2E519A4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:18:59 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 16:18:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1687292337;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AknCkCooyVujKThdxC1FM7ZvENiuN9/CmEk5IHQ7iJc=;
-        b=XuzztPfVVe+3n5nJEOjm27aqlllgXuZQ6rVKnaNP1qE0QAgMdGx6B41jDrtlCUaSZVvcwB
-        aFXG7iOPoRS+k3iuIDq6aCVJVdfwEIwxm8O1jeyxNx8BlQuDXJKsTMlQrOrb4Uy0Osm8So
-        ZIKImGyM50seypVLOxcay429rYAWiDE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        "hch@infradead.org" <hch@infradead.org>, linux-mm@kvack.org,
-        Kees Cook <keescook@chromium.org>,
-        the arch/x86 maintainers <x86@kernel.org>
-Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
-Message-ID: <20230620201851.qrcabl327mrofygb@moria.home.lan>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-8-kent.overstreet@linux.dev>
- <ZJAdhBIvwFBOFQU/@FVFF77S0Q05N>
- <20230619104717.3jvy77y3quou46u3@moria.home.lan>
- <ZJBOVsFraksigfRF@FVFF77S0Q05N.cambridge.arm.com>
- <20230619191740.2qmlza3inwycljih@moria.home.lan>
- <5ef2246b-9fe5-4206-acf0-0ce1f4469e6c@app.fastmail.com>
- <20230620180839.oodfav5cz234pph7@moria.home.lan>
- <dcf8648b-c367-47a5-a2b6-94fb07a68904@app.fastmail.com>
- <37d2378e-72de-e474-5e25-656b691384ba@intel.com>
+        Tue, 20 Jun 2023 16:20:39 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D76F1BD5
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:20:17 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51a200fc3eeso6808866a12.3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:20:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687292415; x=1689884415;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2Zy9E39IJgeyzmvbXlZlqFtNdvkFQRFNcCLclJAn3Dk=;
+        b=w7nUpfulgg5cVpdAqhG2Xt87fp+T4OHkUaUAAHNTM5RqhmEqgDa+Eq/iezw9tpQc2g
+         rB4y3XXbzSHodfyyJ2fcvFBOX4t1l5fvxzPDV8K158mDoC3D6RSqN8HaWllO1jiHck+a
+         EF0ElzRbdWu8NE0gQUYTT1XW7nJMk16fudN8dQc6BIApzpEsUcI+w/VpM1X9SFmCDrgE
+         7k5f3sW0hVpjZje7oO3U3k2s4/vUAY91azC8VAW+0pDB1PLq4zT4QbvjeFjUMMTIGnJU
+         ftcKSF5l/6By5dHPdtDLRcPIikVcjMYdVgKKfzjdnRUg8AsvjJrMlJh2etXoLalRnfcR
+         LBDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687292415; x=1689884415;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2Zy9E39IJgeyzmvbXlZlqFtNdvkFQRFNcCLclJAn3Dk=;
+        b=JTdoib9hqWxLHaN+3D4kRRg7evpu4sU5ePoNsPMC3zluoFKtZA+bn1Wem4y78acmPU
+         LRDdeI3KNcMV1lia8QUVSkFy8wBM5Z0wGW0NtEzJEx9fwQHchvg/7HKLroNLEPK037US
+         7/LwOZRl1N8TpzFh2X0gs/SvfGVVd27Fa37GTzqZTnVUfxi6sAdk2jWtL8uWEnuljVvL
+         zqdX9D7pzzMjzYC9VgM7b5BCgAeAurgmhoImtg586NgIhRHyk1J066nG71pEec+Xrb+j
+         pJv8r1BA+C6t9iItdGcy/ys4Kq9cad40A56cbZL0wO6alxXH2x1zNyuR/FzkXENRJNiW
+         TMoQ==
+X-Gm-Message-State: AC+VfDx5Z0w8zMw6mizRMTxdODMjW2mc+ME/7yqZKgy6cmhm7My5aaTF
+        Qct/BZ7pUCoEbXjRKRL0zqLGyzjdCKGpyIqjf3keMA==
+X-Google-Smtp-Source: ACHHUZ4F1CiTZ+c9pAohA09rIRP6Qf5cYoYVb0ympDQgfKqCJ3aijqKOesZFVWTbdAIVjt+MYTHTHY9ehWV3hzkRzJs=
+X-Received: by 2002:a17:907:808:b0:977:ceab:3996 with SMTP id
+ wv8-20020a170907080800b00977ceab3996mr11622602ejb.76.1687292414702; Tue, 20
+ Jun 2023 13:20:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <37d2378e-72de-e474-5e25-656b691384ba@intel.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230619193821.2710944-1-yuzhao@google.com>
+In-Reply-To: <20230619193821.2710944-1-yuzhao@google.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Tue, 20 Jun 2023 13:19:38 -0700
+Message-ID: <CAJD7tkb=5kOiuYZxYQVCpjZZriCf2wrx9sgenrpP_Bct=GWfcw@mail.gmail.com>
+Subject: Re: [PATCH mm-unstable v1] mm/mglru: make memcg_lru->lock irq safe
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+87c490fd2be656269b6a@syzkaller.appspotmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 11:48:26AM -0700, Dave Hansen wrote:
-> >> No, I'm saying your concerns are baseless and too vague to
-> >> address.
-> > If you don't address them, the NAK will stand forever, or at least
-> > until a different group of people take over x86 maintainership.
-> > That's fine with me.
-> 
-> I've got a specific concern: I don't see vmalloc_exec() used in this
-> series anywhere.  I also don't see any of the actual assembly that's
-> being generated, or the glue code that's calling into the generated
-> assembly.
+On Mon, Jun 19, 2023 at 12:38=E2=80=AFPM Yu Zhao <yuzhao@google.com> wrote:
 >
-> I grepped around a bit in your git trees, but I also couldn't find it in
-> there.  Any chance you could help a guy out and point us to some of the
-> specifics of this new, tiny JIT?
+> lru_gen_rotate_memcg() can happen in softirq if
+> memory.soft_limit_in_bytes is set. This requires memcg_lru->lock to be
+> irq safe.
+>
+> This problem only affects memcg v1.
+>
+> Reported-by: syzbot+87c490fd2be656269b6a@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=3D87c490fd2be656269b6a
+> Fixes: e4dde56cd208 ("mm: multi-gen LRU: per-node lru_gen_folio lists")
+> Signed-off-by: Yu Zhao <yuzhao@google.com>
+> ---
+>  mm/vmscan.c | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
+>
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 45d17c7cc555..27f90896f789 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -4759,10 +4759,11 @@ static void lru_gen_rotate_memcg(struct lruvec *l=
+ruvec, int op)
+>  {
+>         int seg;
+>         int old, new;
+> +       unsigned long flags;
+>         int bin =3D get_random_u32_below(MEMCG_NR_BINS);
+>         struct pglist_data *pgdat =3D lruvec_pgdat(lruvec);
+>
+> -       spin_lock(&pgdat->memcg_lru.lock);
+> +       spin_lock_irqsave(&pgdat->memcg_lru.lock, flags);
 
-vmalloc_exec() has already been dropped from the patchset - I'll switch
-to the new jit allocator when that's available and doing sub-page
-allocations.
+Nit: I think it might be useful to add a comment here that this is
+needed due to the call path from memcg_check_events() ->
+mem_cgroup_update_tree() -- so that if that call path changes we can
+come back and remove the irq-disablement.
 
-I can however point you at the code that generates the unpack functions:
+FWIW:
+Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
 
-https://evilpiepirate.org/git/bcachefs.git/tree/fs/bcachefs/bkey.c#n727
-
-> >> Andy, I replied explaining the difference between text_poke() and
-> >> text_poke_sync(). It's clear you have no idea what you're talking about,
-> >> so I'm not going to be wasting my time on further communications with
-> >> you.
-> 
-> One more specific concern: This comment made me very uncomfortable and
-> it read to me very much like a personal attack, something which is
-> contrary to our code of conduct.
-
-It's not; I prefer to be direct than passive aggressive, and if I have
-to bow out of a discussion that isn't going anywhere I feel I owe an
-explanation of _why_. Too much conflict avoidance means things don't get
-resolved.
-
-And Andy and I are talking on IRC now, so things are proceeding in a
-better direction.
+>
+>         VM_WARN_ON_ONCE(hlist_nulls_unhashed(&lruvec->lrugen.list));
+>
+> @@ -4797,7 +4798,7 @@ static void lru_gen_rotate_memcg(struct lruvec *lru=
+vec, int op)
+>         if (!pgdat->memcg_lru.nr_memcgs[old] && old =3D=3D get_memcg_gen(=
+pgdat->memcg_lru.seq))
+>                 WRITE_ONCE(pgdat->memcg_lru.seq, pgdat->memcg_lru.seq + 1=
+);
+>
+> -       spin_unlock(&pgdat->memcg_lru.lock);
+> +       spin_unlock_irqrestore(&pgdat->memcg_lru.lock, flags);
+>  }
+>
+>  void lru_gen_online_memcg(struct mem_cgroup *memcg)
+> @@ -4810,7 +4811,7 @@ void lru_gen_online_memcg(struct mem_cgroup *memcg)
+>                 struct pglist_data *pgdat =3D NODE_DATA(nid);
+>                 struct lruvec *lruvec =3D get_lruvec(memcg, nid);
+>
+> -               spin_lock(&pgdat->memcg_lru.lock);
+> +               spin_lock_irq(&pgdat->memcg_lru.lock);
+>
+>                 VM_WARN_ON_ONCE(!hlist_nulls_unhashed(&lruvec->lrugen.lis=
+t));
+>
+> @@ -4821,7 +4822,7 @@ void lru_gen_online_memcg(struct mem_cgroup *memcg)
+>
+>                 lruvec->lrugen.gen =3D gen;
+>
+> -               spin_unlock(&pgdat->memcg_lru.lock);
+> +               spin_unlock_irq(&pgdat->memcg_lru.lock);
+>         }
+>  }
+>
+> @@ -4845,7 +4846,7 @@ void lru_gen_release_memcg(struct mem_cgroup *memcg=
+)
+>                 struct pglist_data *pgdat =3D NODE_DATA(nid);
+>                 struct lruvec *lruvec =3D get_lruvec(memcg, nid);
+>
+> -               spin_lock(&pgdat->memcg_lru.lock);
+> +               spin_lock_irq(&pgdat->memcg_lru.lock);
+>
+>                 VM_WARN_ON_ONCE(hlist_nulls_unhashed(&lruvec->lrugen.list=
+));
+>
+> @@ -4857,7 +4858,7 @@ void lru_gen_release_memcg(struct mem_cgroup *memcg=
+)
+>                 if (!pgdat->memcg_lru.nr_memcgs[gen] && gen =3D=3D get_me=
+mcg_gen(pgdat->memcg_lru.seq))
+>                         WRITE_ONCE(pgdat->memcg_lru.seq, pgdat->memcg_lru=
+.seq + 1);
+>
+> -               spin_unlock(&pgdat->memcg_lru.lock);
+> +               spin_unlock_irq(&pgdat->memcg_lru.lock);
+>         }
+>  }
+>
+> --
+> 2.41.0.185.g7c58973941-goog
+>
+>
