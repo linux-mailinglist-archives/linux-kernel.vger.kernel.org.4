@@ -2,205 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 742077365D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0307365DC
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:14:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230517AbjFTIMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 04:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35894 "EHLO
+        id S231700AbjFTIO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 04:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbjFTIMT (ORCPT
+        with ESMTP id S231209AbjFTIOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 04:12:19 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1229A186
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 01:12:18 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f901f87195so23926975e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 01:12:17 -0700 (PDT)
+        Tue, 20 Jun 2023 04:14:23 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1BE1B1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 01:14:21 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f918922954so20251335e9.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 01:14:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687248736; x=1689840736;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2KRzE3IxHv0D72WxLTYYk5f9VrvCEP7kc7aTHTFKOSI=;
-        b=qNDBWvbudemDgPmOjnbu080AyvX8nOks7ZLsys7A4wfr+7VWtU26irPr90roJ30HcM
-         GbWu6dlSkQX77ZWpwWA6jSUeISJ5jxEs82+08vFEDzk/hN4oQH0/mwyq+ziJq0FQkNGw
-         Of+e9HOUY/sUl8Iz/A3o4o1oLV4BiWQuXJfHcdvg5tdRXDQK8bMhoE7yov2rYSvKQHY8
-         78+Q9+bHG3srLrD1hF2i9ACQ0zFDUoQkYbylSUsxNrCWRVXmTLCgu+shGZgrFTWZ8L3k
-         2KRrwrLEVI8z927SBQ1RfzUkCRmOL8DEN9j29rrbw0vzH+nP1nIqQDn1JdQnxo54UgIB
-         xt2A==
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687248860; x=1689840860;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QQbdggw74AN0qE4N6rw9FwT496orbg2m9a2V0ULV/Uw=;
+        b=qeI0jNx4MMXFY5pvb2+qLIUHE7ZFkv9z5nksQ+dxl7WQDJDA6+otDYPwrUmXxmcMc7
+         OwY/zr/aawnu6IYyKH0dL4oTgDWILHJ8GE4g7oM4ZXA44gQCTVks6rRprW25HTKvFTCe
+         Y/kcZOLY0w/EttyjMfaGUb2cOvcA8GAA1i+SIrr9fKqmIpVL8OC0Wy4v6543snbr7Osi
+         hMsqWpBVWBjzsVHJrPwqBJDJjYH+PEKgscMI+vADvpubrPH+k69kTmWDJ1SgwO90Xa2/
+         eLre4gs9T3eHRkhofGMc6nIUp+6nh3QXJPGHQpvxVMOu2DHff/Y32hNGd0RVHbuGMvWU
+         Wk6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687248736; x=1689840736;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2KRzE3IxHv0D72WxLTYYk5f9VrvCEP7kc7aTHTFKOSI=;
-        b=gAOHNSIHAxhVkJQpPD0LdX2HDgNjXek86oMuF8XS8O+xLp8rucFSLpPk6oJspOWngi
-         +4SK/icc721zYpJF547ssiL9Za5exLKyHMKbZMWexE3qStEAufhRN2yy5xv16E1uv+4Q
-         Ey4MUJkuWpxWAWej4smXXTgCaQGrftpDPjXNUwqBnnO5Dhv9S3S25RGKfsopItliUKtK
-         dqZVN4Kmcx/eSWBLzFN9/7ubNXe+UXAUgtOS+c7/cIeIcyTjwiOcbWz0eLbiyPohfAh2
-         ilDiTcCrQWUOfnnE5Kq37aPvQtGDXBa7hynGYFYaf8lVjcsGa6oWNVeivB8Y/K8a5dPJ
-         KxJg==
-X-Gm-Message-State: AC+VfDzHDR+JMhybgAYXlCorc8dD8xo7a7oHS2CMwIUjEXw5WHnZ+xWV
-        2F2fyEmMD1cuBvO7QJYtflEIFg==
-X-Google-Smtp-Source: ACHHUZ5VCMlfw7GJ9Qf2HaNFEaUXnZ28ODluape1E5lbYbI6NEx+mawbOnCdpFyStP6LzFieyg4ZUw==
-X-Received: by 2002:a7b:c450:0:b0:3f7:367a:bd28 with SMTP id l16-20020a7bc450000000b003f7367abd28mr10053356wmi.4.1687248736480;
-        Tue, 20 Jun 2023 01:12:16 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id p25-20020a1c7419000000b003f8fac0ad4bsm1674906wmc.17.2023.06.20.01.12.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jun 2023 01:12:16 -0700 (PDT)
-Message-ID: <8b5e4a9b-7496-02a1-d3b6-a0be8ea85798@linaro.org>
-Date:   Tue, 20 Jun 2023 10:12:14 +0200
+        d=1e100.net; s=20221208; t=1687248860; x=1689840860;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QQbdggw74AN0qE4N6rw9FwT496orbg2m9a2V0ULV/Uw=;
+        b=b3QExnvKmQXXdwmCTD/qoMS+2nHP9Izeplw0YnKeSVJbb0/AQsdGOn9KRNCORENLTh
+         ZLAiDgBqZpQ9ya/Ya1EaYlD3TSpEK2HnK9Mbx2/EMtkrsQkGCRJkkqNwT/+dABXsCNBQ
+         iz+qbO1n49CxVvP+uTb3/qMmy/yFFDgwWOTEhY8wylCGo3vm+yfLCsfEqrT4avw9F4Gn
+         B4hzM8UD2aOVsrUmVCvCGJu3rLmEmCYLrhycq711YmTxYY0xm/+1fvhmk7BC4HMAm1OJ
+         2ueCX7AWM/r+d/5d98NQoe/KR88hD6mH3f9EvacW2ur2nYM9xbCSqOrNvcOV9Ty42VGJ
+         6B7g==
+X-Gm-Message-State: AC+VfDxPiepddSrMTog3Xg0P3NFovmSV1v9eGiu3/9LDCrUt+9aWjxdd
+        LeSmmGAIfHZrsGFtb0Rqyt6nQ0JvroaDlWpqqC5kjw==
+X-Google-Smtp-Source: ACHHUZ5rqXNURmljNNaXdt2sxgcF4jdXG62ZAho+mTu2bFDoCR6HsKSjbY5W5NzBKLCkQujzUGfPXnfTUJlhfbfEcQ8=
+X-Received: by 2002:a05:600c:2252:b0:3f9:14c:11d3 with SMTP id
+ a18-20020a05600c225200b003f9014c11d3mr5850732wmm.12.1687248860464; Tue, 20
+ Jun 2023 01:14:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 3/6] media: dt-bindings: mediatek,vcodec: Remove
- VDEC_SYS for mt8183
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20230620000349.2122191-1-nfraprado@collabora.com>
- <20230620000349.2122191-4-nfraprado@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230620000349.2122191-4-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230619094705.51337-1-alexghiti@rivosinc.com>
+ <CAHVXubjOUeEtnFnERjT2YOG+h5=2YX7kxeEBFSStO3WZvcv36A@mail.gmail.com> <ZJFS1K/LltE57MJ4@sunil-laptop>
+In-Reply-To: <ZJFS1K/LltE57MJ4@sunil-laptop>
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+Date:   Tue, 20 Jun 2023 10:14:09 +0200
+Message-ID: <CAHVXubhcStveNOzwA8i0R79P3spR7m1oEbWtBXaVSr2-bL3mvA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] Documentation: riscv: Add early boot document
+To:     Sunil V L <sunilvl@ventanamicro.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, linux-doc@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        Atish Kumar Patra <atishp@rivosinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/06/2023 02:03, Nícolas F. R. A. Prado wrote:
-> The binding expects the first register space to be VDEC_SYS. But on
-> mt8183, which uses the stateless decoders, this space is used only for
-> controlling clocks and resets, which are better described as separate
-> clock-controller and reset-controller nodes.
-> 
-> In fact, in mt8173's devicetree there are already such separate
-> clock-controller nodes, which cause duplicate addresses between the
-> vdecsys node and the vcodec node. But for this SoC, since the stateful
-> decoder code makes other uses of the VDEC_SYS register space, it's not
-> straightforward to remove it.
-> 
-> In order to avoid the same address conflict to happen on mt8183,
-> since the only current use of the VDEC_SYS register space in
-> the driver is to read the status of a hardware controlled clock, remove
-> the VDEC_SYS register space from the binding and describe an extra
-> syscon that will be used to directly check the hardware status.
-> 
-> Also add reg-names to be able to tell that this new register schema is
-> used, so the driver can keep backward compatibility.
-> 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> 
-> ---
-> I dropped the tags from this commit since a syscon is now used instead
-> of an extra clock.
-> 
-> Changes in v3:
-> - Removed the active clock
-> - Added a mediatek,vdecsys syscon property
-> 
-> Changes in v2:
-> - Merged with patch 1 (media: dt-bindings: mediatek,vcodec: Allow single
->   clock for mt8183) to avoid changing number of clocks twice
-> - Added maxItems to reg-names
-> - Constrained clocks for each compatible
-> - Reordered properties for each compatible
-> 
->  .../media/mediatek,vcodec-decoder.yaml        | 30 +++++++++++++++++++
->  1 file changed, 30 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml b/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
-> index 1e56ece44aee..2f625c50bbfe 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,vcodec-decoder.yaml
-> @@ -21,8 +21,13 @@ properties:
->        - mediatek,mt8183-vcodec-dec
->  
->    reg:
-> +    minItems: 11
->      maxItems: 12
->  
-> +  reg-names:
-> +    minItems: 11
-> +    maxItems: 11
+On Tue, Jun 20, 2023 at 9:18=E2=80=AFAM Sunil V L <sunilvl@ventanamicro.com=
+> wrote:
+>
+> Hey Alex,
+>
+> Many thanks for writing this up!
+>
+> On Mon, Jun 19, 2023 at 11:49:13AM +0200, Alexandre Ghiti wrote:
+> > @Sunil V L Something about ACPI is more than welcome :)
+> >
+> > And thanks to @Bj=C3=B6rn T=C3=B6pel and @Atish Kumar Patra for helping=
+ in
+> > writing this document!
+> >
+> > On Mon, Jun 19, 2023 at 11:47=E2=80=AFAM Alexandre Ghiti <alexghiti@riv=
+osinc.com> wrote:
+> > >
+> > > This document describes the constraints and requirements of the early
+> > > boot process in a RISC-V kernel.
+> > >
+> > > Szigned-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > > ---
+> > >  Documentation/riscv/boot-image-header.rst |   3 -
+> > >  Documentation/riscv/boot.rst              | 181 ++++++++++++++++++++=
+++
+> > >  Documentation/riscv/index.rst             |   1 +
+> > >  3 files changed, 182 insertions(+), 3 deletions(-)
+> > >  create mode 100644 Documentation/riscv/boot.rst
+> > >
+> > > diff --git a/Documentation/riscv/boot-image-header.rst b/Documentatio=
+n/riscv/boot-image-header.rst
+> > > index d7752533865f..a4a45310c4c4 100644
+> > > --- a/Documentation/riscv/boot-image-header.rst
+> > > +++ b/Documentation/riscv/boot-image-header.rst
+> > > @@ -7,9 +7,6 @@ Boot image header in RISC-V Linux
+> > >
+> > >  This document only describes the boot image header details for RISC-=
+V Linux.
+> > >
+> > > -TODO:
+> > > -  Write a complete booting guide.
+> > > -
+> > >  The following 64-byte header is present in decompressed Linux kernel=
+ image::
+> > >
+> > >         u32 code0;                /* Executable code */
+> > > diff --git a/Documentation/riscv/boot.rst b/Documentation/riscv/boot.=
+rst
+> > > new file mode 100644
+> > > index 000000000000..b02230818b79
+> > > --- /dev/null
+> > > +++ b/Documentation/riscv/boot.rst
+> > > @@ -0,0 +1,181 @@
+> > > +.. SPDX-License-Identifier: GPL-2.0
+> > > +
+> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > +Early boot requirements/constraints on RISC-V
+> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > +
+> > > +:Author: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > > +:Date: 23 May 2023
+> > > +
+> > > +This document describes what the RISC-V kernel expects from the prev=
+ious stages
+> > > +and the firmware, but also the constraints that any developer must h=
+ave in mind
+> > > +when touching the early boot process, e.g. before the final virtual =
+mapping is
+> > > +setup.
+> > > +
+> > > +Pre-kernel boot (Expectations from firmware)
+> > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > > +
+> > > +Registers state
+> > > +---------------
+> > > +
+> > > +The RISC-V kernel expects:
+> > > +
+> > > +  * `$a0` to contain the hartid of the current core.
+> > > +  * `$a1` to contain the address of the device tree in memory.
+> > > +
+> > > +CSR state
+> > > +---------
+> > > +
+> > > +The RISC-V kernel expects:
+> > > +
+> > > +  * `$satp =3D 0`: the MMU must be disabled.
+> > > +
+> > > +Reserved memory for resident firmware
+> > > +-------------------------------------
+> > > +
+> > > +The RISC-V kernel expects the firmware to mark any resident memory w=
+ith the
+> > > +`no-map` flag, thus the kernel won't map those regions in the direct=
+ mapping
+> > > +(avoiding issues with hibernation, speculative accesses and probably=
+ other
+> > > +subsystems).
+> > > +
+> > > +Kernel location
+> > > +---------------
+> > > +
+> > > +The RISC-V kernel expects to be placed at a PMD boundary (2MB for rv=
+64 and 4MB
+> > > +for rv32). Note though that the EFI stub will physically relocate th=
+e kernel if
+> > > +that's not the case.
+> > > +
+> > > +Device-tree
+> > > +-----------
+> > > +
+> > > +The RISC-V kernel always expects a device tree, it is:
+> > > +
+> In general, the firmware can pass either DT or ACPI (not both at the
+> same time) to the OS. So, I think the statement that kernel always
+> expects DT probably causes confusion. Can we mention some thing like
+> below?
+>
+> The firmware can pass either DeviceTree or ACPI tables to the RISC-V
+> kernel.
+>
+> The DeviceTree is either passed directly to the kernel from the
+> previous stage using the `$a1` register, or when booting with UEFI, it
+> can be passed using the EFI configuration table.
+>
+> The ACPI tables are passed to the kernel using the EFI configuration
+> table. In this case, a tiny DeviceTree is still created by the EFI
+> stub. Please refer to "EFI stub and device" tree section below for
+> details of the tiny DeviceTree.
+>
 
-maxItems: 12
+Great, this is way better so I'll go with that:
 
-> +
->    interrupts:
->      maxItems: 1
->  
-> @@ -60,6 +65,10 @@ properties:
->      description:
->        Describes point to scp.
->  
-> +  mediatek,vdecsys:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: Phandle to the vdecsys syscon node.
-> +
->  required:
->    - compatible
->    - reg
-> @@ -79,8 +88,26 @@ allOf:
->      then:
->        required:
->          - mediatek,scp
-> +        - mediatek,vdecsys
->  
->        properties:
-> +        reg:
-> +          maxItems: 11
-> +
-> +        reg-names:
-> +          items:
-> +            - const: misc
-> +            - const: ld
-> +            - const: top
-> +            - const: cm
-> +            - const: ad
-> +            - const: av
-> +            - const: pp
-> +            - const: hwd
-> +            - const: hwq
-> +            - const: hwb
-> +            - const: hwg
-> +
->          clocks:
->            minItems: 1
->            maxItems: 1
-> @@ -101,6 +128,9 @@ allOf:
->          - mediatek,vpu
->  
->        properties:
-> +        reg:
-> +          minItems: 12
+Hardware description
+--------------------
 
+The firmware can pass either a devicetree or ACPI tables to the RISC-V kern=
+el.
 
-What about reg-names here? They should be also defined and in sync with
-regs.
+The devicetree is either passed directly to the kernel from the previous st=
+age
+using the `$a1` register, or when booting with UEFI, it can be passed
+using the
+EFI configuration table.
 
-Best regards,
-Krzysztof
+The ACPI tables are passed to the kernel using the EFI configuration table.=
+ In
+this case, a tiny devicetree is still created by the EFI stub. Please refer=
+ to
+"EFI stub and devicetree" tree section below for details about this devicet=
+ree.
 
+Thanks!
+
+> Thanks,
+> Sunil
