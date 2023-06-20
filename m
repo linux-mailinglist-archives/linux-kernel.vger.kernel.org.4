@@ -2,194 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6132B7372AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 208437372CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:27:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbjFTRY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 13:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58030 "EHLO
+        id S230062AbjFTR1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 13:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjFTRYz (ORCPT
+        with ESMTP id S229520AbjFTR1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 13:24:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91699A3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:24:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25EDE6131F
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 17:24:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFB89C433C0;
-        Tue, 20 Jun 2023 17:24:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687281893;
-        bh=Rd2KQT7Sg/jj2vpD/+cypNQq21vO707uBhL4Wt60ONQ=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=S0nBKMBymT7QgN7x8a89rfrJmeCB9n8O7Yfrne22w/1XbfEHmFl1Rqalu8V/ctdwS
-         YreKhbQDy/vrV6XZmrrg4bizue1smNoWLhFBgswQZanSO4Ro92yaaAarg99MPxLbzh
-         yKpDLNdRGTmfjIOljRoFNpPZHwH7wQAxmm3pHmr/BMx7AD4TENI+Rdqs8cBj0HzkcA
-         AtzbtBIHLvIwmOtc7p98zex7yFJwdycS0VkoDAf/l+jTz0QeCFN00hEKQ7OjiUPAvB
-         1clLx9hEwjZPVs40/3CKaXd3OODSbCepYMVDnv8Im1RrAg3NVZTc3mdnFGl41caa5W
-         PQziUw7BgRvUg==
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id C920427C005A;
-        Tue, 20 Jun 2023 13:24:51 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute3.internal (MEProxy); Tue, 20 Jun 2023 13:24:51 -0400
-X-ME-Sender: <xms:4uCRZGPuv7m8KaXFojrVeCbfWrMZ7IJoui-4aoDexdm_V34ZG0-I6g>
-    <xme:4uCRZE-OH2xt14uLz-FF7dbdv-gHG5w14JwsdNtUTTBditVKBbvq_q8tXxJx8iDzO
-    WaowhDX_m63-nZ50aI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefhedgleduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpeduveffvdegvdefhfegjeejlefgtdffueekudfgkeduvdetvddu
-    ieeluefgjeeggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
-    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
-    hugidrlhhuthhordhush
-X-ME-Proxy: <xmx:4uCRZNTpfg2cGu-JZbGK0lauKT6LTXTvSpjwrRQTqsoePCHX_VolEg>
-    <xmx:4uCRZGtzcXFiHy54TUV3vETkj3W0NygxpQUty3hSE43wjAfN8bvT-A>
-    <xmx:4uCRZOcK6KfTYx9uY7noUEoncUDShNm2IP8FjLgB4nFv3QpkDL6MpA>
-    <xmx:4-CRZOAOrENLDeV3AOynkkTJ3wDHPyrZf0jxchqFsnzGmPnTrQoXvQ>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 85C9831A0063; Tue, 20 Jun 2023 13:24:50 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <6145cabf-d016-4dba-b5d2-0fb793352058@app.fastmail.com>
-In-Reply-To: <7F566E60-C371-449B-992B-0C435AD6016B@gmail.com>
-References: <20230616085038.4121892-1-rppt@kernel.org>
- <20230616085038.4121892-3-rppt@kernel.org>
- <f9a7eebe-d36e-4587-b99d-35d4edefdd14@app.fastmail.com>
- <20230618080027.GA52412@kernel.org>
- <a17c65c6-863f-4026-9c6f-a04b659e9ab4@app.fastmail.com>
- <7F566E60-C371-449B-992B-0C435AD6016B@gmail.com>
-Date:   Tue, 20 Jun 2023 10:24:29 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Nadav Amit" <nadav.amit@gmail.com>, "Song Liu" <song@kernel.org>
-Cc:     "Mike Rapoport" <rppt@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Kees Cook" <keescook@chromium.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Dinh Nguyen" <dinguyen@kernel.org>,
-        "Heiko Carstens" <hca@linux.ibm.com>,
-        "Helge Deller" <deller@gmx.de>,
-        "Huacai Chen" <chenhuacai@kernel.org>,
-        "Kent Overstreet" <kent.overstreet@linux.dev>,
-        "Luis Chamberlain" <mcgrof@kernel.org>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Puranjay Mohan" <puranjay12@gmail.com>,
-        "Rick P Edgecombe" <rick.p.edgecombe@intel.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Will Deacon" <will@kernel.org>, bpf <bpf@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        linux-mm <linux-mm@kvack.org>, linux-modules@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        loongarch@lists.linux.dev, netdev@vger.kernel.org,
-        sparclinux@vger.kernel.org,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Subject: Re: [PATCH v2 02/12] mm: introduce execmem_text_alloc() and jit_text_alloc()
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 20 Jun 2023 13:27:37 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2053.outbound.protection.outlook.com [40.107.220.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A343E95;
+        Tue, 20 Jun 2023 10:27:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RhhoD+/e/e9ClEIe07LovFKzgRtSGxtB3CPetWDk7fXu3eHToMFeAaeDule/KcEjC/a9xKf6r5PYr1EwBFK0mmlktHUVXGNnm+hM+CQPwZ0APDMDxiZ30JFFbCH1i28tHuoT6WjSvwXr1SeUclVrawWvdQoCbuE1XFVEHq3Ou9QdhrHqxRDiCOl4PHN2WLngfksmCI+hMnhMJnfoh/KSZS2MkNBkM7XGQ39Z1RyNuB4Sb3fO5Wi72ntA1qSU8QIKJQMTIy1RyxLUM3mKhz/YsZNlgFZcPIO4JTr2df5ANZAYkXAmC9n9OK4KJFlDVKgg1qc8j+gQNrJ9mXlLhPDViQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YK4Ya++DT9fnoXc3qwOg07w/mkbtsOo8oaM+F7D5Yx4=;
+ b=bRKVo31cwbh6tlc3ZSfu/Rgywnqa0ie41ppKrC7+jW0a0W+RTHOfHwHZ8zqBR7FIwvFlzcqzb4Z90tL2bv2EBxT5wLydjseWBSJlzpoBezqdEn7YRFJ+sR0/80WmSBYQ+qQ+lYxdD8Vr21Zee+7N8CsY4MPToLnk0VDuZin4AjrfLOsQEd1sD+e8z5CEp3rymUK7IEJ8rRhii1moShqI1V/rRbZPKGGNYrHssqLwF1kdV8ttkHfxa01zs8UkVOeLa4ddMp6U9YMJZEXIHfuUgUeL4JHbFqHMqdHEIQIER6+e/QWRMTlRxmWyv1Cdw7QJGasBB1oUSlwNNm1061zS2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YK4Ya++DT9fnoXc3qwOg07w/mkbtsOo8oaM+F7D5Yx4=;
+ b=lYYWW7cTzl0ST91vhmR3qQ3H4/rF0GXoFi8HikHRDigrf46rzR3M7AYV6ZQnAH4qYEOK9SBp36XNQax9NKo6N1u4JA8EMlrTBQn06kv8GF+ykFYjx/zYY+WQUP82ODtK5w4ENccNup2+TDbUJsgD4kjK5ybJ4NSDaC5zrwTVpQY=
+Received: from PH8PR02CA0024.namprd02.prod.outlook.com (2603:10b6:510:2d0::16)
+ by IA0PR12MB7529.namprd12.prod.outlook.com (2603:10b6:208:441::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Tue, 20 Jun
+ 2023 17:27:34 +0000
+Received: from SA2PEPF000015C6.namprd03.prod.outlook.com
+ (2603:10b6:510:2d0:cafe::a) by PH8PR02CA0024.outlook.office365.com
+ (2603:10b6:510:2d0::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.21 via Frontend
+ Transport; Tue, 20 Jun 2023 17:27:32 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SA2PEPF000015C6.mail.protection.outlook.com (10.167.241.196) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6521.19 via Frontend Transport; Tue, 20 Jun 2023 17:27:33 +0000
+Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Tue, 20 Jun
+ 2023 12:27:32 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>
+CC:     Len Brown <lenb@kernel.org>, Huang Rui <ray.huang@amd.com>,
+        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>,
+        Gautham Ranjal Shenoy <gautham.shenoy@amd.com>,
+        Wyes Karny <Wyes.Karny@amd.com>,
+        Perry Yuan <perry.yuan@amd.com>,
+        "Mario Limonciello" <mario.limonciello@amd.com>
+Subject: [PATCH v3 0/3] Enable amd-pstate active mode by default
+Date:   Tue, 20 Jun 2023 12:24:30 -0500
+Message-ID: <20230620172433.21325-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF000015C6:EE_|IA0PR12MB7529:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6fbcae36-4e6b-4ca8-7858-08db71b3a241
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +pAhJzRUBB9rkG2n89+nS31iWSnsW93NsY1gCUWN1IwCBaQ4tGCbxulbRAdj13FyDDDqEmyoqmjTQL6uim+u3/sFy9yf703BNHnClGBvuorEXxNjLDEkiVdwyBadAY9uAbOSHcnyet/QIXGBUjuwZH9rhrEUZlqdevIIdMDzQn1XfJ66AY+e1Ml9RosRTD9Fs9phKDmAhr3qqe83eFM5yb+AXp7os3G1N9AyNH1O/ixgersrA9ojrrm6rbmBbOoMhY5lYmfxuWMpUxd/BMGrmYzd0uoCq+NnhKn41yXDq2aEezhqHeh1tDAoT20dhF4ub7ZvYYCUo91dS0h7OmzqaOQAlNQBquOvQGT7o8WDIZj2EBUA5c16LucIvOU/5N2/WMz4LTZ9bDEmNYe43iYdvTbRDPOS7awFQQtDjHt+jC3ILZqew26BT6sOW5ex0Z55U+WcXL8A7V5OC8W8WAvh1RAoxT1O65c10hjzKSmFzCle9YgAfWUxqKk6OI69TJ+HAHkWzx8vf4jl2ftXmsfbX2OE3nc1MZgJndxiLUVfN5csM8BpolzcU1YnMokAnEWN9p4GETONnmbFMUzKAKTsKaa8PzTorrslzj5Q8jmDkGlWSVAbnvgRnIxY9RaQmsFaXYfxtcZRKM24CaPSxxH6kKNwNeBWahe/FC8mq1hpVNS+nOkvStqcYIs7HvUCPEvk/2nVBXNtxAZ/FYgW/eugEotD+YXFQeWRTzKXe8X8+gyNKWQMQKUev2TpHBvPdt4WIFRhaSRZxHXh1bhDia2dZQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(396003)(136003)(39860400002)(451199021)(40470700004)(46966006)(36840700001)(8676002)(8936002)(478600001)(40480700001)(41300700001)(5660300002)(4744005)(2906002)(44832011)(316002)(70206006)(4326008)(6916009)(70586007)(40460700003)(186003)(1076003)(26005)(16526019)(36756003)(54906003)(36860700001)(86362001)(82740400003)(2616005)(336012)(356005)(7696005)(426003)(83380400001)(81166007)(82310400005)(47076005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Jun 2023 17:27:33.7560
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6fbcae36-4e6b-4ca8-7858-08db71b3a241
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: SA2PEPF000015C6.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7529
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Active mode for amd-pstate has shown enough success now that it makes sense
+to enable it by default on client systems.
 
+This series introduces a new kernel configuration option to set the default
+policy for amd-pstate modes for a kernel.
 
-On Mon, Jun 19, 2023, at 1:18 PM, Nadav Amit wrote:
->> On Jun 19, 2023, at 10:09 AM, Andy Lutomirski <luto@kernel.org> wrote:
->>=20
->> But jit_text_alloc() can't do this, because the order of operations d=
-oesn't match.  With jit_text_alloc(), the executable mapping shows up be=
-fore the text is populated, so there is no atomic change from not-there =
-to populated-and-executable.  Which means that there is an opportunity f=
-or CPUs, speculatively or otherwise, to start filling various caches wit=
-h intermediate states of the text, which means that various architecture=
-s (even x86!) may need serialization.
->>=20
->> For eBPF- and module- like use cases, where JITting/code gen is quite=
- coarse-grained, perhaps something vaguely like:
->>=20
->> jit_text_alloc() -> returns a handle and an executable virtual addres=
-s, but does *not* map it there
->> jit_text_write() -> write to that handle
->> jit_text_map() -> map it and synchronize if needed (no sync needed on=
- x86, I think)
->
-> Andy, would you mind explaining why you think a sync is not needed? I=20
-> mean I have a =E2=80=9Cfeeling=E2=80=9D that perhaps TSO can guarantee=
- something based=20
-> on the order of write and page-table update. Is that the argument?
+Server systems will by identified by the PM preferred profile and still be
+set as disabled by default for now.
 
-Sorry, when I say "no sync" I mean no cross-CPU synchronization.  I'm as=
-suming the underlying sequence of events is:
+v2->v3:
+ * Drop patch 4; Intel intentionally doesn't want intel-pstate on SOHO
+   server
+ * Move symbols from patch 1 into patch 2
+ * Add tags
+Mario Limonciello (3):
+  ACPI: CPPC: Add definition for undefined FADT preferred PM profile
+    value
+  cpufreq: amd-pstate: Set a fallback policy based on preferred_profile
+  cpufreq: amd-pstate: Add a kernel config option to set default mode
 
-allocate physical pages (jit_text_alloc)
+ drivers/cpufreq/Kconfig.x86  |  17 ++++++
+ drivers/cpufreq/amd-pstate.c | 101 +++++++++++++++++++++++++----------
+ include/acpi/actbl.h         |   3 +-
+ include/linux/amd-pstate.h   |   4 +-
+ 4 files changed, 96 insertions(+), 29 deletions(-)
 
-write to them (with MOV, memcpy, whatever), via the direct map or via a =
-temporary mm
+-- 
+2.34.1
 
-do an appropriate *local* barrier (which, on x86, is probably implied by=
- TSO, as the subsequent pagetable change is at least a release; also, an=
-y any previous temporary mm stuff would have done MOV CR3 afterwards, wh=
-ich is a full "serializing" barrier)
-
-optionally zap the direct map via IPI, assuming the pages are direct map=
-ped (but this could be avoided with a smart enough allocator and tempora=
-ry_mm above)
-
-install the final RX PTE (jit_text_map), which does a MOV or maybe a LOC=
-K CMPXCHG16B.  Note that the virtual address in question was not readabl=
-e or executable before this, and all CPUs have serialized since the last=
- time it was executable.
-
-either jump to the new text locally, or:
-
-1. Do a store-release to tell other CPUs that the text is mapped
-2. Other CPU does a load-acquire to detect that the text is mapped and j=
-umps to the text
-
-This is all approximately the same thing that plain old mmap(..., PROT_E=
-XEC, ...) does.
-
->
-> On this regard, one thing that I clearly do not understand is why=20
-> *today* it is ok for users of bpf_arch_text_copy() not to call=20
-> text_poke_sync(). Am I missing something?
-
-I cannot explain this, because I suspect the current code is wrong.  But=
- it's only wrong across CPUs, because bpf_arch_text_copy goes through te=
-xt_poke_copy, which calls unuse_temporary_mm(), which is serializing.  A=
-nd it's plausible that most eBPF use cases don't actually cause the load=
-ed program to get used on a different CPU without first serializing on t=
-he CPU that ends up using it.  (Context switches and interrupts are seri=
-alizing.)
-
-FRED could make interrupts non-serializing. I sincerely hope that FRED d=
-oesn't cause this all to fall apart.
-
---Andy
