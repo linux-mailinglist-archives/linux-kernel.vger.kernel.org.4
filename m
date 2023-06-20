@@ -2,56 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2C617368B4
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:04:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48DD37368AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 12:03:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231636AbjFTKE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 06:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
+        id S230484AbjFTKDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 06:03:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231727AbjFTKEN (ORCPT
+        with ESMTP id S231144AbjFTKDD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 06:04:13 -0400
-X-Greylist: delayed 94 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 20 Jun 2023 03:03:58 PDT
-Received: from forward205a.mail.yandex.net (forward205a.mail.yandex.net [178.154.239.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D1FE6E;
-        Tue, 20 Jun 2023 03:03:57 -0700 (PDT)
-Received: from forward100a.mail.yandex.net (forward100a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d100])
-        by forward205a.mail.yandex.net (Yandex) with ESMTP id 05FC24827D;
-        Tue, 20 Jun 2023 12:56:10 +0300 (MSK)
-Received: from mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net [IPv6:2a02:6b8:c1f:5e51:0:640:23ee:0])
-        by forward100a.mail.yandex.net (Yandex) with ESMTP id 3E21D46CF8;
-        Tue, 20 Jun 2023 12:56:04 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id Utd7jIuDca60-C477uvSM;
-        Tue, 20 Jun 2023 12:56:03 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687254963;
-        bh=rkYmDxtuWXPP1hMHDuX5+P8sJGSUmlxPNxtIqEwkg3w=;
-        h=Message-Id:Date:In-Reply-To:Cc:Subject:References:To:From;
-        b=D/AGAc49Aj7GVb2SA46LvULaSvzlzykalpkesue6nUPQqWCRkQN6tnUrX3lsRuDy3
-         9HK0v9FvtHGZgqQ6sFh8WAVDBSC+1DCD6txEzvKlunEn2TussWRBtHZyLYHoR/1+Tl
-         ed8JMVYBBW8Q2lGCZM5oeZMtzS2ZewHNpI3jhhRY=
-Authentication-Results: mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-From:   Stas Sergeev <stsp2@yandex.ru>
-To:     linux-kernel@vger.kernel.org
-Cc:     Stas Sergeev <stsp2@yandex.ru>, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Subject: [PATCH 3/3] selftests: add OFD lock tests
-Date:   Tue, 20 Jun 2023 14:55:07 +0500
-Message-Id: <20230620095507.2677463-4-stsp2@yandex.ru>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230620095507.2677463-1-stsp2@yandex.ru>
-References: <20230620095507.2677463-1-stsp2@yandex.ru>
+        Tue, 20 Jun 2023 06:03:03 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F1019BD;
+        Tue, 20 Jun 2023 03:02:21 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 756F06606F23;
+        Tue, 20 Jun 2023 11:02:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687255340;
+        bh=RLHVI/wjjEu7tgaFY7P5mxMUKibf2l0LJy6KXwWfTcA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MNBGt+PAu1mufc3pOtgjMZsDRsZVkBktZDjH9Dz7Uj7xuARm3UE1Hp+m1EuAIkv1B
+         wsq6HxhL47hyFqG48h1AfLyEMdcZsEm0/sSi/U9RmHlRp92TaYQ+I/IBQ1CRI0TpL0
+         UZH2wsHoxlN5X0vH2NahxbvGryTduWB+/Bu5n9jlo8uFISCOE69AArOmnuKga363U4
+         ZTLQKgeyWz4WLy76ZsYBMetcLMh9wOugHPNULDaww5W4x8zAMemG0KQnL3cz74M+vs
+         +LflWzhOmPJXhdCE4lDo68BVQwnIOdTiPxnHCKfh/uElBlSBNNhpyMR/xEPikge/JQ
+         t4n5olsHSPtmA==
+Message-ID: <491fab1f-e1fe-4388-52a7-05adb17c2c36@collabora.com>
+Date:   Tue, 20 Jun 2023 12:02:16 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 0/6] Add support for Qualcomm's legacy IOMMU v2
+Content-Language: en-US
+To:     Luca Weiss <luca@z3ntu.xyz>, agross@kernel.org
+Cc:     andersson@kernel.org, konrad.dybcio@linaro.org, joro@8bytes.org,
+        will@kernel.org, robin.murphy@arm.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robdclark@gmail.com,
+        linux-arm-msm@vger.kernel.org, iommu@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        marijn.suijten@somainline.org, kernel@collabora.com,
+        a39.skl@gmail.com, phone-devel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>
+References: <20221115101122.155440-1-angelogioacchino.delregno@collabora.com>
+ <254cfbb5-c8b8-0abc-e6bc-5007fe757004@collabora.com>
+ <2759637.mvXUDI8C0e@z3ntu.xyz>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <2759637.mvXUDI8C0e@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,182 +68,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Test the basic locking stuff on 2 fds: multiple read locks,
-conflicts between read and write locks, use of len==0 for queries.
-Also test for pid and F_UNLCK F_OFD_GETLK extensions.
+Il 19/06/23 23:42, Luca Weiss ha scritto:
+> On Mittwoch, 22. Februar 2023 10:57:47 CEST AngeloGioacchino Del Regno wrote:
+>> Il 15/11/22 11:11, AngeloGioacchino Del Regno ha scritto:
+>>> This series adds support for handling "v2" firmware's IOMMU, found
+>>> on at least MSM8956 and MSM8976 (some other SoCs also need the same
+>>> but I honestly don't remember which ones precisely).
+>>>
+>>> This is strictly required to get functional IOMMUs on these SoCs.
+>>>
+>>> I'm sorry for not performing a much needed schema conversion on
+>>> qcom,iommu.txt, but I really didn't have time to do that :-(
+>>>
+>>> This series was tested on Sony Xperia X and X Compact (MSM8956):
+>>> ADSP, LPASS, Venus, MSS, MDP and GPU are happy :-)
+>>
+>> Hello,
+>> this series is really old and got sent and resent many times.
+>> The first time I've sent this one was .. I think in 2019, then, at the
+>> end of 2022, I had some time to actually respin it and send another
+>> three versions. It's been 3 long years :-)
+>> The third version got the last comments addressed.
+>>
+>> Since this didn't get any more feedback for 3 months, I'm worried that it
+>> will be forgotten again, hence:
+>>
+>> Is there any more feedback? Anything else to fix?
+>> If not, can this be picked, please?
+> 
+> Hi Angelo,
+> 
+> there's some open review comments since March now on this series. Since some
+> of these patches are also needed for msm8953 and msm8974 IOMMU it would be
+> nice if you could respin :)
+> 
 
-Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
+Hello Luca,
 
-CC: Shuah Khan <shuah@kernel.org>
-CC: linux-kernel@vger.kernel.org
-CC: linux-kselftest@vger.kernel.org
-CC: Jeff Layton <jlayton@kernel.org>
-CC: Chuck Lever <chuck.lever@oracle.com>
-CC: Alexander Viro <viro@zeniv.linux.org.uk>
-CC: Christian Brauner <brauner@kernel.org>
-CC: linux-fsdevel@vger.kernel.org
+I've just sent a v4, but I'm sorry I forgot to Cc you. Please find it at [1].
 
----
- tools/testing/selftests/locking/Makefile   |   2 +
- tools/testing/selftests/locking/ofdlocks.c | 138 +++++++++++++++++++++
- 2 files changed, 140 insertions(+)
- create mode 100644 tools/testing/selftests/locking/ofdlocks.c
+[1]: 
+https://lore.kernel.org/all/20230620095127.96600-1-angelogioacchino.delregno@collabora.com/
 
-diff --git a/tools/testing/selftests/locking/Makefile b/tools/testing/selftests/locking/Makefile
-index 6e7761ab3536..a83ced1626de 100644
---- a/tools/testing/selftests/locking/Makefile
-+++ b/tools/testing/selftests/locking/Makefile
-@@ -7,4 +7,6 @@ all:
- 
- TEST_PROGS := ww_mutex.sh
- 
-+TEST_GEN_PROGS := ofdlocks
-+
- include ../lib.mk
-diff --git a/tools/testing/selftests/locking/ofdlocks.c b/tools/testing/selftests/locking/ofdlocks.c
-new file mode 100644
-index 000000000000..1cff350e2c81
---- /dev/null
-+++ b/tools/testing/selftests/locking/ofdlocks.c
-@@ -0,0 +1,138 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#define _GNU_SOURCE
-+#include <fcntl.h>
-+#include <assert.h>
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include "../kselftest.h"
-+
-+static int lock_set(int fd, struct flock *fl)
-+{
-+	int ret;
-+
-+	fl->l_pid = 0;		// needed for OFD locks
-+	fl->l_whence = SEEK_SET;
-+	ret = fcntl(fd, F_OFD_SETLK, fl);
-+	if (ret)
-+		perror("fcntl()");
-+	return ret;
-+}
-+
-+static int lock_get(int fd, struct flock *fl)
-+{
-+	int ret;
-+
-+	fl->l_pid = 0;		// needed for OFD locks
-+	fl->l_whence = SEEK_SET;
-+	ret = fcntl(fd, F_OFD_GETLK, fl);
-+	if (ret)
-+		perror("fcntl()");
-+	return ret;
-+}
-+
-+int main(void)
-+{
-+	int rc;
-+	struct flock fl, fl2;
-+	int fd = open("/tmp/aa", O_RDWR | O_CREAT | O_EXCL, 0600);
-+	int fd2 = open("/tmp/aa", O_RDONLY);
-+
-+	unlink("aa");
-+	assert(fd != -1);
-+	assert(fd2 != -1);
-+	ksft_print_msg("[INFO] opened fds %i %i\n", fd, fd2);
-+
-+	/* Set some read lock */
-+	fl.l_type = F_RDLCK;
-+	fl.l_start = 5;
-+	fl.l_len = 3;
-+	rc = lock_set(fd, &fl);
-+	if (rc == 0) {
-+		ksft_print_msg
-+		    ("[SUCCESS] set OFD read lock on first fd\n");
-+	} else {
-+		ksft_print_msg("[FAIL] to set OFD read lock on first fd\n");
-+		return -1;
-+	}
-+	/* Make sure read locks do not conflict on different fds. */
-+	fl.l_type = F_RDLCK;
-+	fl.l_start = 5;
-+	fl.l_len = 1;
-+	rc = lock_get(fd2, &fl);
-+	if (rc != 0)
-+		return -1;
-+	if (fl.l_type != F_UNLCK) {
-+		ksft_print_msg("[FAIL] read locks conflicted\n");
-+		return -1;
-+	}
-+	/* Make sure read/write locks do conflict on different fds. */
-+	fl.l_type = F_WRLCK;
-+	fl.l_start = 5;
-+	fl.l_len = 1;
-+	rc = lock_get(fd2, &fl);
-+	if (rc != 0)
-+		return -1;
-+	if (fl.l_type != F_UNLCK) {
-+		ksft_print_msg
-+		    ("[SUCCESS] read and write locks conflicted\n");
-+	} else {
-+		ksft_print_msg
-+		    ("[SUCCESS] read and write locks not conflicted\n");
-+		return -1;
-+	}
-+	/* Get info about the lock on first fd. */
-+	fl.l_type = F_UNLCK;
-+	fl.l_start = 5;
-+	fl.l_len = 1;
-+	rc = lock_get(fd, &fl);
-+	if (rc != 0) {
-+		ksft_print_msg
-+		    ("[FAIL] F_OFD_GETLK with F_UNLCK not supported\n");
-+		return -1;
-+	}
-+	if (fl.l_type != F_UNLCK) {
-+		if (fl.l_pid != getpid()) {
-+			ksft_print_msg
-+			    ("[FAIL] F_OFD_GETLK does not return pid, %i\n",
-+			    fl.l_pid);
-+			return -1;
-+		}
-+		ksft_print_msg
-+		    ("[SUCCESS] F_UNLCK test returns: locked, type %i pid %i len %zi\n",
-+		     fl.l_type, fl.l_pid, fl.l_len);
-+	} else {
-+		ksft_print_msg
-+		    ("[FAIL] F_OFD_GETLK with F_UNLCK did not return lock info\n");
-+		return -1;
-+	}
-+	/* Try the same but by locking everything by len==0. */
-+	fl2.l_type = F_UNLCK;
-+	fl2.l_start = 0;
-+	fl2.l_len = 0;
-+	rc = lock_get(fd, &fl2);
-+	if (rc != 0) {
-+		ksft_print_msg
-+		    ("[FAIL] F_OFD_GETLK with F_UNLCK not supported\n");
-+		return -1;
-+	}
-+	if (memcmp(&fl, &fl2, sizeof(fl))) {
-+		ksft_print_msg
-+		    ("[FAIL] F_UNLCK test returns: locked, type %i pid %i len %zi\n",
-+		     fl.l_type, fl.l_pid, fl.l_len);
-+		return -1;
-+	}
-+	ksft_print_msg("[SUCCESS] F_UNLCK with len==0 returned the same\n");
-+	/* Get info about the lock on second fd - no locks on it. */
-+	fl.l_type = F_UNLCK;
-+	fl.l_start = 0;
-+	fl.l_len = 0;
-+	lock_get(fd2, &fl);
-+	if (fl.l_type != F_UNLCK) {
-+		ksft_print_msg
-+		    ("[FAIL] F_OFD_GETLK with F_UNLCK return lock info from another fd\n");
-+		return -1;
-+	}
-+	return 0;
-+}
--- 
-2.39.2
+Cheers,
+Angelo
 
+> Regards
+> Luca
+> 
+>>
+>> Thank you.
+>>
+>> Best regards,
+>> Angelo
+>>
+>>> Changes in v3:
+>>>    - Removed useless FSRRESTORE reset and definition as pointed
+>>>    
+>>>      out in Robin Murphy's review
+>>>    
+>>>    - Fixed qcom,iommu.txt changes: squashed MSM8976 compatible
+>>>    
+>>>      string addition with msm-iommu-v2 generics addition
+>>>
+>>> Changes in v2:
+>>>    - Added back Marijn's notes (sorry man!)
+>>>    - Added ARM_SMMU_CB_FSRRESTORE definition
+>>>    - Changed context bank reset to properly set FSR and FSRRESTORE
+>>>
+>>> AngeloGioacchino Del Regno (6):
+>>>     dt-bindings: iommu: qcom,iommu: Document qcom,ctx-num property
+>>>     iommu/qcom: Use the asid read from device-tree if specified
+>>>     iommu/qcom: Properly reset the IOMMU context
+>>>     iommu/qcom: Index contexts by asid number to allow asid 0
+>>>     dt-bindings: iommu: qcom,iommu: Document QSMMUv2 and MSM8976
+>>>     
+>>>       compatibles
+>>>     
+>>>     iommu/qcom: Add support for QSMMUv2 and QSMMU-500 secured contexts
+>>>    
+>>>    .../devicetree/bindings/iommu/qcom,iommu.txt  |  9 +++
+>>>    drivers/iommu/arm/arm-smmu/qcom_iommu.c       | 78 +++++++++++++++----
+>>>    2 files changed, 70 insertions(+), 17 deletions(-)
+> 
+> 
+> 
+> 
+> 
