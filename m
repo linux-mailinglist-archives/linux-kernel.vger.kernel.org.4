@@ -2,68 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCA96736E71
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D40EB736E7C
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:17:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233215AbjFTONT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 10:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34100 "EHLO
+        id S232700AbjFTORL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 10:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233222AbjFTONL (ORCPT
+        with ESMTP id S231810AbjFTORK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 10:13:11 -0400
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06596B1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 07:13:10 -0700 (PDT)
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-3f9085f97a4so8704625e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 07:13:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687270388; x=1689862388;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nWpDQmZNg8zKVk12QskQ7NNS05C4fI/JmZBKLdKyu8Q=;
-        b=e9scUHTPuiRjsrMvyUQ5D2oRSKA11naC7MHXAkmYN1QbYNtqGqP/SpfHxwPljENz0l
-         GAVjReO1VxnPid3fj5bHsBRUX3N/52efo99ezl5EnaIUhRMgUJKHtSTChBCrpkx+EqTX
-         oBhBDNUqpI7bNfuz1BM2lNgXjc1EQaH8AYwSvSeRbbnD6wO5Txzm2UzN+oGqZYhd28rn
-         bC9/6U72fB/WJ3LRIajGPpNtsbulqd8jw4KxNFC/Igs7dctu7Hs7yTPqtXEqYMGGV9l8
-         kn0a6v0xhoqZWxCXkKFuSa9cOuYzgaJHsOZvjQRfTYsIHCz60MHRh+hbJb7CSd9l5Yuh
-         0Hzw==
-X-Gm-Message-State: AC+VfDy8DswDcQkXDJTBCe9v/OVrKE9i5ZvUG82owIuAeSZp+SBb442e
-        vzQWVviaXUJLEWvYsyDwL7E=
-X-Google-Smtp-Source: ACHHUZ4g3isyRwCrwcjd2Om7u+FTf0FHHIAZ/J9ebt+mRhj31XdhigHftz/TVnLibCmotJ54wqtjTA==
-X-Received: by 2002:a05:600c:3c87:b0:3f8:efad:31ee with SMTP id bg7-20020a05600c3c8700b003f8efad31eemr11170736wmb.2.1687270388436;
-        Tue, 20 Jun 2023 07:13:08 -0700 (PDT)
-Received: from [192.168.64.192] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
-        by smtp.gmail.com with ESMTPSA id f23-20020a7bc8d7000000b003f907bdeef3sm9769924wml.26.2023.06.20.07.13.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jun 2023 07:13:08 -0700 (PDT)
-Message-ID: <eb0d768d-d395-e49f-c478-394f5ce9f656@grimberg.me>
-Date:   Tue, 20 Jun 2023 17:13:06 +0300
+        Tue, 20 Jun 2023 10:17:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26FDBB3;
+        Tue, 20 Jun 2023 07:17:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B095D6128D;
+        Tue, 20 Jun 2023 14:17:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94AAEC433C8;
+        Tue, 20 Jun 2023 14:17:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687270628;
+        bh=eJNBsqRHWVUBKO9jQvaQZ7ZEyPf7EYF1nWFETYd9yLs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VAW6JDSzf/cBs0cf/m8szRjrtC1b/jSxNktmJqcOTyHsErMhju7fPWEVRblBjkF74
+         RxW8zDb7VlCgCAMcQ4EzFi0SXppJE1a8JsaFPL6sObjmF+4p384WxbNAow/HnoNJ8D
+         rm78vjPoc4JeXwTC+s4zSW1MChXGs1xcu6sUPQGw=
+Date:   Tue, 20 Jun 2023 16:17:05 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Umang Jain <umang.jain@ideasonboard.com>
+Cc:     linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stefan.wahren@i2se.com,
+        f.fainelli@gmail.com, athierry@redhat.com, error27@gmail.com,
+        dave.stevenson@raspberrypi.com, kieran.bingham@ideasonboard.com,
+        laurent.pinchart@ideasonboard.com
+Subject: Re: [PATCH v7 1/5] staging: vc04_services: vchiq_arm: Add new bus
+ type and device type
+Message-ID: <2023062022-whimsical-hasty-b012@gregkh>
+References: <20230620134152.383569-1-umang.jain@ideasonboard.com>
+ <20230620134152.383569-2-umang.jain@ideasonboard.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2] nvme: Print capabilities changes just once
-Content-Language: en-US
-To:     Breno Leitao <leitao@debian.org>, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>
-Cc:     leit@fb.com,
-        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230615094903.1341683-1-leitao@debian.org>
-From:   Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <20230615094903.1341683-1-leitao@debian.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620134152.383569-2-umang.jain@ideasonboard.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
+On Tue, Jun 20, 2023 at 07:11:48PM +0530, Umang Jain wrote:
+> The devices that the vchiq interface registers (bcm2835-audio,
+> bcm2835-camera) are implemented and exposed by the VC04 firmware.
+> The device tree describes the VC04 itself with the resources required
+> to communicate with it through a mailbox interface. However, the
+> vchiq interface registers these devices as platform devices. This
+> also means the specific drivers for these devices are getting
+> registered as platform drivers. This is not correct and a blatant
+> abuse of platform device/driver.
+> 
+> Add a new bus type, vchiq_bus_type and device type (struct vchiq_device)
+> which will be used to migrate child devices that the vchiq interfaces
+> creates/registers from the platform device/driver.
+> 
+> Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+> ---
+>  drivers/staging/vc04_services/Makefile        |  1 +
+>  .../interface/vchiq_arm/vchiq_device.c        | 78 +++++++++++++++++++
+>  .../interface/vchiq_arm/vchiq_device.h        | 43 ++++++++++
+>  3 files changed, 122 insertions(+)
+>  create mode 100644 drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
+>  create mode 100644 drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.h
+> 
+> diff --git a/drivers/staging/vc04_services/Makefile b/drivers/staging/vc04_services/Makefile
+> index 44794bdf6173..2d071e55e175 100644
+> --- a/drivers/staging/vc04_services/Makefile
+> +++ b/drivers/staging/vc04_services/Makefile
+> @@ -5,6 +5,7 @@ vchiq-objs := \
+>     interface/vchiq_arm/vchiq_core.o  \
+>     interface/vchiq_arm/vchiq_arm.o \
+>     interface/vchiq_arm/vchiq_debugfs.o \
+> +   interface/vchiq_arm/vchiq_device.o \
+>     interface/vchiq_arm/vchiq_connected.o \
+>  
+>  ifdef CONFIG_VCHIQ_CDEV
+> diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
+> new file mode 100644
+> index 000000000000..e16279a25126
+> --- /dev/null
+> +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
+> @@ -0,0 +1,78 @@
+> +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+
+Code that directly interacts with the driver core can, for obvious
+reasons, not be BSD-3 licensed, sorry.
+
+Also, why is any of this dual licensed?  What good is any of that?  In
+order for me to accept new dual-licensed code, it needs to be documented
+in the changelog very very well as to exactly why this is required, as
+the legal issues involved in maintaining dual-licensed code like this is
+tricky and easy to get wrong (as proven here already in this patch...)
+
+thanks,
+
+greg k-h
