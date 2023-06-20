@@ -2,201 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74270737172
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F31BE73717F
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbjFTQZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 12:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52082 "EHLO
+        id S229849AbjFTQ1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 12:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjFTQZB (ORCPT
+        with ESMTP id S229873AbjFTQ13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 12:25:01 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D04810A
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:25:00 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f90bff0f27so25412325e9.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 09:25:00 -0700 (PDT)
+        Tue, 20 Jun 2023 12:27:29 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14A1DC;
+        Tue, 20 Jun 2023 09:27:28 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id 5614622812f47-38ede2e0e69so3135341b6e.2;
+        Tue, 20 Jun 2023 09:27:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1687278299; x=1689870299;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Znjz9mhWIkZAzM3bIGR89qxXvHDPKMA75QcoPc3MXbs=;
-        b=fjHkYLbe0be2lmDc2DbzliG3daRP8Cwy06e4lWbBzihbpEvjrLDc4IpnCrklJPm9y/
-         TrVPeC4nxdDD+X9nVbCkLnjfNhQCO4ETgtXMWa7UoMTJy9HgEkfxkjDwQ1CdJeUtsoYS
-         JGzvkldrixNbVNxPNAvFOwqaF/XGy3paO6imJBQZgW9Vora7xJ49Yl3Qa3ii6TZjnbA0
-         um/RD4koPftR93T6D1qFbrFLliTFjM6MUBdRZ2fROywwJ5Ri5/evXYEEpBPGKVaJwNnX
-         CTw2OAEDgYCEaXnQV3KXDzD05oQVevUDcQzXLC5ZCtnrMKkf7hjqc32i88cFWHarU3GN
-         OLiA==
+        d=gmail.com; s=20221208; t=1687278448; x=1689870448;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Rpnniq76PXiCDxg/rDwxgmARY1zRtNLr8bVJxlqw4q0=;
+        b=bzBfGUDzmJ/U10TDjWJ4dsXKAS19ieQ2vMUY/K8NSFl+1rzia8AdbDNRjtUPlorX5g
+         mmyXIPCOAuT8Dqnxin4zVlWPTIE0p6yjzS4rM+PebVLqdLmvvsUl+XTzyURSp/P+T+dL
+         +7xSZSk35Zzmxh+rRgjGJETERnVq+2Sutg+axQHP3LaTIHW7+YKvUf9GXNpiUvrDmgds
+         3yq50KhCLgAyZAPy8eosPt5y/aQyER5oSjgNwtjBGJI+hQc80VOi1qVeCiDlBCpHUvT8
+         F/EP2G5ak/HTotG/d7xgxZ4RT2fty31Z8Y/C4OntXmGg+LuKaKs53pBL1O8kH0J0zUTW
+         0QGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687278299; x=1689870299;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1687278448; x=1689870448;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Znjz9mhWIkZAzM3bIGR89qxXvHDPKMA75QcoPc3MXbs=;
-        b=ZXdVGa+pz24sNQ+PA/ya2QQQgIxns18VaRZGdzZm38WyIpC0zmdDdJBfLNPArKTZzl
-         i5GJUdZduhn4/lJbWxxdgUzvN3d2v4CfsZAWk1ytRKJpxJGnGtO78rLtJB9BJBl2Kr/4
-         0ISd9qePwlEHcb7ctXkDvExVZSEGjp4aL8MHPXVg/8cE/6fY0fs//o3DpsNL3Jb6gJyD
-         wbTbfdtz0hGJex2BXkCF5NlcMqfGSBdhw4LRBXfg/32PS6Osvb195y67u4yZth3FHDAH
-         OU0Hk1phtpJD5NatrrQdb5Uj4WBxExudXATv5412tG7BxXbF1i/LW2Hf0HZmoo3tcFWA
-         s/mA==
-X-Gm-Message-State: AC+VfDyibcUUF6DXLtAoYRN38t1pzxBUaFFyaymgLogv7089boV6npif
-        D4Ulzk0chGDVbXgrY8H1wLJFVQ==
-X-Google-Smtp-Source: ACHHUZ4wiLUY+Cf2Yma1uofHbvwI5tQcGLbRTlxlEi+dJ/ojWLtPbmVMni/kTCWN4E5uhAJojkAVZg==
-X-Received: by 2002:a1c:6a07:0:b0:3f9:b13b:a1cd with SMTP id f7-20020a1c6a07000000b003f9b13ba1cdmr3960518wmc.16.1687278298940;
-        Tue, 20 Jun 2023 09:24:58 -0700 (PDT)
-Received: from vdi08.nix.tessares.net (static.219.156.76.144.clients.your-server.de. [144.76.156.219])
-        by smtp.gmail.com with ESMTPSA id o19-20020a05600c511300b003f8fe1933e4sm15753056wms.3.2023.06.20.09.24.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 09:24:58 -0700 (PDT)
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-Date:   Tue, 20 Jun 2023 18:24:23 +0200
-Subject: [PATCH net 6/6] mptcp: ensure listener is unhashed before updating
- the sk status
+        bh=Rpnniq76PXiCDxg/rDwxgmARY1zRtNLr8bVJxlqw4q0=;
+        b=f0OZyQwYeuS8EVb0Fk36Fh8paghRrrkhU92o4QiqdL4iZ1Qn3oFn+LQsiA9AK9+GH/
+         NZyGaNWHPQvQH5XcMcea2GMbOMLSJPbNWh4y5Uw5s7/fxG1Ur+fzzdIIVA12h6WwzL79
+         GIfySBxHk7FJvKdK6O//wGc5fgt0/rtAi3EoWgYWdkyX3JcKuNsci6gx0qAu9WEvergB
+         pLvXukZLInnloLVgqqZ6F+Hy0Gu4oelXTzUDjjz9h8m25EDXO5ycvBmHdFmxQVCmN0B1
+         BuCnGR5rjpn9HM6q3BM17pFEBOM4JWl3G6JJ+jO3dy1SWInkCo8/K2KlQ7/KlV6DaWrA
+         9eKw==
+X-Gm-Message-State: AC+VfDwaoPlAOAtNnmxmcgvnOe3az6P8nt7ARGTSdd++42J10ZmDPtU8
+        4fWul82r8QjgPnvfIx5Ro1jpvU5SXDn8ffv90ts=
+X-Google-Smtp-Source: ACHHUZ6eKurANqWw6fRQ3Hyc/pEvSxuO6i2ydbcU9ew7NJNN8ad5zhu1i7+QAETSC2pO/hQH8IoVyH9ZZQW46BREs8E=
+X-Received: by 2002:a05:6808:1481:b0:3a0:373c:2960 with SMTP id
+ e1-20020a056808148100b003a0373c2960mr3238276oiw.36.1687278447901; Tue, 20 Jun
+ 2023 09:27:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230620-upstream-net-20230620-misc-fixes-for-v6-4-v1-6-f36aa5eae8b9@tessares.net>
-References: <20230620-upstream-net-20230620-misc-fixes-for-v6-4-v1-0-f36aa5eae8b9@tessares.net>
-In-Reply-To: <20230620-upstream-net-20230620-misc-fixes-for-v6-4-v1-0-f36aa5eae8b9@tessares.net>
-To:     mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Westphal <fw@strlen.de>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Christoph Paasch <cpaasch@apple.com>, stable@vger.kernel.org
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3462;
- i=matthieu.baerts@tessares.net; h=from:subject:message-id;
- bh=XrTodyZuRWl4/4OQC7pAwj7PljaPvC+0axsjgRjlweQ=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBkkdLU59rYoS7PISGtstSFpyCDz13h50kwKhhsz
- UQhglzkRciJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZJHS1AAKCRD2t4JPQmmg
- c85lEADP17RDWFFhZabVkHlxq7xu4jsB18M64f5ecSn1Q1W0UimQtRHq5TqzSexe/LTDZwijN4R
- usgqHa6AAfyU4TzLIu819mQKV0A2apCfVhzOAcMr2JDvez8Jl+UMG6xHBzabivfIECOKeK1Ja8l
- CLqYFWlhghut3N4SU0ue0wTLO6OxkDBr85cz271+DRv3jpGZRbOgQu/g8T9cGEuO8shFUp5OvUI
- Yu3Qjzv/zUM5WGOajxnQc6b5GL2Aj3SZLETNtB+Lj2RVjuDgIp6lT+ftKzUUV4H1LAXZlU5pTuC
- HtprYVd7qZzUcO4xJvkj03Neu42M4AEFL02lu9bM7hRiByklUb5M7hP5HVBqZGGbqdDpSwRnywo
- wp4FyQI/9R0otMK4HyKzc10oOB8rOpOm2vjC9XEJGBEjb7L+SxvgLrzWPE8dRKCJWsD7Dn4sO1U
- n7pGJrs1qPJcBcuBbH98/jBlkrJUCvcGC9901bxlpFgBeVUl+AlBvbgfjSFy7WDx9CVHpk0bEMt
- Wun0sKe5W4/vblO3i8br8uiS7/0wtOlCNft7zQZR1LY2BlTCvfXZqyoDdg8Usg6S9kB8TUZMz7G
- jbRUwOylPsIe2dEyhNjpMUECCsaRE5MRr2yE0xn4V81S1IrPZ9tp2IcP2flYl6fYAaTJQbVKgyq
- PIn8PYetOam3Txg==
-X-Developer-Key: i=matthieu.baerts@tessares.net; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+References: <20230614095158.1133673-1-elver@google.com> <CA+fCnZdy4TmMacvsPkoenCynUYsyKZ+kU1fx7cDpbh_6=cEPAQ@mail.gmail.com>
+ <CANpmjNOSnVNy14xAVe6UHD0eHuMpxweg86+mYLQHpLM1k0H_cg@mail.gmail.com>
+ <CA+fCnZccdLNqtxubVVtGPTOXcSoYfpM9CHk-nrYsZK7csC77Eg@mail.gmail.com>
+ <ZJGSqdDQPs0sRQTb@elver.google.com> <CA+fCnZdZ0=kKN6hE_OF7jV_r_FjTh3FZtkGHBD57ZfqCXStKHg@mail.gmail.com>
+ <ZJG8WiamZvEJJKUc@elver.google.com>
+In-Reply-To: <ZJG8WiamZvEJJKUc@elver.google.com>
+From:   Andrey Konovalov <andreyknvl@gmail.com>
+Date:   Tue, 20 Jun 2023 18:27:16 +0200
+Message-ID: <CA+fCnZdStZDyTGJfiW1uZVhhb-DraZmHnam0cdrB83-nnoottA@mail.gmail.com>
+Subject: Re: [PATCH] kasan: add support for kasan.fault=panic_on_write
+To:     Marco Elver <elver@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Aleksandr Nogikh <nogikh@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>, kasan-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Catalin Marinas <catalin.marinas@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paolo Abeni <pabeni@redhat.com>
+On Tue, Jun 20, 2023 at 4:49=E2=80=AFPM Marco Elver <elver@google.com> wrot=
+e:
+>
+> On Tue, Jun 20, 2023 at 03:56PM +0200, Andrey Konovalov wrote:
+> ...
+> > Could you move this to the section that describes the kasan.fault
+> > flag? This seems more consistent.
+>
+> Like this?
+>
+>
+> diff --git a/Documentation/dev-tools/kasan.rst b/Documentation/dev-tools/=
+kasan.rst
+> index 7f37a46af574..f4acf9c2e90f 100644
+> --- a/Documentation/dev-tools/kasan.rst
+> +++ b/Documentation/dev-tools/kasan.rst
+> @@ -110,7 +110,9 @@ parameter can be used to control panic and reporting =
+behaviour:
+>  - ``kasan.fault=3Dreport``, ``=3Dpanic``, or ``=3Dpanic_on_write`` contr=
+ols whether
+>    to only print a KASAN report, panic the kernel, or panic the kernel on
+>    invalid writes only (default: ``report``). The panic happens even if
+> -  ``kasan_multi_shot`` is enabled.
+> +  ``kasan_multi_shot`` is enabled. Note that when using asynchronous mod=
+e of
+> +  Hardware Tag-Based KASAN, ``kasan.fault=3Dpanic_on_write`` always pani=
+cs on
+> +  asynchronously checked accesses (including reads).
+>
+>  Software and Hardware Tag-Based KASAN modes (see the section about vario=
+us
+>  modes below) support altering stack trace collection behavior:
 
-The MPTCP protocol access the listener subflow in a lockless
-manner in a couple of places (poll, diag). That works only if
-the msk itself leaves the listener status only after that the
-subflow itself has been closed/disconnected. Otherwise we risk
-deadlock in diag, as reported by Christoph.
-
-Address the issue ensuring that the first subflow (the listener
-one) is always disconnected before updating the msk socket status.
-
-Reported-by: Christoph Paasch <cpaasch@apple.com>
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/407
-Fixes: b29fcfb54cd7 ("mptcp: full disconnect implementation")
-Cc: stable@vger.kernel.org
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
-Signed-off-by: Matthieu Baerts <matthieu.baerts@tessares.net>
----
- net/mptcp/pm_netlink.c |  1 +
- net/mptcp/protocol.c   | 31 +++++++++++++++++++------------
- 2 files changed, 20 insertions(+), 12 deletions(-)
-
-diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
-index 59f8f3124855..1224dfca5bf3 100644
---- a/net/mptcp/pm_netlink.c
-+++ b/net/mptcp/pm_netlink.c
-@@ -1047,6 +1047,7 @@ static int mptcp_pm_nl_create_listen_socket(struct sock *sk,
- 	if (err)
- 		return err;
- 
-+	inet_sk_state_store(newsk, TCP_LISTEN);
- 	err = kernel_listen(ssock, backlog);
- 	if (err)
- 		return err;
-diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-index a66ec341485e..a6c7f2d24909 100644
---- a/net/mptcp/protocol.c
-+++ b/net/mptcp/protocol.c
-@@ -2368,13 +2368,6 @@ static void __mptcp_close_ssk(struct sock *sk, struct sock *ssk,
- 		kfree_rcu(subflow, rcu);
- 	} else {
- 		/* otherwise tcp will dispose of the ssk and subflow ctx */
--		if (ssk->sk_state == TCP_LISTEN) {
--			tcp_set_state(ssk, TCP_CLOSE);
--			mptcp_subflow_queue_clean(sk, ssk);
--			inet_csk_listen_stop(ssk);
--			mptcp_event_pm_listener(ssk, MPTCP_EVENT_LISTENER_CLOSED);
--		}
--
- 		__tcp_close(ssk, 0);
- 
- 		/* close acquired an extra ref */
-@@ -2902,10 +2895,24 @@ static __poll_t mptcp_check_readable(struct mptcp_sock *msk)
- 	return EPOLLIN | EPOLLRDNORM;
- }
- 
--static void mptcp_listen_inuse_dec(struct sock *sk)
-+static void mptcp_check_listen_stop(struct sock *sk)
- {
--	if (inet_sk_state_load(sk) == TCP_LISTEN)
--		sock_prot_inuse_add(sock_net(sk), sk->sk_prot, -1);
-+	struct sock *ssk;
-+
-+	if (inet_sk_state_load(sk) != TCP_LISTEN)
-+		return;
-+
-+	sock_prot_inuse_add(sock_net(sk), sk->sk_prot, -1);
-+	ssk = mptcp_sk(sk)->first;
-+	if (WARN_ON_ONCE(!ssk || inet_sk_state_load(ssk) != TCP_LISTEN))
-+		return;
-+
-+	lock_sock_nested(ssk, SINGLE_DEPTH_NESTING);
-+	mptcp_subflow_queue_clean(sk, ssk);
-+	inet_csk_listen_stop(ssk);
-+	mptcp_event_pm_listener(ssk, MPTCP_EVENT_LISTENER_CLOSED);
-+	tcp_set_state(ssk, TCP_CLOSE);
-+	release_sock(ssk);
- }
- 
- bool __mptcp_close(struct sock *sk, long timeout)
-@@ -2918,7 +2925,7 @@ bool __mptcp_close(struct sock *sk, long timeout)
- 	WRITE_ONCE(sk->sk_shutdown, SHUTDOWN_MASK);
- 
- 	if ((1 << sk->sk_state) & (TCPF_LISTEN | TCPF_CLOSE)) {
--		mptcp_listen_inuse_dec(sk);
-+		mptcp_check_listen_stop(sk);
- 		inet_sk_state_store(sk, TCP_CLOSE);
- 		goto cleanup;
- 	}
-@@ -3035,7 +3042,7 @@ static int mptcp_disconnect(struct sock *sk, int flags)
- 	if (msk->fastopening)
- 		return -EBUSY;
- 
--	mptcp_listen_inuse_dec(sk);
-+	mptcp_check_listen_stop(sk);
- 	inet_sk_state_store(sk, TCP_CLOSE);
- 
- 	mptcp_stop_timer(sk);
-
--- 
-2.40.1
-
+Yes, this looks great! Thanks!
