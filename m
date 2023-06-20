@@ -2,73 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB49673745E
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCAFE737460
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjFTSen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 14:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33288 "EHLO
+        id S229993AbjFTSe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 14:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjFTSel (ORCPT
+        with ESMTP id S230105AbjFTSex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 14:34:41 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66D410C2;
-        Tue, 20 Jun 2023 11:34:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687286079; x=1718822079;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=7wOYvg1PU199MGs3s9q0fJPuRo9zPR+Rxyq5xsvig9s=;
-  b=fNfm000NvG30KuV79I1/O/qHl7r8GxEZ5uVLVzl4dyiwLeJuqphaj5jt
-   E2RVHj2Gt8WfS9XiSbpOxSJU2gQoNHAw6y4rwwQTV/1i5D3MOJ+UoycuP
-   flJisCPgeOsREcG2fYcXszrq4dsS6vUiI7tzx0371FSSlXsRgA/Jjl+PI
-   oq3s7chx32cO5bXFAC1EfjfMaML7aeFmqKniuvQwZwEq7+ECewTJBvSS5
-   xFSuyIwc3L0O1PF77tSdlXb9cbgmUXGW5SM0lmQxO8A0mwp630nqXIe5E
-   pm0E+3YOgPRU9J1AJ9YGupUmTRmWTY+towwa2So5xZr+QgmCD+XgvSf7c
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="340291597"
-X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
-   d="scan'208";a="340291597"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 11:34:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="960883657"
-X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
-   d="scan'208";a="960883657"
-Received: from oyloh-mobl.amr.corp.intel.com (HELO [10.209.25.231]) ([10.209.25.231])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 11:34:18 -0700
-Message-ID: <d20baf1e-a736-667f-2082-0c0539013f2b@linux.intel.com>
-Date:   Tue, 20 Jun 2023 11:34:17 -0700
+        Tue, 20 Jun 2023 14:34:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F89610E2;
+        Tue, 20 Jun 2023 11:34:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D53361376;
+        Tue, 20 Jun 2023 18:34:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A43D9C433C8;
+        Tue, 20 Jun 2023 18:34:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687286090;
+        bh=YOzPATmO8wGxwInPsNJVCNLX4H1Ef7rZzowHevjjD/s=;
+        h=From:To:Cc:Subject:Date:From;
+        b=1PLSkGkIsZPxpmUHXeKhKsPySfKl8A/ptcE9hebeInjOUIy3rHWsvPBJuqZFg1vUC
+         gEYjlxlCn3fKyaBlDDyExTW37J8QGIYxqszhKuI5zuYGyBivS5DT8sFa3SJ50VHdun
+         OXHHb+Et160zUAD4d2MXqwAE1RgLasXPi6NkPtzk=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     sparclinux@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Ivan Orlov <ivan.orlov0322@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH] oradax: make 'cl' a static const structure
+Date:   Tue, 20 Jun 2023 20:34:47 +0200
+Message-ID: <20230620183446.684061-2-gregkh@linuxfoundation.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH v8 2/2] x86/tdx: Support vmalloc() for
- tdx_enc_status_changed()
-Content-Language: en-US
-To:     Dexuan Cui <decui@microsoft.com>, ak@linux.intel.com,
-        arnd@arndb.de, bp@alien8.de, brijesh.singh@amd.com,
-        dan.j.williams@intel.com, dave.hansen@intel.com,
-        dave.hansen@linux.intel.com, haiyangz@microsoft.com, hpa@zytor.com,
-        jane.chu@oracle.com, kirill.shutemov@linux.intel.com,
-        kys@microsoft.com, linux-arch@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, luto@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, rostedt@goodmis.org, seanjc@google.com,
-        tglx@linutronix.de, tony.luck@intel.com, wei.liu@kernel.org,
-        x86@kernel.org, mikelley@microsoft.com
-Cc:     linux-kernel@vger.kernel.org, Tianyu.Lan@microsoft.com,
-        rick.p.edgecombe@intel.com
-References: <20230620154830.25442-1-decui@microsoft.com>
- <20230620154830.25442-3-decui@microsoft.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <20230620154830.25442-3-decui@microsoft.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2449; i=gregkh@linuxfoundation.org; h=from:subject; bh=iMcb7lPwqLnwJII9WdVDNBIv4TpcWL4faC5ec2Wi5h8=; b=owGbwMvMwCRo6H6F97bub03G02pJDCkTP7o9D5+0ouLTn66PoYd+SuYv1j26WX7Z2qUuHlfMx Ccs+lPs2BHLwiDIxCArpsjyZRvP0f0VhxS9DG1Pw8xhZQIZwsDFKQATcehiWHDgu/t3+3VzPVes 9baYEsd16EL0FTmGBUcsjwgfSZj+e92uJzJzmmcaXs6+2AcA
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,117 +59,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Ivan Orlov <ivan.orlov0322@gmail.com>
 
-On 6/20/23 8:48 AM, Dexuan Cui wrote:
-> When a TDX guest runs on Hyper-V, the hv_netvsc driver's netvsc_init_buf()
-> allocates buffers using vzalloc(), and needs to share the buffers with the
-> host OS by calling set_memory_decrypted(), which is not working for
-> vmalloc() yet. Add the support by handling the pages one by one.
-> 
-> Co-developed-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> ---
+Now that the driver core allows for struct class to be in read-only
+memory, move the 'cl' structure to be declared at build time
+placing it into read-only memory, instead of having to be dynamically
+allocated at load time.
 
-Looks good to me.
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: "Mike Rapoport (IBM)" <rppt@kernel.org>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Ivan Orlov <ivan.orlov0322@gmail.com>
+Cc: sparclinux@vger.kernel.org
+Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/sbus/char/oradax.c | 21 ++++++++++-----------
+ 1 file changed, 10 insertions(+), 11 deletions(-)
 
-Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
-
->  arch/x86/coco/tdx/tdx.c | 35 +++++++++++++++++++++++++++++------
->  1 file changed, 29 insertions(+), 6 deletions(-)
-> 
-> Changes in v2:
->   Changed tdx_enc_status_changed() in place.
-> 
-> Changes in v3:
->   No change since v2.
-> 
-> Changes in v4:
->   Added Kirill's Co-developed-by since Kirill helped to improve the
->     code by adding tdx_enc_status_changed_phys().
-> 
->   Thanks Kirill for the clarification on load_unaligned_zeropad()!
-> 
-> Changes in v5:
->   Added Kirill's Signed-off-by.
->   Added Michael's Reviewed-by.
-> 
-> Changes in v6: None.
-> 
-> Changes in v7: None.
->   Note: there was a race between set_memory_encrypted() and
->   load_unaligned_zeropad(), which has been fixed by the 3 patches of
->   Kirill in the x86/tdx branch of the tip tree.
-> 
-> Changes in v8:
->   Rebased to tip.git's master branch.
-> 
-> diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-> index 0c198ab73aa7..a313d5ab42f1 100644
-> --- a/arch/x86/coco/tdx/tdx.c
-> +++ b/arch/x86/coco/tdx/tdx.c
-> @@ -8,6 +8,7 @@
->  #include <linux/export.h>
->  #include <linux/io.h>
-> +#include <linux/mm.h>
->  #include <asm/coco.h>
->  #include <asm/tdx.h>
->  #include <asm/vmx.h>
->  #include <asm/insn.h>
-> @@ -752,6 +753,19 @@ static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
->  	return false;
->  }
->  
-> +static bool tdx_enc_status_changed_phys(phys_addr_t start, phys_addr_t end,
-> +					bool enc)
-> +{
-> +	if (!tdx_map_gpa(start, end, enc))
-> +		return false;
-> +
-> +	/* shared->private conversion requires memory to be accepted before use */
-> +	if (enc)
-> +		return tdx_accept_memory(start, end);
-> +
-> +	return true;
-> +}
-> +
->  /*
->   * Inform the VMM of the guest's intent for this physical page: shared with
->   * the VMM or private to the guest.  The VMM is expected to change its mapping
-> @@ -759,15 +773,24 @@ static bool tdx_map_gpa(phys_addr_t start, phys_addr_t end, bool enc)
->   */
->  static bool tdx_enc_status_changed(unsigned long vaddr, int numpages, bool enc)
->  {
-> -	phys_addr_t start = __pa(vaddr);
-> -	phys_addr_t end   = __pa(vaddr + numpages * PAGE_SIZE);
-> +	unsigned long start = vaddr;
-> +	unsigned long end = start + numpages * PAGE_SIZE;
->  
-> -	if (!tdx_map_gpa(start, end, enc))
-> +	if (offset_in_page(start) != 0)
->  		return false;
->  
-> -	/* shared->private conversion requires memory to be accepted before use */
-> -	if (enc)
-> -		return tdx_accept_memory(start, end);
-> +	if (!is_vmalloc_addr((void *)start))
-> +		return tdx_enc_status_changed_phys(__pa(start), __pa(end), enc);
-> +
-> +	while (start < end) {
-> +		phys_addr_t start_pa = slow_virt_to_phys((void *)start);
-> +		phys_addr_t end_pa = start_pa + PAGE_SIZE;
-> +
-> +		if (!tdx_enc_status_changed_phys(start_pa, end_pa, enc))
-> +			return false;
-> +
-> +		start += PAGE_SIZE;
-> +	}
->  
->  	return true;
->  }
-
+diff --git a/drivers/sbus/char/oradax.c b/drivers/sbus/char/oradax.c
+index aafce8d00000..a536dd6f4f7c 100644
+--- a/drivers/sbus/char/oradax.c
++++ b/drivers/sbus/char/oradax.c
+@@ -226,8 +226,10 @@ static int dax_ccb_info(u64 ca, struct ccb_info_result *info);
+ static int dax_ccb_kill(u64 ca, u16 *kill_res);
+ 
+ static struct cdev c_dev;
+-static struct class *cl;
+ static dev_t first;
++static const struct class cl = {
++	.name = DAX_NAME,
++};
+ 
+ static int max_ccb_version;
+ static int dax_debug;
+@@ -323,14 +325,11 @@ static int __init dax_attach(void)
+ 		goto done;
+ 	}
+ 
+-	cl = class_create(DAX_NAME);
+-	if (IS_ERR(cl)) {
+-		dax_err("class_create failed");
+-		ret = PTR_ERR(cl);
++	ret = class_register(&cl);
++	if (ret)
+ 		goto class_error;
+-	}
+ 
+-	if (device_create(cl, NULL, first, NULL, dax_name) == NULL) {
++	if (device_create(&cl, NULL, first, NULL, dax_name) == NULL) {
+ 		dax_err("device_create failed");
+ 		ret = -ENXIO;
+ 		goto device_error;
+@@ -347,9 +346,9 @@ static int __init dax_attach(void)
+ 	goto done;
+ 
+ cdev_error:
+-	device_destroy(cl, first);
++	device_destroy(&cl, first);
+ device_error:
+-	class_destroy(cl);
++	class_unregister(&cl);
+ class_error:
+ 	unregister_chrdev_region(first, 1);
+ done:
+@@ -362,8 +361,8 @@ static void __exit dax_detach(void)
+ {
+ 	pr_info("Cleaning up DAX module\n");
+ 	cdev_del(&c_dev);
+-	device_destroy(cl, first);
+-	class_destroy(cl);
++	device_destroy(&cl, first);
++	class_unregister(&cl);
+ 	unregister_chrdev_region(first, 1);
+ }
+ module_exit(dax_detach);
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.41.0
+
