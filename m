@@ -2,133 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B19437370D7
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 17:46:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACF1A7370DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 17:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231743AbjFTPqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 11:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
+        id S231779AbjFTPsK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 11:48:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229670AbjFTPqa (ORCPT
+        with ESMTP id S230469AbjFTPsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 11:46:30 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2829197;
-        Tue, 20 Jun 2023 08:46:29 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-982a0232bdcso757745566b.1;
-        Tue, 20 Jun 2023 08:46:29 -0700 (PDT)
+        Tue, 20 Jun 2023 11:48:07 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B493F197
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 08:48:05 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b44d77e56bso59366851fa.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 08:48:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687275988; x=1689867988;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8/RW3JooPHXhGkbyA94yMT3Iw5yY/0I6MyTT7xjBS5I=;
-        b=DMscuMJX1SgH/ZMDaay/ucX0Dt22ZRlsDF2WiTjEGqRL6Rh35yuWu2lwqw1EbEroJu
-         kHvDKSyxpzML7Rod8yHxHsRj1YG2+Ql+t2/bFTjezJ+uwdHw983wYOjhdt/NpigZBxjQ
-         4uqH/nEa+j2ynZFBmZ5gtse4I8Cu/I2eBNkOEFX9K0JI4120XoomphK/4VP4+DkSQ/Qe
-         DgfoqQvyJO+DcmcvTuunmqVZU2rx9neu7GVSb5qP+mg4DyBkVvgP0me9JgPZw0zfjbyG
-         l4oeqEWZAab+MhqHJfLTatdnH1BWgOTNc5OUQyrPSbKZ/kjTxQKUWP+117/UrY2KI8lb
-         yEcw==
+        d=linaro.org; s=google; t=1687276080; x=1689868080;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CB7I5deqvfRAsDiKv3nBAxEGbRsq3QHGkVHFD9w89QE=;
+        b=ToCBgX6Gtm3xbJorZrR6x03ESc42glw+gGVOIaZIna9QBCB8GDn0MpoH5E79OIciwA
+         Ri2nyCOLVKjuSBgzpGq6H2EY9wOTVz+XWiiN13e3iVGmBda8PgwMOFjfT33Hi6anHAkn
+         P1xO+T01Coh1eFvpbhmtPDY5/SoUHwVkji2jVBBNUO1VSxmTaFS/T9jx8Ii6cZNmjwM7
+         8O2RxPY39bIJaEb//AipTYGBGfkqKkVhdlfpX7ublLomaxoYdyYiH/02hueVIf/3wC1Z
+         WmD0Qs71jHa2FpMVku8CwilQrRaarc+b9XbitUzjoc43j2AV20FXZLzI1uYXr/CxYqZp
+         I2gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687275988; x=1689867988;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8/RW3JooPHXhGkbyA94yMT3Iw5yY/0I6MyTT7xjBS5I=;
-        b=a23GDIqlBEaV5N1E8T4Xqd9jkuPpzxOiCLcoUqnJ2OHPy0rBwxeolhu2C4KeUIF+5M
-         Cjsbw9SLpROXMoNDLmLfsoOhZ7vU61zxUvlgdJoZzd1PyrgqTvzdOB/uodGsC+d9cMnO
-         QCOt3pkgq0b4vWtkoplCG153QiAaFS+bQKHIEvR3LH4HlQupKc7OL5ediqI61dbxBOY2
-         9PZqJuW05/PMsZxXO/ec56Ih+iOofP3ScdoqqBV0p79qvynInHD58CDuMOiiSBQ/dooD
-         lb01IR0mVN7jU+SQzTa89GYDW9NvjoBVN2f3zzGoHh+QJTDeVMEitYWCXZfyOnqgSgCA
-         ZOuQ==
-X-Gm-Message-State: AC+VfDzYQ1WhYSx4Yo50cBApNO+I4Kx+YbVuFkS7/ke03GPZ3zjMAX0G
-        hz2JaO4xqwNhZSKYPb7zj1m/IWgdxKY0vdgWnSQ=
-X-Google-Smtp-Source: ACHHUZ6C/gu2jGagJ+kXr36/3xOOzDbuha8PHdogLOBTdzGkn/ZSZEHPqGTwjJo4zlCLCLyzblv41yYzqroYhJWoBao=
-X-Received: by 2002:a17:907:968c:b0:988:a779:cc6e with SMTP id
- hd12-20020a170907968c00b00988a779cc6emr6047920ejc.51.1687275987989; Tue, 20
- Jun 2023 08:46:27 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687276080; x=1689868080;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CB7I5deqvfRAsDiKv3nBAxEGbRsq3QHGkVHFD9w89QE=;
+        b=GzRCUtqvGGyX3lerXzByN2CjrIJZhQT/7p2vwN/1f1L2jxf4pE6xwQU/5o+DGkSXgG
+         SpJtFOD41txRn/dgpRzL2oGd0GSDuea1PnizxreX9AHtCM+4jmYvVHc8l/qLdGRLXIjO
+         RtADZ3Pcs0Xz6s+YUTgIqGeBYRoJLDxXvlE+RLUFpAOm8ogCdvZZEIOVRfVH8WEpQ68n
+         zjllM08Hn2ggPHUr5xV/HBNxuxezsaXnLN9Hks/mZlK/BkaKQEyVtG2VTz4Lg0ZjI4w8
+         Qlg+yLuPuOm1nMOPXOOBOfdP/XtPTq2nj/7TG3nq2uEmSmTG7uHey+DWiAB0k2ev0VPu
+         0O5A==
+X-Gm-Message-State: AC+VfDyyUc9Q7DAzi3CddHVl1t8O+eENfvDqwvVa16lvhmvQn6ohjjyz
+        U9AarMrmCN+dg8jvekXmRhA49w==
+X-Google-Smtp-Source: ACHHUZ6wv7m1p8YHOSnAWAjZyy/J3gu0hGgkbFPMicTp1pe03t8A1xeBhnfUhWqy5zxMk1P/hNBmSQ==
+X-Received: by 2002:a2e:9b01:0:b0:2a2:ac00:4de4 with SMTP id u1-20020a2e9b01000000b002a2ac004de4mr4480035lji.22.1687276080309;
+        Tue, 20 Jun 2023 08:48:00 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id x9-20020a2e3109000000b00295a3a64816sm468549ljx.2.2023.06.20.08.47.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 08:47:59 -0700 (PDT)
+Message-ID: <30cfddfb-fabb-a65e-6bb6-c0efdbd92fd7@linaro.org>
+Date:   Tue, 20 Jun 2023 18:47:59 +0300
 MIME-Version: 1.0
-References: <20230602152626.284324-1-hugo@hugovil.com> <20230602152626.284324-6-hugo@hugovil.com>
- <2023060454-cotton-paramount-e33e@gregkh> <CAHp75Ve6W-hcB4YAeKukgv-uOEzBY7Tx5Sdf3doTRYKzNPcVGw@mail.gmail.com>
- <20230604134459.3c3844012e9714fa2a61e642@hugovil.com> <CAHp75VeWFPBmsD8zsSAaQGNNXtfgLtQuM9AMGfLPk-6p0VW=Pg@mail.gmail.com>
- <20230620100846.d58436efc061fb91074fa7e5@hugovil.com> <CAHp75VcWSVgA8LFLo0-b5TfKWdHb2GfLpXV-V3PZvthTv1Xc4A@mail.gmail.com>
- <20230620113312.882d8f0c7d5603b1c93f33fb@hugovil.com> <CAHp75VfGm6=ULW6kMjsg2OgB1z1T0YdmzvCTa3DFXXX-q_RnfA@mail.gmail.com>
- <20230620114209.fb5272ad8cf5c5e2895d68b1@hugovil.com>
-In-Reply-To: <20230620114209.fb5272ad8cf5c5e2895d68b1@hugovil.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 20 Jun 2023 18:45:51 +0300
-Message-ID: <CAHp75VcieuYqxWrO7rknx2ROYz=rnWnKV6s9eXZ5Zd1BKc6YMg@mail.gmail.com>
-Subject: Re: [PATCH v7 5/9] serial: sc16is7xx: fix regression with GPIO configuration
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        jirislaby@kernel.org, jringle@gridpoint.com,
-        tomasz.mon@camlingroup.com, l.perczak@camlintechnologies.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: qrb4210-rb2: Enable GPU
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230620-topic-gpu_tablet_disp-v1-0-7bb02bec8dc0@linaro.org>
+ <20230620-topic-gpu_tablet_disp-v1-4-7bb02bec8dc0@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230620-topic-gpu_tablet_disp-v1-4-7bb02bec8dc0@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 6:42=E2=80=AFPM Hugo Villeneuve <hugo@hugovil.com> =
-wrote:
-> On Tue, 20 Jun 2023 18:35:48 +0300
-> Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > On Tue, Jun 20, 2023 at 6:33=E2=80=AFPM Hugo Villeneuve <hugo@hugovil.c=
-om> wrote:
-> > > On Tue, 20 Jun 2023 18:18:12 +0300
-> > > Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
-> > > > On Tue, Jun 20, 2023 at 5:08=E2=80=AFPM Hugo Villeneuve <hugo@hugov=
-il.com> wrote:
-> > > > > On Sun, 4 Jun 2023 22:31:04 +0300
-> > > > > Andy Shevchenko <andy.shevchenko@gmail.com> wrote:
+On 20/06/2023 16:17, Konrad Dybcio wrote:
+> Enable the A610 GPU and provide a firmware path to the ZAP blob.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 8 ++++++++
+>   1 file changed, 8 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> index e23a0406eacc..a7278a9472ed 100644
+> --- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> +++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
+> @@ -179,6 +179,14 @@ &gpi_dma0 {
+>   	status = "okay";
+>   };
+>   
+> +&gpu {
+> +	status = "okay";
+> +
+> +	zap-shader {
+> +		firmware-name = "qcom/qrb4210/a610_zap.mbn";
 
-...
+Should this be qrb4210 or sm4250? Previously we did not use special 
+subdirs for IOT versions. See qrb5165-rb5.dts.
 
-> > > > > did you have a chance to look at V8 (sent two weks ago) which fix=
-ed all
-> > > > > of what we discussed?
-> > > >
-> > > > The patch 6 already has my tag, anything specific you want me to do=
-?
-> > >
-> > > Hi Andy,
-> > > I forgot to remove your "Reviewed-by: Andy..." tag before sending V8
-> > > since there were some changes involved in patch 6 and I wanted you to
-> > > review them. Can you confirm if the changes are correct?
-> > >
-> > > I also added a new patch "remove obsolete out_thread label". It has n=
-o
-> > > real impact on the code generation itself, but maybe you can review a=
-nd
-> > > confirm if tags are ok or not, based on commit message and also
-> > > additional commit message.
-> >
-> > Both are fine to me.
->
-> Hi,
-> Ok, thank you for reviewing this.
->
-> I guess now we are good to go with this series if the stable tags and
-> patches order are good after Greg's review?
+> +	};
+> +};
+> +
+>   &i2c2 {
+>   	clock-frequency = <400000>;
+>   	status = "okay";
+> 
 
-Taking into account that we are at rc7, and even with Fixes tags in
-your series I think Greg might take this after v6.5-0rc1 is out. It's
-up to him how to proceed with that. Note, he usually has thousands of
-patches in backlog, you might need to respin it after the above
-mentioned rc1.
+-- 
+With best wishes
+Dmitry
 
-
---=20
-With Best Regards,
-Andy Shevchenko
