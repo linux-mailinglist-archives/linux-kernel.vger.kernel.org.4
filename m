@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C630736EFF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 672FC736EFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 16:44:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233315AbjFTOol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 10:44:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233218AbjFTOoj (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S233190AbjFTOoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Tue, 20 Jun 2023 10:44:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5BAE1A4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 07:44:38 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232204AbjFTOoh (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Tue, 20 Jun 2023 10:44:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B671A4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 07:44:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68459612A3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:44:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 790D9C433C0;
-        Tue, 20 Jun 2023 14:44:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5C63612A3
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:44:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93A9CC433C8;
+        Tue, 20 Jun 2023 14:44:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687272277;
-        bh=i6meXYqzLbS/T0+2ewiMbX093Oqmfn9KIdm7F7gK6M4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=JQXTek8zGep3caKrdUoaW7M5Enue8KiHrWKsE1hsNc7D4oF1wUTkmaV/VF1XjB+Ej
-         d87yR7YNNRsSxgbZMVxDlL0KFvNGts5jS8SB19helGvZx6cr0EXyax7orzNPu8rjOc
-         mnpZ8X+mNS48DNt8kV0hd+dGzxFB6AwdDOQyfifw=
+        s=korg; t=1687272275;
+        bh=ZS4Ma8KGECNAShkM8JDnUCoN4X024GBO7+VXioAiQOA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=sqKJzl5Oy8nDvHjVWIMXDTtE+FvqXAThnODgirzp2HvH6ohctvQE1zC9eMjoCQXle
+         9zA7Rp7CajM/wpjpU7pA6ECuNniyvDNwKXYioBDm+OYpnmwpoqCD5hpFOUq0+Xi8de
+         o2gIiZJjS3E8wxpIeBR8OT3lR8CCb6qsFs6zKVBM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     x86@kernel.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -39,16 +39,18 @@ Cc:     linux-kernel@vger.kernel.org,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 1/3] x86/cpuid: make cpuid_class a static const structure
-Date:   Tue, 20 Jun 2023 16:44:32 +0200
-Message-ID: <20230620144431.583290-4-gregkh@linuxfoundation.org>
+Subject: [PATCH 2/3] x86/MSR: make msr_class a static const structure
+Date:   Tue, 20 Jun 2023 16:44:33 +0200
+Message-ID: <20230620144431.583290-5-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230620144431.583290-4-gregkh@linuxfoundation.org>
+References: <20230620144431.583290-4-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3139; i=gregkh@linuxfoundation.org; h=from:subject; bh=aBTFKVZ8OOd4/o/cKdaCS1NflsAv/K3saJjhqsnO3t0=; b=owGbwMvMwCRo6H6F97bub03G02pJDCkTd/tHzZh33qhUYeZvlee2Zd+Dc846ic7lEHlmlXlX8 cc2o+kyHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCR6p0MCzY2m9V67toaf3b1 XyXBXzJhwkJPqhjm6e6z+vDg/p3p35dEvvr3eZHjfz5dPQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3079; i=gregkh@linuxfoundation.org; h=from:subject; bh=QDmKO6VsyrTokC1ZOS4qNRgZzQOeNd6yP/KZZtalGwM=; b=owGbwMvMwCRo6H6F97bub03G02pJDCkTd/u3q2mW+Py3/J5//cR115zNiysLZqmnH962ztma/ c46dpNjHbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjCRWfcY5hd9/D9FPn8x17qM iMAzYW5v1HY2ODPMlZX5vPWcyl430ap1XRxF4rn2JS1HAA==
 X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,7 +62,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 From: Ivan Orlov <ivan.orlov0322@gmail.com>
 
 Now that the driver core allows for struct class to be in read-only
-memory, move the cpuid_class structure to be declared at build time
+memory, move the msr_class structure to be declared at build time
 placing it into read-only memory, instead of having to be dynamically
 allocated at boot time.
 
@@ -74,93 +76,93 @@ Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/x86/kernel/cpuid.c | 31 ++++++++++++++++---------------
+ arch/x86/kernel/msr.c | 31 ++++++++++++++++---------------
  1 file changed, 16 insertions(+), 15 deletions(-)
 
-diff --git a/arch/x86/kernel/cpuid.c b/arch/x86/kernel/cpuid.c
-index bdc0d5539b57..dae436253de4 100644
---- a/arch/x86/kernel/cpuid.c
-+++ b/arch/x86/kernel/cpuid.c
-@@ -40,7 +40,6 @@
- #include <asm/processor.h>
+diff --git a/arch/x86/kernel/msr.c b/arch/x86/kernel/msr.c
+index 7bb17d37db01..e17c16c54a37 100644
+--- a/arch/x86/kernel/msr.c
++++ b/arch/x86/kernel/msr.c
+@@ -39,7 +39,6 @@
+ #include <asm/cpufeature.h>
  #include <asm/msr.h>
  
--static struct class *cpuid_class;
- static enum cpuhp_state cpuhp_cpuid_state;
+-static struct class *msr_class;
+ static enum cpuhp_state cpuhp_msr_state;
  
- struct cpuid_regs_done {
-@@ -124,26 +123,31 @@ static const struct file_operations cpuid_fops = {
- 	.open = cpuid_open,
+ enum allow_write_msrs {
+@@ -235,26 +234,31 @@ static const struct file_operations msr_fops = {
+ 	.compat_ioctl = msr_ioctl,
  };
  
-+static char *cpuid_devnode(const struct device *dev, umode_t *mode)
++static char *msr_devnode(const struct device *dev, umode_t *mode)
 +{
-+	return kasprintf(GFP_KERNEL, "cpu/%u/cpuid", MINOR(dev->devt));
++	return kasprintf(GFP_KERNEL, "cpu/%u/msr", MINOR(dev->devt));
 +}
 +
-+static const struct class cpuid_class = {
-+	.name		= "cpuid",
-+	.devnode	= cpuid_devnode,
++static const struct class msr_class = {
++	.name		= "msr",
++	.devnode	= msr_devnode,
 +};
 +
- static int cpuid_device_create(unsigned int cpu)
+ static int msr_device_create(unsigned int cpu)
  {
  	struct device *dev;
  
--	dev = device_create(cpuid_class, NULL, MKDEV(CPUID_MAJOR, cpu), NULL,
-+	dev = device_create(&cpuid_class, NULL, MKDEV(CPUID_MAJOR, cpu), NULL,
- 			    "cpu%d", cpu);
+-	dev = device_create(msr_class, NULL, MKDEV(MSR_MAJOR, cpu), NULL,
++	dev = device_create(&msr_class, NULL, MKDEV(MSR_MAJOR, cpu), NULL,
+ 			    "msr%d", cpu);
  	return PTR_ERR_OR_ZERO(dev);
  }
  
- static int cpuid_device_destroy(unsigned int cpu)
+ static int msr_device_destroy(unsigned int cpu)
  {
--	device_destroy(cpuid_class, MKDEV(CPUID_MAJOR, cpu));
-+	device_destroy(&cpuid_class, MKDEV(CPUID_MAJOR, cpu));
+-	device_destroy(msr_class, MKDEV(MSR_MAJOR, cpu));
++	device_destroy(&msr_class, MKDEV(MSR_MAJOR, cpu));
  	return 0;
  }
  
--static char *cpuid_devnode(const struct device *dev, umode_t *mode)
+-static char *msr_devnode(const struct device *dev, umode_t *mode)
 -{
--	return kasprintf(GFP_KERNEL, "cpu/%u/cpuid", MINOR(dev->devt));
+-	return kasprintf(GFP_KERNEL, "cpu/%u/msr", MINOR(dev->devt));
 -}
 -
- static int __init cpuid_init(void)
+ static int __init msr_init(void)
  {
  	int err;
-@@ -154,12 +158,9 @@ static int __init cpuid_init(void)
- 		       CPUID_MAJOR);
+@@ -263,12 +267,9 @@ static int __init msr_init(void)
+ 		pr_err("unable to get major %d for msr\n", MSR_MAJOR);
  		return -EBUSY;
  	}
--	cpuid_class = class_create("cpuid");
--	if (IS_ERR(cpuid_class)) {
--		err = PTR_ERR(cpuid_class);
-+	err = class_register(&cpuid_class);
+-	msr_class = class_create("msr");
+-	if (IS_ERR(msr_class)) {
+-		err = PTR_ERR(msr_class);
++	err = class_register(&msr_class);
 +	if (err)
  		goto out_chrdev;
 -	}
--	cpuid_class->devnode = cpuid_devnode;
+-	msr_class->devnode = msr_devnode;
  
- 	err = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "x86/cpuid:online",
- 				cpuid_device_create, cpuid_device_destroy);
-@@ -170,7 +171,7 @@ static int __init cpuid_init(void)
+ 	err  = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "x86/msr:online",
+ 				 msr_device_create, msr_device_destroy);
+@@ -278,7 +279,7 @@ static int __init msr_init(void)
  	return 0;
  
  out_class:
--	class_destroy(cpuid_class);
-+	class_unregister(&cpuid_class);
+-	class_destroy(msr_class);
++	class_unregister(&msr_class);
  out_chrdev:
- 	__unregister_chrdev(CPUID_MAJOR, 0, NR_CPUS, "cpu/cpuid");
+ 	__unregister_chrdev(MSR_MAJOR, 0, NR_CPUS, "cpu/msr");
  	return err;
-@@ -180,7 +181,7 @@ module_init(cpuid_init);
- static void __exit cpuid_exit(void)
+@@ -288,7 +289,7 @@ module_init(msr_init);
+ static void __exit msr_exit(void)
  {
- 	cpuhp_remove_state(cpuhp_cpuid_state);
--	class_destroy(cpuid_class);
-+	class_unregister(&cpuid_class);
- 	__unregister_chrdev(CPUID_MAJOR, 0, NR_CPUS, "cpu/cpuid");
+ 	cpuhp_remove_state(cpuhp_msr_state);
+-	class_destroy(msr_class);
++	class_unregister(&msr_class);
+ 	__unregister_chrdev(MSR_MAJOR, 0, NR_CPUS, "cpu/msr");
  }
- module_exit(cpuid_exit);
+ module_exit(msr_exit)
 -- 
 2.41.0
 
