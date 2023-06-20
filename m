@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF487366C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C74ED7366C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231551AbjFTI5x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 04:57:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
+        id S231684AbjFTI6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 04:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjFTI5u (ORCPT
+        with ESMTP id S229976AbjFTI6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 04:57:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1070CC2;
-        Tue, 20 Jun 2023 01:57:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 20 Jun 2023 04:58:23 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10D4F10DB;
+        Tue, 20 Jun 2023 01:58:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=dNcfVblJVY+zLncrG+sL2zTOo9XdHdTH5fIK479aTXQ=; b=jZafrTEi6+i9joWWuwVLuOUlv6
+        s+6kibmkrLE+337dcbLt1lEfYdOFd9PkEwyQGfEXyfwYyHD8VC+KHkj0s3oDzqjw35V7rmDiHKO4K
+        z6h8tq2aExj3mvbOkX0FniVWq1njcQbDl+m1LGcaN+H/cVPzdVL0ecKW3uQcm5/F1aiPmHJmvj9SZ
+        ssnjqpxagYQRNfyXDxC0/XLbbdajwi8PTifAKsuQhOXYQ0Q3YX02PyGeEwHMmaqOrmhiThIETiHzz
+        OSbxMPOznxpntfq3JFouOkLY7PcRHCEPj5v0q7oHf4l/ITlRye74I3ftF7aULJrcbPCHoAsAapXt5
+        bOnAHTww==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qBXBN-00G0Xr-1C;
+        Tue, 20 Jun 2023 08:57:49 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E7FD61085;
-        Tue, 20 Jun 2023 08:57:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F082CC433C8;
-        Tue, 20 Jun 2023 08:57:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687251466;
-        bh=0qe/Z9LyLuIqgETnC5j202kEcOTwTRbAceQ/gOZTaj8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KfXkHyYRsB97X7DlcdLp5cqmuulW2nfNX0qgaermKjC3C6AtLqQBLifBqC5OGfXtX
-         A04R9cAzLJNZPJ6Xwb3WuaV4C6J+21FuiSP9KYmWVVTmSshM/brAqwr2M+TJXCL4/g
-         jE2PbUjW/hh7lf99xstkTSaB9kwzOvs1eFZDODA37iGAN0TQ0t9WItyLMBZ6WsgMET
-         l2ByxAVA4k5h7YU3N4h1wDfy74HQt/rVttqUIGCoEmyEy8J+PwJk9JKimTECwGAnlM
-         aQBHhCCb3Jiy0+ukFECxIKdbysTXCx6MykHud2OpNTUEWq/wXzm9fL0t5StKdH8Svt
-         seIpk3bWrUtPg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1qBXBJ-0007Xj-6f; Tue, 20 Jun 2023 10:57:45 +0200
-Date:   Tue, 20 Jun 2023 10:57:45 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] gnss: Use devm_regulator_get_enable_optional()
-Message-ID: <ZJFqCQ8bbBoX3l1g@hovoldconsulting.com>
-References: <62effa7aa1a2023a77709e6416c57d9cb79a5ccc.1686995765.git.christophe.jaillet@wanadoo.fr>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3A31B3002F0;
+        Tue, 20 Jun 2023 10:57:46 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 134DF21440F42; Tue, 20 Jun 2023 10:57:46 +0200 (CEST)
+Date:   Tue, 20 Jun 2023 10:57:46 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Youling Tang <tangyouling@loongson.cn>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        madvenka@linux.microsoft.com, chenzhongjin@huawei.com,
+        WANG Xuerui <kernel@xen0n.name>,
+        Xi Ruoyao <xry111@xry111.site>, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        tangyouling00@gmail.com, youling.tang@outlook.com,
+        Jinyang He <hejinyang@loongson.cn>
+Subject: Re: [RFC PATCH v1 13/23] objtool: Add next member in struct reloc
+Message-ID: <20230620085746.GY4253@hirez.programming.kicks-ass.net>
+References: <1687247415-32057-1-git-send-email-tangyouling@loongson.cn>
+ <1687247415-32057-4-git-send-email-tangyouling@loongson.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <62effa7aa1a2023a77709e6416c57d9cb79a5ccc.1686995765.git.christophe.jaillet@wanadoo.fr>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <1687247415-32057-4-git-send-email-tangyouling@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,68 +66,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 11:57:09AM +0200, Christophe JAILLET wrote:
-> Use devm_regulator_get_enable_optional() instead of hand writing it. It
-> saves some line of code.
+On Tue, Jun 20, 2023 at 03:50:09PM +0800, Youling Tang wrote:
+> In LoongArch, there may be multiple relocation information in one location,
+> so the next member is added to handle this situation.
+
+So Josh did a shrink on struct reloc because there are too many of them;
+ideally we find another way to link them for the case where it is
+needed.
+
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> Note that regulator_disable() is now called after gnss_serial_free() in
-> the error handling path of the probe and in the remove function, but it
-> looks harmless to me.
-
-Yeah, that bit should be fine.
-
-> ---
->  drivers/gnss/mtk.c | 26 ++++----------------------
->  1 file changed, 4 insertions(+), 22 deletions(-)
+> The following warning appears when the next member is not added,
+> warning: objtool: unexpected relocation symbol type in .rela.discard.unreachable
 > 
-> diff --git a/drivers/gnss/mtk.c b/drivers/gnss/mtk.c
-> index c62b1211f4fe..d3d31295d4e0 100644
-> --- a/drivers/gnss/mtk.c
-> +++ b/drivers/gnss/mtk.c
-> @@ -17,7 +17,6 @@
->  #include "serial.h"
+> Relocation section '.rela.discard.unreachable' at offset 0x1a58 contains 4 entries:
+>     Offset             Info             Type               Symbol's Value  Symbol's Name + Addend
+> 0000000000000000  0000000200000032 R_LARCH_ADD32          0000000000000000 .text + 354
+> 0000000000000000  0000000900000037 R_LARCH_SUB32          0000000000000000 L0^A + 0
+> 
+> Co-developed-by: Jinyang He <hejinyang@loongson.cn>
+> Signed-off-by: Jinyang He <hejinyang@loongson.cn>
+> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
+> ---
+>  tools/objtool/elf.c                 | 11 ++++++++++-
+>  tools/objtool/include/objtool/elf.h |  1 +
+>  2 files changed, 11 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
+> index 6806ce01d933..d345300d269b 100644
+> --- a/tools/objtool/elf.c
+> +++ b/tools/objtool/elf.c
+> @@ -895,7 +895,7 @@ static int read_relocs(struct elf *elf)
+>  {
+>  	unsigned long nr_reloc, max_reloc = 0, tot_reloc = 0;
+>  	struct section *sec;
+> -	struct reloc *reloc;
+> +	struct reloc *reloc, *next_reloc;
+>  	unsigned int symndx;
+>  	struct symbol *sym;
+>  	int i;
+> @@ -915,6 +915,7 @@ static int read_relocs(struct elf *elf)
+>  			return -1;
+>  		}
 >  
->  struct mtk_data {
-> -	struct regulator *vbackup;
->  	struct regulator *vcc;
->  };
+> +		next_reloc = NULL;
+>  		sec->base->reloc = sec;
 >  
-> @@ -87,30 +86,16 @@ static int mtk_probe(struct serdev_device *serdev)
->  		goto err_free_gserial;
->  	}
+>  		nr_reloc = 0;
+> @@ -946,6 +947,14 @@ static int read_relocs(struct elf *elf)
+>  				return -1;
+>  			}
 >  
-> -	data->vbackup = devm_regulator_get_optional(&serdev->dev, "vbackup");
-> -	if (IS_ERR(data->vbackup)) {
-> -		ret = PTR_ERR(data->vbackup);
-> -		if (ret == -ENODEV)
-> -			data->vbackup = NULL;
-> -		else
-> -			goto err_free_gserial;
-> -	}
-> -
-> -	if (data->vbackup) {
-> -		ret = regulator_enable(data->vbackup);
-> -		if (ret)
-> -			goto err_free_gserial;
-> -	}
-> +	ret = devm_regulator_get_enable_optional(&serdev->dev, "vbackup");
-> +	if (ret)
-> +		goto err_free_gserial;
+> +			if (next_reloc && reloc->offset == next_reloc->offset) {
+> +				next_reloc->next = reloc;
+> +				next_reloc = reloc;
+> +				continue;
+> +			}
+> +
+> +			next_reloc = reloc;
 
-But this breaks the driver as the new helper still returns -ENODEV when
-the optional is resource is not present.
+This seems to rely on 'linked' reloc being adjecent in the ELF tables;
+is this required by the LoongArch ELF spec? If not, you really should
+not rely on it.
 
-Wolfram already suggested using this new helper here:
-
-	https://lore.kernel.org/lkml/20230523064310.3005-3-wsa+renesas@sang-engineering.com
-
-and also got the error handling right even if that patch will require a
-respin for other reasons.
-
-As I mentioned in my reply to Wolfram, I'm generally sceptical of
-helpers like this one, but in this case where there are no dependencies
-on other resources I guess it's ok.
-
-Johan
+> +
+>  			list_add_tail(&reloc->sym_reloc_entry, &sym->reloc_list);
+>  			list_add_tail(&reloc->list, &sec->reloc_list);
+>  			elf_hash_add(reloc, &reloc->hash, reloc_hash(reloc));
+> diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
+> index ad0024da262b..7877298fe401 100644
+> --- a/tools/objtool/include/objtool/elf.h
+> +++ b/tools/objtool/include/objtool/elf.h
+> @@ -68,6 +68,7 @@ struct symbol {
+>  struct reloc {
+>  	struct list_head list;
+>  	struct hlist_node hash;
+> +	struct reloc *next;
+>  	union {
+>  		GElf_Rela rela;
+>  		GElf_Rel  rel;
+> -- 
+> 2.39.2
+> 
