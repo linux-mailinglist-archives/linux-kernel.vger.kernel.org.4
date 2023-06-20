@@ -2,96 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E81E17372DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6695C7372EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbjFTR3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 13:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
+        id S230115AbjFTRaO convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Jun 2023 13:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231142AbjFTR3a (ORCPT
+        with ESMTP id S229990AbjFTRaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 13:29:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CB71995;
-        Tue, 20 Jun 2023 10:29:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68D4F61316;
-        Tue, 20 Jun 2023 17:29:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40909C433C0;
-        Tue, 20 Jun 2023 17:29:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687282154;
-        bh=lioq7mex040QABLYI2qsir/2Ee7Vlv3H1GUQrVC7a1g=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=AX/ucCzosrfmmUjihrXZ3Jg0wYzmj2LxqptcCPX9l82bXdhFy6lLM7RPLJ7vUYD0W
-         weIh5TYKkap/EMk/jiLL/wVvS1mlSVRXs8/5gBOw5Ou6iU28ZPwuPQd1I+0FQw9ait
-         CX1dpjYuKqhtXbQKqWbZdX2k8pnLfEE1wWKDL8z4L7EWF2Yj3NlSrz/KYGgRuoDvyB
-         sW9AHehm8X0F55BpKVlJVI4TCSKOYX8pFfnPJgQg21AfqOKccmMSCKxbeyivcHPW6A
-         P+84JtUO7wpckJpq0adzFYcO5aLQXGthq4hAu+J5ZxHuDX2bHt6lte70lnOfcoY2Db
-         mjkybMX9H1Iig==
-From:   Mark Brown <broonie@kernel.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Shenghao Ding <13916275206@139.com>,
-        alsa-devel@alsa-project.org,
-        Colin Ian King <colin.i.king@gmail.com>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230620095620.2522058-1-colin.i.king@gmail.com>
-References: <20230620095620.2522058-1-colin.i.king@gmail.com>
-Subject: Re: [PATCH][next] ASoC: tas2781: Fix spelling mistake
- "calibraiton" -> "calibration"
-Message-Id: <168728215296.92979.15498830214406273531.b4-ty@kernel.org>
-Date:   Tue, 20 Jun 2023 18:29:12 +0100
+        Tue, 20 Jun 2023 13:30:12 -0400
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3741703;
+        Tue, 20 Jun 2023 10:30:10 -0700 (PDT)
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-31114d47414so1075636f8f.1;
+        Tue, 20 Jun 2023 10:30:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687282209; x=1689874209;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MAJD1CAE2NOLg5Z0/zR5WnQufrmFPLnVVORvNgNy9Sk=;
+        b=C2eIMxgEqdr07OQLfA8Sr+GZ6cxGAEI+NPcVxYrwRplf3n4c5xdn5H5Z/BUw2Wg3zc
+         hTN4mg0qdiuMgVyWI8zls2+pKTKU4s2evyMuCbEl+S73HpWKn4pdrKSVnVshwBq+pt6f
+         LansT0gSYMRRfYtiEC0sCoCFEvKr//B/N00IRVYn5VFylxDc4mSrushh82/hbmHBs417
+         iPKg31Z35955+wvUh6S/gl6Fgcv3wY3vZjdKrB2eDfsYqkkZWvREiEP2K4YdLyn9/8It
+         MdzkdgmTDbswtn8lmI9us4Bhv/cryQUrrIf/LV8wEDC4Y1Alcu8NbRvsKYtxRyD0oryY
+         c4mA==
+X-Gm-Message-State: AC+VfDySmJmgyVIqHppu4mG/BNhvjib9PHjb6Kfc1Jv9edY1q7i6Bnnv
+        eXJ88BVNGyIkWgkNnLrEL0u7hH7z9bJcuzIwivA=
+X-Google-Smtp-Source: ACHHUZ6qEZTFVs2lRa+IclRc22f6t2zMAP2L7ps/n/TAqOmssNuZMKQejfjedhObqaZaVUzgDuzg6YScXBzJLxAAgAQ=
+X-Received: by 2002:a5d:4b08:0:b0:307:5561:5eec with SMTP id
+ v8-20020a5d4b08000000b0030755615eecmr11066378wrq.0.1687282208681; Tue, 20 Jun
+ 2023 10:30:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-c6835
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230519032719.2581689-1-evalenti@kernel.org> <20230519032719.2581689-7-evalenti@kernel.org>
+In-Reply-To: <20230519032719.2581689-7-evalenti@kernel.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 20 Jun 2023 19:29:57 +0200
+Message-ID: <CAJZ5v0hrddGcoqdT6a0+9t20guW_1cZmbNhP_ZuQTmkCLGSKEA@mail.gmail.com>
+Subject: Re: [PATCH 6/7] ythermal: core: report errors to governors
+To:     Eduardo Valentin <evalenti@kernel.org>
+Cc:     eduval@amazon.com, linux-pm@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Jun 2023 10:56:20 +0100, Colin Ian King wrote:
-> There is a spelling mistake in a dev_err message. Fix it. Also fix
-> grammar and add space between last word and (%d)".
-> 
-> 
+On Fri, May 19, 2023 at 5:27 AM Eduardo Valentin <evalenti@kernel.org> wrote:
+>
+> From: Eduardo Valentin <eduval@amazon.com>
+>
+> Currently the thermal governors are not allowed to
+> react on temperature error events as the thermal core
+> skips the handling and logs an error on kernel buffer.
+> This patch adds the opportunity to report the errors
+> when they happen to governors.
+>
+> Now, if a governor wants to react on temperature read
+> errors, they can implement the .check_error() callback.
 
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-
-Thanks!
-
-[1/1] ASoC: tas2781: Fix spelling mistake "calibraiton" -> "calibration"
-      commit: 0a08778126284481c300336f1ba3d7b1906851a5
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+Explaining the use case for this would help a lot.
