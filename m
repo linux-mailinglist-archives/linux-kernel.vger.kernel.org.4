@@ -2,106 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7ED2F736C18
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 14:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF27A736C20
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 14:42:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232478AbjFTMk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 08:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58902 "EHLO
+        id S231741AbjFTMmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 08:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232499AbjFTMkZ (ORCPT
+        with ESMTP id S230451AbjFTMmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 08:40:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9682F1729
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 05:40:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1964E6121B
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 12:40:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 77AFCC433C9;
-        Tue, 20 Jun 2023 12:40:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687264823;
-        bh=YZHfMq2+jE29no30sjmNvnq+ySZsu7Yhlr+608D3LMA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=lm47Bb/FxHeZfjkNnjOHyWRqUe6KpXQXzmS/6uI/z303XArIDSleL/aJ07dGSLStn
-         yDIAXRm7TZgU7TMzOMpRzNT63BaeJrz9SG3KG65b/Y41kjGOkUYPqDtuhEWXS9SRh8
-         CNVnIjL/5quK7RYg2KqODp1g3QGQzuyL8/DAA7bH+dWtL6ZiCU+oCO50GkswQyLvKS
-         hZgBFmczjFsq/CQFWKNhp9bHg7uUyAMiONRFxMuLwFRQxeCi2YRnLgbbwCBfqvR3uj
-         k16kuM4lnDs75Vw6SXgkC6C5GA9VNNDVxDjYzF4QdBRUk6+o2MoVG66/xvVjHUZ22r
-         QJPVBXCZ07tRQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5EBEDC395C7;
-        Tue, 20 Jun 2023 12:40:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 20 Jun 2023 08:42:05 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C4C10DD;
+        Tue, 20 Jun 2023 05:42:04 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1qBagI-000343-QS; Tue, 20 Jun 2023 14:41:58 +0200
+Message-ID: <2d7ed7bb-38ba-8840-6629-d210937b8513@leemhuis.info>
+Date:   Tue, 20 Jun 2023 14:41:58 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v6 0/6] net: dsa: mt7530: fix multiple CPU ports,
- BPDU and LLDP handling
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168726482338.31923.2814815946421844984.git-patchwork-notify@kernel.org>
-Date:   Tue, 20 Jun 2023 12:40:23 +0000
-References: <20230617062649.28444-1-arinc.unal@arinc9.com>
-In-Reply-To: <20230617062649.28444-1-arinc.unal@arinc9.com>
-To:     =?utf-8?b?QXLEsW7DpyDDnE5BTCA8YXJpbmM5LnVuYWxAZ21haWwuY29tPg==?=@ci.codeaurora.org
-Cc:     arinc.unal@arinc9.com, daniel@makrotopia.org,
-        Landen.Chao@mediatek.com, dqfext@gmail.com, sean.wang@mediatek.com,
-        andrew@lunn.ch, f.fainelli@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com, linux@armlinux.org.uk,
-        landen.chao@mediatek.com, frank-w@public-files.de,
-        bartel.eerdekens@constell8.be, mithat.guner@xeront.com,
-        erkin.bozoglu@xeront.com, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: New kernel warning after updating from LTS 5.15.110 to 5.15.112
+ (and 5.15.113)
+Content-Language: en-US, de-DE
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Chris Packham <Chris.Packham@alliedtelesis.co.nz>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Linux Kernel Integrity <linux-integrity@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        stable@vger.kernel.org
+References: <fe6f7aa0-56c2-3729-ce8c-0f2d943b33f4@alliedtelesis.co.nz>
+ <ZHQIFLWvrWUNMVxb@debian.me>
+ <6e470461-1a9b-ec51-bac5-f2beb1dc11c9@alliedtelesis.co.nz>
+ <2b09d2ed-0852-bbc9-b792-aad92235c7fa@gmail.com>
+ <03daca5c-e468-8889-4dc2-e625a664d571@alliedtelesis.co.nz>
+ <ec5245bd-3103-f0c7-d3ef-85aabb4d4712@alliedtelesis.co.nz>
+ <ZH6TIjXeXJVMvSKa@debian.me> <2023060606-unlatch-yiddish-a45f@gregkh>
+ <ac5b76af-87dc-b04d-6035-8eda8ba5ed12@kunbus.com>
+ <2023060736-immodest-doormat-f957@gregkh>
+From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <2023060736-immodest-doormat-f957@gregkh>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1687264924;c426119d;
+X-HE-SMSGID: 1qBagI-000343-QS
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+[TLDR: This mail in primarily relevant for Linux kernel regression
+tracking. See link in footer if these mails annoy you.]
 
-This series was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
+On 07.06.23 19:49, Greg KH wrote:
+> On Wed, Jun 07, 2023 at 05:47:57PM +0200, Lino Sanfilippo wrote:
+>> On 06.06.23 08:45, Greg KH wrote:
+>>>>
+>>>> Lino, it looks like this regression is caused by (backported) commit of yours.
+>>>> Would you like to take a look on it?
 
-On Sat, 17 Jun 2023 09:26:43 +0300 you wrote:
-> Hi.
+>>>> Anyway, telling regzbot:
+>>>>
+>>>> #regzbot introduced: 51162b05a44cb5
+>>>
+>>> There's some tpm backports to 5.15.y that were suspect and I'll look
+>>> into reverting them and see if this was one of the ones that was on that
+>>> list.  Give me a few days...
+>>
+>> Could you please consider to apply (mainline) commit 0c7e66e5fd69 ("tpm, tpm_tis: Request threaded
+>> interrupt handler") to 5.15.y?
+>>
+>> As Chris confirmed it fixes the regression caused by 51162b05a44cb5 ("tpm, tpm_tis: Claim locality
+>> before writing interrupt registers").
+>>
+>> Commit 0c7e66e5fd69 is also needed for 5.10.y, 6.1.y and 6.3.y.
 > 
-> This patch series fixes all non-theoretical issues regarding multiple CPU
-> ports and the handling of LLDP frames and BPDUs.
-> 
-> I am adding me as a maintainer, I've got some code improvements on the way.
-> I will keep an eye on this driver and the patches submitted for it in the
-> future.
-> 
-> [...]
+> Now queued up, thanks.
 
-Here is the summary with links:
-  - [net,v6,1/6] net: dsa: mt7530: set all CPU ports in MT7531_CPU_PMAP
-    https://git.kernel.org/netdev/net/c/ff221029a51f
-  - [net,v6,2/6] net: dsa: mt7530: fix trapping frames on non-MT7621 SoC MT7530 switch
-    https://git.kernel.org/netdev/net/c/4ae90f90e490
-  - [net,v6,3/6] net: dsa: mt7530: fix handling of BPDUs on MT7530 switch
-    https://git.kernel.org/netdev/net/c/d7c660735593
-  - [net,v6,4/6] net: dsa: mt7530: fix handling of LLDP frames
-    https://git.kernel.org/netdev/net/c/8332cf6fd7c7
-  - [net,v6,5/6] net: dsa: introduce preferred_default_local_cpu_port and use on MT7530
-    https://git.kernel.org/netdev/net/c/b79d7c14f480
-  - [net,v6,6/6] MAINTAINERS: add me as maintainer of MEDIATEK SWITCH DRIVER
-    https://git.kernel.org/netdev/net/c/94d12d88b4a8
+#regzbot fix: 0c7e66e5fd69
+#regzbot ignore-activity
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
