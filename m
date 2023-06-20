@@ -2,101 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 221237373A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:19:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8137737400
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 20:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229778AbjFTSTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 14:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53954 "EHLO
+        id S229833AbjFTSVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 14:21:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjFTST3 (ORCPT
+        with ESMTP id S229549AbjFTSU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 14:19:29 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA351A8
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 11:19:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687285168; x=1718821168;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=fxp7O1IFxzgSra3+U3m4CdtMmU0xIakqiwOKj7ZMuzc=;
-  b=OKRX26P2xfDuDXHuogAZlOLCQshO1ptM5SxETE2boW46K7DgWFrCdkcU
-   foQhNqw8ImGIez0fQI6CY88jv1D8rYrZBqb+1qCZ9+5UIYh2XsNlII5yp
-   rEjCSC6h+PmgMC0U5qAOabhM0SvO2JlJzoZLjw1bLw9zQzh76UzggDPJa
-   duYeranOu1vfID7rz1ie1f4XU34qDvuRroq/2yr89hXuqhtqNWIkhE18Y
-   1ekqmBbQtsM4b3+Tc7sCWgsC948JdOMLaA85SGg67CH1De8XNMYR6ON+y
-   /9YyyQeGl+BCl9nyYntDsb7iF4rxj7gCAWeFwKrLnFUwpm+4QwzjA0dBF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="363368698"
-X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
-   d="scan'208";a="363368698"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 11:19:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="838309700"
-X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
-   d="scan'208";a="838309700"
-Received: from dshvarts-mobl1.ger.corp.intel.com (HELO localhost) ([10.252.62.204])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 11:19:23 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        intel-gfx@lists.freedesktop.org,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        intel-xe@lists.freedesktop.org
-Subject: Re: [Intel-xe] [PATCH 2/3] linux/bits.h: Add fixed-width GENMASK
- and BIT macros
-In-Reply-To: <ZJHkthMktY83pwvy@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230509051403.2748545-1-lucas.demarchi@intel.com>
- <20230509051403.2748545-3-lucas.demarchi@intel.com>
- <ZF4fi5B7PPlgZBOI@smile.fi.intel.com> <87pm75kd0h.fsf@intel.com>
- <ZF4j0NPoBGMBT8CO@smile.fi.intel.com> <87mt29kc34.fsf@intel.com>
- <ZIs0CC2J7nu0LHEK@smile.fi.intel.com> <875y7igph5.fsf@intel.com>
- <ZJG91zMQW3Rnvdbe@smile.fi.intel.com>
- <amgwl5mthhqgvgkqnor6tjfcr3x3pgwvpqin5efwwjfpdhvvpa@vhzhiq5mzsdg>
- <ZJHkthMktY83pwvy@smile.fi.intel.com>
-Date:   Tue, 20 Jun 2023 21:19:20 +0300
-Message-ID: <87ttv2f13r.fsf@intel.com>
+        Tue, 20 Jun 2023 14:20:59 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BCCA199;
+        Tue, 20 Jun 2023 11:20:58 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 258692B3;
+        Tue, 20 Jun 2023 20:20:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687285221;
+        bh=sD1PKV7f7iXFcTk9Cp6Tb3XJE7rld19ReTuqZZXis4k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iG4rP0MTxRyFxBalRPcEerDsmXq1CeolMkm7bEEGOfK5TNr8sqU1mm9TJJY+8ZIgS
+         1Zwx82iXbcoNmen7ZmrIQEQtakzFb9Dw/kcwLrXzKjpOyQ5UcD3q8m33/NYDv+tEST
+         XAMrUSsvbCo5SBsiZQsTdXTSgXDIV63116XP7Sz4=
+Date:   Tue, 20 Jun 2023 21:20:54 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Umang Jain <umang.jain@ideasonboard.com>,
+        linux-staging@lists.linux.dev,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stefan.wahren@i2se.com,
+        f.fainelli@gmail.com, athierry@redhat.com, error27@gmail.com,
+        dave.stevenson@raspberrypi.com, kieran.bingham@ideasonboard.com
+Subject: Re: [PATCH v7 1/5] staging: vc04_services: vchiq_arm: Add new bus
+ type and device type
+Message-ID: <20230620182054.GA14686@pendragon.ideasonboard.com>
+References: <20230620134152.383569-1-umang.jain@ideasonboard.com>
+ <20230620134152.383569-2-umang.jain@ideasonboard.com>
+ <2023062022-whimsical-hasty-b012@gregkh>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2023062022-whimsical-hasty-b012@gregkh>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Jun 2023, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> So, what does prevent you from using GENMASK_ULL()?
->
-> Another point, you may teach GENMASK() to issue a warning if hi and/or lo
-> bigger than BITS_PER_LONG.
+On Tue, Jun 20, 2023 at 04:17:05PM +0200, Greg KH wrote:
+> On Tue, Jun 20, 2023 at 07:11:48PM +0530, Umang Jain wrote:
+> > The devices that the vchiq interface registers (bcm2835-audio,
+> > bcm2835-camera) are implemented and exposed by the VC04 firmware.
+> > The device tree describes the VC04 itself with the resources required
+> > to communicate with it through a mailbox interface. However, the
+> > vchiq interface registers these devices as platform devices. This
+> > also means the specific drivers for these devices are getting
+> > registered as platform drivers. This is not correct and a blatant
+> > abuse of platform device/driver.
+> > 
+> > Add a new bus type, vchiq_bus_type and device type (struct vchiq_device)
+> > which will be used to migrate child devices that the vchiq interfaces
+> > creates/registers from the platform device/driver.
+> > 
+> > Signed-off-by: Umang Jain <umang.jain@ideasonboard.com>
+> > ---
+> >  drivers/staging/vc04_services/Makefile        |  1 +
+> >  .../interface/vchiq_arm/vchiq_device.c        | 78 +++++++++++++++++++
+> >  .../interface/vchiq_arm/vchiq_device.h        | 43 ++++++++++
+> >  3 files changed, 122 insertions(+)
+> >  create mode 100644 drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
+> >  create mode 100644 drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.h
+> > 
+> > diff --git a/drivers/staging/vc04_services/Makefile b/drivers/staging/vc04_services/Makefile
+> > index 44794bdf6173..2d071e55e175 100644
+> > --- a/drivers/staging/vc04_services/Makefile
+> > +++ b/drivers/staging/vc04_services/Makefile
+> > @@ -5,6 +5,7 @@ vchiq-objs := \
+> >     interface/vchiq_arm/vchiq_core.o  \
+> >     interface/vchiq_arm/vchiq_arm.o \
+> >     interface/vchiq_arm/vchiq_debugfs.o \
+> > +   interface/vchiq_arm/vchiq_device.o \
+> >     interface/vchiq_arm/vchiq_connected.o \
+> >  
+> >  ifdef CONFIG_VCHIQ_CDEV
+> > diff --git a/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
+> > new file mode 100644
+> > index 000000000000..e16279a25126
+> > --- /dev/null
+> > +++ b/drivers/staging/vc04_services/interface/vchiq_arm/vchiq_device.c
+> > @@ -0,0 +1,78 @@
+> > +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
+> 
+> Code that directly interacts with the driver core can, for obvious
+> reasons, not be BSD-3 licensed, sorry.
+> 
+> Also, why is any of this dual licensed?  What good is any of that?  In
+> order for me to accept new dual-licensed code, it needs to be documented
+> in the changelog very very well as to exactly why this is required, as
+> the legal issues involved in maintaining dual-licensed code like this is
+> tricky and easy to get wrong (as proven here already in this patch...)
 
-What good does that do if you want the warning for a fixed size
-different from unsigned long or long long? Worse, sizeof(long) depends
-on arch, while the GENMASK you want depends on the use case.
+The whole vchiq_arm layer is dual licensed GPL-2.0 + BSD-3. I assume
+this is why Umang used the same licensing terms. We can use GPL-2.0 only
+if this patch qualifies as original work and not derived work of the
+existing code.
 
-> I still don't see the usefulness of that churn.
-
-This thread is turning into a prime example of why drivers and
-subsystems reinvent their own wheels instead of trying to get generally
-useful stuff merged in kernel headers. :p
-
-
-BR,
-Jani.
-
+This being said, I have no objection changing the license of the whole
+vchiq_arm layer to GPL-2.0 only. Dave, any opinion on this ?
 
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+Regards,
+
+Laurent Pinchart
