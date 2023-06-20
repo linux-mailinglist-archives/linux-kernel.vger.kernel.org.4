@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94908736D7C
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9F25736D7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 15:37:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233049AbjFTNhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 09:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37430 "EHLO
+        id S233051AbjFTNhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 09:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232341AbjFTNhX (ORCPT
+        with ESMTP id S233008AbjFTNhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 20 Jun 2023 09:37:23 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45DB10CE;
-        Tue, 20 Jun 2023 06:37:21 -0700 (PDT)
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8902C10F9;
+        Tue, 20 Jun 2023 06:37:22 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 940AF2188D;
-        Tue, 20 Jun 2023 13:37:20 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3FEA71F88C;
+        Tue, 20 Jun 2023 13:37:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1687268240; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1687268241; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AoMZL1WwymTBvZ61qjY9sbo9USVmC0X8xg8UjUonl4A=;
-        b=OWTGwb5PmWPvgTs4ihl8fxMWI///A36cKf5WeAbNCu601m4vN0ldARu/BQ//QLziAwcz8t
-        h/N8W//yPtvTrgAdLpVGh6N2SPD4vHBl4Hd6LD2ZOuqme0BgGI5FVdiehP32Oz5yMoMUBU
-        U0RdAAFFQoO4e8OTinYK57Khx1G0nHA=
+        bh=BjqQt4D7bz3ycKlBkDP6byX+9ncqyQX2u0PfjF3kOqU=;
+        b=bZPMqWQ/ZKEK1kFvUpeCocMqDCRGCEMfHUdlXWEljoX0XBPPiQTfZHTu7rI0SC1/EBEwj2
+        gN9CVEVtyIRqEoyUl4nGMsJqksYol1ZWE3vIuYLKVruYDL7x6TIH1+H5/aB0LHvGU/e9g+
+        8vvMP9014ek2uQBX14/TzdsvHJzNJdY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1687268240;
+        s=susede2_ed25519; t=1687268241;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=AoMZL1WwymTBvZ61qjY9sbo9USVmC0X8xg8UjUonl4A=;
-        b=FRb75r7X5FkD0FMF6W6slG8sF33HBMQnQ8dRsLZWrfSlyAZERWF98Jx4wPvs8AR38PLwHG
-        eDbZcwDtcWnmWTAQ==
+        bh=BjqQt4D7bz3ycKlBkDP6byX+9ncqyQX2u0PfjF3kOqU=;
+        b=ZdB051TkUH69jvTTCVTUawhCT/PK5HHoGCsBhqqe/FbwrYRR/hnE9PslGO38owzEBC8IYF
+        NDHs8foTLRHjZ3Ag==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 853CF133A9;
-        Tue, 20 Jun 2023 13:37:20 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 308AB133A9;
+        Tue, 20 Jun 2023 13:37:21 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id z4BIIJCrkWTCPQAAMHmgww
-        (envelope-from <dwagner@suse.de>); Tue, 20 Jun 2023 13:37:20 +0000
+        id fnPKC5GrkWTGPQAAMHmgww
+        (envelope-from <dwagner@suse.de>); Tue, 20 Jun 2023 13:37:21 +0000
 From:   Daniel Wagner <dwagner@suse.de>
 To:     linux-nvme@lists.infradead.org
 Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
@@ -58,9 +58,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
         Hannes Reinecke <hare@suse.de>,
         James Smart <jsmart2021@gmail.com>,
         Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH v2 3/5] nvmet-fcloop: Remove remote port from list when unlinking
-Date:   Tue, 20 Jun 2023 15:37:09 +0200
-Message-ID: <20230620133711.22840-4-dwagner@suse.de>
+Subject: [PATCH v2 4/5] nvme-fc: Make initial connect attempt synchronous
+Date:   Tue, 20 Jun 2023 15:37:10 +0200
+Message-ID: <20230620133711.22840-5-dwagner@suse.de>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230620133711.22840-1-dwagner@suse.de>
 References: <20230620133711.22840-1-dwagner@suse.de>
@@ -76,47 +76,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The remote port is removed too late from fcloop_nports list. Remove it
-when port is unregistered.
+Commit 4c984154efa1 ("nvme-fc: change controllers first connect to use
+reconnect path") made the connection attempt asynchronous in order to
+make the connection attempt from autoconnect/boot via udev/systemd up
+case a bit more reliable.
 
-This prevents a busy loop in fcloop_exit, because it is possible the
-remote port is found in the list and thus we will never progress.
+Unfortunately, one side effect of this is that any wrong parameters
+provided from userspace will not be directly reported as invalid, e.g.
+auth keys.
 
-The kernel log will be spammed with
+So instead having the policy code inside the kernel it's better to
+address this in userspace, for example in nvme-cli or nvme-stas.
 
-  nvme_fcloop: fcloop_exit: Failed deleting remote port
-  nvme_fcloop: fcloop_exit: Failed deleting target port
+This aligns the fc transport with tcp and rdma.
 
 Signed-off-by: Daniel Wagner <dwagner@suse.de>
 ---
- drivers/nvme/target/fcloop.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ drivers/nvme/host/fc.c | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/nvme/target/fcloop.c b/drivers/nvme/target/fcloop.c
-index 4b35bdcac185..9f7530147893 100644
---- a/drivers/nvme/target/fcloop.c
-+++ b/drivers/nvme/target/fcloop.c
-@@ -995,11 +995,6 @@ fcloop_nport_free(struct kref *ref)
- {
- 	struct fcloop_nport *nport =
- 		container_of(ref, struct fcloop_nport, ref);
--	unsigned long flags;
+diff --git a/drivers/nvme/host/fc.c b/drivers/nvme/host/fc.c
+index 472ed285fd45..aa2911f07c6c 100644
+--- a/drivers/nvme/host/fc.c
++++ b/drivers/nvme/host/fc.c
+@@ -2943,6 +2943,8 @@ nvme_fc_create_io_queues(struct nvme_fc_ctrl *ctrl)
+ 	/* force put free routine to ignore io queues */
+ 	ctrl->ctrl.tagset = NULL;
+ 
++	if (ret > 0)
++		ret = -EIO;
+ 	return ret;
+ }
+ 
+@@ -3545,21 +3547,15 @@ nvme_fc_init_ctrl(struct device *dev, struct nvmf_ctrl_options *opts,
+ 	list_add_tail(&ctrl->ctrl_list, &rport->ctrl_list);
+ 	spin_unlock_irqrestore(&rport->lock, flags);
+ 
+-	if (!nvme_change_ctrl_state(&ctrl->ctrl, NVME_CTRL_RESETTING) ||
+-	    !nvme_change_ctrl_state(&ctrl->ctrl, NVME_CTRL_CONNECTING)) {
++	if (!nvme_change_ctrl_state(&ctrl->ctrl, NVME_CTRL_CONNECTING)) {
+ 		dev_err(ctrl->ctrl.device,
+ 			"NVME-FC{%d}: failed to init ctrl state\n", ctrl->cnum);
+ 		goto fail_ctrl;
+ 	}
+ 
+-	if (!queue_delayed_work(nvme_wq, &ctrl->connect_work, 0)) {
+-		dev_err(ctrl->ctrl.device,
+-			"NVME-FC{%d}: failed to schedule initial connect\n",
+-			ctrl->cnum);
++	ret = nvme_fc_create_association(ctrl);
++	if (ret)
+ 		goto fail_ctrl;
+-	}
 -
--	spin_lock_irqsave(&fcloop_lock, flags);
--	list_del(&nport->nport_list);
--	spin_unlock_irqrestore(&fcloop_lock, flags);
+-	flush_delayed_work(&ctrl->connect_work);
  
- 	kfree(nport);
- }
-@@ -1357,6 +1352,8 @@ __unlink_remote_port(struct fcloop_nport *nport)
- 		nport->tport->remoteport = NULL;
- 	nport->rport = NULL;
+ 	dev_info(ctrl->ctrl.device,
+ 		"NVME-FC{%d}: new ctrl: NQN \"%s\"\n",
+@@ -3568,7 +3564,6 @@ nvme_fc_init_ctrl(struct device *dev, struct nvmf_ctrl_options *opts,
+ 	return &ctrl->ctrl;
  
-+	list_del(&nport->nport_list);
-+
- 	return rport;
- }
+ fail_ctrl:
+-	nvme_change_ctrl_state(&ctrl->ctrl, NVME_CTRL_DELETING);
+ 	cancel_work_sync(&ctrl->ioerr_work);
+ 	cancel_work_sync(&ctrl->ctrl.reset_work);
+ 	cancel_delayed_work_sync(&ctrl->connect_work);
+@@ -3590,7 +3585,9 @@ nvme_fc_init_ctrl(struct device *dev, struct nvmf_ctrl_options *opts,
+ 	 */
+ 	nvme_fc_rport_get(rport);
  
+-	return ERR_PTR(-EIO);
++	if (ret > 0)
++		ret = -EIO;
++	return ERR_PTR(ret);
+ 
+ out_free_queues:
+ 	kfree(ctrl->queues);
 -- 
 2.41.0
 
