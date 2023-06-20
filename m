@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B547361B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 04:57:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B327361BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 04:57:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbjFTC5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 19 Jun 2023 22:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44610 "EHLO
+        id S230077AbjFTC5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 19 Jun 2023 22:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjFTC5K (ORCPT
+        with ESMTP id S229522AbjFTC5P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 19 Jun 2023 22:57:10 -0400
+        Mon, 19 Jun 2023 22:57:15 -0400
 Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C266F10CB;
-        Mon, 19 Jun 2023 19:57:09 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2D8945C01EF;
-        Mon, 19 Jun 2023 22:57:09 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7E910CE;
+        Mon, 19 Jun 2023 19:57:13 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id C7E565C01E4;
+        Mon, 19 Jun 2023 22:57:12 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Mon, 19 Jun 2023 22:57:09 -0400
+  by compute4.internal (MEProxy); Mon, 19 Jun 2023 22:57:12 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1687229829; x=
-        1687316229; bh=JAa2+5OdKdG1aE9dm0qeBtCZnBJBWtJ16Oa1u/aXq1c=; b=a
-        HRyjjeebR+MN4XUwK21uK//2996g945qYh2beELHP90mbv7vEm08p+KvspyY7pMH
-        kKu0mwLyK8Dlz6KK3naw0kOanh1yK2rBESuabGGGn2dMDkqJg937FhEzD4sZPMAy
-        r3q2ZYNyC7zpi5t5IEGm5pvzQjF+5pU4Bz6iPvTU/Pm9x7I65N+l7UiP1GceUQoD
-        lKv33h0KaD8YRJQf1lorSdL8txyceRoPUUSaArgyyuCHRvdhReCZvWW5Njq1V5pd
-        MxMkRj2yw3eb8GYwZ0zGf2AoROyT8ap6ZUR6ekkhd1RBfhMmyBrRuyWrRfQc/ICW
-        kR904FX1LBRHMPqab7tTw==
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1687229832; x=
+        1687316232; bh=i2v99NqpJrZxAzLHsyMCcMd30q0IFnY2dIA+JESeIh8=; b=d
+        KoNkgBGYUqzm2MyCdEBOpeVHf/gJ4KkT0cPooKtsix0niehPf0Yq5I4FwjvBg4+J
+        f6t5qSpjr/QemhAUx44GjHJaDbVoBeWo3oRmKJWCbFV3g7gQvE13SgGtPUnKcVev
+        C8m7bkj5Ej/6CpoKlnwwoHd4TLPadq3iG8TP0Y246wvwkBKnSbxX4CLwQHYjZqLj
+        MHtnSRae0YgQaVyxzPWq32zP29YnTmx65PGpSqNV0YHLQfzORoogOrXeZWi6v6lK
+        ikk4l9JprQqVaoqGx4+7wu6Hi4CA543qQ36ZXrGcfo1wgHCCMkZCImYaaM9w2LNH
+        zqQbRAXFSc5hLlkz+lBfg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1687229829; x=
-        1687316229; bh=JAa2+5OdKdG1aE9dm0qeBtCZnBJBWtJ16Oa1u/aXq1c=; b=U
-        ETfuI+8103LMF52K+2WdH6c4k45OELYUvEnN9faqYpEwZ3TCdLSM8nm7wf702Pft
-        RvOxI+TMfdy2RjtqF3e91btwneh3A4oeggf988F7VuR93o/CTGedG8xRgVghWFj5
-        1J3Wez2+nPkPgYXLHTZwy4CgmZvpK5R1q+DJ1bFAUkX0Sll6E8jk/1gmrQO664u5
-        VhYI2jqc9r1pp7PNgg7EfMG9EomRxseLg2NFoDkc0eCG3OPHGvxtvZoUwivldolb
-        30Fmu/OvwKULxQzDk/TDBTUGK2JKLQpUWtOBaX+iKV5JBMVFMZrIxGovYv5J3Iqd
-        MoXUpoL18w+8cYIbJmhoA==
-X-ME-Sender: <xms:hRWRZDMLXM9Bc90DQFmKLK3L9LUxkbLJR2rrl4WZsCwqxsp6K5Vxrw>
-    <xme:hRWRZN-yOtH29FZKKSYSMmAR4b_AOun1T45M0Hc6QFAzOxvXn4tPZPpmkTgKxP0KG
-    RvNwDSyQqnSizn7ylk>
-X-ME-Received: <xmr:hRWRZCTbphH5OCeju1KHpTdnJu1_7RKZqHhSG2THdDn27oAl5iT42hNhAe1N>
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1687229832; x=
+        1687316232; bh=i2v99NqpJrZxAzLHsyMCcMd30q0IFnY2dIA+JESeIh8=; b=P
+        mwIt3y+m6nKhG6cfmUH+qMqXD1Z0m9e0YSpsofvRpTHzd1AdViCcFsjuBXO98jgR
+        FVXEdbZ55EK2YL7ZLJLmgOXj1eCQ5rT86y/LwYBenkjB8VOVU8+Wn8LkEeV3UCex
+        CBky3zDgo3DLbrLQ5FBhMzZZXMrd+wcyZvWI5K6EoSQ8u5gBpRiZ89nBw5hbjVXR
+        /+747MnTg6USfaZgaiiU0V0BCeaYj8O0K403YSvaWzl3GI6gP/wAXqWCjQSdbrBY
+        wrz8vq32NHYL7UDyPmyC2ty8sL7ynaROFWA52NkjcxtCh4MMFLH5Nnk2+ldE8tby
+        sx6mNAIIpdvdCYX908eZQ==
+X-ME-Sender: <xms:iBWRZFtCb-vVyuGxIe6PyS5tXy8Xiar8TqZFk8MPo2I0hSlB089KFg>
+    <xme:iBWRZOce15ERde2PSUa2OOWdVCgTJXG3qJxLbZR5MedTIplk19uuAkAPPsnzjtEP6
+    pDRw7A5A5vjbrsU9fs>
+X-ME-Received: <xmr:iBWRZIwKsCTsQtsdpsUY2FCVPj2cWML6D_9WpCOSMYQMSM0VbqhBV9qqQSP1>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefgedgvddvucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
@@ -55,13 +55,13 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefgedgvddvucetufdoteggod
     jhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfetfedugfetudeuheetjefhue
     fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgeptden
     ucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:hRWRZHsSAe9k9V03PMB1MFkn6jJaEsrdwECm86nxIOT3sPOpBQJ_Kg>
-    <xmx:hRWRZLckt6nsPSQ0wh5NSLslDJLpx4E_wqvCAW_LNuvYvJON3gx6vg>
-    <xmx:hRWRZD2okdlgbsVh9pWEzqfDxurUJp7EBWnwb23kz27KpvtvOeKe9g>
-    <xmx:hRWRZNuywjRN4D3Rs2T354N9KJ-52-gPubs0hPe4-xnom0BqjkxLLQ>
+X-ME-Proxy: <xmx:iBWRZMOxYS79YDJj2uMscHC6SzpEC9FXXhY_TVJPHX_rxAwaKqKq1w>
+    <xmx:iBWRZF-mVbu5_7udwlpo5Q0As4Ojo56bRs9j05nvTVqMb3mtF0Q77A>
+    <xmx:iBWRZMXMa_lFqSnao93DTSOivVIsdUWxhWWYkw0oDbnSnRCwDFJqHw>
+    <xmx:iBWRZOMw8ki4F3rFB2TvAw0z-RVmAWMg524TNMCgC30tkPWNpmWphg>
 Feedback-ID: i5ec1447f:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 19 Jun 2023 22:57:05 -0400 (EDT)
+ 19 Jun 2023 22:57:09 -0400 (EDT)
 From:   "Luke D. Jones" <luke@ljones.dev>
 To:     hdegoede@redhat.com
 Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
@@ -69,9 +69,9 @@ Cc:     corentin.chary@gmail.com, acpi4asus-user@lists.sourceforge.net,
         linux-hwmon@vger.kernel.org, markgross@kernel.org,
         jdelvare@suse.com, linux@roeck-us.net,
         "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH 1/8] platform/x86: asus-wmi: add support for showing charger mode
-Date:   Tue, 20 Jun 2023 14:56:34 +1200
-Message-Id: <20230620025641.53197-2-luke@ljones.dev>
+Subject: [PATCH 2/8] platform/x86: asus-wmi: add support for showing middle fan RPM
+Date:   Tue, 20 Jun 2023 14:56:35 +1200
+Message-Id: <20230620025641.53197-3-luke@ljones.dev>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230620025641.53197-1-luke@ljones.dev>
 References: <20230620025641.53197-1-luke@ljones.dev>
@@ -87,108 +87,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Expose a WMI method in sysfs platform for showing which connected
-charger the laptop is currently using.
+Some newer ASUS ROG laptops now have a middle/center fan in addition
+to the CPU and GPU fans. This new fan typically blows across the
+heatpipes and VRMs betweent eh CPU and GPU.
+
+This commit exposes that fan to PWM control plus showing RPM.
 
 Signed-off-by: Luke D. Jones <luke@ljones.dev>
 ---
- .../ABI/testing/sysfs-platform-asus-wmi       | 10 +++++++++
- drivers/platform/x86/asus-wmi.c               | 21 +++++++++++++++++++
- include/linux/platform_data/x86/asus-wmi.h    |  3 +++
- 3 files changed, 34 insertions(+)
+ drivers/platform/x86/asus-wmi.c            | 91 ++++++++++++++++++++++
+ include/linux/platform_data/x86/asus-wmi.h |  1 +
+ 2 files changed, 92 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi b/Documentation/ABI/testing/sysfs-platform-asus-wmi
-index a77a004a1baa..eb29e3023c7b 100644
---- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
-+++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
-@@ -98,3 +98,13 @@ Description:
- 		Enable an LCD response-time boost to reduce or remove ghosting:
- 			* 0 - Disable,
- 			* 1 - Enable
-+
-+What:		/sys/devices/platform/<platform>/charge_mode
-+Date:		Jun 2023
-+KernelVersion:	6.5
-+Contact:	"Luke Jones" <luke@ljones.dev>
-+Description:
-+		Get the current charging mode being used:
-+			* 1 - Barrel connected charger,
-+			* 2 - USB-C charging
-+			* 3 - Both connected, barrel used for charging
-\ No newline at end of file
 diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-index 1038dfdcdd32..f23375d5fb82 100644
+index f23375d5fb82..375d25ae0aca 100644
 --- a/drivers/platform/x86/asus-wmi.c
 +++ b/drivers/platform/x86/asus-wmi.c
-@@ -237,6 +237,7 @@ struct asus_wmi {
- 	u8 fan_boost_mode_mask;
- 	u8 fan_boost_mode;
+@@ -72,6 +72,7 @@ module_param(fnlock_default, bool, 0444);
  
-+	bool charge_mode_available;
- 	bool egpu_enable_available;
- 	bool dgpu_disable_available;
- 	bool gpu_mux_mode_available;
-@@ -586,6 +587,22 @@ static void asus_wmi_tablet_mode_get_state(struct asus_wmi *asus)
- 		asus_wmi_tablet_sw_report(asus, result);
+ #define ASUS_WMI_FNLOCK_BIOS_DISABLED	BIT(0)
+ 
++#define ASUS_MID_FAN_DESC		"mid_fan"
+ #define ASUS_GPU_FAN_DESC		"gpu_fan"
+ #define ASUS_FAN_DESC			"cpu_fan"
+ #define ASUS_FAN_MFUN			0x13
+@@ -229,8 +230,10 @@ struct asus_wmi {
+ 
+ 	enum fan_type fan_type;
+ 	enum fan_type gpu_fan_type;
++	enum fan_type mid_fan_type;
+ 	int fan_pwm_mode;
+ 	int gpu_fan_pwm_mode;
++	int mid_fan_pwm_mode;
+ 	int agfn_pwm;
+ 
+ 	bool fan_boost_mode_available;
+@@ -2129,6 +2132,31 @@ static ssize_t fan2_label_show(struct device *dev,
+ 	return sysfs_emit(buf, "%s\n", ASUS_GPU_FAN_DESC);
  }
  
-+/* Charging mode, 1=Barrel, 2=USB ******************************************/
-+static ssize_t charge_mode_show(struct device *dev,
-+				   struct device_attribute *attr, char *buf)
++/* Middle/Center fan on modern ROG laptops */
++static ssize_t fan3_input_show(struct device *dev,
++					struct device_attribute *attr,
++					char *buf)
 +{
 +	struct asus_wmi *asus = dev_get_drvdata(dev);
-+	int result, value;
++	int value;
++	int ret;
 +
-+	result = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_CHARGE_MODE, &value);
-+	if (result < 0)
-+		return result;
++	ret = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_MID_FAN_CTRL, &value);
++	if (ret < 0)
++		return ret;
 +
-+	return sysfs_emit(buf, "%d\n", value & 0xff);
++	value &= 0xffff;
++
++	return sysfs_emit(buf, "%d\n", value * 100);
 +}
 +
-+static DEVICE_ATTR_RO(charge_mode);
++static ssize_t fan3_label_show(struct device *dev,
++					  struct device_attribute *attr,
++					  char *buf)
++{
++	return sysfs_emit(buf, "%s\n", ASUS_MID_FAN_DESC);
++}
 +
- /* dGPU ********************************************************************/
- static ssize_t dgpu_disable_show(struct device *dev,
- 				   struct device_attribute *attr, char *buf)
-@@ -3462,6 +3479,7 @@ static struct attribute *platform_attributes[] = {
- 	&dev_attr_camera.attr,
- 	&dev_attr_cardr.attr,
- 	&dev_attr_touchpad.attr,
-+	&dev_attr_charge_mode.attr,
- 	&dev_attr_egpu_enable.attr,
- 	&dev_attr_dgpu_disable.attr,
- 	&dev_attr_gpu_mux_mode.attr,
-@@ -3491,6 +3509,8 @@ static umode_t asus_sysfs_is_visible(struct kobject *kobj,
- 		devid = ASUS_WMI_DEVID_LID_RESUME;
- 	else if (attr == &dev_attr_als_enable.attr)
- 		devid = ASUS_WMI_DEVID_ALS_ENABLE;
-+	else if (attr == &dev_attr_charge_mode.attr)
-+		ok = asus->charge_mode_available;
- 	else if (attr == &dev_attr_egpu_enable.attr)
- 		ok = asus->egpu_enable_available;
- 	else if (attr == &dev_attr_dgpu_disable.attr)
-@@ -3757,6 +3777,7 @@ static int asus_wmi_add(struct platform_device *pdev)
- 	if (err)
- 		goto fail_platform;
+ static ssize_t pwm2_enable_show(struct device *dev,
+ 				struct device_attribute *attr,
+ 				char *buf)
+@@ -2175,6 +2203,52 @@ static ssize_t pwm2_enable_store(struct device *dev,
+ 	return count;
+ }
  
-+	asus->charge_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_CHARGE_MODE);
- 	asus->egpu_enable_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_EGPU);
- 	asus->dgpu_disable_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_DGPU);
- 	asus->gpu_mux_mode_available = asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_GPU_MUX);
++static ssize_t pwm3_enable_show(struct device *dev,
++				struct device_attribute *attr,
++				char *buf)
++{
++	struct asus_wmi *asus = dev_get_drvdata(dev);
++
++	return sysfs_emit(buf, "%d\n", asus->mid_fan_pwm_mode);
++}
++
++static ssize_t pwm3_enable_store(struct device *dev,
++				 struct device_attribute *attr,
++				 const char *buf, size_t count)
++{
++	struct asus_wmi *asus = dev_get_drvdata(dev);
++	int state;
++	int value;
++	int ret;
++	u32 retval;
++
++	ret = kstrtouint(buf, 10, &state);
++	if (ret)
++		return ret;
++
++	switch (state) { /* standard documented hwmon values */
++	case ASUS_FAN_CTRL_FULLSPEED:
++		value = 1;
++		break;
++	case ASUS_FAN_CTRL_AUTO:
++		value = 0;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	ret = asus_wmi_set_devstate(ASUS_WMI_DEVID_MID_FAN_CTRL,
++				    value, &retval);
++	if (ret)
++		return ret;
++
++	if (retval != 1)
++		return -EIO;
++
++	asus->mid_fan_pwm_mode = state;
++	return count;
++}
++
+ /* Fan1 */
+ static DEVICE_ATTR_RW(pwm1);
+ static DEVICE_ATTR_RW(pwm1_enable);
+@@ -2184,6 +2258,10 @@ static DEVICE_ATTR_RO(fan1_label);
+ static DEVICE_ATTR_RW(pwm2_enable);
+ static DEVICE_ATTR_RO(fan2_input);
+ static DEVICE_ATTR_RO(fan2_label);
++/* Fan3 - Middle/center fan */
++static DEVICE_ATTR_RW(pwm3_enable);
++static DEVICE_ATTR_RO(fan3_input);
++static DEVICE_ATTR_RO(fan3_label);
+ 
+ /* Temperature */
+ static DEVICE_ATTR(temp1_input, S_IRUGO, asus_hwmon_temp1, NULL);
+@@ -2192,10 +2270,13 @@ static struct attribute *hwmon_attributes[] = {
+ 	&dev_attr_pwm1.attr,
+ 	&dev_attr_pwm1_enable.attr,
+ 	&dev_attr_pwm2_enable.attr,
++	&dev_attr_pwm3_enable.attr,
+ 	&dev_attr_fan1_input.attr,
+ 	&dev_attr_fan1_label.attr,
+ 	&dev_attr_fan2_input.attr,
+ 	&dev_attr_fan2_label.attr,
++	&dev_attr_fan3_input.attr,
++	&dev_attr_fan3_label.attr,
+ 
+ 	&dev_attr_temp1_input.attr,
+ 	NULL
+@@ -2221,6 +2302,11 @@ static umode_t asus_hwmon_sysfs_is_visible(struct kobject *kobj,
+ 	    || attr == &dev_attr_pwm2_enable.attr) {
+ 		if (asus->gpu_fan_type == FAN_TYPE_NONE)
+ 			return 0;
++	} else if (attr == &dev_attr_fan3_input.attr
++	    || attr == &dev_attr_fan3_label.attr
++	    || attr == &dev_attr_pwm3_enable.attr) {
++		if (asus->mid_fan_type == FAN_TYPE_NONE)
++			return 0;
+ 	} else if (attr == &dev_attr_temp1_input.attr) {
+ 		int err = asus_wmi_get_devstate(asus,
+ 						ASUS_WMI_DEVID_THERMAL_CTRL,
+@@ -2264,6 +2350,7 @@ static int asus_wmi_hwmon_init(struct asus_wmi *asus)
+ static int asus_wmi_fan_init(struct asus_wmi *asus)
+ {
+ 	asus->gpu_fan_type = FAN_TYPE_NONE;
++	asus->mid_fan_type = FAN_TYPE_NONE;
+ 	asus->fan_type = FAN_TYPE_NONE;
+ 	asus->agfn_pwm = -1;
+ 
+@@ -2278,6 +2365,10 @@ static int asus_wmi_fan_init(struct asus_wmi *asus)
+ 	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_GPU_FAN_CTRL))
+ 		asus->gpu_fan_type = FAN_TYPE_SPEC83;
+ 
++	/* Some models also have a center/middle fan */
++	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_MID_FAN_CTRL))
++		asus->mid_fan_type = FAN_TYPE_SPEC83;
++
+ 	if (asus->fan_type == FAN_TYPE_NONE)
+ 		return -ENODEV;
+ 
 diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
-index 28234dc9fa6a..f90cafe26af1 100644
+index f90cafe26af1..2c03bda7703f 100644
 --- a/include/linux/platform_data/x86/asus-wmi.h
 +++ b/include/linux/platform_data/x86/asus-wmi.h
-@@ -95,6 +95,9 @@
- /* Keyboard dock */
- #define ASUS_WMI_DEVID_KBD_DOCK		0x00120063
- 
-+/* Charging mode - 1=Barrel, 2=USB */
-+#define ASUS_WMI_DEVID_CHARGE_MODE	0x0012006C
-+
- /* dgpu on/off */
- #define ASUS_WMI_DEVID_EGPU		0x00090019
+@@ -80,6 +80,7 @@
+ #define ASUS_WMI_DEVID_FAN_CTRL		0x00110012 /* deprecated */
+ #define ASUS_WMI_DEVID_CPU_FAN_CTRL	0x00110013
+ #define ASUS_WMI_DEVID_GPU_FAN_CTRL	0x00110014
++#define ASUS_WMI_DEVID_MID_FAN_CTRL 0x00110031
+ #define ASUS_WMI_DEVID_CPU_FAN_CURVE	0x00110024
+ #define ASUS_WMI_DEVID_GPU_FAN_CURVE	0x00110025
  
 -- 
 2.40.1
