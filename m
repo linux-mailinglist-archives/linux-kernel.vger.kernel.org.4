@@ -2,68 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 978387371BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:34:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B26C17371D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 18:36:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231892AbjFTQef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 12:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56866 "EHLO
+        id S230490AbjFTQgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 12:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232292AbjFTQeU (ORCPT
+        with ESMTP id S230145AbjFTQgG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 12:34:20 -0400
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44F21994;
-        Tue, 20 Jun 2023 09:34:19 -0700 (PDT)
-Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-341d62e78d3so23300715ab.3;
-        Tue, 20 Jun 2023 09:34:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687278859; x=1689870859;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MYYM1B8WZ008PRRYsWGZJgntHIjgR8NgheJyM+29+wI=;
-        b=atd5XzzxQMmTbssBWc2AruBUCVIWutwsThpf4lVqLqyxctDa0WKUWbEKerDdj/D3rX
-         ocbLjSrFdQeWCMAGqGPGou5Jq29VmuwPeUo+0xdWd7GkD5M91MSYNqcGPJb0r5cVMXNS
-         r2B832rLCl8MdKgwD1ZG7nutvI4APFGt5qTfbGLa2S6YNY0SG+PlbLWCeRWCjLaIKJ0f
-         yXrXzNV3gxlVpV1XUpZ+MD1Pf875OmYh9geygU3SpOADw3CnKasvjRvER8XLCM77d0bo
-         uS/+xm2CXUFZWzItz0R6nYgU8AUN8LKTVgrLUjZVz67tKC0tu8Wrf77ldP2MMWHHXvcD
-         mRbA==
-X-Gm-Message-State: AC+VfDwbGhZZBuU2E80NWmwrbc9j1O0PZFa+OW4ZaS3KpRg3fQW+bXXw
-        x5iUUjejpAX5Rb2o195i+g==
-X-Google-Smtp-Source: ACHHUZ6+t2UPXqAsSFQKWOOlowteotBbfJ5qQLgww4AsGzPCbj1xYEXbMQ3AlemNlkbQyMZkKSSZkg==
-X-Received: by 2002:a92:cc0f:0:b0:33e:6d38:8f88 with SMTP id s15-20020a92cc0f000000b0033e6d388f88mr12570534ilp.2.1687278858875;
-        Tue, 20 Jun 2023 09:34:18 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id b18-20020a92dcd2000000b003312915e615sm704171ilr.28.2023.06.20.09.34.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 09:34:18 -0700 (PDT)
-Received: (nullmailer pid 3784097 invoked by uid 1000);
-        Tue, 20 Jun 2023 16:34:15 -0000
-Date:   Tue, 20 Jun 2023 10:34:15 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Bastien Nocera <hadess@hadess.net>,
-        Rob Herring <robh+dt@kernel.org>, linux-input@vger.kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        linux-arm-msm@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-        devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, Henrik Rydberg <rydberg@bitmath.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: input: document Goodix Berlin
- Touchscreen IC
-Message-ID: <168727885502.3784019.6096341617892638945.robh@kernel.org>
-References: <20230606-topic-goodix-berlin-upstream-initial-v2-0-26bc8fe1e90e@linaro.org>
- <20230606-topic-goodix-berlin-upstream-initial-v2-1-26bc8fe1e90e@linaro.org>
+        Tue, 20 Jun 2023 12:36:06 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 082CF1FFC;
+        Tue, 20 Jun 2023 09:35:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687278942; x=1718814942;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=JK3tVYgPO813k37yyUcq4KAbO6r53M5gA1CD/W9gXN8=;
+  b=C1AncA6hwg3dXQMAeiRzYT+mJSLy/lPRbX/r5EUi9819GG6Np7ludt8R
+   K4+QvOh3uD0T49+KXeFKR+PgUi0SN1dCovidctMwuCyHmVoZMlgy9cDyi
+   c8BR1ZAkVeXa+l4Z8j+eysGOjhcuV8poNTohH/eNrjKunUq3jFTratDy5
+   2wscgl6P8BaoB1xYbb2qkV6p0i5ZwQR6uS2TmKvC8OHF493x6vbVLPWSU
+   sOx9qg0VfP+6hnYGLyXg9DiHdWXW+0MuSq2RSHffv3WeoEUiseegrOlw1
+   3B0c/6hvc1ckX9s/EiupWG8Wlv6kqRQnXOKnM4PTrX4yC2nvWXq2MoX9y
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="363334026"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="363334026"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 09:35:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="827062742"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="827062742"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 20 Jun 2023 09:35:36 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id E770C413; Tue, 20 Jun 2023 19:35:46 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Wolfram Sang <wsa@kernel.org>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        acpica-devel@lists.linuxfoundation.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Robert Moore <robert.moore@intel.com>,
+        Michael Brunner <michael.brunner@kontron.com>
+Subject: [PATCH v1 1/2] ACPI: platform: Ignore SMB0001 only when it has resources
+Date:   Tue, 20 Jun 2023 19:35:33 +0300
+Message-Id: <20230620163534.1042-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230606-topic-goodix-berlin-upstream-initial-v2-1-26bc8fe1e90e@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,16 +68,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+After switchind i2c-scmi driver to be a plaform one it stopped
+being enumerated on number of Kontron platformsm, because it's
+listed in the forbidden_id_list.
 
-On Thu, 15 Jun 2023 12:27:00 +0200, Neil Armstrong wrote:
-> Document the Goodix GT9916 wich is part of the "Berlin" serie
-> of Touchscreen controllers IC from Goodix.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../bindings/input/touchscreen/goodix,gt9916.yaml  | 95 ++++++++++++++++++++++
->  1 file changed, 95 insertions(+)
-> 
+To resolve the situation, split the list to generic one and
+another that holds devices that has to be skiped if and only if
+they have bogus resources attached (_CRS method returns some).
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Fixes: 03d4287add6e ("i2c: scmi: Convert to be a platform driver")
+Closes: https://lore.kernel.org/r/60c1756765b9a3f1eab0dcbd84f59f00fe1caf48.camel@kontron.com
+Reported-by: Michael Brunner <michael.brunner@kontron.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/acpi/acpi_platform.c | 27 +++++++++++++++++++++++++--
+ 1 file changed, 25 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/acpi/acpi_platform.c b/drivers/acpi/acpi_platform.c
+index fe00a5783f53..089a98bd18bf 100644
+--- a/drivers/acpi/acpi_platform.c
++++ b/drivers/acpi/acpi_platform.c
+@@ -19,13 +19,17 @@
+ 
+ #include "internal.h"
+ 
++static const struct acpi_device_id forbidden_id_with_resourses[] = {
++	{"SMB0001",  0},	/* ACPI SMBUS virtual device */
++	{ }
++};
++
+ static const struct acpi_device_id forbidden_id_list[] = {
+ 	{"ACPI0009", 0},	/* IOxAPIC */
+ 	{"ACPI000A", 0},	/* IOAPIC */
+ 	{"PNP0000",  0},	/* PIC */
+ 	{"PNP0100",  0},	/* Timer */
+ 	{"PNP0200",  0},	/* AT DMA Controller */
+-	{"SMB0001",  0},	/* ACPI SMBUS virtual device */
+ 	{ }
+ };
+ 
+@@ -83,6 +87,15 @@ static void acpi_platform_fill_resource(struct acpi_device *adev,
+ 		dest->parent = pci_find_resource(to_pci_dev(parent), dest);
+ }
+ 
++static int acpi_platform_resource_count(struct acpi_resource *ares, void *data)
++{
++	int *count = data;
++
++	*count = *count + 1;
++
++	return 1;
++}
++
+ /**
+  * acpi_create_platform_device - Create platform device for ACPI device node
+  * @adev: ACPI device node to create a platform device for.
+@@ -103,7 +116,8 @@ struct platform_device *acpi_create_platform_device(struct acpi_device *adev,
+ 	struct resource_entry *rentry;
+ 	struct list_head resource_list;
+ 	struct resource *resources = NULL;
+-	int count;
++	int count = 0;
++	int ret;
+ 
+ 	/* If the ACPI node already has a physical device attached, skip it. */
+ 	if (adev->physical_node_count)
+@@ -113,6 +127,15 @@ struct platform_device *acpi_create_platform_device(struct acpi_device *adev,
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	INIT_LIST_HEAD(&resource_list);
++	ret = acpi_dev_get_resources(adev, &resource_list, acpi_platform_resource_count, &count);
++	if (ret < 0)
++		return ERR_PTR(ret);
++
++	acpi_dev_free_resource_list(&resource_list);
++
++	if (count > 0 && !acpi_match_device_ids(adev, forbidden_id_with_resourses))
++		return ERR_PTR(-EINVAL);
++
+ 	count = acpi_dev_get_resources(adev, &resource_list, NULL, NULL);
+ 	if (count < 0)
+ 		return NULL;
+-- 
+2.40.0.1.gaa8946217a0b
 
