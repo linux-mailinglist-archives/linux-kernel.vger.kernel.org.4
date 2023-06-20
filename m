@@ -2,104 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5E3737234
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7EE737237
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 19:00:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjFTRAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 13:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44934 "EHLO
+        id S230475AbjFTRAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 13:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbjFTRAR (ORCPT
+        with ESMTP id S229983AbjFTRAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 13:00:17 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EEDF91
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:00:16 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-666e97fcc60so2115465b3a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 10:00:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687280415; x=1689872415;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QK+YTzQYirL13Os91ZaovYkQTYBm+sE9lgoxCY58ads=;
-        b=jlbqn+apNr6F9PTo3mvJqssWrFtPJbIQl9jmkvBjaCv9yVtDiI0KAvHeyRetatf6vV
-         F+khgMF6VN4e7go0v9Rtx9aDZ8O6DceoA5SrZdgOyto5gru93jWY/9dzVKCuGy6EFGz6
-         Hgnv4uOAd4a8Ze8Wq4NUEUp1XC4b2bjpYvw1WkCx2rFASy/Y5Q6oj/DSOT8gCjpatXs6
-         epH1VMaY+wyzrhZGJCjre15E2JhTddDERTAT0clo9GOJDKG8x4S7JQ18KXtn/UTupic/
-         C/2ele7/LGT+iv/Kv3dEo3GOVGkU7mD7q4ICs5fYO/zNkTQOdHNZBCNIDbM5R9XXIHKD
-         L93w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687280415; x=1689872415;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QK+YTzQYirL13Os91ZaovYkQTYBm+sE9lgoxCY58ads=;
-        b=JcPPNt75bd9QMxrkd0eSxmriBMV5PqEhJgd4cKN1fiVZNipVwjepVpcQavMyeFU1u9
-         bFcThmvQKAvxtUuaxmR3CPcYwvgln4J7sdxJZhSdmfD6+qBezmtLsJRnM2R4A1jV+mdT
-         unO6MCAHCjw8tgC++G0wmYB3Oe392JSCaQVi8wuZ+I8bG76Oj5HW3mYNJmJu1QaXoYDQ
-         W5/deoko5AlPgDZhxy04CDp0Dew0fFBobC6oP/dbCxtb2tNumm1LpXgs1ce8DmGUp7xC
-         OVXJon8X7zYU8kQ75RJFi2y/8z/dmL4ncslYmj2j7TyX/KL5beVIvADaPs7IxlvMcmE8
-         cSYQ==
-X-Gm-Message-State: AC+VfDxpSjyaZKiqHS8wZvKUMHkMBlCl76XkA25RY7c4coozj6R52SjM
-        T0z2Sj9GB4A7iGMbKEVpdzUJQw==
-X-Google-Smtp-Source: ACHHUZ5YTS2ZtJb6TMHkwov/SWafsEKbx/kSL9Eef8V1L8C+MUfF8AMHNWCY+1vck4/7YVBsS7pDWw==
-X-Received: by 2002:a05:6a21:9983:b0:121:bf66:a715 with SMTP id ve3-20020a056a21998300b00121bf66a715mr4753743pzb.45.1687280415224;
-        Tue, 20 Jun 2023 10:00:15 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id q25-20020a62ae19000000b00666e17004a4sm557666pff.58.2023.06.20.10.00.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 10:00:14 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 10:00:14 -0700 (PDT)
-X-Google-Original-Date: Tue, 20 Jun 2023 09:59:33 PDT (-0700)
-Subject:     Re: [PATCH v2 0/2] dt-bindings: riscv: cpus: switch to unevaluatedProperties: false
-In-Reply-To: <20230615-creamer-emu-ade0fa0bdb68@spud>
-CC:     Conor Dooley <conor@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor Dooley <conor@kernel.org>
-Message-ID: <mhng-9b234a44-e770-48a9-8a7b-d71a9ed671e7@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Tue, 20 Jun 2023 13:00:37 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3791728;
+        Tue, 20 Jun 2023 10:00:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687280433; x=1718816433;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=OBAerPf67KJbNEHvyQM2OXQEr7NY+xfC/oeSx78gcuk=;
+  b=BV6gw48xtQLDByDJQvesnMXYcss3oJZll9TSoejfFWMZhx7RfphWxTq8
+   meQzhHYaUQsOKf8MKhaSh3K3YzSEf9xplkL50ECQOTcLrFU96po+s7hoI
+   G0YuXkgG0o28uyAwwGHrrYhr/wJzlNqoCVv9rPmdgyacq4TZEmkhmMlBq
+   ZSZ8lbk3Co6CBbUY4RP9EUz8GgjOhxv9KnWLQmnfyE/XO2BveOlPexZ4N
+   y2QoF/qOf7LWI7DZEASYjoc5VHDd5Uwlpzhzo76rXm4L28PwPRxg/InBC
+   /HLoCiKSV/yECMmth2B6WIDaIP0ZaS/ccJZMgbSdTwiKM9me/gvfBTyPE
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="359929599"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="359929599"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 10:00:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="888314320"
+X-IronPort-AV: E=Sophos;i="6.00,257,1681196400"; 
+   d="scan'208";a="888314320"
+Received: from a0cec87da3f2.jf.intel.com (HELO worker-node-1.jf.intel.com) ([10.165.55.163])
+  by orsmga005.jf.intel.com with ESMTP; 20 Jun 2023 10:00:32 -0700
+From:   Weilin Wang <weilin.wang@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Weilin Wang <weilin.wang@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Samantha Alt <samantha.alt@intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>, ravi.bangoria@amd.com
+Subject: [PATCH v5 0/3] Add metric value validation test
+Date:   Tue, 20 Jun 2023 10:00:24 -0700
+Message-Id: <20230620170027.1861012-1-weilin.wang@intel.com>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 15 Jun 2023 15:50:13 PDT (-0700), Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> Do the various bits needed to drop the additionalProperties: true that
-> we currently have in riscv/cpu.yaml, to permit actually enforcing what
-> people put in cpus nodes.
->
-> Changes in v2:
-> - drop patches 2 -> 5, they're now standard in dt-schema
->
-> CC: Rob Herring <robh+dt@kernel.org>
-> CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-> CC: Paul Walmsley <paul.walmsley@sifive.com>
-> CC: Palmer Dabbelt <palmer@dabbelt.com>
-> CC: linux-riscv@lists.infradead.org
-> CC: devicetree@vger.kernel.org
-> CC: linux-kernel@vger.kernel.org
->
-> Conor Dooley (2):
->   dt-bindings: riscv: cpus: add a ref the common cpu schema
->   dt-bindings: riscv: cpus: switch to unevaluatedProperties: false
->
->  Documentation/devicetree/bindings/riscv/cpus.yaml | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
+This is the fifth version of metric value validation tests.
 
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+We made the following changes from v4 to v5:
+ - Update "()" to "{}" to avoid creating sub shell and successfully skip test on non-Intel
+ platform. [Ravi]
 
-LMK if you wanted me to pick these up?
+v4: https://lore.kernel.org/lkml/20230618172820.751560-1-weilin.wang@intel.com/
+
+Weilin Wang (3):
+  perf test: Add metric value validation test
+  perf test: Add skip list for metrics known would fail
+  perf test: Rerun failed metrics with longer workload
+
+ .../tests/shell/lib/perf_metric_validation.py | 574 ++++++++++++++++++
+ .../lib/perf_metric_validation_rules.json     | 398 ++++++++++++
+ tools/perf/tests/shell/stat_metrics_values.sh |  30 +
+ 3 files changed, 1002 insertions(+)
+ create mode 100644 tools/perf/tests/shell/lib/perf_metric_validation.py
+ create mode 100644 tools/perf/tests/shell/lib/perf_metric_validation_rules.json
+ create mode 100755 tools/perf/tests/shell/stat_metrics_values.sh
+
+
+base-commit: 7cdda6998ee55140e64894e25048df7157344fc9
+-- 
+2.39.1
+
