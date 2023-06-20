@@ -2,232 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FEE073765E
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 23:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E356737660
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 23:04:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbjFTVDr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 17:03:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S229903AbjFTVER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 17:04:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbjFTVDq (ORCPT
+        with ESMTP id S229885AbjFTVEP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 17:03:46 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179B510F4;
-        Tue, 20 Jun 2023 14:03:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687295025; x=1718831025;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Qy2nBFndB7zMhlWJ7jbpgbfuTUNl9LWdB5UOeqaAxkc=;
-  b=jfrhnQdVvWzwyM/ilZwAcPreOLWNZrbj8zKQ2jO7qv8xNxtXuAIpoKWK
-   4oT6QzYbSUa+yTRWxxgbpJfHHyA8+in9PUawGxX3T4vywlVRl+WaXDnAJ
-   eXqd87iE49uVHljnKAcPTU5Ioc/bNmu2TweFxEMBrBHUI5digDqcDuiRw
-   YKc8aHKuh6uCUaaZrksxiJ904Csx4OHL8ZpzDCMNCMl9Df6JKIKoXnUuw
-   8IZs/YoK7w2gHTFgNBYWAEsoO/IpBhypg9OGPrUFrTg4FVbvqwnslkOnY
-   0fZFFxCAqS0f+UU6ACOsdRo/LHWjitoFs/BTsBYqXAJL/oGdxiRkxnc9I
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="363405827"
-X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
-   d="scan'208";a="363405827"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 14:03:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="888384781"
-X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
-   d="scan'208";a="888384781"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 14:03:31 -0700
-Received: from punajuuri.localdomain (punajuuri.localdomain [192.168.240.130])
-        by kekkonen.fi.intel.com (Postfix) with ESMTP id CD3F811F89D;
-        Wed, 21 Jun 2023 00:03:27 +0300 (EEST)
-Received: from sailus by punajuuri.localdomain with local (Exim 4.96)
-        (envelope-from <sakari.ailus@linux.intel.com>)
-        id 1qBiVS-002jLy-1Z;
-        Wed, 21 Jun 2023 00:03:18 +0300
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     linux-media@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Joe Tessler <jrt@google.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Wenyou Yang <wenyou.yang@microchip.com>,
-        Bin Liu <bin.liu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sean Young <sean@mess.org>, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH v2 20/28] media: platform: jpeg: always reference OF data
-Date:   Wed, 21 Jun 2023 00:03:08 +0300
-Message-Id: <20230620210308.650986-1-sakari.ailus@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230312131318.351173-20-krzysztof.kozlowski@linaro.org>
-References: <20230312131318.351173-20-krzysztof.kozlowski@linaro.org>
+        Tue, 20 Jun 2023 17:04:15 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A810C10F4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:04:14 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-77de8cc1370so57942939f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 14:04:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1687295054; x=1689887054;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gjrlNog9VUmWQ4CeTJ0zT3GopxHeGj3HfK3FziRfHlY=;
+        b=AiSFNVi74b4/QYZ++fP27D6qMecoPP9WELi3ff1Q2o9+DCQogAAyxG66lKIKFcVHKs
+         nytMo+5R1dIiwtoPClgLLft/vhlnEFVC4um3B4FMQchpQqhbeggkLpX6rBaLWQCJrMHI
+         nNu2vQK93jk03Y+mVFkt2YWFGAhW9i7nXFp6M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687295054; x=1689887054;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gjrlNog9VUmWQ4CeTJ0zT3GopxHeGj3HfK3FziRfHlY=;
+        b=EuHtANM7W8grSSQUkIYLVETo8aMHqxjOqFMyk/k55TcidQFNSXFzkznxpdXU7kgjLf
+         ZR7uF6V+6wbt3bQAwf2TAa87MJZrlz4UDx6orXliy/PqU+r3Ho3YErFPGmOTbzKeHu2c
+         VnH2/RxNaDYoISNs4M46SWHwLu+/LN7Nx0JjfR+6RCZER/0qahE2p5myWoeZPceaXytU
+         rL2joyS0dUDQaHQHjwKPTaCprFT/1oKSYuZqwwU/tfWmWZ9MT6EiyxbK+v0X9x7Z3pIZ
+         WK+FZMWrX8LHiyDfrssipTSknQoAtsQQPNB1NmNBFtJ6Lq4vef5+7aQiGjFYbEbJRl4W
+         5sNg==
+X-Gm-Message-State: AC+VfDwzui32rA8AYggNPMGGEQcy1QbNX57DydOcbBnc7Y7jf14Xau2k
+        2gb/ora37Us8LkHDTRhzMCAY0g==
+X-Google-Smtp-Source: ACHHUZ67pM/+HD6HxI1DKWKKG34tNljc5QMIctdDs8pRmiKA5LIWM3veIBSPKOLJ+4RyySUz/FkMKw==
+X-Received: by 2002:a92:7c05:0:b0:340:ae63:38a4 with SMTP id x5-20020a927c05000000b00340ae6338a4mr11589087ilc.2.1687295053815;
+        Tue, 20 Jun 2023 14:04:13 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id c5-20020a92d3c5000000b0034202d05fadsm831865ilh.72.2023.06.20.14.04.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 14:04:13 -0700 (PDT)
+Message-ID: <f7bf3aa8-f1b8-a1b5-8e51-46d51d002633@linuxfoundation.org>
+Date:   Tue, 20 Jun 2023 15:04:12 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 5.15 000/107] 5.15.118-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230619102141.541044823@linuxfoundation.org>
+Content-Language: en-US
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230619102141.541044823@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 6/19/23 04:29, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.118 release.
+> There are 107 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 21 Jun 2023 10:21:12 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.118-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-The driver can match only via the DT table so the table should be always
-used and the of_match_ptr does not have any sense (this also allows ACPI
-matching via PRP0001, even though it might not be relevant here).
+Compiled and boots, but doesn't get to login prompt. Keeps running
+into NMIs and watchdog detects had lockups.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-[Sakari Ailus: Rebased on media tree master, reword commit message,
-	       drop additional #if defined(CONFIG_OF)/#endif's.]
-Signed-off-by: Sakari Ailus <sakari.ailus@linux.intel.com>
----
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c   | 6 +-----
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c | 4 +---
- drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c | 4 +---
- 3 files changed, 3 insertions(+), 11 deletions(-)
+I am starting bisect and will keep you updated.
 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-index 4768156181c99..40cb3cb87ba17 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
-@@ -28,7 +28,6 @@
- #include "mtk_jpeg_core.h"
- #include "mtk_jpeg_dec_parse.h"
- 
--#if defined(CONFIG_OF)
- static struct mtk_jpeg_fmt mtk_jpeg_enc_formats[] = {
- 	{
- 		.fourcc		= V4L2_PIX_FMT_JPEG,
-@@ -102,7 +101,6 @@ static struct mtk_jpeg_fmt mtk_jpeg_dec_formats[] = {
- 		.flags		= MTK_JPEG_FMT_FLAG_CAPTURE,
- 	},
- };
--#endif
- 
- #define MTK_JPEG_ENC_NUM_FORMATS ARRAY_SIZE(mtk_jpeg_enc_formats)
- #define MTK_JPEG_DEC_NUM_FORMATS ARRAY_SIZE(mtk_jpeg_dec_formats)
-@@ -1455,7 +1453,6 @@ static const struct dev_pm_ops mtk_jpeg_pm_ops = {
- 	SET_RUNTIME_PM_OPS(mtk_jpeg_pm_suspend, mtk_jpeg_pm_resume, NULL)
- };
- 
--#if defined(CONFIG_OF)
- static int mtk_jpegenc_get_hw(struct mtk_jpeg_ctx *ctx)
- {
- 	struct mtk_jpegenc_comp_dev *comp_jpeg;
-@@ -1951,14 +1948,13 @@ static const struct of_device_id mtk_jpeg_match[] = {
- };
- 
- MODULE_DEVICE_TABLE(of, mtk_jpeg_match);
--#endif
- 
- static struct platform_driver mtk_jpeg_driver = {
- 	.probe = mtk_jpeg_probe,
- 	.remove_new = mtk_jpeg_remove,
- 	.driver = {
- 		.name           = MTK_JPEG_NAME,
--		.of_match_table = of_match_ptr(mtk_jpeg_match),
-+		.of_match_table = mtk_jpeg_match,
- 		.pm             = &mtk_jpeg_pm_ops,
- 	},
- };
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-index 869068fac5e2f..baa7be58ce691 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_dec_hw.c
-@@ -39,7 +39,6 @@ enum mtk_jpeg_color {
- 	MTK_JPEG_COLOR_400		= 0x00110000
- };
- 
--#if defined(CONFIG_OF)
- static const struct of_device_id mtk_jpegdec_hw_ids[] = {
- 	{
- 		.compatible = "mediatek,mt8195-jpgdec-hw",
-@@ -47,7 +46,6 @@ static const struct of_device_id mtk_jpegdec_hw_ids[] = {
- 	{},
- };
- MODULE_DEVICE_TABLE(of, mtk_jpegdec_hw_ids);
--#endif
- 
- static inline int mtk_jpeg_verify_align(u32 val, int align, u32 reg)
- {
-@@ -653,7 +651,7 @@ static struct platform_driver mtk_jpegdec_hw_driver = {
- 	.probe = mtk_jpegdec_hw_probe,
- 	.driver = {
- 		.name = "mtk-jpegdec-hw",
--		.of_match_table = of_match_ptr(mtk_jpegdec_hw_ids),
-+		.of_match_table = mtk_jpegdec_hw_ids,
- 	},
- };
- 
-diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-index 71e85b4bbf127..244018365b6f1 100644
---- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-+++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_enc_hw.c
-@@ -46,7 +46,6 @@ static const struct mtk_jpeg_enc_qlt mtk_jpeg_enc_quality[] = {
- 	{.quality_param = 97, .hardware_value = JPEG_ENC_QUALITY_Q97},
- };
- 
--#if defined(CONFIG_OF)
- static const struct of_device_id mtk_jpegenc_drv_ids[] = {
- 	{
- 		.compatible = "mediatek,mt8195-jpgenc-hw",
-@@ -54,7 +53,6 @@ static const struct of_device_id mtk_jpegenc_drv_ids[] = {
- 	{},
- };
- MODULE_DEVICE_TABLE(of, mtk_jpegenc_drv_ids);
--#endif
- 
- void mtk_jpeg_enc_reset(void __iomem *base)
- {
-@@ -377,7 +375,7 @@ static struct platform_driver mtk_jpegenc_hw_driver = {
- 	.probe = mtk_jpegenc_hw_probe,
- 	.driver = {
- 		.name = "mtk-jpegenc-hw",
--		.of_match_table = of_match_ptr(mtk_jpegenc_drv_ids),
-+		.of_match_table = mtk_jpegenc_drv_ids,
- 	},
- };
- 
--- 
-2.39.2
+thanks,
+-- Shuah
 
