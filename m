@@ -2,202 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 708BF7366B5
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 565D77366BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 10:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbjFTIzP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 04:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54162 "EHLO
+        id S231432AbjFTI4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 04:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229618AbjFTIzM (ORCPT
+        with ESMTP id S229522AbjFTIz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 04:55:12 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C832E7E
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 01:55:11 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f9083d8849so37476195e9.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 01:55:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687251310; x=1689843310;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4iS2y1OnqzJKxw2HMxOkBjHX6AOsUPw+JImGbUMIxFg=;
-        b=f4JsLlCxHec5vVldrlb1HMkH9i7QC2zxrPMaYwzIjp/HDDLN1HRV4NwopXumEmW9C/
-         xOS/eeLg/uR9ir61is14Ve0SJfuJu3t+W7/nMTrKWjCOOAQ96LZwDvQYMZoFe73ImJgd
-         clCa7NDVHHM6/RGf2ROZIgO/PGPvjq++0F+F8JSPDFXeLszY/Qnw9cVlr7U8srL2ALFo
-         bbMVAkGEwQ6p26WLPXh9kTa8W/qDvZ97c5rEnHDVCJXU55Ud9vmCcss8IGI08NhztPl8
-         4xZNHlvQHigdA1YalBiEAd0jW36yzTHjQr9U+aazJzXB3+Qp3L2Sa9ygBtokYzT3u0dS
-         TjHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687251310; x=1689843310;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4iS2y1OnqzJKxw2HMxOkBjHX6AOsUPw+JImGbUMIxFg=;
-        b=iipGuyCoFEP25xKlyhiv3l/8lu0fl0mmA8tTapVqQ3wJ+EZ4qut1oKLd4VMcsU5Avc
-         F6xvDLLtKSVfBqsb0Pwnx7gductDQX+2cxKjepFub4eefcj57F7h8ppGImaNsIvblQXf
-         dRepNitjooDopmw9T1Cp/prsnwi8usSeh1iZ+zPbSLUhRO2d1q5j5GX3YCkiQddGP81d
-         KiZ+lArNs6B7cnm8zK/5+P4HauA26ixNvpK9FrVkOcYLsiBUzI8Tlw1ZbJerVYzx3KEe
-         pV5s/VpRP9K1SO5HzK68SNCDClIzD59haqG+OHK3NGp8dVMIGkjBc+2ge2Ys4IAmDVR8
-         VuWQ==
-X-Gm-Message-State: AC+VfDz++PnYFTojv49rfiCxvoBjAt8OaFaXUbVgkSwux1OwPtC3ceu8
-        aQ2ayUyrhFlZp7+YjgVTXzSuVA==
-X-Google-Smtp-Source: ACHHUZ5VCu5k4nHF4t4LkDOSbvpBchpWq0tIlTiaANTgj8U6JwAarF7fg48kO+5pn74BlAToa9pfzw==
-X-Received: by 2002:a7b:cc99:0:b0:3f9:b88a:f9aa with SMTP id p25-20020a7bcc99000000b003f9b88af9aamr831636wma.11.1687251310048;
-        Tue, 20 Jun 2023 01:55:10 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id i2-20020a05600c290200b003f42d8dd7d1sm12932116wmd.7.2023.06.20.01.55.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jun 2023 01:55:09 -0700 (PDT)
-Message-ID: <1a5c39d8-812f-4a8d-bc65-205695661973@linaro.org>
-Date:   Tue, 20 Jun 2023 10:55:06 +0200
+        Tue, 20 Jun 2023 04:55:59 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 84F9110DB;
+        Tue, 20 Jun 2023 01:55:56 -0700 (PDT)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 09F1760C12808;
+        Tue, 20 Jun 2023 16:55:44 +0800 (CST)
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From:   Su Hui <suhui@nfschina.com>
+To:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch
+Cc:     dan.carpenter@linaro.org, Jane.Jian@amd.com, Likun.Gao@amd.com,
+        David.Francis@amd.com, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, Su Hui <suhui@nfschina.com>
+Subject: [PATCH] =?UTF-8?q?drm/amd/amdgpu:=20Use=20=E2=80=9C=5F=5Fpacked?= =?UTF-8?q?=E2=80=9C=20instead=20of=20"pragma=20pack()"?=
+Date:   Tue, 20 Jun 2023 16:55:43 +0800
+Message-Id: <20230620085543.576733-1-suhui@nfschina.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: net: motorcomm: Add pad driver
- strength cfg
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Guo Samin <samin.guo@starfivetech.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Conor Dooley <conor@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org, Peter Geis <pgwipeout@gmail.com>,
-        Frank <Frank.Sae@motor-comm.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
-References: <20230526090502.29835-1-samin.guo@starfivetech.com>
- <20230526090502.29835-2-samin.guo@starfivetech.com>
- <20230526-glutinous-pristine-fed571235b80@spud>
- <1dbf113c-7592-68bd-6aaf-05ff1d8c538c@starfivetech.com>
- <15eb4ffe-ea12-9a2c-ae9d-c34860384b60@starfivetech.com>
- <20230620-clicker-antivirus-99e24a06954e@wendy>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230620-clicker-antivirus-99e24a06954e@wendy>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20/06/2023 10:26, Conor Dooley wrote:
-> Hey,
-> 
-> On Tue, Jun 20, 2023 at 11:09:52AM +0800, Guo Samin wrote:
->> From: Guo Samin <samin.guo@starfivetech.com>
->>> From: Conor Dooley <conor@kernel.org>
->>>> On Fri, May 26, 2023 at 05:05:01PM +0800, Samin Guo wrote:
->>>>> The motorcomm phy (YT8531) supports the ability to adjust the drive
->>>>> strength of the rx_clk/rx_data, the value range of pad driver
->>>>> strength is 0 to 7.
-> 
->>>>> +  motorcomm,rx-clk-driver-strength:
->>>>> +    description: drive strength of rx_clk pad.
->>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>>> +    enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
->>>>
->>>> I think you should use minimum & maximum instead of these listed out
->>>> enums.
-> 
->>>  You have also had this comment since v1 & were reminded of it on
->>>> v2 by Krzysztof: "What do the numbers mean? What are the units? mA?"
-> 
->>> The good news is that we just got some data about units from Motorcomm. 
->>> Maybe I can post the data show of the unit later after I get the complete data.
-> 
->> Sorry, haven't updated in a while.
-> 
-> NW chief.
-> 
->> I just got the detailed data of Driver Strength(DS) from Motorcomm , which applies to both rx_clk and rx_data.
->>
->> |----------------------|
->> |     ds map table     |
->> |----------------------|
->> | DS(3b) | Current (mA)|
->> |--------|-------------|
->> |   000  |     1.20    |
->> |   001  |     2.10    |
->> |   010  |     2.70    |
->> |   011  |     2.91    |
->> |   100  |     3.11    |
->> |   101  |     3.60    |
->> |   110  |     3.97    |
->> |   111  |     4.35    |
->> |--------|-------------|
->>
->> Since these currents are not integer values and have no regularity,
+use "__packed" is clearer amd better than “pragma pack()”.
 
-There is no mA unit in DT schema, so I don't see what by "not integer
-values". 1200 uA is an integer.
+Signed-off-by: Su Hui <suhui@nfschina.com>
+---
+As Dan Carpenter mentioned:
+'"Mark the associated types properly packed individually, rather than
+use the disgusting "pragma pack()" that should never be used."
+https://lore.kernel.org/linux-sparse/CAHk-=wi7jGZ+bVbt-UfXOkpEQdHzF3Z2HBjkGdjh8q4dvPPGWQ@mail.gmail.com/'
+use "__packed" is better.
+the previous wrong patch's address:
+https://lore.kernel.org/kernel-janitors/c12c4031-52fb-25a2-b411-e668eb9baaa2@tom.com/T/#t
+ drivers/gpu/drm/amd/amdgpu/amdgv_sriovmsg.h | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
->> it is not very good to use in the drive/dts in my opinion.
-> 
-> Who says you have to use mA? What about uA?
-
-Yep
-
-> 
->> Therefore, I tend to continue to use DS(0-7) in dts/driver, and adding
->> a description of the current value corresponding to DS in dt-bindings. 
-> 
-> I think this goes against not putting register values into the dts &
-> that the accurate description of the hardware are the currents.
-
-For vendor properties register values are often accepted, but logical
-unit is much more readable in the DTS. Also allows further customization
-or extending when new variant appears. You cannot do extend a property
-easily when it holds a register value, without changing the meaning per
-variant.
-
-> 
->> Like This:
->>
->> +  motorcomm,rx-clk-driver-strength:
->> +    description: drive strength of rx_clk pad.
-> 
-> You need "description: |" to preserve the formatting if you add tables,
-> but I don't think that this is a good idea. Put the values in here that
-> describe the hardware (IOW the currents) and then you don't need to have
-> this table.
-> 
->> +      |----------------------|
->> +      | rx_clk ds map table  |
->> +      |----------------------|
->> +      | DS(3b) | Current (mA)|
->> +      |   000  |     1.20    |
->> +      |   001  |     2.10    |
->> +      |   010  |     2.70    |
->> +      |   011  |     2.91    |
->> +      |   100  |     3.11    |
->> +      |   101  |     3.60    |
->> +      |   110  |     3.97    |
->> +      |   111  |     4.35    |
->> +      |--------|-------------|
->> +    $ref: /schemas/types.yaml#/definitions/uint32
->> +    enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
->> +    default: 3
->> +
-> 
->> Or use minimum & maximum instead of these listed out enums
-> 
-> With the actual current values, enum rather than min + max.
-
-
-
-Best regards,
-Krzysztof
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgv_sriovmsg.h b/drivers/gpu/drm/amd/amdgpu/amdgv_sriovmsg.h
+index 24d42d24e6a0..025adc950026 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgv_sriovmsg.h
++++ b/drivers/gpu/drm/amd/amdgpu/amdgv_sriovmsg.h
+@@ -83,8 +83,6 @@ enum amd_sriov_ucode_engine_id {
+ 	AMD_SRIOV_UCODE_ID__MAX
+ };
+ 
+-#pragma pack(push, 1) // PF2VF / VF2PF data areas are byte packed
+-
+ union amd_sriov_msg_feature_flags {
+ 	struct {
+ 		uint32_t error_log_collect : 1;
+@@ -210,7 +208,7 @@ struct amd_sriov_msg_pf2vf_info {
+ 	uint32_t pcie_atomic_ops_support_flags;
+ 	/* reserved */
+ 	uint32_t reserved[256 - AMD_SRIOV_MSG_PF2VF_INFO_FILLED_SIZE];
+-};
++} __packed;
+ 
+ struct amd_sriov_msg_vf2pf_info_header {
+ 	/* the total structure size in byte */
+@@ -263,7 +261,7 @@ struct amd_sriov_msg_vf2pf_info {
+ 	struct {
+ 		uint8_t id;
+ 		uint32_t version;
+-	} ucode_info[AMD_SRIOV_MSG_RESERVE_UCODE];
++	} __packed ucode_info[AMD_SRIOV_MSG_RESERVE_UCODE];
+ 	uint64_t dummy_page_addr;
+ 
+ 	/* reserved */
+@@ -301,8 +299,6 @@ enum amd_sriov_gpu_init_data_version {
+ 	GPU_INIT_DATA_READY_V1 = 1,
+ };
+ 
+-#pragma pack(pop) // Restore previous packing option
+-
+ /* checksum function between host and guest */
+ unsigned int amd_sriov_msg_checksum(void *obj, unsigned long obj_size, unsigned int key,
+ 				    unsigned int checksum);
+-- 
+2.30.2
 
