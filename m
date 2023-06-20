@@ -2,292 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4EAC7376CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 23:45:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F71F737593
+	for <lists+linux-kernel@lfdr.de>; Tue, 20 Jun 2023 22:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbjFTVpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 17:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
+        id S229907AbjFTUDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 16:03:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjFTVpW (ORCPT
+        with ESMTP id S229521AbjFTUDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 17:45:22 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BCCD1985;
-        Tue, 20 Jun 2023 14:45:21 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30fbf253dc7so4140554f8f.0;
-        Tue, 20 Jun 2023 14:45:21 -0700 (PDT)
+        Tue, 20 Jun 2023 16:03:36 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F2C10F0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:03:34 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9786fc23505so623447166b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 13:03:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687297519; x=1689889519;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=bjFWolrp+M6VdHQye2nkm7pEpa5YufBJ9Hnmhmq+TOw=;
-        b=IeDUENFa27UDZuXfr7Gb0kHyoG0WP4gmPGyyR7a26iYLrXZaNX8Jra7V/MNmq/CUb9
-         v9seiTlW6r9xHZ6mUFjC+L84QOKNZTvBPlUxbC1b+NB2/8K5xJ39cqbK2ud1ooHZfGEd
-         SU2wfNmfx+Q1kNmV8oStcfC+CV0LyjiUf+xyHzwYoaXQGc2I8ZZVDeEayCMYbjtHZ1m4
-         p1Kq+qw+D5f6HDmM1cbqKOzXodjTDktRvbC+fR1flPAko7P9P6H+oKqH+KzSnnZe/Gyx
-         4SDuudnAk/GLWiGBY+/vuM6TmljFz1ILhhr2VttgHR6ywOF/NBEHClVlDdTEV5+tOS9I
-         JJnw==
+        d=gmail.com; s=20221208; t=1687291413; x=1689883413;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lHUIx+vaRNcVvwWyiGDGMuucQ15EjOva/eBx4ejRVkQ=;
+        b=eDKl0w0AM166qrNGpWPNGiYnU2jqsFMiMce/t7sI4Qbdqwf4tmaiAuViWs0KKyHm0j
+         +YKGMEZFb8eNIzUZZvfRx5ThiLDAYHcrOWwOUA6iHkHxdkch+7WhBrebHkcbhRMMkv1d
+         g/FBZxYnS+N2UoamO7gia7qdjmUaw0blYCkVjMGi8ISsRH2kmGCQBMbSI4KrCv76Xjlq
+         3GG71Gqv1ITa4dRnQKCDrNkZhykNt4MdTor4jZ5/7xgGVZRRnrZwWVpXyjaLIMBbVAZc
+         ZSM7B2l4aKjFb8YOvsPwE+OhQkzFafIF2RXP0UES6iB0Hl5kyBJFpuNw1lheNjwy1BaG
+         LgXw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687297519; x=1689889519;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bjFWolrp+M6VdHQye2nkm7pEpa5YufBJ9Hnmhmq+TOw=;
-        b=XvWUREagjKsdjCy5b3oyhYwm9tKS8km6vt4ewkUNSCCOZT5f8jLKU3SnFUWFisxSgZ
-         dpasPM0HcXG3qk2FGnIwZB5nL9VKcHMdNp5GV50zN+ARIXI6cd2dqQylNrapHndWgC4n
-         bPA5OGX+ePSLzcnPCuj0p/EPYG7W1Sr2GhatuNXYs3OxNt050ugNMCK8zbcJVJXEpU1w
-         mx8KkreoKz5v8NAbX+scKeCal+gCGbJuAg94hXHjV5od0o787yIEuT5A/sW4XqCIYRSj
-         vnew7QiJCz3Hmfk97738BvVt6BggkKHvu4RPZFzAV6LoYPfN3WFKt5IsTIw1SZnrfhmC
-         8MtA==
-X-Gm-Message-State: AC+VfDzxd7eWo0+67SK1O/V+2CfY7ZwHmfs0MY2Dz7p9uwE4injUUweC
-        7GX/ASf8iyiuMMlD4kFiwZw=
-X-Google-Smtp-Source: ACHHUZ7nlMDdLtN8OT+F5kq/tIwd6foXtf8Xe9WsUQADEz2iesZ0qYY3m9C+JFHwM3jnvPzn8l1NmQ==
-X-Received: by 2002:a5d:630c:0:b0:311:3554:bec9 with SMTP id i12-20020a5d630c000000b003113554bec9mr7766164wru.21.1687297519199;
-        Tue, 20 Jun 2023 14:45:19 -0700 (PDT)
-Received: from Ansuel-xps. (93-34-93-173.ip49.fastwebnet.it. [93.34.93.173])
-        by smtp.gmail.com with ESMTPSA id c1-20020adfed81000000b0030aedb8156esm2798460wro.102.2023.06.20.14.45.18
+        d=1e100.net; s=20221208; t=1687291413; x=1689883413;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lHUIx+vaRNcVvwWyiGDGMuucQ15EjOva/eBx4ejRVkQ=;
+        b=e65MXAfXVVTsIpN7VQlFg8wqu5Zyz5kLQc2B9Q/YIEhnG+pX3jmSrNzmQnYUOj+anM
+         Mi8AiRbaewPJFEYcxHFuGMovD7KEz5MDqws4/zH3XBxx5uPE8jhYanXsrweR1uPypGMb
+         /1c6jI6Z9aD+AxTVY4bO6jcDLlcUEI07/Hy+Ug1hmocqbkGfy5bSH/ZHyvj1lUc/0EY0
+         9OwTLo6UM8ZMz9rK6yAUabVfJ7LaksihLSVxN2jDQmKl1TAjysY8tHh/vbTKAaBZPWJW
+         Yv5eTtpqN3fMtTirRGLgAyxx6IWGlQGyGBB/OEEOJccSL7gQL4pbnfm6rKAI9CKGWVSx
+         5c5A==
+X-Gm-Message-State: AC+VfDy1x7DRow2vq5Q/hIX2x57HWUmK9hdMLDTN7C6fllMfKAQtWwHT
+        dinf74y/oRa2Z0EP0A9ODgmD0u8v7rM/gQ==
+X-Google-Smtp-Source: ACHHUZ6kvPvAH4p1lEqeMIeDw1zHJHWy2ckFm6zryX8xx0UlzKWZkrBlJifj3MtfdSDYY438Ju61Ow==
+X-Received: by 2002:a17:906:6a25:b0:989:40a9:505d with SMTP id qw37-20020a1709066a2500b0098940a9505dmr2399526ejc.0.1687291413158;
+        Tue, 20 Jun 2023 13:03:33 -0700 (PDT)
+Received: from [127.0.1.1] ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id u21-20020a17090617d500b00977e0bcff1esm1947064eje.10.2023.06.20.13.03.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 14:45:18 -0700 (PDT)
-Message-ID: <64921dee.df0a0220.f64e1.72c7@mx.google.com>
-X-Google-Original-Message-ID: <ZJGj3JFeTT0Yl7qr@Ansuel-xps.>
-Date:   Tue, 20 Jun 2023 15:04:28 +0200
-From:   Christian Marangi <ansuelsmth@gmail.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [net-next PATCH] net: dsa: qca8k: add support for
- port_change_master
-References: <20230620063747.19175-1-ansuelsmth@gmail.com>
- <20230620063747.19175-1-ansuelsmth@gmail.com>
- <20230620201227.7sdb3zmwutwtmt2e@skbuf>
+        Tue, 20 Jun 2023 13:03:32 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+Subject: [PATCH RFC v4 00/13] regulator: dynamic voltage monitoring support
+Date:   Tue, 20 Jun 2023 22:02:53 +0200
+Message-Id: <20230419-dynamic-vmon-v4-0-4d3734e62ada@skidata.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230620201227.7sdb3zmwutwtmt2e@skbuf>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAO0FkmQC/33NQQrCMBAF0KtI1kaSJtrUlSB4ALfiYjIZbZCmk
+ pRgkd7d2KWKyz+fN//JEkVPiW0XTxYp++T7UIJeLhi2EK7EvSuZVaJSQsuGuzFA55Hnrg+chHE
+ AArAGxwqxkIjbCAHbN+ogDRTfxT3SxT/mnRM7HvbsXI6tT0Mfx3k7y7n6PZMlF/yija21MmQau
+ Us372CAFfbd/CpX/3hVOCqhLGK9JovfXP3jqnAt68auzcYZ+FifpukFkW6J30YBAAA=
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     support.opensource@diasemi.com,
+        DLG-Adam.Ward.opensource@dm.renesas.com,
+        Martin Fuzzey <martin.fuzzey@flowbird.group>,
+        linux-kernel@vger.kernel.org,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Benjamin Bara <benjamin.bara@skidata.com>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 11:12:27PM +0300, Vladimir Oltean wrote:
-> Hi Christian,
-> 
-> On Tue, Jun 20, 2023 at 08:37:47AM +0200, Christian Marangi wrote:
-> > Add support for port_change_master to permit assigning an alternative
-> > CPU port if the switch have both CPU port connected or create a LAG on
-> > both CPU port and assign the LAG as DSA master.
-> > 
-> > On port change master request, we check if the master is a LAG.
-> > With LAG we compose the cpu_port_mask with the CPU port in the LAG, if
-> > master is a simple dsa_port, we derive the index.
-> > 
-> > Finally we apply the new cpu_port_mask to the LOOKUP MEMBER to permit
-> > the port to receive packet by the new CPU port setup for the port and
-> > we reenable the target port previously disabled.
-> > 
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> >  drivers/net/dsa/qca/qca8k-8xxx.c | 54 ++++++++++++++++++++++++++++++++
-> >  drivers/net/dsa/qca/qca8k.h      |  1 +
-> >  2 files changed, 55 insertions(+)
-> > 
-> > diff --git a/drivers/net/dsa/qca/qca8k-8xxx.c b/drivers/net/dsa/qca/qca8k-8xxx.c
-> > index dee7b6579916..435b69c1c552 100644
-> > --- a/drivers/net/dsa/qca/qca8k-8xxx.c
-> > +++ b/drivers/net/dsa/qca/qca8k-8xxx.c
-> > @@ -1713,6 +1713,59 @@ qca8k_get_tag_protocol(struct dsa_switch *ds, int port,
-> >  	return DSA_TAG_PROTO_QCA;
-> >  }
-> >  
-> > +static int qca8k_port_change_master(struct dsa_switch *ds, int port,
-> > +				    struct net_device *master,
-> > +				    struct netlink_ext_ack *extack)
-> > +{
-> > +	struct qca8k_priv *priv = ds->priv;
-> > +	u32 val, cpu_port_mask = 0;
-> > +	struct dsa_port *dp;
-> > +	int ret;
-> > +
-> > +	/* With LAG of CPU port, compose the mask for LOOKUP MEMBER */
-> > +	if (netif_is_lag_master(master)) {
-> > +		struct dsa_lag *lag;
-> > +		int id;
-> > +
-> > +		id = dsa_lag_id(ds->dst, master);
-> > +		lag = dsa_lag_by_id(ds->dst, id);
-> > +
-> > +		dsa_lag_foreach_port(dp, ds->dst, lag)
-> 
-> I think you use ds->dst often enough that you could assign it to its own
-> local variable.
->
+Hi!
 
-Will do thanks!
+This series targets the "automatic" state handling of monitors when the
+state of the monitored regulator is changed. This is e.g. necessary for
+the da9063, which reaches an invalid state (!PWR_OK) if the voltage
+monitor is not disabled before the regulator is disabled. The problem
+could also be tackled inside of the driver's "state change ops"
+(.enable(), .disable(), ...) but I thought it might be a good idea to
+have a "common framework" independent of the driver's implementation.
 
-> > +			if (dsa_port_is_cpu(dp))
-> > +				cpu_port_mask |= BIT(dp->index);
-> > +	} else {
-> > +		dp = dsa_port_from_netdev(master);
-> 
-> dsa_port_from_netdev() is implemented by calling:
-> 
-> static inline struct dsa_port *dsa_slave_to_port(const struct net_device *dev)
-> {
-> 	struct dsa_slave_priv *p = netdev_priv(dev);
-> 
-> 	return p->dp;
-> }
-> 
-> The "struct net_device *master" does not have a netdev_priv() of the
-> type "struct dsa_slave_priv *". So, this function does not do what you
-> want, but instead it messes through the guts of an unrelated private
-> structure, treating whatever it finds at offset 16 as a pointer, and
-> dereferincing that as a struct dsa_port *. I'm surprised it didn't
-> crash, to be frank.
-> 
-> To find the cpu_dp behind the master, you need to dereference
-> master->dsa_ptr (for which we don't have a helper).
-> 
+After feedback from Matti, the new approach doesn't disable the monitors
+of disabled regulators anymore (except the respective workaround
+property is set). Additionally, the core differs between initialization
+and "workaround handling" when it comes to -EOPNOTSUPP.
 
-I was searching for an helper but no luck. Is it safe to access
-master->dsa_ptr? In theory the caller of port_change_master should
-already check that the passed master is a dsa port?
+1/13 is temporary implemented by me now and fixes a bug found by Martin
+     Fuzzey [1] which can be removed once a follow-up is received.
+2/13 introduces a new op to read out the active monitors.
+3/13 implements the new op for the da9063.
+4/13 implements the new op for the bd718x7 (untested).
+5/13 introduces the new "workaround properties".
+6/13 ensure that the required regulator ops are implemented.
+7/13 find all active regulator monitors the DT is not aware of.
+8/13 factors out the existing monitor handling into an own function.
+{9,10,11}/13 implements the workaround properties in the core.
+12/13 implements mon_disable_reg_disabled for da9063.
+13/13 implements mon_disable_reg_set_higher for bd718x7 (untested).
 
-I see in other context that master->dsa_ptr is checked if not NULL.
-Should I do the same check here?
+As far as I could tell from the implementations, the other two PMICs
+with voltage protection support (max597x, bd9576) don't require
+workarounds.
 
-> > +		cpu_port_mask |= BIT(dp->index);
-> > +	}
-> > +
-> > +	/* Disable port */
-> > +	qca8k_port_set_status(priv, port, 0);
-> > +
-> > +	/* Connect it to new cpu port */
-> > +	ret = qca8k_read(priv, QCA8K_PORT_LOOKUP_CTRL(port), &val);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/* Reset connected CPU port in LOOKUP MEMBER */
-> > +	val &= QCA8K_PORT_LOOKUP_USER_MEMBER;
-> 
-> val &= GENMASK(5, 1) practically has the effect of unsetting BIT(0) and BIT(6).
-> I suppose those are the 2 possible CPU ports? If so, then use ~dsa_cpu_ports(ds),
-> it's more readable at least for me as a fallback maintainer.
-> 
+Thanks & best regards,
+Benjamin
 
-Yes they are and yes I love this so I can also drop the stupid define.
+[1] https://lore.kernel.org/all/20230616143736.2946173-1-martin.fuzzey@flowbird.group/
 
-> > +	/* Assign the new CPU port in LOOKUP MEMBER */
-> > +	val |= cpu_port_mask;
-> > +
-> > +	ret = qca8k_rmw(priv, QCA8K_PORT_LOOKUP_CTRL(port),
-> > +			QCA8K_PORT_LOOKUP_MEMBER,
-> > +			val);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	/* Fast Age the port to flush FDB table */
-> > +	qca8k_port_fast_age(ds, port);
-> 
-> Why do you have to fast age the (user) port?
-> 
+---
+Changes in v4:
+- introduce helper to handle the monitor state according to the workarounds
+- split up commits per workaround implementation
+- don't disable monitors of disabled regulators anymore
+- implement monitor getter for the da9063
+- workarounds are now per-monitor instead of "global"
+- require defined ops for workarounds
+- ensure that active monitoring is known on regulators with workarounds
+- re-enable monitors only if they were disabled
+- Link to v3: https://lore.kernel.org/r/20230419-dynamic-vmon-v3-0-4179b586d8a1@skidata.com
 
-The 2 CPU port have a different mac address, is it a problem?
+---
+Benjamin Bara (13):
+      regulator: da9063: fix null pointer deref with partial DT config
+      regulator: add getter for active monitors
+      regulator: da9063: implement get_active_protections()
+      regulator: bd718x7: implement get_active_protections()
+      regulator: introduce properties for monitoring workarounds
+      regulator: set required ops for monitoring workarounds
+      regulator: find active protections during initialization
+      regulator: move monitor handling into own function
+      regulator: implement mon_disable_reg_disabled
+      regulator: implement mon_disable_reg_set_{higher,lower}
+      regulator: implement mon_unsupported_reg_modes
+      regulator: da9063: let the core handle the monitors
+      regulator: bd718x7: let the core handle the monitors
 
-> > +
-> > +	/* Reenable port */
-> > +	qca8k_port_set_status(priv, port, 1);
-> 
-> or disable/enable it, for that matter?
-> 
+ drivers/regulator/bd718x7-regulator.c | 210 +++++++------------
+ drivers/regulator/core.c              | 370 ++++++++++++++++++++++++++++------
+ drivers/regulator/da9063-regulator.c  |  33 ++-
+ include/linux/regulator/driver.h      |  28 +++
+ 4 files changed, 439 insertions(+), 202 deletions(-)
+---
+base-commit: f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
+change-id: 20230419-dynamic-vmon-e08daa0ac7ad
 
-The idea is sto stop any traffic flowing to one CPU to another before
-doing the change.
-
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static void
-> >  qca8k_master_change(struct dsa_switch *ds, const struct net_device *master,
-> >  		    bool operational)
-> > @@ -1996,6 +2049,7 @@ static const struct dsa_switch_ops qca8k_switch_ops = {
-> >  	.get_phy_flags		= qca8k_get_phy_flags,
-> >  	.port_lag_join		= qca8k_port_lag_join,
-> >  	.port_lag_leave		= qca8k_port_lag_leave,
-> > +	.port_change_master	= qca8k_port_change_master,
-> 
-> From my notes in commit eca70102cfb1 ("net: dsa: felix: add support for
-> changing DSA master"), I recall this:
-> 
->     When we change the DSA master to a LAG device, DSA guarantees us that
->     the LAG has at least one lower interface as a physical DSA master.
->     But DSA masters can come and go as lowers of that LAG, and
->     ds->ops->port_change_master() will not get called, because the DSA
->     master is still the same (the LAG). So we need to hook into the
->     ds->ops->port_lag_{join,leave} calls on the CPU ports and update the
->     logical port ID of the LAG that user ports are assigned to.
-> 
-> Otherwise said:
-> 
-> $ ip link add bond0 type bond mode balance-xor && ip link set bond0 up
-> $ ip link set eth0 down && ip link set eth0 master bond0 # .port_change_master() gets called
-> $ ip link set eth1 down && ip link set eth1 master bond0 # .port_change_master() does not get called
-> $ ip link set eth0 nomaster # .port_change_master() does not get called
-> 
-> Unless something has changed, I believe that you need to handle these as well,
-> and update the QCA8K_PORT_LOOKUP_MEMBER field. In the case above, your
-> CPU port association would remain towards eth0, but the bond's lower interface
-> is eth1.
-> 
-
-Can you better describe this case?
-
-In theory from the switch view, with a LAG we just set that an user port
-can receive packet from both CPU port.
-
-Or you are saying that when an additional memeber is added to the LAG,
-port_change_master is not called and we could face a scenario where:
-
-- dsa master is LAG
-- LAG have the 2 CPU port
-- user port have LAG as master but QCA8K_PORT_LOOKUP_MEMBER with only
-  one CPU?
-
-If I got this right, then I get what you mean with the fact that I
-should update the lag_join/leave definition and refresh each
-configuration.
-
-> >  	.master_state_change	= qca8k_master_change,
-> >  	.connect_tag_protocol	= qca8k_connect_tag_protocol,
-> >  };
-> > diff --git a/drivers/net/dsa/qca/qca8k.h b/drivers/net/dsa/qca/qca8k.h
-> > index c5cc8a172d65..424f851db881 100644
-> > --- a/drivers/net/dsa/qca/qca8k.h
-> > +++ b/drivers/net/dsa/qca/qca8k.h
-> > @@ -250,6 +250,7 @@
-> >  #define   QCA8K_GLOBAL_FW_CTRL1_MC_DP_MASK		GENMASK(14, 8)
-> >  #define   QCA8K_GLOBAL_FW_CTRL1_UC_DP_MASK		GENMASK(6, 0)
-> >  #define QCA8K_PORT_LOOKUP_CTRL(_i)			(0x660 + (_i) * 0xc)
-> > +#define   QCA8K_PORT_LOOKUP_USER_MEMBER			GENMASK(5, 1)
-> >  #define   QCA8K_PORT_LOOKUP_MEMBER			GENMASK(6, 0)
-> >  #define   QCA8K_PORT_LOOKUP_VLAN_MODE_MASK		GENMASK(9, 8)
-> >  #define   QCA8K_PORT_LOOKUP_VLAN_MODE(x)		FIELD_PREP(QCA8K_PORT_LOOKUP_VLAN_MODE_MASK, x)
-> > -- 
-> > 2.40.1
-> > 
-> 
-
+Best regards,
 -- 
-	Ansuel
+Benjamin Bara <benjamin.bara@skidata.com>
+
