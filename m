@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB064738DBE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:51:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0947738DC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:51:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjFURvl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 13:51:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
+        id S231186AbjFURvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 13:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbjFURum (ORCPT
+        with ESMTP id S231735AbjFURus (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 13:50:42 -0400
-Received: from mail-il1-x149.google.com (mail-il1-x149.google.com [IPv6:2607:f8b0:4864:20::149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA45211E
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 10:50:30 -0700 (PDT)
-Received: by mail-il1-x149.google.com with SMTP id e9e14a558f8ab-341c6ac3bf7so49193555ab.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 10:50:30 -0700 (PDT)
+        Wed, 21 Jun 2023 13:50:48 -0400
+Received: from mail-io1-xd4a.google.com (mail-io1-xd4a.google.com [IPv6:2607:f8b0:4864:20::d4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F9D3212A
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 10:50:31 -0700 (PDT)
+Received: by mail-io1-xd4a.google.com with SMTP id ca18e2360f4ac-77e390c2cfeso403859139f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 10:50:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687369829; x=1689961829;
+        d=google.com; s=20221208; t=1687369830; x=1689961830;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dtGUI04cZLcqHqfVph3GLMvS0CVYqac6sXI/vA3EN9c=;
-        b=wUCfp8LIVxVyw9rOjJ+xxvqYiNhrMKEQGqZAIrYsflCWYaL7sMIjnn5LDzBF8HHkci
-         fU6aqWxAcgnmVfiz4UwopUTnDAafaCROX3yoC8OfXmrNVemh4RlpXriU2kIUlflYJXHw
-         uMCeKHy/l1FGUBNLLAGrP3KIWF3x8c8QA6lH15hhdrXNCDtmipcd1fYAZABG46exGlSO
-         gFSuHconOaa66m/06jG0Ro0iy0bHzhaKM98M74q46S68x0wg14fu0205JCX28SDxNDoC
-         IeVohMieqPadYlEk/nIWyWNaXHuxsT0P5qiOFBg+yGi/qLEjpv50H3iXe5QJF2vkwCpH
-         B3PA==
+        bh=kpR1MspLCCKbLGu542rFrU99snL12qe0SU5vnENHbnc=;
+        b=obkQNETduI4Wdlr8DqbH6rQDpqF2mUi0lafiiZR1QXrNN2+tKemED10KMGrakG13Nq
+         +F9e7JIuRjiRR9EfoJnua+9jPsENy4Tu90Vrn/2nK11OMp8Aj/golURDqyPfJ94Cfrxi
+         hdWdLoNiohD/PMMDEG0mtQHMd7A92j4tIxNPh8D/cM9gYPH0WwqnOU4OcPsZKdr9HTOs
+         pyGKjpe6+P6Xcb6ByP94N+J+yZmYDJogpjw8kcjVcP5B1YTqtAJdqi8Hp9kutYXKuAUx
+         OCxMudA25zodKFZSyAwbz9vLyvHyzcqnxGuKjUldsdPVjyx7x6uGCQbzc3ZzHDMDOM0D
+         Kg8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687369829; x=1689961829;
+        d=1e100.net; s=20221208; t=1687369830; x=1689961830;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dtGUI04cZLcqHqfVph3GLMvS0CVYqac6sXI/vA3EN9c=;
-        b=b0hXfi9YF1eBRpC7sk9DRno0yg7TeHxwKMM2+ImreW5e4+PFBi89kvUX6zxxqMsYBU
-         AdgVLRI4PzrTOCJjMw2MO/QMfeOeV6K+PzoWmdRWjRBBGbZzZhsmQaz+KmEuIL2oNHsO
-         4C3ltF229VEkrXP5vHysHgsNAMMIociBN66jC5AIBIempdd2tqCzhohXWbX8RbBDfhOO
-         CLrBrX9XYeFWdrRgmdaPg0qB4jCs5OIsUDcYL5X/dn7E8xKjK4xbMyh1+OslpYh6mzis
-         vhqSD6NxjzqL04gF/62bHuQVsguYIZdNvvF/0O2gFkgC4rEuw5U/+E+9cx84xRX7RtnM
-         BDEQ==
-X-Gm-Message-State: AC+VfDxc01lrooTcPEGBgVvCggntqhYdanoSujTXE1yTMwn+959jMk04
-        tSm4vnMWvqt6gbpzdiHaLiePa3pQQb14
-X-Google-Smtp-Source: ACHHUZ6E9qc4T7u9+yG0bI7LCSWrNIIprVuEXDN8tL08Gxqy8ruadzAtjVxDCW2tLBKnP2MlbqXA+k7+GwdZ
+        bh=kpR1MspLCCKbLGu542rFrU99snL12qe0SU5vnENHbnc=;
+        b=AReoERPY+6rc74YW+SOVk2FHQUkvOVlkHdNNRSW2lu7RmlKgGIYzVAmWe+MS1J4ES+
+         p+pJvWw26uDRysoS4wUgBBOMRy4dXgbc06NYKshPSv+z8qkxD5L5lc+Ka6HWEgJbP4HO
+         78x3rOpjH6HmJxwv1n52qeWL5yx+IZZNQkAqOXApZS3kIWWNn2EJONTp476f1uyrtMXU
+         nq8+NCUVhiXrC97TXbu6sGNsVBAjzlnqX4tlAKIier8iN4jirT3rJTYbGUFavE/92rUq
+         gxr0SUwb5xGyJ8EWthT98hZxCDuDmydnCFDK7pYj+86Pj53vFH9Y8WBin2E0FDZN4Fo+
+         CENA==
+X-Gm-Message-State: AC+VfDxgQ3QLXK+rHf6/QesdmEXboi/nUslFOxdxq3rcA4QNZkU8H929
+        jVUW4KfRmHUC1ww/oEK1bw4b5UvSdax1
+X-Google-Smtp-Source: ACHHUZ6lEejYkvXSZImNPgkcjtxASyr0tUJRYFuyzfo7eVoPr61PQ+mo3lAqnIjMYGuKsT4NfkEe3+3Un922
 X-Received: from rananta-linux.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:22b5])
- (user=rananta job=sendgmr) by 2002:a92:c9cb:0:b0:33e:6230:aa65 with SMTP id
- k11-20020a92c9cb000000b0033e6230aa65mr6242404ilq.0.1687369829258; Wed, 21 Jun
- 2023 10:50:29 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 17:49:59 +0000
+ (user=rananta job=sendgmr) by 2002:a05:6602:152:b0:777:b38d:2333 with SMTP id
+ v18-20020a056602015200b00777b38d2333mr5713635iot.3.1687369830330; Wed, 21 Jun
+ 2023 10:50:30 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 17:50:00 +0000
 In-Reply-To: <20230621175002.2832640-1-rananta@google.com>
 Mime-Version: 1.0
 References: <20230621175002.2832640-1-rananta@google.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230621175002.2832640-9-rananta@google.com>
-Subject: [RESEND PATCH v5 08/11] KVM: arm64: Implement kvm_arch_flush_remote_tlbs_range()
+Message-ID: <20230621175002.2832640-10-rananta@google.com>
+Subject: [RESEND PATCH v5 09/11] KVM: arm64: Flush only the memslot after write-protect
 From:   Raghavendra Rao Ananta <rananta@google.com>
 To:     Oliver Upton <oliver.upton@linux.dev>,
         Marc Zyngier <maz@kernel.org>,
@@ -83,47 +83,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement kvm_arch_flush_remote_tlbs_range() for arm64
-to invalidate the given range in the TLB.
+After write-protecting the region, currently KVM invalidates
+the entire TLB entries using kvm_flush_remote_tlbs(). Instead,
+scope the invalidation only to the targeted memslot. If
+supported, the architecture would use the range-based TLBI
+instructions to flush the memslot or else fallback to flushing
+all of the TLBs.
 
 Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
 ---
- arch/arm64/include/asm/kvm_host.h | 3 +++
- arch/arm64/kvm/mmu.c              | 7 +++++++
- 2 files changed, 10 insertions(+)
+ arch/arm64/kvm/mmu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-index 81ab41b84f436..343fb530eea9c 100644
---- a/arch/arm64/include/asm/kvm_host.h
-+++ b/arch/arm64/include/asm/kvm_host.h
-@@ -1081,6 +1081,9 @@ struct kvm *kvm_arch_alloc_vm(void);
- #define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS
- int kvm_arch_flush_remote_tlbs(struct kvm *kvm);
- 
-+#define __KVM_HAVE_ARCH_FLUSH_REMOTE_TLBS_RANGE
-+int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn, u64 pages);
-+
- static inline bool kvm_vm_is_protected(struct kvm *kvm)
- {
- 	return false;
 diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-index d0a0d3dca9316..c3ec2141c3284 100644
+index c3ec2141c3284..94f10e670c100 100644
 --- a/arch/arm64/kvm/mmu.c
 +++ b/arch/arm64/kvm/mmu.c
-@@ -92,6 +92,13 @@ int kvm_arch_flush_remote_tlbs(struct kvm *kvm)
- 	return 0;
+@@ -992,7 +992,7 @@ static void kvm_mmu_wp_memory_region(struct kvm *kvm, int slot)
+ 	write_lock(&kvm->mmu_lock);
+ 	stage2_wp_range(&kvm->arch.mmu, start, end);
+ 	write_unlock(&kvm->mmu_lock);
+-	kvm_flush_remote_tlbs(kvm);
++	kvm_flush_remote_tlbs_memslot(kvm, memslot);
  }
  
-+int kvm_arch_flush_remote_tlbs_range(struct kvm *kvm, gfn_t start_gfn, u64 pages)
-+{
-+	kvm_tlb_flush_vmid_range(&kvm->arch.mmu,
-+				start_gfn << PAGE_SHIFT, pages << PAGE_SHIFT);
-+	return 0;
-+}
-+
- static bool kvm_is_device_pfn(unsigned long pfn)
- {
- 	return !pfn_is_map_memory(pfn);
+ /**
 -- 
 2.41.0.162.gfafddb0af9-goog
 
