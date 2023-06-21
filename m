@@ -2,102 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EFCA738912
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:29:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB427388D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232861AbjFUP3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:29:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
+        id S232627AbjFUPYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 11:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbjFUP3E (ORCPT
+        with ESMTP id S233336AbjFUPXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:29:04 -0400
-X-Greylist: delayed 386 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 21 Jun 2023 08:29:02 PDT
-Received: from forward205a.mail.yandex.net (forward205a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB54B91;
-        Wed, 21 Jun 2023 08:29:02 -0700 (PDT)
-Received: from forward102a.mail.yandex.net (forward102a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d102])
-        by forward205a.mail.yandex.net (Yandex) with ESMTP id 2BC504727F;
-        Wed, 21 Jun 2023 18:22:58 +0300 (MSK)
-Received: from mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net [IPv6:2a02:6b8:c18:58f:0:640:3768:0])
-        by forward102a.mail.yandex.net (Yandex) with ESMTP id 32548463C0;
-        Wed, 21 Jun 2023 18:22:54 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id UMkSjYADYGk0-nDgmRaci;
-        Wed, 21 Jun 2023 18:22:53 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687360973;
-        bh=b93M/kd7RtP0LNT+znv3PSo9p5SOOzFeXYgHQxmwv9I=;
-        h=Message-Id:Date:In-Reply-To:Cc:Subject:References:To:From;
-        b=MtTY+abfofItqx+ehR5syVfHqnMfG1FQeD12jGzYQ82kiujSkRSuCeFBB6O8nWzkc
-         hVWRs5aMnczR2pQ/T/8cWAlTFji3iAc8pMjYR/6uN48E+Fr1bQ7t+Eph2OTBExkpN7
-         rhVfefZq1Nc6+4kX45d6x2hZFyTVvCUY+/wm3XYc=
-Authentication-Results: mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-From:   Stas Sergeev <stsp2@yandex.ru>
-To:     linux-kernel@vger.kernel.org
-Cc:     Stas Sergeev <stsp2@yandex.ru>, Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
-Subject: [PATCH] fcntl.2: document F_UNLCK F_OFD_GETLK extension
-Date:   Wed, 21 Jun 2023 20:22:14 +0500
-Message-Id: <20230621152214.2720319-4-stsp2@yandex.ru>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230621152214.2720319-1-stsp2@yandex.ru>
-References: <20230621152214.2720319-1-stsp2@yandex.ru>
+        Wed, 21 Jun 2023 11:23:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 735F5213B;
+        Wed, 21 Jun 2023 08:22:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EFAAD61597;
+        Wed, 21 Jun 2023 15:22:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD551C433C8;
+        Wed, 21 Jun 2023 15:22:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687360977;
+        bh=1myIkCNrGS9LjMUd1rt6ohpLBP7wjHK5DM7AyaPDCLI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=C4NsEBbMaKKW3pbO+gVpbt0BLhgzmRAxMt40/S067cELpNYvZT9LPPpKoMLnPPNGg
+         BmfNuqQDwhKNTrIuwc9IMuxSqIHr+CjbQ7vbNvPEDeS1vdBRg9TdxxDBdEarkQXoR6
+         nFaW7MKeep+SvsTBiaGu/VxKWlD6DXfvHJN7XiUk=
+Date:   Wed, 21 Jun 2023 17:22:54 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Saravana Kannan <saravanak@google.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-pm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [RFC PATCH v5 2/4] driver core: Add dev_is_drv_state_synced()
+Message-ID: <2023062103-chevron-sabotage-bf26@gregkh>
+References: <20230621144019.3219858-1-abel.vesa@linaro.org>
+ <20230621144019.3219858-3-abel.vesa@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621144019.3219858-3-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-F_UNLCK has the special meaning when used as a lock type on input.
-It returns the information about any lock found in the specified
-region on that particular file descriptor. Locks on other file
-descriptors are ignored by F_UNLCK.
+On Wed, Jun 21, 2023 at 05:40:17PM +0300, Abel Vesa wrote:
+> This can be used by drivers to figure out if a different device
+> driver has state synced or not for a specific device.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+>  include/linux/device.h | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/include/linux/device.h b/include/linux/device.h
+> index bae11928ef7e..8f042f04b5d9 100644
+> --- a/include/linux/device.h
+> +++ b/include/linux/device.h
+> @@ -1007,6 +1007,20 @@ static inline int dev_set_drv_sync_state(struct device *dev,
+>  	return 0;
+>  }
+>  
+> +static inline bool dev_is_drv_state_synced(struct device *dev)
+> +{
+> +	bool ret = false;
+> +
+> +	if (!dev)
+> +		return ret;
+> +
+> +	device_lock(dev);
+> +	ret = dev->state_synced;
+> +	device_unlock(dev);
 
-Signed-off-by: Stas Sergeev <stsp2@yandex.ru>
+This lock is "protecting" nothing, given that the value can instantly
+change after it is read.
 
-CC: Jeff Layton <jlayton@kernel.org>
-CC: Chuck Lever <chuck.lever@oracle.com>
-CC: Alexander Viro <viro@zeniv.linux.org.uk>
-CC: Christian Brauner <brauner@kernel.org>
-CC: linux-fsdevel@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
-CC: Shuah Khan <shuah@kernel.org>
-CC: linux-kselftest@vger.kernel.org
-CC: linux-api@vger.kernel.org
+Because it can change, how will this function actually show anything
+relevant?
 
----
- man2/fcntl.2 | 7 +++++++
- 1 file changed, 7 insertions(+)
+thanks,
 
-diff --git a/man2/fcntl.2 b/man2/fcntl.2
-index 7b5604e3a..e3e3e7b8c 100644
---- a/man2/fcntl.2
-+++ b/man2/fcntl.2
-@@ -604,6 +604,13 @@ then details about one of these locks are returned via
- .IR lock ,
- as described above for
- .BR F_GETLK .
-+.B F_UNLCK
-+has the special meaning when put into
-+.I l_type
-+as an input. It returns the information about any lock in the specified
-+range on that particular file descriptor. The locks on other file
-+descriptors are ignored by
-+.BR F_UNLCK .
- .PP
- In the current implementation,
- .\" commit 57b65325fe34ec4c917bc4e555144b4a94d9e1f7
--- 
-2.39.2
-
+greg k-h
