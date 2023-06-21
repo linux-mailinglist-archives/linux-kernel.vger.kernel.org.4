@@ -2,123 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39DDE737E9A
+	by mail.lfdr.de (Postfix) with ESMTP id 83E4D737E9B
 	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 11:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbjFUIk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 04:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34408 "EHLO
+        id S231472AbjFUIlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 04:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231816AbjFUIj6 (ORCPT
+        with ESMTP id S231500AbjFUIku (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 04:39:58 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 488BD19A5;
-        Wed, 21 Jun 2023 01:39:15 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Axy8Yyt5JkuBEAAA--.120S3;
-        Wed, 21 Jun 2023 16:39:14 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax3c4st5JkmlAAAA--.2097S4;
-        Wed, 21 Jun 2023 16:39:12 +0800 (CST)
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, bpf@vger.kernel.org,
-        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Subject: [PATCH v2 2/2] tools arch: Remove uapi bitsperlong.h of hexagon and microblaze
-Date:   Wed, 21 Jun 2023 16:39:08 +0800
-Message-Id: <1687336748-4898-3-git-send-email-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.1.0
-In-Reply-To: <1687336748-4898-1-git-send-email-yangtiezhu@loongson.cn>
-References: <1687336748-4898-1-git-send-email-yangtiezhu@loongson.cn>
-X-CM-TRANSID: AQAAf8Ax3c4st5JkmlAAAA--.2097S4
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxJr1DAFWUWFykKr4UGFWxuFX_yoW5Jr1UpF
-        95XwsrWF48CryjkrWFkF1jqrW3A39rGF4jga1xWry8ZrWxJF18Ar4S9FsFya47JayIqa1r
-        uF93WryUKa1kKagCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUBIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7V
-        AKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
-        6r1j6r4UMxCIbckI1I0E14v26r1Y6r17MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-        xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xII
-        jxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw2
-        0EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x02
-        67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU0epB3UUUUU==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 21 Jun 2023 04:40:50 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4871FE7
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:40:10 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3f9d619103dso109351cf.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:40:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687336810; x=1689928810;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jQMoXMnbWU/uyGYsJxGBmzcur0xnsX6AwrHBtRRMA2I=;
+        b=lwi7c+pCIZqb++zcz4hGkaCndThXtwbaE6E9+3J+IxVdpa35rZLHGHXoRgonzS7SHv
+         o6pihBBYWga2wMO84Rd7srilI581XiveFvvsiuO0AtZewj05UbdtBDUahjHZ1WoOECrH
+         lBOTX6JaKh4ezaX794YQ6WxNrrJtpVhafVksKSwpRnKufRB67zUUrWvcphwJuRfQTe9A
+         LgeCT5oPXGAlfpcmFuSS85LC90zDlbIZoxa6n2yKs1vODXcnW91l6Wacugd/xhja+Gq7
+         7absC1E6pW81iQRaHCJR32mkdPVfyLWfhxqBAAkCXnnYIsgGnXWA4aJwyp6Q8A2Lel9J
+         6WlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687336810; x=1689928810;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jQMoXMnbWU/uyGYsJxGBmzcur0xnsX6AwrHBtRRMA2I=;
+        b=RUQFZUPZ8B7i71r9Bv3K4pJMmp+rfVvFbAysxa5AexJFoYz7bP5fZv7N6iNpdYtxvr
+         epXX8hHXXlF4SR2s0bmFJsOhAR4OakWmd3WiG9E7nvRLLw0cxPgYmOwsyMR1cGJPj2J7
+         3tM00rfq1uHhzsuE3/BMguvdDKuck4QFQqrRRYCh0lkEBhccLGEiZZ53mTej76aGbh0w
+         1UWyJM8fJeAf32Nlx5Lw+vUPLiLQS5OblYYieVhifawYfa6iTyCHwBqLXoJqcS9ApWci
+         daeGOm+xG7AJHzdMjnMfBaUFCdVDRJxF1YjsJ5vnEgLWDKJWiyB/+EQ0eil3Lvnaeipl
+         6pwQ==
+X-Gm-Message-State: AC+VfDw1pC8Wq2tov2oTj8CE+OxP+4lDFVmwSQTCJBU86niuExHuJal9
+        fnsB40xouZOUeYUi4PmEeOcw+5OjsUSCy6yzy8NPFA==
+X-Google-Smtp-Source: ACHHUZ6C8CcgmEZ5PbR0wUat4gTexFJ5bM8IZ7FeNQMEVP7/uZEPM63ok3JDnGFHqo1o3vsorbD0i8x9TeiyXF0kJY0=
+X-Received: by 2002:ac8:5843:0:b0:3e0:c2dd:fd29 with SMTP id
+ h3-20020ac85843000000b003e0c2ddfd29mr1399722qth.4.1687336809930; Wed, 21 Jun
+ 2023 01:40:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230530114216.1420790-1-yimingtseng@google.com> <CAJZ5v0gmmyLMWwzn8q_DCrKVg6mNJ+mHFcLt2AY8LJJ_4dt7dg@mail.gmail.com>
+In-Reply-To: <CAJZ5v0gmmyLMWwzn8q_DCrKVg6mNJ+mHFcLt2AY8LJJ_4dt7dg@mail.gmail.com>
+From:   Yi-ming Tseng <yimingtseng@google.com>
+Date:   Wed, 21 Jun 2023 16:39:58 +0800
+Message-ID: <CAA5JqK5MUv-uC1xFNUB-TzjYH-J7VONGcFu2Em6OQnKL2C13Tg@mail.gmail.com>
+Subject: Re: [PATCH] PM: domains: fix overflow in genpd_parse_state
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        marscheng@google.com, n.zhandarovich@fintech.ru
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After the following two commits:
+Oh I just found there is a similar patch from Nikita Zhandarovich
+and it will be applied in v6.5. I think we can drop this patch. Thanks
+and sorry for duplicated patches.
 
-  commit 872e24d5c698 ("hexagon: remove asm/bitsperlong.h")
-  commit 83f0124ad81e ("microblaze: remove asm-generic wrapper headers")
+The patch from Nikita Zhandarovich and the discussion:
+https://lore.kernel.org/all/CAJZ5v0gx7bD9EZKPQWyAAZ6hSKjK4hr-nkrJu84HEK-g2A=
+MAaw@mail.gmail.com/
 
-the arch-specific headers of hexagon and microblaze have been removed,
-the tools arch uapi headers are useless too, remove them.
+Thanks again.
 
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- tools/arch/hexagon/include/uapi/asm/bitsperlong.h  | 27 ----------------------
- .../arch/microblaze/include/uapi/asm/bitsperlong.h |  2 --
- 2 files changed, 29 deletions(-)
- delete mode 100644 tools/arch/hexagon/include/uapi/asm/bitsperlong.h
- delete mode 100644 tools/arch/microblaze/include/uapi/asm/bitsperlong.h
-
-diff --git a/tools/arch/hexagon/include/uapi/asm/bitsperlong.h b/tools/arch/hexagon/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 5adca0d..0000000
---- a/tools/arch/hexagon/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,27 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--/*
-- * Copyright (c) 2010-2011, The Linux Foundation. All rights reserved.
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License version 2 and
-- * only version 2 as published by the Free Software Foundation.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program; if not, write to the Free Software
-- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA
-- * 02110-1301, USA.
-- */
--
--#ifndef __ASM_HEXAGON_BITSPERLONG_H
--#define __ASM_HEXAGON_BITSPERLONG_H
--
--#define __BITS_PER_LONG 32
--
--#include <asm-generic/bitsperlong.h>
--
--#endif
-diff --git a/tools/arch/microblaze/include/uapi/asm/bitsperlong.h b/tools/arch/microblaze/include/uapi/asm/bitsperlong.h
-deleted file mode 100644
-index 76da34b..0000000
---- a/tools/arch/microblaze/include/uapi/asm/bitsperlong.h
-+++ /dev/null
-@@ -1,2 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#include <asm-generic/bitsperlong.h>
--- 
-2.1.0
-
+On Sat, Jun 17, 2023 at 1:44=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
+>
+> On Tue, May 30, 2023 at 1:42=E2=80=AFPM YiMing Tseng <yimingtseng@google.=
+com> wrote:
+> >
+> > Add type casters to prevent 32-bit overflow before assigning to s64
+> > variables. It allows full 32-bit range support for latency and
+> > residency.
+>
+> OK, but is it really a practical problem?
+>
+> Ulf, what do you think?
+>
+> > Signed-off-by: YiMing Tseng <yimingtseng@google.com>
+> > ---
+> >  drivers/base/power/domain.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> > index 32084e38b73d..26a04cd8d8dc 100644
+> > --- a/drivers/base/power/domain.c
+> > +++ b/drivers/base/power/domain.c
+> > @@ -2939,10 +2939,10 @@ static int genpd_parse_state(struct genpd_power=
+_state *genpd_state,
+> >
+> >         err =3D of_property_read_u32(state_node, "min-residency-us", &r=
+esidency);
+> >         if (!err)
+> > -               genpd_state->residency_ns =3D 1000 * residency;
+> > +               genpd_state->residency_ns =3D (s64)1000 * residency;
+> >
+> > -       genpd_state->power_on_latency_ns =3D 1000 * exit_latency;
+> > -       genpd_state->power_off_latency_ns =3D 1000 * entry_latency;
+> > +       genpd_state->power_on_latency_ns =3D (s64)1000 * exit_latency;
+> > +       genpd_state->power_off_latency_ns =3D (s64)1000 * entry_latency=
+;
+> >         genpd_state->fwnode =3D &state_node->fwnode;
+> >
+> >         return 0;
+> > --
