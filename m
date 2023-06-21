@@ -2,78 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AEE0737DB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:40:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B689E737D65
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjFUIMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 04:12:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
+        id S230134AbjFUIMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 04:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjFUIMS (ORCPT
+        with ESMTP id S229657AbjFUIMH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 04:12:18 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0412DE;
-        Wed, 21 Jun 2023 01:12:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687335137; x=1718871137;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DM/VZm23k+KBPD9Z2nm/p/7AvFdl8laDmWGgyYJzjtQ=;
-  b=v8s7LsvTYflOpQOo6WLwodXmWQK/hEDj2cNFKpjheUzLy5Zp1KNFsVY4
-   QPv+FTwzuhA3rI/8WrxbPUUmnB8itKC3bJkA7dcA0/FYn3BgW4sEr4VCx
-   T8N7pwGfXnFsSuwnds/P0D7LFOZR3MOD8910skIkgSzj8OINpYK4NvE1Y
-   Q3SVnuCAdNZ00YY7t2/1+ml6W5ptHzAJe/dirZhXU6zoGiKNSbCwhYFVI
-   MjwB5BDTU9hhZ9w0ovP+Kp6wSWAyp230J4gOeq6fNldHvCpB6dTNQlChr
-   +RbQDgLIxJS397SD4+gRcPMyfaDEb0ruuvDpMAinuA3R9+3AhfyUCbb4f
-   A==;
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="asc'?scan'208";a="231308487"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Jun 2023 01:12:17 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 21 Jun 2023 01:12:16 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 21 Jun 2023 01:12:14 -0700
-Date:   Wed, 21 Jun 2023 09:11:47 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-CC:     Lucas Tanure <tanure@linux.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Yixun Lan <dlan@gentoo.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>, Nick <nick@khadas.com>,
-        Artem <art@khadas.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 2/2] arm64: dts: meson-t7-a311d2-khadas-vim4: add
- initial device-tree
-Message-ID: <20230621-sloppy-lisp-d6569b907c41@wendy>
-References: <20230620134857.238941-1-tanure@linux.com>
- <20230620134857.238941-3-tanure@linux.com>
- <ZJIjtphyKdC48JrN@ofant>
- <76a7f819-f3d2-d39d-1bc9-f1e7f837fd22@linaro.org>
- <CAJX_Q+3im20qphOXzn-=58Kx4--ajbaF4P8BVvRcDcPXn1Qheg@mail.gmail.com>
- <20230621-barber-enjoyably-04806271daea@wendy>
- <6fe5dfb6-5f18-feca-a2e7-8cfb78627e01@linaro.org>
+        Wed, 21 Jun 2023 04:12:07 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95444DE
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:12:06 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qBswS-000166-OV; Wed, 21 Jun 2023 10:11:52 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qBswR-0005Fo-R0; Wed, 21 Jun 2023 10:11:51 +0200
+Date:   Wed, 21 Jun 2023 10:11:51 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Jonas Karlman <jonas@kwiboo.se>
+Cc:     Sandy Huang <hjc@rock-chips.com>, Heiko Stuebner <heiko@sntech.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh@kernel.org>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        Mark Yao <markyao0591@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] drm/rockchip: vop2: Add missing call to crtc reset
+ helper
+Message-ID: <20230621081151.GY18491@pengutronix.de>
+References: <20230620064732.1525594-1-jonas@kwiboo.se>
+ <20230620064732.1525594-5-jonas@kwiboo.se>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="SUGtz7gnd9H8ZpfO"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6fe5dfb6-5f18-feca-a2e7-8cfb78627e01@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+In-Reply-To: <20230620064732.1525594-5-jonas@kwiboo.se>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,32 +61,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---SUGtz7gnd9H8ZpfO
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Tue, Jun 20, 2023 at 06:47:39AM +0000, Jonas Karlman wrote:
+> Add missing call to crtc reset helper to properly vblank reset.
+> 
+> Also move vop2_crtc_reset and call vop2_crtc_destroy_state to simplify
+> and remove duplicated code.
+> 
+> Fixes: 604be85547ce ("drm/rockchip: Add VOP2 driver")
+> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+> ---
+>  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 28 ++++++++------------
+>  1 file changed, 11 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+> index f725487d02ef..1be84fe0208f 100644
+> --- a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+> @@ -2080,23 +2080,6 @@ static const struct drm_crtc_helper_funcs vop2_crtc_helper_funcs = {
+>  	.atomic_disable = vop2_crtc_atomic_disable,
+>  };
+>  
+> -static void vop2_crtc_reset(struct drm_crtc *crtc)
+> -{
+> -	struct rockchip_crtc_state *vcstate = to_rockchip_crtc_state(crtc->state);
+> -
+> -	if (crtc->state) {
+> -		__drm_atomic_helper_crtc_destroy_state(crtc->state);
+> -		kfree(vcstate);
+> -	}
+> -
+> -	vcstate = kzalloc(sizeof(*vcstate), GFP_KERNEL);
+> -	if (!vcstate)
+> -		return;
+> -
+> -	crtc->state = &vcstate->base;
+> -	crtc->state->crtc = crtc;
+> -}
+> -
+>  static struct drm_crtc_state *vop2_crtc_duplicate_state(struct drm_crtc *crtc)
+>  {
+>  	struct rockchip_crtc_state *vcstate;
+> @@ -2123,6 +2106,17 @@ static void vop2_crtc_destroy_state(struct drm_crtc *crtc,
+>  	kfree(vcstate);
+>  }
+>  
+> +static void vop2_crtc_reset(struct drm_crtc *crtc)
+> +{
+> +	struct rockchip_crtc_state *vcstate =
+> +		kzalloc(sizeof(*vcstate), GFP_KERNEL);
+> +
+> +	if (crtc->state)
+> +		vop2_crtc_destroy_state(crtc, crtc->state);
+> +
+> +	__drm_atomic_helper_crtc_reset(crtc, &vcstate->base);
+> +}
 
-On Wed, Jun 21, 2023 at 10:04:28AM +0200, Neil Armstrong wrote:
-> On 21/06/2023 10:01, Conor Dooley wrote:
+You missed to check for allocation failures before using vcstate.
 
-> > Aye, but we do not want to propagate that. New stuff should not be
-> > adding undocumented compatibles, and those that are undocumented should
-> > be documented.
->=20
-> Documentation is ongoing, it takes time !
+Sascha
 
-Don't worry, I wasn't trying to criticise, just pointing out the ideal
-situation.
-
---SUGtz7gnd9H8ZpfO
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJKwwwAKCRB4tDGHoIJi
-0mZ7AP9gCvbPnfk6sA39u0KwkV3NaFictZl7I0Mlsst3rLNtEQEA0Q9A9IX6pcj0
-HEsgPVBiC5EVDdVuA9PbNMdVCd/qGwk=
-=Rcr8
------END PGP SIGNATURE-----
-
---SUGtz7gnd9H8ZpfO--
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
