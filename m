@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB8E77389AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:38:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1E147389AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233729AbjFUPiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
+        id S233642AbjFUPiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 11:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233553AbjFUPhm (ORCPT
+        with ESMTP id S233640AbjFUPhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:37:42 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF1C173F
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:37:24 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f86e1bdce5so5638018e87.3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:37:24 -0700 (PDT)
+        Wed, 21 Jun 2023 11:37:46 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2701FE2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:37:27 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f866a3d8e4so6385684e87.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:37:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1687361829; x=1689953829;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1687361830; x=1689953830;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=jabdaiTACMvGCMLJ1hwhPAwP261O3guFNIkOypEaFEs=;
-        b=iG7OfDCk3JDXJMpMe5FwY7oS1o3s1Nvx9x2APRVXDEve97G6AYWW8S/2RDRZtlP4b/
-         aDrsWqVsROpv7zXRW9DWRTmH1qqcyVjNN2Xhyjmz3PBMs0AlQHlyfhiACVgiVQQyKWDi
-         OObFeo1/781gyvg+8LOciR+e1zqcDmI+umqnmkJLnPHvRvqn2r2LfA92wrJDvxt37lW0
-         GX+uGFlJQhc0SLqQ70RUt7kJiR9PZYlesbkhkhLGmOJ5Zk0K7+hQ6IjBUcIT7seW8Jui
-         0yqngOHSp0/CYOv0+ORCvbaYwqkzPV9ZuXxXlmAHOup61KLjOSUSY8CVF7APhwWZyq5D
-         jfhA==
+        bh=ZXhQ0UIxbIRXJu72M9URbDfOLtQ/Rc/6HlYK7uavKwg=;
+        b=ZKNhsBXVBWDsZT+gQdyHtPSF2CiUZVn4CH6FHKpTsKLUctQft/ssO2/+UcidIhXoYH
+         yaRcbER3BLmJX2YRyh2Qvhy3wzwg0LeX6QpjXO0PvLPe7V4TFPTDbX0ZVff9ownq7439
+         Q8Z7u3EF7o/MgMWDNR6O3IgHWvB5ArH6vvoJD4s16hZbMC2/zBfT7GJ6heD12O0/2E0s
+         dbIpgvmhH2I+OKUzQxtKEWgGaisUjfeMOP78NKVcoOKszCa2f2T/SzgjG+ig5aN7ZH+2
+         s6Z2FnCYcI4mE5O/rt3od3+4hevgnH0SYppx8dLK49t5XHV9TjyAF7SVqR7RLcEn3ynA
+         p80w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687361829; x=1689953829;
+        d=1e100.net; s=20221208; t=1687361830; x=1689953830;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jabdaiTACMvGCMLJ1hwhPAwP261O3guFNIkOypEaFEs=;
-        b=RxpGo+8aA2+PjMddx9+7wIxIAHxy5dT8Nq1YQ30ktx+uvOJZuGB7MVIe6c9ispMgak
-         aroDtXWIiC9rGsK69tUIbBhJo8uaOlLdIEeb4cPqG6isganRrD1VslFdG6Cbbi4GZ8vJ
-         2LQC+3EBAtz3G3PjMaSoscVCq6t8GglMRDRHHLW1jjA3c+7F3JS4vU9aD4n8555JcxjE
-         D6Wdf1vuMKnigBXuu0CZFaE+vJ5uJsdup+ZVAvvpKaskPM4ELFd6uhQ3onix7lvT0zzK
-         22qKSHBGaX24ivw6Boxk2+guPmcO3sLo39L/z7Mb6hRTzAlw4HSoQRL9ACzxNfsQjNPG
-         4xRw==
-X-Gm-Message-State: AC+VfDwDrqdf7OF8EheVA8c1AA3Zx/gyIsH5YPDV28Fjv2Lw2yT8Iir9
-        RrdqmBm5NWjWRGEHbZgmd3JccA==
-X-Google-Smtp-Source: ACHHUZ7O6m3NitPkltuHDknRSK9sSvm6K9sSsjvlHBt+9Nc1zRq0igP7Yk0EiNzUJ+83oxpIYhIKTg==
-X-Received: by 2002:a19:ab12:0:b0:4f8:cd67:88e6 with SMTP id u18-20020a19ab12000000b004f8cd6788e6mr3668244lfe.44.1687361829235;
-        Wed, 21 Jun 2023 08:37:09 -0700 (PDT)
+        bh=ZXhQ0UIxbIRXJu72M9URbDfOLtQ/Rc/6HlYK7uavKwg=;
+        b=Q8EVd043pblr+VN+4gkR/zfwL6F1JPLTWSht+7OF2EGni26y8L3OI/qoTXyk1ig+yW
+         vxJydynQiMTIWj2l0Ido9QSIwccS8n1At2XMHwM5hndr2IYeoC8++0P3TK+mC20Jf4Ij
+         e1Wta5UtOcKFiWBh29UY6YQFP0O2mj3jduzCsCOErMJD4b8vaKI8YB6LFoQRy4bnb4c0
+         tP3whoY7gvMqycnT/w6N21TLhsbdvxB55Y+zbN5IrqTg6WMjZjt5xoxubAs6JUf86Qjw
+         4zrjsAIChbRC3DoPs/UeoP+DbtRCi9TUMjQ4kQYHkvwXM1fGEWRPGYOfD+/02xaIi0Qj
+         EP8Q==
+X-Gm-Message-State: AC+VfDz5WE9yEwrr/mBnObrlLQ2YzWuf2lqg4ru3dRBAQ0+z/05tF7fo
+        v5vbkrNPQeMJsQQpw7m2KA+BgA==
+X-Google-Smtp-Source: ACHHUZ4uJSo2gHx8ZKi/3Nrj3/6juOImyrIJVAJT2kltHhI9yCnZTfyVARk3e8AbVi+9c52J2HXnIg==
+X-Received: by 2002:ac2:5f99:0:b0:4f8:6cad:aae7 with SMTP id r25-20020ac25f99000000b004f86cadaae7mr6596886lfe.61.1687361830338;
+        Wed, 21 Jun 2023 08:37:10 -0700 (PDT)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:a69f:8ee3:6907:ccdf])
-        by smtp.gmail.com with ESMTPSA id l13-20020a1c790d000000b003f7ed463954sm5322491wme.25.2023.06.21.08.37.08
+        by smtp.gmail.com with ESMTPSA id l13-20020a1c790d000000b003f7ed463954sm5322491wme.25.2023.06.21.08.37.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 08:37:08 -0700 (PDT)
+        Wed, 21 Jun 2023 08:37:09 -0700 (PDT)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
         Alexandre Torgue <alexandre.torgue@foss.st.com>,
@@ -65,9 +65,9 @@ To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
 Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH net-next 07/11] net: stmmac: platform: provide stmmac_pltfr_remove_no_dt()
-Date:   Wed, 21 Jun 2023 17:36:46 +0200
-Message-Id: <20230621153650.440350-8-brgl@bgdev.pl>
+Subject: [PATCH net-next 08/11] net: stmmac: platform: provide devm_stmmac_probe_config_dt()
+Date:   Wed, 21 Jun 2023 17:36:47 +0200
+Message-Id: <20230621153650.440350-9-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230621153650.440350-1-brgl@bgdev.pl>
 References: <20230621153650.440350-1-brgl@bgdev.pl>
@@ -84,65 +84,87 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Add a variant of stmmac_pltfr_remove() that only frees resources
-allocated by stmmac_pltfr_probe() and - unlike stmmac_pltfr_remove() -
-does not call stmmac_remove_config_dt().
+Provide a devres variant of stmmac_probe_config_dt() that allows users to
+skip calling stmmac_remove_config_dt() at driver detach.
 
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 ---
- .../ethernet/stmicro/stmmac/stmmac_platform.c | 20 +++++++++++++++++--
- .../ethernet/stmicro/stmmac/stmmac_platform.h |  1 +
- 2 files changed, 19 insertions(+), 2 deletions(-)
+ .../ethernet/stmicro/stmmac/stmmac_platform.c | 35 +++++++++++++++++++
+ .../ethernet/stmicro/stmmac/stmmac_platform.h |  2 ++
+ 2 files changed, 37 insertions(+)
 
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-index df417cdab8c1..58d5c5cc2269 100644
+index 58d5c5cc2269..043fdfdef6d4 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-@@ -762,6 +762,23 @@ int stmmac_pltfr_probe(struct platform_device *pdev,
- }
- EXPORT_SYMBOL_GPL(stmmac_pltfr_probe);
+@@ -8,6 +8,7 @@
+   Author: Giuseppe Cavallaro <peppe.cavallaro@st.com>
+ *******************************************************************************/
  
-+/**
-+ * stmmac_pltfr_remove_no_dt
-+ * @pdev: pointer to the platform device
-+ * Description: This undoes the effects of stmmac_pltfr_probe() by removing the
-+ * driver and calling the platform's exit() callback.
-+ */
-+void stmmac_pltfr_remove_no_dt(struct platform_device *pdev)
++#include <linux/device.h>
+ #include <linux/platform_device.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/module.h>
+@@ -629,6 +630,39 @@ stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac)
+ 	return ret;
+ }
+ 
++static void devm_stmmac_remove_config_dt(void *data)
 +{
-+	struct net_device *ndev = platform_get_drvdata(pdev);
-+	struct stmmac_priv *priv = netdev_priv(ndev);
-+	struct plat_stmmacenet_data *plat = priv->plat;
++	struct plat_stmmacenet_data *plat = data;
 +
-+	stmmac_dvr_remove(&pdev->dev);
-+	stmmac_pltfr_exit(pdev, plat);
++	/* Platform data argument is unused */
++	stmmac_remove_config_dt(NULL, plat);
 +}
-+EXPORT_SYMBOL_GPL(stmmac_pltfr_remove_no_dt);
++
++/**
++ * devm_stmmac_probe_config_dt
++ * @pdev: platform_device structure
++ * @mac: MAC address to use
++ * Description: Devres variant of stmmac_probe_config_dt(). Does not require
++ * the user to call stmmac_remove_config_dt() at driver detach.
++ */
++struct plat_stmmacenet_data *
++devm_stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac)
++{
++	struct plat_stmmacenet_data *plat;
++	int ret;
++
++	plat = stmmac_probe_config_dt(pdev, mac);
++	if (IS_ERR(plat))
++		return plat;
++
++	ret = devm_add_action_or_reset(&pdev->dev,
++				       devm_stmmac_remove_config_dt, plat);
++	if (ret)
++		return ERR_PTR(ret);
++
++	return plat;
++}
 +
  /**
-  * stmmac_pltfr_remove
-  * @pdev: platform device pointer
-@@ -774,8 +791,7 @@ void stmmac_pltfr_remove(struct platform_device *pdev)
- 	struct stmmac_priv *priv = netdev_priv(ndev);
- 	struct plat_stmmacenet_data *plat = priv->plat;
- 
--	stmmac_dvr_remove(&pdev->dev);
--	stmmac_pltfr_exit(pdev, plat);
-+	stmmac_pltfr_remove_no_dt(pdev);
- 	stmmac_remove_config_dt(pdev, plat);
+  * stmmac_remove_config_dt - undo the effects of stmmac_probe_config_dt()
+  * @pdev: platform_device structure
+@@ -657,6 +691,7 @@ void stmmac_remove_config_dt(struct platform_device *pdev,
  }
- EXPORT_SYMBOL_GPL(stmmac_pltfr_remove);
+ #endif /* CONFIG_OF */
+ EXPORT_SYMBOL_GPL(stmmac_probe_config_dt);
++EXPORT_SYMBOL_GPL(devm_stmmac_probe_config_dt);
+ EXPORT_SYMBOL_GPL(stmmac_remove_config_dt);
+ 
+ int stmmac_get_platform_resources(struct platform_device *pdev,
 diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.h b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.h
-index f968e658c9d2..af52d5aa2b9a 100644
+index af52d5aa2b9a..8c1e5b2e9dae 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.h
 +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.h
-@@ -27,6 +27,7 @@ void stmmac_pltfr_exit(struct platform_device *pdev,
- int stmmac_pltfr_probe(struct platform_device *pdev,
- 		       struct plat_stmmacenet_data *plat,
- 		       struct stmmac_resources *res);
-+void stmmac_pltfr_remove_no_dt(struct platform_device *pdev);
- void stmmac_pltfr_remove(struct platform_device *pdev);
- extern const struct dev_pm_ops stmmac_pltfr_pm_ops;
+@@ -13,6 +13,8 @@
+ 
+ struct plat_stmmacenet_data *
+ stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac);
++struct plat_stmmacenet_data *
++devm_stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac);
+ void stmmac_remove_config_dt(struct platform_device *pdev,
+ 			     struct plat_stmmacenet_data *plat);
  
 -- 
 2.39.2
