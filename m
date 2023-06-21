@@ -2,90 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12CF2738EBB
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:27:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E272738EC6
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231828AbjFUS1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 14:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
+        id S231855AbjFUS3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 14:29:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbjFUS0q (ORCPT
+        with ESMTP id S231714AbjFUS2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 14:26:46 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91AD1FC7
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:26:29 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f9c2913133so9146785e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:26:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1687371988; x=1689963988;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/ds8NiiaWx7S6UP8O9D/ooCMxtDTCkVYtSDsiDSpfu8=;
-        b=HL85Tufcp3fRrygkYMd0TVOflu/rc70QpIsmTi6ffrRAQyZbi4wqOz8kH8us4ieUHr
-         Hu6SIvmaFDT+2zQ7cJWGJXPq/sFTXjEM7EXfuopbvY6WZ9nij1MwKB4UsI1O7bG4JA9V
-         j0jM8Qbh0JEFgIbDY/dqUhjwBz3BjNJ0LkEKz1MsC4wTOcmQhsdex7nSA//2ZWUlVfyU
-         /PiU1dQVxsJF+CMrQpsNulRf1DPoramDDii2FlRcI/fe5Tyvdm/vhvk65w2pWjjxpKNh
-         dpPnVVZNM4cbWVYtWmOX0gcOssUw7nZdVG4uyKl3PQ1MbTieo64ihbQibdCqjc9l0Qzl
-         VuLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687371988; x=1689963988;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/ds8NiiaWx7S6UP8O9D/ooCMxtDTCkVYtSDsiDSpfu8=;
-        b=Rdw5mSpbJBWLlGxLdjMMfNACZ8G7Xxvz1nv1iB6YZOXNHMFlSI4UzHCzIqAOxt+MNV
-         Zy9vyXONHl2We9eTebzctlhyCTSnVPFtIh+/poeNk9kZ+dFp1hbZVn5XojhI8+vUaGN7
-         7DmfagLwDYyPvxj2KzHO+PDk14XlPLzchBKhl5s92B1+QsVvXRDQ6nIII0f5PqdjUOfl
-         vZEIBwlg+5t2AGi0tFtFCYf/jCYQtChejtHX/PbgLv/O0QuhH5vpLyj2H4OZSdAi5cBU
-         NSU6c8CiISJHh+YdpcIzKEIo/ZEnyoDNjMAL1xDhfDvnloyUzVR24ustqNZ0zhyydFUb
-         V6aA==
-X-Gm-Message-State: AC+VfDwyrXgE58BJUJj6B0yo8iOA9L3ZxdAqQCBJIZkFlLnofL/Ux+rN
-        lXKakwMdTQu2L/1DzxH9/9aP1Q==
-X-Google-Smtp-Source: ACHHUZ4lLdaAdUOFO06bSwskKbze5TICqWInKMtVygi44QZUdBPafa+94OQU2ihmZOLwJTfHpXjiyA==
-X-Received: by 2002:a5d:6685:0:b0:30f:bc92:a537 with SMTP id l5-20020a5d6685000000b0030fbc92a537mr10988495wru.33.1687371988168;
-        Wed, 21 Jun 2023 11:26:28 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:a69f:8ee3:6907:ccdf])
-        by smtp.gmail.com with ESMTPSA id z13-20020adff74d000000b0030af15d7e41sm5176994wrp.4.2023.06.21.11.26.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 11:26:27 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH net-next 12/12] net: stmmac: replace the en_tx_lpi_clockgating field with a flag
-Date:   Wed, 21 Jun 2023 20:25:58 +0200
-Message-Id: <20230621182558.544417-13-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230621182558.544417-1-brgl@bgdev.pl>
-References: <20230621182558.544417-1-brgl@bgdev.pl>
+        Wed, 21 Jun 2023 14:28:42 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB9E1BFA
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:28:05 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BCDBE1EC05B8;
+        Wed, 21 Jun 2023 20:27:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1687372045;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=BABzfnxcpHaZ+PKnsfZgCNq/PGoS4hweuRO7XPBxZ00=;
+        b=hCiutqVVvjj4Wj+098nbZ26dZ1Be9pLZouGPNU4PPTNOahe/g4ZdqHHZNLXN674WYVOfXe
+        QCwA/leqhSB6icZNgQDExuvPp+ZbQzkafjNoQep2Z1cICTdAzsfZR8jWWHqNusjUnM6crv
+        Hg+6WKrAy8jSQaoc06P7JCxeOEhLeDY=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id K9_-tdCl-d2P; Wed, 21 Jun 2023 18:27:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1687372040; bh=BABzfnxcpHaZ+PKnsfZgCNq/PGoS4hweuRO7XPBxZ00=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cSYgQbT0By3fFjISNksucj4s1QKcWK14O5jR8Csr9tIgkE7SlvXosE22RCUZ+Mh3r
+         dRkA9FgmUSN1mZMJiSC2ZyazIViEHhhnmtRhh2XvCCtoTP+b7+7oYedmpMZTKhX2UM
+         88sSuDwsTLz9TNVv50b7s0j20fTFh8Cr1BEvz8ViGi8KY1OobUt2albFNZJXuKxkpK
+         q19cwr27qiK+AaiX1mOLtJunx/lyq+J3JJKkeuwfV6Z42QwW0+rJz1ijywotGa6CpD
+         nMSBVmlaXVfrcDsRs7Px3jIc+wbT/pcVNlF2SJ/gwmCcoZkuR6PwQ+13d0CHXyWnqU
+         K7j3jS6JCQZp6Aa/EmkJnw4rXFRJnFT7DHNDPZYEXTOGsBmoY8G5Et/OLGQ4Xt313Y
+         4pXk17wJRtOdcJQAcyUU9aaO/XtIeR0xg9UDCVI5FMwyOrYIeo88FLfYhDCUgKRroR
+         RRH20WQ2t8VBKVHREgRVigDIrVjpvG1ANtPykaGnNTtL0+KgC+BYwRbk3X1P/nw8Tf
+         wUWkELiLD8Yo0Ut3g3Xs+cr0TklKt0NduVwIsBLb82NfXQ+B/aGJM5lyy1XVIRnSHW
+         E3H+urIp71kBXvHLiJlglUQBW8ZnmS0pPY3hhPDJmh//mzIau/8uA7SHUtISy6eIVD
+         9uIr6AjH8S11sqGuQ2kN3X4c=
+Received: from zn.tnic (p200300ea971dc565329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c565:329c:23ff:fea6:a903])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B8D4A40E019B;
+        Wed, 21 Jun 2023 18:27:15 +0000 (UTC)
+Date:   Wed, 21 Jun 2023 20:27:10 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Nikolay Borisov <nik.borisov@suse.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, mhocko@suse.com,
+        jslaby@suse.cz
+Subject: Re: [PATCH v3 1/5] x86: Make IA32_EMULATION boot time configurable
+Message-ID: <20230621182710.GOZJNA/q4w1yniKeCr@fat_crate.local>
+References: <20230616125730.1164989-1-nik.borisov@suse.com>
+ <20230616125730.1164989-2-nik.borisov@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230616125730.1164989-2-nik.borisov@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,66 +78,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Fri, Jun 16, 2023 at 03:57:26PM +0300, Nikolay Borisov wrote:
+> Distributions would like to reduce their attack surface as much as
+> possible but at the same time they'd want to retain flexibility to cater
+> to a variety of legacy software. One such avenue where a balance has to
+> be struck is in supporting 32bit syscalls/processes on 64bit kernels. Ideally
+> it should be possible for the distribution to set their own policy and
+> give users the ability to override those policies as appropriate.
+> 
+> In order to support this usecase, introduce
+> CONFIG_IA32_EMULATION_DEFAULT_DISABLED compile time option, which
+> controls whether 32bit processes/syscalls should be allowed or not. This
+> allows distributions to set their preferred default behavior in their
+> kernel configs.
+> 
+> On the other hand, in order to allow users to override the distro's
+> policy, introduce the 'ia32_mode' parameter which allows overriding
+> CONFIG_IA32_EMULATION_DEFAULT_DISABLED state at boot time.
+> 
+> Signed-off-by: Nikolay Borisov <nik.borisov@suse.com>
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt |  5 +++++
+>  arch/x86/Kconfig                                |  9 +++++++++
+>  arch/x86/entry/common.c                         | 16 ++++++++++++++++
+>  arch/x86/include/asm/ia32.h                     | 16 +++++++++++++++-
+>  4 files changed, 45 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index 9e5bab29685f..59b1e86ecd9d 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -1865,6 +1865,11 @@
+>  			 0 -- machine default
+>  			 1 -- force brightness inversion
+>  
+> +	ia32_mode=		[X86-64]
+> +			Format: ia32_mode=disabled, ia32_mode=enabled
 
-Drop the boolean field of the plat_stmmacenet_data structure in favor of a
-simple bitfield flag.
+ia32_mode=(on|off)
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c     | 2 +-
- drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c | 4 ++--
- include/linux/stmmac.h                                | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+is less typing. Especially if you're standing somewhere in a server room
+and trying to type on some weird keyboard which always has the wrong
+layout.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 2d68a6e84b0e..efe85b086abe 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -421,7 +421,7 @@ static int stmmac_enable_eee_mode(struct stmmac_priv *priv)
- 	/* Check and enter in LPI mode */
- 	if (!priv->tx_path_in_lpi_mode)
- 		stmmac_set_eee_mode(priv, priv->hw,
--				priv->plat->en_tx_lpi_clockgating);
-+			priv->plat->flags & STMMAC_FLAG_EN_TX_LPI_CLOCKGATING);
- 	return 0;
- }
- 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-index 5a67af4526c7..0be3113197b1 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-@@ -465,8 +465,8 @@ stmmac_probe_config_dt(struct platform_device *pdev, u8 *mac)
- 	plat->force_sf_dma_mode =
- 		of_property_read_bool(np, "snps,force_sf_dma_mode");
- 
--	plat->en_tx_lpi_clockgating =
--		of_property_read_bool(np, "snps,en-tx-lpi-clockgating");
-+	if (of_property_read_bool(np, "snps,en-tx-lpi-clockgating"))
-+		plat->flags |= STMMAC_FLAG_EN_TX_LPI_CLOCKGATING;
- 
- 	/* Set the maxmtu to a default of JUMBO_LEN in case the
- 	 * parameter is not present in the device tree.
-diff --git a/include/linux/stmmac.h b/include/linux/stmmac.h
-index c3769dad8238..ef67dba775d0 100644
---- a/include/linux/stmmac.h
-+++ b/include/linux/stmmac.h
-@@ -215,6 +215,7 @@ struct dwmac4_addrs {
- #define STMMAC_FLAG_EXT_SNAPSHOT_EN		BIT(8)
- #define STMMAC_FLAG_INT_SNAPSHOT_EN		BIT(9)
- #define STMMAC_FLAG_RX_CLK_RUNS_IN_LPI		BIT(10)
-+#define STMMAC_FLAG_EN_TX_LPI_CLOCKGATING	BIT(11)
- 
- struct plat_stmmacenet_data {
- 	int bus_id;
-@@ -280,7 +281,6 @@ struct plat_stmmacenet_data {
- 	int has_gmac4;
- 	int rss_en;
- 	int mac_port_sel_speed;
--	bool en_tx_lpi_clockgating;
- 	int has_xgmac;
- 	u8 vlan_fail_q;
- 	unsigned int eee_usecs_rate;
+:-)
+
+> +			Allows overriding the compile-time state of
+> +			IA32_EMULATION_DEFAULT_DISABLED at boot time
+
+Just say what "=on" and "=off" does here - loading of 32-bit programs
+and 32-bit syscalls is enabled/disabled.
+
 -- 
-2.39.2
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
