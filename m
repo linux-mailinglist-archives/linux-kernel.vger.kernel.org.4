@@ -2,62 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3CC7388D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3810673891F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjFUPW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
+        id S233372AbjFUPaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 11:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjFUPWe (ORCPT
+        with ESMTP id S233464AbjFUP37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:22:34 -0400
-Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439EE2D7F
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:20:45 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-        by localhost (Postfix) with ESMTP id 4QmRz004c7z9sJj;
-        Wed, 21 Jun 2023 17:20:44 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id pCGSmOT-fKYY; Wed, 21 Jun 2023 17:20:43 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4QmRyx2PMJz9sJs;
-        Wed, 21 Jun 2023 17:20:41 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4EE338B779;
-        Wed, 21 Jun 2023 17:20:41 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id dIDcK9DBKVGZ; Wed, 21 Jun 2023 17:20:41 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 24B988B763;
-        Wed, 21 Jun 2023 17:20:41 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 35LFKbuK2124260
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Wed, 21 Jun 2023 17:20:37 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 35LFKbQZ2124256;
-        Wed, 21 Jun 2023 17:20:37 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH] objtool: Make 'sec-address' always on
-Date:   Wed, 21 Jun 2023 17:20:31 +0200
-Message-Id: <e7e1de1d01194df3ff4053cb0815fc2ddba33213.1687360711.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.40.1
+        Wed, 21 Jun 2023 11:29:59 -0400
+Received: from forward204a.mail.yandex.net (forward204a.mail.yandex.net [178.154.239.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47E591;
+        Wed, 21 Jun 2023 08:29:57 -0700 (PDT)
+Received: from forward101a.mail.yandex.net (forward101a.mail.yandex.net [IPv6:2a02:6b8:c0e:500:1:45:d181:d101])
+        by forward204a.mail.yandex.net (Yandex) with ESMTP id 2CFD649D3E;
+        Wed, 21 Jun 2023 18:22:38 +0300 (MSK)
+Received: from mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net [IPv6:2a02:6b8:c18:58f:0:640:3768:0])
+        by forward101a.mail.yandex.net (Yandex) with ESMTP id 56C6646CF4;
+        Wed, 21 Jun 2023 18:22:33 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id UMkSjYADYGk0-GjkRuaP5;
+        Wed, 21 Jun 2023 18:22:32 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687360952;
+        bh=E2ffYzY+NLviIbJWs/b47Qxtu1PCv/M9VOSMErw+FQU=;
+        h=Message-Id:Date:Cc:Subject:To:From;
+        b=gZ5mWM39yAuSQzgfedC4TGkRkpMziuFoxUrlfshBHKf/lbqOg+MM6K8z2G1Y2EDyk
+         J0S35a0CkWO3fVv662QTH35NwWg5srPoHi7xyYQhdq7E7DMcjYEi6BP1WD2pdg6xjG
+         Z0Sm+rcU4ppNDzGGRvwet+6G1lplpt5dP1aEAC+I=
+Authentication-Results: mail-nwsmtp-smtp-production-main-31.vla.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+From:   Stas Sergeev <stsp2@yandex.ru>
+To:     linux-kernel@vger.kernel.org
+Cc:     Stas Sergeev <stsp2@yandex.ru>, Jeff Layton <jlayton@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
+Subject: [PATCH 0/2] v2: F_OFD_GETLK extension to read lock info
+Date:   Wed, 21 Jun 2023 20:22:11 +0500
+Message-Id: <20230621152214.2720319-1-stsp2@yandex.ru>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1687360830; l=2749; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=cug9KrnhkD0tWNRN91NqNAgvx0YYURd13fBg+W5IvHQ=; b=MSMupOM8tiZHXuHmbGUr+49tsvsHOoMqLJJr6dQ9WAhib0c9wQaeZlV1OoHElkm//dypb0DWq 8Ers3uhG87CCZKBc1aSQNebBr5BBhwJHfoFpOCSe2UDbQpXq9wSto2C
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NO_DNS_FOR_FROM,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR autolearn=no
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,73 +56,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Most of the time objtool warnings are useless without the
-absolute address within the section.
+This extension allows to use F_UNLCK on query, which currently returns
+EINVAL. Instead it can be used to query the locks on a particular fd -
+something that is not currently possible. The basic idea is that on
+F_OFD_GETLK, F_UNLCK would "conflict" with (or query) any types of the
+lock on the same fd, and ignore any locks on other fds.
 
-Today there is --sec-address option to get it printed, but
-that option is nowhere used and requires a change in Makefile
-to use it.
+Use-cases:
 
-Having the address inside the section at all time in addition
-to the address within the object doesn't hurt and will help.
+1. CRIU-alike scenario when you want to read the locking info from an
+fd for the later reconstruction. This can now be done by setting
+l_start and l_len to 0 to cover entire file range, and do F_OFD_GETLK.
+In the loop you need to advance l_start past the returned lock ranges,
+to eventually collect all locked ranges.
 
-Remove the --sec-address option and print it at all time.
+2. Implementing the lock checking/enforcing policy.
+Say you want to implement an "auditor" module in your program,
+that checks that the I/O is done only after the proper locking is
+applied on a file region. In this case you need to know if the
+particular region is locked on that fd, and if so - with what type
+of the lock. If you would do that currently (without this extension)
+then you can only check for the write locks, and for that you need to
+probe the lock on your fd and then open the same file via another fd and
+probe there. That way you can identify the write lock on a particular
+fd, but such trick is non-atomic and complex. As for finding out the
+read lock on a particular fd - impossible.
+This extension allows to do such queries without any extra efforts.
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- tools/objtool/builtin-check.c           | 1 -
- tools/objtool/include/objtool/builtin.h | 1 -
- tools/objtool/include/objtool/warn.h    | 6 ++----
- 3 files changed, 2 insertions(+), 6 deletions(-)
+3. Implementing the mandatory locking policy.
+Suppose you want to make a policy where the write lock inhibits any
+unlocked readers and writers. Currently you need to check if the
+write lock is present on some other fd, and if it is not there - allow
+the I/O operation. But because the write lock can appear at any moment,
+you need to do that under some global lock, which can be released only
+when the I/O operation is finished.
+With the proposed extension you can instead just check the write lock
+on your own fd first, and if it is there - allow the I/O operation on
+that fd without using any global lock. Only if there is no write lock
+on this fd, then you need to take global lock and check for a write
+lock on other fds.
 
-diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
-index 7c175198d09f..d5024a95467a 100644
---- a/tools/objtool/builtin-check.c
-+++ b/tools/objtool/builtin-check.c
-@@ -91,7 +91,6 @@ static const struct option check_options[] = {
- 	OPT_BOOLEAN(0, "module", &opts.module, "object is part of a kernel module"),
- 	OPT_BOOLEAN(0, "mnop", &opts.mnop, "nop out mcount call sites"),
- 	OPT_BOOLEAN(0, "no-unreachable", &opts.no_unreachable, "skip 'unreachable instruction' warnings"),
--	OPT_BOOLEAN(0, "sec-address", &opts.sec_address, "print section addresses in warnings"),
- 	OPT_BOOLEAN(0, "stats", &opts.stats, "print statistics"),
- 
- 	OPT_END(),
-diff --git a/tools/objtool/include/objtool/builtin.h b/tools/objtool/include/objtool/builtin.h
-index 2a108e648b7a..af79618cf6ab 100644
---- a/tools/objtool/include/objtool/builtin.h
-+++ b/tools/objtool/include/objtool/builtin.h
-@@ -35,7 +35,6 @@ struct opts {
- 	bool mnop;
- 	bool module;
- 	bool no_unreachable;
--	bool sec_address;
- 	bool stats;
- };
- 
-diff --git a/tools/objtool/include/objtool/warn.h b/tools/objtool/include/objtool/warn.h
-index b1c920dc9516..2db9717d0558 100644
---- a/tools/objtool/include/objtool/warn.h
-+++ b/tools/objtool/include/objtool/warn.h
-@@ -21,7 +21,6 @@ static inline char *offstr(struct section *sec, unsigned long offset)
- 	bool is_text = (sec->sh.sh_flags & SHF_EXECINSTR);
- 	struct symbol *sym = NULL;
- 	char *str;
--	int len;
- 
- 	if (is_text)
- 		sym = find_func_containing(sec, offset);
-@@ -30,9 +29,8 @@ static inline char *offstr(struct section *sec, unsigned long offset)
- 
- 	if (sym) {
- 		str = malloc(strlen(sym->name) + strlen(sec->name) + 40);
--		len = sprintf(str, "%s+0x%lx", sym->name, offset - sym->offset);
--		if (opts.sec_address)
--			sprintf(str+len, " (%s+0x%lx)", sec->name, offset);
-+		sprintf(str, "%s+0x%lx (%s+0x%lx)", sym->name,
-+			offset - sym->offset, sec->name, offset);
- 	} else {
- 		str = malloc(strlen(sec->name) + 20);
- 		sprintf(str, "%s+0x%lx", sec->name, offset);
+
+The second patch adds a test-case for OFD locks.
+It tests both the generic things and the proposed extension.
+
+
+The third patch is a proposed man page update for fcntl(2)
+(not for the linux source tree)
+
+
+Changes in v2:
+- Dropped the l_pid extension patch and updated test-case accordingly.
+
+Stas Sergeev (2):
+  fs/locks: F_UNLCK extension for F_OFD_GETLK
+  selftests: add OFD lock tests
+
+ fs/locks.c                                 |  23 +++-
+ tools/testing/selftests/locking/Makefile   |   2 +
+ tools/testing/selftests/locking/ofdlocks.c | 132 +++++++++++++++++++++
+ 3 files changed, 154 insertions(+), 3 deletions(-)
+ create mode 100644 tools/testing/selftests/locking/ofdlocks.c
+
+CC: Jeff Layton <jlayton@kernel.org>
+CC: Chuck Lever <chuck.lever@oracle.com>
+CC: Alexander Viro <viro@zeniv.linux.org.uk>
+CC: Christian Brauner <brauner@kernel.org>
+CC: linux-fsdevel@vger.kernel.org
+CC: linux-kernel@vger.kernel.org
+CC: Shuah Khan <shuah@kernel.org>
+CC: linux-kselftest@vger.kernel.org
+CC: linux-api@vger.kernel.org
+
 -- 
-2.40.1
+2.39.2
 
