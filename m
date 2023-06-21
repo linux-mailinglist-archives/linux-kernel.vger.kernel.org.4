@@ -2,368 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 794507392C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 01:01:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7099D7392C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 01:01:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjFUXA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 19:00:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50300 "EHLO
+        id S229871AbjFUXBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 19:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjFUXA4 (ORCPT
+        with ESMTP id S229521AbjFUXBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 19:00:56 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2041.outbound.protection.outlook.com [40.107.237.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6848B19AC;
-        Wed, 21 Jun 2023 16:00:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d+HKC9u5uzowVE8qzdkK09Wk5jnWZkiTfZ0wIzYAojIUpEm517vUQ64tTsyrifWNq/c9SHsltSthrd1Vyli90SpKOI3T5zIaMyNb0fAV8Kyu3D6LNjE03t1gTf0ZJEclnBiAEUQYWENDxj68IIoj6IVdC05P5FIikUTn1mKe7h/pbTDEL6ms1aCLOrYyiVjja7fL2Nih4PG2P9NRR9aG5400W58GNaMtxA9YOQn2Q0VB9zVdREM2PbYs4DCevL6mkrAaF24heHs3D4WlOmP2UOKBFfe61rjWeqoT3gx/cBcEeVqOegx0ME239gHzhH05fnto1v4ZBLK998Q7n+Ey4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lPLngqNlgh8qSF2ge0kMqCLy6y+oKEC2AAVkGPr07ek=;
- b=nRUd601Y3KKLRjc+sCIEN5vIq6PU0z6JiQJOoh1o+tXt5Zvk6hhM6daavvzP/gGjvk8fcKEGqK+/wDRYaBcljQ1mzyXXga1+5oVd1tWEa5Eq2yYf7jOb2Gt9QUdy/LL+IKac8dgy9vMonKR1c/jNuJ2rzQlikteal0nJ8vsDMaxU6SafZ6XsRuDUCnOQU+VRbRQjwS15xKSTBGhcEPHbSik+xUEYUagGuQ36PhuzYVESut9ETknnifEjrIjCoK7oFrZAcrPDPlbQioqxuJGFMScngfmX13q17YXahfHniWn7jxA454CjdyPOBLYzYqzf6VVdD3VFmSf22L4jadSKZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=gmail.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lPLngqNlgh8qSF2ge0kMqCLy6y+oKEC2AAVkGPr07ek=;
- b=YfQj9Ck6Mj5PNjznYunp97ptPaDSL1OeqTiXyU27IEoqiQn+QL6D6+0zXuphFAO8Q4zsc02XBOHPLhWicTAOqzB/Pin6LmGfUbPPc/km2kR9igAUxx7HVgNqDswMQ381cavrudtSQRXUniubpSfW6/oWMmepjLLBnWiVf2u8YU4=
-Received: from DS7PR03CA0321.namprd03.prod.outlook.com (2603:10b6:8:2b::6) by
- SA3PR12MB7782.namprd12.prod.outlook.com (2603:10b6:806:31c::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.21; Wed, 21 Jun
- 2023 23:00:51 +0000
-Received: from DM6NAM11FT046.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:2b:cafe::d1) by DS7PR03CA0321.outlook.office365.com
- (2603:10b6:8:2b::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23 via Frontend
- Transport; Wed, 21 Jun 2023 23:00:51 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT046.mail.protection.outlook.com (10.13.172.121) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6500.37 via Frontend Transport; Wed, 21 Jun 2023 23:00:51 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 21 Jun
- 2023 18:00:50 -0500
-Date:   Wed, 21 Jun 2023 18:00:31 -0500
-From:   Michael Roth <michael.roth@amd.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-CC:     <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
-        <linux-mm@kvack.org>, <linux-crypto@vger.kernel.org>,
-        <x86@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tglx@linutronix.de>, <mingo@redhat.com>, <jroedel@suse.de>,
-        <thomas.lendacky@amd.com>, <hpa@zytor.com>, <ardb@kernel.org>,
-        <pbonzini@redhat.com>, <seanjc@google.com>, <vkuznets@redhat.com>,
-        <jmattson@google.com>, <luto@kernel.org>,
-        <dave.hansen@linux.intel.com>, <slp@redhat.com>,
-        <pgonda@google.com>, <peterz@infradead.org>,
-        <srinivas.pandruvada@linux.intel.com>, <rientjes@google.com>,
-        <dovmurik@linux.ibm.com>, <tobin@ibm.com>, <bp@alien8.de>,
-        <vbabka@suse.cz>, <kirill@shutemov.name>, <ak@linux.intel.com>,
-        <tony.luck@intel.com>, <marcorr@google.com>,
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        <alpergun@google.com>, <dgilbert@redhat.com>, <jarkko@kernel.org>,
-        <ashish.kalra@amd.com>, <nikunj.dadhania@amd.com>,
-        <liam.merwick@oracle.com>, <zhi.a.wang@intel.com>,
-        Vishal Annapurve <vannapurve@google.com>
-Subject: Re: [PATCH RFC v9 04/51] KVM: x86: Determine shared/private faults
- using a configurable mask
-Message-ID: <20230621230031.37hdnymbjzwjgbo2@amd.com>
-References: <20230612042559.375660-1-michael.roth@amd.com>
- <20230612042559.375660-5-michael.roth@amd.com>
- <20230614164709.GT2244082@ls.amr.corp.intel.com>
- <20230620202841.7qizls3u3kcck45g@amd.com>
- <20230620211845.GV2244082@ls.amr.corp.intel.com>
+        Wed, 21 Jun 2023 19:01:47 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D50F1988;
+        Wed, 21 Jun 2023 16:01:46 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LMWKca019433;
+        Wed, 21 Jun 2023 23:01:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=11SQZq0q8ZhUlhbiEakp5ZFyeDKfnXRO6152ZnUIBTs=;
+ b=K5PQIs7SnEyfiMJx1Q4AzhWK0EceuPLHCqo8sw/L/ontaz6ElGGPFcvfOCFCZlg0e52z
+ X+zBjoAYzvjPs3OXaQo8oGQr//CFDCudUxHY0jkfdhL66Bkp9LD2/2TpVXkWt3PSz1ks
+ TTiqO2I7pkEyBm4ax32eGHUdn56JroxpOLth45AYbk62zukXAWDpp9yqWPepFTCW96ii
+ 5kSXezWYjXj5mHEqkr0CTaYhQHggPDzUeLa0YZdf86+3rthMRTNcUFqYyCJA7ymdchkw
+ 76ez5bSYU2gQimXgegp5N5+R224MDDjYx+P8abl3pfGGvy6Aog0QEHFm5USzyldKGl+A Jw== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rc2rch2br-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jun 2023 23:01:37 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35LN1aan016579
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jun 2023 23:01:36 GMT
+Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 21 Jun
+ 2023 16:01:36 -0700
+Message-ID: <7d5256cd-c0bd-36e3-9b59-63ad8595f0ce@quicinc.com>
+Date:   Wed, 21 Jun 2023 16:01:26 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230620211845.GV2244082@ls.amr.corp.intel.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT046:EE_|SA3PR12MB7782:EE_
-X-MS-Office365-Filtering-Correlation-Id: f5075f13-e7e1-46f1-7e51-08db72ab5c1b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Sma25HMm6hodeWkb1Ta0H+ippelY1ho1iEzVy/8i9Ho46YdqWgmQ2zJpX0RHp/2xNovgiCIgzo5DlQLkOXZ8zVM9Isgd+M9bIYhi739cTwV6IVaX/I0ALzoLwE2QvVmujcUprODern5y5mAg0WlfBg2GfcZNjakU2freoKLJehMYOGB//hcgUk596Ak8qwA2kfSFbgJ0+pqVcsSbNAjxOi3JqIYrL5La2Xkp2vUxZq2SMXDHGqjdQG+Hw//WjWImxcr8lH2fYCkAJOOW/RvPfvcpBnXp487lGgfbRmauvhAongVQXZj23CinOf9XdRc0BfmAHRkv8J6hzJDfeEFiw4Yp8dhsaKci139WPGzeDLoRWo6KVUGMPXJIy2qjqjxE8pQtbHNV3igw+76xZxqaPgFKEv/BwhS2MibLf6KdE9lDKgshiiVfW0qu36xj0V8T4ePS89gl/dlunkm9DDGyJr6tGpA8E5GeTDeNKgyjyQgdtYrfZhvqRHNTAlCTJ2/HavgIfiiO/caGiKdwOmgyhwt3FTLoWp6chB03BwlYpIGC7ZEGUrzEbUXuBUV/+Zh/dHeRT0ua1Bf6ql0W9OEbmOBkRxpUHlIehA+z/s/dyP4MNxlgvcIVmcL73LIvoQD7A2NXrcTurDl5cE+VG8Q1p29fOq3BxWOqWmvbLlnH7GXPWhdOspBuMD2vWm2PGCFdSCf3UaCqY9XsiPrgUExRd8Etd/PMw2AtSaKjtMlA0JumSm07/i/P91Hkky19hYkXH4JxiK7vR+REgT9hbFWjYw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(346002)(396003)(136003)(39860400002)(451199021)(36840700001)(46966006)(40470700004)(40460700003)(5660300002)(44832011)(7416002)(7406005)(2906002)(40480700001)(82310400005)(70206006)(8676002)(356005)(81166007)(47076005)(83380400001)(426003)(36860700001)(36756003)(86362001)(82740400003)(6666004)(6916009)(4326008)(8936002)(478600001)(70586007)(54906003)(41300700001)(186003)(16526019)(26005)(336012)(2616005)(316002)(1076003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 23:00:51.2243
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f5075f13-e7e1-46f1-7e51-08db72ab5c1b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT046.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB7782
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/3] drm/msm/dpu: Set DATABUS_WIDEN on command mode
+ encoders
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>
+CC:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
+ <20230525-add-widebus-support-v1-2-c7069f2efca1@quicinc.com>
+ <c74c9e0e-d059-f0e3-4350-03089c37131a@linaro.org>
+ <cce68370-3fd9-4c9a-258e-af0d5d057fda@quicinc.com>
+ <n2c5qlujxhbbj2aqlgj7fetzoteood5h4hmbwt4mapi77xlvmt@bpourzaideti>
+ <81a5e241-ec82-7414-8752-4ce3cb084959@linaro.org>
+ <f14f2c31-38c2-0600-3a29-17e83afececf@quicinc.com>
+ <26tvhvqpxtxz5tqc6jbjixadpae34k7uc7fyec2u5o2ccj4tdq@tjvguzlolc3g>
+ <8dcd643f-9644-a4e7-a0d5-eefa28084a88@linaro.org>
+Content-Language: en-US
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <8dcd643f-9644-a4e7-a0d5-eefa28084a88@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 3BXVtCPQrfpJZUABLfzzkCucAewGnqT6
+X-Proofpoint-GUID: 3BXVtCPQrfpJZUABLfzzkCucAewGnqT6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-21_12,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ priorityscore=1501 mlxscore=0 spamscore=0 impostorscore=0 adultscore=0
+ suspectscore=0 clxscore=1015 lowpriorityscore=0 mlxlogscore=999
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306210193
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 02:18:45PM -0700, Isaku Yamahata wrote:
-> On Tue, Jun 20, 2023 at 03:28:41PM -0500,
-> Michael Roth <michael.roth@amd.com> wrote:
+
+
+On 6/21/2023 9:36 AM, Dmitry Baryshkov wrote:
+> On 21/06/2023 18:17, Marijn Suijten wrote:
+>> On 2023-06-20 14:38:34, Jessica Zhang wrote:
+>> <snip>
+>>>>>>>> +    if (phys_enc->hw_intf->ops.enable_widebus)
+>>>>>>>> +        phys_enc->hw_intf->ops.enable_widebus(phys_enc->hw_intf);
+>>>>>>>
+>>>>>>> No. Please provide a single function which takes necessary
+>>>>>>> configuration, including compression and wide_bus_enable.
+>>>>>>>
+>>>>>>
+>>>>>> There are two ways to look at this. Your point is coming from the
+>>>>>> perspective that its programming the same register but just a 
+>>>>>> different
+>>>>>> bit. But that will also make it a bit confusing.
+>>>>
+>>>> My point is to have a high-level function that configures the INTF for
+>>>> the CMD mode. This way it can take a structure with necessary
+>>>> configuration bits.
+>>>
+>>> Hi Dmitry,
+>>>
+>>> After discussing this approach with Abhinav, we still have a few
+>>> questions about it:
+>>>
+>>> Currently, only 3 of the 32 bits for INTF_CONFIG2 are being used (the
+>>> rest are reserved with no plans of being programmed in the future). Does
+>>> this still justify the use of a struct to pass in the necessary
+>>> configuration?
+>>
+>> No.  The point Dmitry is making is **not** about this concidentally
+>> using the same register, but about adding a common codepath to enable
+>> compression on this hw_intf (regardless of the registers it needs to
+>> touch).
 > 
-> > On Wed, Jun 14, 2023 at 09:47:09AM -0700, Isaku Yamahata wrote:
-> > > On Sun, Jun 11, 2023 at 11:25:12PM -0500,
-> > > Michael Roth <michael.roth@amd.com> wrote:
-> > > 
-> > > > This will be used to determine whether or not an #NPF should be serviced
-> > > > using a normal page vs. a guarded/gmem one.
-> > > > 
-> > > > Signed-off-by: Michael Roth <michael.roth@amd.com>
-> > > > ---
-> > > >  arch/x86/include/asm/kvm_host.h |  7 +++++++
-> > > >  arch/x86/kvm/mmu/mmu_internal.h | 35 ++++++++++++++++++++++++++++++++-
-> > > >  2 files changed, 41 insertions(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> > > > index b3bd24f2a390..c26f76641121 100644
-> > > > --- a/arch/x86/include/asm/kvm_host.h
-> > > > +++ b/arch/x86/include/asm/kvm_host.h
-> > > > @@ -1445,6 +1445,13 @@ struct kvm_arch {
-> > > >  	 */
-> > > >  #define SPLIT_DESC_CACHE_MIN_NR_OBJECTS (SPTE_ENT_PER_PAGE + 1)
-> > > >  	struct kvm_mmu_memory_cache split_desc_cache;
-> > > > +
-> > > > +	/*
-> > > > +	 * When set, used to determine whether a fault should be treated as
-> > > > +	 * private in the context of protected VMs which use a separate gmem
-> > > > +	 * pool to back private guest pages.
-> > > > +	 */
-> > > > +	u64 mmu_private_fault_mask;
-> > > >  };
-> > > >  
-> > > >  struct kvm_vm_stat {
-> > > > diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> > > > index 780b91e1da9f..9b9e75aa43f4 100644
-> > > > --- a/arch/x86/kvm/mmu/mmu_internal.h
-> > > > +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> > > > @@ -252,6 +252,39 @@ struct kvm_page_fault {
-> > > >  
-> > > >  int kvm_tdp_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault);
-> > > >  
-> > > > +static bool kvm_mmu_fault_is_private(struct kvm *kvm, gpa_t gpa, u64 err)
-> > > > +{
-> > > > +	struct kvm_memory_slot *slot;
-> > > > +	bool private_fault = false;
-> > > > +	gfn_t gfn = gpa_to_gfn(gpa);
-> > > > +
-> > > > +	slot = gfn_to_memslot(kvm, gfn);
-> > > > +	if (!slot) {
-> > > > +		pr_debug("%s: no slot, GFN: 0x%llx\n", __func__, gfn);
-> > > > +		goto out;
-> > > > +	}
-> > > > +
-> > > > +	if (!kvm_slot_can_be_private(slot)) {
-> > > > +		pr_debug("%s: slot is not private, GFN: 0x%llx\n", __func__, gfn);
-> > > > +		goto out;
-> > > > +	}
-> > > > +
-> > > > +	if (kvm->arch.mmu_private_fault_mask) {
-> > > > +		private_fault = !!(err & kvm->arch.mmu_private_fault_mask);
-> > > > +		goto out;
-> > > > +	}
-> > > 
-> > > What's the convention of err? Can we abstract it by introducing a new bit
-> > > PFERR_PRIVATE_MASK? The caller sets it based on arch specific value.
-> > > the logic will be
-> > >         .is_private = err & PFERR_PRIVATE_MASK;
-> > 
-> > I'm not sure I understand the question. 'err' is just the page fault flags,
-> > and arch.mmu_private_fault_mask is something that can be set on a
-> > per-platform basis when running in a mode where shared/private access
-> > is recorded in the page fault flags during a #NPF.
-> > 
-> > I'm not sure how we'd keep the handling cross-platform by moving to a macro,
-> > since TDX uses a different bit, and we'd want to be able to build a
-> > SNP+TDX kernel that could run on either type of hardware.
-> > 
-> > Are you suggesting to reverse that and have err be set in a platform-specific
-> > way and then use a common PFERR_PRIVATE_MASK that's software-defined and
-> > consistent across platforms? That could work, but existing handling seems
-> > to use page fault flags as-is, keeping the hardware-set values, rather than
-> > modifying them to pass additional metadata, so it seems like it might
-> > make things more confusing to make an exception to that here. Or are
-> > there other cases where it's done that way?
+> Actually to setup INTF for CMD stream (which is equal to setting up 
+> compression at this point).
 > 
-> I meant the latter, making PFERR_PRIVATE_MASK common software-defined.
+
+Yes it should be setup intf for cmd and not enable compression.
+
+Widebus and compression are different features and we should be able to 
+control them independently.
+
+We just enable them together for DSI. So a separation is necessary.
+
+But I am still not totally convinced we even need to go down the path 
+for having an op called setup_intf_cmd() which takes in a struct like
+
+struct dpu_cmd_intf_cfg {
+	bool data_compress;
+	bool widebus_en;
+};
+
+As we have agreed that we will not touch the video mode timing engine 
+path, it leaves us with only two bits.
+
+And like I said, its not that these two bits always go together. We want 
+to be able to control them independently which means that its not 
+necessary both bits program the same register one by one. We might just 
+end up programming one of them if we just use widebus.
+
+Thats why I am still leaning on keeping this approach.
+
+>>  Similar to how dpu_hw_intf_setup_timing_engine() programs the
+>> hw_intf - including widebus! - for video-mode.
+>>
+>> Or even more generically, have a struct similar to intf_timing_params
+>> that says how the intf needs to be configured - without the caller
+>> knowing about INTF_CONFIG2.
+>>
+>> struct dpu_hw_intf_cfg is a very good example of how we can use a single
+>> struct and a single callback to configure multiple registers at once
+>> based on some input parameters.
+>>
+>>> In addition, it seems that video mode does all its INTF_CONFIG2
+>>> configuration separately in dpu_hw_intf_setup_timing_engine(). If we
+>>> have a generic set_intf_config2() op, it might be good to have it as
+>>> part of a larger cleanup where we have both video and command mode use
+>>> the generic op. What are your thoughts on this?
+>>
+>> Not in that way, but if there is a generic enable_compression() or
+>> configure_compression() callback (or even more generic, similar to
+>> setup_intf_cfg in dpu_hw_ctl) that would work for both video-mode and
+>> command-mode, maybe that is beneficial.
 > 
-> I think the SVM fault handler can use hardware value directly by carefully
-> defining those PFERR values.
+> I'd rather not do this. Let's just 'setup timing enging' vs 'setup CMD'. 
+> For example, it might also include setting up other INTF parameters for 
+> CMD mode (if anything is required later on).
 > 
-> TDX doesn't have architectural bit in error code to indicate the private fault.
-> It's coded in faulted address as shared bit. GPA bit 51 or 47.
-> PFERR_{USER, WRITE, FETCH, PRESENT} are already software-defined value for VMX
-> (and TDX).  The fault handler for VMX, handle_ept_violation(), converts
-> encoding.  For TDX, PFERR_PRIVATE_MASK is just one more software defined bit.
+
+Agreed on setup CMD but I dont know whether we need a setup CMD at all.
+Seems like an overkill.
+
+>>
+>> - Marijn
 > 
-> I'm fine with either way, variable or macro. Which do you prefer?
-> 
-> - Define variable mmu_private_fault_mask (global or per struct kvm)
->   The module initialization code, hardware_setup(), sets mmu_private_fault_mask.
-> - Define the software defined value, PFERR_PRIVATE_MASK.
->   The caller of kvm_mmu_page_fault() parses the hardware value and construct
->   software defined error_code.
-> - any other?
->   
-> 
-> > > > +
-> > > > +	/*
-> > > > +	 * Handling below is for UPM self-tests and guests that treat userspace
-> > > > +	 * as the authority on whether a fault should be private or not.
-> > > > +	 */
-> > > > +	private_fault = kvm_mem_is_private(kvm, gpa >> PAGE_SHIFT);
-> > > 
-> > > This code path is sad. One extra slot lookup and xarray look up.
-> > > Without mmu lock, the result can change by other vcpu.
-> > > Let's find a better way.
-> > 
-> > The intention was to rely on fault->mmu_seq to determine if a
-> > KVM_SET_MEMORY_ATTRIBUTES update came in after .private_fault was set so
-> > that fault handling could be retried, but that doesn't happen until
-> > kvm_faultin_pfn() which is *after* this is logged. So yes, I think there
-> > is a race here, and the approach you took in your Misc. series of
-> > keeping the kvm_mem_is_private() check inside kvm_faultin_pfn() is more
-> > efficient/correct.
-> > 
-> > If we can figure out a way to handle checking the fault flags in a way
-> > that works for both TDX/SNP (and KVM self-test use-case) we can
-> > consolidate around that.
-> 
-> I can think of the following ways. I think the second option is better because
-> we don't need exit bit for error code.
-> 
-> - Introduce software defined error code
-> - Add a flags to struct kvm_arch for self-test use-case VM_TYPE_PROTECTED_VM.
->   Set it to true for VM_TYPE_PROTECTED_VM case.
-> - any other?
-
-Vishal: hoping to get your thoughts here as well from the perspective of
-the KVM self-test use-case.
-
-I was thinking that once we set fault->is_private, that sort of
-becomes our "software-defined" bit, and what KVM would use from that
-point forward to determine whether or not the access should be treated
-as a private one or not, and that whatever handler sets
-fault->is_private would encapsulate away all the platform-specific
-bit-checking needed to do that.
-
-So if we were to straight-forwardly implement that based on how TDX
-currently handles checking for the shared bit in GPA, paired with how
-SEV-SNP handles checking for private bit in fault flags, it would look
-something like:
-
-  bool kvm_fault_is_private(kvm, gpa, err)
-  {
-    /* SEV-SNP handling */
-    if (kvm->arch.mmu_private_fault_mask)
-      return !!(err & arch.mmu_private_fault_mask);
-
-    /* TDX handling */
-    if (kvm->arch.gfn_shared_mask)
-      return !!(gpa & arch.gfn_shared_mask);
-
-    return false;
-  }
-
-  kvm_mmu_do_page_fault(vcpu, gpa, err, ...)
-  {
-    struct kvm_page_fault fault = {
-      ...
-      .is_private = kvm_fault_is_private(vcpu->kvm, gpa, err)
-    };
-
-    ...
-  }
-
-And then arch.mmu_private_fault_mask and arch.gfn_shared_mask would be
-set per-KVM-instance, just like they are now with current SNP and TDX
-patchsets, since stuff like KVM self-test wouldn't be setting those
-masks, so it makes sense to do it per-instance in that regard.
-
-But that still gets a little awkward for the KVM self-test use-case where
-.is_private should sort of be ignored in favor of whatever the xarray
-reports via kvm_mem_is_private(). In your Misc. series I believe you
-handled this by introducing a PFERR_HASATTR_MASK bit so we can determine
-whether existing value of fault->is_private should be
-ignored/overwritten or not.
-
-So maybe kvm_fault_is_private() needs to return an integer value
-instead, like:
-
-  enum {
-    KVM_FAULT_VMM_DEFINED,
-    KVM_FAULT_SHARED,
-    KVM_FAULT_PRIVATE,
-  }
-
-  bool kvm_fault_is_private(kvm, gpa, err)
-  {
-    /* SEV-SNP handling */
-    if (kvm->arch.mmu_private_fault_mask)
-      (err & arch.mmu_private_fault_mask) ? KVM_FAULT_PRIVATE : KVM_FAULT_SHARED
-
-    /* TDX handling */
-    if (kvm->arch.gfn_shared_mask)
-      (gpa & arch.gfn_shared_mask) ? KVM_FAULT_SHARED : KVM_FAULT_PRIVATE
-
-    return KVM_FAULT_VMM_DEFINED;
-  }
-
-And then down in __kvm_faultin_pfn() we do:
-
-  if (fault->is_private == KVM_FAULT_VMM_DEFINED)
-    fault->is_private = kvm_mem_is_private(vcpu->kvm, fault->gfn);
-  else if (fault->is_private != kvm_mem_is_private(vcpu->kvm, fault->gfn))
-    return kvm_do_memory_fault_exit(vcpu, fault);
-
-  if (fault->is_private)
-    return kvm_faultin_pfn_private(vcpu, fault);
-
-Maybe kvm_fault_is_private() can be simplified based on what direction
-we end up taking WRT ongoing discussions like whether we decide to define
-KVM_X86_{SNP,TDX}_VM vm_types in addition to the KVM_X86_PROTECTED_VM
-type that the selftests uses, but hoping that for this path, any changes
-along that line can be encapsulated away in kvm_fault_is_private() without
-any/much further churn at the various call-sites like __kvm_faultin_pfn().
-
-We could even push all the above logic down into the KVM self-tests, but
-have:
-
-  bool kvm_fault_is_private(kvm, gpa, err) {
-    return KVM_FAULT_VMM_DEFINED;
-  }
-
-And that would be enough to run self-tests as standalone series, with
-TDX/SNP should filling in kvm_fault_is_private() with their
-platform-specific handling.
-
-Does that seem reasonable to you? At least as a starting point. 
-
--Mike
-
-> 
-> Thanks,
-> -- 
-> Isaku Yamahata <isaku.yamahata@gmail.com>
