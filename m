@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A73B3738495
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F957738497
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232411AbjFUNNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46328 "EHLO
+        id S232438AbjFUNNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:13:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232390AbjFUNM6 (ORCPT
+        with ESMTP id S232398AbjFUNNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:12:58 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AF3E57
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:12:57 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Wed, 21 Jun 2023 09:13:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D4981739;
+        Wed, 21 Jun 2023 06:12:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5964221D0A;
-        Wed, 21 Jun 2023 13:12:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1687353175; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VXZNBzf99S/Re0auqUhITwZGbKoAylMdpUpWJfqNnEs=;
-        b=YxAXnBaeIC1QLya4c71Dnd7MWnN52zRwCYzAtlWAE1NHH/N5NDQTX4/Tu+fwhotb14VGCG
-        URAvGQ6eet0QlZYOf2jJtyU9IHTDmMRbNEO7uwZOqD1L1estEo4vZi/CpAF1XL14d0hTFy
-        hBOb1LXDca9g4Jek6AAjAjXHtcKL6j0=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3ADDA134B1;
-        Wed, 21 Jun 2023 13:12:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kMubDVf3kmQKYQAAMHmgww
-        (envelope-from <petr.pavlu@suse.com>); Wed, 21 Jun 2023 13:12:55 +0000
-From:   Petr Pavlu <petr.pavlu@suse.com>
-To:     jgross@suse.com, sstabellini@kernel.org,
-        oleksandr_tyshchenko@epam.com
-Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        Petr Pavlu <petr.pavlu@suse.com>
-Subject: [PATCH 2/2] xen/virtio: Avoid use of the dom0 backend in dom0
-Date:   Wed, 21 Jun 2023 15:12:14 +0200
-Message-Id: <20230621131214.9398-3-petr.pavlu@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230621131214.9398-1-petr.pavlu@suse.com>
-References: <20230621131214.9398-1-petr.pavlu@suse.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEB3D614BF;
+        Wed, 21 Jun 2023 13:12:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94F80C433C0;
+        Wed, 21 Jun 2023 13:12:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687353178;
+        bh=xkP28nQB96Oh4QiVptT3fJHnDXTgi6IiTCAHtTa0K4M=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=CEtlNSTxLmGwdRcOyd106AaQJqPM1T2rjODQDd6SoE40Sz+PEaxElGYTWwxYjMWe0
+         zxlhi3+C7Slk4LUL8A4Ha2btgW3FDivOBi4RbyOEAzPbXh8M37rF6McPczNCSSriYt
+         kuIRjz5B/0tNdCiYeyC/aLPpe14hqJep1g/QOXrmfSvn7EHjDFPWgHOd1bR1Ogjla+
+         beVmUX/7Dz9f66BKtkapFKG0yJlN+ZMsxvuCaalQvwuuCFpePvfciRhuP0T66nQhAz
+         Vm+/kmSZv/vDRo8UUw6TXkQsSP1AE9jMg13L8f34giADc98PNgeH02YiWd2WbhtcQ+
+         dhYz0NmYppBVg==
+From:   Christian Brauner <brauner@kernel.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH][next] readdir: Replace one-element arrays with flexible-array members
+Date:   Wed, 21 Jun 2023 15:12:41 +0200
+Message-Id: <20230621-frohe-kegeln-3549bb239263@brauner>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <ZJHiPJkNKwxkKz1c@work>
+References: <ZJHiPJkNKwxkKz1c@work>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2087; i=brauner@kernel.org; h=from:subject:message-id; bh=xkP28nQB96Oh4QiVptT3fJHnDXTgi6IiTCAHtTa0K4M=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaRM+i4R8fv3hjlrX4bcDFoR/r3tk+oFo0M5QbPe3l8pt+zP XvdrKh2lLAxiXAyyYoosDu0m4XLLeSo2G2VqwMxhZQIZwsDFKQATEZJhZOg0Ykgq+rly2b+n9eFz2I 7Nk3i6v2rv9wU3uXf5yPvMfhTH8E/9Xl24fHmR+8c1J1SrtmxaXxV1aMHWrCTlqRZme76dlGEAAA==
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,64 +61,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When attempting to run Xen on a QEMU/KVM virtual machine with virtio
-devices (all x86_64), dom0 tries to establish a grant for itself which
-eventually results in a hang during the boot.
+On Tue, 20 Jun 2023 11:30:36 -0600, Gustavo A. R. Silva wrote:
+> One-element arrays are deprecated, and we are replacing them with flexible
+> array members instead. So, replace one-element arrays with flexible-array
+> members in multiple structures.
+> 
+> Address the following -Wstringop-overflow warnings seen when built
+> m68k architecture with m5307c3_defconfig configuration:
+> In function '__put_user_fn',
+>     inlined from 'fillonedir' at fs/readdir.c:170:2:
+> include/asm-generic/uaccess.h:49:35: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+>    49 |                 *(u8 __force *)to = *(u8 *)from;
+>       |                 ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+> fs/readdir.c: In function 'fillonedir':
+> fs/readdir.c:134:25: note: at offset 1 into destination object 'd_name' of size 1
+>   134 |         char            d_name[1];
+>       |                         ^~~~~~
+> In function '__put_user_fn',
+>     inlined from 'filldir' at fs/readdir.c:257:2:
+> include/asm-generic/uaccess.h:49:35: warning: writing 1 byte into a region of size 0 [-Wstringop-overflow=]
+>    49 |                 *(u8 __force *)to = *(u8 *)from;
+>       |                 ~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~
+> fs/readdir.c: In function 'filldir':
+> fs/readdir.c:211:25: note: at offset 1 into destination object 'd_name' of size 1
+>   211 |         char            d_name[1];
+>       |                         ^~~~~~
+> 
+> [...]
 
-The backtrace looks as follows, the while loop in __send_control_msg()
-makes no progress:
+Applied to the vfs.misc branch of the vfs/vfs.git tree.
+Patches in the vfs.misc branch should appear in linux-next soon.
 
-  #0  virtqueue_get_buf_ctx (_vq=_vq@entry=0xffff8880074a8400, len=len@entry=0xffffc90000413c94, ctx=ctx@entry=0x0 <fixed_percpu_data>) at ../drivers/virtio/virtio_ring.c:2326
-  #1  0xffffffff817086b7 in virtqueue_get_buf (_vq=_vq@entry=0xffff8880074a8400, len=len@entry=0xffffc90000413c94) at ../drivers/virtio/virtio_ring.c:2333
-  #2  0xffffffff8175f6b2 in __send_control_msg (portdev=<optimized out>, port_id=0xffffffff, event=0x0, value=0x1) at ../drivers/char/virtio_console.c:562
-  #3  0xffffffff8175f6ee in __send_control_msg (portdev=<optimized out>, port_id=<optimized out>, event=<optimized out>, value=<optimized out>) at ../drivers/char/virtio_console.c:569
-  #4  0xffffffff817618b1 in virtcons_probe (vdev=0xffff88800585e800) at ../drivers/char/virtio_console.c:2098
-  #5  0xffffffff81707117 in virtio_dev_probe (_d=0xffff88800585e810) at ../drivers/virtio/virtio.c:305
-  #6  0xffffffff8198e348 in call_driver_probe (drv=0xffffffff82be40c0 <virtio_console>, drv=0xffffffff82be40c0 <virtio_console>, dev=0xffff88800585e810) at ../drivers/base/dd.c:579
-  #7  really_probe (dev=dev@entry=0xffff88800585e810, drv=drv@entry=0xffffffff82be40c0 <virtio_console>) at ../drivers/base/dd.c:658
-  #8  0xffffffff8198e58f in __driver_probe_device (drv=drv@entry=0xffffffff82be40c0 <virtio_console>, dev=dev@entry=0xffff88800585e810) at ../drivers/base/dd.c:800
-  #9  0xffffffff8198e65a in driver_probe_device (drv=drv@entry=0xffffffff82be40c0 <virtio_console>, dev=dev@entry=0xffff88800585e810) at ../drivers/base/dd.c:830
-  #10 0xffffffff8198e832 in __driver_attach (dev=0xffff88800585e810, data=0xffffffff82be40c0 <virtio_console>) at ../drivers/base/dd.c:1216
-  #11 0xffffffff8198bfb2 in bus_for_each_dev (bus=<optimized out>, start=start@entry=0x0 <fixed_percpu_data>, data=data@entry=0xffffffff82be40c0 <virtio_console>,
-      fn=fn@entry=0xffffffff8198e7b0 <__driver_attach>) at ../drivers/base/bus.c:368
-  #12 0xffffffff8198db65 in driver_attach (drv=drv@entry=0xffffffff82be40c0 <virtio_console>) at ../drivers/base/dd.c:1233
-  #13 0xffffffff8198d207 in bus_add_driver (drv=drv@entry=0xffffffff82be40c0 <virtio_console>) at ../drivers/base/bus.c:673
-  #14 0xffffffff8198f550 in driver_register (drv=drv@entry=0xffffffff82be40c0 <virtio_console>) at ../drivers/base/driver.c:246
-  #15 0xffffffff81706b47 in register_virtio_driver (driver=driver@entry=0xffffffff82be40c0 <virtio_console>) at ../drivers/virtio/virtio.c:357
-  #16 0xffffffff832cd34b in virtio_console_init () at ../drivers/char/virtio_console.c:2258
-  #17 0xffffffff8100105c in do_one_initcall (fn=0xffffffff832cd2e0 <virtio_console_init>) at ../init/main.c:1246
-  #18 0xffffffff83277293 in do_initcall_level (command_line=0xffff888003e2f900 "root", level=0x6) at ../init/main.c:1319
-  #19 do_initcalls () at ../init/main.c:1335
-  #20 do_basic_setup () at ../init/main.c:1354
-  #21 kernel_init_freeable () at ../init/main.c:1571
-  #22 0xffffffff81f64be1 in kernel_init (unused=<optimized out>) at ../init/main.c:1462
-  #23 0xffffffff81001f49 in ret_from_fork () at ../arch/x86/entry/entry_64.S:308
-  #24 0x0000000000000000 in ?? ()
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-Fix the problem by preventing xen_grant_init_backend_domid() from
-setting dom0 as a backend when running in dom0.
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
 
-Fixes: 035e3a4321f7 ("xen/virtio: Optimize the setup of "xen-grant-dma" devices")
-Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
----
- drivers/xen/grant-dma-ops.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.misc
 
-diff --git a/drivers/xen/grant-dma-ops.c b/drivers/xen/grant-dma-ops.c
-index 76f6f26265a3..29ed27ac450e 100644
---- a/drivers/xen/grant-dma-ops.c
-+++ b/drivers/xen/grant-dma-ops.c
-@@ -362,7 +362,9 @@ static int xen_grant_init_backend_domid(struct device *dev,
- 	if (np) {
- 		ret = xen_dt_grant_init_backend_domid(dev, np, backend_domid);
- 		of_node_put(np);
--	} else if (IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT) || xen_pv_domain()) {
-+	} else if ((IS_ENABLED(CONFIG_XEN_VIRTIO_FORCE_GRANT) ||
-+		    xen_pv_domain()) &&
-+		   !xen_initial_domain()) {
- 		dev_info(dev, "Using dom0 as backend\n");
- 		*backend_domid = 0;
- 		ret = 0;
--- 
-2.35.3
-
+[1/1] readdir: Replace one-element arrays with flexible-array members
+      https://git.kernel.org/vfs/vfs/c/2507135e4ff2
