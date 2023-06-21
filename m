@@ -2,111 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FF8A73835B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:14:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A6BB73838E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjFUMHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 08:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39194 "EHLO
+        id S231377AbjFUMTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 08:19:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjFUMG5 (ORCPT
+        with ESMTP id S231750AbjFUMTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 08:06:57 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2061.outbound.protection.outlook.com [40.107.93.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1772120;
-        Wed, 21 Jun 2023 05:06:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EH+0YgOGSt34gIbbl+ofDPCXAG2BrMLNNexSj2+srJy88GyWoKWNHqvHxDNtK54yNN7hG5BFoq/yFE18B9pWTPtCtgdzapF22eBWOJ1zE/Z9+3nzqJX+Q6o3P4w1xRzviMAxYp0fgIISo16NSSVz74fYbYrOa+88pj3kK8k5v2dSCcbAlD5Pmn/FQNPIa3GtYoaZbPkGRCXsLYD0vtcrARBowq7hU72/TdXNKgLFn2DmWjXfrKFl1etYjgr+M/m8F5z05sRXM/sFajKzgg55sDAwu2T8ynGdOBpVKG4CE7l31dkUCbcmDGdohb9j0WLbHoPNThm1sVFvLL3u6IlGGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7QeI7ERQXbaEiriHDWMa7hYWQK+bpmZ1tT8BwU6JHMY=;
- b=UyR3ylsAIr1AANCvHdxKxMeud9GlPMJ0AeKzfvC/yyknLumI3X1a02p3U5EAf+bfITmV+epR/YQTfE0QD5SGtgByAvkZ9dPz2uJUffznMU01b4lpYtEEI6kXxHVabV6IR1e0g9BVbjyEyDebEAlPFtXb/fXEGt+W+W4DpMgKFFvmVLgRMVoqnO7WMuqTTyWv/AkqWQPSiftMBuR6oug3HBYtgSIcfV2udejvAAZV0plohuIouxRjdGIB2SS94sB3TruwYaDI/utk3ZnaZeSjdsp4P8GxLDc8anadTZ+sfL9327Zq3ujLIQ/91uriJcVF/nD7a9yf1yCeLX46SKhbig==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7QeI7ERQXbaEiriHDWMa7hYWQK+bpmZ1tT8BwU6JHMY=;
- b=t1EupvCh/PvTjTEXZScneiEbvT2RS4oY0VKKoVWaajDYSM2rdYyb2lZPKtRctGsOn69FKzUiaa1gyrvjd4MVxZD8dulTSMDDSYguwQu6p9ptZNVbtKi22abdBkzyRC6XhAFNoQGIoCdu0ouRRxxxXQzWLYQvz4qSMclX7Jecs+pAqf3E3wZfBdwhcAbxqL6ugN92hTFAETwTHazcSfAzDtVlvwkkhwEf8WunMD19PCENwgzrOL6TMH8MafrZYX01+7iPwFp86kv29Xw5Bc5ndn08NXJymFBHs1JcH+1CLnD8qTGHTvKDH4AmU/O7Do8nUyVUGwj5gVzVlHv9ZQNRkA==
-Received: from CY5PR15CA0093.namprd15.prod.outlook.com (2603:10b6:930:7::21)
- by DS0PR12MB6440.namprd12.prod.outlook.com (2603:10b6:8:c8::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Wed, 21 Jun
- 2023 12:06:53 +0000
-Received: from CY4PEPF0000EE3C.namprd03.prod.outlook.com
- (2603:10b6:930:7:cafe::ba) by CY5PR15CA0093.outlook.office365.com
- (2603:10b6:930:7::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23 via Frontend
- Transport; Wed, 21 Jun 2023 12:06:53 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CY4PEPF0000EE3C.mail.protection.outlook.com (10.167.242.16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6521.17 via Frontend Transport; Wed, 21 Jun 2023 12:06:52 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Wed, 21 Jun 2023
- 05:06:42 -0700
-Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Wed, 21 Jun
- 2023 05:06:42 -0700
-Received: from localhost (10.127.8.9) by mail.nvidia.com (10.129.68.7) with
- Microsoft SMTP Server id 15.2.986.37 via Frontend Transport; Wed, 21 Jun 2023
- 05:06:41 -0700
-Date:   Wed, 21 Jun 2023 15:06:41 +0300
-From:   Peter De Schrijver <pdeschrijver@nvidia.com>
-To:     Jassi Brar <jassisinghbrar@gmail.com>
-CC:     <stefank@nvidia.com>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Joe Perches <joe@perches.com>, <linux-kernel@vger.kernel.org>,
-        <linux-tegra@vger.kernel.org>, Thierry Reding <treding@nvidia.com>
-Subject: Re: [PATCH v5 2/5] mailbox: tegra: add support for Tegra264
-Message-ID: <ZJLn0fkIi78jO9K6@44189d9-lcedt>
-References: <20230529135044.2746339-1-pdeschrijver@nvidia.com>
- <20230529135044.2746339-3-pdeschrijver@nvidia.com>
- <ZJGlz7AoaZ6YB095@44189d9-lcedt>
- <CABb+yY0nTx8SQs1==rD3hdBJAvLjHW1R3_Yw40f4-oLNweXw4g@mail.gmail.com>
+        Wed, 21 Jun 2023 08:19:42 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B769D1FD3;
+        Wed, 21 Jun 2023 05:19:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687349980; x=1718885980;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=H2On4BkiK842BWT2+FLgDrsxTV7abLUQsx5UxDHkU+U=;
+  b=Zvj1qvsC/h5Zl3wZyafQwYYRS71T+F71ToUTCy46KoQi9vMwN54IPG/4
+   B9dfPTv0IRM/UycXPcJoZtBEylFFQKvIXlmEFG7Ok8cpEd302QBOaF+yO
+   2AWDgPzjbb4vpjVlnb6XfxkCthS9twJ/lLxGGvAJ0QfXaqYjIk0gH4bnb
+   FqzUeREMbHxtROFQu3DRRD8KHcOChSU0GU72ulpbtQmEUkE9z8pSvXaEu
+   zO20VtJk7Ktm6shuilhjZPxZQ/OWKYiTxw6/N2ZhNTqK13zBSPxvq3owO
+   sQXVlhDAq8Kx8Jawd8gmNLNy/cHQ3OFBYCNbeFJkKo4HhfpKQMV0sQL88
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="349885595"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="349885595"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 05:19:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="827411431"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="827411431"
+Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
+  by fmsmga002.fm.intel.com with ESMTP; 21 Jun 2023 05:19:38 -0700
+From:   "Chang S. Bae" <chang.seok.bae@intel.com>
+To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
+Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
+        ebiggers@kernel.org, x86@kernel.org, tglx@linutronix.de,
+        mingo@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, chang.seok.bae@intel.com
+Subject: [PATCH] crypto: x86/aesni: Align the address before aes_set_key_common()
+Date:   Wed, 21 Jun 2023 05:06:53 -0700
+Message-Id: <20230621120653.121759-1-chang.seok.bae@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <f1093780-cdda-35ec-3ef1-e5fab4139bef@intel.com>
+References: <f1093780-cdda-35ec-3ef1-e5fab4139bef@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABb+yY0nTx8SQs1==rD3hdBJAvLjHW1R3_Yw40f4-oLNweXw4g@mail.gmail.com>
-X-NVConfidentiality: public
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE3C:EE_|DS0PR12MB6440:EE_
-X-MS-Office365-Filtering-Correlation-Id: dece18cc-5940-4960-c8b6-08db7250003f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: R1JsQQSBeVrZ3gDbdjwRoX4QDU2cdDqUBKjCv/+OenjfnC/5y+RI7Fo3o2a1G090GZ8yqNKcYi4dyYSrlbrChxoKNApVrNwFDYNsVQ6fdogLkMFbfKoM3YHc4cchVHzXJJ260zbUqSewUy6Fd31zH/fI0rKRzBs194VzxHTaK1iVUImtaxO9eFYuZVJ40PGxftgi6nOtKdwTfsoQRTb1i3vQdV5oi1GzBMsMLu4IawgEOpbFiVc2mFyvPai5l29ZQcjfwujpejFO9FKVsrUEGmC94+z8LidpeMrPobphW7c0BflaFG9hRDFyrLRmMkQ7zto9wFI1oXfqfiWjq+yvxzr2lonxAMLfd3PgFzLgfn7gqMzlrtcYljwvkDB8zPO/KaVeVCmuVPEdAcjWY4461yUv4K+NYjSkn+6rgE7ur+x5tKf8RteQdtxeH8rpiDzaN/iHLvlfO1t16/xLc37eC4AgB+JxmoQ3MGIacNAuDNSRTKm+srLQWsgn1nk+zGNGTUZfCEphK1WRPq/pIe731zwKKRhkcrftN+/58hV90Lk42YZF9SRKA/ALv7d4mU7j7oexW6y7/2ZcvNcS/4EZTT1yCP+QcQNZOc15lYHFQT3Sh7ExffGzwD4SawA/0VByIGD0sDXAcNTpMZnp276evZjMv15DXCAWZwNcysYVHlPMyRQ3qH2/ea9exNYCuIyFO2cGkTnYkGexb7+uipZ7qLSRwqBYzknFbj6UhaxkcE9Ys2JrNEFDSXej2stNsFYT
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(7916004)(4636009)(39860400002)(396003)(136003)(346002)(376002)(451199021)(40470700004)(46966006)(36840700001)(33716001)(40460700003)(8676002)(82310400005)(54906003)(2906002)(426003)(86362001)(186003)(53546011)(336012)(26005)(9686003)(47076005)(478600001)(41300700001)(107886003)(8936002)(83380400001)(558084003)(82740400003)(4326008)(356005)(7636003)(70206006)(70586007)(6916009)(316002)(5660300002)(36860700001)(40480700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 12:06:52.8781
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: dece18cc-5940-4960-c8b6-08db7250003f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EE3C.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6440
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -114,15 +64,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 10:08:47AM -0500, Jassi Brar wrote:
-> On Tue, Jun 20, 2023 at 8:12 AM Peter De Schrijver
-> <pdeschrijver@nvidia.com> wrote:
-> >
-> > Ping! Jassi, any objections?
-> >
-> None. It will be picked before I send the pull request.
-> 
+aes_set_key_common() performs runtime alignment to the void *raw_ctx
+pointer. This facilitates consistent access to the 16byte-aligned
+address during key extension.
 
-Ok. Thank you!
+However, the alignment is already handlded in the GCM-related setkey
+functions before invoking the common function. Consequently, the
+alignment in the common function is unnecessary for those functions.
 
-Peter.
+To establish a consistent approach throughout the glue code, remove
+the aes_ctx() call from its current location. Instead, place it at
+each call site where the runtime alignment is currently absent.
+
+Link: https://lore.kernel.org/lkml/20230605024623.GA4653@quark.localdomain/
+Suggested-by: Eric Biggers <ebiggers@kernel.org>
+Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
+Cc: linux-crypto@vger.kernel.org
+Cc: x86@kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+The need for this fix was discovered during Eric's review of the Key
+Locker series [1]. Considering the upstream code also requires this
+improvement, this is applicable regardless of the Key Locker enabling
+[2].
+
+[1] https://lore.kernel.org/lkml/20230605024623.GA4653@quark.localdomain/
+[2] https://lore.kernel.org/lkml/f1093780-cdda-35ec-3ef1-e5fab4139bef@intel.com/
+---
+ arch/x86/crypto/aesni-intel_glue.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/arch/x86/crypto/aesni-intel_glue.c b/arch/x86/crypto/aesni-intel_glue.c
+index a5b0cb3efeba..c4eea7e746e7 100644
+--- a/arch/x86/crypto/aesni-intel_glue.c
++++ b/arch/x86/crypto/aesni-intel_glue.c
+@@ -229,10 +229,10 @@ static inline struct crypto_aes_ctx *aes_ctx(void *raw_ctx)
+ 	return (struct crypto_aes_ctx *)ALIGN(addr, align);
+ }
+ 
+-static int aes_set_key_common(struct crypto_tfm *tfm, void *raw_ctx,
++static int aes_set_key_common(struct crypto_tfm *tfm,
++			      struct crypto_aes_ctx *ctx,
+ 			      const u8 *in_key, unsigned int key_len)
+ {
+-	struct crypto_aes_ctx *ctx = aes_ctx(raw_ctx);
+ 	int err;
+ 
+ 	if (key_len != AES_KEYSIZE_128 && key_len != AES_KEYSIZE_192 &&
+@@ -253,7 +253,7 @@ static int aes_set_key_common(struct crypto_tfm *tfm, void *raw_ctx,
+ static int aes_set_key(struct crypto_tfm *tfm, const u8 *in_key,
+ 		       unsigned int key_len)
+ {
+-	return aes_set_key_common(tfm, crypto_tfm_ctx(tfm), in_key, key_len);
++	return aes_set_key_common(tfm, aes_ctx(crypto_tfm_ctx(tfm)), in_key, key_len);
+ }
+ 
+ static void aesni_encrypt(struct crypto_tfm *tfm, u8 *dst, const u8 *src)
+@@ -286,7 +286,7 @@ static int aesni_skcipher_setkey(struct crypto_skcipher *tfm, const u8 *key,
+ 			         unsigned int len)
+ {
+ 	return aes_set_key_common(crypto_skcipher_tfm(tfm),
+-				  crypto_skcipher_ctx(tfm), key, len);
++				  aes_ctx(crypto_skcipher_ctx(tfm)), key, len);
+ }
+ 
+ static int ecb_encrypt(struct skcipher_request *req)
+@@ -893,13 +893,13 @@ static int xts_aesni_setkey(struct crypto_skcipher *tfm, const u8 *key,
+ 	keylen /= 2;
+ 
+ 	/* first half of xts-key is for crypt */
+-	err = aes_set_key_common(crypto_skcipher_tfm(tfm), ctx->raw_crypt_ctx,
++	err = aes_set_key_common(crypto_skcipher_tfm(tfm), aes_ctx(ctx->raw_crypt_ctx),
+ 				 key, keylen);
+ 	if (err)
+ 		return err;
+ 
+ 	/* second half of xts-key is for tweak */
+-	return aes_set_key_common(crypto_skcipher_tfm(tfm), ctx->raw_tweak_ctx,
++	return aes_set_key_common(crypto_skcipher_tfm(tfm), aes_ctx(ctx->raw_tweak_ctx),
+ 				  key + keylen, keylen);
+ }
+ 
+-- 
+2.34.1
+
