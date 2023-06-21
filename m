@@ -2,247 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737A4738FF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8E5738FF4
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjFUTVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 15:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
+        id S229958AbjFUTWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 15:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjFUTVk (ORCPT
+        with ESMTP id S229514AbjFUTWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 15:21:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95AE79D;
-        Wed, 21 Jun 2023 12:21:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E18A6168A;
-        Wed, 21 Jun 2023 19:21:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 530D6C433C0;
-        Wed, 21 Jun 2023 19:21:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687375296;
-        bh=dXl/RcITYryeZDp/bcQ5wJ7/OYXFDVjxEVm67BCHVZs=;
+        Wed, 21 Jun 2023 15:22:03 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCF7199E;
+        Wed, 21 Jun 2023 12:22:01 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 21:21:57 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1687375319; bh=q5JlFy6Ato9AkhnBC0gE+fyxIZckqNSTZwN+1O+DX+Y=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qvsYqzA5QWIMPhJaQm+yBP+QxYh0+8vZjVBb6WWe4CedNcVdeci9dJ55DW57FAWlH
-         v8h77PSL8j7tiWr/EWfYm0kjUtUtJ7x0O8kK2jLCao9kYL5VQXpoQEgaoVfQ6PQxHd
-         P6rwvXUHOA+W0sa6wF9T6klertLGMbXpEFJWrlEX2Cirbdw1lEIPRi9cIhX+PMlojc
-         AHzY/67zJtoa+bh5OVu1uMVGSA9PY91VUZ330171wKCtbyAycNIbNB6R99iacR0h0e
-         xWKrUyx+06M8Lp/695TzkCE/sY5ma5sfThgWJNWEGXO88Mqt1JUwwGV+qs1QgB+krz
-         UfItkGn73Ul4Q==
-Date:   Wed, 21 Jun 2023 19:21:33 +0000
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
-        oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, hch@lst.de,
-        christophe.leroy@csgroup.eu, rppt@kernel.org, willy@infradead.org,
-        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-        schnelle@linux.ibm.com, David.Laight@aculab.com, shorne@gmail.com,
-        deller@gmx.de, glaubitz@physik.fu-berlin.de,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v7 10/19] s390: mm: Convert to GENERIC_IOREMAP
-Message-ID: <20230621192133.GB842758@dev-arch.thelio-3990X>
-References: <20230620131356.25440-11-bhe@redhat.com>
- <202306211329.ticOJCSv-lkp@intel.com>
- <ZJLTxUOCEMh6l/El@MiWiFi-R3L-srv>
+        b=TymseiNHN2tF41D11zxDlA7HCLy6rQxHXsKrzon2JJSMoJ2NYqYgE5En8aNfv/gnN
+         3XLb0Co/TxCykhi86N0v9A/qfSh6WWLr3jeKjrkA1uTdBzKgwIVDcGTjgs8xxGXpRa
+         bmcKiVs3gYUrsAnUOd/wc55ABRVvczcdzDUHNv7o=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     w@1wt.eu, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 00/17] selftests/nolibc: allow run with minimal kernel
+ config
+Message-ID: <bc635c4f-67fe-4e86-bfdf-bcb4879b928d@t-8ch.de>
+References: <cover.1687344643.git.falcon@tinylab.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZJLTxUOCEMh6l/El@MiWiFi-R3L-srv>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1687344643.git.falcon@tinylab.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 06:41:09PM +0800, Baoquan He wrote:
-> Hi,
+Hi Zhangjin,
+
+some general comments for the whole series.
+
+On 2023-06-21 20:52:30+0800, Zhangjin Wu wrote:
+> Hi, Willy
 > 
-> On 06/21/23 at 01:43pm, kernel test robot wrote:
-> > Hi Baoquan,
-> > 
-> > kernel test robot noticed the following build errors:
-> > 
-> > [auto build test ERROR on akpm-mm/mm-everything]
-> > 
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230620-212135
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> > patch link:    https://lore.kernel.org/r/20230620131356.25440-11-bhe%40redhat.com
-> > patch subject: [PATCH v7 10/19] s390: mm: Convert to GENERIC_IOREMAP
-> > config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20230621/202306211329.ticOJCSv-lkp@intel.com/config)
-> > compiler: s390-linux-gcc (GCC) 12.3.0
-> > reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211329.ticOJCSv-lkp@intel.com/reproduce)
+> This patchset mainly allows speed up the nolibc test with a minimal
+> kernel config.
 > 
-> Thanks for reporting this.
+> As the nolibc supported architectures become more and more, the 'run'
+> test with DEFCONFIG may cost several hours, which is not friendly to
+> develop testing and even for release testing, so, smaller kernel configs
+> may be required, and firstly, we should let nolibc-test work with less
+> kernel config options, this patchset aims to this goal.
 > 
-> I followed steps in above reproduce link, it failed as below. Please
-> help check if anything is missing.
+> This patchset mainly remove the dependency from procfs, tmpfs, net and
+> memfd_create, many failures have been fixed up.
 > 
-> [root@intel-knightslanding-lb-02 linux]# COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
-> Compiler will be installed in /root/0day
-> lftpget -c https://download.01.org/0day-ci/cross-package/./gcc-12.3.0-nolibc/x86_64-gcc-12.3.0-nolibc_s390-linux.tar.xz
-> /root/linux                                                                                          
-> tar Jxf /root/0day/gcc-12.3.0-nolibc/x86_64-gcc-12.3.0-nolibc_s390-linux.tar.xz -C /root/0day
-> Please update: libc6 or glibc
-> ldd /root/0day/gcc-12.3.0-nolibc/s390-linux/bin/s390-linux-gcc
-> /root/0day/gcc-12.3.0-nolibc/s390-linux/bin/s390-linux-gcc: /lib64/libc.so.6: version `GLIBC_2.36' not found (required by /root/0day/gcc-12.3.0-nolibc/s390-linux/bin/s390-linux-gcc)
-> setup_crosstool failed
+> When CONFIG_TMPFS and CONFIG_SHMEM are disabled, kernel will provide a
+> ramfs based tmpfs (mm/shmem.c), it will be used as a choice to fix up
+> some failures and also allow skip less tests.
 
-Certain recent versions of the kernel.org crosstool toolchains were
-built against a pretty recent glibc so attempting to run it on a system
-with an older glibc will result in the error above:
+Did you look into how much this duplicates from the kernels already
+existing "tinyconfig" and "kvm_guest.config" functionality?
 
-https://lore.kernel.org/87mt2eoopo.fsf@kernel.org/
+And it would be interesting how much impact the enablement of procfs,
+tmpfs, net and memfd_create has in constrast to the minimal
+configuration.
+It seems unfortunate to me to complicate the testsuite to handle such
+uncommon scenarios.
 
-Arnd resolved this and reuploaded the binaries, I suspect the Intel
-folks need to mirror the updated tarballs to 01.org:
+> Besides, it also adds musl support, improves glibc support and fixes up
+> a kernel cmdline passing use case.
+> 
+> This is based on the dev.2023.06.14a branch of linux-rcu [1], all of the
+> supported architectures are tested (with local minimal configs, [5]
+> pasted the one for i386) without failures:
+> 
+>            arch/board | result
+>           ------------|------------
+>       arm/vexpress-a9 | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/arm-vexpress-a9-nolibc-test.log
+>          aarch64/virt | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/aarch64-virt-nolibc-test.log
+>           ppc/g3beige | not supported
+>               i386/pc | 136 test(s) passed, 3 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/i386-pc-nolibc-test.log
+>             x86_64/pc | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/x86_64-pc-nolibc-test.log
+>          mipsel/malta | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/mipsel-malta-nolibc-test.log
+>      loongarch64/virt | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/loongarch64-virt-nolibc-test.log
+>          riscv64/virt | 136 test(s) passed, 3 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/riscv64-virt-nolibc-test.log
+>          riscv32/virt | no test log found
+> s390x/s390-ccw-virtio | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/s390x-s390-ccw-virtio-nolibc-test.log
+> 
+> Notes:
+>   * The skipped ones are -fstackprotector, chmod_self and chown_self
+> 
+>     The -fstackprotector skip is due to gcc version.
+>     chmod_self and chmod_self skips are due to procfs not enabled
+> 
+>   * ppc/g3beige support is added locally, but not added in this patchset
+> 
+>     will send ppc support as a new patchset, it depends on v2 test
+>     report patchset [3] and the v5 rv32 support, require changes on
+>     Makefile
+> 
+>   * riscv32/virt support is still in review, see v5 rv32 support [4]
+> 
+> This patchset doesn't depends on any of my other nolibc patch series,
+> but the new rmdir() routine added in this patchset may be requird to
+> apply the __sysret() from our v4 syscall helper series [2] after that
+> series being merged, currently, we use the old method to let it compile
+> without any dependency.
+> 
+> Here explains all of the patches:
+> 
+> * selftests/nolibc: stat_fault: silence NULL argument warning with glibc
+>   selftests/nolibc: gettid: restore for glibc and musl
+>   selftests/nolibc: add _LARGEFILE64_SOURCE for musl
+> 
+>   The above 3 patches adds musl compile support and improve glibc support.
+> 
+>   It is able to build and run nolibc-test with musl libc now, but there
+>   are some failures/skips due to the musl its own issues/requirements:
+> 
+>     $ sudo ./nolibc-test  | grep -E 'FAIL|SKIP'
+>     8 sbrk = 1 ENOMEM                                               [FAIL]
+>     9 brk = -1 ENOMEM                                               [FAIL]
+>     46 limit_int_fast16_min = -2147483648                           [FAIL]
+>     47 limit_int_fast16_max = 2147483647                            [FAIL]
+>     49 limit_int_fast32_min = -2147483648                           [FAIL]
+>     50 limit_int_fast32_max = 2147483647                            [FAIL]
+>     0 -fstackprotector not supported                                [SKIPPED]
+> 
+>   musl disabled sbrk and brk for some conflicts with its malloc and the
+>   fast version of int types are defined in 32bit, which differs from nolibc
+>   and glibc. musl reserved the sbrk(0) to allow get current brk, we
+>   added a test for this in the v4 __sysret() helper series [2].
 
-https://lore.kernel.org/e9601db2-ff7d-4490-abd5-8d3c5946e108@app.fastmail.com/
+We could add new macros
 
-According to make.cross, you can override the URL it uses with a
-variable, you could try removing these files
+#define UINT_MAX(t) (~(t)0)
+#define SINT_MAX(t) (((t)1 << (sizeof(t) * 8 - 2)) - (t)1 + ((t)1 << (sizeof(t) * 8 - 2)))
 
-  /root/0day/gcc-12.3.0-nolibc/s390-linux
-  /root/0day/gcc-12.3.0-nolibc/x86_64-gcc-12.3.0-nolibc_s390-linux.tar.xz
+to get whatever is appropriate for the respective type.
 
-and running
+> 
+> * selftests/nolibc: fix up kernel parameters support
+> 
+>   kernel cmdline allows pass two types of parameters, one is without
+>   '=', another is with '=', the first one is passed as init arguments,
+>   the sencond one is passed as init environment variables.
+> 
+>   Our nolibc-test prefer arguments to environment variables, this not
+>   work when users add such parameters in the kernel cmdline:
+> 
+>     noapic NOLIBC_TEST=syscall
+> 
+>   So, this patch will verify the setting from arguments at first, if it
+>   is no valid, will try the environment variables instead.
 
-  $ COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.3.0 URL=https://mirrors.edge.kernel.org/pub/tools/crosstool/files/bin/x86_64 ~/bin/make.cross W=1 O=build_dir ARCH=s390 olddefconfig
+This would be much simpler as:
 
-to see if that works now.
+test = getenv("NOLIBC_TEST");
+if (!test)
+        test = argv[1];
 
-Cheers,
-Nathan
+It changes the semantics a bit, but it doesn't seem to be an issue.
+(Maybe gated behind getpid() == 1).
 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202306211329.ticOJCSv-lkp@intel.com/
-> > 
-> > All error/warnings (new ones prefixed by >>):
-> > 
-> >    drivers/tty/ipwireless/main.c: In function 'ipwireless_probe':
-> >    drivers/tty/ipwireless/main.c:115:30: error: implicit declaration of function 'ioremap'; did you mean 'iounmap'? [-Werror=implicit-function-declaration]
-> >      115 |         ipw->common_memory = ioremap(p_dev->resource[2]->start,
-> >          |                              ^~~~~~~
-> >          |                              iounmap
-> > >> drivers/tty/ipwireless/main.c:115:28: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-> >      115 |         ipw->common_memory = ioremap(p_dev->resource[2]->start,
-> >          |                            ^
-> >    drivers/tty/ipwireless/main.c:139:26: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-> >      139 |         ipw->attr_memory = ioremap(p_dev->resource[3]->start,
-> >          |                          ^
-> >    In file included from include/linux/io.h:13,
-> >                     from drivers/tty/ipwireless/main.c:26:
-> >    arch/s390/include/asm/io.h:29:17: error: implicit declaration of function 'iounmap'; did you mean 'vunmap'? [-Werror=implicit-function-declaration]
-> >       29 | #define iounmap iounmap
-> >          |                 ^~~~~~~
-> >    drivers/tty/ipwireless/main.c:155:9: note: in expansion of macro 'iounmap'
-> >      155 |         iounmap(ipw->attr_memory);
-> >          |         ^~~~~~~
-> >    cc1: some warnings being treated as errors
-> > --
-> >    drivers/net/ethernet/smsc/smc91c92_cs.c: In function 'mhz_mfc_config':
-> > >> drivers/net/ethernet/smsc/smc91c92_cs.c:447:17: error: implicit declaration of function 'ioremap'; did you mean 'ifr_map'? [-Werror=implicit-function-declaration]
-> >      447 |     smc->base = ioremap(link->resource[2]->start,
-> >          |                 ^~~~~~~
-> >          |                 ifr_map
-> > >> drivers/net/ethernet/smsc/smc91c92_cs.c:447:15: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-> >      447 |     smc->base = ioremap(link->resource[2]->start,
-> >          |               ^
-> >    In file included from include/linux/scatterlist.h:9,
-> >                     from include/linux/dma-mapping.h:11,
-> >                     from include/linux/skbuff.h:28,
-> >                     from include/net/net_namespace.h:43,
-> >                     from include/linux/netdevice.h:38,
-> >                     from drivers/net/ethernet/smsc/smc91c92_cs.c:38:
-> >    drivers/net/ethernet/smsc/smc91c92_cs.c: In function 'smc91c92_release':
-> >    arch/s390/include/asm/io.h:29:17: error: implicit declaration of function 'iounmap'; did you mean 'vunmap'? [-Werror=implicit-function-declaration]
-> >       29 | #define iounmap iounmap
-> >          |                 ^~~~~~~
-> >    drivers/net/ethernet/smsc/smc91c92_cs.c:962:17: note: in expansion of macro 'iounmap'
-> >      962 |                 iounmap(smc->base);
-> >          |                 ^~~~~~~
-> >    cc1: some warnings being treated as errors
-> > --
-> >    drivers/net/ethernet/xircom/xirc2ps_cs.c: In function 'xirc2ps_config':
-> >    drivers/net/ethernet/xircom/xirc2ps_cs.c:843:28: error: implicit declaration of function 'ioremap'; did you mean 'iounmap'? [-Werror=implicit-function-declaration]
-> >      843 |         local->dingo_ccr = ioremap(link->resource[2]->start, 0x1000) + 0x0800;
-> >          |                            ^~~~~~~
-> >          |                            iounmap
-> > >> drivers/net/ethernet/xircom/xirc2ps_cs.c:843:26: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-> >      843 |         local->dingo_ccr = ioremap(link->resource[2]->start, 0x1000) + 0x0800;
-> >          |                          ^
-> >    In file included from include/linux/scatterlist.h:9,
-> >                     from include/linux/dma-mapping.h:11,
-> >                     from include/linux/skbuff.h:28,
-> >                     from include/linux/if_ether.h:19,
-> >                     from include/linux/ethtool.h:18,
-> >                     from drivers/net/ethernet/xircom/xirc2ps_cs.c:77:
-> >    drivers/net/ethernet/xircom/xirc2ps_cs.c: In function 'xirc2ps_release':
-> >    arch/s390/include/asm/io.h:29:17: error: implicit declaration of function 'iounmap'; did you mean 'vunmap'? [-Werror=implicit-function-declaration]
-> >       29 | #define iounmap iounmap
-> >          |                 ^~~~~~~
-> >    drivers/net/ethernet/xircom/xirc2ps_cs.c:934:25: note: in expansion of macro 'iounmap'
-> >      934 |                         iounmap(local->dingo_ccr - 0x0800);
-> >          |                         ^~~~~~~
-> >    cc1: some warnings being treated as errors
-> > 
-> > 
-> > vim +447 drivers/net/ethernet/smsc/smc91c92_cs.c
-> > 
-> > b54bf94bf91e4c drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-02  422  
-> > fba395eee7d3f3 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2006-03-31  423  static int mhz_mfc_config(struct pcmcia_device *link)
-> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  424  {
-> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  425      struct net_device *dev = link->priv;
-> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  426      struct smc_private *smc = netdev_priv(dev);
-> > b5cb259e7fac55 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-24  427      unsigned int offset;
-> > b54bf94bf91e4c drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-02  428      int i;
-> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  429  
-> > 00990e7ce0b0e5 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-30  430      link->config_flags |= CONF_ENABLE_SPKR | CONF_ENABLE_IRQ |
-> > 00990e7ce0b0e5 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-30  431  	    CONF_AUTO_SET_IO;
-> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  432  
-> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  433      /* The Megahertz combo cards have modem-like CIS entries, so
-> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  434         we have to explicitly try a bunch of port combinations. */
-> > b54bf94bf91e4c drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-02  435      if (pcmcia_loop_config(link, mhz_mfc_config_check, NULL))
-> > dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  436  	    return -ENODEV;
-> > dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  437  
-> > 9a017a910346af drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-24  438      dev->base_addr = link->resource[0]->start;
-> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  439  
-> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  440      /* Allocate a memory window, for accessing the ISR */
-> > cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  441      link->resource[2]->flags = WIN_DATA_WIDTH_8|WIN_MEMORY_TYPE_AM|WIN_ENABLE;
-> > cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  442      link->resource[2]->start = link->resource[2]->end = 0;
-> > cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  443      i = pcmcia_request_window(link, link->resource[2], 0);
-> > 4c89e88bfde6a3 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-03  444      if (i != 0)
-> > dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  445  	    return -ENODEV;
-> > dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  446  
-> > cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28 @447      smc->base = ioremap(link->resource[2]->start,
-> > cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  448  		    resource_size(link->resource[2]));
-> > 7feabb6412ea23 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-29  449      offset = (smc->manfid == MANFID_MOTOROLA) ? link->config_base : 0;
-> > cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  450      i = pcmcia_map_mem_page(link, link->resource[2], offset);
-> > 8e95a2026f3b43 drivers/net/pcmcia/smc91c92_cs.c Joe Perches       2009-12-03  451      if ((i == 0) &&
-> > 8e95a2026f3b43 drivers/net/pcmcia/smc91c92_cs.c Joe Perches       2009-12-03  452  	(smc->manfid == MANFID_MEGAHERTZ) &&
-> > 8e95a2026f3b43 drivers/net/pcmcia/smc91c92_cs.c Joe Perches       2009-12-03  453  	(smc->cardid == PRODID_MEGAHERTZ_EM3288))
-> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  454  	    mhz_3288_power(link);
-> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  455  
-> > dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  456      return 0;
-> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  457  }
-> > ^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  458  
-> > 
-> > -- 
-> > 0-DAY CI Kernel Test Service
-> > https://github.com/intel/lkp-tests/wiki
-> > 
+> * selftests/nolibc: stat_timestamps: remove procfs dependency
+> 
+>   Use '/' instead of /proc/self, or we can add a 'has_proc' condition
+>   for this test case, but it is not that necessary to skip the whole
+>   stat_timestamps tests for such a subtest binding to /proc/self.
+> 
+>   Welcome suggestion from Thomas.
+
+As above, I think the impact of depending on CONFIG_PROC_FS is
+justifiable.
+
+The usage of /proc/self was actually intentional.
+This file has a timestamp of the start of the referenced process.
+So each invocation of nolibc-test tests a new timestamp.
+
+In contrast if nolibc-test is invocated from a prebaked filesystem the
+timestamp of "/" will always be fixed, reducing the chance to find
+errors.
+
+> * tools/nolibc: add rmdir() support
+>   selftests/nolibc: add a new rmdir() test case
+> 
+>   rmdir() routine and test case are added for the coming requirement.
+> 
+>   Note, if the __sysret() patchset [2] is applied before us, this patch
+>   should be rebased on it and apply the __sysret() helper.
+> 
+> * selftests/nolibc: fix up failures when there is no procfs
+> 
+>   call rmdir() to remove /proc completely to rework the checking of
+>   /proc, before, the existing of /proc not means the procfs is really
+>   mounted.
+> 
+> * selftests/nolibc: rename proc variable to has_proc
+>   selftests/nolibc: rename euid0 variable to is_root
+> 
+>   align with the has_gettid, has_xxx variables.
+> 
+> * selftests/nolibc: prepare tmpfs and hugetlbfs
+>   selftests/nolibc: rename chmod_net to chmod_good
+>   selftests/nolibc: link_cross: support tmpfs
+>   selftests/nolibc: rename chroot_exe to chroot_file
+> 
+>   use file from /tmp instead of file from /proc when there is no procfs
+>   this avoid skipping the chmod_net, link_cross, chroot_exe tests
+> 
+> * selftests/nolibc: vfprintf: silence memfd_create() warning
+>   selftests/nolibc: vfprintf: skip if neither tmpfs nor hugetlbfs
+>   selftests/nolibc: vfprintf: support tmpfs and hugetlbfs
+> 
+>   memfd_create from kernel >= v6.2 forcely warn on missing
+>   MFD_NOEXEC_SEAL flag, the first one silence it with such flag, for
+>   older kernels, use 0 flag as before.
+
+Given this is only a problem when nolibc-test is PID1 and printing to
+the system console, we could also just disable warnings on the system
+console through syscall() or /proc/sys/kernel/printk.
+
+It would also avoid cluttering the tests for limited gain.
+
+>   since memfd_create() depends on TMPFS or HUGETLBFS, the second one
+>   skip the whole vfprintf instead of simply fail if memfd_create() not
+>   work.
+> 
+>   the 3rd one futher try the ramfs based tmpfs even when memfd_create()
+>   not work.
+> 
+> At last, let's simply discuss about the configs, I have prepared minimal
+> configs for all of the nolibc supported architectures but not sure where
+> should we put them, what about tools/testing/selftests/nolibc/configs ?
+> 
+> Thanks!
+> 
+> Best regards,
+> Zhangjin
+> ---
+> 
+> [1]: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/
+> [2]: https://lore.kernel.org/linux-riscv/cover.1687187451.git.falcon@tinylab.org/
+> [3]: https://lore.kernel.org/lkml/cover.1687156559.git.falcon@tinylab.org/
+> [4]: https://lore.kernel.org/linux-riscv/cover.1687176996.git.falcon@tinylab.org/
+> [5]: https://pastebin.com/5jq0Vxbz 
+> 
+> Zhangjin Wu (17):
+>   selftests/nolibc: stat_fault: silence NULL argument warning with glibc
+>   selftests/nolibc: gettid: restore for glibc and musl
+>   selftests/nolibc: add _LARGEFILE64_SOURCE for musl
+>   selftests/nolibc: fix up kernel parameters support
+>   selftests/nolibc: stat_timestamps: remove procfs dependency
+>   tools/nolibc: add rmdir() support
+>   selftests/nolibc: add a new rmdir() test case
+>   selftests/nolibc: fix up failures when there is no procfs
+>   selftests/nolibc: rename proc variable to has_proc
+>   selftests/nolibc: rename euid0 variable to is_root
+>   selftests/nolibc: prepare tmpfs and hugetlbfs
+>   selftests/nolibc: rename chmod_net to chmod_good
+>   selftests/nolibc: link_cross: support tmpfs
+>   selftests/nolibc: rename chroot_exe to chroot_file
+>   selftests/nolibc: vfprintf: silence memfd_create() warning
+>   selftests/nolibc: vfprintf: skip if neither tmpfs nor hugetlbfs
+>   selftests/nolibc: vfprintf: support tmpfs and hugetlbfs
+> 
+>  tools/include/nolibc/sys.h                   |  28 ++++
+>  tools/testing/selftests/nolibc/nolibc-test.c | 132 +++++++++++++++----
+>  2 files changed, 138 insertions(+), 22 deletions(-)
+> 
+> -- 
+> 2.25.1
 > 
