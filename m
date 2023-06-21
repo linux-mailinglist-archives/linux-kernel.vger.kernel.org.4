@@ -2,116 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58937738697
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:16:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B32D738699
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232360AbjFUOQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33874 "EHLO
+        id S232658AbjFUOQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232760AbjFUOQU (ORCPT
+        with ESMTP id S232560AbjFUOQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:16:20 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 646A6199C;
-        Wed, 21 Jun 2023 07:16:19 -0700 (PDT)
-Received: from [192.168.10.54] (unknown [182.179.162.32])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2D60A6606F95;
-        Wed, 21 Jun 2023 15:16:10 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687356977;
-        bh=ZfrnBJpRDergXzvQfqh1+l1r+/MY/drS+UbPB4AW/uk=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=i57nuMmb+8vcTd9/9oF/rAl+e8nxceBaB7h55tYAuxyov6Kermz+DV/q/aSfpXnfw
-         fa8Wh1/O/jcyxUTiVaIDZsTJagLKkHdu3rAIkPCyLGIS7c/AUAAQ5cWjs6+wJ4YjFZ
-         28FYWQGCWE1W4Rg6Hv+ambt+3tBj+XtWDqtgLG3uUE6iz74JTwH00h6JkBcmciWkxY
-         1Rn4/ywv2h8ZMp4jhiilafjzHifzX+1iH3jW6WJm1DrfWIhhrqCyShcEIO3MfVWZ5Q
-         9Zxrt/Eheo7J3RVDJ9qCHBx6ebvjMNUq99xe6OyN5lGj2rWehMZ7VgF27366Y1QTbg
-         lfsg9sPmQ4uYw==
-Message-ID: <de16602a-7ed9-9c03-30d9-5edccc48d2f0@collabora.com>
-Date:   Wed, 21 Jun 2023 19:16:07 +0500
+        Wed, 21 Jun 2023 10:16:56 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E745F94;
+        Wed, 21 Jun 2023 07:16:54 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f8735ac3e3so4832233e87.2;
+        Wed, 21 Jun 2023 07:16:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687357013; x=1689949013;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3LR4PDkdrWuA9l6EMLBodrJpcuDoMtm6x2sjEnKK0/g=;
+        b=gNpimUkP1cs4UTNo1wIvH1qZNiTeD/bZfYbPdos3JSpGi6pVBiYbcGA8IB9dm0Zr73
+         XcicJY5BcOs3K4ePaCTtc42IxwXTCnyTzWFyBLHZFwD3RKnBJvSEwRz3g9ey0LiRo2qU
+         KlyUVg8PXt1UiEuzPkP+eReAHyzvSV32fG1wgveLWYh3klx4OA6Q5UzqPaNxldQjFtET
+         gkkcM1JJjBDJAKG6WJOz2moSX2ZpxnSsuOA7l/NaqMwhABK9HcdpKZEDOgIqHYvaO1b9
+         3TjKKXBX8C3IurDigaqSNqETH+lGbcHDmz0nypKR7VtCjgCZHW0/9vaqvGfHWbL9oxao
+         oMBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687357013; x=1689949013;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3LR4PDkdrWuA9l6EMLBodrJpcuDoMtm6x2sjEnKK0/g=;
+        b=InbLtiMv+cqObhgMmCiPsMdCKL8V61yfdTOJoWyi+0m6wkI5eJRmw0hwSuk0LP6x+W
+         zSow9r6NXnijRPqgYkUYbpmifXmVWsNilSjfqeNC/Tm1nbc7gn2+LF2l/61b3XrzENbq
+         cIhXadJuTv8uZ4u7DbnslEvH1BKQptW89rt6hQEk1jTeVTGQSAD2upoM1ShlAXXeAIhf
+         NczKj0g0gO0YyNiDbZO1udVSijBnTXfxy5YSDY2ZXcOPnzTdc0Erf6PvrlylGbqUSjZl
+         cfIKCouNgHxDMOwdptq9K4zsVb6vBdSS2/2DoDvvypv+35OzM+rpMpCEiQrsjLMBlXVK
+         Ko1A==
+X-Gm-Message-State: AC+VfDxZzdyM3oqRpkeKceJ37/EfqBXLqnpvPKTKhf0cZLtuppOn6034
+        X4nsVFeDKP0/F+DWcF8Njxxje9LnB5wv07fNPAFI54DkeO+tTC8b
+X-Google-Smtp-Source: ACHHUZ6EsUy2gEekvKGVwx2OrwqXQoMyqztFrXefrGmHMyoPNN6lvKi5cGJPxdCBDpK0pgPB6fvfY/HzgL7K7au/tS8=
+X-Received: by 2002:a05:651c:1048:b0:2b5:828c:bfc7 with SMTP id
+ x8-20020a05651c104800b002b5828cbfc7mr1616891ljm.19.1687357012701; Wed, 21 Jun
+ 2023 07:16:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v20 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-References: <20230621072404.2918101-1-usama.anjum@collabora.com>
- <20230621072404.2918101-3-usama.anjum@collabora.com>
- <CABb0KFGhSLAHAsa3nk-pyMe2j9MU4u3xkQR21HOoS65ZB2dKsw@mail.gmail.com>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <CABb0KFGhSLAHAsa3nk-pyMe2j9MU4u3xkQR21HOoS65ZB2dKsw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CA+G9fYuifLivwhCh33kedtpU=6zUpTQ_uSkESyzdRKYp8WbTFQ@mail.gmail.com>
+ <ZJLzsWsIPD57pDgc@FVFF77S0Q05N> <CA+G9fYvwriD8X+kmDx35PavSv-youSUmYTuYTfQ4oBWnZzVRUQ@mail.gmail.com>
+In-Reply-To: <CA+G9fYvwriD8X+kmDx35PavSv-youSUmYTuYTfQ4oBWnZzVRUQ@mail.gmail.com>
+From:   Puranjay Mohan <puranjay12@gmail.com>
+Date:   Wed, 21 Jun 2023 16:16:41 +0200
+Message-ID: <CANk7y0imD3tK1Jox_V_f1vfzFi2tPhUzGOA_mLLkYy-VDHdncg@mail.gmail.com>
+Subject: Re: next: Rpi4: Unexpected kernel BRK exception at EL1
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Song Liu <song@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-rpi-kernel@lists.infradead.org,
+        Netdev <netdev@vger.kernel.org>, lkft-triage@lists.linaro.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/21/23 6:42 PM, Michał Mirosław wrote:
-> On Wed, 21 Jun 2023 at 09:24, Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
-> [...]
->> +static int pagemap_scan_test_walk(unsigned long start, unsigned long end,
->> +                                 struct mm_walk *walk)
->> +{
->> +       struct pagemap_scan_private *p = walk->private;
->> +       struct vm_area_struct *vma = walk->vma;
->> +
->> +       if ((p->flags & PM_SCAN_REQUIRE_UFFD) && (!userfaultfd_wp_async(vma) ||
->> +           !userfaultfd_wp_use_markers(vma)))
->> +               return -EPERM;
->> +
->> +       if (vma->vm_flags & VM_PFNMAP)
->> +               return 1;
->> +
->> +       return 0;
->> +}
-> 
-> This could actually short-circuit all vma flags (e.g. IS_FILE): if
-> (required_mask & IS_FILE && vma is not file-backed) return 0;
-Sorry, unable to understand you. Should we do something here?
+Hi,
 
-> 
-> Best Regards
-> Michał Mirosław
+On Wed, Jun 21, 2023 at 3:39=E2=80=AFPM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
+>
+> On Wed, 21 Jun 2023 at 18:27, Mark Rutland <mark.rutland@arm.com> wrote:
+> >
+> > On Wed, Jun 21, 2023 at 06:06:51PM +0530, Naresh Kamboju wrote:
+> > > Following boot warnings and crashes noticed on arm64 Rpi4 device runn=
+ing
+> > > Linux next-20230621 kernel.
+> > >
+> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > >
+> > > boot log:
+> > >
+> > > [   22.331748] Kernel text patching generated an invalid instruction
+> > > at 0xffff8000835d6580!
+> > > [   22.340579] Unexpected kernel BRK exception at EL1
+> > > [   22.346141] Internal error: BRK handler: 00000000f2000100 [#1] PRE=
+EMPT SMP
+> >
+> > This indicates execution of AARCH64_BREAK_FAULT.
+>
+> I see kernel panic with kselftest merge configs on Juno-r2 and Rpi4.
 
--- 
-BR,
-Muhammad Usama Anjum
+Is there a way to reproduce this setup on Qemu?
+
+I am able to build the linux-next kernel with the config given below.
+But the bug doesn't reproduce in Qemu with debian rootfs.
+
+I guess I would need the Rootfs that is being used here to reproduce it.
+Can you point me to the rootfs for this?
+
+Thanks,
+Puranjay
+
+> metadata:
+>   git_ref: master
+>   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+>   git_sha: 15e71592dbae49a674429c618a10401d7f992ac3
+>   git_describe: next-20230621
+>   kernel_version: 6.4.0-rc7
+>   kernel-config:
+>     https://storage.tuxsuite.com/public/linaro/lkft/builds/2RVAA4lj35ia3Y=
+DkqaoV6ztyqdW/config
+>   artifact-location:
+>     https://storage.tuxsuite.com/public/linaro/lkft/builds/2RVAA4lj35ia3Y=
+DkqaoV6ztyqdW/
+>   toolchain: gcc-11
+>   build_name: gcc-11-lkftconfig-kselftest
+>
+>
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
