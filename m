@@ -2,200 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3904D738346
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:13:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C8F07382CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbjFUL6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 07:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
+        id S231551AbjFUL6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 07:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbjFUL6S (ORCPT
+        with ESMTP id S231442AbjFUL6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 07:58:18 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AD71713
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 04:58:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687348690; x=1718884690;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/UaZYJmBVZXLtrLONhqjC70JFtiBLSaQl6d55pahEGM=;
-  b=FMzzKCjkwSUYr/ghBLZAYV41amfUwbZJekA2sz7eL3p6ghgV87FWFEn7
-   ckiA95bH5Wm9Lhumgv0blPjsYzwJ6IguIpkv0ADB5kuUi+N5QsfAf01Uv
-   FEOpPXz34Xj6tdZI6KoVpSDg6Znc1nd0LPyM3DM4mZqlGTEWora3WXw2X
-   AQfEHyVqGTwc1IisTeiodHv9lfNAe2sI37Hy45K84+dpqTcBSMaW5z7Lt
-   9PSUy1l+PIftze12i4cCaoLkxOh7W68Su96An8saZg4e3IHIGpHQKUtZb
-   RlRcBnw/wesbtXW74jo1FzyN9iDfDk2qgt+zq5iImmqvPQ4fNeegUyk79
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="340493091"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="340493091"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 04:58:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="838591996"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="838591996"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 21 Jun 2023 04:58:07 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qBwTO-0006op-0a;
-        Wed, 21 Jun 2023 11:58:06 +0000
-Date:   Wed, 21 Jun 2023 19:57:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] powerpc/ptrace: Split gpr32_set_common
-Message-ID: <202306211940.y4kIhSei-lkp@intel.com>
-References: <3086d189fa629e6c7bf800832921669450cc09bf.1687343697.git.christophe.leroy@csgroup.eu>
+        Wed, 21 Jun 2023 07:58:45 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAAB1703;
+        Wed, 21 Jun 2023 04:58:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=kl6nUkWuWRJmNI9AJnTnKYdYaqy5k7lvmEkgCwhBU2Y=; b=iBd7t2e4KtP1yDrPCNpHpNxGZt
+        oV1d+5sNoJjk7V8slb3vOPXe163K5GQmlw/Hsc4JLGye1z6NOy9y+rwashq7ENtu+UNVBaVxTQPhr
+        xvgFvhSEhFTRKBc5ivvnCF22WzSijIuypa5Wy6FEyEcMEDNGPjeg3+K2Ev1fxcm7mfEpdHqztz6r3
+        NQCk1FxIIzO7MfUywTjdujiN1SvxB82Em9eAAmRANCEgd6xiMlfikcOdLDXlLfZwlmKGuj+AJFf4a
+        ep6Y8AwETUyGkIzv23ZxfOdvK0jeuyRl+wwBXU6UhrLPFUj/f9BGBIdnG83bZUwIOQumJB4h1wTK8
+        +TCgpIow==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qBwTV-00HQ3X-1Y;
+        Wed, 21 Jun 2023 11:58:14 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 237223002A9;
+        Wed, 21 Jun 2023 13:58:12 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0421220825AF9; Wed, 21 Jun 2023 13:58:11 +0200 (CEST)
+Date:   Wed, 21 Jun 2023 13:58:11 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Stephane Eranian <eranian@google.com>
+Cc:     Eric Lin <eric.lin@sifive.com>, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        adrian.hunter@intel.com, palmer@dabbelt.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, greentime.hu@sifive.com,
+        vincent.chen@sifive.com
+Subject: Re: [PATCH] perf/core: Add pmu stop before unthrottling to prevent
+ WARNING
+Message-ID: <20230621115811.GD2053369@hirez.programming.kicks-ass.net>
+References: <20230602094841.1225-1-eric.lin@sifive.com>
+ <CAPqJEFpamQSbCcD0QJ16u7ctRf1=NYihod6gdZJfxFpE0YUVHQ@mail.gmail.com>
+ <CABPqkBRyqsMnNbokBKepkWq1DtzfB0npXySGbKS1T3nQTwmaAw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <3086d189fa629e6c7bf800832921669450cc09bf.1687343697.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABPqkBRyqsMnNbokBKepkWq1DtzfB0npXySGbKS1T3nQTwmaAw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+On Tue, Jun 20, 2023 at 11:18:05PM -0700, Stephane Eranian wrote:
+> On Tue, Jun 20, 2023 at 9:25 PM Eric Lin <eric.lin@sifive.com> wrote:
+> >
+> > CC: Stephane Eranian
+> >
+> > On Fri, Jun 2, 2023 at 5:49 PM Eric Lin <eric.lin@sifive.com> wrote:
+> > >
+> > > Currently, during the perf sampling, if the perf interrupt takes too long,
+> > > perf framework will lower the perf_event_max_sample_rate. This will limit
+> > > the number of samples per timer tick (max_samples_per_tick) and set hwc->interrupts
+> > > to MAX_INTERRUPTS within the __perf_event_account_interrupt() function.
+> > >
+> > > Afterward, the perf framework will unthrottle the event in the timer interrupt
+> > > handler, which triggers the driver's *_pmu_start() function. Most of the driver's
+> > > *_pmu_start() functions will check the event->hw.state to determine whether this
+> > > event has stopped. If the event has not stopped, a WARN_ON_ONCE() warning
+> > > will be triggered as shown below:
+> > >
+> > > [ 2110.224723] ------------[ cut here ]------------
+> > > [ 2110.224851] WARNING: CPU: 0 PID: 240 at drivers/perf/riscv_pmu.c:184 riscv_pmu_start+0x7c/0x8e
+> > > [ 2110.225242] Modules linked in:
+> > > [ 2110.225380] CPU: 0 PID: 240 Comm: ls Not tainted 6.4-rc4-g19d0788e9ef2 #1
+> > > [ 2110.225574] Hardware name: SiFive (DT)
+> > > [ 2110.225657] epc : riscv_pmu_start+0x7c/0x8e
+> > > [ 2110.225834]  ra : riscv_pmu_start+0x28/0x8e
+> > > [ 2110.225998] epc : ffffffff80aef864 ra : ffffffff80aef810 sp : ffff8f80004db6f0
+> > > [ 2110.226135]  gp : ffffffff81c83750 tp : ffffaf80069f9bc0 t0 : ffff8f80004db6c0
+> > > [ 2110.226245]  t1 : 0000000000000000 t2 : 000000000000001f s0 : ffff8f80004db720
+> > > [ 2110.226367]  s1 : ffffaf8008ca1068 a0 : 0000ffffffffffff a1 : 0000000000000000
+> > > [ 2110.226488]  a2 : 0000000000000001 a3 : 0000000000000870 a4 : 0000000000000000
+> > > [ 2110.226605]  a5 : 0000000000000000 a6 : 0000000000000840 a7 : 0000000000000030
+> > > [ 2110.226721]  s2 : 0000000000000000 s3 : ffffaf8005165800 s4 : ffffaf800424da00
+> > > [ 2110.226838]  s5 : ffffffffffffffff s6 : ffffffff81cc7590 s7 : 0000000000000000
+> > > [ 2110.226955]  s8 : 0000000000000006 s9 : 0000000000000001 s10: ffffaf807efbc340
+> > > [ 2110.227064]  s11: ffffaf807efbbf00 t3 : ffffaf8006a16028 t4 : 00000000dbfbb796
+> > > [ 2110.227180]  t5 : 0000000700000000 t6 : ffffaf8005269870
+> > > [ 2110.227277] status: 0000000200000100 badaddr: 0000000000000000 cause: 0000000000000003
+> > > [ 2110.227407] [<ffffffff80aef864>] riscv_pmu_start+0x7c/0x8e
+> > > [ 2110.227622] [<ffffffff80185b56>] perf_adjust_freq_unthr_context+0x15e/0x174
+> > > [ 2110.227961] [<ffffffff80188642>] perf_event_task_tick+0x88/0x9c
+> > > [ 2110.228235] [<ffffffff800626a8>] scheduler_tick+0xfe/0x27c
+> > > [ 2110.228463] [<ffffffff800b5640>] update_process_times+0x9a/0xba
+> > > [ 2110.228690] [<ffffffff800c5bd4>] tick_sched_handle+0x32/0x66
+> > > [ 2110.229007] [<ffffffff800c5e0c>] tick_sched_timer+0x64/0xb0
+> > > [ 2110.229253] [<ffffffff800b5e50>] __hrtimer_run_queues+0x156/0x2f4
+> > > [ 2110.229446] [<ffffffff800b6bdc>] hrtimer_interrupt+0xe2/0x1fe
+> > > [ 2110.229637] [<ffffffff80acc9e8>] riscv_timer_interrupt+0x38/0x42
+> > > [ 2110.229984] [<ffffffff80090a16>] handle_percpu_devid_irq+0x90/0x1d2
+> > > [ 2110.230162] [<ffffffff8008a9f4>] generic_handle_domain_irq+0x28/0x36
+> > >
+> > > To prevent this warning, we should call the driver's *_pmu_stop() function before unthrottling
+> > >
+> > > Signed-off-by: Eric Lin <eric.lin@sifive.com>
+> > > ---
+> > >  kernel/events/core.c | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/kernel/events/core.c b/kernel/events/core.c
+> > > index db016e418931..098c875abe88 100644
+> > > --- a/kernel/events/core.c
+> > > +++ b/kernel/events/core.c
+> > > @@ -4128,6 +4128,7 @@ perf_adjust_freq_unthr_context(struct perf_event_context *ctx, bool unthrottle)
+> > >
+> > >                 if (hwc->interrupts == MAX_INTERRUPTS) {
+> > >                         hwc->interrupts = 0;
+> > > +                       event->pmu->stop(event, 0);
+> 
+> But how could the event have been stopped with a call to pmu->stop()
+> during throttling?
 
-kernel test robot noticed the following build errors:
+Yeah, Changelog fails to explain how we got to the faulty state -- and
+without that we can't judge if the proposed solution actually fixes the
+problem or not.
 
-[auto build test ERROR on powerpc/next]
-[also build test ERROR on powerpc/fixes linus/master v6.4-rc7 next-20230621]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Leroy/powerpc-ptrace-Split-gpr32_set_common/20230621-183932
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-patch link:    https://lore.kernel.org/r/3086d189fa629e6c7bf800832921669450cc09bf.1687343697.git.christophe.leroy%40csgroup.eu
-patch subject: [PATCH] powerpc/ptrace: Split gpr32_set_common
-config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20230621/202306211940.y4kIhSei-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211940.y4kIhSei-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306211940.y4kIhSei-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> arch/powerpc/kernel/ptrace/ptrace-view.c:719:5: error: no previous prototype for 'gpr32_set_common_kernel' [-Werror=missing-prototypes]
-     719 | int gpr32_set_common_kernel(struct task_struct *target,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~
->> arch/powerpc/kernel/ptrace/ptrace-view.c:757:5: error: no previous prototype for 'gpr32_set_common_user' [-Werror=missing-prototypes]
-     757 | int gpr32_set_common_user(struct task_struct *target,
-         |     ^~~~~~~~~~~~~~~~~~~~~
-   cc1: all warnings being treated as errors
-
-
-vim +/gpr32_set_common_kernel +719 arch/powerpc/kernel/ptrace/ptrace-view.c
-
-   718	
- > 719	int gpr32_set_common_kernel(struct task_struct *target,
-   720				    const struct user_regset *regset,
-   721				    unsigned int pos, unsigned int count,
-   722				    const void *kbuf, unsigned long *regs)
-   723	{
-   724		const compat_ulong_t *k = kbuf;
-   725	
-   726		pos /= sizeof(compat_ulong_t);
-   727		count /= sizeof(compat_ulong_t);
-   728	
-   729		for (; count > 0 && pos < PT_MSR; --count)
-   730			regs[pos++] = *k++;
-   731	
-   732		if (count > 0 && pos == PT_MSR) {
-   733			set_user_msr(target, *k++);
-   734			++pos;
-   735			--count;
-   736		}
-   737	
-   738		for (; count > 0 && pos <= PT_MAX_PUT_REG; --count)
-   739			regs[pos++] = *k++;
-   740		for (; count > 0 && pos < PT_TRAP; --count, ++pos)
-   741			++k;
-   742	
-   743		if (count > 0 && pos == PT_TRAP) {
-   744			set_user_trap(target, *k++);
-   745			++pos;
-   746			--count;
-   747		}
-   748	
-   749		kbuf = k;
-   750		pos *= sizeof(compat_ulong_t);
-   751		count *= sizeof(compat_ulong_t);
-   752		user_regset_copyin_ignore(&pos, &count, &kbuf, NULL,
-   753					  (PT_TRAP + 1) * sizeof(compat_ulong_t), -1);
-   754		return 0;
-   755	}
-   756	
- > 757	int gpr32_set_common_user(struct task_struct *target,
-   758				  const struct user_regset *regset,
-   759				  unsigned int pos, unsigned int count,
-   760				  const void __user *ubuf, unsigned long *regs)
-   761	{
-   762		const compat_ulong_t __user *u = ubuf;
-   763		compat_ulong_t reg;
-   764	
-   765		if (!user_read_access_begin(u, count))
-   766			return -EFAULT;
-   767	
-   768		pos /= sizeof(reg);
-   769		count /= sizeof(reg);
-   770	
-   771		for (; count > 0 && pos < PT_MSR; --count) {
-   772			unsafe_get_user(reg, u++, Efault);
-   773			regs[pos++] = reg;
-   774		}
-   775	
-   776		if (count > 0 && pos == PT_MSR) {
-   777			unsafe_get_user(reg, u++, Efault);
-   778			set_user_msr(target, reg);
-   779			++pos;
-   780			--count;
-   781		}
-   782	
-   783		for (; count > 0 && pos <= PT_MAX_PUT_REG; --count) {
-   784			unsafe_get_user(reg, u++, Efault);
-   785			regs[pos++] = reg;
-   786		}
-   787		for (; count > 0 && pos < PT_TRAP; --count, ++pos)
-   788			unsafe_get_user(reg, u++, Efault);
-   789	
-   790		if (count > 0 && pos == PT_TRAP) {
-   791			unsafe_get_user(reg, u++, Efault);
-   792			set_user_trap(target, reg);
-   793			++pos;
-   794			--count;
-   795		}
-   796		user_read_access_end();
-   797	
-   798		ubuf = u;
-   799		pos *= sizeof(reg);
-   800		count *= sizeof(reg);
-   801		user_regset_copyin_ignore(&pos, &count, NULL, &ubuf,
-   802					  (PT_TRAP + 1) * sizeof(reg), -1);
-   803		return 0;
-   804	
-   805	Efault:
-   806		user_read_access_end();
-   807		return -EFAULT;
-   808	}
-   809	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> >
+> > >                         perf_log_throttle(event, 1);
+> > >                         event->pmu->start(event, 0);
+> > >                 }
+> > > --
+> > > 2.17.1
+> > >
