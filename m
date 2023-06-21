@@ -2,77 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27E42737D8E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD413737DA0
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbjFUIV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 04:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55526 "EHLO
+        id S231164AbjFUIXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 04:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjFUIV4 (ORCPT
+        with ESMTP id S230093AbjFUIXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 04:21:56 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C133EDD;
-        Wed, 21 Jun 2023 01:21:55 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-5149aafef44so6674589a12.0;
-        Wed, 21 Jun 2023 01:21:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687335714; x=1689927714;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4jBRz0LRg2B0m25eW+Tt+1nFooZyySe4sAZwfGusRF0=;
-        b=WkOBwnyhVMeHdjv01ZldJEa+yVR6LiekbLDbZLW1R5TvMV0n+6h68f19tE2f9nILs1
-         fKcMH0bPB91NbFjdrpNvQYwgTzVriIR6TXjPS80e3nbpeWKzhxdeoC5uIbZIATwvieW8
-         fPhTjy8tKuy7sLPj99+c1ne1Hm5tfm2nO/Oj6nQnT5cgwy6XWg3TV3Ji5lMkJYOE4p0B
-         BCIZ04JUBr3Ut+VLcUIYqBmElziueUczruSOONBFcvEcucoSkH/wWVE1hDQcKSnfP7cW
-         YDD5sp91grBQU/yVEwo5KtCMeA8d6oWgkCWak1Mgp0+tB5taBmmOFVHbHxBiNWN0BFJO
-         etPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687335714; x=1689927714;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4jBRz0LRg2B0m25eW+Tt+1nFooZyySe4sAZwfGusRF0=;
-        b=M6vkdVGKqnKxI2GgPdvnaMHKlqWrBdGehdmNt9gEp5rjY/f+U7pPiAdWXZrG6i/rFe
-         5wIk3u0EmdkB2HxTBl3O+RAwE4OcNgUyQros5HAuaohsO+OfZBQbWQ1lvytKR/+FRu8C
-         Hefl4VldLkW5Ua/f9B0cPr41+uiI7NTlbrYfyj/c9X+o72JWbDuYDE2fhwg6lba3Gko7
-         3BVfOofc2aUjCmF6XDKFSZWNeUFfv7UxshrDlR8ekKkyspH//Ddjaq1WUpxYUm9PX0Y9
-         +hy49whFUcb0TcYxlfr4BkLOvYbeOzicJKi2fIKUwVciL7/JtQHEXSNyhyFSFOsAqV4i
-         ZHBA==
-X-Gm-Message-State: AC+VfDw/XHm6r1VekkdqjWTmM9UNQ7P2GYzx72EiJwm2lbloepKlHe1Z
-        ps5ajoV+5zg3E1NvFBMiqCPM9rUKxPeeKDIoSx0=
-X-Google-Smtp-Source: ACHHUZ57t7Yr5k8V208laObFC0kVfmXzVnMgP9PjggD4m6CY94CSVh+22oA8xQEToATqRdx59+GVTM5H79dCBLVzBIE=
-X-Received: by 2002:aa7:c1d9:0:b0:51b:c714:a296 with SMTP id
- d25-20020aa7c1d9000000b0051bc714a296mr3604912edp.13.1687335713981; Wed, 21
- Jun 2023 01:21:53 -0700 (PDT)
+        Wed, 21 Jun 2023 04:23:41 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69B11BC
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:23:40 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35L8NVVS017505;
+        Wed, 21 Jun 2023 03:23:31 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1687335811;
+        bh=7qJOY+Amzwz8yZfUfEoE6qN1GmbOBZaC7WF4l2NdgGg=;
+        h=From:To:CC:Subject:Date;
+        b=V3dsNnMmemStoa0D4314MyMZ0/QO8lmYi1WR/BMmCwIrWmD+kiH59aGFefEj6JHhC
+         eFtW4VoLp4xg3TINHg5IVLSS41Q2TPSb8CRfCUlyEoG4VOG5FIAncLIk+h8wVHXJK1
+         DkVx+fFojgG/lqD6hlHLm/b3y/ldz1mAth7lvgvU=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35L8NVpa042154
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 21 Jun 2023 03:23:31 -0500
+Received: from DFLE111.ent.ti.com (10.64.6.32) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 21
+ Jun 2023 03:23:30 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE111.ent.ti.com
+ (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 21 Jun 2023 03:23:30 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35L8NTIq069520;
+        Wed, 21 Jun 2023 03:23:30 -0500
+From:   Dhruva Gole <d-gole@ti.com>
+To:     Nishanth Menon <nm@ti.com>
+CC:     Praneeth <praneeth@ti.com>, Vignesh <vigneshr@ti.com>,
+        Dhruva Gole <d-gole@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] firmware: ti_sci: Fix few compiler warnings
+Date:   Wed, 21 Jun 2023 13:53:09 +0530
+Message-ID: <20230621082309.1569239-1-d-gole@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230620132641.256307-1-kimseer.paller@analog.com>
- <20230620132641.256307-2-kimseer.paller@analog.com> <CAHp75VdR9W8U9VmP5WZntzB9qW3fM6qy1Q2-yeBSAG5PJimkaw@mail.gmail.com>
- <e92f919e59974bb2ae32a8d961e07538@analog.com>
-In-Reply-To: <e92f919e59974bb2ae32a8d961e07538@analog.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 21 Jun 2023 11:21:17 +0300
-Message-ID: <CAHp75Vf4kXi9TAvEW=JvA9SLRYuTtwwBvzH4vGoP2CRrk9vX8g@mail.gmail.com>
-Subject: Re: [PATCH v7 2/2] iio: adc: max14001: New driver
-To:     "Paller, Kim Seer" <KimSeer.Paller@analog.com>
-Cc:     "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
-        "robh@kernel.org" <robh@kernel.org>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,50 +65,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 3:38=E2=80=AFAM Paller, Kim Seer
-<KimSeer.Paller@analog.com> wrote:
-> > From: Andy Shevchenko <andy.shevchenko@gmail.com>
-> > Sent: Tuesday, June 20, 2023 11:15 PM
-> > On Tue, Jun 20, 2023 at 4:27=E2=80=AFPM Kim Seer Paller
-> > <kimseer.paller@analog.com> wrote:
+Fix below warnings:
 
+ CC      drivers/firmware/ti_sci.o
+drivers/firmware/ti_sci.c:1988: warning: Excess function parameter 'vint_irq' description in 'ti_sci_cmd_set_irq'
+drivers/firmware/ti_sci.c:2036: warning: Excess function parameter 'vint_irq' description in 'ti_sci_cmd_free_irq'
+drivers/firmware/ti_sci.c:2632: warning: Function parameter or member
 ...
+drivers/firmware/ti_sci.c:2748: warning: expecting prototype for ti_sci_cmd_get_boot_status(). Prototype was for ti_sci_cmd_proc_get_status() instead
+drivers/firmware/ti_sci.c:3267: warning: Function parameter or member 'sub_type' not described in 'devm_ti_sci_get_resource'
+drivers/firmware/ti_sci.c:3267: warning: Excess function parameter 'suub_type' description in 'devm_ti_sci_get_resource'
 
-> > > +       /*
-> > > +        * Align received data from the receive buffer, reversing and=
- reordering
-> > > +        * it to match the expected MSB-first format.
-> > > +        */
-> > > +       *data =3D (__force u16)(be16_to_cpu(bitrev16(st->spi_rx_buffe=
-r))) &
-> > > +                                                       MAX14001_DATA=
-_MASK;
-> >
-> > Using __force in the C files is somehow stinky.
+Fixes: 1e407f337f40 ("firmware: ti_sci: Add support for processor control")
+Signed-off-by: Dhruva Gole <d-gole@ti.com>
+---
+ drivers/firmware/ti_sci.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-...
+diff --git a/drivers/firmware/ti_sci.c b/drivers/firmware/ti_sci.c
+index 039d92a595ec..eca947bb35b9 100644
+--- a/drivers/firmware/ti_sci.c
++++ b/drivers/firmware/ti_sci.c
+@@ -1978,8 +1978,6 @@ static int ti_sci_free_irq(const struct ti_sci_handle *handle, u32 valid_params,
+  * @src_index:		IRQ source index within the source device
+  * @dst_id:		Device ID of the IRQ destination
+  * @dst_host_irq:	IRQ number of the destination device
+- * @vint_irq:		Boolean specifying if this interrupt belongs to
+- *			Interrupt Aggregator.
+  *
+  * Return: 0 if all went fine, else return appropriate error.
+  */
+@@ -2026,8 +2024,6 @@ static int ti_sci_cmd_set_event_map(const struct ti_sci_handle *handle,
+  * @src_index:		IRQ source index within the source device
+  * @dst_id:		Device ID of the IRQ destination
+  * @dst_host_irq:	IRQ number of the destination device
+- * @vint_irq:		Boolean specifying if this interrupt belongs to
+- *			Interrupt Aggregator.
+  *
+  * Return: 0 if all went fine, else return appropriate error.
+  */
+@@ -2736,7 +2732,7 @@ static int ti_sci_cmd_proc_set_control(const struct ti_sci_handle *handle,
+ }
+ 
+ /**
+- * ti_sci_cmd_get_boot_status() - Command to get the processor boot status
++ * ti_sci_cmd_proc_get_status() - Command to get the processor boot status
+  * @handle:	Pointer to TI SCI handle
+  * @proc_id:	Processor ID this request is for
+  *
+@@ -3256,7 +3252,7 @@ EXPORT_SYMBOL_GPL(devm_ti_sci_get_of_resource);
+  * @handle:	TISCI handle
+  * @dev:	Device pointer to which the resource is assigned
+  * @dev_id:	TISCI device id to which the resource is assigned
+- * @suub_type:	TISCI resource subytpe representing the resource.
++ * @sub_type:	TISCI resource subytpe representing the resource.
+  *
+  * Return: Pointer to ti_sci_resource if all went well else appropriate
+  *	   error pointer.
+-- 
+2.25.1
 
-> > > +       /*
-> > > +        * Convert transmit buffer to big-endian format and reverse t=
-ransmit
-> > > +        * buffer to align with the LSB-first input on SDI port.
-> > > +        */
-> > > +       st->spi_tx_buffer =3D (__force u16)(cpu_to_be16(bitrev16(
-> >
-> > You have a different type of spi_tx_buffer than u16, don't you?
->
-> I have the same type of spi_tx_buffer as u16.
-
-And you should have __be16.
-
-> Other than using force cast, is there any way to resolve the endian warni=
-ng? I have
-> actually swapped the order of bitrev16() and cpu_to_be16/be16_to_cpu() fu=
-nctions.
-> I have tested and they also work fine.
-
-You really have to get it correct on both LE and BE architectures.
-
---=20
-With Best Regards,
-Andy Shevchenko
