@@ -2,77 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A749738D1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB41F738D1D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbjFURb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 13:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
+        id S231169AbjFURbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 13:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229448AbjFURbZ (ORCPT
+        with ESMTP id S229448AbjFURbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 13:31:25 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5DEADD
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 10:31:23 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8Bx28bpM5Nk8TgAAA--.397S3;
-        Thu, 22 Jun 2023 01:31:21 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx_c7oM5Nkb_kAAA--.5870S3;
-        Thu, 22 Jun 2023 01:31:20 +0800 (CST)
-Message-ID: <02c16e9b-0eca-caf4-b80c-53f1c7eab4e9@loongson.cn>
-Date:   Thu, 22 Jun 2023 01:31:20 +0800
+        Wed, 21 Jun 2023 13:31:44 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8618DE2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 10:31:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687368703; x=1718904703;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kMqvQECyIomaYC4b1lIKJwFmPlmJ/wDvy/xkGjZXTa0=;
+  b=D0wbsUAWVzF7sGkoaaamWRvSGbHfCv/JMymPav2KCE5I504t06zlnD0K
+   TmtgvGgwPnCfphrx8NnRu30U+p1NIEXlgpQlZDBTwD8q2tbTF5lwbvCiE
+   J7KeuPqLWlE/aytIMcpydwmQfHdXCRWDmSB6k68Kc8RC1mXylA24JI4rw
+   ZO5HP4XGGMk59pMvhFgklYO70ajeukK3zlQrLV8UdwJ+mZevJaK+kW5By
+   a+dYFx8oyS9oCKimSOAf696a5E7EWhmui9NyUpUqiW64gfZOzryGdYA+I
+   iHj/wT4xRd9GEWgG22czh5IKG94ANyY23FlEXmDUdZNllAzASsTKoJiyX
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="357749579"
+X-IronPort-AV: E=Sophos;i="6.00,261,1681196400"; 
+   d="scan'208";a="357749579"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 10:31:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="961281789"
+X-IronPort-AV: E=Sophos;i="6.00,261,1681196400"; 
+   d="scan'208";a="961281789"
+Received: from absteel-mobl1.amr.corp.intel.com (HELO desk) ([10.212.231.126])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 10:31:41 -0700
+Date:   Wed, 21 Jun 2023 10:31:35 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Breno Leitao <leitao@debian.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>, leit@fb.com,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] x86/bugs: Break down mitigations configurations
+Message-ID: <20230621173135.wiprtgzslhw5z5or@desk>
+References: <20230616164851.2559415-1-leitao@debian.org>
+ <20230621001327.qdyebewnx7r5aiy3@desk>
+ <ZJMdKUr98H8zPSAl@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v10 07/11] drm/etnaviv: Add support for the dma coherent
- device
-Content-Language: en-US
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Sui Jingfeng <18949883232@163.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        etnaviv@lists.freedesktop.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20230620094716.2231414-1-18949883232@163.com>
- <20230620094716.2231414-8-18949883232@163.com>
- <8f74f0962c8bab6c832919a5340667c54e1a7ddc.camel@pengutronix.de>
- <2249b895-84b9-adea-531b-bf190e9c866f@loongson.cn>
- <030d44e2753b9b2eea0107cdee6c20e2bc2d3efe.camel@pengutronix.de>
- <3911d448-5613-23a8-cfcb-5ae418677338@loongson.cn>
- <87deb46db35b028da74c94f5496b721e14db4745.camel@pengutronix.de>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <87deb46db35b028da74c94f5496b721e14db4745.camel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cx_c7oM5Nkb_kAAA--.5870S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7KF1DGrykJw1xtr47Cr1Utwc_yoW8ZFWxpF
-        48AFyayrWkGr40kw18Jrn8ury3Kr4xA3y5AFn8J3ZIkwnYqrsaqF1jvF1j9F1DWFs3Zr47
-        Jayqvr1Yvr1kArXCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWr
-        XwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-        k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l
-        4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_ZF0_GFyUMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8_gA5UUUU
-        U==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJMdKUr98H8zPSAl@gmail.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,77 +69,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jun 21, 2023 at 08:54:17AM -0700, Breno Leitao wrote:
+> On Tue, Jun 20, 2023 at 05:13:27PM -0700, Pawan Gupta wrote:
+> > On Fri, Jun 16, 2023 at 09:48:50AM -0700, Breno Leitao wrote:
+> > > There is no way to disable MDS, TAA, MMIO Stale data mitigation today at
+> > > compilation time. These mitigations are enabled even if
+> > > CONFIG_SPECULATION_MITIGATIONS is unset.
+> > > 
+> > > Create a new KCONFIG option for each mitigation under
+> > > CONFIG_SPECULATION_MITIGATIONS that allows these
+> > > mitigations to be disabled by default at compilation time.
+> > 
+> > I don't think all mitigations are still controllable at build-time e.g.
+> > spectre_v2 eIBRS mitigation will still be deployed irrespective of the
+> > config.
+> 
+> Right. This patchset only cares about MDS, TAA and MMIO. I am more than
+> happy to send a new patch to also disable spectre_v2 eIBRS.
 
-On 2023/6/22 00:07, Lucas Stach wrote:
-> And as the HW guarantees it on your platform, your platform
-> implementation makes this function effectively a no-op. Skipping the
-> call to this function is breaking the DMA API abstraction, as now the
-> driver is second guessing the DMA API implementation. I really see no
-> reason to do this.
+What about Retbleed, L1TF, SRBDS etc? I thought the goal is to control
+all speculation mitigations?
 
-It is the same reason you chose the word 'effectively', not 'difinitely'.
-
-We don't want waste the CPU's time,
-
-
-  to running the dma_sync_sg_for_cpu funcion() function
-
-
-```
-
-void dma_sync_sg_for_cpu(struct device *dev, struct scatterlist *sg,
-             int nelems, enum dma_data_direction dir)
-{
-     const struct dma_map_ops *ops = get_dma_ops(dev);
-
-     BUG_ON(!valid_dma_direction(dir));
-     if (dma_map_direct(dev, ops))
-         dma_direct_sync_sg_for_cpu(dev, sg, nelems, dir);
-     else if (ops->sync_sg_for_cpu)
-         ops->sync_sg_for_cpu(dev, sg, nelems, dir);
-     debug_dma_sync_sg_for_cpu(dev, sg, nelems, dir);
-}
-
-```
-
-
-  to running the this:
-
-
-```
-
-int etnaviv_gem_cpu_fini(struct drm_gem_object *obj)
-{
-     struct drm_device *dev = obj->dev;
-     struct etnaviv_gem_object *etnaviv_obj = to_etnaviv_bo(obj);
-     struct etnaviv_drm_private *priv = dev->dev_private;
-
-     if (!priv->dma_coherent && etnaviv_obj->flags & ETNA_BO_CACHED) {
-         /* fini without a prep is almost certainly a userspace error */
-         WARN_ON(etnaviv_obj->last_cpu_prep_op == 0);
-         dma_sync_sgtable_for_device(dev->dev, etnaviv_obj->sgt,
-etnaviv_op_to_dma_dir(etnaviv_obj->last_cpu_prep_op));
-         etnaviv_obj->last_cpu_prep_op = 0;
-     }
-
-     return 0;
-}
-
-```
-
-
-But, this is acceptable, because we can kill the GEM_CPU_PREP and 
-GEM_CPU_FINI ioctl entirely
-
-at userspace for cached buffer, as this is totally not needed for cached 
-mapping on our platform.
-
-
-Well leave this for the WC mapping only,
-
-OK ?
-
--- 
-Jingfeng
-
+To be consistent CONFIG_SPECULATION_MITIGATIONS should control all
+speculation mitigations.
