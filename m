@@ -2,60 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA607388A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:16:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9546A7388A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233312AbjFUPQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55470 "EHLO
+        id S231332AbjFUPSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 11:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233271AbjFUPQ3 (ORCPT
+        with ESMTP id S231262AbjFUPSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:16:29 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709AA3C05;
-        Wed, 21 Jun 2023 08:12:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687360331; x=1718896331;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Fy9uOC8gBt63gljWFjyljJTHdFzCmYEir+Wh6USceZ8=;
-  b=cBKGxkG4DIa+Fd/eB99NSpzii5x7e7Q2D3dRSwNhJFhpu8ZZ+BomKlDa
-   qg3jqS/OmyZVfVHsDzSstbEkmuP06YaLNIJjx02n7w7c9KyI/7wKPmiNt
-   Eo7+CwLfZlyiP2VCozPYcXlnptNTzQ0dDIRsTxOQAEjBeivGtFG6cVrjn
-   jgveiWpkVaR05pC89H5bB5HCQGkj7e9O7vuCVsWrUSLoOxSpNIZ3IDrtR
-   D+x0GEOb7C/JE/CgspodY/NA9NGpb8nn2dpyUsu9Dc8vbvqR6hQY6A08a
-   G4SCWz3r9amd++k2ayiOkQS6uDmF2SUlD2hwKSzpda5zZvwPEvrXAa4EC
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="344937866"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="344937866"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 08:11:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="827489545"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="827489545"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Jun 2023 08:11:48 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 19698241; Wed, 21 Jun 2023 18:11:59 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Hans de Goede <hdegoede@redhat.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 2/2] platform/x86: wmi: Replace open coded guid_parse_and_compare()
-Date:   Wed, 21 Jun 2023 18:11:55 +0300
-Message-Id: <20230621151155.78279-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
-In-Reply-To: <20230621151155.78279-1-andriy.shevchenko@linux.intel.com>
-References: <20230621151155.78279-1-andriy.shevchenko@linux.intel.com>
+        Wed, 21 Jun 2023 11:18:17 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62782D74;
+        Wed, 21 Jun 2023 08:14:35 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 4C0C72AE;
+        Wed, 21 Jun 2023 15:14:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 4C0C72AE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1687360475; bh=PFxuX8mago3vl0Qcs3OhzDNVkxupOWWwKCpDkAT9oYo=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=krXsQ9dug4yuevYapGka33Nal5zBrnrDkqPNvU96V638wP5Ike8YE4fgjp2HxulQs
+         jtor4PV1fPxkx4qQe5IBYZ72MmrzZiPSqHhGgOFousdOjshqrehri5h/amiU+V/Hvd
+         i3R+1vnmQLtvFjyX4BadDuuH/raElYCIG6KgNZfTrsOwItr4Y1DcVq8bOsb8Ms9eNc
+         +JAb8f5pC49IhxCEMLwNaKAdF7mPDWjWYlotYq21WvP/9qKAKVsBhOJeNqhsWloTUE
+         StRM8X5Wzo+nr4SjueMe62VOkQvadWfwEi7DlhNY/wU5QX09wdLvfqOOwbX4/Vz/d8
+         P7NkfRb2/60kg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     rongtao@cestc.cn,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Andi Kleen <ak@linux.intel.com>
+Subject: Re: [PATCH] docs: trace: Convert decode_msr.py print syntax to python3
+In-Reply-To: <tencent_6142CF595B97172A46AF02A34D885D060108@qq.com>
+References: <tencent_6142CF595B97172A46AF02A34D885D060108@qq.com>
+Date:   Wed, 21 Jun 2023 09:14:34 -0600
+Message-ID: <877crwrgo5.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,31 +53,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Even though we have no issues in the code, let's replace the open
-coded guid_parse_and_compare().
+[Adding Andi]
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/platform/x86/wmi.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+Rong Tao <rtoax@foxmail.com> writes:
 
-diff --git a/drivers/platform/x86/wmi.c b/drivers/platform/x86/wmi.c
-index 098512a53170..a78ddd83cda0 100644
---- a/drivers/platform/x86/wmi.c
-+++ b/drivers/platform/x86/wmi.c
-@@ -1241,11 +1241,7 @@ static bool guid_already_parsed_for_legacy(struct acpi_device *device, const gui
- 	list_for_each_entry(wblock, &wmi_block_list, list) {
- 		/* skip warning and register if we know the driver will use struct wmi_driver */
- 		for (int i = 0; allow_duplicates[i] != NULL; i++) {
--			guid_t tmp;
--
--			if (guid_parse(allow_duplicates[i], &tmp))
--				continue;
--			if (guid_equal(&tmp, guid))
-+			if (guid_parse_and_compare(allow_duplicates[i], guid))
- 				return false;
- 		}
- 		if (guid_equal(&wblock->gblock.guid, guid)) {
--- 
-2.40.0.1.gaa8946217a0b
+> From: Rong Tao <rongtao@cestc.cn>
+>
+> Convert the decode_msr.py file to python3 to solve the following running
+> errors:
+>
+>     File "Documentation/trace/postprocess/decode_msr.py", line 35
+>         print j,
+>              ^
+>     SyntaxError: Missing parentheses in call to 'print'. Did you mean
+>     print(j, end=" ")?
+>
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+> ---
+>  Documentation/trace/postprocess/decode_msr.py | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Documentation/trace/postprocess/decode_msr.py b/Documentation/trace/postprocess/decode_msr.py
+> index aa9cc7abd5c2..2d45d6c14987 100644
+> --- a/Documentation/trace/postprocess/decode_msr.py
+> +++ b/Documentation/trace/postprocess/decode_msr.py
+> @@ -32,6 +32,6 @@ for j in sys.stdin:
+>  					break
+>  		if r:
+>  			j = j.replace(" " + m.group(2), " " + r + "(" + m.group(2) + ")")
+> -	print j,
+> +	print(j + ",")
 
+So I certainly have no problem applying this.  But it occurs to me that
+this file hasn't been touched since it was added in 2015, and nobody has
+complained that it doesn't work with modern Python.  That leads me to
+wonder if it's being used at all.
+
+Assuming that there is value in keeping it, I wonder if a move to
+samples/ might make sense?
+
+Thanks,
+
+jon
