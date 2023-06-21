@@ -2,77 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60549738E1A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:04:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A89738E5A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:17:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230462AbjFUSEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 14:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
+        id S231480AbjFUSRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 14:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbjFUSEL (ORCPT
+        with ESMTP id S230036AbjFUSQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 14:04:11 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F229D;
-        Wed, 21 Jun 2023 11:04:10 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9741caaf9d4so752752966b.0;
-        Wed, 21 Jun 2023 11:04:10 -0700 (PDT)
+        Wed, 21 Jun 2023 14:16:57 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251A3107
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:16:56 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-66663453f65so2980321b3a.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:16:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687370648; x=1689962648;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cXp+vDAywJj5cJVg/DGBbIIG0LrSwQcuzIbyxZXKO/k=;
-        b=K+EW8lbSK4PoxTVYtjeTj96jP+KYrKG5oRucUsuNByForLRmUwBToTz81XEdfT8oUi
-         /CgExf+MCc1EDN7tAV2qM16x1K4QV75+zqoAnvp6T887K6wZMLJVhSVODjjdOMUPkDgp
-         gnFbbqI+jihCIzg0ALDgkj4ZpbZMNBSRDFB/IKiktdIJAOvjuUCFKJPykE7t45HJ0qZL
-         HXS3QMlWg2AAXtbiMcEnt/mwu3ZTyPEMOrlJuI0JDUHOWwEYJWT3KaYA7IrozTr9B6KL
-         GD1SuSyZ6Nj6ZN0fJYQE5GIAQlMm6IixP/XfIZAzMfbzJme2si21bvfiBToxtfYLhR83
-         Q6SQ==
+        d=google.com; s=20221208; t=1687371415; x=1689963415;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=SErWj7qxRQBNUC6Smh628AB0v7WlXXsygGd167Tdi3o=;
+        b=gH6qZbnmbvzhnYXoZHM0cADGdDaQIJB+Zb3K2J/nt0RJuILN8TTUQfNKhL1NoOpRoz
+         4eVB/B6O+ns16KrHXkmaeikTQ1b4ePaYZisr/NBGvmSQq0hmkMR56XmPQ9zVAPgyYpmv
+         NWCVADLarekZTb/YF8tUjVsARrtG4eYeUd7AA+vBvQZiMqWNtFY3+HGIkyHzwljwaele
+         W05jZa+gTCAsFM8uZ+8pwELeyZ6jb1Kp2qCG2b0T90gXpNA9TB2I4C8u3P2k6nyj8VqU
+         jSnRcjmfT6h2C4RkMJHux+0cYzROGVEdGqr7gLxMMg1pIBqe2KL8660Qf2/lKBB+AAlN
+         vztQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687370648; x=1689962648;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cXp+vDAywJj5cJVg/DGBbIIG0LrSwQcuzIbyxZXKO/k=;
-        b=DEQXuqhOSqxHa49doQSyb3hBI2ucOuKKUHD0kzJXkrkjT2Qk4iRb6m7+FUpqiMGrqY
-         56yTfbbygf75KZds2CtAHhIWpzEKNJzEJKtntiIAKYJQyfdoIN3kxr34yBoO+sZTzQKi
-         KB3UtAlKUM/pAVhptV0TpDzmgQ+GR2Pb9CeDjkw8sFijtHgVAQ0m5XR+3ecMjaRTxeSf
-         TXzKDvxP+3e4dRuGOCTtBYj047Cwy5WDbqZnJ8bjepVCFWez9sanJhsxeXrsBSp2h5HI
-         ErCKQNl7KaJUoeX+r6Sp3gB+QuTpIK6iGao+NPOEUrByL54o937xBgXfEf+mQVBbgr2f
-         h04w==
-X-Gm-Message-State: AC+VfDxsT5ImILUCYlphmmJvGmvcFoWxSu5op00EwaYm5qzY7QDyPbYl
-        kfdPwDmvqz01CKcPBt7v/k6DOz0NPccBQg==
-X-Google-Smtp-Source: ACHHUZ7N4+YBBScMKZUCmuIVV+hNuxz6uOzk1+2+tW4XnlQSDMEifoQ6vD4j5DdLJJ0ml5uElrxyVg==
-X-Received: by 2002:a17:907:16a9:b0:98c:e3a1:dbb4 with SMTP id hc41-20020a17090716a900b0098ce3a1dbb4mr1667292ejc.68.1687370648353;
-        Wed, 21 Jun 2023 11:04:08 -0700 (PDT)
-Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id u13-20020a170906b10d00b00988955f7b5esm3460779ejy.157.2023.06.21.11.04.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 11:04:08 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Wed, 21 Jun 2023 20:04:05 +0200
-Subject: [PATCH v4 3/3] dt-bindings: usb: Add binding for Cypress HX3 USB
- 3.0 family
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230620-hx3-v4-3-e56b3c6db60b@skidata.com>
-References: <20230620-hx3-v4-0-e56b3c6db60b@skidata.com>
-In-Reply-To: <20230620-hx3-v4-0-e56b3c6db60b@skidata.com>
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Benjamin Bara <benjamin.bara@skidata.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        d=1e100.net; s=20221208; t=1687371415; x=1689963415;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SErWj7qxRQBNUC6Smh628AB0v7WlXXsygGd167Tdi3o=;
+        b=RCKyv5NOq4/PpFFU/v8fd/skq52Iu8ao66h2KalsFYEAp2DU21+5CCFtUki1qHjAR8
+         5Uoj/4Co4j0Mypwsslx7QtFy6GgBzHbkn85lugJ9cRyg4rcMiTx4HYMBwGJkuqp8J7mn
+         0pWhHnRoP1WUq8VqL2vyGTnKzyKv2X95JPwaZh0sFnB+hoHPN9Q4PMiU7Nui8728bL90
+         9NK/pAAzicJy3aV6JYuNQYaTabNRrjlP0/Lq1In0rsrwxNHpui8bM7z21CLeE1INP3DH
+         LFp9d5aNeZJXFEUOdnVugHabM3TmsZEzDUMP0/aHgsnHq+kW+O+HFZbsVH6V1185NrZW
+         2qKw==
+X-Gm-Message-State: AC+VfDxtG5I5s5N64cEW/dg4MHiscn/ogkbwWP97sack4f+HUy83L6oO
+        ZJj+2v8nsHaIZgB1cpRpIM37RZmJLLsH
+X-Google-Smtp-Source: ACHHUZ7nxJJH9K2lG/iQd5bdjKxZhjoz3HwnSi034CqmZTOfysPDXpRBX0XDcr7KKuoAxK436AtEeNkdKwqq
+X-Received: from yuanchu.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:4024])
+ (user=yuanchu job=sendgmr) by 2002:a05:6a00:22c7:b0:666:e954:8ab6 with SMTP
+ id f7-20020a056a0022c700b00666e9548ab6mr3973259pfj.3.1687371415509; Wed, 21
+ Jun 2023 11:16:55 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 18:04:48 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230621180454.973862-1-yuanchu@google.com>
+Subject: [RFC PATCH v2 0/6] mm: working set reporting
+From:   Yuanchu Xie <yuanchu@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Yu Zhao <yuzhao@google.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Kairui Song <kasong@tencent.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Yuanchu Xie <yuanchu@google.com>,
+        "T . J . Alumbaugh" <talumbau@google.com>
+Cc:     Wei Xu <weixugc@google.com>, SeongJae Park <sj@kernel.org>,
+        Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>,
+        kai.huang@intel.com, hch@lst.de, jon@nutanix.com,
+        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,104 +90,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Bara <benjamin.bara@skidata.com>
+RFC v1: https://lore.kernel.org/linux-mm/20230509185419.1088297-1-yuanchu@google.com/
+For background and interfaces, see the RFC v1 posting.
 
-The HX3 family comes in different variants (up to 4 USB 3.0 ports;
-multi-TT), e.g. CYUSB330x/CYUSB331x/CYUSB332x/CYUSB230x.
+Changes from v1 -> v2:
+- Refactored the patchs into smaller pieces
+- Renamed interfaces and functions from wss to wsr (Working Set Reporting)
+- Fixed build errors when CONFIG_WSR is not set
+- Changed working_set_num_bins to u8 for virtio-balloon
+- Added support for per-NUMA node reporting for virtio-balloon
 
-This initial version of the binding only describes USB related aspects
-of the HX3 family, it does not cover the option of connecting the
-controller as an i2c slave.
+The RFC adds CONFIG_WSR and requires MGLRU to function. T.J. and I aim to support
+the active/inactive LRU and working set estimation from the userspace as well.
+This series should be build with the following configs:
+CONFIG_LRU_GEN=y
+CONFIG_LRU_GEN_ENABLED=y
+CONFIG_VIRTIO_BALLOON=y
+CONFIG_WSR=y
 
-Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
----
- .../devicetree/bindings/usb/cypress,hx3.yaml       | 77 ++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+TODO list:
+- There's a hack in mm/vmscan.c that calls into the virtio-balloon driver,
+  which doesn't work if CONFIG_VIRTIO_BALLOON=m. T.J. Alumbaugh (talumbau@google.com)
+  and I plan on solving this problem with a working set notification mechanism
+  that would allow multiple consumers to subscribe for working set changes.
+- memory.reaccess.histogram does not consider swapped out pages to be reaccessed.
+  I plan to implement this with the shadow entry computed from mm/workingset.c.
 
-diff --git a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-new file mode 100644
-index 000000000000..47add0d85fb8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-@@ -0,0 +1,77 @@
-+# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/cypress,hx3.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cypress HX3 USB 3.0 hub controller family
-+
-+maintainers:
-+  - Benjamin Bara <benjamin.bara@skidata.com>
-+
-+allOf:
-+  - $ref: usb-device.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - usb4b4,6504
-+      - usb4b4,6506
-+
-+  reg: true
-+
-+  reset-gpios:
-+    items:
-+      - description: GPIO specifier for RESETN pin.
-+
-+  vdd-supply:
-+    description:
-+      1V2 power supply (VDD_EFUSE, AVDD12, DVDD12).
-+
-+  vdd2-supply:
-+    description:
-+      3V3 power supply (AVDD33, VDD_IO).
-+
-+  peer-hub:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      phandle to the peer hub on the controller.
-+
-+required:
-+  - compatible
-+  - reg
-+  - peer-hub
-+  - vdd-supply
-+  - vdd2-supply
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    usb {
-+        dr_mode = "host";
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        /* 2.0 hub on port 1 */
-+        hub_2_0: hub@1 {
-+          compatible = "usb4b4,6504";
-+          reg = <1>;
-+          peer-hub = <&hub_3_0>;
-+          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+          vdd-supply = <&reg_1v2_usb>;
-+          vdd2-supply = <&reg_3v3_usb>;
-+        };
-+
-+        /* 3.0 hub on port 2 */
-+        hub_3_0: hub@2 {
-+          compatible = "usb4b4,6506";
-+          reg = <2>;
-+          peer-hub = <&hub_2_0>;
-+          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+          vdd-supply = <&reg_1v2_usb>;
-+          vdd2-supply = <&reg_3v3_usb>;
-+        };
-+    };
+QEMU device implementation:
+https://lists.gnu.org/archive/html/qemu-devel/2023-05/msg06617.html
+
+virtio-dev spec proposal v1 (v2 to be posted by T.J.):
+https://lore.kernel.org/virtio-dev/CABmGT5Hv6Jd_F9EoQqVMDo4w5=7wJYmS4wwYDqXK3wov44Tf=w@mail.gmail.com/
+
+LSF/MM discussion slides:
+https://lore.kernel.org/linux-mm/CABmGT5HK9xHz=E4q4sECCD8XodP9DUcH0dMeQ8kznUQB5HTQhQ@mail.gmail.com/
+
+T.J. Alumbaugh (1):
+  virtio-balloon: Add Working Set reporting
+
+Yuanchu Xie (5):
+  mm: aggregate working set information into histograms
+  mm: add working set refresh threshold to rate-limit aggregation
+  mm: report working set when under memory pressure
+  mm: extend working set reporting to memcgs
+  mm: add per-memcg reaccess histogram
+
+ drivers/base/node.c                 |   3 +
+ drivers/virtio/virtio_balloon.c     | 288 +++++++++++++++++
+ include/linux/balloon_compaction.h  |   3 +
+ include/linux/memcontrol.h          |   6 +
+ include/linux/mmzone.h              |   5 +
+ include/linux/wsr.h                 | 114 +++++++
+ include/uapi/linux/virtio_balloon.h |  33 ++
+ mm/Kconfig                          |   7 +
+ mm/Makefile                         |   1 +
+ mm/internal.h                       |  12 +
+ mm/memcontrol.c                     | 351 ++++++++++++++++++++-
+ mm/mmzone.c                         |   3 +
+ mm/vmscan.c                         | 194 +++++++++++-
+ mm/wsr.c                            | 464 ++++++++++++++++++++++++++++
+ 14 files changed, 1480 insertions(+), 4 deletions(-)
+ create mode 100644 include/linux/wsr.h
+ create mode 100644 mm/wsr.c
 
 -- 
-2.34.1
+2.41.0.162.gfafddb0af9-goog
 
