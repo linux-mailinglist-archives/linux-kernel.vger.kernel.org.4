@@ -2,94 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB31737D68
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56978737CD9
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjFUIWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 04:22:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
+        id S231626AbjFUICv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 04:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjFUIWo (ORCPT
+        with ESMTP id S230255AbjFUICt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 04:22:44 -0400
-Received: from forward500c.mail.yandex.net (forward500c.mail.yandex.net [IPv6:2a02:6b8:c03:500:1:45:d181:d500])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF03BC
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:22:41 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-57.myt.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-57.myt.yp-c.yandex.net [IPv6:2a02:6b8:c12:6284:0:640:826e:0])
-        by forward500c.mail.yandex.net (Yandex) with ESMTP id 469455F1ED;
-        Wed, 21 Jun 2023 11:22:39 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-57.myt.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id bMdsDaQWniE0-1QR4YBWK;
-        Wed, 21 Jun 2023 11:22:38 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1687335758;
-        bh=x+0IfbRP5uhtrIWmzZU5o1znkghAReX8NKQv/Nwp6/g=;
-        h=References:Date:In-Reply-To:Cc:To:From:Subject:Message-ID;
-        b=j6iUTGQtCGu5WsNJbA7oFV0XZnq7TlyIsoAp6Z0GJnZHLRFeEkL1mG9NBVLCEl0VD
-         H85nzgeFBK8JdBF9LJABGnVeRLeifzcwENwBqYGr5ahx5Vat82OMYMEVopezAD2U7p
-         abepGW7dhkD6TgY5cppX3e/jUCp64qoDbgACYFYc=
-Authentication-Results: mail-nwsmtp-smtp-production-main-57.myt.yp-c.yandex.net; dkim=pass header.i=@maquefel.me
-Message-ID: <35bc18b2e685e8596b1fdc1a2e6212dc98725cd4.camel@maquefel.me>
-Subject: Re: [PATCH v1 09/43] clocksource: ep93xx: Add driver for Cirrus
- Logic EP93xx
-From:   Nikita Shubin <nikita.shubin@maquefel.me>
-To:     andy.shevchenko@gmail.com
-Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Michael Peters <mpeters@embeddedts.com>,
-        Kris Bahnsen <kris@embeddedts.com>,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 21 Jun 2023 14:22:37 +0300
-In-Reply-To: <ZHudRkB1YcMD_DaQ@surfacebook>
-References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
-         <20230601053546.9574-10-nikita.shubin@maquefel.me>
-         <ZHudRkB1YcMD_DaQ@surfacebook>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.3 
+        Wed, 21 Jun 2023 04:02:49 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000EBFE;
+        Wed, 21 Jun 2023 01:02:47 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QmGFY2Gmtz4f4vLv;
+        Wed, 21 Jun 2023 16:02:41 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.104.67])
+        by APP4 (Coremail) with SMTP id gCh0CgA30JOerpJk+MDCMA--.36412S4;
+        Wed, 21 Jun 2023 16:02:40 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     hch@lst.de, chaitanyak@nvidia.com, shinichiro.kawasaki@wdc.com,
+        dgilbert@interlog.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, yukuai3@huawei.com, axboe@kernel.dk
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: [PATCH] scsi/sg: don't grab scsi host module reference
+Date:   Thu, 22 Jun 2023 00:01:11 +0800
+Message-Id: <20230621160111.1433521-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgA30JOerpJk+MDCMA--.36412S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7uryxZFyUtF47uF13Gr4fGrg_yoW8ZrWfpF
+        WUWa90krW09rWUG3WUZw1UZFyxK3yIv3yfJFWxKw15uFW8Jryj9ryktFy8XF15ArZagFWD
+        CFnxtFWvgF1UAw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9q14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2ocxC64kIII
+        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xv
+        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
+        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
+        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
+        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAq
+        YI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4I
+        kC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWU
+        WwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr
+        0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWr
+        Jr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r
+        4UJbIYCTnIWIevJa73UjIFyTuYvjTRNgAwUUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        KHOP_HELO_FCRDNS,MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Andy!
+From: Yu Kuai <yukuai3@huawei.com>
 
-Agreed to almost, still... :
+In order to prevent request_queue to be freed before cleaning up
+blktrace debugfs entries, commit db59133e9279 ("scsi: sg: fix blktrace
+debugfs entries leakage") use scsi_device_get(), however,
+scsi_device_get() will also grab scsi module reference and scsi module
+can't be removed.
 
->=20
-> ...
->=20
-> > +static struct ep93xx_tcu *ep93xx_tcu;
->=20
-> Global?!
-> Can it be derived from struct clocksource?
->=20
+It's reported that blktests can't unload scsi_debug after block/001:
 
-It's look like a common practice for read_sched_clock, even for most
-new drivers. I would like for comment from Daniel or Thomas before
-ripping it out.
+blktests (master) # ./check block
+block/001 (stress device hotplugging) [failed]
+     +++ /root/blktests/results/nodev/block/001.out.bad 2023-06-19
+      Running block/001
+      Stressing sd
+     +modprobe: FATAL: Module scsi_debug is in use.
 
->=20
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0irq =3D irq_of_parse_and_map=
-(np, 0);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (irq <=3D 0) {
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0pr_err("ERROR: invalid interrupt number\n");
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0ret =3D -EINVAL;
->=20
-> Shadowed error in case of negative returned code. Why?
+Fix this problem by grabbing request_queue reference directly, so that
+scsi host module can still be unloaded while request_queue will be
+pinged by sg device.
 
-Majority of clocksource drivers shadow it. Same like above.
+Reported-by: Chaitanya Kulkarni <chaitanyak@nvidia.com>
+Link: https://lore.kernel.org/all/1760da91-876d-fc9c-ab51-999a6f66ad50@nvidia.com/
+Fixes: db59133e9279 ("scsi: sg: fix blktrace debugfs entries leakage")
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+ drivers/scsi/sg.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-All other comments applied - thank you!
-
+diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+index 2433eeef042a..dcb73787c29d 100644
+--- a/drivers/scsi/sg.c
++++ b/drivers/scsi/sg.c
+@@ -1497,7 +1497,7 @@ sg_add_device(struct device *cl_dev)
+ 	int error;
+ 	unsigned long iflags;
+ 
+-	error = scsi_device_get(scsidp);
++	error = blk_get_queue(scsidp->request_queue);
+ 	if (error)
+ 		return error;
+ 
+@@ -1558,7 +1558,7 @@ sg_add_device(struct device *cl_dev)
+ out:
+ 	if (cdev)
+ 		cdev_del(cdev);
+-	scsi_device_put(scsidp);
++	blk_put_queue(scsidp->request_queue);
+ 	return error;
+ }
+ 
+@@ -1575,7 +1575,7 @@ sg_device_destroy(struct kref *kref)
+ 	 */
+ 
+ 	blk_trace_remove(q);
+-	scsi_device_put(sdp->device);
++	blk_put_queue(q);
+ 
+ 	write_lock_irqsave(&sg_index_lock, flags);
+ 	idr_remove(&sg_index_idr, sdp->index);
+-- 
+2.39.2
 
