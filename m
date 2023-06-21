@@ -2,226 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC41E73803E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B23737FFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:09:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbjFUKPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 06:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36334 "EHLO
+        id S230165AbjFUKQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 06:16:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbjFUKPo (ORCPT
+        with ESMTP id S231667AbjFUKP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 06:15:44 -0400
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605D819AD;
-        Wed, 21 Jun 2023 03:15:21 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3110f94915eso1276962f8f.0;
-        Wed, 21 Jun 2023 03:15:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687342520; x=1689934520;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ufw3XdlG8f50ui3w7eQOIJRzxVEkWkebHT8qYe+C8qE=;
-        b=Tb3kTekwJ4StJ0epSuxZl3xeTnKYnxAUCCi6T3lMRRlXtnT5Cel7ZOVxdmpboMHFMw
-         H/w4NTatvgTSC8ORl4aSxPsw574J/BqHzU/jN7Z1X2esVxLoS2N+I+ucQhggxQzJdP+v
-         pYM1p5C07ZWGhbAXrLagL33pZSAsijIz/EJqb8GfoRgth97OIoTpZgHrIragdGkzZH06
-         BCuPZwgK6i2gvwK12nLfUrPKlWvNX7zyMdhxsemAZdteF44CKtImheLSi0NNRj3shrqz
-         l8kYyjmu2AEKVHdGt8N6sb7I5GupBeG79yXEGNEE3IYJVW7qRilz44VF3xe7gdiatPAh
-         L0pg==
-X-Gm-Message-State: AC+VfDxFMvRkrHVgf3cyVJpoRl9kbeN6LZta2bkA8v2GA4ls+d7bbvNx
-        Ho8J2EmhCus4KL4CIYkxD+U=
-X-Google-Smtp-Source: ACHHUZ4tsTabGuEP0pusOoHjithDqeGTXPlhvE5IPuJ0eWoLH8lfxNjVcT1Icfws8enUiCQS9OC42A==
-X-Received: by 2002:a5d:468d:0:b0:30a:d0a0:266e with SMTP id u13-20020a5d468d000000b0030ad0a0266emr14265990wrq.2.1687342519535;
-        Wed, 21 Jun 2023 03:15:19 -0700 (PDT)
-Received: from [192.168.64.192] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
-        by smtp.gmail.com with ESMTPSA id p9-20020adfcc89000000b003113f0ba414sm4082968wrj.65.2023.06.21.03.15.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 03:15:18 -0700 (PDT)
-Message-ID: <87f547b0-7826-b232-cd01-c879b6829951@grimberg.me>
-Date:   Wed, 21 Jun 2023 13:15:15 +0300
+        Wed, 21 Jun 2023 06:15:59 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7AA4D1710;
+        Wed, 21 Jun 2023 03:15:43 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8BxXcfOzZJknxcAAA--.202S3;
+        Wed, 21 Jun 2023 18:15:42 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx_c7KzZJkF3IAAA--.2918S3;
+        Wed, 21 Jun 2023 18:15:39 +0800 (CST)
+Subject: Re: [PATCH v5] selftests/clone3: Fix broken test under
+ !CONFIG_TIME_NS
+To:     Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <1686301625-9477-1-git-send-email-yangtiezhu@loongson.cn>
+Cc:     linux-kselftest@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <69086c4e-501c-64a9-e7c2-4d8189ac7c05@loongson.cn>
+Date:   Wed, 21 Jun 2023 18:15:38 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH net-next v3 10/18] nvme/host: Use
- sendmsg(MSG_SPLICE_PAGES) rather then sendpage
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>, netdev@vger.kernel.org
-Cc:     Alexander Duyck <alexander.duyck@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Willem de Bruijn <willemb@google.com>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-nvme@lists.infradead.org
-References: <20230620145338.1300897-1-dhowells@redhat.com>
- <20230620145338.1300897-11-dhowells@redhat.com>
-From:   Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <20230620145338.1300897-11-dhowells@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <1686301625-9477-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: AQAAf8Cx_c7KzZJkF3IAAA--.2918S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj93XoWxWF1fXr43KFW7ZF47Kw1ktFc_yoW5Gw1kpF
+        y8Zr4qkFZYgF17tasrZ34qgFy5G3WkJrW0krWUZ34UZr1Sgr93Xr4xKa48JFyUK3yF9rWF
+        yFWfGF42g3WUJagCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUB2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        XVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+        Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+        cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+        AvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E
+        14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4oGQDUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One comment:
 
-format for title in nvme-tcp is:
 
-"nvme-tcp: ..." for host patches, and
-"nvmet-tcp: ..." for target patches.
-
-But this can be fixed up when applying the patch set.
-
-Other than that, for both nvme patches:
-Reviewed-by: Sagi Grimberg <sagi@grimberg.me>
-
-What tree will this be going from btw?
-
-On 6/20/23 17:53, David Howells wrote:
-> When transmitting data, call down into TCP using a single sendmsg with
-> MSG_SPLICE_PAGES to indicate that content should be spliced rather than
-> performing several sendmsg and sendpage calls to transmit header, data
-> pages and trailer.
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Tested-by: Sagi Grimberg <sagi@grimberg.me>
-> Acked-by: Willem de Bruijn <willemb@google.com>
-> cc: Keith Busch <kbusch@kernel.org>
-> cc: Jens Axboe <axboe@fb.com>
-> cc: Christoph Hellwig <hch@lst.de>
-> cc: Chaitanya Kulkarni <kch@nvidia.com>
-> cc: "David S. Miller" <davem@davemloft.net>
-> cc: Eric Dumazet <edumazet@google.com>
-> cc: Jakub Kicinski <kuba@kernel.org>
-> cc: Paolo Abeni <pabeni@redhat.com>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Matthew Wilcox <willy@infradead.org>
-> cc: linux-nvme@lists.infradead.org
-> cc: netdev@vger.kernel.org
+On 06/09/2023 05:07 PM, Tiezhu Yang wrote:
+> When execute the following command to test clone3 on LoongArch:
+>
+>   # cd tools/testing/selftests/clone3 && make && ./clone3
+>
+> we can see the following error info:
+>
+>   # [5719] Trying clone3() with flags 0x80 (size 0)
+>   # Invalid argument - Failed to create new process
+>   # [5719] clone3() with flags says: -22 expected 0
+>   not ok 18 [5719] Result (-22) is different than expected (0)
+>
+> This is because if CONFIG_TIME_NS is not set, but the flag
+> CLONE_NEWTIME (0x80) is used to clone a time namespace, it
+> will return -EINVAL in copy_time_ns().
+>
+> If kernel does not support CONFIG_TIME_NS, /proc/self/ns/time
+> will be not exist, and then we should skip clone3() test with
+> CLONE_NEWTIME.
+>
+> With this patch under !CONFIG_TIME_NS:
+>
+>   # cd tools/testing/selftests/clone3 && make && ./clone3
+>   ...
+>   # Time namespaces are not supported
+>   ok 18 # SKIP Skipping clone3() with CLONE_NEWTIME
+>   # Totals: pass:17 fail:0 xfail:0 xpass:0 skip:1 error:0
+>
+> Fixes: 515bddf0ec41 ("selftests/clone3: test clone3 with CLONE_NEWTIME")
+> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 > ---
-> 
-> Notes:
->      ver #2)
->       - Wrap lines at 80.
->      
->      ver #3)
->       - Split nvme/host from nvme/target changes.
-> 
->   drivers/nvme/host/tcp.c | 46 +++++++++++++++++++++--------------------
->   1 file changed, 24 insertions(+), 22 deletions(-)
-> 
-> diff --git a/drivers/nvme/host/tcp.c b/drivers/nvme/host/tcp.c
-> index bf0230442d57..6f31cdbb696a 100644
-> --- a/drivers/nvme/host/tcp.c
-> +++ b/drivers/nvme/host/tcp.c
-> @@ -997,25 +997,25 @@ static int nvme_tcp_try_send_data(struct nvme_tcp_request *req)
->   	u32 h2cdata_left = req->h2cdata_left;
->   
->   	while (true) {
-> +		struct bio_vec bvec;
-> +		struct msghdr msg = {
-> +			.msg_flags = MSG_DONTWAIT | MSG_SPLICE_PAGES,
-> +		};
->   		struct page *page = nvme_tcp_req_cur_page(req);
->   		size_t offset = nvme_tcp_req_cur_offset(req);
->   		size_t len = nvme_tcp_req_cur_length(req);
->   		bool last = nvme_tcp_pdu_last_send(req, len);
->   		int req_data_sent = req->data_sent;
-> -		int ret, flags = MSG_DONTWAIT;
-> +		int ret;
->   
->   		if (last && !queue->data_digest && !nvme_tcp_queue_more(queue))
-> -			flags |= MSG_EOR;
-> +			msg.msg_flags |= MSG_EOR;
->   		else
-> -			flags |= MSG_MORE | MSG_SENDPAGE_NOTLAST;
-> +			msg.msg_flags |= MSG_MORE;
->   
-> -		if (sendpage_ok(page)) {
-> -			ret = kernel_sendpage(queue->sock, page, offset, len,
-> -					flags);
-> -		} else {
-> -			ret = sock_no_sendpage(queue->sock, page, offset, len,
-> -					flags);
-> -		}
-> +		bvec_set_page(&bvec, page, len, offset);
-> +		iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &bvec, 1, len);
-> +		ret = sock_sendmsg(queue->sock, &msg);
->   		if (ret <= 0)
->   			return ret;
->   
-> @@ -1054,22 +1054,24 @@ static int nvme_tcp_try_send_cmd_pdu(struct nvme_tcp_request *req)
->   {
->   	struct nvme_tcp_queue *queue = req->queue;
->   	struct nvme_tcp_cmd_pdu *pdu = nvme_tcp_req_cmd_pdu(req);
-> +	struct bio_vec bvec;
-> +	struct msghdr msg = { .msg_flags = MSG_DONTWAIT | MSG_SPLICE_PAGES, };
->   	bool inline_data = nvme_tcp_has_inline_data(req);
->   	u8 hdgst = nvme_tcp_hdgst_len(queue);
->   	int len = sizeof(*pdu) + hdgst - req->offset;
-> -	int flags = MSG_DONTWAIT;
->   	int ret;
->   
->   	if (inline_data || nvme_tcp_queue_more(queue))
-> -		flags |= MSG_MORE | MSG_SENDPAGE_NOTLAST;
-> +		msg.msg_flags |= MSG_MORE;
->   	else
-> -		flags |= MSG_EOR;
-> +		msg.msg_flags |= MSG_EOR;
->   
->   	if (queue->hdr_digest && !req->offset)
->   		nvme_tcp_hdgst(queue->snd_hash, pdu, sizeof(*pdu));
->   
-> -	ret = kernel_sendpage(queue->sock, virt_to_page(pdu),
-> -			offset_in_page(pdu) + req->offset, len,  flags);
-> +	bvec_set_virt(&bvec, (void *)pdu + req->offset, len);
-> +	iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &bvec, 1, len);
-> +	ret = sock_sendmsg(queue->sock, &msg);
->   	if (unlikely(ret <= 0))
->   		return ret;
->   
-> @@ -1093,6 +1095,8 @@ static int nvme_tcp_try_send_data_pdu(struct nvme_tcp_request *req)
->   {
->   	struct nvme_tcp_queue *queue = req->queue;
->   	struct nvme_tcp_data_pdu *pdu = nvme_tcp_req_data_pdu(req);
-> +	struct bio_vec bvec;
-> +	struct msghdr msg = { .msg_flags = MSG_DONTWAIT | MSG_MORE, };
->   	u8 hdgst = nvme_tcp_hdgst_len(queue);
->   	int len = sizeof(*pdu) - req->offset + hdgst;
->   	int ret;
-> @@ -1101,13 +1105,11 @@ static int nvme_tcp_try_send_data_pdu(struct nvme_tcp_request *req)
->   		nvme_tcp_hdgst(queue->snd_hash, pdu, sizeof(*pdu));
->   
->   	if (!req->h2cdata_left)
-> -		ret = kernel_sendpage(queue->sock, virt_to_page(pdu),
-> -				offset_in_page(pdu) + req->offset, len,
-> -				MSG_DONTWAIT | MSG_MORE | MSG_SENDPAGE_NOTLAST);
-> -	else
-> -		ret = sock_no_sendpage(queue->sock, virt_to_page(pdu),
-> -				offset_in_page(pdu) + req->offset, len,
-> -				MSG_DONTWAIT | MSG_MORE);
-> +		msg.msg_flags |= MSG_SPLICE_PAGES;
-> +
-> +	bvec_set_virt(&bvec, (void *)pdu + req->offset, len);
-> +	iov_iter_bvec(&msg.msg_iter, ITER_SOURCE, &bvec, 1, len);
-> +	ret = sock_sendmsg(queue->sock, &msg);
->   	if (unlikely(ret <= 0))
->   		return ret;
->   
-> 
+>
+> v5:
+>   -- Rebase on the next branch of shuah/linux-kselftest.git
+>      to avoid potential merge conflicts due to changes in the link:
+>      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git/commit/?h=next&id=f8424c54d041
+>   -- Update the commit message and send it as a single patch
+>
+> Here is the v4 patch:
+> https://lore.kernel.org/loongarch/1685968410-5412-2-git-send-email-yangtiezhu@loongson.cn/
+>
+>  tools/testing/selftests/clone3/clone3.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
+> index e60cf4d..1c61e3c 100644
+> --- a/tools/testing/selftests/clone3/clone3.c
+> +++ b/tools/testing/selftests/clone3/clone3.c
+> @@ -196,7 +196,12 @@ int main(int argc, char *argv[])
+>  			CLONE3_ARGS_NO_TEST);
+>
+>  	/* Do a clone3() in a new time namespace */
+> -	test_clone3(CLONE_NEWTIME, 0, 0, CLONE3_ARGS_NO_TEST);
+> +	if (access("/proc/self/ns/time", F_OK) == 0) {
+> +		test_clone3(CLONE_NEWTIME, 0, 0, CLONE3_ARGS_NO_TEST);
+> +	} else {
+> +		ksft_print_msg("Time namespaces are not supported\n");
+> +		ksft_test_result_skip("Skipping clone3() with CLONE_NEWTIME\n");
+> +	}
+>
+>  	/* Do a clone3() with exit signal (SIGCHLD) in flags */
+>  	test_clone3(SIGCHLD, 0, -EINVAL, CLONE3_ARGS_NO_TEST);
+>
+
+Ping. Any more comments?
+
+Thanks,
+Tiezhu
+
