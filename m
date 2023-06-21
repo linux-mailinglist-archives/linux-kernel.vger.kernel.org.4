@@ -2,410 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774F57379A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 05:21:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D3CE7379D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 05:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjFUDU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 23:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60342 "EHLO
+        id S230268AbjFUDmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 23:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbjFUDT4 (ORCPT
+        with ESMTP id S230285AbjFUDmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 23:19:56 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161CD1992;
-        Tue, 20 Jun 2023 20:19:53 -0700 (PDT)
-X-UUID: 76f25d480fe211eeb20a276fd37b9834-20230621
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=TQfV8lmTxwQ0BGhsCxHKEapx86rNZtxBU4zYrC4mUUU=;
-        b=ScKS9THk+tkPrEh3FIR02lJWs9v7OPN6INAF4Aj+6UGyrOxOxvSLaT10KxjqRkXoXTIzp2ZHG3wextbbJ3uyjSmuhPj9ceAt67GSVCN87WW1CJrSsmrpmCNHOHgYrL/h+/TcD3oTscqSnu6tzdwjnxYkdLpr3X+wwZKRUNGPswg=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.27,REQID:4f682e61-68c5-4af9-b0c9-095317a50bed,IP:0,U
-        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:70
-X-CID-INFO: VERSION:1.1.27,REQID:4f682e61-68c5-4af9-b0c9-095317a50bed,IP:0,URL
-        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
-        ON:quarantine,TS:70
-X-CID-META: VersionHash:01c9525,CLOUDID:ef9cbb6f-2f20-4998-991c-3b78627e4938,B
-        ulkID:2306211119453QS2D5W9,BulkQuantity:0,Recheck:0,SF:28|17|19|48|38|29,T
-        C:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-        ,OSI:0,OSA:0,AV:0,LES:1,SPR:NO
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_ASC,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_SNR,
-        TF_CID_SPAM_SDM
-X-UUID: 76f25d480fe211eeb20a276fd37b9834-20230621
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
-        (envelope-from <shawn.sung@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1688604882; Wed, 21 Jun 2023 11:19:42 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 21 Jun 2023 11:19:41 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Wed, 21 Jun 2023 11:19:41 +0800
-From:   Hsiao Chien Sung <shawn.sung@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        Jason-JH Lin <jason-jh.lin@mediatek.com>,
-        Shawn Sung <shawn.sung@mediatek.com>
-Subject: [PATCH v4 14/14] drm/mediatek: Support MT8188 Padding in display driver
-Date:   Wed, 21 Jun 2023 11:19:38 +0800
-Message-ID: <20230621031938.5884-15-shawn.sung@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20230621031938.5884-1-shawn.sung@mediatek.com>
-References: <20230621031938.5884-1-shawn.sung@mediatek.com>
+        Tue, 20 Jun 2023 23:42:12 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31CE1BF7;
+        Tue, 20 Jun 2023 20:41:40 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qm82G4NYSz4f3nTY;
+        Wed, 21 Jun 2023 11:22:30 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgD3X7P1bJJkzg20MA--.30704S3;
+        Wed, 21 Jun 2023 11:22:31 +0800 (CST)
+Subject: Re: [PATCH -next 3/8] raid5: fix missing io accounting in
+ raid5_align_endio()
+To:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     xni@redhat.com, song@kernel.org, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230619204826.755559-1-yukuai1@huaweicloud.com>
+ <20230619204826.755559-4-yukuai1@huaweicloud.com>
+ <6f05e7b4-461c-68db-20c5-e3bfd52cc7f6@molgen.mpg.de>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <8626ee12-e4df-1645-21e9-c6b648ceb1eb@huaweicloud.com>
+Date:   Wed, 21 Jun 2023 11:22:29 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <6f05e7b4-461c-68db-20c5-e3bfd52cc7f6@molgen.mpg.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgD3X7P1bJJkzg20MA--.30704S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxXF4UZr17XF1rArykGrW5trb_yoWrWw1Dpa
+        n7tFy3JrW5Xr1rWrW7tw4UGa4Sqw4Dta97JryxXa48tw42yFyjga1UXry0gFyUAFW8Wr1U
+        Jw1jqrsrur17GFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j
+        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHU
+        DUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Padding is a new display module on MT8188, it provides ability
-to add pixels to width and height of a layer with specified colors.
+Hi,
 
-Due to hardware design, Mixer in VDOSYS1 requires width of a layer
-to be 2-pixel-align, or 4-pixel-align when ETHDR is enabled,
-we need Padding to deal with odd width.
+在 2023/06/20 17:57, Paul Menzel 写道:
+> Dear Yu,
+> 
+> 
+> Thank you for your patch.
+> 
+> Am 19.06.23 um 22:48 schrieb Yu Kuai:
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>
+>> Io will only be accounted as done from raid5_align_endio() if the io
+>> succeed, and io inflight counter will be leaked if such io failed.
+> 
+> succeed*s* or succeed*ed*?
 
-Please notice that even if the Padding is in bypass mode,
-settings in register must be cleared to 0,
-or undefined behaviors could happen.
+I'll up date this.
 
-Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
----
- drivers/gpu/drm/mediatek/Makefile             |   3 +-
- drivers/gpu/drm/mediatek/mtk_disp_drv.h       |   3 +
- .../gpu/drm/mediatek/mtk_disp_ovl_adaptor.c   |  34 +++++
- drivers/gpu/drm/mediatek/mtk_drm_drv.c        |   1 +
- drivers/gpu/drm/mediatek/mtk_drm_drv.h        |   2 +-
- drivers/gpu/drm/mediatek/mtk_padding.c        | 136 ++++++++++++++++++
- 6 files changed, 177 insertions(+), 2 deletions(-)
- create mode 100644 drivers/gpu/drm/mediatek/mtk_padding.c
+> 
+>> Fix this problem by switching to use md_account_bio() for io accounting.
+> 
+> How can this be tested?
+> 
+>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>> ---
+>>   drivers/md/raid5.c | 29 ++++++++---------------------
+>>   1 file changed, 8 insertions(+), 21 deletions(-)
+>>
+>> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+>> index cef0b400b2ee..4cdb35e54251 100644
+>> --- a/drivers/md/raid5.c
+>> +++ b/drivers/md/raid5.c
+>> @@ -5468,26 +5468,17 @@ static struct bio 
+>> *remove_bio_from_retry(struct r5conf *conf,
+>>    */
+>>   static void raid5_align_endio(struct bio *bi)
+>>   {
+>> -    struct md_io_clone *md_io_clone = bi->bi_private;
+>> -    struct bio *raid_bi = md_io_clone->orig_bio;
+>> -    struct mddev *mddev;
+>> -    struct r5conf *conf;
+>> -    struct md_rdev *rdev;
+>> +    struct bio *raid_bi = bi->bi_private;
+>> +    struct md_rdev *rdev = (void *)raid_bi->bi_next;
+>> +    struct mddev *mddev = rdev->mddev;
+>> +    struct r5conf *conf = mddev->private;
+>>       blk_status_t error = bi->bi_status;
+>> -    unsigned long start_time = md_io_clone->start_time;
+>>       bio_put(bi);
+>> -
+>> -    rdev = (void*)raid_bi->bi_next;
+>>       raid_bi->bi_next = NULL;
+>> -    mddev = rdev->mddev;
+>> -    conf = mddev->private;
+>> -
+> 
+> This looks like unnecessary refactoring. No idea what the preferred 
+> style for the subsystem is though. If it is wanted, maybe make it a 
+> separate commit?
 
-diff --git a/drivers/gpu/drm/mediatek/Makefile b/drivers/gpu/drm/mediatek/Makefile
-index d4d193f60271..5e4436403b8d 100644
---- a/drivers/gpu/drm/mediatek/Makefile
-+++ b/drivers/gpu/drm/mediatek/Makefile
-@@ -16,7 +16,8 @@ mediatek-drm-y := mtk_disp_aal.o \
- 		  mtk_dsi.o \
- 		  mtk_dpi.o \
- 		  mtk_ethdr.o \
--		  mtk_mdp_rdma.o
-+		  mtk_mdp_rdma.o \
-+		  mtk_padding.o
- 
- obj-$(CONFIG_DRM_MEDIATEK) += mediatek-drm.o
- 
-diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-index 2254038519e1..f9fdb1268aa5 100644
---- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-+++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
-@@ -157,4 +157,7 @@ void mtk_mdp_rdma_config(struct device *dev, struct mtk_mdp_rdma_cfg *cfg,
- const u32 *mtk_mdp_rdma_get_formats(struct device *dev);
- size_t mtk_mdp_rdma_get_num_formats(struct device *dev);
- 
-+int mtk_padding_clk_enable(struct device *dev);
-+void mtk_padding_clk_disable(struct device *dev);
-+void mtk_padding_config(struct device *dev, struct cmdq_pkt *cmdq_pkt);
- #endif
-diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c b/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
-index 4120d08e4969..5b7895f3324a 100644
---- a/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
-+++ b/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
-@@ -29,6 +29,7 @@ enum mtk_ovl_adaptor_comp_type {
- 	OVL_ADAPTOR_TYPE_ETHDR,
- 	OVL_ADAPTOR_TYPE_MDP_RDMA,
- 	OVL_ADAPTOR_TYPE_MERGE,
-+	OVL_ADAPTOR_TYPE_PADDING,
- 	OVL_ADAPTOR_TYPE_NUM,
- };
- 
-@@ -46,6 +47,14 @@ enum mtk_ovl_adaptor_comp_id {
- 	OVL_ADAPTOR_MERGE1,
- 	OVL_ADAPTOR_MERGE2,
- 	OVL_ADAPTOR_MERGE3,
-+	OVL_ADAPTOR_PADDING0,
-+	OVL_ADAPTOR_PADDING1,
-+	OVL_ADAPTOR_PADDING2,
-+	OVL_ADAPTOR_PADDING3,
-+	OVL_ADAPTOR_PADDING4,
-+	OVL_ADAPTOR_PADDING5,
-+	OVL_ADAPTOR_PADDING6,
-+	OVL_ADAPTOR_PADDING7,
- 	OVL_ADAPTOR_ID_MAX
- };
- 
-@@ -65,6 +74,7 @@ static const char * const private_comp_stem[OVL_ADAPTOR_TYPE_NUM] = {
- 	[OVL_ADAPTOR_TYPE_ETHDR]	= "ethdr",
- 	[OVL_ADAPTOR_TYPE_MDP_RDMA]	= "vdo1-rdma",
- 	[OVL_ADAPTOR_TYPE_MERGE]	= "merge",
-+	[OVL_ADAPTOR_TYPE_PADDING]	= "padding",
- };
- 
- static const struct ovl_adaptor_comp_match comp_matches[OVL_ADAPTOR_ID_MAX] = {
-@@ -81,6 +91,14 @@ static const struct ovl_adaptor_comp_match comp_matches[OVL_ADAPTOR_ID_MAX] = {
- 	[OVL_ADAPTOR_MERGE1] = { OVL_ADAPTOR_TYPE_MERGE, DDP_COMPONENT_MERGE2, 2 },
- 	[OVL_ADAPTOR_MERGE2] = { OVL_ADAPTOR_TYPE_MERGE, DDP_COMPONENT_MERGE3, 3 },
- 	[OVL_ADAPTOR_MERGE3] = { OVL_ADAPTOR_TYPE_MERGE, DDP_COMPONENT_MERGE4, 4 },
-+	[OVL_ADAPTOR_PADDING0] = { OVL_ADAPTOR_TYPE_PADDING, DDP_COMPONENT_PADDING0, 0 },
-+	[OVL_ADAPTOR_PADDING1] = { OVL_ADAPTOR_TYPE_PADDING, DDP_COMPONENT_PADDING1, 1 },
-+	[OVL_ADAPTOR_PADDING2] = { OVL_ADAPTOR_TYPE_PADDING, DDP_COMPONENT_PADDING2, 2 },
-+	[OVL_ADAPTOR_PADDING3] = { OVL_ADAPTOR_TYPE_PADDING, DDP_COMPONENT_PADDING3, 3 },
-+	[OVL_ADAPTOR_PADDING4] = { OVL_ADAPTOR_TYPE_PADDING, DDP_COMPONENT_PADDING4, 4 },
-+	[OVL_ADAPTOR_PADDING5] = { OVL_ADAPTOR_TYPE_PADDING, DDP_COMPONENT_PADDING5, 5 },
-+	[OVL_ADAPTOR_PADDING6] = { OVL_ADAPTOR_TYPE_PADDING, DDP_COMPONENT_PADDING6, 6 },
-+	[OVL_ADAPTOR_PADDING7] = { OVL_ADAPTOR_TYPE_PADDING, DDP_COMPONENT_PADDING7, 7 },
- };
- 
- static int mtk_ovl_adaptor_enable(struct device *dev, enum mtk_ovl_adaptor_comp_type type)
-@@ -108,6 +126,9 @@ static int mtk_ovl_adaptor_enable(struct device *dev, enum mtk_ovl_adaptor_comp_
- 	case OVL_ADAPTOR_TYPE_MERGE:
- 		ret = mtk_merge_clk_enable(dev);
- 		break;
-+	case OVL_ADAPTOR_TYPE_PADDING:
-+		ret = mtk_padding_clk_enable(dev);
-+		break;
- 	default:
- 		dev_err(dev, "Unknown type: %d\n", type);
- 	}
-@@ -135,6 +156,9 @@ static void mtk_ovl_adaptor_disable(struct device *dev, enum mtk_ovl_adaptor_com
- 	case OVL_ADAPTOR_TYPE_MERGE:
- 		mtk_merge_clk_disable(dev);
- 		break;
-+	case OVL_ADAPTOR_TYPE_PADDING:
-+		mtk_padding_clk_disable(dev);
-+		break;
- 	default:
- 		dev_err(dev, "Unknown type: %d\n", type);
- 	}
-@@ -151,6 +175,8 @@ void mtk_ovl_adaptor_layer_config(struct device *dev, unsigned int idx,
- 	struct device *rdma_r;
- 	struct device *merge;
- 	struct device *ethdr;
-+	struct device *padding_l;
-+	struct device *padding_r;
- 	const struct drm_format_info *fmt_info = drm_format_info(pending->format);
- 	bool use_dual_pipe = false;
- 	unsigned int align_width;
-@@ -167,6 +193,8 @@ void mtk_ovl_adaptor_layer_config(struct device *dev, unsigned int idx,
- 	rdma_r = ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_MDP_RDMA0 + 2 * idx + 1];
- 	merge = ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_MERGE0 + idx];
- 	ethdr = ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_ETHDR0];
-+	padding_l = ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_PADDING0 + 2 * idx];
-+	padding_r = ovl_adaptor->ovl_adaptor_comp[OVL_ADAPTOR_PADDING0 + 2 * idx + 1];
- 
- 	if (!pending->enable) {
- 		mtk_merge_stop_cmdq(merge, cmdq_pkt);
-@@ -200,10 +228,15 @@ void mtk_ovl_adaptor_layer_config(struct device *dev, unsigned int idx,
- 	rdma_config.color_encoding = pending->color_encoding;
- 	mtk_mdp_rdma_config(rdma_l, &rdma_config, cmdq_pkt);
- 
-+	if (padding_l)
-+		mtk_padding_config(padding_l, cmdq_pkt);
-+
- 	if (use_dual_pipe) {
- 		rdma_config.x_left = l_w;
- 		rdma_config.width = r_w;
- 		mtk_mdp_rdma_config(rdma_r, &rdma_config, cmdq_pkt);
-+		if (padding_r)
-+			mtk_padding_config(padding_r, cmdq_pkt);
- 	}
- 
- 	mtk_merge_start_cmdq(merge, cmdq_pkt);
-@@ -391,6 +424,7 @@ static int ovl_adaptor_comp_get_id(struct device *dev, struct device_node *node,
- }
- 
- static const struct of_device_id mtk_ovl_adaptor_comp_dt_ids[] = {
-+	{ .compatible = "mediatek,mt8188-padding", .data = (void *)OVL_ADAPTOR_TYPE_PADDING },
- 	{ .compatible = "mediatek,mt8195-disp-ethdr", .data = (void *)OVL_ADAPTOR_TYPE_ETHDR },
- 	{ .compatible = "mediatek,mt8195-disp-merge", .data = (void *)OVL_ADAPTOR_TYPE_MERGE },
- 	{ .compatible = "mediatek,mt8195-vdo1-rdma", .data = (void *)OVL_ADAPTOR_TYPE_MDP_RDMA },
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.c b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-index 613093068bb4..ed5b5b8d6c2e 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.c
-@@ -977,6 +977,7 @@ static struct platform_driver * const mtk_drm_drivers[] = {
- 	&mtk_dsi_driver,
- 	&mtk_ethdr_driver,
- 	&mtk_mdp_rdma_driver,
-+	&mtk_padding_driver,
- };
- 
- static int __init mtk_drm_init(void)
-diff --git a/drivers/gpu/drm/mediatek/mtk_drm_drv.h b/drivers/gpu/drm/mediatek/mtk_drm_drv.h
-index eb2fd45941f0..562f2db47add 100644
---- a/drivers/gpu/drm/mediatek/mtk_drm_drv.h
-+++ b/drivers/gpu/drm/mediatek/mtk_drm_drv.h
-@@ -64,5 +64,5 @@ extern struct platform_driver mtk_dpi_driver;
- extern struct platform_driver mtk_dsi_driver;
- extern struct platform_driver mtk_ethdr_driver;
- extern struct platform_driver mtk_mdp_rdma_driver;
--
-+extern struct platform_driver mtk_padding_driver;
- #endif /* MTK_DRM_DRV_H */
-diff --git a/drivers/gpu/drm/mediatek/mtk_padding.c b/drivers/gpu/drm/mediatek/mtk_padding.c
-new file mode 100644
-index 000000000000..bbb9c5e286ce
---- /dev/null
-+++ b/drivers/gpu/drm/mediatek/mtk_padding.c
-@@ -0,0 +1,136 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2023 MediaTek Inc.
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/component.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/soc/mediatek/mtk-cmdq.h>
-+
-+#include "mtk_disp_drv.h"
-+#include "mtk_drm_crtc.h"
-+#include "mtk_drm_ddp_comp.h"
-+
-+/**
-+ * struct mtk_padding - basic information of Padding
-+ * @clk: Clock of the module
-+ * @regs: Virtual address of the Padding for CPU to access
-+ * @cmdq_reg: CMDQ setting of the Padding
-+ *
-+ * Every Padding should have different clock source, register base, and
-+ * CMDQ settings, we stored these differences all together.
-+ */
-+struct mtk_padding {
-+	struct clk		*clk;
-+	void __iomem		*regs;
-+	struct cmdq_client_reg	cmdq_reg;
-+};
-+
-+int mtk_padding_clk_enable(struct device *dev)
-+{
-+	struct mtk_padding *padding = dev_get_drvdata(dev);
-+
-+	return clk_prepare_enable(padding->clk);
-+}
-+
-+void mtk_padding_clk_disable(struct device *dev)
-+{
-+	struct mtk_padding *padding = dev_get_drvdata(dev);
-+
-+	clk_disable_unprepare(padding->clk);
-+}
-+
-+void mtk_padding_config(struct device *dev, struct cmdq_pkt *cmdq_pkt)
-+{
-+	struct mtk_padding *padding = dev_get_drvdata(dev);
-+
-+	/* bypass padding */
-+	mtk_ddp_write_mask(cmdq_pkt, GENMASK(1, 0), &padding->cmdq_reg, padding->regs, 0,
-+			   GENMASK(1, 0));
-+}
-+
-+static int mtk_padding_bind(struct device *dev, struct device *master, void *data)
-+{
-+	return 0;
-+}
-+
-+static void mtk_padding_unbind(struct device *dev, struct device *master, void *data)
-+{
-+}
-+
-+static const struct component_ops mtk_padding_component_ops = {
-+	.bind	= mtk_padding_bind,
-+	.unbind = mtk_padding_unbind,
-+};
-+
-+static int mtk_padding_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct mtk_padding *priv;
-+	struct resource *res;
-+	int ret;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->clk = devm_clk_get(dev, NULL);
-+	if (IS_ERR(priv->clk)) {
-+		dev_err(dev, "failed to get clk\n");
-+		return PTR_ERR(priv->clk);
-+	}
-+
-+	priv->regs = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-+	if (IS_ERR(priv->regs)) {
-+		dev_err(dev, "failed to do ioremap\n");
-+		return PTR_ERR(priv->regs);
-+	}
-+
-+#if IS_REACHABLE(CONFIG_MTK_CMDQ)
-+	ret = cmdq_dev_get_client_reg(dev, &priv->cmdq_reg, 0);
-+	if (ret) {
-+		dev_err(dev, "failed to get gce client reg\n");
-+		return ret;
-+	}
-+#endif
-+
-+	platform_set_drvdata(pdev, priv);
-+
-+	ret = devm_pm_runtime_enable(dev);
-+	if (ret)
-+		return ret;
-+
-+	ret = component_add(dev, &mtk_padding_component_ops);
-+	if (ret) {
-+		pm_runtime_disable(dev);
-+		return dev_err_probe(dev, ret, "failed to add component\n");
-+	}
-+
-+	return 0;
-+}
-+
-+static int mtk_padding_remove(struct platform_device *pdev)
-+{
-+	component_del(&pdev->dev, &mtk_padding_component_ops);
-+	return 0;
-+}
-+
-+static const struct of_device_id mtk_padding_driver_dt_match[] = {
-+	{ .compatible = "mediatek,mt8188-padding" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, mtk_padding_driver_dt_match);
-+
-+struct platform_driver mtk_padding_driver = {
-+	.probe		= mtk_padding_probe,
-+	.remove		= mtk_padding_remove,
-+	.driver		= {
-+		.name	= "mediatek-padding",
-+		.owner	= THIS_MODULE,
-+		.of_match_table = mtk_padding_driver_dt_match,
-+	},
-+};
--- 
-2.39.2
+You mean that I initialize 'rdev' and 'mdev' while declaration?
+I think code is cleaner this way, and this is too tiny to make a patch
+for this... I will keep this for now.  😉
+
+Thanks,
+Kuai
+
+> 
+>>       rdev_dec_pending(rdev, conf->mddev);
+>>       if (!error) {
+>> -        if (blk_queue_io_stat(raid_bi->bi_bdev->bd_disk->queue))
+>> -            bio_end_io_acct(raid_bi, start_time);
+>>           bio_endio(raid_bi);
+>>           if (atomic_dec_and_test(&conf->active_aligned_reads))
+>>               wake_up(&conf->wait_for_quiescent);
+>> @@ -5506,7 +5497,6 @@ static int raid5_read_one_chunk(struct mddev 
+>> *mddev, struct bio *raid_bio)
+>>       struct md_rdev *rdev;
+>>       sector_t sector, end_sector, first_bad;
+>>       int bad_sectors, dd_idx;
+>> -    struct md_io_clone *md_io_clone;
+>>       bool did_inc;
+>>       if (!in_chunk_boundary(mddev, raid_bio)) {
+>> @@ -5543,16 +5533,13 @@ static int raid5_read_one_chunk(struct mddev 
+>> *mddev, struct bio *raid_bio)
+>>           return 0;
+>>       }
+>> -    align_bio = bio_alloc_clone(rdev->bdev, raid_bio, GFP_NOIO,
+>> -                    &mddev->io_clone_set);
+>> -    md_io_clone = container_of(align_bio, struct md_io_clone, 
+>> bio_clone);
+>> +    md_account_bio(mddev, &raid_bio);
+>>       raid_bio->bi_next = (void *)rdev;
+>> -    if (blk_queue_io_stat(raid_bio->bi_bdev->bd_disk->queue))
+>> -        md_io_clone->start_time = bio_start_io_acct(raid_bio);
+>> -    md_io_clone->orig_bio = raid_bio;
+>> +    align_bio = bio_alloc_clone(rdev->bdev, raid_bio, GFP_NOIO,
+>> +                    &mddev->bio_set);
+>>       align_bio->bi_end_io = raid5_align_endio;
+>> -    align_bio->bi_private = md_io_clone;
+>> +    align_bio->bi_private = raid_bio;
+>>       align_bio->bi_iter.bi_sector = sector;
+>>       /* No reshape active, so we can trust rdev->data_offset */
+> 
+> 
+> Kind regards,
+> 
+> Paul
+> 
+> .
+> 
 
