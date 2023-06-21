@@ -2,97 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA2D737CD6
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 590F0737CE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231599AbjFUHuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 03:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40114 "EHLO
+        id S231561AbjFUHrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 03:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230415AbjFUHub (ORCPT
+        with ESMTP id S230403AbjFUHrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 03:50:31 -0400
-Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6EC83;
-        Wed, 21 Jun 2023 00:50:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1687333825;
-        bh=6S232VMjC7wbziWgrkeXXOdDe+/491iWQmYYurhqPhY=;
-        h=From:To:Cc:Subject:Date;
-        b=zRpgKOSqxCP/4i9St0ozdufw2PbdrHBwGtd7F3XQTp/3YHXPV9dBZWC/oHyccmffd
-         WrrhCg1mZl4p9ls9JYRwdMKUNRnbUi9rmHUWsn9Wh0yEfg/72t5h2/3RG/l7wKDoBz
-         ttnwDJgFQKTWstQUAVeP2hiB5JHCnP+3zT2je/Hc=
-Received: from localhost.localdomain ([39.156.73.12])
-        by newxmesmtplogicsvrsza7-0.qq.com (NewEsmtp) with SMTP
-        id B0E042AA; Wed, 21 Jun 2023 15:44:14 +0800
-X-QQ-mid: xmsmtpt1687333454tfjy6s68a
-Message-ID: <tencent_6142CF595B97172A46AF02A34D885D060108@qq.com>
-X-QQ-XMAILINFO: OZsapEVPoiO6eY0DWtcWpjTtkqvDLES3BnTBVKNv3l0ZaoH54gYPz06I+g/oKg
-         lp5WLi9U9wSKT/2itYOdWzsdQwny/nVUVQH9Abg4Jx3B/e9RRMK3oHraS/uiH/jVvygzOTsWhWET
-         qXa0uwT2TCNgv1mlvJ2UgRKRsDTSfA7o8sbv0OGxhdWCfqmj8+MFB/oVGeS2Nq/okfkQ5T8iU4gj
-         Ywt6AB5YXzWgNqeBNv+ueD+VAEyyoWy4sFsBGY5PDg+mHiV9VV7+yEZGwjFjHtScy4Kv3lJMg76B
-         AOPi8pMYrYZZARbV27YRmScKekrVgNXSuLM4iJnM/IqxFcf+xTd/PyvV/LSDUKTry5M3U+eHUyB4
-         7+xEupHa2S4IeLdUvOtl2hlOrc8ar0CbCHk36bIBxmt0n94Be6OnmdjCXQuZw7UBOLEL4jI4hBCQ
-         WnRxEdKOfzO68Sa/8EhqlcI1xI87uvwaPPTMxitNfMOkFZYQO1QSZfUE1VUK0LcQpSFZgL/0zM8Y
-         65bseXdx0N8kju/Yh/koiODifdukB48B8eGl+jpzz1s1VUbv82NjvYRPAvnEupoWuTT6cXodK9yq
-         FwoTCmKHTX7slCCqz5IGyjRfjyQymOwA5jOEIAiHIt80SP8GrRhRcgIwQnWZeIg6T8mWxGMNJWFm
-         3UCiZ3KJSvySL5KaIHfXu8xoQD9vWhXnLMBONIwZ/xk73HAQ/RW4TDnuIImqI3bi5JReev9UYz35
-         91hjGKcr8ucM1eLbFbzjMygSlxBm2lf4vsNpAnFDDKYpBviGMzzk/6l0U5pPvREgi4F3V42vj3mt
-         WJ1PdRj7ZARY0lxskg6r7XVNmNAKCQ1zobNl8QLFWhTnS049DyAA3tf1DVvBjqEI3riBkIv8ZKfZ
-         LW/PRp544bySZner/x8iNDq29652cleWYaXUd8u6NxWnRpAjnMI4IVRph1nMi2ZbSeyncpqnd4+Z
-         LhmMySxek9gvbJsgOJFc5S2vFZHGbPgmezlNfNyGpBXSCIfTWi+Ftp/6shlVU+Z2wnEHCLAiym65
-         TxayS1qQ==
-X-QQ-XMRINFO: OaHeJnMbHdYJoNPX7mruotAPXHzc5BrOrw==
-From:   Rong Tao <rtoax@foxmail.com>
-To:     corbet@lwn.net
-Cc:     rongtao@cestc.cn,
-        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] docs: trace: Convert decode_msr.py print syntax to python3
-Date:   Wed, 21 Jun 2023 15:44:12 +0800
-X-OQ-MSGID: <20230621074413.88019-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.39.3
+        Wed, 21 Jun 2023 03:47:07 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B05F1718
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 00:47:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687333624; x=1718869624;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=v2gjwEToFRuJ5IZl6784+ZpMbSbQbMfelLt7/7YIpU8=;
+  b=GOxRaAl2JbzDSkBzJfOFZppUm0+vmuqfoTGSoJKpjGQDFVIOFspeIUF+
+   aS/uUHZL58rwQNfQUfI++4FdiKBNsgOZPHkDnrXUZh+ljJiaC2sVLlgHl
+   dGJrSG3O0BO1tWepT+2K1r3dJxqcvRkb50r6JxGOEckLEOScZ3LT3HRek
+   0uG5o8EQV+M6HWDCn0O9ixsGohGoV3/rsm006UvYsMp/u3RiseIN08F/2
+   koy/wKCtJBvGvTX/myPPaY8v5KbyDxB96p4BTuGbYS70P1wx2dLmK2o2w
+   3unegTKN5lfs9aKOQFQ+0FdoO9gWHTtNj2M4TMqdWgLKlSUi3ECb6OuKE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="357594952"
+X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
+   d="scan'208";a="357594952"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 00:46:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="784385178"
+X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
+   d="scan'208";a="784385178"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 00:46:34 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     liuq <liuq131@chinatelecom.cn>
+Cc:     <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] mm/min_free_kbytes: modify min_free_kbytes
+ calculation rules
+References: <20230621073912.21747-1-liuq131@chinatelecom.cn>
+Date:   Wed, 21 Jun 2023 15:45:01 +0800
+In-Reply-To: <20230621073912.21747-1-liuq131@chinatelecom.cn> (liuq's message
+        of "Wed, 21 Jun 2023 15:39:12 +0800")
+Message-ID: <87ttv16yyq.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+Hi, Liuq,
 
-Convert the decode_msr.py file to python3 to solve the following running
-errors:
+Thanks for updated patch.
 
-    File "Documentation/trace/postprocess/decode_msr.py", line 35
-        print j,
-             ^
-    SyntaxError: Missing parentheses in call to 'print'. Did you mean
-    print(j, end=" ")?
+liuq <liuq131@chinatelecom.cn> writes:
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- Documentation/trace/postprocess/decode_msr.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> The current calculation of min_free_kbytes only uses ZONE_DMA and
+> ZONE_NORMAL pages,but the ZONE_MOVABLE zone->_watermark[WMARK_MIN]
+> will also divide part of min_free_kbytes.This will cause the min
+> watermark of ZONE_NORMAL to be too small in the presence of ZONE_MOVEABLE.
+>
+> __GFP_HIGH and PF_MEMALLOC allocations usually don't need moveable
+> zone pages, so just like ZONE_HIGHMEM, cap pages_min to a small
+> value in __setup_per_zone_wmarks.
 
-diff --git a/Documentation/trace/postprocess/decode_msr.py b/Documentation/trace/postprocess/decode_msr.py
-index aa9cc7abd5c2..2d45d6c14987 100644
---- a/Documentation/trace/postprocess/decode_msr.py
-+++ b/Documentation/trace/postprocess/decode_msr.py
-@@ -32,6 +32,6 @@ for j in sys.stdin:
- 					break
- 		if r:
- 			j = j.replace(" " + m.group(2), " " + r + "(" + m.group(2) + ")")
--	print j,
-+	print(j + ",")
- 
- 
--- 
-2.39.3
+Please list the test result of your patch.  That is, WMARK_MIN before
+and after your patch in a system with large ZONE_MOVABLE.
 
+> Signed-off-by: liuq <liuq131@chinatelecom.cn>
+> ---
+>  mm/page_alloc.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> index 47421bedc12b..608384712a89 100644
+> --- a/mm/page_alloc.c
+> +++ b/mm/page_alloc.c
+> @@ -6364,7 +6364,7 @@ static void __setup_per_zone_wmarks(void)
+>  
+>  	/* Calculate total number of !ZONE_HIGHMEM pages */
+>  	for_each_zone(zone) {
+> -		if (!is_highmem(zone))
+> +		if (!is_highmem(zone) || zone_idx(zone) != ZONE_MOVABLE)
+>  			lowmem_pages += zone_managed_pages(zone);
+>  	}
+>  
+> @@ -6374,7 +6374,7 @@ static void __setup_per_zone_wmarks(void)
+>  		spin_lock_irqsave(&zone->lock, flags);
+>  		tmp = (u64)pages_min * zone_managed_pages(zone);
+>  		do_div(tmp, lowmem_pages);
+> -		if (is_highmem(zone)) {
+> +		if (is_highmem(zone) || zone_idx(zone) == ZONE_MOVABLE) {
+>  			/*
+>  			 * __GFP_HIGH and PF_MEMALLOC allocations usually don't
+>  			 * need highmem pages, so cap pages_min to a small
+                                ~~~~~~~
+
+Change the comments above too?
+
+Best Regards,
+Huang, Ying
