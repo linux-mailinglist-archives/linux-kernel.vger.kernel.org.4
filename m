@@ -2,335 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD1C7392CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 01:02:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEEEE7392D1
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 01:03:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbjFUXCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 19:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51328 "EHLO
+        id S229784AbjFUXDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 19:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230084AbjFUXCl (ORCPT
+        with ESMTP id S230148AbjFUXDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 19:02:41 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E77A41988;
-        Wed, 21 Jun 2023 16:02:39 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-5728df0a7d9so55612207b3.1;
-        Wed, 21 Jun 2023 16:02:39 -0700 (PDT)
+        Wed, 21 Jun 2023 19:03:37 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DC51BDA;
+        Wed, 21 Jun 2023 16:03:29 -0700 (PDT)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LJvcn3010110;
+        Wed, 21 Jun 2023 23:03:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2023-03-30;
+ bh=fE5ArEc7+uapWQsx4vC5Vf32tGojl2n2UKQaD73q9Ps=;
+ b=WbR5/tMxNRVZfOf/etaaGVDmdb/JbU676NVnybuT1p80fuaPfZri5egPPE5tfse1/qgc
+ GClgSYaq/fG9hW6FGrALbUhgiM/sYUfmqoxnrjDjs8pvswc/8VpkICN6EHCDAI61aOzO
+ YLgpwVVyVHxnp9xPjrThLJ0JmAafLrHhUs6uSMfCzXKSk99lVhKfkRam85DeoNBc0Pbj
+ g68NNPaWy+NUHoC391e7jh0Kcf1x2qkmZG6GpuBQGawN5zH88rcp/1xcfi54TKQpZ3Qy
+ wuIw5/nktnN7+YiJlMtrxIztcWS92WDIKzQR+ddBfTM1Xm9xQLVIe6jZ+BSuPNZ1J4/y rA== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r94vcrsd0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Jun 2023 23:03:02 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35LLHrKK007118;
+        Wed, 21 Jun 2023 23:03:01 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2176.outbound.protection.outlook.com [104.47.57.176])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3r9w172gaj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Jun 2023 23:03:01 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bCeFu321AS7Gh5JEZumUH05Nlz6omPvbbFQ254uaYP19nLovtUy4ydavQN3hX1X8BU5Rx0mWyazS8BKn2IsDESfNf6KFLZ+P9zcwf7UAxhI7EJojL3svrEoS8tBphJqHFB01+JEp54qakfohI+pjFJ2BSztkL10IBcK/RLmWV+nsKX2ZT8Y/iewWPU6qC6RaPxYDv1+/iuR+yF8/xyWrDxgFtetw/ghD3Rc7hwfz6vscqkmdz6ToHykYDiquSmUaMs50fSjqjROQ3QC5BKcFUHNjuvPg4X0bWvajTrzxMGuQMnml1xxP49f07QDvQvsbNmjzoUnC/qjf5XJaq5NCLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fE5ArEc7+uapWQsx4vC5Vf32tGojl2n2UKQaD73q9Ps=;
+ b=bAQo8Ym72htPxTn+u3CnOYhffLgMlyVVy2Z2MPXU1GqcQNyzJy5gSMXS9/EsSiU7Ba2D8JbXaThJrtwpxsOR5UOcMpYhjxAhgCen6CGqD4To8KQ6BYjt1AS7alhYLv7iYV9NiBFXt9/6eAXPUYoGZeJ87t559Us46tEzNnAFQ+wRjnbA7Eb2AjU+Zkm+a+zSK1MTksFJeFKayn+eUcbQW6CqH+45WRHQHMVDGyyq4Ze2V7TSwccEQKgdAMaMoAEPaekfZABunFHEDsovXGwaxwSHQzkKSp7tZuZnKNpPNCArVzC5SaNQrl7vCQOnQnfgKwaPg9oWuiiFu//oNlOKeg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687388559; x=1689980559;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EonjXqlZ4D8ptk0fyiGcxPaVH14AHNXvs0vJu4xe1rA=;
-        b=LgBLiu9YZDkdCSHBtfgTrgJfpiG5c06vVTO8/GkbYyyLWv8b1RsvdzLxmfkZ9IRWYw
-         WySpmPfYPQvq05bfgfOOURITIQhVAR7KJSIVr4S7Eacr6q7oZF9Y/sTAg5vIkNG1fpju
-         otpOn1jnkQ9mjc/lmng+dz8WTpW6mgEsDCzhEBHnd55qlirfLMhPqTCm3Tj6HyQXp09R
-         FZyZf/PZho/ma6jtNyq5il9dklIIOLWDb3BLt+CLTVRUY98JOnYroFsITQEzZpu+C19j
-         35vzzT9N4wz1BhgM1gbM5eZhE9q9Aesww9bSC1wwuIgWdlmU+oyzhwU1NSjWB+oJQtb3
-         xSyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687388559; x=1689980559;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EonjXqlZ4D8ptk0fyiGcxPaVH14AHNXvs0vJu4xe1rA=;
-        b=Iycbi1sh/G2sJZW2v6o5j7sRhdA8czdJytgB21zihbc5w04H/yWqr/HtpOMIY6wSVE
-         /We5DM9CUHkFbAP2vTKLl4frRI1MJsGZKPOpPy6ZpZKw2918xqI48uZMMuG//bURE+/Q
-         lqoskLV8KJeIEJZBlBWrvLlR0I3krFjLKRlG3pqtm6Nsya/7i5Ib40OVjroi83zQWajk
-         gzZkdypp6l/1YiGP4Ix+VZZWu1n0m2JEpldWrHGzqLV+LWajgFqwBnLnvCqdSrPz8wUD
-         8OlFaCb6jAcKAvo8WylLUNeTSy8dYr5pzsH5gnBNI08WEqf8VA4Q1CnSTzAey1FowKXi
-         9r4A==
-X-Gm-Message-State: AC+VfDzQh2tgWn+qSBbJBkwNc1IunxwEdUaHIrzfbNjPsy2tU91P7TZa
-        Nh2rGruRQ93pgphI/hXqjr+txu4tnCLhOVf2RTQ=
-X-Google-Smtp-Source: ACHHUZ7S5TWTLIchV69k6veztxecc49MVcmttpS65Et193n8mUQ2RiJSZ6ARoYqe2RCenoYR7TG2yZK+RNuAqsMBz/o=
-X-Received: by 2002:a81:6942:0:b0:568:f2c:ee43 with SMTP id
- e63-20020a816942000000b005680f2cee43mr19871536ywc.2.1687388558964; Wed, 21
- Jun 2023 16:02:38 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fE5ArEc7+uapWQsx4vC5Vf32tGojl2n2UKQaD73q9Ps=;
+ b=zBKvsVfFwwcnRTe80+VnjuptAjPd1YLx+7bEfezNZu8h0ZfrM1spTgLAe1Dl6tuaZt+jG9Z54F6PR4oZT18nx6BkruMK3ugV8F6aJviKO03hIm5+mpc+c/LWJExQCwHWKWhtc/3yBWUJpNbIYrti6XpXCk3h4fKzXmp8E1cB+bk=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by MW4PR10MB6462.namprd10.prod.outlook.com (2603:10b6:303:213::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Wed, 21 Jun
+ 2023 23:02:59 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::4a17:13b0:2876:97f2]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::4a17:13b0:2876:97f2%7]) with mapi id 15.20.6521.020; Wed, 21 Jun 2023
+ 23:02:58 +0000
+Date:   Wed, 21 Jun 2023 16:02:55 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 2/2] hugetlb: revert use of page_cache_next_miss()
+Message-ID: <20230621230255.GD4155@monkey>
+References: <20230621212403.174710-1-mike.kravetz@oracle.com>
+ <20230621212403.174710-2-mike.kravetz@oracle.com>
+ <8a1fc1b1-db68-83f2-3718-e795430e5837@oracle.com>
+ <20230621153957.725e3a4e1f38dc7dd76cc1aa@linux-foundation.org>
+ <20230621224657.GB4155@monkey>
+ <20230621155203.40c9e05d1a80f522f7e9e826@linux-foundation.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621155203.40c9e05d1a80f522f7e9e826@linux-foundation.org>
+X-ClientProxiedBy: MW4PR03CA0129.namprd03.prod.outlook.com
+ (2603:10b6:303:8c::14) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-References: <1f04fa59-6ca9-4f18-b138-6c33e164b6c2@sirena.org.uk>
- <49eabafa97032dec8ace7361bccae72c6ecf3860.camel@intel.com>
- <fc2ebfcf-8d91-4f07-a119-2aaec3aa099f@sirena.org.uk> <a0f1da840ad21fae99479288f5d74c7ab9095bb6.camel@intel.com>
- <ZImZ6eUxf5DdLYpe@arm.com> <64837d2af3ae39bafd025b3141a04f04f4323205.camel@intel.com>
- <ZJAWMSLfSaHOD1+X@arm.com> <5794e4024a01e9c25f0951a7386cac69310dbd0f.camel@intel.com>
- <ZJFukYxRbU1MZlQn@arm.com> <e676c4878c51ab4b6018c9426b5edacdb95f2168.camel@intel.com>
- <ZJLgp29mM3BLb3xa@arm.com> <c5ae83588a7e107beaf858ab04961e70d16fe32c.camel@intel.com>
-In-Reply-To: <c5ae83588a7e107beaf858ab04961e70d16fe32c.camel@intel.com>
-From:   "H.J. Lu" <hjl.tools@gmail.com>
-Date:   Wed, 21 Jun 2023 16:02:02 -0700
-Message-ID: <CAMe9rOrmgfmy-7QGhNtU+ApUJgG1rKAC-oUvmGMeEm0LHFM0hw@mail.gmail.com>
-Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack description
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "broonie@kernel.org" <broonie@kernel.org>,
-        "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>,
-        "Xu, Pengfei" <pengfei.xu@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "kcc@google.com" <kcc@google.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>, "nd@arm.com" <nd@arm.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Eranian, Stephane" <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|MW4PR10MB6462:EE_
+X-MS-Office365-Filtering-Correlation-Id: 76b43577-e89d-4c4c-c361-08db72aba809
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: l2GhVOYHzrUSvOxxYSVy8dOltmmKCs3yHiIBfY+3qOotBGcJqaANnP67+z+KSV7ZwVii4DHFb3gmPFrCLnaWWpA7/IT8wDMH5Qp1B0bz46h+0ss40peY9v4fSsABNxMDpNxyriikPQIkvn/ZVbJHPEMxkKPzzADSC4OC5mSD1gTEcD5TRezrieZsWSw2HHp4ENS6UDlJlq3cb671AcgdsXkfgXwv7TZkCcdEJt1YuUaAnAOJ9h5sZdDgCQieseijH+gFBkd2aLS4rsN5rA9jwBIQtwwd4Uj7uRCasM2AGEexnGptzQ0lRUOgigRptIAmjD1Uh9pzObQ1DXALkiachQCbjEZ5vDW+kNADqvgwi/IC+9YnD2If5HX/JluEFved0lWIjkpuAfUJnQ5RxPP7bxKQC6x/p/YRE/wQ1pTKRBYurF9f902/fOOTFuTNGbatXsS5PpU+h4/DxbTkTG8N4uh6pB6nXXgYUkDqaZYzjhalDgyh5eImqXEW2e3/qJUF7rDeZKPeDJVDN4EYuOHkB4vq/9hU4fjLiYWApeFYwGg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(136003)(376002)(396003)(366004)(346002)(451199021)(33716001)(66899021)(478600001)(66476007)(66556008)(66946007)(6916009)(6486002)(4326008)(6666004)(316002)(86362001)(54906003)(6512007)(26005)(1076003)(6506007)(186003)(38100700002)(53546011)(9686003)(41300700001)(2906002)(966005)(5660300002)(8676002)(8936002)(33656002)(44832011)(7416002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JlHtjgWM2tXBsygE0RWgHjfKTFjSEQ+YuFCVnLgZmLj1IxSG9a45Wi9Zo1nz?=
+ =?us-ascii?Q?ZSfzEIE2l2F9jcqdmN0E2lSDvMhk5p2uFa+EsKfV78KZsB5pGYzcXs+h+fVq?=
+ =?us-ascii?Q?HuR8SHyI6ICYr1CeWFst3Me8O6l+TF1SuGf+QcivjbhU8M+9wobbm0ReeftL?=
+ =?us-ascii?Q?/14HorTORErkz2DPDXGQNYW9aPpXF8ZJmmAhZfRXRbR48myqCBDEsEj7YE5/?=
+ =?us-ascii?Q?wJpKuQmRENCSIKsd5vLrrQdmOluM/Doo9V/+aXOAVO1VjIOB3maIerjyGtJ4?=
+ =?us-ascii?Q?8YBJcPkydINRam6QeVdvyCixE2TacSkzFfEsSXIpFwkOJf/FfLm8XSWXym3W?=
+ =?us-ascii?Q?NrGMqSDkO2OYggmzOsndsfNDMv1br9+K8JkkyRe9QdTA8ELk4fzwBoIAP0wF?=
+ =?us-ascii?Q?RT2d1RLxsXBvUg/ccEyCdeR89tu39PSBQuQJZNKzOfdWQMKRR1E2pzIaNv4H?=
+ =?us-ascii?Q?PkuTzBIPYsjGIblhltB3NrxGVDQhvo/erv8gWjkK+XR2djeeHi6q5Jry16sA?=
+ =?us-ascii?Q?9EHIfM6CBVWazlzrFzyems7nG3dRYFjFlhzVMxd1nlEMTr9z0M6FyNy+PThy?=
+ =?us-ascii?Q?iUaJ179eZCrF1x7XJpNoDCjtjjFpdYfli1SixE304AnKCEboChgx0VUH7CkO?=
+ =?us-ascii?Q?JWCNAXKVQXkw8waLpMb3M3eV21uOts1pfuucYxc3H32GQgf8iSyNLBgQy6l4?=
+ =?us-ascii?Q?Z/Hi4ip55j/0hZ1urt5mEliQM460YInhFA/93l91ZumnNNTOW3/koVAiCBf1?=
+ =?us-ascii?Q?s2wj3+qy0aXdBfYGWknZvm+DPwCAIT8TPQ4IIi/cm1aJ3pG+SSdxFZCur0df?=
+ =?us-ascii?Q?h2hs5k5R8sPtOeE+1hg3HNfMxUVR+HdNt8V5fVLynJ4GOpHJrxUx/U07b+aS?=
+ =?us-ascii?Q?Dvs7x32peWFvTqnm88s5iNounUVVfjBTycuxVhp2ZNKuuVLo9izEuzS2KKQs?=
+ =?us-ascii?Q?WnfIpkbmcADJEXFJ7Ig3bpmo3wW9TjBDLNfEgwOCZf1j4U1gu0kV1UX9HtN4?=
+ =?us-ascii?Q?JJjQkwThZEZbfO7aWSh8h/MFWPwZQ5/BaaEci+Mk2X6nBJWceCCcvBz2JAj/?=
+ =?us-ascii?Q?MNq+Q7wQaxIfTpf5eRnxcXnLu1ZaIefu6+NAZDTdvhdxVtn/uaHMq6N4+ef3?=
+ =?us-ascii?Q?3nniq6yfrqRiiDJWGtDOWSRjG+Bmm2F/fKw7bzJYmj0372rrfRhJ6RBDxBAP?=
+ =?us-ascii?Q?hxCSC0GC3+/6LJ1GYf4bXM+uVSLRb4czCqgAUeocoyD/mFGloEN3qHlNzNZs?=
+ =?us-ascii?Q?LoQR3KbIPkZfN3HUyCYgeWWMjeSHekSQHZ8cJeDss6OzssHrioovwWY/+0xo?=
+ =?us-ascii?Q?1v4CWkrkUuV0uXI4OIupsuwrbXJfSB4CsNf37T1bDkX6fzNVPf6fCmT001gj?=
+ =?us-ascii?Q?zojeoCHirVpSFvf+u/YzLbZ89fHj/gsCYbDzL2U2QpTMtfGV2rGY+rWJXm60?=
+ =?us-ascii?Q?mLtvzWjXFx00ksC2vcQp1gWp0AbWOn/e8JS9kDllZovOCBXPMM1rxiyRSB0f?=
+ =?us-ascii?Q?dG5zVKfJlgAhBNJTB8SnnVzZSISLJ2nvrjgJE8XHHbWXHZvITqhXAHiOd9/+?=
+ =?us-ascii?Q?4BnTFTGVuYwCWDwuTyySsnPbkS0OsjUKbABU5uvitf6buNOUaPeB3CHBP2le?=
+ =?us-ascii?Q?Sw=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?wybxInCipbNbo6/q0Zesli2LbNFakmjt32VTvE3MvEuGxzCp23+4sLOtLsfB?=
+ =?us-ascii?Q?9QO8gBPS0Cqa7+Td4VM4DBwpYMRkG38oCh19oKKSWUu/yq/6cqPCnNjagBBL?=
+ =?us-ascii?Q?eObG2j88bLEdQDUTTK1FJNi7zXHHCQeMxRXdWrI+bo1PHjNYqHEW5phpTycD?=
+ =?us-ascii?Q?W2d0OpkANeZy+Rz43bUx9+ZCFf9blb1jWirXLjYCCVqeB2Ooo6kbsxlIA+V/?=
+ =?us-ascii?Q?hMvARUEE2QMgl6t9N6SajsAubtArmSNe9uavloZj4d0bsl+w4106JFTww6VT?=
+ =?us-ascii?Q?o0e/b7hJ/S8zKZihzSJIOfiVxeSrSQ1DRfnDntrl6ULbWCK9wg/ryGMTFLDv?=
+ =?us-ascii?Q?BLlg+Fuf62AkE9oZyIiL466QI8j+lk1CZgTvtC+pcZbJ34keWopNQ3/R+Ofq?=
+ =?us-ascii?Q?3cR9ffBHvinQ3Ev7P0FQpVdsuyKM4g3eIzV8oGpLBh5OndtK+qKa0yp+F9eA?=
+ =?us-ascii?Q?aQt7o2CPrGQABKufmTb1mKvlaNVO+1ELuftjHp2PTDcLIfqFVhDQd3jkB7FI?=
+ =?us-ascii?Q?ja1mNtKI6GF9E2gLJbSCScUHLeglMXnnOKd5qerNSbYBw6LRnFWeJ6sydeyM?=
+ =?us-ascii?Q?cG2wcjXylq22KYPyZ7qtVhUJLSbrp6xxsunZr039PW6gteiOHDxApiDnRrpm?=
+ =?us-ascii?Q?bGsp0CbSTFOX5Dn1H/AhvrzPTCDPZkybPcUDCpqbDVp0vo4XDTHzeVL846g+?=
+ =?us-ascii?Q?Yjqyy6uVYnubc6ItA2SCS9u+2qokZrOJMSw/Fqe28vMWtAOJilOKCP4be/ml?=
+ =?us-ascii?Q?HJF5q5ing5qV+h2tSVdcgtHcVw7u5huZKptAb46ukjN+BtEwXXIoN1WMc07c?=
+ =?us-ascii?Q?yrbRUH22bPSJcKJa748HrW/WVdEcv9eE5zE12XUm0NTUNUPIxNnNAe1hm1AA?=
+ =?us-ascii?Q?fxNynZMt5sKRoJRWY+NlNhtepU39sIOKWaKa900cIHZ5yUj3ViS66ZX0sdD8?=
+ =?us-ascii?Q?ArvcganjlCMYOoZQdEUJHxFOOCctSttBfs9zQ8VjBhv9CV/qvPz/J8QnWX/9?=
+ =?us-ascii?Q?zcVa?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 76b43577-e89d-4c4c-c361-08db72aba809
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 23:02:58.8686
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OU/hC7oY532w4y6AaomxyD1yZfiPy4uw+7zXo0Idrzm1lCkm1vlUuDskgYOqgL4B2EKVD2u36dNegrO1Gf4g5Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6462
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-21_12,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 mlxscore=0
+ suspectscore=0 bulkscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306210193
+X-Proofpoint-GUID: YajxIibxHfoIv8m6eKNbtcac9eVnBWvJ
+X-Proofpoint-ORIG-GUID: YajxIibxHfoIv8m6eKNbtcac9eVnBWvJ
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 11:54=E2=80=AFAM Edgecombe, Rick P
-<rick.p.edgecombe@intel.com> wrote:
->
-> On Wed, 2023-06-21 at 12:36 +0100, szabolcs.nagy@arm.com wrote:
-> > > The 06/20/2023 19:34, Edgecombe, Rick P wrote:
-> > > > > On Tue, 2023-06-20 at 10:17 +0100, szabolcs.nagy@arm.com wrote:
-> > > > > > > if there is a fix that's good, i haven't seen it.
-> > > > > > >
-> > > > > > > my point was that the current unwinder works with current
-> > > > > > > kernel
-> > > > > > > patches, but does not allow future extensions which
-> > > > > > > prevents
-> > > > > > > sigaltshstk to work. the unwinder is not versioned so this
-> > > > > > > cannot
-> > > > > > > be fixed later. it only works if distros ensure shstk is
-> > > > > > > disabled
-> > > > > > > until the unwinder is fixed. (however there is no way to
-> > > > > > > detect
-> > > > > > > old unwinder if somebody builds gcc from source.)
-> > > > >
-> > > > > This is a problem the kernel is having to deal with, not
-> > > > > causing. > > The
-> > > > > userspace changes were upstreamed before the kernel. Userspace
-> > > > > > > folks
-> > > > > are adamantly against moving to a new elf bit, to start over
-> > > > > with a
-> > > > > clean slate. I tried everything to influence this and was not
-> > > > > successful. So I'm still not sure what the proposal here is for
-> > > > > the
-> > > > > kernel.
-> > >
-> > > i agree, the glibc and libgcc patches should not have been accepted
-> > > before a linux abi.
-> > >
-> > > but the other direction also holds: the linux patches should not be
-> > > pushed before the userspace design is discussed. (the current code
-> > > upstream is wrong, and new code for the proposed linux abi is not
-> > > posted yet. this is not your fault, i'm saying it here, because the
-> > > discussion is here.)
->
-> This series has been discussed with glibc/gcc developers regularly
-> throughout the enabling effort. In fact there have been ongoing
-> discussions about future shadow stack functionality.
->
-> It's not like this feature has been a fast or hidden effort. You are
-> just walking into the tail end of it. (much of it predates my
-> involvement BTW, including the initial glibc support)
->
-> AFAIK HJ presented the enabling changes at some glibc meeting. The
-> signal side of glibc is unchanged from what is already upstream. So I'm
-> not sure characterizing it that way is fair. It seems you were not part
-> of those old discussions, but that might be because your interest is
-> new. In any case we are constrained by some of these earlier outcomes.
-> More on that below.
->
-> > >
-> > > > > I am guessing that the fnon-call-exceptions/expanded frame size
-> > > > > incompatibilities could end up causing something to grow an
-> > > > > opt-in > > at
-> > > > > some point.
-> > >
-> > > there are independent userspace components and not every component
-> > > has a chance to opt-in.
-> > >
-> > > > > > > how does "fixed shadow stack signal frame size" relates to
-> > > > > > > "-fnon-call-exceptions"?
-> > > > > > >
-> > > > > > > if there were instruction boundaries within a function
-> > > > > > > where the
-> > > > > > > ret addr is not yet pushed or already poped from the shstk
-> > > > > > > then
-> > > > > > > the flag would be relevant, but since push/pop happens
-> > > > > > > atomically
-> > > > > > > at function entry/return -fnon-call-exceptions makes no
-> > > > > > > difference as far as shstk unwinding is concerned.
-> > > > >
-> > > > > As I said, the existing unwinding code for fnon-call-
-> > > > > excecptions
-> > > > > assumes a fixed shadow stack signal frame size of 8 bytes.
-> > > > > Since > > the
-> > > > > exception is thrown out of a signal, it needs to know how to
-> > > > > unwind
-> > > > > through the shadow stack signal frame.
-> > >
-> > > sorry but there is some misunderstanding about -fnon-call-
-> > > exceptions.
-> > >
-> > > it is for emitting cleanup and exception handler data for a
-> > > function
-> > > such that throwing from certain instructions within that function
-> > > works, while normally only throwing from calls work.
-> > >
-> > > it is not about *unwinding* from an async signal handler, which is
-> > > -fasynchronous-unwind-tables and should always work on linux, nor
-> > > for
-> > > dealing with cleanup/exception handlers above the interrupted frame
-> > > (likewise it works on linux without special cflags).
-> > >
-> > > as far as i can tell the current unwinder handles shstk unwinding
-> > > correctly across signal handlers (sync or async and >
-> > > cleanup/exceptions
-> > > handlers too), i see no issue with "fixed shadow stack signal frame
-> > > size of 8 bytes" other than future extensions and discontinous
-> > > shstk.
->
-> HJ, can you link your patch that makes it extensible and we can clear
-> this up? Maybe the issue extends beyond fnon-call-exceptions, but that
-> is where I reproduced it.
+On 06/21/23 15:52, Andrew Morton wrote:
+> On Wed, 21 Jun 2023 15:46:57 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
+> 
+> > On 06/21/23 15:39, Andrew Morton wrote:
+> > > On Wed, 21 Jun 2023 15:19:58 -0700 Sidhartha Kumar <sidhartha.kumar@oracle.com> wrote:
+> > > 
+> > > > > IMPORTANT NOTE FOR STABLE BACKPORTS:
+> > > > > This patch will apply cleanly to v6.3.  However, due to the change of
+> > > > > filemap_get_folio() return values, it will not function correctly.  This
+> > > > > patch must be modified for stable backports.
+> > > > 
+> > > > This patch I sent previously can be used for the 6.3 backport:
+> > > > 
+> > > > https://lore.kernel.org/lkml/b5bd2b39-7e1e-148f-7462-9565773f6d41@oracle.com/T/#me37b56ca89368dc8dda2a33d39f681337788d13c
+> > > 
+> > > Are we suggesting that this be backported?  If so, I'll add the cc:stable.
+> > > 
+> > > Because -stable maintainers have been asked not to backport MM patches to
+> > > which we didn't add the cc:stable.
+> > 
+> > Yes, we need to get a fix into 6.3 as well.
+> > 
+> > The 'issue' with a backport is noted in the IMPORTANT NOTE above.
+> > 
+> > My concern is that adding cc:stable will have it automatically picked up
+> > and this would make things worse than they are in 6.3.
+> > 
+> > My 'plan' was to not add the cc:stable, but manually create a patch for
+> > 6.3 once this goes upstream.  Honestly, I am not sure what is the best
+> > way to deal with this.  I could also try to catch the email about the
+> > automatic backport and say 'no, use this new patch instead'.
+> 
+> OK, how about I leave it without cc:stable, so you can send the 6.3
+> version at a time of your choosing?
 
-Here is the patch:
+Perfect
 
-https://gitlab.com/x86-gcc/gcc/-/commit/aab4c24b67b5f05b72e52a3eaae005c2277=
-710b9
-
-> > >
-> > > > > > > there is no magic, longjmp should be implemented as:
-> > > > > > >
-> > > > > > >         target_ssp =3D read from jmpbuf;
-> > > > > > >         current_ssp =3D read ssp;
-> > > > > > >         for (p =3D target_ssp; p !=3D current_ssp; p--) {
-> > > > > > >                 if (*p =3D=3D restore-token) {
-> > > > > > >                         // target_ssp is on a different
-> > > > > > > shstk.
-> > > > > > >                         switch_shstk_to(p);
-> > > > > > >                         break;
-> > > > > > >                 }
-> > > > > > >         }
-> > > > > > >         for (; p !=3D target_ssp; p++)
-> > > > > > >                 // ssp is now on the same shstk as target.
-> > > > > > >                 inc_ssp();
-> > > > > > >
-> > > > > > > this is what setcontext is doing and longjmp can do the
-> > > > > > > same:
-> > > > > > > for programs that always longjmp within the same shstk the
-> > > > > > > first
-> > > > > > > loop is just p =3D current_ssp, but it also works when
-> > > > > > > longjmp
-> > > > > > > target is on a different shstk assuming nothing is running
-> > > > > > > on
-> > > > > > > that shstk, which is only possible if there is a restore
-> > > > > > > token
-> > > > > > > on top.
-> > > > > > >
-> > > > > > > this implies if the kernel switches shstk on signal entry
-> > > > > > > it has
-> > > > > > > to add a restore-token on the switched away shstk.
-> > > > >
-> > > > > I actually did a POC for this, but rejected it. The problem is,
-> > > > > if
-> > > > > there is a shadow stack overflow at that point then the kernel
-> > > > > > > can't
-> > > > > push the shadow stack token to the old stack. And shadow stack
-> > > > > > > overflow
-> > > > > is exactly the alt shadow stack use case. So it doesn't really
-> > > > > > > solve
-> > > > > the problem.
-> > >
-> > > the restore token in the alt shstk case does not regress anything
-> > > but
-> > > makes some use-cases work.
-> > >
-> > > alt shadow stack is important if code tries to jump in and out of
-> > > signal handlers (dosemu does this with swapcontext) and for that a
-> > > restore token is needed.
-> > >
-> > > alt shadow stack is important if the original shstk did not
-> > > overflow
-> > > but the signal handler would overflow it (small thread stack, huge
-> > > sigaltstack case).
-> > >
-> > > alt shadow stack is also important for crash reporting on shstk
-> > > overflow even if longjmp does not work then. longjmp to a
-> > > makecontext
-> > > stack would still work and longjmp back to the original stack can
-> > > be
-> > > made to mostly work by an altshstk option to overwrite the top
-> > > entry
-> > > with a restore token on overflow (this can break unwinding though).
-> > >
->
-> There was previously a request to create an alt shadow stack for the
-> purpose of handling shadow stack overflow. So you are now suggesting to
-> to exclude that and instead target a different use case for alt shadow
-> stack?
->
-> But I'm not sure how much we should change the ABI at this point since
-> we are constrained by existing userspace. If you read the history, we
-> may end up needing to deprecate the whole elf bit for this and other
-> reasons.
->
-> So should we struggle to find a way to grow the existing ABI without
-> disturbing the existing userspace? Or should we start with something,
-> finally, and see where we need to grow and maybe get a chance at a
-> fresh start to grow it?
->
-> Like, maybe 3 people will show up saying "hey, I *really* need to use
-> shadow stack and longjmp from a ucontext stack", and no one says
-> anything about shadow stack overflow. Then we know what to do. And
-> maybe dosemu decides it doesn't need to implement shadow stack (highly
-> likely I would think). Now that I think about it, AFAIU SS_AUTODISARM
-> was created for dosemu, and the alt shadow stack patch adopted this
-> behavior. So it's speculation that there is even a problem in that
-> scenario.
->
-> Or maybe people just enable WRSS for longjmp() and directly jump back
-> to the setjmp() point. Do most people want fast setjmp/longjmp() at the
-> cost of a little security?
->
-> Even if, with enough discussion, we could optimize for all
-> hypotheticals without real user feedback, I don't see how it helps
-> users to hold shadow stack. So I think we should move forward with the
-> current ABI.
->
->
-
-
---=20
-H.J.
+-- 
+Mike Kravetz
