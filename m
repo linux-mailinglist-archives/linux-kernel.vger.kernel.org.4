@@ -2,139 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85CE1738AA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D505738AAF
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbjFUQQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:16:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
+        id S230037AbjFUQRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbjFUQQA (ORCPT
+        with ESMTP id S229871AbjFUQRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:16:00 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C14199D;
-        Wed, 21 Jun 2023 09:15:48 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b52bf6e669so48023495ad.2;
-        Wed, 21 Jun 2023 09:15:48 -0700 (PDT)
+        Wed, 21 Jun 2023 12:17:23 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592CCE41
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:17:22 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-57067d70dbdso3950507b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:17:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687364148; x=1689956148;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nJGYiZSmAz4f7DWqK5EepnnOfjeHuHz97IlICgAbfpM=;
-        b=rXvFFwpBMa5FmYnwQKryzn7/pRIxWbxqUbuDWOxQy5R5fuAZg6H/lCYrcytisckb9V
-         JOpaxzgqsRWoqC9YWvhZwVl2z2eplFB28DwpD7fd5PD2IuLiLmFrxexRL/I4e3IPwnFZ
-         iEZXzUZBM6F6NV0AdfajGy9BoRkUWB56UG/XWMsL1z2z5F1i77CAhHoR2lCRMndf//kw
-         VLBGg1mE8ZdmAsGaFgqJ8P7IfxuDy4/LtblSTRPIpMYlrG/4m4AoKKE6WkZWZ4gAW4v7
-         z+7l0xfPc+roMttREcfno6LCCh2x6ZH9JJFipd+v5VxGB8FWEUlGQgCTP85PKZIuSBj6
-         CWLQ==
+        d=gmail.com; s=20221208; t=1687364241; x=1689956241;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KYwloKw/zbAlsa9lQrVpK5pQ/od6vSxRvyUVYTt/4jo=;
+        b=KHtlbjYQ0Emeif6EIuQNzhCwOtyWtysACvGlhziOOIl384aWJTOrNamhlIXbh6GFFc
+         SpnJSi83oRW8LUzGNWcCqG+WniBGksiag3LhCbkY8P97Q9KaDFtvJ4/q5F7MSQFZG+q1
+         MRr7jFgbCVlBtIaVwuspkPIQD0hED4lEuTfR6RsmVladCkv7OVyx6KHSQWvDe828FHDy
+         K+MCRqHt1zYRDfaSHk/9PEqYiUWiYplNP1oxGfwkr801ZFX3UOCz0sbSPez4MKSbj9Ua
+         gl6v1F8W8hi8xKSE6d246eSzzQob+CjteCYcy57BGnDKbyz1ls9/gKhMZIJ+TkjljIec
+         eo6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687364148; x=1689956148;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nJGYiZSmAz4f7DWqK5EepnnOfjeHuHz97IlICgAbfpM=;
-        b=drRed/jrkKgL0Dmnw7oBbOh3j1M/qh1DTBH5XIlYcdx7eY9YSUvwuXhiubPmwdEcF0
-         whZIUwpJvPWApVfjXqJ1ZW3SsNqCsFIwN05w691jBbLnD6wRgmmPsejrhXam6IIf+/Z9
-         qUe8r22JEOncOoSyABBs/vTZcwoblxG3zl+4Z0KF06ElhZcO0w0tjjj8Z0idn8diBiu9
-         cScp2bqOhb2UATUe1DAvEVyCSSZlEtpBw5yKtCm/tKw51DfOSovEw6c+mgRPSLhAxLFK
-         +mKZA+PJ2ZAnO2piKKefOy5oDYRyz01c34OKwq3QUebS3W9BLSkX4bKmJWr8y55KDwpk
-         gsbg==
-X-Gm-Message-State: AC+VfDy6fboYFxw3KRhUypUmTMmgjwAy181qyKki5siVZG2+qjLw8TRu
-        DQ/LbgPzIlFvfOPy3x6zZz+gKDjFAqk=
-X-Google-Smtp-Source: ACHHUZ5w5C/Ax/llbxeWIVIzqLnv+V2hnXxpwlzgpEcMzA+Yr9rTk5qAvHYFGctAC+AfLAN0h7E8Dg==
-X-Received: by 2002:a17:902:bc85:b0:1b5:54cc:fcb8 with SMTP id bb5-20020a170902bc8500b001b554ccfcb8mr10779557plb.19.1687364147732;
-        Wed, 21 Jun 2023 09:15:47 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w15-20020a170902e88f00b001b53d3d911dsm3712465plg.69.2023.06.21.09.15.46
+        d=1e100.net; s=20221208; t=1687364241; x=1689956241;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KYwloKw/zbAlsa9lQrVpK5pQ/od6vSxRvyUVYTt/4jo=;
+        b=B/Ob7G4ssHbs5nsaWgvJX5myO0otPmGsCvPVgOShwbc34wXM+2vMPmCQLW1xafD4rI
+         iNymGotBOchF0UcWsJNRsyQIZZ7vaCMOuXBH0Cp8yNA7qF8Gg8gm2QT6vDVoey//ScdG
+         dx/bFh8ikMOO1xPnPdlco+Zqd1306doMy3EuchzaP6aFsIHr/OBFcJai83NbzyddZOYQ
+         1sUPNUjkA3kLJ7fpSMqKn79bt1DsWRms5dUDoH3AclJUSqePrcdpD64OHyIlj4OBCuf/
+         o3IBVxfCwuMwdutpipA+FxRtbOeIzIgJdbcz/JMkqKVNipuN4e2cQO6Fmqf3iT1IuzHZ
+         yVPw==
+X-Gm-Message-State: AC+VfDzGCagfCNA+9s4KKNzpWm7xOFLlwAkiH+KRjXTZIi7kGE9yrINt
+        sAC7L/X9A8vqLExLYZS2HUk=
+X-Google-Smtp-Source: ACHHUZ6H9dTC04NJhcZGhALZ1EVpUS5xuQh9w5HRkv1wevjbuobpZx/tQqmfepdwpw+HcwBL8hbKcw==
+X-Received: by 2002:a81:7007:0:b0:56c:e6e9:6550 with SMTP id l7-20020a817007000000b0056ce6e96550mr8552187ywc.0.1687364241288;
+        Wed, 21 Jun 2023 09:17:21 -0700 (PDT)
+Received: from localhost.localdomain ([173.23.87.62])
+        by smtp.gmail.com with ESMTPSA id u206-20020a8160d7000000b005668fcdaed8sm1218613ywb.74.2023.06.21.09.17.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 09:15:46 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 21 Jun 2023 09:15:45 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-um@lists.infradead.org
-Subject: Re: [PATCH v7 03/11] kbuild: generate KSYMTAB entries by modpost
-Message-ID: <bb5048e7-5e8f-4391-a9a0-ff15b5384186@roeck-us.net>
-References: <20230608142428.256985-1-masahiroy@kernel.org>
- <20230608142428.256985-4-masahiroy@kernel.org>
+        Wed, 21 Jun 2023 09:17:20 -0700 (PDT)
+From:   Matthew Anderson <ruinairas1992@gmail.com>
+To:     tiwai@suse.com
+Cc:     perex@perex.cz, luke@ljones.dev, sbinding@opensource.cirrus.com,
+        linux-kernel@vger.kernel.org,
+        Matthew Anderson <ruinairas1992@gmail.com>
+Subject: [PATCH v4] ALSA: hda/realtek: Add quirks for ROG ALLY CS35l41 audio
+Date:   Wed, 21 Jun 2023 11:17:14 -0500
+Message-ID: <20230621161714.9442-1-ruinairas1992@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230608142428.256985-4-masahiroy@kernel.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 08, 2023 at 11:24:20PM +0900, Masahiro Yamada wrote:
-> Commit 7b4537199a4a ("kbuild: link symbol CRCs at final link, removing
-> CONFIG_MODULE_REL_CRCS") made modpost output CRCs in the same way
-> whether the EXPORT_SYMBOL() is placed in *.c or *.S.
-> 
-...
+This requires a patched ACPI table or a firmware from ASUS to work because
+the system does not come with the _DSD field for the CSC3551.
 
-> We can do this better now; modpost can selectively emit KSYMTAB entries
-> that are really used by modules.
-> 
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=217550
 
-This patch results in
-
-Building alpha:defconfig ... failed
---------------
-Error log:
-<stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-WARNING: modpost: "saved_config" [vmlinux] is COMMON symbol
-ERROR: modpost: vmlinux: page_is_ram: EXPORT_SYMBOL used for init symbol. Remove __init or EXPORT_SYMBOL.
-
-I don't know if other architectures are affected - linux-next is so broken
-that it is difficult to find root causes for all the breakages.
-
-Guenter
-
+Signed-off-by: Matthew Anderson <ruinairas1992@gmail.com>
 ---
-Bisect log:
+changes in v2:
+  - Fixed indentation
+changes in v3:
+  - Adjusted code as advised
+changes in v4:
+  - Fold and resubmit
+---
+ sound/pci/hda/patch_realtek.c | 46 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-# bad: [15e71592dbae49a674429c618a10401d7f992ac3] Add linux-next specific files for 20230621
-# good: [45a3e24f65e90a047bef86f927ebdc4c710edaa1] Linux 6.4-rc7
-git bisect start 'HEAD' 'v6.4-rc7'
-# bad: [e867e67cd55ae460c860ffd896c7fc96add2821c] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
-git bisect bad e867e67cd55ae460c860ffd896c7fc96add2821c
-# bad: [57b289d5b1005a9c39d6d6567e0ef6115bd59cea] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git
-git bisect bad 57b289d5b1005a9c39d6d6567e0ef6115bd59cea
-# bad: [dc6399fc9ae6d2530fc38fb3ae96bcc8393bd66f] Merge branch 'for-next/perf' of git://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git
-git bisect bad dc6399fc9ae6d2530fc38fb3ae96bcc8393bd66f
-# good: [6d366ba598334a0457d917a7bf38efd118c5b7be] Merge branch 'mm-stable' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-git bisect good 6d366ba598334a0457d917a7bf38efd118c5b7be
-# good: [82fe2e45cdb00de4fa648050ae33bdadf9b3294a] perf pmus: Check if we can encode the PMU number in perf_event_attr.type
-git bisect good 82fe2e45cdb00de4fa648050ae33bdadf9b3294a
-# bad: [d2fa756910f88c2f5871775483744407cbf67933] Merge branch 'for-next' of git://git.infradead.org/users/hch/dma-mapping.git
-git bisect bad d2fa756910f88c2f5871775483744407cbf67933
-# good: [1b990bc8edc396a37a3ff1a43f7c329c361ee07c] Merge branch 'mm-nonmm-unstable' into mm-everything
-git bisect good 1b990bc8edc396a37a3ff1a43f7c329c361ee07c
-# good: [cff6e7f50bd315e5b39c4e46c704ac587ceb965f] kbuild: Add CLANG_FLAGS to as-instr
-git bisect good cff6e7f50bd315e5b39c4e46c704ac587ceb965f
-# bad: [8f3847e175a0044e2212fef772e7fa912270cd6d] ia64,export.h: replace EXPORT_DATA_SYMBOL* with EXPORT_SYMBOL*
-git bisect bad 8f3847e175a0044e2212fef772e7fa912270cd6d
-# good: [3a3f1e573a105328a2cca45a7cfbebabbf5e3192] modpost: fix off by one in is_executable_section()
-git bisect good 3a3f1e573a105328a2cca45a7cfbebabbf5e3192
-# good: [92e74fb6e6196d642505ae2b74a8e327202afef9] scripts/kallsyms: constify long_options
-git bisect good 92e74fb6e6196d642505ae2b74a8e327202afef9
-# good: [92e2921eeafdfca9acd9b83f07d2b7ca099bac24] ARC: define ASM_NL and __ALIGN(_STR) outside #ifdef __ASSEMBLY__ guard
-git bisect good 92e2921eeafdfca9acd9b83f07d2b7ca099bac24
-# bad: [bb2aa9a94b41b883037a56709d995c269204ade0] kbuild: generate KSYMTAB entries by modpost
-git bisect bad bb2aa9a94b41b883037a56709d995c269204ade0
-# good: [94d6cb68124b7a63f24fcc345795ba5f9a27e694] modpost: pass struct module pointer to check_section_mismatch()
-git bisect good 94d6cb68124b7a63f24fcc345795ba5f9a27e694
-# first bad commit: [bb2aa9a94b41b883037a56709d995c269204ade0] kbuild: generate KSYMTAB entries by modpost
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 308ec7034cc9..75f64131b369 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -7120,6 +7120,10 @@ enum {
+ 	ALC294_FIXUP_ASUS_DUAL_SPK,
+ 	ALC285_FIXUP_THINKPAD_X1_GEN7,
+ 	ALC285_FIXUP_THINKPAD_HEADSET_JACK,
++	ALC294_FIXUP_ASUS_ALLY,
++	ALC294_FIXUP_ASUS_ALLY_PINS,
++	ALC294_FIXUP_ASUS_ALLY_VERBS,
++	ALC294_FIXUP_ASUS_ALLY_SPEAKER,
+ 	ALC294_FIXUP_ASUS_HPE,
+ 	ALC294_FIXUP_ASUS_COEF_1B,
+ 	ALC294_FIXUP_ASUS_GX502_HP,
+@@ -8432,6 +8436,47 @@ static const struct hda_fixup alc269_fixups[] = {
+ 		.chained = true,
+ 		.chain_id = ALC294_FIXUP_SPK2_TO_DAC1
+ 	},
++	[ALC294_FIXUP_ASUS_ALLY] = {
++		.type = HDA_FIXUP_FUNC,
++		.v.func = cs35l41_fixup_i2c_two,
++		.chained = true,
++		.chain_id = ALC294_FIXUP_ASUS_ALLY_PINS
++	},
++	[ALC294_FIXUP_ASUS_ALLY_PINS] = {
++		.type = HDA_FIXUP_PINS,
++		.v.pins = (const struct hda_pintbl[]) {
++			{ 0x19, 0x03a11050 },
++			{ 0x1a, 0x03a11c30 },
++			{ 0x21, 0x03211420 },
++			{ }
++		},
++		.chained = true,
++		.chain_id = ALC294_FIXUP_ASUS_ALLY_VERBS
++	},
++	[ALC294_FIXUP_ASUS_ALLY_VERBS] = {
++		.type = HDA_FIXUP_VERBS,
++		.v.verbs = (const struct hda_verb[]) {
++			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x45 },
++			{ 0x20, AC_VERB_SET_PROC_COEF, 0x5089 },
++			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x46 },
++			{ 0x20, AC_VERB_SET_PROC_COEF, 0x0004 },
++			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x47 },
++			{ 0x20, AC_VERB_SET_PROC_COEF, 0xa47a },
++			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x49 },
++			{ 0x20, AC_VERB_SET_PROC_COEF, 0x0049},
++			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x4a },
++			{ 0x20, AC_VERB_SET_PROC_COEF, 0x201b },
++			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x6b },
++			{ 0x20, AC_VERB_SET_PROC_COEF, 0x4278},
++			{ }
++		},
++		.chained = true,
++		.chain_id = ALC294_FIXUP_ASUS_ALLY_SPEAKER
++	},
++	[ALC294_FIXUP_ASUS_ALLY_SPEAKER] = {
++		.type = HDA_FIXUP_FUNC,
++		.v.func = alc285_fixup_speaker2_to_dac1,
++	},
+ 	[ALC285_FIXUP_THINKPAD_X1_GEN7] = {
+ 		.type = HDA_FIXUP_FUNC,
+ 		.v.func = alc285_fixup_thinkpad_x1_gen7,
+@@ -9534,6 +9579,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1043, 0x16e3, "ASUS UX50", ALC269_FIXUP_STEREO_DMIC),
+ 	SND_PCI_QUIRK(0x1043, 0x1740, "ASUS UX430UA", ALC295_FIXUP_ASUS_DACS),
+ 	SND_PCI_QUIRK(0x1043, 0x17d1, "ASUS UX431FL", ALC294_FIXUP_ASUS_DUAL_SPK),
++	SND_PCI_QUIRK(0x1043, 0x17f3, "ROG Ally RC71L_RC71L", ALC294_FIXUP_ASUS_ALLY),
+ 	SND_PCI_QUIRK(0x1043, 0x1881, "ASUS Zephyrus S/M", ALC294_FIXUP_ASUS_GX502_PINS),
+ 	SND_PCI_QUIRK(0x1043, 0x18b1, "Asus MJ401TA", ALC256_FIXUP_ASUS_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x18f1, "Asus FX505DT", ALC256_FIXUP_ASUS_HEADSET_MIC),
+-- 
+2.41.0
+
