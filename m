@@ -2,98 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C75F8738855
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 436D1738834
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:58:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233180AbjFUPD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41142 "EHLO
+        id S232125AbjFUO6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjFUPDN (ORCPT
+        with ESMTP id S230037AbjFUO6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:03:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FBB6EB9
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:56:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687359306;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QoQ+QeYRZBI9jaQiyXxbczTZh6h+sWjH6QRN7ho9+3I=;
-        b=PXlw4fFbVtPopVT0jjMQ7T52cEYbd1ih7bBphEbiqh9DqwzbT2NMpNowDkqXYFhBa5xEJ3
-        PuEvy+pp5r+qrgZRSLlLFmzduJDuSX2JHKak6L6p6vSBWvodI3mETx8D5LQ78tBQxWc4ds
-        j04cCFJyciRaVFZRtl0wUVTxe5D+5N4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-635-ndiTCmUYMs-tAoTQ-IEshw-1; Wed, 21 Jun 2023 10:51:35 -0400
-X-MC-Unique: ndiTCmUYMs-tAoTQ-IEshw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 43F7B185A7AD;
-        Wed, 21 Jun 2023 14:51:34 +0000 (UTC)
-Received: from [10.22.17.140] (unknown [10.22.17.140])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8112B1121330;
-        Wed, 21 Jun 2023 14:51:33 +0000 (UTC)
-Message-ID: <309d15f5-0dd8-aee8-14a6-621a071bc363@redhat.com>
-Date:   Wed, 21 Jun 2023 10:51:33 -0400
+        Wed, 21 Jun 2023 10:58:22 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE5B10F6;
+        Wed, 21 Jun 2023 07:53:12 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-311275efaf8so4527992f8f.3;
+        Wed, 21 Jun 2023 07:53:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687359127; x=1689951127;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nj5cySb2awZPbswPCNNrPFPrMSOToZs+lxCLhtLnxqM=;
+        b=DMa7o4JaZ3/A/B2OwM3xP/l22yEiaNsiWTcFljxXyczYLHnD7n6oveG919mNB6P5Ic
+         J/paTf0iLdK++ldFKS+gJZE4YNXEPZEOIoqe0yjla7DaZyWRxEPPJfDnN1lRkLbQrfak
+         uCdxqkcbqLTAsit60EO349s5wO5eHVorsH5DxrpXRaMChXzkibD/hGO3gf7dE2VwwUiG
+         VU5L9+OXbjkLeiWzWgdPyYjp1JQay3ZmdKxriGJ9sBcQjusqWR69J1NMV2651ZiAVMys
+         k8DVl0fOt7VuodMjyRCYyB6CkBdyY2oY63nAz45rg0hLtSpWe6waOnkijxhuDAYe0n+1
+         2Umg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687359127; x=1689951127;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nj5cySb2awZPbswPCNNrPFPrMSOToZs+lxCLhtLnxqM=;
+        b=JlUye1GzfVsAWiPMXoN75uAhr9E2FaOMZvl5FaolCciv9/i2N8BccNMjmNOwBwtqPv
+         GaiFm3hqgp+fUwDFxaMJjsOgAAa+zRuyRbqnG8PayekXypBz4MZhzJki8VLdf1EGyQJM
+         IWh6/8yhzD8TOcsJJ5HdSqbUM/ZKT16CjeickRpvxlIuqmbU21/gyUu8+myIKoRPMCm7
+         1Jrc+r+UquKXFie2y3J2z4ZY+V+3X9s4xSv23M1DTI3n8emvGD3wEYnU7hr7C0LwbDuC
+         LFIBWzMcjH8EfhRuXWI2W9cXKD9HSPM/Zv+XslRMdfZVVJAZr1sC7EgqVBPnyqJMcwgH
+         GHFg==
+X-Gm-Message-State: AC+VfDxiynVljeCj0SGjc26n0U2a2viX4LQPjmNzm6ttKPgowrVwDVgN
+        bNZkGUGB9uaSshZaoFv0dzY=
+X-Google-Smtp-Source: ACHHUZ4YmDMSzS0Vs/a7yJ8iIQ19cw27PfgVtfXVBRdE2ItLgg6hz6Upx31NjdP6uDgaLzNxVIr80A==
+X-Received: by 2002:adf:e88b:0:b0:30e:3e6f:3682 with SMTP id d11-20020adfe88b000000b0030e3e6f3682mr10488981wrm.5.1687359127129;
+        Wed, 21 Jun 2023 07:52:07 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id a7-20020adfed07000000b003112ab916cdsm4668998wro.73.2023.06.21.07.52.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 07:52:06 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>, Neil Brown <neilb@suse.de>,
+        Olga Kornievskaia <kolga@netapp.com>,
+        Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>,
+        linux-nfs@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] nfsd: remove redundant assignments to variable len
+Date:   Wed, 21 Jun 2023 15:52:05 +0100
+Message-Id: <20230621145205.2682584-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2 2/5] x86/idle: Disable IBRS when cpu is offline
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-pm@vger.kernel.org,
-        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>
-References: <20230620140625.1001886-1-longman@redhat.com>
- <20230620140625.1001886-3-longman@redhat.com>
- <20230621072313.GA2046280@hirez.programming.kicks-ass.net>
- <7f2424df-1846-6c38-e446-b3d5aa693ecd@redhat.com>
- <20230621143602.GI2053369@hirez.programming.kicks-ass.net>
- <5cb81f3b-45a0-d566-3d63-569b5706e9fe@redhat.com>
- <20230621144848.GJ2053369@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230621144848.GJ2053369@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There are a few assignments to variable len where the value is not
+being read and so the assignments are redundant and can be removed.
+In one case, the variable len can be removed completely. Cleans up
+4 clang scan warnings of the form:
 
-On 6/21/23 10:48, Peter Zijlstra wrote:
-> On Wed, Jun 21, 2023 at 10:44:23AM -0400, Waiman Long wrote:
->
->> Well, hlt_play_dead() is only called if cpuidle_play_dead() returns an error
->> which is not the typical case. My testing does confirm that this patch is
->> able to keep the IBRS bit off when a CPU is offline via its online sysfs
->> file.
-> The point is; your re-enable IBRS hunk at the end is dead-code. It
-> should never ever run and having it is confusing.
+fs/nfsd/export.c:100:7: warning: Although the value stored to 'len'
+is used in the enclosing expression, the value is never actually
+read from 'len' [deadcode.DeadStores]
 
-What I meant is that hlt_play_dead() should never be called unless there 
-is some serious problem with the system and native_play_dead() does 
-return in normal usage.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ fs/nfsd/export.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-Cheers,
-Longman
+diff --git a/fs/nfsd/export.c b/fs/nfsd/export.c
+index ae85257b4238..11a0eaa2f914 100644
+--- a/fs/nfsd/export.c
++++ b/fs/nfsd/export.c
+@@ -97,7 +97,7 @@ static int expkey_parse(struct cache_detail *cd, char *mesg, int mlen)
+ 		goto out;
+ 
+ 	err = -EINVAL;
+-	if ((len=qword_get(&mesg, buf, PAGE_SIZE)) <= 0)
++	if (qword_get(&mesg, buf, PAGE_SIZE) <= 0)
+ 		goto out;
+ 
+ 	err = -ENOENT;
+@@ -107,7 +107,7 @@ static int expkey_parse(struct cache_detail *cd, char *mesg, int mlen)
+ 	dprintk("found domain %s\n", buf);
+ 
+ 	err = -EINVAL;
+-	if ((len=qword_get(&mesg, buf, PAGE_SIZE)) <= 0)
++	if (qword_get(&mesg, buf, PAGE_SIZE) <= 0)
+ 		goto out;
+ 	fsidtype = simple_strtoul(buf, &ep, 10);
+ 	if (*ep)
+@@ -593,7 +593,6 @@ static int svc_export_parse(struct cache_detail *cd, char *mesg, int mlen)
+ {
+ 	/* client path expiry [flags anonuid anongid fsid] */
+ 	char *buf;
+-	int len;
+ 	int err;
+ 	struct auth_domain *dom = NULL;
+ 	struct svc_export exp = {}, *expp;
+@@ -609,8 +608,7 @@ static int svc_export_parse(struct cache_detail *cd, char *mesg, int mlen)
+ 
+ 	/* client */
+ 	err = -EINVAL;
+-	len = qword_get(&mesg, buf, PAGE_SIZE);
+-	if (len <= 0)
++	if (qword_get(&mesg, buf, PAGE_SIZE) <= 0)
+ 		goto out;
+ 
+ 	err = -ENOENT;
+@@ -620,7 +618,7 @@ static int svc_export_parse(struct cache_detail *cd, char *mesg, int mlen)
+ 
+ 	/* path */
+ 	err = -EINVAL;
+-	if ((len = qword_get(&mesg, buf, PAGE_SIZE)) <= 0)
++	if (qword_get(&mesg, buf, PAGE_SIZE) <= 0)
+ 		goto out1;
+ 
+ 	err = kern_path(buf, 0, &exp.ex_path);
+@@ -665,7 +663,7 @@ static int svc_export_parse(struct cache_detail *cd, char *mesg, int mlen)
+ 			goto out3;
+ 		exp.ex_fsid = an_int;
+ 
+-		while ((len = qword_get(&mesg, buf, PAGE_SIZE)) > 0) {
++		while (qword_get(&mesg, buf, PAGE_SIZE) > 0) {
+ 			if (strcmp(buf, "fsloc") == 0)
+ 				err = fsloc_parse(&mesg, buf, &exp.ex_fslocs);
+ 			else if (strcmp(buf, "uuid") == 0)
+-- 
+2.39.2
 
