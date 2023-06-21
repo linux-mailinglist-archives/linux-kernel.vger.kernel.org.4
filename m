@@ -2,112 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FD02739181
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 23:28:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C1B4739183
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 23:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbjFUV2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 17:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
+        id S230185AbjFUV3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 17:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjFUV2s (ORCPT
+        with ESMTP id S229680AbjFUV3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 17:28:48 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF991BE4;
-        Wed, 21 Jun 2023 14:28:41 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-34207e81c98so30991325ab.2;
-        Wed, 21 Jun 2023 14:28:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687382921; x=1689974921;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KDVeKgt20anLjpmZL3lLbfkT9Je6VtDNWrGWDpMPcz4=;
-        b=RvbWobbubv0WAnB5MOzIkt7ykTs7F8l/9ejrg40RaTJHbrFOtrQSoADnE7lnud5Iuk
-         nYiXpQXNkb67FFaaNt3hgXnj38zPMCUj+JYo/JvOoMraNl5Z/mZcyFm6JTqw9ca+Tc5T
-         JYJVraxgeDFzY/4YqtRyW/+Fv0akQQBJxXoc8izGzN90PjzovTBRgR+hWJ6KQPSXraVl
-         jTgQHfu2I3BAUHjH6uJGQ0SBb8s2R/yi0D8AsdW+gx6usnqEXwspfOgrivolDw2ni7lp
-         YT8lqGLD8sUbcRp3NfgyoGJw3/INtgWg25KYYTKtgDfQo/TC69L1NHjm1wxE3dqxvAOn
-         9+AQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687382921; x=1689974921;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KDVeKgt20anLjpmZL3lLbfkT9Je6VtDNWrGWDpMPcz4=;
-        b=AI9g4y/3Vt4m70AZOHp2e0++3VsN2TUebiBxOaoRjuFkiMnwwOTbMUfdJ/VrQVTLO4
-         hpbwwDBK++DJPYTt98F2NQn9pVcG40EX3kvPMStmUiFB4iiqks9rPI1xd3SeR3WPlCUL
-         3cXlFlkaCaBb7GCHzVYUrk94RlDlOdeMvvnayJ4cF0VrngC+G8byVR10tCPcSsFtbgfR
-         3VAEdvzoYS8iiOzxCtUU960Vq6INq6gOAkghg4pTPISd4qBRUzDFcDS0CfreIk750Xhg
-         ASfpquJFldaN1fLk5UUMtNL6dd0+jT0zRGDIIsc1PXnFNTFpvTbX8fO754CEiZxJL1oX
-         YUSQ==
-X-Gm-Message-State: AC+VfDx9Qv2QlXNBm7ru1idUu1p2J145LHluUioDH4SYlnjf11GW/b/T
-        /BR3lrLMmKTA1FLPZaKxBCg=
-X-Google-Smtp-Source: ACHHUZ6BZzIC7TcPquzSAHqFVAEaYT0OhXJraqh0DPT8+mgXUfM+BWMcj4cpWUTp9wHKFIHXT7Tnrg==
-X-Received: by 2002:a92:c10e:0:b0:335:7be2:26ca with SMTP id p14-20020a92c10e000000b003357be226camr16876500ile.19.1687382920609;
-        Wed, 21 Jun 2023 14:28:40 -0700 (PDT)
-Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
-        by smtp.gmail.com with ESMTPSA id v2-20020a92c6c2000000b0033bc3a3ea39sm1524188ilm.70.2023.06.21.14.28.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 14:28:40 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 21 Jun 2023 11:28:38 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
-Subject: Re: contention on pwq->pool->lock under heavy NFS workload
-Message-ID: <ZJNrht3NlLyPn2A0@slm.duckdns.org>
-References: <38FA0353-5303-4A3D-86A5-EF1E989CD497@oracle.com>
+        Wed, 21 Jun 2023 17:29:37 -0400
+Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AD11BC;
+        Wed, 21 Jun 2023 14:29:36 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 21:29:21 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1687382974; x=1687642174;
+        bh=d4/p/34ZRL0B4kHlNuD6nT1/glyHyKCZyn6h9RoTdyM=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=TFQPfdiTQ9tw//SNJgyKYCdL9IABZDSubp6ZLkMV2l3NoRWG6BSEuctdkkfivzSRu
+         xN8eMESwInDSUAcxxrLYpzM2Smf0O/KVibOydGsl2P9LjfN3tCxfndb0QU7fs3l9oZ
+         AbWgDvbwOoxiwhG6FaAnABJ45sL915+9k4VHnWpiyS9d9lNdQPWKh3wL89vpslNxsh
+         NLVmuc3Vykc17r52Dfph/Y6AGDZA8YRbjIiJSkh99QGaWP6QDoxHUD+7K5uyunPLw6
+         hm+IKBqWyIGDyN55CdpR4FGIi8YjpRK55SOJF55/hGlvHC3S7gBpmw9qBLEusJAjIt
+         DEFSnNsBkZqYA==
+To:     Armin Wolf <W_Armin@gmx.de>
+From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Gross <markgross@kernel.org>
+Subject: Re: [PATCH v1 1/2] platform/x86: wmi: Break possible infinite loop when parsing GUID
+Message-ID: <TnTqU2wwXh3DG07kYUwMAe0hdBiaKiuoMOqBCBIttT27lXdw-KZVV8fZ7x-Zrg_Ux8mJUHClgyFHRbDoCRmhaOI7GwOPhUPYBRLzThV8iYI=@protonmail.com>
+In-Reply-To: <25715979-8148-8d1d-fd67-a973661f9781@gmx.de>
+References: <20230621151155.78279-1-andriy.shevchenko@linux.intel.com> <25715979-8148-8d1d-fd67-a973661f9781@gmx.de>
+Feedback-ID: 20568564:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <38FA0353-5303-4A3D-86A5-EF1E989CD497@oracle.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi
 
-On Wed, Jun 21, 2023 at 03:26:22PM +0000, Chuck Lever III wrote:
-> lock_stat reports that the pool->lock kernel/workqueue.c:1483 is the highest
-> contended lock on my test NFS client. The issue appears to be that the three
-> NFS-related workqueues, rpciod_workqueue, xprtiod_workqueue, and nfsiod all
-> get placed in the same worker_pool, so they have to fight over one pool lock.
-> 
-> I notice that ib_comp_wq is allocated with the same flags, but I don't see
-> significant contention there, and a trace_printk in __queue_work shows that
-> work items queued on that WQ seem to alternate between at least two different
-> worker_pools.
-> 
-> Is there a preferred way to ensure the NFS WQs get spread a little more fairly
-> amongst the worker_pools?
 
-Can you share the output of lstopo on the test machine?
+2023. j=C3=BAnius 21., szerda 23:20 keltez=C3=A9ssel, Armin Wolf <W_Armin@g=
+mx.de> =C3=ADrta:
 
-The following branch has pending workqueue changes which makes unbound
-workqueues finer grained by default and a lot more flexible in how they're
-segmented.
+> [...]
+> > @@ -895,11 +901,7 @@ static int wmi_dev_match(struct device *dev, struc=
+t device_driver *driver)
+> >   =09=09return 0;
+> >
+> >   =09while (*id->guid_string) {
+> > -=09=09guid_t driver_guid;
+> > -
+> > -=09=09if (WARN_ON(guid_parse(id->guid_string, &driver_guid)))
+>=20
+> Hi,
+>=20
+> just an idea: how about printing an error/debug message in case of an mal=
+formed GUID?
+> This could be useful when searching for typos in GUIDs used by WMI driver=
+s.
+> [...]
 
- git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git affinity-scopes-v2
+Wouldn't it be better to change `__wmi_driver_register()` to check that?
 
-Can you please test with the brnach? If the default doesn't improve the
-situation, you can set WQ_SYSFS on the affected workqueues and change their
-scoping by writing to /sys/devices/virtual/WQ_NAME/affinity_scope. Please
-take a look at
 
- https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git/tree/Documentation/core-api/workqueue.rst?h=affinity-scopes-v2#n350
-
-for more details.
-
-Thanks.
-
--- 
-tejun
+Regards,
+Barnab=C3=A1s P=C5=91cze
