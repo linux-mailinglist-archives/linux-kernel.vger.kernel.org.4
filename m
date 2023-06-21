@@ -2,65 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3CE7379D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 05:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF6F7379AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 05:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbjFUDmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 23:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40648 "EHLO
+        id S230138AbjFUD1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 23:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbjFUDmM (ORCPT
+        with ESMTP id S230171AbjFUD0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 23:42:12 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31CE1BF7;
-        Tue, 20 Jun 2023 20:41:40 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qm82G4NYSz4f3nTY;
-        Wed, 21 Jun 2023 11:22:30 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgD3X7P1bJJkzg20MA--.30704S3;
-        Wed, 21 Jun 2023 11:22:31 +0800 (CST)
-Subject: Re: [PATCH -next 3/8] raid5: fix missing io accounting in
- raid5_align_endio()
-To:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     xni@redhat.com, song@kernel.org, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230619204826.755559-1-yukuai1@huaweicloud.com>
- <20230619204826.755559-4-yukuai1@huaweicloud.com>
- <6f05e7b4-461c-68db-20c5-e3bfd52cc7f6@molgen.mpg.de>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <8626ee12-e4df-1645-21e9-c6b648ceb1eb@huaweicloud.com>
-Date:   Wed, 21 Jun 2023 11:22:29 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
-MIME-Version: 1.0
-In-Reply-To: <6f05e7b4-461c-68db-20c5-e3bfd52cc7f6@molgen.mpg.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD3X7P1bJJkzg20MA--.30704S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxXF4UZr17XF1rArykGrW5trb_yoWrWw1Dpa
-        n7tFy3JrW5Xr1rWrW7tw4UGa4Sqw4Dta97JryxXa48tw42yFyjga1UXry0gFyUAFW8Wr1U
-        Jw1jqrsrur17GFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j
-        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHU
-        DUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Tue, 20 Jun 2023 23:26:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAF7199C;
+        Tue, 20 Jun 2023 20:25:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B63D6145D;
+        Wed, 21 Jun 2023 03:25:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E800C433C0;
+        Wed, 21 Jun 2023 03:25:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687317918;
+        bh=NGs11l/3B8YfeCe/z4oIs1N3Mm5E/col3XvNEFUUXn0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=A9yw8wR5gnNbP8vG+w1Ktt1f/FkaFUuyC2Seh1jsOkpYmmGwJFH8lgQ7I7G8Qn4Mn
+         XL6xH5Ne75d8izn4HSWmrNlOdFBGAqIH8zIKdMjpmRlOLfs9vh08Dh3C5DUi+T1E+i
+         9kJu80fipHNPqIXfbbKEsFU7Wr+N+PBVbOPGfNTXC/OwQcRZB7QzJkwi+2/+PM0ART
+         TD28FaVAqStqrTgUUx1GliFn+0vcB5t4/eeEMqgUUeQWEXybygBgM+z8bGCXzVJrIG
+         7X+KNCM8c+zqKavirD9ZL+uoc4o5XvWgy69IK+gcHDesZXLR8207zoHuqR3bcCQZw5
+         3dRW4J/tJGbyg==
+Date:   Wed, 21 Jun 2023 12:25:13 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, rafael@kernel.org,
+        linux-pm@vger.kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
+        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, delyank@fb.com, qyousef@google.com
+Subject: Re: [RESEND][PATCH v2 1/3] sched/tp: Add new tracepoint to track
+ uclamp set from user-space
+Message-Id: <20230621122513.2aa3bc0d29321197e3d38441@kernel.org>
+In-Reply-To: <20230531182629.nztie5rwhjl53v3d@airbuntu>
+References: <20230522145702.2419654-1-lukasz.luba@arm.com>
+        <20230522145702.2419654-2-lukasz.luba@arm.com>
+        <20230531182629.nztie5rwhjl53v3d@airbuntu>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,115 +64,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, 31 May 2023 19:26:29 +0100
+Qais Yousef <qyousef@layalina.io> wrote:
 
-在 2023/06/20 17:57, Paul Menzel 写道:
-> Dear Yu,
+> On 05/22/23 15:57, Lukasz Luba wrote:
+> > The user-space can set uclamp value for a given task. It impacts task
+> > placement decisions made by the scheduler. This is very useful information
+> > and helps to understand the system behavior or track improvements in
+> > middleware and applications which start using uclamp mechanisms and report
+> > better performance in tests.
 > 
-> 
-> Thank you for your patch.
-> 
-> Am 19.06.23 um 22:48 schrieb Yu Kuai:
->> From: Yu Kuai <yukuai3@huawei.com>
->>
->> Io will only be accounted as done from raid5_align_endio() if the io
->> succeed, and io inflight counter will be leaked if such io failed.
-> 
-> succeed*s* or succeed*ed*?
+> Do you mind adding a generic one instead please? And explain why we can't just
+> attach to the syscall via kprobes? I think you want to bypass the permission
+> checks, so maybe a generic tracepoint after that might be justifiable?
 
-I'll up date this.
+Could you tell me more about this point? I would like to know what kind of
+permission checks can be bypassed with tracepoints.
 
-> 
->> Fix this problem by switching to use md_account_bio() for io accounting.
-> 
-> How can this be tested?
-> 
->> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
->> ---
->>   drivers/md/raid5.c | 29 ++++++++---------------------
->>   1 file changed, 8 insertions(+), 21 deletions(-)
->>
->> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
->> index cef0b400b2ee..4cdb35e54251 100644
->> --- a/drivers/md/raid5.c
->> +++ b/drivers/md/raid5.c
->> @@ -5468,26 +5468,17 @@ static struct bio 
->> *remove_bio_from_retry(struct r5conf *conf,
->>    */
->>   static void raid5_align_endio(struct bio *bi)
->>   {
->> -    struct md_io_clone *md_io_clone = bi->bi_private;
->> -    struct bio *raid_bi = md_io_clone->orig_bio;
->> -    struct mddev *mddev;
->> -    struct r5conf *conf;
->> -    struct md_rdev *rdev;
->> +    struct bio *raid_bi = bi->bi_private;
->> +    struct md_rdev *rdev = (void *)raid_bi->bi_next;
->> +    struct mddev *mddev = rdev->mddev;
->> +    struct r5conf *conf = mddev->private;
->>       blk_status_t error = bi->bi_status;
->> -    unsigned long start_time = md_io_clone->start_time;
->>       bio_put(bi);
->> -
->> -    rdev = (void*)raid_bi->bi_next;
->>       raid_bi->bi_next = NULL;
->> -    mddev = rdev->mddev;
->> -    conf = mddev->private;
->> -
-> 
-> This looks like unnecessary refactoring. No idea what the preferred 
-> style for the subsystem is though. If it is wanted, maybe make it a 
-> separate commit?
+> Then anyone can use it to track how userspace has changed any attributes for
+> a task, not just uclamp.
 
-You mean that I initialize 'rdev' and 'mdev' while declaration?
-I think code is cleaner this way, and this is too tiny to make a patch
-for this... I will keep this for now.  😉
+I guess Uclamp is not controlled by syscall but from kernel internal
+sched_setattr/setscheduler() too. Anyway I agree that it can be more generic
+tracepoint, something like trace_sched_set_scheduer(task, attr).
 
-Thanks,
-Kuai
+Thank you,
 
 > 
->>       rdev_dec_pending(rdev, conf->mddev);
->>       if (!error) {
->> -        if (blk_queue_io_stat(raid_bi->bi_bdev->bd_disk->queue))
->> -            bio_end_io_acct(raid_bi, start_time);
->>           bio_endio(raid_bi);
->>           if (atomic_dec_and_test(&conf->active_aligned_reads))
->>               wake_up(&conf->wait_for_quiescent);
->> @@ -5506,7 +5497,6 @@ static int raid5_read_one_chunk(struct mddev 
->> *mddev, struct bio *raid_bio)
->>       struct md_rdev *rdev;
->>       sector_t sector, end_sector, first_bad;
->>       int bad_sectors, dd_idx;
->> -    struct md_io_clone *md_io_clone;
->>       bool did_inc;
->>       if (!in_chunk_boundary(mddev, raid_bio)) {
->> @@ -5543,16 +5533,13 @@ static int raid5_read_one_chunk(struct mddev 
->> *mddev, struct bio *raid_bio)
->>           return 0;
->>       }
->> -    align_bio = bio_alloc_clone(rdev->bdev, raid_bio, GFP_NOIO,
->> -                    &mddev->io_clone_set);
->> -    md_io_clone = container_of(align_bio, struct md_io_clone, 
->> bio_clone);
->> +    md_account_bio(mddev, &raid_bio);
->>       raid_bio->bi_next = (void *)rdev;
->> -    if (blk_queue_io_stat(raid_bio->bi_bdev->bd_disk->queue))
->> -        md_io_clone->start_time = bio_start_io_acct(raid_bio);
->> -    md_io_clone->orig_bio = raid_bio;
->> +    align_bio = bio_alloc_clone(rdev->bdev, raid_bio, GFP_NOIO,
->> +                    &mddev->bio_set);
->>       align_bio->bi_end_io = raid5_align_endio;
->> -    align_bio->bi_private = md_io_clone;
->> +    align_bio->bi_private = raid_bio;
->>       align_bio->bi_iter.bi_sector = sector;
->>       /* No reshape active, so we can trust rdev->data_offset */
 > 
+> Thanks
 > 
-> Kind regards,
+> --
+> Qais Yousef
 > 
-> Paul
-> 
-> .
-> 
+> > 
+> > Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+> > ---
+> >  include/trace/events/sched.h | 4 ++++
+> >  kernel/sched/core.c          | 5 +++++
+> >  2 files changed, 9 insertions(+)
+> > 
+> > diff --git a/include/trace/events/sched.h b/include/trace/events/sched.h
+> > index fbb99a61f714..dbfb30809f15 100644
+> > --- a/include/trace/events/sched.h
+> > +++ b/include/trace/events/sched.h
+> > @@ -735,6 +735,10 @@ DECLARE_TRACE(sched_update_nr_running_tp,
+> >  	TP_PROTO(struct rq *rq, int change),
+> >  	TP_ARGS(rq, change));
+> >  
+> > +DECLARE_TRACE(uclamp_update_tsk_tp,
+> > +	TP_PROTO(struct task_struct *tsk, int uclamp_id,  unsigned int value),
+> > +	TP_ARGS(tsk, uclamp_id, value));
+> > +
+> >  #endif /* _TRACE_SCHED_H */
+> >  
+> >  /* This part must be outside protection */
+> > diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> > index 944c3ae39861..7b9b800ebb6c 100644
+> > --- a/kernel/sched/core.c
+> > +++ b/kernel/sched/core.c
+> > @@ -114,6 +114,7 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(sched_overutilized_tp);
+> >  EXPORT_TRACEPOINT_SYMBOL_GPL(sched_util_est_cfs_tp);
+> >  EXPORT_TRACEPOINT_SYMBOL_GPL(sched_util_est_se_tp);
+> >  EXPORT_TRACEPOINT_SYMBOL_GPL(sched_update_nr_running_tp);
+> > +EXPORT_TRACEPOINT_SYMBOL_GPL(uclamp_update_tsk_tp);
+> >  
+> >  DEFINE_PER_CPU_SHARED_ALIGNED(struct rq, runqueues);
+> >  
+> > @@ -1956,12 +1957,16 @@ static void __setscheduler_uclamp(struct task_struct *p,
+> >  	    attr->sched_util_min != -1) {
+> >  		uclamp_se_set(&p->uclamp_req[UCLAMP_MIN],
+> >  			      attr->sched_util_min, true);
+> > +		trace_uclamp_update_tsk_tp(p, UCLAMP_MIN,
+> > +					   attr->sched_util_min);
+> >  	}
+> >  
+> >  	if (attr->sched_flags & SCHED_FLAG_UTIL_CLAMP_MAX &&
+> >  	    attr->sched_util_max != -1) {
+> >  		uclamp_se_set(&p->uclamp_req[UCLAMP_MAX],
+> >  			      attr->sched_util_max, true);
+> > +		trace_uclamp_update_tsk_tp(p, UCLAMP_MAX,
+> > +					   attr->sched_util_max);
+> >  	}
+> >  }
+> >  
+> > -- 
+> > 2.25.1
+> > 
 
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
