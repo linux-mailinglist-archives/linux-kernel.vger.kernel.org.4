@@ -2,89 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0824738D86
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:46:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4891738D8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbjFURqR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 13:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49154 "EHLO
+        id S231329AbjFURqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 13:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230231AbjFURqP (ORCPT
+        with ESMTP id S229717AbjFURqd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 13:46:15 -0400
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55641BC;
-        Wed, 21 Jun 2023 10:46:13 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-94ea38c90ccso180735166b.1;
-        Wed, 21 Jun 2023 10:46:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687369572; x=1689961572;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0DU0/sapO1YMhK1JPNASXgMnNdqT8+KgHL8xl7AnUtc=;
-        b=jTpNM6ZL6Fanh7BZftik8aXcl871m+j8eIGvfulUC67Vm+I1np3gjYi/nNDiYsJrDI
-         PZ1fOMfk2wnMKlbjrC7JVqwmo94K3lROtoVKj2z8FJiyIPHMYuB3n6g7CUET8VEE+fUp
-         CBMKAUyXvc6YkkLkspSmZCnxBX4/CekaAofWMDtmjAnn6s66QTBLdvQgFm87KXuKOQn5
-         mzpFS5mCqA1kaNJox9J12HgUP+BJxbqpARTpWXEG+BQ7sCiBeMIG/+zx2zZLHh5CNzha
-         bbu3JtZezdCNOJqUp8NUwQABC8h3q6ZaNCGjMvN7y5sWwYcbZCQE2F9kDJ7P1fZgZ5xX
-         ip3A==
-X-Gm-Message-State: AC+VfDzjGKp7qNY08bnG/NI5CLDQVMZEgF7oUA4B/qKIImuJuMDX8b9w
-        YS50SRjARQwcwtqu7AFqI2he7CxtxwO3//sRucfnGEd/
-X-Google-Smtp-Source: ACHHUZ7CsZfd+CGV1Ou+TL6ngpL5WVqDOdkw9/sKagHoOTlxTOIa8ma7r2vWgYT+kR+ltLnMe6RpuaZQ6nYoUpXDDEQ=
-X-Received: by 2002:a17:906:4e:b0:987:6960:36cb with SMTP id
- 14-20020a170906004e00b00987696036cbmr10453604ejg.6.1687369572030; Wed, 21 Jun
- 2023 10:46:12 -0700 (PDT)
+        Wed, 21 Jun 2023 13:46:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C9B1BDF;
+        Wed, 21 Jun 2023 10:46:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D163C60FFA;
+        Wed, 21 Jun 2023 17:46:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F718C433C8;
+        Wed, 21 Jun 2023 17:46:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687369588;
+        bh=rTVtvaUBO4z3cuonHHr5lxCE9f6EkiuFLQwsHlt5v4s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iqw1oQmaLbVt5jRzb2yOcPrvwkMyXcSXitr+ykMirpGBfjOebyxml4t4HTVdfXb9s
+         yMZnM2soMSsqGCd2yt7Nt3A2uzebZzj83onUa3SNTb9OMKjiQQCMp2qXT9hydb7SMu
+         CV2I4K0VrO1jIJIcIoje6E7plJoIPxKbakdBLiHDVhVXFk0viv79Yxap0vEMfw3BBX
+         t+C7ycMmW1k5K6NEwz1AyEmi+gNrKvT8k1STWKpjZi63IR6YU1cda556ueAZ55r9um
+         iSVqE7QOywQ8CpBbHomTmTG/5rDkSnrgYkLmEho2/c845QwqFdnSfsOf0dt54QYAyX
+         VG+lbTy+kXPmA==
+Date:   Wed, 21 Jun 2023 18:46:23 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] mfd: stmpe: Fix a corner case in stmpe_probe()
+Message-ID: <20230621174623.GP10378@google.com>
+References: <8de3aaf297931d655b9ad6aed548f4de8b85425a.1686998575.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-References: <20230620094519.15300-1-yuehaibing@huawei.com>
-In-Reply-To: <20230620094519.15300-1-yuehaibing@huawei.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 21 Jun 2023 19:46:01 +0200
-Message-ID: <CAJZ5v0gAsds--SYOU4EA0UPdq3TvYkHw84dKSoJx3O3MO0Me_Q@mail.gmail.com>
-Subject: Re: [PATCH -next] x86/acpi: Remove unused extern declaration acpi_copy_wakeup_routine()
-To:     YueHaibing <yuehaibing@huawei.com>
-Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <8de3aaf297931d655b9ad6aed548f4de8b85425a.1686998575.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 11:45 AM YueHaibing <yuehaibing@huawei.com> wrote:
->
-> This is now unused, so can be removed.
->
-> Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+On Sat, 17 Jun 2023, Christophe JAILLET wrote:
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
+> In stmpe_probe(), if some regulator_enable() calls fail, probing continues
+> and there is only a dev_warn().
+> 
+> So, if stmpe_probe() is called the regulator may not be enabled. It is
+> cleaner to test it before calling regulator_disable() in the remove
+> function.
+> 
+> Fixes: 9c9e321455fb ("mfd: stmpe: add optional regulators")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 > ---
->  arch/x86/kernel/acpi/sleep.h | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/arch/x86/kernel/acpi/sleep.h b/arch/x86/kernel/acpi/sleep.h
-> index 171a40c74db6..054c15a2f860 100644
-> --- a/arch/x86/kernel/acpi/sleep.h
-> +++ b/arch/x86/kernel/acpi/sleep.h
-> @@ -12,7 +12,6 @@ extern int wakeup_pmode_return;
->
->  extern u8 wake_sleep_flags;
->
-> -extern unsigned long acpi_copy_wakeup_routine(unsigned long);
->  extern void wakeup_long64(void);
->
->  extern void do_suspend_lowlevel(void);
-> --
-> 2.34.1
->
+>  drivers/mfd/stmpe.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+
+Applied, thanks
+
+-- 
+Lee Jones [李琼斯]
