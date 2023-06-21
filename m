@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBC1A737B78
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:39:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BA1737B71
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230497AbjFUGhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 02:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
+        id S230502AbjFUGhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 02:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230367AbjFUGgY (ORCPT
+        with ESMTP id S230440AbjFUGgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 02:36:24 -0400
+        Wed, 21 Jun 2023 02:36:47 -0400
 Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF2C173F
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:35:47 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-5196a728d90so7248773a12.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:35:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BCBC19A8
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:36:03 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-519608ddbf7so5771402a12.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:36:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687329346; x=1689921346;
+        d=linaro.org; s=google; t=1687329361; x=1689921361;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=TBtUPCGAEPqgP2wnbS7IOunwA2YiB6sHP58rxfnARBU=;
-        b=iwRmwYAzjTB875SQ/kRpszCaNts2yMoTHvkh9s0vK6iwyneD7d8yz0vPSolFsjIE6f
-         kFLi0SY8LASyHKAEESOCnUKLan1kNLEYBGJYKAxkCdMFmOKvUc5HrWMeuziKlhtoHzm6
-         BKU1wkotTSYLYuxpb5nnhDhIglIy+IA7bBDFWvoC+11rPK3qQgTXnjokU652QvcN0idJ
-         9cGQg2UIgeLAuSRiA5a830ojbcaRThGCG8Gva/2TyuXPWOtr/0SD/rzpOTkLirf1oN3V
-         bhgv5bIvgJsAimJ5Ymo5ggKNrSFPwfZsoNVe5oQPuI4/w14DIzL4AyLIMsdIX2z4Arns
-         ahIA==
+        bh=jRlpT2ZjWTZf4vObyFscyBSIYEr3x4f8eXN+TysCtu0=;
+        b=cMmml8S0CDrUJhGDifxZHXNNnhIohUi89oWNnyN4IIRT7g/UlHSkf0iNT6/Yx5pJir
+         KmuOC3KNhPnyQ9sA9iYvkK2CKnTtO7qKGB960SCmxgQRlwLrum3ihQfnCSmsLzCuLIKV
+         Jud/es3W7zIvurh7lMN/77iGlNxQHFYplci+gm/gmCOPUHhmHlihnO7gUiP6xFSgXBEm
+         kcrH8jnsMu0BNkB9B+XsI1ILnYo7T66nCBZPZf21KMHc/qrHeoYnsPiA39wMqwqNf+Vo
+         Ctyva+cN+AuwGng33JaHSPpLClvTwMFjsrqqTcgMp9QqN34QZYb2Je+qARKNLGBh+tAJ
+         6YQQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687329346; x=1689921346;
+        d=1e100.net; s=20221208; t=1687329361; x=1689921361;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TBtUPCGAEPqgP2wnbS7IOunwA2YiB6sHP58rxfnARBU=;
-        b=AXq5pY2ITqqTQ3C9ip5ngRdd4XOu5YsQuo6Lh/9el3/H4Pt8P1ILu6EIFo09IBsH2q
-         YWc3MZKWYZLY3+rIg0Id1zRNgGb59kMw4rXn/+arEpzT2nNZXnHS9NDB5oQLcjG3/h4o
-         ySJhbK0VSUgsUY9VS6tTZwfVZuLMMV1Kwls7JydQSqjhz9ySbl2JUehaITwGB6fsOtop
-         rHNdKGSOpDFPQfb7NswPXIL2YWbdLCuuAb1d85JOF5cb0+iBr28+IBzUhyhqLqAtfoHV
-         QZh2vQqIxjO5cDhyrESwOZITO/Cqf0gjynL5U05/3nF8HtvT2skjrVh96na1Fpm1y04W
-         +Bgw==
-X-Gm-Message-State: AC+VfDyQelOwPpHGHxj0HHkPlekEh5m0rEosmoSaHVLu44+39+EOhc9E
-        p1qD68YXIfZ0BKYI8utTJzK4hQ==
-X-Google-Smtp-Source: ACHHUZ56k6K+LjMGmAXaNkPdn36c6LtNKoR3pnmcKIBBUIePrvOnsXJvC9WonrWnlT4BSUD9NQhfag==
-X-Received: by 2002:a05:6402:64a:b0:510:f462:fc47 with SMTP id u10-20020a056402064a00b00510f462fc47mr10362174edx.7.1687329346218;
-        Tue, 20 Jun 2023 23:35:46 -0700 (PDT)
+        bh=jRlpT2ZjWTZf4vObyFscyBSIYEr3x4f8eXN+TysCtu0=;
+        b=EUR77dWicScT4baCP0j8tKr1ksDwd4yYaLcZJMXIIT5Iorqerx3yWkTffMvPs9YUJf
+         PI7hiIz8gRxsloQFyIWg8EbuK7xzBf7uxF8+aUCcpWth+OG0otTTATsqIBP5v50pYq4Q
+         rRSfuTwsdGeTzi/WH/FuMdSPWdaSOVFgEMkEsYCe/pNjv0eHQ+eawbgo9SlH4AyTUDBq
+         Rg8l5rlMEfSv7OjjRS7pXyYVm6Blizbuu+Y/KTxF/OuppQ6ysiXD5JIETbmePVwdco+Q
+         VhPNwIgEhE91+HwKah1QX/CVfXlu1hAd339c46gzFQPPy0SAsvNX28TQ5nUS2C0vHomi
+         /jDw==
+X-Gm-Message-State: AC+VfDyHzLLljKLNu/YinrAvz6CXXzAj3nc8QGFM9LTEE+9W8oI0+c9S
+        XlnHq9g8lX88mzFubUCvsJCmfQ==
+X-Google-Smtp-Source: ACHHUZ6xWHPDs4cTYGHF/JSBAq092fD4iL8GXH9ODBCLlPbn7CwSyTwWempgEaV0BTZJ3X+E6jaZbg==
+X-Received: by 2002:a50:e604:0:b0:51a:2167:6a70 with SMTP id y4-20020a50e604000000b0051a21676a70mr9219479edm.12.1687329361483;
+        Tue, 20 Jun 2023 23:36:01 -0700 (PDT)
 Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id c17-20020a056402121100b005158563be4asm2119097edw.33.2023.06.20.23.35.44
+        by smtp.gmail.com with ESMTPSA id i13-20020a170906090d00b00977d3fb2a7dsm2549992ejd.76.2023.06.20.23.35.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Jun 2023 23:35:45 -0700 (PDT)
-Message-ID: <e24bdb45-4a30-7358-17ec-9788942cb28b@linaro.org>
-Date:   Wed, 21 Jun 2023 08:35:43 +0200
+        Tue, 20 Jun 2023 23:36:00 -0700 (PDT)
+Message-ID: <8f393aa5-2102-1d5d-0ac2-38e87c056b6d@linaro.org>
+Date:   Wed, 21 Jun 2023 08:35:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v4 04/14] dt-bindings: display: mediatek: padding: Add
- MT8188
+Subject: Re: [PATCH v4 06/14] dt-bindings: reset: mt8188: Add VDOSYS reset
+ control bits
 Content-Language: en-US
 To:     Hsiao Chien Sung <shawn.sung@mediatek.com>,
         AngeloGioacchino Del Regno 
@@ -73,15 +73,15 @@ Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Nancy Lin <nancy.lin@mediatek.com>,
         Jason-JH Lin <jason-jh.lin@mediatek.com>
 References: <20230621031938.5884-1-shawn.sung@mediatek.com>
- <20230621031938.5884-5-shawn.sung@mediatek.com>
+ <20230621031938.5884-7-shawn.sung@mediatek.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230621031938.5884-5-shawn.sung@mediatek.com>
+In-Reply-To: <20230621031938.5884-7-shawn.sung@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,28 +89,13 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 21/06/2023 05:19, Hsiao Chien Sung wrote:
-> Padding is a new hardware module on MediaTek MT8188,
-> add dt-bindings for it.
+> Add MT8188 VDOSYS0 and VDOSYS1 reset control bits.
 > 
 > Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
----
-
-This is an automated instruction, just in case, because many review tags
-are being ignored. If you do not know the process, here is a short
-explanation:
-
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions, under or above your Signed-off-by tag. Tools like b4 can help
-here. However, there's no need to repost patches *only* to add the tags.
-The upstream maintainer will do that for acks received on the version
-they apply.
-
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
