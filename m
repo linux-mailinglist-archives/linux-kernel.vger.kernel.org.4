@@ -2,111 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4072D739236
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 00:06:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C720D739238
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 00:06:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbjFUWGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 18:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
+        id S230201AbjFUWGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 18:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjFUWF5 (ORCPT
+        with ESMTP id S229479AbjFUWGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 18:05:57 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B4110CE;
-        Wed, 21 Jun 2023 15:05:56 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-77e35128efdso172507439f.1;
-        Wed, 21 Jun 2023 15:05:56 -0700 (PDT)
+        Wed, 21 Jun 2023 18:06:31 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A9F10CE
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 15:06:31 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6b58e439696so2568303a34.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 15:06:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687385156; x=1689977156;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=1hF4dAVFDAMGVp+Y09Z0Lab7Zc0WkcRinzpiiIGzUs8=;
-        b=RZdjBlnOJEvcG/Y3K8ZI01UT3N8hTQc0Aji+3t3Grs+Dsmzfht3GhgkQlFcD8jfsam
-         AisAu6MjUUbU3jpCdeVAauA08WKcAcUV7p6EFewLB2//fOPqs+/Z/YUtljoYjjIIiQAw
-         +1rGGe623UT6BFJ+1a7YHmiq/aKiGjOA39T99EViEOCZFstoq4P2px4wRV+c3tz3FxUH
-         0pHH8v2tqL5gCM2c2wcQginKgPGEZrSqS+dGyOrMsg8c12ZHEZOI6UBsNWtDsZshr11u
-         zo17IG7VjsfNtmdng/OrwsFaXGG89YiZ8d4VwHgekk2faJbd2xRi/L7K7qQRGeN/WEEy
-         o3qA==
+        d=gmail.com; s=20221208; t=1687385190; x=1689977190;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JK0VrOChNls2gnXAPFXNlAkcfaLHX3qumvUvMuZb8fQ=;
+        b=HBT7aNvQ9/0lOZBGTU/aMMtPfSpX+gUV4x1qNSU/y1cNhwhauphSbs0iFmIfoJZE0T
+         6sbuM1r9v5WAemGBX2UyyEAavocyO0wdp2G0bRBtzXp3X3stQzvqGUHydBmiVBP5ZBRQ
+         EFXcpSWNo30kWz2nwG8H++kcRJgqTZd3bkaYiJ6d802ovuXEKhJ8g1Jk5DIg4ZO7GwYV
+         xBDn/BYWSfDAwZnUfM4mS07iQdqnNScE/vcpiqYuM3UltJfGUYP3Zao84EYgXTV0wiH0
+         0MGyp58MfUtTVdz3iAGkwoHHT2q5lX0utM/ycEV5IHgI5nC3614rZh3TDctMyxAGrXjA
+         odNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687385156; x=1689977156;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1687385190; x=1689977190;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=1hF4dAVFDAMGVp+Y09Z0Lab7Zc0WkcRinzpiiIGzUs8=;
-        b=HemjCS0tOxlYjiVYL89DD0waJqFFzlLI2DTnV/wsESd++rYxCtLwbYkggxad6+qaNT
-         4a53t/NanOmPJZXn6WwfvmPWLEzLAHSoi50idoMV8e/1PQRqByYdbtGebYTjEP2MBlDn
-         VCWhRW6EdZEzx3+srRW/VZjaXOUQ3iyIOAUxh7vQb38s6qLVoAUHLEUSvfaRCHAgnbqv
-         JUtpobmKjT4JvK+amx/A8G59oBes/ALCclfLOOTnxPGR7tUSuvOBJnVMniDTDkQRGxUu
-         SLrXCpzE/+yTFwi0W9fULFkTNpN/3soS0zWqntv6p4g1rs/OsyDisC1qfwV/G9pZyY6n
-         yQDw==
-X-Gm-Message-State: AC+VfDxJUcLHZxy8NIFg2GBYSJLHI0OltGYA1fxZK3lZOfMByy3umNK5
-        JVPaI7WymNwtLnGcDEBknP4=
-X-Google-Smtp-Source: ACHHUZ69YNtNMlokXWSO/cXDMLi+cdvtjD6xUPfPaaFUQhKdkT1i7Gbu53870ovv6kUWF9kcRY49yQ==
-X-Received: by 2002:a5e:880b:0:b0:774:7a6d:8760 with SMTP id l11-20020a5e880b000000b007747a6d8760mr8205170ioj.17.1687385155964;
-        Wed, 21 Jun 2023 15:05:55 -0700 (PDT)
-Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
-        by smtp.gmail.com with ESMTPSA id f7-20020a056638022700b0042880470872sm253859jaq.126.2023.06.21.15.05.55
+        bh=JK0VrOChNls2gnXAPFXNlAkcfaLHX3qumvUvMuZb8fQ=;
+        b=BCjHOLf5hpuS7sBaqcmn1Ox7yLI6QluOrIEh68CRUMwX2XSwIuRmjgMVVNUDVKWXCX
+         ijH9R/xR3ySNHCVp8d6ycZSq+uY1jJ1V1ALqpoMZw3Ftf3FQm/yfSe8fPDmDoBX/0zIm
+         IaNaErL+QrJ9FtCCYdC2qwyNh1RT+d2lHwkeRaWPeJc5Y6iMVsygLHCrw+1yGVPb8oy0
+         sMYNSoZa29V+2FbwAbI00o1D3xaaVBZocPuiK+DEtD+eroUIuUiVmGOnBxa6bbh9na3W
+         7bdRkveE4WUfcisY0Gr+wEtQNfI68WNe4dA7YmHFzStvH0Vsj2nc0g+xUdpIfhxbkzev
+         UyIg==
+X-Gm-Message-State: AC+VfDwO9mDfE1aEuFY/t/ykdCeFKmkajv73xdQPJ0izO/xyZij+Giny
+        1g72u6mMM0MUPC1lL9+iJgQ=
+X-Google-Smtp-Source: ACHHUZ6h3GpYT62+BblCthS6pKiZlBs3ZJNxN8ROaGRwulVHq+v+K7zceKJauT9/jXHC1ihF4HUPEw==
+X-Received: by 2002:a9d:6a54:0:b0:6b5:e151:baec with SMTP id h20-20020a9d6a54000000b006b5e151baecmr1423495otn.14.1687385190363;
+        Wed, 21 Jun 2023 15:06:30 -0700 (PDT)
+Received: from smeagol.fibertel.com.ar ([201.235.4.68])
+        by smtp.gmail.com with ESMTPSA id v7-20020a9d7d07000000b006af8b60e2c3sm2288987otn.74.2023.06.21.15.06.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 15:05:55 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 21 Jun 2023 12:05:53 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org
-Subject: [GIT PULL] cgroup: Fixes for v6.4-rc7
-Message-ID: <ZJN0Qa--_aBSJ_K3@slm.duckdns.org>
+        Wed, 21 Jun 2023 15:06:29 -0700 (PDT)
+From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>
+To:     maarten.lankhorst@linux.intel.com
+Cc:     mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
+        <samsagax@gmail.com>
+Subject: [PATCH 0/3] drm: panel-orientation-quirks: Add some quirks for 
+Date:   Wed, 21 Jun 2023 19:06:12 -0300
+Message-ID: <20230621220615.1253571-1-samsagax@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 5647e53f7856bb39dae781fe26aa65a699e2fc9f:
+Add quirks for AYA NEO devices:
+- 2
+- GEEK
+- Founder
 
-  cgroup: Documentation: Clarify usage of memory limits (2023-06-05 14:08:12 -1000)
+The quirks have been tested by the JELOS team that has been patching their
+own kernel for a while now and confirmed by users in the AYA NEO and
+ChimeraOS discord servers.
 
-are available in the Git repository at:
+Joaquín Ignacio Aramendía (3):
+  drm: panel-orientation-quirks: Add quirk for AYA NEO 2 model
+  drm: panel-orientation-quirks: Add quirk for AYA NEO Founder edition
+  drm: panel-orientation-quirks: Add quirk for AYA NEO GEEK
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git/ cgroup-for-6.4-rc7-fixes
-
-for you to fetch changes up to 6f363f5aa845561f7ea496d8b1175e3204470486:
-
-  cgroup: Do not corrupt task iteration when rebinding subsystem (2023-06-12 07:21:57 -1000)
-
-----------------------------------------------------------------
-cgroup: Fixes for v6.4-rc7
-
-It's late but here are two bug fixes. Both fix problems which can be severe
-but are very confined in scope. The risk to most use cases should be
-minimal.
-
-* Fix for an old bug which triggers if a cgroup subsystem is remounted to a
-  different hierarchy while someone is reading its cgroup.procs/tasks file.
-  The risk is pretty low given how seldom cgroup subsystems are moved across
-  hierarchies.
-
-* We moved cpus_read_lock() outside of cgroup internal locks a while ago but
-  forgot to update the legacy_freezer leading to lockdep triggers. Fixed.
-
-----------------------------------------------------------------
-Tetsuo Handa (1):
-      cgroup,freezer: hold cpu_hotplug_lock before freezer_mutex in freezer_css_{online,offline}()
-
-Xiu Jianfeng (1):
-      cgroup: Do not corrupt task iteration when rebinding subsystem
-
- kernel/cgroup/cgroup.c         | 20 +++++++++++++++++---
- kernel/cgroup/legacy_freezer.c |  8 ++++++--
- 2 files changed, 23 insertions(+), 5 deletions(-)
+ drivers/gpu/drm/drm_panel_orientation_quirks.c | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
 -- 
-tejun
+2.41.0
+
