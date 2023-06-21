@@ -2,87 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947D6738F61
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26050738F62
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbjFUTAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 15:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43496 "EHLO
+        id S231394AbjFUTA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 15:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjFUTAX (ORCPT
+        with ESMTP id S229549AbjFUTAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 15:00:23 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F85F10F6;
-        Wed, 21 Jun 2023 12:00:20 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-77e250985b5so201622339f.3;
-        Wed, 21 Jun 2023 12:00:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687374019; x=1689966019;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zkWc31QshB/LMbmy/U7IMxynfJvynM10dLnhD7VuGr0=;
-        b=hn4FLYsX9n/TfMXBqz5KHMRnQQPS9PO99wDb/S2cBdELnBET33B1yuvsV2X+R132Rl
-         kS5U4v/nsxmTZBpS1ZlzPJ/V4eRwgZJ6gtt6FgjrgmdEcu5e9Qvlqt6p4E+sD6SXx0Hb
-         Ds+wqYyxr7boTwr92KQQhIIlbp5oL4p4DAhTWGbrxkxfCUA0k/MVgftuJwyg0Xym2EBA
-         XuLptxf8aH2v70DL98tpcQPRtfWoiHvEAkR0cAxTVvYlAVtkmhotPvZgAx2yPksVa9Nf
-         zcC07SWEstZU5sQwiXngm8kNsVhHn0yBSMA4riraUtHDnbFn4Vfofe70985kCFS4Nw9g
-         jr6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687374019; x=1689966019;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zkWc31QshB/LMbmy/U7IMxynfJvynM10dLnhD7VuGr0=;
-        b=A+z5NUgLXdS3J/rzrpDDsCfTpCPKoUD0zLOmaRfQ7PTagpVHfd7HZoism9PFYQFZt/
-         feLX5azheH7WimGfDWkowStKpKTmj8n6xnqSHyjmbTB0q0IlBCWLkc3gdTwuD/gtQIwL
-         vwfRgsFlHZSl4VUod3iGzbi9oKQjgEhkmEg2ZF40FdznGxVmEVNPWlBaUxB5S/czZwNv
-         TcjppyME5jJFPAfqj1kxyW9bvN1n4Iq2zxjPoncyypISOlF9P4RfYcARdqYATi7cjRG1
-         gPsc8FqsbXexYFH3mIc/3JwrkW3i47xL5zXquGFXtT65D19PX3DxO8VUyMYl8FqoK2lk
-         aSmA==
-X-Gm-Message-State: AC+VfDwJCRDdLzZYSnHYbuPawW6b8YfaNfqPk/Z6qfAH4RQntsSXGiEI
-        0ek6bPYGDC4pfP8vZWE+kMM=
-X-Google-Smtp-Source: ACHHUZ4C+WZLOdIkd4iXADxJa2TEfGroDORO8/2DKhupg1HNaJ8ZeYueLixsYugeAi8pjGSpYUpwVg==
-X-Received: by 2002:a6b:f61a:0:b0:77e:288d:f3c1 with SMTP id n26-20020a6bf61a000000b0077e288df3c1mr12153678ioh.6.1687374018812;
-        Wed, 21 Jun 2023 12:00:18 -0700 (PDT)
-Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
-        by smtp.gmail.com with ESMTPSA id g12-20020a05663811cc00b0040fbb3bd38csm1484826jas.145.2023.06.21.12.00.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 12:00:18 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 21 Jun 2023 09:00:16 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     hannes@cmpxchg.org, lizefan.x@bytedance.com,
-        cgroups@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cgroup: remove obsolete comment on cgroup_on_dfl()
-Message-ID: <ZJNIwAJDibFthvwp@slm.duckdns.org>
-References: <20230617074809.1929778-1-linmiaohe@huawei.com>
+        Wed, 21 Jun 2023 15:00:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B5B2B4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 12:00:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27EE0616A2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 19:00:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B382C433C9;
+        Wed, 21 Jun 2023 19:00:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687374053;
+        bh=wCtBx+btmEgXd4oHrHrBecjQgIOZOa4Ob05hmny7ong=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UD6zMebW8v4rlI15uda5rm5vBtPpQemAWU+RHv65YDQt5kS8uIvAdhIdZqXWeSm8a
+         RvZa57VSMtudntxVd5mpTTJQZy96QRxiQO8GyGlQ71NpaVjC3HERMHV3Mke/Brss1D
+         GF3CI/rbBQcc3dRiQ/LYX+Dwqz35FsqitIMNPm5h+2N8nl2a2nWxPBAx5PKH/IEZXq
+         s4HsH6tvowvJzzj2TsCRxvi3N7UOcl5ux6sEAWCX9jN67KFAGN7rPt0jLwSM0J0JQ+
+         S99CwpbpB69iEm510ZVFbOGuFn22dlQBGalESET3gvsAqWGQMih8KwTSusRlBbKHBw
+         T5AA8uIDjDUYw==
+From:   Conor Dooley <conor@kernel.org>
+To:     linux-riscv@lists.infradead.org
+Cc:     conor@kernel.org, Conor Dooley <conor.dooley@microchip.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1] RISC-V: make ARCH_THEAD preclude XIP_KERNEL
+Date:   Wed, 21 Jun 2023 20:00:31 +0100
+Message-Id: <20230621-panorama-stuffing-f24b26546972@spud>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230617074809.1929778-1-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1448; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=DKC0lvBVjPZAhDU4YTCtHGJdKRYVtZU6wqvi6iUcYRc=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCmTPc78tOsQ3d+/6qTti7LOoA1PpzP7rrzHtIj3ZVPt/ 8Ozd1+O6ihlYRDjYJAVU2RJvN3XIrX+j8sO5563MHNYmUCGMHBxCsBEtFoZGa5YvXy+b8adD3G2 /ntunuGLW8ay6d52hVV7FTbZHz5+w8CPkeFB4rPzaXOFF10MW83VwJ7geDK0sk7MV+GUsvGKf+e 8p/EDAA==
+X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 03:48:09PM +0800, Miaohe Lin wrote:
-> The debug feature is supported since commit 8cc38fa7fa31 ("cgroup: make
-> debug an implicit controller on cgroup2"), update corresponding comment.
-> 
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+From: Conor Dooley <conor.dooley@microchip.com>
 
-Applied to cgroup/for-6.5.
+Randy reported build errors in linux-next where XIP_KERNEL was enabled.
+ARCH_THEAD requires alternatives to support the non-standard ISA
+extensions used by the THEAD cores, which are mutually exclusive with
+XIP kernels. Clone the dependency list from the Allwinner entry, since
+Allwinner's D1 uses T-Head cores with the same non-standard extensions.
 
-thanks.
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+Link: https://lore.kernel.org/all/ab38f6af-cb68-a918-1a63-2e7c927a8ffc@infradead.org/
+Fixes: da47ce003963 ("riscv: Add the T-HEAD SoC family Kconfig option")
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+CC: Paul Walmsley <paul.walmsley@sifive.com>
+CC: Palmer Dabbelt <palmer@dabbelt.com>
+CC: Albert Ou <aou@eecs.berkeley.edu>
+CC: Jisheng Zhang <jszhang@kernel.org>
+CC: linux-riscv@lists.infradead.org
+CC: linux-kernel@vger.kernel.org
+---
+ arch/riscv/Kconfig.socs | 1 +
+ 1 file changed, 1 insertion(+)
 
+diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+index ce10a38dff37..6833d01e2e70 100644
+--- a/arch/riscv/Kconfig.socs
++++ b/arch/riscv/Kconfig.socs
+@@ -43,6 +43,7 @@ config ARCH_SUNXI
+ 
+ config ARCH_THEAD
+ 	bool "T-HEAD RISC-V SoCs"
++	depends on MMU && !XIP_KERNEL
+ 	select ERRATA_THEAD
+ 	help
+ 	  This enables support for the RISC-V based T-HEAD SoCs.
 -- 
-tejun
+2.39.2
+
