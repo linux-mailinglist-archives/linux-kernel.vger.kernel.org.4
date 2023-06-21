@@ -2,108 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D166273842E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 429A173842F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232108AbjFUM6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 08:58:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35852 "EHLO
+        id S232117AbjFUM6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 08:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbjFUM6G (ORCPT
+        with ESMTP id S232095AbjFUM6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 21 Jun 2023 08:58:06 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED4BE72;
-        Wed, 21 Jun 2023 05:58:04 -0700 (PDT)
-X-QQ-mid: bizesmtp78t1687352274tr2s7sp4
-Received: from linux-lab-host.localdomain ( [116.30.126.60])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 21 Jun 2023 20:57:53 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: QityeSR92A3lpCGQzuzSiXYnrZ4Ms2NBo4oH5dQTYOsceoGFTIPlmCJgRv0R+
-        s4uzXOz3pXCl4KJPtMgReBObXqC/ju+Gu/brbsuDexhdK9Eo3NLUmlAxcPg1BVViKeVcIjh
-        bjO8/XuAMPkegjfs4p8H9ey54mSrtIFLR0eN3N+By+bkUUMJuzawFdgH92uHSh2QaWb1yIZ
-        nRs7r8IZInAoySDLFF1ZIEPddk2qWQKDYPdLKJSyrFdZ06BmZ5jfYvB55JTN769R8m3eGVB
-        AT9eKVwW88mxy8H0m7WwLaFveZKY1sPCpddc4iXTPjzsPP/ZV8znhNgSY31/rGuKBTDvmIw
-        d9Zi+dJo6NCAkeQMLScWh2IoKVaa51OkOXOHPpkbTtDtG69mrS/8wdW42FXtw==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 8080205378424909828
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     thomas@t-8ch.de, arnd@arndb.de, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 04/17] selftests/nolibc: fix up kernel parameters support
-Date:   Wed, 21 Jun 2023 20:57:41 +0800
-Message-Id: <8e3e44492c986f691a778322e3eaf483e1734e90.1687344643.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687344643.git.falcon@tinylab.org>
-References: <cover.1687344643.git.falcon@tinylab.org>
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E67AAC
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:58:05 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A738E1EC0102;
+        Wed, 21 Jun 2023 14:58:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1687352283;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7hJ9dcznI0I185LOlDtXS/ROzArA4tI6hAX6eJusGfo=;
+        b=mhXE2icJ/fgNBPiYoK0gHOKeffbjEZaWKs0Rxy+IwOvffJ1qCsH7vs+RndyAC89WSGrq6a
+        jBvpnN/HfXpx6vTmNlaGAKzhP5McDSHx61x/Y4Pc0Zf6nSmNe9b7jVdN7QFhCdd5NNVnIV
+        jVrzm4gx/xuXeMG3/saxDKDcwZYeeZM=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=fail (4096-bit key)
+        reason="fail (body has been altered)" header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ifOziNYGLxQi; Wed, 21 Jun 2023 12:58:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1687352279; bh=K4Ml6x1DhwPXY+WicQKr2/XHlje1x1sU0WePdwyi3Ys=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Fku/XE4c8q5LsuT2fAFGeH258/jppZd+qFQNFWrMTZYsdGfBszDqUSy+99vIjn02D
+         6GdG9MQf1R33qUgo0ChJjlNJxtJmX/hBqUPC2W95hAyU8ahx9HQ/6At+cvBWGdievL
+         +VljSTnSizVQgRLgciafz67RHzznBUdQo94c4bfZwLUCAlkAVSPtxT52gboG7MzeAR
+         D38rrROIpGPM3fzKVQ1XM1F6ScgdYveqnoYXVw+747r4cWWSXudDy67BPCkdWVFDum
+         /9yu7CgZYneNnVC3AWTWr3RScgV2L7rn5D2GluxzbkTno5l3w8LbQC/ZUojAFvSEej
+         bC0mzwi17UUP8PVaLn7Qz9r8D8GodYPHn+kq1ybV532/2L/ui42xRVDWXm+KFgAUfL
+         x9sMDC8qzocY7nePnaGcljRP4bFpXiczidhg87ws6Qk3w1GXCJQaJBK/MAXIFkQc2o
+         c/yycuXQ521jdSgCPJZ5j5cBU7Qc/qYrKlHjpHlZ6ueZSTZFb2+0TkyPM5MhVtorZP
+         Bgr9MG18uudjb4cGcPHGh98lfGNmWG3Nv6eAyUxDJ1AWaGYxpUU7ZaGgTZ0OSyQ8k4
+         WLQ9jqbXcYucfHk79C9dcAp0h98+bL/ogqMeqz0OKpII87moaK/IxcJ16qLvZ9nvkX
+         0nrCodsCU8CDgY7x94KFcsmk=
+Received: from zn.tnic (p200300EA971Dc565329C23ffFeA6A903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c565:329c:23ff:fea6:a903])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id DC21740E0145;
+        Wed, 21 Jun 2023 12:57:54 +0000 (UTC)
+Date:   Wed, 21 Jun 2023 14:57:49 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Xi Ruoyao <xry111@xry111.site>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: A question about prefetchw detection in "x86/asm: Cleanup
+ prefetch primitives"
+Message-ID: <20230621125749.GGZJLzzUw0rA3goV1X@fat_crate.local>
+References: <0b663d8f6802e8dbf443397718234bcb6d0811c8.camel@xry111.site>
+ <20230621111346.GFZJLbavDw1JiLi34n@fat_crate.local>
+ <a155ebb791d3aefce5db32658e3c519a1cfac1f6.camel@xry111.site>
+ <e76180a1b82d1c29715587e94e2d6923b64bb893.camel@xry111.site>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e76180a1b82d1c29715587e94e2d6923b64bb893.camel@xry111.site>
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel parameters allow pass two types of strings, one type is like
-'noapic', another type is like 'panic=5', the first type is passed as
-arguments of the init program, the second type is passed as environment
-variables of the init program.
+On Wed, Jun 21, 2023 at 08:04:39PM +0800, Xi Ruoyao wrote:
+> Hmm, while it's true for AMD, the Intel SDM claims otherwise.  It says
+> prefetchw is only (really) supported with "Intel=C2=AE Core=E2=84=A2 M =
+processor
+> family; 5th Generation Intel=C2=AE Core=E2=84=A2 processor family, Inte=
+l Atom
+> processor based on Silvermont microarchitecture" or later.  On the
+> earlier Intel CPUs supporting LM, the prefetchw instruction is treated
+> as NOP.
 
-when users pass kernel parameters like this:
+And this is a problem because?
 
-    noapic NOLIBC_TEST=syscall
+--=20
+Regards/Gruss,
+    Boris.
 
-our nolibc-test program will ignore the NOLIBC_TEST environment
-variable.
-
-Let's verify the first type (from arguments), if it is invalid, get the
-test setting from NOLIBC_TEST environment variable instead.
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index d43116553288..ebec948ec808 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -951,6 +951,7 @@ int main(int argc, char **argv, char **envp)
- 	int ret = 0;
- 	int err;
- 	int idx;
-+	int len, valid = 0;
- 	char *test;
- 
- 	environ = envp;
-@@ -969,7 +970,19 @@ int main(int argc, char **argv, char **envp)
- 	 *    syscall:5-15[:.*],stdlib:8-10
- 	 */
- 	test = argv[1];
--	if (!test)
-+
-+	/* verify the test setting from argv[1] */
-+	if (test) {
-+		for (idx = 0; test_names[idx].name; idx++) {
-+			len = strlen(test_names[idx].name);
-+			if (strncmp(test, test_names[idx].name, len) == 0) {
-+				valid = 1;
-+				break;
-+			}
-+		}
-+	}
-+
-+	if (!valid)
- 		test = getenv("NOLIBC_TEST");
- 
- 	if (test) {
--- 
-2.25.1
-
+https://people.kernel.org/tglx/notes-about-netiquette
