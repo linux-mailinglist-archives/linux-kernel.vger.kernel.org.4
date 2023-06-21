@@ -2,274 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F90738CC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A65738CC1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230346AbjFURLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 13:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
+        id S230328AbjFURLD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 13:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjFURLi (ORCPT
+        with ESMTP id S229514AbjFURLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 13:11:38 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68AF129;
-        Wed, 21 Jun 2023 10:11:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687367497; x=1718903497;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=ouyyW1RWLlx0D/6B8cVMwnjeunonC+1tIEAPC3PI5cE=;
-  b=aXi4i72lUUQ6WFhq8rDVpPBNtfU1S0WclvUwRX6N2bfqhho0DXTJ/y+9
-   ehcWds4QuAMlOJuWiwfeuMCDeU4AVdtFnpcc5nZqMeX2OGc9xtMnVln9d
-   dUh2ngSAlk9xrnllBaVZo0xEZdsYEpF3hA+OQrLkNEOjnSsjVysKlDL9L
-   pM/z6OhpuQohbB2wWGPrsVefQr4KA/kXPKPaA/uHv6a8NgYZ9IkyQv2QA
-   7Wxn/h+NS6vaSO74qScEl6mNLKlmfePq6djwzUJA0fhdm3fwQY8LIQve6
-   AoVGrd+c5/JDbQBDCFK73xEgRM8Z9ukmc7IbSLU1ot8v8wPodk+LjtiSA
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="344977732"
-X-IronPort-AV: E=Sophos;i="6.00,261,1681196400"; 
-   d="scan'208";a="344977732"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 10:10:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="714580017"
-X-IronPort-AV: E=Sophos;i="6.00,261,1681196400"; 
-   d="scan'208";a="714580017"
-Received: from jarteaga-mobl1.amr.corp.intel.com (HELO vcostago-mobl3) ([10.212.165.203])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 10:10:28 -0700
-From:   Vinicius Costa Gomes <vinicius.gomes@intel.com>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com
-Cc:     linux-pci@vger.kernel.org,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] igc: Ignore AER reset when device is suspended
-In-Reply-To: <20230620123636.1854690-1-kai.heng.feng@canonical.com>
-References: <20230620123636.1854690-1-kai.heng.feng@canonical.com>
-Date:   Wed, 21 Jun 2023 10:10:27 -0700
-Message-ID: <87cz1ospvg.fsf@intel.com>
+        Wed, 21 Jun 2023 13:11:00 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F51184;
+        Wed, 21 Jun 2023 10:10:59 -0700 (PDT)
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LDAqAT010110;
+        Wed, 21 Jun 2023 17:10:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=E33sGTufE65zh3ZuiWmqJVbmotTWJUKkV+bbOLdraWA=;
+ b=Byjzpjt8lQxKTDUBQoBz9Y68WTcF6hQOrhhJXudVQTQiE/Z37TVVtQD2goSaKu2nNIcU
+ X10Xqul1UZRhM+gz1ZqL4I0+dbU1/clMcMyvT6rPBSyI4u5aPy5kpQN12cQR4p/j+gAU
+ k71vWe0BDwc8FtECD0YhChfT5TBN8Q62u5K0Hmni5dkHHqsGYBb6NCdyXKBPqbUj4jx8
+ fFS/COq7iiNT+ssCj7GjUgig/Ypi4I+q/T287DRDwb5TL2xXANlQkB783AKqj1te0l2Z
+ GOtr/efBN4luPErDoNb2aYI4gOyDXLAWkaueD3V7+g+S8iBBNukifWmYRSzteyXGUiUs 9Q== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r94vcr5a8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Jun 2023 17:10:38 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35LGQSAS005987;
+        Wed, 21 Jun 2023 17:10:38 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r93963pdm-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Jun 2023 17:10:38 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JfXhrZXlacWXn459J0jwjFGTrK9iJWX1yb4NDwlJKSxcsaiAJGMoaul/ybr1NU9evtkdZqmmq6o/dZH79+G4RBv2wss2/KPbun84rnJvnvt8iQSgRQcbIt58r3aXuK3dSIYQqjHM9pploOC++Q5xuuiWyUy3hLqg9VRSIdhXtORTGYsLC3qALWig1BetQhyS+udrE3GtN0yiUwEwC/zuYde1Va5RMpTyLS7IAquZE2MYGmjfUPc6bmgfUG1OQXfnW0/IIfKx0GAio7sytiOkmrZ40sdzaqFhiUEjUd8JrYJyLvaEvD+TiaMwYojeBt/LWiN+VJalFiG1Vg9bUnl7Iw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=E33sGTufE65zh3ZuiWmqJVbmotTWJUKkV+bbOLdraWA=;
+ b=igjml7X+GT98dVYGdgajFuD8ff8Q7lvTFwDttqrnWkaHUmU2gL2ICfySOEJGlHnyI0zMQ/uvZRuKy46EbfgZtG5KH6v9cFfYDPuMfOWwW+mhC3lB8oH2+mezWUUsSXFL3uSa1pp6ZhAHuumIyOQ8/bWby8xFJN27PgJTnvpAlq0ewb81WyEkC/U0zmw9lriwEwUh2k2vxBPkQ9IuM5qUjYubBUqHAPY9lF7ZIWoYQTJCa0HGaex5wtHFS8XSgBWY6ryNiAeGp5IE8gJtGTPDxcZGVruJl6or3i2NpusKtW6ub5jPKPd29cFV6OixZ5HV7bCsTzBY0G5ajgUEAiRuhQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=E33sGTufE65zh3ZuiWmqJVbmotTWJUKkV+bbOLdraWA=;
+ b=fZTPeS9H3kOy6bD8jtf4JdhSYmP8eEj2YycFmcPFNSNkYnM3yGpMH1tnPoncBF9Tbjj4QGWpXTzg2mWoQK9Puz47OTkW0uWrtVA2OOuXQnRa+/sZb+c54GjRCgmRNMEkStz1qLMso8J5ayPgiINQKG99okU1c6g8kxXIsD2e99s=
+Received: from MW5PR10MB5738.namprd10.prod.outlook.com (2603:10b6:303:19b::14)
+ by PH0PR10MB4598.namprd10.prod.outlook.com (2603:10b6:510:34::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Wed, 21 Jun
+ 2023 17:10:35 +0000
+Received: from MW5PR10MB5738.namprd10.prod.outlook.com
+ ([fe80::9c17:d256:43b9:7e96]) by MW5PR10MB5738.namprd10.prod.outlook.com
+ ([fe80::9c17:d256:43b9:7e96%5]) with mapi id 15.20.6521.023; Wed, 21 Jun 2023
+ 17:10:35 +0000
+Message-ID: <76bb2e47-ce44-76ae-838e-53279047084d@oracle.com>
+Date:   Wed, 21 Jun 2023 12:10:31 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] perf vendor events arm64: Add AmpereOne core pmu events
+Content-Language: en-US
+To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org
+References: <20230427223220.1068356-1-ilkka@os.amperecomputing.com>
+From:   Dave Kleikamp <dave.kleikamp@oracle.com>
+In-Reply-To: <20230427223220.1068356-1-ilkka@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH2PR08CA0005.namprd08.prod.outlook.com
+ (2603:10b6:610:5a::15) To MW5PR10MB5738.namprd10.prod.outlook.com
+ (2603:10b6:303:19b::14)
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW5PR10MB5738:EE_|PH0PR10MB4598:EE_
+X-MS-Office365-Filtering-Correlation-Id: 23e3e11c-78f8-4188-aa71-08db727a6d7a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: LqstnlQTWohrK5ka4wgiU9pb7EZLTL60FnLxK7dkSUsLOPbJnReRp2fHZJKMw/A1qayc7NWtHCyZlBcNbXgLkGBAjEmH+Ny/dgimOyWIFuVYKfnOpGvqyUt8QdfDGUtEOQfkVJ0SC3GAkqK+xf16Uy8+aMAt3rEtudiWHWNUbMlKrSOUbwMNQU6e2HAq2PrepuN51r01yGydhOKNckmjw1b6j/SdtSoVFqj4K8yshHcRJbev/TrWkqPhGz0EOT1HY7+HYj+yD/7k5+eimPIS8vbtgn5FyvwRWaRoPMco2JySKcIxcX1mAsy/GUbzHIElSGJGoyfEwVD983tu1O9Z88dxwBR2CovgPGCC3G9g3Bde81ZnLtmVyG1Ul6D0lQwV9nHrfIR1yl74Z6iuckEwXQHTrmgL1/hD8EPSmlKTty9gDi3ep9kjrVLzzCvE0P7abZsRzPhEhMkAdajxmWKTs7j2FmoBMiIA59Qqc25hzfWSI900JcCelb3R9znNcDPSYFbvFM60djcHftLJN2rwWd/eRzd7hpMUOZjxX9FuFhrGeziUp9ASUYVHZd5D42SrRa/K62zGWFKlZDeJaHKIL7Mm8iXv3UbUJHzCATTFEkY9HT8RRYt/lNk+LikdFrrmu1G0NSXiL5eQVUV13x6jpg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR10MB5738.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(39860400002)(136003)(346002)(376002)(366004)(451199021)(478600001)(110136005)(6666004)(4326008)(54906003)(26005)(6506007)(6486002)(6512007)(2906002)(186003)(41300700001)(8936002)(66946007)(66476007)(8676002)(44832011)(5660300002)(7416002)(316002)(66556008)(38100700002)(36756003)(31696002)(86362001)(2616005)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bXVzb3hXdnJNT1ZaaU1mNEIyNGxMb1dnaG84eFpFbmg2TUVSYTU2VUEyeFox?=
+ =?utf-8?B?K1owSlNvQ0pCdFRLTjAxYkFnUG5xNzk4YUUzajkzMWFRWlBWNktDOTZDcTlt?=
+ =?utf-8?B?aytzRTBiYkRyakZCZXMyOU9QOThPbjhCWnNIcEtSZ0ptYnI2RFNxODFtdGFW?=
+ =?utf-8?B?ZHpNOXREM2NraU9vZ3Jja3kvbVRMTStqVEZrOUM1YkdKQlE3akdNV0hPU0hQ?=
+ =?utf-8?B?eVFCRStLOUVMbFBVMG1lZDA1MzJiWlBIdlRDVEJhaFl1WkdPejhKdG9Dc1FE?=
+ =?utf-8?B?WENNaHdkcm1GTUx5blg3RyttVmhxUkYxWmxhaVV3UDVxNVJuSFhLWlEwUDBv?=
+ =?utf-8?B?dFdKWnUrWTNxV0Ivb2hKUkZEM0NWLzhFc0xOTVR3QWVXQWxjUEVyWEtENG1Z?=
+ =?utf-8?B?cGtaeTlnN3VKRGowOXhmaHB2bmZyNzNPNTdoekRMWHBCSlVUb2pwQlJSWDhO?=
+ =?utf-8?B?Rjl5azhZMy9KWkNkRGJHUmZjWXJadkovZkpCL24zZzV3V0RGWjNJRXhjZ0J3?=
+ =?utf-8?B?Tk1OUUdyUGZFNmZ2c1YyWE90aCs1aFR2bmd5Z3IwNnFLRDVUNEJsM1N6WWdT?=
+ =?utf-8?B?SXB3dFZ4djA3NmFZMkFOa05UcmlvQkVSa00xVXlzRkF1dUZuU3VvSytiZHl0?=
+ =?utf-8?B?bUxzWkFMZjlScE1qbWFoMDdmaXp4L0JObGM0TFBRWS9lWjl1S1VPUkNJdGFG?=
+ =?utf-8?B?NlZvbHpNeVN0YzdvamNreFRhSGdzemF5ZGg1QWNkR3NrNmNLU0VVN1hmQ0FT?=
+ =?utf-8?B?VEJMVGw5ODM2RlBubkhFcWh2UFIrMDlRdWErc2twZkM0aXRYTEp0UU9iRUc3?=
+ =?utf-8?B?QnQ3UmtwdHpVYnlLbStnczRlUkV5M1B0S09HeWFFY204aEEyaHRSUUhJalhI?=
+ =?utf-8?B?ZmRiTDFuMzE4VkJPak9GWnc1aEhEYmI5M0RmT2FNdXZTY3VQRVlnVWJrQVJJ?=
+ =?utf-8?B?V2Vjc09vWjRGRWtaamtDOERYNXJ6ckJLKzRPeVFMenZSdkdSakxuSy9PZ2tN?=
+ =?utf-8?B?S1h2M0FkcTZLaDJxZTNzUEQ4eUxWS0ppL3FyNVBXR3ZlM3ZsejF6YXFGL1BW?=
+ =?utf-8?B?QUc4SG9tV3ptS1ltWVpvV0g4SFh4RktSdHZYWm1zOCtWbnN6TjhUZ2hFZ1kx?=
+ =?utf-8?B?VFlDbDExWExnM3JVRUY1WlUwR1J5VkZXVGJwTXM5TjNwM056bjlxaEJwRW0v?=
+ =?utf-8?B?U2UzRmFCckV6cXJZck5pcGtMZTdzQkRucFFCNmV1NVdFTmVjU01YYlVNK09H?=
+ =?utf-8?B?ei9HNE1WcmdpMTBCMTQ2eTUydHlkb2xSSE54dE5qbkIwUDc3eU9zNlltaEV5?=
+ =?utf-8?B?cEJ3ODZ0Y2dqNHFaay9LUmdEc3lxOXdXWXFNdXJVbE5IbVJ1SFlSdjd5Rys3?=
+ =?utf-8?B?YVVOVTdjSjdWUzQreno4UklRZUNLMW9tMURxMUxjRE9mUmtKUm9GNGNGeUNM?=
+ =?utf-8?B?WmV0WGZYTXRUdmgrS3UwMG1oRUM5ZGpQRVowUXlPMi9YUWZKTk02aCtES3hR?=
+ =?utf-8?B?a2xDakpiSWJvYUFQMWNwcUQ3V2dRTDhiaVRRVG5QU014ZWxRa1llV29CYWJp?=
+ =?utf-8?B?cyt1V3Q0bGI3aXNxczRNN0pHdzlhVXdDS2RVUjdSVzkycmxMeVR1cXU1MXFX?=
+ =?utf-8?B?SHdoYXAxdU4zaDBVSGFGTkxCL3Y0N29JNW5vWkUxWWRsTEtkbnMycmhHU05s?=
+ =?utf-8?B?cU8rR2JsNDBPMmhKM3phSkFyeVlOanE3K282MGJNU3ZtL0VsUmFoaWRNcVBh?=
+ =?utf-8?B?WUhOQ0lQNHJTZitENXRPVGY0cll4dm5iM1I4NWlhSUt5bXZRQ1FYckFmbndY?=
+ =?utf-8?B?clV1aFdkd3dxNnpWelFOZ0VWcFEycEs3ajRCRW9UZzUzTWZZdWx4M1BKdS9B?=
+ =?utf-8?B?RGVycTFhRU43YU9jcVlUOGQyMnN0bFc0LzZaV3NGRWVmaTFCV2lCTWppR2E4?=
+ =?utf-8?B?QlR4eS9pWTNDV3B5WmRKb3FxOTNVR2pGOGZZazRacGR3Rzg4S1VSZTc2RWo1?=
+ =?utf-8?B?RHFkTW9SMEIraUJKakFsQ0tmT3FjbHlyNi9UdkRWcFJHdHNnUlJGbzc3VlZR?=
+ =?utf-8?B?MzJETDFNT3NRck9CMmRnVjJkaDkzQktyR0JKOHRleFJtV3EwZEwyNVhhVmty?=
+ =?utf-8?B?ZUYxdkVla1hhbENKeUZBL0haUGJMN2tOZC9YcW00QjhYeWsveEVTYWJsS2tF?=
+ =?utf-8?B?UFE9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?OWZCZ0tJYkZQVTNQQkkzSFV4aDdIekJTRkNoSTRYelQ4WGZFUFU5TEY4dzdt?=
+ =?utf-8?B?MFhtUVFSU2hBUFpNLzJUUS9oR1Y1V0pWQitjOHJEeFNjOFdNY3FsNWxpZUxt?=
+ =?utf-8?B?SG9aTjJxdGl5dEF5eUJKMjZKMFdWMExkRThzSURQRzEzaEN3aUE4WC9BQlVF?=
+ =?utf-8?B?N2EyTkxCRDg5U3hIeURJR2FMOWFvelFHaTZPSkNOdHZLZEl1Yi8rUzRZZHZr?=
+ =?utf-8?B?a2JyQkxXTmtDNldqMnZhOFRmQ2VmOElMREw2QngvblJWTFBqL0J2SkhkT2lE?=
+ =?utf-8?B?aVN2dzY4eXFyODh1UklCQ0dnbnJheXlNSFZoUEJFb0JlOEZRa1Y3Z2U3QVZY?=
+ =?utf-8?B?TVY3d2M2TmhvK1E0Q3BMTWtyMlluTTJIdUIydFo5ZllESFdYenFzYTJvaFpS?=
+ =?utf-8?B?b0F2bGNkTlJCdE92Ty9VeElQczV0ZUZMaG1aWlF3aXpEZ3pHUEEva2tReU1i?=
+ =?utf-8?B?WXUzaW1wVU1UNnlnQ0oyVGQrQzZqM0VtWmRBR2hIUUN4NVJyaGpWZWlYczZm?=
+ =?utf-8?B?SEt1cFpxOTJyYk5qZFc3UTJzNUF1YXhCVDVKMDdxaWJGUEZiTmRnOVUzelBL?=
+ =?utf-8?B?RExVeHN3Nk84M2gyNnp1SDlaOExnVVE4STBvVlMrMTVlNmdIckxtYzdoWkFH?=
+ =?utf-8?B?U3VzQkJkaFI1K3VONTBlNFlVTGJHMjUrdkxwRk1ncHFlaHl5T1FVdEZsd0VE?=
+ =?utf-8?B?REtXdUdneFZYV09Sa3RIejlqWXBHNkhBdG9UZnNGb2tiYy90N3IwZjd4cWxy?=
+ =?utf-8?B?bUNyN25XZkRpQjJnemJ1UHU3NHVBWlVZV2JvaEFZVTV5RngvWE5WeEcvOGVD?=
+ =?utf-8?B?ZWRPN1AxQXRIY0xyOFh1V2QrYVRnRXlQT20wd250Wm02N2kvUmFsOWdyRHJP?=
+ =?utf-8?B?K1A4V2ZNTWpQU2hSYXptbWJZMG9aUy9LbWw2QWV5VEFFaXcwS25OMkFNaG9H?=
+ =?utf-8?B?dk5xWUkwRGJzNXF4dUdUbnNaWkh1OUJTaU5OdkxtaUEydGI5MzZhWjhwN0hW?=
+ =?utf-8?B?d0JmUHdKREZGWnRNRHNUeHhXYXVFOGFsNFpNV0xQYVlmWTJiVlhWOFRRaVFq?=
+ =?utf-8?B?Ym80b3MvU2IwVDZZQWo5ZGhIUFhrWmpsbU9ieHRIOTNqOXlDOFMrS1F3TmJq?=
+ =?utf-8?B?eDQrS3ZwOG1BOUJXMzdZejJ4bHFLRVlIcU9HYzFFcjVHcnd2UWwxNkNKSTNn?=
+ =?utf-8?B?em5Mb0RBckFTckgzNDhUa0JEYnRCM3JzN3FEeG9yVWRQNkJ2WThJMGlzWGQ2?=
+ =?utf-8?B?T3VvWnQwOVd4SkxvTjNZT00xOC96djMyN0ZOQlVPYnl6Qk45Nk5sNThVbXJu?=
+ =?utf-8?B?RVBCOG1tRGt1Z0lOamQyVUlVRTdEL2ZFMWtmcG5HekRuRHNHcGROd0w1Y2dm?=
+ =?utf-8?B?UUhOanp6K3NZQUhXOExxMjh6WXMvSzlLMXNJUDY2WjJCQlZzZ1pPczZDR2Q3?=
+ =?utf-8?B?U05iNGZPM29LMTNhSTM0N2U2YWtPbW1GeWJiVGszbUx6azV2UjgvdVZ5R1h6?=
+ =?utf-8?Q?qRvjvrvNJlycr8K446u4413JUW8?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 23e3e11c-78f8-4188-aa71-08db727a6d7a
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR10MB5738.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 17:10:35.4969
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Y9y+DXQ/JxsBYhmvro1VxyPaUr2neURm7lWG4vgN2QyVsy8VdePWI66kAb2g+OjPz6BSkmFvFNoPBoftVkXY5aWEfinokadte9n7gUuHR4c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4598
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-21_10,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
+ spamscore=0 bulkscore=0 malwarescore=0 phishscore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306210144
+X-Proofpoint-GUID: 1C_0rR0wUlNtvPoqZWDVJlYcuxvYhHHZ
+X-Proofpoint-ORIG-GUID: 1C_0rR0wUlNtvPoqZWDVJlYcuxvYhHHZ
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kai-Heng Feng <kai.heng.feng@canonical.com> writes:
-
-> When a system that connects to a Thunderbolt dock equipped with I225,
-> I225 stops working after S3 resume:
->
-> [  606.527643] pcieport 0000:00:1d.0: AER: Multiple Corrected error recei=
-ved: 0000:00:1d.0
-> [  606.527791] pcieport 0000:00:1d.0: PCIe Bus Error: severity=3DCorrecte=
-d, type=3DTransaction Layer, (Receiver ID)
-> [  606.527795] pcieport 0000:00:1d.0:   device [8086:7ab0] error status/m=
-ask=3D00008000/00002000
-> [  606.527800] pcieport 0000:00:1d.0:    [15] HeaderOF
-> [  606.527806] pcieport 0000:00:1d.0: AER:   Error of this Agent is repor=
-ted first
-> [  606.527853] pcieport 0000:07:04.0: PCIe Bus Error: severity=3DCorrecte=
-d, type=3DData Link Layer, (Receiver ID)
-> [  606.527856] pcieport 0000:07:04.0:   device [8086:0b26] error status/m=
-ask=3D00000080/00002000
-> [  606.527861] pcieport 0000:07:04.0:    [ 7] BadDLLP
-> [  606.527931] pcieport 0000:00:1d.0: AER: Multiple Uncorrected (Non-Fata=
-l) error received: 0000:00:1d.0
-> [  606.528064] pcieport 0000:00:1d.0: PCIe Bus Error: severity=3DUncorrec=
-ted (Non-Fatal), type=3DTransaction Layer, (Requester ID)
-> [  606.528068] pcieport 0000:00:1d.0:   device [8086:7ab0] error status/m=
-ask=3D00100000/00004000
-> [  606.528072] pcieport 0000:00:1d.0:    [20] UnsupReq               (Fir=
-st)
-> [  606.528075] pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 0a00005=
-2 00000000 00000000
-> [  606.528079] pcieport 0000:00:1d.0: AER:   Error of this Agent is repor=
-ted first
-> [  606.528098] pcieport 0000:04:01.0: PCIe Bus Error: severity=3DUncorrec=
-ted (Non-Fatal), type=3DTransaction Layer, (Requester ID)
-> [  606.528101] pcieport 0000:04:01.0:   device [8086:1136] error status/m=
-ask=3D00300000/00000000
-> [  606.528105] pcieport 0000:04:01.0:    [20] UnsupReq               (Fir=
-st)
-> [  606.528107] pcieport 0000:04:01.0:    [21] ACSViol
-> [  606.528110] pcieport 0000:04:01.0: AER:   TLP Header: 34000000 0400005=
-2 00000000 00000000
-> [  606.528187] thunderbolt 0000:05:00.0: AER: can't recover (no error_det=
-ected callback)
-> [  606.558729] ------------[ cut here ]------------
-> [  606.558729] igc 0000:38:00.0: disabling already-disabled device
-> [  606.558738] WARNING: CPU: 0 PID: 209 at drivers/pci/pci.c:2248 pci_dis=
-able_device+0xf6/0x150
-> [  606.558743] Modules linked in: rfcomm ccm cmac algif_hash algif_skciph=
-er af_alg usbhid bnep snd_hda_codec_hdmi snd_ctl_led snd_hda_codec_realtek =
-joydev snd_hda_codec_generic ledtrig_audio binfmt_misc snd_sof_pci_intel_tg=
-l snd_sof_intel_hda_common snd_soc_acpi_intel_match snd_soc_acpi snd_soc_hd=
-ac_hda snd_sof_pci snd_sof_xtensa_dsp x86_pkg_temp_thermal snd_sof_intel_hd=
-a_mlink intel_powerclamp snd_sof_intel_hda snd_sof snd_sof_utils snd_hda_ex=
-t_core snd_soc_core snd_compress snd_hda_intel coretemp snd_intel_dspcfg sn=
-d_hda_codec snd_hwdep kvm_intel snd_hda_core iwlmvm nls_iso8859_1 i915 snd_=
-pcm kvm mac80211 crct10dif_pclmul crc32_pclmul i2c_algo_bit uvcvideo ghash_=
-clmulni_intel snd_seq mei_pxp drm_buddy videobuf2_vmalloc sch_fq_codel sha5=
-12_ssse3 libarc4 aesni_intel mei_hdcp videobuf2_memops btusb uvc crypto_sim=
-d drm_display_helper snd_seq_device btrtl videobuf2_v4l2 cryptd snd_timer i=
-ntel_rapl_msr btbcm drm_kms_helper videodev iwlwifi snd btintel rapl input_=
-leds wmi_bmof hid_sensor_rotation btmtk hid_sensor_accel_3d
-> [  606.558778]  hid_sensor_gyro_3d hid_sensor_als syscopyarea videobuf2_c=
-ommon intel_cstate serio_raw soundcore bluetooth hid_sensor_trigger thunder=
-bolt sysfillrect cfg80211 mc mei_me industrialio_triggered_buffer sysimgblt=
- processor_thermal_device_pci hid_sensor_iio_common hid_multitouch ecdh_gen=
-eric processor_thermal_device kfifo_buf cec 8250_dw mei ecc processor_therm=
-al_rfim industrialio rc_core processor_thermal_mbox ucsi_acpi processor_the=
-rmal_rapl ttm typec_ucsi intel_rapl_common msr typec video int3403_thermal =
-int340x_thermal_zone int3400_thermal intel_hid wmi acpi_pad acpi_thermal_re=
-l sparse_keymap acpi_tad mac_hid parport_pc ppdev lp parport drm ramoops re=
-ed_solomon efi_pstore ip_tables x_tables autofs4 hid_sensor_custom hid_sens=
-or_hub intel_ishtp_hid spi_pxa2xx_platform hid_generic dw_dmac dw_dmac_core=
- rtsx_pci_sdmmc e1000e i2c_i801 igc nvme i2c_smbus intel_lpss_pci rtsx_pci =
-intel_ish_ipc nvme_core intel_lpss xhci_pci i2c_hid_acpi intel_ishtp idma64=
- xhci_pci_renesas i2c_hid hid pinctrl_alderlake
-> [  606.558809] CPU: 0 PID: 209 Comm: irq/124-aerdrv Not tainted 6.4.0-rc7=
-+ #119
-> [  606.558811] Hardware name: HP HP ZBook Fury 16 G9 Mobile Workstation P=
-C/89C6, BIOS U96 Ver. 01.07.01 04/06/2023
-> [  606.558812] RIP: 0010:pci_disable_device+0xf6/0x150
-> [  606.558814] Code: 4d 85 e4 75 07 4c 8b a3 d0 00 00 00 48 8d bb d0 00 0=
-0 00 e8 5c f5 1f 00 4c 89 e2 48 c7 c7 f8 e6 37 ae 48 89 c6 e8 9a 3e 86 ff <=
-0f> 0b e9 3c ff ff ff 48 8d 55 e6 be 04 00 00 00 48 89 df e8 62 0b
-> [  606.558815] RSP: 0018:ffffa70040a4fca0 EFLAGS: 00010246
-> [  606.558816] RAX: 0000000000000000 RBX: ffff8ac8434b2000 RCX: 000000000=
-0000000
-> [  606.558817] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000000000=
-0000000
-> [  606.558818] RBP: ffffa70040a4fcc0 R08: 0000000000000000 R09: 000000000=
-0000000
-> [  606.558818] R10: 0000000000000000 R11: 0000000000000000 R12: ffff8ac84=
-3435dd0
-> [  606.558818] R13: ffff8ac84277c000 R14: 0000000000000001 R15: ffff8ac84=
-34b2150
-> [  606.558819] FS:  0000000000000000(0000) GS:ffff8acbd6a00000(0000) knlG=
-S:0000000000000000
-> [  606.558820] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  606.558821] CR2: 00007f9740ba28e8 CR3: 00000001eb43a000 CR4: 000000000=
-0f50ef0
-> [  606.558822] PKRU: 55555554
-> [  606.558822] Call Trace:
-> [  606.558823]  <TASK>
-> [  606.558825]  ? show_regs+0x76/0x90
-> [  606.558828]  ? pci_disable_device+0xf6/0x150
-> [  606.558830]  ? __warn+0x91/0x160
-> [  606.558832]  ? pci_disable_device+0xf6/0x150
-> [  606.558834]  ? report_bug+0x1bf/0x1d0
-> [  606.558838] nvme nvme0: 24/0/0 default/read/poll queues
-> [  606.558837]  ? handle_bug+0x46/0x90
-> [  606.558841]  ? exc_invalid_op+0x1d/0x90
-> [  606.558843]  ? asm_exc_invalid_op+0x1f/0x30
-> [  606.558846]  ? pci_disable_device+0xf6/0x150
-> [  606.558849]  igc_io_error_detected+0x40/0x70 [igc]
-> [  606.558857]  report_error_detected+0xdb/0x1d0
-> [  606.558860]  ? __pfx_report_normal_detected+0x10/0x10
-> [  606.558862]  report_normal_detected+0x1a/0x30
-> [  606.558864]  pci_walk_bus+0x78/0xb0
-> [  606.558866]  pcie_do_recovery+0xba/0x340
-> [  606.558868]  ? __pfx_aer_root_reset+0x10/0x10
-> [  606.558870]  aer_process_err_devices+0x168/0x220
-> [  606.558871]  aer_isr+0x1d3/0x1f0
-> [  606.558874]  ? __pfx_irq_thread_fn+0x10/0x10
-> [  606.558876]  irq_thread_fn+0x29/0x70
-> [  606.558877]  irq_thread+0xee/0x1c0
-> [  606.558878]  ? __pfx_irq_thread_dtor+0x10/0x10
-> [  606.558879]  ? __pfx_irq_thread+0x10/0x10
-> [  606.558880]  kthread+0xf8/0x130
-> [  606.558882]  ? __pfx_kthread+0x10/0x10
-> [  606.558884]  ret_from_fork+0x29/0x50
-> [  606.558887]  </TASK>
-> [  606.558887] ---[ end trace 0000000000000000 ]---
-> [  606.570223] i915 0000:00:02.0: [drm] GT0: HuC: authenticated!
-> [  606.570228] i915 0000:00:02.0: [drm] GT0: GUC: submission disabled
-> [  606.570231] i915 0000:00:02.0: [drm] GT0: GUC: SLPC disabled
-> [  606.663042] xhci_hcd 0000:39:00.0: AER: can't recover (no error_detect=
-ed callback)
-> [  606.663111] pcieport 0000:00:1d.0: AER: device recovery failed
-> [  606.721642] iwlwifi 0000:00:14.3: WFPM_UMAC_PD_NOTIFICATION: 0x1f
-> [  606.721677] iwlwifi 0000:00:14.3: WFPM_LMAC2_PD_NOTIFICATION: 0x1f
-> [  606.721687] iwlwifi 0000:00:14.3: WFPM_AUTH_KEY_0: 0x90
-> [  606.721698] iwlwifi 0000:00:14.3: CNVI_SCU_SEQ_DATA_DW9: 0x0
-> [  606.842877] usb 1-8: reset high-speed USB device number 3 using xhci_h=
-cd
-> [  607.048340] genirq: Flags mismatch irq 164. 00000000 (enp56s0) vs. 000=
-00000 (enp56s0)
-> [  607.050313] ------------[ cut here ]------------
-> ...
-> [  609.064160] igc 0000:38:00.0 enp56s0: Register Dump
-> [  609.064167] igc 0000:38:00.0 enp56s0: Register Name   Value
-> [  609.064181] igc 0000:38:00.0 enp56s0: CTRL            081c0641
-> [  609.064188] igc 0000:38:00.0 enp56s0: STATUS          40280401
-> [  609.064195] igc 0000:38:00.0 enp56s0: CTRL_EXT        100000c0
-> [  609.064202] igc 0000:38:00.0 enp56s0: MDIC            18017949
-> [  609.064208] igc 0000:38:00.0 enp56s0: ICR             80000010
-> [  609.064214] igc 0000:38:00.0 enp56s0: RCTL            04408022
-> [  609.064232] igc 0000:38:00.0 enp56s0: RDLEN[0-3]      00001000 0000100=
-0 00001000 00001000
-> [  609.064251] igc 0000:38:00.0 enp56s0: RDH[0-3]        00000000 0000000=
-0 00000000 00000000
-> [  609.064270] igc 0000:38:00.0 enp56s0: RDT[0-3]        000000ff 000000f=
-f 000000ff 000000ff
-> [  609.064289] igc 0000:38:00.0 enp56s0: RXDCTL[0-3]     00040808 0004080=
-8 00040808 00040808
-> [  609.064308] igc 0000:38:00.0 enp56s0: RDBAL[0-3]      ffc62000 fff6b00=
-0 fff6c000 fff6d000
-> [  609.064326] igc 0000:38:00.0 enp56s0: RDBAH[0-3]      00000000 0000000=
-0 00000000 00000000
-> [  609.064333] igc 0000:38:00.0 enp56s0: TCTL            a50400fa
-> [  609.064351] igc 0000:38:00.0 enp56s0: TDBAL[0-3]      fff6d000 ffcdf00=
-0 ffce0000 ffce1000
-> [  609.064369] igc 0000:38:00.0 enp56s0: TDBAH[0-3]      00000000 0000000=
-0 00000000 00000000
-> [  609.064387] igc 0000:38:00.0 enp56s0: TDLEN[0-3]      00001000 0000100=
-0 00001000 00001000
-> [  609.064405] igc 0000:38:00.0 enp56s0: TDH[0-3]        00000000 0000000=
-0 00000000 00000000
-> [  609.064423] igc 0000:38:00.0 enp56s0: TDT[0-3]        00000004 0000000=
-0 00000000 00000000
-> [  609.064441] igc 0000:38:00.0 enp56s0: TXDCTL[0-3]     00100108 0010010=
-8 00100108 00100108
-> [  609.064445] igc 0000:38:00.0 enp56s0: Reset adapter
->
-> The issue is that the PTM requests are sending before driver resumes the
-> device. Since the issue can also be observed on Windows, it's quite
-> likely a firmware/hardwar limitation.
->
-> So avoid resetting the device if it's not resumed. Once the device is
-> fully resumed, the device can work normally.
->
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D216850
-> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+On 4/27/23 5:32PM, Ilkka Koskinen wrote:
+> Add JSON files for AmpereOne core PMU events.
+> 
+> Signed-off-by: Doug Rady <dcrady@os.amperecomputing.com>
+> Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
 > ---
 
-Feel free to add my:
+   CLIP
 
-Acked-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+> diff --git a/tools/perf/pmu-events/arch/arm64/ampere/ampereone/cache.json b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/cache.json
+> new file mode 100644
+> index 000000000000..fc0633054211
+> --- /dev/null
+> +++ b/tools/perf/pmu-events/arch/arm64/ampere/ampereone/cache.json
+> @@ -0,0 +1,104 @@
+> +[
+> +    {
+> +        "ArchStdEvent": "L1D_CACHE_RD"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_CACHE_WR"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_CACHE_REFILL_RD"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_CACHE_INVAL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_TLB_REFILL_RD"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_TLB_REFILL_WR"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_RD"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_WR"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_REFILL_RD"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_REFILL_WR"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_WB_VICTIM"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_WB_CLEAN"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_INVAL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1I_CACHE_REFILL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1I_TLB_REFILL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_CACHE_REFILL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_CACHE"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_TLB_REFILL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1I_CACHE"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_REFILL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_WB"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_TLB"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1I_TLB"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_TLB_REFILL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2I_TLB_REFILL"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_TLB"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2I_TLB"
+> +    },
+> +    {
+> +        "ArchStdEvent": "DTLB_WALK"
+> +    },
+> +    {
+> +        "ArchStdEvent": "ITLB_WALK"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_CACHE_LMISS_RD"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1D_CACHE_LMISS"
 
-After the comments are addressed.
+L1D_CACHE_LMISS is not defined anywhere.
 
+> +    },
+> +    {
+> +        "ArchStdEvent": "L1I_CACHE_LMISS"
+> +    },
+> +    {
+> +        "ArchStdEvent": "L2D_CACHE_LMISS_RD"
+> +    }
+> +]
 
-Cheers,
---=20
-Vinicius
