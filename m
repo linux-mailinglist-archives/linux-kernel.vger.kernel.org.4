@@ -2,85 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F053A738E81
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78A4A738E8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:25:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbjFUSVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 14:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49634 "EHLO
+        id S229993AbjFUSZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 14:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjFUSVy (ORCPT
+        with ESMTP id S229684AbjFUSZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 14:21:54 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E7AB1731
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:21:52 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-53482b44007so3099352a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:21:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687371712; x=1689963712;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=K6Gk7g2e3myD2tH63H8qrLIHXgdsP+ERfyqwv9FmHKA=;
-        b=HK8K+XVPVpHrQ1TBLWxHjZGw3WZq+6agwyY4s0A5kBhe5WzViWHXCAmvm/2c4NxEEc
-         5bX6ioGxPIdLfu40Zqo087JGsSjMepJ8zBlsLsKn9h/mBfoDoN038lJ7xFP+/eEXuRlD
-         oI7dse5fvt0FmTSwEGjrcu65EKDRviG72H44w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687371712; x=1689963712;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K6Gk7g2e3myD2tH63H8qrLIHXgdsP+ERfyqwv9FmHKA=;
-        b=evVAuIbh58k8m+res4xdS2fYZe9hVXbsAkTp7P2UvEr2Rwz4ifx6fFUDqnKj/No9qw
-         R+O9RyASOrIrAZA5ktBbMQeQN3pOlZrId1eXzvyYcVZnKl2RsDfCBWu6S59yB0CrV+KK
-         fP/g0Mdy/bLr7qcgvmLneCImXIzL34q2RWiI2XGK2dsP2IgDI45oYJ+5d/P0TGv8jL8C
-         utQmhe26zSyqlZfutHbb4ArLRsqfTA6x+/nxNtoswPYA62rYMbX00rU8yCr+gsPFfd5e
-         C25Ft7KTN/MuPXZ9BzebhvqIGBlX7XPgs19X42FLYPBVGnuc9wykNTesr4jzZ0EVtJ3f
-         Fu7A==
-X-Gm-Message-State: AC+VfDy8i9s5jdPUbxBTONz0i7sxCIrO7tLbCsmYhrxXZ2Jg97Cg7t15
-        ODpI47Pd7HuqjG+MJlgurc6CBQ==
-X-Google-Smtp-Source: ACHHUZ6tDaappzv2ihAfQqvCVZ7H1Q+IK7vT3D+MHa4nEA5bW0z+dgmIb3VIyINlPx/1903qiPnMlQ==
-X-Received: by 2002:a17:902:e745:b0:1b6:6985:ff5f with SMTP id p5-20020a170902e74500b001b66985ff5fmr7723499plf.36.1687371711957;
-        Wed, 21 Jun 2023 11:21:51 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id iz7-20020a170902ef8700b001b0603829a0sm3801370plb.199.2023.06.21.11.21.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 11:21:51 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 11:21:50 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "GONG, Ruiqi" <gongruiqi@huaweicloud.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        David Rientjes <rientjes@google.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Christoph Lameter <cl@linux.com>, Tejun Heo <tj@kernel.org>,
-        Dennis Zhou <dennis@kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>, Jann Horn <jannh@google.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Pedro Falcato <pedro.falcato@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E . Hallyn" <serge@hallyn.com>,
-        Wang Weiyang <wangweiyang2@huawei.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>, linux-mm@kvack.org,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gongruiqi1@huawei.com
-Subject: Re: [PATCH v3 1/1] Randomized slab caches for kmalloc()
-Message-ID: <202306211111.4E70CD6@keescook>
-References: <20230616111843.3677378-1-gongruiqi@huaweicloud.com>
- <20230616111843.3677378-2-gongruiqi@huaweicloud.com>
+        Wed, 21 Jun 2023 14:25:18 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61184172C;
+        Wed, 21 Jun 2023 11:25:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=TPXBsx8u0xndqzyud1NZ8c9PL61dW9ELHSP+d0BbT0o=; b=qUNpRJx+5v7JW1hZIz4149+kBr
+        Flw33PF/PRzKokJNH5pmMRxb8Ydb9wt8x4hiIzYUGscsA5YLkssJEf5ENs8KV7MyVRDmgln0nx1yz
+        bWAarsWKRT8f+RJcBPkOG0sF/ywsZT8rczHXpfRwRGUPytdYC6QAPFQH/UpCiXyK46v2p7kN5vog6
+        JQSY3h0CwhiL13xROst7C/tjhQHPhgmaXqXEzJByCVH1+IsxQiY2HcsB34uxrYPBg1zWx88kVDRB7
+        7igtuMLsJzarSPFR4RCEKiRTuiJrT3xNMqmdC3fH581lOI61bvrKJLCvkNpf9MO0RsdBkaruVUSG4
+        wWR1M76w==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qC2W2-00FNl3-2h;
+        Wed, 21 Jun 2023 18:25:14 +0000
+Message-ID: <14aa23d6-b4c2-190f-0d6c-22a82befa04d@infradead.org>
+Date:   Wed, 21 Jun 2023 11:25:14 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616111843.3677378-2-gongruiqi@huaweicloud.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: linux-next: Tree for Jun 21 (riscv/errata/thead)
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Conor Dooley <conor@kernel.org>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Guo Ren <guoren@kernel.org>, wefu@redhat.com
+References: <20230621145917.3635a2f1@canb.auug.org.au>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230621145917.3635a2f1@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,166 +58,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 16, 2023 at 07:18:43PM +0800, GONG, Ruiqi wrote:
-> When exploiting memory vulnerabilities, "heap spraying" is a common
-> technique targeting those related to dynamic memory allocation (i.e. the
-> "heap"), and it plays an important role in a successful exploitation.
-> Basically, it is to overwrite the memory area of vulnerable object by
-> triggering allocation in other subsystems or modules and therefore
-> getting a reference to the targeted memory location. It's usable on
-> various types of vulnerablity including use after free (UAF), heap out-
-> of-bound write and etc.
+
+
+On 6/20/23 21:59, Stephen Rothwell wrote:
+> Hi all,
 > 
-> There are (at least) two reasons why the heap can be sprayed: 1) generic
-> slab caches are shared among different subsystems and modules, and
-> 2) dedicated slab caches could be merged with the generic ones.
-> Currently these two factors cannot be prevented at a low cost: the first
-> one is a widely used memory allocation mechanism, and shutting down slab
-> merging completely via `slub_nomerge` would be overkill.
+> Changes since 20230620:
 > 
-> To efficiently prevent heap spraying, we propose the following approach:
-> to create multiple copies of generic slab caches that will never be
-> merged, and random one of them will be used at allocation. The random
-> selection is based on the address of code that calls `kmalloc()`, which
-> means it is static at runtime (rather than dynamically determined at
-> each time of allocation, which could be bypassed by repeatedly spraying
-> in brute force). In other words, the randomness of cache selection will
-> be with respect to the code address rather than time, i.e. allocations
-> in different code paths would most likely pick different caches,
-> although kmalloc() at each place would use the same cache copy whenever
-> it is executed. In this way, the vulnerable object and memory allocated
-> in other subsystems and modules will (most probably) be on different
-> slab caches, which prevents the object from being sprayed.
-> 
-> Meanwhile, the static random selection is further enhanced with a
-> per-boot random seed, which prevents the attacker from finding a usable
-> kmalloc that happens to pick the same cache with the vulnerable
-> subsystem/module by analyzing the open source code.
-> 
-> The overhead of performance has been tested on a 40-core x86 server by
-> comparing the results of `perf bench all` between the kernels with and
-> without this patch based on the latest linux-next kernel, which shows
-> minor difference. A subset of benchmarks are listed below:
-> 
->                 sched/  sched/  syscall/       mem/       mem/
->              messaging    pipe     basic     memcpy     memset
->                  (sec)   (sec)     (sec)   (GB/sec)   (GB/sec)
-> 
-> control1         0.019   5.459     0.733  15.258789  51.398026
-> control2         0.019   5.439     0.730  16.009221  48.828125
-> control3         0.019   5.282     0.735  16.009221  48.828125
-> control_avg      0.019   5.393     0.733  15.759077  49.684759
-> 
-> experiment1      0.019   5.374     0.741  15.500992  46.502976
-> experiment2      0.019   5.440     0.746  16.276042  51.398026
-> experiment3      0.019   5.242     0.752  15.258789  51.398026
-> experiment_avg   0.019   5.352     0.746  15.678608  49.766343
-> 
-> The overhead of memory usage was measured by executing `free` after boot
-> on a QEMU VM with 1GB total memory, and as expected, it's positively
-> correlated with # of cache copies:
-> 
->            control  4 copies  8 copies  16 copies
-> 
-> total       969.8M    968.2M    968.2M     968.2M
-> used         20.0M     21.9M     24.1M      26.7M
-> free        936.9M    933.6M    931.4M     928.6M
-> available   932.2M    928.8M    926.6M     923.9M
-> 
-> Signed-off-by: GONG, Ruiqi <gongruiqi@huaweicloud.com>
-> Co-developed-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
 
-I think this looks really good. Thanks for the respin! Some
-nits/comments/questions below, but I think this can land and get
-incrementally improved. Please consider it:
+on riscv 32-bit:
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
 
-> diff --git a/include/linux/slab.h b/include/linux/slab.h
-> index 791f7453a04f..b7a5387f0dad 100644
-> --- a/include/linux/slab.h
-> +++ b/include/linux/slab.h
-> @@ -19,6 +19,9 @@
->  #include <linux/workqueue.h>
->  #include <linux/percpu-refcount.h>
->  
-> +#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-> +#include <linux/hash.h>
-> +#endif
+WARNING: unmet direct dependencies detected for ERRATA_THEAD
+  Depends on [n]: RISCV_ALTERNATIVE [=n]
+  Selected by [y]:
+  - ARCH_THEAD [=y]
 
-I think this can just be included unconditionally, yes?
+WARNING: unmet direct dependencies detected for ERRATA_THEAD
+  Depends on [n]: RISCV_ALTERNATIVE [=n]
+  Selected by [y]:
+  - ARCH_THEAD [=y]
 
-> [...]
-> +extern unsigned long random_kmalloc_seed;
-> +
-> +static __always_inline enum kmalloc_cache_type kmalloc_type(gfp_t flags, unsigned long caller)
->  {
->  	/*
->  	 * The most common case is KMALLOC_NORMAL, so test for it
->  	 * with a single branch for all the relevant flags.
->  	 */
->  	if (likely((flags & KMALLOC_NOT_NORMAL_BITS) == 0))
-> +#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-> +		return KMALLOC_RANDOM_START + hash_64(caller ^ random_kmalloc_seed,
-> +						      CONFIG_RANDOM_KMALLOC_CACHES_BITS);
-> +#else
->  		return KMALLOC_NORMAL;
-> +#endif
+WARNING: unmet direct dependencies detected for ERRATA_THEAD
+  Depends on [n]: RISCV_ALTERNATIVE [=n]
+  Selected by [y]:
+  - ARCH_THEAD [=y]
 
-The commit log talks about having no runtime lookup, but that's not
-entirely true, given this routine. And xor and a hash_64... I wonder how
-expensive this is compared to some kind of constant expression that
-could be computed at build time... (the xor should stay, but that's
-"cheap").
+../arch/riscv/errata/thead/errata.c: In function 'errata_probe_pbmt':
+../arch/riscv/errata/thead/errata.c:29:22: error: 'RISCV_ALTERNATIVES_EARLY_BOOT' undeclared (first use in this function)
+   29 |         if (stage == RISCV_ALTERNATIVES_EARLY_BOOT ||
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../arch/riscv/errata/thead/errata.c:29:22: note: each undeclared identifier is reported only once for each function it appears in
+../arch/riscv/errata/thead/errata.c:30:22: error: 'RISCV_ALTERNATIVES_MODULE' undeclared (first use in this function)
+   30 |             stage == RISCV_ALTERNATIVES_MODULE)
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+../arch/riscv/errata/thead/errata.c: In function 'errata_probe_cmo':
+../arch/riscv/errata/thead/errata.c:45:22: error: 'RISCV_ALTERNATIVES_EARLY_BOOT' undeclared (first use in this function)
+   45 |         if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../arch/riscv/errata/thead/errata.c: In function 'errata_probe_pmu':
+../arch/riscv/errata/thead/errata.c:63:22: error: 'RISCV_ALTERNATIVES_EARLY_BOOT' undeclared (first use in this function)
+   63 |         if (stage == RISCV_ALTERNATIVES_EARLY_BOOT)
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../arch/riscv/errata/thead/errata.c: At top level:
+../arch/riscv/errata/thead/errata.c:86:37: warning: 'struct alt_entry' declared inside parameter list will not be visible outside of this definition or declaration
+   86 | void thead_errata_patch_func(struct alt_entry *begin, struct alt_entry *end,
+      |                                     ^~~~~~~~~
+../arch/riscv/errata/thead/errata.c: In function 'thead_errata_patch_func':
+../arch/riscv/errata/thead/errata.c:95:41: error: increment of pointer to an incomplete type 'struct alt_entry'
+   95 |         for (alt = begin; alt < end; alt++) {
+      |                                         ^~
+../arch/riscv/errata/thead/errata.c:96:24: error: invalid use of undefined type 'struct alt_entry'
+   96 |                 if (alt->vendor_id != THEAD_VENDOR_ID)
+      |                        ^~
+../arch/riscv/errata/thead/errata.c:98:24: error: invalid use of undefined type 'struct alt_entry'
+   98 |                 if (alt->patch_id >= ERRATA_THEAD_NUMBER)
+      |                        ^~
+../arch/riscv/errata/thead/errata.c:101:33: error: invalid use of undefined type 'struct alt_entry'
+  101 |                 tmp = (1U << alt->patch_id);
+      |                                 ^~
+../arch/riscv/errata/thead/errata.c:103:34: error: implicit declaration of function 'ALT_OLD_PTR' [-Werror=implicit-function-declaration]
+  103 |                         oldptr = ALT_OLD_PTR(alt);
+      |                                  ^~~~~~~~~~~
+../arch/riscv/errata/thead/errata.c:103:32: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  103 |                         oldptr = ALT_OLD_PTR(alt);
+      |                                ^
+../arch/riscv/errata/thead/errata.c:104:34: error: implicit declaration of function 'ALT_ALT_PTR' [-Werror=implicit-function-declaration]
+  104 |                         altptr = ALT_ALT_PTR(alt);
+      |                                  ^~~~~~~~~~~
+../arch/riscv/errata/thead/errata.c:104:32: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+  104 |                         altptr = ALT_ALT_PTR(alt);
+      |                                ^
+../arch/riscv/errata/thead/errata.c:107:38: error: 'RISCV_ALTERNATIVES_EARLY_BOOT' undeclared (first use in this function)
+  107 |                         if (stage == RISCV_ALTERNATIVES_EARLY_BOOT) {
+      |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+../arch/riscv/errata/thead/errata.c:108:59: error: invalid use of undefined type 'struct alt_entry'
+  108 |                                 memcpy(oldptr, altptr, alt->alt_len);
+      |                                                           ^~
+../arch/riscv/errata/thead/errata.c:111:70: error: invalid use of undefined type 'struct alt_entry'
+  111 |                                 patch_text_nosync(oldptr, altptr, alt->alt_len);
+      |                                                                      ^~
+cc1: some warnings being treated as errors
 
->  
->  	/*
->  	 * At least one of the flags has to be set. Their priorities in
-> @@ -577,7 +589,7 @@ static __always_inline __alloc_size(1) void *kmalloc(size_t size, gfp_t flags)
->  
->  		index = kmalloc_index(size);
->  		return kmalloc_trace(
-> -				kmalloc_caches[kmalloc_type(flags)][index],
-> +				kmalloc_caches[kmalloc_type(flags, _RET_IP_)][index],
->  				flags, size);
->  	}
->  	return __kmalloc(size, flags);
-> @@ -593,7 +605,7 @@ static __always_inline __alloc_size(1) void *kmalloc_node(size_t size, gfp_t fla
->  
->  		index = kmalloc_index(size);
->  		return kmalloc_node_trace(
-> -				kmalloc_caches[kmalloc_type(flags)][index],
-> +				kmalloc_caches[kmalloc_type(flags, _RET_IP_)][index],
->  				flags, node, size);
->  	}
->  	return __kmalloc_node(size, flags, node);
-
-The use of _RET_IP_ is generally fine here, but I wonder about some of
-the allocation wrappers (like devm_kmalloc(), etc). I think those aren't
-being bucketed correctly? Have you checked that?
-
-> [...]
-> @@ -776,12 +781,44 @@ EXPORT_SYMBOL(kmalloc_size_roundup);
->  #define KMALLOC_RCL_NAME(sz)
->  #endif
->  
-> +#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-> +#define __KMALLOC_RANDOM_CONCAT(a, b) a ## b
-> +#define KMALLOC_RANDOM_NAME(N, sz) __KMALLOC_RANDOM_CONCAT(KMA_RAND_, N)(sz)
-> +#if CONFIG_RANDOM_KMALLOC_CACHES_BITS >= 1
-> +#define KMA_RAND_1(sz)                  .name[KMALLOC_RANDOM_START +  0] = "kmalloc-random-01-" #sz,
-
-I wonder if this name is getting too long? Should "random" be "rnd" ?
-*shrug*
-
-> [...]
-> +#define KMA_RAND_16(sz) KMA_RAND_15(sz) .name[KMALLOC_RANDOM_START + 15] = "kmalloc-random-16-" #sz,
-
-And if we wanted to save another character, this could be numbered 0-f,
-but I defer these aesthetics to Vlastimil. :)
-
--Kees
 
 -- 
-Kees Cook
+~Randy
