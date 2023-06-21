@@ -2,110 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBE6C7392A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 00:43:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 944847392A9
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 00:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjFUWnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 18:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45428 "EHLO
+        id S229852AbjFUWni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 18:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjFUWnA (ORCPT
+        with ESMTP id S229514AbjFUWne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 18:43:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3282F1;
-        Wed, 21 Jun 2023 15:42:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44B5C616F5;
-        Wed, 21 Jun 2023 22:42:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A789C433C0;
-        Wed, 21 Jun 2023 22:42:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687387378;
-        bh=4kl07al0Jzvum5d8UANt44upxbmeLGvcypOHEKRd24g=;
-        h=Date:From:To:Cc:Subject:From;
-        b=a2QblHnOuvKjfWHwLNTTBOT/dKg0l/lM4+DxplEJkUhTJBJFfJfSaLpbh8VpmRh2M
-         Fdm/WkVndX/G1Jkz7Yaf4kT+3GsgDZD+doKNXwWCP3GcJrfvBPuJpKaATiwz8n2fZR
-         zkMHGCDvuhEJYb0P1StefrO2WIE2K1vdXtrNGWv6bFbzDhA4RBPC7A2tSe8q+GWwkK
-         oIQbxvwrLwpQDF1Co2k9cudV2F8MdEECv1lDox7ulPYrukl8oPD18cO1LUfo3XEiQE
-         Dkx00pw2DQ0ZnpmrWePGzR4e1Q4AU34al9+hS7sQ2q0oqDuSa5CERmUghq+IYLVeps
-         02aR1CvCvJdOg==
-Date:   Wed, 21 Jun 2023 16:43:54 -0600
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org
-Cc:     Kees Cook <keescook@chromium.org>
-Subject: [PATCH][next] reiserfs: Replace one-element array with
- flexible-array member
-Message-ID: <ZJN9Kqhcs0ZGET/8@work>
+        Wed, 21 Jun 2023 18:43:34 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62142173F;
+        Wed, 21 Jun 2023 15:43:33 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id F40D85C0083;
+        Wed, 21 Jun 2023 18:43:29 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 21 Jun 2023 18:43:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687387409; x=1687473809; bh=1CfwJNcZ9ExTk
+        aHBALnXwf9D4LiJBitSPaLMtzcAid4=; b=AcHXmWMbZZx9QwNb4c44Lg1chaJ8B
+        Fizjaek5kMP54fIQze62PtHho1dPLnj8xoOJWm7Uwzh9sXPTfS7vzt9RREZbF7/6
+        KcZedAO9pzD550q26Py3O5ACyMU/2M7GDUYCZflnss3T9rgfjfG8dl2sHA0/rPvv
+        xUcX40tfMgniPTz/dppYLe/M2dgCf5IN/P4nP3p1EnBTB4vrhhlLrrBRXMTadQ0M
+        xsbCPNyczDp2GsCnXdpImEFiCC0WOfyxW/A1zPgEuUUlh880RgdfeFh3/aK8KwGl
+        nMF3WZObT43GcRYgF0HzFKIHSkOMDKFuCade7HcRboUiIzcnTLQ9MjCgw==
+X-ME-Sender: <xms:EX2TZORG2ByZnoRyJL7GQFd5zaQshcdXJwoAQutMTeSCY_a8_kd3uA>
+    <xme:EX2TZDwj7fHDq532tYiXasIzlc_04phpcw0YYWVGNU8Xf9Jg9-0HxfEOuSuHX3KI6
+    XuMz9GqzS6_pk38hg8>
+X-ME-Received: <xmr:EX2TZL1AUIoSZjV04FMID_zcjBk2MnTXHUXotYg75EeGh0v3wNI8-AI1wmsKbbkbB2KavViFZT-vvnwngK4lEMJ3TPDkeXHVbj0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeegtddgtdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevufgjkfhfgggtsehttdertddttddvnecuhfhrohhmpefhihhnnhcu
+    vfhhrghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrg
+    htthgvrhhnpeelueehleehkefgueevtdevteejkefhffekfeffffdtgfejveekgeefvdeu
+    heeuleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hfthhhrghinheslhhinhhugidqmheikehkrdhorhhg
+X-ME-Proxy: <xmx:EX2TZKDKdNf9EjDHbdLPr_iui-7_z4A2QhoC7Or5bKO0aqEdggmf_Q>
+    <xmx:EX2TZHjKiXLnE8up1qBwIXhVfb6B34Ne1oWJFcSh2N2w34RBCziqVA>
+    <xmx:EX2TZGqhGciDyaNCdRM6tqy2SSn68Ofw1SKaPYzJXgqjDzzA6jTJ4g>
+    <xmx:EX2TZNY5lG5j_z4h7eA2-qXvkyWzgTYn67xTNVhQCYZG9JEr5mrC0w>
+Feedback-ID: i58a146ae:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 21 Jun 2023 18:43:27 -0400 (EDT)
+Date:   Thu, 22 Jun 2023 08:44:18 +1000 (AEST)
+From:   Finn Thain <fthain@linux-m68k.org>
+To:     Theodore Ts'o <tytso@mit.edu>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        tech-board-discuss@lists.linux-foundation.org,
+        Kees Cook <keescook@chromium.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Documentation: Linux Contribution Maturity Model and
+ the wider community
+In-Reply-To: <5490402b-8b9f-f52d-3896-41090e639e51@linux-m68k.org>
+Message-ID: <d69b0814-4a74-ebd0-7e08-3765f0acab1a@linux-m68k.org>
+References: <20230620212502.GI286961@mit.edu> <5490402b-8b9f-f52d-3896-41090e639e51@linux-m68k.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One-element arrays are deprecated, and we are replacing them with flexible
-array members instead. So, replace one-element array with flexible-array
-member in direntry_uarea structure, and refactor the rest of the code,
-accordingly.
+On Wed, 21 Jun 2023, Finn Thain wrote:
 
-Worth mentioning is that before these changes, the original implementation
-was returning two-too many bytes in function direntry_create_vi():
+> The technical projects under the purview of FINOS require a contributor 
+> license agreement. This has historically been a difficult pill for some 
+> contributors to swallow, so it's hard to imagine widespread adoption of 
+> the entire FINOS methodolgy
 
-fs/reiserfs/item_ops.c:464:     int size = sizeof(struct direntry_uarea);
-...
-fs/reiserfs/item_ops.c-490-     size += (dir_u->entry_count * sizeof(short));
-...
-fs/reiserfs/item_ops.c-517-     return size;
-
-Link: https://github.com/KSPP/linux/issues/79
-Link: https://github.com/KSPP/linux/issues/290
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
- fs/reiserfs/fix_node.c | 5 +++--
- fs/reiserfs/reiserfs.h | 2 +-
- 2 files changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/fs/reiserfs/fix_node.c b/fs/reiserfs/fix_node.c
-index fefe87e1c099..6c13a8d9a73c 100644
---- a/fs/reiserfs/fix_node.c
-+++ b/fs/reiserfs/fix_node.c
-@@ -2252,8 +2252,9 @@ static int get_virtual_node_size(struct super_block *sb, struct buffer_head *bh)
- 
- 	return sizeof(struct virtual_node) +
- 	    max(max_num_of_items * sizeof(struct virtual_item),
--		sizeof(struct virtual_item) + sizeof(struct direntry_uarea) +
--		(max_num_of_entries - 1) * sizeof(__u16));
-+		sizeof(struct virtual_item) +
-+		struct_size_t(struct direntry_uarea, entry_sizes,
-+			      max_num_of_entries));
- }
- 
- /*
-diff --git a/fs/reiserfs/reiserfs.h b/fs/reiserfs/reiserfs.h
-index 55e85256aae8..b81749492ef9 100644
---- a/fs/reiserfs/reiserfs.h
-+++ b/fs/reiserfs/reiserfs.h
-@@ -2373,7 +2373,7 @@ struct virtual_node {
- struct direntry_uarea {
- 	int flags;
- 	__u16 entry_count;
--	__u16 entry_sizes[1];
-+	__u16 entry_sizes[];
- } __attribute__ ((__packed__));
- 
- /***************************************************************************
--- 
-2.34.1
-
+I'm afraid I may have mixed up CLA and copyright assignment. I can't seem 
+to find the relevant CLA text. Sorry if I've mislead anyone.
