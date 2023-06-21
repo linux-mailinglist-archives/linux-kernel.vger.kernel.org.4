@@ -2,97 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23B4738406
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E894173840F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:46:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbjFUMnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 08:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58454 "EHLO
+        id S231915AbjFUMqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 08:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjFUMnb (ORCPT
+        with ESMTP id S229602AbjFUMqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 08:43:31 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D937107;
-        Wed, 21 Jun 2023 05:43:30 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-666e916b880so2682883b3a.2;
-        Wed, 21 Jun 2023 05:43:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687351410; x=1689943410;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=w/6gXIWTqPYU9mM1Gisj5YbdRDJVns+HyZGDjaiUXfk=;
-        b=HEt5pAKbTU1mylVa5+rX7MBvxfEN3Xgz/fUBg77onXqSK9cJiM5IdrvBfVWm3tKdtt
-         lEl74g2RCrPl4gE0+BSx/m0m+6qFdXupaGWuvdu+HWcQeHzbTo91Z5WeHaf/vWlWfWn7
-         V8uBkQOxQ6MUfF9pyZ8/MYqyNlqId4muSPxtBylYR2KR/Kwec0u17Nn5m7FsLINSVBnP
-         c0qoQ6epe/FLNLsV7vxT9YKPv6hRV33cb4v+6tF3ZwZobm7x+X2uYyK7GEdRSzsEypVb
-         rWBGkosmlgmRUJxzyqOxGu6xLvZSPSRUsVeNCnOxT6Q/+AEDCJMo5DxN/ntJVEEHhpqr
-         OqTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687351410; x=1689943410;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w/6gXIWTqPYU9mM1Gisj5YbdRDJVns+HyZGDjaiUXfk=;
-        b=CO3KD/7esEZ2OT2rAajFtHBS2jPhcV4wjIhPsghbyYRI2CeD1D9Y9EjLw6DUi3WX3y
-         vLqS+duFWOKUlq0SVijxG9kUd25YxAYqOcvVRymkshe5V4M4ag1iL/vgguhy+xeWBXhy
-         nL+LToDyitfHbohp7okLScvTnge1CfRSOxmSymm1elcmVxb0xOoHEdMCDp3HHPpdobZL
-         WQlxIEVBtjKOEXZg8d9DhqUk+98VcFUkJEzOQiixLmMAlhZyc8GtwbvGXfrt4K6yEZUT
-         AQsnE7XZ7Ni50fWnVqoIFJnvwHTCUdpi9fnOkZaW3vYv2+DcWUXBHfhsPJdcxJ+S/t1r
-         wpxw==
-X-Gm-Message-State: AC+VfDyoaea+IzuqUejH2yAiqeoPOV0US37pFIKokDcmGCYz7h5DGzvB
-        dqq1Damzkklu/W0hR/1MVQbgYZb7CZk=
-X-Google-Smtp-Source: ACHHUZ52rHQfd3JpZ8EYEsh4BuJqL2mHG3qWxhcqU8yd7QN2yaU+yCKzEFc9B2Q3R4IiyWPLLtSNKw==
-X-Received: by 2002:a05:6a20:a10b:b0:10a:ef63:4c33 with SMTP id q11-20020a056a20a10b00b0010aef634c33mr6553903pzk.47.1687351409661;
-        Wed, 21 Jun 2023 05:43:29 -0700 (PDT)
-Received: from chcpu13.cse.ust.hk (191host119.mobilenet.cse.ust.hk. [143.89.191.119])
-        by smtp.gmail.com with ESMTPSA id q9-20020a170902bd8900b001b53d3d8f3dsm3377691pls.299.2023.06.21.05.43.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 05:43:29 -0700 (PDT)
-From:   Wei Chen <harperchen1110@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wei Chen <harperchen1110@gmail.com>
-Subject: [PATCH] usb: gadget: legacy: fix error return code in gfs_bind
-Date:   Wed, 21 Jun 2023 12:43:23 +0000
-Message-Id: <20230621124323.47183-1-harperchen1110@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 21 Jun 2023 08:46:43 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66553107;
+        Wed, 21 Jun 2023 05:46:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 205E021AC4;
+        Wed, 21 Jun 2023 12:46:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1687351601; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oOqnsf4JTgard+CNqhYgPXINKh7Q8qdMJU5633e+nBM=;
+        b=fwQOjPd7/G+CpK9ni1W7ie3R5W+7mrZgm5GSbpleKmGfQD0en8W0BziBVElKa5NEgnuVxC
+        I0D/Kv5yDFG57YktGlcGZCVw41iZ9R4N4IlVz/thOu1hwi5Xurc4cxw50z8OsGo0ecX6Au
+        KWAFDulYQV19/fIVyHy+aydRk2Ab9VM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1687351601;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oOqnsf4JTgard+CNqhYgPXINKh7Q8qdMJU5633e+nBM=;
+        b=CCcofopDQJy5eNfLe407xe6vbI1vbG7gSAcZclZaag5nMt8A2dbS5JaUJUSLluBGObdi87
+        QGRIM2L9rJqZckDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F135E133E6;
+        Wed, 21 Jun 2023 12:46:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id pRkNODDxkmS/UwAAMHmgww
+        (envelope-from <chrubis@suse.cz>); Wed, 21 Jun 2023 12:46:40 +0000
+Date:   Wed, 21 Jun 2023 14:47:43 +0200
+From:   Cyril Hrubis <chrubis@suse.cz>
+To:     Damien Le Moal <dlemoal@kernel.org>
+Cc:     kernel test robot <oliver.sang@intel.com>,
+        Niklas Cassel <niklas.cassel@wdc.com>, lkp@intel.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Hannes Reinecke <hare@suse.de>, oe-lkp@lists.linux.dev,
+        Christoph Hellwig <hch@lst.de>, ltp@lists.linux.it
+Subject: Re: [LTP] [linux-next:master] [scsi] eca2040972:
+ ltp.ioprio_set03.fail
+Message-ID: <ZJLxbwCno-it2xBB@yuki>
+References: <202306192248.1ece4c29-oliver.sang@intel.com>
+ <61f22c1d-6b04-d193-57c9-8cad1c555e4b@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <61f22c1d-6b04-d193-57c9-8cad1c555e4b@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We must return negative error code -ENOMEM if function
-'usb_otg_descriptor_alloc()' fails.
+Hi!
+> > kernel test robot noticed "ltp.ioprio_set03.fail" on:
+> 
+> LTP maintainers,
+> 
+> Patches have been submitted to fix this issue. Were these patches applied ?
 
-Signed-off-by: Wei Chen <harperchen1110@gmail.com>
----
- drivers/usb/gadget/legacy/g_ffs.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Looks like they are in, at least these two:
 
-diff --git a/drivers/usb/gadget/legacy/g_ffs.c b/drivers/usb/gadget/legacy/g_ffs.c
-index ae6d8f7092b8..4592df5e2ea1 100644
---- a/drivers/usb/gadget/legacy/g_ffs.c
-+++ b/drivers/usb/gadget/legacy/g_ffs.c
-@@ -395,8 +395,10 @@ static int gfs_bind(struct usb_composite_dev *cdev)
- 		struct usb_descriptor_header *usb_desc;
- 
- 		usb_desc = usb_otg_descriptor_alloc(cdev->gadget);
--		if (!usb_desc)
-+		if (!usb_desc) {
-+			ret = -ENOMEM;
- 			goto error_rndis;
-+		}
- 		usb_otg_descriptor_init(cdev->gadget, usb_desc);
- 		gfs_otg_desc[0] = usb_desc;
- 		gfs_otg_desc[1] = NULL;
+    ioprio: use ioprio.h kernel header if it exists
+    ioprio: Use IOPRIO_PRIO_NUM to check prio range
+
+And there does not seem to be anything ioprio related haning in the LTP
+patchwork.
+
 -- 
-2.25.1
-
+Cyril Hrubis
+chrubis@suse.cz
