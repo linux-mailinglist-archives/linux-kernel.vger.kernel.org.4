@@ -2,82 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858867383C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05BE37382DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231911AbjFUM3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 08:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50576 "EHLO
+        id S232716AbjFULYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 07:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231970AbjFUM25 (ORCPT
+        with ESMTP id S232753AbjFULYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 08:28:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB2EDD
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:28:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687350492;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8ODNtWxPrS+P3+kIG6eN3JMpMKb409eCF7GB5U3shNc=;
-        b=XIQBAPtj/WCXjcZCB1QY1xjY2sgHRxpNy2fV3JEPVvw2XTreCIHRIqvRiuU+kGJ38elikc
-        ePCboMeqMjy0FmtfFvWxmpqwzNo94HaBOKwe6+6i30V/7jlEVbxCRfZUmDWbRusybjayFC
-        0guw2rUD1U6yHBZIdDaWnfrj+dn3PDM=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-445-OnzgFVTjOQ2ZmeWJbnU9LA-1; Wed, 21 Jun 2023 08:28:11 -0400
-X-MC-Unique: OnzgFVTjOQ2ZmeWJbnU9LA-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f9b1ec2826so15229025e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:28:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687350488; x=1689942488;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8ODNtWxPrS+P3+kIG6eN3JMpMKb409eCF7GB5U3shNc=;
-        b=Yo4TUcrm8EI6mXZvACmZucHYcnKDXKRWmdJIba7CvkDLp1N6vETHVazPHYnUWYT5ak
-         FBrRsI8QvOSzWcSt31ibwHTnyGwOhCWXrGCZd5nhfIn0uVAixWvIr04uOJHoDyAZZRhn
-         Qn3h44JTOQDVkXv3TdVS0Kr8iFYJ0a8+WIg8rxHUI43yM/Ht6XI3RDrDiA+9aetMAn95
-         M0xpLRLUmAS5uXUajFM1elmoyKZ3lpUjuGi34f8vlwEkRnzJBzk8D18LMRKKV9UGE6Ue
-         iitpuJ+6P3ju2ne36woA3Um5W/+F1rcoBKfFPglWp08Q03cUHWWXaQ+SaFcAVv+VmGQe
-         VQHA==
-X-Gm-Message-State: AC+VfDzZNPjbOgi4fUM7zjrNmh1p679FGiVcpCwVbK9egb9KKogV53nE
-        iZyCqXJR1/wCvAWjleqKxM8J062+B1PtQn4ZLXjbctCmdVrgmGnURPbZc0xZaLHdRhDX0m8dAqu
-        gqWYaslarmuHJfjH28LrHX/e5
-X-Received: by 2002:a05:600c:ad2:b0:3f9:bb86:bdd3 with SMTP id c18-20020a05600c0ad200b003f9bb86bdd3mr2415704wmr.7.1687350488658;
-        Wed, 21 Jun 2023 05:28:08 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7mKPIqC0zu/ys7v5WXi42P0HPx5eqJ40K+RrFb+Y9/XEgYKSJYwTw9GWYWtVs1pNoEsyuBQw==
-X-Received: by 2002:a05:600c:ad2:b0:3f9:bb86:bdd3 with SMTP id c18-20020a05600c0ad200b003f9bb86bdd3mr2415691wmr.7.1687350488258;
-        Wed, 21 Jun 2023 05:28:08 -0700 (PDT)
-Received: from pollux ([2a02:810d:4b3f:de9c:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id 9-20020a05600c240900b003f93c450657sm4833810wmp.38.2023.06.21.05.28.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 05:28:07 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 13:23:12 +0200
-From:   Danilo Krummrich <dakr@redhat.com>
-To:     Thomas =?iso-8859-1?Q?Hellstr=F6m?= 
-        <thomas.hellstrom@linux.intel.com>
-Cc:     intel-xe@lists.freedesktop.org, Nirmoy Das <nirmoy.das@intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Oak Zeng <oak.zeng@intel.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] Documentation/gpu: Add a VM_BIND async draft document
-Message-ID: <ZJLdoPznXusy8l51@pollux>
-References: <20230621100435.54425-1-thomas.hellstrom@linux.intel.com>
+        Wed, 21 Jun 2023 07:24:02 -0400
+Received: from mail5.swissbit.com (mail5.swissbit.com [148.251.244.252])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FAE71721;
+        Wed, 21 Jun 2023 04:23:59 -0700 (PDT)
+Received: from mail5.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 900BC3A2AEE;
+        Wed, 21 Jun 2023 13:23:57 +0200 (CEST)
+Received: from mail5.swissbit.com (localhost [127.0.0.1])
+        by DDEI (Postfix) with ESMTP id 7D6AA3A2A97;
+        Wed, 21 Jun 2023 13:23:57 +0200 (CEST)
+X-TM-AS-ERS: 10.181.10.102-127.5.254.253
+X-TM-AS-SMTP: 1.0 bXgyLmRtei5zd2lzc2JpdC5jb20= Y2xvZWhsZUBoeXBlcnN0b25lLmNvb
+        Q==
+X-DDEI-TLS-USAGE: Used
+Received: from mx2.dmz.swissbit.com (mx2.dmz.swissbit.com [10.181.10.102])
+        by mail5.swissbit.com (Postfix) with ESMTPS;
+        Wed, 21 Jun 2023 13:23:57 +0200 (CEST)
+Content-Type: multipart/signed; 
+ boundary=NoSpamProxy_32349cd5-7480-4d97-99c6-9d900ada1c9e; 
+ protocol="application/pkcs7-signature"; micalg="sha256"
+From:   Christian Loehle <CLoehle@hyperstone.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Marek Vasut <marex@denx.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 01/11] mmc: core: Use BIT() macro
+Thread-Topic: [PATCH 01/11] mmc: core: Use BIT() macro
+Thread-Index: AQHZo2SocUiFxoozMkOzCUFdpaBskq+TaKaAgAEBWICAAHCAAIAAQJtQ
+Date:   Wed, 21 Jun 2023 11:23:54 +0000
+Message-ID: <da39a415784e4bbabfa99596ffd5b565@hyperstone.com>
+References: <20230620104722.16465-1-marex@denx.de>
+ <CAPDyKFqZ_r=gjpRm833ax4LwASCTGAuO0a0ABXo-kN8dtYje-Q@mail.gmail.com>
+ <289cd876-e6e1-8610-bcb6-b0259c68fd89@denx.de>
+ <CAPDyKFoLaYegCxw35XPNWuzg_F4M-UPho=+XweB+V4oCXaMxGA@mail.gmail.com>
+In-Reply-To: <CAPDyKFoLaYegCxw35XPNWuzg_F4M-UPho=+XweB+V4oCXaMxGA@mail.gmail.com>
+Accept-Language: en-US, de-DE
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230621100435.54425-1-thomas.hellstrom@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-TMASE-Version: DDEI-5.1-9.0.1002-27704.007
+X-TMASE-Result: 10--16.571200-10.000000
+X-TMASE-MatchedRID: UuaOI1zLN1joSitJVour/fHkpkyUphL9t7k6BDMlB1j+MGGu4g4Dva8X
+        I0sh2cEOvlI+Zzj6VqK5oEpue1AetQx6TQKWelWnmlaAItiONP1xXefgn/TNQ9bZhgeyVPQjVEb
+        W2lpTuVQ4TZp9PdZBMb6Um2sWRaGefmpY4OvTCPIvun/+8u/hs6++Humppw/G1F6O1lfh5suipF
+        NLeO72SCA/w+swsUFqpgolEZSL3/xlSYhlh8RfcvSG/+sPtZVkTSz0JdEAJbSY5nVpihxiwzcpX
+        pPCV0E3x3zfzJOsFTlhWlVNvgpQIjWYHgPBpNXWs/Hes76OTZAsvqYk4iz+9q5fd95aO5tJoOaQ
+        vO0H0Bat1kt6UTrAWz2Xsf5MVCB1t7DW3B48kkESMbwGTAneLwU5rQ/jDZbqhx0Lb8oFs7SUTGV
+        AhB5EbQ==
+X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
+X-TMASE-INERTIA: 0-0;;;;
+X-TMASE-XGENCLOUD: 60eeb6a1-e1f0-41fb-ab79-e630ab24b7dd-5-0-200-0
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,217 +72,239 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 12:04:35PM +0200, Thomas Hellström wrote:
-> Add a motivation for and description of asynchronous VM_BIND operation
-> 
-> v2:
-> - Fix typos (Nirmoy Das)
-> - Improve the description of a memory fence (Oak Zeng)
-> - Add a reference to the document in the Xe RFC.
-> - Add pointers to sample uAPI suggestions
-> 
-> Signed-off-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-> Acked-by: Nirmoy Das <nirmoy.das@intel.com>
-> ---
->  Documentation/gpu/drm-vm-bind-async.rst | 145 ++++++++++++++++++++++++
->  Documentation/gpu/rfc/xe.rst            |   4 +-
->  2 files changed, 147 insertions(+), 2 deletions(-)
->  create mode 100644 Documentation/gpu/drm-vm-bind-async.rst
-> 
-> diff --git a/Documentation/gpu/drm-vm-bind-async.rst b/Documentation/gpu/drm-vm-bind-async.rst
-> new file mode 100644
-> index 000000000000..69aff250b62f
-> --- /dev/null
-> +++ b/Documentation/gpu/drm-vm-bind-async.rst
-> @@ -0,0 +1,145 @@
-> +====================
-> +Asynchronous VM_BIND
-> +====================
-> +
-> +Nomenclature:
-> +=============
-> +
-> +* VRAM: On-device memory. Sometimes referred to as device local memory.
-> +
-> +* vm: A GPU address space. Typically per process, but can be shared by
-> +  multiple processes.
+--NoSpamProxy_32349cd5-7480-4d97-99c6-9d900ada1c9e
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-Rather obvious, but maybe specify as "GPU virtual address space" or just
-"GPU VA space".
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogVWxmIEhhbnNzb24gPHVs
+Zi5oYW5zc29uQGxpbmFyby5vcmc+DQo+IFNlbnQ6IE1pdHR3b2NoLCAyMS4gSnVuaSAyMDIzIDEx
+OjE5DQo+IFRvOiBNYXJlayBWYXN1dCA8bWFyZXhAZGVueC5kZT4NCj4gQ2M6IGxpbnV4LW1tY0B2
+Z2VyLmtlcm5lbC5vcmc7IEFkcmlhbiBIdW50ZXIgPGFkcmlhbi5odW50ZXJAaW50ZWwuY29tPjsN
+Cj4gQXZyaSBBbHRtYW4gPGF2cmkuYWx0bWFuQHdkYy5jb20+OyBCbyBMaXUgPGxpdWJvMDNAaW5z
+cHVyLmNvbT47IERlcmVuDQo+IFd1IDxkZXJlbi53dUBtZWRpYXRlay5jb20+OyBQaGlsaXBwIFph
+YmVsIDxwLnphYmVsQHBlbmd1dHJvbml4LmRlPjsNCj4gUGllcnJlIE9zc21hbiA8cGllcnJlQG9z
+c21hbi5ldT47IFJ1c3NlbGwgS2luZyA8bGludXhAYXJtbGludXgub3JnLnVrPjsNCj4gWWFuZyBZ
+aW5nbGlhbmcgPHlhbmd5aW5nbGlhbmdAaHVhd2VpLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQQVRD
+SCAwMS8xMV0gbW1jOiBjb3JlOiBVc2UgQklUKCkgbWFjcm8NCj4gDQo+IENBVVRJT046IHRoaXMg
+bWFpbCBjb21lcyBmcm9tIGV4dGVybmFsIS9BQ0hUVU5HOiBEaWVzZSBNYWlsIGtvbW10IHZvbg0K
+PiBleHRlcm4hDQo+IA0KPiBPbiBXZWQsIDIxIEp1biAyMDIzIGF0IDA0OjM2LCBNYXJlayBWYXN1
+dCA8bWFyZXhAZGVueC5kZT4gd3JvdGU6DQo+ID4NCj4gPiBPbiA2LzIwLzIzIDEzOjE1LCBVbGYg
+SGFuc3NvbiB3cm90ZToNCj4gPiA+IE9uIFR1ZSwgMjAgSnVuIDIwMjMgYXQgMTI6NDcsIE1hcmVr
+IFZhc3V0IDxtYXJleEBkZW54LmRlPiB3cm90ZToNCj4gPiA+Pg0KPiA+ID4+IFVzZSB0aGUgQklU
+KG4pIG1hY3JvIGluc3RlYWQgb2YgKDE8PG4pLCBubyBmdW5jdGlvbmFsIGNoYW5nZS4NCj4gPiA+
+PiBSZWdleCAnc0AoMSBcPzw8IFw/XChbMC05QS1aX11cK1wpKUBCSVQoXDEpJyAuDQo+ID4gPj4N
+Cj4gPiA+PiBTaWduZWQtb2ZmLWJ5OiBNYXJlayBWYXN1dCA8bWFyZXhAZGVueC5kZT4NCj4gPiA+
+DQo+ID4gPiBJIGRvbid0IHRoaW5rIHRoZSBiZW5lZml0IG9mIHRoaXMgY2hhbmdlIGlzIHdvcnRo
+IGl0LiBGb3IgZXhhbXBsZSwNCj4gPiA+IGl0J3MgcXVpdGUgdXNlZnVsIHRvIHJ1biBhIGdpdCBi
+bGFtZSB0byBzZWUgdGhlIGhpc3Rvcnkgb2Ygd2hhdCBoYXMNCj4gPiA+IGhhcHBlbmVkLg0KPiA+
+DQo+ID4gVW5kZXJzdG9vZC4NCj4gPg0KPiA+IGdpdCBibGFtZSBkb2VzIGFsbG93IHlvdSB0byBz
+cGVjaWZ5IGVpdGhlciAtLXNpbmNlIG9yIHJldmlzaW9uIHJhbmdlIHRob3VnaC4NCj4gDQo+IFll
+cywgYnV0IEkgdGhpbmsgeW91IGdldCBteSBwb2ludC4NCj4gDQo+ID4NCj4gPiA+IFNvLCBzb3Jy
+eSwgYnV0IEkgYW0gbm90IGdvaW5nIHRvIHBpY2sgdGhpcyB1cCAtIG9yIGFueSBvdGhlciBzaW1p
+bGFyDQo+ID4gPiBjaGFuZ2VzLCBhdCBsZWFzdCBmb3IgdGhlIGNvcmUgbGF5ZXIuDQo+ID4NCj4g
+PiBJcyB0aGlzIGEgcG9saWN5IG9mIHRoZSBtbWMgc3Vic3lzdGVtIHRvIHJlamVjdCBhbGwgY29k
+ZSBjbGVhbiB1cHMgdGhlbiA/DQo+IA0KPiBPZiBjb3Vyc2UgaXQgaXNuJ3QsIEkgcmVndWxhcmx5
+IHBpY2sgdXAgY2xlYW4gdXBzLg0KPiANCj4gTXkgcG9pbnQgaGVyZSBpcyB0aGF0IHRoZSBjbGVh
+bi11cCBzaG91bGQgbWFrZSB0aGUgY29kZSBiZXR0ZXIsIGluIHNvbWUNCj4gd2F5LiBJIGRvbid0
+IHRoaW5rIGNvbnZlcnRpbmcgdG8gdGhlIEJJVCBtYWNybyBoZWxwcyBpbiB0aGlzIHJlZ2FyZC4g
+SXQgbWF5IGJlDQo+IHByZWZlcnJlZCB0byB1c2UgdGhlIEJJVCBtYWNybyBieSBzb21lIGFuZCBi
+eSBvdGhlcnMgbm90Lg0KDQpGV0lXIEkgYWdyZWUgd2l0aCBVZmZlIGhlcmUuDQpGb3IgaG9zdC8g
+ZmlsZXMsIHdoaWNoIGFyZSBtb3N0bHkgd3JpdHRlbiBieSBhIGhhbmRmdWwgZWFjaCwgaXQncyBz
+dGlsbCBhIG51aXNhbmNlLiAoT25lIGNvdWxkIGFyZ3VlIHRoYXQgdGhleSBhcmUgb2Z0ZW4gZ2l0
+IGJsYW1lZCBieSBwZW9wbGUgbm90IGZhbWlsaWFyIHdpdGggbW1jIHN1YnN5c3RlbSwgdGh1cyBn
+aXZpbmcgb2ZmIHRoZSB3cm9uZyBwaWN0dXJlKS4NCkZvciBtdWNoIG9mIHRoZSBjb3JlIGNvZGUg
+eW91IGFscmVhZHkgaGF2ZSB0byBnbyBtYW55IHJldmlzaW9ucyBiYWNrLCBJJ20gZ3JhdGVmdWwg
+Zm9yIGVhY2ggSSBkb24ndCBoYXZlIHRvLg0KU29tZXRoaW5nIGxpa2UgdGhlIG1xIHJld29yayB3
+b3VsZCBoYXZlIGJlZW4gYSBnb29kIG1vbWVudCB0byBkbyB0aGVzZSBtaW5vciBuaXRwaWNrcywg
+aWYgc29tZXRoaW5nIGxpa2UgdGhhdCBldmVyIGhhcHBlbnMgYWdhaW4sIGJ1dCBldmVuIHRoZW4g
+SSAgd291bGQgcHJlZmVyIGp1c3Qgb25lIGNvbW1pdCBpbmNsdWRpbmcgZXZlcnl0aGluZy4NCg0K
+DQpSZWdhcmRzLA0KQ2hyaXN0aWFuDQo=
 
-Personally, I don't like "vm" as an abbreviation for "GPU VA space" or "virtual
-address space" in general, but it is commonly used and I fail to find a better
-one to be honest.
+--NoSpamProxy_32349cd5-7480-4d97-99c6-9d900ada1c9e
+Content-Transfer-Encoding: BASE64
+Content-Type: application/pkcs7-signature; name=smime.p7s
+Content-Disposition: attachment; filename=smime.p7s
 
-> +
-> +* VM_BIND: An operation or a list of operations to modify a vm using
-> +  an IOCTL. The operations include mapping and unmapping system- or
-> +  VRAM memory.
-> +
-> +* syncobj: A container that abstracts synchronization objects. The
-> +  synchronization objects can be either generic, like dma-fences or
-> +  driver specific. A syncobj typically indicates the type of the
-> +  underlying synchronization object.
-> +
-> +* in-syncobj: Argument to a VM_BIND IOCTL, the VM_BIND operation waits
-> +  for these before starting.
-> +
-> +* out-syncbj: Argument to a VM_BIND_IOCTL, the VM_BIND operation
-> +  signals these when the bind operation is complete.
-> +
-> +* memory fence: A synchronization object, different from a dma-fence.
-> +  A memory fence uses the value of a specified memory location to determine
-> +  signaled status. A memory fence can be awaited and signaled by both
-> +  the GPU and CPU. Memory fences are sometimes referred to as
-> +  user-fences, and do not necessarily bey the dma-fence rule of
-> +  signalling within a "reasonable amount of time". The kernel should
-> +  thus avoid waiting for memory fences with locks held.
-> +
-> +* long-running workload: A workload that may take more than the
-> +  current stipulated dma-fence maximum signal delay to complete and
-> +  which therefore needs to set the VM or the GPU execution context in
-> +  a certain mode that disallows completion dma-fences.
-> +
-> +* UMD: User-mode driver.
-> +
-> +* KMD: Kernel-mode driver.
-> +
-> +
-> +Synchronous / Asynchronous VM_BIND operation
-> +============================================
-> +
-> +Synchronous VM_BIND
-> +___________________
-> +With Synchronous VM_BIND, the VM_BIND operations all complete before the
-> +ioctl returns. A synchronous VM_BIND takes neither in-fences nor
-
-Just some nit-picking: IOCTL is mostly written in caps, maybe you want to stick
-to either of the two variants.
-
-> +out-fences. Synchronous VM_BIND may block and wait for GPU operations;
-> +for example swapin or clearing, or even previous binds.
-> +
-> +Asynchronous VM_BIND
-> +____________________
-> +Asynchronous VM_BIND accepts both in-syncobjs and out-syncobjs. While the
-> +IOCTL may return immediately, the VM_BIND operations wait for the in-syncobjs
-> +before modifying the GPU page-tables, and signal the out-syncobjs when
-> +the modification is done in the sense that the next execbuf that
-
-Maybe add "execbuf" to the nomenclature.
-
-> +awaits for the out-syncobjs will see the change. Errors are reported
-> +synchronously assuming that the asynchronous part of the job never errors.
-> +In low-memory situations the implementation may block, performing the
-> +VM_BIND synchronously, because there might not be enough memory
-> +immediately available for preparing the asynchronous operation.
-> +
-> +If the VM_BIND IOCTL takes a list or an array of operations as an argument,
-> +the in-syncobjs needs to signal before the first operation starts to
-> +execute, and the out-syncobjs signal after the last operation
-> +completes. Operations in the operation list can be assumed, where it
-> +matters, to complete in order.
-> +
-> +To aid in supporting user-space queues, the VM_BIND may take a bind context
-
-I think "bind context" should also be explained in the nomenclature.
-
-> +AKA bind engine identifier argument. All VM_BIND operations using the same
-> +bind engine can then be assumed, where it matters, to complete in
-> +order. No such assumptions can be made between VM_BIND operations
-> +using separate bind contexts.
-> +
-> +The purpose of an Asynchronous VM_BIND operation is for user-mode
-> +drivers to be able to pipeline interleaved vm modifications and
-> +execbufs. For long-running workloads, such pipelining of a bind
-> +operation is not allowed and any in-fences need to be awaited
-> +synchronously.
-> +
-> +Also for VM_BINDS for long-running VMs the user-mode driver should typically
-> +select memory fences as out-fences since that gives greater flexibility for
-> +the kernel mode driver to inject other  operations into the bind /
-> +unbind operations. Like for example inserting breakpoints into batch
-> +buffers. The workload execution can then easily be pipelined behind
-> +the bind completion using the memory out-fence as the signal condition
-> +for a gpu semaphore embedded by UMD in the workload.
-> +
-> +Multi-operation VM_BIND IOCTL error handling and interrupts
-> +========================================
-> +
-> +The VM_BIND operations of the ioctl may error due to lack of resources
-> +to complete and also due to interrupted waits. In both situations UMD
-> +should preferably restart the IOCTL after taking suitable action. If
-> +UMD has overcommitted a memory resource, an -ENOSPC error will be
-> +returned, and UMD may then unbind resources that are not used at the
-> +moment and restart the IOCTL. On -EINTR, UMD should simply restart the
-> +IOCTL and on -ENOMEM user-space may either attempt to free known
-> +system memory resources or abort the operation. If aborting as a
-> +result of a failed operation in a list of operations, some operations
-> +may still have completed, and to get back to a known state, user-space
-> +should therefore attempt to unbind all virtual memory regions touched
-> +by the failing IOCTL.
-> +Unbind operations are guaranteed not to cause any errors due to
-> +resource constraints.
-> +In between a failed VM_BIND ioctl and a successful restart there may
-> +be implementation defined restrictions on the use of the VM. For a
-> +description why, please see KMD implementation details under [error
-> +state saving]_.
-> +
-> +Sample uAPI implementations
-> +======================
-> +Suggested uAPI implementations at the moment of writing can be found for
-> +the Nouveau driver `here: https://patchwork.freedesktop.org/patch/543260/?series=112994&rev=6`
-> +and for the Xe driver `here: https://cgit.freedesktop.org/drm/drm-xe/diff/include/uapi/drm/xe_drm.h?h=drm-xe-next&id=9cb016ebbb6a275f57b1cb512b95d5a842391ad7`
-> +
-> +KMD implementation details
-> +==========================
-
-Maybe we can mention the GPUVA manager as a helper for implementing such an
-interface.
-
-Anyway, I will surely add a link pointing to this document to the documentation
-of the GPUVA manager.
-
-- Danilo
-
-> +
-> +.. [error state saving] Open: When the VM_BIND ioctl returns an error, some
-> +			or even parts of an operation may have been
-> +			completed. If the ioctl is restarted, in order
-> +			to know where to restart, the KMD can
-> +			either put the VM in an error state and save
-> +			one instance of the needed restart state
-> +			internally. In this case, KMD needs to block
-> +			further modifications of the VM state that may
-> +			cause additional failures requiring a restart
-> +			state save, until the error has been fully resolved.
-> +			If the uAPI instead defines a pointer to a
-> +			UMD allocated cookie in the IOCTL struct, it
-> +			could also choose to store the restart state
-> +			in that cookie.
-> +
-> +			The restart state may, for example, be the
-> +			number of successfully completed operations.
-> +
-> +			Easiest for UMD would of course be if KMD did
-> +			a full unwind on error so that no error state
-> +			needs to be saved.
-> diff --git a/Documentation/gpu/rfc/xe.rst b/Documentation/gpu/rfc/xe.rst
-> index 2516fe141db6..0f062e1346d2 100644
-> --- a/Documentation/gpu/rfc/xe.rst
-> +++ b/Documentation/gpu/rfc/xe.rst
-> @@ -138,8 +138,8 @@ memory fences. Ideally with helper support so people don't get it wrong in all
->  possible ways.
->  
->  As a key measurable result, the benefits of ASYNC VM_BIND and a discussion of
-> -various flavors, error handling and a sample API should be documented here or in
-> -a separate document pointed to by this document.
-> +various flavors, error handling and sample API suggestions are documented in
-> +Documentation/gpu/drm-vm-bind-async.rst
->  
->  Userptr integration and vm_bind
->  -------------------------------
-> -- 
-> 2.40.1
-> 
+MIAGCSqGSIb3DQEHAqCAMIACAQExDTALBglghkgBZQMEAgEwCwYJKoZIhvcNAQcBoIIjdjCCB+sw
+ggXToAMCAQICFH/0ya9FbNqDP1mj8nwYIyzoDuazMA0GCSqGSIb3DQEBCwUAMFMxCzAJBgNVBAYT
+AkNIMRUwEwYDVQQKEwxTd2lzc1NpZ24gQUcxLTArBgNVBAMTJFN3aXNzU2lnbiBSU0EgU01JTUUg
+TENQIElDQSAyMDIxIC0gMjAeFw0yMjEyMTUxMDIwNTJaFw0yMzEyMTUxMDIwNTJaMEgxJTAjBgkq
+hkiG9w0BCQEWFmNsb2VobGVAaHlwZXJzdG9uZS5jb20xHzAdBgNVBAMMFmNsb2VobGVAaHlwZXJz
+dG9uZS5jb20wggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDbQs7vFtBkf7fsjeH5TOTl
+4BCMTLaVKnaZGJ79z62g8ZSuOWg45uUJ6ti+RfIaS/gp8bAnHxrFDcYANbU2S/S19bwpqvKlOcV9
+3mKFefUB7SVTnhD1EDsk3I2SCG7Bz61gflKcRnalJG74AXn4E4MAaRlrWCoLkZIeCSY4lNrQD1pw
+70nmNRY41ICYzAVAb0RiP60audx4UP29YDXLUkrki5cpf3yt/eHS/KRjHiadq2uDnkGQI1oadBXa
+u4B0nCVmN68LKWb8Ak5aSROJarWOPHLQ+wuL78NS11Yer5Mnngad5/pccQY0MjkC7e80HBNaOAOt
+vrf2a7i8fFs278So63WAMt+XUM2rHMyIKsOEWqAHBY1GoAKT81NZ+5YMqfvUbK8SucXAy+UWZlzY
+VXLCtxrqHcxNbTApkjDtxalDMn9bm4qyQE/qxbkuGSPdqIj8v7AOCgb1K4I8hzwOIiCpEJMhbIvp
+bZK1GQ3BxE61FG599xyVZNf29aYdoUDIp4MwG3hcLHvYsRvSo6eHPYk8mr9SM+OhexuEdj3+St+Y
+5MSdDdkvRdspx0gXwmffJ6iCBjChXDHa/W1uSBvM5SlKKsYH7ufOC31CptKkEdM8lGi0PPlevh7U
+25ZI0QVH3EiLgBymsdqPc/7LifBKmp+xamIZAUVcfJqvdvTt+EkgEQIDAQABo4ICwDCCArwwIQYD
+VR0RBBowGIEWY2xvZWhsZUBoeXBlcnN0b25lLmNvbTAOBgNVHQ8BAf8EBAMCBLAwEwYDVR0lBAww
+CgYIKwYBBQUHAwQwHQYDVR0OBBYEFA+H5eoYx7aaS0slW7G0+hgo1ZqlMB8GA1UdIwQYMBaAFPpU
+wIKm/pa9BMdfn1+CDD3DlU9HMIH/BgNVHR8EgfcwgfQwR6BFoEOGQWh0dHA6Ly9jcmwuc3dpc3Nz
+aWduLm5ldC9GQTU0QzA4MkE2RkU5NkJEMDRDNzVGOUY1RjgyMEMzREMzOTU0RjQ3MIGooIGloIGi
+hoGfbGRhcDovL2RpcmVjdG9yeS5zd2lzc3NpZ24ubmV0L0NOPUZBNTRDMDgyQTZGRTk2QkQwNEM3
+NUY5RjVGODIwQzNEQzM5NTRGNDclMkNPPVN3aXNzU2lnbiUyQ0M9Q0g/Y2VydGlmaWNhdGVSZXZv
+Y2F0aW9uTGlzdD9iYXNlP29iamVjdENsYXNzPWNSTERpc3RyaWJ1dGlvblBvaW50MGcGA1UdIARg
+MF4wUgYIYIV0AVkCAQswRjBEBggrBgEFBQcCARY4aHR0cHM6Ly9yZXBvc2l0b3J5LnN3aXNzc2ln
+bi5jb20vU3dpc3NTaWduX0NQU19TTUlNRS5wZGYwCAYGBACPegEDMIHGBggrBgEFBQcBAQSBuTCB
+tjBkBggrBgEFBQcwAoZYaHR0cDovL3N3aXNzc2lnbi5uZXQvY2dpLWJpbi9hdXRob3JpdHkvZG93
+bmxvYWQvRkE1NEMwODJBNkZFOTZCRDA0Qzc1RjlGNUY4MjBDM0RDMzk1NEY0NzBOBggrBgEFBQcw
+AYZCaHR0cDovL29jc3Auc3dpc3NzaWduLm5ldC9GQTU0QzA4MkE2RkU5NkJEMDRDNzVGOUY1Rjgy
+MEMzREMzOTU0RjQ3MA0GCSqGSIb3DQEBCwUAA4ICAQCm+EvZobQCGMXgo2yeAD2ztkKXLEUmp7sp
+to3Unk6h7xNT0k1XsLxQAyF+Ny/Ftd6GAnq02cWyupmU8OfcSbWIi91QT13TUUholbqV1ELlgMpa
+slZ6qBAJLWLXQ8p/BWaGzpRBgJEsg4fc3XC5FRjysoZNOxZIwblQrQDD/cCTUAM43Ar086iZoM1B
+5mqNZil+LoCaXR4q8KS2jV3cTseKK/yIHpOl3NNAU7tC10pO9PNkJ9Dd6W/ghKBvhNiSUucEmm4e
+70b5cP3M0qJ1xdBkRhZ5BDFBPTNWq0pecXdRWILG0xz6neB8VCClW3tYYAriroYjXDZzBMVGfXKo
+0pxnwg2B/+ppYGaji2Sf3IBZKFVS5hRFolcsRAqfxmDYfmVJA1lQqOfr0f1jURksb/+IEG7aZNyG
+4iMIMFmDptXeEysz5ntJw5KAf0i6mJ2y/sEU9pzImRlvQc5kHV3GT9BdYs8GmSmdD8CI0S+/y/no
+Ny4l2SzVjkc+3d+fdWSJV6y4gR+3FmG8B5dTvJBHNs0YSsG2rQSEzDxcZNzhjKA9c70FS1U3m3n6
+bU2mErdOPQ4KtTu5v3D5RBKB2cgbdBI4B8gEHJhqxOdBO5E+Z8+FMqIWCITb1fN2NrgenRDYy4Bj
+tax6L8HT5mEY+mS8Lx08gqY01qcfbiD8uD+qTtmsLjCCB+swggXToAMCAQICFH/0ya9FbNqDP1mj
+8nwYIyzoDuazMA0GCSqGSIb3DQEBCwUAMFMxCzAJBgNVBAYTAkNIMRUwEwYDVQQKEwxTd2lzc1Np
+Z24gQUcxLTArBgNVBAMTJFN3aXNzU2lnbiBSU0EgU01JTUUgTENQIElDQSAyMDIxIC0gMjAeFw0y
+MjEyMTUxMDIwNTJaFw0yMzEyMTUxMDIwNTJaMEgxJTAjBgkqhkiG9w0BCQEWFmNsb2VobGVAaHlw
+ZXJzdG9uZS5jb20xHzAdBgNVBAMMFmNsb2VobGVAaHlwZXJzdG9uZS5jb20wggIiMA0GCSqGSIb3
+DQEBAQUAA4ICDwAwggIKAoICAQDbQs7vFtBkf7fsjeH5TOTl4BCMTLaVKnaZGJ79z62g8ZSuOWg4
+5uUJ6ti+RfIaS/gp8bAnHxrFDcYANbU2S/S19bwpqvKlOcV93mKFefUB7SVTnhD1EDsk3I2SCG7B
+z61gflKcRnalJG74AXn4E4MAaRlrWCoLkZIeCSY4lNrQD1pw70nmNRY41ICYzAVAb0RiP60audx4
+UP29YDXLUkrki5cpf3yt/eHS/KRjHiadq2uDnkGQI1oadBXau4B0nCVmN68LKWb8Ak5aSROJarWO
+PHLQ+wuL78NS11Yer5Mnngad5/pccQY0MjkC7e80HBNaOAOtvrf2a7i8fFs278So63WAMt+XUM2r
+HMyIKsOEWqAHBY1GoAKT81NZ+5YMqfvUbK8SucXAy+UWZlzYVXLCtxrqHcxNbTApkjDtxalDMn9b
+m4qyQE/qxbkuGSPdqIj8v7AOCgb1K4I8hzwOIiCpEJMhbIvpbZK1GQ3BxE61FG599xyVZNf29aYd
+oUDIp4MwG3hcLHvYsRvSo6eHPYk8mr9SM+OhexuEdj3+St+Y5MSdDdkvRdspx0gXwmffJ6iCBjCh
+XDHa/W1uSBvM5SlKKsYH7ufOC31CptKkEdM8lGi0PPlevh7U25ZI0QVH3EiLgBymsdqPc/7LifBK
+mp+xamIZAUVcfJqvdvTt+EkgEQIDAQABo4ICwDCCArwwIQYDVR0RBBowGIEWY2xvZWhsZUBoeXBl
+cnN0b25lLmNvbTAOBgNVHQ8BAf8EBAMCBLAwEwYDVR0lBAwwCgYIKwYBBQUHAwQwHQYDVR0OBBYE
+FA+H5eoYx7aaS0slW7G0+hgo1ZqlMB8GA1UdIwQYMBaAFPpUwIKm/pa9BMdfn1+CDD3DlU9HMIH/
+BgNVHR8EgfcwgfQwR6BFoEOGQWh0dHA6Ly9jcmwuc3dpc3NzaWduLm5ldC9GQTU0QzA4MkE2RkU5
+NkJEMDRDNzVGOUY1RjgyMEMzREMzOTU0RjQ3MIGooIGloIGihoGfbGRhcDovL2RpcmVjdG9yeS5z
+d2lzc3NpZ24ubmV0L0NOPUZBNTRDMDgyQTZGRTk2QkQwNEM3NUY5RjVGODIwQzNEQzM5NTRGNDcl
+MkNPPVN3aXNzU2lnbiUyQ0M9Q0g/Y2VydGlmaWNhdGVSZXZvY2F0aW9uTGlzdD9iYXNlP29iamVj
+dENsYXNzPWNSTERpc3RyaWJ1dGlvblBvaW50MGcGA1UdIARgMF4wUgYIYIV0AVkCAQswRjBEBggr
+BgEFBQcCARY4aHR0cHM6Ly9yZXBvc2l0b3J5LnN3aXNzc2lnbi5jb20vU3dpc3NTaWduX0NQU19T
+TUlNRS5wZGYwCAYGBACPegEDMIHGBggrBgEFBQcBAQSBuTCBtjBkBggrBgEFBQcwAoZYaHR0cDov
+L3N3aXNzc2lnbi5uZXQvY2dpLWJpbi9hdXRob3JpdHkvZG93bmxvYWQvRkE1NEMwODJBNkZFOTZC
+RDA0Qzc1RjlGNUY4MjBDM0RDMzk1NEY0NzBOBggrBgEFBQcwAYZCaHR0cDovL29jc3Auc3dpc3Nz
+aWduLm5ldC9GQTU0QzA4MkE2RkU5NkJEMDRDNzVGOUY1RjgyMEMzREMzOTU0RjQ3MA0GCSqGSIb3
+DQEBCwUAA4ICAQCm+EvZobQCGMXgo2yeAD2ztkKXLEUmp7spto3Unk6h7xNT0k1XsLxQAyF+Ny/F
+td6GAnq02cWyupmU8OfcSbWIi91QT13TUUholbqV1ELlgMpaslZ6qBAJLWLXQ8p/BWaGzpRBgJEs
+g4fc3XC5FRjysoZNOxZIwblQrQDD/cCTUAM43Ar086iZoM1B5mqNZil+LoCaXR4q8KS2jV3cTseK
+K/yIHpOl3NNAU7tC10pO9PNkJ9Dd6W/ghKBvhNiSUucEmm4e70b5cP3M0qJ1xdBkRhZ5BDFBPTNW
+q0pecXdRWILG0xz6neB8VCClW3tYYAriroYjXDZzBMVGfXKo0pxnwg2B/+ppYGaji2Sf3IBZKFVS
+5hRFolcsRAqfxmDYfmVJA1lQqOfr0f1jURksb/+IEG7aZNyG4iMIMFmDptXeEysz5ntJw5KAf0i6
+mJ2y/sEU9pzImRlvQc5kHV3GT9BdYs8GmSmdD8CI0S+/y/noNy4l2SzVjkc+3d+fdWSJV6y4gR+3
+FmG8B5dTvJBHNs0YSsG2rQSEzDxcZNzhjKA9c70FS1U3m3n6bU2mErdOPQ4KtTu5v3D5RBKB2cgb
+dBI4B8gEHJhqxOdBO5E+Z8+FMqIWCITb1fN2NrgenRDYy4Bjtax6L8HT5mEY+mS8Lx08gqY01qcf
+biD8uD+qTtmsLjCCB0cwggUvoAMCAQICDyxaqdlU/bKrlq0Xtl+M9DANBgkqhkiG9w0BAQsFADBT
+MQswCQYDVQQGEwJDSDEVMBMGA1UEChMMU3dpc3NTaWduIEFHMS0wKwYDVQQDEyRTd2lzc1NpZ24g
+UlNBIFNNSU1FIFJvb3QgQ0EgMjAyMSAtIDEwHhcNMjEwODA0MTIxMjU5WhcNMzYwNzMxMTIxMjU5
+WjBTMQswCQYDVQQGEwJDSDEVMBMGA1UEChMMU3dpc3NTaWduIEFHMS0wKwYDVQQDEyRTd2lzc1Np
+Z24gUlNBIFNNSU1FIExDUCBJQ0EgMjAyMSAtIDIwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIK
+AoICAQC9BRnI1A1xPgMDELSTFgDrzyPawAcju1E8OBLTQHXDcmN46wsneV+NVoip2X1ZQ9GIF3bj
+x0aLq9/iiKo9EsCdCO1BENfc70ngvzFS1oOdmfzymiKAZlWsEJSQocyLldDWSF03KN8a7Rgl30PD
+IURBvBWlpIOCxiCAUgKogGYBvm7ZRZZ10BcgfGU/ga19jlhGI9xSJ9pCPjvcWPJKpiSbG+s0CR/M
+4cXaQPO9ZEFYxIn7g4rNIYBYZwhsIjcPn5OtC9/7p/3F/2qKA9gfvK/CyQ14fPVOPVJaPECufMs4
++tRhh2edpGx4irQTaVV85iVU3wjPpi84TIgUlRwqUWloj158A5r7pGVMcI++Slyq3rudu319WjiC
+57kAikVHryC+gwC4SUAYn0CqX//cApx+99nmLWAmWnGdeaRmHMJCmJfXy3Dji8SnVuggcXbErnkr
+5sms1kyp5wiDR7YVIkdTuiJHpF2d7WZ/d5EOT7KBdS/k67/XgTrUwkWwKR2Vm/00b0Zpz3N4Hg9F
+TrBP53A2uci2e7Lf3vR8hFJijhu08zGuClY7Khn+0BBU50YSOE2BnYWsBOe36ddw2470cM/iGtMM
+aTXnA0rg4MsX9TP0vX4iQpWZMwqNwqcYk0ewMqy4RDAY7xH4GXNkRGT2nJngURbQS1wgScF1NMzR
+W+rRrQIDAQABo4ICFjCCAhIwDgYDVR0PAQH/BAQDAgEGMBMGA1UdJQQMMAoGCCsGAQUFBwMEMBIG
+A1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFPpUwIKm/pa9BMdfn1+CDD3DlU9HMB8GA1UdIwQY
+MBaAFAkMvyqiHQQkDLL5QApBws9acqqAMIH/BgNVHR8EgfcwgfQwR6BFoEOGQWh0dHA6Ly9jcmwu
+c3dpc3NzaWduLm5ldC8wOTBDQkYyQUEyMUQwNDI0MENCMkY5NDAwQTQxQzJDRjVBNzJBQTgwMIGo
+oIGloIGihoGfbGRhcDovL2RpcmVjdG9yeS5zd2lzc3NpZ24ubmV0L0NOPTA5MENCRjJBQTIxRDA0
+MjQwQ0IyRjk0MDBBNDFDMkNGNUE3MkFBODAlMkNPPVN3aXNzU2lnbiUyQ0M9Q0g/Y2VydGlmaWNh
+dGVSZXZvY2F0aW9uTGlzdD9iYXNlP29iamVjdENsYXNzPWNSTERpc3RyaWJ1dGlvblBvaW50MB8G
+A1UdIAQYMBYwCgYIYIV0AVkCAQswCAYGBACPegEDMHQGCCsGAQUFBwEBBGgwZjBkBggrBgEFBQcw
+AoZYaHR0cDovL3N3aXNzc2lnbi5uZXQvY2dpLWJpbi9hdXRob3JpdHkvZG93bmxvYWQvMDkwQ0JG
+MkFBMjFEMDQyNDBDQjJGOTQwMEE0MUMyQ0Y1QTcyQUE4MDANBgkqhkiG9w0BAQsFAAOCAgEABw8e
+lwSFegmW7IGpGTOPwtOC2tzTwCQiRA2VC/EWGKckk8A3F9Q+M2A8lUYVlRKJt31pAezcXaP6OFW0
+3IPiiXU70QA598nGqUxzzjn8rpFhZgCj6bi8MJd5MH5C2RRYFrhiRefx6pp42LLc0AFIF1ZqkaYa
+1vz0EgTOL9XE3inXe39twPLoe3rc/f8gfpem/s1NIJk2azwyxZn226YSrSedvxhe7LiN6gOqvU7h
+xpC8bXaiIYVy7DISXwEt902Gc+M4QbhUf8yQ+PiK3QexGIWiusOO46cn673dG/1KCzma/1Llp9Dx
+aeUHlxjjeeer/2WtWWZNFhoInrxpcK58odaJZRMZQJwNljMb66gGb5OpeanN0su93/S9GrZgJqN6
+spp171azfMuQzVqj9gxFy66yIdlrhZcba/QixC2eAJxm5fM/PZg9WXZ737G8jAbsuoREH1bxsglL
+zxAIwboY7uVwIim6ZcieKb6Yy4n6TzperNmhU5UHiUZSJzIQ/qu9B14cfh0CAJo19p7fRvyeF/p7
+INDH0ceTVTq5sF8kFtMM1bz+0/sWOTNqdi8kGO7I7iouC3+V4DDx4F1sGcaigFXtUpLmol5Lss+i
+9NXGgWFcPFreexoLaBdckDJgBk6zOHKVYwZdnrg2CovIev/uumK0WyCa7ix1+SDcsd2PXxIwggaL
+MIIEc6ADAgECAhAA3kxVIPbc9AIbDxFU940QMA0GCSqGSIb3DQEBCwUAMEUxCzAJBgNVBAYTAkNI
+MRUwEwYDVQQKEwxTd2lzc1NpZ24gQUcxHzAdBgNVBAMTFlN3aXNzU2lnbiBHb2xkIENBIC0gRzIw
+HhcNMjEwODAzMTMxNDU1WhcNMzYxMDIzMTMxNDU1WjBTMQswCQYDVQQGEwJDSDEVMBMGA1UEChMM
+U3dpc3NTaWduIEFHMS0wKwYDVQQDEyRTd2lzc1NpZ24gUlNBIFNNSU1FIFJvb3QgQ0EgMjAyMSAt
+IDEwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDWsri0OI8mujfIASNFFn6+ZDiGcmZh
+WI0kilmzDKEqq367hXxlZnCn6SLb7rsy+quxhj+rSIG4q/Mq3TfHLgv2q99VrVQgFDq3iURt5+g/
+roghGI5HVpUAyexlblZHFE2tLibS1ItsyvMzLfnwm463hiaB5wueiwx8Bac8evnwhZCciWc5dRGx
+Y7DUIyx93B8rdu0ErboRyQdJDeMoDy4RFNK2sv94uP5aU4AkrAtIuk4yMVHsqv67RCwL1/l9q43a
+bKsI3fNBPY/1QUFcxsxRyg5EH7dqgHZVaVHmTP0XgPuzVO6wSh0zkwZ5uWERrOQOW7Pd4LElXLfU
+0830e54BVCuCkKHhykON8EGkHAfA1jMWo0VGj4RMaf2TV53T5W/LJAwxLQOYwgA5RHkigW3k6vwL
+ZCZu/MqeGgNE7X9NTekRsna9hn17u1Q/UZBHx4v4/04s8ggwjBnBLEc1nr2rU6Qirp8MIRkpvZ6b
+z4TcjtE1SyIQgRti7cBL0yuQIkkfLSGukcXf8dZBVHIO3so0EPXJmp3VXBbkzSWxx6hxRqz4U4UX
+iaskGjgYMiRz6VWu+IBjA2+EsN+glLWpU/CLavVUeeX/W5yibyLh/0ApZWxvjkhpMT6BGzuLWPpb
+LztrfWsk8LzyjeWa5qx4y9iCKwAXHXlqCS7WbnbPMPvbWQIDAQABo4IBZzCCAWMwDwYDVR0TAQH/
+BAUwAwEB/zAdBgNVHQ4EFgQUCQy/KqIdBCQMsvlACkHCz1pyqoAwHwYDVR0jBBgwFoAUWyV7lqRl
+UX64OfPAeGZe6Drn8O4wDgYDVR0PAQH/BAQDAgEGMIH/BgNVHR8EgfcwgfQwR6BFoEOGQWh0dHA6
+Ly9jcmwuc3dpc3NzaWduLm5ldC81QjI1N0I5NkE0NjU1MTdFQjgzOUYzQzA3ODY2NUVFODNBRTdG
+MEVFMIGooIGloIGihoGfbGRhcDovL2RpcmVjdG9yeS5zd2lzc3NpZ24ubmV0L0NOPTVCMjU3Qjk2
+QTQ2NTUxN0VCODM5RjNDMDc4NjY1RUU4M0FFN0YwRUUlMkNPPVN3aXNzU2lnbiUyQ0M9Q0g/Y2Vy
+dGlmaWNhdGVSZXZvY2F0aW9uTGlzdD9iYXNlP29iamVjdENsYXNzPWNSTERpc3RyaWJ1dGlvblBv
+aW50MA0GCSqGSIb3DQEBCwUAA4ICAQAC+Opd0IrMrAgDNlRm/wophuFUgywz6MdsrhCpVIF/Ki2I
+Jq2mqDQoDxkGqZ3iApUEMmRMC8r5433DE1vol0COd+PjgoGHrQFgB8PF4SD9tzCXProccXSLX02n
+sf5OfAl4eodf8ayhJRGXxywRnJDqchY9AjWpu+Uj2B9SQLfQjl3aI7wz6TL9uHWfQ749V0uHYd7t
+lshwfH63E+EJQLsZAgcPa90f0swOWhIY5MGxnL6+KxEe5ZrF4KE1seThsmKuwOhsfJaH+mDeLYkc
+FEFAOaJ377AVWwE/Hs7mFKmcvoKfsWIX3yJDtTJvtwX8GMraekNdZbUm/lpBoWl0l/FDUY3cf9lX
+hKcdUfKCbasOfNOj5eDJlQRt8sedd+Kl+MjFuWcGb239xn9uvsVq2wQ22zBvXb3Imf7EcpbMuct0
+iySpEwt4tQbK9YsmFnOYHXGVnfPwUulsVX4FIhfQiTxl7VeAd/zYrL2zU48He1gTerHnybD448mh
+keJ0zspoG7IbxJZglJDb5Qi3PsyIfWfAVfwoc94cO9rPDxy2CNIzPvk8kkigWnCIHhAXmHp23WBI
+PnJFPnBrjOtIfFm1VgUSFApGTQI2CdFscyFSJ9hrxNJyp0x+2zbO0z3LXOLuG935Ov1NE/8OzlK2
+FnEzoJfFX/aCGBe1OpubtnirG+v9WjCCBbowggOioAMCAQICCQC7QBxD9V5PsDANBgkqhkiG9w0B
+AQUFADBFMQswCQYDVQQGEwJDSDEVMBMGA1UEChMMU3dpc3NTaWduIEFHMR8wHQYDVQQDExZTd2lz
+c1NpZ24gR29sZCBDQSAtIEcyMB4XDTA2MTAyNTA4MzAzNVoXDTM2MTAyNTA4MzAzNVowRTELMAkG
+A1UEBhMCQ0gxFTATBgNVBAoTDFN3aXNzU2lnbiBBRzEfMB0GA1UEAxMWU3dpc3NTaWduIEdvbGQg
+Q0EgLSBHMjCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBAK/k7n6LJA4SbqlQLRZEO5KS
+XMq4XYSSQhMqvGVXgkA+VyTNUIslKrdv/O+i0MAfAiRKE5aPIxPmKFgAo0fHBqeEIyu7vZYrf1XM
+i8FXHw5iZQ/dPVaKc9qufm26gRx+QowgNdlDTYT6hNtSLPMOJ3cLa78RL3J4ny7YPuYYN1oqcvna
+YpCSlcofnOmzPCvL8wETv1rPwbUKYL3dtZlkU7iglrNv4iZ3kYzgYhACnzQPpNWSM1Hevo26hHpg
+PGrbnyvs3t4BP25N5VCGy7Sv7URAxcpajNrSK3yo7r6m5QqqDqXfBVK3VcciXTJql5djE9vJ23k2
+e4U6SsVSifkk5513qYL/VRylcWkr0QIk8rMm1GvaBFXlwQrHbTA3kCrknhQzXhYXVcVbtcs0iZLx
+nSaPoQfUxrJ4UNsMDAt8C4xB17np3YyI96NNsjLM2BfazbfOZp3U/V7/vZc+KXXnfqdiWK8lNKVB
+xz28DVDKAwMPCFoflXN4Yr+vchRpDqXlAw54jiYoQvAHC2IgEGc5RvqpA8wEOHpm7yCDtYxKVo6R
+APyOXILeiKDD4mhufY3vPN1l9F2sUe8kgK6qVpdv+a192mE/mHc8pZG2HIwm2mWiCW3B4lTjucpM
+TICPd3tgmh7ftvJIHg66TlRtmODhohqid1DPxGOS7EcZnevma87BAgMBAAGjgawwgakwDgYDVR0P
+AQH/BAQDAgEGMA8GA1UdEwEB/wQFMAMBAf8wHQYDVR0OBBYEFFsle5akZVF+uDnzwHhmXug65/Du
+MB8GA1UdIwQYMBaAFFsle5akZVF+uDnzwHhmXug65/DuMEYGA1UdIAQ/MD0wOwYJYIV0AVkBAgEB
+MC4wLAYIKwYBBQUHAgEWIGh0dHA6Ly9yZXBvc2l0b3J5LnN3aXNzc2lnbi5jb20vMA0GCSqGSIb3
+DQEBBQUAA4ICAQAnuuOUfPGuwN4X5uXY1fVUsIP0u81eBXtPn3VmrzzoVn78cng4A9krYhsAufjp
+YM3MzlGKx1AxbuFKfhgvaVm2PWSBK+ODhOYih4594O4CmWG4HvS4K4gSFoTCMZM4ljGmuTtTP8Mk
+k1ZbaZLsxcG7OADj7BepuNzHfAGDnzJHulIiNB0yeglWp3wlNqk9S9rAgm8KuxLIh0snEfkeLceT
+P57bXyZrUtkuivEUxkSNFam3v73ephruri37SHcX/rvsrxj1KlHwOYSXlWxuG8MrxHRgeSWwCiff
+317SOc9FfUJL37MsHsXGXcpVOqCcaZqP2u+ysDyfh2wSK2VwFVIxGiTPbzEjUB+MT48jw3RBYxxV
+qBTdPuBRUM/xGzBWDpKwgoXYg8siZLwtuCXVVKK4BuqtkqQkoMGGtUoTakfPLgtWlVTLzprbarSm
+sttBCIYnd/dqoEJsCzjO13VQMpLC3yswIkjQ1UE4JV2k6V2fxpR10EX9MJdDj5CrCseGc2BKaS3e
+pXjXBtpqnks+dzogEyIB0L9onmNgazVNC226oT3Ak+B/I7NVrXIlTkb50hbvsGTBAZ7pyqBqmA7P
+2GDyL0m45ELhODUW9MhuT/eBVui6o74jr679bwPgAjswdvobbUHPAbHpuMlm9Nsm8zqkdPJJJFvJ
+sNBXwfo+euGXyTGAMIACAQEwazBTMQswCQYDVQQGEwJDSDEVMBMGA1UEChMMU3dpc3NTaWduIEFH
+MS0wKwYDVQQDEyRTd2lzc1NpZ24gUlNBIFNNSU1FIExDUCBJQ0EgMjAyMSAtIDICFH/0ya9FbNqD
+P1mj8nwYIyzoDuazMAsGCWCGSAFlAwQCAaCCAfIwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAc
+BgkqhkiG9w0BCQUxDxcNMjMwNjIxMTEyMzU3WjAvBgkqhkiG9w0BCQQxIgQgVjSg7iLSCTNztyC2
+e+NHjp1WnSAQeypy0ISvPVlq/H8wegYJKwYBBAGCNxAEMW0wazBTMQswCQYDVQQGEwJDSDEVMBMG
+A1UEChMMU3dpc3NTaWduIEFHMS0wKwYDVQQDEyRTd2lzc1NpZ24gUlNBIFNNSU1FIExDUCBJQ0Eg
+MjAyMSAtIDICFH/0ya9FbNqDP1mj8nwYIyzoDuazMHwGCyqGSIb3DQEJEAILMW2gazBTMQswCQYD
+VQQGEwJDSDEVMBMGA1UEChMMU3dpc3NTaWduIEFHMS0wKwYDVQQDEyRTd2lzc1NpZ24gUlNBIFNN
+SU1FIExDUCBJQ0EgMjAyMSAtIDICFH/0ya9FbNqDP1mj8nwYIyzoDuazMIGMBgkqhkiG9w0BCQ8x
+fzB9MAcGBSsOAwIaMAsGCWCGSAFlAwQCATALBglghkgBZQMEAgIwCwYJYIZIAWUDBAIDMAoGCCqG
+SIb3DQMHMAsGCWCGSAFlAwQBAjALBglghkgBZQMEAQYwCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQB
+KjALBglghkgBZQMEAS4wDQYJKoZIhvcNAQEBBQAEggIALCTZ7VAwhv1Rp1ISaGfbfusr0gxjfCBF
+M0NakBE/6rmcmorzutfDWQmGxgQAMSDxOkrnd3GvZIAh5ee45n32n+ymSfhukXMRYG/F6lZzjEpK
+uwdsAP8i8Sxc2HUlG0Fb41qyGRAzcdIP+ONhflb6bf70UHDutmfNaNwmd2e7decYcxEIH8goS9YJ
+17EgG5PMAqMMtu2GwtZjSrwyto0hygJk2vqss4cLTkvGNcczbN8MmLqdGUJ5ynmvhOg+tm+4eAAL
+03wImSUDZTjJ70WN/K5tdU/EDi8St2WvhDBGAp/m23/1swfOadKqWehL6p3U7IfxH/5BBHv8TQCN
+syhmaAQefkxqpfwbResZSFBYdIgwStiWJxRT+0RaEMxgJTNQQ1SfCebtykRo7kq5uVRVjdejbAVD
+WNTbzr67J2xr7XL5ow2kq0tOyxCNXWZuAUILqMYchRC/BxIHMA0HD5J6H65HJZCl6JuV89/dcWtF
+WyMBKM424K6GlddC/R1Xp7x77sD+tNrTaKPMmA+Q/mHKfmIpTj1HtHirBG3B6aLdcwjcJJddQuLh
+4LGtxE+bWYXvLtwfZsLn7Xv+jIIOApGZbkeUJUaFrX0hR9oTVC+/9cRdkrYPtUV260jN7PeoVvgY
+IFliwXByLIhpLe1kkXMKMVRDIEKXcK7+L9L2OysDIdIAAAAAAAAAAAAA
+--NoSpamProxy_32349cd5-7480-4d97-99c6-9d900ada1c9e--
 
