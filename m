@@ -2,297 +2,327 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 529EE7382DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39FE7738363
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232735AbjFULhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 07:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
+        id S231795AbjFULgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 07:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232734AbjFULgz (ORCPT
+        with ESMTP id S229789AbjFULge (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 07:36:55 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2055.outbound.protection.outlook.com [40.107.20.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749481706;
-        Wed, 21 Jun 2023 04:36:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=arRt+vGCv2qyqFgpjFPzNfg8B5jAF90AAzcu6NzF5yA=;
- b=NouoLpz76E1om2W+bYAFfBz6w5XQW+IVRctAPlYzcS0o9wWnvKxqwpwYiEM7vk0M6zMMfTEajbZWJTll0NIW5hQ5nRt6jXNljwzIQKcxb+k7xAaTAQVBGKBPX5Js1frXvas8IbCZaXs703cCtuLOrp2IOwBT1umGQJ1cWSoYD0E=
-Received: from AS9PR06CA0527.eurprd06.prod.outlook.com (2603:10a6:20b:49d::27)
- by GV2PR08MB9232.eurprd08.prod.outlook.com (2603:10a6:150:d9::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Wed, 21 Jun
- 2023 11:36:37 +0000
-Received: from AM7EUR03FT006.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:20b:49d:cafe::ad) by AS9PR06CA0527.outlook.office365.com
- (2603:10a6:20b:49d::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23 via Frontend
- Transport; Wed, 21 Jun 2023 11:36:37 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- AM7EUR03FT006.mail.protection.outlook.com (100.127.141.21) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6521.23 via Frontend Transport; Wed, 21 Jun 2023 11:36:37 +0000
-Received: ("Tessian outbound 546d04a74417:v142"); Wed, 21 Jun 2023 11:36:36 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: 509d84184603b17e
-X-CR-MTA-TID: 64aa7808
-Received: from 75faade6b654.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id A9616377-EC36-459A-BBE9-E4C8722E49E5.1;
-        Wed, 21 Jun 2023 11:36:29 +0000
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 75faade6b654.1
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Wed, 21 Jun 2023 11:36:29 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MLkmc/9hvdDspXs9ZuAXtXWuVgLKPc5sraOO+xOyWGLC3vLQzUmwXEpGyDnFW454pqKuX74JirZdt7KV4msW5J9KYJ0oqGpWXZpb8gOMqc86UCFP1QH9Pn7gcV1xqbnIgd6ZwAT8KnurQRmeuvmr8EPnv0kn/7Sc6F+dcOUF1SeDa3viusCJP0hMGvrtg8bVF7Atd7oLpLgOxkhLRvmWt7UK2QtqsnRMyW1/6jEr0J3kTqJFYLSb3Qea9DH5KOzFXQOTTlu+Iljvak1hqWZnf2zK4qeHT85vHZwWAkywUk9hBHSqMoUFx7pW0algDZzcRK9eoZMHz7IBk9WkM8b6Og==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=arRt+vGCv2qyqFgpjFPzNfg8B5jAF90AAzcu6NzF5yA=;
- b=B3+1v1v6sUOBPPE8FRSJSoS0CFhm2QWR1XWz3mgBeZ4Z9zaAvzvtEhFnPbf1XgHa443nH+7vhQhGAmtvKPg5WGNoY8HOj8Rb8NOk48imnbiA8q8D5gR8fUhm6lBI4UMdure1F5dXENYnvTHiqDfzH4vqgzeffO56dEZoZPD20T7XGxeOifHTHj/nHecglU43W8HvQaP01k6WBG33WPnJ81xKX9EjM7GhgwyNk1uSetIiVJAxOCw7l3rNXo6hzjXd+sRV4HYIsZRkWCw8gNNcAMjGrf2U/EhmzwA4jT3l2tcdnlYgRQgeQNvO1cXexKBTDw/P/G+uYjCA/JTYsgTZPQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=arRt+vGCv2qyqFgpjFPzNfg8B5jAF90AAzcu6NzF5yA=;
- b=NouoLpz76E1om2W+bYAFfBz6w5XQW+IVRctAPlYzcS0o9wWnvKxqwpwYiEM7vk0M6zMMfTEajbZWJTll0NIW5hQ5nRt6jXNljwzIQKcxb+k7xAaTAQVBGKBPX5Js1frXvas8IbCZaXs703cCtuLOrp2IOwBT1umGQJ1cWSoYD0E=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
- by AS2PR08MB9620.eurprd08.prod.outlook.com (2603:10a6:20b:607::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.37; Wed, 21 Jun
- 2023 11:36:24 +0000
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::43b7:3a83:5cbe:4559]) by DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::43b7:3a83:5cbe:4559%4]) with mapi id 15.20.6521.023; Wed, 21 Jun 2023
- 11:36:24 +0000
-Date:   Wed, 21 Jun 2023 12:36:07 +0100
-From:   "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "broonie@kernel.org" <broonie@kernel.org>
-Cc:     "Xu, Pengfei" <pengfei.xu@intel.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "Torvalds, Linus" <torvalds@linux-foundation.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "nd@arm.com" <nd@arm.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "Eranian, Stephane" <eranian@google.com>
-Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
- description
-Message-ID: <ZJLgp29mM3BLb3xa@arm.com>
-References: <1f04fa59-6ca9-4f18-b138-6c33e164b6c2@sirena.org.uk>
- <49eabafa97032dec8ace7361bccae72c6ecf3860.camel@intel.com>
- <fc2ebfcf-8d91-4f07-a119-2aaec3aa099f@sirena.org.uk>
- <a0f1da840ad21fae99479288f5d74c7ab9095bb6.camel@intel.com>
- <ZImZ6eUxf5DdLYpe@arm.com>
- <64837d2af3ae39bafd025b3141a04f04f4323205.camel@intel.com>
- <ZJAWMSLfSaHOD1+X@arm.com>
- <5794e4024a01e9c25f0951a7386cac69310dbd0f.camel@intel.com>
- <ZJFukYxRbU1MZlQn@arm.com>
- <e676c4878c51ab4b6018c9426b5edacdb95f2168.camel@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e676c4878c51ab4b6018c9426b5edacdb95f2168.camel@intel.com>
-X-ClientProxiedBy: LO6P123CA0049.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:310::9) To DB9PR08MB7179.eurprd08.prod.outlook.com
- (2603:10a6:10:2cc::19)
+        Wed, 21 Jun 2023 07:36:34 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE36E6C;
+        Wed, 21 Jun 2023 04:36:30 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230621113629euoutp012b7600df2066e4bf78303bced9a8ed4e~qqYKol0t21354513545euoutp01p;
+        Wed, 21 Jun 2023 11:36:29 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230621113629euoutp012b7600df2066e4bf78303bced9a8ed4e~qqYKol0t21354513545euoutp01p
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1687347389;
+        bh=xi7eTGf/eo7hL99txpODdPbOTqM8SUp1Uvq7GSYr9t0=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=HjKp+av5H9OWz9N+piZmYV0JdOXyasDQu7fP+oVjXb7Y+kVM0Io3ajx0enmD93+1o
+         QfCtJMzVFDU6VNsScQsUkuUaPpqyeN3tDl929Z9gJ11rJnIBnBf90vEPEmWbs2ovDI
+         ArrLVq+1RFmQTKQQj7R4dAFkdlj57Bg06J9ZJDN0=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230621113628eucas1p18dc4a47d820546aae77b120440703891~qqYKc3a9o2370123701eucas1p1k;
+        Wed, 21 Jun 2023 11:36:28 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 29.2E.11320.CB0E2946; Wed, 21
+        Jun 2023 12:36:28 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230621113628eucas1p18b8b3a6f7d1ef4aba77c09ed055cfee7~qqYJsMEWT2369923699eucas1p1j;
+        Wed, 21 Jun 2023 11:36:28 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230621113628eusmtrp26515415e90323d1e726f7d3ea7190824~qqYJq3vSy1151411514eusmtrp2f;
+        Wed, 21 Jun 2023 11:36:28 +0000 (GMT)
+X-AuditID: cbfec7f4-97dff70000022c38-89-6492e0bc5391
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 29.E9.14344.BB0E2946; Wed, 21
+        Jun 2023 12:36:27 +0100 (BST)
+Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230621113627eusmtip20349e9f78906bf813c43fd84e62c8aad~qqYJYzSLB2263722637eusmtip2C;
+        Wed, 21 Jun 2023 11:36:27 +0000 (GMT)
+Received: from localhost (106.210.248.248) by CAMSVWEXC02.scsc.local
+        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Wed, 21 Jun 2023 12:36:26 +0100
+Date:   Wed, 21 Jun 2023 13:36:25 +0200
+From:   Joel Granados <j.granados@samsung.com>
+To:     Dan Carpenter <dan.carpenter@linaro.org>
+CC:     <mcgrof@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Joerg Reuter <jreuter@yaina.de>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Mat Martineau <martineau@kernel.org>,
+        Simon Horman <horms@verge.net.au>,
+        Julian Anastasov <ja@ssi.bg>,
+        Remi Denis-Courmont <courmisch@gmail.com>,
+        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
+        David Howells <dhowells@redhat.com>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Neil Horman <nhorman@tuxdriver.com>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Xin Long <lucien.xin@gmail.com>,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Jan Karcher <jaka@linux.ibm.com>,
+        Jon Maloy <jmaloy@redhat.com>,
+        Ying Xue <ying.xue@windriver.com>,
+        Martin Schiller <ms@dev.tdt.de>, <linux-rdma@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-hams@vger.kernel.org>, <netfilter-devel@vger.kernel.org>,
+        <coreteam@netfilter.org>, <bridge@lists.linux-foundation.org>,
+        <dccp@vger.kernel.org>, <linux-wpan@vger.kernel.org>,
+        <mptcp@lists.linux.dev>, <lvs-devel@vger.kernel.org>,
+        <rds-devel@oss.oracle.com>, <linux-afs@lists.infradead.org>,
+        <linux-sctp@vger.kernel.org>, <linux-s390@vger.kernel.org>,
+        <tipc-discussion@lists.sourceforge.net>,
+        <linux-x25@vger.kernel.org>
+Subject: Re: [PATCH 06/11] sysctl: Add size to register_net_sysctl function
+Message-ID: <20230621113625.o54p6qfvr5duskfb@localhost>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|AS2PR08MB9620:EE_|AM7EUR03FT006:EE_|GV2PR08MB9232:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1cfd04e9-c11a-4b06-a35b-08db724bc60e
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: K/pxmpyfEStWj0nR+csHUoYu4HNosyu5UYS4GMTAsApBSkeOKAG2ut087l1D8xH3kpYduokN6xMvwTRSikZ7kRKQHXg53dY/sfXTJaHhluOwQxai36p1ZBrJdVA0d490dqJG1/PmFiU7sYsNs483FViOSdINiDsOi35ta3GnTHHKqWKa/mBHYcNTx8UU0wBDon9KcIz8FpQtjl/FoBrBz3Ar1QNI3CEExKUGeMmI/ErYotcSKsyRrj6EWRmyNqPiFbzF2GVUHIUmVal9xHjqJNKNHNJ9VFyIkXWJ4spvo/1cDFBzorZFG1ybH+tSbbGC0Htr1gwOVvE6VdwAVzvNC9DFKaMMy6/+KirJ1zEWm8Au5EaIUqoRadQw0FH+YriyH8K5p4C29XdYEBV3b4KfChox0LKoz3Tda1soeix7Vv5bmqUKlbzh1hbwYyHAARhxC46ZQsEdKL32Q8ZBSZHr51DZC0/KI7wRqEYgYSs0NiQSFdaU4MLgWXK3lugF3LJ6Q4NXmsJdvgRqH7jNY0OuSRuCPb8OUVfr5A46g2APr94Y2zUH1d7s+ljg2NusRo/X
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(39860400002)(366004)(136003)(396003)(451199021)(316002)(5660300002)(8676002)(4326008)(2906002)(8936002)(7416002)(7406005)(110136005)(54906003)(66946007)(66556008)(66476007)(41300700001)(66899021)(6486002)(6666004)(478600001)(186003)(83380400001)(2616005)(26005)(6512007)(6506007)(38100700002)(86362001)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS2PR08MB9620
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM7EUR03FT006.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: bde16cd4-0a67-4a11-1d54-08db724bbe30
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oOIvmXeTRRPJMpfA1i1QUC/l6OlmgP29DLX4JLm0lWz9i8vR7LM+lh/rojIgVRWqPlJRV3LWtAtWTazEupYYxe0APUambj2yH+HRPtdXAoMlhCt7blYVw9mbppF2ZYk2aeVcYENQ1hLhlxvopMmvyQrb08cbf/QQPAW0NaNl9ZGJ3vKkedQWkfvv/AuLnmqRrvPpip95iylgq6LIgdaB7JD9MidFcbU6K5aVT4gWfDpKJOqkoEOpxlLte7JUT4nNTDHVVE/nHK4s6v5JeFsesbIlVdorsLPUIPpV/AO1tHrrqw7HXtYvyBfoQbN0QK0NkiyFc4x+2nkSUo3qda8vAB6UKA5s5Ck4T6RPqdpoK3Ux24Q4/CdroM8JMOHV8ah6ZehDMHkDPNIBJWlOCIYt/FuakzVLvzyYA3oFd4EbBDbIXdqS1j+ahJJt4OEL+6KENu0PAssDsM+1e5TUmczrqb5oz8La6iaDnkvoti5iz8Vf4tX8S30zeF8UpLOX3RvJxHVjp60r6Qzl6BzC5QiQmvOrjfClY4xDzOofJPK1j1YEVOW9GlDKCeKa8xmrsKOHUH0Jp0LMq0jCeumB/DUe3gTlG0ubXPnjBvxMt/axN2X9cD9uivOGhsXKdVU/gPoBof+bi7iZRvJ7gW4F8cKFjbGGWqSD5RZbVxP+9kjJKHhmYf4/N6pWcV16JbvxGmja2Ldp5hf8UQtgrFQr2EZffcv6eB2bpedDWrO4Bnso+gbX+tc8/Va5yHViU5AtSs++
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(376002)(136003)(396003)(451199021)(40470700004)(46966006)(36840700001)(2906002)(478600001)(2616005)(336012)(47076005)(5660300002)(8676002)(86362001)(36860700001)(83380400001)(316002)(70586007)(4326008)(356005)(41300700001)(70206006)(40460700003)(66899021)(81166007)(26005)(6506007)(8936002)(6512007)(186003)(107886003)(450100002)(82740400003)(36756003)(40480700001)(54906003)(82310400005)(110136005)(6666004)(6486002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 11:36:37.2925
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1cfd04e9-c11a-4b06-a35b-08db724bc60e
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: AM7EUR03FT006.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR08MB9232
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg="pgp-sha512";
+        protocol="application/pgp-signature"; boundary="hjmbaevabjqfrodd"
+Content-Disposition: inline
+In-Reply-To: <dab06c20-f8b0-4e34-b885-f3537e442d54@kadam.mountain>
+X-Originating-IP: [106.210.248.248]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA2VTa1BUZRie75yzu4dV7ICOfIOUite4mZbypuJk1nSmrJxGh7QG25ETIrDY
+        riSVxXIXCN0BExeJRVRYXC5yW+K2EhSwQKyjKIir5MqaIcIGrLHczHWxnOnf8zzv87zf+/z4
+        aNL5vsCVDhYf4iRiUag7X0hpmq1677rf0wJf0SpXQaPMF1oLbwpgujqRhNE7f/DAnB0vgCx9
+        HAXT3Sl8GIqZpKC4Jp4AU7NRAJpUNYKUATeIrbQg6D9u5EFXnpkPilOtCPosRgqsx+aAIjmW
+        gOGTpwm4rDnGgxMT50mQt62F61W3CLhak8WHe42pFMjPxJJgynnAA0N6HgUN9UoExpJhAmKV
+        IyTEjt4lYULVwoPO1MckqDruEdAjNyFoStTyoKMkRgCPsltJaM5ZCPLiNgp6Y3V8eNQ+iCBj
+        8BoJV+qWQ9vYYwI6y0d5MJq1Gu7I9RSkqyoIqE0aF0CF/gBEd2gEcLe7m3zDl+01Wkh2qFOH
+        2OzCb9gJqwdbUXCDYFN+GSDZ6sxbAlbTsILNKYtgyy4k8VnD9To++2tBEcHKcxsQW34uik3v
+        yUfs/XIF2rFkj3BzIBca/CUnWbPlM+H+tqP+B+M9Ig0qPSlDWe7JyIHGzGu4IqaJTEZC2plR
+        IVx2+grPTsYQbq1vpuxkFGFTWinvWWSwSzbrykf4bpNW8K8rqb2PsJNKhFUlSsoWoZgVeNys
+        ImyYz3hh/aCBtOEFT/DMdPrTN0im9AX8oOYGsg3mM+9hs+wkPxnRtCPji2u/X2yTHRknrFP0
+        P91JMpH44bgC2Swkswjnz9A22YF5Ex+3/kbYL12Gu7Vn+Xb8LW6r6J3Vc+fi87dX2/FbuGP6
+        vsCO5+OBlopZ7IYfVyufdsFMOsKXZswCO1EjnBdtmd20Ccd19c8mtuKY6VzSdhBm5uGeh072
+        O+fhNE3GrOyIjyY4290rsfr2ICVHyzKfa5b5XLPM/5rZZS+cUzvC/5/sifPOPCDt2A8XFw9T
+        OUhwAblwEdKwIE66Tswd9pGKwqQR4iCffeFhZejJB2yfaRn7CeUP/OXTiAgaNaLlT8LGi+rL
+        yJUSh4s59wWOL5alBTo7Boq++pqThO+VRIRy0ka0iKbcXRw9/XT7nJkg0SEuhOMOcpJnU4J2
+        cJURPledwiqdjtw+fDDrgHnkpXOSS5tk83RLGzav3kZHG46QXlPv7hqZWh9t3WJJ6ftkqaWL
+        v+HVyL8r6fOaMX/XUs8St76dU94rV3mJVZMBKfFrNuzZeG1D1Zw9Ud4ZoeXqocC3PxiQGyR7
+        UxK2Ltbu8HlZnkje6dromZ02afUcT6j78f0v3MrjwgsUf/r5vz5TYOosCggK293bNmbJ+NkS
+        h1Qf7fJeuLN198fD4VpRx4l2l2UJwaeOH/qcMF3xD3C49c4S/+2FRZVDIb5VP0zkLV1SP/Xp
+        qoJ1OFdduH7uxfVJwVG7hB92d+l6z9Ykud9MvuRX1i8WKo8YVn4XsqjGtEYWv/1ieXOkOyXd
+        L1rrQUqkon8A7wAmHvsEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA2WTe0yTZxTG937f1wsysnKRfWMsaoVsQVdo5XIwApM/6secm1tiZCpohS+A
+        o4W0heHGAqM4EIFW2HBchoAIBRHGrSgIQea4FATnuA0BRwVEaAAFVEBwdN3ikv33O+c8z3Pe
+        vMlh4xbxLBt2iEROSyWiUC5zE9G53jb6fsOfaYFOa00u0BLrBu1l91iwdj0Bh4WxhwyYzz3D
+        gpyeeALWBs4xYTZulYDy+jMYTLTqWKBJuYLg3LQtKGqXEIwrdQzoLZpnQuaP7QjuL+kIWE41
+        hcwkBQZzGdkY3NGkMuD7lcs4qLR86K8bweD3+hwmTLakEKDKV+AwkTfDgOH0IgKaGy8i0FXM
+        YaC4+AQHxcIDHFbUbQzoTnmJg7prEoNB1QSCXxKaGNBVEceCp7ntOLTmWYOqXEvAkKKDCU87
+        9Qgu6PtwuHvDDrSLLzHorl5gwELOezCm6iEgXV2DQcPZ5yyo6TkF33ZpWPBgYAD/wI0a0i3h
+        1Gx3B6Jyy76mVpYdqJqSPzDq3K1pnLqeNcKiNM32VF5VBFVVepZJDfffYFK/llzFKFVBM6Kq
+        C2Oo9MFiRE1VZ6KDW4/w9kjDIuT01uAwmdyDe5QPAh7fHXgCZ3cef5eb326BC9fRc08gHRoS
+        SUsdPU/wgtUjhYxwhUNU6vlOVizK4iYhEzbJcSb1vbGMJLSJbcG5jMj8hhVkHNiSlYt9DCNb
+        ki/6k5hG0WNElix9909Ri8ieoQ6WQUVw7Mnn82rMwEzOTrJHP4wb2GqD19fSCYMB51S+QeqT
+        ywjDwJKzn5yPzdhIYrPNOG5kQ/IWY+gqIhvHVv9ebcYxJzsyxwmDBudEktcSQ4z4Nlm8zjYo
+        TDjepHL5NmZ86HZyoOkS08jfkAtrk0iFLLP+E5T1KijrVZBBgXMcyMH1R9j/2jvIovwZ3Mge
+        ZHn5HJGHWKXIio6QiYPEMgFPJhLLIiRBvIAwcRXaOAFN63LNNVQy/ZjXgjA2akF2G07dz1fu
+        IBtCEiahuVZm71SlBVqYBYpOf0VLw45LI0JpWQty2fjD87jN5oCwjXuSyI/zXZ1c+M6u7k4u
+        7q67uG+a+YQniiw4QSI5/QVNh9PSf30Y28QmFjt8fyYyY/TLxflPTkZ5F/LdVk1JGtKKT/Q+
+        U5p8Nlv7ro+66ZijKPHm5x+hOXzz1Lh94riX0E8TXTEm8JPndDa+0LnXvWUdv1fo05592pY7
+        2sf1FHtat+3W1vRLP05a+rRgx8LBRb6QqBtWBlhuee3ScHDJqZ/mUrZFxcTFaIQqdGtErKrv
+        8S/N0e6/97DvpuuB3xbF+45sy/bPDdBGTzWGzAxOeEl89/pz5R/K8SiCEAk6K82fCe22qxJM
+        F8MPmT0yyQo5fHvf0Yx5ZZGtr0eC9kmO6PXKHyxaBdIZ8wMn9RcSRrPbXLytC2TZh47t9I0W
+        pnslO3h4Jfv53VUJrypNuYQsWMR3wKUy0V9edMuAlwQAAA==
+X-CMS-MailID: 20230621113628eucas1p18b8b3a6f7d1ef4aba77c09ed055cfee7
+X-Msg-Generator: CA
+X-RootMTR: 20230621091022eucas1p1c097da50842b23e902e1a674e117e1aa
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230621091022eucas1p1c097da50842b23e902e1a674e117e1aa
+References: <20230621091000.424843-1-j.granados@samsung.com>
+        <CGME20230621091022eucas1p1c097da50842b23e902e1a674e117e1aa@eucas1p1.samsung.com>
+        <20230621091000.424843-7-j.granados@samsung.com>
+        <dab06c20-f8b0-4e34-b885-f3537e442d54@kadam.mountain>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 06/20/2023 19:34, Edgecombe, Rick P wrote:
-> On Tue, 2023-06-20 at 10:17 +0100, szabolcs.nagy@arm.com wrote:
-> > if there is a fix that's good, i haven't seen it.
-> > 
-> > my point was that the current unwinder works with current kernel
-> > patches, but does not allow future extensions which prevents
-> > sigaltshstk to work. the unwinder is not versioned so this cannot
-> > be fixed later. it only works if distros ensure shstk is disabled
-> > until the unwinder is fixed. (however there is no way to detect
-> > old unwinder if somebody builds gcc from source.)
-> 
-> This is a problem the kernel is having to deal with, not causing. The
-> userspace changes were upstreamed before the kernel. Userspace folks
-> are adamantly against moving to a new elf bit, to start over with a
-> clean slate. I tried everything to influence this and was not
-> successful. So I'm still not sure what the proposal here is for the
-> kernel.
+--hjmbaevabjqfrodd
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-i agree, the glibc and libgcc patches should not have been accepted
-before a linux abi.
+On Wed, Jun 21, 2023 at 12:47:30PM +0300, Dan Carpenter wrote:
+> The patchset doesn't include the actual interesting changes, just a
+> bunch of mechanical prep work.
+Yep, The thread got mangled on the way out. But hopefully the rest of
+the patch made its way to the lists and maintainers.
 
-but the other direction also holds: the linux patches should not be
-pushed before the userspace design is discussed. (the current code
-upstream is wrong, and new code for the proposed linux abi is not
-posted yet. this is not your fault, i'm saying it here, because the
-discussion is here.)
+>=20
+> On Wed, Jun 21, 2023 at 11:09:55AM +0200, Joel Granados wrote:
+> > diff --git a/net/ieee802154/6lowpan/reassembly.c b/net/ieee802154/6lowp=
+an/reassembly.c
+> > index a91283d1e5bf..7b717434368c 100644
+> > --- a/net/ieee802154/6lowpan/reassembly.c
+> > +++ b/net/ieee802154/6lowpan/reassembly.c
+> > @@ -379,7 +379,8 @@ static int __net_init lowpan_frags_ns_sysctl_regist=
+er(struct net *net)
+> >  	table[1].extra2	=3D &ieee802154_lowpan->fqdir->high_thresh;
+> >  	table[2].data	=3D &ieee802154_lowpan->fqdir->timeout;
+> > =20
+> > -	hdr =3D register_net_sysctl(net, "net/ieee802154/6lowpan", table);
+> > +	hdr =3D register_net_sysctl(net, "net/ieee802154/6lowpan", table,
+> > +				  ARRAY_SIZE(lowpan_frags_ns_ctl_table));
+>=20
+> For example, in lowpan_frags_ns_sysctl_register() the sentinel is
+> sometimes element zero if the user doesn't have enough permissions.  I
+> would want to ensure that was handled correctly, but that's going to be
+> done later in a completely different patchset.  I'm definitely not going
+> to remember to check.
+Very good catch! I have fixed this as well as ensure_safe_net_sysctl
+that was missing a table_size arg.
 
-> I am guessing that the fnon-call-exceptions/expanded frame size
-> incompatibilities could end up causing something to grow an opt-in at
-> some point.
+>=20
+> > diff --git a/net/mpls/af_mpls.c b/net/mpls/af_mpls.c
+> > index dc5165d3eec4..6f96aae76537 100644
+> > --- a/net/mpls/af_mpls.c
+> > +++ b/net/mpls/af_mpls.c
+> > @@ -1395,6 +1395,40 @@ static const struct ctl_table mpls_dev_table[] =
+=3D {
+> >  	{ }
+> >  };
+> > =20
+> > +static int mpls_platform_labels(struct ctl_table *table, int write,
+> > +				void *buffer, size_t *lenp, loff_t *ppos);
+> > +#define MPLS_NS_SYSCTL_OFFSET(field)		\
+> > +	(&((struct net *)0)->field)
+> > +
+> > +static const struct ctl_table mpls_table[] =3D {
+> > +	{
+> > +		.procname	=3D "platform_labels",
+> > +		.data		=3D NULL,
+> > +		.maxlen		=3D sizeof(int),
+> > +		.mode		=3D 0644,
+> > +		.proc_handler	=3D mpls_platform_labels,
+> > +	},
+> > +	{
+> > +		.procname	=3D "ip_ttl_propagate",
+> > +		.data		=3D MPLS_NS_SYSCTL_OFFSET(mpls.ip_ttl_propagate),
+> > +		.maxlen		=3D sizeof(int),
+> > +		.mode		=3D 0644,
+> > +		.proc_handler	=3D proc_dointvec_minmax,
+> > +		.extra1		=3D SYSCTL_ZERO,
+> > +		.extra2		=3D SYSCTL_ONE,
+> > +	},
+> > +	{
+> > +		.procname	=3D "default_ttl",
+> > +		.data		=3D MPLS_NS_SYSCTL_OFFSET(mpls.default_ttl),
+> > +		.maxlen		=3D sizeof(int),
+> > +		.mode		=3D 0644,
+> > +		.proc_handler	=3D proc_dointvec_minmax,
+> > +		.extra1		=3D SYSCTL_ONE,
+> > +		.extra2		=3D &ttl_max,
+> > +	},
+> > +	{ }
+> > +};
+> > +
+> >  static int mpls_dev_sysctl_register(struct net_device *dev,
+> >  				    struct mpls_dev *mdev)
+> >  {
+> > @@ -1410,7 +1444,7 @@ static int mpls_dev_sysctl_register(struct net_de=
+vice *dev,
+> >  	/* Table data contains only offsets relative to the base of
+> >  	 * the mdev at this point, so make them absolute.
+> >  	 */
+> > -	for (i =3D 0; i < ARRAY_SIZE(mpls_dev_table); i++) {
+> > +	for (i =3D 0; i < ARRAY_SIZE(mpls_dev_table) - 1; i++) {
+>=20
+> Adding the " - 1" is just a gratuitous change.  It's not required.
+> It makes that patch more confusing to review.  And you're just going
+> to have to change it back to how it was if you remove the sentinel.
+Removed this for convenience. Thx.
 
-there are independent userspace components and not every component
-has a chance to opt-in.
 
-> > how does "fixed shadow stack signal frame size" relates to
-> > "-fnon-call-exceptions"?
-> > 
-> > if there were instruction boundaries within a function where the
-> > ret addr is not yet pushed or already poped from the shstk then
-> > the flag would be relevant, but since push/pop happens atomically
-> > at function entry/return -fnon-call-exceptions makes no
-> > difference as far as shstk unwinding is concerned.
-> 
-> As I said, the existing unwinding code for fnon-call-excecptions
-> assumes a fixed shadow stack signal frame size of 8 bytes. Since the
-> exception is thrown out of a signal, it needs to know how to unwind
-> through the shadow stack signal frame.
+>=20
+> >  		table[i].data =3D (char *)mdev + (uintptr_t)table[i].data;
+> >  		table[i].extra1 =3D mdev;
+> >  		table[i].extra2 =3D net;
+> > @@ -1418,7 +1452,8 @@ static int mpls_dev_sysctl_register(struct net_de=
+vice *dev,
+> > =20
+> >  	snprintf(path, sizeof(path), "net/mpls/conf/%s", dev->name);
+> > =20
+> > -	mdev->sysctl =3D register_net_sysctl(net, path, table);
+> > +	mdev->sysctl =3D register_net_sysctl(net, path, table,
+> > +					   ARRAY_SIZE(mpls_dev_table));
+> >  	if (!mdev->sysctl)
+> >  		goto free;
+> > =20
+> > @@ -1432,6 +1467,7 @@ static int mpls_dev_sysctl_register(struct net_de=
+vice *dev,
+> >  	return -ENOBUFS;
+> >  }
+> > =20
+> > +
+Oops. thx. fixed
 
-sorry but there is some misunderstanding about -fnon-call-exceptions.
+>=20
+> Double blank line.
+>=20
+> >  static void mpls_dev_sysctl_unregister(struct net_device *dev,
+> >  				       struct mpls_dev *mdev)
+> >  {
+>=20
+> regards,
+> dan carpenter
 
-it is for emitting cleanup and exception handler data for a function
-such that throwing from certain instructions within that function
-works, while normally only throwing from calls work.
+--=20
 
-it is not about *unwinding* from an async signal handler, which is
--fasynchronous-unwind-tables and should always work on linux, nor for
-dealing with cleanup/exception handlers above the interrupted frame
-(likewise it works on linux without special cflags).
+Joel Granados
 
-as far as i can tell the current unwinder handles shstk unwinding
-correctly across signal handlers (sync or async and cleanup/exceptions
-handlers too), i see no issue with "fixed shadow stack signal frame
-size of 8 bytes" other than future extensions and discontinous shstk.
+--hjmbaevabjqfrodd
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> > there is no magic, longjmp should be implemented as:
-> > 
-> >         target_ssp = read from jmpbuf;
-> >         current_ssp = read ssp;
-> >         for (p = target_ssp; p != current_ssp; p--) {
-> >                 if (*p == restore-token) {
-> >                         // target_ssp is on a different shstk.
-> >                         switch_shstk_to(p);
-> >                         break;
-> >                 }
-> >         }
-> >         for (; p != target_ssp; p++)
-> >                 // ssp is now on the same shstk as target.
-> >                 inc_ssp();
-> > 
-> > this is what setcontext is doing and longjmp can do the same:
-> > for programs that always longjmp within the same shstk the first
-> > loop is just p = current_ssp, but it also works when longjmp
-> > target is on a different shstk assuming nothing is running on
-> > that shstk, which is only possible if there is a restore token
-> > on top.
-> > 
-> > this implies if the kernel switches shstk on signal entry it has
-> > to add a restore-token on the switched away shstk.
-> 
-> I actually did a POC for this, but rejected it. The problem is, if
-> there is a shadow stack overflow at that point then the kernel can't
-> push the shadow stack token to the old stack. And shadow stack overflow
-> is exactly the alt shadow stack use case. So it doesn't really solve
-> the problem.
+-----BEGIN PGP SIGNATURE-----
 
-the restore token in the alt shstk case does not regress anything but
-makes some use-cases work.
+iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmSS4LkACgkQupfNUreW
+QU/f/Av/R9arMJ/TiZiqAogcW91VL9TisCyhWWoGaao2pCurV0d4vQIZ22no1jLz
+HOEQ8SmtnWRZeyVNdgB7JZ5LM1wEGu3I/NnYEThVwKKblsSErfTYdUKTi5VyBDUj
+UjuPXKvJPdKhW8XwN/d5gKHeY8ugeCZI82AEKP3qqv/p+Tsai8fqlTU4frjB77C2
+pi6zJv+WXkEUknsHnTZQJBV+TL+UJaghgjkhV0QWf8n0dzveTLsK7XhKQxszk067
+fos0Ckxs3JrFiC8eWPX7/Qm8H2qg64O2Y51uD8ahz0EcUWxV8f1UDk4PsgUvACu1
+oEVx/n+aGQGKiOafURew4esnRnmhet8t8EkTGoEQaxqsU7jXnClyR5DWTrVDnT3c
+YHUavHdXH0qCFQoTXaa2YWcds8WpmPuzEDQLnAmhoOKr8C4+NUri6y0HGdBTwHcG
+rQCCd2NcjGCEepKDVkuvJkoMkfj72FpOK+jb+M7K0JQIsRKxKDhPLo31xiesBx05
+mm4+Slxp
+=d3wP
+-----END PGP SIGNATURE-----
 
-alt shadow stack is important if code tries to jump in and out of
-signal handlers (dosemu does this with swapcontext) and for that a
-restore token is needed.
-
-alt shadow stack is important if the original shstk did not overflow
-but the signal handler would overflow it (small thread stack, huge
-sigaltstack case).
-
-alt shadow stack is also important for crash reporting on shstk
-overflow even if longjmp does not work then. longjmp to a makecontext
-stack would still work and longjmp back to the original stack can be
-made to mostly work by an altshstk option to overwrite the top entry
-with a restore token on overflow (this can break unwinding though).
-
+--hjmbaevabjqfrodd--
