@@ -2,70 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7017381B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:11:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FCE738039
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231956AbjFUJne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 05:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43974 "EHLO
+        id S231966AbjFUJni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 05:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjFUJn3 (ORCPT
+        with ESMTP id S231750AbjFUJna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 05:43:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47187DD
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:42:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687340563;
+        Wed, 21 Jun 2023 05:43:30 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D9A129;
+        Wed, 21 Jun 2023 02:43:28 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D62E51EC0645;
+        Wed, 21 Jun 2023 11:43:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1687340605;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=Diofrp0NHoaj7laq9s3ordTMEyCXaD8juDW832/O7Eo=;
-        b=PLGFNbAP7wkxSvzu3PjrjD5k9tQvm/H+0Ya+K765u3vdj9RCvpfftxbg4NF3gnaMFLBRcC
-        gZ/wIoGI59Zepa7O0C2qdLdcaPZ+UjP+f+Leu4HdS8L5xyMLtMzUum+LvpnJk0MCu306/y
-        efekes/8JJ0+zC8p96X1vEgumqPKUXA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-50-HGWhI5BMPYuDye4tb2GKqA-1; Wed, 21 Jun 2023 05:42:37 -0400
-X-MC-Unique: HGWhI5BMPYuDye4tb2GKqA-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=yXKcV3auqZiH5ablDN0OpddtOVM62a/D928JjKMNXI0=;
+        b=fGGGFOcm/j1jBRRvN7zXyPW4PWbANeEwKO58akYk3HFwWVhSbZepdoK1UDfltiq3BVsgxV
+        afZo1xjFVpNXrOgPFEwzSrf+otLk2UgZpxcxQ/SMfzX2uiICQenOugsvfjtw+5jxoMDWDm
+        xejbSVf4LXHZHL2lKqvLKvAqigR5Qp0=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id e4WsilyJ1x43; Wed, 21 Jun 2023 09:43:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1687340602; bh=yXKcV3auqZiH5ablDN0OpddtOVM62a/D928JjKMNXI0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fyQVwBnAueySdbG0xMg34yXlW/XbZoa2fdHIxCPpbUpUvZTzceVEGqhpKf26M8jvh
+         cQZrHrd4NDWJ1hZ9bhyVgh1pjqJKNLWEMiP5gA2Xv7wshI3Zdr7Ezl3oUQ1uk4hncH
+         ktCnJjrTimE6r2iOMN1pBLtXrLeF2ISV/Nw1dqvQxfSDmKyO1yF4mNSg9urBDIt19l
+         MOyDgIo8MpE4vooEPqEEgYB5Z2olkoquqbzGNxggefTMMtCyztPuHGCPg3nmVx4ozu
+         EPUIsYbiqJxia1qErD6CYuMaJsODWsvZ+ZOAudy/BD72pBpc6AID/bTPdb3fSif4he
+         YJqerDK6aM/oRya8NBWdn0pUP0ZzfKFVhaEGbiIc4fDLSmxsPt/LcKMFID505QCQeF
+         bjPZumWkHDakTZMlxA5hv+gLVXfkr8mXNg4pxO6pnDXgITMEpqFW+4/KcWboFFnXik
+         eYdNfzumlPl4OwXJ2X2A32oLbFraGQgho7WNG4HzPbuRoBvfnE4AFk+MN58iiXan/d
+         7YOKobJsShP6uAB/bu/hmdcuAF7hFSyLfx/3ll177T7PJLSzJNTbdqHS6oTgMKbf+/
+         /6fWRvqQT2vKqfHn6HtALNs+cMMAqD4RPO04QOQCVFEvh56EOxuwc3EewsfN5vk7wX
+         dCgtDPf8uUZqB0n1/xsXwixA=
+Received: from zn.tnic (p200300ea971Dc592329c23FffEA6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c592:329c:23ff:fea6:a903])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D67FE3C108C7;
-        Wed, 21 Jun 2023 09:42:36 +0000 (UTC)
-Received: from xps-13.local (unknown [10.39.193.140])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B064B492C13;
-        Wed, 21 Jun 2023 09:42:35 +0000 (UTC)
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Wed, 21 Jun 2023 11:42:30 +0200
-Subject: [PATCH] HID: logitech-hidpp: rework one more time the retries
- attempts
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3EDD640E019B;
+        Wed, 21 Jun 2023 09:42:42 +0000 (UTC)
+Date:   Wed, 21 Jun 2023 11:42:36 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
+        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
+        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
+        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
+        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
+        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
+        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
+        tony.luck@intel.com, marcorr@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
+        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
+        nikunj.dadhania@amd.com, liam.merwick@oracle.com,
+        zhi.a.wang@intel.com, Brijesh Singh <brijesh.singh@amd.com>
+Subject: Re: [PATCH RFC v9 07/51] x86/sev: Add the host SEV-SNP
+ initialization support
+Message-ID: <20230621094236.GZZJLGDAicp1guNPvD@fat_crate.local>
+References: <20230612042559.375660-1-michael.roth@amd.com>
+ <20230612042559.375660-8-michael.roth@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230621-logitech-fixes-v1-1-32e70933c0b0@redhat.com>
-X-B4-Tracking: v=1; b=H4sIAAXGkmQC/1WLwQrCMBAFfyXs2YU0Sg79Felhmz6bBUlLVkQI/
- XdTPHmbgZlGhqowGl2jireabqXLcHGUspQVrEt3Cj5cfQwDP7dVX0iZH/qBsdySR4yQIAv1aRY
- Dz1VKyuf2X5/BXvHj0d2n4/gCP4LGsIEAAAA=
-To:     =?utf-8?q?Filipe_La=C3=ADns?= <lains@riseup.net>,
-        Bastien Nocera <hadess@hadess.net>,
-        Jiri Kosina <jikos@kernel.org>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1687340555; l=5291;
- i=benjamin.tissoires@redhat.com; s=20230215; h=from:subject:message-id;
- bh=UiFLHp8Bq+QvatTIh2AbpNG2HYSjT6YexmSDYyCrUEI=;
- b=KeKGHpo0AAjoH0Qsj9oVKHMco9aHBn3E18cRfEinhSz88nk6+rbZWg4Lvan7cLxYgeFPsdXhu
- ZavHFrOSuL6DpHgPQp9d00y7PICetBA8nUho1RWGTeEBE01mKfDNwTI
-X-Developer-Key: i=benjamin.tissoires@redhat.com; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230612042559.375660-8-michael.roth@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,158 +92,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make the code looks less like Pascal.
+On Sun, Jun 11, 2023 at 11:25:15PM -0500, Michael Roth wrote:
+> From: Brijesh Singh <brijesh.singh@amd.com>
+> 
+> The memory integrity guarantees of SEV-SNP are enforced through a new
+> structure called the Reverse Map Table (RMP). The RMP is a single data
+> structure shared across the system that contains one entry for every 4K
+> page of DRAM that may be used by SEV-SNP VMs. APM2 section 15.36 details
 
-Extract the internal code inside a helper function, fix the
-initialization of the parameters used in the helper function
-(`hidpp->answer_available` was not reset and `*response` wasn't too),
-and use a `do {...} while();` loop.
+Rather say 'APM v2, section "Secure Nested Paging (SEV-SNP)"' because
+the numbering is more likely to change than the name in the future. With
+the name, people can find it faster.
 
-Fixes: 586e8fede795 ("HID: logitech-hidpp: Retry commands when device is busy")
-Cc: stable@vger.kernel.org
-Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
----
-as requested by https://lore.kernel.org/all/CAHk-=wiMbF38KCNhPFiargenpSBoecSXTLQACKS2UMyo_Vu2ww@mail.gmail.com/
-This is a rewrite of that particular piece of code.
----
- drivers/hid/hid-logitech-hidpp.c | 102 +++++++++++++++++++++++----------------
- 1 file changed, 61 insertions(+), 41 deletions(-)
+> a number of steps needed to detect/enable SEV-SNP and RMP table support
+> on the host:
+> 
+>  - Detect SEV-SNP support based on CPUID bit
+>  - Initialize the RMP table memory reported by the RMP base/end MSR
+>    registers and configure IOMMU to be compatible with RMP access
+>    restrictions
+>  - Set the MtrrFixDramModEn bit in SYSCFG MSR
+>  - Set the SecureNestedPagingEn and VMPLEn bits in the SYSCFG MSR
+>  - Configure IOMMU
+> 
+> RMP table entry format is non-architectural and it can vary by
+> processor. It is defined by the PPR. Restrict SNP support to CPU
+> models/families which are compatible with the current RMP table entry
+> format to guard against any undefined behavior when running on other
+> system types. Future models/support will handle this through an
+> architectural mechanism to allow for broader compatibility.
 
-diff --git a/drivers/hid/hid-logitech-hidpp.c b/drivers/hid/hid-logitech-hidpp.c
-index dfe8e09a18de..3d1ffe199f08 100644
---- a/drivers/hid/hid-logitech-hidpp.c
-+++ b/drivers/hid/hid-logitech-hidpp.c
-@@ -275,21 +275,20 @@ static int __hidpp_send_report(struct hid_device *hdev,
- }
- 
- /*
-- * hidpp_send_message_sync() returns 0 in case of success, and something else
-- * in case of a failure.
-- * - If ' something else' is positive, that means that an error has been raised
-- *   by the protocol itself.
-- * - If ' something else' is negative, that means that we had a classic error
-- *   (-ENOMEM, -EPIPE, etc...)
-+ * Effectively send the message to the device, waiting for its answer.
-+ *
-+ * Must be called with hidpp->send_mutex locked
-+ *
-+ * Same return protocol than hidpp_send_message_sync():
-+ * - success on 0
-+ * - negative error means transport error
-+ * - positive value means protocol error
-  */
--static int hidpp_send_message_sync(struct hidpp_device *hidpp,
-+static int __do_hidpp_send_message_sync(struct hidpp_device *hidpp,
- 	struct hidpp_report *message,
- 	struct hidpp_report *response)
- {
--	int ret = -1;
--	int max_retries = 3;
--
--	mutex_lock(&hidpp->send_mutex);
-+	int ret;
- 
- 	hidpp->send_receive_buf = response;
- 	hidpp->answer_available = false;
-@@ -300,41 +299,62 @@ static int hidpp_send_message_sync(struct hidpp_device *hidpp,
- 	 */
- 	*response = *message;
- 
--	for (; max_retries != 0 && ret; max_retries--) {
--		ret = __hidpp_send_report(hidpp->hid_dev, message);
-+	ret = __hidpp_send_report(hidpp->hid_dev, message);
-+	if (ret) {
-+		dbg_hid("__hidpp_send_report returned err: %d\n", ret);
-+		memset(response, 0, sizeof(struct hidpp_report));
-+		return ret;
-+	}
- 
--		if (ret) {
--			dbg_hid("__hidpp_send_report returned err: %d\n", ret);
--			memset(response, 0, sizeof(struct hidpp_report));
--			break;
--		}
-+	if (!wait_event_timeout(hidpp->wait, hidpp->answer_available,
-+				5*HZ)) {
-+		dbg_hid("%s:timeout waiting for response\n", __func__);
-+		memset(response, 0, sizeof(struct hidpp_report));
-+		return -ETIMEDOUT;
-+	}
- 
--		if (!wait_event_timeout(hidpp->wait, hidpp->answer_available,
--					5*HZ)) {
--			dbg_hid("%s:timeout waiting for response\n", __func__);
--			memset(response, 0, sizeof(struct hidpp_report));
--			ret = -ETIMEDOUT;
--			break;
--		}
-+	if (response->report_id == REPORT_ID_HIDPP_SHORT &&
-+	    response->rap.sub_id == HIDPP_ERROR) {
-+		ret = response->rap.params[1];
-+		dbg_hid("%s:got hidpp error %02X\n", __func__, ret);
-+		return ret;
-+	}
- 
--		if (response->report_id == REPORT_ID_HIDPP_SHORT &&
--		    response->rap.sub_id == HIDPP_ERROR) {
--			ret = response->rap.params[1];
--			dbg_hid("%s:got hidpp error %02X\n", __func__, ret);
-+	if ((response->report_id == REPORT_ID_HIDPP_LONG ||
-+	     response->report_id == REPORT_ID_HIDPP_VERY_LONG) &&
-+	    response->fap.feature_index == HIDPP20_ERROR) {
-+		ret = response->fap.params[1];
-+		dbg_hid("%s:got hidpp 2.0 error %02X\n", __func__, ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+/*
-+ * hidpp_send_message_sync() returns 0 in case of success, and something else
-+ * in case of a failure.
-+ * - If ' something else' is positive, that means that an error has been raised
-+ *   by the protocol itself.
-+ * - If ' something else' is negative, that means that we had a classic error
-+ *   (-ENOMEM, -EPIPE, etc...)
-+ */
-+static int hidpp_send_message_sync(struct hidpp_device *hidpp,
-+	struct hidpp_report *message,
-+	struct hidpp_report *response)
-+{
-+	int ret;
-+	int max_retries = 3;
-+
-+	mutex_lock(&hidpp->send_mutex);
-+
-+	do {
-+		ret = __do_hidpp_send_message_sync(hidpp, message, response);
-+		if (ret != HIDPP20_ERROR_BUSY)
- 			break;
--		}
- 
--		if ((response->report_id == REPORT_ID_HIDPP_LONG ||
--		     response->report_id == REPORT_ID_HIDPP_VERY_LONG) &&
--		    response->fap.feature_index == HIDPP20_ERROR) {
--			ret = response->fap.params[1];
--			if (ret != HIDPP20_ERROR_BUSY) {
--				dbg_hid("%s:got hidpp 2.0 error %02X\n", __func__, ret);
--				break;
--			}
--			dbg_hid("%s:got busy hidpp 2.0 error %02X, retrying\n", __func__, ret);
--		}
--	}
-+		dbg_hid("%s:got busy hidpp 2.0 error %02X, retrying\n", __func__, ret);
-+	} while (--max_retries);
- 
- 	mutex_unlock(&hidpp->send_mutex);
- 	return ret;
+I'm guessing this is all for live migration between SNP hosts. If so,
+then there will have to be a guest API to handle the differences.
 
----
-base-commit: b98ec211af5508457e2b1c4cc99373630a83fa81
-change-id: 20230621-logitech-fixes-a4c0e66ea2ad
+> SNP host code depends on CONFIG_KVM_AMD_SEV config flag, which may be
+> enabled even when CONFIG_AMD_MEM_ENCRYPT isn't set, so update the
+> SNP-specific IOMMU helpers used here to rely on CONFIG_KVM_AMD_SEV
+> instead of CONFIG_AMD_MEM_ENCRYPT.
 
-Best regards,
+Does that mean that even on CONFIG_AMD_MEM_ENCRYPT=n kernels, host SNP
+can function?
+
+Do we even want that?
+
+I'd expect that a host SNP kernel should have SME enabled too even
+though it is not absolutely necessary.
+
+> Co-developed-by: Ashish Kalra <ashish.kalra@amd.com>
+> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
+> Co-developed-by: Tom Lendacky <thomas.lendacky@amd.com>
+> Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
+> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
+> [mdr: rework commit message to be clearer about what patch does, squash
+>       in early_rmptable_check() handling from Tom]
+> Signed-off-by: Michael Roth <michael.roth@amd.com>
+> ---
+>  arch/x86/coco/Makefile                   |   1 +
+>  arch/x86/coco/sev/Makefile               |   3 +
+>  arch/x86/coco/sev/host.c                 | 212 +++++++++++++++++++++++
+>  arch/x86/include/asm/disabled-features.h |   8 +-
+>  arch/x86/include/asm/msr-index.h         |  11 +-
+>  arch/x86/include/asm/sev.h               |   2 +
+>  arch/x86/kernel/cpu/amd.c                |  19 ++
+>  drivers/iommu/amd/init.c                 |   2 +-
+>  include/linux/amd-iommu.h                |   2 +-
+>  9 files changed, 256 insertions(+), 4 deletions(-)
+>  create mode 100644 arch/x86/coco/sev/Makefile
+>  create mode 100644 arch/x86/coco/sev/host.c
+
+Ignored review comments here:
+
+https://lore.kernel.org/r/Y9ubi0i4Z750gdMm@zn.tnic
+
+Ignoring this one for now too.
+
 -- 
-Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
