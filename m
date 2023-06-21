@@ -2,50 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7000D738CFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:22:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D36B9738CFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230445AbjFURWR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 13:22:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
+        id S229862AbjFURXB convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 13:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbjFURWO (ORCPT
+        with ESMTP id S230081AbjFURW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 13:22:14 -0400
+        Wed, 21 Jun 2023 13:22:59 -0400
 Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AFEE19AE;
-        Wed, 21 Jun 2023 10:22:10 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-bd61dd9a346so6101620276.2;
-        Wed, 21 Jun 2023 10:22:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3614210C;
+        Wed, 21 Jun 2023 10:22:59 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-bb2ffa1e235so5937884276.0;
+        Wed, 21 Jun 2023 10:22:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687368129; x=1689960129;
+        d=1e100.net; s=20221208; t=1687368178; x=1689960178;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XZpPnQxJ9uihBCuzwCODut6HmIpI48UyBATMRmnphzI=;
-        b=gsn5h2u1Z5oX2oDgk5S7ksOiAb01y0JtCU419fLqH8GhnhWm8thihGyXJks3CFuz8a
-         f8bksGHTzy1ZkY0c9xzJPRphLINBOe+vgTNn6cDVIunUADbOvv0Sv6C63lkZqfECkRDi
-         zFL2LsXYtOal7qip1Dfeqx92fM5k/XKpb2Y9qw6rK0LMWIZ0E02U5Wub36QZNybiHC3c
-         i+o2dL2GfkYr7AQMKXBnIQTzVUNM4hhd3p04aEpuOiFVGJuY80uJc2WQOzLAmMIv4t8p
-         VPvxCFmN2cb8JcMa3dA1pg1iD/3ptRgs0uA701Qr0GAOxpkYYceK1bz8Mtux2Nqvjn1b
-         LnQg==
-X-Gm-Message-State: AC+VfDwLV3JLVqszk8KPRb2B5wqnphFHK/X72hHk195n+8O6xpLjIDQl
-        FFE3YUclRUoUDiYhlYGON3CaGs4YdokBcnmNjxqK2KK1
-X-Google-Smtp-Source: ACHHUZ7CJ2u7aMcLckaeVS3ODaAkKDLiHQR5jej+/fEA6TF067omqvduMrMFOAbZh6j1DBo43iJ6orX74ExUqsejA6k=
-X-Received: by 2002:a25:5f4d:0:b0:bcb:caf8:7aae with SMTP id
- h13-20020a255f4d000000b00bcbcaf87aaemr12274666ybm.44.1687368129592; Wed, 21
- Jun 2023 10:22:09 -0700 (PDT)
+        bh=OEe5QkJa8Tj6wbx7n/OFn5hoJnPVHkIkLosmDQ908PM=;
+        b=YU8ketYrgE5+S57dqocG1ShbsRilxZtXMEq/lF7Z9vlYYVVzXp2JqJTBPCKlTGW5Sl
+         npy38D6iIfvE/4mJ/NoTdf7z2dMebgd4+nDIpv3IAcJAnOA9XJZiyuZF7fVOzmqYH3Jd
+         teM2oO2ro2wered68uHoh1a1qoKyZOfZiUWwFVX4ENTQR96uIuBPSfiOJmzhG3BHiXCz
+         4sCrRkFG7V8aSHvcLLzKdepU4M0/laJSFae6JcF2eEm6yqtRZCRunikWhtRjxGfHzaRZ
+         R8c4G1gaPBrJcJU6emhaHGGaMtPDFTpibVi5QP/9C5zmw+MeBmVf163l7c0tRA+eoCwV
+         tOQg==
+X-Gm-Message-State: AC+VfDyBsSEILy8TPo1vc1MIsfWgu2PMvh+cYg9UznD1kHOcHpk5DLeO
+        TOCx4NahBD8e5YH2e5bUbOJHB9ukJaIvegcPhEU=
+X-Google-Smtp-Source: ACHHUZ71I97j5WODI68uKRtv6X09CgvUKOs6mAIUHzrx9FOHAG6/iFX9E10UepwS9Txxy/i5/eW7A8xH4dSVtZQvlOc=
+X-Received: by 2002:a25:d3c6:0:b0:bcb:f3cc:e965 with SMTP id
+ e189-20020a25d3c6000000b00bcbf3cce965mr12586639ybf.11.1687368178335; Wed, 21
+ Jun 2023 10:22:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230602123815.255001-1-paniii94@gmail.com>
-In-Reply-To: <20230602123815.255001-1-paniii94@gmail.com>
+References: <20230614021505.59856-1-yangjihong1@huawei.com>
+In-Reply-To: <20230614021505.59856-1-yangjihong1@huawei.com>
 From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 21 Jun 2023 10:21:58 -0700
-Message-ID: <CAM9d7ciXeG=9qhZ-5qs=ZR=iEmYD64OVjhd+z+wh_TPjsWaaEA@mail.gmail.com>
-Subject: Re: [PATCH v2] Subject: perf jit: Fix incorrect file name in DWARF
- line table
-To:     Elisabeth <paniii94@gmail.com>
-Cc:     Elisabeth Panholzer <elisabeth@leaningtech.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Date:   Wed, 21 Jun 2023 10:22:47 -0700
+Message-ID: <CAM9d7cjqim4iyBKU1ob3uYXbycQTJ1f-XEL1fCQpiKDMirEuFQ@mail.gmail.com>
+Subject: Re: [PATCH v3] perf stat: Add missing newline in pr_err messages
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        james.clark@arm.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -58,26 +60,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jun 2, 2023 at 5:38 AM Elisabeth <paniii94@gmail.com> wrote:
+On Tue, Jun 13, 2023 at 7:16 PM Yang Jihong <yangjihong1@huawei.com> wrote:
 >
-> From: elisabeth <paniii94@gmail.com>
+> The newline is missing for error messages in add_default_attributes()
 >
-> Fixes an issue where an incorrect filename was added in the DWARF line table of
-> an ELF object file when calling 'perf inject --jit' due to not checking the
-> filename of a debug entry against the repeated name marker (/xff/0).
-> The marker is mentioned in the tools/perf/util/jitdump.h header, which describes
-> the jitdump binary format, and indicitates that the filename in a debug entry
-> is the same as the previous enrty.
-> In the function emit_lineno_info(), in the file tools/perf/util/genelf-debug.c,
-> the debug entry filename gets compared to the previous entry filename. If they
-> are not the same, a new filename is added to the DWARF line table. However,
-> since there is no check against '\xff\0', in some cases '\xff\0' is inserted
-> as the filename into the DWARF line table.
-> This can be seen with `objdump --dwarf=line` on the ELF file after `perf inject --jit`.
-> It also makes no source code information show up in 'perf annotate'.
+> Before:
 >
-> Signed-off-by: Elisabeth Panholzer <elisabeth@leaningtech.com>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-perf-users@vger.kernel.org
+>   # perf stat --topdown
+>   Topdown requested but the topdown metric groups aren't present.
+>   (See perf list the metric groups have names like TopdownL1)#
+>
+> After:
+>
+>   # perf stat --topdown
+>   Topdown requested but the topdown metric groups aren't present.
+>   (See perf list the metric groups have names like TopdownL1)
+>   #
+>
+> In addition, perf_stat_init_aggr_mode() and perf_stat_init_aggr_mode_file()
+> have the same problem, fixed by the way.
+>
+> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> Acked-by: Ian Rogers <irogers@google.com>
+> Reviewed-by: James Clark <james.clark@arm.com>
 
 Applied to perf-tools-next, thanks!
