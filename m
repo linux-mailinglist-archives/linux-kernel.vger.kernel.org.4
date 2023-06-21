@@ -2,91 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C080738913
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:29:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F21FE738914
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:29:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233008AbjFUP3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:29:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36396 "EHLO
+        id S233207AbjFUP3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 11:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233226AbjFUP3N (ORCPT
+        with ESMTP id S232874AbjFUP3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:29:13 -0400
+        Wed, 21 Jun 2023 11:29:32 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68EFC19F
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:29:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA38DC
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:29:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 735256159B
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 15:29:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69059C433C8;
-        Wed, 21 Jun 2023 15:29:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687361350;
-        bh=8sWjYA4N+fAraCJGgq/hNuwy2uwuyh5U7Ae9A1i5Soo=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=WR6NpiobZ/y7MqNA6DkkgIbDms6UHEZ/RkHeaaDm1xDhA4B12AM631tMtqXeax47V
-         KOf3pFJojygW1W3H+0PbJJ+K3N8a3FbVtnLd3UWZyP7SJwaFX2X64dZ09xFaPNS/m9
-         iMzwZCBIv0gjChdTWzGgqOJd1IN0NGGLAql/3PXYQUeMy7m8JOmyriYiwb+WbdReMC
-         Md0eutFCUySEBItiAujtPE1QvQDgbvrwlr4Ptkd6Fe+SK21ygXkNNh0G6LtrKat0XO
-         ffCpSSHaQJ7c0WaWLBl9i11+K+7oKwpEJ6hkJ5M7UzHW0g7BFpYK/wW62M4kmkREYX
-         HvRVb4chSgdJg==
-From:   Mark Brown <broonie@kernel.org>
-To:     vkoul@kernel.org, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, yixuanjiang <yixuanjiang@google.com>
-Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230619033127.2522477-1-yixuanjiang@google.com>
-References: <20230619033127.2522477-1-yixuanjiang@google.com>
-Subject: Re: [PATCH] ASoC: soc-compress: Fix deadlock in soc_compr_open_fe
-Message-Id: <168736134915.407715.9511058115081614816.b4-ty@kernel.org>
-Date:   Wed, 21 Jun 2023 16:29:09 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AF646159F
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 15:29:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73BF8C433C0;
+        Wed, 21 Jun 2023 15:29:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687361368;
+        bh=aMAP5HWouNXWj6lc9xZVQR+piCW8BBPoG08vjJRTNDw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=svJyCzRIhAY5SjfRwTD55zgxnioupIoUMBqNxPDrzRKxzxbAGSh6gaJfyvaoja4we
+         QzzPwtQd7OkQ/iDX51qSdVIXP5aq1ypHy1C7vNI9J1rj6IrqXoUlylr6N9rJQinZ2r
+         HXDBeBRudys+fPSFGI+PxYhHyo/nhqgRE8ktuZ9g=
+Date:   Wed, 21 Jun 2023 17:29:25 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 04/79] binderfs: switch to new ctime accessors
+Message-ID: <2023062156-diagnoses-jellied-beb2@gregkh>
+References: <20230621144507.55591-1-jlayton@kernel.org>
+ <20230621144735.55953-1-jlayton@kernel.org>
+ <20230621144735.55953-3-jlayton@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-c6835
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621144735.55953-3-jlayton@kernel.org>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Jun 2023 11:31:27 +0800, yixuanjiang wrote:
-> Modify the error handling flow by release lock.
-> The require mutex will keep holding if open fail.
+On Wed, Jun 21, 2023 at 10:45:17AM -0400, Jeff Layton wrote:
+> In later patches, we're going to change how the ctime.tv_nsec field is
+> utilized. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
 > 
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> ---
+>  drivers/android/binderfs.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
 
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-
-Thanks!
-
-[1/1] ASoC: soc-compress: Fix deadlock in soc_compr_open_fe
-      commit: 2222214749a9969e09454b9ba7febfdfb09c1c8d
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
