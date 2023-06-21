@@ -2,105 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83B2B738BB5
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:40:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89598738BB6
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:40:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjFUQkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
+        id S231767AbjFUQku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:40:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbjFUQjz (ORCPT
+        with ESMTP id S232530AbjFUQj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:39:55 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25A51BCA
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:39:30 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-987c932883bso739803166b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:39:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687365568; x=1689957568;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5y48c1wpF6+Mt2hNg3vBn4NH1hPD+Xn2/odxxkX/bS4=;
-        b=myEgp1LtAS76zbgSyQbj/EadEI1S6v7AhAdFppSTkzQGol8cFF9Yi6WqvHyFsnqAMb
-         2+9/TDpSREMD1KYMvTj1wI1VxSm1AByydiU0Qwet03iktVYztjke1sdQetFeB8y0C0Zl
-         6kk/0ozUP8KHYofh0hKQiOMwSJcX9K3cRA7cuPZEModdREvksBMTtwh1UVi37y184BCM
-         ubcWgWBrkbS6AuBd1EfFKuv91UGp5rSLXGfWpPtTXGhF75ArGbj4E2Om5oYznBeQ5+vd
-         95d2z9Qn3Go2TBqk/eFY91f2nRrdIw/tPZs2Qw1FAIquFDF+CjVCfFAPvsp5hxPTXhhj
-         Ieyw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687365568; x=1689957568;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5y48c1wpF6+Mt2hNg3vBn4NH1hPD+Xn2/odxxkX/bS4=;
-        b=A+bdjqF+IlOqYwhoLnX3pgUhOIo1+/zwWqEtgsSO2PXncyJmWP1MItEBxyV8LsX1g0
-         N5wTDbLue2dWPgX7cI1my2NsZ5cC5CiPNuVTs9DYKe/HCq/BI51ZMug187oUxYWPyV6m
-         ubNpb8uU25h+PL+Cm3ZTo9YVS5/NLbc7nIBGotkqQPMWZRhYImjG87FNope+GwvagMPu
-         NCMkL7iNBGSRGnmPnEFAWAjKSbo+5y1l5zrXwbNphg0jnBdSfqlvQvR9oloUNz5g5rBV
-         WKUsOKjnVSPZUeT/jjUfMnKFgHSdSF1nGmmbgnuvY6tUWS1KutQqDqvtstmNxd+J7QY5
-         httQ==
-X-Gm-Message-State: AC+VfDxpNnDBe2kn5kYIK//W+g/dq5cWoI8MJJA+7iptHfTNDSrxWfJ7
-        QSgSjFWxibNxqnG4YCqivuSZJg==
-X-Google-Smtp-Source: ACHHUZ6qpdEWlOv74pmH4mmnpmMJfoU5Nu2hjjfpNN7zraQ14UmDv0ENsrB8eBMs/eimeAmgY/1XwA==
-X-Received: by 2002:a17:907:7ba4:b0:977:ecff:3367 with SMTP id ne36-20020a1709077ba400b00977ecff3367mr16818253ejc.40.1687365568223;
-        Wed, 21 Jun 2023 09:39:28 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id g4-20020a17090670c400b00988aff89806sm3473027ejk.14.2023.06.21.09.39.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 09:39:27 -0700 (PDT)
-Message-ID: <aa5c6184-4b64-4dfb-4d3c-93d44cbfd11e@linaro.org>
-Date:   Wed, 21 Jun 2023 18:39:26 +0200
+        Wed, 21 Jun 2023 12:39:59 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249B926A6;
+        Wed, 21 Jun 2023 09:39:35 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E281721B83;
+        Wed, 21 Jun 2023 16:39:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1687365571; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zHga/LRrqLjZgX4k+fSqGnmtc9CGIrSD0m9LcPimypM=;
+        b=N3tk2Wmc+SYFgMM+dA4h2nOXph+49ayIstST0lIXCahEpNYtSl3xTMk3pkYAOTgR3ZnkRD
+        dmjnq7M4NS6UnjLneurcOi1CKR19PVDV0g9Mt8hNJZF+rD33vawGHr/yaO9PYOgVhDv9ca
+        m0qWqh6ujp2kIQVJ8G/cqXq5uOWWukI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1687365571;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zHga/LRrqLjZgX4k+fSqGnmtc9CGIrSD0m9LcPimypM=;
+        b=i9BZXEqL9M+ivYH0wYckmckTpUwnQQhvDk7AUsopKslH6FnBDX2SbF5HDtsuNnjCGTyKIB
+        auOMogOQSqCUE+DQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D47D8133E6;
+        Wed, 21 Jun 2023 16:39:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ljDeM8Mnk2R+RQAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 21 Jun 2023 16:39:31 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 6072AA075D; Wed, 21 Jun 2023 18:39:31 +0200 (CEST)
+Date:   Wed, 21 Jun 2023 18:39:31 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        David Sterba <dsterba@suse.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 10/79] affs: switch to new ctime accessors
+Message-ID: <20230621163931.2ni7bzmwiyw5swrx@quack3>
+References: <20230621144507.55591-1-jlayton@kernel.org>
+ <20230621144735.55953-1-jlayton@kernel.org>
+ <20230621144735.55953-9-jlayton@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 3/3] power: supply: Introduce MM8013 fuel gauge driver
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230621-topic-mm8013-v1-0-4407c6260053@linaro.org>
- <20230621-topic-mm8013-v1-3-4407c6260053@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230621-topic-mm8013-v1-3-4407c6260053@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621144735.55953-9-jlayton@kernel.org>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2023 17:39, Konrad Dybcio wrote:
-> Add a driver for the Mitsumi MM8013 fuel gauge. The driver is a vastly
-> cleaned up and improved version of the one that shipped in some obscure
-> Lenovo downstream kernel [1], with some register definitions borrowed from
-> ChromeOS EC platform code [2].
+On Wed 21-06-23 10:45:23, Jeff Layton wrote:
+> In later patches, we're going to change how the ctime.tv_nsec field is
+> utilized. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
 > 
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-...
+Looks good to me. Feel free to add:
 
-> +
-> +static struct i2c_driver mm8013_i2c_driver = {
-> +	.probe = mm8013_probe,
-> +	.id_table = mm8013_id_table,
-> +	.driver = {
-> +		.name = "mm8013",
-> +		.owner = THIS_MODULE,
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-Drop owner.
+								Honza
 
-Best regards,
-Krzysztof
-
+> ---
+>  fs/affs/amigaffs.c |  6 +++---
+>  fs/affs/inode.c    | 17 +++++++++--------
+>  2 files changed, 12 insertions(+), 11 deletions(-)
+> 
+> diff --git a/fs/affs/amigaffs.c b/fs/affs/amigaffs.c
+> index 29f11e10a7c7..2b508aa6707e 100644
+> --- a/fs/affs/amigaffs.c
+> +++ b/fs/affs/amigaffs.c
+> @@ -60,7 +60,7 @@ affs_insert_hash(struct inode *dir, struct buffer_head *bh)
+>  	mark_buffer_dirty_inode(dir_bh, dir);
+>  	affs_brelse(dir_bh);
+>  
+> -	dir->i_mtime = dir->i_ctime = current_time(dir);
+> +	dir->i_mtime = inode_ctime_set_current(dir);
+>  	inode_inc_iversion(dir);
+>  	mark_inode_dirty(dir);
+>  
+> @@ -114,7 +114,7 @@ affs_remove_hash(struct inode *dir, struct buffer_head *rem_bh)
+>  
+>  	affs_brelse(bh);
+>  
+> -	dir->i_mtime = dir->i_ctime = current_time(dir);
+> +	dir->i_mtime = inode_ctime_set_current(dir);
+>  	inode_inc_iversion(dir);
+>  	mark_inode_dirty(dir);
+>  
+> @@ -315,7 +315,7 @@ affs_remove_header(struct dentry *dentry)
+>  	else
+>  		clear_nlink(inode);
+>  	affs_unlock_link(inode);
+> -	inode->i_ctime = current_time(inode);
+> +	inode_ctime_set_current(inode);
+>  	mark_inode_dirty(inode);
+>  
+>  done:
+> diff --git a/fs/affs/inode.c b/fs/affs/inode.c
+> index 27f77a52c5c8..177bac4def5e 100644
+> --- a/fs/affs/inode.c
+> +++ b/fs/affs/inode.c
+> @@ -19,6 +19,7 @@ struct inode *affs_iget(struct super_block *sb, unsigned long ino)
+>  {
+>  	struct affs_sb_info	*sbi = AFFS_SB(sb);
+>  	struct buffer_head	*bh;
+> +	struct timespec64	ctime;
+>  	struct affs_tail	*tail;
+>  	struct inode		*inode;
+>  	u32			 block;
+> @@ -149,13 +150,13 @@ struct inode *affs_iget(struct super_block *sb, unsigned long ino)
+>  		break;
+>  	}
+>  
+> -	inode->i_mtime.tv_sec = inode->i_atime.tv_sec = inode->i_ctime.tv_sec
+> -		       = (be32_to_cpu(tail->change.days) * 86400LL +
+> -		         be32_to_cpu(tail->change.mins) * 60 +
+> -			 be32_to_cpu(tail->change.ticks) / 50 +
+> -			 AFFS_EPOCH_DELTA) +
+> -			 sys_tz.tz_minuteswest * 60;
+> -	inode->i_mtime.tv_nsec = inode->i_ctime.tv_nsec = inode->i_atime.tv_nsec = 0;
+> +	ctime.tv_sec = (be32_to_cpu(tail->change.days) * 86400LL +
+> +		        be32_to_cpu(tail->change.mins) * 60 +
+> +			be32_to_cpu(tail->change.ticks) / 50 +
+> +			AFFS_EPOCH_DELTA) +
+> +			sys_tz.tz_minuteswest * 60;
+> +	ctime.tv_nsec = 0;
+> +	inode->i_atime = inode->i_mtime = inode_ctime_set(inode, ctime);
+>  	affs_brelse(bh);
+>  	unlock_new_inode(inode);
+>  	return inode;
+> @@ -314,7 +315,7 @@ affs_new_inode(struct inode *dir)
+>  	inode->i_gid     = current_fsgid();
+>  	inode->i_ino     = block;
+>  	set_nlink(inode, 1);
+> -	inode->i_mtime   = inode->i_atime = inode->i_ctime = current_time(inode);
+> +	inode->i_mtime   = inode->i_atime = inode_ctime_set_current(inode);
+>  	atomic_set(&AFFS_I(inode)->i_opencnt, 0);
+>  	AFFS_I(inode)->i_blkcnt = 0;
+>  	AFFS_I(inode)->i_lc = NULL;
+> -- 
+> 2.41.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
