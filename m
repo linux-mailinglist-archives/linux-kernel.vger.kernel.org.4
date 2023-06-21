@@ -2,127 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C0E737D92
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1682F737D9E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbjFUIcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 04:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59224 "EHLO
+        id S230269AbjFUIe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 04:34:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229759AbjFUIcS (ORCPT
+        with ESMTP id S229673AbjFUIeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 04:32:18 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C841A19F
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:32:16 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R411e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VlfH3v6_1687336331;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VlfH3v6_1687336331)
-          by smtp.aliyun-inc.com;
-          Wed, 21 Jun 2023 16:32:11 +0800
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-To:     hsiangkao@linux.alibaba.com, chao@kernel.org, huyue2@coolpad.com,
-        linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org, alexl@redhat.com
-Subject: [RFC 2/2] erofs: optimize getxattr with bloom filter
-Date:   Wed, 21 Jun 2023 16:32:09 +0800
-Message-Id: <20230621083209.116024-3-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <20230621083209.116024-1-jefflexu@linux.alibaba.com>
-References: <20230621083209.116024-1-jefflexu@linux.alibaba.com>
+        Wed, 21 Jun 2023 04:34:24 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CD819AC
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:34:23 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35L8YGkd031030;
+        Wed, 21 Jun 2023 03:34:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1687336456;
+        bh=RcOH7fpnFEhX2+nNrVqYgVkolPMp+HFzURE6ojM7PyY=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=AnGoNnmHJD+x/jN4l3uUlALaOytC33dlC8fFESTKS9UFjm4usLUMtG9kWrsWjKWUl
+         fsc+zLoufhlKy42Z4sBT3dkaB+FFO1VjkkbCZVMw5wpRciQ+AHaC6ldir8G+HSuQlp
+         u0f/qZUps4cOrNjeUAkLWMLu8+WOk0w0K28Arxbg=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35L8YGHW040884
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 21 Jun 2023 03:34:16 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 21
+ Jun 2023 03:34:15 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 21 Jun 2023 03:34:16 -0500
+Received: from [10.24.69.26] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35L8YD9Y081795;
+        Wed, 21 Jun 2023 03:34:13 -0500
+Message-ID: <2d15ea8e-b2d8-2ee7-ba66-7ed6e4237cb3@ti.com>
+Date:   Wed, 21 Jun 2023 14:04:12 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] firmware: ti_sci: Fix few compiler warnings
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>
+CC:     Praneeth <praneeth@ti.com>, Vignesh <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230621082309.1569239-1-d-gole@ti.com>
+From:   Dhruva Gole <d-gole@ti.com>
+In-Reply-To: <20230621082309.1569239-1-d-gole@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Boost the negative xattr lookup with bloom filter.
+Oops, seems like I missed similar patch,
 
-The bit value for the bloom filter map has a reverse semantics for
-compatibility.  That is, the mapped bits will be cleared to 0, while the
-bit value of 1 indicates the absence of corresponding xattr.
+On 21/06/23 13:53, Dhruva Gole wrote:
+> Fix below warnings:
+> 
+>   CC      drivers/firmware/ti_sci.o
+> drivers/firmware/ti_sci.c:1988: warning: Excess function parameter 'vint_irq' description in 'ti_sci_cmd_set_irq'
+> drivers/firmware/ti_sci.c:2036: warning: Excess function parameter 'vint_irq' description in 'ti_sci_cmd_free_irq'
+> drivers/firmware/ti_sci.c:2632: warning: Function parameter or member
+> ...
+> drivers/firmware/ti_sci.c:2748: warning: expecting prototype for ti_sci_cmd_get_boot_status(). Prototype was for ti_sci_cmd_proc_get_status() instead
+> drivers/firmware/ti_sci.c:3267: warning: Function parameter or member 'sub_type' not described in 'devm_ti_sci_get_resource'
+> drivers/firmware/ti_sci.c:3267: warning: Excess function parameter 'suub_type' description in 'devm_ti_sci_get_resource'
+> 
+> Fixes: 1e407f337f40 ("firmware: ti_sci: Add support for processor control")
+> Signed-off-by: Dhruva Gole <d-gole@ti.com>
+> ---
 
-Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
----
- fs/erofs/internal.h |  2 ++
- fs/erofs/xattr.c    | 16 +++++++++++++++-
- 2 files changed, 17 insertions(+), 1 deletion(-)
+Nishanth already submitted this before I did,
 
-diff --git a/fs/erofs/internal.h b/fs/erofs/internal.h
-index 1e39c03357d1..49b4b350af8a 100644
---- a/fs/erofs/internal.h
-+++ b/fs/erofs/internal.h
-@@ -285,6 +285,7 @@ EROFS_FEATURE_FUNCS(fragments, incompat, INCOMPAT_FRAGMENTS)
- EROFS_FEATURE_FUNCS(dedupe, incompat, INCOMPAT_DEDUPE)
- EROFS_FEATURE_FUNCS(xattr_prefixes, incompat, INCOMPAT_XATTR_PREFIXES)
- EROFS_FEATURE_FUNCS(sb_chksum, compat, COMPAT_SB_CHKSUM)
-+EROFS_FEATURE_FUNCS(xattr_bloom, compat, COMPAT_XATTR_BLOOM)
- 
- /* atomic flag definitions */
- #define EROFS_I_EA_INITED_BIT	0
-@@ -304,6 +305,7 @@ struct erofs_inode {
- 	unsigned char inode_isize;
- 	unsigned int xattr_isize;
- 
-+	unsigned long xattr_bloom_map;
- 	unsigned int xattr_shared_count;
- 	unsigned int *xattr_shared_xattrs;
- 
-diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
-index 4376f654474d..1ab481b46e8d 100644
---- a/fs/erofs/xattr.c
-+++ b/fs/erofs/xattr.c
-@@ -5,6 +5,7 @@
-  * Copyright (C) 2021-2022, Alibaba Cloud
-  */
- #include <linux/security.h>
-+#include <linux/xxhash.h>
- #include "xattr.h"
- 
- struct erofs_xattr_iter {
-@@ -87,6 +88,7 @@ static int erofs_init_inode_xattrs(struct inode *inode)
- 	}
- 
- 	ih = it.kaddr + erofs_blkoff(sb, it.pos);
-+	vi->xattr_bloom_map = le32_to_cpu(ih->h_map);
- 	vi->xattr_shared_count = ih->h_shared_count;
- 	vi->xattr_shared_xattrs = kmalloc_array(vi->xattr_shared_count,
- 						sizeof(uint), GFP_KERNEL);
-@@ -392,8 +394,11 @@ int erofs_getxattr(struct inode *inode, int index,
- 		   const char *name,
- 		   void *buffer, size_t buffer_size)
- {
--	int ret;
-+	int i, ret;
-+	uint32_t bit;
- 	struct erofs_xattr_iter it;
-+	struct erofs_inode *const vi = EROFS_I(inode);
-+	struct erofs_sb_info *sbi = EROFS_SB(inode->i_sb);
- 
- 	if (!name)
- 		return -EINVAL;
-@@ -402,6 +407,15 @@ int erofs_getxattr(struct inode *inode, int index,
- 	if (ret)
- 		return ret;
- 
-+	if (erofs_sb_has_xattr_bloom(sbi) && vi->xattr_bloom_map) {
-+		for (i = 0; i < EROFS_XATTR_BLOOM_COUNTS; i++) {
-+			bit = xxh32(name, strlen(name), index + i);
-+			bit &= EROFS_XATTR_BLOOM_MASK;
-+			if (test_bit(bit, &vi->xattr_bloom_map))
-+				return -ENOATTR;
-+		}
-+	}
-+
- 	it.index = index;
- 	it.name = (struct qstr)QSTR_INIT(name, strlen(name));
- 	if (it.name.len > EROFS_NAME_LEN)
+https://lore.kernel.org/all/20230621021619.265162-1-nm@ti.com/
+
 -- 
-2.19.1.6.gb485710b
-
+Thanks and Regards,
+Dhruva Gole
