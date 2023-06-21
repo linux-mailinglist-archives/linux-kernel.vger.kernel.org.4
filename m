@@ -2,214 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9ED7739029
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE5873902A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:36:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbjFUTgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 15:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34350 "EHLO
+        id S230089AbjFUTg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 15:36:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjFUTgT (ORCPT
+        with ESMTP id S229951AbjFUTgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 15:36:19 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129B71989;
-        Wed, 21 Jun 2023 12:36:15 -0700 (PDT)
-X-GND-Sasl: alexandre.belloni@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1687376174;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=t2IbrcNzQNr/fmkdLl77sKepHEuqtDNp0dRZtoi2jnM=;
-        b=Je/33w7wN8peztYmhMOKG59d4LYTqq9ZW6pXS5GVcPdtjGF596LGjli5jIjbW+5wTS7tM1
-        n4ExkXx2NkcsmkBnlicRXMFp7QydUJ3fTUOQPY36vtUpY3NNTQ4iH2NQCuUI2Fp4CnOTB5
-        UPDuvfZYRHB+xVaTnj3lKZEMzGT2LoRp/HZ/bRYSI0l3tsiVilZg8ANY/39JZ2Zk8jLtqZ
-        wocgzy0mF7IZkSV/BH306ZpZE0zJWURZ8hHr8Lc/VwsDLBexUT+81LVl2esJ1uhdcMfMOj
-        YErVFYxSUCgAzxGVbvDUVxqM1LGPbfSuNeiwPf6LybkkRn9DazvOqKeXtrI7WA==
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-X-GND-Sasl: alexandre.belloni@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CCE3C1BF204;
-        Wed, 21 Jun 2023 19:36:13 +0000 (UTC)
-Date:   Wed, 21 Jun 2023 21:36:13 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: Re: [PATCH v3 11/14] rtc: pcf2127: adapt time/date registers write
- sequence for PCF2131
-Message-ID: <20230621193613d25ceb92@mail.local>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
- <20221215150214.1109074-12-hugo@hugovil.com>
- <Y8rK1dgpNJaSy/Gb@mail.local>
- <20230123165741.b7c93d439841860f4ab9b0c8@hugovil.com>
+        Wed, 21 Jun 2023 15:36:55 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598231726
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 12:36:53 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-25e8b2931f2so4756770a91.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 12:36:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687376213; x=1689968213;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ATxljAeXD3ZQLvgleYPWv/HICEiuHF7y2fCsQyw2v4s=;
+        b=F04tWiHz1dnF4m/hyS3Rzz6lV/5n2cDeV8/AKRH6tjunNM+4W5plQtsvob1Rgktzd1
+         B0U6V+EV7Zqk0UsqT6kayYbb0APEuSJ+ZbM3Z+ZrMVGN6HXu7ZGhVv9p1IX++NxiJJEb
+         /5YLxHTmVdRDAXvIbRo2AmcF9RWoGF/TYVkriLxR/jzqqlCSMxh3mfRiXWKyvLNfalJl
+         7xcnkfx4nI+RiK3QfK3/N2Wj+owWrgfGLVvIUJ8S9dsgcGlPg+HgCSARJWaGn1ieekl6
+         IbLtssr6EFnfVBUiGYWlD2KXHwBrhk+2XYlZJV7KC2Omawd1+h1bg/F6TZu0bLVeXe2L
+         wuww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687376213; x=1689968213;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ATxljAeXD3ZQLvgleYPWv/HICEiuHF7y2fCsQyw2v4s=;
+        b=VCFGQtrgAOSjAu7ljc0IV9afyvpxU9P4NpX36QFZRRoHz8aBKXBOnrkb40AooMybJK
+         O7t/O5HXufGflsyNbHzCyhN1q9lLVFv6EscFXpdFDjx0HNOgJwoq9KpLjpNV8gRr8Jqc
+         32dtT6QeikhJlq2Oy2fsf9nrwPe4Z5C+pDdMFFQ6hdNVOMc3BdHO2FMFCCH3GbJag2Ys
+         4yK2MjQ2D3FoFHKA4Ti9AgY3aeb1qLnaxLcSKdnzmwmPQJo4nXCFO9jhSW1dnfMV1A7F
+         lMFGv/Fq6lBmUt3jYvKQcLd1J1IF7a8SdtgONvmNGopM5hDSxWNeC8DXBUtw2tLSsXsw
+         TsFw==
+X-Gm-Message-State: AC+VfDy9XXXINrDTMIT2TlPVGisaI7i1tyPUN53BPzQrjjU856bhWEk3
+        XKAgLA1uqfasL002SL0hw2Uh4cO2SvLwx+QhD1Q=
+X-Google-Smtp-Source: ACHHUZ4gzECWFjd0U1mfwbl+t9yj2eAZd3Ldks7oZPeBVE/vceICr7tQsoMjCRzR74H0cY+940GEZFABs68Mjj8TRqw=
+X-Received: by 2002:a17:90a:6b46:b0:25e:b3f6:a352 with SMTP id
+ x6-20020a17090a6b4600b0025eb3f6a352mr16635989pjl.28.1687376212622; Wed, 21
+ Jun 2023 12:36:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230123165741.b7c93d439841860f4ab9b0c8@hugovil.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230621093009.637544-1-yosryahmed@google.com>
+ <CA+CLi1gjRJ25HqDpqM3dUkddVbzRJnUhxO=bxq-rEjYz3dUhNA@mail.gmail.com> <CAJD7tkYGz3A3-mkzbZBfoHX5gATPseqiwZon0i3rug2h2M3jyg@mail.gmail.com>
+In-Reply-To: <CAJD7tkYGz3A3-mkzbZBfoHX5gATPseqiwZon0i3rug2h2M3jyg@mail.gmail.com>
+From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Date:   Wed, 21 Jun 2023 21:36:41 +0200
+Message-ID: <CA+CLi1hPfvy_kJyi8N6ygNhY9hNH5J6-kN9i1pRZz76dX5b0Lg@mail.gmail.com>
+Subject: Re: [PATCH] mm: zswap: fix double invalidate with exclusive loads
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Nhat Pham <nphamcs@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/01/2023 16:57:41-0500, Hugo Villeneuve wrote:
-> On Fri, 20 Jan 2023 18:09:41 +0100
-> Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-> 
-> > On 15/12/2022 10:02:12-0500, Hugo Villeneuve wrote:
-> > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > 
-> > > The sequence for updating the time/date registers is slightly
-> > > different between PCF2127/29 and PCF2131.
-> > > 
-> > > For PCF2127/29, during write operations, the time counting
-> > > circuits (memory locations 03h through 09h) are automatically blocked.
-> > > 
-> > > For PCF2131, time/date registers write access requires setting the
-> > > STOP bit and sending the clear prescaler instruction (CPR). STOP then
-> > > needs to be released once write operation is completed.
-> > > 
-> > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+On Wed, Jun 21, 2023 at 7:26=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com>=
+ wrote:
+>
+> On Wed, Jun 21, 2023 at 3:20=E2=80=AFAM Domenico Cerasuolo
+> <cerasuolodomenico@gmail.com> wrote:
+> >
+> > On Wed, Jun 21, 2023 at 11:30=E2=80=AFAM Yosry Ahmed <yosryahmed@google=
+.com> wrote:
+> > >
+> > > If exclusive loads are enabled for zswap, we invalidate the entry bef=
+ore
+> > > returning from zswap_frontswap_load(), after dropping the local
+> > > reference. However, the tree lock is dropped during decompression aft=
+er
+> > > the local reference is acquired, so the entry could be invalidated
+> > > before we drop the local ref. If this happens, the entry is freed onc=
+e
+> > > we drop the local ref, and zswap_invalidate_entry() tries to invalida=
+te
+> > > an already freed entry.
+> > >
+> > > Fix this by:
+> > > (a) Making sure zswap_invalidate_entry() is always called with a loca=
+l
+> > >     ref held, to avoid being called on a freed entry.
+> > > (b) Making sure zswap_invalidate_entry() only drops the ref if the en=
+try
+> > >     was actually on the rbtree. Otherwise, another invalidation could
+> > >     have already happened, and the initial ref is already dropped.
+> > >
+> > > With these changes, there is no need to check that there is no need t=
+o
+> > > make sure the entry still exists in the tree in zswap_reclaim_entry()
+> > > before invalidating it, as zswap_reclaim_entry() will make this check
+> > > internally.
+> > >
+> > > Fixes: b9c91c43412f ("mm: zswap: support exclusive loads")
+> > > Reported-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> > > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 > > > ---
-> > >  drivers/rtc/rtc-pcf2127.c | 38 +++++++++++++++++++++++++++++++++++++-
-> > >  1 file changed, 37 insertions(+), 1 deletion(-)
-> > > 
-> > > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-> > > index e4b78b9c03f9..11fbdab6bf01 100644
-> > > --- a/drivers/rtc/rtc-pcf2127.c
-> > > +++ b/drivers/rtc/rtc-pcf2127.c
-> > > @@ -39,6 +39,7 @@
-> > >  #define PCF2127_REG_CTRL1		0x00
-> > >  #define PCF2127_BIT_CTRL1_POR_OVRD		BIT(3)
-> > >  #define PCF2127_BIT_CTRL1_TSF1			BIT(4)
-> > > +#define PCF2127_BIT_CTRL1_STOP			BIT(5)
-> > >  /* Control register 2 */
-> > >  #define PCF2127_REG_CTRL2		0x01
-> > >  #define PCF2127_BIT_CTRL2_AIE			BIT(1)
-> > > @@ -70,6 +71,7 @@
-> > >  #define PCF2131_REG_SR_RESET		0x05
-> > >  #define PCF2131_SR_RESET_READ_PATTERN	0b00100100 /* Fixed pattern. */
-> > >  #define PCF2131_SR_RESET_RESET_CMD	0x2C /* SR is bit 3. */
-> > > +#define PCF2131_SR_RESET_CPR_CMD	0xA4 /* CPR is bit 7. */
-> > >  /* Time and date registers */
-> > >  #define PCF2127_REG_TIME_DATE_BASE	0x03
-> > >  #define PCF2131_REG_TIME_DATE_BASE	0x07 /* Register 0x06 is 100th seconds,
-> > > @@ -307,7 +309,31 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> > >  	/* year */
-> > >  	buf[i++] = bin2bcd(tm->tm_year - 100);
-> > >  
-> > > -	/* write register's data */
-> > > +	/* Write access to time registers:
-> > > +	 * PCF2127/29: no special action required.
-> > > +	 * PCF2131:    requires setting the STOP bit. STOP bit needs to
-> > > +	 *             be cleared after time registers are updated.
-> > > +	 *             It is also recommended to set CPR bit, although
-> > > +	 *             write access will work without it.
-> > > +	 */
-> > > +	if (pcf2127->cfg->has_reset_reg) {
-> > 
-> > This should probably be tied to the actual rtc model rather than the
-> > presence of the reset register.
-> > You MUST clear CPR to be able to set the time precisely.
-> 
-> In fact you must actually SET the CPR bit to clear the prescaler, confusing!
-> 
-> I was already setting the CPR bit (clearing prescaler), so I modified the confusing comment.
-> 
-> The CPR bit is only present IF the reset register is also present, that is why I simply used the presence of the reset register to take the correct action. This avoids to define a new bit or matching on a device model for that functionality (adding newer models could potentially mean modifying the model match).
-> 
-> But if you absolutely want to match on the model, I would like to know how you would like to practically do it (maybe an example)?
-> 
-
-You can keep pcf21xx_type around, in pcf21xx_config for example.
-
-> 
-> 
-> > 
-> > > +		err = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
-> > > +					 PCF2127_BIT_CTRL1_STOP,
-> > > +					 PCF2127_BIT_CTRL1_STOP);
-> > > +		if (err) {
-> > > +			dev_err(dev, "setting STOP bit failed\n");
-> > 
-> > This really needs to be less verbose. There is nothing a user can really
-> > do after having seen this message. Having an error in userspace will
-> > anyway prompt the user to retry the operation which is the only action
-> > it can do.
-> 
-> I converted the dev_err messages to dev_dbg.
-> 
-> In the original driver and in the same function, there is also a dev_err to handle regmap_bulk_write() failure. Do you suggest that we also make it less verbose:
-> 
-> err = regmap_bulk_write(pcf2127->regmap, pcf2127->cfg->reg_time_base, buf, i);
->  	if (err) {
->  		dev_err(dev,
-> 
-> ???
-
-yes, you can remove it as part of your previous patches.
-
-> 
-> 
-> > > +			return err;
-> > > +		}
-> > > +
-> > > +		err = regmap_write(pcf2127->regmap, pcf2127->cfg->reg_reset,
-> > > +				   PCF2131_SR_RESET_CPR_CMD);
-> > > +		if (err) {
-> > > +			dev_err(dev, "sending CPR cmd failed\n");
-> > > +			return err;
-> > > +		}
-> > > +	}
-> > > +
-> > > +	/* write time register's data */
-> > >  	err = regmap_bulk_write(pcf2127->regmap, pcf2127->cfg->regs_td_base, buf, i);
-> > >  	if (err) {
-> > >  		dev_err(dev,
-> > > @@ -315,6 +341,16 @@ static int pcf2127_rtc_set_time(struct device *dev, struct rtc_time *tm)
-> > >  		return err;
-> > >  	}
-> > >  
-> > > +	if (pcf2127->cfg->has_reset_reg) {
-> > > +		/* Clear STOP bit (PCF2131 only) after write is completed. */
-> > > +		err = regmap_update_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
-> > > +					 PCF2127_BIT_CTRL1_STOP, 0);
-> > > +		if (err) {
-> > > +			dev_err(dev, "clearing STOP bit failed\n");
-> > > +			return err;
-> > > +		}
-> > > +	}
-> > > +
-> > >  	return 0;
+> > >  mm/zswap.c | 21 ++++++++++++---------
+> > >  1 file changed, 12 insertions(+), 9 deletions(-)
+> > >
+> > > diff --git a/mm/zswap.c b/mm/zswap.c
+> > > index 87b204233115..62195f72bf56 100644
+> > > --- a/mm/zswap.c
+> > > +++ b/mm/zswap.c
+> > > @@ -355,12 +355,14 @@ static int zswap_rb_insert(struct rb_root *root=
+, struct zswap_entry *entry,
+> > >         return 0;
 > > >  }
-> > >  
-> > > -- 
-> > > 2.30.2
-> > > 
-> > 
-> > -- 
-> > Alexandre Belloni, co-owner and COO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-> > 
-> 
-> 
-> -- 
-> Hugo Villeneuve <hugo@hugovil.com>
+> > >
+> > > -static void zswap_rb_erase(struct rb_root *root, struct zswap_entry =
+*entry)
+> > > +static bool zswap_rb_erase(struct rb_root *root, struct zswap_entry =
+*entry)
+> > >  {
+> > >         if (!RB_EMPTY_NODE(&entry->rbnode)) {
+> > >                 rb_erase(&entry->rbnode, root);
+> > >                 RB_CLEAR_NODE(&entry->rbnode);
+> > > +               return true;
+> > >         }
+> > > +       return false;
+> > >  }
+> > >
+> > >  /*
+> > > @@ -599,14 +601,16 @@ static struct zswap_pool *zswap_pool_find_get(c=
+har *type, char *compressor)
+> > >         return NULL;
+> > >  }
+> > >
+> > > +/*
+> > > + * If the entry is still valid in the tree, drop the initial ref and=
+ remove it
+> > > + * from the tree. This function must be called with an additional re=
+f held,
+> > > + * otherwise it may race with another invalidation freeing the entry=
+.
+> > > + */
+> >
+> > On re-reading this comment there's one thing I'm not sure I get, do we
+> > really need to hold an additional local ref to call this? As far as I
+> > understood, once we check that the entry was in the tree before putting
+> > the initial ref, there's no need for an additional local one.
+>
+> I believe it is, but please correct me if I am wrong. Consider the
+> following scenario:
+>
+> // Initially refcount is at 1
+>
+> CPU#1:                                  CPU#2:
+> spin_lock(tree_lock)
+> zswap_entry_get() // 2 refs
+> spin_unlock(tree_lock)
+>                                             spin_lock(tree_lock)
+>                                             zswap_invalidate_entry() // 1=
+ ref
+>                                             spin_unlock(tree_lock)
+> zswap_entry_put() // 0 refs
+> zswap_invalidate_entry() // problem
+>
+> That last zswap_invalidate_entry() call in CPU#1 is problematic. The
+> entry would have already been freed. If we check that the entry is on
+> the tree by checking RB_EMPTY_NODE(&entry->rbnode), then we are
+> reading already freed and potentially re-used memory.
+>
+> We would need to search the tree to make sure the same entry still
+> exists in the tree (aka what zswap_reclaim_entry() currently does).
+> This is not ideal in the fault path to have to do the lookups twice.
 
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Thanks for the clarification, it is indeed needed in that case. I was just
+wondering if the wording of the comment is exact, in that before calling
+zswap_invalidate_entry one has to ensure that the entry has not been freed,=
+ not
+specifically by holding an additional reference, if a lookup can serve the =
+same
+purpose.
+
+>
+> Also, in zswap_reclaim_entry(), would it be possible if we call
+> zswap_invalidate_entry() after we drop the local ref that the swap
+> entry has been reused for a different page? I didn't look closely, but
+> if yes, then the slab allocator may have repurposed the zswap_entry
+> and we may find the entry in the tree for the same offset, even though
+> it is referring to a different page now. This sounds practically
+> unlikely but perhaps theoretically possible.
+
+I'm not sure I understood the scenario, in zswap_reclaim_entry we keep a lo=
+cal
+reference until the end in order to avoid a free.
+
+>
+> I think it's more reliable to call zswap_invalidate_entry() on an
+> entry that we know is valid before dropping the local ref. Especially
+> that it's easy to do today by just moving a few lines around.
+>
+>
+>
+>
+> >
+> > >  static void zswap_invalidate_entry(struct zswap_tree *tree,
+> > >                                    struct zswap_entry *entry)
+> > >  {
+> > > -       /* remove from rbtree */
+> > > -       zswap_rb_erase(&tree->rbroot, entry);
+> > > -
+> > > -       /* drop the initial reference from entry creation */
+> > > -       zswap_entry_put(tree, entry);
+> > > +       if (zswap_rb_erase(&tree->rbroot, entry))
+> > > +               zswap_entry_put(tree, entry);
+> > >  }
+> > >
+> > >  static int zswap_reclaim_entry(struct zswap_pool *pool)
+> > > @@ -659,8 +663,7 @@ static int zswap_reclaim_entry(struct zswap_pool =
+*pool)
+> > >          * swapcache. Drop the entry from zswap - unless invalidate a=
+lready
+> > >          * took it out while we had the tree->lock released for IO.
+> > >          */
+> > > -       if (entry =3D=3D zswap_rb_search(&tree->rbroot, swpoffset))
+> > > -               zswap_invalidate_entry(tree, entry);
+> > > +       zswap_invalidate_entry(tree, entry);
+> > >
+> > >  put_unlock:
+> > >         /* Drop local reference */
+> > > @@ -1466,7 +1469,6 @@ static int zswap_frontswap_load(unsigned type, =
+pgoff_t offset,
+> > >                 count_objcg_event(entry->objcg, ZSWPIN);
+> > >  freeentry:
+> > >         spin_lock(&tree->lock);
+> > > -       zswap_entry_put(tree, entry);
+> > >         if (!ret && zswap_exclusive_loads_enabled) {
+> > >                 zswap_invalidate_entry(tree, entry);
+> > >                 *exclusive =3D true;
+> > > @@ -1475,6 +1477,7 @@ static int zswap_frontswap_load(unsigned type, =
+pgoff_t offset,
+> > >                 list_move(&entry->lru, &entry->pool->lru);
+> > >                 spin_unlock(&entry->pool->lru_lock);
+> > >         }
+> > > +       zswap_entry_put(tree, entry);
+> > >         spin_unlock(&tree->lock);
+> > >
+> > >         return ret;
+> > > --
+> > > 2.41.0.162.gfafddb0af9-goog
+> > >
