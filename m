@@ -2,115 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8200C738A5A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7204F738A57
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233830AbjFUQBS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:01:18 -0400
+        id S232026AbjFUQBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:01:02 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233175AbjFUQBG (ORCPT
+        with ESMTP id S231777AbjFUQAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:01:06 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A31D1718;
-        Wed, 21 Jun 2023 09:00:43 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 50DBA1EC0102;
-        Wed, 21 Jun 2023 18:00:32 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1687363232;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Lkm1ovXF8w/3l1dQM0aqJCHQ40tS7jLprFLy/F9Ithw=;
-        b=Lv/JZdMzLJ1V/ja2qHoklv+xVmPUhC8fHl072kZMlMYUsq3+WHX3IUW39+KyB0t/lEw0qo
-        yqfLsMoXQiRo+HWEdgnUJ3Pl+2fgdjnYUCqaCSlI+WLK7F2BDjwp2JpGDREMwtSfbVfiUa
-        8E0ZABH+UD/wNOLXtZBnwgKVZtwnLGc=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id c0Czf9ibAY93; Wed, 21 Jun 2023 16:00:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1687363227; bh=Lkm1ovXF8w/3l1dQM0aqJCHQ40tS7jLprFLy/F9Ithw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Dl+W+sUM4kesP9b6SzA+PpNwR05jkz42fZ+9E5uuznFcOUWKSEQ0dEqEq5BmRH0Mj
-         DJnzqmDQz4WQLjr5CbeV6gd9GDImmM0arCnGcOg6d6yLSo2KV3hzkYOeBVL/vuRnzV
-         j4sTA0/ymefYw+vms8mVJPf2jNH0zQL16wjEHaeVfAgKKPgadUd2w5GQXb2V1g6QRy
-         FOyY/4D0XXiM/UuG1KLYthVwx6ARpb/e/EKMzqFRKgsQw2zGPGGPLVkr/kgCqf79WN
-         1zvL2iZMvsIz3iceTKAD2jT8SUlgJ8tUBUwJsierdlrpkurUBS8LAy11xq9KwfxAKF
-         R5xQBVMcxygfMuPxx3r0s9FNB5vLMLlOY9uRBhxBU+Ie3dJZ0VoZBS/lq0qpBxF+l+
-         nY8UbSYcObQYoK/IxU6V4ELbJ5njZ+AHxdN9ao7qx9MtE+OSbu8+4PcWXmtte9+JvI
-         oyhXrFvpXDwoWnQpRttnENERDmZhWfz9XBVcEmKo4j/V8gNFWX2J93R0Yksojs0u9a
-         v4zHE95wsyF666l2fIGQqawT449BMG8eyaZagWA0V4Nanc/SkXz6BakXQHiyvwC/Az
-         b+2yK5E+sQ35wEtstMK47iRTNyP89w8xgn6ikSiEpk/YgbQeV5cugXbTQLkYGluFAO
-         x/Imc81hftUs+JTjh2qoQ0TE=
-Received: from zn.tnic (p200300ea971dc565329C23FFfeA6A903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c565:329c:23ff:fea6:a903])
+        Wed, 21 Jun 2023 12:00:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E70119BE;
+        Wed, 21 Jun 2023 09:00:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1D60E40E019B;
-        Wed, 21 Jun 2023 15:59:46 +0000 (UTC)
-Date:   Wed, 21 Jun 2023 17:59:38 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Michael Roth <michael.roth@amd.com>
-Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        nikunj.dadhania@amd.com, liam.merwick@oracle.com,
-        zhi.a.wang@intel.com, Brijesh Singh <brijesh.singh@amd.com>
-Subject: Re: [PATCH RFC v9 07/51] x86/sev: Add the host SEV-SNP
- initialization support
-Message-ID: <20230621155912.GKZJMeUHzKCFchhE5v@fat_crate.local>
-References: <20230612042559.375660-1-michael.roth@amd.com>
- <20230612042559.375660-8-michael.roth@amd.com>
- <12f95b38-427c-6810-373a-ba2062c43882@intel.com>
- <20230621091541.GEZJK/veTnfhOnX8ci@fat_crate.local>
- <23f400bc-9a62-be4a-6a24-0e2149d4491c@intel.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 963BC615BA;
+        Wed, 21 Jun 2023 15:59:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 776A8C433C0;
+        Wed, 21 Jun 2023 15:59:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687363198;
+        bh=mHRta9tIJV2JDA/5J295h4GbkMjyOk5qKzU56OUj/sk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ef8MjNepoOxKJfpbzY04NICf1OgzrJvYyTtjCFUEJSUHj/8qey/p4CbAUNyZveqZT
+         bm0jdMdQZE5OhNXnmpkUqw2ePKIN0f94/wJs/74eGqz+r8aY1S6ybaRKn99jshcW92
+         W1RJzagbkPcofo+4RCi0w14pEGsgJ2JKLubbpXd0=
+Date:   Wed, 21 Jun 2023 17:59:55 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Lei Yu <yulei.sh@bytedance.com>
+Cc:     Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>,
+        Henry Tian <tianxiaofeng@bytedance.com>,
+        Jakob Koschel <jakobkoschel@gmail.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Ryan Chen <ryan_chen@aspeedtech.com>,
+        Neal Liu <neal_liu@aspeedtech.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>
+Subject: Re: [PATCH] usb: gadget: aspeed: fix buffer overflow
+Message-ID: <2023062146-stony-lair-b6a3@gregkh>
+References: <HK0PR06MB32022348EA65805C7109B7D080329@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <CAGm54UExHOBw61DJNqxvW67OSr60fQ+Q247t63RzymiMOmHmFg@mail.gmail.com>
+ <HK0PR06MB320203EF8E3AD14C34359B0580329@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <Y1ueEYJk2epT/g4J@kroah.com>
+ <HK0PR06MB32024F58191E17DC5ABC99F380329@HK0PR06MB3202.apcprd06.prod.outlook.com>
+ <Y1uyssu84kl1INSR@kroah.com>
+ <CAGm54UGmp=kTKGLhEfENF4SqkvRt_GcpuGH_g5PjtQiBkwtOsA@mail.gmail.com>
+ <TY2PR06MB321303972156248AB08CAB2480EB9@TY2PR06MB3213.apcprd06.prod.outlook.com>
+ <CAGm54UHWhRQsvaBQM7mgfP2A5os=mYDTfKS9qfS0C5_9XkcrSA@mail.gmail.com>
+ <CAGm54UG2uD2jruRc33Xm4izepYpuFNBBcGe594as8_fx1uEWQg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <23f400bc-9a62-be4a-6a24-0e2149d4491c@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGm54UG2uD2jruRc33Xm4izepYpuFNBBcGe594as8_fx1uEWQg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 07:31:34AM -0700, Dave Hansen wrote:
-> Yep, there's the hardware side and then there are fun nuggets like using
-> mem= and then doing a software-only hot-add later after boot.
+On Wed, Jun 21, 2023 at 08:02:14PM +0800, Lei Yu wrote:
+> On Wed, Dec 21, 2022 at 10:26 AM Lei Yu <yulei.sh@bytedance.com> wrote:
+> >
+> > On Wed, Dec 21, 2022 at 10:17 AM Neal Liu <neal_liu@aspeedtech.com> wrote:
+> > > > > > > > Using rndis is able to set MTU to 2000, and the issue can be
+> > > > reproduced.
+> > > >
+> > > > USB ecm is also tested and it is possible to set MTU to 2000, and could
+> > > > reproduce the issue.
+> > > > So I think this patch is needed anyway.
+> > > >
+> > > > @Neal Liu Could you kindly help to verify the USB ECM case?
+> > >
+> > > How to set MTU to 2000 on USB ECM case? I remember last time I cannot set by using "ifconfig ..."
+> > > Regardless ECM or RNDIS, I agree this patch is still needed.
+> >
+> > You were able to set MTU to 2000 for RNDIS but not for NCM.
+> > @Greg Kroah-Hartman indicated that RNDIS should not be used anymore.
+> > So I tested ECM and verified it could set MTU 2000 and the issue could
+> > be reproduced.
+> 
+> This patch fixes the kernel oops in the aspeed-vhub driver for both
+> USB ECM and RNDIS.
+> It now has an Acked-by from benh and Reviewed-by from neal_liu
+> 
+> Should we merge this patch?
 
-Ah, right, Mike, I think we need to check whether mem= has any effect on
-SNP.
+Can you please resend it?
 
-> Also, if the hardware doesn't support any kind of hotplug, it would be
-> great to point to the place in the spec where it says that.
+thanks,
 
-I honestly don't know. But I can't recall ever hearing about hardware
-memory hotplug so something worth to check too.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+greg k-h
