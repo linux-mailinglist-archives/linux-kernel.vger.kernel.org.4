@@ -2,118 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06EB37390C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 22:27:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BAA67390CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 22:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjFUU1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 16:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53898 "EHLO
+        id S229468AbjFUU3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 16:29:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjFUU1v (ORCPT
+        with ESMTP id S229463AbjFUU3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 16:27:51 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E43619A6;
-        Wed, 21 Jun 2023 13:27:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=LRODS49SUbgdzUbhy9d8FMcSqVwfsnLQJj1+bJUkvy4=;
-        t=1687379266; x=1688588866; b=yBwzH+ZachXiLAIc0/nshaYESDcgQRlMl/LW0/tim5hwvWK
-        cHNaxImpA1m+mDxT9Nk6R6F3fvfD33u1hXJ7BC9Vvb3hVfLKwc3ZkogxBrCu8keCzfFmgojgBUKyH
-        EPtg6P0RUMDcOrTxwY6NGwxG2mhBAnBhVTVIUZtWw2MtOLA4yTMBnJdcIVpj8UdSLe0TJ7lJw5dJ/
-        JeFjBo6UujwX+Dn87Ih2Z+W9MFS6T6uwlaxWOFAkMkIS/5CewN/P4R9lxPPNbVoliCjLNHyv/VHcA
-        zGyjN15jTRTCzREpZyJ/3fRf7sS4acRDdtFbe8nX/baf57TXyIb2CDoERWcDrEgw==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1qC4QT-00DrCh-2m;
-        Wed, 21 Jun 2023 22:27:38 +0200
-Message-ID: <cfe53cb984dfd42f8b835d5e05b0393ba0352a7c.camel@sipsolutions.net>
-Subject: Re: [syzbot] [net?] possible deadlock in netlink_set_err
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        syzbot <syzbot+a7d200a347f912723e5c@syzkaller.appspotmail.com>
-Cc:     bpf@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Date:   Wed, 21 Jun 2023 22:27:36 +0200
-In-Reply-To: <20230621124246.07f9833c@kernel.org>
-References: <000000000000e38d1605fea5747e@google.com>
-         <20230621124246.07f9833c@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+        Wed, 21 Jun 2023 16:29:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E35FA1;
+        Wed, 21 Jun 2023 13:29:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 07E1F616A1;
+        Wed, 21 Jun 2023 20:29:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2579EC433C8;
+        Wed, 21 Jun 2023 20:29:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687379353;
+        bh=L+rO1CMYqXKXf6AoAVFANg2xBTRriB5N07RJDG1s6Ko=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=PYdpokDmsLXR3gMVTD3O3cev7KqBdfi56w1P8y6fh83Yw57XZNnH50InYGQbfztrw
+         rgkm4PC0Pzi+XMMSyPsVKSb9CpOGfnCOIMrl+5Vra8EgCvi3IBE64t2GKS0ZFSWzBu
+         FUw2LgPaCO/epg1++kiwPvkfHN1toFUNkcPZ7b1gzmhcdz0uO18scCRfSSFdfIC3jJ
+         LjvV41xx5PoD2yz5TJSe3YBhAXKo0gwh+QYp1RCsZ24u8ibuh8h0KSJ0NAoeXm6D6i
+         JderUS+0Qrdyjjm9wAQQeXi6xfA5b4oOm3zIvoBocHMWgsGoUdRZRQLeU4rMEItH8M
+         NnG855wdACLTQ==
+Date:   Wed, 21 Jun 2023 15:29:11 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Lizhi Hou <lizhi.hou@amd.com>, Bjorn Helgaas <bhelgaas@google.com>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, max.zhen@amd.com,
+        sonal.santan@amd.com, stefano.stabellini@xilinx.com
+Subject: Re: [PATCH V9 0/6] Generate device tree node for pci devices
+Message-ID: <20230621202911.GA116530@bhelgaas>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620220818.GA418170-robh@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-06-21 at 12:42 -0700, Jakub Kicinski wrote:
-> Hi Johannes,
->=20
-> Doesn't seem like netlink_set_err() wants to be called from just any
-> context. Should we convert nl_table_lock to alwasy be _bh ?
+On Tue, Jun 20, 2023 at 04:08:18PM -0600, Rob Herring wrote:
+> On Thu, Jun 15, 2023 at 09:50:36AM -0700, Lizhi Hou wrote:
+> > This patch series introduces OF overlay support for PCI devices which
+> > primarily addresses two use cases. First, it provides a data driven method
+> > to describe hardware peripherals that are present in a PCI endpoint and
+> > hence can be accessed by the PCI host. Second, it allows reuse of a OF
+> > compatible driver -- often used in SoC platforms -- in a PCI host based
+> > system.
 
-So as I was writing this Eric responded too :) It does seem _bh wouldn't
-be sufficient then, the lockdep report below also mentions IRQ
-disabling.
+> >  drivers/of/dynamic.c                          | 164 ++++++++++++++
+> >  drivers/of/overlay.c                          |  42 +++-
+> >  drivers/of/unittest-data/Makefile             |   3 +-
+> >  .../of/unittest-data/overlay_pci_node.dtso    |  22 ++
+> >  drivers/of/unittest.c                         | 210 +++++++++++++++++-
+> >  drivers/pci/Kconfig                           |  12 +
+> >  drivers/pci/Makefile                          |   1 +
+> >  drivers/pci/bus.c                             |   2 +
+> >  drivers/pci/of.c                              |  81 ++++++-
+> >  drivers/pci/of_property.c                     | 190 ++++++++++++++++
+> >  drivers/pci/pci.h                             |  19 ++
+> >  drivers/pci/quirks.c                          |  12 +
+> >  drivers/pci/remove.c                          |   1 +
+> >  include/linux/of.h                            |  25 ++-
+> >  14 files changed, 768 insertions(+), 16 deletions(-)
+> >  create mode 100644 drivers/of/unittest-data/overlay_pci_node.dtso
+> >  create mode 100644 drivers/pci/of_property.c
+> 
+> Bjorn, I think this is pretty close to being in shape for merging. Do 
+> you have any comments on the PCI bits? Would you prefer that I ack the 
+> DT bit and you take it or vice-versa?
 
+I acked the PCI bits (modulo some trivial comments), and this seems
+more DTish than PCIish, so happy if you would take them.
 
-I'm not entirely sure this is needed, and I'm also not sure we really
-need to fix it immediately, it's a very old bug and one that's going to
-be very difficult to actually hit a deadlock on in practice. The "CPU1"
-part of the report is basically almost never happening.
-
-This is why syzbot couldn't reproduce it, this code will always execute:
-
-        spin_lock_irqsave(&local->queue_stop_reason_lock, flags);
-        for (i =3D 0; i < IEEE80211_MAX_QUEUES; i++) {
-                skb_queue_walk_safe(&local->pending[i], skb, tmp) {
-                        struct ieee80211_tx_info *info =3D IEEE80211_SKB_CB=
-(skb);
-                        if (info->control.vif =3D=3D &sdata->vif) {
-                                __skb_unlink(skb, &local->pending[i]);
-                                ieee80211_free_txskb(&local->hw, skb);
-                        }
-                }
-        }
-        spin_unlock_irqrestore(&local->queue_stop_reason_lock, flags);
-
-
-However, pretty much *all* of the time there will be no SKBs on this
-pending list that have a report to send out to userspace in
-ieee80211_free_txskb -> ieee80211_report_used_skb:
-
-...
-        } else if (info->ack_frame_id) {
-                ieee80211_report_ack_skb(local, skb, acked, dropped,
-                                         ack_hwtstamp);
-
-
-and really, ack_frame_id is rarely set, and in addition it's pretty
-unlikely that a frame would still be on the queue when the interface is
-set down. That's also not a very common operation (it's not like you try
-to do that many times per second), so ...
-
-
-Another approach might be to just disentangle that loop I pasted above
-out from the queue_stop_reason_lock, we can move the SKBs to a separate
-list before freeing them.
-
-
-That said, it does stand to reason that if nlmsg_multicast() or
-netlink_broadcast() can be called with a gfp_t argument then it should
-be possible to call it with IRQs disabled or under a lock such as this
-example, so perhaps Eric's patch really is the right thing to do here,
-to avoid this potential pitfall in the future.
-
-johannes
+Bjorn
