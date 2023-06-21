@@ -2,92 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A98739008
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC9D573900C
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230404AbjFUTZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 15:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58884 "EHLO
+        id S231169AbjFUT02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 15:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjFUTZq (ORCPT
+        with ESMTP id S230494AbjFUT00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 15:25:46 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33569D;
-        Wed, 21 Jun 2023 12:25:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=Ydv7rknf/qg04R5ykTH8bT9gjwv3JKQJcB/9WtHJVxA=; b=YjyDrjI7OLOW2QG+3Na9IiiqdL
-        NkAxHgfwgWZiTl7LfxqeR3IazWmI/+vkxvJFzjOQQKa1Rx4W6mc/7Dfekv2xq8myipVX901Sm3UcW
-        AvT8L5NwZcVoeP8evmWIPC1GdK6l9DuaXcDoOoqihybEEdpGMYeHV5hHVK2vZli1tZ/s=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1qC3SC-00HBLB-BX; Wed, 21 Jun 2023 21:25:20 +0200
-Date:   Wed, 21 Jun 2023 21:25:20 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        Evan Quan <evan.quan@amd.com>, rafael@kernel.org,
-        lenb@kernel.org, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mdaenzer@redhat.com,
-        maarten.lankhorst@linux.intel.com, tzimmermann@suse.de,
-        hdegoede@redhat.com, jingyuwang_vip@163.com, lijo.lazar@amd.com,
-        jim.cromie@gmail.com, bellosilicio@gmail.com,
-        andrealmeid@igalia.com, trix@redhat.com, jsg@jsg.id.au,
-        arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH V4 1/8] drivers/acpi: Add support for Wifi band RF
- mitigations
-Message-ID: <08dd8d17-6825-4e53-8441-85c709326f48@lunn.ch>
-References: <20230621054603.1262299-2-evan.quan@amd.com>
- <3a7c8ffa-de43-4795-ae76-5cd9b00c52b5@lunn.ch>
- <216f3c5aa1299100a0009ddf4e95b019855a32be.camel@sipsolutions.net>
- <b1abec47-04df-4481-d680-43c5ff3cbb48@amd.com>
- <36902dda-9e51-41b3-b5fc-c641edf6f1fb@lunn.ch>
- <33d80292-e639-91d0-4d0f-3ed973f89e14@amd.com>
- <9159c3a5-390f-4403-854d-9b5e87b58d8c@lunn.ch>
- <a80c215a-c1d9-4c76-d4a8-9b5fd320a2b1@amd.com>
- <8d3340de-34f6-47ad-8024-f6f5ecd9c4bb@lunn.ch>
- <07ad6860-8ffb-cc6c-a8e5-e8dc4db4e87a@amd.com>
+        Wed, 21 Jun 2023 15:26:26 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7590CFC;
+        Wed, 21 Jun 2023 12:26:24 -0700 (PDT)
+X-GND-Sasl: alexandre.belloni@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1687375583;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vlqLzpB1JDNNnymCns/wsqrCuU7w6ETUKOznj+yVpUk=;
+        b=oELAVpIY3IvGypd/ai021DaQePJRhsWkSdxhphQ7iOIUKP1JpJIUVBCabHhaf7wvVAO4WO
+        djufLY4oQ1GZG1Wajz4UHGO+Jt/4tRX2EdzXHp3URDoffrNx0d4MnRSeCMeLa1HOxwV4IO
+        ooGBWGPrskRZbtqNjuhCRtueWb3iTmt1YiP9EGN+GTBAii19I9mgZgH9aavIVt2yrdir7Q
+        8NWBCDiJjfX5aq3HzLrH464vAYf56g8dKeCZCttMaI8yd3PZyVHpLiMDfhxVfywVvYWgmf
+        /bZxt5rvPe3DJRPJesRIv2eN8TEMuHWrXnXGCygF/Tj9wAzY7eZT/lQwmNuXvA==
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+X-GND-Sasl: alexandre.belloni@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 634FD60002;
+        Wed, 21 Jun 2023 19:26:21 +0000 (UTC)
+Date:   Wed, 21 Jun 2023 21:26:21 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Hugo Villeneuve <hugo@hugovil.com>
+Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Subject: Re: [PATCH v3 08/14] rtc: pcf2127: add support for PCF2131
+ interrupts on output INT_A
+Message-ID: <20230621192621619a92eb@mail.local>
+References: <20221215150214.1109074-1-hugo@hugovil.com>
+ <20221215150214.1109074-9-hugo@hugovil.com>
+ <Y8rHx8U4peB+fnW8@mail.local>
+ <20230123155240.2d55fc2f5874a50e2e6252d2@hugovil.com>
+ <20230511131958.fd82402f8ef43dd8690bee78@hugovil.com>
+ <2023062119243680b73b71@mail.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <07ad6860-8ffb-cc6c-a8e5-e8dc4db4e87a@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <2023062119243680b73b71@mail.local>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> ACPI core does has notifiers that are used, but they don't work the same.
-> If you look at patch 4, you'll see amdgpu registers and unregisters using
-> both
+On 21/06/2023 21:24:37+0200, Alexandre Belloni wrote:
+> On 11/05/2023 13:19:58-0400, Hugo Villeneuve wrote:
+> > On Mon, 23 Jan 2023 15:52:40 -0500
+> > Hugo Villeneuve <hugo@hugovil.com> wrote:
+> > 
+> > > On Fri, 20 Jan 2023 17:56:39 +0100
+> > > Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+> > > 
+> > > > On 15/12/2022 10:02:09-0500, Hugo Villeneuve wrote:
+> > > > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > > > 
+> > > > > The PCF2127 and PCF2129 have one output interrupt pin. The PCF2131 has
+> > > > > two, named INT_A and INT_B. The hardware support that any interrupt
+> > > > > source can be routed to either one or both of them.
+> > > > > 
+> > > > > Force all interrupt sources to go to the INT A pin.
+> > > > > 
+> > > > > Support to route any interrupt source to INT A/B pins is not supported
+> > > > > by this driver at the moment.
+> > > > > 
+> > > > 
+> > > > The main issue with this is that this will created a breaking change
+> > > > once someone needs support for INTB
+> > > 
+> > > We already had a discussion about this a while ago:
+> > > 
+> > >     https://lore.kernel.org/linux-rtc/7be3f9541eaed7e17e334267e49665f442b1b458.camel@dimonoff.com/
+> > > 
+> > > What exactly do you suggest? I personnaly don't have any need for INTB at the moment and I would prefer to avoid the great complexity of supporting any combination of routing interrupts to any A ou  pins.
+> > 
+> > Hi Alexandre,
+> > a few months later, and I am still waiting for your feedback on this (and other questions/interrogations I raised for other patches related to this series) to submit the next version of this patch series.
+> > 
+> > Can you have a look at it and provide some answers?
+> > 
 > 
-> acpi_install_notify_handler()
-> and
-> acpi_remove_notify_handler()
+> I'm very very sorry this takes so long. For this one, I don't have a
+> precise idea. I guess we could have one property per pin with a mask of
+> the interrupts we are interested in. That would cover all the use cases.
+> For example, a PMIC could take the alarms on INTB and the CPU could have
+> alarms, battery low and UIE on INTA.
+
+As the mask for INTA and INTB are set to have interrupts on both by
+default, maybe you could keep that in a separate series so we can wait
+for the DT maintainer to give their opinion.
 > 
-> If we supported both ACPI notifications and non-ACPI notifications
-> all consumers would have to have support to register and use both types.
+> 
+> > Thank you,
+> > Hugo.
+> > 
+> > 
+> > > > > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > > > > ---
+> > > > >  drivers/rtc/rtc-pcf2127.c | 35 +++++++++++++++++++++++++++++++++++
+> > > > >  1 file changed, 35 insertions(+)
+> > > > > 
+> > > > > diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
+> > > > > index 4148e135f935..68af4d0438b8 100644
+> > > > > --- a/drivers/rtc/rtc-pcf2127.c
+> > > > > +++ b/drivers/rtc/rtc-pcf2127.c
+> > > > > @@ -191,6 +191,7 @@ struct pcf21xx_config {
+> > > > >  	int max_register;
+> > > > >  	unsigned int has_nvmem:1;
+> > > > >  	unsigned int has_bit_wd_ctl_cd0:1;
+> > > > > +	unsigned int has_int_a_b:1; /* PCF2131 supports two interrupt outputs. */
+> > > > >  	u8 regs_td_base; /* Time/data base registers. */
+> > > > >  	u8 regs_alarm_base; /* Alarm function base registers. */
+> > > > >  	u8 reg_wd_ctl; /* Watchdog control register. */
+> > > > > @@ -879,6 +880,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+> > > > >  		.max_register = 0x1d,
+> > > > >  		.has_nvmem = 1,
+> > > > >  		.has_bit_wd_ctl_cd0 = 1,
+> > > > > +		.has_int_a_b = 0,
+> > > > >  		.regs_td_base = PCF2127_REG_TIME_DATE_BASE,
+> > > > >  		.regs_alarm_base = PCF2127_REG_ALARM_BASE,
+> > > > >  		.reg_wd_ctl = PCF2127_REG_WD_CTL,
+> > > > > @@ -902,6 +904,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+> > > > >  		.max_register = 0x19,
+> > > > >  		.has_nvmem = 0,
+> > > > >  		.has_bit_wd_ctl_cd0 = 0,
+> > > > > +		.has_int_a_b = 0,
+> > > > >  		.regs_td_base = PCF2127_REG_TIME_DATE_BASE,
+> > > > >  		.regs_alarm_base = PCF2127_REG_ALARM_BASE,
+> > > > >  		.reg_wd_ctl = PCF2127_REG_WD_CTL,
+> > > > > @@ -925,6 +928,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
+> > > > >  		.max_register = 0x36,
+> > > > >  		.has_nvmem = 0,
+> > > > >  		.has_bit_wd_ctl_cd0 = 0,
+> > > > > +		.has_int_a_b = 1,
+> > > > >  		.regs_td_base = PCF2131_REG_TIME_DATE_BASE,
+> > > > >  		.regs_alarm_base = PCF2131_REG_ALARM_BASE,
+> > > > >  		.reg_wd_ctl = PCF2131_REG_WD_CTL,
+> > > > > @@ -1017,6 +1021,28 @@ static int pcf2127_enable_ts(struct device *dev, int ts_id)
+> > > > >  	return ret;
+> > > > >  }
+> > > > >  
+> > > > > +/* Route all interrupt sources to INT A pin. */
+> > > > > +static int pcf2127_configure_interrupt_pins(struct device *dev)
+> > > > > +{
+> > > > > +	struct pcf2127 *pcf2127 = dev_get_drvdata(dev);
+> > > > > +	int ret;
+> > > > > +
+> > > > > +	/* Mask bits need to be cleared to enable corresponding
+> > > > > +	 * interrupt source.
+> > > > > +	 */
+> > > > > +	ret = regmap_write(pcf2127->regmap,
+> > > > > +			   PCF2131_REG_INT_A_MASK1, 0);
+> > > > > +	if (ret)
+> > > > > +		return ret;
+> > > > > +
+> > > > > +	ret = regmap_write(pcf2127->regmap,
+> > > > > +			   PCF2131_REG_INT_A_MASK2, 0);
+> > > > > +	if (ret)
+> > > > > +		return ret;
+> > > > > +
+> > > > > +	return ret;
+> > > > > +}
+> > > > > +
+> > > > >  static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> > > > >  			 int alarm_irq, const char *name, const struct pcf21xx_config *config)
+> > > > >  {
+> > > > > @@ -1076,6 +1102,15 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+> > > > >  		set_bit(RTC_FEATURE_ALARM, pcf2127->rtc->features);
+> > > > >  	}
+> > > > >  
+> > > > > +	if (pcf2127->cfg->has_int_a_b) {
+> > > > > +		/* Configure int A/B pins, independently of alarm_irq. */
+> > > > > +		ret = pcf2127_configure_interrupt_pins(dev);
+> > > > > +		if (ret) {
+> > > > > +			dev_err(dev, "failed to configure interrupt pins\n");
+> > > > > +			return ret;
+> > > > > +		}
+> > > > > +	}
+> > > > > +
+> > > > >  	if (pcf2127->cfg->has_nvmem) {
+> > > > >  		struct nvmem_config nvmem_cfg = {
+> > > > >  			.priv = pcf2127,
+> > > > > -- 
+> > > > > 2.30.2
+> > > > > 
+> > > > 
+> > > > -- 
+> > > > Alexandre Belloni, co-owner and COO, Bootlin
+> > > > Embedded Linux and Kernel engineering
+> > > > https://bootlin.com
+> > > > 
+> > > 
+> > > 
+> > > -- 
+> > > Hugo Villeneuve <hugo@hugovil.com>
+> > 
+> > 
+> > -- 
+> > Hugo Villeneuve
+> 
+> -- 
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
 
-Why would you want to support ACPI notifications and non-ACPI
-notifications? All you need is wbrf notification.
-
-The new wbrf.c should implement wbrf_install_notify_handler() and
-wbrf_remove_notify_handler().
-
-As to where to put wbrf.c? I guess either drivers/base/ or
-drivers/wbrf/. Maybe ask GregKH?
-
-   Andrew
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
