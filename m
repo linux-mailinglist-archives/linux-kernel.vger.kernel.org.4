@@ -2,129 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D127C738880
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048F6738886
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233256AbjFUPLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:11:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51318 "EHLO
+        id S233269AbjFUPMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 11:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233176AbjFUPKz (ORCPT
+        with ESMTP id S232725AbjFUPMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:10:55 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9A31BD3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:06:17 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-39eb3af4d8cso3685796b6e.2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:06:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1687359976; x=1689951976;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=i8mvm0Ua7VheRBgm3SyS2f+CUs+ip4U1HTEOUVIIBZg=;
-        b=HeF1k6bjWFVW0gS1DrVZ7s5steRsGaEzzCs8cnUdWlatT2bkDGzEeLpNR3LkgWjlpq
-         p8HL6SDTUDdeVvXm/6cwQSYiMFo2ig6zdYWYZYRvcIt2OdonMAxt6whMEOgcmqg7p0BF
-         dPU6Z0XeeHzgXZA77Wy350iWlPXC/mrJ8FHlhhSWLKa6+lBZeHznH//y9z4bAY3LGV0j
-         zqvGppwU1sAIn/juqALMn/DhUwL6ZEkKrFnYtinNlAhJCmQGQR3Y1kWid35u5o7SNQd+
-         RVdAghyucYBDYSFRI+E/A+VSJknTFyRKCufCH+0LtDTFImNCr4Kq/m4V+SxH4tzdMDdM
-         dZCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687359976; x=1689951976;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i8mvm0Ua7VheRBgm3SyS2f+CUs+ip4U1HTEOUVIIBZg=;
-        b=UWXCTPChufwDT2SOciwXndbJUHqebNrNSZeb2mhZjo2dR8yUN9v8BklSuGytMns5ON
-         60nTuqn+WksryFr8TjRbcUyme3EaO03ZwqO7A/ANJGUPunC/2kuiqtlGRhcqwHSOHnVc
-         Mv2wzWHMbu7CoDrN1w25dUDcYNcQ/PXHaFNny0DHy72BBltC8N7VSCCQ1n5JT9i2nCGd
-         IVpFrPTHUS7ip2S1VitU0vAGrCzlqNMalX1fIdKznHMuuebilHPuG5RQQh2WF+pRoGe5
-         T91z/zxuMeDoONzCqvO1C/Hge74Q+OZ+tALIUWVNRGqLObzctblUE3PRbpTYCXvl4G6K
-         z0rA==
-X-Gm-Message-State: AC+VfDyYUtBQtC+8rLqENf5oQzB1rvg4iHL1sLWCXRw9fhz02et4Tpva
-        9/UMMAg42QZehVHmVzjNXljFSw==
-X-Google-Smtp-Source: ACHHUZ636NWZSijMUe4oI3fgGZIHT/qTk8OtX3ic1/cT2sn7NBvatb98BNnqEYBTRAhrHhPIPOOMUg==
-X-Received: by 2002:a05:6808:1814:b0:39b:f558:8cab with SMTP id bh20-20020a056808181400b0039bf5588cabmr19969218oib.26.1687359976039;
-        Wed, 21 Jun 2023 08:06:16 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-68-25-194.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.25.194])
-        by smtp.gmail.com with ESMTPSA id gl12-20020a17090b120c00b0025e7f7b46c3sm9142110pjb.25.2023.06.21.08.06.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 08:06:15 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1qBzPR-007dQ6-Os;
-        Wed, 21 Jun 2023 12:06:13 -0300
-Date:   Wed, 21 Jun 2023 12:06:13 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        Robin Murphy <robin.murphy@arm.com>, will@kernel.org,
-        catalin.marinas@arm.com, linux-kernel@vger.kernel.org,
-        nicolinc@nvidia.com, linux-arm-kernel@lists.infradead.org,
-        kvm@vger.kernel.org, John Hubbard <jhubbard@nvidia.com>,
-        zhi.wang.linux@gmail.com, Sean Christopherson <seanjc@google.com>
-Subject: Re: [RFC PATCH 0/2] Invalidate secondary IOMMU TLB on permission
- upgrade
-Message-ID: <ZJMR5bw8l+BbzdJ7@ziepe.ca>
-References: <cover.063f3dc2100ae7cbe3a6527689589646ea787216.1687259597.git-series.apopple@nvidia.com>
+        Wed, 21 Jun 2023 11:12:14 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0B759E1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:07:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=jL1QYc7CYkSFsjBqnkl5XGMhYY+Hx3fWKo9ZfFjCEKw=; b=nq4VCxhBqPE45qfk0dW4eeUFPl
+        Nz5dONCjhVCN9z38ew6WDGm5DkdhpYp6CRfApQ71lX70NLbbQeIPklvnzuLUs8gGSqX8Ky3LwrgiP
+        F1Wvw4kKYEyCU3vsluTQSEKOotrhuY0LhY8/3Rcpkehudc3rQmDX1cK0B578a1nbqNRhqGGVpu+4t
+        3UO6RieKMjnr8jaW9ZI5ZpqJEKLP+XHF4YJplwzXvhAznpTCegIJ2lbr0QQBJ2WC4l2yBH+qAaEeQ
+        D8p8KD4er1qAgfiNr2WHHwXcd6HmH2uP9Eiwp927yihj236qahTlbUmhCgMhiVdjI6VoO/R9eMY27
+        b6ET7rdQ==;
+Received: from [179.113.218.86] (helo=[192.168.1.111])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1qBzQG-001Ld8-6E; Wed, 21 Jun 2023 17:07:04 +0200
+Message-ID: <195dd084-a97b-ef08-a221-e39ffcd7cc09@igalia.com>
+Date:   Wed, 21 Jun 2023 12:06:58 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.063f3dc2100ae7cbe3a6527689589646ea787216.1687259597.git-series.apopple@nvidia.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RFC PATCH v3 0/4] drm: Standardize device reset notification
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     kernel-dev@igalia.com, alexander.deucher@amd.com,
+        pierre-eric.pelloux-prayer@amd.com,
+        Simon Ser <contact@emersion.fr>, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Stone <daniel@fooishbar.org>,
+        =?UTF-8?B?J01hcmVrIE9sxaHDoWsn?= <maraeo@gmail.com>,
+        Dave Airlie <airlied@gmail.com>,
+        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>,
+        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
+        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>
+References: <20230621005719.836857-1-andrealmeid@igalia.com>
+ <caa69e8e-f330-d819-e8cd-7b06aa8eb855@amd.com>
+Content-Language: en-US
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <caa69e8e-f330-d819-e8cd-7b06aa8eb855@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 09:18:24PM +1000, Alistair Popple wrote:
+Em 21/06/2023 04:42, Christian König escreveu:
+> Am 21.06.23 um 02:57 schrieb André Almeida:
+>> Hi,
+>>
+>> This is a new version of the documentation for DRM device resets. As I 
+>> dived
+>> more in the subject, I started to believe that part of the problem was 
+>> the lack
+>> of a DRM API to get reset information from the driver. With an API, we 
+>> can
+>> better standardize reset queries, increase common code from both DRM 
+>> and Mesa,
+>> and make easier to write end-to-end tests.
+>>
+>> So this patchset, along with the documentation, comes with a new IOCTL 
+>> and two
+>> implementations of it for amdgpu and i915 (although just the former 
+>> was really
+>> tested). This IOCTL uses the "context id" to query reset information, 
+>> but this
+>> might be not generic enough to be included in a DRM API.
+> 
+> Well the basic problem with that is that we don't have a standard DRM 
+> context defined.
+> 
+> If you want to do this you should probably start there first.
 
-> 1. Add a call to mmu_notifier_invalidate_secondary_tlbs() to the arm64
->    version of ptep_set_access_flags().
+Any idea on how to start this? I tried to find previous work about that, 
+but I didn't find.
 
-I prefer we modify the whole thing to only call
-mmu_notifier_arch_invalidate_secondary_tlbs() (note the arch in the
-name) directly beside the arch's existing tlb invalidation, and we
-only need to define this for x86 and ARM arches that have secondary
-TLB using drivers - eg it is very much not a generic general purpose
-mmu notifier that has any meaning outside arch code.
+> 
+> Apart from that this looks like a really really good idea to me, 
+> especially that we document the reset expectations.
 
-> This is what this RFC series does as it is the simplest
-> solution. Arguably this call should be made by generic kernel code
-> though to catch other platforms that need it.
+I think I'll submit just the doc for the next version then, given that 
+the IOCTL will need a lot of rework.
 
-But that is the whole point, the generic kernel cannot and does not
-know the rules for TLB invalidation the platform model requires.
-
-> It is unclear if mmu_notifier_invalidate_secondary_tlbs() should be
-> called from mmu_notifier_range_end(). Currently it is, as an analysis
-> of existing code shows most code doesn't explicitly invalidate
-> secondary TLBs and relies on it being called as part of the end()
-> call.
-
-If you do the above we don't need to answer this question. Calling it
-unconditionally at the arches tlbi points is always correct.
-
-> To solve that we could add secondary TLB invalidation calls to the TLB
-> batching code, but that adds complexity so I'm not sure it's worth it
-> but would appreciate feedback.
-
-It sounds like the right direction to me.. Batching is going to be
-important, we don't need to different verions of batching logic. We
-already call the notifier from the batch infrastructure anyhow.
-
-This still fits with the above as batching goes down to the arch's
-flush_tlb_range()/etc which can carry the batch to the notifier. We
-can decide if we leave the notifier call in the core code and let the
-arch elide it or push it to the arch so it the call is more
-consistently placed.
-
-eg we have arch_tlbbatch_flush() on x86 too that looks kind of
-suspicious that is already really funky to figure out where the
-notifier is actually called from. Calling from arch code closer to the
-actual TLB flush would be alot easier to reason about.
-
-Jason
+> 
+> Regards,
+> Christian.
+> 
+>>    At least for amdgpu,
+>> this information is encapsulated by libdrm so one can't just call the 
+>> ioctl
+>> directly from the UMD as I was planning to, but a small refactor can 
+>> be done to
+>> expose the id. Anyway, I'm sharing it as it is to gather feedback if 
+>> this seems
+>> to work.
+>>
+>> The amdgpu and i915 implementations are provided as a mean of testing 
+>> and as
+>> exemplification, and not as reference code yet, as the goal is more 
+>> about the
+>> interface itself then the driver parts.
+>>
+>> For the documentation itself, after spending some time reading the 
+>> reset path in
+>> the kernel in Mesa, I decide to rewrite it to better reflect how it 
+>> works, from
+>> bottom to top.
+>>
+>> You can check the userspace side of the IOCLT here:
+>>   Mesa: 
+>> https://gitlab.freedesktop.org/andrealmeid/mesa/-/commit/cd687b22fb32c21b23596c607003e2a495f465
+>>   libdrm: 
+>> https://gitlab.freedesktop.org/andrealmeid/libdrm/-/commit/b31e5404893ee9a85d1aa67e81c2f58c1dac3c46
+>>
+>> For testing, I use this vulkan app that has an infinity loop in the 
+>> shader:
+>> https://github.com/andrealmeid/vulkan-triangle-v1
+>>
+>> Feedbacks are welcomed!
+>>
+>> Thanks,
+>>         André
+>>
+>> v2: 
+>> https://lore.kernel.org/all/20230227204000.56787-1-andrealmeid@igalia.com/
+>> v1: 
+>> https://lore.kernel.org/all/20230123202646.356592-1-andrealmeid@igalia.com/
+>>
+>> André Almeida (4):
+>>    drm/doc: Document DRM device reset expectations
+>>    drm: Create DRM_IOCTL_GET_RESET
+>>    drm/amdgpu: Implement DRM_IOCTL_GET_RESET
+>>    drm/i915: Implement DRM_IOCTL_GET_RESET
+>>
+>>   Documentation/gpu/drm-uapi.rst                | 51 ++++++++++++++++
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c        |  4 +-
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c       | 35 +++++++++++
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.h       |  5 ++
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c       |  1 +
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_job.c       | 12 +++-
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_job.h       |  2 +
+>>   drivers/gpu/drm/drm_debugfs.c                 |  2 +
+>>   drivers/gpu/drm/drm_ioctl.c                   | 58 +++++++++++++++++++
+>>   drivers/gpu/drm/i915/gem/i915_gem_context.c   | 18 ++++++
+>>   drivers/gpu/drm/i915/gem/i915_gem_context.h   |  2 +
+>>   .../gpu/drm/i915/gem/i915_gem_context_types.h |  2 +
+>>   drivers/gpu/drm/i915/i915_driver.c            |  2 +
+>>   include/drm/drm_device.h                      |  3 +
+>>   include/drm/drm_drv.h                         |  3 +
+>>   include/uapi/drm/drm.h                        | 21 +++++++
+>>   include/uapi/drm/drm_mode.h                   | 15 +++++
+>>   17 files changed, 233 insertions(+), 3 deletions(-)
+>>
+> 
