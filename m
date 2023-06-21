@@ -2,50 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD63F7390C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 22:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5DBA7390C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 22:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230344AbjFUU0U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 16:26:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52350 "EHLO
+        id S230125AbjFUU0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 16:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjFUU0J (ORCPT
+        with ESMTP id S230305AbjFUU02 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 16:26:09 -0400
+        Wed, 21 Jun 2023 16:26:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDC619BF;
-        Wed, 21 Jun 2023 13:25:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2011BFC;
+        Wed, 21 Jun 2023 13:26:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5DF2616A0;
-        Wed, 21 Jun 2023 20:25:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A239DC433C9;
-        Wed, 21 Jun 2023 20:25:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B207E616A1;
+        Wed, 21 Jun 2023 20:26:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37288C433C0;
+        Wed, 21 Jun 2023 20:26:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687379156;
-        bh=hiXA2jbxmgi4ukJ9eszqbew/jk2q5sgKpmcne0KLKto=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=QtOdHzUZZ9WvdV1lUeSql2NrqzAfwxVqRPjKGlvJMAIKkilz/cmef6xc87SOHrBnN
-         im6QiaKv+N6loZUVdp616FvrP6l3BIUBVOjicXt75Rgi5hY5m3w1zwEiAbvT81vx7+
-         7cwbo6gbWoAy949fBlC0aT5HTGiJ14Wv58fAe5XPIAvY1MHQwrr2rTj/9xXJ+h6G9v
-         BTBYARfOse10oJAXsbaDOm5vUxKbxm2as8FjDoMjfNPqYuFErFQyFL2vADXh1N9dj0
-         ZPCAR+wWm+Qyob/3llEsrt5s6c+6+GuQtSB6ce943VRU39f4noyVk2Ivd1gJRyn9Ml
-         iZwE3FQRK2I0g==
-Date:   Wed, 21 Jun 2023 15:25:53 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Lizhi Hou <lizhi.hou@amd.com>
-Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh@kernel.org, max.zhen@amd.com,
-        sonal.santan@amd.com, stefano.stabellini@xilinx.com
-Subject: Re: [PATCH V9 3/5] PCI: Add PCI quirks to generate device tree node
- for Xilinx Alveo U50
-Message-ID: <20230621202553.GA115453@bhelgaas>
+        s=k20201202; t=1687379185;
+        bh=IldafOrMYKZpxWjdW8Dzn1OfaBUtuI1eV2ylNsc6e4U=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Y2yqS/Y4fgeMMrBp4GVpPiqQbkfNRrlEDKuueTlTQcPCkJMvcZl93ZvoNBGz2WDfd
+         prh5aeFF+odgcGV6AHJovFc1nEKh5cxfzd3S8h2m07GFMUckTezMG4N7GGzAN8fHY4
+         d7JdCsfUVoBNmj2AlNadrUd87AzKOuZrRDvoL7MP1Vq9vBRZUd95XDNOMPjmUqQUKx
+         JMS2PKX5AmaDfvzGLvKQ6Fu1YquE0AdOgntp9F8JvZUElb/mbC3KGDpstXFzmfDT7D
+         xBHLVodDHNUxpMCFx2G+bfNhum2wBPFITdhqY5+waVCPStH3gMdb50Jy2z/dIh2biy
+         84S6CUf4NnFcQ==
+Date:   Wed, 21 Jun 2023 14:27:20 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Don Brace <don.brace@microchip.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     storagedev@microchip.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] scsi: smartpqi: Replace one-element arrays with
+ flexible-array members
+Message-ID: <ZJNdKDkuRbFZpASS@work>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1687368849-36722-4-git-send-email-lizhi.hou@amd.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,54 +58,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In subject, s/Add PCI/Add/ (no need to repeat "PCI")
+One-element arrays are deprecated, and we are replacing them with flexible
+array members instead. So, replace one-element arrays with flexible-array
+members in a couple of structures, and refactor the rest of the code,
+accordingly.
 
-On Wed, Jun 21, 2023 at 10:34:07AM -0700, Lizhi Hou wrote:
-> The Xilinx Alveo U50 PCI card exposes multiple hardware peripherals on
-> its PCI BAR. The card firmware provides a flattened device tree to
-> describe the hardware peripherals on its BARs. This allows U50 driver to
-> load the flattened device tree and generate the device tree node for
-> hardware peripherals underneath.
-> 
-> To generate device tree node for U50 card, added PCI quirks to call
-> of_pci_make_dev_node() for U50.
+This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+routines on memcpy().
 
-s/added/add/ (tell me what the patch does, not what you did)
+This results in no differences in binary output.
 
-> Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
+Link: https://github.com/KSPP/linux/issues/79
+Link: https://github.com/KSPP/linux/issues/204
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ drivers/scsi/smartpqi/smartpqi.h      | 4 ++--
+ drivers/scsi/smartpqi/smartpqi_init.c | 5 ++---
+ 2 files changed, 4 insertions(+), 5 deletions(-)
 
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+diff --git a/drivers/scsi/smartpqi/smartpqi.h b/drivers/scsi/smartpqi/smartpqi.h
+index f960b5095d09..e392eaf5b2bf 100644
+--- a/drivers/scsi/smartpqi/smartpqi.h
++++ b/drivers/scsi/smartpqi/smartpqi.h
+@@ -982,12 +982,12 @@ struct report_phys_lun_16byte_wwid {
+ 
+ struct report_phys_lun_8byte_wwid_list {
+ 	struct report_lun_header header;
+-	struct report_phys_lun_8byte_wwid lun_entries[1];
++	struct report_phys_lun_8byte_wwid lun_entries[];
+ };
+ 
+ struct report_phys_lun_16byte_wwid_list {
+ 	struct report_lun_header header;
+-	struct report_phys_lun_16byte_wwid lun_entries[1];
++	struct report_phys_lun_16byte_wwid lun_entries[];
+ };
+ 
+ struct raid_map_disk_data {
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index 19af36e9a16d..6aaaa7ebca37 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -1203,7 +1203,6 @@ static inline int pqi_report_phys_luns(struct pqi_ctrl_info *ctrl_info, void **b
+ 	unsigned int i;
+ 	u8 rpl_response_format;
+ 	u32 num_physicals;
+-	size_t rpl_16byte_wwid_list_length;
+ 	void *rpl_list;
+ 	struct report_lun_header *rpl_header;
+ 	struct report_phys_lun_8byte_wwid_list *rpl_8byte_wwid_list;
+@@ -1232,9 +1231,9 @@ static inline int pqi_report_phys_luns(struct pqi_ctrl_info *ctrl_info, void **b
+ 
+ 	rpl_8byte_wwid_list = rpl_list;
+ 	num_physicals = get_unaligned_be32(&rpl_8byte_wwid_list->header.list_length) / sizeof(rpl_8byte_wwid_list->lun_entries[0]);
+-	rpl_16byte_wwid_list_length = sizeof(struct report_lun_header) + (num_physicals * sizeof(struct report_phys_lun_16byte_wwid));
+ 
+-	rpl_16byte_wwid_list = kmalloc(rpl_16byte_wwid_list_length, GFP_KERNEL);
++	rpl_16byte_wwid_list = kmalloc(struct_size(rpl_16byte_wwid_list, lun_entries,
++						   num_physicals), GFP_KERNEL);
+ 	if (!rpl_16byte_wwid_list)
+ 		return -ENOMEM;
+ 
+-- 
+2.34.1
 
-> ---
->  drivers/pci/quirks.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
-> index c525867760bf..c8f3acea752d 100644
-> --- a/drivers/pci/quirks.c
-> +++ b/drivers/pci/quirks.c
-> @@ -6041,3 +6041,14 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a2d, dpc_log_size);
->  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a2f, dpc_log_size);
->  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x9a31, dpc_log_size);
->  #endif
-> +
-> +/*
-> + * For PCI device which have multiple downstream devices, its driver may use
-> + * a flattened device tree to describe the downstream devices.
-> + * To overlay the flattened device tree, the PCI device and all its ancestor
-> + * devices need to have device tree nodes on system base device tree. Thus,
-> + * before driver probing, it might need to add a device tree node as the final
-
-s/For PCI device which have multiple/For a PCI device with multiple/
-
-It looks like you intend two separate paragraphs in the comment.  If
-so, add a blank line between them.  If not, rewrap so they're a single
-paragraph.
-
-> + * fixup.
-> + */
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_XILINX, 0x5020, of_pci_make_dev_node);
-> +DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_XILINX, 0x5021, of_pci_make_dev_node);
-> -- 
-> 2.34.1
-> 
