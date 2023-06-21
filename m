@@ -2,117 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F31F738F20
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:49:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F4D9738F1D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbjFUStG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 14:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36356 "EHLO
+        id S230210AbjFUSs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 14:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230472AbjFUStB (ORCPT
+        with ESMTP id S229549AbjFUSsx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 14:49:01 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FD21B4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:48:59 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3fde9bfb3c8so30541cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:48:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687373339; x=1689965339;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ktaN2gfy2UoFzSis8IakrvfByDQPNIqA2OzFHTKqH6g=;
-        b=6g8bjgJ05d+rXqPxYemA4IWXC+J1Ela6mFMkncMRIuq1/qtJbHccQZq5eNnK8I5qe0
-         hHNtT089lxLYIpUCWKimJ7OvTnk3AqftjEne3x/QKdPrTQj7whhf9V7QXpmEIjhdikxt
-         3RUxgdzBP7JyIEHwuW1EfLOcXwuB5TITZDI0M9cW8LfCeT6p8VPkPbdIAj+Bz1xOsg4h
-         wX9LbCEVcoDUhWSHLG5Y939Eqa61h2yFQYFGh0vJ5vX9YJMSwF0ASQbl++WFw3qZiFK/
-         UWDxKAbJQKcXA5CFkGIQw1AxgIxNjJ0wsXMZhvPgK37ovf8LI3YrUUA00uM18dZNvF5J
-         3yWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687373339; x=1689965339;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ktaN2gfy2UoFzSis8IakrvfByDQPNIqA2OzFHTKqH6g=;
-        b=SXCgfhXydZO4wDW7R2ERZQc/UowTtR23YdkGsPls/OTYQe7yaG4Yyx3VW70jDXXcov
-         vr+h0GH8nW25Ti5eHJnA+HtDL+JXwri/N57rAGsf9Y6O8jploge++QZF/0mPxZZi+Rkk
-         3MECbd86xpiQbfnaxQhVuTYgJj1Ab3o8s7mnFjNBgeIA1fsG2FitWhywrpqUSM1ATYbQ
-         zpgoeUh2/yPXGHpDdJ+TNH11Kys9g/Yx4nqYZJVf3qF6ydDEMb606opbg45iwaQusY7D
-         KWikphCWt6EweDT77kpmZ3qtB/WfZUJlHS97N29aGwp3l5PYtFXQYVzeBrsne8LkbNkU
-         RfxQ==
-X-Gm-Message-State: AC+VfDx9q0P+DpYT6Zu6+YmmjoaBlEzakzno9YOZA7TlkVt7EJJ6DYXi
-        rQa6/qg1crHpESHgGIeK/yOOenLAxwjldS60wxPtDA==
-X-Google-Smtp-Source: ACHHUZ6wyaGZhoIo4tRyOV5BV1WFj8xWmG+hpZ4QuVswZetsBCPxzzNXwssbZELyoFmUobNTTkI7G9Dgv5b6Tpp1DrY=
-X-Received: by 2002:ac8:5954:0:b0:3ef:3083:a437 with SMTP id
- 20-20020ac85954000000b003ef3083a437mr284103qtz.18.1687373338729; Wed, 21 Jun
- 2023 11:48:58 -0700 (PDT)
+        Wed, 21 Jun 2023 14:48:53 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A6E9B;
+        Wed, 21 Jun 2023 11:48:52 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 20:48:43 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1687373324; bh=K7GIk7uEvmoc9FWOicXHtA/QKVy8xu48Me8OQ6sPdtw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sndpqHdOhqYDseVfPJKdVYV8EPQpnkKnbMjylWcvseJzuXOOeCFxH/HHGQZw1zETm
+         t5T5zd11sqSxgxI9tDY8MkGBV6S9041mlWP3nmtZdLHrDQRruUxrGFgJMwPsgUOe/3
+         88AcTxzv/nCpQ4WMnVN1lpQp94jcsQ87kc8E7U40=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     w@1wt.eu, david.laight@aculab.com, arnd@arndb.de,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 07/10] tools/nolibc: clean up mmap() support
+Message-ID: <31d85464-5731-4df6-8fcd-2b0be11eac90@t-8ch.de>
+References: <cover.1687187451.git.falcon@tinylab.org>
+ <b1162bc16ce5c397e99925e49317756c110e6f1a.1687187451.git.falcon@tinylab.org>
 MIME-Version: 1.0
-References: <20230621180454.973862-1-yuanchu@google.com>
-In-Reply-To: <20230621180454.973862-1-yuanchu@google.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Wed, 21 Jun 2023 12:48:22 -0600
-Message-ID: <CAOUHufbb9_Cah6tT61+WKfM0T9CDmkZ5zym=MuHj2YVsgh-hiw@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 0/6] mm: working set reporting
-To:     Yuanchu Xie <yuanchu@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Kairui Song <kasong@tencent.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        "T . J . Alumbaugh" <talumbau@google.com>,
-        Wei Xu <weixugc@google.com>, SeongJae Park <sj@kernel.org>,
-        Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>,
-        kai.huang@intel.com, hch@lst.de, jon@nutanix.com,
-        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
-        cgroups@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b1162bc16ce5c397e99925e49317756c110e6f1a.1687187451.git.falcon@tinylab.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 12:16=E2=80=AFPM Yuanchu Xie <yuanchu@google.com> w=
-rote:
->
-> RFC v1: https://lore.kernel.org/linux-mm/20230509185419.1088297-1-yuanchu=
-@google.com/
-> For background and interfaces, see the RFC v1 posting.
+On 2023-06-19 23:51:20+0800, Zhangjin Wu wrote:
+> Do several cleanups together:
+> 
+> - Since all supported architectures have my_syscall6() now, remove the
+>   #ifdef check.
+> 
+> - Move the mmap() related macros to tools/include/nolibc/types.h
+> 
+> - Apply the new __sysret() to convert the calling of sys_map() to
+>   oneline code
+> 
+> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> ---
+>  tools/include/nolibc/sys.h   | 24 +-----------------------
+>  tools/include/nolibc/types.h | 11 +++++++++++
+>  2 files changed, 12 insertions(+), 23 deletions(-)
+> 
+> diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> index 8a6e16472d54..1c02cec3bcd9 100644
+> --- a/tools/include/nolibc/sys.h
+> +++ b/tools/include/nolibc/sys.h
+> @@ -624,26 +624,11 @@ int mknod(const char *path, mode_t mode, dev_t dev)
+>  	return __sysret(sys_mknod(path, mode, dev));
+>  }
+>  
+> -#ifndef MAP_SHARED
+> -#define MAP_SHARED		0x01	/* Share changes */
+> -#define MAP_PRIVATE		0x02	/* Changes are private */
+> -#define MAP_SHARED_VALIDATE	0x03	/* share + validate extension flags */
+> -#endif
+> -
+> -#ifndef MAP_FAILED
+> -#define MAP_FAILED ((void *)-1)
+> -#endif
+> -
+>  #ifndef sys_mmap
+>  static __attribute__((unused))
+>  void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
+>  	       off_t offset)
 
-v1 only mentioned one use case (ballooning), but we both know there
-are at least two solid use cases (the other being job
-scheduling/binpacking, e.g., for kubernetes [1]).
+This could return a plain integer type instead to save some casts.
+Not sure if API compatibility is guaranteed for the raw sys_ functions.
 
-Please do a survey, as thoroughly as possible, of use cases.
-* What's the significance of WSR to the landscape, in terms of server
-and client use cases?
-* How would userspace tools, e.g., a PMU-based memory profiler,
-leverage the infra provided by WSR?
-* Would those who register slab shrinkers, e.g., DMA buffs [2], want
-to report their working sets?
-* Does this effort intersect with memory placement with NUMA and CXL.mem?
-
-[1] https://kubernetes.io/docs/concepts/configuration/manage-resources-cont=
-ainers/
-[2] https://lore.kernel.org/linux-mm/20230123191728.2928839-1-tjmercier@goo=
-gle.com/
+>  {
+> -#ifndef my_syscall6
+> -	/* Function not implemented. */
+> -	return (void *)-ENOSYS;
+> -#else
+> -
+>  	int n;
+>  
+>  #if defined(__NR_mmap2)
+> @@ -654,20 +639,13 @@ void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
+>  #endif
+>  
+>  	return (void *)my_syscall6(n, addr, length, prot, flags, fd, offset);
+> -#endif
+>  }
+>  #endif
+>  
+>  static __attribute__((unused))
+>  void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
+>  {
+> -	void *ret = sys_mmap(addr, length, prot, flags, fd, offset);
+> -
+> -	if ((unsigned long)ret >= -4095UL) {
+> -		SET_ERRNO(-(long)ret);
+> -		ret = MAP_FAILED;
+> -	}
+> -	return ret;
+> +	return (void *)__sysret((unsigned long)sys_mmap(addr, length, prot, flags, fd, offset));
+>  }
+>  
+>  static __attribute__((unused))
+> diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
+> index f96e28bff4ba..f889d4e0ac7e 100644
+> --- a/tools/include/nolibc/types.h
+> +++ b/tools/include/nolibc/types.h
+> @@ -81,6 +81,17 @@
+>  #define MAXPATHLEN     (PATH_MAX)
+>  #endif
+>  
+> +/* flags for mmap */
+> +#ifndef MAP_SHARED
+> +#define MAP_SHARED		0x01	/* Share changes */
+> +#define MAP_PRIVATE		0x02	/* Changes are private */
+> +#define MAP_SHARED_VALIDATE	0x03	/* share + validate extension flags */
+> +#endif
+> +
+> +#ifndef MAP_FAILED
+> +#define MAP_FAILED ((void *)-1)
+> +#endif
+> +
+>  /* whence values for lseek() */
+>  #define SEEK_SET       0
+>  #define SEEK_CUR       1
+> -- 
+> 2.25.1
+> 
