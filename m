@@ -2,95 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EF7F738134
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40050738028
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:09:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229527AbjFUJWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 05:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
+        id S231638AbjFUJW5 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 05:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbjFUJWe (ORCPT
+        with ESMTP id S231458AbjFUJWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 05:22:34 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AE110F0;
-        Wed, 21 Jun 2023 02:22:33 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b47354c658so52499521fa.1;
-        Wed, 21 Jun 2023 02:22:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687339351; x=1689931351;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=EDeNQQqyz/nKt5P8lWcisu6DsEDZkm29WDucZUEslLo=;
-        b=LvA+yAc7uqyQWWHYSZ/EweD6nBt0ToDoNvUQfmFPftuB3YQaD3wDtfcddxerdjpqLK
-         zNURLecHDA0Q6cOBY3eeGf4xX6I9MmmOuJ3gASfKbMSoWsMUsi6UzaomNPo4JNN88KxB
-         y3nMyhHHXkjrJ0okRDyTFUog714z1htWRo6ewS0Zm/XhbEi+5kbQVg7YkggJN9ODNKW8
-         looCIxDSUKflL9OdA8dMMf3ZwQufzYK0AjgZ47SJeC/bu/mpG4Ov3dQHEsE+VGcWlOPx
-         0kihrQ7jlL0p5ijllp28oM66AKUJrmxVHjFbWLmDiID2FFyCr5wG06Pi4u6MY21pLv4q
-         9qKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687339351; x=1689931351;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EDeNQQqyz/nKt5P8lWcisu6DsEDZkm29WDucZUEslLo=;
-        b=Jjp0cVdYtWayDmT32m9b93/MK8UjjUJFMBqiP2e4H7DMlI8TghPaeNs0HaRXdZ/zsG
-         G93NghQtjPtJJVsH50b0lTXkfq5IC5LhcMpSvtquaBfpJ/fO54GDPXYwCO6PFN8ovcaI
-         9DSX8MrPCh0gj1bme4paMkfexEWyKHBFRsJ1I6dxmAahGsutBx2db6PV1o5ESkbGvsLa
-         T8XF1fwucikQY7aKOtm5GszLeuJnDSFXpLY84Hs0JIjeIxxUkqAP4Ls9+ZXKPaLv4yhc
-         ekehLj8qfCDOmbPnkeubpkGso0MemMddplxHhQRtcZlZ9/2W5NdEsNEEIk5nulqAiP9Z
-         eYRA==
-X-Gm-Message-State: AC+VfDyiMVV5AbfEYoh+fg/yPbii96MOMn1qyYlIluXGoR/5Bnxj18NY
-        SYhsfeDW57QoLLh1ce3NiiA=
-X-Google-Smtp-Source: ACHHUZ4b5B0OPx8Ocken2B6jez7ePavuLOeKLr41nwQeM7rYzRLGaa8mAeN0QJbfqgiDZ0QYVm5Ecw==
-X-Received: by 2002:a2e:3211:0:b0:2b4:7d83:c80b with SMTP id y17-20020a2e3211000000b002b47d83c80bmr5066194ljy.13.1687339350913;
-        Wed, 21 Jun 2023 02:22:30 -0700 (PDT)
-Received: from localhost.localdomain (sa-84-52-56-253.saturn.infonet.ee. [84.52.56.253])
-        by smtp.googlemail.com with ESMTPSA id w7-20020a05651c102700b002b1b92910c8sm811575ljm.86.2023.06.21.02.22.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 02:22:30 -0700 (PDT)
-From:   emma christy <emma.t.christy@gmail.com>
-To:     ezequiel@vanguardiasur.com.ar, mchehab@kernel.org,
-        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Cc:     emma christy <emma.t.christy@gmail.com>
-Subject: [PATCH] Subject: [PATCH] media: rkvdec: removed redundant blank line
-Date:   Wed, 21 Jun 2023 12:22:23 +0300
-Message-Id: <20230621092223.10805-1-emma.t.christy@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Wed, 21 Jun 2023 05:22:47 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CAA1BC1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:22:38 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1qBu2r-0004OT-7t; Wed, 21 Jun 2023 11:22:33 +0200
+Message-ID: <cba8ebe734aed53e74ddee2242526d10338cbafb.camel@pengutronix.de>
+Subject: Re: [PATCH v10 04/11] drm/etnaviv: Add helpers for private data
+ construction and destruction
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Sui Jingfeng <18949883232@163.com>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Sui Jingfeng <suijingfeng@loongson.cn>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        etnaviv@lists.freedesktop.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Date:   Wed, 21 Jun 2023 11:22:30 +0200
+In-Reply-To: <20230620094716.2231414-5-18949883232@163.com>
+References: <20230620094716.2231414-1-18949883232@163.com>
+         <20230620094716.2231414-5-18949883232@163.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adhere to Linux kernel coding style. Removed redundant blank line.
-Issue found by checkpatch.
+Am Dienstag, dem 20.06.2023 um 17:47 +0800 schrieb Sui Jingfeng:
+> From: Sui Jingfeng <suijingfeng@loongson.cn>
+> 
+> There are numerous members in the struct etnaviv_drm_private, which are
+> shared by all GPU core. This patch introduces two dedicated functions for
+> the construction and destruction of the instances of this structure.
+> The goal is to keep its members from leaking to the outside. The code
+> needed for error handling can also be simplified.
+> 
+> Cc: Lucas Stach <l.stach@pengutronix.de>
+> Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> ---
+>  drivers/gpu/drm/etnaviv/etnaviv_drv.c | 73 +++++++++++++++++----------
+>  drivers/gpu/drm/etnaviv/etnaviv_drv.h |  1 +
+>  2 files changed, 47 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> index cec005035d0e..6a048be02857 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> @@ -24,9 +24,47 @@
+>  #include "etnaviv_perfmon.h"
+>  
+>  /*
+> - * DRM operations:
+> + * etnaviv private data construction and destructions:
+>   */
+> +static struct etnaviv_drm_private *
+> +etnaviv_alloc_private(struct device *dev, struct drm_device *drm)
+> +{
+> +	struct etnaviv_drm_private *priv;
+> +
+> +	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	priv->drm = drm;
 
-Signed-off-by: emma christy <emma.t.christy@gmail.com>
----
- drivers/staging/media/rkvdec/rkvdec-vp9.c | 1 -
- 1 file changed, 1 deletion(-)
+That's an unrelated change that you rely on in later patches. If this
+is needed at all it needs to be in a separate patch with a explanation
+on why it is needed.
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec-vp9.c b/drivers/staging/media/rkvdec/rkvdec-vp9.c
-index cfae99b40ccb..0e7e16f20eeb 100644
---- a/drivers/staging/media/rkvdec/rkvdec-vp9.c
-+++ b/drivers/staging/media/rkvdec/rkvdec-vp9.c
-@@ -227,7 +227,6 @@ static void init_intra_only_probs(struct rkvdec_ctx *ctx,
- 				}
- 			}
- 		}
--
- 	}
- 
- 	for (i = 0; i < sizeof(v4l2_vp9_kf_uv_mode_prob); ++i) {
--- 
-2.40.1
+Regards,
+Lucas
+
+> +
+> +	xa_init_flags(&priv->active_contexts, XA_FLAGS_ALLOC);
+> +
+> +	mutex_init(&priv->gem_lock);
+> +	INIT_LIST_HEAD(&priv->gem_list);
+> +	priv->num_gpus = 0;
+> +	priv->shm_gfp_mask = GFP_HIGHUSER | __GFP_RETRY_MAYFAIL | __GFP_NOWARN;
+>  
+> +	priv->cmdbuf_suballoc = etnaviv_cmdbuf_suballoc_new(dev);
+> +	if (IS_ERR(priv->cmdbuf_suballoc)) {
+> +		kfree(priv);
+> +		dev_err(dev, "Failed to create cmdbuf suballocator\n");
+> +		return ERR_PTR(-ENOMEM);
+> +	}
+> +
+> +	return priv;
+> +}
+> +
+> +static void etnaviv_free_private(struct etnaviv_drm_private *priv)
+> +{
+> +	if (!priv)
+> +		return;
+> +
+> +	etnaviv_cmdbuf_suballoc_destroy(priv->cmdbuf_suballoc);
+> +
+> +	xa_destroy(&priv->active_contexts);
+> +
+> +	kfree(priv);
+> +}
+>  
+>  static void load_gpu(struct drm_device *dev)
+>  {
+> @@ -511,35 +549,21 @@ static int etnaviv_bind(struct device *dev)
+>  	if (IS_ERR(drm))
+>  		return PTR_ERR(drm);
+>  
+> -	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+> -	if (!priv) {
+> -		dev_err(dev, "failed to allocate private data\n");
+> -		ret = -ENOMEM;
+> +	priv = etnaviv_alloc_private(dev, drm);
+> +	if (IS_ERR(priv)) {
+> +		ret = PTR_ERR(priv);
+>  		goto out_put;
+>  	}
+> +
+>  	drm->dev_private = priv;
+>  
+>  	dma_set_max_seg_size(dev, SZ_2G);
+>  
+> -	xa_init_flags(&priv->active_contexts, XA_FLAGS_ALLOC);
+> -
+> -	mutex_init(&priv->gem_lock);
+> -	INIT_LIST_HEAD(&priv->gem_list);
+> -	priv->num_gpus = 0;
+> -	priv->shm_gfp_mask = GFP_HIGHUSER | __GFP_RETRY_MAYFAIL | __GFP_NOWARN;
+> -
+> -	priv->cmdbuf_suballoc = etnaviv_cmdbuf_suballoc_new(drm->dev);
+> -	if (IS_ERR(priv->cmdbuf_suballoc)) {
+> -		dev_err(drm->dev, "Failed to create cmdbuf suballocator\n");
+> -		ret = PTR_ERR(priv->cmdbuf_suballoc);
+> -		goto out_free_priv;
+> -	}
+> -
+>  	dev_set_drvdata(dev, drm);
+>  
+>  	ret = component_bind_all(dev, drm);
+>  	if (ret < 0)
+> -		goto out_destroy_suballoc;
+> +		goto out_free_priv;
+>  
+>  	load_gpu(drm);
+>  
+> @@ -551,10 +575,8 @@ static int etnaviv_bind(struct device *dev)
+>  
+>  out_unbind:
+>  	component_unbind_all(dev, drm);
+> -out_destroy_suballoc:
+> -	etnaviv_cmdbuf_suballoc_destroy(priv->cmdbuf_suballoc);
+>  out_free_priv:
+> -	kfree(priv);
+> +	etnaviv_free_private(priv);
+>  out_put:
+>  	drm_dev_put(drm);
+>  
+> @@ -570,12 +592,9 @@ static void etnaviv_unbind(struct device *dev)
+>  
+>  	component_unbind_all(dev, drm);
+>  
+> -	etnaviv_cmdbuf_suballoc_destroy(priv->cmdbuf_suballoc);
+> -
+> -	xa_destroy(&priv->active_contexts);
+> +	etnaviv_free_private(priv);
+>  
+>  	drm->dev_private = NULL;
+> -	kfree(priv);
+>  
+>  	drm_dev_put(drm);
+>  }
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.h b/drivers/gpu/drm/etnaviv/etnaviv_drv.h
+> index b3eb1662e90c..e58f82e698de 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.h
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.h
+> @@ -35,6 +35,7 @@ struct etnaviv_file_private {
+>  };
+>  
+>  struct etnaviv_drm_private {
+> +	struct drm_device *drm;
+>  	int num_gpus;
+>  	struct etnaviv_gpu *gpu[ETNA_MAX_PIPES];
+>  	gfp_t shm_gfp_mask;
 
