@@ -2,58 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5139073859E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83D4F7385A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbjFUNrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42600 "EHLO
+        id S229618AbjFUNsb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:48:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjFUNrj (ORCPT
+        with ESMTP id S229478AbjFUNs2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:47:39 -0400
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED18E6E
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:47:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1687355258;
-        bh=mKMqUuWKo4We6APzwpiPt0WTyPKwoFAwN9+UkpLCRtE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=KC0DQHUZkjXHWXaKGJ0UQnv2k/xQabEBosK5yr17/Rp6taOu4ZxqZxr/VsvZnvBjU
-         CgLYuyHwcLl+zSBoRXLHvyHqfdqOVmL1tui7gI6iHIRcf8HJ7MPiqdgiGwM/zW3/IF
-         EQu4v05yHkl87bHHTMdKGcTF24Ae6ENl82tNrRKk=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id BA66665A7B;
-        Wed, 21 Jun 2023 09:47:37 -0400 (EDT)
-Message-ID: <e7113e249fa0fc1f259408c9f97655ec199dba5e.camel@xry111.site>
-Subject: Re: A question about prefetchw detection in "x86/asm: Cleanup
- prefetch primitives"
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>
-Date:   Wed, 21 Jun 2023 21:47:36 +0800
-In-Reply-To: <20230621134645.GIZJL/Rf1IdeLMQGl2@fat_crate.local>
-References: <0b663d8f6802e8dbf443397718234bcb6d0811c8.camel@xry111.site>
-         <20230621111346.GFZJLbavDw1JiLi34n@fat_crate.local>
-         <a155ebb791d3aefce5db32658e3c519a1cfac1f6.camel@xry111.site>
-         <e76180a1b82d1c29715587e94e2d6923b64bb893.camel@xry111.site>
-         <20230621125749.GGZJLzzUw0rA3goV1X@fat_crate.local>
-         <b50735128c5a985634468d63fef092f093f0aebc.camel@xry111.site>
-         <20230621130955.GHZJL2o771lIEPURUl@fat_crate.local>
-         <29beee7faf370ea892cb4e5a85ddd1f7ee132164.camel@xry111.site>
-         <20230621134645.GIZJL/Rf1IdeLMQGl2@fat_crate.local>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 
+        Wed, 21 Jun 2023 09:48:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB4619B
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:47:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687355262;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7PkoLL41VxIS/hc3oQfn0XVIx6fl5rPDyyXHPv30+EI=;
+        b=bPo18XRtojx9g9pKwOjiozZVOqCiunz1byl+Zm0OrNrkEq+7j3ZEm/ZC+uUKvqXGzOGWzw
+        agjxMglOWEBGG4ieFaw1FBVSVSR3OwyNTEBBYop9Afbe1gtlFls5nRabWO9gLd2RF9ZQ0T
+        PlNDDbGhxFp9vxf+8Gw3gfngkDi3I4g=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-501-PddCcBXiNvusOilEfY5gPQ-1; Wed, 21 Jun 2023 09:47:39 -0400
+X-MC-Unique: PddCcBXiNvusOilEfY5gPQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E6A3C8910E9;
+        Wed, 21 Jun 2023 13:47:38 +0000 (UTC)
+Received: from [10.22.17.140] (unknown [10.22.17.140])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 32E6C492C13;
+        Wed, 21 Jun 2023 13:47:38 +0000 (UTC)
+Message-ID: <4996d41d-3199-c4f4-ffb0-25f09709fd6c@redhat.com>
+Date:   Wed, 21 Jun 2023 09:47:37 -0400
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 1/5] x86/speculation: Provide a debugfs file to dump
+ SPEC_CTRL MSRs
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-pm@vger.kernel.org,
+        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>
+References: <20230620140625.1001886-1-longman@redhat.com>
+ <20230620140625.1001886-2-longman@redhat.com>
+ <20230621074105.GE2046280@hirez.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230621074105.GE2046280@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,31 +76,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-06-21 at 15:46 +0200, Borislav Petkov wrote:
-> On Wed, Jun 21, 2023 at 09:19:34PM +0800, Xi Ruoyao wrote:
-> > On Wed, 2023-06-21 at 15:09 +0200, Borislav Petkov wrote:
-> > > On Wed, Jun 21, 2023 at 09:06:51PM +0800, Xi Ruoyao wrote:
-> > > > I think it's not an issue in the kernel itself, but announcing
-> > > > 3dnowprefetch in /proc/cpuinfo for an old Intel CPU w/o real
-> > > > prefetchw
-> > > > implementation seems problematic (to me).
-> > >=20
-> > > And this is a problem because?
-> >=20
-> > If a code generator parses /proc/cpuinfo for CPU capabilities, it
-> > may
-> > generates a no-op prefetchw instead of prefetcht0 as a fallback.
->=20
-> Err, go back.
->=20
-> That code snippet you pasted, did you see where that comes from?
->=20
-> A function called init_amd().
->=20
-> Now, is Intel hardware and SDM PREFETCHW text at all relevant here?
 
-Oh s**t, I'm completely stupid :(.
+On 6/21/23 03:41, Peter Zijlstra wrote:
+> On Tue, Jun 20, 2023 at 10:06:21AM -0400, Waiman Long wrote:
+>> Sometimes it is useful to know the states the SPEC_CTRL MSRs to see what
+>> mitigations are enabled at run time. Provide a new x86/spec_ctrl_msrs
+>> debugfs file to dump the cached versions of the current SPEC_CTRL MSRs.
+>>
+> Pff, clearly I can't even read email anymore..
+>
+> We don't do this for any of the other MSRs, so why start now?
 
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+That is true since most of the MSRs are static. IOW, they don't change 
+once they are set. The current way to read the content of the MSRs is 
+via the /dev/cpu/<n>/msr files. There are user space tools to do that.
+
+SPEC_CTRL, however, can be subjected to frequent changes especially when 
+X86_FEATURE_KERNEL_IBRS is set. As a result, the current way of reading 
+MSRs from /dev/cpu/<n>/msr doesn't quite work for SPEC_CTRL as the IBRS 
+bit is always set due to the fact that the reading is done internally 
+via an IPI in kernel space. That is the main reason that I add this 
+debugfs file to get a good snapshot of the current set of cached 
+SPEC_CTRL MSR values without the need to disturb what the CPUs are 
+currently doing at that point in time.
+
+This patch is not central to the main purpose of this patch series, but 
+it does enable me to quickly verify the other patches are working 
+correctly. I can take it out if people don't think it is a good idea.
+
+Cheers,
+Longman
+
