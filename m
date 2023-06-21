@@ -2,90 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD48738A6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:06:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B939738A6E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbjFUQF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
+        id S230035AbjFUQGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231712AbjFUQFz (ORCPT
+        with ESMTP id S230097AbjFUQG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:05:55 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266C8F1;
-        Wed, 21 Jun 2023 09:05:54 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9889952ed18so564524766b.3;
-        Wed, 21 Jun 2023 09:05:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687363552; x=1689955552;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kk1BnNVlzELodZUgAlHBrILAdmGoba/tHKb54nkrU0Y=;
-        b=ZT7wQmwkKHcyXm5r53h2mKMlJalLvOwBS8thd4bw7+CD+40xH5yiW6yJ50BnU0RDK5
-         CnURfQ1rjLJwyiy4/iwk0jU4w5w2Jwrj0UiieuKiEJDFPGtELpVkORP2AA7sDtAxKf/H
-         dGi3nKBkDPzL+Uk7MHi+o1aLiFY58+ArJF7P+N88z/OJ/UlBXve2yhvAAf0L3iwY8Nir
-         zXk8pAE8C9+iP744rpPRX4V+Lqbz8TBtKJ7xluDkUUIKCRKZygmzIRw9MZbs5zsukFo7
-         foG9ohwOwUYIQA/CtiEoI73tItd+UiIunoTAr/UPilPitY617/ThXx3ahvwIeyR8/m3H
-         /Mvw==
+        Wed, 21 Jun 2023 12:06:29 -0400
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA2895;
+        Wed, 21 Jun 2023 09:06:29 -0700 (PDT)
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-25edd424306so2129885a91.1;
+        Wed, 21 Jun 2023 09:06:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687363552; x=1689955552;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kk1BnNVlzELodZUgAlHBrILAdmGoba/tHKb54nkrU0Y=;
-        b=OGa8Q+44E/5WtZ2+Nm6XY9D/7KFFHpvKRPjTCP9QvsKWrQHn0XmAMjhj+nkt9bDbNB
-         tlztUGKD0kxWcpoIPl6/bdqSxahdUskb5p0Bn/0Vjc3Ug5+fhB4KfAJUWoIyQ53rmUTC
-         Z7XHimgSDHP3sha05agsVvUlW/Tndj9efeN6yEBhrmD/bu4tM6fWqSl2oxId5WTnKKD5
-         sOfWxiMLpDNxW1arByFU7CwbSeByjQTvTF/wZcG0F8vDbdf0eW5KrLSPlYGurbxVpvCT
-         esjuaSs5p3o+lKWIZyWAWRg5adN3t18XxfvWtCe47WpXM3wtzVTdvluihZFUQ153TNbr
-         0FNQ==
-X-Gm-Message-State: AC+VfDwGKmHGvZSKQTPJoXQulMm2b02Ywbb87ET86j93fc9cv/NVir7t
-        ENxRI5qdVukvPmevVu6JbXk=
-X-Google-Smtp-Source: ACHHUZ7+dillI7PPdXk5/JfbaJxtmwtPKD3w2HLMqM7BP+d9XjsgD8q0lpGMeA79Xbrq0UxB6iWunA==
-X-Received: by 2002:a17:907:720c:b0:987:5ade:12a5 with SMTP id dr12-20020a170907720c00b009875ade12a5mr11581864ejc.26.1687363552231;
-        Wed, 21 Jun 2023 09:05:52 -0700 (PDT)
-Received: from PCBABN.skidata.net ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id y12-20020a17090614cc00b0098951bb4dc3sm2345530ejc.184.2023.06.21.09.05.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 09:05:51 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     bbara93@gmail.com, benjamin.bara@skidata.com, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        mka@chromium.org, robh+dt@kernel.org
-Subject: Re: [PATCH 1/4] usb: misc: onboard-hub: resort by VID and PID
-Date:   Wed, 21 Jun 2023 18:05:43 +0200
-Message-Id: <20230621160543.2231508-1-bbara93@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <2023062136-subgroup-aground-01e2@gregkh>
-References: <2023062136-subgroup-aground-01e2@gregkh>
+        d=1e100.net; s=20221208; t=1687363589; x=1689955589;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ANhBuY1BkJQHuvukRlCiWkcwmUgmv7RsjD/BodsFM8Y=;
+        b=aaZFt0nsdG8OG5jOJ7Ms305MMoSO9emUcEcFw/fDHSV0Zms4zL0EnoHBmy22I8eHMB
+         Sepd9JWQ5/MQeW5+uhRFZDfVi/CYCNmgzsIH1ZJuW/xnY7PKd5XiP8bH0jI+CzfzarnI
+         svKlKRd5MLwOOAI8Xoswm1wkl0diKcDPOAvTV+K27AvkPV2FuxyoIdOxweGzZ9u5WSVA
+         pSR9vAb9Zb3tPIEfCwz32I+y0lJ1AbsriyX6iZwPt0bL+FYwHanFGbcXAmDt2WwZr4kp
+         3NupUN/bESUCGFmaA0qag57ffa2xU347lVWepo0zA73j6Yfqbf/XeggfeI0H/Zb1JCjd
+         VFVg==
+X-Gm-Message-State: AC+VfDyUPCB01aQ0UJ9EbHhGEBeXhMk4j8CeZ/WHIbS3T3Do2jkF90bu
+        lttHHPNR9o7HjenSqTPtxi8=
+X-Google-Smtp-Source: ACHHUZ66gQdcOK8mtfBUmJULdBxgu+TcSFVsM+yftcG0qy83CwljhEuG38NLPdTyq/cc1tpfFubXVA==
+X-Received: by 2002:a17:90a:db15:b0:260:de07:c663 with SMTP id g21-20020a17090adb1500b00260de07c663mr3061072pjv.27.1687363588637;
+        Wed, 21 Jun 2023 09:06:28 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:9bb2:be1e:34e3:7c45? ([2620:15c:211:201:9bb2:be1e:34e3:7c45])
+        by smtp.gmail.com with ESMTPSA id g14-20020a17090a290e00b0025e9d16f95bsm3615989pjd.28.2023.06.21.09.06.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jun 2023 09:06:27 -0700 (PDT)
+Message-ID: <02a90139-a94a-ea1d-cc36-8b4b66a96bba@acm.org>
+Date:   Wed, 21 Jun 2023 09:06:24 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] scsi/sg: don't grab scsi host module reference
+Content-Language: en-US
+To:     Yu Kuai <yukuai1@huaweicloud.com>, hch@lst.de,
+        chaitanyak@nvidia.com, shinichiro.kawasaki@wdc.com,
+        dgilbert@interlog.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, yukuai3@huawei.com, axboe@kernel.dk
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com
+References: <20230621160111.1433521-1-yukuai1@huaweicloud.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230621160111.1433521-1-yukuai1@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 6/21/23 09:01, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> In order to prevent request_queue to be freed before cleaning up
+> blktrace debugfs entries, commit db59133e9279 ("scsi: sg: fix blktrace
+> debugfs entries leakage") use scsi_device_get(), however,
+> scsi_device_get() will also grab scsi module reference and scsi module
+> can't be removed.
 
-On Wed, 21 Jun 2023 at 17:59, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> This does nothing except make backports harder over time :(
->
-> And this also does nothing to help really, so it's not needed, sorry.
+I just noticed that this patch has been posted on the linux-scsi mailing 
+list. If you plan to resend this patch, please send it to Jens and Cc 
+both linux-block and linux-scsi because this patch fixes a bug in a 
+patch that only exists in Jens' tree.
 
-thanks for the feedback, I already dropped it and sent out v3[1].
+Thanks,
 
-Sorry for the inconvenience.
+Bart.
 
-br,
-Benjamin
-
-[1] https://lore.kernel.org/lkml/20230620-hx3-v3-0-2acbc03ca949@skidata.com/
