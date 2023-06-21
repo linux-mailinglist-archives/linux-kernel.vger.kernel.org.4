@@ -2,68 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E5EF738639
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A990F738647
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231547AbjFUOIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55492 "EHLO
+        id S231382AbjFUOJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbjFUOIN (ORCPT
+        with ESMTP id S231949AbjFUOIx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:08:13 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81F3818C;
-        Wed, 21 Jun 2023 07:08:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687356492; x=1718892492;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TZipVQx34qmoVG1MjtaxYWtXx0xWNWvBS+tqILr8eUs=;
-  b=GVFkoiQM0JKyM2MnvZiCAOVmrfGJtjkeKnOSiEnqfT8kl7GbluAu6pvL
-   pYaBjeSMAElIK8263/22RzvXLC2vt8RA2IqvE3r0bDFuN5ivpPu15qCr1
-   Prb9TiSkZBKtngSjIMjKQW3hkB+ZO4b5aVOFAWlLiHFhjHNplAWpRDAr6
-   YRdIhu4XCjw02/68wA/5ENVyiUROL6yUZWkT0Axz29yhBtfPsrryUHg2q
-   r/KWd7BaEnw9a6PBORIJ73BKqSLTdKKX2KKhygV9bE9RQmYNwxeleszoN
-   RvoYZC+ewQU2fMKaI2llCSByUcimj65lsQWvpZMk2pZdwBSRFRFqPbL+q
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="363603523"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="363603523"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 07:08:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="744185238"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="744185238"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 21 Jun 2023 07:08:08 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qByVC-005Vvy-1J;
-        Wed, 21 Jun 2023 17:08:06 +0300
-Date:   Wed, 21 Jun 2023 17:08:06 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     George Stark <gnstark@sberdevices.ru>
-Cc:     jic23@kernel.org, lars@metafoo.de, neil.armstrong@linaro.org,
-        khilman@baylibre.com, jbrunet@baylibre.com,
-        martin.blumenstingl@googlemail.com, nuno.sa@analog.com,
-        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        kernel@sberdevices.ru
-Subject: Re: [PATCH v1 2/3] meson saradc: add channel labels
-Message-ID: <ZJMERuXDtKi4wjR/@smile.fi.intel.com>
-References: <20230621062715.455652-1-gnstark@sberdevices.ru>
- <20230621062715.455652-3-gnstark@sberdevices.ru>
+        Wed, 21 Jun 2023 10:08:53 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6139218C;
+        Wed, 21 Jun 2023 07:08:52 -0700 (PDT)
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+        id 1qByVq-0004Ap-00; Wed, 21 Jun 2023 16:08:46 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id F1A4EC0346; Wed, 21 Jun 2023 16:08:22 +0200 (CEST)
+Date:   Wed, 21 Jun 2023 16:08:22 +0200
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Shiji Yang <yangshiji66@outlook.com>
+Cc:     linux-mips@vger.kernel.org, john@phrozen.org,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH] mips: ralink: introduce commonly used remap node function
+Message-ID: <20230621140822.GC7206@alpha.franken.de>
+References: <OSYP286MB03120BABB25900E113ED42B7BC5CA@OSYP286MB0312.JPNP286.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230621062715.455652-3-gnstark@sberdevices.ru>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <OSYP286MB03120BABB25900E113ED42B7BC5CA@OSYP286MB0312.JPNP286.PROD.OUTLOOK.COM>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,14 +42,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 09:26:09AM +0300, George Stark wrote:
-> patch adds channel attribute 'label' with channel name
+On Tue, Jun 20, 2023 at 07:44:32PM +0800, Shiji Yang wrote:
+> The ralink_of_remap() function is repeated several times on SoC specific
+> source files. They have the same structure, but just differ in compatible
+> strings. In order to make commonly use of these codes, this patch
+> introduces a newly designed mtmips_of_remap_node() function to match and
+> remap all supported system controller and memory controller nodes.
+> 
+> Build and run tested on MT7620 and MT7628.
+> 
+> Signed-off-by: Shiji Yang <yangshiji66@outlook.com>
+> ---
+>  arch/mips/ralink/common.h |  2 --
+>  arch/mips/ralink/mt7620.c |  9 ---------
+>  arch/mips/ralink/mt7621.c |  9 ---------
+>  arch/mips/ralink/of.c     | 42 ++++++++++++++++++++++++++++++++-------
+>  arch/mips/ralink/rt288x.c |  9 ---------
+>  arch/mips/ralink/rt305x.c |  9 ---------
+>  arch/mips/ralink/rt3883.c |  9 ---------
+>  7 files changed, 35 insertions(+), 54 deletions(-)
 
-Please update commit message in accordance with English grammar and
-Submitting Patches document (e.g. imperative mode should be used).
+applied to mips-next.
+
+Thomas.
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
