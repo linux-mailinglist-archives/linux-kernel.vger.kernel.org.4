@@ -2,73 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D497382B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:13:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB6BC73829E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbjFUMCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 08:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36808 "EHLO
+        id S231840AbjFUMDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 08:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbjFUMCm (ORCPT
+        with ESMTP id S231740AbjFUMDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 08:02:42 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2969170A
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:02:39 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8CxY8Te5pJkUx8AAA--.272S3;
-        Wed, 21 Jun 2023 20:02:38 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxX8_c5pJk9JMAAA--.3412S3;
-        Wed, 21 Jun 2023 20:02:36 +0800 (CST)
-Message-ID: <fedf0263-9c5d-4804-a8df-69fca10d9ca1@loongson.cn>
-Date:   Wed, 21 Jun 2023 20:02:36 +0800
+        Wed, 21 Jun 2023 08:03:05 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D71101985
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:03:01 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230621120300euoutp0149a2eb24eab9cf85025b94c2d7f6279a~qqvUbdnKZ0802708027euoutp01Z
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 12:03:00 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230621120300euoutp0149a2eb24eab9cf85025b94c2d7f6279a~qqvUbdnKZ0802708027euoutp01Z
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1687348980;
+        bh=bpZqvimNewWw3UxsMMES8m/knX462j+T+gvCBFQUHEI=;
+        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
+        b=hCmzQCtP515o5pqve4V/fquSll48inoYHyxNdHJWmobnZYmaKkqOFE+8LunDO2wbL
+         cspfIMYn2LxLgEWkcdoKE2MDjYF97hD4UQfvFZbcU3q+CA9/OvN3eAz+qdbk3m0m42
+         uUSwYmw3yWv4+nleGhnh0fIHQXT8FZENh3TlSEnQ=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230621120259eucas1p170a06c55866885d903d2b0e48e8626e2~qqvUDC2Pw1538315383eucas1p1c;
+        Wed, 21 Jun 2023 12:02:59 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 13.07.42423.3F6E2946; Wed, 21
+        Jun 2023 13:02:59 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230621120259eucas1p1f0ed07016243bc2ec48b3622e57483b9~qqvTpeLXn1536715367eucas1p1T;
+        Wed, 21 Jun 2023 12:02:59 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230621120259eusmtrp298c9aac7b5398a5cc92d1a45db848948~qqvToue1l2679326793eusmtrp2J;
+        Wed, 21 Jun 2023 12:02:59 +0000 (GMT)
+X-AuditID: cbfec7f2-a51ff7000002a5b7-ca-6492e6f326ab
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id F2.4B.10549.3F6E2946; Wed, 21
+        Jun 2023 13:02:59 +0100 (BST)
+Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230621120259eusmtip25a8e9a7a0b25d8e082a564aa74979e59~qqvTaNaeq3272732727eusmtip23;
+        Wed, 21 Jun 2023 12:02:59 +0000 (GMT)
+Received: from [106.110.32.65] (106.110.32.65) by CAMSVWEXC02.scsc.local
+        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Wed, 21 Jun 2023 13:02:57 +0100
+Message-ID: <e9604e71-bfd4-bf72-cb0b-b3dbcc492c3f@samsung.com>
+Date:   Wed, 21 Jun 2023 14:02:57 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v10 06/11] drm/etnaviv: Add driver support for the PCI
- devices
+        Thunderbird/102.11.0
+Subject: Re: [RFC 3/4] block: set mapping order for the block cache in
+ set_init_blocksize
+To:     Hannes Reinecke <hare@suse.de>, <willy@infradead.org>,
+        <david@fromorbit.com>
+CC:     <gost.dev@samsung.com>, <mcgrof@kernel.org>, <hch@lst.de>,
+        <jwong@kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
 Content-Language: en-US
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Sui Jingfeng <18949883232@163.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        etnaviv@lists.freedesktop.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20230620094716.2231414-1-18949883232@163.com>
- <20230620094716.2231414-7-18949883232@163.com>
- <7719934465d538f60d56486de91c3daaa722efc5.camel@pengutronix.de>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <7719934465d538f60d56486de91c3daaa722efc5.camel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Pankaj Raghav <p.raghav@samsung.com>
+In-Reply-To: <58279efe-141b-5d6b-b319-7bd1a0d5347d@suse.de>
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8AxX8_c5pJk9JMAAA--.3412S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWfJF1rKrW3Xw1DZr1ktrW7Jrc_yoWkWr17pF
-        45JFWYkry8ZFWjg347XFn8ZFy3K3WIgryIk34Dt3sIvws0yry8KryUKFyDCr9xJrn8GFW2
-        yr1DKry7uF4UJrXCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        tVWrXwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
-        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
-        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrV
-        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
-        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267
-        AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_
-        Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j873
-        kUUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Originating-IP: [106.110.32.65]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrKKsWRmVeSWpSXmKPExsWy7djP87qfn01KMbi/Wd1iy7F7jBZ7Fk1i
+        sli5+iiTxbUzPUwWe/aeZLG4vGsOm8WNCU8ZLX7/mMPmwOFxapGEx+YVWh6bVnWyeey+2cDm
+        sfl0tcfnTXIBbFFcNimpOZllqUX6dglcGc3v7zMXrGGpWHb3AEsD4yrmLkZODgkBE4lZfZtZ
+        uxi5OIQEVjBKzGnYzgjhfGGU6Hp8kx3C+cwosfvcAiaYltk3+5kgEssZJd70bmGCq3q8/wVU
+        y05GieUPbrGBtPAK2Em0tR4FSnBwsAioSuz45g4RFpQ4OfMJC4gtKhAt0brsPli5MJC9608z
+        K4gtIhAkcbTzFNhMZoFpQDMvXmEESTALiEvcejKfCWQmm4CWRGMnO0iYU8BaYl3zWVaIEnmJ
+        7W/nQD2qKDHp5ntWCLtW4tSWW2BHSwh0c0p8nN0E9ZqLROeR7ewQtrDEq+NboGwZif8750PV
+        VEs8vfGbGaK5hVGif+d6NpAjJIA2953JATGZBTQl1u/Shyh3lJi88BgLRAWfxI23ghCn8UlM
+        2jadeQKj6iykkJiF5LFZSD6YhTB0ASPLKkbx1NLi3PTUYsO81HK94sTc4tK8dL3k/NxNjMCU
+        dPrf8U87GOe++qh3iJGJg/EQowQHs5IIr+ymSSlCvCmJlVWpRfnxRaU5qcWHGKU5WJTEebVt
+        TyYLCaQnlqRmp6YWpBbBZJk4OKUamAqWyf58dyB7v/M/7+i8q33nfoj/SDP5qZy09JPVg3+/
+        DoTJpMirv9ti+VvAfvGW6AcfyxenHctQ+fr+bpP4frHyBXvPWj5oePr0+/Pyc+xNtXMmXuT+
+        6+V2f4amzcnoT1a5a6bNiWg/GmyhJVMx3e7N6jM7LF30prQfu7hhT0A4l23Bw3W7/N9xspVp
+        KS3jtp+9YGGrdtnev8mil1+cKv62RLp/YyePxMLFky0+Fh/PyNx/NOXJHtl7laUiX1XEF2rf
+        OnVj7seMgzs9JnP0z/hVf+h3slZVq0a5j5tA/c+Fomq3a9jKD/woPcohp3VYJFOyjiF4woKC
+        juMS3349Y2/i+NC2wLJmCsfHk7tTWNuUWIozEg21mIuKEwFIE/m6uAMAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDIsWRmVeSWpSXmKPExsVy+t/xe7qfn01KMfg2gdNiy7F7jBZ7Fk1i
+        sli5+iiTxbUzPUwWe/aeZLG4vGsOm8WNCU8ZLX7/mMPmwOFxapGEx+YVWh6bVnWyeey+2cDm
+        sfl0tcfnTXIBbFF6NkX5pSWpChn5xSW2StGGFkZ6hpYWekYmlnqGxuaxVkamSvp2NimpOZll
+        qUX6dgl6Gc3v7zMXrGGpWHb3AEsD4yrmLkZODgkBE4nZN/uZuhi5OIQEljJKfF09kx0iISOx
+        8ctVVghbWOLPtS42iKKPjBI7vt6FcnYySlz/tg1sFK+AnURb61Ggbg4OFgFViR3f3CHCghIn
+        Zz5hAbFFBaIlVn++ADZUGMje9acZzBYRCJI42nmKHWQms8A0RonlF68wQiy4wSRxsPsNG0gV
+        s4C4xK0n85lAFrAJaEk0doJdyilgLbGu+SwrRImmROv23+wQtrzE9rdzoN5UlJh08z3UN7US
+        n/8+Y5zAKDoLyX2zkGyYhWTULCSjFjCyrGIUSS0tzk3PLTbUK07MLS7NS9dLzs/dxAiM5m3H
+        fm7ewTjv1Ue9Q4xMHIyHGCU4mJVEeGU3TUoR4k1JrKxKLcqPLyrNSS0+xGgKDKOJzFKiyfnA
+        dJJXEm9oZmBqaGJmaWBqaWasJM7rWdCRKCSQnliSmp2aWpBaBNPHxMEp1cDkVO5WKNcjHzQv
+        Vc7xzRwOvt/OLlkm2rHh5259elB/5G3mjLnRnT5m4Yc6F2YYTftR1OJVs1i4hanmQPV0+9Wf
+        Zxd9ldUvcvJ+UG2/+Ibc1Ltu542sFJn2H1B7K/blzHOOoIITUn80lsznkV38yEDpa/88oakN
+        r68+PWQwYxvvzyV/RGrPn5m+ZD2fhOeii7rBJ2es5BaeVnbgYGTBYlb3y1o2674yTz25Ze7F
+        3XPCBbcqPmnx5FmzxEhLjvlenLVatvK+w+3dzL8F1sQHv4ndz1B0Pl/kV7e7aKLtrMcf/7EJ
+        H8/oC67gmKf+fMcGU/Zvnw7bei85NPHqOtk1jk3KUduiDu9P2Ddvsr7zpJk/lViKMxINtZiL
+        ihMB8JOVN28DAAA=
+X-CMS-MailID: 20230621120259eucas1p1f0ed07016243bc2ec48b3622e57483b9
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230621083828eucas1p23222cae535297f9536f12dddd485f97b
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230621083828eucas1p23222cae535297f9536f12dddd485f97b
+References: <20230621083823.1724337-1-p.raghav@samsung.com>
+        <CGME20230621083828eucas1p23222cae535297f9536f12dddd485f97b@eucas1p2.samsung.com>
+        <20230621083823.1724337-4-p.raghav@samsung.com>
+        <a25eb5ce-b71c-2a38-d8eb-f8de8b8b449e@suse.de>
+        <d275b49a-b6be-a08f-cfd8-d213eb452dd1@samsung.com>
+        <58279efe-141b-5d6b-b319-7bd1a0d5347d@suse.de>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,318 +127,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 2023/6/21 17:39, Lucas Stach wrote:
-> Am Dienstag, dem 20.06.2023 um 17:47 +0800 schrieb Sui Jingfeng:
->> From: Sui Jingfeng <suijingfeng@loongson.cn>
 >>
->> This patch adds PCI driver support on top of what we already have, take
->> the GC1000 in LS7A1000/LS2K1000 as the first instance which enjoy the PCI
->> device driver. There is only one GPU core for the GC1000 in the LS7A1000
->> and LS2K1000. Therefore, component frameworks can be avoided.
+>> Hmm, which aops are you using for the block device? If you are using the old aops, then we will be
+>> using helpers from buffer.c and mpage.c which do not support large folios. I am getting a BUG_ON
+>> when I don't use iomap based aops for the block device:
 >>
->> Cc: Lucas Stach <l.stach@pengutronix.de>
->> Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
->> Cc: Philipp Zabel <p.zabel@pengutronix.de>
->> Cc: Bjorn Helgaas <bhelgaas@google.com>
->> Cc: Daniel Vetter <daniel@ffwll.ch>
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->> ---
->>   drivers/gpu/drm/etnaviv/Kconfig           | 10 +++
->>   drivers/gpu/drm/etnaviv/Makefile          |  2 +
->>   drivers/gpu/drm/etnaviv/etnaviv_drv.c     | 13 +++-
->>   drivers/gpu/drm/etnaviv/etnaviv_drv.h     |  3 +
->>   drivers/gpu/drm/etnaviv/etnaviv_gpu.c     |  8 +--
->>   drivers/gpu/drm/etnaviv/etnaviv_gpu.h     |  6 ++
->>   drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c | 75 +++++++++++++++++++++++
->>   drivers/gpu/drm/etnaviv/etnaviv_pci_drv.h | 18 ++++++
->>   8 files changed, 128 insertions(+), 7 deletions(-)
->>   create mode 100644 drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c
->>   create mode 100644 drivers/gpu/drm/etnaviv/etnaviv_pci_drv.h
->>
->> diff --git a/drivers/gpu/drm/etnaviv/Kconfig b/drivers/gpu/drm/etnaviv/Kconfig
->> index faa7fc68b009..1b5b162efb61 100644
->> --- a/drivers/gpu/drm/etnaviv/Kconfig
->> +++ b/drivers/gpu/drm/etnaviv/Kconfig
->> @@ -15,6 +15,16 @@ config DRM_ETNAVIV
->>   	help
->>   	  DRM driver for Vivante GPUs.
->>   
->> +config DRM_ETNAVIV_PCI_DRIVER
->> +	bool "enable ETNAVIV PCI driver support"
->> +	depends on DRM_ETNAVIV
->> +	depends on PCI
->> +	default y
-> Drop the default y. Lots of existing systems with Vivante GPUs on a
-> platform bus also have a PCI bus, so this will activate the added code
-> paths in a lot of configurations that don't need it.
->
-This is OK,
->> +	help
->> +	  Compile in support for PCI GPUs of Vivante.
-> Compile in support for Vivante GPUs attached via PCI(e).
-OK, acceptable.
->
->> +	  For example, the GC1000 in LS7A1000 and LS2K1000.
-> Not sure if the example is that helpful. Maybe drop this.
-OK.
->
->> +	  Say Y if you have such a hardware.
->> +
->>   config DRM_ETNAVIV_THERMAL
->>   	bool "enable ETNAVIV thermal throttling"
->>   	depends on DRM_ETNAVIV
->> diff --git a/drivers/gpu/drm/etnaviv/Makefile b/drivers/gpu/drm/etnaviv/Makefile
->> index 46e5ffad69a6..6829e1ebf2db 100644
->> --- a/drivers/gpu/drm/etnaviv/Makefile
->> +++ b/drivers/gpu/drm/etnaviv/Makefile
->> @@ -16,4 +16,6 @@ etnaviv-y := \
->>   	etnaviv_perfmon.o \
->>   	etnaviv_sched.o
->>   
->> +etnaviv-$(CONFIG_DRM_ETNAVIV_PCI_DRIVER) += etnaviv_pci_drv.o
->> +
->>   obj-$(CONFIG_DRM_ETNAVIV)	+= etnaviv.o
->> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
->> index 93ca240cd4c0..0a365e96d371 100644
->> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
->> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
->> @@ -21,6 +21,7 @@
->>   #include "etnaviv_gpu.h"
->>   #include "etnaviv_gem.h"
->>   #include "etnaviv_mmu.h"
->> +#include "etnaviv_pci_drv.h"
->>   #include "etnaviv_perfmon.h"
->>   
->>   /*
->> @@ -538,7 +539,7 @@ static const struct drm_driver etnaviv_drm_driver = {
->>   
->>   static struct etnaviv_drm_private *etna_private_ptr;
->>   
->> -static int etnaviv_drm_bind(struct device *dev, bool component)
->> +int etnaviv_drm_bind(struct device *dev, bool component)
->>   {
->>   	struct etnaviv_drm_private *priv;
->>   	struct drm_device *drm;
->> @@ -588,7 +589,7 @@ static int etnaviv_drm_bind(struct device *dev, bool component)
->>   	return ret;
->>   }
->>   
->> -static void etnaviv_drm_unbind(struct device *dev, bool component)
->> +void etnaviv_drm_unbind(struct device *dev, bool component)
->>   {
->>   	struct etnaviv_drm_private *priv = etna_private_ptr;
->>   	struct drm_device *drm = priv->drm;
->> @@ -746,6 +747,10 @@ static int __init etnaviv_init(void)
->>   	if (ret != 0)
->>   		goto unregister_gpu_driver;
->>   
->> +	ret = etnaviv_register_pci_driver();
->> +	if (ret != 0)
->> +		goto unregister_platform_driver;
->> +
->>   	/*
->>   	 * If the DT contains at least one available GPU device, instantiate
->>   	 * the DRM platform device.
->> @@ -763,7 +768,7 @@ static int __init etnaviv_init(void)
->>   		break;
->>   	}
->>   
->> -	return 0;
->> +	return ret;
->>   
->>   unregister_platform_driver:
->>   	platform_driver_unregister(&etnaviv_platform_driver);
->> @@ -778,6 +783,8 @@ static void __exit etnaviv_exit(void)
->>   	etnaviv_destroy_platform_device(&etnaviv_platform_device);
->>   	platform_driver_unregister(&etnaviv_platform_driver);
->>   	platform_driver_unregister(&etnaviv_gpu_driver);
->> +
->> +	etnaviv_unregister_pci_driver();
->>   }
->>   module_exit(etnaviv_exit);
->>   
->> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.h b/drivers/gpu/drm/etnaviv/etnaviv_drv.h
->> index e58f82e698de..9cd72948cfad 100644
->> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.h
->> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.h
->> @@ -83,6 +83,9 @@ bool etnaviv_cmd_validate_one(struct etnaviv_gpu *gpu,
->>   	u32 *stream, unsigned int size,
->>   	struct drm_etnaviv_gem_submit_reloc *relocs, unsigned int reloc_size);
->>   
->> +int etnaviv_drm_bind(struct device *dev, bool component);
->> +void etnaviv_drm_unbind(struct device *dev, bool component);
->> +
->>   #ifdef CONFIG_DEBUG_FS
->>   void etnaviv_gem_describe_objects(struct etnaviv_drm_private *priv,
->>   	struct seq_file *m);
->> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
->> index 059be8c89c5a..d6a21e97feb1 100644
->> --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
->> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
->> @@ -1866,8 +1866,8 @@ static int etnaviv_gpu_register_irq(struct etnaviv_gpu *gpu, int irq)
->>   
->>   /* platform independent */
->>   
->> -static int etnaviv_gpu_driver_create(struct device *dev, void __iomem *mmio,
->> -				     int irq, bool component, bool has_clk)
->> +int etnaviv_gpu_driver_create(struct device *dev, void __iomem *mmio,
->> +			      int irq, bool component, bool has_clk)
->>   {
->>   	struct etnaviv_gpu *gpu;
->>   	int err;
->> @@ -1916,7 +1916,7 @@ static int etnaviv_gpu_driver_create(struct device *dev, void __iomem *mmio,
->>   	return 0;
->>   }
->>   
->> -static void etnaviv_gpu_driver_destroy(struct device *dev, bool component)
->> +void etnaviv_gpu_driver_destroy(struct device *dev, bool component)
->>   {
->>   	if (component)
->>   		component_del(dev, &gpu_ops);
->> @@ -1967,7 +1967,7 @@ static int etnaviv_gpu_rpm_resume(struct device *dev)
->>   	return 0;
->>   }
->>   
->> -static const struct dev_pm_ops etnaviv_gpu_pm_ops = {
->> +const struct dev_pm_ops etnaviv_gpu_pm_ops = {
->>   	RUNTIME_PM_OPS(etnaviv_gpu_rpm_suspend, etnaviv_gpu_rpm_resume, NULL)
->>   };
->>   
->> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
->> index 1ec829a649b5..8d9833996ed7 100644
->> --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
->> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
->> @@ -209,6 +209,12 @@ void etnaviv_gpu_start_fe(struct etnaviv_gpu *gpu, u32 address, u16 prefetch);
->>   int etnaviv_gpu_bind(struct device *dev, struct device *master, void *data);
->>   void etnaviv_gpu_unbind(struct device *dev, struct device *master, void *data);
->>   
->> +int etnaviv_gpu_driver_create(struct device *dev, void __iomem *mmio,
->> +			      int irq, bool component, bool has_clk);
->> +
->> +void etnaviv_gpu_driver_destroy(struct device *dev, bool component);
->> +
->>   extern struct platform_driver etnaviv_gpu_driver;
->> +extern const struct dev_pm_ops etnaviv_gpu_pm_ops;
->>   
->>   #endif /* __ETNAVIV_GPU_H__ */
->> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c
->> new file mode 100644
->> index 000000000000..78e44a28d30c
->> --- /dev/null
->> +++ b/drivers/gpu/drm/etnaviv/etnaviv_pci_drv.c
->> @@ -0,0 +1,75 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +
->> +#include <linux/pci.h>
->> +
->> +#include "etnaviv_drv.h"
->> +#include "etnaviv_gpu.h"
->> +#include "etnaviv_pci_drv.h"
->> +
->> +static int etnaviv_pci_probe(struct pci_dev *pdev,
->> +			     const struct pci_device_id *ent)
->> +{
->> +	struct device *dev = &pdev->dev;
->> +	void __iomem *mmio;
->> +	int ret;
->> +
->> +	ret = pcim_enable_device(pdev);
->> +	if (ret) {
->> +		dev_err(dev, "failed to enable\n");
->> +		return ret;
->> +	}
->> +
->> +	pci_set_master(pdev);
->> +
->> +	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
-> Is your device really restricted to 32 bit dma addressing?
-Yes, if I don't add this, bugs may happens.
->> +	if (ret)
->> +		return ret;
->> +
->> +	/* Map registers, assume the PCI bar 0 contain the registers */
->> +	mmio = pcim_iomap(pdev, 0, 0);
->> +	if (IS_ERR(mmio))
->> +		return PTR_ERR(mmio);
->> +
->> +	ret = etnaviv_gpu_driver_create(dev, mmio, pdev->irq, false, false);
->> +	if (ret)
->> +		return ret;
->> +
->> +	return etnaviv_drm_bind(dev, false);
->> +}
->> +
->> +static void etnaviv_pci_remove(struct pci_dev *pdev)
->> +{
->> +	struct device *dev = &pdev->dev;
->> +
->> +	etnaviv_drm_unbind(dev, false);
->> +
->> +	etnaviv_gpu_driver_destroy(dev, false);
->> +
->> +	pci_clear_master(pdev);
->> +}
->> +
->> +static const struct pci_device_id etnaviv_pci_id_lists[] = {
->> +	{PCI_VDEVICE(LOONGSON, 0x7a15)},
->> +	{PCI_VDEVICE(LOONGSON, 0x7a05)},
->> +	{ }
->> +};
->> +
->> +static struct pci_driver etnaviv_pci_driver = {
->> +	.name = "etnaviv",
->> +	.id_table = etnaviv_pci_id_lists,
->> +	.probe = etnaviv_pci_probe,
->> +	.remove = etnaviv_pci_remove,
->> +	.driver.pm = pm_ptr(&etnaviv_gpu_pm_ops),
->> +};
->> +
->> +int etnaviv_register_pci_driver(void)
->> +{
->> +	return pci_register_driver(&etnaviv_pci_driver);
->> +}
->> +
->> +void etnaviv_unregister_pci_driver(void)
->> +{
->> +	pci_unregister_driver(&etnaviv_pci_driver);
->> +}
->> +
->> +MODULE_DEVICE_TABLE(pci, etnaviv_pci_id_lists);
-> Hm, I think the amount of code added here is small enough to go
-> directly into etnaviv_drv.c behind a
-> #ifdef CONFIG_DRM_ETNAVIV_PCI_DRIVER, which would allow to keep the
-> referenced functions and pm ops static.
-OK, this is acceptable.
-> Regards,
-> Lucas
->
->> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_pci_drv.h b/drivers/gpu/drm/etnaviv/etnaviv_pci_drv.h
->> new file mode 100644
->> index 000000000000..1db559ee5e9b
->> --- /dev/null
->> +++ b/drivers/gpu/drm/etnaviv/etnaviv_pci_drv.h
->> @@ -0,0 +1,18 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +
->> +#ifndef __ETNAVIV_PCI_DRV_H__
->> +#define __ETNAVIV_PCI_DRV_H__
->> +
->> +#ifdef CONFIG_DRM_ETNAVIV_PCI_DRIVER
->> +
->> +int etnaviv_register_pci_driver(void);
->> +void etnaviv_unregister_pci_driver(void);
->> +
->> +#else
->> +
->> +static inline int etnaviv_register_pci_driver(void) { return 0; }
->> +static inline void etnaviv_unregister_pci_driver(void) { }
->> +
->> +#endif
->> +
->> +#endif
+> I know. I haven't said that mpage.c / buffer.c support large folios _now_. All I'm saying is that I
+> have a patchset enabling it to support large folios :-)
+> 
 
--- 
-Jingfeng
+Ah ok! I thought we are not going that route based on the discussion we had in LSF.
 
+> Cheers,
+> 
+> Hannes
+> 
