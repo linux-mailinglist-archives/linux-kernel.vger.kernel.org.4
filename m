@@ -2,138 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A37E7386FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08F407386FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:29:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjFUO2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
+        id S229472AbjFUO33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232955AbjFUO2J (ORCPT
+        with ESMTP id S232851AbjFUO3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:28:09 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556851FF2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:27:47 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so3686a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:27:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687357666; x=1689949666;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Nx/8tkwi/QCBsZ8gmyeG8Rkuz2KMvUk7ydKIx+Um+wA=;
-        b=Zx7ZT6CDGiK06H867vY+sNm4wafZK+Kvmb8BqCHCD+RgK/A8TOsKrYm88ZeQ2SECqv
-         S7fVo2jMZAWlKlfibVSF4+NdJIuFTIa0/hV9eZbzpGNs8NdeOq6Gf/hK1j41+VqJkX7f
-         0MdtnvEDcTvQ1qlxcyubtHy52SpsQWtzGcgMHO/beMlI2JAgE/lBuWgZO2ZNHA+12UAk
-         6xkAO2o6lOr6d4DjCP484PkPelet7gw71VpFO6zM1RaeJUU4GliVx6GQS/0Q1anV9/b0
-         1vlDsaqBmqIlvqPZnEthL85A7DkyTOobm6olApyMhJG0hLtOI5m8PH9wari0gbV3oEGX
-         O3+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687357666; x=1689949666;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Nx/8tkwi/QCBsZ8gmyeG8Rkuz2KMvUk7ydKIx+Um+wA=;
-        b=SqsKBGuP+76kapEesGiUJ8HzHmL6RytEObyX0aBjzvFkKawbR6ik84yul3Ss8OZa4+
-         OcQTBe7jnLQKv3nMvYecaelfOnxdRwM11vbkHuL1XJOTtk7t+n2YG8EsR3/LNCNSJvDr
-         9QTyYwasmw+GGLOnQ+JflOmDSwbgRheUGGPRli/5YwJTE7fEGiMiiXbe1LlXQwEd7gGo
-         pCJFhsffntsCMfvWSOCcuN9dE5cPID806AU2U5pPM+Mqya5vzdrIeDh7FO5EdqmKNRba
-         AOeBnREcEQqlt97BvM4AEoJItYZgWkbqiTVsaUZxK/xEv6tYrpgB3I7PpN9ry6/vynnc
-         kHYA==
-X-Gm-Message-State: AC+VfDzbUl+f4NkYg/D/EavqIpumcI0IK9YkoHsqGWJ95v+kVnDm7ffc
-        8opS8uNBOQUlmxuGGJ1AltBZcHUKmB0Xiz3EMjNM1Q==
-X-Google-Smtp-Source: ACHHUZ5b784EIfEpEvB4OmcZ87YYr3Ia27+LLB97tML2JkkHkDJzLWdV+C3hXWpgda3VhYBy/K3VCv+xK2nMSkOkpVY=
-X-Received: by 2002:a50:d79a:0:b0:506:b280:4993 with SMTP id
- w26-20020a50d79a000000b00506b2804993mr20647edi.2.1687357665556; Wed, 21 Jun
- 2023 07:27:45 -0700 (PDT)
+        Wed, 21 Jun 2023 10:29:12 -0400
+X-Greylist: delayed 9303 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 21 Jun 2023 07:28:46 PDT
+Received: from smtpng1.i.mail.ru (smtpng1.i.mail.ru [94.100.181.251])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1D91FFC
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:28:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru; s=mail4;
+        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=nJT5fzG4nA8tzrxdBQpWZ2fiA00ghY68jXq6u2LA1uY=;
+        t=1687357726;x=1687447726; 
+        b=kjXZV41ZmG6z2/2coD4iTqB7zqdFiZfSuY7TAL8c71/8kb11dTauq1wqqLjxEJxWUnZEsJVZt4Dtj1UxM+44tE02waf1VT5MICPAW8xlZ2nD/D/MBiGtIDLL6RGBroWJL+KTRwz37i/fqjamZWduG9BQNkH2zr9KyjHDArFYQ5mTgEv+bmtrdRSC0bQeUfeNeu3ThY8yeQfZgxRiHp+dLu2Ojgpw9D8FLyJnF1AVnIF1eIuUgmu124maPPQ1Bbju+sdsSiFI4ZAhMW/tS9bx6Z+CBA4JDOBJqyz0sn8LU4zwd12ul8MzDwnuqX9E+BFs2C0kJvjw82CBfpzJn9NUIA==;
+Received: by smtpng1.m.smailru.net with esmtpa (envelope-from <fido_max@inbox.ru>)
+        id 1qByp8-0007GW-JY; Wed, 21 Jun 2023 17:28:43 +0300
+Message-ID: <0ada8334-4006-438f-8461-5c4c8e13f65d@inbox.ru>
+Date:   Wed, 21 Jun 2023 17:28:41 +0300
 MIME-Version: 1.0
-References: <20230621072404.2918101-1-usama.anjum@collabora.com>
- <20230621072404.2918101-3-usama.anjum@collabora.com> <CABb0KFGhSLAHAsa3nk-pyMe2j9MU4u3xkQR21HOoS65ZB2dKsw@mail.gmail.com>
- <de16602a-7ed9-9c03-30d9-5edccc48d2f0@collabora.com>
-In-Reply-To: <de16602a-7ed9-9c03-30d9-5edccc48d2f0@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Wed, 21 Jun 2023 16:27:34 +0200
-Message-ID: <CABb0KFFsHEX2cKzQj-t9vx=q4FjmObNu930ogQMBn0L6=3ph=w@mail.gmail.com>
-Subject: Re: [PATCH v20 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/1] ASoC: codecs: max98090: Allow dsp_a mode
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     alsa-devel@alsa-project.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        linux-kernel@vger.kernel.org
+References: <20230621115328.156457-1-fido_max@inbox.ru>
+ <3805dc65-113f-453a-90a9-2ae6204004ba@sirena.org.uk>
+ <e6be75f6-054f-6c3b-00b4-a5e112bcefc3@inbox.ru>
+ <b763d08e-f751-480c-96b6-339a53856768@sirena.org.uk>
+ <ed9606a4-4be6-7403-6e32-1c045ac0bdf6@inbox.ru>
+ <adbe1b82-9478-4462-ace9-968723a6ce3f@sirena.org.uk>
+From:   Maxim Kochetkov <fido_max@inbox.ru>
+In-Reply-To: <adbe1b82-9478-4462-ace9-968723a6ce3f@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Authentication-Results: smtpng1.m.smailru.net; auth=pass smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
+X-Mailru-Src: smtp
+X-4EC0790: 10
+X-7564579A: EEAE043A70213CC8
+X-77F55803: 4F1203BC0FB41BD9A4B2B2E818EC31CFD224C07E85EA9859E11F1DAAA4FD1EAA182A05F5380850404C228DA9ACA6FE2708451A61ECE1571BEDF2AA667862DC52E9EB151CE0806E4B8F2E3C5D047B6D81
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE70FFC2100EB7B6895EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637F88016AB904663428638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D87F474E91384C5365BA2C152A92F88B606F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE78C592797616C97AB9FA2833FD35BB23D9E625A9149C048EE9ECD01F8117BC8BEA471835C12D1D9774AD6D5ED66289B52BA9C0B312567BB23117882F4460429728776938767073520C65AC60A1F0286FEBDFBBEFFF4125B51D2E47CDBA5A96583BA9C0B312567BB231DD303D21008E29813377AFFFEAFD269A417C69337E82CC2E827F84554CEF50127C277FBC8AE2E8BA83251EDC214901ED5E8D9A59859A8B6A1DCCEB63E2F10FB089D37D7C0E48F6C5571747095F342E88FB05168BE4CE3AF
+X-C1DE0DAB: 0D63561A33F958A54D8796D2E02DF57BC10FEB1C60DA543E61549223A00EC5C2F87CCE6106E1FC07E67D4AC08A07B9B06A1CB4668A9CA5FACB5012B2E24CD356
+X-C8649E89: 1C3962B70DF3F0ADBF74143AD284FC7177DD89D51EBB7742424CF958EAFF5D571004E42C50DC4CA955A7F0CF078B5EC49A30900B95165D3498EF79680EE3725C32F8C855525AC30190FB61CE7D78FFBFC2D122F4F6CBFAB140530F5F09079E051D7E09C32AA3244C92213DC52697EA0AFC58ACFEE110F6079CA7333006C390A040799AC538031D0DB6C6411D86935C892AB2189BCAD71E73D640157F23F2FFE137E69C174A41D00C
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojw7uTMtz3/lyoCY6f4H0wYA==
+X-Mailru-Sender: 689FA8AB762F73930F533AC2B33E986B7BE4F4AB9B547BE90041AC4B0D015DA898CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
+X-Mras: Ok
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 at 16:16, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> On 6/21/23 6:42=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Wed, 21 Jun 2023 at 09:24, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-> > [...]
-> >> +static int pagemap_scan_test_walk(unsigned long start, unsigned long =
-end,
-> >> +                                 struct mm_walk *walk)
-> >> +{
-> >> +       struct pagemap_scan_private *p =3D walk->private;
-> >> +       struct vm_area_struct *vma =3D walk->vma;
-> >> +
-> >> +       if ((p->flags & PM_SCAN_REQUIRE_UFFD) && (!userfaultfd_wp_asyn=
-c(vma) ||
-> >> +           !userfaultfd_wp_use_markers(vma)))
-> >> +               return -EPERM;
-> >> +
-> >> +       if (vma->vm_flags & VM_PFNMAP)
-> >> +               return 1;
-> >> +
-> >> +       return 0;
-> >> +}
-> >
-> > This could actually short-circuit all vma flags (e.g. IS_FILE): if
-> > (required_mask & IS_FILE && vma is not file-backed) return 0;
-> Sorry, unable to understand you. Should we do something here?
 
-It seems I had an earlier version of the patch in my mind, where
-PAGE_IS_FILE was based on vma type. Sorry for the noise.
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+On 21.06.2023 17:01, Mark Brown wrote:
+> On Wed, Jun 21, 2023 at 04:55:18PM +0300, Maxim Kochetkov wrote:
+>> On 21.06.2023 16:18, Mark Brown wrote:
+> 
+>>> I'm saying there should be some interlock between these two settings, if
+>>> nothing else setting DSP A mode should force TDM mode with automatically
+>>> configured slot sizes.
+> 
+>> At this time there is no any interlock for TDM mode in MAX98090 driver. We
+> 
+> Yes, that's the problem I am identifying.  The driver allows TDM mode to
+> be configured independently of the DAI format but the two are related.
 
->
-> >
-> > Best Regards
-> > Micha=C5=82 Miros=C5=82aw
->
-> --
-> BR,
-> Muhammad Usama Anjum
+But DSP_A mode is just bit/frame format. It is just compatible with TDM.
+
+> 
+>> can specify dai-tdm-slot-* properties in DT and .set_tdm_slot() will be
+>> called to setup TDM mode. And SND_SOC_DAIFMT cannot affect it. I checked
+>> other codecs drivers: most of them performs TDM setup this way. So why do we
+>> need such interlock right now?
+> 
+> A lot of devices support TDM modes with other DAI formats, or allow the
+> mode that is required for TDM to be configured even without doing TDM
+> setup.  Some always configure TDM like I'm suggesting, with the explicit
+> TDM configuration just being an override.  Some are just buggy and
+> nobody noticed.  The issue is that the driver will claim to have
+> configured DSP A mode but actually done something else unless the user
+> also configures TDM.
+
+Yep. But we have to specify TDM parameters (slot masks, slot width, etc) 
+any way. Because there is no default TDM configuration like I2S and so. 
+And pure DSP_A/B mode just have no sense.
+
+Anyway. What do you suggest? Should I perform some refactoring for the 
+driver? Should I move M98090_REG_TDM_FORMAT/M98090_REG_TDM_CONTROL 
+registers setup to the max98090_dai_set_fmt()?
