@@ -2,140 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B32D738699
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:17:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 259B67386A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232658AbjFUOQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34858 "EHLO
+        id S232770AbjFUOS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232560AbjFUOQ4 (ORCPT
+        with ESMTP id S232694AbjFUOS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:16:56 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E745F94;
-        Wed, 21 Jun 2023 07:16:54 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f8735ac3e3so4832233e87.2;
-        Wed, 21 Jun 2023 07:16:54 -0700 (PDT)
+        Wed, 21 Jun 2023 10:18:56 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D17F594
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:18:54 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-668709767b1so2677515b3a.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:18:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687357013; x=1689949013;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3LR4PDkdrWuA9l6EMLBodrJpcuDoMtm6x2sjEnKK0/g=;
-        b=gNpimUkP1cs4UTNo1wIvH1qZNiTeD/bZfYbPdos3JSpGi6pVBiYbcGA8IB9dm0Zr73
-         XcicJY5BcOs3K4ePaCTtc42IxwXTCnyTzWFyBLHZFwD3RKnBJvSEwRz3g9ey0LiRo2qU
-         KlyUVg8PXt1UiEuzPkP+eReAHyzvSV32fG1wgveLWYh3klx4OA6Q5UzqPaNxldQjFtET
-         gkkcM1JJjBDJAKG6WJOz2moSX2ZpxnSsuOA7l/NaqMwhABK9HcdpKZEDOgIqHYvaO1b9
-         3TjKKXBX8C3IurDigaqSNqETH+lGbcHDmz0nypKR7VtCjgCZHW0/9vaqvGfHWbL9oxao
-         oMBQ==
+        d=chromium.org; s=google; t=1687357134; x=1689949134;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hMej/UrvmIg2gizD/pJRTNoHe0G4Jhk/5Y3L9fVhlFc=;
+        b=OQYJ+zaY8pSr/jktybZtT0htfEhNu33853WltavdBCYxLKB2+ifS2Uh627kC/aFW/n
+         QnP90SKAdMT++R2lYiVKL9E1ZVRZSsE0CMFSrCoMKTqwn7UTIs1pE8OzrHpwbIbfxkti
+         EGIvco8phMQTAz04CGS0rg1smftSkZF2Rypxk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687357013; x=1689949013;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3LR4PDkdrWuA9l6EMLBodrJpcuDoMtm6x2sjEnKK0/g=;
-        b=InbLtiMv+cqObhgMmCiPsMdCKL8V61yfdTOJoWyi+0m6wkI5eJRmw0hwSuk0LP6x+W
-         zSow9r6NXnijRPqgYkUYbpmifXmVWsNilSjfqeNC/Tm1nbc7gn2+LF2l/61b3XrzENbq
-         cIhXadJuTv8uZ4u7DbnslEvH1BKQptW89rt6hQEk1jTeVTGQSAD2upoM1ShlAXXeAIhf
-         NczKj0g0gO0YyNiDbZO1udVSijBnTXfxy5YSDY2ZXcOPnzTdc0Erf6PvrlylGbqUSjZl
-         cfIKCouNgHxDMOwdptq9K4zsVb6vBdSS2/2DoDvvypv+35OzM+rpMpCEiQrsjLMBlXVK
-         Ko1A==
-X-Gm-Message-State: AC+VfDxZzdyM3oqRpkeKceJ37/EfqBXLqnpvPKTKhf0cZLtuppOn6034
-        X4nsVFeDKP0/F+DWcF8Njxxje9LnB5wv07fNPAFI54DkeO+tTC8b
-X-Google-Smtp-Source: ACHHUZ6EsUy2gEekvKGVwx2OrwqXQoMyqztFrXefrGmHMyoPNN6lvKi5cGJPxdCBDpK0pgPB6fvfY/HzgL7K7au/tS8=
-X-Received: by 2002:a05:651c:1048:b0:2b5:828c:bfc7 with SMTP id
- x8-20020a05651c104800b002b5828cbfc7mr1616891ljm.19.1687357012701; Wed, 21 Jun
- 2023 07:16:52 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687357134; x=1689949134;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hMej/UrvmIg2gizD/pJRTNoHe0G4Jhk/5Y3L9fVhlFc=;
+        b=KQ/ixr8xzeirQwNgQU9Uu3ltM52YBT51DiuL7hJ5JJGxoJvrWclKMWHbbppb+pQkKx
+         KDKfpRWiXziD/MXWzzABovwITRtjHE9vB8GEAqvXVfMqLi+TUZAD3vw4qyRDK14RNT+Y
+         oTTGlnxw9BqHtnFzySj92mEa51cqYy2iFbpUvf3PTlHih5C+vrUdkz56wSVnsRzdfT1K
+         qqHPeF9Zw0hNLnrlDUH3m8TBRxN3ZvtFD9/2CfAmEKX1sB9ZpJPAYqmpSnJWXyYDnwpf
+         owxWTCd5VTgS3zaVHfGLMdQ6AJAot4NDdqNT6TGwXyhhDhw7h+yuNH4OcD1lSdjY99Te
+         5ylQ==
+X-Gm-Message-State: AC+VfDxADNCI+iAQUtn1vWiA3L2yt7jUBaR7RzgAcZz0azTPTo8KFHBN
+        BByOsoAk8ECRytAAryQrkxVc90LyQADjMObQmqE=
+X-Google-Smtp-Source: ACHHUZ5xG8hArk7RVBqPbdwEYsgopeyJyEV6AuYElV6nBVR81Z9VIWOuhYsMkzXmJkXcpC7njcrEVg==
+X-Received: by 2002:a05:6a20:7da1:b0:123:9582:e9fb with SMTP id v33-20020a056a207da100b001239582e9fbmr209436pzj.50.1687357134314;
+        Wed, 21 Jun 2023 07:18:54 -0700 (PDT)
+Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
+        by smtp.gmail.com with ESMTPSA id x17-20020a056a00271100b0063f1a1e3003sm2980473pfv.166.2023.06.21.07.18.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 07:18:53 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 23:18:50 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Alexey Romanov <AVRomanov@sberdevices.ru>,
+        Minchan Kim <minchan@kernel.org>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Subject: Re: [PATCH v1 1/2] zsmalloc: add allocated objects counter for
+ subpage
+Message-ID: <20230621141850.GE2934656@google.com>
+References: <20230619143506.45253-1-avromanov@sberdevices.ru>
+ <20230619143506.45253-2-avromanov@sberdevices.ru>
+ <20230620103629.GA42985@google.com>
+ <20230620111635.gztldehfzvuzkdnj@cab-wsm-0029881>
+ <20230621131716.GC2934656@google.com>
+ <20230621134130.tm2oucg5eskelwzr@cab-wsm-0029881>
+ <20230621135518.GD2934656@google.com>
+ <20230621135938.outx6qezuholc3hy@cab-wsm-0029881>
 MIME-Version: 1.0
-References: <CA+G9fYuifLivwhCh33kedtpU=6zUpTQ_uSkESyzdRKYp8WbTFQ@mail.gmail.com>
- <ZJLzsWsIPD57pDgc@FVFF77S0Q05N> <CA+G9fYvwriD8X+kmDx35PavSv-youSUmYTuYTfQ4oBWnZzVRUQ@mail.gmail.com>
-In-Reply-To: <CA+G9fYvwriD8X+kmDx35PavSv-youSUmYTuYTfQ4oBWnZzVRUQ@mail.gmail.com>
-From:   Puranjay Mohan <puranjay12@gmail.com>
-Date:   Wed, 21 Jun 2023 16:16:41 +0200
-Message-ID: <CANk7y0imD3tK1Jox_V_f1vfzFi2tPhUzGOA_mLLkYy-VDHdncg@mail.gmail.com>
-Subject: Re: next: Rpi4: Unexpected kernel BRK exception at EL1
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Song Liu <song@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-rpi-kernel@lists.infradead.org,
-        Netdev <netdev@vger.kernel.org>, lkft-triage@lists.linaro.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        bpf <bpf@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621135938.outx6qezuholc3hy@cab-wsm-0029881>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On (23/06/21 13:59), Alexey Romanov wrote:
+> On Wed, Jun 21, 2023 at 10:55:18PM +0900, Sergey Senozhatsky wrote:
+> > On (23/06/21 13:41), Alexey Romanov wrote:
+> > [..]
+> > > > +static bool zspage_empty(struct zspage *zspage)
+> > > > +{
+> > > > +	return get_zspage_inuse(zspage) == 0;
+> > > > +}
+> > > > +
+> > > >  /**
+> > > >   * zs_lookup_class_index() - Returns index of the zsmalloc &size_class
+> > > >   * that hold objects of the provided size.
+> > > > @@ -1787,6 +1792,10 @@ static void migrate_zspage(struct zs_pool *pool, struct size_class *class,
+> > > >  		obj_idx++;
+> > > >  		record_obj(handle, free_obj);
+> > > >  		obj_free(class->size, used_obj, NULL);
+> > > > +
+> > > > +		/* Stop if there are no more objects to migrate */
+> > > > +		if (zspage_empty(get_zspage(s_page)))
+> > > > +			break;
+> > > >  	}
+> > > 
+> > > Yes it seems my version is not as good as I thought. Looks bad for an
+> > > architecturally dependent PAGE_SIZE. [..]
+> > 
+> > Well, we are looking for a solution that is both reasonable (perf wise)
+> > and is maintainable.
+> > 
+> > > I can implement this option. I'll test this and send patch this week.
+> > 
+> > Either that or, if Suggested-by: Alexey Romanov <AVRomanov@sberdevices.ru>
+> > is good enough for you, then I can send a series tonight or tomorrow (after
+> > some testing). I have two more patches on top of that one.
+> 
+> Yeah, Suggested-by is OK. Let's send a patch. Thank you.
 
-On Wed, Jun 21, 2023 at 3:39=E2=80=AFPM Naresh Kamboju
-<naresh.kamboju@linaro.org> wrote:
->
-> On Wed, 21 Jun 2023 at 18:27, Mark Rutland <mark.rutland@arm.com> wrote:
-> >
-> > On Wed, Jun 21, 2023 at 06:06:51PM +0530, Naresh Kamboju wrote:
-> > > Following boot warnings and crashes noticed on arm64 Rpi4 device runn=
-ing
-> > > Linux next-20230621 kernel.
-> > >
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > >
-> > > boot log:
-> > >
-> > > [   22.331748] Kernel text patching generated an invalid instruction
-> > > at 0xffff8000835d6580!
-> > > [   22.340579] Unexpected kernel BRK exception at EL1
-> > > [   22.346141] Internal error: BRK handler: 00000000f2000100 [#1] PRE=
-EMPT SMP
-> >
-> > This indicates execution of AARCH64_BREAK_FAULT.
->
-> I see kernel panic with kselftest merge configs on Juno-r2 and Rpi4.
+Got it.
 
-Is there a way to reproduce this setup on Qemu?
-
-I am able to build the linux-next kernel with the config given below.
-But the bug doesn't reproduce in Qemu with debian rootfs.
-
-I guess I would need the Rootfs that is being used here to reproduce it.
-Can you point me to the rootfs for this?
-
-Thanks,
-Puranjay
-
-> metadata:
->   git_ref: master
->   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
->   git_sha: 15e71592dbae49a674429c618a10401d7f992ac3
->   git_describe: next-20230621
->   kernel_version: 6.4.0-rc7
->   kernel-config:
->     https://storage.tuxsuite.com/public/linaro/lkft/builds/2RVAA4lj35ia3Y=
-DkqaoV6ztyqdW/config
->   artifact-location:
->     https://storage.tuxsuite.com/public/linaro/lkft/builds/2RVAA4lj35ia3Y=
-DkqaoV6ztyqdW/
->   toolchain: gcc-11
->   build_name: gcc-11-lkftconfig-kselftest
->
->
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+Let's hear from Minchan first, just to make sure that Minchan is OK
+with that.
