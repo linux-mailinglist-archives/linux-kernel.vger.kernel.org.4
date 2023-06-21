@@ -2,106 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DADF738570
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:39:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B9C9738579
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232535AbjFUNj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36868 "EHLO
+        id S232615AbjFUNkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232654AbjFUNj1 (ORCPT
+        with ESMTP id S229908AbjFUNkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:39:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C298419AC
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:39:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5127B614E9
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 13:39:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACF29C433C0;
-        Wed, 21 Jun 2023 13:39:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687354764;
-        bh=cPsPjRKWcEmtzMQaG/waG+l05hgrMv31+72e1daYl9M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=elAsHbJhVVL5byp6B61wcncTPmAifiqJYTATP71ljhJRJ772RaHrY/aysK1dWm1eQ
-         wbWXf+Eg2zV58tzr5jHEQ/fNPLZFpmzc0Jn1JBj+HsB5bKArHRvvNhunaVGk50PE+1
-         LSftbspqLEjjDpd2Suh3Lk3NFPWCOsZ/AMpkX/XaMH4MSdKNP4gKjPD78YNra37bPs
-         VEWIxAWCXkHd62mLIDsfHqMCoIpHTK71SYQqdi09kfmD4RLLqLsbNFrl6tq6YV9f0u
-         0swlglT7SRAtanxh51wMrFomm0mg1BdKefK+lJgKkWzmpUkkMkHoeu/UySWfouu2WE
-         mN42R3oh6jZvg==
-Message-ID: <9f3a5518-1de5-17b9-5aec-9820fe79c223@kernel.org>
-Date:   Wed, 21 Jun 2023 21:39:21 +0800
+        Wed, 21 Jun 2023 09:40:51 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0F81981
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:40:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687354850; x=1718890850;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dmo767OTUQjtr6TpU8qEzcebBee6ZirqbrmdGgDPwQw=;
+  b=dVlXTemmKHoOJIM0NIfsfEIZh1/JJnFWXgQK8qjnMHp8SiWgNgK5ENEQ
+   c4TwCJvpEZ4mvMsBK3HvLhVhczuQS+pHmy8xyF/3jD9dCAC1B9m6zkFkz
+   H63YqZZc7BPbOFTNfAo3WCLl5zlpkGqOYnbaa4BZU5YqmlhWsSJWigFmw
+   8fFxAfFtnjei00ORa+3cBAWev+NHh9ADxKcB+5vjKEzCEdfLwveyBMN7j
+   98MrlLGR6GS7UA1T8QQjiroBQ+8hCDWxRYAJoakwZlDZ9nJbVzFd7SfKE
+   +1EzuWrFXQhO4ym9yrTb3b8a0yYALqHy9bvWWHr0zUPl7HgoUqyZpGNYm
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="340519647"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="340519647"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 06:40:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="714493753"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="714493753"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 21 Jun 2023 06:40:48 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qBy4k-005VdW-37;
+        Wed, 21 Jun 2023 16:40:46 +0300
+Date:   Wed, 21 Jun 2023 16:40:46 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     linux-kernel@vger.kernel.org
+Subject: AtomISP and V4L2 new build warnings?
+Message-ID: <ZJL93k3xTe5G1IDD@smile.fi.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [f2fs-dev][PATCH 1/2 v2] f2fs: update mtime and ctime in move
- file range method
-To:     Yunlei He <heyunlei@oppo.com>, jaegeuk@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20230621094359.3827832-1-heyunlei@oppo.com>
-Content-Language: en-US
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20230621094359.3827832-1-heyunlei@oppo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/21 17:43, Yunlei He wrote:
-> Mtime and ctime stay old value without update after move
-> file range ioctl. This patch add time update.
-> 
-> Signed-off-by: Yunlei He <heyunlei@oppo.com>
-> ---
-> v2:
-> -update both src and dst inode
->   fs/f2fs/file.c | 14 ++++++++++++++
->   1 file changed, 14 insertions(+)
-> 
-> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-> index cb42d8464ad9..4adcf62e2665 100644
-> --- a/fs/f2fs/file.c
-> +++ b/fs/f2fs/file.c
-> @@ -2884,8 +2884,22 @@ static int f2fs_move_file_range(struct file *file_in, loff_t pos_in,
->   
->   	if (src != dst)
->   		f2fs_up_write(&F2FS_I(dst)->i_gc_rwsem[WRITE]);
-> +
+Today, on Linux Next, I have got these (among others):
 
-Unneeded blank line.
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-async.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/media/v4l2-core/v4l2-fwnode.o
 
->   out_src:
->   	f2fs_up_write(&F2FS_I(src)->i_gc_rwsem[WRITE]);
-> +
-> +	if (!ret) {
-> +		src->i_mtime = src->i_ctime = current_time(src);
-> +		f2fs_mark_inode_dirty_sync(src, false);
-> +
-> +		if (src != dst) {
-> +			dst->i_mtime = dst->i_ctime = current_time(dst);
-> +			f2fs_mark_inode_dirty_sync(dst, false);
-> +		}
-> +
-> +		f2fs_update_time(F2FS_I_SB(src), REQ_TIME);
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/media/atomisp/i2c/atomisp-mt9m114.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/staging/media/atomisp/i2c/atomisp-libmsrlisthelper.o
 
-f2fs_update_time(sbi, REQ_TIME);
+And since Hans is maintainer of PDx86:
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/intel/pmc/intel_pmc_core_pltdrv.o
+WARNING: modpost: missing MODULE_DESCRIPTION() in drivers/platform/x86/classmate-laptop.o
 
-Thanks,
 
-> +	}
-> +
->   out_unlock:
->   	if (src != dst)
->   		inode_unlock(dst);
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
