@@ -2,73 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA68D738C47
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EE73738C4E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbjFUQua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39038 "EHLO
+        id S229818AbjFUQvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:51:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231493AbjFUQuO (ORCPT
+        with ESMTP id S229802AbjFUQvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:50:14 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A4AE1BD4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:49:49 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8DxuMUsKpNkOjUAAA--.364S3;
-        Thu, 22 Jun 2023 00:49:48 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxzM4sKpNkIO8AAA--.5610S3;
-        Thu, 22 Jun 2023 00:49:48 +0800 (CST)
-Message-ID: <866f4e8d-98be-0aaf-d3a2-f3e5bc94e945@loongson.cn>
-Date:   Thu, 22 Jun 2023 00:49:48 +0800
+        Wed, 21 Jun 2023 12:51:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18E51BE1;
+        Wed, 21 Jun 2023 09:50:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F422615F7;
+        Wed, 21 Jun 2023 16:50:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96030C433C8;
+        Wed, 21 Jun 2023 16:50:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687366253;
+        bh=nRDgHtA8hqej023ToUhLoZFNoVkS+qHIHVfPG/sX2HM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=ZyW7hIwOiMuVBWbNLKkUGG4I9ld9sU+55M4ZDtjpb54AQkZkjrW2BAQpUQDsBScUV
+         3PuViCowDv3Bh65idoeIVGTOkyHEoIL1b2dC7j3xNY75mpWFddVIKrc+1BtooEGsEG
+         e/W29ML5aWligBRBGCkUt8zz0q42K8B1DFB8acM9a3AodCf3X2UrAc7M5tj+QzaIJ3
+         BNU9X9pGdKljGOCb/rjllAVrKb5Q0YONOpcuvdetSA7nDoLJjqbTznsYdA3e/pOQr+
+         ICEH22H0gKf07QhrEh2lPU2+jAbQ9m6lwbXYETYMIVq5QZlLXIOlJBhglEsFLf9vur
+         hkWXTdIwRXM4w==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 241B6CE3A04; Wed, 21 Jun 2023 09:50:53 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 09:50:53 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
+        David Woodhouse <dwmw@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>
+Subject: Re: [patch 05/37] x86/topology: Remove CPU0 hotplug option
+Message-ID: <b487a394-0a70-4ec9-ac43-0e8fb14ad110@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <20230414225551.858160935@linutronix.de>
+ <20230414232309.510911744@linutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v10 07/11] drm/etnaviv: Add support for the dma coherent
- device
-Content-Language: en-US
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Sui Jingfeng <18949883232@163.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        etnaviv@lists.freedesktop.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20230620094716.2231414-1-18949883232@163.com>
- <20230620094716.2231414-8-18949883232@163.com>
- <8f74f0962c8bab6c832919a5340667c54e1a7ddc.camel@pengutronix.de>
- <66fc74ae-299c-a5de-9cfb-07ae24fb3f07@loongson.cn>
- <8212078bd56c54ce508205eae0ed0b69e78d4c38.camel@pengutronix.de>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <8212078bd56c54ce508205eae0ed0b69e78d4c38.camel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxzM4sKpNkIO8AAA--.5610S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7Gr4rCw17Cr4rWFW8Jr1rKrX_yoWDtrXEga
-        y7AFyvkw1Utry2gwsxK3y8AF9F9rW8KF1DXrWfZ3yIy3s7Jan7Jr1kKrWfZw1fKrsFgrnx
-        u34fZF1Yya12gosvyTuYvTs0mTUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvT
-        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-        cSsGvfJTRUUUbq8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-        vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AKxVW8
-        JVW8Jr1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
-        x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5
-        McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7
-        I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCF
-        x2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVW3AVW8Zr1lx2IqxVAqx4xG67AKxV
-        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
-        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
-        4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI
-        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4Xo7DUUUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230414232309.510911744@linutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,43 +89,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+On Sat, Apr 15, 2023 at 01:44:21AM +0200, Thomas Gleixner wrote:
+> This was introduced together with commit e1c467e69040 ("x86, hotplug: Wake
+> up CPU0 via NMI instead of INIT, SIPI, SIPI") to eventually support
+> physical hotplug of CPU0:
+> 
+>  "We'll change this code in the future to wake up hard offlined CPU0 if
+>   real platform and request are available."
+> 
+> 11 years later this has not happened and physical hotplug is not officially
+> supported. Remove the cruft.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt |   14 ---
+>  Documentation/core-api/cpu_hotplug.rst          |   13 ---
+>  arch/x86/Kconfig                                |   43 ----------
+>  arch/x86/include/asm/cpu.h                      |    3 
+>  arch/x86/kernel/topology.c                      |   98 ------------------------
+>  arch/x86/power/cpu.c                            |   37 ---------
+>  6 files changed, 6 insertions(+), 202 deletions(-)
 
-On 2023/6/21 23:58, Lucas Stach wrote:
->> you approach forbidden any possibility to use the WC BO at anywhere.
->>
->>
->> My approach need only check once, while you approach need at least 3
->> check plus
->>
->> so much bit-wise logic operations,  plus a function call  (&, ==, &&,
->> &, ~, &) .
->>
->> and every time you create a BO. This nasty judgement happens.
->>
-> BO creation again is not a fast path. You are committing to allocate
-> new memory, which is a few orders of magnitude more costly than the few
-> instructions needed for those comparisons.
->
-What's wrong with you point here is that
+[ . . . ]
 
-We are not going make it more worse because it is worse.
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -2294,49 +2294,6 @@ config HOTPLUG_CPU
+>  	def_bool y
+>  	depends on SMP
+>  
+> -config BOOTPARAM_HOTPLUG_CPU0
 
-We would like same any single bit of the performance.
+Removing this requires also removing its use in rcutorture.
 
+I have therefore queued the commit below in -rcu, but please feel
+free to take it along with the BOOTPARAM_HOTPLUG_CPU0-removal patch.
+Just please let me know if you do.
 
-It's about the beauty, and beauty and correctness is every thing.
+(Yes, I finally got back to testing -next.  Why do you ask?)
 
+							Thanx, Paul
 
-My implement is good both in the perspective of beauty and in the 
-perspective of the performance.
+------------------------------------------------------------------------
 
-BO creation is fast or not is irrelevant to what the point we are discuss.
+commit 95588de780c0e81004b72526aa3e3ef5ce054719
+Author: Paul E. McKenney <paulmck@kernel.org>
+Date:   Wed Jun 21 09:44:52 2023 -0700
 
-You are always introduce non-critical factor to disturb the discuss,
+    rcutorture: Remove obsolete BOOTPARAM_HOTPLUG_CPU0 Kconfig option
+    
+    Now that the BOOTPARAM_HOTPLUG_CPU0 Kconfig option is in the process of
+    being removed, it is time to remove rcutorture's use of it.
+    
+    Link: https://lore.kernel.org/lkml/20230414232309.510911744@linutronix.de/
+    Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+    Cc: Thomas Gleixner <tglx@linutronix.de>
+    Cc: <x86@kernel.org>
 
-leading the people go a wrong direction.
-
--- 
-Jingfeng
-
+diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE01 b/tools/testing/selftests/rcutorture/configs/rcu/TREE01
+index 04831ef1f9b5..8ae41d5f81a3 100644
+--- a/tools/testing/selftests/rcutorture/configs/rcu/TREE01
++++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE01
+@@ -15,4 +15,3 @@ CONFIG_DEBUG_LOCK_ALLOC=n
+ CONFIG_RCU_BOOST=n
+ CONFIG_DEBUG_OBJECTS_RCU_HEAD=n
+ CONFIG_RCU_EXPERT=y
+-CONFIG_BOOTPARAM_HOTPLUG_CPU0=y
