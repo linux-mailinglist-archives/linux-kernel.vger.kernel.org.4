@@ -2,101 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63AF07385C0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4027385C2
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbjFUNwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45812 "EHLO
+        id S231267AbjFUNxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjFUNwn (ORCPT
+        with ESMTP id S230338AbjFUNxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:52:43 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C06DD;
-        Wed, 21 Jun 2023 06:52:42 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-666eb03457cso2638438b3a.1;
-        Wed, 21 Jun 2023 06:52:42 -0700 (PDT)
+        Wed, 21 Jun 2023 09:53:10 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C0719C
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:53:08 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f918922954so35824405e9.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:53:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687355562; x=1689947562;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=F9tiahjZelkiWueW79yhn3HufREz9PXyjdEwpdn04DE=;
-        b=BcMZ6kU3UqZBlpy9HEMbWpQBoF0GGm4mmzRUAIXLGfQZRmnyTWViSHOMowQOK6fNwY
-         mYXStDTp1JovTM0RayLr/jBGhEj/VuJJ7svTPwtpKY4G/5i/1vfsEtjNijbdFuDGtxK7
-         GbG557T123C/ul1l5emioT3j0hsL0uxeZAhvpHam8ovRI1U+8qxgAkYWNK1tAd8oG0kU
-         NZU7ATkBaz2SSAyaGjEzqy9g4a50j69Hb0FXoIUYn4w8u673gIpFwaFk2bHaAkkJwvzS
-         SEVX79Idjzai9siiGK+z5JRt7GC+QqCFrkDTKRind9+a4yFviPN+wtBN8DTrxxtwFawL
-         i49A==
+        d=linaro.org; s=google; t=1687355587; x=1689947587;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=btW/W684ILT1WDrtjGRP6au9Hja0Menok2T+1KUPWVs=;
+        b=D7wt0OWSdkzK677jMrrdq6NydxVLYfuDAP5Sa90ke8buB0GEYxW5w8wIMAMEssozYU
+         4vi/WDwpDyUEnnr+MDrC1LEGnTCB08d+qoWcUy5b97cNg2ZqYK2WIunZU1bUP0/DuQam
+         B/shkwO9K4UeGZHsZ7uN8JY0r3Q3mNpwZgSPrYnil+tXiVOlrn0BOwDy9dsFXrrnVX2q
+         BRerOGyNrsci2pZxqr7YF+iYVT1o9DzXY3pYdCtLbdpCKhOzDjJ8RTdQdkQIO57+FrXq
+         SwLFlhK67JTRmCRf/YLJlxNWePU00Q7zDp9aiSwAb5V6L51aP435DLLteYLp4cxf2vHG
+         DbRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687355562; x=1689947562;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F9tiahjZelkiWueW79yhn3HufREz9PXyjdEwpdn04DE=;
-        b=lx7u3zVZRicyX3QrPtRW4Ippv/F2S/F1HdbC8wBIXjMVpuw4Lo1O1avgRV12WPqlUJ
-         ai2E1N3YEi3hbCXxA20FsZEZqbxamAECfUo530ptDc8Dngxva8Z1V+hHUsXjFYvdyeC1
-         UA5KAzK00rPRhOgIMSju6FikGcSuKt6dhD8YOgTrhs7REcTGM843NUBWLl6QamF8meLm
-         B0vp47/OPcTtCVJIzxV8SRvzSGNffUYJsju4GYPdcgEjRnxLQUU3wwmdJSF2vmtUEoA1
-         FV2jGhayyu1GgDIUbKTBdPQydoarx/LZapqsq0lmNTy/+5ZK0yYiGAJl4s5Pmsw/02lA
-         Yd4A==
-X-Gm-Message-State: AC+VfDyh+wBP1gjRgwOOH02cXt7D4ksZHrfAhWKbiOIsQaHTwqG+QSxJ
-        gqJInZh8R0qGyd2P0Z7uMG4=
-X-Google-Smtp-Source: ACHHUZ41Q1vIMF6WNqQygbFdcnGFz9ipkUjr1jeaQGLyO2JD8aSc9phrrqCziBBcKPUwU7lfeVZnEw==
-X-Received: by 2002:a05:6a00:2e8d:b0:644:d775:60bb with SMTP id fd13-20020a056a002e8d00b00644d77560bbmr13235480pfb.20.1687355561956;
-        Wed, 21 Jun 2023 06:52:41 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id k10-20020aa790ca000000b006661562429fsm3046110pfk.97.2023.06.21.06.52.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 06:52:41 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 21 Jun 2023 06:52:38 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] mips: provide unxlate_dev_mem_ptr() in asm/io.h
-Message-ID: <7cddcd24-c26c-43e3-8da5-88bd12e27709@roeck-us.net>
-References: <20230516194000.548487-1-arnd@kernel.org>
+        d=1e100.net; s=20221208; t=1687355587; x=1689947587;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=btW/W684ILT1WDrtjGRP6au9Hja0Menok2T+1KUPWVs=;
+        b=RGbebc19eXS1CjMuFNtpsxDIILguYeV+zHTLHvQ7+J4m0h7+CZwx/1FAmsWn0NP6J0
+         WAtXjnwQ2EP3KjkxjtWpeV2NxFikDX9g3XbKZtpnNX2WdaXVjDkmwltmYkGJYyTEunQ+
+         2ztbWUDI1ym/XI7YYEiRCZbszSY+J4kcUq781Jyq9zgvzXaCB5Qqv5l1EPvvcvW2Xewc
+         4mh4BXBxw3Egc6tXjCH2qrTCAyG91auwRDnTGfmIAWZzeSk7d6D2Nn8UasbjRUZoPupM
+         HyfHt6Xi2b7h529J+xcpmKaOnrvGhXWUOVm/QGGF8uAncm0XqwQL2UgB6XxR1M2rwgg2
+         +eLA==
+X-Gm-Message-State: AC+VfDy+vZAOSHWbeya2JIZjlca8J/C0HXxbZMIv66zKZwVwE1yrUqPY
+        EL4AOroMX5RaVWg1gUVoNq2QhYKYYbU1w53vJAo=
+X-Google-Smtp-Source: ACHHUZ6CjZCsBGzmv/SX+exJxEkW3wxvQ20zaQkPvlLAyy5XDVid0KGHqt/HCje2hkpyIdODPFR8Fg==
+X-Received: by 2002:a7b:c407:0:b0:3f9:bd21:eb5e with SMTP id k7-20020a7bc407000000b003f9bd21eb5emr1857115wmi.29.1687355586931;
+        Wed, 21 Jun 2023 06:53:06 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id q19-20020a1cf313000000b003f7361ca753sm15884772wmq.24.2023.06.21.06.53.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jun 2023 06:53:06 -0700 (PDT)
+Message-ID: <20f25e98-d02e-f914-c4e7-72bb9ddb1ae5@linaro.org>
+Date:   Wed, 21 Jun 2023 15:53:04 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230516194000.548487-1-arnd@kernel.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 2/3] dt-bindings: serial: amlogic,meson-uart: Add
+ compatible string for T7
+Content-Language: en-US
+To:     Lucas Tanure <tanure@linux.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>
+Cc:     Nick <nick@khadas.com>, Artem <art@khadas.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230621133215.109254-1-tanure@linux.com>
+ <20230621133215.109254-3-tanure@linux.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230621133215.109254-3-tanure@linux.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 09:39:42PM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On 21/06/2023 15:32, Lucas Tanure wrote:
+> Amlogic T7 SoCs uses the same UART controller as S4 SoCs and G12A.
+> There is no need for an extra compatible line in the driver, but
+> add T7 compatible line for documentation.
 > 
-> The unxlate_dev_mem_ptr() function has no prototype on the mips
-> architecture, which does not include asm-generic/io.h, so gcc warns
-> about the __weak definition:
+> Signed-off-by: Lucas Tanure <tanure@linux.com>
+> ---
+>  .../devicetree/bindings/serial/amlogic,meson-uart.yaml          | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> drivers/char/mem.c:94:29: error: no previous prototype for 'unxlate_dev_mem_ptr' [-Werror=missing-prototypes]
-> 
-> Since everyone else already gets the generic definition or has a custom
-> one, there is not really much point in having a __weak version as well.
-> 
-> Remove this one, and instead add a trivial macro to the mips header.
-> Once we convert mips to use the asm-generic header, this can go away
-> again.
-> 
+> diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> index 01ec45b3b406..860ab58d87b0 100644
+> --- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> +++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
+> @@ -33,6 +33,7 @@ properties:
+>                - amlogic,meson8b-uart
+>                - amlogic,meson-gx-uart
+>                - amlogic,meson-s4-uart
+> +              - amlogic,meson-t7-uart
+>            - const: amlogic,meson-ao-uart
+>        - description: Always-on power domain UART controller on G12A SoCs
+>          items:
+> @@ -46,6 +47,7 @@ properties:
+>            - amlogic,meson8b-uart
+>            - amlogic,meson-gx-uart
+>            - amlogic,meson-s4-uart
+> +          - amlogic,meson-t7-uart
 
-This results in build failures when trying to build sh4 images.
+It does not look like you tested the DTS against bindings. Please run
+`make dtbs_check` (see
+Documentation/devicetree/bindings/writing-schema.rst or
+https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
+for instructions).
 
-drivers/char/mem.c: In function 'read_mem':
-drivers/char/mem.c:164:25: error: implicit declaration of function 'unxlate_dev_mem_ptr'
+Best regards,
+Krzysztof
 
-Guenter
