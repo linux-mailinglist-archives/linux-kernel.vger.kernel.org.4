@@ -2,82 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F43A737B33
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D13B3737B3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:25:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbjFUGVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 02:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
+        id S229958AbjFUGWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 02:22:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229590AbjFUGVb (ORCPT
+        with ESMTP id S230260AbjFUGWC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 02:21:31 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0D0F19C;
-        Tue, 20 Jun 2023 23:21:30 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35L5druq019659;
-        Wed, 21 Jun 2023 06:21:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=7ToFP2HpqlEDvbtmR06hiU8X4yOukC7Jo77fS4yeCIY=;
- b=cI9dV8CQ91BG1fY5lpni+U9EbSHoM5X6xjyBrgtbjZ23SXhGtr9a+QnurkfSYLfXGQRW
- MO+vVLJ/kWHeMjHDOOg1m2vWEdM6igcDEdecUJo6tCD8GRE3F9eYEWCUohNI6gd9RnYD
- aznbbmpTa+OkZR/eYYS9jsW9jMGmj9bpLKRSPafonICVWloDI3F4Kstz6jwCS/NNhOgn
- As0FXE+YVr0qo4XqOq7upY0lhD8qDGUT2DBL/qowgc/lih3l/phzixp7zi0n2LHMieZ9
- gYq5aDYgVAddINm35PfEZNZ96o3CQJhr42fEPMA0EOne25TXLvdP8tc+04lDyQBKLkQV Xg== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rb3xnk35h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Jun 2023 06:21:26 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35L6LPT8009656
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Jun 2023 06:21:25 GMT
-Received: from [10.217.198.86] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 20 Jun
- 2023 23:21:22 -0700
-Message-ID: <29ccc60e-9ef8-883f-9936-95e6ef842746@quicinc.com>
-Date:   Wed, 21 Jun 2023 11:51:19 +0530
+        Wed, 21 Jun 2023 02:22:02 -0400
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C712010DA
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:21:57 -0700 (PDT)
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3406eef1dbeso41611735ab.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:21:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687328517; x=1689920517;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FiMal5spkWzxQuFQIfK2vMHUo4FNmdwa/V87z8doXGc=;
+        b=JeII9d2WxOgbo/Ob+KJgurRJsTfBb1XaI3X0WCHQG/xzqSZYUVGyK/RQQ58Ki/HaJU
+         ZK2GL+6e089FrY58hyGnRDg69iOjxCcY0+9wles92rsKzkIRAnyus1I5y4Nb/Pf1N9+1
+         /1jNpyyNNcSnmKfqBF8iQIrIVUP3aGQytz9VZmLUZTTOYb1UAf3tAPt4sCB4LyxOZYKh
+         Bsp6JT343rFjap9hKgJEm8aNNRr5gmp9IurQMGnsbCf8h5KIwXX1MooupnptozqjDRIV
+         eMrp/o67ZY1jzeukJs4caLNnS38FQmkK9C81+m4k/Taz4kZAJExbPuALBWxLMgXtqECx
+         /z0g==
+X-Gm-Message-State: AC+VfDxq34odrENO9aFBpakU1WVIz0JRh6ykR8hYA+qGUf4ofd/cySlq
+        05EROrTGREyQ1DyZx5Xo87uGOlW6361KB6aCj66D3lGKivwP
+X-Google-Smtp-Source: ACHHUZ5SNaRAP4AlQomcHJ+cQkJ/JYbpSfleiz9DmSgIpbdo3Y+yEDxUPEAfrkmmJuOytq7wEY72T5Y752YY3GgvaS+gYL8anMNM
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 0/2] Add provision to keep idle state disabled
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_lsrao@quicinc.com>,
-        <quic_mkshah@quicinc.com>
-References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
- <CAPDyKFqhVkMH42Vz0+a62j5kFh+R_CvGrcSU7hxoW__tjOhfLw@mail.gmail.com>
- <443b00b1-76b8-c31d-53d3-42e3592d26e8@quicinc.com>
- <CAPDyKFp5L454WmTPo2eYnBuZ=ZMKEtinLgYU09n=J=3DA1FSJQ@mail.gmail.com>
-Content-Language: en-US
-From:   Tushar Nimkar <quic_tnimkar@quicinc.com>
-In-Reply-To: <CAPDyKFp5L454WmTPo2eYnBuZ=ZMKEtinLgYU09n=J=3DA1FSJQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 8FKHHEDZUzwmFFnomjXaFjAHSZfn1nRl
-X-Proofpoint-GUID: 8FKHHEDZUzwmFFnomjXaFjAHSZfn1nRl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-21_03,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 adultscore=0
- malwarescore=0 clxscore=1015 lowpriorityscore=0 impostorscore=0
- suspectscore=0 spamscore=0 bulkscore=0 phishscore=0 mlxscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306210052
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-Received: by 2002:a05:6e02:541:b0:341:d190:ca88 with SMTP id
+ i1-20020a056e02054100b00341d190ca88mr5412963ils.6.1687328517151; Tue, 20 Jun
+ 2023 23:21:57 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 23:21:57 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e2638a05fe9dc8f9@google.com>
+Subject: [syzbot] [udf?] KMSAN: uninit-value in udf_name_from_CS0
+From:   syzbot <syzbot+cd311b1e43cc25f90d18@syzkaller.appspotmail.com>
+To:     glider@google.com, jack@suse.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,72 +54,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Many thanks again,
+Hello,
 
-On 6/16/2023 4:25 PM, Ulf Hansson wrote:
-> On Wed, 14 Jun 2023 at 08:43, Tushar Nimkar <quic_tnimkar@quicinc.com> wrote:
+syzbot found the following issue on:
 
-> 
-> Right. I am not saying it's the perfect solution, but it seems like it
-> could potentially solve the problem for many cases.
-> 
-> If you want some help to turn the cpuidle-psci driver into a loadable
-> module, just reach out, I am happy to help.
-> 
-Thanks :)
-Making cpuidle-psci as loadable does not hold good for target does not 
-support DLKM, in addition to it rpmh driver has dependency on 
-cpuidle-psci for pm-domain and rpmh probe will get defer, their are 
-driver which depends on rpmh probe like interconnect, clk etc. And 
-eventually dependent driver probe defers which are essential for Linux 
-boot-up.
-Hope you got scenario for getting probe defer if we make cpuidle-psci as 
-loadable.
+HEAD commit:    e6bc8833d80f string: use __builtin_memcpy() in strlcpy/str..
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=16c43f97280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6a7e173060c804ee
+dashboard link: https://syzkaller.appspot.com/bug?extid=cd311b1e43cc25f90d18
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: i386
 
-I have below options as well
-[A]: Can we think of making "governor/param_governor" 
-module_param_string, string named governor only to load. In that way 
-need to remove check [3]. Let's say string passed as "teo" then it will 
-not load "menu" and loads "teo" once comes-up.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-[B]: Can we think of making cpuidle.off as writable, let governors to 
-register (i.e remove check [4]) and allow cpuidle_init() to happen (i.e 
-remove check [5])
-So in this way cpuidle.off=1, your idle state can not be selected 
-because [6] and later we can write off=0 to let same check [6] to fail.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/df1e5cb3acfa/disk-e6bc8833.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/55bdfe53ed68/vmlinux-e6bc8833.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/3e2a33babf5f/bzImage-e6bc8833.xz
 
-[C]: Coming to this series approach...What is best way to utilize 
-already present Flag-CPUIDLE_FLAG_OFF ?
-Since we can not add new DT property to take decision in driver as it's 
-not HW feature to be expose in device tree [7]. Can we introduce new 
-module_param() for making idle-state disable default and utilize 
-CPUIDLE_FLAG_OFF? maybe similar to [8]
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cd311b1e43cc25f90d18@syzkaller.appspotmail.com
 
-happy to hear your thoughts!
+UDF-fs: INFO Mounting volume 'LinuxUDF', timestamp 2022/11/22 14:59 (1000)
+=====================================================
+BUG: KMSAN: uninit-value in udf_name_from_CS0+0x1581/0x1a40 fs/udf/unicode.c:250
+ udf_name_from_CS0+0x1581/0x1a40 fs/udf/unicode.c:250
+ udf_get_filename+0xa4/0x150 fs/udf/unicode.c:390
+ udf_fiiter_find_entry+0x77b/0xa60 fs/udf/namei.c:90
+ udf_unlink+0x80/0x920 fs/udf/namei.c:547
+ vfs_unlink+0x66f/0xa20 fs/namei.c:4327
+ do_unlinkat+0x3fa/0xed0 fs/namei.c:4393
+ __do_sys_unlink fs/namei.c:4441 [inline]
+ __se_sys_unlink fs/namei.c:4439 [inline]
+ __ia32_sys_unlink+0x77/0xa0 fs/namei.c:4439
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x37/0x80 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1f/0x30 arch/x86/entry/common.c:246
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
 
+Uninit was created at:
+ slab_post_alloc_hook+0x12d/0xb60 mm/slab.h:716
+ slab_alloc_node mm/slub.c:3451 [inline]
+ __kmem_cache_alloc_node+0x4ff/0x8b0 mm/slub.c:3490
+ kmalloc_trace+0x51/0x200 mm/slab_common.c:1057
+ kmalloc include/linux/slab.h:559 [inline]
+ udf_fiiter_find_entry+0x213/0xa60 fs/udf/namei.c:66
+ udf_unlink+0x80/0x920 fs/udf/namei.c:547
+ vfs_unlink+0x66f/0xa20 fs/namei.c:4327
+ do_unlinkat+0x3fa/0xed0 fs/namei.c:4393
+ __do_sys_unlink fs/namei.c:4441 [inline]
+ __se_sys_unlink fs/namei.c:4439 [inline]
+ __ia32_sys_unlink+0x77/0xa0 fs/namei.c:4439
+ do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
+ __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
+ do_fast_syscall_32+0x37/0x80 arch/x86/entry/common.c:203
+ do_SYSENTER_32+0x1f/0x30 arch/x86/entry/common.c:246
+ entry_SYSENTER_compat_after_hwframe+0x70/0x82
 
-[3] 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/cpuidle/governor.c?h=next-20230620#n93
-
-[4] 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/cpuidle/governor.c?h=next-20230620#n86
-
-[5] 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/cpuidle/cpuidle.c?h=next-20230620#n808
-
-[6] 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/kernel/sched/idle.c?h=next-20230620#n167
-
-[7] 
-https://lore.kernel.org/lkml/20230608085544.16211-1-quic_tnimkar@quicinc.com/T/#m5d6012b0dfcff700f48c0efbba629382f18ee33b
-
-[8] 
-https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/idle/intel_idle.c?h=next-20230620#n2160
-> [...]
-> 
-> Kind regards
-> Uffe
+CPU: 1 PID: 5699 Comm: syz-executor.2 Not tainted 6.4.0-rc7-syzkaller-ge6bc8833d80f #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+=====================================================
 
 
-Thanks,
-Tushar
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
