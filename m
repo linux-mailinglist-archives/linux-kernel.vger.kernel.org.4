@@ -2,86 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E471D738BF5
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FCAD738C1B
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:47:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjFUQq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
+        id S230312AbjFUQqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229909AbjFUQqR (ORCPT
+        with ESMTP id S229690AbjFUQqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:46:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59E032100;
-        Wed, 21 Jun 2023 09:46:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3480615D9;
-        Wed, 21 Jun 2023 16:46:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 283ECC433C8;
-        Wed, 21 Jun 2023 16:45:59 +0000 (UTC)
-Date:   Wed, 21 Jun 2023 12:45:57 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH 2/2] Documentation: Fix typo of reference file name
-Message-ID: <20230621124557.40200450@gandalf.local.home>
-In-Reply-To: <168584575125.2056209.5771945721143181243.stgit@mhiramat.roam.corp.google.com>
-References: <168584574094.2056209.2694238431743782342.stgit@mhiramat.roam.corp.google.com>
-        <168584575125.2056209.5771945721143181243.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 21 Jun 2023 12:46:21 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5021BD1;
+        Wed, 21 Jun 2023 09:46:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description;
+        bh=8TiSCbnL9mJc/af1uk/cttNt5G00aLFokvOncuurQEU=; b=ROBkxSuxyK2GHbWwt0qLgFJiv8
+        zmj9C6CSHPQM7LyW41/OjbHPRndJOpiS6l5UG+bFw4bxt2G+Ca7A4O02XW/hXrAyAyyAbJMtRBI8r
+        utehe7BbwNc6CVtpJO37VKw3d8j5SlrD8p0NYvoc8pLtWcqyqllAEQ9zMkh80iRJ0C6+pqSF/oH6C
+        84eZ0XPv0VUhnwCY5IUj6PaAMQvlFyUmc2KJEaEsXJxuERpYSwSOxsIiY96AQnV53rDs25P4xDSor
+        f26+lGIPExHjRgT8ClXur7P2d8b4h7khDh7JQZha7/A8GMB16vux2F4j1+4MR3dBM2Nyij9QAVuoG
+        PqM1b+Jw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qC0y2-00EjEp-LV; Wed, 21 Jun 2023 16:46:02 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-afs@lists.infradead.org,
+        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH 13/13] mm: Remove unnecessary pagevec includes
+Date:   Wed, 21 Jun 2023 17:45:57 +0100
+Message-Id: <20230621164557.3510324-14-willy@infradead.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20230621164557.3510324-1-willy@infradead.org>
+References: <20230621164557.3510324-1-willy@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun,  4 Jun 2023 11:29:11 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+These files no longer need pagevec.h, mostly due to function declarations
+being moved out of it.
 
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Fix a typo of Documentation/trace/fprobe.rst.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202306040144.aD72UzkF-lkp@intel.com/
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+---
+ mm/fadvise.c        | 1 -
+ mm/memory_hotplug.c | 1 -
+ mm/migrate.c        | 1 -
+ mm/readahead.c      | 1 -
+ mm/swap_state.c     | 1 -
+ 5 files changed, 5 deletions(-)
 
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- Steve
-
-> ---
->  Documentation/trace/fprobetrace.rst |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/trace/fprobetrace.rst b/Documentation/trace/fprobetrace.rst
-> index e949bc0cff05..7297f9478459 100644
-> --- a/Documentation/trace/fprobetrace.rst
-> +++ b/Documentation/trace/fprobetrace.rst
-> @@ -38,7 +38,7 @@ Synopsis of fprobe-events
->                    with a digit character, "_TRACEPOINT" is used.
->   MAXACTIVE      : Maximum number of instances of the specified function that
->                    can be probed simultaneously, or 0 for the default value
-> -                  as defined in Documentation/trace/fprobes.rst
-> +                  as defined in Documentation/trace/fprobe.rst
->  
->   FETCHARGS      : Arguments. Each probe can have up to 128 args.
->    ARG           : Fetch "ARG" function argument using BTF (only for function
+diff --git a/mm/fadvise.c b/mm/fadvise.c
+index f684ffd7f9c9..6c39d42f16dc 100644
+--- a/mm/fadvise.c
++++ b/mm/fadvise.c
+@@ -14,7 +14,6 @@
+ #include <linux/mm.h>
+ #include <linux/pagemap.h>
+ #include <linux/backing-dev.h>
+-#include <linux/pagevec.h>
+ #include <linux/fadvise.h>
+ #include <linux/writeback.h>
+ #include <linux/syscalls.h>
+diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
+index 35db4108bb15..3f231cf1b410 100644
+--- a/mm/memory_hotplug.c
++++ b/mm/memory_hotplug.c
+@@ -13,7 +13,6 @@
+ #include <linux/pagemap.h>
+ #include <linux/compiler.h>
+ #include <linux/export.h>
+-#include <linux/pagevec.h>
+ #include <linux/writeback.h>
+ #include <linux/slab.h>
+ #include <linux/sysctl.h>
+diff --git a/mm/migrate.c b/mm/migrate.c
+index ce35afdbc1e3..ee26f4a962ef 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -21,7 +21,6 @@
+ #include <linux/buffer_head.h>
+ #include <linux/mm_inline.h>
+ #include <linux/nsproxy.h>
+-#include <linux/pagevec.h>
+ #include <linux/ksm.h>
+ #include <linux/rmap.h>
+ #include <linux/topology.h>
+diff --git a/mm/readahead.c b/mm/readahead.c
+index 47afbca1d122..a9c999aa19af 100644
+--- a/mm/readahead.c
++++ b/mm/readahead.c
+@@ -120,7 +120,6 @@
+ #include <linux/export.h>
+ #include <linux/backing-dev.h>
+ #include <linux/task_io_accounting_ops.h>
+-#include <linux/pagevec.h>
+ #include <linux/pagemap.h>
+ #include <linux/psi.h>
+ #include <linux/syscalls.h>
+diff --git a/mm/swap_state.c b/mm/swap_state.c
+index 4a5c7b748051..f8ea7015bad4 100644
+--- a/mm/swap_state.c
++++ b/mm/swap_state.c
+@@ -16,7 +16,6 @@
+ #include <linux/pagemap.h>
+ #include <linux/backing-dev.h>
+ #include <linux/blkdev.h>
+-#include <linux/pagevec.h>
+ #include <linux/migrate.h>
+ #include <linux/vmalloc.h>
+ #include <linux/swap_slots.h>
+-- 
+2.39.2
 
