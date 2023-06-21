@@ -2,71 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A72738137
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88D5873812D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231769AbjFUKa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 06:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
+        id S231145AbjFUKap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 06:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbjFUKaS (ORCPT
+        with ESMTP id S232520AbjFUK37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 06:30:18 -0400
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B861BC;
-        Wed, 21 Jun 2023 03:29:49 -0700 (PDT)
-Received: by mail-vk1-xa2a.google.com with SMTP id 71dfb90a1353d-4714e9f07c0so1439332e0c.2;
-        Wed, 21 Jun 2023 03:29:49 -0700 (PDT)
+        Wed, 21 Jun 2023 06:29:59 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6950219AE
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 03:29:45 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-970028cfb6cso890632866b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 03:29:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687343389; x=1689935389;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k1hCR/RpFfEM3DxPOLTmi3chu8PDZxhhdS78MW46lzc=;
-        b=I6RJ+0o32sU5w6BZaNTQXMXumXgZMD2x8fhpMR5GMt/079xCwBfWjqc8GM9Y7Mmh62
-         v+oKk3ezKIqqcop8ZkZWmTNy3dTR2sBGzSTn/y9WtKQVMyNHQPHaYpHlaOUU2ni2sPlS
-         +jtgMeNdXPBuuvqMxa6ymF9I7zcXh65lEo/ONQWKbjmu7wJvc5TPMm54EPOouMWg+qgo
-         XDX8IsXW88qXx4rNgeXv/hY88/gKd1QEDkD9ohiivE9RskxiPht8h8j+BdFFWTmLQAol
-         vYPwMqhLQ01NT24ReVxf6hCqbvnIpJMEgVVOZKT+WI9/eA+sX9hUVMxUr9+TR/2iVJdz
-         qQ2A==
+        d=linaro.org; s=google; t=1687343384; x=1689935384;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nDF4ZVTkAzYPtnHRop0HswLHr6IvSB28yMxQNxguC9g=;
+        b=fp1r6E+tfo7FVlQyhEXURJigokj81sj1D4rtTtDD3YB14KJ8jWIGs+PDtj9E5BQcjV
+         OK7A4AqrvtrKmAMeSxzvLVrIAIClPOlgVnRIJOhFWYqVEpWMD9cRdTT+rtGsovxdGjrK
+         Ey5N96aQtfw1INmOVYMQh7p2Oa85m2JumX1GgHzZPwS7vvFP6F3XSipWnbWl6FRlSr6K
+         aPJHq2vNlqrL4ZDIPIR+G6YBuHwpHaPW/mlCt5sXZ2Xv4naXxhDyrVvW7Nrl46u+nACc
+         BbyVUU9pxo759TYtyS1F4LUqNUQANug+zd683NX4b37crEf7cCNQ7/3nDtUzwmHkM7Sc
+         Bgqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687343389; x=1689935389;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=k1hCR/RpFfEM3DxPOLTmi3chu8PDZxhhdS78MW46lzc=;
-        b=a85ym0JcxMXvNlw3biqEF/pwv8XNKUMKvISvbObR6zSZ/6+SAqZva7VecBYGOiYnv+
-         78HM7KGAgSDUboNClOtPXRIU9+8KNN0nEe89lCv9tEQ1Uek+2Bc3BZnKQVaq2fYebdjA
-         5XxUmRsKLaHcFoR+diN4VwF4BvBQ46HKUzy7yAR7gPOCNVZ2URW/IHFyeLWGuoekVN9c
-         fa85kvQ+nAYybYC12GwDu+pprJwoTCvXPSwqescUfnFk+kWH620kMDUXsaO4wTbcP7y+
-         aB1l3P2Dq5EnDNf1+c65X0INvh8eM5ZEQMZ4R1z5uHyKt1Rh8UyFWNw162qgI4paaekk
-         uMOg==
-X-Gm-Message-State: AC+VfDwypGnxzyX5L2M9aMkdbIz5mFH+kKGsxX0uY220hu8eWmhzhbSg
-        SmdFj0Qa2PJgtW0S0SzcTC8mwXWEYCSH7Ro8Lnw=
-X-Google-Smtp-Source: ACHHUZ5usrw26q+Ew7a7uwoG/WauIdZremjztT1Qw12eQ3UauWzOHMSCcuWCFw7OrYIK84jMVEyvQhnuoBkkDrIGSOs=
-X-Received: by 2002:a1f:3f02:0:b0:471:2aa6:41f4 with SMTP id
- m2-20020a1f3f02000000b004712aa641f4mr3917248vka.7.1687343388843; Wed, 21 Jun
- 2023 03:29:48 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687343384; x=1689935384;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nDF4ZVTkAzYPtnHRop0HswLHr6IvSB28yMxQNxguC9g=;
+        b=S0MFvWXOJtHd0GxhrznBFmJpiPSvtNF6BxJP5oRS+udoz+pclWBTgzgFF42d3G+zL7
+         LuZlSpQof7fjWA+YYU1PMw/5+esW7jOcEqadA4uP+9Grrobx7ikECTXFpEhgV9Upxjsy
+         qriUqpVpcBZKoefs1TcgebYrZyjuFGahNQT5t10V9qhQ81bddaHyF2ZLjgFpKAfLjA2p
+         dQJ9cPZlMbbPmx9t3u89szo8kq3qU59qnGnV7p/jIY/MBxt7UFXQwVpeofHbwa3jgNym
+         JK7QBGWbO9gIGPpHjVji6RXdIXzQ+ada1gra2IOvKvelYIIjSJ1HLLpLOlPrj1RHLd1/
+         tePA==
+X-Gm-Message-State: AC+VfDwt3bPl2OTmS9b9e2yGUQ4fWjEzH9i7Uj6Ebjw/OKsDnYi+l9QD
+        nc9jpUiYZZ8ysZx1XRP4WLkFwA==
+X-Google-Smtp-Source: ACHHUZ55pNfRxYE5an/hqYprIWtu5+GhxW3NMHuilP6X5Tq3Kzy5cOi31xrX0IjMRYdy6lFdJ5rbUA==
+X-Received: by 2002:a17:907:728b:b0:988:e0cd:99c4 with SMTP id dt11-20020a170907728b00b00988e0cd99c4mr6080249ejc.31.1687343383877;
+        Wed, 21 Jun 2023 03:29:43 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id bq26-20020a170906d0da00b0096f5b48fe43sm2854069ejb.47.2023.06.21.03.29.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jun 2023 03:29:43 -0700 (PDT)
+Message-ID: <315991a3-c825-5df8-2e68-40f24c524df1@linaro.org>
+Date:   Wed, 21 Jun 2023 12:29:40 +0200
 MIME-Version: 1.0
-References: <20230331105546.13607-1-victor.shih@genesyslogic.com.tw>
- <20230331105546.13607-16-victor.shih@genesyslogic.com.tw> <5feaa219-946a-cafd-a9f0-6ab344788f04@intel.com>
-In-Reply-To: <5feaa219-946a-cafd-a9f0-6ab344788f04@intel.com>
-From:   Victor Shih <victorshihgli@gmail.com>
-Date:   Wed, 21 Jun 2023 18:29:36 +0800
-Message-ID: <CAK00qKB5PtQg2mgba7Hc+s1yPD4gVjsvkzw0pAe_AQWu4DcPCg@mail.gmail.com>
-Subject: Re: [PATCH V7 15/23] mmc: sdhci-uhs2: add detect_init() to detect the interface
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benchuanggli@gmail.com,
-        HL.Liu@genesyslogic.com.tw, Greg.tu@genesyslogic.com.tw,
-        takahiro.akashi@linaro.org, dlunev@chromium.org,
-        Victor Shih <victor.shih@genesyslogic.com.tw>,
-        Ben Chuang <ben.chuang@genesyslogic.com.tw>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 1/6] dt-bindings: can: tcan4x5x: Add tcan4552 and
+ tcan4553 variants
+Content-Language: en-US
+To:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Vivek Yadav <vivek.2311@samsung.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Simon Horman <simon.horman@corigine.com>
+References: <20230621093103.3134655-1-msp@baylibre.com>
+ <20230621093103.3134655-2-msp@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230621093103.3134655-2-msp@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,229 +90,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Adrian
+On 21/06/2023 11:30, Markus Schneider-Pargmann wrote:
+> These two new chips do not have state or wake pins.
+> 
+> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
 
-On Wed, Apr 12, 2023 at 9:13=E2=80=AFPM Adrian Hunter <adrian.hunter@intel.=
-com> wrote:
->
-> On 31/03/23 13:55, Victor Shih wrote:
-> > Sdhci_uhs2_do_detect_init() is a sdhci version of mmc's uhs2_detect_ini=
-t
-> > operation. After detected, the host's UHS-II capabilities will be set u=
-p
-> > here and interrupts will also be enabled.
-> >
-> > Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
-> > Signed-off-by: AKASHI Takahiro <takahiro.akashi@linaro.org>
-> > Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
-> > ---
-> >  drivers/mmc/host/sdhci-uhs2.c | 117 ++++++++++++++++++++++++++++++++++
-> >  1 file changed, 117 insertions(+)
-> >
-> > diff --git a/drivers/mmc/host/sdhci-uhs2.c b/drivers/mmc/host/sdhci-uhs=
-2.c
-> > index 9b519bd6d76e..e2972be1889f 100644
-> > --- a/drivers/mmc/host/sdhci-uhs2.c
-> > +++ b/drivers/mmc/host/sdhci-uhs2.c
-> > @@ -334,6 +334,123 @@ static int sdhci_uhs2_set_ios(struct mmc_host *mm=
-c, struct mmc_ios *ios)
-> >   *                                                                    =
-       *
-> >  \*********************************************************************=
-********/
-> >
-> > +static int sdhci_uhs2_interface_detect(struct sdhci_host *host)
-> > +{
-> > +     /* 100ms */
-> > +     int timeout =3D 100000;
-> > +     u32 val;
-> > +
-> > +     udelay(200); /* wait for 200us before check */
->
-> There does not seem to be any need for this function
-> to be atomic, so this should use usleep_range() not udelay().
->
+BTW, why did you ignore the tag?
 
-I will update it to the V8 version.
+This is a friendly reminder during the review process.
 
-> > +
-> > +     if (read_poll_timeout_atomic(sdhci_readl, val, (val & SDHCI_UHS2_=
-IF_DETECT),
-> > +                                  100, timeout, true, host, SDHCI_PRES=
-ENT_STATE)) {
->
-> Does not need to be atomic
->
+It looks like you received a tag and forgot to add it.
 
-I will update it to the V8 version.
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions. However, there's no need to repost patches *only* to add the
+tags. The upstream maintainer will do that for acks received on the
+version they apply.
 
-> > +             pr_warn("%s: not detect UHS2 interface in 200us.\n", mmc_=
-hostname(host->mmc));
-> > +             sdhci_dumpregs(host);
-> > +             return -EIO;
-> > +     }
-> > +
-> > +     /* Enable UHS2 error interrupts */
-> > +     sdhci_uhs2_clear_set_irqs(host, SDHCI_INT_ALL_MASK, SDHCI_UHS2_IN=
-T_ERROR_MASK);
-> > +
-> > +     /* 150ms */
-> > +     timeout =3D 150000;
-> > +     if (read_poll_timeout_atomic(sdhci_readl, val, (val & SDHCI_UHS2_=
-LANE_SYNC),
->
-> Does not need to be atomic
->
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
 
-I will update it to the V8 version.
+If a tag was not added on purpose, please state why and what changed.
 
-> > +                                  100, timeout, true, host, SDHCI_PRES=
-ENT_STATE)) {
-> > +             pr_warn("%s: UHS2 Lane sync fail in 150ms.\n", mmc_hostna=
-me(host->mmc));
-> > +             sdhci_dumpregs(host);
-> > +             return -EIO;
-> > +     }
-> > +
-> > +     DBG("%s: UHS2 Lane synchronized in UHS2 mode, PHY is initialized.=
-\n",
-> > +         mmc_hostname(host->mmc));
-> > +     return 0;
-> > +}
-> > +
-> > +static int sdhci_uhs2_init(struct sdhci_host *host)
-> > +{
-> > +     u16 caps_ptr =3D 0;
-> > +     u32 caps_gen =3D 0;
-> > +     u32 caps_phy =3D 0;
-> > +     u32 caps_tran[2] =3D {0, 0};
-> > +     struct mmc_host *mmc =3D host->mmc;
-> > +
-> > +     caps_ptr =3D sdhci_readw(host, SDHCI_UHS2_CAPS_PTR);
-> > +     if (caps_ptr < 0x100 || caps_ptr > 0x1FF) {
-> > +             pr_err("%s: SDHCI_UHS2_CAPS_PTR(%d) is wrong.\n",
-> > +                    mmc_hostname(mmc), caps_ptr);
-> > +             return -ENODEV;
-> > +     }
-> > +     caps_gen =3D sdhci_readl(host, caps_ptr + SDHCI_UHS2_CAPS_OFFSET)=
-;
-> > +     caps_phy =3D sdhci_readl(host, caps_ptr + SDHCI_UHS2_CAPS_PHY_OFF=
-SET);
-> > +     caps_tran[0] =3D sdhci_readl(host, caps_ptr + SDHCI_UHS2_CAPS_TRA=
-N_OFFSET);
-> > +     caps_tran[1] =3D sdhci_readl(host, caps_ptr + SDHCI_UHS2_CAPS_TRA=
-N_1_OFFSET);
-> > +
-> > +     /* General Caps */
-> > +     mmc->uhs2_caps.dap =3D caps_gen & SDHCI_UHS2_CAPS_DAP_MASK;
-> > +     mmc->uhs2_caps.gap =3D FIELD_GET(SDHCI_UHS2_CAPS_GAP_MASK, caps_g=
-en);
-> > +     mmc->uhs2_caps.n_lanes =3D FIELD_GET(SDHCI_UHS2_CAPS_LANE_MASK, c=
-aps_gen);
-> > +     mmc->uhs2_caps.addr64 =3D (caps_gen & SDHCI_UHS2_CAPS_ADDR_64) ? =
-1 : 0;
-> > +     mmc->uhs2_caps.card_type =3D FIELD_GET(SDHCI_UHS2_CAPS_DEV_TYPE_M=
-ASK, caps_gen);
-> > +
-> > +     /* PHY Caps */
-> > +     mmc->uhs2_caps.phy_rev =3D caps_phy & SDHCI_UHS2_CAPS_PHY_REV_MAS=
-K;
-> > +     mmc->uhs2_caps.speed_range =3D FIELD_GET(SDHCI_UHS2_CAPS_PHY_RANG=
-E_MASK, caps_phy);
-> > +     mmc->uhs2_caps.n_lss_sync =3D FIELD_GET(SDHCI_UHS2_CAPS_PHY_N_LSS=
-_SYN_MASK, caps_phy);
-> > +     mmc->uhs2_caps.n_lss_dir =3D FIELD_GET(SDHCI_UHS2_CAPS_PHY_N_LSS_=
-DIR_MASK, caps_phy);
-> > +     if (mmc->uhs2_caps.n_lss_sync =3D=3D 0)
-> > +             mmc->uhs2_caps.n_lss_sync =3D 16 << 2;
-> > +     else
-> > +             mmc->uhs2_caps.n_lss_sync <<=3D 2;
-> > +     if (mmc->uhs2_caps.n_lss_dir =3D=3D 0)
-> > +             mmc->uhs2_caps.n_lss_dir =3D 16 << 3;
-> > +     else
-> > +             mmc->uhs2_caps.n_lss_dir <<=3D 3;
-> > +
-> > +     /* LINK/TRAN Caps */
-> > +     mmc->uhs2_caps.link_rev =3D caps_tran[0] & SDHCI_UHS2_CAPS_TRAN_L=
-INK_REV_MASK;
-> > +     mmc->uhs2_caps.n_fcu =3D FIELD_GET(SDHCI_UHS2_CAPS_TRAN_N_FCU_MAS=
-K, caps_tran[0]);
-> > +     if (mmc->uhs2_caps.n_fcu =3D=3D 0)
-> > +             mmc->uhs2_caps.n_fcu =3D 256;
-> > +     mmc->uhs2_caps.host_type =3D FIELD_GET(SDHCI_UHS2_CAPS_TRAN_HOST_=
-TYPE_MASK, caps_tran[0]);
-> > +     mmc->uhs2_caps.maxblk_len =3D FIELD_GET(SDHCI_UHS2_CAPS_TRAN_BLK_=
-LEN_MASK, caps_tran[0]);
-> > +     mmc->uhs2_caps.n_data_gap =3D caps_tran[1] & SDHCI_UHS2_CAPS_TRAN=
-_1_N_DATA_GAP_MASK;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int sdhci_uhs2_do_detect_init(struct mmc_host *mmc)
-> > +{
-> > +     struct sdhci_host *host =3D mmc_priv(mmc);
-> > +     int ret =3D -EIO;
-> > +
-> > +     DBG("Begin do uhs2 detect init.\n");
-> > +
-> > +     if (sdhci_uhs2_interface_detect(host)) {
-> > +             pr_warn("%s: cannot detect UHS2 interface.\n",
-> > +                     mmc_hostname(host->mmc));
-> > +             goto out;
->
-> Might as well be
->
->                 return -EIO;
->
+Best regards,
+Krzysztof
 
-I will update it to the V8 version.
-
-> > +     }
-> > +
-> > +     if (sdhci_uhs2_init(host)) {
-> > +             pr_warn("%s: UHS2 init fail.\n", mmc_hostname(host->mmc))=
-;
-> > +             goto out;
->
-> Might as well be
->
->                 return -EIO;
->
-
-I will update it to the V8 version.
-
-> > +     }
-> > +
-> > +     /* Init complete, do soft reset and enable UHS2 error irqs. */
-> > +     sdhci_uhs2_reset(host, SDHCI_UHS2_SW_RESET_SD);
-> > +     sdhci_uhs2_clear_set_irqs(host, SDHCI_INT_ALL_MASK, SDHCI_UHS2_IN=
-T_ERROR_MASK);
-> > +     /*
-> > +      * N.B SDHCI_INT_ENABLE and SDHCI_SIGNAL_ENABLE was cleared
-> > +      * by SDHCI_UHS2_SW_RESET_SD
-> > +      */
-> > +     sdhci_writel(host, host->ier, SDHCI_INT_ENABLE);
-> > +     sdhci_writel(host, host->ier, SDHCI_SIGNAL_ENABLE);
-> > +
-> > +     ret =3D 0;
-> > +out:
-> > +     return ret;
->
-> Might as well be
->
->         return 0;
->
-> so "out:" and ret not needed.
->
-
-I will update it to the V8 version.
-
-> > +}
-> > +
-> >  static int sdhci_uhs2_host_ops_init(struct sdhci_host *host)
-> >  {
-> >       host->mmc_host_ops.start_signal_voltage_switch =3D
->
-
-Thanks, Victor Shih
