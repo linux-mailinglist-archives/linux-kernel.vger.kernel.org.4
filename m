@@ -2,208 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53942737ABF
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 07:48:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64385737AB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 07:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjFUFoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 01:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42698 "EHLO
+        id S229809AbjFUFoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 01:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjFUFoG (ORCPT
+        with ESMTP id S229638AbjFUFn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 01:44:06 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA651718;
-        Tue, 20 Jun 2023 22:44:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687326244; x=1718862244;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U+Hs7VtPqjXBCVMun5WSNlqD7ECDAgylE9+jVB73LoY=;
-  b=PqY6Xis7KQ5+lGfvPpx7VlP7RyUrH2yrJ2MZprNIrW9+JpGIo70sRw+h
-   Ok8D6Zj6kAvcqFJmH3tnQ/vtKhalytroys9oG5yV1A2qV5gdnDrOwOq78
-   lkRn7MzeD2ajpextvl4u/E+q+FHBbaT6ZVX8Y6T++vlQ/0tU16psG5DSy
-   8QpVxtU+NZFMSHVFRp4j8pOUeg3dseRPpcD1PZ1V8QmNttcFTpZJd+A/1
-   UXthWliLJmsILDA7ygIu+p8NMeyMIDsIR49S0R+Y7TvWOlD8I0iCuj7Do
-   uRzFfVySHvsbm5UH91jGIb9SuXHHyy3Os77nO54faWmgLNZ1ysA6Q582U
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="360087373"
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="scan'208";a="360087373"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 22:44:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="858847224"
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="scan'208";a="858847224"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 20 Jun 2023 22:43:58 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qBqdJ-0006ax-1Y;
-        Wed, 21 Jun 2023 05:43:57 +0000
-Date:   Wed, 21 Jun 2023 13:43:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Baoquan He <bhe@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, hch@lst.de,
-        christophe.leroy@csgroup.eu, rppt@kernel.org, willy@infradead.org,
-        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-        schnelle@linux.ibm.com, David.Laight@aculab.com, shorne@gmail.com,
-        deller@gmx.de, nathan@kernel.org, glaubitz@physik.fu-berlin.de,
-        Baoquan He <bhe@redhat.com>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v7 10/19] s390: mm: Convert to GENERIC_IOREMAP
-Message-ID: <202306211329.ticOJCSv-lkp@intel.com>
-References: <20230620131356.25440-11-bhe@redhat.com>
+        Wed, 21 Jun 2023 01:43:57 -0400
+Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6256E1710
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 22:43:56 -0700 (PDT)
+Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-762092e1fb7so483820485a.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 22:43:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687326235; x=1689918235;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uHdXj9PUr7lhUAPuUtTelMceKFwaFrPXgkBrQZ0EjX8=;
+        b=AzJTWVim5EVciKP2XmvPogUa540CEJzCGGnmo0b15/qimTbNPG0Sc1I+bz3I64w9VW
+         oRW4dDidl0wDMrTR/H+kCyRv+o8rwR4ItU/5iTedHgaMHB0x6xeRVC2a8yoF4ee8O+KV
+         GC7dUezWXMnPKMjDsTgJkAqFsK6Lc/g5XELx3W1czRhS3kIaskHyP8eIAy/II/S+IK8z
+         lTNx3Y1LwDzECdi9J2kreuX87/u4NWabcnLX6nrJfzZVFkXsPIzCC+yO/+/eHaUBg6tl
+         R4javbtR81G5HPX1oPYQcO89W1k/5Kw14n9Wk54oHVjsjGvfnSj2CRVYVzFHNyzSbTur
+         DCzg==
+X-Gm-Message-State: AC+VfDzrgQPtx87IhAvs+tOh2GiqNT94kNOtY+Jr69D4s70jUiRimrdd
+        8GSrA/Nz5UyjBjuHS7EJo+I=
+X-Google-Smtp-Source: ACHHUZ5X21iZZxQfq4j98F3jIjLH0HniNEgBgO5oUVRnE6KWu5vSi9MltmE9HltLkkf/qtzNPJ79CA==
+X-Received: by 2002:a05:620a:6501:b0:75d:53f0:4eab with SMTP id qb1-20020a05620a650100b0075d53f04eabmr15653967qkn.42.1687326235244;
+        Tue, 20 Jun 2023 22:43:55 -0700 (PDT)
+Received: from maniforge ([2620:10d:c091:400::5:d965])
+        by smtp.gmail.com with ESMTPSA id h7-20020a05620a10a700b00763ba9a09a9sm919072qkk.34.2023.06.20.22.43.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 22:43:54 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 00:43:52 -0500
+From:   David Vernet <void@manifault.com>
+To:     Aaron Lu <aaron.lu@intel.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        rostedt@goodmis.org, dietmar.eggemann@arm.com, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        joshdon@google.com, roman.gushchin@linux.dev, tj@kernel.org,
+        kernel-team@meta.com
+Subject: Re: [RFC PATCH 3/3] sched: Implement shared wakequeue in CFS
+Message-ID: <20230621054352.GB15990@maniforge>
+References: <20230614043529.GA1942@ziqianlu-dell>
+ <20230615000103.GC2883716@maniforge>
+ <20230615044917.GA109334@ziqianlu-dell>
+ <20230615073153.GA110814@ziqianlu-dell>
+ <20230615232605.GB2915572@maniforge>
+ <20230616005338.GA115001@ziqianlu-dell>
+ <20230620173626.GA3027191@maniforge>
+ <20230621023534.GA236337@ziqianlu-dell>
+ <20230621024300.GA15990@maniforge>
+ <20230621045416.GA237582@ziqianlu-dell>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230620131356.25440-11-bhe@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230621045416.GA237582@ziqianlu-dell>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baoquan,
+On Wed, Jun 21, 2023 at 12:54:16PM +0800, Aaron Lu wrote:
+> On Tue, Jun 20, 2023 at 09:43:00PM -0500, David Vernet wrote:
+> > On Wed, Jun 21, 2023 at 10:35:34AM +0800, Aaron Lu wrote:
+> > > On Tue, Jun 20, 2023 at 12:36:26PM -0500, David Vernet wrote:
+> > > > On Fri, Jun 16, 2023 at 08:53:38AM +0800, Aaron Lu wrote:
+> > > > > I also tried that on the 18cores/36threads/LLC Skylake and the contention
+> > > > > is indeed much smaller than UDP_RR:
+> > > > > 
+> > > > >      7.30%     7.29%  [kernel.vmlinux]      [k]      native_queued_spin_lock_slowpath
+> > > > > 
+> > > > > But I wouldn't say it's entirely gone. Also consider Skylake has a lot
+> > > > > fewer cores per LLC than later Intel servers like Icelake and Sapphire
+> > > > > Rapids and I expect things would be worse on those two machines.
+> > > > 
+> > > > I cannot reproduce this contention locally, even on a slightly larger
+> > > 
+> > > With netperf client number equal to nr_cpu?
+> > 
+> > No, that confusion was only the first time around. See below though, I'm
+> > not sure what insights are to be gained by continuing to tinker with
+> > netperf runs.
+> > 
+> > > > Skylake. Not really sure what to make of the difference here. Perhaps
+> > > > it's because you're running with CONFIG_SCHED_CORE=y? What is the
+> > > 
+> > > Yes I had that config on but I didn't tag any tasks or groups.
+> > > 
+> > > > change in throughput when you run the default workload on your SKL?
+> > > 
+> > > The throughput dropped a little with SWQUEUE:
+> > > 
+> > >                  avg_throughput    native_queued_spin_lock_slowpath%
+> > > NO_SWQUEUE:      9528.061111111108      0.09%
+> > > SWQUEUE:         8984.369722222222      8.05%
+> > > 
+> > > avg_throughput: average throughput of all netperf client's throughput,
+> > > higher is better.
+> > > 
+> > > I run this workload like this:
+> > > "
+> > > netserver
+> > > 
+> > > for i in `seq 72`; do
+> > >         netperf -l 60 -n 72 -6 &
+> > > done
+> > > 
+> > > sleep 30
+> > > perf record -ag -e cycles:pp -- sleep 5 &
+> > > 
+> > > wait
+> > > "
+> > > (the '-n 72' should be redundant but I just keep it there)
+> > 
+> > At this point I'd say we've spent quite a bit of time discussing netperf
+> > results. We understand where the contention is coming from, and yes,
+> > we've established that there are going to be some configurations where
+> > swqueue is not well suited. We've also established that there are
+> > configurations where it will and does perform well, including on
+> > netperf.
+> > 
+> > I'm not sure what we're hoping to gain by continuing to run various
+> > netperf workloads with your specific parameters?
+> 
+> I don't quite follow you.
+> 
+> I thought we were in the process of figuring out why for the same
+> workload(netperf/default_mode/nr_client=nr_cpu) on two similar
+> machines(both are Skylake) you saw no contention while I saw some so I
+> tried to be exact on how I run the workload.
 
-kernel test robot noticed the following build errors:
+I just reran the workload on a 26 core / 52 thread Cooper Lake using
+your exact command below and still don't observe any contention
+whatsoever on the swqueue lock:
 
-[auto build test ERROR on akpm-mm/mm-everything]
+for i in `seq 72`; do
+	netperf -l 60 -n 72 -6 &
+done
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230620-212135
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230620131356.25440-11-bhe%40redhat.com
-patch subject: [PATCH v7 10/19] s390: mm: Convert to GENERIC_IOREMAP
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20230621/202306211329.ticOJCSv-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211329.ticOJCSv-lkp@intel.com/reproduce)
+> If that's not the case, then yes there is no much value continuing this
+> discussion.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306211329.ticOJCSv-lkp@intel.com/
+We can iterate until we find out why we're seeing slightly different
+contention (different configs, different amount of RAM, maybe you have
+turbo enabled or other things running on your host, etc), but I don't
+see what that would tell us that would meaningfully drive the discussion
+forward for the patch set. Is there anything in particular you're trying
+to determine and/or do you have reason to think that the contention
+you're observing is due to something other than a lot of tasks waking up
+at the same time, just as it was with UDP_RR?
 
-All error/warnings (new ones prefixed by >>):
-
-   drivers/tty/ipwireless/main.c: In function 'ipwireless_probe':
-   drivers/tty/ipwireless/main.c:115:30: error: implicit declaration of function 'ioremap'; did you mean 'iounmap'? [-Werror=implicit-function-declaration]
-     115 |         ipw->common_memory = ioremap(p_dev->resource[2]->start,
-         |                              ^~~~~~~
-         |                              iounmap
->> drivers/tty/ipwireless/main.c:115:28: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     115 |         ipw->common_memory = ioremap(p_dev->resource[2]->start,
-         |                            ^
-   drivers/tty/ipwireless/main.c:139:26: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     139 |         ipw->attr_memory = ioremap(p_dev->resource[3]->start,
-         |                          ^
-   In file included from include/linux/io.h:13,
-                    from drivers/tty/ipwireless/main.c:26:
-   arch/s390/include/asm/io.h:29:17: error: implicit declaration of function 'iounmap'; did you mean 'vunmap'? [-Werror=implicit-function-declaration]
-      29 | #define iounmap iounmap
-         |                 ^~~~~~~
-   drivers/tty/ipwireless/main.c:155:9: note: in expansion of macro 'iounmap'
-     155 |         iounmap(ipw->attr_memory);
-         |         ^~~~~~~
-   cc1: some warnings being treated as errors
---
-   drivers/net/ethernet/smsc/smc91c92_cs.c: In function 'mhz_mfc_config':
->> drivers/net/ethernet/smsc/smc91c92_cs.c:447:17: error: implicit declaration of function 'ioremap'; did you mean 'ifr_map'? [-Werror=implicit-function-declaration]
-     447 |     smc->base = ioremap(link->resource[2]->start,
-         |                 ^~~~~~~
-         |                 ifr_map
->> drivers/net/ethernet/smsc/smc91c92_cs.c:447:15: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     447 |     smc->base = ioremap(link->resource[2]->start,
-         |               ^
-   In file included from include/linux/scatterlist.h:9,
-                    from include/linux/dma-mapping.h:11,
-                    from include/linux/skbuff.h:28,
-                    from include/net/net_namespace.h:43,
-                    from include/linux/netdevice.h:38,
-                    from drivers/net/ethernet/smsc/smc91c92_cs.c:38:
-   drivers/net/ethernet/smsc/smc91c92_cs.c: In function 'smc91c92_release':
-   arch/s390/include/asm/io.h:29:17: error: implicit declaration of function 'iounmap'; did you mean 'vunmap'? [-Werror=implicit-function-declaration]
-      29 | #define iounmap iounmap
-         |                 ^~~~~~~
-   drivers/net/ethernet/smsc/smc91c92_cs.c:962:17: note: in expansion of macro 'iounmap'
-     962 |                 iounmap(smc->base);
-         |                 ^~~~~~~
-   cc1: some warnings being treated as errors
---
-   drivers/net/ethernet/xircom/xirc2ps_cs.c: In function 'xirc2ps_config':
-   drivers/net/ethernet/xircom/xirc2ps_cs.c:843:28: error: implicit declaration of function 'ioremap'; did you mean 'iounmap'? [-Werror=implicit-function-declaration]
-     843 |         local->dingo_ccr = ioremap(link->resource[2]->start, 0x1000) + 0x0800;
-         |                            ^~~~~~~
-         |                            iounmap
->> drivers/net/ethernet/xircom/xirc2ps_cs.c:843:26: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     843 |         local->dingo_ccr = ioremap(link->resource[2]->start, 0x1000) + 0x0800;
-         |                          ^
-   In file included from include/linux/scatterlist.h:9,
-                    from include/linux/dma-mapping.h:11,
-                    from include/linux/skbuff.h:28,
-                    from include/linux/if_ether.h:19,
-                    from include/linux/ethtool.h:18,
-                    from drivers/net/ethernet/xircom/xirc2ps_cs.c:77:
-   drivers/net/ethernet/xircom/xirc2ps_cs.c: In function 'xirc2ps_release':
-   arch/s390/include/asm/io.h:29:17: error: implicit declaration of function 'iounmap'; did you mean 'vunmap'? [-Werror=implicit-function-declaration]
-      29 | #define iounmap iounmap
-         |                 ^~~~~~~
-   drivers/net/ethernet/xircom/xirc2ps_cs.c:934:25: note: in expansion of macro 'iounmap'
-     934 |                         iounmap(local->dingo_ccr - 0x0800);
-         |                         ^~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +447 drivers/net/ethernet/smsc/smc91c92_cs.c
-
-b54bf94bf91e4c drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-02  422  
-fba395eee7d3f3 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2006-03-31  423  static int mhz_mfc_config(struct pcmcia_device *link)
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  424  {
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  425      struct net_device *dev = link->priv;
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  426      struct smc_private *smc = netdev_priv(dev);
-b5cb259e7fac55 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-24  427      unsigned int offset;
-b54bf94bf91e4c drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-02  428      int i;
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  429  
-00990e7ce0b0e5 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-30  430      link->config_flags |= CONF_ENABLE_SPKR | CONF_ENABLE_IRQ |
-00990e7ce0b0e5 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-30  431  	    CONF_AUTO_SET_IO;
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  432  
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  433      /* The Megahertz combo cards have modem-like CIS entries, so
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  434         we have to explicitly try a bunch of port combinations. */
-b54bf94bf91e4c drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-02  435      if (pcmcia_loop_config(link, mhz_mfc_config_check, NULL))
-dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  436  	    return -ENODEV;
-dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  437  
-9a017a910346af drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-24  438      dev->base_addr = link->resource[0]->start;
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  439  
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  440      /* Allocate a memory window, for accessing the ISR */
-cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  441      link->resource[2]->flags = WIN_DATA_WIDTH_8|WIN_MEMORY_TYPE_AM|WIN_ENABLE;
-cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  442      link->resource[2]->start = link->resource[2]->end = 0;
-cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  443      i = pcmcia_request_window(link, link->resource[2], 0);
-4c89e88bfde6a3 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2008-08-03  444      if (i != 0)
-dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  445  	    return -ENODEV;
-dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  446  
-cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28 @447      smc->base = ioremap(link->resource[2]->start,
-cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  448  		    resource_size(link->resource[2]));
-7feabb6412ea23 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-29  449      offset = (smc->manfid == MANFID_MOTOROLA) ? link->config_base : 0;
-cdb138080b7814 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2010-07-28  450      i = pcmcia_map_mem_page(link, link->resource[2], offset);
-8e95a2026f3b43 drivers/net/pcmcia/smc91c92_cs.c Joe Perches       2009-12-03  451      if ((i == 0) &&
-8e95a2026f3b43 drivers/net/pcmcia/smc91c92_cs.c Joe Perches       2009-12-03  452  	(smc->manfid == MANFID_MEGAHERTZ) &&
-8e95a2026f3b43 drivers/net/pcmcia/smc91c92_cs.c Joe Perches       2009-12-03  453  	(smc->cardid == PRODID_MEGAHERTZ_EM3288))
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  454  	    mhz_3288_power(link);
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  455  
-dddfbd824b96a2 drivers/net/pcmcia/smc91c92_cs.c Dominik Brodowski 2009-10-18  456      return 0;
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  457  }
-^1da177e4c3f41 drivers/net/pcmcia/smc91c92_cs.c Linus Torvalds    2005-04-16  458  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+David
