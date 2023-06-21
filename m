@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C720D739238
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 00:06:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88CCB73923A
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 00:06:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbjFUWGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 18:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
+        id S229908AbjFUWGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 18:06:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbjFUWGb (ORCPT
+        with ESMTP id S229479AbjFUWGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 18:06:31 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A9F10CE
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 15:06:31 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6b58e439696so2568303a34.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 15:06:31 -0700 (PDT)
+        Wed, 21 Jun 2023 18:06:36 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709B719A2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 15:06:35 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id 46e09a7af769-6b5ef64bca6so110244a34.3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 15:06:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687385190; x=1689977190;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JK0VrOChNls2gnXAPFXNlAkcfaLHX3qumvUvMuZb8fQ=;
-        b=HBT7aNvQ9/0lOZBGTU/aMMtPfSpX+gUV4x1qNSU/y1cNhwhauphSbs0iFmIfoJZE0T
-         6sbuM1r9v5WAemGBX2UyyEAavocyO0wdp2G0bRBtzXp3X3stQzvqGUHydBmiVBP5ZBRQ
-         EFXcpSWNo30kWz2nwG8H++kcRJgqTZd3bkaYiJ6d802ovuXEKhJ8g1Jk5DIg4ZO7GwYV
-         xBDn/BYWSfDAwZnUfM4mS07iQdqnNScE/vcpiqYuM3UltJfGUYP3Zao84EYgXTV0wiH0
-         0MGyp58MfUtTVdz3iAGkwoHHT2q5lX0utM/ycEV5IHgI5nC3614rZh3TDctMyxAGrXjA
-         odNw==
+        d=gmail.com; s=20221208; t=1687385195; x=1689977195;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0jApRl3G0nkzGeB1EhFPefA764c2ImCkJh8aeW4stjc=;
+        b=qWwGDjfx/htff5ZCQv4bhJl6qVZ402as0zi+GPq9gnH0tcm3OvYV90ONqlxZrY0wqy
+         KMIgpP7b8ssia5OOWn1HNNUP8x1ksfG43NnEVF5nbYpQzaAaPjkqeElaWgPKiC+hWJzs
+         Ppm8iyCBiF6vwq+DcTHZB+iCA8G2nDsZzdcirC64lqp48EN8juYbC3upMlAQiEYB3hg2
+         hT8URX4OmWSGkJ38pfCJMsRX3lp1ZwBRhuBVLNJHauuoH0KlxWVN7xmuYG1nSR19rbEl
+         VEO4Z1/5onet7qUHGx3/725+F7/KbXQqYEit2k6IR7dPd8tNwORTVkTgnYvLCsJ03CGn
+         cTeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687385190; x=1689977190;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JK0VrOChNls2gnXAPFXNlAkcfaLHX3qumvUvMuZb8fQ=;
-        b=BCjHOLf5hpuS7sBaqcmn1Ox7yLI6QluOrIEh68CRUMwX2XSwIuRmjgMVVNUDVKWXCX
-         ijH9R/xR3ySNHCVp8d6ycZSq+uY1jJ1V1ALqpoMZw3Ftf3FQm/yfSe8fPDmDoBX/0zIm
-         IaNaErL+QrJ9FtCCYdC2qwyNh1RT+d2lHwkeRaWPeJc5Y6iMVsygLHCrw+1yGVPb8oy0
-         sMYNSoZa29V+2FbwAbI00o1D3xaaVBZocPuiK+DEtD+eroUIuUiVmGOnBxa6bbh9na3W
-         7bdRkveE4WUfcisY0Gr+wEtQNfI68WNe4dA7YmHFzStvH0Vsj2nc0g+xUdpIfhxbkzev
-         UyIg==
-X-Gm-Message-State: AC+VfDwO9mDfE1aEuFY/t/ykdCeFKmkajv73xdQPJ0izO/xyZij+Giny
-        1g72u6mMM0MUPC1lL9+iJgQ=
-X-Google-Smtp-Source: ACHHUZ6h3GpYT62+BblCthS6pKiZlBs3ZJNxN8ROaGRwulVHq+v+K7zceKJauT9/jXHC1ihF4HUPEw==
-X-Received: by 2002:a9d:6a54:0:b0:6b5:e151:baec with SMTP id h20-20020a9d6a54000000b006b5e151baecmr1423495otn.14.1687385190363;
-        Wed, 21 Jun 2023 15:06:30 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687385195; x=1689977195;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0jApRl3G0nkzGeB1EhFPefA764c2ImCkJh8aeW4stjc=;
+        b=Ifw20jdTnlR6My9z+oAINNUuff7KpTg91mP3/20+RxQvjf9slgxG9mML2p6wM8k0fg
+         wzQKlvxNg4HZl0Xa7j2hqLiquKKLeIrpW01nc7qzjVjR6WYM9VQXMpC5OeuEPuDjPQ0v
+         iXkfbGAX7EPyy7LHbqx1RPDWBJpJXzSgBucA2piC4eyYVByFIU5vax15Ln913FEaaHmx
+         5uhBWVruzUhiJvDVwRiScWWDISAae0YP6LbjE2qTaL2UW9TsU84CfYMeFe5ILBb93mKx
+         K3B8ZjvXjK3T7PvafmwzXOvfRkKwEJ944jT3qR6D9mUPN2hJ7y5N6i2IhsPXaiJ2mKDM
+         CTlg==
+X-Gm-Message-State: AC+VfDy89i8CqPL8rzaqO+yvZ5oRAy502F2zdZvCQVpLNwFVUi5xjhT7
+        tW3mHQfwYG+OYmZICrnPd2U3LPj08bw=
+X-Google-Smtp-Source: ACHHUZ4m/2C8LBVVKAkNrxewirUwQ9FLO5rveJ/sCX6cxuIGS+SuiwZe95rXFzQfq65EFjOR1oslNQ==
+X-Received: by 2002:a05:6830:18f8:b0:6af:78cc:e489 with SMTP id d24-20020a05683018f800b006af78cce489mr17541148otf.26.1687385194647;
+        Wed, 21 Jun 2023 15:06:34 -0700 (PDT)
 Received: from smeagol.fibertel.com.ar ([201.235.4.68])
-        by smtp.gmail.com with ESMTPSA id v7-20020a9d7d07000000b006af8b60e2c3sm2288987otn.74.2023.06.21.15.06.27
+        by smtp.gmail.com with ESMTPSA id v7-20020a9d7d07000000b006af8b60e2c3sm2288987otn.74.2023.06.21.15.06.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 15:06:29 -0700 (PDT)
+        Wed, 21 Jun 2023 15:06:33 -0700 (PDT)
 From:   =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
         <samsagax@gmail.com>
 To:     maarten.lankhorst@linux.intel.com
@@ -57,10 +58,12 @@ Cc:     mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com,
         linux-kernel@vger.kernel.org,
         =?UTF-8?q?Joaqu=C3=ADn=20Ignacio=20Aramend=C3=ADa?= 
         <samsagax@gmail.com>
-Subject: [PATCH 0/3] drm: panel-orientation-quirks: Add some quirks for 
-Date:   Wed, 21 Jun 2023 19:06:12 -0300
-Message-ID: <20230621220615.1253571-1-samsagax@gmail.com>
+Subject: [PATCH 1/3] drm: panel-orientation-quirks: Add quirk for AYA NEO 2 model
+Date:   Wed, 21 Jun 2023 19:06:13 -0300
+Message-ID: <20230621220615.1253571-2-samsagax@gmail.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230621220615.1253571-1-samsagax@gmail.com>
+References: <20230621220615.1253571-1-samsagax@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -74,23 +77,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add quirks for AYA NEO devices:
-- 2
-- GEEK
-- Founder
+Add quirk orientation for AYA NEO 2. The name appears without spaces in
+dmi strings. That made it difficult to reuse the 2021 match and the
+display is greater in resolution.
 
-The quirks have been tested by the JELOS team that has been patching their
-own kernel for a while now and confirmed by users in the AYA NEO and
-ChimeraOS discord servers.
+Tested by the JELOS team that has been patching their own kernel for a
+while now and confirmed by users in the AYA NEO and ChimeraOS discord
+servers.
 
-Joaquín Ignacio Aramendía (3):
-  drm: panel-orientation-quirks: Add quirk for AYA NEO 2 model
-  drm: panel-orientation-quirks: Add quirk for AYA NEO Founder edition
-  drm: panel-orientation-quirks: Add quirk for AYA NEO GEEK
+Signed-off-by: Joaquín Ignacio Aramendía <samsagax@gmail.com>
+---
+ drivers/gpu/drm/drm_panel_orientation_quirks.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
- drivers/gpu/drm/drm_panel_orientation_quirks.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
+diff --git a/drivers/gpu/drm/drm_panel_orientation_quirks.c b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+index 0cb646cb04ee..4b428792a3b6 100644
+--- a/drivers/gpu/drm/drm_panel_orientation_quirks.c
++++ b/drivers/gpu/drm/drm_panel_orientation_quirks.c
+@@ -170,6 +170,12 @@ static const struct dmi_system_id orientation_data[] = {
+ 		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "T103HAF"),
+ 		},
+ 		.driver_data = (void *)&lcd800x1280_rightside_up,
++	}, {	/* AYA NEO AYANEO 2 */
++		.matches = {
++		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AYANEO"),
++		  DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "AYANEO 2"),
++		},
++		.driver_data = (void *)&lcd1200x1920_rightside_up,
+ 	}, {	/* AYA NEO 2021 */
+ 		.matches = {
+ 		  DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AYADEVICE"),
 -- 
 2.41.0
 
