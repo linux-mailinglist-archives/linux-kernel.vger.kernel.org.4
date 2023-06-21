@@ -2,89 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00C7737BAC
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 09:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC7B7737B9D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 09:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbjFUGuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 02:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44566 "EHLO
+        id S229729AbjFUGs5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 02:48:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231186AbjFUGte (ORCPT
+        with ESMTP id S231200AbjFUGsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 02:49:34 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D0F2735
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:47:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687330044; x=1718866044;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=d3xuT8j8LOYHVkbndEK2xBaA4wAzaQvUC0MqemTUsOI=;
-  b=IbVr1nnOLsnT/YS4eSNedDexVF5yBy8X3t/awVQtQ102aiYQH6cP6ZEN
-   C3d9P3gaCOoaTN4zz0ecJ/i+nOhvUfoouFbVdK6KlW1gd0nYq13GqbDya
-   PKp3uNUD7ALC0GSkPSnms/EQZ9oHYNeCMaXjsQc61pkbkB2LPBa8lHmvH
-   YJuZd6Y6zwgKjdY55nt/00LFYjcpiObWId/10G8FZc9VMIwwBujtC5YXQ
-   m+MteaO4XUgy79zSEaB9DYKx4jR/UF092tIpHlxFANr8a3owxGBry0qdt
-   +X5/Fh9PK14MsCD7JvuQ6WbJgi0QdlHBr9v9g9RA+nBKPHy5k9bZK5SfY
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="389511902"
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="scan'208";a="389511902"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 23:47:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="779728074"
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="scan'208";a="779728074"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.90])
-  by fmsmga008.fm.intel.com with ESMTP; 20 Jun 2023 23:47:17 -0700
-From:   tien.sung.ang@intel.com
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Ang Tien Sung <tien.sung.ang@intel.com>
-Subject: [PATCH v2 0/2] firmware: stratix10-svc: support N clients
-Date:   Wed, 21 Jun 2023 14:46:43 +0800
-Message-Id: <20230621064645.1431883-1-tien.sung.ang@intel.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 21 Jun 2023 02:48:24 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF232703
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:46:31 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VletMLc_1687329983;
+Received: from 30.97.48.59(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VletMLc_1687329983)
+          by smtp.aliyun-inc.com;
+          Wed, 21 Jun 2023 14:46:24 +0800
+Message-ID: <3b05b046-9d0e-c9a4-5d3d-62b815ca020d@linux.alibaba.com>
+Date:   Wed, 21 Jun 2023 14:46:44 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH v2] mm: Fix shmem THP counters on migration
+To:     Jan Glauber <jglauber@digitalocean.com>, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        "Huang, Ying" <ying.huang@intel.com>
+References: <20230619054955.140276-1-jglauber@digitalocean.com>
+ <20230619103351.234837-1-jglauber@digitalocean.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20230619103351.234837-1-jglauber@digitalocean.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ang Tien Sung <tien.sung.ang@intel.com>
 
-hi,
-In order to support N clients sending concurrent messages to svc driver,
-we need to have all clients owning up to their individual threads.
-And, to cater for the limitation of the mailbox device driver in
-secure monitor firmware that only permits a single message at a time,
-a mutex is used to prevent the multiple clients from sending a message
-to SDM.
-Also, added a fix on the removal of the driver that resulted in a
-kernel panic due to badly used drv_set_drvdata.
+Cc: Huang Ying
 
-changelog from V1:
-- Added "Fixes:" tag to the 2nd patch to detail the fix location.
+On 6/19/2023 6:33 PM, Jan Glauber wrote:
+> The per node numa_stat values for shmem don't change on
+> page migration for THP:
+> 
+>    grep shmem /sys/fs/cgroup/machine.slice/.../memory.numa_stat:
+> 
+>      shmem N0=1092616192 N1=10485760
+>      shmem_thp N0=1092616192 N1=10485760
+> 
+>    migratepages 9181 0 1:
+> 
+>      shmem N0=0 N1=1103101952
+>      shmem_thp N0=1092616192 N1=10485760
+> 
+> Fix that by updating shmem_thp counters likewise to shmem counters
+> on page migration.
+> 
+> Signed-off-by: Jan Glauber <jglauber@digitalocean.com>
+> ---
 
-changelog from V2:
-- Remove newline from the 2nd patch after the tag "Fixes:"
+Please add your change history.
 
-Ang Tien Sung (2):
-  firmware: stratix10-svc: Support up to N SVC clients
-  firmware: stratix10-svc: fix bug in saving controller data
+>   mm/migrate.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+> 
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index 01cac26a3127..d2ba786ea105 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -492,6 +492,11 @@ int folio_migrate_mapping(struct address_space *mapping,
+>   		if (folio_test_swapbacked(folio) && !folio_test_swapcache(folio)) {
+>   			__mod_lruvec_state(old_lruvec, NR_SHMEM, -nr);
+>   			__mod_lruvec_state(new_lruvec, NR_SHMEM, nr);
+> +
+> +			if (folio_test_transhuge(folio)) {
 
- drivers/firmware/stratix10-svc.c | 188 ++++++++++++++++++++-----------
- 1 file changed, 123 insertions(+), 65 deletions(-)
+I am afraid this validation is fragile, IIUC the file backed folio can 
+contain various numbers of pages in future.
 
--- 
-2.25.1
+So seems using folio_test_pmd_mappable() seems more suitable for THP.
 
+> +				__mod_lruvec_state(old_lruvec, NR_SHMEM_THPS, -nr);
+> +				__mod_lruvec_state(new_lruvec, NR_SHMEM_THPS, nr);
+> +			}
+>   		}
+>   #ifdef CONFIG_SWAP
+>   		if (folio_test_swapcache(folio)) {
+> --
+> 2.25.1
+> 
