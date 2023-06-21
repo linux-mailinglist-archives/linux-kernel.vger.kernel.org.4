@@ -2,174 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F28738DE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:56:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0EB6738DE5
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:57:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjFUR4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 13:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57774 "EHLO
+        id S231357AbjFUR5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 13:57:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231710AbjFUR4K (ORCPT
+        with ESMTP id S231735AbjFUR5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 13:56:10 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3778A26B7;
-        Wed, 21 Jun 2023 10:55:25 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3040E1063;
-        Wed, 21 Jun 2023 10:55:17 -0700 (PDT)
-Received: from [10.57.27.43] (unknown [10.57.27.43])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A8F7E3F663;
-        Wed, 21 Jun 2023 10:54:30 -0700 (PDT)
-Message-ID: <0327c5b6-9b6b-460a-dc7e-3a891485a9bd@arm.com>
-Date:   Wed, 21 Jun 2023 18:54:29 +0100
+        Wed, 21 Jun 2023 13:57:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010902708;
+        Wed, 21 Jun 2023 10:56:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BE15615DC;
+        Wed, 21 Jun 2023 17:56:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 140CEC433C9;
+        Wed, 21 Jun 2023 17:56:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687370165;
+        bh=wJPOrVNIgTywFQepJZTNQ+QlyeGFs0MkGE1Cz6G2XTQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FNr6TbArDHSoi3xmVTBdDyYTb16ATq5PrGIWD5FsMFgYJivOYG1r/Z2Mt2EfVaqug
+         tu9+Yjr4mQsUbwGsSQDL6XTt4LilJFK35UOfESsESJpNQDlQ4NJNR5AlauAX+W/Wha
+         AcnpDOk8zQUG51OVRNqykbZJgvMBbfEsy/Nbq8eghb8IjJCGLltD3RJ9qG5gxA5vA+
+         74IQiBD6zogFk2ln6Np598zBBzOUTFWN97opNlzyzSgUCBx9oJyuxDXca2a0mw2wad
+         I1xlYkRllUqsPM2QXvUz2rnoAza5I5zF5aTtcLt3vwlHU8/s1wMt4PQxy++znE/KW7
+         9cW/rsLkLWvIQ==
+Date:   Wed, 21 Jun 2023 18:56:01 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: mfd: samsung,s5m8767: Simplify excluding
+ properties
+Message-ID: <20230621175601.GQ10378@google.com>
+References: <20230619101424.25897-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [PATCH V5 6/6] coresight: etm4x: Add ACPI support in platform
- driver
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, rafael.j.wysocki@intel.com
-Cc:     scclevenger@os.amperecomputing.com,
-        Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        "anshuman.khandual@arm.com" <anshuman.khandual@arm.com>
-References: <20230529062511.52016-1-anshuman.khandual@arm.com>
- <20230529062511.52016-7-anshuman.khandual@arm.com>
- <4c3572f8-9710-0955-72c6-a9907ce6ce8b@arm.com>
- <49c9e20a-f020-0dc5-8601-06b5f0ab8c5c@arm.com>
- <394d0129-e3a5-5b16-6e18-b4a3102aa50c@arm.com>
-In-Reply-To: <394d0129-e3a5-5b16-6e18-b4a3102aa50c@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230619101424.25897-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/06/2023 14:52, Suzuki K Poulose wrote:
-> On 06/06/2023 10:36, Suzuki K Poulose wrote:
->> Hi Rafael,
->>
->> Gentle ping.
-> 
-> Gentle ping..
-> 
+On Mon, 19 Jun 2023, Krzysztof Kozlowski wrote:
 
-Gentle reminder, Rafael.
+> Mutually exclusive s5m8767,pmic-buck[234]-uses-gpio-dvs properties can
+> be written simpler, with half of the lines of code.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/mfd/samsung,s5m8767.yaml         | 25 ++++++-------------
+>  1 file changed, 7 insertions(+), 18 deletions(-)
 
-Suzuki
+Applied, thanks
 
->>
->> On 30/05/2023 10:57, Suzuki K Poulose wrote:
->>> Hi Rafael
->>>
->>> On 29/05/2023 07:25, Anshuman Khandual wrote:
->>>> From: Suzuki K Poulose <suzuki.poulose@arm.com>
->>>>
->>>> Drop ETM4X ACPI ID from the AMBA ACPI device list, and instead just 
->>>> move it
->>>> inside the new ACPI devices list detected and used via platform driver.
->>>>
->>>> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
->>>> Cc: Len Brown <lenb@kernel.org>
->>>> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
->>>> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
->>>> Cc: Mike Leach <mike.leach@linaro.org>
->>>> Cc: Leo Yan <leo.yan@linaro.org>
->>>> Cc: Sudeep Holla <sudeep.holla@arm.com>
->>>> Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
->>>> Cc: linux-acpi@vger.kernel.org
->>>> Cc: coresight@lists.linaro.org
->>>> Cc: linux-arm-kernel@lists.infradead.org
->>>> Cc: linux-kernel@vger.kernel.org
->>>> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com> (for ACPI specific 
->>>> changes)
->>>> Signed-off-by: Suzuki K Poulose <suzuki.poulose@arm.com>
->>>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->>>> ---
->>>>   drivers/acpi/acpi_amba.c                           |  1 -
->>>
->>> We would like to push this via the coresight tree. Please could you 
->>> Ack this change if you are happy with the proposal and the change ?
->>>
->>
->>
->> Suzuki
->>
-> 
-> Suzuki
-> 
-> 
->>
->>> Suzuki
->>>
->>>
->>>>   drivers/hwtracing/coresight/coresight-etm4x-core.c | 10 ++++++++++
->>>>   2 files changed, 10 insertions(+), 1 deletion(-)
->>>>
->>>> diff --git a/drivers/acpi/acpi_amba.c b/drivers/acpi/acpi_amba.c
->>>> index f5b443ab01c2..099966cbac5a 100644
->>>> --- a/drivers/acpi/acpi_amba.c
->>>> +++ b/drivers/acpi/acpi_amba.c
->>>> @@ -22,7 +22,6 @@
->>>>   static const struct acpi_device_id amba_id_list[] = {
->>>>       {"ARMH0061", 0}, /* PL061 GPIO Device */
->>>>       {"ARMH0330", 0}, /* ARM DMA Controller DMA-330 */
->>>> -    {"ARMHC500", 0}, /* ARM CoreSight ETM4x */
->>>>       {"ARMHC501", 0}, /* ARM CoreSight ETR */
->>>>       {"ARMHC502", 0}, /* ARM CoreSight STM */
->>>>       {"ARMHC503", 0}, /* ARM CoreSight Debug */
->>>> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c 
->>>> b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>>> index e10f6676dd9b..fd6f9dff5881 100644
->>>> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>>> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
->>>> @@ -3,6 +3,7 @@
->>>>    * Copyright (c) 2014, The Linux Foundation. All rights reserved.
->>>>    */
->>>> +#include <linux/acpi.h>
->>>>   #include <linux/bitops.h>
->>>>   #include <linux/kernel.h>
->>>>   #include <linux/moduleparam.h>
->>>> @@ -2344,12 +2345,21 @@ static const struct of_device_id 
->>>> etm4_sysreg_match[] = {
->>>>       {}
->>>>   };
->>>> +#ifdef CONFIG_ACPI
->>>> +static const struct acpi_device_id etm4x_acpi_ids[] = {
->>>> +    {"ARMHC500", 0}, /* ARM CoreSight ETM4x */
->>>> +    {}
->>>> +};
->>>> +MODULE_DEVICE_TABLE(acpi, etm4x_acpi_ids);
->>>> +#endif
->>>> +
->>>>   static struct platform_driver etm4_platform_driver = {
->>>>       .probe        = etm4_probe_platform_dev,
->>>>       .remove        = etm4_remove_platform_dev,
->>>>       .driver            = {
->>>>           .name            = "coresight-etm4x",
->>>>           .of_match_table        = etm4_sysreg_match,
->>>> +        .acpi_match_table    = ACPI_PTR(etm4x_acpi_ids),
->>>>           .suppress_bind_attrs    = true,
->>>>           .pm            = &etm4_dev_pm_ops,
->>>>       },
->>>
->>
-> 
-
+-- 
+Lee Jones [李琼斯]
