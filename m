@@ -2,115 +2,359 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97BD2737FD4
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6405738023
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbjFUJbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 05:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34766 "EHLO
+        id S231137AbjFUJb7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 05:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232295AbjFUJao (ORCPT
+        with ESMTP id S232319AbjFUJaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 05:30:44 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A31CE19AF;
-        Wed, 21 Jun 2023 02:29:40 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id D3D1824E208;
-        Wed, 21 Jun 2023 17:29:37 +0800 (CST)
-Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 21 Jun
- 2023 17:29:37 +0800
-Received: from [192.168.125.127] (113.72.145.217) by EXMBX171.cuchost.com
- (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 21 Jun
- 2023 17:29:36 +0800
-Message-ID: <d4824941-85dd-d378-be5b-072907b1169d@starfivetech.com>
-Date:   Wed, 21 Jun 2023 17:29:34 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v7 4/5] phy: starfive: Add JH7110 PCIE 2.0 PHY driver
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>,
-        "Vinod Koul" <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "Roger Quadros" <rogerq@kernel.org>
-CC:     <oe-kbuild-all@lists.linux.dev>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Mason Huo" <mason.huo@starfivetech.com>
-References: <20230619094759.21013-5-minda.chen@starfivetech.com>
- <202306192215.TvQco9m6-lkp@intel.com>
-From:   Minda Chen <minda.chen@starfivetech.com>
-In-Reply-To: <202306192215.TvQco9m6-lkp@intel.com>
+        Wed, 21 Jun 2023 05:30:46 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397A31FE4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:29:56 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1qBu9t-0005p1-SG; Wed, 21 Jun 2023 11:29:50 +0200
+Message-ID: <2c48ad0d1277f880d4d758fe3a3ad24d33e2fabe.camel@pengutronix.de>
+Subject: Re: [PATCH v10 05/11] drm/etnaviv: Allow bypass component framework
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Sui Jingfeng <18949883232@163.com>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Sui Jingfeng <suijingfeng@loongson.cn>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        etnaviv@lists.freedesktop.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Date:   Wed, 21 Jun 2023 11:29:48 +0200
+In-Reply-To: <20230620094716.2231414-6-18949883232@163.com>
+References: <20230620094716.2231414-1-18949883232@163.com>
+         <20230620094716.2231414-6-18949883232@163.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.145.217]
-X-ClientProxiedBy: EXCAS065.cuchost.com (172.16.6.25) To EXMBX171.cuchost.com
- (172.16.6.91)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am Dienstag, dem 20.06.2023 um 17:47 +0800 schrieb Sui Jingfeng:
+> From: Sui Jingfeng <suijingfeng@loongson.cn>
+> 
+> Originally, component frameworks were used to bind multiple GPU cores to a
+> virtual master. But there are chips that have only one GPU core integrated.
+> The component framework can be avoided under some circumstances, Another
+> reason is that usperspace programs such as X server and Mesa will try to
+> find the PCI device to use by default. Creating a virtual master device
+> for PCI GPUs cause unnecessary troubles.
+> 
+> This patch add additional code paths to allow bypassing the component
+> frameworks, platforms with a single GPU core could probably try the
+> non-component code path also. This patch is for code shaing between the
+> PCI driver and the platform driver.
+> 
+> Cc: Lucas Stach <l.stach@pengutronix.de>
+> Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> ---
+>  drivers/gpu/drm/etnaviv/etnaviv_drv.c | 47 ++++++++++-----
+>  drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 83 +++++++++++++++++----------
+>  drivers/gpu/drm/etnaviv/etnaviv_gpu.h |  3 +
+>  3 files changed, 91 insertions(+), 42 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> index 6a048be02857..93ca240cd4c0 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> @@ -536,10 +536,9 @@ static const struct drm_driver etnaviv_drm_driver = {
+>  	.minor              = 3,
+>  };
+>  
+> -/*
+> - * Platform driver:
+> - */
+> -static int etnaviv_bind(struct device *dev)
+> +static struct etnaviv_drm_private *etna_private_ptr;
 
+That's not going to fly. You are dropping the virtual master device,
+which bundles multiple GPUs together, but you are also only allowing a
+single GPU instance via this global private data pointer.
 
-On 2023/6/19 22:45, kernel test robot wrote:
-> Hi Minda,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on robh/for-next]
-> [also build test ERROR on linus/master v6.4-rc7 next-20230619]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Minda-Chen/dt-bindings-phy-Add-StarFive-JH7110-PCIe-PHY/20230619-184756
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-> patch link:    https://lore.kernel.org/r/20230619094759.21013-5-minda.chen%40starfivetech.com
-> patch subject: [PATCH v7 4/5] phy: starfive: Add JH7110 PCIE 2.0 PHY driver
-> config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20230619/202306192215.TvQco9m6-lkp@intel.com/config)
-> compiler: s390-linux-gcc (GCC) 12.3.0
-> reproduce: (https://download.01.org/0day-ci/archive/20230619/202306192215.TvQco9m6-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202306192215.TvQco9m6-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>, old ones prefixed by <<):
-> 
->>> ERROR: modpost: "devm_platform_ioremap_resource" [drivers/phy/starfive/phy-jh7110-pcie.ko] undefined!
-I can not find this error. devm_platform_ioremap_resource is an exported symbol
-> ERROR: modpost: "devm_ioremap_resource" [drivers/dma/qcom/hdma.ko] undefined!
-> ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/fsl-edma.ko] undefined!
-> ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/idma64.ko] undefined!
-> ERROR: modpost: "iounmap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
-> ERROR: modpost: "ioremap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
-> ERROR: modpost: "devm_platform_ioremap_resource" [drivers/char/xillybus/xillybus_of.ko] undefined!
-> ERROR: modpost: "devm_memremap" [drivers/misc/open-dice.ko] undefined!
-> ERROR: modpost: "devm_memunmap" [drivers/misc/open-dice.ko] undefined!
-> ERROR: modpost: "iounmap" [drivers/net/ethernet/8390/pcnet_cs.ko] undefined!
-> WARNING: modpost: suppressed 19 unresolved symbol warnings because there were too many)
->> Kconfig warnings: (for reference only)
->    WARNING: unmet direct dependencies detected for USB_PHY
->    Depends on [n]: USB_SUPPORT [=n]
->    Selected by [m]:
->    - PHY_STARFIVE_JH7110_PCIE [=m]
-> 
-I will fix it.
+I'm okay with dropping the virtual master and instantiating a DRM
+device for each PCI device, but then the driver at least needs to be
+able to handle multiple instances.
+
+Also what exactly is the problem with the virtual master device?
+Couldn't we just instantiate one of those for each PCI device to
+minimize the changes needed to the bind/unbind logic?
+
+Regards,
+Lucas
+
+> +
+> +static int etnaviv_drm_bind(struct device *dev, bool component)
+>  {
+>  	struct etnaviv_drm_private *priv;
+>  	struct drm_device *drm;
+> @@ -556,12 +555,15 @@ static int etnaviv_bind(struct device *dev)
+>  	}
+>  
+>  	drm->dev_private = priv;
+> +	etna_private_ptr = priv;
+>  
+>  	dma_set_max_seg_size(dev, SZ_2G);
+>  
+> -	dev_set_drvdata(dev, drm);
+> +	if (component)
+> +		ret = component_bind_all(dev, drm);
+> +	else
+> +		ret = etnaviv_gpu_bind(dev, NULL, drm);
+>  
+> -	ret = component_bind_all(dev, drm);
+>  	if (ret < 0)
+>  		goto out_free_priv;
+>  
+> @@ -574,7 +576,10 @@ static int etnaviv_bind(struct device *dev)
+>  	return 0;
+>  
+>  out_unbind:
+> -	component_unbind_all(dev, drm);
+> +	if (component)
+> +		component_unbind_all(dev, drm);
+> +	else
+> +		etnaviv_gpu_unbind(dev, NULL, drm);
+>  out_free_priv:
+>  	etnaviv_free_private(priv);
+>  out_put:
+> @@ -583,14 +588,17 @@ static int etnaviv_bind(struct device *dev)
+>  	return ret;
+>  }
+>  
+> -static void etnaviv_unbind(struct device *dev)
+> +static void etnaviv_drm_unbind(struct device *dev, bool component)
+>  {
+> -	struct drm_device *drm = dev_get_drvdata(dev);
+> -	struct etnaviv_drm_private *priv = drm->dev_private;
+> +	struct etnaviv_drm_private *priv = etna_private_ptr;
+> +	struct drm_device *drm = priv->drm;
+>  
+>  	drm_dev_unregister(drm);
+>  
+> -	component_unbind_all(dev, drm);
+> +	if (component)
+> +		component_unbind_all(dev, drm);
+> +	else
+> +		etnaviv_gpu_unbind(dev, NULL, drm);
+>  
+>  	etnaviv_free_private(priv);
+>  
+> @@ -599,9 +607,22 @@ static void etnaviv_unbind(struct device *dev)
+>  	drm_dev_put(drm);
+>  }
+>  
+> +/*
+> + * Platform driver:
+> + */
+> +static int etnaviv_master_bind(struct device *dev)
+> +{
+> +	return etnaviv_drm_bind(dev, true);
+> +}
+> +
+> +static void etnaviv_master_unbind(struct device *dev)
+> +{
+> +	return etnaviv_drm_unbind(dev, true);
+> +}
+> +
+>  static const struct component_master_ops etnaviv_master_ops = {
+> -	.bind = etnaviv_bind,
+> -	.unbind = etnaviv_unbind,
+> +	.bind = etnaviv_master_bind,
+> +	.unbind = etnaviv_master_unbind,
+>  };
+>  
+>  static int etnaviv_pdev_probe(struct platform_device *pdev)
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+> index 5e88fa95dac2..059be8c89c5a 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+> @@ -1737,8 +1737,7 @@ static const struct thermal_cooling_device_ops cooling_ops = {
+>  	.set_cur_state = etnaviv_gpu_cooling_set_cur_state,
+>  };
+>  
+> -static int etnaviv_gpu_bind(struct device *dev, struct device *master,
+> -	void *data)
+> +int etnaviv_gpu_bind(struct device *dev, struct device *master, void *data)
+>  {
+>  	struct drm_device *drm = data;
+>  	struct etnaviv_drm_private *priv = drm->dev_private;
+> @@ -1769,7 +1768,6 @@ static int etnaviv_gpu_bind(struct device *dev, struct device *master,
+>  	if (ret < 0)
+>  		goto out_sched;
+>  
+> -
+>  	gpu->drm = drm;
+>  	gpu->fence_context = dma_fence_context_alloc(1);
+>  	xa_init_flags(&gpu->user_fences, XA_FLAGS_ALLOC);
+> @@ -1798,8 +1796,7 @@ static int etnaviv_gpu_bind(struct device *dev, struct device *master,
+>  	return ret;
+>  }
+>  
+> -static void etnaviv_gpu_unbind(struct device *dev, struct device *master,
+> -	void *data)
+> +void etnaviv_gpu_unbind(struct device *dev, struct device *master, void *data)
+>  {
+>  	struct etnaviv_gpu *gpu = dev_get_drvdata(dev);
+>  
+> @@ -1867,9 +1864,11 @@ static int etnaviv_gpu_register_irq(struct etnaviv_gpu *gpu, int irq)
+>  	return 0;
+>  }
+>  
+> -static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
+> +/* platform independent */
+> +
+> +static int etnaviv_gpu_driver_create(struct device *dev, void __iomem *mmio,
+> +				     int irq, bool component, bool has_clk)
+>  {
+> -	struct device *dev = &pdev->dev;
+>  	struct etnaviv_gpu *gpu;
+>  	int err;
+>  
+> @@ -1877,24 +1876,22 @@ static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
+>  	if (!gpu)
+>  		return -ENOMEM;
+>  
+> -	gpu->dev = &pdev->dev;
+> +	gpu->dev = dev;
+> +	gpu->mmio = mmio;
+>  	mutex_init(&gpu->lock);
+>  	mutex_init(&gpu->sched_lock);
+>  
+> -	/* Map registers: */
+> -	gpu->mmio = devm_platform_ioremap_resource(pdev, 0);
+> -	if (IS_ERR(gpu->mmio))
+> -		return PTR_ERR(gpu->mmio);
+> -
+>  	/* Get Interrupt: */
+> -	err = etnaviv_gpu_register_irq(gpu, platform_get_irq(pdev, 0));
+> +	err = etnaviv_gpu_register_irq(gpu, irq);
+>  	if (err)
+>  		return err;
+>  
+>  	/* Get Clocks: */
+> -	err = etnaviv_gpu_clk_get(gpu);
+> -	if (err)
+> -		return err;
+> +	if (has_clk) {
+> +		err = etnaviv_gpu_clk_get(gpu);
+> +		if (err)
+> +			return err;
+> +	}
+>  
+>  	/* TODO: figure out max mapped size */
+>  	dev_set_drvdata(dev, gpu);
+> @@ -1904,24 +1901,27 @@ static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
+>  	 * autosuspend delay is rather arbitary: no measurements have
+>  	 * yet been performed to determine an appropriate value.
+>  	 */
+> -	pm_runtime_use_autosuspend(gpu->dev);
+> -	pm_runtime_set_autosuspend_delay(gpu->dev, 200);
+> -	pm_runtime_enable(gpu->dev);
+> -
+> -	err = component_add(&pdev->dev, &gpu_ops);
+> -	if (err < 0) {
+> -		dev_err(&pdev->dev, "failed to register component: %d\n", err);
+> -		return err;
+> +	pm_runtime_use_autosuspend(dev);
+> +	pm_runtime_set_autosuspend_delay(dev, 200);
+> +	pm_runtime_enable(dev);
+> +
+> +	if (component) {
+> +		err = component_add(dev, &gpu_ops);
+> +		if (err < 0) {
+> +			dev_err(dev, "failed to register component: %d\n", err);
+> +			return err;
+> +		}
+>  	}
+>  
+>  	return 0;
+>  }
+>  
+> -static int etnaviv_gpu_platform_remove(struct platform_device *pdev)
+> +static void etnaviv_gpu_driver_destroy(struct device *dev, bool component)
+>  {
+> -	component_del(&pdev->dev, &gpu_ops);
+> -	pm_runtime_disable(&pdev->dev);
+> -	return 0;
+> +	if (component)
+> +		component_del(dev, &gpu_ops);
+> +
+> +	pm_runtime_disable(dev);
+>  }
+>  
+>  static int etnaviv_gpu_rpm_suspend(struct device *dev)
+> @@ -1971,6 +1971,31 @@ static const struct dev_pm_ops etnaviv_gpu_pm_ops = {
+>  	RUNTIME_PM_OPS(etnaviv_gpu_rpm_suspend, etnaviv_gpu_rpm_resume, NULL)
+>  };
+>  
+> +static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	void __iomem *mmio;
+> +	int irq;
+> +
+> +	/* Map registers: */
+> +	mmio = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(mmio))
+> +		return PTR_ERR(mmio);
+> +
+> +	irq = platform_get_irq(pdev, 0);
+> +
+> +	return etnaviv_gpu_driver_create(dev, mmio, irq, true, true);
+> +}
+> +
+> +static int etnaviv_gpu_platform_remove(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +
+> +	etnaviv_gpu_driver_destroy(dev, true);
+> +
+> +	return 0;
+> +}
+> +
+>  struct platform_driver etnaviv_gpu_driver = {
+>  	.driver = {
+>  		.name = "etnaviv-gpu",
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
+> index 98c6f9c320fc..1ec829a649b5 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
+> @@ -206,6 +206,9 @@ void etnaviv_gpu_pm_put(struct etnaviv_gpu *gpu);
+>  int etnaviv_gpu_wait_idle(struct etnaviv_gpu *gpu, unsigned int timeout_ms);
+>  void etnaviv_gpu_start_fe(struct etnaviv_gpu *gpu, u32 address, u16 prefetch);
+>  
+> +int etnaviv_gpu_bind(struct device *dev, struct device *master, void *data);
+> +void etnaviv_gpu_unbind(struct device *dev, struct device *master, void *data);
+> +
+>  extern struct platform_driver etnaviv_gpu_driver;
+>  
+>  #endif /* __ETNAVIV_GPU_H__ */
+
