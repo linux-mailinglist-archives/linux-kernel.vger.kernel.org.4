@@ -2,87 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D267383E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D56217383E8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjFUMfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 08:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54682 "EHLO
+        id S231968AbjFUMgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 08:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231958AbjFUMey (ORCPT
+        with ESMTP id S231818AbjFUMgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 08:34:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD9DD122;
-        Wed, 21 Jun 2023 05:34:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 21 Jun 2023 08:36:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69CDC19A9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:35:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687350930;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mCx8PTMmZcxpFBZC7QtJlHTMWJ1OP5pNiL5E71UNtkQ=;
+        b=BXZc4sVaQ1aauYNkrGIwNMITxwXVQz6CTUo0VsxjytfIKPsRkJ7EpnizZQJ4VWf5dNk4Iv
+        +ABI+V4CyUDDNzuFz7LrEWemjfJqQtI0RwVHRY7xhnIut6BVkbcWk2jSFyfp1md5PfboXt
+        aMIHvC4ZpdW5ZoizT0jS9M7GjktBD8c=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-223-f6KGKq15OqmRtG5q1VsCLg-1; Wed, 21 Jun 2023 08:35:24 -0400
+X-MC-Unique: f6KGKq15OqmRtG5q1VsCLg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5907F61557;
-        Wed, 21 Jun 2023 12:34:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34D08C433C8;
-        Wed, 21 Jun 2023 12:34:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687350892;
-        bh=HUK+2Pf/1vVdz2BpYCSLWgvpypSBQV0pJcvu0NwNaBY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IefTF8yyUuBk68bb6/aMl2PZgESWD+7uHcHW86L04b1lA1NSNnPZ/VvrZEpBD62o+
-         YulJV/OjhYm7qlccjPorHdC3ZFUPvOwyBfGdcQYaonY+uVIBSqYIY48zgPGdLHezNx
-         XYHrLEt+aGeeyFO6KANpHhVwT+JN5FxtK0fCvXxU=
-Date:   Wed, 21 Jun 2023 14:34:47 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     emma <emma.t.christy@gmail.com>
-Cc:     ezequiel@vanguardiasur.com.ar, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Subject: [PATCH] media: rkvdec: removed redundant blank
- line
-Message-ID: <2023062124-goldsmith-matcher-edbf@gregkh>
-References: <20230621092223.10805-1-emma.t.christy@gmail.com>
- <2023062136-drench-pasty-79a2@gregkh>
- <20230621151806.6b56f121@emma-rogzephyrusg14ga401iv>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA7071C08784;
+        Wed, 21 Jun 2023 12:35:17 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.4])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 93FBC1121330;
+        Wed, 21 Jun 2023 12:35:15 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <87f547b0-7826-b232-cd01-c879b6829951@grimberg.me>
+References: <87f547b0-7826-b232-cd01-c879b6829951@grimberg.me> <20230620145338.1300897-1-dhowells@redhat.com> <20230620145338.1300897-11-dhowells@redhat.com>
+To:     Sagi Grimberg <sagi@grimberg.me>
+Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Willem de Bruijn <willemb@google.com>,
+        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-nvme@lists.infradead.org
+Subject: Re: [PATCH net-next v3 10/18] nvme/host: Use sendmsg(MSG_SPLICE_PAGES) rather then sendpage
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621151806.6b56f121@emma-rogzephyrusg14ga401iv>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1733832.1687350914.1@warthog.procyon.org.uk>
+Date:   Wed, 21 Jun 2023 13:35:15 +0100
+Message-ID: <1733833.1687350915@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 03:18:06PM +0300, emma wrote:
-> On Wed, 21 Jun 2023 12:51:11 +0200
-> Greg KH <gregkh@linuxfoundation.org> wrote:
-> 
-> > On Wed, Jun 21, 2023 at 12:22:23PM +0300, emma christy wrote:
-> > > Adhere to Linux kernel coding style. Removed redundant blank line.
-> > > Issue found by checkpatch.
-> > > 
-> > > Signed-off-by: emma christy <emma.t.christy@gmail.com>  
-> > 
-> > You might need to write this as "Emma Christy", right?
-> > 
-> > Also, your "Subject" line has an additional [PATCH] and "Subject:" in
-> > it somehow.
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> 
-> I am sorry for the errors, I am still new at this.
-> 
-> I did mean to sign as "Emma Christy". Should I resubmit the patch,
-> because of this?
+Sagi Grimberg <sagi@grimberg.me> wrote:
 
-We can't accept it because of this issue, and the "Subject:" issue, so
-yes, you will need to send a v2 of this.
+> What tree will this be going from btw?
 
-thanks,
+It's aimed at net-next, as mentioned in the subject line.
 
-greg k-h
+Thanks,
+David
+
