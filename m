@@ -2,155 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50696737BE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 09:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84759737C32
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 09:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjFUHGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 03:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
+        id S231184AbjFUHH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 03:07:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjFUHGe (ORCPT
+        with ESMTP id S229567AbjFUHHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 03:06:34 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687F7DD
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 00:06:33 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-3ff29fe0d40so4857211cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 00:06:33 -0700 (PDT)
+        Wed, 21 Jun 2023 03:07:21 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E3A10FB
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 00:07:20 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-66869feb7d1so2500630b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 00:07:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687331192; x=1689923192;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=w1PHjAGZXc4xazJssBOKB0/R/68bqb/HiXn5FLtCATg=;
-        b=i+ST9//AM6kmm9e20uuYi20qyrpg5HZh3QTMv2H9+mOQZCgcnWidDnU43Fi5qIAmLK
-         6Ty/8BHdiM0QzuKd3aa1fus+UajjEl0pFr6v5zfH+GNevht4bnkth6hrXKis4CSLQZD/
-         KpKV6O7mOC1y2U91RIrxgNT2ckOL6gUVFomoRR3PFsTylEJFAdrurFI+r3jEtjCC9E4u
-         kVOqnM3oE/z8Qw7EbAWbxxT5CKAeOL7SK2FdyMmdxXu70A4c6IhBX4kfmjyoQ703MGLd
-         Unpmfptx/tk+mN6lZN2S0wsyWCT9KR58LC5lFVTFrMW495r4bDT2KH1kys2B8S0JF7A5
-         9M1A==
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1687331240; x=1689923240;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=f/3ivr0Uvn0xo4yZRSVF9o5KFsPxbHD7ljE2Fq2Q7Rk=;
+        b=lvrWyMcx2apWGaapBurs7DV5QSCM2IAD3pfwIHVgQqNlyu0EXcveUaQhahvHw6bsiN
+         IulOjmltLeqcV2UH+hw4chi/kRCzevakgKNE7YywkvcYtMXtshuoEgjlOgE6ia9fhhz2
+         JgbUyWOoDLdj8/b1EXWdcIgf8KmHhmujLmLVLmZrdyOYaF3vXLuzHuAUYPh/OmdW+JRq
+         zu5LSPqbiYG7YFMh+0ZNnzKGIpBxYdtwDXMe2SbMScyGEsH3puCaZN2/X5DU65wV5DXZ
+         AjspeCQM4ZbTKXYF+OWAhTCrHvI4u9AuuOIA+j/APGCF3Ss8GvXKQFLATdj+0B10vISQ
+         1A+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687331192; x=1689923192;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=w1PHjAGZXc4xazJssBOKB0/R/68bqb/HiXn5FLtCATg=;
-        b=Ev0hMrp9GbDX42Xn87zPrPDpUjra0luRec3pU+qcLR33mg9jrQAk85fYyQNFtqmXX7
-         F6bAaQhw88iAhOeXdD55hNcPbzPLx2fBha4LEQ4bKILCq8K6RWOAmTbf5sHuKdpxP4ls
-         4rFcJxkNt78m4osIzNTxe3X7TfRtrGvCTfUMaYAHwa6OF2RTO+YmXzOg+74J+y6QPAzv
-         6b8ykJDXAmuiSo/n9+s2SI4b98+SJcsh5CJxKMat089Q/V9kUclne4t+2iSQnl0zTrs3
-         1etm13cjgbY1j6Y2yeHDD6wncjILfmkWIdY37GpBp18x+tUX4RuyuxrR3W5fMRfl2Lbl
-         OTpQ==
-X-Gm-Message-State: AC+VfDz/tdG9WdW/I7QinVjjP1iU0o6cHWcHGu2+Pvps78ndSQgo/UmM
-        Wp5GTjVT/dxyJFh4NDJbxzY=
-X-Google-Smtp-Source: ACHHUZ7taZg7WUuvC3k+zigXvivHcr813dz21NRpnTjy4e6tkPXyAfT2GMaAW++zVFNPbJI3a1KGRQ==
-X-Received: by 2002:a05:620a:800e:b0:763:b025:9f40 with SMTP id ee14-20020a05620a800e00b00763b0259f40mr5271447qkb.7.1687331192447;
-        Wed, 21 Jun 2023 00:06:32 -0700 (PDT)
-Received: from localhost.localdomain ([173.23.87.62])
-        by smtp.gmail.com with ESMTPSA id x8-20020a817c08000000b005623ae13106sm957361ywc.100.2023.06.21.00.06.29
+        d=1e100.net; s=20221208; t=1687331240; x=1689923240;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=f/3ivr0Uvn0xo4yZRSVF9o5KFsPxbHD7ljE2Fq2Q7Rk=;
+        b=bzzAknBNKn85sOwEePXGc8M9RwW/V5bGz1yGkUz69V/m/CwSlECbmyJDvFs9ZgTaf+
+         APvjJCHgXVttsjh+cZODUJYOBlbjUx1N1vvjrktOhrLoDJtb7fjIIGKZ1yE5GltMOrYE
+         K8DxzRdb7mS4XfbrrNpnAeyQeA4tbYuvFK8KqFrNQMeng1d2EWRSXBEwEmtEj/2PGrJs
+         kKVYVBNY9U5wEFi/IDw/Hq/IgS695oJ2Az7ygoT6IR55DLw8A+lTMdh95pdYyjAFt+1L
+         5k4KJxlFRSEHd4uIp18zU6eyKQpn3q9tdJP8emOwu6d07aK8Vx2fam9kR2wsIJ5caysj
+         rikg==
+X-Gm-Message-State: AC+VfDwQNkNHCI/bm4YRh1ey1iGcMvN+KhH8FLgRzlW0/clioCVCL0jP
+        J2R/NqG0MYGOvorhvxtPtYqdmg==
+X-Google-Smtp-Source: ACHHUZ7sTBcKKL8tWbHKZpuD9Of59X+aEk+5qQmG01kJeoc4kPDbdLKuWxz/OcFotfXBZlCRgbQ8Xg==
+X-Received: by 2002:a05:6a21:7890:b0:11f:1aa2:666b with SMTP id bf16-20020a056a21789000b0011f1aa2666bmr12943224pzc.32.1687331239730;
+        Wed, 21 Jun 2023 00:07:19 -0700 (PDT)
+Received: from dread.disaster.area (pa49-180-13-202.pa.nsw.optusnet.com.au. [49.180.13.202])
+        by smtp.gmail.com with ESMTPSA id y17-20020aa78551000000b0064d47cd116esm2298187pfn.161.2023.06.21.00.07.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 00:06:31 -0700 (PDT)
-From:   Matthew Anderson <ruinairas1992@gmail.com>
-To:     tiwai@suse.com
-Cc:     perex@perex.cz, luke@ljones.dev, sbinding@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org,
-        Matthew Anderson <ruinairas1992@gmail.com>
-Subject: [PATCH] ALSA: hda/realtek: Add quirks for ROG ALLY CS35l41 audio
-Date:   Wed, 21 Jun 2023 02:06:10 -0500
-Message-ID: <20230621070610.70399-1-ruinairas1992@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        Wed, 21 Jun 2023 00:07:18 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1qBrvv-00EMGg-14;
+        Wed, 21 Jun 2023 17:07:15 +1000
+Date:   Wed, 21 Jun 2023 17:07:15 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     syzbot <syzbot+9d0b0d54a8bd799f6ae4@syzkaller.appspotmail.com>
+Cc:     dchinner@redhat.com, djwong@kernel.org, hch@lst.de,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [xfs?] WARNING: Reset corrupted AGFL on AG NUM. NUM
+ blocks leaked. Please unmount and run xfs_repair.
+Message-ID: <ZJKhoxnkNF3VspbP@dread.disaster.area>
+References: <000000000000ffcb2e05fe9a445c@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000ffcb2e05fe9a445c@google.com>
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This requires a patched ACPI table or a firmware from ASUS to work because
-the system does not come with the _DSD field for the CSC3551.
+On Tue, Jun 20, 2023 at 07:10:19PM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    40f71e7cd3c6 Merge tag 'net-6.4-rc7' of git://git.kernel.o..
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=158b99d3280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=7ff8f87c7ab0e04e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9d0b0d54a8bd799f6ae4
+> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16ab4537280000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=148326ef280000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/2dc89d5fee38/disk-40f71e7c.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/0ced5a475218/vmlinux-40f71e7c.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/d543a4f69684/bzImage-40f71e7c.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/e2012b787a31/mount_0.gz
+> 
+> The issue was bisected to:
+> 
+> commit e0a8de7da35e5b22b44fa1013ccc0716e17b0c14
+> Author: Dave Chinner <dchinner@redhat.com>
+> Date:   Mon Jun 5 04:48:15 2023 +0000
+> 
+>     xfs: fix agf/agfl verification on v4 filesystems
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10bb665b280000
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=12bb665b280000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14bb665b280000
 
-Bug report: https://bugzilla.kernel.org/show_bug.cgi?id=217550
+WTAF?
 
-Signed-off-by: Matthew Anderson <ruinairas1992@gmail.com>
----
- sound/pci/hda/patch_realtek.c | 46 +++++++++++++++++++++++++++++++++++
- 1 file changed, 46 insertions(+)
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+9d0b0d54a8bd799f6ae4@syzkaller.appspotmail.com
+> Fixes: e0a8de7da35e ("xfs: fix agf/agfl verification on v4 filesystems")
+> 
+> XFS (loop0): WARNING: Reset corrupted AGFL on AG 0. 4 blocks leaked. Please unmount and run xfs_repair.
+> XFS (loop0): Internal error !ino_ok at line 213 of file fs/xfs/libxfs/xfs_dir2.c.  Caller xfs_dir_ino_validate+0x2c/0x90 fs/xfs/libxfs/xfs_dir2.c:220
+> CPU: 1 PID: 46 Comm: kworker/u4:3 Not tainted 6.4.0-rc6-syzkaller-00195-g40f71e7cd3c6 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+> Workqueue: xfs_iwalk-4998 xfs_pwork_work
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:88 [inline]
+>  dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+>  xfs_error_report fs/xfs/xfs_error.c:384 [inline]
+>  xfs_corruption_error+0x11d/0x170 fs/xfs/xfs_error.c:401
+>  xfs_dir_ino_validate+0x5f/0x90 fs/xfs/libxfs/xfs_dir2.c:213
+>  xfs_dir2_sf_verify+0x487/0x990 fs/xfs/libxfs/xfs_dir2_sf.c:779
+>  xfs_ifork_verify_local_data fs/xfs/libxfs/xfs_inode_fork.c:706 [inline]
+>  xfs_iformat_data_fork+0x4bf/0x6d0 fs/xfs/libxfs/xfs_inode_fork.c:256
+>  xfs_inode_from_disk+0xbbf/0x1070 fs/xfs/libxfs/xfs_inode_buf.c:245
+>  xfs_iget_cache_miss fs/xfs/xfs_icache.c:639 [inline]
+>  xfs_iget+0xf08/0x3050 fs/xfs/xfs_icache.c:777
+>  xfs_qm_dqusage_adjust+0x228/0x670 fs/xfs/xfs_qm.c:1157
+>  xfs_iwalk_ag_recs+0x486/0x7c0 fs/xfs/xfs_iwalk.c:220
+>  xfs_iwalk_run_callbacks+0x25b/0x490 fs/xfs/xfs_iwalk.c:376
+>  xfs_iwalk_ag+0xad6/0xbd0 fs/xfs/xfs_iwalk.c:482
+>  xfs_iwalk_ag_work+0xfb/0x1b0 fs/xfs/xfs_iwalk.c:624
+>  xfs_pwork_work+0x7c/0x190 fs/xfs/xfs_pwork.c:47
+>  process_one_work+0x8a0/0x10e0 kernel/workqueue.c:2405
+>  worker_thread+0xa63/0x1210 kernel/workqueue.c:2552
+>  kthread+0x2b8/0x350 kernel/kthread.c:379
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+>  </TASK>
+> XFS (loop0): Corruption detected. Unmount and run xfs_repair
+> XFS (loop0): Invalid inode number 0x24
+> XFS (loop0): Metadata corruption detected at xfs_dir2_sf_verify+0x767/0x990 fs/xfs/libxfs/xfs_dir2_sf.c:774, inode 0x23 data fork
+> XFS (loop0): Unmount and run xfs_repair
+> XFS (loop0): First 32 bytes of corrupted metadata buffer:
+> 00000000: 02 00 00 00 00 20 05 00 30 66 69 6c 65 30 01 00  ..... ..0file0..
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index 308ec7034cc9..a3981160b745 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -7120,6 +7120,10 @@ enum {
- 	ALC294_FIXUP_ASUS_DUAL_SPK,
- 	ALC285_FIXUP_THINKPAD_X1_GEN7,
- 	ALC285_FIXUP_THINKPAD_HEADSET_JACK,
-+	ALC294_FIXUP_ASUS_ALLY,
-+	ALC294_FIXUP_ASUS_ALLY_PINS,
-+	ALC294_FIXUP_ASUS_ALLY_VERBS,
-+	ALC294_FIXUP_ASUS_ALLY_SPEAKER,
- 	ALC294_FIXUP_ASUS_HPE,
- 	ALC294_FIXUP_ASUS_COEF_1B,
- 	ALC294_FIXUP_ASUS_GX502_HP,
-@@ -8432,6 +8436,47 @@ static const struct hda_fixup alc269_fixups[] = {
- 		.chained = true,
- 		.chain_id = ALC294_FIXUP_SPK2_TO_DAC1
- 	},
-+	[ALC294_FIXUP_ASUS_ALLY] = {
-+		.type = HDA_FIXUP_FUNC,
-+		.v.func = cs35l41_fixup_i2c_two,
-+		.chained = true,
-+		.chain_id = ALC294_FIXUP_ASUS_ALLY_PINS
-+	},
-+	[ALC294_FIXUP_ASUS_ALLY_PINS] = {
-+		.type = HDA_FIXUP_PINS,
-+		.v.pins = (const struct hda_pintbl[]) {
-+			{ 0x19, 0x03a11050 },
-+			{ 0x1a, 0x03a11C30 },
-+			{ 0x21, 0x03211420 },
-+			{ }
-+		},
-+		.chained = true,
-+		.chain_id = ALC294_FIXUP_ASUS_ALLY_VERBS
-+	},
-+	[ALC294_FIXUP_ASUS_ALLY_VERBS] = {
-+		.type = HDA_FIXUP_VERBS,
-+		.v.verbs = (const struct hda_verb[]) {
-+			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x45 },
-+			{ 0x20, AC_VERB_SET_PROC_COEF, 0x5089 },
-+			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x46 },
-+			{ 0x20, AC_VERB_SET_PROC_COEF, 0x0004 },
-+			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x47 },
-+			{ 0x20, AC_VERB_SET_PROC_COEF, 0xA47A },
-+			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x49 },
-+			{ 0x20, AC_VERB_SET_PROC_COEF, 0x0049},
-+			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x4A },
-+			{ 0x20, AC_VERB_SET_PROC_COEF, 0x201B },
-+			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x6B },
-+			{ 0x20, AC_VERB_SET_PROC_COEF, 0x4278},
-+			{ }
-+		},
-+		.chained = true,
-+		.chain_id = ALC294_FIXUP_ASUS_ALLY_SPEAKER
-+	},
-+	[ALC294_FIXUP_ASUS_ALLY_SPEAKER] = {
-+		.type = HDA_FIXUP_FUNC,
-+		.v.func = alc285_fixup_speaker2_to_dac1,
-+	},
- 	[ALC285_FIXUP_THINKPAD_X1_GEN7] = {
- 		.type = HDA_FIXUP_FUNC,
- 		.v.func = alc285_fixup_thinkpad_x1_gen7,
-@@ -9596,6 +9641,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x10ec, 0x1254, "Intel Reference board", ALC295_FIXUP_CHROME_BOOK),
- 	SND_PCI_QUIRK(0x10ec, 0x12cc, "Intel Reference board", ALC225_FIXUP_HEADSET_JACK),
- 	SND_PCI_QUIRK(0x10f7, 0x8338, "Panasonic CF-SZ6", ALC269_FIXUP_HEADSET_MODE),
-+	SND_PCI_QUIRK(0x1043, 0x17F3, "ROG Ally RC71L_RC71L", ALC294_FIXUP_ASUS_ALLY),
- 	SND_PCI_QUIRK(0x144d, 0xc109, "Samsung Ativ book 9 (NP900X3G)", ALC269_FIXUP_INV_DMIC),
- 	SND_PCI_QUIRK(0x144d, 0xc169, "Samsung Notebook 9 Pen (NP930SBE-K01US)", ALC298_FIXUP_SAMSUNG_AMP),
- 	SND_PCI_QUIRK(0x144d, 0xc176, "Samsung Notebook 9 Pro (NP930MBE-K04US)", ALC298_FIXUP_SAMSUNG_AMP),
+syzbot corrupted a v4 filesystem.
+
+Syzbot corrupted the superblock, XFS detected and corrected that.
+
+Syzbot corrupted the AGI. XFS detected that.
+
+Syzbot corrupted the AGF and AGFL. XFS detected and corrected that,
+allowing operations to continue.
+
+Syzbot also corrupted a directory inode. XFS detected that and
+warned about it.
+
+Test finished.
+
+At no point did the kernel crash, oops, do anything bad like a UAF
+or OOB read. All XFS did was catch the corruptions, fix some of them
+so it could continue operating, and warn the user that they need to
+unmount and run repair.
+
+So exactly what is syzbot complaining about here? There's no kernel
+issue here at all.
+
+Also, I cannot tell syzbot "don't ever report this as a bug again",
+so the syzbot developers are going to have to triage and fix this
+syzbot problem themselves so it doesn't keep getting reported to
+us...
+
+-Dave.
 -- 
-2.41.0
-
+Dave Chinner
+david@fromorbit.com
