@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6E64737921
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 04:31:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39070737922
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 04:31:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbjFUCbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 22:31:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45676 "EHLO
+        id S229893AbjFUCbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 22:31:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjFUCbD (ORCPT
+        with ESMTP id S229873AbjFUCbF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 22:31:03 -0400
+        Tue, 20 Jun 2023 22:31:05 -0400
 Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD275B7
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 19:30:57 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-25edb0c31ccso1494020a91.0
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 19:30:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D859DB4
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 19:31:03 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-25ed75fef0bso1550169a91.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 19:31:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687314656; x=1689906656;
+        d=google.com; s=20221208; t=1687314663; x=1689906663;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=zMvVDCIqwutYRW7BL6wWIoprb3WJoHOr+n8+HE8xmyM=;
-        b=rmtJdI5G1/6wEp0nVhAgxso+a3Mm7glgZlr7ICu1hFJ9UoSvLcjsh3iroBWHa+roOa
-         AlXXj0ZNZ4hSg/+DDCeZOJVVN2p7j+QQybGU9VsOYiep+h1HWn88LZQitJlFD4XqaV2c
-         Id+3mXdrhiILKsof5gCOVh6cJIaFI9CVt7E8nxPUB8QfNhtwY8SlyJKpf6YXzxx2X/sC
-         LphIp6fDHG1B1niycXyy0t/qCTXgGgCkYmuLNeONUblJoGNRa541t5sR+YcFNYs1Cax4
-         S4EQ9LBP0i8YH17eUqtGY9s2I8q3AgmHKcG+FUBveB69EbKNh8UKtWihNq7wWxRTJ3Ew
-         q/JQ==
+        bh=2i6mxBMLlJpzwoYg2wZeOmq9J33Dk9/METQ7rddthzM=;
+        b=fWo8m3veR2+Dh+41IRQkxot7E9H5Ga0natg38/c0ovy3NMSgF6qfN6kDIT+W9hDXdj
+         sw5fhmDrn1cK0HoWCYIcUSV97oWVwJkVAsBLBO7AaRkjzY6oMV67Iy4VkWEmfaSIeSZQ
+         RANT9wo3kWJhyolFjka1xQ/WnPo0lfX7WqbzhY0c/sZUyNywus125YAWCLcppYbbXDCr
+         X855SxEMuvPSzjupi059z6GzFkyvoiaYeBHHWlRU+lkE17YcSGzWDStJUjN2RWO4bgll
+         di12bINaMXyQfybzv0UdvIUcTu5EJjIT4+3Auw0prdWke+9ChOadWEGhIiEpHuMUA09s
+         qO/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687314656; x=1689906656;
+        d=1e100.net; s=20221208; t=1687314663; x=1689906663;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=zMvVDCIqwutYRW7BL6wWIoprb3WJoHOr+n8+HE8xmyM=;
-        b=KrZbuobo1o2GLgk/DP0uzH3aRl9CM6oIhEJdf3AQ0L6J8/ctXr9s3jcxa6LfbzFIVl
-         CJUeN1HxsR8VmDzhcjV1U4eQO4VnWjND64DbGtk/5OEB9EMDmSHq1HLmRjvJ/OMR9S8q
-         CwdUlz/tuA+ai5MqeXikZpSKMqxZPXpRq5N8xWnYCdCJZVWE0ko6EqlhMLGyEslLDS6A
-         1FsRa3V7g7dEqjx37+4AcwTTMcBiNtkIZ+Hw8H9zJQlpWXXyy7pCrvElWHgrQgx9MZWt
-         8J0xApe4tUNdxEFK5AkfJRntWFYShQakDrLA0Z34giqWlHuNRyG04MOubRq+KMLZos63
-         O4+g==
-X-Gm-Message-State: AC+VfDxZgY5+BVjkDuJUuCZVwL1iW4rX6cInBUXCctWdaJxIC1cyWMVi
-        b2mru2nSZE+GcyO9NN+avAkY58UveTvAH3gU
-X-Google-Smtp-Source: ACHHUZ4wvD8NisRGZkbCm16bHHzOVT6pr5ElJPtaQQsrB+7eK5uc4EwB8Wn4MiiBKHnFztWWKZDJEm0QnPReByj0
+        bh=2i6mxBMLlJpzwoYg2wZeOmq9J33Dk9/METQ7rddthzM=;
+        b=AX4tpNggf8BttMq67yqqoP1lnfbL3qToz99A1G65lpl2LuVR8JVjgnX9j5+TcCnZl3
+         fYfCRt+O39/wapZnBmX8FmXcT4rXleSnvabx7vZQ1cUij8mNOKIXfsTGGi3lHse30GWV
+         8ZTy2dDXImPRbcbc0zyWijEU2+7BplULFAT29sbxC8+gQ8/guQAot5BhN0rWCM3NUznW
+         W1tYA6ZaDHR7CfX4gtHNvz1cR885ayW7VhxEjwxdTHFwjOK6ok44NrZjglpzbC+jUz8+
+         +5VFc/Ij8gKE+gzPg+oO7rio6Q+VGDcyv7FjGXovijF3Q9VqqaMitjPpUMPYwun7Xmau
+         nlmw==
+X-Gm-Message-State: AC+VfDz8y4Mma8vs3JuQTdODSclfCOYO37GLT4USY71iGNSVlxSIVgP3
+        EtyAs2SKwn74rdIQfc9jlsXheleUmlppygA0
+X-Google-Smtp-Source: ACHHUZ4wSiyW43/DbwdPIXmiSBoQP0oMQm+KTVuk3m/PT1ybCYpY9GCI1fNtqyYn2IN9N0HQBmdZQq3mQbNPrPaO
 X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
- (user=yosryahmed job=sendgmr) by 2002:a17:90b:78b:b0:25f:612:b17e with SMTP
- id l11-20020a17090b078b00b0025f0612b17emr1096620pjz.7.1687314656443; Tue, 20
- Jun 2023 19:30:56 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 02:30:53 +0000
+ (user=yosryahmed job=sendgmr) by 2002:a17:90a:dac4:b0:25b:c272:ab34 with SMTP
+ id g4-20020a17090adac400b0025bc272ab34mr1914359pjx.7.1687314663432; Tue, 20
+ Jun 2023 19:31:03 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 02:31:01 +0000
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Message-ID: <20230621023053.432374-1-yosryahmed@google.com>
-Subject: [PATCH 1/2] mm: memcg: rename and document global_reclaim()
+Message-ID: <20230621023101.432780-1-yosryahmed@google.com>
+Subject: [PATCH 2/2] mm/vmscan: fix root proactive reclaim unthrottling
+ unbalanced node
 From:   Yosry Ahmed <yosryahmed@google.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Yu Zhao <yuzhao@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
@@ -67,109 +68,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Evidently, global_reclaim() can be a confusing name. Especially that it
-used to exist before with a subtly different definition (removed by
-commit b5ead35e7e1d ("mm: vmscan: naming fixes: global_reclaim() and
-sane_reclaim()"). It can be interpreted as non-cgroup reclaim, even
-though it returns true for cgroup reclaim on the root memcg
-(through memory.reclaim).
+When memory.reclaim was introduced, it became the first case where
+cgroup_reclaim() is true for the root cgroup. Johannes concluded [1]
+that for most cases this is okay, except for one case. Historically,
+kswapd would throttle reclaim on a node if a lot of pages marked for
+reclaim are under writeback (aka the node is congested). This occurred
+by setting LRUVEC_CONGESTED bit in lruvec->flags. The bit would be
+cleared when the node is balanced.
 
-Rename it to root_reclaim() in an attempt to make it less ambiguous, and
-add documentation to it as well as cgroup_reclaim.
+Similarly, cgroup reclaim would set the same bit when an lruvec is
+congested, and clear it on the way out of reclaim (to throttle local
+reclaimers).
+
+Before the introduction of memory.reclaim, the root memcg was the only
+target of kswapd reclaim, and non-root memcgs were the only targets of
+cgroup reclaim, so they would never interfere. Using the same bit for
+both was fine. After memory.reclaim, it is possible for cgroup reclaim
+on the root cgroup to clear the bit set by kswapd. This would result in
+reclaim on the node to be unthrottled before the node is balanced.
+
+Fix this by introducing separate bits for cgroup-level and node-level
+congestion. kswapd can unthrottle an lruvec that is marked as congested
+by cgroup reclaim (as the entire node should no longer be congested),
+but not vice versa (to prevent premature unthrottling before the entire
+node is balanced).
+
+[1]https://lore.kernel.org/lkml/20230405200150.GA35884@cmpxchg.org/
 
 Reported-by: Johannes Weiner <hannes@cmpxchg.org>
 Closes: https://lore.kernel.org/lkml/20230405200150.GA35884@cmpxchg.org/
 Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
 ---
- mm/vmscan.c | 21 +++++++++++++--------
- 1 file changed, 13 insertions(+), 8 deletions(-)
+ include/linux/mmzone.h | 18 +++++++++++++++---
+ mm/vmscan.c            | 19 ++++++++++++-------
+ 2 files changed, 27 insertions(+), 10 deletions(-)
 
+diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+index 3e822335f214..d863698a84e0 100644
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -293,9 +293,21 @@ static inline bool is_active_lru(enum lru_list lru)
+ #define ANON_AND_FILE 2
+ 
+ enum lruvec_flags {
+-	LRUVEC_CONGESTED,		/* lruvec has many dirty pages
+-					 * backed by a congested BDI
+-					 */
++	/*
++	 * An lruvec has many dirty pages backed by a congested BDI:
++	 * 1. LRUVEC_CGROUP_CONGESTED is set by cgroup-level reclaim.
++	 *    It can be cleared by cgroup reclaim or kswapd.
++	 * 2. LRUVEC_NODE_CONGESTED is set by kswapd node-level reclaim.
++	 *    It can only be cleared by kswapd.
++	 *
++	 * Essentially, kswapd can unthrottle an lruvec throttled by cgroup
++	 * reclaim, but not vice versa. This only applies to the root cgroup.
++	 * The goal is to prevent cgroup reclaim on the root cgroup (e.g.
++	 * memory.reclaim) to unthrottle an unbalanced node (that was throttled
++	 * by kswapd).
++	 */
++	LRUVEC_CGROUP_CONGESTED,
++	LRUVEC_NODE_CONGESTED,
+ };
+ 
+ #endif /* !__GENERATING_BOUNDS_H */
 diff --git a/mm/vmscan.c b/mm/vmscan.c
-index e305c11ec8fc..0dbbf718c53e 100644
+index 0dbbf718c53e..c22e4e7368da 100644
 --- a/mm/vmscan.c
 +++ b/mm/vmscan.c
-@@ -445,12 +445,17 @@ void reparent_shrinker_deferred(struct mem_cgroup *memcg)
- 	mutex_unlock(&shrinker_mutex);
- }
- 
-+/* Returns true for reclaim through cgroup limits or cgroup interfaces. */
- static bool cgroup_reclaim(struct scan_control *sc)
- {
- 	return sc->target_mem_cgroup;
- }
- 
--static bool global_reclaim(struct scan_control *sc)
-+/*
-+ * Returns true for reclaim on the root cgroup. This is true for direct
-+ * allocator reclaim and reclaim through cgroup interfaces on the root cgroup.
-+ */
-+static bool root_reclaim(struct scan_control *sc)
- {
- 	return !sc->target_mem_cgroup || mem_cgroup_is_root(sc->target_mem_cgroup);
- }
-@@ -505,7 +510,7 @@ static bool cgroup_reclaim(struct scan_control *sc)
- 	return false;
- }
- 
--static bool global_reclaim(struct scan_control *sc)
-+static bool root_reclaim(struct scan_control *sc)
- {
- 	return true;
- }
-@@ -562,7 +567,7 @@ static void flush_reclaim_state(struct scan_control *sc)
- 	 * memcg reclaim, to make reporting more accurate and reduce
- 	 * underestimation, but it's probably not worth the complexity for now.
+@@ -6592,10 +6592,13 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
+ 	 * Legacy memcg will stall in page writeback so avoid forcibly
+ 	 * stalling in reclaim_throttle().
  	 */
--	if (current->reclaim_state && global_reclaim(sc)) {
-+	if (current->reclaim_state && root_reclaim(sc)) {
- 		sc->nr_reclaimed += current->reclaim_state->reclaimed;
- 		current->reclaim_state->reclaimed = 0;
- 	}
-@@ -5339,7 +5344,7 @@ static long get_nr_to_scan(struct lruvec *lruvec, struct scan_control *sc, bool
- static unsigned long get_nr_to_reclaim(struct scan_control *sc)
- {
- 	/* don't abort memcg reclaim to ensure fairness */
--	if (!global_reclaim(sc))
-+	if (!root_reclaim(sc))
- 		return -1;
- 
- 	return max(sc->nr_to_reclaim, compact_gap(sc->order));
-@@ -5491,7 +5496,7 @@ static void lru_gen_shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc
- {
- 	struct blk_plug plug;
- 
--	VM_WARN_ON_ONCE(global_reclaim(sc));
-+	VM_WARN_ON_ONCE(root_reclaim(sc));
- 	VM_WARN_ON_ONCE(!sc->may_writepage || !sc->may_unmap);
- 
- 	lru_add_drain();
-@@ -5552,7 +5557,7 @@ static void lru_gen_shrink_node(struct pglist_data *pgdat, struct scan_control *
- 	struct blk_plug plug;
- 	unsigned long reclaimed = sc->nr_reclaimed;
- 
--	VM_WARN_ON_ONCE(!global_reclaim(sc));
-+	VM_WARN_ON_ONCE(!root_reclaim(sc));
+-	if ((current_is_kswapd() ||
+-	     (cgroup_reclaim(sc) && writeback_throttling_sane(sc))) &&
+-	    sc->nr.dirty && sc->nr.dirty == sc->nr.congested)
+-		set_bit(LRUVEC_CONGESTED, &target_lruvec->flags);
++	if (sc->nr.dirty && sc->nr.dirty == sc->nr.congested) {
++		if (cgroup_reclaim(sc) && writeback_throttling_sane(sc))
++			set_bit(LRUVEC_CGROUP_CONGESTED, &target_lruvec->flags);
++
++		if (current_is_kswapd())
++			set_bit(LRUVEC_NODE_CONGESTED, &target_lruvec->flags);
++	}
  
  	/*
- 	 * Unmapped clean folios are already prioritized. Scanning for more of
-@@ -6274,7 +6279,7 @@ static void shrink_lruvec(struct lruvec *lruvec, struct scan_control *sc)
- 	bool proportional_reclaim;
- 	struct blk_plug plug;
+ 	 * Stall direct reclaim for IO completions if the lruvec is
+@@ -6605,7 +6608,8 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
+ 	 */
+ 	if (!current_is_kswapd() && current_may_throttle() &&
+ 	    !sc->hibernation_mode &&
+-	    test_bit(LRUVEC_CONGESTED, &target_lruvec->flags))
++	    (test_bit(LRUVEC_CGROUP_CONGESTED, &target_lruvec->flags) ||
++	     test_bit(LRUVEC_NODE_CONGESTED, &target_lruvec->flags)))
+ 		reclaim_throttle(pgdat, VMSCAN_THROTTLE_CONGESTED);
  
--	if (lru_gen_enabled() && !global_reclaim(sc)) {
-+	if (lru_gen_enabled() && !root_reclaim(sc)) {
- 		lru_gen_shrink_lruvec(lruvec, sc);
- 		return;
- 	}
-@@ -6515,7 +6520,7 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
- 	struct lruvec *target_lruvec;
- 	bool reclaimable = false;
+ 	if (should_continue_reclaim(pgdat, nr_node_reclaimed, sc))
+@@ -6862,7 +6866,7 @@ static unsigned long do_try_to_free_pages(struct zonelist *zonelist,
  
--	if (lru_gen_enabled() && global_reclaim(sc)) {
-+	if (lru_gen_enabled() && root_reclaim(sc)) {
- 		lru_gen_shrink_node(pgdat, sc);
- 		return;
+ 			lruvec = mem_cgroup_lruvec(sc->target_mem_cgroup,
+ 						   zone->zone_pgdat);
+-			clear_bit(LRUVEC_CONGESTED, &lruvec->flags);
++			clear_bit(LRUVEC_CGROUP_CONGESTED, &lruvec->flags);
+ 		}
  	}
+ 
+@@ -7251,7 +7255,8 @@ static void clear_pgdat_congested(pg_data_t *pgdat)
+ {
+ 	struct lruvec *lruvec = mem_cgroup_lruvec(NULL, pgdat);
+ 
+-	clear_bit(LRUVEC_CONGESTED, &lruvec->flags);
++	clear_bit(LRUVEC_NODE_CONGESTED, &lruvec->flags);
++	clear_bit(LRUVEC_CGROUP_CONGESTED, &lruvec->flags);
+ 	clear_bit(PGDAT_DIRTY, &pgdat->flags);
+ 	clear_bit(PGDAT_WRITEBACK, &pgdat->flags);
+ }
 -- 
 2.41.0.162.gfafddb0af9-goog
 
