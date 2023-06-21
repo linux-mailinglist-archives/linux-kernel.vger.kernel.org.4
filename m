@@ -2,359 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6405738023
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B85738202
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbjFUJb7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 05:31:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34772 "EHLO
+        id S230364AbjFUJb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 05:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232319AbjFUJaq (ORCPT
+        with ESMTP id S231745AbjFUJas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 05:30:46 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397A31FE4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:29:56 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1qBu9t-0005p1-SG; Wed, 21 Jun 2023 11:29:50 +0200
-Message-ID: <2c48ad0d1277f880d4d758fe3a3ad24d33e2fabe.camel@pengutronix.de>
-Subject: Re: [PATCH v10 05/11] drm/etnaviv: Allow bypass component framework
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Sui Jingfeng <18949883232@163.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Sui Jingfeng <suijingfeng@loongson.cn>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        etnaviv@lists.freedesktop.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Date:   Wed, 21 Jun 2023 11:29:48 +0200
-In-Reply-To: <20230620094716.2231414-6-18949883232@163.com>
-References: <20230620094716.2231414-1-18949883232@163.com>
-         <20230620094716.2231414-6-18949883232@163.com>
+        Wed, 21 Jun 2023 05:30:48 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A3410A
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:30:12 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-25b79a5cf1aso4094329a91.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:30:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687339812; x=1689931812;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZkMJYW9AaEkYEFdiIfyRJ8y7x5cNBiWOkfQ1Jk9vOOI=;
+        b=U6f0qHdaGld6GTFVyXxfloqd25G2EbbnWjUmTySziT7GSoTmtZppD3J4/pbhq/vTr1
+         FFrgcAlhqTCcqPc2fBGDrjxKgSAihBui7o41fev/08bRLTT4nyGNLaIHeGTUSzNvnAAO
+         DN/9CTNj+eA4WdTANg86emSsQY4nvBEGRRhB/ZAJJuI3AxPKCnmFTdhWqcoSem0mF/pq
+         JjHJy7Ca+IFbWiqi0l8H/LHQLNn5f6UIuqc8lDTvNY+QGwaGWGGdJaRy+kKc52aSFnt5
+         U9RMgouucsiKJp4d+Z9Uh5kG6aeiyZGJ4RJjONYN8P1iFu+BzlK3XuBwRqVb5knD0dzE
+         vjVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687339812; x=1689931812;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZkMJYW9AaEkYEFdiIfyRJ8y7x5cNBiWOkfQ1Jk9vOOI=;
+        b=If6YW+WIndw+dwQpvGXrqX8H2WpmzY0CvIX8wrKaPoEhCHfZJ/xVLb/nn9NKoXKa6w
+         aJfcEqCV4bhH/y4f6IT3ab/h/53qCc66lRB4Mu96nYopLKNLsTRB9uIUyTvtGF7Cx816
+         XHTDWSXmDalkusEkIzyPyWMI9+V9njQaUpagfZZupH22/bmWkK1moS/xbpBdKOW/t/LB
+         zkRCeOgccqUdHyr6YcrqHHAoAY3nuh2I1WOjdMFOuFDect9atxiNCBgxVXzXfFAZqK8+
+         hEBc7vtwsN4F3Lr4b+/cHRkF3e6D1Pzv/1oyFAnYhVrzypEsReo+tR110XoRecVh6kPM
+         i/gg==
+X-Gm-Message-State: AC+VfDwkKyyTrIzxFfMVvZ2kp5jynDDukADRews7jkNU5Ycrlzt9vcnZ
+        pYgU7v+DTMMhEJhk4vOHIJ/goov/p7eCjwnp
+X-Google-Smtp-Source: ACHHUZ7l9rcK0816aFWbVC6lPdhWa3cUm/9YUOdHHYlROSnCwgf2ZSIN+kchQK1Tab23ig2CAx/x3hozCaVcEVHE
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a17:90a:404c:b0:25e:c3a3:ccc7 with SMTP
+ id k12-20020a17090a404c00b0025ec3a3ccc7mr1891887pjg.3.1687339812393; Wed, 21
+ Jun 2023 02:30:12 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 09:30:09 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230621093009.637544-1-yosryahmed@google.com>
+Subject: [PATCH] mm: zswap: fix double invalidate with exclusive loads
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Nhat Pham <nphamcs@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yosry Ahmed <yosryahmed@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, dem 20.06.2023 um 17:47 +0800 schrieb Sui Jingfeng:
-> From: Sui Jingfeng <suijingfeng@loongson.cn>
-> 
-> Originally, component frameworks were used to bind multiple GPU cores to a
-> virtual master. But there are chips that have only one GPU core integrated.
-> The component framework can be avoided under some circumstances, Another
-> reason is that usperspace programs such as X server and Mesa will try to
-> find the PCI device to use by default. Creating a virtual master device
-> for PCI GPUs cause unnecessary troubles.
-> 
-> This patch add additional code paths to allow bypassing the component
-> frameworks, platforms with a single GPU core could probably try the
-> non-component code path also. This patch is for code shaing between the
-> PCI driver and the platform driver.
-> 
-> Cc: Lucas Stach <l.stach@pengutronix.de>
-> Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
-> Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> Cc: Bjorn Helgaas <bhelgaas@google.com>
-> Cc: Daniel Vetter <daniel@ffwll.ch>
-> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> ---
->  drivers/gpu/drm/etnaviv/etnaviv_drv.c | 47 ++++++++++-----
->  drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 83 +++++++++++++++++----------
->  drivers/gpu/drm/etnaviv/etnaviv_gpu.h |  3 +
->  3 files changed, 91 insertions(+), 42 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
-> index 6a048be02857..93ca240cd4c0 100644
-> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
-> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
-> @@ -536,10 +536,9 @@ static const struct drm_driver etnaviv_drm_driver = {
->  	.minor              = 3,
->  };
->  
-> -/*
-> - * Platform driver:
-> - */
-> -static int etnaviv_bind(struct device *dev)
-> +static struct etnaviv_drm_private *etna_private_ptr;
+If exclusive loads are enabled for zswap, we invalidate the entry before
+returning from zswap_frontswap_load(), after dropping the local
+reference. However, the tree lock is dropped during decompression after
+the local reference is acquired, so the entry could be invalidated
+before we drop the local ref. If this happens, the entry is freed once
+we drop the local ref, and zswap_invalidate_entry() tries to invalidate
+an already freed entry.
 
-That's not going to fly. You are dropping the virtual master device,
-which bundles multiple GPUs together, but you are also only allowing a
-single GPU instance via this global private data pointer.
+Fix this by:
+(a) Making sure zswap_invalidate_entry() is always called with a local
+    ref held, to avoid being called on a freed entry.
+(b) Making sure zswap_invalidate_entry() only drops the ref if the entry
+    was actually on the rbtree. Otherwise, another invalidation could
+    have already happened, and the initial ref is already dropped.
 
-I'm okay with dropping the virtual master and instantiating a DRM
-device for each PCI device, but then the driver at least needs to be
-able to handle multiple instances.
+With these changes, there is no need to check that there is no need to
+make sure the entry still exists in the tree in zswap_reclaim_entry()
+before invalidating it, as zswap_reclaim_entry() will make this check
+internally.
 
-Also what exactly is the problem with the virtual master device?
-Couldn't we just instantiate one of those for each PCI device to
-minimize the changes needed to the bind/unbind logic?
+Fixes: b9c91c43412f ("mm: zswap: support exclusive loads")
+Reported-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+---
+ mm/zswap.c | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
 
-Regards,
-Lucas
-
-> +
-> +static int etnaviv_drm_bind(struct device *dev, bool component)
->  {
->  	struct etnaviv_drm_private *priv;
->  	struct drm_device *drm;
-> @@ -556,12 +555,15 @@ static int etnaviv_bind(struct device *dev)
->  	}
->  
->  	drm->dev_private = priv;
-> +	etna_private_ptr = priv;
->  
->  	dma_set_max_seg_size(dev, SZ_2G);
->  
-> -	dev_set_drvdata(dev, drm);
-> +	if (component)
-> +		ret = component_bind_all(dev, drm);
-> +	else
-> +		ret = etnaviv_gpu_bind(dev, NULL, drm);
->  
-> -	ret = component_bind_all(dev, drm);
->  	if (ret < 0)
->  		goto out_free_priv;
->  
-> @@ -574,7 +576,10 @@ static int etnaviv_bind(struct device *dev)
->  	return 0;
->  
->  out_unbind:
-> -	component_unbind_all(dev, drm);
-> +	if (component)
-> +		component_unbind_all(dev, drm);
-> +	else
-> +		etnaviv_gpu_unbind(dev, NULL, drm);
->  out_free_priv:
->  	etnaviv_free_private(priv);
->  out_put:
-> @@ -583,14 +588,17 @@ static int etnaviv_bind(struct device *dev)
->  	return ret;
->  }
->  
-> -static void etnaviv_unbind(struct device *dev)
-> +static void etnaviv_drm_unbind(struct device *dev, bool component)
->  {
-> -	struct drm_device *drm = dev_get_drvdata(dev);
-> -	struct etnaviv_drm_private *priv = drm->dev_private;
-> +	struct etnaviv_drm_private *priv = etna_private_ptr;
-> +	struct drm_device *drm = priv->drm;
->  
->  	drm_dev_unregister(drm);
->  
-> -	component_unbind_all(dev, drm);
-> +	if (component)
-> +		component_unbind_all(dev, drm);
-> +	else
-> +		etnaviv_gpu_unbind(dev, NULL, drm);
->  
->  	etnaviv_free_private(priv);
->  
-> @@ -599,9 +607,22 @@ static void etnaviv_unbind(struct device *dev)
->  	drm_dev_put(drm);
->  }
->  
-> +/*
-> + * Platform driver:
-> + */
-> +static int etnaviv_master_bind(struct device *dev)
-> +{
-> +	return etnaviv_drm_bind(dev, true);
-> +}
-> +
-> +static void etnaviv_master_unbind(struct device *dev)
-> +{
-> +	return etnaviv_drm_unbind(dev, true);
-> +}
-> +
->  static const struct component_master_ops etnaviv_master_ops = {
-> -	.bind = etnaviv_bind,
-> -	.unbind = etnaviv_unbind,
-> +	.bind = etnaviv_master_bind,
-> +	.unbind = etnaviv_master_unbind,
->  };
->  
->  static int etnaviv_pdev_probe(struct platform_device *pdev)
-> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-> index 5e88fa95dac2..059be8c89c5a 100644
-> --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-> @@ -1737,8 +1737,7 @@ static const struct thermal_cooling_device_ops cooling_ops = {
->  	.set_cur_state = etnaviv_gpu_cooling_set_cur_state,
->  };
->  
-> -static int etnaviv_gpu_bind(struct device *dev, struct device *master,
-> -	void *data)
-> +int etnaviv_gpu_bind(struct device *dev, struct device *master, void *data)
->  {
->  	struct drm_device *drm = data;
->  	struct etnaviv_drm_private *priv = drm->dev_private;
-> @@ -1769,7 +1768,6 @@ static int etnaviv_gpu_bind(struct device *dev, struct device *master,
->  	if (ret < 0)
->  		goto out_sched;
->  
-> -
->  	gpu->drm = drm;
->  	gpu->fence_context = dma_fence_context_alloc(1);
->  	xa_init_flags(&gpu->user_fences, XA_FLAGS_ALLOC);
-> @@ -1798,8 +1796,7 @@ static int etnaviv_gpu_bind(struct device *dev, struct device *master,
->  	return ret;
->  }
->  
-> -static void etnaviv_gpu_unbind(struct device *dev, struct device *master,
-> -	void *data)
-> +void etnaviv_gpu_unbind(struct device *dev, struct device *master, void *data)
->  {
->  	struct etnaviv_gpu *gpu = dev_get_drvdata(dev);
->  
-> @@ -1867,9 +1864,11 @@ static int etnaviv_gpu_register_irq(struct etnaviv_gpu *gpu, int irq)
->  	return 0;
->  }
->  
-> -static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
-> +/* platform independent */
-> +
-> +static int etnaviv_gpu_driver_create(struct device *dev, void __iomem *mmio,
-> +				     int irq, bool component, bool has_clk)
->  {
-> -	struct device *dev = &pdev->dev;
->  	struct etnaviv_gpu *gpu;
->  	int err;
->  
-> @@ -1877,24 +1876,22 @@ static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
->  	if (!gpu)
->  		return -ENOMEM;
->  
-> -	gpu->dev = &pdev->dev;
-> +	gpu->dev = dev;
-> +	gpu->mmio = mmio;
->  	mutex_init(&gpu->lock);
->  	mutex_init(&gpu->sched_lock);
->  
-> -	/* Map registers: */
-> -	gpu->mmio = devm_platform_ioremap_resource(pdev, 0);
-> -	if (IS_ERR(gpu->mmio))
-> -		return PTR_ERR(gpu->mmio);
-> -
->  	/* Get Interrupt: */
-> -	err = etnaviv_gpu_register_irq(gpu, platform_get_irq(pdev, 0));
-> +	err = etnaviv_gpu_register_irq(gpu, irq);
->  	if (err)
->  		return err;
->  
->  	/* Get Clocks: */
-> -	err = etnaviv_gpu_clk_get(gpu);
-> -	if (err)
-> -		return err;
-> +	if (has_clk) {
-> +		err = etnaviv_gpu_clk_get(gpu);
-> +		if (err)
-> +			return err;
-> +	}
->  
->  	/* TODO: figure out max mapped size */
->  	dev_set_drvdata(dev, gpu);
-> @@ -1904,24 +1901,27 @@ static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
->  	 * autosuspend delay is rather arbitary: no measurements have
->  	 * yet been performed to determine an appropriate value.
->  	 */
-> -	pm_runtime_use_autosuspend(gpu->dev);
-> -	pm_runtime_set_autosuspend_delay(gpu->dev, 200);
-> -	pm_runtime_enable(gpu->dev);
-> -
-> -	err = component_add(&pdev->dev, &gpu_ops);
-> -	if (err < 0) {
-> -		dev_err(&pdev->dev, "failed to register component: %d\n", err);
-> -		return err;
-> +	pm_runtime_use_autosuspend(dev);
-> +	pm_runtime_set_autosuspend_delay(dev, 200);
-> +	pm_runtime_enable(dev);
-> +
-> +	if (component) {
-> +		err = component_add(dev, &gpu_ops);
-> +		if (err < 0) {
-> +			dev_err(dev, "failed to register component: %d\n", err);
-> +			return err;
-> +		}
->  	}
->  
->  	return 0;
->  }
->  
-> -static int etnaviv_gpu_platform_remove(struct platform_device *pdev)
-> +static void etnaviv_gpu_driver_destroy(struct device *dev, bool component)
->  {
-> -	component_del(&pdev->dev, &gpu_ops);
-> -	pm_runtime_disable(&pdev->dev);
-> -	return 0;
-> +	if (component)
-> +		component_del(dev, &gpu_ops);
-> +
-> +	pm_runtime_disable(dev);
->  }
->  
->  static int etnaviv_gpu_rpm_suspend(struct device *dev)
-> @@ -1971,6 +1971,31 @@ static const struct dev_pm_ops etnaviv_gpu_pm_ops = {
->  	RUNTIME_PM_OPS(etnaviv_gpu_rpm_suspend, etnaviv_gpu_rpm_resume, NULL)
->  };
->  
-> +static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	void __iomem *mmio;
-> +	int irq;
-> +
-> +	/* Map registers: */
-> +	mmio = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(mmio))
-> +		return PTR_ERR(mmio);
-> +
-> +	irq = platform_get_irq(pdev, 0);
-> +
-> +	return etnaviv_gpu_driver_create(dev, mmio, irq, true, true);
-> +}
-> +
-> +static int etnaviv_gpu_platform_remove(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +
-> +	etnaviv_gpu_driver_destroy(dev, true);
-> +
-> +	return 0;
-> +}
-> +
->  struct platform_driver etnaviv_gpu_driver = {
->  	.driver = {
->  		.name = "etnaviv-gpu",
-> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
-> index 98c6f9c320fc..1ec829a649b5 100644
-> --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
-> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.h
-> @@ -206,6 +206,9 @@ void etnaviv_gpu_pm_put(struct etnaviv_gpu *gpu);
->  int etnaviv_gpu_wait_idle(struct etnaviv_gpu *gpu, unsigned int timeout_ms);
->  void etnaviv_gpu_start_fe(struct etnaviv_gpu *gpu, u32 address, u16 prefetch);
->  
-> +int etnaviv_gpu_bind(struct device *dev, struct device *master, void *data);
-> +void etnaviv_gpu_unbind(struct device *dev, struct device *master, void *data);
-> +
->  extern struct platform_driver etnaviv_gpu_driver;
->  
->  #endif /* __ETNAVIV_GPU_H__ */
+diff --git a/mm/zswap.c b/mm/zswap.c
+index 87b204233115..62195f72bf56 100644
+--- a/mm/zswap.c
++++ b/mm/zswap.c
+@@ -355,12 +355,14 @@ static int zswap_rb_insert(struct rb_root *root, struct zswap_entry *entry,
+ 	return 0;
+ }
+ 
+-static void zswap_rb_erase(struct rb_root *root, struct zswap_entry *entry)
++static bool zswap_rb_erase(struct rb_root *root, struct zswap_entry *entry)
+ {
+ 	if (!RB_EMPTY_NODE(&entry->rbnode)) {
+ 		rb_erase(&entry->rbnode, root);
+ 		RB_CLEAR_NODE(&entry->rbnode);
++		return true;
+ 	}
++	return false;
+ }
+ 
+ /*
+@@ -599,14 +601,16 @@ static struct zswap_pool *zswap_pool_find_get(char *type, char *compressor)
+ 	return NULL;
+ }
+ 
++/*
++ * If the entry is still valid in the tree, drop the initial ref and remove it
++ * from the tree. This function must be called with an additional ref held,
++ * otherwise it may race with another invalidation freeing the entry.
++ */
+ static void zswap_invalidate_entry(struct zswap_tree *tree,
+ 				   struct zswap_entry *entry)
+ {
+-	/* remove from rbtree */
+-	zswap_rb_erase(&tree->rbroot, entry);
+-
+-	/* drop the initial reference from entry creation */
+-	zswap_entry_put(tree, entry);
++	if (zswap_rb_erase(&tree->rbroot, entry))
++		zswap_entry_put(tree, entry);
+ }
+ 
+ static int zswap_reclaim_entry(struct zswap_pool *pool)
+@@ -659,8 +663,7 @@ static int zswap_reclaim_entry(struct zswap_pool *pool)
+ 	 * swapcache. Drop the entry from zswap - unless invalidate already
+ 	 * took it out while we had the tree->lock released for IO.
+ 	 */
+-	if (entry == zswap_rb_search(&tree->rbroot, swpoffset))
+-		zswap_invalidate_entry(tree, entry);
++	zswap_invalidate_entry(tree, entry);
+ 
+ put_unlock:
+ 	/* Drop local reference */
+@@ -1466,7 +1469,6 @@ static int zswap_frontswap_load(unsigned type, pgoff_t offset,
+ 		count_objcg_event(entry->objcg, ZSWPIN);
+ freeentry:
+ 	spin_lock(&tree->lock);
+-	zswap_entry_put(tree, entry);
+ 	if (!ret && zswap_exclusive_loads_enabled) {
+ 		zswap_invalidate_entry(tree, entry);
+ 		*exclusive = true;
+@@ -1475,6 +1477,7 @@ static int zswap_frontswap_load(unsigned type, pgoff_t offset,
+ 		list_move(&entry->lru, &entry->pool->lru);
+ 		spin_unlock(&entry->pool->lru_lock);
+ 	}
++	zswap_entry_put(tree, entry);
+ 	spin_unlock(&tree->lock);
+ 
+ 	return ret;
+-- 
+2.41.0.162.gfafddb0af9-goog
 
