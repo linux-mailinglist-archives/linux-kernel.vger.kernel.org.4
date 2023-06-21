@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA9173791F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 04:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1905737920
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 04:30:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjFUCab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 22:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45178 "EHLO
+        id S229881AbjFUCam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 22:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjFUCaa (ORCPT
+        with ESMTP id S229870AbjFUCai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 22:30:30 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DD2B4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 19:30:28 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35L2UM9i071557;
-        Tue, 20 Jun 2023 21:30:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1687314622;
-        bh=OgSsI5+k9or1l2drelkWidOoCSCHzFPrSWQHWzKVW7Y=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=vUD90p6h2yFGYjMNAE/Bf/kYWy94F8FnNMEU0+r6gGsCgKFSAYBzGvsjQ+OfTkwza
-         dekuyMji19HCMtLOSRH9QDb4lra6tZCbAEs7GY30v+evc0Loi14uoGhAlx2+h+X0xq
-         o6wnwvN0inVAu0aGjX2Am/MWEq8SQFPys1RKOPxw=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35L2UMDR091909
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 20 Jun 2023 21:30:22 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 20
- Jun 2023 21:30:21 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 20 Jun 2023 21:30:21 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35L2ULcV006455;
-        Tue, 20 Jun 2023 21:30:21 -0500
-Date:   Tue, 20 Jun 2023 21:30:21 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-CC:     Santosh Shilimkar <ssantosh@kernel.org>,
-        Tero Kristo <kristo@kernel.org>, <vigneshr@ti.com>,
-        <praneeth@ti.com>, <u-kumar1@ti.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>
-Subject: Re: [PATCH] soc: ti: k3-ringacc: Fixup documentation errors
-Message-ID: <20230621023021.ubvgok5id5uwydvw@catnap>
-References: <20230621022407.270842-1-nm@ti.com>
- <88587e16-8517-bd02-1ce5-7437ce288cb6@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <88587e16-8517-bd02-1ce5-7437ce288cb6@infradead.org>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Tue, 20 Jun 2023 22:30:38 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE69F1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 19:30:37 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-be47a3b3a01so5330128276.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 19:30:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687314637; x=1689906637;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=VSoisqprkMitd+xVsai6RZ6ObdS1Rg95P89VE+p+UtY=;
+        b=HoGEDJNuH1S6XZ7O1VHvt+thQ09ho4OWJgXvwTchJRKY8pdO2VwgrKK/bXrEJR50PN
+         4s16ZdlWm8G3esFAcOwVQZqwkkWCxMFjADbgSs8g98QnnNHnKpQ4Vxo2b0L1N0G7WNoe
+         OJeBdwjB5/npVOnfsPb+8Ip1JwUYinUU5GtR1RL2ZRAu0MN8xasKrhp4GJqdMYRXdLx2
+         3rdeoKs4khijAS3tQD4J6p/aHYc0UloSf5seAik+XSu4Y7uO5gN3rMwZqn2jZOquL6fS
+         2QxcReI2cuDOeg9/7Qd4DYGRCXNOv5CTpK/6fFg9u95mXx4uCq/pD3Sd2GhQV2dElxRp
+         ngfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687314637; x=1689906637;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VSoisqprkMitd+xVsai6RZ6ObdS1Rg95P89VE+p+UtY=;
+        b=LFnApmKHZDQ9Xuls3Vh98X4NmaJdzH5348Z8/lZmn776D4F2NEZ6w9lwWym/SDDlCE
+         3InmTsoljqDng+lyCTECALlF2hXHki4D/890sE0C995iGY/7MA2nVUM8TdWqs1x4MjrB
+         vcTGPUZSxBZkVyso1FvobRH1B38ORITx4pqLstSQzHA2qZlSmpIN9NEsXbVjUDUXapuQ
+         Q6k+J669kbkkI2xF/dxYxAAITp6LxIElSfR8gjUejnXVoMxH3nbZR5qb4bAtzoJJ8ThU
+         fAn6HTxj5OaFvJiB4pAfUl1W6FfLmMf4ykaC89nbhhrdT0KChJZIdrTMo2OJ2W1NVBg3
+         zTjQ==
+X-Gm-Message-State: AC+VfDxJr0j0/pLPXbXlpHSn8/OD7xBu6/DTaaJvm0wrsQD0C8k210LO
+        U1Bdyb2m0LmNvN6+saS3mGuxtaHjqAZUUu9L
+X-Google-Smtp-Source: ACHHUZ4cGtZIWGCSOfqk64IUkQ1VaAR+gAvtNKd+7LexG8Vxe6vkohlCKB7/9eKUj2PwgRW/GfUVsN56uHKH5gHP
+X-Received: from yosry.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2327])
+ (user=yosryahmed job=sendgmr) by 2002:a05:6902:1363:b0:bea:918f:2ef6 with
+ SMTP id bt3-20020a056902136300b00bea918f2ef6mr1472872ybb.0.1687314637032;
+ Tue, 20 Jun 2023 19:30:37 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 02:30:34 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+Message-ID: <20230621023034.431962-1-yosryahmed@google.com>
+Subject: [PATCH 0/2] memory.reclaim fixes for root cgroup
+From:   Yosry Ahmed <yosryahmed@google.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Yu Zhao <yuzhao@google.com>, Johannes Weiner <hannes@cmpxchg.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,53 +67,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19:27-20230620, Randy Dunlap wrote:
-> 
-> 
-> On 6/20/23 19:24, Nishanth Menon wrote:
-> > Fixup couple of misses in documentation. This squashes the following
-> > warnings:
-> > drivers/soc/ti/k3-ringacc.c:135: warning: Function parameter or member 'tdown_complete' not described in 'k3_ring_state'
-> > drivers/soc/ti/k3-ringacc.c:238: warning: expecting prototype for struct k3_ringacc. Prototype was for struct k3_ringacc_soc_data instead
-> > 
-> > Cc: Peter Ujfalusi <peter.ujfalusi@gmail.com>
-> > Signed-off-by: Nishanth Menon <nm@ti.com>
-> 
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-> 
-> (more below)
-> 
-> > ---
-> >  drivers/soc/ti/k3-ringacc.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/soc/ti/k3-ringacc.c b/drivers/soc/ti/k3-ringacc.c
-> > index 8f131368a758..548b9f605d86 100644
-> > --- a/drivers/soc/ti/k3-ringacc.c
-> > +++ b/drivers/soc/ti/k3-ringacc.c
-> > @@ -125,6 +125,7 @@ struct k3_ring_ops {
-> >   * @occ: Occupancy
-> >   * @windex: Write index
-> >   * @rindex: Read index
-> > + * @tdown_complete: Tear down complete state
-> >   */
-> >  struct k3_ring_state {
-> >  	u32 free;
-> > @@ -229,7 +230,7 @@ struct k3_ringacc {
-> >  };
-> >  
-> >  /**
-> > - * struct k3_ringacc - Rings accelerator SoC data
-> > + * struct k3_ringacc_soc_data - Rings accelerator SoC data
-> >   *
-> >   * @dma_ring_reset_quirk:  DMA reset w/a enable
-> 
-> What does "w/a" mean?
+This mini series includes fixes to the semantics of memory.reclaim on
+the root memcg, as reported by Johannes Weiner in [1].
 
-I think it means work around.. (going by the "quirk" terminology).. Let
-me respin this with w/a replaced with workaround as well.
+[1]https://lore.kernel.org/lkml/20230405200150.GA35884@cmpxchg.org/
+
+Yosry Ahmed (2):
+  mm: memcg: rename and document global_reclaim()
+  mm/vmscan: fix root proactive reclaim unthrottling unbalanced node
+
+ include/linux/mmzone.h | 18 +++++++++++++++---
+ mm/vmscan.c            | 40 +++++++++++++++++++++++++---------------
+ 2 files changed, 40 insertions(+), 18 deletions(-)
 
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
+2.41.0.162.gfafddb0af9-goog
+
