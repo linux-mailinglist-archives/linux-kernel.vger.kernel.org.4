@@ -2,193 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7099D7392C8
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 01:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 378A67392CB
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 01:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbjFUXBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 19:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50846 "EHLO
+        id S230046AbjFUXCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 19:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbjFUXBr (ORCPT
+        with ESMTP id S229521AbjFUXCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 19:01:47 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D50F1988;
-        Wed, 21 Jun 2023 16:01:46 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LMWKca019433;
-        Wed, 21 Jun 2023 23:01:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=11SQZq0q8ZhUlhbiEakp5ZFyeDKfnXRO6152ZnUIBTs=;
- b=K5PQIs7SnEyfiMJx1Q4AzhWK0EceuPLHCqo8sw/L/ontaz6ElGGPFcvfOCFCZlg0e52z
- X+zBjoAYzvjPs3OXaQo8oGQr//CFDCudUxHY0jkfdhL66Bkp9LD2/2TpVXkWt3PSz1ks
- TTiqO2I7pkEyBm4ax32eGHUdn56JroxpOLth45AYbk62zukXAWDpp9yqWPepFTCW96ii
- 5kSXezWYjXj5mHEqkr0CTaYhQHggPDzUeLa0YZdf86+3rthMRTNcUFqYyCJA7ymdchkw
- 76ez5bSYU2gQimXgegp5N5+R224MDDjYx+P8abl3pfGGvy6Aog0QEHFm5USzyldKGl+A Jw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rc2rch2br-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Jun 2023 23:01:37 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35LN1aan016579
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Jun 2023 23:01:36 GMT
-Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 21 Jun
- 2023 16:01:36 -0700
-Message-ID: <7d5256cd-c0bd-36e3-9b59-63ad8595f0ce@quicinc.com>
-Date:   Wed, 21 Jun 2023 16:01:26 -0700
+        Wed, 21 Jun 2023 19:02:36 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6689A19B4;
+        Wed, 21 Jun 2023 16:02:35 -0700 (PDT)
+Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LKO7jI030796;
+        Wed, 21 Jun 2023 23:01:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2023-03-30;
+ bh=FCYZXG66N8Lues2oZRu5cMRF7c5HpoVM2d+HYdtNv5w=;
+ b=GZBLcCQWEM61hgNw2Q16AdsZFohgGeR4F/mc/75Qut0/3xpvD71mTp1bZIczTaHrxknV
+ BM2coSUAOsih7UId/V+c/ZAwyE7xqHbEMzmRhdnpM/zOgxnKeKVyiKitGK5HarDhpgmY
+ wY66Kx1wDy9Q+2PdCREsJZ13on+EFRxkQffb1ZLIq56hGm9EDS1kdWl8HA25pHCkBvX9
+ Kw6IbBJRhum9VFLvoulGySz6F/Vr1Zn337T9nF6RU+3lSiWmTF5KWHA2ywrdYMFieoqq
+ MJyNlw4hIwi3sAsEziN18RVGBRQWuaijkJc+t9yhifkoHLN5xOU2LZ5Whn3pYFjOHzhf nQ== 
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r94qa8gg6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Jun 2023 23:01:54 +0000
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35LLftcc028849;
+        Wed, 21 Jun 2023 23:01:53 GMT
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2175.outbound.protection.outlook.com [104.47.57.175])
+        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r939cq7ph-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 21 Jun 2023 23:01:53 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fy4A/muWrFaoWd2ImnLZ92TLPVU2rjvnd/Ku2qTtMABVO/h6HH/BzsgNDj1A1/UX4qDox3xHaC5OSPZncMIW4jbHjdKYLvqsla9jMXAMycpkT6LNL3KCWsrntsFJWSHsPGyrsisvfzuJpd6fzRmp+0MFUYFab22hhtfSJmTFwCr0FEbh5FyWzzCJGra6iyXA9hMxtjqf0w46a9D9cus+DAa/03xistqFEPYHcsgfGYCJaX6xGRad7vdV047GxABvuwdfp+KyuWckxBCaW/SHZUGZkHZGhEJQQoGU0TnUe6SbAJJNk80/B7IXRW0iCGWkbWf2ZX2LJ1V3qVlXWfAPPw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FCYZXG66N8Lues2oZRu5cMRF7c5HpoVM2d+HYdtNv5w=;
+ b=P+FtA5oRH7z4SZ/yUznmmdIRFLxW22FQ9jCBesA/70UhkdHl2XvjPR9e1XUHKWJUyeylaO0+6zKLhIEtzTmPb11ctDFOvrzsSmDSrwpoGC3yD+7BrgBUzwsPtvT5fHMHaPw6qzQL91Fr18gsq/JThLB5qcmg9YWCZ1nmOA8XIMVN8xndbb4R/UjPNlyVqvPgDzPJeQIstHJRvACUos/KNtGh/AWWXaQ19SmebBBAtl99P6SmMzJgUfA3FtK/tabBM9GafVoUdxgoAfqtF1J3VuGPgI7IcIWaMjVoHbUF2tDCUq7R+ReB1UNfyq5hBgflUoJvqKS43yNKcN1Ehsun+w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FCYZXG66N8Lues2oZRu5cMRF7c5HpoVM2d+HYdtNv5w=;
+ b=DWONbuaqu/IEQPWUWwHhHetPy/zvj5gSt+gJFcGJEtwJ016F32sk9qxBWgthZB30lMQ6QDuR6QS5t3RT5KEzdfPdOp4JvojJBR5IsMxR4K0GAYGpGMd3p7r6Fzwn5AI33/VApddAZlxiYWZ+V0NsVzDk5dJS5ukNW5k9v1up/4A=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by MW4PR10MB6462.namprd10.prod.outlook.com (2603:10b6:303:213::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Wed, 21 Jun
+ 2023 23:01:50 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::4a17:13b0:2876:97f2]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::4a17:13b0:2876:97f2%7]) with mapi id 15.20.6521.020; Wed, 21 Jun 2023
+ 23:01:50 +0000
+Date:   Wed, 21 Jun 2023 16:01:47 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        kernel test robot <oliver.sang@intel.com>
+Subject: Re: [PATCH 1/2] Revert "page cache: fix page_cache_next/prev_miss
+ off by one"
+Message-ID: <20230621230147.GC4155@monkey>
+References: <20230621212403.174710-1-mike.kravetz@oracle.com>
+ <20230621151855.318449527a851cc0bb62fb34@linux-foundation.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621151855.318449527a851cc0bb62fb34@linux-foundation.org>
+X-ClientProxiedBy: MW4PR04CA0190.namprd04.prod.outlook.com
+ (2603:10b6:303:86::15) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/3] drm/msm/dpu: Set DATABUS_WIDEN on command mode
- encoders
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>
-CC:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
- <20230525-add-widebus-support-v1-2-c7069f2efca1@quicinc.com>
- <c74c9e0e-d059-f0e3-4350-03089c37131a@linaro.org>
- <cce68370-3fd9-4c9a-258e-af0d5d057fda@quicinc.com>
- <n2c5qlujxhbbj2aqlgj7fetzoteood5h4hmbwt4mapi77xlvmt@bpourzaideti>
- <81a5e241-ec82-7414-8752-4ce3cb084959@linaro.org>
- <f14f2c31-38c2-0600-3a29-17e83afececf@quicinc.com>
- <26tvhvqpxtxz5tqc6jbjixadpae34k7uc7fyec2u5o2ccj4tdq@tjvguzlolc3g>
- <8dcd643f-9644-a4e7-a0d5-eefa28084a88@linaro.org>
-Content-Language: en-US
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <8dcd643f-9644-a4e7-a0d5-eefa28084a88@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 3BXVtCPQrfpJZUABLfzzkCucAewGnqT6
-X-Proofpoint-GUID: 3BXVtCPQrfpJZUABLfzzkCucAewGnqT6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|MW4PR10MB6462:EE_
+X-MS-Office365-Filtering-Correlation-Id: 509658bf-03d1-4062-a650-08db72ab7f51
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: h1lumQgl1O/yLRlL8zEnsymmzt0sJXhWADO5DsaEinu5LjLuwJX4Y9OybWu9o+ELm5NDhMsrV9oteIot5lzKnb9HuT4I/nnVDKoUtOloV7ardQ7aBl1j/JWg1Zt7Q2QQzCLVurWlkl9yOMB3y3ulQSKVypnGWtdEsi55zdquVcqRMdoGbpDsnECe06tn+053Gc+59DmfABe4ax4Ftv9+0eOCrXFCsyPJv1ImTfkgF44B+CcrGBtnFUTMQixfGWI4kDYPrPaRYrUcd7pS8H4YCtUvxkeneI88seu/kCY0bc9YMLG92qgomVDcgL9HzvdXYD5ByczHC6RQJCB9svFYhYUsJd/a9CXB4GJdfO2APEcAujH2sWGQCte+sJkMQJyWIoMfgBvgqWi3H7mAkpCRj0KlHVtky8WM0I1aT48qaae/DB8rVpD1nHrM0W5euWOiQQ0WcOZBgtJrOHrfU5HvAv66daqTmpgHLjzhwoCTwUrKumjuYalMHK6UxZfPYIBqDpa5e048U1weF5lYtbzozTnQSWVuWcq7bHFF1MXs0z0I4LT6yYKCu7CLkieBpvT6
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(136003)(376002)(396003)(366004)(346002)(451199021)(33716001)(478600001)(66476007)(66556008)(66946007)(6916009)(6486002)(4326008)(6666004)(316002)(86362001)(54906003)(6512007)(26005)(1076003)(6506007)(83380400001)(186003)(38100700002)(53546011)(9686003)(41300700001)(2906002)(5660300002)(8676002)(8936002)(33656002)(44832011)(7416002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?hYvB0jrnZw5+f1i9cGY2PLrMZ6CglHzzsz9aRConLqJHFbmHQ7CphTVYcmWV?=
+ =?us-ascii?Q?3GWD6phmSRCfzOSSX0P4xvkQQXjKtxopmaUqCTgsCkLax0NC5rj5bH0acD16?=
+ =?us-ascii?Q?VxYQS05ul+I7N3miSsFFXPke/Lp31gxTQ4JcaEcAPEvQHFcmhQfW2RIG6Xut?=
+ =?us-ascii?Q?PIKQhA/kPbYwHqs4BT41CUVpb5DKK+FImAaTMWQZCfT0G3RVIWo5pyQKhWPo?=
+ =?us-ascii?Q?aw5noEsJ3NErJU+ZTLNDi5zWZ+qREU8SKqTSY5BLs85skCef3JzxggUsxAHR?=
+ =?us-ascii?Q?3sBjBREBPmjAo1R6dRAQ2hVYWmVv0pZjfSYdZ4DWWOKkF7/s2LBOooKgOPX1?=
+ =?us-ascii?Q?gZGr8d3c07qk4HnyDeFr73feh/Ox7ESMr92LHe/dEAIvABcDwvKiUpXFyMkR?=
+ =?us-ascii?Q?Iu978MUgms4RobJq013ANvjJn0R6zqBrQ3IM2AiAFpY+BaueLsg1CaVssXhm?=
+ =?us-ascii?Q?rsXbn0GrjKDf9wEdgCIg+nQN04V2B201f++rSp61QHBTWLD0U1xM/fAOajyY?=
+ =?us-ascii?Q?RD+AA9KmCI8rxNBaXxGH98uYJXveoX/qZDLdu/AoPwxOhXJcrioSFKaQFUtj?=
+ =?us-ascii?Q?bgFw8rLg9S6OKJpdxqO1B1TmTxf/7Qz0N0PvmRwcExz2o9Dib45SyliaRN4q?=
+ =?us-ascii?Q?DHwdomgzolCPEI55ILVkWXcGJNK4iovtMLdkZak91MFUDbfojzKwAyDXRC6Q?=
+ =?us-ascii?Q?l0E+vHfQMqJD4LbTtHdmlMT5W/I67XYWWgKPA9NKz90Hy+07BTMubEmi2MtI?=
+ =?us-ascii?Q?2xZqHCqzAK6ssTLr8Bpdaa09VJ7A8ibIIf9Chb+EJ66f8uz1Or+jTTEryqcP?=
+ =?us-ascii?Q?9QXEFcK8WI0ItcgH4r4HWV7EEXKzKACuBkc20TEB80EtYIu1Z3jpd+n2lTQy?=
+ =?us-ascii?Q?vQXIzuar+Pzg7ikQINmj3/pt3dAbchk7sRzexAiJlgGVjTAWklptwx1cT+Hq?=
+ =?us-ascii?Q?NIMR2KgwJlWKDAzbgAaY2nM/vsfS5zr5MAonV5WXfS1bZulNPftkWLqHIaAV?=
+ =?us-ascii?Q?vmoiAC51/6YyBZyH7xw5YggBboQZjl7OZcYWh6Y//wCkQc2ttsl8P3pwaJjW?=
+ =?us-ascii?Q?QyM2WdTsPdX4jMkDEXUiD/l5ASSdMrUFogFdJ0cTDSPyLMdT4N0x9gQOTdsy?=
+ =?us-ascii?Q?ovk9vQHp3w9n1tDuxMAH6aEymSnfRyxs5oUBdBNrQTy9CD1RURVf+70/P8MK?=
+ =?us-ascii?Q?Z9TmvVuAkK64Dbh1oYa3SK3nWpHImXwPeVDQbVC6vJ9TzdfRwiJ3EY2h1Kof?=
+ =?us-ascii?Q?/C9pw8MevXUNOiKANPX1Hyark8N49mU+TSrLdDPn5EFUKUqHxQ2xnTlu+D2J?=
+ =?us-ascii?Q?SDmlZBHy/QcOaeGcuHBkiaryBOUky1zdCYfLj08gTnXC6USI2V7SmFomLojW?=
+ =?us-ascii?Q?jgoOJ/bpF5ndkhY7XO3sNGXaSlWb8etiSztkJsvpfZTTUYT4eF9GgxxB/wdf?=
+ =?us-ascii?Q?hiScWz3B7F8f9SCFPgXq+ivcu3TfV/TNHfvngCC3V9SQeG6zIEOvAbUvhes9?=
+ =?us-ascii?Q?TbZj+YoLOLXoHRG7n9A1tUoG0rkWDHqebqZGVO9Pg1gqkGJd4uYsQGtgx06j?=
+ =?us-ascii?Q?Osx+yBulh4ODxpTmaog7AEWb49MI8Yn4qMa2UxoQlU0yh7V+q/A3phR8QN0A?=
+ =?us-ascii?Q?kA=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?wX9ERk9115D3YQJZr5RHTB8LMEu7vqCNfMi1dCArjseLIcvwkH6Kvin+rWc8?=
+ =?us-ascii?Q?HOxMlZjvFcx0qG0U3UNRkN/koRJEi2369xv69OSfaMx01DE7NsOxxa+ez4kL?=
+ =?us-ascii?Q?dXSQeXmjCyEoZ/El372ARJm3MGVBka6mtOKzPgs+dmEqu/EK3AsSbWI8qA2k?=
+ =?us-ascii?Q?GgmLAWEskdZMlqqcbFytUzdNzEvdhNbfqcgrLGRMzS8UJo+h9XesYgCAI+7g?=
+ =?us-ascii?Q?s45JkWX7b5b9mAFPFvq/5APdmuEC+BUx1yCt/R5i8RGQ4iC30FYkTImW1Q+/?=
+ =?us-ascii?Q?7ofipmWm34l7mTy6WeDPBGOf+8aEK+/1iV8QTZfnETQdV6RmE8q1vg7NbpUb?=
+ =?us-ascii?Q?hi/c46X/oa30Kf8jQYWalA3IIXFGw3W/ndzw89/RwUk4mEqSn44p3jsUcP9J?=
+ =?us-ascii?Q?/IiyUsc7kmmBMgJts/HYgrSK/G8UF8eC7l7wLJ2n6oCmEUTYoQmJlVcyIEne?=
+ =?us-ascii?Q?HEPamzCp0XddB/MQfYrSQv8OKQhVBYX8qKVjNYm38NZaEzIQjbQcRVvJc3Lf?=
+ =?us-ascii?Q?LrMkD7Kidu67TGHL/3ZbX2GbZBbR2V+25e4sTTJIQ3xoPjEJpd2veds1pwEj?=
+ =?us-ascii?Q?AlOApOxxtyztxnClvFvA414LIwH9SV88P3zph+5nb+9uooHHxyT3cNwMCCHQ?=
+ =?us-ascii?Q?s9SIgcLwXbqy+Y6VlUIp1v+h9iPCi7TbZ4YxPX6vu4UJQi0UEgUhLGMRCsVc?=
+ =?us-ascii?Q?gBJXEgoT6XxyjN8x/W7sN7UGiynDiMSk/NEsqTVuASFiLBz0C0TVnyuFP8mT?=
+ =?us-ascii?Q?kOcR2GloTiFTTAqdndUxDbgGLrpesMDtu0HujcpgWZ9L269ip9Yx+gRGijw9?=
+ =?us-ascii?Q?u3ZAARLh5zMpm118fWUeZXoZBPEWoXxFGw8WjyGuTbWXtimCDz1gRuFVu4cS?=
+ =?us-ascii?Q?64eDkfOHSVW5jxkFJyWERwC1ufPlbs3YkltPxqOJvA6wDFPluVwt95EvFREx?=
+ =?us-ascii?Q?OcMfdleQWhj/qUCH6FwYnZLsq4AQkWsz6Vh+00iSGxlPcXgIi3xV9OKwyoAb?=
+ =?us-ascii?Q?2iI1yI3m581U1DBy89dH4QtlIw=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 509658bf-03d1-4062-a650-08db72ab7f51
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 23:01:50.5526
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4201SO+PS4Yy/PeEub/IR1bgpN5SHqa91dM8IaiPwc7Uy57LOUOFZyUKc3hCU9AjeIX/SwIlc6H3Mpb9PQUHWA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6462
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-06-21_12,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- priorityscore=1501 mlxscore=0 spamscore=0 impostorscore=0 adultscore=0
- suspectscore=0 clxscore=1015 lowpriorityscore=0 mlxlogscore=999
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0
+ mlxlogscore=999 suspectscore=0 spamscore=0 adultscore=0 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2305260000 definitions=main-2306210193
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-GUID: Q4osNE2FOF_UuByBuso0v0JdhZZdqYhK
+X-Proofpoint-ORIG-GUID: Q4osNE2FOF_UuByBuso0v0JdhZZdqYhK
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/21/2023 9:36 AM, Dmitry Baryshkov wrote:
-> On 21/06/2023 18:17, Marijn Suijten wrote:
->> On 2023-06-20 14:38:34, Jessica Zhang wrote:
->> <snip>
->>>>>>>> +    if (phys_enc->hw_intf->ops.enable_widebus)
->>>>>>>> +        phys_enc->hw_intf->ops.enable_widebus(phys_enc->hw_intf);
->>>>>>>
->>>>>>> No. Please provide a single function which takes necessary
->>>>>>> configuration, including compression and wide_bus_enable.
->>>>>>>
->>>>>>
->>>>>> There are two ways to look at this. Your point is coming from the
->>>>>> perspective that its programming the same register but just a 
->>>>>> different
->>>>>> bit. But that will also make it a bit confusing.
->>>>
->>>> My point is to have a high-level function that configures the INTF for
->>>> the CMD mode. This way it can take a structure with necessary
->>>> configuration bits.
->>>
->>> Hi Dmitry,
->>>
->>> After discussing this approach with Abhinav, we still have a few
->>> questions about it:
->>>
->>> Currently, only 3 of the 32 bits for INTF_CONFIG2 are being used (the
->>> rest are reserved with no plans of being programmed in the future). Does
->>> this still justify the use of a struct to pass in the necessary
->>> configuration?
->>
->> No.  The point Dmitry is making is **not** about this concidentally
->> using the same register, but about adding a common codepath to enable
->> compression on this hw_intf (regardless of the registers it needs to
->> touch).
+On 06/21/23 15:18, Andrew Morton wrote:
+> On Wed, 21 Jun 2023 14:24:02 -0700 Mike Kravetz <mike.kravetz@oracle.com> wrote:
 > 
-> Actually to setup INTF for CMD stream (which is equal to setting up 
-> compression at this point).
+> > This reverts commit 9425c591e06a9ab27a145ba655fb50532cf0bcc9
+> > 
+> > The reverted commit fixed up routines primarily used by readahead code
+> > such that they could also be used by hugetlb.  Unfortunately, this
+> > caused a performance regression as pointed out by the Closes: tag.
+> > 
+> > The hugetlb code which uses page_cache_next_miss will be addressed in
+> > a subsequent patch.
 > 
-
-Yes it should be setup intf for cmd and not enable compression.
-
-Widebus and compression are different features and we should be able to 
-control them independently.
-
-We just enable them together for DSI. So a separation is necessary.
-
-But I am still not totally convinced we even need to go down the path 
-for having an op called setup_intf_cmd() which takes in a struct like
-
-struct dpu_cmd_intf_cfg {
-	bool data_compress;
-	bool widebus_en;
-};
-
-As we have agreed that we will not touch the video mode timing engine 
-path, it leaves us with only two bits.
-
-And like I said, its not that these two bits always go together. We want 
-to be able to control them independently which means that its not 
-necessary both bits program the same register one by one. We might just 
-end up programming one of them if we just use widebus.
-
-Thats why I am still leaning on keeping this approach.
-
->>  Similar to how dpu_hw_intf_setup_timing_engine() programs the
->> hw_intf - including widebus! - for video-mode.
->>
->> Or even more generically, have a struct similar to intf_timing_params
->> that says how the intf needs to be configured - without the caller
->> knowing about INTF_CONFIG2.
->>
->> struct dpu_hw_intf_cfg is a very good example of how we can use a single
->> struct and a single callback to configure multiple registers at once
->> based on some input parameters.
->>
->>> In addition, it seems that video mode does all its INTF_CONFIG2
->>> configuration separately in dpu_hw_intf_setup_timing_engine(). If we
->>> have a generic set_intf_config2() op, it might be good to have it as
->>> part of a larger cleanup where we have both video and command mode use
->>> the generic op. What are your thoughts on this?
->>
->> Not in that way, but if there is a generic enable_compression() or
->> configure_compression() callback (or even more generic, similar to
->> setup_intf_cfg in dpu_hw_ctl) that would work for both video-mode and
->> command-mode, maybe that is beneficial.
+> Often these throughput changes are caused by rather random
+> alignment/layout changes and the code change itself was innocent.
 > 
-> I'd rather not do this. Let's just 'setup timing enging' vs 'setup CMD'. 
-> For example, it might also include setting up other INTF parameters for 
-> CMD mode (if anything is required later on).
-> 
+> Do we have an explanation for this regression, or was it a surprise?
 
-Agreed on setup CMD but I dont know whether we need a setup CMD at all.
-Seems like an overkill.
+It was not a total surprise.  As mentioned, the primary user of this
+interface is the readahead code.  The code in question is in
+ondemand_readahead.
 
->>
->> - Marijn
-> 
+		rcu_read_lock();
+		start = page_cache_next_miss(ractl->mapping, index + 1,
+				max_pages);
+		rcu_read_unlock();
+
+		if (!start || start - index > max_pages)
+			return;
+
+With the reverted changes, we will take that quick return when there are
+no gaps in the range.  Previously we did not.
+
+I am of the belief that page_cache_next_miss behavior did not match the
+function description.  Matthew suggested page_cache_next_miss use in hugetlb
+code and I can only guess that he also though it behaved as documented.
+
+I do not know the readahead code well enough to know exactly what is
+expected.  readahead certainly performs worse with my proposed changes.
+Since we can easily 'fix' hugetlb code in another way, let's do that and
+leave the readahead code alone unless someone more knowledgable can
+provide insight.
+-- 
+Mike Kravetz
