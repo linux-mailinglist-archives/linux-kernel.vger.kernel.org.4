@@ -2,223 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC771737B5C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C27737B66
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230295AbjFUG1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 02:27:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
+        id S230202AbjFUG1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 02:27:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbjFUG1j (ORCPT
+        with ESMTP id S230062AbjFUG1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 02:27:39 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352A61A3;
-        Tue, 20 Jun 2023 23:27:38 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 851195FD61;
-        Wed, 21 Jun 2023 09:27:36 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1687328856;
-        bh=iYMidsTDXcTCWyifw1vWsk3ddCRuBC/523lS3FYIPhA=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=d91jAQnp+1oOd7EG36ECRbKu2NluxoeVSEEiTUd+3ULMtQv2z3CSczX/CHzaCeLhF
-         XDHWa9jh8ooov05wqJE2FPhTyVl9fZXyAoSwZOLkntZBr7H0V8Q3B0FIghnZQTIU30
-         eTP4UJpzwSvbsES98TfHRxOR4sTRhatLEWh5+QQwCOhQao9qvd+XNzOoikgn48pYdm
-         /qTyR8V9GOqkVEvS45goJtDNIzoRUL5ZIeXS5t8qH2yoWqQuCFlW1Hk8M78wfRJxyp
-         rC0GkQiqWJUvEcOvIk1VM/GNGl9g3oQBxaY1fjo5wkpubxch1GqrgJ6qCmC/qyu8Zy
-         Clvf2m+/oSxuQ==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 21 Jun 2023 09:27:36 +0300 (MSK)
-From:   George Stark <gnstark@sberdevices.ru>
-To:     <jic23@kernel.org>, <lars@metafoo.de>, <neil.armstrong@linaro.org>,
-        <khilman@baylibre.com>, <jbrunet@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>,
-        <andriy.shevchenko@linux.intel.com>, <nuno.sa@analog.com>,
-        <gnstark@sberdevices.ru>
-CC:     <linux-iio@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-amlogic@lists.infradead.org>, <kernel@sberdevices.ru>,
-        George Stark <GNStark@sberdevices.ru>
-Subject: [PATCH v1 3/3] meson saradc: support reading from channel7 mux inputs
-Date:   Wed, 21 Jun 2023 09:26:10 +0300
-Message-ID: <20230621062715.455652-4-gnstark@sberdevices.ru>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230621062715.455652-1-gnstark@sberdevices.ru>
-References: <20230621062715.455652-1-gnstark@sberdevices.ru>
+        Wed, 21 Jun 2023 02:27:43 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6317E1A3;
+        Tue, 20 Jun 2023 23:27:42 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35L69rOq027889;
+        Wed, 21 Jun 2023 06:27:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=jXLCsdAsdsHUa0zK53wusYT4EH7uxKMx5/XtZxXDxfo=;
+ b=nU0uYWbL+jDBNYNRthnzkZ1Kmflc9WF+Wgwb5bjIKy6G/AIUV0I5woQRmAw7Rq1yiTvj
+ kQws5vu4PQYQAK+53dRbw33c5yHgkniJJOqFvhfK8c3TN+2vmhHp9/5mV3AGgsXikDuh
+ ItkH8jBX1lT440x+kJHeZ1lL56LOtquka3aIcILjJvsr5Kijn8ldtNR5+yChq+KSERu+
+ Gtp1IXvqJZNXUUWiO4rQEBRyFd0LDPNW6eC0J2MLLSxrq4eQB2Yp8iHIQSEUff0n+LpR
+ ahHKzQEaAEumHKSyArkkbddvY+qBOQ2YV2uxtzJwTaCry3l0/mcHkmQ3cG7MwnbOJ+ZI nw== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rb3guu5mg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jun 2023 06:27:35 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35L6RY96001892
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jun 2023 06:27:34 GMT
+Received: from [10.217.198.86] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 20 Jun
+ 2023 23:27:31 -0700
+Message-ID: <806f395c-91d7-a410-51ab-93898faba7ce@quicinc.com>
+Date:   Wed, 21 Jun 2023 11:57:28 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [100.64.160.123]
-X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
- p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/20 23:30:00 #21539802
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/2] dt-bindings: arm: idle-states: Add
+ idle-state-disabled property
+Content-Language: en-US
+To:     Sudeep Holla <sudeep.holla@arm.com>
+CC:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_lsrao@quicinc.com>,
+        <quic_mkshah@quicinc.com>, <devicetree@vger.kernel.org>
+References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
+ <20230608085544.16211-2-quic_tnimkar@quicinc.com>
+ <20230615085629.b2aaumhq7yqhs5lf@bogus>
+ <5820345a-4207-3b12-87eb-098bac4ef4e8@quicinc.com>
+ <20230616153924.2wtvgr7lvjcul6to@bogus>
+From:   Tushar Nimkar <quic_tnimkar@quicinc.com>
+In-Reply-To: <20230616153924.2wtvgr7lvjcul6to@bogus>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: dRv8gxlGfj-30yRf5YMQ-oWYDWrHH-qC
+X-Proofpoint-GUID: dRv8gxlGfj-30yRf5YMQ-oWYDWrHH-qC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-21_03,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ spamscore=0 suspectscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=842
+ priorityscore=1501 phishscore=0 clxscore=1015 bulkscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306210053
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-meson saradc channel 7 is connected to muxer that can switch channel
-input to well-known sources like Vdd, GND and several Vdd dividers.
-This patch adds iio channel for every mux input.
+Thanks again Sudeep,
 
-Signed-off-by: George Stark <GNStark@sberdevices.ru>
----
- drivers/iio/adc/meson_saradc.c | 65 +++++++++++++++++++++++++++++++---
- 1 file changed, 61 insertions(+), 4 deletions(-)
+On 6/16/2023 9:09 PM, Sudeep Holla wrote:
+> On Fri, Jun 16, 2023 at 11:26:18AM +0530, Tushar Nimkar wrote:
 
-diff --git a/drivers/iio/adc/meson_saradc.c b/drivers/iio/adc/meson_saradc.c
-index 66d6f527122c..c4f350b4523e 100644
---- a/drivers/iio/adc/meson_saradc.c
-+++ b/drivers/iio/adc/meson_saradc.c
-@@ -163,6 +163,7 @@
- #define MESON_SAR_ADC_MAX_FIFO_SIZE				32
- #define MESON_SAR_ADC_TIMEOUT					100 /* ms */
- #define MESON_SAR_ADC_VOLTAGE_AND_TEMP_CHANNEL			6
-+#define MESON_SAR_ADC_VOLTAGE_AND_MUX_CHANNEL			7
- #define MESON_SAR_ADC_TEMP_OFFSET				27
- 
- /* temperature sensor calibration information in eFuse */
-@@ -201,6 +202,19 @@
- 	.datasheet_name = "TEMP_SENSOR",				\
- }
- 
-+#define MESON_SAR_ADC_MUX(_chan, _sel) {				\
-+	.type = IIO_VOLTAGE,						\
-+	.channel = _chan,						\
-+	.indexed = 1,							\
-+	.address = MESON_SAR_ADC_VOLTAGE_AND_MUX_CHANNEL,		\
-+	.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |			\
-+				BIT(IIO_CHAN_INFO_AVERAGE_RAW),		\
-+	.info_mask_shared_by_type = BIT(IIO_CHAN_INFO_SCALE),		\
-+	.info_mask_shared_by_all = BIT(IIO_CHAN_INFO_CALIBBIAS) |	\
-+				BIT(IIO_CHAN_INFO_CALIBSCALE),		\
-+	.datasheet_name = "SAR_ADC_MUX_"#_sel,				\
-+}
-+
- enum meson_sar_adc_avg_mode {
- 	NO_AVERAGING = 0x0,
- 	MEAN_AVERAGING = 0x1,
-@@ -233,6 +247,27 @@ enum meson_sar_adc_channel_index {
- 	INDEX_CHAN_6,
- 	INDEX_CHAN_7,
- 	INDEX_CHAN_SOFT_TIMESTAMP,
-+	INDEX_MUX_0_VSS,
-+	INDEX_MUX_1_VDD_DIV4,
-+	INDEX_MUX_2_VDD_DIV2,
-+	INDEX_MUX_3_VDD_MUL3_DIV4,
-+	INDEX_MUX_4_VDD,
-+};
-+
-+static enum meson_sar_adc_chan7_mux_sel chan7_mux_values[] = {
-+	CHAN7_MUX_VSS,
-+	CHAN7_MUX_VDD_DIV4,
-+	CHAN7_MUX_VDD_DIV2,
-+	CHAN7_MUX_VDD_MUL3_DIV4,
-+	CHAN7_MUX_VDD,
-+};
-+
-+static const char * const chan7_mux_names[] = {
-+	"gnd",
-+	"0.25vdd",
-+	"0.5vdd",
-+	"0.75vdd",
-+	"vdd",
- };
- 
- static const struct iio_chan_spec meson_sar_adc_iio_channels[] = {
-@@ -245,6 +280,11 @@ static const struct iio_chan_spec meson_sar_adc_iio_channels[] = {
- 	MESON_SAR_ADC_CHAN(INDEX_CHAN_6),
- 	MESON_SAR_ADC_CHAN(INDEX_CHAN_7),
- 	IIO_CHAN_SOFT_TIMESTAMP(INDEX_CHAN_SOFT_TIMESTAMP),
-+	MESON_SAR_ADC_MUX(INDEX_MUX_0_VSS, 0),
-+	MESON_SAR_ADC_MUX(INDEX_MUX_1_VDD_DIV4, 1),
-+	MESON_SAR_ADC_MUX(INDEX_MUX_2_VDD_DIV2, 2),
-+	MESON_SAR_ADC_MUX(INDEX_MUX_3_VDD_MUL3_DIV4, 3),
-+	MESON_SAR_ADC_MUX(INDEX_MUX_4_VDD, 4),
- 	MESON_SAR_ADC_TEMP_CHAN(), /* must be the last item */
- };
- 
-@@ -284,6 +324,7 @@ struct meson_sar_adc_priv {
- 	bool					temperature_sensor_calibrated;
- 	u8					temperature_sensor_coefficient;
- 	u16					temperature_sensor_adc_val;
-+	enum meson_sar_adc_chan7_mux_sel	chan7_mux_sel;
- };
- 
- static const struct regmap_config meson_sar_adc_regmap_config_gxbb = {
-@@ -348,6 +389,8 @@ static void meson_sar_adc_set_chan7_mux(struct iio_dev *indio_dev,
- 			   MESON_SAR_ADC_REG3_CTRL_CHAN7_MUX_SEL_MASK, regval);
- 
- 	usleep_range(10, 20);
-+
-+	priv->chan7_mux_sel = sel;
- }
- 
- static int meson_sar_adc_read_raw_sample(struct iio_dev *indio_dev,
-@@ -443,6 +486,15 @@ static void meson_sar_adc_enable_channel(struct iio_dev *indio_dev,
- 		regmap_update_bits(priv->regmap,
- 				   MESON_SAR_ADC_DELTA_10,
- 				   MESON_SAR_ADC_DELTA_10_TEMP_SEL, regval);
-+	} else if (chan->address == MESON_SAR_ADC_VOLTAGE_AND_MUX_CHANNEL) {
-+		enum meson_sar_adc_chan7_mux_sel sel;
-+
-+		if (chan->channel == INDEX_CHAN_7)
-+			sel = CHAN7_MUX_CH7_INPUT;
-+		else
-+			sel = chan7_mux_values[chan->channel - INDEX_MUX_0_VSS];
-+		if (sel != priv->chan7_mux_sel)
-+			meson_sar_adc_set_chan7_mux(indio_dev, sel);
- 	}
- }
- 
-@@ -1015,7 +1067,7 @@ static int meson_sar_adc_calib(struct iio_dev *indio_dev)
- 	meson_sar_adc_set_chan7_mux(indio_dev, CHAN7_MUX_VDD_DIV4);
- 	usleep_range(10, 20);
- 	ret = meson_sar_adc_get_sample(indio_dev,
--				       &indio_dev->channels[INDEX_CHAN_7],
-+				       &indio_dev->channels[INDEX_MUX_1_VDD_DIV4],
- 				       MEAN_AVERAGING, EIGHT_SAMPLES, &value0);
- 	if (ret < 0)
- 		goto out;
-@@ -1023,7 +1075,7 @@ static int meson_sar_adc_calib(struct iio_dev *indio_dev)
- 	meson_sar_adc_set_chan7_mux(indio_dev, CHAN7_MUX_VDD_MUL3_DIV4);
- 	usleep_range(10, 20);
- 	ret = meson_sar_adc_get_sample(indio_dev,
--				       &indio_dev->channels[INDEX_CHAN_7],
-+				       &indio_dev->channels[INDEX_MUX_3_VDD_MUL3_DIV4],
- 				       MEAN_AVERAGING, EIGHT_SAMPLES, &value1);
- 	if (ret < 0)
- 		goto out;
-@@ -1050,8 +1102,13 @@ static int read_label(struct iio_dev *indio_dev,
- {
- 	if (chan->type == IIO_TEMP)
- 		return sprintf(label, "%s\n", "temp-sensor");
--	if (chan->type == IIO_VOLTAGE)
--		return sprintf(label, "channel-%d\n", chan->channel);
-+	if (chan->type == IIO_VOLTAGE) {
-+		if (chan->channel <= INDEX_CHAN_7)
-+			return sprintf(label, "channel-%d\n", chan->channel);
-+		if (chan->channel >= INDEX_MUX_0_VSS)
-+			return sprintf(label, "%s\n",
-+				chan7_mux_names[chan->channel - INDEX_MUX_0_VSS]);
-+	}
- 	return 0;
- }
- 
--- 
-2.38.4
+> 
+> OK try command line approach to disable all states(you can't get partial
+> on/off in that case). I don't think the build config is of any use as we
+> end up enabling it which will affect other platforms.
+> 
+Do you mean cpuidle.off=1 ?
+It will disable idle states but this will not allow cpuidle_init() and 
+governors register to happen which mean no way to re-enable idle states.
+Do you mean any other command line approach?
 
+> 
+> The above still holds, so still NACK. It is a policy and not a
+> hardware/firmware property or feature.
+> 
+Yes, understood!
+
+Thanks,
+Tushar
