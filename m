@@ -2,91 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A512073917D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 23:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FD02739181
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 23:28:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbjFUV20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 17:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47272 "EHLO
+        id S229504AbjFUV2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 17:28:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjFUV2Y (ORCPT
+        with ESMTP id S229969AbjFUV2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 17:28:24 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF1810CE
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:28:23 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-bff4f1e93caso986132276.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:28:23 -0700 (PDT)
+        Wed, 21 Jun 2023 17:28:48 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF991BE4;
+        Wed, 21 Jun 2023 14:28:41 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-34207e81c98so30991325ab.2;
+        Wed, 21 Jun 2023 14:28:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687382902; x=1689974902;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I23QwpbRVC93I2xN0J8C9PPNt1nuyTNz6gUJBDkbm84=;
-        b=copINrrPigwq5XhYM0SrXJMptbcqpEzn+RkQM4XMh3yKWGKY9ONl1YvTPhC3Z+Ikxp
-         YQqob2hF6oFAB5uT1bjoNbOK4Q+vd1uk0a0mvxrjoULfEfq4ubxQBg258ewBeDabFQfp
-         TJKjbcbMYiTJtrSlXGCDgCyl5FlfqU3K5Qf2Y3IgViEbAFAGET4dMKTuC3ivF8GmNl1D
-         OzmWfUPRqYLq4g/f24oe5CkcEZwzlcYtqUSHVDU24tyK2iuSDszNSEfYI2uzXXqpNjoL
-         ptR+ptbrjuZ8l22N0ShYP5Tp05IfhKVRGe+2yy1BOavGWypIoS7gQ81kpsd+zj6RJaM5
-         cw7g==
+        d=gmail.com; s=20221208; t=1687382921; x=1689974921;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KDVeKgt20anLjpmZL3lLbfkT9Je6VtDNWrGWDpMPcz4=;
+        b=RvbWobbubv0WAnB5MOzIkt7ykTs7F8l/9ejrg40RaTJHbrFOtrQSoADnE7lnud5Iuk
+         nYiXpQXNkb67FFaaNt3hgXnj38zPMCUj+JYo/JvOoMraNl5Z/mZcyFm6JTqw9ca+Tc5T
+         JYJVraxgeDFzY/4YqtRyW/+Fv0akQQBJxXoc8izGzN90PjzovTBRgR+hWJ6KQPSXraVl
+         jTgQHfu2I3BAUHjH6uJGQ0SBb8s2R/yi0D8AsdW+gx6usnqEXwspfOgrivolDw2ni7lp
+         YT8lqGLD8sUbcRp3NfgyoGJw3/INtgWg25KYYTKtgDfQo/TC69L1NHjm1wxE3dqxvAOn
+         9+AQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687382902; x=1689974902;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1687382921; x=1689974921;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=I23QwpbRVC93I2xN0J8C9PPNt1nuyTNz6gUJBDkbm84=;
-        b=eKFMMClFr0ew4UV3C/PQU+2QoecXa9Y2ZNkIA2Vuv+WdnYqo5GZVPk07XOoKPrpxzl
-         2lsGeboBAO0DlOxjTudezYxmM5DjioOIkitBk+uEREhJwAtVGYt2a+RfuwS7N/Dt5cMi
-         5UZnIoNjt8DNpn6jNDqi+IlTcXJxOUs9z/pWsv67Ib2LXc8ehqtHBHuw4o6Q/OOvx6SB
-         iYFfYby9/EA44CyGyaHCFDlh8DuN91/r8AsYN1YkTAgRUSDJ0+nkCGqL4sBfR7G58zeS
-         ARaaITL4OU2XyBqpCNbM5tZn1O7c9HhbxJMM60wSe9bkr9VXo19piaqXvHbDu7l1WiFe
-         YCRA==
-X-Gm-Message-State: AC+VfDxngGZ46ybV1cz21ZTEyDv+vofjvq8G/NiaPoVWoVA+H2b29Inz
-        DacncowXxBn0867PS/6VlhsXMLgVGlkmEKiFoiLf3g==
-X-Google-Smtp-Source: ACHHUZ4yERI5vFsl4RR99IkTQFRJT6kLO4bTKnqG2lAKzNozcmaIEuZz/O0vXYKegBPiwDcRHCIDPhtvjxixs6ZIqCc=
-X-Received: by 2002:a25:df84:0:b0:bcc:f2cc:73e with SMTP id
- w126-20020a25df84000000b00bccf2cc073emr13862828ybg.22.1687382902657; Wed, 21
- Jun 2023 14:28:22 -0700 (PDT)
+        bh=KDVeKgt20anLjpmZL3lLbfkT9Je6VtDNWrGWDpMPcz4=;
+        b=AI9g4y/3Vt4m70AZOHp2e0++3VsN2TUebiBxOaoRjuFkiMnwwOTbMUfdJ/VrQVTLO4
+         hpbwwDBK++DJPYTt98F2NQn9pVcG40EX3kvPMStmUiFB4iiqks9rPI1xd3SeR3WPlCUL
+         3cXlFlkaCaBb7GCHzVYUrk94RlDlOdeMvvnayJ4cF0VrngC+G8byVR10tCPcSsFtbgfR
+         3VAEdvzoYS8iiOzxCtUU960Vq6INq6gOAkghg4pTPISd4qBRUzDFcDS0CfreIk750Xhg
+         ASfpquJFldaN1fLk5UUMtNL6dd0+jT0zRGDIIsc1PXnFNTFpvTbX8fO754CEiZxJL1oX
+         YUSQ==
+X-Gm-Message-State: AC+VfDx9Qv2QlXNBm7ru1idUu1p2J145LHluUioDH4SYlnjf11GW/b/T
+        /BR3lrLMmKTA1FLPZaKxBCg=
+X-Google-Smtp-Source: ACHHUZ6BZzIC7TcPquzSAHqFVAEaYT0OhXJraqh0DPT8+mgXUfM+BWMcj4cpWUTp9wHKFIHXT7Tnrg==
+X-Received: by 2002:a92:c10e:0:b0:335:7be2:26ca with SMTP id p14-20020a92c10e000000b003357be226camr16876500ile.19.1687382920609;
+        Wed, 21 Jun 2023 14:28:40 -0700 (PDT)
+Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
+        by smtp.gmail.com with ESMTPSA id v2-20020a92c6c2000000b0033bc3a3ea39sm1524188ilm.70.2023.06.21.14.28.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 14:28:40 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 21 Jun 2023 11:28:38 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>
+Subject: Re: contention on pwq->pool->lock under heavy NFS workload
+Message-ID: <ZJNrht3NlLyPn2A0@slm.duckdns.org>
+References: <38FA0353-5303-4A3D-86A5-EF1E989CD497@oracle.com>
 MIME-Version: 1.0
-References: <20230621191302.1405623-1-paweldembicki@gmail.com> <20230621191302.1405623-2-paweldembicki@gmail.com>
-In-Reply-To: <20230621191302.1405623-2-paweldembicki@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 21 Jun 2023 23:28:11 +0200
-Message-ID: <CACRpkdaAgW+ya50AHTi7QZqLe_HzFDZD7km5ieViruv-GCCHtQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 2/6] net: dsa: vsc73xx: add port_stp_state_set function
-To:     Pawel Dembicki <paweldembicki@gmail.com>
-Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <38FA0353-5303-4A3D-86A5-EF1E989CD497@oracle.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 9:13=E2=80=AFPM Pawel Dembicki <paweldembicki@gmail=
-.com> wrote:
+Hello,
 
-> This isn't fully functional implementation of 802.1D, but
-> port_stp_state_set is required for future tag8021q operations.
->
-> This implementation handle properly all states, but vsc 73xx don't
-> forward STP packets.
->
-> Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
+On Wed, Jun 21, 2023 at 03:26:22PM +0000, Chuck Lever III wrote:
+> lock_stat reports that the pool->lock kernel/workqueue.c:1483 is the highest
+> contended lock on my test NFS client. The issue appears to be that the three
+> NFS-related workqueues, rpciod_workqueue, xprtiod_workqueue, and nfsiod all
+> get placed in the same worker_pool, so they have to fight over one pool lock.
+> 
+> I notice that ib_comp_wq is allocated with the same flags, but I don't see
+> significant contention there, and a trace_printk in __queue_work shows that
+> work items queued on that WQ seem to alternate between at least two different
+> worker_pools.
+> 
+> Is there a preferred way to ensure the NFS WQs get spread a little more fairly
+> amongst the worker_pools?
 
-I think it is a best effort and should be merged.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Can you share the output of lstopo on the test machine?
 
-Yours,
-Linus Walleij
+The following branch has pending workqueue changes which makes unbound
+workqueues finer grained by default and a lot more flexible in how they're
+segmented.
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git affinity-scopes-v2
+
+Can you please test with the brnach? If the default doesn't improve the
+situation, you can set WQ_SYSFS on the affected workqueues and change their
+scoping by writing to /sys/devices/virtual/WQ_NAME/affinity_scope. Please
+take a look at
+
+ https://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git/tree/Documentation/core-api/workqueue.rst?h=affinity-scopes-v2#n350
+
+for more details.
+
+Thanks.
+
+-- 
+tejun
