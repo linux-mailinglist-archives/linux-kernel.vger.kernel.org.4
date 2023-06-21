@@ -2,95 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F04C3738427
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:56:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1491C738429
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:57:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231325AbjFUM4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 08:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
+        id S231585AbjFUM5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 08:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229995AbjFUM4u (ORCPT
+        with ESMTP id S231624AbjFUM5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 08:56:50 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE021AC;
-        Wed, 21 Jun 2023 05:56:48 -0700 (PDT)
-X-QQ-mid: bizesmtp71t1687352198t3y4p8d8
-Received: from linux-lab-host.localdomain ( [116.30.126.60])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 21 Jun 2023 20:56:37 +0800 (CST)
-X-QQ-SSF: 00200000000000D0V000000A0000000
-X-QQ-FEAT: kW11ei911QIEmMARb2D/9riz1PmfAVjY0VfqkkrlMxEhhNhhOM6Lop7SLtmUf
-        wM8PfJZIXzcE8XffnD6KaOQeOPUIUkxe9Nnu0JrvGtyaukJEccdFZmu74ZhjuBWMDlyf/bB
-        4psKfa61jl09sqKWt7abjFYCwzUO+BwI9SXCuiLjmYlHyHWoemIaFVlpPiGgv8IMr5n7ET+
-        KeAp2NB2XWDWX6thOVS5g0df3C72/7zHaxp4D64GWf1elO0WAU2TDaB2yxfQdteVmxIrRyi
-        96Z64UweY4ajqpKnug/miPliEMgg+YM43kA/j4dsGVRiw7pLlS++xC3MajL5tLACqWofxWy
-        kB+/1DhGQxhf/42v2D2iq0kru0MySKugpr1MnrhDLEVJNKKF/PkFecRbfqqyA==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1937265591445148803
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     thomas@t-8ch.de, arnd@arndb.de, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 03/17] selftests/nolibc: add _LARGEFILE64_SOURCE for musl
-Date:   Wed, 21 Jun 2023 20:56:03 +0800
-Message-Id: <6b28c488dbbdee2d44d75fffe067feb884865861.1687344643.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687344643.git.falcon@tinylab.org>
-References: <cover.1687344643.git.falcon@tinylab.org>
+        Wed, 21 Jun 2023 08:57:11 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1627210D2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:57:08 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 12:57:06 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1687352227;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=mfJR3MK9wcyi5gJAKc+z304Qjz1+2ds7fjxml8WHpzI=;
+        b=urdW55p8trq+/EfmomWazIVtrKrzYr6/hXE90IdzxsD2yK4v97kxd6Wpc3MUiboPUgskKJ
+        6hx6p1Okb6o1l5BErFfLeMUNPtvBOHXt0Ct88wm9PyT901U5I4ujtQ1V61x0J7q0E625QW
+        srrzXE3EMQIdO+62r24JzUooCED116BWL5xdOPmmewvo7uY31odUtV2Si9/U/r1+YEhkp9
+        vG4gRo1Fb1nkjhLRrQwajPzLirxCSe/jMkCVq8NL0qSgwJIYQJsH02xBrBMOQxhP3/s/CY
+        cGqHIF5EHkNHkGnAJpb2Ig4VCFzI0S+BH90Ij3Y20VJ4AUMmojARqwwKTzryGw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1687352227;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=mfJR3MK9wcyi5gJAKc+z304Qjz1+2ds7fjxml8WHpzI=;
+        b=GAZa/ZgiEkH+vUnKtyzq46C7oYXm8/bZM8KvUBhpfB/eNXdqHeICDvVywc6yFWQTIQ8x0O
+        ggH1+sWubmVFibDA==
+From:   "irqchip-bot for Marc Zyngier" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
+Subject: [irqchip: irq/irqchip-next] Revert "irqchip/mxs: Include linux/irqchip/mxs.h"
+Cc:     Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Shawn Guo <shawnguo@kernel.org>, tglx@linutronix.de
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Message-ID: <168735222615.404.5437100914727545952.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-_GNU_SOURCE Implies _LARGEFILE64_SOURCE in glibc, but in musl, the
-default configuration doesn't enable _LARGEFILE64_SOURCE.
+The following commit has been merged into the irq/irqchip-next branch of irqchip:
 
-From include/dirent.h of musl, getdents64 is provided as getdents when
-_LARGEFILE64_SOURCE is defined.
+Commit-ID:     d93c22199966696cfb76c6942797de2fbb22da24
+Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/d93c22199966696cfb76c6942797de2fbb22da24
+Author:        Marc Zyngier <maz@kernel.org>
+AuthorDate:    Wed, 21 Jun 2023 13:46:25 +01:00
+Committer:     Marc Zyngier <maz@kernel.org>
+CommitterDate: Wed, 21 Jun 2023 13:50:53 +01:00
 
-    #if defined(_LARGEFILE64_SOURCE)
-    ...
-    #define getdents64 getdents
-    #endif
+Revert "irqchip/mxs: Include linux/irqchip/mxs.h"
 
-Let's define _LARGEFILE64_SOURCE to fix up this compile error:
+This reverts commit 5b7e5676209120814dbb9fec8bc3769f0f7a7958.
 
-    tools/testing/selftests/nolibc/nolibc-test.c: In function ‘test_getdents64’:
-    tools/testing/selftests/nolibc/nolibc-test.c:453:8: warning: implicit declaration of function ‘getdents64’; did you mean ‘getdents’? [-Wimplicit-function-declaration]
-      453 |  ret = getdents64(fd, (void *)buffer, sizeof(buffer));
-          |        ^~~~~~~~~~
-          |        getdents
-    /usr/bin/ld: /tmp/ccKILm5u.o: in function `test_getdents64':
-    nolibc-test.c:(.text+0xe3e): undefined reference to `getdents64'
-    collect2: error: ld returned 1 exit status
+Although including linux/irqchip/mxs.h is technically correct,
+this clashes with the parallel removal of this include file
+with 32bit ARM modernizing the low level irq handling as part of
+5bb578a0c1b8 ("ARM: 9298/1: Drop custom mdesc->handle_irq()").
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+As such, this patch is not only unnecessary, it also breaks
+compilation in -next. Revert it.
+
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Shawn Guo <shawnguo@kernel.org>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/irqchip/irq-mxs.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 739c9daa91b6..d43116553288 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -1,6 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- 
- #define _GNU_SOURCE
-+#define _LARGEFILE64_SOURCE
- 
- /* libc-specific include files
-  * The program may be built in 3 ways:
--- 
-2.25.1
-
+diff --git a/drivers/irqchip/irq-mxs.c b/drivers/irqchip/irq-mxs.c
+index b3b1fba..55cb6b5 100644
+--- a/drivers/irqchip/irq-mxs.c
++++ b/drivers/irqchip/irq-mxs.c
+@@ -9,7 +9,6 @@
+ #include <linux/init.h>
+ #include <linux/irq.h>
+ #include <linux/irqchip.h>
+-#include <linux/irqchip/mxs.h>
+ #include <linux/irqdomain.h>
+ #include <linux/io.h>
+ #include <linux/of.h>
