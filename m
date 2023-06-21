@@ -2,77 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00244738432
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:58:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5819738434
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:59:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232122AbjFUM6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 08:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36514 "EHLO
+        id S232095AbjFUM7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 08:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231251AbjFUM6t (ORCPT
+        with ESMTP id S231156AbjFUM7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 08:58:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E7F19A4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:58:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1CA060DF0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 12:58:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC261C433C0;
-        Wed, 21 Jun 2023 12:58:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687352321;
-        bh=0wuMaCipc6KtZD0Xh4BIPnRA9SQTgc4eexJxe2sb/h4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DnIxgLCUvIzh7oUiE4sXzvtmMB8eohVtfVw3ccGZjd20l8Pfov8YBblQ2I5AieLqO
-         8rYxI4a6G/6pPnuG7XNOjo3uWQVoRTyBIyDu8XYVsbRRvFAqz6gQDRBpvQiwBw1vOP
-         v1nRx4Hi8TzBJcjaQdtfEJqfWp/eIQkkbhoVJkt8eCHWJaa+wZ0pqgBvmOU61nEQvB
-         t8Yo02QHYnakBa22j44k/ai3AMOxTzRzzqLL6HEW4sLOA7xaWRyjrrcPwAruk3tvgu
-         LGmQHAdg+wQvuxH935NPBC0OY0BXRK6WbqF6LPllU4Dh5fb2+Jakhu/hm8g/9Q4UcB
-         dEKpBDjARxHew==
-From:   rfoss@kernel.org
-To:     Juerg Haefliger <juerg.haefliger@canonical.com>
-Cc:     Robert Foss <rfoss@kernel.org>, andrzej.hajda@intel.com,
-        dri-devel@lists.freedesktop.org, airlied@gmail.com,
-        jonas@kwiboo.se, linux-kernel@vger.kernel.org,
-        neil.armstrong@linaro.org, jernej.skrabec@gmail.com,
-        Laurent.pinchart@ideasonboard.com, daniel@ffwll.ch
-Subject: Re: [PATCH v2] drm/bridge: lt9611uxc: Add MODULE_FIRMWARE macro
-Date:   Wed, 21 Jun 2023 14:58:34 +0200
-Message-Id: <168735229147.2587713.1545878591431982417.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230620061254.1210248-1-juerg.haefliger@canonical.com>
-References: <CAN6tsi4jdDD20DY5sKL+ALC_Mk2UHRArOrQnjzKoyF30QZi8jw@mail.gmail.com> <20230620061254.1210248-1-juerg.haefliger@canonical.com>
+        Wed, 21 Jun 2023 08:59:41 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F326FAC;
+        Wed, 21 Jun 2023 05:59:38 -0700 (PDT)
+X-QQ-mid: bizesmtp73t1687352369te3lj68z
+Received: from linux-lab-host.localdomain ( [116.30.126.60])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 21 Jun 2023 20:59:28 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: xwvWJGGFd7Pp39HRCTQYRbgJy3bbvGHQ7WlZR48+2RLviBp/41ZiQ96oKRZr/
+        SilZzV0NenGnJQOAoEBB0FsmiBH7+SiFV9oelPczpDc5Rv6vON7sAY8uZqZwSd+t40quVga
+        UlD5ndGNbGYHcYN65235Szzzn+W3uQJbRs+cM5+xVrvNtkhz8C96FkkUB4g30N+3iiIrT18
+        IQ6Ef+55Bvl/Wb4QA6h+fvhx0tjuE67lIQ90/3id1+HCtIisliMmEsk8Ug9bqvYo0ghVbrP
+        B7xN3wcVi695bHsw5s8IapJuwl+GKCEXCNiaucghBROurHs1Z2GS5Y9guTFLTImqjkXOMkJ
+        m22jHKU242jcgYr6CLmUguUae2HlOWvJPWimeF9ZtAi9dq0bot3TJaA2a7Ar64D7EGcWIyU
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 18004566144104333474
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     thomas@t-8ch.de, arnd@arndb.de, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v1 05/17] selftests/nolibc: stat_timestamps: remove procfs dependency
+Date:   Wed, 21 Jun 2023 20:58:58 +0800
+Message-Id: <5f80f3dae60f77c6b746578113e56c8fa6454143.1687344643.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1687344643.git.falcon@tinylab.org>
+References: <cover.1687344643.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Foss <rfoss@kernel.org>
+Since it is not really necessary to use /proc/self here, instead of
+adding a condition check, we use the always existing '/' path instead of
+/proc/self, this eventually let it work without procfs.
 
-On Tue, 20 Jun 2023 08:12:54 +0200, Juerg Haefliger wrote:
-> The module loads firmware so add a MODULE_FIRMWARE macro to provide that
-> information via modinfo.
-> 
-> 
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied, thanks!
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index ebec948ec808..2ef44176f7a9 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -520,7 +520,7 @@ static int test_stat_timestamps(void)
+ 	if (sizeof(st.st_atim.tv_sec) != sizeof(st.st_atime))
+ 		return 1;
+ 
+-	if (stat("/proc/self/", &st))
++	if (stat("/", &st))
+ 		return 1;
+ 
+ 	if (st.st_atim.tv_sec != st.st_atime || st.st_atim.tv_nsec > 1000000000)
+-- 
+2.25.1
 
-[1/1] drm/bridge: lt9611uxc: Add MODULE_FIRMWARE macro
-      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=354c0fb61739
-
-
-
-Rob
 
