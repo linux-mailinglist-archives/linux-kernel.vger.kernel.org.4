@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87712737CEE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65EB5737CDC
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:07:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231685AbjFUIFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 04:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45044 "EHLO
+        id S231699AbjFUIF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 04:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbjFUIF0 (ORCPT
+        with ESMTP id S230013AbjFUIFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 04:05:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E691199E;
-        Wed, 21 Jun 2023 01:05:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3222B6148D;
-        Wed, 21 Jun 2023 08:05:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 533AFC433C0;
-        Wed, 21 Jun 2023 08:05:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687334723;
-        bh=A0nwC/s2ji+8UKgD6FCXPyKxJZJQg3sYdNzUYtkF8cc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TF1TB1X1ojZbqpj39jYJnNpIrddkPfoGr61YuBVsLHjD7C/ixqCfulfKAU4cj7USq
-         cfbumCWgDf3xGlK7BdjT5IFed2TMYYIkbB6eRyczbUwlmS2WqkShU/RnsFDweJz5mr
-         khf41H49v1SoN4AMQbMDMBOj1J7S2w1THHnUHmo6A/k/oR0TB0bYN0TTclQ8OwJYv+
-         eLobEDN9pM3iJq7VX/nMiyIbxuoK4Ilox7QxVugRG4859Dij9mjU0iTQyLmAMEquzm
-         CG1jMbrRRMFA9eVnxdW88IcGi1Px7Gebg7jAdc7EW18XQqFUYzObnWVEElZheu4G4X
-         9AAZLvsoxtINA==
-Date:   Wed, 21 Jun 2023 01:05:21 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Dave Chinner <david@fromorbit.com>
-Cc:     syzbot <syzbot+510dcbdc6befa1e6b2f6@syzkaller.appspotmail.com>,
-        djwong@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [xfs?] UBSAN: array-index-out-of-bounds in
- xfs_attr3_leaf_add_work
-Message-ID: <20230621080521.GB56560@sol.localdomain>
-References: <0000000000001c8edb05fe518644@google.com>
- <ZI+3QXDHiohgv/Pb@dread.disaster.area>
+        Wed, 21 Jun 2023 04:05:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42649FE
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:05:49 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qBsqQ-0008H8-EV; Wed, 21 Jun 2023 10:05:38 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qBsqN-00056Q-PQ; Wed, 21 Jun 2023 10:05:35 +0200
+Date:   Wed, 21 Jun 2023 10:05:35 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Jonas Karlman <jonas@kwiboo.se>
+Cc:     Sandy Huang <hjc@rock-chips.com>, Heiko Stuebner <heiko@sntech.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Mark Yao <markyao0591@gmail.com>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] drm/rockchip: vop: Fix reset of state in duplicate
+ state crtc funcs
+Message-ID: <20230621080535.GV18491@pengutronix.de>
+References: <20230620064732.1525594-1-jonas@kwiboo.se>
+ <20230620064732.1525594-2-jonas@kwiboo.se>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZI+3QXDHiohgv/Pb@dread.disaster.area>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230620064732.1525594-2-jonas@kwiboo.se>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,82 +61,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
+On Tue, Jun 20, 2023 at 06:47:36AM +0000, Jonas Karlman wrote:
+> struct rockchip_crtc_state members such as output_type, output_bpc and
+> enable_afbc is always reset to zero in the atomic_duplicate_state crtc
+> funcs.
+> 
+> Fix this by using kmemdup on the subclass rockchip_crtc_state struct.
+> 
+> Fixes: 4e257d9eee23 ("drm/rockchip: get rid of rockchip_drm_crtc_mode_config")
+> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
 
-On Mon, Jun 19, 2023 at 12:02:41PM +1000, 'Dave Chinner' via syzkaller-bugs wrote:
-> On Sat, Jun 17, 2023 at 04:22:59AM -0700, syzbot wrote:
-> > Hello,
-> > 
-> > syzbot found the following issue on:
-> > 
-> > HEAD commit:    1f6ce8392d6f Add linux-next specific files for 20230613
-> > git tree:       linux-next
-> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=14e629dd280000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=d103d5f9125e9fe9
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=510dcbdc6befa1e6b2f6
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=139d8d2d280000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11b371f1280000
-> > 
-> > Downloadable assets:
-> > disk image: https://storage.googleapis.com/syzbot-assets/2d9bf45aeae9/disk-1f6ce839.raw.xz
-> > vmlinux: https://storage.googleapis.com/syzbot-assets/e0b03ef83e17/vmlinux-1f6ce839.xz
-> > kernel image: https://storage.googleapis.com/syzbot-assets/b6c21a24174d/bzImage-1f6ce839.xz
-> > mounted in repro: https://storage.googleapis.com/syzbot-assets/65eca6891c21/mount_0.gz
-> > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+510dcbdc6befa1e6b2f6@syzkaller.appspotmail.com
-> > 
-> > XFS (loop0): Mounting V4 Filesystem 5e6273b8-2167-42bb-911b-418aa14a1261
-> > XFS (loop0): Ending clean mount
-> > xfs filesystem being mounted at /root/file0 supports timestamps until 2038-01-19 (0x7fffffff)
-> > ================================================================================
-> > UBSAN: array-index-out-of-bounds in fs/xfs/libxfs/xfs_attr_leaf.c:1560:3
-> > index 14 is out of range for type '__u8 [1]'
-> > CPU: 1 PID: 5021 Comm: syz-executor198 Not tainted 6.4.0-rc6-next-20230613-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
-> > Call Trace:
-> >  <TASK>
-> >  __dump_stack lib/dump_stack.c:88 [inline]
-> >  dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
-> >  ubsan_epilogue lib/ubsan.c:217 [inline]
-> >  __ubsan_handle_out_of_bounds+0xd5/0x140 lib/ubsan.c:348
-> >  xfs_attr3_leaf_add_work+0x1528/0x1730 fs/xfs/libxfs/xfs_attr_leaf.c:1560
-> >  xfs_attr3_leaf_add+0x750/0x880 fs/xfs/libxfs/xfs_attr_leaf.c:1438
-> >  xfs_attr_leaf_try_add+0x1b7/0x660 fs/xfs/libxfs/xfs_attr.c:1242
-> >  xfs_attr_leaf_addname fs/xfs/libxfs/xfs_attr.c:444 [inline]
-> >  xfs_attr_set_iter+0x16c4/0x2f90 fs/xfs/libxfs/xfs_attr.c:721
-> >  xfs_xattri_finish_update+0x3c/0x140 fs/xfs/xfs_attr_item.c:332
-> 
-> The on disk format for this field is defined as:
-> 
-> typedef struct xfs_attr_leaf_name_local {
->         __be16  valuelen;               /* number of bytes in value */
->         __u8    namelen;                /* length of name bytes */
->         __u8    nameval[1];             /* name/value bytes */
-> } xfs_attr_leaf_name_local_t
-> 
-> If someone wants to do change the on-disk format definition to use
-> "kernel proper" flex arrays in both the kernel code and user space,
-> update all the documentation and do all the validation work that
-> on-disk format changes require for all XFS disk structures that are
-> defined this way, then we'll fix this.
-> 
-> But as it stands, these structures have been defined this way for 25
-> years and the code accessing them has been around for just as long.
-> The code is not broken and it does not need fixing. We have way more
-> important things to be doing that fiddling with on disk format
-> definitions and long standing, working code just to shut up UBSAN
-> and/or syzbot.
-> 
-> WONTFIX, NOTABUG.
+Reviewed-by: Sascha Hauer <s.hauer@pengutronix.de>
 
-My understanding is that the main motivation for the conversions to flex arrays
-is kernel hardening, as it allows bounds checking to be enabled.
+Sascha
 
-You can probably get away with not fixing this for a little while longer, as
-that stuff is still a work in progress.  But I would suggest you be careful
-about potentially getting yourself into a position where XFS is blocking
-enabling security mitigations for the whole kernel...
+> ---
+>  drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+> index a530ecc4d207..60b23636a3fe 100644
+> --- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+> @@ -1614,7 +1614,8 @@ static struct drm_crtc_state *vop_crtc_duplicate_state(struct drm_crtc *crtc)
+>  	if (WARN_ON(!crtc->state))
+>  		return NULL;
+>  
+> -	rockchip_state = kzalloc(sizeof(*rockchip_state), GFP_KERNEL);
+> +	rockchip_state = kmemdup(to_rockchip_crtc_state(crtc->state),
+> +				 sizeof(*rockchip_state), GFP_KERNEL);
+>  	if (!rockchip_state)
+>  		return NULL;
+>  
+> -- 
+> 2.41.0
+> 
+> 
 
-- Eric
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
