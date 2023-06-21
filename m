@@ -2,139 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FCDE7389F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B1C7389F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233748AbjFUPmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45636 "EHLO
+        id S233799AbjFUPnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 11:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232701AbjFUPmj (ORCPT
+        with ESMTP id S233705AbjFUPmq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:42:39 -0400
-Received: from s.wrqvtbkv.outbound-mail.sendgrid.net (s.wrqvtbkv.outbound-mail.sendgrid.net [149.72.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3654819B5
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
-        h=mime-version:subject:references:from:in-reply-to:to:cc:content-type:
-        content-transfer-encoding:cc:content-type:from:subject:to;
-        s=s1; bh=8+jSZYNVSR48321s/oSCWt0Vx0TuZhHVNXzSvj6Jubw=;
-        b=ZMJbFTe/D3Y3fpJsgbD+xG8inBdcqgJJm4S+6tintXoPTGXQ7Y2APOwTQPySoEH+AEvV
-        lnahvLL3hgEmCak2r7ltJIJvut9FCvRUr3rgV4bYtQKbAJiYR3BAphQ7077tyUaYdlyPUB
-        caU5+aRl66KAgrYL1AUlXXnXjdcIFWJGZXgVs+ZdROmPzZd3X7MDiv0PPYHa19a0MVj1Un
-        CM1gKbzCGYVWqei89WIEzlBE1x0wM/2yV66HHD1cKsTcwfZtKTxRmAj+oL4oX6S8pq+LDp
-        syffKEZiJiNM9h1K06nMqnOTRvCXYcz3m9vMmagvRPqygV1hjResjDCdLVodnWPg==
-Received: by filterdrecv-77869f68cc-4lhvt with SMTP id filterdrecv-77869f68cc-4lhvt-1-64931A39-63
-        2023-06-21 15:41:45.772147988 +0000 UTC m=+3600334.020172255
-Received: from [192.168.1.50] (unknown)
-        by geopod-ismtpd-5 (SG) with ESMTP
-        id 1CQkqm0ERMy9gnj9PBUTmw
-        Wed, 21 Jun 2023 15:41:45.457 +0000 (UTC)
-Message-ID: <1f20a832-6339-0feb-3647-cea7598e60be@kwiboo.se>
-Date:   Wed, 21 Jun 2023 15:41:46 +0000 (UTC)
+        Wed, 21 Jun 2023 11:42:46 -0400
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32116E68;
+        Wed, 21 Jun 2023 08:42:24 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1b50e309602so47944165ad.0;
+        Wed, 21 Jun 2023 08:42:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687362122; x=1689954122;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FTJzUZXq823ZXnmLS5AS4rZZIfTqatFrJY6YpC4QzpE=;
+        b=BoocG/dCUaNbOvH580ePfIw424DALlxJpTkKvSEKXH7mR7tpaLzPk1+JLpVttUy2t6
+         LM7wGbHTwWpJLJRExnC9fMrO2Kcx23CnQ2ZTOykU+vllB8pjhJdgDJtVFrSf/oa6TYaL
+         /EKD/HrhztwjLJ+vbpeHyVyMnUh6aoRKFROsTiWzgrutzI2LVG+SvRHl5qTBV5RwqO7X
+         Qbf8M0DTwmKwxImUsRx7JEnkCxYmuiJF3P5kgCw7IOhZkhe+RYoEU5pLYKkqpTZtK3bH
+         E7ORuuNs7H8PTdXFer2Mn1C3ck7GM7NWr2yuGw73zqLcFskL2FsYpPwsgNna4VbZFJqI
+         ClXQ==
+X-Gm-Message-State: AC+VfDzFoYTRdPW6EntrmsGNkyaAm2o3t77CHtexfASIQZXua5coZ+xG
+        W0lYKL6cf4+DR+HVNSXCQAc=
+X-Google-Smtp-Source: ACHHUZ75AgZuplMcSb1kEuUFuGEsTg5FBp+Eusurp/PRz9+EQrBqDaV+XQmO0a4stt8z/TTWglepIQ==
+X-Received: by 2002:a17:903:1108:b0:1b0:2d08:eb51 with SMTP id n8-20020a170903110800b001b02d08eb51mr19783283plh.12.1687362122342;
+        Wed, 21 Jun 2023 08:42:02 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:9bb2:be1e:34e3:7c45? ([2620:15c:211:201:9bb2:be1e:34e3:7c45])
+        by smtp.gmail.com with ESMTPSA id u9-20020a17090341c900b001ac741dfd29sm3637788ple.295.2023.06.21.08.42.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jun 2023 08:42:01 -0700 (PDT)
+Message-ID: <debdc47a-c377-e457-5643-415d93ced54a@acm.org>
+Date:   Wed, 21 Jun 2023 08:41:58 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 4/4] drm/rockchip: vop2: Add missing call to crtc reset
- helper
-References: <20230620064732.1525594-1-jonas@kwiboo.se>
- <20230620064732.1525594-5-jonas@kwiboo.se>
- <20230621081151.GY18491@pengutronix.de>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+From:   Bart Van Assche <bvanassche@acm.org>
+Subject: Re: [PATCH] docs: target: Convert tcm_mod_builder.py print syntax to
+ python3
+To:     Rong Tao <rtoax@foxmail.com>, martin.petersen@oracle.com
+Cc:     rongtao@cestc.cn, Jonathan Corbet <corbet@lwn.net>,
+        "open list:SCSI TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
+        "open list:SCSI TARGET SUBSYSTEM" <target-devel@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Mike Christie <michael.christie@oracle.com>
+References: <tencent_F3895D0EA868BCCE8C56221619BC093D660A@qq.com>
 Content-Language: en-US
-From:   Jonas Karlman <jonas@kwiboo.se>
-In-Reply-To: <20230621081151.GY18491@pengutronix.de>
-X-SG-EID: =?us-ascii?Q?TdbjyGynYnRZWhH+7lKUQJL+ZxmxpowvO2O9SQF5CwCVrYgcwUXgU5DKUU3QxA?=
- =?us-ascii?Q?fZekEeQsTe+RrMu3cja6a0h7SRAqrjZghh+BUwH?=
- =?us-ascii?Q?PaDHTn0zfJUkykOFCOQaqgs9WhKZwljx1UFMUli?=
- =?us-ascii?Q?64cy78z0MEgFsiULaIXkYPjkvJPN0lJKOsBrzgo?=
- =?us-ascii?Q?zVj+NjeBW0XaXTzBuM8tJbnyUuz50xZc1=2FeMU2T?=
- =?us-ascii?Q?NoCo7xctEjTmPlTrOPb3HQKdLkrk23cU7aK5+q?=
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Sandy Huang <hjc@rock-chips.com>, Heiko Stuebner <heiko@sntech.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh@kernel.org>,
-        Andy Yan <andy.yan@rock-chips.com>,
-        Mark Yao <markyao0591@gmail.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-X-Entity-ID: P7KYpSJvGCELWjBME/J5tg==
-Content-Type: text/plain; charset=us-ascii
+In-Reply-To: <tencent_F3895D0EA868BCCE8C56221619BC093D660A@qq.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-21 10:11, Sascha Hauer wrote:
-> On Tue, Jun 20, 2023 at 06:47:39AM +0000, Jonas Karlman wrote:
->> Add missing call to crtc reset helper to properly vblank reset.
->>
->> Also move vop2_crtc_reset and call vop2_crtc_destroy_state to simplify
->> and remove duplicated code.
->>
->> Fixes: 604be85547ce ("drm/rockchip: Add VOP2 driver")
->> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
->> ---
->>  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 28 ++++++++------------
->>  1 file changed, 11 insertions(+), 17 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
->> index f725487d02ef..1be84fe0208f 100644
->> --- a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
->> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
->> @@ -2080,23 +2080,6 @@ static const struct drm_crtc_helper_funcs vop2_crtc_helper_funcs = {
->>  	.atomic_disable = vop2_crtc_atomic_disable,
->>  };
->>  
->> -static void vop2_crtc_reset(struct drm_crtc *crtc)
->> -{
->> -	struct rockchip_crtc_state *vcstate = to_rockchip_crtc_state(crtc->state);
->> -
->> -	if (crtc->state) {
->> -		__drm_atomic_helper_crtc_destroy_state(crtc->state);
->> -		kfree(vcstate);
->> -	}
->> -
->> -	vcstate = kzalloc(sizeof(*vcstate), GFP_KERNEL);
->> -	if (!vcstate)
->> -		return;
->> -
->> -	crtc->state = &vcstate->base;
->> -	crtc->state->crtc = crtc;
->> -}
->> -
->>  static struct drm_crtc_state *vop2_crtc_duplicate_state(struct drm_crtc *crtc)
->>  {
->>  	struct rockchip_crtc_state *vcstate;
->> @@ -2123,6 +2106,17 @@ static void vop2_crtc_destroy_state(struct drm_crtc *crtc,
->>  	kfree(vcstate);
->>  }
->>  
->> +static void vop2_crtc_reset(struct drm_crtc *crtc)
->> +{
->> +	struct rockchip_crtc_state *vcstate =
->> +		kzalloc(sizeof(*vcstate), GFP_KERNEL);
->> +
->> +	if (crtc->state)
->> +		vop2_crtc_destroy_state(crtc, crtc->state);
->> +
->> +	__drm_atomic_helper_crtc_reset(crtc, &vcstate->base);
->> +}
-> 
-> You missed to check for allocation failures before using vcstate.
+On 6/21/23 00:33, Rong Tao wrote:
+> diff --git a/Documentation/target/tcm_mod_builder.py b/Documentation/target/tcm_mod_builder.py
+> index 54492aa813b9..e2ef72925de3 100755
+> --- a/Documentation/target/tcm_mod_builder.py
+> +++ b/Documentation/target/tcm_mod_builder.py
+> @@ -20,7 +20,7 @@ fabric_mod_port = ""
+>   fabric_mod_init_port = ""
+>   
+>   def tcm_mod_err(msg):
+> -	print msg
+> +	print(msg)
+>   	sys.exit(1)
 
-Good catch, I will fix for both vop and vop2 driver in v2.
+How about deleting the file Documentation/target/tcm_mod_builder.py? I
+don't think anyone is using this script. Additionally, it takes effort
+to keep this script in sync with the rest of the SCSI target code. I'm
+not sure anyone is interested in maintaining this script.
 
-Regards,
-Jonas
+Thanks,
 
-> 
-> Sascha
-> 
-
+Bart.
