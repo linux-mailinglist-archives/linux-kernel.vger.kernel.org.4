@@ -2,113 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23D273800F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB1B738051
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbjFUKhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 06:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
+        id S232480AbjFUKiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 06:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbjFUKgm (ORCPT
+        with ESMTP id S231968AbjFUKiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 06:36:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE351BCD;
-        Wed, 21 Jun 2023 03:35:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1908D61486;
-        Wed, 21 Jun 2023 10:35:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8984C433C0;
-        Wed, 21 Jun 2023 10:35:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687343723;
-        bh=/nDUysOIs+S67QS0PXY41K9/6X1N3a9ho9GHTrfj2i0=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=a6p6PJqCNZCyMhzG8L0y2KV1XMdLUq9rM7BtrK0thbvITt6Gbpu4/tg5tSRO+XIuE
-         gqtY54aFk5vcoAOhF5Rulvr5Hibmec5CT6Y37PLVThyrlAej05jXapqpAeyuPu8rgq
-         7D8g+WDF3jwxK5DifiLYwtvVdOuFH655lyvrCbCqiRNbiNRlwJfdy83IGz3tir5s2F
-         swu0D+OvGOiGFJxORVSKVK+cGWgor/7YXe62lmWAVvlsmIpC0CV+bG9rZsS0L3zAyg
-         n2FtNGgOJW2QbNvHi7mwiWNNMqMeZNTKMG4mTuVmRk1CTpcPrTv9p1+Uqomphqa7AY
-         MFr2VGKSG1F8g==
-Message-ID: <26dce201000d32fd3ca1ca5b5f8cd4f5ae0b38b2.camel@kernel.org>
-Subject: Re: [PATCH 2/3] fd/locks: allow get the lock owner by F_OFD_GETLK
-From:   Jeff Layton <jlayton@kernel.org>
-To:     stsp <stsp2@yandex.ru>, linux-kernel@vger.kernel.org
-Cc:     Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>
-Date:   Wed, 21 Jun 2023 06:35:21 -0400
-In-Reply-To: <9c0a7cde-da32-bc09-0724-5b1387909d18@yandex.ru>
-References: <20230620095507.2677463-1-stsp2@yandex.ru>
-         <20230620095507.2677463-3-stsp2@yandex.ru>
-         <5728ebda22a723b0eb209ae078e8f132d7b4ac7b.camel@kernel.org>
-         <a1e7f5c1-76ef-19e5-91db-a62f7615b28a@yandex.ru>
-         <eaccc14ddc6b546e5913eb557fec55f77cb5424d.camel@kernel.org>
-         <5f644a24-90b5-a02f-b593-49336e8e0f5a@yandex.ru>
-         <2eb8566726e95a01536b61a3b8d0343379092b94.camel@kernel.org>
-         <d70b6831-3443-51d0-f64c-6f6996367a85@yandex.ru>
-         <d0c18369245db91a3b78017fabdc81417418af67.camel@kernel.org>
-         <ddb48e05-ab26-ae5d-86d5-01e47f0f0cd2@yandex.ru>
-         <e8c8c7d8bf871a0282f3e629d017c09ed38e2c5e.camel@kernel.org>
-         <9c0a7cde-da32-bc09-0724-5b1387909d18@yandex.ru>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+        Wed, 21 Jun 2023 06:38:22 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06AC210E;
+        Wed, 21 Jun 2023 03:37:24 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-988e6fc41ccso343128866b.3;
+        Wed, 21 Jun 2023 03:37:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687343843; x=1689935843;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5LLokvFJRr0ZS2/J+RyaPCEgCPP7mcKpknVtjbysX64=;
+        b=aJaEcdo/WXsjqvY6b3OmYlnmUBegG+pi6a/jfHi7NPGD0Ghq3KAxY/9j91CCoIbkys
+         e6jFshOjb9E6+DDuezEGFRwhQFZh7ghMopz7vwnC3gm8DPGyL0/q+XmfDUh/tMUCrLX7
+         e+9ddaQ1WTrWpR9zBbKhpD75Teh+wF/O0BnbchgJvmdE2rC+DeHLSJtiLn+6qbmaah7t
+         p8Aq0fmRYpb6W/G5Lbu0VVrIiiu3ppt57JbokvDwxte75C5KTKVKwZnTOtLpSczgBVSQ
+         piNkUosIQ6D9WNaNyuXD4wsqCQ5GNGpLFmth/J7O3zUEvEWPiVZVoZtqdavA56uAneLI
+         IX4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687343843; x=1689935843;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5LLokvFJRr0ZS2/J+RyaPCEgCPP7mcKpknVtjbysX64=;
+        b=YLXa/IxmzT4TVEFs/s0xYHFubOVe8N8c2XBpcHN/oRmMQ0MmOm20ABaFq1zPPqmrzV
+         T039jI2SpyyYvM7Mv/aeje/aU9wJA9RgTdSJB8+noYxidmP7MNUcVBDhmKI5QbS2WvZP
+         g0vcLy09AuOGn8JcJSBY15hYIQJUK12on2SSHEQ3M2DhslOVgmbnTL4Y3jNha2/447qB
+         dBMfE4lERd9EaXfwKmoyAX6mKk+jW4FBP2WvZTGF6y8uU4w74AzeJ1ER1s2p78PMXmrC
+         iQw6cIGjLXuFHc+aIMyI5Rj4ArAClKQ/g6jkIDWhZJgdUqm4w7XKST8mIGSCOt1nvQF4
+         wiRg==
+X-Gm-Message-State: AC+VfDwC0xqnHmp86c+gFbQ/I8Taj3sFUgrvyOn9BIzcUGD1Rr4TwYUS
+        GYnwHkJAkfB3iznx3EMoRYA=
+X-Google-Smtp-Source: ACHHUZ4AMAXLQ2VODo60XAY+XGQ82nEkQz5gsitczhta2Sp8+R5DzfROGEx23e5eqEQo/KvZh5C/CA==
+X-Received: by 2002:a17:907:1b08:b0:971:eb29:a082 with SMTP id mp8-20020a1709071b0800b00971eb29a082mr11779512ejc.49.1687343842917;
+        Wed, 21 Jun 2023 03:37:22 -0700 (PDT)
+Received: from [127.0.1.1] ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id c2-20020a1709060fc200b0098880feae36sm2931758ejk.153.2023.06.21.03.37.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 03:37:22 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+Subject: [PATCH 0/4] usb: misc: onboard_usb_hub: add support for Cypress
+ HX3 USB 3.0 family
+Date:   Wed, 21 Jun 2023 12:37:15 +0200
+Message-Id: <20230620-hx3-v1-0-690000b6d60d@skidata.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANzSkmQC/x2MWwqAIBAArxL7nWDag7pK9OFjy4WwUAohuntLn
+ zMM80DGRJhhqh5IeFOmIzI0dQUumLihIM8MSioteyVFKFo4O+rOtqv3Qw9cWpNR2GSiC9zGa99
+ ZnglXKv96Xt73Az3SbARqAAAA
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Benjamin Bara <benjamin.bara@skidata.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-06-21 at 11:57 +0500, stsp wrote:
-> 20.06.2023 18:58, Jeff Layton =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> > No, it won't. The l_pid field is populated from the file_lock->fl_pid.
-> > That field is set when the lock is set, and never updated. So it's quit=
-e
-> > possible for F_GETLK to return the pid of a process that no longer
-> > exists.
-> >=20
-> > In principle, we could try to address that by changing how we track loc=
-k
-> > ownership, but that's a fairly major overhaul, and I'm not clear on any
-> > use-cases where that matters.
->=20
-> OK, in this case I'll just put a comments
-> into the code, summarizing the info I got
-> from you and Matthew.
-> Thanks guys for all the info, its very helpful.
->=20
-> Now I only need to convert the current
-> "fundamental problem" attitude into a "not
-> implemented yet" via the code comment.
->=20
->=20
-> > > So my call is to be brave and just re-consider
-> > > the conclusion of that article, made 10 years
-> > > ago! :)
-> > >=20
-> > I think my foot has too many bullet wounds for that sort of bravery.
-> I am perfectly fine with leaving this thing
-> unimplemented. But what really bothers
-> me is the posix proposal, which I think was
-> done. Please tell me it allows fixing fl_pid
-> in the future (rather than to mandate -1),
-> and I am calm.
+Hi!
 
-I don't think we can change this at this point.
+This series adds support for the Cypress HX3 USB 3.0 family (3/4). For
+now, it just contains the USB-related aspects and ignores the option to
+connect it via i2c (4/4).
 
-The bottom line (again) is that OFD locks are owned by the file
-descriptor (much like with flock()), and since file descriptors can be
-shared across multiple process it's impossible to say that some single
-process owns it.
---=20
-Jeff Layton <jlayton@kernel.org>
+For a better overview, the current entries are first re-ordered by VID
+and then by PID (1/4).
+
+As the HX3 family operates with two power supplies, multiple power
+supply support is implemented (2/4).
+
+Thanks & best regards,
+Benjamin
+
+---
+Benjamin Bara (4):
+      usb: misc: onboard-hub: resort by VID and PID
+      usb: misc: onboard-hub: support multiple power supplies
+      usb: misc: onboard-hub: add support for Cypress HX3 USB 3.0 family
+      dt-bindings: usb: Add binding for Cypress HX3 USB 3.0 family
+
+ .../devicetree/bindings/usb/cypress,hx3.yaml       | 77 ++++++++++++++++++++++
+ drivers/usb/misc/onboard_usb_hub.c                 | 55 +++++++++++-----
+ drivers/usb/misc/onboard_usb_hub.h                 | 16 +++--
+ 3 files changed, 128 insertions(+), 20 deletions(-)
+---
+base-commit: 45a3e24f65e90a047bef86f927ebdc4c710edaa1
+change-id: 20230620-hx3-cb935b4fdd76
+
+Best regards,
+-- 
+Benjamin Bara <benjamin.bara@skidata.com>
+
