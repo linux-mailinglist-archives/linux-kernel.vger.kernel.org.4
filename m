@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C45937387BD
+	by mail.lfdr.de (Postfix) with ESMTP id 27DE17387BB
 	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:50:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232177AbjFUOtt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:49:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
+        id S229542AbjFUOuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjFUOtJ (ORCPT
+        with ESMTP id S232426AbjFUOtN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:49:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685CB210A;
-        Wed, 21 Jun 2023 07:48:05 -0700 (PDT)
+        Wed, 21 Jun 2023 10:49:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F96C2122
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:48:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D266612B7;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AE9761594
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:48:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD878C433C9;
         Wed, 21 Jun 2023 14:48:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED5C6C433C0;
-        Wed, 21 Jun 2023 14:48:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687358884;
-        bh=602OBQOYZOHE47XEi3Ae1spcJ/o1W14lJ8xXHeSF938=;
+        s=k20201202; t=1687358886;
+        bh=CEB8rkixi7YO82ePUfp2XAfIP0PNDGjkFzVGTxjtP5w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uVIbTn//g7DjaISL0EEFbO0GPceKZ06PB4n+WjFMQZoc/RDOfDFZhVSb083ga5R/M
-         4dSqFVfWuqNbYsjGSK7MRWKLtXOFsasXs8J+tDJuYrBNEyfEdRH2BDSvbHQTkIuGGn
-         CEzsdrjqjUUw1endMJGRyaed31xVhYykwNdgGsw63ReLPFutJR0hDlpAO58bF6dqLO
-         mbhH2Qnf1mRMVCkO4k2zCuEf3SK5L0DBLSHzKFOxCpMXS5PoJkz8gAly19GGdhO8KF
-         UwQYcCEIeU9eAsLA/SNsX2lJLL4lLrODvwDMtTK7uY41Okagt6xQ0+kTJc4vL7KxzG
-         TSQHJDh1niDqg==
+        b=QOkYLIREzHCvPajuRMYGs2HkV0oR6hdUH1vR6zgG+zsjyTevjW5ItIzcYe/CB+ixy
+         KWjbmSEJFAD5ZQpayLdbJBI30UYmlA/KVZ5oohC4c/1oKMmNGpImKK5+F9YVUh9ECS
+         3tOtuM6Wwk6pnf5tddbJSJpJIDSLgzWuwQsNJ7NNnvQwDwutD5qMrw4vODyGKNFeiQ
+         6DVQNRxG7cZ3XkfaP7zQYH5UaQj6yhCBoGF62g9U1X2mZfbN+HBwjmbvWrvbTNqhqo
+         RJdbzZ7/aU6nhpvaio0M/L2caKuPhjer49gr19DsSe7whjqmZDjb4lnaxYSLLNcOoo
+         errAy2UjieNyg==
 From:   Jeff Layton <jlayton@kernel.org>
 To:     Christian Brauner <brauner@kernel.org>,
-        Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>
+        Jan Harkes <jaharkes@cs.cmu.edu>, coda@cs.cmu.edu
 Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 17/79] ceph: switch to new ctime accessors
-Date:   Wed, 21 Jun 2023 10:45:30 -0400
-Message-ID: <20230621144735.55953-16-jlayton@kernel.org>
+        codalist@coda.cs.cmu.edu, linux-kernel@vger.kernel.org
+Subject: [PATCH 18/79] coda: switch to new ctime accessors
+Date:   Wed, 21 Jun 2023 10:45:31 -0400
+Message-ID: <20230621144735.55953-17-jlayton@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230621144735.55953-1-jlayton@kernel.org>
 References: <20230621144507.55591-1-jlayton@kernel.org>
  <20230621144735.55953-1-jlayton@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,124 +63,64 @@ inode->i_ctime.
 
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- fs/ceph/acl.c   |  2 +-
- fs/ceph/caps.c  |  2 +-
- fs/ceph/inode.c | 17 ++++++++++-------
- fs/ceph/snap.c  |  2 +-
- fs/ceph/xattr.c |  2 +-
- 5 files changed, 14 insertions(+), 11 deletions(-)
+ fs/coda/coda_linux.c | 2 +-
+ fs/coda/dir.c        | 2 +-
+ fs/coda/file.c       | 2 +-
+ fs/coda/inode.c      | 2 +-
+ 4 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/fs/ceph/acl.c b/fs/ceph/acl.c
-index 6945a938d396..a3de2b9c3a68 100644
---- a/fs/ceph/acl.c
-+++ b/fs/ceph/acl.c
-@@ -93,7 +93,7 @@ int ceph_set_acl(struct mnt_idmap *idmap, struct dentry *dentry,
- 	char *value = NULL;
- 	struct iattr newattrs;
- 	struct inode *inode = d_inode(dentry);
--	struct timespec64 old_ctime = inode->i_ctime;
-+	struct timespec64 old_ctime = inode_ctime_peek(inode);
- 	umode_t new_mode = inode->i_mode, old_mode = inode->i_mode;
+diff --git a/fs/coda/coda_linux.c b/fs/coda/coda_linux.c
+index 903ca8fa4b9b..2a6187ca52d9 100644
+--- a/fs/coda/coda_linux.c
++++ b/fs/coda/coda_linux.c
+@@ -127,7 +127,7 @@ void coda_vattr_to_iattr(struct inode *inode, struct coda_vattr *attr)
+ 	if (attr->va_mtime.tv_sec != -1)
+ 		inode->i_mtime = coda_to_timespec64(attr->va_mtime);
+         if (attr->va_ctime.tv_sec != -1)
+-		inode->i_ctime = coda_to_timespec64(attr->va_ctime);
++		inode_ctime_set(inode, coda_to_timespec64(attr->va_ctime));
+ }
  
- 	if (ceph_snap(inode) != CEPH_NOSNAP) {
-diff --git a/fs/ceph/caps.c b/fs/ceph/caps.c
-index 2321e5ddb664..c144a07e334e 100644
---- a/fs/ceph/caps.c
-+++ b/fs/ceph/caps.c
-@@ -1400,7 +1400,7 @@ static void __prep_cap(struct cap_msg_args *arg, struct ceph_cap *cap,
  
- 	arg->mtime = inode->i_mtime;
- 	arg->atime = inode->i_atime;
--	arg->ctime = inode->i_ctime;
-+	arg->ctime = inode_ctime_peek(inode);
- 	arg->btime = ci->i_btime;
- 	arg->change_attr = inode_peek_iversion_raw(inode);
+diff --git a/fs/coda/dir.c b/fs/coda/dir.c
+index 8450b1bd354b..b158a505570c 100644
+--- a/fs/coda/dir.c
++++ b/fs/coda/dir.c
+@@ -111,7 +111,7 @@ static inline void coda_dir_update_mtime(struct inode *dir)
+ 	/* optimistically we can also act as if our nose bleeds. The
+ 	 * granularity of the mtime is coarse anyways so we might actually be
+ 	 * right most of the time. Note: we only do this for directories. */
+-	dir->i_mtime = dir->i_ctime = current_time(dir);
++	dir->i_mtime = inode_ctime_set_current(dir);
+ #endif
+ }
  
-diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
-index 8e5f41d45283..f0b3b11d695e 100644
---- a/fs/ceph/inode.c
-+++ b/fs/ceph/inode.c
-@@ -100,7 +100,7 @@ struct inode *ceph_get_snapdir(struct inode *parent)
- 	inode->i_uid = parent->i_uid;
- 	inode->i_gid = parent->i_gid;
- 	inode->i_mtime = parent->i_mtime;
--	inode->i_ctime = parent->i_ctime;
-+	inode_ctime_set(inode, inode_ctime_peek(parent));
- 	inode->i_atime = parent->i_atime;
- 	ci->i_rbytes = 0;
- 	ci->i_btime = ceph_inode(parent)->i_btime;
-@@ -695,12 +695,14 @@ void ceph_fill_file_time(struct inode *inode, int issued,
- 		      CEPH_CAP_FILE_BUFFER|
- 		      CEPH_CAP_AUTH_EXCL|
- 		      CEPH_CAP_XATTR_EXCL)) {
-+		struct timespec64 ictime = inode_ctime_peek(inode);
-+
- 		if (ci->i_version == 0 ||
--		    timespec64_compare(ctime, &inode->i_ctime) > 0) {
-+		    timespec64_compare(ctime, &ictime) > 0) {
- 			dout("ctime %lld.%09ld -> %lld.%09ld inc w/ cap\n",
--			     inode->i_ctime.tv_sec, inode->i_ctime.tv_nsec,
-+			     ictime.tv_sec, ictime.tv_nsec,
- 			     ctime->tv_sec, ctime->tv_nsec);
--			inode->i_ctime = *ctime;
-+			inode_ctime_set(inode, *ctime);
- 		}
- 		if (ci->i_version == 0 ||
- 		    ceph_seq_cmp(time_warp_seq, ci->i_time_warp_seq) > 0) {
-@@ -738,7 +740,7 @@ void ceph_fill_file_time(struct inode *inode, int issued,
- 	} else {
- 		/* we have no write|excl caps; whatever the MDS says is true */
- 		if (ceph_seq_cmp(time_warp_seq, ci->i_time_warp_seq) >= 0) {
--			inode->i_ctime = *ctime;
-+			inode_ctime_set(inode, *ctime);
- 			inode->i_mtime = *mtime;
- 			inode->i_atime = *atime;
- 			ci->i_time_warp_seq = time_warp_seq;
-@@ -2166,7 +2168,8 @@ int __ceph_setattr(struct inode *inode, struct iattr *attr)
- 		bool only = (ia_valid & (ATTR_SIZE|ATTR_MTIME|ATTR_ATIME|
- 					 ATTR_MODE|ATTR_UID|ATTR_GID)) == 0;
- 		dout("setattr %p ctime %lld.%ld -> %lld.%ld (%s)\n", inode,
--		     inode->i_ctime.tv_sec, inode->i_ctime.tv_nsec,
-+		     inode_ctime_peek(inode).tv_sec,
-+		     inode_ctime_peek(inode).tv_nsec,
- 		     attr->ia_ctime.tv_sec, attr->ia_ctime.tv_nsec,
- 		     only ? "ctime only" : "ignored");
- 		if (only) {
-@@ -2191,7 +2194,7 @@ int __ceph_setattr(struct inode *inode, struct iattr *attr)
- 	if (dirtied) {
- 		inode_dirty_flags = __ceph_mark_dirty_caps(ci, dirtied,
- 							   &prealloc_cf);
--		inode->i_ctime = attr->ia_ctime;
-+		inode_ctime_set(inode, attr->ia_ctime);
- 		inode_inc_iversion_raw(inode);
- 	}
+diff --git a/fs/coda/file.c b/fs/coda/file.c
+index 12b26bd13564..18684d73d085 100644
+--- a/fs/coda/file.c
++++ b/fs/coda/file.c
+@@ -84,7 +84,7 @@ coda_file_write_iter(struct kiocb *iocb, struct iov_iter *to)
+ 	ret = vfs_iter_write(cfi->cfi_container, to, &iocb->ki_pos, 0);
+ 	coda_inode->i_size = file_inode(host_file)->i_size;
+ 	coda_inode->i_blocks = (coda_inode->i_size + 511) >> 9;
+-	coda_inode->i_mtime = coda_inode->i_ctime = current_time(coda_inode);
++	coda_inode->i_mtime = inode_ctime_set_current(coda_inode);
+ 	inode_unlock(coda_inode);
+ 	file_end_write(host_file);
  
-diff --git a/fs/ceph/snap.c b/fs/ceph/snap.c
-index 2e73ba62bd7a..f02df070fa84 100644
---- a/fs/ceph/snap.c
-+++ b/fs/ceph/snap.c
-@@ -660,7 +660,7 @@ int __ceph_finish_cap_snap(struct ceph_inode_info *ci,
- 	capsnap->size = i_size_read(inode);
- 	capsnap->mtime = inode->i_mtime;
- 	capsnap->atime = inode->i_atime;
--	capsnap->ctime = inode->i_ctime;
-+	capsnap->ctime = inode_ctime_peek(inode);
- 	capsnap->btime = ci->i_btime;
- 	capsnap->change_attr = inode_peek_iversion_raw(inode);
- 	capsnap->time_warp_seq = ci->i_time_warp_seq;
-diff --git a/fs/ceph/xattr.c b/fs/ceph/xattr.c
-index 806183959c47..8e217f7f58bd 100644
---- a/fs/ceph/xattr.c
-+++ b/fs/ceph/xattr.c
-@@ -1238,7 +1238,7 @@ int __ceph_setxattr(struct inode *inode, const char *name,
- 		dirty = __ceph_mark_dirty_caps(ci, CEPH_CAP_XATTR_EXCL,
- 					       &prealloc_cf);
- 		ci->i_xattrs.dirty = true;
--		inode->i_ctime = current_time(inode);
-+		inode_ctime_set_current(inode);
- 	}
+diff --git a/fs/coda/inode.c b/fs/coda/inode.c
+index d661e6cf17ac..996729c3041a 100644
+--- a/fs/coda/inode.c
++++ b/fs/coda/inode.c
+@@ -269,7 +269,7 @@ int coda_setattr(struct mnt_idmap *idmap, struct dentry *de,
  
- 	spin_unlock(&ci->i_ceph_lock);
+ 	memset(&vattr, 0, sizeof(vattr)); 
+ 
+-	inode->i_ctime = current_time(inode);
++	inode_ctime_set_current(inode);
+ 	coda_iattr_to_vattr(iattr, &vattr);
+ 	vattr.va_type = C_VNON; /* cannot set type */
+ 
 -- 
 2.41.0
 
