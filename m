@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B5A7380F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 858E3738056
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231776AbjFUJYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 05:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
+        id S231905AbjFUJZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 05:25:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbjFUJYX (ORCPT
+        with ESMTP id S231406AbjFUJYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 05:24:23 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499B219BF
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:24:04 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51a3e6a952aso6851296a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:24:04 -0700 (PDT)
+        Wed, 21 Jun 2023 05:24:24 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B0D319B9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:24:05 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-3112f5ab0b1so3626629f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:24:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687339442; x=1689931442;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687339444; x=1689931444;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LE1vT+gVNirEsJxbTiTmA/33w+JDDyn/z8+OkH6Uatg=;
-        b=dh/Yscpx9g50WP8aUQec7esEdqkMVckT3xmVw5qZUmxNn8Lnkpby8IzbVZxOkbudQ1
-         dR5a6nkp17Pn0vSgWzUsFeApujZpPlq8DvW9F6cn4SoKlOPPHmvyWvXo/XEgH/v1Xjhp
-         d0gzl7pJo4T/8Ea7xeTevcKvSQAm4tg84t6Li6oi2XxrgDKYJKUrU5QO+OJZUmcn/pW8
-         WgN3lJONfebk19tQqqGWv1PBAFnjqam9Hm3hhUp/V1h9hKt/3nybAv0+65aU0McJ3Sct
-         U+MigjS8Fq7nIP9+sx1pDlBh59lrTSFdqy1cYRhDwwYdcIAfIhrkmUsd1f5G+ApwD6Ex
-         LGTA==
+        bh=DG8roE6DhQwhU2xd4+PBx8NOhVWjNvN1rf2zoTDzpOE=;
+        b=zfMj4yE/E3JiduSidiDhmkVb1PXwnXSoIAD/BKOKSWThF0Medj9ixH10zxIDtLxPwi
+         2u5tw1TqtyfHQ1Ctp/9EzjrlTcV6AszrGml9w9YE8qRNS/7YG9GBzZfpbjfBNM8jAHkU
+         +fv7lEHKsdHaCFA0piyEIzF91CNZ64CXXBubRHgGuc1WjKzZDi6tPFhDT7ethE7Zdwsp
+         dVLviscYJfyVQABy9gDorl63pM6C+IWVPjEnyn6YaWUBwLlbJbHDoiv6Olnn9f5k3w81
+         sSJPU3pitUMYXAiknhVsoqycNSJYPjo0yPokeccIwxfDzqw5JfywxN9sK04wZICKixI6
+         u3kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687339442; x=1689931442;
+        d=1e100.net; s=20221208; t=1687339444; x=1689931444;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LE1vT+gVNirEsJxbTiTmA/33w+JDDyn/z8+OkH6Uatg=;
-        b=ElxKoKGkairFAG1GIrNRuzHasZfhJwYRKLMJFAbG7R7LkXTWzyRP26bLSPplNJ2cnJ
-         N2u461u1auVEgOzW3z6ZNnd0cG6FsSlOQc6659qQi7Ac353tn4ilH1srPkp/3kuIOgwv
-         Lv7idM7hHZzlZyOFEqNmDWd1uLo0IEUOuoUw868mwCm05dogcG1rSuEGhPaZJcbFk3a0
-         l4mhXwDu7kgbnvbSkIk/LYJo2ih2KJftm/tCi3T595igCEKDvGLQwEreq/o6ksXo0AHg
-         0PxwGJX5bxGoQAb4aVvB67Hl8P8YQaBOFMP/xsVc8+/sjjhpjdQND6B9ZD4DbZE+vubU
-         VvrA==
-X-Gm-Message-State: AC+VfDzE6NkDfqwehK2utcaxTntrrWacjQbSEhs7EBOvdZeO5776ZgBk
-        ThhQDVsuMXkB7PSiLJ7l7v9l8w==
-X-Google-Smtp-Source: ACHHUZ7IYIJzPl+IZdr+yo0zGtbLHILTndtfPgoJd1ib2x2wssIJxDu9j+PC5fysl1booVNBKkNFgA==
-X-Received: by 2002:a17:906:58d2:b0:988:8a11:ab88 with SMTP id e18-20020a17090658d200b009888a11ab88mr8539198ejs.33.1687339442703;
-        Wed, 21 Jun 2023 02:24:02 -0700 (PDT)
+        bh=DG8roE6DhQwhU2xd4+PBx8NOhVWjNvN1rf2zoTDzpOE=;
+        b=N5JQzBqvHQcNVlTyQCgbBWvQq+O1IqUgS8acj4wJEqovQnoOqY+WP3ubCubnHCE5nE
+         B8goXL4VM7P0BQEex19NVDjMbK1NFaL0kpPdsJDZM4bZ981rHlCA6IDN0m4dYHAdIUjm
+         ow4G1db7+86TLLXrmmXTap7EIwzGIJEqZNocKKJ9DrC///CNbIGPItt1at7/Y+NSf66p
+         1ZSFMZMg0aHn8x5IrguOS3a8fAb+tAPWtzTm1qskT5nA0GEytqfRfvx55vUizfuBBZ75
+         jUz8d0EmJ1WbhCi+NgcEWKfpmCFtKpjV/9BhzZOEGKt7dqYQtcU3fh0ev1a4zbsm0zvm
+         KgqQ==
+X-Gm-Message-State: AC+VfDxopNicH9Jhh1TUNL9PLrhQx/SAHxDonCRViBrRViURPJZnKY3P
+        REvb6G3gb0iZwft0nrs0olk9pw==
+X-Google-Smtp-Source: ACHHUZ6sId7l7j6whJo/YkV2dFIsFAmiVsuGwurxB3iRA7J0C+YrFMOc/j4DJGLUWFIDR5obcw2EGQ==
+X-Received: by 2002:a5d:628d:0:b0:30d:5cce:3bb5 with SMTP id k13-20020a5d628d000000b0030d5cce3bb5mr10729727wru.60.1687339444004;
+        Wed, 21 Jun 2023 02:24:04 -0700 (PDT)
 Received: from blmsp.fritz.box ([2001:4091:a247:82fa:b762:4f68:e1ed:5041])
-        by smtp.gmail.com with ESMTPSA id i11-20020adffdcb000000b002fda1b12a0bsm4022115wrs.2.2023.06.21.02.24.01
+        by smtp.gmail.com with ESMTPSA id i11-20020adffdcb000000b002fda1b12a0bsm4022115wrs.2.2023.06.21.02.24.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 02:24:02 -0700 (PDT)
+        Wed, 21 Jun 2023 02:24:03 -0700 (PDT)
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>,
         Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
@@ -63,9 +63,9 @@ Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Julien Panis <jpanis@baylibre.com>,
         Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH v4 06/12] can: m_can: Use u32 for putidx
-Date:   Wed, 21 Jun 2023 11:23:44 +0200
-Message-Id: <20230621092350.3130866-7-msp@baylibre.com>
+Subject: [PATCH v4 07/12] can: m_can: Cache tx putidx
+Date:   Wed, 21 Jun 2023 11:23:45 +0200
+Message-Id: <20230621092350.3130866-8-msp@baylibre.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230621092350.3130866-1-msp@baylibre.com>
 References: <20230621092350.3130866-1-msp@baylibre.com>
@@ -73,58 +73,70 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-putidx is not an integer normally, it is an unsigned field used in
-hardware registers. Use a u32 for it.
+m_can_tx_handler is the only place where data is written to the tx fifo.
+We can calculate the putidx in the driver code here to avoid the
+dependency on the txfqs register.
 
 Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 ---
- drivers/net/can/m_can/m_can.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/net/can/m_can/m_can.c | 8 +++++++-
+ drivers/net/can/m_can/m_can.h | 3 +++
+ 2 files changed, 10 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index d1435d1466b2..6f8043636c54 100644
+index 6f8043636c54..40acd78cc0ed 100644
 --- a/drivers/net/can/m_can/m_can.c
 +++ b/drivers/net/can/m_can/m_can.c
-@@ -467,7 +467,7 @@ static void m_can_clean(struct net_device *net)
- 	struct m_can_classdev *cdev = netdev_priv(net);
+@@ -1482,6 +1482,10 @@ static int m_can_start(struct net_device *dev)
  
- 	if (cdev->tx_skb) {
--		int putidx = 0;
-+		u32 putidx = 0;
+ 	m_can_enable_all_interrupts(cdev);
  
- 		net->stats.tx_errors++;
- 		if (cdev->version > 30)
-@@ -1673,12 +1673,12 @@ static int m_can_close(struct net_device *dev)
++	if (cdev->version > 30)
++		cdev->tx_fifo_putidx = FIELD_GET(TXFQS_TFQPI_MASK,
++						 m_can_read(cdev, M_CAN_TXFQS));
++
  	return 0;
  }
  
--static int m_can_next_echo_skb_occupied(struct net_device *dev, int putidx)
-+static int m_can_next_echo_skb_occupied(struct net_device *dev, u32 putidx)
- {
- 	struct m_can_classdev *cdev = netdev_priv(dev);
- 	/*get wrap around for loopback skb index */
- 	unsigned int wrap = cdev->can.echo_skb_max;
--	int next_idx;
-+	u32 next_idx;
+@@ -1772,7 +1776,7 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+ 		}
  
- 	/* calculate next index */
- 	next_idx = (++putidx >= wrap ? 0 : putidx);
-@@ -1698,7 +1698,7 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
- 	u32 cccr, fdflags;
- 	u32 txfqs;
- 	int err;
--	int putidx;
-+	u32 putidx;
+ 		/* get put index for frame */
+-		putidx = FIELD_GET(TXFQS_TFQPI_MASK, txfqs);
++		putidx = cdev->tx_fifo_putidx;
  
- 	cdev->tx_skb = NULL;
+ 		/* Construct DLC Field, with CAN-FD configuration.
+ 		 * Use the put index of the fifo as the message marker,
+@@ -1806,6 +1810,8 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+ 
+ 		/* Enable TX FIFO element to start transfer  */
+ 		m_can_write(cdev, M_CAN_TXBAR, (1 << putidx));
++		cdev->tx_fifo_putidx = (++cdev->tx_fifo_putidx >= cdev->can.echo_skb_max ?
++					0 : cdev->tx_fifo_putidx);
+ 
+ 		/* stop network queue if fifo full */
+ 		if (m_can_tx_fifo_full(cdev) ||
+diff --git a/drivers/net/can/m_can/m_can.h b/drivers/net/can/m_can/m_can.h
+index d0c21eddb6ec..548ae908ac4e 100644
+--- a/drivers/net/can/m_can/m_can.h
++++ b/drivers/net/can/m_can/m_can.h
+@@ -102,6 +102,9 @@ struct m_can_classdev {
+ 	u32 tx_max_coalesced_frames_irq;
+ 	u32 tx_coalesce_usecs_irq;
+ 
++	// Store this internally to avoid fetch delays on peripheral chips
++	int tx_fifo_putidx;
++
+ 	struct mram_cfg mcfg[MRAM_CFG_NUM];
+ };
  
 -- 
 2.40.1
