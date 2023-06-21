@@ -2,177 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BC4737B29
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47C8D737B2D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjFUGSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 02:18:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54376 "EHLO
+        id S229984AbjFUGTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 02:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbjFUGSS (ORCPT
+        with ESMTP id S229838AbjFUGTf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 02:18:18 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2471731
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:18:17 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f9d619103dso55551cf.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:18:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687328296; x=1689920296;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EY6Ne/SM4st5svkq+5PmFR9ym99PQO1FPMB+O80q/9k=;
-        b=jJgJ8TEwkTcJjg1WjlUR9s8k6xuroY0T6d/deXtuR6rtpQms6eSvNiZYzdonANiUvl
-         rtVLnv81nzNCVa4awgoAIxNR6WGcCzRae03XOEGQWufDl+YimvOSKnD6KTyqvZpqEgrR
-         9k7bestW22knqvyeQe2LdOiQVRnDba3Lff5fGdys9NnvWhGrxUZ2FzgJ4Fg52lxWP+Zj
-         87+9lorjspaapO563tVLV2xa13yHzMOq36qt1CEiYqqQI7dqNZkx/1R063gewZf9gZ/e
-         mQwlcDu8WkksEmnyZ4CPgtCrYWbzWG5xpHpY8Beza9mx2MQ+L67Gic8xKZvVIUUzs/jc
-         UcQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687328296; x=1689920296;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EY6Ne/SM4st5svkq+5PmFR9ym99PQO1FPMB+O80q/9k=;
-        b=Lnq6TuKto5RIqHERkiVNVnMutG7PsxJvQtPFuTn0GT55DYDGli8KbsV8dJmcP6gKQu
-         UAF2X+qJfMFVK6ctree1huAY3oeK26c4Ds2MdrJ4K7JRKp29VdXjYwYlI6DWGq+Ah/+1
-         SPOB5eFdexJKzpAEk2p3h5V/D3pDJbVMxpQ8S0a4VeKMgCWTL6BkWgNpmSObYcZvfZvq
-         5IKo+uL/p3iD0cAOtcWqETr14mKqkPREoB2j2pZ3qEafwolNTCO3y2pefTRZacysl1BG
-         prvHdm3WymBwRE211oRIcCtIlmZEWjoWbvvh97lkNf4OxoXrnQ091VTkRWaThgof6Aqv
-         zTLg==
-X-Gm-Message-State: AC+VfDwNmVCq1fJhjt5Ge6F+1EDQvsPgZ+isVZOWkwuydm2nK7oEzSCh
-        kln4HhF+yRpA/rda748z271sQuzH1PsfH0GD/12AEw==
-X-Google-Smtp-Source: ACHHUZ5Si2f5rcozpuv/IX3egthC3n6xTOPCLu1mauqLlDSD8RTu21u5MDhWkbFZ/yCBTJdUKEE7iLebzq6xzpeI364=
-X-Received: by 2002:a05:622a:14c7:b0:3f8:8c06:c53b with SMTP id
- u7-20020a05622a14c700b003f88c06c53bmr1388016qtx.0.1687328296083; Tue, 20 Jun
- 2023 23:18:16 -0700 (PDT)
+        Wed, 21 Jun 2023 02:19:35 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA90F118
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:19:34 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a5YPZAAoxtVF6Vk/UQa25L/Hq9Pp8U16HX6zxHgcPhkA/TTs6ncN2exI8IGwLxIbyZI2zeuDXZqmdw4Hb0QREIdmpOw324aIu8LfBZ7Vd06RSgZTvx34HGJ8gXcfCmBP3jxJQZHD82hHNGWUHcwdZ5CSCpAJhUc7opUW1kUGs0UjLLPFV8PD54KsG3bHmW/vqaRZzsrE1nXN6Q7vWYEkqyxoExDU+OHjk0t0urj6idDofDshYgArV8QVoaXNI15Y0F8Wi3auAKRYrZQAtB4F5BQ8QurKeu1FguW22b7oBZg6ggTrMhKrifZb3JWJsii5BgZX84aoSffIt4vuiXEQ8w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=P4PrwyniEukTYvPgE5ESkBr2G5YngTXPLJgj1TExeAM=;
+ b=WhRvT1E05gI/XyCpNfR/IKZoKnDu9rSZybIpXOCTeZQI2h8feobNgU3V+IMwaMd7znxNlyDc1NrK1Phm1De7oKKpNiVxagOaxBahJLGd0Agcd7RP9x7Q8292LjLMHWenKf+fd9G/5UvSBGlasr73G/39zDWreTD3TOgojAziyrjdC2WPGjZ+VNxv0MRsbgAmMQ661rTNRyfzVZBN5M5WsurU05ZiMxH1J8qqD93ABOlLTy0it0maEkEqN2OXp58GMSWlr+nOq4BK6cLvVZpM7I1GdCKG/rzvtMT+ismUXsg3MAMhFcUT7TlDV2K+XqKi3Ur1+JeXDcNRHOCPSkI2xQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=lists.freedesktop.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P4PrwyniEukTYvPgE5ESkBr2G5YngTXPLJgj1TExeAM=;
+ b=CilMzAGapSzZR1QYW5hlDTISuuscDZanNE+s8rTEI0f9y9oTWZJ+G8BAtK0xGCBE4Aeb5wN98/KttYeNQDoD5wKBdPQvdLiNDz9nAzxx/InBa1/66AJ2JVYioE6IzOREU7ZKE0G8aUccvZiARvBxZd51A1xNo4q1TFYwQUW+fb2lzgw5mdCp8LUUdj1nmxhvN7Pb1yYc5eORlqjYvCl5svuSltjENs1cBchgCZA5M5cGJdHjDPiTtHjfwf7ikQM7b3rCHATy/zbcEU4ZWp2AMGA0PrcC34wuBB+hgNu0rwxgAp7ms6X+VHGxprol2RRwz00FSIf5u5U/FFHaeY6SOg==
+Received: from PH0PR07CA0046.namprd07.prod.outlook.com (2603:10b6:510:e::21)
+ by BL1PR12MB5804.namprd12.prod.outlook.com (2603:10b6:208:394::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Wed, 21 Jun
+ 2023 06:19:32 +0000
+Received: from SA2PEPF000015C8.namprd03.prod.outlook.com
+ (2603:10b6:510:e:cafe::29) by PH0PR07CA0046.outlook.office365.com
+ (2603:10b6:510:e::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.21 via Frontend
+ Transport; Wed, 21 Jun 2023 06:19:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ SA2PEPF000015C8.mail.protection.outlook.com (10.167.241.198) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.19 via Frontend Transport; Wed, 21 Jun 2023 06:19:30 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 20 Jun 2023
+ 23:19:21 -0700
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.37; Tue, 20 Jun 2023 23:19:21 -0700
+Received: from rcampbell-dev.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server id 15.2.986.37 via Frontend
+ Transport; Tue, 20 Jun 2023 23:19:21 -0700
+From:   Ralph Campbell <rcampbell@nvidia.com>
+To:     <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+CC:     Jani Nikula <jani.nikula@intel.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Ralph Campbell <rcampbell@nvidia.com>
+Subject: [PATCH v2] drm/edid: Add quirk for OSVR HDK 2.0
+Date:   Tue, 20 Jun 2023 23:19:03 -0700
+Message-ID: <20230621061903.3422648-1-rcampbell@nvidia.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230602094841.1225-1-eric.lin@sifive.com> <CAPqJEFpamQSbCcD0QJ16u7ctRf1=NYihod6gdZJfxFpE0YUVHQ@mail.gmail.com>
-In-Reply-To: <CAPqJEFpamQSbCcD0QJ16u7ctRf1=NYihod6gdZJfxFpE0YUVHQ@mail.gmail.com>
-From:   Stephane Eranian <eranian@google.com>
-Date:   Tue, 20 Jun 2023 23:18:05 -0700
-Message-ID: <CABPqkBRyqsMnNbokBKepkWq1DtzfB0npXySGbKS1T3nQTwmaAw@mail.gmail.com>
-Subject: Re: [PATCH] perf/core: Add pmu stop before unthrottling to prevent WARNING
-To:     Eric Lin <eric.lin@sifive.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
-        adrian.hunter@intel.com, palmer@dabbelt.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, greentime.hu@sifive.com,
-        vincent.chen@sifive.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF000015C8:EE_|BL1PR12MB5804:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3780a8ec-7f01-4b2a-1ff0-08db721f797e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jMsmffO5he3+HW6W/WzlYc1OusKVQJWUuU4qzIbjDYjS4Oqsy+c5jI95HKzYGMTMQwXxrr6xTYgWI8N1Z9+CeQhRTwe81BeyPQhgsKKvNYC3J5oaMHR8SCOR1A4XaEL1GEF5tpxQYrkY6z6DYMG2E0xjAdv2b3mWuJYdI/lKJFEyl3tPsunl81AnQxeF2ifkFAEt3clzix9VVpL0Y5kbpT2H8kfkj9NdoWrvbvLPs3N0lGEjYdBIjIJSRX+QrL6QilUW76sdDMds8ZEFBh65++Pn9PPp94XWlr4LMzcqsuWZlDR3tjc2N11LaPIQlebSoNgHznyj4cvXwKCjRT+VdLyZegx26kqcaH65yibw5wouS5D4imjti/vpXKEBZJm1F8qRULDlcO5cSSNC1Kcu+pRb4ngjlGQa68sFuuG1P23HihvHY+MVn/LwNXX4BhN7mhBra2Yj2MwaCxiY2XMb7W/fnpcxC2HnjT0NbDh/cBA54XusXaKY1yI1VOhAfo4G9C9vXKYjlru/YAOpHVt2XHfs5qbl+Uw8pPCRlkMEZI/s62UnJ2UinI+7rTCTUXXYmCmQyWufP8uYeDFj8L+Hvx9+ojVhajkoAU0UJLI3vGpZ9Pr75kQRH7UPMa/s1RIsjUUvk1AhDxkqS6B3IPCPuuRiC1MirceXqVfuV3fJaQuRgkPxx7vVXFiavAFr7mrWV//mlM0Teycr8r3dNleliW1eeeAJDoPGXRPfUWIFJrYpTsLhhsIOPutzg2vykklq
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(346002)(136003)(451199021)(46966006)(36840700001)(40470700004)(478600001)(6666004)(4326008)(54906003)(110136005)(7696005)(1076003)(107886003)(186003)(26005)(70586007)(2906002)(82310400005)(8676002)(8936002)(41300700001)(70206006)(316002)(5660300002)(7636003)(82740400003)(356005)(40460700003)(86362001)(36756003)(40480700001)(47076005)(2616005)(426003)(336012)(36860700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 06:19:30.9668
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3780a8ec-7f01-4b2a-1ff0-08db721f797e
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: SA2PEPF000015C8.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5804
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 9:25=E2=80=AFPM Eric Lin <eric.lin@sifive.com> wrot=
-e:
->
-> CC: Stephane Eranian
->
-> On Fri, Jun 2, 2023 at 5:49=E2=80=AFPM Eric Lin <eric.lin@sifive.com> wro=
-te:
-> >
-> > Currently, during the perf sampling, if the perf interrupt takes too lo=
-ng,
-> > perf framework will lower the perf_event_max_sample_rate. This will lim=
-it
-> > the number of samples per timer tick (max_samples_per_tick) and set hwc=
-->interrupts
-> > to MAX_INTERRUPTS within the __perf_event_account_interrupt() function.
-> >
-> > Afterward, the perf framework will unthrottle the event in the timer in=
-terrupt
-> > handler, which triggers the driver's *_pmu_start() function. Most of th=
-e driver's
-> > *_pmu_start() functions will check the event->hw.state to determine whe=
-ther this
-> > event has stopped. If the event has not stopped, a WARN_ON_ONCE() warni=
-ng
-> > will be triggered as shown below:
-> >
-> > [ 2110.224723] ------------[ cut here ]------------
-> > [ 2110.224851] WARNING: CPU: 0 PID: 240 at drivers/perf/riscv_pmu.c:184=
- riscv_pmu_start+0x7c/0x8e
-> > [ 2110.225242] Modules linked in:
-> > [ 2110.225380] CPU: 0 PID: 240 Comm: ls Not tainted 6.4-rc4-g19d0788e9e=
-f2 #1
-> > [ 2110.225574] Hardware name: SiFive (DT)
-> > [ 2110.225657] epc : riscv_pmu_start+0x7c/0x8e
-> > [ 2110.225834]  ra : riscv_pmu_start+0x28/0x8e
-> > [ 2110.225998] epc : ffffffff80aef864 ra : ffffffff80aef810 sp : ffff8f=
-80004db6f0
-> > [ 2110.226135]  gp : ffffffff81c83750 tp : ffffaf80069f9bc0 t0 : ffff8f=
-80004db6c0
-> > [ 2110.226245]  t1 : 0000000000000000 t2 : 000000000000001f s0 : ffff8f=
-80004db720
-> > [ 2110.226367]  s1 : ffffaf8008ca1068 a0 : 0000ffffffffffff a1 : 000000=
-0000000000
-> > [ 2110.226488]  a2 : 0000000000000001 a3 : 0000000000000870 a4 : 000000=
-0000000000
-> > [ 2110.226605]  a5 : 0000000000000000 a6 : 0000000000000840 a7 : 000000=
-0000000030
-> > [ 2110.226721]  s2 : 0000000000000000 s3 : ffffaf8005165800 s4 : ffffaf=
-800424da00
-> > [ 2110.226838]  s5 : ffffffffffffffff s6 : ffffffff81cc7590 s7 : 000000=
-0000000000
-> > [ 2110.226955]  s8 : 0000000000000006 s9 : 0000000000000001 s10: ffffaf=
-807efbc340
-> > [ 2110.227064]  s11: ffffaf807efbbf00 t3 : ffffaf8006a16028 t4 : 000000=
-00dbfbb796
-> > [ 2110.227180]  t5 : 0000000700000000 t6 : ffffaf8005269870
-> > [ 2110.227277] status: 0000000200000100 badaddr: 0000000000000000 cause=
-: 0000000000000003
-> > [ 2110.227407] [<ffffffff80aef864>] riscv_pmu_start+0x7c/0x8e
-> > [ 2110.227622] [<ffffffff80185b56>] perf_adjust_freq_unthr_context+0x15=
-e/0x174
-> > [ 2110.227961] [<ffffffff80188642>] perf_event_task_tick+0x88/0x9c
-> > [ 2110.228235] [<ffffffff800626a8>] scheduler_tick+0xfe/0x27c
-> > [ 2110.228463] [<ffffffff800b5640>] update_process_times+0x9a/0xba
-> > [ 2110.228690] [<ffffffff800c5bd4>] tick_sched_handle+0x32/0x66
-> > [ 2110.229007] [<ffffffff800c5e0c>] tick_sched_timer+0x64/0xb0
-> > [ 2110.229253] [<ffffffff800b5e50>] __hrtimer_run_queues+0x156/0x2f4
-> > [ 2110.229446] [<ffffffff800b6bdc>] hrtimer_interrupt+0xe2/0x1fe
-> > [ 2110.229637] [<ffffffff80acc9e8>] riscv_timer_interrupt+0x38/0x42
-> > [ 2110.229984] [<ffffffff80090a16>] handle_percpu_devid_irq+0x90/0x1d2
-> > [ 2110.230162] [<ffffffff8008a9f4>] generic_handle_domain_irq+0x28/0x36
-> >
-> > To prevent this warning, we should call the driver's *_pmu_stop() funct=
-ion before unthrottling
-> >
-> > Signed-off-by: Eric Lin <eric.lin@sifive.com>
-> > ---
-> >  kernel/events/core.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/kernel/events/core.c b/kernel/events/core.c
-> > index db016e418931..098c875abe88 100644
-> > --- a/kernel/events/core.c
-> > +++ b/kernel/events/core.c
-> > @@ -4128,6 +4128,7 @@ perf_adjust_freq_unthr_context(struct perf_event_=
-context *ctx, bool unthrottle)
-> >
-> >                 if (hwc->interrupts =3D=3D MAX_INTERRUPTS) {
-> >                         hwc->interrupts =3D 0;
-> > +                       event->pmu->stop(event, 0);
+The OSVR virtual reality headset HDK 2.0 uses a different EDID
+vendor and device identifier than the HDK 1.1 - 1.4 headsets.
+Add the HDK 2.0 vendor and device identifier to the quirks table so
+that window managers do not try to display the desktop screen on the
+headset display.
 
-But how could the event have been stopped with a call to pmu->stop()
-during throttling?
+Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
+Tested-by: Ralph Campbell <rcampbell@nvidia.com>
+---
+ drivers/gpu/drm/drm_edid.c | 1 +
+ 1 file changed, 1 insertion(+)
 
->
-> >                         perf_log_throttle(event, 1);
-> >                         event->pmu->start(event, 0);
-> >                 }
-> > --
-> > 2.17.1
-> >
+I don't know how many of these VR headsets are still around but I have a
+working one and I saw an entry for HDK 1.x so I thought it would be good
+to add HDK 2.0.
+
+v2: The vendor ID was byte swapped.
+I'm not sure how I missed that in v1.
+
+diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+index 0454da505687..3b8cc1fe05e8 100644
+--- a/drivers/gpu/drm/drm_edid.c
++++ b/drivers/gpu/drm/drm_edid.c
+@@ -230,6 +230,7 @@ static const struct edid_quirk {
+ 
+ 	/* OSVR HDK and HDK2 VR Headsets */
+ 	EDID_QUIRK('S', 'V', 'R', 0x1019, EDID_QUIRK_NON_DESKTOP),
++	EDID_QUIRK('A', 'U', 'O', 0x1111, EDID_QUIRK_NON_DESKTOP),
+ };
+ 
+ /*
+-- 
+2.40.1
+
