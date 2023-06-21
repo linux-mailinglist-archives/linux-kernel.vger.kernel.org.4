@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9867C738FD0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9408738FD8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:15:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232036AbjFUTOi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 15:14:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52556 "EHLO
+        id S231820AbjFUTO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 15:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231944AbjFUTOY (ORCPT
+        with ESMTP id S231271AbjFUTO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 15:14:24 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801651BF7;
-        Wed, 21 Jun 2023 12:14:13 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-988b204ce5fso477512466b.3;
-        Wed, 21 Jun 2023 12:14:13 -0700 (PDT)
+        Wed, 21 Jun 2023 15:14:26 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15511FCB;
+        Wed, 21 Jun 2023 12:14:17 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-5147e40bbbbso6575641a12.3;
+        Wed, 21 Jun 2023 12:14:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687374852; x=1689966852;
+        d=gmail.com; s=20221208; t=1687374856; x=1689966856;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sPvwDLAkPm+J5yy/CrqAAOmNvfy8yFX7NYpiCf7rGFY=;
-        b=CqrDU8Tf/bjAF7VdkLJwDhrUE1jCNiXlhoc/pd7gGkepULcmd+0AXAeee9IahSUfjP
-         Y6LglgErqcWCa3Kqa7pJdsiRCPlutHhV3sqVFfwjOrvFuXl51/SJLAX69NWvkuGHJxAI
-         p448+QKYC6Nl9cwifFr2jAt3pIQT9FHP8rWvax0qA/bQjR02mtjNohEf+vORxMup56J0
-         nzm/ldTm390H5eYn9TsG5HILhQGm6UpwkamKP5Plqt0QpmH1suYoBUtO5pEKMR03n48+
-         Cw6nythrcgTO2nO1qXQuPNnBU8WxWpDWkC0C7w+Eq6/H0FuSvoHhIwGj23BWu3gvYUgA
-         LdTQ==
+        bh=0OFEEr8CRLhYmuTj5DihLU72iPAQ9ZiHHA571qCsogI=;
+        b=doD9KOMJcKD8cOpR92sSS1frurq3fCa9rRRFRPWBioxhbTviRlaqFc+CuG0mpoaid3
+         MJuzgvLdkctrtU5sY8cb6/HoGA3V0qVpf4npbEzOTYE6CE8E0pPUL8W6A6aIEP2c0g8s
+         uk+5czKWFE3aizqiQMzPSt7HXb2jZYm3Z1SiSy8R+nGzQLqx870Uk5msdVZkedmlTL4K
+         ZwSSx+Nt4+mqoJ/h5/leDsaAwc1uwzzpZHvaP9hNSBODir3gR1pH7wdBrZExxY455wbR
+         c3krhEVwD9t56dEYoXkO/KDVuWEEgHGOkeq9U5icJ/yvMuC9JEaTxz6/yYN/HAPS20d4
+         L5XQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687374852; x=1689966852;
+        d=1e100.net; s=20221208; t=1687374856; x=1689966856;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sPvwDLAkPm+J5yy/CrqAAOmNvfy8yFX7NYpiCf7rGFY=;
-        b=RMJOcNHPmXMO4NoNohSvLu7d/QDusGw0BzXG0LBYLSwGc0mpBLUDvt8QXECdp40hFp
-         y7JNNrhQxFDx9otjYWPHI+rSuw8K9tSeNt4p/XZ3DzNLB9kw2CtDq7Y/nM6mYBhcIGT8
-         z+NY7Fz+9QKWEZ1ALj5pn8huXTVNHrQv0gJEybsxAIe0tYAvFSt5p0opXKX+QOMtTwrM
-         LdIrsxC6Gdq8wwjVopMs4PYvC7s3vjUXNRDBAi4QdvJ07Pq0UcTmShmo32n/aWuUcKsi
-         MU27NdjoRFOKsjLcK4Ek6gMwlEzw6dVWRcMuf+W2lg6WmuNPid/jh4lEZj6l0jxhs7EL
-         PLTA==
-X-Gm-Message-State: AC+VfDzFI+TolSntO4sueY1UvLcwef3XCNLMD317mJrDhiRvcNH75WvS
-        ZXqcuyGshdh9xbnJtEaSdkhXy598E3hfeA==
-X-Google-Smtp-Source: ACHHUZ4fDOq3zc5oeihem59ydVCdtumef/VHkXEaPyVyWTt1gXMHyKrm+Y3sskhuXcXikbTVlqMFpg==
-X-Received: by 2002:a17:907:802:b0:982:a454:6d20 with SMTP id wv2-20020a170907080200b00982a4546d20mr13099911ejb.54.1687374851681;
-        Wed, 21 Jun 2023 12:14:11 -0700 (PDT)
+        bh=0OFEEr8CRLhYmuTj5DihLU72iPAQ9ZiHHA571qCsogI=;
+        b=V1FCzkKc3Du7XuDcV7nJMWevFPGkY2hOOvavWEMrCtOJVqli6TDKs1+kEe5H/0OLZ8
+         klZOgW+VfMFXb/7ga6TWZ1YS75PohAWwkYldpXAFkru7lp2bFMgkUqFs3NgVNZ7TzzcY
+         M+16uHtNssarWwtoHDPhOfvwyOxHX2z6Bex8Kha7bfAJqxoLFhz41+4wQalW8/OdQ1if
+         a+ro63vHCqKWM7xdRV4D60+xEDal0iNDniP7/UI5JSIfdGoDkQT0dh08upVgfe1pJud/
+         zqHQvRwleudv6MykTFaXo3CFt2f83Ct36+aPgTOJOHVEa+H//1JeHPMjaUTQhPS4MKdf
+         alMw==
+X-Gm-Message-State: AC+VfDyupB8VjkcD0TlzZiCaVnrAvDow/Z5ALoDfqzTI1xgBbVeKOp9K
+        z98CH5UcetIzeY6vQJvw1dbaxDslxwVBmg==
+X-Google-Smtp-Source: ACHHUZ4SclwO9nDqPe0vpCLLvv9iPwe3xITQAzVvoJBd7NWrcLWLajqw+ubOhiFoqREniPkzJA+GGA==
+X-Received: by 2002:a17:906:974f:b0:989:21e4:6c6e with SMTP id o15-20020a170906974f00b0098921e46c6emr4815550ejy.53.1687374855819;
+        Wed, 21 Jun 2023 12:14:15 -0700 (PDT)
 Received: from WBEC325.dom.local ([185.188.71.122])
-        by smtp.gmail.com with ESMTPSA id gu1-20020a170906f28100b009829a5ae8b3sm3539562ejb.64.2023.06.21.12.14.10
+        by smtp.gmail.com with ESMTPSA id gu1-20020a170906f28100b009829a5ae8b3sm3539562ejb.64.2023.06.21.12.14.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 12:14:11 -0700 (PDT)
+        Wed, 21 Jun 2023 12:14:15 -0700 (PDT)
 From:   Pawel Dembicki <paweldembicki@gmail.com>
 To:     netdev@vger.kernel.org
 Cc:     linus.walleij@linaro.org, Pawel Dembicki <paweldembicki@gmail.com>,
@@ -60,9 +60,9 @@ Cc:     linus.walleij@linaro.org, Pawel Dembicki <paweldembicki@gmail.com>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 4/6] net: dsa: vsc73xx: Add bridge support
-Date:   Wed, 21 Jun 2023 21:13:00 +0200
-Message-Id: <20230621191302.1405623-4-paweldembicki@gmail.com>
+Subject: [PATCH net-next 5/6] net: dsa: vsc73xx: Add vlan filtering
+Date:   Wed, 21 Jun 2023 21:13:01 +0200
+Message-Id: <20230621191302.1405623-5-paweldembicki@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230621191302.1405623-1-paweldembicki@gmail.com>
 References: <20230621191302.1405623-1-paweldembicki@gmail.com>
@@ -78,112 +78,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds bridge support for vsc73xx driver.
-It introduce two functions for port_bridge_join and
-vsc73xx_port_bridge_leave handling.
+This patch implement vlan filtering for vsc73xx driver.
 
-Those functions implement forwarding adjust and use
-dsa_tag_8021q_bridge_* api for adjust VLAN configuration.
+After vlan filtering start, switch is reconfigured from QinQ to simple
+vlan aware mode. It's required, because VSC73XX chips haven't support
+for inner vlan tag filter.
 
 Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
 ---
- drivers/net/dsa/vitesse-vsc73xx-core.c | 69 ++++++++++++++++++++++++++
- 1 file changed, 69 insertions(+)
+ drivers/net/dsa/vitesse-vsc73xx-core.c | 101 +++++++++++++++++++++++++
+ 1 file changed, 101 insertions(+)
 
 diff --git a/drivers/net/dsa/vitesse-vsc73xx-core.c b/drivers/net/dsa/vitesse-vsc73xx-core.c
-index 653914fb5796..427b6f964811 100644
+index 427b6f964811..fcce47cf6da4 100644
 --- a/drivers/net/dsa/vitesse-vsc73xx-core.c
 +++ b/drivers/net/dsa/vitesse-vsc73xx-core.c
-@@ -1317,6 +1317,72 @@ static int vsc73xx_vlan_set_pvid(struct dsa_switch *ds, int port, u16 vid,
+@@ -1239,6 +1239,30 @@ static int vsc73xx_port_set_double_vlan_aware(struct dsa_switch *ds, int port)
+ 	return ret;
+ }
+ 
++static int
++vsc73xx_port_vlan_filtering(struct dsa_switch *ds, int port,
++			    bool vlan_filtering, struct netlink_ext_ack *extack)
++{
++	int ret, i;
++
++	if (vlan_filtering) {
++		vsc73xx_port_set_vlan_conf(ds, port, VSC73XX_VLAN_AWARE);
++	} else {
++		if (port == CPU_PORT)
++			vsc73xx_port_set_vlan_conf(ds, port, VSC73XX_DOUBLE_VLAN_CPU_AWARE);
++		else
++			vsc73xx_port_set_vlan_conf(ds, port, VSC73XX_DOUBLE_VLAN_AWARE);
++	}
++
++	for (i = 0; i <= 3072; i++) {
++		ret = vsc73xx_port_update_vlan_table(ds, port, i, 0);
++		if (ret)
++			return ret;
++	}
++
++	return ret;
++}
++
+ static int vsc73xx_vlan_set_untagged(struct dsa_switch *ds, int port, u16 vid,
+ 				     bool port_vlan)
+ {
+@@ -1317,6 +1341,80 @@ static int vsc73xx_vlan_set_pvid(struct dsa_switch *ds, int port, u16 vid,
  	return 0;
  }
  
-+static void vsc73xx_update_forwarding_map(struct vsc73xx *vsc)
++static int vsc73xx_port_vlan_add(struct dsa_switch *ds, int port,
++				 const struct switchdev_obj_port_vlan *vlan,
++				 struct netlink_ext_ack *extack)
 +{
-+	int i;
++	bool untagged = vlan->flags & BRIDGE_VLAN_INFO_UNTAGGED;
++	bool pvid = vlan->flags & BRIDGE_VLAN_INFO_PVID;
++	int ret;
 +
-+	for (i = 0; i < vsc->ds->num_ports; i++) {
-+		u32 val;
-+
-+		vsc73xx_read(vsc, VSC73XX_BLOCK_ANALYZER, 0,
-+			     VSC73XX_SRCMASKS + i, &val);
-+		/* update only if port is in forwarding state*/
-+		if (val & VSC73XX_SRCMASKS_PORTS_MASK)
-+			vsc73xx_update_bits(vsc, VSC73XX_BLOCK_ANALYZER, 0,
-+					    VSC73XX_SRCMASKS + i,
-+					    VSC73XX_SRCMASKS_PORTS_MASK,
-+					    vsc->forward_map[i]);
++	/* Be sure to deny alterations to the configuration done by tag_8021q.
++	 */
++	if (vid_is_dsa_8021q(vlan->vid)) {
++		NL_SET_ERR_MSG_MOD(extack,
++				   "Range 3072-4095 reserved for dsa_8021q operation");
++		return -EBUSY;
 +	}
++
++	if (untagged && port != CPU_PORT) {
++		ret = vsc73xx_vlan_set_untagged(ds, port, vlan->vid, true);
++		if (ret)
++			return ret;
++	}
++	if (pvid && port != CPU_PORT) {
++		ret = vsc73xx_vlan_set_pvid(ds, port, vlan->vid, true);
++		if (ret)
++			return ret;
++	}
++
++	ret = vsc73xx_port_update_vlan_table(ds, port, vlan->vid, 1);
++
++	return ret;
 +}
 +
-+static int vsc73xx_port_bridge_join(struct dsa_switch *ds, int port,
-+				    struct dsa_bridge bridge,
-+				    bool *tx_fwd_offload,
-+				    struct netlink_ext_ack *extack)
-+{
-+	struct vsc73xx *vsc = ds->priv;
-+	int i;
-+
-+	*tx_fwd_offload = true;
-+
-+	for (i = 0; i < ds->num_ports; i++) {
-+		/* Add this port to the forwarding matrix of the
-+		 * other ports in the same bridge, and viceversa.
-+		 */
-+		if (!dsa_is_user_port(ds, i))
-+			continue;
-+
-+		if (i == port)
-+			continue;
-+
-+		if (!dsa_port_offloads_bridge(dsa_to_port(ds, i), &bridge))
-+			continue;
-+
-+		vsc->forward_map[port] |= VSC73XX_SRCMASKS_PORTS_MASK & BIT(i);
-+		vsc->forward_map[i] |= VSC73XX_SRCMASKS_PORTS_MASK & BIT(port);
-+	}
-+	vsc73xx_update_forwarding_map(vsc);
-+
-+	return dsa_tag_8021q_bridge_join(ds, port, bridge);
-+}
-+
-+static void vsc73xx_port_bridge_leave(struct dsa_switch *ds, int port,
-+				      struct dsa_bridge bridge)
++static int vsc73xx_port_vlan_del(struct dsa_switch *ds, int port,
++				 const struct switchdev_obj_port_vlan *vlan)
 +{
 +	struct vsc73xx *vsc = ds->priv;
-+	int i;
-+	/*configure forward map to CPU <-> port only*/
-+	for (i = 0; i < vsc->ds->num_ports; i++) {
-+		if (i == CPU_PORT)
-+			continue;
-+		vsc->forward_map[i] &= VSC73XX_SRCMASKS_PORTS_MASK & ~BIT(port);
-+	}
-+	vsc->forward_map[port] = VSC73XX_SRCMASKS_PORTS_MASK & BIT(CPU_PORT);
++	u16 vlan_no;
++	int ret;
++	u32 val;
 +
-+	vsc73xx_update_forwarding_map(vsc);
-+	dsa_tag_8021q_bridge_leave(ds, port, bridge);
++	ret =
++	    vsc73xx_port_update_vlan_table(ds, port, vlan->vid, 0);
++	if (ret)
++		return ret;
++
++	vsc73xx_read(vsc, VSC73XX_BLOCK_MAC, port, VSC73XX_TXUPDCFG, &val);
++
++	if (val & VSC73XX_TXUPDCFG_TX_UNTAGGED_VID_ENA) {
++		vsc73xx_read(vsc, VSC73XX_BLOCK_MAC, port,
++			     VSC73XX_TXUPDCFG, &val);
++		vlan_no = (val & VSC73XX_TXUPDCFG_TX_UNTAGGED_VID) >>
++			  VSC73XX_TXUPDCFG_TX_UNTAGGED_VID_SHIFT;
++		if (vlan_no == vlan->vid) {
++			vsc73xx_update_bits(vsc, VSC73XX_BLOCK_MAC, port,
++					    VSC73XX_TXUPDCFG,
++					    VSC73XX_TXUPDCFG_TX_UNTAGGED_VID_ENA,
++					    0);
++			vsc73xx_update_bits(vsc, VSC73XX_BLOCK_MAC, port,
++					    VSC73XX_TXUPDCFG,
++					    VSC73XX_TXUPDCFG_TX_UNTAGGED_VID, 0);
++		}
++	}
++
++	vsc73xx_read(vsc, VSC73XX_BLOCK_MAC, port, VSC73XX_CAT_PORT_VLAN, &val);
++	vlan_no = val & VSC73XX_CAT_PORT_VLAN_VLAN_VID;
++	if (vlan_no && vlan_no == vlan->vid) {
++		vsc73xx_update_bits(vsc, VSC73XX_BLOCK_MAC, port,
++				    VSC73XX_CAT_PORT_VLAN,
++				    VSC73XX_CAT_PORT_VLAN_VLAN_VID, 0);
++	}
++
++	return 0;
 +}
 +
- static int vsc73xx_tag_8021q_vlan_add(struct dsa_switch *ds, int port, u16 vid,
- 				      u16 flags)
+ static void vsc73xx_update_forwarding_map(struct vsc73xx *vsc)
  {
-@@ -1355,6 +1421,7 @@ static int vsc73xx_setup(struct dsa_switch *ds)
- 
- 	ds->vlan_filtering_is_global = false;
- 	ds->configure_vlan_while_not_filtering = false;
-+	ds->max_num_bridges = 7;
- 
- 	/* Issue RESET */
- 	vsc73xx_write(vsc, VSC73XX_BLOCK_SYSTEM, 0, VSC73XX_GLORESET,
-@@ -1465,6 +1532,8 @@ static const struct dsa_switch_ops vsc73xx_ds_ops = {
- 	.get_sset_count = vsc73xx_get_sset_count,
- 	.port_enable = vsc73xx_port_enable,
- 	.port_disable = vsc73xx_port_disable,
-+	.port_bridge_join = vsc73xx_port_bridge_join,
-+	.port_bridge_leave = vsc73xx_port_bridge_leave,
+ 	int i;
+@@ -1537,6 +1635,9 @@ static const struct dsa_switch_ops vsc73xx_ds_ops = {
  	.port_change_mtu = vsc73xx_change_mtu,
  	.port_max_mtu = vsc73xx_get_max_mtu,
  	.port_stp_state_set = vsc73xx_port_stp_state_set,
++	.port_vlan_filtering = vsc73xx_port_vlan_filtering,
++	.port_vlan_add = vsc73xx_port_vlan_add,
++	.port_vlan_del = vsc73xx_port_vlan_del,
+ 	.tag_8021q_vlan_add = vsc73xx_tag_8021q_vlan_add,
+ 	.tag_8021q_vlan_del = vsc73xx_tag_8021q_vlan_del,
+ };
 -- 
 2.34.1
 
