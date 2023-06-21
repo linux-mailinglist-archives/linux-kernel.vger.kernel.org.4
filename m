@@ -2,68 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB84737CEF
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97BF3737D04
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbjFUHzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 03:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41310 "EHLO
+        id S230501AbjFUHz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 03:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbjFUHzi (ORCPT
+        with ESMTP id S230187AbjFUHzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 03:55:38 -0400
-Received: from mail.mahavavy.com (mail.mahavavy.com [92.222.170.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DA5210C2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 00:55:37 -0700 (PDT)
-Received: by mail.mahavavy.com (Postfix, from userid 1002)
-        id 88C872365C; Wed, 21 Jun 2023 07:55:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mahavavy.com; s=mail;
-        t=1687334135; bh=IfqQW79nVX/qUpmHcJiWDpV9BQnOf/s+Zcq9ON74QJY=;
-        h=Date:From:To:Subject:From;
-        b=JV+eFM7YH0V+LjkeReTls756/UpIRNO0RyU2Ix4UJxJgA256oXrHw31jQ5vtAR84B
-         sI4XH9dTGCQbAvUImvmfcBpzD9bWrKEH63LTnVddneN0CK+v/j+wg3fYE/Eiw76+m/
-         CyzElm/4eDzL2ZrXg5DLqc6X6hKnLT7sCn1TtLInk5n0T6YE7nltLbuX5dsqrUkpo/
-         7AMDSLqsjpHXOPwNyml3RmBqex9va1/0oA7Vv59vxSWCZbGx8UJ1toue+XSpRNuR87
-         UYjJEpyQhu8myBkSzzQQLNnW2eP8agAXD5Nf7XmXlXRiqDjBwmrjS1rHAaMC0Bl5OY
-         kduFcnh1MMDuw==
-Received: by mail.mahavavy.com for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:55:23 GMT
-Message-ID: <20230621064500-0.1.39.74qj.0.a9ckpoo5m8@mahavavy.com>
-Date:   Wed, 21 Jun 2023 07:55:23 GMT
-From:   =?UTF-8?Q? "Kristi=C3=A1n_Plet=C3=A1nek" ?= 
-        <kristian.pletanek@mahavavy.com>
-To:     <linux-kernel@vger.kernel.org>
-Subject: =?UTF-8?Q?Tlakov=C4=9B_lit=C3=BD?=
-X-Mailer: mail.mahavavy.com
+        Wed, 21 Jun 2023 03:55:54 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B778FE41
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 00:55:52 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-1a998a2e7a6so5800780fac.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 00:55:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687334152; x=1689926152;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=chdbH7mNzgkmuCyhA12j8pNPXGXQu3niNcq2qlGIJcs=;
+        b=LbxvhVwpNqssBmWSmVTSBoOqM3MlXb7DhtqbUE7LEO6cnbME5IpO64HbS9T7taeDtX
+         ailK4VhS9N0EesSXQmFC2QE4SQ5fNtqKFY+87AtZ9U8ZOskme0FDpgkPTSs5lr+hUyTe
+         /Qgvw0ssaER5tRu6uE15GBqc/dQxMJ55TBZdwRPyB3zbeMf7Q6bRTMeZwu/GgnYrbhr7
+         3sLqgkfyMTQCMhfCqGuLSseBFInIkpKzb76bqT5LDq7xMCwTcqeAGPmEB0OZZt+xemG0
+         Hrlyp5maNwnixWVnA2DEu7A7EBtV9+EE+D94ZZ0WxqnqI5Tfbf1qH/2/HAGL8ZztSsCu
+         HyXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687334152; x=1689926152;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=chdbH7mNzgkmuCyhA12j8pNPXGXQu3niNcq2qlGIJcs=;
+        b=JFECeH81grroXzmwLXCOKbH4FSx13O3yCJ9AiUDM/M/LlxE5Qx74aWwIo3wP0yCQbY
+         kbBaMvLTVHK/mVcDKQYN6+2ck9z4bpLVuKh+KWrr9MpNBTN8+ldlwhu7CSmMsd8HLqUv
+         41P7kaSMlsi1ej+ECzFmnRt/7WhSwEQ+8MvARC3cAp6+cUO1fAmMkcALK+FGFlbT5t1S
+         g3qsHE7SJes0cVhDK48MKGZwtowFYZgBEgbHyd0+cCxd84Nr11nRuajEimSBI0h9Yu+n
+         lxL9hzGsexRqetRP09oUgjXrYPROFdkn0UyaoCztJrAcXqhIBUmiez0zaZnzJybdOSdR
+         ppBg==
+X-Gm-Message-State: AC+VfDwnxQDG710pbEsw1db0mOgJxkG1HtwNTrivT1kQs0ovz+YzGjW1
+        BFIsMfM38d+ZK9YuGeUVJQRz2DIiH3WILwcMcEk=
+X-Google-Smtp-Source: ACHHUZ6hf43JL8/RjRnBEVRErt7bEY91oQCXLhTfpmTCVuL+A1sbzEX1l/BiasLu5n6sDvOOkVw+A4kp6AMZvTIKafo=
+X-Received: by 2002:a05:6870:343:b0:1aa:1c3f:4e7 with SMTP id
+ n3-20020a056870034300b001aa1c3f04e7mr4918564oaf.57.1687334151934; Wed, 21 Jun
+ 2023 00:55:51 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230620094716.2231414-1-18949883232@163.com>
+In-Reply-To: <20230620094716.2231414-1-18949883232@163.com>
+From:   Christian Gmeiner <christian.gmeiner@gmail.com>
+Date:   Wed, 21 Jun 2023 09:55:40 +0200
+Message-ID: <CAH9NwWdfK0DkDA-Fi6TRrS4orm-HbAqBLDpYcMKd69dU6Jh+CA@mail.gmail.com>
+Subject: Re: [PATCH v10 00/11] drm/etnaviv: Add pci device driver support
+To:     Sui Jingfeng <18949883232@163.com>
+Cc:     Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Sui Jingfeng <suijingfeng@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MIXED_ES,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dobr=C3=A9 r=C3=A1no,
+Hi
 
-zaji=C5=A1=C5=A5ujeme technologii tlakov=C3=A9ho lit=C3=AD hlin=C3=ADku.
+>
+> From: Sui Jingfeng <suijingfeng@loongson.cn>
+>
+> There is a Vivante GC1000 (v5037) in LS2K1000 and LS7A1000, this GPU is a
+> PCI device, and it has 2D and 3D cores in the same core. This series is
+> trying to add PCI device driver support to drm/etnaviv.
+>
 
-M=C3=A1me v=C3=BDrobn=C3=AD z=C3=A1vody v Polsku, =C5=A0v=C3=A9dsku a =C4=
-=8C=C3=ADn=C4=9B se schopnost=C3=AD flexibiln=C4=9B p=C5=99esouvat v=C3=BD=
-robu mezi lokalitami.
+Is it possible to get the lspci output for the GPU? Something like
+this: sudo lspci -vvv -s ...
 
-Na=C5=A1e lic=C3=AD bu=C5=88ky jsou v=C4=9Bt=C5=A1inou automatick=C3=A9 n=
-ebo poloautomatick=C3=A9, co=C5=BE umo=C5=BE=C5=88uje v=C3=BDrobu velk=C3=
-=BDch v=C3=BDrobn=C3=ADch s=C3=A9ri=C3=AD s vysokou flexibilitou detail=C5=
-=AF.
-=20
-Poskytujeme podporu v ka=C5=BEd=C3=A9 f=C3=A1zi v=C3=BDvoje projektu, vyv=
-=C3=ADj=C3=ADme strukturu detailu.
 
-Cht=C4=9Bli byste mluvit o spolupr=C3=A1ci v t=C3=A9to oblasti?
+thanks
+--
+Christian Gmeiner, MSc
 
-Pozdravy
-Kristi=C3=A1n Plet=C3=A1nek
+https://christian-gmeiner.info/privacypolicy
