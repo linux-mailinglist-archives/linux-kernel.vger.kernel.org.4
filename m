@@ -2,136 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE7673836A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:14:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD90773838F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231879AbjFUMNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 08:13:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40914 "EHLO
+        id S230059AbjFUMPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 08:15:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231848AbjFUMNR (ORCPT
+        with ESMTP id S229478AbjFUMPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 08:13:17 -0400
-Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E501713
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:13:15 -0700 (PDT)
-Received: by mail-ot1-x32d.google.com with SMTP id 46e09a7af769-6b472915d1bso2987818a34.2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:13:15 -0700 (PDT)
+        Wed, 21 Jun 2023 08:15:21 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF89110F6
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:15:20 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-9741caaf9d4so712131266b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:15:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687349595; x=1689941595;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FqVDCbkEpxilUdix2+kmj0eFs9thdqo8/rdk3F0KWIw=;
-        b=mPvVFvkEBsa9B3DmV2rhm7xEDwq9dqAk6EgNuO/oX8AUpay26wkpw4MNpFtEp14jzH
-         qJsZ1Mc3gnOZL7LVIpzbaF07PJd4oL6n0vh7YmxJcVaRzrhDxQQjtU9XuOfu7zof9L2T
-         p1GHX9CKla0ZBxWOX4VTpvxWVm32sQDkobVQ+mpcdjEiiJ7mnMwN8ipWtOZ1vPC1DATN
-         0h1TXf5lBYOFtqBa4XFmg8FVJ/oCOTyFlzaxNVUmUXx7voUX8ma5cxf4Id0nht/eaUDb
-         pSYn5cpOgjFRysGiGHHFjcWNPkLByZhBmHz4kN9nfApCVrEDksQ3B5Vj1zvh2wPo2UR/
-         Yw4Q==
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687349719; x=1689941719;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WILflar73P9grdlRUg9RO2U9WLt2s61ZgDHgOf0roCg=;
+        b=fA/GToZx8rTkl4+8te9h0sgmdRmFX73L6r+lbNg9D+OIxz5sP/Hh/4vw1yEiS2brzx
+         Eh8+ulOe891pexuYL28+KmrKf0hxfWpGiyLPYbH66ZRgS+nYwJBknEPqvpNFoWSaYKTA
+         iGPg1hSa7mD/IYXnO6A81bLfXCKZ8owbM1wTTg6vEU+Jq9JihFKP7rZYuy5DAGwDsj6R
+         IVmzrJB5seub/+/b1qyZKanzuT8ybBM3bkZJtM5f0SsAKo5HfxihUsTGzapMaoulw2Wi
+         kCulasgakjKqR2j0Ff31/2BePi7GF+8WTquoLn/fYBfkquwyOoJZZnfXDmJlhg44U4iv
+         CsaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687349595; x=1689941595;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FqVDCbkEpxilUdix2+kmj0eFs9thdqo8/rdk3F0KWIw=;
-        b=gKiPvkmAgtsZfiVNR/zbniDmvSIeG6N4j9zi48OrC6GjQSPcIlVf5ONxhYHNs/Nr24
-         a/KSU38D4IjxjP+3lBlrq2I4WP1r8TSPYdFtTRlS+Iq6h/GfAGQ13vmUJtVv1rGGaVME
-         jTd/lVOxNznrsDQTpL8hx2LBzVMLqXDjUBKkQ+hlboHxV8JT08I25U5Y/euwv58eVO4v
-         C9xAawUOlcCdsA4zPI88mPGA6Dia+nlaBKT84JJ4ZksKf/uwjhMCPK9QeoNrS6c+sOvh
-         CVvEHzz+aExIACO0LbA1ultMTZxEfKZoJMvRH6+ZhNB15wzf1SB99IA+9GK4/P/bF7xM
-         bVAw==
-X-Gm-Message-State: AC+VfDzj9chhsILREaHBVzGiRLDC588hOW4DP/0iR+BDUWArJm4DwH5J
-        Wt2+jSEb4bYPd5CvWqMRl5I=
-X-Google-Smtp-Source: ACHHUZ492tt1ZewNxpjsUEHD/kdj6hmC39lxyMZO1eBhdSfmaVO4yMZ7wBwsDX/ukDbYyHXEofxj2g==
-X-Received: by 2002:a05:6830:1d5a:b0:6b5:8762:cf6c with SMTP id p26-20020a0568301d5a00b006b58762cf6cmr6779449oth.34.1687349594672;
-        Wed, 21 Jun 2023 05:13:14 -0700 (PDT)
-Received: from smtpclient.apple ([2402:d0c0:2:a2a::1])
-        by smtp.gmail.com with ESMTPSA id i8-20020a654848000000b0051b460fd90fsm2783430pgs.8.2023.06.21.05.13.11
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 21 Jun 2023 05:13:14 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
-Subject: Re: [PATCH] list: Remove unnecessary WRITE_ONCE()
-From:   Alan Huang <mmpgouride@gmail.com>
-In-Reply-To: <20230619090336.145738-1-mmpgouride@gmail.com>
-Date:   Wed, 21 Jun 2023 20:12:55 +0800
-Cc:     Eric Dumazet <edumazet@google.com>, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <4B653A92-5FD0-4E38-9F86-AEFE5B86AADA@gmail.com>
-References: <20230619090336.145738-1-mmpgouride@gmail.com>
-To:     paulmck@kernel.org
-X-Mailer: Apple Mail (2.3731.400.51.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687349719; x=1689941719;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WILflar73P9grdlRUg9RO2U9WLt2s61ZgDHgOf0roCg=;
+        b=jNUGuXiUnYisKvlqNAhTvddQMOaDMYSTWETeLQ9QboMJw/qPw8SPVfB6z930V/fZRp
+         Iq7J01S+Qn0cuSh/j6Kt5smoqtBNLIdDC/9aGl13MwqGKXo60omSQlcVPPPPblbkeDPn
+         A/Lbofy8rshhcaiEzTasQNGW574jmtowXcq6gLfV45dDN9yY8Z4n1x9BvkJnzN6bZEqA
+         HekxyS/CvbCNV9V+wCgXD/3RMJaoExzAmBsP/IecqXG2S/SCuVJEHRy3iyRkhjTUftEx
+         8mFv/zCyupDm9V6xjsqLVf90mIGAcn/LbdchJXCfR5S+7xJvz3r8uCbrl6m+p3IYUypZ
+         WvyA==
+X-Gm-Message-State: AC+VfDw2IArWoFnsPhJd382hR/HB73+ms5LO46SrdMU4/xwPulp2RT/S
+        W1SfndOjQsg/WB649sEDaxjcIw==
+X-Google-Smtp-Source: ACHHUZ7azvcvHBW+wPfSgRuwA0WGdeEm0dZ/FYXf5fv6pTmWqmIwCPGWA2q3H4YY5S3xPaR/CRr0KA==
+X-Received: by 2002:a17:907:2da6:b0:988:99e:9798 with SMTP id gt38-20020a1709072da600b00988099e9798mr12028501ejc.43.1687349718972;
+        Wed, 21 Jun 2023 05:15:18 -0700 (PDT)
+Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id me16-20020a170906aed000b0098669cc16b2sm3017631ejb.83.2023.06.21.05.15.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jun 2023 05:15:18 -0700 (PDT)
+Message-ID: <b0a2d809-943b-d5fe-fbb4-32d23e501ae3@baylibre.com>
+Date:   Wed, 21 Jun 2023 14:15:17 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 2/4] drm/mediatek: Add cnt checking for coverity issue
+Content-Language: en-US
+To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Jason-ch Chen <jason-ch.chen@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        Shawn Sung <shawn.sung@mediatek.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20230621102247.10116-1-jason-jh.lin@mediatek.com>
+ <20230621102247.10116-3-jason-jh.lin@mediatek.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20230621102247.10116-3-jason-jh.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+On 21/06/2023 12:22, Jason-JH.Lin wrote:
+> CERT-C Characters and Strings (CERT STR31-C)
+> all_drm_priv[cnt] evaluates to an address that could be at negative
+> offset of an array.
+> 
+> In mtk_drm_get_all_drm_priv():
+> Guarantee that storage for strings has sufficient space for character
+> data and the null terminator.
+> 
+> So change cnt to unsigned int and check its max value.
 
-Looks like you missed this one?
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-Thanks,
-Alan
-
-> 2023=E5=B9=B46=E6=9C=8819=E6=97=A5 17:03=EF=BC=8CAlan Huang =
-<mmpgouride@gmail.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> Commit c54a2744497d("list: Add hlist_unhashed_lockless()") added
-> various WRITE_ONCE() to pair with the READ_ONCE() in
-> hlist_unhashed_lockless(), but there is no need to protect
-> ->next with WRITE_ONCE(). Therefore, this commit removes those
-> unnecessary WRITE_ONCE().
->=20
-> Signed-off-by: Alan Huang <mmpgouride@gmail.com>
-> ---
-> include/linux/list.h | 8 ++++----
-> 1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/include/linux/list.h b/include/linux/list.h
-> index f10344dbad..ac366958ea 100644
-> --- a/include/linux/list.h
-> +++ b/include/linux/list.h
-> @@ -940,7 +940,7 @@ static inline void hlist_del_init(struct =
-hlist_node *n)
-> static inline void hlist_add_head(struct hlist_node *n, struct =
-hlist_head *h)
-> {
-> struct hlist_node *first =3D h->first;
-> - WRITE_ONCE(n->next, first);
-> + n->next =3D first;
-> if (first)
-> WRITE_ONCE(first->pprev, &n->next);
-> WRITE_ONCE(h->first, n);
-> @@ -956,7 +956,7 @@ static inline void hlist_add_before(struct =
-hlist_node *n,
->    struct hlist_node *next)
-> {
-> WRITE_ONCE(n->pprev, next->pprev);
-> - WRITE_ONCE(n->next, next);
-> + n->next =3D next;
-> WRITE_ONCE(next->pprev, &n->next);
-> WRITE_ONCE(*(n->pprev), n);
-> }
-> @@ -969,8 +969,8 @@ static inline void hlist_add_before(struct =
-hlist_node *n,
-> static inline void hlist_add_behind(struct hlist_node *n,
->    struct hlist_node *prev)
-> {
-> - WRITE_ONCE(n->next, prev->next);
-> - WRITE_ONCE(prev->next, n);
-> + n->next =3D prev->next;
-> + prev->next =3D n;
-> WRITE_ONCE(n->pprev, &prev->next);
->=20
-> if (n->next)
-> --=20
-> 2.34.1
->=20
-
+-- 
+Regards,
+Alexandre
