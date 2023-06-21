@@ -2,129 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CFBE7384C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 119967384C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbjFUNUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50642 "EHLO
+        id S231270AbjFUNUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232495AbjFUNTz (ORCPT
+        with ESMTP id S232559AbjFUNUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:19:55 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8619A19AB;
-        Wed, 21 Jun 2023 06:19:52 -0700 (PDT)
-X-GND-Sasl: kory.maincent@bootlin.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1687353591;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=HD60J9yNUWQtovHBK58Ljzap9glKZqstLAMvvb+CDq4=;
-        b=AsSVdH7xN7OxkE6Lyw5uuEZfIZ7nELMTasIUsBCVNAE1HX391bsMmrPLYYQyuKGAfyea0G
-        r/V7zHgOCJnHrcMolZEg1Gpd3XGqMotYchfVnbXM5sF71y1LAMMy1WRJaMKUd6haGXyI6l
-        rL4ApEGON5ardvN5Tjyxg8/Nd2L+mOyyMNs6cM4KKX790aN1Gu7wvG3bTiKjldOF2U86c1
-        hGnByFB8CGGMIOlVPHb0WKuz0jl+Fu9QEFu17b0cWsTd/8bMuwLdQVPkBCxbDnEZs0F5Mc
-        yV1GZ+qTwrr2E8GpUWYvUsELpDrMX3vwcOOUAKD6HFvBTfL6gIU5oG1aI5mTbA==
-X-GND-Sasl: kory.maincent@bootlin.com
-X-GND-Sasl: kory.maincent@bootlin.com
-X-GND-Sasl: kory.maincent@bootlin.com
-X-GND-Sasl: kory.maincent@bootlin.com
-X-GND-Sasl: kory.maincent@bootlin.com
-X-GND-Sasl: kory.maincent@bootlin.com
-X-GND-Sasl: kory.maincent@bootlin.com
-X-GND-Sasl: kory.maincent@bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CB79DE0005;
-        Wed, 21 Jun 2023 13:19:49 +0000 (UTC)
-Date:   Wed, 21 Jun 2023 15:19:48 +0200
-From:   =?UTF-8?Q?K=C3=B6ry?= Maincent <kory.maincent@bootlin.com>
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Gustavo Pimentel <Gustavo.Pimentel@synopsys.com>,
-        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>
-Subject: Re: [PATCH 4/9] dmaengine: dw-edma: HDMA: Add memory barrier before
- starting the DMA transfer in remote setup
-Message-ID: <20230621151948.36125997@kmaincent-XPS-13-7390>
-In-Reply-To: <qwkwtsjmfkmvsx4pmjetoxkjrpuwkndm6h6ntkpehxutz2h2jm@bmdzt7ywiuvs>
-References: <20230609081654.330857-1-kory.maincent@bootlin.com>
- <20230609081654.330857-5-kory.maincent@bootlin.com>
- <20230619170201.5hbgte2optjlbx55@mobilestation.baikal.int>
- <20230619203207.694bfac6@kmaincent-XPS-13-7390>
- <tpowhctppelni47dosc27cg4vmzwdqnuvf3rukvmju2guoxzsr@wgxomqzfv6ch>
- <20230620153006.036ca3ba@kmaincent-XPS-13-7390>
- <qwkwtsjmfkmvsx4pmjetoxkjrpuwkndm6h6ntkpehxutz2h2jm@bmdzt7ywiuvs>
-Organization: bootlin
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 21 Jun 2023 09:20:03 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C56E57;
+        Wed, 21 Jun 2023 06:20:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687353601; x=1718889601;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gXKkCfw0L0vm2oisoVKbq0dOluIkKgZ/dLrFgppTtNQ=;
+  b=UTj8qhqAmKUHpYfgEaPbDJLWVAVf+jkrsxT1h2tS8FZNh5fXcS6vbZE1
+   YXKLhDi428GbGf1uzGoZT640M6PogHMwv589DZQrLa+x8xtvJP5NL8gTy
+   yFmzPK9AJjXyvkn7a8Li7NU0nlwBRYW+6hkfUbhXKoLRbq3J57O3jcatb
+   bq2B2kdtmccn7uxEPBagWYwquaHokhFv/OVl40XmsZ9jG2v28u8L9XFjD
+   BTR2UZDIA6RCv0GRaB4LtlOZ5X9Ka/pUBtXgl8m4PNYTdp102wfnHwkky
+   K02nXp/mR5yixPmBLQ9hBLL8MhZA6v1M/xmxOXNL4h01Snnm1H8twVD5x
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="349900487"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="349900487"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 06:20:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="804378806"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="804378806"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Jun 2023 06:19:59 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qBxkb-005VOb-1r;
+        Wed, 21 Jun 2023 16:19:57 +0300
+Date:   Wed, 21 Jun 2023 16:19:57 +0300
+From:   "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Michael Brunner <michael.brunner@kontron.com>,
+        "acpica-devel@lists.linuxfoundation.org" 
+        <acpica-devel@lists.linuxfoundation.org>,
+        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "robert.moore@intel.com" <robert.moore@intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>
+Subject: Re: [PATCH v1 1/2] ACPI: platform: Ignore SMB0001 only when it has
+ resources
+Message-ID: <ZJL4/X1Z9gCdESxp@smile.fi.intel.com>
+References: <20230620163534.1042-1-andriy.shevchenko@linux.intel.com>
+ <b9af5a068cc0b5e785c8e2ddfc70d811fd5929cd.camel@kontron.com>
+ <20230621093056.5qfa3kn7ldgwsyeg@intel.intel>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621093056.5qfa3kn7ldgwsyeg@intel.intel>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 12:45:35 +0300
-Serge Semin <fancer.lancer@gmail.com> wrote:
+On Wed, Jun 21, 2023 at 11:30:56AM +0200, Andi Shyti wrote:
+> On Wed, Jun 21, 2023 at 07:46:42AM +0000, Michael Brunner wrote:
+> > On Tue, 2023-06-20 at 19:35 +0300, Andy Shevchenko wrote:
+> > > After switchind i2c-scmi driver to be a plaform one it stopped
+> > > being enumerated on number of Kontron platformsm, because it's
+> > > listed in the forbidden_id_list.
+> > > 
+> > > To resolve the situation, split the list to generic one and
+> > > another that holds devices that has to be skiped if and only if
+> > > they have bogus resources attached (_CRS method returns some).
+> > > 
+> > > Fixes: 03d4287add6e ("i2c: scmi: Convert to be a platform driver")
+> > > Closes: https://lore.kernel.org/r/60c1756765b9a3f1eab0dcbd84f59f00fe1caf48.camel@kontron.com
+> > > Reported-by: Michael Brunner <michael.brunner@kontron.com>
+> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > 
+> > Works as expected - the SMB0001 device shows up as platform device and
+> > the i2c-scmi driver is enumerated again on the affected boards.
+> > Thanks a lot!
+> 
+> is this a "Tested-by: Michael Brunner <michael.brunner@kontron.com>" :)
 
-> > I thought that using a read will solve the issue like the gpio_nand dri=
-ver
-> > (gpio_nand_dosync)  =20
->=20
-> AFAICS The io_sync dummy-read there is a workaround to fix the
-> bus-reordering within the SoC bus. In this case we have a PCIe bus
-> which is supposed to guarantee the strong order with the exception I
-> described above or unless there is a bug someplace in the PCIe fabric.
->=20
-> > but I didn't thought of a cache that could return the value
-> > of the read even if the write doesn't fully happen. In the case of a ca=
-che
-> > how could we know that the write is done without using a delay?  =20
->=20
-> MMIO mapping is platform dependent and low-level driver dependent.
-> That's why I asked many times about the platform you are using and the
-> low-level driver that probes the eDMA engine. It would be also useful
-> to know what PCIe host controller is utilized too.
->=20
-> Mainly MMIO spaces are mapped in a way to bypass the caching. But in
-> some cases it might be useful to map an MMIO space with additional
-> optimizations like Write-combining. For instance it could be
-> effectively done for the eDMA linked-list BAR mapping. Indeed why
-> would you need to send each linked-list byte/word/dword right away to
-> the device while you can combine them and send all together, then
-> flush the cache and only after that start the DMA transfer? Another
-> possible reason of the writes reordering could be in a way the PCIe
-> host outbound memory window (a memory region accesses to which are
-> translated to the PCIe bus transfers) is configured. For instance DW
-> PCIe Host controller outbound MW config CSR has a special flag which
-> enables setting a custom PCIe bus TLPs (packets) attribute. As I
-> mentioned above that attribute can affect the TLPs order: make it
-> relaxed or ID-based.
->=20
-> Of course we can't reject a possibility of having some delays hidden
-> inside your device which may cause writes to the internal memory
-> landing after the writes to the CSRs. But that seems too exotic to be
-> considered as the real one for sure until the alternatives are
-> thoroughly checked.
->=20
-> What I was trying to say that your problem can be caused by some much
-> more frequently met reason. If I were you I would have checked them
-> first and only then considered a workaround like you suggest.
+Michael, indeed, it would be nice to have a formal tag.
+After that I will send a v2 with tags and fixed typos
+as Andi noticed (thank you, Andi!).
 
-Thanks for you detailed answer, this was instructive.
-I will come back with more information if TLP flags are set.
-FYI the PCIe board I am currently working with is the one from Brainchip:
-Here is the driver:
-https://github.com/Brainchip-Inc/akida_dw_edma
 
-K=C3=B6ry
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
