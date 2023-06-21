@@ -2,118 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBF7C7381DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 006BB7381FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231719AbjFULCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 07:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36676 "EHLO
+        id S231971AbjFULC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 07:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbjFULCf (ORCPT
+        with ESMTP id S232027AbjFULCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 07:02:35 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7BBBC;
-        Wed, 21 Jun 2023 04:02:34 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Wed, 21 Jun 2023 07:02:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35C010FF;
+        Wed, 21 Jun 2023 04:02:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 297B01FD6A;
-        Wed, 21 Jun 2023 11:02:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1687345353; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pnziWqeIZNrvl2O+xZ1w8A8qnxuxPCpJZgtJgpYEvPU=;
-        b=Adb4Tgacrd4bHVu9MkzkWN+QTgjcjTbEFFwPNjYONgsefwqitUgPD1ytt2T6caVvkj3Fdw
-        hiUw2rsfQilqCdwW8FPWoymED3AJCvWXDjUebGmVTBsrRj/kXKbDGZfWbcVyM2MfVZq55O
-        WGTQ3o0S3ud8xZaOsahm9OexgHg8XYc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1687345353;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pnziWqeIZNrvl2O+xZ1w8A8qnxuxPCpJZgtJgpYEvPU=;
-        b=EthIC3W/BETDoJ0qFd58aXLAEe6J6/tyoI3oud+epXosaZbJS4OnTDNuExvY52kNt+f1PJ
-        Bqwubvsd0gJ7KkBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 13EF9134B1;
-        Wed, 21 Jun 2023 11:02:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sCJfBMnYkmTMHgAAMHmgww
-        (envelope-from <hare@suse.de>); Wed, 21 Jun 2023 11:02:33 +0000
-Message-ID: <58279efe-141b-5d6b-b319-7bd1a0d5347d@suse.de>
-Date:   Wed, 21 Jun 2023 13:02:32 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 677CF614D8;
+        Wed, 21 Jun 2023 11:02:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44444C433C0;
+        Wed, 21 Jun 2023 11:02:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687345368;
+        bh=N49s8hoCPzg/d/5Yqx/JLNELPTMhdz+fJaCZkodGWio=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Gs93SjTKfmM5tRP9D9zbsuHGo9f6Xh4kgyR0a6U1XttmyhFNhs7BavEpTXdRxLVaA
+         oD7wG0QOriYFbwHHdnAQC8YDhFlDhY5Q20yEP9aKQkxdhrOtiUAccszGIDq0TDZTlP
+         y1SZqSoIae7Tm+BlZMYX0sOdoTGYAVg1soxbYZjN1sa968M9SyIymcHeGOXLa9JoRK
+         ldl3lUHnyjgd9Wm+z+tKOZ0W1W4l9xXUgr0edpy3wQWWE2yU6nXJqtyP90yXI+rdck
+         Dstw6M3vrqSJirEhKXyx0q35sQ98fhhmJRPwXLz79SLJeneCJYThdsBuNDnfo+7y1q
+         H3Ti9T5en087g==
+Date:   Wed, 21 Jun 2023 16:32:44 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <error27@gmail.com>
+Subject: Re: [PATCH] soundwire: qcom: fix storing port config out-of-bounds
+Message-ID: <ZJLY1A4es4CQpDxr@matsya>
+References: <20230601102525.609627-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RFC 3/4] block: set mapping order for the block cache in
- set_init_blocksize
-Content-Language: en-US
-To:     Pankaj Raghav <p.raghav@samsung.com>, willy@infradead.org,
-        david@fromorbit.com
-Cc:     gost.dev@samsung.com, mcgrof@kernel.org, hch@lst.de,
-        jwong@kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230621083823.1724337-1-p.raghav@samsung.com>
- <CGME20230621083828eucas1p23222cae535297f9536f12dddd485f97b@eucas1p2.samsung.com>
- <20230621083823.1724337-4-p.raghav@samsung.com>
- <a25eb5ce-b71c-2a38-d8eb-f8de8b8b449e@suse.de>
- <d275b49a-b6be-a08f-cfd8-d213eb452dd1@samsung.com>
-From:   Hannes Reinecke <hare@suse.de>
-In-Reply-To: <d275b49a-b6be-a08f-cfd8-d213eb452dd1@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601102525.609627-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/21/23 12:42, Pankaj Raghav wrote:
->>>        bdev->bd_inode->i_blkbits = blksize_bits(bsize);
->>> +    order = bdev->bd_inode->i_blkbits - PAGE_SHIFT;
->>> +    folio_order = mapping_min_folio_order(bdev->bd_inode->i_mapping);
->>> +
->>> +    if (!IS_ENABLED(CONFIG_BUFFER_HEAD)) {
->>> +        /* Do not allow changing the folio order after it is set */
->>> +        WARN_ON_ONCE(folio_order && (folio_order != order));
->>> +        mapping_set_folio_orders(bdev->bd_inode->i_mapping, order, 31);
->>> +    }
->>>    }
->>>      int set_blocksize(struct block_device *bdev, int size)
->> This really has nothing to do with buffer heads.
->>
->> In fact, I've got a patchset to make it work _with_ buffer heads.
->>
->> So please, don't make it conditional on CONFIG_BUFFER_HEAD.
->>
->> And we should be calling into 'mapping_set_folio_order()' only if the 'order' argument is larger
->> than PAGE_ORDER, otherwise we end up enabling
->> large folio support for _every_ block device.
->> Which I doubt we want.
->>
+On 01-06-23, 12:25, Krzysztof Kozlowski wrote:
+> The 'qcom_swrm_ctrl->pconfig' has size of QCOM_SDW_MAX_PORTS (14),
+> however we index it starting from 1, not 0, to match real port numbers.
+> This can lead to writing port config past 'pconfig' bounds and
+> overwriting next member of 'qcom_swrm_ctrl' struct.  Reported also by
+> smatch:
 > 
-> Hmm, which aops are you using for the block device? If you are using the old aops, then we will be
-> using helpers from buffer.c and mpage.c which do not support large folios. I am getting a BUG_ON
-> when I don't use iomap based aops for the block device:
-> 
-I know. I haven't said that mpage.c / buffer.c support large folios 
-_now_. All I'm saying is that I have a patchset enabling it to support 
-large folios :-)
+>   drivers/soundwire/qcom.c:1269 qcom_swrm_get_port_config() error: buffer overflow 'ctrl->pconfig' 14 <= 14
 
-Cheers,
+Applied, thanks
 
-Hannes
-
+-- 
+~Vinod
