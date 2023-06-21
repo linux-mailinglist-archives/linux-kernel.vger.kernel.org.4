@@ -2,85 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4378737B56
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC1A737B78
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjFUGg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 02:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34488 "EHLO
+        id S230497AbjFUGhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 02:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbjFUGgH (ORCPT
+        with ESMTP id S230367AbjFUGgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 02:36:07 -0400
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C604C10FB;
-        Tue, 20 Jun 2023 23:35:25 -0700 (PDT)
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-1b525af07a6so26098425ad.1;
-        Tue, 20 Jun 2023 23:35:25 -0700 (PDT)
+        Wed, 21 Jun 2023 02:36:24 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF2C173F
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:35:47 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-5196a728d90so7248773a12.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:35:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687329346; x=1689921346;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TBtUPCGAEPqgP2wnbS7IOunwA2YiB6sHP58rxfnARBU=;
+        b=iwRmwYAzjTB875SQ/kRpszCaNts2yMoTHvkh9s0vK6iwyneD7d8yz0vPSolFsjIE6f
+         kFLi0SY8LASyHKAEESOCnUKLan1kNLEYBGJYKAxkCdMFmOKvUc5HrWMeuziKlhtoHzm6
+         BKU1wkotTSYLYuxpb5nnhDhIglIy+IA7bBDFWvoC+11rPK3qQgTXnjokU652QvcN0idJ
+         9cGQg2UIgeLAuSRiA5a830ojbcaRThGCG8Gva/2TyuXPWOtr/0SD/rzpOTkLirf1oN3V
+         bhgv5bIvgJsAimJ5Ymo5ggKNrSFPwfZsoNVe5oQPuI4/w14DIzL4AyLIMsdIX2z4Arns
+         ahIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687329308; x=1689921308;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rOw6lr7KCaSTbJVfVX5591M2W/FZfWw7G+MVsaNTI+g=;
-        b=cWqYMvgy2v4E6fjpyYOM+qaoxJLvUVCx2qfGCFe2QYlzrCZGWZTpB3j1PG6omhA6VZ
-         4PB7esX2zOjLVTZS/k5GhshOO6+qUX8PnSqJthKKr7lo/6/8vTVYam4p8HUA3s2ZRbK/
-         bboFlV0zJ1pn5U1CyF9892lQHZHcF8kL7nYltZlvg4SjVkntTUHUnknp3zpcLkas8wA6
-         /RP6lGIlBWQzaojyJjSFqyo8wSoC9mk8dsR86ejWONzf6vVSpjt2F14Q2QJDSaeeio8s
-         1i/yAx8N5h7FHWkburxYzLjDWpk2ulMIyJRHbJ2yl702QVKHkLgJdzJwlFANVzKsmSOz
-         j+Uw==
-X-Gm-Message-State: AC+VfDxhd5RHpzSgm8sof0UU79gAxIWJgSqpd8QZi/iIX+iTmvxAIN8I
-        LUFmYlGiKJf7hL7Fab9eVQ==
-X-Google-Smtp-Source: ACHHUZ5UFqt4bZo98PnGsOl8cmIyq++2mSRoSZ9M/lz6KCX1WvNV4k4qrQCYPZ5sDR7n3y23mLPtkw==
-X-Received: by 2002:a17:902:d353:b0:1b3:c7c1:8ded with SMTP id l19-20020a170902d35300b001b3c7c18dedmr8466029plk.27.1687329308272;
-        Tue, 20 Jun 2023 23:35:08 -0700 (PDT)
-Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id z7-20020a170902708700b001b3dada0e78sm2593054plk.258.2023.06.20.23.35.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 23:35:07 -0700 (PDT)
-From:   sunliming <sunliming@kylinos.cn>
-To:     rostedt@goodmis.org, mhiramat@kernel.org, beaub@linux.microsoft.com
-Cc:     kelulanainsley@gmail.com, linux-trace-kernel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sunliming <sunliming@kylinos.cn>
-Subject: [PATCH v3 3/3] selftests/user_events: Add test cases when event is diabled
-Date:   Wed, 21 Jun 2023 14:35:02 +0800
-Message-Id: <20230621063502.154378-1-sunliming@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        d=1e100.net; s=20221208; t=1687329346; x=1689921346;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TBtUPCGAEPqgP2wnbS7IOunwA2YiB6sHP58rxfnARBU=;
+        b=AXq5pY2ITqqTQ3C9ip5ngRdd4XOu5YsQuo6Lh/9el3/H4Pt8P1ILu6EIFo09IBsH2q
+         YWc3MZKWYZLY3+rIg0Id1zRNgGb59kMw4rXn/+arEpzT2nNZXnHS9NDB5oQLcjG3/h4o
+         ySJhbK0VSUgsUY9VS6tTZwfVZuLMMV1Kwls7JydQSqjhz9ySbl2JUehaITwGB6fsOtop
+         rHNdKGSOpDFPQfb7NswPXIL2YWbdLCuuAb1d85JOF5cb0+iBr28+IBzUhyhqLqAtfoHV
+         QZh2vQqIxjO5cDhyrESwOZITO/Cqf0gjynL5U05/3nF8HtvT2skjrVh96na1Fpm1y04W
+         +Bgw==
+X-Gm-Message-State: AC+VfDyQelOwPpHGHxj0HHkPlekEh5m0rEosmoSaHVLu44+39+EOhc9E
+        p1qD68YXIfZ0BKYI8utTJzK4hQ==
+X-Google-Smtp-Source: ACHHUZ56k6K+LjMGmAXaNkPdn36c6LtNKoR3pnmcKIBBUIePrvOnsXJvC9WonrWnlT4BSUD9NQhfag==
+X-Received: by 2002:a05:6402:64a:b0:510:f462:fc47 with SMTP id u10-20020a056402064a00b00510f462fc47mr10362174edx.7.1687329346218;
+        Tue, 20 Jun 2023 23:35:46 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id c17-20020a056402121100b005158563be4asm2119097edw.33.2023.06.20.23.35.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 23:35:45 -0700 (PDT)
+Message-ID: <e24bdb45-4a30-7358-17ec-9788942cb28b@linaro.org>
+Date:   Wed, 21 Jun 2023 08:35:43 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4 04/14] dt-bindings: display: mediatek: padding: Add
+ MT8188
+Content-Language: en-US
+To:     Hsiao Chien Sung <shawn.sung@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Singo Chang <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        Jason-JH Lin <jason-jh.lin@mediatek.com>
+References: <20230621031938.5884-1-shawn.sung@mediatek.com>
+ <20230621031938.5884-5-shawn.sung@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230621031938.5884-5-shawn.sung@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When user_events are disabled, it's write operation should return zero.
-Add this test cases.
+On 21/06/2023 05:19, Hsiao Chien Sung wrote:
+> Padding is a new hardware module on MediaTek MT8188,
+> add dt-bindings for it.
+> 
+> Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
 
-Signed-off-by: sunliming <sunliming@kylinos.cn>
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
 ---
- tools/testing/selftests/user_events/ftrace_test.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
-index d33bd31425db..7968d69c3a5c 100644
---- a/tools/testing/selftests/user_events/ftrace_test.c
-+++ b/tools/testing/selftests/user_events/ftrace_test.c
-@@ -297,6 +297,9 @@ TEST_F(user, write_events) {
- 	io[0].iov_base = &reg.write_index;
- 	io[0].iov_len = sizeof(reg.write_index);
- 
-+	/* Write should return zero when event is not enabled */
-+	ASSERT_EQ(0, writev(self->data_fd, (const struct iovec *)io, 3));
-+
- 	/* Enable event */
- 	self->enable_fd = open(enable_file, O_RDWR);
- 	ASSERT_NE(-1, write(self->enable_fd, "1", sizeof("1")))
--- 
-2.25.1
+This is an automated instruction, just in case, because many review tags
+are being ignored. If you do not know the process, here is a short
+explanation:
+
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions, under or above your Signed-off-by tag. Tools like b4 can help
+here. However, there's no need to repost patches *only* to add the tags.
+The upstream maintainer will do that for acks received on the version
+they apply.
+
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+
+Best regards,
+Krzysztof
 
