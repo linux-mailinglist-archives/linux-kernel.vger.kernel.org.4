@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17EE57387FE
+	by mail.lfdr.de (Postfix) with ESMTP id 78E4A7387FF
 	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233013AbjFUOyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:54:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
+        id S233018AbjFUOyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232937AbjFUOxG (ORCPT
+        with ESMTP id S232941AbjFUOxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:53:06 -0400
+        Wed, 21 Jun 2023 10:53:07 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE1130DE
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:49:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EAB30E4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:49:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EEC7A615C9
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:49:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4D71C433C8;
-        Wed, 21 Jun 2023 14:49:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC7B3612B7
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:49:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3A32C433C8;
+        Wed, 21 Jun 2023 14:49:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687358972;
-        bh=6QoqtM/yLv5wl60ALByHpdG2UYIXCUSz8axrRGF+yAY=;
+        s=k20201202; t=1687358974;
+        bh=+guKJI0dr1zSxzHN9bTzMEKvLYnDM+NtgQTgRIMc65c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tddGOEwI+4i7EAHz9lvAtVvCNgOeWxZ5bXAlo7sgSQzNzTQ/Y4HQvHIYv8N5jGTyw
-         WtoFJG0/maQDiaGilCW6Tk+QF2JMBsOliJbDEyAnwXRYYQgbyqEKIs22Yb05ZheUlH
-         cgdF0KoSTG2GT/8zQmAW+INTtmTgFXdNzi3NBO9VJcdORqYc8U1Qx5pYZXOHx0wa/t
-         CC1etQwYNLP4XuFMMwmbaHQ7cbT/aYH94sx2aTl0j+nkEW1Le/35Bn/Ww9/3YkrJA5
-         ADJvJmRlju7WKpDNgXLoWNz49YraoYAoWWR0Zr6qFiBjYSJiOEF4Ah56mAyyZ9wZP6
-         MNWYxu8jfnlSw==
+        b=blC+PfP4jXg6TdvGJNSV5geEw+cWTNg1vwgxJIcw0aoPhH+EjOEulIMpCQtnTbJyv
+         pyxhdmraM2/owfebuO9zuEJ38n1BHD4FUB/d2ksLu6tDD7XRPB8fHd8o5WJ/oTXqVZ
+         FfV+OpBHE06F+jB4zaz0H6BavKE2TbhitkArN65vp1GxKA/9Thv+z7/YrnIkyaYIFQ
+         TDIlwKs6/BY5kQSDOXjFQB7/3yD4Vuwtug2uVKXDJSAG8Q6CoAs4dD1+u5bCf7qjxa
+         k0X4Mu0D70o9S7G1syqZ+DE5wQTMOAvORnZtac01XNFkOlRtEH0o9+n+QdvuJgEDlc
+         w8wKqSAtKb3Tg==
 From:   Jeff Layton <jlayton@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.com>
+To:     Christian Brauner <brauner@kernel.org>,
+        Evgeniy Dushistov <dushistov@mail.ru>
 Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 67/79] udf: switch to new ctime accessors
-Date:   Wed, 21 Jun 2023 10:46:20 -0400
-Message-ID: <20230621144735.55953-66-jlayton@kernel.org>
+Subject: [PATCH 68/79] ufs: switch to new ctime accessors
+Date:   Wed, 21 Jun 2023 10:46:21 -0400
+Message-ID: <20230621144735.55953-67-jlayton@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230621144735.55953-1-jlayton@kernel.org>
 References: <20230621144507.55591-1-jlayton@kernel.org>
@@ -62,189 +63,177 @@ inode->i_ctime.
 
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- fs/udf/ialloc.c |  2 +-
- fs/udf/inode.c  | 17 ++++++++++-------
- fs/udf/namei.c  | 24 ++++++++++++------------
- 3 files changed, 23 insertions(+), 20 deletions(-)
+ fs/ufs/dir.c    |  6 +++---
+ fs/ufs/ialloc.c |  2 +-
+ fs/ufs/inode.c  | 23 +++++++++++++----------
+ fs/ufs/namei.c  |  8 ++++----
+ 4 files changed, 21 insertions(+), 18 deletions(-)
 
-diff --git a/fs/udf/ialloc.c b/fs/udf/ialloc.c
-index 5f7ac8c84798..6320b15113e4 100644
---- a/fs/udf/ialloc.c
-+++ b/fs/udf/ialloc.c
-@@ -100,7 +100,7 @@ struct inode *udf_new_inode(struct inode *dir, umode_t mode)
- 		iinfo->i_alloc_type = ICBTAG_FLAG_AD_SHORT;
- 	else
- 		iinfo->i_alloc_type = ICBTAG_FLAG_AD_LONG;
+diff --git a/fs/ufs/dir.c b/fs/ufs/dir.c
+index 379d75796a5c..0ccd32ab7ffc 100644
+--- a/fs/ufs/dir.c
++++ b/fs/ufs/dir.c
+@@ -107,7 +107,7 @@ void ufs_set_link(struct inode *dir, struct ufs_dir_entry *de,
+ 	ufs_commit_chunk(page, pos, len);
+ 	ufs_put_page(page);
+ 	if (update_times)
+-		dir->i_mtime = dir->i_ctime = current_time(dir);
++		dir->i_mtime = inode_ctime_set_current(dir);
+ 	mark_inode_dirty(dir);
+ 	ufs_handle_dirsync(dir);
+ }
+@@ -397,7 +397,7 @@ int ufs_add_link(struct dentry *dentry, struct inode *inode)
+ 	ufs_set_de_type(sb, de, inode->i_mode);
+ 
+ 	ufs_commit_chunk(page, pos, rec_len);
+-	dir->i_mtime = dir->i_ctime = current_time(dir);
++	dir->i_mtime = inode_ctime_set_current(dir);
+ 
+ 	mark_inode_dirty(dir);
+ 	err = ufs_handle_dirsync(dir);
+@@ -539,7 +539,7 @@ int ufs_delete_entry(struct inode *inode, struct ufs_dir_entry *dir,
+ 		pde->d_reclen = cpu_to_fs16(sb, to - from);
+ 	dir->d_ino = 0;
+ 	ufs_commit_chunk(page, pos, to - from);
+-	inode->i_ctime = inode->i_mtime = current_time(inode);
++	inode->i_mtime = inode_ctime_set_current(inode);
+ 	mark_inode_dirty(inode);
+ 	err = ufs_handle_dirsync(inode);
+ out:
+diff --git a/fs/ufs/ialloc.c b/fs/ufs/ialloc.c
+index 06bd84d555bd..3d64f7b3aba1 100644
+--- a/fs/ufs/ialloc.c
++++ b/fs/ufs/ialloc.c
+@@ -292,7 +292,7 @@ struct inode *ufs_new_inode(struct inode *dir, umode_t mode)
+ 	inode_init_owner(&nop_mnt_idmap, inode, dir, mode);
+ 	inode->i_blocks = 0;
+ 	inode->i_generation = 0;
 -	inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
 +	inode->i_mtime = inode->i_atime = inode_ctime_set_current(inode);
- 	iinfo->i_crtime = inode->i_mtime;
- 	if (unlikely(insert_inode_locked(inode) < 0)) {
- 		make_bad_inode(inode);
-diff --git a/fs/udf/inode.c b/fs/udf/inode.c
-index 28cdfc57d946..4c31a51e0d18 100644
---- a/fs/udf/inode.c
-+++ b/fs/udf/inode.c
-@@ -910,7 +910,7 @@ static int inode_getblk(struct inode *inode, struct udf_map_rq *map)
- 	map->oflags = UDF_BLK_NEW | UDF_BLK_MAPPED;
- 	iinfo->i_next_alloc_block = map->lblk + 1;
- 	iinfo->i_next_alloc_goal = newblocknum + 1;
+ 	ufsi->i_flags = UFS_I(dir)->i_flags;
+ 	ufsi->i_lastfrag = 0;
+ 	ufsi->i_shadow = 0;
+diff --git a/fs/ufs/inode.c b/fs/ufs/inode.c
+index a4246c83a8cd..64242e1378d6 100644
+--- a/fs/ufs/inode.c
++++ b/fs/ufs/inode.c
+@@ -296,7 +296,7 @@ ufs_inode_getfrag(struct inode *inode, unsigned index,
+ 
+ 	if (new)
+ 		*new = 1;
 -	inode->i_ctime = current_time(inode);
 +	inode_ctime_set_current(inode);
- 
  	if (IS_SYNC(inode))
- 		udf_sync_inode(inode);
-@@ -1298,7 +1298,7 @@ int udf_setsize(struct inode *inode, loff_t newsize)
- 			goto out_unlock;
- 	}
- update_time:
--	inode->i_mtime = inode->i_ctime = current_time(inode);
-+	inode->i_mtime = inode_ctime_set_current(inode);
+ 		ufs_sync_inode (inode);
+ 	mark_inode_dirty(inode);
+@@ -378,7 +378,7 @@ ufs_inode_getblock(struct inode *inode, u64 ind_block,
+ 	mark_buffer_dirty(bh);
  	if (IS_SYNC(inode))
- 		udf_sync_inode(inode);
- 	else
-@@ -1329,6 +1329,7 @@ static int udf_read_inode(struct inode *inode, bool hidden_inode)
- 	int bs = inode->i_sb->s_blocksize;
- 	int ret = -EIO;
- 	uint32_t uid, gid;
-+	struct timespec64 ctime;
- 
- reread:
- 	if (iloc->partitionReferenceNum >= sbi->s_partitions) {
-@@ -1501,13 +1502,14 @@ static int udf_read_inode(struct inode *inode, bool hidden_inode)
- 	inode->i_size = le64_to_cpu(fe->informationLength);
- 	iinfo->i_lenExtents = inode->i_size;
- 
-+	ctime = inode_ctime_peek(inode);
- 	if (iinfo->i_efe == 0) {
- 		inode->i_blocks = le64_to_cpu(fe->logicalBlocksRecorded) <<
- 			(inode->i_sb->s_blocksize_bits - 9);
- 
- 		udf_disk_stamp_to_time(&inode->i_atime, fe->accessTime);
- 		udf_disk_stamp_to_time(&inode->i_mtime, fe->modificationTime);
--		udf_disk_stamp_to_time(&inode->i_ctime, fe->attrTime);
-+		udf_disk_stamp_to_time(&ctime, fe->attrTime);
- 
- 		iinfo->i_unique = le64_to_cpu(fe->uniqueID);
- 		iinfo->i_lenEAttr = le32_to_cpu(fe->lengthExtendedAttr);
-@@ -1522,7 +1524,7 @@ static int udf_read_inode(struct inode *inode, bool hidden_inode)
- 		udf_disk_stamp_to_time(&inode->i_atime, efe->accessTime);
- 		udf_disk_stamp_to_time(&inode->i_mtime, efe->modificationTime);
- 		udf_disk_stamp_to_time(&iinfo->i_crtime, efe->createTime);
--		udf_disk_stamp_to_time(&inode->i_ctime, efe->attrTime);
-+		udf_disk_stamp_to_time(&ctime, efe->attrTime);
- 
- 		iinfo->i_unique = le64_to_cpu(efe->uniqueID);
- 		iinfo->i_lenEAttr = le32_to_cpu(efe->lengthExtendedAttr);
-@@ -1799,7 +1801,7 @@ static int udf_update_inode(struct inode *inode, int do_sync)
- 
- 		udf_time_to_disk_stamp(&fe->accessTime, inode->i_atime);
- 		udf_time_to_disk_stamp(&fe->modificationTime, inode->i_mtime);
--		udf_time_to_disk_stamp(&fe->attrTime, inode->i_ctime);
-+		udf_time_to_disk_stamp(&fe->attrTime, inode_ctime_peek(inode));
- 		memset(&(fe->impIdent), 0, sizeof(struct regid));
- 		strcpy(fe->impIdent.ident, UDF_ID_DEVELOPER);
- 		fe->impIdent.identSuffix[0] = UDF_OS_CLASS_UNIX;
-@@ -1830,12 +1832,13 @@ static int udf_update_inode(struct inode *inode, int do_sync)
- 
- 		udf_adjust_time(iinfo, inode->i_atime);
- 		udf_adjust_time(iinfo, inode->i_mtime);
--		udf_adjust_time(iinfo, inode->i_ctime);
-+		udf_adjust_time(iinfo, inode_ctime_peek(inode));
- 
- 		udf_time_to_disk_stamp(&efe->accessTime, inode->i_atime);
- 		udf_time_to_disk_stamp(&efe->modificationTime, inode->i_mtime);
- 		udf_time_to_disk_stamp(&efe->createTime, iinfo->i_crtime);
--		udf_time_to_disk_stamp(&efe->attrTime, inode->i_ctime);
-+		udf_time_to_disk_stamp(&efe->attrTime,
-+				       inode_ctime_peek(inode));
- 
- 		memset(&(efe->impIdent), 0, sizeof(efe->impIdent));
- 		strcpy(efe->impIdent.ident, UDF_ID_DEVELOPER);
-diff --git a/fs/udf/namei.c b/fs/udf/namei.c
-index a95579b043ab..50ee82a7d910 100644
---- a/fs/udf/namei.c
-+++ b/fs/udf/namei.c
-@@ -365,7 +365,7 @@ static int udf_add_nondir(struct dentry *dentry, struct inode *inode)
- 	*(__le32 *)((struct allocDescImpUse *)iter.fi.icb.impUse)->impUse =
- 		cpu_to_le32(iinfo->i_unique & 0x00000000FFFFFFFFUL);
- 	udf_fiiter_write_fi(&iter, NULL);
--	dir->i_ctime = dir->i_mtime = current_time(dir);
-+	dir->i_mtime = inode_ctime_set_current(dir);
- 	mark_inode_dirty(dir);
- 	udf_fiiter_release(&iter);
- 	udf_add_fid_counter(dir->i_sb, false, 1);
-@@ -471,7 +471,7 @@ static int udf_mkdir(struct mnt_idmap *idmap, struct inode *dir,
- 	udf_fiiter_release(&iter);
- 	udf_add_fid_counter(dir->i_sb, true, 1);
- 	inc_nlink(dir);
--	dir->i_ctime = dir->i_mtime = current_time(dir);
-+	dir->i_mtime = inode_ctime_set_current(dir);
- 	mark_inode_dirty(dir);
- 	d_instantiate_new(dentry, inode);
- 
-@@ -523,8 +523,8 @@ static int udf_rmdir(struct inode *dir, struct dentry *dentry)
- 	inode->i_size = 0;
- 	inode_dec_link_count(dir);
- 	udf_add_fid_counter(dir->i_sb, true, -1);
--	inode->i_ctime = dir->i_ctime = dir->i_mtime =
--						current_time(inode);
-+	inode_ctime_set_current(inode);
-+	dir->i_mtime = inode_ctime_set_current(dir);
- 	mark_inode_dirty(dir);
- 	ret = 0;
- end_rmdir:
-@@ -555,11 +555,11 @@ static int udf_unlink(struct inode *dir, struct dentry *dentry)
- 		set_nlink(inode, 1);
- 	}
- 	udf_fiiter_delete_entry(&iter);
--	dir->i_ctime = dir->i_mtime = current_time(dir);
-+	dir->i_mtime = inode_ctime_set_current(dir);
- 	mark_inode_dirty(dir);
- 	inode_dec_link_count(inode);
- 	udf_add_fid_counter(dir->i_sb, false, -1);
--	inode->i_ctime = dir->i_ctime;
-+	inode_ctime_set(inode, inode_ctime_peek(dir));
- 	ret = 0;
- end_unlink:
- 	udf_fiiter_release(&iter);
-@@ -746,9 +746,9 @@ static int udf_link(struct dentry *old_dentry, struct inode *dir,
- 
- 	inc_nlink(inode);
- 	udf_add_fid_counter(dir->i_sb, false, 1);
+ 		sync_dirty_buffer(bh);
 -	inode->i_ctime = current_time(inode);
 +	inode_ctime_set_current(inode);
  	mark_inode_dirty(inode);
--	dir->i_ctime = dir->i_mtime = current_time(dir);
-+	dir->i_mtime = inode_ctime_set_current(dir);
- 	mark_inode_dirty(dir);
+ out:
+ 	brelse (bh);
+@@ -580,11 +580,12 @@ static int ufs1_read_inode(struct inode *inode, struct ufs_inode *ufs_inode)
+ 
+ 	inode->i_size = fs64_to_cpu(sb, ufs_inode->ui_size);
+ 	inode->i_atime.tv_sec = (signed)fs32_to_cpu(sb, ufs_inode->ui_atime.tv_sec);
+-	inode->i_ctime.tv_sec = (signed)fs32_to_cpu(sb, ufs_inode->ui_ctime.tv_sec);
++	inode_ctime_set_sec(inode,
++			    (signed)fs32_to_cpu(sb, ufs_inode->ui_ctime.tv_sec));
+ 	inode->i_mtime.tv_sec = (signed)fs32_to_cpu(sb, ufs_inode->ui_mtime.tv_sec);
+ 	inode->i_mtime.tv_nsec = 0;
+ 	inode->i_atime.tv_nsec = 0;
+-	inode->i_ctime.tv_nsec = 0;
++	inode_ctime_set_nsec(inode, 0);
+ 	inode->i_blocks = fs32_to_cpu(sb, ufs_inode->ui_blocks);
+ 	inode->i_generation = fs32_to_cpu(sb, ufs_inode->ui_gen);
+ 	ufsi->i_flags = fs32_to_cpu(sb, ufs_inode->ui_flags);
+@@ -626,10 +627,10 @@ static int ufs2_read_inode(struct inode *inode, struct ufs2_inode *ufs2_inode)
+ 
+ 	inode->i_size = fs64_to_cpu(sb, ufs2_inode->ui_size);
+ 	inode->i_atime.tv_sec = fs64_to_cpu(sb, ufs2_inode->ui_atime);
+-	inode->i_ctime.tv_sec = fs64_to_cpu(sb, ufs2_inode->ui_ctime);
++	inode_ctime_set_sec(inode, fs64_to_cpu(sb, ufs2_inode->ui_ctime));
+ 	inode->i_mtime.tv_sec = fs64_to_cpu(sb, ufs2_inode->ui_mtime);
+ 	inode->i_atime.tv_nsec = fs32_to_cpu(sb, ufs2_inode->ui_atimensec);
+-	inode->i_ctime.tv_nsec = fs32_to_cpu(sb, ufs2_inode->ui_ctimensec);
++	inode_ctime_set_nsec(inode, fs32_to_cpu(sb, ufs2_inode->ui_ctimensec));
+ 	inode->i_mtime.tv_nsec = fs32_to_cpu(sb, ufs2_inode->ui_mtimensec);
+ 	inode->i_blocks = fs64_to_cpu(sb, ufs2_inode->ui_blocks);
+ 	inode->i_generation = fs32_to_cpu(sb, ufs2_inode->ui_gen);
+@@ -726,7 +727,8 @@ static void ufs1_update_inode(struct inode *inode, struct ufs_inode *ufs_inode)
+ 	ufs_inode->ui_size = cpu_to_fs64(sb, inode->i_size);
+ 	ufs_inode->ui_atime.tv_sec = cpu_to_fs32(sb, inode->i_atime.tv_sec);
+ 	ufs_inode->ui_atime.tv_usec = 0;
+-	ufs_inode->ui_ctime.tv_sec = cpu_to_fs32(sb, inode->i_ctime.tv_sec);
++	ufs_inode->ui_ctime.tv_sec = cpu_to_fs32(sb,
++						 inode_ctime_peek(inode).tv_sec);
+ 	ufs_inode->ui_ctime.tv_usec = 0;
+ 	ufs_inode->ui_mtime.tv_sec = cpu_to_fs32(sb, inode->i_mtime.tv_sec);
+ 	ufs_inode->ui_mtime.tv_usec = 0;
+@@ -770,8 +772,9 @@ static void ufs2_update_inode(struct inode *inode, struct ufs2_inode *ufs_inode)
+ 	ufs_inode->ui_size = cpu_to_fs64(sb, inode->i_size);
+ 	ufs_inode->ui_atime = cpu_to_fs64(sb, inode->i_atime.tv_sec);
+ 	ufs_inode->ui_atimensec = cpu_to_fs32(sb, inode->i_atime.tv_nsec);
+-	ufs_inode->ui_ctime = cpu_to_fs64(sb, inode->i_ctime.tv_sec);
+-	ufs_inode->ui_ctimensec = cpu_to_fs32(sb, inode->i_ctime.tv_nsec);
++	ufs_inode->ui_ctime = cpu_to_fs64(sb, inode_ctime_peek(inode).tv_sec);
++	ufs_inode->ui_ctimensec = cpu_to_fs32(sb,
++					      inode_ctime_peek(inode).tv_nsec);
+ 	ufs_inode->ui_mtime = cpu_to_fs64(sb, inode->i_mtime.tv_sec);
+ 	ufs_inode->ui_mtimensec = cpu_to_fs32(sb, inode->i_mtime.tv_nsec);
+ 
+@@ -1205,7 +1208,7 @@ static int ufs_truncate(struct inode *inode, loff_t size)
+ 	truncate_setsize(inode, size);
+ 
+ 	ufs_truncate_blocks(inode);
+-	inode->i_mtime = inode->i_ctime = current_time(inode);
++	inode->i_mtime = inode_ctime_set_current(inode);
+ 	mark_inode_dirty(inode);
+ out:
+ 	UFSD("EXIT: err %d\n", err);
+diff --git a/fs/ufs/namei.c b/fs/ufs/namei.c
+index 36154b5aca6d..d3f69e3c6965 100644
+--- a/fs/ufs/namei.c
++++ b/fs/ufs/namei.c
+@@ -153,7 +153,7 @@ static int ufs_link (struct dentry * old_dentry, struct inode * dir,
+ 	struct inode *inode = d_inode(old_dentry);
+ 	int error;
+ 
+-	inode->i_ctime = current_time(inode);
++	inode_ctime_set_current(inode);
+ 	inode_inc_link_count(inode);
  	ihold(inode);
- 	d_instantiate(dentry, inode);
-@@ -833,7 +833,7 @@ static int udf_rename(struct mnt_idmap *idmap, struct inode *old_dir,
+ 
+@@ -220,7 +220,7 @@ static int ufs_unlink(struct inode *dir, struct dentry *dentry)
+ 	if (err)
+ 		goto out;
+ 
+-	inode->i_ctime = dir->i_ctime;
++	inode_ctime_set(inode, inode_ctime_peek(dir));
+ 	inode_dec_link_count(inode);
+ 	err = 0;
+ out:
+@@ -282,7 +282,7 @@ static int ufs_rename(struct mnt_idmap *idmap, struct inode *old_dir,
+ 		if (!new_de)
+ 			goto out_dir;
+ 		ufs_set_link(new_dir, new_de, new_page, old_inode, 1);
+-		new_inode->i_ctime = current_time(new_inode);
++		inode_ctime_set_current(new_inode);
+ 		if (dir_de)
+ 			drop_nlink(new_inode);
+ 		inode_dec_link_count(new_inode);
+@@ -298,7 +298,7 @@ static int ufs_rename(struct mnt_idmap *idmap, struct inode *old_dir,
  	 * Like most other Unix systems, set the ctime for inodes on a
- 	 * rename.
+  	 * rename.
  	 */
 -	old_inode->i_ctime = current_time(old_inode);
 +	inode_ctime_set_current(old_inode);
+ 
+ 	ufs_delete_entry(old_dir, old_de, old_page);
  	mark_inode_dirty(old_inode);
- 
- 	/*
-@@ -861,13 +861,13 @@ static int udf_rename(struct mnt_idmap *idmap, struct inode *old_dir,
- 	}
- 
- 	if (new_inode) {
--		new_inode->i_ctime = current_time(new_inode);
-+		inode_ctime_set_current(new_inode);
- 		inode_dec_link_count(new_inode);
- 		udf_add_fid_counter(old_dir->i_sb, S_ISDIR(new_inode->i_mode),
- 				    -1);
- 	}
--	old_dir->i_ctime = old_dir->i_mtime = current_time(old_dir);
--	new_dir->i_ctime = new_dir->i_mtime = current_time(new_dir);
-+	old_dir->i_mtime = inode_ctime_set_current(old_dir);
-+	new_dir->i_mtime = inode_ctime_set_current(new_dir);
- 	mark_inode_dirty(old_dir);
- 	mark_inode_dirty(new_dir);
- 
 -- 
 2.41.0
 
