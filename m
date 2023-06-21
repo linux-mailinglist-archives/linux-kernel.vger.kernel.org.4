@@ -2,165 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0FD1737A1E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 06:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57535737A1F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 06:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjFUEZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 00:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50694 "EHLO
+        id S229814AbjFUEZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 00:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbjFUEZG (ORCPT
+        with ESMTP id S229746AbjFUEZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 00:25:06 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CA6E1726
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 21:25:05 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f8792d2e86so2642845e87.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 21:25:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1687321503; x=1689913503;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LuEAiEqFzxQqtssF/XyIsWFBa1XFMPGQrF0jyK8eg4s=;
-        b=XXpqOWb76gFbvNHhpsISUXf41NyGxTGOgD+JApzu1tOt1Ekny/Au85wYwds7Uubgu8
-         ydGBnJMW7KUk1G00lw29oWp/1fVcgHrGPiVHc74p95m8qW3E+DOvCsAHYU56WRlldZoG
-         TJCqBMgFueyBOpq4TVo8LehsCBwNZQFu4mfpyiBpc3BitrVcUX9+zJr2FTbiBFL0eidM
-         5BDvYZ+KdwVKznHkHNWmrHae9zbuSCxdrds+VTb1dEqovVZHzAZ7QF/FrLVPBjMqq1pz
-         ho1Zo2+BXtftckfSK1xZah07L5YhK3odnfF/1XKuvAfcRVnYZTi2LwqYJOuO93RMf8iC
-         05Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687321503; x=1689913503;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LuEAiEqFzxQqtssF/XyIsWFBa1XFMPGQrF0jyK8eg4s=;
-        b=WPE70UsSGEdc+vjlNF/h/IMerCN/jftOV8MJ1Jajv4mBASrC5Hek+h3D21UYEn/QVJ
-         HnXuqkg0Yczu57N27/kiGt2UZbvq4ty2Y2hSLMzGdZraJGbbWoGokzlmNo9kH+lzdjvB
-         4tiHK8geOTyjq0cBgqxHXtn2E5eBagJDHModECU+t6n4dMkKcaktegSc/pVPTv4cHN7c
-         Twqsdv+pWltVKTHrcdldInMC8Mt0phj5kIqulf5Q6ZmRHWRfXWC6qLn19cyUtcYIGER4
-         SB5rO8YHh/BfiIpcN9eKtOC5jY4ejWNn7TH8vJi7U9PpqQ9jiSat6EG2Dy8xjFnQW//9
-         0/IA==
-X-Gm-Message-State: AC+VfDxE62oUwIwaxImaWUgAfllCGQ1FfeUSbnRCcZ35lx7EGQ62cMOp
-        fJh1R/gEbGLkr8XnxYnEc0JkTn/t0gi+gdKsxaIrAA==
-X-Google-Smtp-Source: ACHHUZ5e35l6LnX7XodTQBDPnk2bkYC/RZKniEMCiLxMYVECDyKqRYf9BNAs3JuKORFJ64C9YqrbJoQzdffkcu3SbgM=
-X-Received: by 2002:a2e:7d09:0:b0:2b4:74a7:9606 with SMTP id
- y9-20020a2e7d09000000b002b474a79606mr4726742ljc.46.1687321503290; Tue, 20 Jun
- 2023 21:25:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230602094841.1225-1-eric.lin@sifive.com>
-In-Reply-To: <20230602094841.1225-1-eric.lin@sifive.com>
-From:   Eric Lin <eric.lin@sifive.com>
-Date:   Wed, 21 Jun 2023 12:24:52 +0800
-Message-ID: <CAPqJEFpamQSbCcD0QJ16u7ctRf1=NYihod6gdZJfxFpE0YUVHQ@mail.gmail.com>
-Subject: Re: [PATCH] perf/core: Add pmu stop before unthrottling to prevent WARNING
-To:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
-        adrian.hunter@intel.com, palmer@dabbelt.com,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, eranian@google.com
-Cc:     greentime.hu@sifive.com, vincent.chen@sifive.com
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 21 Jun 2023 00:25:08 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2052.outbound.protection.outlook.com [40.107.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F51172C;
+        Tue, 20 Jun 2023 21:25:07 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=d5AeONkgc8E+KewmeQjiMNsc6oGyBImxxMd9UieTJFabkV95XtZnzbZtPy2ylPzL4kocuRh9bEPAWkWUCnfzJ2SO6cG7Fuy2StxmbXsKU6NQq24Ut72mhQKc/2NarWRGBLeFhWBXeQEBejddcGPxZeT7nbTCecPVMKYbpjKZNChkLr1yPBV4WiVWtF05DL1N/kAnbWt5zVadblMAgaALQqwqhecMFhpW1LsSnF2MoRK63tSUkV/f40SMOJaWYvC2E35SV59EOok3TAzAyYtF5hhAgM9rnI/6lpS4EjAKVtIFekx7hYK9Gq8QtW0w1ZM8KgQASxPY77j/Pvcop+qQdA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2Ydbz+wSY3xZzbfU5gk2pkHlv45OmaHNsIf/D7uUTlg=;
+ b=RnTjbwwdhqDExG7rWQEpFrvKVfi3rOlywkK0irj55up6sPPKYjH68orPVou/mQlqIl4QXfwXtybWK93DTPa4A8tDJQqyTbA9Y6xIHfC/3u1lPwj9RQeWm+aSaCBCnq7iB4Q8tZigWyZd52UQ04fMWqHFUlBKkg2a8w7mHlIW39kB8b0HqlgHc39/Vllag7IgvHNAUE9/zyeFxm6jb6s8q5dwJgYrcRTFPm64Q5Nlckoq1Eq2DwISX8CqkPtsBBL1JRSxedccfSEinrMvPqHg3NLq+qMGO8wIetGczqqF7ZG37pVYjt/FUvfkz1y+QEwe9BGZZLHCFiDJVJM43su3PQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2Ydbz+wSY3xZzbfU5gk2pkHlv45OmaHNsIf/D7uUTlg=;
+ b=iXaP9mMr+HLsqJJpQ22IKDbUbe8l1dEm5d2DRSjcke01UgaGV1NKdH23Q1pDZYRjf2UFTnJuoqBqzCHOc1fVahf6S80z1/37sr5DF73ZWGGVSqq9F7UWJuxova2FrV6XQZwi1+wo0sQBYFiUIxZgvuW+nDqfcPO+4K7G9lOpnos=
+Received: from CYYPR12MB8655.namprd12.prod.outlook.com (2603:10b6:930:c4::19)
+ by DM4PR12MB6469.namprd12.prod.outlook.com (2603:10b6:8:b6::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6500.37; Wed, 21 Jun 2023 04:25:04 +0000
+Received: from CYYPR12MB8655.namprd12.prod.outlook.com
+ ([fe80::8d99:5e7c:3ab:a882]) by CYYPR12MB8655.namprd12.prod.outlook.com
+ ([fe80::8d99:5e7c:3ab:a882%7]) with mapi id 15.20.6500.036; Wed, 21 Jun 2023
+ 04:25:04 +0000
+From:   "Yuan, Perry" <Perry.Yuan@amd.com>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>
+CC:     Len Brown <lenb@kernel.org>, "Huang, Ray" <Ray.Huang@amd.com>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "Shenoy, Gautham Ranjal" <gautham.shenoy@amd.com>,
+        "Karny, Wyes" <Wyes.Karny@amd.com>
+Subject: RE: [PATCH v3 2/3] cpufreq: amd-pstate: Set a fallback policy based
+ on preferred_profile
+Thread-Topic: [PATCH v3 2/3] cpufreq: amd-pstate: Set a fallback policy based
+ on preferred_profile
+Thread-Index: AQHZo5yBMSRG81IwBEOekQRdyHNwE6+UqW7Q
+Date:   Wed, 21 Jun 2023 04:25:04 +0000
+Message-ID: <CYYPR12MB8655DF3FCF6714BAC247287E9C5DA@CYYPR12MB8655.namprd12.prod.outlook.com>
+References: <20230620172433.21325-1-mario.limonciello@amd.com>
+ <20230620172433.21325-3-mario.limonciello@amd.com>
+In-Reply-To: <20230620172433.21325-3-mario.limonciello@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=6d5fd617-d590-4951-8fdc-044a43be1135;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-06-21T04:24:53Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CYYPR12MB8655:EE_|DM4PR12MB6469:EE_
+x-ms-office365-filtering-correlation-id: d19cf6d6-3421-4f38-29b1-08db720f7cbc
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: uHe8Zr0wEaG1NBfddILmdwc6lB2EKHupxB46z2x+HFYc5tyB55/dS9Wsd1Ags7aohjQ+SKUeVA4Dx7wvm+rY4AN44ri9mxB13B7oRd46zWDqI1XlOpqWy07wJOsohc4KGJqDNKNAgM3yIepgEnKjmutTBplQoPCdkjytcv2jmCfQMRr76MIVr25t290LRCwkgDqedK62ghA/KImF8kqG6u/kazLMbt6D8WawNExB6owbJFTJOB6OzWzeNFXrrY0MwZwRdhKgP92xEkXrkLjIxGTnuGlWne2/lIrOKv4GghtSXVbjtdKm9kmeRbdK8ZPHNuRVSRi7pgOh0rjGNaM9lJW0TPcEKsLo7zLlRgh2En715f2z7YelUlY7scr6ON51dPCDFIC7dhnPqvNL9cfTq87Z346vP4rik0yqeM0wPE61riu3pNJSzxfCQj5DL8I4yFXn6g3DtgANz+UIDnAoRZGYUUA8ufcjHi9lek5KXdEj1kkOT1MObjbftU1DxyHwqjBZWLWwF+buyaHf8mq89ZeXDtqAwlASESCj018CNI6ZNl6RuMYRm53PgXBDwtfa3kI/dCKQiIGlSfrLNuBj72IMUykK9ECxMd2dnOs4nBk=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CYYPR12MB8655.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(396003)(376002)(366004)(39860400002)(451199021)(71200400001)(86362001)(52536014)(83380400001)(2906002)(38070700005)(122000001)(5660300002)(4326008)(110136005)(54906003)(66946007)(8936002)(66556008)(186003)(64756008)(66446008)(66476007)(9686003)(966005)(38100700002)(478600001)(76116006)(55016003)(53546011)(6506007)(41300700001)(26005)(7696005)(33656002)(316002)(8676002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?aS7yMu+3CBXmt1UnPfusmxcc54S6noatDfVgnFIHBPz1WQ2YyNeCiceMn3aj?=
+ =?us-ascii?Q?BPz1be3gStK3QFCgxX8VgKVPP+n95rw3N2Q4GjkzCsJYjPVUtd09FEZzkitR?=
+ =?us-ascii?Q?vhUMJvpa3CI+O9bpAFR94k17Z73QGezqipNo4cFxxwWpllxrE0u0lbd4nzeB?=
+ =?us-ascii?Q?fgrAY3wIMKJ37BioSMC0dx3C/FIiucBcsftoE2SMFWMeE1VspyHMMJDL0/Sq?=
+ =?us-ascii?Q?FzLwWyTHk9gNBYFbYlAr0roDMQ8wcAtdZPG9u3u0NgaluGs/CyEatQGVRAun?=
+ =?us-ascii?Q?Mtc9+jYmAIRhui7ZPxOogRagZQIbMsnNJxVqlJnBSCeUnoX4TJNjcK2Jq9aU?=
+ =?us-ascii?Q?CdWlKq5QKbKXK4GYvVNN02KQWh40msSf0Nhiy5fF+L2DZ3qoy87ULXdeysRS?=
+ =?us-ascii?Q?NAoKk9EorWSSTy3HszhL7uUuxP68zJuniB4f+O8vlc67jkvpfxtyDf0pwQsE?=
+ =?us-ascii?Q?h6h/sNUQIg8s7ZFU3f2YEGgHY31JVH9BTDHpTasIbx/TsvLD/GT9+FyolWQZ?=
+ =?us-ascii?Q?v2axe1HSR35Myk9eOO4Mop0JLE38qg40mZe15osMSimbsXSEFND45AuNiSiY?=
+ =?us-ascii?Q?Y+Y5lYG3plzwhfXqOOWz1qa9gRogmY8L2VyCnEkd8tu5PURQY44rAAWdUQ8U?=
+ =?us-ascii?Q?uLhBhfCZByN3XxKLAdg8PGQ3ZP6s9fp8csiMBxFU4EO0w7+yGVuH/Bv6yXLl?=
+ =?us-ascii?Q?qzK74lwqpNGdChx1o/9cAYVvkdQNF5lsTvkDnluzxNEhi40FDB80gE8b7S7M?=
+ =?us-ascii?Q?EATq7zwFzj05otSPiQcnkWHxd7OviUM/5MntkW8Jhm3feWpAbNfKFgD2d18s?=
+ =?us-ascii?Q?jWi2FJf2dLtNP9nQRrrGVO6lQoXuHjzshOlIkNJI0piRUfl+U/6tzh2weCKu?=
+ =?us-ascii?Q?A43V13BoHLmFsepGvMP+jXMTeUnqiUtElkpy8qclOwGsjPB/I9p+0wLJTxSq?=
+ =?us-ascii?Q?56MIY5TeSOcD4ct2hejjDcdjGaHQ/E53qYH8dO6+mNS9ZBegU90xCU6aqCJ6?=
+ =?us-ascii?Q?SPzki50U8YBcA68gpwnCytLfmzaSq79H30R0WsKFos2dNScAwFD74olQPQD8?=
+ =?us-ascii?Q?iOt0jl3RMzCjxLORJs34NhNs8uQHyXj5cKj8pTfoK5/Zy/Sf5DGReeCw+BfP?=
+ =?us-ascii?Q?h3GOwuquUPw+IJodjmzryEh/6X0prCMys+MMQq8lcFhFwMVC8ZTN1nHTn0CC?=
+ =?us-ascii?Q?MtSBYjKdbKbFb33rpRJTjGt7wIqCgRznu7HyLEBIvl4gIHw6F32Fj3gSaJAP?=
+ =?us-ascii?Q?wCiGkJgcNIZxxUtqtBeBM0ZGXaW0226WQ1WMHTPe1Ybn9irKlGJXr8HHTSZx?=
+ =?us-ascii?Q?YMqu0lYdXY2d88XazU1JdGpNz80XEbBS0SXgN6LKphVK2sAZso44GorXKVqC?=
+ =?us-ascii?Q?H/b/AauFp0u4CS8UyDmPv5z1qWetDXH9IuwmgBDcrMuFSiNdmdzlIqYJ9H9+?=
+ =?us-ascii?Q?WFTEyLKWx9Ugp1gHlUj/U2nfZavf9FEGdx9SXTwwFBrWUOsmXDRVWve2SkXn?=
+ =?us-ascii?Q?Q+BWS2R5/srA82DIs2lCZbjbx6OrgsIgWIVWU0xuqP6ForBqrkyjomJjphSo?=
+ =?us-ascii?Q?j7TGUllzMpcSB6DHv0Q=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CYYPR12MB8655.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d19cf6d6-3421-4f38-29b1-08db720f7cbc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jun 2023 04:25:04.5754
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: k1Aw+qtxSL9W0G+xVqrGft8NtE6SYOg+LI9OjsW1azedU1MWFMsJqYuetW5URQrlnlyL3xxVj2sO0tQiNM6zEA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6469
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CC: Stephane Eranian
+[AMD Official Use Only - General]
 
-On Fri, Jun 2, 2023 at 5:49=E2=80=AFPM Eric Lin <eric.lin@sifive.com> wrote=
-:
+> -----Original Message-----
+> From: Limonciello, Mario <Mario.Limonciello@amd.com>
+> Sent: Wednesday, June 21, 2023 1:25 AM
+> To: Rafael J . Wysocki <rafael@kernel.org>
+> Cc: Len Brown <lenb@kernel.org>; Huang, Ray <Ray.Huang@amd.com>;
+> linux-acpi@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
+> pm@vger.kernel.org; Shenoy, Gautham Ranjal
+> <gautham.shenoy@amd.com>; Karny, Wyes <Wyes.Karny@amd.com>;
+> Yuan, Perry <Perry.Yuan@amd.com>; Limonciello, Mario
+> <Mario.Limonciello@amd.com>
+> Subject: [PATCH v3 2/3] cpufreq: amd-pstate: Set a fallback policy based =
+on
+> preferred_profile
 >
-> Currently, during the perf sampling, if the perf interrupt takes too long=
-,
-> perf framework will lower the perf_event_max_sample_rate. This will limit
-> the number of samples per timer tick (max_samples_per_tick) and set hwc->=
-interrupts
-> to MAX_INTERRUPTS within the __perf_event_account_interrupt() function.
+> If a user's configuration doesn't explicitly specify the cpufreq scaling =
+governor
+> then the code currently explicitly falls back to 'powersave'. This defaul=
+t is fine
+> for notebooks and desktops, but servers and undefined machines should
+> default to 'performance'.
 >
-> Afterward, the perf framework will unthrottle the event in the timer inte=
-rrupt
-> handler, which triggers the driver's *_pmu_start() function. Most of the =
-driver's
-> *_pmu_start() functions will check the event->hw.state to determine wheth=
-er this
-> event has stopped. If the event has not stopped, a WARN_ON_ONCE() warning
-> will be triggered as shown below:
+> Look at the 'preferred_profile' field from the FADT to set this policy
+> accordingly.
 >
-> [ 2110.224723] ------------[ cut here ]------------
-> [ 2110.224851] WARNING: CPU: 0 PID: 240 at drivers/perf/riscv_pmu.c:184 r=
-iscv_pmu_start+0x7c/0x8e
-> [ 2110.225242] Modules linked in:
-> [ 2110.225380] CPU: 0 PID: 240 Comm: ls Not tainted 6.4-rc4-g19d0788e9ef2=
- #1
-> [ 2110.225574] Hardware name: SiFive (DT)
-> [ 2110.225657] epc : riscv_pmu_start+0x7c/0x8e
-> [ 2110.225834]  ra : riscv_pmu_start+0x28/0x8e
-> [ 2110.225998] epc : ffffffff80aef864 ra : ffffffff80aef810 sp : ffff8f80=
-004db6f0
-> [ 2110.226135]  gp : ffffffff81c83750 tp : ffffaf80069f9bc0 t0 : ffff8f80=
-004db6c0
-> [ 2110.226245]  t1 : 0000000000000000 t2 : 000000000000001f s0 : ffff8f80=
-004db720
-> [ 2110.226367]  s1 : ffffaf8008ca1068 a0 : 0000ffffffffffff a1 : 00000000=
-00000000
-> [ 2110.226488]  a2 : 0000000000000001 a3 : 0000000000000870 a4 : 00000000=
-00000000
-> [ 2110.226605]  a5 : 0000000000000000 a6 : 0000000000000840 a7 : 00000000=
-00000030
-> [ 2110.226721]  s2 : 0000000000000000 s3 : ffffaf8005165800 s4 : ffffaf80=
-0424da00
-> [ 2110.226838]  s5 : ffffffffffffffff s6 : ffffffff81cc7590 s7 : 00000000=
-00000000
-> [ 2110.226955]  s8 : 0000000000000006 s9 : 0000000000000001 s10: ffffaf80=
-7efbc340
-> [ 2110.227064]  s11: ffffaf807efbbf00 t3 : ffffaf8006a16028 t4 : 00000000=
-dbfbb796
-> [ 2110.227180]  t5 : 0000000700000000 t6 : ffffaf8005269870
-> [ 2110.227277] status: 0000000200000100 badaddr: 0000000000000000 cause: =
-0000000000000003
-> [ 2110.227407] [<ffffffff80aef864>] riscv_pmu_start+0x7c/0x8e
-> [ 2110.227622] [<ffffffff80185b56>] perf_adjust_freq_unthr_context+0x15e/=
-0x174
-> [ 2110.227961] [<ffffffff80188642>] perf_event_task_tick+0x88/0x9c
-> [ 2110.228235] [<ffffffff800626a8>] scheduler_tick+0xfe/0x27c
-> [ 2110.228463] [<ffffffff800b5640>] update_process_times+0x9a/0xba
-> [ 2110.228690] [<ffffffff800c5bd4>] tick_sched_handle+0x32/0x66
-> [ 2110.229007] [<ffffffff800c5e0c>] tick_sched_timer+0x64/0xb0
-> [ 2110.229253] [<ffffffff800b5e50>] __hrtimer_run_queues+0x156/0x2f4
-> [ 2110.229446] [<ffffffff800b6bdc>] hrtimer_interrupt+0xe2/0x1fe
-> [ 2110.229637] [<ffffffff80acc9e8>] riscv_timer_interrupt+0x38/0x42
-> [ 2110.229984] [<ffffffff80090a16>] handle_percpu_devid_irq+0x90/0x1d2
-> [ 2110.230162] [<ffffffff8008a9f4>] generic_handle_domain_irq+0x28/0x36
->
-> To prevent this warning, we should call the driver's *_pmu_stop() functio=
-n before unthrottling
->
-> Signed-off-by: Eric Lin <eric.lin@sifive.com>
+> Link:
+> https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/05_ACPI_Software_Progr
+> amming_Model/ACPI_Software_Programming_Model.html#fixed-acpi-
+> description-table-fadt
+> Acked-by: Huang Rui <ray.huang@amd.com>
+> Suggested-by: Wyes Karny <Wyes.Karny@amd.com>
+> Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
->  kernel/events/core.c | 1 +
->  1 file changed, 1 insertion(+)
+> v2->v3:
+>  * Move new symbols out of patch 1 into this patch
+>  * Add Ray's tag
+> ---
+>  drivers/cpufreq/amd-pstate.c | 28 ++++++++++++++++++++++++++--
+>  1 file changed, 26 insertions(+), 2 deletions(-)
 >
-> diff --git a/kernel/events/core.c b/kernel/events/core.c
-> index db016e418931..098c875abe88 100644
-> --- a/kernel/events/core.c
-> +++ b/kernel/events/core.c
-> @@ -4128,6 +4128,7 @@ perf_adjust_freq_unthr_context(struct perf_event_co=
-ntext *ctx, bool unthrottle)
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index d8269994322e..3546d7db614d 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -1071,6 +1071,26 @@ static const struct attribute_group
+> amd_pstate_global_attr_group =3D {
+>       .attrs =3D pstate_global_attributes,
+>  };
 >
->                 if (hwc->interrupts =3D=3D MAX_INTERRUPTS) {
->                         hwc->interrupts =3D 0;
-> +                       event->pmu->stop(event, 0);
->                         perf_log_throttle(event, 1);
->                         event->pmu->start(event, 0);
->                 }
+> +static bool amd_pstate_acpi_pm_profile_server(void)
+> +{
+> +     switch (acpi_gbl_FADT.preferred_profile) {
+> +     case PM_ENTERPRISE_SERVER:
+> +     case PM_SOHO_SERVER:
+> +     case PM_PERFORMANCE_SERVER:
+> +             return true;
+> +     }
+> +     return false;
+> +}
+> +
+> +static bool amd_pstate_acpi_pm_profile_undefined(void)
+> +{
+> +     if (acpi_gbl_FADT.preferred_profile =3D=3D PM_UNSPECIFIED)
+> +             return true;
+> +     if (acpi_gbl_FADT.preferred_profile >=3D NR_PM_PROFILES)
+> +             return true;
+> +     return false;
+> +}
+> +
+>  static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)  {
+>       int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq, ret;
+> @@ -1128,10 +1148,14 @@ static int amd_pstate_epp_cpu_init(struct
+> cpufreq_policy *policy)
+>       policy->max =3D policy->cpuinfo.max_freq;
+>
+>       /*
+> -      * Set the policy to powersave to provide a valid fallback value in=
+ case
+> +      * Set the policy to provide a valid fallback value in case
+>        * the default cpufreq governor is neither powersave nor
+> performance.
+>        */
+> -     policy->policy =3D CPUFREQ_POLICY_POWERSAVE;
+> +     if (amd_pstate_acpi_pm_profile_server() ||
+> +         amd_pstate_acpi_pm_profile_undefined())
+> +             policy->policy =3D CPUFREQ_POLICY_PERFORMANCE;
+> +     else
+> +             policy->policy =3D CPUFREQ_POLICY_POWERSAVE;
+>
+>       if (boot_cpu_has(X86_FEATURE_CPPC)) {
+>               ret =3D rdmsrl_on_cpu(cpudata->cpu, MSR_AMD_CPPC_REQ,
+> &value);
 > --
-> 2.17.1
->
+> 2.34.1
+Reviewed-by: Perry Yuan <Perry.Yuan@amd.com>
