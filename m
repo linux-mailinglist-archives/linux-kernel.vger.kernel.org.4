@@ -2,60 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A26737B2A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7BC4737B29
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbjFUGRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 02:17:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54392 "EHLO
+        id S229710AbjFUGSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 02:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbjFUGRD (ORCPT
+        with ESMTP id S230209AbjFUGSS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 02:17:03 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6E019A8;
-        Tue, 20 Jun 2023 23:16:39 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id AAD2224E271;
-        Wed, 21 Jun 2023 14:16:37 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 21 Jun
- 2023 14:16:37 +0800
-Received: from [192.168.120.57] (171.223.208.138) by EXMBX068.cuchost.com
- (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 21 Jun
- 2023 14:16:36 +0800
-Message-ID: <ddad3e67-05b1-e0fd-0241-fb47c5a0bbde@starfivetech.com>
-Date:   Wed, 21 Jun 2023 14:16:35 +0800
+        Wed, 21 Jun 2023 02:18:18 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2471731
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:18:17 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f9d619103dso55551cf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:18:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687328296; x=1689920296;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EY6Ne/SM4st5svkq+5PmFR9ym99PQO1FPMB+O80q/9k=;
+        b=jJgJ8TEwkTcJjg1WjlUR9s8k6xuroY0T6d/deXtuR6rtpQms6eSvNiZYzdonANiUvl
+         rtVLnv81nzNCVa4awgoAIxNR6WGcCzRae03XOEGQWufDl+YimvOSKnD6KTyqvZpqEgrR
+         9k7bestW22knqvyeQe2LdOiQVRnDba3Lff5fGdys9NnvWhGrxUZ2FzgJ4Fg52lxWP+Zj
+         87+9lorjspaapO563tVLV2xa13yHzMOq36qt1CEiYqqQI7dqNZkx/1R063gewZf9gZ/e
+         mQwlcDu8WkksEmnyZ4CPgtCrYWbzWG5xpHpY8Beza9mx2MQ+L67Gic8xKZvVIUUzs/jc
+         UcQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687328296; x=1689920296;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EY6Ne/SM4st5svkq+5PmFR9ym99PQO1FPMB+O80q/9k=;
+        b=Lnq6TuKto5RIqHERkiVNVnMutG7PsxJvQtPFuTn0GT55DYDGli8KbsV8dJmcP6gKQu
+         UAF2X+qJfMFVK6ctree1huAY3oeK26c4Ds2MdrJ4K7JRKp29VdXjYwYlI6DWGq+Ah/+1
+         SPOB5eFdexJKzpAEk2p3h5V/D3pDJbVMxpQ8S0a4VeKMgCWTL6BkWgNpmSObYcZvfZvq
+         5IKo+uL/p3iD0cAOtcWqETr14mKqkPREoB2j2pZ3qEafwolNTCO3y2pefTRZacysl1BG
+         prvHdm3WymBwRE211oRIcCtIlmZEWjoWbvvh97lkNf4OxoXrnQ091VTkRWaThgof6Aqv
+         zTLg==
+X-Gm-Message-State: AC+VfDwNmVCq1fJhjt5Ge6F+1EDQvsPgZ+isVZOWkwuydm2nK7oEzSCh
+        kln4HhF+yRpA/rda748z271sQuzH1PsfH0GD/12AEw==
+X-Google-Smtp-Source: ACHHUZ5Si2f5rcozpuv/IX3egthC3n6xTOPCLu1mauqLlDSD8RTu21u5MDhWkbFZ/yCBTJdUKEE7iLebzq6xzpeI364=
+X-Received: by 2002:a05:622a:14c7:b0:3f8:8c06:c53b with SMTP id
+ u7-20020a05622a14c700b003f88c06c53bmr1388016qtx.0.1687328296083; Tue, 20 Jun
+ 2023 23:18:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 1/3] dt-bindings: qspi: cdns,qspi-nor: Add clocks for
- StarFive JH7110 SoC
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-        "Conor Dooley" <conor+dt@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Emil Renner Berthing" <kernel@esmil.dk>,
-        Ziv Xu <ziv.xu@starfivetech.com>
-References: <20230619083517.415597-1-william.qiu@starfivetech.com>
- <20230619083517.415597-2-william.qiu@starfivetech.com>
- <168716619573.242780.12121020614995223090.robh@kernel.org>
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <168716619573.242780.12121020614995223090.robh@kernel.org>
+References: <20230602094841.1225-1-eric.lin@sifive.com> <CAPqJEFpamQSbCcD0QJ16u7ctRf1=NYihod6gdZJfxFpE0YUVHQ@mail.gmail.com>
+In-Reply-To: <CAPqJEFpamQSbCcD0QJ16u7ctRf1=NYihod6gdZJfxFpE0YUVHQ@mail.gmail.com>
+From:   Stephane Eranian <eranian@google.com>
+Date:   Tue, 20 Jun 2023 23:18:05 -0700
+Message-ID: <CABPqkBRyqsMnNbokBKepkWq1DtzfB0npXySGbKS1T3nQTwmaAw@mail.gmail.com>
+Subject: Re: [PATCH] perf/core: Add pmu stop before unthrottling to prevent WARNING
+To:     Eric Lin <eric.lin@sifive.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        adrian.hunter@intel.com, palmer@dabbelt.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, greentime.hu@sifive.com,
+        vincent.chen@sifive.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX068.cuchost.com
- (172.16.6.68)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,53 +75,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Jun 20, 2023 at 9:25=E2=80=AFPM Eric Lin <eric.lin@sifive.com> wrot=
+e:
+>
+> CC: Stephane Eranian
+>
+> On Fri, Jun 2, 2023 at 5:49=E2=80=AFPM Eric Lin <eric.lin@sifive.com> wro=
+te:
+> >
+> > Currently, during the perf sampling, if the perf interrupt takes too lo=
+ng,
+> > perf framework will lower the perf_event_max_sample_rate. This will lim=
+it
+> > the number of samples per timer tick (max_samples_per_tick) and set hwc=
+->interrupts
+> > to MAX_INTERRUPTS within the __perf_event_account_interrupt() function.
+> >
+> > Afterward, the perf framework will unthrottle the event in the timer in=
+terrupt
+> > handler, which triggers the driver's *_pmu_start() function. Most of th=
+e driver's
+> > *_pmu_start() functions will check the event->hw.state to determine whe=
+ther this
+> > event has stopped. If the event has not stopped, a WARN_ON_ONCE() warni=
+ng
+> > will be triggered as shown below:
+> >
+> > [ 2110.224723] ------------[ cut here ]------------
+> > [ 2110.224851] WARNING: CPU: 0 PID: 240 at drivers/perf/riscv_pmu.c:184=
+ riscv_pmu_start+0x7c/0x8e
+> > [ 2110.225242] Modules linked in:
+> > [ 2110.225380] CPU: 0 PID: 240 Comm: ls Not tainted 6.4-rc4-g19d0788e9e=
+f2 #1
+> > [ 2110.225574] Hardware name: SiFive (DT)
+> > [ 2110.225657] epc : riscv_pmu_start+0x7c/0x8e
+> > [ 2110.225834]  ra : riscv_pmu_start+0x28/0x8e
+> > [ 2110.225998] epc : ffffffff80aef864 ra : ffffffff80aef810 sp : ffff8f=
+80004db6f0
+> > [ 2110.226135]  gp : ffffffff81c83750 tp : ffffaf80069f9bc0 t0 : ffff8f=
+80004db6c0
+> > [ 2110.226245]  t1 : 0000000000000000 t2 : 000000000000001f s0 : ffff8f=
+80004db720
+> > [ 2110.226367]  s1 : ffffaf8008ca1068 a0 : 0000ffffffffffff a1 : 000000=
+0000000000
+> > [ 2110.226488]  a2 : 0000000000000001 a3 : 0000000000000870 a4 : 000000=
+0000000000
+> > [ 2110.226605]  a5 : 0000000000000000 a6 : 0000000000000840 a7 : 000000=
+0000000030
+> > [ 2110.226721]  s2 : 0000000000000000 s3 : ffffaf8005165800 s4 : ffffaf=
+800424da00
+> > [ 2110.226838]  s5 : ffffffffffffffff s6 : ffffffff81cc7590 s7 : 000000=
+0000000000
+> > [ 2110.226955]  s8 : 0000000000000006 s9 : 0000000000000001 s10: ffffaf=
+807efbc340
+> > [ 2110.227064]  s11: ffffaf807efbbf00 t3 : ffffaf8006a16028 t4 : 000000=
+00dbfbb796
+> > [ 2110.227180]  t5 : 0000000700000000 t6 : ffffaf8005269870
+> > [ 2110.227277] status: 0000000200000100 badaddr: 0000000000000000 cause=
+: 0000000000000003
+> > [ 2110.227407] [<ffffffff80aef864>] riscv_pmu_start+0x7c/0x8e
+> > [ 2110.227622] [<ffffffff80185b56>] perf_adjust_freq_unthr_context+0x15=
+e/0x174
+> > [ 2110.227961] [<ffffffff80188642>] perf_event_task_tick+0x88/0x9c
+> > [ 2110.228235] [<ffffffff800626a8>] scheduler_tick+0xfe/0x27c
+> > [ 2110.228463] [<ffffffff800b5640>] update_process_times+0x9a/0xba
+> > [ 2110.228690] [<ffffffff800c5bd4>] tick_sched_handle+0x32/0x66
+> > [ 2110.229007] [<ffffffff800c5e0c>] tick_sched_timer+0x64/0xb0
+> > [ 2110.229253] [<ffffffff800b5e50>] __hrtimer_run_queues+0x156/0x2f4
+> > [ 2110.229446] [<ffffffff800b6bdc>] hrtimer_interrupt+0xe2/0x1fe
+> > [ 2110.229637] [<ffffffff80acc9e8>] riscv_timer_interrupt+0x38/0x42
+> > [ 2110.229984] [<ffffffff80090a16>] handle_percpu_devid_irq+0x90/0x1d2
+> > [ 2110.230162] [<ffffffff8008a9f4>] generic_handle_domain_irq+0x28/0x36
+> >
+> > To prevent this warning, we should call the driver's *_pmu_stop() funct=
+ion before unthrottling
+> >
+> > Signed-off-by: Eric Lin <eric.lin@sifive.com>
+> > ---
+> >  kernel/events/core.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/kernel/events/core.c b/kernel/events/core.c
+> > index db016e418931..098c875abe88 100644
+> > --- a/kernel/events/core.c
+> > +++ b/kernel/events/core.c
+> > @@ -4128,6 +4128,7 @@ perf_adjust_freq_unthr_context(struct perf_event_=
+context *ctx, bool unthrottle)
+> >
+> >                 if (hwc->interrupts =3D=3D MAX_INTERRUPTS) {
+> >                         hwc->interrupts =3D 0;
+> > +                       event->pmu->stop(event, 0);
 
+But how could the event have been stopped with a call to pmu->stop()
+during throttling?
 
-On 2023/6/19 17:16, Rob Herring wrote:
-> 
-> On Mon, 19 Jun 2023 16:35:15 +0800, William Qiu wrote:
->> The QSPI controller needs three clock items to work properly on StarFive
->> JH7110 SoC, so there is need to change the maxItems's value to 3. Other
->> platforms do not have this constraint.
->> 
->> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
->> Reviewed-by: Hal Feng <hal.feng@starfivetech.com>
->> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->> ---
->>  .../bindings/spi/cdns,qspi-nor.yaml           | 20 ++++++++++++++++++-
->>  1 file changed, 19 insertions(+), 1 deletion(-)
->> 
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> 
-> dtschema/dtc warnings/errors:
-> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/spi/cdns,qspi-nor.example.dtb: spi@ff705000: clocks: [[4294967295]] is too short
-> 	from schema $id: http://devicetree.org/schemas/spi/cdns,qspi-nor.yaml#
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230619083517.415597-2-william.qiu@starfivetech.com
-> 
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
-> 
-It seems that my changes are not compatible with other dts files, I'll try to
-fix it.
-
-Thanks for reminding.
-
-Best regards
-William
+>
+> >                         perf_log_throttle(event, 1);
+> >                         event->pmu->start(event, 0);
+> >                 }
+> > --
+> > 2.17.1
+> >
