@@ -2,118 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27AC2737EC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 11:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE62737E7A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 11:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbjFUI5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 04:57:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
+        id S230353AbjFUI7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 04:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbjFUI4h (ORCPT
+        with ESMTP id S230507AbjFUI6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 04:56:37 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF76A1BFF;
-        Wed, 21 Jun 2023 01:55:06 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A60A11EC0645;
-        Wed, 21 Jun 2023 10:54:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1687337688;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=PaijKeZv9hHzPlRW8nV/FYz8UIKd1karlQoSdFTK9HU=;
-        b=bXvV0+pxKiaymh6RMR5E7TymGBtOIKsJQRSEXl6ZgJlqDLoxmRN+EbYq53nMqpeSm8Fqcv
-        juvqXqCN6U9D1PMExuQT2nUWstu0UHyTHq6SadvJ6vqMCjyKTvbQpFF+6xoNHNbK+zgcXd
-        lMHc57oV4O1RNKyc122eH/G4HXSD12g=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id J9iqJbrA_r02; Wed, 21 Jun 2023 08:54:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1687337685; bh=PaijKeZv9hHzPlRW8nV/FYz8UIKd1karlQoSdFTK9HU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NZyPtAM5/IdcCmMCgT07D/cKwY5LISGmi08sReq8DvsGMAJg7TbmGflxm2e4+nhW1
-         iM8n4szOWC7EJktdC7OieNP3tV1U+8A8rGXnToElYLW9jG7PFYvhP/pxB/hG0gD0A5
-         NvgkTVHjWBzSaTC2PTYLrnb6dis6w/coleE3KJ7P5U4ueUijT+AY6Mw3eGKF/rpJOl
-         1+3U94yuoOb95xXewS808ymG8YphUWenlYBtwW1c59lKr3Bn5mSbiJLdjGiWnMxfIB
-         W+IDhNs+64UGOO9sJmxs2+Qm445XqPoUuR7pqJpjx3DHGjK3Sb1pCewY4sVibZX3LX
-         s0vVMDCE250TdXfAao/7fr9iTE2uU5U4fkvPZCZ/++dVp9/vBPEzvVJVSkfoDw/TWW
-         ZGorHZa3NrTRAsNHRifAqR6/OV6uq7uqOwZBVdsra6/+Zymo6cXFgzqIHTwbQglT1Q
-         hoZ6+C2USb20l9LItSwWGf+id6/NME+lQMm/ZGG7Pn5D7CdZT2epathV3G9ZpzgMUS
-         BVC8P2MDBpL967kRs++EckTvrNYXIAi4Hml4Y9d6RNE+WHkqH5egbll7z0yZUR68ja
-         XBymJ9aKqhJAMgYgsL9YnDigIu5FZeZfinbP/8kBa0FRKJS+OrU5iqj2Lar4z2aNqy
-         5dmKsESs5nfxY7bHbIvYwrqA=
-Received: from zn.tnic (p200300ea971Dc592329c23FffEA6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c592:329c:23ff:fea6:a903])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id ED59740E019B;
-        Wed, 21 Jun 2023 08:54:04 +0000 (UTC)
-Date:   Wed, 21 Jun 2023 10:54:00 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        nikunj.dadhania@amd.com, liam.merwick@oracle.com,
-        zhi.a.wang@intel.com,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: Re: [PATCH RFC v9 05/51] x86/coco: move CONFIG_HAS_CC_PLATFORM check
- down into coco/Makefile
-Message-ID: <20230621085400.GDZJK6qMeOU2monJDv@fat_crate.local>
-References: <20230612042559.375660-1-michael.roth@amd.com>
- <20230612042559.375660-6-michael.roth@amd.com>
- <20230620120920.GAZJGW8B6XHrsoLGCJ@fat_crate.local>
- <20230620204315.xr7wtcrowc7oprka@amd.com>
+        Wed, 21 Jun 2023 04:58:41 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B86921FD5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:57:32 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9500E5C0152;
+        Wed, 21 Jun 2023 04:57:29 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 21 Jun 2023 04:57:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1687337849; x=1687424249; bh=sqjidIDUcm
+        CoYCCZKcZoG0QaTsvHKMai8wcILNcUgKk=; b=ebduSWYlrRTYiKI7ti+dk52cC3
+        0km1PhIJrVqn+bE3n8dAwbQaLyStHVgiv+KXZTEn7lsp9AOLRgJDZuxO3G1AzHAo
+        S0ypSa6VvAkQcA/JRu6c/55uVy4F1I0KCkOv/CjW4EXqpGwoHXVuMXk6RpkDkoV/
+        b0X1Ky6ofOQxf7owBJej+7aywJM2CFEDc8yGca6UIHxusSotgOi7xavnhy9p8Xk9
+        23cKRs+syG4MhH4lVCmeS3lEa/l7eMmjjWXJObgOQ3Iq1suLldapnr8i8jGmo1oN
+        55HacTgtjhWoYEgkAM5LmIFGl0lesxuKfcIwBK0Esf3JvyOdazVnG9ySnbOA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687337849; x=1687424249; bh=sqjidIDUcmCoY
+        CCZKcZoG0QaTsvHKMai8wcILNcUgKk=; b=QNplretzkQ9u00GR1x0I81W7kSkJ/
+        ZSctVpCPkByfkDFbem6re4diMdN/c3IhkbRtm1UddnEUayLtqtWbuEFRg1Wtt6/F
+        ZCII/eR6S6QfJppooGMS0EX/0G6yobiXYldqANiOpPs/5qnnbTowHdohuZA3MNHp
+        Sxsjqx47YEbclQYEth+a5fw+rE2F9v5B4t6/9+sU1ogGk3bbHCj69DkVMs1gx1+2
+        hRa6QjNiZVqxVsEvrS1SX+9JXLM8klkH/InxzK96iNh8bFEAGuInjY+Qk5G9cChI
+        zhFQOkcyyJhTEZg4ODJilUF/5pxljrX2qf0GEmlrJyggf4OTZk8XQ9sIg==
+X-ME-Sender: <xms:eLuSZERaY5JzbB7Y-icX_53pUjZDhOsEeYjOKuoJKubB83qshBnL8w>
+    <xme:eLuSZByjDA6z4Z9fmH5ExMHSrFbItPag4ssN318b_fEYb7MZVptBlWYSEXA9oFSzU
+    uy4j3EEya5uJkLmlWU>
+X-ME-Received: <xmr:eLuSZB3zHPOBmPye00ADpP584kZtU8kR6_SRXbiuh7tVtL43MX-NWYHLCNwx>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefjedguddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
+    ertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehljhho
+    nhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfdujedthfduudekffefkeeiffdttd
+    dvhfegudduueffuefhfefggeefteevvdegnecuvehluhhsthgvrhfuihiivgeptdenucfr
+    rghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:eLuSZID9Xg_oxvMabKEC9isi5j_mG-RhygwU0nPPeX7oMoN8Y81b8A>
+    <xmx:eLuSZNizdtEkSkb9fny7-A8v9wso9bxn28E1cK8qquy8Csh07c9AoA>
+    <xmx:eLuSZEo_JXEkpMeE2YXPtbMvjXTNnTkimkMWI_gyK6pAOeUQciZw6g>
+    <xmx:ebuSZIXYKwQXvAcc2xxL83L-2qfIynJbf_wKtOeTqnTQdd4DKmvvIQ>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 21 Jun 2023 04:57:25 -0400 (EDT)
+From:   "Luke D. Jones" <luke@ljones.dev>
+To:     tiwai@suse.com
+Cc:     perex@perex.cz, sbinding@opensource.cirrus.com,
+        tangmeng@uniontech.com, andy.chi@canonical.com, p.jungkamp@gmx.net,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        "Luke D. Jones" <luke@ljones.dev>
+Subject: [PATCH] ALSA: hda/realtek: Add quirk for ASUS ROG GV601V
+Date:   Wed, 21 Jun 2023 20:57:15 +1200
+Message-ID: <20230621085715.5382-1-luke@ljones.dev>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230620204315.xr7wtcrowc7oprka@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 03:43:15PM -0500, Michael Roth wrote:
-> Basically, arch/x86/coco/Makefile is never processed if arch/x86/Kbuild
-> indicates that CONFIG_HAS_CC_PLATFORM is not set. So if we want to have
-> stuff in arch/x86/coco/Makefile that build for !CONFIG_HAS_CC_PLATFORM,
-> like SNP host support, which does not rely on CONFIG_HAS_CC_PLATFORM
-> being set, that check needs to be moved down into arch/x86/coco/Makefile.
+Adds the required quirk to enable the Cirrus amp and correct pins
+on the ASUS ROG GV601V series.
 
-Ok, so if you put SNP host support into arch/x86/virt/svm/sev.c, that
-should work too and won't have any relation to CONFIG_HAS_CC_PLATFORM,
-right?
+While this works if the related _DSD properties are made available, these
+aren't included in the ACPI of these laptops (yet).
 
-The CC_PLATFORM thing is a way to check for confidential computing guest
-features by abstracting the capabilities so that you don't have to check
-*each* and *every* conf guest type in the conditionals and thus go nuts.
+Signed-off-by: Luke D. Jones <luke@ljones.dev>
+---
+ sound/pci/hda/patch_realtek.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Thx.
-
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 17d5bdd4be6f..dabfdecece26 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9527,6 +9527,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1043, 0x1427, "Asus Zenbook UX31E", ALC269VB_FIXUP_ASUS_ZENBOOK),
+ 	SND_PCI_QUIRK(0x1043, 0x1473, "ASUS GU604V", ALC285_FIXUP_ASUS_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x1483, "ASUS GU603V", ALC285_FIXUP_ASUS_HEADSET_MIC),
++	SND_PCI_QUIRK(0x1043, 0x1493, "ASUS GV601V", ALC285_FIXUP_ASUS_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x1517, "Asus Zenbook UX31A", ALC269VB_FIXUP_ASUS_ZENBOOK_UX31A),
+ 	SND_PCI_QUIRK(0x1043, 0x1662, "ASUS GV301QH", ALC294_FIXUP_ASUS_DUAL_SPK),
+ 	SND_PCI_QUIRK(0x1043, 0x1683, "ASUS UM3402YAR", ALC287_FIXUP_CS35L41_I2C_2),
 -- 
-Regards/Gruss,
-    Boris.
+2.41.0
 
-https://people.kernel.org/tglx/notes-about-netiquette
