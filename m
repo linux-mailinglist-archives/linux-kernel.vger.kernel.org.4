@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05AE7391B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 23:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5D097391B2
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 23:36:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230463AbjFUVgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 17:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51650 "EHLO
+        id S230471AbjFUVgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 17:36:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230403AbjFUVf4 (ORCPT
+        with ESMTP id S230420AbjFUVf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 17:35:56 -0400
+        Wed, 21 Jun 2023 17:35:57 -0400
 Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C0E19B5;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CEA19B9;
         Wed, 21 Jun 2023 14:35:51 -0700 (PDT)
-Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LGPm1S032004;
+Received: from pps.filterd (m0134421.ppops.net [127.0.0.1])
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LL290f011935;
         Wed, 21 Jun 2023 21:35:25 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
  date : message-id : in-reply-to : references; s=pps0720;
- bh=ZCL5FttdyAPtD9AmhElk+raRcRc+P3HJCTeIptM8TeM=;
- b=RA8c949UlIr2uNONmriwPIifhzqniG4PfNBbGgbO2eq7TjYRsLXGEtkMEuM6yKZ01pJm
- Zsf07EzekOn/oZiRazMupQqXEjA+bAAsSJW17F7Qi/KqqWsjmP0Fd9eWogXPY1njM5oe
- oA60oaBQjkH6WwkPLYBQQ8zz0ICo23ZiXTm0Q5KVrjzib/8ogOPCE3cPYLmb2iUEkqKm
- oNKAOdYqaClf8TQKT7ab4EsE5A1UjTrAhwhEIGr5rt4Fy0FzXlwGZxJ6OLlO7p8tDxbE
- 947cJ+XeiDpb10w7nZv+a4YygDHHGuuY3h9SVozXnByLeTn4yzdvezXEuUdExyAzFwuU NQ== 
-Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3rc4qja82p-1
+ bh=ZaAMxQm6m/mGUMJTQ+5RfplSyslHC7ztGaUYxxke++8=;
+ b=Ahx1Qvtec46KtgEDJJMQLuwNkv+ARdSPUpSSJc3jhj5KVc/fz6zDXSfyjkVLD5bkG7CU
+ xChWxalG+EB/+pKTetoFYUwOU4CgdE1ZROFu1AzVga+MHxG8brd9PkQILyuVp1GBhVAA
+ k7kbbCyAg33ku+PEM17mfXuCX7In8wtjLqnjxDRyi/Ub55zdlOZYbUAWY/vQKnMdDJwf
+ mt6HcWy2dBbVmDf4/CDXQIqK3Hi9Ka21sN1iv2fTjDh29wwHUarb17N949/6d91vflRo
+ ciwhJWbbSdMSfr8u/Uu6K5uSg8TmY74PgS8VnZk6B0pQHWnUNud+qrE8CAxxiRv8RxSo iA== 
+Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3rbduf5s9t-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Wed, 21 Jun 2023 21:35:25 +0000
 Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id F354214792;
-        Wed, 21 Jun 2023 21:35:23 +0000 (UTC)
+        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 8792E800197;
+        Wed, 21 Jun 2023 21:35:24 +0000 (UTC)
 Received: from hpe.com (unknown [16.231.227.36])
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 6951980FEEB;
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id F24F2801AF9;
         Wed, 21 Jun 2023 21:35:23 +0000 (UTC)
 From:   nick.hawkins@hpe.com
 To:     verdun@hpe.com, nick.hawkins@hpe.com, linus.walleij@linaro.org,
@@ -46,23 +46,23 @@ To:     verdun@hpe.com, nick.hawkins@hpe.com, linus.walleij@linaro.org,
         linux@roeck-us.net, andy.shevchenko@gmail.com,
         linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: [PATCH v4 1/5] gpio: gxp: Add HPE GXP GPIO
-Date:   Wed, 21 Jun 2023 16:31:11 -0500
-Message-Id: <20230621213115.113266-2-nick.hawkins@hpe.com>
+Subject: [PATCH v4 2/5] gpio: gxp: Add HPE GXP GPIO PL
+Date:   Wed, 21 Jun 2023 16:31:12 -0500
+Message-Id: <20230621213115.113266-3-nick.hawkins@hpe.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230621213115.113266-1-nick.hawkins@hpe.com>
 References: <20230621213115.113266-1-nick.hawkins@hpe.com>
-X-Proofpoint-ORIG-GUID: qUDUYC8PKIr0JSwDitoUQyGt0D6UOGYS
-X-Proofpoint-GUID: qUDUYC8PKIr0JSwDitoUQyGt0D6UOGYS
+X-Proofpoint-GUID: cyCojdnax8h9H-bGL-dkMCa02fmYCpDy
+X-Proofpoint-ORIG-GUID: cyCojdnax8h9H-bGL-dkMCa02fmYCpDy
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
  definitions=2023-06-21_12,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 phishscore=0
- priorityscore=1501 mlxscore=0 mlxlogscore=999 spamscore=0
- lowpriorityscore=0 clxscore=1015 impostorscore=0 bulkscore=0
- suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2305260000 definitions=main-2306210181
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
+ mlxscore=0 adultscore=0 phishscore=0 priorityscore=1501 mlxlogscore=999
+ impostorscore=0 clxscore=1015 malwarescore=0 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306210181
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -77,17 +77,18 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 From: Nick Hawkins <nick.hawkins@hpe.com>
 
 The GXP SoC supports GPIO on multiple interfaces. The interfaces are
-CPLD and Host. The GPIOs is a combination of both physical and virtual
-I/O across the interfaces. The gpio-gxp driver specifically covers the
-CSM(physical), FN2(virtual), and VUHC(virtual) which are the host. The
-driver supports interrupts from the host.
+CPLD and Host. The gpio-gxp-pl driver covers the CPLD which takes
+physical I/O from the board and shares it with GXP via a proprietary
+interface that maps the I/O onto a specific register area of the GXP.
+This driver supports interrupts from the CPLD.
 
 Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
 
 ---
-
 v4:
- *Moved gpio-gxp-pl.c to a separate commit.
+ *New commit: Broke GPIO into two different commits one for each driver
+ *Explain psu_presence global
+ *Moved gpio_chip to first in gxp_gpio_drvdata
  *Moved regmap_config out of function and made it static const
  *Removed unnecessary variables
  *Removed redundant conditional
@@ -104,75 +105,58 @@ v4:
  *Corrected check on devm_gpiochip_add_data
  *Remove dev_err_probe on platform_get_irq
  *Changed return 0 to devm_request_irq
+ *Added debug FS call to enable reading of the server_id
 v3:
- *Remove shared variables with gxp-fan-ctrl
-v2:
- *Separated code into two files to keep size down: gpio-gxp.c and
-  gpio-gxp-pl.c
- *Fixed Kconfig indentation as well as add new entry for gpio-gxp-pl
- *Removed use of linux/of.h and linux/of_device.h
- *Added mod_devicetable.h and property.h
- *Fixed indentation of defines and uses consistent number of digits
- *Corrected defines with improper GPIO_ namespace.
- *For masks now use BIT()
- *Added comment for PLREG offsets
- *Move gpio_chip to be first in structure
- *Calculate offset for high and low byte GPIO reads instead of having
-  H(High) and L(Low) letters added to the variables.
- *Removed repeditive use of "? 1 : 0"
- *Switched to handle_bad_irq()
- *Removed improper bailout on gpiochip_add_data
- *Used GENMASK to arm interrupts
- *Removed use of of_match_device
- *fixed sizeof in devm_kzalloc
- *Added COMPILE_TEST to Kconfig
- *Added dev_err_probe
- *Removed unecessary parent and compatible checks
+ *Did not exist
+v:2
+ *Did not exist
+v1:
+ *Did not exist
 ---
- drivers/gpio/Kconfig    |   9 +
- drivers/gpio/Makefile   |   1 +
- drivers/gpio/gpio-gxp.c | 573 ++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 583 insertions(+)
- create mode 100644 drivers/gpio/gpio-gxp.c
+ drivers/gpio/Kconfig       |   9 +
+ drivers/gpio/Makefile      |   1 +
+ drivers/gpio/gpio-gxp-pl.c | 582 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 592 insertions(+)
+ create mode 100644 drivers/gpio/gpio-gxp-pl.c
 
 diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index 13be729710f2..fa0c9fdbb50c 100644
+index fa0c9fdbb50c..b0a24ef18392 100644
 --- a/drivers/gpio/Kconfig
 +++ b/drivers/gpio/Kconfig
-@@ -1235,6 +1235,15 @@ config HTC_EGPIO
- 	  several HTC phones.  It provides basic support for input
- 	  pins, output pins, and IRQs.
+@@ -1244,6 +1244,15 @@ config GPIO_GXP
+ 	  support for the multiple GPIO interfaces available to be
+ 	  available to the Host.
  
-+config GPIO_GXP
-+	tristate "GXP GPIO support"
++config GPIO_GXP_PL
++	tristate "GXP GPIO PL support"
 +	depends on ARCH_HPE_GXP || COMPILE_TEST
 +	select GPIOLIB_IRQCHIP
 +	help
-+	  Say Y here to support GXP GPIO controllers. It provides
-+	  support for the multiple GPIO interfaces available to be
++	  Say Y here to support GXP GPIO PL controller. It provides
++	  support for the GPIO PL interface available to be
 +	  available to the Host.
 +
  config GPIO_JANZ_TTL
  	tristate "Janz VMOD-TTL Digital IO Module"
  	depends on MFD_JANZ_CMODIO
 diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-index c048ba003367..a7ce0ab097aa 100644
+index a7ce0ab097aa..1f285c630e15 100644
 --- a/drivers/gpio/Makefile
 +++ b/drivers/gpio/Makefile
-@@ -63,6 +63,7 @@ obj-$(CONFIG_GPIO_FTGPIO010)		+= gpio-ftgpio010.o
- obj-$(CONFIG_GPIO_GE_FPGA)		+= gpio-ge.o
+@@ -64,6 +64,7 @@ obj-$(CONFIG_GPIO_GE_FPGA)		+= gpio-ge.o
  obj-$(CONFIG_GPIO_GPIO_MM)		+= gpio-gpio-mm.o
  obj-$(CONFIG_GPIO_GRGPIO)		+= gpio-grgpio.o
-+obj-$(CONFIG_GPIO_GXP)                  += gpio-gxp.o
+ obj-$(CONFIG_GPIO_GXP)                  += gpio-gxp.o
++obj-$(CONFIG_GPIO_GXP_PL)               += gpio-gxp-pl.o
  obj-$(CONFIG_GPIO_GW_PLD)		+= gpio-gw-pld.o
  obj-$(CONFIG_GPIO_HISI)                 += gpio-hisi.o
  obj-$(CONFIG_GPIO_HLWD)			+= gpio-hlwd.o
-diff --git a/drivers/gpio/gpio-gxp.c b/drivers/gpio/gpio-gxp.c
+diff --git a/drivers/gpio/gpio-gxp-pl.c b/drivers/gpio/gpio-gxp-pl.c
 new file mode 100644
-index 000000000000..4fe086137e86
+index 000000000000..8506e2a96da4
 --- /dev/null
-+++ b/drivers/gpio/gpio-gxp.c
-@@ -0,0 +1,573 @@
++++ b/drivers/gpio/gpio-gxp-pl.c
+@@ -0,0 +1,582 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/* Copyright (C) 2023 Hewlett-Packard Enterprise Development Company, L.P. */
 +
@@ -186,403 +170,133 @@ index 000000000000..4fe086137e86
 +#include <linux/property.h>
 +#include <linux/regmap.h>
 +
-+#define GPIDAT		0x040
-+#define GPODAT		0x0b0
-+#define GPODAT2		0x0f8
-+#define GPOOWN		0x110
-+#define GPOOWN2		0x118
-+#define ASR_OFS		0x05c
-+#define VUHC_OFS	0x064
++/* Specific offsets in CPLD registers for interrupts */
++#define PLREG_INT_GRP_STAT_MASK	0x08
++#define PLREG_INT_HI_PRI_EN	0x0C
++#define PLREG_INT_GRP5_BASE	0x31
++#define PLREG_INT_GRP6_BASE	0x35
++#define PLREG_INT_GRP5_FLAG	0x30
++#define PLREG_INT_GRP5_STATE	0x32
++#define PLREG_INT_GRP6_FLAG	0x34
 +
-+#define GXP_GPIO_DIR_OUT	0
-+#define GXP_GPIO_DIR_IN		1
++/* Specific bits to enable Group 4 and Group 5 interrupts */
++#define PLREG_GRP4_GRP5_MASK	GENMASK(5, 4)
 +
-+#define PGOOD_MASK	BIT(0)
++/* Specific offsets in CPLD registers */
++#define PLREG_SERVER_ID		0x01 /* 2 Bytes */
++#define PLREG_IOP_LED		0x04
++#define PLREG_IDENT_LED		0x05
++#define PLREG_HEALTH_LED	0x0D
++#define PLREG_PSU_INST		0x19
++#define PLREG_PSU_AC		0x1B
++#define PLREG_PSU_DC		0x1C
++#define PLREG_FAN_INST		0x27
++#define PLREG_FAN_FAIL		0x29
++#define PLREG_SIDEBAND		0x40
++#define GXP_GPIO_DIR_OUT        0x00
++#define GXP_GPIO_DIR_IN         0x01
 +
-+struct gxp_gpio_drvdata {
-+	struct gpio_chip chip;
-+	struct regmap *csm_map;
-+	void __iomem *fn2_vbtn;
-+	struct regmap *fn2_stat;
-+	struct regmap *vuhc0_map;
-+	int irq;
++enum pl_gpio_pn {
++	IOP_LED1 = 0,
++	IOP_LED2 = 1,
++	IOP_LED3 = 2,
++	IOP_LED4 = 3,
++	IOP_LED5 = 4,
++	IOP_LED6 = 5,
++	IOP_LED7 = 6,
++	IOP_LED8 = 7,
++	FAN1_INST = 8,
++	FAN2_INST = 9,
++	FAN3_INST = 10,
++	FAN4_INST = 11,
++	FAN5_INST = 12,
++	FAN6_INST = 13,
++	FAN7_INST = 14,
++	FAN8_INST = 15,
++	FAN1_FAIL = 16,
++	FAN2_FAIL = 17,
++	FAN3_FAIL = 18,
++	FAN4_FAIL = 19,
++	FAN5_FAIL = 20,
++	FAN6_FAIL = 21,
++	FAN7_FAIL = 22,
++	FAN8_FAIL = 23,
++	LED_IDENTIFY = 24,
++	LED_HEALTH_RED = 25,
++	LED_HEALTH_AMBER = 26,
++	PWR_BTN_INT = 27,
++	UID_PRESS_INT = 28,
++	SLP_INT = 29,
++	ACM_FORCE_OFF = 30,
++	ACM_REMOVED = 31,
++	ACM_REQ_N = 32,
++	PSU1_INST = 33,
++	PSU2_INST = 34,
++	PSU3_INST = 35,
++	PSU4_INST = 36,
++	PSU5_INST = 37,
++	PSU6_INST = 38,
++	PSU7_INST = 39,
++	PSU8_INST = 40,
++	PSU1_AC = 41,
++	PSU2_AC = 42,
++	PSU3_AC = 43,
++	PSU4_AC = 44,
++	PSU5_AC = 45,
++	PSU6_AC = 46,
++	PSU7_AC = 47,
++	PSU8_AC = 48,
++	PSU1_DC = 49,
++	PSU2_DC = 50,
++	PSU3_DC = 51,
++	PSU4_DC = 52,
++	PSU5_DC = 53,
++	PSU6_DC = 54,
++	PSU7_DC = 55,
++	PSU8_DC = 56,
++	RESET = 57,
++	NMI_OUT = 58,
++	VPBTN = 59,
++	PGOOD = 60,
++	PERST = 61,
++	POST_COMPLETE = 62,
++	SIDEBAND_SEL_L = 63,
++	SIDEBAND_SEL_H = 64
 +};
 +
 +/*
-+ * Note: Instead of definining all PINs here are the select few that
-+ * are specifically defined in DTS and offsets are used here.
++ * When an interrupt fires for a PSU config change
++ * there is a need to know the previous PSU configuration
++ * so that the appropriate gpio line is interrupted for
++ * the correct PSU. In order to keep this variable up to
++ * date it is global so that it can be set at init and
++ * each time the interrupt fires.
 + */
-+enum gxp_gpio_pn {
-+	RESET = 192,
-+	VPBTN = 210, /* aka POWER_OK */
-+	PGOOD = 211, /* aka PS_PWROK */
-+	PERST = 212, /* aka PCIERST */
-+	POST_COMPLETE = 213,
++u8 psu_presence;
++
++struct gxp_gpio_drvdata {
++	struct gpio_chip chip;
++	struct regmap *base;
++	struct regmap *interrupt;
++	int irq;
 +};
 +
-+static int gxp_gpio_csm_get(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct gxp_gpio_drvdata *drvdata = dev_get_drvdata(chip->parent);
-+	int ret = 0;
-+	unsigned int reg_offset;
-+	unsigned int reg_mask;
-+
-+	switch (offset) {
-+	case 0 ... 31:
-+		reg_offset = GPIDAT;
-+		reg_mask = BIT(offset);
-+		break;
-+	case 32 ... 63:
-+		reg_offset = GPIDAT + 0x20;
-+		reg_mask = BIT(offset - 32);
-+		break;
-+	case 64 ... 95:
-+		reg_offset = GPODAT;
-+		reg_mask = BIT(offset - 64);
-+		break;
-+	case 96 ... 127:
-+		reg_offset = GPODAT + 0x04;
-+		reg_mask = BIT(offset - 96);
-+		break;
-+	case 128 ...  159:
-+		reg_offset = GPODAT2;
-+		reg_mask = BIT(offset - 128);
-+		break;
-+	case 160 ... 191:
-+		reg_offset = GPODAT2 + 0x04;
-+		reg_mask = BIT(offset - 160);
-+		break;
-+	case RESET:
-+		/* SW_RESET */
-+		reg_offset = ASR_OFS;
-+		reg_mask = BIT(15);
-+		break;
-+	default:
-+		break;
-+	}
-+
-+	regmap_read(drvdata->csm_map, reg_offset, &ret);
-+	ret = (ret & reg_mask) ? 1 : 0;
-+
-+	return ret;
-+}
-+
-+static void gxp_gpio_csm_set(struct gpio_chip *chip, unsigned int offset,
-+			     int value)
-+{
-+	struct gxp_gpio_drvdata *drvdata = dev_get_drvdata(chip->parent);
-+	u32 tmp;
-+
-+	switch (offset) {
-+	case 64 ... 95:
-+		/* Keep ownership setting */
-+		regmap_read(drvdata->csm_map, GPOOWN, &tmp);
-+		tmp = (tmp & BIT(offset - 64)) ? 1 : 0;
-+
-+		regmap_update_bits(drvdata->csm_map, GPOOWN,
-+				   BIT(offset - 64), BIT(offset - 64));
-+		regmap_update_bits(drvdata->csm_map, GPODAT,
-+				   BIT(offset - 64), value ? BIT(offset - 64) : 0);
-+
-+		/* Restore ownership setting */
-+		regmap_update_bits(drvdata->csm_map, GPOOWN,
-+				   BIT(offset - 64), tmp ? BIT(offset - 64) : 0);
-+		break;
-+	case 96 ... 127:
-+		/* Keep ownership setting */
-+		regmap_read(drvdata->csm_map, GPOOWN + 0x04, &tmp);
-+		tmp = (tmp & BIT(offset - 96)) ? 1 : 0;
-+
-+		regmap_update_bits(drvdata->csm_map, GPOOWN + 0x04,
-+				   BIT(offset - 96), BIT(offset - 96));
-+		regmap_update_bits(drvdata->csm_map, GPODAT + 0x04,
-+				   BIT(offset - 96), value ? BIT(offset - 96) : 0);
-+
-+		/* Restore ownership setting */
-+		regmap_update_bits(drvdata->csm_map, GPOOWN + 0x04,
-+				   BIT(offset - 96), tmp ? BIT(offset - 96) : 0);
-+		break;
-+	case 128 ... 159:
-+		/* Keep ownership setting */
-+		regmap_read(drvdata->csm_map, GPOOWN2, &tmp);
-+		tmp = (tmp & BIT(offset - 128)) ? 1 : 0;
-+
-+		regmap_update_bits(drvdata->csm_map, GPOOWN2,
-+				   BIT(offset - 128), BIT(offset - 128));
-+		regmap_update_bits(drvdata->csm_map, GPODAT2,
-+				   BIT(offset - 128), value ? BIT(offset - 128) : 0);
-+
-+		/* Restore ownership setting */
-+		regmap_update_bits(drvdata->csm_map, GPOOWN2,
-+				   BIT(offset - 128), tmp ? BIT(offset - 128) : 0);
-+		break;
-+	case 160 ... 191:
-+		/* Keep ownership setting */
-+		regmap_read(drvdata->csm_map, GPOOWN2 + 0x04,	&tmp);
-+		tmp = (tmp & BIT(offset - 160)) ? 1 : 0;
-+
-+		regmap_update_bits(drvdata->csm_map, GPOOWN2 + 0x04,
-+				   BIT(offset - 160), BIT(offset - 160));
-+		regmap_update_bits(drvdata->csm_map, GPODAT2 + 0x04,
-+				   BIT(offset - 160), value ? BIT(offset - 160) : 0);
-+
-+		/* Restore ownership setting */
-+		regmap_update_bits(drvdata->csm_map, GPOOWN2 + 0x04,
-+				   BIT(offset - 160), tmp ? BIT(offset - 160) : 0);
-+		break;
-+	case 192:
-+		if (value) {
-+			regmap_update_bits(drvdata->csm_map, ASR_OFS,
-+					   BIT(0), BIT(0));
-+			regmap_update_bits(drvdata->csm_map, ASR_OFS,
-+					   BIT(15), BIT(15));
-+		} else {
-+			regmap_update_bits(drvdata->csm_map, ASR_OFS,
-+					   BIT(15), 0);
-+		}
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static int gxp_gpio_csm_get_direction(struct gpio_chip *chip,
-+				      unsigned int offset)
-+{
-+	switch (offset) {
-+	case 0 ... 63:
-+		return GXP_GPIO_DIR_IN;
-+	case 64 ... 191:
-+		return GXP_GPIO_DIR_OUT;
-+	case 192 ... 193:
-+		return GXP_GPIO_DIR_OUT;
-+	case 194:
-+		return GXP_GPIO_DIR_IN;
-+	default:
-+		return -ENOTSUPP;
-+	}
-+}
-+
-+static int gxp_gpio_csm_direction_input(struct gpio_chip *chip,
-+					unsigned int offset)
-+{
-+	switch (offset) {
-+	case 0 ... 63:
-+		return 0;
-+	case 194:
-+		return 0;
-+	default:
-+		return -ENOTSUPP;
-+	}
-+}
-+
-+static int gxp_gpio_csm_direction_output(struct gpio_chip *chip,
-+					 unsigned int offset, int value)
-+{
-+	switch (offset) {
-+	case 64 ... 191:
-+	case 192 ... 193:
-+		gxp_gpio_csm_set(chip, offset, value);
-+		return 0;
-+	default:
-+		return -ENOTSUPP;
-+	}
-+}
-+
-+static int gxp_gpio_vuhc_get(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct gxp_gpio_drvdata *drvdata = dev_get_drvdata(chip->parent);
-+	unsigned int val;
-+	int ret = 0;
-+
-+	if (offset < 8) {
-+		regmap_read(drvdata->vuhc0_map, VUHC_OFS + 4 * offset,   &val);
-+		ret = (val & BIT(13)) ? 1 : 0;
-+	}
-+
-+	return ret;
-+}
-+
-+static void gxp_gpio_vuhc_set(struct gpio_chip *chip, unsigned int offset,
-+			      int value)
-+{
-+	/* Currently we are not supporting setting of these values yet */
-+	switch (offset) {
-+	default:
-+		break;
-+	}
-+}
-+
-+static int gxp_gpio_vuhc_get_direction(struct gpio_chip *chip,
-+				       unsigned int offset)
-+{
-+	switch (offset) {
-+	case 0:
-+	case 1:
-+	case 2:
-+		return GXP_GPIO_DIR_IN;
-+	default:
-+		return -ENOTSUPP;
-+	}
-+}
-+
-+static int gxp_gpio_vuhc_direction_input(struct gpio_chip *chip,
-+					 unsigned int offset)
-+{
-+	switch (offset) {
-+	case 0:
-+	case 1:
-+	case 2:
-+		return 0;
-+	default:
-+		return -ENOTSUPP;
-+	}
-+}
-+
-+static int gxp_gpio_vuhc_direction_output(struct gpio_chip *chip,
-+					  unsigned int offset, int value)
-+{
-+	switch (offset) {
-+	default:
-+		return -ENOTSUPP;
-+	}
-+}
-+
-+static int gxp_gpio_fn2_get(struct gpio_chip *chip, unsigned int offset)
-+{
-+	struct gxp_gpio_drvdata *drvdata = dev_get_drvdata(chip->parent);
-+	unsigned int val;
-+	int ret = 0;
-+	unsigned int reg_mask;
-+
-+	switch (offset) {
-+	case PGOOD:
-+		regmap_read(drvdata->fn2_stat, 0, &val);
-+		reg_mask = BIT(24);
-+
-+		break;
-+	case PERST:
-+		regmap_read(drvdata->fn2_stat, 0, &val);
-+		reg_mask = BIT(25);
-+
-+		break;
-+	default:
-+		return -ENOTSUPP;
-+	}
-+
-+	regmap_read(drvdata->fn2_stat, 0, &val);
-+	ret = (val & reg_mask);
-+	/* Return either 1 or 0 */
-+	return ret ? 1 : 0;
-+}
-+
-+static void gxp_gpio_fn2_set(struct gpio_chip *chip, unsigned int offset,
-+			     int value)
-+{
-+	struct gxp_gpio_drvdata *drvdata = dev_get_drvdata(chip->parent);
-+
-+	switch (offset) {
-+	case VPBTN:
-+		writeb(1, drvdata->fn2_vbtn);
-+		break;
-+	default:
-+		break;
-+	}
-+}
-+
-+static int gxp_gpio_fn2_get_direction(struct gpio_chip *chip,
-+				      unsigned int offset)
-+{
-+	switch (offset) {
-+	case VPBTN:
-+		return GXP_GPIO_DIR_OUT;
-+	default:
-+		return GXP_GPIO_DIR_IN;
-+	}
-+}
-+
-+static int gxp_gpio_fn2_direction_input(struct gpio_chip *chip,
-+					unsigned int offset)
-+{
-+	switch (offset) {
-+	case PGOOD:
-+	case PERST:
-+	case POST_COMPLETE:
-+		return 0;
-+	default:
-+		return -ENOTSUPP;
-+	}
-+}
-+
-+static int gxp_gpio_get(struct gpio_chip *chip, unsigned int offset)
-+{
-+	if (offset < 200)
-+		return gxp_gpio_csm_get(chip, offset);
-+	else if (offset >= 200 && offset < 210)
-+		return gxp_gpio_vuhc_get(chip, offset - 200);
-+	else if (offset >= 210)
-+		return gxp_gpio_fn2_get(chip, offset);
-+
-+	return 0;
-+}
-+
-+static void gxp_gpio_set(struct gpio_chip *chip,
-+			 unsigned int offset, int value)
-+{
-+	if (offset < 200)
-+		gxp_gpio_csm_set(chip, offset, value);
-+	else if (offset >= 200 && offset < 210)
-+		gxp_gpio_vuhc_set(chip, offset - 200, value);
-+	else if (offset >= 210)
-+		gxp_gpio_fn2_set(chip, offset, value);
-+}
-+
-+static int gxp_gpio_get_direction(struct gpio_chip *chip,
-+				  unsigned int offset)
-+{
-+	if (offset < 200)
-+		return gxp_gpio_csm_get_direction(chip, offset);
-+	else if (offset >= 200 && offset < 210)
-+		return gxp_gpio_vuhc_get_direction(chip, offset - 200);
-+	else if (offset >= 210)
-+		return gxp_gpio_fn2_get_direction(chip, offset);
-+
-+	return 0;
-+}
-+
-+static int gxp_gpio_direction_input(struct gpio_chip *chip,
-+				    unsigned int offset)
-+{
-+	if (offset < 200)
-+		return gxp_gpio_csm_direction_input(chip, offset);
-+	else if (offset >= 200 && offset < 210)
-+		return gxp_gpio_vuhc_direction_input(chip, offset - 200);
-+	else if (offset >= 210)
-+		return gxp_gpio_fn2_direction_input(chip, offset);
-+
-+	return 0;
-+}
-+
-+static int gxp_gpio_direction_output(struct gpio_chip *chip,
-+				     unsigned int offset, int value)
-+{
-+	if (offset < 200)
-+		return gxp_gpio_csm_direction_output(chip, offset, value);
-+	else if (offset >= 200 && offset < 210)
-+		return gxp_gpio_vuhc_direction_output(chip, offset - 200, value);
-+
-+	return 0;
-+}
-+
 +static const struct regmap_config gxp_regmap_config = {
-+	.reg_bits = 32,
-+	.reg_stride = 4,
-+	.val_bits = 32,
-+	.name = "gxp",
++	.reg_bits = 8,
++	.val_bits = 8,
++	.max_register = 0x80,
++	.name = "gxp-gpio-pl",
++};
++
++static const struct regmap_config gxp_int_regmap_config = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.max_register = 0x7f,
++	.name = "gxp-gpio-pl-int",
 +};
 +
 +static struct regmap *gxp_gpio_init_regmap(struct platform_device *pdev,
-+					   char *reg_name)
++					   char *reg_name, bool is_interrupt)
 +{
 +	void __iomem *base;
 +
@@ -590,43 +304,264 @@ index 000000000000..4fe086137e86
 +	if (IS_ERR(base))
 +		return ERR_CAST(base);
 +
-+	return devm_regmap_init_mmio(&pdev->dev, base, &gxp_regmap_config);
++	if (is_interrupt)
++		return devm_regmap_init_mmio(&pdev->dev, base, &gxp_int_regmap_config);
++	else
++		return devm_regmap_init_mmio(&pdev->dev, base, &gxp_regmap_config);
 +}
 +
-+static void gxp_gpio_fn2_irq_ack(struct irq_data *d)
++#ifdef CONFIG_DEBUG_FS
++
++#include <linux/debugfs.h>
++
++static int gxp_gpio_serverid_show(struct seq_file *s, void *unused)
++{
++	struct gxp_gpio_drvdata *drvdata = dev_get_drvdata(s->private);
++	unsigned int server_id_l;
++	unsigned int server_id_h;
++
++	regmap_read(drvdata->base, PLREG_SERVER_ID, &server_id_l);
++	regmap_read(drvdata->base, PLREG_SERVER_ID + 0x01, &server_id_h);
++
++	seq_printf(s, "%02x %02x", server_id_h, server_id_l);
++
++	return 0;
++}
++
++static void gxp_gpio_debuginit(struct platform_device *pdev)
++{
++	debugfs_create_devm_seqfile(&pdev->dev, "gxp_gpio_serverid", NULL,
++				    gxp_gpio_serverid_show);
++}
++
++#else
++
++static inline void gxp_gpio_debuginit(struct platform_device *pdev)
++{
++}
++
++#endif
++
++static int gxp_gpio_pl_get(struct gpio_chip *chip, unsigned int offset)
++{
++	struct gxp_gpio_drvdata *drvdata = dev_get_drvdata(chip->parent);
++	unsigned int val;
++	unsigned int reg_offset;
++	u8 reg_mask;
++	bool is_active_low = false;
++
++	switch (offset) {
++	case IOP_LED1 ... IOP_LED8:
++		reg_offset = PLREG_IOP_LED;
++		reg_mask = BIT(offset);
++		break;
++	case FAN1_INST ...FAN8_INST:
++		regmap_read(drvdata->base, PLREG_FAN_INST, &val);
++		reg_mask = BIT(offset - FAN1_INST);
++		break;
++	case FAN1_FAIL ... FAN8_FAIL:
++		regmap_read(drvdata->base, PLREG_FAN_FAIL, &val);
++		reg_mask = BIT(offset - FAN1_FAIL);
++		break;
++	case PWR_BTN_INT ... SLP_INT:
++		/* Note this is active low */
++		reg_offset = PLREG_INT_GRP5_STATE;
++		reg_mask = BIT(offset - PWR_BTN_INT);
++		is_active_low = true;
++		break;
++	case  PSU1_INST ... PSU8_INST:
++		reg_offset = PLREG_PSU_INST;
++		reg_mask = BIT(offset - PSU1_INST);
++		break;
++	case PSU1_AC ... PSU8_AC:
++		reg_offset = PLREG_PSU_AC;
++		reg_mask = BIT(offset - PSU1_AC);
++		break;
++	case PSU1_DC ... PSU8_DC:
++		reg_offset = PLREG_PSU_DC;
++		reg_mask = BIT(offset - PSU1_DC);
++		break;
++	case LED_IDENTIFY:
++		reg_offset = PLREG_IDENT_LED;
++		reg_mask = BIT(1);
++		break;
++	case LED_HEALTH_RED:
++		reg_offset = PLREG_HEALTH_LED;
++		reg_mask = GENMASK(5, 4); /* Bit 5 set, bit 4 clear */
++		break;
++	case LED_HEALTH_AMBER:
++		reg_offset = PLREG_HEALTH_LED;
++		reg_mask = GENMASK(5, 4); /* Bit 5, bit 4 set */
++		break;
++	case SIDEBAND_SEL_L:
++		reg_offset = PLREG_SIDEBAND;
++		reg_mask = BIT(0);
++		break;
++	case SIDEBAND_SEL_H:
++		reg_offset = PLREG_SIDEBAND;
++		reg_mask = BIT(1);
++		break;
++	default:
++		return -ENOTSUPP;
++	}
++
++	regmap_read(drvdata->base, reg_offset, &val);
++
++	/* Special case: Check two bits for Health LED */
++	if (offset == LED_HEALTH_RED)
++		/* Bit 5 set, bit 4 not set */
++		return ((val & reg_mask) == BIT(5) ? 1 : 0);
++	else if (offset == LED_HEALTH_AMBER)
++		/* Bit 5 and 4 set */
++		return ((val & reg_mask) == reg_mask ? 1 : 0);
++
++	val = val & reg_mask;
++
++	if (is_active_low)
++		return (val ? 0 : 1);
++	else
++		return (val ? 1 : 0);
++}
++
++static void gxp_gpio_pl_set(struct gpio_chip *chip,
++			    unsigned int offset, int value)
++{
++	struct gxp_gpio_drvdata *drvdata = dev_get_drvdata(chip->parent);
++
++	switch (offset) {
++	case IOP_LED1 ... IOP_LED8:
++		regmap_update_bits(drvdata->base,
++				   PLREG_IOP_LED,
++				   BIT(offset),
++				   value == 0 ? 0 : BIT(offset));
++		break;
++	case LED_IDENTIFY:
++		regmap_update_bits(drvdata->base,
++				   PLREG_IDENT_LED,
++				   GENMASK(7, 6),
++				   value == 0 ? BIT(7) : GENMASK(7, 6));
++		break;
++	case LED_HEALTH_RED:
++		regmap_update_bits(drvdata->base,
++				   PLREG_HEALTH_LED,
++				   GENMASK(7, 6),
++				   value == 0 ? 0 : BIT(7));
++		break;
++	case LED_HEALTH_AMBER:
++		regmap_update_bits(drvdata->base,
++				   PLREG_HEALTH_LED,
++				   GENMASK(7, 6),
++				   value == 0 ? 0 : BIT(6));
++		break;
++	case SIDEBAND_SEL_L ... SIDEBAND_SEL_H:
++		regmap_update_bits(drvdata->base,
++				   PLREG_SIDEBAND,
++				   BIT(offset - SIDEBAND_SEL_L),
++				   value == 0 ? 0 : BIT(offset - SIDEBAND_SEL_L));
++		break;
++	default:
++		break;
++	}
++}
++
++static int gxp_gpio_pl_get_direction(struct gpio_chip *chip, unsigned int offset)
++{
++	switch (offset) {
++	case IOP_LED1 ... IOP_LED8:
++	case LED_IDENTIFY ... LED_HEALTH_AMBER:
++	case ACM_FORCE_OFF:
++	case ACM_REQ_N:
++	case SIDEBAND_SEL_L ... SIDEBAND_SEL_H:
++		return GXP_GPIO_DIR_OUT;
++	default:
++		return -ENOTSUPP;
++	}
++}
++
++static int gxp_gpio_pl_direction_input(struct gpio_chip *chip,
++				       unsigned int offset)
++{
++	switch (offset) {
++	case FAN1_INST ... FAN8_FAIL:
++		return GXP_GPIO_DIR_OUT;
++	case PWR_BTN_INT ... SLP_INT:
++		return GXP_GPIO_DIR_OUT;
++	default:
++		return -ENOTSUPP;
++	}
++}
++
++static int gxp_gpio_pl_direction_output(struct gpio_chip *chip,
++					unsigned int offset, int value)
++{
++	switch (offset) {
++	case IOP_LED1 ... IOP_LED8:
++	case LED_IDENTIFY ... LED_HEALTH_AMBER:
++	case ACM_FORCE_OFF:
++	case ACM_REQ_N:
++	case SIDEBAND_SEL_L ... SIDEBAND_SEL_H:
++		gxp_gpio_pl_set(chip, offset, value);
++		return GXP_GPIO_DIR_OUT;
++	default:
++		return -ENOTSUPP;
++	}
++}
++
++static void gxp_gpio_pl_irq_ack(struct irq_data *d)
 +{
 +	struct gpio_chip *chip = irq_data_get_irq_chip_data(d);
 +	struct gxp_gpio_drvdata *drvdata = dev_get_drvdata(chip->parent);
 +	unsigned int val;
 +
-+	/* Read latched interrupt */
-+	regmap_read(drvdata->fn2_stat, 0, &val);
++	/* Read latched interrupt for group 5 */
++	regmap_read(drvdata->interrupt, PLREG_INT_GRP5_FLAG, &val);
 +	/* Clear latched interrupt */
-+	regmap_update_bits(drvdata->fn2_stat, 0,
-+			   GENMASK(15, 0), GENMASK(15, 0));
++	regmap_update_bits(drvdata->interrupt, PLREG_INT_GRP5_FLAG,
++			   0xFF, 0xFF);
++
++	/* Read latched interrupt for group 6 */
++	regmap_read(drvdata->interrupt, PLREG_INT_GRP6_FLAG, &val);
++	/* Clear latched interrupt */
++	regmap_update_bits(drvdata->interrupt, PLREG_INT_GRP6_FLAG,
++			   0xFF, 0xFF);
 +}
 +
-+#define FN2_SEVMASK BIT(2)
-+static void gxp_gpio_fn2_irq_set_mask(struct irq_data *d, bool set)
++static void gxp_gpio_pl_irq_set_mask(struct irq_data *d, bool set)
 +{
 +	struct gpio_chip *chip = irq_data_get_irq_chip_data(d);
 +	struct gxp_gpio_drvdata *drvdata = dev_get_drvdata(chip->parent);
 +
-+	regmap_update_bits(drvdata->fn2_stat, FN2_SEVMASK,
-+			   BIT(0), set ? BIT(0) : 0);
++	regmap_update_bits(drvdata->interrupt, PLREG_INT_GRP5_BASE,
++			   BIT(0) | BIT(2), set ? 0 : BIT(0) | BIT(2));
++
++	regmap_update_bits(drvdata->interrupt, PLREG_INT_GRP6_BASE,
++			   BIT(2), set ? 0 : BIT(2));
 +}
 +
-+static void gxp_gpio_fn2_irq_mask(struct irq_data *d)
++static void gxp_gpio_pl_irq_mask(struct irq_data *d)
 +{
-+	gxp_gpio_fn2_irq_set_mask(d, false);
++	gxp_gpio_pl_irq_set_mask(d, false);
 +}
 +
-+static void gxp_gpio_fn2_irq_unmask(struct irq_data *d)
++static void gxp_gpio_pl_irq_unmask(struct irq_data *d)
 +{
-+	gxp_gpio_fn2_irq_set_mask(d, true);
++	gxp_gpio_pl_irq_set_mask(d, true);
 +}
 +
-+static int gxp_gpio_fn2_set_type(struct irq_data *d, unsigned int type)
++static int gxp_gpio_irq_init_hw(struct gpio_chip *chip)
++{
++	struct gxp_gpio_drvdata *drvdata = dev_get_drvdata(chip->parent);
++
++	regmap_update_bits(drvdata->interrupt, PLREG_INT_GRP5_BASE,
++			   BIT(0) | BIT(2), 0);
++
++	regmap_update_bits(drvdata->interrupt, PLREG_INT_GRP6_BASE,
++			   BIT(2), 0);
++
++	return 0;
++}
++
++static int gxp_gpio_pl_set_type(struct irq_data *d, unsigned int type)
 +{
 +	if (type & IRQ_TYPE_LEVEL_MASK)
 +		irq_set_handler_locked(d, handle_level_irq);
@@ -636,41 +571,85 @@ index 000000000000..4fe086137e86
 +	return 0;
 +}
 +
-+static irqreturn_t gxp_gpio_fn2_irq_handle(int irq, void *_drvdata)
++static irqreturn_t gxp_gpio_pl_irq_handle(int irq, void *_drvdata)
 +{
-+	struct gxp_gpio_drvdata *drvdata = (struct gxp_gpio_drvdata *)_drvdata;
-+	unsigned int val;
++	struct gxp_gpio_drvdata *drvdata = _drvdata;
++	unsigned int val, i;
++	unsigned long temp;
 +
-+	regmap_read(drvdata->fn2_stat, 0, &val);
++	/* Check group 5 interrupts */
 +
-+	if (val & PGOOD_MASK)
-+		generic_handle_domain_irq(drvdata->chip.irq.domain, PGOOD);
++	regmap_read(drvdata->base, PLREG_INT_GRP5_FLAG, &val);
++
++	temp = (unsigned long)val;
++	for_each_set_bit(i, &temp, 3) {
++		generic_handle_domain_irq(drvdata->chip.irq.domain,
++					  i + PWR_BTN_INT);
++	}
++
++		/* Clear latched interrupt */
++	regmap_update_bits(drvdata->interrupt, PLREG_INT_GRP5_FLAG,
++			   GENMASK(7, 0), GENMASK(7, 0));
++	regmap_update_bits(drvdata->interrupt, PLREG_INT_GRP5_BASE,
++			   BIT(0) | BIT(2), 0);
++
++	/* Check group 6 interrupts */
++
++	regmap_read(drvdata->base, PLREG_INT_GRP6_FLAG, &val);
++
++	if (val & BIT(2)) {
++		u8 old_psu = psu_presence;
++
++		regmap_read(drvdata->base, PLREG_PSU_INST, &val);
++		psu_presence = val;
++
++		if (old_psu != psu_presence) {
++			/* Identify all bits which differs */
++			unsigned long current_val = psu_presence;
++			unsigned long old_val = old_psu;
++			unsigned long changed_bits;
++
++			bitmap_xor(&changed_bits, &current_val, &old_val, 8);
++
++			for_each_set_bit(i, &changed_bits, 8) {
++				/* PSU state has changed */
++				generic_handle_domain_irq(drvdata->chip.irq.domain,
++							  i + PSU1_INST);
++			}
++		}
++	}
++
++	/* Clear latched interrupt */
++	regmap_update_bits(drvdata->interrupt, PLREG_INT_GRP6_FLAG,
++			   GENMASK(7, 0), GENMASK(7, 0));
++	regmap_update_bits(drvdata->interrupt, PLREG_INT_GRP6_BASE,
++			   BIT(2), 0);
 +
 +	return IRQ_HANDLED;
 +}
 +
-+static const struct irq_chip gxp_gpio_irqchip = {
-+	.name		= "gxp_fn2",
-+	.irq_ack	= gxp_gpio_fn2_irq_ack,
-+	.irq_mask	= gxp_gpio_fn2_irq_mask,
-+	.irq_unmask	= gxp_gpio_fn2_irq_unmask,
-+	.irq_set_type	= gxp_gpio_fn2_set_type,
++static const struct gpio_chip template_chip = {
++	.label			= "gxp_gpio_plreg",
++	.owner			= THIS_MODULE,
++	.get			= gxp_gpio_pl_get,
++	.set			= gxp_gpio_pl_set,
++	.get_direction = gxp_gpio_pl_get_direction,
++	.direction_input = gxp_gpio_pl_direction_input,
++	.direction_output = gxp_gpio_pl_direction_output,
++	.base = -1,
++};
++
++static const struct irq_chip gxp_plreg_irqchip = {
++	.name		= "gxp_plreg",
++	.irq_ack	= gxp_gpio_pl_irq_ack,
++	.irq_mask	= gxp_gpio_pl_irq_mask,
++	.irq_unmask	= gxp_gpio_pl_irq_unmask,
++	.irq_set_type	= gxp_gpio_pl_set_type,
 +	.flags = IRQCHIP_IMMUTABLE,
 +};
 +
-+static const struct gpio_chip common_chip_template = {
-+	.label			= "gxp_gpio",
-+	.owner                  = THIS_MODULE,
-+	.get                    = gxp_gpio_get,
-+	.set                    = gxp_gpio_set,
-+	.get_direction		= gxp_gpio_get_direction,
-+	.direction_input	= gxp_gpio_direction_input,
-+	.direction_output	= gxp_gpio_direction_output,
-+	.base = 0,
-+};
-+
 +static const struct of_device_id gxp_gpio_of_match[] = {
-+	{ .compatible = "hpe,gxp-gpio" },
++	{ .compatible = "hpe,gxp-gpio-pl" },
 +	{}
 +};
 +MODULE_DEVICE_TABLE(of, gxp_gpio_of_match);
@@ -680,6 +659,10 @@ index 000000000000..4fe086137e86
 +	int ret;
 +	struct gxp_gpio_drvdata *drvdata;
 +	struct gpio_irq_chip *girq;
++	unsigned int val;
++
++	/* Initialize global vars */
++	psu_presence = 0;
 +
 +	drvdata = devm_kzalloc(&pdev->dev, sizeof(*drvdata), GFP_KERNEL);
 +	if (!drvdata)
@@ -687,33 +670,52 @@ index 000000000000..4fe086137e86
 +
 +	platform_set_drvdata(pdev, drvdata);
 +
-+	drvdata->csm_map = gxp_gpio_init_regmap(pdev, "csm");
-+	if (IS_ERR(drvdata->csm_map))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(drvdata->csm_map),
-+				     "failed to map csm_handle\n");
++	drvdata->base = gxp_gpio_init_regmap(pdev, "base", false);
++	if (IS_ERR(drvdata->base))
++		return dev_err_probe(&pdev->dev, PTR_ERR(drvdata->base),
++				     "failed to map base\n");
 +
-+	drvdata->fn2_vbtn = devm_platform_ioremap_resource_byname(pdev, "fn2-vbtn");
-+	if (IS_ERR(drvdata->fn2_vbtn))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(drvdata->fn2_vbtn),
-+				     "failed to map fn2_vbtn\n");
++	drvdata->interrupt = gxp_gpio_init_regmap(pdev, "interrupt", true);
++	if (IS_ERR(drvdata->interrupt))
++		return dev_err_probe(&pdev->dev, PTR_ERR(drvdata->interrupt),
++				     "failed to map interrupt base\n");
 +
-+	drvdata->fn2_stat = gxp_gpio_init_regmap(pdev, "fn2-stat");
-+	if (IS_ERR(drvdata->fn2_stat))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(drvdata->fn2_stat),
-+				     "failed to map fn2_stat\n");
++	/* Necessary to read the server id */
++	gxp_gpio_debuginit(pdev);
 +
-+	drvdata->vuhc0_map = gxp_gpio_init_regmap(pdev, "vuhc");
-+	if (IS_ERR(drvdata->vuhc0_map))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(drvdata->vuhc0_map),
-+				     "failed to map vuhc0_map\n");
++	/* Initialize psu_presence variable */
++	regmap_read(drvdata->base, PLREG_PSU_INST, &val);
++	psu_presence = val;
++
++	drvdata->chip = template_chip;
++	drvdata->chip.ngpio = 80;
++	drvdata->chip.parent = &pdev->dev;
 +
 +	girq = &drvdata->chip.irq;
-+	gpio_irq_chip_set_chip(girq, &gxp_gpio_irqchip);
++	gpio_irq_chip_set_chip(girq, &gxp_plreg_irqchip);
 +	girq->parent_handler = NULL;
 +	girq->num_parents = 0;
 +	girq->parents = NULL;
 +	girq->default_type = IRQ_TYPE_NONE;
 +	girq->handler = handle_bad_irq;
++
++	girq->init_hw = gxp_gpio_irq_init_hw;
++
++	ret = devm_gpiochip_add_data(&pdev->dev, &drvdata->chip, drvdata);
++	if (ret < 0)
++		return dev_err_probe(&pdev->dev, ret, "Could not register gpiochip for plreg\n");
++
++	regmap_update_bits(drvdata->interrupt,
++			   PLREG_INT_HI_PRI_EN,
++			   PLREG_GRP4_GRP5_MASK,
++			   PLREG_GRP4_GRP5_MASK);
++	regmap_update_bits(drvdata->interrupt,
++			   PLREG_INT_GRP_STAT_MASK,
++			   PLREG_GRP4_GRP5_MASK,
++			   0x00);
++
++	regmap_read(drvdata->interrupt, PLREG_INT_HI_PRI_EN, &val);
++	regmap_read(drvdata->interrupt, PLREG_INT_GRP_STAT_MASK, &val);
 +
 +	ret = platform_get_irq(pdev, 0);
 +	if (ret < 0)
@@ -721,22 +723,13 @@ index 000000000000..4fe086137e86
 +
 +	drvdata->irq = ret;
 +
-+	ret = devm_request_irq(&pdev->dev, drvdata->irq, gxp_gpio_fn2_irq_handle,
-+			       IRQF_SHARED, "gxp-fn2", drvdata);
-+	if (ret < 0)
-+		return ret;
-+
-+	drvdata->chip = common_chip_template;
-+	drvdata->chip.ngpio = 220;
-+
-+	drvdata->chip.parent = &pdev->dev;
-+
-+	return devm_gpiochip_add_data(&pdev->dev, &drvdata->chip, NULL);
++	return devm_request_irq(&pdev->dev, drvdata->irq, gxp_gpio_pl_irq_handle,
++				IRQF_SHARED, "gxp-pl", drvdata);
 +}
 +
 +static struct platform_driver gxp_gpio_driver = {
 +	.driver = {
-+		.name = "gxp-gpio",
++		.name = "gxp-gpio-pl",
 +		.of_match_table = gxp_gpio_of_match,
 +	},
 +	.probe = gxp_gpio_probe,
@@ -744,7 +737,7 @@ index 000000000000..4fe086137e86
 +module_platform_driver(gxp_gpio_driver);
 +
 +MODULE_AUTHOR("Nick Hawkins <nick.hawkins@hpe.com>");
-+MODULE_DESCRIPTION("GPIO interface for GXP");
++MODULE_DESCRIPTION("GPIO PL interface for GXP");
 +MODULE_LICENSE("GPL");
 -- 
 2.17.1
