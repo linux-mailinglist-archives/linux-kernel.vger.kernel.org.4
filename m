@@ -2,210 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DCE1738B86
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4B1738B95
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:38:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbjFUQhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:37:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
+        id S231317AbjFUQiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231642AbjFUQhL (ORCPT
+        with ESMTP id S230046AbjFUQif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:37:11 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF6E268B;
-        Wed, 21 Jun 2023 09:36:43 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 993121FF3A;
-        Wed, 21 Jun 2023 16:36:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1687365402; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/d4ziQZw6N7mHZLzmgH+OAesVEUu7JrV0F1FpHCOj/Y=;
-        b=rU19K/Y2/QE9QgbbEIeMWU9TBzjpZek0f4a0CG5e7wLxJwECVBKoPN64Q/245PInLsROTe
-        JHnVDP5mIRCFbt0N0rb39KBA125VrnyNgDvK/Apyq4ecbwZectVy6ipwXhawxQxRo5mp13
-        vR3bSpRx4wz8NUydR8/0lnmD7umJ4hg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1687365402;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/d4ziQZw6N7mHZLzmgH+OAesVEUu7JrV0F1FpHCOj/Y=;
-        b=Jzpmvodf0LrZ4TExuIW84tMI1D8erJv2Pv/8wD1TwCXFtDmtUpgJzA/OGBUdOLRRz+Gg/P
-        nrVl9xqEp7IP0IAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8BB5B133E6;
-        Wed, 21 Jun 2023 16:36:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ud0TIhonk2T5QwAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 21 Jun 2023 16:36:42 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 2BEEDA075D; Wed, 21 Jun 2023 18:36:42 +0200 (CEST)
-Date:   Wed, 21 Jun 2023 18:36:42 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 07/79] usb: switch to new ctime accessors
-Message-ID: <20230621163642.j6blmqfu7oqelzri@quack3>
-References: <20230621144507.55591-1-jlayton@kernel.org>
- <20230621144735.55953-1-jlayton@kernel.org>
- <20230621144735.55953-6-jlayton@kernel.org>
+        Wed, 21 Jun 2023 12:38:35 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732721BD0;
+        Wed, 21 Jun 2023 09:38:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=OdFzun0L0/e6r02A+DrKv3kwszx3coOMwNXnVWRuYqM=;
+        t=1687365488; x=1688575088; b=m9p8LdGGk7MFyOmWI+LHZkM2E7doe5Xb/ok4iwGgsLroHFp
+        3JdDqhm9aA5ijUA8EM+AJkyHRFvPxBxeD7+0EZ6nMifeVeK97GlCFZX33Rq+IBdR7OS77Hjo/+Meo
+        OPoKxA/wCkmtOAk8AZ4wPsd2HNUECr55nSCrUuGH9g0jWBUUHrP6+xy+WT4hL43hehPMUzM60ZUcc
+        kf0XGBPIuQpijgY2nlj6zOI3rw/PLukL+FOtnvOq7XhAaTVyOM/0l3YWNgV2cG32uZLsP8EtxCex1
+        Y6dsPJCz5OaPYzyeoRNh/Z0PnRdxkSFEApfF2RXCvns+gyoBe4oSI76w3TuVxdCA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1qC0pt-00Dltw-2s;
+        Wed, 21 Jun 2023 18:37:38 +0200
+Message-ID: <aca10d753183508672739e8b6668d41ce2cdaf80.camel@sipsolutions.net>
+Subject: Re: [PATCH V4 1/8] drivers/acpi: Add support for Wifi band RF
+ mitigations
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Evan Quan <evan.quan@amd.com>, rafael@kernel.org, lenb@kernel.org,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mario.limonciello@amd.com, mdaenzer@redhat.com,
+        maarten.lankhorst@linux.intel.com, tzimmermann@suse.de,
+        hdegoede@redhat.com, jingyuwang_vip@163.com, lijo.lazar@amd.com,
+        jim.cromie@gmail.com, bellosilicio@gmail.com,
+        andrealmeid@igalia.com, trix@redhat.com, jsg@jsg.id.au,
+        arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+Date:   Wed, 21 Jun 2023 18:37:36 +0200
+In-Reply-To: <d2dba04d-36bf-4d07-bf2b-dd06671c45c6@lunn.ch>
+References: <20230621054603.1262299-1-evan.quan@amd.com>
+         <20230621054603.1262299-2-evan.quan@amd.com>
+         <3a7c8ffa-de43-4795-ae76-5cd9b00c52b5@lunn.ch>
+         <216f3c5aa1299100a0009ddf4e95b019855a32be.camel@sipsolutions.net>
+         <d2dba04d-36bf-4d07-bf2b-dd06671c45c6@lunn.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621144735.55953-6-jlayton@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 21-06-23 10:45:20, Jeff Layton wrote:
-> In later patches, we're going to change how the ctime.tv_nsec field is
-> utilized. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
-> 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+On Wed, 2023-06-21 at 18:14 +0200, Andrew Lunn wrote:
+> > > Do only ACPI based systems have:
+> > >=20
+> > > =C2=A0=C2=A0=C2=A0interference of relatively high-powered harmonics o=
+f the (G-)DDR
+> > > =C2=A0=C2=A0=C2=A0memory clocks with local radio module frequency ban=
+ds used by
+> > > =C2=A0=C2=A0=C2=A0Wifi 6/6e/7."
+> > >=20
+> > > Could Device Tree based systems not experience this problem?
+> >=20
+> > They could, of course, but they'd need some other driver to change
+> > _something_ in the system? I don't even know what this is doing
+> > precisely under the hood in the ACPI BIOS
+>=20
+> If you don't know what it is actually doing, it suggests the API is
+> not very well defined.
 
-Looks good to me. Feel free to add:
+I wouldn't say that. At the level it's defined now, the API is very
+clear: the wifi subsystem tells the other side what channels it's
+operating on right now.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+> Is there even enough details that ARM64 ACPI
+> BIOS could implement this?=20
 
-								Honza
+This, in itself? No. You'd have to know about the physical
+characteristics of the system, what is actually causing interference and
+at what frequencies and of course what you can actually do to mitigate
+(such as adjusting clock frequencies.)
 
-> ---
->  drivers/usb/core/devio.c           | 16 ++++++++--------
->  drivers/usb/gadget/function/f_fs.c |  6 +-----
->  drivers/usb/gadget/legacy/inode.c  |  3 +--
->  3 files changed, 10 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-> index 1a16a8bdea60..02f718e0deaf 100644
-> --- a/drivers/usb/core/devio.c
-> +++ b/drivers/usb/core/devio.c
-> @@ -2642,21 +2642,21 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
->  		snoop(&dev->dev, "%s: CONTROL\n", __func__);
->  		ret = proc_control(ps, p);
->  		if (ret >= 0)
-> -			inode->i_mtime = inode->i_ctime = current_time(inode);
-> +			inode->i_mtime = inode_ctime_set_current(inode);
->  		break;
->  
->  	case USBDEVFS_BULK:
->  		snoop(&dev->dev, "%s: BULK\n", __func__);
->  		ret = proc_bulk(ps, p);
->  		if (ret >= 0)
-> -			inode->i_mtime = inode->i_ctime = current_time(inode);
-> +			inode->i_mtime = inode_ctime_set_current(inode);
->  		break;
->  
->  	case USBDEVFS_RESETEP:
->  		snoop(&dev->dev, "%s: RESETEP\n", __func__);
->  		ret = proc_resetep(ps, p);
->  		if (ret >= 0)
-> -			inode->i_mtime = inode->i_ctime = current_time(inode);
-> +			inode->i_mtime = inode_ctime_set_current(inode);
->  		break;
->  
->  	case USBDEVFS_RESET:
-> @@ -2668,7 +2668,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
->  		snoop(&dev->dev, "%s: CLEAR_HALT\n", __func__);
->  		ret = proc_clearhalt(ps, p);
->  		if (ret >= 0)
-> -			inode->i_mtime = inode->i_ctime = current_time(inode);
-> +			inode->i_mtime = inode_ctime_set_current(inode);
->  		break;
->  
->  	case USBDEVFS_GETDRIVER:
-> @@ -2695,7 +2695,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
->  		snoop(&dev->dev, "%s: SUBMITURB\n", __func__);
->  		ret = proc_submiturb(ps, p);
->  		if (ret >= 0)
-> -			inode->i_mtime = inode->i_ctime = current_time(inode);
-> +			inode->i_mtime = inode_ctime_set_current(inode);
->  		break;
->  
->  #ifdef CONFIG_COMPAT
-> @@ -2703,14 +2703,14 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
->  		snoop(&dev->dev, "%s: CONTROL32\n", __func__);
->  		ret = proc_control_compat(ps, p);
->  		if (ret >= 0)
-> -			inode->i_mtime = inode->i_ctime = current_time(inode);
-> +			inode->i_mtime = inode_ctime_set_current(inode);
->  		break;
->  
->  	case USBDEVFS_BULK32:
->  		snoop(&dev->dev, "%s: BULK32\n", __func__);
->  		ret = proc_bulk_compat(ps, p);
->  		if (ret >= 0)
-> -			inode->i_mtime = inode->i_ctime = current_time(inode);
-> +			inode->i_mtime = inode_ctime_set_current(inode);
->  		break;
->  
->  	case USBDEVFS_DISCSIGNAL32:
-> @@ -2722,7 +2722,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
->  		snoop(&dev->dev, "%s: SUBMITURB32\n", __func__);
->  		ret = proc_submiturb_compat(ps, p);
->  		if (ret >= 0)
-> -			inode->i_mtime = inode->i_ctime = current_time(inode);
-> +			inode->i_mtime = inode_ctime_set_current(inode);
->  		break;
->  
->  	case USBDEVFS_IOCTL32:
-> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> index f41a385a5c42..756c78043a04 100644
-> --- a/drivers/usb/gadget/function/f_fs.c
-> +++ b/drivers/usb/gadget/function/f_fs.c
-> @@ -1377,16 +1377,12 @@ ffs_sb_make_inode(struct super_block *sb, void *data,
->  	inode = new_inode(sb);
->  
->  	if (inode) {
-> -		struct timespec64 ts = current_time(inode);
-> -
->  		inode->i_ino	 = get_next_ino();
->  		inode->i_mode    = perms->mode;
->  		inode->i_uid     = perms->uid;
->  		inode->i_gid     = perms->gid;
-> -		inode->i_atime   = ts;
-> -		inode->i_mtime   = ts;
-> -		inode->i_ctime   = ts;
->  		inode->i_private = data;
-> +		inode->i_atime   = inode->i_mtime = inode_ctime_set_current(inode);
->  		if (fops)
->  			inode->i_fop = fops;
->  		if (iops)
-> diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-> index 28249d0bf062..b83a68feb316 100644
-> --- a/drivers/usb/gadget/legacy/inode.c
-> +++ b/drivers/usb/gadget/legacy/inode.c
-> @@ -1969,8 +1969,7 @@ gadgetfs_make_inode (struct super_block *sb,
->  		inode->i_mode = mode;
->  		inode->i_uid = make_kuid(&init_user_ns, default_uid);
->  		inode->i_gid = make_kgid(&init_user_ns, default_gid);
-> -		inode->i_atime = inode->i_mtime = inode->i_ctime
-> -				= current_time(inode);
-> +		inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
->  		inode->i_private = data;
->  		inode->i_fop = fops;
->  	}
-> -- 
-> 2.41.0
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+But as an API? I'd think yes, since WiFi can't really move off a
+frequency, other than disconnect, anyway.
+
+
+> > > > +bool wbrf_supported_producer(struct acpi_device *adev);
+> > > > +int wbrf_add_exclusion(struct acpi_device *adev,
+> > > > +		       struct wbrf_ranges_in *in);
+> > > > +int wbrf_remove_exclusion(struct acpi_device *adev,
+> > > > +			  struct wbrf_ranges_in *in);
+> > >=20
+> > > Could struct device be used here, to make the API agnostic to where
+> > > the information is coming from? That would then allow somebody in the
+> > > future to implement a device tree based information provider.
+> >=20
+> > That does make sense, and it wouldn't even be that much harder if we
+> > assume in a given platform there's only one provider
+>=20
+> That seems like a very reasonable assumption. It is theoretically
+> possible to build an ACPI + DT hybrid, but i've never seen it actually
+> done.
+
+OK.
+
+> If an ARM64 ACPI BIOS could implement this, then i would guess the low
+> level bits would be solved, i guess jumping into the EL1
+> firmware. Putting DT on top instead should not be too hard.
+
+Right.
+
+
+Maybe then this really shouldn't be called "wbrf", but maybe naming
+doesn't matter that much :)
+
+johannes
