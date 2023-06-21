@@ -2,76 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17AEB737CBE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:07:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA17737CF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231611AbjFUICS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 04:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
+        id S230255AbjFUIC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 04:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbjFUICP (ORCPT
+        with ESMTP id S231630AbjFUICx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 04:02:15 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84C0170C;
-        Wed, 21 Jun 2023 01:02:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687334535; x=1718870535;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2TQu/oPINqyAhXMvFfjq4krM1J8lJ1HeueobGZSxnsg=;
-  b=FhX3suz9bUq5bBwE/MKa8VdHP2yJylwzReGCNz8mskDvU0xAsF9wflcH
-   J3/LX5dAenwqacB8yai7TsB0VT+8F2F7o75m4K+o9TZBXJQOWySPZVyoa
-   RHtk/5zIrzbrjpdzcL5RQCfCfBXlE6iuvguBu2THAH3tnRMJUp6tCBnfJ
-   Q1D72d8AeMii3ll3hOkQunWXq/mE4Di3hSSuZ771ixVs+942TL8ScJFkJ
-   hshM+1R3hksb3UKqLH8PToRGae3n2JpGZMNEnf6fa/GnTmb0j3oGi049s
-   f+RWzrvcbzNLRcrUMkj7IBir7b1nOPp512j00jsC4AH5pOadDH25jl3H+
-   A==;
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="asc'?scan'208";a="219662347"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Jun 2023 01:02:14 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 21 Jun 2023 01:02:08 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 21 Jun 2023 01:02:06 -0700
-Date:   Wed, 21 Jun 2023 09:01:39 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Lucas Tanure <tanure@linux.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Yixun Lan <dlan@gentoo.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>, Nick <nick@khadas.com>,
-        Artem <art@khadas.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 2/2] arm64: dts: meson-t7-a311d2-khadas-vim4: add
- initial device-tree
-Message-ID: <20230621-barber-enjoyably-04806271daea@wendy>
-References: <20230620134857.238941-1-tanure@linux.com>
- <20230620134857.238941-3-tanure@linux.com>
- <ZJIjtphyKdC48JrN@ofant>
- <76a7f819-f3d2-d39d-1bc9-f1e7f837fd22@linaro.org>
- <CAJX_Q+3im20qphOXzn-=58Kx4--ajbaF4P8BVvRcDcPXn1Qheg@mail.gmail.com>
+        Wed, 21 Jun 2023 04:02:53 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C146FE
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:02:51 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8DxtMSprpJk_A0AAA--.95S3;
+        Wed, 21 Jun 2023 16:02:49 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxX8+nrpJk+0MAAA--.1658S3;
+        Wed, 21 Jun 2023 16:02:47 +0800 (CST)
+Message-ID: <3e434dc7-be72-869c-e668-cbde07538732@loongson.cn>
+Date:   Wed, 21 Jun 2023 16:02:47 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="5aSeY0QXlyq92qaE"
-Content-Disposition: inline
-In-Reply-To: <CAJX_Q+3im20qphOXzn-=58Kx4--ajbaF4P8BVvRcDcPXn1Qheg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v10 00/11] drm/etnaviv: Add pci device driver support
+Content-Language: en-US
+To:     Christian Gmeiner <christian.gmeiner@gmail.com>,
+        Sui Jingfeng <18949883232@163.com>
+Cc:     Lucas Stach <l.stach@pengutronix.de>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
+        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+References: <20230620094716.2231414-1-18949883232@163.com>
+ <CAH9NwWdfK0DkDA-Fi6TRrS4orm-HbAqBLDpYcMKd69dU6Jh+CA@mail.gmail.com>
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <CAH9NwWdfK0DkDA-Fi6TRrS4orm-HbAqBLDpYcMKd69dU6Jh+CA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8AxX8+nrpJk+0MAAA--.1658S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7Cw18Kry7CF1UArW7tw43Arc_yoW8ZrWfpr
+        1UAr1UGr48Jr18Jr1UJr15Jr1Utr1UA3WUJr1UJryUJr1UGr1jqr1UXr4UJryDJr48Jr17
+        Jr1Dtr4Utr1UJwcCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUxYiiDU
+        UUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,88 +71,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---5aSeY0QXlyq92qaE
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi
 
-On Wed, Jun 21, 2023 at 08:37:02AM +0100, Lucas Tanure wrote:
-> On Wed, Jun 21, 2023 at 7:02=E2=80=AFAM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> >
-> > On 21/06/2023 00:09, Yixun Lan wrote:
-> > >> +            apb4: bus@fe000000 {
-> > >> +                    compatible =3D "simple-bus";
-> > >> +                    reg =3D <0x0 0xfe000000 0x0 0x480000>;
-> > >> +                    #address-cells =3D <2>;
-> > >> +                    #size-cells =3D <2>;
-> > >> +                    ranges =3D <0x0 0x0 0x0 0xfe000000 0x0 0x480000=
->;
-> > >> +
-> > >> +                    uart_A: serial@78000 {
-> > >> +                            compatible =3D "amlogic,meson-t7-uart",
-> > >                                               ~~~~~~~~~~~~~~~~~
-> > > if you introduce new compatible string, then at least you need to doc=
-ument it
-> > > so Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml n=
-eed to be updated
-> > >
-> > > but my qeustion here, why bother introducing new compatible string if=
- nothing
-> > > changed with the compatible data? given the uart is same IP with g12a=
-, can't we just
-> > > use "amlogic,meson-g12-uart" for this? no only it will reduce the str=
-ucture length of
-> > > meson_uart_dt_match[], but also relieve maintainer's review burden?
-> >
-> > https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetr=
-ee/bindings/writing-bindings.rst#L42
-> >
-> > Best regards,
-> > Krzysztof
-> >
-> Hi, I did not understand the recommendation here.
-> Can I add "amlogic,meson-t7-uart" without Documentation changes?
+On 2023/6/21 15:55, Christian Gmeiner wrote:
+> Hi
+>
+>> From: Sui Jingfeng <suijingfeng@loongson.cn>
+>>
+>> There is a Vivante GC1000 (v5037) in LS2K1000 and LS7A1000, this GPU is a
+>> PCI device, and it has 2D and 3D cores in the same core. This series is
+>> trying to add PCI device driver support to drm/etnaviv.
+>>
+> Is it possible to get the lspci output for the GPU? Something like
+> this: sudo lspci -vvv -s ...
 
-No, you can't.
+Yes,
 
-> I think Yes, as I can see a few compatible strings in dts that don't
-> exist anywhere else.
 
-Aye, but we do not want to propagate that. New stuff should not be
-adding undocumented compatibles, and those that are undocumented should
-be documented.
+sudo lspci -vvvxxx -s 00:06.0
+00:06.0 Multimedia video controller: Loongson Technology LLC Vivante GPU 
+(Graphics Processing Unit) (rev 01)
+     Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop+ ParErr- 
+Stepping- SERR- FastB2B- DisINTx-
+     Status: Cap- 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- 
+<TAbort- <MAbort- >SERR- <PERR- INTx-
+     Latency: 0
+     Interrupt: pin A routed to IRQ 51
+     NUMA node: 0
+     Region 0: Memory at e0035200000 (64-bit, non-prefetchable) [size=256K]
+     Region 2: Memory at e0030000000 (64-bit, non-prefetchable) [size=64M]
+     Region 4: Memory at e0035240000 (64-bit, non-prefetchable) [size=64K]
+     Kernel driver in use: etnaviv
+     Kernel modules: etnaviv
+00: 14 00 15 7a 27 00 00 00 01 00 00 04 00 00 80 00
+10: 04 00 20 35 00 00 00 00 04 00 00 30 00 00 00 00
+20: 04 00 24 35 00 00 00 00 00 00 00 00 00 00 00 00
+30: 00 00 00 00 00 00 00 00 00 00 00 00 5d 01 00 00
+40: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+50: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+60: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+70: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+90: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+a0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+b0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+c0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+d0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+e0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
 
-> My idea here is to add "amlogic,meson-t7-uart" for future use if ever
-> created, like if we find a bug in the future that is only relevant to
-> T7 soc.
-> But for now, fallback to s4 uart, as it seems to be the same controller.
->=20
-> >From Krzysztof said in the writing-bindings.rst, I am following the rule=
-s.
->=20
-> So, what's the path forward here?
 
-You are following the rules from the dts point of view, you just need a
-3rd patch in which you document the pattern you have added here in
-amlogic,meson-uart.yaml. It is probably something like:
-+      - items:
-+          - const: amlogic,meson-t7-uart
-+          - const: amlogic,meson-s4-uart
-But I have not tested that, I just wrote that in my mail client.
 
-Cheers,
-Conor.
+> thanks
+> --
+> Christian Gmeiner, MSc
+>
+> https://christian-gmeiner.info/privacypolicy
 
---5aSeY0QXlyq92qaE
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+Jingfeng
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJKuWAAKCRB4tDGHoIJi
-0sz1AQDTbSImMPfj3eXZkkbJgedEV9mFN5eDBAD9G8HavB9hSwEAiOLWCw7Qt7yU
-nkxVT6Dtv3r2MiNA45lN8/HWxgTfZwk=
-=Xw6R
------END PGP SIGNATURE-----
-
---5aSeY0QXlyq92qaE--
