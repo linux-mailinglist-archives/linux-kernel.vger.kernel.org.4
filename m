@@ -2,185 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB87738597
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:45:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4ACF73859A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:46:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjFUNpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:45:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
+        id S230096AbjFUNqt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:46:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbjFUNpN (ORCPT
+        with ESMTP id S229997AbjFUNqp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:45:13 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD88C19B1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:44:51 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-570282233ceso52245097b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:44:51 -0700 (PDT)
+        Wed, 21 Jun 2023 09:46:45 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF9F132
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:46:44 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b5079b8cb3so10950795ad.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:46:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687355091; x=1689947091;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=B6Y+4x5cfJFeIyV3JmtXZ9y2zrl5ML3C/rCwWA5caOA=;
-        b=egdBV8LQg30eFKc8nDXoPtkM8vpl5u/HOezAyIlTH8Kgdw6eIF9bb+XX7B1l+KMkw5
-         66PfVhRzyg2JqQTxfJ4sj3wZ+rM1Ge3ff0Br2EQ5dumFuqfdG0bJpO581spXvyquFOsa
-         pgLjpKGUDhjXTJSY03B9uki8EdQSZxGJD8A/fyxo0kgb46FBJ/VG1I/K3sGtNWA8atMA
-         knPZUXgzarYZ6e/eBb6bbbPohJk1W7BJydabVjYWhFQzxQ5PBfDenqfQdjzH/xaIfsPk
-         tdntz2GI38GREB+mWQzG2O2s7Y1ZlIdpj9XjEruZ1Q2EZV7VMqqg8pzKoDQFBaPVUfWH
-         yB4g==
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1687355204; x=1689947204;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kLtSXPBahUMgKQVBn5Rd4J0wNhqqaJSy+CKw/Y/m6tM=;
+        b=p/6bV4ypTW1kiEtExMP1Y77vqeg7zVH2t1J0zdEv4dtxUnvbN0McjCJ9aZ2vSliOJ5
+         2kFNww98CbYdPpGtc71RixBZAQYE6odAVxQtGtyiW99SmFR/OGfsTEcQJCMX5Ap06/Hr
+         zhcSgq/TJFysLI+bYBqFXzTqKIh+ozfgfqxaYgSnU1cuJtTXLdDbI5SSdnT2wd3QcSiG
+         trj8DCd6JLkCiPH2vbLoqUAKbbYDfNSjoeNvNnjwpqZErGldwRfiapwMdwFI0QbMx9vz
+         +EHP4e6v1Dh2GMcXJOAi2hc+QYSpM3kRsjjZ9I/A0C2sbuVrAA0eDAiAV231EUAY4Ofe
+         boyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687355091; x=1689947091;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B6Y+4x5cfJFeIyV3JmtXZ9y2zrl5ML3C/rCwWA5caOA=;
-        b=AVDH7sGQ+A9DY24OxSPkNLiDtABTjZEhPSi74sIWOfqOIVLsytCw3b2OMRZmtDOrY3
-         tLKgpsw85EKic8fl1gcaLe0xTkOpSzlPSfb7sNVTrt38CbaMjAHYh1rAXx04hHVQHt13
-         Jc78Aw1ehsw3sJvC7MKVo24M5WlUHLYUUBRkskyEr8JmxV261bQSo8ZPQWGi3x24hCfp
-         zwKh7ViEBfWEpeCx/xWKwvEMSa/V1obZBL4jj7dCcxKyiGvNsn2f8dZdUBpGPJjpJkz0
-         SvcK5k1icLAfWjq8ijO2R/xrEip6bgKCeVlsRNNoDyC4P6JTSVbH8f3BQYn1noCkNC6p
-         PVjQ==
-X-Gm-Message-State: AC+VfDyMUumCjy8Dx7oR8ZbQ2jvpL5GBOXD0NxKYvKOHZhMam/lvcXFt
-        iWGzxBxjkah292i8Hoz9JkGZMnOjgroAgeEyPGtzf93/GQFhK/3u
-X-Google-Smtp-Source: ACHHUZ7eXgV2xsNLYgHzVckH9o2+oO+AFIWHMnFeLSgvSgMwWGHhRSVEfq8l+dVXwrRUx/EinzNi2nm33U55N8+Cm7c=
-X-Received: by 2002:a81:4e11:0:b0:56c:f38a:163d with SMTP id
- c17-20020a814e11000000b0056cf38a163dmr13751743ywb.8.1687355090812; Wed, 21
- Jun 2023 06:44:50 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687355204; x=1689947204;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kLtSXPBahUMgKQVBn5Rd4J0wNhqqaJSy+CKw/Y/m6tM=;
+        b=i4CVoTE2AGa11mgk632aIGN9t4VOu4DAziGfhy5ufCG8An1qDl/7XQtjRwymzpvVLi
+         i/89K7Hv34BPwbEKnVknB6axwSsNTOwSspqSqYY2ETAgLcIO5VL80AcOeoNXSuM1UdQ9
+         4BVpvWOXmoL6fcKUXAk1CkDOpx96EXCB7Bh0LcrLec66kg1wZejgTJYf9oZnMNRyFIen
+         ooxV2M5MwJPSrzD5/eKbxtMxSQSlfoaQ6T+4gmNzqwhxm/Z4BCoIf066J36tkvXS83J6
+         eJLCG8ylknKZ4TBObT6ubugvjigzKzX/SlGSWemjy1lXL15V0DmPIua04W91mjqKJo/r
+         VMNA==
+X-Gm-Message-State: AC+VfDz7vGUjW6nIUqZ+mc3uFwRdLxbh2jGFlUuLo60Vw49TpEMNS+4r
+        ZJDFo5E6Jzmp9jNe9yLXY0HwEg==
+X-Google-Smtp-Source: ACHHUZ7OkD4wv0DkpDZydNb4IYO41VvvOdEvmserXM7+mx4U8O/fwa4iq5YczMz/UU+uyqg2Ak8uJQ==
+X-Received: by 2002:a17:903:1ca:b0:1b5:32ec:df97 with SMTP id e10-20020a17090301ca00b001b532ecdf97mr18146080plh.5.1687355203847;
+        Wed, 21 Jun 2023 06:46:43 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id u2-20020a17090282c200b001ac95be5081sm3503549plz.307.2023.06.21.06.46.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 06:46:43 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     linux-block@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Ivan Orlov <ivan.orlov0322@gmail.com>,
+        "Md. Haris Iqbal" <haris.iqbal@ionos.com>,
+        Jack Wang <jinpu.wang@ionos.com>
+In-Reply-To: <20230620180129.645646-5-gregkh@linuxfoundation.org>
+References: <20230620180129.645646-5-gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 1/4] block/rnbd: make all 'class' structures const
+Message-Id: <168735520264.3922571.3510429095521254500.b4-ty@kernel.dk>
+Date:   Wed, 21 Jun 2023 07:46:42 -0600
 MIME-Version: 1.0
-References: <20230621100151.6329-1-victorshihgli@gmail.com> <20230621100151.6329-2-victorshihgli@gmail.com>
-In-Reply-To: <20230621100151.6329-2-victorshihgli@gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 21 Jun 2023 15:44:14 +0200
-Message-ID: <CAPDyKFq5YzwAGGKi_4=MVrQad9kM-i0xoQ5XhijDNuWDPOVFFA@mail.gmail.com>
-Subject: Re: [PATCH V8 01/23] mmc: core: Cleanup printing of speed mode at
- card insertion
-To:     Victor Shih <victorshihgli@gmail.com>
-Cc:     adrian.hunter@intel.com, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benchuanggli@gmail.com,
-        HL.Liu@genesyslogic.com.tw, Greg.tu@genesyslogic.com.tw,
-        takahiro.akashi@linaro.org, dlunev@chromium.org,
-        Victor Shih <victor.shih@genesyslogic.com.tw>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 at 12:02, Victor Shih <victorshihgli@gmail.com> wrote:
->
-> From: Victor Shih <victor.shih@genesyslogic.com.tw>
 
-Please do not claim authorship of patches that haven't been authored
-by you. Of course, there is a balance, if you need to make bigger
-modifications, then you deserve to claim the authorship, but that
-isn't the case here I think.
+On Tue, 20 Jun 2023 20:01:30 +0200, Greg Kroah-Hartman wrote:
+> Now that the driver core allows for struct class to be in read-only
+> memory, making all 'class' structures to be declared at build time
+> placing them into read-only memory, instead of having to be dynamically
+> allocated at load time.
+> 
+> 
 
-This applies to a couple of more patches in the series, I will not
-comment on them in this regard, but leave that to you to look over at
-the next submission.
+Applied, thanks!
 
->
-> The current print of the bus speed mode in mmc_add_card() has grown over
-> the years and is now difficult to parse. Let's clean up the code and also
-> take the opportunity to properly announce "DDR" for eMMCs as
-> "high speed DDR", which is according to the eMMC spec.
->
-> Updates in V8:
->  - Modify commit message.
->
-> Updates in V7:
->  - Remove unnecessary parentheses.
->
-> Updates in V6:
->  - Adjust the position of matching brackets.
+[1/4] block/rnbd: make all 'class' structures const
+      commit: 137380c0ec40710cbaf57c7878726c41a6da81cd
+[2/4] aoe: make aoe_class a static const structure
+      commit: 65d7a37d4e3e226bb4a4ddf73a827d0dbc77f530
+[3/4] ublk: make ublk_chr_class a static const structure
+      commit: 2eefd399d28a52739fdbeebe84775275f016171c
+[4/4] bsg: make bsg_class a static const structure
+      commit: 72ef02b8dfa009029fa713e8a731a92d27d14e35
 
-I appreciate the version history per patch. However, this doesn't
-belong in the commit message.
+Best regards,
+-- 
+Jens Axboe
 
-Instead you have to manually edit each formatted patch to add this,
-exactly where see below.
 
->
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
-> ---
 
-After this line you can add comments and version history for the
-patch. In this way, it will not be a part of the commit message when
-applying.
-
-Complete the section by adding three new dashes and a newline - this
-keeps the patch format correct.
-
----
-
->  drivers/mmc/core/bus.c | 36 ++++++++++++++++++++----------------
->  1 file changed, 20 insertions(+), 16 deletions(-)
->
-> diff --git a/drivers/mmc/core/bus.c b/drivers/mmc/core/bus.c
-> index 2c3074a605fc..cf32cf135781 100644
-> --- a/drivers/mmc/core/bus.c
-> +++ b/drivers/mmc/core/bus.c
-> @@ -299,6 +299,7 @@ int mmc_add_card(struct mmc_card *card)
->  {
->         int ret;
->         const char *type;
-> +       const char *speed_mode = "";
->         const char *uhs_bus_speed_mode = "";
->         static const char *const uhs_speeds[] = {
->                 [UHS_SDR12_BUS_SPEED] = "SDR12 ",
-> @@ -337,27 +338,30 @@ int mmc_add_card(struct mmc_card *card)
->                 break;
->         }
->
-> +       if (mmc_card_hs(card))
-> +               speed_mode = "high speed ";
-> +       else if (mmc_card_uhs(card))
-> +               speed_mode = "ultra high speed ";
-> +       else if (mmc_card_ddr52(card))
-> +               speed_mode = "high speed DDR ";
-> +       else if (mmc_card_hs200(card))
-> +               speed_mode = "HS200 ";
-> +       else if (mmc_card_hs400es(card))
-> +               speed_mode = "HS400 Enhanced strobe ";
-> +       else if (mmc_card_hs400(card))
-> +               speed_mode = "HS400 ";
-> +
->         if (mmc_card_uhs(card) &&
->                 (card->sd_bus_speed < ARRAY_SIZE(uhs_speeds)))
->                 uhs_bus_speed_mode = uhs_speeds[card->sd_bus_speed];
->
-> -       if (mmc_host_is_spi(card->host)) {
-> -               pr_info("%s: new %s%s%s card on SPI\n",
-> -                       mmc_hostname(card->host),
-> -                       mmc_card_hs(card) ? "high speed " : "",
-> -                       mmc_card_ddr52(card) ? "DDR " : "",
-> -                       type);
-> -       } else {
-> -               pr_info("%s: new %s%s%s%s%s%s card at address %04x\n",
-> -                       mmc_hostname(card->host),
-> -                       mmc_card_uhs(card) ? "ultra high speed " :
-> -                       (mmc_card_hs(card) ? "high speed " : ""),
-> -                       mmc_card_hs400(card) ? "HS400 " :
-> -                       (mmc_card_hs200(card) ? "HS200 " : ""),
-> -                       mmc_card_hs400es(card) ? "Enhanced strobe " : "",
-> -                       mmc_card_ddr52(card) ? "DDR " : "",
-> +       if (mmc_host_is_spi(card->host))
-> +               pr_info("%s: new %s%s card on SPI\n",
-> +                       mmc_hostname(card->host), speed_mode, type);
-> +       else
-> +               pr_info("%s: new %s%s%s card at address %04x\n",
-> +                       mmc_hostname(card->host), speed_mode,
->                         uhs_bus_speed_mode, type, card->rca);
-> -       }
->
->         mmc_add_card_debugfs(card);
->         card->dev.of_node = mmc_of_find_child_device(card->host, 0);
-> --
-> 2.25.1
->
