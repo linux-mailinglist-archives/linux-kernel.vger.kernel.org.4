@@ -2,178 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D63E0737C30
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 09:36:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4A8737C5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 09:36:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjFUHaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 03:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58368 "EHLO
+        id S231345AbjFUHb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 03:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbjFUHaI (ORCPT
+        with ESMTP id S230280AbjFUHbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 03:30:08 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41033170C
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 00:30:06 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-98cd280cf94so30409966b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 00:30:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1687332604; x=1689924604;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ZmyDfnK9tJh8eswYvjmWTei7tQJVIfXBxXoVL4SG7R8=;
-        b=AErp9BkT1HOnQXLDaZG2ZhhgiFqoujRXuDRZ6mNMc66uo4iADPH8ND6vVT11LgrTTL
-         AylPEuDYLAbzHcWd6s9RIjOsgstMtxC5b9BLtSsAOyK2HGqgHC3fff3Y4oZ7Y6VrxRlb
-         xSE2jauM8NDE34EUg1l7tNFFj85RKWqV6X4jlUmegTW9fKm1MGIzqBLlvT7Dk2psnP4Y
-         8HbScXfthtVm8E5V+taPq0gF55iLE02AnUSQSRYRIhOz37xoTjciAU4olKLgmAwzKjUw
-         VAxO82NHkTCDWNCuSI/RyrXR9+cfwhF5scfDxoKd+zT2dCML+89Tp+fKPi19rwUbwudh
-         B7nA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687332604; x=1689924604;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZmyDfnK9tJh8eswYvjmWTei7tQJVIfXBxXoVL4SG7R8=;
-        b=dFWFoq3dtWvGI9PzmmKxhggqcNLfZi9SJMBks50RCaNSQsDEvQoOLZO9qfLpWjx5Zj
-         vM9s4Zsfc8s9R15cAvajAiIxZbiZ/y2+p20vEw0Z21GivSUL/6OjlGYaZZUWj9MLDW98
-         bj5rx0h0CK+myRy3QTnLbgMN+kimuIEW1dXqoYsJ4gO1vZiVYlo9TWFP6JXsvJXAht0S
-         BCtV5xS2u6CKTJGmi76evwbt1agQzHJt9Ik2RvZzqXqWt8hPBRDf9PwlopDWg7imZz2f
-         E8+86/+ErNZ2vHqYXsT/3Gi1vm33RGgg2mHKPQg4nHwqUEzbJWWHt0+w2oDLY6OZOXgm
-         KjaA==
-X-Gm-Message-State: AC+VfDwNX/tpnFw6s53dBrMUq73MykP2rCFx/hVpWafMIyVA1uFMKO6p
-        lNeuE2fpwlPJXe5Gv7M5Cp8h4w==
-X-Google-Smtp-Source: ACHHUZ71iRvfbRckg3Spoocjgf5Ljr6HcH7QnRCM6WqfLPyHhFnJWAR3zMooBAb60KO2iMTWfdWlMw==
-X-Received: by 2002:a17:906:9b88:b0:988:8fed:8ae9 with SMTP id dd8-20020a1709069b8800b009888fed8ae9mr7743704ejc.37.1687332604526;
-        Wed, 21 Jun 2023 00:30:04 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id n17-20020a17090625d100b00988c6ac6b86sm2631710ejb.186.2023.06.21.00.30.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 00:30:03 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 09:30:02 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Haibo Xu <xiaobo55x@gmail.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>, maz@kernel.org,
-        oliver.upton@linux.dev, seanjc@google.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev
-Subject: Re: [PATCH v3 10/10] KVM: riscv: selftests: Add get-reg-list test
-Message-ID: <20230621-37ea9461250036cc2ec8c544@orel>
-References: <cover.1686275310.git.haibo1.xu@intel.com>
- <8cd4ce50f5f4a639f4508085959aae222d4d4386.1686275310.git.haibo1.xu@intel.com>
- <20230609-fba04b424a4d46574e04e587@orel>
- <CAJve8okjRZEt6_6SB9EWm+6c7utpExzenfWo2T1N-J6G9w9czQ@mail.gmail.com>
- <20230620-95ce8ab70956a72b9da3a31a@orel>
- <CAJve8onNFfHFcvAGkbtnxjzqgfq4geL1zOwJEc8Xzc=NHVDrFg@mail.gmail.com>
+        Wed, 21 Jun 2023 03:31:51 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4AD1710;
+        Wed, 21 Jun 2023 00:31:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=NaqaQxah/FrLZHICWXU12yQMjvpRgrOIvBO2ioW93AY=; b=KHNtTWbSJEl/nBGTJsXuEeIdgW
+        qVjhcFPOFwYWiaWIa0LK1iFSvpDOOTZdB/Ozowojefd0Wvjq7x38/6KcqWQkDs/ZsGNRIe9ZzzNlC
+        UAqFWAsLDDF3K1ujtfh0z18i/p46ELqQRAL2VzBhCbH+XNYUE60eADsxslcLBB0d737i7/MvbaNYf
+        b1f6qfzS4YrNERERk5tSlre56eoPRP1Me7tOxjzrTtS41Qbxi6PXLf9FbbIFITU69OFrDIUU+v6Wy
+        z/X2ILqzrNvfFfeXToHnHuiqj3/HqMiGuF39YrsJEWV4htcqVMeQrq2ODCecMJoP0NXXCZKNO8H+Q
+        nm4NeHAw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qBsIr-00E6Ol-4c; Wed, 21 Jun 2023 07:30:57 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BA10A3002A9;
+        Wed, 21 Jun 2023 09:30:56 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9F4EC2419FDEF; Wed, 21 Jun 2023 09:30:56 +0200 (CEST)
+Date:   Wed, 21 Jun 2023 09:30:56 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-pm@vger.kernel.org,
+        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>
+Subject: Re: [PATCH v2 4/5] intel_idle: Add no_ibrs module parameter to force
+ disable IBRS
+Message-ID: <20230621073056.GB2046280@hirez.programming.kicks-ass.net>
+References: <20230620140625.1001886-1-longman@redhat.com>
+ <20230620140625.1001886-5-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJve8onNFfHFcvAGkbtnxjzqgfq4geL1zOwJEc8Xzc=NHVDrFg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230620140625.1001886-5-longman@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 09:55:13AM +0800, Haibo Xu wrote:
-> On Tue, Jun 20, 2023 at 6:44 PM Andrew Jones <ajones@ventanamicro.com> wrote:
-> >
-> > On Tue, Jun 20, 2023 at 06:05:59PM +0800, Haibo Xu wrote:
-> > > On Fri, Jun 9, 2023 at 9:35 PM Andrew Jones <ajones@ventanamicro.com> wrote:
-> > > >
-> > > > On Fri, Jun 09, 2023 at 10:12:18AM +0800, Haibo Xu wrote:
-> > > > > +static struct vcpu_reg_list aia_config = {
-> > > > > +     .sublists = {
-> > > > > +     BASE_SUBLIST,
-> > > > > +     AIA_REGS_SUBLIST,
-> > > > > +     {0},
-> > > > > +     },
-> > > > > +};
-> > > > > +
-> > > > > +static struct vcpu_reg_list fp_f_d_config = {
-> > > > > +     .sublists = {
-> > > > > +     BASE_SUBLIST,
-> > > > > +     FP_F_REGS_SUBLIST,
-> > > > > +     FP_D_REGS_SUBLIST,
-> > > > > +     {0},
-> > > > > +     },
-> > > > > +};
-> > > > > +
-> > > > > +struct vcpu_reg_list *vcpu_configs[] = {
-> > > > > +     &zicbo_config,
-> > > > > +     &aia_config,
-> > > > > +     &fp_f_d_config,
-> > > > > +};
-> > > > > +int vcpu_configs_n = ARRAY_SIZE(vcpu_configs);
-> > > > > --
-> > > > > 2.34.1
-> > > > >
-> > > >
-> > > > I see we have a bit of a problem with the configs for riscv. Since we
-> > > > don't disable anything we're not testing, then for any test that is
-> > > > missing, for example, the f and d registers, we'll get output like
-> > > > "There are 66 new registers. Consider adding them to the blessed reg
-> > > > list with the following lines:" and then a dump of all the f and d
-> > > > registers. The test doesn't fail, but it's messy and confusing. Ideally
-> > > > we'd disable all registers of all sublists not in the config, probably
-> > > > by starting by disabling everything and then only reenabling the ones
-> > > > in the config.
-> > > >
-> > > > Anything that can't be disabled is either a KVM bug, i.e. we should
-> > > > be able to disable it, because we can't expect every host to have it,
-> > > > or it needs to be in the base register sublist (meaning every host
-> > > > will always have it).
-> > > >
-> > >
-> > > HI Andrew,
-> > >
-> > > I found several multi-letters ISA EXT(AIA/SSTC etc) were not allowed
-> > > to be disabled.
-> > > Is it a bug? shall we fix it？
-> >
-> > Extensions that a guest could use (regardless of whether or not the host
-> > described it in the guest's isa string), because the instructions or CSR
-> > accesses don't trap, can't truly be disabled. So, it's not a bug to
-> > prohibit disabling them and indeed the test cases should actually ensure
-> > disabling them fails.
-> >
+On Tue, Jun 20, 2023 at 10:06:24AM -0400, Waiman Long wrote:
+> Commit bf5835bcdb96 ("intel_idle: Disable IBRS during long idle")
+> disables IBRS when the cstate is 6 or lower. However, there are
+> some use cases where a customer may want to use max_cstate=1 to
+> lower latency. 
+
+And then add the WRMSRs to increase latency again...
+
+Since you're mucking about with all this, perhaps see if you can measure
+the latency impact of all this.
+
+> Such use cases will suffer from the performance
+> degradation caused by the enabling of IBRS in the sibling idle thread.
+> Add a "no_ibrs" module parameter to force disable IBRS and the
+> CPUIDLE_FLAG_IRQ_ENABLE flag if set.
 > 
-> So these kinds of ISA_EXT_* regs should be in the base reg list, right?
->
+> In the case of a Skylake server with max_cstate=1, this new no_ibrs
+> option will increase the IRQ response latency as IRQ will now be
+> disabled.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+>  drivers/idle/intel_idle.c | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index 07fa23707b3c..366dacccc971 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -69,6 +69,7 @@ static int max_cstate = CPUIDLE_STATE_MAX - 1;
+>  static unsigned int disabled_states_mask __read_mostly;
+>  static unsigned int preferred_states_mask __read_mostly;
+>  static bool force_irq_on __read_mostly;
+> +static bool no_ibrs __read_mostly;
+>  
+>  static struct cpuidle_device __percpu *intel_idle_cpuidle_devices;
+>  
+> @@ -1907,12 +1908,15 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
+>  			WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IRQ_ENABLE);
+>  			state->enter = intel_idle_xstate;
+>  		} else if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS) &&
+> -			   state->flags & CPUIDLE_FLAG_IBRS) {
+> +			  ((state->flags & CPUIDLE_FLAG_IBRS) || no_ibrs)) {
+>  			/*
+>  			 * IBRS mitigation requires that C-states are entered
+>  			 * with interrupts disabled.
+>  			 */
+> -			WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IRQ_ENABLE);
+> +			if (no_ibrs && (state->flags & CPUIDLE_FLAG_IRQ_ENABLE))
+> +				state->flags &= ~CPUIDLE_FLAG_IRQ_ENABLE;
+> +			else
+> +				WARN_ON_ONCE(state->flags & CPUIDLE_FLAG_IRQ_ENABLE);
+>  			state->enter = intel_idle_ibrs;
+>  		} else if (state->flags & CPUIDLE_FLAG_IRQ_ENABLE) {
+>  			state->enter = intel_idle_irq;
+> @@ -2165,3 +2169,9 @@ MODULE_PARM_DESC(preferred_cstates, "Mask of preferred idle states");
+>   * 'CPUIDLE_FLAG_INIT_XSTATE' and 'CPUIDLE_FLAG_IBRS' flags.
+>   */
+>  module_param(force_irq_on, bool, 0444);
+> +/*
+> + * Force the disabling of IBRS when X86_FEATURE_KERNEL_IBRS is on and
+> + * CPUIDLE_FLAG_IRQ_ENABLE isn't set.
+> + */
+> +module_param(no_ibrs, bool, 0444);
+> +MODULE_PARM_DESC(no_ibrs, "Disable IBRS when idle");
 
-Ah, this is getting a bit messy. We don't want all these extensions in a
-"base", which represents extensions for all possible hosts, because the
-extensions are optional, but, we can't remove them from get-reg-list
-output by disabling them, since they can't be disabled. It seems we
-need the concept of "base", which is the common set expected on all hosts,
-and also the concept of "this host's base". I'm struggling to think of
-a nice way to deal with that. A first thought is to both add these types
-of registers to their own extension-specific sublists and to filter_reg().
-I think that will keep them from being reported as new registers in every
-test, but also allow detection of them going missing when they're
-extension is present.
+Urgghhh.. the flag is CPUIDLE_FLAG_IBRS, so "no_ibrs" implies clearing
+that flag.
 
-Thanks,
-drew
