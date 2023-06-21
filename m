@@ -2,173 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4589E7383DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 185177383F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:40:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231952AbjFUMcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 08:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
+        id S232034AbjFUMkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 08:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231953AbjFUMcG (ORCPT
+        with ESMTP id S229871AbjFUMkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 08:32:06 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22CF219A6
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:32:02 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f9c532fa45so3977045e9.2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:32:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687350720; x=1689942720;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YzmtLOP7oc0tzQzkG240IPHIjmF5+AVL1tQJX0AniZE=;
-        b=t0MfzdapmYbvx4BeFguQWa3HWQjpRz+5fQYExp1X3ihFsm+dRN6suYDI00ZJ4rB8qn
-         X/iYsYk9AMmd36uyii2GYuUks47TPm3k3mAX6GbfUjGV840CvGvNOe1/0IiLBe3Eb5fO
-         kA7nArvXSjMpdkGwYUdekfSymBqHatorZ8gO8oq23K9Ihjm0ZoWtGESJNuNPydCOmTat
-         mGOfUKLUrKpmyRmI/IZW9noSw6waJUsxg/fxB9OEmm97NIdXNolw8S7NjKyZow8guHls
-         Bko5Nq9aJn9OZiqcJHZUFDroBcZxe0/08Byti6/wpsCc6buTfpKYBh5LyEIksIFHjC50
-         Uluw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687350720; x=1689942720;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YzmtLOP7oc0tzQzkG240IPHIjmF5+AVL1tQJX0AniZE=;
-        b=iRIOj/vhqT0g/4Y8GSQhTy6DjbCQZ9j8jC3L1EDih8EzTSNvEpt3TdhJIux8mNPgt8
-         eDV6X6mZcJ+uLFVn7Ug5BIfw84vrv++jswkTGYdbaaapD4xmrG09Hmfg+Cbz8a9+VGsx
-         nZealsKfc2U01B1aOErFhJUj0irnaO+/zeZ5GUUzDc+NR5cLHUKMe7+Y3mN6IRYNy48r
-         19MBoixQedZ6bKaRbe2iHSWKMvFIXQGM1bCdv2FQglFl2v2MrLdG2onA+BHU1yv9VOlV
-         o8LjJ+Nfxgg1sGWSJqSXQstdbPZrL9QKERa628xsh/0atSsi3EvVTmYVACursAbFNH2z
-         tqgg==
-X-Gm-Message-State: AC+VfDy/gVHjBywuXB8sqJLza+LP9iRuOG1L9XrNnulVKS1vgY97Opfw
-        Ukhh9VN1e6yjyYjclUDuaInKXh244Pu/wPMnlythTg==
-X-Google-Smtp-Source: ACHHUZ4Vt/DXBCbpC79d+F7Gxz4ssIFP+pZFUveEp3RHBDcx3TTeI+y2mnOP8Y9byDYF7iDjiKlBvg==
-X-Received: by 2002:a05:600c:3799:b0:3f9:b540:862d with SMTP id o25-20020a05600c379900b003f9b540862dmr4300764wmr.28.1687350720552;
-        Wed, 21 Jun 2023 05:32:00 -0700 (PDT)
-Received: from blmsp ([2001:4091:a247:82fa:b762:4f68:e1ed:5041])
-        by smtp.gmail.com with ESMTPSA id j2-20020adfe502000000b002ca864b807csm4518345wrm.0.2023.06.21.05.31.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 05:32:00 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 14:31:58 +0200
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Vivek Yadav <vivek.2311@samsung.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH v2 5/6] can: tcan4x5x: Add support for tcan4552/4553
-Message-ID: <20230621123158.fd3pd6i7aefawobf@blmsp>
-References: <20230621093103.3134655-1-msp@baylibre.com>
- <20230621093103.3134655-6-msp@baylibre.com>
- <32557326-650c-192d-9a82-ca5451b01f70@linaro.org>
+        Wed, 21 Jun 2023 08:40:16 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9578B9B;
+        Wed, 21 Jun 2023 05:40:15 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3BFCC21C99;
+        Wed, 21 Jun 2023 12:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1687351214;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fFl+TwM20LVAi4D/M42g+0o8Juj67CDLcdDgvpi5mGk=;
+        b=2FPVqngejQ6nbFfhWhapGLmZpDHw6BVy8/mlH5YZ5kpptEdS0oRwhJuBfnnpkuZpbv1uOm
+        L9oZmWHbuzhc1ihKKk2l5VkbYnj2nbdJggbx7yrGbWNBVPHvGgv+ZUf6OhBgIOzL106MxH
+        9BeTN2dUokYmMBAI0GWR5BlMqx8BwJY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1687351214;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fFl+TwM20LVAi4D/M42g+0o8Juj67CDLcdDgvpi5mGk=;
+        b=D+LeytsQ+1KY5k+wYxnYApJQ9IVKTvtEW3lRs8hBUhQOSs5GBZLYb6vs2ZhA2/oVZQSIOb
+        BB6KwNEjAz36kBAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1152D133E6;
+        Wed, 21 Jun 2023 12:40:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 1kRSA67vkmRpUAAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Wed, 21 Jun 2023 12:40:14 +0000
+Date:   Wed, 21 Jun 2023 14:33:50 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     syzbot <syzbot+9992306148b06272f3bb@syzkaller.appspotmail.com>
+Cc:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [btrfs?] WARNING in emit_fiemap_extent
+Message-ID: <20230621123350.GP16168@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <00000000000091164305fe966bdd@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <32557326-650c-192d-9a82-ca5451b01f70@linaro.org>
+In-Reply-To: <00000000000091164305fe966bdd@google.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-On Wed, Jun 21, 2023 at 12:28:34PM +0200, Krzysztof Kozlowski wrote:
-> On 21/06/2023 11:31, Markus Schneider-Pargmann wrote:
-> > tcan4552 and tcan4553 do not have wake or state pins, so they are
-> > currently not compatible with the generic driver. The generic driver
-> > uses tcan4x5x_disable_state() and tcan4x5x_disable_wake() if the gpios
-> > are not defined. These functions use register bits that are not
-> > available in tcan4552/4553.
-> > 
-> > This patch adds support by introducing version information to reflect if
-> > the chip has wake and state pins. Also the version is now checked.
-> > 
-> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> > ---
-> >  drivers/net/can/m_can/tcan4x5x-core.c | 128 +++++++++++++++++++++-----
-> >  1 file changed, 104 insertions(+), 24 deletions(-)
-> > 
-> > diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
-> > index fb9375fa20ec..756acd122075 100644
-> > --- a/drivers/net/can/m_can/tcan4x5x-core.c
-> > +++ b/drivers/net/can/m_can/tcan4x5x-core.c
-> > @@ -7,6 +7,7 @@
-> >  #define TCAN4X5X_EXT_CLK_DEF 40000000
-> >  
-> >  #define TCAN4X5X_DEV_ID1 0x00
-> > +#define TCAN4X5X_DEV_ID1_TCAN 0x4e414354 /* ASCII TCAN */
-> >  #define TCAN4X5X_DEV_ID2 0x04
-> >  #define TCAN4X5X_REV 0x08
-> >  #define TCAN4X5X_STATUS 0x0C
-> > @@ -103,6 +104,13 @@
-> >  #define TCAN4X5X_WD_3_S_TIMER BIT(29)
-> >  #define TCAN4X5X_WD_6_S_TIMER (BIT(28) | BIT(29))
-> >  
-> > +struct tcan4x5x_version_info {
-> > +	u32 id2_register;
-> > +
-> > +	bool has_wake_pin;
-> > +	bool has_state_pin;
-> > +};
-> > +
-> >  static inline struct tcan4x5x_priv *cdev_to_priv(struct m_can_classdev *cdev)
-> >  {
-> >  	return container_of(cdev, struct tcan4x5x_priv, cdev);
-> > @@ -254,18 +262,68 @@ static int tcan4x5x_disable_state(struct m_can_classdev *cdev)
-> >  				  TCAN4X5X_DISABLE_INH_MSK, 0x01);
-> >  }
-> >  
-> > -static int tcan4x5x_get_gpios(struct m_can_classdev *cdev)
-> > +static const struct tcan4x5x_version_info tcan4x5x_generic;
-> > +static const struct of_device_id tcan4x5x_of_match[];
-> > +
-> > +static const struct tcan4x5x_version_info
-> > +*tcan4x5x_find_version_info(struct tcan4x5x_priv *priv, u32 id2_value)
-> > +{
-> > +	for (int i = 0; tcan4x5x_of_match[i].data; ++i) {
-> > +		const struct tcan4x5x_version_info *vinfo =
-> > +			tcan4x5x_of_match[i].data;
-> > +		if (!vinfo->id2_register || id2_value == vinfo->id2_register) {
-> > +			dev_warn(&priv->spi->dev, "TCAN device is %s, please use it in DT\n",
-> > +				 tcan4x5x_of_match[i].compatible);
-> > +			return vinfo;
-> > +		}
-> > +	}
-> > +
-> > +	return &tcan4x5x_generic;
+On Tue, Jun 20, 2023 at 02:34:46PM -0700, syzbot wrote:
+> Hello,
 > 
-> I don't understand what do you want to achieve here. Kernel job is not
-> to validate DTB, so if DTB says you have 4552, there is no need to
-> double check. On the other hand, you have Id register so entire idea of
-> custom compatibles can be dropped and instead you should detect the
-> variant based on the ID.
+> syzbot found the following issue on:
+> 
+> HEAD commit:    40f71e7cd3c6 Merge tag 'net-6.4-rc7' of git://git.kernel.o..
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=166d2acf280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=7ff8f87c7ab0e04e
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9992306148b06272f3bb
+> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10c65e87280000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1094a78b280000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/2dc89d5fee38/disk-40f71e7c.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/0ced5a475218/vmlinux-40f71e7c.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/d543a4f69684/bzImage-40f71e7c.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/7cde8d2312ae/mount_0.gz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+9992306148b06272f3bb@syzkaller.appspotmail.com
+> 
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 5351 at fs/btrfs/extent_io.c:2824 emit_fiemap_extent+0xee/0x410
 
-I can read the ID register but tcan4552 and 4553 do not have two
-devicetree properties that tcan4550 has, namely state and wake gpios.
-See v1 discussion about that [1].
+2804 static int emit_fiemap_extent(struct fiemap_extent_info *fieinfo,
+2805                                 struct fiemap_cache *cache,
+2806                                 u64 offset, u64 phys, u64 len, u32 flags)
+2807 {
+2808         int ret = 0;
+2809
+2810         /* Set at the end of extent_fiemap(). */
+2811         ASSERT((flags & FIEMAP_EXTENT_LAST) == 0);
+2812
+2813         if (!cache->cached)
+2814                 goto assign;
+2815
+2816         /*
+2817          * Sanity check, extent_fiemap() should have ensured that new
+2818          * fiemap extent won't overlap with cached one.
+2819          * Not recoverable.
+2820          *
+2821          * NOTE: Physical address can overlap, due to compression
+2822          */
+2823         if (cache->offset + cache->len > offset) {
+2824                 WARN_ON(1);
+2825                 return -EINVAL;
+2826         }
 
-In v1 Marc pointed out that mcp251xfd is using an autodetection and warn
-mechanism which I implemented here as well. [2]
-
-Best,
-Markus
-
-
-[1] https://lore.kernel.org/lkml/5f9fe7fb-9483-7dee-82c8-bd6564abcaab@linaro.org/
-[2] https://lore.kernel.org/lkml/20230315112905.qutggrdnpsttbase@pengutronix.de/
+Either we can drop the warning as the error is handled, or there was
+another issue that was supposed to be caught earlier.
