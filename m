@@ -2,133 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5D0737CB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:07:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC1A737CDB
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:07:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjFUHhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 03:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33642 "EHLO
+        id S231388AbjFUHhV convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 03:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbjFUHhF (ORCPT
+        with ESMTP id S231365AbjFUHhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 03:37:05 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4317F95
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 00:37:04 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b53e1cd0ffso23467455ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 00:37:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1687333024; x=1689925024;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=I6UWVKtOhSNf8+Qb6s/x3NVKgbGYZ27trtRsrPVMZbc=;
-        b=ajjSlZ2pVqA0Drxuy0LPBr1g6/r/CnSseKH0hEXibflbG47ydQhn6IKbtqisVrlIll
-         P8aKz3R6NfKWprnRU0z7Z0892fvKw0iFl4+L/Xmn9IHD9wPj7GHeDZI3hBw8r/LKz53b
-         l6NmBDTWSqayISA+lWHBQvLY1Cw3YlSOewxqvyNCHzWCbwJhch0/FecllswP3VVAJ4LQ
-         fEVENBVclMWJNoHbanlDGxXE9aIMmfvHQvlR4CNoiXl9+04mRpKYFPayS/lYKCE0k9dP
-         7Q2vxOei6wvcuxrCjYAQX7DB++SRDlhwKTh7tKA52w8BwrYpo0JjprDVkh+HHm0NcBp5
-         xbVw==
+        Wed, 21 Jun 2023 03:37:17 -0400
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88ED1118;
+        Wed, 21 Jun 2023 00:37:16 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-bd0a359ca35so4477190276.3;
+        Wed, 21 Jun 2023 00:37:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687333024; x=1689925024;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I6UWVKtOhSNf8+Qb6s/x3NVKgbGYZ27trtRsrPVMZbc=;
-        b=U1X/mOTYjtegnvTgkl+VKVEWpqgSN/rN48Ude1HSQocQze3SBc9Ub0iW4FCKrhLTz7
-         9ZI86ARXNVu5XE/U6NNhIflqBhkQLztg82uelvQkx9r1fR64ukUsFLJhNu6n956ENUR3
-         3uvFE+Lv1J+K8s2HQP0olNL/GmSNb+LiwO44iK3QJ65x+zvLjker6jMNJif/2nX9Terz
-         Kgf4aa00p68KEny7E4UH7hfp+055sxtTERge7o6qo7b3j6tb7BcsPVD1K2Mhlbjaaksv
-         aWzQ9gWTWeZgDAxwbAgRbRUssRSDwkB1YiKPs7bY8Zozg2vCGK9Ml/nBSMNx2e9TTCZG
-         exGA==
-X-Gm-Message-State: AC+VfDxCuAnKGaFa4Se4Zb0FBClnoUYdI76qzpVIeUbJ+CG/fZweN2nC
-        91jPJEWKsiqt0b0VGs47+MKp3A==
-X-Google-Smtp-Source: ACHHUZ7AzJu+yamwln6Zw/qda+kLCR+13+12pD29yTJvwzi7N6r3mLLSRcnKXQ3t0c1w17RK7+dxDw==
-X-Received: by 2002:a17:903:2348:b0:1ac:921c:87fc with SMTP id c8-20020a170903234800b001ac921c87fcmr13152510plh.32.1687333023741;
-        Wed, 21 Jun 2023 00:37:03 -0700 (PDT)
-Received: from ?IPV6:fdbd:ff1:ce00:11bb:1457:9302:1528:c8f4? ([240e:694:e21:b::2])
-        by smtp.gmail.com with ESMTPSA id g16-20020a1709029f9000b001b04aee1f99sm2758852plq.228.2023.06.21.00.36.56
+        d=1e100.net; s=20221208; t=1687333035; x=1689925035;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RBbxlv9gnoM9pjw8kXntm7KKExMqeh457d11frY80Iw=;
+        b=aL6ASVWsMK+nrRrm4KrUTisLQWI0pRVH6ApcZoStMrau7SLcSA9BvretnoMt+vDXfb
+         SfGWt4S1jB+3OnG3PNtjt1SxtUynwchNFp8I1NOmK2ZrzM8NmlvTNIR0FCO5/pQ67KXx
+         ORl1pmT5fGxul0hSbNP6pUm89ASQeT53bC4Ko4H+5cmfDaXgLlYZJJS2JJRrCG5Iav8W
+         yMsm001dNZbxHI1DfcOg4jE/lvL/QK1czX7fpo9jdNmvWUVvcIaaLEEOfs+SiRJSEKbb
+         pzbe0TIF6+XoAI1Nqmua1DlLyYdfAYGw9DMUTRO9RR9umJlTEl6wjJVhv/79YzWymgCS
+         Aueg==
+X-Gm-Message-State: AC+VfDwm9gzWepOYBmSAliVOwLlPPc4IjQKMhO9f+439k5USxipTtDRp
+        lDqdXjZlYGVzgc2d3BxLU5Xb0sYHD7e6gpSY
+X-Google-Smtp-Source: ACHHUZ5QwD25W7i4rV1q2MqyhTGrg69WSczWlnar6VFw7/caEBhxq7pGydP2i7H+C8GV+qWyTxQNiA==
+X-Received: by 2002:a81:4992:0:b0:568:8e96:7008 with SMTP id w140-20020a814992000000b005688e967008mr11287029ywa.0.1687333035332;
+        Wed, 21 Jun 2023 00:37:15 -0700 (PDT)
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
+        by smtp.gmail.com with ESMTPSA id d187-20020a0df4c4000000b0055a07e36659sm954239ywf.145.2023.06.21.00.37.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 00:37:03 -0700 (PDT)
-Message-ID: <0a2c3d52-a964-d987-5808-88f09515d5be@bytedance.com>
-Date:   Wed, 21 Jun 2023 15:36:53 +0800
+        Wed, 21 Jun 2023 00:37:14 -0700 (PDT)
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-5702415be17so48956087b3.2;
+        Wed, 21 Jun 2023 00:37:14 -0700 (PDT)
+X-Received: by 2002:a81:4992:0:b0:568:8e96:7008 with SMTP id
+ w140-20020a814992000000b005688e967008mr11287000ywa.0.1687333034038; Wed, 21
+ Jun 2023 00:37:14 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH] sched/fair: fix possible active balance misbehavior
-To:     Miaohe Lin <linmiaohe@huawei.com>, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org
-Cc:     dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org
-References: <20230621065331.3793767-1-linmiaohe@huawei.com>
-Content-Language: en-US
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <20230621065331.3793767-1-linmiaohe@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230620134857.238941-1-tanure@linux.com> <20230620134857.238941-3-tanure@linux.com>
+ <ZJIjtphyKdC48JrN@ofant> <76a7f819-f3d2-d39d-1bc9-f1e7f837fd22@linaro.org>
+In-Reply-To: <76a7f819-f3d2-d39d-1bc9-f1e7f837fd22@linaro.org>
+Reply-To: tanure@linux.com
+From:   Lucas Tanure <tanure@linux.com>
+Date:   Wed, 21 Jun 2023 08:37:02 +0100
+X-Gmail-Original-Message-ID: <CAJX_Q+3im20qphOXzn-=58Kx4--ajbaF4P8BVvRcDcPXn1Qheg@mail.gmail.com>
+Message-ID: <CAJX_Q+3im20qphOXzn-=58Kx4--ajbaF4P8BVvRcDcPXn1Qheg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] arm64: dts: meson-t7-a311d2-khadas-vim4: add
+ initial device-tree
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Yixun Lan <dlan@gentoo.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>, Nick <nick@khadas.com>,
+        Artem <art@khadas.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Miaohe,
+On Wed, Jun 21, 2023 at 7:02 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 21/06/2023 00:09, Yixun Lan wrote:
+> >> +            apb4: bus@fe000000 {
+> >> +                    compatible = "simple-bus";
+> >> +                    reg = <0x0 0xfe000000 0x0 0x480000>;
+> >> +                    #address-cells = <2>;
+> >> +                    #size-cells = <2>;
+> >> +                    ranges = <0x0 0x0 0x0 0xfe000000 0x0 0x480000>;
+> >> +
+> >> +                    uart_A: serial@78000 {
+> >> +                            compatible = "amlogic,meson-t7-uart",
+> >                                               ~~~~~~~~~~~~~~~~~
+> > if you introduce new compatible string, then at least you need to document it
+> > so Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml need to be updated
+> >
+> > but my qeustion here, why bother introducing new compatible string if nothing
+> > changed with the compatible data? given the uart is same IP with g12a, can't we just
+> > use "amlogic,meson-g12-uart" for this? no only it will reduce the structure length of
+> > meson_uart_dt_match[], but also relieve maintainer's review burden?
+>
+> https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
+>
+> Best regards,
+> Krzysztof
+>
+Hi, I did not understand the recommendation here.
+Can I add "amlogic,meson-t7-uart" without Documentation changes?
+I think Yes, as I can see a few compatible strings in dts that don't
+exist anywhere else.
 
-On 6/21/23 2:53 PM, Miaohe Lin wrote:
-> In LBF_DST_PINNED case, env.dst_cpu won't be equal to this_cpu. So when
-> need_active_balance() returns true, env.dst_cpu should be used to do the
-> active balance stuff instead of this_cpu.
+My idea here is to add "amlogic,meson-t7-uart" for future use if ever
+created, like if we find a bug in the future that is only relevant to
+T7 soc.
+But for now, fallback to s4 uart, as it seems to be the same controller.
 
-Active LB is the last resort to balance loads, which means no task
-found can be moved to the local group before we actually do active lb.
-So I don't think there is much difference between this cpu and the
-selected new dst_cpu, as they are both in the local sched group and
-the sched group is treated as a whole in point of view of balancing.
+From Krzysztof said in the writing-bindings.rst, I am following the rules.
 
-Best,
-	Abel
+So, what's the path forward here?
 
-> 
-> Fixes: 88b8dac0a14c ("sched: Improve balance_cpu() to consider other cpus in its group as target of (pinned) task")
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->   kernel/sched/fair.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 5e90e9658528..28ff831ee847 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -10968,14 +10968,14 @@ static int load_balance(int this_cpu, struct rq *this_rq,
->   			/*
->   			 * Don't kick the active_load_balance_cpu_stop,
->   			 * if the curr task on busiest CPU can't be
-> -			 * moved to this_cpu:
-> +			 * moved to env.dst_cpu:
->   			 */
-> -			if (!cpumask_test_cpu(this_cpu, busiest->curr->cpus_ptr)) {
-> +			if (!cpumask_test_cpu(env.dst_cpu, busiest->curr->cpus_ptr)) {
->   				raw_spin_rq_unlock_irqrestore(busiest, flags);
->   				goto out_one_pinned;
->   			}
->   
-> -			/* Record that we found at least one task that could run on this_cpu */
-> +			/* Record that we found at least one task that could run on env.dst_cpu */
->   			env.flags &= ~LBF_ALL_PINNED;
->   
->   			/*
-> @@ -10985,7 +10985,7 @@ static int load_balance(int this_cpu, struct rq *this_rq,
->   			 */
->   			if (!busiest->active_balance) {
->   				busiest->active_balance = 1;
-> -				busiest->push_cpu = this_cpu;
-> +				busiest->push_cpu = env.dst_cpu;
->   				active_balance = 1;
->   			}
->   			raw_spin_rq_unlock_irqrestore(busiest, flags);
+Thanks
+Lucas
