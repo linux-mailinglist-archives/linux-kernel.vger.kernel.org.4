@@ -2,114 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA935738006
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF7F738134
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:11:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjFUJVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 05:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
+        id S229527AbjFUJWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 05:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbjFUJVL (ORCPT
+        with ESMTP id S229783AbjFUJWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 05:21:11 -0400
-Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9DBF51B4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:21:09 -0700 (PDT)
-HMM_SOURCE_IP: 172.18.0.48:41464.1037017731
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-36.111.64.85 (unknown [172.18.0.48])
-        by chinatelecom.cn (HERMES) with SMTP id A0D352800BB;
-        Wed, 21 Jun 2023 17:21:01 +0800 (CST)
-X-189-SAVE-TO-SEND: +liuq131@chinatelecom.cn
-Received: from  ([36.111.64.85])
-        by app0024 with ESMTP id fa69a156f7714ae4ae7368d0327bf29c for akpm@linux-foundation.org;
-        Wed, 21 Jun 2023 17:21:07 CST
-X-Transaction-ID: fa69a156f7714ae4ae7368d0327bf29c
-X-Real-From: liuq131@chinatelecom.cn
-X-Receive-IP: 36.111.64.85
-X-MEDUSA-Status: 0
-Sender: liuq131@chinatelecom.cn
-From:   liuq <liuq131@chinatelecom.cn>
-To:     akpm@linux-foundation.org
-Cc:     ying.huang@intel.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, liuq <liuq131@chinatelecom.cn>
-Subject: [PATCH v3] mm/min_free_kbytes: modify min_free_kbytes calculation rules
-Date:   Wed, 21 Jun 2023 17:20:48 +0800
-Message-Id: <20230621092048.5242-1-liuq131@chinatelecom.cn>
-X-Mailer: git-send-email 2.27.0
+        Wed, 21 Jun 2023 05:22:34 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05AE110F0;
+        Wed, 21 Jun 2023 02:22:33 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b47354c658so52499521fa.1;
+        Wed, 21 Jun 2023 02:22:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687339351; x=1689931351;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EDeNQQqyz/nKt5P8lWcisu6DsEDZkm29WDucZUEslLo=;
+        b=LvA+yAc7uqyQWWHYSZ/EweD6nBt0ToDoNvUQfmFPftuB3YQaD3wDtfcddxerdjpqLK
+         zNURLecHDA0Q6cOBY3eeGf4xX6I9MmmOuJ3gASfKbMSoWsMUsi6UzaomNPo4JNN88KxB
+         y3nMyhHHXkjrJ0okRDyTFUog714z1htWRo6ewS0Zm/XhbEi+5kbQVg7YkggJN9ODNKW8
+         looCIxDSUKflL9OdA8dMMf3ZwQufzYK0AjgZ47SJeC/bu/mpG4Ov3dQHEsE+VGcWlOPx
+         0kihrQ7jlL0p5ijllp28oM66AKUJrmxVHjFbWLmDiID2FFyCr5wG06Pi4u6MY21pLv4q
+         9qKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687339351; x=1689931351;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EDeNQQqyz/nKt5P8lWcisu6DsEDZkm29WDucZUEslLo=;
+        b=Jjp0cVdYtWayDmT32m9b93/MK8UjjUJFMBqiP2e4H7DMlI8TghPaeNs0HaRXdZ/zsG
+         G93NghQtjPtJJVsH50b0lTXkfq5IC5LhcMpSvtquaBfpJ/fO54GDPXYwCO6PFN8ovcaI
+         9DSX8MrPCh0gj1bme4paMkfexEWyKHBFRsJ1I6dxmAahGsutBx2db6PV1o5ESkbGvsLa
+         T8XF1fwucikQY7aKOtm5GszLeuJnDSFXpLY84Hs0JIjeIxxUkqAP4Ls9+ZXKPaLv4yhc
+         ekehLj8qfCDOmbPnkeubpkGso0MemMddplxHhQRtcZlZ9/2W5NdEsNEEIk5nulqAiP9Z
+         eYRA==
+X-Gm-Message-State: AC+VfDyiMVV5AbfEYoh+fg/yPbii96MOMn1qyYlIluXGoR/5Bnxj18NY
+        SYhsfeDW57QoLLh1ce3NiiA=
+X-Google-Smtp-Source: ACHHUZ4b5B0OPx8Ocken2B6jez7ePavuLOeKLr41nwQeM7rYzRLGaa8mAeN0QJbfqgiDZ0QYVm5Ecw==
+X-Received: by 2002:a2e:3211:0:b0:2b4:7d83:c80b with SMTP id y17-20020a2e3211000000b002b47d83c80bmr5066194ljy.13.1687339350913;
+        Wed, 21 Jun 2023 02:22:30 -0700 (PDT)
+Received: from localhost.localdomain (sa-84-52-56-253.saturn.infonet.ee. [84.52.56.253])
+        by smtp.googlemail.com with ESMTPSA id w7-20020a05651c102700b002b1b92910c8sm811575ljm.86.2023.06.21.02.22.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 02:22:30 -0700 (PDT)
+From:   emma christy <emma.t.christy@gmail.com>
+To:     ezequiel@vanguardiasur.com.ar, mchehab@kernel.org,
+        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Cc:     emma christy <emma.t.christy@gmail.com>
+Subject: [PATCH] Subject: [PATCH] media: rkvdec: removed redundant blank line
+Date:   Wed, 21 Jun 2023 12:22:23 +0300
+Message-Id: <20230621092223.10805-1-emma.t.christy@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current calculation of min_free_kbytes only uses ZONE_DMA and
-ZONE_NORMAL pages,but the ZONE_MOVABLE zone->_watermark[WMARK_MIN]
-will also divide part of min_free_kbytes.This will cause the min
-watermark of ZONE_NORMAL to be too small in the presence of ZONE_MOVEABLE.
+Adhere to Linux kernel coding style. Removed redundant blank line.
+Issue found by checkpatch.
 
-__GFP_HIGH and PF_MEMALLOC allocations usually don't need movable
-zone pages, so just like ZONE_HIGHMEM, cap pages_min to a small
-value in __setup_per_zone_wmarks.
-
-On my testing machine with 16GB of memory (transparent hugepage is
-turned off by default, and movablecore=12G is configured)
-The following is a comparative test data of watermark_min
-
-		no patch	add patch
-ZONE_DMA	1		8
-ZONE_DMA32	151		709
-ZONE_NORMAL	233		1113
-ZONE_MOVABLE	1434		128
-min_free_kbytes	7288		7326
-
-Signed-off-by: liuq <liuq131@chinatelecom.cn>
+Signed-off-by: emma christy <emma.t.christy@gmail.com>
 ---
- mm/page_alloc.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/staging/media/rkvdec/rkvdec-vp9.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 47421bedc12b..590ed8725e09 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -6362,9 +6362,9 @@ static void __setup_per_zone_wmarks(void)
- 	struct zone *zone;
- 	unsigned long flags;
- 
--	/* Calculate total number of !ZONE_HIGHMEM pages */
-+	/* Calculate total number of !ZONE_HIGHMEM and !ZONE_MOVABLE pages */
- 	for_each_zone(zone) {
--		if (!is_highmem(zone))
-+		if (!is_highmem(zone) && zone_idx(zone) != ZONE_MOVABLE)
- 			lowmem_pages += zone_managed_pages(zone);
+diff --git a/drivers/staging/media/rkvdec/rkvdec-vp9.c b/drivers/staging/media/rkvdec/rkvdec-vp9.c
+index cfae99b40ccb..0e7e16f20eeb 100644
+--- a/drivers/staging/media/rkvdec/rkvdec-vp9.c
++++ b/drivers/staging/media/rkvdec/rkvdec-vp9.c
+@@ -227,7 +227,6 @@ static void init_intra_only_probs(struct rkvdec_ctx *ctx,
+ 				}
+ 			}
+ 		}
+-
  	}
  
-@@ -6374,15 +6374,15 @@ static void __setup_per_zone_wmarks(void)
- 		spin_lock_irqsave(&zone->lock, flags);
- 		tmp = (u64)pages_min * zone_managed_pages(zone);
- 		do_div(tmp, lowmem_pages);
--		if (is_highmem(zone)) {
-+		if (is_highmem(zone) || zone_idx(zone) == ZONE_MOVABLE) {
- 			/*
- 			 * __GFP_HIGH and PF_MEMALLOC allocations usually don't
--			 * need highmem pages, so cap pages_min to a small
--			 * value here.
-+			 * need highmem and movable zones pages, so cap pages_min
-+			 * to a small  value here.
- 			 *
- 			 * The WMARK_HIGH-WMARK_LOW and (WMARK_LOW-WMARK_MIN)
- 			 * deltas control async page reclaim, and so should
--			 * not be capped for highmem.
-+			 * not be capped for highmem and movable zones.
- 			 */
- 			unsigned long min_pages;
- 
+ 	for (i = 0; i < sizeof(v4l2_vp9_kf_uv_mode_prob); ++i) {
 -- 
-2.27.0
+2.40.1
 
