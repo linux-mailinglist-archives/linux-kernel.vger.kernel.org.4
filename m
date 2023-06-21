@@ -2,74 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1780738B68
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81454738B6D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230392AbjFUQfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
+        id S231732AbjFUQfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232748AbjFUQem (ORCPT
+        with ESMTP id S233073AbjFUQfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:34:42 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C9F1FCB
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:34:21 -0700 (PDT)
+        Wed, 21 Jun 2023 12:35:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0A41BD0;
+        Wed, 21 Jun 2023 09:34:43 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D9DDB1FF33;
-        Wed, 21 Jun 2023 16:34:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1687365259; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by smtp-out1.suse.de (Postfix) with ESMTPS id AEB272199E;
+        Wed, 21 Jun 2023 16:34:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1687365262; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7B1rYZPmUUmzG9AoAPJupPPqfTGJws54sAbZMp3PkUA=;
-        b=ouDN/VVTNK6cBdCJ4J8ygLPNzVV/2zwMHeaArMxw1HltM4aU7N34JgXIUgiEALkKX2g21m
-        OJoSQY1urvoXICt3pICYxeEfZbT87xQX6QykUmkIAVyhULax2wawYCmvJQMorMSG+LUow6
-        9RDVhbWpggFzIfiUF0tCopWx/uxZyuA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1687365259;
+        bh=nP97CZRMi7DzHuqo3ZRpLhOQxus1icZrg2m4Gx76Tsw=;
+        b=bzbna+hlHAKeGsV1/PiehUW/1VgYgGkIixL5MqK8MJcl85KtxZQAErWUxpwpK0MNH/5wjz
+        iDD9V1MjrFlFn8pM9yO9KUZelNSqIG7zPZzUtpHgH80tRcYZHsUJRGjs8huyCGN6PTowBb
+        zcycPg0NGa579PoAZ33AAP60Wc2ctMA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1687365262;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=7B1rYZPmUUmzG9AoAPJupPPqfTGJws54sAbZMp3PkUA=;
-        b=eo+l3AgW85QpyYlNRRCatCClY81nY/61R6LbM2JVU+X6MU1mo7Ktcdd/h5gqYp7kIf81sr
-        hCXv5Vhbo7RFBDBQ==
+        bh=nP97CZRMi7DzHuqo3ZRpLhOQxus1icZrg2m4Gx76Tsw=;
+        b=UlBAF8kOJR4yUNnNtzxj7DprWyeel6m/433ZEs5yCwgIsE7i3cpXIG8pW0OylRnXjPsCQH
+        ic+uOb6ZgkuZJ8Dw==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CC3DD133E6;
-        Wed, 21 Jun 2023 16:34:19 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7B0B1133E6;
+        Wed, 21 Jun 2023 16:34:22 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id myTWMYsmk2TfQgAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 21 Jun 2023 16:34:19 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 6C725A075D; Wed, 21 Jun 2023 18:34:19 +0200 (CEST)
-Date:   Wed, 21 Jun 2023 18:34:19 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Jeremy Kerr <jk@ozlabs.org>, Arnd Bergmann <arnd@arndb.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 02/79] spufs: switch to new ctime accessors
-Message-ID: <20230621163419.adjsdbqoyebvymqc@quack3>
-References: <20230621144507.55591-1-jlayton@kernel.org>
- <20230621144735.55953-1-jlayton@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621144735.55953-1-jlayton@kernel.org>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        id nXcMHY4mk2ToQgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 21 Jun 2023 16:34:22 +0000
+Date:   Wed, 21 Jun 2023 18:34:22 +0200
+Message-ID: <87352krcz5.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     =?ISO-8859-1?Q?=22N=EDcolas_F=2E_R=2E_A=2E=22?= Prado 
+        <nfraprado@collabora.com>
+Cc:     Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+        kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/2] kselftest/alsa: pcm-test: Decrease stream duration from 4 to 2 seconds
+In-Reply-To: <5c2d5213-5299-44f1-9611-26002c8a5d3a@notapiano>
+References: <20230620220839.2215057-1-nfraprado@collabora.com>
+        <20230620220839.2215057-3-nfraprado@collabora.com>
+        <33bea0d3-b8dd-4936-812e-392166df4437@sirena.org.uk>
+        <443f697b-fecf-6e8e-0b76-65257aff7da8@perex.cz>
+        <9069ad0c-d166-4620-a3de-a36ab233cab0@sirena.org.uk>
+        <5c2d5213-5299-44f1-9611-26002c8a5d3a@notapiano>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,39 +83,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 21-06-23 10:45:15, Jeff Layton wrote:
-> In later patches, we're going to change how the ctime.tv_nsec field is
-> utilized. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
+On Wed, 21 Jun 2023 18:03:22 +0200,
+Nícolas F. R. A. Prado wrote:
 > 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-
-Looks good to me. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
-> ---
->  arch/powerpc/platforms/cell/spufs/inode.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> On Wed, Jun 21, 2023 at 03:39:12PM +0100, Mark Brown wrote:
+> > On Wed, Jun 21, 2023 at 04:08:47PM +0200, Jaroslav Kysela wrote:
+> > 
+> > > I think that the problem is somewhere else here. The overall test timeout
+> > > should be calculated dynamically. All tests may be queried for the maximal
+> > > expected interval based on the hardware/software capabilities. It's a bit
+> > > pitfall to have a fixed time limit where the realtime tests depend on the
+> > > number of devices.
+> > 
+> > I tend to agree here, unfortunately Shuah hasn't responded to queries
+> > from Nícolas about this which I imagine is what inspired this patch.  We
+> > also have problems with mixer-test on one of the Dialog CODECs with a
+> > couple of 64k value controls and no cache only mode.
 > 
-> diff --git a/arch/powerpc/platforms/cell/spufs/inode.c b/arch/powerpc/platforms/cell/spufs/inode.c
-> index ea807aa0c31a..55418395bd9a 100644
-> --- a/arch/powerpc/platforms/cell/spufs/inode.c
-> +++ b/arch/powerpc/platforms/cell/spufs/inode.c
-> @@ -86,7 +86,7 @@ spufs_new_inode(struct super_block *sb, umode_t mode)
->  	inode->i_mode = mode;
->  	inode->i_uid = current_fsuid();
->  	inode->i_gid = current_fsgid();
-> -	inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
-> +	inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
->  out:
->  	return inode;
->  }
-> -- 
-> 2.41.0
+> Yes, exactly. I've tried increasing the timeout for this test to a larger fixed
+> value previously, and later asked for more information on how to deal with the
+> kselftest timeout. [1]
 > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> Since I didn't hear back, I thought this patch would be a way to at least
+> mitigate the issue for now, without limiting the test coverage, which was a
+> concern with having limited scopes for the test.
+> 
+> I've just noticed that in the mean time a way to override the timeout when
+> running kselftest has been introduced [2], so I suppose we could use that to
+> work around the timeout limitation in CI systems and be able to run through
+> completion on the different hardware at the lab. But I still believe, like you
+> do, that calculating the timeout at runtime based on the hardware would make
+> much more sense, though if there's such a desire to keep kselftests under the
+> 45s mark, I'm not sure if it would be acceptable.
+> 
+> [1] https://lore.kernel.org/all/5302e70d-cb58-4e70-b44f-ff81b138a2e1@notapiano/
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f6a01213e3f8
+
+So, we're back to square...  Unless anyone has a strong objection, I'm
+inclined to take this as a workaround for 6.5 for now, as the merge
+window deadline is coming.  We can improve things at the same time for
+the future kernel, too.
+
+
+thanks,
+
+Takashi
