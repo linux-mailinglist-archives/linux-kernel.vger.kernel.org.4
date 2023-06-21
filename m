@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A60D738CA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 991AC738CB5
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjFURFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 13:05:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
+        id S230242AbjFURIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 13:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjFURFc (ORCPT
+        with ESMTP id S229726AbjFURIe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 13:05:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C780610D;
-        Wed, 21 Jun 2023 10:05:31 -0700 (PDT)
+        Wed, 21 Jun 2023 13:08:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC25135;
+        Wed, 21 Jun 2023 10:08:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 01F5261601;
-        Wed, 21 Jun 2023 17:05:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B3EEC433C8;
-        Wed, 21 Jun 2023 17:05:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 103DB61615;
+        Wed, 21 Jun 2023 17:08:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 503ECC433C0;
+        Wed, 21 Jun 2023 17:08:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687367129;
-        bh=VgDrDN1AlEKLSxfcxPdZIOC6m3JNO0J57lFupt0/nRM=;
+        s=k20201202; t=1687367312;
+        bh=ZMr77jsR3SW8Dv/WoWnmFrUI+GNGUZXIyByY3L5hI6A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tkiqn8dhJ2BLxGzsNwrl7GH0zA9Q2H5HA2XY0mrYmVXJ6UNtMexUiyMjqkDv5Kgik
-         wvjbpIdNK5OTZmbd6YaDrpat/twBHL9TgvP7hTZwo/6AZqFuP/KZt1YU71JyjrBkFO
-         gRG0hut4nnXW1zF5UzAVUXGNU9oUj70HB46C8QPdCwUrBQyw6GAWxKgYaIEQNNehom
-         m5pTHhEnmjfSimTT5xIpvfOZI1kPNyLgocS54PZmAyCBiF8AqzZvy9hUViASUnIRNU
-         RbnC+T8/mx9jvkucXKyxDUIy5CehRIMGzejVLjXtZ58N1UPzY6R6Joz8NEsYzwxbts
-         xq58MM9uoNpcQ==
-Date:   Wed, 21 Jun 2023 18:05:24 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Raymond Hackley <raymondhackley@protonmail.com>,
-        linux-kernel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Luca Weiss <luca@z3ntu.xyz>,
-        "open list:LED SUBSYSTEM" <linux-leds@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 1/2] dt-bindings: leds: sgm3140: Document richtek,rt5033
- compatible
-Message-ID: <20230621170524.GJ10378@google.com>
-References: <20230602130644.259933-1-raymondhackley@protonmail.com>
- <20230602131009.260239-1-raymondhackley@protonmail.com>
- <20230621150141.GE10378@google.com>
- <20230621150302.GF10378@google.com>
- <20230621-stuffed-revolt-435d3d2dd4aa@spud>
+        b=NYWSoLiFIsZ1nfDhdck7LiifPmHR84QXTyuGiCMU/g7H5RBloxpx7xyQaqMUx16TU
+         YAXNuvLWUsgov3iWlwf4cgSfMHex5l4Tx5XuSZTSJ1t8GT5poh8+VqrulyReaGepWp
+         TKRc9T2718YWQQEpbuNWmEwT3gTIW9HXi7IoRmChfdv9El4sRhTobLtkFxQFIbztPv
+         sNlwnxkhpkpH4iOB1dW/Mf6M45aCQT+9HyxRKgviTqags6QGH3kz5ZvRU+X0yu/3gp
+         wN9HOzvhRr0QiOaIrWvdqQrfJgh4tfnaWO4SyQFImPV0ZaqhA+xUENh5nwXYlramQo
+         sQ3OClM7HOsmw==
+Date:   Wed, 21 Jun 2023 18:08:27 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     =?iso-8859-1?B?Ik7tY29sYXMgRi4gUi4gQS4i?= Prado 
+        <nfraprado@collabora.com>, Jaroslav Kysela <perex@perex.cz>,
+        kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/2] kselftest/alsa: pcm-test: Decrease stream duration
+ from 4 to 2 seconds
+Message-ID: <f5cab2c2-1638-4d19-aff3-d46ed34b857e@sirena.org.uk>
+References: <20230620220839.2215057-1-nfraprado@collabora.com>
+ <20230620220839.2215057-3-nfraprado@collabora.com>
+ <33bea0d3-b8dd-4936-812e-392166df4437@sirena.org.uk>
+ <443f697b-fecf-6e8e-0b76-65257aff7da8@perex.cz>
+ <9069ad0c-d166-4620-a3de-a36ab233cab0@sirena.org.uk>
+ <5c2d5213-5299-44f1-9611-26002c8a5d3a@notapiano>
+ <87352krcz5.wl-tiwai@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="sJ223WL4sI8q4Z0q"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230621-stuffed-revolt-435d3d2dd4aa@spud>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <87352krcz5.wl-tiwai@suse.de>
+X-Cookie: When among apes, one must play the ape.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,53 +70,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023, Conor Dooley wrote:
 
-> Raymond,
-> 
-> On Wed, Jun 21, 2023 at 04:03:02PM +0100, Lee Jones wrote:
-> > On Wed, 21 Jun 2023, Lee Jones wrote:
-> > 
-> > > On Fri, 02 Jun 2023, Raymond Hackley wrote:
-> > > 
-> > > > Add devicetree binding for Richtek RT5033 Flash LED charge pump used for
-> > > > camera flash LEDs.
-> > > > 
-> > > > Signed-off-by: Raymond Hackley <raymondhackley@protonmail.com>
-> > > > ---
-> > > >  Documentation/devicetree/bindings/leds/leds-sgm3140.yaml | 1 +
-> > > >  1 file changed, 1 insertion(+)
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml b/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml
-> > > > index 4d2ffe5fcfc7..37d2a93780ab 100644
-> > > > --- a/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml
-> > > > +++ b/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml
-> > > > @@ -20,6 +20,7 @@ properties:
-> > > >    compatible:
-> > > >      enum:
-> > > >        - ocs,ocp8110
-> > > > +      - richtek,rt5033-led
-> > > 
-> > > Why is "-led" appended on to this one and not the others?
-> > 
-> > It's unusual for me to have to dump through a bunch of hoops just to
-> > read and then subsequently reply to mail.  Can you consider removing
-> > whatever encryption you have enabled please?
-> 
-> https://www.kernel.org/doc/html/latest/process/email-clients.html#proton-mail
+--sJ223WL4sI8q4Z0q
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks for the link.  This is perfect!
+On Wed, Jun 21, 2023 at 06:34:22PM +0200, Takashi Iwai wrote:
 
-At least I know it's not just me being unreasonable.
+> So, we're back to square...  Unless anyone has a strong objection, I'm
+> inclined to take this as a workaround for 6.5 for now, as the merge
+> window deadline is coming.  We can improve things at the same time for
+> the future kernel, too.
 
-> I was under the impression that there was no way to disable this
-> behaviour, but I saw mention somewhere that they managed to patch the
-> open source version of the protonmail bridge to function. I cannot find
-> this on lore, because the person's domain was not a proton one and I
-> completely forget their name as it was several months ago.
-> I'll reply here if I find it.
+It feels like it might be good to let it cook for a bit longer before
+going to Linus (eg, applying after the merge window) so we've more
+chance to see what the impact is on other boards?
 
-Thanks.
+--sJ223WL4sI8q4Z0q
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Lee Jones [李琼斯]
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSTLooACgkQJNaLcl1U
+h9CHJQf7Bn6pMlneZXihhoTKXkp58Tz+OhUfB9RBtYGcHEyPCRoxwLmhZ/8CV+Av
+ucrbzZmxYOaStT5mGuz7vYY3JjCPSItte03vaKR3k7vC8iNoVjthpdgW6u7qVSha
+wr1sjMVkxgNhMXTNuc4HRAEOu5vXFFB14DuV9lrQYpv50VxIh5U73XQw3jNcGjYz
+8S4HoDtqIzzAvBkblIcGSgLbpj/DaMrMXYmxd32TjjN/b1swYQAY1CmheqOMeUqm
+BhIlwhzoWhMhmZ4ZB2BWIFgYia6cxeqnURnUbL5QkJ8KgYzsbneR8QRldGGs8Hjr
+Ab/65yDMSzPzAkC+FoeJ4zU3tb0eyQ==
+=4AF1
+-----END PGP SIGNATURE-----
+
+--sJ223WL4sI8q4Z0q--
