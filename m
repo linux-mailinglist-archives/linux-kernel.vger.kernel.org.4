@@ -2,74 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E26F737C31
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 09:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CD6C737C43
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 09:36:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbjFUHdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 03:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
+        id S230237AbjFUHfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 03:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFUHde (ORCPT
+        with ESMTP id S231370AbjFUHez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 03:33:34 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC0761B6;
-        Wed, 21 Jun 2023 00:33:31 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8Dxc8TKp5JkDgwAAA--.75S3;
-        Wed, 21 Jun 2023 15:33:30 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax8uTIp5JkoToAAA--.1446S3;
-        Wed, 21 Jun 2023 15:33:29 +0800 (CST)
-Message-ID: <4cdc3d68-8bd6-fbc4-b9c6-ca41e6d132ad@loongson.cn>
-Date:   Wed, 21 Jun 2023 15:33:28 +0800
+        Wed, 21 Jun 2023 03:34:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4909D;
+        Wed, 21 Jun 2023 00:34:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F17E61493;
+        Wed, 21 Jun 2023 07:34:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 610A4C433C0;
+        Wed, 21 Jun 2023 07:34:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687332891;
+        bh=oa7cHyl/wgzTNr7eiy1JrxQnqgppAVKyAkxSlwKm8sY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=q1t7oC/65+XyZa5qZhD3yXkihC6vreLEB/FY+Z6VtD/+Gemh8qQirksNE4IYlZOGV
+         /6sfkfYdUfKx+7qBJD3axxPopc7UBbDnIz9+mtwvhcHJyZxX7uQopX2HcgIvTZcjVT
+         xuSGKrPzh9w7I3kvBS5ayvtDM+zHIG615Oq3u4PYPt4EQ9yOAa2SmP/g33bCGYldfg
+         sI82g1PqXNW5nz/1RUKJDWqu4GgBsdFYTVixcDA2TYIUgx+PaARaLFwcQ9vf6oJUV8
+         Y5Ijryg5EK00p/veZHF5bpJxsvRjzllqPcOiruM/rUYMdJ0J8R2nF5Cz19GIv3qaD4
+         7Y3geRoySw0ow==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1qBsMe-0005lF-UQ; Wed, 21 Jun 2023 09:34:53 +0200
+Date:   Wed, 21 Jun 2023 09:34:52 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc:     Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
+        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
+        "quic_harshq@quicinc.com" <quic_harshq@quicinc.com>,
+        "ahalaney@redhat.com" <ahalaney@redhat.com>
+Subject: Re: [PATCH v8 6/9] usb: dwc3: qcom: Add multiport controller support
+ for qcom wrapper
+Message-ID: <ZJKoHEi6A3I_APGI@hovoldconsulting.com>
+References: <bc347624-4539-4a3a-9399-9b4e272cdb32@quicinc.com>
+ <ZGUCykpDFt9zgeTU@hovoldconsulting.com>
+ <82553597-ce0e-48f4-44d4-9eeaaf4cb1c4@quicinc.com>
+ <ZIBsDQJtgDZRe7MG@hovoldconsulting.com>
+ <99cded6f-6a71-ffce-8479-c7c0726bfb8e@quicinc.com>
+ <ZIGihYS5EacISEFm@hovoldconsulting.com>
+ <279fff8b-57e2-cfc8-cd6d-c69d00e71799@quicinc.com>
+ <20230608175705.2ajrteztdeqdrkzg@synopsys.com>
+ <ZILgW5CwfSlBxzNB@hovoldconsulting.com>
+ <20230609181602.ljxdchgzl7kzk73n@synopsys.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v7 2/8] PCI/VGA: Deal only with VGA class devices
-Content-Language: en-US
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Sui Jingfeng <15330273260@189.cn>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-fbdev@vger.kernel.org, kvm@vger.kernel.org,
-        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        amd-gfx@lists.freedesktop.org, linux-pci@vger.kernel.org
-References: <20230613030151.216625-1-15330273260@189.cn>
- <20230613030151.216625-3-15330273260@189.cn>
- <dbf0d89f-717a-1f78-aef2-f30506751d4d@loongson.cn>
- <CADnq5_N6vVtzH6tzguZdHnP_TdRoG1G-Cr94O+X03jvtk=vhag@mail.gmail.com>
- <3c1c86ab-96ea-aa1c-c9c5-9a4012644fd6@loongson.cn>
- <CADnq5_Px-HWfwetv8LZsCnCeV7SMt_uqtLwMVK7648ZQiP2RCQ@mail.gmail.com>
- <f08b6a76-6c90-b59b-ff43-c779ef759d09@loongson.cn>
- <CADnq5_PFoM2O8mCd6+VFfu9Nc-Hg_HTnwEMxrq0FGRpva1kKiA@mail.gmail.com>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <CADnq5_PFoM2O8mCd6+VFfu9Nc-Hg_HTnwEMxrq0FGRpva1kKiA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Ax8uTIp5JkoToAAA--.1446S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW3JF4UJr45GrW3trWrJFyUtwc_yoWfCw1kpF
-        WrGFW5KF4DJr17Gr12qw1UXFyYvryrJF1rXr1rJw1Ykrn0yr1UGryrGr45C34xXrs5Gr12
-        vr4UJry7uF15XagCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPIb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        XVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jrv_JF1lx2IqxVAqx4xG67
-        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
-        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07jOa93UUU
-        UU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230609181602.ljxdchgzl7kzk73n@synopsys.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,274 +85,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Thinh,
 
-On 2023/6/16 22:34, Alex Deucher wrote:
-> On Fri, Jun 16, 2023 at 10:22 AM Sui Jingfeng <suijingfeng@loongson.cn> wrote:
->>
->> On 2023/6/16 21:41, Alex Deucher wrote:
->>> On Fri, Jun 16, 2023 at 3:11 AM Sui Jingfeng <suijingfeng@loongson.cn> wrote:
->>>> Hi,
->>>>
->>>> On 2023/6/16 05:11, Alex Deucher wrote:
->>>>> On Wed, Jun 14, 2023 at 6:50 AM Sui Jingfeng <suijingfeng@loongson.cn> wrote:
->>>>>> Hi,
->>>>>>
->>>>>> On 2023/6/13 11:01, Sui Jingfeng wrote:
->>>>>>> From: Sui Jingfeng <suijingfeng@loongson.cn>
->>>>>>>
->>>>>>> Deal only with the VGA devcie(pdev->class == 0x0300), so replace the
->>>>>>> pci_get_subsys() function with pci_get_class(). Filter the non-PCI display
->>>>>>> device(pdev->class != 0x0300) out. There no need to process the non-display
->>>>>>> PCI device.
->>>>>>>
->>>>>>> Cc: Bjorn Helgaas <bhelgaas@google.com>
->>>>>>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->>>>>>> ---
->>>>>>>      drivers/pci/vgaarb.c | 22 ++++++++++++----------
->>>>>>>      1 file changed, 12 insertions(+), 10 deletions(-)
->>>>>>>
->>>>>>> diff --git a/drivers/pci/vgaarb.c b/drivers/pci/vgaarb.c
->>>>>>> index c1bc6c983932..22a505e877dc 100644
->>>>>>> --- a/drivers/pci/vgaarb.c
->>>>>>> +++ b/drivers/pci/vgaarb.c
->>>>>>> @@ -754,10 +754,6 @@ static bool vga_arbiter_add_pci_device(struct pci_dev *pdev)
->>>>>>>          struct pci_dev *bridge;
->>>>>>>          u16 cmd;
->>>>>>>
->>>>>>> -     /* Only deal with VGA class devices */
->>>>>>> -     if ((pdev->class >> 8) != PCI_CLASS_DISPLAY_VGA)
->>>>>>> -             return false;
->>>>>>> -
->>>>>> Hi, here is probably a bug fixing.
->>>>>>
->>>>>> For an example, nvidia render only GPU typically has 0x0380.
->>>>>>
->>>>>> as its PCI class number, but render only GPU should not participate in
->>>>>> the arbitration.
->>>>>>
->>>>>> As it shouldn't snoop the legacy fixed VGA address.
->>>>>>
->>>>>> It(render only GPU) can not display anything.
->>>>>>
->>>>>>
->>>>>> But 0x0380 >> 8 = 0x03, the filter  failed.
->>>>>>
->>>>>>
->>>>>>>          /* Allocate structure */
->>>>>>>          vgadev = kzalloc(sizeof(struct vga_device), GFP_KERNEL);
->>>>>>>          if (vgadev == NULL) {
->>>>>>> @@ -1500,7 +1496,9 @@ static int pci_notify(struct notifier_block *nb, unsigned long action,
->>>>>>>          struct pci_dev *pdev = to_pci_dev(dev);
->>>>>>>          bool notify = false;
->>>>>>>
->>>>>>> -     vgaarb_dbg(dev, "%s\n", __func__);
->>>>>>> +     /* Only deal with VGA class devices */
->>>>>>> +     if (pdev->class != PCI_CLASS_DISPLAY_VGA << 8)
->>>>>>> +             return 0;
->>>>>> So here we only care 0x0300, my initial intent is to make an optimization,
->>>>>>
->>>>>> nowadays sane display graphic card should all has 0x0300 as its PCI
->>>>>> class number, is this complete right?
->>>>>>
->>>>>> ```
->>>>>>
->>>>>> #define PCI_BASE_CLASS_DISPLAY        0x03
->>>>>> #define PCI_CLASS_DISPLAY_VGA        0x0300
->>>>>> #define PCI_CLASS_DISPLAY_XGA        0x0301
->>>>>> #define PCI_CLASS_DISPLAY_3D        0x0302
->>>>>> #define PCI_CLASS_DISPLAY_OTHER        0x0380
->>>>>>
->>>>>> ```
->>>>>>
->>>>>> Any ideas ?
->>>>> I'm not quite sure what you are asking about here.
->>>> To be honest, I'm worried about the PCI devices which has a
->>>>
->>>> PCI_CLASS_DISPLAY_XGA as its PCI class number.
->>>>
->>>> As those devices are very uncommon in the real world.
->>>>
->>>>
->>>> $ find . -name "*.c" -type f | xargs grep "PCI_CLASS_DISPLAY_XGA"
->>>>
->>>>
->>>> Grep the "PCI_CLASS_DISPLAY_XGA" in the linux kernel tree got ZERO,
->>>>
->>>> there no code reference this macro. So I think it seems safe to ignore
->>>> the XGA ?
->>>>
->>>>
->>>> PCI_CLASS_DISPLAY_3D and PCI_CLASS_DISPLAY_OTHER are used to annotate
->>>> the render-only GPU.
->>>>
->>>> And render-only GPU can't decode the fixed VGA address space, it is safe
->>>> to ignore them.
->>>>
->>>>
->>>>>     For vga_arb, we
->>>>> only care about VGA class devices since those should be on the only
->>>>> ones that might have VGA routed to them.
->>>>>     However, as VGA gets deprecated,
->>>> We need the vgaarb for a system with multiple video card.
->>>>
->>>> Not only because some Legacy VGA devices implemented
->>>>
->>>> on PCI will typically have the same "hard-decoded" addresses;
->>>>
->>>> But also these video card need to participate in the arbitration,
->>>>
->>>> determine the default boot device.
->>> But couldn't the boot device be determined via what whatever resources
->>> were used by the pre-OS console?
->> I don't know what you are refer to by saying  pre-OS console, UEFI
->> SHELL,  UEFI GOP  or something like that.
->>
-> Right.  Before the OS loads the platform firmware generally sets up
-> something for display.  That could be GOP or vesa or some other
-> platform specific protocol.
->
->> If you are referring to the framebuffer driver which light up the screen
->> before the Linux kernel is loaded .
->>
->>
->> Then, what you have said is true,  the boot device is determined by the
->> pre-OS console.
->>
->> But the problem is how does the Linux kernel(vgaarb) could know which
->> one is the default boot device
->>
->> on a multiple GPU machine.  Relaying on the firmware fb's address and
->> size is what the mechanism
->>
->> we already in using.
-> Right.  It shouldn't need to depend on vgaarb.
->
->>
->>>    I feel like that should be separate from vgaarb.
->> Emm, this really deserved another patch, please ?
->>
->>>    vgaarb should handle PCI VGA routing and some other
->>> mechanism should be used to determine what device provided the pre-OS
->>> console.
->> If the new mechanism need the firmware changed, then this probably break
->> the old machine.
->>
->> Also, this probably will get all arch involved. to get the new mechanism
->> supported.
->>
->> The testing pressure and review power needed is quite large.
->>
->> drm/amdgpu and drm/radeon already being used on X86, ARM64,  Mips and
->> more arch...
->>
->> The reviewing process will became quite difficult then.
->>
->> vgaarb is really what we already in use, and being used more than ten
->> years ...
-> Yes, it works for x86 (and a few other platforms) today because of the
-> VGA legacy, so we can look at VGA routing to determine this.  But even
-> today, we don't need VGA routing to determine what was the primary
-> display before starting the OS.  We could probably have a platform
-> independent way to handle this by looking at the bread crumbs leftover
-> from the pre-OS environment.  E.g., for pre-UEFI platforms, we can
-> look at VGA routing.  For UEFI platforms we can look at what GOP left
-> us.  For various non-UEFI ARM/PPC/MIPS/etc. platforms we can look at
-> whatever breadcrumbs those pre-OS environments left.  That way when
-> VGA goes away, we can have a clean break and you won't need vgaarb if
-> the platform has no VGA devices.
+and sorry about the late reply. Was on holiday last week.
 
+On Fri, Jun 09, 2023 at 06:16:13PM +0000, Thinh Nguyen wrote:
+> On Fri, Jun 09, 2023, Johan Hovold wrote:
+> > On Thu, Jun 08, 2023 at 05:57:23PM +0000, Thinh Nguyen wrote:
+> > > On Thu, Jun 08, 2023, Krishna Kurapati PSSNV wrote:
+> > > > On 6/8/2023 3:12 PM, Johan Hovold wrote:
+> > > > > On Thu, Jun 08, 2023 at 01:21:02AM +0530, Krishna Kurapati PSSNV wrote:
+> > > > > > On 6/7/2023 5:07 PM, Johan Hovold wrote:
+> > > > > 
+> > > > > > > So there at least two issues with this series:
+> > > > > > > 
+> > > > > > > 	1. accessing xhci registers from the dwc3 core
+> > > > > > > 	2. accessing driver data of a child device
+> > > > > > > 
+> > > > > > > 1. The first part about accessing xhci registers goes against the clear
+> > > > > > > separation between glue, core and xhci that Felipe tried to maintain.
+> > > > > > > 
+> > > > > > > I'm not entirely against doing this from the core driver before
+> > > > > > > registering the xhci platform device as the registers are unmapped
+> > > > > > > afterwards. But if this is to be allowed, then the implementation should
+> > > > > > > be shared with xhci rather than copied verbatim.
+> > > 
+> > > The core will just be looking at the HW capability registers and
+> > > accessing the ports capability. Our programming guide also listed the
+> > > host capability registers in its documentation. We're not driving the
+> > > xhci controller here. We're initializing some of the core configs base
+> > > on its capability.
+> > > 
+> > > We're duplicating the logic here and not exactly doing it verbatim.
+> > > Let's try not to share the whole xhci header where we should not have
+> > > visibility over. Perhaps it makes sense in some other driver, but let's
+> > > not do it here.
+> > 
+> > The patch series even copied the kernel doc verbatim. This is just not
+> > the way things are supposed to be done upstream. We share defines and
+> > implementations all the time, but we should not be making copies of
+> > them.
+> 
+>  We had some fixes to the kernel doc as it's incorrect description.
+>  Perhaps we can fully rewrite the kernel-doc if that what makes it
+>  better.
 
-Thanks for the dear developers from AMDGPU,
+No, this is an example of why you should not copy code (and docs)
+around, for example, so you don't have to fix the same bug (or typo) in
+multiple places.
 
+> We can share define implementations if they are meant to be
+>  shared. However, with the current way xhci header is implemented, it's
+>  not meant to be shared with dwc3. You agreed that we are violating this
+>  in some driver, but you're also insistent that we should not duplicate
+>  the logic to avoid this violation. Perhaps I'm not a maintainer here
+>  long enough to know some violation is better kept. If sharing the xhci
+>  header is what it takes to get this through, then fine.
 
-Mario already give me a R-B to V6 of this series[1],  I link it to 
-here,//for fear of lost it.
+Just because no-one has used these outside of xhci today, doesn't mean
+that you should copy the defines once they are needed outside that
+driver.
 
-He may be busy,  not seeing the latest.
+And in fact, they are used outside of the xhci driver proper already
+today, only that people took the lazy approach and shared the inline
+helper for that.
 
+> > > > > > > 
+> > > > > > > The alternative that avoids this issue entirely could indeed be to
+> > > > > > > simply count the number of PHYs described in DT as Rob initially
+> > > > > > > suggested. Why would that not work?
+> > > 
+> > > See below.
+> > > 
+> > > > > > > 
+> > > > > > The reason why I didn't want to read the Phy's from DT is explained in
+> > > > > > [1]. I felt it makes the code unreadable and its very tricky to read the
+> > > > > > phy's properly, so we decided we would initialize phy's for all ports
+> > > > > > and if a phy is missing in DT, the corresponding member in
+> > > > > > dwc->usbX_generic_phy[] would be NULL and any phy op on it would be a NOP.
+> > > > > 
+> > > > > That doesn't sound too convincing. Can't you just iterate over the PHYs
+> > > > > described in DT and determine the maximum port number used for HS and
+> > > > > SS?
+> > > > > > Also as per Krzysztof suggestion on [2], we can add a compatible to read
+> > > > > > number of phy's / ports present. This avoids accessing xhci members
+> > > > > > atleast in driver core. But the layering violations would still be present.
+> > > > > 
+> > > > > Yes, but if the information is already available in DT it's better to use
+> > > > > it rather than re-encode it in the driver.
+> > 
+> > > >   Are you suggesting that we just do something like
+> > > > num_ports = max( highest usb2 portnum, highest usb3 port num)
+> > > 
+> > > Why do we want to do this? This makes num_ports ambiguous. Let's not
+> > > sacrifice clarity for some lines of code.
+> > 
+> > This is not about lines of code, but avoiding the bad practice of
+> > copying code around and, to some degree, maintaining the separation
+> > between the glue, core, and xhci which Felipe (perhaps mistakingly) has
+> > fought for.
+> 
+> We're talking about combining num_usb3_ports and num_usb2_ports here,
+> what does that have to do with layer separation?
 
-For this patch series, V6 is same with the V7.
+I mentioned this is as an alternative if you're are hell-bent on not
+reusing the xhci register defines and parsing code.
 
+> > If you just need to know how many PHYs you have in DT so that you can
+> > iterate over that internal array, you can just look at the max index in
+> > DT where the indexes are specified in the first place.
+> > 
+> > Don't get hung up on the current variable names, those can be renamed to
+> > match the implementation. Call it max_ports or whatever.
+> 
+> It doesn't matter what variable name is given, it doesn't change the
+> fact that this "num_ports" or "max_ports" obfuscated usb2 vs usb3 ports
+> just for this specific implementation. So, don't do that.
 
-[1] 
-https://lore.kernel.org/all/5b6fdf65-b354-94a9-f883-be820157efad@amd.com/
+Ok, then make sure you reuse the xhci implementation for that then.
 
-> Alex
->
->>
->>> Alex
->>>
->>>> Nowadays, the 'VGA devices' here is stand for the Graphics card
->>>>
->>>> which is capable of display something on the screen.
->>>>
->>>> We still need vgaarb to select the default boot device.
->>>>
->>>>
->>>>> you'll have more non VGA PCI classes for devices which
->>>>> could be the pre-OS console device.
->>>> Ah, we still want  do this(by applying this patch) first,
->>>>
->>>> and then we will have the opportunity to see who will crying if
->>>> something is broken. Will know more then.
->>>>
->>>> But drop this patch or revise it with more consideration is also
->>>> acceptable.
->>>>
->>>>
->>>> I asking about suggestion and/or review.
->>>>
->>>>> Alex
->>>>>
->>>>>>>          /* For now we're only intereted in devices added and removed. I didn't
->>>>>>>           * test this thing here, so someone needs to double check for the
->>>>>>> @@ -1510,6 +1508,8 @@ static int pci_notify(struct notifier_block *nb, unsigned long action,
->>>>>>>          else if (action == BUS_NOTIFY_DEL_DEVICE)
->>>>>>>                  notify = vga_arbiter_del_pci_device(pdev);
->>>>>>>
->>>>>>> +     vgaarb_dbg(dev, "%s: action = %lu\n", __func__, action);
->>>>>>> +
->>>>>>>          if (notify)
->>>>>>>                  vga_arbiter_notify_clients();
->>>>>>>          return 0;
->>>>>>> @@ -1534,8 +1534,8 @@ static struct miscdevice vga_arb_device = {
->>>>>>>
->>>>>>>      static int __init vga_arb_device_init(void)
->>>>>>>      {
->>>>>>> +     struct pci_dev *pdev = NULL;
->>>>>>>          int rc;
->>>>>>> -     struct pci_dev *pdev;
->>>>>>>
->>>>>>>          rc = misc_register(&vga_arb_device);
->>>>>>>          if (rc < 0)
->>>>>>> @@ -1545,11 +1545,13 @@ static int __init vga_arb_device_init(void)
->>>>>>>
->>>>>>>          /* We add all PCI devices satisfying VGA class in the arbiter by
->>>>>>>           * default */
->>>>>>> -     pdev = NULL;
->>>>>>> -     while ((pdev =
->>>>>>> -             pci_get_subsys(PCI_ANY_ID, PCI_ANY_ID, PCI_ANY_ID,
->>>>>>> -                            PCI_ANY_ID, pdev)) != NULL)
->>>>>>> +     while (1) {
->>>>>>> +             pdev = pci_get_class(PCI_CLASS_DISPLAY_VGA << 8, pdev);
->>>>>>> +             if (!pdev)
->>>>>>> +                     break;
->>>>>>> +
->>>>>>>                  vga_arbiter_add_pci_device(pdev);
->>>>>>> +     }
->>>>>>>
->>>>>>>          pr_info("loaded\n");
->>>>>>>          return rc;
->>>>>> --
->>>>>> Jingfeng
->>>>>>
->>>> --
->>>> Jingfeng
->>>>
->> --
->> Jingfeng
->>
--- 
-Jingfeng
+> > > > If so, incase the usb2 phy of quad port controller is missing in DT, we
+> > > > would still read num_usb2_ports as 4 but the usb2_generic_phy[1] would be
+> > > > NULL and any phy ops would still be NOP. But we would be getting rid of
+> > > > reading the xhci registers compeltely in core driver.
+> > > > 
+> > > > Thinh, Bjorn, can you also let us know your views on this.
+> > > > 
+> > > > 1. Read:
+> > > >   num_usb3_ports = highest usb3 port index in DT
+> > > >   num_usb2_ports = max( highest usb2 port index, num_usb3_ports)
+> > > > 
+> > > > 2. Read the same by parsing xhci registers as done in recent versions of
+> > > > this series.
+> > > 
+> > > DT is not reliable to get this info. As noted, the DT may skip some
+> > > ports and still be fine. However, the driver doesn't know which port
+> > > reflects which port config index without the exact port count.
+> > 
+> > That's not correct. DT provides the port indexes already, for example:
+> > 
+> > 	phy-names = "usb2-port0", "usb3-port0",
+> > 		    "usb2-port1", "usb3-port1",
+> > 		    "usb2-port2",
+> > 		    "usb2-port3";
+> > 
+> > So if you just need this to iterate over the PHYs all the information
+> > needed is here.
+> > 
+> > If you need to access ports which do not have a PHY described in DT,
+> > then this is not going to suffice, but I have not seen anyone claim that
+> > that is needed yet.
+> 
+> Perhaps I misunderstand the conversation. However, there isn't a method
+> that everyone's agree on yet regarding DT [*]. Perhaps this indicates it
+> may not be the best approach. You can resume the conversation if you
+> want to:
+> 
+> [*] https://lore.kernel.org/linux-usb/9671cade-1820-22e1-9db9-5c9836414908@quicinc.com/#t
 
+This was the approach suggested by Rob, the DT maintainer, in that very
+thread IIRC.
+
+> > > More importantly, the host controller that lives on the PCI bus will not
+> > > use DT. This can be useful for some re-configurations if the controller
+> > > is a PCI device and that goes through the dwc3 code path.
+> > 
+> > Ok, this is a bit hand wavy, but if this ever turns out to be needed it
+> > can also be implemented then.
+> 
+> What does hand wavy mean? We have case where it's useful outside of
+> this, and it would be useful for PCI device too:
+> 
+> https://lore.kernel.org/linux-usb/20230517233218.rjfmvptrexgkpam3@synopsys.com/
+
+Hand-wavy as in lacking detail which makes it hard to evaluate the
+argument.
+
+> > Or just generalise the xhci implementation for parsing these registers
+> > and reuse that from the start. (As a bonus you'd shrink the kernel text
+> > size by getting rid of that iffy inline implementation.)
+> > 
+> 
+> I don't like the iffy inline function either. We changed that here. To
+> rework the xhci header and define its global header seems a bit
+> excessive just for dwc3 to get the port capability. Regardless, as I've
+> said, if we _must_, perhaps we can just import xhci-ext-caps.h instead
+> of the whole xhci.h.
+
+No one said anything about importing the whole of xhci.h.
+
+Johan
