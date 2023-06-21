@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A10977385B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D2637385BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231907AbjFUNux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:50:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44534 "EHLO
+        id S232298AbjFUNvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbjFUNuv (ORCPT
+        with ESMTP id S230220AbjFUNvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:50:51 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC33519B;
-        Wed, 21 Jun 2023 06:50:50 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1b693afe799so1315095ad.1;
-        Wed, 21 Jun 2023 06:50:50 -0700 (PDT)
+        Wed, 21 Jun 2023 09:51:11 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BBBB19A9;
+        Wed, 21 Jun 2023 06:51:09 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-2610f4d2294so1961a91.0;
+        Wed, 21 Jun 2023 06:51:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687355450; x=1689947450;
+        d=gmail.com; s=20221208; t=1687355469; x=1689947469;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uxn7JpSM143hDirR91x8tlGJ/0kaa0KP5K4TK0Bzc5U=;
-        b=Ns+fTk0hvVwPormQiusr7DmQXVsuD62qQ3Rz+CyyZTH3p6x6ugcHEcTmcags9KmKtQ
-         kQ9vou1yhNUuLK8TLzHarNMrj9CZtp4Xu6ei1s9jJ7Fyp5pFHoKivHKkyL/DE4zxUCHK
-         NcZMbHVaiC9SBVJBQOEUoJIrzRdhput5mN8dmkgEFR9Vd9D/RMLk8mKYgo3vvWKIp4+G
-         JyrU25pezUYMlaN9S4i7kseT/YxTw9LdU4Y6VYgo9hgoepHvY2qtJ2Li0KUyOeXfOwWS
-         W0uEGdeMUVVUVMOsItfqhpXJIP56zhvGGjmP7wb/mkOdoHfVusuQQnhQUR0FpdMouy4O
-         Fh0g==
+        bh=rgUaVj33Q8V+dYunhjxyQcs1yGerwAWKpThsCvWxQl0=;
+        b=FAySKuka41Oaxnwyak2X2RDZtth63z3cjHg1S7PirLORN7G+XajdQ9dzTm55cIdEdl
+         sDeG67Rj18CMPowVC+Ur6NagZE+PaG6fN/+qfj+UkzKu+BCpwTbVyATDevshoLQN/N+L
+         YKkactYq84gjvNajT9rIpsK+GhhMZYVHDRAs/JsttcTRq6LCMVZec4Nqe8InP+DGx7P8
+         g+EjwUu9nyPFzBJrliFhoGT5QY6yA++tHe2U9fsYK9SzmFWGZpR8jrhi7lz/oeQlTrYu
+         hNiCNp9xVaqFYkGBrzAFhvrpjJE9UY0KTupjthTkOLzGYXF0QTfohWy6uG/YVUTmgCMB
+         XIzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687355450; x=1689947450;
+        d=1e100.net; s=20221208; t=1687355469; x=1689947469;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uxn7JpSM143hDirR91x8tlGJ/0kaa0KP5K4TK0Bzc5U=;
-        b=NsLiQ9o0atdoQUFxvFgeyiRU2BllriIkVidVGcuT+RCWdvm06Rb8Mmw5PyMgq49EzN
-         L7mjht6eY0UxqMLpUwxC6NgdDFSnbdG0eXeXDG1c/OkMvopBHex9h2jhdszLs3TuS06b
-         z540jLV78u7Xi9rHOEwZ7+5POPmPjJVr9rQLJGoTT4O8peAj09wxEuZxSZkG7ff5xZbY
-         B6HmBiFRg5QYl6arCCt6qPEPF2kmzj7FvbOw62os/RZfIFoGuO1aIDcQ6xFzVfjRcWWY
-         PCZiQpHe+R3w99ha8aYDMLpB9FjFfCbjbOJnduIRwOIlAJhMWk2MpoULGwPVwg2Kvxk1
-         LPvA==
-X-Gm-Message-State: AC+VfDz3/DNZF3CQ66916N5Gq2spPliTcTprF2owjwAb7FMjvOeERRbW
-        iGzoxY9yr/kq2DVGUBPb/tnN1adiPLc=
-X-Google-Smtp-Source: ACHHUZ7XJzc838erhMn5vckigt0mI3Bggtd16R+B32DOImlwodQz+zxnWCzICD6VSODgIA5LBV1DUQ==
-X-Received: by 2002:a17:902:f691:b0:1af:adc2:ab5b with SMTP id l17-20020a170902f69100b001afadc2ab5bmr18687631plg.0.1687355450149;
-        Wed, 21 Jun 2023 06:50:50 -0700 (PDT)
+        bh=rgUaVj33Q8V+dYunhjxyQcs1yGerwAWKpThsCvWxQl0=;
+        b=Tfm48eFY+Sf9fkf2rEa376EsDz55KoFuRIOyLZ01lkY9eidssvcftwSfL4e9yz0jCE
+         7TGNe1VfpkgdsK7bQ6wOHzJfmMMM6Rs6UzFd/LEDhk83W0xi16NHMGZlKHkAP4s5Gp9h
+         arziFqDLhGczWy3OairulTUqkQNc5NWcCEwz5P5CUaM/Tku8x+ihCs0Z2SRpsm8tSuBX
+         uWykR7ksEUrcA8biX518XW647iykiDvhM8dD6rrAPYFrMoDyh3McwVKA4sJg10Fn9Wjw
+         T/TuzVpxCX0eIkxB2CYo7LAJ/DsIYIL0s/N6VxwpUn9HqUFki6WNxQfAoJ73K/5NQc+d
+         /68Q==
+X-Gm-Message-State: AC+VfDylUY3S8pNUkdf8GQuknbCZFpI8kgr+fmblc+dfbAHCHhRDEsdB
+        mtcHIRPNSYrzzcJTtg2j6h0=
+X-Google-Smtp-Source: ACHHUZ4v0mgQcfZVmwFq1z78P/pmlqJbn8eVW8Cu6wXBNThucznOjJPH2rzWDuA9anwusoyvnQOcig==
+X-Received: by 2002:a17:90b:164a:b0:25b:e83b:593f with SMTP id il10-20020a17090b164a00b0025be83b593fmr19041391pjb.4.1687355468805;
+        Wed, 21 Jun 2023 06:51:08 -0700 (PDT)
 Received: from hoboy.vegasvil.org ([2601:640:8200:e:e2d5:5eff:fea5:802f])
-        by smtp.gmail.com with ESMTPSA id l10-20020a170903244a00b001b3c33e575fsm3535573pls.95.2023.06.21.06.50.49
+        by smtp.gmail.com with ESMTPSA id y13-20020a17090aca8d00b002610a3cdc3dsm463476pjt.12.2023.06.21.06.51.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 06:50:49 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 06:50:47 -0700
+        Wed, 21 Jun 2023 06:51:08 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 06:51:06 -0700
 From:   Richard Cochran <richardcochran@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Horatiu Vultur <horatiu.vultur@microchip.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
 Subject: Re: [PATCH net-next v3] net: micrel: Change to receive timestamp in
  the frame for lan8841
-Message-ID: <ZJMAN88XYA6drwfe@hoboy.vegasvil.org>
+Message-ID: <ZJMASvms7nLY8HKz@hoboy.vegasvil.org>
 References: <20230615094740.627051-1-horatiu.vultur@microchip.com>
- <20230620113021.01d90f90@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230620113021.01d90f90@kernel.org>
+In-Reply-To: <20230615094740.627051-1-horatiu.vultur@microchip.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -75,32 +74,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 11:30:21AM -0700, Jakub Kicinski wrote:
-> Richard, looks good?
+On Thu, Jun 15, 2023 at 11:47:40AM +0200, Horatiu Vultur wrote:
+> Currently for each timestamp frame, the SW needs to go and read the
+> received timestamp over the MDIO bus. But the HW has the capability
+> to store the received nanoseconds part and the least significant two
+> bits of the seconds in the reserved field of the PTP header. In this
+> way we could save few MDIO transactions (actually a little more
+> transactions because the access to the PTP registers are indirect)
+> for each received frame.
+> 
+> Instead of reading the rest of seconds part of the timestamp of the
+> frame using MDIO transactions schedule PTP worker thread to read the
+> seconds part every 500ms and then for each of the received frames use
+> this information. Because if for example running with 512 frames per
+> second, there is no point to read 512 times the second part.
+> 
+> Doing all these changes will give a great CPU usage performance.
+> Running ptp4l with logSyncInterval of -9 will give a ~60% CPU
+> improvement.
+> 
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 
-Yes.
- 
-> I'm not sure if the settime handling is sufficient, some packets may
-> still sneak thru both getting stamped with new value of time and use
-> old upper bits and get stamped with old bits and use new upper.
-> Can we disable timestamping, drain the queue, then change the time
-> and enable stamping again?
-
-This can happen with any driver.  The user space stack combines four
-time stamps to calculate the PTP client/server offset.  When setting
-the clock, some skbs might be in the kernel's Rx path with the "old"
-timestamp.
-
-The kernel doesn't track Rx skbs that have HW timestamps, and stopping
-the MAC and then flushing _everything_ seems heavy handed to me.
-
-In the user space PTP stack, setting the clock happens immediately
-after Sync message reception.  For configurations with a very high
-Sync rate, a linuxptp client has an option to skip a given number of
-messages after setting the clock.  In this way you can avoid stale
-timestamps by choosing a duration that is longer than the longest
-frame residence time from MAC to kernel.
-
-Thanks,
-Richard
-
+Acked-by: Richard Cochran <richardcochran@gmail.com>
