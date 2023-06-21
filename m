@@ -2,138 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFC23739146
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 23:07:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C2C739143
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 23:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230013AbjFUVHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 17:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39964 "EHLO
+        id S229873AbjFUVHV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 17:07:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbjFUVH1 (ORCPT
+        with ESMTP id S229513AbjFUVHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 17:07:27 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0F51988
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:07:25 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2b4790ff688so58938191fa.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:07:25 -0700 (PDT)
+        Wed, 21 Jun 2023 17:07:20 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9818E1713;
+        Wed, 21 Jun 2023 14:07:16 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-666e97fcc60so3070880b3a.3;
+        Wed, 21 Jun 2023 14:07:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687381644; x=1689973644;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=t7RHhO8mVnpgh8ODJ94LK5sLSRpLLBu7IaMuXHBaJqM=;
-        b=oMDwhcZ8ZGSlcM2I39/I4R5qMkYyTMTGiOFUbnvyBWsrsEIbFlMp0hzPnQqNr2wqGF
-         hjSNs/QY8Ep5oNtZFRF2RX0bmYChUg4BbJiSQ3e4o4UAEJHCDwyaZuxCF3ieiPioVZLn
-         QdwmdbakA38YGrhVNC+B350zs6fNxA8TiSXeRv2QKkF8f0AHdHwm7LVvwrCbXCni71yC
-         y6m6PNzQvWR7+Th8x7vbDfzHelDyK0WP2/zaTSlk+cD3dk5JARe3JEGRL57tGO0KtWR9
-         SotarOck7deRjGRMdFeDLQ7GDdPdroJDHCeUQr+J8nyLjNMhuForPvGQ4WwcyH3DITcH
-         9+Vw==
+        d=gmail.com; s=20221208; t=1687381636; x=1689973636;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zxmHl6BRr4PCuqTmBRiO+tAEIgtNXslvgtPUDDYEk5g=;
+        b=oaaQAD9cGxPEmmAEmp3xGt7xjEDHAjuq0ULgnSRpME/0jfp5uei/cX5bL8V/aTAfhH
+         hGFWO3YeJ3zlpyqmhNTJ05nkVcTO1M/HDS0v2QoCyMuns2gymjr1mbs6jmFOyRyil0qq
+         vcyzj1o2Ck1X3aVmQGLz4L9hkX9lfx6AQT24lQNjfNxQH9R4tS/AEunlf++n1awxctia
+         qJ98y1ah/MBR2KqBgpSJJANu16QO+OsiafXzPlFT+YT6hqPWe/wpX4qzCQbp6I2b6Z0s
+         6kPlRQHCX37mmmjg0xxMV8lxc1ZMwpW5fT9QS8opCIJ2BIJNlD/MCDUvxyl65Iqcm/gB
+         mk0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687381644; x=1689973644;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1687381636; x=1689973636;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=t7RHhO8mVnpgh8ODJ94LK5sLSRpLLBu7IaMuXHBaJqM=;
-        b=E6UyPCxDOPp/qU513KVU9Hjdn67OoWm+yz6HOd0U/VpjKWyCgN+CS+DwimUuFgtw/J
-         TwvlzoHOqwddc2ZyIFXv0uyTg8zuHS5/Lf7CoQQUv0TkeZy7TQ52b2r0o95OY1ZDx2kn
-         xd5OfcuutQ0/utxWjNuxIEDE7ZVyvD/pQNyAB+ffDLDeB8jUcdcT0LHwDmvC9cPdIKXT
-         zT6sm+cFvMdGl9k9frjZob1C2Nfo/Ds3y8P4SDRRBfdKXBETNzxaviSQ9N+iCiiCEvUA
-         5BitYW2jIFuYUKpaxf0RfL4tjVwcBKFqtCo2z7cHDV2NneT4CsLqIIzl3UlZXnbVD667
-         pgZA==
-X-Gm-Message-State: AC+VfDzV2JeWBqIzy217rpDg+7hDWgoBzAv79KBnAWp0RhMiJhCrQivg
-        tJdnq7ZOo799OgAm67NjSvs7KCTLbiDJThEhfQ==
-X-Google-Smtp-Source: ACHHUZ4kWe1ytiro9pZcB8j7bXK9dfkxCFGP6cRoZ6O60k8eOri7mgD26ZGO9z7VcIUoP/z8zW80TiGHaF0hRgAIpIM=
-X-Received: by 2002:a05:6512:3292:b0:4f8:5bbf:d195 with SMTP id
- p18-20020a056512329200b004f85bbfd195mr8628199lfe.20.1687381643766; Wed, 21
- Jun 2023 14:07:23 -0700 (PDT)
+        bh=zxmHl6BRr4PCuqTmBRiO+tAEIgtNXslvgtPUDDYEk5g=;
+        b=PRqbGXj+tPzeooTWfTT9v9jKXFF1IulAnwKM+YOJjSb28x3AFfborShfy1ewIUqDBB
+         hbiqt6Fm50mNpoUzE8zuMCCAXDMfLe0nIlWbA8pSYzMv/QIXZvEdaiEjfjH1VdjxEDXb
+         K78m7F/dwSkwzn/dYCCgbKfglRQuyS1Q1CWcIHohxPJlEWFKdS26aGtMLxWcP/7BOQ9H
+         TfEyFFCTZNRruVnW0ktXTvygq8hTMqPiwzNvkmJ1GmZJY5oPG9vUQJTTgmlh2Kr2BKHA
+         ZKLIYwA6IrZW/S1g2D2vlZZRiBXwf6oa7wYzsOQNjVA4O/FKQ8mu2jWtmMoRSP+SJFir
+         la5w==
+X-Gm-Message-State: AC+VfDx+ZGToYJptkKs5n1VSnsRYUIjBfPICexcZP4KPWvKV8xLo0Tbi
+        5p22qfbPqqA+0HxWxVLHLBs=
+X-Google-Smtp-Source: ACHHUZ7UDAN/DUH7d080Yzd19oIbDx6FPfqIcDrxG092wrfQR3eJP0wA81oUirDnxYC5Jt9r4xQd0w==
+X-Received: by 2002:a05:6a20:3d88:b0:10e:96b5:45fa with SMTP id s8-20020a056a203d8800b0010e96b545famr13704285pzi.43.1687381635960;
+        Wed, 21 Jun 2023 14:07:15 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g7-20020a635207000000b00528db73ed70sm3529775pgb.3.2023.06.21.14.07.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 14:07:15 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 21 Jun 2023 14:07:13 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Joern Engel <joern@lazybastard.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 14/24] init: clear root_wait on all invalid root= strings
+Message-ID: <8c1992bc-110a-4dad-8643-766c14bf6fd4@roeck-us.net>
+References: <20230523074535.249802-1-hch@lst.de>
+ <20230523074535.249802-15-hch@lst.de>
 MIME-Version: 1.0
-References: <20230615193546.949657149@infradead.org> <20230615193722.127844423@infradead.org>
-In-Reply-To: <20230615193722.127844423@infradead.org>
-From:   Brian Gerst <brgerst@gmail.com>
-Date:   Wed, 21 Jun 2023 17:07:11 -0400
-Message-ID: <CAMzpN2j2Okm1BPrQcrd7=Duo286RqZ-AKvy=NoJOBQ0sLJLhAw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] x86/cfi: Fix ret_from_fork indirect calls
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, alyssa.milburn@linux.intel.com,
-        linux-kernel@vger.kernel.org, samitolvanen@google.com,
-        keescook@chromium.org, jpoimboe@kernel.org,
-        joao@overdrivepizza.com, tim.c.chen@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230523074535.249802-15-hch@lst.de>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 3:56=E2=80=AFPM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> The ret_from_fork stub does an indirect call to the kthread function,
-> but only knows about Retpolines. Instead of making the asm more
-> complicated, punt to C and let the compiler figure it out.
->
-> Specifically, this makes it a proper kCFI indirect call when needed (in
-> fact, it is nearly impossible to code a kCFI indirect call in asm).
->
-> This was the only callsite that was still calling func()+0 on regular
-> indirect functions.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  arch/x86/entry/entry_64.S        |    6 ++++--
->  arch/x86/include/asm/switch_to.h |    2 ++
->  arch/x86/kernel/process_64.c     |    5 +++++
->  3 files changed, 11 insertions(+), 2 deletions(-)
->
-> --- a/arch/x86/entry/entry_64.S
-> +++ b/arch/x86/entry/entry_64.S
-> @@ -304,8 +304,10 @@ SYM_CODE_START_NOALIGN(ret_from_fork)
->  1:
->         /* kernel thread */
->         UNWIND_HINT_END_OF_STACK
-> -       movq    %r12, %rdi
-> -       CALL_NOSPEC rbx
-> +       movq    %rbx, %rdi
-> +       movq    %r12, %rsi
-> +       call    kthread_from_fork
-> +
->         /*
->          * A kernel thread is allowed to return here after successfully
->          * calling kernel_execve().  Exit to userspace to complete the ex=
-ecve()
-> --- a/arch/x86/include/asm/switch_to.h
-> +++ b/arch/x86/include/asm/switch_to.h
-> @@ -74,6 +74,8 @@ static inline void update_task_stack(str
->  #endif
->  }
->
-> +extern void kthread_from_fork(int (*fn)(void *), void *);
-> +
->  static inline void kthread_frame_init(struct inactive_task_frame *frame,
->                                       int (*fun)(void *), void *arg)
->  {
-> --- a/arch/x86/kernel/process_64.c
-> +++ b/arch/x86/kernel/process_64.c
-> @@ -544,6 +544,11 @@ void compat_start_thread(struct pt_regs
->  }
->  #endif
->
-> +__visible noinstr void kthread_from_fork(int (*fn)(void *), void *arg)
-> +{
-> +       fn(arg);
-> +}
-> +
->  /*
->   *     switch_to(x,y) should switch tasks from x to y.
->   *
+Hi,
 
-I think this makes a case for converting all of ret_from_fork() to C
-(other than some minimal asm glue).  Patches coming soon.
+On Tue, May 23, 2023 at 09:45:25AM +0200, Christoph Hellwig wrote:
+> Instead of only clearing root_wait in devt_from_partuuid when the UUID
+> format was invalid, do that in parse_root_device for all strings that
+> failed to parse.
+> 
+> Signed-off-by: Christoph Hellwig <hch@lst.de>
 
-Brian Gerst
+In linux-next, almost all of my boot tests from usb drives as well
+as a few others fail with "Disabling rootwait; root= is invalid."
+in the log. Bisect points to this patch.
+
+It can not easily be reverted, but the following change fixes the problem.
+
+--- a/init/do_mounts.c
++++ b/init/do_mounts.c
+@@ -413,10 +413,12 @@ static dev_t __init parse_root_device(char *root_device_name)
+ 
+        error = early_lookup_bdev(root_device_name, &dev);
+        if (error) {
++#if 0
+                if (error == -EINVAL && root_wait) {
+                        pr_err("Disabling rootwait; root= is invalid.\n");
+                        root_wait = 0;
+                }
++#endif
+                return 0;
+        }
+        return dev;
+
+Debugging shows that early_lookup_bdev() indeed returns -EINVAL.
+Looking into it further, it turns out that devt_from_devname() returns
+-EINVAL for root devices such as
+	root=/dev/sda
+if the device is not found, making it impossible to rootwait for such
+a device (this might for example be a raw USB drive without partitions,
+or any qemu drive with format=raw).
+
+Guenter
+
+---
+# bad: [15e71592dbae49a674429c618a10401d7f992ac3] Add linux-next specific files for 20230621
+# good: [45a3e24f65e90a047bef86f927ebdc4c710edaa1] Linux 6.4-rc7
+git bisect start 'HEAD' 'v6.4-rc7'
+# good: [e867e67cd55ae460c860ffd896c7fc96add2821c] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
+git bisect good e867e67cd55ae460c860ffd896c7fc96add2821c
+# bad: [0ab4015a11182e2a19c3dd52db85418f370cef39] Merge branch 'for-next' of git://git.kernel.dk/linux-block.git
+git bisect bad 0ab4015a11182e2a19c3dd52db85418f370cef39
+# good: [901bdf5ea1a836400ee69aa32b04e9c209271ec7] Merge tag 'amd-drm-next-6.5-2023-06-09' of https://gitlab.freedesktop.org/agd5f/linux into drm-next
+git bisect good 901bdf5ea1a836400ee69aa32b04e9c209271ec7
+# good: [07164956fbc26eff280f3a044a489460ae36413c] Merge branch 'for-next' of https://git.kernel.org/pub/scm/linux/kernel/git/ieee1394/linux1394.git
+git bisect good 07164956fbc26eff280f3a044a489460ae36413c
+# good: [3067e020d361ed346957eb5e253911f7a3e18f59] add snd_soc_{of_}get_dlc()
+git bisect good 3067e020d361ed346957eb5e253911f7a3e18f59
+# bad: [0dbbd269fb6a8799f312dfc9b1ae1244a144cfc6] Merge branch 'for-6.5/block' into for-next
+git bisect bad 0dbbd269fb6a8799f312dfc9b1ae1244a144cfc6
+# good: [6c500000af037f74b66dd01b565c8ee1b501cc1b] block: mark bio_add_folio as __must_check
+git bisect good 6c500000af037f74b66dd01b565c8ee1b501cc1b
+# bad: [1a0ddd56e545b743af510b5a1b8dbdfe7d35cd3b] pktcdvd: replace sscanf() by kstrtoul()
+git bisect bad 1a0ddd56e545b743af510b5a1b8dbdfe7d35cd3b
+# good: [e3102722ffe77094ba9e7e46380792b3dd8a7abd] init: rename mount_block_root to mount_root_generic
+git bisect good e3102722ffe77094ba9e7e46380792b3dd8a7abd
+# bad: [d4a28d7defe79006e59293a4b43d518ba8483fb0] dm: remove dm_get_dev_t
+git bisect bad d4a28d7defe79006e59293a4b43d518ba8483fb0
+# good: [c0c1a7dcb6f5db4500e6574294674213bc24940c] init: move the nfs/cifs/ram special cases out of name_to_dev_t
+git bisect good c0c1a7dcb6f5db4500e6574294674213bc24940c
+# bad: [702f3189e454b3c3c2f3c99dbf30acf41aab707c] block: move the code to do early boot lookup of block devices to block/
+git bisect bad 702f3189e454b3c3c2f3c99dbf30acf41aab707c
+# bad: [079caa35f7863cd9958b4555ae873ea4d352a502] init: clear root_wait on all invalid root= strings
+git bisect bad 079caa35f7863cd9958b4555ae873ea4d352a502
+# good: [cf056a43121559d3642419917d405c3237ded90a] init: improve the name_to_dev_t interface
+git bisect good cf056a43121559d3642419917d405c3237ded90a
+# first bad commit: [079caa35f7863cd9958b4555ae873ea4d352a502] init: clear root_wait on all invalid root= strings
