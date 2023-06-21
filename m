@@ -2,48 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9572B7384CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:20:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3EEE7384C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232488AbjFUNU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
+        id S231937AbjFUNTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbjFUNUW (ORCPT
+        with ESMTP id S231134AbjFUNTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:20:22 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAE71994;
-        Wed, 21 Jun 2023 06:20:18 -0700 (PDT)
-X-QQ-mid: bizesmtp78t1687353609twv2x5yr
-Received: from linux-lab-host.localdomain ( [116.30.126.60])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 21 Jun 2023 21:20:07 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: LE7C6P2vL8QaLL7JPV1s2XMq3xaIhLPj7Fcy7ZasiRCLssjSUm9F+DbEx0p4g
-        0gPy5kD2TqEixqQZRzFnulPS2AtCpo9yKg2a53LxzOZDf426H2hSW7q9zCjMScUmvL+Gc96
-        wv3NqZLpC0DEYO20NTyPnywckAS2JgJxhTLDwxla2AKv3sOWObrXEz+Anb8OCHv0wvNFSH9
-        7zk5zv2vqy36LnH1ewGptn5XZsPVIbcdMlgh4vFMn9w7sIKp+1dkXXbUd75tS/Epfv1rx7x
-        stmMDbj9VDf/181dzxopn0yu4htPyqic7qpxpWmxC4MeYq6/yhx946EDrciP0a1aNvmVlK6
-        YdFyPLWkPAsOpp9lPx9Jbw3ghg8k90cjaPuFvuU002KpY1c0D0=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 11267784333303017325
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     thomas@t-8ch.de, arnd@arndb.de, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 16/17] selftests/nolibc: vfprintf: skip if neither tmpfs nor hugetlbfs
-Date:   Wed, 21 Jun 2023 21:18:53 +0800
-Message-Id: <55a01001987f2795a982755ed2ca8e27efe49249.1687344643.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687344643.git.falcon@tinylab.org>
-References: <cover.1687344643.git.falcon@tinylab.org>
+        Wed, 21 Jun 2023 09:19:37 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5E3E72
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:19:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1687353576;
+        bh=h6D1oWxliIEGx0hamqvBgdIL8Yifhe5fhqBA/YQTfnQ=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Q/EOGTLF0eEnQ6UK8N15G7+DEJu8umFvvRckgLxBsVu3L+sFQtrhyrIypRBTuWWBF
+         xDyCbWFk9yW+4jjCvWD+SfTGRyGvPIKSCZm0pf/y909N9BS0i8+YfBq9/cOkfQ8wW+
+         x2wWYHEKEDXmf0viJdQZ4vmQcEFOrPgm8dVNSySA=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id ED09065EBF;
+        Wed, 21 Jun 2023 09:19:35 -0400 (EDT)
+Message-ID: <29beee7faf370ea892cb4e5a85ddd1f7ee132164.camel@xry111.site>
+Subject: Re: A question about prefetchw detection in "x86/asm: Cleanup
+ prefetch primitives"
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>
+Date:   Wed, 21 Jun 2023 21:19:34 +0800
+In-Reply-To: <20230621130955.GHZJL2o771lIEPURUl@fat_crate.local>
+References: <0b663d8f6802e8dbf443397718234bcb6d0811c8.camel@xry111.site>
+         <20230621111346.GFZJLbavDw1JiLi34n@fat_crate.local>
+         <a155ebb791d3aefce5db32658e3c519a1cfac1f6.camel@xry111.site>
+         <e76180a1b82d1c29715587e94e2d6923b64bb893.camel@xry111.site>
+         <20230621125749.GGZJLzzUw0rA3goV1X@fat_crate.local>
+         <b50735128c5a985634468d63fef092f093f0aebc.camel@xry111.site>
+         <20230621130955.GHZJL2o771lIEPURUl@fat_crate.local>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,49 +59,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As fs/Kconfig shows, MEMFD_CREATE depends on TMPFS or HUGETLBFS:
+On Wed, 2023-06-21 at 15:09 +0200, Borislav Petkov wrote:
+> On Wed, Jun 21, 2023 at 09:06:51PM +0800, Xi Ruoyao wrote:
+> > I think it's not an issue in the kernel itself, but announcing
+> > 3dnowprefetch in /proc/cpuinfo for an old Intel CPU w/o real prefetchw
+> > implementation seems problematic (to me).
+>=20
+> And this is a problem because?
 
-    config MEMFD_CREATE
-    	def_bool TMPFS || HUGETLBFS
+If a code generator parses /proc/cpuinfo for CPU capabilities, it may
+generates a no-op prefetchw instead of prefetcht0 as a fallback.
 
-Let's skip vfprintf test if they are not there.
+>=20
+> Think practically.
+>=20
 
-The /tmp and /hugetlb directories have been created to mount tmpfs and
-hugetlbfs respectively, if they are not enabled in kernel configuration,
-neither /tmp nor /hugetlb will be created.
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 8b1ce9911c5c..85fa64746cde 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -769,11 +769,22 @@ int run_stdlib(int min, int max)
- 
- static int expect_vfprintf(int llen, size_t c, const char *expected, const char *fmt, ...)
- {
-+	struct stat stat_buf;
- 	int ret, fd, w, r;
-+	int tmpfs = 0, hugetlbfs = 0;
- 	char buf[100];
- 	FILE *memfile;
- 	va_list args;
- 
-+	/* memfd_create depends on tmpfs or hugetlbfs */
-+	tmpfs = stat("/tmp/.", &stat_buf) == 0;
-+	hugetlbfs = stat("/hugetlb/.", &stat_buf) == 0;
-+
-+	if (!tmpfs && !hugetlbfs) {
-+		pad_spc(llen, 64, "[SKIPPED]\n");
-+		return 0;
-+	}
-+
- 	/* silence warning for kernel >= v6.2:
- 	 *
- 	 *   "memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=<pid>"
--- 
-2.25.1
-
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
