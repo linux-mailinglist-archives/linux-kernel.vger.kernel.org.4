@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC30D73914C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 23:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 312B8739151
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 23:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjFUVKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 17:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
+        id S230009AbjFUVLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 17:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjFUVK2 (ORCPT
+        with ESMTP id S229637AbjFUVLt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 17:10:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807961989
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:10:27 -0700 (PDT)
+        Wed, 21 Jun 2023 17:11:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B901989;
+        Wed, 21 Jun 2023 14:11:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15D34616DE
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 21:10:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5E425C433AD;
-        Wed, 21 Jun 2023 21:10:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A5B2616C4;
+        Wed, 21 Jun 2023 21:11:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1798C433C0;
+        Wed, 21 Jun 2023 21:11:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687381826;
-        bh=778aFxmB3Fo3K9ZEIoLiqcuiGipuiqZwdEhhMcFYmPw=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=p66h6MsJxbZUiIox+BDhbQ3cgE6RnguZUarKVrkyWiYFmEqSzEWQw9YR9UT7RkicD
-         Wm5/VqJLj2FHUcTCC4tQm+MWknMpugcV+cfC3oYBlS23T1bDlGDLlGc+WvG1X57YAH
-         D3yvcimHcLjPqyc/bn7fjyC9ddo3XhO1z51Rg+r8WaitVmtXwlYrmXu/IgNXuZ7MdS
-         CX8Pob9N3fKAHcHim8v62eNGjaJ+LXSepZAq1qMNXb3O8cAY0hu6liTGBMKm+6evOz
-         Wg8VC45ek8YvnUPq8J1TTcBXqTwQFcwZBUiHa9GQdyh0LMCFgikDvM1OlTP5EwZ3ea
-         uFiIaekR33TVA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 0A64FC395F1;
-        Wed, 21 Jun 2023 21:10:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1687381906;
+        bh=O26sECzjqHFzFfFoCV8qOAnuIGD+u12DbfflB2M+dGE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Mc6VeZNlzLFFKvWLt4SfV26pH0WCzMz1WckpSDLzbdaYX8GMutcxYHze+5by4XLK2
+         yHfMQLFbu2pmeEwBynpL3BEJ3tetRlPnPvJPXEKi/IRe9DkmxAZQygwAYHnlpCw/Rc
+         XkEPmn+8RSuPpM6MKhI/JnuECIkGZiA8exsp9iZ8IFF0vIsd6Cb6XANXO+HEjXGN+R
+         xkGt+asExn3p8hUshKNVBlmPQC3ubDd1ikaJfL9f1Xttgaqdh2SdpNRrncS4yZDHO8
+         xwzkLPXl/ITfPY3/tMsiQ+nvvAYzcHK8d4nk8TY1AciXccOuXNzHYL+dSEneX0CwGL
+         fQBR36Y8C8Qcg==
+Date:   Wed, 21 Jun 2023 15:12:42 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Namjae Jeon <linkinjeon@kernel.org>,
+        Steve French <sfrench@samba.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Tom Talpey <tom@talpey.com>
+Cc:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] smb: Replace one-element array with flexible-array
+ member
+Message-ID: <ZJNnynWOoTp6uTwF@work>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] bnxt_en: Link representors to PCI device
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168738182603.695.15786386736224760669.git-patchwork-notify@kernel.org>
-Date:   Wed, 21 Jun 2023 21:10:26 +0000
-References: <20230620144855.288443-1-ivecera@redhat.com>
-In-Reply-To: <20230620144855.288443-1-ivecera@redhat.com>
-To:     Ivan Vecera <ivecera@redhat.com>
-Cc:     netdev@vger.kernel.org, michael.chan@broadcom.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,28 +58,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+One-element arrays are deprecated, and we are replacing them with flexible
+array members instead. So, replace one-element array with flexible-array
+member in struct smb_negotiate_req.
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+This results in no differences in binary output.
 
-On Tue, 20 Jun 2023 16:48:55 +0200 you wrote:
-> Link VF representors to parent PCI device to benefit from
-> systemd defined naming scheme.
-> 
-> Without this change the representor is visible as ethN.
-> 
-> Signed-off-by: Ivan Vecera <ivecera@redhat.com>
-> 
-> [...]
+Link: https://github.com/KSPP/linux/issues/79
+Link: https://github.com/KSPP/linux/issues/317
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ fs/smb/server/smb_common.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Here is the summary with links:
-  - [net-next] bnxt_en: Link representors to PCI device
-    https://git.kernel.org/netdev/net-next/c/7ad7b7023fcb
-
-You are awesome, thank you!
+diff --git a/fs/smb/server/smb_common.h b/fs/smb/server/smb_common.h
+index 6b0d5f1fe85c..aeca0f46068f 100644
+--- a/fs/smb/server/smb_common.h
++++ b/fs/smb/server/smb_common.h
+@@ -200,7 +200,7 @@ struct smb_hdr {
+ struct smb_negotiate_req {
+ 	struct smb_hdr hdr;     /* wct = 0 */
+ 	__le16 ByteCount;
+-	unsigned char DialectsArray[1];
++	unsigned char DialectsArray[];
+ } __packed;
+ 
+ struct smb_negotiate_rsp {
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.34.1
 
