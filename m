@@ -2,81 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08AE737D11
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:08:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F13C4737D14
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:08:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230239AbjFUIGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 04:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46050 "EHLO
+        id S230340AbjFUIGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 04:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbjFUIGJ (ORCPT
+        with ESMTP id S231133AbjFUIGm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 04:06:09 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CD02199A;
-        Wed, 21 Jun 2023 01:06:05 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4DC7D6602242;
-        Wed, 21 Jun 2023 09:06:03 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687334764;
-        bh=ydVa0OJTkAFyPTmPWHYs9HFEjte8tovDBD4Np4zYHt8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Iioy2NChcdbx1E6PQ4Mpz8mw/H5jQssUOpz6/xvablYnHReF2nC+IIS469GkhNoAi
-         waMUD3QSkjhtmqvRGTAQVhVPsmg41F23wy49heyaf+HjvJj2625DYTGyE7v4ZdawB1
-         DLtnLYg0Fvcorj9Fo7j7PVTvjYn8slb1fL3/uZp6Vx/gHvliDAdokH2GhbW2ZeDxWe
-         8jw+LRpKFWkeDT/bQXdGG7P3e3+rTYJSe0WOpNrB0ftiPUsXnED87OEPMcH9gPk2Je
-         EF7KpCitzWYC2Lo/YZxDlOy4FG1aBAxXpm8C5ya/C+CibhHzpw4G8zIOh2u9T8L+/U
-         eKKMxYNaj0z6Q==
-Message-ID: <27242bc0-d3df-3af7-7a12-ec1f83b5f639@collabora.com>
-Date:   Wed, 21 Jun 2023 10:06:01 +0200
+        Wed, 21 Jun 2023 04:06:42 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B66719AB
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:06:27 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qBsqz-0008Si-6c; Wed, 21 Jun 2023 10:06:13 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qBsqy-00057C-7x; Wed, 21 Jun 2023 10:06:12 +0200
+Date:   Wed, 21 Jun 2023 10:06:12 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Jonas Karlman <jonas@kwiboo.se>
+Cc:     Sandy Huang <hjc@rock-chips.com>, Heiko Stuebner <heiko@sntech.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        Rob Herring <robh@kernel.org>,
+        Mark Yao <markyao0591@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/4] drm/rockchip: vop2: Don't crash for invalid
+ duplicate_state
+Message-ID: <20230621080612.GX18491@pengutronix.de>
+References: <20230620064732.1525594-1-jonas@kwiboo.se>
+ <20230620064732.1525594-4-jonas@kwiboo.se>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 09/14] soc: mediatek: Support reset bit mapping in
- mmsys driver
-To:     Hsiao Chien Sung <shawn.sung@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Singo Chang <singo.chang@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        Jason-JH Lin <jason-jh.lin@mediatek.com>
-References: <20230621031938.5884-1-shawn.sung@mediatek.com>
- <20230621031938.5884-10-shawn.sung@mediatek.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230621031938.5884-10-shawn.sung@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620064732.1525594-4-jonas@kwiboo.se>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 21/06/23 05:19, Hsiao Chien Sung ha scritto:
-> - Reset ID must starts from 0 and be consecutive, but
->    the reset bits in our hardware design is not continuous,
->    some bits are left unused, we need a map to solve the problem
-> - Use old style 1-to-1 mapping if .rst_tb is not defined
+On Tue, Jun 20, 2023 at 06:47:38AM +0000, Jonas Karlman wrote:
+> It's possible for users to try to duplicate the CRTC state even when the
+> state doesn't exist. drm_atomic_helper_crtc_duplicate_state() (and other
+> users of __drm_atomic_helper_crtc_duplicate_state()) already guard this
+> with a WARN_ON() instead of crashing, so let's do that here too.
 > 
-> Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
+> Fixes: 604be85547ce ("drm/rockchip: Add VOP2 driver")
+> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Reviewed-by: Sascha Hauer <s.hauer@pengutronix.de>
 
+Sascha
 
+> ---
+>  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+> index ca73b8ccc29f..f725487d02ef 100644
+> --- a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+> @@ -2099,11 +2099,13 @@ static void vop2_crtc_reset(struct drm_crtc *crtc)
+>  
+>  static struct drm_crtc_state *vop2_crtc_duplicate_state(struct drm_crtc *crtc)
+>  {
+> -	struct rockchip_crtc_state *vcstate, *old_vcstate;
+> +	struct rockchip_crtc_state *vcstate;
+>  
+> -	old_vcstate = to_rockchip_crtc_state(crtc->state);
+> +	if (WARN_ON(!crtc->state))
+> +		return NULL;
+>  
+> -	vcstate = kmemdup(old_vcstate, sizeof(*old_vcstate), GFP_KERNEL);
+> +	vcstate = kmemdup(to_rockchip_crtc_state(crtc->state),
+> +			  sizeof(*vcstate), GFP_KERNEL);
+>  	if (!vcstate)
+>  		return NULL;
+>  
+> -- 
+> 2.41.0
+> 
+> 
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
