@@ -2,65 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD06F73855C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:36:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 456E173856A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232634AbjFUNgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:36:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34346 "EHLO
+        id S230076AbjFUNiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232632AbjFUNgK (ORCPT
+        with ESMTP id S230226AbjFUNiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:36:10 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CD719B1;
-        Wed, 21 Jun 2023 06:36:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687354564; x=1718890564;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=MO5jQHVrWgoYawifJrECYV/hrpZREDclWzjSKISkgyw=;
-  b=CfbIiRLm9fmXuwnpViccfcl76E/XEC9heJdGeYRZFancyF4wdZTTzAx4
-   Gt/8lAmzVtnbZv6b+doTGZz/JuZW6r5lPaK+Ciiw/RzD4uF4CUmcFNpS8
-   se5ruhisnsNlSdEvy9v7eKwshELI8yzblHAv8FgZlhpV73Mo6o8c+qGeK
-   D+sJqKS2LCHtJRm5uL9M2y6XFNvOgooTEapEXRx8+ohXn8MYzga7s3MEw
-   PV3IjDJYWJRzsOlWG6OvQyUq1TtKDvhmmGNdqYJXHHI3EpMMQTWFs55xU
-   wwZ5cFai1BOPXO/YbeDmAkACaCntmvS1N6kOcOnwwQyYWtVHVtdek8Fhb
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="389674899"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="389674899"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 06:36:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="804381308"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="804381308"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Jun 2023 06:36:02 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qBy09-005Van-02;
-        Wed, 21 Jun 2023 16:36:01 +0300
-Date:   Wed, 21 Jun 2023 16:36:00 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] pinctrl: mcp23s08: check return value of
- devm_kasprintf()
-Message-ID: <ZJL8wPGxs9SDquQi@smile.fi.intel.com>
-References: <20230621100409.1608395-1-claudiu.beznea@microchip.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230621100409.1608395-1-claudiu.beznea@microchip.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        Wed, 21 Jun 2023 09:38:17 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51EBE59
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:38:16 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3E4855C01EE;
+        Wed, 21 Jun 2023 09:38:16 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Wed, 21 Jun 2023 09:38:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1687354696; x=1687441096; bh=1d
+        BRv88m8DzmsRCY2sdR5AtUmMT+gLlbjdNPhPq4Vr4=; b=yyYLrOekmAbDvkrI40
+        13wTo/99CDXoenIiXNlDedT/o823/dNHm8vCZ/KHY2BFkv8FJwVtaKEXPHYocrZ/
+        cXc+oAmavpuBDPszHzeS4VvdzQONA4eXJr9fBZoisuGxJeFULL8+++nracCCHHCn
+        wh5ew3hK3F2WKsakvkhhgIXDHjrumvALKlSEBfpEtmXrfQSM8MiIzPiSrIdJHayE
+        v4118BovNTCInZNKQFXSicMVtREPBMm9NWRt9OdBKcWBAIrIoM+Nu+820nDslL9I
+        j/jhakcDl08RltP2o2RKJAYhIm8/61/8uD3yBJMLyLY8ktVD20wjl8HLokZOtO+z
+        pjvA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687354696; x=1687441096; bh=1dBRv88m8Dzms
+        RCY2sdR5AtUmMT+gLlbjdNPhPq4Vr4=; b=QNWAj4DumqXhr/oHnIoKGkfN+sXCx
+        MvJfP9/RYZNPp8VOW6DCfgEa/oASJYEeoF6Vns7aAXp8SI0knGIwNWMQSCySZcai
+        ddcubxk1bosLygTf7pD1KWTm0QGZsNxe6PDMpdWf/QnThlRF6u8YcS9nXauRZgth
+        6kOkJnESxNl8ymdO2nZb7hyYKhMBp3UcqVdASxYfbZrkI7zyWC39QwclHbZOTPxK
+        ba8GVLPyn95Z+V6Qez9pZUO52huxeCOmhQMlpHn7+bMWWMWOUvewP1sTXlHAA2MN
+        +EJKIs2NY32pLMqJXl72QB2m9RhmSArpKdX7FgRJm24SI9ezoXJMO+w6A==
+X-ME-Sender: <xms:SP2SZAztbx1fWdlj0Ts0r-9XTm6EiuayH5AdjjUWGmWyN8gKj6MZNw>
+    <xme:SP2SZETSpk6wUkKGgv_SSa_d4EYzelKvrfHKcUtkJzAbmvbT65kixKiCjEUJ0nrf4
+    esq4Z2Aie9ixtzrnj8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefkedggedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:SP2SZCX3ACRTg5otRMSoHKt69dsqr5RHOwBp9B8oX72sQ4K2s7R6tA>
+    <xmx:SP2SZOjkc2OP0tjeZrB1GtTDTvWccSdVV8bQJpGHNZ1j6E4xany4pA>
+    <xmx:SP2SZCCrJOqg7VxbJVnvvLa5enFVoJYk3m3eU_mHQ3fKsIy4j0Vjig>
+    <xmx:SP2SZD6l-xXSjGQf9PP1VAESZ7eUcjY0JXNg3NLA9yHsrVns9Pcd0Q>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id F31DDB60086; Wed, 21 Jun 2023 09:38:15 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <246274e5-851d-4cea-8e01-d165ebd967f9@app.fastmail.com>
+In-Reply-To: <168735222615.404.5437100914727545952.tip-bot2@tip-bot2>
+References: <168735222615.404.5437100914727545952.tip-bot2@tip-bot2>
+Date:   Wed, 21 Jun 2023 15:37:55 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Marc Zyngier" <maz@kernel.org>, "Shawn Guo" <shawnguo@kernel.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>
+Subject: Re: [irqchip: irq/irqchip-next] Revert "irqchip/mxs: Include
+ linux/irqchip/mxs.h"
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,62 +86,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 01:04:09PM +0300, Claudiu Beznea wrote:
-> devm_kasprintf() returns a pointer to dynamically allocated memory.
-> Pointer could be NULL in case allocation fails. Check pointer validity.
-> Identified with coccinelle (kmerr.cocci script).
+On Wed, Jun 21, 2023, at 14:57, irqchip-bot for Marc Zyngier wrote:
+> The following commit has been merged into the irq/irqchip-next branch 
+> of irqchip:
+>
+> Commit-ID:     d93c22199966696cfb76c6942797de2fbb22da24
+> Gitweb:        
+> https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/d93c22199966696cfb76c6942797de2fbb22da24
+> Author:        Marc Zyngier <maz@kernel.org>
+> AuthorDate:    Wed, 21 Jun 2023 13:46:25 +01:00
+> Committer:     Marc Zyngier <maz@kernel.org>
+> CommitterDate: Wed, 21 Jun 2023 13:50:53 +01:00
+>
+> Revert "irqchip/mxs: Include linux/irqchip/mxs.h"
+>
+> This reverts commit 5b7e5676209120814dbb9fec8bc3769f0f7a7958.
+>
+> Although including linux/irqchip/mxs.h is technically correct,
+> this clashes with the parallel removal of this include file
+> with 32bit ARM modernizing the low level irq handling as part of
+> 5bb578a0c1b8 ("ARM: 9298/1: Drop custom mdesc->handle_irq()").
+>
+> As such, this patch is not only unnecessary, it also breaks
+> compilation in -next. Revert it.
+>
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Shawn Guo <shawnguo@kernel.org>
 
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Thanks! I had prepared the same patch but not yet sent it as I
+was still debugging some unrelated issues. Once 5bb578a0c1b8
+ends up in mainline, we can get back to fixing the warning
+by marking the handler as 'static'.
 
-> Fixes: 0f04a81784fe ("pinctrl: mcp23s08: Split to three parts: core, I²C, SPI")
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-> ---
-> 
-> Changes in v2:
-> - use independent checks for devm_kasprintf()
-> 
->  drivers/pinctrl/pinctrl-mcp23s08_spi.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/pinctrl/pinctrl-mcp23s08_spi.c b/drivers/pinctrl/pinctrl-mcp23s08_spi.c
-> index 9ae10318f6f3..ea059b9c5542 100644
-> --- a/drivers/pinctrl/pinctrl-mcp23s08_spi.c
-> +++ b/drivers/pinctrl/pinctrl-mcp23s08_spi.c
-> @@ -91,18 +91,28 @@ static int mcp23s08_spi_regmap_init(struct mcp23s08 *mcp, struct device *dev,
->  		mcp->reg_shift = 0;
->  		mcp->chip.ngpio = 8;
->  		mcp->chip.label = devm_kasprintf(dev, GFP_KERNEL, "mcp23s08.%d", addr);
-> +		if (!mcp->chip.label)
-> +			return -ENOMEM;
->  
->  		config = &mcp23x08_regmap;
->  		name = devm_kasprintf(dev, GFP_KERNEL, "%d", addr);
-> +		if (!name)
-> +			return -ENOMEM;
-> +
->  		break;
->  
->  	case MCP_TYPE_S17:
->  		mcp->reg_shift = 1;
->  		mcp->chip.ngpio = 16;
->  		mcp->chip.label = devm_kasprintf(dev, GFP_KERNEL, "mcp23s17.%d", addr);
-> +		if (!mcp->chip.label)
-> +			return -ENOMEM;
->  
->  		config = &mcp23x17_regmap;
->  		name = devm_kasprintf(dev, GFP_KERNEL, "%d", addr);
-> +		if (!name)
-> +			return -ENOMEM;
-> +
->  		break;
->  
->  	case MCP_TYPE_S18:
-> -- 
-> 2.34.1
-> 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+     Arnd
