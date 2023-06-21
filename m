@@ -2,107 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A107384BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:18:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9572B7384CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232453AbjFUNSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50088 "EHLO
+        id S232488AbjFUNU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbjFUNSk (ORCPT
+        with ESMTP id S230448AbjFUNUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:18:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B61D410C1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:18:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4ACB7614D7
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 13:18:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2BBDDC433C8;
-        Wed, 21 Jun 2023 13:18:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687353518;
-        bh=fNzgBv3S6Z9XVyqQGOlHUKzzBC7T0ZKsC6puwES5pQA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UzLCHXo4e0aRFNPwG0rKmRZ9TVR7a7NN1lkXVYfd9yPfJU1E6Lg07Ar/4It34XzUV
-         g1835P2QVlAfUwL/EBQCqVeHkbXhGjyBlNGwelfSACYHzwFy7Lm3FcRlI4LPZHbVw/
-         E4aNvkzIJw9G3i9pY7BeuvjkXaqbqeJ6d1sfQR2qae8hDac/kQ4ZFDvTvaQg0vGn95
-         VTI/6/hHSiSDkYDP1YsdFRlzRboP3tpT06MS7rsrYtruEacD4hMjGcSJdwTxOVrQ0c
-         cFyvNY2pMQYoYxp7zeKAFsm13UEUxM3+4dwcBkSvvtm62vhXe2q8hYCrE6ECimHnei
-         a+dbmUfZ74W0Q==
-Date:   Wed, 21 Jun 2023 14:18:32 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Maxim Kochetkov <fido_max@inbox.ru>
-Cc:     alsa-devel@alsa-project.org, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] ASoC: codecs: max98090: Allow dsp_a mode
-Message-ID: <b763d08e-f751-480c-96b6-339a53856768@sirena.org.uk>
-References: <20230621115328.156457-1-fido_max@inbox.ru>
- <3805dc65-113f-453a-90a9-2ae6204004ba@sirena.org.uk>
- <e6be75f6-054f-6c3b-00b4-a5e112bcefc3@inbox.ru>
+        Wed, 21 Jun 2023 09:20:22 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAE71994;
+        Wed, 21 Jun 2023 06:20:18 -0700 (PDT)
+X-QQ-mid: bizesmtp78t1687353609twv2x5yr
+Received: from linux-lab-host.localdomain ( [116.30.126.60])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 21 Jun 2023 21:20:07 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: LE7C6P2vL8QaLL7JPV1s2XMq3xaIhLPj7Fcy7ZasiRCLssjSUm9F+DbEx0p4g
+        0gPy5kD2TqEixqQZRzFnulPS2AtCpo9yKg2a53LxzOZDf426H2hSW7q9zCjMScUmvL+Gc96
+        wv3NqZLpC0DEYO20NTyPnywckAS2JgJxhTLDwxla2AKv3sOWObrXEz+Anb8OCHv0wvNFSH9
+        7zk5zv2vqy36LnH1ewGptn5XZsPVIbcdMlgh4vFMn9w7sIKp+1dkXXbUd75tS/Epfv1rx7x
+        stmMDbj9VDf/181dzxopn0yu4htPyqic7qpxpWmxC4MeYq6/yhx946EDrciP0a1aNvmVlK6
+        YdFyPLWkPAsOpp9lPx9Jbw3ghg8k90cjaPuFvuU002KpY1c0D0=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 11267784333303017325
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     thomas@t-8ch.de, arnd@arndb.de, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v1 16/17] selftests/nolibc: vfprintf: skip if neither tmpfs nor hugetlbfs
+Date:   Wed, 21 Jun 2023 21:18:53 +0800
+Message-Id: <55a01001987f2795a982755ed2ca8e27efe49249.1687344643.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1687344643.git.falcon@tinylab.org>
+References: <cover.1687344643.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7uVBzkQ09VJrlG8A"
-Content-Disposition: inline
-In-Reply-To: <e6be75f6-054f-6c3b-00b4-a5e112bcefc3@inbox.ru>
-X-Cookie: When among apes, one must play the ape.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As fs/Kconfig shows, MEMFD_CREATE depends on TMPFS or HUGETLBFS:
 
---7uVBzkQ09VJrlG8A
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+    config MEMFD_CREATE
+    	def_bool TMPFS || HUGETLBFS
 
-On Wed, Jun 21, 2023 at 04:02:34PM +0300, Maxim Kochetkov wrote:
-> On 21.06.2023 15:26, Mark Brown wrote:
+Let's skip vfprintf test if they are not there.
 
-> > This is configuring DSP A identically to left justified mode, it looks
-> > like the format configuration needs at least some interlock with the TDM
-> > configuration.
+The /tmp and /hugetlb directories have been created to mount tmpfs and
+hugetlbfs respectively, if they are not enabled in kernel configuration,
+neither /tmp nor /hugetlb will be created.
 
-> According to datasheet MAX98090 supports only DSP_A (L data MSB after FRM
-> LRC) TDM mode. Allowing this mode will let us proper configure CPU audio
-> node via DT. Actual TDM mode activation is performed in
-> max98090_set_tdm_slot() via M98090_REG_TDM_FORMAT/M98090_REG_TDM_CONTROL
-> registers.
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-I'm saying there should be some interlock between these two settings, if
-nothing else setting DSP A mode should force TDM mode with automatically
-configured slot sizes.
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 8b1ce9911c5c..85fa64746cde 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -769,11 +769,22 @@ int run_stdlib(int min, int max)
+ 
+ static int expect_vfprintf(int llen, size_t c, const char *expected, const char *fmt, ...)
+ {
++	struct stat stat_buf;
+ 	int ret, fd, w, r;
++	int tmpfs = 0, hugetlbfs = 0;
+ 	char buf[100];
+ 	FILE *memfile;
+ 	va_list args;
+ 
++	/* memfd_create depends on tmpfs or hugetlbfs */
++	tmpfs = stat("/tmp/.", &stat_buf) == 0;
++	hugetlbfs = stat("/hugetlb/.", &stat_buf) == 0;
++
++	if (!tmpfs && !hugetlbfs) {
++		pad_spc(llen, 64, "[SKIPPED]\n");
++		return 0;
++	}
++
+ 	/* silence warning for kernel >= v6.2:
+ 	 *
+ 	 *   "memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=<pid>"
+-- 
+2.25.1
 
---7uVBzkQ09VJrlG8A
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSS+KgACgkQJNaLcl1U
-h9BaHgf+PmazZFiaoqkNhCaUKsZylWCGAFPo+cgvXRDHq5Knkow2MpiNkogFgGJf
-I/9l7+LvZ8II/1BIxBVK4slt5eygq94wMkzA3q4UOVq0z0npBQZNfM3osCGXGOKW
-P3h77NAS5OSyNhe4GcKMSmRyiG4cPc1QYp6/KDJSuUWXHUaQMXQG9nWNv718Fsxj
-gtD96exbO3v2B5a/y8D0tGXhFCNU5xw9ZOlkXQULZtD/FD6oYL2loZ26os0Js7o5
-qhmuoxz7ymH+ZLeLZZZxXNixaj8CcksYNiCWlWIj8VPxfEAmegLac3GzFWu7f8GW
-VH52b6Q6SFn9Gu5bjcJZGj8M6ClZfw==
-=1W9y
------END PGP SIGNATURE-----
-
---7uVBzkQ09VJrlG8A--
