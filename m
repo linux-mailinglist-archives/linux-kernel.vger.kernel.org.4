@@ -2,173 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C5873830A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 119EA7382EE
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjFULpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 07:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56428 "EHLO
+        id S229988AbjFULoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 07:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231259AbjFULpE (ORCPT
+        with ESMTP id S229732AbjFULoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 07:45:04 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A7DE65;
-        Wed, 21 Jun 2023 04:45:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687347903; x=1718883903;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dqCF3GfDpG27kGoS0tVLvifXd0cUJHAq0oMXHt6Pows=;
-  b=cpoIhcYN4qbDVW0Yqv1NFj8HUabHIn55H7n5eBciPYhe2cXW1uJyCCGp
-   vLsGhJyzm+dXZDT5nVyZImPe8TVLbDp3eAK+5Q5oVpLjkxrXHmR7GuP+K
-   kazGTLEQC+3lKDImORjObkuv56O7V/EMA4oMrCDrliXhEpEj2UJO0BcXO
-   QPMG7QCeQF/jcU7xQyclcxbBsUmIVyqjbLuVRdI7XJ0z7pwI5SdDXgcul
-   l8vk8XV25tz39pKjXID3D/rzd6JPk0xchlua5cH32eDqqP9F7NRHz/bsn
-   Hvq1Kukj1v9AVWe5QA27b9g+HcO9CF3hTN2gmUBPLTbyiNWZPg0YZpdnE
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="asc'?scan'208";a="216987650"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 21 Jun 2023 04:45:02 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 21 Jun 2023 04:44:34 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 21 Jun 2023 04:44:31 -0700
-Date:   Wed, 21 Jun 2023 12:44:04 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Minda Chen <minda.chen@starfivetech.com>
-CC:     kernel test robot <lkp@intel.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        <oe-kbuild-all@lists.linux.dev>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: Re: [PATCH v7 4/5] phy: starfive: Add JH7110 PCIE 2.0 PHY driver
-Message-ID: <20230621-duckbill-scarf-fa79744cd42d@wendy>
-References: <20230619094759.21013-5-minda.chen@starfivetech.com>
- <202306192215.TvQco9m6-lkp@intel.com>
- <d4824941-85dd-d378-be5b-072907b1169d@starfivetech.com>
+        Wed, 21 Jun 2023 07:44:44 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5087A1B4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 04:44:43 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-311367a3e12so4873130f8f.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 04:44:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1687347882; x=1689939882;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GHn9t4zMhJxxvPoRVF2VtnqYo/UVxkvWAxyDQV5WVfE=;
+        b=E1avIA9iFt+MBS8GQNcN3VKRL+WvabL4YWMug9M85jOqFCJQKSA5FY+vr6OUMsQfBn
+         Sg3QZkk1tAzdbD1pP46Ta0Ni0UYk1fR3HlQr7SXsQgJgdyA1pPfZ7BU3siVqo2eM/Ns3
+         FcCY5GW0V43NrMMwNfg7xOmjuWL3YDmsW/PvW5reoqtybhivRJ506NEoyvCEee8ozGMj
+         /UG5/ptCroa0uQY112o44OaAxj5tTdWUs1/2UuLXk6dSveHGaXuaZppX4vTJW+ernkko
+         g6W93n6cvaEdJQJewJPpbOQ98TFyKOLFmPTQelX+nI7FoYmOfLOFtnw0Rxi8He/cLf3p
+         D4QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687347882; x=1689939882;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GHn9t4zMhJxxvPoRVF2VtnqYo/UVxkvWAxyDQV5WVfE=;
+        b=Nq/f9pou4QbGScImN7ysyOa8PiLAtEhc1AhOxoLwiAaiFbEhjpbec4adC80G7Vjsxb
+         63FxSVwgEU+T3Yc2jWjNaWYVCqjdQabFJQZaXphO1ezGZ52w+z4aX994V6C2cq30Dqhz
+         VDtWK06BtiFjVeiBqfX8g02VsOrfmrCKSIPm9YUQLJyTzqGT+JnKhszjxgy2pp/Ns9Ig
+         X2FSJIUPea3ONdVUs+PlS1+yelO5E4Nc3L0pg10UGSqbdCHxS1CN9zjKuyUNtUZN29As
+         2KNo6RPSKsXwhCMN4Uhv95l7DodIyIj1Bk6Qa3jP9DRAwbdR/WZtt5yLxOCR2QYcvQHK
+         2GUA==
+X-Gm-Message-State: AC+VfDwOaQ2xnJeYHIrPSkoN6zLimS8Z8bYcMim2QhXcT84iPy8mHqWx
+        ebNuXJ+Z1XkUWOm86mU15TPj+TMDZHT+18XUjmY=
+X-Google-Smtp-Source: ACHHUZ51vzxDs7AjU8ndh3RMVYQWxD6gTSkurFeCPCmv6odOxecoJJxIcYdY4XsWYRhOUtTUhwgPHA==
+X-Received: by 2002:adf:fa06:0:b0:311:15e3:e09d with SMTP id m6-20020adffa06000000b0031115e3e09dmr13371125wrr.36.1687347881744;
+        Wed, 21 Jun 2023 04:44:41 -0700 (PDT)
+Received: from alex-rivos.ba.rivosinc.com (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
+        by smtp.gmail.com with ESMTPSA id l15-20020a5d674f000000b003112f836d4esm4254272wrw.85.2023.06.21.04.44.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 04:44:41 -0700 (PDT)
+From:   Alexandre Ghiti <alexghiti@rivosinc.com>
+To:     Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org
+Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: [RFC PATCH 0/1] zboot: Garbage collect unused functions
+Date:   Wed, 21 Jun 2023 13:44:38 +0200
+Message-Id: <20230621114439.42851-1-alexghiti@rivosinc.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="tRw/601YCUT+ci1y"
-Content-Disposition: inline
-In-Reply-To: <d4824941-85dd-d378-be5b-072907b1169d@starfivetech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---tRw/601YCUT+ci1y
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This patch is meant to solve the issue reported by lkp in [1] with the KASLR
+series support for RISC-V.
 
-Hey,
+The problem in [1] is caused by the addition of new functions in
+efi-stub-helper.c which reference symbols that are not defined in the context
+of zboot. Those functions are not used in zboot but it causes those link
+errors.
 
-On Wed, Jun 21, 2023 at 05:29:34PM +0800, Minda Chen wrote:
-> On 2023/6/19 22:45, kernel test robot wrote:
-> > kernel test robot noticed the following build errors:
-> >=20
-> > [auto build test ERROR on robh/for-next]
-> > [also build test ERROR on linus/master v6.4-rc7 next-20230619]
-> > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > And when submitting patch, we suggest to use '--base' as documented in
-> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> >=20
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Minda-Chen/dt-bi=
-ndings-phy-Add-StarFive-JH7110-PCIe-PHY/20230619-184756
-> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git =
-for-next
-> > patch link:    https://lore.kernel.org/r/20230619094759.21013-5-minda.c=
-hen%40starfivetech.com
-> > patch subject: [PATCH v7 4/5] phy: starfive: Add JH7110 PCIE 2.0 PHY dr=
-iver
-> > config: s390-allmodconfig (https://download.01.org/0day-ci/archive/2023=
-0619/202306192215.TvQco9m6-lkp@intel.com/config)
-> > compiler: s390-linux-gcc (GCC) 12.3.0
-> > reproduce: (https://download.01.org/0day-ci/archive/20230619/2023061922=
-15.TvQco9m6-lkp@intel.com/reproduce)
-> >=20
-> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
-rsion of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202306192215.TvQco9m6-l=
-kp@intel.com/
-> >=20
-> > All errors (new ones prefixed by >>, old ones prefixed by <<):
-> >=20
-> >>> ERROR: modpost: "devm_platform_ioremap_resource" [drivers/phy/starfiv=
-e/phy-jh7110-pcie.ko] undefined!
+I can move those new functions around so that the problem disappears, but I
+believe that fixing that using the linker garbage collection is more sane.
 
-> I can not find this error. devm_platform_ioremap_resource is an exported =
-symbol
+That's an RFC, I'll include it in my KASLR series if that's the right
+direction.
 
-I asked Arnd about this since the error confused me too. Arnd pointed
-out that this "allmodconfig" isn't really allmodconfig as PCI is
-disabled. On s390, CONFIG_HAS_IOMEM depends on PCI and thus none of
-this devres stuff is usable without it. He suggested that you make the
-driver depend on USB_SUPPORT, which in turn depends on HAS_IOMEM.
+[1] https://lore.kernel.org/oe-kbuild-all/202306080741.ArdxyO6n-lkp@intel.com/
 
-Cheers,
-Conor.
+Alexandre Ghiti (1):
+  libstub: zboot: Use -ffunction-sections + --gc-sections
 
-> > ERROR: modpost: "devm_ioremap_resource" [drivers/dma/qcom/hdma.ko] unde=
-fined!
-> > ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/fsl-edma.=
-ko] undefined!
-> > ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/idma64.ko=
-] undefined!
-> > ERROR: modpost: "iounmap" [drivers/tty/ipwireless/ipwireless.ko] undefi=
-ned!
-> > ERROR: modpost: "ioremap" [drivers/tty/ipwireless/ipwireless.ko] undefi=
-ned!
-> > ERROR: modpost: "devm_platform_ioremap_resource" [drivers/char/xillybus=
-/xillybus_of.ko] undefined!
-> > ERROR: modpost: "devm_memremap" [drivers/misc/open-dice.ko] undefined!
-> > ERROR: modpost: "devm_memunmap" [drivers/misc/open-dice.ko] undefined!
-> > ERROR: modpost: "iounmap" [drivers/net/ethernet/8390/pcnet_cs.ko] undef=
-ined!
-> > WARNING: modpost: suppressed 19 unresolved symbol warnings because ther=
-e were too many)
-> >> Kconfig warnings: (for reference only)
-> >    WARNING: unmet direct dependencies detected for USB_PHY
-> >    Depends on [n]: USB_SUPPORT [=3Dn]
-> >    Selected by [m]:
-> >    - PHY_STARFIVE_JH7110_PCIE [=3Dm]
-> >=20
-> I will fix it.
+ drivers/firmware/efi/libstub/Makefile       | 1 +
+ drivers/firmware/efi/libstub/Makefile.zboot | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
---tRw/601YCUT+ci1y
-Content-Type: application/pgp-signature; name="signature.asc"
+-- 
+2.39.2
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJLihAAKCRB4tDGHoIJi
-0vj8AP9kJjPUKKeK5Ikb1Vd6nWoEl8ogTNFNE5HjZqKwMcYd4wD+MdHtCtk1hVIG
-mTwN9gzq2iJiK6QVTmkspy3bwM3HLgQ=
-=7ieo
------END PGP SIGNATURE-----
-
---tRw/601YCUT+ci1y--
