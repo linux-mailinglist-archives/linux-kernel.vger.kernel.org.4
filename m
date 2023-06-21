@@ -2,105 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7204F738A57
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEB77738A5C
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbjFUQBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:01:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33478 "EHLO
+        id S230458AbjFUQDc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:03:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231777AbjFUQAy (ORCPT
+        with ESMTP id S229601AbjFUQDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:00:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E70119BE;
-        Wed, 21 Jun 2023 09:00:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 21 Jun 2023 12:03:30 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C86595;
+        Wed, 21 Jun 2023 09:03:29 -0700 (PDT)
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 963BC615BA;
-        Wed, 21 Jun 2023 15:59:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 776A8C433C0;
-        Wed, 21 Jun 2023 15:59:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687363198;
-        bh=mHRta9tIJV2JDA/5J295h4GbkMjyOk5qKzU56OUj/sk=;
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6FD016602B7B;
+        Wed, 21 Jun 2023 17:03:26 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687363408;
+        bh=PYMTdbVF2PMr4ZhHNAxwUqn6dETM9Y5e8rTc5YEuElE=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ef8MjNepoOxKJfpbzY04NICf1OgzrJvYyTtjCFUEJSUHj/8qey/p4CbAUNyZveqZT
-         bm0jdMdQZE5OhNXnmpkUqw2ePKIN0f94/wJs/74eGqz+r8aY1S6ybaRKn99jshcW92
-         W1RJzagbkPcofo+4RCi0w14pEGsgJ2JKLubbpXd0=
-Date:   Wed, 21 Jun 2023 17:59:55 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Lei Yu <yulei.sh@bytedance.com>
-Cc:     Felipe Balbi <balbi@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Henry Tian <tianxiaofeng@bytedance.com>,
-        Jakob Koschel <jakobkoschel@gmail.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Ryan Chen <ryan_chen@aspeedtech.com>,
-        Neal Liu <neal_liu@aspeedtech.com>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>
-Subject: Re: [PATCH] usb: gadget: aspeed: fix buffer overflow
-Message-ID: <2023062146-stony-lair-b6a3@gregkh>
-References: <HK0PR06MB32022348EA65805C7109B7D080329@HK0PR06MB3202.apcprd06.prod.outlook.com>
- <CAGm54UExHOBw61DJNqxvW67OSr60fQ+Q247t63RzymiMOmHmFg@mail.gmail.com>
- <HK0PR06MB320203EF8E3AD14C34359B0580329@HK0PR06MB3202.apcprd06.prod.outlook.com>
- <Y1ueEYJk2epT/g4J@kroah.com>
- <HK0PR06MB32024F58191E17DC5ABC99F380329@HK0PR06MB3202.apcprd06.prod.outlook.com>
- <Y1uyssu84kl1INSR@kroah.com>
- <CAGm54UGmp=kTKGLhEfENF4SqkvRt_GcpuGH_g5PjtQiBkwtOsA@mail.gmail.com>
- <TY2PR06MB321303972156248AB08CAB2480EB9@TY2PR06MB3213.apcprd06.prod.outlook.com>
- <CAGm54UHWhRQsvaBQM7mgfP2A5os=mYDTfKS9qfS0C5_9XkcrSA@mail.gmail.com>
- <CAGm54UG2uD2jruRc33Xm4izepYpuFNBBcGe594as8_fx1uEWQg@mail.gmail.com>
+        b=ZH47d6tx1IAY9eICX09S/l0nMoX7geEWUVBWBlDjMVBWGrYo3F9BeP0EQseXgLsdS
+         qI73pj1x+d6ohBsGebvhDWx6b0UlCIq5lvU3viVJi0WnXZkS+aXvavaWSZRlBUfzP3
+         z8LuuP4nfH2IeTNzucIfxq8KLFCo9Tf9TpGqVvFWLHzugNvhI6b/+n0xdncg1NETV4
+         J7X3rqOAMbAb6ZVQ8yHRFj+BHL9ADIEtSXKLVO7eAb7Tp2+gK2cM89D1SVHKYnNqSf
+         q2EJUEGNf5KwgABniY9lkrieQ7bQ2n3RhY/Pb1hYl1WkqzFL90tNqxcE6qtd2Gj4j8
+         qUWkEed7QRPHA==
+Date:   Wed, 21 Jun 2023 12:03:22 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/2] kselftest/alsa: pcm-test: Decrease stream duration
+ from 4 to 2 seconds
+Message-ID: <5c2d5213-5299-44f1-9611-26002c8a5d3a@notapiano>
+References: <20230620220839.2215057-1-nfraprado@collabora.com>
+ <20230620220839.2215057-3-nfraprado@collabora.com>
+ <33bea0d3-b8dd-4936-812e-392166df4437@sirena.org.uk>
+ <443f697b-fecf-6e8e-0b76-65257aff7da8@perex.cz>
+ <9069ad0c-d166-4620-a3de-a36ab233cab0@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAGm54UG2uD2jruRc33Xm4izepYpuFNBBcGe594as8_fx1uEWQg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <9069ad0c-d166-4620-a3de-a36ab233cab0@sirena.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 08:02:14PM +0800, Lei Yu wrote:
-> On Wed, Dec 21, 2022 at 10:26â€¯AM Lei Yu <yulei.sh@bytedance.com> wrote:
-> >
-> > On Wed, Dec 21, 2022 at 10:17 AM Neal Liu <neal_liu@aspeedtech.com> wrote:
-> > > > > > > > Using rndis is able to set MTU to 2000, and the issue can be
-> > > > reproduced.
-> > > >
-> > > > USB ecm is also tested and it is possible to set MTU to 2000, and could
-> > > > reproduce the issue.
-> > > > So I think this patch is needed anyway.
-> > > >
-> > > > @Neal Liu Could you kindly help to verify the USB ECM case?
-> > >
-> > > How to set MTU to 2000 on USB ECM case? I remember last time I cannot set by using "ifconfig ..."
-> > > Regardless ECM or RNDIS, I agree this patch is still needed.
-> >
-> > You were able to set MTU to 2000 for RNDIS but not for NCM.
-> > @Greg Kroah-Hartman indicated that RNDIS should not be used anymore.
-> > So I tested ECM and verified it could set MTU 2000 and the issue could
-> > be reproduced.
+On Wed, Jun 21, 2023 at 03:39:12PM +0100, Mark Brown wrote:
+> On Wed, Jun 21, 2023 at 04:08:47PM +0200, Jaroslav Kysela wrote:
 > 
-> This patch fixes the kernel oops in the aspeed-vhub driver for both
-> USB ECM and RNDIS.
-> It now has an Acked-by from benh and Reviewed-by from neal_liu
+> > I think that the problem is somewhere else here. The overall test timeout
+> > should be calculated dynamically. All tests may be queried for the maximal
+> > expected interval based on the hardware/software capabilities. It's a bit
+> > pitfall to have a fixed time limit where the realtime tests depend on the
+> > number of devices.
 > 
-> Should we merge this patch?
+> I tend to agree here, unfortunately Shuah hasn't responded to queries
+> from Nícolas about this which I imagine is what inspired this patch.  We
+> also have problems with mixer-test on one of the Dialog CODECs with a
+> couple of 64k value controls and no cache only mode.
 
-Can you please resend it?
+Yes, exactly. I've tried increasing the timeout for this test to a larger fixed
+value previously, and later asked for more information on how to deal with the
+kselftest timeout. [1]
 
-thanks,
+Since I didn't hear back, I thought this patch would be a way to at least
+mitigate the issue for now, without limiting the test coverage, which was a
+concern with having limited scopes for the test.
 
-greg k-h
+I've just noticed that in the mean time a way to override the timeout when
+running kselftest has been introduced [2], so I suppose we could use that to
+work around the timeout limitation in CI systems and be able to run through
+completion on the different hardware at the lab. But I still believe, like you
+do, that calculating the timeout at runtime based on the hardware would make
+much more sense, though if there's such a desire to keep kselftests under the
+45s mark, I'm not sure if it would be acceptable.
+
+[1] https://lore.kernel.org/all/5302e70d-cb58-4e70-b44f-ff81b138a2e1@notapiano/
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f6a01213e3f8
+
+Thanks,
+Nícolas
