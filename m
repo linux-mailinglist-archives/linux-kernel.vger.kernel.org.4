@@ -2,146 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992CE7378B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 03:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5487378C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 03:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjFUB1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 21:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
+        id S229600AbjFUBfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 21:35:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbjFUB1a (ORCPT
+        with ESMTP id S229757AbjFUBez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 21:27:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCCC1726
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 18:27:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66CC66144F
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:27:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 225DCC433C9;
-        Wed, 21 Jun 2023 01:27:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687310846;
-        bh=1otvnE5+wHePKnvvLsl/wIH5ilQt0tl8E7t6o0z9JvU=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=idkFXeEyGpeDCjbeK9q/lEYwkPL0bPEmfzHxWY8qunk+b6R7WmjsARsmDIwy2fYJE
-         DYsTtIwM3ddhdbgNOFUQH7Ojtrrb/WQ2200GSJUvZauRsV29B85/EOTofs7oXFvNtW
-         iFUFo9RShIk9mZhb2ergNJqVuaISFV4KGBkdSMbbp2ysd9xKW6IQ0YaodC3aUqfimJ
-         NNylsxJhJKADtiHV3PlH8oIfL7f5QUVRBl6lfcTi+mpmiFB/mtGjG/dOrEUIYz+/Fp
-         t7BfECvUu1d4Nlku3sT3DKy7x3Yiqyf6nEEcyKL5loJWGistZj5lYmWKsA6Qa1srY2
-         fTElDlnCHkdmw==
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 035FC27C0054;
-        Tue, 20 Jun 2023 21:27:24 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute3.internal (MEProxy); Tue, 20 Jun 2023 21:27:25 -0400
-X-ME-Sender: <xms:_FGSZPDkrGj6KJ54W-LQ3OcSabGeozUznZ4bL8PsjJHKrGxbvtoQ1g>
-    <xme:_FGSZFg2g1x-YWVhNI9DSGoAGNjDwN2-7yUGI6qtFhwDMT7cm29bSLu1hI0-Dr1Z5
-    sKng8aRDt04u_Ri4FI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefiedggeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpeelleehueeuudegjefglefftddtieetudduuefgveejhedtgfel
-    leeggfegjeejjeenucffohhmrghinhepghhouggsohhlthdrohhrghenucevlhhushhtvg
-    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnhguhidomhgvshhmthhp
-    rghuthhhphgvrhhsohhnrghlihhthidqudduiedukeehieefvddqvdeifeduieeitdekqd
-    hluhhtoheppehkvghrnhgvlhdrohhrgheslhhinhhugidrlhhuthhordhush
-X-ME-Proxy: <xmx:_FGSZKmLMaeis2ZeB6Le_ohOQQxQ9ywaHp-_thH-P31Gb24Lug5JbA>
-    <xmx:_FGSZBy5QUbkUNrShhejJHyRy75hU8KvDS_HhzSL-KIhXK5W6w-2Zw>
-    <xmx:_FGSZES9XiDZH7pop7T6VgY60AwZqoK5RZMXQo7vUpnPPEIwBU4hXA>
-    <xmx:_FGSZIZ67W4YpR0YHK55gXBHRNU1de6feBykXbCGN6s-weJtrcX6jA>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 7A20531A0063; Tue, 20 Jun 2023 21:27:24 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <1be708d5-638c-40ff-bd52-b6b88c93d132@app.fastmail.com>
-In-Reply-To: <E6B85BE5-10E8-4532-B599-1ACB83097A62@gmail.com>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-8-kent.overstreet@linux.dev>
- <ZJAdhBIvwFBOFQU/@FVFF77S0Q05N>
- <20230619104717.3jvy77y3quou46u3@moria.home.lan>
- <ZJBOVsFraksigfRF@FVFF77S0Q05N.cambridge.arm.com>
- <20230619191740.2qmlza3inwycljih@moria.home.lan>
- <5ef2246b-9fe5-4206-acf0-0ce1f4469e6c@app.fastmail.com>
- <20230620180839.oodfav5cz234pph7@moria.home.lan>
- <dcf8648b-c367-47a5-a2b6-94fb07a68904@app.fastmail.com>
- <37d2378e-72de-e474-5e25-656b691384ba@intel.com>
- <ff2006db-cd13-48c4-bc5b-1864f9ec9149@app.fastmail.com>
- <bf22d1d1-ed6b-422d-9ea8-f778be841d8d@app.fastmail.com>
- <E6B85BE5-10E8-4532-B599-1ACB83097A62@gmail.com>
-Date:   Tue, 20 Jun 2023 18:27:04 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Nadav Amit" <nadav.amit@gmail.com>
-Cc:     "Dave Hansen" <dave.hansen@intel.com>,
-        "Kent Overstreet" <kent.overstreet@linux.dev>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org,
-        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
-        "Kent Overstreet" <kent.overstreet@gmail.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Uladzislau Rezki" <urezki@gmail.com>,
-        "hch@infradead.org" <hch@infradead.org>,
-        linux-mm <linux-mm@kvack.org>,
-        "Kees Cook" <keescook@chromium.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>
-Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 20 Jun 2023 21:34:55 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E5D170F;
+        Tue, 20 Jun 2023 18:34:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687311293; x=1718847293;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rXs2HEdQtBy2ef3AWHhr1OpTYy55CdS5OXi3yf9DqkU=;
+  b=DvqmiBBEubDh73eAXbM3vpc3T7eEdzzl9bIKsSMSuRXJgChu3ei1s1Ti
+   i4w/ToZPsidAjojg7d6xbY9g0fYG3or4u5SI+OPwNfSON8kneA1LBZ/jd
+   fZlqyx+UJWcpYXv6TXwQnbqg1xdtl/5XaBh3SVml0beYnAoIQkP4BJgOY
+   JQyf8XTHHmvxH6+wTJz4W+ktlDBXXODYJwomOzVyjmsbnTQ6RIWWM7jHU
+   CIOGK1yZZ5+Lh5vksdQErXgt3O74MZlG9zapyaLwh5Set2U7qpVZV6CQT
+   yGHtGyxMN+xfzY62oDgn7lEeK6iJpX6b8cK2f1l/HvgmN1UpOc5sPar7u
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="446407127"
+X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
+   d="scan'208";a="446407127"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 18:34:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="743972754"
+X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
+   d="scan'208";a="743972754"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 20 Jun 2023 18:34:48 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qBmkB-0006Pc-2l;
+        Wed, 21 Jun 2023 01:34:47 +0000
+Date:   Wed, 21 Jun 2023 09:33:51 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Minda Chen <minda.chen@starfivetech.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Minda Chen <minda.chen@starfivetech.com>,
+        Mason Huo <mason.huo@starfivetech.com>
+Subject: Re: [PATCH v7 4/5] phy: starfive: Add JH7110 PCIE 2.0 PHY driver
+Message-ID: <202306210917.dFnmlrv2-lkp@intel.com>
+References: <20230619094759.21013-5-minda.chen@starfivetech.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230619094759.21013-5-minda.chen@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Minda,
 
+kernel test robot noticed the following build errors:
 
-On Tue, Jun 20, 2023, at 3:43 PM, Nadav Amit wrote:
->> On Jun 20, 2023, at 3:32 PM, Andy Lutomirski <luto@kernel.org> wrote:
->>=20
->>> // out needs to be zeroed first
->>> void unpack(struct uncompressed *out, const u64 *in, const struct=20
->>> bitblock *blocks, int nblocks)
->>> {
->>>    u64 *out_as_words =3D (u64*)out;
->>>    for (int i =3D 0; i < nblocks; i++) {
->>>        const struct bitblock *b;
->>>        out_as_words[b->target] |=3D (in[b->source] & b->mask) <<=20
->>> b->shift;
->>>    }
->>> }
->>>=20
->>> void apply_offsets(struct uncompressed *out, const struct uncompress=
-ed *offsets)
->>> {
->>>    out->a +=3D offsets->a;
->>>    out->b +=3D offsets->b;
->>>    out->c +=3D offsets->c;
->>>    out->d +=3D offsets->d;
->>>    out->e +=3D offsets->e;
->>>    out->f +=3D offsets->f;
->>> }
->>>=20
->>> Which generates nice code: https://godbolt.org/z/3fEq37hf5
->>=20
->> Thinking about this a bit more, I think the only real performance iss=
-ue with my code is that it does 12 read-xor-write operations in memory, =
-which all depend on each other in horrible ways.
->
-> If you compare the generated code, just notice that you forgot to=20
-> initialize b in unpack() in this version.
->
-> I presume you wanted it to say "b =3D &blocks[i]=E2=80=9D.
+[auto build test ERROR on robh/for-next]
+[also build test ERROR on linus/master v6.4-rc7 next-20230620]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Indeed.  I also didn't notice that -Wall wasn't set.  Oops.
+url:    https://github.com/intel-lab-lkp/linux/commits/Minda-Chen/dt-bindings-phy-Add-StarFive-JH7110-PCIe-PHY/20230619-184756
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230619094759.21013-5-minda.chen%40starfivetech.com
+patch subject: [PATCH v7 4/5] phy: starfive: Add JH7110 PCIE 2.0 PHY driver
+config: hexagon-randconfig-r045-20230620 (https://download.01.org/0day-ci/archive/20230621/202306210917.dFnmlrv2-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+reproduce: (https://download.01.org/0day-ci/archive/20230621/202306210917.dFnmlrv2-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306210917.dFnmlrv2-lkp@intel.com/
+
+All errors (new ones prefixed by >>, old ones prefixed by <<):
+
+>> ERROR: modpost: "devm_usb_get_phy" [drivers/power/supply/rt9455_charger.ko] undefined!
+>> ERROR: modpost: "devm_usb_get_phy_by_phandle" [drivers/power/supply/isp1704_charger.ko] undefined!
+>> ERROR: modpost: "devm_usb_get_phy" [drivers/power/supply/isp1704_charger.ko] undefined!
+>> ERROR: modpost: "devm_usb_get_phy" [drivers/power/supply/bq256xx_charger.ko] undefined!
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for USB_PHY
+   Depends on [n]: USB_SUPPORT [=n]
+   Selected by [m]:
+   - PHY_STARFIVE_JH7110_PCIE [=m]
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
