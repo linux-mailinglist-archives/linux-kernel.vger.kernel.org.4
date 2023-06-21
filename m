@@ -2,116 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FFA07391AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 23:36:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D37E173918A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 23:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230448AbjFUVgD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 17:36:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51602 "EHLO
+        id S230194AbjFUVbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 17:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229789AbjFUVfx (ORCPT
+        with ESMTP id S229472AbjFUVb3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 17:35:53 -0400
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98E031996;
-        Wed, 21 Jun 2023 14:35:50 -0700 (PDT)
-Received: from pps.filterd (m0134423.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LKWEKR005742;
-        Wed, 21 Jun 2023 21:35:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
- date : message-id : in-reply-to : references; s=pps0720;
- bh=KbLxX+O63lrcD6heRVHuxzRyXrSY2WIVIOJqjf0/100=;
- b=o2PX9q280LddqUvdRcmw3vEXlPzwylQYvTAw9aE8dmM8HZVjxeYpurhaFO5Yfigf3kAY
- JgXq+Ss2uoBCrwjvS4+x64ilAgvct3KELlN/I72fYl+sBFEuf62yapY/LKZ+fIlSmgc6
- ALshQQgoDXbxxPTaqfXMYuoEuPJ1vj/V1zAd5ff+CIscZI/TaBeu44/St9p/1LznkIDx
- uFZ85r/ZEJBjdRddTaYX7qvRrBpIXtSla82Nk1fFZ8WcDddNCaxnHIBqHufc9/AEQ15f
- 1bgO4utTjz4Y8zIa9cFAYBKlW5idX+/MSBNoWpXI95Q9Wz3JEgBnNQpMasfPJPF8Och3 gw== 
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3rc024n8vt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Jun 2023 21:35:27 +0000
-Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
+        Wed, 21 Jun 2023 17:31:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4041E1BC;
+        Wed, 21 Jun 2023 14:31:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 39266800238;
-        Wed, 21 Jun 2023 21:35:26 +0000 (UTC)
-Received: from hpe.com (unknown [16.231.227.36])
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 9D3E780FEE1;
-        Wed, 21 Jun 2023 21:35:25 +0000 (UTC)
-From:   nick.hawkins@hpe.com
-To:     verdun@hpe.com, nick.hawkins@hpe.com, linus.walleij@linaro.org,
-        brgl@bgdev.pl, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, jdelvare@suse.com,
-        linux@roeck-us.net, andy.shevchenko@gmail.com,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: [PATCH v4 5/5] MAINTAINERS: hpe: Add GPIO
-Date:   Wed, 21 Jun 2023 16:31:15 -0500
-Message-Id: <20230621213115.113266-6-nick.hawkins@hpe.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230621213115.113266-1-nick.hawkins@hpe.com>
-References: <20230621213115.113266-1-nick.hawkins@hpe.com>
-X-Proofpoint-GUID: VAFUr4qepx01bMSNcCeEeOuLIWr1Wm-l
-X-Proofpoint-ORIG-GUID: VAFUr4qepx01bMSNcCeEeOuLIWr1Wm-l
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-21_12,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 adultscore=0 spamscore=0 bulkscore=0 mlxlogscore=956
- suspectscore=0 impostorscore=0 phishscore=0 mlxscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306210181
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0E78616D8;
+        Wed, 21 Jun 2023 21:31:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B7DDC433C0;
+        Wed, 21 Jun 2023 21:31:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687383087;
+        bh=HY2/KPCQv+TNb8BEUoFS/75P2bkM0JsT+gXSpFBNCJA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=inJljWazMcccbQVlONx/s92wacqeR1e65s1uXDfzP8ddik+z5pUlpBQKE5kSFyfME
+         VAkZAODssc039oYcAHlCKCTi7j5WiJy6YESntQDym3N5YRUSPeuy5YL94ZdxMxeQXY
+         I7VWEg9/4cM2agT4V2XhXpmeGxdg3TP/ZxnQBvntnfC4J8xFGdJd0exvsJgIfFpIus
+         EKy2GZ5bK/cvf4Ghg3/KblBZTk3EclqnYSzKcKxBTHU0px6Hh+9emJD9cCxfwT1E5Y
+         UvEEE8BNXEncBVjoeaw0CDY9o7wB13lrmROFp0Mowsyxs2LbLrqR35UnHU4/pCCslh
+         BOXqTkjIVAM1A==
+Date:   Wed, 21 Jun 2023 21:31:24 +0000
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     pavel@ucw.cz, lee@kernel.org, sean.wang@mediatek.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, llvm@lists.linux.dev
+Subject: Re: [PATCH v3 8/8] leds: leds-mt6323: Add support for WLEDs and
+ MT6332
+Message-ID: <20230621213124.GA2689001@dev-arch.thelio-3990X>
+References: <20230601110813.2373764-1-angelogioacchino.delregno@collabora.com>
+ <20230601110813.2373764-9-angelogioacchino.delregno@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230601110813.2373764-9-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nick Hawkins <nick.hawkins@hpe.com>
+Hi Angelo,
 
-List the files added for GPIO.
+On Thu, Jun 01, 2023 at 01:08:13PM +0200, AngeloGioacchino Del Regno wrote:
+> Add basic code to turn on and off WLEDs and wire up MT6332 support
+> to take advantage of it.
+> This is a simple approach due to the aforementioned PMIC supporting
+> only on/off status so, at the time of writing, it is impossible for me
+> to validate more advanced functionality due to lack of hardware.
+> 
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Signed-off-by: Nick Hawkins <nick.hawkins@hpe.com>
+After this patch as commit 9bb0a9e0626c ("leds: leds-mt6323: Add support
+for WLEDs and MT6332") in -next, I see the following warnings from
+clang, which are basically flagging potential kernel Control Flow
+Integrity [1] violations that will be visible at runtime (this warning
+is not enabled for the kernel yet but we would like it to be):
 
----
+  drivers/leds/leds-mt6323.c:598:49: error: incompatible function pointer types assigning to 'int (*)(struct led_classdev *, enum led_brightness)' from 'int (struct led_classdev *, unsigned int)' [-Werror,-Wincompatible-function-pointer-types-strict]
+    598 |                         leds->led[reg]->cdev.brightness_set_blocking =
+        |                                                                      ^
+    599 |                                                 mt6323_wled_set_brightness;
+        |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+  drivers/leds/leds-mt6323.c:600:40: error: incompatible function pointer types assigning to 'enum led_brightness (*)(struct led_classdev *)' from 'unsigned int (struct led_classdev *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+    600 |                         leds->led[reg]->cdev.brightness_get =
+        |                                                             ^
+    601 |                                                 mt6323_get_wled_brightness;
+        |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+  2 errors generated.
 
-v4:
- *No change
-v3:
- *No change
-v2:
- *Removed reference to PSU changes as they have been discarded.
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+From what I can tell/understand, 'enum led_brightness' is obsolete and
+the value that is passed via ->brightness_set_blocking() is an 'unsigned
+int' as well but it seems 'enum led_brightness' is used as the parameter
+in a lot of different callback implementations, so the prototype cannot
+be easily updated without a lot of extra work. Is there any reason not
+to just do something like this to avoid this issue?
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a3b14ec33830..6157d9466a58 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2239,6 +2239,7 @@ M:	Nick Hawkins <nick.hawkins@hpe.com>
- S:	Maintained
- F:	Documentation/hwmon/gxp-fan-ctrl.rst
- F:	Documentation/devicetree/bindings/arm/hpe,gxp.yaml
-+F:	Documentation/devicetree/bindings/gpio/hpe,gxp-gpio.yaml
- F:	Documentation/devicetree/bindings/hwmon/hpe,gxp-fan-ctrl.yaml
- F:	Documentation/devicetree/bindings/i2c/hpe,gxp-i2c.yaml
- F:	Documentation/devicetree/bindings/spi/hpe,gxp-spifi.yaml
-@@ -2247,6 +2248,7 @@ F:	arch/arm/boot/dts/hpe-bmc*
- F:	arch/arm/boot/dts/hpe-gxp*
- F:	arch/arm/mach-hpe/
- F:	drivers/clocksource/timer-gxp.c
-+F:	drivers/gpio/gpio-gxp.c
- F:	drivers/hwmon/gxp-fan-ctrl.c
- F:	drivers/i2c/busses/i2c-gxp.c
- F:	drivers/spi/spi-gxp.c
--- 
-2.17.1
+[1]: https://lwn.net/Articles/898040/
 
+Cheers,
+Nathan
+
+diff --git a/drivers/leds/leds-mt6323.c b/drivers/leds/leds-mt6323.c
+index e8fecfc2e90a..24f35bdb55fb 100644
+--- a/drivers/leds/leds-mt6323.c
++++ b/drivers/leds/leds-mt6323.c
+@@ -76,7 +76,7 @@ struct mt6323_led {
+ 	int			id;
+ 	struct mt6323_leds	*parent;
+ 	struct led_classdev	cdev;
+-	unsigned int		current_brightness;
++	enum led_brightness	current_brightness;
+ };
+ 
+ /**
+@@ -451,7 +451,7 @@ static int mtk_wled_hw_off(struct led_classdev *cdev)
+ 	return 0;
+ }
+ 
+-static unsigned int mt6323_get_wled_brightness(struct led_classdev *cdev)
++static enum led_brightness mt6323_get_wled_brightness(struct led_classdev *cdev)
+ {
+ 	struct mt6323_led *led = container_of(cdev, struct mt6323_led, cdev);
+ 	struct mt6323_leds *leds = led->parent;
+@@ -471,7 +471,7 @@ static unsigned int mt6323_get_wled_brightness(struct led_classdev *cdev)
+ }
+ 
+ static int mt6323_wled_set_brightness(struct led_classdev *cdev,
+-				      unsigned int brightness)
++				      enum led_brightness brightness)
+ {
+ 	struct mt6323_led *led = container_of(cdev, struct mt6323_led, cdev);
+ 	struct mt6323_leds *leds = led->parent;
