@@ -2,67 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE83737CEB
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:08:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F4C737D00
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:08:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbjFUIF7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 04:05:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45434 "EHLO
+        id S231715AbjFUIGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 04:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231133AbjFUIFy (ORCPT
+        with ESMTP id S231743AbjFUIGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 04:05:54 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8750C170D
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:05:50 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8CxZ8Vdr5JkOw4AAA--.100S3;
-        Wed, 21 Jun 2023 16:05:49 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxDc9cr5JkEUUAAA--.1805S3;
-        Wed, 21 Jun 2023 16:05:48 +0800 (CST)
-Message-ID: <a190b9ac-f4c5-1b36-c7eb-0b3333338a6d@loongson.cn>
-Date:   Wed, 21 Jun 2023 16:05:48 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v10 00/11] drm/etnaviv: Add pci device driver support
-Content-Language: en-US
-To:     Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Sui Jingfeng <18949883232@163.com>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Wed, 21 Jun 2023 04:06:04 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C2B19B7
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:06:01 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qBsqe-0008Km-B6; Wed, 21 Jun 2023 10:05:52 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qBsqd-00056l-Ub; Wed, 21 Jun 2023 10:05:51 +0200
+Date:   Wed, 21 Jun 2023 10:05:51 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Jonas Karlman <jonas@kwiboo.se>
+Cc:     Sandy Huang <hjc@rock-chips.com>, Heiko Stuebner <heiko@sntech.de>,
         David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-References: <20230620094716.2231414-1-18949883232@163.com>
- <CAH9NwWdfK0DkDA-Fi6TRrS4orm-HbAqBLDpYcMKd69dU6Jh+CA@mail.gmail.com>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <CAH9NwWdfK0DkDA-Fi6TRrS4orm-HbAqBLDpYcMKd69dU6Jh+CA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxDc9cr5JkEUUAAA--.1805S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7Ww47Cw45JFyDur4kJFW3twc_yoW8Cw45p3
-        4rtF9xCrW0qr40y3y7Jr15Jry5ArWYya45Jr4DJFyUCFyDGF12vF1DZr4v9rZrXF48Xr4U
-        tF4YgFyqvw15XabCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67
-        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14
-        v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4Xo7DU
-        UUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Mark Yao <markyao0591@gmail.com>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] drm/rockchip: vop: Use cleanup helper directly as
+ destroy funcs
+Message-ID: <20230621080551.GW18491@pengutronix.de>
+References: <20230620064732.1525594-1-jonas@kwiboo.se>
+ <20230620064732.1525594-3-jonas@kwiboo.se>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620064732.1525594-3-jonas@kwiboo.se>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,79 +61,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Jun 20, 2023 at 06:47:37AM +0000, Jonas Karlman wrote:
+> vop_plane_destroy and vop_crtc_destroy are plain wrappers around
+> drm_plane_cleanup and drm_crtc_cleanup. Use them directly as plane and
+> crtc funcs to closer match VOP2 driver.
+> 
+> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
 
-Below is the gpu info cat from the debugfs,
+Reviewed-by: Sascha Hauer <s.hauer@pengutronix.de>
 
-I guess this is also what you want ?
+Sascha
 
-
-[root@fedora 0]# cat gpu
-
-0000:00:06.0 Status:
-     identity
-      model: 0x1000
-      revision: 0x5037
-      product_id: 0x0
-      customer_id: 0x0
-      eco_id: 0x0
-     features
-      major_features: 0xe0286eed
-      minor_features0: 0xe9799eff
-      minor_features1: 0xbe13b2d9
-      minor_features2: 0xca114080
-      minor_features3: 0x0e0100a1
-      minor_features4: 0x00000000
-      minor_features5: 0x00000000
-      minor_features6: 0x00000000
-      minor_features7: 0x00000000
-      minor_features8: 0x00000000
-      minor_features9: 0x00000000
-      minor_features10: 0x00000000
-      minor_features11: 0x00000000
-     specs
-      stream_count:  4
-      register_max: 64
-      thread_count: 512
-      vertex_cache_size: 8
-      shader_core_count: 2
-      nn_core_count: 0
-      pixel_pipes: 1
-      vertex_output_buffer_size: 512
-      buffer_size: 0
-      instruction_count: 256
-      num_constants: 576
-      varyings_count: 8
-     axi: 0x00000051
-     idle: 0x7ffffffe
-      FE is not idle
-     DMA is running
-      address 0: 0x00002ac0
-      address 1: 0x00002ac8
-      state 0: 0x00000800
-      state 1: 0x00000812
-      last fetch 64 bit word: 0x380000c8 0x00000701
-
-
-On 2023/6/21 15:55, Christian Gmeiner wrote:
-> Hi
->
->> From: Sui Jingfeng <suijingfeng@loongson.cn>
->>
->> There is a Vivante GC1000 (v5037) in LS2K1000 and LS7A1000, this GPU is a
->> PCI device, and it has 2D and 3D cores in the same core. This series is
->> trying to add PCI device driver support to drm/etnaviv.
->>
-> Is it possible to get the lspci output for the GPU? Something like
-> this: sudo lspci -vvv -s ...
->
->
-> thanks
-> --
-> Christian Gmeiner, MSc
->
-> https://christian-gmeiner.info/privacypolicy
+> ---
+>  drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 16 +++-------------
+>  1 file changed, 3 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+> index 60b23636a3fe..25c873d4ff53 100644
+> --- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+> @@ -766,11 +766,6 @@ static void vop_crtc_atomic_disable(struct drm_crtc *crtc,
+>  	}
+>  }
+>  
+> -static void vop_plane_destroy(struct drm_plane *plane)
+> -{
+> -	drm_plane_cleanup(plane);
+> -}
+> -
+>  static inline bool rockchip_afbc(u64 modifier)
+>  {
+>  	return modifier == ROCKCHIP_AFBC_MOD;
+> @@ -1131,7 +1126,7 @@ static const struct drm_plane_helper_funcs plane_helper_funcs = {
+>  static const struct drm_plane_funcs vop_plane_funcs = {
+>  	.update_plane	= drm_atomic_helper_update_plane,
+>  	.disable_plane	= drm_atomic_helper_disable_plane,
+> -	.destroy = vop_plane_destroy,
+> +	.destroy = drm_plane_cleanup,
+>  	.reset = drm_atomic_helper_plane_reset,
+>  	.atomic_duplicate_state = drm_atomic_helper_plane_duplicate_state,
+>  	.atomic_destroy_state = drm_atomic_helper_plane_destroy_state,
+> @@ -1602,11 +1597,6 @@ static const struct drm_crtc_helper_funcs vop_crtc_helper_funcs = {
+>  	.atomic_disable = vop_crtc_atomic_disable,
+>  };
+>  
+> -static void vop_crtc_destroy(struct drm_crtc *crtc)
+> -{
+> -	drm_crtc_cleanup(crtc);
+> -}
+> -
+>  static struct drm_crtc_state *vop_crtc_duplicate_state(struct drm_crtc *crtc)
+>  {
+>  	struct rockchip_crtc_state *rockchip_state;
+> @@ -1711,7 +1701,7 @@ vop_crtc_verify_crc_source(struct drm_crtc *crtc, const char *source_name,
+>  static const struct drm_crtc_funcs vop_crtc_funcs = {
+>  	.set_config = drm_atomic_helper_set_config,
+>  	.page_flip = drm_atomic_helper_page_flip,
+> -	.destroy = vop_crtc_destroy,
+> +	.destroy = drm_crtc_cleanup,
+>  	.reset = vop_crtc_reset,
+>  	.atomic_duplicate_state = vop_crtc_duplicate_state,
+>  	.atomic_destroy_state = vop_crtc_destroy_state,
+> @@ -1962,7 +1952,7 @@ static void vop_destroy_crtc(struct vop *vop)
+>  	 */
+>  	list_for_each_entry_safe(plane, tmp, &drm_dev->mode_config.plane_list,
+>  				 head)
+> -		vop_plane_destroy(plane);
+> +		drm_plane_cleanup(plane);
+>  
+>  	/*
+>  	 * Destroy CRTC after vop_plane_destroy() since vop_disable_plane()
+> -- 
+> 2.41.0
+> 
+> 
 
 -- 
-Jingfeng
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
