@@ -2,205 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 972FD7378E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 04:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3100F7378EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 04:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjFUCIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 22:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
+        id S229783AbjFUCK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 22:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjFUCIx (ORCPT
+        with ESMTP id S229677AbjFUCKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 22:08:53 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A61198B;
-        Tue, 20 Jun 2023 19:08:48 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-6686a1051beso3024497b3a.1;
-        Tue, 20 Jun 2023 19:08:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687313328; x=1689905328;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/Z1FdXPAdBbAS8vpnEBAJMrThm+NfoZMxij9njmv4SA=;
-        b=hpCaR0h9USHnRpS0w6eA3vkduGXrVzIBFTcxsfUVeSXZYl1iiJ77bzLnuE9dEkC87f
-         /2Sn0x/SQVL9bncTX7ClF/hxK3Pqouf7NMw84gxo37b40J+u6QYlQcX6TtozcC17+KIf
-         JO4ymI0eP+fPe12ZwFsBDjLf7LBvDJNexQwZ9UpwXDapGmP/FuCdNw6ZXFV8vcKlFE9T
-         1qABiKhElXNZKbeO/AgjrQvHHiXkPCGdA5EjZa4iff/SjniOvGeEJ5YWJ2rSyAMDLlDh
-         /fpVjkdOW/JECTNDaBPx1R1nuv32cA42GB8wFr3hRbju0H7dfDpyZcWiYOlE+g4ou+mZ
-         FRbQ==
+        Tue, 20 Jun 2023 22:10:23 -0400
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7B6198B
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 19:10:20 -0700 (PDT)
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-77ac4aa24eeso421105339f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 19:10:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687313328; x=1689905328;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/Z1FdXPAdBbAS8vpnEBAJMrThm+NfoZMxij9njmv4SA=;
-        b=fsDfj7J6zhHbAhI2zSUouRKynp/xby8wbpUuFqG/gLKHFdN7wPySzSBgU8Kxhkk+Yo
-         RgyhM0xN8dOOCLHIilQo+vNOMG0x+uFKV4Hk4Z0Bzlo52Jk7IgqufP3RT+b4OhMNvr7e
-         b7HX9N6a7n6Rk57b9jKgZ9XZcvyxdmh0hG0UWTbX6nAZMwrw6ZELM10CC+XUhnKznX0J
-         T204v4c0gPz774XyYlukZ0kAqVl9QIL41UkHRNhj39U5QMT//0FZJo+CsGgvnne1apBP
-         ybZCwkmZd1VpUyjMEDhO3jLE2k4QjhLvH+RCbnq48i8lbiMX96NkejJ/akzsT2UOpmJv
-         +j2w==
-X-Gm-Message-State: AC+VfDwm3taqBICTuBjWsISUMTZ1pRHT3TX0GxlroGD0pORHhWf3cf/v
-        nvTW3ipW3km5CTm1UDK60ZrZhvnA+sQ=
-X-Google-Smtp-Source: ACHHUZ68DUPWge3DRzDNYfQsKrTkVm9kcJu0O8Ts2E4cUrs3GHypq4gJYKQ+Z0foJ55pIHQmbSezxg==
-X-Received: by 2002:a05:6a20:3d02:b0:121:c6cf:f96e with SMTP id y2-20020a056a203d0200b00121c6cff96emr9721684pzi.25.1687313327733;
-        Tue, 20 Jun 2023 19:08:47 -0700 (PDT)
-Received: from smtpclient.apple ([2402:d0c0:2:a2a::1])
-        by smtp.gmail.com with ESMTPSA id r7-20020a63fc47000000b005533f154df1sm1987931pgk.2.2023.06.20.19.08.45
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 20 Jun 2023 19:08:47 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
-Subject: Re: [PATCH v2] rcu: Add necessary WRITE_ONCE()
-From:   Alan Huang <mmpgouride@gmail.com>
-In-Reply-To: <50c4aa37-388b-449c-8184-00a9d69471fc@paulmck-laptop>
-Date:   Wed, 21 Jun 2023 10:08:28 +0800
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <B9A94CB4-DB9B-43D2-9D34-ADB4F7EA737D@gmail.com>
-References: <20230620171346.207076-1-mmpgouride@gmail.com>
- <50c4aa37-388b-449c-8184-00a9d69471fc@paulmck-laptop>
-To:     paulmck@kernel.org
-X-Mailer: Apple Mail (2.3731.400.51.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687313419; x=1689905419;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rGD1kCLK3UO9zPwdYoWf6HQp/ziO4UX3ezLXTcAFRPw=;
+        b=XtS0Uwie4GPIildvSzMi9Ih11x703V1PjPh9sPNSb+YJT/mMcW/yT6PhyjkUiDHMBg
+         2GkeDQbzhRc959faTjZmIzjnTzz+UxKBir43T/FmLQJ+j2dz0S5ncd26+c46VQpKDBX4
+         uEOm7LFmM3uus42brFwEfdDJRpeEPFDRRNop9bCy80jq8cBW89/EahH4VGVw/YfGZf4i
+         cKk+bqapZ6CRcFKDS6r/h2OMCs8plBesqFyW4c6WUJFq3e2BumSHGEeSJYQ9w+8EZgnE
+         wrTFIsrLPYusTwk6PnUay2RU2R3+rtyppLiDjSWJFq0yjE8/mB5SaTHNm8v8qXS1aWrV
+         SDaQ==
+X-Gm-Message-State: AC+VfDygAXS+TKvPZWWVr+gw8lYKavCMOWCCvTIPMEsOlQU+YkrWuTN4
+        XehiqEqXznnNW14CvrbXeNNjwv6qH4PxUYs7yUeUDkXCLkLT
+X-Google-Smtp-Source: ACHHUZ7Q/9EbX1kpttT8CvsDCX0XJLKMo+55xXxHBXcmfVI6lQYBaxLthKvMTKRqa3PyMHoowWPyxe5UFkwIZ4MgJ8dvBHl3C/h0
+MIME-Version: 1.0
+X-Received: by 2002:a02:b041:0:b0:426:792a:ec72 with SMTP id
+ q1-20020a02b041000000b00426792aec72mr2412676jah.0.1687313419583; Tue, 20 Jun
+ 2023 19:10:19 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 19:10:19 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ffcb2e05fe9a445c@google.com>
+Subject: [syzbot] [xfs?] WARNING: Reset corrupted AGFL on AG NUM. NUM blocks
+ leaked. Please unmount and run xfs_repair.
+From:   syzbot <syzbot+9d0b0d54a8bd799f6ae4@syzkaller.appspotmail.com>
+To:     david@fromorbit.com, dchinner@redhat.com, djwong@kernel.org,
+        hch@lst.de, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-> 2023=E5=B9=B46=E6=9C=8821=E6=97=A5 06:26=EF=BC=8CPaul E. McKenney =
-<paulmck@kernel.org> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> On Tue, Jun 20, 2023 at 05:13:46PM +0000, Alan Huang wrote:
->> Commit c54a2744497d("list: Add hlist_unhashed_lockless()") and
->> commit 860c8802ace1("rcu: Use WRITE_ONCE() for assignments to
->> ->pprev for hlist_nulls") added various WRITE_ONCE() to pair with
->> the READ_ONCE() in hlist_unhashed_lockless(), but there are still
->> some places where WRITE_ONCE() was not added, this commit adds that.
->>=20
->> Also add WRITE_ONCE() to pair with the READ_ONCE() in hlist_empty().
->>=20
->> Signed-off-by: Alan Huang <mmpgouride@gmail.com>
->=20
-> On hlist_nulls_add_tail_rcu(), good catch, thank you!
->=20
-> On the others, are there really cases where a lockless read races with
-> the update?  At first glance, that sounds like a usage bug.  For =
-example,
-> as I understand it, when you use something like hlist_del(), you are
-> supposed to ensure that there are no concurrent readers.  Which is the
-> point of the assignment of the special value LIST_POISON2, right?
+syzbot found the following issue on:
 
-Do you mean there are cases where a lockless read races with =
-hlist_add_head/hlist_add_before
-hlist_add_behind/__hlist_del, but there is no real case where a lockless =
-read races with the hlist_del_init/hlist_del
-hlist_move_list?
+HEAD commit:    40f71e7cd3c6 Merge tag 'net-6.4-rc7' of git://git.kernel.o..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=158b99d3280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7ff8f87c7ab0e04e
+dashboard link: https://syzkaller.appspot.com/bug?extid=9d0b0d54a8bd799f6ae4
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16ab4537280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=148326ef280000
 
-There may be no real case where a lockless read races with the =
-hlist_del_init/hlist_del
-hlist_move_list. But for the sake of completeness, I added those =
-WRITE_ONCE, after all, if there is WRITE_ONCE
-in __hlist_del, why not add WRITE_ONCE in its caller, like hlist_del()?
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/2dc89d5fee38/disk-40f71e7c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/0ced5a475218/vmlinux-40f71e7c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d543a4f69684/bzImage-40f71e7c.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/e2012b787a31/mount_0.gz
 
-Thanks,
-Alan
+The issue was bisected to:
 
->=20
-> Or is there some use case that I am missing?
->=20
-> If I am not missing something, then switching the non-RCU APIs to
-> WRITE_ONCE() would be a step backwards, because it would make it =
-harder
-> for tools like KCSAN to find bugs.
->=20
-> Thanx, Paul
->=20
->> ---
->> Changelog:
->> V1 -> V2:=20
->>  Add WRITE_ONCE in hlist_del_init to pair with READ_ONCE in
->>  hlist_unhashed_lockless.
->>=20
->> include/linux/list.h          | 9 +++++----
->> include/linux/list_nulls.h    | 2 +-
->> include/linux/rculist_nulls.h | 2 +-
->> 3 files changed, 7 insertions(+), 6 deletions(-)
->>=20
->> diff --git a/include/linux/list.h b/include/linux/list.h
->> index ac366958ea..3a29b95bfe 100644
->> --- a/include/linux/list.h
->> +++ b/include/linux/list.h
->> @@ -912,7 +912,7 @@ static inline void hlist_del(struct hlist_node =
-*n)
->> {
->> __hlist_del(n);
->> n->next =3D LIST_POISON1;
->> - n->pprev =3D LIST_POISON2;
->> + WRITE_ONCE(n->pprev, LIST_POISON2);
->> }
->>=20
->> /**
->> @@ -925,7 +925,8 @@ static inline void hlist_del_init(struct =
-hlist_node *n)
->> {
->> if (!hlist_unhashed(n)) {
->> __hlist_del(n);
->> - INIT_HLIST_NODE(n);
->> + n->next =3D NULL;
->> + WRITE_ONCE(n->pprev, NULL);
->> }
->> }
->>=20
->> @@ -1026,8 +1027,8 @@ static inline void hlist_move_list(struct =
-hlist_head *old,
->> {
->> new->first =3D old->first;
->> if (new->first)
->> - new->first->pprev =3D &new->first;
->> - old->first =3D NULL;
->> + WRITE_ONCE(new->first->pprev, &new->first);
->> + WRITE_ONCE(old->first, NULL);
->> }
->>=20
->> #define hlist_entry(ptr, type, member) container_of(ptr,type,member)
->> diff --git a/include/linux/list_nulls.h b/include/linux/list_nulls.h
->> index fa6e8471bd..b63b0589fa 100644
->> --- a/include/linux/list_nulls.h
->> +++ b/include/linux/list_nulls.h
->> @@ -95,7 +95,7 @@ static inline void hlist_nulls_add_head(struct =
-hlist_nulls_node *n,
->>=20
->> n->next =3D first;
->> WRITE_ONCE(n->pprev, &h->first);
->> - h->first =3D n;
->> + WRITE_ONCE(h->first, n);
->> if (!is_a_nulls(first))
->> WRITE_ONCE(first->pprev, &n->next);
->> }
->> diff --git a/include/linux/rculist_nulls.h =
-b/include/linux/rculist_nulls.h
->> index ba4c00dd80..c65121655b 100644
->> --- a/include/linux/rculist_nulls.h
->> +++ b/include/linux/rculist_nulls.h
->> @@ -138,7 +138,7 @@ static inline void =
-hlist_nulls_add_tail_rcu(struct hlist_nulls_node *n,
->>=20
->> if (last) {
->> n->next =3D last->next;
->> - n->pprev =3D &last->next;
->> + WRITE_ONCE(n->pprev, &last->next);
->> rcu_assign_pointer(hlist_nulls_next_rcu(last), n);
->> } else {
->> hlist_nulls_add_head_rcu(n, h);
->> --=20
->> 2.34.1
->>=20
+commit e0a8de7da35e5b22b44fa1013ccc0716e17b0c14
+Author: Dave Chinner <dchinner@redhat.com>
+Date:   Mon Jun 5 04:48:15 2023 +0000
 
+    xfs: fix agf/agfl verification on v4 filesystems
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10bb665b280000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=12bb665b280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=14bb665b280000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9d0b0d54a8bd799f6ae4@syzkaller.appspotmail.com
+Fixes: e0a8de7da35e ("xfs: fix agf/agfl verification on v4 filesystems")
+
+XFS (loop0): WARNING: Reset corrupted AGFL on AG 0. 4 blocks leaked. Please unmount and run xfs_repair.
+XFS (loop0): Internal error !ino_ok at line 213 of file fs/xfs/libxfs/xfs_dir2.c.  Caller xfs_dir_ino_validate+0x2c/0x90 fs/xfs/libxfs/xfs_dir2.c:220
+CPU: 1 PID: 46 Comm: kworker/u4:3 Not tainted 6.4.0-rc6-syzkaller-00195-g40f71e7cd3c6 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Workqueue: xfs_iwalk-4998 xfs_pwork_work
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ xfs_error_report fs/xfs/xfs_error.c:384 [inline]
+ xfs_corruption_error+0x11d/0x170 fs/xfs/xfs_error.c:401
+ xfs_dir_ino_validate+0x5f/0x90 fs/xfs/libxfs/xfs_dir2.c:213
+ xfs_dir2_sf_verify+0x487/0x990 fs/xfs/libxfs/xfs_dir2_sf.c:779
+ xfs_ifork_verify_local_data fs/xfs/libxfs/xfs_inode_fork.c:706 [inline]
+ xfs_iformat_data_fork+0x4bf/0x6d0 fs/xfs/libxfs/xfs_inode_fork.c:256
+ xfs_inode_from_disk+0xbbf/0x1070 fs/xfs/libxfs/xfs_inode_buf.c:245
+ xfs_iget_cache_miss fs/xfs/xfs_icache.c:639 [inline]
+ xfs_iget+0xf08/0x3050 fs/xfs/xfs_icache.c:777
+ xfs_qm_dqusage_adjust+0x228/0x670 fs/xfs/xfs_qm.c:1157
+ xfs_iwalk_ag_recs+0x486/0x7c0 fs/xfs/xfs_iwalk.c:220
+ xfs_iwalk_run_callbacks+0x25b/0x490 fs/xfs/xfs_iwalk.c:376
+ xfs_iwalk_ag+0xad6/0xbd0 fs/xfs/xfs_iwalk.c:482
+ xfs_iwalk_ag_work+0xfb/0x1b0 fs/xfs/xfs_iwalk.c:624
+ xfs_pwork_work+0x7c/0x190 fs/xfs/xfs_pwork.c:47
+ process_one_work+0x8a0/0x10e0 kernel/workqueue.c:2405
+ worker_thread+0xa63/0x1210 kernel/workqueue.c:2552
+ kthread+0x2b8/0x350 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
+XFS (loop0): Corruption detected. Unmount and run xfs_repair
+XFS (loop0): Invalid inode number 0x24
+XFS (loop0): Metadata corruption detected at xfs_dir2_sf_verify+0x767/0x990 fs/xfs/libxfs/xfs_dir2_sf.c:774, inode 0x23 data fork
+XFS (loop0): Unmount and run xfs_repair
+XFS (loop0): First 32 bytes of corrupted metadata buffer:
+00000000: 02 00 00 00 00 20 05 00 30 66 69 6c 65 30 01 00  ..... ..0file0..
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
