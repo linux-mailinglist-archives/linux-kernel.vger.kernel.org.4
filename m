@@ -2,184 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E99737CE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44DB4737CCF
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbjFUHjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 03:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
+        id S231562AbjFUHjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 03:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231573AbjFUHiu (ORCPT
+        with ESMTP id S231492AbjFUHiq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 03:38:50 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FAE91988
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 00:38:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687333129; x=1718869129;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version:content-transfer-encoding;
-  bh=z9Sj3YeuNpGi+kC2OKSHhpUo2+Q4p5ltLVJ8mQ7FYcs=;
-  b=mMgpHhcsQHqS6Pk3ARJvCBHCoTplVjrOT0zBjoclVaEhPZGsNaRr0KRh
-   5QZE/aaDZJsHnT9hM487lOGzEejTNGuLiV4BRiOS0HHOBSI+zC46Lc/aa
-   4R1fwFMH7abSe1gfevUP0Bwaoks9o/b2B5/+7oBmgJqOHSpFzABJcWu17
-   8BKS1J1m9aLJPHREs2qvD5s+PcXG2CATIOhgoyWEoIPpV9iEHO2hs4Fmu
-   BEUJFcTcfgGxYWliEMjTA4+3Zz0VNh45X5EPt7AecwL4XHLMmHUHhdm6s
-   AIcMH5kJ/8t2NQyoHh3ulxDr8aBCBzki6b7C514VejJmoaBJ6W0drVASP
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="389532826"
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="scan'208";a="389532826"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 00:38:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="888553416"
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="scan'208";a="888553416"
-Received: from dafnaroz-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.63.122])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 00:38:09 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     =?utf-8?Q?Andr=C3=A9?= Almeida <andrealmeid@igalia.com>,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     pierre-eric.pelloux-prayer@amd.com,
-        =?utf-8?Q?Andr=C3=A9?= Almeida <andrealmeid@igalia.com>,
-        'Marek =?utf-8?B?T2zFocOhayc=?= <maraeo@gmail.com>,
-        Michel =?utf-8?Q?D=C3=A4nzer?= <michel.daenzer@mailbox.org>,
-        Timur =?utf-8?Q?Krist=C3=B3f?= <timur.kristof@gmail.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        kernel-dev@igalia.com, alexander.deucher@amd.com,
-        christian.koenig@amd.com
-Subject: Re: [RFC PATCH v3 4/4] drm/i915: Implement DRM_IOCTL_GET_RESET
-In-Reply-To: <20230621005719.836857-5-andrealmeid@igalia.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230621005719.836857-1-andrealmeid@igalia.com>
- <20230621005719.836857-5-andrealmeid@igalia.com>
-Date:   Wed, 21 Jun 2023 10:38:06 +0300
-Message-ID: <87ilbhfeox.fsf@intel.com>
+        Wed, 21 Jun 2023 03:38:46 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD44F19BE;
+        Wed, 21 Jun 2023 00:38:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=lTSU3An8gM6reX7gIYHv5XUzCbetDmgqSY0M6vDhJ+M=; b=uhiGbTsu70yxmQ3RrqI7soy7kc
+        gixwosjeuBeVAWWonw8yp58ecXYP1x4VufUnGvKSlRPg5fThgCqYhjtItGx3i13zMyf/yoRiHiPxu
+        m0eMFvyUuLKoeu3zvOcZP2nxDxEwrd2qkFM31exDIpqmut3qT1VIvZ/gABjXntICVcLfqQN02ZZiM
+        Ynu0eohRqKQomQCb/FwcFaFWhK3CYinJVB0O26eZ6bZ7a2v5DtBND+MLZers/5cbtmHJr7pAO7zaM
+        ymZnW/VwvKHTRSAPvtjXCT1dUjeYzL6VXZyUb9HVqEzwH3cWvCImmWV1n1eC/IO5jlgP2HDVNKU+H
+        Q8YYf0IA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qBsQG-00E6kq-1V; Wed, 21 Jun 2023 07:38:36 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 72C2B3002A9;
+        Wed, 21 Jun 2023 09:38:35 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 56D222BC73BB9; Wed, 21 Jun 2023 09:38:35 +0200 (CEST)
+Date:   Wed, 21 Jun 2023 09:38:35 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-pm@vger.kernel.org,
+        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>
+Subject: Re: [PATCH v2 3/5] intel_idle: Sync up the SPEC_CTRL MSR value to
+ x86_spec_ctrl_current
+Message-ID: <20230621073835.GD2046280@hirez.programming.kicks-ass.net>
+References: <20230620140625.1001886-1-longman@redhat.com>
+ <20230620140625.1001886-4-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620140625.1001886-4-longman@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Jun 2023, Andr=C3=A9 Almeida <andrealmeid@igalia.com> wrote:
-> Implement get_reset ioctl for i915.
->
-> Signed-off-by: Andr=C3=A9 Almeida <andrealmeid@igalia.com>
-> ---
->  drivers/gpu/drm/i915/gem/i915_gem_context.c    | 18 ++++++++++++++++++
->  drivers/gpu/drm/i915/gem/i915_gem_context.h    |  2 ++
->  .../gpu/drm/i915/gem/i915_gem_context_types.h  |  2 ++
->  drivers/gpu/drm/i915/i915_driver.c             |  2 ++
->  4 files changed, 24 insertions(+)
->
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_context.c b/drivers/gpu/dr=
-m/i915/gem/i915_gem_context.c
-> index 9a9ff84c90d7..fba8c9bbc7e9 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_context.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_context.c
-> @@ -1666,6 +1666,8 @@ i915_gem_create_context(struct drm_i915_private *i9=
-15,
->  		ctx->uses_protected_content =3D true;
->  	}
->=20=20
-> +	ctx->dev_reset_counter =3D i915_reset_count(&i915->gpu_error);
-> +
->  	trace_i915_context_create(ctx);
->=20=20
->  	return ctx;
-> @@ -2558,6 +2560,22 @@ int i915_gem_context_reset_stats_ioctl(struct drm_=
-device *dev,
->  	return 0;
->  }
->=20=20
-> +int i915_gem_get_reset(struct drm_file *filp, struct drm_device *dev,
-> +		       struct drm_get_reset *reset)
-> +{
-> +	struct i915_gem_context *ctx;
-> +
-> +	ctx =3D i915_gem_context_lookup(file->driver_priv, reset->ctx_id);
-> +	if (IS_ERR(ctx))
-> +		return PTR_ERR(ctx);
-> +
-> +	reset->dev_reset_count =3D i915_reset_count(&i915->gpu_error) - ctx->de=
-v_reset_count;
-> +	reset->ctx_reset_count =3D ctx->guilty_count;
-> +
-> +	i915_gem_context_put(ctx);
+On Tue, Jun 20, 2023 at 10:06:23AM -0400, Waiman Long wrote:
+> When intel_idle_ibrs() is called, it modifies the SPEC_CTRL MSR to 0
+> in order disable IBRS. However, the new MSR value isn't reflected in
+> x86_spec_ctrl_current. That will cause the new spec_ctrl_msrs debugfs
+> file to show incorrect result. Fix that by updating x86_spec_ctrl_current
+> percpu value to always match the content of the SPEC_CTRL MSR.
 
-Usually return is preceded by a blank line.
-
-> +	return 0;
-> +}
-> +
->  /* GEM context-engines iterator: for_each_gem_engine() */
->  struct intel_context *
->  i915_gem_engines_iter_next(struct i915_gem_engines_iter *it)
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_context.h b/drivers/gpu/dr=
-m/i915/gem/i915_gem_context.h
-> index e5b0f66ea1fe..9ee119d8123f 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_context.h
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_context.h
-> @@ -138,6 +138,8 @@ int i915_gem_context_setparam_ioctl(struct drm_device=
- *dev, void *data,
->  				    struct drm_file *file_priv);
->  int i915_gem_context_reset_stats_ioctl(struct drm_device *dev, void *dat=
-a,
->  				       struct drm_file *file);
-> +int i915_gem_get_reset(struct drm_file *file_priv, struct drm_device *de=
-v,
-> +		       struct drm_get_reset *reset);
->=20=20
->  struct i915_gem_context *
->  i915_gem_context_lookup(struct drm_i915_file_private *file_priv, u32 id);
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_context_types.h b/drivers/=
-gpu/drm/i915/gem/i915_gem_context_types.h
-> index cb78214a7dcd..2e4cf0f0d3dc 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_context_types.h
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_context_types.h
-> @@ -414,6 +414,8 @@ struct i915_gem_context {
->  		/** @engines: list of stale engines */
->  		struct list_head engines;
->  	} stale;
-> +
-> +	uint64_t dev_reset_counter;
-
-u64 please. i915 only uses the kernel fixed types.
-
-Please do wait for review on the actual content before reposting.
-
-BR,
-Jani.
-
->  };
->=20=20
->  #endif /* __I915_GEM_CONTEXT_TYPES_H__ */
-> diff --git a/drivers/gpu/drm/i915/i915_driver.c b/drivers/gpu/drm/i915/i9=
-15_driver.c
-> index 97244541ec28..640304141ada 100644
-> --- a/drivers/gpu/drm/i915/i915_driver.c
-> +++ b/drivers/gpu/drm/i915/i915_driver.c
-> @@ -1805,6 +1805,8 @@ static const struct drm_driver i915_drm_driver =3D {
->  	.postclose =3D i915_driver_postclose,
->  	.show_fdinfo =3D i915_drm_client_fdinfo,
->=20=20
-> +	.get_reset =3D i915_gem_get_reset,
-> +
->  	.prime_handle_to_fd =3D drm_gem_prime_handle_to_fd,
->  	.prime_fd_to_handle =3D drm_gem_prime_fd_to_handle,
->  	.gem_prime_import =3D i915_gem_prime_import,
-
---=20
-Jani Nikula, Intel Open Source Graphics Center
+What debugfs file?
