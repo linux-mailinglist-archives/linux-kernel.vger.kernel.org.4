@@ -2,237 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A97E737979
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 05:04:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 631B673797D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 05:08:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjFUDD5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Jun 2023 23:03:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56818 "EHLO
+        id S229974AbjFUDIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 23:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFUDDy (ORCPT
+        with ESMTP id S229626AbjFUDIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 23:03:54 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4636EE7E;
-        Tue, 20 Jun 2023 20:03:49 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id DE6108062;
-        Wed, 21 Jun 2023 11:03:35 +0800 (CST)
-Received: from EXMBX062.cuchost.com (172.16.6.62) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 21 Jun
- 2023 11:03:35 +0800
-Received: from [192.168.120.43] (171.223.208.138) by EXMBX062.cuchost.com
- (172.16.6.62) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 21 Jun
- 2023 11:03:34 +0800
-Message-ID: <cce9e2d7-6a62-7e9d-fa44-d577273e672e@starfivetech.com>
-Date:   Wed, 21 Jun 2023 11:03:33 +0800
+        Tue, 20 Jun 2023 23:08:36 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F20F1703
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 20:08:35 -0700 (PDT)
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id B30C1413A9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 03:08:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1687316911;
+        bh=UBPZtGvQo+V6SDyZVSWIAeDYphAGCAkQ+a9RWWShpuM=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=Aj0lPeOB6UgFL7Ic5InrhTJNJ8M5VtzSMkYyNxSHt22aZ3she7RQe7yZu6bu7JjK6
+         udgqoeFHo0bZQV4CeglJdB1qr6JCFmmmFq+SZapnPg3HzJL7S5AZeBJetyX1vby6aS
+         9qPn869h9Rl3gkUkI8hyPVFupz9Pthkg8uNXaimhjt/2GVxZ3FVE4OzfsGt4wiQHxh
+         DcdsOlhAQ6MJQ+dtWdiwthdNlVaptSzA+1C8eV+NG0602zehikvZqHRAhCVyP73lwE
+         NEBXW+I8rlOXvMlvUJgfAPj/2syr//6wZVizERPgsChwBGvie3NgzhpSptV/ackskf
+         XrSZONsSou0dw==
+Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-25f02317e40so2316183a91.0
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 20:08:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687316910; x=1689908910;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UBPZtGvQo+V6SDyZVSWIAeDYphAGCAkQ+a9RWWShpuM=;
+        b=CMZKXCpHC9ItkSf4xKV3z+utPuvf5qFNcaDd7iCDtGuvZvg41m8y4WNwU+mkbntPY5
+         hyFfFkX/9pQ9ohQl0FgbMHjhiTqZK6f6H3QvbPjMya8E9ZquJcpwVGMk9w/BeqNkfVzX
+         EXR8CxvDUA0kJIhz60VznTeXgTKMqIiFh3Yc5wTrCsfpeIKIX0VSKcgWw4mD1ZIJiAu3
+         nDEPa5+fZxDHklZffObbDn1FcFXkN44ahmJU6vPervR8SfCheFW3cVJu8UoKdw+YLS35
+         kpKX+UsATJH3AweSlb7ofz0B9FiaVFLfOtiMFFBXSMLM12ko+16jQbdNtRoT6AEnC4HU
+         qtMA==
+X-Gm-Message-State: AC+VfDzwQ2DV9bobCSzF7r/anoANPRKl92u5bgLH5HjUatBT331Y/0Qv
+        SK0JjhUEseBFHPTMAkv2ZNvkLNuuVYtfsH6MoD7VG4hjhaD4X0LYCF/u37kGTBAzhFQ8aQbcZZJ
+        A3kxybyVqZd2wH0ke4eKFT/0xMBUIofhuTYaywKBn/ylbtbcTIAsxYrftn67Mup+vfA==
+X-Received: by 2002:a17:90b:1d03:b0:25e:a057:afa with SMTP id on3-20020a17090b1d0300b0025ea0570afamr7466346pjb.13.1687316910298;
+        Tue, 20 Jun 2023 20:08:30 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7JYEQszqNAybOs1jMnmKWXbXDeRjmdNw0iYFg+HVIACEZLPRwYJxTysM9wru1QObTrhsMmyojEJRIuewu0rVQ=
+X-Received: by 2002:a17:90b:1d03:b0:25e:a057:afa with SMTP id
+ on3-20020a17090b1d0300b0025ea0570afamr7466340pjb.13.1687316910045; Tue, 20
+ Jun 2023 20:08:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: net: motorcomm: Add pad driver
- strength cfg
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>
-CC:     Andrew Lunn <andrew@lunn.ch>, Conor Dooley <conor@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <netdev@vger.kernel.org>, Peter Geis <pgwipeout@gmail.com>,
-        Frank <Frank.Sae@motor-comm.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
-References: <20230526090502.29835-1-samin.guo@starfivetech.com>
- <20230526090502.29835-2-samin.guo@starfivetech.com>
- <20230526-glutinous-pristine-fed571235b80@spud>
- <1dbf113c-7592-68bd-6aaf-05ff1d8c538c@starfivetech.com>
- <15eb4ffe-ea12-9a2c-ae9d-c34860384b60@starfivetech.com>
- <20230620-clicker-antivirus-99e24a06954e@wendy>
- <1a5c39d8-812f-4a8d-bc65-205695661973@linaro.org>
-From:   Guo Samin <samin.guo@starfivetech.com>
-In-Reply-To: <1a5c39d8-812f-4a8d-bc65-205695661973@linaro.org>
+References: <20230615070421.1704133-1-kai.heng.feng@canonical.com> <20230616220125.GA1555182@bhelgaas>
+In-Reply-To: <20230616220125.GA1555182@bhelgaas>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Wed, 21 Jun 2023 11:08:18 +0800
+Message-ID: <CAAd53p5J8xTU6Fgo8m4h5wzy7w8x4jPugonrR9DTwk-QAm8fZQ@mail.gmail.com>
+Subject: Re: [PATCH] PCI/ASPM: Enable ASPM on external PCIe devices
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     bhelgaas@google.com, Mario Limonciello <mario.limonciello@amd.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Vidya Sagar <vidyas@nvidia.com>,
+        Michael Bottini <michael.a.bottini@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX062.cuchost.com
- (172.16.6.62)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
--------- 原始信息 --------
-主题: Re: [PATCH v3 1/2] dt-bindings: net: motorcomm: Add pad driver strength cfg
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-收件人: Conor Dooley <conor.dooley@microchip.com>, Guo Samin <samin.guo@starfivetech.com>
-日期: 2023/6/20
-
-> On 20/06/2023 10:26, Conor Dooley wrote:
->> Hey,
->>
->> On Tue, Jun 20, 2023 at 11:09:52AM +0800, Guo Samin wrote:
->>> From: Guo Samin <samin.guo@starfivetech.com>
->>>> From: Conor Dooley <conor@kernel.org>
->>>>> On Fri, May 26, 2023 at 05:05:01PM +0800, Samin Guo wrote:
->>>>>> The motorcomm phy (YT8531) supports the ability to adjust the drive
->>>>>> strength of the rx_clk/rx_data, the value range of pad driver
->>>>>> strength is 0 to 7.
->>
->>>>>> +  motorcomm,rx-clk-driver-strength:
->>>>>> +    description: drive strength of rx_clk pad.
->>>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>>>> +    enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
->>>>>
->>>>> I think you should use minimum & maximum instead of these listed out
->>>>> enums.
->>
->>>>  You have also had this comment since v1 & were reminded of it on
->>>>> v2 by Krzysztof: "What do the numbers mean? What are the units? mA?"
->>
->>>> The good news is that we just got some data about units from Motorcomm. 
->>>> Maybe I can post the data show of the unit later after I get the complete data.
->>
->>> Sorry, haven't updated in a while.
->>
->> NW chief.
->>
->>> I just got the detailed data of Driver Strength(DS) from Motorcomm , which applies to both rx_clk and rx_data.
->>>
->>> |----------------------|
->>> |     ds map table     |
->>> |----------------------|
->>> | DS(3b) | Current (mA)|
->>> |--------|-------------|
->>> |   000  |     1.20    |
->>> |   001  |     2.10    |
->>> |   010  |     2.70    |
->>> |   011  |     2.91    |
->>> |   100  |     3.11    |
->>> |   101  |     3.60    |
->>> |   110  |     3.97    |
->>> |   111  |     4.35    |
->>> |--------|-------------|
->>>
->>> Since these currents are not integer values and have no regularity,
-> 
-> There is no mA unit in DT schema, so I don't see what by "not integer
-> values". 1200 uA is an integer.
-> 
->>> it is not very good to use in the drive/dts in my opinion.
->>
->> Who says you have to use mA? What about uA?
-> 
-> Yep
-
-> 
->>
->>> Therefore, I tend to continue to use DS(0-7) in dts/driver, and adding
->>> a description of the current value corresponding to DS in dt-bindings. 
->>
->> I think this goes against not putting register values into the dts &
->> that the accurate description of the hardware are the currents.
-> 
-> For vendor properties register values are often accepted, but logical
-> unit is much more readable in the DTS. Also allows further customization
-> or extending when new variant appears. You cannot do extend a property
-> easily when it holds a register value, without changing the meaning per
-> variant.
+On Sat, Jun 17, 2023 at 6:01=E2=80=AFAM Bjorn Helgaas <helgaas@kernel.org> =
+wrote:
 >
+> On Thu, Jun 15, 2023 at 03:04:20PM +0800, Kai-Heng Feng wrote:
+> > When a PCIe device is hotplugged to a Thunderbolt port, ASPM is not
+> > enabled for that device. However, when the device is plugged preboot,
+> > ASPM is enabled by default.
+> >
+> > The disparity happens because BIOS doesn't have the ability to program
+> > ASPM on hotplugged devices.
+> >
+> > So enable ASPM by default for external connected PCIe devices so ASPM
+> > settings are consitent between preboot and hotplugged.
+> >
+> > On HP Thunderbolt Dock G4, enable ASPM can also fix BadDLLP error:
+> > pcieport 0000:00:1d.0: AER: Corrected error received: 0000:07:04.0
+> > pcieport 0000:07:04.0: PCIe Bus Error: severity=3DCorrected, type=3DDat=
+a Link Layer, (Receiver ID)
+> > pcieport 0000:07:04.0:   device [8086:0b26] error status/mask=3D0000008=
+0/00002000
+> > pcieport 0000:07:04.0:    [ 7] BadDLLP
+> >
+> > The root cause is still unclear, but quite likely because the I225 on
+> > the dock supports PTM, where ASPM timing is precalculated for the PTM.
+>
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217557
+>
+> I know you said this isn't clear yet, but I don't see a connection
+> between ASPM being enabled and PTM.  If anything, *disabling* ASPM
+> should be safer if there's a timing issue.
 
-Hi Conor & Krzysztof，
-Thanks for taking the time to review.
-Yes, uA can be used to avoid the problem of decimals.
+If PTM timing is tested when ASPM is enabled, there can be a strong
+connection between the two.
 
-In addition to this, we need to deal with the DS under different IOPAD.
-these values were existed at IO 1.8V. When the IO is set to 3.3V, the values will change.
+I'll raise the issue to IGC devs.
 
-Chip_Config (EXT_0xA001)
-|Bit  |Symbol  |Access  |Default  |Description |
-|5:4  |Cfg_ldo |RW      |0x0      |Rgmii ldo voltage and RGMII/MDC/MDIO PAD's level shifter control. Depends on strapping.|
-                                  |2'b11: 1.8v   2'b10: 1.8v    2'b01: 2.5v    2'b00: 3.3v                                |
+>
+> I assume the ASPM timing you refer to is the LTR snoop/no snoop
+> latency, since that's the only timing difference I see in the lspci
+> output in bugzilla?
 
+Not only LTR. ASPM L0s and L1 are not enabled when devices are hotplugged.
 
-      |----------------------|            
-      | ds map table(1.8V)   |
-      |----------------------|
-      | DS(3b) | Current (mA)|
-      |   000  |     1.20    |
-      |   001  |     2.10    |
-      |   010  |     2.70    |
-      |   011  |     2.91    |
-      |   100  |     3.11    |
-      |   101  |     3.60    |
-      |   110  |     3.97    |
-      |   111  |     4.35    |
-      |--------|-------------|
+Kai-Heng
 
-
-      |----------------------|
-      | ds map table(3.3V)   |
-      |----------------------|
-      | DS(3b) | Current (mA)|
-      |   000  |     3.07    |
-      |   001  |     4.08    |
-      |   010  |     4.37    |
-      |   011  |     4.68    |
-      |   100  |     5.02    |
-      |   101  |     5.45    |
-      |   110  |     5.74    |
-      |   111  |     6.14    |
-      |--------|-------------|
-
-
-Best regards,
-Samin
->>
->>> Like This:
->>>
->>> +  motorcomm,rx-clk-driver-strength:
->>> +    description: drive strength of rx_clk pad.
->>
->> You need "description: |" to preserve the formatting if you add tables,
->> but I don't think that this is a good idea. Put the values in here that
->> describe the hardware (IOW the currents) and then you don't need to have
->> this table.
->>
->>> +      |----------------------|
->>> +      | rx_clk ds map table  |
->>> +      |----------------------|
->>> +      | DS(3b) | Current (mA)|
->>> +      |   000  |     1.20    |
->>> +      |   001  |     2.10    |
->>> +      |   010  |     2.70    |
->>> +      |   011  |     2.91    |
->>> +      |   100  |     3.11    |
->>> +      |   101  |     3.60    |
->>> +      |   110  |     3.97    |
->>> +      |   111  |     4.35    |
->>> +      |--------|-------------|
->>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>> +    enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
->>> +    default: 3
->>> +
->>
->>> Or use minimum & maximum instead of these listed out enums
->>
->> With the actual current values, enum rather than min + max.
-> 
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+>
+> I don't see any PTM differences there.
+>
+> Bjorn
