@@ -2,102 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32758738484
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BC0D73847E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232328AbjFUNKt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:10:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44992 "EHLO
+        id S232315AbjFUNJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbjFUNKr (ORCPT
+        with ESMTP id S232355AbjFUNJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:10:47 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EAEDE57;
-        Wed, 21 Jun 2023 06:10:40 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1687353031t44bo3k3
-Received: from linux-lab-host.localdomain ( [116.30.126.60])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 21 Jun 2023 21:10:30 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: LE7C6P2vL8TmJPct4lgjZrwR2r9ifUIlt/ooF/BX9SyZKu13GRvTyl9GsqTST
-        ltdyYZfK1hcYTSw2PtZ2cSsrutXtqrrH3wICe4sQVBMsvsqOyuB7dI4iFpVmLBze724lXru
-        MrCOhErIOZL0iMGraRvDTOwXKXNRwTHqMxbFxAhdcOzLAE6urkKcn7OFGyK5Rr/QQ3Gi+O5
-        5uVcyN5zxpJheUWjJWBCHlUkqOfvA50eoBqaZecRtTDbFslq8WkE3qHczh1ezZ9Ioa7rK+/
-        zlHkifVvPodX7TZRCtuN2tansc3KrcXZ2e3GtT/Qg0KVnKjHg2RyqIOXmQVwFyud1pA3NG+
-        XiNPe3DkQHD4hboBT2grmvA4AP6LZE9fF+QyhfjfFvLMKAG6JLghvxFqZcoZw==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 6653536713406143944
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     thomas@t-8ch.de, arnd@arndb.de, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 12/17] selftests/nolibc: rename chmod_net to chmod_good
-Date:   Wed, 21 Jun 2023 21:09:24 +0800
-Message-Id: <f8aacdf071153f3166df9c565d5ebc04290f0b10.1687344643.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687344643.git.falcon@tinylab.org>
-References: <cover.1687344643.git.falcon@tinylab.org>
+        Wed, 21 Jun 2023 09:09:46 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C62C199B;
+        Wed, 21 Jun 2023 06:09:41 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f86dbce369so5105212e87.0;
+        Wed, 21 Jun 2023 06:09:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687352979; x=1689944979;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=itwb9Cgqe4LPJLF1L10bNoqbQPmNuEgB4oxI2zCKoaQ=;
+        b=gzO+LSsXSDFErn1INaYei3n7YDBSmFzaOv/u/1f5dOnG/NfkL/mWWy+Okxa2A4Jb+R
+         yKMIrBEyNBQz6vT1rpL5mpaOODqPJTamMkzIwmzfZnl3JkFQqRp0v2NV5lhTurpoGzHG
+         HtY2ma32uh7NYhGiQANZuj3NrVjE/FNNIwWuf3AiDsszJVlXALdrn6ro0by/vo3OI95+
+         mu8Gc1FcGdOi82NS/TuZ2SnuZES3aRUiQzV5oD+xjsoTAy43IcpxvJ1klPv70H4QKq2O
+         I8xWbCp8z6RDD8ioHtPzl32dIQuLQe8QXmzSVpH9D//rwQSm6yhvlvxgwoPkBCGiAd/q
+         FJwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687352979; x=1689944979;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=itwb9Cgqe4LPJLF1L10bNoqbQPmNuEgB4oxI2zCKoaQ=;
+        b=gwxRSRf27gUoTKTpQRK+o+4q6/fr5HTNVpJ1WUojPbAKW5zHweJ/7f1+ZfPvGiEnn6
+         ru3n9CXVKZBrmKZEZpvn/2t9O5p/aVrSpuHZzfU1fRRRayFiwW463Vz+DqXRflKHWeyr
+         A2FUnAB/qZk+ZSbpA4wlmLFjwS9EQoE9qXWHCQUzF9TsxszPVJGZeG+FedztLPMhY1v0
+         bOtEy7lk2qXvVe4R6aGypzl0MWhA3WgoXa18IWKcB7CR2lnpFLgEAEPc4P+2Jx5i87hI
+         4swv7lHcgfP3baCLOYhVg9ArJwAh8ywIpg0xqbEbm/dGnF+HHEUYUuISg4PXUW2epzw7
+         /aHg==
+X-Gm-Message-State: AC+VfDzABhCuMopDtXz2GwW3u6VBJ4uqbeBGxsW4/yNhqlKwqZkQXlnt
+        PSqH06ZParpMFDt//U9rgHI=
+X-Google-Smtp-Source: ACHHUZ5ZIkz67DxCK4edbIQh90vWhjPTO4MfSW5ISWzZyTBWBSIsfyWfn/OO71EMNgVC0iifq/trww==
+X-Received: by 2002:a19:5006:0:b0:4f8:711b:18b0 with SMTP id e6-20020a195006000000b004f8711b18b0mr5686159lfb.3.1687352979205;
+        Wed, 21 Jun 2023 06:09:39 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id 24-20020a05600c22d800b003f8c5ceeb77sm5024814wmg.21.2023.06.21.06.09.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 06:09:38 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] btrfs: scrub: remove redundant division of stripe_nr
+Date:   Wed, 21 Jun 2023 14:09:37 +0100
+Message-Id: <20230621130937.2676434-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_NET is not enabled, there would be no /proc/self/net, let's
-use /tmp/blah in such case and rename chmod_net to chmod_good.
+Variable stripe_nr is being divided by map->num_stripes however the
+result is never read. The division and assignment are redundant and
+can be removed. Cleans up clang scan build warning:
 
-This allows to test chmod_good with tmpfs even when procfs is not there.
+fs/btrfs/scrub.c:1264:3: warning: Value stored to 'stripe_nr' is
+never read [deadcode.DeadStores]
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ fs/btrfs/scrub.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 8b587961e46a..eca0070151b6 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -550,10 +550,22 @@ int run_syscall(int min, int max)
- 	int ret = 0;
- 	void *p1, *p2;
- 	int has_gettid = 1;
-+	int has_tmpdir = 0;
-+	char *tmpdir = NULL;
+diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
+index 2c7fdbb60314..8fc4f9ea3d20 100644
+--- a/fs/btrfs/scrub.c
++++ b/fs/btrfs/scrub.c
+@@ -1261,7 +1261,6 @@ static int get_raid56_logic_offset(u64 physical, int num,
  
- 	/* <has_proc> indicates whether or not /proc is mounted */
- 	has_proc = stat("/proc", &stat_buf) == 0;
- 
-+	/* <has_tmpdir> indicates whether or not /tmp/blah is there */
-+	if (stat("/proc/self/net", &stat_buf) == 0) {
-+		tmpdir = "/proc/self/net";
-+		has_tmpdir = 1;
-+	} else if (stat("/tmp/.", &stat_buf) == 0) {
-+		tmpdir = "/tmp/blah";
-+		if (mkdir(tmpdir, 0755) == 0)
-+			has_tmpdir = 1;
-+	}
-+
- 	/* this will be used to skip certain tests that can't be run unprivileged */
- 	is_root = geteuid() == 0;
- 
-@@ -582,7 +594,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(chdir_root);        EXPECT_SYSZR(1, chdir("/")); break;
- 		CASE_TEST(chdir_dot);         EXPECT_SYSZR(1, chdir(".")); break;
- 		CASE_TEST(chdir_blah);        EXPECT_SYSER(1, chdir("/blah"), -1, ENOENT); break;
--		CASE_TEST(chmod_net);         EXPECT_SYSZR(has_proc, chmod("/proc/self/net", 0555)); break;
-+		CASE_TEST(chmod_good);        EXPECT_SYSZR(has_tmpdir, chmod(tmpdir, 0555)); break;
- 		CASE_TEST(chmod_self);        EXPECT_SYSER(has_proc, chmod("/proc/self", 0555), -1, EPERM); break;
- 		CASE_TEST(chown_self);        EXPECT_SYSER(has_proc, chown("/proc/self", 0, 0), -1, EPERM); break;
- 		CASE_TEST(chroot_root);       EXPECT_SYSZR(is_root, chroot("/")); break;
+ 		/* Work out the disk rotation on this stripe-set */
+ 		rot = stripe_nr % map->num_stripes;
+-		stripe_nr /= map->num_stripes;
+ 		/* calculate which stripe this data locates */
+ 		rot += i;
+ 		stripe_index = rot % map->num_stripes;
 -- 
-2.25.1
-
+2.39.2
 
