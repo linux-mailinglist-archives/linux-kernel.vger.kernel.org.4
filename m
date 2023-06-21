@@ -2,258 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49551738938
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EA47738939
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:32:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232936AbjFUPcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37704 "EHLO
+        id S233459AbjFUPc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 11:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233391AbjFUPb6 (ORCPT
+        with ESMTP id S233455AbjFUPcB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:31:58 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD2F291
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:31:36 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id DA5035C00A0;
-        Wed, 21 Jun 2023 11:31:35 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Wed, 21 Jun 2023 11:31:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1687361495; x=1687447895; bh=HJ
-        zrcymNDK/30NtyNUALiWIqzreIddQyX3G4I6rsQh4=; b=wA1oD9SCppUkUOBsRB
-        2O9j2IdxeO3T6qlF/M9ggnUDvMn7gbgy80q2B/NO4vJS+dVtjTK/bS6voLzF6QSp
-        urx3PvTwrWEIZSk54zKRZqpiqn9Sg/uwFQ23eQg5HbykVHdbJbafJcoJtCKvL7EA
-        +YvPlwnim3eHm7g1boRmRsiW9qvbdwNr6qyX/cQQvuxz9cqDnq42NGT0Ii9ez7PN
-        drplFEs3d2IyihQ3IIDSEehYZtd7gbWNMCs2Re7LtmRQUESM2aah+Q+JUj0r1/QQ
-        FmW9tCSBU/3t0bjcO0R+Iu1mRqX596fY9T7tId6fhWV2C1LqOb1Ng9bDwoVr7uIa
-        otXQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687361495; x=1687447895; bh=HJzrcymNDK/30
-        NtyNUALiWIqzreIddQyX3G4I6rsQh4=; b=Dh84IE10gK3ubTGvWEgdMBh3HkFsA
-        AOb1S2oH6rasvJCWw7I6ytNSdUxu8JgpjdqR32NDo7mePuPRsiz8m4+J+35tqfED
-        bJgaqj1Sxc0Ro19WK38v26ALBM3PQ01Mmu7HqH85xWCkGCbP0RBlliXcme7bytiU
-        PU9Ou1sFCAAWT3EAG8oM0i4BtygpoLYqcWfRdzKdreVaacflUO2W2tg3RHJk1VZ5
-        LqFnQ3Q7W6vxgSEdNDIgom2P58MJXNa1+me8v8ibowsrWRSKTdHJo4D9EiU+jSp3
-        hCR5REYGJx2DD2NZYhWBXHd1CxRrrGxzx+lO2V192tVSMTdrfolgAU3/A==
-X-ME-Sender: <xms:1xeTZB-aQTubQv7pxOTKuL8O_C2o8qsK2DSjXs7nNdVchg9d5aXCsw>
-    <xme:1xeTZFuV8GltP0BynVPsMrDHFldyhuHz-R_lNe0RECxRODul3AWkCh0V5x956g7Bb
-    g2-za3-pDOV2ebDUTw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefkedgieefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepkedujeffgeefveefueeggeegtedugeeufeeuffeifeeifefgkeeltdejhedu
-    ueelnecuffhomhgrihhnpeguohgtkhgvrhdrihhopdhqvghmuhdrohhrghdplhhinhgrrh
-    hordhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
-    mheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:1xeTZPCx49JhC-aUe6kkpUh9y8lTIm_nP8donfvVSED78CeSPUZYFQ>
-    <xmx:1xeTZFfP88pgVQQGpfzt803IsuUGxlVKTXvDFE4KD8VMegEN-Fd21g>
-    <xmx:1xeTZGM2j0j8OkflDYEtElhfZm5nwYHH-rk6ehpHHQUWcJFPau0SDg>
-    <xmx:1xeTZDp-qqJ2WUWctkFrxqfFIJzePzGyss5lbSapn_9RSuCHu5wpBQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 73548B60089; Wed, 21 Jun 2023 11:31:35 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <2d7595b1-b655-4425-85d3-423801bce644@app.fastmail.com>
-In-Reply-To: <CA+G9fYsETJQm0Ue7hGsb+nbsiMikwycOV3V0DPr6WC2r61KRBQ@mail.gmail.com>
-References: <CA+G9fYsETJQm0Ue7hGsb+nbsiMikwycOV3V0DPr6WC2r61KRBQ@mail.gmail.com>
-Date:   Wed, 21 Jun 2023 17:31:15 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Naresh Kamboju" <naresh.kamboju@linaro.org>,
-        "Anders Roxell" <anders.roxell@linaro.org>,
-        =?UTF-8?Q?Daniel_D=C3=ADaz?= <daniel.diaz@linaro.org>,
-        "Benjamin Copeland" <ben.copeland@linaro.org>
-Cc:     "Peter Zijlstra" <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-Subject: Re: qemu-x86_64 booting with 8.0.0 stil see int3: when running LTP tracing
- testing.
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 21 Jun 2023 11:32:01 -0400
+Received: from smtpdh19-1.aruba.it (smtpdh19-1.aruba.it [62.149.155.148])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFBDD19B7
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:31:43 -0700 (PDT)
+Received: from [192.168.1.56] ([79.0.204.227])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id Bzo4qqTmVBn0GBzo4qL3PU; Wed, 21 Jun 2023 17:31:40 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1687361500; bh=Kr9uQUwuYYRfz/jvnZbpKuJ6zBBw4mD5BU/o+Z6TmUg=;
+        h=Content-Type:Date:MIME-Version:Subject:To:From;
+        b=ebP5sXGMQVyUtR9A7ncleYpn++S9IfHI1A/MgcPqW8hBf5ZGPsK4aJEoUuWNh789h
+         m1hRd5XJuNwuPR9ii2U6RrjEP9cGECGjz/D+F3mjwK5Ll/MuFnV+wehBLNPbiFljlR
+         onaeZiG5fcWSL2VlOhbcG06qwDk/H2JIKqKyRmJMmKNZlfR2m/GreZ06YSryvsHP79
+         dy3F6y952MWtViwYsk/LWgAe7FxG3j1RVi/PUpNrqS6mcZFT+dFcFz0pOGSsPRq6V9
+         CsJmryjLuf6nVpnS/htZdhSx7k+QbSOja53DmDaedvPAs2kKoNkxPMPrq5gYJblAMX
+         xmGvs468LCSeg==
+Content-Type: multipart/mixed; boundary="------------K8FqYMzZ0uMINnuLmani0Jzv"
+Message-ID: <c770492b-dfee-c38e-f15a-aad382caec25@enneenne.com>
+Date:   Wed, 21 Jun 2023 17:31:40 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RFC PATCH] pps: Increase PPS_MAX_SOURCES value.
+Content-Language: en-US
+To:     Charlie Johnston <charlie.johnston@ni.com>
+Cc:     linux-kernel@vger.kernel.org, brenda.streiff@ni.com
+References: <20230605203147.694716-1-charlie.johnston@ni.com>
+ <fe435e68-8e05-9078-0fe6-63ef7cce2fc9@enneenne.com>
+ <b794bccc-0233-4d78-df6f-bf7c688a7d7d@ni.com>
+ <70ce864c-ca13-4fc4-fcb5-9b7f91579a90@enneenne.com>
+ <38f38f66-0fd5-4e6c-4839-8272cef77046@ni.com>
+ <5aff32cf-74ea-b632-9d4d-a01ca0d31821@enneenne.com>
+ <41affdf0-edba-6202-4e76-fd969da6497b@ni.com>
+From:   Rodolfo Giometti <giometti@enneenne.com>
+In-Reply-To: <41affdf0-edba-6202-4e76-fd969da6497b@ni.com>
+X-CMAE-Envelope: MS4xfH/Xdblr6XkoFrvyzCTEp7+KWc0O+QFMNl8GIcEI6WGEkmekZrqJ2ESbiTamGSS/zEaz44ugxz5n8+t2JPj2UwzF5sesn6zRPpwEdD17C5D1zWWteW3f
+ FZZQKd20j10tmkldTh54K2WeAQAEIcX2ZQ/6AdWQ+AucBVJ88jak6RsGtJT2Debu7T9hl5ySSiLzP5DbpnQlcAmTYXbeWdFIWx/5qmHTLZFDrdV7bMod6dlp
+ hgHoPmFrN47U1Y5o40t8fMfljmNH943u8gGhhGVH6i8=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023, at 16:16, Naresh Kamboju wrote:
-> Hi Team,
->
-> FYI,
-> qemu-x86_64 booting with 8.0.0 still see int3: when running LTP tracing testing.
->
-> docker.io/linaro/tuxrun-qemu:v8.0.0 qemu-system-x86_64
+This is a multi-part message in MIME format.
+--------------K8FqYMzZ0uMINnuLmani0Jzv
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Thanks for the report. I've added the x86 and kernel lists as well
-as Peter Zijlstra to Cc.
+On 20/06/23 22:42, Charlie Johnston wrote:
+> I've resubmitted the patch with just PPS_MAX_SOURCES = MINORMASK. The system which hits the limit and causes the problem is currently available for testing.
+> 
+> Is there anything you'd like me to try running? Or just confirm the limit change works?
 
-> Running tests.......
-> ftrace_regression01 1 TPASS: Finished running the test
-> <4>[   49.874424] int3: 0000 [#1] PREEMPT SMP PTI
-> <4>[   49.874634] int3: 0000 [#2] PREEMPT SMP PTI
-> <4>[   49.874656] int3: 0000 [#3] PREEMPT SMP PTI
-> <4>[   49.874669] int3: 0000 [#4] PREEMPT SMP PTI
-> <4>[   49.874680] int3: 0000 [#5] PREEMPT SMP PTI
-> <4>[   49.874691] int3: 0000 [#6] PREEMPT SMP PTI
-> <4>[   49.874703] int3: 0000 [#7] PREEMPT SMP PTI
-> <4>[   49.874714] int3: 0000 [#8] PREEMPT SMP PTI
-> <4>[   49.874725] int3: 0000 [#9] PREEMPT SMP PTI
+Sorry for the delay (i was very busy in these days)! Please, test the attached 
+two patches.
 
-At first looked a bit like it's hitting on multiple CPUs, but 
-I also see that the instance only has two CPUs, so apparently
-this instance is hitting the same bug recursively from
-the exception handler.
+Ciao,
 
-> <4>[   49.874736] int3: 0000 [#10] PREEMPT SMP PTI
-> <4>[   49.874750] int3: 0000 [#11] PREEMPT SMP PTI
-> <4>[   49.874761] int3: 0000 [#12] PREEMPT SMP PTI
-> <4>[   49.874772] int3: 0000 [#13] PREEMPT SMP PTI
-> <4>[   49.874783] int3: 0000 [#14] PREEMPT SMP PTI
-> <4>[   49.874828] int3: 0000 [#15] PREEMPT SMP PTI
-> <4>[   49.874894] int3: 0000 [#16] PREEMPT SMP PTI
-> <4>[   49.874907] int3: 0000 [#17] PREEMPT SMP PTI
-> <4>[   49.874918] int3: 0000 [#18] PREEMPT SMP PTI
-> <4>[   49.874930] int3: 0000 [#19] PREEMPT SMP PTI
-> <4>[   49.874941] int3: 0000 [#20] PREEMPT SMP PTI
-> <4>[   49.874953] int3: 0000 [#21] PREEMPT SMP PTI
-> <4>[   49.874964] int3: 0000 [#22] PREEMPT SMP PTI
-> <4>[   49.874976] int3: 0000 [#23] PREEMPT SMP PTI
-> <4>[   49.874987] int3: 0000 [#24] PREEMPT SMP PTI
-> <4>[   49.874999] int3: 0000 [#25] PREEMPT SMP PTI
-> <4>[   49.875010] int3: 0000 [#26] PREEMPT SMP PTI
-> <4>[   49.875021] int3: 0000 [#27] PREEMPT SMP PTI
-> <4>[   49.875032] int3: 0000 [#28] PREEMPT SMP PTI
-> <4>[   49.875043] int3: 0000 [#29] PREEMPT SMP PTI
-> <4>[   49.875054] int3: 0000 [#30] PREEMPT SMP PTI
-> <4>[   49.875282] ------------[ cut here ]------------
-> <4>[   49.875687] ------------[ cut here ]------------
-> <2>[   49.875904] kernel BUG at kernel/entry/common.c:454!
-> <4>[   49.876652] invalid opcode: 0000 [#31] PREEMPT SMP PTI
-> <4>[   49.876845] CPU: 1 PID: 317 Comm: ftrace_regressi Not tainted
-> 6.4.0-rc7-next-20230621 #1
-> <4>[   49.876994] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
-> BIOS rel-1.16.2-0-gea1b7a073390-prebuilt.qemu.org 04/01/2014
-> <4>[   49.877119] RIP: 0010:irqentry_nmi_enter+0x68/0x70
-> <4>[   49.877756] Code: 48 8b 0d 7b 3a 6a 73 c7 81 88 08 00 00 00 00
-> 00 00 85 c0 0f 95 c3 e8 27 02 00 00 e8 22 93 fe fe 89 d8 5b 5d c3 cc
-> cc cc cc cc <0f> 0b 66 0f 1f 44 00 00 90 90 90 90 90 90 90 90 90 90 90
-> 90 90 90
-> <4>[   49.877929] RSP: 0000:fffffe3e79ab6ee8 EFLAGS: 00000046
-> <4>[   49.878425] RAX: 0000000000000000 RBX: fffffe3e79ab6f58 RCX:
-> 00000000fe00ffdb
-> <4>[   49.878444] RDX: 00000000ffffa445 RSI: 0000000000000000 RDI:
-> fffffe3e79ab6f58
-> <4>[   49.878460] RBP: fffffe3e79ab6ef0 R08: 0000000000000000 R09:
-> 0000000000000000
-> <4>[   49.878475] R10: 0000000000000000 R11: 0000000000000000 R12:
-> ffffa44502ab5a00
-> <4>[   49.878490] R13: 0000000000000000 R14: 0000000000000000 R15:
-> ffffab17000ccfd8
-> <4>[   49.878540] FS:  00007f91069b4740(0000)
-> GS:ffffa4457bd00000(0000) knlGS:0000000000000000
-> <4>[   49.878579] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> <4>[   49.878596] CR2: ffffab17000ccfd8 CR3: 0000000102be8000 CR4:
-> 00000000000006e0
-> <4>[   49.878695] Call Trace:
-> <4>[   49.878892]  <#DF>
-> <4>[   49.879037]  ? __die_body+0x6c/0xc0
-> <4>[   49.879123]  ? die+0xae/0xe0
-> <4>[   49.879151]  ? do_trap+0x8d/0x160
-> <4>[   49.879178]  ? irqentry_nmi_enter+0x68/0x70
-> <4>[   49.879199]  ? handle_invalid_op+0x7f/0xd0
-> <4>[   49.879213]  ? irqentry_nmi_enter+0x68/0x70
-> <4>[   49.879237]  ? exc_invalid_op+0x36/0x50
-> <4>[   49.879259]  ? asm_exc_invalid_op+0x1f/0x30
-> <4>[   49.879316]  ? irqentry_nmi_enter+0x68/0x70
-> <4>[   49.879344]  exc_double_fault+0x107/0x1b0
-> <4>[   49.879416]  asm_exc_double_fault+0x23/0x30
-> <4>[   49.879479] RIP: 0010:0xffffffffc00ac0ac
+Rodolfo
 
-I don't know much about x86 exception handling, but my guess is
-that this is where the stack overflows, so this backtrace
-is not all that useful. Looking at the full log from your link,
-I see that recursion through asm_exc_int3:
+-- 
+GNU/Linux Solutions                  e-mail: giometti@enneenne.com
+Linux Device Driver                          giometti@linux.it
+Embedded Systems                     phone:  +39 349 2432127
+UNIX programming                     skype:  rodolfo.giometti
 
-<4>[   49.886694]  ? exc_int3+0x62/0x80
-<4>[   49.886714]  ? asm_exc_int3+0x3e/0x50
-<4>[   49.886759]  ? preempt_count_sub+0x5/0x80
-<4>[   49.886783]  ? preempt_count_sub+0x5/0x80
-<4>[   49.886805]  ? irq_work_queue+0x40/0x80
-<4>[   49.886826]  ? defer_console_output+0x49/0x80
-<4>[   49.886840]  ? vprintk+0x42/0x60
-<4>[   49.886857]  ? _printk+0x5d/0x80
-<4>[   49.886891]  ? die+0x9c/0xe0
-<4>[   49.886922]  ? exc_int3+0x62/0x80
-<4>[   49.886942]  ? asm_exc_int3+0x3e/0x50
-<4>[   49.886966]  ? __pfx_tick_sched_timer+0x10/0x10
-<4>[   49.886980]  ? __pfx_read_tsc+0x10/0x10
-<4>[   49.887010]  ? preempt_count_sub+0x5/0x80
-<4>[   49.887035]  ? preempt_count_sub+0x5/0x80
-<4>[   49.887057]  ? __hrtimer_run_queues+0xee/0x330
-<4>[   49.887070]  ? _raw_spin_unlock_irqrestore+0x28/0x50
-<4>[   49.887085]  ? __hrtimer_run_queues+0xee/0x330
-<4>[   49.887136]  ? hrtimer_interrupt+0xf6/0x390
-<4>[   49.887167]  ? __sysvec_apic_timer_interrupt+0x64/0x1a0
-<4>[   49.887189]  ? sysvec_apic_timer_interrupt+0x7a/0x90
-<4>[   49.887206]  </IRQ>
-<4>[   49.887219]  <TASK>
-<4>[   49.887231]  ? asm_sysvec_apic_timer_interrupt+0x1f/0x30
-<4>[   49.887252]  ? sched_rt_period_timer+0x4/0x390
-<4>[   49.887272]  ? __pfx_do_sync_core+0x10/0x10
-<4>[   49.887305]  ? insn_get_displacement+0x9/0x160
-<4>[   49.887329]  ? insn_get_displacement+0x9/0x160
-<4>[   49.887344]  ? insn_get_immediate+0xd2/0x270
-<4>[   49.887365]  ? insn_decode+0x113/0x150
-<4>[   49.887384]  ? text_poke_loc_init+0xea/0x220
-<4>[   49.887429]  ? sched_rt_period_timer+0x4/0x390
-<4>[   49.887451]  ? text_poke_queue+0x89/0xa0
-<4>[   49.887477]  ? ftrace_replace_code+0x149/0x1f0
-<4>[   49.887508]  ? ftrace_modify_all_code+0x71/0x140
-<4>[   49.887533]  ? arch_ftrace_update_code+0xd/0x20
-<4>[   49.887550]  ? ftrace_shutdown+0xf5/0x220
-<4>[   49.887577]  ? unregister_ftrace_function+0x2e/0x150
-<4>[   49.887608]  ? stack_trace_sysctl+0x82/0xb0
-<4>[   49.887636]  ? proc_sys_call_handler+0x18b/0x280
-<4>[   49.887675]  ? proc_sys_write+0x17/0x20
-<4>[   49.887692]  ? vfs_write+0x324/0x3f0
-<4>[   49.887742]  ? ksys_write+0x75/0xe0
-<4>[   49.887771]  ? __x64_sys_write+0x1f/0x30
-<4>[   49.887787]  ? do_syscall_64+0x48/0xa0
-<4>[   49.887802]  ? sysvec_apic_timer_interrupt+0x4d/0x90
-<4>[   49.887822]  ? entry_SYSCALL_64_after_hwframe+0x6e/0xd8
-<4>[   49.887878]  </TASK>
+--------------K8FqYMzZ0uMINnuLmani0Jzv
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0001-include-uapi-pps.h-increase-PPS_MAX_SOURCES-value.patch"
+Content-Disposition: attachment;
+ filename*0="0001-include-uapi-pps.h-increase-PPS_MAX_SOURCES-value.patch"
+Content-Transfer-Encoding: base64
 
-This looks like a timer interrupt happens inside of
-text_poke_loc_init(), i.e. while the kernel is modifying
-itself, and presumably adding (or removing) an int3
-instruction that is later hit inside of the timer function.
+RnJvbSAwMjliYjI4NzcyYjQ3NTFjZDA3YmViNWYzNjYwNjZlOTMzM2VhNTAyIE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBDaGFybGllIEpvaG5zdG9uIDxjaGFybGllLmpvaG5z
+dG9uQG5pLmNvbT4KRGF0ZTogTW9uLCAxMiBKdW4gMjAyMyAxNDowODoyOCAtMDUwMApTdWJq
+ZWN0OiBbUEFUQ0ggMS8yXSBpbmNsdWRlL3VhcGkgcHBzLmg6IGluY3JlYXNlIFBQU19NQVhf
+U09VUkNFUyB2YWx1ZQoKRm9yIGNvbnNpc3RlbmN5IHdpdGggd2hhdCBvdGhlcnMgdXNlIGZv
+ciBtaW5vcnMsIHRoaXMgY2hhbmdlIHNldHMKUFBTX01BWF9TT1VSQ0VTIHRvIE1JTk9STUFT
+Sy4KClRoZSBQUFNfTUFYX1NPVVJDRVMgdmFsdWUgaXMgY3VycmVudGx5IHNldCB0byAxNi4g
+SW4gc29tZSBjYXNlcyB0aGlzCndhcyBub3Qgc3VmZmljaWVudCBmb3IgYSBzeXN0ZW0uIEZv
+ciBleGFtcGxlLCBhIHN5c3RlbSB3aXRoIG11bHRpcGxlCig0KykgUENJZSBjYXJkcyBlYWNo
+IHdpdGggNCBQVFAtY2FwYWJsZSBldGhlcm5ldCBpbnRlcmZhY2VzIGNvdWxkIHJ1bgpvdXQg
+b2YgdGhlIGF2YWlsYWJsZSBQUFMgbWFqb3I6bWlub3JzIGlmIGVhY2ggaW50ZXJmYWNlIHJl
+Z2lzdGVycyBhClBQUyBzb3VyY2UuCgpTaWduZWQtb2ZmLWJ5OiBDaGFybGllIEpvaG5zdG9u
+IDxjaGFybGllLmpvaG5zdG9uQG5pLmNvbT4KQWNrZWQtYnk6IFJvZG9sZm8gR2lvbWV0dGkg
+PGdpb21ldHRpQGVubmVlbm5lLmNvbT4KLS0tCiBpbmNsdWRlL3VhcGkvbGludXgvcHBzLmgg
+fCAyICstCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkK
+CmRpZmYgLS1naXQgYS9pbmNsdWRlL3VhcGkvbGludXgvcHBzLmggYi9pbmNsdWRlL3VhcGkv
+bGludXgvcHBzLmgKaW5kZXggMDA5ZWJjZDhjZWQ1Li45MGYyZTg2MDIwYmEgMTAwNjQ0Ci0t
+LSBhL2luY2x1ZGUvdWFwaS9saW51eC9wcHMuaAorKysgYi9pbmNsdWRlL3VhcGkvbGludXgv
+cHBzLmgKQEAgLTI2LDcgKzI2LDcgQEAKICNpbmNsdWRlIDxsaW51eC90eXBlcy5oPgogCiAj
+ZGVmaW5lIFBQU19WRVJTSU9OCQkiNS4zLjYiCi0jZGVmaW5lIFBQU19NQVhfU09VUkNFUwkJ
+MTYJCS8qIHNob3VsZCBiZSBlbm91Z2guLi4gKi8KKyNkZWZpbmUgUFBTX01BWF9TT1VSQ0VT
+CQlNSU5PUk1BU0sKIAogLyogSW1wbGVtZW50YXRpb24gbm90ZTogdGhlIGxvZ2ljYWwgc3Rh
+dGVzIGBgYXNzZXJ0JycgYW5kIGBgY2xlYXInJwogICogYXJlIGltcGxlbWVudGVkIGluIHRl
+cm1zIG9mIHRoZSBjaGlwIHJlZ2lzdGVyLCBpLmUuIGBgYXNzZXJ0JycKLS0gCjIuMzQuMQoK
 
-While our previous theory was that this was most likely
-a qemu bug in dealing with self-modifying code, this might
-actually hint at a problem in the kernel after all.
+--------------K8FqYMzZ0uMINnuLmani0Jzv
+Content-Type: text/x-patch; charset=UTF-8;
+ name="0002-include-uapi-pps.h-drop-not-needed-PPS_MAX_SOURCES-d.patch"
+Content-Disposition: attachment;
+ filename*0="0002-include-uapi-pps.h-drop-not-needed-PPS_MAX_SOURCES-d.pa";
+ filename*1="tch"
+Content-Transfer-Encoding: base64
 
-I think Peter understands this function best, he probably
-sees more here than I do.
+RnJvbSAzNDdmNGIzYmNmY2Y5NTAzOWI1M2NhMGY2NjU4NmY1NDdlOWE5MjI5IE1vbiBTZXAg
+MTcgMDA6MDA6MDAgMjAwMQpGcm9tOiBSb2RvbGZvIEdpb21ldHRpIDxnaW9tZXR0aUBlbm5l
+ZW5uZS5jb20+CkRhdGU6IFdlZCwgMjEgSnVuIDIwMjMgMTY6NDI6MzggKzAyMDAKU3ViamVj
+dDogW1BBVENIIDIvMl0gaW5jbHVkZS91YXBpIHBwcy5oOiBkcm9wIG5vdCBuZWVkZWQgUFBT
+X01BWF9TT1VSQ0VTCiBkZWZpbmUKClVzZXJzcGFjZSBQUFMgY2xpZW50cyBzaG91bGQgbm90
+IGtub3duIGFib3V0IGhvdyBtYW55IFBQUyBzb3VyY2VzIGNhbgpiZSBkZWZpbmVkIHdpdGhp
+biB0aGUgc3lzdGVtIChub3IgdGhlIHJmYzI3ODMgc2F5IHNvKSwgc28gd2UgY2FuCnNhZmVs
+eSBkcm9wIHRoaXMgZGVmaW5lIHNpbmNlIGlzIG5vdCB1c2VkIGFueW1vcmUgaW4gdGhlIGtl
+cm5lbCB0b28uCgpTaWduZWQtb2ZmLWJ5OiBSb2RvbGZvIEdpb21ldHRpIDxnaW9tZXR0aUBl
+bm5lZW5uZS5jb20+Ci0tLQogZHJpdmVycy9wcHMvcHBzLmMgICAgICAgIHwgNiArKystLS0K
+IGluY2x1ZGUvdWFwaS9saW51eC9wcHMuaCB8IDEgLQogMiBmaWxlcyBjaGFuZ2VkLCAzIGlu
+c2VydGlvbnMoKyksIDQgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy9wcHMv
+cHBzLmMgYi9kcml2ZXJzL3Bwcy9wcHMuYwppbmRleCA1ZDE5YmFhZTZhMzguLjFhNjEzMTYw
+ODAzNiAxMDA2NDQKLS0tIGEvZHJpdmVycy9wcHMvcHBzLmMKKysrIGIvZHJpdmVycy9wcHMv
+cHBzLmMKQEAgLTM1NCw3ICszNTQsNyBAQCBpbnQgcHBzX3JlZ2lzdGVyX2NkZXYoc3RydWN0
+IHBwc19kZXZpY2UgKnBwcykKIAkgKiBHZXQgbmV3IElEIGZvciB0aGUgbmV3IFBQUyBzb3Vy
+Y2UuICBBZnRlciBpZHJfYWxsb2MoKSBjYWxsaW5nCiAJICogdGhlIG5ldyBzb3VyY2Ugd2ls
+bCBiZSBmcmVlbHkgYXZhaWxhYmxlIGludG8gdGhlIGtlcm5lbC4KIAkgKi8KLQllcnIgPSBp
+ZHJfYWxsb2MoJnBwc19pZHIsIHBwcywgMCwgUFBTX01BWF9TT1VSQ0VTLCBHRlBfS0VSTkVM
+KTsKKwllcnIgPSBpZHJfYWxsb2MoJnBwc19pZHIsIHBwcywgMCwgTUlOT1JNQVNLLCBHRlBf
+S0VSTkVMKTsKIAlpZiAoZXJyIDwgMCkgewogCQlpZiAoZXJyID09IC1FTk9TUEMpIHsKIAkJ
+CXByX2VycigiJXM6IHRvbyBtYW55IFBQUyBzb3VyY2VzIGluIHRoZSBzeXN0ZW1cbiIsCkBA
+IC00NDksNyArNDQ5LDcgQEAgRVhQT1JUX1NZTUJPTChwcHNfbG9va3VwX2Rldik7CiBzdGF0
+aWMgdm9pZCBfX2V4aXQgcHBzX2V4aXQodm9pZCkKIHsKIAljbGFzc19kZXN0cm95KHBwc19j
+bGFzcyk7Ci0JdW5yZWdpc3Rlcl9jaHJkZXZfcmVnaW9uKHBwc19kZXZ0LCBQUFNfTUFYX1NP
+VVJDRVMpOworCXVucmVnaXN0ZXJfY2hyZGV2X3JlZ2lvbihwcHNfZGV2dCwgTUlOT1JNQVNL
+KTsKIH0KIAogc3RhdGljIGludCBfX2luaXQgcHBzX2luaXQodm9pZCkKQEAgLTQ2Myw3ICs0
+NjMsNyBAQCBzdGF0aWMgaW50IF9faW5pdCBwcHNfaW5pdCh2b2lkKQogCX0KIAlwcHNfY2xh
+c3MtPmRldl9ncm91cHMgPSBwcHNfZ3JvdXBzOwogCi0JZXJyID0gYWxsb2NfY2hyZGV2X3Jl
+Z2lvbigmcHBzX2RldnQsIDAsIFBQU19NQVhfU09VUkNFUywgInBwcyIpOworCWVyciA9IGFs
+bG9jX2NocmRldl9yZWdpb24oJnBwc19kZXZ0LCAwLCBNSU5PUk1BU0ssICJwcHMiKTsKIAlp
+ZiAoZXJyIDwgMCkgewogCQlwcl9lcnIoImZhaWxlZCB0byBhbGxvY2F0ZSBjaGFyIGRldmlj
+ZSByZWdpb25cbiIpOwogCQlnb3RvIHJlbW92ZV9jbGFzczsKZGlmZiAtLWdpdCBhL2luY2x1
+ZGUvdWFwaS9saW51eC9wcHMuaCBiL2luY2x1ZGUvdWFwaS9saW51eC9wcHMuaAppbmRleCA5
+MGYyZTg2MDIwYmEuLjhhNDA5NmYxOGFmMSAxMDA2NDQKLS0tIGEvaW5jbHVkZS91YXBpL2xp
+bnV4L3Bwcy5oCisrKyBiL2luY2x1ZGUvdWFwaS9saW51eC9wcHMuaApAQCAtMjYsNyArMjYs
+NiBAQAogI2luY2x1ZGUgPGxpbnV4L3R5cGVzLmg+CiAKICNkZWZpbmUgUFBTX1ZFUlNJT04J
+CSI1LjMuNiIKLSNkZWZpbmUgUFBTX01BWF9TT1VSQ0VTCQlNSU5PUk1BU0sKIAogLyogSW1w
+bGVtZW50YXRpb24gbm90ZTogdGhlIGxvZ2ljYWwgc3RhdGVzIGBgYXNzZXJ0JycgYW5kIGBg
+Y2xlYXInJwogICogYXJlIGltcGxlbWVudGVkIGluIHRlcm1zIG9mIHRoZSBjaGlwIHJlZ2lz
+dGVyLCBpLmUuIGBgYXNzZXJ0JycKLS0gCjIuMzQuMQoK
 
-> Link:
-> https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230621/testrun/17699662/suite/log-parser-test/tests/
->
-> https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230621/testrun/17699662/suite/log-parser-test/test/check-kernel-panic/log
->
-> - Naresh
-
-   Arnd
+--------------K8FqYMzZ0uMINnuLmani0Jzv--
