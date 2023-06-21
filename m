@@ -2,131 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68DC17389F0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:42:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FCDE7389F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233666AbjFUPma (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:42:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45444 "EHLO
+        id S233748AbjFUPmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 11:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233651AbjFUPmR (ORCPT
+        with ESMTP id S232701AbjFUPmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:42:17 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4DE2819B
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:41:50 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8CxZ8UhGpNkGy0AAA--.323S3;
-        Wed, 21 Jun 2023 23:41:21 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxF80hGpNkvN4AAA--.2969S3;
-        Wed, 21 Jun 2023 23:41:21 +0800 (CST)
-Message-ID: <9c8afcb4-70c0-a920-2a78-78a9ac884c80@loongson.cn>
-Date:   Wed, 21 Jun 2023 23:41:21 +0800
+        Wed, 21 Jun 2023 11:42:39 -0400
+Received: from s.wrqvtbkv.outbound-mail.sendgrid.net (s.wrqvtbkv.outbound-mail.sendgrid.net [149.72.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3654819B5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:42:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
+        h=mime-version:subject:references:from:in-reply-to:to:cc:content-type:
+        content-transfer-encoding:cc:content-type:from:subject:to;
+        s=s1; bh=8+jSZYNVSR48321s/oSCWt0Vx0TuZhHVNXzSvj6Jubw=;
+        b=ZMJbFTe/D3Y3fpJsgbD+xG8inBdcqgJJm4S+6tintXoPTGXQ7Y2APOwTQPySoEH+AEvV
+        lnahvLL3hgEmCak2r7ltJIJvut9FCvRUr3rgV4bYtQKbAJiYR3BAphQ7077tyUaYdlyPUB
+        caU5+aRl66KAgrYL1AUlXXnXjdcIFWJGZXgVs+ZdROmPzZd3X7MDiv0PPYHa19a0MVj1Un
+        CM1gKbzCGYVWqei89WIEzlBE1x0wM/2yV66HHD1cKsTcwfZtKTxRmAj+oL4oX6S8pq+LDp
+        syffKEZiJiNM9h1K06nMqnOTRvCXYcz3m9vMmagvRPqygV1hjResjDCdLVodnWPg==
+Received: by filterdrecv-77869f68cc-4lhvt with SMTP id filterdrecv-77869f68cc-4lhvt-1-64931A39-63
+        2023-06-21 15:41:45.772147988 +0000 UTC m=+3600334.020172255
+Received: from [192.168.1.50] (unknown)
+        by geopod-ismtpd-5 (SG) with ESMTP
+        id 1CQkqm0ERMy9gnj9PBUTmw
+        Wed, 21 Jun 2023 15:41:45.457 +0000 (UTC)
+Message-ID: <1f20a832-6339-0feb-3647-cea7598e60be@kwiboo.se>
+Date:   Wed, 21 Jun 2023 15:41:46 +0000 (UTC)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v10 07/11] drm/etnaviv: Add support for the dma coherent
- device
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 4/4] drm/rockchip: vop2: Add missing call to crtc reset
+ helper
+References: <20230620064732.1525594-1-jonas@kwiboo.se>
+ <20230620064732.1525594-5-jonas@kwiboo.se>
+ <20230621081151.GY18491@pengutronix.de>
 Content-Language: en-US
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Sui Jingfeng <18949883232@163.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
+From:   Jonas Karlman <jonas@kwiboo.se>
+In-Reply-To: <20230621081151.GY18491@pengutronix.de>
+X-SG-EID: =?us-ascii?Q?TdbjyGynYnRZWhH+7lKUQJL+ZxmxpowvO2O9SQF5CwCVrYgcwUXgU5DKUU3QxA?=
+ =?us-ascii?Q?fZekEeQsTe+RrMu3cja6a0h7SRAqrjZghh+BUwH?=
+ =?us-ascii?Q?PaDHTn0zfJUkykOFCOQaqgs9WhKZwljx1UFMUli?=
+ =?us-ascii?Q?64cy78z0MEgFsiULaIXkYPjkvJPN0lJKOsBrzgo?=
+ =?us-ascii?Q?zVj+NjeBW0XaXTzBuM8tJbnyUuz50xZc1=2FeMU2T?=
+ =?us-ascii?Q?NoCo7xctEjTmPlTrOPb3HQKdLkrk23cU7aK5+q?=
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     Sandy Huang <hjc@rock-chips.com>, Heiko Stuebner <heiko@sntech.de>,
         David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        etnaviv@lists.freedesktop.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20230620094716.2231414-1-18949883232@163.com>
- <20230620094716.2231414-8-18949883232@163.com>
- <8f74f0962c8bab6c832919a5340667c54e1a7ddc.camel@pengutronix.de>
- <aa73348d-5ec8-4ac0-2ec0-0cce24756c63@loongson.cn>
- <87c9576e6ca1b58fa94e0bc1a2f4be3847f0518c.camel@pengutronix.de>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <87c9576e6ca1b58fa94e0bc1a2f4be3847f0518c.camel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxF80hGpNkvN4AAA--.2969S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7CrWkuw48tF43Ww15AF1fGrX_yoW8WryDpF
-        4UGFyFyrWUXr10grnFqw45XF13Kw13XFWI9wnrJwn0v3s0yryUtrn5Kr45CF9Yqw1fGr1a
-        va90gFyxZF92yFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPmb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVWxJr0_GcWln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q
-        6rW5McIj6I8E87Iv67AKxVW8Jr0_Cr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
-        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
-        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26rWY6Fy7MI8I3I0E5I8CrV
-        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
-        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267
-        AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr1j
-        6F4UJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU8
-        m0P3UUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Daniel Vetter <daniel@ffwll.ch>, Rob Herring <robh@kernel.org>,
+        Andy Yan <andy.yan@rock-chips.com>,
+        Mark Yao <markyao0591@gmail.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+X-Entity-ID: P7KYpSJvGCELWjBME/J5tg==
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H5,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 2023/6/21 23:23, Lucas Stach wrote:
-> Am Mittwoch, dem 21.06.2023 um 22:44 +0800 schrieb Sui Jingfeng:
->> Hi,
+On 2023-06-21 10:11, Sascha Hauer wrote:
+> On Tue, Jun 20, 2023 at 06:47:39AM +0000, Jonas Karlman wrote:
+>> Add missing call to crtc reset helper to properly vblank reset.
 >>
->> On 2023/6/21 18:00, Lucas Stach wrote:
->>>> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.h b/drivers/gpu/drm/etnaviv/etnaviv_drv.h
->>>> index 9cd72948cfad..644e5712c050 100644
->>>> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.h
->>>> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.h
->>>> @@ -46,6 +46,12 @@ struct etnaviv_drm_private {
->>>>    	struct xarray active_contexts;
->>>>    	u32 next_context_id;
->>>>    
->>>> +	/*
->>>> +	 * If true, the GPU is capable of snooping cpu cache. Here, it
->>>> +	 * also means that cache coherency is enforced by the hardware.
->>>> +	 */
->>>> +	bool dma_coherent;
->>>> +
->>> No need for this, I think. Just use dev_is_dma_coherent() where you
->>> need to know this.
->>>
->> No, we want this value cached by the driver.
+>> Also move vop2_crtc_reset and call vop2_crtc_destroy_state to simplify
+>> and remove duplicated code.
 >>
-> Why? dev_is_dma_coherent() is a header-only function with a single
-> pointer chasing operation. Your cache is also a single pointer chasing
-> access, just that we now need storage for this information in both
-> struct device and struct etnaviv_gpu.
-
-
-You don't need store it in struct etnaviv_gpu.
-
-As this variable is shared across the device, so it is better to be put 
-in the struct etnaviv_drm_private.
-
-I don't think another 4 bytes allocation is something what we can't pay for.
-
-
-My patch doesn't mentioned that it need to store it inside of struct 
-etnaviv_gpu, do I?
-
-> Regards,
-> Lucas
->
->> We only need call  dev_is_dma_coherent() once!
+>> Fixes: 604be85547ce ("drm/rockchip: Add VOP2 driver")
+>> Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+>> ---
+>>  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 28 ++++++++------------
+>>  1 file changed, 11 insertions(+), 17 deletions(-)
 >>
->> We need to reuse this variable on other places.
->>
--- 
-Jingfeng
+>> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+>> index f725487d02ef..1be84fe0208f 100644
+>> --- a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+>> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+>> @@ -2080,23 +2080,6 @@ static const struct drm_crtc_helper_funcs vop2_crtc_helper_funcs = {
+>>  	.atomic_disable = vop2_crtc_atomic_disable,
+>>  };
+>>  
+>> -static void vop2_crtc_reset(struct drm_crtc *crtc)
+>> -{
+>> -	struct rockchip_crtc_state *vcstate = to_rockchip_crtc_state(crtc->state);
+>> -
+>> -	if (crtc->state) {
+>> -		__drm_atomic_helper_crtc_destroy_state(crtc->state);
+>> -		kfree(vcstate);
+>> -	}
+>> -
+>> -	vcstate = kzalloc(sizeof(*vcstate), GFP_KERNEL);
+>> -	if (!vcstate)
+>> -		return;
+>> -
+>> -	crtc->state = &vcstate->base;
+>> -	crtc->state->crtc = crtc;
+>> -}
+>> -
+>>  static struct drm_crtc_state *vop2_crtc_duplicate_state(struct drm_crtc *crtc)
+>>  {
+>>  	struct rockchip_crtc_state *vcstate;
+>> @@ -2123,6 +2106,17 @@ static void vop2_crtc_destroy_state(struct drm_crtc *crtc,
+>>  	kfree(vcstate);
+>>  }
+>>  
+>> +static void vop2_crtc_reset(struct drm_crtc *crtc)
+>> +{
+>> +	struct rockchip_crtc_state *vcstate =
+>> +		kzalloc(sizeof(*vcstate), GFP_KERNEL);
+>> +
+>> +	if (crtc->state)
+>> +		vop2_crtc_destroy_state(crtc, crtc->state);
+>> +
+>> +	__drm_atomic_helper_crtc_reset(crtc, &vcstate->base);
+>> +}
+> 
+> You missed to check for allocation failures before using vcstate.
+
+Good catch, I will fix for both vop and vop2 driver in v2.
+
+Regards,
+Jonas
+
+> 
+> Sascha
+> 
 
