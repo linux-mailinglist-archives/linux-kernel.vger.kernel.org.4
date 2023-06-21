@@ -2,79 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1407D737CC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B720E737CD1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:07:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231429AbjFUHmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 03:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35170 "EHLO
+        id S231485AbjFUHm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 03:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231487AbjFUHlf (ORCPT
+        with ESMTP id S231455AbjFUHmJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 03:41:35 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E00671730;
-        Wed, 21 Jun 2023 00:41:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=CVccEsCRdBl+DyRFyKD9+7GUkI4WQ8YmpzDSeZ8LLAU=; b=UBnRecR5iA9zqnqiBJcqz/55xX
-        A3eIbAZ/GIqVk7aCdQreoS1qGWET767UVs912HwOcxufzXOO6gUWD1lYTvrGW7Q+fHkeUp2WRyI6b
-        Czg6gAQuewKvft8SHyw6qZTWCNcab/QS9ZetefpYPqBSVS5pgLHgsFt1MligyngRxD/HNmVH+ScX2
-        fEOd1fOg+ZxEKwm/K94SXpWKXJUas9bYQJ48cm1/pUj94sr6QTUt2j1j8sbAKuUkw7xrA3l1Rgrql
-        zJjWxJwuMHLs1SMV/olYwiiBxyLDVYkMxk7yfgnMFm/IFtCt+2LEq63jT5hlAIRzGOM50+N3H5US0
-        pFYuljTQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qBsSg-00HITA-0Z;
-        Wed, 21 Jun 2023 07:41:09 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id AA29F300222;
-        Wed, 21 Jun 2023 09:41:05 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9424D2BC73BD5; Wed, 21 Jun 2023 09:41:05 +0200 (CEST)
-Date:   Wed, 21 Jun 2023 09:41:05 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-pm@vger.kernel.org,
-        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>
-Subject: Re: [PATCH v2 1/5] x86/speculation: Provide a debugfs file to dump
- SPEC_CTRL MSRs
-Message-ID: <20230621074105.GE2046280@hirez.programming.kicks-ass.net>
-References: <20230620140625.1001886-1-longman@redhat.com>
- <20230620140625.1001886-2-longman@redhat.com>
+        Wed, 21 Jun 2023 03:42:09 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C13E65
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 00:42:08 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qBsTa-0004Rj-9Y; Wed, 21 Jun 2023 09:42:02 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1qBsTX-0003Jg-KN; Wed, 21 Jun 2023 09:41:59 +0200
+Date:   Wed, 21 Jun 2023 09:41:59 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>, devicetree@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        linux-kernel@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        linux-rockchip@lists.infradead.org,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        kernel@pengutronix.de, Vincent Legoll <vincent.legoll@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v6 22/26] dt-bindings: devfreq: event: rockchip,dfi: Add
+ rk3588 support
+Message-ID: <20230621074159.GN18491@pengutronix.de>
+References: <20230616062101.601837-1-s.hauer@pengutronix.de>
+ <20230616062101.601837-23-s.hauer@pengutronix.de>
+ <20230616-swimwear-prewar-f9dce761d2ec@spud>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230620140625.1001886-2-longman@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230616-swimwear-prewar-f9dce761d2ec@spud>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 10:06:21AM -0400, Waiman Long wrote:
-> Sometimes it is useful to know the states the SPEC_CTRL MSRs to see what
-> mitigations are enabled at run time. Provide a new x86/spec_ctrl_msrs
-> debugfs file to dump the cached versions of the current SPEC_CTRL MSRs.
+On Fri, Jun 16, 2023 at 08:05:33PM +0100, Conor Dooley wrote:
+> On Fri, Jun 16, 2023 at 08:20:57AM +0200, Sascha Hauer wrote:
+> > This adds rockchip,rk3588-dfi to the list of compatibles. Unlike ealier
+> > SoCs the rk3588 has four interrupts (one for each channel) instead of
+> > only one, so increase the number of allowed interrupts to four.
+> > 
+> > Link: https://lore.kernel.org/r/20230524083153.2046084-23-s.hauer@pengutronix.de
 > 
+> It's unclear what the point of this link is.
 
-Pff, clearly I can't even read email anymore..
+The link was added automatically by b4. I re-applied the series from the
+last one I sent just to be sure that I base my work for the new series
+on the one I sent last time. I didn't remember that b4 adds these links,
+I should have disabled that option.
 
-We don't do this for any of the other MSRs, so why start now?
+> My comment still stands about whether only the new compatible should be
+> permitted to have more than one interrupt. I don't recall a response to
+> that question on the last version.
+
+My personal take on this is that such additions make the bindings more
+readable by machines, but less by humans. That's why I don't have enough
+intrinsic motivation to make this change. Anyway, if you insist then
+I'll make it for the next round.
+
+Sascha
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
