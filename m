@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888787387E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46DC47387E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232596AbjFUOwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
+        id S230013AbjFUOwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232412AbjFUOuo (ORCPT
+        with ESMTP id S232443AbjFUOup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:50:44 -0400
+        Wed, 21 Jun 2023 10:50:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABE7296C
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:48:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F182296F;
+        Wed, 21 Jun 2023 07:48:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 44A066159B
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:48:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3B23C433C0;
-        Wed, 21 Jun 2023 14:48:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AD281615AA;
+        Wed, 21 Jun 2023 14:48:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96814C433C0;
+        Wed, 21 Jun 2023 14:48:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687358922;
-        bh=UvNq+M9oth0ZwLvHaFU15fGRvb6agUkybQaQqyNXMdc=;
+        s=k20201202; t=1687358924;
+        bh=GOlvR7zQkP7YHCqLCSL4MnqspCPui1thTIrZ1lMD+xI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hSKmtL7GOzh8ryKxNvlPtCPaMYjdREurFTyaiU4tT/RKIG0YTrSJ2eVDf3SEBiyMq
-         j5WmOAz0nBbsqQfrOq+RV9ZFdzGj1d+9E3epTOFd4lMEcakc46syFOL9LuADxQIWNj
-         a+f9l8ReAu1jL/NzHaH06oT/DyIYYozoWFslZ+exTUcRJ0B4bOcut3FgOsYyirXx50
-         5eTemc9IpO6dKCthte5LY8lHUUuYVglt9Yrk//4n8zNrQXKDaPd3q8Yx8cN5VTO1mc
-         pdfRxg4A8WDnTh9BC1E37C3xAPk7o3WbgPYzbRVmhobR/726zRgQebtcbA0AlPP1Qx
-         R2XH4puSJLm5A==
+        b=Wsb3/uGFyYqh0KgV+TN+qB/TlZ2sZd6ovf4WfWNqA8JQnuDvnSzMOUdqU0zoBDbEf
+         dUR/HCHZjRG9dNvEVI1c+lOhVQXDyIEvXlY3KT7lqWcLF0k8A2rMJ4oRQgbOeqDxlD
+         5jDAkLbRIM7IQ8p3Up+GGS4QqcfdwshnDnmCGOjgxT5Uqskcm/eBTyO4pGNpY8cd9s
+         er2KDyHUPq9eA7XFuZ2awoe6+6SH6BoJlPDxdxyT0iIq94m7puHa0Q8kL+ayaEpg5V
+         mtYdjXz2jYR55HIrd+XbwOYfEcddFITlwR6hye7VUTFKnhSSHD0LqyRUEfU2eld15q
+         jN2SKRYjLQQNg==
 From:   Jeff Layton <jlayton@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <muchun.song@linux.dev>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 39/79] hugetlbfs: switch to new ctime accessors
-Date:   Wed, 21 Jun 2023 10:45:52 -0400
-Message-ID: <20230621144735.55953-38-jlayton@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 40/79] isofs: switch to new ctime accessors
+Date:   Wed, 21 Jun 2023 10:45:53 -0400
+Message-ID: <20230621144735.55953-39-jlayton@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230621144735.55953-1-jlayton@kernel.org>
 References: <20230621144507.55591-1-jlayton@kernel.org>
@@ -64,67 +62,68 @@ inode->i_ctime.
 
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- fs/hugetlbfs/inode.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ fs/isofs/inode.c |  4 ++--
+ fs/isofs/rock.c  | 16 +++++++---------
+ 2 files changed, 9 insertions(+), 11 deletions(-)
 
-diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index 90361a922cec..7be5a8f5927f 100644
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@ -889,7 +889,7 @@ static long hugetlbfs_fallocate(struct file *file, int mode, loff_t offset,
+diff --git a/fs/isofs/inode.c b/fs/isofs/inode.c
+index df9d70588b60..035fa0271d6e 100644
+--- a/fs/isofs/inode.c
++++ b/fs/isofs/inode.c
+@@ -1425,10 +1425,10 @@ static int isofs_read_inode(struct inode *inode, int relocated)
  
- 	if (!(mode & FALLOC_FL_KEEP_SIZE) && offset + len > inode->i_size)
- 		i_size_write(inode, offset + len);
--	inode->i_ctime = current_time(inode);
-+	inode_ctime_set_current(inode);
- out:
- 	inode_unlock(inode);
- 	return error;
-@@ -937,7 +937,7 @@ static struct inode *hugetlbfs_get_root(struct super_block *sb,
- 		inode->i_mode = S_IFDIR | ctx->mode;
- 		inode->i_uid = ctx->uid;
- 		inode->i_gid = ctx->gid;
--		inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
-+		inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
- 		inode->i_op = &hugetlbfs_dir_inode_operations;
- 		inode->i_fop = &simple_dir_operations;
- 		/* directory inodes start off with i_nlink == 2 (for "." entry) */
-@@ -981,7 +981,7 @@ static struct inode *hugetlbfs_get_inode(struct super_block *sb,
- 		lockdep_set_class(&inode->i_mapping->i_mmap_rwsem,
- 				&hugetlbfs_i_mmap_rwsem_key);
- 		inode->i_mapping->a_ops = &hugetlbfs_aops;
--		inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
-+		inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
- 		inode->i_mapping->private_data = resv_map;
- 		info->seals = F_SEAL_SEAL;
- 		switch (mode & S_IFMT) {
-@@ -1024,7 +1024,7 @@ static int hugetlbfs_mknod(struct mnt_idmap *idmap, struct inode *dir,
- 	inode = hugetlbfs_get_inode(dir->i_sb, dir, mode, dev);
- 	if (!inode)
- 		return -ENOSPC;
--	dir->i_ctime = dir->i_mtime = current_time(dir);
-+	dir->i_mtime = inode_ctime_set_current(dir);
- 	d_instantiate(dentry, inode);
- 	dget(dentry);/* Extra count - pin the dentry in core */
- 	return 0;
-@@ -1056,7 +1056,7 @@ static int hugetlbfs_tmpfile(struct mnt_idmap *idmap,
- 	inode = hugetlbfs_get_inode(dir->i_sb, dir, mode | S_IFREG, 0);
- 	if (!inode)
- 		return -ENOSPC;
--	dir->i_ctime = dir->i_mtime = current_time(dir);
-+	dir->i_mtime = inode_ctime_set_current(dir);
- 	d_tmpfile(file, inode);
- 	return finish_open_simple(file, 0);
- }
-@@ -1078,7 +1078,7 @@ static int hugetlbfs_symlink(struct mnt_idmap *idmap,
- 		} else
- 			iput(inode);
- 	}
--	dir->i_ctime = dir->i_mtime = current_time(dir);
-+	dir->i_mtime = inode_ctime_set_current(dir);
+ 	inode->i_mtime.tv_sec =
+ 	inode->i_atime.tv_sec =
+-	inode->i_ctime.tv_sec = iso_date(de->date, high_sierra);
++	inode_ctime_set_sec(inode, iso_date(de->date, high_sierra));
+ 	inode->i_mtime.tv_nsec =
+ 	inode->i_atime.tv_nsec =
+-	inode->i_ctime.tv_nsec = 0;
++	inode_ctime_set_nsec(inode, 0);
  
- 	return error;
- }
+ 	ei->i_first_extent = (isonum_733(de->extent) +
+ 			isonum_711(de->ext_attr_length));
+diff --git a/fs/isofs/rock.c b/fs/isofs/rock.c
+index 48f58c6c9e69..6b7f2a62124d 100644
+--- a/fs/isofs/rock.c
++++ b/fs/isofs/rock.c
+@@ -421,10 +421,9 @@ parse_rock_ridge_inode_internal(struct iso_directory_record *de,
+ 			/* Rock ridge never appears on a High Sierra disk */
+ 			cnt = 0;
+ 			if (rr->u.TF.flags & TF_CREATE) {
+-				inode->i_ctime.tv_sec =
+-				    iso_date(rr->u.TF.times[cnt++].time,
+-					     0);
+-				inode->i_ctime.tv_nsec = 0;
++				inode_ctime_set_sec(inode,
++						    iso_date(rr->u.TF.times[cnt++].time, 0));
++				inode_ctime_set_nsec(inode, 0);
+ 			}
+ 			if (rr->u.TF.flags & TF_MODIFY) {
+ 				inode->i_mtime.tv_sec =
+@@ -439,10 +438,9 @@ parse_rock_ridge_inode_internal(struct iso_directory_record *de,
+ 				inode->i_atime.tv_nsec = 0;
+ 			}
+ 			if (rr->u.TF.flags & TF_ATTRIBUTES) {
+-				inode->i_ctime.tv_sec =
+-				    iso_date(rr->u.TF.times[cnt++].time,
+-					     0);
+-				inode->i_ctime.tv_nsec = 0;
++				inode_ctime_set_sec(inode,
++						    iso_date(rr->u.TF.times[cnt++].time, 0));
++				inode_ctime_set_nsec(inode, 0);
+ 			}
+ 			break;
+ 		case SIG('S', 'L'):
+@@ -534,7 +532,7 @@ parse_rock_ridge_inode_internal(struct iso_directory_record *de,
+ 			inode->i_size = reloc->i_size;
+ 			inode->i_blocks = reloc->i_blocks;
+ 			inode->i_atime = reloc->i_atime;
+-			inode->i_ctime = reloc->i_ctime;
++			inode_ctime_set(inode, inode_ctime_peek(reloc));
+ 			inode->i_mtime = reloc->i_mtime;
+ 			iput(reloc);
+ 			break;
 -- 
 2.41.0
 
