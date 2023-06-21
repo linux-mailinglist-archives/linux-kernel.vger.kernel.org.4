@@ -2,105 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68B1D737818
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 02:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F5773781C
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 02:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjFUAKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 20:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41288 "EHLO
+        id S229786AbjFUANW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 20:13:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjFUAKo (ORCPT
+        with ESMTP id S229595AbjFUANU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 20:10:44 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7191738
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 17:10:41 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-666eba6f3d6so2267460b3a.3
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 17:10:41 -0700 (PDT)
+        Tue, 20 Jun 2023 20:13:20 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C537A172C
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 17:13:18 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6686ef86110so1912949b3a.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 17:13:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687306241; x=1689898241;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sDoj5PizcTKiqq5oaVy5xtW8w+Dir/LUc1s8hK7cyjI=;
-        b=MxRfzc1vGvZjmUSK3wSSYsPaxK/+eKVXg9yUx04aYXW4w1zjS5gJiN9BRJBjGbZJ1o
-         0jqovS3pviU2TkQAAUg0AvYmKyqWrE5FHICUk8VwCXpD93/jxE1QR1EcGRPgXHtOZXfI
-         1klvD0X02q/kN/H0f6kUoM6rx8UcoZSI2fhhM=
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687306398; x=1689898398;
+        h=message-id:to:from:cc:in-reply-to:subject:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tjYx1i3/gCVvDUNwYH2uVhDCA+CPehZaUiYWjawRZkM=;
+        b=sjUoX7jwC00g/1eLiAyZp7jtN9jgrMFgXJTIjzmMqeBGF6gNt7yEtIuDKhS6YWSKNw
+         iG3jzjNxjTLdWROYuSIsCCK5Maghmyppas9yOrDKWiIaVNWLL8PGlYlojeJZXG3Jk+CR
+         7M+80O9YfMnNcFB49lEcYcCFQMKY0lO8WrimTAdT6vcGiFhlfStGWkpJCFFhAQ0hV53e
+         BKC4XRy/AvZKKysP4pFfNc0K1titJwvX4ea3CK9UxOef+Jt3oHPs2QQOG3WmUSJXRVfR
+         eFeaVHM/mea84txT62UN5B3oJOxi/WHB9wJ15z8+3tCVqDhglOdrEL+0hOKbMZvN1Hgy
+         TDxA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687306241; x=1689898241;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sDoj5PizcTKiqq5oaVy5xtW8w+Dir/LUc1s8hK7cyjI=;
-        b=Cm7HJnBWlunWNfHgB6UdQwi9hSHxnNuGdRg8kAnA32CSx1CC79ddVMloW6XXjsFC5s
-         5jNRjhzsE0liUK9AiKT6/APPgcmYKkMLK08aWLse2ZF0FH1rqEISUHONLd/85Z4AxzvB
-         xWaeBiB7GYoPEg7lbq8jHBToPYW095yTToNL5OuZD8JmaKhQIXaOAQtldjWN/Uqe8nzq
-         ZRY5445Flpl0ocUKWhmiMQxSWBkvlStIVOkhoCwKV1pCkvUIZwSiyf/HDEiJ0fXH6Dv+
-         8k4prCZTT2rMj/rnULg+d1n4nRlwfogwzHp/8RlGuM87/VY17Yp/EdVFgXLHOqinFlKJ
-         DkZQ==
-X-Gm-Message-State: AC+VfDxD1+TQ3di53V9HQtcRXJ9oDvCG7IZSiu65VIlOCJ5feEA1UJB/
-        lJWSgKwkPU3ehVrLrDN6pRyXJQ==
-X-Google-Smtp-Source: ACHHUZ7M1TXH01T8EJ1f7D/M/gWLBY5GZ2T6Wi2foAXBCD0fUUGWx06I4CB55Jn+ZXYErmZ+fgb2sw==
-X-Received: by 2002:a05:6a00:24cb:b0:668:74e9:8f06 with SMTP id d11-20020a056a0024cb00b0066874e98f06mr5912743pfv.1.1687306241046;
-        Tue, 20 Jun 2023 17:10:41 -0700 (PDT)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id t2-20020a62ea02000000b0064d27a28451sm1789600pfh.100.2023.06.20.17.10.38
+        d=1e100.net; s=20221208; t=1687306398; x=1689898398;
+        h=message-id:to:from:cc:in-reply-to:subject:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tjYx1i3/gCVvDUNwYH2uVhDCA+CPehZaUiYWjawRZkM=;
+        b=YWSjQbbbUMR/9BSDcEW6KA1fP9uljE1zShXsO8ii3Jhx/n/OML7MuTSxgxWpoxOZal
+         DHeZr4SSTPmMtwySWs0mkBQn5T0FEHiePevReufRY9gfKGjN4xEpgeWy2DWyPQN8eboj
+         GcAD5c5nnSBuN3r9LEEP6bEBw/hFnv+BTuUutP2UV563BsI3k2HtA9hWMZSGgwJ7ng6x
+         iFJTvmYeaLLYjIOkhgN6+Zc/6p59ah5N0FENtLqK2ZtlC5ozOzpNfjvl2PkHIyc48/+v
+         CTqf2QC96kIAFVQTD6ysHb9YxoWzynDFt1Ntg/9NsMrtkksZTp/LdAUIxOkhulULuW12
+         ZDmw==
+X-Gm-Message-State: AC+VfDywgck6TU9t5fwQ2jO4i9BeQPptkWXUDV6nKQ8uYYC1dNWXDdUb
+        fvOg6BgfJlxHUK0qrxFRLBzmr3TYEKHMgcJXEZo=
+X-Google-Smtp-Source: ACHHUZ7Nw4aRq+TWO1VkY0DHqMW34dcaoaGD141nBeA4rU0iyYuaxNlQebBEStDo9kJp5JEvtCc1yA==
+X-Received: by 2002:a05:6a20:5493:b0:122:9af9:67c with SMTP id i19-20020a056a20549300b001229af9067cmr3139865pzk.23.1687306398159;
+        Tue, 20 Jun 2023 17:13:18 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id bm17-20020a056a00321100b0064ccfb73cb8sm1804052pfb.46.2023.06.20.17.13.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 17:10:40 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 09:10:36 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        maple-tree@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Peng Zhang <zhangpeng.00@bytedance.com>
-Subject: Re: [PATCH v2 04/16] mm: Change do_vmi_align_munmap() side tree index
-Message-ID: <20230621001036.GB2934656@google.com>
-References: <20230612203953.2093911-1-Liam.Howlett@oracle.com>
- <20230612203953.2093911-5-Liam.Howlett@oracle.com>
- <20230620122619.GA2934656@google.com>
- <20230620130412.lxri53iekoq6lpfb@revolver>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230620130412.lxri53iekoq6lpfb@revolver>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 20 Jun 2023 17:13:17 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 17:13:17 -0700 (PDT)
+X-Google-Original-Date: Tue, 20 Jun 2023 17:12:37 PDT (-0700)
+Subject:     Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+In-Reply-To: <mhng-3ceb19b1-0af6-451e-816d-8ab5c68b5fea@palmer-ri-x1c9a>
+CC:     Conor Dooley <conor@kernel.org>, jszhang@kernel.org,
+        llvm@lists.linux.dev, Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     ndesaulniers@google.com
+Message-ID: <mhng-8caf7779-aa9e-496a-b2ee-2e6d6d1d76ff@palmer-ri-x1c9a>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,PP_MIME_FAKE_ASCII_TEXT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/06/20 09:04), Liam R. Howlett wrote:
-> > On (23/06/12 16:39), Liam R. Howlett wrote:
-> > [..]
-> > > @@ -2450,17 +2452,17 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct vm_area_struct *vma,
-> > >  #if defined(CONFIG_DEBUG_VM_MAPLE_TREE)
-> > >  	/* Make sure no VMAs are about to be lost. */
-> > >  	{
-> > > -		MA_STATE(test, &mt_detach, start, end - 1);
-> > > +		MA_STATE(test, &mt_detach, 0, 0);
-> > >  		struct vm_area_struct *vma_mas, *vma_test;
-> > >  		int test_count = 0;
-> > >  
-> > >  		vma_iter_set(vmi, start);
-> > >  		rcu_read_lock();
-> > > -		vma_test = mas_find(&test, end - 1);
-> > > +		vma_test = mas_find(&test, count - 1);
-> > >  		for_each_vma_range(*vmi, vma_mas, end) {
-> > >  			BUG_ON(vma_mas != vma_test);
-> > >  			test_count++;
-> > > -			vma_test = mas_next(&test, end - 1);
-> > > +			vma_test = mas_next(&test, count - 1);
-> > >  		}
-> > >  		rcu_read_unlock();
-> > >  		BUG_ON(count != test_count);
-> > 
-> > Something isn't quite working, I'm hitting BUG_ON(vma_mas != vma_test)
-> 
-> Is this with next by any chance?
+On Tue, 20 Jun 2023 14:08:33 PDT (-0700), Palmer Dabbelt wrote:
+> On Tue, 20 Jun 2023 13:47:07 PDT (-0700), ndesaulniers@google.com wrote:
+>> On Tue, Jun 20, 2023 at 4:41 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>>>
+>>> On Tue, 20 Jun 2023 13:32:32 PDT (-0700), ndesaulniers@google.com wrote:
+>>> > On Tue, Jun 20, 2023 at 4:13 PM Conor Dooley <conor@kernel.org> wrote:
+>>> >>
+>>> >> On Tue, Jun 20, 2023 at 04:05:55PM -0400, Nick Desaulniers wrote:
+>>> >> > On Mon, Jun 19, 2023 at 6:06 PM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>>> >> > > On Thu, 15 Jun 2023 06:54:33 PDT (-0700), Palmer Dabbelt wrote:
+>>> >> > > > On Wed, 14 Jun 2023 09:25:49 PDT (-0700), jszhang@kernel.org wrote:
+>>> >> > > >> On Wed, Jun 14, 2023 at 07:49:17AM -0700, Palmer Dabbelt wrote:
+>>> >> > > >>> On Tue, 23 May 2023 09:54:58 PDT (-0700), jszhang@kernel.org wrote:
+>>> >>
+>>> >> > > >> Commit 3b90b09af5be ("riscv: Fix orphan section warnings caused by
+>>> >> > > >> kernel/pi") touches vmlinux.lds.S, so to make the merge easy, this
+>>> >> > > >> series is based on 6.4-rc2.
+>>> >> > > >
+>>> >> > > > Thanks.
+>>> >> > >
+>>> >> > > Sorry to be so slow here, but I think this is causing LLD to hang on
+>>> >> > > allmodconfig.  I'm still getting to the bottom of it, there's a few
+>>> >> > > other things I have in flight still.
+>>> >> >
+>>> >> > Confirmed with v3 on mainline (linux-next is pretty red at the moment).
+>>> >> > https://lore.kernel.org/linux-riscv/20230517082936.37563-1-falcon@tinylab.org/
+>>> >>
+>>> >> Just FYI Nick, there's been some concurrent work here from different
+>>> >> people working on the same thing & the v3 you linked (from Zhangjin) was
+>>> >> superseded by this v2 (from Jisheng).
+>>> >
+>>> > Ah! I've been testing the deprecated patch set, sorry I just looked on
+>>> > lore for "dead code" on riscv-linux and grabbed the first thread,
+>>> > without noticing the difference in authors or new version numbers for
+>>> > distinct series. ok, nevermind my noise.  I'll follow up with the
+>>> > correct patch set, sorry!
+>>>
+>>> Ya, I hadn't even noticed the v3 because I pretty much only look at
+>>> patchwork these days.  Like we talked about in IRC, I'm going to go test
+>>> the merge of this one and see what's up -- I've got it staged at
+>>> <https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/commit/?h=for-next&id=1bd2963b21758a773206a1cb67c93e7a8ae8a195>,
+>>> though that won't be a stable hash if it's actually broken...
+>>
+>> Ok, https://lore.kernel.org/linux-riscv/20230523165502.2592-1-jszhang@kernel.org/
+>> built for me.  If you're seeing a hang, please let me know what
+>> version of LLD you're using and I'll build that tag from source to see
+>> if I can reproduce, then bisect if so.
+>>
+>> $ ARCH=riscv LLVM=1 /usr/bin/time -v make -j128 allmodconfig vmlinux
+>> ...
+>>         Elapsed (wall clock) time (h:mm:ss or m:ss): 2:35.68
+>> ...
+>>
+>> Tested-by: Nick Desaulniers <ndesaulniers@google.com> # build
+>
+> OK, it triggered enough of a rebuild that it might take a bit for
+> anything to filter out.
 
-Oh yes, linux-next
+I'm on LLVM 16.0.2
+
+    $ git describe
+    llvmorg-16.0.2
+    $ git log | head -n1
+    commit 18ddebe1a1a9bde349441631365f0472e9693520
+
+that seems to hang for me -- or at least run for an hour without 
+completing, so I assume it's hung.  I'm not wed to 16.0.2, it just 
+happens to be the last time I bumped the toolchain.  I'm moving to 
+16.0.5 to see if that changes anything.
+
+>
+> Thanks!
+>
+>>
+>>>
+>>> >
+>>> >>
+>>> >> Cheers,
+>>> >> Conor.
+>>> >
+>>> >
+>>> >
+>>> > --
+>>> > Thanks,
+>>> > ~Nick Desaulniers
+>>
+>>
+>>
+>> --
+>> Thanks,
+>> ~Nick Desaulniers
