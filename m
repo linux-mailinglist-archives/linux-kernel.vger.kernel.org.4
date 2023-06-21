@@ -2,113 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83D51738BDB
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EFAF738BDD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjFUQor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:44:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37086 "EHLO
+        id S229570AbjFUQpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbjFUQoZ (ORCPT
+        with ESMTP id S229806AbjFUQof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:44:25 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CD0184
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:44:17 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 67F9821F6A;
-        Wed, 21 Jun 2023 16:44:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1687365856; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aAVGXNrkgl4/ky+79KLnILYyQneRzEuevXG7/+WuCwo=;
-        b=kWNL4pgiVzOgehactdZ52x2L0RyflNzlOQXRZTEhVrTfvHbgmYfzxLbMGHD4a0FJEqcfxc
-        XefsD2kov1iV+8DFTR28+xClWTAYqSPTAPlEkjLgeIDuash9OSVAEaj4f1SXBS0xlCzPGN
-        mGPPQ1M7FoiNbSYQLDYI09Y5xA0UQos=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1687365856;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aAVGXNrkgl4/ky+79KLnILYyQneRzEuevXG7/+WuCwo=;
-        b=9Y9EOS8HVqnfgF1vq24ROfGYHGX1bn1txG1uSTTguGInUVU3/Qfhy+A/zTNiV8cqPEjbFz
-        F7Ar/eNV/HJf8KBA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5C0E0133E6;
-        Wed, 21 Jun 2023 16:44:16 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id wbpwFuAok2SPRwAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 21 Jun 2023 16:44:16 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 05A76A075D; Wed, 21 Jun 2023 18:44:16 +0200 (CEST)
-Date:   Wed, 21 Jun 2023 18:44:15 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Luis de Bethencourt <luisbg@kernel.org>,
-        Salah Triki <salah.triki@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 14/79] befs: switch to new ctime accessors
-Message-ID: <20230621164415.7lcr3jrp2ndark4d@quack3>
-References: <20230621144507.55591-1-jlayton@kernel.org>
- <20230621144735.55953-1-jlayton@kernel.org>
- <20230621144735.55953-13-jlayton@kernel.org>
+        Wed, 21 Jun 2023 12:44:35 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E3C1BF4;
+        Wed, 21 Jun 2023 09:44:30 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-668689ce13fso2363888b3a.0;
+        Wed, 21 Jun 2023 09:44:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687365870; x=1689957870;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ovx+jfZaH7V8FUChgciq0i3am8A77reL9nkY9HPtvCI=;
+        b=oW1ObikBvNryJa3IQbsMIObXQjVKuU+Iar50y+rtYh0A7IRz+1XYqAoe1R0Uwwgy2r
+         aLufJu+ujgaOCNBf18/9nfHEeXaf14QE55Wj9i37mRHMmR3DulOVIckWO3SYLIizeB4t
+         ylzGvX19+gt0Qz+C1m0u41kS4iGnavFx27DmySmD8+mYd04IvtdIyFjlBjm81PKfgB2b
+         TlcfC0876TQ906Q33bvfX1T8VM80AJi/b4s32YUX0pe3OCCvyBUCfNXcGw0DLrFAwl28
+         vWXwLesHf4srU5hQEQn7VazrpIrdrsP9LCG1B8h7ihjp4XN7Ac+KqSo0+BDTOAU9aOEJ
+         7oVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687365870; x=1689957870;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ovx+jfZaH7V8FUChgciq0i3am8A77reL9nkY9HPtvCI=;
+        b=kmqQC4+g3A3Ob2EXSJfbR2dpmMqrBo92SkW6l8boBGYO8SlmZyCxwXVQXDM3kwawIl
+         HhXNw3Aa4iKCkQ1wNCCaZ6RLzTA1XhVK32w879u7CgAeqrxZfarNla4SXQqUWnmaEhHk
+         uuIFI41oyaBeT2R9mMSvbXjcRwL7AC2AzLdm39e+I1s61lMKZynnZhGpVN5N8qbLgv2j
+         uR1uaeY9sCZ/TW+eouDsWK+1HTrEApWfrZCf5n8dxkQTdwOB1jiPuagbObUWsw+4G/Vs
+         H4n+y7fpMnc796x02d53CrAgQrnJrl0XyDmKaPCX7eA0zD9dTPOgfsK5SlV0euFcC1qG
+         Jo9A==
+X-Gm-Message-State: AC+VfDzaRrLgj2yjNUCFawIBzZIEHGI+pzf8sT4jRelmYfLb5z637mI7
+        HfFOpHsDa7fZDLvw4GFUTzw=
+X-Google-Smtp-Source: ACHHUZ45oqsBtnqeZQhPpnjVYiE28xPv4RXfLxZ/e2KDRp7E0x5FpC9J7lmd1zTkwlwe53k51cNEVA==
+X-Received: by 2002:a05:6a20:4288:b0:11f:4412:fc77 with SMTP id o8-20020a056a20428800b0011f4412fc77mr6379317pzj.17.1687365870107;
+        Wed, 21 Jun 2023 09:44:30 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x9-20020aa793a9000000b0064fd8b3dd10sm3130533pff.109.2023.06.21.09.44.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 09:44:29 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 21 Jun 2023 09:44:28 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: mpc: Use of_property_read_reg() to parse "reg"
+Message-ID: <c9e228d6-d8b5-4041-b50a-c599144c8752@roeck-us.net>
+References: <20230609183044.1764951-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230621144735.55953-13-jlayton@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230609183044.1764951-1-robh@kernel.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 21-06-23 10:45:27, Jeff Layton wrote:
-> In later patches, we're going to change how the ctime.tv_nsec field is
-> utilized. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
+On Fri, Jun 09, 2023 at 12:30:44PM -0600, Rob Herring wrote:
+> Use the recently added of_property_read_reg() helper to get the
+> untranslated "reg" address value.
 > 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Looks good to me. Feel free to add:
+This patch results in:
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+Building powerpc:ppc32_allmodconfig ... failed
+--------------
+Error log:
+drivers/i2c/busses/i2c-mpc.c: In function 'mpc_i2c_setup_512x':
+drivers/i2c/busses/i2c-mpc.c:310:20: error: unused variable 'pval' [-Werror=unused-variable]
+  310 |         const u32 *pval;
 
-								Honza
+because pval is no longer used.
+
+Guenter
 
 > ---
->  fs/befs/linuxvfs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/i2c/busses/i2c-mpc.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/fs/befs/linuxvfs.c b/fs/befs/linuxvfs.c
-> index eee9237386e2..1eee7baa808b 100644
-> --- a/fs/befs/linuxvfs.c
-> +++ b/fs/befs/linuxvfs.c
-> @@ -363,7 +363,7 @@ static struct inode *befs_iget(struct super_block *sb, unsigned long ino)
->  	inode->i_mtime.tv_sec =
->  	    fs64_to_cpu(sb, raw_inode->last_modified_time) >> 16;
->  	inode->i_mtime.tv_nsec = 0;   /* lower 16 bits are not a time */
-> -	inode->i_ctime = inode->i_mtime;
-> +	inode_ctime_set(inode, inode->i_mtime);
->  	inode->i_atime = inode->i_mtime;
->  
->  	befs_ino->i_inode_num = fsrun_to_cpu(sb, raw_inode->inode_num);
+> diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
+> index cfd074ee6d54..595dce9218ad 100644
+> --- a/drivers/i2c/busses/i2c-mpc.c
+> +++ b/drivers/i2c/busses/i2c-mpc.c
+> @@ -316,9 +316,10 @@ static void mpc_i2c_setup_512x(struct device_node *node,
+>  	if (node_ctrl) {
+>  		ctrl = of_iomap(node_ctrl, 0);
+>  		if (ctrl) {
+> +			u64 addr;
+>  			/* Interrupt enable bits for i2c-0/1/2: bit 24/26/28 */
+> -			pval = of_get_property(node, "reg", NULL);
+> -			idx = (*pval & 0xff) / 0x20;
+> +			of_property_read_reg(node, 0, &addr, NULL);
+> +			idx = (addr & 0xff) / 0x20;
+>  			setbits32(ctrl, 1 << (24 + idx * 2));
+>  			iounmap(ctrl);
+>  		}
 > -- 
-> 2.41.0
+> 2.39.2
 > 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
