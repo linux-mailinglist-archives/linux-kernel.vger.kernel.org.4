@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDADF738D11
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:28:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A97738D13
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbjFUR2E convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 13:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
+        id S231157AbjFUR3N convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 13:29:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbjFUR2C (ORCPT
+        with ESMTP id S229507AbjFUR3M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 13:28:02 -0400
-Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE43BE2;
-        Wed, 21 Jun 2023 10:28:01 -0700 (PDT)
-Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-471c9f2f47aso1327092e0c.3;
-        Wed, 21 Jun 2023 10:28:01 -0700 (PDT)
+        Wed, 21 Jun 2023 13:29:12 -0400
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D1EE2;
+        Wed, 21 Jun 2023 10:29:11 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-bb2ffa1e235so5942527276.0;
+        Wed, 21 Jun 2023 10:29:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687368481; x=1689960481;
+        d=1e100.net; s=20221208; t=1687368550; x=1689960550;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CmaOCoyILhi3FgVCCQ1JmKKyeL3P35Rtqp7/2iklqXE=;
-        b=kw9h7ZlWfdigCSS2vZleN/9MR1q8JoGfBY9IgB6cmRzj3wdMGehxx952L6uQL+eb+v
-         MrulV5Y+TO8CDUDqkYp/Ddm63BYErbA3E4Aic7dqzD0u05Dw+6QES0ScMjQ5BIH23+xa
-         Vr0rmz0umhpueu9M55SVaJrWpj6hjQS98XvZtoLWdjxIvJezl+W0QW0UkDe+tYp6sG5I
-         zL615N6rtCf38504xzz4KNdyEFNaVewwhzJ72cmnu2uhZo1JVSd/BIF0d+eVixkv2hw4
-         sXEd3x5UmM2NrI+JNP4lp+f2IdxioF+H0bOIFhsYNyp26dljqnGyLIEyaGTGGmTQgKEM
-         gPwA==
-X-Gm-Message-State: AC+VfDwTRoXzYJRGGNg+O8OCbCCwjZGzVva3hN7LbEHNhtXPQuFPznZT
-        DsJ6zft+PBfn2E6KZ3tLOi6DoMhXeUpnNI7W3E4ui9xKd/0=
-X-Google-Smtp-Source: ACHHUZ4rdMM40f9UaN+w8M9TF6iOsxZdswgln6yT/olT5EUVpeMzGIgKTjsQgAhV0bZNhPLOfEULfoxpx7J0VUFFmq8=
-X-Received: by 2002:a1f:bd16:0:b0:471:5427:39a4 with SMTP id
- n22-20020a1fbd16000000b00471542739a4mr7529723vkf.0.1687368480680; Wed, 21 Jun
- 2023 10:28:00 -0700 (PDT)
+        bh=sHKJ5E4QyaneB9JDT8DwEZgyuTNCEA7MDDSg1wRoMEI=;
+        b=EF02C/IqTEdWvGevmILr5zJtLS27nm5s3cGXmsx1zeBnWpqby5fXoDRb8UVWZNwR5N
+         L9B54+su2lQ2ojI7er/qQ585bbS3DGpIpZV92qZQztUInbcuDnSPMhNMtqT9EcAvSkxW
+         agok7YmSnYMTHSQEznQjaPok1nniOHgGWGy9FFBPipCajH5BAiII3oK0iiXlJZ4ARPXy
+         Yp7422E0F2teNauvOIjQqo2TpeAMOJQg643iRtPcQb6Pds241VBPEI69iwMPelEU7XZO
+         zIWwhv2SqejzNY4PDrCMw29J+OLixJMkheStNOfWsFj19JuaYqUbP1ii0FvDlpkb52YJ
+         szOg==
+X-Gm-Message-State: AC+VfDzCeDmrvDYASfsptTK4WluQ2OibL5Xt51JyZ3y3UlK+ENH+gEX3
+        PxYV2X4DpAIlAt9gchi6dzO/By47VpvBYm6qO64=
+X-Google-Smtp-Source: ACHHUZ7hMGvTxVYM7j06iuh48J3sQevUoI3xiFZJa4qO0+XgMX1X2u/VYFsp7hO0BhArpajGcDMuvE2Xa8xasyBdtao=
+X-Received: by 2002:a25:b1a3:0:b0:bca:531d:dcde with SMTP id
+ h35-20020a25b1a3000000b00bca531ddcdemr11934138ybj.30.1687368550410; Wed, 21
+ Jun 2023 10:29:10 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230615040715.2064350-1-irogers@google.com> <CAM9d7cigCUz4i-t2rHaz9Ch0oWxjYWmvnVB73uV1cm+47DtpXw@mail.gmail.com>
-In-Reply-To: <CAM9d7cigCUz4i-t2rHaz9Ch0oWxjYWmvnVB73uV1cm+47DtpXw@mail.gmail.com>
+References: <20230620132025.105563-1-wangrui@loongson.cn>
+In-Reply-To: <20230620132025.105563-1-wangrui@loongson.cn>
 From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 21 Jun 2023 10:27:49 -0700
-Message-ID: <CAM9d7cg_PoRu=6u5WYvHeyPLv0_-70_2TevrnPP6Bi=-oxX=eg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] perf sharded_mutex: Introduce sharded_mutex
-To:     Ian Rogers <irogers@google.com>
+Date:   Wed, 21 Jun 2023 10:28:59 -0700
+Message-ID: <CAM9d7cgpm+Uz4JOh9vW60OQkCOjpbNvrrDy-KefALVak1EXQxQ@mail.gmail.com>
+Subject: Re: [PATCH] perf annotate: Fix instruction association and parsing
+ for LoongArch
+To:     WANG Rui <wangrui@loongson.cn>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
         Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Yuan Can <yuancan@huawei.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Andres Freund <andres@anarazel.de>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+        Huacai Chen <chenhuacai@loongson.cn>,
+        loongarch@lists.linux.dev, Tiezhu Yang <yangtiezhu@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, loongson-kernel@lists.loongnix.cn
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -68,18 +66,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 3:15 PM Namhyung Kim <namhyung@kernel.org> wrote:
+On Tue, Jun 20, 2023 at 6:21 AM WANG Rui <wangrui@loongson.cn> wrote:
 >
-> On Wed, Jun 14, 2023 at 9:07 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > Per object mutexes may come with significant memory cost while a
-> > global mutex can suffer from unnecessary contention. A sharded mutex
-> > is a compromise where objects are hashed and then a particular mutex
-> > for the hash of the object used. Contention can be controlled by the
-> > number of shards.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
+> In the perf annotate view for LoongArch, there is no arrowed line
+> pointing to the target from the branch instruction. This issue is
+> caused by incorrect instruction association and parsing.
 >
-> Acked-by: Namhyung Kim <namhyung@kernel.org>
+> $ perf record alloc-6276705c94ad1398 # rust benchmark
+> $ perf report
+>
+>   0.28 │       ori        $a1, $zero, 0x63
+>        │       move       $a2, $zero
+>  10.55 │       addi.d     $a3, $a2, 1(0x1)
+>        │       sltu       $a4, $a3, $s7
+>   9.53 │       masknez    $a4, $s7, $a4
+>        │       sub.d      $a3, $a3, $a4
+>  12.12 │       st.d       $a1, $fp, 24(0x18)
+>        │       st.d       $a3, $fp, 16(0x10)
+>  16.29 │       slli.d     $a2, $a2, 0x2
+>        │       ldx.w      $a2, $s8, $a2
+>  12.77 │       st.w       $a2, $sp, 724(0x2d4)
+>        │       st.w       $s0, $sp, 720(0x2d0)
+>   7.03 │       addi.d     $a2, $sp, 720(0x2d0)
+>        │       addi.d     $a1, $a1, -1(0xfff)
+>  12.03 │       move       $a2, $a3
+>        │     → bne        $a1, $s3, -52(0x3ffcc)  # 82ce8 <test::bench::Bencher::iter+0x3f4>
+>   2.50 │       addi.d     $a0, $a0, 1(0x1)
+>
+> This patch fixes instruction association issues, such as associating
+> branch instructions with jump_ops instead of call_ops, and corrects
+> false instruction matches. It also implements branch instruction parsing
+> specifically for LoongArch. With this patch, we will be able to see the
+> arrowed line.
+>
+>   0.79 │3ec:   ori        $a1, $zero, 0x63
+>        │       move       $a2, $zero
+>  10.32 │3f4:┌─→addi.d     $a3, $a2, 1(0x1)
+>        │    │  sltu       $a4, $a3, $s7
+>  10.44 │    │  masknez    $a4, $s7, $a4
+>        │    │  sub.d      $a3, $a3, $a4
+>  14.17 │    │  st.d       $a1, $fp, 24(0x18)
+>        │    │  st.d       $a3, $fp, 16(0x10)
+>  13.15 │    │  slli.d     $a2, $a2, 0x2
+>        │    │  ldx.w      $a2, $s8, $a2
+>  11.00 │    │  st.w       $a2, $sp, 724(0x2d4)
+>        │    │  st.w       $s0, $sp, 720(0x2d0)
+>   8.00 │    │  addi.d     $a2, $sp, 720(0x2d0)
+>        │    │  addi.d     $a1, $a1, -1(0xfff)
+>  11.99 │    │  move       $a2, $a3
+>        │    └──bne        $a1, $s3, 3f4
+>   3.17 │       addi.d     $a0, $a0, 1(0x1)
+>
+> Signed-off-by: WANG Rui <wangrui@loongson.cn>
 
-Applied both patches to perf-tools-next, thanks!
+Applied to perf-tools-next, thanks!
