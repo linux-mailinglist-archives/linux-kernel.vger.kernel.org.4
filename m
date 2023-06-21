@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50231739288
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 00:33:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDED373928B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 00:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjFUWdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 18:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
+        id S229990AbjFUWdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 18:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjFUWdS (ORCPT
+        with ESMTP id S229637AbjFUWdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 18:33:18 -0400
+        Wed, 21 Jun 2023 18:33:19 -0400
 Received: from s.wrqvtzvf.outbound-mail.sendgrid.net (s.wrqvtzvf.outbound-mail.sendgrid.net [149.72.126.143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9577173F
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 15:33:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EF1173F
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 15:33:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kwiboo.se;
-        h=from:subject:mime-version:to:cc:content-transfer-encoding:
-        content-type:cc:content-type:from:subject:to;
-        s=s1; bh=Pv1U1EEqpR4gm7kxbWZCerK7wt2q95EyqJhSl+womJE=;
-        b=FkXsUOsXaFkwZrliDf9C2YwjNTIUEVvciEnSKJ9DTDBt+k27cbXeShchjqIG62qoBEXH
-        b0W+UdYOsXPSNmZl5/Pa8sDZfJN5aeForP98D+/3H6KELBuaDRZL2xHCv6G3oK6M/dQmyK
-        AMXMyqWZr86H/epaKAB4V5YO6jAJtDnPWYeG4EX3ygxWvztz3IhdGcfbov+QuCNbGM+LFl
-        lFhpBrEdkWwITScZKCVx/GAr3/k1aFutWnpGJzunVRusb7gmRM6uuMYpj8CKxUYbLSu4oG
-        i8u8jJfV7em/W//1XTI598X82qwaAx4/LdMfQCu/XA2/mKmYkdUdxX1yww99Iarw==
-Received: by filterdrecv-65f68489c8-b6w8z with SMTP id filterdrecv-65f68489c8-b6w8z-1-64937AAA-5C
-        2023-06-21 22:33:15.071715387 +0000 UTC m=+3625023.840218965
+        h=from:subject:in-reply-to:references:mime-version:to:cc:
+        content-transfer-encoding:content-type:cc:content-type:from:subject:to;
+        s=s1; bh=W99jR6zQr9o9HH0LFWjkqVeyLEmhww0LQ1TODMrD+JU=;
+        b=lgYVrVqzL5xtT/wvZAyliCCJFvkwGuTcAcJfKQdzdxZC6nLMwUo9oDusU22C1uWycY8I
+        p34S3bqatApfjKJTD6B4eqk7llOn5/Xibjn/59rFvUNYJpcXcORsPCo/1q8lBzu49gqfjB
+        5PDLZaTyULgvju+D0MFe6J6rsx8c/hdQbcyDzjbI6MDJnr3FbvWFMIIF/X0/Gt/wgODH29
+        AMiYWHdlvJEungau2LBFg6UBFDagsmxX5TqNHt+ZoboL6wu8V4cakUrMw9jhJCfkqgkEj3
+        F40YikYplgk68+/3que0WX9V4L4kVAXHsY7Sm/jyaWEFZ3bd0BYwBi10ZNkv5yNA==
+Received: by filterdrecv-84b96456cb-hrvlt with SMTP id filterdrecv-84b96456cb-hrvlt-1-64937AAC-29
+        2023-06-21 22:33:16.784398642 +0000 UTC m=+3624881.780498603
 Received: from bionic.localdomain (unknown)
         by geopod-ismtpd-0 (SG)
         with ESMTP
-        id Vsg4Okx2QpydLWx1dvgG5Q
-        Wed, 21 Jun 2023 22:33:14.503 +0000 (UTC)
+        id q2JBcGBES7ak8zO87bOzoQ
+        Wed, 21 Jun 2023 22:33:16.341 +0000 (UTC)
 From:   Jonas Karlman <jonas@kwiboo.se>
-Subject: [PATCH v2 0/5] drm/rockchip: Fix crtc duplicate state and crtc reset
- funcs
-Date:   Wed, 21 Jun 2023 22:33:15 +0000 (UTC)
-Message-ID: <20230621223311.2239547-1-jonas@kwiboo.se>
+Subject: [PATCH v2 1/5] drm/rockchip: vop: Fix reset of state in duplicate
+ state crtc funcs
+Date:   Wed, 21 Jun 2023 22:33:17 +0000 (UTC)
+Message-ID: <20230621223311.2239547-2-jonas@kwiboo.se>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230621223311.2239547-1-jonas@kwiboo.se>
+References: <20230621223311.2239547-1-jonas@kwiboo.se>
 MIME-Version: 1.0
 X-SG-EID: =?us-ascii?Q?TdbjyGynYnRZWhH+7lKUQJL+ZxmxpowvO2O9SQF5CwCVrYgcwUXgU5DKUU3QxA?=
- =?us-ascii?Q?fZekEeQsTe+RrMu3cja6a0hwAj6JtqDVdUtl=2Fsv?=
- =?us-ascii?Q?EfHTEBPZGZPV0oT8N0cvVyWZgOlphJJAE1JguJu?=
- =?us-ascii?Q?Hu+WRw0387JHRl7AW9o30oWLdB+uU37bxzHe3L1?=
- =?us-ascii?Q?tAYAhOs6OWJswLf1+CsvL1B7NBMxMnDq2zNxVzK?=
- =?us-ascii?Q?2K+k2+1NKGxTJKJlqtaAGk5uSkxAqzt3zWxvQ=2F?=
+ =?us-ascii?Q?fZekEeQsTe+RrMu3cja6a0h4IxyhjudaBMscryW?=
+ =?us-ascii?Q?yil2MxaaDxax+ugZQXodSqRHYB6mo1lanwr1jqt?=
+ =?us-ascii?Q?Ei9avORGicVCxu+gicqUMciYzh1qKi3mMrSCg1d?=
+ =?us-ascii?Q?PUSBMXm9wLuXzM76H6Sr+4cVwqlUT3w933cPfI=2F?=
+ =?us-ascii?Q?Va59vtrjACEYW2+1Zc1Kd3y6fVmW+iocbJHw78?=
 To:     Sandy Huang <hjc@rock-chips.com>, Heiko Stuebner <heiko@sntech.de>,
         David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Mark Yao <markyao0591@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Mark Yao <markyao0591@gmail.com>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
         Andy Yan <andy.yan@rock-chips.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         dri-devel@lists.freedesktop.org,
@@ -68,38 +70,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series fixes a reset of state in duplicate state crtc funcs for VOP
-driver, a possible crash and ensure crtc reset helper is called in VOP2
-driver.
+struct rockchip_crtc_state members such as output_type, output_bpc and
+enable_afbc is always reset to zero in the atomic_duplicate_state crtc
+funcs.
 
-Patch 1 use kmemdup instead of kzalloc to duplicate the crtc state.
-Patch 2 change to use crtc and plane cleanup helpers directly.
-Patch 3 adds a null guard for allocation failure.
-Patch 4 adds a crash guard for empty crtc state.
-Patch 5 adds a missing call to crtc reset helper.
+Fix this by using kmemdup on the subclass rockchip_crtc_state struct.
 
-This is the next part of an ongoing effort to upstream HDMI 2.0 support
-used in LibreELEC for the past 3+ years.
+Fixes: 4e257d9eee23 ("drm/rockchip: get rid of rockchip_drm_crtc_mode_config")
+Signed-off-by: Jonas Karlman <jonas@kwiboo.se>
+Reviewed-by: Sascha Hauer <s.hauer@pengutronix.de>
+---
+v2:
+- Collect r-b tag
 
-Changes in v2:
-- Handle possible allocation failure in crtc reset funcs
-- Collect r-b tags
+ drivers/gpu/drm/rockchip/rockchip_drm_vop.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-This series is also available at [1].
-
-[1] https://github.com/Kwiboo/linux-rockchip/commits/next-20230621-duplicate-state
-
-Jonas Karlman (5):
-  drm/rockchip: vop: Fix reset of state in duplicate state crtc funcs
-  drm/rockchip: vop: Use cleanup helper directly as destroy funcs
-  drm/rockchip: vop: Fix call to crtc reset helper
-  drm/rockchip: vop2: Don't crash for invalid duplicate_state
-  drm/rockchip: vop2: Add missing call to crtc reset helper
-
- drivers/gpu/drm/rockchip/rockchip_drm_vop.c  | 24 +++++-------
- drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 39 ++++++++++----------
- 2 files changed, 28 insertions(+), 35 deletions(-)
-
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+index a530ecc4d207..60b23636a3fe 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+@@ -1614,7 +1614,8 @@ static struct drm_crtc_state *vop_crtc_duplicate_state(struct drm_crtc *crtc)
+ 	if (WARN_ON(!crtc->state))
+ 		return NULL;
+ 
+-	rockchip_state = kzalloc(sizeof(*rockchip_state), GFP_KERNEL);
++	rockchip_state = kmemdup(to_rockchip_crtc_state(crtc->state),
++				 sizeof(*rockchip_state), GFP_KERNEL);
+ 	if (!rockchip_state)
+ 		return NULL;
+ 
 -- 
 2.41.0
 
