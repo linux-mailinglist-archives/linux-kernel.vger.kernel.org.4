@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C60E67387EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B297387ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232777AbjFUOw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
+        id S232239AbjFUOxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232397AbjFUOv5 (ORCPT
+        with ESMTP id S232402AbjFUOv6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:51:57 -0400
+        Wed, 21 Jun 2023 10:51:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E542F1FD4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:49:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DB42D66
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:49:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE86E6159A
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:49:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D0AFC433C8;
-        Wed, 21 Jun 2023 14:49:05 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5447615BB
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:49:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF26BC433C8;
+        Wed, 21 Jun 2023 14:49:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687358946;
-        bh=w0GRo5owbosOIL5IOwRPzqacdqpxHdKA8CfKDsWGpQQ=;
+        s=k20201202; t=1687358947;
+        bh=JQjWRhfzUQZACyGM7HIbqAr9d+i/Io57Za+SRGPmvhM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uxs4ILcjp4N2ppOX8asPwYn830WjQU9Lbf/fB7KjgK5wnPYMoVBac0vGJNnyIz/r1
-         oIoWqVhtgSfZgo0GiceGIDjeJEx1tG6Rk/GQmIzVVG6Zyit0v5uGPe9Hmqm9oAm35j
-         YFm+QXkwHpqJZXyt+/hgjwni0zmTTvcRkc8r5Pvx5ZJ68IfLlGmH2XLp63fe1X/WSx
-         +0Yrp3gVDK5Uwbdh2FNWN3vG9jVEEvZQs6U5GdA+xhPOfBKtJHT2g6d6xU8ffV8Xc5
-         dh4qXmHXVxShHTqR8oofalh+t08v0XK8JYbjN9d8eCjGfvCHUvAf+OUyyyKaJ8bhd9
-         Q9T0BAQmVi1WQ==
+        b=bdUKZYYLvTy45nvYztdff8e4VCJRwe0ffrexOXDSI/yBlBydc35TzkNnWHmjw5Y/9
+         goZxRzSDEzkVWtknVfxfec/Aj+AM2uZRtFVAjAdhfFi3l6MC85srSB3iAHNs95m3/L
+         49QZNErjFRDRnCclr1i3sMxkV5OVBXqyjbGJeI7tuFchrrCJQL58vdJl7XNIFAxCMp
+         2izD9l1u0LjQ2LXJEub3cMDopxpAIEW+hPjkSzGFSJd73gsxei4tzG/JvBsyqyfm8v
+         eME5qHvJOsz0sZQAVec1IErkai6ZKxqxfuw5C+zuqT16qJ0E8s9NZVMyFSJuIw+YjH
+         0AJ7qyewiqMdA==
 From:   Jeff Layton <jlayton@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>,
-        Bob Copeland <me@bobcopeland.com>
+To:     Christian Brauner <brauner@kernel.org>
 Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-karma-devel@lists.sourceforge.net,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 51/79] omfs: switch to new ctime accessors
-Date:   Wed, 21 Jun 2023 10:46:04 -0400
-Message-ID: <20230621144735.55953-50-jlayton@kernel.org>
+Subject: [PATCH 52/79] openpromfs: switch to new ctime accessors
+Date:   Wed, 21 Jun 2023 10:46:05 -0400
+Message-ID: <20230621144735.55953-51-jlayton@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230621144735.55953-1-jlayton@kernel.org>
 References: <20230621144507.55591-1-jlayton@kernel.org>
@@ -64,69 +62,31 @@ inode->i_ctime.
 
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- fs/omfs/dir.c   |  4 ++--
- fs/omfs/inode.c | 10 +++++-----
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ fs/openpromfs/inode.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/omfs/dir.c b/fs/omfs/dir.c
-index 82cf7e9a665f..9b302b859335 100644
---- a/fs/omfs/dir.c
-+++ b/fs/omfs/dir.c
-@@ -143,7 +143,7 @@ static int omfs_add_link(struct dentry *dentry, struct inode *inode)
- 	mark_buffer_dirty(bh);
- 	brelse(bh);
+diff --git a/fs/openpromfs/inode.c b/fs/openpromfs/inode.c
+index f0b7f4d51a17..5d5066078638 100644
+--- a/fs/openpromfs/inode.c
++++ b/fs/openpromfs/inode.c
+@@ -237,7 +237,7 @@ static struct dentry *openpromfs_lookup(struct inode *dir, struct dentry *dentry
+ 	if (IS_ERR(inode))
+ 		return ERR_CAST(inode);
+ 	if (inode->i_state & I_NEW) {
+-		inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
++		inode->i_mtime = inode->i_atime = inode_ctime_set_current(inode);
+ 		ent_oi = OP_I(inode);
+ 		ent_oi->type = ent_type;
+ 		ent_oi->u = ent_data;
+@@ -388,7 +388,7 @@ static int openprom_fill_super(struct super_block *s, struct fs_context *fc)
+ 	}
  
--	dir->i_ctime = current_time(dir);
-+	inode_ctime_set_current(dir);
- 
- 	/* mark affected inodes dirty to rebuild checksums */
- 	mark_inode_dirty(dir);
-@@ -399,7 +399,7 @@ static int omfs_rename(struct mnt_idmap *idmap, struct inode *old_dir,
- 	if (err)
- 		goto out;
- 
--	old_inode->i_ctime = current_time(old_inode);
-+	inode_ctime_set_current(old_inode);
- 	mark_inode_dirty(old_inode);
- out:
- 	return err;
-diff --git a/fs/omfs/inode.c b/fs/omfs/inode.c
-index c4c79e07efc7..d420e5a53de3 100644
---- a/fs/omfs/inode.c
-+++ b/fs/omfs/inode.c
-@@ -51,7 +51,7 @@ struct inode *omfs_new_inode(struct inode *dir, umode_t mode)
- 	inode_init_owner(&nop_mnt_idmap, inode, NULL, mode);
- 	inode->i_mapping->a_ops = &omfs_aops;
- 
--	inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
-+	inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
- 	switch (mode & S_IFMT) {
- 	case S_IFDIR:
- 		inode->i_op = &omfs_dir_inops;
-@@ -134,8 +134,8 @@ static int __omfs_write_inode(struct inode *inode, int wait)
- 	oi->i_head.h_magic = OMFS_IMAGIC;
- 	oi->i_size = cpu_to_be64(inode->i_size);
- 
--	ctime = inode->i_ctime.tv_sec * 1000LL +
--		((inode->i_ctime.tv_nsec + 999)/1000);
-+	ctime = inode_ctime_peek(inode).tv_sec * 1000LL +
-+		((inode_ctime_peek(inode).tv_nsec + 999)/1000);
- 	oi->i_ctime = cpu_to_be64(ctime);
- 
- 	omfs_update_checksums(oi);
-@@ -232,10 +232,10 @@ struct inode *omfs_iget(struct super_block *sb, ino_t ino)
- 
- 	inode->i_atime.tv_sec = ctime;
- 	inode->i_mtime.tv_sec = ctime;
--	inode->i_ctime.tv_sec = ctime;
-+	inode_ctime_set_sec(inode, ctime);
- 	inode->i_atime.tv_nsec = nsecs;
- 	inode->i_mtime.tv_nsec = nsecs;
--	inode->i_ctime.tv_nsec = nsecs;
-+	inode_ctime_set_nsec(inode, nsecs);
- 
- 	inode->i_mapping->a_ops = &omfs_aops;
- 
+ 	root_inode->i_mtime = root_inode->i_atime =
+-		root_inode->i_ctime = current_time(root_inode);
++		inode_ctime_set_current(root_inode);
+ 	root_inode->i_op = &openprom_inode_operations;
+ 	root_inode->i_fop = &openprom_operations;
+ 	root_inode->i_mode = S_IFDIR | S_IRUGO | S_IXUGO;
 -- 
 2.41.0
 
