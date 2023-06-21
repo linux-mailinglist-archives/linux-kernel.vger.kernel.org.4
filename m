@@ -2,83 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1E07381F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EDA97381CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232425AbjFULGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 07:06:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38648 "EHLO
+        id S230527AbjFULI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 07:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbjFULFo (ORCPT
+        with ESMTP id S229783AbjFULIy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 07:05:44 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E33D1BEC;
-        Wed, 21 Jun 2023 04:05:33 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D08BB1063;
-        Wed, 21 Jun 2023 04:06:16 -0700 (PDT)
-Received: from ewhatever.cambridge.arm.com (ewhatever.cambridge.arm.com [10.1.197.1])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 34AA43F663;
-        Wed, 21 Jun 2023 04:05:31 -0700 (PDT)
-From:   Suzuki K Poulose <suzuki.poulose@arm.com>
-To:     linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        mathieu.poirier@linaro.org, corbet@lwn.net,
-        Yicong Yang <yangyicong@huawei.com>,
-        jonathan.cameron@huawei.com
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        linux-pci@vger.kernel.org, prime.zeng@huawei.com,
-        yangyicong@hisilicon.com, hejunhao3@huawei.com,
-        alexander.shishkin@linux.intel.com, linuxarm@huawei.com,
-        helgaas@kernel.org
-Subject: Re: [PATCH v6 0/5] Improve PTT filter interface and some fixes
-Date:   Wed, 21 Jun 2023 12:05:16 +0100
-Message-Id: <168734549634.567664.225208952925294170.b4-ty@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230621092804.15120-1-yangyicong@huawei.com>
-References: <20230621092804.15120-1-yangyicong@huawei.com>
+        Wed, 21 Jun 2023 07:08:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AFD9B;
+        Wed, 21 Jun 2023 04:08:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5331E614F0;
+        Wed, 21 Jun 2023 11:08:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C31C7C433C8;
+        Wed, 21 Jun 2023 11:08:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687345732;
+        bh=pDMlNd8ACfLvQmNU6tj/DpiQ1icRIIy6rldPkFKNQNY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nDaFj5hbkaoHpWVX2S1kRS79PjrjwDvtc3au5R9O09gR8LnTBUfvAscY33QWPoJLa
+         yG1HfWL9Fzzwy7p48+VhvhQ3m3vY/tSdrFjR19RDbrGSRLUbfrsrnBLEmyseqKEyO1
+         gkrRs4YuNMqo7H4GOqa4HnZb3vz2TwdAKEmMcqxaWSDspLJRNag+Pv4O8tFYXNagBf
+         yZ/ijC3toU9H2EHmufaz74OxJ1I12W9ymtu9lPpf93uJvo2+OWdqG1f0PChBz6mY8c
+         YIlp/CGFJF9HfHNIJrfqmxiI7j+jAqQwd7eP10mTPdLdPoZXMlKFjVMRkVJ6MJrp/y
+         Vhhi+/RiEOIzA==
+Date:   Wed, 21 Jun 2023 16:38:48 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Minda Chen <minda.chen@starfivetech.com>
+Cc:     kernel test robot <lkp@intel.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Mason Huo <mason.huo@starfivetech.com>
+Subject: Re: [PATCH v7 4/5] phy: starfive: Add JH7110 PCIE 2.0 PHY driver
+Message-ID: <ZJLaQB7UB56+/mtN@matsya>
+References: <20230619094759.21013-5-minda.chen@starfivetech.com>
+ <202306192215.TvQco9m6-lkp@intel.com>
+ <d4824941-85dd-d378-be5b-072907b1169d@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d4824941-85dd-d378-be5b-072907b1169d@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 17:27:59 +0800, Yicong Yang wrote:
-> From: Yicong Yang <yangyicong@hisilicon.com>
+On 21-06-23, 17:29, Minda Chen wrote:
 > 
-> This series tends to improve the PTT's filter interface in 2 aspects (Patch 2&3):
-> - Support dynamically filter updating to response to hotplug
->   Previous the supported filter list is settled down once the driver probed and
->   it maybe out-of-date if hotplug events happen later. User need to reload the
->   driver to update list. Patch 1/2 enable the driver to update the list by
->   registering a PCI bus notifier and the filter list will always be the latest.
-> - Export the available filters through sysfs
->   Previous user needs to calculate the filters and filter value using device's
->   BDF number, which requires the user to know the hardware well. Patch 3/3 tends
->   to export the available filter information through sysfs attributes, the filter
->   value will be gotten by reading the file. This will be more user friendly.
 > 
-> [...]
+> On 2023/6/19 22:45, kernel test robot wrote:
+> > Hi Minda,
+> > 
+> > kernel test robot noticed the following build errors:
+> > 
+> > [auto build test ERROR on robh/for-next]
+> > [also build test ERROR on linus/master v6.4-rc7 next-20230619]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > 
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Minda-Chen/dt-bindings-phy-Add-StarFive-JH7110-PCIe-PHY/20230619-184756
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+> > patch link:    https://lore.kernel.org/r/20230619094759.21013-5-minda.chen%40starfivetech.com
+> > patch subject: [PATCH v7 4/5] phy: starfive: Add JH7110 PCIE 2.0 PHY driver
+> > config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20230619/202306192215.TvQco9m6-lkp@intel.com/config)
+> > compiler: s390-linux-gcc (GCC) 12.3.0
+> > reproduce: (https://download.01.org/0day-ci/archive/20230619/202306192215.TvQco9m6-lkp@intel.com/reproduce)
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202306192215.TvQco9m6-lkp@intel.com/
+> > 
+> > All errors (new ones prefixed by >>, old ones prefixed by <<):
+> > 
+> >>> ERROR: modpost: "devm_platform_ioremap_resource" [drivers/phy/starfive/phy-jh7110-pcie.ko] undefined!
+> I can not find this error. devm_platform_ioremap_resource is an exported symbol
 
-Applied, thanks!
+Use the config and compiler provided in the report to repro this
 
-[1/5] hwtracing: hisi_ptt: Factor out filter allocation and release operation
-      commit: a3ecaba7017f5d02d1ad60229cc14d5f0cda0c20
-[2/5] hwtracing: hisi_ptt: Add support for dynamically updating the filter list
-      commit: 556ef09392dbc2d0b9aad5fd880d5d11addfc40d
-[3/5] hwtracing: hisi_ptt: Export available filters through sysfs
-      commit: 6373c463ac894e41cab24469d1947ff91aaea486
-[4/5] hwtracing: hisi_ptt: Advertise PERF_PMU_CAP_NO_EXCLUDE for PTT PMU
-      commit: 45c90292ad0e275ef4b870838b3b5273b3ef8ade
-[5/5] hwtracing: hisi_ptt: Fix potential sleep in atomic context
-      commit: 6c50384ef8b94a527445e3694ae6549e1f15d859
-
-Best regards,
 -- 
-Suzuki K Poulose <suzuki.poulose@arm.com>
+~Vinod
