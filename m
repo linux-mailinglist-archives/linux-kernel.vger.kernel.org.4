@@ -2,56 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7CDE73795A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 04:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D05D73795E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 04:51:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjFUCuB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 22:50:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
+        id S229988AbjFUCvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 22:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbjFUCt7 (ORCPT
+        with ESMTP id S229676AbjFUCvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 22:49:59 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C4610C
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 19:49:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687315799; x=1718851799;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=IMtGCrLO3YpuKxkzasfmBJGNYdQfJI324OqayZwJdc4=;
-  b=m0mi8CVW392pGYYGjBSmnh+SgT3lFSphnxhkIOi2Y+vcRqqehgv6//0L
-   6e/X95kKxR4rX4KzJuKHvRlxoOmVe7+QnWzW4pPUagPgdUewZMgeZabQi
-   yS0Z7XlkWCXbq1WsmeON0VxMvUH6ffUikk/9/X1zsf6Vyq5xbBfpxOgNm
-   CG7TasWtBFDt/bA85ycqYTg5Tb4jpujbAZxq43GUP/79vHx+n/SzZx8Mo
-   eADlEF+mRYuK6KK5sMh+AEE1IzFgCVnYDeprjIrMIPwR/eGCjZhZ3JVIH
-   Kd+Gz/5iy/guvWmV5UwDIeBkliuyBHDXAh8e/PbLYUg4R96C+AkP0p+V0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="358916416"
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="scan'208";a="358916416"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 19:49:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="743994770"
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="scan'208";a="743994770"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.90])
-  by orsmga008.jf.intel.com with ESMTP; 20 Jun 2023 19:49:57 -0700
-From:   tien.sung.ang@intel.com
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Ang Tien Sung <tien.sung.ang@intel.com>
-Subject: [PATCH v1 2/2] firmware: stratix10-svc: fix bug in saving controller data
-Date:   Wed, 21 Jun 2023 10:49:30 +0800
-Message-Id: <20230621024930.1392294-1-tien.sung.ang@intel.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Tue, 20 Jun 2023 22:51:51 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0E71B4;
+        Tue, 20 Jun 2023 19:51:50 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6b470ebd670so2607799a34.0;
+        Tue, 20 Jun 2023 19:51:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687315909; x=1689907909;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qJNr1vyPvHbMEk8O8XldE8NbrEXH2idSMvV3eZDgIT4=;
+        b=J9rhQVz1R8lKDLiKwNIPca+zvG5Tv3NsIAj1Ji/wwJWZ5NGPo67uNji7TMbGfymVWO
+         GMr37w69IFJ1a/xO2A5DmceFjN0O32RpzdAIssyO44XqTHGckAF25peyXSxvQDN3Hon3
+         nm7yK6UQvcoGWP40qbNg1er6nj4r5UQsT0ym99rNBvogtZMf2i5gafTMS+lgcgzNQGKq
+         aoUmdiGQ3/vjF0fTi0Y3GwgVLDETdD79PdEDbQpGXiviLmWKyCtsFqxqvYfIKO+j7cmH
+         1dwMi6f30X6ti1+jJ2sfUBHAIRnjtvhicwwWnFeGYhp7QveaAM4i9Fm9K8L5dJwflH0T
+         aPMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687315909; x=1689907909;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qJNr1vyPvHbMEk8O8XldE8NbrEXH2idSMvV3eZDgIT4=;
+        b=Cvs8PH9gXi5I5TbvEm6ueuUXfr4+MzUBGnZsj2anRhFeqsMeb68yjyAHEOjfFU8s4v
+         VXBiwh95vcPcDhe3BmyGWVvBY9OItxL0M0KSE18VzppnO1vvcJ2PlxoDQDSqNvFMSwJg
+         L6JnlscCqqw2og4/k4hmW9Wu5799g3corNzPHE4hYYIX+xL/3eRcvT8eVg2djie7Xl/C
+         dAGItrlaC9AWUvsMgBbswlQxJWe/dAdwobkGZv77e+6WrgthYQaebnucq4UNkoJvWcYW
+         MCQsB/Lxs1I7WNuYt6kNPJpkX6CQgqbyL59lvLTWaQj6lRdx47z+hq4PQGYj/VUzMkrg
+         88bA==
+X-Gm-Message-State: AC+VfDyiYbN5KLQbblO6vQ/QNWBMZcLJpiPTgCb5c+yIhXc1TaSmL9dE
+        pFwSPTKWDnwy0634pBABP7nOGid4Xvs=
+X-Google-Smtp-Source: ACHHUZ4vmFcBnDcvLrBXtT15BOX4k0uY1EIRYfrVxGT80rydywp/6szlGIEPs7lB1lYg1S65G5/lLQ==
+X-Received: by 2002:a05:6359:a26:b0:12c:9960:ec1e with SMTP id el38-20020a0563590a2600b0012c9960ec1emr8123207rwb.19.1687315909090;
+        Tue, 20 Jun 2023 19:51:49 -0700 (PDT)
+Received: from localhost (193-116-203-37.tpgi.com.au. [193.116.203.37])
+        by smtp.gmail.com with ESMTPSA id q15-20020a170902bd8f00b001a5fccab02dsm2246983pls.177.2023.06.20.19.51.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 19:51:48 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Wed, 21 Jun 2023 12:51:31 +1000
+Message-Id: <CTHZKBJCQRHR.11CFMPICJ8XQP@wheely>
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Yu Zhao" <yuzhao@google.com>
+Cc:     "Andrew Morton" <akpm@linux-foundation.org>,
+        "Paolo Bonzini" <pbonzini@redhat.com>,
+        "Alistair Popple" <apopple@nvidia.com>,
+        "Anup Patel" <anup@brainfault.org>,
+        "Ben Gardon" <bgardon@google.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Chao Peng" <chao.p.peng@linux.intel.com>,
+        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Fabiano Rosas" <farosas@linux.ibm.com>,
+        "Gaosheng Cui" <cuigaosheng1@huawei.com>,
+        "Gavin Shan" <gshan@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        "James Morse" <james.morse@arm.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        "Jason Gunthorpe" <jgg@ziepe.ca>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Marc Zyngier" <maz@kernel.org>,
+        "Masami Hiramatsu" <mhiramat@kernel.org>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Michael Larabel" <michael@michaellarabel.com>,
+        "Mike Rapoport" <rppt@kernel.org>,
+        "Oliver Upton" <oliver.upton@linux.dev>,
+        "Paul Mackerras" <paulus@ozlabs.org>,
+        "Peter Xu" <peterx@redhat.com>,
+        "Sean Christopherson" <seanjc@google.com>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        "Suzuki K Poulose" <suzuki.poulose@arm.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Thomas Huth" <thuth@redhat.com>, "Will Deacon" <will@kernel.org>,
+        "Zenghui Yu" <yuzenghui@huawei.com>, <kvmarm@lists.linux.dev>,
+        <kvm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linuxppc-dev@lists.ozlabs.org>,
+        <linux-trace-kernel@vger.kernel.org>, <x86@kernel.org>,
+        <linux-mm@google.com>
+Subject: Re: [PATCH mm-unstable v2 07/10] kvm/powerpc: add
+ kvm_arch_test_clear_young()
+X-Mailer: aerc 0.14.0
+References: <20230526234435.662652-1-yuzhao@google.com>
+ <20230526234435.662652-8-yuzhao@google.com>
+ <CTHB6A4EL3IH.3UJFAJ4LV85X6@wheely>
+ <CAOUHufaEpyXjr-zPRXRsGdiJV9ZDo2qxA32swcJ30=7Nmyg3vQ@mail.gmail.com>
+In-Reply-To: <CAOUHufaEpyXjr-zPRXRsGdiJV9ZDo2qxA32swcJ30=7Nmyg3vQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,67 +112,235 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ang Tien Sung <tien.sung.ang@intel.com>
+On Wed Jun 21, 2023 at 10:38 AM AEST, Yu Zhao wrote:
+> On Tue, Jun 20, 2023 at 1:48=E2=80=AFAM Nicholas Piggin <npiggin@gmail.co=
+m> wrote:
+> >
+> > On Sat May 27, 2023 at 9:44 AM AEST, Yu Zhao wrote:
+> > > Implement kvm_arch_test_clear_young() to support the fast path in
+> > > mmu_notifier_ops->test_clear_young().
+> > >
+> > > It focuses on a simple case, i.e., radix MMU sets the accessed bit in
+> > > KVM PTEs and VMs are not nested, where it can rely on RCU and
+> > > pte_xchg() to safely clear the accessed bit without taking
+> > > kvm->mmu_lock. Complex cases fall back to the existing slow path
+> > > where kvm->mmu_lock is then taken.
+> > >
+> > > Signed-off-by: Yu Zhao <yuzhao@google.com>
+> > > ---
+> > >  arch/powerpc/include/asm/kvm_host.h    |  8 ++++
+> > >  arch/powerpc/include/asm/kvm_ppc.h     |  1 +
+> > >  arch/powerpc/kvm/book3s.c              |  6 +++
+> > >  arch/powerpc/kvm/book3s.h              |  1 +
+> > >  arch/powerpc/kvm/book3s_64_mmu_radix.c | 59 ++++++++++++++++++++++++=
+++
+> > >  arch/powerpc/kvm/book3s_hv.c           |  5 +++
+> > >  6 files changed, 80 insertions(+)
+> > >
+> > > diff --git a/arch/powerpc/include/asm/kvm_host.h b/arch/powerpc/inclu=
+de/asm/kvm_host.h
+> > > index 14ee0dece853..75c260ea8a9e 100644
+> > > --- a/arch/powerpc/include/asm/kvm_host.h
+> > > +++ b/arch/powerpc/include/asm/kvm_host.h
+> > > @@ -883,4 +883,12 @@ static inline void kvm_arch_sched_in(struct kvm_=
+vcpu *vcpu, int cpu) {}
+> > >  static inline void kvm_arch_vcpu_blocking(struct kvm_vcpu *vcpu) {}
+> > >  static inline void kvm_arch_vcpu_unblocking(struct kvm_vcpu *vcpu) {=
+}
+> > >
+> > > +#define kvm_arch_has_test_clear_young kvm_arch_has_test_clear_young
+> > > +static inline bool kvm_arch_has_test_clear_young(void)
+> > > +{
+> > > +     return IS_ENABLED(CONFIG_KVM_BOOK3S_HV_POSSIBLE) &&
+> > > +            cpu_has_feature(CPU_FTR_HVMODE) && cpu_has_feature(CPU_F=
+TR_ARCH_300) &&
+> > > +            radix_enabled();
+> >
+> > This could probably be radix_enabled() && !kvmhv_on_pseries().
+>
+> Will do. (I used !kvmhv_on_pseries() in v1 but had second thoughts on
+> moving kvmhv_on_pseries() into this file.)
 
-Fix the incorrect usage of platform_set_drvdata and dev_set_drvdata.
-They both are of the same data and overrides each other. This resulted
-in the rmmod of the svc driver to fail and throw a kernel panic
-for kthread_stop and fifo free.
+That should be okay. kvmhv_on_pseries is a property of the host so it
+seems reasonable to move it here if needed.
 
-Fixes: b5dc75c915cd ("firmware: stratix10-svc: extend svc to support new RSU features")
+> > Although unclear why not nested hypervisor... I'd have to think about i=
+t a bit
+> > more. Do you have any idea what might go wrong, or just didn't have the
+> > time to consider it? (Not just powerpc nested but any others).
+>
+> Yes, this series excludes nested KVM support on all architures. The
+> common reason for such a decision on powerpc and x86 (aarch64 doesn't
+> support nested yet) is that it's quite challenging to make the rmap, a
+> complex data structure that maps one PFN to multiple GFNs, lockless.
+> (See kvmhv_insert_nest_rmap().) It might be possible, however, the
+> potential ROI would be in question.
 
-Signed-off-by: Ang Tien Sung <tien.sung.ang@intel.com>
----
- drivers/firmware/stratix10-svc.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+Okay just wondering. rmap (at least the powerpc one) is just a list
+I think, with a few details. If that is all it is, it might not be
+so hard to make that lock-free or a fine-grained lock on the rmap
+chains maybe. But fine to ignore it to start with.
 
-diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix10-svc.c
-index ca713f39107e..60e08987c402 100644
---- a/drivers/firmware/stratix10-svc.c
-+++ b/drivers/firmware/stratix10-svc.c
-@@ -130,6 +130,7 @@ struct stratix10_svc_data {
-  * @complete_status: state for completion
-  * @invoke_fn: function to issue secure monitor call or hypervisor call
-  * @sdm_lock: a mutex lock to allow only one pending sdm message per client
-+ * @svc: manages the list of client svc drivers
-  *
-  * This struct is used to create communication channels for service clients, to
-  * handle secure monitor or hypervisor call.
-@@ -144,6 +145,7 @@ struct stratix10_svc_controller {
- 	svc_invoke_fn *invoke_fn;
- 	/* Enforces atomic command sending to SDM */
- 	struct mutex *sdm_lock;
-+	struct stratix10_svc *svc;
- };
- 
- /**
-@@ -1252,6 +1254,7 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
- 		ret = -ENOMEM;
- 		goto err_free_kfifo;
- 	}
-+	controller->svc = svc;
- 
- 	svc->stratix10_svc_rsu = platform_device_alloc(STRATIX10_RSU, 0);
- 	if (!svc->stratix10_svc_rsu) {
-@@ -1279,8 +1282,6 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
- 		goto err_unregister_dev;
- 	}
- 
--	dev_set_drvdata(dev, svc);
--
- 	pr_info("Intel Service Layer Driver Initialized\n");
- 
- 	return 0;
-@@ -1296,8 +1297,8 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
- 
- static int stratix10_svc_drv_remove(struct platform_device *pdev)
- {
--	struct stratix10_svc *svc = dev_get_drvdata(&pdev->dev);
- 	struct stratix10_svc_controller *ctrl = platform_get_drvdata(pdev);
-+	struct stratix10_svc *svc = ctrl->svc;
- 
- 	platform_device_unregister(svc->intel_svc_fcs);
- 	platform_device_unregister(svc->stratix10_svc_rsu);
--- 
-2.25.1
+> > > +}
+> > > +
+> > >  #endif /* __POWERPC_KVM_HOST_H__ */
+> > > diff --git a/arch/powerpc/include/asm/kvm_ppc.h b/arch/powerpc/includ=
+e/asm/kvm_ppc.h
+> > > index 79a9c0bb8bba..ff1af6a7b44f 100644
+> > > --- a/arch/powerpc/include/asm/kvm_ppc.h
+> > > +++ b/arch/powerpc/include/asm/kvm_ppc.h
+> > > @@ -287,6 +287,7 @@ struct kvmppc_ops {
+> > >       bool (*unmap_gfn_range)(struct kvm *kvm, struct kvm_gfn_range *=
+range);
+> > >       bool (*age_gfn)(struct kvm *kvm, struct kvm_gfn_range *range);
+> > >       bool (*test_age_gfn)(struct kvm *kvm, struct kvm_gfn_range *ran=
+ge);
+> > > +     bool (*test_clear_young)(struct kvm *kvm, struct kvm_gfn_range =
+*range);
+> > >       bool (*set_spte_gfn)(struct kvm *kvm, struct kvm_gfn_range *ran=
+ge);
+> > >       void (*free_memslot)(struct kvm_memory_slot *slot);
+> > >       int (*init_vm)(struct kvm *kvm);
+> > > diff --git a/arch/powerpc/kvm/book3s.c b/arch/powerpc/kvm/book3s.c
+> > > index 686d8d9eda3e..37bf40b0c4ff 100644
+> > > --- a/arch/powerpc/kvm/book3s.c
+> > > +++ b/arch/powerpc/kvm/book3s.c
+> > > @@ -899,6 +899,12 @@ bool kvm_test_age_gfn(struct kvm *kvm, struct kv=
+m_gfn_range *range)
+> > >       return kvm->arch.kvm_ops->test_age_gfn(kvm, range);
+> > >  }
+> > >
+> > > +bool kvm_arch_test_clear_young(struct kvm *kvm, struct kvm_gfn_range=
+ *range)
+> > > +{
+> > > +     return !kvm->arch.kvm_ops->test_clear_young ||
+> > > +            kvm->arch.kvm_ops->test_clear_young(kvm, range);
+> > > +}
+> > > +
+> > >  bool kvm_set_spte_gfn(struct kvm *kvm, struct kvm_gfn_range *range)
+> > >  {
+> > >       return kvm->arch.kvm_ops->set_spte_gfn(kvm, range);
+> > > diff --git a/arch/powerpc/kvm/book3s.h b/arch/powerpc/kvm/book3s.h
+> > > index 58391b4b32ed..fa2659e21ccc 100644
+> > > --- a/arch/powerpc/kvm/book3s.h
+> > > +++ b/arch/powerpc/kvm/book3s.h
+> > > @@ -12,6 +12,7 @@ extern void kvmppc_core_flush_memslot_hv(struct kvm=
+ *kvm,
+> > >  extern bool kvm_unmap_gfn_range_hv(struct kvm *kvm, struct kvm_gfn_r=
+ange *range);
+> > >  extern bool kvm_age_gfn_hv(struct kvm *kvm, struct kvm_gfn_range *ra=
+nge);
+> > >  extern bool kvm_test_age_gfn_hv(struct kvm *kvm, struct kvm_gfn_rang=
+e *range);
+> > > +extern bool kvm_test_clear_young_hv(struct kvm *kvm, struct kvm_gfn_=
+range *range);
+> > >  extern bool kvm_set_spte_gfn_hv(struct kvm *kvm, struct kvm_gfn_rang=
+e *range);
+> > >
+> > >  extern int kvmppc_mmu_init_pr(struct kvm_vcpu *vcpu);
+> > > diff --git a/arch/powerpc/kvm/book3s_64_mmu_radix.c b/arch/powerpc/kv=
+m/book3s_64_mmu_radix.c
+> > > index 3b65b3b11041..0a392e9a100a 100644
+> > > --- a/arch/powerpc/kvm/book3s_64_mmu_radix.c
+> > > +++ b/arch/powerpc/kvm/book3s_64_mmu_radix.c
+> > > @@ -1088,6 +1088,65 @@ bool kvm_test_age_radix(struct kvm *kvm, struc=
+t kvm_memory_slot *memslot,
+> > >       return ref;
+> > >  }
+> > >
+> > > +bool kvm_test_clear_young_hv(struct kvm *kvm, struct kvm_gfn_range *=
+range)
+> > > +{
+> > > +     bool err;
+> > > +     gfn_t gfn =3D range->start;
+> > > +
+> > > +     rcu_read_lock();
+> > > +
+> > > +     err =3D !kvm_is_radix(kvm);
+> > > +     if (err)
+> > > +             goto unlock;
+> > > +
+> > > +     /*
+> > > +      * Case 1:  This function          kvmppc_switch_mmu_to_hpt()
+> > > +      *
+> > > +      *          rcu_read_lock()
+> > > +      *          Test kvm_is_radix()    kvm->arch.radix =3D 0
+> > > +      *          Use kvm->arch.pgtable  synchronize_rcu()
+> > > +      *          rcu_read_unlock()
+> > > +      *                                 kvmppc_free_radix()
+> > > +      *
+> > > +      *
+> > > +      * Case 2:  This function          kvmppc_switch_mmu_to_radix()
+> > > +      *
+> > > +      *                                 kvmppc_init_vm_radix()
+> > > +      *                                 smp_wmb()
+> > > +      *          Test kvm_is_radix()    kvm->arch.radix =3D 1
+> > > +      *          smp_rmb()
+> > > +      *          Use kvm->arch.pgtable
+> > > +      */
+> > > +     smp_rmb();
+> >
+> > Comment could stand to expand slightly on what you are solving, in
+> > words.
+>
+> Will do.
+>
+> > If you use synchronize_rcu() on both sides, you wouldn't need the
+> > barrier, right?
+>
+> Case 2 is about memory ordering, which is orthogonal to case 1 (RCU
+> freeing). So we need the r/w barrier regardless.
 
+RCU can take care of memory ordering too though. If you had
+synchronize_rcu() where smp_wmb() is, then no smp_rmb() neeed here.
+
+>
+> > > +     while (gfn < range->end) {
+> > > +             pte_t *ptep;
+> > > +             pte_t old, new;
+> > > +             unsigned int shift;
+> > > +
+> > > +             ptep =3D find_kvm_secondary_pte_unlocked(kvm, gfn * PAG=
+E_SIZE, &shift);
+> > > +             if (!ptep)
+> > > +                     goto next;
+> > > +
+> > > +             VM_WARN_ON_ONCE(!page_count(virt_to_page(ptep)));
+> >
+> > Not really appropriate at the KVM level. mm enforces this kind of
+> > thing (with notifiers).
+>
+> Will remove this.
+>
+> > > +
+> > > +             old =3D READ_ONCE(*ptep);
+> > > +             if (!pte_present(old) || !pte_young(old))
+> > > +                     goto next;
+> > > +
+> > > +             new =3D pte_mkold(old);
+> > > +
+> > > +             if (kvm_should_clear_young(range, gfn))
+> > > +                     pte_xchg(ptep, old, new);
+> >
+> > *Probably* will work. I can't think of a reason why not at the
+> > moment anyway :)
+>
+> My reasoning:
+> * It should work if we only change the dedicated A bit, i.e., not
+> shared for other purposes, because races are safe (the case here).
+> * It may not work for x86 EPT without the A bit (excluded in this
+> series) where accesses are trapped by the R/X bits, because races in
+> changing the R/X bits can be unsafe.
+
+(For the benefit of others reading, it works because powerpc's pte_xchg
+is actually a cmpxchg, for some reason which we really should fix).
+Although it can fail to clear the bit if the cmpxchg fails.
+
+I think pte_xchg is only used on with hash MMU in Linux before this
+change. I think we may want to keep it that way and use something
+like kvmppc_radix_update_pte() here to clear out the bit. But don't
+worry too much about fine details so much before sorting out the
+core changes I will have a better look after that.
+
+Thanks,
+Nick
