@@ -2,143 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B8A73932F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 01:43:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D0B739333
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 01:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229874AbjFUXnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 19:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
+        id S229818AbjFUXrC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 19:47:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjFUXnK (ORCPT
+        with ESMTP id S229504AbjFUXrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 19:43:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6571730
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 16:43:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE83161708
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 23:43:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D870AC433CA;
-        Wed, 21 Jun 2023 23:43:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687390988;
-        bh=RoMKsAIPNmQwi8XbSHui64FM9FxWSSvleopyh2AgkRM=;
-        h=In-Reply-To:References:Date:From:To:Subject:From;
-        b=RKi6Ips4YOcbYcSL+N6hHAUWYJR6dKGoSb6XrgLAZZHGkQjJfQf1VPwVQfWN2Zg9p
-         sWkKS9KCXft23kpaZG7HVrPM+0h3zRkveO6j1IzFPaKT85rVRTI7pubtWOYDlL5nAA
-         2m+ylJBz1/dsFJEX3z+ZutLurK9Ai+osB9x1HXGq8RKBoHdIKj7yZJVWA+GxKlwpiB
-         7GUwY1cdaJHgnP7scmNfiQzG5gAcV0pWiYAISwTH2XUn119UYQyrzIf8iGNskrlDop
-         HojHFlz6lTvhrChkXd974yn9s1DvlZaln/siwyBn0UgeweX/ZoVo7xzIGzTSQy4+GL
-         s1RFJL5M0051A==
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id B90EA27C0054;
-        Wed, 21 Jun 2023 19:43:06 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute3.internal (MEProxy); Wed, 21 Jun 2023 19:43:06 -0400
-X-ME-Sender: <xms:CYuTZFAa6hQW_d42ApNMnsOzzM229EWsvjyeO6Yhq9Dsm6tKPId0AQ>
-    <xme:CYuTZDgwByWAovgL8gv2kxdOB1mFofssm-NxewxM3JiORDuF2Y50AWHhm3vC75JzJ
-    p50rGRcljbKGi_eux8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeegtddgvdduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgfgsehtqhertderreejnecuhfhrohhmpedftehn
-    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepvdelheejjeevhfdutdeggefftdejtdffgeevteehvdfgjeeiveei
-    ueefveeuvdetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
-    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
-    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
-    igrdhluhhtohdruhhs
-X-ME-Proxy: <xmx:CYuTZAkwYjTbT-0I6lmCvRq-yKXaUGs9x3_-SeWI2wOv0N2ZnfiEsQ>
-    <xmx:CYuTZPz1JeAs_Wg7NKoa1mLqaJNSv3vANaW33SnEVZVSOe_OYqjgAA>
-    <xmx:CYuTZKTovROWPa5HA8sZdk3gI_rWibusyDJTjM6YmhAF9lgRUAGRjA>
-    <xmx:CouTZL-N1Ehe5PoxPWGKkMpxrzfjKCQY0Qjqe1HGaQdVTOP0iaoiLg>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id B529031A0063; Wed, 21 Jun 2023 19:43:05 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <0ff85b95-f4c7-445c-b0e0-7368c182ee0b@app.fastmail.com>
-In-Reply-To: <333138f8-9fbe-be5b-d125-12c9d3ed3eda@citrix.com>
-References: <20230621151442.2152425-1-per.bilse@citrix.com>
- <7fbad052-4c4a-4a49-913d-ea836c180dc2@app.fastmail.com>
- <333138f8-9fbe-be5b-d125-12c9d3ed3eda@citrix.com>
-Date:   Wed, 21 Jun 2023 16:42:44 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Per Bilse" <Per.Bilse@citrix.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Juergen Gross" <jgross@suse.com>,
-        "Stefano Stabellini" <sstabellini@kernel.org>,
-        "Oleksandr Tyshchenko" <oleksandr_tyshchenko@epam.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "moderated list:XEN HYPERVISOR INTERFACE" 
-        <xen-devel@lists.xenproject.org>
-Subject: Re: [PATCH] Updates to Xen hypercall preemption
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 21 Jun 2023 19:47:00 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA1610C1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 16:46:58 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2b45c289615so87437031fa.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 16:46:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687391217; x=1689983217;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oOiwUqZP4/ZBUQay2OmmnkqAiOONYUDUlPRVo/SLkM4=;
+        b=DFnJQlCH2I3JkVfWuCzr5CSiQPKUQSAov76XceCVfvZrVHk9tYVmkpYAwW0JqmNZxC
+         sY0hLfW04E0X/QSJqyn5XYpRHA4yQw/xVn3UvzZQ4yc51fQD3l5GvRd9JHhGuvZlFgx7
+         28/ob8g/w3LkLdEF02Hwpvw4lSGF3JNOtWcv74SJFKPsEzpJXOmfPX09PfM9Cl8glLUs
+         0Z2GlbWHfvo1Axd1SO5WCO1fOFMuzaRBhhjUmnuUs4VXV6bqNyjuT9Uq+1FOhz90Sc+k
+         p6N8D8ip/OGRWJT/cbWmSuI2TWl+ENdoN6AwkABz4JYRhS9E9wOfJbF+aIbSpYIXdHhl
+         sU9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687391217; x=1689983217;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oOiwUqZP4/ZBUQay2OmmnkqAiOONYUDUlPRVo/SLkM4=;
+        b=Udt7CbtWI3YjIrpWDgfgTK/8anXVPqvX+PcUt+pT94oWRXmd3Zru5TCjMV8Yic3hz2
+         YC/1gMbJpd/1R0ImQHjuEMLE0mm/KXpZDk5Z6ahhCbb/idIEPAoghbtMir5Gzpu5ULOl
+         qc7jlxi/YjgMBPMEDuJ6+nHIIIF/2t4PYZnAiZcAd4JQWpZQ+OsDUh9PUvEpScguxbv2
+         ZL8Dve0XxGFdmNZhsTeUygRorPHOLRSF1CvhuCcNlyxNN/F+pUtAiCYKC5gyGAUgk06N
+         tFOiXv78u/IMk5LyCBzIgtkaKaSa1bBrkhjctdOFEeO167uBvOpZIZanp00toEspAgi7
+         OkNQ==
+X-Gm-Message-State: AC+VfDz0hJTjifQjlJrGCVen7EhtqMGik1mQB9CcNSraI5i0KSF8K4AU
+        yYqFr9WA8mSdjX/EdV25jjwpFQ==
+X-Google-Smtp-Source: ACHHUZ59SEFD1bzDgMCtit9uF6IrHCQYYtidCfeaP2JiLSZdyfmuw85CumHY+HwWPTvbgmF6Ihb5RQ==
+X-Received: by 2002:a2e:998c:0:b0:2b1:a3ce:b709 with SMTP id w12-20020a2e998c000000b002b1a3ceb709mr11935997lji.39.1687391217167;
+        Wed, 21 Jun 2023 16:46:57 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id y2-20020a2e7d02000000b002b4750c4db0sm1075944ljc.49.2023.06.21.16.46.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jun 2023 16:46:56 -0700 (PDT)
+Message-ID: <b119470d-f656-71d1-8b87-b4b8196f5220@linaro.org>
+Date:   Thu, 22 Jun 2023 02:46:55 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/3] drm/msm/dpu: Set DATABUS_WIDEN on command mode
+ encoders
+Content-Language: en-GB
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>
+Cc:     Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
+ <20230525-add-widebus-support-v1-2-c7069f2efca1@quicinc.com>
+ <c74c9e0e-d059-f0e3-4350-03089c37131a@linaro.org>
+ <cce68370-3fd9-4c9a-258e-af0d5d057fda@quicinc.com>
+ <n2c5qlujxhbbj2aqlgj7fetzoteood5h4hmbwt4mapi77xlvmt@bpourzaideti>
+ <81a5e241-ec82-7414-8752-4ce3cb084959@linaro.org>
+ <f14f2c31-38c2-0600-3a29-17e83afececf@quicinc.com>
+ <26tvhvqpxtxz5tqc6jbjixadpae34k7uc7fyec2u5o2ccj4tdq@tjvguzlolc3g>
+ <8dcd643f-9644-a4e7-a0d5-eefa28084a88@linaro.org>
+ <7d5256cd-c0bd-36e3-9b59-63ad8595f0ce@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <7d5256cd-c0bd-36e3-9b59-63ad8595f0ce@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 22/06/2023 02:01, Abhinav Kumar wrote:
+> 
+> 
+> On 6/21/2023 9:36 AM, Dmitry Baryshkov wrote:
+>> On 21/06/2023 18:17, Marijn Suijten wrote:
+>>> On 2023-06-20 14:38:34, Jessica Zhang wrote:
+>>> <snip>
+>>>>>>>>> +    if (phys_enc->hw_intf->ops.enable_widebus)
+>>>>>>>>> +        phys_enc->hw_intf->ops.enable_widebus(phys_enc->hw_intf);
+>>>>>>>>
+>>>>>>>> No. Please provide a single function which takes necessary
+>>>>>>>> configuration, including compression and wide_bus_enable.
+>>>>>>>>
+>>>>>>>
+>>>>>>> There are two ways to look at this. Your point is coming from the
+>>>>>>> perspective that its programming the same register but just a 
+>>>>>>> different
+>>>>>>> bit. But that will also make it a bit confusing.
+>>>>>
+>>>>> My point is to have a high-level function that configures the INTF for
+>>>>> the CMD mode. This way it can take a structure with necessary
+>>>>> configuration bits.
+>>>>
+>>>> Hi Dmitry,
+>>>>
+>>>> After discussing this approach with Abhinav, we still have a few
+>>>> questions about it:
+>>>>
+>>>> Currently, only 3 of the 32 bits for INTF_CONFIG2 are being used (the
+>>>> rest are reserved with no plans of being programmed in the future). 
+>>>> Does
+>>>> this still justify the use of a struct to pass in the necessary
+>>>> configuration?
+>>>
+>>> No.  The point Dmitry is making is **not** about this concidentally
+>>> using the same register, but about adding a common codepath to enable
+>>> compression on this hw_intf (regardless of the registers it needs to
+>>> touch).
+>>
+>> Actually to setup INTF for CMD stream (which is equal to setting up 
+>> compression at this point).
+>>
+> 
+> Yes it should be setup intf for cmd and not enable compression.
+> 
+> Widebus and compression are different features and we should be able to 
+> control them independently.
+> 
+> We just enable them together for DSI. So a separation is necessary.
+> 
+> But I am still not totally convinced we even need to go down the path 
+> for having an op called setup_intf_cmd() which takes in a struct like
+> 
+> struct dpu_cmd_intf_cfg {
+>      bool data_compress;
+>      bool widebus_en;
+> };
+> 
+> As we have agreed that we will not touch the video mode timing engine 
+> path, it leaves us with only two bits.
+> 
+> And like I said, its not that these two bits always go together. We want 
+> to be able to control them independently which means that its not 
+> necessary both bits program the same register one by one. We might just 
+> end up programming one of them if we just use widebus.
+> 
+> Thats why I am still leaning on keeping this approach.
 
+I do not like the idea of having small functions being called between 
+modules. So, yes there will a config of two booleans, but it is 
+preferable (and more scalable) compared to separate callbacks.
 
-On Wed, Jun 21, 2023, at 12:05 PM, Per Bilse wrote:
-> On 6/21/2023 5:27 PM, Andy Lutomirski wrote:
->> This code is a horrible mess, with and without your patches.  I think=
- that, if this were new, there's no way it would make it in to the kerne=
-l.
->
-> Hi Andy, and many thanks for your frank assessments.  Generally, this
-> is indeed somewhat old code, first introduced in 2015 by way of commit
-> fdfd811ddde3.  There's more information in the notes to that, and it's
-> maybe worth noting that we're not trying to introduce anything new,
-> merely fix what various commits since then have broken.
->
->> I propose one of two rather radical changes:
->>=20
->> 1. (preferred) Just delete all of it and make support for dom0 requir=
-e either full or dynamic preempt, and make a dynamic preempt kernel boot=
-ing as dom0 run as full preempt.
->
-> Personally I think that's a good idea; a machine so limited in resourc=
-es
-> that a fully preemptible dom0 kernel would be a problem wouldn't work =
-as
-> a Xen server anyway.  Having said that, what to do about this isn't
-> really in my hands; the issues came to light because the kernel for
-> Citrix's XenServer product is being upgraded, and it was considered in
-> everybody's interest to upstream the fixes.  I'll see what I can do.
+Not to mention that it allows us to program required registers directly 
+(by setting values) rather than using RMW cycles and thus depending on 
+the value being previously programmed to these registers.
 
-This isn=E2=80=99t actually a resource thing. It=E2=80=99s a distro thin=
-g.
+> 
+>>>  Similar to how dpu_hw_intf_setup_timing_engine() programs the
+>>> hw_intf - including widebus! - for video-mode.
+>>>
+>>> Or even more generically, have a struct similar to intf_timing_params
+>>> that says how the intf needs to be configured - without the caller
+>>> knowing about INTF_CONFIG2.
+>>>
+>>> struct dpu_hw_intf_cfg is a very good example of how we can use a single
+>>> struct and a single callback to configure multiple registers at once
+>>> based on some input parameters.
+>>>
+>>>> In addition, it seems that video mode does all its INTF_CONFIG2
+>>>> configuration separately in dpu_hw_intf_setup_timing_engine(). If we
+>>>> have a generic set_intf_config2() op, it might be good to have it as
+>>>> part of a larger cleanup where we have both video and command mode use
+>>>> the generic op. What are your thoughts on this?
+>>>
+>>> Not in that way, but if there is a generic enable_compression() or
+>>> configure_compression() callback (or even more generic, similar to
+>>> setup_intf_cfg in dpu_hw_ctl) that would work for both video-mode and
+>>> command-mode, maybe that is beneficial.
+>>
+>> I'd rather not do this. Let's just 'setup timing enging' vs 'setup 
+>> CMD'. For example, it might also include setting up other INTF 
+>> parameters for CMD mode (if anything is required later on).
+>>
+> 
+> Agreed on setup CMD but I dont know whether we need a setup CMD at all.
+> Seems like an overkill.
+> 
+>>>
+>>> - Marijn
+>>
 
-Historically, full preempt was a config option only, and distros, for wh=
-atever reason, often shipped kernels with full preempt disabled.  (There=
- we probably decent reasons. There may still be decent reasons.). And Xe=
-n needed to work on these kernels.  Hence the mess.
+-- 
+With best wishes
+Dmitry
 
-But Linux recently gained the ability to build a kernel that, by default=
-, is not full preempt but can be switched *at boot or runtime* to full p=
-reempt. And distros should ship *that* (or a kernel that does have full =
-preempt by default).
-
-So let=E2=80=99s just make Xen PV dom0 depend on this. It wasn=E2=80=99t=
- an option a couple years ago. Now it is.
-
->
-> Best,
->
->    -- Per
