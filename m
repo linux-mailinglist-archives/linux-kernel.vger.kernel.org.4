@@ -2,131 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4108C738D07
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B37738D0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbjFURZh convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 13:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
+        id S231129AbjFUR0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 13:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbjFURZg (ORCPT
+        with ESMTP id S229448AbjFUR0e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 13:25:36 -0400
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C247BE2;
-        Wed, 21 Jun 2023 10:25:35 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-bc476bf5239so6185688276.2;
-        Wed, 21 Jun 2023 10:25:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687368335; x=1689960335;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wHngUWEw5u2Fdtltkm2omRysHcLxgGd8tyhOPSzH7GI=;
-        b=TLtfrodA02NeRi7DRsIqtdOhr7e6s2gQ1DI2X334tQDQkmqvmzWzaXR0xurjqf8OlC
-         cy0o376GeGwFrD7hHzRX3L2XhkwU34CDOLvteOl/Qodlyj1NEbVM9j9WDP9vapeUlqaW
-         Osgd0q2w1mUCbIMrrL3TCnM62WnWn17IuwzGgXwKQvLg9LpadBxTB5rtfNMr0KewOyqt
-         Dwgg/iCpIxxNdWnYphPpZQ8mbP5uIqGcM5w17s0DJ8yhWRHplZyJg4jINB/QSW7HepBF
-         jWmoujz59hYawT3Gbz+ZRCR36uSimXAkJop0Nys/pJV/VfJDUbCm3uTFNDn9V1KP7UZv
-         lOog==
-X-Gm-Message-State: AC+VfDypWWnuOksgjrty+wFzCL0OnIn9btjkUYXp4V0nRhlV22ahuuqX
-        X8TjVPfjhoIA2H9AcV7WrOdYANaU6nEDTLI5jk8=
-X-Google-Smtp-Source: ACHHUZ42gBnZwcJ2JB3Hatg/ioXumzAd1h5q54bfVQRzjfSHFUV+wbxLhGDpZEIIYsBThRgg4IN/loC3ZSipCGu8QN8=
-X-Received: by 2002:a5b:906:0:b0:ba7:54ab:d676 with SMTP id
- a6-20020a5b0906000000b00ba754abd676mr12497981ybq.63.1687368334881; Wed, 21
- Jun 2023 10:25:34 -0700 (PDT)
+        Wed, 21 Jun 2023 13:26:34 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EA65E2;
+        Wed, 21 Jun 2023 10:26:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=NF4zBEcDJi5tK0sppmgQglo0yCtgkMekDJXsqP9rEWE=; b=Bj
+        wtzUPDYzEuK/cPE63zmLaBg+84ZmbmNgB6BNQFl+zDi7yR3PBotkqT5cO0Rw4Zs01JumJhGvsda8M
+        hfsFwp2aUhIyOyM/tKJcRB1AH20PAn3ZFxI0O58LMFr0UKnetCw5PNAO7I7RWUWS48DtfqURQaQji
+        ngzUFUlEIePNV/o=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1qC1ar-00HAax-FK; Wed, 21 Jun 2023 19:26:09 +0200
+Date:   Wed, 21 Jun 2023 19:26:09 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        Evan Quan <evan.quan@amd.com>, rafael@kernel.org,
+        lenb@kernel.org, alexander.deucher@amd.com,
+        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
+        daniel@ffwll.ch, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, mdaenzer@redhat.com,
+        maarten.lankhorst@linux.intel.com, tzimmermann@suse.de,
+        hdegoede@redhat.com, jingyuwang_vip@163.com, lijo.lazar@amd.com,
+        jim.cromie@gmail.com, bellosilicio@gmail.com,
+        andrealmeid@igalia.com, trix@redhat.com, jsg@jsg.id.au,
+        arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH V4 1/8] drivers/acpi: Add support for Wifi band RF
+ mitigations
+Message-ID: <9159c3a5-390f-4403-854d-9b5e87b58d8c@lunn.ch>
+References: <20230621054603.1262299-1-evan.quan@amd.com>
+ <20230621054603.1262299-2-evan.quan@amd.com>
+ <3a7c8ffa-de43-4795-ae76-5cd9b00c52b5@lunn.ch>
+ <216f3c5aa1299100a0009ddf4e95b019855a32be.camel@sipsolutions.net>
+ <b1abec47-04df-4481-d680-43c5ff3cbb48@amd.com>
+ <36902dda-9e51-41b3-b5fc-c641edf6f1fb@lunn.ch>
+ <33d80292-e639-91d0-4d0f-3ed973f89e14@amd.com>
 MIME-Version: 1.0
-References: <20230616024515.80814-1-yangjihong1@huawei.com> <CAM9d7chJtidBnLYd27Us6aW5tJKbi_n_kHj=6SRUTbTiowwi5w@mail.gmail.com>
-In-Reply-To: <CAM9d7chJtidBnLYd27Us6aW5tJKbi_n_kHj=6SRUTbTiowwi5w@mail.gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 21 Jun 2023 10:25:23 -0700
-Message-ID: <CAM9d7cit095kueUKgo+bq7hakam3DoTOs7sB5SGKXMEpiRViDg@mail.gmail.com>
-Subject: Re: [PATCH] perf parse: Add missing newline to pr_debug message in evsel__compute_group_pmu_name()
-To:     Yang Jihong <yangjihong1@huawei.com>
-Cc:     peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, irogers@google.com, adrian.hunter@intel.com,
-        kan.liang@linux.intel.com, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <33d80292-e639-91d0-4d0f-3ed973f89e14@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 1:32â€¯PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> Hello,
->
-> On Thu, Jun 15, 2023 at 7:47â€¯PM Yang Jihong <yangjihong1@huawei.com> wrote:
-> >
-> > The newline is missing for pr_debug message in
-> > evsel__compute_group_pmu_name(), fix it.
-> >
-> > Before:
-> >
-> >   # perf --debug verbose=2 record -e cpu-clock true
-> >   <SNIP>
-> >   No PMU found for 'cycles:u'No PMU found for 'instructions:u'------------------------------------------------------------
-> >   perf_event_attr:
-> >     type                             1
-> >     size                             136
-> >     { sample_period, sample_freq }   4000
-> >     sample_type                      IP|TID|TIME|PERIOD
-> >     read_format                      ID|LOST
-> >     disabled                         1
-> >     inherit                          1
-> >     mmap                             1
-> >     comm                             1
-> >     freq                             1
-> >     enable_on_exec                   1
-> >     task                             1
-> >     sample_id_all                    1
-> >     exclude_guest                    1
-> >     mmap2                            1
-> >     comm_exec                        1
-> >     ksymbol                          1
-> >     bpf_event                        1
-> >   ------------------------------------------------------------
-> >   <SNIP>
-> >
-> > After:
-> >
-> >   # perf --debug verbose=2 record -e cpu-clock true
-> >   <SNIP>
-> >   No PMU found for 'cycles:u'
-> >   No PMU found for 'instructions:u'
-> >   ------------------------------------------------------------
-> >   perf_event_attr:
-> >     type                             1
-> >     size                             136
-> >     { sample_period, sample_freq }   4000
-> >     sample_type                      IP|TID|TIME|PERIOD
-> >     read_format                      ID|LOST
-> >     disabled                         1
-> >     inherit                          1
-> >     mmap                             1
-> >     comm                             1
-> >     freq                             1
-> >     enable_on_exec                   1
-> >     task                             1
-> >     sample_id_all                    1
-> >     exclude_guest                    1
-> >     mmap2                            1
-> >     comm_exec                        1
-> >     ksymbol                          1
-> >     bpf_event                        1
-> >   ------------------------------------------------------------
-> >   <SNIP>
-> >
-> > Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
->
-> Acked-by: Namhyung Kim <namhyung@kernel.org>
+> I think what you're asking for is another layer of indirection
+> like CONFIG_WBRF in addition to CONFIG_ACPI_WBRF.
+> 
+> Producers would call functions like wbrf_supported_producer()
+> where the source file is not guarded behind CONFIG_ACPI_WBRF,
+> but instead by CONFIG_WBRF and locally use CONFIG_ACPI_WBRF within
+> it.  So a producer could look like this:
+> 
+> bool wbrf_supported_producer(struct device *dev)
+> {
+> #ifdef CONFIG_ACPI_WBRF
+>     struct acpi_device *adev = ACPI_COMPANION(dev);
+> 
+>     if (adev)
+>         return check_acpi_wbrf(adev->handle,
+>                        WBRF_REVISION,
+>                        1ULL << WBRF_RECORD);
+> #endif
+>     return -ENODEV;
+> 
+> }
+> EXPORT_SYMBOL_GPL(wbrf_supported_producer);
+> 
+> And then adding/removing could look something like this
+> 
+> int wbrf_add_exclusion(struct device *dev,
+>                struct wbrf_ranges_in *in)
+> {
+> #ifdef CONFIG_ACPI_WBRF
+>     struct acpi_device *adev = ACPI_COMPANION(dev);
+> 
+>     if (adev)
+>         return wbrf_record(adev, WBRF_RECORD_ADD, in);
+> #endif
+>     return -ENODEV;
+> }
+> EXPORT_SYMBOL_GPL(wbrf_add_exclusion);
+> 
+> int wbrf_remove_exclusion(struct device *dev,
+>                struct wbrf_ranges_in *in)
+> {
+> #ifdef CONFIG_ACPI_WBRF
+>     struct acpi_device *adev = ACPI_COMPANION(dev);
+> 
+>     if (adev)
+>         return wbrf_record(adev, WBRF_RECORD_REMOVE, in);
+> #endif
+>     return -ENODEV;
+> }
+> EXPORT_SYMBOL_GPL(wbrf_remove_exclusion);
 
-Applied to perf-tools-next, thanks!
+Yes, this looks a lot better.
+
+But what about notifications?
+
+    Andrew
