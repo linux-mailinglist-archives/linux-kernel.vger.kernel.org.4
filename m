@@ -2,96 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 253147390EE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 22:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6CC7390F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 22:42:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjFUUm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 16:42:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57480 "EHLO
+        id S230090AbjFUUmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 16:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjFUUmY (ORCPT
+        with ESMTP id S229521AbjFUUmx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 16:42:24 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B377110EC;
-        Wed, 21 Jun 2023 13:42:23 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-777a6ebb542so261013939f.0;
-        Wed, 21 Jun 2023 13:42:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687380143; x=1689972143;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=efNPwXii9p40aEa8rDVFFS1wZk6ktbvmOO6XguzWEk8=;
-        b=DeEC7sohDKZ9WK1hcV069v/RrKf2OYtk4yfm9LUKkOHgANu2oXKTruOpn63bjz7Q00
-         Rk3blTvq+RMsoJPzTG4zlVbWhm+8YOxVCuhSrA5Or82BE5oVnjnmd1xZdJVHsa7GA8t7
-         /pS6bsBroCBBVQW6m1q7B0ex5DB/6rg18UhAXCRVI+4GCe31PJD8GGSK9Cx2MHbqZK6U
-         H6OSOvUB1kH3m1iZc0be1q2EO4rxGDGGydfX/1u+KOx+C2GQe0QRA+uJzAo67smH96kJ
-         ZZGZ/shnstWohFx9RAOhKZDAsZY7mQGJJxHOqbKb/qyz0l4Uk5rIfbRqhHO4Zl4dNeIg
-         2+Wg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687380143; x=1689972143;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=efNPwXii9p40aEa8rDVFFS1wZk6ktbvmOO6XguzWEk8=;
-        b=KBuI1IWdEcAzlPSGxkWvure1lE5iNa+r7hmrSBSVkZc0CkP3CbkTLafB/vAMhJ0n3r
-         xB8LmvB3eO/cNlEX/EWkUg0LtgBAmNh9BtCx3knxqkS91YrwxZpORYClVz1IQ284qf8E
-         tJgpqxfOhDO+aQmbbO9jJeE1YBoFWSxH/1EToC2GJPcZqTjh1aHM4GmRIP0QiKrR1Z54
-         xCw//CxO++h3VkOj5gqyWAM7h/EZFFMGmDHu+mdVVJAmZHK9Bxxgd/sITt9Nigtcb/ST
-         b3qI7y+seAJguHfi5k7851bNtphJSOCnTeph5WxI4FDe3qjyr1PyAhhBvCCziZyply/A
-         10GQ==
-X-Gm-Message-State: AC+VfDxOd1DCySm6/acwk8XIktITgSgON920VKgDvDORsMv1ie3wJ9J5
-        rm2siQ7ZL+E1WFt2xM3B5+4=
-X-Google-Smtp-Source: ACHHUZ5OvySq5xaRuaNJ+gh/NFTMJ6rkPySVRSoSp6LDuFfHmlPoSi0gM6hmHv82OQbBw9jqUrc6+Q==
-X-Received: by 2002:a5e:8515:0:b0:77a:c54c:1e51 with SMTP id i21-20020a5e8515000000b0077ac54c1e51mr12842246ioj.9.1687380142832;
-        Wed, 21 Jun 2023 13:42:22 -0700 (PDT)
-Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
-        by smtp.gmail.com with ESMTPSA id ei22-20020a05663829b600b0040f94261ab1sm1584455jab.12.2023.06.21.13.42.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 13:42:22 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 21 Jun 2023 10:42:20 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] cgroup: Avoid -Wstringop-overflow warnings
-Message-ID: <ZJNgrLEE7i9CfUnS@slm.duckdns.org>
-References: <ZIpm3pcs3iCP9UaR@work>
+        Wed, 21 Jun 2023 16:42:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2898B10D2;
+        Wed, 21 Jun 2023 13:42:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BC796152D;
+        Wed, 21 Jun 2023 20:42:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76AD5C433C0;
+        Wed, 21 Jun 2023 20:42:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687380171;
+        bh=6mOvkf1tp0MaXc78Yx6yn5b2RwNgMbnASYqk7mMraHY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oHsypfLla1qIozwVaf6pPL0hFaTxPr2r08Af/ATLBEFwIkLbb3itX5nmgUuQhbeJv
+         OTSTwEEUkdUIMZb+9uiXI5Emjr6BtAWYPLakMixJWhLffDBqYXJ791CQG3UUhrm/5y
+         UZ64WWzHjHE9RefbopX4YrwBD2E0qvXWGwDv7xrR8l9ksERieQ568NgJaIS/5gh2GW
+         XSXTSBh+pWS3TZPuNaw08r8fVipvUrhtB+PewlTA2IUYSq97IoqfufVasnVHOZ7j/6
+         RKElVCwr9XwkeRv4w97pBJ8UXvybN6BWn7RLyzr56B+YWrrJYOgDOn7ByXvnsRCm+v
+         Vfjqb/GBHjWKg==
+Date:   Wed, 21 Jun 2023 21:42:43 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>, kernel@pengutronix.de,
+        Peng Fan <peng.fan@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        Mark Brown <broonie@kernel.org>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Marek Vasut <marex@denx.de>, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] dt-bindings: mmc: fsl-imx-esdhc: Add imx6ul
+ support
+Message-ID: <20230621-data-smirk-36bba6f815ad@spud>
+References: <20230621093245.78130-1-o.rempel@pengutronix.de>
+ <20230621093245.78130-2-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="J8TbsuUfMTbP6whp"
 Content-Disposition: inline
-In-Reply-To: <ZIpm3pcs3iCP9UaR@work>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230621093245.78130-2-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 14, 2023 at 07:18:22PM -0600, Gustavo A. R. Silva wrote:
-> Address the following -Wstringop-overflow warnings seen when
-> built with ARM architecture and aspeed_g4_defconfig configuration
-> (notice that under this configuration CGROUP_SUBSYS_COUNT == 0):
-> kernel/cgroup/cgroup.c:1208:16: warning: 'find_existing_css_set' accessing 4 bytes in a region of size 0 [-Wstringop-overflow=]
-> kernel/cgroup/cgroup.c:1258:15: warning: 'css_set_hash' accessing 4 bytes in a region of size 0 [-Wstringop-overflow=]
-> kernel/cgroup/cgroup.c:6089:18: warning: 'css_set_hash' accessing 4 bytes in a region of size 0 [-Wstringop-overflow=]
-> kernel/cgroup/cgroup.c:6153:18: warning: 'css_set_hash' accessing 4 bytes in a region of size 0 [-Wstringop-overflow=]
-> 
-> These changes are based on commit d20d30ebb199 ("cgroup: Avoid compiler
-> warnings with no subsystems").
-> 
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-Applied to cgroup/for-6.5.
+--J8TbsuUfMTbP6whp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks.
+On Wed, Jun 21, 2023 at 11:32:41AM +0200, Oleksij Rempel wrote:
+> Add the 'fsl,imx6ul-usdhc' value to the compatible properties list in
+> the fsl-imx-esdhc.yaml file. This is required to match the compatible
+> strings present in the 'mmc@2190000' node of 'imx6ul-prti6g.dtb'. This
+> commit addresses the following dtbs_check warning:
+> imx6ul-prti6g.dtb:0:0: /soc/bus@2100000/mmc@2190000: failed to match any =
+schema with compatible: ['fsl,imx6ul-usdhc', 'fsl,imx6sx-usdhc']
+>=20
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
--- 
-tejun
+Seems harmless...
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Cheers,
+Conor.
+
+> ---
+>  Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/D=
+ocumentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> index fbfd822b92707..82eb7a24c8578 100644
+> --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> @@ -42,6 +42,7 @@ properties:
+>            - enum:
+>                - fsl,imx6sll-usdhc
+>                - fsl,imx6ull-usdhc
+> +              - fsl,imx6ul-usdhc
+>            - const: fsl,imx6sx-usdhc
+>        - items:
+>            - const: fsl,imx7d-usdhc
+> --=20
+> 2.39.2
+>=20
+
+--J8TbsuUfMTbP6whp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJNgwwAKCRB4tDGHoIJi
+0i1RAQCBFDAYqoL3pPW8t2IB/dJd8QozfffhqAJ1rwSqKOZ1OAD9GX1AAM2VhBky
+PxulAKMfPnn876al0CLlGePgEVXE+AI=
+=ouzy
+-----END PGP SIGNATURE-----
+
+--J8TbsuUfMTbP6whp--
