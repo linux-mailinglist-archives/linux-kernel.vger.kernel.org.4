@@ -2,185 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5EB4737B5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB96737D10
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbjFUGbL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 02:31:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60916 "EHLO
+        id S231417AbjFUHkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 03:40:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjFUGbH (ORCPT
+        with ESMTP id S231386AbjFUHkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 02:31:07 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A631AC;
-        Tue, 20 Jun 2023 23:31:05 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QmDCp0gxKz4f4qKt;
-        Wed, 21 Jun 2023 14:31:02 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.104.67])
-        by APP4 (Coremail) with SMTP id gCh0CgAHoZQkmZJkXPK9MA--.34642S4;
-        Wed, 21 Jun 2023 14:31:02 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     song@kernel.org, yukuai3@huawei.com
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
-Subject: [PATCH] md: fix 'delete_mutex' deadlock
-Date:   Wed, 21 Jun 2023 22:29:33 +0800
-Message-Id: <20230621142933.1395629-1-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.39.2
+        Wed, 21 Jun 2023 03:40:10 -0400
+Received: from out203-205-221-192.mail.qq.com (out203-205-221-192.mail.qq.com [203.205.221.192])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442B1210B;
+        Wed, 21 Jun 2023 00:39:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1687333181;
+        bh=UqApaAasoEBoMc0dxYV4OnhSyfSEoo7sl5sXBYzYfds=;
+        h=From:To:Cc:Subject:Date;
+        b=WCV6uW5r4UcO67rokvNvBOtVGkznnBl2vKOKD9816+y1dwNO3igJQAVEdGBlMlbKF
+         l53y1EK3mIeXTpQ1slXy9NczFBlxBw75rn1KGTmbGZaFCLNz9ZGQG9yeA77Q1rvYUm
+         9QMkudbFYgWKpqqUm4PvWPo4LJxs6JrFT+OhCs3s=
+Received: from localhost.localdomain ([39.156.73.12])
+        by newxmesmtplogicsvrszc2-1.qq.com (NewEsmtp) with SMTP
+        id 8603282D; Wed, 21 Jun 2023 15:33:32 +0800
+X-QQ-mid: xmsmtpt1687332812t2jwfvdiw
+Message-ID: <tencent_F3895D0EA868BCCE8C56221619BC093D660A@qq.com>
+X-QQ-XMAILINFO: MQ+wLuVvI2LQjtOqTDlIV94yDrHmkwsY56bVPolYhQ89M8b1VZfbz8XhMultN9
+         2xBjYkXEzUFu76fKZNAsQOlL8OhtaDzw/sK9uvnSIVwTtg7Dx8NUosziNzoyaOw8gYYaOlIqX/HB
+         tSmmvm6MTN8NPtbcvZjVPFcU92BQhq7snXgooRbpUTtFy/9JrV9bBMjb/dehvF0b1fY1sQ2Mgp9b
+         Uoza7fQFr4kIVOgrXEJbl65uLjvZLSf1jtisvIeuNw18mt1Pbxj1OdU0hUSRh0JRwN5z5x1ISnAU
+         mjQTNrLTl+kaWF0v+Oev4SmZM8m+0A1pMVAK3TuaL3AfVfRT/XE0eHyiqChpkaUNji0I7u7wsF4T
+         GCGOsQ4C5Dhvl2bM3Troc+JHMoVNfhZNxM4tS5RkUgS/6jAy9p3xiSuEG5QMTvsSIeC3pSCgL3pL
+         RRDjpJrjfcx4/KXow7luA4Kz3QOIjTDw8GGanLwNP9t3oDYD+MynjOO/JAMX5QqTiBPpK8o6InZO
+         vkgrqv/i44HBKJ3Z03sPIk40UDLpV2kgEI4zII1343ldpMK7N4nYM9J1PMVxnxqeUnF2l/ZraqE1
+         FfjUUrk/fz3vXOnj1LR4tSIQ6pv3kedIh701tWYZxf4dKygkL9ecnUjBKmrPccHJQS19K52AYdnF
+         4lubXf+EvnSV6dGyMSp22EYwYrij7lrDPTHbfAbSuECnyf3HBOFiMyvBFvK1cDPWXzFFnsz1a2UR
+         rMh511MudjQlHnMu28jI1Cpt/OYCh+iPRMR1Erpl81OYcJtT7ip7oKPJ3ABvf6zyhkovuFi+KcCb
+         xNXEre3wX+paOww/KokfN1XlNf+8Jl+xXvWCDnNhxzno6xIYTQnU16GdTN2385vWCkmXbKf7LX6/
+         viViVS3f1ergI3BwpSx6vvyoWw5JengErO1EG+GnZTwaC7TvNTwtIWuaSvlt1/WOwTktiLE6TGMR
+         oOwBY5rQc8eJ8Z6EXc/bk0uJ/AA3S/NcbwKdI6mq16FaXsKBdvtw==
+X-QQ-XMRINFO: NjIWXnpjOUTzjNa+72IgnqZv1lPwKoxBEg==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     martin.petersen@oracle.com
+Cc:     rongtao@cestc.cn, Jonathan Corbet <corbet@lwn.net>,
+        linux-scsi@vger.kernel.org (open list:SCSI TARGET SUBSYSTEM),
+        target-devel@vger.kernel.org (open list:SCSI TARGET SUBSYSTEM),
+        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH] docs: target: Convert tcm_mod_builder.py print syntax to python3
+Date:   Wed, 21 Jun 2023 15:33:30 +0800
+X-OQ-MSGID: <20230621073331.85873-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.39.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHoZQkmZJkXPK9MA--.34642S4
-X-Coremail-Antispam: 1UD129KBjvJXoWxWrWfKw45GrW8ZF4fWFykZrb_yoWrGr48pr
-        WftasxGr4DArZxXF4UX397ua45Xw1kKayDtry7u3WfZ3W5ursFgryfX348ur95Ga93Ar4q
-        q3W0gr4avFyUGFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvY14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2jI8I6cxK62vIxIIY0VWUZVW8XwA2ocxC64kIII
-        0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xv
-        wVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4
-        x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG
-        64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r
-        1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAq
-        YI8I648v4I1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
-        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1D
-        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
-        0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v2
-        6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0p
-        RQo7tUUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
-        KHOP_HELO_FCRDNS,MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
+From: Rong Tao <rongtao@cestc.cn>
 
-Commit 3ce94ce5d05a ("md: fix duplicate filename for rdev") introduce a
-new lock 'delete_mutex', and trigger a new deadlock:
+Convert the tcm_mod_builder.py file to python3 and fix indentation.
 
-t1: remove rdev			t2: sysfs writer
+Error:
 
-rdev_attr_store			rdev_attr_store
- mddev_lock
- state_store
- md_kick_rdev_from_array
-  lock delete_mutex
-  list_add mddev->deleting
-  unlock delete_mutex
- mddev_unlock
-				 mddev_lock
-				 ...
-  lock delete_mutex
-  kobject_del
-  // wait for sysfs writers to be done
-				 mddev_unlock
-				 lock delete_mutex
-				 // wait for delete_mutex, deadlock
+    $ ./tcm_mod_builder.py
+    File "/home/sda/git-repos/linux/Documentation/target/./tcm_mod_builder.py", line 23
+        print msg
+            ^
+    SyntaxError: Missing parentheses in call to 'print'. Did you mean print(msg)?
 
-'delete_mutex' is used to protect the list 'mddev->deleting', turns out
-that this list can be protected by 'reconfig_mutex' directly, and this
-lock can be removed.
+    $ ./tcm_mod_builder.py
+    File "/home/sda/git-repos/linux/Documentation/target/./tcm_mod_builder.py", line 186
+        p = open(f, 'w');
+    TabError: inconsistent use of tabs and spaces in indentation
 
-Fix this problem by removing the lock, and use 'reconfig_mutex' to
-protect the list. mddev_unlock() will move this list to a local list to
-be handled after 'reconfig_mutex' is dropped.
-
-Fixes: 3ce94ce5d05a ("md: fix duplicate filename for rdev")
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
 ---
- drivers/md/md.c | 28 +++++++++-------------------
- drivers/md/md.h |  4 +---
- 2 files changed, 10 insertions(+), 22 deletions(-)
+ Documentation/target/tcm_mod_builder.py | 44 ++++++++++++-------------
+ 1 file changed, 22 insertions(+), 22 deletions(-)
 
-diff --git a/drivers/md/md.c b/drivers/md/md.c
-index 1086d7282ee7..089f7d7a9052 100644
---- a/drivers/md/md.c
-+++ b/drivers/md/md.c
-@@ -643,7 +643,6 @@ void mddev_init(struct mddev *mddev)
- {
- 	mutex_init(&mddev->open_mutex);
- 	mutex_init(&mddev->reconfig_mutex);
--	mutex_init(&mddev->delete_mutex);
- 	mutex_init(&mddev->sync_mutex);
- 	mutex_init(&mddev->bitmap_info.mutex);
- 	INIT_LIST_HEAD(&mddev->disks);
-@@ -751,26 +750,15 @@ static void mddev_free(struct mddev *mddev)
+diff --git a/Documentation/target/tcm_mod_builder.py b/Documentation/target/tcm_mod_builder.py
+index 54492aa813b9..e2ef72925de3 100755
+--- a/Documentation/target/tcm_mod_builder.py
++++ b/Documentation/target/tcm_mod_builder.py
+@@ -20,7 +20,7 @@ fabric_mod_port = ""
+ fabric_mod_init_port = ""
  
- static const struct attribute_group md_redundancy_group;
+ def tcm_mod_err(msg):
+-	print msg
++	print(msg)
+ 	sys.exit(1)
  
--static void md_free_rdev(struct mddev *mddev)
-+void mddev_unlock(struct mddev *mddev)
- {
- 	struct md_rdev *rdev;
- 	struct md_rdev *tmp;
-+	LIST_HEAD(delete);
+ def tcm_mod_create_module_subdir(fabric_mod_dir_var):
+@@ -28,7 +28,7 @@ def tcm_mod_create_module_subdir(fabric_mod_dir_var):
+ 	if os.path.isdir(fabric_mod_dir_var) == True:
+ 		return 1
  
--	mutex_lock(&mddev->delete_mutex);
--	if (list_empty(&mddev->deleting))
--		goto out;
-+	if (!list_empty(&mddev->deleting))
-+		list_splice_init(&mddev->deleting, &delete);
+-	print "Creating fabric_mod_dir: " + fabric_mod_dir_var
++	print("Creating fabric_mod_dir: " + fabric_mod_dir_var)
+ 	ret = os.mkdir(fabric_mod_dir_var)
+ 	if ret:
+ 		tcm_mod_err("Unable to mkdir " + fabric_mod_dir_var)
+@@ -41,7 +41,7 @@ def tcm_mod_build_FC_include(fabric_mod_dir_var, fabric_mod_name):
+ 	buf = ""
  
--	list_for_each_entry_safe(rdev, tmp, &mddev->deleting, same_set) {
--		list_del_init(&rdev->same_set);
--		kobject_del(&rdev->kobj);
--		export_rdev(rdev, mddev);
--	}
--out:
--	mutex_unlock(&mddev->delete_mutex);
--}
--
--void mddev_unlock(struct mddev *mddev)
--{
- 	if (mddev->to_remove) {
- 		/* These cannot be removed under reconfig_mutex as
- 		 * an access to the files will try to take reconfig_mutex
-@@ -810,7 +798,11 @@ void mddev_unlock(struct mddev *mddev)
- 	} else
- 		mutex_unlock(&mddev->reconfig_mutex);
+ 	f = fabric_mod_dir_var + "/" + fabric_mod_name + "_base.h"
+-	print "Writing file: " + f
++	print("Writing file: " + f)
  
--	md_free_rdev(mddev);
-+	list_for_each_entry_safe(rdev, tmp, &delete, same_set) {
-+		list_del_init(&rdev->same_set);
-+		kobject_del(&rdev->kobj);
-+		export_rdev(rdev, mddev);
-+	}
+ 	p = open(f, 'w');
+ 	if not p:
+@@ -85,7 +85,7 @@ def tcm_mod_build_SAS_include(fabric_mod_dir_var, fabric_mod_name):
+ 	buf = ""
  
- 	md_wakeup_thread(mddev->thread);
- 	wake_up(&mddev->sb_wait);
-@@ -2490,9 +2482,7 @@ static void md_kick_rdev_from_array(struct md_rdev *rdev)
- 	 * reconfig_mutex is held, hence it can't be called under
- 	 * reconfig_mutex and it's delayed to mddev_unlock().
- 	 */
--	mutex_lock(&mddev->delete_mutex);
- 	list_add(&rdev->same_set, &mddev->deleting);
--	mutex_unlock(&mddev->delete_mutex);
- }
+ 	f = fabric_mod_dir_var + "/" + fabric_mod_name + "_base.h"
+-	print "Writing file: " + f
++	print("Writing file: " + f)
  
- static void export_array(struct mddev *mddev)
-diff --git a/drivers/md/md.h b/drivers/md/md.h
-index 892a598a5029..8ae957480976 100644
---- a/drivers/md/md.h
-+++ b/drivers/md/md.h
-@@ -531,11 +531,9 @@ struct mddev {
+ 	p = open(f, 'w');
+ 	if not p:
+@@ -128,7 +128,7 @@ def tcm_mod_build_iSCSI_include(fabric_mod_dir_var, fabric_mod_name):
+ 	buf = ""
  
- 	/*
- 	 * Temporarily store rdev that will be finally removed when
--	 * reconfig_mutex is unlocked.
-+	 * reconfig_mutex is unlocked, protected by reconfig_mutex.
- 	 */
- 	struct list_head		deleting;
--	/* Protect the deleting list */
--	struct mutex			delete_mutex;
+ 	f = fabric_mod_dir_var + "/" + fabric_mod_name + "_base.h"
+-	print "Writing file: " + f
++	print("Writing file: " + f)
  
- 	/* Used to synchronize idle and frozen for action_store() */
- 	struct mutex			sync_mutex;
+ 	p = open(f, 'w');
+ 	if not p:
+@@ -172,7 +172,7 @@ def tcm_mod_build_base_includes(proto_ident, fabric_mod_dir_val, fabric_mod_name
+ 	elif proto_ident == "iSCSI":
+ 		tcm_mod_build_iSCSI_include(fabric_mod_dir_val, fabric_mod_name)
+ 	else:
+-		print "Unsupported proto_ident: " + proto_ident
++		print("Unsupported proto_ident: " + proto_ident)
+ 		sys.exit(1)
+ 
+ 	return
+@@ -181,11 +181,11 @@ def tcm_mod_build_configfs(proto_ident, fabric_mod_dir_var, fabric_mod_name):
+ 	buf = ""
+ 
+ 	f = fabric_mod_dir_var + "/" + fabric_mod_name + "_configfs.c"
+-	print "Writing file: " + f
++	print("Writing file: " + f)
+ 
+-        p = open(f, 'w');
+-        if not p:
+-                tcm_mod_err("Unable to open file: " + f)
++	p = open(f, 'w');
++	if not p:
++		tcm_mod_err("Unable to open file: " + f)
+ 
+ 	buf = "#include <linux/module.h>\n"
+ 	buf += "#include <linux/moduleparam.h>\n"
+@@ -339,7 +339,7 @@ def tcm_mod_scan_fabric_ops(tcm_dir):
+ 
+ 	fabric_ops_api = tcm_dir + "include/target/target_core_fabric.h"
+ 
+-	print "Using tcm_mod_scan_fabric_ops: " + fabric_ops_api
++	print("Using tcm_mod_scan_fabric_ops: " + fabric_ops_api)
+ 	process_fo = 0;
+ 
+ 	p = open(fabric_ops_api, 'r')
+@@ -375,14 +375,14 @@ def tcm_mod_dump_fabric_ops(proto_ident, fabric_mod_dir_var, fabric_mod_name):
+ 	bufi = ""
+ 
+ 	f = fabric_mod_dir_var + "/" + fabric_mod_name + "_fabric.c"
+-	print "Writing file: " + f
++	print("Writing file: " + f)
+ 
+ 	p = open(f, 'w')
+ 	if not p:
+ 		tcm_mod_err("Unable to open file: " + f)
+ 
+ 	fi = fabric_mod_dir_var + "/" + fabric_mod_name + "_fabric.h"
+-	print "Writing file: " + fi
++	print("Writing file: " + fi)
+ 
+ 	pi = open(fi, 'w')
+ 	if not pi:
+@@ -537,7 +537,7 @@ def tcm_mod_build_kbuild(fabric_mod_dir_var, fabric_mod_name):
+ 
+ 	buf = ""
+ 	f = fabric_mod_dir_var + "/Makefile"
+-	print "Writing file: " + f
++	print("Writing file: " + f)
+ 
+ 	p = open(f, 'w')
+ 	if not p:
+@@ -558,7 +558,7 @@ def tcm_mod_build_kconfig(fabric_mod_dir_var, fabric_mod_name):
+ 
+ 	buf = ""
+ 	f = fabric_mod_dir_var + "/Kconfig"
+-	print "Writing file: " + f
++	print("Writing file: " + f)
+ 
+ 	p = open(f, 'w')
+ 	if not p:
+@@ -603,20 +603,20 @@ def main(modname, proto_ident):
+ 
+ 	tcm_dir = os.getcwd();
+ 	tcm_dir += "/../../"
+-	print "tcm_dir: " + tcm_dir
++	print("tcm_dir: " + tcm_dir)
+ 	fabric_mod_name = modname
+ 	fabric_mod_dir = tcm_dir + "drivers/target/" + fabric_mod_name
+-	print "Set fabric_mod_name: " + fabric_mod_name
+-	print "Set fabric_mod_dir: " + fabric_mod_dir
+-	print "Using proto_ident: " + proto_ident
++	print("Set fabric_mod_name: " + fabric_mod_name)
++	print("Set fabric_mod_dir: " + fabric_mod_dir)
++	print("Using proto_ident: " + proto_ident)
+ 
+ 	if proto_ident != "FC" and proto_ident != "SAS" and proto_ident != "iSCSI":
+-		print "Unsupported proto_ident: " + proto_ident
++		print("Unsupported proto_ident: " + proto_ident)
+ 		sys.exit(1)
+ 
+ 	ret = tcm_mod_create_module_subdir(fabric_mod_dir)
+ 	if ret:
+-		print "tcm_mod_create_module_subdir() failed because module already exists!"
++		print("tcm_mod_create_module_subdir() failed because module already exists!")
+ 		sys.exit(1)
+ 
+ 	tcm_mod_build_base_includes(proto_ident, fabric_mod_dir, fabric_mod_name)
+@@ -647,7 +647,7 @@ parser.add_option('-p', '--protoident', help='Protocol Ident', dest='protoident'
+ mandatories = ['modname', 'protoident']
+ for m in mandatories:
+ 	if not opts.__dict__[m]:
+-		print "mandatory option is missing\n"
++		print("mandatory option is missing\n")
+ 		parser.print_help()
+ 		exit(-1)
+ 
 -- 
-2.39.2
+2.39.3
 
