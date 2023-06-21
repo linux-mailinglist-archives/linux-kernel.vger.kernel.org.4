@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F23373796C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 05:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C0173796E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 05:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjFUDAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 23:00:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
+        id S230062AbjFUDBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 23:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFUDAv (ORCPT
+        with ESMTP id S230030AbjFUDBO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 23:00:51 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF860E7E;
-        Tue, 20 Jun 2023 20:00:50 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-77e2c42de06so176194439f.1;
-        Tue, 20 Jun 2023 20:00:50 -0700 (PDT)
+        Tue, 20 Jun 2023 23:01:14 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C717A19B6;
+        Tue, 20 Jun 2023 20:01:07 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-340bba768acso26378875ab.2;
+        Tue, 20 Jun 2023 20:01:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687316450; x=1689908450;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=yk+CCzKPoEK1DNGd+x8aPT6YCsf+viHVDJzfkXgbxwM=;
-        b=VRgq37DNHaxMgTnBuph6L5V1HPRkptAq8ksZwGPsvwidL2Xvf6TPy/M9KpkfUx0ZsC
-         iSVwUvnf9FMnQU44mimALZbKUh/FkA6Jsdla2+Q6qxYjhqSsWceFrngsZzqVr6UieB1R
-         GxJOORpgtrvXvXhpPNn89+bku4KgEnmGzzBqERZLxnRTMEut3yw6nmxCzXvuFU1dvm+R
-         Bh+OVpfnwT09V5A72HMZ1lTeh2fXxlelsKk9YzP+yZ8qiYcHpOhZvr4Bgd3N/EA9zikm
-         Q2E71GNrAlIaD4WhIBvhbSB19T9dVLcwbOjIucMNtjJmOnPB9IqubxVhMD5m3gNiAOlM
-         s75Q==
+        d=gmail.com; s=20221208; t=1687316466; x=1689908466;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9i3TwOUjrba6y/sZ16lkUZi/PKa7z6zduQ0cJPwPLqg=;
+        b=KzJ4T/HpsfXuydpnH5TcpZW3RZy68kv09P93asfMP/FwSRCRDaCrwxIyh/j24Dfq0+
+         xAnYbxEhSYfYilQOdTz6isg3cTnormzf2gSO8/Py5wuEmTOZ9lx6B977xnnpcI0VW67j
+         gvPsQNS/NEu1LKWiPN/K/ZLNEJlSSh/VjHcdsZyKHMhQnbbScUTcjgosvYccUrfeS3S2
+         QRQoEumHUPnUBYHzTboO5XL3qgQOh8O6I5/hzQJpmatN9lgYSYcMAQH4PeRicSzkvWnY
+         MGLTNQZrLXr7SHhMREY3cWf30rUzrYahIBq8xx9yHp5jbHIalORjY5K+5LMkCAoJ1a9S
+         0KHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687316450; x=1689908450;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yk+CCzKPoEK1DNGd+x8aPT6YCsf+viHVDJzfkXgbxwM=;
-        b=CofBt2hm425r1r3Y4T7INGtdtXnIvfp+2BKSZ9SqRLp991W7CEOK9GzurCoRaEUV/5
-         38B3aXH+495Ceqmi8h1a6C1BpsXr6ndTPnq71OHYps+i7kYNBKB9cWnJrBP7PO+u7e1U
-         NACcsoadmk9UQsjnv3LdahcadRSHOWZDbZ7y/qLaO9FZdZBWuKNERTTbbbRt6y681I4l
-         NFPixB3wpQ9CA/Kw36L0oZJzzlLFIDrmpbdYp42B1UJDB6FiWb7fhh6/3W4A61J7fYea
-         oIBHXxRLNOZRVfYw2UN/3RGCSrHOK49kAH4DW9tbvZ1QF8cSqvihl9rPmwte1mKqEET4
-         0DRg==
-X-Gm-Message-State: AC+VfDyeaHNfU2wr0wGbIlO+TU+9PMDeApbDaDJQgukLp+qeOaXsAsvn
-        IRmORK/u/Kff4tZGwtI1XpukeoKnVoPfeQ==
-X-Google-Smtp-Source: ACHHUZ5tdpP+vH8ZxE1GLqqc/SHVOSQIlQ7gzYXMLVfVTpncwMOS3+mzoZuOl84qGUimIfjvOsU0LQ==
-X-Received: by 2002:a5e:8909:0:b0:777:b6cd:5a93 with SMTP id k9-20020a5e8909000000b00777b6cd5a93mr12837261ioj.2.1687316450166;
-        Tue, 20 Jun 2023 20:00:50 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687316466; x=1689908466;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9i3TwOUjrba6y/sZ16lkUZi/PKa7z6zduQ0cJPwPLqg=;
+        b=h9w6jt9sNLM69dHENyihm+HPO4innwu/3QAUBsrEhuPHVpb0tfCw5Qn1dY9PpBdCsc
+         UU7LsFn9A8oH6p7DZJDKliP6HAZQYNWSYC2Jv9hkn42twwO7OSjZukIJs+1j4Lfj72Eo
+         gfELBT5CFbxzeZfermXxQUaUN8OZfznJd/mQsfSqeuRA1g3JTPo3ZvMYOZyKDAkckI2i
+         pZlHjJPZt3/j1QRglnngjPVCtwlc7zV7MFNQrEQfsXW5Mn+WYVHHP2cSBctc9ZKs9gsf
+         uamfl3DSXhkp5K8yPMe7NvcVJCjkzI5KsH+NoNZ6svy4jqxLS8ZDhHwMjvZ2lXp1C+Rt
+         jHPg==
+X-Gm-Message-State: AC+VfDwvG62KTF9Nwtbh2Tn4rpbuS74V9545Ul6lKHvroJxfiKHHjmIS
+        O+00GXDsxYI3WymELjtPX+A=
+X-Google-Smtp-Source: ACHHUZ6E5Oy77f4SmFCfxx6uJ93Rl7pB5cRGyN/JxOBjfA5Zzy6rp+P+wBjfWtNWsJItDkJQwX41xQ==
+X-Received: by 2002:a92:d4c4:0:b0:332:e5aa:f9b8 with SMTP id o4-20020a92d4c4000000b00332e5aaf9b8mr592276ilm.13.1687316466620;
+        Tue, 20 Jun 2023 20:01:06 -0700 (PDT)
 Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id x6-20020a029706000000b0042682dd951dsm1035008jai.87.2023.06.20.20.00.49
+        by smtp.gmail.com with ESMTPSA id x6-20020a029706000000b0042682dd951dsm1035008jai.87.2023.06.20.20.01.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 20:00:49 -0700 (PDT)
+        Tue, 20 Jun 2023 20:01:06 -0700 (PDT)
 From:   Azeem Shaikh <azeemshaikh38@gmail.com>
 To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
@@ -56,10 +57,12 @@ To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
 Cc:     linux-hardening@vger.kernel.org,
         Azeem Shaikh <azeemshaikh38@gmail.com>,
         linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] scsi: Replace strlcpy with strscpy
-Date:   Wed, 21 Jun 2023 03:00:31 +0000
-Message-ID: <20230621030033.3800351-1-azeemshaikh38@gmail.com>
+Subject: [PATCH 1/2] scsi: Replace strlcpy with strscpy
+Date:   Wed, 21 Jun 2023 03:00:32 +0000
+Message-ID: <20230621030033.3800351-2-azeemshaikh38@gmail.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+In-Reply-To: <20230621030033.3800351-1-azeemshaikh38@gmail.com>
+References: <20230621030033.3800351-1-azeemshaikh38@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,19 +75,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series replaces strlcpy in the scsi subsystem wherever trivial
-replacement is possible, i.e return value from strlcpy is unused. The patches
-themselves are independent of each other and are included as a series for
-ease of review. 
+strlcpy() reads the entire source buffer first.
+This read may exceed the destination size limit.
+This is both inefficient and can lead to linear read
+overflows if a source string is not NUL-terminated [1].
+In an effort to remove strlcpy() completely [2], replace
+strlcpy() here with strscpy().
 
-Azeem Shaikh (2):
-  scsi: Replace strlcpy with strscpy
-  scsi: target: tcmu: Replace strlcpy with strscpy
+No return values were used, so direct replacement is safe.
 
- drivers/scsi/ncr53c8xx.c          | 2 +-
- drivers/target/target_core_user.c | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+[2] https://github.com/KSPP/linux/issues/89
 
+Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+---
+ drivers/scsi/ncr53c8xx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/ncr53c8xx.c b/drivers/scsi/ncr53c8xx.c
+index 4458449c960b..35869b4f9329 100644
+--- a/drivers/scsi/ncr53c8xx.c
++++ b/drivers/scsi/ncr53c8xx.c
+@@ -4555,7 +4555,7 @@ static void ncr_detach(struct ncb *np)
+ 	char inst_name[16];
+ 
+ 	/* Local copy so we don't access np after freeing it! */
+-	strlcpy(inst_name, ncr_name(np), sizeof(inst_name));
++	strscpy(inst_name, ncr_name(np), sizeof(inst_name));
+ 
+ 	printk("%s: releasing host resources\n", ncr_name(np));
+ 
 -- 
 2.41.0.162.gfafddb0af9-goog
 
