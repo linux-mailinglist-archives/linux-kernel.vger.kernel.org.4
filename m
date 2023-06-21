@@ -2,116 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAD757380D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:10:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4498C737FE4
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbjFUJsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 05:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48502 "EHLO
+        id S229921AbjFUJvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 05:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231646AbjFUJsc (ORCPT
+        with ESMTP id S232158AbjFUJvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 05:48:32 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B74FFE
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:48:30 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230621094828euoutp01cd0a8799f6ee8041c1f70e03357f4777~qo53gOyOO2238922389euoutp01A
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:48:28 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230621094828euoutp01cd0a8799f6ee8041c1f70e03357f4777~qo53gOyOO2238922389euoutp01A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1687340908;
-        bh=dbte9P3LahOTAa8vkLg+Y6+keP5p3Zx/hRuNObHLKVE=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=BcGKGimtwHugbx0GY6b12ut2JhRSDV5A7THYwSZ3iL8kfg1IAl93KPpRaEgpNplkS
-         YdBde4XCVHCUZIkxmpYwFJMYF3DG96cLoC8hnIHeuqAoL8Jd9a9HTcXij5/eYL5U6D
-         o/Wciu0IPzA162vaQIEjdwTYjudVFMVN0dXRtSTY=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230621094828eucas1p2380095a1edd4d673c43affc5299fbab4~qo53OTIyo1478514785eucas1p2T;
-        Wed, 21 Jun 2023 09:48:28 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id ED.FA.42423.C67C2946; Wed, 21
-        Jun 2023 10:48:28 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230621094828eucas1p22b0b45adc25f881fe00a20d96d495d95~qo523PHWH0198801988eucas1p2I;
-        Wed, 21 Jun 2023 09:48:28 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230621094828eusmtrp11d40c79030349f6083303a91ed30fe41~qo522rCpK1249712497eusmtrp1f;
-        Wed, 21 Jun 2023 09:48:28 +0000 (GMT)
-X-AuditID: cbfec7f2-a3bff7000002a5b7-e6-6492c76c5a13
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id 4B.06.10549.C67C2946; Wed, 21
-        Jun 2023 10:48:28 +0100 (BST)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230621094828eusmtip181b98584f1c8352c62496699c33e6758~qo52sbIGp1838018380eusmtip1d;
-        Wed, 21 Jun 2023 09:48:28 +0000 (GMT)
-Received: from localhost (106.210.248.248) by CAMSVWEXC02.scsc.local
-        (106.1.227.72) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Wed, 21 Jun
-        2023 10:48:27 +0100
-From:   Joel Granados <j.granados@samsung.com>
-To:     <mcgrof@kernel.org>, Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>
-CC:     Joel Granados <j.granados@samsung.com>,
-        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>
-Subject: [PATCH 11/11] sysctl: rm "child" from __register_sysctl_table doc
-Date:   Wed, 21 Jun 2023 11:48:02 +0200
-Message-ID: <20230621094817.433842-3-j.granados@samsung.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230621094817.433842-1-j.granados@samsung.com>
+        Wed, 21 Jun 2023 05:51:11 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 80014213E
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:49:41 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8DxuMW0x5JkKhYAAA--.162S3;
+        Wed, 21 Jun 2023 17:49:40 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax8uSzx5Jk32gAAA--.2575S3;
+        Wed, 21 Jun 2023 17:49:39 +0800 (CST)
+Message-ID: <1c7596fd-7e63-6719-2574-7d7820687832@loongson.cn>
+Date:   Wed, 21 Jun 2023 17:49:39 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [106.210.248.248]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (106.1.227.71) To
-        CAMSVWEXC02.scsc.local (106.1.227.72)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrPIsWRmVeSWpSXmKPExsWy7djP87o5xyelGKz6K2dxpjvXYs/ekywW
-        l3fNYbO4MeEpo8WynX4OrB6zGy6yeCzYVOqxaVUnm8fnTXIBLFFcNimpOZllqUX6dglcGb1L
-        rzAWrBKruPdnOlMD41nBLkZODgkBE4lN926ydTFycQgJrGCUWH/6NiOE84VR4vTRFnaQKiGB
-        z4wSyxd5wXSca1jHDlG0nFFixaJpzBAOUNHmfRMY4WbNPb2BGaSFTUBH4vybO2C2iEC8xOw1
-        2xlBbGaBXIlZy5eAxYUFvCQu/VjNBmKzCKhKzF15A8jm4OAVsJHYcj0PYrO8RNv16WCtnAK2
-        Eq9X9IO18goISpyc+YQFYqS8RPPW2cwQtoTEwRcvmCF6lSWu71vMBmEnS7T8+csEYV/hkDj+
-        uwRklYSAi8Tzh9YQYWGJV8e3sEPYMhKnJ/ewgLwlITCZUWL/vw/sEM5qRolljV+hBllLtFx5
-        wg4xyFGieYIbhMknceOtIMQ5fBKTtk1nhgjzSnS0CU1gVJmF5IFZSB6YheSBBYzMqxjFU0uL
-        c9NTiw3zUsv1ihNzi0vz0vWS83M3MQLTyOl/xz/tYJz76qPeIUYmDsZDjBIczEoivLKbJqUI
-        8aYkVlalFuXHF5XmpBYfYpTmYFES59W2PZksJJCeWJKanZpakFoEk2Xi4JRqYFIXqv576dqz
-        x7vFnJLnnz7aNlnN8NWZrlfbsn7/2lmw0MyK9XKnPZNMZvjMKlVLR6urxnUz+bIOHAtlklr7
-        uVbz2cP578LcxDK/5yoGdCm/Vfa9Zl5leNropKfuj5CcfydEf1cUCNg/lGoQljoSuauuYZ7H
-        QQvDRyder9907O/6Hs8E8z7e5RKaen7nNXqV7myoPHYluXR9/bFfsw7vMJef93X7kQ1vVLyO
-        zdINFlM8I+7P/vxQKvu9E6sfFeQ53pk85ZiBsqtK4OmUhK9dxx+VKWrOFy/1Ec+wVvteZ3/u
-        L9eESQ9/q66f6bbvzy7OkMT0ZWb8LytN2a9YycdnhW1/5KNvzZ4bmct4/+y9V0osxRmJhlrM
-        RcWJAKKUufuSAwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFIsWRmVeSWpSXmKPExsVy+t/xu7o5xyelGEybyG5xpjvXYs/ekywW
-        l3fNYbO4MeEpo8WynX4OrB6zGy6yeCzYVOqxaVUnm8fnTXIBLFF6NkX5pSWpChn5xSW2StGG
-        FkZ6hpYWekYmlnqGxuaxVkamSvp2NimpOZllqUX6dgl6Gb1LrzAWrBKruPdnOlMD41nBLkZO
-        DgkBE4lzDevYuxi5OIQEljJK3Fu7nwkiISOx8ctVVghbWOLPtS42iKKPjBK7/s6C6ljBKDH7
-        9mZ2kCo2AR2J82/uMIPYIgLxErPXbGcEsZkFciVmLV8CFhcW8JK49GM1G4jNIqAqMXflDSCb
-        g4NXwEZiy/U8iGXyEm3Xp4O1cgrYSrxe0Q/WKiSQL7Fl7Sywg3gFBCVOznzCAjFeXqJ562xm
-        CFtC4uCLF8wQc5Qlru9bzAZhJ0tM2vOLcQKjyCwk7bOQtM9C0r6AkXkVo0hqaXFuem6xoV5x
-        Ym5xaV66XnJ+7iZGYKRtO/Zz8w7Gea8+6h1iZOJgPMQowcGsJMIru2lSihBvSmJlVWpRfnxR
-        aU5q8SFGU6A3JzJLiSbnA2M9ryTe0MzA1NDEzNLA1NLMWEmc17OgI1FIID2xJDU7NbUgtQim
-        j4mDU6qBqcO2j2Ou7TmuRbduLfk8wT+muOpZCBfTWU1NM3vlFZL/1/gIhu+b4/T0ejqPq9qD
-        tQadDSecrK6cVdO28XLbNn3O6iUCeQ3pRiLKlYn3L4SwvfnJfPv73E/qpft/dnJ22xy00gtk
-        ZTzFqXJLbtXSL6kBvv1PQnq8Hh02kpk236I7pM38glDf8hndqxe3TJ8eu5S/VyNK2ecD61Jl
-        xpr4DV4BKYb3Ft3s+cr7Zd8dmcr5+scK3Nbkb9q/4LPvuZmu3lPfv9i9Xq6vy10r9LWer5hB
-        VNiiWW2JtUHHDddEiRS99ZR50XOgv+XYnj5fS4bYNs/S72xfqj48CPZ6YZxXIyj/kXnKibuh
-        nmHmh/8osRRnJBpqMRcVJwIALybYTz0DAAA=
-X-CMS-MailID: 20230621094828eucas1p22b0b45adc25f881fe00a20d96d495d95
-X-Msg-Generator: CA
-X-RootMTR: 20230621094828eucas1p22b0b45adc25f881fe00a20d96d495d95
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230621094828eucas1p22b0b45adc25f881fe00a20d96d495d95
-References: <20230621091000.424843-1-j.granados@samsung.com>
-        <20230621094817.433842-1-j.granados@samsung.com>
-        <CGME20230621094828eucas1p22b0b45adc25f881fe00a20d96d495d95@eucas1p2.samsung.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v10 03/11] drm/etnaviv: Add dedicated functions to create
+ and destroy platform device
+Content-Language: en-US
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Sui Jingfeng <18949883232@163.com>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        etnaviv@lists.freedesktop.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20230620094716.2231414-1-18949883232@163.com>
+ <20230620094716.2231414-4-18949883232@163.com>
+ <0daa7182d6600a24988d1c81cf8fe3c0c9487f52.camel@pengutronix.de>
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <0daa7182d6600a24988d1c81cf8fe3c0c9487f52.camel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8Ax8uSzx5Jk32gAAA--.2575S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj93XoWxXFW3Aw1xJF1fKFW8tw1kZwc_yoWruryrpF
+        WUGFWYyry8WFWUKw1xXrn8ZFW5Cw1Sq34F9r1qywnF9390vr9YqFyrKF1UAasxJryfGa1F
+        vw4UtFs7uF45ZrXCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+        0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+        AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4SoGDU
+        UUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,67 +76,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove "child" from code documentation in proc_sysctl.c. Child was
-replaced with a explicit size value in ctl header and there is no need
-to have it around in the documentation.
+Hi
 
-Signed-off-by: Joel Granados <j.granados@samsung.com>
----
- fs/proc/proc_sysctl.c | 28 +++++++++++-----------------
- 1 file changed, 11 insertions(+), 17 deletions(-)
+On 2023/6/21 17:15, Lucas Stach wrote:
+> Am Dienstag, dem 20.06.2023 um 17:47 +0800 schrieb Sui Jingfeng:
+>> From: Sui Jingfeng <suijingfeng@loongson.cn>
+>>
+>> Also rename the virtual master platform device as etnaviv_platform_device,
+>> for better reflection that it is a platform device, not a DRM device.
+>>
+>> Another benefit is that we no longer need to call of_node_put() for three
+>> different cases, Instead, we only need to call it once.
+>>
+>> Cc: Lucas Stach <l.stach@pengutronix.de>
+>> Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
+>> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+>> Cc: Bjorn Helgaas <bhelgaas@google.com>
+>> Cc: Daniel Vetter <daniel@ffwll.ch>
+>> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+>> ---
+>>   drivers/gpu/drm/etnaviv/etnaviv_drv.c | 56 +++++++++++++++++++--------
+>>   1 file changed, 39 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+>> index 31a7f59ccb49..cec005035d0e 100644
+>> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+>> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+>> @@ -656,12 +656,44 @@ static struct platform_driver etnaviv_platform_driver = {
+>>   	},
+>>   };
+>>   
+>> -static struct platform_device *etnaviv_drm;
+>> +static struct platform_device *etnaviv_platform_device;
+>>   
+>> -static int __init etnaviv_init(void)
+>> +static int etnaviv_create_platform_device(const char *name,
+>> +					  struct platform_device **ppdev)
+> As the platform device is a global static variable, there is no need to
+> push it through the parameters of this function. Just use the global
+> variable directly in this function.
 
-diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
-index 9e7e17dd6162..8dbc5b2316a5 100644
---- a/fs/proc/proc_sysctl.c
-+++ b/fs/proc/proc_sysctl.c
-@@ -1306,27 +1306,22 @@ static struct ctl_dir *sysctl_mkdir_p(struct ctl_dir *dir, const char *path)
-  * __register_sysctl_table - register a leaf sysctl table
-  * @set: Sysctl tree to register on
-  * @path: The path to the directory the sysctl table is in.
-- * @table: the top-level table structure without any child. This table
-- * 	 should not be free'd after registration. So it should not be
-- * 	 used on stack. It can either be a global or dynamically allocated
-- * 	 by the caller and free'd later after sysctl unregistration.
-+ *
-+ * @table: the top-level table structure. This table should not be free'd
-+ * 	after registration. So it should not be used on stack. It can either
-+ * 	be a global or dynamically allocated by the caller and free'd later
-+ * 	after sysctl unregistration.
-  *
-  * Register a sysctl table hierarchy. @table should be a filled in ctl_table
-- * array. A completely 0 filled entry terminates the table.
-+ * array.
-  *
-  * The members of the &struct ctl_table structure are used as follows:
-- *
-  * procname - the name of the sysctl file under /proc/sys. Set to %NULL to not
-  *            enter a sysctl file
-- *
-- * data - a pointer to data for use by proc_handler
-- *
-- * maxlen - the maximum size in bytes of the data
-- *
-- * mode - the file permissions for the /proc/sys file
-- *
-- * child - must be %NULL.
-- *
-+ * data     - a pointer to data for use by proc_handler
-+ * maxlen   - the maximum size in bytes of the data
-+ * mode     - the file permissions for the /proc/sys file
-+ * type     - Defines the target type (described in struct definition)
-  * proc_handler - the text handler routine (described below)
-  *
-  * extra1, extra2 - extra pointers usable by the proc handler routines
-@@ -1334,8 +1329,7 @@ static struct ctl_dir *sysctl_mkdir_p(struct ctl_dir *dir, const char *path)
-  * [0] https://lkml.kernel.org/87zgpte9o4.fsf@email.froward.int.ebiederm.org
-  *
-  * Leaf nodes in the sysctl tree will be represented by a single file
-- * under /proc; non-leaf nodes (where child is not NULL) are not allowed,
-- * sysctl_check_table() verifies this.
-+ * under /proc; non-leaf nodes are not allowed.
-  *
-  * There must be a proc_handler routine for any terminal nodes.
-  * Several default handlers are available to cover common cases -
+A function reference a global static variable is *NOT* a *pure* fucntion,
+
+it degenerate as a procedure,
+
+
+The function is perfect in the sense that it does not reference any 
+global variable.
+
+
+etnaviv_create_platform_device() is NOT intended to used by one function,
+
+a specific purpose only, but when create this function, I want to create other
+
+platform device with this function.
+
+Say, You want to create a dummy platform device, targeting to bind to the real master
+
+(the single GPU core) . To verify the idea that we choose the first 3D gpu core as master,
+
+other 2D or VG gpu core is not as important as the 3D one.
+
+The should bind to the 3D GPU core (master).
+
+
+While back to the question you ask, I want etnaviv_create_platform_device() to be generic,
+
+can be used by multiple place for multiple purpose.
+
+I have successfully copy this to a another drm driver by simply renaming.
+
+The body of the function itself does not need to change.
+
+>>   {
+>>   	struct platform_device *pdev;
+>>   	int ret;
+>> +
+>> +	pdev = platform_device_alloc(name, PLATFORM_DEVID_NONE);
+>> +	if (!pdev)
+>> +		return -ENOMEM;
+>> +
+>> +	ret = platform_device_add(pdev);
+>> +	if (ret) {
+>> +		platform_device_put(pdev);
+>> +		return ret;
+>> +	}
+>> +
+>> +	*ppdev = pdev;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static void etnaviv_destroy_platform_device(struct platform_device **ppdev)
+>> +{
+>> +	struct platform_device *pdev = *ppdev;
+> Same here, just use the global variable directly.
+>
+> Regards,
+> Lucas
+>
+>> +
+>> +	if (!pdev)
+>> +		return;
+>> +
+>> +	platform_device_unregister(pdev);
+>> +
+>> +	*ppdev = NULL;
+>> +}
+>> +
+>> +static int __init etnaviv_init(void)
+>> +{
+>> +	int ret;
+>>   	struct device_node *np;
+>>   
+>>   	etnaviv_validate_init();
+>> @@ -681,23 +713,13 @@ static int __init etnaviv_init(void)
+>>   	for_each_compatible_node(np, NULL, "vivante,gc") {
+>>   		if (!of_device_is_available(np))
+>>   			continue;
+>> +		of_node_put(np);
+>>   
+>> -		pdev = platform_device_alloc("etnaviv", PLATFORM_DEVID_NONE);
+>> -		if (!pdev) {
+>> -			ret = -ENOMEM;
+>> -			of_node_put(np);
+>> -			goto unregister_platform_driver;
+>> -		}
+>> -
+>> -		ret = platform_device_add(pdev);
+>> -		if (ret) {
+>> -			platform_device_put(pdev);
+>> -			of_node_put(np);
+>> +		ret = etnaviv_create_platform_device("etnaviv",
+>> +						     &etnaviv_platform_device);
+>> +		if (ret)
+>>   			goto unregister_platform_driver;
+>> -		}
+>>   
+>> -		etnaviv_drm = pdev;
+>> -		of_node_put(np);
+>>   		break;
+>>   	}
+>>   
+>> @@ -713,7 +735,7 @@ module_init(etnaviv_init);
+>>   
+>>   static void __exit etnaviv_exit(void)
+>>   {
+>> -	platform_device_unregister(etnaviv_drm);
+>> +	etnaviv_destroy_platform_device(&etnaviv_platform_device);
+>>   	platform_driver_unregister(&etnaviv_platform_driver);
+>>   	platform_driver_unregister(&etnaviv_gpu_driver);
+>>   }
+
 -- 
-2.30.2
+Jingfeng
 
