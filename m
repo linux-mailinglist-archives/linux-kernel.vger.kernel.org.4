@@ -2,39 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0DE738F5B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF3A738F71
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjFUS6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 14:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
+        id S231700AbjFUTBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 15:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjFUS6u (ORCPT
+        with ESMTP id S231642AbjFUTBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 14:58:50 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A1CB4;
-        Wed, 21 Jun 2023 11:58:49 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 20:58:46 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1687373926; bh=4nYEAteqZDwoEERcJ/4r/81UZbr+SxIo+24Al6wvXxw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qghO2PUkRp7vDv3aBumGSh+IPZJOjqAfAKG4Q6YdGCUdtm6tIqLtT3y0Wr4VoVlUD
-         eMqrP1ZeqSRVtntpyIycI8Vt6cXp8gyxJRV7Ykm/utqmw5sPpcL8rdPT6kALm3KG1M
-         55TdI+CCWrZWhM2Ur0Jrr6zPTbq6EqvMUKWGDiyo=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     w@1wt.eu, david.laight@aculab.com, arnd@arndb.de,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 10/10] selftests/nolibc: add mmap and munmap test cases
-Message-ID: <bff82ea6-610b-4471-a28b-6c76c28604a6@t-8ch.de>
-References: <cover.1687187451.git.falcon@tinylab.org>
- <9c46f648cd8c784405afed565bed120f0a2f239e.1687187451.git.falcon@tinylab.org>
+        Wed, 21 Jun 2023 15:01:09 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C109DB4;
+        Wed, 21 Jun 2023 12:01:05 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LHtmAk006865;
+        Wed, 21 Jun 2023 19:00:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=qVmVwv5lBXo2mzhJIw+jA/mdwdbctTzwNXxp+Kidd4g=;
+ b=BUK5nFhiBOgNM4+DQHAieAl8bRAhPJsrzpg/DI84Ey4cKUTkNmh3/GY32bVPMcA1noMc
+ cmkl+3TnMgSNafsmN6shyF8iE7kWaVp9mQP7clz7zdPqA4WQ7lOxpbq6dfSVVcdNtvu7
+ a3dgrimj2ajtvQo/7CcdeNbw29K2XCqnWB0+heTxsXVCe3pk+KTrqITn+wTCP2WOTqlj
+ +55C42l/7EvyXtPGe2LDxmVRgJL0Nf5TCAPAqAdsjrLWifGwo9gm4Fkv4uL4hjlbLgxG
+ WuoueT3einU2F9RLP+semvJjoKcqLyYNDP9ET3aht7mqblz2iXRqhOeKJwhMBKYGdKtB hw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rbqkhj4qh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jun 2023 19:00:46 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35LJ0jVS024917
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jun 2023 19:00:45 GMT
+Received: from hu-amelende-lv.qualcomm.com (10.49.16.6) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 21 Jun 2023 12:00:44 -0700
+From:   Anjelique Melendez <quic_amelende@quicinc.com>
+To:     <pavel@ucw.cz>, <lee@kernel.org>, <thierry.reding@gmail.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <conor+dt@kernel.org>, <agross@kernel.org>, <andersson@kernel.org>
+CC:     <konrad.dybcio@linaro.org>, <u.kleine-koenig@pengutronix.de>,
+        <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>,
+        Anjelique Melendez <quic_amelende@quicinc.com>
+Subject: [PATCH 0/7] Add support for LUT PPG
+Date:   Wed, 21 Jun 2023 11:59:43 -0700
+Message-ID: <20230621185949.2068-1-quic_amelende@quicinc.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9c46f648cd8c784405afed565bed120f0a2f239e.1687187451.git.falcon@tinylab.org>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ecsGRqo74DEqjJoxQGrNZ84lvFb2IBqf
+X-Proofpoint-ORIG-GUID: ecsGRqo74DEqjJoxQGrNZ84lvFb2IBqf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-21_11,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ priorityscore=1501 suspectscore=0 phishscore=0 impostorscore=0
+ adultscore=0 bulkscore=0 lowpriorityscore=0 spamscore=0 mlxlogscore=757
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306210158
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -45,85 +80,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-19 23:55:41+0800, Zhangjin Wu wrote:
-> Three mmap/munmap related test cases are added:
-> 
-> - mmap(NULL, 0, PROT_READ, MAP_PRIVATE, 0, 0), MAP_FAILED, EINVAL)
-> 
->   The length argument must be greater than 0, otherwise, fail with -EINVAL.
-> 
-> - munmap((void *)-1, 4*1024), -1, EINVAL)
-> 
->   Invalid (void *)-1 address fail with -EINVAL.
-> 
-> - test_mmap_munmap(4*1024)
-> 
->   It finds a init file, mmap() it and then munmap().
-> 
-> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> ---
->  tools/testing/selftests/nolibc/nolibc-test.c | 31 ++++++++++++++++++++
->  1 file changed, 31 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> index 80ab29e2887c..f7c0ca72cb28 100644
-> --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> @@ -592,6 +592,34 @@ static int test_stat_timestamps(void)
->  	return 0;
->  }
->  
-> +int test_mmap_munmap(int size)
-> +{
-> +	char init_files[5][20] = {"/init", "/sbin/init", "/etc/init", "/bin/init", "/bin/sh"};
+In certain PMICs, LUT pattern and LPG configuration can be stored in SDAM
+modules instead of LUT peripheral. This feature is called PPG.
 
-Why not /proc/1/exe or even /proc/self/exe?
+This change series adds support for PPG. Thanks!
 
-I know your other series tries to remove the procfs dependency, but
-we're not there yet :-).
+Anjelique Melendez (7):
+  dt-bindings: soc: qcom: Add qcom-pbs bindings
+  dt-bindings: leds: leds-qcom-lpg: Add support for LUT through NVMEM
+    devices
+  soc: qcom: add QCOM PBS driver
+  leds: rgb: leds-qcom-lpg: Add support for LUT pattern through single
+    SDAM
+  leds: rgb: leds-qcom-lpg: Update PMI632 lpg_data to support PPG
+  leds: rgb: leds-qcom-lpg: Support two-nvmem PPG Scheme
+  leds: rgb: Update PM8350C lpg_data to support two-nvmem PPG Scheme
 
-Also does it make sense to pass a size parameter?
-Why not use either PAGE_SIZE or the real size of the binary from
-fstat().
+ .../bindings/leds/leds-qcom-lpg.yaml          |  85 ++++
+ .../bindings/soc/qcom/qcom-pbs.yaml           |  41 ++
+ drivers/leds/rgb/leds-qcom-lpg.c              | 393 ++++++++++++++++--
+ drivers/soc/qcom/Kconfig                      |   9 +
+ drivers/soc/qcom/Makefile                     |   1 +
+ drivers/soc/qcom/qcom-pbs.c                   | 343 +++++++++++++++
+ include/linux/soc/qcom/qcom-pbs.h             |  36 ++
+ 7 files changed, 877 insertions(+), 31 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml
+ create mode 100644 drivers/soc/qcom/qcom-pbs.c
+ create mode 100644 include/linux/soc/qcom/qcom-pbs.h
 
-> +	int ret, fd, i;
-> +	void *mem;
-> +
-> +	for (i = 0; i < 5; i++) {
-> +		ret = fd = open(init_files[i], O_RDONLY);
-> +		if (ret < 0)
-> +			continue;
-> +		else
-> +			break;
-> +	}
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	mem = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);
-> +	if (mem == MAP_FAILED)
-> +		return -1;
-> +
-> +	ret = munmap(mem, size);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return close(fd);
-> +}
-> +
-> +
->  /* Run syscall tests between IDs <min> and <max>.
->   * Return 0 on success, non-zero on failure.
->   */
-> @@ -666,6 +694,9 @@ int run_syscall(int min, int max)
->  		CASE_TEST(lseek_m1);          EXPECT_SYSER(1, lseek(-1, 0, SEEK_SET), -1, EBADF); break;
->  		CASE_TEST(lseek_0);           EXPECT_SYSER(1, lseek(0, 0, SEEK_SET), -1, ESPIPE); break;
->  		CASE_TEST(mkdir_root);        EXPECT_SYSER(1, mkdir("/", 0755), -1, EEXIST); break;
-> +		CASE_TEST(mmap_bad);          EXPECT_PTRER(1, mmap(NULL, 0, PROT_READ, MAP_PRIVATE, 0, 0), MAP_FAILED, EINVAL); break;
-> +		CASE_TEST(munmap_bad);        EXPECT_SYSER(1, munmap((void *)-1, 0), -1, EINVAL); break;
-> +		CASE_TEST(mmap_good);         EXPECT_SYSZR(1, test_mmap_munmap(4*1024)); break;
->  		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp = open("/dev/null", 0), -1); if (tmp != -1) close(tmp); break;
->  		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp = open("/proc/self/blah", 0), -1, ENOENT); if (tmp != -1) close(tmp); break;
->  		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
-> -- 
-> 2.25.1
-> 
+-- 
+2.40.0
+
