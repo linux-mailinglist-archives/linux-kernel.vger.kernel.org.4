@@ -2,246 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A494F737D62
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:39:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9139E737DA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231322AbjFUIRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 04:17:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
+        id S231700AbjFUIRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 04:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbjFUIRB (ORCPT
+        with ESMTP id S231723AbjFUIR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 04:17:01 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97E961731;
-        Wed, 21 Jun 2023 01:16:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687335417; x=1718871417;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=sVKox1aOY6tNf5MDrhdLwD9ctQwEUahKH0icXmVJo7g=;
-  b=UIqJ40H+s8L2xOUxcyuIxyWhKhQoU2/03qvoUX0AVzjKmGPhIxT2qxqt
-   QPfL9FBZJd75phl5nimIynyBowlwkPS1BJfRiFfz0wRIo4UMTLTE3Zj3C
-   K/xdvDtVF65pY9hHXp7dYvH0SlGUN7M3az6Bdeg5kcRuu6Huz9GRKaEfv
-   +ATAczKFgNIKyB+zYbeSKwCn5snDezz5J89IrZsQjLp/wgUy6x/PT5TfT
-   8FkF39JvghC9zKkb9enx/VzCqh1I8VXNXRb1vlvFmXlquqKUurwVCOPz8
-   kHu00ASK2MmTlwm1ZZPSvQMARs99vdzdev/k2o0CDO0JIZV+HdyP8azJj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="344843867"
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="scan'208";a="344843867"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 01:16:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="804282987"
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="scan'208";a="804282987"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Jun 2023 01:16:55 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 21 Jun 2023 01:16:55 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Wed, 21 Jun 2023 01:16:55 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.46) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Wed, 21 Jun 2023 01:16:54 -0700
+        Wed, 21 Jun 2023 04:17:29 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2074.outbound.protection.outlook.com [40.107.93.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC3D1BC7
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:17:21 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=U0WG8xqGPZzmYQa0GrJbkp1XOlxqpNhkdSDmXllD4qq78vyziIhhwaVtNi9J9Tj76IAismyVEWW6gkHF0zWN5Sm+Sj7y8JwP+JLMdc7YiCZSc7XxPQcucRzBi4DJSctONrLY7cXW4cV6vb2r2dRiEk0DioPAngTva5B97Z1B9HBa3NYpZ/a01UyerhbOzIQId4i2UeGdx7K/DBw9M8C6/N3oN5afhKJjGyFx0V7QE6ArMouHO6hp1++Q4mVPd72WClIfAMfuRdUmK5mKdwzD6uKJnqzVQbUV9bB/u+mGcscxh/2yRz/eoVvFkpOxBEjt9rmc1HRATlwbvGlfMULAoQ==
+ b=IY3QeU/m6csNP04vzFmzTcg7t6RjHSOiukSyCjR1Q23fF6N9LSE4kXL5fcp9QMoBgWRVxQOCmuHj7wIbt0k0Wi3VPbcX4uuxolnlVn3SGCP5N1MM0rfa6AwmAyfbE0+bku7LDYX9HBjU0qBlp38YymihQcNoNN4sc7bk4YCOPGpBDnvwdI00c8u69xjBkWvCUNmf38Lggsw7eIbTE51dMvne1LohnRF5Vdq3Awzm/7BM5/Ag201zDLH2pEYAKKS4spD/jRUdTLRP9aoBx32mSEkHAsSdPDD/5mtxo0rLVS6CR3CCUX10+LWkKmXzwrJj4IzHBaJf8rI8sYuWZh7fkw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hHTnvGdH+KDbD8vuPqbJM0WCxhcx1Vh8ZAc/U+WqfRc=;
- b=C3Et+w9N7ZIH8t7r/j6GX3KtBv/XMIsgTOI9boTycnTIyYr7VI0/Ds8DLYXsHagBQvTF5py6oaBagpGBrNIeK9XBkCwFu/2QAdZ6uVe8HfnKOa634dNXQSo8p3cDq/lKIX29qLE4QsCvTUOvirMkVHPdqNbtW7kly+iAA3p6oU0x2sggNEGGGhM7OG13DJVxul8iwRbM9nYEOnhPeChrQlvo1p2czw9mciTWCb5XUXUG+Y5fRGdqJ+IH9DtdvUGp7kG0JWtz5SpD04RQuZi1JS9ddVCDSFOpJ1NpzL67vZduBSfKIvTyPC3VKbg7jYIu6MjdAJ478D1ZIcNURIDz/g==
+ bh=XsU11Ua5zmLeBqy01KiQ24kR/3j28/Ytj/IWE3Z3Rvg=;
+ b=aTEmJDWmANRNKcjTQXoP7INQ72O3guInr+Yje4JYN2iFJB45vCKDGJPWY2Gx1L/R5fMqTccfQUsOFWpufS4YZIz5MmCryD0UnZhrVmFGyq3A211iYiRmr8Q+HiH0z3rx+NgpYlGGatk8IIvdHt4vEkOgkjgSJPfA5Dl2PsEucLXXgHmeN6vpvyh01PjqtBbzZAq+BP0zTaYb19iTnkfX37D+Anm0RI5u++GRq1NkNGpc6cEqIS3TR98OvLJNtjNkJVfVIUwCgNj8JnBev53yBWmJQOjTAvLGnJgliy46srLY36b8rZBR5WjIqnng4PyZeEgZhNmZHqlVAqdcs8XVnQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by SA1PR11MB6989.namprd11.prod.outlook.com (2603:10b6:806:2be::7) with
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XsU11Ua5zmLeBqy01KiQ24kR/3j28/Ytj/IWE3Z3Rvg=;
+ b=C+3ZxLPMsRI2KidUg8ObgEN0xknF9xqA2zOycyQ4OdD/MHYfarOUwQJlT8383A3ck6YsVYDSz1W11xkY2GOoUqh8W5nZ4lbSh34QJP59ag3GnrpHHf+vGXr0ABoEwco79kfVi0jV013AD3mgUD18u9iTHc0WWHifOZ7FENF/j5Y=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB3286.namprd12.prod.outlook.com (2603:10b6:a03:139::15)
+ by DS0PR12MB8341.namprd12.prod.outlook.com (2603:10b6:8:f8::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.35; Wed, 21 Jun
- 2023 08:16:52 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::4f05:6b0b:dbc8:abbb]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::4f05:6b0b:dbc8:abbb%7]) with mapi id 15.20.6521.023; Wed, 21 Jun 2023
- 08:16:52 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     Robin Murphy <robin.murphy@arm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        "Alexander Duyck" <alexander.duyck@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-Subject: RE: Question about reserved_regions w/ Intel IOMMU
-Thread-Topic: Question about reserved_regions w/ Intel IOMMU
-Thread-Index: AQHZmZR0JpzuQIuRD0G85gaP7++jm6+AOJSAgADP/QCAB+LmgIAEOrcwgABAlgCAB47s0A==
-Date:   Wed, 21 Jun 2023 08:16:52 +0000
-Message-ID: <BN9PR11MB5276B96470F3BF1E7077CC018C5DA@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <CAKgT0UezciLjHacOx372+v8MZkDf22D5Thn82n-07xxKy_0FTQ@mail.gmail.com>
- <CAKgT0UfMeVOz6AOqSvVvzpsedGDiXCNQrjM+4KDv7qJJ1orpsw@mail.gmail.com>
- <a1cff65b-b390-3872-25b5-dd6bbfb3524c@linux.intel.com>
- <b24a6c7b-27fc-41c0-5c82-15696b4a7dc1@arm.com> <ZIiRK2Dzl2/9Jqle@ziepe.ca>
- <BN9PR11MB52765C24405D2475CF3CBEBE8C58A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZIxTmGU4a5dniEY3@nvidia.com>
-In-Reply-To: <ZIxTmGU4a5dniEY3@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SA1PR11MB6989:EE_
-x-ms-office365-filtering-correlation-id: aa90ffe9-5472-4c74-d5ee-08db722fdea8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 070bKmazggvGV/TlOqjkQbkkN7rFwP5qI6qMSJ9PDbVrM47PlLwVoNSHgaVhMgbJVFgphbICrq9eA4v/PGRNCt6ygojMMsSHKSEsECx99Q2R7+BasClWzmprDbUPpXrpbByW4PclmiTLDdfe/zY6OueZdkB/u3PrFYLxXO0T5DgimpTO6OYk3y0+quSL4ej76tZXspllhfRg0DD3lc+fQPi5nkX9hmEGfasqUmVbYNuMN1KH1fulcD8MpQFcYXmc/iGlnfcJ7Wi67Jh1ul+hiZ5YkVQ/I7Tor3m59MBZFx9UvfW2hmbA9zkSADdw+0l9KH+Dg4dOw/ZPkEE2kxbHfa8YRG1AFljjLASxfui0shPXo35YopojcRQTK8P+Vz+rWDIryuqGLBUWSPwrN+Ikfbee6cmB/5UwItiGWNSq2J3ungjDvr7snBC4UzS0Fl+AJnh+M6a+AYy64+wJNTgUFNzqpeBCBvNzsZ58l9behQRDVefIuMZwSxuCUDKB5WLmZmYiUvsLPBjXzniHEKTtaT2LiVC/Z4gT8IoeL+QLhcC8JD76rKsnbL3WIIdjNC86j2sZvpbP1B/Xn7e731pzqQWy5Ra5RiaLTRdfku6xnq9NgzM/OeDzE2RomDfcJEtmzEYXa3Q+VDxjdPj+7w9nRw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(346002)(396003)(136003)(376002)(39860400002)(451199021)(82960400001)(52536014)(2906002)(122000001)(83380400001)(38070700005)(86362001)(5660300002)(66899021)(4326008)(54906003)(186003)(66556008)(8936002)(8676002)(66476007)(66446008)(64756008)(66946007)(26005)(478600001)(41300700001)(6916009)(76116006)(55016003)(9686003)(38100700002)(6506007)(7696005)(316002)(33656002)(71200400001)(473944003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?hYGCP6zE19s/RQD8oT/gWJYkSES1hoJmAoOwaDlCBJ2+7sDCXOswILrZzzRW?=
- =?us-ascii?Q?AFKBtlyr00LsnIUo7HemXyW1uRaGeGB9qqmolWrbXu8THRKrzABl+NLJXd8p?=
- =?us-ascii?Q?acbrVvk4d+qoSrLm6LNt5x8sbUHQutqplbhUaWjWYfVYHyyHAJhnNo6CTeQ7?=
- =?us-ascii?Q?tlkKsZXwYOIoD53vDPoQ/RP0nVTCPb6fEQkQJXpuLASchakNrc5qHzNZYOuJ?=
- =?us-ascii?Q?mLtnxnXU6NIMwftKjM/0qmdO6vm3eTHBXjcMSsOrkdosbBf2kigyyKSm+N4I?=
- =?us-ascii?Q?t6IQzTRs/oOy5yC8WYuZpJMsvPUypsZcxOzUS5qzMvyAlhs/4Ko/i5HvMJ0b?=
- =?us-ascii?Q?CiZ0u52swTOPQShHLPcK0kdGDeBvnNlfiYNG9tiO2Nj7X7JPoUIjojOQwhZM?=
- =?us-ascii?Q?MLaLfwcmWKonbOeFQv9t1/z4768psxOTQCFR5oirzss7QFyA0g+Z5k4n2TAh?=
- =?us-ascii?Q?RvG3VXXBeJZTNY5pDtRmQ9HI8WBgFHZ4X31d6JJEJH2R4OEyOr1llOgPJaLU?=
- =?us-ascii?Q?K6/G/J8zuwWs7zogPRtnfezwBBqfFjpcn09c4P1kUX4rfl+xhaXuYcxSasUU?=
- =?us-ascii?Q?8032mDXJZc3aOe64eOU75SOOio88EsHiGXZNFVZAFqjX/94qHGIBy9OXLHto?=
- =?us-ascii?Q?hBZTWMLy7B1s9SAh/aIDYYAnLXf2yof/9qa/xHMSFaTPdrDZCYRVp+3G4e4v?=
- =?us-ascii?Q?BIaoy/Pu5Zg+oBzh/6W1/74GDQe49GeLRbRujKDJkL42RqJuikQf8MCTm3eX?=
- =?us-ascii?Q?BJU5BjvilDNompDxnXNl6Bua/WRDnD8+XslLc1JYkEUrb0ghb9SD7nv20T7c?=
- =?us-ascii?Q?yZuNEjF+jy1XmRbZsjomclXyOfus2TOD031BCweS4Ws1o7TRypsumjb93356?=
- =?us-ascii?Q?sB9eMiqpJFpmkSpcxkjz3iUtQYtzlwi0D+EJ39gjjK3IbC2VYsMve3kWBI++?=
- =?us-ascii?Q?Fnw9bbJRRfqcVmOxF9or3eduDzk4UuypX7BHvpkt5KUr+UOf3aA4z17/0gTd?=
- =?us-ascii?Q?+aXFohX/fqLQe7Yo/KPM7YcteVcAbiGndXb+9QyoYKC1oJKmL27XX2WWMUCD?=
- =?us-ascii?Q?ZNSDVrJFdWwpLsDrJW7JAjowYYD6AM6Hfy9cfzWbAQPXdNTc/88YlDzcMSKz?=
- =?us-ascii?Q?SVW/ux7aQusqC7j4aWVSmxcue2PrVIVrw1APWQoKIH0PM7AtnglpWqpWTJsz?=
- =?us-ascii?Q?F5O4YoiME9oG+beIBOLQ1FFDlCOJUBBd0eK8mdxec7GCMcwKaODUeTHaN3iS?=
- =?us-ascii?Q?zTWgQg3CdzaigTKTUOkhGIC8m1yfUc6PesMjlKdNn2f2uhzRnyejBxKsPcpD?=
- =?us-ascii?Q?XE+i+8nNTjWT3LlrGOjn9bOuUdVBvzOvu1rTVQS19x0wDcZzY1BFttluiNC0?=
- =?us-ascii?Q?P5ApWUYxxZv4+HOJhEhTpYUz5U2pF8GaKJ7H+Nm6zdaDOiuIVw+zmpQSQ3Oh?=
- =?us-ascii?Q?XHJQx0CbiiO5kdnHj2R0KN9fZ/haE+PYVlTAJp6IQbHmsY/4lUaQ+BMzO30M?=
- =?us-ascii?Q?D9idvP+HVC2ql7GRID7TwmGvcJYfMJSWy9pKUCzwop33bEG0rRwDGLB+el5W?=
- =?us-ascii?Q?hohroEbeHdg2E7Gw/YMOgxe5ISZeiTUAQnAVxb6E?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.21; Wed, 21 Jun
+ 2023 08:17:18 +0000
+Received: from BYAPR12MB3286.namprd12.prod.outlook.com
+ ([fe80::8801:420d:4748:33b1]) by BYAPR12MB3286.namprd12.prod.outlook.com
+ ([fe80::8801:420d:4748:33b1%4]) with mapi id 15.20.6521.023; Wed, 21 Jun 2023
+ 08:17:18 +0000
+Date:   Wed, 21 Jun 2023 13:47:00 +0530
+From:   "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+To:     David Vernet <void@manifault.com>
+Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, rostedt@goodmis.org,
+        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, joshdon@google.com,
+        roman.gushchin@linux.dev, tj@kernel.org, kernel-team@meta.com
+Subject: Re: [RFC PATCH 3/3] sched: Implement shared wakequeue in CFS
+Message-ID: <ZJKx/LQwc3bWS5nh@BLR-5CG11610CF.amd.com>
+References: <20230613052004.2836135-1-void@manifault.com>
+ <20230613052004.2836135-4-void@manifault.com>
+ <ZI/x+RkSqpct4bM3@BLR-5CG11610CF.amd.com>
+ <20230620200822.GC3027191@maniforge>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620200822.GC3027191@maniforge>
+X-ClientProxiedBy: PN3PR01CA0054.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:98::20) To BYAPR12MB3286.namprd12.prod.outlook.com
+ (2603:10b6:a03:139::15)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BYAPR12MB3286:EE_|DS0PR12MB8341:EE_
+X-MS-Office365-Filtering-Correlation-Id: fed9aaf1-e703-429f-595a-08db722fedc8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: c4Jf0msxtihWJB6ngGBdw52GuPkND9cWD5FBd2j5h499sKaloc749NH0en0ShN8f9R+/MXu8B6uGIgH/xvS9AoYG1Hxajj+CkunUSkkp8EIdtE1sUNmMgtilnT3q8G+ioVEeo6H2cTIT2gD5p+0qedW/eF7oj0fW0o8+TcvFWEFkEa2S+6EOHw1X0xazqFOevYZV8PbWqGKhPY3Imtf5w9So4j2eUv/dzDpQRpQv08FVoAY0eI1g8gco3MeTWYL3Zy1HN2ccQWWbU7CwT+KUJ/5whBsVKZjF/OEygOZfDjfCDpD74p4oFeDtJg6AR9UqvVFtUv6G+musflMMIoS3jb5lTGyzNvCape1yQkKU9QvqyUgEVVNjYK8sR9OS5uPTG17obh17xCfauNuqQM+OwpWj4fpQmtXT/L82rXyN6oM6h2+CX9WpHty302wU8SpZRSP+Y4glT0qLjI/jJ4NtJMSIFMVnUb6Hnrj5P5HJQSEKCgpWr00lOpLZa8aSMp2FI6Zc+ZEp4I+kn8uH7fuyh/WilpyYgXefyRSRW8f6qfU6NQDvBlHo77Lokkk+uKoJ
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3286.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(136003)(346002)(366004)(376002)(451199021)(38100700002)(86362001)(66556008)(66946007)(4326008)(316002)(26005)(66476007)(6916009)(186003)(5660300002)(6486002)(8936002)(6512007)(6506007)(6666004)(41300700001)(2906002)(8676002)(478600001)(7416002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gMC1ewQyRjKMj03mxflYv9H6pmAmnqmwSkn95oz0fpK8KAnSfbm3XYhUeEry?=
+ =?us-ascii?Q?/1wgbwXlhndqwIOzpiT/Hdppy/IEws60hikoahARL6ZSA3RIS1Fy8ajXtvr6?=
+ =?us-ascii?Q?TdP32iRnB4Rbr6ajystbrzSNlncxuNZtiGC7xIhaFsIDuNy2U9CJfhLLTcxF?=
+ =?us-ascii?Q?R14JICtGNeabAX6IoqSQ73n0Uos3dZu1/5OKLmou7VWAm4BObf0O+/5SWtG9?=
+ =?us-ascii?Q?0H6jzhjUOQzoDfvH0zSW0vQgX6hseoDtwJ7P13AhxeYq/Zb8VJ3B7mG5tzG5?=
+ =?us-ascii?Q?Jf5U8HQUjVYNbskEWeFz7Bt4cGHLdETNkqXcYeGijbpj0xGNnJjmStHPQ75b?=
+ =?us-ascii?Q?CQIS0SJIVoi+pA1X1ynN5b5UyCcMWWU0W7wsRYSPVi5TqI6BtxnEPXCxbBWa?=
+ =?us-ascii?Q?qRikbCjW/pip3cem/DV8tBjIm1aa3OUH06MzR8yRNOTuCZN2wHDE28/rCgd2?=
+ =?us-ascii?Q?AfxFMk8uhOuPp+TLLq23v3OJVZOgJ/+qXXZrnah8fBHqAqc2vl5VGEeqXT2z?=
+ =?us-ascii?Q?LKWtDILqIggqQQhYHIF2+Ii25ZKpX7sR4/h+NkUrciDoGSH9wmGDIzmisQYv?=
+ =?us-ascii?Q?3CfpHKOUKP8UKzRFGnaP66Jbhinr8fX5GR+urs0sXR4wtsar3TNtk/2hOoVr?=
+ =?us-ascii?Q?F73zA4sZTifQHA4BATUHhwHqdG4nIazLDP9//aycw9fwOsMg7dWn/VmZjThk?=
+ =?us-ascii?Q?+NfttPwRdwgX2oz7fwKS5elXfYImTVTTJPTVZeH4W3RnYFMgs6Usr/pbef42?=
+ =?us-ascii?Q?1nR3bq0uvvjTz4bIRJ2bsyrT8vqGB80comWPJKxU95ZQfcdT1NuFoDajvV9J?=
+ =?us-ascii?Q?n3XPT846eSH4UnjPdHGtBFP62LQh+TmWr3ZAzA3gt+PPc7o1tW+RBxV/ogMA?=
+ =?us-ascii?Q?OUrps6C+u0IDg/bJzRuXfV9pScAHG0J8x7k9WaWh+w3CqCJU5qkRPgqf/1Hg?=
+ =?us-ascii?Q?WHa9qrXtEvd4tsCTTaKjA4oVR3j5v9BFhBwnTSbf0B57th07TAOEsD2GJ+N8?=
+ =?us-ascii?Q?oSy8EmQuImCOrbo21twaabs/BbkS7eqAmcnWrauIhzO277PtVfdq+rlvzOCc?=
+ =?us-ascii?Q?YyBtumljUGJZU1WyctTpQ4Z5zWpYMFN1OeslZ+Ti8uO3Nut7hlaYpeAwLAHG?=
+ =?us-ascii?Q?CS1IYrlS2XoIAR7+anaqlsVqHe8d5QOPAPkMnyggX2y8/8KRvIUs6Kvdjtnk?=
+ =?us-ascii?Q?KlIqFvjmPSE/Xocoa/hHC0kV7iLQ3aggaLf/vZw0Qv2UyQqIN67LJWyKLHFu?=
+ =?us-ascii?Q?VoEPDX2rBnh67P72lvsUo8kkM9FM9DIhP67JIs9JvmDLVdB1pafssDHL2fNc?=
+ =?us-ascii?Q?M+N3hOEYvncqKz7o5w5eR4Bzif5O0RHN6ivnko13XnF3tYPwSJwW9gPCzsqP?=
+ =?us-ascii?Q?p+RSeIuE0JqoHhKi6O0lMcnllhEZWJp+hyHcmFwxyOeZWhv7FJBwT/lcNsup?=
+ =?us-ascii?Q?d+7HlTGkEIvhONITO9qbK4XiYTts7aNibMvVur34cJ+1THC2WBR4hObPxwpn?=
+ =?us-ascii?Q?avtzxNlBemeOaLDkgd7fdkgxml5Dk10bj3ntiyNHS4Eqj+/XQnv7bNIAUciR?=
+ =?us-ascii?Q?4ae6W//e8zoIWv/uFRsOhgkVsGd23sKiOqGnOCoV?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fed9aaf1-e703-429f-595a-08db722fedc8
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3286.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa90ffe9-5472-4c74-d5ee-08db722fdea8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jun 2023 08:16:52.7533
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 08:17:18.5422
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: A04PTd7hjzzHc4979Y9xZTb5XCq76nFFEYndB2/jJx4JqcWeiIz7X5sbdqgtDa02LtOkw7jABa0fsFZlT45NsQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6989
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EcUGraPV2u5coFFyfCfDpVHoMYIBgIski61ozihwCui20vGZmHRhUi4I+z+VlDVVkJ5+i5ity59HPx6ddqUrlA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8341
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Friday, June 16, 2023 8:21 PM
->=20
-> On Fri, Jun 16, 2023 at 08:39:46AM +0000, Tian, Kevin wrote:
-> > +Alex
-> >
-> > > From: Jason Gunthorpe <jgg@nvidia.com>
-> > > Sent: Tuesday, June 13, 2023 11:54 PM
-> > >
-> > > On Thu, Jun 08, 2023 at 04:28:24PM +0100, Robin Murphy wrote:
-> > >
-> > > > > The iova_reserve_pci_windows() you've seen is for kernel DMA
-> interfaces
-> > > > > which is not related to peer-to-peer accesses.
-> > > >
-> > > > Right, in general the IOMMU driver cannot be held responsible for
-> > > whatever
-> > > > might happen upstream of the IOMMU input.
-> > >
-> > > The driver yes, but..
-> > >
-> > > > The DMA layer carves PCI windows out of its IOVA space
-> > > > unconditionally because we know that they *might* be problematic,
-> > > > and we don't have any specific constraints on our IOVA layout so
-> > > > it's no big deal to just sacrifice some space for simplicity.
-> > >
-> > > This is a problem for everything using UNMANAGED domains. If the
-> iommu
-> > > API user picks an IOVA it should be able to expect it to work. If the
-> > > intereconnect fails to allow it to work then this has to be discovere=
-d
-> > > otherwise UNAMANGED domains are not usable at all.
-> > >
-> > > Eg vfio and iommufd are also in trouble on these configurations.
-> > >
-> >
-> > If those PCI windows are problematic e.g. due to ACS they belong to
-> > a single iommu group. If a vfio user opens all the devices in that grou=
-p
-> > then it can discover and reserve those windows in its IOVA space.
->=20
-> How? We don't even exclude the single device's BAR if there is no ACS?
+Hello David,
 
-I thought the initial vbar value in vfio is copied from physical BAR so
-the user may check this value to skip. But it's informal and looks
-today Qemu doesn't compose the GPA layout with any information
-from there.
+On Tue, Jun 20, 2023 at 03:08:22PM -0500, David Vernet wrote:
+> On Mon, Jun 19, 2023 at 11:43:13AM +0530, Gautham R. Shenoy wrote:
+> > Hello David,
+> > 
+> > 
+> > On Tue, Jun 13, 2023 at 12:20:04AM -0500, David Vernet wrote:
+> > [..snip..]
+> > 
+> > > +static void swqueue_enqueue(struct rq *rq, struct task_struct *p, int enq_flags)
+> > > +{
+> > > +	unsigned long flags;
+> > > +	struct swqueue *swqueue;
+> > > +	bool task_migrated = enq_flags & ENQUEUE_MIGRATED;
+> > > +	bool task_wakeup = enq_flags & ENQUEUE_WAKEUP;
+> > > +
+> > > +	/*
+> > > +	 * Only enqueue the task in the shared wakequeue if:
+> > > +	 *
+> > > +	 * - SWQUEUE is enabled
+> > > +	 * - The task is on the wakeup path
+> > > +	 * - The task wasn't purposefully migrated to the current rq by
+> > > +	 *   select_task_rq()
+> > > +	 * - The task isn't pinned to a specific CPU
+> > > +	 */
+> > > +	if (!task_wakeup || task_migrated || p->nr_cpus_allowed == 1)
+> > > +		return;
+> > 
+> > In select_task_rq_fair(), having determined if the target of task
+> > wakeup should be the task's previous CPU vs the waker's current CPU,
+> > we spend quite a bit of time already to determine if there is an idle
+> > core/CPU in the target's LLC. @rq would correspond to CPU chosen as a
+> > result of that scan or if no idle CPU exists, @rq corresponds to the
+> > target CPU determined by wake_affine_idle()/wake_affine_weight().
+> > 
+> > So if the CPU of @rq is idle here, can we not simply return here?
+> 
+> Hi Gautum,
+> 
+> Sorry, I'm not sure I'm quite following the issue you're pointing out.
+> We don't use swqueue if the task was migrated following
+> select_task_rq_fair(). That's the idea with us returning if the task was
+> migrated (the second conditional in that if). If I messed up that logic
+> somehow, it should be fixed.
 
->=20
-> > The problem is that the user may not open all the devices then
-> > currently there is no way for it to know the windows on those
-> > unopened devices.
-> >
-> > Curious why nobody complains about this gap before this thread...
->=20
-> Probably because it only matters if you have a real PCIe switch in the
-> system, which is pretty rare.
->=20
+Sorry, my bad. I see it now.
 
-multi-devices group might not be rare given vfio has spent so many
-effort to manage it.
+So as per this patch, the only time we enqueue the task on the shared
+wakeup is if the target of try_to_wake_up() is the same CPU where the
+task ran previously.
 
-More likely the virtual bios may reserve a big enough hole between
-[3GB, 4GB] which happens to cover the physical BARs (if not 64bit)
-in the group to avoid conflict, e.g.:
+When wake_affine logic fails and the previous CPU is chosen as the
+target, and when there are no other idle cores/threads in the LLC of
+the previous CPU, it makes sense to queue the task on the
+shared-wakequeue instead of on a busy previous CPU.
 
-c0000000-febfffff : PCI Bus 0000:00
-  fd000000-fdffffff : 0000:00:01.0
-    fd000000-fdffffff : bochs-drm
-  fe000000-fe01ffff : 0000:00:02.0
-  fe020000-fe02ffff : 0000:00:02.0
-  fe030000-fe033fff : 0000:00:03.0
-    fe030000-fe033fff : virtio-pci-modern
-  feb80000-febbffff : 0000:00:03.0
-  febd0000-febd0fff : 0000:00:01.0
-    febd0000-febd0fff : bochs-drm
-  febd1000-febd1fff : 0000:00:03.0
-  febd2000-febd2fff : 0000:00:1f.2
-    febd2000-febd2fff : ahci
-fec00000-fec003ff : IOAPIC 0
-fed00000-fed003ff : HPET 0
-  fed00000-fed003ff : PNP0103:00
-fed1c000-fed1ffff : Reserved
-  fed1f410-fed1f414 : iTCO_wdt.0.auto
-fed90000-fed90fff : dmar0
-fee00000-fee00fff : Local APIC
-feffc000-feffffff : Reserved
-fffc0000-ffffffff : Reserved
+And when that previous CPU is idle, the try_to_wake_up() would have
+woken it up via ttwu_queue(), so before going idle the next time it
+will check the shared queue for the task and find it. We should be
+good in this case.
+
+Now, it is possible that select_task_rq_fair() ended up selecting the
+waker's CPU as the target based on the
+wake_affine_idle()/wake_affine_weight() logic. And if there is no idle
+core/thread on the waker's LLC, the target would be the busy waker
+CPU. In the case when the waker CPU is different from the task's
+previous CPU, due to ENQUEUE_MIGRATE flag being set, the task won't be
+queued on the shared wakequeue and instead has to wait on the busy
+waker CPU.
+
+I wonder if it makes sense to enqueue the task on the shared wakequeue
+in this scenario as well.
+
+> 
+> > Or if the idea is to avoid the scan for an idle core/CPU in
+> > select_task_rq_fair(), then 
+> 
+> No, swqueue_enqueue() is called from enqueue_task_fair(), not
+> select_task_rq_fair(). If select_task_rq_fair() (which is of course
+> called beforehand for a waking task) found an idle core/CPU, we don't
+> bother using swqueue, as mentioned above.
+
+Got it. Thanks!
+
+> 
+> Thanks,
+> David
+
+--
+Thanks and Regards
+gautham.
