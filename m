@@ -2,127 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2E3738E02
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:02:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D773B738E0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbjFUSCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 14:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
+        id S229717AbjFUSCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 14:02:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjFUSCU (ORCPT
+        with ESMTP id S231179AbjFUSCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 14:02:20 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35A129D;
-        Wed, 21 Jun 2023 11:02:20 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-25e7fe2fbc9so3037079a91.2;
-        Wed, 21 Jun 2023 11:02:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687370539; x=1689962539;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ghR3ONQ0xCWF/XsVVqlYhvKkezqnfnGRVsn4IWmNqPA=;
-        b=WlDhY0OAVtt9U/sOOElyyyzC8WQUo6poFN2oaUUbgXb/+d/IcLxLnp/l+UzGUwpnTP
-         qNVRgaSawr/Lks/MVqkXW3vhZ6kxmceUTjHXM6jlyF1GptNr1dqW3DS3mHch/GovOfRj
-         eeIG+2GeD7qLThk604Ls1Dm6ulCuVqsz3HJeNzmw20ui3f1km/wN1Lsn8new91sCB9f4
-         Y/9gdFH2EtmVLBvhgPnz+wuC+/IaW12lqMa1hMv5oCDcKrdyydt7o/GSHiNNyTmCgyjE
-         n6f4GEOsh48n3nZWOX6uYilALlQZViylNfVYvHM7mBlUYr3PiCQJ7ZWpUMc3s5dLxZUE
-         OjEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687370539; x=1689962539;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ghR3ONQ0xCWF/XsVVqlYhvKkezqnfnGRVsn4IWmNqPA=;
-        b=kSlWNIkwNJ5KFt1U5a7Vv6vUphbCVfgkll3XXjmbASforS54EYcu2dO+RtQD1MTAbz
-         IV9JlQoZWOeDPKpCqJ/ssggXgUNpjufXJ1lOx+wQure1Z/qRh4VTncNmqElz0ok6fCyu
-         puI49LTDbVEKaw+uXmC6jIanMi9bV0hKg2znzPSTSssWg1lfdi8lb37TanBkSvCLU5HL
-         hzM2/b/wxN36/GFRiW0gkdq+v/B8meRIv692is0FpZArKWjTWEOWRGsx9u72EEcfSRjy
-         0l/ypA8RfSDQPeN/XD9EVzIoBv0k4fMOSeCi8ryiwl7x+oWVn4KrTKA4ifKV9iT1toZC
-         SpUg==
-X-Gm-Message-State: AC+VfDyJlWGbFxmDiTOlxGEzHOOb4gABL74oNTD39MgKuS/5WNAKdm9Y
-        5ZLphXyB6Nn21HG0dGxn6VI=
-X-Google-Smtp-Source: ACHHUZ6mRoAo2s2oCkgP3Wp2nUTJXsXUGVHNcWUvqJUw9GFNXu1TCgqL3BU4dWywAqRpkfH2O6TdSg==
-X-Received: by 2002:a17:90b:4c8d:b0:25e:a5b2:8463 with SMTP id my13-20020a17090b4c8d00b0025ea5b28463mr11111864pjb.8.1687370539354;
-        Wed, 21 Jun 2023 11:02:19 -0700 (PDT)
-Received: from smtpclient.apple ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id r10-20020a638f4a000000b005439aaf0301sm3329045pgn.64.2023.06.21.11.02.16
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 21 Jun 2023 11:02:18 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.600.7\))
-Subject: Re: [PATCH v2 2/2] mm/mmu_gather: send tlb_remove_table_smp_sync IPI
- only to MM CPUs
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20230620144618.125703-3-ypodemsk@redhat.com>
-Date:   Wed, 21 Jun 2023 11:02:05 -0700
-Cc:     mtosatti@redhat.com, ppandit@redhat.com,
-        David Hildenbrand <david@redhat.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Heiko Carstens <hca@linux.ibm.com>, gor@linux.ibm.com,
-        agordeev@linux.ibm.com,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        svens@linux.ibm.com, "David S. Miller" <davem@davemloft.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>, frederic@kernel.org,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>, ardb@kernel.org,
-        samitolvanen@google.com, juerg.haefliger@canonical.com,
-        Arnd Bergmann <arnd@arndb.de>, rmk+kernel@armlinux.org.uk,
-        geert+renesas@glider.be, linus.walleij@linaro.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        sebastian.reichel@collabora.com, Mike Rapoport <rppt@kernel.org>,
-        aneesh.kumar@linux.ibm.com,
-        the arch/x86 maintainers <x86@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-s390 <linux-s390@vger.kernel.org>,
-        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm <linux-mm@kvack.org>, linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <10050BB1-15A4-4E84-B900-B21500B2079B@gmail.com>
-References: <20230620144618.125703-1-ypodemsk@redhat.com>
- <20230620144618.125703-3-ypodemsk@redhat.com>
-To:     Yair Podemsky <ypodemsk@redhat.com>
-X-Mailer: Apple Mail (2.3731.600.7)
+        Wed, 21 Jun 2023 14:02:35 -0400
+Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [213.239.216.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 444261981;
+        Wed, 21 Jun 2023 11:02:29 -0700 (PDT)
+Received: from lexxgentoo.devos.club (unknown [77.239.252.99])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id BDFB11408B0;
+        Wed, 21 Jun 2023 17:52:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postmarketos.org;
+        s=donut; t=1687369948;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ycwnc1CefgiqLrlbcmIQiF4/rkNGiReXStw8FUuFvLA=;
+        b=k27OBlhmdxbqZzrDeeHji5at9hsQtlul4H76PvRlGRl7jJXk5pEdL94IUOqiecGMT77ols
+        sIAd7cc3q136reU6RgzuYo+rQYkx/5CALISfY/TAiAwymffRtQjhYe7ML8mdWCuyK8ZYLs
+        3Ao2tMEXlHxHCHBMDTq+3CKqQGPeXkY=
+From:   Alexey Minnekhanov <alexeymin@postmarketos.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Alexey Minnekhanov <alexeymin@postmarketos.org>,
+        Konrad Dybcio <konradybcio@gmail.com>
+Subject: [PATCH v2 2/3] remoteproc: qcom: q6v5-mss: Add support for SDM630/636/660
+Date:   Wed, 21 Jun 2023 20:50:45 +0300
+Message-Id: <20230621175046.61521-2-alexeymin@postmarketos.org>
+X-Mailer: git-send-email 2.39.3
+In-Reply-To: <20230621175046.61521-1-alexeymin@postmarketos.org>
+References: <20230621175046.61521-1-alexeymin@postmarketos.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->=20
-> On Jun 20, 2023, at 7:46 AM, Yair Podemsky <ypodemsk@redhat.com> =
-wrote:
->=20
-> @@ -1525,7 +1525,7 @@ static void collapse_and_free_pmd(struct =
-mm_struct *mm, struct vm_area_struct *v
-> 				addr + HPAGE_PMD_SIZE);
-> 	mmu_notifier_invalidate_range_start(&range);
-> 	pmd =3D pmdp_collapse_flush(vma, addr, pmdp);
-> -	tlb_remove_table_sync_one();
-> +	tlb_remove_table_sync_one(mm);
+Snapdragon 630/660 modem subsystem is similar to one in MSM8998
+and can almost reuse it's reset sequence.
 
-Can=E2=80=99t pmdp_collapse_flush() have one additional argument =
-=E2=80=9Cfreed_tables=E2=80=9D
-that it would propagate, for instance on x86 to flush_tlb_mm_range() ?
-Then you would not need tlb_remove_table_sync_one() to issue an =
-additional
-IPI, no?
+Downstream sources call this q6v5 version "qdsp6v62-1-5" and its
+code path has additional checks for QDSP6v55_BHS_EN_REST_ACK
+status [2].
 
-It just seems that you might still have 2 IPIs in many cases instead of
-one, and unless I am missing something, I don=E2=80=99t see why.
+Inspiration is taken from Konrad Dybcio's work in [1], but reworked
+to use common code path with MSM8996/8998, instead of completely
+separate "if" block for SDM660.
+
+[1] https://github.com/SoMainline/linux/commit/7dd6dd9b936dc8d6c1f1abe299e5b065c33741e8
+[2] https://github.com/MiCode/Xiaomi_Kernel_OpenSource/blob/lavender-q-oss/drivers/soc/qcom/pil-q6v5.c#L393
+
+Co-developed-by: Konrad Dybcio <konradybcio@gmail.com>
+Signed-off-by: Konrad Dybcio <konradybcio@gmail.com>
+Signed-off-by: Alexey Minnekhanov <alexeymin@postmarketos.org>
+
+---
+
+V2: use readl_relaxed_poll_timeout instead of hand-coded for loop.
+
+In his commit Konrad mentions that modem was unstable, but I don't
+observe such behaviour on my device. Modem does not restart by itself,
+and I could successfully enable ath10k wcn3990 Wi-Fi with this.
+
+Also worth saying that in my initial tests just using qcom,msm8998-mss-pil
+as-is, without separate resource struct and separate code paths for
+SDM660, was also working fine.
+---
+ drivers/remoteproc/qcom_q6v5_mss.c | 51 ++++++++++++++++++++++++++++--
+ 1 file changed, 49 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/remoteproc/qcom_q6v5_mss.c b/drivers/remoteproc/qcom_q6v5_mss.c
+index 8e15e4f85de1..dcbecae675e2 100644
+--- a/drivers/remoteproc/qcom_q6v5_mss.c
++++ b/drivers/remoteproc/qcom_q6v5_mss.c
+@@ -71,6 +71,7 @@
+ #define QDSP6SS_MEM_PWR_CTL		0x0B0
+ #define QDSP6V6SS_MEM_PWR_CTL		0x034
+ #define QDSP6SS_STRAP_ACC		0x110
++#define QDSP6V62SS_BHS_STATUS		0x0C4
+ 
+ /* AXI Halt Register Offsets */
+ #define AXI_HALTREQ_REG			0x0
+@@ -123,6 +124,7 @@
+ #define QDSP6v56_CLAMP_QMC_MEM		BIT(22)
+ #define QDSP6SS_XO_CBCR		0x0038
+ #define QDSP6SS_ACC_OVERRIDE_VAL		0x20
++#define QDSP6v55_BHS_EN_REST_ACK	BIT(0)
+ 
+ /* QDSP6v65 parameters */
+ #define QDSP6SS_CORE_CBCR		0x20
+@@ -130,6 +132,7 @@
+ #define QDSP6SS_BOOT_CORE_START         0x400
+ #define QDSP6SS_BOOT_CMD                0x404
+ #define BOOT_FSM_TIMEOUT                10000
++#define BHS_CHECK_MAX_LOOPS             200
+ 
+ struct reg_info {
+ 	struct regulator *reg;
+@@ -250,6 +253,7 @@ enum {
+ 	MSS_MSM8998,
+ 	MSS_SC7180,
+ 	MSS_SC7280,
++	MSS_SDM660,
+ 	MSS_SDM845,
+ };
+ 
+@@ -700,7 +704,8 @@ static int q6v5proc_reset(struct q6v5 *qproc)
+ 	} else if (qproc->version == MSS_MSM8909 ||
+ 		   qproc->version == MSS_MSM8953 ||
+ 		   qproc->version == MSS_MSM8996 ||
+-		   qproc->version == MSS_MSM8998) {
++		   qproc->version == MSS_MSM8998 ||
++		   qproc->version == MSS_SDM660) {
+ 
+ 		if (qproc->version != MSS_MSM8909 &&
+ 		    qproc->version != MSS_MSM8953)
+@@ -734,6 +739,16 @@ static int q6v5proc_reset(struct q6v5 *qproc)
+ 		val |= readl(qproc->reg_base + QDSP6SS_PWR_CTL_REG);
+ 		udelay(1);
+ 
++		if (qproc->version == MSS_SDM660) {
++			ret = readl_relaxed_poll_timeout(qproc->reg_base + QDSP6V62SS_BHS_STATUS,
++							 i, (i & QDSP6v55_BHS_EN_REST_ACK),
++							 1, BHS_CHECK_MAX_LOOPS);
++			if (ret == -ETIMEDOUT) {
++				dev_err(qproc->dev, "BHS_EN_REST_ACK not set!\n");
++				return -ETIMEDOUT;
++			}
++		}
++
+ 		/* Put LDO in bypass mode */
+ 		val |= QDSP6v56_LDO_BYP;
+ 		writel(val, qproc->reg_base + QDSP6SS_PWR_CTL_REG);
+@@ -756,7 +771,7 @@ static int q6v5proc_reset(struct q6v5 *qproc)
+ 				mem_pwr_ctl = QDSP6SS_MEM_PWR_CTL;
+ 				i = 19;
+ 			} else {
+-				/* MSS_MSM8998 */
++				/* MSS_MSM8998, MSS_SDM660 */
+ 				mem_pwr_ctl = QDSP6V6SS_MEM_PWR_CTL;
+ 				i = 28;
+ 			}
+@@ -2193,6 +2208,37 @@ static const struct rproc_hexagon_res sc7280_mss = {
+ 	.version = MSS_SC7280,
+ };
+ 
++static const struct rproc_hexagon_res sdm660_mss = {
++	.hexagon_mba_image = "mba.mbn",
++	.proxy_clk_names = (char*[]){
++			"xo",
++			"qdss",
++			"mem",
++			NULL
++	},
++	.active_clk_names = (char*[]){
++			"iface",
++			"bus",
++			"gpll0_mss",
++			"mnoc_axi",
++			"snoc_axi",
++			NULL
++	},
++	.proxy_pd_names = (char*[]){
++			"cx",
++			"mx",
++			NULL
++	},
++	.need_mem_protection = true,
++	.has_alt_reset = false,
++	.has_mba_logs = false,
++	.has_spare_reg = false,
++	.has_qaccept_regs = false,
++	.has_ext_cntl_regs = false,
++	.has_vq6 = false,
++	.version = MSS_SDM660,
++};
++
+ static const struct rproc_hexagon_res sdm845_mss = {
+ 	.hexagon_mba_image = "mba.mbn",
+ 	.proxy_clk_names = (char*[]){
+@@ -2475,6 +2521,7 @@ static const struct of_device_id q6v5_of_match[] = {
+ 	{ .compatible = "qcom,msm8998-mss-pil", .data = &msm8998_mss},
+ 	{ .compatible = "qcom,sc7180-mss-pil", .data = &sc7180_mss},
+ 	{ .compatible = "qcom,sc7280-mss-pil", .data = &sc7280_mss},
++	{ .compatible = "qcom,sdm660-mss-pil", .data = &sdm660_mss},
+ 	{ .compatible = "qcom,sdm845-mss-pil", .data = &sdm845_mss},
+ 	{ },
+ };
+-- 
+2.39.3
 
