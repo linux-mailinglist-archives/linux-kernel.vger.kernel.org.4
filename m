@@ -2,182 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0743B7386F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A37E7386FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232981AbjFUO1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
+        id S229521AbjFUO2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232272AbjFUO1P (ORCPT
+        with ESMTP id S232955AbjFUO2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:27:15 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0716610D5;
-        Wed, 21 Jun 2023 07:26:44 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b4745834f3so54991031fa.2;
-        Wed, 21 Jun 2023 07:26:43 -0700 (PDT)
+        Wed, 21 Jun 2023 10:28:09 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556851FF2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:27:47 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so3686a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:27:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687357602; x=1689949602;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cXp+vDAywJj5cJVg/DGBbIIG0LrSwQcuzIbyxZXKO/k=;
-        b=UP3OyWN+5ecr1xlIb7pHYBadTYZQly/kIMPmuS9kujYlNimputz+zZOzKhPlZmJBuF
-         aG1lwHGq6a2UZc4oRSj0chrcqOv2F5UzWHFfOhfLEdOHa5Knynk5rKni1va7viwNhzkP
-         tdlNVksai/R6T1u9cUsT7fyRR2Rg/ebjSzJTAq68how2dfz+PipYdYaNWIZ/6ZGcmtqS
-         /GZOhk5sQ58FhqzmeDOd8GomVZNTt0ZYjhXhfnEyADpJD8U05nXZjYqGjbEdYMbjQ+kA
-         SGJveeESLeQJ7ACg/4N6bHWXDxbdMOhq0V/fUtpBc267r6SH3T04VRmCNUPCk1EJoiy4
-         W0rQ==
+        d=google.com; s=20221208; t=1687357666; x=1689949666;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Nx/8tkwi/QCBsZ8gmyeG8Rkuz2KMvUk7ydKIx+Um+wA=;
+        b=Zx7ZT6CDGiK06H867vY+sNm4wafZK+Kvmb8BqCHCD+RgK/A8TOsKrYm88ZeQ2SECqv
+         S7fVo2jMZAWlKlfibVSF4+NdJIuFTIa0/hV9eZbzpGNs8NdeOq6Gf/hK1j41+VqJkX7f
+         0MdtnvEDcTvQ1qlxcyubtHy52SpsQWtzGcgMHO/beMlI2JAgE/lBuWgZO2ZNHA+12UAk
+         6xkAO2o6lOr6d4DjCP484PkPelet7gw71VpFO6zM1RaeJUU4GliVx6GQS/0Q1anV9/b0
+         1vlDsaqBmqIlvqPZnEthL85A7DkyTOobm6olApyMhJG0hLtOI5m8PH9wari0gbV3oEGX
+         O3+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687357602; x=1689949602;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1687357666; x=1689949666;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cXp+vDAywJj5cJVg/DGBbIIG0LrSwQcuzIbyxZXKO/k=;
-        b=lpTmzDglVJhIVgPGyPUwcIZ+vcwZNmBnhk3F+5Ig/MgjspKu5OGmxE4kR4h0wRWOS9
-         5siO3wwVfgG1JvDgWJWMUZzckKGYobgwdL9/mPOiChrJTc5L4G3KRYbZwZHwXy4Oh7K7
-         vqoTlE2/sWP8XWvmG5xBM9m9eatdoLFm/ZddZDjXQb7DaL6EKdSAmjlTB3qT88q4C3C1
-         2rslhtXe/cDAG1T0ruEeTzvmoBf0JgF5c5mosrPBddZHwkQS+K83dP5JAYj29GefJDAl
-         TI1+U2/5ILUo1NTFMVjP9AhQMGB+YQgl683+6nFL5vOMwUx96xktUFg+7W7RSCfbrm9L
-         RqFA==
-X-Gm-Message-State: AC+VfDwApdcYKv+BzzHCWbYCH6DkL2q9Wl3Um7o/+TiRgMpvSWNlJQ7D
-        M1Jg4y/oZKobm9mZxUFYLto=
-X-Google-Smtp-Source: ACHHUZ41bK7GbPj4Q4/ms1CfUJQsjI2LU88qpxC0XJoGOKFGgJiDpf8tUoe6KWqbHNCdOEkRJxqEKA==
-X-Received: by 2002:a2e:6e07:0:b0:2b4:4a68:a95 with SMTP id j7-20020a2e6e07000000b002b44a680a95mr10759042ljc.8.1687357601846;
-        Wed, 21 Jun 2023 07:26:41 -0700 (PDT)
-Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id l11-20020a170906644b00b00988956f244csm3266156ejn.6.2023.06.21.07.26.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 07:26:41 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Wed, 21 Jun 2023 16:26:29 +0200
-Subject: [PATCH v2 3/3] dt-bindings: usb: Add binding for Cypress HX3 USB
- 3.0 family
+        bh=Nx/8tkwi/QCBsZ8gmyeG8Rkuz2KMvUk7ydKIx+Um+wA=;
+        b=SqsKBGuP+76kapEesGiUJ8HzHmL6RytEObyX0aBjzvFkKawbR6ik84yul3Ss8OZa4+
+         OcQTBe7jnLQKv3nMvYecaelfOnxdRwM11vbkHuL1XJOTtk7t+n2YG8EsR3/LNCNSJvDr
+         9QTyYwasmw+GGLOnQ+JflOmDSwbgRheUGGPRli/5YwJTE7fEGiMiiXbe1LlXQwEd7gGo
+         pCJFhsffntsCMfvWSOCcuN9dE5cPID806AU2U5pPM+Mqya5vzdrIeDh7FO5EdqmKNRba
+         AOeBnREcEQqlt97BvM4AEoJItYZgWkbqiTVsaUZxK/xEv6tYrpgB3I7PpN9ry6/vynnc
+         kHYA==
+X-Gm-Message-State: AC+VfDzbUl+f4NkYg/D/EavqIpumcI0IK9YkoHsqGWJ95v+kVnDm7ffc
+        8opS8uNBOQUlmxuGGJ1AltBZcHUKmB0Xiz3EMjNM1Q==
+X-Google-Smtp-Source: ACHHUZ5b784EIfEpEvB4OmcZ87YYr3Ia27+LLB97tML2JkkHkDJzLWdV+C3hXWpgda3VhYBy/K3VCv+xK2nMSkOkpVY=
+X-Received: by 2002:a50:d79a:0:b0:506:b280:4993 with SMTP id
+ w26-20020a50d79a000000b00506b2804993mr20647edi.2.1687357665556; Wed, 21 Jun
+ 2023 07:27:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230620-hx3-v2-3-76a53434c713@skidata.com>
-References: <20230620-hx3-v2-0-76a53434c713@skidata.com>
-In-Reply-To: <20230620-hx3-v2-0-76a53434c713@skidata.com>
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Benjamin Bara <benjamin.bara@skidata.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230621072404.2918101-1-usama.anjum@collabora.com>
+ <20230621072404.2918101-3-usama.anjum@collabora.com> <CABb0KFGhSLAHAsa3nk-pyMe2j9MU4u3xkQR21HOoS65ZB2dKsw@mail.gmail.com>
+ <de16602a-7ed9-9c03-30d9-5edccc48d2f0@collabora.com>
+In-Reply-To: <de16602a-7ed9-9c03-30d9-5edccc48d2f0@collabora.com>
+From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
+Date:   Wed, 21 Jun 2023 16:27:34 +0200
+Message-ID: <CABb0KFFsHEX2cKzQj-t9vx=q4FjmObNu930ogQMBn0L6=3ph=w@mail.gmail.com>
+Subject: Re: [PATCH v20 2/5] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Bara <benjamin.bara@skidata.com>
+On Wed, 21 Jun 2023 at 16:16, Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+> On 6/21/23 6:42=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
+> > On Wed, 21 Jun 2023 at 09:24, Muhammad Usama Anjum
+> > <usama.anjum@collabora.com> wrote:
+> > [...]
+> >> +static int pagemap_scan_test_walk(unsigned long start, unsigned long =
+end,
+> >> +                                 struct mm_walk *walk)
+> >> +{
+> >> +       struct pagemap_scan_private *p =3D walk->private;
+> >> +       struct vm_area_struct *vma =3D walk->vma;
+> >> +
+> >> +       if ((p->flags & PM_SCAN_REQUIRE_UFFD) && (!userfaultfd_wp_asyn=
+c(vma) ||
+> >> +           !userfaultfd_wp_use_markers(vma)))
+> >> +               return -EPERM;
+> >> +
+> >> +       if (vma->vm_flags & VM_PFNMAP)
+> >> +               return 1;
+> >> +
+> >> +       return 0;
+> >> +}
+> >
+> > This could actually short-circuit all vma flags (e.g. IS_FILE): if
+> > (required_mask & IS_FILE && vma is not file-backed) return 0;
+> Sorry, unable to understand you. Should we do something here?
 
-The HX3 family comes in different variants (up to 4 USB 3.0 ports;
-multi-TT), e.g. CYUSB330x/CYUSB331x/CYUSB332x/CYUSB230x.
+It seems I had an earlier version of the patch in my mind, where
+PAGE_IS_FILE was based on vma type. Sorry for the noise.
 
-This initial version of the binding only describes USB related aspects
-of the HX3 family, it does not cover the option of connecting the
-controller as an i2c slave.
+Best Regards
+Micha=C5=82 Miros=C5=82aw
 
-Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
----
- .../devicetree/bindings/usb/cypress,hx3.yaml       | 77 ++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-new file mode 100644
-index 000000000000..47add0d85fb8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-@@ -0,0 +1,77 @@
-+# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/cypress,hx3.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cypress HX3 USB 3.0 hub controller family
-+
-+maintainers:
-+  - Benjamin Bara <benjamin.bara@skidata.com>
-+
-+allOf:
-+  - $ref: usb-device.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - usb4b4,6504
-+      - usb4b4,6506
-+
-+  reg: true
-+
-+  reset-gpios:
-+    items:
-+      - description: GPIO specifier for RESETN pin.
-+
-+  vdd-supply:
-+    description:
-+      1V2 power supply (VDD_EFUSE, AVDD12, DVDD12).
-+
-+  vdd2-supply:
-+    description:
-+      3V3 power supply (AVDD33, VDD_IO).
-+
-+  peer-hub:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      phandle to the peer hub on the controller.
-+
-+required:
-+  - compatible
-+  - reg
-+  - peer-hub
-+  - vdd-supply
-+  - vdd2-supply
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    usb {
-+        dr_mode = "host";
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        /* 2.0 hub on port 1 */
-+        hub_2_0: hub@1 {
-+          compatible = "usb4b4,6504";
-+          reg = <1>;
-+          peer-hub = <&hub_3_0>;
-+          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+          vdd-supply = <&reg_1v2_usb>;
-+          vdd2-supply = <&reg_3v3_usb>;
-+        };
-+
-+        /* 3.0 hub on port 2 */
-+        hub_3_0: hub@2 {
-+          compatible = "usb4b4,6506";
-+          reg = <2>;
-+          peer-hub = <&hub_2_0>;
-+          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+          vdd-supply = <&reg_1v2_usb>;
-+          vdd2-supply = <&reg_3v3_usb>;
-+        };
-+    };
-
--- 
-2.34.1
-
+>
+> >
+> > Best Regards
+> > Micha=C5=82 Miros=C5=82aw
+>
+> --
+> BR,
+> Muhammad Usama Anjum
