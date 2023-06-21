@@ -2,80 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99503738414
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3D2D73841D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232032AbjFUMt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 08:49:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60158 "EHLO
+        id S230080AbjFUMxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 08:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjFUMt4 (ORCPT
+        with ESMTP id S230404AbjFUMxA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 08:49:56 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327F51717;
-        Wed, 21 Jun 2023 05:49:55 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id ada2fe7eead31-440db8e60c8so49698137.0;
-        Wed, 21 Jun 2023 05:49:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687351794; x=1689943794;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8PdIfEQE5qKLVmM+dbuAdzdn3w59OCD/u/aDJaWNRVY=;
-        b=oXT+JxL/7NBOvVrMWn+Xlf9j+mWJgDxO6CMZzQHe0vouHmGpEYx/slqSGR7MIKi+1X
-         7a5EJ94R0GKUnIrYbbxoVDdqRuaovmA6NEE4JMl2odCYKXIHssunN9af6Du4p4Q72GUf
-         gC+bdGSSp0EkjN5MG7Ulp0uxiUEWz96j9nH07ZAASJ90+v6FLY85vKYiO+nQDr1LYaDD
-         wQAm5hu4dJmCoB9ZeNCKF0s3RWcDRwuOrLRvGF2x5wZHoVvj3uH7DesXRTSCQGIMV8fx
-         FLYGQVBZhDQZs5695s0ax3jHufydoqL1BFiz13gd9b3DGt5e06JyTcnROQ3tYYu9aYGe
-         PifA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687351794; x=1689943794;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8PdIfEQE5qKLVmM+dbuAdzdn3w59OCD/u/aDJaWNRVY=;
-        b=kf1cq8cmLeuihw0pXPph9Nz5ViR7FXJm2oFGB+NkL+caixF5yTN6RqWPU6TRST6x0P
-         A6bekUIUGRXcvOP0I7uY3nzGuA3uha4THREcjDWrpbB8Y1dipU3sliMZeqL3uSlNsjjT
-         XQl1GyLesMjOZBryegxh29WoAAVW9jPMviDHNd1l77uq2wH45VD9wxU3rUPjGTXPwHHa
-         UJ55YyGgf9MSsPXkdsoeTePZqNvG6i60kFWkc5dScHQ65NXHP6wbuGaAHB4OjS+3hare
-         oGSy4C4z0grdnimfGJbWnsJHGq6Bt9DBbsNSJo5nC2BuntwRO/I9Ex/4pyCByOVxYHxU
-         QoqQ==
-X-Gm-Message-State: AC+VfDwHdGopPsoAdGwXmcC3V0/oNSqL24KLL1iRrPVXHxzaeFJsunY5
-        MxAVyQe1tsbS900HTzTrgkqxO/cYkFuouLE8HTo=
-X-Google-Smtp-Source: ACHHUZ40j3yDUpJMaBERCx7VHArb1cFDlbuTRAimB469povwCJ+py9bIr6qHbKLdzihsUJblvAeHzhy2GixZ3W0FG3A=
-X-Received: by 2002:a05:6102:41b:b0:440:9f9a:4bbb with SMTP id
- d27-20020a056102041b00b004409f9a4bbbmr5517461vsq.20.1687351794168; Wed, 21
- Jun 2023 05:49:54 -0700 (PDT)
+        Wed, 21 Jun 2023 08:53:00 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB0C1995;
+        Wed, 21 Jun 2023 05:52:53 -0700 (PDT)
+X-QQ-mid: bizesmtp91t1687351961tumh2szc
+Received: from linux-lab-host.localdomain ( [116.30.126.60])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 21 Jun 2023 20:52:40 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: uGhnJwy6xZL950HgA6Ham07tGfpCj7XROiqwj9NcJbqlRHMGxdNztZ48+M4Ci
+        5rBXvOWTVLqFMmHSIaRV89+irDDcSri2MzO0RSB6Cvp9kHJS63lYvvpXqHW37/1jflkFjLw
+        BaAVo9BOjTCf1qzlFkkr+aXCBVxIQ2RIz/IEdLnV48jlwxqbR/zzM2ebEgp8HuJT9Oj7XD/
+        RT/ntGVI8Rx1Ko3ncYG+aFpczv6LvPI4lLHI/PYS0KNw4MDNBnirwckm8vU37XeBGoshVQh
+        s2/xoh1gRhyWgLspD5RxmHpL4Oz85yDedqJZ3PH8JjpBk32PBpd9WhVpCwG6QXHk9k7pAqL
+        xHJ9qG+FQh0+fiCYC5c7Kf8h8SrTQYPwFjdkMW8BPTWpS0lXJs=
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 5853156832008230843
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     thomas@t-8ch.de, arnd@arndb.de, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v1 00/17] selftests/nolibc: allow run with minimal kernel config
+Date:   Wed, 21 Jun 2023 20:52:30 +0800
+Message-Id: <cover.1687344643.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <f591b13c-4600-e2a4-8efa-aac6ad828dd1@linaro.org>
- <32530c36-91d0-d351-0689-aed6a0975a4b@linaro.org> <2f285607-cbf9-6abc-f436-edb6e9a3938b@linaro.org>
- <CAFX2Jfmz7QqZBEdzbPUhPs0yctnXVaVF68tX1c57YX=6ki=0TA@mail.gmail.com>
- <4fe39d77-eb7c-a578-aefa-45b76e2247c2@linaro.org> <CAFX2JfmdRMsHPTySiw4vm7BwJfRZj3s0V3_v7NJ+XwMxBBSo9A@mail.gmail.com>
- <a3683dd3-3f30-bb4c-539d-d1519de6e5bf@linaro.org> <CAFX2JfnS9GVc4NaxKhr9E4y10NNv6SPgcv1yoeHTfEw5NvZgMg@mail.gmail.com>
- <86d8e252-975f-5d48-4567-0911d5ef9a44@linaro.org> <CAFX2Jfn_DSs38WQYsRs2ifLi5w+T3BhZfSU2W80T6dK48_Bb5g@mail.gmail.com>
- <e8d31e48-df6a-fde4-4c6b-c4ccf1664ded@linaro.org> <c8d454b0-d355-f599-f720-b7e64374fb56@linaro.org>
- <CAFX2JfmvMZ7DzD9znWeOHXywgPbUKDS1irMjUerEuborjRBpcg@mail.gmail.com>
- <CAFX2JfnhOz+HiOd4vBwBK+5d19Kb8wfBNQhxRZHQoP8S2qiwFw@mail.gmail.com>
- <CAFX2Jf=5WV=dY9J4-7tp5NB85fDOkwiv8rxQqHziqG+ED1cUJw@mail.gmail.com>
- <CAFX2Jf=TxojviigtdQ=F_8FcHFFC4RNdfkoS=157jnXQCQSq5g@mail.gmail.com> <85851031-cf43-07d2-8ec7-b40c8c00be91@linaro.org>
-In-Reply-To: <85851031-cf43-07d2-8ec7-b40c8c00be91@linaro.org>
-From:   Anna Schumaker <schumaker.anna@gmail.com>
-Date:   Wed, 21 Jun 2023 08:49:38 -0400
-Message-ID: <CAFX2JfnH_rOFxn+uT4e1Eutea5En4_z26a-u_qCwOsnr5EowRw@mail.gmail.com>
-Subject: Re: Regression: NULL pointer dereference after NFS_V4_2_READ_PLUS
- (commit 7fd461c47)
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Trond Myklebust <trondmy@hammerspace.com>,
-        Anna Schumaker <Anna.Schumaker@netapp.com>,
-        linux-nfs <linux-nfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,83 +49,192 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 17, 2023 at 6:09=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 15/06/2023 21:38, Anna Schumaker wrote:
-> > On Thu, Jun 15, 2023 at 1:16=E2=80=AFPM Anna Schumaker <schumaker.anna@=
-gmail.com> wrote:
-> >>
-> >> On Thu, Jun 15, 2023 at 1:04=E2=80=AFPM Anna Schumaker <schumaker.anna=
-@gmail.com> wrote:
-> >>>
-> >>> On Thu, Jun 15, 2023 at 9:01=E2=80=AFAM Anna Schumaker <schumaker.ann=
-a@gmail.com> wrote:
-> >>>>
-> >>>> On Thu, Jun 15, 2023 at 4:55=E2=80=AFAM Krzysztof Kozlowski
-> >>>> <krzysztof.kozlowski@linaro.org> wrote:
-> >>>>>
-> >>>>> On 15/06/2023 10:52, Krzysztof Kozlowski wrote:
-> >>>>>> On 14/06/2023 22:55, Anna Schumaker wrote:
-> >>>>>>>>>> Still null ptr (built on 420b2d4 with your patch):
-> >>>>>>>>>
-> >>>>>>>>> We're through the merge window and at rc1 now, so I can spend m=
-ore
-> >>>>>>>>> time scratching my head over your bug again. We've come up with=
- a
-> >>>>>>>>> patch (attached) that adds a bunch of printks to show us what t=
-he
-> >>>>>>>>> kernel thinks is going on. Do you mind trying it out and lettin=
-g us
-> >>>>>>>>> know what gets printed out? You'll need to make sure
-> >>>>>>>>> CONFIG_NFS_V4_2_READ_PLUS is enabled when compiling the kernel.
-> >>>>>>>>
-> >>>>>>>> The patch does not apply. I tried: v6.4-rc1, v6.4-rc5, next-2023=
-0609.
-> >>>>>>>
-> >>>>>>> Can you try the attached patch on top of my 3-patch series from t=
-he
-> >>>>>>> other day, and let me know what gets printed out? It adds a bunch=
- of
-> >>>>>>> printk()s at strategic points to print out what is going on with =
-the
-> >>>>>>> xdr scratch buffer since it's suddenly a bad memory address after
-> >>>>>>> working for a bit on your machine.
-> >>>>>>>
-> >>>>>>
-> >>>>>> Here you have entire log - attached (113 kB, I hope goes past mail=
-ing
-> >>>>>> lists/spam filters).
-> >>>>>
-> >>>>> As expected this bounced from the mailing lists, but I hope you got=
- it.
-> >>>>> If not, let me know.
-> >>>>
-> >>>> I did still receive it. Thanks!
-> >>>
-> >>> Can you swap out yesterday's patch with this patch? I've adjusted wha=
-t
-> >>> gets printed out, and added printk()s to xdr_copy_to_scratch().  I'm
-> >>> starting to think that the xdr scratch buffer is fine, and that it's
-> >>> the other pointer passed to memcpy() in that function that's the
-> >>> problem, and the output from this patch will confirm for me.
-> >>
-> >> Oh, and can you add this one on top of the v2 patch as well?
-> >
-> > Sorry about the noise today. Can you use this patch instead of the two
-> > I attached earlier? I cleaned up the output and cut down on extra
-> > output..
-> >
->
-> Here you have - attached.
+Hi, Willy
 
-This is good, thanks! I was finally able to figure out how to hit the
-bug using a 32bit x86 VM, so hopefully the next thing you hear from me
-is a patch fixing the bug!
+This patchset mainly allows speed up the nolibc test with a minimal
+kernel config.
 
-Anna
+As the nolibc supported architectures become more and more, the 'run'
+test with DEFCONFIG may cost several hours, which is not friendly to
+develop testing and even for release testing, so, smaller kernel configs
+may be required, and firstly, we should let nolibc-test work with less
+kernel config options, this patchset aims to this goal.
 
->
->
-> Best regards,
-> Krzysztof
+This patchset mainly remove the dependency from procfs, tmpfs, net and
+memfd_create, many failures have been fixed up.
+
+When CONFIG_TMPFS and CONFIG_SHMEM are disabled, kernel will provide a
+ramfs based tmpfs (mm/shmem.c), it will be used as a choice to fix up
+some failures and also allow skip less tests.
+
+Besides, it also adds musl support, improves glibc support and fixes up
+a kernel cmdline passing use case.
+
+This is based on the dev.2023.06.14a branch of linux-rcu [1], all of the
+supported architectures are tested (with local minimal configs, [5]
+pasted the one for i386) without failures:
+
+           arch/board | result
+          ------------|------------
+      arm/vexpress-a9 | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/arm-vexpress-a9-nolibc-test.log
+         aarch64/virt | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/aarch64-virt-nolibc-test.log
+          ppc/g3beige | not supported
+              i386/pc | 136 test(s) passed, 3 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/i386-pc-nolibc-test.log
+            x86_64/pc | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/x86_64-pc-nolibc-test.log
+         mipsel/malta | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/mipsel-malta-nolibc-test.log
+     loongarch64/virt | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/loongarch64-virt-nolibc-test.log
+         riscv64/virt | 136 test(s) passed, 3 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/riscv64-virt-nolibc-test.log
+         riscv32/virt | no test log found
+s390x/s390-ccw-virtio | 138 test(s) passed, 1 skipped, 0 failed. See all results in /labs/linux-lab/logging/nolibc/s390x-s390-ccw-virtio-nolibc-test.log
+
+Notes:
+  * The skipped ones are -fstackprotector, chmod_self and chown_self
+
+    The -fstackprotector skip is due to gcc version.
+    chmod_self and chmod_self skips are due to procfs not enabled
+
+  * ppc/g3beige support is added locally, but not added in this patchset
+
+    will send ppc support as a new patchset, it depends on v2 test
+    report patchset [3] and the v5 rv32 support, require changes on
+    Makefile
+
+  * riscv32/virt support is still in review, see v5 rv32 support [4]
+
+This patchset doesn't depends on any of my other nolibc patch series,
+but the new rmdir() routine added in this patchset may be requird to
+apply the __sysret() from our v4 syscall helper series [2] after that
+series being merged, currently, we use the old method to let it compile
+without any dependency.
+
+Here explains all of the patches:
+
+* selftests/nolibc: stat_fault: silence NULL argument warning with glibc
+  selftests/nolibc: gettid: restore for glibc and musl
+  selftests/nolibc: add _LARGEFILE64_SOURCE for musl
+
+  The above 3 patches adds musl compile support and improve glibc support.
+
+  It is able to build and run nolibc-test with musl libc now, but there
+  are some failures/skips due to the musl its own issues/requirements:
+
+    $ sudo ./nolibc-test  | grep -E 'FAIL|SKIP'
+    8 sbrk = 1 ENOMEM                                               [FAIL]
+    9 brk = -1 ENOMEM                                               [FAIL]
+    46 limit_int_fast16_min = -2147483648                           [FAIL]
+    47 limit_int_fast16_max = 2147483647                            [FAIL]
+    49 limit_int_fast32_min = -2147483648                           [FAIL]
+    50 limit_int_fast32_max = 2147483647                            [FAIL]
+    0 -fstackprotector not supported                                [SKIPPED]
+
+  musl disabled sbrk and brk for some conflicts with its malloc and the
+  fast version of int types are defined in 32bit, which differs from nolibc
+  and glibc. musl reserved the sbrk(0) to allow get current brk, we
+  added a test for this in the v4 __sysret() helper series [2].
+
+* selftests/nolibc: fix up kernel parameters support
+
+  kernel cmdline allows pass two types of parameters, one is without
+  '=', another is with '=', the first one is passed as init arguments,
+  the sencond one is passed as init environment variables.
+
+  Our nolibc-test prefer arguments to environment variables, this not
+  work when users add such parameters in the kernel cmdline:
+
+    noapic NOLIBC_TEST=syscall
+
+  So, this patch will verify the setting from arguments at first, if it
+  is no valid, will try the environment variables instead.
+
+* selftests/nolibc: stat_timestamps: remove procfs dependency
+
+  Use '/' instead of /proc/self, or we can add a 'has_proc' condition
+  for this test case, but it is not that necessary to skip the whole
+  stat_timestamps tests for such a subtest binding to /proc/self.
+
+  Welcome suggestion from Thomas.
+
+* tools/nolibc: add rmdir() support
+  selftests/nolibc: add a new rmdir() test case
+
+  rmdir() routine and test case are added for the coming requirement.
+
+  Note, if the __sysret() patchset [2] is applied before us, this patch
+  should be rebased on it and apply the __sysret() helper.
+
+* selftests/nolibc: fix up failures when there is no procfs
+
+  call rmdir() to remove /proc completely to rework the checking of
+  /proc, before, the existing of /proc not means the procfs is really
+  mounted.
+
+* selftests/nolibc: rename proc variable to has_proc
+  selftests/nolibc: rename euid0 variable to is_root
+
+  align with the has_gettid, has_xxx variables.
+
+* selftests/nolibc: prepare tmpfs and hugetlbfs
+  selftests/nolibc: rename chmod_net to chmod_good
+  selftests/nolibc: link_cross: support tmpfs
+  selftests/nolibc: rename chroot_exe to chroot_file
+
+  use file from /tmp instead of file from /proc when there is no procfs
+  this avoid skipping the chmod_net, link_cross, chroot_exe tests
+
+* selftests/nolibc: vfprintf: silence memfd_create() warning
+  selftests/nolibc: vfprintf: skip if neither tmpfs nor hugetlbfs
+  selftests/nolibc: vfprintf: support tmpfs and hugetlbfs
+
+  memfd_create from kernel >= v6.2 forcely warn on missing
+  MFD_NOEXEC_SEAL flag, the first one silence it with such flag, for
+  older kernels, use 0 flag as before.
+
+  since memfd_create() depends on TMPFS or HUGETLBFS, the second one
+  skip the whole vfprintf instead of simply fail if memfd_create() not
+  work.
+
+  the 3rd one futher try the ramfs based tmpfs even when memfd_create()
+  not work.
+
+At last, let's simply discuss about the configs, I have prepared minimal
+configs for all of the nolibc supported architectures but not sure where
+should we put them, what about tools/testing/selftests/nolibc/configs ?
+
+Thanks!
+
+Best regards,
+Zhangjin
+---
+
+[1]: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/
+[2]: https://lore.kernel.org/linux-riscv/cover.1687187451.git.falcon@tinylab.org/
+[3]: https://lore.kernel.org/lkml/cover.1687156559.git.falcon@tinylab.org/
+[4]: https://lore.kernel.org/linux-riscv/cover.1687176996.git.falcon@tinylab.org/
+[5]: https://pastebin.com/5jq0Vxbz 
+
+Zhangjin Wu (17):
+  selftests/nolibc: stat_fault: silence NULL argument warning with glibc
+  selftests/nolibc: gettid: restore for glibc and musl
+  selftests/nolibc: add _LARGEFILE64_SOURCE for musl
+  selftests/nolibc: fix up kernel parameters support
+  selftests/nolibc: stat_timestamps: remove procfs dependency
+  tools/nolibc: add rmdir() support
+  selftests/nolibc: add a new rmdir() test case
+  selftests/nolibc: fix up failures when there is no procfs
+  selftests/nolibc: rename proc variable to has_proc
+  selftests/nolibc: rename euid0 variable to is_root
+  selftests/nolibc: prepare tmpfs and hugetlbfs
+  selftests/nolibc: rename chmod_net to chmod_good
+  selftests/nolibc: link_cross: support tmpfs
+  selftests/nolibc: rename chroot_exe to chroot_file
+  selftests/nolibc: vfprintf: silence memfd_create() warning
+  selftests/nolibc: vfprintf: skip if neither tmpfs nor hugetlbfs
+  selftests/nolibc: vfprintf: support tmpfs and hugetlbfs
+
+ tools/include/nolibc/sys.h                   |  28 ++++
+ tools/testing/selftests/nolibc/nolibc-test.c | 132 +++++++++++++++----
+ 2 files changed, 138 insertions(+), 22 deletions(-)
+
+-- 
+2.25.1
+
