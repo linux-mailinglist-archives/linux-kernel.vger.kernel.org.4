@@ -2,309 +2,827 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BE37382DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81BF873833B
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232716AbjFULYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 07:24:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
+        id S232640AbjFULY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 07:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232753AbjFULYC (ORCPT
+        with ESMTP id S232721AbjFULYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 07:24:02 -0400
-Received: from mail5.swissbit.com (mail5.swissbit.com [148.251.244.252])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FAE71721;
-        Wed, 21 Jun 2023 04:23:59 -0700 (PDT)
-Received: from mail5.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 900BC3A2AEE;
-        Wed, 21 Jun 2023 13:23:57 +0200 (CEST)
-Received: from mail5.swissbit.com (localhost [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id 7D6AA3A2A97;
-        Wed, 21 Jun 2023 13:23:57 +0200 (CEST)
-X-TM-AS-ERS: 10.181.10.102-127.5.254.253
-X-TM-AS-SMTP: 1.0 bXgyLmRtei5zd2lzc2JpdC5jb20= Y2xvZWhsZUBoeXBlcnN0b25lLmNvb
-        Q==
-X-DDEI-TLS-USAGE: Used
-Received: from mx2.dmz.swissbit.com (mx2.dmz.swissbit.com [10.181.10.102])
-        by mail5.swissbit.com (Postfix) with ESMTPS;
-        Wed, 21 Jun 2023 13:23:57 +0200 (CEST)
-Content-Type: multipart/signed; 
- boundary=NoSpamProxy_32349cd5-7480-4d97-99c6-9d900ada1c9e; 
- protocol="application/pkcs7-signature"; micalg="sha256"
-From:   Christian Loehle <CLoehle@hyperstone.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Marek Vasut <marex@denx.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH 01/11] mmc: core: Use BIT() macro
-Thread-Topic: [PATCH 01/11] mmc: core: Use BIT() macro
-Thread-Index: AQHZo2SocUiFxoozMkOzCUFdpaBskq+TaKaAgAEBWICAAHCAAIAAQJtQ
-Date:   Wed, 21 Jun 2023 11:23:54 +0000
-Message-ID: <da39a415784e4bbabfa99596ffd5b565@hyperstone.com>
-References: <20230620104722.16465-1-marex@denx.de>
- <CAPDyKFqZ_r=gjpRm833ax4LwASCTGAuO0a0ABXo-kN8dtYje-Q@mail.gmail.com>
- <289cd876-e6e1-8610-bcb6-b0259c68fd89@denx.de>
- <CAPDyKFoLaYegCxw35XPNWuzg_F4M-UPho=+XweB+V4oCXaMxGA@mail.gmail.com>
-In-Reply-To: <CAPDyKFoLaYegCxw35XPNWuzg_F4M-UPho=+XweB+V4oCXaMxGA@mail.gmail.com>
-Accept-Language: en-US, de-DE
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
+        Wed, 21 Jun 2023 07:24:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6AF10FE;
+        Wed, 21 Jun 2023 04:24:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6E2D6150E;
+        Wed, 21 Jun 2023 11:24:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 156F9C433C8;
+        Wed, 21 Jun 2023 11:24:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687346658;
+        bh=NwH5V30lS5yuvPManxFLnChOCMB0DORyGUvgs2Zr6UY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mWSxcoEVRWxNXGI/Oek4fG9sGHqE5jWxuxZOFaQMXVXGKN1XsNZO3NlLaK9s6Herx
+         GmfpnFQNfDkvBywz9NzTRfontZLY7od2W4ScJoS7D2To1kTEAyZcpmDJz0KevH/wJ6
+         K13KDRSRl2T54GYWvGB7loExRsBoqSU4JRAGldNqzOkNLruz0JNculEKqr2kmjx4MD
+         Py7fJD11FEjjIfdYgtl01yNM3ZORsYgyByw4uIcY+F8ENOQmPmeA+p5JSy0ojKTX+Y
+         x1s6FbK4STvasCzBUMYvoG2Fv43pFjDb7uQQKHQwNTvLaKNci46IuMCRtKjVhOMW8B
+         uIBQnS2ZQMsPA==
+Date:   Wed, 21 Jun 2023 16:54:13 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Sandor Yu <Sandor.yu@nxp.com>
+Cc:     andrzej.hajda@intel.com, neil.armstrong@linaro.org,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@gmail.com,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, festevam@gmail.com,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-phy@lists.infradead.org, kernel@pengutronix.de,
+        linux-imx@nxp.com, oliver.brown@nxp.com
+Subject: Re: [PATCH v6 7/8] phy: freescale: Add DisplayPort PHY driver for
+ i.MX8MQ
+Message-ID: <ZJLd3SEDLCAgYafE@matsya>
+References: <cover.1686729444.git.Sandor.yu@nxp.com>
+ <279d6d605656a7ca1bbee6270d66aa218a1b7d3d.1686729444.git.Sandor.yu@nxp.com>
 MIME-Version: 1.0
-X-TMASE-Version: DDEI-5.1-9.0.1002-27704.007
-X-TMASE-Result: 10--16.571200-10.000000
-X-TMASE-MatchedRID: UuaOI1zLN1joSitJVour/fHkpkyUphL9t7k6BDMlB1j+MGGu4g4Dva8X
-        I0sh2cEOvlI+Zzj6VqK5oEpue1AetQx6TQKWelWnmlaAItiONP1xXefgn/TNQ9bZhgeyVPQjVEb
-        W2lpTuVQ4TZp9PdZBMb6Um2sWRaGefmpY4OvTCPIvun/+8u/hs6++Humppw/G1F6O1lfh5suipF
-        NLeO72SCA/w+swsUFqpgolEZSL3/xlSYhlh8RfcvSG/+sPtZVkTSz0JdEAJbSY5nVpihxiwzcpX
-        pPCV0E3x3zfzJOsFTlhWlVNvgpQIjWYHgPBpNXWs/Hes76OTZAsvqYk4iz+9q5fd95aO5tJoOaQ
-        vO0H0Bat1kt6UTrAWz2Xsf5MVCB1t7DW3B48kkESMbwGTAneLwU5rQ/jDZbqhx0Lb8oFs7SUTGV
-        AhB5EbQ==
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-TMASE-XGENCLOUD: 60eeb6a1-e1f0-41fb-ab79-e630ab24b7dd-5-0-200-0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <279d6d605656a7ca1bbee6270d66aa218a1b7d3d.1686729444.git.Sandor.yu@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---NoSpamProxy_32349cd5-7480-4d97-99c6-9d900ada1c9e
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+On 15-06-23, 09:38, Sandor Yu wrote:
+> Add Cadence HDP-TX DisplayPort PHY driver for i.MX8MQ
+> 
+> Cadence HDP-TX PHY could be put in either DP mode or
+> HDMI mode base on the configuration chosen.
+> DisplayPort PHY mode is configurated in the driver.
+> 
+> Signed-off-by: Sandor Yu <Sandor.yu@nxp.com>
+> ---
+>  drivers/phy/freescale/Kconfig             |   9 +
+>  drivers/phy/freescale/Makefile            |   1 +
+>  drivers/phy/freescale/phy-fsl-imx8mq-dp.c | 697 ++++++++++++++++++++++
+>  3 files changed, 707 insertions(+)
+>  create mode 100644 drivers/phy/freescale/phy-fsl-imx8mq-dp.c
+> 
+> diff --git a/drivers/phy/freescale/Kconfig b/drivers/phy/freescale/Kconfig
+> index 853958fb2c06..a99ee370eda6 100644
+> --- a/drivers/phy/freescale/Kconfig
+> +++ b/drivers/phy/freescale/Kconfig
+> @@ -35,6 +35,15 @@ config PHY_FSL_IMX8M_PCIE
+>  	  Enable this to add support for the PCIE PHY as found on
+>  	  i.MX8M family of SOCs.
+>  
+> +config PHY_CADENCE_DP_PHY
+> +	tristate "Cadence HDPTX DP PHY support"
+> +	depends on OF && HAS_IOMEM
+> +	depends on COMMON_CLK
+> +	select GENERIC_PHY
+> +	help
+> +	  Enable this to support the Cadence HDPTX DP PHY driver
+> +	  on NXP's i.MX8MQ SOC.
+> +
+>  endif
+>  
+>  config PHY_FSL_LYNX_28G
+> diff --git a/drivers/phy/freescale/Makefile b/drivers/phy/freescale/Makefile
+> index cedb328bc4d2..c3bdf3fa2e72 100644
+> --- a/drivers/phy/freescale/Makefile
+> +++ b/drivers/phy/freescale/Makefile
+> @@ -4,3 +4,4 @@ obj-$(CONFIG_PHY_MIXEL_LVDS_PHY)	+= phy-fsl-imx8qm-lvds-phy.o
+>  obj-$(CONFIG_PHY_MIXEL_MIPI_DPHY)	+= phy-fsl-imx8-mipi-dphy.o
+>  obj-$(CONFIG_PHY_FSL_IMX8M_PCIE)	+= phy-fsl-imx8m-pcie.o
+>  obj-$(CONFIG_PHY_FSL_LYNX_28G)		+= phy-fsl-lynx-28g.o
+> +obj-$(CONFIG_PHY_CADENCE_DP_PHY)	+= phy-fsl-imx8mq-dp.o
+> diff --git a/drivers/phy/freescale/phy-fsl-imx8mq-dp.c b/drivers/phy/freescale/phy-fsl-imx8mq-dp.c
+> new file mode 100644
+> index 000000000000..2bd6772a5d3b
+> --- /dev/null
+> +++ b/drivers/phy/freescale/phy-fsl-imx8mq-dp.c
+> @@ -0,0 +1,697 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Cadence HDP-TX Display Port Interface (DP) PHY driver
+> + *
+> + * Copyright (C) 2022 NXP Semiconductor, Inc.
+> + */
+> +#include <asm/unaligned.h>
+> +#include <linux/clk.h>
+> +#include <linux/kernel.h>
+> +#include <linux/phy/phy.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/io.h>
+> +#include <linux/iopoll.h>
+> +
+> +#include <drm/bridge/cdns-mhdp-mailbox.h>
+> +
+> +#define ADDR_PHY_AFE	0x80000
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogVWxmIEhhbnNzb24gPHVs
-Zi5oYW5zc29uQGxpbmFyby5vcmc+DQo+IFNlbnQ6IE1pdHR3b2NoLCAyMS4gSnVuaSAyMDIzIDEx
-OjE5DQo+IFRvOiBNYXJlayBWYXN1dCA8bWFyZXhAZGVueC5kZT4NCj4gQ2M6IGxpbnV4LW1tY0B2
-Z2VyLmtlcm5lbC5vcmc7IEFkcmlhbiBIdW50ZXIgPGFkcmlhbi5odW50ZXJAaW50ZWwuY29tPjsN
-Cj4gQXZyaSBBbHRtYW4gPGF2cmkuYWx0bWFuQHdkYy5jb20+OyBCbyBMaXUgPGxpdWJvMDNAaW5z
-cHVyLmNvbT47IERlcmVuDQo+IFd1IDxkZXJlbi53dUBtZWRpYXRlay5jb20+OyBQaGlsaXBwIFph
-YmVsIDxwLnphYmVsQHBlbmd1dHJvbml4LmRlPjsNCj4gUGllcnJlIE9zc21hbiA8cGllcnJlQG9z
-c21hbi5ldT47IFJ1c3NlbGwgS2luZyA8bGludXhAYXJtbGludXgub3JnLnVrPjsNCj4gWWFuZyBZ
-aW5nbGlhbmcgPHlhbmd5aW5nbGlhbmdAaHVhd2VpLmNvbT4NCj4gU3ViamVjdDogUmU6IFtQQVRD
-SCAwMS8xMV0gbW1jOiBjb3JlOiBVc2UgQklUKCkgbWFjcm8NCj4gDQo+IENBVVRJT046IHRoaXMg
-bWFpbCBjb21lcyBmcm9tIGV4dGVybmFsIS9BQ0hUVU5HOiBEaWVzZSBNYWlsIGtvbW10IHZvbg0K
-PiBleHRlcm4hDQo+IA0KPiBPbiBXZWQsIDIxIEp1biAyMDIzIGF0IDA0OjM2LCBNYXJlayBWYXN1
-dCA8bWFyZXhAZGVueC5kZT4gd3JvdGU6DQo+ID4NCj4gPiBPbiA2LzIwLzIzIDEzOjE1LCBVbGYg
-SGFuc3NvbiB3cm90ZToNCj4gPiA+IE9uIFR1ZSwgMjAgSnVuIDIwMjMgYXQgMTI6NDcsIE1hcmVr
-IFZhc3V0IDxtYXJleEBkZW54LmRlPiB3cm90ZToNCj4gPiA+Pg0KPiA+ID4+IFVzZSB0aGUgQklU
-KG4pIG1hY3JvIGluc3RlYWQgb2YgKDE8PG4pLCBubyBmdW5jdGlvbmFsIGNoYW5nZS4NCj4gPiA+
-PiBSZWdleCAnc0AoMSBcPzw8IFw/XChbMC05QS1aX11cK1wpKUBCSVQoXDEpJyAuDQo+ID4gPj4N
-Cj4gPiA+PiBTaWduZWQtb2ZmLWJ5OiBNYXJlayBWYXN1dCA8bWFyZXhAZGVueC5kZT4NCj4gPiA+
-DQo+ID4gPiBJIGRvbid0IHRoaW5rIHRoZSBiZW5lZml0IG9mIHRoaXMgY2hhbmdlIGlzIHdvcnRo
-IGl0LiBGb3IgZXhhbXBsZSwNCj4gPiA+IGl0J3MgcXVpdGUgdXNlZnVsIHRvIHJ1biBhIGdpdCBi
-bGFtZSB0byBzZWUgdGhlIGhpc3Rvcnkgb2Ygd2hhdCBoYXMNCj4gPiA+IGhhcHBlbmVkLg0KPiA+
-DQo+ID4gVW5kZXJzdG9vZC4NCj4gPg0KPiA+IGdpdCBibGFtZSBkb2VzIGFsbG93IHlvdSB0byBz
-cGVjaWZ5IGVpdGhlciAtLXNpbmNlIG9yIHJldmlzaW9uIHJhbmdlIHRob3VnaC4NCj4gDQo+IFll
-cywgYnV0IEkgdGhpbmsgeW91IGdldCBteSBwb2ludC4NCj4gDQo+ID4NCj4gPiA+IFNvLCBzb3Jy
-eSwgYnV0IEkgYW0gbm90IGdvaW5nIHRvIHBpY2sgdGhpcyB1cCAtIG9yIGFueSBvdGhlciBzaW1p
-bGFyDQo+ID4gPiBjaGFuZ2VzLCBhdCBsZWFzdCBmb3IgdGhlIGNvcmUgbGF5ZXIuDQo+ID4NCj4g
-PiBJcyB0aGlzIGEgcG9saWN5IG9mIHRoZSBtbWMgc3Vic3lzdGVtIHRvIHJlamVjdCBhbGwgY29k
-ZSBjbGVhbiB1cHMgdGhlbiA/DQo+IA0KPiBPZiBjb3Vyc2UgaXQgaXNuJ3QsIEkgcmVndWxhcmx5
-IHBpY2sgdXAgY2xlYW4gdXBzLg0KPiANCj4gTXkgcG9pbnQgaGVyZSBpcyB0aGF0IHRoZSBjbGVh
-bi11cCBzaG91bGQgbWFrZSB0aGUgY29kZSBiZXR0ZXIsIGluIHNvbWUNCj4gd2F5LiBJIGRvbid0
-IHRoaW5rIGNvbnZlcnRpbmcgdG8gdGhlIEJJVCBtYWNybyBoZWxwcyBpbiB0aGlzIHJlZ2FyZC4g
-SXQgbWF5IGJlDQo+IHByZWZlcnJlZCB0byB1c2UgdGhlIEJJVCBtYWNybyBieSBzb21lIGFuZCBi
-eSBvdGhlcnMgbm90Lg0KDQpGV0lXIEkgYWdyZWUgd2l0aCBVZmZlIGhlcmUuDQpGb3IgaG9zdC8g
-ZmlsZXMsIHdoaWNoIGFyZSBtb3N0bHkgd3JpdHRlbiBieSBhIGhhbmRmdWwgZWFjaCwgaXQncyBz
-dGlsbCBhIG51aXNhbmNlLiAoT25lIGNvdWxkIGFyZ3VlIHRoYXQgdGhleSBhcmUgb2Z0ZW4gZ2l0
-IGJsYW1lZCBieSBwZW9wbGUgbm90IGZhbWlsaWFyIHdpdGggbW1jIHN1YnN5c3RlbSwgdGh1cyBn
-aXZpbmcgb2ZmIHRoZSB3cm9uZyBwaWN0dXJlKS4NCkZvciBtdWNoIG9mIHRoZSBjb3JlIGNvZGUg
-eW91IGFscmVhZHkgaGF2ZSB0byBnbyBtYW55IHJldmlzaW9ucyBiYWNrLCBJJ20gZ3JhdGVmdWwg
-Zm9yIGVhY2ggSSBkb24ndCBoYXZlIHRvLg0KU29tZXRoaW5nIGxpa2UgdGhlIG1xIHJld29yayB3
-b3VsZCBoYXZlIGJlZW4gYSBnb29kIG1vbWVudCB0byBkbyB0aGVzZSBtaW5vciBuaXRwaWNrcywg
-aWYgc29tZXRoaW5nIGxpa2UgdGhhdCBldmVyIGhhcHBlbnMgYWdhaW4sIGJ1dCBldmVuIHRoZW4g
-SSAgd291bGQgcHJlZmVyIGp1c3Qgb25lIGNvbW1pdCBpbmNsdWRpbmcgZXZlcnl0aGluZy4NCg0K
-DQpSZWdhcmRzLA0KQ2hyaXN0aWFuDQo=
+Is this always fixed for every phy generation?
+> +
+> +/* PHY registers */
+> +#define CMN_SSM_BIAS_TMR                0x0022
+> +#define CMN_PLLSM0_PLLEN_TMR            0x0029
+> +#define CMN_PLLSM0_PLLPRE_TMR           0x002A
+> +#define CMN_PLLSM0_PLLVREF_TMR          0x002B
+> +#define CMN_PLLSM0_PLLLOCK_TMR          0x002C
+> +#define CMN_PLLSM0_USER_DEF_CTRL        0x002F
+> +#define CMN_PSM_CLK_CTRL                0x0061
+> +#define CMN_PLL0_VCOCAL_START           0x0081
+> +#define CMN_PLL0_VCOCAL_INIT_TMR        0x0084
+> +#define CMN_PLL0_VCOCAL_ITER_TMR        0x0085
+> +#define CMN_PLL0_INTDIV                 0x0094
+> +#define CMN_PLL0_FRACDIV                0x0095
+> +#define CMN_PLL0_HIGH_THR               0x0096
+> +#define CMN_PLL0_DSM_DIAG               0x0097
+> +#define CMN_PLL0_SS_CTRL2               0x0099
+> +#define CMN_ICAL_INIT_TMR               0x00C4
+> +#define CMN_ICAL_ITER_TMR               0x00C5
+> +#define CMN_RXCAL_INIT_TMR              0x00D4
+> +#define CMN_RXCAL_ITER_TMR              0x00D5
+> +#define CMN_TXPUCAL_INIT_TMR            0x00E4
+> +#define CMN_TXPUCAL_ITER_TMR            0x00E5
+> +#define CMN_TXPDCAL_INIT_TMR            0x00F4
+> +#define CMN_TXPDCAL_ITER_TMR            0x00F5
+> +#define CMN_ICAL_ADJ_INIT_TMR           0x0102
+> +#define CMN_ICAL_ADJ_ITER_TMR           0x0103
+> +#define CMN_RX_ADJ_INIT_TMR             0x0106
+> +#define CMN_RX_ADJ_ITER_TMR             0x0107
+> +#define CMN_TXPU_ADJ_INIT_TMR           0x010A
+> +#define CMN_TXPU_ADJ_ITER_TMR           0x010B
+> +#define CMN_TXPD_ADJ_INIT_TMR           0x010E
+> +#define CMN_TXPD_ADJ_ITER_TMR           0x010F
+> +#define CMN_DIAG_PLL0_FBH_OVRD          0x01C0
+> +#define CMN_DIAG_PLL0_FBL_OVRD          0x01C1
+> +#define CMN_DIAG_PLL0_OVRD              0x01C2
+> +#define CMN_DIAG_PLL0_TEST_MODE         0x01C4
+> +#define CMN_DIAG_PLL0_V2I_TUNE          0x01C5
+> +#define CMN_DIAG_PLL0_CP_TUNE           0x01C6
+> +#define CMN_DIAG_PLL0_LF_PROG           0x01C7
+> +#define CMN_DIAG_PLL0_PTATIS_TUNE1      0x01C8
+> +#define CMN_DIAG_PLL0_PTATIS_TUNE2      0x01C9
+> +#define CMN_DIAG_HSCLK_SEL              0x01E0
+> +#define CMN_DIAG_PER_CAL_ADJ            0x01EC
+> +#define CMN_DIAG_CAL_CTRL               0x01ED
+> +#define CMN_DIAG_ACYA                   0x01FF
+> +#define XCVR_PSM_RCTRL                  0x4001
+> +#define XCVR_PSM_CAL_TMR                0x4002
+> +#define XCVR_PSM_A0IN_TMR               0x4003
+> +#define TX_TXCC_CAL_SCLR_MULT_0         0x4047
+> +#define TX_TXCC_CPOST_MULT_00_0         0x404C
+> +#define XCVR_DIAG_PLLDRC_CTRL           0x40E0
+> +#define XCVR_DIAG_PLLDRC_CTRL           0x40E0
+> +#define XCVR_DIAG_HSCLK_SEL             0x40E1
+> +#define XCVR_DIAG_LANE_FCM_EN_MGN_TMR   0x40F2
+> +#define TX_PSC_A0                       0x4100
+> +#define TX_PSC_A1                       0x4101
+> +#define TX_PSC_A2                       0x4102
+> +#define TX_PSC_A3                       0x4103
+> +#define TX_RCVDET_EN_TMR                0x4122
+> +#define TX_RCVDET_ST_TMR                0x4123
+> +#define TX_DIAG_BGREF_PREDRV_DELAY      0x41E7
+> +#define TX_DIAG_BGREF_PREDRV_DELAY      0x41E7
+> +#define TX_DIAG_ACYA_0                  0x41FF
+> +#define TX_DIAG_ACYA_1                  0x43FF
+> +#define TX_DIAG_ACYA_2                  0x45FF
+> +#define TX_DIAG_ACYA_3                  0x47FF
+> +#define TX_ANA_CTRL_REG_1               0x5020
+> +#define TX_ANA_CTRL_REG_2               0x5021
+> +#define TX_DIG_CTRL_REG_1               0x5023
+> +#define TX_DIG_CTRL_REG_2               0x5024
+> +#define TXDA_CYA_AUXDA_CYA              0x5025
+> +#define TX_ANA_CTRL_REG_3               0x5026
+> +#define TX_ANA_CTRL_REG_4               0x5027
+> +#define TX_ANA_CTRL_REG_5               0x5029
+> +#define RX_PSC_A0                       0x8000
+> +#define RX_PSC_CAL                      0x8006
+> +#define PHY_HDP_MODE_CTRL               0xC008
+> +#define PHY_HDP_CLK_CTL                 0xC009
+> +#define PHY_PMA_CMN_CTRL1               0xC800
 
---NoSpamProxy_32349cd5-7480-4d97-99c6-9d900ada1c9e
-Content-Transfer-Encoding: BASE64
-Content-Type: application/pkcs7-signature; name=smime.p7s
-Content-Disposition: attachment; filename=smime.p7s
+Lower case hex values please
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDTALBglghkgBZQMEAgEwCwYJKoZIhvcNAQcBoIIjdjCCB+sw
-ggXToAMCAQICFH/0ya9FbNqDP1mj8nwYIyzoDuazMA0GCSqGSIb3DQEBCwUAMFMxCzAJBgNVBAYT
-AkNIMRUwEwYDVQQKEwxTd2lzc1NpZ24gQUcxLTArBgNVBAMTJFN3aXNzU2lnbiBSU0EgU01JTUUg
-TENQIElDQSAyMDIxIC0gMjAeFw0yMjEyMTUxMDIwNTJaFw0yMzEyMTUxMDIwNTJaMEgxJTAjBgkq
-hkiG9w0BCQEWFmNsb2VobGVAaHlwZXJzdG9uZS5jb20xHzAdBgNVBAMMFmNsb2VobGVAaHlwZXJz
-dG9uZS5jb20wggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDbQs7vFtBkf7fsjeH5TOTl
-4BCMTLaVKnaZGJ79z62g8ZSuOWg45uUJ6ti+RfIaS/gp8bAnHxrFDcYANbU2S/S19bwpqvKlOcV9
-3mKFefUB7SVTnhD1EDsk3I2SCG7Bz61gflKcRnalJG74AXn4E4MAaRlrWCoLkZIeCSY4lNrQD1pw
-70nmNRY41ICYzAVAb0RiP60audx4UP29YDXLUkrki5cpf3yt/eHS/KRjHiadq2uDnkGQI1oadBXa
-u4B0nCVmN68LKWb8Ak5aSROJarWOPHLQ+wuL78NS11Yer5Mnngad5/pccQY0MjkC7e80HBNaOAOt
-vrf2a7i8fFs278So63WAMt+XUM2rHMyIKsOEWqAHBY1GoAKT81NZ+5YMqfvUbK8SucXAy+UWZlzY
-VXLCtxrqHcxNbTApkjDtxalDMn9bm4qyQE/qxbkuGSPdqIj8v7AOCgb1K4I8hzwOIiCpEJMhbIvp
-bZK1GQ3BxE61FG599xyVZNf29aYdoUDIp4MwG3hcLHvYsRvSo6eHPYk8mr9SM+OhexuEdj3+St+Y
-5MSdDdkvRdspx0gXwmffJ6iCBjChXDHa/W1uSBvM5SlKKsYH7ufOC31CptKkEdM8lGi0PPlevh7U
-25ZI0QVH3EiLgBymsdqPc/7LifBKmp+xamIZAUVcfJqvdvTt+EkgEQIDAQABo4ICwDCCArwwIQYD
-VR0RBBowGIEWY2xvZWhsZUBoeXBlcnN0b25lLmNvbTAOBgNVHQ8BAf8EBAMCBLAwEwYDVR0lBAww
-CgYIKwYBBQUHAwQwHQYDVR0OBBYEFA+H5eoYx7aaS0slW7G0+hgo1ZqlMB8GA1UdIwQYMBaAFPpU
-wIKm/pa9BMdfn1+CDD3DlU9HMIH/BgNVHR8EgfcwgfQwR6BFoEOGQWh0dHA6Ly9jcmwuc3dpc3Nz
-aWduLm5ldC9GQTU0QzA4MkE2RkU5NkJEMDRDNzVGOUY1RjgyMEMzREMzOTU0RjQ3MIGooIGloIGi
-hoGfbGRhcDovL2RpcmVjdG9yeS5zd2lzc3NpZ24ubmV0L0NOPUZBNTRDMDgyQTZGRTk2QkQwNEM3
-NUY5RjVGODIwQzNEQzM5NTRGNDclMkNPPVN3aXNzU2lnbiUyQ0M9Q0g/Y2VydGlmaWNhdGVSZXZv
-Y2F0aW9uTGlzdD9iYXNlP29iamVjdENsYXNzPWNSTERpc3RyaWJ1dGlvblBvaW50MGcGA1UdIARg
-MF4wUgYIYIV0AVkCAQswRjBEBggrBgEFBQcCARY4aHR0cHM6Ly9yZXBvc2l0b3J5LnN3aXNzc2ln
-bi5jb20vU3dpc3NTaWduX0NQU19TTUlNRS5wZGYwCAYGBACPegEDMIHGBggrBgEFBQcBAQSBuTCB
-tjBkBggrBgEFBQcwAoZYaHR0cDovL3N3aXNzc2lnbi5uZXQvY2dpLWJpbi9hdXRob3JpdHkvZG93
-bmxvYWQvRkE1NEMwODJBNkZFOTZCRDA0Qzc1RjlGNUY4MjBDM0RDMzk1NEY0NzBOBggrBgEFBQcw
-AYZCaHR0cDovL29jc3Auc3dpc3NzaWduLm5ldC9GQTU0QzA4MkE2RkU5NkJEMDRDNzVGOUY1Rjgy
-MEMzREMzOTU0RjQ3MA0GCSqGSIb3DQEBCwUAA4ICAQCm+EvZobQCGMXgo2yeAD2ztkKXLEUmp7sp
-to3Unk6h7xNT0k1XsLxQAyF+Ny/Ftd6GAnq02cWyupmU8OfcSbWIi91QT13TUUholbqV1ELlgMpa
-slZ6qBAJLWLXQ8p/BWaGzpRBgJEsg4fc3XC5FRjysoZNOxZIwblQrQDD/cCTUAM43Ar086iZoM1B
-5mqNZil+LoCaXR4q8KS2jV3cTseKK/yIHpOl3NNAU7tC10pO9PNkJ9Dd6W/ghKBvhNiSUucEmm4e
-70b5cP3M0qJ1xdBkRhZ5BDFBPTNWq0pecXdRWILG0xz6neB8VCClW3tYYAriroYjXDZzBMVGfXKo
-0pxnwg2B/+ppYGaji2Sf3IBZKFVS5hRFolcsRAqfxmDYfmVJA1lQqOfr0f1jURksb/+IEG7aZNyG
-4iMIMFmDptXeEysz5ntJw5KAf0i6mJ2y/sEU9pzImRlvQc5kHV3GT9BdYs8GmSmdD8CI0S+/y/no
-Ny4l2SzVjkc+3d+fdWSJV6y4gR+3FmG8B5dTvJBHNs0YSsG2rQSEzDxcZNzhjKA9c70FS1U3m3n6
-bU2mErdOPQ4KtTu5v3D5RBKB2cgbdBI4B8gEHJhqxOdBO5E+Z8+FMqIWCITb1fN2NrgenRDYy4Bj
-tax6L8HT5mEY+mS8Lx08gqY01qcfbiD8uD+qTtmsLjCCB+swggXToAMCAQICFH/0ya9FbNqDP1mj
-8nwYIyzoDuazMA0GCSqGSIb3DQEBCwUAMFMxCzAJBgNVBAYTAkNIMRUwEwYDVQQKEwxTd2lzc1Np
-Z24gQUcxLTArBgNVBAMTJFN3aXNzU2lnbiBSU0EgU01JTUUgTENQIElDQSAyMDIxIC0gMjAeFw0y
-MjEyMTUxMDIwNTJaFw0yMzEyMTUxMDIwNTJaMEgxJTAjBgkqhkiG9w0BCQEWFmNsb2VobGVAaHlw
-ZXJzdG9uZS5jb20xHzAdBgNVBAMMFmNsb2VobGVAaHlwZXJzdG9uZS5jb20wggIiMA0GCSqGSIb3
-DQEBAQUAA4ICDwAwggIKAoICAQDbQs7vFtBkf7fsjeH5TOTl4BCMTLaVKnaZGJ79z62g8ZSuOWg4
-5uUJ6ti+RfIaS/gp8bAnHxrFDcYANbU2S/S19bwpqvKlOcV93mKFefUB7SVTnhD1EDsk3I2SCG7B
-z61gflKcRnalJG74AXn4E4MAaRlrWCoLkZIeCSY4lNrQD1pw70nmNRY41ICYzAVAb0RiP60audx4
-UP29YDXLUkrki5cpf3yt/eHS/KRjHiadq2uDnkGQI1oadBXau4B0nCVmN68LKWb8Ak5aSROJarWO
-PHLQ+wuL78NS11Yer5Mnngad5/pccQY0MjkC7e80HBNaOAOtvrf2a7i8fFs278So63WAMt+XUM2r
-HMyIKsOEWqAHBY1GoAKT81NZ+5YMqfvUbK8SucXAy+UWZlzYVXLCtxrqHcxNbTApkjDtxalDMn9b
-m4qyQE/qxbkuGSPdqIj8v7AOCgb1K4I8hzwOIiCpEJMhbIvpbZK1GQ3BxE61FG599xyVZNf29aYd
-oUDIp4MwG3hcLHvYsRvSo6eHPYk8mr9SM+OhexuEdj3+St+Y5MSdDdkvRdspx0gXwmffJ6iCBjCh
-XDHa/W1uSBvM5SlKKsYH7ufOC31CptKkEdM8lGi0PPlevh7U25ZI0QVH3EiLgBymsdqPc/7LifBK
-mp+xamIZAUVcfJqvdvTt+EkgEQIDAQABo4ICwDCCArwwIQYDVR0RBBowGIEWY2xvZWhsZUBoeXBl
-cnN0b25lLmNvbTAOBgNVHQ8BAf8EBAMCBLAwEwYDVR0lBAwwCgYIKwYBBQUHAwQwHQYDVR0OBBYE
-FA+H5eoYx7aaS0slW7G0+hgo1ZqlMB8GA1UdIwQYMBaAFPpUwIKm/pa9BMdfn1+CDD3DlU9HMIH/
-BgNVHR8EgfcwgfQwR6BFoEOGQWh0dHA6Ly9jcmwuc3dpc3NzaWduLm5ldC9GQTU0QzA4MkE2RkU5
-NkJEMDRDNzVGOUY1RjgyMEMzREMzOTU0RjQ3MIGooIGloIGihoGfbGRhcDovL2RpcmVjdG9yeS5z
-d2lzc3NpZ24ubmV0L0NOPUZBNTRDMDgyQTZGRTk2QkQwNEM3NUY5RjVGODIwQzNEQzM5NTRGNDcl
-MkNPPVN3aXNzU2lnbiUyQ0M9Q0g/Y2VydGlmaWNhdGVSZXZvY2F0aW9uTGlzdD9iYXNlP29iamVj
-dENsYXNzPWNSTERpc3RyaWJ1dGlvblBvaW50MGcGA1UdIARgMF4wUgYIYIV0AVkCAQswRjBEBggr
-BgEFBQcCARY4aHR0cHM6Ly9yZXBvc2l0b3J5LnN3aXNzc2lnbi5jb20vU3dpc3NTaWduX0NQU19T
-TUlNRS5wZGYwCAYGBACPegEDMIHGBggrBgEFBQcBAQSBuTCBtjBkBggrBgEFBQcwAoZYaHR0cDov
-L3N3aXNzc2lnbi5uZXQvY2dpLWJpbi9hdXRob3JpdHkvZG93bmxvYWQvRkE1NEMwODJBNkZFOTZC
-RDA0Qzc1RjlGNUY4MjBDM0RDMzk1NEY0NzBOBggrBgEFBQcwAYZCaHR0cDovL29jc3Auc3dpc3Nz
-aWduLm5ldC9GQTU0QzA4MkE2RkU5NkJEMDRDNzVGOUY1RjgyMEMzREMzOTU0RjQ3MA0GCSqGSIb3
-DQEBCwUAA4ICAQCm+EvZobQCGMXgo2yeAD2ztkKXLEUmp7spto3Unk6h7xNT0k1XsLxQAyF+Ny/F
-td6GAnq02cWyupmU8OfcSbWIi91QT13TUUholbqV1ELlgMpaslZ6qBAJLWLXQ8p/BWaGzpRBgJEs
-g4fc3XC5FRjysoZNOxZIwblQrQDD/cCTUAM43Ar086iZoM1B5mqNZil+LoCaXR4q8KS2jV3cTseK
-K/yIHpOl3NNAU7tC10pO9PNkJ9Dd6W/ghKBvhNiSUucEmm4e70b5cP3M0qJ1xdBkRhZ5BDFBPTNW
-q0pecXdRWILG0xz6neB8VCClW3tYYAriroYjXDZzBMVGfXKo0pxnwg2B/+ppYGaji2Sf3IBZKFVS
-5hRFolcsRAqfxmDYfmVJA1lQqOfr0f1jURksb/+IEG7aZNyG4iMIMFmDptXeEysz5ntJw5KAf0i6
-mJ2y/sEU9pzImRlvQc5kHV3GT9BdYs8GmSmdD8CI0S+/y/noNy4l2SzVjkc+3d+fdWSJV6y4gR+3
-FmG8B5dTvJBHNs0YSsG2rQSEzDxcZNzhjKA9c70FS1U3m3n6bU2mErdOPQ4KtTu5v3D5RBKB2cgb
-dBI4B8gEHJhqxOdBO5E+Z8+FMqIWCITb1fN2NrgenRDYy4Bjtax6L8HT5mEY+mS8Lx08gqY01qcf
-biD8uD+qTtmsLjCCB0cwggUvoAMCAQICDyxaqdlU/bKrlq0Xtl+M9DANBgkqhkiG9w0BAQsFADBT
-MQswCQYDVQQGEwJDSDEVMBMGA1UEChMMU3dpc3NTaWduIEFHMS0wKwYDVQQDEyRTd2lzc1NpZ24g
-UlNBIFNNSU1FIFJvb3QgQ0EgMjAyMSAtIDEwHhcNMjEwODA0MTIxMjU5WhcNMzYwNzMxMTIxMjU5
-WjBTMQswCQYDVQQGEwJDSDEVMBMGA1UEChMMU3dpc3NTaWduIEFHMS0wKwYDVQQDEyRTd2lzc1Np
-Z24gUlNBIFNNSU1FIExDUCBJQ0EgMjAyMSAtIDIwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIK
-AoICAQC9BRnI1A1xPgMDELSTFgDrzyPawAcju1E8OBLTQHXDcmN46wsneV+NVoip2X1ZQ9GIF3bj
-x0aLq9/iiKo9EsCdCO1BENfc70ngvzFS1oOdmfzymiKAZlWsEJSQocyLldDWSF03KN8a7Rgl30PD
-IURBvBWlpIOCxiCAUgKogGYBvm7ZRZZ10BcgfGU/ga19jlhGI9xSJ9pCPjvcWPJKpiSbG+s0CR/M
-4cXaQPO9ZEFYxIn7g4rNIYBYZwhsIjcPn5OtC9/7p/3F/2qKA9gfvK/CyQ14fPVOPVJaPECufMs4
-+tRhh2edpGx4irQTaVV85iVU3wjPpi84TIgUlRwqUWloj158A5r7pGVMcI++Slyq3rudu319WjiC
-57kAikVHryC+gwC4SUAYn0CqX//cApx+99nmLWAmWnGdeaRmHMJCmJfXy3Dji8SnVuggcXbErnkr
-5sms1kyp5wiDR7YVIkdTuiJHpF2d7WZ/d5EOT7KBdS/k67/XgTrUwkWwKR2Vm/00b0Zpz3N4Hg9F
-TrBP53A2uci2e7Lf3vR8hFJijhu08zGuClY7Khn+0BBU50YSOE2BnYWsBOe36ddw2470cM/iGtMM
-aTXnA0rg4MsX9TP0vX4iQpWZMwqNwqcYk0ewMqy4RDAY7xH4GXNkRGT2nJngURbQS1wgScF1NMzR
-W+rRrQIDAQABo4ICFjCCAhIwDgYDVR0PAQH/BAQDAgEGMBMGA1UdJQQMMAoGCCsGAQUFBwMEMBIG
-A1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFPpUwIKm/pa9BMdfn1+CDD3DlU9HMB8GA1UdIwQY
-MBaAFAkMvyqiHQQkDLL5QApBws9acqqAMIH/BgNVHR8EgfcwgfQwR6BFoEOGQWh0dHA6Ly9jcmwu
-c3dpc3NzaWduLm5ldC8wOTBDQkYyQUEyMUQwNDI0MENCMkY5NDAwQTQxQzJDRjVBNzJBQTgwMIGo
-oIGloIGihoGfbGRhcDovL2RpcmVjdG9yeS5zd2lzc3NpZ24ubmV0L0NOPTA5MENCRjJBQTIxRDA0
-MjQwQ0IyRjk0MDBBNDFDMkNGNUE3MkFBODAlMkNPPVN3aXNzU2lnbiUyQ0M9Q0g/Y2VydGlmaWNh
-dGVSZXZvY2F0aW9uTGlzdD9iYXNlP29iamVjdENsYXNzPWNSTERpc3RyaWJ1dGlvblBvaW50MB8G
-A1UdIAQYMBYwCgYIYIV0AVkCAQswCAYGBACPegEDMHQGCCsGAQUFBwEBBGgwZjBkBggrBgEFBQcw
-AoZYaHR0cDovL3N3aXNzc2lnbi5uZXQvY2dpLWJpbi9hdXRob3JpdHkvZG93bmxvYWQvMDkwQ0JG
-MkFBMjFEMDQyNDBDQjJGOTQwMEE0MUMyQ0Y1QTcyQUE4MDANBgkqhkiG9w0BAQsFAAOCAgEABw8e
-lwSFegmW7IGpGTOPwtOC2tzTwCQiRA2VC/EWGKckk8A3F9Q+M2A8lUYVlRKJt31pAezcXaP6OFW0
-3IPiiXU70QA598nGqUxzzjn8rpFhZgCj6bi8MJd5MH5C2RRYFrhiRefx6pp42LLc0AFIF1ZqkaYa
-1vz0EgTOL9XE3inXe39twPLoe3rc/f8gfpem/s1NIJk2azwyxZn226YSrSedvxhe7LiN6gOqvU7h
-xpC8bXaiIYVy7DISXwEt902Gc+M4QbhUf8yQ+PiK3QexGIWiusOO46cn673dG/1KCzma/1Llp9Dx
-aeUHlxjjeeer/2WtWWZNFhoInrxpcK58odaJZRMZQJwNljMb66gGb5OpeanN0su93/S9GrZgJqN6
-spp171azfMuQzVqj9gxFy66yIdlrhZcba/QixC2eAJxm5fM/PZg9WXZ737G8jAbsuoREH1bxsglL
-zxAIwboY7uVwIim6ZcieKb6Yy4n6TzperNmhU5UHiUZSJzIQ/qu9B14cfh0CAJo19p7fRvyeF/p7
-INDH0ceTVTq5sF8kFtMM1bz+0/sWOTNqdi8kGO7I7iouC3+V4DDx4F1sGcaigFXtUpLmol5Lss+i
-9NXGgWFcPFreexoLaBdckDJgBk6zOHKVYwZdnrg2CovIev/uumK0WyCa7ix1+SDcsd2PXxIwggaL
-MIIEc6ADAgECAhAA3kxVIPbc9AIbDxFU940QMA0GCSqGSIb3DQEBCwUAMEUxCzAJBgNVBAYTAkNI
-MRUwEwYDVQQKEwxTd2lzc1NpZ24gQUcxHzAdBgNVBAMTFlN3aXNzU2lnbiBHb2xkIENBIC0gRzIw
-HhcNMjEwODAzMTMxNDU1WhcNMzYxMDIzMTMxNDU1WjBTMQswCQYDVQQGEwJDSDEVMBMGA1UEChMM
-U3dpc3NTaWduIEFHMS0wKwYDVQQDEyRTd2lzc1NpZ24gUlNBIFNNSU1FIFJvb3QgQ0EgMjAyMSAt
-IDEwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDWsri0OI8mujfIASNFFn6+ZDiGcmZh
-WI0kilmzDKEqq367hXxlZnCn6SLb7rsy+quxhj+rSIG4q/Mq3TfHLgv2q99VrVQgFDq3iURt5+g/
-roghGI5HVpUAyexlblZHFE2tLibS1ItsyvMzLfnwm463hiaB5wueiwx8Bac8evnwhZCciWc5dRGx
-Y7DUIyx93B8rdu0ErboRyQdJDeMoDy4RFNK2sv94uP5aU4AkrAtIuk4yMVHsqv67RCwL1/l9q43a
-bKsI3fNBPY/1QUFcxsxRyg5EH7dqgHZVaVHmTP0XgPuzVO6wSh0zkwZ5uWERrOQOW7Pd4LElXLfU
-0830e54BVCuCkKHhykON8EGkHAfA1jMWo0VGj4RMaf2TV53T5W/LJAwxLQOYwgA5RHkigW3k6vwL
-ZCZu/MqeGgNE7X9NTekRsna9hn17u1Q/UZBHx4v4/04s8ggwjBnBLEc1nr2rU6Qirp8MIRkpvZ6b
-z4TcjtE1SyIQgRti7cBL0yuQIkkfLSGukcXf8dZBVHIO3so0EPXJmp3VXBbkzSWxx6hxRqz4U4UX
-iaskGjgYMiRz6VWu+IBjA2+EsN+glLWpU/CLavVUeeX/W5yibyLh/0ApZWxvjkhpMT6BGzuLWPpb
-LztrfWsk8LzyjeWa5qx4y9iCKwAXHXlqCS7WbnbPMPvbWQIDAQABo4IBZzCCAWMwDwYDVR0TAQH/
-BAUwAwEB/zAdBgNVHQ4EFgQUCQy/KqIdBCQMsvlACkHCz1pyqoAwHwYDVR0jBBgwFoAUWyV7lqRl
-UX64OfPAeGZe6Drn8O4wDgYDVR0PAQH/BAQDAgEGMIH/BgNVHR8EgfcwgfQwR6BFoEOGQWh0dHA6
-Ly9jcmwuc3dpc3NzaWduLm5ldC81QjI1N0I5NkE0NjU1MTdFQjgzOUYzQzA3ODY2NUVFODNBRTdG
-MEVFMIGooIGloIGihoGfbGRhcDovL2RpcmVjdG9yeS5zd2lzc3NpZ24ubmV0L0NOPTVCMjU3Qjk2
-QTQ2NTUxN0VCODM5RjNDMDc4NjY1RUU4M0FFN0YwRUUlMkNPPVN3aXNzU2lnbiUyQ0M9Q0g/Y2Vy
-dGlmaWNhdGVSZXZvY2F0aW9uTGlzdD9iYXNlP29iamVjdENsYXNzPWNSTERpc3RyaWJ1dGlvblBv
-aW50MA0GCSqGSIb3DQEBCwUAA4ICAQAC+Opd0IrMrAgDNlRm/wophuFUgywz6MdsrhCpVIF/Ki2I
-Jq2mqDQoDxkGqZ3iApUEMmRMC8r5433DE1vol0COd+PjgoGHrQFgB8PF4SD9tzCXProccXSLX02n
-sf5OfAl4eodf8ayhJRGXxywRnJDqchY9AjWpu+Uj2B9SQLfQjl3aI7wz6TL9uHWfQ749V0uHYd7t
-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
---NoSpamProxy_32349cd5-7480-4d97-99c6-9d900ada1c9e--
+> +
+> +#define REF_CLK_27MHZ		27000000
+> +
+> +enum dp_link_rate {
+> +	RATE_1_6 = 162000,
+> +	RATE_2_1 = 216000,
+> +	RATE_2_4 = 243000,
+> +	RATE_2_7 = 270000,
+> +	RATE_3_2 = 324000,
+> +	RATE_4_3 = 432000,
+> +	RATE_5_4 = 540000,
+> +	RATE_8_1 = 810000,
+> +};
+> +
+> +#define MAX_LINK_RATE RATE_5_4
+> +
+> +struct phy_pll_reg {
+> +	u16 val[7];
+> +	u32 addr;
+> +};
+> +
+> +static const struct phy_pll_reg phy_pll_27m_cfg[] = {
+> +	/*  1.62    2.16    2.43    2.7     3.24    4.32    5.4      register address */
+> +	{{ 0x010E, 0x010E, 0x010E, 0x010E, 0x010E, 0x010E, 0x010E }, CMN_PLL0_VCOCAL_INIT_TMR },
+> +	{{ 0x001B, 0x001B, 0x001B, 0x001B, 0x001B, 0x001B, 0x001B }, CMN_PLL0_VCOCAL_ITER_TMR },
+> +	{{ 0x30B9, 0x3087, 0x3096, 0x30B4, 0x30B9, 0x3087, 0x30B4 }, CMN_PLL0_VCOCAL_START },
+> +	{{ 0x0077, 0x009F, 0x00B3, 0x00C7, 0x0077, 0x009F, 0x00C7 }, CMN_PLL0_INTDIV },
+> +	{{ 0xF9DA, 0xF7CD, 0xF6C7, 0xF5C1, 0xF9DA, 0xF7CD, 0xF5C1 }, CMN_PLL0_FRACDIV },
+> +	{{ 0x001E, 0x0028, 0x002D, 0x0032, 0x001E, 0x0028, 0x0032 }, CMN_PLL0_HIGH_THR },
+> +	{{ 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020 }, CMN_PLL0_DSM_DIAG },
+> +	{{ 0x0000, 0x1000, 0x1000, 0x1000, 0x0000, 0x1000, 0x1000 }, CMN_PLLSM0_USER_DEF_CTRL },
+> +	{{ 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 }, CMN_DIAG_PLL0_OVRD },
+> +	{{ 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 }, CMN_DIAG_PLL0_FBH_OVRD },
+> +	{{ 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 }, CMN_DIAG_PLL0_FBL_OVRD },
+> +	{{ 0x0006, 0x0007, 0x0007, 0x0007, 0x0006, 0x0007, 0x0007 }, CMN_DIAG_PLL0_V2I_TUNE },
+> +	{{ 0x0043, 0x0043, 0x0043, 0x0042, 0x0043, 0x0043, 0x0042 }, CMN_DIAG_PLL0_CP_TUNE },
+> +	{{ 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008, 0x0008 }, CMN_DIAG_PLL0_LF_PROG },
+> +	{{ 0x0100, 0x0001, 0x0001, 0x0001, 0x0100, 0x0001, 0x0001 }, CMN_DIAG_PLL0_PTATIS_TUNE1 },
+> +	{{ 0x0007, 0x0001, 0x0001, 0x0001, 0x0007, 0x0001, 0x0001 }, CMN_DIAG_PLL0_PTATIS_TUNE2 },
+> +	{{ 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020, 0x0020 }, CMN_DIAG_PLL0_TEST_MODE},
+> +	{{ 0x0016, 0x0016, 0x0016, 0x0016, 0x0016, 0x0016, 0x0016 }, CMN_PSM_CLK_CTRL }
 
+again, lower case please
+
+> +};
+> +
+> +struct cdns_hdptx_dp_phy {
+> +	void __iomem *regs;	/* DPTX registers base */
+> +	struct device *dev;
+> +	struct phy *phy;
+> +	struct mutex mbox_mutex; /* mutex to protect mailbox */
+> +	struct clk *ref_clk, *apb_clk;
+> +	u32 ref_clk_rate;
+> +	u32 num_lanes;
+> +	u32 link_rate;
+> +	bool power_up;
+> +};
+> +
+> +static int cdns_phy_reg_write(struct cdns_hdptx_dp_phy *cdns_phy, u32 addr, u32 val)
+> +{
+> +	return cdns_mhdp_reg_write(cdns_phy, ADDR_PHY_AFE + (addr << 2), val);
+> +}
+> +
+> +static u32 cdns_phy_reg_read(struct cdns_hdptx_dp_phy *cdns_phy, u32 addr)
+> +{
+> +	u32 reg32;
+> +
+> +	cdns_mhdp_reg_read(cdns_phy, ADDR_PHY_AFE + (addr << 2), &reg32);
+> +	return reg32;
+> +}
+> +
+> +static int link_rate_index(u32 rate)
+> +{
+> +	switch (rate) {
+> +	case RATE_1_6:
+> +		return 0;
+> +	case RATE_2_1:
+> +		return 1;
+> +	case RATE_2_4:
+> +		return 2;
+> +	case RATE_2_7:
+> +		return 3;
+> +	case RATE_3_2:
+> +		return 4;
+> +	case RATE_4_3:
+> +		return 5;
+> +	case RATE_5_4:
+> +		return 6;
+> +	default:
+> +		return -1;
+> +	}
+> +}
+> +
+> +static int hdptx_dp_clk_enable(struct cdns_hdptx_dp_phy *cdns_phy)
+> +{
+> +	struct device *dev = cdns_phy->dev;
+> +	u32 ref_clk_rate;
+> +	int ret;
+> +
+> +	cdns_phy->ref_clk = devm_clk_get(dev, "ref");
+> +	if (IS_ERR(cdns_phy->ref_clk)) {
+> +		dev_err(dev, "phy ref clock not found\n");
+> +		return PTR_ERR(cdns_phy->ref_clk);
+> +	}
+> +
+> +	cdns_phy->apb_clk = devm_clk_get(dev, "apb");
+> +	if (IS_ERR(cdns_phy->apb_clk)) {
+> +		dev_err(dev, "phy apb clock not found\n");
+> +		return PTR_ERR(cdns_phy->apb_clk);
+> +	}
+> +
+> +	ret = clk_prepare_enable(cdns_phy->ref_clk);
+> +	if (ret) {
+> +		dev_err(cdns_phy->dev, "Failed to prepare ref clock\n");
+> +		return ret;
+> +	}
+> +
+> +	ref_clk_rate = clk_get_rate(cdns_phy->ref_clk);
+> +	if (!ref_clk_rate) {
+> +		dev_err(cdns_phy->dev, "Failed to get ref clock rate\n");
+> +		goto err_ref_clk;
+> +	}
+> +
+> +	if (ref_clk_rate == REF_CLK_27MHZ)
+> +		cdns_phy->ref_clk_rate = ref_clk_rate;
+> +	else {
+> +		dev_err(cdns_phy->dev, "Not support Ref Clock Rate(%dHz)\n", ref_clk_rate);
+> +		goto err_ref_clk;
+> +	}
+> +
+> +	ret = clk_prepare_enable(cdns_phy->apb_clk);
+> +	if (ret) {
+> +		dev_err(cdns_phy->dev, "Failed to prepare apb clock\n");
+> +		goto err_ref_clk;
+> +	}
+> +
+> +	return 0;
+> +
+> +err_ref_clk:
+> +	clk_disable_unprepare(cdns_phy->ref_clk);
+> +	return -EINVAL;
+> +}
+> +
+> +static void hdptx_dp_clk_disable(struct cdns_hdptx_dp_phy *cdns_phy)
+> +{
+> +	clk_disable_unprepare(cdns_phy->ref_clk);
+> +	clk_disable_unprepare(cdns_phy->apb_clk);
+> +}
+> +
+> +static void hdptx_dp_aux_cfg(struct cdns_hdptx_dp_phy *cdns_phy)
+> +{
+> +	/* Power up Aux */
+> +	cdns_phy_reg_write(cdns_phy, TXDA_CYA_AUXDA_CYA, 1);
+> +
+> +	cdns_phy_reg_write(cdns_phy, TX_DIG_CTRL_REG_1, 0x3);
+> +	ndelay(150);
+> +	cdns_phy_reg_write(cdns_phy, TX_DIG_CTRL_REG_2, 36);
+> +	ndelay(150);
+> +	cdns_phy_reg_write(cdns_phy, TX_ANA_CTRL_REG_2, 0x0100);
+> +	ndelay(150);
+> +	cdns_phy_reg_write(cdns_phy, TX_ANA_CTRL_REG_2, 0x0300);
+> +	ndelay(150);
+> +	cdns_phy_reg_write(cdns_phy, TX_ANA_CTRL_REG_3, 0x0000);
+> +	ndelay(150);
+> +	cdns_phy_reg_write(cdns_phy, TX_ANA_CTRL_REG_1, 0x2008);
+> +	ndelay(150);
+> +	cdns_phy_reg_write(cdns_phy, TX_ANA_CTRL_REG_1, 0x2018);
+> +	ndelay(150);
+> +	cdns_phy_reg_write(cdns_phy, TX_ANA_CTRL_REG_1, 0xA018);
+> +	ndelay(150);
+> +	cdns_phy_reg_write(cdns_phy, TX_ANA_CTRL_REG_2, 0x030C);
+> +	ndelay(150);
+> +	cdns_phy_reg_write(cdns_phy, TX_ANA_CTRL_REG_5, 0x0000);
+> +	ndelay(150);
+> +	cdns_phy_reg_write(cdns_phy, TX_ANA_CTRL_REG_4, 0x1001);
+> +	ndelay(150);
+> +	cdns_phy_reg_write(cdns_phy, TX_ANA_CTRL_REG_1, 0xA098);
+> +	ndelay(150);
+> +	cdns_phy_reg_write(cdns_phy, TX_ANA_CTRL_REG_1, 0xA198);
+> +	ndelay(150);
+> +	cdns_phy_reg_write(cdns_phy, TX_ANA_CTRL_REG_2, 0x030d);
+> +	ndelay(150);
+> +	cdns_phy_reg_write(cdns_phy, TX_ANA_CTRL_REG_2, 0x030f);
+> +}
+> +
+> +/* PMA common configuration for 27MHz */
+> +static void hdptx_dp_phy_pma_cmn_cfg_27mhz(struct cdns_hdptx_dp_phy *cdns_phy)
+> +{
+> +	u32 num_lanes = cdns_phy->num_lanes;
+> +	u16 val;
+> +	int k;
+> +
+> +	val = cdns_phy_reg_read(cdns_phy, PHY_PMA_CMN_CTRL1);
+> +	val &= 0xFFF7;
+> +	val |= 0x0008;
+> +	cdns_phy_reg_write(cdns_phy, PHY_PMA_CMN_CTRL1, val);
+> +
+> +	/* Startup state machine registers */
+> +	cdns_phy_reg_write(cdns_phy, CMN_SSM_BIAS_TMR, 0x0087);
+> +	cdns_phy_reg_write(cdns_phy, CMN_PLLSM0_PLLEN_TMR, 0x001B);
+> +	cdns_phy_reg_write(cdns_phy, CMN_PLLSM0_PLLPRE_TMR, 0x0036);
+> +	cdns_phy_reg_write(cdns_phy, CMN_PLLSM0_PLLVREF_TMR, 0x001B);
+> +	cdns_phy_reg_write(cdns_phy, CMN_PLLSM0_PLLLOCK_TMR, 0x006C);
+> +
+> +	/* Current calibration registers */
+> +	cdns_phy_reg_write(cdns_phy, CMN_ICAL_INIT_TMR, 0x0044);
+> +	cdns_phy_reg_write(cdns_phy, CMN_ICAL_ITER_TMR, 0x0006);
+> +	cdns_phy_reg_write(cdns_phy, CMN_ICAL_ADJ_INIT_TMR, 0x0022);
+> +	cdns_phy_reg_write(cdns_phy, CMN_ICAL_ADJ_ITER_TMR, 0x0006);
+> +
+> +	/* Resistor calibration registers */
+> +	cdns_phy_reg_write(cdns_phy, CMN_TXPUCAL_INIT_TMR, 0x0022);
+> +	cdns_phy_reg_write(cdns_phy, CMN_TXPUCAL_ITER_TMR, 0x0006);
+> +	cdns_phy_reg_write(cdns_phy, CMN_TXPU_ADJ_INIT_TMR, 0x0022);
+> +	cdns_phy_reg_write(cdns_phy, CMN_TXPU_ADJ_ITER_TMR, 0x0006);
+> +	cdns_phy_reg_write(cdns_phy, CMN_TXPDCAL_INIT_TMR, 0x0022);
+> +	cdns_phy_reg_write(cdns_phy, CMN_TXPDCAL_ITER_TMR, 0x0006);
+> +	cdns_phy_reg_write(cdns_phy, CMN_TXPD_ADJ_INIT_TMR, 0x0022);
+> +	cdns_phy_reg_write(cdns_phy, CMN_TXPD_ADJ_ITER_TMR, 0x0006);
+> +	cdns_phy_reg_write(cdns_phy, CMN_RXCAL_INIT_TMR, 0x0022);
+> +	cdns_phy_reg_write(cdns_phy, CMN_RXCAL_ITER_TMR, 0x0006);
+> +	cdns_phy_reg_write(cdns_phy, CMN_RX_ADJ_INIT_TMR, 0x0022);
+> +	cdns_phy_reg_write(cdns_phy, CMN_RX_ADJ_ITER_TMR, 0x0006);
+> +
+> +	for (k = 0; k < num_lanes; k = k + 1) {
+> +		/* Power state machine registers */
+> +		cdns_phy_reg_write(cdns_phy, XCVR_PSM_CAL_TMR  | (k << 9), 0x016D);
+> +		cdns_phy_reg_write(cdns_phy, XCVR_PSM_A0IN_TMR | (k << 9), 0x016D);
+> +		/* Transceiver control and diagnostic registers */
+> +		cdns_phy_reg_write(cdns_phy, XCVR_DIAG_LANE_FCM_EN_MGN_TMR | (k << 9), 0x00A2);
+> +		cdns_phy_reg_write(cdns_phy, TX_DIAG_BGREF_PREDRV_DELAY    | (k << 9), 0x0097);
+> +		/* Transmitter receiver detect registers */
+> +		cdns_phy_reg_write(cdns_phy, TX_RCVDET_EN_TMR | (k << 9), 0x0A8C);
+> +		cdns_phy_reg_write(cdns_phy, TX_RCVDET_ST_TMR | (k << 9), 0x0036);
+> +	}
+> +
+> +	cdns_phy_reg_write(cdns_phy, TX_DIAG_ACYA_0, 1);
+> +	cdns_phy_reg_write(cdns_phy, TX_DIAG_ACYA_1, 1);
+> +	cdns_phy_reg_write(cdns_phy, TX_DIAG_ACYA_2, 1);
+> +	cdns_phy_reg_write(cdns_phy, TX_DIAG_ACYA_3, 1);
+> +}
+> +
+> +static void hdptx_dp_phy_pma_cmn_pll0_27mhz(struct cdns_hdptx_dp_phy *cdns_phy)
+> +{
+> +	u32 num_lanes = cdns_phy->num_lanes;
+> +	u32 link_rate = cdns_phy->link_rate;
+> +	u16 val;
+> +	int index, i, k;
+> +
+> +	/* DP PLL data rate 0/1 clock divider value */
+> +	val = cdns_phy_reg_read(cdns_phy, PHY_HDP_CLK_CTL);
+> +	val &= 0x00FF;
+> +	if (link_rate <= RATE_2_7)
+> +		val |= 0x2400;
+> +	else
+> +		val |= 0x1200;
+> +	cdns_phy_reg_write(cdns_phy, PHY_HDP_CLK_CTL, val);
+> +
+> +	/* High speed clock 0/1 div */
+> +	val = cdns_phy_reg_read(cdns_phy, CMN_DIAG_HSCLK_SEL);
+> +	val &= 0xFFCC;
+> +	if (link_rate <= RATE_2_7)
+> +		val |= 0x0011;
+> +	cdns_phy_reg_write(cdns_phy, CMN_DIAG_HSCLK_SEL, val);
+> +
+> +	for (k = 0; k < num_lanes; k++) {
+> +		val = cdns_phy_reg_read(cdns_phy, (XCVR_DIAG_HSCLK_SEL | (k << 9)));
+> +		val = val & 0xCFFF;
+> +		if (link_rate <= RATE_2_7)
+> +			val |= 0x1000;
+> +		cdns_phy_reg_write(cdns_phy, (XCVR_DIAG_HSCLK_SEL | (k << 9)), val);
+> +	}
+> +
+> +	/* DP PHY PLL 27MHz configuration */
+> +	index = link_rate_index(link_rate);
+> +	for (i = 0; i < ARRAY_SIZE(phy_pll_27m_cfg); i++)
+> +		cdns_phy_reg_write(cdns_phy, phy_pll_27m_cfg[i].addr,
+> +				phy_pll_27m_cfg[i].val[index]);
+> +
+> +	/* Transceiver control and diagnostic registers */
+> +	for (k = 0; k < num_lanes; k++) {
+> +		val = cdns_phy_reg_read(cdns_phy, (XCVR_DIAG_PLLDRC_CTRL | (k << 9)));
+> +		val = val & 0x8FFF;
+> +		if (link_rate <= RATE_2_7)
+> +			val |= 0x2000;
+> +		else
+> +			val |= 0x1000;
+> +		cdns_phy_reg_write(cdns_phy, (XCVR_DIAG_PLLDRC_CTRL | (k << 9)), val);
+> +	}
+> +
+> +	for (k = 0; k < num_lanes; k = k + 1) {
+> +		/* Power state machine registers */
+> +		cdns_phy_reg_write(cdns_phy, (XCVR_PSM_RCTRL | (k << 9)),  0xBEFC);
+> +		cdns_phy_reg_write(cdns_phy, (TX_PSC_A0 | (k << 9)), 0x6799);
+> +		cdns_phy_reg_write(cdns_phy, (TX_PSC_A1 | (k << 9)), 0x6798);
+> +		cdns_phy_reg_write(cdns_phy, (TX_PSC_A2 | (k << 9)), 0x0098);
+> +		cdns_phy_reg_write(cdns_phy, (TX_PSC_A3 | (k << 9)), 0x0098);
+> +		/* Receiver calibration power state definition register */
+> +		val = cdns_phy_reg_read(cdns_phy, RX_PSC_CAL | (k << 9));
+> +		val &= 0xFFBB;
+> +		cdns_phy_reg_write(cdns_phy, (RX_PSC_CAL | (k << 9)), val);
+> +		val = cdns_phy_reg_read(cdns_phy, RX_PSC_A0  | (k << 9));
+> +		val &= 0xFFBB;
+> +		cdns_phy_reg_write(cdns_phy, (RX_PSC_A0  | (k << 9)), val);
+> +	}
+> +}
+> +
+> +static void hdptx_dp_phy_ref_clock_type(struct cdns_hdptx_dp_phy *cdns_phy)
+> +{
+> +	u32 val;
+> +
+> +	val = cdns_phy_reg_read(cdns_phy, PHY_PMA_CMN_CTRL1);
+> +	val &= 0xFF8F;
+> +	/*
+> +	 * single ended reference clock (val |= 0x0030);
+> +	 * differential clock  (val |= 0x0000);
+> +	 *
+> +	 * for differential clock on the refclk_p and
+> +	 * refclk_m off chip pins: CMN_DIAG_ACYA[8]=1'b1
+> +	 * cdns_phy_reg_write(cdns_phy, CMN_DIAG_ACYA, 0x0100);
+> +	 */
+> +	val |= 0x0030;
+> +	cdns_phy_reg_write(cdns_phy, PHY_PMA_CMN_CTRL1, val);
+> +}
+> +
+> +static int hdptx_dp_phy_power_up(struct cdns_hdptx_dp_phy *cdns_phy)
+> +{
+> +	u32 val, i;
+> +
+> +	/* Enable HDP PLL’s for high speed clocks */
+> +	val = cdns_phy_reg_read(cdns_phy, PHY_HDP_CLK_CTL);
+> +	val |= (1 << 0);
+> +	cdns_phy_reg_write(cdns_phy, PHY_HDP_CLK_CTL, val);
+> +	/* Wait for PLL ready ACK */
+> +	for (i = 0; i < 10; i++) {
+> +		val = cdns_phy_reg_read(cdns_phy, PHY_HDP_CLK_CTL);
+> +		if (val & (1 << 1))
+> +			break;
+> +		msleep(20);
+> +	}
+> +	if (i == 10) {
+> +		dev_err(cdns_phy->dev, "Wait PLL Ack failed\n");
+> +		return -1;
+> +	}
+> +
+> +	/* Enable HDP PLL’s data rate and full rate clocks out of PMA. */
+> +	val = cdns_phy_reg_read(cdns_phy, PHY_HDP_CLK_CTL);
+> +	val |= (1 << 2);
+> +	cdns_phy_reg_write(cdns_phy, PHY_HDP_CLK_CTL, val);
+> +	/* Wait for PLL clock enable ACK */
+> +	for (i = 0; i < 10; i++) {
+> +		val = cdns_phy_reg_read(cdns_phy, PHY_HDP_CLK_CTL);
+> +		if (val & (1 << 3))
+> +			break;
+> +		msleep(20);
+> +	}
+> +	if (i == 10) {
+> +		dev_err(cdns_phy->dev, "Wait PLL clock enable ACk failed\n");
+> +		return -1;
+> +	}
+> +
+> +	/* Configure PHY in A2 Mode */
+> +	cdns_phy_reg_write(cdns_phy, PHY_HDP_MODE_CTRL, 0x0004);
+> +	/* Wait for Power State A2 Ack */
+> +	for (i = 0; i < 10; i++) {
+> +		val = cdns_phy_reg_read(cdns_phy, PHY_HDP_MODE_CTRL);
+> +		if (val & (1 << 6))
+> +			break;
+> +		msleep(20);
+> +	}
+> +	if (i == 10) {
+> +		dev_err(cdns_phy->dev, "Wait A2 Ack failed\n");
+> +		return -1;
+> +	}
+> +
+> +	/* Configure PHY in A0 mode (PHY must be in the A0 power
+> +	 * state in order to transmit data)
+> +	 */
+> +	cdns_phy_reg_write(cdns_phy, PHY_HDP_MODE_CTRL, 0x0101);
+> +
+> +	/* Wait for Power State A0 Ack */
+> +	for (i = 0; i < 10; i++) {
+> +		val = cdns_phy_reg_read(cdns_phy, PHY_HDP_MODE_CTRL);
+> +		if (val & (1 << 4))
+> +			break;
+> +		msleep(20);
+> +	}
+> +	if (i == 10) {
+> +		dev_err(cdns_phy->dev, "Wait A0 Ack failed\n");
+> +		return -1;
+> +	}
+> +
+> +	cdns_phy->power_up = true;
+> +
+> +	return 0;
+> +}
+> +
+> +static void hdptx_dp_phy_power_down(struct cdns_hdptx_dp_phy *cdns_phy)
+> +{
+> +	u16 val;
+> +	int i;
+> +
+> +	if (!cdns_phy->power_up)
+> +		return;
+> +
+> +	/* Place the PHY lanes in the A3 power state. */
+> +	cdns_phy_reg_write(cdns_phy, PHY_HDP_MODE_CTRL, 0x8);
+> +	/* Wait for Power State A3 Ack */
+> +	for (i = 0; i < 10; i++) {
+> +		val = cdns_phy_reg_read(cdns_phy, PHY_HDP_MODE_CTRL);
+> +		if (val & (1 << 7))
+> +			break;
+> +		msleep(20);
+> +	}
+> +	if (i == 10) {
+> +		dev_err(cdns_phy->dev, "Wait A3 Ack failed\n");
+> +		return;
+> +	}
+> +
+> +	/* Disable HDP PLL’s data rate and full rate clocks out of PMA. */
+> +	val = cdns_phy_reg_read(cdns_phy, PHY_HDP_CLK_CTL);
+> +	val &= ~(1 << 2);
+> +	cdns_phy_reg_write(cdns_phy, PHY_HDP_CLK_CTL, val);
+> +	/* Wait for PLL clock gate ACK */
+> +	for (i = 0; i < 10; i++) {
+> +		val = cdns_phy_reg_read(cdns_phy, PHY_HDP_CLK_CTL);
+> +		if (!(val & (1 << 3)))
+> +			break;
+> +		msleep(20);
+> +	}
+> +	if (i == 10) {
+> +		dev_err(cdns_phy->dev, "Wait PLL clock gate Ack failed\n");
+> +		return;
+> +	}
+> +
+> +	/* Disable HDP PLL’s for high speed clocks */
+> +	val = cdns_phy_reg_read(cdns_phy, PHY_HDP_CLK_CTL);
+> +	val &= ~(1 << 0);
+> +	cdns_phy_reg_write(cdns_phy, PHY_HDP_CLK_CTL, val);
+> +	/* Wait for PLL disable ACK */
+> +	for (i = 0; i < 10; i++) {
+> +		val = cdns_phy_reg_read(cdns_phy, PHY_HDP_CLK_CTL);
+> +		if (!(val & (1 << 1)))
+> +			break;
+> +		msleep(20);
+> +	}
+> +	if (i == 10) {
+> +		dev_err(cdns_phy->dev, "Wait PLL disable Ack failed\n");
+> +		return;
+> +	}
+> +}
+> +
+> +static int cdns_hdptx_dp_phy_on(struct phy *phy)
+> +{
+> +	struct cdns_hdptx_dp_phy *cdns_phy = phy_get_drvdata(phy);
+> +
+> +	return hdptx_dp_phy_power_up(cdns_phy);
+> +}
+> +
+> +static int cdns_hdptx_dp_phy_off(struct phy *phy)
+> +{
+> +	struct cdns_hdptx_dp_phy *cdns_phy = phy_get_drvdata(phy);
+> +
+> +	hdptx_dp_phy_power_down(cdns_phy);
+> +
+> +	return 0;
+> +}
+> +
+> +static int cdns_hdptx_dp_phy_init(struct phy *phy)
+> +{
+> +	struct cdns_hdptx_dp_phy *cdns_phy = phy_get_drvdata(phy);
+> +	int ret;
+> +
+> +	hdptx_dp_phy_ref_clock_type(cdns_phy);
+> +
+> +	/* PHY power up */
+> +	ret = hdptx_dp_phy_power_up(cdns_phy);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	hdptx_dp_aux_cfg(cdns_phy);
+> +
+> +	return ret;
+> +}
+> +
+> +static int cdns_hdptx_dp_configure(struct phy *phy,
+> +				     union phy_configure_opts *opts)
+> +{
+> +	struct cdns_hdptx_dp_phy *cdns_phy = phy_get_drvdata(phy);
+> +	int ret;
+> +
+> +	cdns_phy->link_rate = opts->dp.link_rate;
+> +	cdns_phy->num_lanes = opts->dp.lanes;
+> +
+> +	if (cdns_phy->link_rate > MAX_LINK_RATE) {
+> +		dev_err(cdns_phy->dev, "Link Rate(%d) Not supported\n", cdns_phy->link_rate);
+> +		return false;
+> +	}
+> +
+> +	/* Disable phy clock if PHY in power up state */
+> +	hdptx_dp_phy_power_down(cdns_phy);
+> +
+> +	if (cdns_phy->ref_clk_rate == REF_CLK_27MHZ) {
+> +		hdptx_dp_phy_pma_cmn_cfg_27mhz(cdns_phy);
+> +		hdptx_dp_phy_pma_cmn_pll0_27mhz(cdns_phy);
+> +	} else
+> +		dev_err(cdns_phy->dev, "Not support ref clock rate\n");
+> +
+> +	/* PHY power up */
+> +	ret = hdptx_dp_phy_power_up(cdns_phy);
+> +
+> +	return ret;
+> +}
+> +
+> +static const struct phy_ops cdns_hdptx_dp_phy_ops = {
+> +	.init		= cdns_hdptx_dp_phy_init,
+> +	.configure	= cdns_hdptx_dp_configure,
+> +	.power_on	= cdns_hdptx_dp_phy_on,
+> +	.power_off	= cdns_hdptx_dp_phy_off,
+> +	.owner		= THIS_MODULE,
+> +};
+> +
+> +static int cdns_hdptx_dp_phy_probe(struct platform_device *pdev)
+> +{
+> +	struct cdns_hdptx_dp_phy *cdns_phy;
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *node = dev->of_node;
+> +	struct phy_provider *phy_provider;
+> +	struct resource *res;
+> +	struct phy *phy;
+> +	int ret;
+> +
+> +	cdns_phy = devm_kzalloc(dev, sizeof(*cdns_phy), GFP_KERNEL);
+> +	if (!cdns_phy)
+> +		return -ENOMEM;
+> +
+> +	dev_set_drvdata(dev, cdns_phy);
+> +	cdns_phy->dev = dev;
+> +	mutex_init(&cdns_phy->mbox_mutex);
+> +
+> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> +	if (!res)
+> +		return -ENODEV;
+> +	cdns_phy->regs = devm_ioremap(dev, res->start, resource_size(res));
+> +	if (IS_ERR(cdns_phy->regs))
+> +		return PTR_ERR(cdns_phy->regs);
+> +
+> +	phy = devm_phy_create(dev, node, &cdns_hdptx_dp_phy_ops);
+> +	if (IS_ERR(phy))
+> +		return PTR_ERR(phy);
+> +
+> +	phy->attrs.mode = PHY_MODE_DP;
+> +	cdns_phy->phy = phy;
+> +	phy_set_drvdata(phy, cdns_phy);
+> +
+> +	ret = hdptx_dp_clk_enable(cdns_phy);
+> +	if (ret) {
+> +		dev_err(dev, "Init clk fail\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+> +	if (IS_ERR(phy_provider)) {
+> +		ret =  PTR_ERR(phy_provider);
+> +		goto clk_disable;
+> +	}
+> +
+> +	return 0;
+> +
+> +clk_disable:
+> +	hdptx_dp_clk_disable(cdns_phy);
+> +
+> +	return -EINVAL;
+> +}
+> +
+> +static int cdns_hdptx_dp_phy_remove(struct platform_device *pdev)
+> +{
+> +	struct cdns_hdptx_dp_phy *cdns_phy = platform_get_drvdata(pdev);
+> +
+> +	hdptx_dp_clk_disable(cdns_phy);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id cdns_hdptx_dp_phy_of_match[] = {
+> +	{.compatible = "fsl,imx8mq-dp-phy" },
+> +	{ /* sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, cdns_hdptx_dp_phy_of_match);
+> +
+> +static struct platform_driver cdns_hdptx_dp_phy_driver = {
+> +	.probe	= cdns_hdptx_dp_phy_probe,
+> +	.remove = cdns_hdptx_dp_phy_remove,
+> +	.driver = {
+> +		.name	= "cdns-hdptx-dp-phy",
+> +		.of_match_table	= cdns_hdptx_dp_phy_of_match,
+> +	}
+> +};
+> +module_platform_driver(cdns_hdptx_dp_phy_driver);
+> +
+> +MODULE_AUTHOR("Sandor Yu <sandor.yu@nxp.com>");
+> +MODULE_DESCRIPTION("Cadence HDP-TX DisplayPort PHY driver");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.34.1
+
+-- 
+~Vinod
