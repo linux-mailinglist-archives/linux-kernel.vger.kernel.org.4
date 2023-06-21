@@ -2,72 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C039E738772
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:46:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E268E7387C4
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbjFUOpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:45:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54518 "EHLO
+        id S231721AbjFUOu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231867AbjFUOpj (ORCPT
+        with ESMTP id S230193AbjFUOtZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:45:39 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BBB5E7D
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:45:37 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8Bx28YQDZNk7ykAAA--.320S3;
-        Wed, 21 Jun 2023 22:45:36 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxJ80PDZNkR8wAAA--.2674S3;
-        Wed, 21 Jun 2023 22:45:35 +0800 (CST)
-Message-ID: <50fcc764-212e-5797-cc66-f2a6601965d2@loongson.cn>
-Date:   Wed, 21 Jun 2023 22:45:35 +0800
+        Wed, 21 Jun 2023 10:49:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B992135;
+        Wed, 21 Jun 2023 07:48:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CB456157B;
+        Wed, 21 Jun 2023 14:48:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55919C433C9;
+        Wed, 21 Jun 2023 14:48:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687358893;
+        bh=zkF7XZXkTymtKzVrHDI637HQp5mSePtzjunOQ79N8zE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=gSHiEXsKhNqGZ+sB3hwTHXGNior3Vyk10xSUYstyJLFKIlTJSAOcnOQ2r8J35gKv4
+         hTQgG3n1FDzKuUnLiBOM2ubd4vVWoC1tGAFdUvw8PCKQpszcxBzhXWia3+eKh79s6B
+         uS2vR2lIKa92/++teZMrzYnXERN0GyecvjAunedslC8Ku286r07eMZOWmnPpXt151i
+         ARyuJgLmKm5pmwarGxtAYtFLRQgryXexDZHGYhW1Q4Fe6L+tP6QiTDIWsr2LP7GTHp
+         NykRzV8nRP3w7h5VFEoufujbW+ZihUvJJmL33Lkza8IfhRNn0JonD1p/9u/b2LvNCM
+         DYObIt+Ob7Yaw==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>,
+        Tyler Hicks <code@tyhicks.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        ecryptfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 23/79] ecryptfs: switch to new ctime accessors
+Date:   Wed, 21 Jun 2023 10:45:36 -0400
+Message-ID: <20230621144735.55953-22-jlayton@kernel.org>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230621144735.55953-1-jlayton@kernel.org>
+References: <20230621144507.55591-1-jlayton@kernel.org>
+ <20230621144735.55953-1-jlayton@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v10 07/11] drm/etnaviv: Add support for the dma coherent
- device
-Content-Language: en-US
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Sui Jingfeng <18949883232@163.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        etnaviv@lists.freedesktop.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20230620094716.2231414-1-18949883232@163.com>
- <20230620094716.2231414-8-18949883232@163.com>
- <8f74f0962c8bab6c832919a5340667c54e1a7ddc.camel@pengutronix.de>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <8f74f0962c8bab6c832919a5340667c54e1a7ddc.camel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8DxJ80PDZNkR8wAAA--.2674S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj9xXoW7GFyUtFWUZw1xtFWfKFyUurX_yoWDArc_Ca
-        yxZrn7Wr1akrnYgFs0y34SvFyftFs5ZrZ2qw4qv3s8KrWDCw1UXrykZ347W34DJFW8JFyD
-        Kwn7tFyUtr1UWosvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
-        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-        cSsGvfJTRUUUby8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        WxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVWxJr0_GcWln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
-        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26rWY
-        6Fy7McIj6I8E87Iv67AKxVW8Jr0_Cr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
-        xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
-        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r4a6rW5MI8I3I0E5I8CrV
-        AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
-        c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267
-        AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4U
-        JVWxJr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07
-        j-ID7UUUUU=
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,34 +57,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In later patches, we're going to change how the ctime.tv_nsec field is
+utilized. Switch to using accessor functions instead of raw accesses of
+inode->i_ctime.
 
-On 2023/6/21 18:00, Lucas Stach wrote:
->>   	/* list of GEM objects: */
->>   	struct mutex gem_lock;
->>   	struct list_head gem_list;
->> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem.c b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
->> index b5f73502e3dd..39bdc3774f2d 100644
->> --- a/drivers/gpu/drm/etnaviv/etnaviv_gem.c
->> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
->> @@ -343,6 +343,7 @@ void *etnaviv_gem_vmap(struct drm_gem_object *obj)
->>   static void *etnaviv_gem_vmap_impl(struct etnaviv_gem_object *obj)
->>   {
->>   	struct page **pages;
->> +	pgprot_t prot;
->>   
->>   	lockdep_assert_held(&obj->lock);
->>   
->> @@ -350,8 +351,19 @@ static void *etnaviv_gem_vmap_impl(struct etnaviv_gem_object *obj)
->>   	if (IS_ERR(pages))
->>   		return NULL;
->>   
->> -	return vmap(pages, obj->base.size >> PAGE_SHIFT,
->> -			VM_MAP, pgprot_writecombine(PAGE_KERNEL));
->> +	switch (obj->flags) {
-> switch (obj->flags & ETNA_BO_CACHE_MASK)
->
-This is certainly OK, acceptable!
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+---
+ fs/ecryptfs/inode.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/fs/ecryptfs/inode.c b/fs/ecryptfs/inode.c
+index 83274915ba6d..3171214fdffd 100644
+--- a/fs/ecryptfs/inode.c
++++ b/fs/ecryptfs/inode.c
+@@ -148,7 +148,7 @@ static int ecryptfs_do_unlink(struct inode *dir, struct dentry *dentry,
+ 	}
+ 	fsstack_copy_attr_times(dir, lower_dir);
+ 	set_nlink(inode, ecryptfs_inode_to_lower(inode)->i_nlink);
+-	inode->i_ctime = dir->i_ctime;
++	inode_ctime_set(inode, inode_ctime_peek(dir));
+ out_unlock:
+ 	dput(lower_dentry);
+ 	inode_unlock(lower_dir);
 -- 
-Jingfeng
+2.41.0
 
