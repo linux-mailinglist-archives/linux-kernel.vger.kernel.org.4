@@ -2,95 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1682F737D9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 803E8737D85
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:40:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230269AbjFUIe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 04:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60390 "EHLO
+        id S229673AbjFUIe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 04:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjFUIeY (ORCPT
+        with ESMTP id S231178AbjFUIeu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 04:34:24 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CD819AC
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:34:23 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 35L8YGkd031030;
-        Wed, 21 Jun 2023 03:34:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1687336456;
-        bh=RcOH7fpnFEhX2+nNrVqYgVkolPMp+HFzURE6ojM7PyY=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=AnGoNnmHJD+x/jN4l3uUlALaOytC33dlC8fFESTKS9UFjm4usLUMtG9kWrsWjKWUl
-         fsc+zLoufhlKy42Z4sBT3dkaB+FFO1VjkkbCZVMw5wpRciQ+AHaC6ldir8G+HSuQlp
-         u0f/qZUps4cOrNjeUAkLWMLu8+WOk0w0K28Arxbg=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 35L8YGHW040884
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 21 Jun 2023 03:34:16 -0500
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 21
- Jun 2023 03:34:15 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 21 Jun 2023 03:34:16 -0500
-Received: from [10.24.69.26] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 35L8YD9Y081795;
-        Wed, 21 Jun 2023 03:34:13 -0500
-Message-ID: <2d15ea8e-b2d8-2ee7-ba66-7ed6e4237cb3@ti.com>
-Date:   Wed, 21 Jun 2023 14:04:12 +0530
+        Wed, 21 Jun 2023 04:34:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B9819AC;
+        Wed, 21 Jun 2023 01:34:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 39BE661452;
+        Wed, 21 Jun 2023 08:34:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8563AC433C8;
+        Wed, 21 Jun 2023 08:34:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687336488;
+        bh=r6U/wiN4yjlHDSDq9vyDDHA8xXXk2YRJxVxtk46DIlo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WZdO6yM56gukvs/jIK7F/cmrtA3TS7Dg1XxN+QYdCIKQCb33aWA0wcUfJG5tHu68t
+         LOAlzGLY+k8vXGAcIVmPSfpmduFrtlspn5hXfWpU41Y2v69RB7ssS6g96B5XVNKQO4
+         WnJbqMf96zNpPHnOhOjmYUbFKr1BrWmvJL8b1+q+oz0w52yktL/P3TWLjSDPQ2Crb1
+         yWM9OSp1nXwGw8ljzgHttJ3UxjnZV1GNUI+q3D2SllMrdq1kEqqvPyPkX4oBgxm7E3
+         NRCvjCwy/xniwou2StPq7pe5U5LUcDXH2VTpFMzTYZo1XV+eC+rHlK3RU+UogAe0mq
+         oZp8gtJk02xJQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1qBtIg-00063W-Bw; Wed, 21 Jun 2023 10:34:51 +0200
+Date:   Wed, 21 Jun 2023 10:34:50 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Mike Tipton <quic_mdtipton@quicinc.com>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Odelu Kukatla <quic_okukatla@quicinc.com>
+Subject: Re: [PATCH RESEND v2] interconnect: drop unused icc_get() interface
+Message-ID: <ZJK2Ki6--nLe8bK0@hovoldconsulting.com>
+References: <20230523095248.25211-1-johan+linaro@kernel.org>
+ <37dcbd3c-1e41-023c-8bbd-19cf9c9f151b@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] firmware: ti_sci: Fix few compiler warnings
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>
-CC:     Praneeth <praneeth@ti.com>, Vignesh <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230621082309.1569239-1-d-gole@ti.com>
-From:   Dhruva Gole <d-gole@ti.com>
-In-Reply-To: <20230621082309.1569239-1-d-gole@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <37dcbd3c-1e41-023c-8bbd-19cf9c9f151b@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Oops, seems like I missed similar patch,
+On Tue, Jun 20, 2023 at 02:57:17PM -0700, Mike Tipton wrote:
+> On 5/23/2023 2:52 AM, Johan Hovold wrote:
+> > The icc_get() interface can be used to lookup an interconnect path based
+> > on global node ids. There has never been any users of this interface and
+> > all lookups are currently done from the devicetree.
+> > 
+> > Remove the unused icc_get() interface.
+> > 
+> > Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 
-On 21/06/23 13:53, Dhruva Gole wrote:
-> Fix below warnings:
+> We have downstream debug/test modules that removing icc_get() will 
+> break. I'd like to get equivalent debug support in mainline, but until 
+> then I'd prefer we not remove this.
+
+I'm sure you've heard this before, but if it's not in mainline it does
+not count. We don't carry code upstream for the sole benefit of
+out-of-tree users.
+
+> I suspect having a mainline approach for voting paths from debugfs would 
+> be useful to others as well. There are similar debugfs control 
+> mechanisms in other frameworks already, e.g. clock.
 > 
->   CC      drivers/firmware/ti_sci.o
-> drivers/firmware/ti_sci.c:1988: warning: Excess function parameter 'vint_irq' description in 'ti_sci_cmd_set_irq'
-> drivers/firmware/ti_sci.c:2036: warning: Excess function parameter 'vint_irq' description in 'ti_sci_cmd_free_irq'
-> drivers/firmware/ti_sci.c:2632: warning: Function parameter or member
-> ...
-> drivers/firmware/ti_sci.c:2748: warning: expecting prototype for ti_sci_cmd_get_boot_status(). Prototype was for ti_sci_cmd_proc_get_status() instead
-> drivers/firmware/ti_sci.c:3267: warning: Function parameter or member 'sub_type' not described in 'devm_ti_sci_get_resource'
-> drivers/firmware/ti_sci.c:3267: warning: Excess function parameter 'suub_type' description in 'devm_ti_sci_get_resource'
-> 
-> Fixes: 1e407f337f40 ("firmware: ti_sci: Add support for processor control")
-> Signed-off-by: Dhruva Gole <d-gole@ti.com>
-> ---
+> Instead of removing icc_get() immediately, can we wait for a future 
+> patch series that adds debugfs as a consumer?
 
-Nishanth already submitted this before I did,
+This function was merged over four years ago and has never been used in
+mainline and I doubt a user will suddenly show up in the near future if
+we were to keep it.
 
-https://lore.kernel.org/all/20230621021619.265162-1-nm@ti.com/
+I guess you can just carry one more patch out-of-tree until you can
+mainline a proper debugfs interface (which should probably not even use
+this function, as you mentioned yourself).
 
--- 
-Thanks and Regards,
-Dhruva Gole
+Johan
