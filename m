@@ -2,173 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 166FA7381A1
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:11:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC15973810A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232589AbjFUKpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 06:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52500 "EHLO
+        id S230308AbjFUKqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 06:46:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232661AbjFUKo5 (ORCPT
+        with ESMTP id S230125AbjFUKqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 06:44:57 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC76199E
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 03:42:50 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230621104248euoutp012c3395b201692484aba7069f2a2f4f57~qppTTxktj1817118171euoutp01y
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 10:42:48 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230621104248euoutp012c3395b201692484aba7069f2a2f4f57~qppTTxktj1817118171euoutp01y
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1687344168;
-        bh=l1C4lvIt3QKQmaC9+QjfjU/cqjeq5T+23Tlro/biFn0=;
-        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-        b=EjXl3a6ae7hTq+stLNivKpQOU64pssSpvJgD7ORWYuEKDACjvJW7Qd+01e3X8Rc+j
-         aUSpZXilw1s4jF7I9dlI62JvKsHHQ6ytKn+u/siyxjyPTBadJNo9pRN3sRfdh7/6SR
-         5kWTOL+2INP/pfBSpE8u1lO5A3W5OViJDmnPevHs=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230621104248eucas1p27a4a8a897900d5e64e2493f4cb5ad695~qppTCqiIK3009130091eucas1p2N;
-        Wed, 21 Jun 2023 10:42:48 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id 7B.18.37758.824D2946; Wed, 21
-        Jun 2023 11:42:48 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230621104247eucas1p1008c472be110abce7d38366964c9eb4e~qppSoA0zh3236032360eucas1p17;
-        Wed, 21 Jun 2023 10:42:47 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230621104247eusmtrp1e4451c41261eee14caa8481d053a482d~qppSne4T21503715037eusmtrp1f;
-        Wed, 21 Jun 2023 10:42:47 +0000 (GMT)
-X-AuditID: cbfec7f5-7ffff7000002937e-d2-6492d4281bc9
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id CC.91.14344.724D2946; Wed, 21
-        Jun 2023 11:42:47 +0100 (BST)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230621104247eusmtip1fce9a88bea1d162fbc5cc50b80394027~qppSZeRXa1760517605eusmtip1o;
-        Wed, 21 Jun 2023 10:42:47 +0000 (GMT)
-Received: from [106.110.32.65] (106.110.32.65) by CAMSVWEXC02.scsc.local
-        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Wed, 21 Jun 2023 11:42:45 +0100
-Message-ID: <d275b49a-b6be-a08f-cfd8-d213eb452dd1@samsung.com>
-Date:   Wed, 21 Jun 2023 12:42:45 +0200
+        Wed, 21 Jun 2023 06:46:03 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8F6E41;
+        Wed, 21 Jun 2023 03:44:30 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6D7BC1FDAD;
+        Wed, 21 Jun 2023 10:44:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1687344269; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uKfVaC6JkeFcL/06eIzho6xSCCes9hNDXUsaPx8dW6k=;
+        b=ojRLit9kPFy1zm5wZ/Jh0wxoR+XNjhCPsbX77o6gAfw5wL4WBB2xBH4bCRO31XNHReqqVb
+        uaYC7UGMLTYlOVPhRvYM2gacvPib1bliuQPfgclqdunjhGG4BYerwhuFliljLM9SkuHOgk
+        960FqrOR7kGKL8Wp5gbYvSL3sQ/A+Ew=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1687344269;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uKfVaC6JkeFcL/06eIzho6xSCCes9hNDXUsaPx8dW6k=;
+        b=xff3U+YrR7TIGuaHffuc4XBvk1VA2WLAVoNHMNpE9xHS6NJkGtwAL28gnfkawrTsw9IN2/
+        lZ4eGDxRqPkWO4Dw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 050B8134B1;
+        Wed, 21 Jun 2023 10:44:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id R05fAI3UkmQXFgAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Wed, 21 Jun 2023 10:44:29 +0000
+Message-ID: <5b87fb5c-2f23-47c9-b6a8-623472115876@suse.de>
+Date:   Wed, 21 Jun 2023 12:44:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
-        Thunderbird/102.11.0
-Subject: Re: [RFC 3/4] block: set mapping order for the block cache in
- set_init_blocksize
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 4/9] drm/verisilicon: Add gem driver for JH7110 SoC
 Content-Language: en-US
-To:     Hannes Reinecke <hare@suse.de>, <willy@infradead.org>,
-        <david@fromorbit.com>
-CC:     <gost.dev@samsung.com>, <mcgrof@kernel.org>, <hch@lst.de>,
-        <jwong@kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <a25eb5ce-b71c-2a38-d8eb-f8de8b8b449e@suse.de>
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [106.110.32.65]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCKsWRmVeSWpSXmKPExsWy7djP87oaVyalGLw/xG6x5dg9Ros9iyYx
-        WaxcfZTJ4tqZHiaLPXtPslhc3jWHzeLGhKeMFr9/zGFz4PA4tUjCY/MKLY9NqzrZPHbfbGDz
-        2Hy62uPzJrkAtigum5TUnMyy1CJ9uwSujMNvPzEWzOer2L2ppoHxOncXIyeHhICJxLGlm9m7
-        GLk4hARWMEr82NHBDOF8YZRYfaqdFcL5zCjRNWMxK0zL9Psv2SASyxklWs5uZIKrurR6KyOE
-        s5NR4vaFD2AtvAJ2Ehd/bmQBsVkEVCWW3JjJDBEXlDg58wlYXFQgWqJ12X02EFsYyN71pxms
-        l1lAXOLWk/lMILaIQJDE0c5TYNcyC0xjlFh+8QrQNg4ONgEticZOdpAaTgFriZdvHkP1yks0
-        b53NDHG2osSkm++hXqiVOLXlFhOE3c4psW1FEoTtItH6agU7hC0s8er4FihbRuL05B4WCLta
-        4umN3+BAkhBoYZTo37meDeQGCaDFfWdyQExmAU2J9bv0IcodJSYvPMYCUcEnceOtIMRlfBKT
-        tk1nnsCoOgspIGYheXgWkgdmIQxdwMiyilE8tbQ4Nz212DgvtVyvODG3uDQvXS85P3cTIzAh
-        nf53/OsOxhWvPuodYmTiYDzEKMHBrCTCK7tpUooQb0piZVVqUX58UWlOavEhRmkOFiVxXm3b
-        k8lCAumJJanZqakFqUUwWSYOTqkGpvCYKat71CvSk7e/8qpKFWAv41yxTt58yf3QRMft76RL
-        1X7Hh+berz3xfF9odLBEmrXUhm81eex3PgXELjo30YMp7mXS4+J3K3fsk7hhKq9//4HHr+c6
-        ch/0PveK5z/d9DR6tenj5lcnXonzJYjs9fi779I/Xbn9rPUHrq+4eZJxv/DXrc7id8wtpomz
-        PjrxOq62cO/ujVP0WZ9+/KEhyJd7IuODSW5wbdKzRQq8HQn3Ngso7HzA/lK6NSj7VfwTA4mW
-        uZf17fYwHP7xK86Q5/tXle+rHe0vTT0wYXnfBPmNtR5nHt1fm/muu+j7u3M2pzJOzDE0Ouzn
-        k2C4JrFwt7+xp/HNrz5/FiawBYn41SuxFGckGmoxFxUnAgCRBmr4twMAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrNIsWRmVeSWpSXmKPExsVy+t/xu7rqVyalGPzs0LTYcuweo8WeRZOY
-        LFauPspkce1MD5PFnr0nWSwu75rDZnFjwlNGi98/5rA5cHicWiThsXmFlsemVZ1sHrtvNrB5
-        bD5d7fF5k1wAW5SeTVF+aUmqQkZ+cYmtUrShhZGeoaWFnpGJpZ6hsXmslZGpkr6dTUpqTmZZ
-        apG+XYJexuG3nxgL5vNV7N5U08B4nbuLkZNDQsBEYvr9l2wgtpDAUkaJyYusIOIyEhu/XGWF
-        sIUl/lzrAqrhAqr5yCixd8p0RghnJ6PEpPU32UGqeAXsJC7+3MgCYrMIqEosuTGTGSIuKHFy
-        5hOwuKhAtMTqzxfApgoD2bv+NIPZzALiEreezGcCsUUEgiSOdp5iB1nALDCNUWL5xStQ2z4x
-        Sjx8eQeoioODTUBLorETbDGngLXEyzePoQZpSrRu/80OYctLNG+dzQzxgqLEpJvvod6plfj8
-        9xnjBEbRWUjum4XkjllIRs1CMmoBI8sqRpHU0uLc9NxiI73ixNzi0rx0veT83E2MwFjeduzn
-        lh2MK1991DvEyMTBeIhRgoNZSYRXdtOkFCHelMTKqtSi/Pii0pzU4kOMpsBAmsgsJZqcD0wm
-        eSXxhmYGpoYmZpYGppZmxkrivJ4FHYlCAumJJanZqakFqUUwfUwcnFINTFa1F/rPrxP8p7Iv
-        oIo/4fLiKyWc2/anRVb2Wh978PpthvybMuFf5dbTDi193r/pdp9axDWRKVydiXl3bZY66cVP
-        VnbdWt7tYuH/Vb5ubeaRfubSyNNbtYJmhB80yTsgriFwgy96Z1+JsmLukVfvqjUtw66XnkzW
-        bTBbYXr99KomS72ucLuu29ynHrbt+aj6YpLVwpnrQq6KZJ3cmv7xWAdD+LpX3CEu4t8SF+mX
-        tVs1/hWP5+HxfSS83sAyROj/KsvoLPvJeoqse+072Q/Nv1x/Vrk3ymK9oNX5TaazuQ0zDt+J
-        X8RQ9PRBfNmUE1ft8o65fDFps5OcsbrZ1yr4Yry1bpCXWv3RWl+NGcJKLMUZiYZazEXFiQBT
-        sdKrbgMAAA==
-X-CMS-MailID: 20230621104247eucas1p1008c472be110abce7d38366964c9eb4e
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20230621083828eucas1p23222cae535297f9536f12dddd485f97b
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230621083828eucas1p23222cae535297f9536f12dddd485f97b
-References: <20230621083823.1724337-1-p.raghav@samsung.com>
-        <CGME20230621083828eucas1p23222cae535297f9536f12dddd485f97b@eucas1p2.samsung.com>
-        <20230621083823.1724337-4-p.raghav@samsung.com>
-        <a25eb5ce-b71c-2a38-d8eb-f8de8b8b449e@suse.de>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     Keith Zhao <keith.zhao@starfivetech.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Cc:     Conor Dooley <conor+dt@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        christian.koenig@amd.com, Bjorn Andersson <andersson@kernel.org>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        Changhuang Liang <changhuang.liang@starfivetech.com>,
+        Jagan Teki <jagan@edgeble.ai>,
+        Jack Zhu <jack.zhu@starfivetech.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Shengyang Chen <shengyang.chen@starfivetech.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+References: <20230602074043.33872-1-keith.zhao@starfivetech.com>
+ <20230602074043.33872-5-keith.zhao@starfivetech.com>
+ <f7ded369-e384-db01-dc8c-6a5183f20409@suse.de>
+In-Reply-To: <f7ded369-e384-db01-dc8c-6a5183f20409@suse.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------E3lpJV3O3OclE0b68k1BcyGT"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>       bdev->bd_inode->i_blkbits = blksize_bits(bsize);
->> +    order = bdev->bd_inode->i_blkbits - PAGE_SHIFT;
->> +    folio_order = mapping_min_folio_order(bdev->bd_inode->i_mapping);
->> +
->> +    if (!IS_ENABLED(CONFIG_BUFFER_HEAD)) {
->> +        /* Do not allow changing the folio order after it is set */
->> +        WARN_ON_ONCE(folio_order && (folio_order != order));
->> +        mapping_set_folio_orders(bdev->bd_inode->i_mapping, order, 31);
->> +    }
->>   }
->>     int set_blocksize(struct block_device *bdev, int size)
-> This really has nothing to do with buffer heads.
-> 
-> In fact, I've got a patchset to make it work _with_ buffer heads.
-> 
-> So please, don't make it conditional on CONFIG_BUFFER_HEAD.
-> 
-> And we should be calling into 'mapping_set_folio_order()' only if the 'order' argument is larger
-> than PAGE_ORDER, otherwise we end up enabling
-> large folio support for _every_ block device.
-> Which I doubt we want.
-> 
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------E3lpJV3O3OclE0b68k1BcyGT
+Content-Type: multipart/mixed; boundary="------------0TLCl8mGu0c1FRx96iB0uY6u";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Keith Zhao <keith.zhao@starfivetech.com>,
+ dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Cc: Conor Dooley <conor+dt@kernel.org>, Albert Ou <aou@eecs.berkeley.edu>,
+ Emil Renner Berthing <kernel@esmil.dk>, christian.koenig@amd.com,
+ Bjorn Andersson <andersson@kernel.org>,
+ Chris Morgan <macromorgan@hotmail.com>,
+ Changhuang Liang <changhuang.liang@starfivetech.com>,
+ Jagan Teki <jagan@edgeble.ai>, Jack Zhu <jack.zhu@starfivetech.com>,
+ Rob Herring <robh+dt@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Paul Walmsley <paul.walmsley@sifive.com>,
+ Shengyang Chen <shengyang.chen@starfivetech.com>,
+ Shawn Guo <shawnguo@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>
+Message-ID: <5b87fb5c-2f23-47c9-b6a8-623472115876@suse.de>
+Subject: Re: [PATCH 4/9] drm/verisilicon: Add gem driver for JH7110 SoC
+References: <20230602074043.33872-1-keith.zhao@starfivetech.com>
+ <20230602074043.33872-5-keith.zhao@starfivetech.com>
+ <f7ded369-e384-db01-dc8c-6a5183f20409@suse.de>
+In-Reply-To: <f7ded369-e384-db01-dc8c-6a5183f20409@suse.de>
 
-Hmm, which aops are you using for the block device? If you are using the old aops, then we will be
-using helpers from buffer.c and mpage.c which do not support large folios. I am getting a BUG_ON
-when I don't use iomap based aops for the block device:
+--------------0TLCl8mGu0c1FRx96iB0uY6u
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-[   11.596239] kernel BUG at fs/buffer.c:2384!
+SGkNCg0KQW0gMTkuMDYuMjMgdW0gMTY6MjIgc2NocmllYiBUaG9tYXMgWmltbWVybWFubjoN
+Cj4gSGkNCj4gDQo+IEFtIDAyLjA2LjIzIHVtIDA5OjQwIHNjaHJpZWIgS2VpdGggWmhhbzoN
+Cj4+IFRoaXMgcGF0Y2ggaW1wbGVtZW50cyBnZW0gcmVsYXRlZCBBUElzIGZvciBKSDcxMDAg
+U29DLg0KPiANCj4gcGxlYXNlIGFsc28gc2VlIG15IG90aGVyIHJlcGx5IHRvIHRoaXMgcGF0
+Y2guIE15IG1haWwgY2xpZW50IGhhZCBhIGJ1ZyANCj4gYmVmb3JlIEkgY291bGQgZmluaXNo
+IGl0LiBCZWxvdyBhcmUgc29tZSBtb3JlIGNvbW1lbnRzLg0KPiANCj4+DQo+PiBTaWduZWQt
+b2ZmLWJ5OiBLZWl0aCBaaGFvIDxrZWl0aC56aGFvQHN0YXJmaXZldGVjaC5jb20+DQo+PiAt
+LS0NCj4gWy4uLl0NCj4+ICsjaWZuZGVmIF9fVlNfR0VNX0hfXw0KPj4gKyNkZWZpbmUgX19W
+U19HRU1fSF9fDQo+PiArDQo+PiArI2luY2x1ZGUgPGxpbnV4L2RtYS1idWYuaD4NCj4+ICsN
+Cj4+ICsjaW5jbHVkZSA8ZHJtL2RybV9nZW0uaD4NCj4+ICsjaW5jbHVkZSA8ZHJtL2RybV9w
+cmltZS5oPg0KPj4gKw0KPj4gKyNpbmNsdWRlICJ2c19kcnYuaCINCj4+ICsvKg0KPj4gKyAq
+DQo+PiArICogQGJhc2U6IGRybSBnZW0gb2JqZWN0Lg0KPj4gKyAqIEBzaXplOiBzaXplIHJl
+cXVlc3RlZCBmcm9tIHVzZXINCj4+ICsgKiBAY29va2llOiBjb29raWUgcmV0dXJuZWQgYnkg
+ZG1hX2FsbG9jX2F0dHJzDQo+PiArICrCoMKgwqAgLSBub3Qga2VybmVsIHZpcnR1YWwgYWRk
+cmVzcyB3aXRoIERNQV9BVFRSX05PX0tFUk5FTF9NQVBQSU5HDQo+PiArICogQGRtYV9hZGRy
+OiBidXMgYWRkcmVzcyhhY2Nlc3NlZCBieSBkbWEpIHRvIGFsbG9jYXRlZCBtZW1vcnkgcmVn
+aW9uLg0KPj4gKyAqwqDCoMKgIC0gdGhpcyBhZGRyZXNzIGNvdWxkIGJlIHBoeXNpY2FsIGFk
+ZHJlc3Mgd2l0aG91dCBJT01NVSBhbmQNCj4+ICsgKsKgwqDCoCBkZXZpY2UgYWRkcmVzcyB3
+aXRoIElPTU1VLg0KPj4gKyAqIEBkbWFfYXR0cnM6IGF0dHJpYnV0ZSBmb3IgRE1BIEFQSQ0K
+Pj4gKyAqIEBnZXRfcGFnZXM6IGZsYWcgZm9yIG1hbnVhbGx5IGFwcGx5aW5nIGZvciBub24t
+Y29udGlndW91cyBtZW1vcnkuDQo+PiArICogQHBhZ2VzOiBBcnJheSBvZiBiYWNraW5nIHBh
+Z2VzLg0KPj4gKyAqIEBzZ3Q6IEltcG9ydGVkIHNnX3RhYmxlLg0KPj4gKyAqDQo+PiArICov
+DQo+PiArc3RydWN0IHZzX2dlbV9vYmplY3Qgew0KPj4gK8KgwqDCoCBzdHJ1Y3QgZHJtX2dl
+bV9vYmplY3TCoMKgwqAgYmFzZTsNCj4+ICvCoMKgwqAgc2l6ZV90wqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoCBzaXplOw0KPj4gK8KgwqDCoCB2b2lkwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAq
+Y29va2llOw0KPj4gK8KgwqDCoCBkbWFfYWRkcl90wqDCoMKgwqDCoMKgwqAgZG1hX2FkZHI7
+DQo+PiArwqDCoMKgIHUzMsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpb3ZhOw0K
+Pj4gK8KgwqDCoCB1bnNpZ25lZCBsb25nwqDCoMKgIGRtYV9hdHRyczsNCj4+ICvCoMKgwqAg
+Ym9vbMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZ2V0X3BhZ2VzOw0KPj4gK8KgwqDCoCBzdHJ1
+Y3QgcGFnZcKgwqDCoMKgwqDCoMKgICoqcGFnZXM7DQo+PiArwqDCoMKgIHN0cnVjdCBzZ190
+YWJsZSAqc2d0Ow0KPj4gK307DQo+PiArDQo+PiArc3RhdGljIGlubGluZQ0KPj4gK3N0cnVj
+dCB2c19nZW1fb2JqZWN0ICp0b192c19nZW1fb2JqZWN0KHN0cnVjdCBkcm1fZ2VtX29iamVj
+dCAqb2JqKQ0KPj4gK3sNCj4+ICvCoMKgwqAgcmV0dXJuIGNvbnRhaW5lcl9vZihvYmosIHN0
+cnVjdCB2c19nZW1fb2JqZWN0LCBiYXNlKTsNCj4+ICt9DQo+PiArDQo+PiArc3RydWN0IHZz
+X2dlbV9vYmplY3QgKnZzX2dlbV9jcmVhdGVfb2JqZWN0KHN0cnVjdCBkcm1fZGV2aWNlICpk
+ZXYsDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
+c2l6ZV90IHNpemUpOw0KPj4gKw0KPj4gK2ludCB2c19nZW1fcHJpbWVfdm1hcChzdHJ1Y3Qg
+ZHJtX2dlbV9vYmplY3QgKm9iaiwgc3RydWN0IGlvc3lzX21hcCANCj4+ICptYXApOw0KPj4g
+K3ZvaWQgdnNfZ2VtX3ByaW1lX3Z1bm1hcChzdHJ1Y3QgZHJtX2dlbV9vYmplY3QgKm9iaiwg
+c3RydWN0IGlvc3lzX21hcCANCj4+ICptYXApOw0KPiANCj4gSSdkIGNvbnNpZGVyIHRoaXMg
+YmFkIHN0eWxlLiBZb3VyIGZ1bmN0aW9ucyBhcmUgaW4gdGhlIHZzXyBuYW1lc3BhY2UsIHNv
+IA0KPiB0aGV5IHNob3VsZCB0YWtlIGEgdnNfZ2VtX29iamVjdCBhcyBmaXJzdCBhcmd1bWVu
+dC4gUmF0aGVyIGltcGxlbWVudCANCj4gdnNfZ2VtX3ByaW1lX3ZtYXAoc3RydWN0IHZzX2dl
+bV9vYmplY3QgKnZzX29iaiwgc3RydWN0IGlvc3lzX21hcCAqbWFwKQ0KPiBhbmQgX3Z1bm1h
+cCgpIGFuZCBfbW1hcCgpLg0KPiANCj4gRm9yIHRoZSBjYWxsYmFja3MgaW4gc3RydWN0IGRy
+bV9nZW1vYmplY3RfZnVuY3MsIHlvdSBjYW4gd3JpdGUgc21hbGwgDQo+IHdyYXBwZXJzIGFy
+b3VuZCB0aGUgaGVscGVycyB0byBkbyB0aGUgdHlwZSBjYXN0aW5nLiBTZWUgDQo+IGRybV9n
+ZW1fc2htZW1fb2JqZWN0X21tYXAoKSBhbmQgZHJtX2dlbV9zaG1lbV9tbWFwKCkgZm9yIGFu
+IGV4YW1wbGUuDQo+IA0KPiBodHRwczovL2VsaXhpci5ib290bGluLmNvbS9saW51eC9sYXRl
+c3Qvc291cmNlL2luY2x1ZGUvZHJtL2RybV9nZW1fc2htZW1faGVscGVyLmgjTDIzMw0KDQpJ
+IHdhcyB0aGlua2luZyBhYm91dCBteSBhZHZpc2Ugd2l0aCB0aGUgd3JhcHBlcnMsIGJ1dCBp
+dCBkb2Vzbid0IHNlZW0gc28gDQpnb29kIGFmdGVyIGFsbC4gTWF5YmUganVzdCBpZ25vcmUg
+aXQuIEkgdGhpbmsgeW91IHNob3VsZCBzdGlsbCByZW5hbWUgDQp0aGUgZnVuY3Rpb24gdG8g
+c29tZXRoaW5nIGxpa2UgdnNfZ2VtX29iamVjdF92bWFwKCksIGV0Yy4gIFNvIHRoZXkgbmFt
+ZSANCnJlZmxlY3RzIHRoYXQgdGhleSBvcGVyYXRlIG9uIGEgc3RydWN0IGRybV9nZW1fb2Jq
+ZWN0Lg0KDQpCdXQgbWFueSBvZiB0aGUgaGVscGVycyBpbiB0aGlzIGZpbGUgYXJlIG9ubHkg
+ZXZlciB1c2VkIGluIHZzX2dlbS5jLiANCllvdSBzaG91bGQgZGVjbGFyZSB0aGVtIHN0YXRp
+YyBpbiB0aGUgQyBmaWxlIGFuZCByZW1vdmUgdGhlbSBmcm9tIHRoaXMgDQpoZWFkZXIuDQoN
+CkJlc3QgcmVnYXJkcw0KVGhvbWFzDQoNCj4gDQo+IA0KPiANCj4+ICsNCj4+ICtpbnQgdnNf
+Z2VtX3ByaW1lX21tYXAoc3RydWN0IGRybV9nZW1fb2JqZWN0ICpvYmosDQo+PiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2bWEpOw0KPj4g
+Kw0KPj4gK2ludCB2c19nZW1fZHVtYl9jcmVhdGUoc3RydWN0IGRybV9maWxlICpmaWxlX3By
+aXYsDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgZHJtX2Rldmlj
+ZSAqZHJtLA0KPj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0IGRybV9t
+b2RlX2NyZWF0ZV9kdW1iICphcmdzKTsNCj4+ICsNCj4+ICtpbnQgdnNfZ2VtX21tYXAoc3Ry
+dWN0IGZpbGUgKmZpbHAsIHN0cnVjdCB2bV9hcmVhX3N0cnVjdCAqdm1hKTsNCj4+ICsNCj4+
+ICtzdHJ1Y3Qgc2dfdGFibGUgKnZzX2dlbV9wcmltZV9nZXRfc2dfdGFibGUoc3RydWN0IGRy
+bV9nZW1fb2JqZWN0ICpvYmopOw0KPj4gKw0KPj4gK3N0cnVjdCBkcm1fZ2VtX29iamVjdCAq
+dnNfZ2VtX3ByaW1lX2ltcG9ydChzdHJ1Y3QgZHJtX2RldmljZSAqZGV2LA0KPj4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN0cnVjdCBkbWFfYnVm
+ICpkbWFfYnVmKTsNCj4+ICtzdHJ1Y3QgZHJtX2dlbV9vYmplY3QgKg0KPj4gK3ZzX2dlbV9w
+cmltZV9pbXBvcnRfc2dfdGFibGUoc3RydWN0IGRybV9kZXZpY2UgKmRldiwNCj4+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBzdHJ1Y3QgZG1hX2J1Zl9hdHRhY2htZW50
+ICphdHRhY2gsDQo+PiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3RydWN0
+IHNnX3RhYmxlICpzZ3QpOw0KPj4gKw0KPj4gKyNlbmRpZiAvKiBfX1ZTX0dFTV9IX18gKi8N
+Cj4gDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBoaWNzIERyaXZlciBEZXZlbG9w
+ZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkgR21iSA0KRnJhbmtlbnN0cmFz
+c2UgMTQ2LCA5MDQ2MSBOdWVybmJlcmcsIEdlcm1hbnkNCkdGOiBJdm8gVG90ZXYsIEFuZHJl
+dyBNeWVycywgQW5kcmV3IE1jRG9uYWxkLCBCb3VkaWVuIE1vZXJtYW4NCkhSQiAzNjgwOSAo
+QUcgTnVlcm5iZXJnKQ0K
 
+--------------0TLCl8mGu0c1FRx96iB0uY6u--
 
-[   11.596609] invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-[   11.597064] CPU: 3 PID: 10 Comm: kworker/u8:0 Not tainted
-6.4.0-rc7-next-20230621-00010-g87171074c649-dirty #183
-[   11.597934] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS
-rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+--------------E3lpJV3O3OclE0b68k1BcyGT
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
 
-[   11.598882] Workqueue: nvme-wq nvme_scan_work [nvme_core]
-[   11.599370] RIP: 0010:block_read_full_folio+0x70d/0x8f0
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmSS1IwFAwAAAAAACgkQlh/E3EQov+BU
+DxAAvNFbqmuRl+8x0Gbhtssj4+R3z3D+Ai8rXjZ2JPfd6/4LSoy5YyM5WX3HLD1U5nLAenDka2ke
+drQRj6kzf3pJHD8ZsJhUKVgQSe5V3PDq4sB6YdIIpcEqpwZy8HABwOXhALnpbm25uypskQQ2hR7P
+OPZnIdLGoRJcgipBpja7AXhylhBvz9A7o8DlLUeUOlF3Ymd2F0uAiSCcoXxbq5cE11EV8ml3Aejc
+gmatc/K/6AKhDw/+SST0b8Gj28WGUov+uYVziNH9UKm35uM29zPWbLc2SdApRy073D7K82k5sLDM
+LxKecNWwPl1wUBZtcgdqnPOP7W3ZDrpv49GVmRNZWSCRicf+r+58iPYZSIBotqsmV7Z4zfRvYBeg
+dAIv7kYxQtd/8EnhXLeYs2aT5d3WSo0hXMMVTHGX+z24y8f2zgsL92sgSHhEVzfP2D6OVbG/iwJq
+lGbvzfRYtdsKBG8s3LwALdCNST/Guxvy8K1s0rxH7VVlwYQ+THD0eRbRmtBwZVIzznLkbM5YQ9Me
+nURdvkIoaD2zz7xtuu7WrifXr5dBlNlp8KBgV0vn+PqVx5zlH5094pHij9AByCIlVre4PLgjxyFl
+GU97AGB+0t5r5doJ1btnsVDBe+j963TvrekRTDZNfTZGBUTSuVWq1ToeWEfIR7oYiADutizlo5de
+M9o=
+=Dna4
+-----END PGP SIGNATURE-----
 
-Let me know what you think!
-
-> Cheers,
-> 
-> Hannes
-> 
-> 
+--------------E3lpJV3O3OclE0b68k1BcyGT--
