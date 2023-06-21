@@ -2,116 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B88F7391CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 23:51:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 929147391D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 23:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjFUVvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 17:51:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
+        id S230351AbjFUVy3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 17:54:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjFUVvh (ORCPT
+        with ESMTP id S229690AbjFUVy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 17:51:37 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EFCFC;
-        Wed, 21 Jun 2023 14:51:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de;
- s=s31663417; t=1687384253; x=1687989053; i=w_armin@gmx.de;
- bh=6Xmv7vD6eiYx1sPenoCtuNkZHGz8aSPHMuGO9T/g0Sk=;
- h=X-UI-Sender-Class:Subject:To:Cc:References:From:Date:In-Reply-To;
- b=NhriHbVw+FOYLlhhG6uLZ/MSQ5CT14SYwbWSdD+PjNlGyuW75thcR9Ux7qdvFxoWKoPG5wl
- broNgCkD3q1AOcFiXhiBsKTMIqE362qzBPTxo+r5DiUaK7nM5e4RjAS7AS3NrvsU0hX5kkBmI
- q2x6vf6vLR77F8gm3eZYJ2kRhP0vEWwUoXpmc47NTHmfhSsBBUh6i7/LpjZYSlissWHz/71i9
- sYgQapcU7It57IdLqc+i/ON2356yNfFOQdllaj6VlKkUrsYG9N3X6qN9A2QTqHKb0tSupgkxr
- 9rGAft5Sq9lvwCqHhYafl0KUCyDj9r4kll4A3BlGhHPPiUWu7F6Q==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [141.30.226.129] ([141.30.226.129]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MxUnz-1ps4vc163F-00xqAh; Wed, 21
- Jun 2023 23:50:53 +0200
-Subject: Re: [PATCH v1 1/2] platform/x86: wmi: Break possible infinite loop
- when parsing GUID
-To:     =?UTF-8?Q?Barnab=c3=a1s_P=c5=91cze?= <pobrn@protonmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>
-References: <20230621151155.78279-1-andriy.shevchenko@linux.intel.com>
- <25715979-8148-8d1d-fd67-a973661f9781@gmx.de>
- <TnTqU2wwXh3DG07kYUwMAe0hdBiaKiuoMOqBCBIttT27lXdw-KZVV8fZ7x-Zrg_Ux8mJUHClgyFHRbDoCRmhaOI7GwOPhUPYBRLzThV8iYI=@protonmail.com>
-From:   Armin Wolf <W_Armin@gmx.de>
-Message-ID: <b4dc2571-1163-805a-f92b-30dcc8b69246@gmx.de>
-Date:   Wed, 21 Jun 2023 23:50:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        Wed, 21 Jun 2023 17:54:27 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82387E57
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:54:19 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b5422163f4so42225505ad.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:54:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687384459; x=1689976459;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DBUEVo1q7n30FsHvjVeF7u+PkYrRTPaQ7gRodIMSGHc=;
+        b=g0lMw2Rz4vHh0LSVgW2evkSBz+6/980KZyjZCsSI0elex38mMOmUGcG6hJIiOfkjOa
+         hh9nR9eDwEO3P9OIJboZkfv2xpsj/GYudHRuxRO2OZ4Gse0PeeiSZgwxjlJpooJyIBmZ
+         sdaEEBVfiOw3VSNlfZehux7NzQbiE9ZT91y68=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687384459; x=1689976459;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DBUEVo1q7n30FsHvjVeF7u+PkYrRTPaQ7gRodIMSGHc=;
+        b=J/CL2o15yqX7HPXjBVDOKiIdRzwhutjPVwSvCaY0HJG85b6lj1ApOjarYpwRa+QjE6
+         uNOwepKfGO7Yw5jWVMltjJmPBq88mfYoIUSjdxoIeHlFnPJkuGy2oxY/ma3ong1tpS0u
+         iv4p8aw297GHE9Clp/VZpr0X9Xfs5wmipu4zUakonZzLqu2wm5b1BZYANaVu63jP8NiM
+         8qkM/3ceiEeKqxuMRlt+nhQF2DuOOn9RUZ+3jHAIgLSgZscpNY7jAKh7RvDGMZGZneBC
+         9uFFI//D0D9bb3RKk75mJ58MUMApCkxAc9Ye+1Hbd91f3kVPG3zgqTK+X65AAnOadOeI
+         gxNA==
+X-Gm-Message-State: AC+VfDzYW56YiAR5eW8DpC6vkE2+8hlGUmBsaPztPM2TyXzSSOknCIEX
+        o4QUwAmpsbR5nebRK71zCZ8kvT4x/gMWhmdtdDE=
+X-Google-Smtp-Source: ACHHUZ7sSNSEdyXfVFVbwQZyuo/RmgZQEi8YADL8wI+y2YjTTaLRDJ6GJgpQ9q7lMzepkoUPJatsYg==
+X-Received: by 2002:a17:902:8c94:b0:1b1:a9e7:5d4b with SMTP id t20-20020a1709028c9400b001b1a9e75d4bmr15712370plo.22.1687384459016;
+        Wed, 21 Jun 2023 14:54:19 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id i10-20020a17090332ca00b001b6758a2d94sm3903265plr.305.2023.06.21.14.54.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 14:54:18 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 14:54:17 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Dan Li <ashimida.1990@gmail.com>
+Cc:     Qing Zhao <qing.zhao@oracle.com>, gcc-patches@gcc.gnu.org,
+        Richard Sandiford <richard.sandiford@arm.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Marco Elver <elver@google.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Song Liu <song@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Juergen Gross <jgross@suse.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Borislav Petkov <bp@suse.de>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Aaron Tomlin <atomlin@redhat.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Yuntao Wang <ytcoode@gmail.com>,
+        Changbin Du <changbin.du@intel.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev,
+        linux-hardening@vger.kernel.org
+Subject: Re: [RFC/RFT,V2 0/3] Add compiler support for Kernel Control Flow
+ Integrity
+Message-ID: <202306211451.CB0A34563@keescook>
+References: <20221219055431.22596-1-ashimida.1990@gmail.com>
+ <20230325081117.93245-1-ashimida.1990@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <TnTqU2wwXh3DG07kYUwMAe0hdBiaKiuoMOqBCBIttT27lXdw-KZVV8fZ7x-Zrg_Ux8mJUHClgyFHRbDoCRmhaOI7GwOPhUPYBRLzThV8iYI=@protonmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-Content-Language: en-US
-X-Provags-ID: V03:K1:XHfB6/2Fw6zz+QB/CB9tZ0O8zinCxxSfWML+9No86ri+yX0CoJH
- G5idFR+azcQWZ49WEUGsJZkps+ALNG78sxxKGKiB/iqO1E+Zuy0gzQHy2N1qkQLsIwP/2N+
- e6GQXKiCaacTZ3PzdkLuvmQ+LI89oO8YkPml5pUvDRXZVfG9nCxMgPLqmAGNlA4cpIcmoDx
- ODdrKzCsCL6n5Vq5gT8Yg==
-UI-OutboundReport: notjunk:1;M01:P0:kiMdPi8m4vc=;LCPJhRcRzh4tDsBZEYMWbKcawvc
- 2G7UekStaOwsb3virvIbfMVyyr4587Vjk18g53vJPa8LGW3HeiLFuRmnJGXP46I7iOk4X96As
- VLYLG8oZxNdP66mjiwtNbTP77Ishh8sJspEh9pBWDwkVh2/Y0A9FXz9DubvIdQ20inijoCvI1
- RuWB96ocDCjOHI4q6NqKw+HCWjVZaM5DWD+gjuyxA2nAaeksurii4hDLelCgCi2/xl9WJr4O2
- ZOHaGuesSYPBhkJzJ0XpMAOQRNg2/lwMMavp+QYzO52maIcbpNmaVEyvYMlSozXjqOqBgjuWf
- xICy9qJVP59HftGEpGoPLelnqHCAoXe31Z2TTzSBXYXP5y91Ai8SWCVynS7LErD18sGsLOk7T
- OlU3qT4egReVD16Szi+Sp0H28rP1P8F9HZTK8JKWFtjXjjOZi4xEEVqtUGAWdFJgZKsZDymph
- S55+tQmMQrkGUhdOczruxcOq4QZjw8CIcbPFvLxOpR+L1QYjeTJEuPRmQ4m5QUmi8rUH96vLJ
- h1ElvdVrsQWDcDWPMrXk0PfMlPnUm02v2D0D0dgQD4Y6Q1qy3Ro64dcPLEvZaQqGG7Nl/am4w
- kphyrynbEr6Eh/T8EptWhyjBbnGWwSdYt4l/UldCusNQjj/SOuTJC6i9Ftkgur2BWqSLolfUH
- p0QDRql93xSM78KsVKTIb+7yaqTblTYruDI3JfOncyLKGDbHdTB6ZxdxOzvZSDhRkq7929Ygo
- hL11twN/Ug7v4ZcZ661n5AUqzvuwSaoHTQB2MVgLxxOxxJ8t13gsrXK+MRuyGBK9harjKiI8b
- uEQVffJuaGKGNz0ETMdpIpl7PTh6MqRksBWkSCa2marHAd1Uole9/eLp+tQwDPx9nPFV3O1G9
- Lfj1rgaVj6iNDudsyIVqPJHaezrbHOpqnuJiWSdSFMDO+jA8TCkJeXoiKBELLTivizzLRa7cN
- a81KvNuOuI0eMDRAvdkuvsftlqY=
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230325081117.93245-1-ashimida.1990@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 21.06.23 um 23:29 schrieb Barnab=C3=A1s P=C5=91cze:
+On Sat, Mar 25, 2023 at 01:11:14AM -0700, Dan Li wrote:
+> This series of patches is mainly used to support the control flow
+> integrity protection of the linux kernel [1], which is similar to
+> -fsanitize=kcfi in clang 16.0 [2,3].
+> 
+> Any suggestion please let me know :).
 
-> Hi
->
->
-> 2023. j=C3=BAnius 21., szerda 23:20 keltez=C3=A9ssel, Armin Wolf <W_Armi=
-n@gmx.de> =C3=ADrta:
->
->> [...]
->>> @@ -895,11 +901,7 @@ static int wmi_dev_match(struct device *dev, stru=
-ct device_driver *driver)
->>>    		return 0;
->>>
->>>    	while (*id->guid_string) {
->>> -		guid_t driver_guid;
->>> -
->>> -		if (WARN_ON(guid_parse(id->guid_string, &driver_guid)))
->> Hi,
->>
->> just an idea: how about printing an error/debug message in case of an m=
-alformed GUID?
->> This could be useful when searching for typos in GUIDs used by WMI driv=
-ers.
->> [...]
-> Wouldn't it be better to change `__wmi_driver_register()` to check that?
->
->
-> Regards,
-> Barnab=C3=A1s P=C5=91cze
+Hi Dan,
 
-Good point, i guess we can just forget this idea. The original motivation =
-for it was the WARN_ON()
-inside wmi_dev_match(), but your right that this is the wrong place to che=
-ck the GUID formating.
+It's been a couple months, and I didn't see any other feedback on this
+proposal. I was curious what the status of this work is. Are you able to
+attend GNU Cauldron[1] this year? I'd love to see this get some traction
+in GCC.
 
-Armin Wolf
+Thanks!
 
+-Kees
+
+[1] https://gcc.gnu.org/wiki/cauldron2023
+
+-- 
+Kees Cook
