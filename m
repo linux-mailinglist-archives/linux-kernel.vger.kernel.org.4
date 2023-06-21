@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A64C739196
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 23:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD420739199
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 23:35:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbjFUVem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 17:34:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50938 "EHLO
+        id S230342AbjFUVfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 17:35:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjFUVel (ORCPT
+        with ESMTP id S229530AbjFUVfh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 17:34:41 -0400
-Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544E71BC
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:34:40 -0700 (PDT)
-Received: by mail-ua1-x936.google.com with SMTP id a1e0cc1a2514c-784f7f7deddso2059865241.3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:34:40 -0700 (PDT)
+        Wed, 21 Jun 2023 17:35:37 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751811B4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:35:36 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-bcd0226607bso11064199276.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:35:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687383279; x=1689975279;
+        d=linaro.org; s=google; t=1687383335; x=1689975335;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ERhjKrk8uNuT8fJftN6Wzv13k5nYu7dMLPTKhrBK3z4=;
-        b=aYGnvnNXHBjMNbmulhIQhX8SaBIFKZ7yqzr1tKO4nLxmy8HFg6SE992IK7obG5rzCX
-         jCUPt3cDMPKNPy5VyNefi/qW8u6xg8+lwSNyuf4nD6xlaeNRYlVPiiI/RtQFnIoHu5E1
-         XzubqUR3Dl/e3+ExdXUqdvmi++G3kxt9ABtmRHD6WSP7WSuCtnGSwmBCW/HLnLqQDmPu
-         P6UEpiMLCtflVbUnB7RSeZMSB2skbjC+L7XwusnWiBOxWUZCFJrrOzd2A8ciwEi0EyeN
-         pm1DS4rka5jemYVxM8jUxmFZwMdUMJ5XI5goq5HOt8i67BUbRf4IDhhdvwFxIg7KRzma
-         XPfw==
+        bh=8a9oVKOS3hKiaurU+C8B/jf21qpSFSdbTRfDL8gXf+M=;
+        b=QyXdhBwxRQYaHsD8caUiTbIkKW2bksY1ZMBQROy87n8W67UkkMRKDyO/w8J1+cItRX
+         u9h9HbgEZEdBNKmUZZytziB+ZWsC8WFpb+2xQmchnbGd3k5w6KylfhE++iW2n9WzrUo/
+         sRZCGi6dkk7pai/citsVzqIqionwaSwUFCxWitNy8soIMhTO0vAL26YMdWD9K7rNDZj3
+         Kuf+GlRAjtz8pJ9woo86PwBVUA61y6JufkEURLHDwWUhk/VC9NE0V2OCLcb1VEq7y2bt
+         fOiCqGzMi8wTi4KOYvg8nRomJ0v41XFZ1ZnpKzgKbGYtyJQiVKB5jWxqBbkqgPyEHb7/
+         7BsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687383279; x=1689975279;
+        d=1e100.net; s=20221208; t=1687383335; x=1689975335;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ERhjKrk8uNuT8fJftN6Wzv13k5nYu7dMLPTKhrBK3z4=;
-        b=T3jjqKB2Z9m/l53V5OJQZR7hmwr9xluCMZoGx2jEGv5eY6EfXpjVL2bipL1Mxk/4o+
-         B9VL3M6VsnaADJE5OLVI99B9y0/xHwH69XBJVlXuhRQc5w8irOTjuwhJKbVMnHSioReU
-         /KnMCAdliB4ES/GxcFOYvOsUzR8/3JcoC27/4JA4zsSJH26eOEMYWXrRHxSygQz5W5Jj
-         FZTiH3/tDqPJeRvdo27D0wXh7ZklfT+f1Ibznm2ThEMywQdjum+4M7ip/pvOl7rqYRal
-         HqUihIXz3WU6YRYKy7Z0Pd+ELO7bIiYhg4QLMspLNIRYccFbWf//ckKLkSWpBkSGMxZ0
-         N5ig==
-X-Gm-Message-State: AC+VfDy6raXoU+obv9ObL1b1n1Z3Tl7YaIwik5g6qX1e8YsbbN92rEsv
-        7/7lFfgZs85HkbB0LHTcAYY4PqfylPZHApXowUGftQ==
-X-Google-Smtp-Source: ACHHUZ46aDuspJOarRL79lYzMGYqEwkTT5JRnSSANc5yEURsqqhVLj46v6MxmEOQjpuP2GHM1lq45BhbCoWHJISjTgk=
-X-Received: by 2002:a67:f6c2:0:b0:43f:58a1:b22c with SMTP id
- v2-20020a67f6c2000000b0043f58a1b22cmr6794552vso.16.1687383279464; Wed, 21 Jun
- 2023 14:34:39 -0700 (PDT)
+        bh=8a9oVKOS3hKiaurU+C8B/jf21qpSFSdbTRfDL8gXf+M=;
+        b=Orce2iu1lCg5vG9RjwmrbIfatT4oscJ1Vhw2osDjvRhY5s65FpQeJT40nH2o33XNzf
+         4Cx+rXyehQZYNzkbxu6p24V1KaV1xIMXjDBbN+Feil7uq242/3G/WFNXdpzO7VAzsetH
+         KBxTBNEWy8CxjDs5KfpiF1EuYT3ZwxJr4J7zt+WKBw5yNcpJZU+mHSxoWTxK8kfh8WHE
+         Phq9UmFROTtvk6VOdkKZPU45WWiLNpeCJz5oeNTrBuBDBmOmYoK+k8NSfClJLPEnJOLu
+         Zir8xMBr7b6fj9zCDqv9S7qv/MncBAinCG8UUuZ/lTuUVo9ehFH1nU7D7ZO2e41fHJPQ
+         9N6A==
+X-Gm-Message-State: AC+VfDz5OR/eN0GkjVyZmC9WjRkAhOCTxkZrHJjV3S4npvJMyh8EtlIJ
+        UtvJJVPC5an6+nrZxGFtHHDraLEQ1VunqjMuY/VW1w==
+X-Google-Smtp-Source: ACHHUZ73Y7ww5KI7+S1wZpvD/2S7BPuJld4uWbQgfQLvmOJfdP1VL9ryh8Il7M0BRloVqM1kbxjhL04BYBQ8SjeJD5U=
+X-Received: by 2002:a25:42:0:b0:ba1:6bad:9270 with SMTP id 63-20020a250042000000b00ba16bad9270mr15933237yba.27.1687383335686;
+ Wed, 21 Jun 2023 14:35:35 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230621191302.1405623-1-paweldembicki@gmail.com> <20230621191302.1405623-5-paweldembicki@gmail.com>
-In-Reply-To: <20230621191302.1405623-5-paweldembicki@gmail.com>
+References: <20230621191302.1405623-1-paweldembicki@gmail.com> <20230621191302.1405623-6-paweldembicki@gmail.com>
+In-Reply-To: <20230621191302.1405623-6-paweldembicki@gmail.com>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 21 Jun 2023 23:34:28 +0200
-Message-ID: <CACRpkdaZC9AWRMv-=sQH4DghD3H6WO_9JTdJ4jg+EbM+WAEeKg@mail.gmail.com>
-Subject: Re: [PATCH net-next 5/6] net: dsa: vsc73xx: Add vlan filtering
+Date:   Wed, 21 Jun 2023 23:35:24 +0200
+Message-ID: <CACRpkdafXbhW3=6kAS0h6YjiOCcDa_zwhRVVRcun-GNPbroasw@mail.gmail.com>
+Subject: Re: [PATCH net-next 6/6] net: dsa: vsc73xx: fix MTU configuration
 To:     Pawel Dembicki <paweldembicki@gmail.com>
 Cc:     netdev@vger.kernel.org, Andrew Lunn <andrew@lunn.ch>,
         Florian Fainelli <f.fainelli@gmail.com>,
@@ -77,14 +76,17 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Wed, Jun 21, 2023 at 9:14=E2=80=AFPM Pawel Dembicki <paweldembicki@gmail=
 .com> wrote:
 
-> This patch implement vlan filtering for vsc73xx driver.
+> Switch in MAXLEN register store maximum size of data frame.
+> MTU size is 18 bytes smaller than frame size.
 >
-> After vlan filtering start, switch is reconfigured from QinQ to simple
-> vlan aware mode. It's required, because VSC73XX chips haven't support
-> for inner vlan tag filter.
+> Current settings causes problems with packet forwarding.
+> This patch fix MTU settings to proper values.
+>
+> Fixes: fb77ffc6ec86 ("net: dsa: vsc73xx: make the MTU configurable")
 >
 > Signed-off-by: Pawel Dembicki <paweldembicki@gmail.com>
 
+Ooops my bad. Thanks for finding this.
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
