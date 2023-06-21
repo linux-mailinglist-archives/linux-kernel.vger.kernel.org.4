@@ -2,132 +2,539 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A4973814F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:11:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0613D738107
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232531AbjFUKmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 06:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
+        id S232582AbjFUKnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 06:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232507AbjFUKlc (ORCPT
+        with ESMTP id S232484AbjFUKnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 06:41:32 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05812718
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 03:39:46 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f90a1aa204so51419255e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 03:39:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687343982; x=1689935982;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=zjtcCvh/hkoBltrfU6NoFvQZYkuiZLIu53RCREg7WZw=;
-        b=mXhMgbB1MsHck7ny5a1FnIAq+fWGafe1++qTd+8X22rBjJFQB3IgHS48dPwRFu7vA4
-         pi9Ks05Ds2TzsFGk+jqNIwy4tudFOZY7L5qAggjG1THREyJNIsEPjiBktTD0I7VjS7kf
-         1RkBy6iEZFuh1Um034PNvnfZ6GqnckcBQRjNbXtGLrwt4997j1zSpBUSmUcMAIfmO22H
-         0tsSlfRJkr4rgr4Ko/2S+ZR+djyDMaVSfi9OKLDvd4eI1FsBEuF1cNqFqsh3biK/v6xt
-         qgWCjSX8k+NUmjux5oieo41sZ86BcojL0xl5XkIDDep/GfR9porxROBOfQ/HyI4R2Mgc
-         fpHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687343982; x=1689935982;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zjtcCvh/hkoBltrfU6NoFvQZYkuiZLIu53RCREg7WZw=;
-        b=GQV99LP3WVFAIaYmk4og9wSsoPWKzOXeVcnJ7SkcKHd591vYTBDBTGGHiTXz4tU5bY
-         pCO84u3pbJALb9WKXEhJeJtW81uc5EHK/vlYUY4DDm80GfOt/iSGzjmDTixy0ym3ymxx
-         36CZBzDHZAhcZbWbJe0PdJKrPxf9Ymvqo3JMmot4TPxDWCQpk35/pn2dhJjwjV7weGh7
-         nI/GA2610uHpBJD2z7X3zPN1GxRHjP0ZC8FuHE4Q6fNt7jY4wjG5sF5mq+7X691OV4Tn
-         t8rBX3i67r2yQ+Wp/qMWvwWIyKia3UnqJMiFCqwX8nzVs88QO+Ws7ry7vyZQcv8xI04p
-         j7lQ==
-X-Gm-Message-State: AC+VfDyJdc1/H0pWPYvaTBsaFIXsi9Ic0uP+OC6/A6K4C/0sXvm5KqIV
-        EgvG01a8EYXWDoajLQV1fmVQ6wakKXLqVCWyTik=
-X-Google-Smtp-Source: ACHHUZ6144jGWYuXU2HYG173odFCPZn8Vd5kd4ZQTpTk5z0gomsiMDLlsH3tL5i2EGA2RtmCdjBN/g==
-X-Received: by 2002:a1c:4b08:0:b0:3f9:c2f6:344 with SMTP id y8-20020a1c4b08000000b003f9c2f60344mr856644wma.16.1687343981984;
-        Wed, 21 Jun 2023 03:39:41 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:b158:3e69:8736:455d? ([2a01:e0a:982:cbb0:b158:3e69:8736:455d])
-        by smtp.gmail.com with ESMTPSA id x23-20020a1c7c17000000b003f72468833esm4632219wmc.26.2023.06.21.03.39.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 03:39:41 -0700 (PDT)
-Message-ID: <6180134a-2919-0f13-e37c-bb64b6403692@linaro.org>
-Date:   Wed, 21 Jun 2023 12:39:40 +0200
+        Wed, 21 Jun 2023 06:43:07 -0400
+Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A44002D7D
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 03:40:51 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+        by localhost (Postfix) with ESMTP id 4QmKlM2nJyz9sDZ;
+        Wed, 21 Jun 2023 12:40:15 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id NbYnEwTcC-OB; Wed, 21 Jun 2023 12:40:15 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4QmKlM20Plz9sCn;
+        Wed, 21 Jun 2023 12:40:15 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 419A38B779;
+        Wed, 21 Jun 2023 12:40:15 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id mMCMKADsnCeK; Wed, 21 Jun 2023 12:40:15 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2201F8B763;
+        Wed, 21 Jun 2023 12:40:15 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 35LAeBbY2083043
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Wed, 21 Jun 2023 12:40:11 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 35LAeApo2083002;
+        Wed, 21 Jun 2023 12:40:10 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH] powerpc/kuap: KUAP enabling/disabling functions must be __always_inline
+Date:   Wed, 21 Jun 2023 12:40:05 +0200
+Message-Id: <25a39c954562e74d06db8b4ec3b6441b7eae3355.1687343989.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] arm64: dts: qcom: sm8450: add missing power-domains
- property to usb qmpphy node
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230621-topic-sm8450-upstream-usb-phy-missing-power-domains-v1-1-d850c086c43c@linaro.org>
- <e31ad5ac-77ab-cf04-2e3e-d0857ccfdecf@linaro.org>
-Organization: Linaro Developer Services
-In-Reply-To: <e31ad5ac-77ab-cf04-2e3e-d0857ccfdecf@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687344004; l=17772; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=tRdCHm1N5vuxvRQX7hD/93h/ORWg63Y+02PpH5NUnYY=; b=qg4I/DsH99vgTXB5Cdu7MAKcOgSH1hphOt0cLtgPu8gsaCkpLHRohplvqkxN8Fh4cafxuIvpT GQCGx7VzFMOAWlecqKZUVMjD8uMMS64Cg/Ggcyv03xmszTYoZWgPg+G
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Objtool reports following warnings:
 
-On 21/06/2023 12:01, Konrad Dybcio wrote:
-> On 21.06.2023 11:55, Neil Armstrong wrote:
->> Add the missing property to fix the bindings check error:
->> arch/arm64/boot/dts/qcom/sm8450-hdk.dtb: phy@88e8000: 'power-domains' is a required property
->>      From schema: Documentation/devicetree/bindings/phy/qcom,sc8280xp-qmp-usb43dp-phy.yaml
->>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
-> Are you sure about this one? Historically PHYs have had their own GDSCs.
-> 
-> May just be a wrong binding fwiw
+  arch/powerpc/kernel/signal_32.o: warning: objtool:
+    __prevent_user_access.constprop.0+0x4 (.text+0x4):
+    redundant UACCESS disable
 
-Indeed you're right, forget this patch USB30_PRIM_GDSC id for the controller
-and starting from SM8550 a new one is used USB3_PHY_GDSC.
+  arch/powerpc/kernel/signal_32.o: warning: objtool: user_access_begin+0x2c
+    (.text+0x4c): return with UACCESS enabled
 
-I'll fix the bindings.
+  arch/powerpc/kernel/signal_32.o: warning: objtool: handle_rt_signal32+0x188
+    (.text+0x360): call to __prevent_user_access.constprop.0() with UACCESS enabled
 
-Neil
+  arch/powerpc/kernel/signal_32.o: warning: objtool: handle_signal32+0x150
+    (.text+0x4d4): call to __prevent_user_access.constprop.0() with UACCESS enabled
 
-> 
-> Konrad
->>   arch/arm64/boot/dts/qcom/sm8450.dtsi | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sm8450.dtsi b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> index 5cd7296c7660..f921bd520e40 100644
->> --- a/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sm8450.dtsi
->> @@ -2046,6 +2046,8 @@ usb_1_qmpphy: phy@88e8000 {
->>   				 <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
->>   			clock-names = "aux", "ref", "com_aux", "usb3_pipe";
->>   
->> +			power-domains = <&gcc USB30_PRIM_GDSC>;
->> +
->>   			resets = <&gcc GCC_USB3_DP_PHY_PRIM_BCR>,
->>   				 <&gcc GCC_USB3_PHY_PRIM_BCR>;
->>   			reset-names = "phy", "common";
->>
->> ---
->> base-commit: 15e71592dbae49a674429c618a10401d7f992ac3
->> change-id: 20230621-topic-sm8450-upstream-usb-phy-missing-power-domains-499a3d6c725f
->>
->> Best regards,
+This is due to some KUAP enabling/disabling functions being outline
+allthough they are marked inline. Use __always_inline instead.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ arch/powerpc/include/asm/book3s/32/kup.h     | 26 ++++++++++----------
+ arch/powerpc/include/asm/book3s/64/kup.h     | 22 ++++++++---------
+ arch/powerpc/include/asm/kup.h               | 16 ++++++------
+ arch/powerpc/include/asm/nohash/32/kup-8xx.h | 20 +++++++--------
+ arch/powerpc/include/asm/nohash/kup-booke.h  | 22 ++++++++---------
+ arch/powerpc/include/asm/uaccess.h           |  6 ++---
+ 6 files changed, 56 insertions(+), 56 deletions(-)
+
+diff --git a/arch/powerpc/include/asm/book3s/32/kup.h b/arch/powerpc/include/asm/book3s/32/kup.h
+index 8da9997a67ba..41746a22c650 100644
+--- a/arch/powerpc/include/asm/book3s/32/kup.h
++++ b/arch/powerpc/include/asm/book3s/32/kup.h
+@@ -23,25 +23,25 @@ static __always_inline bool kuep_is_disabled(void)
+ #define KUAP_NONE	(~0UL)
+ #define KUAP_ALL	(~1UL)
+ 
+-static inline void kuap_lock_one(unsigned long addr)
++static __always_inline void kuap_lock_one(unsigned long addr)
+ {
+ 	mtsr(mfsr(addr) | SR_KS, addr);
+ 	isync();	/* Context sync required after mtsr() */
+ }
+ 
+-static inline void kuap_unlock_one(unsigned long addr)
++static __always_inline void kuap_unlock_one(unsigned long addr)
+ {
+ 	mtsr(mfsr(addr) & ~SR_KS, addr);
+ 	isync();	/* Context sync required after mtsr() */
+ }
+ 
+-static inline void kuap_lock_all(void)
++static __always_inline void kuap_lock_all(void)
+ {
+ 	update_user_segments(mfsr(0) | SR_KS);
+ 	isync();	/* Context sync required after mtsr() */
+ }
+ 
+-static inline void kuap_unlock_all(void)
++static __always_inline void kuap_unlock_all(void)
+ {
+ 	update_user_segments(mfsr(0) & ~SR_KS);
+ 	isync();	/* Context sync required after mtsr() */
+@@ -50,7 +50,7 @@ static inline void kuap_unlock_all(void)
+ void kuap_lock_all_ool(void);
+ void kuap_unlock_all_ool(void);
+ 
+-static inline void kuap_lock_addr(unsigned long addr, bool ool)
++static __always_inline void kuap_lock_addr(unsigned long addr, bool ool)
+ {
+ 	if (likely(addr != KUAP_ALL))
+ 		kuap_lock_one(addr);
+@@ -60,7 +60,7 @@ static inline void kuap_lock_addr(unsigned long addr, bool ool)
+ 		kuap_lock_all_ool();
+ }
+ 
+-static inline void kuap_unlock(unsigned long addr, bool ool)
++static __always_inline void kuap_unlock(unsigned long addr, bool ool)
+ {
+ 	if (likely(addr != KUAP_ALL))
+ 		kuap_unlock_one(addr);
+@@ -70,7 +70,7 @@ static inline void kuap_unlock(unsigned long addr, bool ool)
+ 		kuap_unlock_all_ool();
+ }
+ 
+-static inline void __kuap_save_and_lock(struct pt_regs *regs)
++static __always_inline void __kuap_save_and_lock(struct pt_regs *regs)
+ {
+ 	unsigned long kuap = current->thread.kuap;
+ 
+@@ -83,11 +83,11 @@ static inline void __kuap_save_and_lock(struct pt_regs *regs)
+ }
+ #define __kuap_save_and_lock __kuap_save_and_lock
+ 
+-static inline void kuap_user_restore(struct pt_regs *regs)
++static __always_inline void kuap_user_restore(struct pt_regs *regs)
+ {
+ }
+ 
+-static inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned long kuap)
++static __always_inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned long kuap)
+ {
+ 	if (unlikely(kuap != KUAP_NONE)) {
+ 		current->thread.kuap = KUAP_NONE;
+@@ -102,7 +102,7 @@ static inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned long kua
+ 	kuap_unlock(regs->kuap, false);
+ }
+ 
+-static inline unsigned long __kuap_get_and_assert_locked(void)
++static __always_inline unsigned long __kuap_get_and_assert_locked(void)
+ {
+ 	unsigned long kuap = current->thread.kuap;
+ 
+@@ -137,7 +137,7 @@ static __always_inline void __prevent_user_access(unsigned long dir)
+ 	kuap_lock_addr(kuap, true);
+ }
+ 
+-static inline unsigned long __prevent_user_access_return(void)
++static __always_inline unsigned long __prevent_user_access_return(void)
+ {
+ 	unsigned long flags = current->thread.kuap;
+ 
+@@ -149,7 +149,7 @@ static inline unsigned long __prevent_user_access_return(void)
+ 	return flags;
+ }
+ 
+-static inline void __restore_user_access(unsigned long flags)
++static __always_inline void __restore_user_access(unsigned long flags)
+ {
+ 	if (flags != KUAP_NONE) {
+ 		current->thread.kuap = flags;
+@@ -157,7 +157,7 @@ static inline void __restore_user_access(unsigned long flags)
+ 	}
+ }
+ 
+-static inline bool
++static __always_inline bool
+ __bad_kuap_fault(struct pt_regs *regs, unsigned long address, bool is_write)
+ {
+ 	unsigned long kuap = regs->kuap;
+diff --git a/arch/powerpc/include/asm/book3s/64/kup.h b/arch/powerpc/include/asm/book3s/64/kup.h
+index b40a5099c1ae..19f137a272bf 100644
+--- a/arch/powerpc/include/asm/book3s/64/kup.h
++++ b/arch/powerpc/include/asm/book3s/64/kup.h
+@@ -213,14 +213,14 @@ extern u64 __ro_after_init default_iamr;
+  * access restrictions. Because of this ignore AMR value when accessing
+  * userspace via kernel thread.
+  */
+-static inline u64 current_thread_amr(void)
++static __always_inline u64 current_thread_amr(void)
+ {
+ 	if (current->thread.regs)
+ 		return current->thread.regs->amr;
+ 	return default_amr;
+ }
+ 
+-static inline u64 current_thread_iamr(void)
++static __always_inline u64 current_thread_iamr(void)
+ {
+ 	if (current->thread.regs)
+ 		return current->thread.regs->iamr;
+@@ -236,7 +236,7 @@ static __always_inline bool kuap_is_disabled(void)
+ }
+ #define kuap_is_disabled kuap_is_disabled
+ 
+-static inline void kuap_user_restore(struct pt_regs *regs)
++static __always_inline void kuap_user_restore(struct pt_regs *regs)
+ {
+ 	bool restore_amr = false, restore_iamr = false;
+ 	unsigned long amr, iamr;
+@@ -275,7 +275,7 @@ static inline void kuap_user_restore(struct pt_regs *regs)
+ 	 */
+ }
+ 
+-static inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned long amr)
++static __always_inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned long amr)
+ {
+ 	if (likely(regs->amr == amr))
+ 		return;
+@@ -291,7 +291,7 @@ static inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned long amr
+ 	 */
+ }
+ 
+-static inline unsigned long __kuap_get_and_assert_locked(void)
++static __always_inline unsigned long __kuap_get_and_assert_locked(void)
+ {
+ 	unsigned long amr = mfspr(SPRN_AMR);
+ 
+@@ -306,7 +306,7 @@ static inline unsigned long __kuap_get_and_assert_locked(void)
+  * because that would require an expensive read/modify write of the AMR.
+  */
+ 
+-static inline unsigned long get_kuap(void)
++static __always_inline unsigned long get_kuap(void)
+ {
+ 	/*
+ 	 * We return AMR_KUAP_BLOCKED when we don't support KUAP because
+@@ -336,7 +336,7 @@ static __always_inline void set_kuap(unsigned long value)
+ 	isync();
+ }
+ 
+-static inline bool __bad_kuap_fault(struct pt_regs *regs, unsigned long address, bool is_write)
++static __always_inline bool __bad_kuap_fault(struct pt_regs *regs, unsigned long address, bool is_write)
+ {
+ 	/*
+ 	 * For radix this will be a storage protection fault (DSISR_PROTFAULT).
+@@ -379,12 +379,12 @@ static __always_inline void allow_user_access(void __user *to, const void __user
+ 
+ #else /* CONFIG_PPC_KUAP */
+ 
+-static inline unsigned long get_kuap(void)
++static __always_inline unsigned long get_kuap(void)
+ {
+ 	return AMR_KUAP_BLOCKED;
+ }
+ 
+-static inline void set_kuap(unsigned long value) { }
++static __always_inline void set_kuap(unsigned long value) { }
+ 
+ static __always_inline void allow_user_access(void __user *to, const void __user *from,
+ 					      unsigned long size, unsigned long dir)
+@@ -399,7 +399,7 @@ static __always_inline void prevent_user_access(unsigned long dir)
+ 		do_uaccess_flush();
+ }
+ 
+-static inline unsigned long prevent_user_access_return(void)
++static __always_inline unsigned long prevent_user_access_return(void)
+ {
+ 	unsigned long flags = get_kuap();
+ 
+@@ -410,7 +410,7 @@ static inline unsigned long prevent_user_access_return(void)
+ 	return flags;
+ }
+ 
+-static inline void restore_user_access(unsigned long flags)
++static __always_inline void restore_user_access(unsigned long flags)
+ {
+ 	set_kuap(flags);
+ 	if (static_branch_unlikely(&uaccess_flush_key) && flags == AMR_KUAP_BLOCKED)
+diff --git a/arch/powerpc/include/asm/kup.h b/arch/powerpc/include/asm/kup.h
+index f3280169aeec..d39454274f73 100644
+--- a/arch/powerpc/include/asm/kup.h
++++ b/arch/powerpc/include/asm/kup.h
+@@ -61,14 +61,14 @@ static inline void setup_kuap(bool disabled) { }
+ 
+ static __always_inline bool kuap_is_disabled(void) { return true; }
+ 
+-static inline bool
++static __always_inline bool
+ __bad_kuap_fault(struct pt_regs *regs, unsigned long address, bool is_write)
+ {
+ 	return false;
+ }
+ 
+-static inline void kuap_user_restore(struct pt_regs *regs) { }
+-static inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned long amr) { }
++static __always_inline void kuap_user_restore(struct pt_regs *regs) { }
++static __always_inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned long amr) { }
+ 
+ /*
+  * book3s/64/kup-radix.h defines these functions for the !KUAP case to flush
+@@ -76,11 +76,11 @@ static inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned long amr
+  * platforms.
+  */
+ #ifndef CONFIG_PPC_BOOK3S_64
+-static inline void __allow_user_access(void __user *to, const void __user *from,
+-				       unsigned long size, unsigned long dir) { }
+-static inline void __prevent_user_access(unsigned long dir) { }
+-static inline unsigned long __prevent_user_access_return(void) { return 0UL; }
+-static inline void __restore_user_access(unsigned long flags) { }
++static __always_inline void __allow_user_access(void __user *to, const void __user *from,
++						unsigned long size, unsigned long dir) { }
++static __always_inline void __prevent_user_access(unsigned long dir) { }
++static __always_inline unsigned long __prevent_user_access_return(void) { return 0UL; }
++static __always_inline void __restore_user_access(unsigned long flags) { }
+ #endif /* CONFIG_PPC_BOOK3S_64 */
+ #endif /* CONFIG_PPC_KUAP */
+ 
+diff --git a/arch/powerpc/include/asm/nohash/32/kup-8xx.h b/arch/powerpc/include/asm/nohash/32/kup-8xx.h
+index 1d53f38c5cd5..61067e4c8f22 100644
+--- a/arch/powerpc/include/asm/nohash/32/kup-8xx.h
++++ b/arch/powerpc/include/asm/nohash/32/kup-8xx.h
+@@ -13,24 +13,24 @@
+ 
+ #include <asm/reg.h>
+ 
+-static inline void __kuap_save_and_lock(struct pt_regs *regs)
++static __always_inline void __kuap_save_and_lock(struct pt_regs *regs)
+ {
+ 	regs->kuap = mfspr(SPRN_MD_AP);
+ 	mtspr(SPRN_MD_AP, MD_APG_KUAP);
+ }
+ #define __kuap_save_and_lock __kuap_save_and_lock
+ 
+-static inline void kuap_user_restore(struct pt_regs *regs)
++static __always_inline void kuap_user_restore(struct pt_regs *regs)
+ {
+ }
+ 
+-static inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned long kuap)
++static __always_inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned long kuap)
+ {
+ 	mtspr(SPRN_MD_AP, regs->kuap);
+ }
+ 
+ #ifdef CONFIG_PPC_KUAP_DEBUG
+-static inline unsigned long __kuap_get_and_assert_locked(void)
++static __always_inline unsigned long __kuap_get_and_assert_locked(void)
+ {
+ 	WARN_ON_ONCE(mfspr(SPRN_MD_AP) >> 16 != MD_APG_KUAP >> 16);
+ 
+@@ -39,18 +39,18 @@ static inline unsigned long __kuap_get_and_assert_locked(void)
+ #define __kuap_get_and_assert_locked __kuap_get_and_assert_locked
+ #endif
+ 
+-static inline void __allow_user_access(void __user *to, const void __user *from,
+-				       unsigned long size, unsigned long dir)
++static __always_inline void __allow_user_access(void __user *to, const void __user *from,
++						unsigned long size, unsigned long dir)
+ {
+ 	mtspr(SPRN_MD_AP, MD_APG_INIT);
+ }
+ 
+-static inline void __prevent_user_access(unsigned long dir)
++static __always_inline void __prevent_user_access(unsigned long dir)
+ {
+ 	mtspr(SPRN_MD_AP, MD_APG_KUAP);
+ }
+ 
+-static inline unsigned long __prevent_user_access_return(void)
++static __always_inline unsigned long __prevent_user_access_return(void)
+ {
+ 	unsigned long flags;
+ 
+@@ -61,12 +61,12 @@ static inline unsigned long __prevent_user_access_return(void)
+ 	return flags;
+ }
+ 
+-static inline void __restore_user_access(unsigned long flags)
++static __always_inline void __restore_user_access(unsigned long flags)
+ {
+ 	mtspr(SPRN_MD_AP, flags);
+ }
+ 
+-static inline bool
++static __always_inline bool
+ __bad_kuap_fault(struct pt_regs *regs, unsigned long address, bool is_write)
+ {
+ 	return !((regs->kuap ^ MD_APG_KUAP) & 0xff000000);
+diff --git a/arch/powerpc/include/asm/nohash/kup-booke.h b/arch/powerpc/include/asm/nohash/kup-booke.h
+index 07759ae9117b..416f3e0897d5 100644
+--- a/arch/powerpc/include/asm/nohash/kup-booke.h
++++ b/arch/powerpc/include/asm/nohash/kup-booke.h
+@@ -18,14 +18,14 @@
+ 
+ #include <asm/reg.h>
+ 
+-static inline void __kuap_lock(void)
++static __always_inline void __kuap_lock(void)
+ {
+ 	mtspr(SPRN_PID, 0);
+ 	isync();
+ }
+ #define __kuap_lock __kuap_lock
+ 
+-static inline void __kuap_save_and_lock(struct pt_regs *regs)
++static __always_inline void __kuap_save_and_lock(struct pt_regs *regs)
+ {
+ 	regs->kuap = mfspr(SPRN_PID);
+ 	mtspr(SPRN_PID, 0);
+@@ -33,7 +33,7 @@ static inline void __kuap_save_and_lock(struct pt_regs *regs)
+ }
+ #define __kuap_save_and_lock __kuap_save_and_lock
+ 
+-static inline void kuap_user_restore(struct pt_regs *regs)
++static __always_inline void kuap_user_restore(struct pt_regs *regs)
+ {
+ 	if (kuap_is_disabled())
+ 		return;
+@@ -43,7 +43,7 @@ static inline void kuap_user_restore(struct pt_regs *regs)
+ 	/* Context synchronisation is performed by rfi */
+ }
+ 
+-static inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned long kuap)
++static __always_inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned long kuap)
+ {
+ 	if (regs->kuap)
+ 		mtspr(SPRN_PID, current->thread.pid);
+@@ -52,7 +52,7 @@ static inline void __kuap_kernel_restore(struct pt_regs *regs, unsigned long kua
+ }
+ 
+ #ifdef CONFIG_PPC_KUAP_DEBUG
+-static inline unsigned long __kuap_get_and_assert_locked(void)
++static __always_inline unsigned long __kuap_get_and_assert_locked(void)
+ {
+ 	WARN_ON_ONCE(mfspr(SPRN_PID));
+ 
+@@ -61,20 +61,20 @@ static inline unsigned long __kuap_get_and_assert_locked(void)
+ #define __kuap_get_and_assert_locked __kuap_get_and_assert_locked
+ #endif
+ 
+-static inline void __allow_user_access(void __user *to, const void __user *from,
+-				       unsigned long size, unsigned long dir)
++static __always_inline void __allow_user_access(void __user *to, const void __user *from,
++						unsigned long size, unsigned long dir)
+ {
+ 	mtspr(SPRN_PID, current->thread.pid);
+ 	isync();
+ }
+ 
+-static inline void __prevent_user_access(unsigned long dir)
++static __always_inline void __prevent_user_access(unsigned long dir)
+ {
+ 	mtspr(SPRN_PID, 0);
+ 	isync();
+ }
+ 
+-static inline unsigned long __prevent_user_access_return(void)
++static __always_inline unsigned long __prevent_user_access_return(void)
+ {
+ 	unsigned long flags = mfspr(SPRN_PID);
+ 
+@@ -84,7 +84,7 @@ static inline unsigned long __prevent_user_access_return(void)
+ 	return flags;
+ }
+ 
+-static inline void __restore_user_access(unsigned long flags)
++static __always_inline void __restore_user_access(unsigned long flags)
+ {
+ 	if (flags) {
+ 		mtspr(SPRN_PID, current->thread.pid);
+@@ -92,7 +92,7 @@ static inline void __restore_user_access(unsigned long flags)
+ 	}
+ }
+ 
+-static inline bool
++static __always_inline bool
+ __bad_kuap_fault(struct pt_regs *regs, unsigned long address, bool is_write)
+ {
+ 	return !regs->kuap;
+diff --git a/arch/powerpc/include/asm/uaccess.h b/arch/powerpc/include/asm/uaccess.h
+index a2d255aa9627..fb725ec77926 100644
+--- a/arch/powerpc/include/asm/uaccess.h
++++ b/arch/powerpc/include/asm/uaccess.h
+@@ -386,7 +386,7 @@ copy_mc_to_user(void __user *to, const void *from, unsigned long n)
+ extern long __copy_from_user_flushcache(void *dst, const void __user *src,
+ 		unsigned size);
+ 
+-static __must_check inline bool user_access_begin(const void __user *ptr, size_t len)
++static __must_check __always_inline bool user_access_begin(const void __user *ptr, size_t len)
+ {
+ 	if (unlikely(!access_ok(ptr, len)))
+ 		return false;
+@@ -401,7 +401,7 @@ static __must_check inline bool user_access_begin(const void __user *ptr, size_t
+ #define user_access_save	prevent_user_access_return
+ #define user_access_restore	restore_user_access
+ 
+-static __must_check inline bool
++static __must_check __always_inline bool
+ user_read_access_begin(const void __user *ptr, size_t len)
+ {
+ 	if (unlikely(!access_ok(ptr, len)))
+@@ -415,7 +415,7 @@ user_read_access_begin(const void __user *ptr, size_t len)
+ #define user_read_access_begin	user_read_access_begin
+ #define user_read_access_end		prevent_current_read_from_user
+ 
+-static __must_check inline bool
++static __must_check __always_inline bool
+ user_write_access_begin(const void __user *ptr, size_t len)
+ {
+ 	if (unlikely(!access_ok(ptr, len)))
+-- 
+2.40.1
 
