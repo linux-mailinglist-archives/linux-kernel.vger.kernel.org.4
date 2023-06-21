@@ -2,155 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3100F7378EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 04:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 310357378F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 04:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbjFUCK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 22:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39912 "EHLO
+        id S229649AbjFUCP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 22:15:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjFUCKX (ORCPT
+        with ESMTP id S229521AbjFUCPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 22:10:23 -0400
-Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F7B6198B
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 19:10:20 -0700 (PDT)
-Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-77ac4aa24eeso421105339f.1
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 19:10:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687313419; x=1689905419;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rGD1kCLK3UO9zPwdYoWf6HQp/ziO4UX3ezLXTcAFRPw=;
-        b=XtS0Uwie4GPIildvSzMi9Ih11x703V1PjPh9sPNSb+YJT/mMcW/yT6PhyjkUiDHMBg
-         2GkeDQbzhRc959faTjZmIzjnTzz+UxKBir43T/FmLQJ+j2dz0S5ncd26+c46VQpKDBX4
-         uEOm7LFmM3uus42brFwEfdDJRpeEPFDRRNop9bCy80jq8cBW89/EahH4VGVw/YfGZf4i
-         cKk+bqapZ6CRcFKDS6r/h2OMCs8plBesqFyW4c6WUJFq3e2BumSHGEeSJYQ9w+8EZgnE
-         wrTFIsrLPYusTwk6PnUay2RU2R3+rtyppLiDjSWJFq0yjE8/mB5SaTHNm8v8qXS1aWrV
-         SDaQ==
-X-Gm-Message-State: AC+VfDygAXS+TKvPZWWVr+gw8lYKavCMOWCCvTIPMEsOlQU+YkrWuTN4
-        XehiqEqXznnNW14CvrbXeNNjwv6qH4PxUYs7yUeUDkXCLkLT
-X-Google-Smtp-Source: ACHHUZ7Q/9EbX1kpttT8CvsDCX0XJLKMo+55xXxHBXcmfVI6lQYBaxLthKvMTKRqa3PyMHoowWPyxe5UFkwIZ4MgJ8dvBHl3C/h0
+        Tue, 20 Jun 2023 22:15:55 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 034D01987
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 19:15:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687313754; x=1718849754;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qScSC4bBlYqqRzg1M8A/BBNUlIY65qfnfx194lP9nP0=;
+  b=NRSiXK/nAsuskpvJLbteDd/kl5LY/H4khqBoS40qrYjmauAxnleCiwMw
+   uW44stSdrEGqD8Q+Eky0SAmKnbSJ8sFtvYa9XBbnPAvbdXAME7dK4dSEg
+   WBa8pID33Ml9NAQjyQ3uDa8B9AQpaYMEF1AqH8Ezvww5hE6sfCx43gEGd
+   kTklRT4g10O0zokTkI1B9M83zvALdq6sxv8RXWm3X+ZblLbkY+r9KkqAc
+   uRpSriIJTi6XSBZ5qlY0kJ/fZ2IW6k+GIZHzXuoAzqt16IS7wsRIRm58R
+   sZEM5LVrJ0EXTI8j4oncaJwa0J5WP9BeNA5Lt21WPQLqz1RWdOb16gjF0
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="362581723"
+X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
+   d="scan'208";a="362581723"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 19:15:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="858802797"
+X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
+   d="scan'208";a="858802797"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 20 Jun 2023 19:15:50 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qBnNt-0006Rs-2L;
+        Wed, 21 Jun 2023 02:15:49 +0000
+Date:   Wed, 21 Jun 2023 10:15:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc:     oe-kbuild-all@lists.linux.dev, willy@infradead.org,
+        torvalds@linuxfoundation.org, vegard.nossum@oracle.com,
+        mpe@ellerman.id.au, Liam.Howlett@oracle.com, lrh2000@pku.edu.cn,
+        mgorman@suse.de, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@android.com, surenb@google.com
+Subject: Re: [PATCH 3/3] mm: check for VMA being detached before destroying it
+Message-ID: <202306211007.hQoEsMrP-lkp@intel.com>
+References: <20230620235726.3873043-3-surenb@google.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:b041:0:b0:426:792a:ec72 with SMTP id
- q1-20020a02b041000000b00426792aec72mr2412676jah.0.1687313419583; Tue, 20 Jun
- 2023 19:10:19 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 19:10:19 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ffcb2e05fe9a445c@google.com>
-Subject: [syzbot] [xfs?] WARNING: Reset corrupted AGFL on AG NUM. NUM blocks
- leaked. Please unmount and run xfs_repair.
-From:   syzbot <syzbot+9d0b0d54a8bd799f6ae4@syzkaller.appspotmail.com>
-To:     david@fromorbit.com, dchinner@redhat.com, djwong@kernel.org,
-        hch@lst.de, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620235726.3873043-3-surenb@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Suren,
 
-syzbot found the following issue on:
+kernel test robot noticed the following build errors:
 
-HEAD commit:    40f71e7cd3c6 Merge tag 'net-6.4-rc7' of git://git.kernel.o..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=158b99d3280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7ff8f87c7ab0e04e
-dashboard link: https://syzkaller.appspot.com/bug?extid=9d0b0d54a8bd799f6ae4
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16ab4537280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=148326ef280000
+[auto build test ERROR on akpm-mm/mm-everything]
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/2dc89d5fee38/disk-40f71e7c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/0ced5a475218/vmlinux-40f71e7c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/d543a4f69684/bzImage-40f71e7c.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/e2012b787a31/mount_0.gz
+url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/mm-change-vma_start_read-to-fail-to-lock-a-detached-VMA/20230621-075833
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230620235726.3873043-3-surenb%40google.com
+patch subject: [PATCH 3/3] mm: check for VMA being detached before destroying it
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20230621/202306211007.hQoEsMrP-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211007.hQoEsMrP-lkp@intel.com/reproduce)
 
-The issue was bisected to:
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306211007.hQoEsMrP-lkp@intel.com/
 
-commit e0a8de7da35e5b22b44fa1013ccc0716e17b0c14
-Author: Dave Chinner <dchinner@redhat.com>
-Date:   Mon Jun 5 04:48:15 2023 +0000
+All errors (new ones prefixed by >>):
 
-    xfs: fix agf/agfl verification on v4 filesystems
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10bb665b280000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=12bb665b280000
-console output: https://syzkaller.appspot.com/x/log.txt?x=14bb665b280000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9d0b0d54a8bd799f6ae4@syzkaller.appspotmail.com
-Fixes: e0a8de7da35e ("xfs: fix agf/agfl verification on v4 filesystems")
-
-XFS (loop0): WARNING: Reset corrupted AGFL on AG 0. 4 blocks leaked. Please unmount and run xfs_repair.
-XFS (loop0): Internal error !ino_ok at line 213 of file fs/xfs/libxfs/xfs_dir2.c.  Caller xfs_dir_ino_validate+0x2c/0x90 fs/xfs/libxfs/xfs_dir2.c:220
-CPU: 1 PID: 46 Comm: kworker/u4:3 Not tainted 6.4.0-rc6-syzkaller-00195-g40f71e7cd3c6 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-Workqueue: xfs_iwalk-4998 xfs_pwork_work
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- xfs_error_report fs/xfs/xfs_error.c:384 [inline]
- xfs_corruption_error+0x11d/0x170 fs/xfs/xfs_error.c:401
- xfs_dir_ino_validate+0x5f/0x90 fs/xfs/libxfs/xfs_dir2.c:213
- xfs_dir2_sf_verify+0x487/0x990 fs/xfs/libxfs/xfs_dir2_sf.c:779
- xfs_ifork_verify_local_data fs/xfs/libxfs/xfs_inode_fork.c:706 [inline]
- xfs_iformat_data_fork+0x4bf/0x6d0 fs/xfs/libxfs/xfs_inode_fork.c:256
- xfs_inode_from_disk+0xbbf/0x1070 fs/xfs/libxfs/xfs_inode_buf.c:245
- xfs_iget_cache_miss fs/xfs/xfs_icache.c:639 [inline]
- xfs_iget+0xf08/0x3050 fs/xfs/xfs_icache.c:777
- xfs_qm_dqusage_adjust+0x228/0x670 fs/xfs/xfs_qm.c:1157
- xfs_iwalk_ag_recs+0x486/0x7c0 fs/xfs/xfs_iwalk.c:220
- xfs_iwalk_run_callbacks+0x25b/0x490 fs/xfs/xfs_iwalk.c:376
- xfs_iwalk_ag+0xad6/0xbd0 fs/xfs/xfs_iwalk.c:482
- xfs_iwalk_ag_work+0xfb/0x1b0 fs/xfs/xfs_iwalk.c:624
- xfs_pwork_work+0x7c/0x190 fs/xfs/xfs_pwork.c:47
- process_one_work+0x8a0/0x10e0 kernel/workqueue.c:2405
- worker_thread+0xa63/0x1210 kernel/workqueue.c:2552
- kthread+0x2b8/0x350 kernel/kthread.c:379
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
-XFS (loop0): Corruption detected. Unmount and run xfs_repair
-XFS (loop0): Invalid inode number 0x24
-XFS (loop0): Metadata corruption detected at xfs_dir2_sf_verify+0x767/0x990 fs/xfs/libxfs/xfs_dir2_sf.c:774, inode 0x23 data fork
-XFS (loop0): Unmount and run xfs_repair
-XFS (loop0): First 32 bytes of corrupted metadata buffer:
-00000000: 02 00 00 00 00 20 05 00 30 66 69 6c 65 30 01 00  ..... ..0file0..
+   scripts/genksyms/parse.y: warning: 9 shift/reduce conflicts [-Wconflicts-sr]
+   scripts/genksyms/parse.y: warning: 5 reduce/reduce conflicts [-Wconflicts-rr]
+   scripts/genksyms/parse.y: note: rerun with option '-Wcounterexamples' to generate conflict counterexamples
+   In file included from include/linux/pid_namespace.h:7,
+                    from include/linux/ptrace.h:10,
+                    from arch/alpha/kernel/asm-offsets.c:11:
+   include/linux/mm.h: In function 'vma_init':
+>> include/linux/mm.h:753:12: error: 'struct vm_area_struct' has no member named 'detached'
+     753 |         vma->detached = true;
+         |            ^~
+   arch/alpha/kernel/asm-offsets.c: At top level:
+   arch/alpha/kernel/asm-offsets.c:15:6: warning: no previous prototype for 'foo' [-Wmissing-prototypes]
+      15 | void foo(void)
+         |      ^~~
+   make[2]: *** [scripts/Makefile.build:114: arch/alpha/kernel/asm-offsets.s] Error 1
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:1287: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:226: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +753 include/linux/mm.h
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+   740	
+   741	/*
+   742	 * WARNING: vma_init does not initialize vma->vm_lock.
+   743	 * Use vm_area_alloc()/vm_area_free() if vma needs locking.
+   744	 */
+   745	static inline void vma_init(struct vm_area_struct *vma, struct mm_struct *mm)
+   746	{
+   747		static const struct vm_operations_struct dummy_vm_ops = {};
+   748	
+   749		memset(vma, 0, sizeof(*vma));
+   750		vma->vm_mm = mm;
+   751		vma->vm_ops = &dummy_vm_ops;
+   752		INIT_LIST_HEAD(&vma->anon_vma_chain);
+ > 753		vma->detached = true;
+   754		vma_numab_state_init(vma);
+   755	}
+   756	
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
