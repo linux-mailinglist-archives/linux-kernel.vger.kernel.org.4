@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1F97381E6
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D707380CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:10:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbjFUK1t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 06:27:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44558 "EHLO
+        id S231874AbjFUK2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 06:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjFUK1q (ORCPT
+        with ESMTP id S231717AbjFUK2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 06:27:46 -0400
-Received: from mail-ua1-x930.google.com (mail-ua1-x930.google.com [IPv6:2607:f8b0:4864:20::930])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8F7A3;
-        Wed, 21 Jun 2023 03:27:42 -0700 (PDT)
-Received: by mail-ua1-x930.google.com with SMTP id a1e0cc1a2514c-78f3f8ecc42so1290493241.0;
-        Wed, 21 Jun 2023 03:27:42 -0700 (PDT)
+        Wed, 21 Jun 2023 06:28:00 -0400
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD56A3;
+        Wed, 21 Jun 2023 03:27:57 -0700 (PDT)
+Received: by mail-vk1-xa2a.google.com with SMTP id 71dfb90a1353d-460eb67244eso2013721e0c.1;
+        Wed, 21 Jun 2023 03:27:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687343261; x=1689935261;
+        d=gmail.com; s=20221208; t=1687343276; x=1689935276;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=e5+GfvgPcHPqXiINLGqPIzzL8i33lB+F9aTxfsBAba0=;
-        b=YyoK5/sTGDt1NOzNMuO3SutO5B5uTcfadNHDoSGe4KgvD1frBCkCgcOjbqhqzURw2j
-         g8JrqdhM8FA9oKQaxIiSrVIaT4uWsg4d9F7m0MHMMlfknS7S8ZnuB+vbwTRSb9bAnPWc
-         QiC5iZ7ke/1w1C9iw+IofXiZ3MsvuYvmIcq2nNdydoDF6Hjb39v3mbl2zGuMMy55SbWq
-         sMtmOBPf9X5GPNbYrg4NETy5Rz/q3HX6LhDotqOCeaWevtc4gD+8jL/C4bLpKQl/cv9h
-         DEVIq9wTkh3cm5m3X2OJFlCGmEPBL/e9mix3kWQ8CGQUI233ew/z1U7Aja1hs/Xmx/WD
-         s5iw==
+        bh=AtjYH+2P+QYg94YakrCegFEQ872mnB10+dWRjipMnUo=;
+        b=qoDafpm0f2q8nhGgg/vwpPkaiPg3Pt/0GB1d6QIAhWy9KwD/C/tWUe3WcthP3Nc7ay
+         svcAODK6N7W6HBEU1msi2/fYZWnW1PoAZGEspVFvF8J8YmslPDP/2zSXS0X6H69HaC+V
+         LRaY5RdJfLhL/zq4f1f5Cm0YBEwcKb7jlvLTqXq3DkKmmsEseVeJS9LZ1YL85RBhdCas
+         J3hT9gHC53YMKpkcx3b+9PTUmQrrphRnGsCrfYN2ZH/ZNJ1ObGy3HNiHbBUMhFIqzjA2
+         90PDRnWTsPiO0z9ddpAdrMmGOUnJ/WwPMlt95OISZQjFvChsSeclaqELe26g3K9up/0z
+         lKHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687343261; x=1689935261;
+        d=1e100.net; s=20221208; t=1687343276; x=1689935276;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=e5+GfvgPcHPqXiINLGqPIzzL8i33lB+F9aTxfsBAba0=;
-        b=QrsBrczEOZ+r0BmK8gVTretu0Jk5q1J1P5tY446Fq202HkM2fyy8IZh92WpyVgXTrl
-         wBzOCuFpjsCYs2PflhrPMspUNCygZZjr1THXCRKAVIfAtMAheUtLoJvqFg7xWis/s9yn
-         2zNS2af2uUYesurdPIu5wAKp69r+B/fVfV9E8SvhNen6OQK9gRUKxuRvQzNlPmZXg66a
-         I8I/8IbNsOObzZqao9zk5E7TwaGe3z3QjW+XRRca+JE3RYLFp4laZjembRiAefNbiwJv
-         XUXs2KkXeYx426xOHa3qZQfjBcCFCNl+8yoOH2iyqGQaXrvLHT30vPXYrKE4ARZXuONk
-         vIAQ==
-X-Gm-Message-State: AC+VfDzQR4xZdFhPj+kS2qUrxlk2eCMsT1v+y5Txzfniw4R9/u+s3ZAF
-        fI8mH5COCipJ3KWsdxPPduE36nI6jWGZuHfJArs=
-X-Google-Smtp-Source: ACHHUZ6DJLdCdhll6lBXYTOHpUh4S5Ymyisp+XV+BYO1BhYqVjcLE7ZArztA6F1G9bPGYtb0cqcbo3gZl9GMapCaybI=
-X-Received: by 2002:a67:e8cc:0:b0:440:cdf7:af4 with SMTP id
- y12-20020a67e8cc000000b00440cdf70af4mr1153661vsn.14.1687343260839; Wed, 21
- Jun 2023 03:27:40 -0700 (PDT)
+        bh=AtjYH+2P+QYg94YakrCegFEQ872mnB10+dWRjipMnUo=;
+        b=CDd2t6xIYVT2I9POsZijFFUoMNoLCRWPUWRWEaDJSZyioaYM3xk9Pw2XBSQsgolR1k
+         BPXJPtm1PJmjTJwrbnWgtgrCtnnLytODiaMx5xTJPhGr9c5wFHv907T0qbimzWn3h5iX
+         cwXwF/piWofawC2zNgI6ZY71CDw7mUT1xi73BHWXrsNQlFshPIFRkw2VcwWmLfOwlAwI
+         hwMiMftt8C/WEdEpN0IPgKEybil6Ylz/8GVLiTWXbklMeduatLFzJbhgwLfKZCvSfPOy
+         XDWayou77DPDKbq6ViY8UkAncageQkSAw+sqTEEg71pc9hrE3ShaXZNdfQV3PEcrkpwW
+         N8Ow==
+X-Gm-Message-State: AC+VfDyRBG0n5t5HGH7XUkobxWp2ieE7YgMzditSwNl8hbRsZ4EHSQ8a
+        Q1KPw6lJswdcnHK1C3pyDNNe8PgTxVFyhTD0g0min0oWunI=
+X-Google-Smtp-Source: ACHHUZ4t0OkCUEzBZiIOm5uLT/k8Ml9vU5e/kEkKc1ssbMCEN9jmm/1rExDbigXPoW37bFR8EJ5dxCFT9Q+j+hip74w=
+X-Received: by 2002:a1f:bfd7:0:b0:471:6b1d:3796 with SMTP id
+ p206-20020a1fbfd7000000b004716b1d3796mr5743444vkf.1.1687343276289; Wed, 21
+ Jun 2023 03:27:56 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230331105546.13607-1-victor.shih@genesyslogic.com.tw>
- <20230331105546.13607-7-victor.shih@genesyslogic.com.tw> <c38a5030-45cf-9590-7c1a-2f80556c0e10@intel.com>
-In-Reply-To: <c38a5030-45cf-9590-7c1a-2f80556c0e10@intel.com>
+ <20230331105546.13607-8-victor.shih@genesyslogic.com.tw> <20bd15db-9483-59b8-a5e5-6f047b215bb8@intel.com>
+In-Reply-To: <20bd15db-9483-59b8-a5e5-6f047b215bb8@intel.com>
 From:   Victor Shih <victorshihgli@gmail.com>
-Date:   Wed, 21 Jun 2023 18:27:28 +0800
-Message-ID: <CAK00qKA5u11-LijGz9bb7hYZmvwYRN1vK3YV3jPVjExBh5+Ksw@mail.gmail.com>
-Subject: Re: [PATCH V7 06/23] mmc: core: Support UHS-II card control and access
+Date:   Wed, 21 Jun 2023 18:27:44 +0800
+Message-ID: <CAK00qKDDZfM=Hsd25nUm5yvvqgpN4K7DSgdOHk4D5QDvaOV9uQ@mail.gmail.com>
+Subject: Re: [PATCH V7 07/23] mmc: sdhci: add UHS-II related definitions in headers
 To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, benchuanggli@gmail.com,
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benchuanggli@gmail.com, ulf.hansson@linaro.org,
         HL.Liu@genesyslogic.com.tw, Greg.tu@genesyslogic.com.tw,
         takahiro.akashi@linaro.org, dlunev@chromium.org,
         Victor Shih <victor.shih@genesyslogic.com.tw>,
-        Jason Lai <jason.lai@genesyslogic.com.tw>
+        Ben Chuang <ben.chuang@genesyslogic.com.tw>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,1802 +80,405 @@ On Wed, Apr 12, 2023 at 9:09=E2=80=AFPM Adrian Hunter <adrian.hunter@intel.=
 com> wrote:
 >
 > On 31/03/23 13:55, Victor Shih wrote:
-> > Embed UHS-II access/control functionality into the MMC request
-> > processing flow.
+> > Add UHS-II related definitions in shdci.h and sdhci-uhs2.h.
 > >
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > Signed-off-by: Jason Lai <jason.lai@genesyslogic.com.tw>
+> > Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+> > Signed-off-by: AKASHI Takahiro <takahiro.akashi@linaro.org>
 > > Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
+>
+> Here and other patches:
+>
+> From:/Signed-off-by: email address mismatch: 'From: Victor Shih <victorsh=
+ihgli@gmail.com>' !=3D 'Signed-off-by: Victor Shih <victor.shih@genesyslogi=
+c.com.tw>'
+>
+
+I will fix it in the V8 version.
+
 > > ---
-> >  drivers/mmc/core/block.c   |   18 +-
-> >  drivers/mmc/core/core.c    |    8 +
-> >  drivers/mmc/core/mmc_ops.c |   25 +-
-> >  drivers/mmc/core/mmc_ops.h |    1 +
-> >  drivers/mmc/core/sd.c      |   13 +-
-> >  drivers/mmc/core/sd.h      |    4 +
-> >  drivers/mmc/core/sd_ops.c  |   11 +
-> >  drivers/mmc/core/sd_ops.h  |   18 +
-> >  drivers/mmc/core/sd_uhs2.c | 1138 ++++++++++++++++++++++++++++++++++--
-> >  9 files changed, 1176 insertions(+), 60 deletions(-)
+> >  drivers/mmc/host/sdhci-uhs2.h | 178 ++++++++++++++++++++++++++++++++++
+> >  drivers/mmc/host/sdhci.h      |  62 +++++++++++-
+> >  2 files changed, 239 insertions(+), 1 deletion(-)
+> >  create mode 100644 drivers/mmc/host/sdhci-uhs2.h
 > >
-> > diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-> > index 672ab90c4b2d..ecd3cbd81d5f 100644
-> > --- a/drivers/mmc/core/block.c
-> > +++ b/drivers/mmc/core/block.c
-> > @@ -911,15 +911,9 @@ static int mmc_sd_num_wr_blocks(struct mmc_card *c=
-ard, u32 *written_blocks)
-> >
-> >       struct scatterlist sg;
-> >
-> > -     cmd.opcode =3D MMC_APP_CMD;
-> > -     cmd.arg =3D card->rca << 16;
-> > -     cmd.flags =3D MMC_RSP_SPI_R1 | MMC_RSP_R1 | MMC_CMD_AC;
-> > -
-> > -     err =3D mmc_wait_for_cmd(card->host, &cmd, 0);
-> > -     if (err)
-> > -             return err;
-> > -     if (!mmc_host_is_spi(card->host) && !(cmd.resp[0] & R1_APP_CMD))
-> > -             return -EIO;
-> > +     err =3D mmc_app_cmd(card->host, card);
-> > +             if (err)
-> > +                     return err;
-> >
-> >       memset(&cmd, 0, sizeof(struct mmc_command));
-> >
-> > @@ -1605,6 +1599,9 @@ static void mmc_blk_rw_rq_prep(struct mmc_queue_r=
-eq *mqrq,
-> >       struct request *req =3D mmc_queue_req_to_req(mqrq);
-> >       struct mmc_blk_data *md =3D mq->blkdata;
-> >       bool do_rel_wr, do_data_tag;
-> > +     bool do_multi;
-> > +
-> > +     do_multi =3D (card->host->flags & MMC_UHS2_SD_TRAN) ? true : fals=
-e;
-> >
-> >       mmc_blk_data_prep(mq, mqrq, recovery_mode, &do_rel_wr, &do_data_t=
-ag);
-> >
-> > @@ -1615,7 +1612,7 @@ static void mmc_blk_rw_rq_prep(struct mmc_queue_r=
-eq *mqrq,
-> >               brq->cmd.arg <<=3D 9;
-> >       brq->cmd.flags =3D MMC_RSP_SPI_R1 | MMC_RSP_R1 | MMC_CMD_ADTC;
-> >
-> > -     if (brq->data.blocks > 1 || do_rel_wr) {
-> > +     if (brq->data.blocks > 1 || do_rel_wr || do_multi) {
-> >               /* SPI multiblock writes terminate using a special
-> >                * token, not a STOP_TRANSMISSION request.
-> >                */
-> > @@ -1628,6 +1625,7 @@ static void mmc_blk_rw_rq_prep(struct mmc_queue_r=
-eq *mqrq,
-> >               brq->mrq.stop =3D NULL;
-> >               readcmd =3D MMC_READ_SINGLE_BLOCK;
-> >               writecmd =3D MMC_WRITE_BLOCK;
-> > +             brq->cmd.uhs2_tmode0_flag =3D 1;
-> >       }
-> >       brq->cmd.opcode =3D rq_data_dir(req) =3D=3D READ ? readcmd : writ=
-ecmd;
-> >
-> > diff --git a/drivers/mmc/core/core.c b/drivers/mmc/core/core.c
-> > index ba8808cd9318..f5dc653eafb0 100644
-> > --- a/drivers/mmc/core/core.c
-> > +++ b/drivers/mmc/core/core.c
-> > @@ -334,6 +334,8 @@ static int mmc_mrq_prep(struct mmc_host *host, stru=
-ct mmc_request *mrq)
-> >
-> >  int mmc_start_request(struct mmc_host *host, struct mmc_request *mrq)
-> >  {
-> > +     struct uhs2_command uhs2_cmd;
-> > +     __be32 payload[4]; /* for maximum size */
-> >       int err;
-> >
-> >       init_completion(&mrq->cmd_completion);
-> > @@ -351,6 +353,8 @@ int mmc_start_request(struct mmc_host *host, struct=
- mmc_request *mrq)
-> >       if (err)
-> >               return err;
-> >
-> > +     mmc_uhs2_card_prepare_cmd(host, mrq, uhs2_cmd, payload);
-> > +
-> >       led_trigger_event(host->led, LED_FULL);
-> >       __mmc_start_request(host, mrq);
-> >
-> > @@ -430,6 +434,8 @@ EXPORT_SYMBOL(mmc_wait_for_req_done);
-> >   */
-> >  int mmc_cqe_start_req(struct mmc_host *host, struct mmc_request *mrq)
-> >  {
-> > +     struct uhs2_command uhs2_cmd;
-> > +     __be32 payload[4]; /* for maximum size */
-> >       int err;
-> >
-> >       /*
-> > @@ -450,6 +456,8 @@ int mmc_cqe_start_req(struct mmc_host *host, struct=
- mmc_request *mrq)
-> >       if (err)
-> >               goto out_err;
-> >
-> > +     mmc_uhs2_card_prepare_cmd(host, mrq, uhs2_cmd, payload);
-> > +
-> >       err =3D host->cqe_ops->cqe_request(host, mrq);
-> >       if (err)
-> >               goto out_err;
-> > diff --git a/drivers/mmc/core/mmc_ops.c b/drivers/mmc/core/mmc_ops.c
-> > index 3b3adbddf664..8ae205a07f9b 100644
-> > --- a/drivers/mmc/core/mmc_ops.c
-> > +++ b/drivers/mmc/core/mmc_ops.c
-> > @@ -144,10 +144,24 @@ int mmc_set_dsr(struct mmc_host *host)
-> >       return mmc_wait_for_cmd(host, &cmd, MMC_CMD_RETRIES);
-> >  }
-> >
-> > +int __mmc_go_idle(struct mmc_host *host)
-> > +{
-> > +     struct mmc_command cmd =3D {};
-> > +     int err;
-> > +
-> > +     cmd.opcode =3D MMC_GO_IDLE_STATE;
-> > +     cmd.arg =3D 0;
-> > +     cmd.flags =3D MMC_RSP_SPI_R1 | MMC_RSP_NONE | MMC_CMD_BC;
-> > +
-> > +     err =3D mmc_wait_for_cmd(host, &cmd, 0);
-> > +     mmc_delay(1);
-> > +
-> > +     return err;
-> > +}
-> > +
-> >  int mmc_go_idle(struct mmc_host *host)
-> >  {
-> >       int err;
-> > -     struct mmc_command cmd =3D {};
-> >
-> >       /*
-> >        * Non-SPI hosts need to prevent chipselect going active during
-> > @@ -163,13 +177,7 @@ int mmc_go_idle(struct mmc_host *host)
-> >               mmc_delay(1);
-> >       }
-> >
-> > -     cmd.opcode =3D MMC_GO_IDLE_STATE;
-> > -     cmd.arg =3D 0;
-> > -     cmd.flags =3D MMC_RSP_SPI_R1 | MMC_RSP_NONE | MMC_CMD_BC;
-> > -
-> > -     err =3D mmc_wait_for_cmd(host, &cmd, 0);
-> > -
-> > -     mmc_delay(1);
-> > +     err =3D __mmc_go_idle(host);
-> >
-> >       if (!mmc_host_is_spi(host)) {
-> >               mmc_set_chip_select(host, MMC_CS_DONTCARE);
-> > @@ -300,6 +308,7 @@ int mmc_send_adtc_data(struct mmc_card *card, struc=
-t mmc_host *host, u32 opcode,
-> >        * not R1 plus a data block.
-> >        */
-> >       cmd.flags =3D MMC_RSP_SPI_R1 | MMC_RSP_R1 | MMC_CMD_ADTC;
-> > +     cmd.uhs2_tmode0_flag =3D 1;
-> >
-> >       data.blksz =3D len;
-> >       data.blocks =3D 1;
-> > diff --git a/drivers/mmc/core/mmc_ops.h b/drivers/mmc/core/mmc_ops.h
-> > index 09ffbc00908b..abda7492d578 100644
-> > --- a/drivers/mmc/core/mmc_ops.h
-> > +++ b/drivers/mmc/core/mmc_ops.h
-> > @@ -25,6 +25,7 @@ struct mmc_command;
-> >  int mmc_select_card(struct mmc_card *card);
-> >  int mmc_deselect_cards(struct mmc_host *host);
-> >  int mmc_set_dsr(struct mmc_host *host);
-> > +int __mmc_go_idle(struct mmc_host *host);
-> >  int mmc_go_idle(struct mmc_host *host);
-> >  int mmc_send_op_cond(struct mmc_host *host, u32 ocr, u32 *rocr);
-> >  int mmc_set_relative_addr(struct mmc_card *card);
-> > diff --git a/drivers/mmc/core/sd.c b/drivers/mmc/core/sd.c
-> > index 72b664ed90cf..2ff9c37a1975 100644
-> > --- a/drivers/mmc/core/sd.c
-> > +++ b/drivers/mmc/core/sd.c
-> > @@ -207,7 +207,7 @@ static int mmc_decode_csd(struct mmc_card *card)
-> >  /*
-> >   * Given a 64-bit response, decode to our card SCR structure.
-> >   */
-> > -static int mmc_decode_scr(struct mmc_card *card)
-> > +int mmc_decode_scr(struct mmc_card *card)
-> >  {
-> >       struct sd_scr *scr =3D &card->scr;
-> >       unsigned int scr_struct;
-> > @@ -904,7 +904,7 @@ int mmc_sd_get_csd(struct mmc_card *card)
-> >       return 0;
-> >  }
-> >
-> > -static int mmc_sd_get_ro(struct mmc_host *host)
-> > +int mmc_sd_get_ro(struct mmc_host *host)
-> >  {
-> >       int ro;
-> >
-> > @@ -1616,11 +1616,6 @@ static void mmc_sd_detect(struct mmc_host *host)
-> >       }
-> >  }
-> >
-> > -static int sd_can_poweroff_notify(struct mmc_card *card)
-> > -{
-> > -     return card->ext_power.feature_support & SD_EXT_POWER_OFF_NOTIFY;
-> > -}
-> > -
-> >  static int sd_busy_poweroff_notify_cb(void *cb_data, bool *busy)
-> >  {
-> >       struct sd_busy_data *data =3D cb_data;
-> > @@ -1644,7 +1639,7 @@ static int sd_busy_poweroff_notify_cb(void *cb_da=
-ta, bool *busy)
-> >       return 0;
-> >  }
-> >
-> > -static int sd_poweroff_notify(struct mmc_card *card)
-> > +int sd_poweroff_notify(struct mmc_card *card)
-> >  {
-> >       struct sd_busy_data cb_data;
-> >       u8 *reg_buf;
-> > @@ -1692,7 +1687,7 @@ static int _mmc_sd_suspend(struct mmc_host *host)
-> >       if (mmc_card_suspended(card))
-> >               goto out;
-> >
-> > -     if (sd_can_poweroff_notify(card))
-> > +     if (mmc_sd_can_poweroff_notify(card))
-> >               err =3D sd_poweroff_notify(card);
-> >       else if (!mmc_host_is_spi(host))
-> >               err =3D mmc_deselect_cards(host);
-> > diff --git a/drivers/mmc/core/sd.h b/drivers/mmc/core/sd.h
-> > index 1af5a038bae9..d31259919ee5 100644
-> > --- a/drivers/mmc/core/sd.h
-> > +++ b/drivers/mmc/core/sd.h
-> > @@ -11,10 +11,14 @@ struct mmc_card;
-> >
-> >  int mmc_sd_get_cid(struct mmc_host *host, u32 ocr, u32 *cid, u32 *rocr=
-);
-> >  int mmc_sd_get_csd(struct mmc_card *card);
-> > +int mmc_sd_get_ro(struct mmc_host *host);
-> >  void mmc_decode_cid(struct mmc_card *card);
-> >  int mmc_sd_setup_card(struct mmc_host *host, struct mmc_card *card,
-> >       bool reinit);
-> >  unsigned mmc_sd_get_max_clock(struct mmc_card *card);
-> >  int mmc_sd_switch_hs(struct mmc_card *card);
-> >
-> > +/* These call back functions were also used by UHS2 sd card */
-> > +int sd_poweroff_notify(struct mmc_card *card);
-> > +
-> >  #endif
-> > diff --git a/drivers/mmc/core/sd_ops.c b/drivers/mmc/core/sd_ops.c
-> > index ef8d1dce5af1..1f9580491ad0 100644
-> > --- a/drivers/mmc/core/sd_ops.c
-> > +++ b/drivers/mmc/core/sd_ops.c
-> > @@ -27,6 +27,15 @@ int mmc_app_cmd(struct mmc_host *host, struct mmc_ca=
-rd *card)
-> >       if (WARN_ON(card && card->host !=3D host))
-> >               return -EINVAL;
-> >
-> > +     /*
-> > +      * UHS2 packet has APP bit so only set APP_CMD flag here.
-> > +      * Will set the APP bit when assembling UHS2 packet.
-> > +      */
-> > +     if (host->flags & MMC_UHS2_SD_TRAN) {
-> > +             host->uhs2_app_cmd =3D true;
-> > +             return 0;
-> > +     }
-> > +
-> >       cmd.opcode =3D MMC_APP_CMD;
-> >
-> >       if (card) {
-> > @@ -281,6 +290,7 @@ int mmc_app_send_scr(struct mmc_card *card)
-> >       cmd.opcode =3D SD_APP_SEND_SCR;
-> >       cmd.arg =3D 0;
-> >       cmd.flags =3D MMC_RSP_SPI_R1 | MMC_RSP_R1 | MMC_CMD_ADTC;
-> > +     cmd.uhs2_tmode0_flag =3D 1;
-> >
-> >       data.blksz =3D 8;
-> >       data.blocks =3D 1;
-> > @@ -344,6 +354,7 @@ int mmc_app_sd_status(struct mmc_card *card, void *=
-ssr)
-> >       cmd.opcode =3D SD_APP_SD_STATUS;
-> >       cmd.arg =3D 0;
-> >       cmd.flags =3D MMC_RSP_SPI_R2 | MMC_RSP_R1 | MMC_CMD_ADTC;
-> > +     cmd.uhs2_tmode0_flag =3D 1;
-> >
-> >       data.blksz =3D 64;
-> >       data.blocks =3D 1;
-> > diff --git a/drivers/mmc/core/sd_ops.h b/drivers/mmc/core/sd_ops.h
-> > index 3ba7b3cf4652..8c2da57ca2c2 100644
-> > --- a/drivers/mmc/core/sd_ops.h
-> > +++ b/drivers/mmc/core/sd_ops.h
-> > @@ -11,6 +11,7 @@
-> >  #include <linux/types.h>
-> >
-> >  struct mmc_card;
-> > +struct mmc_command;
-> >  struct mmc_host;
-> >
-> >  int mmc_app_set_bus_width(struct mmc_card *card, int width);
-> > @@ -19,10 +20,27 @@ int mmc_send_if_cond(struct mmc_host *host, u32 ocr=
-);
-> >  int mmc_send_if_cond_pcie(struct mmc_host *host, u32 ocr);
-> >  int mmc_send_relative_addr(struct mmc_host *host, unsigned int *rca);
-> >  int mmc_app_send_scr(struct mmc_card *card);
-> > +int mmc_decode_scr(struct mmc_card *card);
-> >  int mmc_sd_switch(struct mmc_card *card, int mode, int group,
-> >       u8 value, u8 *resp);
-> >  int mmc_app_sd_status(struct mmc_card *card, void *ssr);
-> >  int mmc_app_cmd(struct mmc_host *host, struct mmc_card *card);
-> > +void mmc_uhs2_prepare_cmd(struct mmc_host *host, struct mmc_request *m=
-rq);
-> > +
-> > +static inline void mmc_uhs2_card_prepare_cmd(struct mmc_host *host, st=
-ruct mmc_request *mrq,
-> > +                                          struct uhs2_command uhs2_cmd=
-, __be32 payload[4])
-> > +{
-> > +     if (host->flags & MMC_UHS2_SD_TRAN) {
-> > +             uhs2_cmd.payload =3D payload;
-> > +             mrq->cmd->uhs2_cmd =3D &uhs2_cmd;
-> > +             mmc_uhs2_prepare_cmd(host, mrq);
-> > +     }
-> > +}
-> > +
-> > +static inline int mmc_sd_can_poweroff_notify(struct mmc_card *card)
-> > +{
-> > +     return card->ext_power.feature_support & SD_EXT_POWER_OFF_NOTIFY;
-> > +}
-> >
-> >  #endif
-> >
-> > diff --git a/drivers/mmc/core/sd_uhs2.c b/drivers/mmc/core/sd_uhs2.c
-> > index 06b2aab52b93..9afbcfda6c0a 100644
-> > --- a/drivers/mmc/core/sd_uhs2.c
-> > +++ b/drivers/mmc/core/sd_uhs2.c
-> > @@ -1,23 +1,51 @@
-> >  // SPDX-License-Identifier: GPL-2.0-only
-> >  /*
-> >   * Copyright (C) 2021 Linaro Ltd
-> > - *
-> >   * Author: Ulf Hansson <ulf.hansson@linaro.org>
-> >   *
-> > + * Copyright (C) 2014 Intel Corp, All Rights Reserved.
-> > + * Author: Yi Sun <yi.y.sun@intel.com>
-> > + *
-> > + * Copyright (C) 2020 Genesys Logic, Inc.
-> > + * Authors: Ben Chuang <ben.chuang@genesyslogic.com.tw>
-> > + *
-> > + * Copyright (C) 2020 Linaro Limited
-> > + * Author: AKASHI Takahiro <takahiro.akashi@linaro.org>
-> > + *
-> > + * Copyright (C) 2022 Genesys Logic, Inc.
-> > + * Authors: Jason Lai <jason.lai@genesyslogic.com.tw>
-> > + *
-> > + * Copyright (C) 2023 Genesys Logic, Inc.
-> > + * Authors: Victor Shih <victor.shih@genesyslogic.com.tw>
-> > + *
-> >   * Support for SD UHS-II cards
-> >   */
-> >  #include <linux/err.h>
-> > +#include <linux/pm_runtime.h>
-> >
-> >  #include <linux/mmc/host.h>
-> >  #include <linux/mmc/card.h>
-> > +#include <linux/mmc/mmc.h>
-> > +#include <linux/mmc/sd.h>
-> > +#include <linux/mmc/sd_uhs2.h>
-> >
-> > +#include "card.h"
-> >  #include "core.h"
-> >  #include "bus.h"
-> >  #include "sd.h"
-> > +#include "sd_ops.h"
-> >  #include "mmc_ops.h"
-> >
-> > +#define UHS2_WAIT_CFG_COMPLETE_PERIOD_US  (1 * 1000) /* 1ms */
-> > +#define UHS2_WAIT_CFG_COMPLETE_TIMEOUT_MS 100        /* 100ms */
-> > +
-> >  static const unsigned int sd_uhs2_freqs[] =3D { 52000000, 26000000 };
-> >
-> > +struct sd_uhs2_wait_active_state_data {
-> > +     struct mmc_host *host;
-> > +     struct mmc_command *cmd;
-> > +};
-> > +
-> >  static int sd_uhs2_power_up(struct mmc_host *host)
-> >  {
-> >       int err;
-> > @@ -50,6 +78,43 @@ static int sd_uhs2_power_off(struct mmc_host *host)
-> >       return host->ops->uhs2_control(host, UHS2_SET_IOS);
-> >  }
-> >
-> > +/**
-> > ++ * sd_uhs2_cmd_assemble() - build up UHS-II command packet which is e=
-mbedded in
-> > ++ *                          mmc_command structure
-> > ++ * @cmd:    MMC command to executed
-> > ++ * @uhs2_cmd:       UHS2 command corresponded to MMC command
-> > ++ * @header: Header field of UHS-II command cxpacket
-> > ++ * @arg:    Argument field of UHS-II command packet
-> > ++ * @payload:        Payload field of UHS-II command packet
-> > ++ * @plen:   Payload length
-> > ++ * @resp:   Response buffer is allocated by caller and it is used to =
-keep
-> > ++ *              the response of CM-TRAN command. For SD-TRAN command,=
- uhs2_resp
-> > ++ *              should be null and SD-TRAN command response should be=
- stored in
-> > ++ *              resp of mmc_command.
-> > ++ * @resp_len:       Response buffer length
-> > ++ *
-> > ++ * The uhs2_command structure contains message packets which are tran=
-smited/
-> > ++ * received on UHS-II bus. This function fills in the contents of uhs=
-2_command
-> > ++ * structure and embededs UHS2 command into mmc_command structure, wh=
-ich is used
-> > ++ * in legacy SD operation functions.
-> > ++ *
-> > ++ */
-> > +static void sd_uhs2_cmd_assemble(struct mmc_command *cmd,
-> > +                              struct uhs2_command *uhs2_cmd,
-> > +                              u16 header, u16 arg, __be32 *payload,
-> > +                              u8 plen, u8 *resp, u8 resp_len)
-> > +{
-> > +     uhs2_cmd->header =3D header;
-> > +     uhs2_cmd->arg =3D arg;
-> > +     uhs2_cmd->payload =3D payload;
-> > +     uhs2_cmd->payload_len =3D plen * sizeof(u32);
-> > +     uhs2_cmd->packet_len =3D uhs2_cmd->payload_len + 4;
-> > +
-> > +     cmd->uhs2_cmd =3D uhs2_cmd;
-> > +     cmd->uhs2_resp =3D resp;
-> > +     cmd->uhs2_resp_len =3D resp_len;
-> > +}
-> > +
-> >  /*
-> >   * Run the phy initialization sequence, which mainly relies on the UHS=
--II host
-> >   * to check that we reach the expected electrical state, between the h=
-ost and
-> > @@ -57,7 +122,15 @@ static int sd_uhs2_power_off(struct mmc_host *host)
-> >   */
-> >  static int sd_uhs2_phy_init(struct mmc_host *host)
-> >  {
-> > -     return 0;
-> > +     int err =3D 0;
-> > +
-> > +     err =3D host->ops->uhs2_control(host, UHS2_PHY_INIT);
-> > +     if (err) {
-> > +             pr_err("%s: failed to initial phy for UHS-II!\n",
-> > +                    mmc_hostname(host));
-> > +     }
-> > +
-> > +     return err;
-> >  }
-> >
-> >  /*
-> > @@ -66,6 +139,82 @@ static int sd_uhs2_phy_init(struct mmc_host *host)
-> >   */
-> >  static int sd_uhs2_dev_init(struct mmc_host *host)
-> >  {
-> > +     struct mmc_command cmd =3D {0};
-> > +     struct uhs2_command uhs2_cmd =3D {};
-> > +     u32 cnt;
-> > +     u32 dap, gap, resp_gap;
-> > +     u16 header, arg;
-> > +     __be32 payload[UHS2_DEV_INIT_PAYLOAD_LEN];
-> > +     u8 gd =3D 0;
-> > +     u8 resp[UHS2_DEV_ENUM_RESP_LEN] =3D {0};
-> > +     int err;
-> > +
-> > +     dap =3D host->uhs2_caps.dap;
-> > +     gap =3D host->uhs2_caps.gap;
-> > +
-> > +     /*
-> > +      * Refer to UHS-II Addendum Version 1.02 Figure 6-21 to see DEVIC=
-E_INIT CCMD format.
-> > +      * Head:
-> > +      *      - Control Write(R/W=3D1) with 4-Byte payload(PLEN=3D01b).
-> > +      *      - IOADR =3D CMD_BASE + 002h
-> > +      * Payload:
-> > +      *      - bit [3:0]  : GAP(Group Allocated Power)
-> > +      *      - bit [7:4]  : GD(Group Descriptor)
-> > +      *      - bit [11]   : Complete Flag
-> > +      *      - bit [15:12]: DAP(Device Allocated Power)
-> > +      */
-> > +     header =3D UHS2_NATIVE_PACKET | UHS2_PACKET_TYPE_CCMD;
-> > +     arg =3D ((UHS2_DEV_CMD_DEVICE_INIT & 0xFF) << 8) |
-> > +            UHS2_NATIVE_CMD_WRITE |
-> > +            UHS2_NATIVE_CMD_PLEN_4B |
-> > +            (UHS2_DEV_CMD_DEVICE_INIT >> 8);
-> > +
-> > +     /*
-> > +      * Refer to UHS-II Addendum Version 1.02 section 6.3.1.
-> > +      * Max. time from DEVICE_INIT CCMD EOP reception on Device
-> > +      * Rx to its SOP transmission on Device Tx(Tfwd_init_cmd) is
-> > +      * 1 second.
-> > +      */
-> > +     cmd.busy_timeout =3D 1000;
-> > +
-> > +     /*
-> > +      * Refer to UHS-II Addendum Version 1.02 section 6.2.6.3.
-> > +      * When the number of the DEVICE_INIT commands is reach to
-> > +      * 30 tiems, Host shall stop issuing DEVICE_INIT command
-> > +      * and regard it as an error.
-> > +      */
-> > +     for (cnt =3D 0; cnt < 30; cnt++) {
-> > +             payload[0] =3D ((dap & 0xF) << 12) |
-> > +                           UHS2_DEV_INIT_COMPLETE_FLAG |
-> > +                           ((gd & 0xF) << 4) |
-> > +                           (gap & 0xF);
-> > +
-> > +             sd_uhs2_cmd_assemble(&cmd, &uhs2_cmd, header, arg,
-> > +                                  payload, UHS2_DEV_INIT_PAYLOAD_LEN,
-> > +                                  resp, UHS2_DEV_INIT_RESP_LEN);
-> > +
-> > +             err =3D mmc_wait_for_cmd(host, &cmd, 0);
-> > +             if (err) {
-> > +                     pr_err("%s: %s: UHS2 CMD send fail, err=3D 0x%x!\=
-n",
-> > +                            mmc_hostname(host), __func__, err);
-> > +                     return err;
-> > +             }
-> > +
-> > +             if (resp[3] !=3D (UHS2_DEV_CMD_DEVICE_INIT & 0xFF)) {
-> > +                     pr_err("%s: DEVICE_INIT response is wrong!\n",
-> > +                            mmc_hostname(host));
-> > +                     return -EIO;
-> > +             }
-> > +
-> > +             if (resp[5] & 0x8) {
-> > +                     host->uhs2_caps.group_desc =3D gd;
-> > +                     return 0;
-> > +             }
-> > +             resp_gap =3D resp[4] & 0x0F;
-> > +             if (gap =3D=3D resp_gap)
-> > +                     gd++;
-> > +     }
-> > +
-> >       return 0;
-> >  }
-> >
-> > @@ -76,6 +225,52 @@ static int sd_uhs2_dev_init(struct mmc_host *host)
-> >   */
-> >  static int sd_uhs2_enum(struct mmc_host *host, u32 *node_id)
-> >  {
-> > +     struct mmc_command cmd =3D {0};
-> > +     struct uhs2_command uhs2_cmd =3D {};
-> > +     u16 header, arg;
-> > +     __be32 payload[UHS2_DEV_ENUM_PAYLOAD_LEN];
-> > +     u8 id_f =3D 0xF, id_l =3D 0x0;
-> > +     u8 resp[UHS2_DEV_ENUM_RESP_LEN] =3D {0};
-> > +     int err;
-> > +
-> > +     /*
-> > +      * Refer to UHS-II Addendum Version 1.02 Figure 6-28 to see ENUME=
-RATE CCMD format.
-> > +      * Header:
-> > +      *      - Control Write(R/W=3D1) with 4-Byte payload(PLEN=3D01b).
-> > +      *      - IOADR =3D CMD_BASE + 003h
-> > +      * Payload:
-> > +      *      - bit [3:0]: ID_L(Last Node ID)
-> > +      *      - bit [7:4]: ID_F(First Node ID)
-> > +      */
-> > +     header =3D UHS2_NATIVE_PACKET | UHS2_PACKET_TYPE_CCMD;
-> > +     arg =3D ((UHS2_DEV_CMD_ENUMERATE & 0xFF) << 8) |
-> > +            UHS2_NATIVE_CMD_WRITE |
-> > +            UHS2_NATIVE_CMD_PLEN_4B |
-> > +            (UHS2_DEV_CMD_ENUMERATE >> 8);
-> > +
-> > +     payload[0] =3D (id_f << 4) | id_l;
-> > +     payload[0] =3D cpu_to_be32(payload[0]);
-> > +
-> > +     sd_uhs2_cmd_assemble(&cmd, &uhs2_cmd, header, arg, payload, UHS2_=
-DEV_ENUM_PAYLOAD_LEN,
-> > +                          resp, UHS2_DEV_ENUM_RESP_LEN);
-> > +
-> > +     err =3D mmc_wait_for_cmd(host, &cmd, 0);
-> > +     if (err) {
-> > +             pr_err("%s: %s: UHS2 CMD send fail, err=3D 0x%x!\n",
-> > +                    mmc_hostname(host), __func__, err);
-> > +             return err;
-> > +     }
-> > +
-> > +     if (resp[3] !=3D (UHS2_DEV_CMD_ENUMERATE & 0xFF)) {
-> > +             pr_err("%s: ENUMERATE response is wrong!\n",
-> > +                    mmc_hostname(host));
-> > +             return -EIO;
-> > +     }
-> > +
-> > +     id_f =3D (resp[4] >> 4) & 0xF;
-> > +     id_l =3D resp[4] & 0xF;
-> > +     *node_id =3D id_f;
-> > +
-> >       return 0;
-> >  }
-> >
-> > @@ -86,6 +281,181 @@ static int sd_uhs2_enum(struct mmc_host *host, u32=
- *node_id)
-> >   */
-> >  static int sd_uhs2_config_read(struct mmc_host *host, struct mmc_card =
-*card)
-> >  {
-> > +     struct mmc_command cmd =3D {0};
-> > +     struct uhs2_command uhs2_cmd =3D {};
-> > +     u16 header, arg;
-> > +     u32 cap;
-> > +     int err;
-> > +
-> > +     /*
-> > +      * Use Control Read CCMD to read Generic Capability from Configur=
-ation Register.
-> > +      * - Control Write(R/W=3D1) with 4-Byte payload(PLEN=3D01b).
-> > +      * - IOADR =3D Generic Capability Register(CFG_BASE + 000h)
-> > +      */
-> > +     header =3D UHS2_NATIVE_PACKET | UHS2_PACKET_TYPE_CCMD | card->uhs=
-2_config.node_id;
-> > +     arg =3D ((UHS2_DEV_CONFIG_GEN_CAPS & 0xFF) << 8) |
-> > +            UHS2_NATIVE_CMD_READ |
-> > +            UHS2_NATIVE_CMD_PLEN_4B |
-> > +            (UHS2_DEV_CONFIG_GEN_CAPS >> 8);
-> > +
-> > +     /*
-> > +      * There is no payload because per spec, there should be
-> > +      * no payload field for read CCMD.
-> > +      * Plen is set in arg. Per spec, plen for read CCMD
-> > +      * represents the len of read data which is assigned in payload
-> > +      * of following RES (p136).
-> > +      */
-> > +     sd_uhs2_cmd_assemble(&cmd, &uhs2_cmd, header, arg, NULL, 0, NULL,=
- 0);
-> > +
-> > +     err =3D mmc_wait_for_cmd(host, &cmd, 0);
-> > +     if (err) {
-> > +             pr_err("%s: %s: UHS2 CMD send fail, err=3D 0x%x!\n",
-> > +                    mmc_hostname(host), __func__, err);
-> > +             return err;
-> > +     }
-> > +
-> > +     /*
-> > +      * Generic Capability Register:
-> > +      * bit [7:0]  : Reserved
-> > +      * bit [13:8] : Device-Specific Number of Lanes and Functionality
-> > +      *              bit 8: 2L-HD
-> > +      *              bit 9: 2D-1U FD
-> > +      *              bit 10: 1D-2U FD
-> > +      *              bit 11: 2D-2U FD
-> > +      *              Others: Reserved
-> > +      * bit [14]   : DADR Length
-> > +      *              0: 4 bytes
-> > +      *              1: Reserved
-> > +      * bit [23:16]: Application Type
-> > +      *              bit 16: 0=3DNon-SD memory, 1=3DSD memory
-> > +      *              bit 17: 0=3DNon-SDIO, 1=3DSDIO
-> > +      *              bit 18: 0=3DCard, 1=3DEmbedded
-> > +      * bit [63:24]: Reserved
-> > +      */
-> > +     cap =3D cmd.resp[0];
-> > +     card->uhs2_config.n_lanes =3D
-> > +                             (cap >> UHS2_DEV_CONFIG_N_LANES_POS) &
-> > +                             UHS2_DEV_CONFIG_N_LANES_MASK;
-> > +     card->uhs2_config.dadr_len =3D
-> > +                             (cap >> UHS2_DEV_CONFIG_DADR_POS) &
-> > +                             UHS2_DEV_CONFIG_DADR_MASK;
-> > +     card->uhs2_config.app_type =3D
-> > +                             (cap >> UHS2_DEV_CONFIG_APP_POS) &
-> > +                             UHS2_DEV_CONFIG_APP_MASK;
-> > +
-> > +     /*
-> > +      * Use Control Read CCMD to read PHY Capability from Configuratio=
-n Register.
-> > +      * - Control Write(R/W=3D1) with 8-Byte payload(PLEN=3D10b).
-> > +      * - IOADR =3D PHY Capability Register(CFG_BASE + 002h)
-> > +      */
-> > +     arg =3D ((UHS2_DEV_CONFIG_PHY_CAPS & 0xFF) << 8) |
-> > +            UHS2_NATIVE_CMD_READ |
-> > +            UHS2_NATIVE_CMD_PLEN_8B |
-> > +           (UHS2_DEV_CONFIG_PHY_CAPS >> 8);
-> > +
-> > +     sd_uhs2_cmd_assemble(&cmd, &uhs2_cmd, header, arg, NULL, 0, NULL,=
- 0);
-> > +
-> > +     err =3D mmc_wait_for_cmd(host, &cmd, 0);
-> > +     if (err) {
-> > +             pr_err("%s: %s: UHS2 CMD send fail, err=3D 0x%x!\n",
-> > +                    mmc_hostname(host), __func__, err);
-> > +             return err;
-> > +     }
-> > +
-> > +     /*
-> > +      * PHY Capability Register:
-> > +      * bit [3:0]  : PHY Minor Revision
-> > +      * bit [5:4]  : PHY Major Revision
-> > +      * bit [15]   : Support Hibernate Mode
-> > +      *              0: Not support Hibernate Mode
-> > +      *              1: Support Hibernate Mode
-> > +      * bit [31:16]: Reserved
-> > +      * bit [35:32]: Device-Specific N_LSS_SYN
-> > +      * bit [39:36]: Device-Specific N_LSS_DIR
-> > +      * bit [63:40]: Reserved
-> > +      */
-> > +     cap =3D cmd.resp[0];
-> > +     card->uhs2_config.phy_minor_rev =3D
-> > +                             cap & UHS2_DEV_CONFIG_PHY_MINOR_MASK;
-> > +     card->uhs2_config.phy_major_rev =3D
-> > +                             (cap >> UHS2_DEV_CONFIG_PHY_MAJOR_POS) &
-> > +                              UHS2_DEV_CONFIG_PHY_MAJOR_MASK;
-> > +     card->uhs2_config.can_hibernate =3D
-> > +                             (cap >> UHS2_DEV_CONFIG_CAN_HIBER_POS) &
-> > +                              UHS2_DEV_CONFIG_CAN_HIBER_MASK;
-> > +
-> > +     cap =3D cmd.resp[1];
-> > +     card->uhs2_config.n_lss_sync =3D
-> > +                             cap & UHS2_DEV_CONFIG_N_LSS_SYN_MASK;
-> > +     card->uhs2_config.n_lss_dir =3D
-> > +                             (cap >> UHS2_DEV_CONFIG_N_LSS_DIR_POS) &
-> > +                             UHS2_DEV_CONFIG_N_LSS_DIR_MASK;
-> > +     if (card->uhs2_config.n_lss_sync =3D=3D 0)
-> > +             card->uhs2_config.n_lss_sync =3D 16 << 2;
-> > +     else
-> > +             card->uhs2_config.n_lss_sync <<=3D 2;
-> > +
-> > +     if (card->uhs2_config.n_lss_dir =3D=3D 0)
-> > +             card->uhs2_config.n_lss_dir =3D 16 << 3;
-> > +     else
-> > +             card->uhs2_config.n_lss_dir <<=3D 3;
-> > +
-> > +     /*
-> > +      * Use Control Read CCMD to read LINK/TRAN Capability from Config=
-uration Register.
-> > +      * - Control Write(R/W=3D1) with 8-Byte payload(PLEN=3D10b).
-> > +      * - IOADR =3D LINK/TRAN Capability Register(CFG_BASE + 004h)
-> > +      */
-> > +     arg =3D ((UHS2_DEV_CONFIG_LINK_TRAN_CAPS & 0xFF) << 8) |
-> > +             UHS2_NATIVE_CMD_READ |
-> > +             UHS2_NATIVE_CMD_PLEN_8B |
-> > +             (UHS2_DEV_CONFIG_LINK_TRAN_CAPS >> 8);
-> > +
-> > +     sd_uhs2_cmd_assemble(&cmd, &uhs2_cmd, header, arg, NULL, 0, NULL,=
- 0);
-> > +
-> > +     err =3D mmc_wait_for_cmd(host, &cmd, 0);
-> > +     if (err) {
-> > +             pr_err("%s: %s: UHS2 CMD send fail, err=3D 0x%x!\n",
-> > +                    mmc_hostname(host), __func__, err);
-> > +             return err;
-> > +     }
-> > +
-> > +     /*
-> > +      * LINK/TRAN Capability Register:
-> > +      * bit [3:0]  : LINK_TRAN Minor Revision
-> > +      * bit [5:4]  : LINK/TRAN Major Revision
-> > +      * bit [7:6]  : Reserved
-> > +      * bit [15:8] : Device-Specific N_FCU
-> > +      * bit [18:16]: Device Type
-> > +      *              001b=3DHost
-> > +      *              010b=3DDevice
-> > +      *              011b=3DReserved for CMD issuable Device
-> > +      * bit [19]   : Reserved
-> > +      * bit [31:20]: Device-Specific MAX_BLKLEN
-> > +      * bit [39:32]: Device-Specific N_DATA_GAP
-> > +      * bit [63:40]: Reserved
-> > +      */
-> > +     cap =3D cmd.resp[0];
-> > +     card->uhs2_config.link_minor_rev =3D
-> > +                             cap & UHS2_DEV_CONFIG_LT_MINOR_MASK;
-> > +     card->uhs2_config.link_major_rev =3D
-> > +                             (cap >> UHS2_DEV_CONFIG_LT_MAJOR_POS) &
-> > +                             UHS2_DEV_CONFIG_LT_MAJOR_MASK;
-> > +     card->uhs2_config.n_fcu =3D
-> > +                             (cap >> UHS2_DEV_CONFIG_N_FCU_POS) &
-> > +                             UHS2_DEV_CONFIG_N_FCU_MASK;
-> > +     card->uhs2_config.dev_type =3D
-> > +                             (cap >> UHS2_DEV_CONFIG_DEV_TYPE_POS) &
-> > +                             UHS2_DEV_CONFIG_DEV_TYPE_MASK;
-> > +     card->uhs2_config.maxblk_len =3D
-> > +                             (cap >> UHS2_DEV_CONFIG_MAX_BLK_LEN_POS) =
-&
-> > +                             UHS2_DEV_CONFIG_MAX_BLK_LEN_MASK;
-> > +
-> > +     cap =3D cmd.resp[1];
-> > +     card->uhs2_config.n_data_gap =3D
-> > +                             cap & UHS2_DEV_CONFIG_N_DATA_GAP_MASK;
-> > +     if (card->uhs2_config.n_fcu =3D=3D 0)
-> > +             card->uhs2_config.n_fcu =3D 256;
-> > +
-> >       return 0;
-> >  }
-> >
-> > @@ -100,26 +470,357 @@ static int sd_uhs2_config_read(struct mmc_host *=
-host, struct mmc_card *card)
-> >   */
-> >  static int sd_uhs2_config_write(struct mmc_host *host, struct mmc_card=
- *card)
-> >  {
-> > +     struct mmc_command cmd =3D {0};
-> > +     struct uhs2_command uhs2_cmd =3D {};
-> > +     u16 header, arg;
-> > +     __be32 payload[UHS2_CFG_WRITE_PAYLOAD_LEN];
-> > +     u8 nMinDataGap;
-> > +     int err;
-> > +     u8 resp[5] =3D {0};
-> > +
-> > +     /*
-> > +      * Use Control Write CCMD to set Generic Setting in Configuration=
- Register.
-> > +      * - Control Write(R/W=3D1) with 8-Byte payload(PLEN=3D10b).
-> > +      * - IOADR =3D Generic Setting Register(CFG_BASE + 008h)
-> > +      * - Payload =3D New contents to be written to Generic Setting Re=
-gister
-> > +      */
-> > +     header =3D UHS2_NATIVE_PACKET | UHS2_PACKET_TYPE_CCMD | card->uhs=
-2_config.node_id;
-> > +     arg =3D ((UHS2_DEV_CONFIG_GEN_SET & 0xFF) << 8) |
-> > +            UHS2_NATIVE_CMD_WRITE |
-> > +            UHS2_NATIVE_CMD_PLEN_8B |
-> > +            (UHS2_DEV_CONFIG_GEN_SET >> 8);
-> > +
-> > +     /*
-> > +      * Most UHS-II cards only support FD and 2L-HD mode. Other lane n=
-umbers
-> > +      * defined in UHS-II addendem Ver1.01 are optional.
-> > +      */
-> > +     host->uhs2_caps.n_lanes_set =3D UHS2_DEV_CONFIG_GEN_SET_2L_FD_HD;
-> > +     card->uhs2_config.n_lanes_set =3D UHS2_DEV_CONFIG_GEN_SET_2L_FD_H=
-D;
-> > +
-> > +     payload[0] =3D card->uhs2_config.n_lanes_set << UHS2_DEV_CONFIG_N=
-_LANES_POS;
-> > +     payload[1] =3D 0;
-> > +     payload[0] =3D cpu_to_be32(payload[0]);
-> > +     payload[1] =3D cpu_to_be32(payload[1]);
-> > +
-> > +     /*
-> > +      * There is no payload because per spec, there should be
-> > +      * no payload field for read CCMD.
-> > +      * Plen is set in arg. Per spec, plen for read CCMD
-> > +      * represents the len of read data which is assigned in payload
-> > +      * of following RES (p136).
-> > +      */
-> > +     sd_uhs2_cmd_assemble(&cmd, &uhs2_cmd, header, arg, payload, UHS2_=
-CFG_WRITE_PAYLOAD_LEN,
-> > +                          NULL, 0);
-> > +
-> > +     err =3D mmc_wait_for_cmd(host, &cmd, 0);
-> > +     if (err) {
-> > +             pr_err("%s: %s: UHS2 CMD send fail, err=3D 0x%x!\n",
-> > +                    mmc_hostname(host), __func__, err);
-> > +             return err;
-> > +     }
-> > +
-> > +     /*
-> > +      * Use Control Write CCMD to set PHY Setting in Configuration Reg=
-ister.
-> > +      * - Control Write(R/W=3D1) with 8-Byte payload(PLEN=3D10b).
-> > +      * - IOADR =3D PHY Setting Register(CFG_BASE + 00Ah)
-> > +      * - Payload =3D New contents to be written to PHY Setting Regist=
+> > diff --git a/drivers/mmc/host/sdhci-uhs2.h b/drivers/mmc/host/sdhci-uhs=
+2.h
+>
+> It is nice and neat which is great, but tabs would have been
+> better than spaces.
+>
+> > new file mode 100644
+> > index 000000000000..c47debb7497e
+> > --- /dev/null
+> > +++ b/drivers/mmc/host/sdhci-uhs2.h
+> > @@ -0,0 +1,178 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> > +/*
+> > + *  linux/drivers/mmc/host/sdhci-uhs2.h - Secure Digital Host Controll=
 er
-> > +      */
-> > +     arg =3D ((UHS2_DEV_CONFIG_PHY_SET & 0xFF) << 8) |
-> > +            UHS2_NATIVE_CMD_WRITE |
-> > +            UHS2_NATIVE_CMD_PLEN_8B |
-> > +            (UHS2_DEV_CONFIG_PHY_SET >> 8);
-> > +
-> > +     if (host->uhs2_caps.speed_range =3D=3D UHS2_DEV_CONFIG_PHY_SET_SP=
-EED_B) {
-> > +             if (card->uhs2_config.n_lanes =3D=3D UHS2_DEV_CONFIG_2L_H=
-D_FD &&
-> > +                 host->uhs2_caps.n_lanes =3D=3D UHS2_DEV_CONFIG_2L_HD_=
-FD) {
-> > +                     /* Support HD */
-> > +                     host->ios.timing =3D MMC_TIMING_UHS2_SPEED_B_HD;
-> > +                     nMinDataGap =3D 1;
-> > +             } else {
-> > +                     /* Only support 2L-FD so far */
-> > +                     host->ios.timing =3D MMC_TIMING_UHS2_SPEED_B;
-> > +                     nMinDataGap =3D 3;
-> > +             }
-> > +             card->uhs2_config.speed_range_set =3D UHS2_DEV_CONFIG_PHY=
-_SET_SPEED_B;
-> > +     } else {
-> > +             if (card->uhs2_config.n_lanes =3D=3D UHS2_DEV_CONFIG_2L_H=
-D_FD &&
-> > +                 host->uhs2_caps.n_lanes =3D=3D UHS2_DEV_CONFIG_2L_HD_=
-FD) {
-> > +                     /* Support HD */
-> > +                     host->ios.timing =3D MMC_TIMING_UHS2_SPEED_A_HD;
-> > +                     nMinDataGap =3D 1;
-> > +             } else {
-> > +                     /* Only support 2L-FD so far */
-> > +                     host->ios.timing =3D MMC_TIMING_UHS2_SPEED_A;
-> > +                     nMinDataGap =3D 3;
-> > +             }
-> > +             card->uhs2_config.speed_range_set =3D UHS2_DEV_CONFIG_PHY=
-_SET_SPEED_A;
-> > +     }
-> > +
-> > +     payload[0] =3D card->uhs2_config.speed_range_set << UHS2_DEV_CONF=
-IG_PHY_SET_SPEED_POS;
-> > +
-> > +     card->uhs2_config.n_lss_sync_set =3D (max(card->uhs2_config.n_lss=
-_sync,
-> > +                                             host->uhs2_caps.n_lss_syn=
-c) >> 2) &
-> > +                                        UHS2_DEV_CONFIG_N_LSS_SYN_MASK=
-;
-> > +     host->uhs2_caps.n_lss_sync_set =3D card->uhs2_config.n_lss_sync_s=
-et;
-> > +
-> > +     card->uhs2_config.n_lss_dir_set =3D (max(card->uhs2_config.n_lss_=
-dir,
-> > +                                            host->uhs2_caps.n_lss_dir)=
- >> 3) &
-> > +                                       UHS2_DEV_CONFIG_N_LSS_DIR_MASK;
-> > +     host->uhs2_caps.n_lss_dir_set =3D card->uhs2_config.n_lss_dir_set=
-;
-> > +
-> > +     payload[1] =3D (card->uhs2_config.n_lss_dir_set << UHS2_DEV_CONFI=
-G_N_LSS_DIR_POS) |
-> > +                  card->uhs2_config.n_lss_sync_set;
-> > +     payload[0] =3D cpu_to_be32(payload[0]);
-> > +     payload[1] =3D cpu_to_be32(payload[1]);
-> > +
-> > +     memset(resp, 0, sizeof(resp));
-> > +
-> > +     sd_uhs2_cmd_assemble(&cmd, &uhs2_cmd, header, arg, payload, UHS2_=
-CFG_WRITE_PAYLOAD_LEN,
-> > +                          resp, UHS2_CFG_WRITE_PHY_SET_RESP_LEN);
-> > +
-> > +     err =3D mmc_wait_for_cmd(host, &cmd, 0);
-> > +     if (err) {
-> > +             pr_err("%s: %s: UHS2 CMD send fail, err=3D 0x%x!\n",
-> > +                    mmc_hostname(host), __func__, err);
-> > +             return err;
-> > +     }
-> > +
-> > +     if ((resp[2] & 0x80)) {
-> > +             pr_err("%s: %s: UHS2 CMD not accepted, resp=3D 0x%x!\n",
-> > +                    mmc_hostname(host), __func__, resp[2]);
-> > +             return -EIO;
-> > +     }
-> > +
-> > +     /*
-> > +      * Use Control Write CCMD to set LINK/TRAN Setting in Configurati=
-on Register.
-> > +      * - Control Write(R/W=3D1) with 8-Byte payload(PLEN=3D10b).
-> > +      * - IOADR =3D LINK/TRAN Setting Register(CFG_BASE + 00Ch)
-> > +      * - Payload =3D New contents to be written to LINK/TRAN Setting =
-Register
-> > +      */
-> > +     arg =3D ((UHS2_DEV_CONFIG_LINK_TRAN_SET & 0xFF) << 8) |
-> > +             UHS2_NATIVE_CMD_WRITE |
-> > +             UHS2_NATIVE_CMD_PLEN_8B |
-> > +             (UHS2_DEV_CONFIG_LINK_TRAN_SET >> 8);
-> > +
-> > +     if (card->uhs2_config.app_type =3D=3D UHS2_DEV_CONFIG_APP_SD_MEM)
-> > +             card->uhs2_config.maxblk_len_set =3D UHS2_DEV_CONFIG_LT_S=
-ET_MAX_BLK_LEN;
-> > +     else
-> > +             card->uhs2_config.maxblk_len_set =3D min(card->uhs2_confi=
-g.maxblk_len,
-> > +                                                    host->uhs2_caps.ma=
-xblk_len);
-> > +     host->uhs2_caps.maxblk_len_set =3D card->uhs2_config.maxblk_len_s=
-et;
-> > +
-> > +     card->uhs2_config.n_fcu_set =3D min(card->uhs2_config.n_fcu, host=
-->uhs2_caps.n_fcu);
-> > +     host->uhs2_caps.n_fcu_set =3D card->uhs2_config.n_fcu_set;
-> > +
-> > +     card->uhs2_config.n_data_gap_set =3D max(nMinDataGap, card->uhs2_=
-config.n_data_gap);
-> > +     host->uhs2_caps.n_data_gap_set =3D card->uhs2_config.n_data_gap_s=
-et;
-> > +
-> > +     host->uhs2_caps.max_retry_set =3D 3;
-> > +     card->uhs2_config.max_retry_set =3D host->uhs2_caps.max_retry_set=
-;
-> > +
-> > +     payload[0] =3D (card->uhs2_config.maxblk_len_set << UHS2_DEV_CONF=
-IG_MAX_BLK_LEN_POS) |
-> > +                  (card->uhs2_config.max_retry_set << UHS2_DEV_CONFIG_=
-LT_SET_MAX_RETRY_POS) |
-> > +                  (card->uhs2_config.n_fcu_set << UHS2_DEV_CONFIG_N_FC=
-U_POS);
-> > +     payload[1] =3D card->uhs2_config.n_data_gap_set;
-> > +     payload[0] =3D cpu_to_be32(payload[0]);
-> > +     payload[1] =3D cpu_to_be32(payload[1]);
-> > +
-> > +     sd_uhs2_cmd_assemble(&cmd, &uhs2_cmd, header, arg, payload, UHS2_=
-CFG_WRITE_PAYLOAD_LEN,
-> > +                          NULL, 0);
-> > +
-> > +     err =3D mmc_wait_for_cmd(host, &cmd, 0);
-> > +     if (err) {
-> > +             pr_err("%s: %s: UHS2 CMD send fail, err=3D 0x%x!\n",
-> > +                    mmc_hostname(host), __func__, err);
-> > +             return err;
-> > +     }
-> > +
-> > +     /*
-> > +      * Use Control Write CCMD to set Config Completion(payload bit 63=
-) in Generic Setting
-> > +      * Register.
-> > +      * Header:
-> > +      *      - Control Write(R/W=3D1) with 8-Byte payload(PLEN=3D10b).
-> > +      *      - IOADR =3D PGeneric Setting Register(CFG_BASE + 008h)
-> > +      * Payload:
-> > +      *      - bit [63]: Config Completion
-> > +      *
-> > +      * DLSM transits to Active state immediately when Config Completi=
-on is set to 1.
-> > +      */
-> > +     arg =3D ((UHS2_DEV_CONFIG_GEN_SET & 0xFF) << 8) |
-> > +            UHS2_NATIVE_CMD_WRITE |
-> > +            UHS2_NATIVE_CMD_PLEN_8B |
-> > +            (UHS2_DEV_CONFIG_GEN_SET >> 8);
-> > +
-> > +     payload[0] =3D 0;
-> > +     payload[1] =3D UHS2_DEV_CONFIG_GEN_SET_CFG_COMPLETE;
-> > +     payload[0] =3D cpu_to_be32(payload[0]);
-> > +     payload[1] =3D cpu_to_be32(payload[1]);
-> > +
-> > +     memset(resp, 0, sizeof(resp));
-> > +     sd_uhs2_cmd_assemble(&cmd, &uhs2_cmd, header, arg, payload, UHS2_=
-CFG_WRITE_PAYLOAD_LEN,
-> > +                          resp, UHS2_CFG_WRITE_GENERIC_SET_RESP_LEN);
-> > +
-> > +     err =3D mmc_wait_for_cmd(host, &cmd, 0);
-> > +     if (err) {
-> > +             pr_err("%s: %s: UHS2 CMD send fail, err=3D 0x%x!\n",
-> > +                    mmc_hostname(host), __func__, err);
-> > +             return err;
-> > +     }
-> > +
-> > +     /* Set host Config Setting registers */
-> > +     err =3D host->ops->uhs2_control(host, UHS2_SET_CONFIG);
-> > +     if (err) {
-> > +             pr_err("%s: %s: UHS2 SET_CONFIG fail!\n", mmc_hostname(ho=
-st), __func__);
-> > +             return err;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int sd_uhs2_go_dormant(struct mmc_host *host, u32 node_id)
-> > +{
-> > +     struct mmc_command cmd =3D {0};
-> > +     struct uhs2_command uhs2_cmd =3D {};
-> > +     u16 header, arg;
-> > +     __be32 payload[1];
-> > +     int err;
-> > +
-> > +     /* Disable Normal INT */
-> > +     err =3D host->ops->uhs2_control(host, UHS2_DISABLE_INT);
-> > +     if (err) {
-> > +             pr_err("%s: %s: UHS2 DISABLE_INT fail!\n",
-> > +                    mmc_hostname(host), __func__);
-> > +             return err;
-> > +     }
-> > +
-> > +     /*
-> > +      * Refer to UHS-II Addendum Version 1.02 Figure 6-17 to see GO_DO=
-RMANT_STATE CCMD format.
-> > +      * Header:
-> > +      *      - Control Write(R/W=3D1) with 4-Byte payload(PLEN=3D01b).
-> > +      *      - IOADR =3D CMD_BASE + 001h
-> > +      * Payload:
-> > +      *      - bit [7]: HBR(Entry to Hibernate Mode)
-> > +      *                 1: Host intends to enter Hibernate mode during=
- Dormant state.
-> > +      *                 The default setting is 0 because hibernate is =
-currently not supported.
-> > +      */
-> > +     header =3D UHS2_NATIVE_PACKET | UHS2_PACKET_TYPE_CCMD | node_id;
-> > +     arg =3D ((UHS2_DEV_CMD_GO_DORMANT_STATE & 0xFF) << 8) |
-> > +             UHS2_NATIVE_CMD_WRITE |
-> > +             UHS2_NATIVE_CMD_PLEN_4B |
-> > +             (UHS2_DEV_CMD_GO_DORMANT_STATE >> 8);
-> > +
-> > +     sd_uhs2_cmd_assemble(&cmd, &uhs2_cmd, header, arg, payload, UHS2_=
-GO_DORMANT_PAYLOAD_LEN,
-> > +                          NULL, 0);
-> > +
-> > +     err =3D mmc_wait_for_cmd(host, &cmd, 0);
-> > +     if (err) {
-> > +             pr_err("%s: %s: UHS2 CMD send fail, err=3D 0x%x!\n",
-> > +                    mmc_hostname(host), __func__, err);
-> > +             return err;
-> > +     }
-> > +
-> > +     /* Check Dormant State in Present */
-> > +     err =3D host->ops->uhs2_control(host, UHS2_CHECK_DORMANT);
-> > +     if (err)
-> > +             return err;
-> > +
-> > +     /* Disable UHS2 card clock */
-> > +     err =3D host->ops->uhs2_control(host, UHS2_DISABLE_CLK);
-> > +     if (err)
-> > +             return err;
-> > +
-> > +     /* Restore sd clock */
-> > +     mmc_delay(5);
-> > +     err =3D host->ops->uhs2_control(host, UHS2_ENABLE_CLK);
-> > +     if (err)
-> > +             return err;
-> > +
-> > +     /* Enable Normal INT */
-> > +     err =3D host->ops->uhs2_control(host, UHS2_ENABLE_INT);
-> > +     if (err)
-> > +             return err;
-> > +
-> > +     /* Detect UHS2 */
-> > +     err =3D host->ops->uhs2_control(host, UHS2_PHY_INIT);
-> > +     if (err)
-> > +             return err;
-> > +
-> >       return 0;
-> >  }
-> >
-> > -/*
-> > - * Initialize the UHS-II card through the SD-TRAN transport layer. Thi=
-s enables
-> > - * commands/requests to be backwards compatible through the legacy SD =
-protocol.
-> > - * UHS-II cards has a specific power limit specified for VDD1/VDD2, th=
-at should
-> > - * be set through a legacy CMD6. Note that, the power limit that becom=
-es set,
-> > - * survives a soft reset through the GO_DORMANT_STATE command.
-> > - */
-> > -static int sd_uhs2_legacy_init(struct mmc_host *host, struct mmc_card =
-*card)
-> > +static int __sd_uhs2_wait_active_state_cb(void *cb_data, bool *busy)
-> > +{
-> > +     struct sd_uhs2_wait_active_state_data *data =3D cb_data;
-> > +     struct mmc_host *host =3D data->host;
-> > +     struct mmc_command *cmd =3D data->cmd;
-> > +     int err;
-> > +
-> > +     err =3D mmc_wait_for_cmd(host, cmd, 0);
-> > +     if (err)
-> > +             return err;
-> > +
-> > +     if (cmd->resp[1] & UHS2_DEV_CONFIG_GEN_SET_CFG_COMPLETE)
-> > +             *busy =3D false;
-> > +     else
-> > +             *busy =3D true;
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int sd_uhs2_go_dormant_state(struct mmc_host *host, u32 node_id=
-)
-> >  {
-> > +     struct mmc_command cmd =3D {0};
-> > +     struct uhs2_command uhs2_cmd =3D {};
-> > +     u16 header, arg;
-> > +     int err;
-> > +     struct sd_uhs2_wait_active_state_data cb_data =3D {
-> > +             .host =3D host,
-> > +             .cmd =3D &cmd
-> > +     };
-> > +
-> > +     err =3D sd_uhs2_go_dormant(host, node_id);
-> > +     if (err) {
-> > +             pr_err("%s: %s: UHS2 GO_DORMANT_STATE fail, err=3D 0x%x!\=
-n",
-> > +                    mmc_hostname(host), __func__, err);
-> > +             return err;
-> > +     }
-> > +
-> > +     /*
-> > +      * Use Control Read CCMD to check Config Completion(bit 63) in Ge=
-neric Setting Register.
-> > +      * - Control Read(R/W=3D0) with 8-Byte payload(PLEN=3D10b).
-> > +      * - IOADR =3D Generic Setting Register(CFG_BASE + 008h)
-> > +      *
-> > +      * When UHS-II card been switched to new speed mode, it will set =
-Config Completion to 1.
-> > +      */
-> > +     header =3D UHS2_NATIVE_PACKET | UHS2_PACKET_TYPE_CCMD | node_id;
-> > +     arg =3D ((UHS2_DEV_CONFIG_GEN_SET & 0xFF) << 8) |
-> > +             UHS2_NATIVE_CMD_READ |
-> > +             UHS2_NATIVE_CMD_PLEN_8B |
-> > +             (UHS2_DEV_CONFIG_GEN_SET >> 8);
-> > +
-> > +     sd_uhs2_cmd_assemble(&cmd, &uhs2_cmd, header, arg, NULL, 0, NULL,=
- 0);
-> > +     err =3D __mmc_poll_for_busy(host, UHS2_WAIT_CFG_COMPLETE_PERIOD_U=
-S,
-> > +                               UHS2_WAIT_CFG_COMPLETE_TIMEOUT_MS,
-> > +                               &__sd_uhs2_wait_active_state_cb, &cb_da=
-ta);
-> > +     if (err) {
-> > +             pr_err("%s: %s: Not switch to Active in 100 ms\n", mmc_ho=
-stname(host), __func__);
-> > +             return err;
-> > +     }
-> > +
-> >       return 0;
-> >  }
-> >
-> > +static void sd_uhs2_remove(struct mmc_host *host)
-> > +{
-> > +     mmc_remove_card(host->card);
-> > +     host->card =3D NULL;
-> > +}
-> > +
-> >  /*
-> >   * Allocate the data structure for the mmc_card and run the UHS-II spe=
-cific
-> >   * initialization sequence.
-> >   */
-> > -static int sd_uhs2_init_card(struct mmc_host *host)
-> > +static int sd_uhs2_init_card(struct mmc_host *host, struct mmc_card *o=
-ldcard)
-> >  {
-> >       struct mmc_card *card;
-> >       u32 node_id;
-> > @@ -133,9 +834,14 @@ static int sd_uhs2_init_card(struct mmc_host *host=
-)
-> >       if (err)
-> >               return err;
-> >
-> > -     card =3D mmc_alloc_card(host, &sd_type);
-> > -     if (IS_ERR(card))
-> > -             return PTR_ERR(card);
-> > +     if (oldcard) {
-> > +             card =3D oldcard;
-> > +     } else {
-> > +             card =3D mmc_alloc_card(host, &sd_type);
-> > +             if (IS_ERR(card))
-> > +                     return PTR_ERR(card);
-> > +     }
-> > +     host->card =3D card;
-> >
-> >       card->uhs2_config.node_id =3D node_id;
-> >       card->type =3D MMC_TYPE_SD;
-> > @@ -148,18 +854,226 @@ static int sd_uhs2_init_card(struct mmc_host *ho=
-st)
-> >       if (err)
-> >               goto err;
-> >
-> > -     host->card =3D card;
-> > +     /* If change speed to Range B, need to GO_DORMANT_STATE */
-> > +     if (host->ios.timing =3D=3D MMC_TIMING_UHS2_SPEED_B ||
-> > +         host->ios.timing =3D=3D MMC_TIMING_UHS2_SPEED_B_HD) {
-> > +             err =3D sd_uhs2_go_dormant_state(host, node_id);
-> > +             if (err)
-> > +                     return err;
-> > +     }
-> > +
-> > +     host->flags |=3D MMC_UHS2_SD_TRAN;
-> > +
-> >       return 0;
-> >
-> >  err:
-> > -     mmc_remove_card(card);
-> > +     sd_uhs2_remove(host);
-> >       return err;
-> >  }
-> >
-> > -static void sd_uhs2_remove(struct mmc_host *host)
-> > +int sd_uhs2_reinit(struct mmc_host *host)
-> >  {
-> > -     mmc_remove_card(host->card);
-> > -     host->card =3D NULL;
-> > +     struct mmc_card *card =3D host->card;
-> > +     int err;
-> > +
-> > +     sd_uhs2_power_up(host);
-> > +     err =3D sd_uhs2_phy_init(host);
-> > +     if (err)
-> > +             return err;
-> > +
-> > +     err =3D sd_uhs2_init_card(host, card);
-> > +     if (err)
-> > +             return err;
-> > +
-> > +     mmc_card_set_present(card);
-> > +     return err;
-> > +}
-> > +
-> > +/*
-> > + * Mask off any voltages we don't support and select
-> > + * the lowest voltage
-> > + */
-> > +u32 sd_uhs2_select_voltage(struct mmc_host *host, u32 ocr)
-> > +{
-> > +     int bit;
-> > +     int err;
-> > +
-> > +     /*
-> > +      * Sanity check the voltages that the card claims to
-> > +      * support.
-> > +      */
-> > +     if (ocr & 0x7F) {
-> > +             dev_warn(mmc_dev(host), "card claims to support voltages =
-below defined range\n");
-> > +             ocr &=3D ~0x7F;
-> > +     }
-> > +
-> > +     ocr &=3D host->ocr_avail;
-> > +     if (!ocr) {
-> > +             dev_warn(mmc_dev(host), "no support for card's volts\n");
-> > +             return 0;
-> > +     }
-> > +
-> > +     if (host->caps2 & MMC_CAP2_FULL_PWR_CYCLE) {
-> > +             bit =3D ffs(ocr) - 1;
-> > +             ocr &=3D 3 << bit;
-> > +             /* Power cycle */
-> > +             err =3D sd_uhs2_power_off(host);
-> > +             if (err)
-> > +                     return 0;
-> > +             err =3D sd_uhs2_reinit(host);
-> > +             if (err)
-> > +                     return 0;
-> > +     } else {
-> > +             bit =3D fls(ocr) - 1;
-> > +             ocr &=3D 3 << bit;
-> > +             if (bit !=3D host->ios.vdd)
-> > +                     dev_warn(mmc_dev(host), "exceeding card's volts\n=
-");
-> > +     }
-> > +
-> > +     return ocr;
-> > +}
-> > +
-> > +/*
-> > + * Initialize the UHS-II card through the SD-TRAN transport layer. Thi=
-s enables
-> > + * commands/requests to be backwards compatible through the legacy SD =
-protocol.
-> > + * UHS-II cards has a specific power limit specified for VDD1/VDD2, th=
-at should
-> > + * be set through a legacy CMD6. Note that, the power limit that becom=
-es set,
-> > + * survives a soft reset through the GO_DORMANT_STATE command.
-> > + */
-> > +static int sd_uhs2_legacy_init(struct mmc_host *host, struct mmc_card =
-*card)
-> > +{
-> > +     int err;
-> > +     u32 cid[4];
-> > +     u32 ocr;
-> > +     u32 rocr;
-> > +     u8  *status;
-> > +     int ro;
-> > +
-> > +     /* Send CMD0 to reset SD card */
-> > +     err =3D __mmc_go_idle(host);
-> > +     if (err)
-> > +             return err;
-> > +
-> > +     mmc_delay(1);
-> > +
-> > +     /* Send CMD8 to communicate SD interface operation condition */
-> > +     err =3D mmc_send_if_cond(host, host->ocr_avail);
-> > +     if (err) {
-> > +             dev_warn(mmc_dev(host), "CMD8 error\n");
-> > +             goto err;
-> > +     }
-> > +
-> > +     /*
-> > +      * Probe SD card working voltage.
-> > +      */
-> > +     err =3D mmc_send_app_op_cond(host, 0, &ocr);
-> > +     if (err)
-> > +             goto err;
-> > +
-> > +     card->ocr =3D ocr;
-> > +
-> > +     /*
-> > +      * Some SD cards claims an out of spec VDD voltage range. Let's t=
-reat
-> > +      * these bits as being in-valid and especially also bit7.
-> > +      */
-> > +     ocr &=3D ~0x7FFF;
-> > +     rocr =3D sd_uhs2_select_voltage(host, ocr);
-> > +     /*
-> > +      * Some cards have zero value of rocr in UHS-II mode. Assign host=
-'s
-> > +      * ocr value to rocr.
-> > +      */
-> > +     if (!rocr)
-> > +             rocr =3D host->ocr_avail;
-> > +
-> > +     rocr |=3D (SD_OCR_CCS | SD_OCR_XPC);
-> > +
-> > +     /* Wait SD power on ready */
-> > +     ocr =3D rocr;
-> > +
-> > +     err =3D mmc_send_app_op_cond(host, ocr, &rocr);
-> > +     if (err)
-> > +             goto err;
-> > +
-> > +     err =3D mmc_send_cid(host, cid);
-> > +     if (err)
-> > +             goto err;
-> > +
-> > +     memcpy(card->raw_cid, cid, sizeof(card->raw_cid));
-> > +     mmc_decode_cid(card);
-> > +
-> > +     /*
-> > +      * For native busses:  get card RCA and quit open drain mode.
-> > +      */
-> > +     err =3D mmc_send_relative_addr(host, &card->rca);
-> > +     if (err)
-> > +             goto err;
-> > +
-> > +     err =3D mmc_sd_get_csd(card);
-> > +     if (err)
-> > +             goto err;
-> > +
-> > +     /*
-> > +      * Select card, as all following commands rely on that.
-> > +      */
-> > +     err =3D mmc_select_card(card);
-> > +     if (err)
-> > +             goto err;
-> > +
-> > +     /*
-> > +      * Fetch SCR from card.
-> > +      */
-> > +     err =3D mmc_app_send_scr(card);
-> > +     if (err)
-> > +             goto err;
-> > +
-> > +     err =3D mmc_decode_scr(card);
-> > +     if (err)
-> > +             goto err;
-> > +
-> > +     /*
-> > +      * Switch to high power consumption mode.
-> > +      * Even switch failed, sd card can still work at lower power cons=
-umption mode, but
-> > +      * performance will be lower than high power consumption mode.
-> > +      */
-> > +     status =3D kmalloc(64, GFP_KERNEL);
-> > +     if (!status)
-> > +             return -ENOMEM;
-> > +
-> > +     if (!(card->csd.cmdclass & CCC_SWITCH)) {
-> > +             pr_warn("%s: card lacks mandatory switch function, perfor=
-mance might suffer\n",
-> > +                     mmc_hostname(card->host));
-> > +     } else {
-> > +             /* send CMD6 to set Maximum Power Consumption to get bett=
-er performance */
-> > +             err =3D mmc_sd_switch(card, 0, 3, SD4_SET_POWER_LIMIT_1_8=
-0W, status);
-> > +             if (!err)
-> > +                     err =3D mmc_sd_switch(card, 1, 3, SD4_SET_POWER_L=
-IMIT_1_80W, status);
-> > +
-> > +             err =3D 0;
-> > +     }
-> > +
-> > +     /*
-> > +      * Check if read-only switch is active.
-> > +      */
-> > +     ro =3D mmc_sd_get_ro(host);
-> > +     if (ro < 0) {
-> > +             pr_warn("%s: host does not support read-only switch, assu=
-ming write-enable\n",
-> > +                     mmc_hostname(host));
-> > +     } else if (ro > 0) {
-> > +             mmc_card_set_readonly(card);
-> > +     }
-> > +
-> > +     /*
-> > +      * NOTE:
-> > +      * Should we read Externsion Register to check power notification=
- feature here?
-> > +      */
-> > +
-> > +     kfree(status);
-> > +
-> > +     return 0;
-> > +
-> > +err:
-> > +     sd_uhs2_remove(host);
-> > +     return err;
-> >  }
-> >
-> >  static int sd_uhs2_alive(struct mmc_host *host)
-> > @@ -185,34 +1099,176 @@ static void sd_uhs2_detect(struct mmc_host *hos=
-t)
-> >       }
-> >  }
-> >
-> > +static int _sd_uhs2_suspend(struct mmc_host *host)
-> > +{
-> > +     struct mmc_card *card =3D host->card;
-> > +     int err =3D 0;
-> > +
-> > +     mmc_claim_host(host);
-> > +
-> > +     if (mmc_card_suspended(card))
-> > +             goto out;
-> > +
-> > +     if (mmc_sd_can_poweroff_notify(card))
-> > +             err =3D sd_poweroff_notify(card);
-> > +
-> > +     if (!err) {
-> > +             sd_uhs2_power_off(host);
-> > +             mmc_card_set_suspended(card);
-> > +     }
-> > +
-> > +out:
-> > +     mmc_release_host(host);
-> > +     return err;
-> > +}
-> > +
-> > +/*
-> > + * Callback for suspend
-> > + */
-> >  static int sd_uhs2_suspend(struct mmc_host *host)
-> >  {
-> > -     return 0;
-> > +     int err;
-> > +
-> > +     err =3D _sd_uhs2_suspend(host);
-> > +     if (!err) {
-> > +             pm_runtime_disable(&host->card->dev);
-> > +             pm_runtime_set_suspended(&host->card->dev);
-> > +     }
-> > +
-> > +     return err;
-> > +}
-> > +
-> > +/*
-> > + * This function tries to determine if the same card is still present
-> > + * and, if so, restore all state to it.
-> > + */
-> > +static int _mmc_sd_uhs2_resume(struct mmc_host *host)
-> > +{
-> > +     int err =3D 0;
-> > +
-> > +     mmc_claim_host(host);
-> > +
-> > +     if (!mmc_card_suspended(host->card))
-> > +             goto out;
-> > +
-> > +     /* Power up UHS2 SD card and re-initialize it. */
-> > +     err =3D sd_uhs2_reinit(host);
-> > +     mmc_card_clr_suspended(host->card);
-> > +
-> > +out:
-> > +     mmc_release_host(host);
-> > +     return err;
-> >  }
-> >
-> > +/*
-> > + * Callback for resume
-> > + */
-> >  static int sd_uhs2_resume(struct mmc_host *host)
-> >  {
-> > +     pm_runtime_enable(&host->card->dev);
-> >       return 0;
-> >  }
-> >
-> > +/*
-> > + * Callback for runtime_suspend.
-> > + */
-> >  static int sd_uhs2_runtime_suspend(struct mmc_host *host)
-> >  {
-> > -     return 0;
-> > +     int err;
-> > +
-> > +     if (!(host->caps & MMC_CAP_AGGRESSIVE_PM))
-> > +             return 0;
-> > +
-> > +     err =3D _sd_uhs2_suspend(host);
-> > +     if (err)
-> > +             pr_err("%s: error %d doing aggressive suspend\n", mmc_hos=
-tname(host), err);
-> > +
-> > +     return err;
-> >  }
-> >
-> >  static int sd_uhs2_runtime_resume(struct mmc_host *host)
-> >  {
-> > -     return 0;
-> > +     int err;
-> > +
-> > +     err =3D _mmc_sd_uhs2_resume(host);
-> > +     if (err && err !=3D -ENOMEDIUM)
-> > +             pr_err("%s: error %d doing runtime resume\n", mmc_hostnam=
-e(host), err);
-> > +
-> > +     return err;
-> >  }
-> >
-> > -static int sd_uhs2_shutdown(struct mmc_host *host)
-> > +static int sd_uhs2_hw_reset(struct mmc_host *host)
-> >  {
-> > -     return 0;
-> > +     int err;
-> > +
-> > +     sd_uhs2_power_off(host);
-> > +     /* Wait at least 1 ms according to SD spec */
-> > +     mmc_delay(1);
-> > +     sd_uhs2_power_up(host);
-> > +
-> > +     err =3D sd_uhs2_reinit(host);
-> > +
-> > +     return err;
-> >  }
-> >
-> > -static int sd_uhs2_hw_reset(struct mmc_host *host)
-> > +/*
-> > + * mmc_uhs2_prepare_cmd - prepare for SD command packet
-> > + * @host:    MMC host
-> > + * @mrq:     MMC request
+> > + *  Interface driver
 > > + *
-> > + * Initialize and fill in a header and a payload of SD command packet.
-> > + * The caller should allocate uhs2_command in host->cmd->uhs2_cmd in
-> > + * advance.
+> > + * Header file for Host Controller UHS2 related registers.
 > > + *
-> > + * Return:   0 on success, non-zero error on failure
+> > + *  Copyright (C) 2014 Intel Corp, All Rights Reserved.
 > > + */
-> > +void mmc_uhs2_prepare_cmd(struct mmc_host *host, struct mmc_request *m=
-rq)
-> >  {
-> > -     return 0;
-> > +     struct mmc_command *cmd;
-> > +     struct uhs2_command *uhs2_cmd;
-> > +     u16 header, arg;
-> > +     __be32 *payload;
-> > +     u8 plen;
+> > +#ifndef __SDHCI_UHS2_H
+> > +#define __SDHCI_UHS2_H
 > > +
-> > +     cmd =3D mrq->cmd;
-> > +     header =3D host->card->uhs2_config.node_id;
-> > +     if ((cmd->flags & MMC_CMD_MASK) =3D=3D MMC_CMD_ADTC)
-> > +             header |=3D UHS2_PACKET_TYPE_DCMD;
-> > +     else
-> > +             header |=3D UHS2_PACKET_TYPE_CCMD;
+> > +#include <linux/bits.h>
 > > +
-> > +     arg =3D cmd->opcode << UHS2_SD_CMD_INDEX_POS;
-> > +     if (host->uhs2_app_cmd) {
-> > +             arg |=3D UHS2_SD_CMD_APP;
-> > +             host->uhs2_app_cmd =3D false;
-> > +     }
+> > +/* SDHCI Category C registers : UHS2 usage */
 > > +
-> > +     uhs2_cmd =3D cmd->uhs2_cmd;
-> > +     payload =3D uhs2_cmd->payload;
-> > +     plen =3D 2; /* at the maximum */
+> > +#define  SDHCI_UHS2_CM_TRAN_RESP                0x10
+> > +#define  SDHCI_UHS2_SD_TRAN_RESP                0x18
+> > +#define  SDHCI_UHS2_SD_TRAN_RESP_1              0x1C
 > > +
-> > +     if ((cmd->flags & MMC_CMD_MASK) =3D=3D MMC_CMD_ADTC &&
-> > +         !cmd->uhs2_tmode0_flag) {
-> > +             if (mmc_card_uhs2_hd_mode(host))
-> > +                     arg |=3D UHS2_DCMD_2L_HD_MODE;
+> > +/* SDHCI Category B registers : UHS2 only */
 > > +
-> > +             arg |=3D UHS2_DCMD_LM_TLEN_EXIST;
+> > +#define SDHCI_UHS2_BLOCK_SIZE                   0x80
+> > +#define  SDHCI_UHS2_MAKE_BLKSZ(dma, blksz)      ((((dma) & 0x7) << 12)=
+ | ((blksz) & 0xFFF))
 > > +
-> > +             if (cmd->data->blocks =3D=3D 1 &&
-> > +                 cmd->data->blksz !=3D 512 &&
-> > +                 cmd->opcode !=3D MMC_READ_SINGLE_BLOCK &&
-> > +                 cmd->opcode !=3D MMC_WRITE_BLOCK) {
-> > +                     arg |=3D UHS2_DCMD_TLUM_BYTE_MODE;
-> > +                     payload[1] =3D cpu_to_be32(cmd->data->blksz);
-> > +             } else {
-> > +                     payload[1] =3D cpu_to_be32(cmd->data->blocks);
-> > +             }
-> > +     } else {
-> > +             plen =3D 1;
-> > +     }
+> > +#define SDHCI_UHS2_BLOCK_COUNT                  0x84
 > > +
-> > +     payload[0] =3D cpu_to_be32(cmd->arg);
-> > +     sd_uhs2_cmd_assemble(cmd, uhs2_cmd, header, arg, payload, plen, N=
-ULL, 0);
-> >  }
+> > +#define SDHCI_UHS2_CMD_PACKET                   0x88
+> > +#define  SDHCI_UHS2_CMD_PACK_MAX_LEN            20
+> > +
+> > +#define SDHCI_UHS2_TRANS_MODE                   0x9C
+> > +#define  SDHCI_UHS2_TRNS_DMA                    BIT(0)
+> > +#define  SDHCI_UHS2_TRNS_BLK_CNT_EN             BIT(1)
+> > +#define  SDHCI_UHS2_TRNS_DATA_TRNS_WRT          BIT(4)
+> > +#define  SDHCI_UHS2_TRNS_BLK_BYTE_MODE          BIT(5)
+> > +#define  SDHCI_UHS2_TRNS_RES_R5                 BIT(6)
+> > +#define  SDHCI_UHS2_TRNS_RES_ERR_CHECK_EN       BIT(7)
+> > +#define  SDHCI_UHS2_TRNS_RES_INT_DIS            BIT(8)
+> > +#define  SDHCI_UHS2_TRNS_WAIT_EBSY              BIT(14)
+> > +#define  SDHCI_UHS2_TRNS_2L_HD                  BIT(15)
+> > +
+> > +#define SDHCI_UHS2_CMD                          0x9E
+> > +#define  SDHCI_UHS2_CMD_SUB_CMD                 BIT(2)
+> > +#define  SDHCI_UHS2_CMD_DATA                    BIT(5)
+> > +#define  SDHCI_UHS2_CMD_TRNS_ABORT              BIT(6)
+> > +#define  SDHCI_UHS2_CMD_CMD12                   BIT(7)
+> > +#define  SDHCI_UHS2_CMD_DORMANT                 GENMASK(7, 6)
+> > +#define  SDHCI_UHS2_CMD_PACK_LEN_MASK           GENMASK(12, 8)
+> > +
+> > +#define SDHCI_UHS2_RESPONSE                     0xA0
+> > +#define  SDHCI_UHS2_RESPONSE_MAX_LEN            20
+> > +
+> > +#define SDHCI_UHS2_MSG_SELECT                   0xB4
+> > +#define SDHCI_UHS2_MSG_SELECT_CURR              0x0
+> > +#define SDHCI_UHS2_MSG_SELECT_ONE               0x1
+> > +#define SDHCI_UHS2_MSG_SELECT_TWO               0x2
+> > +#define SDHCI_UHS2_MSG_SELECT_THREE             0x3
+> > +
+> > +#define SDHCI_UHS2_MSG                          0xB8
+> > +
+> > +#define SDHCI_UHS2_DEV_INT_STATUS               0xBC
+> > +
+> > +#define SDHCI_UHS2_DEV_SELECT                   0xBE
+> > +#define SDHCI_UHS2_DEV_SEL_MASK                 GENMASK(3, 0)
+> > +#define SDHCI_UHS2_DEV_SEL_INT_MSG_EN           BIT(7)
+> > +
+> > +#define SDHCI_UHS2_DEV_INT_CODE                 0xBF
+> > +
+> > +#define SDHCI_UHS2_SW_RESET                     0xC0
+> > +#define SDHCI_UHS2_SW_RESET_FULL                BIT(0)
+> > +#define SDHCI_UHS2_SW_RESET_SD                  BIT(1)
+> > +
+> > +#define SDHCI_UHS2_TIMER_CTRL                   0xC2
+> > +#define SDHCI_UHS2_TIMER_CTRL_DEADLOCK_MASK     GENMASK(7, 4)
+> > +
+> > +#define SDHCI_UHS2_INT_STATUS                   0xC4
+> > +#define SDHCI_UHS2_INT_STATUS_ENABLE            0xC8
+> > +#define SDHCI_UHS2_INT_SIGNAL_ENABLE            0xCC
+> > +#define SDHCI_UHS2_INT_HEADER_ERR               BIT(0)
+> > +#define SDHCI_UHS2_INT_RES_ERR                  BIT(1)
+> > +#define SDHCI_UHS2_INT_RETRY_EXP                BIT(2)
+> > +#define SDHCI_UHS2_INT_CRC                      BIT(3)
+> > +#define SDHCI_UHS2_INT_FRAME_ERR                BIT(4)
+> > +#define SDHCI_UHS2_INT_TID_ERR                  BIT(5)
+> > +#define SDHCI_UHS2_INT_UNRECOVER                BIT(7)
+> > +#define SDHCI_UHS2_INT_EBUSY_ERR                BIT(8)
+> > +#define SDHCI_UHS2_INT_ADMA_ERROR               BIT(15)
+> > +#define SDHCI_UHS2_INT_CMD_TIMEOUT              BIT(16)
+> > +#define SDHCI_UHS2_INT_DEADLOCK_TIMEOUT         BIT(17)
+> > +#define SDHCI_UHS2_INT_VENDOR_ERR               BIT(27)
+> > +#define SDHCI_UHS2_INT_ERROR_MASK            ( \
+> > +            SDHCI_UHS2_INT_HEADER_ERR      | \
+> > +            SDHCI_UHS2_INT_RES_ERR         | \
+> > +            SDHCI_UHS2_INT_RETRY_EXP       | \
+> > +            SDHCI_UHS2_INT_CRC             | \
+> > +            SDHCI_UHS2_INT_FRAME_ERR       | \
+> > +            SDHCI_UHS2_INT_TID_ERR         | \
+> > +            SDHCI_UHS2_INT_UNRECOVER       | \
+> > +            SDHCI_UHS2_INT_EBUSY_ERR       | \
+> > +            SDHCI_UHS2_INT_ADMA_ERROR      | \
+> > +            SDHCI_UHS2_INT_CMD_TIMEOUT     | \
+> > +            SDHCI_UHS2_INT_DEADLOCK_TIMEOUT)
+> > +#define SDHCI_UHS2_INT_CMD_ERR_MASK     ( \
+> > +            SDHCI_UHS2_INT_HEADER_ERR | \
+> > +            SDHCI_UHS2_INT_RES_ERR    | \
+> > +            SDHCI_UHS2_INT_FRAME_ERR  | \
+> > +            SDHCI_UHS2_INT_TID_ERR    | \
+> > +            SDHCI_UHS2_INT_CMD_TIMEOUT)
+> > +/* CRC Error occurs during a packet receiving */
+> > +#define SDHCI_UHS2_INT_DATA_ERR_MASK         ( \
+> > +            SDHCI_UHS2_INT_RETRY_EXP       | \
+> > +            SDHCI_UHS2_INT_CRC             | \
+> > +            SDHCI_UHS2_INT_UNRECOVER       | \
+> > +            SDHCI_UHS2_INT_EBUSY_ERR       | \
+> > +            SDHCI_UHS2_INT_ADMA_ERROR      | \
+> > +            SDHCI_UHS2_INT_DEADLOCK_TIMEOUT)
+> > +
+> > +#define SDHCI_UHS2_SETTINGS_PTR                 0xE0
+> > +#define   SDHCI_UHS2_GEN_SETTINGS_POWER_LOW     BIT(0)
+> > +#define   SDHCI_UHS2_GEN_SETTINGS_N_LANES_MASK  GENMASK(11, 8)
+> > +#define   SDHCI_UHS2_FD_OR_2L_HD                0x0 /* 2 lanes */
+> > +#define   SDHCI_UHS2_2D1U_FD                    0x2 /* 3 lanes, 2 down=
+, 1 up, full duplex */
+> > +#define   SDHCI_UHS2_1D2U_FD                    0x3 /* 3 lanes, 1 down=
+, 2 up, full duplex */
+> > +#define   SDHCI_UHS2_2D2U_FD                    0x4 /* 4 lanes, 2 down=
+, 2 up, full duplex */
+> > +
+> > +#define   SDHCI_UHS2_PHY_SET_SPEED_B            BIT(6)
+> > +#define   SDHCI_UHS2_PHY_HIBERNATE_EN           BIT(12)
+> > +#define   SDHCI_UHS2_PHY_N_LSS_SYN_MASK         GENMASK(19, 16)
+> > +#define   SDHCI_UHS2_PHY_N_LSS_DIR_MASK         GENMASK(23, 20)
+> > +
+> > +#define   SDHCI_UHS2_TRAN_N_FCU_MASK            GENMASK(15, 8)
+> > +#define   SDHCI_UHS2_TRAN_RETRY_CNT_MASK        GENMASK(17, 16)
+> > +#define   SDHCI_UHS2_TRAN_1_N_DAT_GAP_MASK      GENMASK(7, 0)
+> > +
+> > +#define SDHCI_UHS2_CAPS_PTR                     0xE2
+> > +#define  SDHCI_UHS2_CAPS_OFFSET                 0
+> > +#define   SDHCI_UHS2_CAPS_DAP_MASK              GENMASK(3, 0)
+> > +#define   SDHCI_UHS2_CAPS_GAP_MASK              GENMASK(7, 4)
+> > +#define   SDHCI_UHS2_CAPS_GAP(gap)              ((gap) * 360)
+> > +#define   SDHCI_UHS2_CAPS_LANE_MASK             GENMASK(13, 8)
+> > +#define    SDHCI_UHS2_CAPS_2L_HD_FD             1
+> > +#define    SDHCI_UHS2_CAPS_2D1U_FD              2
+> > +#define    SDHCI_UHS2_CAPS_1D2U_FD              4
+> > +#define    SDHCI_UHS2_CAPS_2D2U_FD              8
+> > +#define   SDHCI_UHS2_CAPS_ADDR_64               BIT(14)
+> > +#define   SDHCI_UHS2_CAPS_BOOT                  BIT(15)
+> > +#define   SDHCI_UHS2_CAPS_DEV_TYPE_MASK         GENMASK(17, 16)
+> > +#define    SDHCI_UHS2_CAPS_DEV_TYPE_RMV         0
+> > +#define    SDHCI_UHS2_CAPS_DEV_TYPE_EMB         1
+> > +#define    SDHCI_UHS2_CAPS_DEV_TYPE_EMB_RMV     2
+> > +#define   SDHCI_UHS2_CAPS_NUM_DEV_MASK          GENMASK(21, 18)
+> > +#define   SDHCI_UHS2_CAPS_BUS_TOPO_MASK         GENMASK(23, 22)
+> > +#define   SDHCI_UHS2_CAPS_BUS_TOPO_SHIFT        22
+> > +#define   SDHCI_UHS2_CAPS_BUS_TOPO_P2P          0
+> > +#define   SDHCI_UHS2_CAPS_BUS_TOPO_RING         1
+> > +#define   SDHCI_UHS2_CAPS_BUS_TOPO_HUB          2
+> > +#define   SDHCI_UHS2_CAPS_BUS_TOPO_HUB_RING     3
+> > +
+> > +#define  SDHCI_UHS2_CAPS_PHY_OFFSET             4
+> > +#define   SDHCI_UHS2_CAPS_PHY_REV_MASK          GENMASK(5, 0)
+> > +#define   SDHCI_UHS2_CAPS_PHY_RANGE_MASK        GENMASK(7, 6)
+> > +#define   SDHCI_UHS2_CAPS_PHY_RANGE_A           0
+> > +#define   SDHCI_UHS2_CAPS_PHY_RANGE_B           1
+> > +#define   SDHCI_UHS2_CAPS_PHY_N_LSS_SYN_MASK    GENMASK(19, 16)
+> > +#define   SDHCI_UHS2_CAPS_PHY_N_LSS_DIR_MASK    GENMASK(23, 20)
+> > +#define  SDHCI_UHS2_CAPS_TRAN_OFFSET            8
+> > +#define   SDHCI_UHS2_CAPS_TRAN_LINK_REV_MASK    GENMASK(5, 0)
+> > +#define   SDHCI_UHS2_CAPS_TRAN_N_FCU_MASK       GENMASK(15, 8)
+> > +#define   SDHCI_UHS2_CAPS_TRAN_HOST_TYPE_MASK   GENMASK(18, 16)
+> > +#define   SDHCI_UHS2_CAPS_TRAN_BLK_LEN_MASK     GENMASK(31, 20)
+> > +
+> > +#define  SDHCI_UHS2_CAPS_TRAN_1_OFFSET          12
+> > +#define  SDHCI_UHS2_CAPS_TRAN_1_N_DATA_GAP_MASK GENMASK(7, 0)
+> > +
+> > +#define SDHCI_UHS2_EMBED_CTRL_PTR               0xE6
+> > +#define SDHCI_UHS2_VENDOR_PTR                   0xE8
+> > +
+> > +#endif /* __SDHCI_UHS2_H */
+> > diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
+> > index f4f2085c274c..2c7ab4453248 100644
+> > --- a/drivers/mmc/host/sdhci.h
+> > +++ b/drivers/mmc/host/sdhci.h
+> > @@ -43,8 +43,23 @@
+> >  #define  SDHCI_TRNS_READ     0x10
+> >  #define  SDHCI_TRNS_MULTI    0x20
 > >
-> >  static const struct mmc_bus_ops sd_uhs2_ops =3D {
-> > @@ -223,7 +1279,7 @@ static const struct mmc_bus_ops sd_uhs2_ops =3D {
-> >       .resume =3D sd_uhs2_resume,
-> >       .runtime_suspend =3D sd_uhs2_runtime_suspend,
-> >       .runtime_resume =3D sd_uhs2_runtime_resume,
-> > -     .shutdown =3D sd_uhs2_shutdown,
-> > +     .shutdown =3D sd_uhs2_suspend,
-> >       .hw_reset =3D sd_uhs2_hw_reset,
-> >  };
-> >
-> > @@ -231,6 +1287,8 @@ static int sd_uhs2_attach(struct mmc_host *host)
-> >  {
-> >       int err;
-> >
-> > +     host->flags |=3D MMC_UHS2_SUPPORT;
-> > +
-> >       err =3D sd_uhs2_power_up(host);
-> >       if (err)
-> >               goto err;
-> > @@ -239,7 +1297,7 @@ static int sd_uhs2_attach(struct mmc_host *host)
-> >       if (err)
-> >               goto err;
-> >
-> > -     err =3D sd_uhs2_init_card(host);
-> > +     err =3D sd_uhs2_init_card(host, NULL);
-> >       if (err)
-> >               goto err;
-> >
-> > @@ -256,21 +1314,32 @@ static int sd_uhs2_attach(struct mmc_host *host)
-> >               goto remove_card;
-> >
-> >       mmc_claim_host(host);
-> > +
-> >       return 0;
-> >
-> >  remove_card:
-> > -     mmc_remove_card(host->card);
-> > -     host->card =3D NULL;
-> > +     sd_uhs2_remove(host);
-> >       mmc_claim_host(host);
-> > -     mmc_detach_bus(host);
-> > +
-> >  err:
-> > +     mmc_detach_bus(host);
-> >       sd_uhs2_power_off(host);
-> > -     return err;
-> > +     host->flags &=3D ~MMC_UHS2_SUPPORT;
->
-> sdhci would expect MMC_UHS2_SUPPORT to also be cleared in
-> sd_uhs2_detect() i.e.
->
-> static void sd_uhs2_detect(struct mmc_host *host)
-> {
->         int err;
->
->         mmc_get_card(host->card, NULL);
->         err =3D _mmc_detect_card_removed(host);
->         mmc_put_card(host->card, NULL);
->
->         if (err) {
->                 sd_uhs2_remove(host);
->
->                 mmc_claim_host(host);
->                 mmc_detach_bus(host);
->                 sd_uhs2_power_off(host);
-> +               host->flags &=3D ~MMC_UHS2_SUPPORT;
->                 mmc_release_host(host);
->         }
-> }
->
-
-I will update it to the V8 version.
-
-> > +     return 1;
->
-> Not sure why this shouldn't remain:
->
->         return err;
->
-
-I will update it to the V8 version.
-
-> >  }
-> >
-> > +/**
-> > + * mmc_attach_sd_uhs2 - select UHS2 interface
-> > + * @host: MMC host
-> > + *
-> > + * Try to select UHS2 interface and initialize the bus for a given
-> > + * frequency, @freq.
-> > + *
-> > + * Return:   0 on success, non-zero error on failure
+> > +/*
+> > + * Defined in Host Version 4.0.
 > > + */
-> >  int mmc_attach_sd_uhs2(struct mmc_host *host)
-> >  {
-> > -     int i, err =3D 0;
-> > +     int i, err;
-> >
-> >       if (!(host->caps2 & MMC_CAP2_SD_UHS2))
-> >               return -EOPNOTSUPP;
-> > @@ -285,6 +1354,9 @@ int mmc_attach_sd_uhs2(struct mmc_host *host)
-> >        */
-> >       for (i =3D 0; i < ARRAY_SIZE(sd_uhs2_freqs); i++) {
-> >               host->f_init =3D sd_uhs2_freqs[i];
-> > +             pr_info("%s: %s: trying to init UHS-II card at %u Hz\n",
-> > +                     mmc_hostname(host), __func__, host->f_init);
+> > +#define  SDHCI_TRNS_RES_TYPE         0x40
+> > +#define  SDHCI_TRNS_RES_ERR_CHECK    0x80
+> > +#define  SDHCI_TRNS_RES_INT_DIS              0x0100
 > > +
-> >               err =3D sd_uhs2_attach(host);
-> >               if (!err)
-> >                       break;
+> >  #define SDHCI_COMMAND                0x0E
+> >  #define  SDHCI_CMD_RESP_MASK 0x03
+> > +
+> > +/*
+> > + * Host Version 4.10 adds this bit to distinguish a main command or
+> > + * sub command.
+> > + * For example with SDIO, CMD52 (sub command) issued during CMD53 (mai=
+n command).
+> > + */
+> > +#define  SDHCI_CMD_SUB_CMD   0x04
+> > +
+> >  #define  SDHCI_CMD_CRC               0x08
+> >  #define  SDHCI_CMD_INDEX     0x10
+> >  #define  SDHCI_CMD_DATA              0x20
+> > @@ -65,6 +80,9 @@
+> >  #define SDHCI_PRESENT_STATE  0x24
+> >  #define  SDHCI_CMD_INHIBIT   0x00000001
+> >  #define  SDHCI_DATA_INHIBIT  0x00000002
+> > +
+> > +#define  SDHCI_DAT_4_TO_7_LVL_MASK   0x000000F0
+> > +
+> >  #define  SDHCI_DOING_WRITE   0x00000100
+> >  #define  SDHCI_DOING_READ    0x00000200
+> >  #define  SDHCI_SPACE_AVAILABLE       0x00000400
+> > @@ -80,6 +98,15 @@
+> >  #define   SDHCI_DATA_0_LVL_MASK      0x00100000
+> >  #define  SDHCI_CMD_LVL               0x01000000
+> >
+> > +/* Host Version 4.10 */
+> > +
+> > +#define  SDHCI_HOST_REGULATOR_STABLE 0x02000000
+> > +#define  SDHCI_CMD_NOT_ISSUED_ERR    0x08000000
+> > +#define  SDHCI_SUB_CMD_STATUS                0x10000000
+> > +#define  SDHCI_UHS2_IN_DORMANT_STATE 0x20000000
+> > +#define  SDHCI_UHS2_LANE_SYNC                0x40000000
+> > +#define  SDHCI_UHS2_IF_DETECT                0x80000000
+> > +
+> >  #define SDHCI_HOST_CONTROL   0x28
+> >  #define  SDHCI_CTRL_LED              0x01
+> >  #define  SDHCI_CTRL_4BITBUS  0x02
+> > @@ -100,6 +127,14 @@
+> >  #define  SDHCI_POWER_300     0x0C
+> >  #define  SDHCI_POWER_330     0x0E
+> >
+> > +/*
+> > + * VDD2 - UHS2
+> > + * VDD2 power on/off and voltage select (UHS2)
+> > + */
+> > +#define  SDHCI_VDD2_POWER_ON         0x10
+> > +#define  SDHCI_VDD2_POWER_120                0x80
+> > +#define  SDHCI_VDD2_POWER_180                0xA0
+> > +
+> >  #define SDHCI_BLOCK_GAP_CONTROL      0x2A
+> >
+> >  #define SDHCI_WAKE_UP_CONTROL        0x2B
+> > @@ -110,7 +145,7 @@
+> >  #define SDHCI_CLOCK_CONTROL  0x2C
+> >  #define  SDHCI_DIVIDER_SHIFT 8
+> >  #define  SDHCI_DIVIDER_HI_SHIFT      6
+> > -#define  SDHCI_DIV_MASK      0xFF
+> > +#define  SDHCI_DIV_MASK              0xFF
+> >  #define  SDHCI_DIV_MASK_LEN  8
+> >  #define  SDHCI_DIV_HI_MASK   0x300
+> >  #define  SDHCI_PROG_CLOCK_MODE       0x0020
+> > @@ -139,6 +174,10 @@
+> >  #define  SDHCI_INT_CARD_REMOVE       0x00000080
+> >  #define  SDHCI_INT_CARD_INT  0x00000100
+> >  #define  SDHCI_INT_RETUNE    0x00001000
+> > +
+> > +/* Host Version 4.10 */
+> > +#define  SDHCI_INT_FX_EVENT  0x00002000
+> > +
+> >  #define  SDHCI_INT_CQE               0x00004000
+> >  #define  SDHCI_INT_ERROR     0x00008000
+> >  #define  SDHCI_INT_TIMEOUT   0x00010000
+> > @@ -152,6 +191,9 @@
+> >  #define  SDHCI_INT_AUTO_CMD_ERR      0x01000000
+> >  #define  SDHCI_INT_ADMA_ERROR        0x02000000
+> >
+> > +/* Host Version 4.0 */
+> > +#define  SDHCI_INT_RESP_ERR  0x08000000
+> > +
+> >  #define  SDHCI_INT_NORMAL_MASK       0x00007FFF
+> >  #define  SDHCI_INT_ERROR_MASK        0xFFFF8000
+> >
+> > @@ -178,6 +220,9 @@
+> >  #define  SDHCI_AUTO_CMD_END_BIT      0x00000008
+> >  #define  SDHCI_AUTO_CMD_INDEX        0x00000010
+> >
+> > +/* Host Version 4.10 */
+> > +#define  SDHCI_AUTO_CMD_RESP_ERR     0x0020
+> > +
+> >  #define SDHCI_HOST_CONTROL2          0x3E
+> >  #define  SDHCI_CTRL_UHS_MASK         0x0007
+> >  #define   SDHCI_CTRL_UHS_SDR12               0x0000
+> > @@ -186,6 +231,7 @@
+> >  #define   SDHCI_CTRL_UHS_SDR104              0x0003
+> >  #define   SDHCI_CTRL_UHS_DDR50               0x0004
+> >  #define   SDHCI_CTRL_HS400           0x0005 /* Non-standard */
+> > +#define   SDHCI_CTRL_UHS2            0x0007
+> >  #define  SDHCI_CTRL_VDD_180          0x0008
+> >  #define  SDHCI_CTRL_DRV_TYPE_MASK    0x0030
+> >  #define   SDHCI_CTRL_DRV_TYPE_B              0x0000
+> > @@ -194,9 +240,12 @@
+> >  #define   SDHCI_CTRL_DRV_TYPE_D              0x0030
+> >  #define  SDHCI_CTRL_EXEC_TUNING              0x0040
+> >  #define  SDHCI_CTRL_TUNED_CLK                0x0080
+> > +#define  SDHCI_CTRL_UHS2_ENABLE              0x0100
+> > +#define  SDHCI_CTRL_ADMA2_LEN_MODE   0x0400
+> >  #define  SDHCI_CMD23_ENABLE          0x0800
+> >  #define  SDHCI_CTRL_V4_MODE          0x1000
+> >  #define  SDHCI_CTRL_64BIT_ADDR               0x2000
+> > +#define  SDHCI_CTRL_ASYNC_INT_ENABLE 0x4000
+> >  #define  SDHCI_CTRL_PRESET_VAL_ENABLE        0x8000
+> >
+> >  #define SDHCI_CAPABILITIES   0x40
+> > @@ -219,11 +268,13 @@
+> >  #define  SDHCI_CAN_VDD_180   0x04000000
+> >  #define  SDHCI_CAN_64BIT_V4  0x08000000
+> >  #define  SDHCI_CAN_64BIT     0x10000000
+> > +#define  SDHCI_CAN_ASYNC_INT 0x20000000
+> >
+> >  #define SDHCI_CAPABILITIES_1 0x44
+> >  #define  SDHCI_SUPPORT_SDR50 0x00000001
+> >  #define  SDHCI_SUPPORT_SDR104        0x00000002
+> >  #define  SDHCI_SUPPORT_DDR50 0x00000004
+> > +#define  SDHCI_SUPPORT_UHS2  0x00000008
+> >  #define  SDHCI_DRIVER_TYPE_A 0x00000010
+> >  #define  SDHCI_DRIVER_TYPE_C 0x00000020
+> >  #define  SDHCI_DRIVER_TYPE_D 0x00000040
+> > @@ -232,6 +283,7 @@
+> >  #define  SDHCI_RETUNING_MODE_MASK            GENMASK(15, 14)
+> >  #define  SDHCI_CLOCK_MUL_MASK                        GENMASK(23, 16)
+> >  #define  SDHCI_CAN_DO_ADMA3  0x08000000
+> > +#define  SDHCI_CAN_VDD2_180  0x10000000 /* UHS-2 1.8V VDD2 */
+> >  #define  SDHCI_SUPPORT_HS400 0x80000000 /* Non-standard */
+> >
+> >  #define SDHCI_MAX_CURRENT            0x48
+> > @@ -239,11 +291,14 @@
+> >  #define  SDHCI_MAX_CURRENT_330_MASK  GENMASK(7, 0)
+> >  #define  SDHCI_MAX_CURRENT_300_MASK  GENMASK(15, 8)
+> >  #define  SDHCI_MAX_CURRENT_180_MASK  GENMASK(23, 16)
+> > +#define SDHCI_MAX_CURRENT_1          0x4C
+> > +#define  SDHCI_MAX_CURRENT_VDD2_180_MASK     GENMASK(7, 0) /* UHS2 */
+> >  #define   SDHCI_MAX_CURRENT_MULTIPLIER       4
+> >
+> >  /* 4C-4F reserved for more max current */
+> >
+> >  #define SDHCI_SET_ACMD12_ERROR       0x50
+> > +/* Host Version 4.10 */
+> >  #define SDHCI_SET_INT_ERROR  0x52
+> >
+> >  #define SDHCI_ADMA_ERROR     0x54
+> > @@ -262,10 +317,15 @@
+> >  #define SDHCI_PRESET_FOR_SDR104        0x6C
+> >  #define SDHCI_PRESET_FOR_DDR50 0x6E
+> >  #define SDHCI_PRESET_FOR_HS400 0x74 /* Non-standard */
+> > +
+> > +/* UHS2 */
+> > +#define SDHCI_PRESET_FOR_UHS2  0x74
+> >  #define SDHCI_PRESET_DRV_MASK                GENMASK(15, 14)
+> >  #define SDHCI_PRESET_CLKGEN_SEL              BIT(10)
+> >  #define SDHCI_PRESET_SDCLK_FREQ_MASK GENMASK(9, 0)
+> >
+> > +#define SDHCI_ADMA3_ADDRESS  0x78
+> > +
+> >  #define SDHCI_SLOT_INT_STATUS        0xFC
+> >
+> >  #define SDHCI_HOST_VERSION   0xFE
 >
 
 Thanks, Victor Shih
