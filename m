@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7BA17386F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E2817386F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbjFUO1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41342 "EHLO
+        id S232974AbjFUO1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230521AbjFUO1P (ORCPT
+        with ESMTP id S232258AbjFUO1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 21 Jun 2023 10:27:15 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7F7199E;
-        Wed, 21 Jun 2023 07:26:42 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-988e6fc41ccso371907666b.3;
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031A119A3;
+        Wed, 21 Jun 2023 07:26:43 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-987a977f62aso548682466b.1;
         Wed, 21 Jun 2023 07:26:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20221208; t=1687357601; x=1689949601;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QQRV2/BxFxsagJLIgXBd9RLpWbGBv5scvqVn53g9A3w=;
-        b=RRHhMySXXhM1+I1TSh9pvr3SQPRMDnfzmf6IOmFPO3S11q93DLutkYmb6GhV5RPZr/
-         ytwYv8EDHekMVBtRhPLZRxM2T879d7aHd/LiN1uWCP0SoZqdhcFKVBHrDI2dydLDRsA+
-         dhlnf0txq1cSwyNYKQAjeiShStH3RRYShHQdqWVpKVmxx7gAQvQwiy18p5+G5mwP0SsQ
-         Cn5yWFK1PreJ8M8znbC/APDbHvvQRSDgWKnackcKSk2HWouAeabHhZz/Rm4BD+QTILdB
-         UYtJf1Z5RfEyUGYyjULfDDFqcJ1oD+3gxV2410jyhZbR0DQkIPSBsQuiaBQKbvdjfnod
-         OBtg==
+        bh=NcKKa+7GIbUbn3aIE6VV0tQ+KglpEI27I8tdXAPUVmE=;
+        b=Rft1ZcHbjS+0PnQAzgXbc0duGtDgNU92Y3/fCrC+UCURUsCbQrKvURpffGO3c1GRB0
+         iRY65I9f0YEADwgNBkb9+HRddotuXR6txlKh530OI6wCFl8l1mgbKM7e0BGbeXvuqGyi
+         C99Vwgx/6P5p8vRCQZETJYzZYzYaCi9NfKL7sAiEL/CQ5nD6QIMZ5Qucmlab/6bJxsWj
+         6tGpc06sw0mpirT+Dl/1qlHghDCTFT3Kd+VXRjD0HeguNyKL0MhtEd9PiA0trfq0qK3q
+         czY082pxlYOSIY45KyGw1Gr9v1FVhcFId9Hw1yyjlJFm+DoZV/RtzlFalvl8Hb4ElXkf
+         9CGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1687357601; x=1689949601;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QQRV2/BxFxsagJLIgXBd9RLpWbGBv5scvqVn53g9A3w=;
-        b=TuWdRpnoFDy2/7Pv1iVILhCv6r66zwIz0606V0tyWfevClfqE6hJctf90N/ILDnlkb
-         doRAK/92jiVIhCsCYmPcNfVi0iP7aiQ7wwU8sO2LaEz19+Yt5NsHrDpQSVQ+bg2tu7+l
-         8/UjW+P1P1KDKbhwEHY+gbfz8Iw8S4b62UTbKCEbWbJdMGqlQO5N/yXtOsuJaX21KK9a
-         Wm9PLSNBLrfBPohGcPlwhrr3b7Iy6ZUz6sMytMD3ElvlV0rYo31cmQHpavGCRGDGucA+
-         E9hDqC+GvuEBALn+jPRJkSozcwScfrXzOOpY0zhAArVMByKqVW6gWFYd91DY4DcGZeyb
-         1DVQ==
-X-Gm-Message-State: AC+VfDw044WnXS5D+zaWHcJh4k2NgkbZC8xg2ANuC5QWXRl4mHOCHgT3
-        pmqARy2vC/lZ5kRmfql3ETM=
-X-Google-Smtp-Source: ACHHUZ68LoexcxdjYtLwc0swpBCHwId4MTQmcf+Fa3BiKkZvXVLtD6lfuopIL9cq7pfgnVodivB6mw==
-X-Received: by 2002:a17:906:7943:b0:988:7d1:f5a5 with SMTP id l3-20020a170906794300b0098807d1f5a5mr9254549ejo.28.1687357600304;
+        bh=NcKKa+7GIbUbn3aIE6VV0tQ+KglpEI27I8tdXAPUVmE=;
+        b=b9XwKFv4h6TWoQD7EFhcgoTcsKuC5V3byxtwD6/m9DRYyKeqgCC3/5RRO8+HUedUOv
+         Sd+QvuGCNx6DqmvEZd8noCWa7EpUXFjuHcFpRWIW/t/yd87TFRGGzNB2p7geyDxXUfWV
+         hLP/kz1ZZ76GiSuBb5qX9brkdelQ0Qs/NoNUP7o9/HgqEVDhmfQFt/aykK4wkxT5rfvd
+         N6Odvxf1qcYwmEIDbTPxJInfHdIUIenC/45eQN71Clijqn7zaKY8s+RKcfA61dMu3xe1
+         cAX5wJG61daTeIIa19QPJSsNl9PjLksHkM/srII1E34djA56SpDJghjCk37DiivJ6CnL
+         SpRQ==
+X-Gm-Message-State: AC+VfDw1DIySQwv1oZJ3efOFRrV3fAlY7pek0mRJ6EobHIY8nyYFiZ3T
+        dhUpdLdjEyVFqeCSEKLHw6c=
+X-Google-Smtp-Source: ACHHUZ5G587pM6Aiojr6sHXnPyDfOizNOGotzhHpzsjZmt4xzkyNgnwI/noBBxbBRTt6b8OiDFMWjg==
+X-Received: by 2002:a17:907:3f18:b0:983:cb6c:8aa3 with SMTP id hq24-20020a1709073f1800b00983cb6c8aa3mr12795543ejc.59.1687357600935;
         Wed, 21 Jun 2023 07:26:40 -0700 (PDT)
 Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id l11-20020a170906644b00b00988956f244csm3266156ejn.6.2023.06.21.07.26.39
+        by smtp.gmail.com with ESMTPSA id l11-20020a170906644b00b00988956f244csm3266156ejn.6.2023.06.21.07.26.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 21 Jun 2023 07:26:40 -0700 (PDT)
 From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Wed, 21 Jun 2023 16:26:27 +0200
-Subject: [PATCH v2 1/3] usb: misc: onboard-hub: support multiple power
- supplies
+Date:   Wed, 21 Jun 2023 16:26:28 +0200
+Subject: [PATCH v2 2/3] usb: misc: onboard-hub: add support for Cypress HX3
+ USB 3.0 family
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230620-hx3-v2-1-76a53434c713@skidata.com>
+Message-Id: <20230620-hx3-v2-2-76a53434c713@skidata.com>
 References: <20230620-hx3-v2-0-76a53434c713@skidata.com>
 In-Reply-To: <20230620-hx3-v2-0-76a53434c713@skidata.com>
 To:     Matthias Kaehlcke <mka@chromium.org>,
@@ -81,114 +81,73 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Benjamin Bara <benjamin.bara@skidata.com>
 
-As some of the onboard hubs require multiple power supplies, provide the
-environment to support them.
+The HX3 comes in different variants (up to 4 USB 3.0 ports; multi-TT),
+e.g. CYUSB330x/CYUSB331x/CYUSB332x/CYUSB230x. It operates with two
+different power supplies: 1V2 and 3V3.
+
+Add the support for this hub, for controlling the reset pin and the
+power supplies.
+
+Reset time is extracted from data sheet, page 24:
+"The RESETN pin can be tied to VDD_IO through an external resistor and
+to ground (GND) through an external capacitor (minimum 5 ms time
+constant)."
+V_IH min is given at 0.7 * 3V3 (page 34), therefore use 10ms.
+
+Also add USB PIDs for the USB 2.0 and USB 3.0 root hub.
 
 Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
 ---
-v2:
-- replace (err != 0) with (err)
----
- drivers/usb/misc/onboard_usb_hub.c | 36 ++++++++++++++++++++++++++++--------
- drivers/usb/misc/onboard_usb_hub.h |  1 +
- 2 files changed, 29 insertions(+), 8 deletions(-)
+ drivers/usb/misc/onboard_usb_hub.c | 3 +++
+ drivers/usb/misc/onboard_usb_hub.h | 7 +++++++
+ 2 files changed, 10 insertions(+)
 
 diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-index 12fc6eb67c3b..3de30356a684 100644
+index 3de30356a684..06e448b7e8cf 100644
 --- a/drivers/usb/misc/onboard_usb_hub.c
 +++ b/drivers/usb/misc/onboard_usb_hub.c
-@@ -27,6 +27,12 @@
+@@ -349,6 +349,7 @@ static struct platform_driver onboard_hub_driver = {
  
- #include "onboard_usb_hub.h"
+ /************************** USB driver **************************/
  
-+#define SUPPLIES_NUM_MAX 2
-+static const char * const supply_names[] = {
-+	"vdd",
-+	"vdd2",
-+};
-+
- static void onboard_hub_attach_usb_driver(struct work_struct *work);
++#define VENDOR_ID_CYPRESS	0x04b4
+ #define VENDOR_ID_GENESYS	0x05e3
+ #define VENDOR_ID_MICROCHIP	0x0424
+ #define VENDOR_ID_REALTEK	0x0bda
+@@ -427,6 +428,8 @@ static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
+ }
  
- static struct usb_device_driver onboard_hub_usbdev_driver;
-@@ -40,7 +46,8 @@ struct usbdev_node {
- };
- 
- struct onboard_hub {
--	struct regulator *vdd;
-+	struct regulator_bulk_data supplies[SUPPLIES_NUM_MAX];
-+	unsigned int supplies_num;
- 	struct device *dev;
- 	const struct onboard_hub_pdata *pdata;
- 	struct gpio_desc *reset_gpio;
-@@ -55,9 +62,9 @@ static int onboard_hub_power_on(struct onboard_hub *hub)
- {
- 	int err;
- 
--	err = regulator_enable(hub->vdd);
-+	err = regulator_bulk_enable(hub->supplies_num, hub->supplies);
- 	if (err) {
--		dev_err(hub->dev, "failed to enable regulator: %d\n", err);
-+		dev_err(hub->dev, "failed to enable supplies: %d\n", err);
- 		return err;
- 	}
- 
-@@ -75,9 +82,9 @@ static int onboard_hub_power_off(struct onboard_hub *hub)
- 
- 	gpiod_set_value_cansleep(hub->reset_gpio, 1);
- 
--	err = regulator_disable(hub->vdd);
-+	err = regulator_bulk_disable(hub->supplies_num, hub->supplies);
- 	if (err) {
--		dev_err(hub->dev, "failed to disable regulator: %d\n", err);
-+		dev_err(hub->dev, "failed to disable supplies: %d\n", err);
- 		return err;
- 	}
- 
-@@ -232,6 +239,7 @@ static int onboard_hub_probe(struct platform_device *pdev)
- 	const struct of_device_id *of_id;
- 	struct device *dev = &pdev->dev;
- 	struct onboard_hub *hub;
-+	unsigned int i;
- 	int err;
- 
- 	hub = devm_kzalloc(dev, sizeof(*hub), GFP_KERNEL);
-@@ -246,9 +254,21 @@ static int onboard_hub_probe(struct platform_device *pdev)
- 	if (!hub->pdata)
- 		return -EINVAL;
- 
--	hub->vdd = devm_regulator_get(dev, "vdd");
--	if (IS_ERR(hub->vdd))
--		return PTR_ERR(hub->vdd);
-+	if (hub->pdata->supplies_num > SUPPLIES_NUM_MAX)
-+		return dev_err_probe(dev, -EINVAL, "max %d supplies supported!\n",
-+				     SUPPLIES_NUM_MAX);
-+	hub->supplies_num = 1;
-+	if (hub->pdata->supplies_num > 1)
-+		hub->supplies_num = hub->pdata->supplies_num;
-+
-+	for (i = 0; i < SUPPLIES_NUM_MAX; i++)
-+		hub->supplies[i].supply = supply_names[i];
-+
-+	err = devm_regulator_bulk_get(dev, hub->supplies_num, hub->supplies);
-+	if (err) {
-+		dev_err(dev, "Failed to get regulator supplies: %d\n", err);
-+		return err;
-+	}
- 
- 	hub->reset_gpio = devm_gpiod_get_optional(dev, "reset",
- 						  GPIOD_OUT_HIGH);
+ static const struct usb_device_id onboard_hub_id_table[] = {
++	{ USB_DEVICE(VENDOR_ID_CYPRESS, 0x6504) }, /* CYUSB33{0,1,2}x/CYUSB230x 3.0 */
++	{ USB_DEVICE(VENDOR_ID_CYPRESS, 0x6506) }, /* CYUSB33{0,1,2}x/CYUSB230x 2.0 */
+ 	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
+ 	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0610) }, /* Genesys Logic GL852G USB 2.0 */
+ 	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2514) }, /* USB2514B USB 2.0 */
 diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
-index aca5f50eb0da..657190bf1799 100644
+index 657190bf1799..145e476b1d6c 100644
 --- a/drivers/usb/misc/onboard_usb_hub.h
 +++ b/drivers/usb/misc/onboard_usb_hub.h
-@@ -8,6 +8,7 @@
- 
- struct onboard_hub_pdata {
- 	unsigned long reset_us;		/* reset pulse width in us */
-+	unsigned int supplies_num;	/* num of supplies: 0 considered as 1 */
+@@ -23,6 +23,11 @@ static const struct onboard_hub_pdata ti_tusb8041_data = {
+ 	.reset_us = 3000,
  };
  
- static const struct onboard_hub_pdata microchip_usb424_data = {
++static const struct onboard_hub_pdata cypress_hx3_data = {
++	.reset_us = 10000,
++	.supplies_num = 2,
++};
++
+ static const struct onboard_hub_pdata genesys_gl850g_data = {
+ 	.reset_us = 3,
+ };
+@@ -40,6 +45,8 @@ static const struct of_device_id onboard_hub_match[] = {
+ 	{ .compatible = "usb424,2517", .data = &microchip_usb424_data, },
+ 	{ .compatible = "usb451,8140", .data = &ti_tusb8041_data, },
+ 	{ .compatible = "usb451,8142", .data = &ti_tusb8041_data, },
++	{ .compatible = "usb4b4,6504", .data = &cypress_hx3_data, },
++	{ .compatible = "usb4b4,6506", .data = &cypress_hx3_data, },
+ 	{ .compatible = "usb5e3,608", .data = &genesys_gl850g_data, },
+ 	{ .compatible = "usb5e3,610", .data = &genesys_gl852g_data, },
+ 	{ .compatible = "usbbda,411", .data = &realtek_rts5411_data, },
 
 -- 
 2.34.1
