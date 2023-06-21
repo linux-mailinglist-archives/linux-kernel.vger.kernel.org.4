@@ -2,92 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AEB07382FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:13:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 630EB7382DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232062AbjFULOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 07:14:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42092 "EHLO
+        id S230426AbjFULPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 07:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbjFULN4 (ORCPT
+        with ESMTP id S231710AbjFULPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 07:13:56 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4370B186
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 04:13:55 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B11B91EC0645;
-        Wed, 21 Jun 2023 13:13:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1687346033;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=oEdjW/BEuqJA1WSGzokko57xz6LD2lJ+RtmrN8Ryq9k=;
-        b=lKezUUCTjixcfl506APBTIrfu49K5em68tkZeoiok2l1SzRqppVq19fy8ehNAbfTcD1tQ1
-        SeJIfH9iCyfRDva+M2AS8DbMkPYGEuZiKI6Ww9ZTWNwGzTIMD0mbvIIOkwNCHGcOUsBopk
-        VcPwXNj1NJupETBUZZNw43FsG9Xk2B4=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id zN72J6PS8SE0; Wed, 21 Jun 2023 11:13:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1687346031; bh=oEdjW/BEuqJA1WSGzokko57xz6LD2lJ+RtmrN8Ryq9k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TZhnL2l+gKQFq8SwdzBRrCS7HJkG1u7xtNGh5ss0NaF4Gjp5toi7pJm9ljh06xP+1
-         Ax1ChLFYFB8MibH9yx8rs3eHlGHbrftnicoXGKrBc1xImaSe5kZ1iYEZBPcDZ2eIhi
-         WDMccEdi8S2D1tPoZUKPOrn8G6zaYB6EXW+waggrDzU59ZEXNBKkrSolaLmr43bHpV
-         cqlp3gkeoAv2F4OxoNaPnEF6+0j0FMvQAWMQ0MRUwc3u7qST+r38lN48/ZdhUuEZHd
-         86Nf5wfUvf4OTZw06zoxM8N4JvFSY5XRVRE9lRkI6FyzZeqDOPcoUgv+QRsJ8ozAhO
-         TPCqFq7mpAwjFExy5c2EpOA6roM41j/aswmQ3vh5RDmOPRu5yGv5oi89wNjjBGdSgV
-         fCDUuj8w9Or16A2PCpLMbevWTpB+BzTynkN/vMJY/rH1zctlQtRS8gqnJCNl5C8+TU
-         qcYDwx34cp+6b3Xw2sMr8/bCt0ezVZA5+BweRNQAi1jFXokSW06pWIF/WXI7zFtYgV
-         VxMcPZs2jG2bNIze4I7I0pNhHZIGJx0LgfB9Z2XVzk85xO2gWdReusvkTTStc78N3u
-         qRyyO+kNJPY2ihXmd2DJs9gsHP/FsXovn725ZPTDze/A97aQdNe01M8chb4vX4u0aW
-         DtNoNbM2TcVJg+Y+73GscxNA=
-Received: from zn.tnic (p200300ea971Dc592329c23FffEA6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c592:329c:23ff:fea6:a903])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3508540E01DE;
-        Wed, 21 Jun 2023 11:13:47 +0000 (UTC)
-Date:   Wed, 21 Jun 2023 13:13:46 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Xi Ruoyao <xry111@xry111.site>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: A question about prefetchw detection in "x86/asm: Cleanup
- prefetch primitives"
-Message-ID: <20230621111346.GFZJLbavDw1JiLi34n@fat_crate.local>
-References: <0b663d8f6802e8dbf443397718234bcb6d0811c8.camel@xry111.site>
+        Wed, 21 Jun 2023 07:15:07 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:237:300::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06EC186;
+        Wed, 21 Jun 2023 04:15:06 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1qBvna-0006ir-Ck; Wed, 21 Jun 2023 13:14:54 +0200
+Date:   Wed, 21 Jun 2023 13:14:54 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     Florent Revest <revest@chromium.org>
+Cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kadlec@netfilter.org, fw@strlen.de,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, lirongqing@baidu.com, wangli39@baidu.com,
+        zhangyu31@baidu.com, daniel@iogearbox.net, ast@kernel.org,
+        kpsingh@kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH nf] netfilter: conntrack: Avoid nf_ct_helper_hash uses
+ after free
+Message-ID: <20230621111454.GB24035@breakpoint.cc>
+References: <20230615152918.3484699-1-revest@chromium.org>
+ <ZJFIy+oJS+vTGJer@calendula>
+ <CABRcYmJjv-JoadtzZwU5A+SZwbmbgnzWb27UNZ-UC+9r+JnVxg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <0b663d8f6802e8dbf443397718234bcb6d0811c8.camel@xry111.site>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABRcYmJjv-JoadtzZwU5A+SZwbmbgnzWb27UNZ-UC+9r+JnVxg@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 06:57:40PM +0800, Xi Ruoyao wrote:
-> I intend to implement the same logic for Glibc.  I can understand "3DNow
-> implies PREFETCHW", but is there a bibliographical reference about "LM
-> implies PREFETCHW" so I can convince the Glibc maintainers for the
-> change?
+Florent Revest <revest@chromium.org> wrote:
+> On Tue, Jun 20, 2023 at 8:35 AM Pablo Neira Ayuso <pablo@netfilter.org> wrote:
+> >
+> > On Thu, Jun 15, 2023 at 05:29:18PM +0200, Florent Revest wrote:
+> > > If register_nf_conntrack_bpf() fails (for example, if the .BTF section
+> > > contains an invalid entry), nf_conntrack_init_start() calls
+> > > nf_conntrack_helper_fini() as part of its cleanup path and
+> > > nf_ct_helper_hash gets freed.
+> > >
+> > > Further netfilter modules like netfilter_conntrack_ftp don't check
+> > > whether nf_conntrack initialized correctly and call
+> > > nf_conntrack_helpers_register() which accesses the freed
+> > > nf_ct_helper_hash and causes a uaf.
+> > >
+> > > This patch guards nf_conntrack_helper_register() from accessing
+> > > freed/uninitialized nf_ct_helper_hash maps and fixes a boot-time
+> > > use-after-free.
+> >
+> > How could this possibly happen?
+> 
+> Here is one way to reproduce this bug:
+> 
+>   # Use nf/main
+>   git clone git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf.git
+>   cd nf
+> 
+>   # Start from a minimal config
+>   make LLVM=1 LLVM_IAS=0 defconfig
+> 
+>   # Enable KASAN, BTF and nf_conntrack_ftp
+>   scripts/config -e KASAN -e BPF_SYSCALL -e DEBUG_INFO -e
+> DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT -e DEBUG_INFO_BTF -e
+> NF_CONNTRACK_FTP
+>   make LLVM=1 LLVM_IAS=0 olddefconfig
+> 
+>   # Build without the LLVM integrated assembler
+>   make LLVM=1 LLVM_IAS=0 -j `nproc`
+> 
+> (Note that the use of LLVM_IAS=0, KASAN and BTF is just to trigger a
+> bug in BTF that will be fixed by
+> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/commit/?id=9724160b3942b0a967b91a59f81da5593f28b8ba
+> Independently of that specific BTF bug, it shows how an error in
+> nf_conntrack_bpf can cause a boot-time uaf in netfilter)
+> 
+> Then, booting gives me:
+> 
+> [    4.624666] BPF: [13893] FUNC asan.module_ctor
+> [    4.625611] BPF: type_id=1
+> [    4.626176] BPF:
+> [    4.626601] BPF: Invalid name
+> [    4.627208] BPF:
+> [    4.627723] ==================================================================
+> [    4.628610] BUG: KASAN: slab-use-after-free in
+> nf_conntrack_helper_register+0x129/0x2f0
+> [    4.628610] Read of size 8 at addr ffff888102d24000 by task swapper/0/1
+> [    4.628610]
 
-https://www.amd.com/system/files/TechDocs/24594.pdf
+Isn't that better than limping along?
 
--- 
-Regards/Gruss,
-    Boris.
+in this case an initcall is failing and I think panic is preferrable
+to a kernel that behaves like NF_CONNTRACK_FTP=n.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+AFAICS this problem is specific to NF_CONNTRACK_FTP=y
+(or any other helper module, for that matter).
+
+If you disagree please resend with a commit message that
+makes it clear that this is only relevant for the 'builtin' case.
