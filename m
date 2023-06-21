@@ -2,134 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E5D73822E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82600738230
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231836AbjFULJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 07:09:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40416 "EHLO
+        id S230327AbjFULMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 07:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbjFULJZ (ORCPT
+        with ESMTP id S229782AbjFULMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 07:09:25 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683009B;
-        Wed, 21 Jun 2023 04:09:24 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9BFBC1EC0645;
-        Wed, 21 Jun 2023 13:09:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1687345762;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=dW10WzO/1D1df+c5COuWituJ1H1J79DUe0LfeJ0bU1c=;
-        b=dpEnioDv7ovBtKQfZ7wxK6DT7xfn47sqTKDsed0UFc+/GswtEoTwj5hL7S9Pnd/yB6jAGF
-        uZvtpoAf0/ngE01Z3FWKk+/odbnqn5t6dWO0OduiC/3L5SZQBwQcb0K3mze5hA6r+1XxLI
-        BULR4iuYScPkWdAJi/at72k17yqgP3c=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id FHFnIBtczH5v; Wed, 21 Jun 2023 11:09:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1687345758; bh=dW10WzO/1D1df+c5COuWituJ1H1J79DUe0LfeJ0bU1c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G8Ic9iU9eL/U44nJG0zZRt/DzhRRg+4nw2s7UAUE9IIRyPJKGgN8unciTBIZ7riDN
-         Kg6VYIsyEtj+xC3t1oPjPgE24bgeVdUciREBFgQgY0WLGkIigXnhOTqV7UAvfHAIF5
-         ImPivRpBsWt4UPqGqmFtFB49JPzbtCjd4mVOHIVsoURVf1o6oH+ksZvSCyuGu3svws
-         Iw3aWZXvY5whdHmxKeVe0iQl4tyU7KIZKxFMHTNwfh7/kAQMgS6OpbvXNVdGeFfSIj
-         BV8l2r4RzgSg571NfSCx5Qeo4AX0Unn2PbNRNTQw4J35iGe1345hffB8DMy2JphCDj
-         MTDbFdvIPENbXeKAVS66aA2a5F+f1ertw6ONZyEf5mCtnj4GkM6ujA7gNS2eGUpJRy
-         kW5390pUCZx/RxlbUSlxgxmtydUpyKRJ3f9m8O69UqtmXkjAh5QqPR/ZQdCbXMeSsb
-         AiR7bJEQ2LFbpfjaEAgTDs539ArarVFM0KMybQdey6YO1eY3ZmK9YlnECL+aHBHuml
-         Lt8f3mnhCNOf/9e+mQ8ak01HIOiyKoNWdD88hR3bMUgg6D7YYBzHNAkbpqtk7/2K9n
-         vRhIqjtIKVEfQIcOAUvimNUemIbt5IQLhuFsKeShB/obgfMa1n7mdbnICphbztqa/B
-         YWbGx3kVCF7ZaCnK1ounlSEo=
-Received: from zn.tnic (p200300ea971Dc592329c23FffEA6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c592:329c:23ff:fea6:a903])
+        Wed, 21 Jun 2023 07:12:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C933B186;
+        Wed, 21 Jun 2023 04:12:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 4DDA540E019B;
-        Wed, 21 Jun 2023 11:08:59 +0000 (UTC)
-Date:   Wed, 21 Jun 2023 13:08:52 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Evgeniy Baskov <baskov@ispras.ru>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>
-Subject: Re: [PATCH v5 05/20] x86/decompressor: Use proper sequence to take
- the address of the GOT
-Message-ID: <20230621110852.GAZJLaRAuGBCc5R4yb@fat_crate.local>
-References: <20230607072342.4054036-1-ardb@kernel.org>
- <20230607072342.4054036-6-ardb@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E94B6150C;
+        Wed, 21 Jun 2023 11:12:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0303EC433C0;
+        Wed, 21 Jun 2023 11:12:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687345933;
+        bh=hemcQkLtj8eWOKOF5ziGhqriVgYi/b1g7rj4VltgJCo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oUqEMkZZyULF/pzRaSsITTNpCD4gR0JyXNpDI4McoFlgJ2Nz13WNKcEig6H2ml1/P
+         kxdt74OU71d/nzwWs4Vm2xaaoc5NkVu30moVjVD7/pFETuTiboDiexS5/6X+CVCzSI
+         S7MJsAkt0zmBZkRj93ApPwM9rG7BoWnXsDi4ULFcaxeI1TQ78nhbU0oSRIk41zkEAG
+         4L3Tono77SSGEHVG+FMiZf1ZqKBsTDwe1UYB10PzrkBnHF2Eh928CZ3R3iYz9nHdSH
+         yYniY4l9NE8LRSDiTXSZ7AfuTCQzwbk9zygg8KEbU7A/3h3jaq7qyGDG0ccfrmMFqA
+         kzGkpw6Sm4Ygw==
+Date:   Wed, 21 Jun 2023 16:42:09 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Minda Chen <minda.chen@starfivetech.com>
+Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Conor Dooley <conor@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Roger Quadros <rogerq@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-riscv@lists.infradead.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Mason Huo <mason.huo@starfivetech.com>
+Subject: Re: [PATCH v7 3/5] phy: starfive: Add JH7110 USB 2.0 PHY driver
+Message-ID: <ZJLbCbG9+XnGVjKb@matsya>
+References: <20230619094759.21013-1-minda.chen@starfivetech.com>
+ <20230619094759.21013-4-minda.chen@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230607072342.4054036-6-ardb@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230619094759.21013-4-minda.chen@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 07, 2023 at 09:23:27AM +0200, Ard Biesheuvel wrote:
-> The 32-bit decompressor does not actually use a global offset table
-> (GOT), but as is common for 32-bit position independent code, it uses
-> the magic symbol _GLOBAL_OFFSET_TABLE_ as an anchor from which to derive
-> the actual runtime addresses of other symbols, using special @GOTOFF
-> symbol references that are resolved at link time, and populated with the
-> distance between the address of the magic _GLOBAL_OFFSET_TABLE_ anchor
-> and the address of the symbol in question.
+On 19-06-23, 17:47, Minda Chen wrote:
+> Add Starfive JH7110 SoC USB 2.0 PHY driver support.
+> USB 2.0 PHY default connect to Cadence USB controller.
 > 
-> This means _GLOBAL_OFFSET_TABLE_ is the only symbol whose actual runtime
-> address needs to be determined explicitly, which is one of the first
-> things that happens in startup_32. However, it does so by taking the
-> absolute address via the immediate field of an ADD instruction (plus a
-> small offset), which seems to defeat the point.
+> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+> Reviewed-by: Roger Quadros <rogerq@kernel.org>
+> ---
+>  MAINTAINERS                           |   6 ++
+>  drivers/phy/Kconfig                   |   1 +
+>  drivers/phy/Makefile                  |   1 +
+>  drivers/phy/starfive/Kconfig          |  15 +++
+>  drivers/phy/starfive/Makefile         |   2 +
+>  drivers/phy/starfive/phy-jh7110-usb.c | 150 ++++++++++++++++++++++++++
+>  6 files changed, 175 insertions(+)
+>  create mode 100644 drivers/phy/starfive/Kconfig
+>  create mode 100644 drivers/phy/starfive/Makefile
+>  create mode 100644 drivers/phy/starfive/phy-jh7110-usb.c
 > 
-> Fortunately, the assembler knows that _GLOBAL_OFFSET_TABLE_ is magic,
-> and emits a special relative relocation instead, and so the resulting
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index f794002a192e..d2ce89a8d31c 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -20174,6 +20174,12 @@ S:	Supported
+>  F:	Documentation/devicetree/bindings/watchdog/starfive*
+>  F:	drivers/watchdog/starfive-wdt.c
+>  
+> +STARFIVE JH71X0 USB PHY DRIVER
+> +M:	Minda Chen <minda.chen@starfivetech.com>
+> +S:	Supported
+> +F:	Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
+> +F:	drivers/phy/starfive/phy-jh7110-usb.c
+> +
+>  STATIC BRANCH/CALL
+>  M:	Peter Zijlstra <peterz@infradead.org>
+>  M:	Josh Poimboeuf <jpoimboe@kernel.org>
+> diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
+> index f46e3148d286..0000149edbc4 100644
+> --- a/drivers/phy/Kconfig
+> +++ b/drivers/phy/Kconfig
+> @@ -91,6 +91,7 @@ source "drivers/phy/rockchip/Kconfig"
+>  source "drivers/phy/samsung/Kconfig"
+>  source "drivers/phy/socionext/Kconfig"
+>  source "drivers/phy/st/Kconfig"
+> +source "drivers/phy/starfive/Kconfig"
+>  source "drivers/phy/sunplus/Kconfig"
+>  source "drivers/phy/tegra/Kconfig"
+>  source "drivers/phy/ti/Kconfig"
+> diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
+> index 54f312c10a40..fb3dc9de6111 100644
+> --- a/drivers/phy/Makefile
+> +++ b/drivers/phy/Makefile
+> @@ -31,6 +31,7 @@ obj-y					+= allwinner/	\
+>  					   samsung/	\
+>  					   socionext/	\
+>  					   st/		\
+> +					   starfive/	\
+>  					   sunplus/	\
+>  					   tegra/	\
+>  					   ti/		\
+> diff --git a/drivers/phy/starfive/Kconfig b/drivers/phy/starfive/Kconfig
+> new file mode 100644
+> index 000000000000..2283feadfc76
+> --- /dev/null
+> +++ b/drivers/phy/starfive/Kconfig
+> @@ -0,0 +1,15 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +#
+> +# Phy drivers for StarFive platforms
+> +#
+> +
+> +config PHY_STARFIVE_JH7110_USB
+> +	tristate "Starfive JH7110 USB 2.0 PHY support"
+> +	depends on USB_SUPPORT
+> +	select GENERIC_PHY
+> +	select USB_PHY
+> +	help
+> +	  Enable this to support the StarFive USB 2.0 PHY,
+> +	  used with the Cadence USB controller.
+> +	  If M is selected, the module will be called
+> +	  phy-jh7110-usb.ko.
+> diff --git a/drivers/phy/starfive/Makefile b/drivers/phy/starfive/Makefile
+> new file mode 100644
+> index 000000000000..52e9a09cc619
+> --- /dev/null
+> +++ b/drivers/phy/starfive/Makefile
+> @@ -0,0 +1,2 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +obj-$(CONFIG_PHY_STARFIVE_JH7110_USB)	+= phy-jh7110-usb.o
+> diff --git a/drivers/phy/starfive/phy-jh7110-usb.c b/drivers/phy/starfive/phy-jh7110-usb.c
+> new file mode 100644
+> index 000000000000..90d788423705
+> --- /dev/null
+> +++ b/drivers/phy/starfive/phy-jh7110-usb.c
+> @@ -0,0 +1,150 @@
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * StarFive JH7110 USB 2.0 PHY driver
+> + *
+> + * Copyright (C) 2023 StarFive Technology Co., Ltd.
+> + * Author: Minda Chen <minda.chen@starfivetech.com>
+> + */
+> +
+> +#include <linux/bits.h>
+> +#include <linux/clk.h>
+> +#include <linux/err.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/phy/phy.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/usb/of.h>
+> +
+> +#define USB_125M_CLK_RATE		125000000
+> +#define USB_LS_KEEPALIVE_OFF		0x4
+> +#define USB_LS_KEEPALIVE_ENABLE		BIT(4)
+> +
+> +struct jh7110_usb2_phy {
+> +	struct phy *phy;
+> +	void __iomem *regs;
+> +	struct clk *usb_125m_clk;
+> +	struct clk *app_125m;
+> +	enum phy_mode mode;
+> +};
+> +
+> +static void jh7110_usb2_mode_set(struct jh7110_usb2_phy *phy)
+> +{
+> +	unsigned int val;
+> +
+> +	if (phy->mode != PHY_MODE_USB_HOST) {
+> +		/* Enable the LS speed keep-alive signal */
+> +		val = readl(phy->regs + USB_LS_KEEPALIVE_OFF);
+> +		val |= USB_LS_KEEPALIVE_ENABLE;
+> +		writel(val, phy->regs + USB_LS_KEEPALIVE_OFF);
+> +	}
 
-Which special relocation do you mean?
+looks like this sets only for host, so why not call it
+jh7110_usb2_set_host_mode() rather than get confused about
+jh7110_usb2_mode_set/jh7110_usb2_phy_set_mode
 
-This guy:
+> +}
+> +
+> +static int jh7110_usb2_phy_set_mode(struct phy *_phy,
+> +				    enum phy_mode mode, int submode)
+> +{
+> +	struct jh7110_usb2_phy *phy = phy_get_drvdata(_phy);
+> +
+> +	switch (mode) {
+> +	case PHY_MODE_USB_HOST:
+> +	case PHY_MODE_USB_DEVICE:
+> +	case PHY_MODE_USB_OTG:
+> +		break;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +
+> +	if (mode != phy->mode) {
+> +		dev_dbg(&_phy->dev, "Changing phy to %d\n", mode);
+> +		phy->mode = mode;
+> +		jh7110_usb2_mode_set(phy);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int jh7110_usb2_phy_init(struct phy *_phy)
+> +{
+> +	struct jh7110_usb2_phy *phy = phy_get_drvdata(_phy);
+> +	int ret;
+> +
+> +	ret = clk_set_rate(phy->usb_125m_clk, USB_125M_CLK_RATE);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = clk_prepare_enable(phy->app_125m);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int jh7110_usb2_phy_exit(struct phy *_phy)
+> +{
+> +	struct jh7110_usb2_phy *phy = phy_get_drvdata(_phy);
+> +
+> +	clk_disable_unprepare(phy->app_125m);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct phy_ops jh7110_usb2_phy_ops = {
+> +	.init		= jh7110_usb2_phy_init,
+> +	.exit		= jh7110_usb2_phy_exit,
+> +	.set_mode	= jh7110_usb2_phy_set_mode,
+> +	.owner		= THIS_MODULE,
+> +};
+> +
+> +static int jh7110_usb_phy_probe(struct platform_device *pdev)
+> +{
+> +	struct jh7110_usb2_phy *phy;
+> +	struct device *dev = &pdev->dev;
+> +	struct phy_provider *phy_provider;
+> +
+> +	phy = devm_kzalloc(dev, sizeof(*phy), GFP_KERNEL);
+> +	if (!phy)
+> +		return -ENOMEM;
+> +
+> +	phy->usb_125m_clk = devm_clk_get(dev, "125m");
+> +	if (IS_ERR(phy->usb_125m_clk))
+> +		return dev_err_probe(dev, PTR_ERR(phy->usb_125m_clk),
+> +			"Failed to get 125m clock\n");
+> +
+> +	phy->app_125m = devm_clk_get(dev, "app_125m");
+> +	if (IS_ERR(phy->app_125m))
+> +		return dev_err_probe(dev, PTR_ERR(phy->app_125m),
+> +			"Failed to get app 125m clock\n");
+> +
+> +	phy->regs = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(phy->regs))
+> +		return dev_err_probe(dev, PTR_ERR(phy->regs),
+> +			"Failed to map phy base\n");
+> +
+> +	phy->phy = devm_phy_create(dev, NULL, &jh7110_usb2_phy_ops);
+> +	if (IS_ERR(phy->phy))
+> +		return dev_err_probe(dev, PTR_ERR(phy->phy),
+> +			"Failed to create phy\n");
+> +
+> +	phy_set_drvdata(phy->phy, phy);
+> +	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+> +
+> +	return PTR_ERR_OR_ZERO(phy_provider);
+> +}
+> +
+> +static const struct of_device_id jh7110_usb_phy_of_match[] = {
+> +	{ .compatible = "starfive,jh7110-usb-phy" },
+> +	{ /* sentinel */ },
+> +};
+> +MODULE_DEVICE_TABLE(of, jh7110_usb_phy_of_match);
+> +
+> +static struct platform_driver jh7110_usb_phy_driver = {
+> +	.probe	= jh7110_usb_phy_probe,
+> +	.driver = {
+> +		.of_match_table	= jh7110_usb_phy_of_match,
+> +		.name  = "jh7110-usb-phy",
+> +	}
+> +};
+> +module_platform_driver(jh7110_usb_phy_driver);
 
-Relocation section '.rel.head.text' at offset 0x3a0 contains 12 entries:
- Offset     Info    Type            Sym.Value  Sym. Name
-00000010  00000d0a R_386_GOTPC       00000000   _GLOBAL_OFFSET_TABLE_
+A very light driver, only setting couple of things for hw. Can you
+explain how phy registers are configured, am sure there would be many
+more..? Do you rely on bootloader or some other entity for that?
 
-?
-
-In any case, this thing came from
-
-a2c4fc4d4e2c ("x86/boot: Remove run-time relocations from .head.text code")
-
-Thx.
+> +
+> +MODULE_DESCRIPTION("StarFive JH7110 USB 2.0 PHY driver");
+> +MODULE_AUTHOR("Minda Chen <minda.chen@starfivetech.com>");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.17.1
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+~Vinod
