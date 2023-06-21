@@ -2,264 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFE5873902A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:36:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948A0739034
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjFUTg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 15:36:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34874 "EHLO
+        id S230454AbjFUThM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 15:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbjFUTgz (ORCPT
+        with ESMTP id S229951AbjFUThG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 15:36:55 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598231726
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 12:36:53 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-25e8b2931f2so4756770a91.2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 12:36:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687376213; x=1689968213;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ATxljAeXD3ZQLvgleYPWv/HICEiuHF7y2fCsQyw2v4s=;
-        b=F04tWiHz1dnF4m/hyS3Rzz6lV/5n2cDeV8/AKRH6tjunNM+4W5plQtsvob1Rgktzd1
-         B0U6V+EV7Zqk0UsqT6kayYbb0APEuSJ+ZbM3Z+ZrMVGN6HXu7ZGhVv9p1IX++NxiJJEb
-         /5YLxHTmVdRDAXvIbRo2AmcF9RWoGF/TYVkriLxR/jzqqlCSMxh3mfRiXWKyvLNfalJl
-         7xcnkfx4nI+RiK3QfK3/N2Wj+owWrgfGLVvIUJ8S9dsgcGlPg+HgCSARJWaGn1ieekl6
-         IbLtssr6EFnfVBUiGYWlD2KXHwBrhk+2XYlZJV7KC2Omawd1+h1bg/F6TZu0bLVeXe2L
-         wuww==
+        Wed, 21 Jun 2023 15:37:06 -0400
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8142171C;
+        Wed, 21 Jun 2023 12:37:04 -0700 (PDT)
+Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-341c362a851so24553935ab.2;
+        Wed, 21 Jun 2023 12:37:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687376213; x=1689968213;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ATxljAeXD3ZQLvgleYPWv/HICEiuHF7y2fCsQyw2v4s=;
-        b=VCFGQtrgAOSjAu7ljc0IV9afyvpxU9P4NpX36QFZRRoHz8aBKXBOnrkb40AooMybJK
-         O7t/O5HXufGflsyNbHzCyhN1q9lLVFv6EscFXpdFDjx0HNOgJwoq9KpLjpNV8gRr8Jqc
-         32dtT6QeikhJlq2Oy2fsf9nrwPe4Z5C+pDdMFFQ6hdNVOMc3BdHO2FMFCCH3GbJag2Ys
-         4yK2MjQ2D3FoFHKA4Ti9AgY3aeb1qLnaxLcSKdnzmwmPQJo4nXCFO9jhSW1dnfMV1A7F
-         lMFGv/Fq6lBmUt3jYvKQcLd1J1IF7a8SdtgONvmNGopM5hDSxWNeC8DXBUtw2tLSsXsw
-         TsFw==
-X-Gm-Message-State: AC+VfDy9XXXINrDTMIT2TlPVGisaI7i1tyPUN53BPzQrjjU856bhWEk3
-        XKAgLA1uqfasL002SL0hw2Uh4cO2SvLwx+QhD1Q=
-X-Google-Smtp-Source: ACHHUZ4gzECWFjd0U1mfwbl+t9yj2eAZd3Ldks7oZPeBVE/vceICr7tQsoMjCRzR74H0cY+940GEZFABs68Mjj8TRqw=
-X-Received: by 2002:a17:90a:6b46:b0:25e:b3f6:a352 with SMTP id
- x6-20020a17090a6b4600b0025eb3f6a352mr16635989pjl.28.1687376212622; Wed, 21
- Jun 2023 12:36:52 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687376224; x=1689968224;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=v1W5en0X6o+ZubGP6+969Y3mIZxJYwr7a66wP5yY9ik=;
+        b=NfwNsjBL49VZSWITBBChmJJve7q5HcbGBs/henr5MDmQI/yVfa0QugUPmAHjAES6xu
+         xEJMd7s3mJUQSLLUAMcNaZk2h5aNhQ8e1rCkWXOJPLzhuC4SySa1CnQ3M7xoQBjmvs6s
+         ilIJ4p8/MgELHmdHX/Wu2W4kevm7cLso2hfNHhLj2n1lkxX6zOmauCCBCG5M5ud00YtT
+         BIU1W6C1oTgVE4CLJMVB6L+OlCn89IpGkKyv0YeVIOc6mNKN5D2g+bAHdZkEGm3aHkQa
+         Hx+bMKY6Ps3MKzoRDc2pZCS/fAXP0fTWFLvETU+bWBp589yWpJlq51wsMB0Nl+Ku/PQM
+         djkQ==
+X-Gm-Message-State: AC+VfDxQVyFGqbf3LONKXRgdai2jIPsX0n9aN6dMlV5Vo1WBI4l8CuRO
+        iAausEDoMJDd99VMeNqgpw==
+X-Google-Smtp-Source: ACHHUZ56xWTEeuEUlIWxxD7+8PJ+uta1biB7UfsTJz5OyKBF7NGWPlA3R5cc3fwUFRWz8KewHgTnfA==
+X-Received: by 2002:a92:cf50:0:b0:33b:1635:359f with SMTP id c16-20020a92cf50000000b0033b1635359fmr12184456ilr.22.1687376224015;
+        Wed, 21 Jun 2023 12:37:04 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id j18-20020a926e12000000b00341c0710169sm1496585ilc.46.2023.06.21.12.37.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 12:37:03 -0700 (PDT)
+Received: (nullmailer pid 3403584 invoked by uid 1000);
+        Wed, 21 Jun 2023 19:36:57 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-References: <20230621093009.637544-1-yosryahmed@google.com>
- <CA+CLi1gjRJ25HqDpqM3dUkddVbzRJnUhxO=bxq-rEjYz3dUhNA@mail.gmail.com> <CAJD7tkYGz3A3-mkzbZBfoHX5gATPseqiwZon0i3rug2h2M3jyg@mail.gmail.com>
-In-Reply-To: <CAJD7tkYGz3A3-mkzbZBfoHX5gATPseqiwZon0i3rug2h2M3jyg@mail.gmail.com>
-From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Date:   Wed, 21 Jun 2023 21:36:41 +0200
-Message-ID: <CA+CLi1hPfvy_kJyi8N6ygNhY9hNH5J6-kN9i1pRZz76dX5b0Lg@mail.gmail.com>
-Subject: Re: [PATCH] mm: zswap: fix double invalidate with exclusive loads
-To:     Yosry Ahmed <yosryahmed@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Vitaly Wool <vitaly.wool@konsulko.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Nhat Pham <nphamcs@gmail.com>, Yu Zhao <yuzhao@google.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Anjelique Melendez <quic_amelende@quicinc.com>
+Cc:     andersson@kernel.org, linux-pwm@vger.kernel.org, pavel@ucw.cz,
+        linux-arm-msm@vger.kernel.org, u.kleine-koenig@pengutronix.de,
+        konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, conor+dt@kernel.org,
+        thierry.reding@gmail.com, linux-leds@vger.kernel.org,
+        lee@kernel.org, agross@kernel.org
+In-Reply-To: <20230621185949.2068-3-quic_amelende@quicinc.com>
+References: <20230621185949.2068-1-quic_amelende@quicinc.com>
+ <20230621185949.2068-3-quic_amelende@quicinc.com>
+Message-Id: <168737621786.3403563.13933135215667889399.robh@kernel.org>
+Subject: Re: [PATCH 2/7] dt-bindings: leds: leds-qcom-lpg: Add support for
+ LUT through NVMEM devices
+Date:   Wed, 21 Jun 2023 13:36:57 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 7:26=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com>=
- wrote:
->
-> On Wed, Jun 21, 2023 at 3:20=E2=80=AFAM Domenico Cerasuolo
-> <cerasuolodomenico@gmail.com> wrote:
-> >
-> > On Wed, Jun 21, 2023 at 11:30=E2=80=AFAM Yosry Ahmed <yosryahmed@google=
-.com> wrote:
-> > >
-> > > If exclusive loads are enabled for zswap, we invalidate the entry bef=
-ore
-> > > returning from zswap_frontswap_load(), after dropping the local
-> > > reference. However, the tree lock is dropped during decompression aft=
-er
-> > > the local reference is acquired, so the entry could be invalidated
-> > > before we drop the local ref. If this happens, the entry is freed onc=
-e
-> > > we drop the local ref, and zswap_invalidate_entry() tries to invalida=
-te
-> > > an already freed entry.
-> > >
-> > > Fix this by:
-> > > (a) Making sure zswap_invalidate_entry() is always called with a loca=
-l
-> > >     ref held, to avoid being called on a freed entry.
-> > > (b) Making sure zswap_invalidate_entry() only drops the ref if the en=
-try
-> > >     was actually on the rbtree. Otherwise, another invalidation could
-> > >     have already happened, and the initial ref is already dropped.
-> > >
-> > > With these changes, there is no need to check that there is no need t=
-o
-> > > make sure the entry still exists in the tree in zswap_reclaim_entry()
-> > > before invalidating it, as zswap_reclaim_entry() will make this check
-> > > internally.
-> > >
-> > > Fixes: b9c91c43412f ("mm: zswap: support exclusive loads")
-> > > Reported-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-> > > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> > > ---
-> > >  mm/zswap.c | 21 ++++++++++++---------
-> > >  1 file changed, 12 insertions(+), 9 deletions(-)
-> > >
-> > > diff --git a/mm/zswap.c b/mm/zswap.c
-> > > index 87b204233115..62195f72bf56 100644
-> > > --- a/mm/zswap.c
-> > > +++ b/mm/zswap.c
-> > > @@ -355,12 +355,14 @@ static int zswap_rb_insert(struct rb_root *root=
-, struct zswap_entry *entry,
-> > >         return 0;
-> > >  }
-> > >
-> > > -static void zswap_rb_erase(struct rb_root *root, struct zswap_entry =
-*entry)
-> > > +static bool zswap_rb_erase(struct rb_root *root, struct zswap_entry =
-*entry)
-> > >  {
-> > >         if (!RB_EMPTY_NODE(&entry->rbnode)) {
-> > >                 rb_erase(&entry->rbnode, root);
-> > >                 RB_CLEAR_NODE(&entry->rbnode);
-> > > +               return true;
-> > >         }
-> > > +       return false;
-> > >  }
-> > >
-> > >  /*
-> > > @@ -599,14 +601,16 @@ static struct zswap_pool *zswap_pool_find_get(c=
-har *type, char *compressor)
-> > >         return NULL;
-> > >  }
-> > >
-> > > +/*
-> > > + * If the entry is still valid in the tree, drop the initial ref and=
- remove it
-> > > + * from the tree. This function must be called with an additional re=
-f held,
-> > > + * otherwise it may race with another invalidation freeing the entry=
-.
-> > > + */
-> >
-> > On re-reading this comment there's one thing I'm not sure I get, do we
-> > really need to hold an additional local ref to call this? As far as I
-> > understood, once we check that the entry was in the tree before putting
-> > the initial ref, there's no need for an additional local one.
->
-> I believe it is, but please correct me if I am wrong. Consider the
-> following scenario:
->
-> // Initially refcount is at 1
->
-> CPU#1:                                  CPU#2:
-> spin_lock(tree_lock)
-> zswap_entry_get() // 2 refs
-> spin_unlock(tree_lock)
->                                             spin_lock(tree_lock)
->                                             zswap_invalidate_entry() // 1=
- ref
->                                             spin_unlock(tree_lock)
-> zswap_entry_put() // 0 refs
-> zswap_invalidate_entry() // problem
->
-> That last zswap_invalidate_entry() call in CPU#1 is problematic. The
-> entry would have already been freed. If we check that the entry is on
-> the tree by checking RB_EMPTY_NODE(&entry->rbnode), then we are
-> reading already freed and potentially re-used memory.
->
-> We would need to search the tree to make sure the same entry still
-> exists in the tree (aka what zswap_reclaim_entry() currently does).
-> This is not ideal in the fault path to have to do the lookups twice.
 
-Thanks for the clarification, it is indeed needed in that case. I was just
-wondering if the wording of the comment is exact, in that before calling
-zswap_invalidate_entry one has to ensure that the entry has not been freed,=
- not
-specifically by holding an additional reference, if a lookup can serve the =
-same
-purpose.
+On Wed, 21 Jun 2023 11:59:46 -0700, Anjelique Melendez wrote:
+> Update leds-qcom-lpg bindings to support LUT patterns through NVMEM
+> devices.
+> 
+> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+> ---
+>  .../bindings/leds/leds-qcom-lpg.yaml          | 85 +++++++++++++++++++
+>  1 file changed, 85 insertions(+)
+> 
 
->
-> Also, in zswap_reclaim_entry(), would it be possible if we call
-> zswap_invalidate_entry() after we drop the local ref that the swap
-> entry has been reused for a different page? I didn't look closely, but
-> if yes, then the slab allocator may have repurposed the zswap_entry
-> and we may find the entry in the tree for the same offset, even though
-> it is referring to a different page now. This sounds practically
-> unlikely but perhaps theoretically possible.
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-I'm not sure I understood the scenario, in zswap_reclaim_entry we keep a lo=
-cal
-reference until the end in order to avoid a free.
+yamllint warnings/errors:
 
->
-> I think it's more reliable to call zswap_invalidate_entry() on an
-> entry that we know is valid before dropping the local ref. Especially
-> that it's easy to do today by just moving a few lines around.
->
->
->
->
-> >
-> > >  static void zswap_invalidate_entry(struct zswap_tree *tree,
-> > >                                    struct zswap_entry *entry)
-> > >  {
-> > > -       /* remove from rbtree */
-> > > -       zswap_rb_erase(&tree->rbroot, entry);
-> > > -
-> > > -       /* drop the initial reference from entry creation */
-> > > -       zswap_entry_put(tree, entry);
-> > > +       if (zswap_rb_erase(&tree->rbroot, entry))
-> > > +               zswap_entry_put(tree, entry);
-> > >  }
-> > >
-> > >  static int zswap_reclaim_entry(struct zswap_pool *pool)
-> > > @@ -659,8 +663,7 @@ static int zswap_reclaim_entry(struct zswap_pool =
-*pool)
-> > >          * swapcache. Drop the entry from zswap - unless invalidate a=
-lready
-> > >          * took it out while we had the tree->lock released for IO.
-> > >          */
-> > > -       if (entry =3D=3D zswap_rb_search(&tree->rbroot, swpoffset))
-> > > -               zswap_invalidate_entry(tree, entry);
-> > > +       zswap_invalidate_entry(tree, entry);
-> > >
-> > >  put_unlock:
-> > >         /* Drop local reference */
-> > > @@ -1466,7 +1469,6 @@ static int zswap_frontswap_load(unsigned type, =
-pgoff_t offset,
-> > >                 count_objcg_event(entry->objcg, ZSWPIN);
-> > >  freeentry:
-> > >         spin_lock(&tree->lock);
-> > > -       zswap_entry_put(tree, entry);
-> > >         if (!ret && zswap_exclusive_loads_enabled) {
-> > >                 zswap_invalidate_entry(tree, entry);
-> > >                 *exclusive =3D true;
-> > > @@ -1475,6 +1477,7 @@ static int zswap_frontswap_load(unsigned type, =
-pgoff_t offset,
-> > >                 list_move(&entry->lru, &entry->pool->lru);
-> > >                 spin_unlock(&entry->pool->lru_lock);
-> > >         }
-> > > +       zswap_entry_put(tree, entry);
-> > >         spin_unlock(&tree->lock);
-> > >
-> > >         return ret;
-> > > --
-> > > 2.41.0.162.gfafddb0af9-goog
-> > >
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/leds/leds-qcom-lpg.example.dtb: /example-4/led-controller: failed to match any schema with compatible: ['qcom,pmi632-lpg']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230621185949.2068-3-quic_amelende@quicinc.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
