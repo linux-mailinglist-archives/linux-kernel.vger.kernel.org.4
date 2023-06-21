@@ -2,127 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53936737D79
+	by mail.lfdr.de (Postfix) with ESMTP id F25AE737D7B
 	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:39:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbjFUIi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 04:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33434 "EHLO
+        id S231373AbjFUIiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 04:38:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFUIi2 (ORCPT
+        with ESMTP id S231261AbjFUIig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 04:38:28 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE3D10E6
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:38:26 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id ca18e2360f4ac-7748ca56133so45230439f.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:38:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687336706; x=1689928706;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IHtjxAmb7B7SArMbO/Kvh4i1mid7QPAVHxWWvv4k3+E=;
-        b=W9v3g5jUjBMy691gY+wM3sf1dUWu7Mld1lCobuFZna8Vb2kB6Ur+iN5jNNvCZrbdB8
-         yqQMm53PP1gunHIXs2utZyekTplRS8i7IeUEMgnQhha9IQ7TiYTK0r/+q4Ot98510Hz0
-         rmJrYPsh1bJxeH7oCtvpwF5QyrjIia64puFVUd9XGhUveCXOQ1az6+2li7ZFlh6z6N/1
-         leDb8MVIuTEiQRHQ8fuucYOHAOJ2P/ssU8zhgH7dOSt9qvMFm+77Ncb6dddnYFB0OodK
-         2ubtqYp3NpBLzgFj8zwlqnonzOehDpxO0dVKbwk5uVtn4tdEU+tSOwzYroNpS4eN1y3Y
-         fS0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687336706; x=1689928706;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IHtjxAmb7B7SArMbO/Kvh4i1mid7QPAVHxWWvv4k3+E=;
-        b=br7RChBJ3I1o65p1EfMivpidRP1URoYh27C09Ihefdi39Oog1Bp2PkjcI3KlyKkayl
-         lIVfy1KnsBpFgN5oLDigUeoVjyl0oTqTK83adV9D8Euv3jTpb9heLKXuKTuKYJG7HlYy
-         CtdOUsH7PZ9unpgpvG1WQGoOhiOpUmMttgvfylpjiOOL1caVT9gkuBFiE7fwEXinOd+d
-         bqN3BU8pu5XfYWE0FVmtK95fPhiga3jIK9rWUas71MUIuMfb4+aO03aGXmsSY1jt9kte
-         XRR1xvORTZ/+W6FWM2YqLh4bzvZtFuGV13fAP8XtQLq3ZhwfwTakTeasyaWmCuJnC/mm
-         v2ag==
-X-Gm-Message-State: AC+VfDzAT2VHl8P88LtKeYay5gq99GeXq9N5mj+QB0mQw0ld5GL0Negt
-        Xfa9LeFZIcz0gEEDfg0+aM4=
-X-Google-Smtp-Source: ACHHUZ40yNj6e0bMA8yt1Uilvns4XS/HDvKUVeba5qgqeUj2010RrurjLjkflir640BHHiIxn5X7jw==
-X-Received: by 2002:a05:6e02:349f:b0:342:26c7:1708 with SMTP id bp31-20020a056e02349f00b0034226c71708mr10117972ilb.3.1687336705839;
-        Wed, 21 Jun 2023 01:38:25 -0700 (PDT)
-Received: from localhost.localdomain (63.sub-174-255-1.myvzw.com. [174.255.1.63])
-        by smtp.gmail.com with ESMTPSA id z12-20020a92cecc000000b003428aca64bdsm1177348ilq.84.2023.06.21.01.38.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 01:38:25 -0700 (PDT)
-From:   Matthew Anderson <ruinairas1992@gmail.com>
-To:     tiwai@suse.com
-Cc:     perex@perex.cz, luke@ljones.dev, sbinding@opensource.cirrus.com,
-        linux-kernel@vger.kernel.org,
-        Matthew Anderson <ruinairas1992@gmail.com>
-Subject: [PATCH v3] ALSA: hda/realtek: Add quirks for ROG ALLY CS35l41 audio
-Date:   Wed, 21 Jun 2023 03:38:14 -0500
-Message-ID: <20230621083814.76334-1-ruinairas1992@gmail.com>
-X-Mailer: git-send-email 2.41.0
+        Wed, 21 Jun 2023 04:38:36 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55161737
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:38:28 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230621083826euoutp01f5d46777b26433f4eca638569fb118ce~qn8tSseAg0987509875euoutp017
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:38:26 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230621083826euoutp01f5d46777b26433f4eca638569fb118ce~qn8tSseAg0987509875euoutp017
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1687336706;
+        bh=xvc2sXLnGhjLFsmbguf3lN8FCrGCE+c6gqNP7gHJ+6E=;
+        h=From:To:CC:Subject:Date:References:From;
+        b=T/AUgajGXsbE7r0HBkBm/Elg4RLirjeafZsY8AWQ+KcQnzqrKcntfGhDZOchPu16U
+         L8cz49Ob1/7lz85zozlCE3YEdA12x0F1m7pxp/aIiZkhVh1ksd5IvFgKq8oXwmPJ/d
+         6ZSgQ1RmPf5JKFUou9/CE/xDd2mrRtLyIljyooA8=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230621083825eucas1p16d3b63ee510633d075e53ae04dc89616~qn8s_KRHt2117621176eucas1p1V;
+        Wed, 21 Jun 2023 08:38:25 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id 39.1A.42423.107B2946; Wed, 21
+        Jun 2023 09:38:25 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230621083825eucas1p1b05a6d7e0bf90e7a3d8e621f6578ff0a~qn8sk8gNA1658116581eucas1p11;
+        Wed, 21 Jun 2023 08:38:25 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230621083825eusmtrp233925ce44cddfcf590425c8d7e60f792~qn8sjqxzl0284602846eusmtrp28;
+        Wed, 21 Jun 2023 08:38:25 +0000 (GMT)
+X-AuditID: cbfec7f2-a3bff7000002a5b7-81-6492b7018925
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 64.8B.14344.107B2946; Wed, 21
+        Jun 2023 09:38:25 +0100 (BST)
+Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230621083825eusmtip22703050621435331ea1809e6ba0deb8c~qn8saRz8T3188231882eusmtip2T;
+        Wed, 21 Jun 2023 08:38:25 +0000 (GMT)
+Received: from localhost (106.110.32.140) by CAMSVWEXC02.scsc.local
+        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Wed, 21 Jun 2023 09:38:24 +0100
+From:   Pankaj Raghav <p.raghav@samsung.com>
+To:     <hare@suse.de>, <willy@infradead.org>, <david@fromorbit.com>
+CC:     <gost.dev@samsung.com>, <mcgrof@kernel.org>, <hch@lst.de>,
+        <jwong@kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Pankaj Raghav <p.raghav@samsung.com>
+Subject: [RFC 0/4] minimum folio order support in filemap
+Date:   Wed, 21 Jun 2023 10:38:19 +0200
+Message-ID: <20230621083823.1724337-1-p.raghav@samsung.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [106.110.32.140]
+X-ClientProxiedBy: CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348) To
+        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprEKsWRmVeSWpSXmKPExsWy7djP87qM2yelGHx5pGKx5dg9Ros9iyYx
+        WaxcfZTJ4tqZHiaLPXtPslhc3jWHzeLGhKeMFr9/zGFz4PA4tUjCY/MKLY9NqzrZPHbfbGDz
+        2Hy62uPzJrkAtigum5TUnMyy1CJ9uwSujJZpD9gKukUr5s3SbGDcKdjFyMEhIWAi8aNZrYuR
+        k0NIYAWjxK35yV2MXED2F0aJw/t2MUE4nxklurt3s4FUgTR0znjIDNGxnFGi9b4LhA1UtP6U
+        NETDFkaJrW/WsYBsYBPQkmjsZAepERFwkNi8cQ4rSA2zwB5GiQONn5hAEsIClhIz164Cs1kE
+        VCV+PZ4DZvMKWEt8f7qPEeJSeYnFDyQgwoISJ2c+YQGxmYHCzVtnM0PcpiTRsPkMC4RdK7G3
+        +QA7yC4JgSccEssf7mSFmOMicXtCAUSNsMSr41vYIWwZif875zNB2NUST2/8ZobobWGU6N+5
+        ng2i11qi70wOiMksoCmxfpc+RLmjxNNt15ghKvgkbrwVhLiMT2LStulQYV6JjjYhiGo1idX3
+        3rBMYFSeheSXWUh+mYUwfwEj8ypG8dTS4tz01GLDvNRyveLE3OLSvHS95PzcTYzAZHP63/FP
+        Oxjnvvqod4iRiYPxEKMEB7OSCK/spkkpQrwpiZVVqUX58UWlOanFhxilOViUxHm1bU8mCwmk
+        J5akZqemFqQWwWSZODilGpi4LLcYtjFOPG7x97V1hovF5vgQ3RdL/tZcmOBWnbPJYrGnqM7U
+        HN3KUFavzrtca+OlpfztltY41W5OWVWm1zArhvfb017GlvY72VNkVJ3udX07aXeDY2Na/80v
+        y8+rdTNpLjisdngNt+5NNh0hg5wjJUVe5qxBl/Xtf+SJsm6x0wr82yAm03Uu0zQtZKfh42km
+        bef6KvZdWHbj9Zvl+TwGxo+K/MNyVm6cadzMqqT0wVTLVLdXY8U89XU7jI7cCDilHL099wZn
+        0fY/D+zqOLTWL/PbnVUeGHlYWcUkwN3z899LvmZyhrore++9+Leg2vSiT9PbKZ+3L2vmr+hd
+        4incJqqxaD3T58UsMyVslViKMxINtZiLihMBZ9GixqUDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrBIsWRmVeSWpSXmKPExsVy+t/xe7qM2yelGCy6xGWx5dg9Ros9iyYx
+        WaxcfZTJ4tqZHiaLPXtPslhc3jWHzeLGhKeMFr9/zGFz4PA4tUjCY/MKLY9NqzrZPHbfbGDz
+        2Hy62uPzJrkAtig9m6L80pJUhYz84hJbpWhDCyM9Q0sLPSMTSz1DY/NYKyNTJX07m5TUnMyy
+        1CJ9uwS9jJZpD9gKukUr5s3SbGDcKdjFyMkhIWAi0TnjIXMXIxeHkMBSRomddw4zQiRkJDZ+
+        ucoKYQtL/LnWxQZR9JFR4tKls1DOFkaJyU9+M3UxcnCwCWhJNHaygzSICDhIbN44hxWkhllg
+        D6PEgcZPTCAJYQFLiZlrV4HZLAKqEr8ezwGzeQWsJb4/3ccIMkdCQF5i8QMJEJNZQFNi/S59
+        iApBiZMzn7CA2MxAFc1bZzND3KYk0bD5DAuEXSvR+eo02wRGoVkI3bOQdM9C0r2AkXkVo0hq
+        aXFuem6xkV5xYm5xaV66XnJ+7iZGYJRtO/Zzyw7Gla8+6h1iZOJgPMQowcGsJMIru2lSihBv
+        SmJlVWpRfnxRaU5q8SFGU6BnJjJLiSbnA+M8ryTe0MzA1NDEzNLA1NLMWEmc17OgI1FIID2x
+        JDU7NbUgtQimj4mDU6qBSeOY2KOk29wdTCwSdsIaD88GJRx6mpm1eVXi4oTsycwbs2ofGl3f
+        3akd8Txra/csluB/jsUJvxW/vzhpu/T/cu+5jy9e2bdx3xMXQ8e3EQ3z2pgW7oiYvq7+8pkZ
+        PTdD5m57rd3SVKZ1unGX8ssFtmkMXhc//1dZOPnT3096Xm2dc3k1V2Rcfqf4yn1tjz1v6P6j
+        09ZZPVso8t/hhfXNeYuzNI8WBbsdzHP7pWsX/Ejj1s6eVLPqTS9PeHGFeepdt1/tuvtXfQNf
+        0NQE/5j40601L/7sP+K44OuL/2wiSQrMTy8svnNkUmUC0+5/ykbKTzhenvq7aSM/z4v7uycf
+        kL1v3Hr3vP9yk/1S1zXfnLqkxFKckWioxVxUnAgAppSQgzsDAAA=
+X-CMS-MailID: 20230621083825eucas1p1b05a6d7e0bf90e7a3d8e621f6578ff0a
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230621083825eucas1p1b05a6d7e0bf90e7a3d8e621f6578ff0a
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230621083825eucas1p1b05a6d7e0bf90e7a3d8e621f6578ff0a
+References: <CGME20230621083825eucas1p1b05a6d7e0bf90e7a3d8e621f6578ff0a@eucas1p1.samsung.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed the nitputs as requested
+There has been a lot of discussion recently to support devices and fs for
+bs > ps. One of the main plumbing to support buffered IO is to have a minimum
+order while allocating folios in the page cache.
 
-Signed-off-by: Matthew Anderson <ruinairas1992@gmail.com>
----
- sound/pci/hda/patch_realtek.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+Hannes sent recently a series[1] where he deduces the minimum folio
+order based on the i_blkbits in struct inode. This takes a different
+approach based on the discussion in that thread where the minimum and
+maximum folio order can be set individually per inode.
 
-diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
-index a3981160b745..75f64131b369 100644
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -8446,7 +8446,7 @@ static const struct hda_fixup alc269_fixups[] = {
- 		.type = HDA_FIXUP_PINS,
- 		.v.pins = (const struct hda_pintbl[]) {
- 			{ 0x19, 0x03a11050 },
--			{ 0x1a, 0x03a11C30 },
-+			{ 0x1a, 0x03a11c30 },
- 			{ 0x21, 0x03211420 },
- 			{ }
- 		},
-@@ -8461,12 +8461,12 @@ static const struct hda_fixup alc269_fixups[] = {
- 			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x46 },
- 			{ 0x20, AC_VERB_SET_PROC_COEF, 0x0004 },
- 			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x47 },
--			{ 0x20, AC_VERB_SET_PROC_COEF, 0xA47A },
-+			{ 0x20, AC_VERB_SET_PROC_COEF, 0xa47a },
- 			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x49 },
- 			{ 0x20, AC_VERB_SET_PROC_COEF, 0x0049},
--			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x4A },
--			{ 0x20, AC_VERB_SET_PROC_COEF, 0x201B },
--			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x6B },
-+			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x4a },
-+			{ 0x20, AC_VERB_SET_PROC_COEF, 0x201b },
-+			{ 0x20, AC_VERB_SET_COEF_INDEX, 0x6b },
- 			{ 0x20, AC_VERB_SET_PROC_COEF, 0x4278},
- 			{ }
- 		},
-@@ -9579,6 +9579,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x1043, 0x16e3, "ASUS UX50", ALC269_FIXUP_STEREO_DMIC),
- 	SND_PCI_QUIRK(0x1043, 0x1740, "ASUS UX430UA", ALC295_FIXUP_ASUS_DACS),
- 	SND_PCI_QUIRK(0x1043, 0x17d1, "ASUS UX431FL", ALC294_FIXUP_ASUS_DUAL_SPK),
-+	SND_PCI_QUIRK(0x1043, 0x17f3, "ROG Ally RC71L_RC71L", ALC294_FIXUP_ASUS_ALLY),
- 	SND_PCI_QUIRK(0x1043, 0x1881, "ASUS Zephyrus S/M", ALC294_FIXUP_ASUS_GX502_PINS),
- 	SND_PCI_QUIRK(0x1043, 0x18b1, "Asus MJ401TA", ALC256_FIXUP_ASUS_HEADSET_MIC),
- 	SND_PCI_QUIRK(0x1043, 0x18f1, "Asus FX505DT", ALC256_FIXUP_ASUS_HEADSET_MIC),
-@@ -9641,7 +9642,6 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
- 	SND_PCI_QUIRK(0x10ec, 0x1254, "Intel Reference board", ALC295_FIXUP_CHROME_BOOK),
- 	SND_PCI_QUIRK(0x10ec, 0x12cc, "Intel Reference board", ALC225_FIXUP_HEADSET_JACK),
- 	SND_PCI_QUIRK(0x10f7, 0x8338, "Panasonic CF-SZ6", ALC269_FIXUP_HEADSET_MODE),
--	SND_PCI_QUIRK(0x1043, 0x17F3, "ROG Ally RC71L_RC71L", ALC294_FIXUP_ASUS_ALLY),
- 	SND_PCI_QUIRK(0x144d, 0xc109, "Samsung Ativ book 9 (NP900X3G)", ALC269_FIXUP_INV_DMIC),
- 	SND_PCI_QUIRK(0x144d, 0xc169, "Samsung Notebook 9 Pen (NP930SBE-K01US)", ALC298_FIXUP_SAMSUNG_AMP),
- 	SND_PCI_QUIRK(0x144d, 0xc176, "Samsung Notebook 9 Pro (NP930MBE-K04US)", ALC298_FIXUP_SAMSUNG_AMP),
+This series is based on top of Christoph's patches to have iomap aops
+for the block cache[2]. I rebased his remaining patches to
+next-20230621. The whole tree can be found here[3].
+
+Compiling the tree with CONFIG_BUFFER_HEAD=n, I am able to do a buffered
+IO on a nvme drive with bs>ps in QEMU without any issues:
+
+[root@archlinux ~]# cat /sys/block/nvme0n2/queue/logical_block_size
+16384
+[root@archlinux ~]# fio -bs=16k -iodepth=8 -rw=write -ioengine=io_uring -size=500M
+		    -name=io_uring_1 -filename=/dev/nvme0n2 -verify=md5
+io_uring_1: (g=0): rw=write, bs=(R) 16.0KiB-16.0KiB, (W) 16.0KiB-16.0KiB, (T) 16.0KiB-16.0KiB, ioengine=io_uring, iodepth=8
+fio-3.34
+Starting 1 process
+Jobs: 1 (f=1): [V(1)][100.0%][r=336MiB/s][r=21.5k IOPS][eta 00m:00s]
+io_uring_1: (groupid=0, jobs=1): err= 0: pid=285: Wed Jun 21 07:58:29 2023
+  read: IOPS=27.3k, BW=426MiB/s (447MB/s)(500MiB/1174msec)
+  <snip>
+Run status group 0 (all jobs):
+   READ: bw=426MiB/s (447MB/s), 426MiB/s-426MiB/s (447MB/s-447MB/s), io=500MiB (524MB), run=1174-1174msec
+  WRITE: bw=198MiB/s (207MB/s), 198MiB/s-198MiB/s (207MB/s-207MB/s), io=500MiB (524MB), run=2527-2527msec
+
+Disk stats (read/write):
+  nvme0n2: ios=35614/4297, merge=0/0, ticks=11283/1441, in_queue=12725, util=96.27%
+
+One of the main dependency to work on a block device with bs>ps is
+Christoph's work on converting block device aops to use iomap.
+
+[1] https://lwn.net/Articles/934651/
+[2] https://lwn.net/ml/linux-kernel/20230424054926.26927-1-hch@lst.de/
+[3] https://github.com/Panky-codes/linux/tree/next-20230523-filemap-order-generic-v1
+
+Luis Chamberlain (1):
+  block: set mapping order for the block cache in set_init_blocksize
+
+Matthew Wilcox (Oracle) (1):
+  fs: Allow fine-grained control of folio sizes
+
+Pankaj Raghav (2):
+  filemap: use minimum order while allocating folios
+  nvme: enable logical block size > PAGE_SIZE
+
+ block/bdev.c             |  9 ++++++++
+ drivers/nvme/host/core.c |  2 +-
+ include/linux/pagemap.h  | 46 ++++++++++++++++++++++++++++++++++++----
+ mm/filemap.c             |  9 +++++---
+ mm/readahead.c           | 34 ++++++++++++++++++++---------
+ 5 files changed, 82 insertions(+), 18 deletions(-)
+
 -- 
-2.41.0
+2.39.2
 
