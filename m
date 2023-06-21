@@ -2,210 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3F7A738EDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3569B738EDE
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:33:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjFUSbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 14:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56500 "EHLO
+        id S230378AbjFUSdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 14:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjFUSbo (ORCPT
+        with ESMTP id S229472AbjFUSdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 14:31:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DCD61710;
-        Wed, 21 Jun 2023 11:31:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9513961694;
-        Wed, 21 Jun 2023 18:31:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B562C433C0;
-        Wed, 21 Jun 2023 18:31:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687372302;
-        bh=3o6u2aYrhfQMlUwAXLurIY4fV50SmtZY3yOfVjIeR28=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MQWRmw+9hEXFkCu2JLJqzbgDETxXVogPrWZ8nWcPuTFkA8IbD+Tj46A2xd06P2PGv
-         b1d+ejelGNOELlfAyW7tYCoYodCxyT89BvqILNqDqQzQZPe1+BJjiFIxm94ystR3zQ
-         nPPckI+c/pZl3hct6McqN882b5B1NCGA5EhyEtPS1wZznU30l1JPUPgIlYhxe5gz/y
-         QEBT5xa8wsoYrDVcaoklx/yvyW+MdNMuFLI5kqjfeLPhPBKz9eiSsmhb0fVBhtUo5A
-         5jZzmsV89oo/rFbzfs0/w6YEhBrdX5yYwMvQ0HBkYoD8NJKaupOzadBPEAvfjftY2X
-         FePWYrONXVC2A==
-Date:   Wed, 21 Jun 2023 19:31:37 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Guo Ren <guoren@kernel.org>, wefu@redhat.com
-Subject: Re: linux-next: Tree for Jun 21 (riscv/errata/thead)
-Message-ID: <20230621-playoff-wireless-0dcfce9711ff@spud>
-References: <20230621145917.3635a2f1@canb.auug.org.au>
- <14aa23d6-b4c2-190f-0d6c-22a82befa04d@infradead.org>
+        Wed, 21 Jun 2023 14:33:22 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DA841A4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:33:21 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-66615629689so5253014b3a.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:33:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687372400; x=1689964400;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JMCcSs/LNtvhK0BXk5UBwN4S171el/6E9/JAkRmkQ14=;
+        b=HdwxOHbSoqUwOb6scyLytVCNBpr1vwNnQT2D/hW5FKgqNmiGZBEUds0gb7Mwid3xVY
+         1EVF6TIlDX37MMcT1uuuEKRQMF7BlHM+djkdvHuJnJlP97NE5a1yHBHKxcdlP1JLWij5
+         95LAF3n+A/3JrQmWPhQu/6H9+TM2x6GB51clo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687372400; x=1689964400;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JMCcSs/LNtvhK0BXk5UBwN4S171el/6E9/JAkRmkQ14=;
+        b=UZZ/bzm7yuvhEplgdAqggv0lCIAe1FOdBd65F73xn0fls0UJvLkLdF1s6RceHho6sv
+         ur1+zQrBJCF9RWigYrU44OILVEOM4j6FUQzsYB4hY6mEowp875dziaU1VkRpXSokkLk2
+         UwuPGOzsxdrF8b449OGrXR0B6AUFsH1d2NT++XyMqDLbHgUCfkYOB2Vg8m5aUtz4LVax
+         8eWCkspdlp5KFt4IYS+kFmj7QwbIaEobqp637FgdH3sPFk6+xp/vvwdflt0KwpIeqTKY
+         W9Obce5UQH7PJAvzVwonqpVdfxLR57aWa0Q3m6LAYOFV57Xkk8RTk1pDMgq9rIksuGGA
+         hgbA==
+X-Gm-Message-State: AC+VfDwKZHUNAy/iqxdxuVBiWN+/3OHsRzm082B6gTXlLNAFJ5zHe3Rw
+        YQYztj8SeCwvxdw2w1mIVZuWsA==
+X-Google-Smtp-Source: ACHHUZ61VuRGcNyIdsoeKxEP9I9ve0zzxwyEYeiTSUjX+SCoV/75jyc7NFgMI0GbksiCPhqa3pmwdg==
+X-Received: by 2002:a05:6a20:244a:b0:10e:440:6d36 with SMTP id t10-20020a056a20244a00b0010e04406d36mr19792675pzc.1.1687372400488;
+        Wed, 21 Jun 2023 11:33:20 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id e20-20020a62ee14000000b00665a76a8cfasm3193283pfi.194.2023.06.21.11.33.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 11:33:19 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 11:33:18 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] scsi: bfa: fix function pointer type mismatch for
+ state machines
+Message-ID: <202306211131.18885FF471@keescook>
+References: <20230616092233.3229414-1-arnd@kernel.org>
+ <20230616092233.3229414-2-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="h3jpjHKuVyhChuPS"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <14aa23d6-b4c2-190f-0d6c-22a82befa04d@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230616092233.3229414-2-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Jun 16, 2023 at 11:22:10AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The bfa driver is full of state machines and a generic abstraction layer
+> for them. This relies on casting function pointers, but that is no longer
+> allowed when CONFIG_CFI_CLANG is enabled and causes a huge number of
+> warnings like:
+> 
+> drivers/scsi/bfa/bfad.c:169:3: error: cast from 'void (*)(struct bfad_s *, enum bfad_sm_event)' to 'bfa_sm_t' (aka 'void (*)(void *, int)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+>                 bfa_sm_set_state(bfad, bfad_sm_created);
+>                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> Rework the mechanism to no longer require the function pointer casts,
+> by having separate types for each individual state machine. This in
+> turn requires moving the enum definitions for each state machine
+> into the header files in order to define the typedef.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
---h3jpjHKuVyhChuPS
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for all this! It's a lot of mechanical changes, but looks correct
+to me. One nit below...
 
-On Wed, Jun 21, 2023 at 11:25:14AM -0700, Randy Dunlap wrote:
->=20
->=20
-> On 6/20/23 21:59, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > Changes since 20230620:
-> >=20
->=20
-> on riscv 32-bit:
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Is XIP_KERNEL enabled? And if so, does this fix it?
-diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
-index ce10a38dff37..6833d01e2e70 100644
---- a/arch/riscv/Kconfig.socs
-+++ b/arch/riscv/Kconfig.socs
-@@ -43,6 +43,7 @@ config ARCH_SUNXI
-=20
- config ARCH_THEAD
-        bool "T-HEAD RISC-V SoCs"
-+       depends on MMU && !XIP_KERNEL
-        select ERRATA_THEAD
-        help
-          This enables support for the RISC-V based T-HEAD SoCs.
-(whitespace damaged)
+> [...]
+>  static void
+> -bfad_sm_uninit(struct bfad_s *bfad, enum bfad_sm_event event);
+> +bfad_sm_uninit(struct bfad_s *bfad, enum bfad_sm_event);
+>  static void
+> -bfad_sm_created(struct bfad_s *bfad, enum bfad_sm_event event);
+> +bfad_sm_created(struct bfad_s *bfad, enum bfad_sm_event);
+>  static void
+> -bfad_sm_initializing(struct bfad_s *bfad, enum bfad_sm_event event);
+> +bfad_sm_initializing(struct bfad_s *bfad, enum bfad_sm_event);
+>  static void
+> -bfad_sm_operational(struct bfad_s *bfad, enum bfad_sm_event event);
+> +bfad_sm_operational(struct bfad_s *bfad, enum bfad_sm_event);
+>  static void
+> -bfad_sm_stopping(struct bfad_s *bfad, enum bfad_sm_event event);
+> +bfad_sm_stopping(struct bfad_s *bfad, enum bfad_sm_event);
+>  static void
+> -bfad_sm_failed(struct bfad_s *bfad, enum bfad_sm_event event);
+> +bfad_sm_failed(struct bfad_s *bfad, enum bfad_sm_event);
+>  static void
+> -bfad_sm_fcs_exit(struct bfad_s *bfad, enum bfad_sm_event event);
+> +bfad_sm_fcs_exit(struct bfad_s *bfad, enum bfad_sm_event);
 
-Cheers,
-Conor.
+This bit doesn't seem needed? i.e. why remove the prototype's argument
+names?
 
->=20
->=20
-> WARNING: unmet direct dependencies detected for ERRATA_THEAD
->   Depends on [n]: RISCV_ALTERNATIVE [=3Dn]
->   Selected by [y]:
->   - ARCH_THEAD [=3Dy]
->=20
-> WARNING: unmet direct dependencies detected for ERRATA_THEAD
->   Depends on [n]: RISCV_ALTERNATIVE [=3Dn]
->   Selected by [y]:
->   - ARCH_THEAD [=3Dy]
->=20
-> WARNING: unmet direct dependencies detected for ERRATA_THEAD
->   Depends on [n]: RISCV_ALTERNATIVE [=3Dn]
->   Selected by [y]:
->   - ARCH_THEAD [=3Dy]
->=20
-> ../arch/riscv/errata/thead/errata.c: In function 'errata_probe_pbmt':
-> ../arch/riscv/errata/thead/errata.c:29:22: error: 'RISCV_ALTERNATIVES_EAR=
-LY_BOOT' undeclared (first use in this function)
->    29 |         if (stage =3D=3D RISCV_ALTERNATIVES_EARLY_BOOT ||
->       |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ../arch/riscv/errata/thead/errata.c:29:22: note: each undeclared identifi=
-er is reported only once for each function it appears in
-> ../arch/riscv/errata/thead/errata.c:30:22: error: 'RISCV_ALTERNATIVES_MOD=
-ULE' undeclared (first use in this function)
->    30 |             stage =3D=3D RISCV_ALTERNATIVES_MODULE)
->       |                      ^~~~~~~~~~~~~~~~~~~~~~~~~
-> ../arch/riscv/errata/thead/errata.c: In function 'errata_probe_cmo':
-> ../arch/riscv/errata/thead/errata.c:45:22: error: 'RISCV_ALTERNATIVES_EAR=
-LY_BOOT' undeclared (first use in this function)
->    45 |         if (stage =3D=3D RISCV_ALTERNATIVES_EARLY_BOOT)
->       |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ../arch/riscv/errata/thead/errata.c: In function 'errata_probe_pmu':
-> ../arch/riscv/errata/thead/errata.c:63:22: error: 'RISCV_ALTERNATIVES_EAR=
-LY_BOOT' undeclared (first use in this function)
->    63 |         if (stage =3D=3D RISCV_ALTERNATIVES_EARLY_BOOT)
->       |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ../arch/riscv/errata/thead/errata.c: At top level:
-> ../arch/riscv/errata/thead/errata.c:86:37: warning: 'struct alt_entry' de=
-clared inside parameter list will not be visible outside of this definition=
- or declaration
->    86 | void thead_errata_patch_func(struct alt_entry *begin, struct alt_=
-entry *end,
->       |                                     ^~~~~~~~~
-> ../arch/riscv/errata/thead/errata.c: In function 'thead_errata_patch_func=
-':
-> ../arch/riscv/errata/thead/errata.c:95:41: error: increment of pointer to=
- an incomplete type 'struct alt_entry'
->    95 |         for (alt =3D begin; alt < end; alt++) {
->       |                                         ^~
-> ../arch/riscv/errata/thead/errata.c:96:24: error: invalid use of undefine=
-d type 'struct alt_entry'
->    96 |                 if (alt->vendor_id !=3D THEAD_VENDOR_ID)
->       |                        ^~
-> ../arch/riscv/errata/thead/errata.c:98:24: error: invalid use of undefine=
-d type 'struct alt_entry'
->    98 |                 if (alt->patch_id >=3D ERRATA_THEAD_NUMBER)
->       |                        ^~
-> ../arch/riscv/errata/thead/errata.c:101:33: error: invalid use of undefin=
-ed type 'struct alt_entry'
->   101 |                 tmp =3D (1U << alt->patch_id);
->       |                                 ^~
-> ../arch/riscv/errata/thead/errata.c:103:34: error: implicit declaration o=
-f function 'ALT_OLD_PTR' [-Werror=3Dimplicit-function-declaration]
->   103 |                         oldptr =3D ALT_OLD_PTR(alt);
->       |                                  ^~~~~~~~~~~
-> ../arch/riscv/errata/thead/errata.c:103:32: warning: assignment to 'void =
-*' from 'int' makes pointer from integer without a cast [-Wint-conversion]
->   103 |                         oldptr =3D ALT_OLD_PTR(alt);
->       |                                ^
-> ../arch/riscv/errata/thead/errata.c:104:34: error: implicit declaration o=
-f function 'ALT_ALT_PTR' [-Werror=3Dimplicit-function-declaration]
->   104 |                         altptr =3D ALT_ALT_PTR(alt);
->       |                                  ^~~~~~~~~~~
-> ../arch/riscv/errata/thead/errata.c:104:32: warning: assignment to 'void =
-*' from 'int' makes pointer from integer without a cast [-Wint-conversion]
->   104 |                         altptr =3D ALT_ALT_PTR(alt);
->       |                                ^
-> ../arch/riscv/errata/thead/errata.c:107:38: error: 'RISCV_ALTERNATIVES_EA=
-RLY_BOOT' undeclared (first use in this function)
->   107 |                         if (stage =3D=3D RISCV_ALTERNATIVES_EARLY=
-_BOOT) {
->       |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> ../arch/riscv/errata/thead/errata.c:108:59: error: invalid use of undefin=
-ed type 'struct alt_entry'
->   108 |                                 memcpy(oldptr, altptr, alt->alt_l=
-en);
->       |                                                           ^~
-> ../arch/riscv/errata/thead/errata.c:111:70: error: invalid use of undefin=
-ed type 'struct alt_entry'
->   111 |                                 patch_text_nosync(oldptr, altptr,=
- alt->alt_len);
->       |                                                                  =
-    ^~
-> cc1: some warnings being treated as errors
->=20
->=20
-> --=20
-> ~Randy
-
---h3jpjHKuVyhChuPS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJNCCQAKCRB4tDGHoIJi
-0umMAQCeo7tmsoCFK/laMekW4n23h2SNRMHCYavQ4qKr/38lrAEA562IA0l+w8Xw
-rA9XTQCe3y0k47NwabyL9ZgB23r6XA4=
-=o8t5
------END PGP SIGNATURE-----
-
---h3jpjHKuVyhChuPS--
+-- 
+Kees Cook
