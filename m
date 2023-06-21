@@ -2,99 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE5BF7389FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:43:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADCF5738A0B
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233573AbjFUPn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50818 "EHLO
+        id S232701AbjFUPpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 11:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233669AbjFUPnJ (ORCPT
+        with ESMTP id S233907AbjFUPpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:43:09 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71950E69;
-        Wed, 21 Jun 2023 08:42:53 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f95bf5c493so1085525e87.3;
-        Wed, 21 Jun 2023 08:42:53 -0700 (PDT)
+        Wed, 21 Jun 2023 11:45:15 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2429B;
+        Wed, 21 Jun 2023 08:45:14 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-977e0fbd742so810977966b.2;
+        Wed, 21 Jun 2023 08:45:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687362172; x=1689954172;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wzxiaQ082ZFew564dfizmutmqfV0MIQOlwM4DhrL6Ig=;
-        b=DnH636UX7kGEnRpOVDWD065E2A7A+d66pQf0h3YL7NRfQsbdrdNIvirYGSd73IkXSk
-         kcoJ1lnxOlZBW2fKCvEuRhpKtupQbp4IxZMvKcJ4YvvlMg6MlfIForbYnAX+Tt1W8qQy
-         5aQQM36JHa5n1+VX8r2GdnmDN+GhkJOcUVltA3OiZygvcFnM4vqgzHjPvVChi2SdNgWa
-         YHwUzJ1OdLIXlCrua4LA032FZudH1sIWh/D5nv0fjmg05eOG+BDPpVNHegMTRjMyx0FO
-         iLU3RW1XC0I7fdkuta3Abr4kAjZqfqyZKXuey3P4yhUeNbOJ4jHlVXWbyP8QO4ghHQGl
-         Dl1g==
+        d=gmail.com; s=20221208; t=1687362313; x=1689954313;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cw7AjrQzIb0yz93itV9IidgEBv70/EYhS5N/v3j4hcA=;
+        b=pFtKdMbslc5zH4eMpfjeX+zjhO1eJhy7szeX+llYddNhsIkLLJeuHyRG2cFy+mqRTF
+         fhJKz3Z49CABwixub3hH4TGc8LYBEAJcG22GfkyA9jnu/uZOClSnTFONBRC5vUYz933r
+         zdTnyiBBugPOwFd3KGQ+x9oYrAFmnUn/agPLPtLZ07wAgHw6KzqS2TqqoN2k41w3nyyj
+         vB2qiiBjJ0DImTQmZmWHpj+x3FUEtK7ns6bIA1TaIVhlOPkWUIwOqHosc8qAQhTe7pzA
+         FzKfdNRZzY78klnetu8/zqvjXlMHnh8rfTm/PF9qZmwHknRygPea4XpLKMHchR9+TA5J
+         Z3xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687362172; x=1689954172;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wzxiaQ082ZFew564dfizmutmqfV0MIQOlwM4DhrL6Ig=;
-        b=fCuG0sVcJj6BSHHWKV5c402a4yTk5PgZtheoQkSy2w3Ad0s2yWnZ5QIZGvcfDJ9+QH
-         hrOH7AwAXKYPT8LWrN9BPa8p33+ZiNHBwTSxLM1C79f0CQ1XgqD4o67cjNAd9lsvtHcn
-         CTqRZXvVQLrRtyMjZLnVzAMk16bDrR9FZaRdEQmnCiv1Qn/RS+3Jvbgb1ryHRPH3jIUB
-         8z1cJDcCpLWSBJUoaLSSYd/MBN9HbEJEE5cA4esJrnsLlhBxc97qu73JZ6YncchOszMd
-         uyAdQl+RISJ6hD9ib1f5nCHHjoKeB/omFe5a7RxYwgfd5EAEtH5I8/VJW0RkbruTbESB
-         ki+g==
-X-Gm-Message-State: AC+VfDx9OlQLYcfKWLs2kNgZiEtkEfUehv7/LBgWd+pCfP4Hss16/qLa
-        wXU1gzcVl4Nekcp52hRHTl0=
-X-Google-Smtp-Source: ACHHUZ6Oy/XXvR8t4B7d/NTgPTdlbFRDbN1BltI4AoZQjNz5Dhl5IEq4dU7qm1CazjTVer2vn6hV8g==
-X-Received: by 2002:a05:6512:55a:b0:4f7:669f:7da8 with SMTP id h26-20020a056512055a00b004f7669f7da8mr10582510lfl.7.1687362171346;
-        Wed, 21 Jun 2023 08:42:51 -0700 (PDT)
-Received: from localhost.localdomain (sa-84-52-56-253.saturn.infonet.ee. [84.52.56.253])
-        by smtp.googlemail.com with ESMTPSA id j17-20020ac253b1000000b004f76684329esm813156lfh.234.2023.06.21.08.42.50
+        d=1e100.net; s=20221208; t=1687362313; x=1689954313;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cw7AjrQzIb0yz93itV9IidgEBv70/EYhS5N/v3j4hcA=;
+        b=g1JjZXFFCsi49YWJxmol75qqeyfl9ScU3/sUTXYNF9prkPS2LBn8H5Q63UjJ2xst7a
+         7JkPRv27mLg6c3DoP2RQbR0L0HW9kFQkBwK/OypfjDT9LGFWDJ7osIquLGYDVZ9yKplB
+         ccYOUG3G2LqOq58rXd0VEznX5vZYOXGA5Z1QU9Dj6Rrp4Yc/yMYMXj7ZwmNYOC7kO19u
+         c7VaMQRrCzHbRHFSnYLpZydMBJFkn+EnvJglfcQARWD+WhtS/NxH8wjnrfgSnbs5X3ex
+         zhZMAIaEsx1DYorxtOaRVPipar55vLD7BVyj3bCJlW8NQhAQK7JPRlwGzb2xR4QeZyHQ
+         ejTQ==
+X-Gm-Message-State: AC+VfDxPe3THIRA0IdwWKe4BzXUdTcMUFq+bTFJ4o91HSlUF7P4aekPO
+        X3HhzNg9i8KNp+uRdGwiPEw=
+X-Google-Smtp-Source: ACHHUZ7W/uMgae1mGa5B1RkGawdjByjhC0dPkdc5N6T8/ihfppc7NB0lAt2bwVJXQModqCq4P97Ahg==
+X-Received: by 2002:a17:907:a45:b0:96f:678:d2fc with SMTP id be5-20020a1709070a4500b0096f0678d2fcmr11739593ejc.22.1687362312835;
+        Wed, 21 Jun 2023 08:45:12 -0700 (PDT)
+Received: from PCBABN.skidata.net ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id p9-20020a170906498900b00986ad2e34f4sm3250381eju.205.2023.06.21.08.45.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 08:42:50 -0700 (PDT)
-From:   Emma Christy <emma.t.christy@gmail.com>
-To:     ezequiel@vanguardiasur.com.ar, mchehab@kernel.org,
-        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Cc:     Emma Christy <emma.t.christy@gmail.com>
-Subject: [PATCH v2] media: rkvdec: removed redundant blank line
-Date:   Wed, 21 Jun 2023 18:42:47 +0300
-Message-Id: <20230621154247.43983-1-emma.t.christy@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Wed, 21 Jun 2023 08:45:12 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+To:     mka@chromium.org
+Cc:     bbara93@gmail.com, benjamin.bara@skidata.com, conor+dt@kernel.org,
+        devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, robh+dt@kernel.org
+Subject: Re: [PATCH v2 1/3] usb: misc: onboard-hub: support multiple power supplies
+Date:   Wed, 21 Jun 2023 17:45:05 +0200
+Message-Id: <20230621154505.2229794-1-bbara93@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <ZJMPv6Fm3On0ITFi@google.com>
+References: <ZJMPv6Fm3On0ITFi@google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adhere to Linux kernel coding style. Removed redundant blank line.
-Issue found by checkpatch.
+Hi,
 
-Signed-off-by: Emma Christy <emma.t.christy@gmail.com>
----
-Changes in v2:
-  - Fixed Singed-off-by.
-  - Fixed Subject line.
+thanks for the feedback!
 
- drivers/staging/media/rkvdec/rkvdec-vp9.c | 1 -
- 1 file changed, 1 deletion(-)
+On Wed, 21 Jun 2023 at 16:57, Matthias Kaehlcke <mka@chromium.org> wrote:
+> On Wed, Jun 21, 2023 at 04:26:27PM +0200, Benjamin Bara wrote:
+> > +     hub->supplies_num = 1;
+> > +     if (hub->pdata->supplies_num > 1)
+> > +             hub->supplies_num = hub->pdata->supplies_num;
+>
+> Please change the above to:
+>
+>         if (hub->pdata->supplies_num != 0)
+>                 hub->supplies_num = hub->pdata->supplies_num;
+>         else
+>                 hub->supplies_num = 1;
+>
 
-diff --git a/drivers/staging/media/rkvdec/rkvdec-vp9.c b/drivers/staging/media/rkvdec/rkvdec-vp9.c
-index cfae99b40ccb..0e7e16f20eeb 100644
---- a/drivers/staging/media/rkvdec/rkvdec-vp9.c
-+++ b/drivers/staging/media/rkvdec/rkvdec-vp9.c
-@@ -227,7 +227,6 @@ static void init_intra_only_probs(struct rkvdec_ctx *ctx,
- 				}
- 			}
- 		}
--
- 	}
- 
- 	for (i = 0; i < sizeof(v4l2_vp9_kf_uv_mode_prob); ++i) {
--- 
-2.40.1
+I would even prefer:
+if (hub->pdata->supplies_num)
 
+if it's fine for you?
