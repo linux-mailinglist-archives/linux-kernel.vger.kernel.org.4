@@ -2,64 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAB757390D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 22:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E09987390DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 22:38:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjFUUfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 16:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55466 "EHLO
+        id S229757AbjFUUiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 16:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjFUUew (ORCPT
+        with ESMTP id S229595AbjFUUiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 16:34:52 -0400
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47733EA
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 13:34:50 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-3f9cf20da51so54360771cf.2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 13:34:50 -0700 (PDT)
+        Wed, 21 Jun 2023 16:38:18 -0400
+Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E2E6EC
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 13:38:17 -0700 (PDT)
+Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-77e3f25446bso106324639f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 13:38:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687379896; x=1689971896;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0IVDT+pHiNYnFSITOZZiipEu5nJYuLpHmhrSiK63MvU=;
+        b=q9QaF7gpeCfzxdbtkgaNBWMp+z+n5J21Q95XVt1T79jLqR9ZnQdNa8YbtRG9jN1y2M
+         ajit1EAmXJOB5ia//hxw3LVBUkFIy035lIYKH2QHR31AuTuPaZhPytxTW27y4lXwXuJA
+         hNJAaM7OesGjT4Nubiv69k0TvokQG35CEZ3E1iAR+KuscDsa/B4CFZW9rgIsyQwzUlIz
+         IiLDF3OW9kIvehJau9NN5p4dV+1Q1s4G5yXJUWXxqCLlU0lebxyltSKtjfB+S8AFn66t
+         OcYUt7FDnoRQDlvGEafNNN+LyB/9NBgF1n9RHouhxX6phgOfGIQtL4wX2693hMDZvty/
+         Iy5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687379689; x=1689971689;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1687379896; x=1689971896;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=T4lH/14XGem5/80z00o/w4e7/bJA0MK+2aNuXcfZsvY=;
-        b=hTV0Y6CRlk6YBbYVWRyK/oFuNGkoXUFQbGi6xw3MgzASp9IWPJPXNQ49qnzfELAsdx
-         nApTE2JUgFVkQoBEWnYrp+s+wmIQainobCz6aGQpW89O9K/OVTVNASfmf/hO3YzWfHXd
-         8z6wf6XJ0q+fDFJAlDW0oHDw2jn/xRGqG/4W7nC8BBhSsojek9CHnt0Ygb8/zOx/5uFV
-         XX9jjHo6tWE+JHtrqbzzLgb7BwWxNEuSbPGxr5BP5DS7wHtvsdp4//RTJlHtQb8WD40t
-         fugTqiFIRShAutkZV7sNsbVnNGs81osoWkr3EcApNzOHHWH/Jl29RulgeVWfRZGq0ATB
-         B8cw==
-X-Gm-Message-State: AC+VfDzSgW8/7NNDdrqfI4/6m2eRzmLuSzR8WfUnQcgns/8YaMaBKrI7
-        1Yy9a5yzYTxFCi9o5WOmROk=
-X-Google-Smtp-Source: ACHHUZ4XCq70Y4vxQOgNcRrJIuble1L+2xzY+ZI1CgCIlH/ALr2QyIK5UT1+sDphZEoMH2hVGr19/Q==
-X-Received: by 2002:ac8:7f8c:0:b0:3ed:a2f5:f27c with SMTP id z12-20020ac87f8c000000b003eda2f5f27cmr24770264qtj.12.1687379689058;
-        Wed, 21 Jun 2023 13:34:49 -0700 (PDT)
-Received: from maniforge ([2620:10d:c091:400::5:d965])
-        by smtp.gmail.com with ESMTPSA id h15-20020ac8714f000000b003e39106bdb2sm2770144qtp.31.2023.06.21.13.34.47
+        bh=0IVDT+pHiNYnFSITOZZiipEu5nJYuLpHmhrSiK63MvU=;
+        b=GvdIn9fI1YCcaW6yanno+MCoDKHvAuQ24AmiK1kB3sJH14x3Yg1B6MY5RkfZUlcsXe
+         CH6mxBtUlW9xcpgEgtTfmoOMp8mfkQdsBVRrU81zCCCcEm4OpqqvYxbzLm8LluqDoyOc
+         csiBNNQtBAMXbkb27pQvAj8HHSeibxgr4P1AjZgpSVvP5zAYqYRzFuD1q0H/B0CFt6q6
+         YtuzsfW38Rwt4s4a59MSmSidntDEehd1FGV3tI5Kwkiqive2kh4fKk0SHe5xgNmzCq5u
+         cqH8Z5bCHjbiXpgDbrN06ZEOeo/NHiCqpYRAflINoRvg2ySmKIiQkzZekN0cfm3JFvQV
+         okBg==
+X-Gm-Message-State: AC+VfDzaTzwzF7C4ERogy4/63NyT9v0bFRv0wyBDsZZgJdHozfvti+4B
+        xi0O34vkUgWY1xftUKPcasc=
+X-Google-Smtp-Source: ACHHUZ5MTF4zSqzWhLiOWwa71LlYb/iMx+JkhRe5zn8h+XBxQJVLm3vw1pbZjEi+KOrU/G8jY8JdaA==
+X-Received: by 2002:a6b:c9cf:0:b0:780:c92c:38ed with SMTP id z198-20020a6bc9cf000000b00780c92c38edmr409190iof.0.1687379896206;
+        Wed, 21 Jun 2023 13:38:16 -0700 (PDT)
+Received: from localhost (dhcp-72-235-13-41.hawaiiantel.net. [72.235.13.41])
+        by smtp.gmail.com with ESMTPSA id q1-20020a0566380ec100b004188a9370d7sm1562609jas.98.2023.06.21.13.38.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 13:34:48 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 15:34:45 -0500
-From:   David Vernet <void@manifault.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        rostedt@goodmis.org, dietmar.eggemann@arm.com, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        joshdon@google.com, roman.gushchin@linux.dev, tj@kernel.org,
-        kernel-team@meta.com
-Subject: Re: [RFC PATCH 3/3] sched: Implement shared wakequeue in CFS
-Message-ID: <20230621203445.GC15990@maniforge>
-References: <20230613052004.2836135-1-void@manifault.com>
- <20230613052004.2836135-4-void@manifault.com>
- <20230621142020.GG2053369@hirez.programming.kicks-ass.net>
+        Wed, 21 Jun 2023 13:38:15 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 21 Jun 2023 10:38:14 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Swapnil Sapkal <Swapnil.Sapkal@amd.com>
+Cc:     K Prateek Nayak <kprateek.nayak@amd.com>,
+        Sandeep Dhavale <dhavale@google.com>, jiangshanlai@gmail.com,
+        torvalds@linux-foundation.org, peterz@infradead.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        joshdon@google.com, brho@google.com, briannorris@chromium.org,
+        nhuck@google.com, agk@redhat.com, snitzer@kernel.org,
+        void@manifault.com, kernel-team@android.com
+Subject: Re: [PATCH 14/24] workqueue: Generalize unbound CPU pods
+Message-ID: <ZJNftsP2t6b7taQE@slm.duckdns.org>
+References: <20230519001709.2563-1-tj@kernel.org>
+ <20230519001709.2563-15-tj@kernel.org>
+ <CAB=BE-S=cxewXu7nqJY1DC5w9Bapar_C0cTjpZOQ-Qd5GGwYyw@mail.gmail.com>
+ <c307ba94-0d8c-3cbf-19da-44ee31751428@amd.com>
+ <ZIEBB-A1arYKSK2P@slm.duckdns.org>
+ <fb3461cd-3fc2-189a-a86b-c638816a2440@amd.com>
+ <ZIJbMQOu_k07jkFf@slm.duckdns.org>
+ <edfb9182-72e8-8bc2-bae9-2384e4e52577@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230621142020.GG2053369@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+In-Reply-To: <edfb9182-72e8-8bc2-bae9-2384e4e52577@amd.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,153 +86,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 04:20:20PM +0200, Peter Zijlstra wrote:
-> On Tue, Jun 13, 2023 at 12:20:04AM -0500, David Vernet wrote:
-> > +struct swqueue {
-> > +	struct list_head list;
-> > +	spinlock_t lock;
-> > +} ____cacheline_aligned;
-> 
-> I'm thinking you can shard this just fine, it makes that pop() needs to
-> iterate all shards, but that shouldn't be a problem, and it would still
-> only need to take a single lock.
+Hello, Swapnil.
 
-Is the idea here to have multiple sharded queues per LLC, with a single
-lock protecting them? Assuming so, is the idea that it would avoid
-bouncing the list heads amongst all of the cores' cachelines? I could
-see that being useful in some scenarios, but it also feels a bit
-complicated for what it gives you. If you have tasks being pulled
-quickly I don't think that will help much because the list heads will
-just bounce to the pullers. Also, if the lock is already heavily
-contended, it seems possible that the cores inside a single shard could
-still bounce the head back and forth amongst them, or the cache line
-bouncing will be a small-order overhead compared to the lock itself.
+On Mon, Jun 19, 2023 at 10:00:33AM +0530, Swapnil Sapkal wrote:
+...
+> Thanks for the patchset. I tested the patchset with fiotests.
+> Tests were run on a dual socket 3rd Generation EPYC server(2 x64C/128T)
+> with NPS1, NPS2 and NPS4 modes.
 
-Or did I misunderstand your suggestion entirely?
+Can you elaborate or point me to a doc explaining the differences between
+NPS1, 2 and 4? My feeble attempt at googling didn't lead to anything useful.
+What's the test doing and how long are they running?
 
-> I'm thinking 4 or 8 shards should be plenty, even for Intel LLC.
-> 
-> >  #ifdef CONFIG_SMP
-> 
-> > +static struct task_struct *swqueue_pull_task(struct swqueue *swqueue)
-> > +{
-> > +	unsigned long flags;
-> > +
-> > +	struct task_struct *p;
-> > +
-> > +	spin_lock_irqsave(&swqueue->lock, flags);
-> > +	p = list_first_entry_or_null(&swqueue->list, struct task_struct,
-> > +				     swqueue_node);
-> > +	if (p)
-> > +		list_del_init(&p->swqueue_node);
-> > +	spin_unlock_irqrestore(&swqueue->lock, flags);
-> > +
-> > +	return p;
-> > +}
-> 
-> Would this not normally be called pop() or somesuch?
+> With affinity-scopes-v2, below are the observations:
+> BW, LAT AVG and CLAT AVG shows improvement with some combinations
+> of the params in NPS1 and NPS2 while all other combinations of params
+> show no loss or gain in the performance. Those combinations showing
+> improvement are marked with ### and those showing drop in performance
+> are marked with ***. CLAT 99 shows mixed results in all the NPS modes.
+> SLAT 99 is suffering tremendously in all NPS mode.
 
-Yes, I'll improve the name in the next iteration. swqueue_dequeue() and
-swqueue_enqueue() seem like the most canonical. Let me know if you have another
-preference.
+Lower thread count tests showing larger variance is consistent with my
+experience. Sometimes the scheduling and its interaction with workload seems
+to exhibit bi(or higher degree)-modal behaviors and the swings get a lot
+more severe when clock boosting is involved.
 
-> 
-> > +static void swqueue_enqueue(struct rq *rq, struct task_struct *p, int enq_flags)
-> > +{
-> > +	unsigned long flags;
-> > +	struct swqueue *swqueue;
-> > +	bool task_migrated = enq_flags & ENQUEUE_MIGRATED;
-> > +	bool task_wakeup = enq_flags & ENQUEUE_WAKEUP;
-> > +
-> > +	/*
-> > +	 * Only enqueue the task in the shared wakequeue if:
-> > +	 *
-> > +	 * - SWQUEUE is enabled
-> > +	 * - The task is on the wakeup path
-> > +	 * - The task wasn't purposefully migrated to the current rq by
-> > +	 *   select_task_rq()
-> > +	 * - The task isn't pinned to a specific CPU
-> > +	 */
-> > +	if (!task_wakeup || task_migrated || p->nr_cpus_allowed == 1)
-> > +		return;
-> 
-> Elsewhere you mentioned heuristics, this smells like them. This and the
-> is_cpus_allowed() thing makes you loose plenty of opportunities.
+Outside of that tho, I'm having a difficult time interpreting the results.
+It's definitely possible that I made some mistakes but in theory NUMA should
+behave about the same as before the patchset, which seem sto hold for most
+of the results but there are some striking outliers.
 
-Yeah fair enough, these certainly are heuristics as well.
+So, here's a suggestion. How about we pick two scenarios, one where CACHE is
+doing better and one worse, and then run those two specific scenarios
+multiple times and see how consistent the results are?
 
-I thought it best to try and avoid swqueue getting in the way of
-select_task_rq_fair() (at least to start out with), but we could always
-remove that and run other experiments to see how it does.
+Thanks.
 
-> > +	swqueue = rq_swqueue(rq);
-> > +	spin_lock_irqsave(&swqueue->lock, flags);
-> > +	list_add_tail(&p->swqueue_node, &swqueue->list);
-> > +	spin_unlock_irqrestore(&swqueue->lock, flags);
-> > +}
-> > +
-> >  static int swqueue_pick_next_task(struct rq *rq, struct rq_flags *rf)
-> >  {
-> > -	return 0;
-> > +	struct swqueue *swqueue;
-> > +	struct task_struct *p = NULL;
-> > +	struct rq *src_rq;
-> > +	struct rq_flags src_rf;
-> > +	int ret;
-> > +
-> > +	swqueue = rq_swqueue(rq);
-> > +	if (!list_empty(&swqueue->list))
-> > +		p = swqueue_pull_task(swqueue);
-> > +
-> > +	if (!p)
-> > +		return 0;
-> 
-> At this point you can do the whole is_cpu_allowed() and avoid the whole
-> lock dance if not.
-
-Good idea, will incorporate into the next iteration.
-
-> > +
-> > +	rq_unpin_lock(rq, rf);
-> > +	raw_spin_rq_unlock(rq);
-> > +
-> > +	src_rq = task_rq_lock(p, &src_rf);
-> > +
-> > +	if (task_on_rq_queued(p) && !task_on_cpu(rq, p))
-> > +		src_rq = migrate_task_to(src_rq, &src_rf, p, cpu_of(rq));
-> 
-> And then this becomes move_queued_task().
-
-Yep, will make this change per your suggestion in [0].
-
-[0]: https://lore.kernel.org/all/20230621130439.GF2053369@hirez.programming.kicks-ass.net/
-
-> > +	if (src_rq->cpu != rq->cpu)
-> > +		ret = 1;
-> > +	else
-> > +		ret = -1;
-> > +
-> > +	task_rq_unlock(src_rq, p, &src_rf);
-> > +
-> > +	raw_spin_rq_lock(rq);
-> > +	rq_repin_lock(rq, rf);
-> > +
-> > +	return ret;
-> >  }
-> >  
-> >  static void swqueue_remove_task(struct task_struct *p)
-> > +{
-> > +	unsigned long flags;
-> > +	struct swqueue *swqueue;
-> > +
-> > +	if (!list_empty(&p->swqueue_node)) {
-> > +		swqueue = rq_swqueue(task_rq(p));
-> > +		spin_lock_irqsave(&swqueue->lock, flags);
-> > +		list_del_init(&p->swqueue_node);
-> > +		spin_unlock_irqrestore(&swqueue->lock, flags);
-> > +	}
-> > +}
-> 
-> dequeue()
-
-Ack
+-- 
+tejun
