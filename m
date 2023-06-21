@@ -2,270 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927127379B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 05:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1807379B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 05:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbjFUD2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 23:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37070 "EHLO
+        id S230113AbjFUD3P convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 20 Jun 2023 23:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjFUD2q (ORCPT
+        with ESMTP id S230143AbjFUD3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 23:28:46 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DD5DC;
-        Tue, 20 Jun 2023 20:28:45 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35L0Fb0F006572;
-        Tue, 20 Jun 2023 20:28:20 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=J8wxnOwdnptZrdgiH7+QqGmhk1ut888eKBpsu2fPbl4=;
- b=gxryR+2dTHoB8D+0Gn0R990O+s77xDHRgv42SxfC8u9/Q558+rAbuncqGi0RJgqkZELd
- ZtwpecK4dOIqRClkXd2FLKoFhh5nr7xnZb9LIPbccwy2DvZB/I9jorNBgyjKOMfdAo8j
- 93e8NSPZV2pOKgGnfJ8dMlmllH3uf+LjTO8paTYgpPk6+8xnVZmkBCQcjHpWb0CKf8+4
- cICnabR9hDQvz8josLPfD3KUSjC16vmrJFj51o8B6axfuQyXFyV27IdZu7X237DMFtuT
- 2yHbcnS7INx5zzgWVyjXpGIMCvhupvHjvB/RbOcqaxdth1eZJfv6F6pd/u2pEAfm4Vze tg== 
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2169.outbound.protection.outlook.com [104.47.56.169])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rb1cy9ukc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 20 Jun 2023 20:28:20 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DB4cFGWZYUvDPIDuDG8H+fOVNPkySBhq8r6E2v+hmPam6p2jif9h3PkKsnOu2Ze6RkYj/2rQ9EfoD9UTCX1S1fuiCGzxrEgWmW/etlZCZmgLwXZOzwDrCC1VZDSNc4rhHM00oum7TdaKg7Yme7OIqVN2x3qCOO2q4UGEZiGyW9SHLSwU853qt5XvaE8d0zfwrij9zEGokjAIMg19fCcYhghEOEXyMqspOcCaQwC7si/Xen/IwMXhkFsXulAGLU6yIn2s2ZH4YWjBQhpbfddn+awEaro4LRc90bxAG802ZigjL3gmerhHy9RjOkUW1y76nTL0gdGx9ozPjYh8bLhq8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=J8wxnOwdnptZrdgiH7+QqGmhk1ut888eKBpsu2fPbl4=;
- b=XO3oUYx+H+fS2pqWGqYng4cSQhH2b9IsKUOC3oV/c9zLf7t7/TS8fT3otsEmn6g1ElmbMN2RxKwmrRWgaK3Xyr6vAPIwfShoHhBJNpamqe6LCWaNm9LEO72X+vtufo7BwbpEqlc3xoqpAKgtw67umntWpT2rSWAo/90XBUGeFdbHykwWkRKNogc0NMEUDdZxBu6oE068bLQXYUX4/tAj2G5ZAg/TCVL/z4geQ7cnkAAFYwuCgcmtunx05IqvGzhmmUfdd+MgeKageF8gICid+SoYgBUTKLo3Wjue89/5akfA22PghGAOmz2FgHe9k8xMaPR9xFiqWc2E+qaOaxkj2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by SN7PR15MB5826.namprd15.prod.outlook.com (2603:10b6:806:32c::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.36; Wed, 21 Jun
- 2023 03:28:17 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::428f:acec:2c1f:c812]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::428f:acec:2c1f:c812%7]) with mapi id 15.20.6500.036; Wed, 21 Jun 2023
- 03:28:17 +0000
-Message-ID: <2dcc697a-46fe-0933-0508-90ebad9ac8f3@meta.com>
-Date:   Tue, 20 Jun 2023 20:28:13 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH bpf] bpf/btf: Accept function names that contain dots
-Content-Language: en-US
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Florent Revest <revest@chromium.org>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, martin.lau@linux.dev, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        nathan@kernel.org, trix@redhat.com, stable@vger.kernel.org
-References: <20230615145607.3469985-1-revest@chromium.org>
- <CAEf4BzbjCt3tKJ40tg12rMjCLXrm7UoGuOdC62vGnpTTt8-buw@mail.gmail.com>
- <CABRcYmK=yXDumZj3tdW7341+sSV1zmZw1UpQkfSF6RFgnBQjew@mail.gmail.com>
- <c26de68d-4a56-03a0-2625-25c7e2997d45@meta.com>
- <CAKwvOdnehNwrDNV5LvBBwM=jqPJvL7vB9HwF0YU-X5=zbByrmg@mail.gmail.com>
- <6b63301f-96b2-74b9-c156-3a34fb5ad346@meta.com>
- <CAKwvOdna=1Sg4Aab=BE6F86H9ZE7kPRM=VTkqQuGiF-Jdze-cA@mail.gmail.com>
-From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <CAKwvOdna=1Sg4Aab=BE6F86H9ZE7kPRM=VTkqQuGiF-Jdze-cA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SJ2PR07CA0016.namprd07.prod.outlook.com
- (2603:10b6:a03:505::16) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        Tue, 20 Jun 2023 23:29:09 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80E31985;
+        Tue, 20 Jun 2023 20:29:03 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 93F4C7FC9;
+        Wed, 21 Jun 2023 11:29:01 +0800 (CST)
+Received: from EXMBX062.cuchost.com (172.16.6.62) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 21 Jun
+ 2023 11:29:01 +0800
+Received: from [192.168.120.43] (171.223.208.138) by EXMBX062.cuchost.com
+ (172.16.6.62) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 21 Jun
+ 2023 11:29:00 +0800
+Message-ID: <8e2a50b2-a9ab-e164-a3c2-b7bc11ccdb53@starfivetech.com>
+Date:   Wed, 21 Jun 2023 11:28:59 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|SN7PR15MB5826:EE_
-X-MS-Office365-Filtering-Correlation-Id: c4a7a2c8-a22b-456d-50fc-08db72078db9
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: q4io8xG99DKK/bOLtSvIsL1hc5HfgTDOaj1iCRh2gHsbC25tyexEgTS7sgp5SsFLd7bU2Gnuld/Rc7XDRaOYoV0JQOdj/CZKBWVzm9R4u68CkKyUhtM630Mr+trGjKvvaf6nqnecR2NENZ1fldgUokE3no5F43UMddOsPYOZ/UUWQApWtfSuV4O2Hc9ZsLI0SGBDGhs9OPIY7UmBrbutOiRskHi6xaMw2O5ZefVFpVgFr7m1nqDvL5UMsefZWeBU+f0wn6qlHt9OmdmowfaYEv5s1BDg4z+s4N5RN8IxdeRKsibcghVT85Xo3KiIp5IuU8xGOFTA3K72aUR0U3/Oc/rAzAahNzywn/YdG0JR1SEsriDbnHI+hgco2xDHk1cFxYffSv9HV+wYNv2GTPMbN2lkT48LiLR/+urqMu9sWN+MgPCoecvzWu6FECJ5kXm6pF8rjHMrkju/pUpogxw+LZzxlEe2U9YbX/NFvLAndXeWt2rS09GBrF4yGBrDsLgeKf394F3a/AYoctxHl+xmBu7zZx1vQxAYJXavfAzz/yH5xszTBGUeieHT24bKzeuxoU5OCM5Wbjows57t4iQyG8Fl/R0kb9Dy3Xlsx0z1T1/PJSFSZp2cCYqNRJgcVAFBEmKlLisUT/H4ezc+Uv8jfQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(136003)(396003)(376002)(366004)(451199021)(7416002)(478600001)(5660300002)(31686004)(66476007)(66946007)(4326008)(6916009)(66556008)(2906002)(54906003)(316002)(41300700001)(6666004)(6486002)(8936002)(8676002)(53546011)(6512007)(186003)(6506007)(2616005)(83380400001)(38100700002)(36756003)(86362001)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZW9xZmhQVVVDUUNsT1RVdU8wNVEvZGVuMWJMRXA3VTVieHNkb0IxelVGOWxD?=
- =?utf-8?B?RGdnZElFalJXaldTSVdmQm5UdExTODljTHpqYlo3bHdXQ3lvY2cxeThEUmJP?=
- =?utf-8?B?aWNPRXFyUUdrOTl5OHNBcloyaW5rai9MT1kxN0YzQkRQYjVpTHhkRkRBVXJT?=
- =?utf-8?B?dk8ycHZTVG1JMHIzK1cyTzJDVjNjNlNsQVNYSGtZRGMxckY0d2RrazJTWFpO?=
- =?utf-8?B?U0pPMXRsV1k0RmFOTjJPeW9ONlBrSDMwdDVYNm9OUXVHbDRQZXFYMEcrVFFP?=
- =?utf-8?B?bzNFeUNxdm5FVDVBTngwdHlyTFhoMkIvRm1HMWtOK1pORDA1L0JnbzlQS3Y5?=
- =?utf-8?B?cFoxK1FVS1h1ZU01UWV6dDNWT3MzY2lWSVZ5TWN2OElRTGFQcUxKVFVTczFk?=
- =?utf-8?B?YlV3MHhQTHNSYUJlelhlaW9UQWdEemtNaTlTQVJ3Rk9sT25BeWxJVlVQQlo1?=
- =?utf-8?B?R1d6cXdYUDZ4MXhFWS8rbHF5ZTdWTEx6K1RuNmNTRnh6ZHBQb0hzQ3pMZzBk?=
- =?utf-8?B?bWF4czM3clFtZXJ4SkVPTFJ3d0Z1Si81Tk5KcmxzTWI5N3oxSWh5OVdWazdx?=
- =?utf-8?B?OTdDSGEyWFM0NFZ3c2g0dTBidWNDcTQzMzBEcWhLRFVWMHZReHZ2Wm1laVM2?=
- =?utf-8?B?MzRuOE1YTlV1eWVMSjAwa2M2R2pCMi9lL0IvY0Y5OCtrM3JKakpWRWduVTB2?=
- =?utf-8?B?dC9FMnZicGswSkFkanFlT1pBQThrQTFtTWVnUnNMMlJ0QmJUZ0Z3RlRkUzZH?=
- =?utf-8?B?aTRacWJQSWNXZW42RUxWeHBoeld1WWp0RDY3VHRsRGdoMTdDM1ovUmpFeXQy?=
- =?utf-8?B?ZG5OOVNRdzRmZjFJSmkzRmxyU0FnbGNKZnN5OU1pa1QveUxaaThVcnh0UUxK?=
- =?utf-8?B?WW1mWEpqOVVqdjhSZWNyZVRGYVE2Mnd1VEpPWnZxeGh3T1NzSUEzSDVuZDZ1?=
- =?utf-8?B?Qk5jbHl0WTBTR2Nra2xlcFluMWNFa1poTGdzdmN6M0RJRHgvUSsvZCtReVlt?=
- =?utf-8?B?YkZibUpnWWs1QTY1aGVSQnpjdzJpSnh1bnE3MURVVnZSZEtyYy9sbC85d3h5?=
- =?utf-8?B?TGJOMCtJSnliTmMrUkhmVW9SeWJyd2xvRWdkQWl3Y3o0L2dsMERHRnp4dXlI?=
- =?utf-8?B?NTRKRlFmTXBMU1czbGxwSlFWSU1NQVNoSnVISnN1K1VJdHBRWGROMlEyZ2xI?=
- =?utf-8?B?RWd0bUtCbE9yQkwyemN5VlNFT3hVOWNkZTF0OVNnZzdIRktCaXA3Z3ZoNWtF?=
- =?utf-8?B?bkhNZkduQ2lralpyaGtQREY1c0kvbk05V0grZFBBWW9WSm5vOHRycjNwNGJo?=
- =?utf-8?B?RlB5OXl2RmpqcXhNN0RxcGtyTzMyK2V4OEFDQmluQlU5QUo3alZVNEw0cWVv?=
- =?utf-8?B?RnlpcGxwVUdPdFZlZ2FtOWNzTUpjelNIejZ2VVMvN3piaXJ2SERxU1V3eEZK?=
- =?utf-8?B?QVZHYm5RZ2I2RW1FdWd2RStkS3dwUGszOW5qQy9PMXNNYUwwSWkrK2ZiVWV2?=
- =?utf-8?B?ZXJYM2JaRHZyYVo5Ykc0dnU5TloxTHhvSDd2aUh4cUhTME1SYlQvQkdzOHhu?=
- =?utf-8?B?b1hCajB3VjVXYWRlOFpFZkh3dWVCc1J5RFZ1N3gyVENRakx6OFczc1VPOUlt?=
- =?utf-8?B?V3lYdGU3aWNUbmQ2WjFRVVgwUmxZLzkyQmdGTlhQWEpkWUlzNG1pSEw1bnJu?=
- =?utf-8?B?Q2plY01qMzA1amp1Q2MrMTNpMTNrNS9ZMWMwd3oyVjE2TE03ZEhib0l0Tk5S?=
- =?utf-8?B?Slp2MXJmWmp5bjVYWWFjeHIrN1ZpN2IvdEpVeHZOYWF6SUxjTmQ2bnRTS3dl?=
- =?utf-8?B?M0pvT2VyNTU4WTBBRGlaUXJsK1VBKytkTmx0cEpTQUZpejJyeG9QVTdZREFH?=
- =?utf-8?B?UEl3dGNGczhRYjJ5YWd5L3h0Vm0yNEY5cHV1czFPeExYU3NuTmdEdGJ3d0Nx?=
- =?utf-8?B?czJtVUNMZjk0TVNsQ1lRRk9XSjVVMWlLUDFHUEFTQm1BTUpWRjZDV1Y1QU5h?=
- =?utf-8?B?U3J5a2U0Yk8xWFFOSFYzZ0tQbmV0U1FjbGhyNzkwN21SQ2wyQkUrVDY0c0dq?=
- =?utf-8?B?MkxJNFBCK1RWN3I3SURFNllmZkcyQUhGcitod3kzRG1SMU1WYThOTlBVUERk?=
- =?utf-8?B?bHpqSDE2d1V4UEZwZ0NtNE1VS1BFMndQVExoRWxCWlpDNWFLRTI5MSsrQytH?=
- =?utf-8?B?SEE9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c4a7a2c8-a22b-456d-50fc-08db72078db9
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 03:28:17.3092
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sWaMc6AJRnOMdZLZeTbRuv4HRwY9uedgPG57Eq+8ODQPYBN26r0DSsWXqBvzgCFr
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR15MB5826
-X-Proofpoint-ORIG-GUID: q-oRzR_5_IkY1-r18tLV3VYSvOmSYyNW
-X-Proofpoint-GUID: q-oRzR_5_IkY1-r18tLV3VYSvOmSYyNW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-21_01,2023-06-16_01,2023-05-22_02
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: net: motorcomm: Add pad driver
+ strength cfg
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     Conor Dooley <conor@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Frank <Frank.Sae@motor-comm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+References: <20230526090502.29835-1-samin.guo@starfivetech.com>
+ <20230526090502.29835-2-samin.guo@starfivetech.com>
+ <20230526-glutinous-pristine-fed571235b80@spud>
+ <1dbf113c-7592-68bd-6aaf-05ff1d8c538c@starfivetech.com>
+ <15eb4ffe-ea12-9a2c-ae9d-c34860384b60@starfivetech.com>
+ <b0a61cf4-adb1-4261-b6a5-aeb1e3c1b1aa@lunn.ch>
+From:   Guo Samin <samin.guo@starfivetech.com>
+In-Reply-To: <b0a61cf4-adb1-4261-b6a5-aeb1e3c1b1aa@lunn.ch>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX062.cuchost.com
+ (172.16.6.62)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Re: [PATCH v3 1/2] dt-bindings: net: motorcomm: Add pad driver strength cfg
+From: Andrew Lunn <andrew@lunn.ch>
+to: Guo Samin <samin.guo@starfivetech.com>
+data: 2023/6/20
+
+>> I just got the detailed data of Driver Strength(DS) from Motorcomm ,
+>> which applies to both rx_clk and rx_data.
+>>
+>> |----------------------|
+>> |     ds map table     |
+>> |----------------------|
+>> | DS(3b) | Current (mA)|
+>> |--------|-------------|
+>> |   000  |     1.20    |
+>> |   001  |     2.10    |
+>> |   010  |     2.70    |
+>> |   011  |     2.91    |
+>> |   100  |     3.11    |
+>> |   101  |     3.60    |
+>> |   110  |     3.97    |
+>> |   111  |     4.35    |
+>> |--------|-------------|
+>>
+>> Since these currents are not integer values
+> 
+> Integers is not a problem. Simply use uA.
+> 
+>> and have no regularity, it is not very good to use in the drive/dts
+>> in my opinion.
+> 
+> I think they are fine to use. Add a lookup table, microamps to
+> register value. Return -EINVAL if the requested value is not in the
+> table. List the valid values in the schema, so the checker tool might
+> point out problems.
+> 
+>       Andrew
+
+Thanks Andrew,
+I'll use a lookup table to try.
+Another thing we need to deal with DS under different IO voltages(1.8V/2.5V/3.3V).
+
+The IO voltage can be configured via a hardware pull-up resistor (visionfive 2 is configured to 1.8V by default), 
+and then the IO voltage can be obtained or set through the register（0xA001）
+
+Chip_Config (EXT_0xA001)
+|Bit  |Symbol  |Access  |Default  |Description |
+|5:4  |Cfg_ldo |RW      |0x0      |Rgmii ldo voltage and RGMII/MDC/MDIO PAD's level shifter control. Depends on strapping.|
+                                  |2'b11: 1.8v   2'b10: 1.8v    2'b01: 2.5v    2'b00: 3.3v                                |
+
+      |----------------------|            
+      | ds map table(1.8V)   |
+      |----------------------|
+      | DS(3b) | Current (mA)|
+      |   000  |     1.20    |
+      |   001  |     2.10    |
+      |   010  |     2.70    |
+      |   011  |     2.91    |
+      |   100  |     3.11    |
+      |   101  |     3.60    |
+      |   110  |     3.97    |
+      |   111  |     4.35    |
+      |--------|-------------|
 
 
-On 6/20/23 8:07 AM, Nick Desaulniers wrote:
-> On Tue, Jun 20, 2023 at 10:53 AM Yonghong Song <yhs@meta.com> wrote:
->>
->>
->>
->> On 6/20/23 7:38 AM, Nick Desaulniers wrote:
->>> 3. you did not run defconfig/menuconfig to have kconfig check for
->>> DWARFv5 support.
->>
->> Yes, I didn't run defconfig/menuconfig.
-> 
-> That doesn't mean the odd combo of clang+gas doesn't work.
-> 
-> Just like how using scripts/config is a hazard since it also doesn't
-> run kconfig and allows you to set incompatible configurations. Garbage
-> in; garbage out.
-> 
->>
->>>
->>> The kconfigs should prevent you from selecting DWARFv5 if your
->>> toolchain combination doesn't support it; if you run kconfig.
->>>
->>>> /tmp/video-bios-59fa52.s:4: Error: file number less than one
->>>> /tmp/video-bios-59fa52.s:5: Error: junk at end of line, first
->>>> unrecognized character is `"'
->>>> /tmp/video-bios-59fa52.s:6: Error: junk at end of line, first
->>>> unrecognized character is `"'
->>>> /tmp/video-bios-59fa52.s:7: Error: junk at end of line, first
->>>> unrecognized character is `"'
->>>> /tmp/video-bios-59fa52.s:8: Error: junk at end of line, first
->>>> unrecognized character is `"'
->>>> /tmp/video-bios-59fa52.s:9: Error: junk at end of line, first
->>>> unrecognized character is `"'
->>>> /tmp/video-bios-59fa52.s:10: Error: junk at end of line, first
->>>> unrecognized character is `"'
->>>> /tmp/video-bios-59fa52.s:68: Error: junk at end of line, first
->>>> unrecognized character is `"'
->>>> clang: error: assembler command failed with exit code 1 (use -v to see
->>>> invocation)
->>>> make[4]: *** [/home/yhs/work/bpf-next/scripts/Makefile.build:252:
->>>> arch/x86/realmode/rm/video-bios.o] Error 1
->>>> make[4]: *** Waiting for unfinished jobs....
->>>> /tmp/wakemain-88777c.s: Assembler messages:
->>>> /tmp/wakemain-88777c.s:4: Error: junk at end of line, first unrecognized
->>>> character is `"'
->>>> /tmp/wakemain-88777c.s:4: Error: file number less than one
->>>> /tmp/wakemain-88777c.s:5: Error: junk at end of line, first unrecognized
->>>> character is `"'
->>>> /tmp/wakemain-88777c.s:6: Error: junk at end of line, first unrecognized
->>>> character is `"'
->>>> /tmp/wakemain-88777c.s:7: Error: junk at end of line, first unrecognized
->>>> character is `"'
->>>> /tmp/wakemain-88777c.s:8: Error: junk at end of line, first unrecognized
->>>> character is `"'
->>>> /tmp/wakemain-88777c.s:81: Error: junk at end of line, first
->>>> unrecognized character is `"'
->>>> /tmp/wakemain-88777c.s:312: Error: junk at end of line, first
->>>> unrecognized character is `"'
->>>> clang: error: assembler command failed with exit code 1 (use -v to see
->>>> invocation)
->>>>
->>>> Potentially because of my local gnu assembler 2.30-120.el8 won't work
->>>
->>> It's recorded in lib/Kconfig.debug that 2.35.2 is required for DWARFv5
->>> support if you're using GAS.  My machine has 2.40.
->>>
->>>> with some syntax generated by clang. Mixing clang compiler and arbitrary
->>>> gnu assembler are not a good idea (see the above example). It might
->>>
->>> I agree, but for older branches of stable which are still supported,
->>> we didn't quite have clang assembler support usable.  We still need to
->>> support those branches of stable.
->>
->> Thanks Florent pointing out 5.10 stable kernels which have this issue.
-> 
-> No, all kernels have this issue, when using `LLVM=1 LLVM_IAS=0`.  It's
-> more likely that someone is using that combination for branches of
-> stable that predate 4.19 (such as 4.14) but we do still try to support
-> that combination somewhat, even if we recommend just using `LLVM=1`.
-> Interop between toolchains is still important, even if "why would you
-> do that?"
+      |----------------------|
+      | ds map table(3.3V)   |
+      |----------------------|
+      | DS(3b) | Current (mA)|
+      |   000  |     3.07    |
+      |   001  |     4.08    |
+      |   010  |     4.37    |
+      |   011  |     4.68    |
+      |   100  |     5.02    |
+      |   101  |     5.45    |
+      |   110  |     5.74    |
+      |   111  |     6.14    |
+      |--------|-------------|
+ 
+(The current value of 2.5V is not available to us now)
 
-Okay, yes, although 'LLVM=1' is recommended way to compiler clang
-based kernel, users can certainly do 'LLVM=1 LLVM_IAS=0' as well
-although not recommended. Then it is okay to put a bug fix in
-the commit message. Just need to clarify that
-   - > 5.10 kernel, LLVM=1 (LLVM_IAS=0 is not the default)
-     is recommended but user can still have LLVM=1 LLVM_IAS=0
-     to trigger the issue
-   - <= 5.10 kernel, LLVM=1 (LLVM_IAS=0 is the default) is
-     recommended in which case gnu as will be used.
+When we need to deal with current values at different voltages, using register values in drives may be simpler, comparing the current value.
+Of course, I will also follow your suggestion and use the current value + lookup table to implement a solution. Thanks!
 
-> 
->> I am okay with backporting to old stable kernels if that is needed.
->> But the patch going to bpf-next should not have a bug-fix tag and
->> the patch commit message can be tweaked for backport to 5.10 though.
->>
->>>
->>>> work with close-to-latest gnu assembler.
->>>>
->>>> To support function name like '<fname>.isra', some llvm work will be
->>>> needed, and it may take some time.
->>>>
->>>> So in my opinion, this patch is NOT a bug fix. It won't affect distro.
->>>> Whether we should backport to the old kernel, I am not sure whether it
->>>> is absolutely necessary as casual build can always remove LLVM_IAS=0 or
->>>> hack the kernel source itself.
->>>
->>>
->>>
-> 
-> 
-> 
+Best regards,
+Samin
