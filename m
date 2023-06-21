@@ -2,54 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57C11738112
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:11:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5577380D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:10:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232163AbjFUKRJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 06:17:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37276 "EHLO
+        id S232445AbjFUKR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 06:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231675AbjFUKQm (ORCPT
+        with ESMTP id S232238AbjFUKRn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 06:16:42 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000F61B4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 03:16:37 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1qBut4-0004ep-2R; Wed, 21 Jun 2023 12:16:30 +0200
-Message-ID: <21f781a548cef63312df56cb2265de9a7c9a0901.camel@pengutronix.de>
-Subject: Re: [PATCH v10 01/11] drm/etnaviv: Add a dedicated function to
- register an irq handler
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>,
-        Sui Jingfeng <18949883232@163.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        etnaviv@lists.freedesktop.org
-Date:   Wed, 21 Jun 2023 12:16:26 +0200
-In-Reply-To: <52751b55-ce34-f3a8-b3c0-4858ad984622@loongson.cn>
-References: <20230620094716.2231414-1-18949883232@163.com>
-         <20230620094716.2231414-2-18949883232@163.com>
-         <77f62814f98dd2728a1e4747f0db6b2a3cfa2c11.camel@pengutronix.de>
-         <52751b55-ce34-f3a8-b3c0-4858ad984622@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 21 Jun 2023 06:17:43 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8036F1FF6;
+        Wed, 21 Jun 2023 03:17:07 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35L68TN5028452;
+        Wed, 21 Jun 2023 03:16:55 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=5u6BWBK/bo7oif1Y/e08ARqz5El6m4nveuOvMD1hy5U=;
+ b=LgzQjzqoYgMeRZbXUOMsSjW7oODOev9Nxjhdfkzkg7REodSgyreBa1arBi/60AOyFTtL
+ lBwqhhAoS7e+NonSb9djmLNj6eVdePmGbkrCZ05PskjVDugmpsSlSlA8sOphIyqgTtBx
+ u2AUrefzcwasp6nxGIOP99WMVF4qn7NpqiFcnKpFv7Db0aVUearr6ujIcF8x2KXaqC66
+ qH2eqs3RHluoo13HfxOU6MnN6lV1+KQKLyf4KTavLoN03tQ4SykGc5afxod4RLR7ZSjx
+ MHKghW0wFh2VsiO9CJAwBRTO5lVXHhxgdZ+iMQPKK2Dl1+SdPH+17Sdbvl7P031fjvBf jg== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3rb5b35n74-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jun 2023 03:16:55 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 21 Jun
+ 2023 03:16:53 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Wed, 21 Jun 2023 03:16:53 -0700
+Received: from setup-1.sclab.marvell.com (unknown [10.106.25.74])
+        by maili.marvell.com (Postfix) with ESMTP id 8B00F3F705F;
+        Wed, 21 Jun 2023 03:16:53 -0700 (PDT)
+From:   Sathesh Edara <sedara@marvell.com>
+To:     <linux-kernel@vger.kernel.org>, <sburla@marvell.com>,
+        <vburru@marvell.com>, <davem@davemloft.net>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <hgani@marvell.com>
+CC:     <sedara@marvell.com>
+Subject: [PATCH v2] MAINTAINERS: update email addresses of octeon_ep driver maintainers
+Date:   Wed, 21 Jun 2023 03:16:49 -0700
+Message-ID: <20230621101649.43441-1-sedara@marvell.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: LaiyW7-dh_srrfRSeJaF4dIL3z7PJtvn
+X-Proofpoint-ORIG-GUID: LaiyW7-dh_srrfRSeJaF4dIL3z7PJtvn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-21_07,2023-06-16_01,2023-05-22_02
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,120 +67,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, dem 21.06.2023 um 17:20 +0800 schrieb Sui Jingfeng:
-> Hi,
-> 
-> On 2023/6/21 17:07, Lucas Stach wrote:
-> > Am Dienstag, dem 20.06.2023 um 17:47 +0800 schrieb Sui Jingfeng:
-> > > From: Sui Jingfeng <suijingfeng@loongson.cn>
-> > > 
-> > > Because getting IRQ from a device is platform-dependent, PCI devices have
-> > > different methods for getting an IRQ. This patch is a preparation to extend
-> > > this driver for supporting the PCI devices.
-> > > 
-> > > Cc: Lucas Stach <l.stach@pengutronix.de>
-> > > Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
-> > > Cc: Philipp Zabel <p.zabel@pengutronix.de>
-> > > Cc: Bjorn Helgaas <bhelgaas@google.com>
-> > > Cc: Daniel Vetter <daniel@ffwll.ch>
-> > > Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> > > ---
-> > >   drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 32 +++++++++++++++++++--------
-> > >   1 file changed, 23 insertions(+), 9 deletions(-)
-> > > 
-> > > diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-> > > index de8c9894967c..a03e81337d8f 100644
-> > > --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-> > > +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
-> > > @@ -1817,6 +1817,27 @@ static const struct of_device_id etnaviv_gpu_match[] = {
-> > >   };
-> > >   MODULE_DEVICE_TABLE(of, etnaviv_gpu_match);
-> > >   
-> > > +static int etnaviv_gpu_register_irq(struct etnaviv_gpu *gpu, int irq)
-> > > +{
-> > > +	struct device *dev = gpu->dev;
-> > > +	int err;
-> > > +
-> > > +	if (irq < 0)
-> > > +		return irq;
-> > > +
-> > > +	err = devm_request_irq(dev, irq, irq_handler, 0, dev_name(dev), gpu);
-> > > +	if (err) {
-> > > +		dev_err(dev, "failed to request irq %u: %d\n", irq, err);
-> > > +		return err;
-> > > +	}
-> > > +
-> > > +	gpu->irq = irq;
-> > > +
-> > > +	dev_info(dev, "irq(%d) handler registered\n", irq);
-> > There is no reason to put this into the kernel log.
-> 
-> I want to see the IRQ of the device when debugging,
-> 
-> etnaviv actually print very less.
-> 
-> This serve as a minimal signal  to us the etnaviv_gpu_register_irq() 
-> function is successful at driver load time.
-> 
-And debugging is a very different use-case than normal operation. If
-it's needed at all, downgrade this to dev_dbg. This isn't interesting
-information for a ordinary user of a system.
+Update email addresses of Marvell octeon_ep driver maintainers.
+Also remove a former maintainer.
 
-> >   It's no different
-> > than other resources to the driver and we don't log each one of those
-> > either.
-> > 
-> > In fact I don't see any reason for this change in the first place.
-> > Effectively you are moving a single function call into a new function,
-> > which doesn't seem like an improvement.
-> 
-> This is to make the patch easy to review, each patch is only introduce a 
-> small function,
-> 
-What I'm saying is that I don't see the need to introduce this function
-at all. All you need to do is move platform_get_irq out into the
-platform device code path. The devm_request_irq can stay where it is,
-as the only difference between platform and PCI device is how the irq
-number is retrieved from the platform.
+As a maintainer below are the responsibilities:
+- Pushing the bug fixes and new features to upstream.
+- Responsible for reviewing the external changes
+  submitted for the octeon_ep driver.
+- Reply to maintainers questions in a timely manner.
 
-Regards,
-Lucas
+Signed-off-by: Sathesh Edara <sedara@marvell.com>
+---
 
-> which is paving the way for we introducing the PCI device driver.
-> 
-> Otherwise when we introducing the PCI device driver, the patch is looks 
-> ugly,
-> 
-> It is difficult to review.
-> 
-> > Regards,
-> > Lucas
-> > 
-> > > +
-> > > +	return 0;
-> > > +}
-> > > +
-> > >   static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
-> > >   {
-> > >   	struct device *dev = &pdev->dev;
-> > > @@ -1837,16 +1858,9 @@ static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
-> > >   		return PTR_ERR(gpu->mmio);
-> > >   
-> > >   	/* Get Interrupt: */
-> > > -	gpu->irq = platform_get_irq(pdev, 0);
-> > > -	if (gpu->irq < 0)
-> > > -		return gpu->irq;
-> > > -
-> > > -	err = devm_request_irq(&pdev->dev, gpu->irq, irq_handler, 0,
-> > > -			       dev_name(gpu->dev), gpu);
-> > > -	if (err) {
-> > > -		dev_err(dev, "failed to request IRQ%u: %d\n", gpu->irq, err);
-> > > +	err = etnaviv_gpu_register_irq(gpu, platform_get_irq(pdev, 0));
-> > > +	if (err)
-> > >   		return err;
-> > > -	}
-> > >   
-> > >   	/* Get Clocks: */
-> > >   	gpu->clk_reg = devm_clk_get_optional(&pdev->dev, "reg");
-> 
+v2: added maintainer responsibilities
+
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 081eb65ef865..23d91becf43a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12538,7 +12538,7 @@ F:	drivers/mtd/nand/raw/marvell_nand.c
+ 
+ MARVELL OCTEON ENDPOINT DRIVER
+ M:	Veerasenareddy Burru <vburru@marvell.com>
+-M:	Abhijit Ayarekar <aayarekar@marvell.com>
++M:	Sathesh Edara <sedara@marvell.com>
+ L:	netdev@vger.kernel.org
+ S:	Supported
+ F:	drivers/net/ethernet/marvell/octeon_ep
+-- 
+2.37.3
 
