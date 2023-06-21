@@ -2,94 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70975738AD9
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C47EF738AE7
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:22:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232019AbjFUQU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:20:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
+        id S230201AbjFUQWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230038AbjFUQUP (ORCPT
+        with ESMTP id S229563AbjFUQWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:20:15 -0400
-Received: from imap5.colo.codethink.co.uk (imap5.colo.codethink.co.uk [78.40.148.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0EFE68
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:20:09 -0700 (PDT)
-Received: from [167.98.27.226] (helo=rainbowdash)
-        by imap5.colo.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
-        id 1qC0Yw-00CSar-IB; Wed, 21 Jun 2023 17:20:07 +0100
-Received: from ben by rainbowdash with local (Exim 4.96)
-        (envelope-from <ben@rainbowdash>)
-        id 1qC0Yx-001z4m-0c;
-        Wed, 21 Jun 2023 17:20:07 +0100
-From:   Ben Dooks <ben.dooks@codethink.co.uk>
-To:     linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
-        alexandre.belloni@bootlin.com
-Cc:     Ben Dooks <ben.dooks@codethink.co.uk>
-Subject: [RFC 5/5] i3c: dw; add print if cannot get resources
-Date:   Wed, 21 Jun 2023 17:20:05 +0100
-Message-Id: <20230621162005.473049-6-ben.dooks@codethink.co.uk>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230621162005.473049-1-ben.dooks@codethink.co.uk>
-References: <20230621162005.473049-1-ben.dooks@codethink.co.uk>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 21 Jun 2023 12:22:15 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D071BC
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:22:14 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 1949F1FF25;
+        Wed, 21 Jun 2023 16:22:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1687364533; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=j5LzRbA0MSafltoPYJhRpiKdOXzTXxtc3lByltXj8ss=;
+        b=hAskPiOXR5m1boyQyLH3AQleNo07DSPQ2Mdnep/jP5rZO5xlT8kwzmXEqDv8ORp/+ZEn68
+        D5vRTCdAq/6xJfD98PaUqBJip9kFYpnDrDisf1ukIkYSkGdUZ5COwo65ICfmQ/N6Y6yfK4
+        FPynqT9PldLWSfspSJ/g8t00JLxnEyY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1687364533;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=j5LzRbA0MSafltoPYJhRpiKdOXzTXxtc3lByltXj8ss=;
+        b=tf06WSAoYNsnxk6aabgguwiQbV+Si4MeMRDWiG20PzFqCtzX05yrQ63TrD+cxv8zainkBs
+        4DAPhSG9LZR3ekBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E7538133E6;
+        Wed, 21 Jun 2023 16:22:12 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id TLyYN7Qjk2Q8PQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Wed, 21 Jun 2023 16:22:12 +0000
+Date:   Wed, 21 Jun 2023 18:22:12 +0200
+Message-ID: <875y7grdjf.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Matthew Anderson <ruinairas1992@gmail.com>
+Cc:     tiwai@suse.com, perex@perex.cz, luke@ljones.dev,
+        sbinding@opensource.cirrus.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] ALSA: hda/realtek: Add quirks for ROG ALLY CS35l41 audio
+In-Reply-To: <20230621161714.9442-1-ruinairas1992@gmail.com>
+References: <20230621161714.9442-1-ruinairas1992@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The devm_reset_control_get_optional_exclusive() call does
-not print any errors, neiterh does the clk_prepare_enable
-or devm_request_irq() call.
+On Wed, 21 Jun 2023 18:17:14 +0200,
+Matthew Anderson wrote:
+> 
+> This requires a patched ACPI table or a firmware from ASUS to work because
+> the system does not come with the _DSD field for the CSC3551.
+> 
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217550
+> 
+> Signed-off-by: Matthew Anderson <ruinairas1992@gmail.com>
+> ---
+> changes in v2:
+>   - Fixed indentation
+> changes in v3:
+>   - Adjusted code as advised
+> changes in v4:
+>   - Fold and resubmit
 
-Add some basic error printing to make the probe failures
-easier to debug.
+Thanks, applied now to for-next branch.
 
-Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
----
- drivers/i3c/master/dw-i3c-master.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/i3c/master/dw-i3c-master.c b/drivers/i3c/master/dw-i3c-master.c
-index 9332ae5f6419..ffc84ff6225c 100644
---- a/drivers/i3c/master/dw-i3c-master.c
-+++ b/drivers/i3c/master/dw-i3c-master.c
-@@ -1429,12 +1429,16 @@ int dw_i3c_common_probe(struct dw_i3c_master *master,
- 
- 	master->core_rst = devm_reset_control_get_optional_exclusive(&pdev->dev,
- 								    "core_rst");
--	if (IS_ERR(master->core_rst))
-+	if (IS_ERR(master->core_rst)) {
-+		dev_err(&pdev->dev, "cannot get core_rst\n");
- 		return PTR_ERR(master->core_rst);
-+	}
- 
- 	ret = clk_prepare_enable(master->core_clk);
--	if (ret)
-+	if (ret) {
-+		dev_err(&pdev->dev, "cannot enable core_clk\n");
- 		goto err_disable_core_clk;
-+	}
- 
- 	reset_control_deassert(master->core_rst);
- 
-@@ -1446,8 +1450,10 @@ int dw_i3c_common_probe(struct dw_i3c_master *master,
- 	ret = devm_request_irq(&pdev->dev, irq,
- 			       dw_i3c_master_irq_handler, 0,
- 			       dev_name(&pdev->dev), master);
--	if (ret)
-+	if (ret) {
-+		dev_err(&pdev->dev, "cannot get irq\n");
- 		goto err_assert_rst;
-+	}
- 
- 	platform_set_drvdata(pdev, master);
- 
--- 
-2.40.1
-
+Takashi
