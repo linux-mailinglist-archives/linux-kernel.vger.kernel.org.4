@@ -2,115 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C363738E75
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 787CE738E77
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjFUST7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 14:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47758 "EHLO
+        id S229755AbjFUSUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 14:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbjFUSTx (ORCPT
+        with ESMTP id S230047AbjFUSUD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 14:19:53 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C83410D
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:19:33 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b520c77de0so30893945ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:19:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687371572; x=1689963572;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2N+RflCXP1PzqPiaKt451iYwf1h+9b0LuKAtNyBxB34=;
-        b=vZJh1OHfFxruZ2w3nH0qXkjMYYeCkv5Ua0zyfpVuCpMtXRcvouQouNPsAdKWRXXMry
-         zrn8M/JnD32mu7zYsKdevgjmGMGXzb2lX5l0oAnBUm/LsUWwpDicYlkVholIJaspBMsU
-         c+q1kszWrccgcS/g9a56qdy9GEW0T9LRlDyzZYFWjLqVv2IS+qcUW9ETjUhhNPaYI9QF
-         YxBNbBdJlEeGSIcfkdKq4oDUITp8UBaZdOui11Ubpm9V7h+E+4TFC1Ge8XKoYubJjSab
-         X67Dz8Wo9qk5i0/fhx9xWwI4WmhH8MsGD1R1hjNTmVHT8NQKlYI5wJZDrrrY6glsnvbm
-         HClA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687371572; x=1689963572;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2N+RflCXP1PzqPiaKt451iYwf1h+9b0LuKAtNyBxB34=;
-        b=bg8urD3akoTKBZSBim3e6Zh/+Kdc2F3mosw5rebg0fPaedPnu+s5vsrQfGTMPdw37s
-         SiNQ0N+gzUcNWxII97KwQDO3840FlmQGPBak44DAAE7POxzNLlg19N2TtlWZckj7ePEi
-         XYYBDhRE6RLgYvm7AC9W9BMFSTOI25MWlCDcanawH/ZlvsC1i5Y+dSRaC/TF2L+DAtLi
-         gJ/j7RfxeQLhjx04y17iiq/S8Jhxt801U0335eTQ//xGTwb1D6jDsAQ/l4iLPqGYUPqQ
-         GacnYr4ihqwOLrlnMebgShjAFDFPDG6DGP18SJx+7khRvi1c107eNQ2zUsWsGYLGu9EG
-         WiEg==
-X-Gm-Message-State: AC+VfDyC5ZiW5zVVWZu4OWZhqw86ebPABKD1VMVEoUD07Xb5G3VWMGzr
-        iI5N5T+hdZdgpa1whHji2J1GQA==
-X-Google-Smtp-Source: ACHHUZ5Gpf4XE8MJKO2B5K1fQ3ujoREdSQF8gdFfQ4ZRJyq7uL0zOLzLgMg+CO/3CitU/RJb7tjGJQ==
-X-Received: by 2002:a17:902:d48f:b0:1af:ea40:34e6 with SMTP id c15-20020a170902d48f00b001afea4034e6mr7449439plg.60.1687371572484;
-        Wed, 21 Jun 2023 11:19:32 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id jw9-20020a170903278900b001b50f35aff1sm3805118plb.140.2023.06.21.11.19.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 11:19:31 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 11:19:31 -0700 (PDT)
-X-Google-Original-Date: Wed, 21 Jun 2023 11:18:52 PDT (-0700)
-Subject:     Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-In-Reply-To: <87wmzwn1po.fsf@all.your.base.are.belong.to.us>
-CC:     Conor Dooley <conor@kernel.org>, jszhang@kernel.org,
-        llvm@lists.linux.dev, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     bjorn@kernel.org, ndesaulniers@google.com, nathan@kernel.org
-Message-ID: <mhng-1d790a82-44ad-4b9c-bfe4-6303f09b0705@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 21 Jun 2023 14:20:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEAB01BF0;
+        Wed, 21 Jun 2023 11:19:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3225A6166F;
+        Wed, 21 Jun 2023 18:19:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 616F6C433C0;
+        Wed, 21 Jun 2023 18:19:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687371591;
+        bh=nTV9RiBRV0XxdfsvMmpFlcA+BferCSjEfKms+dD19HY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rBD3XV3+p1bFXkOdw8a66gAfh35qLVsuEJJ4JVmFpN07Yi/VFFfiOcilvJaLQHGxS
+         iYEIg82CEyC2zr7uIQiBJ0qyNmUGsvbbn+l9rxa+qmcwvv2EGNJ/OTJ7uMayB+8PKl
+         wJ0FEa5CXKLPuYa7vRfVsuvvll5eFzRnceUaRVfzoSQIWGw2YI0Q3FmjVTNjCtFsu4
+         0Kmrz5TeRQ3C2/DYFnY2dFPm3EISbbharOnkRiWhkszeUqHdbqLrQECKvE/GZA3WHN
+         SdaS9elvNehkI/LoPHw5UJnNqvr4nm2TaqaRJcEaKcz9C04G2iXq0CY7uCOb+qHXTo
+         57qR1Md+rLxSg==
+Date:   Wed, 21 Jun 2023 19:19:46 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     =?iso-8859-1?B?Ik7tY29sYXMgRi4gUi4gQS4i?= Prado 
+        <nfraprado@collabora.com>, Jaroslav Kysela <perex@perex.cz>,
+        kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/2] kselftest/alsa: pcm-test: Decrease stream duration
+ from 4 to 2 seconds
+Message-ID: <06b8bfde-e4f1-48ea-aa3e-35d2fe5df046@sirena.org.uk>
+References: <20230620220839.2215057-1-nfraprado@collabora.com>
+ <20230620220839.2215057-3-nfraprado@collabora.com>
+ <33bea0d3-b8dd-4936-812e-392166df4437@sirena.org.uk>
+ <443f697b-fecf-6e8e-0b76-65257aff7da8@perex.cz>
+ <9069ad0c-d166-4620-a3de-a36ab233cab0@sirena.org.uk>
+ <5c2d5213-5299-44f1-9611-26002c8a5d3a@notapiano>
+ <87352krcz5.wl-tiwai@suse.de>
+ <f5cab2c2-1638-4d19-aff3-d46ed34b857e@sirena.org.uk>
+ <87wmzwptu0.wl-tiwai@suse.de>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="+O0SrHBBBg9Awh68"
+Content-Disposition: inline
+In-Reply-To: <87wmzwptu0.wl-tiwai@suse.de>
+X-Cookie: When among apes, one must play the ape.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 10:51:15 PDT (-0700), bjorn@kernel.org wrote:
-> Conor Dooley <conor@kernel.org> writes:
->
-> [...]
->
->>> So I'm no longer actually sure there's a hang, just something slow.  
->>> That's even more of a grey area, but I think it's sane to call a 1-hour 
->>> link time a regression -- unless it's expected that this is just very 
->>> slow to link?
->>
->> I dunno, if it was only a thing for allyesconfig, then whatever - but
->> it's gonna significantly increase build times for any large kernels if LLD
->> is this much slower than LD. Regression in my book.
->>
->> I'm gonna go and experiment with mixed toolchain builds, I'll report
->> back..
->
-> I took palmer/for-next (1bd2963b2175 ("Merge patch series "riscv: enable
-> HAVE_LD_DEAD_CODE_DATA_ELIMINATION"")) for a tuxmake build with llvm-16:
->
->   | ~/src/tuxmake/run -v --wrapper ccache --target-arch riscv \
->   |     --toolchain=llvm-16 --runtime docker --directory . -k \
->   |     allyesconfig
->
-> Took forever, but passed after 2.5h.
 
-Thanks.  I just re-ran mine 17/trunk LLD under time (rather that just 
-checking top sometimes), it's at 1.5h but even that seems quite long.
+--+O0SrHBBBg9Awh68
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I guess this is sort of up to the LLVM folks: if it's expected that DCE 
-takes a very long time to link then I'm not opposed to allowing it, but 
-if this is probably a bug in LLD then it seems best to turn it off until 
-we sort things out over there.
+On Wed, Jun 21, 2023 at 08:13:11PM +0200, Takashi Iwai wrote:
+> Mark Brown wrote:
 
-I think maybe Nick or Nathan is the best bet to know?
+> > It feels like it might be good to let it cook for a bit longer before
+> > going to Linus (eg, applying after the merge window) so we've more
+> > chance to see what the impact is on other boards?
 
-> CONFIG_CC_VERSION_TEXT="Debian clang version 16.0.6 (++20230610113307+7cbf1a259152-1~exp1~20230610233402.106)"
->
->
-> Björn
+> I'm fine with that option, too.  Are most of selftests performed on
+> linux-next basis, or rather on Linus tree?
+
+For KernelCI we've got coverage on both.  I can also run stuff on the
+boards I have in my lab on demand of course, but there's more coverage
+in KernelCI.
+
+--+O0SrHBBBg9Awh68
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSTP0EACgkQJNaLcl1U
+h9Am+gf40/bpS7iIA5RSIo3+i4yZu/3bXuKMGIMrCX7dBLmfsu0mDyN/snxucJGj
+vfgjS3Cyoq9qZlSZSjCPcbp+mznSagKLZLvqqXpcXusg1e4AvThZgzIgZ0q5ZfpC
+ATgKm7rKG9Y8ZEUSZGzNnXoqehYPwg5HxkiB1vTagVHkPoyHg8iNrKCZM2AHKEc0
+8NqOUOwweDSnZwzfa/MUzUTqJ+nhkMN0xQB/qsQznVqa2T/jROtBd5g++oyRNQXv
+0C+3TBI4E18DV+mYQccPFdt08HxFmkaezacElViS65N8cuVtP/5U+nXKcIVC5rM9
+xMtUNgfipI/7PJJGmJpnMUqr6Ul+
+=Ckr3
+-----END PGP SIGNATURE-----
+
+--+O0SrHBBBg9Awh68--
