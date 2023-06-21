@@ -2,149 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 231D8737EA0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 11:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B665737E7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 11:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231674AbjFUIuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 04:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39108 "EHLO
+        id S231688AbjFUIv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 04:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbjFUIuU (ORCPT
+        with ESMTP id S231713AbjFUIvx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 04:50:20 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B151F95
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:50:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Cz2jATrTeZc5BEzBEzrguwGK/CP5maOGmB7lpt8nnbI=; b=bMXHBjchiEsvOpwVeqrOV9NeCi
-        uJGnn1AN9sw5fU4Y+pkh8T4yAJmkuM+e9rIREsTp3HRzVAQ3sI5a8QJFYUaN3PjWG7YX4g12a/3b4
-        rFBirt1o+BayLZKt/+lP6hFAR9XWuOJ/3aa1Z2QS8hNHtiCI41ftCEwMhZHTSP8aOK3JaPHfA7IV+
-        Aoqtc9Cu5A15hWci9bYMXLCBDKWMhI9SD2vFwGaltTSNWvhvQOdHc0Mn0dFH/FdA0wHVAHd1fh8jE
-        3mTc4ufg7/+MtLtG/dubBEm9oj87u0EA+2JKZqoeDUY/gcNLrJZofe4Ul6Ou4yTxO6lD1HHU55mWe
-        G+hvogkA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qBtVU-00HK69-0W;
-        Wed, 21 Jun 2023 08:50:05 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id EAF543002A9;
-        Wed, 21 Jun 2023 10:48:02 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CDB5520825AF7; Wed, 21 Jun 2023 10:48:02 +0200 (CEST)
-Date:   Wed, 21 Jun 2023 10:48:02 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     x86@kernel.org, alyssa.milburn@linux.intel.com,
-        linux-kernel@vger.kernel.org, samitolvanen@google.com,
-        jpoimboe@kernel.org, joao@overdrivepizza.com,
-        tim.c.chen@linux.intel.com
-Subject: Re: [PATCH 2/2] x86/fineibt: Poison ENDBR at +0
-Message-ID: <20230621084802.GA2048237@hirez.programming.kicks-ass.net>
-References: <20230615193546.949657149@infradead.org>
- <20230615193722.194131053@infradead.org>
- <202306201454.0A2E875F@keescook>
- <20230621081857.GG2046280@hirez.programming.kicks-ass.net>
+        Wed, 21 Jun 2023 04:51:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAC395
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:51:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687337468;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=uwyBlKAjWWqC2ADnT8omvFeBUBts/JlKuShTUrNb9VA=;
+        b=e6+0LnVAlwcO5XqxEys2fKA7OLiscrfN8nY2JlaKxXEIuCwMOSTtY6Qtv/nPMxzGaUAh6E
+        HFRD5TdhGLpBKh+KhEMU4nDCr856uyAr5zEbl0Tibgyq9QOL3+g7Cc2Ok2Qgel7/lfGv2G
+        mu9MjOFO2yY3KpvnHkeDR+qVESgQgf8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-115-ZaFiW99aNIaeRMC_Bh02Dw-1; Wed, 21 Jun 2023 04:51:04 -0400
+X-MC-Unique: ZaFiW99aNIaeRMC_Bh02Dw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8AC25805C3F;
+        Wed, 21 Jun 2023 08:50:59 +0000 (UTC)
+Received: from localhost (ovpn-12-166.pek2.redhat.com [10.72.12.166])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4175F492B02;
+        Wed, 21 Jun 2023 08:50:57 +0000 (UTC)
+Date:   Wed, 21 Jun 2023 16:50:53 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, arnd@arndb.de, hch@lst.de,
+        christophe.leroy@csgroup.eu, rppt@kernel.org, willy@infradead.org,
+        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
+        schnelle@linux.ibm.com, David.Laight@aculab.com, shorne@gmail.com,
+        deller@gmx.de, nathan@kernel.org, glaubitz@physik.fu-berlin.de,
+        Brian Cain <bcain@quicinc.com>, linux-hexagon@vger.kernel.org
+Subject: Re: [PATCH v7 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
+Message-ID: <ZJK57Uw5ZYQZY3d+@MiWiFi-R3L-srv>
+References: <20230620131356.25440-3-bhe@redhat.com>
+ <202306211030.DioMEPhl-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230621081857.GG2046280@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <202306211030.DioMEPhl-lkp@intel.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 10:18:57AM +0200, Peter Zijlstra wrote:
-> (and I need to write a better Changelog).
+Hi,
 
-Updated changelog...
+On 06/21/23 at 10:15am, kernel test robot wrote:
+> Hi Baoquan,
+> 
+> kernel test robot noticed the following build errors:
+> 
+> [auto build test ERROR on akpm-mm/mm-everything]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230620-212135
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> patch link:    https://lore.kernel.org/r/20230620131356.25440-3-bhe%40redhat.com
+> patch subject: [PATCH v7 02/19] hexagon: mm: Convert to GENERIC_IOREMAP
+> config: hexagon-randconfig-r041-20230620 (https://download.01.org/0day-ci/archive/20230621/202306211030.DioMEPhl-lkp@intel.com/config)
+> compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
+> reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211030.DioMEPhl-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202306211030.DioMEPhl-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> arch/hexagon/kernel/hexagon_ksyms.o: error: local symbol ioremap was exported
 
----
-Subject: x86/fineibt: Poison ENDBR at +0
-From: Peter Zijlstra <peterz@infradead.org>
-Date: Thu, 15 Jun 2023 21:35:48 +0200
+I followed steps in your reproduce link, didn't reproduce the error as
+above line reported. I can still see those PCI_IOMAP warning, however
+they will disappear when rebuilding. The clone3 warning can always ben
+seen. I didn't see the symbol ioremap error. Could you double check if
+anything missed in steps?
 
-Alyssa noticed that when building the kernel with CFI_CLANG+IBT and
-booting on IBT enabled hardware obtain FineIBT, the indirect functions
-look like:
+[root@dell-pem620-01 linux]# COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang ~/bin/make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+Compiler will be installed in /root/0day
+make --keep-going LLVM=1 CROSS_COMPILE=hexagon-linux- LLVM_IAS=1 --jobs=48 W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
+make[1]: Entering directory '/root/linux/build_dir'
+  GEN     Makefile
+ld.lld: /lib64/libtinfo.so.6: no version information available (required by ld.lld)
+tools/testing/selftests/arm64/tags/.gitignore: warning: ignored by one of the .gitignore files
+tools/testing/selftests/arm64/tags/Makefile: warning: ignored by one of the .gitignore files
+tools/testing/selftests/arm64/tags/run_tags_test.sh: warning: ignored by one of the .gitignore files
+tools/testing/selftests/arm64/tags/tags_test.c: warning: ignored by one of the .gitignore files
+tools/testing/selftests/kvm/.gitignore: warning: ignored by one of the .gitignore files
+tools/testing/selftests/kvm/Makefile: warning: ignored by one of the .gitignore files
+tools/testing/selftests/kvm/config: warning: ignored by one of the .gitignore files
+tools/testing/selftests/kvm/settings: warning: ignored by one of the .gitignore files
+  CALL    ../scripts/checksyscalls.sh
+clang: /lib64/libtinfo.so.6: no version information available (required by clang)
+<stdin>:1519:2: warning: syscall clone3 not implemented [-W#warnings]
+ 1519 | #warning syscall clone3 not implemented
+      |  ^
+1 warning generated.
+make[1]: Leaving directory '/root/linux/build_dir'
+[root@dell-pem620-01 linux]# 
 
-  __cfi_foo:
-	endbr64
-	subl	$hash, %r10d
-	jz	1f
-	ud2
-	nop
-  1:
-  foo:
-	endbr64
 
-This is because the compiler generates code for kCFI+IBT. In that case
-the caller does the hash check and will jump to +0, so there must be
-an ENDBR there. The compiler doesn't know about FineIBT at all; also
-it is possible to actually use kCFI+IBT when booting with 'cfi=kcfi'
-on IBT enabled hardware.
-
-Having this second ENDBR however makes it possible to elide the CFI
-check. Therefore, we should poison this second ENDBR when switching to
-FineIBT mode.
-
-Fixes: 931ab63664f0 ("x86/ibt: Implement FineIBT")
-Reported-by: "Milburn, Alyssa" <alyssa.milburn@intel.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Sami Tolvanen <samitolvanen@google.com>
-Acked-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20230615193722.194131053@infradead.org
----
- arch/x86/kernel/alternative.c |   16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
-
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -1063,6 +1063,17 @@ static int cfi_rewrite_preamble(s32 *sta
- 	return 0;
- }
- 
-+static void cfi_rewrite_endbr(s32 *start, s32 *end)
-+{
-+	s32 *s;
-+
-+	for (s = start; s < end; s++) {
-+		void *addr = (void *)s + *s;
-+
-+		poison_endbr(addr+16, false);
-+	}
-+}
-+
- /* .retpoline_sites */
- static int cfi_rand_callers(s32 *start, s32 *end)
- {
-@@ -1157,14 +1168,19 @@ static void __apply_fineibt(s32 *start_r
- 		return;
- 
- 	case CFI_FINEIBT:
-+		/* place the FineIBT preamble at func()-16 */
- 		ret = cfi_rewrite_preamble(start_cfi, end_cfi);
- 		if (ret)
- 			goto err;
- 
-+		/* rewrite the callers to target func()-16 */
- 		ret = cfi_rewrite_callers(start_retpoline, end_retpoline);
- 		if (ret)
- 			goto err;
- 
-+		/* now that nobody targets func()+0, remove ENDBR there */
-+		cfi_rewrite_endbr(start_cfi, end_cfi);
-+
- 		if (builtin)
- 			pr_info("Using FineIBT CFI\n");
- 		return;
