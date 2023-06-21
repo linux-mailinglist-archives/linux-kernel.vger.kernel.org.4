@@ -2,79 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B287380BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A23D273800F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232400AbjFUKhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 06:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49740 "EHLO
+        id S231463AbjFUKhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 06:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232431AbjFUKgg (ORCPT
+        with ESMTP id S231349AbjFUKgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 06:36:36 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5055119AA;
-        Wed, 21 Jun 2023 03:34:57 -0700 (PDT)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LAM3nV031292;
-        Wed, 21 Jun 2023 10:34:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=t0yrefkmrNz4EOT55sP70wpNk4B87w6RAgE6J6GLSzw=;
- b=QHorqIShSWWzm7SVF036uf3vuB1p2PKBG/oOgjk+wd4eYUmh15rGaOyETZOYJIhZ3tFn
- 8MDfh7shAFZjAJUZwNgw7ex9CCyEHo5ILJ/ob+2w75m5InSztf5rcSC7K6ZIsR0EG6Zd
- +yASktVR0jVaS4MTd3XExEPckyVWxqLKMmd5n5mDfyFXK431tUoXdS7HOCrFXUB+jTbS
- vGLn/Sb5Xamb+L83YDfSTOcRK5hqhk1o7usnNYW6+XvgOiLaHYqPg/n1zGq/5qE0MV0j
- 2My+zHyODIzFMjI/pj1UFF4SqbWDQxdUiMNmfkuQideYvcLKVvWH+6zzPYOhGsFyieUd Zw== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rbyd1r9mk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Jun 2023 10:34:37 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35L1pPv0003626;
-        Wed, 21 Jun 2023 10:34:19 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3r94f5aq2t-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Jun 2023 10:34:19 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35LAYFTw40043160
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 21 Jun 2023 10:34:16 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DDEEC2004B;
-        Wed, 21 Jun 2023 10:34:15 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EA9EF20043;
-        Wed, 21 Jun 2023 10:34:13 +0000 (GMT)
-Received: from tarunpc.in.ibm.com (unknown [9.199.157.25])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 21 Jun 2023 10:34:13 +0000 (GMT)
-From:   Tarun Sahu <tsahu@linux.ibm.com>
-To:     nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, dave.jiang@intel.com,
-        dan.j.williams@intel.com, vishal.l.verma@intel.com,
-        aneesh.kumar@linux.ibm.com, jaypatel@linux.ibm.com,
-        tsahu@linux.ibm.com
-Subject: [PATCH v2] dax/kmem: Pass valid argument to memory_group_register_static
-Date:   Wed, 21 Jun 2023 16:04:11 +0530
-Message-Id: <20230621103411.113030-1-tsahu@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 21 Jun 2023 06:36:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE351BCD;
+        Wed, 21 Jun 2023 03:35:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1908D61486;
+        Wed, 21 Jun 2023 10:35:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8984C433C0;
+        Wed, 21 Jun 2023 10:35:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687343723;
+        bh=/nDUysOIs+S67QS0PXY41K9/6X1N3a9ho9GHTrfj2i0=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=a6p6PJqCNZCyMhzG8L0y2KV1XMdLUq9rM7BtrK0thbvITt6Gbpu4/tg5tSRO+XIuE
+         gqtY54aFk5vcoAOhF5Rulvr5Hibmec5CT6Y37PLVThyrlAej05jXapqpAeyuPu8rgq
+         7D8g+WDF3jwxK5DifiLYwtvVdOuFH655lyvrCbCqiRNbiNRlwJfdy83IGz3tir5s2F
+         swu0D+OvGOiGFJxORVSKVK+cGWgor/7YXe62lmWAVvlsmIpC0CV+bG9rZsS0L3zAyg
+         n2FtNGgOJW2QbNvHi7mwiWNNMqMeZNTKMG4mTuVmRk1CTpcPrTv9p1+Uqomphqa7AY
+         MFr2VGKSG1F8g==
+Message-ID: <26dce201000d32fd3ca1ca5b5f8cd4f5ae0b38b2.camel@kernel.org>
+Subject: Re: [PATCH 2/3] fd/locks: allow get the lock owner by F_OFD_GETLK
+From:   Jeff Layton <jlayton@kernel.org>
+To:     stsp <stsp2@yandex.ru>, linux-kernel@vger.kernel.org
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>
+Date:   Wed, 21 Jun 2023 06:35:21 -0400
+In-Reply-To: <9c0a7cde-da32-bc09-0724-5b1387909d18@yandex.ru>
+References: <20230620095507.2677463-1-stsp2@yandex.ru>
+         <20230620095507.2677463-3-stsp2@yandex.ru>
+         <5728ebda22a723b0eb209ae078e8f132d7b4ac7b.camel@kernel.org>
+         <a1e7f5c1-76ef-19e5-91db-a62f7615b28a@yandex.ru>
+         <eaccc14ddc6b546e5913eb557fec55f77cb5424d.camel@kernel.org>
+         <5f644a24-90b5-a02f-b593-49336e8e0f5a@yandex.ru>
+         <2eb8566726e95a01536b61a3b8d0343379092b94.camel@kernel.org>
+         <d70b6831-3443-51d0-f64c-6f6996367a85@yandex.ru>
+         <d0c18369245db91a3b78017fabdc81417418af67.camel@kernel.org>
+         <ddb48e05-ab26-ae5d-86d5-01e47f0f0cd2@yandex.ru>
+         <e8c8c7d8bf871a0282f3e629d017c09ed38e2c5e.camel@kernel.org>
+         <9c0a7cde-da32-bc09-0724-5b1387909d18@yandex.ru>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Tate9wwJNg0zd3vgp8WfVNUD4-kWGAqx
-X-Proofpoint-ORIG-GUID: Tate9wwJNg0zd3vgp8WfVNUD4-kWGAqx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-21_07,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 mlxscore=0 adultscore=0 malwarescore=0 phishscore=0
- spamscore=0 bulkscore=0 lowpriorityscore=0 impostorscore=0 mlxlogscore=999
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306210089
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,66 +69,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-memory_group_register_static takes maximum number of pages as the argument
-while dev_dax_kmem_probe passes total_len (in bytes) as the argument.
+On Wed, 2023-06-21 at 11:57 +0500, stsp wrote:
+> 20.06.2023 18:58, Jeff Layton =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
+> > No, it won't. The l_pid field is populated from the file_lock->fl_pid.
+> > That field is set when the lock is set, and never updated. So it's quit=
+e
+> > possible for F_GETLK to return the pid of a process that no longer
+> > exists.
+> >=20
+> > In principle, we could try to address that by changing how we track loc=
+k
+> > ownership, but that's a fairly major overhaul, and I'm not clear on any
+> > use-cases where that matters.
+>=20
+> OK, in this case I'll just put a comments
+> into the code, summarizing the info I got
+> from you and Matthew.
+> Thanks guys for all the info, its very helpful.
+>=20
+> Now I only need to convert the current
+> "fundamental problem" attitude into a "not
+> implemented yet" via the code comment.
+>=20
+>=20
+> > > So my call is to be brave and just re-consider
+> > > the conclusion of that article, made 10 years
+> > > ago! :)
+> > >=20
+> > I think my foot has too many bullet wounds for that sort of bravery.
+> I am perfectly fine with leaving this thing
+> unimplemented. But what really bothers
+> me is the posix proposal, which I think was
+> done. Please tell me it allows fixing fl_pid
+> in the future (rather than to mandate -1),
+> and I am calm.
 
-IIUC, I don't see any crash/panic impact as such. As,
-memory_group_register_static just set the max_pages limit which is used in
-auto_movable_zone_for_pfn to determine the zone.
+I don't think we can change this at this point.
 
-which might cause these condition to behave differently,
-
-This will be true always so jump will happen to kernel_zone
-	if (!auto_movable_can_online_movable(NUMA_NO_NODE, group, nr_pages))
-		goto kernel_zone;
----
-kernel_zone:
-	return default_kernel_zone_for_pfn(nid, pfn, nr_pages);
-
----
-
-Here, In below, zone_intersects compare range will be larger as nr_pages
-will be higher (derived from total_len passed in dev_dax_kmem_probe).
-
-static struct zone *default_kernel_zone_for_pfn(int nid, unsigned long start_pfn,
-		unsigned long nr_pages)
-{
-	struct pglist_data *pgdat = NODE_DATA(nid);
-	int zid;
-
-	for (zid = 0; zid < ZONE_NORMAL; zid++) {
-		struct zone *zone = &pgdat->node_zones[zid];
-
-		if (zone_intersects(zone, start_pfn, nr_pages))
-			return zone;
-	}
-
-	return &pgdat->node_zones[ZONE_NORMAL];
-}
-
-Incorrect zone will be returned here, which in later time might cause bigger
-problem.
-
-Fixes: eedf634aac3b ("dax/kmem: use a single static memory group for a single probed unit")
-Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
-Reviewed-by: Vishal Verma <vishal.l.verma@intel.com>
----
- drivers/dax/kmem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/dax/kmem.c b/drivers/dax/kmem.c
-index 7b36db6f1cbd..898ca9505754 100644
---- a/drivers/dax/kmem.c
-+++ b/drivers/dax/kmem.c
-@@ -99,7 +99,7 @@ static int dev_dax_kmem_probe(struct dev_dax *dev_dax)
- 	if (!data->res_name)
- 		goto err_res_name;
- 
--	rc = memory_group_register_static(numa_node, total_len);
-+	rc = memory_group_register_static(numa_node, PFN_UP(total_len));
- 	if (rc < 0)
- 		goto err_reg_mgid;
- 	data->mgid = rc;
--- 
-2.31.1
-
+The bottom line (again) is that OFD locks are owned by the file
+descriptor (much like with flock()), and since file descriptors can be
+shared across multiple process it's impossible to say that some single
+process owns it.
+--=20
+Jeff Layton <jlayton@kernel.org>
