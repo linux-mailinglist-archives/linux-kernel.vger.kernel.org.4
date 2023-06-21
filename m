@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFEA17387F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E20547387E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:52:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232967AbjFUOxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
+        id S232883AbjFUOwb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:52:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232657AbjFUOwN (ORCPT
+        with ESMTP id S232713AbjFUOvt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:52:13 -0400
+        Wed, 21 Jun 2023 10:51:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C3BC1FD8;
-        Wed, 21 Jun 2023 07:49:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E04972D55
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:48:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B9DB6159F;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC2B46157E
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:48:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A691C433C8;
         Wed, 21 Jun 2023 14:48:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1AD7C433C0;
-        Wed, 21 Jun 2023 14:48:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687358937;
-        bh=YI0ekcjuxgrtvDegmv/g98VNDJqmIL3E+j0N+sr4RfA=;
+        s=k20201202; t=1687358939;
+        bh=SEEgw3h/jPpL+PXMgRE1LQFrTLNf3+Q9wbIwlE7Cr0M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ph+klMpFn0NnfmWDST8YV5l2WD5+GGXP+55Ibv5XHUI/SRE5Rr/QHhu2wb8qKDC9Q
-         SWDk5P/k+cbkLXA+CwywekH6U6HMgeFh0407se6Rlngxd2yKsV+T9TmYO+W1WER6Vf
-         371BWyAvTsp711mSR+V11XY/nphXVkkbyY+0NrHnVBhTP5STIpc9vy6nNdmB3WxOin
-         PzZRehXRlOMo4BMoFb/m/jq6As/dcZS3VWvNQKw4o3NOvpngL7Dwett3bMy+ug6n4C
-         wdVzRonhZu7dlbfp8YkNt/uJydCOnjOoNzsGbV9AWYaxWEVeqs2sy44KWlWxQe6q7p
-         nsYTR01hDaY9w==
+        b=gcAdQAMzyrGX5k0WK/Id5YI5rykQYZBVvKLlxg5vMF+8k4rmqKh1fsU5cgbPB5gyB
+         vp8R00GrGH2340dsBfafDn2Se13REpYMWmPPc/mWmdz+f9GMByUZMA69dm2pnlPbv7
+         iuZ2BE+iuVDdFPLm1FwfOBv6S7rzo4BZ/m6bvFMQjoMwQYl3BPQoSuFeaTbn7yTchS
+         9jR0ennu4zUPa/KqRRYBhLcpe54un12hHEVvSC3qv4nsz/FF6gfm1MOnlIxo80Smv8
+         snJtL31ypO9aXMvcDf9+ceBmpf5j0wX+QnzNeXJV6NoMPtI4V3cG+PVgbA9Vdavq9D
+         I8zzvMV7FFb8w==
 From:   Jeff Layton <jlayton@kernel.org>
 To:     Christian Brauner <brauner@kernel.org>,
-        Ryusuke Konishi <konishi.ryusuke@gmail.com>
+        Anton Altaparmakov <anton@tuxera.com>,
+        Namjae Jeon <linkinjeon@kernel.org>
 Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-nilfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 47/79] nilfs2: switch to new ctime accessors
-Date:   Wed, 21 Jun 2023 10:46:00 -0400
-Message-ID: <20230621144735.55953-46-jlayton@kernel.org>
+        linux-ntfs-dev@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Subject: [PATCH 48/79] ntfs: switch to new ctime accessors
+Date:   Wed, 21 Jun 2023 10:46:01 -0400
+Message-ID: <20230621144735.55953-47-jlayton@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230621144735.55953-1-jlayton@kernel.org>
 References: <20230621144507.55591-1-jlayton@kernel.org>
@@ -63,143 +64,90 @@ inode->i_ctime.
 
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- fs/nilfs2/dir.c   |  6 +++---
- fs/nilfs2/inode.c | 12 ++++++------
- fs/nilfs2/ioctl.c |  2 +-
- fs/nilfs2/namei.c |  8 ++++----
- 4 files changed, 14 insertions(+), 14 deletions(-)
+ fs/ntfs/inode.c | 15 ++++++++-------
+ fs/ntfs/mft.c   |  3 +--
+ 2 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/fs/nilfs2/dir.c b/fs/nilfs2/dir.c
-index decd6471300b..a51d13a95651 100644
---- a/fs/nilfs2/dir.c
-+++ b/fs/nilfs2/dir.c
-@@ -429,7 +429,7 @@ void nilfs_set_link(struct inode *dir, struct nilfs_dir_entry *de,
- 	nilfs_set_de_type(de, inode);
- 	nilfs_commit_chunk(page, mapping, from, to);
- 	nilfs_put_page(page);
--	dir->i_mtime = dir->i_ctime = current_time(dir);
-+	dir->i_mtime = inode_ctime_set_current(dir);
- }
- 
- /*
-@@ -519,7 +519,7 @@ int nilfs_add_link(struct dentry *dentry, struct inode *inode)
- 	de->inode = cpu_to_le64(inode->i_ino);
- 	nilfs_set_de_type(de, inode);
- 	nilfs_commit_chunk(page, page->mapping, from, to);
--	dir->i_mtime = dir->i_ctime = current_time(dir);
-+	dir->i_mtime = inode_ctime_set_current(dir);
- 	nilfs_mark_inode_dirty(dir);
- 	/* OFFSET_CACHE */
- out_put:
-@@ -567,7 +567,7 @@ int nilfs_delete_entry(struct nilfs_dir_entry *dir, struct page *page)
- 		pde->rec_len = nilfs_rec_len_to_disk(to - from);
- 	dir->inode = 0;
- 	nilfs_commit_chunk(page, mapping, from, to);
--	inode->i_ctime = inode->i_mtime = current_time(inode);
-+	inode->i_mtime = inode_ctime_set_current(inode);
- out:
- 	nilfs_put_page(page);
- 	return err;
-diff --git a/fs/nilfs2/inode.c b/fs/nilfs2/inode.c
-index a8ce522ac747..dee831f7426f 100644
---- a/fs/nilfs2/inode.c
-+++ b/fs/nilfs2/inode.c
-@@ -366,7 +366,7 @@ struct inode *nilfs_new_inode(struct inode *dir, umode_t mode)
- 	atomic64_inc(&root->inodes_count);
- 	inode_init_owner(&nop_mnt_idmap, inode, dir, mode);
- 	inode->i_ino = ino;
--	inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
-+	inode->i_mtime = inode->i_atime = inode_ctime_set_current(inode);
- 
- 	if (S_ISREG(mode) || S_ISDIR(mode) || S_ISLNK(mode)) {
- 		err = nilfs_bmap_read(ii->i_bmap, NULL);
-@@ -450,10 +450,10 @@ int nilfs_read_inode_common(struct inode *inode,
- 	set_nlink(inode, le16_to_cpu(raw_inode->i_links_count));
- 	inode->i_size = le64_to_cpu(raw_inode->i_size);
- 	inode->i_atime.tv_sec = le64_to_cpu(raw_inode->i_mtime);
--	inode->i_ctime.tv_sec = le64_to_cpu(raw_inode->i_ctime);
-+	inode_ctime_set_sec(inode, le64_to_cpu(raw_inode->i_ctime));
- 	inode->i_mtime.tv_sec = le64_to_cpu(raw_inode->i_mtime);
- 	inode->i_atime.tv_nsec = le32_to_cpu(raw_inode->i_mtime_nsec);
--	inode->i_ctime.tv_nsec = le32_to_cpu(raw_inode->i_ctime_nsec);
-+	inode_ctime_set_nsec(inode, le32_to_cpu(raw_inode->i_ctime_nsec));
- 	inode->i_mtime.tv_nsec = le32_to_cpu(raw_inode->i_mtime_nsec);
- 	if (nilfs_is_metadata_file_inode(inode) && !S_ISREG(inode->i_mode))
- 		return -EIO; /* this inode is for metadata and corrupted */
-@@ -768,9 +768,9 @@ void nilfs_write_inode_common(struct inode *inode,
- 	raw_inode->i_gid = cpu_to_le32(i_gid_read(inode));
- 	raw_inode->i_links_count = cpu_to_le16(inode->i_nlink);
- 	raw_inode->i_size = cpu_to_le64(inode->i_size);
--	raw_inode->i_ctime = cpu_to_le64(inode->i_ctime.tv_sec);
-+	raw_inode->i_ctime = cpu_to_le64(inode_ctime_peek(inode).tv_sec);
- 	raw_inode->i_mtime = cpu_to_le64(inode->i_mtime.tv_sec);
--	raw_inode->i_ctime_nsec = cpu_to_le32(inode->i_ctime.tv_nsec);
-+	raw_inode->i_ctime_nsec = cpu_to_le32(inode_ctime_peek(inode).tv_nsec);
- 	raw_inode->i_mtime_nsec = cpu_to_le32(inode->i_mtime.tv_nsec);
- 	raw_inode->i_blocks = cpu_to_le64(inode->i_blocks);
- 
-@@ -875,7 +875,7 @@ void nilfs_truncate(struct inode *inode)
- 
- 	nilfs_truncate_bmap(ii, blkoff);
- 
--	inode->i_mtime = inode->i_ctime = current_time(inode);
-+	inode->i_mtime = inode_ctime_set_current(inode);
- 	if (IS_SYNC(inode))
- 		nilfs_set_transaction_flag(NILFS_TI_SYNC);
- 
-diff --git a/fs/nilfs2/ioctl.c b/fs/nilfs2/ioctl.c
-index 1dfbc0c34513..811fab46e277 100644
---- a/fs/nilfs2/ioctl.c
-+++ b/fs/nilfs2/ioctl.c
-@@ -149,7 +149,7 @@ int nilfs_fileattr_set(struct mnt_idmap *idmap,
- 	NILFS_I(inode)->i_flags = oldflags | (flags & FS_FL_USER_MODIFIABLE);
- 
- 	nilfs_set_inode_flags(inode);
--	inode->i_ctime = current_time(inode);
-+	inode_ctime_set_current(inode);
- 	if (IS_SYNC(inode))
- 		nilfs_set_transaction_flag(NILFS_TI_SYNC);
- 
-diff --git a/fs/nilfs2/namei.c b/fs/nilfs2/namei.c
-index c7024da8f1e2..251f6021c3db 100644
---- a/fs/nilfs2/namei.c
-+++ b/fs/nilfs2/namei.c
-@@ -185,7 +185,7 @@ static int nilfs_link(struct dentry *old_dentry, struct inode *dir,
- 	if (err)
- 		return err;
- 
--	inode->i_ctime = current_time(inode);
-+	inode_ctime_set_current(inode);
- 	inode_inc_link_count(inode);
- 	ihold(inode);
- 
-@@ -283,7 +283,7 @@ static int nilfs_do_unlink(struct inode *dir, struct dentry *dentry)
- 	if (err)
- 		goto out;
- 
--	inode->i_ctime = dir->i_ctime;
-+	inode_ctime_set(inode, inode_ctime_peek(dir));
- 	drop_nlink(inode);
- 	err = 0;
- out:
-@@ -387,7 +387,7 @@ static int nilfs_rename(struct mnt_idmap *idmap,
- 			goto out_dir;
- 		nilfs_set_link(new_dir, new_de, new_page, old_inode);
- 		nilfs_mark_inode_dirty(new_dir);
--		new_inode->i_ctime = current_time(new_inode);
-+		inode_ctime_set_current(new_inode);
- 		if (dir_de)
- 			drop_nlink(new_inode);
- 		drop_nlink(new_inode);
-@@ -406,7 +406,7 @@ static int nilfs_rename(struct mnt_idmap *idmap,
- 	 * Like most other Unix systems, set the ctime for inodes on a
- 	 * rename.
+diff --git a/fs/ntfs/inode.c b/fs/ntfs/inode.c
+index 6c3f38d66579..285142c22275 100644
+--- a/fs/ntfs/inode.c
++++ b/fs/ntfs/inode.c
+@@ -654,7 +654,7 @@ static int ntfs_read_locked_inode(struct inode *vi)
+ 	 * always changes, when mtime is changed. ctime can be changed on its
+ 	 * own, mtime is then not changed, e.g. when a file is renamed.
  	 */
--	old_inode->i_ctime = current_time(old_inode);
-+	inode_ctime_set_current(old_inode);
+-	vi->i_ctime = ntfs2utc(si->last_mft_change_time);
++	inode_ctime_set(vi, ntfs2utc(si->last_mft_change_time));
+ 	/*
+ 	 * Last access to the data within the file. Not changed during a rename
+ 	 * for example but changed whenever the file is written to.
+@@ -1218,7 +1218,7 @@ static int ntfs_read_locked_attr_inode(struct inode *base_vi, struct inode *vi)
+ 	vi->i_gid	= base_vi->i_gid;
+ 	set_nlink(vi, base_vi->i_nlink);
+ 	vi->i_mtime	= base_vi->i_mtime;
+-	vi->i_ctime	= base_vi->i_ctime;
++	inode_ctime_set(vi, inode_ctime_peek(base_vi));
+ 	vi->i_atime	= base_vi->i_atime;
+ 	vi->i_generation = ni->seq_no = base_ni->seq_no;
  
- 	nilfs_delete_entry(old_de, old_page);
+@@ -1484,7 +1484,7 @@ static int ntfs_read_locked_index_inode(struct inode *base_vi, struct inode *vi)
+ 	vi->i_gid	= base_vi->i_gid;
+ 	set_nlink(vi, base_vi->i_nlink);
+ 	vi->i_mtime	= base_vi->i_mtime;
+-	vi->i_ctime	= base_vi->i_ctime;
++	inode_ctime_set(vi, inode_ctime_peek(base_vi));
+ 	vi->i_atime	= base_vi->i_atime;
+ 	vi->i_generation = ni->seq_no = base_ni->seq_no;
+ 	/* Set inode type to zero but preserve permissions. */
+@@ -2804,13 +2804,14 @@ int ntfs_truncate(struct inode *vi)
+ 	 */
+ 	if (!IS_NOCMTIME(VFS_I(base_ni)) && !IS_RDONLY(VFS_I(base_ni))) {
+ 		struct timespec64 now = current_time(VFS_I(base_ni));
++		struct timespec64 ctime = inode_ctime_peek(VFS_I(base_ni));
+ 		int sync_it = 0;
  
+ 		if (!timespec64_equal(&VFS_I(base_ni)->i_mtime, &now) ||
+-		    !timespec64_equal(&VFS_I(base_ni)->i_ctime, &now))
++		    !timespec64_equal(&ctime, &now))
+ 			sync_it = 1;
+ 		VFS_I(base_ni)->i_mtime = now;
+-		VFS_I(base_ni)->i_ctime = now;
++		inode_ctime_set(VFS_I(base_ni), now);
+ 
+ 		if (sync_it)
+ 			mark_inode_dirty_sync(VFS_I(base_ni));
+@@ -2928,7 +2929,7 @@ int ntfs_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
+ 	if (ia_valid & ATTR_MTIME)
+ 		vi->i_mtime = attr->ia_mtime;
+ 	if (ia_valid & ATTR_CTIME)
+-		vi->i_ctime = attr->ia_ctime;
++		inode_ctime_set(vi, attr->ia_ctime);
+ 	mark_inode_dirty(vi);
+ out:
+ 	return err;
+@@ -3004,7 +3005,7 @@ int __ntfs_write_inode(struct inode *vi, int sync)
+ 		si->last_data_change_time = nt;
+ 		modified = true;
+ 	}
+-	nt = utc2ntfs(vi->i_ctime);
++	nt = utc2ntfs(inode_ctime_peek(vi));
+ 	if (si->last_mft_change_time != nt) {
+ 		ntfs_debug("Updating ctime for inode 0x%lx: old = 0x%llx, "
+ 				"new = 0x%llx", vi->i_ino, (long long)
+diff --git a/fs/ntfs/mft.c b/fs/ntfs/mft.c
+index 0155f106ec34..68821e312ed2 100644
+--- a/fs/ntfs/mft.c
++++ b/fs/ntfs/mft.c
+@@ -2682,8 +2682,7 @@ ntfs_inode *ntfs_mft_record_alloc(ntfs_volume *vol, const int mode,
+ 			vi->i_mode &= ~S_IWUGO;
+ 
+ 		/* Set the inode times to the current time. */
+-		vi->i_atime = vi->i_mtime = vi->i_ctime =
+-			current_time(vi);
++		vi->i_atime = vi->i_mtime = inode_ctime_set_current(vi);
+ 		/*
+ 		 * Set the file size to 0, the ntfs inode sizes are set to 0 by
+ 		 * the call to ntfs_init_big_inode() below.
 -- 
 2.41.0
 
