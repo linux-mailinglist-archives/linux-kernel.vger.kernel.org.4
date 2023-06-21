@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22578738824
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17EE57387FE
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233105AbjFUO4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35418 "EHLO
+        id S233013AbjFUOyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233112AbjFUOy6 (ORCPT
+        with ESMTP id S232937AbjFUOxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:54:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3353A84
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:50:28 -0700 (PDT)
+        Wed, 21 Jun 2023 10:53:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE1130DE
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:49:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C6F9615B5
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:49:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DDEEC433C0;
-        Wed, 21 Jun 2023 14:49:30 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EEC7A615C9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:49:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4D71C433C8;
+        Wed, 21 Jun 2023 14:49:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687358970;
-        bh=bWfKou76bFFjObS87FXTEtpJCLJj//Ee7jkqO2cLFu0=;
+        s=k20201202; t=1687358972;
+        bh=6QoqtM/yLv5wl60ALByHpdG2UYIXCUSz8axrRGF+yAY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mhLiYYPm7NVKGNQtohUL1QsckjE7jWHddEG0eG0Dd5MeQONM4c5tPIMwbaTZpOKN5
-         7gE/KZvcOX1L2j5X7dMDQStzCSBL7GDFb1Pvqkp50C58XEzs0X5Bpe7EGbSGrZWH2e
-         orLE+IgHLKWEqAd3vc75jlrAH8ucg+KmPPcXnncDJ4X9pzBkg95y2jsDYuCTAt8eBQ
-         BvDNYP0B5gbUxzqUeAfhofA2KSZ/ccUxnlM7o4lYIOlMtsByRLbk9Tmr9Brg2MT2hX
-         fvnSgbVkk/V/923zJLWnq9kytHnt9ePWxPM+6c/mf913x55Gii4bpsyToBoTRz7m56
-         jye04OQwA5Ksg==
+        b=tddGOEwI+4i7EAHz9lvAtVvCNgOeWxZ5bXAlo7sgSQzNzTQ/Y4HQvHIYv8N5jGTyw
+         WtoFJG0/maQDiaGilCW6Tk+QF2JMBsOliJbDEyAnwXRYYQgbyqEKIs22Yb05ZheUlH
+         cgdF0KoSTG2GT/8zQmAW+INTtmTgFXdNzi3NBO9VJcdORqYc8U1Qx5pYZXOHx0wa/t
+         CC1etQwYNLP4XuFMMwmbaHQ7cbT/aYH94sx2aTl0j+nkEW1Le/35Bn/Ww9/3YkrJA5
+         ADJvJmRlju7WKpDNgXLoWNz49YraoYAoWWR0Zr6qFiBjYSJiOEF4Ah56mAyyZ9wZP6
+         MNWYxu8jfnlSw==
 From:   Jeff Layton <jlayton@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>,
-        Richard Weinberger <richard@nod.at>
+To:     Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.com>
 Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 66/79] ubifs: switch to new ctime accessors
-Date:   Wed, 21 Jun 2023 10:46:19 -0400
-Message-ID: <20230621144735.55953-65-jlayton@kernel.org>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 67/79] udf: switch to new ctime accessors
+Date:   Wed, 21 Jun 2023 10:46:20 -0400
+Message-ID: <20230621144735.55953-66-jlayton@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230621144735.55953-1-jlayton@kernel.org>
 References: <20230621144507.55591-1-jlayton@kernel.org>
  <20230621144735.55953-1-jlayton@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,310 +62,189 @@ inode->i_ctime.
 
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- fs/ubifs/debug.c   |  4 ++--
- fs/ubifs/dir.c     | 39 +++++++++++++++++++--------------------
- fs/ubifs/file.c    | 16 +++++++++-------
- fs/ubifs/ioctl.c   |  2 +-
- fs/ubifs/journal.c |  4 ++--
- fs/ubifs/super.c   |  4 ++--
- fs/ubifs/xattr.c   |  6 +++---
- 7 files changed, 38 insertions(+), 37 deletions(-)
+ fs/udf/ialloc.c |  2 +-
+ fs/udf/inode.c  | 17 ++++++++++-------
+ fs/udf/namei.c  | 24 ++++++++++++------------
+ 3 files changed, 23 insertions(+), 20 deletions(-)
 
-diff --git a/fs/ubifs/debug.c b/fs/ubifs/debug.c
-index 9c9d3f0e36a4..114c2b00aa29 100644
---- a/fs/ubifs/debug.c
-+++ b/fs/ubifs/debug.c
-@@ -243,8 +243,8 @@ void ubifs_dump_inode(struct ubifs_info *c, const struct inode *inode)
- 	       (unsigned int)inode->i_mtime.tv_sec,
- 	       (unsigned int)inode->i_mtime.tv_nsec);
- 	pr_err("\tctime          %u.%u\n",
--	       (unsigned int)inode->i_ctime.tv_sec,
--	       (unsigned int)inode->i_ctime.tv_nsec);
-+	       (unsigned int) inode_ctime_peek(inode).tv_sec,
-+	       (unsigned int) inode_ctime_peek(inode).tv_nsec);
- 	pr_err("\tcreat_sqnum    %llu\n", ui->creat_sqnum);
- 	pr_err("\txattr_size     %u\n", ui->xattr_size);
- 	pr_err("\txattr_cnt      %u\n", ui->xattr_cnt);
-diff --git a/fs/ubifs/dir.c b/fs/ubifs/dir.c
-index ef0499edc248..39588e3e3a8b 100644
---- a/fs/ubifs/dir.c
-+++ b/fs/ubifs/dir.c
-@@ -96,8 +96,7 @@ struct inode *ubifs_new_inode(struct ubifs_info *c, struct inode *dir,
- 	inode->i_flags |= S_NOCMTIME;
- 
- 	inode_init_owner(&nop_mnt_idmap, inode, dir, mode);
--	inode->i_mtime = inode->i_atime = inode->i_ctime =
--			 current_time(inode);
+diff --git a/fs/udf/ialloc.c b/fs/udf/ialloc.c
+index 5f7ac8c84798..6320b15113e4 100644
+--- a/fs/udf/ialloc.c
++++ b/fs/udf/ialloc.c
+@@ -100,7 +100,7 @@ struct inode *udf_new_inode(struct inode *dir, umode_t mode)
+ 		iinfo->i_alloc_type = ICBTAG_FLAG_AD_SHORT;
+ 	else
+ 		iinfo->i_alloc_type = ICBTAG_FLAG_AD_LONG;
+-	inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
 +	inode->i_mtime = inode->i_atime = inode_ctime_set_current(inode);
- 	inode->i_mapping->nrpages = 0;
- 
- 	if (!is_xattr) {
-@@ -325,7 +324,7 @@ static int ubifs_create(struct mnt_idmap *idmap, struct inode *dir,
- 	mutex_lock(&dir_ui->ui_mutex);
- 	dir->i_size += sz_change;
- 	dir_ui->ui_size = dir->i_size;
--	dir->i_mtime = dir->i_ctime = inode->i_ctime;
-+	dir->i_mtime = inode_ctime_set(inode, inode_ctime_peek(inode));
- 	err = ubifs_jnl_update(c, dir, &nm, inode, 0, 0);
- 	if (err)
- 		goto out_cancel;
-@@ -765,10 +764,10 @@ static int ubifs_link(struct dentry *old_dentry, struct inode *dir,
- 
- 	inc_nlink(inode);
- 	ihold(inode);
+ 	iinfo->i_crtime = inode->i_mtime;
+ 	if (unlikely(insert_inode_locked(inode) < 0)) {
+ 		make_bad_inode(inode);
+diff --git a/fs/udf/inode.c b/fs/udf/inode.c
+index 28cdfc57d946..4c31a51e0d18 100644
+--- a/fs/udf/inode.c
++++ b/fs/udf/inode.c
+@@ -910,7 +910,7 @@ static int inode_getblk(struct inode *inode, struct udf_map_rq *map)
+ 	map->oflags = UDF_BLK_NEW | UDF_BLK_MAPPED;
+ 	iinfo->i_next_alloc_block = map->lblk + 1;
+ 	iinfo->i_next_alloc_goal = newblocknum + 1;
 -	inode->i_ctime = current_time(inode);
 +	inode_ctime_set_current(inode);
- 	dir->i_size += sz_change;
- 	dir_ui->ui_size = dir->i_size;
--	dir->i_mtime = dir->i_ctime = inode->i_ctime;
-+	dir->i_mtime = inode_ctime_set(inode, inode_ctime_peek(inode));
- 	err = ubifs_jnl_update(c, dir, &nm, inode, 0, 0);
- 	if (err)
- 		goto out_cancel;
-@@ -838,11 +837,11 @@ static int ubifs_unlink(struct inode *dir, struct dentry *dentry)
+ 
+ 	if (IS_SYNC(inode))
+ 		udf_sync_inode(inode);
+@@ -1298,7 +1298,7 @@ int udf_setsize(struct inode *inode, loff_t newsize)
+ 			goto out_unlock;
  	}
- 
- 	lock_2_inodes(dir, inode);
--	inode->i_ctime = current_time(dir);
-+	inode_ctime_set(inode, current_time(dir));
- 	drop_nlink(inode);
- 	dir->i_size -= sz_change;
- 	dir_ui->ui_size = dir->i_size;
--	dir->i_mtime = dir->i_ctime = inode->i_ctime;
-+	dir->i_mtime = inode_ctime_set(inode, inode_ctime_peek(inode));
- 	err = ubifs_jnl_update(c, dir, &nm, inode, 1, 0);
- 	if (err)
- 		goto out_cancel;
-@@ -940,12 +939,12 @@ static int ubifs_rmdir(struct inode *dir, struct dentry *dentry)
- 	}
- 
- 	lock_2_inodes(dir, inode);
--	inode->i_ctime = current_time(dir);
-+	inode_ctime_set(inode, current_time(dir));
- 	clear_nlink(inode);
- 	drop_nlink(dir);
- 	dir->i_size -= sz_change;
- 	dir_ui->ui_size = dir->i_size;
--	dir->i_mtime = dir->i_ctime = inode->i_ctime;
-+	dir->i_mtime = inode_ctime_set(inode, inode_ctime_peek(inode));
- 	err = ubifs_jnl_update(c, dir, &nm, inode, 1, 0);
- 	if (err)
- 		goto out_cancel;
-@@ -1019,7 +1018,7 @@ static int ubifs_mkdir(struct mnt_idmap *idmap, struct inode *dir,
- 	inc_nlink(dir);
- 	dir->i_size += sz_change;
- 	dir_ui->ui_size = dir->i_size;
--	dir->i_mtime = dir->i_ctime = inode->i_ctime;
-+	dir->i_mtime = inode_ctime_set(inode, inode_ctime_peek(inode));
- 	err = ubifs_jnl_update(c, dir, &nm, inode, 0, 0);
- 	if (err) {
- 		ubifs_err(c, "cannot create directory, error %d", err);
-@@ -1110,7 +1109,7 @@ static int ubifs_mknod(struct mnt_idmap *idmap, struct inode *dir,
- 	mutex_lock(&dir_ui->ui_mutex);
- 	dir->i_size += sz_change;
- 	dir_ui->ui_size = dir->i_size;
--	dir->i_mtime = dir->i_ctime = inode->i_ctime;
-+	dir->i_mtime = inode_ctime_set(inode, inode_ctime_peek(inode));
- 	err = ubifs_jnl_update(c, dir, &nm, inode, 0, 0);
- 	if (err)
- 		goto out_cancel;
-@@ -1210,7 +1209,7 @@ static int ubifs_symlink(struct mnt_idmap *idmap, struct inode *dir,
- 	mutex_lock(&dir_ui->ui_mutex);
- 	dir->i_size += sz_change;
- 	dir_ui->ui_size = dir->i_size;
--	dir->i_mtime = dir->i_ctime = inode->i_ctime;
-+	dir->i_mtime = inode_ctime_set(inode, inode_ctime_peek(inode));
- 	err = ubifs_jnl_update(c, dir, &nm, inode, 0, 0);
- 	if (err)
- 		goto out_cancel;
-@@ -1415,7 +1414,7 @@ static int do_rename(struct inode *old_dir, struct dentry *old_dentry,
- 	 * rename.
- 	 */
- 	time = current_time(old_dir);
--	old_inode->i_ctime = time;
-+	inode_ctime_set(old_inode, time);
- 
- 	/* We must adjust parent link count when renaming directories */
- 	if (is_dir) {
-@@ -1444,8 +1443,8 @@ static int do_rename(struct inode *old_dir, struct dentry *old_dentry,
- 
- 	old_dir->i_size -= old_sz;
- 	ubifs_inode(old_dir)->ui_size = old_dir->i_size;
--	old_dir->i_mtime = old_dir->i_ctime = time;
--	new_dir->i_mtime = new_dir->i_ctime = time;
-+	old_dir->i_mtime = inode_ctime_set(old_dir, time);
-+	new_dir->i_mtime = inode_ctime_set(new_dir, time);
- 
- 	/*
- 	 * And finally, if we unlinked a direntry which happened to have the
-@@ -1462,7 +1461,7 @@ static int do_rename(struct inode *old_dir, struct dentry *old_dentry,
- 			clear_nlink(new_inode);
- 		else
- 			drop_nlink(new_inode);
--		new_inode->i_ctime = time;
-+		inode_ctime_set(new_inode, time);
- 	} else {
- 		new_dir->i_size += new_sz;
- 		ubifs_inode(new_dir)->ui_size = new_dir->i_size;
-@@ -1589,10 +1588,10 @@ static int ubifs_xrename(struct inode *old_dir, struct dentry *old_dentry,
- 	lock_4_inodes(old_dir, new_dir, NULL, NULL);
- 
- 	time = current_time(old_dir);
--	fst_inode->i_ctime = time;
--	snd_inode->i_ctime = time;
--	old_dir->i_mtime = old_dir->i_ctime = time;
--	new_dir->i_mtime = new_dir->i_ctime = time;
-+	inode_ctime_set(fst_inode, time);
-+	inode_ctime_set(snd_inode, time);
-+	old_dir->i_mtime = inode_ctime_set(old_dir, time);
-+	new_dir->i_mtime = inode_ctime_set(new_dir, time);
- 
- 	if (old_dir != new_dir) {
- 		if (S_ISDIR(fst_inode->i_mode) && !S_ISDIR(snd_inode->i_mode)) {
-diff --git a/fs/ubifs/file.c b/fs/ubifs/file.c
-index 6738fe43040b..f9ba69f6fbab 100644
---- a/fs/ubifs/file.c
-+++ b/fs/ubifs/file.c
-@@ -1092,7 +1092,7 @@ static void do_attr_changes(struct inode *inode, const struct iattr *attr)
- 	if (attr->ia_valid & ATTR_MTIME)
- 		inode->i_mtime = attr->ia_mtime;
- 	if (attr->ia_valid & ATTR_CTIME)
--		inode->i_ctime = attr->ia_ctime;
-+		inode_ctime_set(inode, attr->ia_ctime);
- 	if (attr->ia_valid & ATTR_MODE) {
- 		umode_t mode = attr->ia_mode;
- 
-@@ -1192,7 +1192,7 @@ static int do_truncation(struct ubifs_info *c, struct inode *inode,
- 	mutex_lock(&ui->ui_mutex);
- 	ui->ui_size = inode->i_size;
- 	/* Truncation changes inode [mc]time */
+ update_time:
 -	inode->i_mtime = inode->i_ctime = current_time(inode);
 +	inode->i_mtime = inode_ctime_set_current(inode);
- 	/* Other attributes may be changed at the same time as well */
- 	do_attr_changes(inode, attr);
- 	err = ubifs_jnl_truncate(c, inode, old_size, new_size);
-@@ -1239,7 +1239,7 @@ static int do_setattr(struct ubifs_info *c, struct inode *inode,
- 	mutex_lock(&ui->ui_mutex);
- 	if (attr->ia_valid & ATTR_SIZE) {
- 		/* Truncation changes inode [mc]time */
--		inode->i_mtime = inode->i_ctime = current_time(inode);
-+		inode->i_mtime = inode_ctime_set_current(inode);
- 		/* 'truncate_setsize()' changed @i_size, update @ui_size */
- 		ui->ui_size = inode->i_size;
+ 	if (IS_SYNC(inode))
+ 		udf_sync_inode(inode);
+ 	else
+@@ -1329,6 +1329,7 @@ static int udf_read_inode(struct inode *inode, bool hidden_inode)
+ 	int bs = inode->i_sb->s_blocksize;
+ 	int ret = -EIO;
+ 	uint32_t uid, gid;
++	struct timespec64 ctime;
+ 
+ reread:
+ 	if (iloc->partitionReferenceNum >= sbi->s_partitions) {
+@@ -1501,13 +1502,14 @@ static int udf_read_inode(struct inode *inode, bool hidden_inode)
+ 	inode->i_size = le64_to_cpu(fe->informationLength);
+ 	iinfo->i_lenExtents = inode->i_size;
+ 
++	ctime = inode_ctime_peek(inode);
+ 	if (iinfo->i_efe == 0) {
+ 		inode->i_blocks = le64_to_cpu(fe->logicalBlocksRecorded) <<
+ 			(inode->i_sb->s_blocksize_bits - 9);
+ 
+ 		udf_disk_stamp_to_time(&inode->i_atime, fe->accessTime);
+ 		udf_disk_stamp_to_time(&inode->i_mtime, fe->modificationTime);
+-		udf_disk_stamp_to_time(&inode->i_ctime, fe->attrTime);
++		udf_disk_stamp_to_time(&ctime, fe->attrTime);
+ 
+ 		iinfo->i_unique = le64_to_cpu(fe->uniqueID);
+ 		iinfo->i_lenEAttr = le32_to_cpu(fe->lengthExtendedAttr);
+@@ -1522,7 +1524,7 @@ static int udf_read_inode(struct inode *inode, bool hidden_inode)
+ 		udf_disk_stamp_to_time(&inode->i_atime, efe->accessTime);
+ 		udf_disk_stamp_to_time(&inode->i_mtime, efe->modificationTime);
+ 		udf_disk_stamp_to_time(&iinfo->i_crtime, efe->createTime);
+-		udf_disk_stamp_to_time(&inode->i_ctime, efe->attrTime);
++		udf_disk_stamp_to_time(&ctime, efe->attrTime);
+ 
+ 		iinfo->i_unique = le64_to_cpu(efe->uniqueID);
+ 		iinfo->i_lenEAttr = le32_to_cpu(efe->lengthExtendedAttr);
+@@ -1799,7 +1801,7 @@ static int udf_update_inode(struct inode *inode, int do_sync)
+ 
+ 		udf_time_to_disk_stamp(&fe->accessTime, inode->i_atime);
+ 		udf_time_to_disk_stamp(&fe->modificationTime, inode->i_mtime);
+-		udf_time_to_disk_stamp(&fe->attrTime, inode->i_ctime);
++		udf_time_to_disk_stamp(&fe->attrTime, inode_ctime_peek(inode));
+ 		memset(&(fe->impIdent), 0, sizeof(struct regid));
+ 		strcpy(fe->impIdent.ident, UDF_ID_DEVELOPER);
+ 		fe->impIdent.identSuffix[0] = UDF_OS_CLASS_UNIX;
+@@ -1830,12 +1832,13 @@ static int udf_update_inode(struct inode *inode, int do_sync)
+ 
+ 		udf_adjust_time(iinfo, inode->i_atime);
+ 		udf_adjust_time(iinfo, inode->i_mtime);
+-		udf_adjust_time(iinfo, inode->i_ctime);
++		udf_adjust_time(iinfo, inode_ctime_peek(inode));
+ 
+ 		udf_time_to_disk_stamp(&efe->accessTime, inode->i_atime);
+ 		udf_time_to_disk_stamp(&efe->modificationTime, inode->i_mtime);
+ 		udf_time_to_disk_stamp(&efe->createTime, iinfo->i_crtime);
+-		udf_time_to_disk_stamp(&efe->attrTime, inode->i_ctime);
++		udf_time_to_disk_stamp(&efe->attrTime,
++				       inode_ctime_peek(inode));
+ 
+ 		memset(&(efe->impIdent), 0, sizeof(efe->impIdent));
+ 		strcpy(efe->impIdent.ident, UDF_ID_DEVELOPER);
+diff --git a/fs/udf/namei.c b/fs/udf/namei.c
+index a95579b043ab..50ee82a7d910 100644
+--- a/fs/udf/namei.c
++++ b/fs/udf/namei.c
+@@ -365,7 +365,7 @@ static int udf_add_nondir(struct dentry *dentry, struct inode *inode)
+ 	*(__le32 *)((struct allocDescImpUse *)iter.fi.icb.impUse)->impUse =
+ 		cpu_to_le32(iinfo->i_unique & 0x00000000FFFFFFFFUL);
+ 	udf_fiiter_write_fi(&iter, NULL);
+-	dir->i_ctime = dir->i_mtime = current_time(dir);
++	dir->i_mtime = inode_ctime_set_current(dir);
+ 	mark_inode_dirty(dir);
+ 	udf_fiiter_release(&iter);
+ 	udf_add_fid_counter(dir->i_sb, false, 1);
+@@ -471,7 +471,7 @@ static int udf_mkdir(struct mnt_idmap *idmap, struct inode *dir,
+ 	udf_fiiter_release(&iter);
+ 	udf_add_fid_counter(dir->i_sb, true, 1);
+ 	inc_nlink(dir);
+-	dir->i_ctime = dir->i_mtime = current_time(dir);
++	dir->i_mtime = inode_ctime_set_current(dir);
+ 	mark_inode_dirty(dir);
+ 	d_instantiate_new(dentry, inode);
+ 
+@@ -523,8 +523,8 @@ static int udf_rmdir(struct inode *dir, struct dentry *dentry)
+ 	inode->i_size = 0;
+ 	inode_dec_link_count(dir);
+ 	udf_add_fid_counter(dir->i_sb, true, -1);
+-	inode->i_ctime = dir->i_ctime = dir->i_mtime =
+-						current_time(inode);
++	inode_ctime_set_current(inode);
++	dir->i_mtime = inode_ctime_set_current(dir);
+ 	mark_inode_dirty(dir);
+ 	ret = 0;
+ end_rmdir:
+@@ -555,11 +555,11 @@ static int udf_unlink(struct inode *dir, struct dentry *dentry)
+ 		set_nlink(inode, 1);
  	}
-@@ -1364,8 +1364,10 @@ int ubifs_fsync(struct file *file, loff_t start, loff_t end, int datasync)
- static inline int mctime_update_needed(const struct inode *inode,
- 				       const struct timespec64 *now)
- {
-+	struct timespec64 ctime = inode_ctime_peek(inode);
-+
- 	if (!timespec64_equal(&inode->i_mtime, now) ||
--	    !timespec64_equal(&inode->i_ctime, now))
-+	    !timespec64_equal(&ctime, now))
- 		return 1;
- 	return 0;
- }
-@@ -1396,7 +1398,7 @@ int ubifs_update_time(struct inode *inode, struct timespec64 *time,
- 	if (flags & S_ATIME)
- 		inode->i_atime = *time;
- 	if (flags & S_CTIME)
--		inode->i_ctime = *time;
-+		inode_ctime_set(inode, *time);
- 	if (flags & S_MTIME)
- 		inode->i_mtime = *time;
+ 	udf_fiiter_delete_entry(&iter);
+-	dir->i_ctime = dir->i_mtime = current_time(dir);
++	dir->i_mtime = inode_ctime_set_current(dir);
+ 	mark_inode_dirty(dir);
+ 	inode_dec_link_count(inode);
+ 	udf_add_fid_counter(dir->i_sb, false, -1);
+-	inode->i_ctime = dir->i_ctime;
++	inode_ctime_set(inode, inode_ctime_peek(dir));
+ 	ret = 0;
+ end_unlink:
+ 	udf_fiiter_release(&iter);
+@@ -746,9 +746,9 @@ static int udf_link(struct dentry *old_dentry, struct inode *dir,
  
-@@ -1432,7 +1434,7 @@ static int update_mctime(struct inode *inode)
- 			return err;
- 
- 		mutex_lock(&ui->ui_mutex);
--		inode->i_mtime = inode->i_ctime = current_time(inode);
-+		inode->i_mtime = inode_ctime_set_current(inode);
- 		release = ui->dirty;
- 		mark_inode_dirty_sync(inode);
- 		mutex_unlock(&ui->ui_mutex);
-@@ -1570,7 +1572,7 @@ static vm_fault_t ubifs_vm_page_mkwrite(struct vm_fault *vmf)
- 		struct ubifs_inode *ui = ubifs_inode(inode);
- 
- 		mutex_lock(&ui->ui_mutex);
--		inode->i_mtime = inode->i_ctime = current_time(inode);
-+		inode->i_mtime = inode_ctime_set_current(inode);
- 		release = ui->dirty;
- 		mark_inode_dirty_sync(inode);
- 		mutex_unlock(&ui->ui_mutex);
-diff --git a/fs/ubifs/ioctl.c b/fs/ubifs/ioctl.c
-index 67c5108abd89..a4da17f4cceb 100644
---- a/fs/ubifs/ioctl.c
-+++ b/fs/ubifs/ioctl.c
-@@ -118,7 +118,7 @@ static int setflags(struct inode *inode, int flags)
- 	ui->flags &= ~ioctl2ubifs(UBIFS_SETTABLE_IOCTL_FLAGS);
- 	ui->flags |= ioctl2ubifs(flags);
- 	ubifs_set_inode_flags(inode);
+ 	inc_nlink(inode);
+ 	udf_add_fid_counter(dir->i_sb, false, 1);
 -	inode->i_ctime = current_time(inode);
 +	inode_ctime_set_current(inode);
- 	release = ui->dirty;
- 	mark_inode_dirty_sync(inode);
- 	mutex_unlock(&ui->ui_mutex);
-diff --git a/fs/ubifs/journal.c b/fs/ubifs/journal.c
-index dc52ac0f4a34..86f5d73cd613 100644
---- a/fs/ubifs/journal.c
-+++ b/fs/ubifs/journal.c
-@@ -454,8 +454,8 @@ static void pack_inode(struct ubifs_info *c, struct ubifs_ino_node *ino,
- 	ino->creat_sqnum = cpu_to_le64(ui->creat_sqnum);
- 	ino->atime_sec  = cpu_to_le64(inode->i_atime.tv_sec);
- 	ino->atime_nsec = cpu_to_le32(inode->i_atime.tv_nsec);
--	ino->ctime_sec  = cpu_to_le64(inode->i_ctime.tv_sec);
--	ino->ctime_nsec = cpu_to_le32(inode->i_ctime.tv_nsec);
-+	ino->ctime_sec  = cpu_to_le64(inode_ctime_peek(inode).tv_sec);
-+	ino->ctime_nsec = cpu_to_le32(inode_ctime_peek(inode).tv_nsec);
- 	ino->mtime_sec  = cpu_to_le64(inode->i_mtime.tv_sec);
- 	ino->mtime_nsec = cpu_to_le32(inode->i_mtime.tv_nsec);
- 	ino->uid   = cpu_to_le32(i_uid_read(inode));
-diff --git a/fs/ubifs/super.c b/fs/ubifs/super.c
-index 32cb14759796..29c2f40acac9 100644
---- a/fs/ubifs/super.c
-+++ b/fs/ubifs/super.c
-@@ -146,8 +146,8 @@ struct inode *ubifs_iget(struct super_block *sb, unsigned long inum)
- 	inode->i_atime.tv_nsec = le32_to_cpu(ino->atime_nsec);
- 	inode->i_mtime.tv_sec  = (int64_t)le64_to_cpu(ino->mtime_sec);
- 	inode->i_mtime.tv_nsec = le32_to_cpu(ino->mtime_nsec);
--	inode->i_ctime.tv_sec  = (int64_t)le64_to_cpu(ino->ctime_sec);
--	inode->i_ctime.tv_nsec = le32_to_cpu(ino->ctime_nsec);
-+	inode_ctime_set_sec(inode, (int64_t)le64_to_cpu(ino->ctime_sec));
-+	inode_ctime_set_nsec(inode, le32_to_cpu(ino->ctime_nsec));
- 	inode->i_mode = le32_to_cpu(ino->mode);
- 	inode->i_size = le64_to_cpu(ino->size);
+ 	mark_inode_dirty(inode);
+-	dir->i_ctime = dir->i_mtime = current_time(dir);
++	dir->i_mtime = inode_ctime_set_current(dir);
+ 	mark_inode_dirty(dir);
+ 	ihold(inode);
+ 	d_instantiate(dentry, inode);
+@@ -833,7 +833,7 @@ static int udf_rename(struct mnt_idmap *idmap, struct inode *old_dir,
+ 	 * Like most other Unix systems, set the ctime for inodes on a
+ 	 * rename.
+ 	 */
+-	old_inode->i_ctime = current_time(old_inode);
++	inode_ctime_set_current(old_inode);
+ 	mark_inode_dirty(old_inode);
  
-diff --git a/fs/ubifs/xattr.c b/fs/ubifs/xattr.c
-index 349228dd1191..d5955e1fbb7d 100644
---- a/fs/ubifs/xattr.c
-+++ b/fs/ubifs/xattr.c
-@@ -134,7 +134,7 @@ static int create_xattr(struct ubifs_info *c, struct inode *host,
- 	ui->data_len = size;
+ 	/*
+@@ -861,13 +861,13 @@ static int udf_rename(struct mnt_idmap *idmap, struct inode *old_dir,
+ 	}
  
- 	mutex_lock(&host_ui->ui_mutex);
--	host->i_ctime = current_time(host);
-+	inode_ctime_set_current(host);
- 	host_ui->xattr_cnt += 1;
- 	host_ui->xattr_size += CALC_DENT_SIZE(fname_len(nm));
- 	host_ui->xattr_size += CALC_XATTR_BYTES(size);
-@@ -215,7 +215,7 @@ static int change_xattr(struct ubifs_info *c, struct inode *host,
- 	ui->data_len = size;
+ 	if (new_inode) {
+-		new_inode->i_ctime = current_time(new_inode);
++		inode_ctime_set_current(new_inode);
+ 		inode_dec_link_count(new_inode);
+ 		udf_add_fid_counter(old_dir->i_sb, S_ISDIR(new_inode->i_mode),
+ 				    -1);
+ 	}
+-	old_dir->i_ctime = old_dir->i_mtime = current_time(old_dir);
+-	new_dir->i_ctime = new_dir->i_mtime = current_time(new_dir);
++	old_dir->i_mtime = inode_ctime_set_current(old_dir);
++	new_dir->i_mtime = inode_ctime_set_current(new_dir);
+ 	mark_inode_dirty(old_dir);
+ 	mark_inode_dirty(new_dir);
  
- 	mutex_lock(&host_ui->ui_mutex);
--	host->i_ctime = current_time(host);
-+	inode_ctime_set_current(host);
- 	host_ui->xattr_size -= CALC_XATTR_BYTES(old_size);
- 	host_ui->xattr_size += CALC_XATTR_BYTES(size);
- 
-@@ -474,7 +474,7 @@ static int remove_xattr(struct ubifs_info *c, struct inode *host,
- 		return err;
- 
- 	mutex_lock(&host_ui->ui_mutex);
--	host->i_ctime = current_time(host);
-+	inode_ctime_set_current(host);
- 	host_ui->xattr_cnt -= 1;
- 	host_ui->xattr_size -= CALC_DENT_SIZE(fname_len(nm));
- 	host_ui->xattr_size -= CALC_XATTR_BYTES(ui->data_len);
 -- 
 2.41.0
 
