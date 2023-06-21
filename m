@@ -2,107 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7BC3738474
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:08:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F0BC738476
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232276AbjFUNIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
+        id S232300AbjFUNIv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:08:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232269AbjFUNIi (ORCPT
+        with ESMTP id S230109AbjFUNIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:08:38 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D951739;
-        Wed, 21 Jun 2023 06:08:37 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        Wed, 21 Jun 2023 09:08:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27E019AB;
+        Wed, 21 Jun 2023 06:08:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QmP2R0Rwzz4wj7;
-        Wed, 21 Jun 2023 23:08:31 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1687352912;
-        bh=zMmz8eNhn1LuA/bMCpwWPyDta4A4p5omDG9jWVnrIhA=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=IELwl0a2CcWKtHQYpyrr7sFEKemIZwDa+P3WaQzNRjWOBtKHns7YRnhc4zJ61CtTe
-         VtiNmWT/MSjxIcsMk0GFLElYIRQShuSOZETFrGgT4P/ghqCTLzPcLsUEq+LB9bTV+G
-         ezXrX5eHiHuzHhgKJjcPGV4IhZoXJpyYiZGALWIB3CtTTFesoWwLyio6BWgifN4m/A
-         Hc70Kn6muoGgmoZg4dh2jIQMqgSmiTjtGgniOT6wnQEbMbSiAeTGQxJDLRveCIyS/p
-         RshmiYJ+tckcsHareuzZsBA7Thn4UtJZrdFKcOpxw0gcOY9CUtwyNJDvio492P5yOT
-         3xClQ4DFwCJvg==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        Nicholas Piggin <npiggin@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        sparclinux@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-perf-users@vger.kernel.org, Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH v2 6/6] watchdog/hardlockup: Define
- HARDLOCKUP_DETECTOR_ARCH
-In-Reply-To: <20230616150618.6073-7-pmladek@suse.com>
-References: <20230616150618.6073-1-pmladek@suse.com>
- <20230616150618.6073-7-pmladek@suse.com>
-Date:   Wed, 21 Jun 2023 23:08:26 +1000
-Message-ID: <871qi5otdh.fsf@mail.lhotse>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 360D3614B3;
+        Wed, 21 Jun 2023 13:08:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76F99C433C8;
+        Wed, 21 Jun 2023 13:08:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687352925;
+        bh=8rei6Srdj2hOeoUrA3FxQyYSVAkO4eKByya+vrCiMow=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Jzdbg3X7R2R5aA3l8Bd5J468BcoyvZBbSNoW5z+bFd+uFHYr1hhHbrrbcXsJlunb6
+         RRtpi5CAMalVtBG9vvSqM6C5QpMzt7OdwQIcW2TO3CSc+L/uHJDuOaJqKvYwFhBd57
+         2SSve45pWiVdVg6dY8nlQNVJ9ktQDejU8ZmG5VqnOR5pOIIU99tEYhg9A8RncBiNmd
+         UsqW95s+2dzAa61gQ8bB0RFNUCnZNkvXKvi1YNf+X8FW/YRSxSgNZQn4Et8139Rn1l
+         rGoMll5XO4YOTdPbpbBdZSkcqEf7e9jCXwNlIyrcbOO/VeqQt4v1WalbRl4ud0xEAh
+         bwiFENJzWPQTg==
+Date:   Wed, 21 Jun 2023 14:08:40 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/2] kselftest/alsa: pcm-test: Decrease stream duration
+ from 4 to 2 seconds
+Message-ID: <33bea0d3-b8dd-4936-812e-392166df4437@sirena.org.uk>
+References: <20230620220839.2215057-1-nfraprado@collabora.com>
+ <20230620220839.2215057-3-nfraprado@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="XuUu5UqlTitESjDI"
+Content-Disposition: inline
+In-Reply-To: <20230620220839.2215057-3-nfraprado@collabora.com>
+X-Cookie: When among apes, one must play the ape.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Petr Mladek <pmladek@suse.com> writes:
-> The HAVE_ prefix means that the code could be enabled. Add another
-> variable for HAVE_HARDLOCKUP_DETECTOR_ARCH without this prefix.
-> It will be set when it should be built. It will make it compatible
-> with the other hardlockup detectors.
->
-> The change allows to clean up dependencies of PPC_WATCHDOG
-> and HAVE_HARDLOCKUP_DETECTOR_PERF definitions for powerpc.
->
-> As a result HAVE_HARDLOCKUP_DETECTOR_PERF has the same dependencies
-> on arm, x86, powerpc architectures.
->
-> Signed-off-by: Petr Mladek <pmladek@suse.com>
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
-> ---
->  arch/powerpc/Kconfig | 5 ++---
->  include/linux/nmi.h  | 2 +-
->  lib/Kconfig.debug    | 9 +++++++++
->  3 files changed, 12 insertions(+), 4 deletions(-)
 
-Something in this patch is breaking the powerpc g5_defconfig, I don't
-immediately see what though.
+--XuUu5UqlTitESjDI
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-../arch/powerpc/kernel/stacktrace.c: In function =E2=80=98handle_backtrace_=
-ipi=E2=80=99:
-../arch/powerpc/kernel/stacktrace.c:171:9: error: implicit declaration of f=
-unction =E2=80=98nmi_cpu_backtrace=E2=80=99 [-Werror=3Dimplicit-function-de=
-claration]
-  171 |         nmi_cpu_backtrace(regs);
-      |         ^~~~~~~~~~~~~~~~~
-../arch/powerpc/kernel/stacktrace.c: In function =E2=80=98arch_trigger_cpum=
-ask_backtrace=E2=80=99:
-../arch/powerpc/kernel/stacktrace.c:226:9: error: implicit declaration of f=
-unction =E2=80=98nmi_trigger_cpumask_backtrace=E2=80=99; did you mean =E2=
-=80=98arch_trigger_cpumask_backtrace=E2=80=99? [-Werror=3Dimplicit-function=
--declaration]
-  226 |         nmi_trigger_cpumask_backtrace(mask, exclude_self, raise_bac=
-ktrace_ipi);
-      |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-      |         arch_trigger_cpumask_backtrace
-cc1: all warnings being treated as errors
+On Tue, Jun 20, 2023 at 06:08:26PM -0400, N=EDcolas F. R. A. Prado wrote:
 
+> -	const int duration_s =3D 4, margin_ms =3D 100;
+> +	const int duration_s =3D 2, margin_ms =3D 100;
 
-cheers
+This doesn't scale the margin with the duration which will affect the
+sensitivity of the test to misclocking.  It should make it less
+sensitive which is *probably* safer but at least worth noting.
+
+We might also have issues with some of the lower sample rates, IIRC some
+devices are constrained in ways that mean they want a minimum buffer
+size which is harder to satisfy with very short playbacks and low sample
+rates.
+
+I don't know why Jaroslav picked the 4s number here.
+
+--XuUu5UqlTitESjDI
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSS9lcACgkQJNaLcl1U
+h9DvRQf/Sa8yVLTUhx/xI7Go5M1j3MnEnA2L8Kol2HP04viW/HKYX9nikxkUgxKI
+30UMmR4G03BqyUEpOcDV2fxkvkeHCJXpvC9fRR16FWeTQbSFb/RNXMDxiP5tQa90
+DG/qLbm2FEoOgPYARMmqwI/E1610i63eSnsj0toP87QQxGc4H8XRL1HH7u3/tl5D
+BhFVvN2xaiZCnQROs1n4yDcslDNZLIdGR1yWUW9nx+e4dNIWOQ/AW4yluB3EFv+J
+tGfFR5SPEsJNtIqVAtKb+NPBGYcEl52aUFRCbB30gWKSQIsq6gris+8EOTTjHs+x
+L0tFO5FBQfrA9J3lK6eOwSQTx0Ob4A==
+=yDSV
+-----END PGP SIGNATURE-----
+
+--XuUu5UqlTitESjDI--
