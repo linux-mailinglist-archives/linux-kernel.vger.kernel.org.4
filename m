@@ -2,126 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185177383F8
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:40:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C06717383DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbjFUMkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 08:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56708 "EHLO
+        id S231622AbjFUMeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 08:34:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjFUMkQ (ORCPT
+        with ESMTP id S229994AbjFUMeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 08:40:16 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9578B9B;
-        Wed, 21 Jun 2023 05:40:15 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3BFCC21C99;
-        Wed, 21 Jun 2023 12:40:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1687351214;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fFl+TwM20LVAi4D/M42g+0o8Juj67CDLcdDgvpi5mGk=;
-        b=2FPVqngejQ6nbFfhWhapGLmZpDHw6BVy8/mlH5YZ5kpptEdS0oRwhJuBfnnpkuZpbv1uOm
-        L9oZmWHbuzhc1ihKKk2l5VkbYnj2nbdJggbx7yrGbWNBVPHvGgv+ZUf6OhBgIOzL106MxH
-        9BeTN2dUokYmMBAI0GWR5BlMqx8BwJY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1687351214;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fFl+TwM20LVAi4D/M42g+0o8Juj67CDLcdDgvpi5mGk=;
-        b=D+LeytsQ+1KY5k+wYxnYApJQ9IVKTvtEW3lRs8hBUhQOSs5GBZLYb6vs2ZhA2/oVZQSIOb
-        BB6KwNEjAz36kBAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1152D133E6;
-        Wed, 21 Jun 2023 12:40:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 1kRSA67vkmRpUAAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Wed, 21 Jun 2023 12:40:14 +0000
-Date:   Wed, 21 Jun 2023 14:33:50 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     syzbot <syzbot+9992306148b06272f3bb@syzkaller.appspotmail.com>
-Cc:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [btrfs?] WARNING in emit_fiemap_extent
-Message-ID: <20230621123350.GP16168@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <00000000000091164305fe966bdd@google.com>
+        Wed, 21 Jun 2023 08:34:11 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BA04122
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:34:10 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51bdf6336d2so431687a12.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:34:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687350848; x=1689942848;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9iTM9Tx3UJaYsQqcJ5JbhlSjUUYORfuUf20lfWrNUGw=;
+        b=DyZTRfXkqmTQnyvBXikfY0NTynrMhXjBGLHZVMrJY0TwddYoDbuJhc1uqwl23cYthL
+         6N/Z0MaQ8Dke4iO36VCMrPxTZ+bUC3ZT4vGz61ZpoHzd26MvkGEYBV/0U9Fstsdadhi7
+         /O0RIB2jzarwKJf7bVIC3FrsfdfNmCdEWPOFMF3yDtdEFPphCau35K+7MEdgAan2QbQ4
+         htypz58WEw1weh2+/UBIkqyGTp4wxvhmC7DYd6qFqe0jNQzgE7yCIZh/2WAODIe6mbj8
+         2FZFKA71mrI1ORYFQZ1GTLsARQ2fbEKWihMKQHdpuVbMcgHkd+Na6kzd1Bdg2iz7J+3r
+         GfFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687350848; x=1689942848;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9iTM9Tx3UJaYsQqcJ5JbhlSjUUYORfuUf20lfWrNUGw=;
+        b=IsNMwoYisnreH+FywvjHdrCqM9hr+5h+WTn8O77He5JrIidJKkmT7eHuAA00vMQyQ1
+         3yqkk9WCAGtzZcPnAfDFj/xFRiV6oWA6fu6d8hZq+7t/SfosPLk3olbQ0FKY475sGhJB
+         7DbKUcwPFsjl+vVVDGMzAd+G1uQ8XrMeWFO4ZU6Glx8IOXODont5WQd2Qpr2F2YpJumh
+         HtfDJliedypHxCUREgHi9UdC0Fov9Nu+cjUOkAg1SWfHgKt9D85ADhTo3NqZ4SJ1nG6e
+         S81zXtrDyZuD4/o46K7N8bSprCHd7FmoMBcgKs+OXtYDRbkq8AKNtFY9gxA7m7V+7dbm
+         T9Jg==
+X-Gm-Message-State: AC+VfDzTQpY3rD33lLL4sAe6NQ7esPVAHTe8XeLpwYthNX+pLkKgZxv+
+        F9qtHgey4Oa0/qZE2nteptwApA==
+X-Google-Smtp-Source: ACHHUZ73rIeM+5qs+5Ye74ibBRbWD6zPIqZkgDbrySnJcz6nb9Hi0Fxdp3gQ3hkix1TMdfOKYaKaYg==
+X-Received: by 2002:aa7:cb84:0:b0:518:7a8b:5d4 with SMTP id r4-20020aa7cb84000000b005187a8b05d4mr10690489edt.16.1687350848621;
+        Wed, 21 Jun 2023 05:34:08 -0700 (PDT)
+Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id k2-20020aa7c382000000b0051a5ac9a40csm2606525edq.7.2023.06.21.05.34.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jun 2023 05:34:08 -0700 (PDT)
+Message-ID: <797c0144-4072-8728-304e-e64213185687@baylibre.com>
+Date:   Wed, 21 Jun 2023 14:34:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000091164305fe966bdd@google.com>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 3/4] drm/mediatek: Add casting before assign
+Content-Language: en-US
+To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Jason-ch Chen <jason-ch.chen@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        Shawn Sung <shawn.sung@mediatek.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20230621102247.10116-1-jason-jh.lin@mediatek.com>
+ <20230621102247.10116-4-jason-jh.lin@mediatek.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20230621102247.10116-4-jason-jh.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 02:34:46PM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    40f71e7cd3c6 Merge tag 'net-6.4-rc7' of git://git.kernel.o..
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=166d2acf280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=7ff8f87c7ab0e04e
-> dashboard link: https://syzkaller.appspot.com/bug?extid=9992306148b06272f3bb
-> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10c65e87280000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1094a78b280000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/2dc89d5fee38/disk-40f71e7c.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/0ced5a475218/vmlinux-40f71e7c.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/d543a4f69684/bzImage-40f71e7c.xz
-> mounted in repro: https://storage.googleapis.com/syzbot-assets/7cde8d2312ae/mount_0.gz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+9992306148b06272f3bb@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> WARNING: CPU: 1 PID: 5351 at fs/btrfs/extent_io.c:2824 emit_fiemap_extent+0xee/0x410
 
-2804 static int emit_fiemap_extent(struct fiemap_extent_info *fieinfo,
-2805                                 struct fiemap_cache *cache,
-2806                                 u64 offset, u64 phys, u64 len, u32 flags)
-2807 {
-2808         int ret = 0;
-2809
-2810         /* Set at the end of extent_fiemap(). */
-2811         ASSERT((flags & FIEMAP_EXTENT_LAST) == 0);
-2812
-2813         if (!cache->cached)
-2814                 goto assign;
-2815
-2816         /*
-2817          * Sanity check, extent_fiemap() should have ensured that new
-2818          * fiemap extent won't overlap with cached one.
-2819          * Not recoverable.
-2820          *
-2821          * NOTE: Physical address can overlap, due to compression
-2822          */
-2823         if (cache->offset + cache->len > offset) {
-2824                 WARN_ON(1);
-2825                 return -EINVAL;
-2826         }
 
-Either we can drop the warning as the error is handled, or there was
-another issue that was supposed to be caught earlier.
+On 21/06/2023 12:22, Jason-JH.Lin wrote:
+> 1. Add casting before assign to avoid the unintentional integer
+>     overflow or unintended sign extension.
+> 2. Add a int varriable for multiplier calculation instead of calculating
+>     different types multiplier with dma_addr_t varriable directly.
+> 
+> Fixes: 1a64a7aff8da ("drm/mediatek: Fix cursor plane no update")
+> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+> ---
+>   drivers/gpu/drm/mediatek/mtk_drm_gem.c   |  3 ++-
+>   drivers/gpu/drm/mediatek/mtk_drm_plane.c | 22 +++++++++++++---------
+>   2 files changed, 15 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_gem.c b/drivers/gpu/drm/mediatek/mtk_drm_gem.c
+> index a25b28d3ee90..da087d74612d 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_gem.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_gem.c
+> @@ -121,7 +121,8 @@ int mtk_drm_gem_dumb_create(struct drm_file *file_priv, struct drm_device *dev,
+>   	int ret;
+>   
+>   	args->pitch = DIV_ROUND_UP(args->width * args->bpp, 8);
+> -	args->size = args->pitch * args->height;
+> +	args->size = args->pitch;
+> +	args->size *= args->height;
+>   
+>   	mtk_gem = mtk_drm_gem_create(dev, args->size, false);
+>   	if (IS_ERR(mtk_gem))
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_plane.c b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
+> index 31f9420aff6f..1cd41454d545 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_plane.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_plane.c
+> @@ -145,6 +145,7 @@ static void mtk_plane_update_new_state(struct drm_plane_state *new_state,
+>   	dma_addr_t addr;
+>   	dma_addr_t hdr_addr = 0;
+>   	unsigned int hdr_pitch = 0;
+> +	int offset;
+
+I agree with Angelo, please set offset as unsigned.
+
+>   
+>   	gem = fb->obj[0];
+>   	mtk_gem = to_mtk_gem_obj(gem);
+> @@ -154,8 +155,10 @@ static void mtk_plane_update_new_state(struct drm_plane_state *new_state,
+>   	modifier = fb->modifier;
+>   
+>   	if (modifier == DRM_FORMAT_MOD_LINEAR) {
+> -		addr += (new_state->src.x1 >> 16) * fb->format->cpp[0];
+> -		addr += (new_state->src.y1 >> 16) * pitch;
+> +		offset = (new_state->src.x1 >> 16) * fb->format->cpp[0];
+> +		addr += offset;
+> +		offset = (new_state->src.y1 >> 16) * pitch;
+> +		addr += offset;
+>   	} else {
+>   		int width_in_blocks = ALIGN(fb->width, AFBC_DATA_BLOCK_WIDTH)
+>   				      / AFBC_DATA_BLOCK_WIDTH;
+> @@ -163,21 +166,22 @@ static void mtk_plane_update_new_state(struct drm_plane_state *new_state,
+>   				       / AFBC_DATA_BLOCK_HEIGHT;
+>   		int x_offset_in_blocks = (new_state->src.x1 >> 16) / AFBC_DATA_BLOCK_WIDTH;
+>   		int y_offset_in_blocks = (new_state->src.y1 >> 16) / AFBC_DATA_BLOCK_HEIGHT;
+> -		int hdr_size;
+> +		int hdr_size, hdr_offset;
+>   
+>   		hdr_pitch = width_in_blocks * AFBC_HEADER_BLOCK_SIZE;
+>   		pitch = width_in_blocks * AFBC_DATA_BLOCK_WIDTH *
+>   			AFBC_DATA_BLOCK_HEIGHT * fb->format->cpp[0];
+>   
+>   		hdr_size = ALIGN(hdr_pitch * height_in_blocks, AFBC_HEADER_ALIGNMENT);
+> +		hdr_offset = hdr_pitch * y_offset_in_blocks +
+> +			AFBC_HEADER_BLOCK_SIZE * x_offset_in_blocks;
+> +		hdr_addr = addr + hdr_offset;
+>   
+> -		hdr_addr = addr + hdr_pitch * y_offset_in_blocks +
+> -			   AFBC_HEADER_BLOCK_SIZE * x_offset_in_blocks;
+>   		/* The data plane is offset by 1 additional block. */
+> -		addr = addr + hdr_size +
+> -		       pitch * y_offset_in_blocks +
+> -		       AFBC_DATA_BLOCK_WIDTH * AFBC_DATA_BLOCK_HEIGHT *
+> -		       fb->format->cpp[0] * (x_offset_in_blocks + 1);
+> +		offset = pitch * y_offset_in_blocks +
+> +			 AFBC_DATA_BLOCK_WIDTH * AFBC_DATA_BLOCK_HEIGHT *
+> +			 fb->format->cpp[0] * (x_offset_in_blocks + 1);
+> +		addr = addr + hdr_size + offset;
+>   	}
+>   
+>   	mtk_plane_state->pending.enable = true;
+
+-- 
+Regards,
+Alexandre
