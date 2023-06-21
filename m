@@ -2,198 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF1A738F3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:53:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56AA5738F35
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:52:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbjFUSxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 14:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
+        id S230004AbjFUSwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 14:52:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231550AbjFUSxB (ORCPT
+        with ESMTP id S230526AbjFUSwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 14:53:01 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2049.outbound.protection.outlook.com [40.107.93.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD83199B;
-        Wed, 21 Jun 2023 11:52:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JmxatZT2OpWHzHDWZn3P6R7qOKg42y+imqJiJU7vDTZfZGjBRpXsYJHO61k0aIsZETZXE90Zn/NwBp6khHvPfm5WUvQABC6iRB9PCxMQukQVMyFywj1Sdf/sjC9MMH552jfDMFhf3P3wPe+hIC3v5x1KGG/P1IUBMTtlCp6SHQMT967FrRc/zU/6mlsvceKpQI7oxQmDT4Iy1J/KO8g7CxJZWpsIqPwARfDq+mAwuGs38DUGop5klSoLpo/mDo1woZZJIw1r+xYlyhqbmUi+vxZMBjmmmjOU7zyAkuXmX73XnMNknumcSZMlB7Zej1Uwz8fgqYCXSaYlsYajfwtaDw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YhHmFwSHvWZXFAuUVeIaaDvrn7rpDuXcxvDDmpZMcq8=;
- b=SiUB9IabHRAvYKJ5VCZuy5nWZ3hBXU8qxSLvFtF+sDmSqFYFi6dT7sz2o4oj9y0WtiGuDGBr7RokqUsdSPTLHdKk5VFtSQ0/jbjazZE46MbCdreEIQIA2VXY6yRpQ7YJilfB2v/m61lmSNEwMlwG0Wp1S6zCo+NR3n2LYFTloykiV2yk6lsZQ7V6/FSixlqPnl5V2Z6JIN6LYD0Ca4qno5IicMKebCltW/O2MiyB19zFMv23CzcXTCUkaeLFSHDMeDvN82IkTPZF4j60mx4NtBFgIV9/kamxfECCHaGsD9QY0QhHSaWnH3xzmzvuajSHpF8F1T3/9TSQTvul6/R80A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YhHmFwSHvWZXFAuUVeIaaDvrn7rpDuXcxvDDmpZMcq8=;
- b=WcP6kKzcXdxcL1Vh/Xgbwx3CpXMR6BFdqI+oKtLFpTcxUnDHie7w0AdIrt5sC+dSCT5ET8fE0FHQ9BT4B6nNS40TAA3GHf/Zt2tjBb7g0JJ59kQwqdqa2aef/uOtdkBlm3AynMKZ97eL+3lKF8HUG3QQ/8iC/hcM1wbL8QTaFr8=
-Received: from BYAPR02CA0036.namprd02.prod.outlook.com (2603:10b6:a02:ee::49)
- by SN7PR12MB7203.namprd12.prod.outlook.com (2603:10b6:806:2aa::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Wed, 21 Jun
- 2023 18:52:54 +0000
-Received: from MWH0EPF000971E8.namprd02.prod.outlook.com
- (2603:10b6:a02:ee:cafe::94) by BYAPR02CA0036.outlook.office365.com
- (2603:10b6:a02:ee::49) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.21 via Frontend
- Transport; Wed, 21 Jun 2023 18:52:54 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- MWH0EPF000971E8.mail.protection.outlook.com (10.167.243.68) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6521.17 via Frontend Transport; Wed, 21 Jun 2023 18:52:54 +0000
-Received: from ethanolx50f7host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 21 Jun
- 2023 13:52:52 -0500
-From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
-To:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Bjorn Helgaas <bhelgaas@google.com>, <oohall@gmail.com>,
-        "Mahesh J Salgaonkar" <mahesh@linux.ibm.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        "Kuppuswamy Sathyanarayanan" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Yazen Ghannam <yazen.ghannam@amd.com>,
-        Fontenot Nathan <Nathan.Fontenot@amd.com>,
-        "Smita Koralahalli" <Smita.KoralahalliChannabasappa@amd.com>
-Subject: [PATCH v3 2/2] PCI: pciehp: Clear the optional capabilities in DEVCTL2 on a hot-plug
-Date:   Wed, 21 Jun 2023 18:51:52 +0000
-Message-ID: <20230621185152.105320-3-Smita.KoralahalliChannabasappa@amd.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230621185152.105320-1-Smita.KoralahalliChannabasappa@amd.com>
-References: <20230621185152.105320-1-Smita.KoralahalliChannabasappa@amd.com>
+        Wed, 21 Jun 2023 14:52:35 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A68510F6
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:52:28 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f8f3786f20so73245655e9.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:52:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1687373546; x=1689965546;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2XxKRhii9jz/SSvnP3Rvp5gqtHBBhqPsoYXbvA85nbE=;
+        b=Z/uOYZ0+9cASIRm8wVzTOGHyi13TTBA6v/wOgeDiRBTEBX7nBfyEZZUBZJuQKQsl6H
+         k6280uj60OXlUd2FjoLZixxB9t94YGz5DtxEtX14io16mjbTxFWPebxdMxBHJuKY/e3o
+         6MFsurvRpcxVI8XLJijqjdawIdtLJcx/kXu5M4VHsCmf5bMuZLHiVneTaTo8heHtxxCg
+         pmKFgMq0TcMjbbxJntpx197c34mgZMwU5iqwWiCQw2AgydqV5RoWDZeCt7bGdMHL6dhK
+         fVyAHp4ZEpCg6W1OLkZnas4F/5pI0Iw3zepiLt5xQ+j0FHSEkTEw+AheeogfuEmR1k1l
+         wuOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687373546; x=1689965546;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2XxKRhii9jz/SSvnP3Rvp5gqtHBBhqPsoYXbvA85nbE=;
+        b=K6NJcZ3Z0cC8AR/eSQi53jSpPYHFHNTujGU9z+va5wqZPBIjhI+sKOiAC0zRGIlxHw
+         di6EcO6UyG0/QbzUm/2U6NG9PcRXkihKHNqzAVTNhrSyo9Ksf/cn/i/SJ+fuzdRuBSQQ
+         YM0QYCtrOimvV5Mi547zix1Kf92hg8ZsJZCMTwiRUtJF8vLY1gzdXgHW12y1kSWrUHRY
+         xulaLvnZtoX9udor4LzCs+I9Y4jNmq5gqgc2xdFAEiUM2A2otGjwurNBlV2Lb6f5ynWT
+         cOppX1RHrdZiYBQDMpPqU47BZDbtEB0iHggTa6BqoykhvL1oJzgprVLELh1gJJkax6NR
+         KEcw==
+X-Gm-Message-State: AC+VfDygBEAOGpsO89zU4KZ9HJGYRwvG+JPGjKoSg6mnAex67bjTxYsS
+        fawqak1twVkGAarlxnqsMpk=
+X-Google-Smtp-Source: ACHHUZ5pp77gkfir8AIg/D/+2YLp/SO2okjskiHOqbuj+aqu6SV/kzcjOB3Hp690aWnawGAmHFw+Bw==
+X-Received: by 2002:adf:cd91:0:b0:312:74a9:825a with SMTP id q17-20020adfcd91000000b0031274a9825amr7727511wrj.62.1687373546236;
+        Wed, 21 Jun 2023 11:52:26 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:810a:9640:26a8:5d4c:afae:7fa:7038])
+        by smtp.gmail.com with ESMTPSA id n6-20020a7bcbc6000000b003f7e4d143cfsm5745734wmi.15.2023.06.21.11.52.25
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 21 Jun 2023 11:52:25 -0700 (PDT)
+From:   Franziska Naepelt <franziska.naepelt@googlemail.com>
+X-Google-Original-From: Franziska Naepelt <franziska.naepelt@gmail.com>
+To:     franziska.naepelt@googlemail.com
+Cc:     eperi1024@gmail.com, franziska.naepelt@gmail.com,
+        gregkh@linuxfoundation.org, hdegoede@redhat.com,
+        johannes.berg@intel.com, linux-kernel@vger.kernel.org,
+        linux-staging@lists.linux.dev, quic_vjakkam@quicinc.com,
+        tegongkang@gmail.com
+Subject: [PATCH v2 2/5] staging: rtl8723bs: Fix space issues
+Date:   Wed, 21 Jun 2023 20:52:23 +0200
+Message-Id: <20230621185223.25193-1-franziska.naepelt@gmail.com>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
+In-Reply-To: <20230621184635.25064-1-franziska.naepelt@gmail.com>
+References: <20230621184635.25064-1-franziska.naepelt@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000971E8:EE_|SN7PR12MB7203:EE_
-X-MS-Office365-Filtering-Correlation-Id: 19b5df84-a93c-40c7-fe98-08db7288b8b3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /0FuQScoi3BySsUb4TrRYwtD6F9BIsb5wr6PsMhfS+r35SxuslmxatTe0zC7snfA6DM6FfNsxj/AZnYyyoZ+QIHm1AY2QTCHA2pBpb844P4fFS9ZBUwLMQLnSs/YMcXXqz6YuEYep7b38uV2Nc5uOH9Kv4NwGvXWK1vk5dBr+j+gfebnogqcK37mYLM+OwBEiBnvmBKojIAsZC7ksCi2i3DXsO5IpybE2mi5hEtdPi1Z5mf6dfhZdw1yefqc+vCNOkDLOmRfhscOpDCQQDEQDygCd5YWAU5x4zO2/RdTfW6ZXX29A7FnH9eOMNnuBQxx/Of0qJbP89lmnZPOWv5vIe4mkV3I8x9IH/Rl624rBZ9OcR4DuBiEMYUl9r2I34EYgiTlP7mUtY43fif+Kg5CHnBWb3VQ7PU4KpCCmKU3ZOc54oS3WZ+k0/+77D2SdxbJkvSTHPFbw/6ybrO/5N2wE+7RCr+RbYjG5mMsZ8swwAFp+9NrARInZ35mA6VjiPtvNlYPoSt749D0xpsEP0LX+kUAxKbHiRDt2PuQObVJ0bZPKZlqUuzAGBXUx4BKRmUJetajbHHyMvCpqd7OFMhsr4PHKIt1D0MK7w8NxEbuk8gNl4tXyg7RShHveyxR1FFR+F2RytKJGkVUSVt3RI5508cOm75X+ybgrSu9GtMeUAPIR/NcBaptA+Fc1WCa3QXpVneh3gHFh+MXtvUvOES/6QsmCI/dWRbKsNO8KNv/iAHOgQx85mvxX7MObVWrPwr7c+2/+khVKsTFeAYEKN0E2w==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(136003)(346002)(376002)(451199021)(46966006)(40470700004)(36840700001)(82310400005)(81166007)(478600001)(70206006)(7696005)(36756003)(83380400001)(110136005)(54906003)(70586007)(40460700003)(4326008)(316002)(86362001)(26005)(36860700001)(16526019)(186003)(2616005)(966005)(1076003)(356005)(336012)(82740400003)(8936002)(8676002)(41300700001)(2906002)(5660300002)(426003)(47076005)(40480700001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 18:52:54.1417
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 19b5df84-a93c-40c7-fe98-08db7288b8b3
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: MWH0EPF000971E8.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7203
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clear the optional capabilities ARI Forwarding Enable, AtomicOp Requester
-Enable and 10-Bit Tag Requester Enable in DEVCTL2 unconditionally on a
-hot-plug event. These are the bits which are negotiated between endpoint
-and root port and should be re-negotiated and set up for optimal operation
-on a hot add.
+Fix the following checkpatch space issues:
+- CHECK: spaces preferred around that '*' (ctx:VxV)
+- CHECK: spaces preferred around that '+' (ctx:VxV)
+- CHECK: spaces preferred around that '-' (ctx:VxV)
+- CHECK: spaces preferred around that '|' (ctx:VxV)
+- CHECK: No space is necessary after a cast
+- WARNING: please, no spaces at the start of a line
 
-According to implementation notes in 2.2.6.2, of PCIe Base Specification
-[1], "For platforms where the RC supports 10-Bit Tag Completer capability,
-it is highly recommended for platform firmware or operating software that
-configures PCIe hierarchies to Set the 10-Bit Tag Requester Enable bit
-automatically in Endpoints with 10-Bit Tag Requester capability. This
-enables the important class of 10-Bit Tag capable adapters that send
-Memory Read Requests only to host memory". Hence, it must be noted that
-Platform FW may enable these bits if endpoint supports them at boot time
-for performance reasons even if Linux hasn't defined them.
-
-Issues are being observed where a device became inaccessible and the port
-was not able to be recovered without a system reset when a device with
-10-bit tags was removed and replaced with a device that didn't support
-10-bit tags.
-
-Section 2.2.6.2, in PCIe Base Specification also implies that:
-
-* If a Requester sends a 10-Bit Tag Request to a Completer that lacks
-10-Bit Completer capability, the returned Completion(s) will have Tags
-with Tag[9:8] equal to 00b. Since the Requester is forbidden to generate
-these Tag values for 10-Bit Tags, such Completions will be handled as
-Unexpected Completions, which by default are Advisory Non-Fatal Errors.
-The Requester must follow standard PCI Express error handling
-requirements.
-
-* In configurations where a Requester with 10-Bit Tag Requester capability
-needs to target multiple Completers, one needs to ensure that the Requester
-sends 10-Bit Tag Requests only to Completers that have 10-Bit Tag Completer
-capability.
-
-Additionally, Section 6.13 and 6.15 of the PCIe Base Spec points out that
-following a hot-plug event, clear the ARI Forwarding Enable bit and
-AtomicOp Requester Enable as its not determined whether the next device
-inserted will support these capabilities. AtomicOp capabilities are not
-supported on PCI Express to PCI/PCI-X Bridges and any newly added
-component may not be an ARI device.
-
-[1] PCI Express Base Specification Revision 6.0, Dec 16 2021.
-    https://members.pcisig.com/wg/PCI-SIG/document/16609
-
-Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Signed-off-by: Franziska Naepelt <franziska.naepelt@gmail.com>
 ---
-v2:
-	Clear all optional capabilities in Device Control 2 register
-	instead of individually clearing ARI Forwarding Enable,
-	AtomicOp Requestor Enable and 10-bit Tag Requestor Enable.
-v3:
-	Restore clearing only ARI, Atomic Op and 10 bit tags as these are
-	the optional capabilities.
-	Provide all necessary information in commit description.
-	Clear register bits of the hotplug port.
+v2: Remove blank line fix
 ---
- drivers/pci/hotplug/pciehp_pci.c | 4 ++++
- include/uapi/linux/pci_regs.h    | 1 +
- 2 files changed, 5 insertions(+)
+ .../staging/rtl8723bs/os_dep/ioctl_cfg80211.c | 76 +++++++++----------
+ 1 file changed, 38 insertions(+), 38 deletions(-)
 
-diff --git a/drivers/pci/hotplug/pciehp_pci.c b/drivers/pci/hotplug/pciehp_pci.c
-index ad12515a4a12..e27fd2bc4ceb 100644
---- a/drivers/pci/hotplug/pciehp_pci.c
-+++ b/drivers/pci/hotplug/pciehp_pci.c
-@@ -102,6 +102,10 @@ void pciehp_unconfigure_device(struct controller *ctrl, bool presence)
- 
- 	pci_lock_rescan_remove();
- 
-+	pcie_capability_clear_word(ctrl->pcie->port, PCI_EXP_DEVCTL2,
-+				   (PCI_EXP_DEVCTL2_ARI | PCI_EXP_DEVCTL2_ATOMIC_REQ |
-+				    PCI_EXP_DEVCTL2_TAG_REQ_EN));
-+
- 	/*
- 	 * Stopping an SR-IOV PF device removes all the associated VFs,
- 	 * which will update the bus->devices list and confuse the
-diff --git a/include/uapi/linux/pci_regs.h b/include/uapi/linux/pci_regs.h
-index dc2000e0fe3a..6fbc47f23d52 100644
---- a/include/uapi/linux/pci_regs.h
-+++ b/include/uapi/linux/pci_regs.h
-@@ -668,6 +668,7 @@
- #define  PCI_EXP_DEVCTL2_IDO_REQ_EN	0x0100	/* Allow IDO for requests */
- #define  PCI_EXP_DEVCTL2_IDO_CMP_EN	0x0200	/* Allow IDO for completions */
- #define  PCI_EXP_DEVCTL2_LTR_EN		0x0400	/* Enable LTR mechanism */
-+#define  PCI_EXP_DEVCTL2_TAG_REQ_EN	0x1000  /* Allow 10 Tags for Requester */
- #define  PCI_EXP_DEVCTL2_OBFF_MSGA_EN	0x2000	/* Enable OBFF Message type A */
- #define  PCI_EXP_DEVCTL2_OBFF_MSGB_EN	0x4000	/* Enable OBFF Message type B */
- #define  PCI_EXP_DEVCTL2_OBFF_WAKE_EN	0x6000	/* OBFF using WAKE# signaling */
--- 
-2.17.1
+diff --git a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
+index 1afd1a93bcee..ca642eb5d73e 100644
+--- a/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
++++ b/drivers/staging/rtl8723bs/os_dep/ioctl_cfg80211.c
+@@ -95,14 +95,14 @@ static struct ieee80211_channel rtw_2ghz_channels[] = {
+ static void rtw_2g_channels_init(struct ieee80211_channel *channels)
+ {
+ 	memcpy((void *)channels, (void *)rtw_2ghz_channels,
+-		sizeof(struct ieee80211_channel)*RTW_2G_CHANNELS_NUM
++		sizeof(struct ieee80211_channel) * RTW_2G_CHANNELS_NUM
+ 	);
+ }
+
+ static void rtw_2g_rates_init(struct ieee80211_rate *rates)
+ {
+ 	memcpy(rates, rtw_g_rates,
+-		sizeof(struct ieee80211_rate)*RTW_G_RATES_NUM
++		sizeof(struct ieee80211_rate) * RTW_G_RATES_NUM
+ 	);
+ }
+
+@@ -126,8 +126,8 @@ static struct ieee80211_supported_band *rtw_spt_band_alloc(
+ 	if (!spt_band)
+ 		goto exit;
+
+-	spt_band->channels = (struct ieee80211_channel *)(((u8 *)spt_band)+sizeof(struct ieee80211_supported_band));
+-	spt_band->bitrates = (struct ieee80211_rate *)(((u8 *)spt_band->channels)+sizeof(struct ieee80211_channel)*n_channels);
++	spt_band->channels = (struct ieee80211_channel *)(((u8 *)spt_band) + sizeof(struct ieee80211_supported_band));
++	spt_band->bitrates = (struct ieee80211_rate *)(((u8 *)spt_band->channels) + sizeof(struct ieee80211_channel) * n_channels);
+ 	spt_band->band = band;
+ 	spt_band->n_channels = n_channels;
+ 	spt_band->n_bitrates = n_bitrates;
+@@ -247,10 +247,10 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
+ 		u32 wpsielen = 0;
+ 		u8 *wpsie = NULL;
+
+-		wpsie = rtw_get_wps_ie(pnetwork->network.ies+_FIXED_IE_LENGTH_, pnetwork->network.ie_length-_FIXED_IE_LENGTH_, NULL, &wpsielen);
++		wpsie = rtw_get_wps_ie(pnetwork->network.ies + _FIXED_IE_LENGTH_, pnetwork->network.ie_length - _FIXED_IE_LENGTH_, NULL, &wpsielen);
+
+ 		if (wpsie && wpsielen > 0)
+-			psr = rtw_get_wps_attr_content(wpsie,  wpsielen, WPS_ATTR_SELECTED_REGISTRAR, (u8 *)(&sr), NULL);
++			psr = rtw_get_wps_attr_content(wpsie, wpsielen, WPS_ATTR_SELECTED_REGISTRAR, (u8 *)(&sr), NULL);
+
+ 		if (sr != 0) {
+ 			/* it means under processing WPS */
+@@ -277,9 +277,9 @@ struct cfg80211_bss *rtw_cfg80211_inform_bss(struct adapter *padapter, struct wl
+ 	/* We've set wiphy's signal_type as CFG80211_SIGNAL_TYPE_MBM: signal strength in mBm (100*dBm) */
+ 	if (check_fwstate(pmlmepriv, _FW_LINKED) == true &&
+ 		is_same_network(&pmlmepriv->cur_network.network, &pnetwork->network, 0)) {
+-		notify_signal = 100*translate_percentage_to_dbm(padapter->recvpriv.signal_strength);/* dbm */
++		notify_signal = 100 * translate_percentage_to_dbm(padapter->recvpriv.signal_strength);/* dbm */
+ 	} else {
+-		notify_signal = 100*translate_percentage_to_dbm(pnetwork->network.phy_info.signal_strength);/* dbm */
++		notify_signal = 100 * translate_percentage_to_dbm(pnetwork->network.phy_info.signal_strength);/* dbm */
+ 	}
+
+ 	buf = kzalloc(MAX_BSSINFO_LEN, GFP_ATOMIC);
+@@ -452,20 +452,20 @@ void rtw_cfg80211_indicate_connect(struct adapter *padapter)
+ 		roam_info.links[0].channel = notify_channel;
+ 		roam_info.links[0].bssid = cur_network->network.mac_address;
+ 		roam_info.req_ie =
+-			pmlmepriv->assoc_req+sizeof(struct ieee80211_hdr_3addr)+2;
++			pmlmepriv->assoc_req + sizeof(struct ieee80211_hdr_3addr) + 2;
+ 		roam_info.req_ie_len =
+-			pmlmepriv->assoc_req_len-sizeof(struct ieee80211_hdr_3addr)-2;
++			pmlmepriv->assoc_req_len - sizeof(struct ieee80211_hdr_3addr) - 2;
+ 		roam_info.resp_ie =
+-			pmlmepriv->assoc_rsp+sizeof(struct ieee80211_hdr_3addr)+6;
++			pmlmepriv->assoc_rsp + sizeof(struct ieee80211_hdr_3addr) + 6;
+ 		roam_info.resp_ie_len =
+-			pmlmepriv->assoc_rsp_len-sizeof(struct ieee80211_hdr_3addr)-6;
++			pmlmepriv->assoc_rsp_len - sizeof(struct ieee80211_hdr_3addr) - 6;
+ 		cfg80211_roamed(padapter->pnetdev, &roam_info, GFP_ATOMIC);
+ 	} else {
+ 		cfg80211_connect_result(padapter->pnetdev, cur_network->network.mac_address
+-			, pmlmepriv->assoc_req+sizeof(struct ieee80211_hdr_3addr)+2
+-			, pmlmepriv->assoc_req_len-sizeof(struct ieee80211_hdr_3addr)-2
+-			, pmlmepriv->assoc_rsp+sizeof(struct ieee80211_hdr_3addr)+6
+-			, pmlmepriv->assoc_rsp_len-sizeof(struct ieee80211_hdr_3addr)-6
++			, pmlmepriv->assoc_req + sizeof(struct ieee80211_hdr_3addr) + 2
++			, pmlmepriv->assoc_req_len - sizeof(struct ieee80211_hdr_3addr) - 2
++			, pmlmepriv->assoc_rsp + sizeof(struct ieee80211_hdr_3addr) + 6
++			, pmlmepriv->assoc_rsp_len - sizeof(struct ieee80211_hdr_3addr) - 6
+ 			, WLAN_STATUS_SUCCESS, GFP_ATOMIC);
+ 	}
+ }
+@@ -720,7 +720,7 @@ static int rtw_cfg80211_set_encryption(struct net_device *dev, struct ieee_param
+ 	param->u.crypt.err = 0;
+ 	param->u.crypt.alg[IEEE_CRYPT_ALG_NAME_LEN - 1] = '\0';
+
+-	if (param_len < (u32) ((u8 *) param->u.crypt.key - (u8 *) param) + param->u.crypt.key_len) {
++	if (param_len < (u32)((u8 *)param->u.crypt.key - (u8 *)param) + param->u.crypt.key_len) {
+ 		ret =  -EINVAL;
+ 		goto exit;
+ 	}
+@@ -1035,10 +1035,10 @@ static int cfg80211_rtw_get_station(struct wiphy *wiphy,
+ 	}
+
+ 	/* for Ad-Hoc/AP mode */
+-	if ((check_fwstate(pmlmepriv, WIFI_ADHOC_STATE)
+- || check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE)
+- || check_fwstate(pmlmepriv, WIFI_AP_STATE))
+-		&& check_fwstate(pmlmepriv, _FW_LINKED)) {
++	if ((check_fwstate(pmlmepriv, WIFI_ADHOC_STATE) ||
++	     check_fwstate(pmlmepriv, WIFI_ADHOC_MASTER_STATE) ||
++	     check_fwstate(pmlmepriv, WIFI_AP_STATE)) &&
++	    check_fwstate(pmlmepriv, _FW_LINKED)) {
+ 		/* TODO: should acquire station info... */
+ 	}
+
+@@ -1237,7 +1237,7 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
+ 	spin_unlock_bh(&pwdev_priv->scan_req_lock);
+
+ 	if (check_fwstate(pmlmepriv, WIFI_AP_STATE) == true) {
+-		if (check_fwstate(pmlmepriv, WIFI_UNDER_WPS|_FW_UNDER_SURVEY|_FW_UNDER_LINKING) == true) {
++		if (check_fwstate(pmlmepriv, WIFI_UNDER_WPS | _FW_UNDER_SURVEY | _FW_UNDER_LINKING) == true) {
+ 			need_indicate_scan_done = true;
+ 			goto check_need_indicate_scan_done;
+ 		}
+@@ -1291,7 +1291,7 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
+ 	}
+
+ 	/* parsing channels, n_channels */
+-	memset(ch, 0, sizeof(struct rtw_ieee80211_channel)*RTW_CHANNEL_SCAN_AMOUNT);
++	memset(ch, 0, sizeof(struct rtw_ieee80211_channel) * RTW_CHANNEL_SCAN_AMOUNT);
+ 	for (i = 0; i < request->n_channels && i < RTW_CHANNEL_SCAN_AMOUNT; i++) {
+ 		ch[i].hw_value = request->channels[i]->hw_value;
+ 		ch[i].flags = request->channels[i]->flags;
+@@ -1305,7 +1305,7 @@ static int cfg80211_rtw_scan(struct wiphy *wiphy
+ 	} else if (request->n_channels <= 4) {
+ 		for (j = request->n_channels - 1; j >= 0; j--)
+ 			for (i = 0; i < survey_times; i++)
+-				memcpy(&ch[j*survey_times+i], &ch[j], sizeof(struct rtw_ieee80211_channel));
++				memcpy(&ch[j * survey_times + i], &ch[j], sizeof(struct rtw_ieee80211_channel));
+ 		_status = rtw_sitesurvey_cmd(padapter, ssid, RTW_SSID_SCAN_AMOUNT, ch, survey_times * request->n_channels);
+ 	} else {
+ 		_status = rtw_sitesurvey_cmd(padapter, ssid, RTW_SSID_SCAN_AMOUNT, NULL, 0);
+@@ -1461,7 +1461,7 @@ static int rtw_cfg80211_set_wpa_ie(struct adapter *padapter, u8 *pie, size_t iel
+ 		goto exit;
+ 	}
+
+-	if (ielen > MAX_WPA_IE_LEN+MAX_WPS_IE_LEN+MAX_P2P_IE_LEN) {
++	if (ielen > MAX_WPA_IE_LEN + MAX_WPS_IE_LEN + MAX_P2P_IE_LEN) {
+ 		ret = -EINVAL;
+ 		goto exit;
+ 	}
+@@ -1481,19 +1481,19 @@ static int rtw_cfg80211_set_wpa_ie(struct adapter *padapter, u8 *pie, size_t iel
+
+ 	pwpa = rtw_get_wpa_ie(buf, &wpa_ielen, ielen);
+ 	if (pwpa && wpa_ielen > 0) {
+-		if (rtw_parse_wpa_ie(pwpa, wpa_ielen+2, &group_cipher, &pairwise_cipher, NULL) == _SUCCESS) {
++		if (rtw_parse_wpa_ie(pwpa, wpa_ielen + 2, &group_cipher, &pairwise_cipher, NULL) == _SUCCESS) {
+ 			padapter->securitypriv.dot11AuthAlgrthm = dot11AuthAlgrthm_8021X;
+ 			padapter->securitypriv.ndisauthtype = Ndis802_11AuthModeWPAPSK;
+-			memcpy(padapter->securitypriv.supplicant_ie, &pwpa[0], wpa_ielen+2);
++			memcpy(padapter->securitypriv.supplicant_ie, &pwpa[0], wpa_ielen + 2);
+ 		}
+ 	}
+
+ 	pwpa2 = rtw_get_wpa2_ie(buf, &wpa2_ielen, ielen);
+ 	if (pwpa2 && wpa2_ielen > 0) {
+-		if (rtw_parse_wpa2_ie(pwpa2, wpa2_ielen+2, &group_cipher, &pairwise_cipher, NULL) == _SUCCESS) {
++		if (rtw_parse_wpa2_ie(pwpa2, wpa2_ielen + 2, &group_cipher, &pairwise_cipher, NULL) == _SUCCESS) {
+ 			padapter->securitypriv.dot11AuthAlgrthm = dot11AuthAlgrthm_8021X;
+ 			padapter->securitypriv.ndisauthtype = Ndis802_11AuthModeWPA2PSK;
+-			memcpy(padapter->securitypriv.supplicant_ie, &pwpa2[0], wpa2_ielen+2);
++			memcpy(padapter->securitypriv.supplicant_ie, &pwpa2[0], wpa2_ielen + 2);
+ 		}
+ 	}
+
+@@ -1892,7 +1892,7 @@ static int cfg80211_rtw_set_pmksa(struct wiphy *wiphy,
+
+ 			memcpy(psecuritypriv->PMKIDList[index].PMKID, (u8 *)pmksa->pmkid, WLAN_PMKID_LEN);
+ 			psecuritypriv->PMKIDList[index].bUsed = true;
+-			psecuritypriv->PMKIDIndex = index+1;
++			psecuritypriv->PMKIDIndex = index + 1;
+ 			blInserted = true;
+ 			break;
+ 		}
+@@ -2094,8 +2094,8 @@ static netdev_tx_t rtw_cfg80211_monitor_if_xmit_entry(struct sk_buff *skb, struc
+ 		_rtw_xmit_entry(skb, padapter->pnetdev);
+ 		return NETDEV_TX_OK;
+
+-	} else if ((frame_control & (IEEE80211_FCTL_FTYPE|IEEE80211_FCTL_STYPE)) ==
+-		   (IEEE80211_FTYPE_MGMT|IEEE80211_STYPE_ACTION)) {
++	} else if ((frame_control & (IEEE80211_FCTL_FTYPE | IEEE80211_FCTL_STYPE)) ==
++		   (IEEE80211_FTYPE_MGMT | IEEE80211_STYPE_ACTION)) {
+ 		/* only for action frames */
+ 		struct xmit_frame		*pmgntframe;
+ 		struct pkt_attrib	*pattrib;
+@@ -2209,7 +2209,7 @@ static int rtw_cfg80211_add_monitor_if(struct adapter *padapter, char *name, str
+ 		goto out;
+
+ 	*ndev = pwdev_priv->pmon_ndev = mon_ndev;
+-	memcpy(pwdev_priv->ifname_mon, name, IFNAMSIZ+1);
++	memcpy(pwdev_priv->ifname_mon, name, IFNAMSIZ + 1);
+
+ out:
+ 	if (ret && mon_wdev) {
+@@ -2303,14 +2303,14 @@ static int rtw_add_beacon(struct adapter *adapter, const u8 *head, size_t head_l
+ 	if (head_len < 24)
+ 		return -EINVAL;
+
+-	pbuf = rtw_zmalloc(head_len+tail_len);
++	pbuf = rtw_zmalloc(head_len + tail_len);
+ 	if (!pbuf)
+ 		return -ENOMEM;
+
+-	memcpy(pbuf, (void *)head+24, head_len-24);/*  24 =beacon header len. */
+-	memcpy(pbuf+head_len-24, (void *)tail, tail_len);
++	memcpy(pbuf, (void *)head + 24, head_len - 24);/*  24 =beacon header len. */
++	memcpy(pbuf + head_len - 24, (void *)tail, tail_len);
+
+-	len = head_len+tail_len-24;
++	len = head_len + tail_len - 24;
+
+ 	/* check wps ie if inclued */
+ 	rtw_get_wps_ie(pbuf + _FIXED_IE_LENGTH_, len - _FIXED_IE_LENGTH_, NULL, &wps_ielen);
+@@ -2600,7 +2600,7 @@ static int cfg80211_rtw_mgmt_tx(struct wiphy *wiphy,
+ 	pwdev_priv = adapter_wdev_data(padapter);
+
+ 	/* cookie generation */
+-	*cookie = (unsigned long) buf;
++	*cookie = (unsigned long)buf;
+
+ 	/* indicate ack before issue frame to avoid racing with rsp frame */
+ 	rtw_cfg80211_mgmt_tx_status(padapter, *cookie, buf, len, ack, GFP_KERNEL);
+--
+2.39.2 (Apple Git-143)
 
