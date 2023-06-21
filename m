@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B9B373839F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 496047383A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231490AbjFUMWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 08:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46538 "EHLO
+        id S229463AbjFUMWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 08:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbjFUMWa (ORCPT
+        with ESMTP id S230462AbjFUMWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 21 Jun 2023 08:22:30 -0400
 Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D35EDD
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6EEC1718
         for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:22:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1687350149; x=1718886149;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=t7jSq9lhIuDurlZNMr91+neHmx2u8cph/G6HgXnh4hI=;
-  b=iNlRnkdrHc36YbhD2KaZiF5rttMJXCm4yYkKrmq48HYRrKvqysghohZ5
-   hq1jPi/rRghzjRjpJNqAO2bdrCcIPb+GoTBNnuqFK1uw87KA5ZQkbbHFX
-   l48mc/sBGy8+bf87+pd8T6YJYS8uLHau31P1cHCFrCgEPXpxb/IcFtaDy
-   cthAp4A3ZO0LZ2Wq28xSKKj5OM3EY8/9O/5IGKfjV3fC5QDwVxwGbM0l+
-   93I8GAk5UDqJynzm5cddM5CevUkvsVng9+EVjgAMsHy6EvuT+zaOeJrUv
-   7MY3GmGeR1NvgZFafPR7sEKVveDh91qxxrW6r3slIb+/VHhtcrpzYcb+9
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="360165698"
+  bh=PxrG7SFhXzSn4raQBGerOrXRroeYuO9/VMUGq89WOlM=;
+  b=EE3rqI8LbKdp6TGGgcyQ9iO6LM5XIU4GfX32AzOmiJbRjcWI73me/lKJ
+   zrrqfkfgBESP5kKsXzDr1Outx/xgQyMt6+UFwIRuE00YuVsMxaElrv0en
+   p87fxIv4ZOHC/D77FUk/DVYsqUi5g5DtUI6nMlePruQiaJaVoYRMlOa6G
+   0Fj7WrhY6FFS8XCuG/5QTUpUOrwo6mUwiV7jAOdtQo5yQRAzG530BrOhP
+   Dnarh1Fg0oATAJ2Zh5BAgUolh6wtC+CZdvVeu0tk7CSWw5S/C3v1sN3qn
+   cJ6kj9ju3Pz9/YxT4Frm8PuQYlZjB8aJ9Ob3+ULNlNb4bVdMZzedfzRgK
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="360165707"
 X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="360165698"
+   d="scan'208";a="360165707"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 05:22:28 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="888638354"
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="888638358"
 X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="888638354"
+   d="scan'208";a="888638358"
 Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
   by orsmga005.jf.intel.com with ESMTP; 21 Jun 2023 05:22:28 -0700
 From:   "Chang S. Bae" <chang.seok.bae@intel.com>
@@ -44,9 +44,9 @@ To:     linux-kernel@vger.kernel.org, x86@kernel.org
 Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@linux.intel.com, hpa@zytor.com,
         andrew.cooper3@citrix.com, chang.seok.bae@intel.com
-Subject: [PATCH v1 3/4] x86/fpu/xstate: Simplify print_xstate_features()
-Date:   Wed, 21 Jun 2023 05:09:41 -0700
-Message-Id: <20230621120942.121822-4-chang.seok.bae@intel.com>
+Subject: [PATCH v1 4/4] x86/fpu: Remove the unnecessary fpstate_reset() invocation
+Date:   Wed, 21 Jun 2023 05:09:42 -0700
+Message-Id: <20230621120942.121822-5-chang.seok.bae@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230621120942.121822-1-chang.seok.bae@intel.com>
 References: <20230621120942.121822-1-chang.seok.bae@intel.com>
@@ -62,68 +62,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The print_xstate_features() invokes print_xstate_feature() multiple
-times in separate lines which can be replaced with a loop.
-
-The print_xstate_feature() function already checks the feature
-enabling status, and it is only called from within
-print_xstate_features(). So the code can be relocated.
-
-Move the code exactly to print_xstate_features() and wrap it with a
-loop there.
+fpstate_reset() initializes the fpstate container. But, when no state
+has been established yet, calling this is not meaningful. In the
+fpu__init_system() function, it is called immediately after the legacy
+FPU size is determined. So, remove it as not causing any issues.
 
 Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
 Cc: x86@kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
- arch/x86/kernel/fpu/xstate.c | 29 +++++++++--------------------
- 1 file changed, 9 insertions(+), 20 deletions(-)
 
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index d488621b280e..6d72498ea0bc 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -253,31 +253,20 @@ static void __init setup_xstate_cache(void)
- 	}
- }
- 
--static void __init print_xstate_feature(u64 xstate_mask)
--{
--	const char *feature_name;
--
--	if (cpu_has_xfeatures(xstate_mask, &feature_name))
--		pr_info("x86/fpu: Supporting XSAVE feature 0x%03Lx: '%s'\n", xstate_mask, feature_name);
--}
--
- /*
-  * Print out all the supported xstate features:
+The change made by fpstate_reset() can be measured with this:
+
+static struct fpstate fps;
+
+void __init fpu__init_system(struct cpuinfo_x86 *c)
+{
+	memcpy(&fps, &current->thread.fpu.__fpstate, sizeof(struct fpstate));
+	fpstate_reset(&current->thread.fpu);
+	if (memcmp(&fps, &current->thread.fpu.__fpstate, sizeof(struct fpstate)))
+		pr_info("fpstate has reason to be inited at %s\n", __func__);
+	else
+		pr_info("fpstate has no reason to be inited at %s\n", __func__);
+	...
+}
+
+Although it looks to be a no-op, there might be some unknown
+intention behind it. If there is a specific reason for invoking
+fpstate_reset() at that point, this should be documented properly
+instead of removing it.
+---
+ arch/x86/kernel/fpu/init.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/x86/kernel/fpu/init.c b/arch/x86/kernel/fpu/init.c
+index 998a08f17e33..95af3084c4cf 100644
+--- a/arch/x86/kernel/fpu/init.c
++++ b/arch/x86/kernel/fpu/init.c
+@@ -213,7 +213,6 @@ static void __init fpu__init_system_xstate_size_legacy(void)
   */
- static void __init print_xstate_features(void)
+ void __init fpu__init_system(void)
  {
--	print_xstate_feature(XFEATURE_MASK_FP);
--	print_xstate_feature(XFEATURE_MASK_SSE);
--	print_xstate_feature(XFEATURE_MASK_YMM);
--	print_xstate_feature(XFEATURE_MASK_BNDREGS);
--	print_xstate_feature(XFEATURE_MASK_BNDCSR);
--	print_xstate_feature(XFEATURE_MASK_OPMASK);
--	print_xstate_feature(XFEATURE_MASK_ZMM_Hi256);
--	print_xstate_feature(XFEATURE_MASK_Hi16_ZMM);
--	print_xstate_feature(XFEATURE_MASK_PKRU);
--	print_xstate_feature(XFEATURE_MASK_PASID);
--	print_xstate_feature(XFEATURE_MASK_XTILE_CFG);
--	print_xstate_feature(XFEATURE_MASK_XTILE_DATA);
-+	int i;
-+
-+	for (i = 0; i < XFEATURE_MAX; i++) {
-+		u64 mask = BIT_ULL(i);
-+		const char *name;
-+
-+		if (cpu_has_xfeatures(mask, &name))
-+			pr_info("x86/fpu: Supporting XSAVE feature 0x%03Lx: '%s'\n", mask, name);
-+	}
- }
+-	fpstate_reset(&current->thread.fpu);
+ 	fpu__init_system_early_generic();
  
- /*
+ 	/*
 -- 
 2.34.1
 
