@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EDC2738822
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:56:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 780E773881F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:56:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233075AbjFUO4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:56:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35344 "EHLO
+        id S233050AbjFUO43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:56:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233105AbjFUOy5 (ORCPT
+        with ESMTP id S233058AbjFUOyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:54:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909F535BD;
-        Wed, 21 Jun 2023 07:50:27 -0700 (PDT)
+        Wed, 21 Jun 2023 10:54:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91A7D35A4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:50:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FC076157B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D80AB6157D
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:49:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1CB9C433C0;
         Wed, 21 Jun 2023 14:49:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DFA8C433C8;
-        Wed, 21 Jun 2023 14:49:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687358954;
-        bh=Vg/q4ub2LEKrZ4zBjRc7OAhNi+XpqXacU3lh8zGDHJw=;
+        s=k20201202; t=1687358955;
+        bh=f1rttWyEovUo0PnSxIfPqjg/fvLapokvDJ8MLoxkPYI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=owSMvesLWC51zX/w3HurcDsigUZBkUjBx89d/v/tKRNiBBfM/VPhtcpo9dR8B3ZMc
-         PDe+zG2re5PUV2UEoOrM44yZHSL3P+gwidySNM86UXsHOIUSf0Qky5oJOnhwT+qYA1
-         VHjBdUj8aQhn7E2OJZeHktqkQXMulITgMesuwodMynt+FeodeotnCrKXtehojXdeP7
-         Rt5fDUl3pvcPlLE3os7F2iynv0K5izO/6hmJUsAU9Ve36RmcIDosxIvUwnFlexo8aD
-         jsOHq3F8CCbhDrNkVWbhpXiTw0SnWBypegWbqxSnOuDF1wlYqhYk6Oc8oJmKfY5I3P
-         dUULt9UrCqVDg==
+        b=WoUD345LPEF4hodSkjDYo5jbDC614zugtoeX1ouA1gScMBog1mZZYzmATLhoTkySU
+         LFuPoSmt+olr3KHqx8+VmRJFW/KeJPLkuxYI+lPde4RamxgyZa9XxPETK+DGxumHFO
+         KIwkMqbgaJC8LAAQ+ZbiB9ppRUDv8cCEdqIScHWCOZP3d8eBMuKKN9V2XLvH+iUySx
+         A1gejL3krjz8/+bD/6xXL6saZhNjKHvd4qAMpeYWSCkyn1fUj3B+Ft+ohp071f8PCQ
+         pPQHqK4yuEyzI9l5GBMhtSq5KLVffyNyX68NbI2pDLjbQLuDCCntxY+oB9xDpD5PKB
+         GJwP1DSIe0M6A==
 From:   Jeff Layton <jlayton@kernel.org>
 To:     Christian Brauner <brauner@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+        Anders Larsen <al@alarsen.net>
 Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 56/79] pstore: switch to new ctime accessors
-Date:   Wed, 21 Jun 2023 10:46:09 -0400
-Message-ID: <20230621144735.55953-55-jlayton@kernel.org>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 57/79] qnx4: switch to new ctime accessors
+Date:   Wed, 21 Jun 2023 10:46:10 -0400
+Message-ID: <20230621144735.55953-56-jlayton@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230621144735.55953-1-jlayton@kernel.org>
 References: <20230621144507.55591-1-jlayton@kernel.org>
  <20230621144735.55953-1-jlayton@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,31 +63,24 @@ inode->i_ctime.
 
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- fs/pstore/inode.c | 4 ++--
+ fs/qnx4/inode.c | 4 ++--
  1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/pstore/inode.c b/fs/pstore/inode.c
-index ffbadb8b3032..20624d6006e6 100644
---- a/fs/pstore/inode.c
-+++ b/fs/pstore/inode.c
-@@ -223,7 +223,7 @@ static struct inode *pstore_get_inode(struct super_block *sb)
- 	struct inode *inode = new_inode(sb);
- 	if (inode) {
- 		inode->i_ino = get_next_ino();
--		inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
-+		inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
- 	}
- 	return inode;
- }
-@@ -390,7 +390,7 @@ int pstore_mkfile(struct dentry *root, struct pstore_record *record)
- 	inode->i_private = private;
+diff --git a/fs/qnx4/inode.c b/fs/qnx4/inode.c
+index 391ea402920d..3fde90b3f99b 100644
+--- a/fs/qnx4/inode.c
++++ b/fs/qnx4/inode.c
+@@ -305,8 +305,8 @@ struct inode *qnx4_iget(struct super_block *sb, unsigned long ino)
+ 	inode->i_mtime.tv_nsec = 0;
+ 	inode->i_atime.tv_sec   = le32_to_cpu(raw_inode->di_atime);
+ 	inode->i_atime.tv_nsec = 0;
+-	inode->i_ctime.tv_sec   = le32_to_cpu(raw_inode->di_ctime);
+-	inode->i_ctime.tv_nsec = 0;
++	inode_ctime_set_sec(inode, le32_to_cpu(raw_inode->di_ctime));
++	inode_ctime_set_nsec(inode, 0);
+ 	inode->i_blocks  = le32_to_cpu(raw_inode->di_first_xtnt.xtnt_size);
  
- 	if (record->time.tv_sec)
--		inode->i_mtime = inode->i_ctime = record->time;
-+		inode->i_mtime = inode_ctime_set(inode, record->time);
- 
- 	d_add(dentry, inode);
- 
+ 	memcpy(qnx4_inode, raw_inode, QNX4_DIR_ENTRY_SIZE);
 -- 
 2.41.0
 
