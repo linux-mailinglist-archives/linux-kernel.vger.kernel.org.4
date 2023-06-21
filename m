@@ -2,211 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC835738883
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3B28738859
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233255AbjFUPLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
+        id S232986AbjFUPGS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 11:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233220AbjFUPLb (ORCPT
+        with ESMTP id S232879AbjFUPGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:11:31 -0400
-Received: from mail-vk1-xa2f.google.com (mail-vk1-xa2f.google.com [IPv6:2607:f8b0:4864:20::a2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B157D55A9
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:06:58 -0700 (PDT)
-Received: by mail-vk1-xa2f.google.com with SMTP id 71dfb90a1353d-471c9f2f47aso1244418e0c.3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:06:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687360014; x=1689952014;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=71z8LhgGLO2daEYFxMvnjOv3P6R9bwnVjy2+4M+RqPE=;
-        b=VhykntzuF/uN4/tK93JbjlsAUtx26v9xgqpidGBDa1HRYYwrx7YaF1uDXBE5Bxdm5e
-         TmaH8/4JjEtldkXbR/O7EF0O6ZSMZURv4Ay2Hm04JNOqwKK8l17SnLEEJBh5veQkqZIK
-         53XlCVsUoiTz43JNFSEQ59R2bLDaYs3HOhg78=
+        Wed, 21 Jun 2023 11:06:03 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2982135;
+        Wed, 21 Jun 2023 08:00:21 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-987f13f8d21so133788066b.0;
+        Wed, 21 Jun 2023 08:00:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687360014; x=1689952014;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=71z8LhgGLO2daEYFxMvnjOv3P6R9bwnVjy2+4M+RqPE=;
-        b=OUZRRFcy94p2EHRkjZ/WQw6x++VJK9IdIN9uPtbRa43hspT327R227A/j+suGtBf5U
-         dbsBKWv9dlceogHyBrvUz0pb7t7pLpFbOWzAwBS2Dr11c+g+h1foBAUM1j8wk1hlxpn5
-         8CkuE41u9Yud7CcVZmEJ+4tG2jZ/2+pviNaUDVwRH4AHQz4RYwFOt0453+QKfz65jBcb
-         WmkgcivzjhlEiITG7+/fZ72CyXb6AAb152Er0YjDtXRT2ApCTpZbcTUy1li6gLvLoWwD
-         BQVlMfFcrRII/Fn1mVoiOTeSkw04wm9FK5znHOq13hK97ZcNVOdHCmyBhwTaLaF+96e1
-         h76g==
-X-Gm-Message-State: AC+VfDwldSsTobbVLk5gePCoVk60lBsCPnVglpYCAj6wg+FfwDVtTyzW
-        xarDQqU9yTo4e6Wa1alkxW5fAiR+lcYmx7DpIqY=
-X-Google-Smtp-Source: ACHHUZ40pm00cx+5QtNSdK+p1nl1iGTlL8sdLUPf0anon/otCr2jk9289Avlf7F6IwoMeQOYIoCJzQ==
-X-Received: by 2002:a05:6602:91:b0:780:c787:637b with SMTP id h17-20020a056602009100b00780c787637bmr56097iob.0.1687359425648;
-        Wed, 21 Jun 2023 07:57:05 -0700 (PDT)
-Received: from localhost (30.23.70.34.bc.googleusercontent.com. [34.70.23.30])
-        by smtp.gmail.com with UTF8SMTPSA id p7-20020a0566380e8700b0042674500f87sm308659jas.123.2023.06.21.07.57.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 07:57:04 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 14:57:03 +0000
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Benjamin Bara <bbara93@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Benjamin Bara <benjamin.bara@skidata.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] usb: misc: onboard-hub: support multiple power
- supplies
-Message-ID: <ZJMPv6Fm3On0ITFi@google.com>
-References: <20230620-hx3-v2-0-76a53434c713@skidata.com>
- <20230620-hx3-v2-1-76a53434c713@skidata.com>
+        d=1e100.net; s=20221208; t=1687359499; x=1689951499;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MQgcSi11x60RW/FFHyKWmOjoC911mNST/9JBZIHptvk=;
+        b=W1SLRDd3rPBxA9ZspVk1vkj20s38sOO0B7Y6algErLJN4EP4zozFB/MpFfDCI69Mr2
+         SeVIJOZtzU/PvGfAAR+pYsLII1sBu5rVxiVamTZ9fhhpO9jEbjryu+Ow3xwD03zo7weG
+         GS/Oe0Ti3CRKRwIkpXGxeDhUGSZDdAXnb96z7CwGFadiAGS0wyDbxg9dAdWnKKzPfrgB
+         KDniOYkRXnQxNLFCv+gbQJcYPh8KTDsUXg2AzLPcpo/Efc+eNdMDcVJf0gEeGWHkE52U
+         VnviErnApTBk8EYG6+QeTPD6zAFkUYYt6DdgqoQV3jXEVJ5RhzmXipDYRCW+wa68HcJd
+         9j/w==
+X-Gm-Message-State: AC+VfDyQa+hRq/RtSi7MgJpvIPYGC2ZDL5HQFIh3ce2rfTZ9vvltCwEA
+        VnRbZdAWfCrqEsbcC1m6YkumhQjVJZentxeCmwo4FtOz
+X-Google-Smtp-Source: ACHHUZ4zOmKFCiRY/93PgkC/EmyUUkGrnaTqR4BSa+01OTVPYz47owdtRluCjLQIny1zn/MAfC2T3MDxnNocNHJkeZ8=
+X-Received: by 2002:a17:906:77ca:b0:989:1ed3:d010 with SMTP id
+ m10-20020a17090677ca00b009891ed3d010mr4063730ejn.2.1687359499235; Wed, 21 Jun
+ 2023 07:58:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230620-hx3-v2-1-76a53434c713@skidata.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230620230150.3068704-1-srinivas.pandruvada@linux.intel.com>
+In-Reply-To: <20230620230150.3068704-1-srinivas.pandruvada@linux.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 21 Jun 2023 16:58:08 +0200
+Message-ID: <CAJZ5v0jGp_Rsu6S+znmrKhQ+y88Mqf9PLf66Ec-SffdFdyH_4g@mail.gmail.com>
+Subject: Re: [PATCH 0/7] thermal: processor_thermal: Suport workload hint
+To:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc:     rafael@kernel.org, rui.zhang@intel.com, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Wed, Jun 21, 2023 at 04:26:27PM +0200, Benjamin Bara wrote:
-> From: Benjamin Bara <benjamin.bara@skidata.com>
+On Wed, Jun 21, 2023 at 1:01 AM Srinivas Pandruvada
+<srinivas.pandruvada@linux.intel.com> wrote:
 >
-> As some of the onboard hubs require multiple power supplies, provide the
-> environment to support them.
-> 
-> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+> Add support for Meteor Lake workload hints. Before adding this support,
+> some reorganization and clean up is required.
+> First four changes are for clean up and to reorganize code to add
+> support for workload hint. The last patch adds a test program as part
+> of self tests.
+>
+> Srinivas Pandruvada (7):
+>   thermal: int340x: processor_thermal: Move mailbox code to common
+>     module
+>   thermal: int340x: processor_thermal: Add interrupt configuration
+>   thermal: int340x: processor_thermal: Use non MSI interrupts
+>   thermal/drivers/int340x: Remove PROC_THERMAL_FEATURE_WLT_REQ for
+>     Meteor Lake
+>   thermal: int340x: processor_thermal: Add workload type hint
+>   thermal/drivers/int340x: Support workload hint interrupts
+>   selftests/thermel/intel: Add test to read workload hint
+>
+>  .../driver-api/thermal/intel_dptf.rst         |  38 +++
+>  .../thermal/intel/int340x_thermal/Makefile    |   2 +
+>  .../processor_thermal_device.c                |  17 +-
+>  .../processor_thermal_device.h                |  21 +-
+>  .../processor_thermal_device_pci.c            |  76 ++++--
+>  .../processor_thermal_device_pci_legacy.c     |   3 +-
+>  .../int340x_thermal/processor_thermal_mbox.c  | 179 ++++---------
+>  .../processor_thermal_wlt_hint.c              | 239 ++++++++++++++++++
+>  .../processor_thermal_wlt_req.c               | 137 ++++++++++
+>  .../testing/selftests/thermal/intel/Makefile  |  16 ++
+>  .../thermal/intel/workload_hint_test.c        | 114 +++++++++
+>  11 files changed, 680 insertions(+), 162 deletions(-)
+>  create mode 100644 drivers/thermal/intel/int340x_thermal/processor_thermal_wlt_hint.c
+>  create mode 100644 drivers/thermal/intel/int340x_thermal/processor_thermal_wlt_req.c
+>  create mode 100644 tools/testing/selftests/thermal/intel/Makefile
+>  create mode 100644 tools/testing/selftests/thermal/intel/workload_hint_test.c
+>
+> --
 
-Overall this looks good to me, a few nits inside.
-
-> ---
-> v2:
-> - replace (err != 0) with (err)
-> ---
->  drivers/usb/misc/onboard_usb_hub.c | 36 ++++++++++++++++++++++++++++--------
->  drivers/usb/misc/onboard_usb_hub.h |  1 +
->  2 files changed, 29 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-> index 12fc6eb67c3b..3de30356a684 100644
-> --- a/drivers/usb/misc/onboard_usb_hub.c
-> +++ b/drivers/usb/misc/onboard_usb_hub.c
-> @@ -27,6 +27,12 @@
->  
->  #include "onboard_usb_hub.h"
->  
-> +#define SUPPLIES_NUM_MAX 2
-
-MAX_SUPPLIES?
-
-add empty line
-
-> +static const char * const supply_names[] = {
-> +	"vdd",
-> +	"vdd2",
-> +};
-> +
->  static void onboard_hub_attach_usb_driver(struct work_struct *work);
->  
->  static struct usb_device_driver onboard_hub_usbdev_driver;
-> @@ -40,7 +46,8 @@ struct usbdev_node {
->  };
->  
->  struct onboard_hub {
-> -	struct regulator *vdd;
-> +	struct regulator_bulk_data supplies[SUPPLIES_NUM_MAX];
-> +	unsigned int supplies_num;
-
-num_supplies?
-
->  	struct device *dev;
->  	const struct onboard_hub_pdata *pdata;
->  	struct gpio_desc *reset_gpio;
-> @@ -55,9 +62,9 @@ static int onboard_hub_power_on(struct onboard_hub *hub)
->  {
->  	int err;
->  
-> -	err = regulator_enable(hub->vdd);
-> +	err = regulator_bulk_enable(hub->supplies_num, hub->supplies);
->  	if (err) {
-> -		dev_err(hub->dev, "failed to enable regulator: %d\n", err);
-> +		dev_err(hub->dev, "failed to enable supplies: %d\n", err);
->  		return err;
->  	}
->  
-> @@ -75,9 +82,9 @@ static int onboard_hub_power_off(struct onboard_hub *hub)
->  
->  	gpiod_set_value_cansleep(hub->reset_gpio, 1);
->  
-> -	err = regulator_disable(hub->vdd);
-> +	err = regulator_bulk_disable(hub->supplies_num, hub->supplies);
->  	if (err) {
-> -		dev_err(hub->dev, "failed to disable regulator: %d\n", err);
-> +		dev_err(hub->dev, "failed to disable supplies: %d\n", err);
->  		return err;
->  	}
->  
-> @@ -232,6 +239,7 @@ static int onboard_hub_probe(struct platform_device *pdev)
->  	const struct of_device_id *of_id;
->  	struct device *dev = &pdev->dev;
->  	struct onboard_hub *hub;
-> +	unsigned int i;
->  	int err;
->  
->  	hub = devm_kzalloc(dev, sizeof(*hub), GFP_KERNEL);
-> @@ -246,9 +254,21 @@ static int onboard_hub_probe(struct platform_device *pdev)
->  	if (!hub->pdata)
->  		return -EINVAL;
->  
-> -	hub->vdd = devm_regulator_get(dev, "vdd");
-> -	if (IS_ERR(hub->vdd))
-> -		return PTR_ERR(hub->vdd);
-> +	if (hub->pdata->supplies_num > SUPPLIES_NUM_MAX)
-> +		return dev_err_probe(dev, -EINVAL, "max %d supplies supported!\n",
-> +				     SUPPLIES_NUM_MAX);
-> +	hub->supplies_num = 1;
-> +	if (hub->pdata->supplies_num > 1)
-> +		hub->supplies_num = hub->pdata->supplies_num;
-
-Please change the above to:
-
-	if (hub->pdata->supplies_num != 0)
-		hub->supplies_num = hub->pdata->supplies_num;
-	else
-		hub->supplies_num = 1;
-
-> +
-> +	for (i = 0; i < SUPPLIES_NUM_MAX; i++)
-> +		hub->supplies[i].supply = supply_names[i];
-> +
-> +	err = devm_regulator_bulk_get(dev, hub->supplies_num, hub->supplies);
-> +	if (err) {
-> +		dev_err(dev, "Failed to get regulator supplies: %d\n", err);
-> +		return err;
-> +	}
->  
->  	hub->reset_gpio = devm_gpiod_get_optional(dev, "reset",
->  						  GPIOD_OUT_HIGH);
-> diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
-> index aca5f50eb0da..657190bf1799 100644
-> --- a/drivers/usb/misc/onboard_usb_hub.h
-> +++ b/drivers/usb/misc/onboard_usb_hub.h
-> @@ -8,6 +8,7 @@
->  
->  struct onboard_hub_pdata {
->  	unsigned long reset_us;		/* reset pulse width in us */
-> +	unsigned int supplies_num;	/* num of supplies: 0 considered as 1 */
-
-num_supplies?
-
-s/num of/number of/
-
->  };
+Because of the timing of the first posting, I'm going to treat this
+series as 6.6 material.
