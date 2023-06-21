@@ -2,172 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7FCE738039
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CE13738217
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231966AbjFUJni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 05:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
+        id S231177AbjFUJnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 05:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231750AbjFUJna (ORCPT
+        with ESMTP id S230095AbjFUJnB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 05:43:30 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D9A129;
-        Wed, 21 Jun 2023 02:43:28 -0700 (PDT)
-Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D62E51EC0645;
-        Wed, 21 Jun 2023 11:43:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1687340605;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=yXKcV3auqZiH5ablDN0OpddtOVM62a/D928JjKMNXI0=;
-        b=fGGGFOcm/j1jBRRvN7zXyPW4PWbANeEwKO58akYk3HFwWVhSbZepdoK1UDfltiq3BVsgxV
-        afZo1xjFVpNXrOgPFEwzSrf+otLk2UgZpxcxQ/SMfzX2uiICQenOugsvfjtw+5jxoMDWDm
-        xejbSVf4LXHZHL2lKqvLKvAqigR5Qp0=
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-        header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id e4WsilyJ1x43; Wed, 21 Jun 2023 09:43:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-        t=1687340602; bh=yXKcV3auqZiH5ablDN0OpddtOVM62a/D928JjKMNXI0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fyQVwBnAueySdbG0xMg34yXlW/XbZoa2fdHIxCPpbUpUvZTzceVEGqhpKf26M8jvh
-         cQZrHrd4NDWJ1hZ9bhyVgh1pjqJKNLWEMiP5gA2Xv7wshI3Zdr7Ezl3oUQ1uk4hncH
-         ktCnJjrTimE6r2iOMN1pBLtXrLeF2ISV/Nw1dqvQxfSDmKyO1yF4mNSg9urBDIt19l
-         MOyDgIo8MpE4vooEPqEEgYB5Z2olkoquqbzGNxggefTMMtCyztPuHGCPg3nmVx4ozu
-         EPUIsYbiqJxia1qErD6CYuMaJsODWsvZ+ZOAudy/BD72pBpc6AID/bTPdb3fSif4he
-         YJqerDK6aM/oRya8NBWdn0pUP0ZzfKFVhaEGbiIc4fDLSmxsPt/LcKMFID505QCQeF
-         bjPZumWkHDakTZMlxA5hv+gLVXfkr8mXNg4pxO6pnDXgITMEpqFW+4/KcWboFFnXik
-         eYdNfzumlPl4OwXJ2X2A32oLbFraGQgho7WNG4HzPbuRoBvfnE4AFk+MN58iiXan/d
-         7YOKobJsShP6uAB/bu/hmdcuAF7hFSyLfx/3ll177T7PJLSzJNTbdqHS6oTgMKbf+/
-         /6fWRvqQT2vKqfHn6HtALNs+cMMAqD4RPO04QOQCVFEvh56EOxuwc3EewsfN5vk7wX
-         dCgtDPf8uUZqB0n1/xsXwixA=
-Received: from zn.tnic (p200300ea971Dc592329c23FffEA6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c592:329c:23ff:fea6:a903])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-        (No client certificate requested)
-        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3EDD640E019B;
-        Wed, 21 Jun 2023 09:42:42 +0000 (UTC)
-Date:   Wed, 21 Jun 2023 11:42:36 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     kvm@vger.kernel.org, linux-coco@lists.linux.dev,
-        linux-mm@kvack.org, linux-crypto@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        vbabka@suse.cz, kirill@shutemov.name, ak@linux.intel.com,
-        tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org, ashish.kalra@amd.com,
-        nikunj.dadhania@amd.com, liam.merwick@oracle.com,
-        zhi.a.wang@intel.com, Brijesh Singh <brijesh.singh@amd.com>
-Subject: Re: [PATCH RFC v9 07/51] x86/sev: Add the host SEV-SNP
- initialization support
-Message-ID: <20230621094236.GZZJLGDAicp1guNPvD@fat_crate.local>
-References: <20230612042559.375660-1-michael.roth@amd.com>
- <20230612042559.375660-8-michael.roth@amd.com>
+        Wed, 21 Jun 2023 05:43:01 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2C9BC
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:42:57 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-514ab6cb529so12716163a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:42:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687340576; x=1689932576;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=z5GBcmLnyO9lS4NBr/8rAccCIiKtu5RR66Ulq/RkkiE=;
+        b=EouuDPxL4n9lFO0cBiaRzm24jdgt8Emsx7GfOcSfY2YFPsMJosdkWq9hlFPRuOn3He
+         w8nioFV+AlRQ2LvHIraP/glAQq8e0GYoiIYjamoYGmn5dFCuWtU49aUtrmqIUDh4jD3u
+         xfnKQgjeIg8TfhWl2xv32/X9+C8P9S5eqrNfG9RppPcMM+n1NvUA7RtQYF2yD0dJCk9c
+         5jESXhsd+yX6jZ55IoEFveSuMpoEoccgvaPC9DJY9KA5P5SwQVNi/fvLLPHqDR22xbar
+         4YNrJeBg/ojC8fi7wqJYNqZlve7kITWALxlASb+3UGAedc8dD8kyfvU7e1Zprkjo5PSW
+         02Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687340576; x=1689932576;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z5GBcmLnyO9lS4NBr/8rAccCIiKtu5RR66Ulq/RkkiE=;
+        b=kZpQGD8VTIzwyzfzIF07hZpbnKJ1tP7/6b5hh6yc9yjNIEXZIAoMfWhhqTtTLycMdi
+         cjpB5LHCW1Lh2OmNqVscKNRuSVlRbJtFm6yvwCe6Ctmmch7Ao6RKosajom/JVR8rbdEu
+         xWdbXBFVxJVtjBqDz7l7Y/TTTQCOXpq+Z39bhGE+SUQoZpMS/YeI2mUFz3Y+tinwLRWj
+         tZP3Q6mW8rsCHzI/irKsAh/Go8SRfYda66P0mx687eAB0Y/r1OiDEQ1id09dqeRng19p
+         WYa8T3msMpN6QdAj9sFXrRqnQr/o+xZbUtF3rDploAdag+RdyzyCFupzz0jC1QMjupyO
+         Q1pA==
+X-Gm-Message-State: AC+VfDwzn0efRlTmVi6tjax9eeX9ISavdDeSH+sfqkTVn+T8UCTGlQiu
+        U+91D0wqCxAkVHCIUrmd0KxeVw==
+X-Google-Smtp-Source: ACHHUZ5iOhly3GaJctJp5PPZl6BWmLQfk2mo+Y68nqZxEzWI8KUTqCHxqDZrW0/HUoNmJ0E4OEPQLg==
+X-Received: by 2002:a05:6402:270d:b0:51a:4451:564d with SMTP id y13-20020a056402270d00b0051a4451564dmr11134073edd.18.1687340576011;
+        Wed, 21 Jun 2023 02:42:56 -0700 (PDT)
+Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id f10-20020a50ee8a000000b0051823c1a10bsm2340226edr.54.2023.06.21.02.42.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jun 2023 02:42:55 -0700 (PDT)
+Message-ID: <a6bcad96-6d77-b50a-6b69-5fb6757b424f@baylibre.com>
+Date:   Wed, 21 Jun 2023 11:42:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230612042559.375660-8-michael.roth@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] linux-firmware: update firmware for MT7921 WiFi
+ device
+Content-Language: en-US
+To:     Deren Wu <Deren.Wu@mediatek.com>, jwboyer@kernel.org,
+        dwmw2@infradead.org, ben@decadent.org.uk,
+        Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Soul Huang <Soul.Huang@mediatek.com>,
+        Quan Zhou <quan.zhou@mediatek.com>,
+        Ming Yen Hsieh <mingyen.hsieh@mediatek.com>,
+        KM Lin <km.lin@mediatek.com>,
+        Robin Chiu <robin.chiu@mediatek.com>,
+        CH Yeh <ch.yeh@mediatek.com>, Posh Sun <posh.sun@mediatek.com>,
+        linux-firmware <linux-firmware@kernel.org>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        linux-mediatek <linux-mediatek@lists.infradead.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <5d30a2ec441a1364a2548c007a94f6f3337b6eb0.1685603641.git.deren.wu@mediatek.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <5d30a2ec441a1364a2548c007a94f6f3337b6eb0.1685603641.git.deren.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 11, 2023 at 11:25:15PM -0500, Michael Roth wrote:
-> From: Brijesh Singh <brijesh.singh@amd.com>
+On 01/06/2023 09:36, Deren Wu wrote:
+> Update binary firmware for MT7921 WiFi devices
 > 
-> The memory integrity guarantees of SEV-SNP are enforced through a new
-> structure called the Reverse Map Table (RMP). The RMP is a single data
-> structure shared across the system that contains one entry for every 4K
-> page of DRAM that may be used by SEV-SNP VMs. APM2 section 15.36 details
+> File: mediatek/WIFI_MT7961_patch_mcu_1_2_hdr.bin
+> Version: 20230526130917a
+> File: mediatek/WIFI_RAM_CODE_MT7961_1.bin
+> Version: 20230526130958
 
-Rather say 'APM v2, section "Secure Nested Paging (SEV-SNP)"' because
-the numbering is more likely to change than the name in the future. With
-the name, people can find it faster.
+Hi Deren,
 
-> a number of steps needed to detect/enable SEV-SNP and RMP table support
-> on the host:
-> 
->  - Detect SEV-SNP support based on CPUID bit
->  - Initialize the RMP table memory reported by the RMP base/end MSR
->    registers and configure IOMMU to be compatible with RMP access
->    restrictions
->  - Set the MtrrFixDramModEn bit in SYSCFG MSR
->  - Set the SecureNestedPagingEn and VMPLEn bits in the SYSCFG MSR
->  - Configure IOMMU
-> 
-> RMP table entry format is non-architectural and it can vary by
-> processor. It is defined by the PPR. Restrict SNP support to CPU
-> models/families which are compatible with the current RMP table entry
-> format to guard against any undefined behavior when running on other
-> system types. Future models/support will handle this through an
-> architectural mechanism to allow for broader compatibility.
-
-I'm guessing this is all for live migration between SNP hosts. If so,
-then there will have to be a guest API to handle the differences.
-
-> SNP host code depends on CONFIG_KVM_AMD_SEV config flag, which may be
-> enabled even when CONFIG_AMD_MEM_ENCRYPT isn't set, so update the
-> SNP-specific IOMMU helpers used here to rely on CONFIG_KVM_AMD_SEV
-> instead of CONFIG_AMD_MEM_ENCRYPT.
-
-Does that mean that even on CONFIG_AMD_MEM_ENCRYPT=n kernels, host SNP
-can function?
-
-Do we even want that?
-
-I'd expect that a host SNP kernel should have SME enabled too even
-though it is not absolutely necessary.
-
-> Co-developed-by: Ashish Kalra <ashish.kalra@amd.com>
-> Signed-off-by: Ashish Kalra <ashish.kalra@amd.com>
-> Co-developed-by: Tom Lendacky <thomas.lendacky@amd.com>
-> Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
-> Signed-off-by: Brijesh Singh <brijesh.singh@amd.com>
-> [mdr: rework commit message to be clearer about what patch does, squash
->       in early_rmptable_check() handling from Tom]
-> Signed-off-by: Michael Roth <michael.roth@amd.com>
-> ---
->  arch/x86/coco/Makefile                   |   1 +
->  arch/x86/coco/sev/Makefile               |   3 +
->  arch/x86/coco/sev/host.c                 | 212 +++++++++++++++++++++++
->  arch/x86/include/asm/disabled-features.h |   8 +-
->  arch/x86/include/asm/msr-index.h         |  11 +-
->  arch/x86/include/asm/sev.h               |   2 +
->  arch/x86/kernel/cpu/amd.c                |  19 ++
->  drivers/iommu/amd/init.c                 |   2 +-
->  include/linux/amd-iommu.h                |   2 +-
->  9 files changed, 256 insertions(+), 4 deletions(-)
->  create mode 100644 arch/x86/coco/sev/Makefile
->  create mode 100644 arch/x86/coco/sev/host.c
-
-Ignored review comments here:
-
-https://lore.kernel.org/r/Y9ubi0i4Z750gdMm@zn.tnic
-
-Ignoring this one for now too.
+Can you provide details (fix, improvement, new feature) for these 
+updated binaries please ?
 
 -- 
-Regards/Gruss,
-    Boris.
+Regards,
+Alexandre
 
-https://people.kernel.org/tglx/notes-about-netiquette
