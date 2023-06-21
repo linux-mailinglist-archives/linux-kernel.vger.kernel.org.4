@@ -2,106 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4494E738EE6
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:34:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68BDA738EE2
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbjFUSeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 14:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
+        id S229821AbjFUSde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 14:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjFUSeT (ORCPT
+        with ESMTP id S231153AbjFUSdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 14:34:19 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140961996
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:34:03 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9896216338cso183986566b.3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:34:03 -0700 (PDT)
+        Wed, 21 Jun 2023 14:33:31 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758B61735
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:33:30 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-25e7fe2fb51so3273977a91.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:33:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687372441; x=1689964441;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MkTkg0yk5G+m/3RuQi582p9no07noJpOVWR1uVt2QJ8=;
-        b=jhU2qXV7zgZAHlPuzJt9roWj9xYxOAu1wdHns/nRruICat6vZgD6g7WT66fmeD7eJC
-         SYrdE5LfxQViiL6lSz4LSuSIoJr9/06WPjE8nkVTCvYQbI7uT6RcV3QmKgya8iN2QkVD
-         ddp8ZNe0TBekwvv68uje4kaxI8i10czLrcDvDhsRwfiKW950/CS5k07O93fwZNlyieBo
-         L4DAIRaspsoyTxggLGA5y651H1fMcenqDEg44Ab00oou5Iy3ni91xvXPrZiGTaVBfrad
-         B/bhazmIbrfha7bOoi56i8PYPVUf2uMiHfQ17gYuCwaWR3Y1C64AIx92fJ6PXll7A4Ym
-         gTmw==
+        d=chromium.org; s=google; t=1687372410; x=1689964410;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R2S4gS2xsl31ZVbj5QmbK/bF8pdwruLrQ0Of/mUlG7M=;
+        b=hIQg4b6dBFhr8M1cB2wCKdDIS2BqrZFkxpeYC9/r/Fm4/PFRkhINjLnndweKacJ7IP
+         V8cig2c3cCv7oAvLssc4iBdvgeuMqkMdvBVCb2TTShovFY5Gf4Mfmm1haAIxoTVhcXAh
+         OT5ZmbC2Hz2Fbpo93tqT6X9u8qiANoR9cGeOw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687372441; x=1689964441;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MkTkg0yk5G+m/3RuQi582p9no07noJpOVWR1uVt2QJ8=;
-        b=ibQFt04/wJMzp/cbh/ext29pBRmZe/ETNG+H4QbiunD4dFIADoJM9x/oAWooWvTzQZ
-         YHc3vdTNWTb+MhUnPaFX7bd1V39pWwQsAwiue/7IL2+mJJtjO0PkTezy4KTvhLbSmkYv
-         Ru89lLCLlk0sM2ENSdPDuSVxI/2TO2Oil2CSxV3v7geKLR9styu+WsWqUKXGglRv22Fp
-         ErXayd1vLCmZ8+xOkNerU6qBGzQhwYdSSLTm8jH7ugB5R8XpWyf7KYlcTXjxDMnfKv3V
-         TnjrdLigPZ4bRtFWFXhb6ct1ezuywOK+VXJOzorvzRuwzHO5M2RTMt3yORXYOCcCkgeu
-         q0ZQ==
-X-Gm-Message-State: AC+VfDzvLOdXWo8nq3e9jKLE3NwpliJ+Ma8avIsS0ebFMvNhfkA+b26H
-        xvWstzgbs66yKH51k127+58h/KprTV/lJ6olOI36Sg==
-X-Google-Smtp-Source: ACHHUZ56mWPIZN9zRu60o7GkY+dtcQe/JAx8qk37vaGZg5yLb4G/foH80j+heYxIq88Od3vZR0/ZK5nlyTE1OnKvpwg=
-X-Received: by 2002:a17:907:3e92:b0:988:7cdb:943a with SMTP id
- hs18-20020a1709073e9200b009887cdb943amr11674209ejc.30.1687372441404; Wed, 21
- Jun 2023 11:34:01 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687372410; x=1689964410;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R2S4gS2xsl31ZVbj5QmbK/bF8pdwruLrQ0Of/mUlG7M=;
+        b=lqUIJ+Yw+jFGsfgKjPW0dKPeGrOzOkkUxVrLIr+l6BpxrDzyvz1ZTuNVOmJ54cNQJg
+         HM80peeXBcXOgJC2dG53GfU8Xo+pwHTS9kwCsc9exoNcNpAPvB8vTyxlfZ7RqFE9k665
+         9+LOS2qrsWEcTtSoFSi5npiRJOAPcL0oeJvQO5SgBV/4MPff3OsXJ+mNL3FxVhiO+bDg
+         yO8gJa/Sxcag5e42PtHTaZi6J+bb9tGnXZrzf3QXSC2bMTHeLr2M56rpb9aL0i8Q7JsX
+         7rjaK795osHovE2jL63T0/Bz8oP6wUSp+JbktgcVLtaQYRcM2mfqW1e1ya7ioWNu4bW3
+         Arcg==
+X-Gm-Message-State: AC+VfDwkgnIPPAb/seLQ4qfEawcBatYxTtKclyYLLT9XyEvi3jN3WFPs
+        xRca0EomhYu3aQbZcBjaoURSGg==
+X-Google-Smtp-Source: ACHHUZ55HAlLqELh2ztTLy1Zy882zddDnIs2ffNwpxg18Goh1qFJ8fhZuoht6oim3Oz/H9kVw+iajg==
+X-Received: by 2002:a17:90a:69a2:b0:25b:f9ce:d8df with SMTP id s31-20020a17090a69a200b0025bf9ced8dfmr13250289pjj.8.1687372409966;
+        Wed, 21 Jun 2023 11:33:29 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id i18-20020a17090ad35200b0025e0bea16eesm3466415pjx.42.2023.06.21.11.33.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 11:33:29 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 11:33:29 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Anil Gurumurthy <anil.gurumurthy@qlogic.com>,
+        Sudarsana Kalluru <sudarsana.kalluru@qlogic.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        Krishna Gudipati <kgudipat@brocade.com>,
+        James Bottomley <JBottomley@parallels.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH 1/2] scsi: bfa: fix function pointer type mismatch for
+ hcb_qe->cbfn
+Message-ID: <202306211133.DD89F45965@keescook>
+References: <20230616092233.3229414-1-arnd@kernel.org>
 MIME-Version: 1.0
-References: <20230618000856.1714902-1-mizhang@google.com> <20230619120051.00001f0f.zhi.wang.linux@gmail.com>
-In-Reply-To: <20230619120051.00001f0f.zhi.wang.linux@gmail.com>
-From:   Mingwei Zhang <mizhang@google.com>
-Date:   Wed, 21 Jun 2023 11:33:25 -0700
-Message-ID: <CAL715WKF8Ws1E0UNvRNQ7ZqisrFD6srC3o24g8FU=f=f0YwUKw@mail.gmail.com>
-Subject: Re: [PATCH 0/6] KVM: Documentation: Update document description for
- kvm_mmu_page and kvm_mmu_page_role
-To:     Zhi Wang <zhi.wang.linux@gmail.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230616092233.3229414-1-arnd@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 19, 2023 at 2:00=E2=80=AFAM Zhi Wang <zhi.wang.linux@gmail.com>=
- wrote:
->
-> On Sun, 18 Jun 2023 00:08:50 +0000
-> Mingwei Zhang <mizhang@google.com> wrote:
->
-> > When reading the KVM MMU documentation for nested virtualization, I fee=
-l
-> > that the description of kvm_mmu_page (and kvm_mmu_page_role) has been
-> > lagging for around 1-2 years. The descriptions for several fields in st=
-ruct
-> > kvm_mmu_page and struct kvm_mmu_page_role are missing. So I think it mi=
-ght
-> > be good to add them to make it consistent with the current code.
-> >
->
-> This is so nice. A trivial comment, maybe refining the tittle of PATCH 1-=
-6 a
-> bit: "Add the missing comment of xxxx into xxxx". It is a little bit conf=
-using
-> by just looking at the titles at the first glance, more like some members=
- are
-> missing, not the comments. :)
->
+On Fri, Jun 16, 2023 at 11:22:09AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Some callback functions used here take a boolean argument, others
+> take a status argument. This breaks KCFI type checking, so clang
+> now warns about the function pointer cast:
+> 
+> drivers/scsi/bfa/bfad_bsg.c:2138:29: error: cast from 'void (*)(void *, enum bfa_status)' to 'bfa_cb_cbfn_t' (aka 'void (*)(void *, enum bfa_boolean)') converts to incompatible function type [-Werror,-Wcast-function-type-strict]
+> 
+> Assuming the code is actually correct here and the callers always match
+> the argument types of the callee, rework this to replace the explicit
+> cast with a union of the two pointer types. This does not change the
+> behavior of the code, so if something is actually broken here, a larger
+> rework may be necessary.
+> 
+> Fixes: 37ea0558b87ab ("[SCSI] bfa: Added support to collect and reset fcport stats")
+> Fixes: 3ec4f2c8bff25 ("[SCSI] bfa: Added support to configure QOS and collect stats.")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Sure. Yeah, the shortlog looks slightly confusing as if I am changing
-the actual data structures. I will update those in the next version.
-Thanks for your comments.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
--Mingwei
+-- 
+Kees Cook
