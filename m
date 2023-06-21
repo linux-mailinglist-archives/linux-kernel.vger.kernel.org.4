@@ -2,129 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E55B738B99
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:39:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98322738B9E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:39:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbjFUQjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:39:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32932 "EHLO
+        id S231750AbjFUQjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjFUQik (ORCPT
+        with ESMTP id S229650AbjFUQjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:38:40 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4505A1BE3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:38:12 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-970028cfb6cso937304166b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:38:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687365484; x=1689957484;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kHT0xkRPj/tHL2KhcXjDvfPGYpV6DV94rE8fbAVVN3g=;
-        b=OuIf/Hk8Z6ZNeL5MTS+7vZTCeT+7y44aCN21cSuhvvHxvmGKL9onTLPW+IbnI9a5y5
-         mlpV9SlP91WvG262OezJ/Ggywgt2WRILVvI7LWesxWa7U7Kp4wWHg2aRtwOkIG9xTYxI
-         YpZhIV5WhQDhb9Zx1JXuNFy+YMgZ+jxeAKUoHG3qAwq1a5QxeB8IBwxtHNvOpad5xCjK
-         QRQwiRjgglxH/qutqzAVg5xLJuorhIGhZ/GIynSYGrVcvlbSC3FueXm8nygKzCL06RNU
-         den+lYE4UgFRCIWv09jZ9DvbXcoaBVDrSMTZlR/mlaHsxzgeC8fmHDSVNQ3kfW4oTZoO
-         dWlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687365484; x=1689957484;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kHT0xkRPj/tHL2KhcXjDvfPGYpV6DV94rE8fbAVVN3g=;
-        b=E+4ZCTZZ22kapXcbu4orCC3xo/2+1z6dyadvPTn35O/4xJvuMBrtfMf2fgZNzkZZDN
-         5Tu/8EKuTuYTkxvXXT7fkssFAF8m7KkXE7yuhZCJoPYR9WkcjMov8udYAPRGL1nXMEbQ
-         YmlY6WucAFeJxQ5XmB2Xcuyd4UOnddkd10IR3YQoVHawFp5cLskqTaCLvhEgt6RUxPe6
-         NNPdpXpHqX8rXFaeimX6mbqQuLYEw764HvfSVs2x2YaNwpD1g6rNa411J5X30P+8YjH3
-         /cyyoc2uyE38VSkT4dnnw/6DOI8lCJmkOlCZQYynyl3GGIvVZNm9KkL+Uc4geMKMEHrp
-         RNeQ==
-X-Gm-Message-State: AC+VfDwX13wi3F5XzPC31hdc+D5gPYQauQjm6OiJakP2pUtrpQLDEAca
-        BMzRjqkc0b3J4HMWmT8uVnG1ewUpUJR0tP6iWnQ=
-X-Google-Smtp-Source: ACHHUZ74pD5lWhZRri048RG4p/7SNG3Sl7EjZJfgYf3y4RRrD12qSUSfXikA6LBchkNrVcsv/EkWKg==
-X-Received: by 2002:a17:906:9b86:b0:982:21a1:c4e0 with SMTP id dd6-20020a1709069b8600b0098221a1c4e0mr16135482ejc.56.1687365484337;
-        Wed, 21 Jun 2023 09:38:04 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id z19-20020a170906669300b00977c7566ccbsm3378068ejo.164.2023.06.21.09.38.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 09:38:03 -0700 (PDT)
-Message-ID: <da300402-d417-5646-d4c9-7c100c351db1@linaro.org>
-Date:   Wed, 21 Jun 2023 18:38:01 +0200
+        Wed, 21 Jun 2023 12:39:02 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A422D2102
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:38:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=An+C0VbpadAK9DfnzOg8IsiKKHs6Mfr+wM5S8OrzUqo=; b=EWDHlaPJenuW/W/kA1tPqLj2bs
+        a1fNdJLYwe2wwlh7AG9RnC0gjxpFNy5tAILAlO/3VikggC3JX+nzqgA6lGW/N+tSyxhQEH3J4RQtn
+        +9c59/67kTgo9VQNDn77Gh/Ixwj47veX+LKfeEz4V93sjEEdgzqXpAnq8+0zK1nozeg5lgHqdVF6O
+        0gpAmk/MLB1Gx7jA5wiIUcJWnCP0NKdFJ8pA5j8mpX2/u0PedSL7KnyXIChUbNFO7H67CV2b8B0OM
+        XxQWEJm8hPLgaHJ1+bEEvcQ2SFrW2UnQTe+Qnp4LsCuKjEv3VQzamiU38/hFfIRki0k37hSOBdSDk
+        ZXfh0rGA==;
+Received: from [179.113.218.86] (helo=[192.168.1.111])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1qC0qi-001OBo-2K; Wed, 21 Jun 2023 18:38:28 +0200
+Message-ID: <1d638ba7-b34c-472a-0816-72758da20ec7@igalia.com>
+Date:   Wed, 21 Jun 2023 13:38:23 -0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH 2/3] dt-bindings: power: supply: Document Mitsumi MM8013
- fuel gauge
+Subject: Re: [RFC PATCH v3 3/4] drm/amdgpu: Implement DRM_IOCTL_GET_RESET
 Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20230621-topic-mm8013-v1-0-4407c6260053@linaro.org>
- <20230621-topic-mm8013-v1-2-4407c6260053@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230621-topic-mm8013-v1-2-4407c6260053@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+Cc:     kernel-dev@igalia.com, alexander.deucher@amd.com,
+        pierre-eric.pelloux-prayer@amd.com,
+        Simon Ser <contact@emersion.fr>,
+        Rob Clark <robdclark@gmail.com>,
+        Pekka Paalanen <ppaalanen@gmail.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Stone <daniel@fooishbar.org>,
+        =?UTF-8?B?J01hcmVrIE9sxaHDoWsn?= <maraeo@gmail.com>,
+        Dave Airlie <airlied@gmail.com>,
+        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>,
+        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
+        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+        linux-kernel@vger.kernel.org
+References: <20230621005719.836857-1-andrealmeid@igalia.com>
+ <20230621005719.836857-4-andrealmeid@igalia.com>
+ <5a0876a6-c3db-73b6-15c1-ef0b8cc8c732@amd.com>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <5a0876a6-c3db-73b6-15c1-ef0b8cc8c732@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2023 17:39, Konrad Dybcio wrote:
-> The Mitsumie MM8013 is an I2C fuel gauge for Li-Ion cells. The partial
-
-Mitsumi
-
-> datasheet is available at [1]. Add bindings for this chip.
+Em 21/06/2023 04:40, Christian König escreveu:
+> Am 21.06.23 um 02:57 schrieb André Almeida:
+>> Implement get_reset ioctl for amdgpu
 > 
-> [1] https://www.mitsumi.co.jp/latest-M/Catalog/pdf/battery_mm_8013_e.pdf
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  .../bindings/power/supply/mitsumi,mm8013.yaml      | 35 ++++++++++++++++++++++
->  1 file changed, 35 insertions(+)
+> Well that pretty much won't work since the jobs are destroyed much later 
+> than the contexts.
 > 
-> diff --git a/Documentation/devicetree/bindings/power/supply/mitsumi,mm8013.yaml b/Documentation/devicetree/bindings/power/supply/mitsumi,mm8013.yaml
-> new file mode 100644
-> index 000000000000..080fd44083ac
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/mitsumi,mm8013.yaml
-> @@ -0,0 +1,35 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/mitsumi,mm8013.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mitsumi MM8013 fuel gauge
-> +
-> +maintainers:
-> +  - Konrad Dybcio <konradybcio@kernel.org>
-> +
-> +properties:
-> +  compatible:
-> +    const: mitsumi,mm8013
-> +
-> +  reg:
-> +    maxItems: 1
 
+Why does this prevents the code to work? If the context is detroyed, it 
+can't be queried anyway.
 
-I think you miss several properties: three power supplies (although not
-all might be needed) and most likely monitored-battery. One regulator
-output and output GPIO probably can be skipped.
-
-Best regards,
-Krzysztof
-
+> Christian.
+> 
+>>
+>> Signed-off-by: André Almeida <andrealmeid@igalia.com>
+>> ---
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c  |  4 ++-
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c | 35 +++++++++++++++++++++++++
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.h |  5 ++++
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c |  1 +
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_job.c | 12 +++++++--
+>>   drivers/gpu/drm/amd/amdgpu/amdgpu_job.h |  2 ++
+>>   6 files changed, 56 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c 
+>> b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+>> index 2eb2c66843a8..0ba26b4b039c 100644
+>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
+>> @@ -1262,8 +1262,10 @@ static int amdgpu_cs_submit(struct 
+>> amdgpu_cs_parser *p,
+>>       uint64_t seq;
+>>       int r;
+>> -    for (i = 0; i < p->gang_size; ++i)
+>> +    for (i = 0; i < p->gang_size; ++i) {
+>> +        p->jobs[i]->ctx = p->ctx;
+>>           drm_sched_job_arm(&p->jobs[i]->base);
+>> +    }
+>>       for (i = 0; i < p->gang_size; ++i) {
+>>           struct dma_fence *fence;
+>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c 
+>> b/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c
+>> index d2139ac12159..d3e292382d4a 100644
+>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c
+>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c
+>> @@ -322,6 +322,9 @@ static int amdgpu_ctx_init(struct amdgpu_ctx_mgr 
+>> *mgr, int32_t priority,
+>>       ctx->init_priority = priority;
+>>       ctx->override_priority = AMDGPU_CTX_PRIORITY_UNSET;
+>> +    ctx->global_reset_counter = 
+>> atomic_read(&mgr->adev->gpu_reset_counter);
+>> +    ctx->local_reset_counter = 0;
+>> +
+>>       r = amdgpu_ctx_get_stable_pstate(ctx, &current_stable_pstate);
+>>       if (r)
+>>           return r;
+>> @@ -963,3 +966,35 @@ void amdgpu_ctx_mgr_usage(struct amdgpu_ctx_mgr 
+>> *mgr,
+>>       }
+>>       mutex_unlock(&mgr->lock);
+>>   }
+>> +
+>> +int amdgpu_get_reset(struct drm_file *filp, struct drm_device *dev,
+>> +             struct drm_get_reset *reset)
+>> +{
+>> +    struct amdgpu_device *adev = drm_to_adev(dev);
+>> +    struct amdgpu_ctx *ctx;
+>> +    struct amdgpu_ctx_mgr *mgr;
+>> +    unsigned int id = reset->ctx_id;
+>> +    struct amdgpu_fpriv *fpriv = filp->driver_priv;
+>> +
+>> +    mgr = &fpriv->ctx_mgr;
+>> +    mutex_lock(&mgr->lock);
+>> +    ctx = idr_find(&mgr->ctx_handles, id);
+>> +    if (!ctx) {
+>> +        mutex_unlock(&mgr->lock);
+>> +        return -EINVAL;
+>> +    }
+>> +
+>> +    reset->dev_reset_count =
+>> +        atomic_read(&adev->gpu_reset_counter) - 
+>> ctx->global_reset_counter;
+>> +
+>> +    reset->ctx_reset_count = ctx->local_reset_counter;
+>> +
+>> +    if (amdgpu_in_reset(adev))
+>> +        reset->flags |= DRM_RESET_IN_PROGRESS;
+>> +
+>> +    if (ctx->vram_lost_counter != atomic_read(&adev->vram_lost_counter))
+>> +        reset->flags |= DRM_RESET_VRAM_LOST;
+>> +
+>> +    mutex_unlock(&mgr->lock);
+>> +    return 0;
+>> +}
+>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.h 
+>> b/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.h
+>> index 0fa0e56daf67..0c9815695884 100644
+>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.h
+>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.h
+>> @@ -57,6 +57,9 @@ struct amdgpu_ctx {
+>>       unsigned long            ras_counter_ce;
+>>       unsigned long            ras_counter_ue;
+>>       uint32_t            stable_pstate;
+>> +
+>> +    uint64_t            global_reset_counter;
+>> +    uint64_t            local_reset_counter;
+>>   };
+>>   struct amdgpu_ctx_mgr {
+>> @@ -97,4 +100,6 @@ void amdgpu_ctx_mgr_fini(struct amdgpu_ctx_mgr *mgr);
+>>   void amdgpu_ctx_mgr_usage(struct amdgpu_ctx_mgr *mgr,
+>>                 ktime_t usage[AMDGPU_HW_IP_NUM]);
+>> +int amdgpu_get_reset(struct drm_file *file_priv, struct drm_device *dev,
+>> +             struct drm_get_reset *reset);
+>>   #endif
+>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c 
+>> b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+>> index c9a41c997c6c..431791b2c3cb 100644
+>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+>> @@ -2805,6 +2805,7 @@ static const struct drm_driver amdgpu_kms_driver 
+>> = {
+>>   #ifdef CONFIG_PROC_FS
+>>       .show_fdinfo = amdgpu_show_fdinfo,
+>>   #endif
+>> +    .get_reset = amdgpu_get_reset,
+>>       .prime_handle_to_fd = drm_gem_prime_handle_to_fd,
+>>       .prime_fd_to_handle = drm_gem_prime_fd_to_handle,
+>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c 
+>> b/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c
+>> index c3d9d75143f4..1553a2633d46 100644
+>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c
+>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c
+>> @@ -35,11 +35,20 @@ static enum drm_gpu_sched_stat 
+>> amdgpu_job_timedout(struct drm_sched_job *s_job)
+>>   {
+>>       struct amdgpu_ring *ring = to_amdgpu_ring(s_job->sched);
+>>       struct amdgpu_job *job = to_amdgpu_job(s_job);
+>> +    struct drm_sched_entity *entity = job->base.entity;
+>>       struct amdgpu_task_info ti;
+>>       struct amdgpu_device *adev = ring->adev;
+>>       int idx;
+>>       int r;
+>> +    memset(&ti, 0, sizeof(struct amdgpu_task_info));
+>> +    amdgpu_vm_get_task_info(ring->adev, job->pasid, &ti);
+>> +
+>> +    if (job->ctx) {
+>> +        DRM_INFO("Increasing ctx reset count for %s (%d)\n", 
+>> ti.process_name, ti.pid);
+>> +        job->ctx->local_reset_counter++;
+>> +    }
+>> +
+>>       if (!drm_dev_enter(adev_to_drm(adev), &idx)) {
+>>           DRM_INFO("%s - device unplugged skipping recovery on 
+>> scheduler:%s",
+>>                __func__, s_job->sched->name);
+>> @@ -48,7 +57,6 @@ static enum drm_gpu_sched_stat 
+>> amdgpu_job_timedout(struct drm_sched_job *s_job)
+>>           return DRM_GPU_SCHED_STAT_ENODEV;
+>>       }
+>> -    memset(&ti, 0, sizeof(struct amdgpu_task_info));
+>>       adev->job_hang = true;
+>>       if (amdgpu_gpu_recovery &&
+>> @@ -58,7 +66,6 @@ static enum drm_gpu_sched_stat 
+>> amdgpu_job_timedout(struct drm_sched_job *s_job)
+>>           goto exit;
+>>       }
+>> -    amdgpu_vm_get_task_info(ring->adev, job->pasid, &ti);
+>>       DRM_ERROR("ring %s timeout, signaled seq=%u, emitted seq=%u\n",
+>>             job->base.sched->name, 
+>> atomic_read(&ring->fence_drv.last_seq),
+>>             ring->fence_drv.sync_seq);
+>> @@ -105,6 +112,7 @@ int amdgpu_job_alloc(struct amdgpu_device *adev, 
+>> struct amdgpu_vm *vm,
+>>        */
+>>       (*job)->base.sched = &adev->rings[0]->sched;
+>>       (*job)->vm = vm;
+>> +    (*job)->ctx = NULL;
+>>       amdgpu_sync_create(&(*job)->explicit_sync);
+>>       (*job)->vram_lost_counter = atomic_read(&adev->vram_lost_counter);
+>> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_job.h 
+>> b/drivers/gpu/drm/amd/amdgpu/amdgpu_job.h
+>> index 52f2e313ea17..0d463babaa60 100644
+>> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_job.h
+>> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_job.h
+>> @@ -63,6 +63,8 @@ struct amdgpu_job {
+>>       uint32_t        oa_base, oa_size;
+>>       uint32_t        vram_lost_counter;
+>> +    struct amdgpu_ctx    *ctx;
+>> +
+>>       /* user fence handling */
+>>       uint64_t        uf_addr;
+>>       uint64_t        uf_sequence;
+> 
