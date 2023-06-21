@@ -2,54 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80BAE738685
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C8673868A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232912AbjFUOOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
+        id S232546AbjFUOPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:15:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232784AbjFUONq (ORCPT
+        with ESMTP id S233052AbjFUOO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:13:46 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECA5213E;
-        Wed, 21 Jun 2023 07:13:12 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3D7A2105;
-        Wed, 21 Jun 2023 16:12:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1687356755;
-        bh=Q6gLfttyYNyv7Ic+tR22YEZY26euzVq7wKTAMWUvU0s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=r0DIjYKo+0Osx2KQHLVhCXXDUegjqBJgOiv4hf304R3UPHjMjZ8nQ0wVZeyEXalxT
-         gV0t0DaAq7dJd75bX46mprnyebvJybDFpD7pivybx4CdqGA8gOqKE8WqJfhccnfDo7
-         k4TqFlenzwRU3GVLTqT13XMCeKvhVDMh9RflR/NM=
-Date:   Wed, 21 Jun 2023 17:13:07 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Michal Simek <michal.simek@amd.com>
-Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, git@xilinx.com,
-        Conor Dooley <conor+dt@kernel.org>,
-        Harini Katakam <harini.katakam@amd.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Parth Gajjar <parth.gajjar@amd.com>,
-        Piyush Mehta <piyush.mehta@xilinx.com>,
-        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Hancock <robert.hancock@calian.com>,
-        Tanmay Shah <tanmay.shah@amd.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] arm64: zynqmp: Fix dwc3 usb interrupt description
-Message-ID: <20230621141307.GC18703@pendragon.ideasonboard.com>
-References: <6544d13afd9f3d8f5413e32684aa16e4d155e331.1687160244.git.michal.simek@amd.com>
+        Wed, 21 Jun 2023 10:14:57 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D689213C
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:14:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687356859; x=1718892859;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=9adIYkSPZPSbDZomCIPXDHAFkK/cANr4oaK1SeIPzi4=;
+  b=A+9o0pWS850tGuW41aDtohzsvllZyXIxzA5M0MNte4JEh1x8X5CAw/k/
+   n7CGit7eHr4hxy52YO/DDoFAWDa/kYeFKAA/fpGEsirXuNty5DhNbOdCh
+   s9qC8qO2ly5jqwe0cvQ7wUHBzWTvrRou5wft75W8fX+Bj+uTYfqloe0LJ
+   opvogF9svpnqcy79iSFbstWGb86P6tbdxT5w+hFcJ72XXJm7dpy3zAiRy
+   4EHEhKzlZL8uv4kZvNfwjrKB6b4Tp1Uj06wAUDXs2Gjkt2KmCQwZ0D5Nr
+   xBZ+WlpTf8U4JTthD6aUYpvVIVqSHLzBuSIaL0nVl04yrxH9UqLH4uaiV
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="349915867"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="349915867"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 07:14:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="784507825"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="784507825"
+Received: from uniemimu-mobl1.ger.corp.intel.com (HELO [10.249.254.76]) ([10.249.254.76])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 07:14:16 -0700
+Message-ID: <7bcd2548ad4a403d8c6b67a8274c253b07123be8.camel@linux.intel.com>
+Subject: Re: [PATCH v2] Documentation/gpu: Add a VM_BIND async draft document
+From:   Thomas =?ISO-8859-1?Q?Hellstr=F6m?= 
+        <thomas.hellstrom@linux.intel.com>
+To:     Danilo Krummrich <dakr@redhat.com>
+Cc:     intel-xe@lists.freedesktop.org, Nirmoy Das <nirmoy.das@intel.com>,
+        Matthew Brost <matthew.brost@intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Oak Zeng <oak.zeng@intel.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Date:   Wed, 21 Jun 2023 16:14:14 +0200
+In-Reply-To: <ZJLdoPznXusy8l51@pollux>
+References: <20230621100435.54425-1-thomas.hellstrom@linux.intel.com>
+         <ZJLdoPznXusy8l51@pollux>
+Organization: Intel Sweden AB, Registration Number: 556189-6027
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <6544d13afd9f3d8f5413e32684aa16e4d155e331.1687160244.git.michal.simek@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,63 +70,351 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal,
+Thanks for reviewing.
 
-Thank you for the patch.
+On Wed, 2023-06-21 at 13:23 +0200, Danilo Krummrich wrote:
+> On Wed, Jun 21, 2023 at 12:04:35PM +0200, Thomas Hellstr=C3=B6m wrote:
+> > Add a motivation for and description of asynchronous VM_BIND
+> > operation
+> >=20
+> > v2:
+> > - Fix typos (Nirmoy Das)
+> > - Improve the description of a memory fence (Oak Zeng)
+> > - Add a reference to the document in the Xe RFC.
+> > - Add pointers to sample uAPI suggestions
+> >=20
+> > Signed-off-by: Thomas Hellstr=C3=B6m <thomas.hellstrom@linux.intel.com>
+> > Acked-by: Nirmoy Das <nirmoy.das@intel.com>
+> > ---
+> > =C2=A0Documentation/gpu/drm-vm-bind-async.rst | 145
+> > ++++++++++++++++++++++++
+> > =C2=A0Documentation/gpu/rfc/xe.rst=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 4 +-
+> > =C2=A02 files changed, 147 insertions(+), 2 deletions(-)
+> > =C2=A0create mode 100644 Documentation/gpu/drm-vm-bind-async.rst
+> >=20
+> > diff --git a/Documentation/gpu/drm-vm-bind-async.rst
+> > b/Documentation/gpu/drm-vm-bind-async.rst
+> > new file mode 100644
+> > index 000000000000..69aff250b62f
+> > --- /dev/null
+> > +++ b/Documentation/gpu/drm-vm-bind-async.rst
+> > @@ -0,0 +1,145 @@
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +Asynchronous VM_BIND
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +Nomenclature:
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +* VRAM: On-device memory. Sometimes referred to as device local
+> > memory.
+> > +
+> > +* vm: A GPU address space. Typically per process, but can be
+> > shared by
+> > +=C2=A0 multiple processes.
+>=20
+> Rather obvious, but maybe specify as "GPU virtual address space" or
+> just
+> "GPU VA space".
+>=20
+> Personally, I don't like "vm" as an abbreviation for "GPU VA space"
+> or "virtual
+> address space" in general, but it is commonly used and I fail to find
+> a better
+> one to be honest.
 
-On Mon, Jun 19, 2023 at 09:37:54AM +0200, Michal Simek wrote:
-> Based on DT binding dwc_usb3 is single entry without anything else. That's
-> why combination dwc3_usb3, otg is not allowed. That's why split it to host
-> and peripheral pair which both points to the same IRQ.
-> DWC3 code is reading these two properties first before generic dwc_usb3.
-> 
-> Signed-off-by: Michal Simek <michal.simek@amd.com>
-> ---
-> 
->  arch/arm64/boot/dts/xilinx/zynqmp.dtsi | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> index 02cfcc716936..e8104ffc6663 100644
-> --- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> +++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
-> @@ -888,8 +888,8 @@ dwc3_0: usb@fe200000 {
->  				compatible = "snps,dwc3";
->  				reg = <0x0 0xfe200000 0x0 0x40000>;
->  				interrupt-parent = <&gic>;
-> -				interrupt-names = "dwc_usb3", "otg";
-> -				interrupts = <0 65 4>, <0 69 4>;
-> +				interrupt-names = "host", "peripheral", "otg";
-> +				interrupts = <0 65 4>, <0 65 4>, <0 69 4>;
+I have another upcoming document related to VM_BIND locking variants /
+userptr integration and there I call gpu_vm. It would make sense to
+unify the naming in the documents anyway. I don't have a strong opinion
+either as long as it's not too long.
 
-This should read
+>=20
+> > +
+> > +* VM_BIND: An operation or a list of operations to modify a vm
+> > using
+> > +=C2=A0 an IOCTL. The operations include mapping and unmapping system-
+> > or
+> > +=C2=A0 VRAM memory.
+> > +
+> > +* syncobj: A container that abstracts synchronization objects. The
+> > +=C2=A0 synchronization objects can be either generic, like dma-fences
+> > or
+> > +=C2=A0 driver specific. A syncobj typically indicates the type of the
+> > +=C2=A0 underlying synchronization object.
+> > +
+> > +* in-syncobj: Argument to a VM_BIND IOCTL, the VM_BIND operation
+> > waits
+> > +=C2=A0 for these before starting.
+> > +
+> > +* out-syncbj: Argument to a VM_BIND_IOCTL, the VM_BIND operation
+> > +=C2=A0 signals these when the bind operation is complete.
+> > +
+> > +* memory fence: A synchronization object, different from a dma-
+> > fence.
+> > +=C2=A0 A memory fence uses the value of a specified memory location to
+> > determine
+> > +=C2=A0 signaled status. A memory fence can be awaited and signaled by
+> > both
+> > +=C2=A0 the GPU and CPU. Memory fences are sometimes referred to as
+> > +=C2=A0 user-fences, and do not necessarily bey the dma-fence rule of
+> > +=C2=A0 signalling within a "reasonable amount of time". The kernel
+> > should
+> > +=C2=A0 thus avoid waiting for memory fences with locks held.
+> > +
+> > +* long-running workload: A workload that may take more than the
+> > +=C2=A0 current stipulated dma-fence maximum signal delay to complete
+> > and
+> > +=C2=A0 which therefore needs to set the VM or the GPU execution contex=
+t
+> > in
+> > +=C2=A0 a certain mode that disallows completion dma-fences.
+> > +
+> > +* UMD: User-mode driver.
+> > +
+> > +* KMD: Kernel-mode driver.
+> > +
+> > +
+> > +Synchronous / Asynchronous VM_BIND operation
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +Synchronous VM_BIND
+> > +___________________
+> > +With Synchronous VM_BIND, the VM_BIND operations all complete
+> > before the
+> > +ioctl returns. A synchronous VM_BIND takes neither in-fences nor
+>=20
+> Just some nit-picking: IOCTL is mostly written in caps, maybe you
+> want to stick
+> to either of the two variants.
 
-				interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>,
-					     <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>,
-					     <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
+Sure,
 
-The issue isn't introduced by this patch, so it should probably be fixed
-by a separate patch on top, to convert the whole zynqmp.dtsi file. Do
-you have any plan to do so, or should I ?
+>=20
+> > +out-fences. Synchronous VM_BIND may block and wait for GPU
+> > operations;
+> > +for example swapin or clearing, or even previous binds.
+> > +
+> > +Asynchronous VM_BIND
+> > +____________________
+> > +Asynchronous VM_BIND accepts both in-syncobjs and out-syncobjs.
+> > While the
+> > +IOCTL may return immediately, the VM_BIND operations wait for the
+> > in-syncobjs
+> > +before modifying the GPU page-tables, and signal the out-syncobjs
+> > when
+> > +the modification is done in the sense that the next execbuf that
+>=20
+> Maybe add "execbuf" to the nomenclature.
+>=20
+> > +awaits for the out-syncobjs will see the change. Errors are
+> > reported
+> > +synchronously assuming that the asynchronous part of the job never
+> > errors.
+> > +In low-memory situations the implementation may block, performing
+> > the
+> > +VM_BIND synchronously, because there might not be enough memory
+> > +immediately available for preparing the asynchronous operation.
+> > +
+> > +If the VM_BIND IOCTL takes a list or an array of operations as an
+> > argument,
+> > +the in-syncobjs needs to signal before the first operation starts
+> > to
+> > +execute, and the out-syncobjs signal after the last operation
+> > +completes. Operations in the operation list can be assumed, where
+> > it
+> > +matters, to complete in order.
+> > +
+> > +To aid in supporting user-space queues, the VM_BIND may take a
+> > bind context
+>=20
+> I think "bind context" should also be explained in the nomenclature.
+>=20
+> > +AKA bind engine identifier argument. All VM_BIND operations using
+> > the same
+> > +bind engine can then be assumed, where it matters, to complete in
+> > +order. No such assumptions can be made between VM_BIND operations
+> > +using separate bind contexts.
+> > +
+> > +The purpose of an Asynchronous VM_BIND operation is for user-mode
+> > +drivers to be able to pipeline interleaved vm modifications and
+> > +execbufs. For long-running workloads, such pipelining of a bind
+> > +operation is not allowed and any in-fences need to be awaited
+> > +synchronously.
+> > +
+> > +Also for VM_BINDS for long-running VMs the user-mode driver should
+> > typically
+> > +select memory fences as out-fences since that gives greater
+> > flexibility for
+> > +the kernel mode driver to inject other=C2=A0 operations into the bind =
+/
+> > +unbind operations. Like for example inserting breakpoints into
+> > batch
+> > +buffers. The workload execution can then easily be pipelined
+> > behind
+> > +the bind completion using the memory out-fence as the signal
+> > condition
+> > +for a gpu semaphore embedded by UMD in the workload.
+> > +
+> > +Multi-operation VM_BIND IOCTL error handling and interrupts
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +The VM_BIND operations of the ioctl may error due to lack of
+> > resources
+> > +to complete and also due to interrupted waits. In both situations
+> > UMD
+> > +should preferably restart the IOCTL after taking suitable action.
+> > If
+> > +UMD has overcommitted a memory resource, an -ENOSPC error will be
+> > +returned, and UMD may then unbind resources that are not used at
+> > the
+> > +moment and restart the IOCTL. On -EINTR, UMD should simply restart
+> > the
+> > +IOCTL and on -ENOMEM user-space may either attempt to free known
+> > +system memory resources or abort the operation. If aborting as a
+> > +result of a failed operation in a list of operations, some
+> > operations
+> > +may still have completed, and to get back to a known state, user-
+> > space
+> > +should therefore attempt to unbind all virtual memory regions
+> > touched
+> > +by the failing IOCTL.
+> > +Unbind operations are guaranteed not to cause any errors due to
+> > +resource constraints.
+> > +In between a failed VM_BIND ioctl and a successful restart there
+> > may
+> > +be implementation defined restrictions on the use of the VM. For a
+> > +description why, please see KMD implementation details under
+> > [error
+> > +state saving]_.
+> > +
+> > +Sample uAPI implementations
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +Suggested uAPI implementations at the moment of writing can be
+> > found for
+> > +the Nouveau driver `here:
+> > https://patchwork.freedesktop.org/patch/543260/?series=3D112994&rev=3D6=
+`
+> > +and for the Xe driver `here:
+> > https://cgit.freedesktop.org/drm/drm-xe/diff/include/uapi/drm/xe_drm.h?=
+h=3Ddrm-xe-next&id=3D9cb016ebbb6a275f57b1cb512b95d5a842391ad7`
+> > +
+> > +KMD implementation details
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D
+>=20
+> Maybe we can mention the GPUVA manager as a helper for implementing
+> such an
+> interface.
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Sure will add this as well.
+Thanks,
 
->  				clock-names = "bus_early", "ref";
->  				iommus = <&smmu 0x860>;
->  				snps,quirk-frame-length-adjustment = <0x20>;
-> @@ -915,8 +915,8 @@ dwc3_1: usb@fe300000 {
->  				compatible = "snps,dwc3";
->  				reg = <0x0 0xfe300000 0x0 0x40000>;
->  				interrupt-parent = <&gic>;
-> -				interrupt-names = "dwc_usb3", "otg";
-> -				interrupts = <0 70 4>, <0 74 4>;
-> +				interrupt-names = "host", "peripheral", "otg";
-> +				interrupts = <0 70 4>, <0 70 4>, <0 74 4>;
->  				clock-names = "bus_early", "ref";
->  				iommus = <&smmu 0x861>;
->  				snps,quirk-frame-length-adjustment = <0x20>;
+Thomas
 
--- 
-Regards,
+>=20
+> Anyway, I will surely add a link pointing to this document to the
+> documentation
+> of the GPUVA manager.
 
-Laurent Pinchart
+
+>=20
+> - Danilo
+>=20
+> > +
+> > +.. [error state saving] Open: When the VM_BIND ioctl returns an
+> > error, some
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0or eve=
+n parts of an operation may have been
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0comple=
+ted. If the ioctl is restarted, in
+> > order
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0to kno=
+w where to restart, the KMD can
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0either=
+ put the VM in an error state and
+> > save
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0one in=
+stance of the needed restart state
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0intern=
+ally. In this case, KMD needs to
+> > block
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0furthe=
+r modifications of the VM state that
+> > may
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0cause =
+additional failures requiring a
+> > restart
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0state =
+save, until the error has been fully
+> > resolved.
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0If the=
+ uAPI instead defines a pointer to a
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0UMD al=
+located cookie in the IOCTL struct,
+> > it
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0could =
+also choose to store the restart
+> > state
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0in tha=
+t cookie.
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0The re=
+start state may, for example, be the
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0number=
+ of successfully completed
+> > operations.
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Easies=
+t for UMD would of course be if KMD
+> > did
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0a full=
+ unwind on error so that no error
+> > state
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0needs =
+to be saved.
+> > diff --git a/Documentation/gpu/rfc/xe.rst
+> > b/Documentation/gpu/rfc/xe.rst
+> > index 2516fe141db6..0f062e1346d2 100644
+> > --- a/Documentation/gpu/rfc/xe.rst
+> > +++ b/Documentation/gpu/rfc/xe.rst
+> > @@ -138,8 +138,8 @@ memory fences. Ideally with helper support so
+> > people don't get it wrong in all
+> > =C2=A0possible ways.
+> > =C2=A0
+> > =C2=A0As a key measurable result, the benefits of ASYNC VM_BIND and a
+> > discussion of
+> > -various flavors, error handling and a sample API should be
+> > documented here or in
+> > -a separate document pointed to by this document.
+> > +various flavors, error handling and sample API suggestions are
+> > documented in
+> > +Documentation/gpu/drm-vm-bind-async.rst
+> > =C2=A0
+> > =C2=A0Userptr integration and vm_bind
+> > =C2=A0-------------------------------
+> > --=20
+> > 2.40.1
+> >=20
+>=20
+
