@@ -2,79 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93F297380AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F4DC7381B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbjFUJSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 05:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54022 "EHLO
+        id S231179AbjFUJTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 05:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbjFUJSo (ORCPT
+        with ESMTP id S231159AbjFUJTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 05:18:44 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7936E68
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:18:43 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b51488ad67so29317735ad.3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:18:43 -0700 (PDT)
+        Wed, 21 Jun 2023 05:19:10 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C240F19A5
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:19:02 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-25eb777c7f2so2443085a91.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:19:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1687339123; x=1689931123;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pB2kKOyXmNJk2e2QsKOkbUZlQ9krtQWymG1tqTKND7M=;
-        b=JEl+WD8TxC8kp5VqXUE8dKNh2/i7vnWvgiUcocUBtcvkMYbkJ/3i/v1xwcQI/dnAYD
-         OocJ0aboXF1NcZDeOK+0y/eEiy2dSnUKH8qOOzAKez+JCw7tFekIKtwqCFhRfiNAKlLt
-         q5+gV8VlyclcWMQHTWua5wpsF/9nEXJZj/nZagINJw6yXeij1vuicd7+vVmeUoHRt4If
-         bnBpQ8XUnXOkoLSp2bYEahv6V/k4PyCu7yOSZCqc7nu5EzRWafvELH50E9xAkYQwv7Jn
-         SJe9vOVGMBBXv8+yJMdaxMtks4idFDRhUSiJN05C/KeQ6BdmEBhTcbqL7PropsMzaMpq
-         pqbg==
+        d=gmail.com; s=20221208; t=1687339142; x=1689931142;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LG46ChCK+BwfP68y/KI81ahnd53s4HpMp6bIweLRvmo=;
+        b=UsJVwK9XgNJyoTnbXVkKVlaTZi1ATL7zgAzLxoTk9o8k/ED17vxHDscITHgoHs6//F
+         0QlHmOuCfBH+enSBNnvn78cEnEqZAzQX9oQVoblE6/re4T4LWZ/0RFtLvFgkb7E3falJ
+         eYozQOzUWsYKBoa231vF/wpDycEU01iKR5syBTUXmIrhWI+NmBnQccW4BfTT7Rfuac4K
+         VW9YFskP8Lhe2tXHFx9xgjtJIyJb13D2t2RmnNjOWcnt6zxBbcT1gAOqtxPurnR3hnCz
+         2FiwemCr9RY5qyQGEyrsX29Yt4NvqL+oNHi0YX1vAzdR0CfCgBX8cZxfsF0KEHTu1/hT
+         lzCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687339123; x=1689931123;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pB2kKOyXmNJk2e2QsKOkbUZlQ9krtQWymG1tqTKND7M=;
-        b=VQ+J/YWc4lGhHK7SU5lIpFcA+DV5VY73nfhXoOOTsIWLtLXtQqti/9bWE8OXVYWU8o
-         k1JlihnzWii9iozCGE+PxtJFlEu6FL1BtDF3apUO/p1S2zwZFqfenfFRj8hdQlSlzCEv
-         xLoaHxkpJEOeIERPH5DZ4VnOsoAvMk4qbTgeN6weCLHvkPp9PTsbaNu1wUZoBpGFn8/1
-         mrN6dro7PKSGGOMdrJtbL3h44/HFC602YPv1lLWwUdO0lRCaLmhC3pf6CRZqk9txwtzl
-         EPRrN1UaCUhWdNQ3vABHkv/VQ5NI/++fl2yTqrAVZO7yImmbdo875m3Sb5s3kPnYYZwv
-         n/RA==
-X-Gm-Message-State: AC+VfDwhpneVM9XsZlrn6U5lgYZdGjLslT74NJZEBVqRilqwx8hK4e1W
-        wABOApAdVGARViIfOQYUjSN/SQ==
-X-Google-Smtp-Source: ACHHUZ7Lr9AUWR6pAzVAfNdiplGzzD94FoKQ4yBkZgab3ADs+Jo6JR2/ENdEGi0ao1yboNbI01pSuQ==
-X-Received: by 2002:a17:902:ce91:b0:1b6:8f1f:fc8d with SMTP id f17-20020a170902ce9100b001b68f1ffc8dmr2804577plg.0.1687339123052;
-        Wed, 21 Jun 2023 02:18:43 -0700 (PDT)
-Received: from sunil-laptop ([106.51.184.72])
-        by smtp.gmail.com with ESMTPSA id n21-20020a170902969500b001ab1b7bae5asm3007337plp.184.2023.06.21.02.18.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 02:18:42 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 14:48:35 +0530
-From:   Sunil V L <sunilvl@ventanamicro.com>
-To:     Song Shuai <songshuaishuai@tinylab.org>
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>
-Subject: Re: [PATCH v2 2/3] Documentation: riscv: Add early boot document
-Message-ID: <ZJLAa5AdJfHNJyPv@sunil-laptop>
-References: <20230621072234.9900-1-alexghiti@rivosinc.com>
- <20230621072234.9900-2-alexghiti@rivosinc.com>
- <131BBACE35371733+d5902eda-c4ea-b74d-a17c-70fd1a166b6f@tinylab.org>
+        d=1e100.net; s=20221208; t=1687339142; x=1689931142;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LG46ChCK+BwfP68y/KI81ahnd53s4HpMp6bIweLRvmo=;
+        b=GM2Jfi0fX1yPfA9pNy8S7/8FErTrAAGXwKAxKWm9bkm5ATN7Lg2JxOlUgIzcDPrt/f
+         ir0HaMP33Ol5P0pGy0pbjVpnz2+v/301HJzGJ00VrRHzZZyI8o2hmB7kRoCcgxDkiIuK
+         1lN7zpEpbznZEYngvW4qLkY9kvhjoXxRMNt0UU1j3u3jk8XB5n+tSVDE/Adyk2GFq56A
+         aBB29tENTctHdiRnYG7dNsEYJv/y3fNoa1bVScUoOyQjhxWctz0xaUd24k/T/RXRCd6z
+         +MHC643sXT2KQEnPZmD0hAsPgR5KJhX6oz7yH17C8zVyQTd5Sn7dEKS4oJSalkV83GfM
+         yecw==
+X-Gm-Message-State: AC+VfDz5AFL7I2jV2BK6J7m7vGnLSosE6Ln2BFoOaoF1wfiXVt+/0UCH
+        l1z+HP2nUpDraK0IsdqoABdrFuqYCJYiFyNzX3k=
+X-Google-Smtp-Source: ACHHUZ7A0sTZuMdN04LlG0KEWoMuNP0IS/Mj6i9rchT/ZccWposruguveBaa5vSLzQ3FrOHWCh2P1RjxoNK/NMx0sIw=
+X-Received: by 2002:a17:90b:11c7:b0:24b:2fc1:8a9c with SMTP id
+ gv7-20020a17090b11c700b0024b2fc18a9cmr8961892pjb.11.1687339141972; Wed, 21
+ Jun 2023 02:19:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <131BBACE35371733+d5902eda-c4ea-b74d-a17c-70fd1a166b6f@tinylab.org>
+References: <20230607195143.1473802-1-yosryahmed@google.com>
+ <ZJKgThENoFlkJQmB@fedora> <CAJD7tkYEZEihcQFVrb5KR18r6o5496uXSRJbDrs+woGHwv6zWg@mail.gmail.com>
+In-Reply-To: <CAJD7tkYEZEihcQFVrb5KR18r6o5496uXSRJbDrs+woGHwv6zWg@mail.gmail.com>
+From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Date:   Wed, 21 Jun 2023 11:18:50 +0200
+Message-ID: <CA+CLi1hxowDTfK6DNRN5SBp_wktpCdQTjU7CtS4E6h0nZJkV6w@mail.gmail.com>
+Subject: Re: [BUG mm-unstable] "kernel BUG at mm/swap.c:393!" on commit b9c91c43412f2e
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Vitaly Wool <vitaly.wool@konsulko.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Nhat Pham <nphamcs@gmail.com>, Yu Zhao <yuzhao@google.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,132 +77,209 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 04:15:07PM +0800, Song Shuai wrote:
-> 
-> 
-> 在 2023/6/21 15:22, Alexandre Ghiti 写道:
-> > This document describes the constraints and requirements of the early
-> > boot process in a RISC-V kernel.
-> > 
-> > Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> > Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
-> > ---
-> >   Documentation/riscv/boot-image-header.rst |   3 -
-> >   Documentation/riscv/boot.rst              | 170 ++++++++++++++++++++++
-> >   Documentation/riscv/index.rst             |   1 +
-> >   3 files changed, 171 insertions(+), 3 deletions(-)
-> >   create mode 100644 Documentation/riscv/boot.rst
-> > 
-> > diff --git a/Documentation/riscv/boot-image-header.rst b/Documentation/riscv/boot-image-header.rst
-> > index d7752533865f..a4a45310c4c4 100644
-> > --- a/Documentation/riscv/boot-image-header.rst
-> > +++ b/Documentation/riscv/boot-image-header.rst
-> > @@ -7,9 +7,6 @@ Boot image header in RISC-V Linux
-> >   This document only describes the boot image header details for RISC-V Linux.
-> > -TODO:
-> > -  Write a complete booting guide.
-> > -
-> >   The following 64-byte header is present in decompressed Linux kernel image::
-> >   	u32 code0;		  /* Executable code */
-> > diff --git a/Documentation/riscv/boot.rst b/Documentation/riscv/boot.rst
-> > new file mode 100644
-> > index 000000000000..019ee818686d
-> > --- /dev/null
-> > +++ b/Documentation/riscv/boot.rst
-> > @@ -0,0 +1,170 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +
-> > +===============================================
-> > +RISC-V Kernel Boot Requirements and Constraints
-> > +===============================================
-> > +
-> > +:Author: Alexandre Ghiti <alexghiti@rivosinc.com>
-> > +:Date: 23 May 2023
-> > +
-> > +This document describes what the RISC-V kernel expects from bootloaders and
-> > +firmware, but also the constraints that any developer must have in mind when
-> > +touching the early boot process. For the purposes of this document, the
-> > +'early boot process' refers to any code that runs before the final virtual
-> > +mapping is set up.
-> > +
-> > +Pre-kernel Requirements and Constraints
-> > +=======================================
-> > +
-> > +The RISC-V kernel expects the following of bootloaders and platform firmware:
-> > +
-> > +Register state
-> > +--------------
-> > +
-> > +The RISC-V kernel expects:
-> > +
-> > +  * `$a0` to contain the hartid of the current core.
-> > +  * `$a1` to contain the address of the devicetree in memory.
-> > +
-> > +CSR state
-> > +---------
-> > +
-> > +The RISC-V kernel expects:
-> > +
-> > +  * `$satp = 0`: the MMU, if present, must be disabled.
-> > +
-> > +Reserved memory for resident firmware
-> > +-------------------------------------
-> > +
-> > +The RISC-V kernel must not map any resident memory, or memory protected with
-> > +PMPs, in the direct mapping, so the firmware must correctly mark those regions
-> > +as per the devicetree specification and/or the UEFI specification.
-> > +
-> > +Kernel location
-> > +---------------
-> > +
-> > +The RISC-V kernel expects to be placed at a PMD boundary (2MB aligned for rv64
-> > +and 4MB aligned for rv32). Note that the EFI stub will physically relocate the
-> > +kernel if that's not the case.
-> > +
-> > +Hardware description
-> > +--------------------
-> > +
-> > +The firmware can pass either a devicetree or ACPI tables to the RISC-V kernel.
-> > +
-> > +The devicetree is either passed directly to the kernel from the previous stage
-> > +using the `$a1` register, or when booting with UEFI, it can be passed using the
-> > +EFI configuration table.
-> > +
-> > +The ACPI tables are passed to the kernel using the EFI configuration table. In
-> > +this case, a tiny devicetree is still created by the EFI stub. Please refer to
-> > +"EFI stub and devicetree" tree section below for details about this devicetree.
-> > +
-> > +Kernel entrance
-> > +---------------
-> > +
-> > +On SMP systems, there are 2 methods to enter the kernel:
-> > +
-> > +- `RISCV_BOOT_SPINWAIT`: the firmware releases all harts in the kernel, one hart
-> > +  wins a lottery and executes the early boot code while the other harts are
-> > +  parked waiting for the initialization to finish. This method is mostly used to
-> > +  support older firmwares without SBI HSM extension and M-mode RISC-V kernel.
-> > +- `Ordered booting`: the firmware releases only one hart that will execute the
-> > +  initialization phase and then will start all other harts using the SBI HSM
-> > +  extension. The ordered booting method is the preferred booting method for
-> > +  booting the RISC-V kernel because it can support cpu hotplug and kexec.
-> > +
-> > +UEFI
-> > +----
-> > +
-> > +UEFI memory map
-> > +~~~~~~~~~~~~~~~
-> > +
-> > +When booting with UEFI, the RISC-V kernel will use only the EFI memory map to
-> > +populate the system memory.
-> > +
-> > +The UEFI firmware must parse the subnodes of the `/reserved-memory` devicetree
-> > +node and abide by the devicetree specification to convert the attributes of
-> > +those subnodes (`no-map` and `reusable`) into their correct EFI equivalent
-> > +(refer to section "3.5.4 /reserved-memory and UEFI" of the devicetree
-> > +specification v0.4-rc1).
-> append this note ?
-> 
-> Note that RISC-V edk2 diverges from the devicetree specification to declare
-> the !no-map regions as EfiReservedMemoryType instead of EfiBootServicesData.
-> > +
-Not required. It will be fixed in EDK2.
+On Wed, Jun 21, 2023 at 10:06=E2=80=AFAM Yosry Ahmed <yosryahmed@google.com=
+> wrote:
+>
+> On Wed, Jun 21, 2023 at 12:01=E2=80=AFAM Hyeonggon Yoo <42.hyeyoo@gmail.c=
+om> wrote:
+> >
+> > On Wed, Jun 07, 2023 at 07:51:43PM +0000, Yosry Ahmed wrote:
+> > > Commit 71024cb4a0bf ("frontswap: remove frontswap_tmem_exclusive_gets=
+")
+> > > removed support for exclusive loads from frontswap as it was not used=
+.
+> > > Bring back exclusive loads support to frontswap by adding an "exclusi=
+ve"
+> > > output parameter to frontswap_ops->load.
+> > >
+> > > On the zswap side, add a module parameter to enable/disable exclusive
+> > > loads, and a config option to control the boot default value.
+> > > Refactor zswap entry invalidation in zswap_frontswap_invalidate_page(=
+)
+> > > into zswap_invalidate_entry() to reuse it in zswap_frontswap_load() i=
+f
+> > > exclusive loads are enabled.
+> > >
+> > > With exclusive loads, we avoid having two copies of the same page in
+> > > memory (compressed & uncompressed) after faulting it in from zswap. O=
+n
+> > > the other hand, if the page is to be reclaimed again without being
+> > > dirtied, it will be re-compressed. Compression is not usually slow, a=
+nd
+> > > a page that was just faulted in is less likely to be reclaimed again
+> > > soon.
+> > >
+> > > Suggested-by: Yu Zhao <yuzhao@google.com>
+> > > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > > ---
+> > >
+> > > v1 -> v2:
+> > > - Add a module parameter to control whether exclusive loads are enabl=
+ed
+> > >   or not, the config option now controls the default boot value inste=
+ad.
+> > >   Replaced frontswap_ops->exclusive_loads by an output parameter to
+> > >   frontswap_ops->load() (Johannes Weiner).
+> > > ---
+> >
+> > Hi Yosry, I was testing the latest mm-unstable and encountered a bug.
+> > It was bisectable and this is the first bad commit.
+> >
+> >
+> > Attached config file and bisect log.
+> > The oops message is available at:
+> >
+> > https://social.kernel.org/media/eace06d71655b3cc76411366573e4a8ce240ad6=
+5b8fd20977d7c73eec9dc2253.jpg
+> >
+> > (the head commit is b9c91c43412f2e07 "mm: zswap: support exclusive load=
+s")
+> > (it's an image because I tested it on real machine)
+> >
+> >
+> > This is what I have as swap space:
+> >
+> > $ cat /proc/swaps
+> > Filename                                Type            Size           =
+ Used            Priority
+> > /var/swap                               file            134217724      =
+ 0               -2
+> > /dev/zram0                              partition       8388604        =
+ 0               100
+>
+>
+> Hi Hyeonggon,
+>
+> Thanks for reporting this! I think I know what went wrong. Could you
+> please verify if the below fix works if possible?
+>
+> Domenico, I believe the below fix would also fix a problem with the
+> recent writeback series. If the entry is invalidated before we grab the
+> lock to put the local ref in zswap_frontswap_load(), then the entry
+> will be freed once we call zswap_entry_put(), and the movement to the
+> beginning LRU will be operating on a freed entry. It also modifies
+> your recently added commit 418fd29d9de5 ("mm: zswap: invaldiate entry
+> after writeback"). I would appreciate it if you also take a look.
+
+Hi Yosry,
+
+Thanks, this makes sense indeed. I've been running a stress test too for
+an hour now and it seems fine.
+
+>
+> If this works as intended, I can send a formal patch (applies on top
+> of fd247f029cd0 ("mm/gup: do not return 0 from pin_user_pages_fast()
+> for bad args")):
+>
+> From 4b7f949b3ffb42d969d525d5b576fad474f55276 Mon Sep 17 00:00:00 2001
+> From: Yosry Ahmed <yosryahmed@google.com>
+> Date: Wed, 21 Jun 2023 07:43:51 +0000
+> Subject: [PATCH] mm: zswap: fix double invalidate with exclusive loads
+>
+> If exclusive loads are enabled for zswap, we invalidate the entry before
+> returning from zswap_frontswap_load(), after dropping the local
+> reference. However, the tree lock is dropped during decompression after
+> the local reference is acquired, so the entry could be invalidated
+> before we drop the local ref. If this happens, the entry is freed once
+> we drop the local ref, and zswap_invalidate_entry() tries to invalidate
+> an already freed entry.
+>
+> Fix this by:
+> (a) Making sure zswap_invalidate_entry() is always called with a local
+>     ref held, to avoid being called on a freed entry.
+> (b) Making sure zswap_invalidate_entry() only drops the ref if the entry
+>     was actually on the rbtree. Otherwise, another invalidation could
+>     have already happened, and the initial ref is already dropped.
+>
+> With these changes, there is no need to check that there is no need to
+> make sure the entry still exists in the tree in zswap_reclaim_entry()
+> before invalidating it, as zswap_reclaim_entry() will make this check
+> internally.
+>
+> Fixes: b9c91c43412f ("mm: zswap: support exclusive loads")
+> Reported-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+> Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> ---
+>  mm/zswap.c | 21 ++++++++++++---------
+>  1 file changed, 12 insertions(+), 9 deletions(-)
+>
+> diff --git a/mm/zswap.c b/mm/zswap.c
+> index 87b204233115..62195f72bf56 100644
+> --- a/mm/zswap.c
+> +++ b/mm/zswap.c
+> @@ -355,12 +355,14 @@ static int zswap_rb_insert(struct rb_root *root,
+> struct zswap_entry *entry,
+>         return 0;
+>  }
+>
+> -static void zswap_rb_erase(struct rb_root *root, struct zswap_entry *ent=
+ry)
+> +static bool zswap_rb_erase(struct rb_root *root, struct zswap_entry *ent=
+ry)
+>  {
+>         if (!RB_EMPTY_NODE(&entry->rbnode)) {
+>                 rb_erase(&entry->rbnode, root);
+>                 RB_CLEAR_NODE(&entry->rbnode);
+> +               return true;
+>         }
+> +       return false;
+>  }
+>
+>  /*
+> @@ -599,14 +601,16 @@ static struct zswap_pool
+> *zswap_pool_find_get(char *type, char *compressor)
+>         return NULL;
+>  }
+>
+> +/*
+> + * If the entry is still valid in the tree, drop the initial ref and rem=
+ove it
+> + * from the tree. This function must be called with an additional ref he=
+ld,
+> + * otherwise it may race with another invalidation freeing the entry.
+> + */
+>  static void zswap_invalidate_entry(struct zswap_tree *tree,
+>                                    struct zswap_entry *entry)
+>  {
+> -       /* remove from rbtree */
+> -       zswap_rb_erase(&tree->rbroot, entry);
+> -
+> -       /* drop the initial reference from entry creation */
+> -       zswap_entry_put(tree, entry);
+> +       if (zswap_rb_erase(&tree->rbroot, entry))
+> +               zswap_entry_put(tree, entry);
+>  }
+>
+>  static int zswap_reclaim_entry(struct zswap_pool *pool)
+> @@ -659,8 +663,7 @@ static int zswap_reclaim_entry(struct zswap_pool *poo=
+l)
+>          * swapcache. Drop the entry from zswap - unless invalidate alrea=
+dy
+>          * took it out while we had the tree->lock released for IO.
+>          */
+> -       if (entry =3D=3D zswap_rb_search(&tree->rbroot, swpoffset))
+> -               zswap_invalidate_entry(tree, entry);
+> +       zswap_invalidate_entry(tree, entry);
+>
+>  put_unlock:
+>         /* Drop local reference */
+> @@ -1466,7 +1469,6 @@ static int zswap_frontswap_load(unsigned type,
+> pgoff_t offset,
+>                 count_objcg_event(entry->objcg, ZSWPIN);
+>  freeentry:
+>         spin_lock(&tree->lock);
+> -       zswap_entry_put(tree, entry);
+>         if (!ret && zswap_exclusive_loads_enabled) {
+>                 zswap_invalidate_entry(tree, entry);
+>                 *exclusive =3D true;
+> @@ -1475,6 +1477,7 @@ static int zswap_frontswap_load(unsigned type,
+> pgoff_t offset,
+>                 list_move(&entry->lru, &entry->pool->lru);
+>                 spin_unlock(&entry->pool->lru_lock);
+>         }
+> +       zswap_entry_put(tree, entry);
+>         spin_unlock(&tree->lock);
+>
+>         return ret;
+> --
+> 2.41.0.162.gfafddb0af9-goog
