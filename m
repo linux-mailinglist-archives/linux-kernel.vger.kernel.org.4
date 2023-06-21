@@ -2,86 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2714273863F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3242C738650
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:09:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231965AbjFUOIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
+        id S232642AbjFUOJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjFUOIu (ORCPT
+        with ESMTP id S232042AbjFUOJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:08:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE5C718C;
-        Wed, 21 Jun 2023 07:08:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        Wed, 21 Jun 2023 10:09:07 -0400
+Received: from mail1.perex.cz (mail1.perex.cz [77.48.224.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AC3719A9;
+        Wed, 21 Jun 2023 07:09:01 -0700 (PDT)
+Received: from mail1.perex.cz (localhost [127.0.0.1])
+        by smtp1.perex.cz (Perex's E-mail Delivery System) with ESMTP id 762631E36;
+        Wed, 21 Jun 2023 16:08:57 +0200 (CEST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.perex.cz 762631E36
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=perex.cz; s=default;
+        t=1687356537; bh=hWXdhsVQpB/+odxLGC42YI96+2wDIp0AX9bS19+Gdls=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=hRxm4WlyJw2csmDx+4MIHfUDNvERGecyaCSIxZONPgugcwVP2EkzFT0MtkQimGTzQ
+         p2SQK9SuEZdc6vsQGGJLj712XnD/+bHpNaqzyPhyRDm3oa8c5e+3dIFxRb5+T1l8z0
+         BeqR/fZQCBqx+siJoyuTH6gKZhg9OUiLUMfi+a4s=
+Received: from [192.168.100.98] (unknown [192.168.100.98])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 507E76153B;
-        Wed, 21 Jun 2023 14:08:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06C49C433CB;
-        Wed, 21 Jun 2023 14:08:47 +0000 (UTC)
-Date:   Wed, 21 Jun 2023 10:08:45 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Finn Thain <fthain@linux-m68k.org>
-Cc:     Theodore Ts'o <tytso@mit.edu>, linux-doc@vger.kernel.org,
-        tech-board-discuss@lists.linux-foundation.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [Tech-board-discuss] [PATCH] Documentation: Linux Contribution
- Maturity Model and the wider community
-Message-ID: <20230621100845.12588f48@gandalf.local.home>
-In-Reply-To: <5490402b-8b9f-f52d-3896-41090e639e51@linux-m68k.org>
-References: <20230620212502.GI286961@mit.edu>
-        <5490402b-8b9f-f52d-3896-41090e639e51@linux-m68k.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        (Authenticated sender: perex)
+        by mail1.perex.cz (Perex's E-mail Delivery System) with ESMTPSA;
+        Wed, 21 Jun 2023 16:08:48 +0200 (CEST)
+Message-ID: <443f697b-fecf-6e8e-0b76-65257aff7da8@perex.cz>
+Date:   Wed, 21 Jun 2023 16:08:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20230620220839.2215057-1-nfraprado@collabora.com>
+ <20230620220839.2215057-3-nfraprado@collabora.com>
+ <33bea0d3-b8dd-4936-812e-392166df4437@sirena.org.uk>
+From:   Jaroslav Kysela <perex@perex.cz>
+Subject: Re: [PATCH 2/2] kselftest/alsa: pcm-test: Decrease stream duration
+ from 4 to 2 seconds
+In-Reply-To: <33bea0d3-b8dd-4936-812e-392166df4437@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 11:51:19 +1000 (AEST)
-Finn Thain <fthain@linux-m68k.org> wrote:
-
-> - Maintainers should be "automating themselves out of a job" to whatever 
->   extent this is possible.  git is a good example of this, as is all of 
->   the tooling and workflow automation that grew out of that (e.g. gitlab).
-
-I agree with the above statement.
-
+On 21. 06. 23 15:08, Mark Brown wrote:
+> On Tue, Jun 20, 2023 at 06:08:26PM -0400, Nícolas F. R. A. Prado wrote:
 > 
->   Because the Linux project is structured as a heirarchy, I think Linus 
->   and senior maintainers have a crucial role here. I don't think it's a 
->   co-incidence that git was the brainchild of the top maintainer.
-
-True.
-
+>> -	const int duration_s = 4, margin_ms = 100;
+>> +	const int duration_s = 2, margin_ms = 100;
 > 
->   Making the maintainer role more lucrative will provide a disincentive 
->   for more automation (with or without level 5 performance reviews) unless 
->   remuneration is tied to metrics that reflect maintainer effectiveness.
+> This doesn't scale the margin with the duration which will affect the
+> sensitivity of the test to misclocking.  It should make it less
+> sensitive which is *probably* safer but at least worth noting.
+> 
+> We might also have issues with some of the lower sample rates, IIRC some
+> devices are constrained in ways that mean they want a minimum buffer
+> size which is harder to satisfy with very short playbacks and low sample
+> rates.
+> 
+> I don't know why Jaroslav picked the 4s number here.
 
-I'm not sure I totally understand your point above. I do not think that
-making the maintainer role more lucrative provides a disincentive for more
-automation. I'm constantly trying to add more automation to my process.
-That's why I created ktest.pl, and constantly fiddling with patchwork to
-get patch state automatically updated when things move from different
-branches and git trees.
+You basically replied yourself. The values (time + margin) were picked to do 
+the DMA test for a reasonable time - based on my experience.
 
-If your point is mainly the second part of that paragraph, which is to tie
-in metrics to reflect maintainer effectiveness, then I think I agree with
-you there. One metric is simply the time a patch is ignored by a
-maintainer on a mailing list (where the maintainer is Cc'd and it is
-obvious the patch belongs to their subsystem). I know I fail at that,
-especially when my work is pushing me to focus on other things.
+I think that the problem is somewhere else here. The overall test timeout 
+should be calculated dynamically. All tests may be queried for the maximal 
+expected interval based on the hardware/software capabilities. It's a bit 
+pitfall to have a fixed time limit where the realtime tests depend on the 
+number of devices.
 
--- Steve
+					Jaroslav
+
+-- 
+Jaroslav Kysela <perex@perex.cz>
+Linux Sound Maintainer; ALSA Project; Red Hat, Inc.
+
