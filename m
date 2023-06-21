@@ -2,53 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32FA073879F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:48:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128C27387A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:48:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232068AbjFUOsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56778 "EHLO
+        id S230422AbjFUOsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232065AbjFUOr5 (ORCPT
+        with ESMTP id S232055AbjFUOr6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:47:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60DA41997;
-        Wed, 21 Jun 2023 07:47:47 -0700 (PDT)
+        Wed, 21 Jun 2023 10:47:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 199011BCA
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:47:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E21AC6157E;
-        Wed, 21 Jun 2023 14:47:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B79CBC433C0;
-        Wed, 21 Jun 2023 14:47:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7CE96157F
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:47:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E541C433C8;
+        Wed, 21 Jun 2023 14:47:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687358866;
-        bh=F3dY/2KLU5GOMIGa42l18TYXTzOkj60bdKGA2MB7kkg=;
+        s=k20201202; t=1687358868;
+        bh=3RYKe34tfhw7qCFMfdSwp5DfFyxQfIY9Egtj5X0ni8Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mioKTqZYyXJZavUYjcubhAf8oDBomkt74YuPWSA09CAcJuHtjWYu58SB4Z3985pYl
-         9rU5LxQy2mip8BeoycVEc8K0Y2pmMxS0Tlq+9SwjwKNf1UsqVYl9jhv4FcDRPADbKI
-         491CPsalfGoUC3xZ2srE9Ot53iuzMqb4CpFDRwKPoQQlYaruIT9GF+q2EJamLI8KTB
-         xBGNVi1fOZ7dtG39nR+YmVdEtg0IiQ/DBo1cOK89vpa3Jr0WXQn1fokdnQLmxlz3Is
-         YyRaE/xiud5UkfOYTmAqwP8rnqRnxkH4w9BLQmRmqc2ICOWr/8PRBzs37A0SOQKudr
-         H6GYBb/gkUn9g==
+        b=jyBusIDy9RnwXDykjRdGdrB37HI23tNaNH9Kn/r/H6n8AyQH5L4VxdrwYFJSGDkUG
+         x4GDrOg2uiVQZXTS2OPbIDfoTTTKeulq9Cwe7YOcnFbTqQoi+UTVrFAZima3ScB2T6
+         4u8Ho/LD0CpUZfgqeTqip9pYeUUHj4B5eaD5lq2d8HHplRzhLvnGY+J59+rBAUvrHw
+         YZEfFfLZ/H35s4BTKT1HaohpIU7HNSajR7+4ovllzIRvDbDTdnuTF7c6DWvrDDNjFe
+         rhOeAI/MlrU03RU0BV7Fw8m+fvDGGsWo2j/+BBeq157CrCYzqGSh0b4IXNeb881V8y
+         2FVi6HnOyrfJw==
 From:   Jeff Layton <jlayton@kernel.org>
 To:     Christian Brauner <brauner@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+        Eric Van Hensbergen <ericvh@kernel.org>,
+        Latchesar Ionkov <lucho@ionkov.net>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        Christian Schoenebeck <linux_oss@crudebyte.com>
 Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 07/79] usb: switch to new ctime accessors
-Date:   Wed, 21 Jun 2023 10:45:20 -0400
-Message-ID: <20230621144735.55953-6-jlayton@kernel.org>
+        v9fs@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 08/79] 9p: switch to new ctime accessors
+Date:   Wed, 21 Jun 2023 10:45:21 -0400
+Message-ID: <20230621144735.55953-7-jlayton@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230621144735.55953-1-jlayton@kernel.org>
 References: <20230621144507.55591-1-jlayton@kernel.org>
  <20230621144735.55953-1-jlayton@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,120 +66,74 @@ inode->i_ctime.
 
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- drivers/usb/core/devio.c           | 16 ++++++++--------
- drivers/usb/gadget/function/f_fs.c |  6 +-----
- drivers/usb/gadget/legacy/inode.c  |  3 +--
- 3 files changed, 10 insertions(+), 15 deletions(-)
+ fs/9p/vfs_inode.c      |  6 ++++--
+ fs/9p/vfs_inode_dotl.c | 11 +++++------
+ 2 files changed, 9 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index 1a16a8bdea60..02f718e0deaf 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -2642,21 +2642,21 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
- 		snoop(&dev->dev, "%s: CONTROL\n", __func__);
- 		ret = proc_control(ps, p);
- 		if (ret >= 0)
--			inode->i_mtime = inode->i_ctime = current_time(inode);
-+			inode->i_mtime = inode_ctime_set_current(inode);
- 		break;
+diff --git a/fs/9p/vfs_inode.c b/fs/9p/vfs_inode.c
+index 36b466e35887..098e4c7160a8 100644
+--- a/fs/9p/vfs_inode.c
++++ b/fs/9p/vfs_inode.c
+@@ -261,7 +261,7 @@ int v9fs_init_inode(struct v9fs_session_info *v9ses,
+ 	inode_init_owner(&nop_mnt_idmap, inode, NULL, mode);
+ 	inode->i_blocks = 0;
+ 	inode->i_rdev = rdev;
+-	inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
++	inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
+ 	inode->i_mapping->a_ops = &v9fs_addr_operations;
+ 	inode->i_private = NULL;
  
- 	case USBDEVFS_BULK:
- 		snoop(&dev->dev, "%s: BULK\n", __func__);
- 		ret = proc_bulk(ps, p);
- 		if (ret >= 0)
--			inode->i_mtime = inode->i_ctime = current_time(inode);
-+			inode->i_mtime = inode_ctime_set_current(inode);
- 		break;
+@@ -1153,12 +1153,14 @@ v9fs_stat2inode(struct p9_wstat *stat, struct inode *inode,
+ 	umode_t mode;
+ 	struct v9fs_session_info *v9ses = sb->s_fs_info;
+ 	struct v9fs_inode *v9inode = V9FS_I(inode);
++	struct timespec64 ctime = { .tv_sec  = stat->mtime,
++				    .tv_nsec = 0 };
  
- 	case USBDEVFS_RESETEP:
- 		snoop(&dev->dev, "%s: RESETEP\n", __func__);
- 		ret = proc_resetep(ps, p);
- 		if (ret >= 0)
--			inode->i_mtime = inode->i_ctime = current_time(inode);
-+			inode->i_mtime = inode_ctime_set_current(inode);
- 		break;
+ 	set_nlink(inode, 1);
  
- 	case USBDEVFS_RESET:
-@@ -2668,7 +2668,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
- 		snoop(&dev->dev, "%s: CLEAR_HALT\n", __func__);
- 		ret = proc_clearhalt(ps, p);
- 		if (ret >= 0)
--			inode->i_mtime = inode->i_ctime = current_time(inode);
-+			inode->i_mtime = inode_ctime_set_current(inode);
- 		break;
+ 	inode->i_atime.tv_sec = stat->atime;
+ 	inode->i_mtime.tv_sec = stat->mtime;
+-	inode->i_ctime.tv_sec = stat->mtime;
++	inode_ctime_set(inode, ctime);
  
- 	case USBDEVFS_GETDRIVER:
-@@ -2695,7 +2695,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
- 		snoop(&dev->dev, "%s: SUBMITURB\n", __func__);
- 		ret = proc_submiturb(ps, p);
- 		if (ret >= 0)
--			inode->i_mtime = inode->i_ctime = current_time(inode);
-+			inode->i_mtime = inode_ctime_set_current(inode);
- 		break;
+ 	inode->i_uid = v9ses->dfltuid;
+ 	inode->i_gid = v9ses->dfltgid;
+diff --git a/fs/9p/vfs_inode_dotl.c b/fs/9p/vfs_inode_dotl.c
+index 5361cd2d7996..0041b5fc4407 100644
+--- a/fs/9p/vfs_inode_dotl.c
++++ b/fs/9p/vfs_inode_dotl.c
+@@ -640,14 +640,15 @@ v9fs_stat2inode_dotl(struct p9_stat_dotl *stat, struct inode *inode,
+ {
+ 	umode_t mode;
+ 	struct v9fs_inode *v9inode = V9FS_I(inode);
++	struct timespec64 ctime = { .tv_sec  = stat->st_ctime_sec,
++				    .tv_nsec = stat->st_ctime_nsec };
  
- #ifdef CONFIG_COMPAT
-@@ -2703,14 +2703,14 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
- 		snoop(&dev->dev, "%s: CONTROL32\n", __func__);
- 		ret = proc_control_compat(ps, p);
- 		if (ret >= 0)
--			inode->i_mtime = inode->i_ctime = current_time(inode);
-+			inode->i_mtime = inode_ctime_set_current(inode);
- 		break;
- 
- 	case USBDEVFS_BULK32:
- 		snoop(&dev->dev, "%s: BULK32\n", __func__);
- 		ret = proc_bulk_compat(ps, p);
- 		if (ret >= 0)
--			inode->i_mtime = inode->i_ctime = current_time(inode);
-+			inode->i_mtime = inode_ctime_set_current(inode);
- 		break;
- 
- 	case USBDEVFS_DISCSIGNAL32:
-@@ -2722,7 +2722,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
- 		snoop(&dev->dev, "%s: SUBMITURB32\n", __func__);
- 		ret = proc_submiturb_compat(ps, p);
- 		if (ret >= 0)
--			inode->i_mtime = inode->i_ctime = current_time(inode);
-+			inode->i_mtime = inode_ctime_set_current(inode);
- 		break;
- 
- 	case USBDEVFS_IOCTL32:
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index f41a385a5c42..756c78043a04 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -1377,16 +1377,12 @@ ffs_sb_make_inode(struct super_block *sb, void *data,
- 	inode = new_inode(sb);
- 
- 	if (inode) {
--		struct timespec64 ts = current_time(inode);
--
- 		inode->i_ino	 = get_next_ino();
- 		inode->i_mode    = perms->mode;
- 		inode->i_uid     = perms->uid;
- 		inode->i_gid     = perms->gid;
--		inode->i_atime   = ts;
--		inode->i_mtime   = ts;
--		inode->i_ctime   = ts;
- 		inode->i_private = data;
-+		inode->i_atime   = inode->i_mtime = inode_ctime_set_current(inode);
- 		if (fops)
- 			inode->i_fop = fops;
- 		if (iops)
-diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
-index 28249d0bf062..b83a68feb316 100644
---- a/drivers/usb/gadget/legacy/inode.c
-+++ b/drivers/usb/gadget/legacy/inode.c
-@@ -1969,8 +1969,7 @@ gadgetfs_make_inode (struct super_block *sb,
- 		inode->i_mode = mode;
- 		inode->i_uid = make_kuid(&init_user_ns, default_uid);
- 		inode->i_gid = make_kgid(&init_user_ns, default_gid);
--		inode->i_atime = inode->i_mtime = inode->i_ctime
--				= current_time(inode);
-+		inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
- 		inode->i_private = data;
- 		inode->i_fop = fops;
- 	}
+ 	if ((stat->st_result_mask & P9_STATS_BASIC) == P9_STATS_BASIC) {
+ 		inode->i_atime.tv_sec = stat->st_atime_sec;
+ 		inode->i_atime.tv_nsec = stat->st_atime_nsec;
+ 		inode->i_mtime.tv_sec = stat->st_mtime_sec;
+ 		inode->i_mtime.tv_nsec = stat->st_mtime_nsec;
+-		inode->i_ctime.tv_sec = stat->st_ctime_sec;
+-		inode->i_ctime.tv_nsec = stat->st_ctime_nsec;
++		inode_ctime_set(inode, ctime);
+ 		inode->i_uid = stat->st_uid;
+ 		inode->i_gid = stat->st_gid;
+ 		set_nlink(inode, stat->st_nlink);
+@@ -668,10 +669,8 @@ v9fs_stat2inode_dotl(struct p9_stat_dotl *stat, struct inode *inode,
+ 			inode->i_mtime.tv_sec = stat->st_mtime_sec;
+ 			inode->i_mtime.tv_nsec = stat->st_mtime_nsec;
+ 		}
+-		if (stat->st_result_mask & P9_STATS_CTIME) {
+-			inode->i_ctime.tv_sec = stat->st_ctime_sec;
+-			inode->i_ctime.tv_nsec = stat->st_ctime_nsec;
+-		}
++		if (stat->st_result_mask & P9_STATS_CTIME)
++			inode_ctime_set(inode, ctime);
+ 		if (stat->st_result_mask & P9_STATS_UID)
+ 			inode->i_uid = stat->st_uid;
+ 		if (stat->st_result_mask & P9_STATS_GID)
 -- 
 2.41.0
 
