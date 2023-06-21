@@ -2,78 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADD31738F16
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:48:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F31F738F20
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbjFUSr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 14:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
+        id S231544AbjFUStG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 14:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjFUSry (ORCPT
+        with ESMTP id S230472AbjFUStB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 14:47:54 -0400
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:237:300::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC7079B;
-        Wed, 21 Jun 2023 11:47:52 -0700 (PDT)
-Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-        (envelope-from <fw@strlen.de>)
-        id 1qC2ri-0001Xx-27; Wed, 21 Jun 2023 20:47:38 +0200
-Date:   Wed, 21 Jun 2023 20:47:38 +0200
-From:   Florian Westphal <fw@strlen.de>
-To:     Florent Revest <revest@chromium.org>
-Cc:     Florian Westphal <fw@strlen.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org, kadlec@netfilter.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        lirongqing@baidu.com, daniel@iogearbox.net, ast@kernel.org,
-        kpsingh@kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH nf] netfilter: conntrack: Avoid nf_ct_helper_hash uses
- after free
-Message-ID: <20230621184738.GG24035@breakpoint.cc>
-References: <20230615152918.3484699-1-revest@chromium.org>
- <ZJFIy+oJS+vTGJer@calendula>
- <CABRcYmJjv-JoadtzZwU5A+SZwbmbgnzWb27UNZ-UC+9r+JnVxg@mail.gmail.com>
- <20230621111454.GB24035@breakpoint.cc>
- <CABRcYmKeo6A+3dmZd9bRp8W3tO9M5cHDpQ13b8aeMkhYr4L64Q@mail.gmail.com>
+        Wed, 21 Jun 2023 14:49:01 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FD21B4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:48:59 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3fde9bfb3c8so30541cf.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:48:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687373339; x=1689965339;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ktaN2gfy2UoFzSis8IakrvfByDQPNIqA2OzFHTKqH6g=;
+        b=6g8bjgJ05d+rXqPxYemA4IWXC+J1Ela6mFMkncMRIuq1/qtJbHccQZq5eNnK8I5qe0
+         hHNtT089lxLYIpUCWKimJ7OvTnk3AqftjEne3x/QKdPrTQj7whhf9V7QXpmEIjhdikxt
+         3RUxgdzBP7JyIEHwuW1EfLOcXwuB5TITZDI0M9cW8LfCeT6p8VPkPbdIAj+Bz1xOsg4h
+         wX9LbCEVcoDUhWSHLG5Y939Eqa61h2yFQYFGh0vJ5vX9YJMSwF0ASQbl++WFw3qZiFK/
+         UWDxKAbJQKcXA5CFkGIQw1AxgIxNjJ0wsXMZhvPgK37ovf8LI3YrUUA00uM18dZNvF5J
+         3yWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687373339; x=1689965339;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ktaN2gfy2UoFzSis8IakrvfByDQPNIqA2OzFHTKqH6g=;
+        b=SXCgfhXydZO4wDW7R2ERZQc/UowTtR23YdkGsPls/OTYQe7yaG4Yyx3VW70jDXXcov
+         vr+h0GH8nW25Ti5eHJnA+HtDL+JXwri/N57rAGsf9Y6O8jploge++QZF/0mPxZZi+Rkk
+         3MECbd86xpiQbfnaxQhVuTYgJj1Ab3o8s7mnFjNBgeIA1fsG2FitWhywrpqUSM1ATYbQ
+         zpgoeUh2/yPXGHpDdJ+TNH11Kys9g/Yx4nqYZJVf3qF6ydDEMb606opbg45iwaQusY7D
+         KWikphCWt6EweDT77kpmZ3qtB/WfZUJlHS97N29aGwp3l5PYtFXQYVzeBrsne8LkbNkU
+         RfxQ==
+X-Gm-Message-State: AC+VfDx9q0P+DpYT6Zu6+YmmjoaBlEzakzno9YOZA7TlkVt7EJJ6DYXi
+        rQa6/qg1crHpESHgGIeK/yOOenLAxwjldS60wxPtDA==
+X-Google-Smtp-Source: ACHHUZ6wyaGZhoIo4tRyOV5BV1WFj8xWmG+hpZ4QuVswZetsBCPxzzNXwssbZELyoFmUobNTTkI7G9Dgv5b6Tpp1DrY=
+X-Received: by 2002:ac8:5954:0:b0:3ef:3083:a437 with SMTP id
+ 20-20020ac85954000000b003ef3083a437mr284103qtz.18.1687373338729; Wed, 21 Jun
+ 2023 11:48:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABRcYmKeo6A+3dmZd9bRp8W3tO9M5cHDpQ13b8aeMkhYr4L64Q@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230621180454.973862-1-yuanchu@google.com>
+In-Reply-To: <20230621180454.973862-1-yuanchu@google.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Wed, 21 Jun 2023 12:48:22 -0600
+Message-ID: <CAOUHufbb9_Cah6tT61+WKfM0T9CDmkZ5zym=MuHj2YVsgh-hiw@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 0/6] mm: working set reporting
+To:     Yuanchu Xie <yuanchu@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Kairui Song <kasong@tencent.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        "T . J . Alumbaugh" <talumbau@google.com>,
+        Wei Xu <weixugc@google.com>, SeongJae Park <sj@kernel.org>,
+        Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>,
+        kai.huang@intel.com, hch@lst.de, jon@nutanix.com,
+        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vasily Averin <vasily.averin@linux.dev>,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, linux-mm@kvack.org,
+        cgroups@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Florent Revest <revest@chromium.org> wrote:
-> > in this case an initcall is failing and I think panic is preferrable
-> > to a kernel that behaves like NF_CONNTRACK_FTP=n.
-> 
-> In that case, it seems like what you'd want is
-> nf_conntrack_standalone_init() to BUG() instead of returning an error
-> then ? (so you'd never get to NF_CONNTRACK_FTP or any other if
-> nf_conntrack failed to initialize) If this is the prefered behavior,
-> then sure, why not.
-> 
-> > AFAICS this problem is specific to NF_CONNTRACK_FTP=y
-> > (or any other helper module, for that matter).
-> 
-> Even with NF_CONNTRACK_FTP=m, the initialization failure in
-> nf_conntrack_standalone_init() still happens. Therefore, the helper
-> hashtable gets freed and when the nf_conntrack_ftp.ko module gets
-> insmod-ed, it calls nf_conntrack_helpers_register() and this still
-> causes a use-after-free.
+On Wed, Jun 21, 2023 at 12:16=E2=80=AFPM Yuanchu Xie <yuanchu@google.com> w=
+rote:
+>
+> RFC v1: https://lore.kernel.org/linux-mm/20230509185419.1088297-1-yuanchu=
+@google.com/
+> For background and interfaces, see the RFC v1 posting.
 
-Can you send a v2 with a slightly reworded changelog?
+v1 only mentioned one use case (ballooning), but we both know there
+are at least two solid use cases (the other being job
+scheduling/binpacking, e.g., for kubernetes [1]).
 
-It should mention that one needs NF_CONNTRACK=y, so that when
-the failure happens during the initcall (as oposed to module insertion),
-nf_conntrack_helpers_register() can fail cleanly without followup splat?
+Please do a survey, as thoroughly as possible, of use cases.
+* What's the significance of WSR to the landscape, in terms of server
+and client use cases?
+* How would userspace tools, e.g., a PMU-based memory profiler,
+leverage the infra provided by WSR?
+* Would those who register slab shrinkers, e.g., DMA buffs [2], want
+to report their working sets?
+* Does this effort intersect with memory placement with NUMA and CXL.mem?
 
-Thanks.
+[1] https://kubernetes.io/docs/concepts/configuration/manage-resources-cont=
+ainers/
+[2] https://lore.kernel.org/linux-mm/20230123191728.2928839-1-tjmercier@goo=
+gle.com/
