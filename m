@@ -2,260 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8E0737A61
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 06:41:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C792737A65
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 06:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjFUElx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 00:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57416 "EHLO
+        id S230024AbjFUEme (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 00:42:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbjFUEls (ORCPT
+        with ESMTP id S229732AbjFUEma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 00:41:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 092D61BFE;
-        Tue, 20 Jun 2023 21:41:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5A7B6145F;
-        Wed, 21 Jun 2023 04:41:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 860E4C433C8;
-        Wed, 21 Jun 2023 04:41:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687322461;
-        bh=6oRTTtk/IzodiZKEwgwp7SySHcNigQH0hHFSbtcK7u4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UuZ5vFIxGHcafuljlSX4bk7Y0OTL+7IxbxBYNV6y5S0sj+VGcUNB9XGuXTqetqxmT
-         fXDHzqRgmFHPfoe7WGlswixcTtrBy6BUDqMWWFec973jwi/cPo5jV3+I6z1A/krN9C
-         zwja7dD4O808jjGhp9N0pD56/RTzIj+266wVZNNRVe51QycP135SkYYLKhlwXgXf89
-         0JZZ/UT89dgKjp87TDLK4kB/dgojtGu3fL7ax2EWBmR+M8eB+9ZhBYcdYX7FvQDkIh
-         v5GR3c8O/IHU0J9wC52XnHIU6uaSwiZ37JUhN1B9iO4cV8VcN67PHmMKHeoqENj5rs
-         rLP84AbKOhaHQ==
-Date:   Tue, 20 Jun 2023 21:40:58 -0700
-From:   Eduardo Valentin <evalenti@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Eduardo Valentin <evalenti@kernel.org>, eduval@amazon.com,
-        linux-pm@vger.kernel.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 2/7] thermal: stats: track number of change requests due to tz
-Message-ID: <ZJJ/Wkao+Z0qTWFE@uf8f119305bce5e.ant.amazon.com>
-References: <20230519032719.2581689-1-evalenti@kernel.org>
- <20230519032719.2581689-3-evalenti@kernel.org>
- <CAJZ5v0hqGg9h+iOpKDLr=BXGk3p6sBTMM3nVok97yhRj5EdQ3g@mail.gmail.com>
+        Wed, 21 Jun 2023 00:42:30 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAF71BE3;
+        Tue, 20 Jun 2023 21:42:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687322524; x=1718858524;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+Oyatk6UJM7WoUbA4Egxw1w1lf2ZrfcTPtl1VcnDick=;
+  b=LzYaxyiWCi9gWah9Oa3T9MyU08DrZQaa1/T72kPAEaKmgFtnRE+nRbz3
+   p6+GvAaH9vAs5xaYheP/ktGt0Yt1P6MlI1ZMWsJjDLhB92HzfEzMD7b3t
+   EQA6DNF1LTPMNttpRe/WYYgsk7mxD4uqz6ZMfkn4OpzK62TM5MHmrPtTk
+   WxCV4kYVgv6xXjhR3yCdgz/HBNgIAi2Io4xWia3CUEYpbB6Am2FtVqdrP
+   b7Fng2xADcWDV3LCzQyAky6rVngp0DerZcOU8jsSVAhQzoRgace1lu37s
+   VK7YLZ+XCUdijpuIxN5VfZ+P2vydxzI9a8tPjlpvf/PT7PmBYdixH3gdd
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="349798498"
+X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
+   d="scan'208";a="349798498"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 21:42:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="714304953"
+X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
+   d="scan'208";a="714304953"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 20 Jun 2023 21:41:57 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qBpfI-0006Yp-0P;
+        Wed, 21 Jun 2023 04:41:56 +0000
+Date:   Wed, 21 Jun 2023 12:41:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lucas Tanure <tanure@linux.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Nick <nick@khadas.com>, Artem <art@khadas.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        Lucas Tanure <tanure@linux.com>
+Subject: Re: [PATCH 3/6] clk: meson: t7: add peripheral clock controller
+Message-ID: <202306211239.HA6GmDhb-lkp@intel.com>
+References: <20230615182938.18487-4-tanure@linux.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0hqGg9h+iOpKDLr=BXGk3p6sBTMM3nVok97yhRj5EdQ3g@mail.gmail.com>
+In-Reply-To: <20230615182938.18487-4-tanure@linux.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 07:12:52PM +0200, Rafael J. Wysocki wrote:
-> 
-> 
-> 
-> On Fri, May 19, 2023 at 5:27 AM Eduardo Valentin <evalenti@kernel.org> wrote:
-> >
-> > From: Eduardo Valentin <eduval@amazon.com>
-> >
-> > This patch improves the current cooling device
-> > statistics by adding a new file under
-> > cdev/stats/requests_of_thermal_zone
-> >
-> > to represent the number of times each thermal zone
-> > requested the cooling device to effectively change.
-> > If the request associated was not serviced because
-> > another thermal zone asked for a higher cooling level,
-> > this counter does not increase.
-> 
-> What if the cdev is associated with two thermal zones asking for the
-> same state of it?
+Hi Lucas,
 
-same as explained before, there will be always one thermal instance
-that is picked. This patch considers that.
+kernel test robot noticed the following build warnings:
 
-> 
-> > The file format is:
-> > thermal_zone: <type> <count>
-> >
-> > Samples:
-> > $ cat cdev0/stats/requests_of_thermal_zone
-> > thermal_zone: amb0      2
-> 
-> The "one value per attribute" sysfs rule violation.
-> 
-> >
-> > In this example, it means the thermal zone 'amb0' has requested
-> > 2 times for cdev0 to change state.
-> 
-> Like in the previous patch, it would be good to explain the use case.
-> 
-> > Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
-> > Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
-> > Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
-> > Cc: Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
-> > Cc: Jonathan Corbet <corbet@lwn.net> (maintainer:DOCUMENTATION)
-> > Cc: linux-pm@vger.kernel.org (open list:THERMAL)
-> > Cc: linux-doc@vger.kernel.org (open list:DOCUMENTATION)
-> > Cc: linux-kernel@vger.kernel.org (open list)
-> >
-> > Signed-off-by: Eduardo Valentin <eduval@amazon.com>
-> > ---
-> >  .../driver-api/thermal/sysfs-api.rst          |  2 +
-> >  drivers/thermal/thermal_core.h                |  1 +
-> >  drivers/thermal/thermal_sysfs.c               | 52 +++++++++++++++++++
-> >  3 files changed, 55 insertions(+)
-> >
-> > diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation/driver-api/thermal/sysfs-api.rst
-> > index caa50d61a5bc..75309a51d9b3 100644
-> > --- a/Documentation/driver-api/thermal/sysfs-api.rst
-> > +++ b/Documentation/driver-api/thermal/sysfs-api.rst
-> > @@ -369,6 +369,8 @@ Thermal cooling device sys I/F, created once it's registered::
-> >      |---stats/trans_table:     Cooling state transition table
-> >      |---stats/time_in_thermal_zone_ms: Time that this cooling device was driven
-> >                                  each associated thermal zone.
-> > +    |---stats/requests_of_thermal_zone:        Total number of times this cooling device
-> > +                                changed due to each associated thermal zone.
-> 
-> The meaning of the above description is not clear to me.
-> 
-> >
-> >
-> >  Then next two dynamic attributes are created/removed in pairs. They represent
-> > diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-> > index 3cce60c6e065..ed6511c3b794 100644
-> > --- a/drivers/thermal/thermal_core.h
-> > +++ b/drivers/thermal/thermal_core.h
-> > @@ -103,6 +103,7 @@ struct thermal_instance {
-> >         unsigned int weight; /* The weight of the cooling device */
-> >         bool upper_no_limit;
-> >  #if IS_ENABLED(CONFIG_THERMAL_STATISTICS)
-> > +       unsigned long total_requests;
-> >         ktime_t time_in; /* time spent in this instance */
-> >  #endif
-> >  };
-> > diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-> > index a3b71f03db75..0bce1415f7e8 100644
-> > --- a/drivers/thermal/thermal_sysfs.c
-> > +++ b/drivers/thermal/thermal_sysfs.c
-> > @@ -723,6 +723,7 @@ void thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
-> >         stats->trans_table[stats->state * (cdev->max_state + 1) + new_state]++;
-> >         stats->state = new_state;
-> >         stats->total_trans++;
-> > +       stats->curr_instance->total_requests++;
-> >
-> >  unlock:
-> >         spin_unlock(&stats->lock);
-> > @@ -867,6 +868,54 @@ time_in_thermal_zone_ms_show(struct device *dev, struct device_attribute *attr,
-> >         return ret < 0 ? ret : len;
-> >  }
-> >
-> > +static ssize_t
-> > +requests_of_thermal_zone_show(struct device *dev, struct device_attribute *attr,
-> > +                             char *buf)
-> > +{
-> > +       LIST_HEAD(cdev_thermal_zone_list);
-> > +       struct thermal_cooling_device *cdev = to_cooling_device(dev);
-> > +       struct cooling_dev_stats *stats = cdev->stats;
-> > +       struct cdev_thermal_zone_residency *res, *next;
-> > +       struct thermal_instance *instance;
-> > +       ssize_t len = 0, ret = 0;
-> > +
-> > +       mutex_lock(&cdev->lock);
-> > +
-> > +       spin_lock(&stats->lock);
-> > +       update_time_in_state(stats, stats->curr_instance);
-> > +       spin_unlock(&stats->lock);
-> > +
-> > +       build_cdev_thermal_zone_residency(&cdev_thermal_zone_list, cdev);
-> > +
-> > +       list_for_each_entry(instance, &cdev->thermal_instances, cdev_node)
-> > +               list_for_each_entry(res, &cdev_thermal_zone_list, node)
-> > +                       if (strncmp(res->thermal_zone, instance->tz->type,
-> > +                                   THERMAL_NAME_LENGTH) == 0)
-> > +                               res->counter += instance->total_requests;
-> > +
-> > +       mutex_unlock(&cdev->lock);
-> > +
-> > +       list_for_each_entry_safe(res, next, &cdev_thermal_zone_list, node) {
-> 
-> Why is the _safe variant needed here?
-> 
-> > +               ret = sprintf(buf + len, "thermal_zone: %s\t%lu\n",
-> > +                             res->thermal_zone, res->counter);
-> > +
-> > +               if (ret == 0)
-> > +                       ret = -EOVERFLOW;
-> > +
-> > +               if (ret < 0)
-> > +                       break;
-> > +
-> > +               len += ret;
-> > +       }
-> > +
-> > +       list_for_each_entry_safe(res, next, &cdev_thermal_zone_list, node) {
-> > +               list_del(&res->node);
-> > +               kfree(res);
-> > +       }
-> > +
-> > +       return ret < 0 ? ret : len;
-> 
-> I would prefer
-> 
-> if (ret < 0)
->         return ret;
-> 
-> return len;
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on clk/clk-next tty/tty-testing tty/tty-next tty/tty-linus krzk/for-next krzk-dt/for-next krzk-mem-ctrl/for-next linus/master v6.4-rc7 next-20230620]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-OK. I will fix this and enhance the explanations.
+url:    https://github.com/intel-lab-lkp/linux/commits/Lucas-Tanure/dt-bindings-arm-amlogic-add-Amlogic-T7-based-Khadas-VIM4-bindings/20230616-023038
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20230615182938.18487-4-tanure%40linux.com
+patch subject: [PATCH 3/6] clk: meson: t7: add peripheral clock controller
+config: arm64-randconfig-r001-20230620 (https://download.01.org/0day-ci/archive/20230621/202306211239.HA6GmDhb-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211239.HA6GmDhb-lkp@intel.com/reproduce)
 
-And the same comments and replies of the previous patch applies here.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306211239.HA6GmDhb-lkp@intel.com/
 
-> 
-> > +}
-> > +
-> >  static ssize_t
-> >  reset_store(struct device *dev, struct device_attribute *attr, const char *buf,
-> >             size_t count)
-> > @@ -897,6 +946,7 @@ reset_store(struct device *dev, struct device_attribute *attr, const char *buf,
-> >
-> >         /* Make sure we reset all counters per instance */
-> >         list_for_each_entry(instance, &cdev->thermal_instances, cdev_node) {
-> > +               instance->total_requests = 0;
-> >                 instance->time_in = ktime_set(0, 0);
-> >         }
-> >
-> > @@ -971,6 +1021,7 @@ static ssize_t trans_table_show(struct device *dev,
-> >  static DEVICE_ATTR_RO(total_trans);
-> >  static DEVICE_ATTR_RO(time_in_state_ms);
-> >  static DEVICE_ATTR_RO(time_in_thermal_zone_ms);
-> > +static DEVICE_ATTR_RO(requests_of_thermal_zone);
-> >  static DEVICE_ATTR_WO(reset);
-> >  static DEVICE_ATTR_RO(trans_table);
-> >
-> > @@ -978,6 +1029,7 @@ static struct attribute *cooling_device_stats_attrs[] = {
-> >         &dev_attr_total_trans.attr,
-> >         &dev_attr_time_in_state_ms.attr,
-> >         &dev_attr_time_in_thermal_zone_ms.attr,
-> > +       &dev_attr_requests_of_thermal_zone.attr,
-> >         &dev_attr_reset.attr,
-> >         &dev_attr_trans_table.attr,
-> >         NULL
-> > --
+All warnings (new ones prefixed by >>):
+
+   drivers/clk/meson/t7.c:7084:23: warning: initializer overrides prior initialization of this subobject [-Winitializer-overrides]
+                   [CLKID_VID_PLL]                 = &t7_vid_pll.hw,
+                                                     ^~~~~~~~~~~~~~
+   drivers/clk/meson/t7.c:7082:23: note: previous initialization is here
+                   [CLKID_VID_PLL]                 = &t7_vid_pll_div.hw,
+                                                     ^~~~~~~~~~~~~~~~~~
+   drivers/clk/meson/t7.c:7946:29: warning: variable 'mclk_data' set but not used [-Wunused-but-set-variable]
+           struct meson_clk_pll_data *mclk_data;
+                                      ^
+>> drivers/clk/meson/t7.c:93:29: warning: unused variable 'meson_pll_clk_no_ops' [-Wunused-const-variable]
+   static const struct clk_ops meson_pll_clk_no_ops = {};
+                               ^
+>> drivers/clk/meson/t7.c:689:37: warning: unused variable 't7_a73_dyn_clk_sel' [-Wunused-const-variable]
+   static const struct clk_parent_data t7_a73_dyn_clk_sel[] = {
+                                       ^
+   4 warnings generated.
+
+
+vim +/meson_pll_clk_no_ops +93 drivers/clk/meson/t7.c
+
+    92	
+  > 93	static const struct clk_ops meson_pll_clk_no_ops = {};
+    94	
 
 -- 
-All the best,
-Eduardo Valentin
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
