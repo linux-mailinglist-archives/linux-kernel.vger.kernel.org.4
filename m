@@ -2,107 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1654C737E89
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 11:17:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6DA737EA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 11:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231451AbjFUJLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 05:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
+        id S231520AbjFUJL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 05:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231477AbjFUJK7 (ORCPT
+        with ESMTP id S231731AbjFUJLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 05:10:59 -0400
+        Wed, 21 Jun 2023 05:11:14 -0400
 Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1011BF5;
-        Wed, 21 Jun 2023 02:10:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23AA1FF2;
+        Wed, 21 Jun 2023 02:10:33 -0700 (PDT)
 Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230621091023euoutp01ec65ee83be0b4972b071be6b6ce46ddd~qoYnSztar1413414134euoutp01V;
-        Wed, 21 Jun 2023 09:10:23 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230621091023euoutp01ec65ee83be0b4972b071be6b6ce46ddd~qoYnSztar1413414134euoutp01V
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230621091030euoutp014ad40326cb733a0a56272604c4496620~qoYt05suO1148511485euoutp01L;
+        Wed, 21 Jun 2023 09:10:30 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230621091030euoutp014ad40326cb733a0a56272604c4496620~qoYt05suO1148511485euoutp01L
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1687338623;
-        bh=1jgxo9l2TtPgCBIdPe/y+ojPYkgw4g2+N3N/h90OAdE=;
+        s=mail20170921; t=1687338630;
+        bh=A9vJqtefMweXRl5hA0piF7XKpY7+Y1RrvCTm+EtEXlQ=;
         h=From:To:CC:Subject:Date:In-Reply-To:References:From;
-        b=rc2oPNlJp42Fpp8u3rDtoPvzPqisaQYsIMpfprmtb7MP8tuJ9U2DITmdFrRyh/Qzc
-         pT0tpbD15aITOcFnJmRIyANBOAePJqI0eBRt9OPkUkkR8nwz853xesTVcq38ltVct+
-         co62GQHfMbXW3m9DCqqdfu7acJ67HlfjK3RPgyGg=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20230621091023eucas1p122d19ce002f66c6e8a0adbd2e3a30ad4~qoYmz9mgx2848828488eucas1p1W;
-        Wed, 21 Jun 2023 09:10:23 +0000 (GMT)
+        b=Ka4ZfoeHZ9KJZ0KIhhdzO1ExiUUNFd4pQTnInOxAgqyf0eUSdqf9fGf4ADqTzHos1
+         ywZFhN8UlbjrBOzPZnyD8ZTVyakxnTGgnKeSkWsclDeJldAylGgwILHjQdvJGQ1yCF
+         Ta2ndNd0iIyvJvB9swtxZqirf7z/BsD/JzVDihvI=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230621091030eucas1p2b9431b5e8ae4acfd91cec8a259953008~qoYtbzuHT2538825388eucas1p2C;
+        Wed, 21 Jun 2023 09:10:30 +0000 (GMT)
 Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id BF.8E.11320.E7EB2946; Wed, 21
-        Jun 2023 10:10:23 +0100 (BST)
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id 1D.84.37758.58EB2946; Wed, 21
+        Jun 2023 10:10:30 +0100 (BST)
 Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230621091022eucas1p1c097da50842b23e902e1a674e117e1aa~qoYmASvrd0547605476eucas1p1v;
-        Wed, 21 Jun 2023 09:10:22 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230621091029eucas1p2f9fd694dae3dfbdfffd25dccf4fcb568~qoYsgN9G-1816318163eucas1p2-;
+        Wed, 21 Jun 2023 09:10:29 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
         eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230621091022eusmtrp236bd2250119bdac5fe33daa3c529b4fd~qoYl7iO_G2182221822eusmtrp2g;
-        Wed, 21 Jun 2023 09:10:22 +0000 (GMT)
-X-AuditID: cbfec7f4-993ff70000022c38-c8-6492be7e5d77
+        20230621091029eusmtrp2a0edd6b63446d061037baf6b483c48bb~qoYsaZmkS2225722257eusmtrp2B;
+        Wed, 21 Jun 2023 09:10:29 +0000 (GMT)
+X-AuditID: cbfec7f5-815ff7000002937e-7e-6492be85d3cb
 Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id CF.0F.10549.D7EB2946; Wed, 21
-        Jun 2023 10:10:22 +0100 (BST)
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id D9.E1.14344.48EB2946; Wed, 21
+        Jun 2023 10:10:28 +0100 (BST)
 Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
         eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230621091021eusmtip237d1f3e24e19ae8cad088c863d5c07c2~qoYlj-NWC1796317963eusmtip2T;
-        Wed, 21 Jun 2023 09:10:21 +0000 (GMT)
+        20230621091028eusmtip2a2c40ec1c961aabd77e7ae0ea239ab31~qoYr28XcU1980519805eusmtip2i;
+        Wed, 21 Jun 2023 09:10:28 +0000 (GMT)
 Received: from localhost (106.210.248.248) by CAMSVWEXC02.scsc.local
         (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Wed, 21 Jun 2023 10:10:20 +0100
+        Wed, 21 Jun 2023 10:10:27 +0100
 From:   Joel Granados <j.granados@samsung.com>
-To:     <mcgrof@kernel.org>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
+To:     <mcgrof@kernel.org>, Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
         "David S. Miller" <davem@davemloft.net>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Clemens Ladisch <clemens@ladisch.de>,
+        Arnd Bergmann <arnd@arndb.de>, Corey Minyard <minyard@acm.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Song Liu <song@kernel.org>, Robin Holt <robinmholt@gmail.com>,
+        Steve Wahl <steve.wahl@hpe.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Doug Gilbert <dgilbert@interlog.com>,
+        David Howells <dhowells@redhat.com>,
+        Jan Harkes <jaharkes@cs.cmu.edu>, <coda@cs.cmu.edu>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>, Jan Kara <jack@suse.cz>,
+        Anton Altaparmakov <anton@tuxera.com>,
+        Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        John Stultz <jstultz@google.com>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Joerg Reuter <jreuter@yaina.de>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <martineau@kernel.org>,
-        Simon Horman <horms@verge.net.au>,
-        Julian Anastasov <ja@ssi.bg>,
-        Remi Denis-Courmont <courmisch@gmail.com>,
-        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
-        David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Jan Karcher <jaka@linux.ibm.com>,
-        Jon Maloy <jmaloy@redhat.com>,
-        Ying Xue <ying.xue@windriver.com>,
-        Martin Schiller <ms@dev.tdt.de>
+        John Johansen <john.johansen@canonical.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>
 CC:     Joel Granados <j.granados@samsung.com>,
-        <linux-rdma@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-hams@vger.kernel.org>,
-        <netfilter-devel@vger.kernel.org>, <coreteam@netfilter.org>,
-        <bridge@lists.linux-foundation.org>, <dccp@vger.kernel.org>,
-        <linux-wpan@vger.kernel.org>, <mptcp@lists.linux.dev>,
-        <lvs-devel@vger.kernel.org>, <rds-devel@oss.oracle.com>,
-        <linux-afs@lists.infradead.org>, <linux-sctp@vger.kernel.org>,
-        <linux-s390@vger.kernel.org>,
-        <tipc-discussion@lists.sourceforge.net>,
-        <linux-x25@vger.kernel.org>
-Subject: [PATCH 06/11] sysctl: Add size to register_net_sysctl function
-Date:   Wed, 21 Jun 2023 11:09:55 +0200
-Message-ID: <20230621091000.424843-7-j.granados@samsung.com>
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Mike Travis <mike.travis@hpe.com>,
+        Amir Goldstein <amir73il@gmail.com>,
+        Matthew Bobrowski <repnop@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-ia64@vger.kernel.org>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-s390@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>,
+        <openipmi-developer@lists.sourceforge.net>,
+        <intel-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-hyperv@vger.kernel.org>,
+        <linux-raid@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
+        <linux-cachefs@redhat.com>, <codalist@coda.cs.cmu.edu>,
+        <linux-fsdevel@vger.kernel.org>, <linux-nfs@vger.kernel.org>,
+        <linux-ntfs-dev@lists.sourceforge.net>,
+        <ocfs2-devel@oss.oracle.com>, <fsverity@lists.linux.dev>,
+        <linux-xfs@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <apparmor@lists.ubuntu.com>,
+        <linux-security-module@vger.kernel.org>
+Subject: [PATCH 07/11] sysctl: Add size to register_sysctl
+Date:   Wed, 21 Jun 2023 11:09:56 +0200
+Message-ID: <20230621091000.424843-8-j.granados@samsung.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230621091000.424843-1-j.granados@samsung.com>
 MIME-Version: 1.0
@@ -111,55 +151,57 @@ Content-Type: text/plain
 X-Originating-IP: [106.210.248.248]
 X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
         CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA01TaVBTVxid++7LAkzkERy5RTtMUWq1LRZb8ZtWOtBlfNp2yg+tDD+0EV4R
-        FGQIoNRRgYCyFA1LoQHKYlmCbDMQgoACpcomNVbQIIIoEEVEoixKokAJoR3+nfOd79x7zp25
-        QiwuFdgL/YNCuZAgyRFHviWtbjVoPjzdmOL7UWwlBS2R26G97J4A5urOYph6+JgH2ZoYGua0
-        iXyYiH5NQ0V9LAW61iEBqJNKESSOrQNZzQyCkfNDPOgpes4HxW/tCAZnhmgwnLMCRYKMAn16
-        FgU31ed4kGYsxCDvdIE7tQMUdNdn8+FRSxIN8nwZBl3eUx70pxbR0HwlF8FQpZ4CWe4kBtnU
-        MAajso0HN5IWMCi7HlHQK9ch+OtsIw+6KqMF8DKnHUNr3hqQV3TS0Cfr4MPL6+MIMsZvY7h1
-        eQN0Ti9QcKN6igdT2e/BQ7mGhlSlioKG+FkBqDQBENWlFsCwVovdXdm+oRnMTtzoQGxO2QnW
-        aNjMqkruUmzi1THM1mUOCFh1sxObVxXGVl2M57PXSsopVn6hGbHVBafZ1N5ixI5WKxDbkDdF
-        eTp4W+7w5Y74h3MhWz7/0fLQ6O9dvGB1CXVc+SKNF4nyZ1ACEgoJ8wkxGkITkKVQzCgRKczN
-        wAnIYpFMI6L/daNZmEJk5FYXbRJMhgdpSsosFCNinE+j/t96cvvJMqlBpCy1gGey8JkPiGa8
-        H5uE1UyOFSnOmRSYCGau0ORxZhFlSmLL7CTqGGuTgWaciGoslmcai5gdpP+O0Hy1AzmjzUAm
-        bMG4Ec2wfimSiLEhHYqRJYwXd2Q1WdiMCflzdBSbveuJtvEPvhmfJJ2qPsqM9VZkrvpbM/6K
-        jCruL+/bkrE2lcCM15GFutylYoRJRaRp/rnATEoRKYqaWT7pMxLTM7Ls8CDRcxew+YVXkd5n
-        NuZAq0iKOmN5LCJxZ8RytCFzRYXMFRUyV1TIQ/gisuPCpIF+nHRrEHfMWSoJlIYF+Tn7HA2s
-        Qov/6fp82/QlVDz2wrkFUULUgogQO64WvV2V4isW+UoifuZCjh4ICTvCSVvQWiHtaCd6363D
-        R8z4SUK5wxwXzIX8p1JCC/tIyvNpcsMbL/pVc7mkLa4x3Ekp13dPBrpHnYg/Tpef8radb5H/
-        MpB8UFjwd8pYrf5gfOZPuq3Z/JtNYtWnxn8qXUq/uV87Z19z7UtdhIe2ljWuv3VYa+0Qli7u
-        H4zw2Ktz3/46TnjbiZu3hWqbQG2Ev0Xz7E0fJ7cqvCkyumGbNPwL2URP39fus4mhl04OezQd
-        +z6gUOP6YEtFyu7OWpFdZNpghiu+t7vWUO/bp6vbv59Ys3d69/WRtxw7ug2Wz15t3JNwzv7U
-        AYMyFIK91m9amyTJz756frJAMbqnS1/i7bUvOpn4GiPu7tr17jvayHS+4s13nmF7mYCsdBy+
-        5uNtl38YdKSlhyQum3GIVPIv28QTHr4EAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA02TeVDUZRzGfX/H7iKz+QOW/A3pqEtYGaws55dAImvs1zQ1/GFZNgQ7sMMR
-        V7vgeJCgCxhnyzEqy7WgLKAGscAKkgxuxH1Eq2AGIfcZhwskJBKw0wz/Pe/zfT/PM9+Z9+Xg
-        pg9ZFpzA0AixJFQUzGftJtpfNv9lc7E+3c92Xo2DNsYZWu78yYb12is46IcmSMjpjiVgvS+J
-        BXOX/yWg7F4cBmNNw2zQpNxGkDS9D2TVywhGfxgm4aFqgQVZ11sQDC4PE7CaagxZiTIM5q9m
-        Y/CbJpWEzLUiHORtQui9O4CB7l4OC8a1KQTIC2Q4jClnSOjPUBHQcD8fwXD5PAay/Gc4yPQj
-        OKyVNJPQlbKBQ0nHOAaP5WMIfrlST0JH+WU2rOS14NCkfBXkZW0EPJG1smClfRbBtdlHOPz+
-        8+vQtrSBQVelngR9zpswJO8mIKOkCoO6hOdsqOoOgksdGjaM9PXhHk7Mk+FlnJnrakVM3p0L
-        zNrqEaaq9A+MSWqcxplaxQCb0TRYMUp1JKO+lcBifi39EWPkhQ2IqbwZzWQ8LkbMZGUWYuqU
-        eszzwGmBmyQsMkJ8MCBMGnGM/5UQ7ARCFxDYObgIhPbOXu/YOfKPurv5iYMDz4glR919BAGT
-        uR1kuKYUO1uymEnGoIJllIiMODTlQD/NLMES0W6OKVWE6J7SGcIw2EdXLD0iDdqMftGbyNrS
-        ptQiouOVbxuAakSX5hZsJ7Eoa7p7th/fGvCoPGM65YEabR1w6j5BTyhUmx0cjhn1Ia2J3bMF
-        EJQVXTUdR27ZXMqN7u/lGMoO0PF917YzjahjdPfIPGEodqPzF3TbPpcyoVuzRrd9fPO+rDob
-        N2iafjA5iRtyLOm++hssg/6O1q+PIzniKXbgih24YgeuRPgtxBNHSkP8Q6RCgVQUIo0M9Rf4
-        hoWo0ebz1jStVtagvOlFgRZhHKRFNAfn87j71el+plw/0bnzYkmYtyQyWCzVIsfNNdNwC3Pf
-        sM3/ERrhLXSydRQ6OLnYOro42fP3cj8K/15kSvmLIsTfiMXhYsn/HMYxsojBvLt7M4JOnH2r
-        2KLY5j0vOdc9jLt/pfOzqpc45XB4lPw73Z1su/u5wuU1XkXduVPmlqocRfuS32K1t03jnEnO
-        UM8XDdY14Vjyt++vFjakuk40HzRz5fo4G/8zsRoVFTuYFH7d47z9lMdYWeMnz4KOm4x0jgbW
-        VA/q0vy9Ooem9lCiyhszU1DYHo2F6Po9V6wORUzE5bv5Rx3+8hVeboD2ZO0uvU70xs2NtEMX
-        651VuxoaVwpfnOr6+ulAI7snWmVaHP/Buz72DubJ3Pi1QF3STx6Lamte0VR22oWPyxM7LCMr
-        Tie7Xuriw4nahU8Him+3HUpkzBLO+F59njem8TxZNJe8F+MT0gCR8AgukYr+A/zhRFhnBAAA
-X-CMS-MailID: 20230621091022eucas1p1c097da50842b23e902e1a674e117e1aa
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Te0xTdxTe797bewsRdi1m/AJsRBS26ETcWHLcREe26M10zswlW3xtBa5g
+        pOBa1OkyQylvnNE6BgJDEOTRIoWKKAQ6x5CHbLxaqEzU8Iq1CK0iIg9hwmUL/33nfN93ft85
+        yU9MSvoYN/GhiCheHiEN96IdqcqGybZ18QZ1iF+MiYDylkc0NJkvEdBeqkUQVzVHQZW+QgTK
+        hhwRvFQ3MGCPiSNh4GUdDWNlszQM//kUga3gNIJe9UMG5u49JCC/qY+A5yV3CIhWzdBgKUtA
+        kNUWS4EhVo/AkH6FhtGYaQqMg85gGrfRcKVmhoShhn4GkvrnaLCpDkB7xnMRqPJ0NHRf52A4
+        W4MgxeoBv5a7QubZqwRkpqkIuHw3SQSFRh2CyQINA82tzyko1eUR0PQsjobaXAKKC14wMNNU
+        TsNfKTJorzwjgkHtNQb0A90ieJJ/m4EH9ycJqKltpiD1nJ0Ge+KoCIzVWTS032wRQUJiFoKE
+        i9UIzuaqSEgx33glOd1PQ/XMDQbqUmsRTE/Mij4O4Yym7dxE3BmKK8kuQZyxu4PkpqfUiMuI
+        /pnmMqM7KE5bUk9yOfU7uPGeVoKrKO4huEuPoiluqONLTtejprmqjHsMV3nTe9eGPY6bQvjw
+        Q8d4+frN3zmGJXbqyCMdvxE/jA6Pi6KR0YqSkYMYs/64vKiVSUaOYglbhHBL2zlynpCwzxBu
+        N0oEYgzhyuQiOhmJFxy56eFCvxDhqxoj9b/owS+xtFBcQ7hB00XMj6LZd3Hb415ynljB9qzA
+        2Y9tzDxBsjUO2F4QNI9d2A9x8/nLC6Eo1ht3jF9a0Dixm/D9Zh0hhPXE8ea0BY0DG4DbBmyU
+        oFmOmy8MUsJMT6y6lkkKGOM/LBZS8K7CZkMeLeCf8O2Kf4j5QJjVLMOp1VOLD3yK1Vlji5dx
+        wdbGCkbAHniu6uKi4TzCv8/aGaHQIlygHF90f4RjTYOLjkDcWKoXCRdzxndGlguJnLG6Mo0U
+        2k44MV5yFq3OWLJDxpIdMpbskINIDXLljypkobzi/Qj+uK9CKlMcjQj1DY6U6dGrX9gy2zh+
+        AxVZn/jWIUKM6hAWk14rnN7Uq0MkTiHSEyd5eeS38qPhvKIOuYspL1entQHNwRI2VBrFH+b5
+        I7z8P5YQO7hFE/7FiVs+/2J90dpY/7vDriO3cps6TtkOvpG3/+v81ebOiVPKigsDhf3Ht76z
+        j9neuHHHhOmkqcsn823tMn5j/i3vfM8Xfrdd1mYZdMemNfa/PWJ2H4h6r90tOVPu97qhac1l
+        sso2G540InPxsRz+QDm0bqusOrl+MruY89oW9iyoxn8vUbClnNlzOmen7cfXwgJ2f2Wx7ht4
+        emp5drU2zRK036PXuHNXY2Bwf8jBBDbA8cL1vsNsWeSUuQZk3n7uzmbVmLR31d4TnVGp9k92
+        +tlSyjiW9Em35OUOKR8mTFl9rAwRqEw7QV0E2/SB7z97sbnT/Ru9y8qVruu2PfI3tLyV31Xh
+        RSnCpBvWkHKF9F+mKDof9AQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xbZRiH851zek5ZhNUO5Ii4YXeJ063j7gsy1On0KMSJMSY6BnRQAW2B
+        9aIDGSkU5CqBLm6zXMelC+M2KiAQIMqQcZmUrhsdk7GMizAgUMZgTm4WGhP+e77f9/zeL98f
+        LxvnZlAO7MgomVASJRDxyB1E3/qNkcPJ7aow5+xMN6jre0RCt7EEg4GaSgQpzRsENGvrWZDY
+        VcyCNVUXBaakFBzG1jpIWLy2TsLM9ccI5jVZCIZVkxRs3J/EoKz7IQbLVXcxUChXSdhozMVh
+        6loqgnxdMgHtyVoE7ZeqSZhLWiHAMG4Dt5fmSahuXcVhomuUgvTRDRLmlUEwoF5mgbK0loTB
+        XxmYKbyKIHPaES7U2UNezi8Y5F1UYlD+VzoLrhhqEZTcbcTgmeYqBT39ywTU1JZi0P0khYS2
+        yxhUaP6hYLW7joSbmWIYaMxmwXhlAwXasUEWLJT1UvBg5BkGrW09BPyUayLBlDbHAkNLPgkD
+        v/WxIDUtH0FqUQuCnMtKHDKNTWYla5SEltUm6u2vGMNtP+ZpSjbBVBVWIcYwqMeZlX9ViFEr
+        fiSZPIWeYCqrOnGmuNOfWRrqx5j6iiGMKXmkIJgJ/adM7ZCKZNqWiwmmWX2f+sT1S76PJFou
+        EzpFREtlR3knXcCV7+IFfFd3L76L2xunvF09eEd8fcKEoshvhZIjviH8iLRbtXiMvgA7Ozez
+        xFIgwzTKQGw2zXGnL18SZaAdbC6nHNFDT2+acytz7kjXPbnDsvAuenUwg7RIC4j+Y6iSshwa
+        EF33uGjLIjmHaN3sML55YcsZsqUL7g1ujcI5rVa0SXN6k3dxvOme8+VbOcHZT+uXSqhNtub4
+        0CM9tZjluT30D8aLW44V5yitG5snNplrdopMBmTxn6d7fh4nLPP30MqGPNzCNP371BRumbOX
+        NraXkhY+Ry+u/Y1ykK16W129ra7eVi9G+FVkK5RLxeFiqStfKhBL5VHh/NBosRaZl6Kx61l9
+        E6qYXuB3IIyNOhDNxnm21i9rVWFc6zBBbJxQEh0skYuE0g7kYf5nLu5gFxpt3qooWbCLp7OH
+        i7unl7OHl6cbz976w5g0AZcTLpAJvxEKY4SS/3sY28pBgcnfkm+UTR8oT9SEiGRWKuriS7Pp
+        Pv666qhTkhbDF012QRfYx9A7nRvvqpvsxHtjnPa//yJbNvJRY2zCZFDn0mcpaTPaEMPuV/tE
+        k9mpB6N4aGXdJsGoe24u5FY9z89HEfhdqLqXazrRuhOdyYyIHS0M5H8e4dXcG7BbVHjAaZTZ
+        pz/xAT8wPvL619x8eUWK8r2d8zX2cUnnhx0Px6HmxVfuGXcey3r95J2YiuGyM/Su5ePSiYMP
+        0kUBuvg3ufisM1/v35hwVlt2pT/Aq26/avZ4U6rH2NrD06HMwrkXnErKbHS5Gg/Nn8GJ8X67
+        Z7sCxN66wBtTlKHAIWZf1se+IqdD3/MIaYTA5TVcIhX8B9lnSFCdBAAA
+X-CMS-MailID: 20230621091029eucas1p2f9fd694dae3dfbdfffd25dccf4fcb568
 X-Msg-Generator: CA
-X-RootMTR: 20230621091022eucas1p1c097da50842b23e902e1a674e117e1aa
+X-RootMTR: 20230621091029eucas1p2f9fd694dae3dfbdfffd25dccf4fcb568
 X-EPHeader: CA
 CMS-TYPE: 201P
-X-CMS-RootMailID: 20230621091022eucas1p1c097da50842b23e902e1a674e117e1aa
+X-CMS-RootMailID: 20230621091029eucas1p2f9fd694dae3dfbdfffd25dccf4fcb568
 References: <20230621091000.424843-1-j.granados@samsung.com>
-        <CGME20230621091022eucas1p1c097da50842b23e902e1a674e117e1aa@eucas1p1.samsung.com>
+        <CGME20230621091029eucas1p2f9fd694dae3dfbdfffd25dccf4fcb568@eucas1p2.samsung.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
@@ -172,1027 +214,958 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 In order to remove the end element from the ctl_table struct arrays, we
-explicitly define the size when registering the targets.
-The register_net_sysctl function is an indirection function that gets a
-new argument. All the functions that call into regster_net_sysctl, in
-turn, pass a new size of array argument.
-
-In general the callers of register_net_sysctl need to add a size
-argument calculated by ARRAY_size on the ctl_table array. The following
-files are the ones that fall in this "easy" category:
-	drivers/infiniband/core/iwcm.c
-	drivers/infiniband/core/ucma.c
-	drivers/net/vrf.c
-	include/net/net_namespace.h
-	net/appletalk/sysctl_net_atalk.c
-	net/ax25/sysctl_net_ax25.c
-	net/bridge/br_netfilter_hooks.c
-	net/core/neighbour.c
-	net/core/sysctl_net_core.c
-	net/dccp/sysctl.c
-	net/ieee802154/6lowpan/reassembly.c
-	net/ipv4/devinet.c
-	net/ipv4/ip_fragment.c
-	net/ipv4/route.c
-	net/ipv4/sysctl_net_ipv4.c
-	net/ipv4/xfrm4_policy.c
-	net/ipv6/addrconf.c
-	net/ipv6/netfilter/nf_conntrack_reasm.c
-	net/ipv6/reassembly.c
-	net/ipv6/xfrm6_policy.c
-	net/llc/sysctl_net_llc.c
-	net/mpls/af_mpls.c
-	net/mptcp/ctrl.c
-	net/netfilter/ipvs/ip_vs_ctl.c
-	net/netfilter/ipvs/ip_vs_lblc.c
-	net/netfilter/ipvs/ip_vs_lblcr.c
-	net/netfilter/nf_conntrack_standalone.c
-	net/netfilter/nf_log.c
-	net/netrom/sysctl_net_netrom.c
-	net/phonet/sysctl.c
-	net/rds/ib_sysctl.c
-	net/rds/sysctl.c
-	net/rds/tcp.c
-	net/rose/sysctl_net_rose.c
-	net/rxrpc/sysctl.c
-	net/sctp/sysctl.c
-	net/smc/smc_sysctl.c
-	net/tipc/sysctl.c
-	net/unix/sysctl_net_unix.c
-	net/x25/sysctl_net_x25.c
-	net/xfrm/xfrm_sysctl.c
-
-An additional size function was added to the following files in order to
-calculate the size of an array that is defined in another file:
-	include/net/ipv6.h
-	net/ipv6/icmp.c
-	net/ipv6/route.c
-	net/ipv6/sysctl_net_ipv6.c
-
-In this file we add the additional argument:
-	net/sysctl_net.c
+explicitly define the size when registering the targes.
+We add a size argument to register_sysctl and change all the callers to
+pass the ARRAY_SIZE of their table arg.
 
 Signed-off-by: Joel Granados <j.granados@samsung.com>
 ---
- drivers/infiniband/core/iwcm.c          |  3 +-
- drivers/infiniband/core/ucma.c          |  4 +-
- drivers/net/vrf.c                       |  3 +-
- include/net/ipv6.h                      |  2 +
- include/net/net_namespace.h             |  4 +-
- net/appletalk/sysctl_net_atalk.c        |  4 +-
- net/ax25/sysctl_net_ax25.c              |  3 +-
- net/bridge/br_netfilter_hooks.c         |  2 +-
- net/core/neighbour.c                    |  3 +-
- net/core/sysctl_net_core.c              |  5 +-
- net/dccp/sysctl.c                       |  3 +-
- net/ieee802154/6lowpan/reassembly.c     |  6 +-
- net/ipv4/devinet.c                      |  6 +-
- net/ipv4/ip_fragment.c                  |  6 +-
- net/ipv4/route.c                        |  6 +-
- net/ipv4/sysctl_net_ipv4.c              |  6 +-
- net/ipv4/xfrm4_policy.c                 |  3 +-
- net/ipv6/addrconf.c                     |  3 +-
- net/ipv6/icmp.c                         |  5 ++
- net/ipv6/netfilter/nf_conntrack_reasm.c |  3 +-
- net/ipv6/reassembly.c                   |  6 +-
- net/ipv6/route.c                        |  5 ++
- net/ipv6/sysctl_net_ipv6.c              | 13 +++--
- net/ipv6/xfrm6_policy.c                 |  3 +-
- net/llc/sysctl_net_llc.c                |  9 ++-
- net/mpls/af_mpls.c                      | 75 +++++++++++++------------
- net/mptcp/ctrl.c                        |  3 +-
- net/netfilter/ipvs/ip_vs_ctl.c          |  3 +-
- net/netfilter/ipvs/ip_vs_lblc.c         |  5 +-
- net/netfilter/ipvs/ip_vs_lblcr.c        |  5 +-
- net/netfilter/nf_conntrack_standalone.c |  8 ++-
- net/netfilter/nf_log.c                  |  5 +-
- net/netrom/sysctl_net_netrom.c          |  3 +-
- net/phonet/sysctl.c                     |  4 +-
- net/rds/ib_sysctl.c                     |  4 +-
- net/rds/sysctl.c                        |  5 +-
- net/rds/tcp.c                           |  3 +-
- net/rose/sysctl_net_rose.c              |  4 +-
- net/rxrpc/sysctl.c                      |  3 +-
- net/sctp/sysctl.c                       |  7 ++-
- net/smc/smc_sysctl.c                    |  3 +-
- net/sysctl_net.c                        | 10 +---
- net/tipc/sysctl.c                       |  3 +-
- net/unix/sysctl_net_unix.c              |  3 +-
- net/x25/sysctl_net_x25.c                |  4 +-
- net/xfrm/xfrm_sysctl.c                  |  3 +-
- 46 files changed, 176 insertions(+), 103 deletions(-)
+ arch/arm/kernel/isa.c                         |  2 +-
+ arch/arm64/kernel/armv8_deprecated.c          |  2 +-
+ arch/arm64/kernel/fpsimd.c                    |  6 +++--
+ arch/arm64/kernel/process.c                   |  3 ++-
+ arch/ia64/kernel/crash.c                      |  3 ++-
+ arch/powerpc/kernel/idle.c                    |  3 ++-
+ arch/powerpc/platforms/pseries/mobility.c     |  3 ++-
+ arch/s390/appldata/appldata_base.c            |  4 +++-
+ arch/s390/kernel/debug.c                      |  3 ++-
+ arch/s390/kernel/topology.c                   |  3 ++-
+ arch/s390/mm/cmm.c                            |  3 ++-
+ arch/s390/mm/pgalloc.c                        |  3 ++-
+ arch/x86/entry/vdso/vdso32-setup.c            |  2 +-
+ arch/x86/kernel/itmt.c                        |  3 ++-
+ crypto/fips.c                                 |  3 ++-
+ drivers/base/firmware_loader/fallback_table.c |  6 ++---
+ drivers/cdrom/cdrom.c                         |  3 ++-
+ drivers/char/hpet.c                           |  3 ++-
+ drivers/char/ipmi/ipmi_poweroff.c             |  3 ++-
+ drivers/gpu/drm/i915/i915_perf.c              |  3 ++-
+ drivers/hv/hv_common.c                        |  3 ++-
+ drivers/macintosh/mac_hid.c                   |  3 ++-
+ drivers/md/md.c                               |  3 ++-
+ drivers/misc/sgi-xp/xpc_main.c                |  6 +++--
+ drivers/parport/procfs.c                      | 11 +++++----
+ drivers/perf/arm_pmuv3.c                      |  3 ++-
+ drivers/scsi/scsi_sysctl.c                    |  3 ++-
+ drivers/scsi/sg.c                             |  3 ++-
+ fs/cachefiles/error_inject.c                  |  3 ++-
+ fs/coda/sysctl.c                              |  3 ++-
+ fs/devpts/inode.c                             |  3 ++-
+ fs/eventpoll.c                                |  2 +-
+ fs/lockd/svc.c                                |  3 ++-
+ fs/nfs/nfs4sysctl.c                           |  3 ++-
+ fs/nfs/sysctl.c                               |  3 ++-
+ fs/notify/fanotify/fanotify_user.c            |  3 ++-
+ fs/notify/inotify/inotify_user.c              |  3 ++-
+ fs/ntfs/sysctl.c                              |  3 ++-
+ fs/ocfs2/stackglue.c                          |  3 ++-
+ fs/proc/proc_sysctl.c                         | 23 ++++++++++---------
+ fs/verity/signature.c                         |  4 +++-
+ fs/xfs/xfs_sysctl.c                           |  3 ++-
+ include/linux/sysctl.h                        |  6 +++--
+ kernel/pid_sysctl.h                           |  2 +-
+ kernel/time/timer.c                           |  2 +-
+ kernel/ucount.c                               |  2 +-
+ kernel/utsname_sysctl.c                       |  2 +-
+ lib/test_sysctl.c                             |  9 +++++---
+ net/sunrpc/sysctl.c                           |  3 ++-
+ net/sunrpc/xprtrdma/svc_rdma.c                |  3 ++-
+ net/sunrpc/xprtrdma/transport.c               |  4 +++-
+ net/sunrpc/xprtsock.c                         |  4 +++-
+ net/sysctl_net.c                              |  2 +-
+ security/apparmor/lsm.c                       |  3 ++-
+ security/loadpin/loadpin.c                    |  3 ++-
+ security/yama/yama_lsm.c                      |  3 ++-
+ 56 files changed, 133 insertions(+), 76 deletions(-)
 
-diff --git a/drivers/infiniband/core/iwcm.c b/drivers/infiniband/core/iwcm.c
-index 2b47073c61a6..20627a894c89 100644
---- a/drivers/infiniband/core/iwcm.c
-+++ b/drivers/infiniband/core/iwcm.c
-@@ -1193,7 +1193,8 @@ static int __init iw_cm_init(void)
- 		goto err_alloc;
+diff --git a/arch/arm/kernel/isa.c b/arch/arm/kernel/isa.c
+index 20218876bef2..561432e3c55a 100644
+--- a/arch/arm/kernel/isa.c
++++ b/arch/arm/kernel/isa.c
+@@ -46,5 +46,5 @@ register_isa_ports(unsigned int membase, unsigned int portbase, unsigned int por
+ 	isa_membase = membase;
+ 	isa_portbase = portbase;
+ 	isa_portshift = portshift;
+-	isa_sysctl_header = register_sysctl("bus/isa", ctl_isa_vars);
++	isa_sysctl_header = register_sysctl("bus/isa", ctl_isa_vars, ARRAY_SIZE(ctl_isa_vars));
+ }
+diff --git a/arch/arm64/kernel/armv8_deprecated.c b/arch/arm64/kernel/armv8_deprecated.c
+index 1febd412b4d2..68ed60a521a6 100644
+--- a/arch/arm64/kernel/armv8_deprecated.c
++++ b/arch/arm64/kernel/armv8_deprecated.c
+@@ -569,7 +569,7 @@ static void __init register_insn_emulation(struct insn_emulation *insn)
+ 		sysctl->extra2 = &insn->max;
+ 		sysctl->proc_handler = emulation_proc_handler;
  
- 	iwcm_ctl_table_hdr = register_net_sysctl(&init_net, "net/iw_cm",
--						 iwcm_ctl_table);
-+						 iwcm_ctl_table,
-+						 ARRAY_SIZE(iwcm_ctl_table));
- 	if (!iwcm_ctl_table_hdr) {
- 		pr_err("iw_cm: couldn't register sysctl paths\n");
- 		goto err_sysctl;
-diff --git a/drivers/infiniband/core/ucma.c b/drivers/infiniband/core/ucma.c
-index bf42650f125b..f737ab0de883 100644
---- a/drivers/infiniband/core/ucma.c
-+++ b/drivers/infiniband/core/ucma.c
-@@ -1863,7 +1863,9 @@ static int __init ucma_init(void)
- 		goto err1;
+-		register_sysctl("abi", sysctl);
++		register_sysctl("abi", sysctl, 1);
  	}
+ }
  
--	ucma_ctl_table_hdr = register_net_sysctl(&init_net, "net/rdma_ucm", ucma_ctl_table);
-+	ucma_ctl_table_hdr = register_net_sysctl(&init_net, "net/rdma_ucm",
-+						 ucma_ctl_table,
-+						 ARRAY_SIZE(ucma_ctl_table));
- 	if (!ucma_ctl_table_hdr) {
- 		pr_err("rdma_ucm: couldn't register sysctl paths\n");
- 		ret = -ENOMEM;
-diff --git a/drivers/net/vrf.c b/drivers/net/vrf.c
-index bdb3a76a352e..edd8f2ba5595 100644
---- a/drivers/net/vrf.c
-+++ b/drivers/net/vrf.c
-@@ -1979,7 +1979,8 @@ static int vrf_netns_init_sysctl(struct net *net, struct netns_vrf *nn_vrf)
- 	/* init the extra1 parameter with the reference to current netns */
- 	table[0].extra1 = net;
+diff --git a/arch/arm64/kernel/fpsimd.c b/arch/arm64/kernel/fpsimd.c
+index 2fbafa5cc7ac..ecfb2ef6a036 100644
+--- a/arch/arm64/kernel/fpsimd.c
++++ b/arch/arm64/kernel/fpsimd.c
+@@ -595,7 +595,8 @@ static struct ctl_table sve_default_vl_table[] = {
+ static int __init sve_sysctl_init(void)
+ {
+ 	if (system_supports_sve())
+-		if (!register_sysctl("abi", sve_default_vl_table))
++		if (!register_sysctl("abi", sve_default_vl_table,
++				     ARRAY_SIZE(sve_default_vl_table)))
+ 			return -EINVAL;
  
--	nn_vrf->ctl_hdr = register_net_sysctl(net, "net/vrf", table);
-+	nn_vrf->ctl_hdr = register_net_sysctl(net, "net/vrf", table,
-+					      ARRAY_SIZE(vrf_table));
- 	if (!nn_vrf->ctl_hdr) {
- 		kfree(table);
- 		return -ENOMEM;
-diff --git a/include/net/ipv6.h b/include/net/ipv6.h
-index 7332296eca44..37c2737be083 100644
---- a/include/net/ipv6.h
-+++ b/include/net/ipv6.h
-@@ -1274,7 +1274,9 @@ static inline int snmp6_unregister_dev(struct inet6_dev *idev) { return 0; }
+ 	return 0;
+@@ -619,7 +620,8 @@ static struct ctl_table sme_default_vl_table[] = {
+ static int __init sme_sysctl_init(void)
+ {
+ 	if (system_supports_sme())
+-		if (!register_sysctl("abi", sme_default_vl_table))
++		if (!register_sysctl("abi", sme_default_vl_table,
++				     ARRAY_SIZE(sme_default_vl_table)))
+ 			return -EINVAL;
  
+ 	return 0;
+diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+index 0fcc4eb1a7ab..cfe232960f2f 100644
+--- a/arch/arm64/kernel/process.c
++++ b/arch/arm64/kernel/process.c
+@@ -729,7 +729,8 @@ static struct ctl_table tagged_addr_sysctl_table[] = {
+ 
+ static int __init tagged_addr_init(void)
+ {
+-	if (!register_sysctl("abi", tagged_addr_sysctl_table))
++	if (!register_sysctl("abi", tagged_addr_sysctl_table,
++			     ARRAY_SIZE(tagged_addr_sysctl_table)))
+ 		return -EINVAL;
+ 	return 0;
+ }
+diff --git a/arch/ia64/kernel/crash.c b/arch/ia64/kernel/crash.c
+index 88b3ce3e66cd..66917b879b2a 100644
+--- a/arch/ia64/kernel/crash.c
++++ b/arch/ia64/kernel/crash.c
+@@ -248,7 +248,8 @@ machine_crash_setup(void)
+ 	if((ret = register_die_notifier(&kdump_init_notifier_nb)) != 0)
+ 		return ret;
  #ifdef CONFIG_SYSCTL
- struct ctl_table *ipv6_icmp_sysctl_init(struct net *net);
-+size_t ipv6_icmp_sysctl_table_size(void);
- struct ctl_table *ipv6_route_sysctl_init(struct net *net);
-+size_t ipv6_route_sysctl_table_size(void);
- int ipv6_sysctl_register(void);
- void ipv6_sysctl_unregister(void);
+-	register_sysctl("kernel", kdump_ctl_table);
++	register_sysctl("kernel", kdump_ctl_table,
++			ARRAY_SIZE(kdump_ctl_table));
  #endif
-diff --git a/include/net/net_namespace.h b/include/net/net_namespace.h
-index 78beaa765c73..e6ffe77516eb 100644
---- a/include/net/net_namespace.h
-+++ b/include/net/net_namespace.h
-@@ -472,12 +472,12 @@ struct ctl_table;
- #ifdef CONFIG_SYSCTL
- int net_sysctl_init(void);
- struct ctl_table_header *register_net_sysctl(struct net *net, const char *path,
--					     struct ctl_table *table);
-+					     struct ctl_table *table, size_t table_size);
- void unregister_net_sysctl_table(struct ctl_table_header *header);
- #else
- static inline int net_sysctl_init(void) { return 0; }
- static inline struct ctl_table_header *register_net_sysctl(struct net *net,
--	const char *path, struct ctl_table *table)
-+	const char *path, struct ctl_table *table, size_t table_size)
- {
- 	return NULL;
- }
-diff --git a/net/appletalk/sysctl_net_atalk.c b/net/appletalk/sysctl_net_atalk.c
-index d945b7c0176d..30dcbbb8aeff 100644
---- a/net/appletalk/sysctl_net_atalk.c
-+++ b/net/appletalk/sysctl_net_atalk.c
-@@ -47,7 +47,9 @@ static struct ctl_table_header *atalk_table_header;
- 
- int __init atalk_register_sysctl(void)
- {
--	atalk_table_header = register_net_sysctl(&init_net, "net/appletalk", atalk_table);
-+	atalk_table_header = register_net_sysctl(&init_net, "net/appletalk",
-+						 atalk_table,
-+						 ARRAY_SIZE(atalk_table));
- 	if (!atalk_table_header)
- 		return -ENOMEM;
  	return 0;
-diff --git a/net/ax25/sysctl_net_ax25.c b/net/ax25/sysctl_net_ax25.c
-index 2154d004d3dc..06afbc14b783 100644
---- a/net/ax25/sysctl_net_ax25.c
-+++ b/net/ax25/sysctl_net_ax25.c
-@@ -159,7 +159,8 @@ int ax25_register_dev_sysctl(ax25_dev *ax25_dev)
- 		table[k].data = &ax25_dev->values[k];
- 
- 	snprintf(path, sizeof(path), "net/ax25/%s", ax25_dev->dev->name);
--	ax25_dev->sysheader = register_net_sysctl(&init_net, path, table);
-+	ax25_dev->sysheader = register_net_sysctl(&init_net, path, table,
-+						  ARRAY_SIZE(ax25_param_table));
- 	if (!ax25_dev->sysheader) {
- 		kfree(table);
- 		return -ENOMEM;
-diff --git a/net/bridge/br_netfilter_hooks.c b/net/bridge/br_netfilter_hooks.c
-index 1a801fab9543..ebbaef748a48 100644
---- a/net/bridge/br_netfilter_hooks.c
-+++ b/net/bridge/br_netfilter_hooks.c
-@@ -1135,7 +1135,7 @@ static int br_netfilter_sysctl_init_net(struct net *net)
- 
- 	br_netfilter_sysctl_default(brnet);
- 
--	brnet->ctl_hdr = register_net_sysctl(net, "net/bridge", table);
-+	brnet->ctl_hdr = register_net_sysctl(net, "net/bridge", table, ARRAY_SIZE(brnf_table));
- 	if (!brnet->ctl_hdr) {
- 		if (!net_eq(net, &init_net))
- 			kfree(table);
-diff --git a/net/core/neighbour.c b/net/core/neighbour.c
-index ddd0f32de20e..aa5ad1cfc9b1 100644
---- a/net/core/neighbour.c
-+++ b/net/core/neighbour.c
-@@ -3842,7 +3842,8 @@ int neigh_sysctl_register(struct net_device *dev, struct neigh_parms *p,
- 	snprintf(neigh_path, sizeof(neigh_path), "net/%s/neigh/%s",
- 		p_name, dev_name_source);
- 	t->sysctl_header =
--		register_net_sysctl(neigh_parms_net(p), neigh_path, t->neigh_vars);
-+		register_net_sysctl(neigh_parms_net(p), neigh_path, t->neigh_vars,
-+				    ARRAY_SIZE(t->neigh_vars));
- 	if (!t->sysctl_header)
- 		goto free;
- 
-diff --git a/net/core/sysctl_net_core.c b/net/core/sysctl_net_core.c
-index 782273bb93c2..aa615f22507b 100644
---- a/net/core/sysctl_net_core.c
-+++ b/net/core/sysctl_net_core.c
-@@ -712,7 +712,8 @@ static __net_init int sysctl_core_net_init(struct net *net)
- 			tmp->data += (char *)net - (char *)&init_net;
- 	}
- 
--	net->core.sysctl_hdr = register_net_sysctl(net, "net/core", tbl);
-+	net->core.sysctl_hdr = register_net_sysctl(net, "net/core", tbl,
-+						   ARRAY_SIZE(netns_core_table));
- 	if (net->core.sysctl_hdr == NULL)
- 		goto err_reg;
- 
-@@ -745,7 +746,7 @@ static __net_initdata struct pernet_operations sysctl_core_ops = {
- 
- static __init int sysctl_core_init(void)
- {
--	register_net_sysctl(&init_net, "net/core", net_core_table);
-+	register_net_sysctl(&init_net, "net/core", net_core_table, ARRAY_SIZE(net_core_table));
- 	return register_pernet_subsys(&sysctl_core_ops);
  }
- 
-diff --git a/net/dccp/sysctl.c b/net/dccp/sysctl.c
-index ee8d4f5afa72..1140748858b0 100644
---- a/net/dccp/sysctl.c
-+++ b/net/dccp/sysctl.c
-@@ -99,7 +99,8 @@ static struct ctl_table_header *dccp_table_header;
- int __init dccp_sysctl_init(void)
+diff --git a/arch/powerpc/kernel/idle.c b/arch/powerpc/kernel/idle.c
+index b1c0418b25c8..3807169fc7e7 100644
+--- a/arch/powerpc/kernel/idle.c
++++ b/arch/powerpc/kernel/idle.c
+@@ -111,7 +111,8 @@ static struct ctl_table powersave_nap_ctl_table[] = {
+ static int __init
+ register_powersave_nap_sysctl(void)
  {
- 	dccp_table_header = register_net_sysctl(&init_net, "net/dccp/default",
--			dccp_default_table);
-+						dccp_default_table,
-+						ARRAY_SIZE(dccp_default_table));
+-	register_sysctl("kernel", powersave_nap_ctl_table);
++	register_sysctl("kernel", powersave_nap_ctl_table,
++			ARRAY_SIZE(powersave_nap_ctl_table));
  
- 	return dccp_table_header != NULL ? 0 : -ENOMEM;
- }
-diff --git a/net/ieee802154/6lowpan/reassembly.c b/net/ieee802154/6lowpan/reassembly.c
-index a91283d1e5bf..7b717434368c 100644
---- a/net/ieee802154/6lowpan/reassembly.c
-+++ b/net/ieee802154/6lowpan/reassembly.c
-@@ -379,7 +379,8 @@ static int __net_init lowpan_frags_ns_sysctl_register(struct net *net)
- 	table[1].extra2	= &ieee802154_lowpan->fqdir->high_thresh;
- 	table[2].data	= &ieee802154_lowpan->fqdir->timeout;
- 
--	hdr = register_net_sysctl(net, "net/ieee802154/6lowpan", table);
-+	hdr = register_net_sysctl(net, "net/ieee802154/6lowpan", table,
-+				  ARRAY_SIZE(lowpan_frags_ns_ctl_table));
- 	if (hdr == NULL)
- 		goto err_reg;
- 
-@@ -411,7 +412,8 @@ static int __init lowpan_frags_sysctl_register(void)
- {
- 	lowpan_ctl_header = register_net_sysctl(&init_net,
- 						"net/ieee802154/6lowpan",
--						lowpan_frags_ctl_table);
-+						lowpan_frags_ctl_table,
-+						ARRAY_SIZE(lowpan_frags_ctl_table));
- 	return lowpan_ctl_header == NULL ? -ENOMEM : 0;
- }
- 
-diff --git a/net/ipv4/devinet.c b/net/ipv4/devinet.c
-index 5deac0517ef7..6360425dfcb2 100644
---- a/net/ipv4/devinet.c
-+++ b/net/ipv4/devinet.c
-@@ -2587,7 +2587,8 @@ static int __devinet_sysctl_register(struct net *net, char *dev_name,
- 
- 	snprintf(path, sizeof(path), "net/ipv4/conf/%s", dev_name);
- 
--	t->sysctl_header = register_net_sysctl(net, path, t->devinet_vars);
-+	t->sysctl_header = register_net_sysctl(net, path, t->devinet_vars,
-+					       ARRAY_SIZE(t->devinet_vars));
- 	if (!t->sysctl_header)
- 		goto free;
- 
-@@ -2720,7 +2721,8 @@ static __net_init int devinet_init_net(struct net *net)
- 		goto err_reg_dflt;
- 
- 	err = -ENOMEM;
--	forw_hdr = register_net_sysctl(net, "net/ipv4", tbl);
-+	forw_hdr = register_net_sysctl(net, "net/ipv4", tbl,
-+				       ARRAY_SIZE(ctl_forward_entry));
- 	if (!forw_hdr)
- 		goto err_reg_ctl;
- 	net->ipv4.forw_hdr = forw_hdr;
-diff --git a/net/ipv4/ip_fragment.c b/net/ipv4/ip_fragment.c
-index 69c00ffdcf3e..3d7a82a900b5 100644
---- a/net/ipv4/ip_fragment.c
-+++ b/net/ipv4/ip_fragment.c
-@@ -615,7 +615,8 @@ static int __net_init ip4_frags_ns_ctl_register(struct net *net)
- 	table[2].data	= &net->ipv4.fqdir->timeout;
- 	table[3].data	= &net->ipv4.fqdir->max_dist;
- 
--	hdr = register_net_sysctl(net, "net/ipv4", table);
-+	hdr = register_net_sysctl(net, "net/ipv4", table,
-+				  ARRAY_SIZE(ip4_frags_ns_ctl_table));
- 	if (!hdr)
- 		goto err_reg;
- 
-@@ -640,7 +641,8 @@ static void __net_exit ip4_frags_ns_ctl_unregister(struct net *net)
- 
- static void __init ip4_frags_ctl_register(void)
- {
--	register_net_sysctl(&init_net, "net/ipv4", ip4_frags_ctl_table);
-+	register_net_sysctl(&init_net, "net/ipv4", ip4_frags_ctl_table,
-+			    ARRAY_SIZE(ip4_frags_ctl_table));
- }
- #else
- static int ip4_frags_ns_ctl_register(struct net *net)
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index 98d7e6ba7493..883f4f1ee056 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -3615,7 +3615,8 @@ static __net_init int sysctl_route_net_init(struct net *net)
- 	}
- 	tbl[0].extra1 = net;
- 
--	net->ipv4.route_hdr = register_net_sysctl(net, "net/ipv4/route", tbl);
-+	net->ipv4.route_hdr = register_net_sysctl(net, "net/ipv4/route", tbl,
-+						  ARRAY_SIZE(ipv4_route_netns_table));
- 	if (!net->ipv4.route_hdr)
- 		goto err_reg;
  	return 0;
-@@ -3775,6 +3776,7 @@ int __init ip_rt_init(void)
+ }
+diff --git a/arch/powerpc/platforms/pseries/mobility.c b/arch/powerpc/platforms/pseries/mobility.c
+index 6f30113b5468..9fdbee8ee126 100644
+--- a/arch/powerpc/platforms/pseries/mobility.c
++++ b/arch/powerpc/platforms/pseries/mobility.c
+@@ -65,7 +65,8 @@ static struct ctl_table nmi_wd_lpm_factor_ctl_table[] = {
+ 
+ static int __init register_nmi_wd_lpm_factor_sysctl(void)
+ {
+-	register_sysctl("kernel", nmi_wd_lpm_factor_ctl_table);
++	register_sysctl("kernel", nmi_wd_lpm_factor_ctl_table,
++			ARRAY_SIZE(nmi_wd_lpm_factor_ctl_table));
+ 
+ 	return 0;
+ }
+diff --git a/arch/s390/appldata/appldata_base.c b/arch/s390/appldata/appldata_base.c
+index b07b0610950e..54d8ed1c4518 100644
+--- a/arch/s390/appldata/appldata_base.c
++++ b/arch/s390/appldata/appldata_base.c
+@@ -408,7 +408,9 @@ static int __init appldata_init(void)
+ 	appldata_wq = alloc_ordered_workqueue("appldata", 0);
+ 	if (!appldata_wq)
+ 		return -ENOMEM;
+-	appldata_sysctl_header = register_sysctl(appldata_proc_name, appldata_table);
++	appldata_sysctl_header = register_sysctl(appldata_proc_name,
++						 appldata_table,
++						 ARRAY_SIZE(appldata_table));
+ 	return 0;
+ }
+ 
+diff --git a/arch/s390/kernel/debug.c b/arch/s390/kernel/debug.c
+index a85e0c3e7027..002f843e6523 100644
+--- a/arch/s390/kernel/debug.c
++++ b/arch/s390/kernel/debug.c
+@@ -1564,7 +1564,8 @@ static int debug_sprintf_format_fn(debug_info_t *id, struct debug_view *view,
   */
- void __init ip_static_sysctl_init(void)
+ static int __init debug_init(void)
  {
--	register_net_sysctl(&init_net, "net/ipv4/route", ipv4_route_table);
-+	register_net_sysctl(&init_net, "net/ipv4/route", ipv4_route_table,
-+			    ARRAY_SIZE(ipv4_route_table));
+-	s390dbf_sysctl_header = register_sysctl("s390dbf", s390dbf_table);
++	s390dbf_sysctl_header = register_sysctl("s390dbf", s390dbf_table,
++						ARRAY_SIZE(s390dbf_table));
+ 	mutex_lock(&debug_mutex);
+ 	debug_debugfs_root_entry = debugfs_create_dir(DEBUG_DIR_ROOT, NULL);
+ 	initialized = 1;
+diff --git a/arch/s390/kernel/topology.c b/arch/s390/kernel/topology.c
+index 9fd19530c9a5..372d2c7c9a8e 100644
+--- a/arch/s390/kernel/topology.c
++++ b/arch/s390/kernel/topology.c
+@@ -647,7 +647,8 @@ static int __init topology_init(void)
+ 		set_topology_timer();
+ 	else
+ 		topology_update_polarization_simple();
+-	register_sysctl("s390", topology_ctl_table);
++	register_sysctl("s390", topology_ctl_table,
++			ARRAY_SIZE(topology_ctl_table));
+ 
+ 	dev_root = bus_get_dev_root(&cpu_subsys);
+ 	if (dev_root) {
+diff --git a/arch/s390/mm/cmm.c b/arch/s390/mm/cmm.c
+index 5300c6867d5e..918816dcb42a 100644
+--- a/arch/s390/mm/cmm.c
++++ b/arch/s390/mm/cmm.c
+@@ -379,7 +379,8 @@ static int __init cmm_init(void)
+ {
+ 	int rc = -ENOMEM;
+ 
+-	cmm_sysctl_header = register_sysctl("vm", cmm_table);
++	cmm_sysctl_header = register_sysctl("vm", cmm_table,
++					    ARRAY_SIZE(cmm_table));
+ 	if (!cmm_sysctl_header)
+ 		goto out_sysctl;
+ #ifdef CONFIG_CMM_IUCV
+diff --git a/arch/s390/mm/pgalloc.c b/arch/s390/mm/pgalloc.c
+index 66ab68db9842..a723f1a8236a 100644
+--- a/arch/s390/mm/pgalloc.c
++++ b/arch/s390/mm/pgalloc.c
+@@ -35,7 +35,8 @@ static struct ctl_table page_table_sysctl[] = {
+ 
+ static int __init page_table_register_sysctl(void)
+ {
+-	return register_sysctl("vm", page_table_sysctl) ? 0 : -ENOMEM;
++	return register_sysctl("vm", page_table_sysctl,
++			       ARRAY_SIZE(page_table_sysctl)) ? 0 : -ENOMEM;
  }
- #endif
-diff --git a/net/ipv4/sysctl_net_ipv4.c b/net/ipv4/sysctl_net_ipv4.c
-index 40fe70fc2015..1821f403efc0 100644
---- a/net/ipv4/sysctl_net_ipv4.c
-+++ b/net/ipv4/sysctl_net_ipv4.c
-@@ -1500,7 +1500,8 @@ static __net_init int ipv4_sysctl_init_net(struct net *net)
- 		}
+ __initcall(page_table_register_sysctl);
+ 
+diff --git a/arch/x86/entry/vdso/vdso32-setup.c b/arch/x86/entry/vdso/vdso32-setup.c
+index f3b3cacbcbb0..e28cdba83e0e 100644
+--- a/arch/x86/entry/vdso/vdso32-setup.c
++++ b/arch/x86/entry/vdso/vdso32-setup.c
+@@ -72,7 +72,7 @@ static struct ctl_table abi_table2[] = {
+ 
+ static __init int ia32_binfmt_init(void)
+ {
+-	register_sysctl("abi", abi_table2);
++	register_sysctl("abi", abi_table2, ARRAY_SIZE(abi_table2));
+ 	return 0;
+ }
+ __initcall(ia32_binfmt_init);
+diff --git a/arch/x86/kernel/itmt.c b/arch/x86/kernel/itmt.c
+index 670eb08b972a..58ec95fce798 100644
+--- a/arch/x86/kernel/itmt.c
++++ b/arch/x86/kernel/itmt.c
+@@ -105,7 +105,8 @@ int sched_set_itmt_support(void)
+ 		return 0;
  	}
  
--	net->ipv4.ipv4_hdr = register_net_sysctl(net, "net/ipv4", table);
-+	net->ipv4.ipv4_hdr = register_net_sysctl(net, "net/ipv4", table,
-+						 ARRAY_SIZE(ipv4_net_table));
- 	if (!net->ipv4.ipv4_hdr)
- 		goto err_reg;
+-	itmt_sysctl_header = register_sysctl("kernel", itmt_kern_table);
++	itmt_sysctl_header = register_sysctl("kernel", itmt_kern_table,
++					     ARRAY_SIZE(itmt_kern_table));
+ 	if (!itmt_sysctl_header) {
+ 		mutex_unlock(&itmt_update_mutex);
+ 		return -ENOMEM;
+diff --git a/crypto/fips.c b/crypto/fips.c
+index 92fd506abb21..05a251680700 100644
+--- a/crypto/fips.c
++++ b/crypto/fips.c
+@@ -70,7 +70,8 @@ static struct ctl_table_header *crypto_sysctls;
  
-@@ -1538,7 +1539,8 @@ static __init int sysctl_ipv4_init(void)
+ static void crypto_proc_fips_init(void)
  {
- 	struct ctl_table_header *hdr;
+-	crypto_sysctls = register_sysctl("crypto", crypto_sysctl_table);
++	crypto_sysctls = register_sysctl("crypto", crypto_sysctl_table,
++					 ARRAY_SIZE(crypto_sysctl_table));
+ }
  
--	hdr = register_net_sysctl(&init_net, "net/ipv4", ipv4_table);
-+	hdr = register_net_sysctl(&init_net, "net/ipv4", ipv4_table,
-+				  ARRAY_SIZE(ipv4_table));
- 	if (!hdr)
+ static void crypto_proc_fips_exit(void)
+diff --git a/drivers/base/firmware_loader/fallback_table.c b/drivers/base/firmware_loader/fallback_table.c
+index e5ac098d0742..7a2d584233bb 100644
+--- a/drivers/base/firmware_loader/fallback_table.c
++++ b/drivers/base/firmware_loader/fallback_table.c
+@@ -50,9 +50,9 @@ static struct ctl_table firmware_config_table[] = {
+ static struct ctl_table_header *firmware_config_sysct_table_header;
+ int register_firmware_config_sysctl(void)
+ {
+-	firmware_config_sysct_table_header =
+-		register_sysctl("kernel/firmware_config",
+-				firmware_config_table);
++	firmware_config_sysct_table_header = register_sysctl("kernel/firmware_config",
++							     firmware_config_table,
++							     ARRAY_SIZE(firmware_config_table));
+ 	if (!firmware_config_sysct_table_header)
+ 		return -ENOMEM;
+ 	return 0;
+diff --git a/drivers/cdrom/cdrom.c b/drivers/cdrom/cdrom.c
+index 416f723a2dbb..3855da76a16d 100644
+--- a/drivers/cdrom/cdrom.c
++++ b/drivers/cdrom/cdrom.c
+@@ -3680,7 +3680,8 @@ static void cdrom_sysctl_register(void)
+ 	if (!atomic_add_unless(&initialized, 1, 1))
+ 		return;
+ 
+-	cdrom_sysctl_header = register_sysctl("dev/cdrom", cdrom_table);
++	cdrom_sysctl_header = register_sysctl("dev/cdrom", cdrom_table,
++					      ARRAY_SIZE(cdrom_table));
+ 
+ 	/* set the defaults */
+ 	cdrom_sysctl_settings.autoclose = autoclose;
+diff --git a/drivers/char/hpet.c b/drivers/char/hpet.c
+index ee71376f174b..bb1eb801b20c 100644
+--- a/drivers/char/hpet.c
++++ b/drivers/char/hpet.c
+@@ -1027,7 +1027,8 @@ static int __init hpet_init(void)
+ 	if (result < 0)
+ 		return -ENODEV;
+ 
+-	sysctl_header = register_sysctl("dev/hpet", hpet_table);
++	sysctl_header = register_sysctl("dev/hpet", hpet_table,
++					ARRAY_SIZE(hpet_table));
+ 
+ 	result = acpi_bus_register_driver(&hpet_acpi_driver);
+ 	if (result < 0) {
+diff --git a/drivers/char/ipmi/ipmi_poweroff.c b/drivers/char/ipmi/ipmi_poweroff.c
+index 870659d91db2..46b1ea866da9 100644
+--- a/drivers/char/ipmi/ipmi_poweroff.c
++++ b/drivers/char/ipmi/ipmi_poweroff.c
+@@ -675,7 +675,8 @@ static int __init ipmi_poweroff_init(void)
+ 		pr_info("Power cycle is enabled\n");
+ 
+ #ifdef CONFIG_PROC_FS
+-	ipmi_table_header = register_sysctl("dev/ipmi", ipmi_table);
++	ipmi_table_header = register_sysctl("dev/ipmi", ipmi_table,
++					    ARRAY_SIZE(ipmi_table));
+ 	if (!ipmi_table_header) {
+ 		pr_err("Unable to register powercycle sysctl\n");
+ 		rv = -ENOMEM;
+diff --git a/drivers/gpu/drm/i915/i915_perf.c b/drivers/gpu/drm/i915/i915_perf.c
+index 050b8ae7b8e7..f43950219ffc 100644
+--- a/drivers/gpu/drm/i915/i915_perf.c
++++ b/drivers/gpu/drm/i915/i915_perf.c
+@@ -5266,7 +5266,8 @@ static int destroy_config(int id, void *p, void *data)
+ 
+ int i915_perf_sysctl_register(void)
+ {
+-	sysctl_header = register_sysctl("dev/i915", oa_table);
++	sysctl_header = register_sysctl("dev/i915", oa_table,
++					ARRAY_SIZE(oa_table));
+ 	return 0;
+ }
+ 
+diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+index 64f9ceca887b..dd751c391cf7 100644
+--- a/drivers/hv/hv_common.c
++++ b/drivers/hv/hv_common.c
+@@ -302,7 +302,8 @@ int __init hv_common_init(void)
+ 		 * message recording won't be available in isolated
+ 		 * guests should the following registration fail.
+ 		 */
+-		hv_ctl_table_hdr = register_sysctl("kernel", hv_ctl_table);
++		hv_ctl_table_hdr = register_sysctl("kernel", hv_ctl_table,
++						   ARRAY_SIZE(hv_ctl_table));
+ 		if (!hv_ctl_table_hdr)
+ 			pr_err("Hyper-V: sysctl table register error");
+ 
+diff --git a/drivers/macintosh/mac_hid.c b/drivers/macintosh/mac_hid.c
+index d8c4d5664145..5d433ef430fa 100644
+--- a/drivers/macintosh/mac_hid.c
++++ b/drivers/macintosh/mac_hid.c
+@@ -243,7 +243,8 @@ static struct ctl_table_header *mac_hid_sysctl_header;
+ 
+ static int __init mac_hid_init(void)
+ {
+-	mac_hid_sysctl_header = register_sysctl("dev/mac_hid", mac_hid_files);
++	mac_hid_sysctl_header = register_sysctl("dev/mac_hid", mac_hid_files,
++						ARRAY_SIZE(mac_hid_files));
+ 	if (!mac_hid_sysctl_header)
  		return -ENOMEM;
  
-diff --git a/net/ipv4/xfrm4_policy.c b/net/ipv4/xfrm4_policy.c
-index 9403bbaf1b61..ec1d68dbffc3 100644
---- a/net/ipv4/xfrm4_policy.c
-+++ b/net/ipv4/xfrm4_policy.c
-@@ -178,7 +178,8 @@ static __net_init int xfrm4_net_sysctl_init(struct net *net)
- 		table[0].data = &net->xfrm.xfrm4_dst_ops.gc_thresh;
+diff --git a/drivers/md/md.c b/drivers/md/md.c
+index 8e344b4b3444..c10cc8ddd94d 100644
+--- a/drivers/md/md.c
++++ b/drivers/md/md.c
+@@ -9633,7 +9633,8 @@ static int __init md_init(void)
+ 	mdp_major = ret;
+ 
+ 	register_reboot_notifier(&md_notifier);
+-	raid_table_header = register_sysctl("dev/raid", raid_table);
++	raid_table_header = register_sysctl("dev/raid", raid_table,
++					    ARRAY_SIZE(raid_table));
+ 
+ 	md_geninit();
+ 	return 0;
+diff --git a/drivers/misc/sgi-xp/xpc_main.c b/drivers/misc/sgi-xp/xpc_main.c
+index 6da509d692bb..264b919d0610 100644
+--- a/drivers/misc/sgi-xp/xpc_main.c
++++ b/drivers/misc/sgi-xp/xpc_main.c
+@@ -1236,8 +1236,10 @@ xpc_init(void)
+ 		goto out_1;
  	}
  
--	hdr = register_net_sysctl(net, "net/ipv4", table);
-+	hdr = register_net_sysctl(net, "net/ipv4", table,
-+				  ARRAY_SIZE(xfrm4_policy_table));
- 	if (!hdr)
- 		goto err_reg;
+-	xpc_sysctl = register_sysctl("xpc", xpc_sys_xpc);
+-	xpc_sysctl_hb = register_sysctl("xpc/hb", xpc_sys_xpc_hb);
++	xpc_sysctl = register_sysctl("xpc", xpc_sys_xpc,
++				     ARRAY_SIZE(xpc_sys_xpc));
++	xpc_sysctl_hb = register_sysctl("xpc/hb", xpc_sys_xpc_hb,
++					ARRAY_SIZE(xpc_sys_xpc_hb));
  
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index 3797917237d0..68a2925c66a5 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -7086,7 +7086,8 @@ static int __addrconf_sysctl_register(struct net *net, char *dev_name,
- 
- 	snprintf(path, sizeof(path), "net/ipv6/conf/%s", dev_name);
- 
--	p->sysctl_header = register_net_sysctl(net, path, table);
-+	p->sysctl_header = register_net_sysctl(net, path, table,
-+					       ARRAY_SIZE(addrconf_sysctl));
- 	if (!p->sysctl_header)
- 		goto free;
- 
-diff --git a/net/ipv6/icmp.c b/net/ipv6/icmp.c
-index 9edf1f45b1ed..4159662fa214 100644
---- a/net/ipv6/icmp.c
-+++ b/net/ipv6/icmp.c
-@@ -1226,4 +1226,9 @@ struct ctl_table * __net_init ipv6_icmp_sysctl_init(struct net *net)
+ 	/*
+ 	 * Fill the partition reserved page with the information needed by
+diff --git a/drivers/parport/procfs.c b/drivers/parport/procfs.c
+index 4e5b972c3e26..16cee52f035f 100644
+--- a/drivers/parport/procfs.c
++++ b/drivers/parport/procfs.c
+@@ -464,7 +464,8 @@ int parport_proc_register(struct parport *port)
+ 		err = -ENOENT;
+ 		goto exit_free_tmp_dir_path;
  	}
- 	return table;
- }
-+
-+size_t ipv6_icmp_sysctl_table_size(void)
-+{
-+	return ARRAY_SIZE(ipv6_icmp_table_template);
-+}
- #endif
-diff --git a/net/ipv6/netfilter/nf_conntrack_reasm.c b/net/ipv6/netfilter/nf_conntrack_reasm.c
-index d13240f13607..dca8e0aabc51 100644
---- a/net/ipv6/netfilter/nf_conntrack_reasm.c
-+++ b/net/ipv6/netfilter/nf_conntrack_reasm.c
-@@ -87,7 +87,8 @@ static int nf_ct_frag6_sysctl_register(struct net *net)
- 	table[2].data	= &nf_frag->fqdir->high_thresh;
- 	table[2].extra1	= &nf_frag->fqdir->low_thresh;
- 
--	hdr = register_net_sysctl(net, "net/netfilter", table);
-+	hdr = register_net_sysctl(net, "net/netfilter", table,
-+				  ARRAY_SIZE(nf_ct_frag6_sysctl_table));
- 	if (hdr == NULL)
- 		goto err_reg;
- 
-diff --git a/net/ipv6/reassembly.c b/net/ipv6/reassembly.c
-index 5bc8a28e67f9..0688261202de 100644
---- a/net/ipv6/reassembly.c
-+++ b/net/ipv6/reassembly.c
-@@ -470,7 +470,8 @@ static int __net_init ip6_frags_ns_sysctl_register(struct net *net)
- 	table[1].extra2	= &net->ipv6.fqdir->high_thresh;
- 	table[2].data	= &net->ipv6.fqdir->timeout;
- 
--	hdr = register_net_sysctl(net, "net/ipv6", table);
-+	hdr = register_net_sysctl(net, "net/ipv6", table,
-+				  ARRAY_SIZE(ip6_frags_ns_ctl_table));
- 	if (!hdr)
- 		goto err_reg;
- 
-@@ -499,7 +500,8 @@ static struct ctl_table_header *ip6_ctl_header;
- static int ip6_frags_sysctl_register(void)
- {
- 	ip6_ctl_header = register_net_sysctl(&init_net, "net/ipv6",
--			ip6_frags_ctl_table);
-+					     ip6_frags_ctl_table,
-+					     ARRAY_SIZE(ip6_frags_ctl_table));
- 	return ip6_ctl_header == NULL ? -ENOMEM : 0;
- }
- 
-diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index e3aec46bd466..a35470576077 100644
---- a/net/ipv6/route.c
-+++ b/net/ipv6/route.c
-@@ -6450,6 +6450,11 @@ struct ctl_table * __net_init ipv6_route_sysctl_init(struct net *net)
- 
- 	return table;
- }
-+
-+size_t ipv6_route_sysctl_table_size(void)
-+{
-+	return ARRAY_SIZE(ipv6_route_table_template);
-+}
- #endif
- 
- static int __net_init ip6_route_net_init(struct net *net)
-diff --git a/net/ipv6/sysctl_net_ipv6.c b/net/ipv6/sysctl_net_ipv6.c
-index 94a0a294c6a1..29f121f513a6 100644
---- a/net/ipv6/sysctl_net_ipv6.c
-+++ b/net/ipv6/sysctl_net_ipv6.c
-@@ -275,17 +275,21 @@ static int __net_init ipv6_sysctl_net_init(struct net *net)
- 	if (!ipv6_icmp_table)
- 		goto out_ipv6_route_table;
- 
--	net->ipv6.sysctl.hdr = register_net_sysctl(net, "net/ipv6", ipv6_table);
-+	net->ipv6.sysctl.hdr = register_net_sysctl(net, "net/ipv6",
-+						   ipv6_table,
-+						   ARRAY_SIZE(ipv6_table_template));
- 	if (!net->ipv6.sysctl.hdr)
- 		goto out_ipv6_icmp_table;
- 
- 	net->ipv6.sysctl.route_hdr =
--		register_net_sysctl(net, "net/ipv6/route", ipv6_route_table);
-+		register_net_sysctl(net, "net/ipv6/route", ipv6_route_table,
-+				    ipv6_route_sysctl_table_size());
- 	if (!net->ipv6.sysctl.route_hdr)
- 		goto out_unregister_ipv6_table;
- 
- 	net->ipv6.sysctl.icmp_hdr =
--		register_net_sysctl(net, "net/ipv6/icmp", ipv6_icmp_table);
-+		register_net_sysctl(net, "net/ipv6/icmp", ipv6_icmp_table,
-+				    ipv6_icmp_sysctl_table_size());
- 	if (!net->ipv6.sysctl.icmp_hdr)
- 		goto out_unregister_route_table;
- 
-@@ -335,7 +339,8 @@ int ipv6_sysctl_register(void)
- {
- 	int err = -ENOMEM;
- 
--	ip6_header = register_net_sysctl(&init_net, "net/ipv6", ipv6_rotable);
-+	ip6_header = register_net_sysctl(&init_net, "net/ipv6", ipv6_rotable,
-+					 ARRAY_SIZE(ipv6_rotable));
- 	if (!ip6_header)
- 		goto out;
- 
-diff --git a/net/ipv6/xfrm6_policy.c b/net/ipv6/xfrm6_policy.c
-index eecc5e59da17..27efdb18a018 100644
---- a/net/ipv6/xfrm6_policy.c
-+++ b/net/ipv6/xfrm6_policy.c
-@@ -205,7 +205,8 @@ static int __net_init xfrm6_net_sysctl_init(struct net *net)
- 		table[0].data = &net->xfrm.xfrm6_dst_ops.gc_thresh;
+-	t->devices_header = register_sysctl(tmp_dir_path, t->device_dir);
++	t->devices_header = register_sysctl(tmp_dir_path, t->device_dir,
++					    ARRAY_SIZE(t->device_dir));
+ 	if (t->devices_header == NULL) {
+ 		err = -ENOENT;
+ 		goto  exit_free_tmp_dir_path;
+@@ -478,7 +479,8 @@ int parport_proc_register(struct parport *port)
+ 		goto unregister_devices_h;
  	}
  
--	hdr = register_net_sysctl(net, "net/ipv6", table);
-+	hdr = register_net_sysctl(net, "net/ipv6", table,
-+				  ARRAY_SIZE(xfrm6_policy_table));
- 	if (!hdr)
- 		goto err_reg;
+-	t->port_header = register_sysctl(tmp_dir_path, t->vars);
++	t->port_header = register_sysctl(tmp_dir_path, t->vars,
++					 ARRAY_SIZE(t->vars));
+ 	if (t->port_header == NULL) {
+ 		err = -ENOENT;
+ 		goto unregister_devices_h;
+@@ -544,7 +546,7 @@ int parport_device_proc_register(struct pardevice *device)
  
-diff --git a/net/llc/sysctl_net_llc.c b/net/llc/sysctl_net_llc.c
-index 8443a6d841b0..195296ba29f0 100644
---- a/net/llc/sysctl_net_llc.c
-+++ b/net/llc/sysctl_net_llc.c
-@@ -56,8 +56,13 @@ static struct ctl_table_header *llc_station_header;
+ 	t->vars[0].data = &device->timeslice;
  
- int __init llc_sysctl_init(void)
- {
--	llc2_timeout_header = register_net_sysctl(&init_net, "net/llc/llc2/timeout", llc2_timeout_table);
--	llc_station_header = register_net_sysctl(&init_net, "net/llc/station", llc_station_table);
-+	llc2_timeout_header = register_net_sysctl(&init_net,
-+						  "net/llc/llc2/timeout",
-+						  llc2_timeout_table,
-+						  ARRAY_SIZE(llc2_timeout_table));
-+	llc_station_header = register_net_sysctl(&init_net, "net/llc/station",
-+						 llc_station_table,
-+						 ARRAY_SIZE(llc_station_table));
+-	t->sysctl_header = register_sysctl(tmp_dir_path, t->vars);
++	t->sysctl_header = register_sysctl(tmp_dir_path, t->vars, ARRAY_SIZE(t->vars));
+ 	if (t->sysctl_header == NULL) {
+ 		kfree(t);
+ 		t = NULL;
+@@ -579,7 +581,8 @@ static int __init parport_default_proc_register(void)
+ 	int ret;
  
- 	if (!llc2_timeout_header || !llc_station_header) {
- 		llc_sysctl_exit();
-diff --git a/net/mpls/af_mpls.c b/net/mpls/af_mpls.c
-index dc5165d3eec4..6f96aae76537 100644
---- a/net/mpls/af_mpls.c
-+++ b/net/mpls/af_mpls.c
-@@ -1395,6 +1395,40 @@ static const struct ctl_table mpls_dev_table[] = {
- 	{ }
- };
- 
-+static int mpls_platform_labels(struct ctl_table *table, int write,
-+				void *buffer, size_t *lenp, loff_t *ppos);
-+#define MPLS_NS_SYSCTL_OFFSET(field)		\
-+	(&((struct net *)0)->field)
-+
-+static const struct ctl_table mpls_table[] = {
-+	{
-+		.procname	= "platform_labels",
-+		.data		= NULL,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= mpls_platform_labels,
-+	},
-+	{
-+		.procname	= "ip_ttl_propagate",
-+		.data		= MPLS_NS_SYSCTL_OFFSET(mpls.ip_ttl_propagate),
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ZERO,
-+		.extra2		= SYSCTL_ONE,
-+	},
-+	{
-+		.procname	= "default_ttl",
-+		.data		= MPLS_NS_SYSCTL_OFFSET(mpls.default_ttl),
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec_minmax,
-+		.extra1		= SYSCTL_ONE,
-+		.extra2		= &ttl_max,
-+	},
-+	{ }
-+};
-+
- static int mpls_dev_sysctl_register(struct net_device *dev,
- 				    struct mpls_dev *mdev)
- {
-@@ -1410,7 +1444,7 @@ static int mpls_dev_sysctl_register(struct net_device *dev,
- 	/* Table data contains only offsets relative to the base of
- 	 * the mdev at this point, so make them absolute.
- 	 */
--	for (i = 0; i < ARRAY_SIZE(mpls_dev_table); i++) {
-+	for (i = 0; i < ARRAY_SIZE(mpls_dev_table) - 1; i++) {
- 		table[i].data = (char *)mdev + (uintptr_t)table[i].data;
- 		table[i].extra1 = mdev;
- 		table[i].extra2 = net;
-@@ -1418,7 +1452,8 @@ static int mpls_dev_sysctl_register(struct net_device *dev,
- 
- 	snprintf(path, sizeof(path), "net/mpls/conf/%s", dev->name);
- 
--	mdev->sysctl = register_net_sysctl(net, path, table);
-+	mdev->sysctl = register_net_sysctl(net, path, table,
-+					   ARRAY_SIZE(mpls_dev_table));
- 	if (!mdev->sysctl)
- 		goto free;
- 
-@@ -1432,6 +1467,7 @@ static int mpls_dev_sysctl_register(struct net_device *dev,
- 	return -ENOBUFS;
- }
- 
-+
- static void mpls_dev_sysctl_unregister(struct net_device *dev,
- 				       struct mpls_dev *mdev)
- {
-@@ -2636,38 +2672,6 @@ static int mpls_platform_labels(struct ctl_table *table, int write,
- 	return ret;
- }
- 
--#define MPLS_NS_SYSCTL_OFFSET(field)		\
--	(&((struct net *)0)->field)
--
--static const struct ctl_table mpls_table[] = {
--	{
--		.procname	= "platform_labels",
--		.data		= NULL,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= mpls_platform_labels,
--	},
--	{
--		.procname	= "ip_ttl_propagate",
--		.data		= MPLS_NS_SYSCTL_OFFSET(mpls.ip_ttl_propagate),
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec_minmax,
--		.extra1		= SYSCTL_ZERO,
--		.extra2		= SYSCTL_ONE,
--	},
--	{
--		.procname	= "default_ttl",
--		.data		= MPLS_NS_SYSCTL_OFFSET(mpls.default_ttl),
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec_minmax,
--		.extra1		= SYSCTL_ONE,
--		.extra2		= &ttl_max,
--	},
--	{ }
--};
--
- static int mpls_net_init(struct net *net)
- {
- 	struct ctl_table *table;
-@@ -2688,7 +2692,8 @@ static int mpls_net_init(struct net *net)
- 	for (i = 0; i < ARRAY_SIZE(mpls_table) - 1; i++)
- 		table[i].data = (char *)net + (uintptr_t)table[i].data;
- 
--	net->mpls.ctl = register_net_sysctl(net, "net/mpls", table);
-+	net->mpls.ctl = register_net_sysctl(net, "net/mpls", table,
-+					    ARRAY_SIZE(mpls_table));
- 	if (net->mpls.ctl == NULL) {
- 		kfree(table);
+ 	parport_default_sysctl_table.sysctl_header =
+-		register_sysctl("dev/parport/default", parport_default_sysctl_table.vars);
++		register_sysctl("dev/parport/default", parport_default_sysctl_table.vars,
++				ARRAY_SIZE(parport_default_sysctl_table.vars));
+ 	if (!parport_default_sysctl_table.sysctl_header)
  		return -ENOMEM;
-diff --git a/net/mptcp/ctrl.c b/net/mptcp/ctrl.c
-index ae20b7d92e28..42dfc834e5c6 100644
---- a/net/mptcp/ctrl.c
-+++ b/net/mptcp/ctrl.c
-@@ -150,7 +150,8 @@ static int mptcp_pernet_new_table(struct net *net, struct mptcp_pernet *pernet)
- 	table[4].data = &pernet->stale_loss_cnt;
- 	table[5].data = &pernet->pm_type;
+ 	ret = parport_bus_init();
+diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
+index c98e4039386d..763f9c8acfbf 100644
+--- a/drivers/perf/arm_pmuv3.c
++++ b/drivers/perf/arm_pmuv3.c
+@@ -1188,7 +1188,8 @@ static void armv8_pmu_register_sysctl_table(void)
+ 	static u32 tbl_registered = 0;
  
--	hdr = register_net_sysctl(net, MPTCP_SYSCTL_PATH, table);
-+	hdr = register_net_sysctl(net, MPTCP_SYSCTL_PATH, table,
-+				  ARRAY_SIZE(mptcp_sysctl_table));
+ 	if (!cmpxchg_relaxed(&tbl_registered, 0, 1))
+-		register_sysctl("kernel", armv8_pmu_sysctl_table);
++		register_sysctl("kernel", armv8_pmu_sysctl_table,
++				ARRAY_SIZE(armv8_pmu_sysctl_table));
+ }
+ 
+ static int armv8_pmu_init(struct arm_pmu *cpu_pmu, char *name,
+diff --git a/drivers/scsi/scsi_sysctl.c b/drivers/scsi/scsi_sysctl.c
+index 7f0914ea168f..0378bd63fea4 100644
+--- a/drivers/scsi/scsi_sysctl.c
++++ b/drivers/scsi/scsi_sysctl.c
+@@ -25,7 +25,8 @@ static struct ctl_table_header *scsi_table_header;
+ 
+ int __init scsi_init_sysctl(void)
+ {
+-	scsi_table_header = register_sysctl("dev/scsi", scsi_table);
++	scsi_table_header = register_sysctl("dev/scsi", scsi_table,
++					    ARRAY_SIZE(scsi_table));
+ 	if (!scsi_table_header)
+ 		return -ENOMEM;
+ 	return 0;
+diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
+index 037f8c98a6d3..d12cdf875b50 100644
+--- a/drivers/scsi/sg.c
++++ b/drivers/scsi/sg.c
+@@ -1646,7 +1646,8 @@ static struct ctl_table_header *hdr;
+ static void register_sg_sysctls(void)
+ {
  	if (!hdr)
- 		goto err_reg;
+-		hdr = register_sysctl("kernel", sg_sysctls);
++		hdr = register_sysctl("kernel", sg_sysctls,
++				      ARRAY_SIZE(sg_sysctls));
+ }
  
-diff --git a/net/netfilter/ipvs/ip_vs_ctl.c b/net/netfilter/ipvs/ip_vs_ctl.c
-index 62606fb44d02..abbd30ee3ce0 100644
---- a/net/netfilter/ipvs/ip_vs_ctl.c
-+++ b/net/netfilter/ipvs/ip_vs_ctl.c
-@@ -4353,7 +4353,8 @@ static int __net_init ip_vs_control_net_init_sysctl(struct netns_ipvs *ipvs)
- #endif
+ static void unregister_sg_sysctls(void)
+diff --git a/fs/cachefiles/error_inject.c b/fs/cachefiles/error_inject.c
+index 18de8a876b02..ea6bcce4f6f1 100644
+--- a/fs/cachefiles/error_inject.c
++++ b/fs/cachefiles/error_inject.c
+@@ -24,7 +24,8 @@ static struct ctl_table cachefiles_sysctls[] = {
  
- 	ret = -ENOMEM;
--	ipvs->sysctl_hdr = register_net_sysctl(net, "net/ipv4/vs", tbl);
-+	ipvs->sysctl_hdr = register_net_sysctl(net, "net/ipv4/vs", tbl,
-+					       ARRAY_SIZE(vs_vars));
- 	if (!ipvs->sysctl_hdr)
- 		goto err;
- 	ipvs->sysctl_tbl = tbl;
-diff --git a/net/netfilter/ipvs/ip_vs_lblc.c b/net/netfilter/ipvs/ip_vs_lblc.c
-index 1b87214d385e..254eb3b61e15 100644
---- a/net/netfilter/ipvs/ip_vs_lblc.c
-+++ b/net/netfilter/ipvs/ip_vs_lblc.c
-@@ -570,8 +570,9 @@ static int __net_init __ip_vs_lblc_init(struct net *net)
- 	ipvs->sysctl_lblc_expiration = DEFAULT_EXPIRATION;
- 	ipvs->lblc_ctl_table[0].data = &ipvs->sysctl_lblc_expiration;
+ int __init cachefiles_register_error_injection(void)
+ {
+-	cachefiles_sysctl = register_sysctl("cachefiles", cachefiles_sysctls);
++	cachefiles_sysctl = register_sysctl("cachefiles", cachefiles_sysctls,
++					    ARRAY_SIZE(cachefiles_sysctls));
+ 	if (!cachefiles_sysctl)
+ 		return -ENOMEM;
+ 	return 0;
+diff --git a/fs/coda/sysctl.c b/fs/coda/sysctl.c
+index a247c14aaab7..16224a7c6691 100644
+--- a/fs/coda/sysctl.c
++++ b/fs/coda/sysctl.c
+@@ -42,7 +42,8 @@ static struct ctl_table coda_table[] = {
+ void coda_sysctl_init(void)
+ {
+ 	if ( !fs_table_header )
+-		fs_table_header = register_sysctl("coda", coda_table);
++		fs_table_header = register_sysctl("coda", coda_table,
++						  ARRAY_SIZE(coda_table));
+ }
  
--	ipvs->lblc_ctl_header =
--		register_net_sysctl(net, "net/ipv4/vs", ipvs->lblc_ctl_table);
-+	ipvs->lblc_ctl_header = register_net_sysctl(net, "net/ipv4/vs",
-+						    ipvs->lblc_ctl_table,
-+						    ARRAY_SIZE(vs_vars_table));
- 	if (!ipvs->lblc_ctl_header) {
- 		if (!net_eq(net, &init_net))
- 			kfree(ipvs->lblc_ctl_table);
-diff --git a/net/netfilter/ipvs/ip_vs_lblcr.c b/net/netfilter/ipvs/ip_vs_lblcr.c
-index ad8f5fea6d3a..0e39a4fd421f 100644
---- a/net/netfilter/ipvs/ip_vs_lblcr.c
-+++ b/net/netfilter/ipvs/ip_vs_lblcr.c
-@@ -755,8 +755,9 @@ static int __net_init __ip_vs_lblcr_init(struct net *net)
- 	ipvs->sysctl_lblcr_expiration = DEFAULT_EXPIRATION;
- 	ipvs->lblcr_ctl_table[0].data = &ipvs->sysctl_lblcr_expiration;
- 
--	ipvs->lblcr_ctl_header =
--		register_net_sysctl(net, "net/ipv4/vs", ipvs->lblcr_ctl_table);
-+	ipvs->lblcr_ctl_header = register_net_sysctl(net, "net/ipv4/vs",
-+						     ipvs->lblcr_ctl_table,
-+						     ARRAY_SIZE(vs_vars_table));
- 	if (!ipvs->lblcr_ctl_header) {
- 		if (!net_eq(net, &init_net))
- 			kfree(ipvs->lblcr_ctl_table);
-diff --git a/net/netfilter/nf_conntrack_standalone.c b/net/netfilter/nf_conntrack_standalone.c
-index 169e16fc2bce..a3b2029ef098 100644
---- a/net/netfilter/nf_conntrack_standalone.c
-+++ b/net/netfilter/nf_conntrack_standalone.c
-@@ -1106,7 +1106,8 @@ static int nf_conntrack_standalone_init_sysctl(struct net *net)
- 		table[NF_SYSCTL_CT_BUCKETS].mode = 0444;
+ void coda_sysctl_clean(void)
+diff --git a/fs/devpts/inode.c b/fs/devpts/inode.c
+index fe3db0eda8e4..c17f971a8c4b 100644
+--- a/fs/devpts/inode.c
++++ b/fs/devpts/inode.c
+@@ -612,7 +612,8 @@ static int __init init_devpts_fs(void)
+ {
+ 	int err = register_filesystem(&devpts_fs_type);
+ 	if (!err) {
+-		register_sysctl("kernel/pty", pty_table);
++		register_sysctl("kernel/pty", pty_table,
++				ARRAY_SIZE(pty_table));
  	}
+ 	return err;
+ }
+diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+index 980483455cc0..e1a0e6a6d3de 100644
+--- a/fs/eventpoll.c
++++ b/fs/eventpoll.c
+@@ -327,7 +327,7 @@ static struct ctl_table epoll_table[] = {
  
--	cnet->sysctl_header = register_net_sysctl(net, "net/netfilter", table);
-+	cnet->sysctl_header = register_net_sysctl(net, "net/netfilter", table,
-+						  ARRAY_SIZE(nf_ct_sysctl_table));
- 	if (!cnet->sysctl_header)
- 		goto out_unregister_netfilter;
- 
-@@ -1207,8 +1208,9 @@ static int __init nf_conntrack_standalone_init(void)
- 	BUILD_BUG_ON(NFCT_INFOMASK <= IP_CT_NUMBER);
+ static void __init epoll_sysctls_init(void)
+ {
+-	register_sysctl("fs/epoll", epoll_table);
++	register_sysctl("fs/epoll", epoll_table, ARRAY_SIZE(epoll_table));
+ }
+ #else
+ #define epoll_sysctls_init() do { } while (0)
+diff --git a/fs/lockd/svc.c b/fs/lockd/svc.c
+index bb94949bc223..84736267f4e1 100644
+--- a/fs/lockd/svc.c
++++ b/fs/lockd/svc.c
+@@ -626,7 +626,8 @@ static int __init init_nlm(void)
  
  #ifdef CONFIG_SYSCTL
--	nf_ct_netfilter_header =
--		register_net_sysctl(&init_net, "net", nf_ct_netfilter_table);
-+	nf_ct_netfilter_header = register_net_sysctl(&init_net, "net",
-+						     nf_ct_netfilter_table,
-+						     ARRAY_SIZE(nf_ct_netfilter_table));
- 	if (!nf_ct_netfilter_header) {
- 		pr_err("nf_conntrack: can't register to sysctl.\n");
- 		ret = -ENOMEM;
-diff --git a/net/netfilter/nf_log.c b/net/netfilter/nf_log.c
-index 8a29290149bd..755f9cf570ce 100644
---- a/net/netfilter/nf_log.c
-+++ b/net/netfilter/nf_log.c
-@@ -479,7 +479,8 @@ static int netfilter_log_sysctl_init(struct net *net)
- 				(void *)(unsigned long) i;
- 		}
- 		nf_log_sysctl_fhdr = register_net_sysctl(net, "net/netfilter",
--							 nf_log_sysctl_ftable);
-+							 nf_log_sysctl_ftable,
-+							 ARRAY_SIZE(nf_log_sysctl_ftable));
- 		if (!nf_log_sysctl_fhdr)
- 			goto err_freg;
- 	}
-@@ -489,7 +490,7 @@ static int netfilter_log_sysctl_init(struct net *net)
- 
- 	net->nf.nf_log_dir_header = register_net_sysctl(net,
- 						"net/netfilter/nf_log",
--						table);
-+						table, ARRAY_SIZE(nf_log_sysctl_table));
- 	if (!net->nf.nf_log_dir_header)
- 		goto err_reg;
- 
-diff --git a/net/netrom/sysctl_net_netrom.c b/net/netrom/sysctl_net_netrom.c
-index 79fb2d3f477b..c02b93fd9d4f 100644
---- a/net/netrom/sysctl_net_netrom.c
-+++ b/net/netrom/sysctl_net_netrom.c
-@@ -145,7 +145,8 @@ static struct ctl_table nr_table[] = {
- 
- int __init nr_register_sysctl(void)
+ 	err = -ENOMEM;
+-	nlm_sysctl_table = register_sysctl("fs/nfs", nlm_sysctls);
++	nlm_sysctl_table = register_sysctl("fs/nfs", nlm_sysctls,
++					   ARRAY_SIZE(nlm_sysctls));
+ 	if (nlm_sysctl_table == NULL)
+ 		goto err_sysctl;
+ #endif
+diff --git a/fs/nfs/nfs4sysctl.c b/fs/nfs/nfs4sysctl.c
+index e776200e9a11..4a542ee11e68 100644
+--- a/fs/nfs/nfs4sysctl.c
++++ b/fs/nfs/nfs4sysctl.c
+@@ -40,7 +40,8 @@ static struct ctl_table nfs4_cb_sysctls[] = {
+ int nfs4_register_sysctl(void)
  {
--	nr_table_header = register_net_sysctl(&init_net, "net/netrom", nr_table);
-+	nr_table_header = register_net_sysctl(&init_net, "net/netrom",
-+					      nr_table, ARRAY_SIZE(nr_table));
- 	if (!nr_table_header)
+ 	nfs4_callback_sysctl_table = register_sysctl("fs/nfs",
+-						     nfs4_cb_sysctls);
++						     nfs4_cb_sysctls,
++						     ARRAY_SIZE(nfs4_cb_sysctls));
+ 	if (nfs4_callback_sysctl_table == NULL)
  		return -ENOMEM;
  	return 0;
-diff --git a/net/phonet/sysctl.c b/net/phonet/sysctl.c
-index 0d0bf41381c2..0fd0fcb00505 100644
---- a/net/phonet/sysctl.c
-+++ b/net/phonet/sysctl.c
-@@ -86,7 +86,9 @@ static struct ctl_table phonet_table[] = {
+diff --git a/fs/nfs/sysctl.c b/fs/nfs/sysctl.c
+index f39e2089bc4c..9dafd44670e4 100644
+--- a/fs/nfs/sysctl.c
++++ b/fs/nfs/sysctl.c
+@@ -34,7 +34,8 @@ static struct ctl_table nfs_cb_sysctls[] = {
  
- int __init phonet_sysctl_init(void)
+ int nfs_register_sysctl(void)
  {
--	phonet_table_hrd = register_net_sysctl(&init_net, "net/phonet", phonet_table);
-+	phonet_table_hrd = register_net_sysctl(&init_net, "net/phonet",
-+					       phonet_table,
-+					       ARRAY_SIZE(phonet_table));
- 	return phonet_table_hrd == NULL ? -ENOMEM : 0;
- }
- 
-diff --git a/net/rds/ib_sysctl.c b/net/rds/ib_sysctl.c
-index e4e41b3afce7..102fd4a18df7 100644
---- a/net/rds/ib_sysctl.c
-+++ b/net/rds/ib_sysctl.c
-@@ -114,7 +114,9 @@ void rds_ib_sysctl_exit(void)
- 
- int rds_ib_sysctl_init(void)
- {
--	rds_ib_sysctl_hdr = register_net_sysctl(&init_net, "net/rds/ib", rds_ib_sysctl_table);
-+	rds_ib_sysctl_hdr = register_net_sysctl(&init_net, "net/rds/ib",
-+						rds_ib_sysctl_table,
-+						ARRAY_SIZE(rds_ib_sysctl_table));
- 	if (!rds_ib_sysctl_hdr)
+-	nfs_callback_sysctl_table = register_sysctl("fs/nfs", nfs_cb_sysctls);
++	nfs_callback_sysctl_table = register_sysctl("fs/nfs", nfs_cb_sysctls,
++						    ARRAY_SIZE(nfs_cb_sysctls));
+ 	if (nfs_callback_sysctl_table == NULL)
  		return -ENOMEM;
  	return 0;
-diff --git a/net/rds/sysctl.c b/net/rds/sysctl.c
-index e381bbcd9cc1..5abd2730a1bc 100644
---- a/net/rds/sysctl.c
-+++ b/net/rds/sysctl.c
-@@ -102,8 +102,9 @@ int rds_sysctl_init(void)
- 	rds_sysctl_reconnect_min = msecs_to_jiffies(1);
- 	rds_sysctl_reconnect_min_jiffies = rds_sysctl_reconnect_min;
+diff --git a/fs/notify/fanotify/fanotify_user.c b/fs/notify/fanotify/fanotify_user.c
+index 22fb1cf7e1fc..78d3bf479f59 100644
+--- a/fs/notify/fanotify/fanotify_user.c
++++ b/fs/notify/fanotify/fanotify_user.c
+@@ -91,7 +91,8 @@ static struct ctl_table fanotify_table[] = {
  
--	rds_sysctl_reg_table =
--		register_net_sysctl(&init_net, "net/rds", rds_sysctl_rds_table);
-+	rds_sysctl_reg_table = register_net_sysctl(&init_net, "net/rds",
-+						   rds_sysctl_rds_table,
-+						   ARRAY_SIZE(rds_sysctl_rds_table));
- 	if (!rds_sysctl_reg_table)
- 		return -ENOMEM;
- 	return 0;
-diff --git a/net/rds/tcp.c b/net/rds/tcp.c
-index c5b86066ff66..2e90a2570d3b 100644
---- a/net/rds/tcp.c
-+++ b/net/rds/tcp.c
-@@ -565,7 +565,8 @@ static __net_init int rds_tcp_init_net(struct net *net)
- 	}
- 	tbl[RDS_TCP_SNDBUF].data = &rtn->sndbuf_size;
- 	tbl[RDS_TCP_RCVBUF].data = &rtn->rcvbuf_size;
--	rtn->rds_tcp_sysctl = register_net_sysctl(net, "net/rds/tcp", tbl);
-+	rtn->rds_tcp_sysctl = register_net_sysctl(net, "net/rds/tcp", tbl,
-+						  ARRAY_SIZE(rds_tcp_sysctl_table));
- 	if (!rtn->rds_tcp_sysctl) {
- 		pr_warn("could not register sysctl\n");
- 		err = -ENOMEM;
-diff --git a/net/rose/sysctl_net_rose.c b/net/rose/sysctl_net_rose.c
-index d391d7758f52..4f5a1e8b6c54 100644
---- a/net/rose/sysctl_net_rose.c
-+++ b/net/rose/sysctl_net_rose.c
-@@ -117,7 +117,9 @@ static struct ctl_table rose_table[] = {
- 
- void __init rose_register_sysctl(void)
+ static void __init fanotify_sysctls_init(void)
  {
--	rose_table_header = register_net_sysctl(&init_net, "net/rose", rose_table);
-+	rose_table_header = register_net_sysctl(&init_net, "net/rose",
-+						rose_table,
-+						ARRAY_SIZE(rose_table));
+-	register_sysctl("fs/fanotify", fanotify_table);
++	register_sysctl("fs/fanotify", fanotify_table,
++			ARRAY_SIZE(fanotify_table));
+ }
+ #else
+ #define fanotify_sysctls_init() do { } while (0)
+diff --git a/fs/notify/inotify/inotify_user.c b/fs/notify/inotify/inotify_user.c
+index 1c4bfdab008d..0ce25c4ddfec 100644
+--- a/fs/notify/inotify/inotify_user.c
++++ b/fs/notify/inotify/inotify_user.c
+@@ -90,7 +90,8 @@ static struct ctl_table inotify_table[] = {
+ 
+ static void __init inotify_sysctls_init(void)
+ {
+-	register_sysctl("fs/inotify", inotify_table);
++	register_sysctl("fs/inotify", inotify_table,
++			ARRAY_SIZE(inotify_table));
  }
  
- void rose_unregister_sysctl(void)
-diff --git a/net/rxrpc/sysctl.c b/net/rxrpc/sysctl.c
-index ecaeb4ecfb58..2b5824416036 100644
---- a/net/rxrpc/sysctl.c
-+++ b/net/rxrpc/sysctl.c
-@@ -131,7 +131,8 @@ static struct ctl_table rxrpc_sysctl_table[] = {
- int __init rxrpc_sysctl_init(void)
+ #else
+diff --git a/fs/ntfs/sysctl.c b/fs/ntfs/sysctl.c
+index 174fe536a1c0..2c48f48a0b80 100644
+--- a/fs/ntfs/sysctl.c
++++ b/fs/ntfs/sysctl.c
+@@ -44,7 +44,8 @@ int ntfs_sysctl(int add)
  {
- 	rxrpc_sysctl_reg_table = register_net_sysctl(&init_net, "net/rxrpc",
--						     rxrpc_sysctl_table);
-+						     rxrpc_sysctl_table,
-+						     ARRAY_SIZE(rxrpc_sysctl_table));
- 	if (!rxrpc_sysctl_reg_table)
- 		return -ENOMEM;
- 	return 0;
-diff --git a/net/sctp/sysctl.c b/net/sctp/sysctl.c
-index a7a9136198fd..233f37f0fa28 100644
---- a/net/sctp/sysctl.c
-+++ b/net/sctp/sysctl.c
-@@ -612,7 +612,8 @@ int sctp_sysctl_net_register(struct net *net)
- 	table[SCTP_PF_RETRANS_IDX].extra2 = &net->sctp.ps_retrans;
- 	table[SCTP_PS_RETRANS_IDX].extra1 = &net->sctp.pf_retrans;
+ 	if (add) {
+ 		BUG_ON(sysctls_root_table);
+-		sysctls_root_table = register_sysctl("fs", ntfs_sysctls);
++		sysctls_root_table = register_sysctl("fs", ntfs_sysctls,
++						     ARRAY_SIZE(ntfs_sysctls));
+ 		if (!sysctls_root_table)
+ 			return -ENOMEM;
+ 	} else {
+diff --git a/fs/ocfs2/stackglue.c b/fs/ocfs2/stackglue.c
+index a8d5ca98fa57..9a653875d1c5 100644
+--- a/fs/ocfs2/stackglue.c
++++ b/fs/ocfs2/stackglue.c
+@@ -673,7 +673,8 @@ static int __init ocfs2_stack_glue_init(void)
  
--	net->sctp.sysctl_header = register_net_sysctl(net, "net/sctp", table);
-+	net->sctp.sysctl_header = register_net_sysctl(net, "net/sctp", table,
-+						      ARRAY_SIZE(sctp_net_table));
- 	if (net->sctp.sysctl_header == NULL) {
- 		kfree(table);
- 		return -ENOMEM;
-@@ -634,7 +635,9 @@ static struct ctl_table_header *sctp_sysctl_header;
- /* Sysctl registration.  */
- void sctp_sysctl_register(void)
+ 	strcpy(cluster_stack_name, OCFS2_STACK_PLUGIN_O2CB);
+ 
+-	ocfs2_table_header = register_sysctl("fs/ocfs2/nm", ocfs2_nm_table);
++	ocfs2_table_header = register_sysctl("fs/ocfs2/nm", ocfs2_nm_table,
++					     ARRAY_SIZE(ocfs2_nm_table));
+ 	if (!ocfs2_table_header) {
+ 		printk(KERN_ERR
+ 		       "ocfs2 stack glue: unable to register sysctl\n");
+diff --git a/fs/proc/proc_sysctl.c b/fs/proc/proc_sysctl.c
+index 8c415048d540..66c9d7a07d2e 100644
+--- a/fs/proc/proc_sysctl.c
++++ b/fs/proc/proc_sysctl.c
+@@ -43,7 +43,7 @@ struct ctl_table sysctl_mount_point[] = {
+  */
+ struct ctl_table_header *register_sysctl_mount_point(const char *path)
  {
--	sctp_sysctl_header = register_net_sysctl(&init_net, "net/sctp", sctp_table);
-+	sctp_sysctl_header = register_net_sysctl(&init_net, "net/sctp",
-+						 sctp_table,
-+						 ARRAY_SIZE(sctp_table));
+-	return register_sysctl(path, sysctl_mount_point);
++	return register_sysctl(path, sysctl_mount_point, 0);
  }
+ EXPORT_SYMBOL(register_sysctl_mount_point);
  
- /* Sysctl deregistration.  */
-diff --git a/net/smc/smc_sysctl.c b/net/smc/smc_sysctl.c
-index b6f79fabb9d3..9404123883c0 100644
---- a/net/smc/smc_sysctl.c
-+++ b/net/smc/smc_sysctl.c
-@@ -81,7 +81,8 @@ int __net_init smc_sysctl_net_init(struct net *net)
- 			table[i].data += (void *)net - (void *)&init_net;
- 	}
- 
--	net->smc.smc_hdr = register_net_sysctl(net, "net/smc", table);
-+	net->smc.smc_hdr = register_net_sysctl(net, "net/smc", table,
-+					       ARRAY_SIZE(smc_table));
- 	if (!net->smc.smc_hdr)
- 		goto err_reg;
- 
-diff --git a/net/sysctl_net.c b/net/sysctl_net.c
-index 8ee4b74bc009..1757c18ea065 100644
---- a/net/sysctl_net.c
-+++ b/net/sysctl_net.c
-@@ -161,18 +161,12 @@ static void ensure_safe_net_sysctl(struct net *net, const char *path,
- }
- 
- struct ctl_table_header *register_net_sysctl(struct net *net,
--	const char *path, struct ctl_table *table)
-+	const char *path, struct ctl_table *table, size_t table_size)
+@@ -1414,17 +1414,11 @@ struct ctl_table_header *__register_sysctl_table(
+  *
+  * See __register_sysctl_table for more details.
+  */
+-struct ctl_table_header *register_sysctl(const char *path, struct ctl_table *table)
++struct ctl_table_header *register_sysctl(const char *path, struct ctl_table *table,
++					 size_t table_size)
  {
 -	int count = 0;
 -	struct ctl_table *entry;
+-	struct ctl_table_header t_hdr;
 -
- 	if (!net_eq(net, &init_net))
- 		ensure_safe_net_sysctl(net, path, table);
- 
--	for (entry = table; entry->procname; entry++)
+-	t_hdr.ctl_table = table;
+-	list_for_each_table_entry(entry, (&t_hdr))
 -		count++;
--
--	return __register_sysctl_table(&net->sysctls, path, table, count);
-+	return __register_sysctl_table(&net->sysctls, path, table, table_size);
+ 	return __register_sysctl_table(&sysctl_table_root.default_set,
+-					path, table, count);
++					path, table, table_size);
  }
- EXPORT_SYMBOL_GPL(register_net_sysctl);
+ EXPORT_SYMBOL(register_sysctl);
  
-diff --git a/net/tipc/sysctl.c b/net/tipc/sysctl.c
-index 9fb65c988f7f..b9cbc3b359aa 100644
---- a/net/tipc/sysctl.c
-+++ b/net/tipc/sysctl.c
-@@ -96,7 +96,8 @@ static struct ctl_table tipc_table[] = {
- 
- int tipc_register_sysctl(void)
+@@ -1451,7 +1445,14 @@ EXPORT_SYMBOL(register_sysctl);
+ void __init __register_sysctl_init(const char *path, struct ctl_table *table,
+ 				 const char *table_name)
  {
--	tipc_ctl_hdr = register_net_sysctl(&init_net, "net/tipc", tipc_table);
-+	tipc_ctl_hdr = register_net_sysctl(&init_net, "net/tipc", tipc_table,
-+					   ARRAY_SIZE(tipc_table));
- 	if (tipc_ctl_hdr == NULL)
+-	struct ctl_table_header *hdr = register_sysctl(path, table);
++	int count = 0;
++	struct ctl_table *entry;
++	struct ctl_table_header t_hdr, *hdr;
++
++	t_hdr.ctl_table = table;
++	list_for_each_table_entry(entry, (&t_hdr))
++		count++;
++	hdr = register_sysctl(path, table, count);
+ 
+ 	if (unlikely(!hdr)) {
+ 		pr_err("failed when register_sysctl %s to %s\n", table_name, path);
+diff --git a/fs/verity/signature.c b/fs/verity/signature.c
+index b8c51ad40d3a..f617c6a1f16c 100644
+--- a/fs/verity/signature.c
++++ b/fs/verity/signature.c
+@@ -103,7 +103,9 @@ static struct ctl_table fsverity_sysctl_table[] = {
+ 
+ static int __init fsverity_sysctl_init(void)
+ {
+-	fsverity_sysctl_header = register_sysctl("fs/verity", fsverity_sysctl_table);
++	fsverity_sysctl_header = register_sysctl("fs/verity",
++						 fsverity_sysctl_table,
++						 ARRAY_SIZE(fsverity_sysctl_table));
+ 	if (!fsverity_sysctl_header) {
+ 		pr_err("sysctl registration failed!\n");
+ 		return -ENOMEM;
+diff --git a/fs/xfs/xfs_sysctl.c b/fs/xfs/xfs_sysctl.c
+index fade33735393..61075e9c9e37 100644
+--- a/fs/xfs/xfs_sysctl.c
++++ b/fs/xfs/xfs_sysctl.c
+@@ -213,7 +213,8 @@ static struct ctl_table xfs_table[] = {
+ int
+ xfs_sysctl_register(void)
+ {
+-	xfs_table_header = register_sysctl("fs/xfs", xfs_table);
++	xfs_table_header = register_sysctl("fs/xfs", xfs_table,
++					   ARRAY_SIZE(xfs_table));
+ 	if (!xfs_table_header)
  		return -ENOMEM;
  	return 0;
-diff --git a/net/unix/sysctl_net_unix.c b/net/unix/sysctl_net_unix.c
-index 500129aa710c..92f3bc3cd704 100644
---- a/net/unix/sysctl_net_unix.c
-+++ b/net/unix/sysctl_net_unix.c
-@@ -36,7 +36,8 @@ int __net_init unix_sysctl_register(struct net *net)
- 		table[0].data = &net->unx.sysctl_max_dgram_qlen;
- 	}
+diff --git a/include/linux/sysctl.h b/include/linux/sysctl.h
+index 0495c858989f..71d7935e50f0 100644
+--- a/include/linux/sysctl.h
++++ b/include/linux/sysctl.h
+@@ -227,7 +227,8 @@ extern void retire_sysctl_set(struct ctl_table_set *set);
+ struct ctl_table_header *__register_sysctl_table(
+ 	struct ctl_table_set *set,
+ 	const char *path, struct ctl_table *table, size_t table_size);
+-struct ctl_table_header *register_sysctl(const char *path, struct ctl_table *table);
++struct ctl_table_header *register_sysctl(const char *path, struct ctl_table *table,
++					 size_t table_size);
+ void unregister_sysctl_table(struct ctl_table_header * table);
  
--	net->unx.ctl = register_net_sysctl(net, "net/unix", table);
-+	net->unx.ctl = register_net_sysctl(net, "net/unix", table,
-+					   ARRAY_SIZE(unix_table));
- 	if (net->unx.ctl == NULL)
- 		goto err_reg;
+ extern int sysctl_init_bases(void);
+@@ -262,7 +263,8 @@ static inline struct ctl_table_header *register_sysctl_mount_point(const char *p
+ 	return NULL;
+ }
  
-diff --git a/net/x25/sysctl_net_x25.c b/net/x25/sysctl_net_x25.c
-index e9802afa43d0..4d7c2ee41943 100644
---- a/net/x25/sysctl_net_x25.c
-+++ b/net/x25/sysctl_net_x25.c
-@@ -76,7 +76,9 @@ static struct ctl_table x25_table[] = {
- 
- int __init x25_register_sysctl(void)
+-static inline struct ctl_table_header *register_sysctl(const char *path, struct ctl_table *table)
++static inline struct ctl_table_header *register_sysctl(const char *path, struct ctl_table *table,
++						       size_t table_size)
  {
--	x25_table_header = register_net_sysctl(&init_net, "net/x25", x25_table);
-+	x25_table_header = register_net_sysctl(&init_net, "net/x25",
-+					       x25_table,
-+					       ARRAY_SIZE(x25_table));
- 	if (!x25_table_header)
- 		return -ENOMEM;
- 	return 0;
-diff --git a/net/xfrm/xfrm_sysctl.c b/net/xfrm/xfrm_sysctl.c
-index 0c6c5ef65f9d..d04b25a47575 100644
---- a/net/xfrm/xfrm_sysctl.c
-+++ b/net/xfrm/xfrm_sysctl.c
-@@ -59,7 +59,8 @@ int __net_init xfrm_sysctl_init(struct net *net)
- 	if (net->user_ns != &init_user_ns)
- 		table[0].procname = NULL;
+ 	return NULL;
+ }
+diff --git a/kernel/pid_sysctl.h b/kernel/pid_sysctl.h
+index d67a4d45bb42..8b24744752cb 100644
+--- a/kernel/pid_sysctl.h
++++ b/kernel/pid_sysctl.h
+@@ -48,7 +48,7 @@ static struct ctl_table pid_ns_ctl_table_vm[] = {
+ };
+ static inline void register_pid_ns_sysctl_table_vm(void)
+ {
+-	register_sysctl("vm", pid_ns_ctl_table_vm);
++	register_sysctl("vm", pid_ns_ctl_table_vm, ARRAY_SIZE(pid_ns_ctl_table_vm));
+ }
+ #else
+ static inline void initialize_memfd_noexec_scope(struct pid_namespace *ns) {}
+diff --git a/kernel/time/timer.c b/kernel/time/timer.c
+index 63a8ce7177dd..de385b365a7a 100644
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -265,7 +265,7 @@ static struct ctl_table timer_sysctl[] = {
  
--	net->xfrm.sysctl_hdr = register_net_sysctl(net, "net/core", table);
-+	net->xfrm.sysctl_hdr = register_net_sysctl(net, "net/core", table,
-+						   ARRAY_SIZE(xfrm_table));
- 	if (!net->xfrm.sysctl_hdr)
- 		goto out_register;
+ static int __init timer_sysctl_init(void)
+ {
+-	register_sysctl("kernel", timer_sysctl);
++	register_sysctl("kernel", timer_sysctl, ARRAY_SIZE(timer_sysctl));
  	return 0;
+ }
+ device_initcall(timer_sysctl_init);
+diff --git a/kernel/ucount.c b/kernel/ucount.c
+index 2b80264bb79f..59bf6983f1cf 100644
+--- a/kernel/ucount.c
++++ b/kernel/ucount.c
+@@ -365,7 +365,7 @@ static __init int user_namespace_sysctl_init(void)
+ 	 * default set so that registrations in the child sets work
+ 	 * properly.
+ 	 */
+-	user_header = register_sysctl("user", empty);
++	user_header = register_sysctl("user", empty, 0);
+ 	kmemleak_ignore(user_header);
+ 	BUG_ON(!user_header);
+ 	BUG_ON(!setup_userns_sysctls(&init_user_ns));
+diff --git a/kernel/utsname_sysctl.c b/kernel/utsname_sysctl.c
+index 019e3a1566cf..24527b155538 100644
+--- a/kernel/utsname_sysctl.c
++++ b/kernel/utsname_sysctl.c
+@@ -138,7 +138,7 @@ void uts_proc_notify(enum uts_proc proc)
+ 
+ static int __init utsname_sysctl_init(void)
+ {
+-	register_sysctl("kernel", uts_kern_table);
++	register_sysctl("kernel", uts_kern_table, ARRAY_SIZE(uts_kern_table));
+ 	return 0;
+ }
+ 
+diff --git a/lib/test_sysctl.c b/lib/test_sysctl.c
+index 8036aa91a1cb..83d37a163836 100644
+--- a/lib/test_sysctl.c
++++ b/lib/test_sysctl.c
+@@ -166,7 +166,8 @@ static int test_sysctl_setup_node_tests(void)
+ 	test_data.bitmap_0001 = kzalloc(SYSCTL_TEST_BITMAP_SIZE/8, GFP_KERNEL);
+ 	if (!test_data.bitmap_0001)
+ 		return -ENOMEM;
+-	sysctl_test_headers.test_h_setup_node = register_sysctl("debug/test_sysctl", test_table);
++	sysctl_test_headers.test_h_setup_node = register_sysctl("debug/test_sysctl", test_table,
++					     ARRAY_SIZE(test_table));
+ 	if (!sysctl_test_headers.test_h_setup_node) {
+ 		kfree(test_data.bitmap_0001);
+ 		return -ENOMEM;
+@@ -192,7 +193,8 @@ static int test_sysctl_run_unregister_nested(void)
+ 	struct ctl_table_header *unregister;
+ 
+ 	unregister = register_sysctl("debug/test_sysctl/unregister_error",
+-				   test_table_unregister);
++				     test_table_unregister,
++				     ARRAY_SIZE(test_table_unregister));
+ 	if (!unregister)
+ 		return -ENOMEM;
+ 
+@@ -209,7 +211,8 @@ static int test_sysctl_run_register_mount_point(void)
+ 
+ 	sysctl_test_headers.test_h_mnterror
+ 		= register_sysctl("debug/test_sysctl/mnt/mnt_error",
+-				  test_table_unregister);
++				  test_table_unregister,
++				  ARRAY_SIZE(test_table_unregister));
+ 	/*
+ 	 * Don't check the result.:
+ 	 * If it fails (expected behavior), return 0.
+diff --git a/net/sunrpc/sysctl.c b/net/sunrpc/sysctl.c
+index 93941ab12549..61222addda7e 100644
+--- a/net/sunrpc/sysctl.c
++++ b/net/sunrpc/sysctl.c
+@@ -167,7 +167,8 @@ void
+ rpc_register_sysctl(void)
+ {
+ 	if (!sunrpc_table_header)
+-		sunrpc_table_header = register_sysctl("sunrpc", debug_table);
++		sunrpc_table_header = register_sysctl("sunrpc", debug_table,
++						      ARRAY_SIZE(debug_table));
+ }
+ 
+ void
+diff --git a/net/sunrpc/xprtrdma/svc_rdma.c b/net/sunrpc/xprtrdma/svc_rdma.c
+index f0d5eeed4c88..df7fb9c8b785 100644
+--- a/net/sunrpc/xprtrdma/svc_rdma.c
++++ b/net/sunrpc/xprtrdma/svc_rdma.c
+@@ -246,7 +246,8 @@ static int svc_rdma_proc_init(void)
+ 		goto out_err;
+ 
+ 	svcrdma_table_header = register_sysctl("sunrpc/svc_rdma",
+-					       svcrdma_parm_table);
++					       svcrdma_parm_table,
++					       ARRAY_SIZE(svcrdma_parm_table));
+ 	return 0;
+ 
+ out_err:
+diff --git a/net/sunrpc/xprtrdma/transport.c b/net/sunrpc/xprtrdma/transport.c
+index 29b0562d62e7..bf43e05044a3 100644
+--- a/net/sunrpc/xprtrdma/transport.c
++++ b/net/sunrpc/xprtrdma/transport.c
+@@ -790,7 +790,9 @@ int xprt_rdma_init(void)
+ 
+ #if IS_ENABLED(CONFIG_SUNRPC_DEBUG)
+ 	if (!sunrpc_table_header)
+-		sunrpc_table_header = register_sysctl("sunrpc", xr_tunables_table);
++		sunrpc_table_header = register_sysctl("sunrpc",
++						      xr_tunables_table,
++						      ARRAY_SIZE(xr_tunables_table));
+ #endif
+ 	return 0;
+ }
+diff --git a/net/sunrpc/xprtsock.c b/net/sunrpc/xprtsock.c
+index 5f9030b81c9e..7c3d5ed708be 100644
+--- a/net/sunrpc/xprtsock.c
++++ b/net/sunrpc/xprtsock.c
+@@ -3169,7 +3169,9 @@ static struct xprt_class	xs_bc_tcp_transport = {
+ int init_socket_xprt(void)
+ {
+ 	if (!sunrpc_table_header)
+-		sunrpc_table_header = register_sysctl("sunrpc", xs_tunables_table);
++		sunrpc_table_header = register_sysctl("sunrpc",
++						      xs_tunables_table,
++						      ARRAY_SIZE(xs_tunables_table));
+ 
+ 	xprt_register_transport(&xs_local_transport);
+ 	xprt_register_transport(&xs_udp_transport);
+diff --git a/net/sysctl_net.c b/net/sysctl_net.c
+index 1757c18ea065..f96e6633fdd3 100644
+--- a/net/sysctl_net.c
++++ b/net/sysctl_net.c
+@@ -101,7 +101,7 @@ __init int net_sysctl_init(void)
+ 	 * registering "/proc/sys/net" as an empty directory not in a
+ 	 * network namespace.
+ 	 */
+-	net_header = register_sysctl("net", empty);
++	net_header = register_sysctl("net", empty, 0);
+ 	if (!net_header)
+ 		goto out;
+ 	ret = register_pernet_subsys(&sysctl_pernet_ops);
+diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+index f431251ffb91..b77344506cf3 100644
+--- a/security/apparmor/lsm.c
++++ b/security/apparmor/lsm.c
+@@ -1785,7 +1785,8 @@ static struct ctl_table apparmor_sysctl_table[] = {
+ 
+ static int __init apparmor_init_sysctl(void)
+ {
+-	return register_sysctl("kernel", apparmor_sysctl_table) ? 0 : -ENOMEM;
++	return register_sysctl("kernel", apparmor_sysctl_table,
++			       ARRAY_SIZE(apparmor_sysctl_table)) ? 0 : -ENOMEM;
+ }
+ #else
+ static inline int apparmor_init_sysctl(void)
+diff --git a/security/loadpin/loadpin.c b/security/loadpin/loadpin.c
+index ebae964f7cc9..6f2cc827df41 100644
+--- a/security/loadpin/loadpin.c
++++ b/security/loadpin/loadpin.c
+@@ -256,7 +256,8 @@ static int __init loadpin_init(void)
+ 		enforce ? "" : "not ");
+ 	parse_exclude();
+ #ifdef CONFIG_SYSCTL
+-	if (!register_sysctl("kernel/loadpin", loadpin_sysctl_table))
++	if (!register_sysctl("kernel/loadpin", loadpin_sysctl_table,
++			     ARRAY_SIZE(loadpin_sysctl_table)))
+ 		pr_notice("sysctl registration failed!\n");
+ #endif
+ 	security_add_hooks(loadpin_hooks, ARRAY_SIZE(loadpin_hooks), "loadpin");
+diff --git a/security/yama/yama_lsm.c b/security/yama/yama_lsm.c
+index 2503cf153d4a..7b8164a4b504 100644
+--- a/security/yama/yama_lsm.c
++++ b/security/yama/yama_lsm.c
+@@ -461,7 +461,8 @@ static struct ctl_table yama_sysctl_table[] = {
+ };
+ static void __init yama_init_sysctl(void)
+ {
+-	if (!register_sysctl("kernel/yama", yama_sysctl_table))
++	if (!register_sysctl("kernel/yama", yama_sysctl_table,
++			     ARRAY_SIZE(yama_sysctl_table)))
+ 		panic("Yama: sysctl registration failed.\n");
+ }
+ #else
 -- 
 2.30.2
 
