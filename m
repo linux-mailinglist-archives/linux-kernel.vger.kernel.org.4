@@ -2,99 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B11FC738369
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AE7673836A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:14:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjFUMNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 08:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
+        id S231879AbjFUMNX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 08:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFUMM7 (ORCPT
+        with ESMTP id S231848AbjFUMNR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 08:12:59 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E5312C
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:12:58 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-51be527628fso66294a12.3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:12:58 -0700 (PDT)
+        Wed, 21 Jun 2023 08:13:17 -0400
+Received: from mail-ot1-x32d.google.com (mail-ot1-x32d.google.com [IPv6:2607:f8b0:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E501713
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:13:15 -0700 (PDT)
+Received: by mail-ot1-x32d.google.com with SMTP id 46e09a7af769-6b472915d1bso2987818a34.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 05:13:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687349576; x=1689941576;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1S20z+a2meRa1t5ROBbcRF+0qtIDSZlETYaPDTmCWIQ=;
-        b=wZf9FY946GCy+xy08dQAUqGP+uauiMOCv/PM7k9BbNqoR3/RkvS3CYXV2s6ZGIkVNR
-         FJk1adEklzbuZBMmjE6PpZr8tYp3ywet4DtQCQyMrRsj6PRKEQjmXs9/rd3bnW3wRI1L
-         mmjEVtAmGjy16C1OvUNyrmb3zeyTFgJ6CEhOxds/SexZVGmqtujvBi83Pbgs3kPO6ChL
-         GAMvTUWJ/QkRXHbz08vg5arB4JoGTecjHD4kJs1zQVIPz3FIYdyNdKg6jmoKlQDk1oc4
-         8obTXmXlgcvpR33IhpRjN9oYq3VkZqxHuPPDLbciOPbrLxaYU7HBawBYz9YuqJtMaoUI
-         +MYg==
+        d=gmail.com; s=20221208; t=1687349595; x=1689941595;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FqVDCbkEpxilUdix2+kmj0eFs9thdqo8/rdk3F0KWIw=;
+        b=mPvVFvkEBsa9B3DmV2rhm7xEDwq9dqAk6EgNuO/oX8AUpay26wkpw4MNpFtEp14jzH
+         qJsZ1Mc3gnOZL7LVIpzbaF07PJd4oL6n0vh7YmxJcVaRzrhDxQQjtU9XuOfu7zof9L2T
+         p1GHX9CKla0ZBxWOX4VTpvxWVm32sQDkobVQ+mpcdjEiiJ7mnMwN8ipWtOZ1vPC1DATN
+         0h1TXf5lBYOFtqBa4XFmg8FVJ/oCOTyFlzaxNVUmUXx7voUX8ma5cxf4Id0nht/eaUDb
+         pSYn5cpOgjFRysGiGHHFjcWNPkLByZhBmHz4kN9nfApCVrEDksQ3B5Vj1zvh2wPo2UR/
+         Yw4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687349576; x=1689941576;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1S20z+a2meRa1t5ROBbcRF+0qtIDSZlETYaPDTmCWIQ=;
-        b=A3GwLr3J1fYz/gZMKfwqVRGKJaL7jkCg0B/2GvgW+EOom3XG2aMaLV3WRoH1tsiu2s
-         5/p0eU6cu8LbzEVfdgDZ1/1/jtH3kV0uyzGK6oKJPe9b6ZvL+gG/TmUgNgLFgUA9Rqop
-         SiwNhPA/tXX78TwIuG/RGZHSNKOem9ACaEVA/1RZ9xF3lxktbYOoe7UxnaDsgakEpwo4
-         vKHjrsdE10Bb8W7ZUDCdYZTKXPyZ/W0xVB2W25Ey9Er36+H54aI45tzgPT2RATb8Lu4K
-         WWHX4v8giH37QoQ4OB/g9+9MwRSZMcc9SKMzQSpb8bazgK2nE/xhvoY8y3Zsf1sCd7EH
-         Zlqg==
-X-Gm-Message-State: AC+VfDzBoJKV0SeDp1djlEmJOtcirKYKG/sfbzD+wDRFLtN7Q8kVifcV
-        ICIeGLADbFX59NRCXrJaSoKxfg==
-X-Google-Smtp-Source: ACHHUZ68VVDiFM83434iVSkRffqR1mrfuPtN7Pi923y2gXxASrxcfPNxrl0l2Ti4w63d8TcW+BemvQ==
-X-Received: by 2002:a17:907:d1a:b0:988:e223:9566 with SMTP id gn26-20020a1709070d1a00b00988e2239566mr7643882ejc.62.1687349576599;
-        Wed, 21 Jun 2023 05:12:56 -0700 (PDT)
-Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.gmail.com with ESMTPSA id h6-20020a1709063b4600b009891da61b1asm2911773ejf.44.2023.06.21.05.12.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 05:12:56 -0700 (PDT)
-Message-ID: <7c5acd58-e7b3-097d-329e-15cf4f6bc4d5@baylibre.com>
-Date:   Wed, 21 Jun 2023 14:12:54 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 1/4] drm/mediatek: Remove freeing not dynamic allocated
- memory
-Content-Language: en-US
-To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Jason-ch Chen <jason-ch.chen@mediatek.com>,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        Shawn Sung <shawn.sung@mediatek.com>,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230621102247.10116-1-jason-jh.lin@mediatek.com>
- <20230621102247.10116-2-jason-jh.lin@mediatek.com>
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-In-Reply-To: <20230621102247.10116-2-jason-jh.lin@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687349595; x=1689941595;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FqVDCbkEpxilUdix2+kmj0eFs9thdqo8/rdk3F0KWIw=;
+        b=gKiPvkmAgtsZfiVNR/zbniDmvSIeG6N4j9zi48OrC6GjQSPcIlVf5ONxhYHNs/Nr24
+         a/KSU38D4IjxjP+3lBlrq2I4WP1r8TSPYdFtTRlS+Iq6h/GfAGQ13vmUJtVv1rGGaVME
+         jTd/lVOxNznrsDQTpL8hx2LBzVMLqXDjUBKkQ+hlboHxV8JT08I25U5Y/euwv58eVO4v
+         C9xAawUOlcCdsA4zPI88mPGA6Dia+nlaBKT84JJ4ZksKf/uwjhMCPK9QeoNrS6c+sOvh
+         CVvEHzz+aExIACO0LbA1ultMTZxEfKZoJMvRH6+ZhNB15wzf1SB99IA+9GK4/P/bF7xM
+         bVAw==
+X-Gm-Message-State: AC+VfDzj9chhsILREaHBVzGiRLDC588hOW4DP/0iR+BDUWArJm4DwH5J
+        Wt2+jSEb4bYPd5CvWqMRl5I=
+X-Google-Smtp-Source: ACHHUZ492tt1ZewNxpjsUEHD/kdj6hmC39lxyMZO1eBhdSfmaVO4yMZ7wBwsDX/ukDbYyHXEofxj2g==
+X-Received: by 2002:a05:6830:1d5a:b0:6b5:8762:cf6c with SMTP id p26-20020a0568301d5a00b006b58762cf6cmr6779449oth.34.1687349594672;
+        Wed, 21 Jun 2023 05:13:14 -0700 (PDT)
+Received: from smtpclient.apple ([2402:d0c0:2:a2a::1])
+        by smtp.gmail.com with ESMTPSA id i8-20020a654848000000b0051b460fd90fsm2783430pgs.8.2023.06.21.05.13.11
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 21 Jun 2023 05:13:14 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.400.51.1.1\))
+Subject: Re: [PATCH] list: Remove unnecessary WRITE_ONCE()
+From:   Alan Huang <mmpgouride@gmail.com>
+In-Reply-To: <20230619090336.145738-1-mmpgouride@gmail.com>
+Date:   Wed, 21 Jun 2023 20:12:55 +0800
+Cc:     Eric Dumazet <edumazet@google.com>, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <4B653A92-5FD0-4E38-9F86-AEFE5B86AADA@gmail.com>
+References: <20230619090336.145738-1-mmpgouride@gmail.com>
+To:     paulmck@kernel.org
+X-Mailer: Apple Mail (2.3731.400.51.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2023 12:22, Jason-JH.Lin wrote:
-> Fixing the coverity issue of:
-> mtk_drm_cmdq_pkt_destroy frees address of mtk_crtc->cmdq_handle
-> 
-> So remove the free function.
+Hi Paul,
 
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+Looks like you missed this one?
 
--- 
-Regards,
-Alexandre
+Thanks,
+Alan
+
+> 2023=E5=B9=B46=E6=9C=8819=E6=97=A5 17:03=EF=BC=8CAlan Huang =
+<mmpgouride@gmail.com> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> Commit c54a2744497d("list: Add hlist_unhashed_lockless()") added
+> various WRITE_ONCE() to pair with the READ_ONCE() in
+> hlist_unhashed_lockless(), but there is no need to protect
+> ->next with WRITE_ONCE(). Therefore, this commit removes those
+> unnecessary WRITE_ONCE().
+>=20
+> Signed-off-by: Alan Huang <mmpgouride@gmail.com>
+> ---
+> include/linux/list.h | 8 ++++----
+> 1 file changed, 4 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/include/linux/list.h b/include/linux/list.h
+> index f10344dbad..ac366958ea 100644
+> --- a/include/linux/list.h
+> +++ b/include/linux/list.h
+> @@ -940,7 +940,7 @@ static inline void hlist_del_init(struct =
+hlist_node *n)
+> static inline void hlist_add_head(struct hlist_node *n, struct =
+hlist_head *h)
+> {
+> struct hlist_node *first =3D h->first;
+> - WRITE_ONCE(n->next, first);
+> + n->next =3D first;
+> if (first)
+> WRITE_ONCE(first->pprev, &n->next);
+> WRITE_ONCE(h->first, n);
+> @@ -956,7 +956,7 @@ static inline void hlist_add_before(struct =
+hlist_node *n,
+>    struct hlist_node *next)
+> {
+> WRITE_ONCE(n->pprev, next->pprev);
+> - WRITE_ONCE(n->next, next);
+> + n->next =3D next;
+> WRITE_ONCE(next->pprev, &n->next);
+> WRITE_ONCE(*(n->pprev), n);
+> }
+> @@ -969,8 +969,8 @@ static inline void hlist_add_before(struct =
+hlist_node *n,
+> static inline void hlist_add_behind(struct hlist_node *n,
+>    struct hlist_node *prev)
+> {
+> - WRITE_ONCE(n->next, prev->next);
+> - WRITE_ONCE(prev->next, n);
+> + n->next =3D prev->next;
+> + prev->next =3D n;
+> WRITE_ONCE(n->pprev, &prev->next);
+>=20
+> if (n->next)
+> --=20
+> 2.34.1
+>=20
+
