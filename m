@@ -2,249 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0177381F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E183E73806E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:10:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjFUKZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 06:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
+        id S230124AbjFUK0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 06:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231874AbjFUKZd (ORCPT
+        with ESMTP id S231732AbjFUKZz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 06:25:33 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940431A8;
-        Wed, 21 Jun 2023 03:25:31 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-989d03eae11so125662066b.2;
-        Wed, 21 Jun 2023 03:25:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687343130; x=1689935130;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YR+wlgHevwg5FuwHcUU1d3cnI2XtiA2vJqFj5alzsro=;
-        b=sIQKXgeTqXp98Ny5rPWI0fIMQduVne5oVOC7LR2pcNyp4doH0500kIgdG81SbCKDTj
-         vqYLLR6VC37TQT+70txmmLWiUqtr0cOo5l6PlqAv6veCmTjwJSCo6PH43dS8kHrmLEhm
-         6KgSczL/RBUqx8ii3+MFH17C9VLCIDTbxCyiQ5BMhJzBAOgPAai1CaCXqUb5EVe5LSzx
-         1d6EDrLw1+OCTrCDBBtfyvbFz57M1nQvTYXwhC3gsiDZHppon/h1dyrKngW0mNxC20Kz
-         EhpdPnPmPBTV1BLbXaNaH6Ib6pC21XYKrHpVapcO4DCHYzFHp9uN5+mxzSOdCoU5PBWG
-         59hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687343130; x=1689935130;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YR+wlgHevwg5FuwHcUU1d3cnI2XtiA2vJqFj5alzsro=;
-        b=ZtjvmH5+HSb4Fi0hQB0gbVfJEStvuBshMtlpLo9OxaKqjr8KZgyBdQpwxP9LPBcUQ3
-         KLDR1oT2YmFSE4V6rIlv/6xiZvHWWs404Y80+M4Aynm77mioqU9CpFzfk9bSTwAw+T9G
-         YGMMT5sOX8cze7rHTJJcw1Y8Uw53+eCdjqsG30GkmQU5J3oZpfCENBDymS4VWF5PhIfF
-         ajDIFWp0lGhnDv43l8V2RgveEiCeP3VyZVuDKrW4tA95IDWrYvVwcqw/efnQ2Vu72jWu
-         H+tFxxv9KK1vj/YHM5CrLyd3v9KCKn+1pF7DP1LSKUw/Owh6jkbu1Y6Yy2W8VGX50UEd
-         Z6ew==
-X-Gm-Message-State: AC+VfDw28r2AqhbcI7QDbDK1DJT9SDgWSKAqkY6ugeQHAYewcch0bmHz
-        ynUyxZ2CB0U2kxCeLYWu8hQ=
-X-Google-Smtp-Source: ACHHUZ6gLQ4j36V00vXy9eoVTLuvf0cUol0Ih8iJBMNyK3qmGdS8FTrtOZRwCCMVwX/JD17KQ+0xzQ==
-X-Received: by 2002:a17:907:e86:b0:988:9b29:564a with SMTP id ho6-20020a1709070e8600b009889b29564amr8060764ejc.68.1687343129750;
-        Wed, 21 Jun 2023 03:25:29 -0700 (PDT)
-Received: from skbuf ([188.25.159.134])
-        by smtp.gmail.com with ESMTPSA id q9-20020a1709066b0900b009829fcb94fesm2903845ejr.37.2023.06.21.03.25.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 03:25:29 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 13:25:27 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [net-next PATCH] net: dsa: qca8k: add support for
- port_change_master
-Message-ID: <20230621102527.f47kmwminkhe7ttt@skbuf>
-References: <20230620063747.19175-1-ansuelsmth@gmail.com>
- <20230620063747.19175-1-ansuelsmth@gmail.com>
- <20230620201227.7sdb3zmwutwtmt2e@skbuf>
- <64921dee.df0a0220.f64e1.72c7@mx.google.com>
+        Wed, 21 Jun 2023 06:25:55 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9BF81731
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 03:25:48 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230621102547euoutp02b0c5b437b9440b0a71c2a1e44e61a721~qpacQQA9D2690826908euoutp02H
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 10:25:47 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230621102547euoutp02b0c5b437b9440b0a71c2a1e44e61a721~qpacQQA9D2690826908euoutp02H
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1687343147;
+        bh=fQhn+XbU5SeW4XS5TuU4PPvuoJyk0edn3EZ7CeTiW7g=;
+        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
+        b=UhPuaYaIHduGVDgJVVizkGJO+Vm6iu/GKM+R9xECNbN6TA7tJz5zekdganiLXrfaq
+         hdPPFVMtCNjSri6v1GidKNj7g+t1Xg/HFFMLRnEKAW0aO5bxOLX8xvMwZgqmbnie0e
+         z2iv8BJjtkFoSqr3ss9N6kvP7mkbvqrE2nB5ceUI=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230621102547eucas1p18afdd0fd548b43d5e25e335173f2dc94~qpab-lu2s2249422494eucas1p1c;
+        Wed, 21 Jun 2023 10:25:47 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id BF.1F.11320.A20D2946; Wed, 21
+        Jun 2023 11:25:46 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230621102546eucas1p14a476fd2f61d7d780d04b9ff213e23c3~qpabsBb9g1594915949eucas1p10;
+        Wed, 21 Jun 2023 10:25:46 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230621102546eusmtrp207bac3e5fc06829b09a00543f59ece79~qpabrcEXq0135001350eusmtrp2J;
+        Wed, 21 Jun 2023 10:25:46 +0000 (GMT)
+X-AuditID: cbfec7f4-97dff70000022c38-a1-6492d02a74be
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id AF.0F.14344.A20D2946; Wed, 21
+        Jun 2023 11:25:46 +0100 (BST)
+Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230621102546eusmtip16ab9315cd56c971c18ab31f7519fc378~qpabf6i-O0499904999eusmtip1W;
+        Wed, 21 Jun 2023 10:25:46 +0000 (GMT)
+Received: from [106.110.32.65] (106.110.32.65) by CAMSVWEXC02.scsc.local
+        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Wed, 21 Jun 2023 11:25:45 +0100
+Message-ID: <b57c76b8-aaf5-d245-6c0e-a3afdfd96643@samsung.com>
+Date:   Wed, 21 Jun 2023 12:25:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <64921dee.df0a0220.f64e1.72c7@mx.google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+        Thunderbird/102.11.0
+Subject: Re: [RFC 2/4] filemap: use minimum order while allocating folios
+To:     Hannes Reinecke <hare@suse.de>, <willy@infradead.org>,
+        <david@fromorbit.com>
+CC:     <gost.dev@samsung.com>, <mcgrof@kernel.org>, <hch@lst.de>,
+        <jwong@kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Content-Language: en-US
+From:   Pankaj Raghav <p.raghav@samsung.com>
+In-Reply-To: <d0b77326-e93f-c1dc-c46c-1213bfafd7ee@suse.de>
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [106.110.32.65]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrIKsWRmVeSWpSXmKPExsWy7djPc7paFyalGDTdsLDYcuweo8WeRZOY
+        LFauPspkce1MD5PFnr0nWSwu75rDZnFjwlNGi98/5rA5cHicWiThsXmFlsemVZ1sHrtvNrB5
+        bD5d7fF5k1wAWxSXTUpqTmZZapG+XQJXxuUX+gVr+Cp61qc1MLbydDFycEgImEjc/ZTbxcjF
+        ISSwglFi0cl5zBDOF0aJqwcWskM4nxklpr9YAuRwgnUsaT0ElVjOKNE4dzETXFXv7UtQzk5G
+        ic1/DjCDtPAK2Ek8/P2TFcRmEVCVOD7tDRNEXFDi5MwnLCC2qEC0ROuy+2wgtrCAp8SKr+1g
+        vSICQRJHO0+BrWMWmMYosfziFUaQBLOAuMStJ/OZQL5gE9CSaOwEO49TwFpid+8EVogSeYnm
+        rbOZIc5WlJh08z0rhF0rcWrLLSYIu5tTYsf3DAjbRaKt4xcLhC0s8er4FqiXZST+75wPVV8t
+        8fTGb3AgSQi0MEr071zPBglJa4m+MzkgJrOApsT6XfoQUUeJp1eiIEw+iRtvBSEO45OYtG06
+        8wRG1VlI4TALyVuzkNw/C2HmAkaWVYziqaXFuempxUZ5qeV6xYm5xaV56XrJ+bmbGIGp6PS/
+        4192MC5/9VHvECMTB+MhRgkOZiURXtlNk1KEeFMSK6tSi/Lji0pzUosPMUpzsCiJ82rbnkwW
+        EkhPLEnNTk0tSC2CyTJxcEo1MM2aktaUxPP105K+ieKrvFQ/Lf6nJj31xaYZJ5WmKblWyPj8
+        XmCYOUn36+zHId+/JafN5Ti42+1M71yThVE1ffbXF/If9z5lsTh00zWGu2GWyziXfm2/Iu8g
+        o3s6tv38GpfPm39v7cp+xaDu9OCcu9PshyKvpfVl78hdvJdpJHbgdaFRRYLCWdeI2wvDTUpr
+        GupmZSe0fBB+21wuwzjN7g1Loq6qxfLET2aLT+5jj3ed9mWdyTauq+sTRBoSHv0Us485xPPZ
+        2eP++dLemm8/toTMmRWacXxhen3844IkqY3H7+Qx2Ydecsj9GqvA1nKUTfGRgqlN0Mxw5zbe
+        vz+PF5QwS37xfl3770FW2B+9D0osxRmJhlrMRcWJAOvnQYW0AwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFIsWRmVeSWpSXmKPExsVy+t/xu7paFyalGMw/rW6x5dg9Ros9iyYx
+        WaxcfZTJ4tqZHiaLPXtPslhc3jWHzeLGhKeMFr9/zGFz4PA4tUjCY/MKLY9NqzrZPHbfbGDz
+        2Hy62uPzJrkAtig9m6L80pJUhYz84hJbpWhDCyM9Q0sLPSMTSz1DY/NYKyNTJX07m5TUnMyy
+        1CJ9uwS9jMsv9AvW8FX0rE9rYGzl6WLk5JAQMJFY0nqIvYuRi0NIYCmjxL/NL1khEjISG79c
+        hbKFJf5c62KDKPrIKNE77TFYQkhgJ6PEt6nmIDavgJ3Ew98/weIsAqoSx6e9YYKIC0qcnPmE
+        BcQWFYiWWP35AliNsICnxIqv7cwgtohAkMTRzlNgVzALTGOUWH7xCiPEtk+MEjMbdoBVMQuI
+        S9x6Mh9oKgcHm4CWRGMnO0iYU8BaYnfvBFaIEk2J1u2/2SFseYnmrbOZIT5QlJh08z3UN7US
+        n/8+Y5zAKDoLyX2zkGyYhWTULCSjFjCyrGIUSS0tzk3PLTbSK07MLS7NS9dLzs/dxAiM5G3H
+        fm7Zwbjy1Ue9Q4xMHIyHGCU4mJVEeGU3TUoR4k1JrKxKLcqPLyrNSS0+xGgKDKSJzFKiyfnA
+        VJJXEm9oZmBqaGJmaWBqaWasJM7rWdCRKCSQnliSmp2aWpBaBNPHxMEp1cAkFpoQcz7aJ2tb
+        3i0Bg9MGzcHB19eufSjS2CfAJBb+vsyj64lDYVgW4yVnyTfXyifd3SWjyXDy8IHyf7XTH1ln
+        lD/euJE7y8TV59mXBXx1537IJGjViBvuOPqJ1Txw5a5rKf1X+qKXmFeWh75YtmZjQ6Hw7O2r
+        V8kdCV71j09uwdQTa5zebHFUWr9AxvaG3YarvS9jrdJPd8yO2yYTULDsuvyJ5BLjRl62L085
+        noq032pQELLZduH7TJv2bUeCP6dVf9y6J2/TS48I+7k98UGCP160VC9IO7zjJ2/gyo7rPkKB
+        /p/O/l3nvqVrg4Xcy669Z3/3lxxm+xuzXMpCVGKmqzdTrqvqyc/X3bJE5ispsRRnJBpqMRcV
+        JwIAbtfl0G0DAAA=
+X-CMS-MailID: 20230621102546eucas1p14a476fd2f61d7d780d04b9ff213e23c3
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230621083827eucas1p2948b4efaf55064c3761c924b5b049219
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230621083827eucas1p2948b4efaf55064c3761c924b5b049219
+References: <20230621083823.1724337-1-p.raghav@samsung.com>
+        <CGME20230621083827eucas1p2948b4efaf55064c3761c924b5b049219@eucas1p2.samsung.com>
+        <20230621083823.1724337-3-p.raghav@samsung.com>
+        <d0b77326-e93f-c1dc-c46c-1213bfafd7ee@suse.de>
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 03:04:28PM +0200, Christian Marangi wrote:
-> > > +			if (dsa_port_is_cpu(dp))
-> > > +				cpu_port_mask |= BIT(dp->index);
-> > > +	} else {
-> > > +		dp = dsa_port_from_netdev(master);
-> > 
-> > dsa_port_from_netdev() is implemented by calling:
-> > 
-> > static inline struct dsa_port *dsa_slave_to_port(const struct net_device *dev)
-> > {
-> > 	struct dsa_slave_priv *p = netdev_priv(dev);
-> > 
-> > 	return p->dp;
-> > }
-> > 
-> > The "struct net_device *master" does not have a netdev_priv() of the
-> > type "struct dsa_slave_priv *". So, this function does not do what you
-> > want, but instead it messes through the guts of an unrelated private
-> > structure, treating whatever it finds at offset 16 as a pointer, and
-> > dereferincing that as a struct dsa_port *. I'm surprised it didn't
-> > crash, to be frank.
-> > 
-> > To find the cpu_dp behind the master, you need to dereference
-> > master->dsa_ptr (for which we don't have a helper).
-> > 
+>> index 47afbca1d122..090b810ddeed 100644
+>> --- a/mm/readahead.c
+>> +++ b/mm/readahead.c
+>> @@ -245,7 +245,8 @@ void page_cache_ra_unbounded(struct readahead_control *ractl,
+>>               continue;
+>>           }
+>>   -        folio = filemap_alloc_folio(gfp_mask, 0);
+>> +        folio = filemap_alloc_folio(gfp_mask,
+>> +                        mapping_min_folio_order(mapping));
+>>           if (!folio)
+>>               break;
+>>           if (filemap_add_folio(mapping, folio, index + i,
+>> @@ -259,7 +260,8 @@ void page_cache_ra_unbounded(struct readahead_control *ractl,
+>>           if (i == nr_to_read - lookahead_size)
+>>               folio_set_readahead(folio);
+>>           ractl->_workingset |= folio_test_workingset(folio);
+>> -        ractl->_nr_pages++;
+>> +        ractl->_nr_pages += folio_nr_pages(folio);
+>> +        i += folio_nr_pages(folio) - 1;
+>>       }
+>>         /*
+> This is incomplete, as the loop above has some exit statements which blindly step backwards by one
+> page.
 > 
-> I was searching for an helper but no luck. Is it safe to access
-> master->dsa_ptr? In theory the caller of port_change_master should
-> already check that the passed master is a dsa port?
-
-*that the passed network interface is a master - netdev_uses_dsa()
-
-What is attached to the DSA master through dev->dsa_ptr is the CPU port.
-
-what makes a net_device be a DSA master is dsa_master_setup(), and what
-makes it stop being that is dsa_master_teardown(). Both are called under
-rtnl_lock(), so as long as you are in a calling context where that lock
-is held, you can be sure that the value of netdev_uses_dsa() does not
-change for a device - and thus the value of dev->dsa_ptr.
-
-> I see in other context that master->dsa_ptr is checked if not NULL.
-> Should I do the same check here?
-
-Nope. DSA takes care of passing a fully set up DSA master as the
-"master" argument, and the calling convention is that rtnl_lock() is held.
-
-> > > +	/* Assign the new CPU port in LOOKUP MEMBER */
-> > > +	val |= cpu_port_mask;
-> > > +
-> > > +	ret = qca8k_rmw(priv, QCA8K_PORT_LOOKUP_CTRL(port),
-> > > +			QCA8K_PORT_LOOKUP_MEMBER,
-> > > +			val);
-> > > +	if (ret)
-> > > +		return ret;
-> > > +
-> > > +	/* Fast Age the port to flush FDB table */
-> > > +	qca8k_port_fast_age(ds, port);
-> > 
-> > Why do you have to fast age the (user) port?
-> > 
+> I found it better to rework the 'for' into a 'while' loop; please check the attached patch.
 > 
-> The 2 CPU port have a different mac address, is it a problem?
+Taken from your patch:
 
-But fast ageing the user port (which is what "port" is, here) gets rid
-of the FDB entries learned on that port as part of the bridging service,
-and which have it as a *destination*. So I'm not sure how that operation
-would help. The MAC address of the DSA masters, if learned at all, would
-not point towards any user port but towards CPU ports.
+@@ -240,8 +240,8 @@ void page_cache_ra_unbounded(struct readahead_control *ractl,
+ 			 * not worth getting one just for that.
+ 			 */
+ 			read_pages(ractl);
+-			ractl->_index++;
+-			i = ractl->_index + ractl->_nr_pages - index - 1;
++			ractl->_index += folio_nr_pages(folio);
++			i = ractl->_index + ractl->_nr_pages - index;
 
-FWIW, dsa_port_change_master() takes care of migrating/replaying a lot of
-configuration, including the MAC addresses for local address filtering -
-dsa_slave_unsync_ha() and dsa_slave_sync_ha().
+IIUC, we don't need to update the _index after read_pages() as it already modifies it. We just need
+to move ractl->_index by 1 to move to the next index.
 
-That being said, those 2 functions are dead code for your switch,
-because dsa_switch_supports_uc_filtering() and dsa_switch_supports_mc_filtering()
-both return false.
 
-It would be good to hear from you how do you plan the qca8k driver to
-send and receive packets. From looking at the code (learning on the CPU
-port isn't enabled), I guess that the MAC addresses of the ports are
-never programmed in the FDB and thus, they reach the CPU by flooding,
-with the usual drawbacks that come with that - packets destined for
-local termination will also be flooded to other stations in the bridging
-domain. Getting rid of the reliance on flooding will have its own
-challenges. You can't enable automatic address learning [ on the CPU
-ports ] with multiple active CPU ports, because one FDB entry could ping
-pong from one CPU port to the other, leading to packet loss from certain
-user ports when the FDB entry points to the CPU port that isn't affine
-to the inbound port. So you'd probably need to program some sort of
-"multicast" FDB entries that target all CPU ports, and rely on the
-PORT_VID_MEMBER field to restrict forwarding to only one of those CPU
-ports at a time.
-
-> > > +
-> > > +	/* Reenable port */
-> > > +	qca8k_port_set_status(priv, port, 1);
-> > 
-> > or disable/enable it, for that matter?
-> > 
+> Cheers,
 > 
-> The idea is sto stop any traffic flowing to one CPU to another before
-> doing the change.
-
-Both DSA masters are prepared to handle traffic when port_change_master()
-is called, so unless there's some limitation in the qca8k driver, there
-shouldn't be any in DSA.
-
-> > From my notes in commit eca70102cfb1 ("net: dsa: felix: add support for
-> > changing DSA master"), I recall this:
-> > 
-> >     When we change the DSA master to a LAG device, DSA guarantees us that
-> >     the LAG has at least one lower interface as a physical DSA master.
-> >     But DSA masters can come and go as lowers of that LAG, and
-> >     ds->ops->port_change_master() will not get called, because the DSA
-> >     master is still the same (the LAG). So we need to hook into the
-> >     ds->ops->port_lag_{join,leave} calls on the CPU ports and update the
-> >     logical port ID of the LAG that user ports are assigned to.
-> > 
-> > Otherwise said:
-> > 
-> > $ ip link add bond0 type bond mode balance-xor && ip link set bond0 up
-> > $ ip link set eth0 down && ip link set eth0 master bond0 # .port_change_master() gets called
-> > $ ip link set eth1 down && ip link set eth1 master bond0 # .port_change_master() does not get called
-> > $ ip link set eth0 nomaster # .port_change_master() does not get called
-> > 
-> > Unless something has changed, I believe that you need to handle these as well,
-> > and update the QCA8K_PORT_LOOKUP_MEMBER field. In the case above, your
-> > CPU port association would remain towards eth0, but the bond's lower interface
-> > is eth1.
-> > 
-> 
-> Can you better describe this case?
-> 
-> In theory from the switch view, with a LAG we just set that an user port
-> can receive packet from both CPU port.
-> 
-> Or you are saying that when an additional memeber is added to the LAG,
-> port_change_master is not called and we could face a scenario where:
-> 
-> - dsa master is LAG
-> - LAG have the 2 CPU port
-> - user port have LAG as master but QCA8K_PORT_LOOKUP_MEMBER with only
->   one CPU?
-> 
-> If I got this right, then I get what you mean with the fact that I
-> should update the lag_join/leave definition and refresh each
-> configuration.
-
-In Documentation/networking/dsa/configuration.rst I gave 2 examples of
-changing the DSA master to be a LAG.
-
-In the list of 4 commands I posted in the previous reply, I assumed that
-eth0 is the original DSA master, and eth1 is the second (initially inactive)
-DSA master.
-
-When eth0 joins a LAG, DSA notices that and implicitly migrates all user
-ports affine to eth0 towards bond0 as the new DSA master. At that time,
-.port_change_master() will be called for all user ports under eth0, to
-be notified that the new DSA master is bond0.
-
-Once all user ports have bond0 as a DSA master, .port_change_master()
-will no longer be called as long as bond0 remains their DSA master.
-But the lower port configuration of bond0 can still change.
-
-During the command where eth1 also becomes a lower port of bond0, DSA
-just calls .port_lag_join() for the CPU port attached to eth1, and you
-need to handle that and update the CPU port mask. Same thing when eth0
-leaves bond0.
+> Hannes
