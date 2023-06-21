@@ -2,129 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F5BA738535
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0455738545
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:34:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231207AbjFUNcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60158 "EHLO
+        id S231703AbjFUNd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjFUNcX (ORCPT
+        with ESMTP id S231478AbjFUNdx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:32:23 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2531981;
-        Wed, 21 Jun 2023 06:32:22 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3a03ff70c1aso1095470b6e.1;
-        Wed, 21 Jun 2023 06:32:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687354342; x=1689946342;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/IJMn0/zhbPXvpTVANrT1cs8Ypc7FJHdchkV1z/m0Hg=;
-        b=hgPhc6i1L+dMuKShv/QYYl14XtrwkypfPbagW42p++z6j8bK9EOl6KjPQ8gq7xkhGO
-         wTh9cHXL3W8vi59H0WX7APoHx6jmMwX/f0JlhKpF2LU16XQo4zi6b4Foxfau95wZPbo2
-         vYIP6TziUUhrRqBTZo8V44K1rwZgqCNlHmoh4WB15PObLT3QHjE1IfphPk0M2BFh9cml
-         BOX9+58fAQdwVxasNfnOCouqZoq6hhVO0IiIKSKUFETEi6Rfnutxs8wkPuZ8NqOj9aWG
-         ZH7VPLdNJOTZSfqJpeKVdwWdPeFccIfg6rNXZIingyQKHkYPUwlbTcDQppeEY62lOC1e
-         AKJA==
-X-Gm-Message-State: AC+VfDx2r1fOFQP6Grx8L0GA62jSa4lPQAtML2ywnfrHKtd696+wAKdi
-        dgh01A+hlpeYuzsCZ6VQPcw=
-X-Google-Smtp-Source: ACHHUZ5ZaK8fBszARbtNRNohDQBzuxdQlCR3hu8a/EPENE6dcfIxTIt6R1TGNUF4Cdy+76NkOdPjuA==
-X-Received: by 2002:aca:d0a:0:b0:3a0:30e8:f069 with SMTP id 10-20020aca0d0a000000b003a030e8f069mr6942247oin.30.1687354341857;
-        Wed, 21 Jun 2023 06:32:21 -0700 (PDT)
-Received: from localhost.localdomain (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net. [82.11.51.62])
-        by smtp.gmail.com with ESMTPSA id bf24-20020a056808191800b00395f2c84b81sm2114206oib.54.2023.06.21.06.32.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 06:32:21 -0700 (PDT)
-From:   Lucas Tanure <tanure@linux.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>
-Cc:     Nick <nick@khadas.com>, Artem <art@khadas.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Lucas Tanure <tanure@linux.com>
-Subject: [PATCH v3 0/3] Add Amlogic A311D2 and Khadas Vim4 Board Support
-Date:   Wed, 21 Jun 2023 14:32:12 +0100
-Message-ID: <20230621133215.109254-1-tanure@linux.com>
-X-Mailer: git-send-email 2.41.0
+        Wed, 21 Jun 2023 09:33:53 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE34191;
+        Wed, 21 Jun 2023 06:33:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687354433; x=1718890433;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UGeph0SnmhqYhiHgSmqDullZqGhaZth9Yn0Kr+BwwTs=;
+  b=CJwTo2VdYTY/LYqO4uUZnMcIYItGJW2cy0CiSA+YJvXxMZ1fnEsPBWLT
+   l+ZEeaZnWOTaUCtg3/XQEaVGCyHQxOXRMEvGzhRJgnZEUW//AbzApxWUq
+   KNrC6mxZ+VA612fff7IFzlOSYxjZbrWv1gjTE4d44TS608ivD8m7jeTZC
+   fD/U2zR35LphoV4JQ86QCdfO8UVxEK7DwjzASAZTI9vBwstKjt2lsADI0
+   tvtl4T5JZXvbnNVnPyuLaKLIIBKcdrYp7CulEAq0lqTXaNHJIGrGPDqzq
+   C+3zeUuqGVrRBmZkOXqeoQ07S+1fjpKaCww9y6jSmr811DBqtO0bUmHx7
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="359041977"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="359041977"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 06:33:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="784502088"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="784502088"
+Received: from araj-dh-work.jf.intel.com (HELO araj-dh-work) ([10.165.157.158])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 06:33:52 -0700
+Date:   Wed, 21 Jun 2023 06:32:13 -0700
+From:   Ashok Raj <ashok_raj@linux.intel.com>
+To:     linan666@huaweicloud.com
+Cc:     axboe@kernel.dk, linan122@huawei.com, dan.j.williams@intel.com,
+        vishal.l.verma@intel.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com, houtao1@huawei.com, yangerkun@huawei.com,
+        Ashok Raj <ashok.raj@intel.com>
+Subject: Re: [PATCH v3 0/4] block/badblocks: fix badblocks setting error
+Message-ID: <ZJL73Zhyq4d/oaXd@araj-dh-work>
+References: <20230621172052.1499919-1-linan666@huaweicloud.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621172052.1499919-1-linan666@huaweicloud.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Khadas VIM4 uses the Amlogic A311D2 SoC, based on the Amlogic
-Meson T7 family. This chip is not the same as A311D used in Vim3
-board.
+On Thu, Jun 22, 2023 at 01:20:48AM +0800, linan666@huaweicloud.com wrote:
+> From: Li Nan <linan122@huawei.com>
+> 
+> This patch series fixes some simple bugs of setting badblocks and
+> optimizing struct badblocks. Coly Li has been trying to refactor badblocks
+> in patch series "badblocks improvement for multiple bad block ranges", but
+> the workload is significant. Before that, I will fix some easily triggered
+  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Work based on Khadas 5.4 branch:
-https://github.com/khadas/linux/tree/khadas-vims-5.4.y
-
-The current status is Vim4 board booting to emergency shell via uart.
-
-Board Features:
-- 8GB LPDDR4X 2016MHz
-- 32GB eMMC 5.1 storage
-- 32MB SPI flash
-- 10/100/1000 Base-T Ethernet
-- AP6275S Wireless (802.11 a/b/g/n/ac/ax, BT5.1)
-- HDMI 2.1 video
-- HDMI Input
-- 1x USB 2.0 + 1x USB 3.0 ports
-- 1x USB-C (power) with USB 2.0 OTG
-- 3x LED's (1x red, 1x blue, 1x white)
-- 3x buttons (power, function, reset)
-- M2 socket with PCIe, USB, ADC & I2C
-- 40pin GPIO Header
-- 1x micro SD card slot
-
-Changes Since v2:
- - Add "amlogic,meson-t7-uart" documentation
-
-Changes Since v1:
- - Drop the T7 clock driver as it is not needed for serial boot. It will
- later use the S4 clock
- driver as S4 and  T7 seems to be similar chips.
- - Use "arm,gic-400" for interrupt controller to fix dtb_check
- - Remove CPU node properties not needed for serial boot
- - Move UART node to apb4 node
- - Drop T7 UART compatible line and use S4 uart
- - Use psci V1 instead of 0.2, it works, but I can't verify is correct
- as the datasheet I have
- doesn't contain that information.
- - Remove compatible from meson-t7.dtsi, move it to vim4 board dts
- - Add memory node with 8GB. Not sure about this one, works without,
- but doesn't detect 8GB
- - Use defines for GIC_CPU_MASK_SIMPLE, IRQ_TYPE_LEVEL_LOW,
- IRQ_TYPE_LEVEL_HIGH instead of hardcoded values
-
-Lucas Tanure (3):
-  dt-bindings: arm: amlogic: add Amlogic A311D2 bindings
-  dt-bindings: serial: amlogic,meson-uart: Add compatible string for T7
-  arm64: dts: meson-t7-a311d2-khadas-vim4: add initial device-tree
-
- .../devicetree/bindings/arm/amlogic.yaml      |   7 +
- .../bindings/serial/amlogic,meson-uart.yaml   |   2 +
- arch/arm64/boot/dts/amlogic/Makefile          |   1 +
- .../amlogic/meson-t7-a311d2-khadas-vim4.dts   |  52 ++++++
- arch/arm64/boot/dts/amlogic/meson-t7.dtsi     | 158 ++++++++++++++++++
- 5 files changed, 220 insertions(+)
- create mode 100644 arch/arm64/boot/dts/amlogic/meson-t7-a311d2-khadas-vim4.dts
- create mode 100644 arch/arm64/boot/dts/amlogic/meson-t7.dtsi
-
---
-2.41.0
-
+You mean the refactor is going to take longer to complete? 
+If so, maybe state it that way...
