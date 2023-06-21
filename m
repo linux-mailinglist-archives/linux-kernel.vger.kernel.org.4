@@ -2,419 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C8673868A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0A0F73868E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:15:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232546AbjFUOPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33658 "EHLO
+        id S232918AbjFUOPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:15:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233052AbjFUOO5 (ORCPT
+        with ESMTP id S233195AbjFUOPP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:14:57 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D689213C
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:14:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687356859; x=1718892859;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=9adIYkSPZPSbDZomCIPXDHAFkK/cANr4oaK1SeIPzi4=;
-  b=A+9o0pWS850tGuW41aDtohzsvllZyXIxzA5M0MNte4JEh1x8X5CAw/k/
-   n7CGit7eHr4hxy52YO/DDoFAWDa/kYeFKAA/fpGEsirXuNty5DhNbOdCh
-   s9qC8qO2ly5jqwe0cvQ7wUHBzWTvrRou5wft75W8fX+Bj+uTYfqloe0LJ
-   opvogF9svpnqcy79iSFbstWGb86P6tbdxT5w+hFcJ72XXJm7dpy3zAiRy
-   4EHEhKzlZL8uv4kZvNfwjrKB6b4Tp1Uj06wAUDXs2Gjkt2KmCQwZ0D5Nr
-   xBZ+WlpTf8U4JTthD6aUYpvVIVqSHLzBuSIaL0nVl04yrxH9UqLH4uaiV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="349915867"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="349915867"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 07:14:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="784507825"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="784507825"
-Received: from uniemimu-mobl1.ger.corp.intel.com (HELO [10.249.254.76]) ([10.249.254.76])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 07:14:16 -0700
-Message-ID: <7bcd2548ad4a403d8c6b67a8274c253b07123be8.camel@linux.intel.com>
-Subject: Re: [PATCH v2] Documentation/gpu: Add a VM_BIND async draft document
-From:   Thomas =?ISO-8859-1?Q?Hellstr=F6m?= 
-        <thomas.hellstrom@linux.intel.com>
-To:     Danilo Krummrich <dakr@redhat.com>
-Cc:     intel-xe@lists.freedesktop.org, Nirmoy Das <nirmoy.das@intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Oak Zeng <oak.zeng@intel.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Date:   Wed, 21 Jun 2023 16:14:14 +0200
-In-Reply-To: <ZJLdoPznXusy8l51@pollux>
-References: <20230621100435.54425-1-thomas.hellstrom@linux.intel.com>
-         <ZJLdoPznXusy8l51@pollux>
-Organization: Intel Sweden AB, Registration Number: 556189-6027
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 21 Jun 2023 10:15:15 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82401BFD;
+        Wed, 21 Jun 2023 07:14:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=olkfJFJHmdPF0qnYYe5wpm6Uq97XftMPhiu1DWdUHp4=; b=SEPaIvjbiZ9lxdf4JKSWf9/muM
+        7kpEvyox/R5SDvyjmv/ZatjeZ7FozBPEWRPKKYJ9+BTuorwCPKdcJjBjKgkKbnwo3XtjnIlXzumwh
+        FP5fKODdLvTMBnXLbx9Fmz+wJKLVjfd2BWAiDc2ImCrYNwiOHDNub9X5dpiH5vt3WmJY=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:45778 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1qBybN-0004sm-Vk; Wed, 21 Jun 2023 10:14:30 -0400
+Date:   Wed, 21 Jun 2023 10:14:29 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Message-Id: <20230621101429.7f86490aa7590f0d978834ce@hugovil.com>
+In-Reply-To: <Y8rl452Xm1FrnFfF@mail.local>
+References: <20221215150214.1109074-1-hugo@hugovil.com>
+        <Y8rl452Xm1FrnFfF@mail.local>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v3 00/14] rtc: pcf2127: add PCF2131 driver
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for reviewing.
+On Fri, 20 Jan 2023 20:05:07 +0100
+Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
 
-On Wed, 2023-06-21 at 13:23 +0200, Danilo Krummrich wrote:
-> On Wed, Jun 21, 2023 at 12:04:35PM +0200, Thomas Hellstr=C3=B6m wrote:
-> > Add a motivation for and description of asynchronous VM_BIND
-> > operation
-> >=20
-> > v2:
-> > - Fix typos (Nirmoy Das)
-> > - Improve the description of a memory fence (Oak Zeng)
-> > - Add a reference to the document in the Xe RFC.
-> > - Add pointers to sample uAPI suggestions
-> >=20
-> > Signed-off-by: Thomas Hellstr=C3=B6m <thomas.hellstrom@linux.intel.com>
-> > Acked-by: Nirmoy Das <nirmoy.das@intel.com>
-> > ---
-> > =C2=A0Documentation/gpu/drm-vm-bind-async.rst | 145
-> > ++++++++++++++++++++++++
-> > =C2=A0Documentation/gpu/rfc/xe.rst=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 4 +-
-> > =C2=A02 files changed, 147 insertions(+), 2 deletions(-)
-> > =C2=A0create mode 100644 Documentation/gpu/drm-vm-bind-async.rst
-> >=20
-> > diff --git a/Documentation/gpu/drm-vm-bind-async.rst
-> > b/Documentation/gpu/drm-vm-bind-async.rst
-> > new file mode 100644
-> > index 000000000000..69aff250b62f
-> > --- /dev/null
-> > +++ b/Documentation/gpu/drm-vm-bind-async.rst
-> > @@ -0,0 +1,145 @@
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +Asynchronous VM_BIND
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +Nomenclature:
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +* VRAM: On-device memory. Sometimes referred to as device local
-> > memory.
-> > +
-> > +* vm: A GPU address space. Typically per process, but can be
-> > shared by
-> > +=C2=A0 multiple processes.
->=20
-> Rather obvious, but maybe specify as "GPU virtual address space" or
-> just
-> "GPU VA space".
->=20
-> Personally, I don't like "vm" as an abbreviation for "GPU VA space"
-> or "virtual
-> address space" in general, but it is commonly used and I fail to find
-> a better
-> one to be honest.
+> Hello,
+> 
+> I know I've been holding off on the review of this series for a while
+> and I'm sorry for that.
+> 
+> One of the main issue that is remaining is that the driver ends up being
+> 53% bigger and generaly less efficient for no added functionality for
+> the existing RTCs.
+> 
+> I know performance is not a concern however, having more code in the
+> set/read time and irq paths means that it is more difficult to set an
+> get the time precisely.
 
-I have another upcoming document related to VM_BIND locking variants /
-userptr integration and there I call gpu_vm. It would make sense to
-unify the naming in the documents anyway. I don't have a strong opinion
-either as long as it's not too long.
+Hi Alexandre,
+one way to keep rtc_read_time() as efficient as before, and even more
+efficient by reading 7 instead of 10 registers, would be to drop reading
+the CTRL3 register, which is only used to detect and display an info
+message for the low battery condition. This low battery check could be
+moved to an ioctl call, like it is done in the PCF8523 driver.
 
->=20
-> > +
-> > +* VM_BIND: An operation or a list of operations to modify a vm
-> > using
-> > +=C2=A0 an IOCTL. The operations include mapping and unmapping system-
-> > or
-> > +=C2=A0 VRAM memory.
-> > +
-> > +* syncobj: A container that abstracts synchronization objects. The
-> > +=C2=A0 synchronization objects can be either generic, like dma-fences
-> > or
-> > +=C2=A0 driver specific. A syncobj typically indicates the type of the
-> > +=C2=A0 underlying synchronization object.
-> > +
-> > +* in-syncobj: Argument to a VM_BIND IOCTL, the VM_BIND operation
-> > waits
-> > +=C2=A0 for these before starting.
-> > +
-> > +* out-syncbj: Argument to a VM_BIND_IOCTL, the VM_BIND operation
-> > +=C2=A0 signals these when the bind operation is complete.
-> > +
-> > +* memory fence: A synchronization object, different from a dma-
-> > fence.
-> > +=C2=A0 A memory fence uses the value of a specified memory location to
-> > determine
-> > +=C2=A0 signaled status. A memory fence can be awaited and signaled by
-> > both
-> > +=C2=A0 the GPU and CPU. Memory fences are sometimes referred to as
-> > +=C2=A0 user-fences, and do not necessarily bey the dma-fence rule of
-> > +=C2=A0 signalling within a "reasonable amount of time". The kernel
-> > should
-> > +=C2=A0 thus avoid waiting for memory fences with locks held.
-> > +
-> > +* long-running workload: A workload that may take more than the
-> > +=C2=A0 current stipulated dma-fence maximum signal delay to complete
-> > and
-> > +=C2=A0 which therefore needs to set the VM or the GPU execution contex=
-t
-> > in
-> > +=C2=A0 a certain mode that disallows completion dma-fences.
-> > +
-> > +* UMD: User-mode driver.
-> > +
-> > +* KMD: Kernel-mode driver.
-> > +
-> > +
-> > +Synchronous / Asynchronous VM_BIND operation
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +Synchronous VM_BIND
-> > +___________________
-> > +With Synchronous VM_BIND, the VM_BIND operations all complete
-> > before the
-> > +ioctl returns. A synchronous VM_BIND takes neither in-fences nor
->=20
-> Just some nit-picking: IOCTL is mostly written in caps, maybe you
-> want to stick
-> to either of the two variants.
-
-Sure,
-
->=20
-> > +out-fences. Synchronous VM_BIND may block and wait for GPU
-> > operations;
-> > +for example swapin or clearing, or even previous binds.
-> > +
-> > +Asynchronous VM_BIND
-> > +____________________
-> > +Asynchronous VM_BIND accepts both in-syncobjs and out-syncobjs.
-> > While the
-> > +IOCTL may return immediately, the VM_BIND operations wait for the
-> > in-syncobjs
-> > +before modifying the GPU page-tables, and signal the out-syncobjs
-> > when
-> > +the modification is done in the sense that the next execbuf that
->=20
-> Maybe add "execbuf" to the nomenclature.
->=20
-> > +awaits for the out-syncobjs will see the change. Errors are
-> > reported
-> > +synchronously assuming that the asynchronous part of the job never
-> > errors.
-> > +In low-memory situations the implementation may block, performing
-> > the
-> > +VM_BIND synchronously, because there might not be enough memory
-> > +immediately available for preparing the asynchronous operation.
-> > +
-> > +If the VM_BIND IOCTL takes a list or an array of operations as an
-> > argument,
-> > +the in-syncobjs needs to signal before the first operation starts
-> > to
-> > +execute, and the out-syncobjs signal after the last operation
-> > +completes. Operations in the operation list can be assumed, where
-> > it
-> > +matters, to complete in order.
-> > +
-> > +To aid in supporting user-space queues, the VM_BIND may take a
-> > bind context
->=20
-> I think "bind context" should also be explained in the nomenclature.
->=20
-> > +AKA bind engine identifier argument. All VM_BIND operations using
-> > the same
-> > +bind engine can then be assumed, where it matters, to complete in
-> > +order. No such assumptions can be made between VM_BIND operations
-> > +using separate bind contexts.
-> > +
-> > +The purpose of an Asynchronous VM_BIND operation is for user-mode
-> > +drivers to be able to pipeline interleaved vm modifications and
-> > +execbufs. For long-running workloads, such pipelining of a bind
-> > +operation is not allowed and any in-fences need to be awaited
-> > +synchronously.
-> > +
-> > +Also for VM_BINDS for long-running VMs the user-mode driver should
-> > typically
-> > +select memory fences as out-fences since that gives greater
-> > flexibility for
-> > +the kernel mode driver to inject other=C2=A0 operations into the bind =
-/
-> > +unbind operations. Like for example inserting breakpoints into
-> > batch
-> > +buffers. The workload execution can then easily be pipelined
-> > behind
-> > +the bind completion using the memory out-fence as the signal
-> > condition
-> > +for a gpu semaphore embedded by UMD in the workload.
-> > +
-> > +Multi-operation VM_BIND IOCTL error handling and interrupts
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +The VM_BIND operations of the ioctl may error due to lack of
-> > resources
-> > +to complete and also due to interrupted waits. In both situations
-> > UMD
-> > +should preferably restart the IOCTL after taking suitable action.
-> > If
-> > +UMD has overcommitted a memory resource, an -ENOSPC error will be
-> > +returned, and UMD may then unbind resources that are not used at
-> > the
-> > +moment and restart the IOCTL. On -EINTR, UMD should simply restart
-> > the
-> > +IOCTL and on -ENOMEM user-space may either attempt to free known
-> > +system memory resources or abort the operation. If aborting as a
-> > +result of a failed operation in a list of operations, some
-> > operations
-> > +may still have completed, and to get back to a known state, user-
-> > space
-> > +should therefore attempt to unbind all virtual memory regions
-> > touched
-> > +by the failing IOCTL.
-> > +Unbind operations are guaranteed not to cause any errors due to
-> > +resource constraints.
-> > +In between a failed VM_BIND ioctl and a successful restart there
-> > may
-> > +be implementation defined restrictions on the use of the VM. For a
-> > +description why, please see KMD implementation details under
-> > [error
-> > +state saving]_.
-> > +
-> > +Sample uAPI implementations
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +Suggested uAPI implementations at the moment of writing can be
-> > found for
-> > +the Nouveau driver `here:
-> > https://patchwork.freedesktop.org/patch/543260/?series=3D112994&rev=3D6=
-`
-> > +and for the Xe driver `here:
-> > https://cgit.freedesktop.org/drm/drm-xe/diff/include/uapi/drm/xe_drm.h?=
-h=3Ddrm-xe-next&id=3D9cb016ebbb6a275f57b1cb512b95d5a842391ad7`
-> > +
-> > +KMD implementation details
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D
->=20
-> Maybe we can mention the GPUVA manager as a helper for implementing
-> such an
-> interface.
-
-Sure will add this as well.
-Thanks,
-
-Thomas
-
->=20
-> Anyway, I will surely add a link pointing to this document to the
-> documentation
-> of the GPUVA manager.
+Hugo.
 
 
->=20
-> - Danilo
->=20
-> > +
-> > +.. [error state saving] Open: When the VM_BIND ioctl returns an
-> > error, some
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0or eve=
-n parts of an operation may have been
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0comple=
-ted. If the ioctl is restarted, in
-> > order
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0to kno=
-w where to restart, the KMD can
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0either=
- put the VM in an error state and
-> > save
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0one in=
-stance of the needed restart state
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0intern=
-ally. In this case, KMD needs to
-> > block
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0furthe=
-r modifications of the VM state that
-> > may
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0cause =
-additional failures requiring a
-> > restart
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0state =
-save, until the error has been fully
-> > resolved.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0If the=
- uAPI instead defines a pointer to a
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0UMD al=
-located cookie in the IOCTL struct,
-> > it
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0could =
-also choose to store the restart
-> > state
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0in tha=
-t cookie.
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0The re=
-start state may, for example, be the
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0number=
- of successfully completed
-> > operations.
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Easies=
-t for UMD would of course be if KMD
-> > did
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0a full=
- unwind on error so that no error
-> > state
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0needs =
-to be saved.
-> > diff --git a/Documentation/gpu/rfc/xe.rst
-> > b/Documentation/gpu/rfc/xe.rst
-> > index 2516fe141db6..0f062e1346d2 100644
-> > --- a/Documentation/gpu/rfc/xe.rst
-> > +++ b/Documentation/gpu/rfc/xe.rst
-> > @@ -138,8 +138,8 @@ memory fences. Ideally with helper support so
-> > people don't get it wrong in all
-> > =C2=A0possible ways.
-> > =C2=A0
-> > =C2=A0As a key measurable result, the benefits of ASYNC VM_BIND and a
-> > discussion of
-> > -various flavors, error handling and a sample API should be
-> > documented here or in
-> > -a separate document pointed to by this document.
-> > +various flavors, error handling and sample API suggestions are
-> > documented in
-> > +Documentation/gpu/drm-vm-bind-async.rst
-> > =C2=A0
-> > =C2=A0Userptr integration and vm_bind
-> > =C2=A0-------------------------------
-> > --=20
-> > 2.40.1
-> >=20
->=20
-
+> I guess I'll take it as a merged driver but I took a different decision
+> for other RTCs.
+> 
+> On 15/12/2022 10:02:01-0500, Hugo Villeneuve wrote:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > 
+> > Hello,
+> > this patch series adds the driver for the PCF2131 real-time clock.
+> > 
+> > This RTC is very similar in functionality to the PCF2127/29 with the
+> > following differences:
+> >   -supports two new control registers at offsets 4 and 5
+> >   -supports a new reset register
+> >   -supports 4 tamper detection functions instead of 1
+> >   -has no nvmem (like the PCF2129)
+> >   -has two output interrupt pins instead of one
+> >   -has 1/100th seconds capabilities (not supported in this driver)
+> >   -pcf2127 has watchdog clock sources: 1/60,   1, 64 and 4096Hz
+> >    pcf2131 has watchdog clock sources: 1/64, 1/4,  4 and   64Hz
+> >   -watchdog value register cannot be read after being set
+> > 
+> > Most of the register addresses are very different, although they still
+> > follow the same layout. For example, the time/date and tamper registers
+> > have a different base address, but the offsets are all the same.
+> > Consequently, the source code of the PCF2127 driver can be easily adapted
+> > to support this new device.
+> > 
+> > Patches 1 to 6 modify the existing pcf2127 driver to make it more generic
+> > and able to support multiple variants, like the PCF2131. This is done
+> > mostly by using offsets instead of absolute hardcoded register addresses.
+> > 
+> > Patch 7 add actual support for the PCF2131.
+> > 
+> > Patch 8 configures all interrupt sources to go through the INT A pin.
+> > 
+> > Patch 9 changes the PWRMNG bits to be the same with the PCF2131 as they
+> >       are with the PCF2127/29 (different default values).
+> > 
+> > Patch 10 allow to confirm PCF2131 device presence by reading the reset
+> >       register fixed pattern.
+> > 
+> > Patch 11 adapt the time/date registers write sequence for PCF2131 (STOP and
+> >       CPR bits).
+> > 
+> > Patch 12 add support for generic watchdog timing configuration.
+> > 
+> > Patch 13 add a new flag to identify if device has read support for reading
+> >       watchdog register value.
+> >       Since the watchdog value register cannot be read on the PCF2131 after
+> >       being set, it seems that we cannot detect if watchdog timer was
+> >       started by bootloader. I am not sure what is the best way to handle
+> >       this situation, suggestions are welcomed.
+> > 
+> > Patch 14 add the dt-bindings for the PCF2131.
+> > 
+> > I have tested the driver using a PCF2131-ARD evaluation board connected to
+> > an NXP imx8mp evaluation board:
+> >   - Time get/set ok;
+> >   - Alarms get/set ok
+> >   - Timestamp 1 to 4 ok
+> >   - IRQ alarm ok
+> >   - Watchdog ok
+> >   - Also tested successfully with "RTC Driver Test Example" from
+> >     Documentation/rtc.txt
+> > 
+> > I have also tested the driver on a custom PCF2129 adapter board connected to a
+> > beaglebone black.
+> > 
+> > Thank you.
+> > 
+> > Link: [v1] https://patchwork.ozlabs.org/project/rtc-linux/patch/20220125200009.900660-2-hugo@hugovil.com/
+> > Link: [v2] https://patchwork.ozlabs.org/project/rtc-linux/list/?series=285734
+> > 
+> > Changes for V3:
+> > - Rebased for kernel v6.1
+> > 
+> > Changes for V2:
+> > - In general, fix and improvements after I have tested on real hardware
+> > - Fix alarm interrupt A/B mask setting for PCF2131:
+> >   PCF2131_BIT_INT_AIE must be cleared, not set, to enable interrupt.
+> > - Remove low_reg validation: only check if TS interrupt flag is
+> >   defined, as low_reg is defined at address 0 for PCF2127/29.
+> > - Change PWRMNG value for PCF2131: default is different than PCF2127/29.
+> > - Adapt time/date registers write sequence for PCF2131 (STOP and CPR bits).
+> > - Map all interrupt sources to INT A pin
+> > - Read and validate PCF2131 device presence from RESET register
+> > - Adapt watchdog configuration for PCF2131
+> > 
+> > Hugo Villeneuve (14):
+> >   rtc: pcf2127: add variant-specific configuration structure
+> >   rtc: pcf2127: adapt for time/date registers at any offset
+> >   rtc: pcf2127: adapt for alarm registers at any offset
+> >   rtc: pcf2127: adapt for WD registers at any offset
+> >   rtc: pcf2127: adapt for CLKOUT register at any offset
+> >   rtc: pcf2127: add support for multiple TS functions
+> >   rtc: pcf2127: add support for PCF2131 RTC
+> >   rtc: pcf2127: add support for PCF2131 interrupts on output INT_A
+> >   rtc: pcf2127: set PWRMNG value for PCF2131
+> >   rtc: pcf2127: read and validate PCF2131 device signature
+> >   rtc: pcf2127: adapt time/date registers write sequence for PCF2131
+> >   rtc: pcf2127: support generic watchdog timing configuration
+> >   rtc: pcf2127: add flag for watchdog register value read support
+> >   dt-bindings: rtc: pcf2127: add PCF2131
+> > 
+> >  .../devicetree/bindings/rtc/nxp,pcf2127.yaml  |   4 +-
+> >  drivers/rtc/Kconfig                           |   4 +-
+> >  drivers/rtc/rtc-pcf2127.c                     | 939 ++++++++++++++----
+> >  3 files changed, 752 insertions(+), 195 deletions(-)
+> > 
+> > -- 
+> > 2.30.2
+> > 
+> 
+> -- 
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> 
