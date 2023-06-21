@@ -2,104 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F20737981
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 05:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 406B6737983
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 05:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjFUDP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 23:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58718 "EHLO
+        id S230010AbjFUDQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 23:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjFUDP1 (ORCPT
+        with ESMTP id S229478AbjFUDQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 23:15:27 -0400
-Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4E31717;
-        Tue, 20 Jun 2023 20:15:24 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R451e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=renyu.zj@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0VleADK4_1687317318;
-Received: from 30.221.149.25(mailfrom:renyu.zj@linux.alibaba.com fp:SMTPD_---0VleADK4_1687317318)
-          by smtp.aliyun-inc.com;
-          Wed, 21 Jun 2023 11:15:19 +0800
-Message-ID: <738dda90-6235-07dd-145a-d1dd3b1f5b5c@linux.alibaba.com>
-Date:   Wed, 21 Jun 2023 11:15:15 +0800
+        Tue, 20 Jun 2023 23:16:13 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70A771717;
+        Tue, 20 Jun 2023 20:16:12 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b5422163f4so35111445ad.2;
+        Tue, 20 Jun 2023 20:16:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687317372; x=1689909372;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7nB6R0ouDG8zHyz3+Z8AEZ2eoEA3QO4GpFCpSBeZ10g=;
+        b=iCO3ku+Uhm6rlxOnDEhVNOLzuI4wQF4xrBGC+dvhpnMwUtSbewBEWazsqWS4pg3gTb
+         xKWj4eO3LtyZxjaxEOgUrHqu/oS29qzD40oBn9L0Lq2rVZfV/9RUP0u5M2u1xK9AURqb
+         rBdWju/6G9Gpyn5RAJrD1QpIiy7HDpgFx+km7MUgd+2ezcKxGYZV92sVS2IQUGSoXQFT
+         swwWLWVUbQQJEB//eYUPhKozDoqqh5bXbxDjtnnVAg6lfIc553Cy5SBMlMi5wM8JBA1p
+         Cdg+9t3lEe9dkWMDudaDGpCDIE3RJic0DU+tDi/CZ4XBfRZq9R3jePj18RlMrThCng4N
+         MVZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687317372; x=1689909372;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7nB6R0ouDG8zHyz3+Z8AEZ2eoEA3QO4GpFCpSBeZ10g=;
+        b=jSrdyaVyijkN3/6/H4aexM8box2s3SqaQ9pFq9t4t/Y5MH48Som8dDLd5mnfwaw8at
+         8mpsconyzTmHBqpSwHRgcUZo03GZAv+EVElktQN5iACRftqJVBKt3/UKucvMHSX6mdzl
+         RqJOkhf29/RUXP3Xg3MvYWNmBB3fHMV2td5xBKy1LuCIxCkIgrxGItqdn/zstjVsZj46
+         CcBkSbgyh98rgDfT58QDSwjiAF487riyFgrl9Xnzz8J8bPLSh0Q4Ln8wgAGWpSZuKHwS
+         oumeb7kTQfkLYZ9yqh5JwfB5d5atmSxX656vHkr9PJQNPlT60At2B9s/2qfuuob4KeP5
+         X1eg==
+X-Gm-Message-State: AC+VfDzuaWdtBjrGWU4aNfZUhWPH7xKz38B27EVf+yi3RCG9RQqQYOiq
+        +YOknlIbJ/o0LpqyjgH2lu0=
+X-Google-Smtp-Source: ACHHUZ4UcsTpEvDFFd3DyltwlAJiswPaNd58ZXIHCY/uOaxB0kW+EmvrOngR2fOsSwWb49PYi6r/Lg==
+X-Received: by 2002:a17:902:ea0f:b0:1b6:6b03:10cd with SMTP id s15-20020a170902ea0f00b001b66b0310cdmr6482846plg.67.1687317371780;
+        Tue, 20 Jun 2023 20:16:11 -0700 (PDT)
+Received: from a28aa0606c51.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
+        by smtp.gmail.com with ESMTPSA id w13-20020a170902d3cd00b001b01fc7337csm2257747plb.247.2023.06.20.20.16.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 20:16:11 -0700 (PDT)
+From:   Jacky Huang <ychuang570808@gmail.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, arnd@arndb.de,
+        gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, soc@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, schung@nuvoton.com,
+        Jacky Huang <ychuang3@nuvoton.com>
+Subject: [PATCH v2 0/2] clk: nuvoton: Use clk_parent_data instead and add a header file
+Date:   Wed, 21 Jun 2023 03:16:03 +0000
+Message-Id: <20230621031605.234149-1-ychuang570808@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.2
-Subject: Re: [PATCH v3 2/7] perf metric: Event "Compat" value supports
- matching multiple identifiers
-To:     John Garry <john.g.garry@oracle.com>
-Cc:     James Clark <james.clark@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ilkka Koskinen <ilkka@os.amperecomputing.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org,
-        Zhuo Song <zhuo.song@linux.alibaba.com>,
-        Ian Rogers <irogers@google.com>, Will Deacon <will@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Robin Murphy <robin.murphy@arm.com>
-References: <1685438374-33287-1-git-send-email-renyu.zj@linux.alibaba.com>
- <1685438374-33287-3-git-send-email-renyu.zj@linux.alibaba.com>
- <c1d8ee9b-4839-1011-4dad-c4777d8f8224@oracle.com>
- <452e724b-2a2c-52fd-274b-60db7a7f730e@linux.alibaba.com>
- <c4b2fca8-602d-9c76-90a7-3eafd92da8bc@oracle.com>
- <76fcb062-61a8-5f90-b39d-b5fb6da35652@linux.alibaba.com>
- <5f38ef6c-8c50-5df9-19dd-c3c9fe590452@oracle.com>
- <e4be7189-a1ba-7758-bff3-e7b8d8ff1419@linux.alibaba.com>
- <892f57c7-8ce2-634c-26f3-4d4ab8b2f2ce@oracle.com>
- <079d7920-2030-2e00-a833-5ec6d450f7dc@oracle.com>
- <552eebae-76bb-a2fe-ccdc-11e8a01717da@linux.alibaba.com>
- <045a49c9-b9ae-bf0e-c4be-858d905bcc55@oracle.com>
- <7c765e0f-ca76-d212-0496-f9c56369e389@linux.alibaba.com>
- <d1ab4947-6bdf-2b9c-5b26-52c572611ca6@oracle.com>
- <a6e1114c-b37c-6999-0668-039aa495db84@linux.alibaba.com>
- <71c4ef1e-0982-1ef4-5135-001303b43cd3@oracle.com>
- <777e06ae-fd9c-8fd3-6976-7b80594e1942@linux.alibaba.com>
- <ae596b0c-e0bc-2b08-c348-0927acc0c8ef@oracle.com>
-From:   Jing Zhang <renyu.zj@linux.alibaba.com>
-In-Reply-To: <ae596b0c-e0bc-2b08-c348-0927acc0c8ef@oracle.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Jacky Huang <ychuang3@nuvoton.com>
+
+This set of patches addresses some of the issues that were identified in
+the ma35d1 clock driver.
+
+1. The external functions referenced between the .c files in this driver
+   should not be declared within the .c files themselves. Instead, a shared
+   .h file should be created to reference them.
+
+2. For the declaration of parent clocks, use struct clk_parent_data instead
+   of a string. Due to the change in the passed arguments, replace the usage
+   of devm_clk_hw_register_mux() with clk_hw_register_mux_parent_data() for
+   all cases.
+
+v2:
+  - In v1, all these modifications were included in a single patch, which is
+    not ideal. In v2, there were no changes made to the patch content itself,
+    but the different modification topics were separated into two individual
+    patches 
 
 
-在 2023/6/20 下午3:01, John Garry 写道:
-> On 20/06/2023 03:12, Jing Zhang wrote:
->>> But that JSON is not in this series. Why is it not included?
->>>
->> Because the RFC version of the cmn.json file does not define the EventCode for each event, this will not take effect, so I temporarily removed it.
->> The EventID of CMN events is different from other events. For example, hnf_slc_sf_cache_access corresponds to arm_cmn_0/type=0x5,eventid=0x2/.
->> The current JSON format parsing does not support this EventID, and jevent.py needs to be extended.
-> 
-> So please do that then. I would suggest just to first support event aliasing, and then support metrics. JFYI, I am still reworking current perf tool metric code for sys events, which should take a few more days.
-> 
+Jacky Huang (2):
+  clk: nuvoton: Add clk-ma35d1.h for driver extern functions
+  clk: nuvoton: Use clk_parent_data instead of string for parent clock
 
-Ok, thank you.
+ drivers/clk/nuvoton/clk-ma35d1-divider.c |   7 +-
+ drivers/clk/nuvoton/clk-ma35d1-pll.c     |   5 +-
+ drivers/clk/nuvoton/clk-ma35d1.c         | 737 +++++++++++++----------
+ drivers/clk/nuvoton/clk-ma35d1.h         |  18 +
+ 4 files changed, 447 insertions(+), 320 deletions(-)
+ create mode 100644 drivers/clk/nuvoton/clk-ma35d1.h
 
->>
->>> The cmn kernel driver exposes event hnf_slc_sf_cache_access, but I did not think that perf tool metric code matches those events described in/bus/event_sourcs/devices/<PMU>/events
->>>
->> If there is no alias defined, other events with the same name may be matched, it is indeed necessary to define an alias for each event first,
->> and I will add it in the next version. But first I need to extend jevent.py to support cmn EventID.
-> 
-> ok, please do this. I assume that you are talking about wildcard matching for cmn HW identifier. We would also need perf tool self-test expanded to cover this wildcard matching - see tests/pmu-events.c
-> 
+-- 
+2.34.1
 
-Ok, let me try.
-
-Thanks,
-Jing
