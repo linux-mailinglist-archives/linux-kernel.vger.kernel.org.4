@@ -2,125 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EA56738E1C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D115B738E0C
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjFUSFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 14:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37096 "EHLO
+        id S229830AbjFUSDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 14:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231873AbjFUSFA (ORCPT
+        with ESMTP id S231189AbjFUSCk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 14:05:00 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2388719BE
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:04:35 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-bb3a77abd7bso6160188276.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:04:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687370671; x=1689962671;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=we88AZ15mcIhWAQhZKhKoOix1+2t83No85BbQaNBI9o=;
-        b=Ak0ZY1obUF525QDvhGh4XZxBruc/h4DJUvpzjqGqMcbTbCU0e2d51GEkzIL2QmRJJv
-         b4lvcAynBt5RwhD2wPF44GexI0rskIa9LmZudsYEQglwueOInWqypFh69PsXXgKWO7Oc
-         lv/YuzheEsfRFvUowFE4HpMyC6CFz7HkbSaB8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687370671; x=1689962671;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=we88AZ15mcIhWAQhZKhKoOix1+2t83No85BbQaNBI9o=;
-        b=BBblDZw/SjoyYr8VUmzqSpMUOGIAtTsS3ukGbj8j3qmafgu1sEJBuA12delcsFaHgw
-         91oa+sKvEshFgfAqNU+lw8LknNETFHrKQ2+zsFnIE/OGMZAnFWKwoT4F+dyUq4miEjVM
-         HmrY7nFvM2zRhJy/nL6GLSEdiAgWunYnxuadoUaJf4mpSlZfYRR3N5EK7iCE7lD4TXCr
-         1n6uQ/P4wESXqOVmfHxWAPltiN1VyU7chegz1GlyEG/V3IFSzTuuFriOzQ80Yb7tcRhn
-         zQqepZusgZkFBC9sK0l7dXV7BNp3M6NH56JShHKE+O7Hy4hmImGVCohQItu5USDzJgck
-         cqZw==
-X-Gm-Message-State: AC+VfDytpIVqUkeLJq5jXrFHnSveKJqTWimYkNEtZ7Vy2jzMM1Zfkkng
-        4DOnU8PUY86bhjZEET1Jy2yqn7H7O0kkTsrH+5M=
-X-Google-Smtp-Source: ACHHUZ7FPiX6xbICfcQfnlk5NeoX1flf6bmaMMZg8oXO6UnONtdYZQiohoWdvvq5ofdLlbveSOSdOg==
-X-Received: by 2002:a54:4091:0:b0:398:2f06:329 with SMTP id i17-20020a544091000000b003982f060329mr15283734oii.9.1687369943179;
-        Wed, 21 Jun 2023 10:52:23 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id w36-20020a634924000000b0053491d92b65sm3398139pga.84.2023.06.21.10.52.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 10:52:22 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 10:52:21 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Marco Elver <elver@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>, Tom Rix <trix@redhat.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>, linux-kbuild@vger.kernel.org,
-        llvm@lists.linux.dev, Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] ubsan: Tighten UBSAN_BOUNDS on GCC
-Message-ID: <202306211051.1D4038323@keescook>
-References: <20230405022356.gonna.338-kees@kernel.org>
- <07dea91f-9b93-4227-9fec-728a9e7a0d55@roeck-us.net>
+        Wed, 21 Jun 2023 14:02:40 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A3F81710;
+        Wed, 21 Jun 2023 11:02:39 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 18:02:35 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1687370556;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=iQxjUsgsC/WPSkUYa9/qyRTPa+IzhBw37VPPoiW/Ep4=;
+        b=h7FbXNQsQRLhBeeZn3zZamxvnTfjIQooDQ0Oqjva3XLlTzutSgY6oU6Ao0f+/0TCfhUm3X
+        KHoYS6m0Cd5AmdiqwmDRPQ2kW6a68LnhhvD7FDfIfSWuJ1Y5px5RxQ/LTEWsZpna5M0PmF
+        doE44RfGClxU2CBjkSHedUo49VXvVG3r6KoQsa0EFByCASyUFgRshfJzKJV0KCZSC0ZAHI
+        tNtpwc9bXMkG4Iw+xXQzvbYJYKZrmWw/4FgA26Om7LHTa+3FTketRte2oLXi6F7SqkbXN7
+        GWbRfiKfnPAPyoibmNNa6/ciyxtigY3ANBRZTG4tQ4f0B6QdV26dm/7HqZD07A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1687370556;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=iQxjUsgsC/WPSkUYa9/qyRTPa+IzhBw37VPPoiW/Ep4=;
+        b=hawb49/GCpkH0I7iWNUPgYJRoPMFCEzd6JW4uCjRD2XBKrt6EhgRo0gTd6Qid4+EIF6tvh
+        mvLj4YtjnMjyHfAw==
+From:   "tip-bot2 for YueHaibing" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cleanups] x86/acpi: Remove unused extern declaration
+ acpi_copy_wakeup_routine()
+Cc:     YueHaibing <yuehaibing@huawei.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <07dea91f-9b93-4227-9fec-728a9e7a0d55@roeck-us.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Message-ID: <168737055575.404.2070205807282162061.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 09:42:01AM -0700, Guenter Roeck wrote:
-> Hi,
-> 
-> On Tue, Apr 04, 2023 at 07:23:59PM -0700, Kees Cook wrote:
-> > The use of -fsanitize=bounds on GCC will ignore some trailing arrays,
-> > leaving a gap in coverage. Switch to using -fsanitize=bounds-strict to
-> > match Clang's stricter behavior.
-> > 
-> > Cc: Marco Elver <elver@google.com>
-> > Cc: Masahiro Yamada <masahiroy@kernel.org>
-> > Cc: Nathan Chancellor <nathan@kernel.org>
-> > Cc: Nick Desaulniers <ndesaulniers@google.com>
-> > Cc: Nicolas Schier <nicolas@fjasle.eu>
-> > Cc: Tom Rix <trix@redhat.com>
-> > Cc: Josh Poimboeuf <jpoimboe@kernel.org>
-> > Cc: Miroslav Benes <mbenes@suse.cz>
-> > Cc: linux-kbuild@vger.kernel.org
-> > Cc: llvm@lists.linux.dev
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> > ---
-> 
-> This patch, presumably as side effect, enables CONFIG_ARCH_STM32
-> for arm64:allmodconfig. As consequence, CONFIG_STM32_RPROC is enabled
-> as well. This in turn results in the following build error.
-> 
-> Building arm64:allmodconfig ... failed
-> --------------
-> Error log:
-> In file included from include/linux/printk.h:564,
->                  from include/asm-generic/bug.h:22,
->                  from arch/arm64/include/asm/bug.h:26,
->                  from include/linux/bug.h:5,
->                  from include/linux/fortify-string.h:5,
->                  from include/linux/string.h:254,
->                  from include/linux/dma-mapping.h:7,
->                  from drivers/remoteproc/stm32_rproc.c:9:
-> drivers/remoteproc/stm32_rproc.c: In function 'stm32_rproc_mem_alloc':
-> drivers/remoteproc/stm32_rproc.c:122:22: error: format '%x' expects argument of type 'unsigned int', but argument 5 has type 'size_t'
-> 
-> I did not try to understand what is going on, but reverting this
-> patch fixes the problem.
+The following commit has been merged into the x86/cleanups branch of tip:
 
-Well that is really weird! I will investigate... this patch should be
-pretty self-contained...
+Commit-ID:     b360cbd254fde61cb500a4a3ca2e65dff3dfa039
+Gitweb:        https://git.kernel.org/tip/b360cbd254fde61cb500a4a3ca2e65dff3dfa039
+Author:        YueHaibing <yuehaibing@huawei.com>
+AuthorDate:    Tue, 20 Jun 2023 17:45:19 +08:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Wed, 21 Jun 2023 10:57:54 -07:00
 
--- 
-Kees Cook
+x86/acpi: Remove unused extern declaration acpi_copy_wakeup_routine()
+
+This is now unused, so can be removed.
+
+Signed-off-by: YueHaibing <yuehaibing@huawei.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Link: https://lore.kernel.org/all/20230620094519.15300-1-yuehaibing%40huawei.com
+---
+ arch/x86/kernel/acpi/sleep.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/arch/x86/kernel/acpi/sleep.h b/arch/x86/kernel/acpi/sleep.h
+index 171a40c..054c15a 100644
+--- a/arch/x86/kernel/acpi/sleep.h
++++ b/arch/x86/kernel/acpi/sleep.h
+@@ -12,7 +12,6 @@ extern int wakeup_pmode_return;
+ 
+ extern u8 wake_sleep_flags;
+ 
+-extern unsigned long acpi_copy_wakeup_routine(unsigned long);
+ extern void wakeup_long64(void);
+ 
+ extern void do_suspend_lowlevel(void);
