@@ -2,91 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02144737A05
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 06:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4DD737A06
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 06:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbjFUEBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 00:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
+        id S229966AbjFUEB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 00:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbjFUEBE (ORCPT
+        with ESMTP id S230027AbjFUEBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 00:01:04 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 364401BD9;
-        Tue, 20 Jun 2023 21:00:45 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Qm8tD6qc1z1FDhn;
-        Wed, 21 Jun 2023 12:00:36 +0800 (CST)
-Received: from [10.174.151.185] (10.174.151.185) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 21 Jun 2023 12:00:43 +0800
-Subject: Re: [PATCH] EDAC/mc: fix potential memoryleak in edac_mc_alloc()
-To:     <tony.luck@intel.com>, <bp@alien8.de>
-CC:     <james.morse@arm.com>, <mchehab@kernel.org>, <rric@kernel.org>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230603144131.832804-1-linmiaohe@huawei.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <e9d1f449-17ad-c4d9-05b0-779c7160433e@huawei.com>
-Date:   Wed, 21 Jun 2023 12:00:42 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Wed, 21 Jun 2023 00:01:07 -0400
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD9C1989
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 21:00:47 -0700 (PDT)
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-77d89a08a50so419353239f.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 21:00:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687320047; x=1689912047;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PgVoTAj3kuss3kFr1267Rg5VeIZx1hZjiH49N3zkAhA=;
+        b=EqW6cNYkq3GoCviSARRjM8MoxuLFvbtCYDvw6qXagZFblL/5Lhfuj23iOWq1D39tQ4
+         fP27AzIrsq8CHlZ17oMeBXFL5eX3i8hGk204d60JG7hu/QuB+64/GZiI+EaPOviQtsH3
+         vhBYkJRiBPxK8CUxnJOfdLM1TDUNsr9oG/HRCko/NudmLPfk3U+sW7/7NdAZ20EQOYrS
+         RvSn5uA/ow3IVmg2V2UtSipCyogetqyk88RVLnDweZhzAEmFkye9w35ngKcEixIUTyW4
+         G3qXbevWLhuSIjCRzZXqLG/17b5+2j4YxYOgXPOhEZ6/MSJgKNy85FbEpvCGZkdRhlD9
+         pcww==
+X-Gm-Message-State: AC+VfDxi0QSouuXRuOTEcuWUVHIaHWWnCaiEbowTtEvMjVmpZfTN0wKP
+        +j4ibKLWPLwRjB8/RpPPRQcOef2qHiTVUd7l6icU6ASSnxI2
+X-Google-Smtp-Source: ACHHUZ45C64BJjKSVk1PjWF96QGQgC8o90sOe7KtjM/Jxj2R97YCAGYSR5ZaiOBQ6cOzRHovOtR7eUj/DquuyhpZAc0KLcW25gy2
 MIME-Version: 1.0
-In-Reply-To: <20230603144131.832804-1-linmiaohe@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.151.185]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:22b6:b0:41c:fc86:d338 with SMTP id
+ z22-20020a05663822b600b0041cfc86d338mr4651191jas.2.1687320047317; Tue, 20 Jun
+ 2023 21:00:47 -0700 (PDT)
+Date:   Tue, 20 Jun 2023 21:00:47 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000afa6e05fe9bd037@google.com>
+Subject: [syzbot] [hfs?] KASAN: wild-memory-access Read in hfsplus_bnode_read_u16
+From:   syzbot <syzbot+9947d6d413633b3877d2@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/6/3 22:41, Miaohe Lin wrote:
-> When fails to allocate memory for layers or pvt_info, _edac_mc_free()
-> will be called to release the resource of edac mc but mci->dev is not
-> even initialized at that time. _edac_mc_free() will fail to release
-> the allocated memory.
+Hello,
 
-friendly ping.. :)
+syzbot found the following issue on:
 
-> 
-> Fixes: 0bbb265f7089 ("EDAC/mc: Get rid of silly one-shot struct allocation in edac_mc_alloc()")
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
->  drivers/edac/edac_mc.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/edac/edac_mc.c b/drivers/edac/edac_mc.c
-> index 6faeb2ab3960..89dc5954d19e 100644
-> --- a/drivers/edac/edac_mc.c
-> +++ b/drivers/edac/edac_mc.c
-> @@ -364,6 +364,8 @@ struct mem_ctl_info *edac_mc_alloc(unsigned int mc_num,
->  	mci = kzalloc(sizeof(struct mem_ctl_info), GFP_KERNEL);
->  	if (!mci)
->  		return NULL;
-> +	mci->dev.release = mci_release;
-> +	device_initialize(&mci->dev);
->  
->  	mci->layers = kcalloc(n_layers, sizeof(struct edac_mc_layer), GFP_KERNEL);
->  	if (!mci->layers)
-> @@ -373,9 +375,6 @@ struct mem_ctl_info *edac_mc_alloc(unsigned int mc_num,
->  	if (!mci->pvt_info)
->  		goto error;
->  
-> -	mci->dev.release = mci_release;
-> -	device_initialize(&mci->dev);
-> -
->  	/* setup index and various internal pointers */
->  	mci->mc_idx = mc_num;
->  	mci->tot_dimms = tot_dimms;
-> 
+HEAD commit:    40f71e7cd3c6 Merge tag 'net-6.4-rc7' of git://git.kernel.o..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1376ceef280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7ff8f87c7ab0e04e
+dashboard link: https://syzkaller.appspot.com/bug?extid=9947d6d413633b3877d2
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10b4a78b280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=120c7727280000
 
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/073eea957569/disk-40f71e7c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c8a97aaa4cdc/vmlinux-40f71e7c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/f536015eacbd/bzImage-40f71e7c.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/a357fe8e79fa/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9947d6d413633b3877d2@syzkaller.appspotmail.com
+
+         option from the mount to silence this warning.
+=======================================================
+==================================================================
+BUG: KASAN: wild-memory-access in memcpy_from_page include/linux/highmem.h:417 [inline]
+BUG: KASAN: wild-memory-access in hfsplus_bnode_read fs/hfsplus/bnode.c:32 [inline]
+BUG: KASAN: wild-memory-access in hfsplus_bnode_read_u16+0x146/0x2c0 fs/hfsplus/bnode.c:45
+Read of size 1 at addr 000508800000103f by task syz-executor206/4992
+
+CPU: 1 PID: 4992 Comm: syz-executor206 Not tainted 6.4.0-rc6-syzkaller-00195-g40f71e7cd3c6 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ print_report+0xe6/0x540 mm/kasan/report.c:465
+ kasan_report+0x176/0x1b0 mm/kasan/report.c:572
+ kasan_check_range+0x283/0x290 mm/kasan/generic.c:187
+ __asan_memcpy+0x29/0x70 mm/kasan/shadow.c:105
+ memcpy_from_page include/linux/highmem.h:417 [inline]
+ hfsplus_bnode_read fs/hfsplus/bnode.c:32 [inline]
+ hfsplus_bnode_read_u16+0x146/0x2c0 fs/hfsplus/bnode.c:45
+ hfsplus_bnode_find+0x769/0x10c0 fs/hfsplus/bnode.c:522
+ hfsplus_bmap_alloc+0xc9/0x640 fs/hfsplus/btree.c:390
+ hfs_btree_inc_height+0x11e/0xdb0 fs/hfsplus/brec.c:475
+ hfsplus_brec_insert+0x166/0xdd0 fs/hfsplus/brec.c:75
+ __hfsplus_ext_write_extent+0x36b/0x5b0 fs/hfsplus/extents.c:107
+ __hfsplus_ext_cache_extent+0x84/0xe00 fs/hfsplus/extents.c:186
+ hfsplus_ext_read_extent fs/hfsplus/extents.c:218 [inline]
+ hfsplus_file_extend+0x439/0x1b10 fs/hfsplus/extents.c:461
+ hfsplus_get_block+0x406/0x14e0 fs/hfsplus/extents.c:245
+ __block_write_begin_int+0x548/0x1a50 fs/buffer.c:2064
+ __block_write_begin fs/buffer.c:2114 [inline]
+ block_write_begin+0x9c/0x1f0 fs/buffer.c:2175
+ cont_write_begin+0x643/0x880 fs/buffer.c:2534
+ hfsplus_write_begin+0x8a/0xd0 fs/hfsplus/inode.c:52
+ cont_expand_zero fs/buffer.c:2461 [inline]
+ cont_write_begin+0x316/0x880 fs/buffer.c:2524
+ hfsplus_write_begin+0x8a/0xd0 fs/hfsplus/inode.c:52
+ generic_cont_expand_simple+0x18b/0x2a0 fs/buffer.c:2425
+ hfsplus_setattr+0x16d/0x280 fs/hfsplus/inode.c:263
+ notify_change+0xc8b/0xf40 fs/attr.c:483
+ do_truncate+0x220/0x300 fs/open.c:66
+ do_sys_ftruncate+0x2e4/0x380 fs/open.c:194
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7ffa4b6957c9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffdd40bdb58 EFLAGS: 00000246 ORIG_RAX: 000000000000004d
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007ffa4b6957c9
+RDX: 0000000000000000 RSI: 0000000000048280 RDI: 0000000000000004
+RBP: 00007ffa4b655060 R08: 0000000000000000 R09: 0000000000000000
+R10: 00000000000005f1 R11: 0000000000000246 R12: 00007ffa4b6550f0
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
