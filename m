@@ -2,75 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA5273873B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:38:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F45173873E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjFUOiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49832 "EHLO
+        id S230146AbjFUOjW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:39:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjFUOix (ORCPT
+        with ESMTP id S229514AbjFUOjU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:38:53 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 259BB10EC
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:38:50 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8CxI_B5C5NkeCkAAA--.324S3;
-        Wed, 21 Jun 2023 22:38:49 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxX895C5NkFMoAAA--.4591S3;
-        Wed, 21 Jun 2023 22:38:49 +0800 (CST)
-Message-ID: <3be802bd-2431-a876-dd05-27e4740a7cb9@loongson.cn>
-Date:   Wed, 21 Jun 2023 22:38:49 +0800
+        Wed, 21 Jun 2023 10:39:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 495891994;
+        Wed, 21 Jun 2023 07:39:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9399612B7;
+        Wed, 21 Jun 2023 14:39:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C34C433C8;
+        Wed, 21 Jun 2023 14:39:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687358358;
+        bh=VXBvW08YHCjFJUo8Y3I1beTInLzEQKnsdmhPOK4bYIM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tZl1k1F0ZcAed6cyywzNyeNFbJ7D6LC6xDLfFbVBm2LiVc0WmmIBNSjNUlr6y4Q6c
+         rJpTjq0rjslE8kERMZNeE2zcPY3jxdT9ITE+Pz7qR78CSkCef7gSlpSVKVJiPXtMtq
+         hmdokXAc3JVSVmgu5FhkQ1pzAjoIF1f7E6t42PDhxgPHYycyqhX2rcVAsZQNz24xKh
+         es6lnaa0+8Xq6joKOvOZr0nHG6PvKgVnojHtrULUOYyRhvTgmKPN8D56nB9aEa+bMi
+         5KqpBXJ4p19QxRnGye8BhGeFJRMBjIcxvq1/75EWokHyNOoRUhTPwcGb8cTK/e1z9i
+         PxmFblnHkgLcQ==
+Date:   Wed, 21 Jun 2023 15:39:12 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Jaroslav Kysela <perex@perex.cz>
+Cc:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/2] kselftest/alsa: pcm-test: Decrease stream duration
+ from 4 to 2 seconds
+Message-ID: <9069ad0c-d166-4620-a3de-a36ab233cab0@sirena.org.uk>
+References: <20230620220839.2215057-1-nfraprado@collabora.com>
+ <20230620220839.2215057-3-nfraprado@collabora.com>
+ <33bea0d3-b8dd-4936-812e-392166df4437@sirena.org.uk>
+ <443f697b-fecf-6e8e-0b76-65257aff7da8@perex.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v10 03/11] drm/etnaviv: Add dedicated functions to create
- and destroy platform device
-Content-Language: en-US
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Sui Jingfeng <18949883232@163.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        etnaviv@lists.freedesktop.org
-References: <20230620094716.2231414-1-18949883232@163.com>
- <20230620094716.2231414-4-18949883232@163.com>
- <0daa7182d6600a24988d1c81cf8fe3c0c9487f52.camel@pengutronix.de>
- <1c7596fd-7e63-6719-2574-7d7820687832@loongson.cn>
- <6d287bbb1733814009dfeb7d48f08cb6f44dc56c.camel@pengutronix.de>
- <30d80802-2d9d-2816-1a02-240145f6dd3a@loongson.cn>
- <0f1095ef333da7ea103486a1121ca9038815e57c.camel@pengutronix.de>
- <ab17a1e6-c621-9a92-73fc-8b762fd0800e@loongson.cn>
-Organization: Loongson
-In-Reply-To: <ab17a1e6-c621-9a92-73fc-8b762fd0800e@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8AxX895C5NkFMoAAA--.4591S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
-        BjDU0xBIdaVrnRJUUUmab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
-        xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
-        j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxV
-        AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x02
-        67AKxVWxJr0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44
-        I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2
-        jsIE14v26r4UJVWxJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2
-        IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4c8EcI0En4kS14v26r126r1DMxAqzxv2
-        6xkF7I0En4kS14v26r126r1DMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r
-        4a6rW5MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CE
-        b7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0x
-        vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAI
-        cVC2z280aVAFwI0_Gr1j6F4UJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvf
-        C2KfnxnUUI43ZEXa7IU82sjUUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="lN6DZShoSnw04Qtm"
+Content-Disposition: inline
+In-Reply-To: <443f697b-fecf-6e8e-0b76-65257aff7da8@perex.cz>
+X-Cookie: When among apes, one must play the ape.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,11 +67,37 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 2023/6/21 22:35, Sui Jingfeng wrote:
-> Yes it provided flexibly, but don't forget, it rely on the DT. 
+--lN6DZShoSnw04Qtm
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Yes it provided flexibility, it rely on the DT provide such flexibility.
+On Wed, Jun 21, 2023 at 04:08:47PM +0200, Jaroslav Kysela wrote:
 
--- 
-Jingfeng
+> I think that the problem is somewhere else here. The overall test timeout
+> should be calculated dynamically. All tests may be queried for the maximal
+> expected interval based on the hardware/software capabilities. It's a bit
+> pitfall to have a fixed time limit where the realtime tests depend on the
+> number of devices.
 
+I tend to agree here, unfortunately Shuah hasn't responded to queries
+=66rom N=EDcolas about this which I imagine is what inspired this patch.  We
+also have problems with mixer-test on one of the Dialog CODECs with a
+couple of 64k value controls and no cache only mode.
+
+--lN6DZShoSnw04Qtm
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSTC48ACgkQJNaLcl1U
+h9BGbwf/Tdjkixv5SETg00LJp+l4cOfv6sRpMFmm0MjvB7B8F7D8D4fFtu8vwLCk
+1pVCzZ2Z6WSbnPBMlVDSWV9ns+VBPoXD/W9R1OBx+IgQLyqr/FXUvQFed3MvQSrt
+uOHg5udSeoLyfhpGMgbHRUEy2yFjt+jJNvlPn5GPk0W9gDQ540afmJStnKzyOXrW
+8eL8q14TSSzn41yRaOZSN5K6Qx5vu/qDOxk2qKr9pUAkVABHVd1BBqzoysINKWEk
+++RHedjGxb4PrspUa5io2mzmDkd3VzoQu+ReCxSbLerIa45KG2oev+o9kSFK2Lbu
+juIvTAHQ21sYmy6eHgoLaxAshfYtyg==
+=GpWQ
+-----END PGP SIGNATURE-----
+
+--lN6DZShoSnw04Qtm--
