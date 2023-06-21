@@ -2,183 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84759737C32
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 09:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB56D737C20
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 09:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbjFUHH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 03:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
+        id S231139AbjFUHIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 03:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjFUHHV (ORCPT
+        with ESMTP id S230231AbjFUHHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 03:07:21 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E3A10FB
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 00:07:20 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-66869feb7d1so2500630b3a.3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 00:07:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1687331240; x=1689923240;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=f/3ivr0Uvn0xo4yZRSVF9o5KFsPxbHD7ljE2Fq2Q7Rk=;
-        b=lvrWyMcx2apWGaapBurs7DV5QSCM2IAD3pfwIHVgQqNlyu0EXcveUaQhahvHw6bsiN
-         IulOjmltLeqcV2UH+hw4chi/kRCzevakgKNE7YywkvcYtMXtshuoEgjlOgE6ia9fhhz2
-         JgbUyWOoDLdj8/b1EXWdcIgf8KmHhmujLmLVLmZrdyOYaF3vXLuzHuAUYPh/OmdW+JRq
-         zu5LSPqbiYG7YFMh+0ZNnzKGIpBxYdtwDXMe2SbMScyGEsH3puCaZN2/X5DU65wV5DXZ
-         AjspeCQM4ZbTKXYF+OWAhTCrHvI4u9AuuOIA+j/APGCF3Ss8GvXKQFLATdj+0B10vISQ
-         1A+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687331240; x=1689923240;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f/3ivr0Uvn0xo4yZRSVF9o5KFsPxbHD7ljE2Fq2Q7Rk=;
-        b=bzzAknBNKn85sOwEePXGc8M9RwW/V5bGz1yGkUz69V/m/CwSlECbmyJDvFs9ZgTaf+
-         APvjJCHgXVttsjh+cZODUJYOBlbjUx1N1vvjrktOhrLoDJtb7fjIIGKZ1yE5GltMOrYE
-         K8DxzRdb7mS4XfbrrNpnAeyQeA4tbYuvFK8KqFrNQMeng1d2EWRSXBEwEmtEj/2PGrJs
-         kKVYVBNY9U5wEFi/IDw/Hq/IgS695oJ2Az7ygoT6IR55DLw8A+lTMdh95pdYyjAFt+1L
-         5k4KJxlFRSEHd4uIp18zU6eyKQpn3q9tdJP8emOwu6d07aK8Vx2fam9kR2wsIJ5caysj
-         rikg==
-X-Gm-Message-State: AC+VfDwQNkNHCI/bm4YRh1ey1iGcMvN+KhH8FLgRzlW0/clioCVCL0jP
-        J2R/NqG0MYGOvorhvxtPtYqdmg==
-X-Google-Smtp-Source: ACHHUZ7sTBcKKL8tWbHKZpuD9Of59X+aEk+5qQmG01kJeoc4kPDbdLKuWxz/OcFotfXBZlCRgbQ8Xg==
-X-Received: by 2002:a05:6a21:7890:b0:11f:1aa2:666b with SMTP id bf16-20020a056a21789000b0011f1aa2666bmr12943224pzc.32.1687331239730;
-        Wed, 21 Jun 2023 00:07:19 -0700 (PDT)
-Received: from dread.disaster.area (pa49-180-13-202.pa.nsw.optusnet.com.au. [49.180.13.202])
-        by smtp.gmail.com with ESMTPSA id y17-20020aa78551000000b0064d47cd116esm2298187pfn.161.2023.06.21.00.07.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 00:07:18 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1qBrvv-00EMGg-14;
-        Wed, 21 Jun 2023 17:07:15 +1000
-Date:   Wed, 21 Jun 2023 17:07:15 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     syzbot <syzbot+9d0b0d54a8bd799f6ae4@syzkaller.appspotmail.com>
-Cc:     dchinner@redhat.com, djwong@kernel.org, hch@lst.de,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [xfs?] WARNING: Reset corrupted AGFL on AG NUM. NUM
- blocks leaked. Please unmount and run xfs_repair.
-Message-ID: <ZJKhoxnkNF3VspbP@dread.disaster.area>
-References: <000000000000ffcb2e05fe9a445c@google.com>
+        Wed, 21 Jun 2023 03:07:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011B91704;
+        Wed, 21 Jun 2023 00:07:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 921186148F;
+        Wed, 21 Jun 2023 07:07:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7EAFC433C0;
+        Wed, 21 Jun 2023 07:07:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687331274;
+        bh=kN+4TA7hOi5aHNRfw/fpGeCplr4/QRLv8TMeQlLQpXw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BTQkhk0mIay5EeH9GTQe6bvPrjgIfDdIsjHsUIzcV4AA9YzNSAUmwkKLaxQ41K0tS
+         JOlfHUKN5VDDwlWmLx6EFJPfdzK4kGR9ajPuSTe/JKe+NgTSGeagOeW3rpCngOYRth
+         e3etVlRFgdLyWKkk18sUyheDd9raxlka5vdGVf9Yc6Pyzra+gSt/OzoqALYnmF8V4w
+         NMjiiWeQw7BEE2aj5yyLQA/0/hmRYdGNZARAkz3FoeR4zZahsNnLGNEHoyBWEvEcfG
+         TlG4d27XbL+xJ6tPHdDe9qjffKfk4kqgCUFg0n3zyNUcnJFCmYbGzZFYeLRHPmnZTs
+         OvgW0qIiEQ7Tw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1qBrwa-0005ay-Iy; Wed, 21 Jun 2023 09:07:56 +0200
+Date:   Wed, 21 Jun 2023 09:07:56 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: sc8280xp-crd: Fix naming of
+ regulators
+Message-ID: <ZJKhzApSUfUCY3qI@hovoldconsulting.com>
+References: <20230620203915.141337-1-quic_bjorande@quicinc.com>
+ <20230620203915.141337-2-quic_bjorande@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <000000000000ffcb2e05fe9a445c@google.com>
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230620203915.141337-2-quic_bjorande@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 07:10:19PM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    40f71e7cd3c6 Merge tag 'net-6.4-rc7' of git://git.kernel.o..
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=158b99d3280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=7ff8f87c7ab0e04e
-> dashboard link: https://syzkaller.appspot.com/bug?extid=9d0b0d54a8bd799f6ae4
-> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16ab4537280000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=148326ef280000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/2dc89d5fee38/disk-40f71e7c.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/0ced5a475218/vmlinux-40f71e7c.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/d543a4f69684/bzImage-40f71e7c.xz
-> mounted in repro: https://storage.googleapis.com/syzbot-assets/e2012b787a31/mount_0.gz
-> 
-> The issue was bisected to:
-> 
-> commit e0a8de7da35e5b22b44fa1013ccc0716e17b0c14
-> Author: Dave Chinner <dchinner@redhat.com>
-> Date:   Mon Jun 5 04:48:15 2023 +0000
-> 
->     xfs: fix agf/agfl verification on v4 filesystems
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10bb665b280000
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=12bb665b280000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=14bb665b280000
+On Tue, Jun 20, 2023 at 01:39:15PM -0700, Bjorn Andersson wrote:
+> The external regulators in the CRD seems to have inherited their names
+> from the X13s DeviceTree, correct them.
 
-WTAF?
+Yeah, without access to the schematics that's a guess as good as
+anything. Fortunately, you're there to dig out the names. :)
 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+9d0b0d54a8bd799f6ae4@syzkaller.appspotmail.com
-> Fixes: e0a8de7da35e ("xfs: fix agf/agfl verification on v4 filesystems")
-> 
-> XFS (loop0): WARNING: Reset corrupted AGFL on AG 0. 4 blocks leaked. Please unmount and run xfs_repair.
-> XFS (loop0): Internal error !ino_ok at line 213 of file fs/xfs/libxfs/xfs_dir2.c.  Caller xfs_dir_ino_validate+0x2c/0x90 fs/xfs/libxfs/xfs_dir2.c:220
-> CPU: 1 PID: 46 Comm: kworker/u4:3 Not tainted 6.4.0-rc6-syzkaller-00195-g40f71e7cd3c6 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-> Workqueue: xfs_iwalk-4998 xfs_pwork_work
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
->  xfs_error_report fs/xfs/xfs_error.c:384 [inline]
->  xfs_corruption_error+0x11d/0x170 fs/xfs/xfs_error.c:401
->  xfs_dir_ino_validate+0x5f/0x90 fs/xfs/libxfs/xfs_dir2.c:213
->  xfs_dir2_sf_verify+0x487/0x990 fs/xfs/libxfs/xfs_dir2_sf.c:779
->  xfs_ifork_verify_local_data fs/xfs/libxfs/xfs_inode_fork.c:706 [inline]
->  xfs_iformat_data_fork+0x4bf/0x6d0 fs/xfs/libxfs/xfs_inode_fork.c:256
->  xfs_inode_from_disk+0xbbf/0x1070 fs/xfs/libxfs/xfs_inode_buf.c:245
->  xfs_iget_cache_miss fs/xfs/xfs_icache.c:639 [inline]
->  xfs_iget+0xf08/0x3050 fs/xfs/xfs_icache.c:777
->  xfs_qm_dqusage_adjust+0x228/0x670 fs/xfs/xfs_qm.c:1157
->  xfs_iwalk_ag_recs+0x486/0x7c0 fs/xfs/xfs_iwalk.c:220
->  xfs_iwalk_run_callbacks+0x25b/0x490 fs/xfs/xfs_iwalk.c:376
->  xfs_iwalk_ag+0xad6/0xbd0 fs/xfs/xfs_iwalk.c:482
->  xfs_iwalk_ag_work+0xfb/0x1b0 fs/xfs/xfs_iwalk.c:624
->  xfs_pwork_work+0x7c/0x190 fs/xfs/xfs_pwork.c:47
->  process_one_work+0x8a0/0x10e0 kernel/workqueue.c:2405
->  worker_thread+0xa63/0x1210 kernel/workqueue.c:2552
->  kthread+0x2b8/0x350 kernel/kthread.c:379
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
->  </TASK>
-> XFS (loop0): Corruption detected. Unmount and run xfs_repair
-> XFS (loop0): Invalid inode number 0x24
-> XFS (loop0): Metadata corruption detected at xfs_dir2_sf_verify+0x767/0x990 fs/xfs/libxfs/xfs_dir2_sf.c:774, inode 0x23 data fork
-> XFS (loop0): Unmount and run xfs_repair
-> XFS (loop0): First 32 bytes of corrupted metadata buffer:
-> 00000000: 02 00 00 00 00 20 05 00 30 66 69 6c 65 30 01 00  ..... ..0file0..
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
 
-syzbot corrupted a v4 filesystem.
-
-Syzbot corrupted the superblock, XFS detected and corrected that.
-
-Syzbot corrupted the AGI. XFS detected that.
-
-Syzbot corrupted the AGF and AGFL. XFS detected and corrected that,
-allowing operations to continue.
-
-Syzbot also corrupted a directory inode. XFS detected that and
-warned about it.
-
-Test finished.
-
-At no point did the kernel crash, oops, do anything bad like a UAF
-or OOB read. All XFS did was catch the corruptions, fix some of them
-so it could continue operating, and warn the user that they need to
-unmount and run repair.
-
-So exactly what is syzbot complaining about here? There's no kernel
-issue here at all.
-
-Also, I cannot tell syzbot "don't ever report this as a bug again",
-so the syzbot developers are going to have to triage and fix this
-syzbot problem themselves so it doesn't keep getting reported to
-us...
-
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
