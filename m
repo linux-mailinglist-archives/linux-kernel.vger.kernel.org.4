@@ -2,77 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B6EE738178
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:11:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8840C738222
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231794AbjFUKAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 06:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
+        id S232146AbjFUKBI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 06:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbjFUKAP (ORCPT
+        with ESMTP id S232158AbjFUKAg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 06:00:15 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B54A3;
-        Wed, 21 Jun 2023 03:00:13 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8F92B6606F79;
-        Wed, 21 Jun 2023 11:00:11 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687341612;
-        bh=Ph+03Fr42BlVtzH5wEcKX5Csb0mSfoQbYcHJJGg40Co=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LdF3IBH5a+ErxRKXcSUPN/bn2oVRx9YsFx819NnpZ+OttiUJlbAQmlG/QWfLdZ1VP
-         SE5ffSB3+1dzjgbEYMPJ/rUBrgNXN/jobAuXHBpgkHfZ4EmYJ0Mixi4hYwUeIzbQgC
-         GRXixwt/aYI+/dPbwq/fyYL5iP1lFD7wtHkd5gDmR5QHyT8MmTOT/z+OrCjx/8/L50
-         Pm48v7YpdyQtHd8PKJnRJT6UGZaK1vlxzCoz6Amulsu3ZrB/9Y77sPk045E+f+lGU+
-         WFERUIxJSmoGIkqCkywo/ibKy+5sZEpSRITgWZRe9sFNmbqyuKbJ8rL7H/1sw5jgHj
-         cQa1LXSJeFqNg==
-Message-ID: <0db4a705-10d0-93ce-df61-1a20d6d09959@collabora.com>
-Date:   Wed, 21 Jun 2023 12:00:09 +0200
+        Wed, 21 Jun 2023 06:00:36 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7381910DB
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 03:00:27 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1qBudR-0001Ja-Pf; Wed, 21 Jun 2023 12:00:21 +0200
+Message-ID: <8f74f0962c8bab6c832919a5340667c54e1a7ddc.camel@pengutronix.de>
+Subject: Re: [PATCH v10 07/11] drm/etnaviv: Add support for the dma coherent
+ device
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Sui Jingfeng <18949883232@163.com>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Sui Jingfeng <suijingfeng@loongson.cn>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        etnaviv@lists.freedesktop.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Date:   Wed, 21 Jun 2023 12:00:17 +0200
+In-Reply-To: <20230620094716.2231414-8-18949883232@163.com>
+References: <20230620094716.2231414-1-18949883232@163.com>
+         <20230620094716.2231414-8-18949883232@163.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v4 13/14] drm/mediatek: Sort OVL adaptor components in
- alphabetical order
-Content-Language: en-US
-To:     =?UTF-8?B?U2hhd24gU3VuZyAo5a6L5a2d6KyZKQ==?= 
-        <Shawn.Sung@mediatek.com>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        =?UTF-8?B?U2luZ28gQ2hhbmcgKOW8teiIiOWciyk=?= 
-        <Singo.Chang@mediatek.com>,
-        =?UTF-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
-        <Jason-JH.Lin@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        =?UTF-8?B?TmFuY3kgTGluICjmnpfmrKPonqIp?= <Nancy.Lin@mediatek.com>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20230621031938.5884-1-shawn.sung@mediatek.com>
- <20230621031938.5884-14-shawn.sung@mediatek.com>
- <8442c6a4-14a7-e3b3-0a82-0797ef3ddd77@collabora.com>
- <9a2acfe13a22ddb1caace1fb58089f5c8a5f8b07.camel@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <9a2acfe13a22ddb1caace1fb58089f5c8a5f8b07.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,37 +55,268 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 21/06/23 11:16, Shawn Sung (宋孝謙) ha scritto:
-> On Wed, 2023-06-21 at 10:16 +0200, AngeloGioacchino Del Regno wrote:
->>   	
->> External email : Please do not click links or open attachments until
->> you have verified the sender or the content.
->>   Il 21/06/23 05:19, Hsiao Chien Sung ha scritto:
->>> - Rename OVL_ADAPTOR_TYPE_RDMA to OVL_ADAPTOR_TYPE_MDP_RDMA
->>>     to align the naming rule of mtk_ovl_adaptor_comp_id.
->>> - Sort components' names in alphabetical order
->>> - Sort device table in alphabetical order
->>> - Add sentinel to device table
->>>
->>> Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
->>
->> I agree, but this commit should come before [12/14] of this series.
+Am Dienstag, dem 20.06.2023 um 17:47 +0800 schrieb Sui Jingfeng:
+> From: Sui Jingfeng <suijingfeng@loongson.cn>
 > 
-> Got it. Since [12/14] removed many lines that use component ID/type
-> (for example, in mtk_ovl_adaptor_clk_enable() or
-> mtk_ovl_adaptor_add_comp()), if this commit has to move before that,
-> should I still modify them and delete them in [12/14]? Thanks.
+> Loongson CPUs maintain cache coherency by hardware, which means that the
+> data in the CPU cache is identical to the data in main system memory. As
+> for the peripheral device, most of Loongson chips chose to define the
+> peripherals as DMA coherent by default, device drivers do not need to
+> maintain the coherency between a processor and an I/O device manually.
 > 
-
-Every commit has to work on its own, so you first perform the renaming in
-one commit, then you modify and delete.
-
-
->>
->> Regards,
->> Angelo
->>
+> There are exceptions, for LS2K1000 SoC, part of peripheral device can be
+> configured as DMA non-coherent. But there is no released version of such
+> firmware exist in the market. Peripherals of older LS2K1000 is also DMA
+> non-coherent, but they are nearly outdated. So, those are trivial cases.
 > 
-> Best regards,
-> Hsiao Chien Sung
+> Nevertheless, kernel space still need to do the probe work, because vivante
+> GPU IP has been integrated into various platform. Hence, this patch add
+> runtime detection code to probe if a specific GPU is DMA coherent, If the
+> answer is yes, we are going to utilize such features. On Loongson platform,
+> When a buffer is accessed by both the GPU and the CPU, the driver should
+> prefer ETNA_BO_CACHED over ETNA_BO_WC.
+> 
+> This patch also add a new parameter: etnaviv_param_gpu_coherent, which
+> allow userspace to know if such a feature is available. Because
+> write-combined BO is still preferred in some case, especially where don't
+> need CPU read, for example, uploading compiled shader bin.
+> 
+> Cc: Lucas Stach <l.stach@pengutronix.de>
+> Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
+> Cc: Philipp Zabel <p.zabel@pengutronix.de>
+> Cc: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> ---
+>  drivers/gpu/drm/etnaviv/etnaviv_drv.c       | 35 +++++++++++++++++++++
+>  drivers/gpu/drm/etnaviv/etnaviv_drv.h       |  6 ++++
+>  drivers/gpu/drm/etnaviv/etnaviv_gem.c       | 22 ++++++++++---
+>  drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c |  7 ++++-
+>  drivers/gpu/drm/etnaviv/etnaviv_gpu.c       |  4 +++
+>  include/uapi/drm/etnaviv_drm.h              |  1 +
+>  6 files changed, 70 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> index 0a365e96d371..d8e788aa16cb 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> @@ -5,7 +5,9 @@
+>  
+>  #include <linux/component.h>
+>  #include <linux/dma-mapping.h>
+> +#include <linux/dma-map-ops.h>
+>  #include <linux/module.h>
+> +#include <linux/of_address.h>
+>  #include <linux/of_platform.h>
+>  #include <linux/uaccess.h>
+>  
+> @@ -24,6 +26,34 @@
+>  #include "etnaviv_pci_drv.h"
+>  #include "etnaviv_perfmon.h"
+>  
+> +static struct device_node *etnaviv_of_first_available_node(void)
+> +{
+> +	struct device_node *core_node;
+> +
+> +	for_each_compatible_node(core_node, NULL, "vivante,gc") {
+> +		if (of_device_is_available(core_node))
+> +			return core_node;
+> +	}
+> +
+> +	return NULL;
+> +}
+> +
+> +static bool etnaviv_is_dma_coherent(struct device *dev)
+> +{
+> +	struct device_node *np;
+> +	bool coherent;
+> +
+> +	np = etnaviv_of_first_available_node();
+> +	if (np) {
+> +		coherent = of_dma_is_coherent(np);
+> +		of_node_put(np);
+> +	} else {
+> +		coherent = dev_is_dma_coherent(dev);
+> +	}
+
+This whole dance shouldn't be needed. We transfer the DMA capabilities
+from the first node to the virtual master device in the platform device
+case, so dev_is_dma_coherent(dev) should always return the right thing.
+
+> +
+> +	return coherent;
+> +}
+> +
+>  /*
+>   * etnaviv private data construction and destructions:
+>   */
+> @@ -52,6 +82,11 @@ etnaviv_alloc_private(struct device *dev, struct drm_device *drm)
+>  		return ERR_PTR(-ENOMEM);
+>  	}
+>  
+> +	priv->dma_coherent = etnaviv_is_dma_coherent(dev);
+> +
+> +	if (priv->dma_coherent)
+> +		drm_info(drm, "%s is dma coherent\n", dev_name(dev));
+> +
+>  	return priv;
+>  }
+>  
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.h b/drivers/gpu/drm/etnaviv/etnaviv_drv.h
+> index 9cd72948cfad..644e5712c050 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.h
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.h
+> @@ -46,6 +46,12 @@ struct etnaviv_drm_private {
+>  	struct xarray active_contexts;
+>  	u32 next_context_id;
+>  
+> +	/*
+> +	 * If true, the GPU is capable of snooping cpu cache. Here, it
+> +	 * also means that cache coherency is enforced by the hardware.
+> +	 */
+> +	bool dma_coherent;
+> +
+No need for this, I think. Just use dev_is_dma_coherent() where you
+need to know this.
+
+>  	/* list of GEM objects: */
+>  	struct mutex gem_lock;
+>  	struct list_head gem_list;
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem.c b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
+> index b5f73502e3dd..39bdc3774f2d 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_gem.c
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gem.c
+> @@ -343,6 +343,7 @@ void *etnaviv_gem_vmap(struct drm_gem_object *obj)
+>  static void *etnaviv_gem_vmap_impl(struct etnaviv_gem_object *obj)
+>  {
+>  	struct page **pages;
+> +	pgprot_t prot;
+>  
+>  	lockdep_assert_held(&obj->lock);
+>  
+> @@ -350,8 +351,19 @@ static void *etnaviv_gem_vmap_impl(struct etnaviv_gem_object *obj)
+>  	if (IS_ERR(pages))
+>  		return NULL;
+>  
+> -	return vmap(pages, obj->base.size >> PAGE_SHIFT,
+> -			VM_MAP, pgprot_writecombine(PAGE_KERNEL));
+> +	switch (obj->flags) {
+
+switch (obj->flags & ETNA_BO_CACHE_MASK)
+
+> +	case ETNA_BO_CACHED:
+> +		prot = PAGE_KERNEL;
+> +		break;
+> +	case ETNA_BO_UNCACHED:
+> +		prot = pgprot_noncached(PAGE_KERNEL);
+> +		break;
+> +	case ETNA_BO_WC:
+> +	default:
+> +		prot = pgprot_writecombine(PAGE_KERNEL);
+> +	}
+> +
+> +	return vmap(pages, obj->base.size >> PAGE_SHIFT, VM_MAP, prot);
+
+While that change makes sense it should also be in a separate patch, as
+it's a valid change on its own, even if for non-coherent devices.
+
+>  }
+>  
+>  static inline enum dma_data_direction etnaviv_op_to_dma_dir(u32 op)
+> @@ -369,6 +381,7 @@ int etnaviv_gem_cpu_prep(struct drm_gem_object *obj, u32 op,
+>  {
+>  	struct etnaviv_gem_object *etnaviv_obj = to_etnaviv_bo(obj);
+>  	struct drm_device *dev = obj->dev;
+> +	struct etnaviv_drm_private *priv = dev->dev_private;
+>  	bool write = !!(op & ETNA_PREP_WRITE);
+>  	int ret;
+>  
+> @@ -395,7 +408,7 @@ int etnaviv_gem_cpu_prep(struct drm_gem_object *obj, u32 op,
+>  			return ret == 0 ? -ETIMEDOUT : ret;
+>  	}
+>  
+> -	if (etnaviv_obj->flags & ETNA_BO_CACHED) {
+> +	if (!priv->dma_coherent && etnaviv_obj->flags & ETNA_BO_CACHED) {
+
+Why do you need this? Isn't dma_sync_sgtable_for_cpu a no-op on your
+platform when the device is coherent?
+
+>  		dma_sync_sgtable_for_cpu(dev->dev, etnaviv_obj->sgt,
+>  					 etnaviv_op_to_dma_dir(op));
+>  		etnaviv_obj->last_cpu_prep_op = op;
+> @@ -408,8 +421,9 @@ int etnaviv_gem_cpu_fini(struct drm_gem_object *obj)
+>  {
+>  	struct drm_device *dev = obj->dev;
+>  	struct etnaviv_gem_object *etnaviv_obj = to_etnaviv_bo(obj);
+> +	struct etnaviv_drm_private *priv = dev->dev_private;
+>  
+> -	if (etnaviv_obj->flags & ETNA_BO_CACHED) {
+> +	if (!priv->dma_coherent && etnaviv_obj->flags & ETNA_BO_CACHED) {
+>  		/* fini without a prep is almost certainly a userspace error */
+>  		WARN_ON(etnaviv_obj->last_cpu_prep_op == 0);
+>  		dma_sync_sgtable_for_device(dev->dev, etnaviv_obj->sgt,
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
+> index 3524b5811682..754126992264 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
+> @@ -112,11 +112,16 @@ static const struct etnaviv_gem_ops etnaviv_gem_prime_ops = {
+>  struct drm_gem_object *etnaviv_gem_prime_import_sg_table(struct drm_device *dev,
+>  	struct dma_buf_attachment *attach, struct sg_table *sgt)
+>  {
+> +	struct etnaviv_drm_private *priv = dev->dev_private;
+>  	struct etnaviv_gem_object *etnaviv_obj;
+>  	size_t size = PAGE_ALIGN(attach->dmabuf->size);
+> +	u32 cache_flags = ETNA_BO_WC;
+>  	int ret, npages;
+>  
+> -	ret = etnaviv_gem_new_private(dev, size, ETNA_BO_WC,
+> +	if (priv->dma_coherent)
+> +		cache_flags = ETNA_BO_CACHED;
+> +
+Drop this change. Instead etnaviv_gem_new_impl() should do the upgrade
+from WC to CACHED as necessary by adding something like this:
+
+/*
+ * Upgrade WC to CACHED when the device is hardware coherent and the
+ * platform doesn't allow mixing cached and writecombined mappings to
+ * the same memory area.
+ */
+if ((flags & ETNA_BO_CACHE_MASK) == ETNA_BO_WC &&
+    dev_is_dma_coherent(dev) && !drm_arch_can_wc_memory())
+        flags = (flags & ~ETNA_BO_CACHE_MASK) & ETNA_BO_CACHED;
+
+Regards,
+Lucas
+
+> +	ret = etnaviv_gem_new_private(dev, size, cache_flags,
+>  				      &etnaviv_gem_prime_ops, &etnaviv_obj);
+>  	if (ret < 0)
+>  		return ERR_PTR(ret);
+> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+> index d6a21e97feb1..d99ac675ce8b 100644
+> --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
+> @@ -164,6 +164,10 @@ int etnaviv_gpu_get_param(struct etnaviv_gpu *gpu, u32 param, u64 *value)
+>  		*value = gpu->identity.eco_id;
+>  		break;
+>  
+> +	case ETNAVIV_PARAM_GPU_COHERENT:
+> +		*value = priv->dma_coherent;
+> +		break;
+> +
+>  	default:
+>  		DBG("%s: invalid param: %u", dev_name(gpu->dev), param);
+>  		return -EINVAL;
+> diff --git a/include/uapi/drm/etnaviv_drm.h b/include/uapi/drm/etnaviv_drm.h
+> index af024d90453d..76baf45d7158 100644
+> --- a/include/uapi/drm/etnaviv_drm.h
+> +++ b/include/uapi/drm/etnaviv_drm.h
+> @@ -77,6 +77,7 @@ struct drm_etnaviv_timespec {
+>  #define ETNAVIV_PARAM_GPU_PRODUCT_ID                0x1c
+>  #define ETNAVIV_PARAM_GPU_CUSTOMER_ID               0x1d
+>  #define ETNAVIV_PARAM_GPU_ECO_ID                    0x1e
+> +#define ETNAVIV_PARAM_GPU_COHERENT                  0x1f
+>  
+>  #define ETNA_MAX_PIPES 4
+>  
 
