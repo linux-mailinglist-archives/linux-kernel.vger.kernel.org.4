@@ -2,183 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6DBF738C6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:55:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E332B738C69
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbjFUQzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
+        id S230061AbjFUQzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbjFUQzl (ORCPT
+        with ESMTP id S230083AbjFUQz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:55:41 -0400
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1144610C;
-        Wed, 21 Jun 2023 09:55:40 -0700 (PDT)
-Received: from pps.filterd (m0109332.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LBEw7S007052;
-        Wed, 21 Jun 2023 09:55:00 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=suNQ1P0ycBvRSV4aTnxP1727DDPFg2lHH2tI35zApqI=;
- b=XAcX8qXN/OBKWujMlxmDZYB1lpho14wPIH7/N6us4QEmHstNiQdrk7NLUq2wDr2Dq4yn
- MjE821Csw6jP2Suka3IwzPQCyBi7ea24kUqIQ+ayu787EWDSNu1SRPIa1F5vyhvxj2up
- fOznHdOoEYU1TrhaalAMxecKTkhI5ofmZGwE/TosK83DI8TsIyR3a90aP1wI4DF2dg26
- Z7UAiD+VQt9kvAc+L8uu+GAjkLI2/eIYoCWCwUYhwy6hTjg/7RxmfcALCt5uhnhyAhe+
- 3XDToo671JGX3e0ZryUAATmpprfYq9m4D7er9Q/R7CxuC7aOZ1FMw0zOXSTFf29BXCgM NQ== 
-Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2045.outbound.protection.outlook.com [104.47.73.45])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3rc05htk98-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 21 Jun 2023 09:55:00 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FdQLYWgZm7vNgeXNT6Y2Yv7iNK1nsNoIt/oDjag5LmM7vThgVgIrqKx8MZHUsEX84Pyu83BNvElGRPA7bJQ1c/rRDAZl5War7MWPDYyAi4sFCvoRRGkib6zsR8mDBwMUPEQ891R+vPkUtveNAgzDZhaIWWVYWrtZQLDIr8qKIoVMMt4nH0U20olgJihvfxGuxsEQ7f2dtjWf00jMZf71FFz0koFvuXdT7QHPGPgrp/cnHb3MI5vCKp3p9IErBQr3yn8QGeVG2RTqq22y8G9jAxpYqice8CQ7wJ8rsSNumqwE38UGRDizIalRc6dakbVw5RlYkrpSadGFn0gdFh8Ezw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=suNQ1P0ycBvRSV4aTnxP1727DDPFg2lHH2tI35zApqI=;
- b=GUEHz/0R/lVn9TgWV8H8qz7m3ivUec1AtvxtX+3+W0vrYs1cqAZrnhiiMiM0ZfGwWo2fFxTwoHJyPu+3tt7/v1x0iZrc27r+e4EzjwaTIN/8OAh0IF2VWWSmnqnlOKEv0I/3MUzf7OzvRNbygbL+y8hLr18awFfgkc3L7eND+PIrcIeJmnImRNcMq17hzxSVJB5F8GHvQnTerxIrrf7Mr+WCJIelf0nzf1CmB3Mw6aywOLhBfvWLCIJIIkENWqsThj5A6Q+UQZRvPdi6ESsW5jorOC0rwj4n116WN8i3ws8SP0qlxY1ORh1yEKinL833pM2P2mmcDUxGxcViGkQ9iw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by MW3PR15MB3788.namprd15.prod.outlook.com (2603:10b6:303:4e::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Wed, 21 Jun
- 2023 16:54:57 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::428f:acec:2c1f:c812]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::428f:acec:2c1f:c812%7]) with mapi id 15.20.6521.023; Wed, 21 Jun 2023
- 16:54:57 +0000
-Message-ID: <a850fe4e-4f67-7209-4793-731f3d88f1f0@meta.com>
-Date:   Wed, 21 Jun 2023 09:54:53 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH bpf-next v6 3/3] selftests/bpf: add testcase for TRACING
- with 6+ arguments
-Content-Language: en-US
-To:     menglong8.dong@gmail.com, alexei.starovoitov@gmail.com
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, benbjiang@tencent.com,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>
-References: <20230619114947.1543848-1-imagedong@tencent.com>
- <20230619114947.1543848-4-imagedong@tencent.com>
-From:   Yonghong Song <yhs@meta.com>
-In-Reply-To: <20230619114947.1543848-4-imagedong@tencent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR05CA0025.namprd05.prod.outlook.com
- (2603:10b6:a03:c0::38) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        Wed, 21 Jun 2023 12:55:26 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02262E9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:55:24 -0700 (PDT)
+Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com [209.85.219.197])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 578DA3F188
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 16:55:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1687366522;
+        bh=+9U0XU2Gxr37XDMHjv7vr70CfmLrF445b9aXRviWook=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=IyBcBKPRnUsfvP0QQo7YVlJgWBWzNsIlvntgcWcAO+UtTlv8PSLkl3zgPSVJgJqBw
+         TDfNr+Zg+4W8SrOuiJKLyvLeTE1wBOt9LXvhDQq6VC6B2jQHz6REnvrAxYr+IXz1Vz
+         pwC+PPzfwokHvd6EX4wLtHsptWQCLUw/B1RQMn1a6+4P5s17BPsPCx5CRLMZpdBwjE
+         xxcl0exohWRb9GmeWmT4llGpTPu3hLYLGgXBVf/muG6ZGyAJ5XB+VIuKHgHbn+vLVa
+         c9DHfuGmq+AVDYR1vaAi1STS6Kh8wACXSjdavmvK0jV74MUaMOpuX5KCIcjIf5Hpzu
+         fqE4oppHmkSig==
+Received: by mail-yb1-f197.google.com with SMTP id 3f1490d57ef6-bacd408046cso7966247276.3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:55:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687366519; x=1689958519;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+9U0XU2Gxr37XDMHjv7vr70CfmLrF445b9aXRviWook=;
+        b=EVmvpgXScG3x0uqlkCJbtpKi8zmhvgrBDxR5LMCgJxGNyfQ7wqgxckh0sQ329wyv4y
+         9lM2HD50e+mx7Gpn3m4vrFME5Vo5sun8fmhae1Ysko7ffUZjqjQfWpzoKiDCsClEH8wU
+         Xt4nUzPIdwgO2VwQP2Tx2iQVDrxZJP9rnt179Zn6/in4NLmXktYkyUkZ7dux9W8sGFwQ
+         RqsaciOAnu+rySsTjI0TdLqHZzBKa3kDsLesswxx7L7OfLnchhKbZn53UivGpAtSGn87
+         Af6Ng7xNUwFUbBN2k7BgMmgu5WkDERIPWi//zHpVO/0EO8kLQDg+PRVExmJP1gNMYUxa
+         2FVQ==
+X-Gm-Message-State: AC+VfDwOgHXz4DUO9wjpY1MGdo2q8YECvR6IIHr6kWeSZhKGWZR1kdu+
+        oz8eNSaaohK5JWCjNSnNbPdSpxRhWvLwYLw1njG/2VZxV9YmYWUZwdDw1dBHL9P3OAd0CCpV0Es
+        FPvMSvz/bHBYhqiYSOhd5lZ6Kr/BFTK0k1/7MNR5gmUYWMktfJjlrJQ0LNA==
+X-Received: by 2002:a25:748e:0:b0:bc7:b120:1ea0 with SMTP id p136-20020a25748e000000b00bc7b1201ea0mr13025467ybc.3.1687366519284;
+        Wed, 21 Jun 2023 09:55:19 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4r9CExidg5ZT0PtvLMtlOMLooYGnRuySf8LXaLqhUHu8Kb5ASFxq8JUOv24NUG+4q3/LpHPwK2//3UFeLziL0=
+X-Received: by 2002:a25:748e:0:b0:bc7:b120:1ea0 with SMTP id
+ p136-20020a25748e000000b00bc7b1201ea0mr13025454ybc.3.1687366519013; Wed, 21
+ Jun 2023 09:55:19 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|MW3PR15MB3788:EE_
-X-MS-Office365-Filtering-Correlation-Id: cf25864a-61e1-4fd5-f71b-08db72783e61
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mPexQf27+nPf2qw+IW6AtbcU7Gls3tyOrR8KkCLcxTvt+zTh7sSb/1Pr6/tVDISybxVcDh9Q0Ba0K0DJ6H30S54FbiY+dxfoAZhxYiQqimnwyVftYFwrSJ9tmhHOYqhai/GSKzY/1l5NJemApetN+qmrgpPoYiaAhYxhr+lqiJ+qAYgUs7KqF46LOjn42w/qDns6hQwvqZr3FwTAy6KmRN8azOXCC6Swg6aqmEU3iB0P7cgHzj0EeN5zgc8bFI/fyfa2qK6dFrwYLpOT/SfeG3PdmJCDZqRxv04YLCj5i1PhGs++R7/rT6Wl6S8N6iqNBJ7+T9x//TxE4w/gfQp4exGevD6gyzN2ClOGgyQmWAIw3NDho8zHPJwFElT+5+bgN4XStravnle3TWUSOs04ArMPvvrm+CHQCtP0NpQ3csz0OmJnwpwQRwfxNH2xTgAvVfg5XYts/VWKrCUWBFfdXqGst6kF3uivmR8EbrVoCkgfBKHNYvR1IP+ARqQyYV8+1zK5n4HtG0V+1raixJBcEULe1XeBIThnjpYw2L5ZjE3TESkjuRu7E1bg9F5xhGrv1tbX+cMH/S1GWJaVoKUdrh2EpadRBkbnsQxyuygkSCueo7KxQJ1OdmM/ThgEH3kkGJxQU/Op+Bm4PLYIcv5CjQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(136003)(346002)(366004)(451199021)(478600001)(6486002)(6666004)(186003)(53546011)(6506007)(6512007)(2906002)(66946007)(4744005)(66556008)(8936002)(66476007)(4326008)(5660300002)(8676002)(7416002)(41300700001)(316002)(38100700002)(86362001)(31696002)(36756003)(2616005)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a2xNQUZiL29KOFp0Y2R0ZERleUhPZ1QyWGFHalBrUjMvOFdLVzk3Z2hha240?=
- =?utf-8?B?eTdLczFWRmtvZ0Z3NHNtR0ZlUnVCcXFxb21ZMXJiaHRTRE50dElVR0N4V3Q0?=
- =?utf-8?B?dTc0Q1RRL2NQVjhDU1hDb3BBWDVpSlJDd3ErbE5adnpBWjRQVjBnc1JzVFVE?=
- =?utf-8?B?Uit6S0phVko2STVpZmhIMlVZZmZWbU1tSUdRUDVET0RkYndFMGJ3eU5iVGhl?=
- =?utf-8?B?cUFIOVFTRlhuc01ONGJDSkVyZ3oxT1RXVk9ONkpGTmZyMHlLRDB4d1dGdEJP?=
- =?utf-8?B?OGZSWGpzMlZRNFM4THp2aHVlazNoNkZ6aEpzQjVtdXB1eVBzS3dmV2RTaXh5?=
- =?utf-8?B?ejlpR0MxMVhyUnBXWWxPc1JIc3o2bUJRbDNsUVQrT1Vlb1dmTWQ0MXUrSUFL?=
- =?utf-8?B?TE9jZ1RlSlZqVDkxREtwZlB5UVNNY2k1ckNObHBxV1BNRW5RYURuQm5Nencr?=
- =?utf-8?B?R2I0STcyc1lqY3ppdEhTYW10SzFCYUxLWlZhNmxORlFTZ2YzNEpIWlRvSnJX?=
- =?utf-8?B?VVAxR09MemhXRmlPZmxxRGZGd1lpSHVKL2dBeFRFUXpwUkp5RExIbUhKZTZZ?=
- =?utf-8?B?TFBuZ2drYkpLUHlENzhjT2lUdzV3QnJVTGRDS2pxaWZsMGh0c1FHektUdXF1?=
- =?utf-8?B?QXh0UzNxWUdFdGJFYVU2TUl4c3pQdlphZ0s5dVRoTW0xTkVqZWQ2WmNDR2s4?=
- =?utf-8?B?NVIzTVdmQVN5RkxQdE81RFExQytoL3V5bzQ0azlmekdoQy9XcFBzZTFNM2Zw?=
- =?utf-8?B?YTZyRCtiZlFpS3UrQ0xKbFlMdkVQRDVTLzJzLyt3Rmx5M3Z0U0dRTXRxODdl?=
- =?utf-8?B?TGhqK0xDWUlQLzBCV1M1bEYzOG5yWS8yZFljTmN1ZkVLbTI5aG1jQk9ZZGxa?=
- =?utf-8?B?TWNPQm1XZXdIa2FBajNETXU4c2pidkVjUGtwMEQxQVlKRHg1aWIwZmhMNCtw?=
- =?utf-8?B?dmM5ajVYZUFvOStzRHZrYkhjTko2UUxJb2NIaGZWdzlIc3g1YkNMcHh4bWhy?=
- =?utf-8?B?UGJLSmFQSkRIMDVicWl0QktPNWhiTXVvdDJEL2Zuc1ZDeG9McExKUTFLOU1H?=
- =?utf-8?B?ZHkvYXAzUjJSKzYwTitpZmxsTTBpVDQvNHNLNlQ3djJnRFpVak5wZUJXS0FS?=
- =?utf-8?B?YzdjelZlVmFibWl0Yk1adnN4VTBOcFhFdUlVN0psZkZUbFN0NEE1dWxQSUJz?=
- =?utf-8?B?dkRlRkRJUmo3K3MxU1FxMm4rNFJjQjJBVjZTcnc0alJWVUR5VWVSWmxTZnFx?=
- =?utf-8?B?UVVoN1lNbWdkY3doYWR2dHVyY1FtT3NLNHAyL2QzdVJYQTNZVEFYaVhBTjdW?=
- =?utf-8?B?L3ErZHkveW1CbElPUmk4NHJYWCt4bXhrbFZpbkhwcklMdUlPRFc3cW5FSVg3?=
- =?utf-8?B?b2tBV0pJN1ZIRkZNbS9sY2pnYXprcnBaZHJYMDhTbkk2d1BhOTdrdnRHamdJ?=
- =?utf-8?B?bWJjL0dSa2J4b2N5cE5QRVhVbVEyV3lmZUFOQStvaTg2SGRLZ3YzNjhkWDFN?=
- =?utf-8?B?aGdJQVgzMG5PNDR1aHRrWFl5SDFPN3Jpdm82TnhYWFJOT1l5QUt5c2sybUJB?=
- =?utf-8?B?NWlUbS9VeVV2YXAxMjAzMFFSL2owWUl4aFEyV1lFMGtXWkFITlFXcUIxWTJS?=
- =?utf-8?B?MXprS1ZXb1l5ZzNHajJSeEJVWWllaTdQZFdGNUpPVFRBaEhGM05zZnJGTWpX?=
- =?utf-8?B?bG5aUm5Mb2k1dy92ekZiSWxFcnpxV1lTbHFkclhKd0J0R2F5eW0wWTV3eFFo?=
- =?utf-8?B?TnZNQW9TdFFpUjRQOElEUUE3R1Y2T1hWNTFvcXM4TFlRK2FrSkkxb0d0YmZR?=
- =?utf-8?B?UUhVU3pkYzdFY29vc20wNDV2MVBZbG5VYzdSTWU2NFppd1RoNXIyalF3VzhW?=
- =?utf-8?B?cHkvdmtIckdIWFJBZlNOaGJzN0JacFprZEUzUlc3YjFmTWc3VHNHWVk2ZzhW?=
- =?utf-8?B?emJNVmQ3Yk5POEM5TzJiSVB5bzFvbjFSbmhwRzBzK0JKU3RpcXZ1SnRSUDR0?=
- =?utf-8?B?bXYrbm1oVFpuNWp0eXdLT013T3Z2QzVreFZTM05MUDM2YVIvRmFBT1QvU0xw?=
- =?utf-8?B?K0N1NkZ2VklKclV0VUJta21kSGllcEpseVo5bXJlY3hvKzBwNG4vbFlGeXNq?=
- =?utf-8?B?SkhVVlhBNXdvVG9MTWdqMXIxRndMSEp4YmlRTC9LNFF2WWh1emE4NzdOVVNt?=
- =?utf-8?B?RkE9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cf25864a-61e1-4fd5-f71b-08db72783e61
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 16:54:57.2877
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fOp2DNqAn522Iibatwg5rFYNvra5hiCba/1R0gnbhoMX3R4vqE+ed3x1NuLuGgnG
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR15MB3788
-X-Proofpoint-GUID: uFjiFVECl3_H_NDEdea20NfelUgQ2r45
-X-Proofpoint-ORIG-GUID: uFjiFVECl3_H_NDEdea20NfelUgQ2r45
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-21_10,2023-06-16_01,2023-05-22_02
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230608154256.562906-1-aleksandr.mikhalitsyn@canonical.com>
+ <f3864ed6-8c97-8a7a-f268-dab29eb2fb21@redhat.com> <CAEivzxcRsHveuW3nrPnSBK6_2-eT4XPvza3kN2oogvnbVXBKvQ@mail.gmail.com>
+ <20230609-alufolie-gezaubert-f18ef17cda12@brauner> <CAEivzxc_LW6mTKjk46WivrisnnmVQs0UnRrh6p0KxhqyXrErBQ@mail.gmail.com>
+ <ac1c6817-9838-fcf3-edc8-224ff85691e0@redhat.com> <CAJ4mKGby71qfb3gd696XH3AazeR0Qc_VGYupMznRH3Piky+VGA@mail.gmail.com>
+ <977d8133-a55f-0667-dc12-aa6fd7d8c3e4@redhat.com> <CAEivzxcr99sERxZX17rZ5jW9YSzAWYvAjOOhBH+FqRoso2=yng@mail.gmail.com>
+ <626175e2-ee91-0f1a-9e5d-e506aea366fa@redhat.com> <bb20aebe-e598-9212-1533-c777ea89948a@redhat.com>
+ <CAEivzxdBoWrN1cNrotAcKrfRHg+0oajwSFT3OBAKTrjvmn=MKA@mail.gmail.com>
+In-Reply-To: <CAEivzxdBoWrN1cNrotAcKrfRHg+0oajwSFT3OBAKTrjvmn=MKA@mail.gmail.com>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Wed, 21 Jun 2023 18:55:07 +0200
+Message-ID: <CAEivzxdyLz1ZukU=1OOxcLUDidkwN0WaMn82coya0cc9V67buQ@mail.gmail.com>
+Subject: Re: [PATCH v5 00/14] ceph: support idmapped mounts
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     Gregory Farnum <gfarnum@redhat.com>,
+        Christian Brauner <brauner@kernel.org>, stgraber@ubuntu.com,
+        linux-fsdevel@vger.kernel.org, Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 15, 2023 at 2:54=E2=80=AFPM Aleksandr Mikhalitsyn
+<aleksandr.mikhalitsyn@canonical.com> wrote:
+>
+> On Thu, Jun 15, 2023 at 2:29=E2=80=AFPM Xiubo Li <xiubli@redhat.com> wrot=
+e:
+> >
+> > [...]
+> >
+> >  > > >
+> >  > > > I thought about this too and came to the same conclusion, that
+> > UID/GID
+> >  > > > based
+> >  > > > restriction can be applied dynamically, so detecting it on mount=
+-time
+> >  > > > helps not so much.
+> >  > > >
+> >  > > For this you please raise one PR to ceph first to support this, an=
+d in
+> >  > > the PR we can discuss more for the MDS auth caps. And after the PR
+> >  > > getting merged then in this patch series you need to check the
+> >  > > corresponding option or flag to determine whether could the idmap
+> >  > > mounting succeed.
+> >  >
+> >  > I'm sorry but I don't understand what we want to support here. Do we
+> > want to
+> >  > add some new ceph request that allows to check if UID/GID-based
+> >  > permissions are applied for
+> >  > a particular ceph client user?
+> >
+> > IMO we should prevent users to set UID/GID-based MDS auth caps from cep=
+h
+> > side. And users should know what has happened.
+>
+> ok, we want to restrict setting of UID/GID-based permissions if there is =
+an
+> idmapped mount on the client. IMHO, idmapping mounts is truly a
+> client-side feature
+> and server modification looks a bit strange to me.
+>
+> >
+> > Once users want to support the idmap mounts they should know that the
+> > MDS auth caps won't work anymore.
+>
+> They will work, but permission rule configuration should include
+> non-mapped UID/GID-s.
+> As I mentioned here [1] it's already the case even without mount idmappin=
+gs.
+>
+> It would be great to discuss this thing as a concept and synchronize
+> our understanding of this
+> before going into modification of a server side.
 
+Hi everyone,
 
-On 6/19/23 4:49 AM, menglong8.dong@gmail.com wrote:
-> From: Menglong Dong <imagedong@tencent.com>
-> 
-> Add test9/test10 in fexit_test.c and fentry_test.c to test the fentry
-> and fexit whose target function have 7/11 arguments.
-> 
-> Correspondingly, add bpf_testmod_fentry_test7() and
-> bpf_testmod_fentry_test11() to bpf_testmod.c
-> 
-> Meanwhile, add bpf_modify_return_test2() to test_run.c to test the
-> MODIFY_RETURN with 7 arguments.
-> 
-> Add bpf_testmod_test_struct_arg_7/bpf_testmod_test_struct_arg_7 in
-> bpf_testmod.c to test the struct in the arguments.
-> 
-> And the testcases passed:
-> 
-> ./test_progs -t fexit
-> Summary: 5/12 PASSED, 0 SKIPPED, 0 FAILED
-> 
-> ./test_progs -t fentry
-> Summary: 3/0 PASSED, 0 SKIPPED, 0 FAILED
-> 
-> ./test_progs -t modify_return
-> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-> 
-> ./test_progs -t tracing_struct
-> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
-> 
-> Signed-off-by: Menglong Dong <imagedong@tencent.com>
+I've spent some extra time analyzing this issue with UID/GID-based
+path restriction feature and idmapped mounts
+one more time and am still fully sure that we have two ways here:
+I. Extend Cephfs protocol (add new fields to request arguments in the
+"union ceph_mds_request_args")
+There should be 2 new fields for the file/directory owner's UID and
+GID respectively. With the help of these
+new fields, we will be able to split the permission check logic (that
+is based on the caller's UID/GID and should not be affected by
+the mounts idmapping at all!) and file owner concept, which involves
+mounts' idmapping.
+II. ignore this issue as non-critical, because:
+- idmapped mounts can be created only by privileged users
+(CAP_SYS_ADMIN in the superblock owner's user namespace (currently,
+it's always the initial user namespace!))
+- the surface of the problem is really small (combination of idmapped
+mount + UID/GID path-based restriction)
+- problem *can* be workarounded by appropriate permission
+configuration (UID/GID permissions should be configured to
+include both the mount's idmapping UIDs/GIDs and the host ones).
 
-Acked-by: Yonghong Song <yhs@fb.com>
+Before that I've highlighted some existing problems of this UID/GID
+path-based restriction feature:
+- [kernel client] UID/GIDs are sent to the server always from the
+initial user namespace (while the caller can be from inside the
+container with a non-initial user namespace)
+- [fuse client] UID/GIDs are always mapped to the fuse mount's
+superblock user namespace
+(https://github.com/ceph/ceph-client/blob/409e873ea3c1fd3079909718bbeb06ac1=
+ec7f38b/fs/fuse/dev.c#L138)
+It means that we already have analogical inconsistency between clients
+(userspace one and kernel).
+- [kernel client] We always take current user credentials instead of
+using (struct file)->f_cred as it has usually done for other
+filesystems
+
+Please understand me in the right way, I'm not trying to say that we
+need to be lazy and ignore the issue at all, but I'm
+just trying to say that this issue is not local and is not caused by
+an idmapped mounts, but it there is something to do on the cephfs
+side,
+we need to extend protocol and it's not obvious that it is worth it.
+My understanding is that we need to clarify this limitation in
+cephfs kernel client documentation and explain how to configure
+UID/GID path-based permissions with idmapped mounts to work around
+this.
+And if we get requests from our users that this is interesting to
+someone to support it in the right way then we can do all of this
+crazy stuff
+by extending ceph protocol. Btw, I've checked when "union
+ceph_mds_request_args" was extended last time. It was 6 (!) years ago
+:)
+
+Kind regards,
+Alex
+
+>
+> [1] https://lore.kernel.org/lkml/CAEivzxcBBJV6DOGzy5S7=3DTUjrXZfVaGaJX5z7=
+WFzYq1w4MdtiA@mail.gmail.com/
+>
+> Kind regards,
+> Alex
+>
+> >
+> > Thanks
+> >
+> > - Xiubo
+> >
