@@ -2,88 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 827E9738BE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0692B738BFB
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjFUQpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35272 "EHLO
+        id S229974AbjFUQqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbjFUQoy (ORCPT
+        with ESMTP id S229513AbjFUQqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:44:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C0E19AE;
-        Wed, 21 Jun 2023 09:44:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E38C615F7;
-        Wed, 21 Jun 2023 16:44:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47212C433C8;
-        Wed, 21 Jun 2023 16:44:50 +0000 (UTC)
-Date:   Wed, 21 Jun 2023 12:44:48 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH 1/2] tracing/probes: Fix to return NULL and keep using
- current argc
-Message-ID: <20230621124448.6971ddcf@gandalf.local.home>
-In-Reply-To: <168584574094.2056209.2694238431743782342.stgit@mhiramat.roam.corp.google.com>
-References: <168584574094.2056209.2694238431743782342.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 21 Jun 2023 12:46:20 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02AE419AF;
+        Wed, 21 Jun 2023 09:46:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=gPF8zQQSIHiKU2e2Ly4ej0SDtpoejzkFWwWEYtBtv+s=; b=R6XCM2zV5SdOXGzdC4zN24TUJT
+        M4veWjCAPq0VNUMCOXwK50bgiMz71O8YN/hsbWICKjaGBn0L/hOi6O3vzf8WibWLHu9fl3oQnQsny
+        VGKEA7Ik15shC5pM7bj5sOsWEZqfwMVm1w/UApf/gyrXm2EOIwgAe4VVVX5iq6/R6BNzAkxe/vJHh
+        XJoF4JmL38Rj6+7jZjgWTJ1XxMEElaDGBPXE4ET31k0NcLCnoFJ3RJwwdIo3TnQpnX9h+isSLIe6j
+        JkTmNrRbvZfY6wvO0Tfw3qOS6OftxBxHLANWzL3TPle2V4DyHE+CsN5B7LgFifpOLmUjM6a7p9apc
+        NtFA7iFA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qC0y1-00EjDe-6y; Wed, 21 Jun 2023 16:46:01 +0000
+From:   "Matthew Wilcox (Oracle)" <willy@infradead.org>
+To:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>
+Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, linux-afs@lists.infradead.org,
+        linux-nfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: [PATCH 00/13] Remove pagevecs
+Date:   Wed, 21 Jun 2023 17:45:44 +0100
+Message-Id: <20230621164557.3510324-1-willy@infradead.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun,  4 Jun 2023 11:29:00 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+We're almost done with the pagevec -> folio_batch conversion.  Finish
+the job.
 
-> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Fix to return NULL and keep using current argc when there is
-> $argN and the BTF is not available.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202306030940.Cej2JoUx-lkp@intel.com/
-> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Matthew Wilcox (Oracle) (13):
+  afs: Convert pagevec to folio_batch in afs_extend_writeback()
+  mm: Add __folio_batch_release()
+  scatterlist: Add sg_set_folio()
+  i915: Convert shmem_sg_free_table() to use a folio_batch
+  drm: Convert drm_gem_put_pages() to use a folio_batch
+  mm: Remove check_move_unevictable_pages()
+  pagevec: Rename fbatch_count()
+  i915: Convert i915_gpu_error to use a folio_batch
+  net: Convert sunrpc from pagevec to folio_batch
+  mm: Remove struct pagevec
+  mm: Rename invalidate_mapping_pagevec to mapping_try_invalidate
+  mm: Remove references to pagevec
+  mm: Remove unnecessary pagevec includes
 
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+ drivers/gpu/drm/drm_gem.c                 | 68 +++++++++++++----------
+ drivers/gpu/drm/i915/gem/i915_gem_shmem.c | 55 ++++++++++--------
+ drivers/gpu/drm/i915/i915_gpu_error.c     | 50 ++++++++---------
+ fs/afs/write.c                            | 16 +++---
+ include/linux/pagevec.h                   | 67 +++-------------------
+ include/linux/scatterlist.h               | 24 ++++++++
+ include/linux/sunrpc/svc.h                |  2 +-
+ include/linux/swap.h                      |  1 -
+ mm/fadvise.c                              | 17 +++---
+ mm/huge_memory.c                          |  2 +-
+ mm/internal.h                             |  4 +-
+ mm/khugepaged.c                           |  6 +-
+ mm/ksm.c                                  |  6 +-
+ mm/memory.c                               |  6 +-
+ mm/memory_hotplug.c                       |  1 -
+ mm/migrate.c                              |  1 -
+ mm/migrate_device.c                       |  2 +-
+ mm/readahead.c                            |  1 -
+ mm/swap.c                                 | 20 +++----
+ mm/swap_state.c                           |  1 -
+ mm/truncate.c                             | 27 +++++----
+ mm/vmscan.c                               | 17 ------
+ net/sunrpc/svc.c                          | 10 ++--
+ 23 files changed, 185 insertions(+), 219 deletions(-)
 
--- Steve
-
-> ---
->  kernel/trace/trace_probe.c |    3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-> index ba1c6e059b51..473e1c43bc57 100644
-> --- a/kernel/trace/trace_probe.c
-> +++ b/kernel/trace/trace_probe.c
-> @@ -1273,7 +1273,8 @@ const char **traceprobe_expand_meta_args(int argc, const char *argv[],
->  			trace_probe_log_err(0, NOSUP_BTFARG);
->  			return (const char **)params;
->  		}
-> -		return 0;
-> +		*new_argc = argc;
-> +		return NULL;
->  	}
->  	ctx->params = params;
->  	ctx->nr_params = nr_params;
+-- 
+2.39.2
 
