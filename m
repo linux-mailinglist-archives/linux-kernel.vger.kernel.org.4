@@ -2,183 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9312B737AFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6CC737AFD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229876AbjFUF4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 01:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47656 "EHLO
+        id S229931AbjFUGA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 02:00:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFUF4h (ORCPT
+        with ESMTP id S229470AbjFUGA0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 01:56:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AB51CA;
-        Tue, 20 Jun 2023 22:56:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB13661472;
-        Wed, 21 Jun 2023 05:56:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24983C433C8;
-        Wed, 21 Jun 2023 05:56:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687326995;
-        bh=US3Xe7yz1+AVCinByPs1eOKpdoQy+FtobpB/5DLulWo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ApWBaV3TgZW9WTYCyLlgF0j+nqO+nqmitwslpm8g44yprfBubzuc/R2N7ybTRvLh/
-         Ns2uFpGWP95Ae6rWEKexoj9fyhiRxZA/wLLqVZFEM73cbQIxwPlddy3soGTxo8yvU+
-         KmhjFIivoFQ3qB5ah+k5e8Gio3hzQKnNmch9z4ONG0+pLoezU4BG4f+2eIC028XG9j
-         utIhP2VICtz5KV8tRvjIeDWimNFy4DzoSprB2oAuTb+YWOSZbTF0QLt2bsSZrnA02M
-         1XRU1qkVxPK3DQN1U2NTHyiuI13Tc/yQ9JPpS4V1ZAVmfzUQehSI+M00JtumYmXzHB
-         sFdwPG5FVkIVw==
-Date:   Wed, 21 Jun 2023 08:55:51 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Jeff Xu <jeffxu@chromium.org>
-Cc:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Peter Xu <peterx@redhat.com>, linux-mm@kvack.org,
-        linux-hardening@vger.kernel.org, zhangpeng.00@bytedance.com,
-        akpm@linux-foundation.org, koct9i@gmail.com, david@redhat.com,
-        ak@linux.intel.com, hughd@google.com, emunson@akamai.com,
-        rppt@linux.ibm.com, aarcange@redhat.com,
-        linux-kernel@vger.kernel.org, Lorenzo Stoakes <lstoakes@gmail.com>
-Subject: Re: inconsistence in mprotect_fixup mlock_fixup madvise_update_vma
-Message-ID: <20230621055551.GE52412@kernel.org>
-References: <CABi2SkWx_BnEHzGqqqbDMJi+vi-5a7XkQUCkyesN5PUtk23SgQ@mail.gmail.com>
- <CABi2SkXw6ZD-M1ZrcXNL7abtM=RzQXv716PPM_k=1Tay=5rUFA@mail.gmail.com>
- <ZIjOlU5EfVNt6NRU@x1n>
- <CABi2SkXE4pUhHucZ_c-_4Ux-VcLKic0+HY_DN2wUEC6DGkDvQQ@mail.gmail.com>
- <20230614011814.sz2l6z6wbaubabk2@revolver>
- <20230614125731.GY52412@kernel.org>
- <CABi2SkXySaoRxB0dfhhTQz6P5jCL8iWpY_ti=LC7Qi49+2F01w@mail.gmail.com>
+        Wed, 21 Jun 2023 02:00:26 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D400A94;
+        Tue, 20 Jun 2023 23:00:24 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35L5OlsW023073;
+        Wed, 21 Jun 2023 06:00:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=xjY2SYNfv3RwEGW+uucTh9bt3QwnFzKvr/dlKJfaTl4=;
+ b=JB6f+RnzBFvZYNkUb927gnK12732kWuDCE8LzxJi+9HKCMLbfgN55z6uoCreKiwq8llc
+ yA6lKCApig4bb/aBFs2VGP9KY6u+h1ku6XZI1FZ7IZ6qT3CHmqx5H8QKusdigShpi2YG
+ cZ4n+ypySkbdsOCd2A4SfWO85NAGU3Qt43PqD5UCVGyh37IAol9Uu4f0Kai68emVCPWj
+ bRXGsl3hpu6EGJ5xst1FfRqaQBZpfESKX2IoHfU+fMRd9WHnYxyNWthVPsV/ky4gDEra
+ zi4pNanQo5YuhXqNuLsOwk+w6fyIBhEzYzLGU6qrWBZSbantyHP05XH4YvNK6k20HhcZ 7Q== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rb1dtk93n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jun 2023 06:00:19 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35L60HN0009259
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jun 2023 06:00:17 GMT
+Received: from [10.216.41.219] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 20 Jun
+ 2023 23:00:13 -0700
+Message-ID: <c5302062-e66a-c943-9fed-d959a1b6a9ed@quicinc.com>
+Date:   Wed, 21 Jun 2023 11:29:51 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABi2SkXySaoRxB0dfhhTQz6P5jCL8iWpY_ti=LC7Qi49+2F01w@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [RESEND v6 7/8] arm64: dts: qcom: sc7280: Modify LPASS_MCC reg
+ region size in the lpass_tlmm node
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <swboyd@chromium.org>,
+        <andersson@kernel.org>, <broonie@kernel.org>, <agross@kernel.org>
+CC:     <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
+        <dianders@chromium.org>, <judyhsiao@chromium.org>,
+        <quic_visr@quicinc.com>,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+References: <20230616103534.4031331-1-quic_mohs@quicinc.com>
+ <20230616103534.4031331-8-quic_mohs@quicinc.com>
+ <6a0a9fe7-d08e-4d1d-0085-f854f95c390f@linaro.org>
+From:   Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+In-Reply-To: <6a0a9fe7-d08e-4d1d-0085-f854f95c390f@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: PCvf3pB22Dsytsb8SB8oPClhWgRck59z
+X-Proofpoint-GUID: PCvf3pB22Dsytsb8SB8oPClhWgRck59z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-21_03,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
+ bulkscore=0 impostorscore=0 lowpriorityscore=0 phishscore=0 adultscore=0
+ suspectscore=0 mlxscore=0 mlxlogscore=887 clxscore=1015 priorityscore=1501
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306210051
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 03:29:34PM -0700, Jeff Xu wrote:
-> On Wed, Jun 14, 2023 at 5:58 AM Mike Rapoport <rppt@kernel.org> wrote:
-> >
-> > On Tue, Jun 13, 2023 at 09:18:14PM -0400, Liam R. Howlett wrote:
-> > > * Jeff Xu <jeffxu@chromium.org> [230613 17:29]:
-> > > > Hello Peter,
-> > > >
-> > > > Thanks for responding.
-> > > >
-> > > > On Tue, Jun 13, 2023 at 1:16 PM Peter Xu <peterx@redhat.com> wrote:
-> > > > >
-> > > > > Hi, Jeff,
-> > > > >
-> > > > > On Tue, Jun 13, 2023 at 08:26:26AM -0700, Jeff Xu wrote:
-> > > > > > + more ppl to the list.
-> > > > > >
-> > > > > > On Mon, Jun 12, 2023 at 6:04 PM Jeff Xu <jeffxu@chromium.org> wrote:
-> > > > > > >
-> > > > > > > Hello,
-> > > > > > >
-> > > > > > > There seems to be inconsistency in different VMA fixup
-> > > > > > > implementations, for example:
-> > > > > > > mlock_fixup will skip VMA that is hugettlb, etc, but those checks do
-> > > > > > > not exist in mprotect_fixup and madvise_update_vma. Wouldn't this be a
-> > > > > > > problem? the merge/split skipped by mlock_fixup, might get acted on in
-> > > > > > > the madvice/mprotect case.
-> > > > > > >
-> > > > > > > mlock_fixup currently check for
-> > > > > > > if (newflags == oldflags ||
-> > >
-> > > newflags == oldflags, then we don't need to do anything here, it's
-> > > already at the desired mlock.  mprotect does this, madvise does this..
-> > > probably.. it's ugly.
-> > >
-> > > > > > > (oldflags & VM_SPECIAL) ||
-> > >
-> > > It's special, merging will fail always.  I don't know about splitting,
-> > > but I guess we don't want to alter the mlock state on special mappings.
-> > >
-> > > > > > > is_vm_hugetlb_page(vma) || vma == get_gate_vma(current->mm) ||
-> > > > > > > vma_is_dax(vma) || vma_is_secretmem(vma))
-> > > > >
-> > > > > The special handling you mentioned in mlock_fixup mostly makes sense to me.
-> > > > >
-> > > > > E.g., I think we can just ignore mlock a hugetlb page if it won't be
-> > > > > swapped anyway.
-> > > > >
-> > > > > Do you encounter any issue with above?
-> > > > >
-> > > > > > > Should there be a common function to handle VMA merge/split ?
-> > > > >
-> > > > > IMHO vma_merge() and split_vma() are the "common functions".  Copy Lorenzo
-> > > > > as I think he has plan to look into the interface to make it even easier to
-> > > > > use.
-> > > > >
-> > > > The mprotect_fixup doesn't have the same check as mlock_fixup. When
-> > > > userspace calls mlock(), two VMAs might not merge or split because of
-> > > > vma_is_secretmem check, However, when user space calls mprotect() with
-> > > > the same address range, it will merge/split.  If mlock() is doing the
-> > > > right thing to merge/split the VMAs, then mprotect() is not ?
-> > >
-> > > It looks like secretmem is mlock'ed to begin with so they don't want it
-> > > to be touched.  So, I think they will be treated differently and I think
-> > > it is correct.
-> >
-> > Right, they don't :)
-> >
-> > secretmem VMAs are always mlocked, they cannot be munlocked and there is no
-> > point trying to mlock them again.
-> >
-> > The mprotect for secretmem is Ok though, so e.g. if we (unlikely) have two
-> > adjacent secretmem VMAs in a range passed to mprotect, it's fine to merge
-> > them.
-> >
-> 
-> I m thinking/brainstorming below, assuming:
-> Address range 1: 0x5000 to 0x6000 (regular mmap)
-> Address range 2: 0x6000 to 0x7000 (allocated to secretmem)
-> Address range 3: 0x7000 to 0x8000 (regular mmap)
-> 
-> User space call: mlock(0x5000,0x3000)
-> range 1 and 2 won't merge.
-> range 2 and 3  could merge, when mlock_fixup  checks current vma
-> (range 3), it is not secretmem, so it will merge with prev vma.
 
-But 2 and 3 have different vm_file, they won't merge.
- 
-> user space call: mprotect(0x5000,0x3000)
-> range 1 2 3 could merge,  all three can have the same flags.
-> Note: vma_is_secretmem() isn't checked in mprotect_fixup, same for
-> vma_is_dax and get_gate_vma, those doesn't have included in
-> vma->vm_flags
-> 
-> Once 1 and 2 are merged, maybe user space is able to use
-> munlock(0x5000,0x3000)
-> to unlock range 1 to 3, this will include 2, right ? (haven't used the
-> code to prove it)
+On 6/16/2023 5:00 PM, Konrad Dybcio wrote:
+> On 16.06.2023 12:35, Mohammad Rafi Shaik wrote:
+>> From: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>>
+>> Modify LPASS_MCC register region size in "lpass_tlmm" node.
+>> The pincntl driver requires access until slew-rate register region
+>> and remaining register region related to the lpass_efuse register
+>> is not required in pincntl driver as lpass_efuse register region is
+>> required in adsp remoteproc driver.
+>>
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> Signed-off-by: Mohammad Rafi Shaik <quic_mohs@quicinc.com>
+>> ---
+> Fixes tag?
+>
+> Konrad
+Thanks for comment,
 
-But 1 and 2 won't merge because their vm_file's are different.
- 
-> I'm using secretmem as an example here, having 3 different _fixup
-> implementations seems to be error prone to me.
-
-The actual decision whether to merge VMAs is taken in vma_merge rather than
-by the _fixup functions. So while the checks around vma_merge might be
-different in these functions, it does not mean it's possible to wrongly
-merge VMA unless there is a bug in vma_merge. So in the end it boils down
-to a single core implementation, don't you agree?
- 
-> Thanks
-> -Jeff
-
--- 
-Sincerely yours,
-Mike.
+okay, will add fixes tag.
+>>   arch/arm64/boot/dts/qcom/sc7280.dtsi | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> index 36f9edabb9d7..ec38f2feb9bf 100644
+>> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
+>> @@ -2509,7 +2509,7 @@ lpass_ag_noc: interconnect@3c40000 {
+>>   		lpass_tlmm: pinctrl@33c0000 {
+>>   			compatible = "qcom,sc7280-lpass-lpi-pinctrl";
+>>   			reg = <0 0x033c0000 0x0 0x20000>,
+>> -				<0 0x03550000 0x0 0x10000>;
+>> +				<0 0x03550000 0x0 0xa100>;
+>>   			qcom,adsp-bypass-mode;
+>>   			gpio-controller;
+>>   			#gpio-cells = <2>;
