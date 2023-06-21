@@ -2,60 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA266738196
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8B65738204
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbjFUJw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 05:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
+        id S231684AbjFUJxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 05:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbjFUJwx (ORCPT
+        with ESMTP id S230376AbjFUJxo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 05:52:53 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C3210A;
-        Wed, 21 Jun 2023 02:52:52 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 21 Jun 2023 05:53:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21819B;
+        Wed, 21 Jun 2023 02:53:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1FB486606F73;
-        Wed, 21 Jun 2023 10:52:50 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687341170;
-        bh=HjDAudkKipQLczGA3Z+Xcf4LUnUH5z5iQaIO41AWYto=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=e4nqUfiWPdOPILSnlwY/fnUauQ1CgUSbBk904O3wxRq8jufIdx8Se0MUH8zg2LTa6
-         F07saruQacith8Q7T55AI+b2nspXoX4g5eiOtdk4qrDdC74qOcbephNt7p/2ryX5ci
-         Cfu5P9NI2QgrEEyVHqPZzrz85w5mjlqirx3nGX3iv1QWwizOKwo6LV08oTaWT6+JfS
-         3jwuzOq7ILskZxpSV6FUQ7JgX7lPuOdjkAQck2+rRDKqhjHH3e2xAdWRVb2IcdY+NN
-         PhbzBizMVGXgFDHl+evY1+z4mECWBOFGqWcr+qyAW74O7oHu+3yxRxc7G2kvZTEM6R
-         gQZSyraCMBQfQ==
-Message-ID: <d26ea42b-5749-bf08-997b-4a3b6062aed4@collabora.com>
-Date:   Wed, 21 Jun 2023 11:52:48 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87099614D0;
+        Wed, 21 Jun 2023 09:53:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D283AC433C8;
+        Wed, 21 Jun 2023 09:53:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687341223;
+        bh=hbYSGhPNihESibj0GLzopXILEUIpPsXw1kgApj2/L9A=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=J3CSndaeTkQTTZKxs4ETpM4EIwIydrK8+HXZVGJ5rJiIMf95B9/bP8UC5OAUStMdD
+         LcKGYNC1uUqIgak8KtT4zO1yRAwEIORHoUFzI63j3NCqu8RT+GC0Z2TjUbeURwmako
+         hwf2pZRiNGOPaLEVGOMvkyywPwJ8Zh+39dMUiGlqfsz/HZ9C1GjA58Uu807NoF83YV
+         imdezZTKRM3TfW6/FF6k44fY86+JBEIx2fx33T4FX/IPT0HMB5jNlQmc2c4RAbw1K2
+         xHbqa0XMSJDO758M8IaF8uy6G5+XKoqGhSmuzFb9IK1HSmDfvJSQwJ9ZCqkO0VKStF
+         rHtPcI8vrJm9g==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 1/2] kselftest/alsa: pcm-test: Move stream duration and
- margin to variables
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>
-Cc:     kernel@collabora.com, Jaroslav Kysela <perex@perex.cz>,
-        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-References: <20230620220839.2215057-1-nfraprado@collabora.com>
- <20230620220839.2215057-2-nfraprado@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230620220839.2215057-2-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] wifi: p54: Add missing MODULE_FIRMWARE macro
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20230616121917.1034761-1-juerg.haefliger@canonical.com>
+References: <20230616121917.1034761-1-juerg.haefliger@canonical.com>
+To:     Juerg Haefliger <juerg.haefliger@canonical.com>
+Cc:     chunkeey@googlemail.com, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Juerg Haefliger <juerg.haefliger@canonical.com>
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.11.2
+Message-ID: <168734121983.549389.14943663338589626944.kvalo@kernel.org>
+Date:   Wed, 21 Jun 2023 09:53:41 +0000 (UTC)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,13 +57,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 21/06/23 00:08, Nícolas F. R. A. Prado ha scritto:
-> The duration to stream for and time margin to consider the stream failed
-> are currently hardcoded values. Move them to variables so they can be
-> reused and more easily changed.
-> 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> 
+Juerg Haefliger <juerg.haefliger@canonical.com> wrote:
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Add the missing MODULE_FIRMWARE macro for "3826.eeprom".
+> 
+> Signed-off-by: Juerg Haefliger <juerg.haefliger@canonical.com>
+> Acked-by: Christian Lamparter <chunkeey@gmail.com>
+
+Patch applied to wireless-next.git, thanks.
+
+8d0c7e1901d6 wifi: p54: Add missing MODULE_FIRMWARE macro
+
+-- 
+https://patchwork.kernel.org/project/linux-wireless/patch/20230616121917.1034761-1-juerg.haefliger@canonical.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
