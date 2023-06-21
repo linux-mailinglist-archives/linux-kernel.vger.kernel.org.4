@@ -2,54 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D800738C2C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A33738C3E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:49:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229645AbjFUQrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37014 "EHLO
+        id S230357AbjFUQtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:49:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjFUQq1 (ORCPT
+        with ESMTP id S230230AbjFUQt2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:46:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15C710CE
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:46:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 21 Jun 2023 12:49:28 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E49111BD6
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:48:43 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 773E5615D9
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 16:46:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F34DC433CB;
-        Wed, 21 Jun 2023 16:46:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687365979;
-        bh=u5z3ftv6BB076pT5euIJojw2xnPqDLGdMYKakdyytIY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hj63S+ykIPE+j7FWCIXD97o63nTf17Gp0jFj++wXidUxhZ67umI9k+oGfZZpXlIJZ
-         QnHEYWbweXL2c1RcZ3ZRcB8b1RZw7ZkpPnWC0jr4DE4sYbYBDLYvgzI7lOp0qeQn25
-         9ZKRVIc56nsK7zOV2MRJEgYtLYwMrDQ0XiLbxVSPkixx1jp0lxtlEN31CzV3LTJczn
-         IH5r6t4oAhwVLmAbdOKKKhZGXgogIHDdoO0wxEvauQdI4KMw6TpoTyrfgKGgvBaGjt
-         Qf2Sdoeywzmk/rW7W2Rym5MMTuLE0cCucvxcTl6TH0ha6BgbjCbIL54MianYuXT/Nr
-         VMUNaPFRkuykA==
-Date:   Wed, 21 Jun 2023 10:46:17 -0600
-From:   Keith Busch <kbusch@kernel.org>
-To:     Breno Leitao <leitao@debian.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>, leit@fb.com,
-        "open list:NVM EXPRESS DRIVER" <linux-nvme@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] nvme: Print capabilities changes just once
-Message-ID: <ZJMpWaMxKMFE8hmK@kbusch-mbp.dhcp.thefacebook.com>
-References: <20230615094903.1341683-1-leitao@debian.org>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id E796B21F6F;
+        Wed, 21 Jun 2023 16:48:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1687366088; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qpiD7nZ3CxtSB25h11cYA22p73QI3NvhZV+46nJgvR4=;
+        b=vx9uelIbcZARqzOURqtxV6YC86hereTNAbh49+mmf3kfF/KDCE46g31r3Q9x9vND7nrWXG
+        oCMn2pvP+vPOd5baU/GPJET9gC6Km5pTai/PHtLbTkxgbc6av8VKi0q0irMCvOAwb2Sr7v
+        kug5MfxsEngN9iPk2fHWUPXXUdw1v34=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1687366088;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qpiD7nZ3CxtSB25h11cYA22p73QI3NvhZV+46nJgvR4=;
+        b=e6LjeoGTiAaFWeCLCdmtOQ3qE2zmHiVIwcVp1kX7f3Pfj1TNqEQZsIFjbknvak2koESNYp
+        R721Ujbzl48SOHBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DA92B133E6;
+        Wed, 21 Jun 2023 16:48:08 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id dHBVNcgpk2Q8SQAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 21 Jun 2023 16:48:08 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 751E1A075D; Wed, 21 Jun 2023 18:48:08 +0200 (CEST)
+Date:   Wed, 21 Jun 2023 18:48:08 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 15/79] bfs: switch to new ctime accessors
+Message-ID: <20230621164808.5lhujni7qb36hhtk@quack3>
+References: <20230621144507.55591-1-jlayton@kernel.org>
+ <20230621144735.55953-1-jlayton@kernel.org>
+ <20230621144735.55953-14-jlayton@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230615094903.1341683-1-leitao@debian.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20230621144735.55953-14-jlayton@kernel.org>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,20 +75,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 02:49:03AM -0700, Breno Leitao wrote:
->  	if (effects & NVME_CMD_EFFECTS_CCC) {
-> -		dev_info(ctrl->device,
-> +		if (!test_and_set_bit(NVME_CTRL_DIRTY_CAPABILITY,
-> +				      &ctrl->flags)) {
-> +			dev_info(ctrl->device,
->  "controller capabilities changed, reset may be required to take effect.\n");
-> +		}
->  	}
+On Wed 21-06-23 10:45:28, Jeff Layton wrote:
+> In later patches, we're going to change how the ctime.tv_nsec field is
+> utilized. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
+> 
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-Thanks, patch applied to nvme-6.5.
+...
 
-A question for Christoph and future consideration: I *think* the
-complications that had the driver stop refreshing the controller
-attributes are largely mitigated by the fact we now handle effects
-after the request is freed. Perhaps I'm missing something. Is there
-a risk in just bringing that feature back into the driver?
+> diff --git a/fs/bfs/inode.c b/fs/bfs/inode.c
+> index 1926bec2c850..c964316be32b 100644
+> --- a/fs/bfs/inode.c
+> +++ b/fs/bfs/inode.c
+> @@ -82,10 +82,10 @@ struct inode *bfs_iget(struct super_block *sb, unsigned long ino)
+>  	inode->i_blocks = BFS_FILEBLOCKS(di);
+>  	inode->i_atime.tv_sec =  le32_to_cpu(di->i_atime);
+>  	inode->i_mtime.tv_sec =  le32_to_cpu(di->i_mtime);
+> -	inode->i_ctime.tv_sec =  le32_to_cpu(di->i_ctime);
+> +	inode_ctime_set_sec(inode, le32_to_cpu(di->i_ctime));
+>  	inode->i_atime.tv_nsec = 0;
+>  	inode->i_mtime.tv_nsec = 0;
+> -	inode->i_ctime.tv_nsec = 0;
+> +	inode_ctime_set_nsec(inode, 0);
+
+So I'm somewhat wondering here - in other filesystem you construct
+timespec64 and then use inode_ctime_set(). Here you use
+inode_ctime_set_sec() + inode_ctime_set_nsec(). What's the benefit? It
+seems these two functions are not used that much some maybe we could just
+live with just inode_ctime_set() and constructing timespec64 when needed?
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
