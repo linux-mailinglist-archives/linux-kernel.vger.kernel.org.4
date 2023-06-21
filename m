@@ -2,119 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 207DD73809E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 450E1738004
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232614AbjFUKrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 06:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55468 "EHLO
+        id S231801AbjFUKsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 06:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232312AbjFUKrV (ORCPT
+        with ESMTP id S231915AbjFUKri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 06:47:21 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E36BF272E;
-        Wed, 21 Jun 2023 03:45:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687344352; x=1718880352;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=P32W9AfKeVxcvQoVXSO2hVKT1bX+1GIInDGt+g7kzUA=;
-  b=Tik79gtRICZJ/e6yWuGptEes4Uf6Ys1haKc4XzL+KzNx62sLPB5mzmaj
-   zWa566YoI71TDWmdh+qJYJADnYDYg1Mh8m4azTwAXnkw6ykQy90nrDeq8
-   oO7KTtxmj/2dF8Y5ov7Yd2u/Ux50qQhYMsvU11pYENdHpuurXHoWIwctz
-   HkJyHrT0LvH8zWqobpaFyLxbl1MYFYiObFEcvCLT1FCF/51z7qDvaDYYU
-   j2QZoAemndju9vMhn8Tdttj+mEPHsscSjPHG/tmsoSdPS5rgcP43NltIT
-   kLgsr92dV6l8yBB/WV6I92zYst2VvOuBgM6e5zhm2sqhXcuORqIEIWbi4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="359004744"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="359004744"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 03:45:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="858926048"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="858926048"
-Received: from unknown (HELO localhost.localdomain) ([10.226.216.116])
-  by fmsmga001.fm.intel.com with ESMTP; 21 Jun 2023 03:45:48 -0700
-From:   wen.ping.teh@intel.com
-To:     krzysztof.kozlowski@linaro.org
-Cc:     adrian.ho.yin.ng@intel.com, andrew@lunn.ch, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, dinguyen@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mturquette@baylibre.com,
-        netdev@vger.kernel.org, niravkumar.l.rabara@intel.com,
-        p.zabel@pengutronix.de, richardcochran@gmail.com,
-        robh+dt@kernel.org, sboyd@kernel.org, wen.ping.teh@intel.com
-Subject: Re: [PATCH 2/4] dt-bindings: clock: Add Intel Agilex5 clocks and resets
-Date:   Wed, 21 Jun 2023 18:45:25 +0800
-Message-Id: <20230621104525.2522714-1-wen.ping.teh@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <ed6f9ab8-9c4e-ec9f-efb7-81974d75f074@linaro.org>
-References: <ed6f9ab8-9c4e-ec9f-efb7-81974d75f074@linaro.org>
+        Wed, 21 Jun 2023 06:47:38 -0400
+Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [IPv6:2a0a:51c0:0:237:300::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B26281BDF;
+        Wed, 21 Jun 2023 03:46:14 -0700 (PDT)
+Received: from fw by Chamillionaire.breakpoint.cc with local (Exim 4.92)
+        (envelope-from <fw@strlen.de>)
+        id 1qBvLf-0006WT-QB; Wed, 21 Jun 2023 12:46:03 +0200
+Date:   Wed, 21 Jun 2023 12:46:03 +0200
+From:   Florian Westphal <fw@strlen.de>
+To:     "Igor A. Artemiev" <Igor.A.Artemiev@mcst.ru>
+Cc:     Florian Westphal <fw@strlen.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+Subject: Re: [lvc-project] [PATCH] netfilter: ebtables: remove unnecessary
+ NULL check
+Message-ID: <20230621104603.GA24035@breakpoint.cc>
+References: <20230620152549.2109063-1-Igor.A.Artemiev@mcst.ru>
+ <20230620163806.GB3799@breakpoint.cc>
+ <f687fe6f-3330-a9c5-4760-f753638c7b03@mcst.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f687fe6f-3330-a9c5-4760-f753638c7b03@mcst.ru>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->From: Krzysztof Kozlowski @ 2023-06-20 11:06 UTC (permalink / raw)
->>>
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    const: intel,agilex5-clkmgr
->>>
->>>
->>> Why "clkmgr", not "clk"? You did not call it Clock manager anywhere in
->>> the description or title.
->>>
->> 
->> The register in Agilex5 handling the clock is named clock_mgr.
->> Previous IntelSocFPGA, Agilex and Stratix10, are also named clkmgr.
->
->So use it in description.
+Igor A. Artemiev <Igor.A.Artemiev@mcst.ru> wrote:
+> On 6/20/23 19:38, Florian Westphal wrote:
+> > Igor Artemiev <Igor.A.Artemiev@mcst.ru> wrote:
+> > > In ebt_do_table() 'private->chainstack' cannot be NULL
+> > > and the 'cs' pointer is dereferenced below, so it does not make
+> > > sense to compare 'private->chainstack' with NULL.
+> > ?  Why do you think that?
+> > 
+> The 'cs' pointer is dereferenced below without checking, as it is assumed to
+> always be initialized with 'private->chainstack[smp_processor_id()]'.
 
-Noted. Will update the description in V2.
+No, its not.  The dereferencing is conditional, as is the allocation
+of the chainstack.
 
->>>> +
->>>> +additionalProperties: false
->>>> +
->>>> +examples:
->>>> +  # Clock controller node:
->>>> +  - |
->>>> +    clkmgr: clock-controller@10d10000 {
->>>> +      compatible = "intel,agilex5-clkmgr";
->>>> +      reg = <0x10d10000 0x1000>;
->>>> +      #clock-cells = <1>;
->>>> +    };
->>>> +...
->>>> diff --git a/include/dt-bindings/clock/agilex5-clock.h b/include/dt-bindings/clock/agilex5-clock.h
->>>> new file mode 100644
->>>> index 000000000000..4505b352cd83
->>>> --- /dev/null
->>>> +++ b/include/dt-bindings/clock/agilex5-clock.h
->>>
->>> Filename the same as binding. Missing vendor prefix, entirely different
->>> device name.
->>>
->> 
->> Will change filename to intel,agilex5-clock.h in V2.
->
->Read the comment - same as binding. You did not call binding that way...
->unless you rename the binding.
+No user defined chains, no chain stack.
 
-Just to confirm, the binding name you are referring to is "intel,agilex5-clkmgr"?
-I will change the filename to intel,agilex5-clkmgr.h in V2.
-
-Best Regards,
-Wen Ping
-
+With this change, "ebtables-legacy -A INPUT" causes kernel panic.
