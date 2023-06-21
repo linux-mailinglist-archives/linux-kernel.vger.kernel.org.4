@@ -2,117 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 017BB738533
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:32:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F5BA738535
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:32:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbjFUNcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:32:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59746 "EHLO
+        id S231207AbjFUNcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231200AbjFUNb6 (ORCPT
+        with ESMTP id S229602AbjFUNcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:31:58 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC0E5199A
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:31:42 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8BxU8S9+5Jk4iQAAA--.265S3;
-        Wed, 21 Jun 2023 21:31:41 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx4eS8+5JkGLYAAA--.4269S3;
-        Wed, 21 Jun 2023 21:31:41 +0800 (CST)
-Message-ID: <30d80802-2d9d-2816-1a02-240145f6dd3a@loongson.cn>
-Date:   Wed, 21 Jun 2023 21:31:40 +0800
+        Wed, 21 Jun 2023 09:32:23 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2531981;
+        Wed, 21 Jun 2023 06:32:22 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3a03ff70c1aso1095470b6e.1;
+        Wed, 21 Jun 2023 06:32:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687354342; x=1689946342;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/IJMn0/zhbPXvpTVANrT1cs8Ypc7FJHdchkV1z/m0Hg=;
+        b=hgPhc6i1L+dMuKShv/QYYl14XtrwkypfPbagW42p++z6j8bK9EOl6KjPQ8gq7xkhGO
+         wTh9cHXL3W8vi59H0WX7APoHx6jmMwX/f0JlhKpF2LU16XQo4zi6b4Foxfau95wZPbo2
+         vYIP6TziUUhrRqBTZo8V44K1rwZgqCNlHmoh4WB15PObLT3QHjE1IfphPk0M2BFh9cml
+         BOX9+58fAQdwVxasNfnOCouqZoq6hhVO0IiIKSKUFETEi6Rfnutxs8wkPuZ8NqOj9aWG
+         ZH7VPLdNJOTZSfqJpeKVdwWdPeFccIfg6rNXZIingyQKHkYPUwlbTcDQppeEY62lOC1e
+         AKJA==
+X-Gm-Message-State: AC+VfDx2r1fOFQP6Grx8L0GA62jSa4lPQAtML2ywnfrHKtd696+wAKdi
+        dgh01A+hlpeYuzsCZ6VQPcw=
+X-Google-Smtp-Source: ACHHUZ5ZaK8fBszARbtNRNohDQBzuxdQlCR3hu8a/EPENE6dcfIxTIt6R1TGNUF4Cdy+76NkOdPjuA==
+X-Received: by 2002:aca:d0a:0:b0:3a0:30e8:f069 with SMTP id 10-20020aca0d0a000000b003a030e8f069mr6942247oin.30.1687354341857;
+        Wed, 21 Jun 2023 06:32:21 -0700 (PDT)
+Received: from localhost.localdomain (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net. [82.11.51.62])
+        by smtp.gmail.com with ESMTPSA id bf24-20020a056808191800b00395f2c84b81sm2114206oib.54.2023.06.21.06.32.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 06:32:21 -0700 (PDT)
+From:   Lucas Tanure <tanure@linux.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>
+Cc:     Nick <nick@khadas.com>, Artem <art@khadas.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Lucas Tanure <tanure@linux.com>
+Subject: [PATCH v3 0/3] Add Amlogic A311D2 and Khadas Vim4 Board Support
+Date:   Wed, 21 Jun 2023 14:32:12 +0100
+Message-ID: <20230621133215.109254-1-tanure@linux.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v10 03/11] drm/etnaviv: Add dedicated functions to create
- and destroy platform device
-Content-Language: en-US
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Sui Jingfeng <18949883232@163.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        etnaviv@lists.freedesktop.org
-References: <20230620094716.2231414-1-18949883232@163.com>
- <20230620094716.2231414-4-18949883232@163.com>
- <0daa7182d6600a24988d1c81cf8fe3c0c9487f52.camel@pengutronix.de>
- <1c7596fd-7e63-6719-2574-7d7820687832@loongson.cn>
- <6d287bbb1733814009dfeb7d48f08cb6f44dc56c.camel@pengutronix.de>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <6d287bbb1733814009dfeb7d48f08cb6f44dc56c.camel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8Dx4eS8+5JkGLYAAA--.4269S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj9xXoWrtr4fWr4DKF4fuw4UKrWDZFc_yoWDZFbEkr
-        s7ZFsrK3yftwsYqFyakFW8AF17Ga9IvrZ5Jw1Utwn5K343X3yDZ3ykArs2va4rXa1I9rsI
-        grnxur1Sy3sI9osvyTuYvTs0mTUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvT
-        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-        cSsGvfJTRUUUbg8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-        vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
-        Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_
-        Jw1lYx0Ex4A2jsIE14v26F4j6r4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
-        1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxG
-        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4U
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU8oGQD
-        UUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The Khadas VIM4 uses the Amlogic A311D2 SoC, based on the Amlogic
+Meson T7 family. This chip is not the same as A311D used in Vim3
+board.
 
-On 2023/6/21 18:23, Lucas Stach wrote:
->> While back to the question you ask, I want etnaviv_create_platform_device() to be generic,
->>
->> can be used by multiple place for multiple purpose.
->>
->> I have successfully copy this to a another drm driver by simply renaming.
->>
->> The body of the function itself does not need to change.
-> But it isn't shared,
+Work based on Khadas 5.4 branch:
+https://github.com/khadas/linux/tree/khadas-vims-5.4.y
 
-This can be shared for drm/etnaviv in the future,
+The current status is Vim4 board booting to emergency shell via uart.
 
-currently, we just need an opportunity to use this function.
+Board Features:
+- 8GB LPDDR4X 2016MHz
+- 32GB eMMC 5.1 storage
+- 32MB SPI flash
+- 10/100/1000 Base-T Ethernet
+- AP6275S Wireless (802.11 a/b/g/n/ac/ax, BT5.1)
+- HDMI 2.1 video
+- HDMI Input
+- 1x USB 2.0 + 1x USB 3.0 ports
+- 1x USB-C (power) with USB 2.0 OTG
+- 3x LED's (1x red, 1x blue, 1x white)
+- 3x buttons (power, function, reset)
+- M2 socket with PCIe, USB, ADC & I2C
+- 40pin GPIO Header
+- 1x micro SD card slot
 
-I want to create a dummy platform device,
+Changes Since v2:
+ - Add "amlogic,meson-t7-uart" documentation
 
-let this dummy platform be bound to the single PCI GPU master.
+Changes Since v1:
+ - Drop the T7 clock driver as it is not needed for serial boot. It will
+ later use the S4 clock
+ driver as S4 and  T7 seems to be similar chips.
+ - Use "arm,gic-400" for interrupt controller to fix dtb_check
+ - Remove CPU node properties not needed for serial boot
+ - Move UART node to apb4 node
+ - Drop T7 UART compatible line and use S4 uart
+ - Use psci V1 instead of 0.2, it works, but I can't verify is correct
+ as the datasheet I have
+ doesn't contain that information.
+ - Remove compatible from meson-t7.dtsi, move it to vim4 board dts
+ - Add memory node with 8GB. Not sure about this one, works without,
+ but doesn't detect 8GB
+ - Use defines for GIC_CPU_MASK_SIMPLE, IRQ_TYPE_LEVEL_LOW,
+ IRQ_TYPE_LEVEL_HIGH instead of hardcoded values
 
+Lucas Tanure (3):
+  dt-bindings: arm: amlogic: add Amlogic A311D2 bindings
+  dt-bindings: serial: amlogic,meson-uart: Add compatible string for T7
+  arm64: dts: meson-t7-a311d2-khadas-vim4: add initial device-tree
 
-etnaviv_create_platform_device("dummy", &dummy_device);
+ .../devicetree/bindings/arm/amlogic.yaml      |   7 +
+ .../bindings/serial/amlogic,meson-uart.yaml   |   2 +
+ arch/arm64/boot/dts/amlogic/Makefile          |   1 +
+ .../amlogic/meson-t7-a311d2-khadas-vim4.dts   |  52 ++++++
+ arch/arm64/boot/dts/amlogic/meson-t7.dtsi     | 158 ++++++++++++++++++
+ 5 files changed, 220 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/amlogic/meson-t7-a311d2-khadas-vim4.dts
+ create mode 100644 arch/arm64/boot/dts/amlogic/meson-t7.dtsi
 
-
-1) To verify the component code path on PCI case.
-
-2) Possibly for create a device for some other tiny hardware logic
-come with the platform
-
-3) Revival component_compare_dev_name() function.
-
-> in this compilation unit this function is specific
-> to the etnaviv driver and I don't see why we shouldn't have etnaviv
-> specifics in there if it makes the code of this driver easier to
-> follow.
-
--- 
-Jingfeng
+--
+2.41.0
 
