@@ -2,139 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D13B3737B3F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6396737B2C
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:25:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbjFUGWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 02:22:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56740 "EHLO
+        id S230121AbjFUGWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 02:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbjFUGWC (ORCPT
+        with ESMTP id S230221AbjFUGWh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 02:22:02 -0400
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C712010DA
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:21:57 -0700 (PDT)
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3406eef1dbeso41611735ab.2
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:21:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687328517; x=1689920517;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+        Wed, 21 Jun 2023 02:22:37 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DE410CE
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:22:35 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-98cd280cf94so23234966b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:22:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687328554; x=1689920554;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=FiMal5spkWzxQuFQIfK2vMHUo4FNmdwa/V87z8doXGc=;
-        b=JeII9d2WxOgbo/Ob+KJgurRJsTfBb1XaI3X0WCHQG/xzqSZYUVGyK/RQQ58Ki/HaJU
-         ZK2GL+6e089FrY58hyGnRDg69iOjxCcY0+9wles92rsKzkIRAnyus1I5y4Nb/Pf1N9+1
-         /1jNpyyNNcSnmKfqBF8iQIrIVUP3aGQytz9VZmLUZTTOYb1UAf3tAPt4sCB4LyxOZYKh
-         Bsp6JT343rFjap9hKgJEm8aNNRr5gmp9IurQMGnsbCf8h5KIwXX1MooupnptozqjDRIV
-         eMrp/o67ZY1jzeukJs4caLNnS38FQmkK9C81+m4k/Taz4kZAJExbPuALBWxLMgXtqECx
-         /z0g==
-X-Gm-Message-State: AC+VfDxq34odrENO9aFBpakU1WVIz0JRh6ykR8hYA+qGUf4ofd/cySlq
-        05EROrTGREyQ1DyZx5Xo87uGOlW6361KB6aCj66D3lGKivwP
-X-Google-Smtp-Source: ACHHUZ5SNaRAP4AlQomcHJ+cQkJ/JYbpSfleiz9DmSgIpbdo3Y+yEDxUPEAfrkmmJuOytq7wEY72T5Y752YY3GgvaS+gYL8anMNM
+        bh=nOnf1IwNAj9eWxqQ3NaJ61zegJDoEg9fxsPDNf+LrA8=;
+        b=vLX1S8h70Y3uUmQ/uz4k+GVA5A6NGNFwW+5QH0qR0xEsqi6M4PO1VXFbQ0gOsZ1xeC
+         s1ZHpq8nrTlMfUgVzIjTB6UVhgosmiQ137q9Nx7E7Br6oShSph0awERCcjxHb+KocMEJ
+         8ySw5/qTmMP1MGC1oNVTl9LozTu6jWMHVEI9KMWKgdS8SYmf7xKExkglqOePbvq60sjq
+         lWNYBbbznPB8J9mqve6iC1cITm2l0OVg8FS0xYrdtEGvvSzA5WBAuyyGe2NtXtdljxxI
+         tCqYH6zER5FtIQO2hAW2Sr9o6LD5Men0ohhsbDSAbRPCiuzzyJnmF8YW5eyFNiIPufmv
+         HSPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687328554; x=1689920554;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nOnf1IwNAj9eWxqQ3NaJ61zegJDoEg9fxsPDNf+LrA8=;
+        b=R7NnVj1bnDlI6J3Lct/K5xcipjCZy/jsV9mXhfwKsZ28nbzK6hxJ6cYTjfDcNHTV7F
+         QfQFm/scIMtqOQud+Y9zvaiXg+JJ/CFNsW0/wPdBw/l75ss0R1bLNA6MQ7TgzmoRlMGa
+         vvwwoT7VNxpVx5U+Gal0rtO1pAxl7ijghdQaNLWwpT5Rf/OBkfS3b7te3MOi8NjYD2L6
+         EJFXkn+16L5R2A0qLBaOvVytRHCoQQZBEUbx2YSrKPRHwrWIitCCgnacqyXJ5AMnsLW/
+         3dyeREL1u6WZ8FUfbvGgfszUo7KINm7BHKNHGofYzBkclNaFmnJdVozZEaHce9jkmxAg
+         FIjg==
+X-Gm-Message-State: AC+VfDyth3+cc9EaHyJH+yVPWy0PQdg26lMSBzyw1bMUTNEvAiGCrNgF
+        GEWEc4Rz26NcnpVUOBLYFKVzwA==
+X-Google-Smtp-Source: ACHHUZ50+qrhepCQsuUeAYYv6aa5weBNKXA3yMmkFj+KS1yKcgIV10DK2KspkSILnaZUEwc3l7KYaA==
+X-Received: by 2002:a17:906:9748:b0:989:d9d:d8f7 with SMTP id o8-20020a170906974800b009890d9dd8f7mr4458595ejy.5.1687328554140;
+        Tue, 20 Jun 2023 23:22:34 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id ju15-20020a17090798af00b009788554ad10sm2547201ejc.138.2023.06.20.23.22.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 23:22:33 -0700 (PDT)
+Message-ID: <66d5a117-abc7-e147-f416-5366706b5f26@linaro.org>
+Date:   Wed, 21 Jun 2023 08:22:31 +0200
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:541:b0:341:d190:ca88 with SMTP id
- i1-20020a056e02054100b00341d190ca88mr5412963ils.6.1687328517151; Tue, 20 Jun
- 2023 23:21:57 -0700 (PDT)
-Date:   Tue, 20 Jun 2023 23:21:57 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e2638a05fe9dc8f9@google.com>
-Subject: [syzbot] [udf?] KMSAN: uninit-value in udf_name_from_CS0
-From:   syzbot <syzbot+cd311b1e43cc25f90d18@syzkaller.appspotmail.com>
-To:     glider@google.com, jack@suse.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCHv4 1/2] dt-bindings: arm: rockchip: Add Firefly Station P2
+Content-Language: en-US
+To:     Furkan Kardame <f.kardame@manjaro.org>, robh+dt@kernel.org
+Cc:     krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        heiko@sntech.de, broonie@kernel.org, deller@gmx.de,
+        dsterba@suse.com, arnd@arndb.de, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230620184746.55391-1-f.kardame@manjaro.org>
+ <20230620184746.55391-2-f.kardame@manjaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230620184746.55391-2-f.kardame@manjaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 20/06/2023 20:47, Furkan Kardame wrote:
+> Station P2 is a single board computer by firefly based
+> on rk3568 soc
+> 
+> Signed-off-by: Furkan Kardame <f.kardame@manjaro.org>
+> ---
 
-syzbot found the following issue on:
+This is a friendly reminder during the review process.
 
-HEAD commit:    e6bc8833d80f string: use __builtin_memcpy() in strlcpy/str..
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=16c43f97280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=6a7e173060c804ee
-dashboard link: https://syzkaller.appspot.com/bug?extid=cd311b1e43cc25f90d18
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: i386
+It looks like you received a tag and forgot to add it.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions. However, there's no need to repost patches *only* to add the
+tags. The upstream maintainer will do that for acks received on the
+version they apply.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/df1e5cb3acfa/disk-e6bc8833.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/55bdfe53ed68/vmlinux-e6bc8833.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/3e2a33babf5f/bzImage-e6bc8833.xz
+https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cd311b1e43cc25f90d18@syzkaller.appspotmail.com
+If a tag was not added on purpose, please state why and what changed.
 
-UDF-fs: INFO Mounting volume 'LinuxUDF', timestamp 2022/11/22 14:59 (1000)
-=====================================================
-BUG: KMSAN: uninit-value in udf_name_from_CS0+0x1581/0x1a40 fs/udf/unicode.c:250
- udf_name_from_CS0+0x1581/0x1a40 fs/udf/unicode.c:250
- udf_get_filename+0xa4/0x150 fs/udf/unicode.c:390
- udf_fiiter_find_entry+0x77b/0xa60 fs/udf/namei.c:90
- udf_unlink+0x80/0x920 fs/udf/namei.c:547
- vfs_unlink+0x66f/0xa20 fs/namei.c:4327
- do_unlinkat+0x3fa/0xed0 fs/namei.c:4393
- __do_sys_unlink fs/namei.c:4441 [inline]
- __se_sys_unlink fs/namei.c:4439 [inline]
- __ia32_sys_unlink+0x77/0xa0 fs/namei.c:4439
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x37/0x80 arch/x86/entry/common.c:203
- do_SYSENTER_32+0x1f/0x30 arch/x86/entry/common.c:246
- entry_SYSENTER_compat_after_hwframe+0x70/0x82
+Best regards,
+Krzysztof
 
-Uninit was created at:
- slab_post_alloc_hook+0x12d/0xb60 mm/slab.h:716
- slab_alloc_node mm/slub.c:3451 [inline]
- __kmem_cache_alloc_node+0x4ff/0x8b0 mm/slub.c:3490
- kmalloc_trace+0x51/0x200 mm/slab_common.c:1057
- kmalloc include/linux/slab.h:559 [inline]
- udf_fiiter_find_entry+0x213/0xa60 fs/udf/namei.c:66
- udf_unlink+0x80/0x920 fs/udf/namei.c:547
- vfs_unlink+0x66f/0xa20 fs/namei.c:4327
- do_unlinkat+0x3fa/0xed0 fs/namei.c:4393
- __do_sys_unlink fs/namei.c:4441 [inline]
- __se_sys_unlink fs/namei.c:4439 [inline]
- __ia32_sys_unlink+0x77/0xa0 fs/namei.c:4439
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x37/0x80 arch/x86/entry/common.c:203
- do_SYSENTER_32+0x1f/0x30 arch/x86/entry/common.c:246
- entry_SYSENTER_compat_after_hwframe+0x70/0x82
-
-CPU: 1 PID: 5699 Comm: syz-executor.2 Not tainted 6.4.0-rc7-syzkaller-ge6bc8833d80f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-=====================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
