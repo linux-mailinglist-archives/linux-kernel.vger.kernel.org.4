@@ -2,82 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C1B4739183
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 23:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BDF73917F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 23:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjFUV3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 17:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48280 "EHLO
+        id S230334AbjFUV2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 17:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjFUV3h (ORCPT
+        with ESMTP id S229971AbjFUV2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 17:29:37 -0400
-Received: from mail-40131.protonmail.ch (mail-40131.protonmail.ch [185.70.40.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60AD11BC;
-        Wed, 21 Jun 2023 14:29:36 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 21:29:21 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1687382974; x=1687642174;
-        bh=d4/p/34ZRL0B4kHlNuD6nT1/glyHyKCZyn6h9RoTdyM=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=TFQPfdiTQ9tw//SNJgyKYCdL9IABZDSubp6ZLkMV2l3NoRWG6BSEuctdkkfivzSRu
-         xN8eMESwInDSUAcxxrLYpzM2Smf0O/KVibOydGsl2P9LjfN3tCxfndb0QU7fs3l9oZ
-         AbWgDvbwOoxiwhG6FaAnABJ45sL915+9k4VHnWpiyS9d9lNdQPWKh3wL89vpslNxsh
-         NLVmuc3Vykc17r52Dfph/Y6AGDZA8YRbjIiJSkh99QGaWP6QDoxHUD+7K5uyunPLw6
-         hm+IKBqWyIGDyN55CdpR4FGIi8YjpRK55SOJF55/hGlvHC3S7gBpmw9qBLEusJAjIt
-         DEFSnNsBkZqYA==
-To:     Armin Wolf <W_Armin@gmx.de>
-From:   =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v1 1/2] platform/x86: wmi: Break possible infinite loop when parsing GUID
-Message-ID: <TnTqU2wwXh3DG07kYUwMAe0hdBiaKiuoMOqBCBIttT27lXdw-KZVV8fZ7x-Zrg_Ux8mJUHClgyFHRbDoCRmhaOI7GwOPhUPYBRLzThV8iYI=@protonmail.com>
-In-Reply-To: <25715979-8148-8d1d-fd67-a973661f9781@gmx.de>
-References: <20230621151155.78279-1-andriy.shevchenko@linux.intel.com> <25715979-8148-8d1d-fd67-a973661f9781@gmx.de>
-Feedback-ID: 20568564:user:proton
+        Wed, 21 Jun 2023 17:28:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459321988;
+        Wed, 21 Jun 2023 14:28:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C6D8F616DE;
+        Wed, 21 Jun 2023 21:28:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72184C433C8;
+        Wed, 21 Jun 2023 21:28:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687382907;
+        bh=jMM5maLB1n7n18QpQ4GX1Q/OPQs1vFd4DPSmOfWIvKE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=kllHomcKxmcBzBuz+hh7DjecvxYH5RCglPxKh1H80fArO2MG6W+WedoZkb7KIDcxB
+         uJrF5+Q2dr0lmY0IcgGuuYfh0gDUfW6x9SqsbEdVbAPOc08jjFFpgVhPjychHWkWVG
+         UHVlVHpCM+gzOqlhfnK24Az2TVP44ODC8tCovN8DO1XEgO8gHjZ01OmMBAcAxK1GLV
+         puQQJ3I8RuF1zYbYBZHheXl47/2g30VZXVEeFxoopuGrryWobcL8Lr7gTvEuboE9gp
+         PdBOde8gtOB73Lg6MgdEMdM6U0WJT8U4owN5uTKbSEaltrAl3QOHJiDkCtPX634s3y
+         Q/RfrrW/uE30w==
+Date:   Wed, 21 Jun 2023 15:29:22 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     Namjae Jeon <linkinjeon@kernel.org>,
+        Steve French <sfrench@samba.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Tom Talpey <tom@talpey.com>
+Cc:     linux-cifs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] ksmbd: Use struct_size() helper in
+ ksmbd_negotiate_smb_dialect()
+Message-ID: <ZJNrsjDEfe0iwQ92@work>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Prefer struct_size() over open-coded versions.
 
+Link: https://github.com/KSPP/linux/issues/160
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+---
+ fs/smb/server/smb_common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-2023. j=C3=BAnius 21., szerda 23:20 keltez=C3=A9ssel, Armin Wolf <W_Armin@g=
-mx.de> =C3=ADrta:
+diff --git a/fs/smb/server/smb_common.c b/fs/smb/server/smb_common.c
+index a7e81067bc99..b51f431ade01 100644
+--- a/fs/smb/server/smb_common.c
++++ b/fs/smb/server/smb_common.c
+@@ -266,7 +266,7 @@ static int ksmbd_negotiate_smb_dialect(void *buf)
+ 		if (smb2_neg_size > smb_buf_length)
+ 			goto err_out;
+ 
+-		if (smb2_neg_size + le16_to_cpu(req->DialectCount) * sizeof(__le16) >
++		if (struct_size(req, Dialects, le16_to_cpu(req->DialectCount)) >
+ 		    smb_buf_length)
+ 			goto err_out;
+ 
+-- 
+2.34.1
 
-> [...]
-> > @@ -895,11 +901,7 @@ static int wmi_dev_match(struct device *dev, struc=
-t device_driver *driver)
-> >   =09=09return 0;
-> >
-> >   =09while (*id->guid_string) {
-> > -=09=09guid_t driver_guid;
-> > -
-> > -=09=09if (WARN_ON(guid_parse(id->guid_string, &driver_guid)))
->=20
-> Hi,
->=20
-> just an idea: how about printing an error/debug message in case of an mal=
-formed GUID?
-> This could be useful when searching for typos in GUIDs used by WMI driver=
-s.
-> [...]
-
-Wouldn't it be better to change `__wmi_driver_register()` to check that?
-
-
-Regards,
-Barnab=C3=A1s P=C5=91cze
