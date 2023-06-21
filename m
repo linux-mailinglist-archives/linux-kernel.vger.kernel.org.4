@@ -2,138 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 360A3738318
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C2E738349
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:13:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231492AbjFUL6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 07:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
+        id S231613AbjFUMBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 08:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbjFUL6o (ORCPT
+        with ESMTP id S231127AbjFUMBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 07:58:44 -0400
+        Wed, 21 Jun 2023 08:01:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE8ADE;
-        Wed, 21 Jun 2023 04:58:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6AC170C;
+        Wed, 21 Jun 2023 05:01:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20F966154C;
-        Wed, 21 Jun 2023 11:58:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5208C433C8;
-        Wed, 21 Jun 2023 11:58:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 614DA6150D;
+        Wed, 21 Jun 2023 12:01:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E40EC433C0;
+        Wed, 21 Jun 2023 12:01:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687348717;
-        bh=zjlaqUJd/M2XG3eUFn4mMZVwk591aoxerwCGAG/o7Kg=;
+        s=k20201202; t=1687348912;
+        bh=Zbli/nHmg0Y57wvMmEMuZ0gz0XpSicqxaFo4q834toM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HH2K6wz1VGKLKMLtvE0b4Iv/nxoeEKa+38PupxaUY2AxourukKfqZ9jcB5o7NUqyw
-         sb+dYFkRi/KB8EEzEstq04IWUTuzAkCRgJ1Vpj020oEco12DfL5Vy+jkKP9N6GPTl0
-         cDwiVvpDXeIrdLKynX8Gr4oK2fgKEgZSm2rgE/enKb2aKwT9g9LEU2psDIynmFi3zF
-         Ir2vR09ejfeBzfKSlNzrkC5dvheSUOjbydClg5C+39yFx5MWfF2cVt5j5EMAGiOBam
-         WPT3jZVD2gqpgXkwrAvQ9BsoDIryMXF2yoygQ9liWRBn0GScDDRYB+KD63NxNMOWpJ
-         0TDFJnZAaENww==
-Date:   Wed, 21 Jun 2023 17:28:33 +0530
+        b=V/yAGLCvaQc5LnmSglHk1VokYaWRV/9qIdTsqcQZhm7swikGI25GfzztYtjEVSt4V
+         BnS6/YJIGS2+6kP/NmRrrNQ8nzbMxu8wFv/qWwQABnfnCXu/owoLpQXz5Nt5HN7KT0
+         f+frDJMnL9rfbUrFTEDHjmi/8tSHMCur5ocfPImS5TwRQ0j3gWF0Raqz93EPD8TbTK
+         C0rPw9+JqPsp+u3TJmB9us/Y9hqYV6PPozUwW1mBKaGh0ALHyDUZZQ09ijv0nqB0Bx
+         6+ww1GKUy04D49c9RJOlLFbwRgUGtxlXhRqc7yajhdmnQxjnapeZ0vQl7yVtFVOuSa
+         jHsCuNzwZLXdA==
+Date:   Wed, 21 Jun 2023 17:31:48 +0530
 From:   Vinod Koul <vkoul@kernel.org>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Minda Chen <minda.chen@starfivetech.com>,
-        kernel test robot <lkp@intel.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>,
+To:     Haotien Hsu <haotienh@nvidia.com>
+Cc:     JC Kuo <jckuo@nvidia.com>,
         Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: Re: [PATCH v7 4/5] phy: starfive: Add JH7110 PCIE 2.0 PHY driver
-Message-ID: <ZJLl6Sb0hPdYUGC0@matsya>
-References: <20230619094759.21013-5-minda.chen@starfivetech.com>
- <202306192215.TvQco9m6-lkp@intel.com>
- <d4824941-85dd-d378-be5b-072907b1169d@starfivetech.com>
- <20230621-duckbill-scarf-fa79744cd42d@wendy>
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-phy@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Wayne Chang <waynec@nvidia.com>,
+        EJ Hsu <ejh@nvidia.com>
+Subject: Re: [PATCH v3] phy: tegra: xusb: Clear the driver reference in
+ usb-phy dev
+Message-ID: <ZJLmrHC/yvqmWOqG@matsya>
+References: <20230609062932.3276509-1-haotienh@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230621-duckbill-scarf-fa79744cd42d@wendy>
+In-Reply-To: <20230609062932.3276509-1-haotienh@nvidia.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21-06-23, 12:44, Conor Dooley wrote:
-> Hey,
+On 09-06-23, 14:29, Haotien Hsu wrote:
+> From: EJ Hsu <ejh@nvidia.com>
 > 
-> On Wed, Jun 21, 2023 at 05:29:34PM +0800, Minda Chen wrote:
-> > On 2023/6/19 22:45, kernel test robot wrote:
-> > > kernel test robot noticed the following build errors:
-> > > 
-> > > [auto build test ERROR on robh/for-next]
-> > > [also build test ERROR on linus/master v6.4-rc7 next-20230619]
-> > > [If your patch is applied to the wrong git tree, kindly drop us a note.
-> > > And when submitting patch, we suggest to use '--base' as documented in
-> > > https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> > > 
-> > > url:    https://github.com/intel-lab-lkp/linux/commits/Minda-Chen/dt-bindings-phy-Add-StarFive-JH7110-PCIe-PHY/20230619-184756
-> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-> > > patch link:    https://lore.kernel.org/r/20230619094759.21013-5-minda.chen%40starfivetech.com
-> > > patch subject: [PATCH v7 4/5] phy: starfive: Add JH7110 PCIE 2.0 PHY driver
-> > > config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20230619/202306192215.TvQco9m6-lkp@intel.com/config)
-> > > compiler: s390-linux-gcc (GCC) 12.3.0
-> > > reproduce: (https://download.01.org/0day-ci/archive/20230619/202306192215.TvQco9m6-lkp@intel.com/reproduce)
-> > > 
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202306192215.TvQco9m6-lkp@intel.com/
-> > > 
-> > > All errors (new ones prefixed by >>, old ones prefixed by <<):
-> > > 
-> > >>> ERROR: modpost: "devm_platform_ioremap_resource" [drivers/phy/starfive/phy-jh7110-pcie.ko] undefined!
+> For the dual-role port, it will assign the phy dev to usb-phy dev and
+> use the port dev driver as the dev driver of usb-phy.
 > 
-> > I can not find this error. devm_platform_ioremap_resource is an exported symbol
-> 
-> I asked Arnd about this since the error confused me too. Arnd pointed
-> out that this "allmodconfig" isn't really allmodconfig as PCI is
-> disabled. On s390, CONFIG_HAS_IOMEM depends on PCI and thus none of
-> this devres stuff is usable without it. He suggested that you make the
-> driver depend on USB_SUPPORT, which in turn depends on HAS_IOMEM.
+> When we try to destroy the port dev, it will destroy its dev driver
+> as well. But we did not remove the reference from usb-phy dev. This
+> might cause the use-after-free issue in KASAN.
 
-Or add HAS_IOMEM as few drivers already do :-)
-
-> 
-> Cheers,
-> Conor.
-> 
-> > > ERROR: modpost: "devm_ioremap_resource" [drivers/dma/qcom/hdma.ko] undefined!
-> > > ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/fsl-edma.ko] undefined!
-> > > ERROR: modpost: "devm_platform_ioremap_resource" [drivers/dma/idma64.ko] undefined!
-> > > ERROR: modpost: "iounmap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
-> > > ERROR: modpost: "ioremap" [drivers/tty/ipwireless/ipwireless.ko] undefined!
-> > > ERROR: modpost: "devm_platform_ioremap_resource" [drivers/char/xillybus/xillybus_of.ko] undefined!
-> > > ERROR: modpost: "devm_memremap" [drivers/misc/open-dice.ko] undefined!
-> > > ERROR: modpost: "devm_memunmap" [drivers/misc/open-dice.ko] undefined!
-> > > ERROR: modpost: "iounmap" [drivers/net/ethernet/8390/pcnet_cs.ko] undefined!
-> > > WARNING: modpost: suppressed 19 unresolved symbol warnings because there were too many)
-> > >> Kconfig warnings: (for reference only)
-> > >    WARNING: unmet direct dependencies detected for USB_PHY
-> > >    Depends on [n]: USB_SUPPORT [=n]
-> > >    Selected by [m]:
-> > >    - PHY_STARFIVE_JH7110_PCIE [=m]
-> > > 
-> > I will fix it.
-
-
+Applied, thanks
 
 -- 
 ~Vinod
