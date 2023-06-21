@@ -2,170 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F233C73786A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 02:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8D7573786D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 02:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjFUAvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 20:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
+        id S229907AbjFUA4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 20:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjFUAvw (ORCPT
+        with ESMTP id S229628AbjFUA4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 20:51:52 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F5F183
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 17:51:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687308710; x=1718844710;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=byNNmiRwVHwfrGYMfTJ3x0bUzqPnibOKlP6YriwHef0=;
-  b=QGa0Z7R+0lZYs+gT4K18c3FuhA/GFC0r3OdTMEAFLk55FvTWjSVouXSw
-   en02yUTbQ78lt2OMFTC99TL8BjYzRB2DsNtbW2ye2e/pAXG0ID6+K9dUJ
-   nkED71WyzUWEBZ3W1pkPOTvlF/Mw+E7DMwMEoNC8yCnqnwyOjzAuMY0Qw
-   DKe6Ioj4/L07mQO2YzcH5cjHsFy+dzNkC1GvWnjMRzn2hS6TSsmY17jzb
-   a6hYchByh3eGvbzXGLmMKeGPfVQI4PhUAXy/mUMYeAO/2ROmEJCgE8SLx
-   BELhZjQ5sndFRjqd04fZH50g/xCB7t3TpTyimL/Wdc7svPpsbAbxAoWYk
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="344764969"
-X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
-   d="scan'208";a="344764969"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 17:51:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="717416691"
-X-IronPort-AV: E=Sophos;i="6.00,258,1681196400"; 
-   d="scan'208";a="717416691"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 20 Jun 2023 17:51:47 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qBm4Y-0006Nv-1d;
-        Wed, 21 Jun 2023 00:51:46 +0000
-Date:   Wed, 21 Jun 2023 08:51:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        "Jason-JH . Lin" <jason-jh.lin@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Jason-ch Chen <jason-ch.chen@mediatek.com>,
-        Nancy Lin <nancy.lin@mediatek.com>,
-        Johnson Wang <johnson.wang@mediatek.com>,
-        Shawn Sung <shawn.sung@mediatek.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] drm/mediatek: Fix void-pointer-to-enum-cast warning
-Message-ID: <202306210852.JWLKcawy-lkp@intel.com>
-References: <20230620102804.17585-1-jason-jh.lin@mediatek.com>
+        Tue, 20 Jun 2023 20:56:23 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61942183
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 17:56:21 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 098225C010B;
+        Tue, 20 Jun 2023 20:56:19 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Tue, 20 Jun 2023 20:56:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1687308979; x=1687395379; bh=MXEcmj/UjZGLXKXDuon/v3xkIoMj1zqOw+n
+        JH5vv6Oc=; b=jr8FiqnqWGdnXxeAL73a5FxrVTKcSFgSW57OD3GGGMoRxxfoyUp
+        j0DGI6CI0tn0ids+SDQaIRHIQLzDRhhal1oLIe259f5fQTo3I3Y5GNJ8QQkRubFc
+        nOCkWSkK/wjGJwumlVs0FUG4aJm7B/ne7MUEwXIVN2/uxeUYljw7jCcSuA61KabF
+        ap20kJ8csrlmwWHenOn44ZlPmv5Sy9BMqkaJTr+zMkErUT1UV0f/hmtnGHUB6rBQ
+        b/dbTjjisaH7+gHVptFleFeJRtdVjT7Ldrj0wUd9brWCtIC+Xvxhc2mthDOByNLw
+        TIcmf3FGX61fk2qnKS3SIcDD3qvuCeXL/qg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687308979; x=1687395379; bh=MXEcmj/UjZGLX
+        KXDuon/v3xkIoMj1zqOw+nJH5vv6Oc=; b=iwJqyKGz26fsO1P+iSBOLbSm5fmtr
+        doc9gGG7olKrx0NyRy1SX3w/WUS7Tq7ob2f9TwNAM1afaNZTAjAarOnbI6YMr0Qq
+        WTZV3yq18ku+of0PzkZe+2BfbNdYlhYDL4cVQJBCyhUq7OE1WZklicRNTnoTxPeh
+        rOFYqHPlDQ9Qu7s70EUhx6H65g6Yl6vr4bJtB/MRdYMQlP9tZJyNNi64B3EKks1b
+        2RGgnbUbmIJvqesoQ5EiUFZQQMtJ4+3NS5U1m0HUELG2k3Ehr7e71PIjEjRdqhdC
+        Bc3jqr+JtsP0mweyh3X0avvTf2cSFYi3LFPJDblSDtM7q7hZbd7bnb8FA==
+X-ME-Sender: <xms:sUqSZEcGHFwNsztNNufkZeKEnGY8yxCdBcMLSlR4Umo7WhsgC424Sw>
+    <xme:sUqSZGOS_Aga-BWHM9LFvwZ3gbk6sCGvsyM0SKRttIGWk7HURfKS-aOt9yM46B-Xk
+    sg1k3NW-sEGRCk>
+X-ME-Received: <xmr:sUqSZFies4OJa5rJKXv6-_ps-Qb4Hjtg7V3w2v6b9k52O6dqtaY7YQ_B2K8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefiedggedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepffgvmhhi
+    ucforghrihgvucfqsggvnhhouhhruceouggvmhhisehinhhvihhsihgslhgvthhhihhngh
+    hslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepvdejteegkefhteduhffgteffgeff
+    gfduvdfghfffieefieekkedtheegteehffelnecuvehluhhsthgvrhfuihiivgeptdenuc
+    frrghrrghmpehmrghilhhfrhhomhepuggvmhhisehinhhvihhsihgslhgvthhhihhnghhs
+    lhgrsgdrtghomh
+X-ME-Proxy: <xmx:sUqSZJ_nwAHPGamXqJOhbKvggSNYDsoV3dW9oRwFrBmUhCxtRgW5uA>
+    <xmx:sUqSZAs9E7RBOiPEP-wIqgLInZfYbad1Jsy9KOX-tzUU-Z8UJWyHlw>
+    <xmx:sUqSZAF8E0alh2dlHwPNAAxl5sKnbpPjmXyvLld_kM4Ckrea_a9eiw>
+    <xmx:s0qSZB_zhbNBevBXrjCR-hrN1pkQY2Rf0Uz01AX3s2MzGPJun_KvYA>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 20 Jun 2023 20:56:16 -0400 (EDT)
+Date:   Tue, 20 Jun 2023 20:56:11 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Petr Mladek <pmladek@suse.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     David Laight <David.Laight@aculab.com>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Lee Jones <lee@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCH v3 0/4] Make sscanf() stricter
+Message-ID: <ZJJKr0xYvcO7P8QY@itl-email>
+References: <ZId/IA41c2sJyvE0@itl-email>
+ <ZIeHfBf3aB3vUgRM@smile.fi.intel.com>
+ <ZIeMyQXU49OcoxY2@itl-email>
+ <ec3d7ebe62654e949329785bb32c3822@AcuMS.aculab.com>
+ <ZIiMrDxI5Ts0s8fK@itl-email>
+ <23df90dd35874fd89c64906e6a6de164@AcuMS.aculab.com>
+ <ZIoeVjC6offUywop@itl-email>
+ <e354268a4efe48c9a8023a30c7292d12@AcuMS.aculab.com>
+ <ZIr0z6u17xogE5+n@smile.fi.intel.com>
+ <ZJGq0UTHPdEuIMal@alley>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/W/EWKP7OFW36OsZ"
 Content-Disposition: inline
-In-Reply-To: <20230620102804.17585-1-jason-jh.lin@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZJGq0UTHPdEuIMal@alley>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason-JH.Lin,
 
-kernel test robot noticed the following build errors:
+--/W/EWKP7OFW36OsZ
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Tue, 20 Jun 2023 20:56:11 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: Petr Mladek <pmladek@suse.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: David Laight <David.Laight@aculab.com>,
+	Alexey Dobriyan <adobriyan@gmail.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+	Lee Jones <lee@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCH v3 0/4] Make sscanf() stricter
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on linus/master v6.4-rc7 next-20230620]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Tue, Jun 20, 2023 at 03:34:09PM +0200, Petr Mladek wrote:
+> On Thu 2023-06-15 14:23:59, Andy Shevchenko wrote:
+> > On Thu, Jun 15, 2023 at 08:06:46AM +0000, David Laight wrote:
+> > > From: Demi Marie Obenour
+> > > > Sent: 14 June 2023 21:09
+> >=20
+> > ...
+> >=20
+> > > > > What sort of formats and data are being used?
+> > > >=20
+> > > > Base-10 or base-16 integers, with whitespace never being valid.
+> > >=20
+> > > In which case sscanf() really isn't what you are looking for.
+> > >=20
+> > > > > The "%s" format terminates on whitespace.
+> > > > > Even stroul() (and friends) will skip leading whitespace.
+> > > >=20
+> > > > Yes, which is a reason that strto*l() are just broken IMO.
+> > >
+> > > They are not 'broken', that is what is useful most of the time.
+> > > The usual problem is that "020" is treated as octal.
+>=20
+> I do not know how many users depend on this behavior. But I believe
+> that there are such users. And breaking compatibility with userspace
+> implementation would make more harm then good in this case.
+>=20
+> > > > I=E2=80=99m trying to replace their uses in Xen with custom parsing=
+ code.
+> > >=20
+> > > Then write a custom parser :-)
+>=20
+> Honestly, I dislike any sscanf() modification which have been suggested
+> so far:
+>=20
+>   + %!d is not acceptable because it produces compiler errors
+>=20
+>   + %d! is not acceptable because "use 64!" is a realistic string.
+>     We could not be sure that "<number>!" will never be parsed
+>     in kernel.
+>=20
+>   + %d%[!] produces compiler error either. It is hard to parse by eyes.
+>     Also the meaning of such a format would be far from obvious.
+>=20
+>   + %pj or another %p modifiers would be hard to understand either.
+>=20
+>     Yes, we have %pe but I think that only few people really use it.
+>     And it is kind of self-explanatory because it is typically
+>     used together with ERR_PTR() and with variables called
+>     "err" or "ret".
+>=20
+>=20
+> > Hmm... Usually we are against zillion implementations of the same with =
+zillion
+> > bugs hidden (each buggy implementation with its own bugs).
+>=20
+> I would really like to see the code depending on it. The cover letter
+> suggests that there already is a patch with such a custom parser.
+> I am sorry if it has already been mentioned. There were so many threads.
+>=20
+> Sure, we do not want two full featured sscanf() implementations. But a
+> wrapper checking for leading whitespace and using kstrto<foo>
+> family does not sound too complex.
+>=20
+> There should always be a good reason to introduce an incompatibility
+> between the kernel and the userspace implementation of a commonly
+> used API.
+>=20
+> Best Regards,
+> Petr
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jason-JH-Lin/drm-mediatek-Fix-void-pointer-to-enum-cast-warning/20230620-182906
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-patch link:    https://lore.kernel.org/r/20230620102804.17585-1-jason-jh.lin%40mediatek.com
-patch subject: [PATCH] drm/mediatek: Fix void-pointer-to-enum-cast warning
-config: arm-allmodconfig (https://download.01.org/0day-ci/archive/20230621/202306210852.JWLKcawy-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230621/202306210852.JWLKcawy-lkp@intel.com/reproduce)
+I strongly believe that overflow should be forbidden by default, but it
+turns out that I do not have time to advance this patch further.  My
+understanding is that Xen never wants to allow spaces in Xenstore
+entries, but that is easy to ensure via an explicit check prior to
+calling vsscanf().
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306210852.JWLKcawy-lkp@intel.com/
+--/W/EWKP7OFW36OsZ
+Content-Type: application/pgp-signature; name="signature.asc"
 
-All errors (new ones prefixed by >>):
+-----BEGIN PGP SIGNATURE-----
 
-   drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c: In function 'ovl_adaptor_comp_init':
->> drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c:429:24: error: incompatible types when assigning to type 'enum mtk_ovl_adaptor_comp_type' from type 'const void *'
-     429 |                 type = of_id->data;
-         |                        ^~~~~
---
-   drivers/gpu/drm/mediatek/mtk_drm_drv.c: In function 'mtk_drm_probe':
->> drivers/gpu/drm/mediatek/mtk_drm_drv.c:831:29: error: incompatible types when assigning to type 'enum mtk_ddp_comp_type' from type 'const void *'
-     831 |                 comp_type = of_id->data;
-         |                             ^~~~~
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmSSSq4ACgkQsoi1X/+c
+IsEENBAAxKtLt+LIHXO8ZpbY+RkEdtC5atusiIsk2g39Nsf6slNiN8+ayF5vXpkb
+39CayIdya0GzbjCjcWO8bCVN4j5+Ek8SKBi01lswttceqTQIb97e5tg759eUXgdQ
+3ylVRrG5KCav8aMUGpOZkuiqvhBy3VEr68XvVmpxf1GaLpDycP2cRuoloOdxFVbU
+XNrG5iriYGjXt4l1NXK3rNSZgxmJLores9z8Z8bjRGxzotW6bVvx9Da3DwZqJoo9
+1Zi2elSUlmalsBvvX5eG+Pzi5niZaK+O6aqnFpSwbwT/yT5zkBNWJGxIzbGiwYU2
+W7N4kCEboYDOf/umzIxCuZUPy8Fk/+QxyDgcwIH5/VAYkt1AauilVT3iBl3SMxHY
+Wv6x+eOIQAJsXvf6dkVcF5Cq+HTptjAQakbFAO7Xk23AJW0zmGhBudVTqyBG7JCe
+x9iB1mQfeS2rx0MkXJUWGsJsy3XnoJvdDt+HwEbSi4+zwhfyx0nSwuaM8Ng3W2Q8
+5fCYxdRykIWBqxk0kr8O8Wdd7CORVOTO4s+/zfJh4d074aFIwpor/4TLtjBjJGie
+DZ134c7HCmhENkHWDaGdYY0UKxeTiILfrDX1/yhKx+590dQwxQzxiX2ag3XLCmaR
+P3KzvLLz8AQelBb2BW2KS295mM3sEwDy4ggOYrLHXpc++JwK74Q=
+=2uLn
+-----END PGP SIGNATURE-----
 
-
-vim +429 drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
-
-   405	
-   406	static int ovl_adaptor_comp_init(struct device *dev, struct component_match **match)
-   407	{
-   408		struct mtk_disp_ovl_adaptor *priv = dev_get_drvdata(dev);
-   409		struct device_node *node, *parent;
-   410		struct platform_device *comp_pdev;
-   411	
-   412		parent = dev->parent->parent->of_node->parent;
-   413	
-   414		for_each_child_of_node(parent, node) {
-   415			const struct of_device_id *of_id;
-   416			enum mtk_ovl_adaptor_comp_type type;
-   417			int id;
-   418	
-   419			of_id = of_match_node(mtk_ovl_adaptor_comp_dt_ids, node);
-   420			if (!of_id)
-   421				continue;
-   422	
-   423			if (!of_device_is_available(node)) {
-   424				dev_dbg(dev, "Skipping disabled component %pOF\n",
-   425					node);
-   426				continue;
-   427			}
-   428	
- > 429			type = of_id->data;
-   430			id = ovl_adaptor_comp_get_id(dev, node, type);
-   431			if (id < 0) {
-   432				dev_warn(dev, "Skipping unknown component %pOF\n",
-   433					 node);
-   434				continue;
-   435			}
-   436	
-   437			comp_pdev = of_find_device_by_node(node);
-   438			if (!comp_pdev)
-   439				return -EPROBE_DEFER;
-   440	
-   441			priv->ovl_adaptor_comp[id] = &comp_pdev->dev;
-   442	
-   443			drm_of_component_match_add(dev, match, compare_of, node);
-   444			dev_dbg(dev, "Adding component match for %pOF\n", node);
-   445		}
-   446	
-   447		if (!*match) {
-   448			dev_err(dev, "No match device for ovl_adaptor\n");
-   449			return -ENODEV;
-   450		}
-   451	
-   452		return 0;
-   453	}
-   454	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+--/W/EWKP7OFW36OsZ--
