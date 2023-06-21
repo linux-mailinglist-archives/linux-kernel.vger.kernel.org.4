@@ -2,67 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA17737CF7
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:08:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19C27737CE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbjFUIC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 04:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44148 "EHLO
+        id S231280AbjFUIEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 04:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231630AbjFUICx (ORCPT
+        with ESMTP id S230346AbjFUIEa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 04:02:53 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C146FE
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:02:51 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8DxtMSprpJk_A0AAA--.95S3;
-        Wed, 21 Jun 2023 16:02:49 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8AxX8+nrpJk+0MAAA--.1658S3;
-        Wed, 21 Jun 2023 16:02:47 +0800 (CST)
-Message-ID: <3e434dc7-be72-869c-e668-cbde07538732@loongson.cn>
-Date:   Wed, 21 Jun 2023 16:02:47 +0800
+        Wed, 21 Jun 2023 04:04:30 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14557FE
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:04:29 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f8f3786f20so66057555e9.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:04:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1687334667; x=1689926667;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bdr99ZnsFuaWd7+2tODjIdBaqRk40Wcx2mkyWMKgAl8=;
+        b=lFls4G02TYGejcUGf7F2yKuKiyQwm27IZuxaz7ZicOiWbynZJ6m8AknpkLLU8fsxVN
+         UFw6M408EmOALQQy3AxLMbgC5k695jz6oQz43eDNvkqg7v+wHHF7ZJyMrPC26sFbVV3i
+         zv2gAmHagzux42h5Nhh/OYbvsQr3BNOI/eVgE/44pMs5ZWM3fnDUoUjrmWVEBeOuWVLE
+         7JOlsXCv7JWgaBTeGNmukewQHRsVfkX1AOuu7MNeDx2uMOi+S33HLzsYpGN5dgxuYNVC
+         or6qB9a2VI+sLmCxPycuQgSmE/i2/qMrOa7ilqnBYYWrcJlUqBajh18WU8fTmJbGu68s
+         4iig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687334667; x=1689926667;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Bdr99ZnsFuaWd7+2tODjIdBaqRk40Wcx2mkyWMKgAl8=;
+        b=eMhw10khAlJ8bLXGKpBUwTCuALAOhdmMMe3tKYqXTIVnDdcIFq8nRjHyxlg0aYHfo6
+         PS0yuGHrXUONKsnIMwGUbxz6W8HhdKMETo9jWoR1dmIi1pSLx3k4LHIDt4ei2g79n7FS
+         H7ZGDJBAfxKrOlb7DfEaF+YHoI91qz6UKAMI4kxAANK8N8aoLL8/rbvivDUUH/Og8YOS
+         N10DEsstKpkcPzlqpIVRj+AITDWZSC3fNBw8/JC3Vdzp9hfAonNnx50fMdN0LOMy3na6
+         1sxDXYElb0eO8JoR+rQyYb6FtUt8fjQ1Zt/jBCBnSvHLrJf+9blTHnxkpFJ8AvlUUVT/
+         kSMQ==
+X-Gm-Message-State: AC+VfDx1hLzT3gHWX/u6imSR+xDmw/m5cMi9l47jEYe6tRHqkFFjmR4b
+        XJmp4zZjjCs0IxzcDyM72F939tczJGByzYChbAZIoFlKJ4dxIic/nng=
+X-Google-Smtp-Source: ACHHUZ44Io9K//QUtZqsJ0miupjsyJM4Vmg0fqFUuIr/d5lcyjwwOt9RCqOVmeYyxELVEltNdPnj/LtaG/39Zo3R434=
+X-Received: by 2002:a7b:ca4e:0:b0:3f9:c00:51d3 with SMTP id
+ m14-20020a7bca4e000000b003f90c0051d3mr9855397wml.13.1687334667559; Wed, 21
+ Jun 2023 01:04:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v10 00/11] drm/etnaviv: Add pci device driver support
-Content-Language: en-US
-To:     Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Sui Jingfeng <18949883232@163.com>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org,
-        etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-References: <20230620094716.2231414-1-18949883232@163.com>
- <CAH9NwWdfK0DkDA-Fi6TRrS4orm-HbAqBLDpYcMKd69dU6Jh+CA@mail.gmail.com>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <CAH9NwWdfK0DkDA-Fi6TRrS4orm-HbAqBLDpYcMKd69dU6Jh+CA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8AxX8+nrpJk+0MAAA--.1658S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7Cw18Kry7CF1UArW7tw43Arc_yoW8ZrWfpr
-        1UAr1UGr48Jr18Jr1UJr15Jr1Utr1UA3WUJr1UJryUJr1UGr1jqr1UXr4UJryDJr48Jr17
-        Jr1Dtr4Utr1UJwcCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        AVWUtwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
-        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
-        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUxYiiDU
-        UUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+References: <20230426034001.16-1-cuiyunhui@bytedance.com> <CAMj1kXEKh9O-ndk3QFibJMYfMbG7vm-cLN2vVQM5eDsYK84NzQ@mail.gmail.com>
+ <CAEEQ3wkJB5CKm33mHXUOPX5makYOHF8By6FYGnNzRkM-Mo72OQ@mail.gmail.com>
+ <ZEj33QLZqEeL+/y4@FVFF77S0Q05N> <CAEEQ3wmDBJkfOeKCQfcnuE+1=1K0D2pzu+Sn+zPEWk+RHs0NFQ@mail.gmail.com>
+ <CAP6exY+ydbzh1EkWTFejzwaW+PA-ySVO2Qj+CVJ1XbSMce2S9Q@mail.gmail.com> <CAP6exY+tqAU0j1TVEMTzTb18M6_mPH5bWWiAS=94gyDGTY3hyQ@mail.gmail.com>
+In-Reply-To: <CAP6exY+tqAU0j1TVEMTzTb18M6_mPH5bWWiAS=94gyDGTY3hyQ@mail.gmail.com>
+From:   =?UTF-8?B?6L+Q6L6J5bSU?= <cuiyunhui@bytedance.com>
+Date:   Wed, 21 Jun 2023 16:04:15 +0800
+Message-ID: <CAEEQ3w=wBdpZWnUd2WWVBC3BtFiUp-PQtNAtdXE4cO4n0XT-fg@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH] firmware: added a firmware information
+ passing method FFI
+To:     ron minnich <rminnich@gmail.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>, rafael@kernel.org,
+        lenb@kernel.org, jdelvare@suse.com, yc.hung@mediatek.com,
+        angelogioacchino.delregno@collabora.com,
+        allen-kh.cheng@mediatek.com, pierre-louis.bossart@linux.intel.com,
+        tinghan.shen@mediatek.com, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org, geshijian@bytedance.com,
+        weidong.wd@bytedance.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,63 +78,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+Thanks for Ron's suggestions.
 
-On 2023/6/21 15:55, Christian Gmeiner wrote:
-> Hi
+Hi Ard,  Mark,
 >
->> From: Sui Jingfeng <suijingfeng@loongson.cn>
->>
->> There is a Vivante GC1000 (v5037) in LS2K1000 and LS7A1000, this GPU is a
->> PCI device, and it has 2D and 3D cores in the same core. This series is
->> trying to add PCI device driver support to drm/etnaviv.
->>
-> Is it possible to get the lspci output for the GPU? Something like
-> this: sudo lspci -vvv -s ...
-
-Yes,
-
-
-sudo lspci -vvvxxx -s 00:06.0
-00:06.0 Multimedia video controller: Loongson Technology LLC Vivante GPU 
-(Graphics Processing Unit) (rev 01)
-     Control: I/O+ Mem+ BusMaster+ SpecCycle- MemWINV- VGASnoop+ ParErr- 
-Stepping- SERR- FastB2B- DisINTx-
-     Status: Cap- 66MHz- UDF- FastB2B- ParErr- DEVSEL=fast >TAbort- 
-<TAbort- <MAbort- >SERR- <PERR- INTx-
-     Latency: 0
-     Interrupt: pin A routed to IRQ 51
-     NUMA node: 0
-     Region 0: Memory at e0035200000 (64-bit, non-prefetchable) [size=256K]
-     Region 2: Memory at e0030000000 (64-bit, non-prefetchable) [size=64M]
-     Region 4: Memory at e0035240000 (64-bit, non-prefetchable) [size=64K]
-     Kernel driver in use: etnaviv
-     Kernel modules: etnaviv
-00: 14 00 15 7a 27 00 00 00 01 00 00 04 00 00 80 00
-10: 04 00 20 35 00 00 00 00 04 00 00 30 00 00 00 00
-20: 04 00 24 35 00 00 00 00 00 00 00 00 00 00 00 00
-30: 00 00 00 00 00 00 00 00 00 00 00 00 5d 01 00 00
-40: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-50: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-60: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-70: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-90: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-a0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-b0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-c0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-d0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-e0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-f0: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-
-
-
-> thanks
-> --
-> Christian Gmeiner, MSc
+> Is there some feeling here that it would be ok to restrict this discussion to risc-v, and not bring in ARM considerations.  WDYT?
 >
-> https://christian-gmeiner.info/privacypolicy
 
--- 
-Jingfeng
+Hi Ard,  Mark,
 
+Now the coreboot we are using does not support EFI and only supports
+one interface DTB. It seems that we have to pass the firmware
+information through DTB.
+
+From another point of view, ACPI and SMBIOS are common modules of the
+kernel, not only EFI, but also other interfaces can also be connected
+to this module, such as 0xF0000 for SMBIOS,
+CONFIG_ACPI_LEGACY_TABLES_LOOKUP for ACPI,  this patch is also.
+
+We just use the DTB channel to add a few nodes to complete the
+transfer of firmware information, which does not interfere with DTS
+itself.
+
+We think it is unnecessary to add an ACPI-supporting framework under
+the fdt framework we discussed before. We only need one set of ACPI
+framework, but one more set will cause unnecessary trouble.
+
+So, let's move on to this patch, shall we?
+
+
+
+Thanks,
+Yunhui
