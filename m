@@ -2,149 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69631738DDD
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC13738DCB
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231826AbjFUR4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 13:56:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57466 "EHLO
+        id S231769AbjFURwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 13:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbjFURzn (ORCPT
+        with ESMTP id S230260AbjFURwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 13:55:43 -0400
-Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [213.239.216.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A87419AB;
-        Wed, 21 Jun 2023 10:54:45 -0700 (PDT)
-Received: from lexxgentoo.devos.club (unknown [77.239.252.99])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id F150C1408B3;
-        Wed, 21 Jun 2023 17:52:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postmarketos.org;
-        s=donut; t=1687369959;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=spj7M1eu0BpTeWO4D88uXHofRs63AcicfCjtgCEG0j4=;
-        b=bUP0j+i7VThOhmj1qULSbsnS2q8655wfM/XpfJNl53YC4HK7km1yUcz5GBjPsrwQtrYOzT
-        isUEBs95ZytRcRA/wMVGrEHCOxyLzG3GfiWf4DzgtLbi5EFx+ZGmPJ6GsoDThl46xQk3bh
-        P9+yHoMSdQ7mLSvfECwFnVjK1SfbUME=
-From:   Alexey Minnekhanov <alexeymin@postmarketos.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Alexey Minnekhanov <alexeymin@postmarketos.org>
-Subject: [PATCH v2 3/3] arm64: dts: qcom: sdm630: Add support for modem remoteproc
-Date:   Wed, 21 Jun 2023 20:50:46 +0300
-Message-Id: <20230621175046.61521-3-alexeymin@postmarketos.org>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <20230621175046.61521-1-alexeymin@postmarketos.org>
-References: <20230621175046.61521-1-alexeymin@postmarketos.org>
+        Wed, 21 Jun 2023 13:52:12 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 825381FE2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 10:50:58 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-25ea0c44acdso3115225a91.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 10:50:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687369856; x=1689961856;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ul91Gz+yGEhmaOXTQJ2di/sLFzTVDLLuzrW8OhsrW9o=;
+        b=PN88XqpGSql5ti6zvT6MUvr9iRN8qejKRO5qMqIuXMl4qKT/uKG4P1FmNIemZkRScj
+         KsudeTVuvXIjTPV/yKqEfzwR1i99um4nsgTQ0U0KpdcF/BxGhOsbrldKHFhAe1mViIHK
+         JWPqzFj8jkO0Mk5C1pG3VeABn0XA9qWSNdi9A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687369856; x=1689961856;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ul91Gz+yGEhmaOXTQJ2di/sLFzTVDLLuzrW8OhsrW9o=;
+        b=PMwhNUcoVgCplDPHABGcQ93jA677WD6S6aVQfhmFZVGZVr2z6Un4OJtOCLeKzkicCr
+         vTQmwripVjm/tqst3Xx+tj0qGbsQhgvhLMUvUFTKxlZbP5UQBM44XlJiAJX7yxQXTT0Y
+         MaV2cFYqJd7UeXo0LiOmoprJYpGoP6XBZe2RGzDYxm2FSSNsQ91FjgKy5e+bMCsvUsO+
+         pM835wQE+z36k0kRj0qdghBzgCDgplgn9Bv+zKSXrn9vgymT/GZ/alhSEa7senXQx0/m
+         M27oXrNw/SlnngYDewZKN9FvueUBaNgmy4xltq3UBn6bC2k9qp7LShxWZ8MBrWHaWh6B
+         Cwzw==
+X-Gm-Message-State: AC+VfDx3pUwgvkgwZf6XjtIN18+nEIxLn+Y/jreXERXgNx9IxlkoCFMB
+        B4sp9O1ZfWr0mdLMv2j34+/TkjXe3eLK8awDWHY=
+X-Google-Smtp-Source: ACHHUZ7ylAOPxm0ae9kRQYk6NPxzV0WTtVMQNcAedwT2Ag86/ZawLLXcJ65lEiAZwo2vPHOjAsR1Cw==
+X-Received: by 2002:a17:90a:d908:b0:260:afef:7b6d with SMTP id c8-20020a17090ad90800b00260afef7b6dmr5982996pjv.39.1687369856294;
+        Wed, 21 Jun 2023 10:50:56 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id x6-20020a17090a6b4600b0025bda194e5esm9179619pjl.31.2023.06.21.10.50.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 10:50:55 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 10:50:55 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 56/79] pstore: switch to new ctime accessors
+Message-ID: <202306211050.969F935BB8@keescook>
+References: <20230621144507.55591-1-jlayton@kernel.org>
+ <20230621144735.55953-1-jlayton@kernel.org>
+ <20230621144735.55953-55-jlayton@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621144735.55953-55-jlayton@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Modem subsystem in SDM630/660 is similar to MSM8998 and
-device tree node for it is based on the one from msm8998.dtsi.
+On Wed, Jun 21, 2023 at 10:46:09AM -0400, Jeff Layton wrote:
+> In later patches, we're going to change how the ctime.tv_nsec field is
+> utilized. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
+> 
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-Signed-off-by: Alexey Minnekhanov <alexeymin@postmarketos.org>
----
- arch/arm64/boot/dts/qcom/sdm630.dtsi | 65 ++++++++++++++++++++++++++++
- 1 file changed, 65 insertions(+)
+Acked-by: Kees Cook <keescook@chromium.org>
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-index 014237d4b5b2..ad01f2951154 100644
---- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
-@@ -1028,6 +1028,71 @@ data-pins {
- 			};
- 		};
- 
-+		remoteproc_mss: remoteproc@4080000 {
-+			compatible = "qcom,sdm660-mss-pil";
-+			reg = <0x04080000 0x100>, <0x04180000 0x40>;
-+			reg-names = "qdsp6", "rmb";
-+
-+			interrupts-extended = <&intc GIC_SPI 448 IRQ_TYPE_EDGE_RISING>,
-+					      <&modem_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-+					      <&modem_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-+					      <&modem_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-+					      <&modem_smp2p_in 3 IRQ_TYPE_EDGE_RISING>,
-+					      <&modem_smp2p_in 7 IRQ_TYPE_EDGE_RISING>;
-+			interrupt-names = "wdog",
-+					  "fatal",
-+					  "ready",
-+					  "handover",
-+					  "stop-ack",
-+					  "shutdown-ack";
-+
-+			clocks = <&gcc GCC_MSS_CFG_AHB_CLK>,
-+				 <&gcc GCC_BIMC_MSS_Q6_AXI_CLK>,
-+				 <&gcc GCC_BOOT_ROM_AHB_CLK>,
-+				 <&gcc GPLL0_OUT_MSSCC>,
-+				 <&gcc GCC_MSS_SNOC_AXI_CLK>,
-+				 <&gcc GCC_MSS_MNOC_BIMC_AXI_CLK>,
-+				 <&rpmcc RPM_SMD_QDSS_CLK>,
-+				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
-+			clock-names = "iface",
-+				      "bus",
-+				      "mem",
-+				      "gpll0_mss",
-+				      "snoc_axi",
-+				      "mnoc_axi",
-+				      "qdss",
-+				      "xo";
-+
-+			qcom,smem-states = <&modem_smp2p_out 0>;
-+			qcom,smem-state-names = "stop";
-+
-+			resets = <&gcc GCC_MSS_RESTART>;
-+			reset-names = "mss_restart";
-+
-+			qcom,halt-regs = <&tcsr_regs_1 0x3000 0x5000 0x4000>;
-+
-+			power-domains = <&rpmpd SDM660_VDDCX>,
-+					<&rpmpd SDM660_VDDMX>;
-+			power-domain-names = "cx", "mx";
-+
-+			status = "disabled";
-+
-+			mba {
-+				memory-region = <&mba_region>;
-+			};
-+
-+			mpss {
-+				memory-region = <&mpss_region>;
-+			};
-+
-+			glink-edge {
-+				interrupts = <GIC_SPI 452 IRQ_TYPE_EDGE_RISING>;
-+				label = "modem";
-+				qcom,remote-pid = <1>;
-+				mboxes = <&apcs_glb 15>;
-+			};
-+		};
-+
- 		adreno_gpu: gpu@5000000 {
- 			compatible = "qcom,adreno-508.0", "qcom,adreno";
- 
 -- 
-2.39.3
-
+Kees Cook
