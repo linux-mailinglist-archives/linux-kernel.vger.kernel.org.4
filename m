@@ -2,106 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DFEA73902F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5CE739036
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjFUThG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 15:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34956 "EHLO
+        id S230365AbjFUThZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 15:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229951AbjFUThE (ORCPT
+        with ESMTP id S231145AbjFUThU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 15:37:04 -0400
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 469E81726;
-        Wed, 21 Jun 2023 12:37:03 -0700 (PDT)
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-77e3f25446bso104462839f.1;
-        Wed, 21 Jun 2023 12:37:03 -0700 (PDT)
+        Wed, 21 Jun 2023 15:37:20 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4121992;
+        Wed, 21 Jun 2023 12:37:14 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b5465a79cdso28158575ad.3;
+        Wed, 21 Jun 2023 12:37:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687376234; x=1689968234;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wysmKxTjA5POXPuSnL3ZWdPlXIDrR3joMPak2RW+D1M=;
+        b=S07+kLCUT/SwJ5u1DA+bkwXwy97NCQpkedZxhO8+z6Wq8+W6n5xNfqYhJNk24Dtx2J
+         dsZxb94BkFneFYNQTcJrx8e3lpkdZnE1tJk7lz0V00qnMvjNIHqsPDTZbhqhTz6jHwvO
+         6zjxgjTnw/hw9pNYqi6jVBHgBPAjDkE30MLk8M06RDHtHJa4nxy0YJn5kUvO35SLeyT8
+         zy1l6SfvqEVmjFVNjvRL/Mr0Ot5X1KwelKNhaHVqD36RmV561WGqqqenu8/0Ran/6sRe
+         Xlp8JlZCoyOMC3ds4twYoRWsqJkF0S9kPLKsYbVG52nnv76D7niK19XtvLp/MrLrzw6O
+         9m4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687376222; x=1689968222;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=yXwTNcT3p5TlhcI5K0peTsLgCwCNEi2f6S+CEMJ2sTo=;
-        b=j4P99z3bcxv6rjRgStscMh+spK8HpN4FARSzKG+kEp/zJ3gVdH6zgUhT5nZEqndXEp
-         TSgc76dJVliW5FrFgpqJV8QUOcjpfCQZXhK/GKjUXNj5Qbrf4wdi/LnFuWRmbqIoWz1x
-         5tzE4sHJDYeYYgdBrDQOtb81SRI5Hl6lOpPtae40kY1R+aIjnsRgHbJe7rrNCAkYxV63
-         eksMlftmZVVzcfkBC769wenM/5bkFksXDBVAaiCPnLA2ACVnGtoek0NMT/3iz2VEQmZX
-         eKSUNORV/+XhnJbCRv+zXGd+txcPIHa4glocXa5yLAqlmuq+krfUN40eoLGAS4QnXloq
-         buVw==
-X-Gm-Message-State: AC+VfDxmy1fuod8G9WCfZeIMtmm+jvYnlyNQyYBsmZ718eHY19Mm0uOr
-        UEV+8pfBFJAdxWo7UPZJ6g==
-X-Google-Smtp-Source: ACHHUZ7pZNivx0IhDNQ9nDhjzEyELHZSbzYnnRqjMifeP5v8EyJiXJcFjsNioffrMb2HtT/wGPcrgA==
-X-Received: by 2002:a05:6602:1613:b0:780:ba85:f475 with SMTP id x19-20020a056602161300b00780ba85f475mr1696474iow.3.1687376221384;
-        Wed, 21 Jun 2023 12:37:01 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id dq35-20020a0566384d2300b0040fad79ac08sm1526742jab.89.2023.06.21.12.36.58
+        d=1e100.net; s=20221208; t=1687376234; x=1689968234;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wysmKxTjA5POXPuSnL3ZWdPlXIDrR3joMPak2RW+D1M=;
+        b=Qw9zjJPq7bIfEC1mR7TQtVVIb7vCsL/kWdwCB3rhWUgEsRkQP405SMK2pIwbcwlxYi
+         p5Kgq7pIqYUqi2K4igh6HXqFt9IXKTipAB13Q0yu9fAhsKtEiQJqAHjaPV+2pwp1gEbD
+         wFb8ZqPxTyu0ZWOryfLlWln5GGCn9XXSndZbfOjSnS1i3uZLmOQ4TpJGt0VYFN+TipZb
+         dfaVSQVyXUCF9/qVjX3jLawxt3rOT2C7qPRfi7huTSSfJ+Y4i1oJs5fvvitfcWUn3sN/
+         xlTY1iiA7ucUA93pAMpeuWFX/CyR8XVvzY5rxAYRdNBbBvqqrwgGOs54dSx1zrDVhx39
+         SA4w==
+X-Gm-Message-State: AC+VfDx9w7XVG2rEP+V6pSdeGmmLHiUd7WwVH2YRiDgnjSueYVyxE1ku
+        XbXgjAfFiEuXSPkismqhwHs=
+X-Google-Smtp-Source: ACHHUZ69TGI7UgaMNHlz30M9h5OSeOZkCCWPBquKQ2Y9Gao9+QHOyGF1n9se2Rl8repP0FTskygALQ==
+X-Received: by 2002:a17:902:f551:b0:1b5:4f50:f1e0 with SMTP id h17-20020a170902f55100b001b54f50f1e0mr11017305plf.29.1687376234097;
+        Wed, 21 Jun 2023 12:37:14 -0700 (PDT)
+Received: from yoga ([2400:1f00:13:6258:556c:aad7:2240:7612])
+        by smtp.gmail.com with ESMTPSA id jl17-20020a170903135100b001b39f8dc06fsm3862326plb.152.2023.06.21.12.37.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 12:37:00 -0700 (PDT)
-Received: (nullmailer pid 3403581 invoked by uid 1000);
-        Wed, 21 Jun 2023 19:36:57 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Wed, 21 Jun 2023 12:37:13 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 01:07:05 +0530
+From:   Anup Sharma <anupnewsmail@gmail.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Anup Sharma <anupnewsmail@gmail.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/9] scripts: python: Add check for correct perf script format
+Message-ID: <c43a51b4895b5b0b40f8c526d6e5e92b9d646a62.1687375189.git.anupnewsmail@gmail.com>
+References: <cover.1687375189.git.anupnewsmail@gmail.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Anjelique Melendez <quic_amelende@quicinc.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, andersson@kernel.org,
-        thierry.reding@gmail.com, linux-arm-msm@vger.kernel.org,
-        robh+dt@kernel.org, lee@kernel.org, pavel@ucw.cz,
-        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pwm@vger.kernel.org, agross@kernel.org,
-        u.kleine-koenig@pengutronix.de, devicetree@vger.kernel.org,
-        konrad.dybcio@linaro.org, conor+dt@kernel.org
-In-Reply-To: <20230621185949.2068-2-quic_amelende@quicinc.com>
-References: <20230621185949.2068-1-quic_amelende@quicinc.com>
- <20230621185949.2068-2-quic_amelende@quicinc.com>
-Message-Id: <168737621686.3403500.14671930652655583051.robh@kernel.org>
-Subject: Re: [PATCH 1/7] dt-bindings: soc: qcom: Add qcom-pbs bindings
-Date:   Wed, 21 Jun 2023 13:36:57 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1687375189.git.anupnewsmail@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The isPerfScriptFormat function, validates the format of a perf script.
+The function checks if the given input meets specific criteria to
+determine if it is a valid perf script output.
 
-On Wed, 21 Jun 2023 11:59:45 -0700, Anjelique Melendez wrote:
-> Add binding for the Qualcomm Programmable Boot Sequencer device.
-> 
-> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
-> ---
->  .../bindings/soc/qcom/qcom-pbs.yaml           | 41 +++++++++++++++++++
->  1 file changed, 41 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml
-> 
+Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
+---
+ .../scripts/python/firefox-gecko-converter.py     | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+ create mode 100644 tools/perf/scripts/python/firefox-gecko-converter.py
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/soc/qcom/qcom-pbs.yaml:26:2: [warning] wrong indentation: expected 2 but found 1 (indentation)
-
-dtschema/dtc warnings/errors:
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230621185949.2068-2-quic_amelende@quicinc.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+diff --git a/tools/perf/scripts/python/firefox-gecko-converter.py b/tools/perf/scripts/python/firefox-gecko-converter.py
+new file mode 100644
+index 000000000000..73a431d0c7d1
+--- /dev/null
++++ b/tools/perf/scripts/python/firefox-gecko-converter.py
+@@ -0,0 +1,15 @@
++#!/usr/bin/env python3
++import re
++import sys
++import json
++from functools import reduce
++
++def isPerfScriptFormat(profile):
++    if profile.startswith('# ========\n'):
++        return True
++
++    if profile.startswith('{'):
++        return False
++
++    firstLine = profile[:profile.index('\n')]
++    return bool(re.match(r'^\S.*?\s+(?:\d+/)?\d+\s+(?:\d+\d+\s+)?[\d.]+:', firstLine))
+-- 
+2.34.1
 
