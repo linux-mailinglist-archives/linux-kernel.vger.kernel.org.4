@@ -2,396 +2,425 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3E06739360
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 01:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBCCE739378
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 02:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbjFUX55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 19:57:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38740 "EHLO
+        id S230062AbjFVABq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 20:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbjFUX5L (ORCPT
+        with ESMTP id S230097AbjFVABm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 19:57:11 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2055.outbound.protection.outlook.com [40.107.220.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F1C268C;
-        Wed, 21 Jun 2023 16:56:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CbBS6Lixh5nIfZDdspesuU9ejdwEfggKKGnEMyfdJh7FHzUnnNT0MdsCnDtQCj7Xb3+/MDOPVLxi7cBXG8FmYqTp3mPiXDdeFmpYeuGNhceTj255EWbo8rIal3ylhFI6Uu/v9Pa6t0wLf90CW0TTGCAbaFPgDYnbZz1iy3GBl+itqTaZz1jyLGwGsAsFmFXEJmbGmHdH2lmVTiBnCbgT0+ID7a3ppsdWm+pRcH9Clv1llDGEyMd/SQIcC5lipiiBpzhQh3xyWIm8G4v3KpfswQTJutWM99XbF63rfCALIWCCHQc7B1mT0nBYXR85AytFqa1mSCT22CsaIiF2mbge4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wdQMrgOTXfgV72RZpei832Z4XyMWSKHyjQtp0oqj+xw=;
- b=kvKOLLQWIAFMIA1HtQ13vnJZycphsT9z4YA8CMqj8BTImFFMNY75r7JIE7l9YNMZ0odQlMp/sNozuNDBmL1GiSWpaQqTxHHAElq1+GoByCL1huTLCtQl23YevT+vTaGirVmqzu9XR5zfmzANPorrc867t9bzl0WmflJQwH0xqtQ0E77NLUADkSPsR3xsERXxKKyVjVl4cFo250+DZFOz7M0xouHu21Ko8VHGqxfpNqRdTq+VH+sKh+ILnOfw/lhWcFTF1zinxmC5mUDYpPG4fZTZkZUDnXQib323LKSI0jVKMUfLOGnhvs6w9QrsJxhIWMmxv9iKS0gZcF0KFRW4zw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wdQMrgOTXfgV72RZpei832Z4XyMWSKHyjQtp0oqj+xw=;
- b=xMSY3TlT8x+PCtElLwfpEl1IA2FANM2Iq39x614KaemLdE1W6BtFyfedJfhi9ty16NJdO503bq9FJLWmH7y5ws5wXrO5Sej9QYNvIKnhA832eQwfZZF1IfvUgPObyfm4rwZ5CXxfqrpN+Bs67GteesmOkpcN+kQWvTRXeg4oX7I=
-Received: from CYZPR10CA0008.namprd10.prod.outlook.com (2603:10b6:930:8a::18)
- by PH7PR12MB6812.namprd12.prod.outlook.com (2603:10b6:510:1b6::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Wed, 21 Jun
- 2023 23:56:07 +0000
-Received: from CY4PEPF0000E9CD.namprd03.prod.outlook.com
- (2603:10b6:930:8a:cafe::e4) by CYZPR10CA0008.outlook.office365.com
- (2603:10b6:930:8a::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23 via Frontend
- Transport; Wed, 21 Jun 2023 23:56:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000E9CD.mail.protection.outlook.com (10.167.241.140) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6521.24 via Frontend Transport; Wed, 21 Jun 2023 23:56:07 +0000
-Received: from ruby-95f9host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Wed, 21 Jun
- 2023 18:56:02 -0500
-From:   Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
-        <kvm@vger.kernel.org>
-CC:     <joro@8bytes.org>, <robin.murphy@arm.com>, <yi.l.liu@intel.com>,
-        <alex.williamson@redhat.com>, <jgg@nvidia.com>,
-        <nicolinc@nvidia.com>, <baolu.lu@linux.intel.com>,
-        <eric.auger@redhat.com>, <pandoh@google.com>,
-        <kumaranand@google.com>, <jon.grimm@amd.com>,
-        <santosh.shukla@amd.com>, <vasant.hegde@amd.com>,
-        <jay.chen@amd.com>, <joseph.chung@amd.com>,
-        "Suravee Suthikulpanit" <suravee.suthikulpanit@amd.com>
-Subject: [RFC PATCH 21/21] iommufd: Introduce AMD HW-vIOMMU IOCTL
-Date:   Wed, 21 Jun 2023 18:55:08 -0500
-Message-ID: <20230621235508.113949-22-suravee.suthikulpanit@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230621235508.113949-1-suravee.suthikulpanit@amd.com>
-References: <20230621235508.113949-1-suravee.suthikulpanit@amd.com>
+        Wed, 21 Jun 2023 20:01:42 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE7C1FCE;
+        Wed, 21 Jun 2023 17:00:59 -0700 (PDT)
+Received: from [192.168.192.83] (unknown [50.47.134.245])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 71FD03F2AC;
+        Wed, 21 Jun 2023 23:59:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1687391975;
+        bh=wFuAVCOUvQPjKSq+iX3clfT5fZv8EUgOeu44COO1wXw=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=VPb8vXAS0ASNV3K8lb97mzZZX+3RhmV7ely3uU+hSrUGnspGuADtnhFlvFYfWTjUt
+         xd16J+Zpjyvx2Cf8FdXVAh+kjNlR4OPJyLZVAWSc0QA/bJpLvm6noxaOn+GmEZCzel
+         GqDIA51QNF3m5U6XZTcJGMFvM37sKjONQYYlVnmQ8SEuRYvg3QI+huPwoG25lEx/cq
+         WDHP2P928eVwNUEV84ggQX6OQ6BVmWafBFxrHfU1UlAeCzJ9H84kmvHKBjik1jIn8x
+         WjTl2kd35+7C5FurTwqTlltsVJxch1+z+jw7DnnK7S5fuSDp/dujceVaV0MxkTUcCc
+         gUkzyl0Ghbx1A==
+Message-ID: <f94cd9fa-1a83-1f54-0259-123fcd86d549@canonical.com>
+Date:   Wed, 21 Jun 2023 16:59:31 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [tip: sched/core] sched: Fix performance regression introduced by
+ mm_cid
+Content-Language: en-US
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Swapnil Sapkal <Swapnil.Sapkal@amd.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
+        Aaron Lu <aaron.lu@intel.com>, x86@kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <168214940343.404.10896712987516429042.tip-bot2@tip-bot2>
+ <09e0f469-a3f7-62ef-75a1-e64cec2dcfc5@amd.com>
+ <20230620091139.GZ4253@hirez.programming.kicks-ass.net>
+ <44428f1e-ca2c-466f-952f-d5ad33f12073@amd.com>
+ <3e9eaed6-4708-9e58-c80d-143760d6b23a@efficios.com>
+ <ddbd1564-8135-5bc3-72b4-afb7c6e9caba@amd.com>
+ <a73761e4-b791-e9a2-a276-e1551628e33b@efficios.com>
+ <6c693e3b-b941-9acf-6821-179e7a7fe2b8@efficios.com>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <6c693e3b-b941-9acf-6821-179e7a7fe2b8@efficios.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9CD:EE_|PH7PR12MB6812:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7213e5fa-480b-4a71-3491-08db72b3149b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nemnw003TM6NrfSHZUQqKMi1p4t+51nk25Hw9wpP1bTVSgFs+tw60mNJ7t1yC/DHtGqBG3u4u2x2RlEyKq6LiICdXIwDeFo4mnS917VqMoUOtWQgnWZtq6deHHVVHGwToFd+csr04qhzEJniX0p1X/2RfBNqd78agX9g239KXZdPm0QBZNGcoDfFkG4xt0KEiZqx33KxONggBp3FFEYdNZmCLQP/dpcKwU9EdbtOlh3jntQBA/B98lyQGHIsPdJxsYKVIkSDNZFFxkYLo47R9Q0soOxclr/NZ60aN0kfkPGVgay/9CuUyabShE2iOFgtbaz7o1HWxer9tywaKXu822X/5sJvQKnuTDO4REIUbOztYVrpq9MTLO/jK3f5wiuwpSv7TzcIcyINBfWoUezx2gYcK9BAFiiZxtEabxH0D+jpqxMACHUDPzQB67U3DtK7S2v4ENyPRO7Md4MHTV+QQ7IW+QzJOutSDlphoUlFB0proI2zki8kh4oWYltPINMqucc68xAzlIf/GvX84oGdt3w+YWKTGLuUV8l2e0zRkkC15Fq2YHPIBERhRKJQVjOY7v1A50xfjzITyGaqQWxSGOxTBNzHrDFxtb7E7Q/PinXl3U2hGPfwwQsWagBs363P5M5QNha+SvVIk1XKhgFcGGE84OUIecTu9dM9gwzHzc8+noUi/bFu793nsIQmces72LO7XT7OImYruYE+S/DrXQ4c8btnrTyk/4o0bOBeDcq6Bp+/1lQelrQDYZHhO7tX8pm3Quq0r1DeFF/1ZV5SAQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(39860400002)(376002)(136003)(451199021)(36840700001)(46966006)(40470700004)(7696005)(478600001)(36860700001)(82310400005)(36756003)(47076005)(16526019)(83380400001)(426003)(336012)(2616005)(86362001)(186003)(81166007)(40480700001)(356005)(82740400003)(1076003)(40460700003)(26005)(8936002)(8676002)(41300700001)(7416002)(44832011)(5660300002)(2906002)(110136005)(54906003)(316002)(70586007)(70206006)(4326008)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 23:56:07.2547
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7213e5fa-480b-4a71-3491-08db72b3149b
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000E9CD.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6812
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for AMD HW-vIOMMU in the iommufd /dev/iommu devfs.
+On 6/21/23 14:41, Mathieu Desnoyers wrote:
+> On 6/21/23 14:51, Mathieu Desnoyers wrote:
+>> On 6/21/23 12:36, Swapnil Sapkal wrote:
+>>> Hello Mathieu,
+>>>
+>> [...]
+>>>>
+>>>> I suspect the regression is caused by the mm_count cache line bouncing.
+>>>>
+>>>> Please try with this additional patch applied:
+>>>>
+>>>> https://lore.kernel.org/lkml/20230515143536.114960-1-mathieu.desnoyers@efficios.com/
+>>>
+>>> Thanks for the suggestion. I tried out with the patch you suggested. I am seeing
+>>> improvement in hackbench numbers with mm_count padding. But this is not matching
+>>> with what we achieved through reverting the new mm_cid patch.
+>>>
+>>> Below are the results on the 1 Socket 4th Generation EPYC Processor (1 x 96C/192T):
+>>>
+>>> Threads:
+>>>
+>>> Test:              Base (v6.4-rc1)   Base + new_mmcid_reverted  Base + mm_count_padding
+>>>   1-groups:         5.23 (0.00 pct)         4.61 (11.85 pct) 5.11 (2.29 pct)
+>>>   2-groups:         4.99 (0.00 pct)         4.72 (5.41 pct) 5.00 (-0.20 pct)
+>>>   4-groups:         5.96 (0.00 pct)         4.87 (18.28 pct) 5.86 (1.67 pct)
+>>>   8-groups:         6.58 (0.00 pct)         5.44 (17.32 pct) 6.20 (5.77 pct)
+>>> 16-groups:        11.48 (0.00 pct)         8.07 (29.70 pct) 10.68 (6.96 pct)
+>>>
+>>> Processes:
+>>>
+>>> Test:              Base (v6.4-rc1)  Base + new_mmcid_reverted   Base + mm_count_padding
+>>>   1-groups:         5.19 (0.00 pct)         4.90 (5.58 pct) 5.19 (0.00 pct)
+>>>   2-groups:         5.44 (0.00 pct)         5.39 (0.91 pct) 5.39 (0.91 pct)
+>>>   4-groups:         5.69 (0.00 pct)         5.64 (0.87 pct) 5.64 (0.87 pct)
+>>>   8-groups:         6.08 (0.00 pct)         6.01 (1.15 pct) 6.04 (0.65 pct)
+>>> 16-groups:        10.87 (0.00 pct)        10.83 (0.36 pct) 10.93 (-0.55 pct)
+>>>
+>>> The ibs profile shows that function __switch_to_asm() is coming at top in baseline
+>>> run and is not seen with mm_count padding patch. Will be attaching full ibs profile
+>>> data for all the 3 runs:
+>>>
+>>> # Base (v6.4-rc1)
+>>> Threads:
+>>> Total time: 11.486 [sec]
+>>>
+>>>     5.15%  sched-messaging  [kernel.vmlinux]      [k] __switch_to_asm
+>>>     4.31%  sched-messaging  [kernel.vmlinux]      [k] copyout
+>>>     4.29%  sched-messaging  [kernel.vmlinux]      [k] native_queued_spin_lock_slowpath
+>>>     4.22%  sched-messaging  [kernel.vmlinux]      [k] copyin
+>>>     3.92%  sched-messaging  [kernel.vmlinux]      [k] apparmor_file_permission
+>>>     2.91%  sched-messaging  [kernel.vmlinux]      [k] __schedule
+>>>     2.34%  swapper          [kernel.vmlinux]      [k] __switch_to_asm
+>>>     2.10%  sched-messaging  [kernel.vmlinux]      [k] prepare_to_wait_event
+>>>     2.10%  sched-messaging  [kernel.vmlinux]      [k] try_to_wake_up
+>>>     2.07%  sched-messaging  [kernel.vmlinux]      [k] finish_task_switch.isra.0
+>>>     2.00%  sched-messaging  [kernel.vmlinux]      [k] pipe_write
+>>>     1.82%  sched-messaging  [kernel.vmlinux]      [k] check_preemption_disabled
+>>>     1.73%  sched-messaging  [kernel.vmlinux]      [k] exit_to_user_mode_prepare
+>>>     1.52%  sched-messaging  [kernel.vmlinux]      [k] __entry_text_start
+>>>     1.49%  sched-messaging  [kernel.vmlinux]      [k] osq_lock
+>>>     1.45%  sched-messaging  libc.so.6             [.] write
+>>>     1.44%  swapper          [kernel.vmlinux]      [k] native_sched_clock
+>>>     1.38%  sched-messaging  [kernel.vmlinux]      [k] psi_group_change
+>>>     1.38%  sched-messaging  [kernel.vmlinux]      [k] pipe_read
+>>>     1.37%  sched-messaging  libc.so.6             [.] read
+>>>     1.06%  sched-messaging  [kernel.vmlinux]      [k] vfs_read
+>>>     1.01%  swapper          [kernel.vmlinux]      [k] psi_group_change
+>>>     1.00%  sched-messaging  [kernel.vmlinux]      [k] update_curr
+>>>
+>>> # Base + mm_count_padding
+>>> Threads:
+>>> Total time: 11.384 [sec]
+>>>
+>>>     4.43%  sched-messaging  [kernel.vmlinux]         [k] copyin
+>>>     4.39%  sched-messaging  [kernel.vmlinux]         [k] native_queued_spin_lock_slowpath
+>>>     4.07%  sched-messaging  [kernel.vmlinux]         [k] apparmor_file_permission
+>>>     4.07%  sched-messaging  [kernel.vmlinux]         [k] copyout
+>>>     2.49%  sched-messaging  [kernel.vmlinux]         [k] entry_SYSCALL_64
+>>>     2.37%  sched-messaging  [kernel.vmlinux]         [k] update_cfs_group
+>>>     2.19%  sched-messaging  [kernel.vmlinux]         [k] pipe_write
+>>>     2.00%  sched-messaging  [kernel.vmlinux]         [k] check_preemption_disabled
+>>>     1.93%  swapper          [kernel.vmlinux]         [k] update_load_avg
+>>>     1.81%  sched-messaging  [kernel.vmlinux]         [k] exit_to_user_mode_prepare
+>>>     1.69%  sched-messaging  [kernel.vmlinux]         [k] try_to_wake_up
+>>>     1.58%  sched-messaging  libc.so.6                [.] write
+>>>     1.53%  sched-messaging  [kernel.vmlinux]         [k] psi_group_change
+>>>     1.50%  sched-messaging  libc.so.6                [.] read
+>>>     1.50%  sched-messaging  [kernel.vmlinux]         [k] pipe_read
+>>>     1.39%  sched-messaging  [kernel.vmlinux]         [k] update_load_avg
+>>>     1.39%  sched-messaging  [kernel.vmlinux]         [k] osq_lock
+>>>     1.30%  sched-messaging  [kernel.vmlinux]         [k] update_curr
+>>>     1.28%  swapper          [kernel.vmlinux]         [k] psi_group_change
+>>>     1.16%  sched-messaging  [kernel.vmlinux]         [k] vfs_read
+>>>     1.12%  sched-messaging  [kernel.vmlinux]         [k] vfs_write
+>>>     1.10%  sched-messaging  [kernel.vmlinux]         [k] entry_SYSRETQ_unsafe_stack
+>>>     1.09%  sched-messaging  [kernel.vmlinux]         [k] __switch_to_asm
+>>>     1.08%  sched-messaging  [kernel.vmlinux]         [k] do_syscall_64
+>>>     1.06%  sched-messaging  [kernel.vmlinux]         [k] select_task_rq_fair
+>>>     1.03%  swapper          [kernel.vmlinux]         [k] update_cfs_group
+>>>     1.00%  swapper          [kernel.vmlinux]         [k] rb_insert_color
+>>>
+>>> # Base + reverted_new_mm_cid
+>>> Threads:
+>>> Total time: 7.847 [sec]
+>>>
+>>>    12.14%  sched-messaging  [kernel.vmlinux]      [k] native_queued_spin_lock_slowpath
+>>>     8.86%  swapper          [kernel.vmlinux]      [k] native_queued_spin_lock_slowpath
+>>>     6.13%  sched-messaging  [kernel.vmlinux]      [k] copyin
+>>>     5.54%  sched-messaging  [kernel.vmlinux]      [k] apparmor_file_permission
+>>>     3.59%  sched-messaging  [kernel.vmlinux]      [k] copyout
+>>>     2.61%  sched-messaging  [kernel.vmlinux]      [k] osq_lock
+>>>     2.48%  sched-messaging  [kernel.vmlinux]      [k] pipe_write
+>>>     2.33%  sched-messaging  [kernel.vmlinux]      [k] exit_to_user_mode_prepare
+>>>     2.01%  sched-messaging  [kernel.vmlinux]      [k] check_preemption_disabled
+>>>     1.96%  sched-messaging  [kernel.vmlinux]      [k] __entry_text_start
+>>>     1.91%  sched-messaging  libc.so.6             [.] write
+>>>     1.77%  sched-messaging  libc.so.6             [.] read
+>>>     1.64%  sched-messaging  [kernel.vmlinux]      [k] mutex_spin_on_owner
+>>>     1.58%  sched-messaging  [kernel.vmlinux]      [k] pipe_read
+>>>     1.52%  sched-messaging  [kernel.vmlinux]      [k] try_to_wake_up
+>>>     1.38%  sched-messaging  [kernel.vmlinux]      [k] ktime_get_coarse_real_ts64
+>>>     1.35%  sched-messaging  [kernel.vmlinux]      [k] vfs_write
+>>>     1.28%  sched-messaging  [kernel.vmlinux]      [k] entry_SYSRETQ_unsafe_stack
+>>>     1.28%  sched-messaging  [kernel.vmlinux]      [k] vfs_read
+>>>     1.25%  sched-messaging  [kernel.vmlinux]      [k] do_syscall_64
+>>>     1.22%  sched-messaging  [kernel.vmlinux]      [k] __fget_light
+>>>     1.18%  sched-messaging  [kernel.vmlinux]      [k] mutex_lock
+>>>     1.12%  sched-messaging  [kernel.vmlinux]      [k] file_update_time
+>>>     1.04%  sched-messaging  [kernel.vmlinux]      [k] _copy_from_iter
+>>>     1.01%  sched-messaging  [kernel.vmlinux]      [k] current_time
+>>>
+>>> So with the reverted new_mm_cid patch, we are seeing a lot of time being spent in
+>>> native_queued_spin_lock_slowpath and yet, hackbench finishes faster.
+>>>
+>>> I keep further digging into this please let me know if you have any pointers for me.
+>>
+>> Do you have CONFIG_SECURITY_APPARMOR=y ? Can you try without ?
+>>
+>> I notice that apparmor_file_permission appears near the top of your
+>> profiles, and apparmor uses an internal aa_buffers_lock spinlock,
+>> which could possibly explain the top hits for
+>> native_queued_spin_lock_slowpath. My current suspicion is that
+>> the raw spinlock that was taken by "Base + reverted_new_mm_cid"
+>> changed the contention pattern on the apparmor lock enough to
+>> speed things up by pure accident.
+> 
+> If apparmor happens to be the culprit here, we should have a hard look at this commit:
+> 
+> commit df323337e50 "apparmor: Use a memory pool instead per-CPU caches"
+> 
+> Which turned a per-cpu cache into a global memory pool protected by a spinlock. It may benefit RT, but it does not appear to be so great at scaling.
+> 
+it is not. And I have a patch that needs some more formal testing for some stats.
+Ubuntu pulled it in last cycle so it has gotten a fair bit of use and is looking good
+on that end. There are probably some tweaks that can be done to improve it. The
+backoff in particular is something that has mostly been adjusted in response to some
+basic benchmarking.
 
-Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
----
- drivers/iommu/iommufd/Makefile     |   3 +-
- drivers/iommu/iommufd/amd_viommu.c | 158 +++++++++++++++++++++++++++++
- drivers/iommu/iommufd/main.c       |  17 ++--
- include/linux/amd-viommu.h         |  26 +++++
- include/linux/iommufd.h            |   8 ++
- 5 files changed, 203 insertions(+), 9 deletions(-)
- create mode 100644 drivers/iommu/iommufd/amd_viommu.c
- create mode 100644 include/linux/amd-viommu.h
+anyways patch below
 
-diff --git a/drivers/iommu/iommufd/Makefile b/drivers/iommu/iommufd/Makefile
-index 8aeba81800c5..84d771c9cfba 100644
---- a/drivers/iommu/iommufd/Makefile
-+++ b/drivers/iommu/iommufd/Makefile
-@@ -6,7 +6,8 @@ iommufd-y := \
- 	ioas.o \
- 	main.o \
- 	pages.o \
--	vfio_compat.o
-+	vfio_compat.o \
-+	amd_viommu.o
- 
- iommufd-$(CONFIG_IOMMUFD_TEST) += selftest.o
- 
-diff --git a/drivers/iommu/iommufd/amd_viommu.c b/drivers/iommu/iommufd/amd_viommu.c
-new file mode 100644
-index 000000000000..1836e19cb37d
---- /dev/null
-+++ b/drivers/iommu/iommufd/amd_viommu.c
-@@ -0,0 +1,158 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2023 Advanced Micro Devices, Inc.
-+ * Author: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-+ */
-+
-+#include <linux/file.h>
-+#include <linux/fs.h>
-+#include <linux/amd-viommu.h>
-+#include <uapi/linux/amd_viommu.h>
-+#include <linux/iommufd.h>
-+
-+#include "iommufd_private.h"
-+
-+union amd_viommu_ucmd_buffer {
-+	struct amd_viommu_iommu_info iommu;
-+	struct amd_viommu_dev_info dev;
-+	struct amd_viommu_dom_info dom;
-+	struct amd_viommu_mmio_data mmio;
-+	struct amd_viommu_cmdbuf_data cmdbuf;
+commit e057e9b47f1749882ea0efb4427d6b9671c761ab
+Author: John Johansen <john.johansen@canonical.com>
+Date:   Tue Oct 25 01:18:41 2022 -0700
+
+     apparmor: cache buffers on percpu list if there is lock contention
+     
+     df323337e507 ("apparmor: Use a memory pool instead per-CPU caches")
+     changed buffer allocation to use a memory pool, however on a heavily
+     loaded machine there can be lock contention on the global buffers
+     lock. Add a percpu list to cache buffers on when lock contention is
+     encountered.
+     
+     When allocating buffers attempt to use cached buffers first,
+     before taking the global buffers lock. When freeing buffers
+     try to put them back to the global list but if contention is
+     encountered, put the buffer on the percpu list.
+     
+     The length of time a buffer is held on the percpu list is dynamically
+     adjusted based on lock contention.  The amount of hold time is rapidly
+     increased and slow ramped down.
+     
+     v4:
+     - fix percpu ->count buffer count which had been spliced across a
+       debug patch.
+     - introduce define for MAX_LOCAL_COUNT
+     - rework count check and locking around it.
+     - update commit message to reference commit that introduced the
+       memory pool.
+     v3:
+     - limit number of buffers that can be pushed onto the percpu
+       list. This avoids a problem on some kernels where one percpu
+       list can inherit buffers from another cpu after a reschedule,
+       causing more kernel memory to used than is necessary. Under
+       normal conditions this should eventually return to normal
+       but under pathelogical conditions the extra memory consumption
+       may have been unbouanded
+     v2:
+     - dynamically adjust buffer hold time on percpu list based on
+       lock contention.
+     v1:
+     - cache buffers on percpu list on lock contention
+     
+     Signed-off-by: John Johansen <john.johansen@canonical.com>
+
+diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+index e6671a4a89c4..ea3af769af5a 100644
+--- a/security/apparmor/lsm.c
++++ b/security/apparmor/lsm.c
+@@ -55,12 +55,21 @@ union aa_buffer {
+  	char buffer[1];
+  };
+  
++struct aa_local_cache {
++	unsigned int contention;
++	unsigned int hold;
++	unsigned int count;
++	struct list_head head;
 +};
 +
-+#define IOCTL_OP(_ioctl, _fn, _struct, _last)                                  \
-+	[_IOC_NR(_ioctl) - IOMMUFD_VIOMMU_CMD_BASE] = {                        \
-+		.size = sizeof(_struct) +                                      \
-+			BUILD_BUG_ON_ZERO(sizeof(union amd_viommu_ucmd_buffer) <          \
-+					  sizeof(_struct)),                    \
-+		.min_size = offsetofend(_struct, _last),                       \
-+		.ioctl_num = _ioctl,                                           \
-+		.execute = _fn,                                                \
++#define MAX_LOCAL_COUNT 2
+  #define RESERVE_COUNT 2
+  static int reserve_count = RESERVE_COUNT;
+  static int buffer_count;
+  
+  static LIST_HEAD(aa_global_buffers);
+  static DEFINE_SPINLOCK(aa_buffers_lock);
++static DEFINE_PER_CPU(struct aa_local_cache, aa_local_buffers);
+  
+  struct kmem_cache *aa_audit_slab;
+  
+@@ -2029,14 +2038,45 @@ static int param_set_mode(const char *val, const struct kernel_param *kp)
+  	return 0;
+  }
+  
++static void update_contention(struct aa_local_cache *cache)
++{
++	cache->contention += 3;
++	if (cache->contention > 9)
++		cache->contention = 9;
++	cache->hold += 1 << cache->contention;		/* 8, 64, 512 */
++}
++
+  char *aa_get_buffer(bool in_atomic)
+  {
+  	union aa_buffer *aa_buf;
++	struct aa_local_cache *cache;
+  	bool try_again = true;
+  	gfp_t flags = (GFP_KERNEL | __GFP_RETRY_MAYFAIL | __GFP_NOWARN);
+  
++	/* use per cpu cached buffers first */
++	cache = get_cpu_ptr(&aa_local_buffers);
++	if (!list_empty(&cache->head)) {
++		aa_buf = list_first_entry(&cache->head, union aa_buffer, list);
++		list_del(&aa_buf->list);
++		cache->hold--;
++		cache->count--;
++		put_cpu_ptr(&aa_local_buffers);
++		return &aa_buf->buffer[0];
 +	}
++	put_cpu_ptr(&aa_local_buffers);
 +
-+int viommu_iommu_init(struct iommufd_ucmd *ucmd)
-+{
-+	int ret;
-+	struct amd_viommu_iommu_info *data = ucmd->cmd;
-+
-+	ret = amd_viommu_iommu_init(data);
-+	if (ret)
-+		return ret;
-+
-+	if (copy_to_user(ucmd->ubuffer, data, sizeof(*data)))
-+		ret = -EFAULT;
-+	return ret;
-+}
-+
-+int viommu_iommu_destroy(struct iommufd_ucmd *ucmd)
-+{
-+	struct amd_viommu_iommu_info *data = ucmd->cmd;
-+
-+	return amd_viommu_iommu_destroy(data);
-+}
-+
-+int viommu_domain_attach(struct iommufd_ucmd *ucmd)
-+{
-+	struct amd_viommu_dom_info *data = ucmd->cmd;
-+
-+	return amd_viommu_domain_update(data, true);
-+}
-+
-+int viommu_domain_detach(struct iommufd_ucmd *ucmd)
-+{
-+	struct amd_viommu_dom_info *data = ucmd->cmd;
-+
-+	return amd_viommu_domain_update(data, false);
-+}
-+
-+int viommu_device_attach(struct iommufd_ucmd *ucmd)
-+{
-+	struct amd_viommu_dev_info *data = ucmd->cmd;
-+
-+	return amd_viommu_device_update(data, true);
-+}
-+
-+int viommu_device_detach(struct iommufd_ucmd *ucmd)
-+{
-+	struct amd_viommu_dev_info *data = ucmd->cmd;
-+
-+	return amd_viommu_device_update(data, false);
-+}
-+
-+int viommu_mmio_access(struct iommufd_ucmd *ucmd)
-+{
-+	int ret;
-+	struct amd_viommu_mmio_data *data = ucmd->cmd;
-+
-+	if (data->is_write) {
-+		ret = amd_viommu_guest_mmio_write(data);
++	if (!spin_trylock(&aa_buffers_lock)) {
++		cache = get_cpu_ptr(&aa_local_buffers);
++		update_contention(cache);
++		put_cpu_ptr(&aa_local_buffers);
++		spin_lock(&aa_buffers_lock);
 +	} else {
-+		ret = amd_viommu_guest_mmio_read(data);
-+		if (ret)
-+			return ret;
-+
-+		if (copy_to_user(ucmd->ubuffer, data, sizeof(*data)))
-+			ret = -EFAULT;
++		cache = get_cpu_ptr(&aa_local_buffers);
++		if (cache->contention)
++			cache->contention--;
++		put_cpu_ptr(&aa_local_buffers);
 +	}
-+	return ret;
-+}
+  retry:
+-	spin_lock(&aa_buffers_lock);
+  	if (buffer_count > reserve_count ||
+  	    (in_atomic && !list_empty(&aa_global_buffers))) {
+  		aa_buf = list_first_entry(&aa_global_buffers, union aa_buffer,
+@@ -2062,6 +2102,7 @@ char *aa_get_buffer(bool in_atomic)
+  	if (!aa_buf) {
+  		if (try_again) {
+  			try_again = false;
++			spin_lock(&aa_buffers_lock);
+  			goto retry;
+  		}
+  		pr_warn_once("AppArmor: Failed to allocate a memory buffer.\n");
+@@ -2073,15 +2114,42 @@ char *aa_get_buffer(bool in_atomic)
+  void aa_put_buffer(char *buf)
+  {
+  	union aa_buffer *aa_buf;
++	struct aa_local_cache *cache;
+  
+  	if (!buf)
+  		return;
+  	aa_buf = container_of(buf, union aa_buffer, buffer[0]);
+  
+-	spin_lock(&aa_buffers_lock);
+-	list_add(&aa_buf->list, &aa_global_buffers);
+-	buffer_count++;
+-	spin_unlock(&aa_buffers_lock);
++	cache = get_cpu_ptr(&aa_local_buffers);
++	if (!cache->hold) {
++		bool must_lock = cache->count >= MAX_LOCAL_COUNT;
 +
-+int viommu_cmdbuf_update(struct iommufd_ucmd *ucmd)
-+{
-+	struct amd_viommu_cmdbuf_data *data = ucmd->cmd;
++		put_cpu_ptr(&aa_local_buffers);
 +
-+	return amd_viommu_cmdbuf_update(data);
-+}
-+
-+struct iommufd_ioctl_op viommu_ioctl_ops[] = {
-+	IOCTL_OP(VIOMMU_IOMMU_INIT, viommu_iommu_init,
-+		 struct amd_viommu_iommu_info, gid),
-+	IOCTL_OP(VIOMMU_IOMMU_DESTROY, viommu_iommu_destroy,
-+		 struct amd_viommu_iommu_info, gid),
-+	IOCTL_OP(VIOMMU_DEVICE_ATTACH, viommu_device_attach,
-+		 struct amd_viommu_dev_info, queue_id),
-+	IOCTL_OP(VIOMMU_DEVICE_DETACH, viommu_device_detach,
-+		 struct amd_viommu_dev_info, queue_id),
-+	IOCTL_OP(VIOMMU_DOMAIN_ATTACH, viommu_domain_attach,
-+		 struct amd_viommu_dom_info, gdom_id),
-+	IOCTL_OP(VIOMMU_DOMAIN_DETACH, viommu_domain_detach,
-+		 struct amd_viommu_dom_info, gdom_id),
-+	IOCTL_OP(VIOMMU_MMIO_ACCESS, viommu_mmio_access,
-+		 struct amd_viommu_mmio_data, is_write),
-+	IOCTL_OP(VIOMMU_CMDBUF_UPDATE, viommu_cmdbuf_update,
-+		 struct amd_viommu_cmdbuf_data, hva),
-+};
-+
-+long iommufd_amd_viommu_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
-+{
-+	struct iommufd_ctx *ictx = filp->private_data;
-+	struct iommufd_ucmd ucmd = {};
-+	struct iommufd_ioctl_op *op;
-+	union amd_viommu_ucmd_buffer buf;
-+	unsigned int nr;
-+	int ret;
-+
-+	nr = _IOC_NR(cmd);
-+	if (nr < IOMMUFD_VIOMMU_CMD_BASE ||
-+	    (nr - IOMMUFD_VIOMMU_CMD_BASE) >= ARRAY_SIZE(viommu_ioctl_ops))
-+		return -ENOIOCTLCMD;
-+
-+	ucmd.ictx = ictx;
-+	ucmd.ubuffer = (void __user *)arg;
-+	ret = get_user(ucmd.user_size, (u32 __user *)ucmd.ubuffer);
-+	if (ret)
-+		return ret;
-+
-+	op = &viommu_ioctl_ops[nr - IOMMUFD_VIOMMU_CMD_BASE];
-+	if (op->ioctl_num != cmd)
-+		return -ENOIOCTLCMD;
-+	if (ucmd.user_size < op->min_size)
-+		return -EOPNOTSUPP;
-+
-+	ucmd.cmd = &buf;
-+	ret = copy_struct_from_user(ucmd.cmd, op->size, ucmd.ubuffer,
-+				    ucmd.user_size);
-+	if (ret)
-+		return ret;
-+	return op->execute(&ucmd);
-+}
-diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
-index 83f8b8f19bcb..d5c2738a8355 100644
---- a/drivers/iommu/iommufd/main.c
-+++ b/drivers/iommu/iommufd/main.c
-@@ -17,6 +17,8 @@
- #include <linux/bug.h>
- #include <uapi/linux/iommufd.h>
- #include <linux/iommufd.h>
-+#include <uapi/linux/amd_viommu.h>
-+#include <linux/amd-viommu.h>
- #include "../iommu-priv.h"
- 
- #include "io_pagetable.h"
-@@ -442,13 +444,6 @@ union ucmd_buffer {
- 	struct iommu_hwpt_arm_smmuv3_invalidate smmuv3;
- };
- 
--struct iommufd_ioctl_op {
--	unsigned int size;
--	unsigned int min_size;
--	unsigned int ioctl_num;
--	int (*execute)(struct iommufd_ucmd *ucmd);
--};
--
- #define IOCTL_OP(_ioctl, _fn, _struct, _last)                                  \
- 	[_IOC_NR(_ioctl) - IOMMUFD_CMD_BASE] = {                               \
- 		.size = sizeof(_struct) +                                      \
-@@ -503,8 +498,14 @@ static long iommufd_fops_ioctl(struct file *filp, unsigned int cmd,
- 
- 	nr = _IOC_NR(cmd);
- 	if (nr < IOMMUFD_CMD_BASE ||
--	    (nr - IOMMUFD_CMD_BASE) >= ARRAY_SIZE(iommufd_ioctl_ops))
-+	    (nr - IOMMUFD_CMD_BASE) >= ARRAY_SIZE(iommufd_ioctl_ops)) {
-+		/* AMD VIOMMU ioctl */
-+		if (!iommufd_amd_viommu_ioctl(filp, cmd, arg))
-+			return 0;
-+
-+		/* VFIO ioctl */
- 		return iommufd_vfio_ioctl(ictx, cmd, arg);
++		if (must_lock) {
++			spin_lock(&aa_buffers_lock);
++			goto locked;
++		} else if (spin_trylock(&aa_buffers_lock)) {
++		locked:
++			/* put back on global list */
++			list_add(&aa_buf->list, &aa_global_buffers);
++			buffer_count++;
++			spin_unlock(&aa_buffers_lock);
++			cache = get_cpu_ptr(&aa_local_buffers);
++			if (cache->contention)
++				cache->contention--;
++			put_cpu_ptr(&aa_local_buffers);
++			return;
++		}
++		/* contention on global list, fallback to percpu */
++		cache = get_cpu_ptr(&aa_local_buffers);
++		update_contention(cache);
 +	}
- 
- 	ucmd.ictx = ictx;
- 	ucmd.ubuffer = (void __user *)arg;
-diff --git a/include/linux/amd-viommu.h b/include/linux/amd-viommu.h
-new file mode 100644
-index 000000000000..645e25c493c2
---- /dev/null
-+++ b/include/linux/amd-viommu.h
-@@ -0,0 +1,26 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2022 Advanced Micro Devices, Inc.
-+ */
 +
-+#ifndef _LINUX_AMD_VIOMMU_H
-+#define _LINUX_AMD_VIOMMU_H
-+
-+#include <uapi/linux/amd_viommu.h>
-+
-+extern long iommufd_amd_viommu_ioctl(struct file *filp,
-+				     unsigned int cmd,
-+				     unsigned long arg);
-+
-+extern long iommufd_viommu_ioctl(struct file *filp, unsigned int cmd,
-+			  unsigned long arg);
-+
-+extern int amd_viommu_iommu_init(struct amd_viommu_iommu_info *data);
-+extern int amd_viommu_iommu_destroy(struct amd_viommu_iommu_info *data);
-+extern int amd_viommu_domain_update(struct amd_viommu_dom_info *data, bool is_set);
-+extern int amd_viommu_device_update(struct amd_viommu_dev_info *data, bool is_set);
-+extern int amd_viommu_guest_mmio_write(struct amd_viommu_mmio_data *data);
-+extern int amd_viommu_guest_mmio_read(struct amd_viommu_mmio_data *data);
-+extern int amd_viommu_cmdbuf_update(struct amd_viommu_cmdbuf_data *data);
-+
-+#endif /* _LINUX_AMD_VIOMMU_H */
-diff --git a/include/linux/iommufd.h b/include/linux/iommufd.h
-index 9269ce668d9b..91912e044038 100644
---- a/include/linux/iommufd.h
-+++ b/include/linux/iommufd.h
-@@ -17,6 +17,14 @@ struct iommufd_ctx;
- struct iommufd_access;
- struct file;
- struct iommu_group;
-+struct iommufd_ucmd;
-+
-+struct iommufd_ioctl_op {
-+	unsigned int size;
-+	unsigned int min_size;
-+	unsigned int ioctl_num;
-+	int (*execute)(struct iommufd_ucmd *ucmd);
-+};
- 
- struct iommufd_device *iommufd_device_bind(struct iommufd_ctx *ictx,
- 					   struct device *dev, u32 *id);
--- 
-2.34.1
++	/* cache in percpu list */
++	list_add(&aa_buf->list, &cache->head);
++	cache->count++;
++	put_cpu_ptr(&aa_local_buffers);
+  }
+  
+  /*
+@@ -2123,6 +2191,16 @@ static int __init alloc_buffers(void)
+  	union aa_buffer *aa_buf;
+  	int i, num;
+  
++	/*
++	 * per cpu set of cached allocated buffers used to help reduce
++	 * lock contention
++	 */
++	for_each_possible_cpu(i) {
++		per_cpu(aa_local_buffers, i).contention = 0;
++		per_cpu(aa_local_buffers, i).hold = 0;
++		per_cpu(aa_local_buffers, i).count = 0;
++		INIT_LIST_HEAD(&per_cpu(aa_local_buffers, i).head);
++	}
+  	/*
+  	 * A function may require two buffers at once. Usually the buffers are
+  	 * used for a short period of time and are shared. On UP kernel buffers
+
+
+
 
