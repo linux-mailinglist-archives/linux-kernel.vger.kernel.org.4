@@ -2,60 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48544738766
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E9973876E
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbjFUOoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:44:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
+        id S230445AbjFUOpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjFUOoh (ORCPT
+        with ESMTP id S231889AbjFUOpA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:44:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919A5199D;
-        Wed, 21 Jun 2023 07:44:35 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (unknown [IPv6:2606:6d00:15:c623::7a9])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nicolas)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6F0B46606F96;
-        Wed, 21 Jun 2023 15:44:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687358674;
-        bh=8HFzaL56gG3Wzf7zrZFg8U3SAyI/UGRw9a2LhNVa630=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=m1945OSJr1DSvGu1IGFg1dGoA6/7lOf/X4FocnaCoKz8c5mLFBDZvyEc8tMLFdbFX
-         R5d/QXk0ARM1hGHXU9L6KTyDu0K8GsA22mRLkNewd6xikNhvzDlUT8ppuM6vrEfiJy
-         ronbcE9SzChNkJk6DqV5SOW57FAWN8i9wKHXGP32Gzigi54lH7Wv/dvJdE+4letZRM
-         KM1CwJzgCJgNx+T9KofqeXj65IvK4G7ouIq8jlfUFi4M4pTMOuTSUwoCpSONLgBfW8
-         IDAfFMwEmpKhMDJeYNOkQHbiFbyfMIaYqZ/0GhSpGCEGcOzFlHXbzuwkYG5timtI7M
-         mghb3GWnUwYYw==
-Message-ID: <998e2fcef6c1e8602e25974daf8f5b18cfca7436.camel@collabora.com>
-Subject: Re: [PATCH 1/2] media: verisilicon: fix excessive stack usage
-From:   Nicolas Dufresne <nicolas.dufresne@collabora.com>
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 21 Jun 2023 10:44:23 -0400
-In-Reply-To: <20230616144854.3818934-1-arnd@kernel.org>
-References: <20230616144854.3818934-1-arnd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
+        Wed, 21 Jun 2023 10:45:00 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B55C11992
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:44:56 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8Bx28bnDJNk3ikAAA--.319S3;
+        Wed, 21 Jun 2023 22:44:55 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax8uTmDJNkD8wAAA--.4713S3;
+        Wed, 21 Jun 2023 22:44:54 +0800 (CST)
+Message-ID: <aa73348d-5ec8-4ac0-2ec0-0cce24756c63@loongson.cn>
+Date:   Wed, 21 Jun 2023 22:44:54 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v10 07/11] drm/etnaviv: Add support for the dma coherent
+ device
+Content-Language: en-US
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Sui Jingfeng <18949883232@163.com>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        etnaviv@lists.freedesktop.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20230620094716.2231414-1-18949883232@163.com>
+ <20230620094716.2231414-8-18949883232@163.com>
+ <8f74f0962c8bab6c832919a5340667c54e1a7ddc.camel@pengutronix.de>
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <8f74f0962c8bab6c832919a5340667c54e1a7ddc.camel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Ax8uTmDJNkD8wAAA--.4713S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrtF18WryDury3Kw4xKr15Awc_yoW3Kwc_Cw
+        48ZrZrWrsxtrnYqF12yFy5uFyvyF98ZrZaq3Wjy3s8Kry7Xw1UX397Gry0v3s8JFW8JF9I
+        k3s5ZF12kw4DuosvyTuYvTs0mTUanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUbgkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
+        Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_
+        WrylYx0Ex4A2jsIE14v26r4UJVWxJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8Jr0_
+        Cr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUcb
+        18DUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,143 +78,30 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-thanks you.
+On 2023/6/21 18:00, Lucas Stach wrote:
+>> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.h b/drivers/gpu/drm/etnaviv/etnaviv_drv.h
+>> index 9cd72948cfad..644e5712c050 100644
+>> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.h
+>> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.h
+>> @@ -46,6 +46,12 @@ struct etnaviv_drm_private {
+>>   	struct xarray active_contexts;
+>>   	u32 next_context_id;
+>>   
+>> +	/*
+>> +	 * If true, the GPU is capable of snooping cpu cache. Here, it
+>> +	 * also means that cache coherency is enforced by the hardware.
+>> +	 */
+>> +	bool dma_coherent;
+>> +
+> No need for this, I think. Just use dev_is_dma_coherent() where you
+> need to know this.
+>
+No, we want this value cached by the driver.
 
-Le vendredi 16 juin 2023 =C3=A0 16:48 +0200, Arnd Bergmann a =C3=A9crit=C2=
-=A0:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> In some configurations, gcc decides not to inline the register accessor f=
-unctions,
-> which in turn leads to lots of temporary hantro_reg structures on the sta=
-ck that
-> cannot be eliminated because they escape into an uninlined function:
->=20
-> drivers/media/platform/verisilicon/rockchip_vpu981_hw_av1_dec.c:1022:1: w=
-arning: the frame size of 1112 bytes is larger than 1024 bytes [-Wframe-lar=
-ger-than=3D]
->=20
-> Mark all of these as __always_inline so the compiler is able to completel=
-y
-> eliminate the temporary structures instead, which brings the stack usage
-> back down to just the normal local variables.
+We only need call  dev_is_dma_coherent() once!
 
-This is falling into compiler bug territory, though I see no harm in forcin=
-g
-these to inline, as in the old days these would have been macros anyway.
+We need to reuse this variable on other places.
 
->=20
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202306151506.goHEegOd-lkp@i=
-ntel.com/
-> Fixes: 727a400686a2c ("media: verisilicon: Add Rockchip AV1 decoder")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Thanks again,
-
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
-
-> ---
->  drivers/media/platform/verisilicon/hantro.h | 22 ++++++++++-----------
->  1 file changed, 11 insertions(+), 11 deletions(-)
->=20
-> diff --git a/drivers/media/platform/verisilicon/hantro.h b/drivers/media/=
-platform/verisilicon/hantro.h
-> index 6523ffb748812..6c5e56ce5b351 100644
-> --- a/drivers/media/platform/verisilicon/hantro.h
-> +++ b/drivers/media/platform/verisilicon/hantro.h
-> @@ -370,26 +370,26 @@ extern int hantro_debug;
->  	pr_err("%s:%d: " fmt, __func__, __LINE__, ##args)
-> =20
->  /* Structure access helpers. */
-> -static inline struct hantro_ctx *fh_to_ctx(struct v4l2_fh *fh)
-> +static __always_inline struct hantro_ctx *fh_to_ctx(struct v4l2_fh *fh)
->  {
->  	return container_of(fh, struct hantro_ctx, fh);
->  }
-> =20
->  /* Register accessors. */
-> -static inline void vepu_write_relaxed(struct hantro_dev *vpu,
-> +static __always_inline void vepu_write_relaxed(struct hantro_dev *vpu,
->  				      u32 val, u32 reg)
->  {
->  	vpu_debug(6, "0x%04x =3D 0x%08x\n", reg / 4, val);
->  	writel_relaxed(val, vpu->enc_base + reg);
->  }
-> =20
-> -static inline void vepu_write(struct hantro_dev *vpu, u32 val, u32 reg)
-> +static __always_inline void vepu_write(struct hantro_dev *vpu, u32 val, =
-u32 reg)
->  {
->  	vpu_debug(6, "0x%04x =3D 0x%08x\n", reg / 4, val);
->  	writel(val, vpu->enc_base + reg);
->  }
-> =20
-> -static inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
-> +static __always_inline u32 vepu_read(struct hantro_dev *vpu, u32 reg)
->  {
->  	u32 val =3D readl(vpu->enc_base + reg);
-> =20
-> @@ -397,27 +397,27 @@ static inline u32 vepu_read(struct hantro_dev *vpu,=
- u32 reg)
->  	return val;
->  }
-> =20
-> -static inline void vdpu_write_relaxed(struct hantro_dev *vpu,
-> +static __always_inline void vdpu_write_relaxed(struct hantro_dev *vpu,
->  				      u32 val, u32 reg)
->  {
->  	vpu_debug(6, "0x%04x =3D 0x%08x\n", reg / 4, val);
->  	writel_relaxed(val, vpu->dec_base + reg);
->  }
-> =20
-> -static inline void vdpu_write(struct hantro_dev *vpu, u32 val, u32 reg)
-> +static __always_inline void vdpu_write(struct hantro_dev *vpu, u32 val, =
-u32 reg)
->  {
->  	vpu_debug(6, "0x%04x =3D 0x%08x\n", reg / 4, val);
->  	writel(val, vpu->dec_base + reg);
->  }
-> =20
-> -static inline void hantro_write_addr(struct hantro_dev *vpu,
-> +static __always_inline void hantro_write_addr(struct hantro_dev *vpu,
->  				     unsigned long offset,
->  				     dma_addr_t addr)
->  {
->  	vdpu_write(vpu, addr & 0xffffffff, offset);
->  }
-> =20
-> -static inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
-> +static __always_inline u32 vdpu_read(struct hantro_dev *vpu, u32 reg)
->  {
->  	u32 val =3D readl(vpu->dec_base + reg);
-> =20
-> @@ -425,7 +425,7 @@ static inline u32 vdpu_read(struct hantro_dev *vpu, u=
-32 reg)
->  	return val;
->  }
-> =20
-> -static inline u32 vdpu_read_mask(struct hantro_dev *vpu,
-> +static __always_inline u32 vdpu_read_mask(struct hantro_dev *vpu,
->  				 const struct hantro_reg *reg,
->  				 u32 val)
->  {
-> @@ -437,14 +437,14 @@ static inline u32 vdpu_read_mask(struct hantro_dev =
-*vpu,
->  	return v;
->  }
-> =20
-> -static inline void hantro_reg_write(struct hantro_dev *vpu,
-> +static __always_inline void hantro_reg_write(struct hantro_dev *vpu,
->  				    const struct hantro_reg *reg,
->  				    u32 val)
->  {
->  	vdpu_write_relaxed(vpu, vdpu_read_mask(vpu, reg, val), reg->base);
->  }
-> =20
-> -static inline void hantro_reg_write_s(struct hantro_dev *vpu,
-> +static __always_inline void hantro_reg_write_s(struct hantro_dev *vpu,
->  				      const struct hantro_reg *reg,
->  				      u32 val)
->  {
+-- 
+Jingfeng
 
