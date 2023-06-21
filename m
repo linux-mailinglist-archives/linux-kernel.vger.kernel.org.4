@@ -2,94 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C57277388DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 860867388E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:25:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233309AbjFUPYX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 11:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
+        id S232718AbjFUPYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 11:24:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233297AbjFUPYB (ORCPT
+        with ESMTP id S232714AbjFUPY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:24:01 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E619D1706
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:23:29 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1qBzg3-0008SF-2I; Wed, 21 Jun 2023 17:23:23 +0200
-Message-ID: <87c9576e6ca1b58fa94e0bc1a2f4be3847f0518c.camel@pengutronix.de>
-Subject: Re: [PATCH v10 07/11] drm/etnaviv: Add support for the dma coherent
- device
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>,
-        Sui Jingfeng <18949883232@163.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        etnaviv@lists.freedesktop.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Date:   Wed, 21 Jun 2023 17:23:21 +0200
-In-Reply-To: <aa73348d-5ec8-4ac0-2ec0-0cce24756c63@loongson.cn>
-References: <20230620094716.2231414-1-18949883232@163.com>
-         <20230620094716.2231414-8-18949883232@163.com>
-         <8f74f0962c8bab6c832919a5340667c54e1a7ddc.camel@pengutronix.de>
-         <aa73348d-5ec8-4ac0-2ec0-0cce24756c63@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 21 Jun 2023 11:24:26 -0400
+Received: from forward500b.mail.yandex.net (forward500b.mail.yandex.net [178.154.239.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FCA519BD;
+        Wed, 21 Jun 2023 08:24:20 -0700 (PDT)
+Received: from mail-nwsmtp-smtp-production-main-77.iva.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-77.iva.yp-c.yandex.net [IPv6:2a02:6b8:c0c:859f:0:640:3817:0])
+        by forward500b.mail.yandex.net (Yandex) with ESMTP id 8E16F5F339;
+        Wed, 21 Jun 2023 18:24:18 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-77.iva.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id GOkJr54DRW20-lq8r0Yu5;
+        Wed, 21 Jun 2023 18:24:17 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687361058;
+        bh=PLIndlg4XuZXOQOaF0urOQKFPmTObBhkO0SlGRY1jJg=;
+        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
+        b=A6oczahYIKWko6YBLh5O9cSJ6eJVVdKAzNTwPj1UXfqOcPS6VePMgEbAuTbk1jFsX
+         uE4essZGeTI7DDZXeSGCrwklNxmVTw9tRDtPusAR8xj6ctcbp2WKAuCmvKkCcnk6/a
+         BJq5yFT9Kk8W6APRYb2H0dQU6aF7QqZfIAWFlE6w=
+Authentication-Results: mail-nwsmtp-smtp-production-main-77.iva.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+Message-ID: <e9c344c8-b5ee-c981-9d9b-fbfe703aa2f7@yandex.ru>
+Date:   Wed, 21 Jun 2023 20:24:16 +0500
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/3] fs/locks: F_UNLCK extension for F_OFD_GETLK
+Content-Language: en-US
+To:     Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org
+Cc:     Chuck Lever <chuck.lever@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org
+References: <20230620095507.2677463-1-stsp2@yandex.ru>
+ <20230620095507.2677463-2-stsp2@yandex.ru>
+ <c6d4e620cad72da5f85df03443a64747b5719939.camel@kernel.org>
+ <e7586b46-ff65-27ff-e829-c6009d7d4808@yandex.ru>
+ <e1a59fa3eb821e66cdc95fcecc68ef9f9434ddf5.camel@kernel.org>
+From:   stsp <stsp2@yandex.ru>
+In-Reply-To: <e1a59fa3eb821e66cdc95fcecc68ef9f9434ddf5.camel@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, dem 21.06.2023 um 22:44 +0800 schrieb Sui Jingfeng:
-> Hi,
-> 
-> On 2023/6/21 18:00, Lucas Stach wrote:
-> > > diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.h b/drivers/gpu/drm/etnaviv/etnaviv_drv.h
-> > > index 9cd72948cfad..644e5712c050 100644
-> > > --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.h
-> > > +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.h
-> > > @@ -46,6 +46,12 @@ struct etnaviv_drm_private {
-> > >   	struct xarray active_contexts;
-> > >   	u32 next_context_id;
-> > >   
-> > > +	/*
-> > > +	 * If true, the GPU is capable of snooping cpu cache. Here, it
-> > > +	 * also means that cache coherency is enforced by the hardware.
-> > > +	 */
-> > > +	bool dma_coherent;
-> > > +
-> > No need for this, I think. Just use dev_is_dma_coherent() where you
-> > need to know this.
-> > 
-> No, we want this value cached by the driver.
-> 
-Why? dev_is_dma_coherent() is a header-only function with a single
-pointer chasing operation. Your cache is also a single pointer chasing
-access, just that we now need storage for this information in both
-struct device and struct etnaviv_gpu.
 
-Regards,
-Lucas
-
-> We only need call  dev_is_dma_coherent() once!
-> 
-> We need to reuse this variable on other places.
-> 
-
+20.06.2023 16:15, Jeff Layton пишет:
+> These days, it's a good idea to go ahead and draft that up early. You'll
+> be surprised what sort of details you notice once you have to start
+> writing documentation. ;)
+>
+> You can post it as part of this set on the next posting and just mention
+> that it's a draft manpage patch. You should also include the linux-api
+> mailing list on the next posting so we get some feedback on the
+> interface itself.
+v2 is sent with the proposed man page
+update and a drop of an l_pid.
+Thanks.
