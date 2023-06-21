@@ -2,158 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B357738B84
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DCE1738B86
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbjFUQh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:37:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55732 "EHLO
+        id S230368AbjFUQhd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:37:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbjFUQhI (ORCPT
+        with ESMTP id S231642AbjFUQhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:37:08 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420231BE5
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:36:40 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f766777605so8207873e87.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:36:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687365398; x=1689957398;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=V91HdnJXsaX0PLi6by4eFkZCUR8xDSPcjyaQrOd751A=;
-        b=Qh8KOKMuCq9jCpN3+pxWOUMRcma+ssgtoHyQsuO6TGppIutQdKQu6tsrZRxm/5vD1j
-         c5xaA55jh45mfJ5Ksz1JaK4/3dP6phXPB8sSItILjcaHihwi+cbgYvO6WCYH8tzHw7ZP
-         ohu8GHmMt8XYMri7HmKtjUffBeq3kZG7MJm0IEL1a6wkVlih8wjaUY+kaK/jFJGIrhke
-         nygtNAD+r5R0TdDaCgbDGjJfuID1dRVioXrFeXzdHpHaDJUEreC8mSds6SgSkvhwDR0u
-         ECIO6eB8dgnf5h7LVAm43XGyoHIOznecKu4oEsGfU7gBRYeDzYXiyPKMP70orzvVIp3w
-         idng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687365398; x=1689957398;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V91HdnJXsaX0PLi6by4eFkZCUR8xDSPcjyaQrOd751A=;
-        b=mI2O9t3hhwht0nJqX9/szMiPSe1MUbgnrFGjkofK7vIk2Yddd8Ym+QftYlXul9lap9
-         S3cB/Lg8RiAWxxDBw8TrrqPzQ1g8psMVOGrejM1eBWAtRxAiNLn+Bj+QUbcNEbWkgosp
-         etvBnkgpkx+sbxfHepaNj84Mo5KjIOn4P61O6NYrrEUP1SnwnkzNJhWN2ZvYLL4+o4xA
-         UPQWAXX2Qgl16PA3bCE/Sdq6vkVe+xoKJtYuBlgkF0QAPD+9GCJYK7y6fbhrdnbYamgE
-         exlA0B/Rc0aYpnp1SZHis8tYWZDGVjBpOqoG+undmD+CMBgiloY/+xUv5BaVOlU8Z1yE
-         Usbg==
-X-Gm-Message-State: AC+VfDxSTc7PayLtdxKQf6r6mRU8rCxhmH7F8IGJXyWtD1UalGe+ijyh
-        1suiqNjiHKdso8UPLXMdaRbe4w==
-X-Google-Smtp-Source: ACHHUZ6dEDu85fL5mAUf/2mokFDGQqHGCVyQDKbdeNp2HIwGLClLZK2w/Hl7Mb+dn+n2XGKLgb19Tg==
-X-Received: by 2002:a19:5f18:0:b0:4f3:80a3:b40a with SMTP id t24-20020a195f18000000b004f380a3b40amr10226590lfb.69.1687365398317;
-        Wed, 21 Jun 2023 09:36:38 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id p2-20020a19f002000000b004f85885cff1sm813463lfc.134.2023.06.21.09.36.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 09:36:37 -0700 (PDT)
-Message-ID: <8dcd643f-9644-a4e7-a0d5-eefa28084a88@linaro.org>
-Date:   Wed, 21 Jun 2023 19:36:37 +0300
+        Wed, 21 Jun 2023 12:37:11 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF6E268B;
+        Wed, 21 Jun 2023 09:36:43 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 993121FF3A;
+        Wed, 21 Jun 2023 16:36:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1687365402; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/d4ziQZw6N7mHZLzmgH+OAesVEUu7JrV0F1FpHCOj/Y=;
+        b=rU19K/Y2/QE9QgbbEIeMWU9TBzjpZek0f4a0CG5e7wLxJwECVBKoPN64Q/245PInLsROTe
+        JHnVDP5mIRCFbt0N0rb39KBA125VrnyNgDvK/Apyq4ecbwZectVy6ipwXhawxQxRo5mp13
+        vR3bSpRx4wz8NUydR8/0lnmD7umJ4hg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1687365402;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/d4ziQZw6N7mHZLzmgH+OAesVEUu7JrV0F1FpHCOj/Y=;
+        b=Jzpmvodf0LrZ4TExuIW84tMI1D8erJv2Pv/8wD1TwCXFtDmtUpgJzA/OGBUdOLRRz+Gg/P
+        nrVl9xqEp7IP0IAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8BB5B133E6;
+        Wed, 21 Jun 2023 16:36:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ud0TIhonk2T5QwAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 21 Jun 2023 16:36:42 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 2BEEDA075D; Wed, 21 Jun 2023 18:36:42 +0200 (CEST)
+Date:   Wed, 21 Jun 2023 18:36:42 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 07/79] usb: switch to new ctime accessors
+Message-ID: <20230621163642.j6blmqfu7oqelzri@quack3>
+References: <20230621144507.55591-1-jlayton@kernel.org>
+ <20230621144735.55953-1-jlayton@kernel.org>
+ <20230621144735.55953-6-jlayton@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/3] drm/msm/dpu: Set DATABUS_WIDEN on command mode
- encoders
-Content-Language: en-GB
-To:     Marijn Suijten <marijn.suijten@somainline.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>
-Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230525-add-widebus-support-v1-0-c7069f2efca1@quicinc.com>
- <20230525-add-widebus-support-v1-2-c7069f2efca1@quicinc.com>
- <c74c9e0e-d059-f0e3-4350-03089c37131a@linaro.org>
- <cce68370-3fd9-4c9a-258e-af0d5d057fda@quicinc.com>
- <n2c5qlujxhbbj2aqlgj7fetzoteood5h4hmbwt4mapi77xlvmt@bpourzaideti>
- <81a5e241-ec82-7414-8752-4ce3cb084959@linaro.org>
- <f14f2c31-38c2-0600-3a29-17e83afececf@quicinc.com>
- <26tvhvqpxtxz5tqc6jbjixadpae34k7uc7fyec2u5o2ccj4tdq@tjvguzlolc3g>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <26tvhvqpxtxz5tqc6jbjixadpae34k7uc7fyec2u5o2ccj4tdq@tjvguzlolc3g>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621144735.55953-6-jlayton@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2023 18:17, Marijn Suijten wrote:
-> On 2023-06-20 14:38:34, Jessica Zhang wrote:
-> <snip>
->>>>>>> +    if (phys_enc->hw_intf->ops.enable_widebus)
->>>>>>> +        phys_enc->hw_intf->ops.enable_widebus(phys_enc->hw_intf);
->>>>>>
->>>>>> No. Please provide a single function which takes necessary
->>>>>> configuration, including compression and wide_bus_enable.
->>>>>>
->>>>>
->>>>> There are two ways to look at this. Your point is coming from the
->>>>> perspective that its programming the same register but just a different
->>>>> bit. But that will also make it a bit confusing.
->>>
->>> My point is to have a high-level function that configures the INTF for
->>> the CMD mode. This way it can take a structure with necessary
->>> configuration bits.
->>
->> Hi Dmitry,
->>
->> After discussing this approach with Abhinav, we still have a few
->> questions about it:
->>
->> Currently, only 3 of the 32 bits for INTF_CONFIG2 are being used (the
->> rest are reserved with no plans of being programmed in the future). Does
->> this still justify the use of a struct to pass in the necessary
->> configuration?
+On Wed 21-06-23 10:45:20, Jeff Layton wrote:
+> In later patches, we're going to change how the ctime.tv_nsec field is
+> utilized. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
 > 
-> No.  The point Dmitry is making is **not** about this concidentally
-> using the same register, but about adding a common codepath to enable
-> compression on this hw_intf (regardless of the registers it needs to
-> touch).
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-Actually to setup INTF for CMD stream (which is equal to setting up 
-compression at this point).
+Looks good to me. Feel free to add:
 
->  Similar to how dpu_hw_intf_setup_timing_engine() programs the
-> hw_intf - including widebus! - for video-mode.
-> 
-> Or even more generically, have a struct similar to intf_timing_params
-> that says how the intf needs to be configured - without the caller
-> knowing about INTF_CONFIG2.
-> 
-> struct dpu_hw_intf_cfg is a very good example of how we can use a single
-> struct and a single callback to configure multiple registers at once
-> based on some input parameters.
-> 
->> In addition, it seems that video mode does all its INTF_CONFIG2
->> configuration separately in dpu_hw_intf_setup_timing_engine(). If we
->> have a generic set_intf_config2() op, it might be good to have it as
->> part of a larger cleanup where we have both video and command mode use
->> the generic op. What are your thoughts on this?
-> 
-> Not in that way, but if there is a generic enable_compression() or
-> configure_compression() callback (or even more generic, similar to
-> setup_intf_cfg in dpu_hw_ctl) that would work for both video-mode and
-> command-mode, maybe that is beneficial.
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-I'd rather not do this. Let's just 'setup timing enging' vs 'setup CMD'. 
-For example, it might also include setting up other INTF parameters for 
-CMD mode (if anything is required later on).
+								Honza
 
+> ---
+>  drivers/usb/core/devio.c           | 16 ++++++++--------
+>  drivers/usb/gadget/function/f_fs.c |  6 +-----
+>  drivers/usb/gadget/legacy/inode.c  |  3 +--
+>  3 files changed, 10 insertions(+), 15 deletions(-)
 > 
-> - Marijn
-
+> diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
+> index 1a16a8bdea60..02f718e0deaf 100644
+> --- a/drivers/usb/core/devio.c
+> +++ b/drivers/usb/core/devio.c
+> @@ -2642,21 +2642,21 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
+>  		snoop(&dev->dev, "%s: CONTROL\n", __func__);
+>  		ret = proc_control(ps, p);
+>  		if (ret >= 0)
+> -			inode->i_mtime = inode->i_ctime = current_time(inode);
+> +			inode->i_mtime = inode_ctime_set_current(inode);
+>  		break;
+>  
+>  	case USBDEVFS_BULK:
+>  		snoop(&dev->dev, "%s: BULK\n", __func__);
+>  		ret = proc_bulk(ps, p);
+>  		if (ret >= 0)
+> -			inode->i_mtime = inode->i_ctime = current_time(inode);
+> +			inode->i_mtime = inode_ctime_set_current(inode);
+>  		break;
+>  
+>  	case USBDEVFS_RESETEP:
+>  		snoop(&dev->dev, "%s: RESETEP\n", __func__);
+>  		ret = proc_resetep(ps, p);
+>  		if (ret >= 0)
+> -			inode->i_mtime = inode->i_ctime = current_time(inode);
+> +			inode->i_mtime = inode_ctime_set_current(inode);
+>  		break;
+>  
+>  	case USBDEVFS_RESET:
+> @@ -2668,7 +2668,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
+>  		snoop(&dev->dev, "%s: CLEAR_HALT\n", __func__);
+>  		ret = proc_clearhalt(ps, p);
+>  		if (ret >= 0)
+> -			inode->i_mtime = inode->i_ctime = current_time(inode);
+> +			inode->i_mtime = inode_ctime_set_current(inode);
+>  		break;
+>  
+>  	case USBDEVFS_GETDRIVER:
+> @@ -2695,7 +2695,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
+>  		snoop(&dev->dev, "%s: SUBMITURB\n", __func__);
+>  		ret = proc_submiturb(ps, p);
+>  		if (ret >= 0)
+> -			inode->i_mtime = inode->i_ctime = current_time(inode);
+> +			inode->i_mtime = inode_ctime_set_current(inode);
+>  		break;
+>  
+>  #ifdef CONFIG_COMPAT
+> @@ -2703,14 +2703,14 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
+>  		snoop(&dev->dev, "%s: CONTROL32\n", __func__);
+>  		ret = proc_control_compat(ps, p);
+>  		if (ret >= 0)
+> -			inode->i_mtime = inode->i_ctime = current_time(inode);
+> +			inode->i_mtime = inode_ctime_set_current(inode);
+>  		break;
+>  
+>  	case USBDEVFS_BULK32:
+>  		snoop(&dev->dev, "%s: BULK32\n", __func__);
+>  		ret = proc_bulk_compat(ps, p);
+>  		if (ret >= 0)
+> -			inode->i_mtime = inode->i_ctime = current_time(inode);
+> +			inode->i_mtime = inode_ctime_set_current(inode);
+>  		break;
+>  
+>  	case USBDEVFS_DISCSIGNAL32:
+> @@ -2722,7 +2722,7 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
+>  		snoop(&dev->dev, "%s: SUBMITURB32\n", __func__);
+>  		ret = proc_submiturb_compat(ps, p);
+>  		if (ret >= 0)
+> -			inode->i_mtime = inode->i_ctime = current_time(inode);
+> +			inode->i_mtime = inode_ctime_set_current(inode);
+>  		break;
+>  
+>  	case USBDEVFS_IOCTL32:
+> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+> index f41a385a5c42..756c78043a04 100644
+> --- a/drivers/usb/gadget/function/f_fs.c
+> +++ b/drivers/usb/gadget/function/f_fs.c
+> @@ -1377,16 +1377,12 @@ ffs_sb_make_inode(struct super_block *sb, void *data,
+>  	inode = new_inode(sb);
+>  
+>  	if (inode) {
+> -		struct timespec64 ts = current_time(inode);
+> -
+>  		inode->i_ino	 = get_next_ino();
+>  		inode->i_mode    = perms->mode;
+>  		inode->i_uid     = perms->uid;
+>  		inode->i_gid     = perms->gid;
+> -		inode->i_atime   = ts;
+> -		inode->i_mtime   = ts;
+> -		inode->i_ctime   = ts;
+>  		inode->i_private = data;
+> +		inode->i_atime   = inode->i_mtime = inode_ctime_set_current(inode);
+>  		if (fops)
+>  			inode->i_fop = fops;
+>  		if (iops)
+> diff --git a/drivers/usb/gadget/legacy/inode.c b/drivers/usb/gadget/legacy/inode.c
+> index 28249d0bf062..b83a68feb316 100644
+> --- a/drivers/usb/gadget/legacy/inode.c
+> +++ b/drivers/usb/gadget/legacy/inode.c
+> @@ -1969,8 +1969,7 @@ gadgetfs_make_inode (struct super_block *sb,
+>  		inode->i_mode = mode;
+>  		inode->i_uid = make_kuid(&init_user_ns, default_uid);
+>  		inode->i_gid = make_kgid(&init_user_ns, default_gid);
+> -		inode->i_atime = inode->i_mtime = inode->i_ctime
+> -				= current_time(inode);
+> +		inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
+>  		inode->i_private = data;
+>  		inode->i_fop = fops;
+>  	}
+> -- 
+> 2.41.0
+> 
 -- 
-With best wishes
-Dmitry
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
