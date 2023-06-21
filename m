@@ -2,241 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 545077380B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0177381F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbjFUKYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 06:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
+        id S229758AbjFUKZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 06:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231883AbjFUKYK (ORCPT
+        with ESMTP id S231874AbjFUKZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 06:24:10 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448761713
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 03:23:59 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2b45e6e1b73so73110381fa.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 03:23:59 -0700 (PDT)
+        Wed, 21 Jun 2023 06:25:33 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940431A8;
+        Wed, 21 Jun 2023 03:25:31 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-989d03eae11so125662066b.2;
+        Wed, 21 Jun 2023 03:25:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687343037; x=1689935037;
+        d=gmail.com; s=20221208; t=1687343130; x=1689935130;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qIP/RgUHzsZiGVBRB71b7glXbG7VXiyuTjWvBX5krQg=;
-        b=S/CdoZua/1rLl8yRwjaUF9IfJ2JcWeppWIYsAe/kEWbp+VzSobUM4iS9eeLWZHt5FO
-         j/+mECwtEut66NCJpjuzLpLobjA7fzCyDUwpVOGTHl1cVmF3qTtFzfRaBX7G+Tegl8Tm
-         87Q/OZiSy1hpcxgY+MGptzKzvpXBNnTUuiwawnXX2OiPypV+k03lx7aTLBlVlmFPyOCK
-         oOwW0/iZyWnJ4lfaT24bKv+GYWW44GzHrflM4FjMvA3v2Bo8q5EMHhya2b4FnBXvqkic
-         qrcQPaiA4BdDNTsbHtCocDQbJDuuggPiCViWJpmfQFFiYemQpuO3YqlziZ0eyW6vOYiK
-         i8ZA==
+        bh=YR+wlgHevwg5FuwHcUU1d3cnI2XtiA2vJqFj5alzsro=;
+        b=sIQKXgeTqXp98Ny5rPWI0fIMQduVne5oVOC7LR2pcNyp4doH0500kIgdG81SbCKDTj
+         vqYLLR6VC37TQT+70txmmLWiUqtr0cOo5l6PlqAv6veCmTjwJSCo6PH43dS8kHrmLEhm
+         6KgSczL/RBUqx8ii3+MFH17C9VLCIDTbxCyiQ5BMhJzBAOgPAai1CaCXqUb5EVe5LSzx
+         1d6EDrLw1+OCTrCDBBtfyvbFz57M1nQvTYXwhC3gsiDZHppon/h1dyrKngW0mNxC20Kz
+         EhpdPnPmPBTV1BLbXaNaH6Ib6pC21XYKrHpVapcO4DCHYzFHp9uN5+mxzSOdCoU5PBWG
+         59hQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687343037; x=1689935037;
+        d=1e100.net; s=20221208; t=1687343130; x=1689935130;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qIP/RgUHzsZiGVBRB71b7glXbG7VXiyuTjWvBX5krQg=;
-        b=Vi/QIdLABTBNNTaocX5GNb5J+NV7kMluc9jheOtRM91LaSBM+/+7XQWDUWS32CK9a0
-         ipnrbG3do1xQQjyqQg6nt7LyEJuHe6x4iZePqGfkxS0CwLn+Wtz7YPQQPBzPddybAFuR
-         jI1vGFNwRABvbRlaY1GJzd3pewo5l77AL/whn1+XM38m011BMwT+vRg0KySEkbChwhIL
-         fzgY6RbUMd98eeQ8G80xl8VOf2VomsxN8jCzxRSCpEm8GJLSVzZ1Zmt1oCNV8S9P4T1Q
-         98cYNTgQVNgQF5+zL0AmcAVSAjRrOtKFuYkyf1raB9Kn+2eVCHYUo/MZPezcYBFXEB/7
-         ELug==
-X-Gm-Message-State: AC+VfDzVh0OSoL6ur07VnkuL25mJI+mCGTzYu11aCAQCoBcruqSQq84x
-        c1n9mEjEdUzo98I0kzipKJP9jA==
-X-Google-Smtp-Source: ACHHUZ47T18xkAbbJT1Ek0oO9Y+tEkoagA5plZsIhQf/ly6xrGEeqlbNRj/M5efxydPdN9Sgu8PD7g==
-X-Received: by 2002:a2e:94c1:0:b0:2b3:4621:b6e3 with SMTP id r1-20020a2e94c1000000b002b34621b6e3mr9804142ljh.34.1687343037327;
-        Wed, 21 Jun 2023 03:23:57 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id d2-20020adff842000000b00312793cc763sm4142979wrq.15.2023.06.21.03.23.54
+        bh=YR+wlgHevwg5FuwHcUU1d3cnI2XtiA2vJqFj5alzsro=;
+        b=ZtjvmH5+HSb4Fi0hQB0gbVfJEStvuBshMtlpLo9OxaKqjr8KZgyBdQpwxP9LPBcUQ3
+         KLDR1oT2YmFSE4V6rIlv/6xiZvHWWs404Y80+M4Aynm77mioqU9CpFzfk9bSTwAw+T9G
+         YGMMT5sOX8cze7rHTJJcw1Y8Uw53+eCdjqsG30GkmQU5J3oZpfCENBDymS4VWF5PhIfF
+         ajDIFWp0lGhnDv43l8V2RgveEiCeP3VyZVuDKrW4tA95IDWrYvVwcqw/efnQ2Vu72jWu
+         H+tFxxv9KK1vj/YHM5CrLyd3v9KCKn+1pF7DP1LSKUw/Owh6jkbu1Y6Yy2W8VGX50UEd
+         Z6ew==
+X-Gm-Message-State: AC+VfDw28r2AqhbcI7QDbDK1DJT9SDgWSKAqkY6ugeQHAYewcch0bmHz
+        ynUyxZ2CB0U2kxCeLYWu8hQ=
+X-Google-Smtp-Source: ACHHUZ6gLQ4j36V00vXy9eoVTLuvf0cUol0Ih8iJBMNyK3qmGdS8FTrtOZRwCCMVwX/JD17KQ+0xzQ==
+X-Received: by 2002:a17:907:e86:b0:988:9b29:564a with SMTP id ho6-20020a1709070e8600b009889b29564amr8060764ejc.68.1687343129750;
+        Wed, 21 Jun 2023 03:25:29 -0700 (PDT)
+Received: from skbuf ([188.25.159.134])
+        by smtp.gmail.com with ESMTPSA id q9-20020a1709066b0900b009829fcb94fesm2903845ejr.37.2023.06.21.03.25.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 03:23:55 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 13:23:52 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Joel Granados <j.granados@samsung.com>
-Cc:     mcgrof@kernel.org, Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
+        Wed, 21 Jun 2023 03:25:29 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 13:25:27 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Christian Marangi <ansuelsmth@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Joerg Reuter <jreuter@yaina.de>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Mat Martineau <martineau@kernel.org>,
-        Simon Horman <horms@verge.net.au>,
-        Julian Anastasov <ja@ssi.bg>,
-        Remi Denis-Courmont <courmisch@gmail.com>,
-        Santosh Shilimkar <santosh.shilimkar@oracle.com>,
-        David Howells <dhowells@redhat.com>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>,
-        Jan Karcher <jaka@linux.ibm.com>,
-        Jon Maloy <jmaloy@redhat.com>,
-        Ying Xue <ying.xue@windriver.com>,
-        Martin Schiller <ms@dev.tdt.de>, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-hams@vger.kernel.org, netfilter-devel@vger.kernel.org,
-        coreteam@netfilter.org, bridge@lists.linux-foundation.org,
-        dccp@vger.kernel.org, linux-wpan@vger.kernel.org,
-        mptcp@lists.linux.dev, lvs-devel@vger.kernel.org,
-        rds-devel@oss.oracle.com, linux-afs@lists.infradead.org,
-        linux-sctp@vger.kernel.org, linux-s390@vger.kernel.org,
-        tipc-discussion@lists.sourceforge.net, linux-x25@vger.kernel.org
-Subject: Re: [PATCH 06/11] sysctl: Add size to register_net_sysctl function
-Message-ID: <5aba7eee-7a6e-4f3b-9921-e4220d479346@kadam.mountain>
-References: <20230621091000.424843-1-j.granados@samsung.com>
- <CGME20230621091022eucas1p1c097da50842b23e902e1a674e117e1aa@eucas1p1.samsung.com>
- <20230621091000.424843-7-j.granados@samsung.com>
- <dab06c20-f8b0-4e34-b885-f3537e442d54@kadam.mountain>
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [net-next PATCH] net: dsa: qca8k: add support for
+ port_change_master
+Message-ID: <20230621102527.f47kmwminkhe7ttt@skbuf>
+References: <20230620063747.19175-1-ansuelsmth@gmail.com>
+ <20230620063747.19175-1-ansuelsmth@gmail.com>
+ <20230620201227.7sdb3zmwutwtmt2e@skbuf>
+ <64921dee.df0a0220.f64e1.72c7@mx.google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <dab06c20-f8b0-4e34-b885-f3537e442d54@kadam.mountain>
+In-Reply-To: <64921dee.df0a0220.f64e1.72c7@mx.google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 12:47:30PM +0300, Dan Carpenter wrote:
-> The patchset doesn't include the actual interesting changes, just a
-> bunch of mechanical prep work.
+On Tue, Jun 20, 2023 at 03:04:28PM +0200, Christian Marangi wrote:
+> > > +			if (dsa_port_is_cpu(dp))
+> > > +				cpu_port_mask |= BIT(dp->index);
+> > > +	} else {
+> > > +		dp = dsa_port_from_netdev(master);
+> > 
+> > dsa_port_from_netdev() is implemented by calling:
+> > 
+> > static inline struct dsa_port *dsa_slave_to_port(const struct net_device *dev)
+> > {
+> > 	struct dsa_slave_priv *p = netdev_priv(dev);
+> > 
+> > 	return p->dp;
+> > }
+> > 
+> > The "struct net_device *master" does not have a netdev_priv() of the
+> > type "struct dsa_slave_priv *". So, this function does not do what you
+> > want, but instead it messes through the guts of an unrelated private
+> > structure, treating whatever it finds at offset 16 as a pointer, and
+> > dereferincing that as a struct dsa_port *. I'm surprised it didn't
+> > crash, to be frank.
+> > 
+> > To find the cpu_dp behind the master, you need to dereference
+> > master->dsa_ptr (for which we don't have a helper).
+> > 
 > 
-> On Wed, Jun 21, 2023 at 11:09:55AM +0200, Joel Granados wrote:
-> > diff --git a/net/ieee802154/6lowpan/reassembly.c b/net/ieee802154/6lowpan/reassembly.c
-> > index a91283d1e5bf..7b717434368c 100644
-> > --- a/net/ieee802154/6lowpan/reassembly.c
-> > +++ b/net/ieee802154/6lowpan/reassembly.c
-> > @@ -379,7 +379,8 @@ static int __net_init lowpan_frags_ns_sysctl_register(struct net *net)
-> >  	table[1].extra2	= &ieee802154_lowpan->fqdir->high_thresh;
-> >  	table[2].data	= &ieee802154_lowpan->fqdir->timeout;
-> >  
-> > -	hdr = register_net_sysctl(net, "net/ieee802154/6lowpan", table);
-> > +	hdr = register_net_sysctl(net, "net/ieee802154/6lowpan", table,
-> > +				  ARRAY_SIZE(lowpan_frags_ns_ctl_table));
+> I was searching for an helper but no luck. Is it safe to access
+> master->dsa_ptr? In theory the caller of port_change_master should
+> already check that the passed master is a dsa port?
+
+*that the passed network interface is a master - netdev_uses_dsa()
+
+What is attached to the DSA master through dev->dsa_ptr is the CPU port.
+
+what makes a net_device be a DSA master is dsa_master_setup(), and what
+makes it stop being that is dsa_master_teardown(). Both are called under
+rtnl_lock(), so as long as you are in a calling context where that lock
+is held, you can be sure that the value of netdev_uses_dsa() does not
+change for a device - and thus the value of dev->dsa_ptr.
+
+> I see in other context that master->dsa_ptr is checked if not NULL.
+> Should I do the same check here?
+
+Nope. DSA takes care of passing a fully set up DSA master as the
+"master" argument, and the calling convention is that rtnl_lock() is held.
+
+> > > +	/* Assign the new CPU port in LOOKUP MEMBER */
+> > > +	val |= cpu_port_mask;
+> > > +
+> > > +	ret = qca8k_rmw(priv, QCA8K_PORT_LOOKUP_CTRL(port),
+> > > +			QCA8K_PORT_LOOKUP_MEMBER,
+> > > +			val);
+> > > +	if (ret)
+> > > +		return ret;
+> > > +
+> > > +	/* Fast Age the port to flush FDB table */
+> > > +	qca8k_port_fast_age(ds, port);
+> > 
+> > Why do you have to fast age the (user) port?
+> > 
 > 
-> For example, in lowpan_frags_ns_sysctl_register() the sentinel is
-> sometimes element zero if the user doesn't have enough permissions.  I
-> would want to ensure that was handled correctly, but that's going to be
-> done later in a completely different patchset.  I'm definitely not going
-> to remember to check.
+> The 2 CPU port have a different mac address, is it a problem?
 
-On reflecting the patch is obviously wrong.  It should be pass zero as
-table_size in that case.  See diff at the end.
+But fast ageing the user port (which is what "port" is, here) gets rid
+of the FDB entries learned on that port as part of the bridging service,
+and which have it as a *destination*. So I'm not sure how that operation
+would help. The MAC address of the DSA masters, if learned at all, would
+not point towards any user port but towards CPU ports.
 
-There is a similar bug in neigh_sysctl_register() where we use memset to
-zero out the whole table.  And another in __ip_vs_lblc_init().  I used
-the smatch cross function database
-	`smdb.py where ctl_table procname | grep '(null)' | grep min-max`
-to make a list of functions which set procname to zero.
+FWIW, dsa_port_change_master() takes care of migrating/replaying a lot of
+configuration, including the MAC addresses for local address filtering -
+dsa_slave_unsync_ha() and dsa_slave_sync_ha().
 
-Probably we should add a WARN_ON() if procname is zero in the new code
-which doesn't use sentinels.
+That being said, those 2 functions are dead code for your switch,
+because dsa_switch_supports_uc_filtering() and dsa_switch_supports_mc_filtering()
+both return false.
 
-regards,
-dan carpenter
+It would be good to hear from you how do you plan the qca8k driver to
+send and receive packets. From looking at the code (learning on the CPU
+port isn't enabled), I guess that the MAC addresses of the ports are
+never programmed in the FDB and thus, they reach the CPU by flooding,
+with the usual drawbacks that come with that - packets destined for
+local termination will also be flooded to other stations in the bridging
+domain. Getting rid of the reliance on flooding will have its own
+challenges. You can't enable automatic address learning [ on the CPU
+ports ] with multiple active CPU ports, because one FDB entry could ping
+pong from one CPU port to the other, leading to packet loss from certain
+user ports when the FDB entry points to the CPU port that isn't affine
+to the inbound port. So you'd probably need to program some sort of
+"multicast" FDB entries that target all CPU ports, and rely on the
+PORT_VID_MEMBER field to restrict forwarding to only one of those CPU
+ports at a time.
 
-drivers/char/random.c          | proc_do_uuid                   | (struct ctl_table)->procname | 0
-fs/proc/proc_sysctl.c          | new_dir                        | (struct ctl_table)->procname | 48,3906148897379000352
-fs/proc/proc_sysctl.c          | new_links                      | (struct ctl_table)->procname | 4096-ptr_max
-arch/arm64/kernel/fpsimd.c     | vec_proc_do_default_vl         | (struct ctl_table)->procname | 0
-arch/arm64/kernel/armv8_deprecated.c | register_insn_emulation        | (struct ctl_table)->procname | 0-u64max
-kernel/sysctl-test.c           | sysctl_test_api_dointvec_null_tbl_data | (struct ctl_table)->procname | 7612622206476333056
-kernel/sysctl-test.c           | sysctl_test_api_dointvec_table_maxlen_unset | (struct ctl_table)->procname | 7612622206476333056
-kernel/sysctl-test.c           | sysctl_test_api_dointvec_table_len_is_zero | (struct ctl_table)->procname | 7612622206476333056
-kernel/sysctl-test.c           | sysctl_test_api_dointvec_table_read_but_position_set | (struct ctl_table)->procname | 7612622206476333056
-kernel/sysctl-test.c           | sysctl_test_dointvec_read_happy_single_positive | (struct ctl_table)->procname | 7612622206476333056
-kernel/sysctl-test.c           | sysctl_test_dointvec_read_happy_single_negative | (struct ctl_table)->procname | 7612622206476333056
-kernel/sysctl-test.c           | sysctl_test_dointvec_write_happy_single_positive | (struct ctl_table)->procname | 7612622206476333056
-kernel/sysctl-test.c           | sysctl_test_dointvec_write_happy_single_negative | (struct ctl_table)->procname | 7612622206476333056
-kernel/sysctl-test.c           | sysctl_test_api_dointvec_write_single_less_int_min | (struct ctl_table)->procname | 7612622206476333056
-kernel/sysctl-test.c           | sysctl_test_api_dointvec_write_single_greater_int_max | (struct ctl_table)->procname | 7612622206476333056
-kernel/sysctl.c                | proc_do_static_key             | (struct ctl_table)->procname | 0
-kernel/kexec_core.c            | kexec_limit_handler            | (struct ctl_table)->procname | 0
-kernel/bpf/syscall.c           | bpf_stats_handler              | (struct ctl_table)->procname | 0
-net/core/sysctl_net_core.c     | rps_sock_flow_sysctl           | (struct ctl_table)->procname | 0
-net/core/sysctl_net_core.c     | set_default_qdisc              | (struct ctl_table)->procname | 0
-net/core/neighbour.c           | neigh_sysctl_register          | (struct ctl_table)->procname | 0
-net/netfilter/ipvs/ip_vs_lblc.c | __ip_vs_lblc_init              | (struct ctl_table)->procname | 0-u64max
-net/netfilter/ipvs/ip_vs_lblcr.c | __ip_vs_lblcr_init             | (struct ctl_table)->procname | 0-u64max
-net/netfilter/ipvs/ip_vs_ctl.c | proc_do_defense_mode           | (struct ctl_table)->procname | 0
-net/netfilter/ipvs/ip_vs_ctl.c | proc_do_sync_threshold         | (struct ctl_table)->procname | 0
-net/netfilter/ipvs/ip_vs_ctl.c | proc_do_sync_ports             | (struct ctl_table)->procname | 0
-net/netfilter/ipvs/ip_vs_ctl.c | ipvs_proc_est_nice             | (struct ctl_table)->procname | 0
-net/netfilter/ipvs/ip_vs_ctl.c | ipvs_proc_run_estimation       | (struct ctl_table)->procname | 0
-net/netfilter/ipvs/ip_vs_ctl.c | ip_vs_control_net_init_sysctl  | (struct ctl_table)->procname | 0-u64max
-net/netfilter/nf_log.c         | netfilter_log_sysctl_init      | (struct ctl_table)->procname | 0-u64max
-net/sctp/sysctl.c              | proc_sctp_do_hmac_alg          | (struct ctl_table)->procname | 0
-net/sctp/sysctl.c              | proc_sctp_do_rto_min           | (struct ctl_table)->procname | 0
-net/sctp/sysctl.c              | proc_sctp_do_rto_max           | (struct ctl_table)->procname | 0
-net/sctp/sysctl.c              | proc_sctp_do_auth              | (struct ctl_table)->procname | 0
-net/sctp/sysctl.c              | proc_sctp_do_udp_port          | (struct ctl_table)->procname | 0
-net/sctp/sysctl.c              | proc_sctp_do_probe_interval    | (struct ctl_table)->procname | 0
-net/ipv6/route.c               | ipv6_route_sysctl_init         | (struct ctl_table)->procname | 0-u64max
-net/ipv6/addrconf.c            | addrconf_sysctl_addr_gen_mode  | (struct ctl_table)->procname | 0
-net/ieee802154/6lowpan/reassembly.c | lowpan_frags_ns_sysctl_register | (struct ctl_table)->procname | 0-u64max
-net/xfrm/xfrm_sysctl.c         | xfrm_sysctl_init               | (struct ctl_table)->procname | 0-u64max
-net/phonet/sysctl.c            | proc_local_port_range          | (struct ctl_table)->procname | 0
-net/ipv4/route.c               | sysctl_route_net_init          | (struct ctl_table)->procname | 0-u64max
-net/ipv4/sysctl_net_ipv4.c     | ipv4_local_port_range          | (struct ctl_table)->procname | 0
-net/ipv4/sysctl_net_ipv4.c     | ipv4_privileged_ports          | (struct ctl_table)->procname | 0
-net/ipv4/sysctl_net_ipv4.c     | ipv4_ping_group_range          | (struct ctl_table)->procname | 0
-net/ipv4/sysctl_net_ipv4.c     | proc_tcp_congestion_control    | (struct ctl_table)->procname | 0
-net/ipv4/sysctl_net_ipv4.c     | proc_tcp_available_congestion_control | (struct ctl_table)->procname | 0
-net/ipv4/sysctl_net_ipv4.c     | proc_allowed_congestion_control | (struct ctl_table)->procname | 0
-net/ipv4/sysctl_net_ipv4.c     | proc_tcp_fastopen_key          | (struct ctl_table)->procname | 0
-net/ipv4/sysctl_net_ipv4.c     | proc_tcp_available_ulp         | (struct ctl_table)->procname | 0
-net/ipv4/sysctl_net_ipv4.c     | proc_tcp_ehash_entries         | (struct ctl_table)->procname | 0
-net/ipv4/sysctl_net_ipv4.c     | proc_udp_hash_entries          | (struct ctl_table)->procname | 0
+> > > +
+> > > +	/* Reenable port */
+> > > +	qca8k_port_set_status(priv, port, 1);
+> > 
+> > or disable/enable it, for that matter?
+> > 
+> 
+> The idea is sto stop any traffic flowing to one CPU to another before
+> doing the change.
 
-diff --git a/net/ieee802154/6lowpan/reassembly.c b/net/ieee802154/6lowpan/reassembly.c
-index a91283d1e5bf..749238d38014 100644
---- a/net/ieee802154/6lowpan/reassembly.c
-+++ b/net/ieee802154/6lowpan/reassembly.c
-@@ -360,6 +360,7 @@ static int __net_init lowpan_frags_ns_sysctl_register(struct net *net)
- 	struct ctl_table_header *hdr;
- 	struct netns_ieee802154_lowpan *ieee802154_lowpan =
- 		net_ieee802154_lowpan(net);
-+	size_t table_size = ARRAY_SIZE(lowpan_frags_ns_ctl_table);
- 
- 	table = lowpan_frags_ns_ctl_table;
- 	if (!net_eq(net, &init_net)) {
-@@ -369,8 +370,10 @@ static int __net_init lowpan_frags_ns_sysctl_register(struct net *net)
- 			goto err_alloc;
- 
- 		/* Don't export sysctls to unprivileged users */
--		if (net->user_ns != &init_user_ns)
-+		if (net->user_ns != &init_user_ns) {
- 			table[0].procname = NULL;
-+			table_size = 0;
-+		}
- 	}
- 
- 	table[0].data	= &ieee802154_lowpan->fqdir->high_thresh;
-@@ -379,7 +382,7 @@ static int __net_init lowpan_frags_ns_sysctl_register(struct net *net)
- 	table[1].extra2	= &ieee802154_lowpan->fqdir->high_thresh;
- 	table[2].data	= &ieee802154_lowpan->fqdir->timeout;
- 
--	hdr = register_net_sysctl(net, "net/ieee802154/6lowpan", table);
-+	hdr = register_net_sysctl(net, "net/ieee802154/6lowpan", table, table_size);
- 	if (hdr == NULL)
- 		goto err_reg;
- 
+Both DSA masters are prepared to handle traffic when port_change_master()
+is called, so unless there's some limitation in the qca8k driver, there
+shouldn't be any in DSA.
+
+> > From my notes in commit eca70102cfb1 ("net: dsa: felix: add support for
+> > changing DSA master"), I recall this:
+> > 
+> >     When we change the DSA master to a LAG device, DSA guarantees us that
+> >     the LAG has at least one lower interface as a physical DSA master.
+> >     But DSA masters can come and go as lowers of that LAG, and
+> >     ds->ops->port_change_master() will not get called, because the DSA
+> >     master is still the same (the LAG). So we need to hook into the
+> >     ds->ops->port_lag_{join,leave} calls on the CPU ports and update the
+> >     logical port ID of the LAG that user ports are assigned to.
+> > 
+> > Otherwise said:
+> > 
+> > $ ip link add bond0 type bond mode balance-xor && ip link set bond0 up
+> > $ ip link set eth0 down && ip link set eth0 master bond0 # .port_change_master() gets called
+> > $ ip link set eth1 down && ip link set eth1 master bond0 # .port_change_master() does not get called
+> > $ ip link set eth0 nomaster # .port_change_master() does not get called
+> > 
+> > Unless something has changed, I believe that you need to handle these as well,
+> > and update the QCA8K_PORT_LOOKUP_MEMBER field. In the case above, your
+> > CPU port association would remain towards eth0, but the bond's lower interface
+> > is eth1.
+> > 
+> 
+> Can you better describe this case?
+> 
+> In theory from the switch view, with a LAG we just set that an user port
+> can receive packet from both CPU port.
+> 
+> Or you are saying that when an additional memeber is added to the LAG,
+> port_change_master is not called and we could face a scenario where:
+> 
+> - dsa master is LAG
+> - LAG have the 2 CPU port
+> - user port have LAG as master but QCA8K_PORT_LOOKUP_MEMBER with only
+>   one CPU?
+> 
+> If I got this right, then I get what you mean with the fact that I
+> should update the lag_join/leave definition and refresh each
+> configuration.
+
+In Documentation/networking/dsa/configuration.rst I gave 2 examples of
+changing the DSA master to be a LAG.
+
+In the list of 4 commands I posted in the previous reply, I assumed that
+eth0 is the original DSA master, and eth1 is the second (initially inactive)
+DSA master.
+
+When eth0 joins a LAG, DSA notices that and implicitly migrates all user
+ports affine to eth0 towards bond0 as the new DSA master. At that time,
+.port_change_master() will be called for all user ports under eth0, to
+be notified that the new DSA master is bond0.
+
+Once all user ports have bond0 as a DSA master, .port_change_master()
+will no longer be called as long as bond0 remains their DSA master.
+But the lower port configuration of bond0 can still change.
+
+During the command where eth1 also becomes a lower port of bond0, DSA
+just calls .port_lag_join() for the CPU port attached to eth1, and you
+need to handle that and update the CPU port mask. Same thing when eth0
+leaves bond0.
