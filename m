@@ -2,114 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957677385CA
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1794F7385CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:56:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbjFUNzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46922 "EHLO
+        id S231739AbjFUN4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231807AbjFUNzu (ORCPT
+        with ESMTP id S229726AbjFUN4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:55:50 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AAD3199E
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:55:46 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f9bece8e19so8464205e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:55:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1687355744; x=1689947744;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TGiINbu7foWgaD89gaNM9RV3a9vEUoSjU+97idyE2Co=;
-        b=G5MLNwrMO/ygECl2UrKnTU4hYZAPfCguFUUBoqVRG3tRN7Vb04To5n0wDzGBF6f9uu
-         SrAyU1MPLRIzDsEAZZzVc3u9m29IKIkNND81q1leCLtwqeXIqNaoqKGegINEEVVhbawA
-         lExWWKmCn1a/dyqWCjd/GKB31g6qHiPLXntc6CxZGa0j3MtIG9oO/SDZMLwTiUdNZw9w
-         mEuKhbpeXSqFRWSbmSWMxJ2wNF63e7yMjAtS8xw4UircxJRfc2yFhtDsx9nR76005mya
-         rFBm0l+tgvZwCeuNJklbDwxyzx8/AjGTKlDRwZY325eNt4a324SQDVm8GJNdTefEaaAw
-         eoUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687355744; x=1689947744;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TGiINbu7foWgaD89gaNM9RV3a9vEUoSjU+97idyE2Co=;
-        b=eKbu/0a648+oA7zlDTQSMhD0v0jKJ/WLN3f0QTDtiFeh0FonADLfg1dnNOwEeb7hDd
-         WMvv29oYMMd1y+Us3reE/fKGCzE+QjUNy7Nxz+bgggRih6u5kEjohBXKN/79GslASAED
-         G2NRC5A+O++TDxr3JHlx4y14LNZlqdeaydHZzCiWiqqmDi5BGKCvhaapABDXPECBMEwH
-         IwKZj3DVWedCoZtsPvpC3Ekaq4v9VTgAxMSW7U86KpLT13kRaCrDf6+f45kcdcLQQ3ki
-         akRBLME5/4qr0EV7Ez4NE8EKpeBSrWE1wDm+4D5T8OLvnQFGh1TMJlhcfPAEWJlKiwqz
-         pKGg==
-X-Gm-Message-State: AC+VfDx4B7Vs04EjXqVeBmwe3Ws+B5oj87g1joK3qLxCFWc4dTx+Zd0B
-        slREXtGa1K3e16+1fQau2qqY1w==
-X-Google-Smtp-Source: ACHHUZ6lpAkKw4lUE1mi/nl5WQy66Jmf4UjvJOEHqcX5UnW2U7zvUnOOSSgljBc/dyx9VV5dVySgcw==
-X-Received: by 2002:a05:600c:22c6:b0:3f9:b244:c294 with SMTP id 6-20020a05600c22c600b003f9b244c294mr8259781wmg.35.1687355744011;
-        Wed, 21 Jun 2023 06:55:44 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:a69f:8ee3:6907:ccdf])
-        by smtp.gmail.com with ESMTPSA id y7-20020a1c4b07000000b003f17848673fsm5069294wma.27.2023.06.21.06.55.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 06:55:43 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Junxiao Chang <junxiao.chang@intel.com>
-Cc:     netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH net] net: stmmac: fix double serdes powerdown
-Date:   Wed, 21 Jun 2023 15:55:37 +0200
-Message-Id: <20230621135537.376649-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.39.2
+        Wed, 21 Jun 2023 09:56:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582D5199D
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:56:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687355763;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7y9KT9PySXHthutNF44xmw8PTiv1Tz4Z5j5n+ktDan8=;
+        b=LtkKl3OySrYIbjRi9BNeeuV9RQf2IrDWcZ1UhX0gQJLbI6oHfD7A5F65w+ukgiCPwjI9vK
+        EwewiKsMD3zHajNGIin9YcV//h6CW1SPkRxImQGtQLc5YSyJ7dulmhC0VEygObnxPpdjWh
+        4jjMB5+oc3EkccBFy00rkuzfuJXagEs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-103-U3catim0OvG360Z-jaGMYg-1; Wed, 21 Jun 2023 09:56:01 -0400
+X-MC-Unique: U3catim0OvG360Z-jaGMYg-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E914D858290;
+        Wed, 21 Jun 2023 13:55:59 +0000 (UTC)
+Received: from localhost (ovpn-12-166.pek2.redhat.com [10.72.12.166])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id AF9512166B32;
+        Wed, 21 Jun 2023 13:55:58 +0000 (UTC)
+Date:   Wed, 21 Jun 2023 21:55:55 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Alexander Gordeev <agordeev@linux.ibm.com>
+Cc:     kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
+        oe-kbuild-all@lists.linux.dev, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, arnd@arndb.de, hch@lst.de,
+        christophe.leroy@csgroup.eu, rppt@kernel.org, willy@infradead.org,
+        wangkefeng.wang@huawei.com, schnelle@linux.ibm.com,
+        David.Laight@aculab.com, shorne@gmail.com, deller@gmx.de,
+        nathan@kernel.org, glaubitz@physik.fu-berlin.de,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v7 10/19] s390: mm: Convert to GENERIC_IOREMAP
+Message-ID: <ZJMBa76Yx3ITgMYH@MiWiFi-R3L-srv>
+References: <20230620131356.25440-11-bhe@redhat.com>
+ <202306211329.ticOJCSv-lkp@intel.com>
+ <ZJLTxUOCEMh6l/El@MiWiFi-R3L-srv>
+ <ZJLVB3CtS+3TodSp@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJLVB3CtS+3TodSp@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 06/21/23 at 12:46pm, Alexander Gordeev wrote:
+> On Wed, Jun 21, 2023 at 06:41:09PM +0800, Baoquan He wrote:
+> 
+> Hi Baoquan,
+> 
+> > > [auto build test ERROR on akpm-mm/mm-everything]
+> > > 
+> > > url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/asm-generic-iomap-h-remove-ARCH_HAS_IOREMAP_xx-macros/20230620-212135
+> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+> > > patch link:    https://lore.kernel.org/r/20230620131356.25440-11-bhe%40redhat.com
+> > > patch subject: [PATCH v7 10/19] s390: mm: Convert to GENERIC_IOREMAP
+> > > config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20230621/202306211329.ticOJCSv-lkp@intel.com/config)
+> > > compiler: s390-linux-gcc (GCC) 12.3.0
+> > > reproduce: (https://download.01.org/0day-ci/archive/20230621/202306211329.ticOJCSv-lkp@intel.com/reproduce)
+> > 
+> > Thanks for reporting this.
+> > 
+> > I followed steps in above reproduce link, it failed as below. Please
+> > help check if anything is missing.
+> 
+> Could it be because you locally have the fix you posted aganst v6?
 
-Commit 49725ffc15fc ("net: stmmac: power up/down serdes in
-stmmac_open/release") correctly added a call to the serdes_powerdown()
-callback to stmmac_release() but did not remove the one from
-stmmac_remove() which leads to a doubled call to serdes_powerdown().
-
-This can lead to all kinds of problems: in the case of the qcom ethqos
-driver, it caused an unbalanced regulator disable splat.
-
-Fixes: 49725ffc15fc ("net: stmmac: power up/down serdes in stmmac_open/release")
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 6 ------
- 1 file changed, 6 deletions(-)
-
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 10e8a5606ba6..4727f7be4f86 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7461,12 +7461,6 @@ void stmmac_dvr_remove(struct device *dev)
- 	netif_carrier_off(ndev);
- 	unregister_netdev(ndev);
- 
--	/* Serdes power down needs to happen after VLAN filter
--	 * is deleted that is triggered by unregister_netdev().
--	 */
--	if (priv->plat->serdes_powerdown)
--		priv->plat->serdes_powerdown(ndev, priv->plat->bsp_priv);
--
- #ifdef CONFIG_DEBUG_FS
- 	stmmac_exit_fs(ndev);
- #endif
--- 
-2.39.2
+I am not sure. I failed to setup the cross compiling environment
+accoridng to steps of lkp. I borrowed a s390x machine, will build with
+the config of lkp test robot to see if I can reproduce it.
 
