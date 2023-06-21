@@ -2,117 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491997381B2
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:11:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23457738209
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231565AbjFULAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 07:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35512 "EHLO
+        id S229676AbjFULBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 07:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjFULAW (ORCPT
+        with ESMTP id S231719AbjFULBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 07:00:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0274B6
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 04:00:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C379614D8
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:00:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32E96C433C0;
-        Wed, 21 Jun 2023 11:00:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687345220;
-        bh=lXzszQD+zptu3Dhn+zgRvR6h6mdmH5naNO55GH7WfQE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ezCkDl0dShEAojqKiOZZfJIfIyZOWQ4bsdnFsAMM5buRpqn30urYYfa7ZZ81l8woq
-         /X8xYwAtPkZv+W4eJOQA4XUplnt3BPQFC+BYkTPLxDnf7VdtJGSikuEIwgHA7PBPUV
-         FRgKH8Oam///jNZmSJx6sdOasO7dlTnSnG8rX+3ek6z6VZXNJCb9nCegCHQfNErx2r
-         mEqs1E6CYixsXgnXFSr/VDxY3pdvg75IGMzqztq2EYRKzSt9sGIimbK8DEn1/ZiLPY
-         4eOgmJcwjhXqjGojAbqRy4Y0j8376fnrMKTpwSUVnUZoZxXitZM2vA27mx5SdKLuF+
-         f0jTzRcdOYqmw==
-Date:   Wed, 21 Jun 2023 16:30:16 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     Bard Liao <yung-chuan.liao@linux.intel.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        bard.liao@intel.com
-Subject: Re: [PATCH 2/4] soundwire: introduce SDW_DEV_NUM_ALLOC_IDA_WAKE_ONLY
-Message-ID: <ZJLYQCwvvIwEj47H@matsya>
-References: <20230531033736.792464-1-yung-chuan.liao@linux.intel.com>
- <20230531033736.792464-3-yung-chuan.liao@linux.intel.com>
- <ZIF94vZHzeGXfyin@matsya>
- <6c75e986-29a4-d97c-3862-d20397f8b8b4@linux.intel.com>
+        Wed, 21 Jun 2023 07:01:02 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E84F8B6;
+        Wed, 21 Jun 2023 04:01:00 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-98cd280cf94so56490066b.1;
+        Wed, 21 Jun 2023 04:01:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687345259; x=1689937259;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dC+CkcFL2MhCtddKaZrPXa9cdLHcEd5ohlN3nSioyXI=;
+        b=HXGdzS5MVr9hjWsLy2TyJYAIuVllC1QwFlIIacHf7DsPJtL/qTL7kEeh80inW0XuSv
+         6EttBY2nDYeiitf+7hCP20RGQbbMq5WA7xX0FLXQBSou4XLi0R6hfiRDGeYNLoLJV7XQ
+         wG/NaRVe4MniyzP9r23orHSLaOna56l+Ksw8td2r/oM2rtA/QQePaJN/agWP8AcJ5VWN
+         DXmEAAFv3nEUSmK1L70s3QAZQBKrX8yuW9ClQqSw0FfmWZz0ro4LBQ441POtWW3+9Z20
+         8UumjtfXpVujrdZUINXw9bSJPnVWF8WEPiqIOf/w5SUvCwC0pBcOkNbx379qOQEWkghc
+         NrCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687345259; x=1689937259;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dC+CkcFL2MhCtddKaZrPXa9cdLHcEd5ohlN3nSioyXI=;
+        b=AH7TxiwvpQ8dhNzJ4ppH7Ju0m/twd6iGnPK2kM7fTHsFNmiJbvo1Z2xTYQS+xcRk6z
+         8yNA4eMLAIAOsSRN5M8mPeicKFWChl57+7/LAYVBxzt2Gh4nbghxg81nQDGJFdSyiQjG
+         9h2MS4Wi/gERT9OJmcs+VLQnfcaDbgG/QWN9TKSJhtIYqMHUcCzdWUFrrl99VU4Duqgv
+         t+WvpzuU/q2/qMoQA9MKIJ6wCMd9L/3IYelhc51egGyN1hVJ8qSydQHP8sgyLPwVSeq4
+         8r3D2/qbFnYhes4+lVyF01wO6D0fqesYAVL6YwVubEmSEByBuTjCC1OjTLEs+gY8WOpj
+         WHdg==
+X-Gm-Message-State: AC+VfDzgkkD+hszB2Z/juIKwf8ygezAlixbD3hYUqFwsUA9xVrPqjb8J
+        2W7OdI3Z5UZ4qIwDrDUdygZrWXmlKIl7gOoIwzc=
+X-Google-Smtp-Source: ACHHUZ4yWoJDvI8mx0swN29OBx6m3OEEAHGuL+rtd3ygvRSN02lw5h0orw/GBbroJ0PSJWKLvpe4t7VRdems5M2+340=
+X-Received: by 2002:a17:907:6292:b0:983:ba44:48af with SMTP id
+ nd18-20020a170907629200b00983ba4448afmr14464518ejc.53.1687345259069; Wed, 21
+ Jun 2023 04:00:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6c75e986-29a4-d97c-3862-d20397f8b8b4@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230619153732.46258-1-clamor95@gmail.com> <20230619153732.46258-3-clamor95@gmail.com>
+ <20230621103219.o2u33nsok7zngikf@intel.intel>
+In-Reply-To: <20230621103219.o2u33nsok7zngikf@intel.intel>
+From:   Svyatoslav Ryhel <clamor95@gmail.com>
+Date:   Wed, 21 Jun 2023 14:00:48 +0300
+Message-ID: <CAPVz0n2E5gqCS3mRRjnUM0K__9An_fDcJG_7w0EgR0JG8Dtp=w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] i2c: Add GPIO-based hotplug gate
+To:     Andi Shyti <andi.shyti@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08-06-23, 10:09, Pierre-Louis Bossart wrote:
-> 
-> 
-> On 6/8/23 02:06, Vinod Koul wrote:
-> > On 31-05-23, 11:37, Bard Liao wrote:
-> >> From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-> >>
-> >> This patch adds a new Device Number allocation strategy, with the IDA
-> >> used only for devices that are wake-capable.
-> >>
-> >> "regular" devices such as amplifiers will use Device Numbers
-> >> [1..min_ida-1].
-> >>
-> >> "wake-capable" devices such as jack or microphone codecs will use
-> >> Device Numbers [min_ida..11].
-> >>
-> >> This hybrid strategy extends the number of supported devices in a
-> >> system by only constraining the allocation if required, e.g. in the
-> >> case of Intel LunarLake platforms the wake-capable devices are
-> >> required to have a unique address to use the HDaudio SDI and HDAudio
-> >> WAKEEN/WAKESTS registers.
-> > 
-> > This seems to be a consequence of Intel hardware decisions, so I guess
-> > best suited place for this is Intel controller, do we really want to
-> > have this in core logic?
-> 
-> It's a valid objection.
-> 
-> The reason why I added the alternate strategies in the core logic is
-> that the IDA and hybrid approach are just software-based with no
-> specific hardware dependencies. If QCOM or AMD wanted to use the
-> strategies contributed and tested by Intel, it'd be a two-line change on
-> their side.
-> 
-> That said, it's likely that at some point *someone* will want to
-> constrain the device number allocation further, be it with ACPI/DT
-> properties or reading hardware registers. The device number is a
-> de-facto priority given the way we scan the PING frames, so some systems
-> may want to give a higher priority to a specific peripherals.
-> 
-> This would push us to add a master ops callback to control the device
-> number allocation. It's a bit invasive but that would give the ultimate
-> flexibility. Reuse between vendors could be possible if 'generic'
-> callbacks were part of a library to pick from.
-> 
-> I don't really have any objections if this vendor-specific callback was
-> preferred, it may be a bit early to add this but long-term it's probably
-> what makes more sense.
-> 
-> I'll go with the flow on suggested recommendations.
+=D1=81=D1=80, 21 =D1=87=D0=B5=D1=80=D0=B2. 2023=E2=80=AF=D1=80. =D0=BE 13:3=
+2 Andi Shyti <andi.shyti@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> Hi,
+>
+> On Mon, Jun 19, 2023 at 06:37:32PM +0300, Svyatoslav Ryhel wrote:
+> > From: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
+> >
+> > Implement driver for hot-plugged I2C busses, where some devices on
+> > a bus are hot-pluggable and their presence is indicated by GPIO line.
+> >
+> > Co-developed-by: Ion Agorria <ion@agorria.com>
+> > Signed-off-by: Ion Agorria <ion@agorria.com>
+> > Signed-off-by: Micha=C5=82 Miros=C5=82aw <mirq-linux@rere.qmqm.pl>
+> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> > ---
+> >  drivers/i2c/Kconfig            |  11 ++
+> >  drivers/i2c/Makefile           |   1 +
+> >  drivers/i2c/i2c-hotplug-gpio.c | 266 +++++++++++++++++++++++++++++++++
+> >  3 files changed, 278 insertions(+)
+> >  create mode 100644 drivers/i2c/i2c-hotplug-gpio.c
+>
+> without going through the code I am missing the big picture here.
+>
+> What is this actually doing?
 
-Thanks, if it all one of the other two controller start using this, it
-would make sense to move it to core then, for now would be better to
-have this in specific driver
+Basically it duplicates the parent i2c bus once detection GPIO triggers
+and probes all hot-pluggable devices which are connected to it. Once
+GPIO triggers detach signal all hot-pluggable devices are unprobed and
+bus removed.
 
--- 
-~Vinod
+> Is this a new bus driver support?
+
+Most likely not.
+
+> Is this a feature to existing drivers?
+
+Yes, it is more like i2c mux
+
+> Is the GPIO an irq line for signalling hoplugging and can be used by
+> any driver or just this one?
+>
+
+It can be shared if necessary but usually all hot-pluggable devices
+are gathered in one container and are plugged simultaneously.
+
+> Without further discussing technicalities, can you please explain
+> better and more in detail what is the scope of this patch, why
+> there is a need for such a patch, how this new driver/feature
+> has been implemented and finally how it can be used.
+
+This patch is a predecessor of a possible larger patchset which
+should bring support for a asus-ec, a i2c mfd device programmed by
+Asus for their Transformers tablet line.
+
+This is Micha=C5=82 Miros=C5=82aw, original author quote about this driver:
+"The Transformers have a connector that's used for USB, charging or
+for attaching a keyboard (called a dock; it also has a battery and
+a touchpad). This connector probably (I don't have the means to verify
+that) has an I2C bus lines and a "detect" line (pulled low on the dock
+side) among the pins. I guess there is either no additional chip or
+a transparent bridge/buffer chip, but nothing that could be controlled
+by software. For DT this setup could be modelled like an I2C gate or
+2-port mux with enable joining two I2C busses (one "closer" to the
+CPU -- parent)."
+
+Similar approach is used in Microsoft Surface RT for attachable
+Type Cover.
+
+> This would help a lot so that I know already beforehand what I am
+> going to read without figuring it out.
+>
+> Thanks,
+> Andi
+>
+> PS Please notice that my set of questions is even longer than
+> your commit log :)
