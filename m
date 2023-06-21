@@ -2,219 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83195738AA1
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:15:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85CE1738AA8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231925AbjFUQPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:15:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
+        id S231226AbjFUQQU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:16:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232666AbjFUQPJ (ORCPT
+        with ESMTP id S232178AbjFUQQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:15:09 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2053.outbound.protection.outlook.com [40.107.223.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1BF186;
-        Wed, 21 Jun 2023 09:15:08 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=E1xmLpc+1ef5weZFgu6kVmIkGRPu/NsuOH9Ttd8AAVy5ZFHULy7Ctr2SXqBn0hJhaY8Z9sQiVspGd6duGWDqtEvVvtQOpw2Jiq7RgqfJcrCVzKRGAHGnfJByw3tsm3HHJKx/G4pO47OGegOfHRbUKCGGXH8nxWFXzzNjJy8b7VITEyINiTe1tizQMaNLXfXf1dJcMqB1g+PjZJOhntRSvnjuA51221buVpX8aBZQTCI+IfvBkLiXBvi4rKF8VHCTEElE8cuD9OAcAIYssNRz943Y9ZtkRdQ3CiE8y4Q5OCJZtp7xBWwxCxmFDnRDHk/B0wS4aHK14MBJ11FEN4lYmA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2XuIkuVB09s2z0EXoibkagIFTtxAv4WP2pPDyyxrThI=;
- b=WoRnwhqT2Esd8RNktcLsIpNARcs/Jm23ypTAMlfqGRJ5pmKK+cna8MzCm+muOYQ/NqYPvdg0x2J40mc+eJKR6fqc2MiT+B2z2e26BtKpOIGq9DwGGgqL+fS/SnYlWUZl4gRUgd5mBrgfGgICw7rrFpuvov2zkoq8RUWQ3+z4QPLnl79LEMZ6qBV4XPjP1V04Q0Ep3/d9ZxYcpypwKpEDWq9Nr7rHUEkvwvE09p7iJnr//MjS5GyhM+EZh10qW3OqTX32UfVb9CN36zBPZUjENXwHVXStDok93l0EFsDNfbPC0+ZF25P7JnvmeZ8RqSWY9z1bphjtdOCI3W78YCZj4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2XuIkuVB09s2z0EXoibkagIFTtxAv4WP2pPDyyxrThI=;
- b=wSwpo+F0gqG87cDBUm4gI5LwnqC2UYoCbiq+XapIEpYXslzegdcBThn/OVeYMXEBBSiv9VgrmNEArJgC9CYgfRqjUk/TzQDU4nOX/+of/y/YVdvTCiHA8C+cPhL4HjcoF1GEADgAkochIqP7WBBViPxhauRl30PSq9OaNhaU6jU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by MW4PR12MB5602.namprd12.prod.outlook.com (2603:10b6:303:169::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Wed, 21 Jun
- 2023 16:15:05 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70%5]) with mapi id 15.20.6521.020; Wed, 21 Jun 2023
- 16:15:05 +0000
-Message-ID: <b1abec47-04df-4481-d680-43c5ff3cbb48@amd.com>
-Date:   Wed, 21 Jun 2023 11:15:00 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH V4 1/8] drivers/acpi: Add support for Wifi band RF
- mitigations
-Content-Language: en-US
-To:     Johannes Berg <johannes@sipsolutions.net>,
-        Andrew Lunn <andrew@lunn.ch>, Evan Quan <evan.quan@amd.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mdaenzer@redhat.com,
-        maarten.lankhorst@linux.intel.com, tzimmermann@suse.de,
-        hdegoede@redhat.com, jingyuwang_vip@163.com, lijo.lazar@amd.com,
-        jim.cromie@gmail.com, bellosilicio@gmail.com,
-        andrealmeid@igalia.com, trix@redhat.com, jsg@jsg.id.au,
-        arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20230621054603.1262299-1-evan.quan@amd.com>
- <20230621054603.1262299-2-evan.quan@amd.com>
- <3a7c8ffa-de43-4795-ae76-5cd9b00c52b5@lunn.ch>
- <216f3c5aa1299100a0009ddf4e95b019855a32be.camel@sipsolutions.net>
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <216f3c5aa1299100a0009ddf4e95b019855a32be.camel@sipsolutions.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SA0PR11CA0193.namprd11.prod.outlook.com
- (2603:10b6:806:1bc::18) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        Wed, 21 Jun 2023 12:16:00 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C14199D;
+        Wed, 21 Jun 2023 09:15:48 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1b52bf6e669so48023495ad.2;
+        Wed, 21 Jun 2023 09:15:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687364148; x=1689956148;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nJGYiZSmAz4f7DWqK5EepnnOfjeHuHz97IlICgAbfpM=;
+        b=rXvFFwpBMa5FmYnwQKryzn7/pRIxWbxqUbuDWOxQy5R5fuAZg6H/lCYrcytisckb9V
+         JOpaxzgqsRWoqC9YWvhZwVl2z2eplFB28DwpD7fd5PD2IuLiLmFrxexRL/I4e3IPwnFZ
+         iEZXzUZBM6F6NV0AdfajGy9BoRkUWB56UG/XWMsL1z2z5F1i77CAhHoR2lCRMndf//kw
+         VLBGg1mE8ZdmAsGaFgqJ8P7IfxuDy4/LtblSTRPIpMYlrG/4m4AoKKE6WkZWZ4gAW4v7
+         z+7l0xfPc+roMttREcfno6LCCh2x6ZH9JJFipd+v5VxGB8FWEUlGQgCTP85PKZIuSBj6
+         CWLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687364148; x=1689956148;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nJGYiZSmAz4f7DWqK5EepnnOfjeHuHz97IlICgAbfpM=;
+        b=drRed/jrkKgL0Dmnw7oBbOh3j1M/qh1DTBH5XIlYcdx7eY9YSUvwuXhiubPmwdEcF0
+         whZIUwpJvPWApVfjXqJ1ZW3SsNqCsFIwN05w691jBbLnD6wRgmmPsejrhXam6IIf+/Z9
+         qUe8r22JEOncOoSyABBs/vTZcwoblxG3zl+4Z0KF06ElhZcO0w0tjjj8Z0idn8diBiu9
+         cScp2bqOhb2UATUe1DAvEVyCSSZlEtpBw5yKtCm/tKw51DfOSovEw6c+mgRPSLhAxLFK
+         +mKZA+PJ2ZAnO2piKKefOy5oDYRyz01c34OKwq3QUebS3W9BLSkX4bKmJWr8y55KDwpk
+         gsbg==
+X-Gm-Message-State: AC+VfDy6fboYFxw3KRhUypUmTMmgjwAy181qyKki5siVZG2+qjLw8TRu
+        DQ/LbgPzIlFvfOPy3x6zZz+gKDjFAqk=
+X-Google-Smtp-Source: ACHHUZ5w5C/Ax/llbxeWIVIzqLnv+V2hnXxpwlzgpEcMzA+Yr9rTk5qAvHYFGctAC+AfLAN0h7E8Dg==
+X-Received: by 2002:a17:902:bc85:b0:1b5:54cc:fcb8 with SMTP id bb5-20020a170902bc8500b001b554ccfcb8mr10779557plb.19.1687364147732;
+        Wed, 21 Jun 2023 09:15:47 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id w15-20020a170902e88f00b001b53d3d911dsm3712465plg.69.2023.06.21.09.15.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 09:15:46 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 21 Jun 2023 09:15:45 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-um@lists.infradead.org
+Subject: Re: [PATCH v7 03/11] kbuild: generate KSYMTAB entries by modpost
+Message-ID: <bb5048e7-5e8f-4391-a9a0-ff15b5384186@roeck-us.net>
+References: <20230608142428.256985-1-masahiroy@kernel.org>
+ <20230608142428.256985-4-masahiroy@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|MW4PR12MB5602:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8c70935e-48eb-4e8f-026f-08db7272ac8d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kNj8/xhpnNQTd3MFZcv99BwPIF296qlnDlLXS5NC+GIqnb0HE9pjgTc1jBVIh+gUvCSIHsiuDMYuZKSmXmE/P+XGJBzk6rHKIVigotKDAcd7yQWi/Tw5YuvLbhmuMcWCpsqwB02x0PKuNAd9zZoqeAyjGhqwZYESvSyO6gbHSF1EfqO15JF6BqMVzb2vpHfvXPCYhUz8lgb7qtH1YHIxCmwRqrUBMTr1Vl2VKNt1cuMuS4+vfSmT1kqOrJ8MVPYVLJcyEeRQR+4llXHmiECTdu2d598YZcXM0me6Xk433xUqCL+A/mwTXwvCsk1sYwIgQpqaLsiDjPL/LR4w6rsax15r1ubbP4DCEotqO6XW9akaIJ55BJxs/d7mgZbBvxTOMK/3UXxO+ll+7KL/ReyDiOqZkSl/VpzNU9SUJK/8oJZx4BxymzHWoUqRFi/Ao5CEbmsKXXpRjSgrVHkqtO8OHgJfwt1uulPL9QR0dVnmjn4zTPRLcdsOMDHrSBL+/qrXyBTSo7ILk6aTZ/xOdlpUWh2i+UPZQzLJUjaHwV9VuAkMFDmKSxcaUMNBhulclbeu8DOdh73Eul6ihJSFxkWvhfA5iKyYmdYHuYDFnebx8bvud28A4ogmfqzlhTzmzK47hmzdqwz2xovv3Ke060aU+A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(136003)(39860400002)(396003)(376002)(451199021)(38100700002)(5660300002)(53546011)(26005)(6512007)(6506007)(83380400001)(186003)(2616005)(7416002)(41300700001)(2906002)(8676002)(8936002)(36756003)(6666004)(478600001)(6486002)(4326008)(6636002)(66476007)(66556008)(66946007)(316002)(31696002)(86362001)(110136005)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y2plNGpaeUxlRmNrOGFVcFVKYWNoeWJyZHJGay83eVYxNXNQaFV0aVRhd05K?=
- =?utf-8?B?ak9jY2preXg4Vm9UMVUxSWVtUkdtbFV2d29DVm01cTlJZnVoREdWY3pjSUVT?=
- =?utf-8?B?c0Z4dmRacnkyQnIzcHVLc2I5K1V1US8xb1NXK3czZUxtSUx3bk55eStadmN5?=
- =?utf-8?B?Nnlub3NlK1NDTkp0L1o5cHIyU3lvQUFHU1Q5dEEyeWFxNXJ5ZnMwbDBtUjFh?=
- =?utf-8?B?Z1Y3UUNwRU1FUnRFYWtZdWJHVTZjVHlsQURydG5GQjgreCtobS8xMmpBd2Rw?=
- =?utf-8?B?KzRJNjF5d1hvZDJjWVpRTnVqRnN6VFJ2SThXNmhHaHJwL1J5elBwRktnTDhN?=
- =?utf-8?B?KytjK0s2QnA1bGQ4MjNIaytYdTZuUHB5MjQvL3QxbmtPSldRbFhnRW5sdzN5?=
- =?utf-8?B?VDJmU284NHh5SGVCdEdGTVd4MDdFZDF5L2d4UWx5eldXVmRLd2p1QWZnNWUr?=
- =?utf-8?B?dXJ1OWpMRWc4OW5TTkxRQ04zc01XVzhkOWRHaWJHdzJacTB1WVBYeXp5Qkxa?=
- =?utf-8?B?NTZuUlR0b0tjNzkzY1lIMWUrMU12MzNrcVcvSDRLcGg5RTJyVFRRUjBNNkY1?=
- =?utf-8?B?MXlkL3NpMURzWERHUjJIZkViazQzTlRCZ01wRnE4NCs5d2ZsdUFiUEhjWlZm?=
- =?utf-8?B?ZUxXdmZvYnZ6K2xjVmVQYjZENGdLdFFmQWwyVjdjZzcybzZSOW1kV0Q2Z0Rt?=
- =?utf-8?B?eDRqcmlPbUNibCtlVU1OVUtDa1RaTDFZTFdhYklQamw0dWVXWWxHbDZtWisz?=
- =?utf-8?B?c2pHOTFFT1E5YmdtdHZKbTRkclJpQUhiblEyL2hYWTd4cEhiWTJWYjlaQW1Y?=
- =?utf-8?B?NUJEV1ArMnBIQ0QrWG5yV0o3aTNHS3AyL25GMThrMVR5UE9nN2tGcEEwM3Vo?=
- =?utf-8?B?SXl0MHYxZldCWFdBR1RSbTFoZWc0dEdidXU2dy9JSGNXUWcrSEZDZ21XRCtt?=
- =?utf-8?B?bDJCN2RnNnYzc21MMk8wN05ZUnZoU0JCempLTWVpZThjZlRxRmthaXl2MG9F?=
- =?utf-8?B?YWtSUExlUDlLVG5pOW8vZVRLTExjbXhhOGZEekV6UytZczlmeXAvU2o3YnYr?=
- =?utf-8?B?aS9JTjRrT2xJT2VVRUhFdmgya0EzMGJoeVdtdlNVSVZjalFGS25zZUp5bmhh?=
- =?utf-8?B?bW1xUGQvZ3BpaFVVWk55eVVzNkVRcktBTzhuVGdNSnUyZWFkYjkyVTR2YUJG?=
- =?utf-8?B?MGhuZzNLTjlFUmpJQlU5bkc2UG1lT0tScVArRGE3N2gwSjFwMjcwVXNwRk5D?=
- =?utf-8?B?R21XT0JsWG9sQkJ2T2xxUWh1cTAya2RDejVjbzFGL21EREpiamd0bzZ4OU5D?=
- =?utf-8?B?andyNmNTeEw5cTQvQkRuZ0t2ZTc3STVLS0xxc1pnZnFnRHhOL2lsN29BWllZ?=
- =?utf-8?B?QjBHQ0NCcWpLVUp0WGpPOTE0LzdDdi9DZk05WFZmUUpIN1JNS3ZjOU9CeWJm?=
- =?utf-8?B?ZXVOM2g2YXJtK3ZweWdFYlQwY1NvUWtnS1BQZm5yREttcnU1c2VPSWo5T0Np?=
- =?utf-8?B?bEhWK0hocGlSdEtJbTJUdGs3M2dqRGN2VTg1aTMyd0Z5UEVRNHpwUkFvRzls?=
- =?utf-8?B?NGNBRmJYUS9iM1Y5THlia0pKKzZqclEyUU5aNTRBOFl6dmthWnR3emxZSTcy?=
- =?utf-8?B?THg4ZzhYSms3MFp1dExCWEJRZGdlbU1vZXV0Y2U0SFEzV1pQaE92L2U3cU8z?=
- =?utf-8?B?WHJyUHU5UzFPNjVEcmNkeTFrZ05pRFVYNVlvWGo0MnR3KzRiZk1XVXNicWVB?=
- =?utf-8?B?UnRleEZNdDE1TnU2dy8xSXZQTmxFU0RyRTRXc2NzTFBXYkNjbFMyT0crU1Vp?=
- =?utf-8?B?RVpwV1NROXJUcXpMaVdGaTN4eWNPb3J0MHpRSHVsZWhHTDhPRUZMOU9FeGVD?=
- =?utf-8?B?dEhLWSsrTXh0U1JPMnZkY3VscmZrRzY3MmFqMnMyc1ZWaVRCT2tNOHRIVzBp?=
- =?utf-8?B?cHFLT3ArTi9IMUhHTGpUY0hnajBZc3VGMEZvbWtiY3p6WkFWT2Jla1RpSERZ?=
- =?utf-8?B?MG1QMDJpSk9sbkxPNG83S21RQk1neStFZTNnY014TlhBWjQzVzQrSFNuVWhH?=
- =?utf-8?B?cDNyNUhOOVZHTzJBV0ZsN3loL2MzTmNUNUhMWDBBU0h4T0w5VlJNSytrTnJr?=
- =?utf-8?Q?3k+8C/2FQKzWb5hwJlMrWKC/q?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8c70935e-48eb-4e8f-026f-08db7272ac8d
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 16:15:05.1658
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aCcOnNKscodZcJZ3WJUzqWYGQI1IEtArbgmYSfl+Uf0qqlHf1iyRsMTcNs4PSfXqWv6fCVGaH9RcZhE4WeZbDA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB5602
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230608142428.256985-4-masahiroy@kernel.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 08, 2023 at 11:24:20PM +0900, Masahiro Yamada wrote:
+> Commit 7b4537199a4a ("kbuild: link symbol CRCs at final link, removing
+> CONFIG_MODULE_REL_CRCS") made modpost output CRCs in the same way
+> whether the EXPORT_SYMBOL() is placed in *.c or *.S.
+> 
+...
 
-On 6/21/2023 10:39 AM, Johannes Berg wrote:
-> On Wed, 2023-06-21 at 17:36 +0200, Andrew Lunn wrote:
->> On Wed, Jun 21, 2023 at 01:45:56PM +0800, Evan Quan wrote:
->>> From: Mario Limonciello <mario.limonciello@amd.com>
->>>
->>> Due to electrical and mechanical constraints in certain platform designs
->>> there may be likely interference of relatively high-powered harmonics of
->>> the (G-)DDR memory clocks with local radio module frequency bands used
->>> by Wifi 6/6e/7.
->>>
->>> To mitigate this, AMD has introduced an ACPI based mechanism that
->>> devices can use to notify active use of particular frequencies so
->>> that devices can make relative internal adjustments as necessary
->>> to avoid this resonance.
->> Do only ACPI based systems have:
->>
->>     interference of relatively high-powered harmonics of the (G-)DDR
->>     memory clocks with local radio module frequency bands used by
->>     Wifi 6/6e/7."
->>
->> Could Device Tree based systems not experience this problem?
-> They could, of course, but they'd need some other driver to change
-> _something_ in the system? I don't even know what this is doing
-> precisely under the hood in the ACPI BIOS, perhaps it adjusts the DDR
-> memory clock frequency in response to WiFi using a frequency that will
-> cause interference with harmonics.
+> We can do this better now; modpost can selectively emit KSYMTAB entries
+> that are really used by modules.
+> 
 
-The way that WBRF has been architected, it's intended to be able
-to scale to any type of device pair that has harmonic issues.
+This patch results in
 
-In the first use (Wifi 6e + specific AMD dGPUs) that matches this
-series BIOS has the following purposes:
+Building alpha:defconfig ... failed
+--------------
+Error log:
+<stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
+WARNING: modpost: "saved_config" [vmlinux] is COMMON symbol
+ERROR: modpost: vmlinux: page_is_ram: EXPORT_SYMBOL used for init symbol. Remove __init or EXPORT_SYMBOL.
 
-1) The existence of _DSM indicates that the system may not have
-adequate shielding and should be using these mitigations.
+I don't know if other architectures are affected - linux-next is so broken
+that it is difficult to find root causes for all the breakages.
 
-2) Notification mechanism of frequency use.
+Guenter
 
-For the first problematic devices we *could* have done notifications
-entirely in native Linux kernel code with notifier chains.
-However that still means you need a hint from the platform that the
-functionality is needed like a _DSD bit.
+---
+Bisect log:
 
-It's also done this way so that AML could do some of the notifications
-directly to applicable devices in the future without needing "consumer"
-driver participation.
-
->>> +/**
->>> + * APIs needed by drivers/subsystems for contributing frequencies:
->>> + * During probe, check `wbrf_supported_producer` to see if WBRF is supported.
->>> + * If adding frequencies, then call `wbrf_add_exclusion` with the
->>> + * start and end points specified for the frequency ranges added.
->>> + * If removing frequencies, then call `wbrf_remove_exclusion` with
->>> + * start and end points specified for the frequency ranges added.
->>> + */
->>> +bool wbrf_supported_producer(struct acpi_device *adev);
->>> +int wbrf_add_exclusion(struct acpi_device *adev,
->>> +		       struct wbrf_ranges_in *in);
->>> +int wbrf_remove_exclusion(struct acpi_device *adev,
->>> +			  struct wbrf_ranges_in *in);
->> Could struct device be used here, to make the API agnostic to where
->> the information is coming from? That would then allow somebody in the
->> future to implement a device tree based information provider.
-> That does make sense, and it wouldn't even be that much harder if we
-> assume in a given platform there's only one provider - but once you go
-> beyond that these would need to call function pointers I guess? Though
-> that could be left for "future improvement" too.
->
-> johannes
-
-There's more to it than just sending in the frequency that is
-added or removed.  The notification path comes from ACPI as well.
-
-This first implementation only has one provider and consumer
-but yes, we envision that there could be multiple of each party
-and that AML may be the mechanism for some consumers to react.
-
+# bad: [15e71592dbae49a674429c618a10401d7f992ac3] Add linux-next specific files for 20230621
+# good: [45a3e24f65e90a047bef86f927ebdc4c710edaa1] Linux 6.4-rc7
+git bisect start 'HEAD' 'v6.4-rc7'
+# bad: [e867e67cd55ae460c860ffd896c7fc96add2821c] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
+git bisect bad e867e67cd55ae460c860ffd896c7fc96add2821c
+# bad: [57b289d5b1005a9c39d6d6567e0ef6115bd59cea] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git
+git bisect bad 57b289d5b1005a9c39d6d6567e0ef6115bd59cea
+# bad: [dc6399fc9ae6d2530fc38fb3ae96bcc8393bd66f] Merge branch 'for-next/perf' of git://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git
+git bisect bad dc6399fc9ae6d2530fc38fb3ae96bcc8393bd66f
+# good: [6d366ba598334a0457d917a7bf38efd118c5b7be] Merge branch 'mm-stable' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+git bisect good 6d366ba598334a0457d917a7bf38efd118c5b7be
+# good: [82fe2e45cdb00de4fa648050ae33bdadf9b3294a] perf pmus: Check if we can encode the PMU number in perf_event_attr.type
+git bisect good 82fe2e45cdb00de4fa648050ae33bdadf9b3294a
+# bad: [d2fa756910f88c2f5871775483744407cbf67933] Merge branch 'for-next' of git://git.infradead.org/users/hch/dma-mapping.git
+git bisect bad d2fa756910f88c2f5871775483744407cbf67933
+# good: [1b990bc8edc396a37a3ff1a43f7c329c361ee07c] Merge branch 'mm-nonmm-unstable' into mm-everything
+git bisect good 1b990bc8edc396a37a3ff1a43f7c329c361ee07c
+# good: [cff6e7f50bd315e5b39c4e46c704ac587ceb965f] kbuild: Add CLANG_FLAGS to as-instr
+git bisect good cff6e7f50bd315e5b39c4e46c704ac587ceb965f
+# bad: [8f3847e175a0044e2212fef772e7fa912270cd6d] ia64,export.h: replace EXPORT_DATA_SYMBOL* with EXPORT_SYMBOL*
+git bisect bad 8f3847e175a0044e2212fef772e7fa912270cd6d
+# good: [3a3f1e573a105328a2cca45a7cfbebabbf5e3192] modpost: fix off by one in is_executable_section()
+git bisect good 3a3f1e573a105328a2cca45a7cfbebabbf5e3192
+# good: [92e74fb6e6196d642505ae2b74a8e327202afef9] scripts/kallsyms: constify long_options
+git bisect good 92e74fb6e6196d642505ae2b74a8e327202afef9
+# good: [92e2921eeafdfca9acd9b83f07d2b7ca099bac24] ARC: define ASM_NL and __ALIGN(_STR) outside #ifdef __ASSEMBLY__ guard
+git bisect good 92e2921eeafdfca9acd9b83f07d2b7ca099bac24
+# bad: [bb2aa9a94b41b883037a56709d995c269204ade0] kbuild: generate KSYMTAB entries by modpost
+git bisect bad bb2aa9a94b41b883037a56709d995c269204ade0
+# good: [94d6cb68124b7a63f24fcc345795ba5f9a27e694] modpost: pass struct module pointer to check_section_mismatch()
+git bisect good 94d6cb68124b7a63f24fcc345795ba5f9a27e694
+# first bad commit: [bb2aa9a94b41b883037a56709d995c269204ade0] kbuild: generate KSYMTAB entries by modpost
