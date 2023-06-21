@@ -2,130 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1CF738EC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:28:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B8F738EC8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231858AbjFUS2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 14:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52440 "EHLO
+        id S231795AbjFUS3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 14:29:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231838AbjFUS2Z (ORCPT
+        with ESMTP id S231611AbjFUS2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 14:28:25 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2072c.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 688EE2967;
-        Wed, 21 Jun 2023 11:27:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q20sCN8Lks1sHUJKxMuz2eUb1dsYuPZnqri8INqMNgh5S+7IO9ojSvvqJasC1xsi1LCtgPQ5hy7LQU5leYY0YlaBNcU7E9OhS+bMNjE9Om921YDZkuiXoVufJz3Cg4p0SWLKWoStP9i4B2jSDREndV7N/1u0QbBh9i4AE5vFGR3JAq9kZ9YaTDcUjGqD7AXJrpZiIip+CtiIaCkT4PqnDoAZBn7A2+oyciZkz5majvBSkId20uxeiKVWybbrOCC+6/DP26WXLr15ASZGOVNEM+e8eLnNsu7dxsbA3KBk7lljClC/8HVO5xAfwmt21JgGKZbApxOAwFH2+SRkBAE9KQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ushIagdw+F/wqu0Fo/hSC4/yIC2tsqhKF416S1QZel8=;
- b=N2YRRceXJnrSt3uYGjrjrbjk4Psg09KC+U2SzdJaX8ShcrsyRCjB/HWxwmBTm5yWnQlu9BXQq2mqeEMiWVWrIPMUnhZv6AApNIPGu4LPMBJ25JgUlIyAt08UJNbGg4qfofmekdJRkQqIkrscMHzPWx5L3ge5E8SPiv80YPFU8BySedDO8lqOkUFjN/XyJLyDNH5bSrwUD+i4FUuwwFGkmR3+fOKvpS4hXoRL3xLS2CO3kVSz1zO7PVppEty3cuWPnK0B4t2uQ2Y9Gf6xmqaKJxNURG+kUPQZklkAnhHajA3PmXExmReKNxS5rieAQPM2KplDTy6qUWTmJv06a+mEOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ushIagdw+F/wqu0Fo/hSC4/yIC2tsqhKF416S1QZel8=;
- b=My4USihmC2KzHGPcsjjAeeOI6z9VUGp7AE8O3rfRM1JOENcMQNa0ZQ9Q4S4Z9+rknirWk5o8sTZAy6gdXueVDwUIfHO/0hR/XiLkRSa+8LCeml+yPJ2BQGcfRFguSV0GFHnBjJ8yzDZkjmtqICI/F0hiNV9rN5YveKAf45VkVUI=
-Received: from PH7PR21MB3116.namprd21.prod.outlook.com (2603:10b6:510:1d0::10)
- by SA1PR21MB3809.namprd21.prod.outlook.com (2603:10b6:806:2b5::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6544.9; Wed, 21 Jun
- 2023 18:27:11 +0000
-Received: from PH7PR21MB3116.namprd21.prod.outlook.com
- ([fe80::848b:6d47:841d:20ff]) by PH7PR21MB3116.namprd21.prod.outlook.com
- ([fe80::848b:6d47:841d:20ff%4]) with mapi id 15.20.6544.006; Wed, 21 Jun 2023
- 18:27:11 +0000
-From:   Haiyang Zhang <haiyangz@microsoft.com>
-To:     souradeep chakrabarti <schakrabarti@linux.microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        Long Li <longli@microsoft.com>,
-        Ajay Sharma <sharmaajay@microsoft.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "cai.huoqing@linux.dev" <cai.huoqing@linux.dev>,
-        "ssengar@linux.microsoft.com" <ssengar@linux.microsoft.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
-Subject: RE: [PATCH] net: mana: Fix MANA VF unload when host is unresponsive
-Thread-Topic: [PATCH] net: mana: Fix MANA VF unload when host is unresponsive
-Thread-Index: AQHZpCs3ZzoQKfff9kydouuwhM8kLq+VkuiQ
-Date:   Wed, 21 Jun 2023 18:27:11 +0000
-Message-ID: <PH7PR21MB3116B3B046D513BDB3DC3508CA5DA@PH7PR21MB3116.namprd21.prod.outlook.com>
-References: <1687343341-10898-1-git-send-email-schakrabarti@linux.microsoft.com>
-In-Reply-To: <1687343341-10898-1-git-send-email-schakrabarti@linux.microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=163b4832-f11a-47e6-ab84-c3f9a528bc1f;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-06-21T18:24:31Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR21MB3116:EE_|SA1PR21MB3809:EE_
-x-ms-office365-filtering-correlation-id: 27130c74-aa2e-4ae6-0c2e-08db72852129
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iVUj8RP58eQm+0XMOch6PclTYT5ZQuLfurhXSIM2YntbYCnCrCFwfDcVRaw5UkiOFdAz9QQr7LKESA4RZ6DbLyrtpH+7D3LT9AVVW28TgVdGlMzKGkm60bkrvZwUarfDbfG5ImJqYf89t91kDVb5SHOgrQEFer1A8qnTbIz6M6ruUUajN4U0Gsb+v5kNb9JyB/FiHSEaWxNz5fgoZ+qyyInlYLUnl9Qui2Z1DfhyenAlrXSOL7W1YqAgmxKqU3iG/r5bDQbNJEc1e7l3THEmVmB5VdpjGE+dNNHrsEhsZRC3vpWktIovho5azXnvSQP/ksixBpiAYq78N0FbiWSwTtNrYEcsygq+f62suTVckhBSVt+IywpOVdcbGLeBMig8wOGG95HScU94sOmecw0n1nltZIrfj0TihE1m0Hx3LO4lQJATUBOrNvH7mKOzgVbMzCFiy+E0/qXGkftgSg41PPiOpGwaKcfEolMiky+PYZY1hNVfyAVUmu6tOwjvk/OBaOahxvaVIrwkI13xON36wP9WjvctdT/s0vbkcwxpyOEH17AmFmjmKeIExh9ElV7+5+DkenFukKzzEVhGscHWM8zF0hTxPglGoi1rNIb3RbzmsTVQdwNyU0kZnhd9yhLHAaMx37JJdEEtbycF+F4PxWmBuHBPwvmh77BKxZmpR6+EOEArZ3/0xOzeXgOGOK0D
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR21MB3116.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(366004)(376002)(346002)(136003)(451199021)(53546011)(7696005)(10290500003)(478600001)(110136005)(71200400001)(76116006)(26005)(6506007)(186003)(9686003)(8990500004)(2906002)(66946007)(66556008)(82960400001)(8676002)(316002)(66446008)(66476007)(64756008)(86362001)(41300700001)(7416002)(52536014)(5660300002)(8936002)(38100700002)(921005)(122000001)(82950400001)(33656002)(38070700005)(83380400001)(55016003)(66899021);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ofCRBzULKkZ1Hmzx2lsePjVkmGXSYwVd+zqLOFz5+2YvEyddPhpWmDhGdMPG?=
- =?us-ascii?Q?Dbi5+em1jDjF7fWbxg5wgGsOQvRc6ZAmIetrwbpmD4XBJquy6Dod2ekfKzLG?=
- =?us-ascii?Q?AP3MDFqh0y/ouwRC+UrmOi6nqXkei3XHAEeRqqgaB8/OZCuAN3BVdcujBu98?=
- =?us-ascii?Q?kTv2EQwjnFW8ybLGz5bYtOIb0Mvh0zVaNBbEeXNQUSz2pDEnFD2IhSStVY30?=
- =?us-ascii?Q?ZE9hJaamq93SQVQRpjHBslfpRBp0GB47J3qCo6q+OPPpruQIk8HvGHFhOvW2?=
- =?us-ascii?Q?5X08awBedD0tIkjx3NDqqSzonbg5e/whj1+lgMCMTMy32qvVJkMV1wLre9RZ?=
- =?us-ascii?Q?XMw6vurr15IKkIfk/AH1Yia72SUWWoPrXecOw9XY0tBLH9R1XHZ57n/iXO4x?=
- =?us-ascii?Q?alAlSlEyx1Tr4Pf6uBJrpdZL4XRDUNgxMpOynyzdgJGv6eVfAUvwcNK8b3Zn?=
- =?us-ascii?Q?jAoKFWEh44MNTsraCW80V/U67hcu4mLuIhlpOa3pAHtdywIhMsK6HWwiSJ/H?=
- =?us-ascii?Q?N+l1Rfm1uGVBaVUgsSTfuAz0fKeJnnWbSiLahlTRGRl+YHCwIA54Jy6hXd+/?=
- =?us-ascii?Q?MeS4Gf40dTS4WKZKB6oRv0hHg/11r+vmqDybzTiVf8oAVWe0CWQvhomKCj7n?=
- =?us-ascii?Q?yw9u9HBPOqGLI/AQcA4mP031EAoyFlnEYRLN3XKIOs3VxQZGt2wL7EIxSWfE?=
- =?us-ascii?Q?v+JW+6MTPsjl4zU+L5pVnlPg8vaQdFAfV4zqfCoMUlw3rOMmZslrk4por5d4?=
- =?us-ascii?Q?zOKa92guBC1sSfKwAtf1/jTie1DxrNl3lPBIclGTU2eBXzmqeLroOx4Wa0lZ?=
- =?us-ascii?Q?2eYMvVYxqVEDUPvoIx2t5rttCFLRHXuoV2jt5LWsJ8RXscUCsBscurbrCzq8?=
- =?us-ascii?Q?VGIHad0iF4dPYrUQxcWKqXXdy7PcJ0p0Y7fHNC5yUgT+yTOtpMnwtv1kGG1+?=
- =?us-ascii?Q?YORqbxr8IN/CIHor53tB7p49aBVdutpebqKMYkDxqCGLMFIm7YS8AHo0DdgI?=
- =?us-ascii?Q?j9wPn1FCgs5xMMiircS7y/6LGLtDDdSWqE9717YSyTeD21Y5p+qIfPDGkcp3?=
- =?us-ascii?Q?odfZZBjau4PgH0MsY5n4144FrOC06RIOCwD5kYi+gtHzfQy5UK7YrX7T/e+O?=
- =?us-ascii?Q?3XdoPZSk1OnBwlOMeIo703Y4jSO6jbuwkiAtpAfXD1pXs7sNv4RetcO49DW3?=
- =?us-ascii?Q?gQ+sqy/E5+hcvz2mM2m/XBVQmsiV8ZKDfy9bCJoAjAt4uO3zxg2qWBp0wSMp?=
- =?us-ascii?Q?6kFXaNUxJ06u97Uwh7qF9CAPfuooRC7doIVZ2xLddzsRBM4hQ8mBtIIgyroF?=
- =?us-ascii?Q?cFSieyDN6EWPihjn415cJXDaxqdaImuRtbMR0Y0yDQ0iLwAACS0MhMEihUSd?=
- =?us-ascii?Q?9ZNXTvtLx2MzpkIwqFQ1uxmKxDCIacOZmefKwGv6bRG0NBqv8Rx6Rbgd15Hc?=
- =?us-ascii?Q?rpsausljUtlhKcx5NLO+Sdp0KYzCmjzFzuRcRBXUBvZFdu8kC+r2rSza0fcN?=
- =?us-ascii?Q?wVaJHjYLSLsMocOSf/uGbOWruPVr6absc1yqfeOgnzg/0VXujqveah8X8YPJ?=
- =?us-ascii?Q?1dMo2gJ9t/dKn1OjlUd3ZJbZI/b1+0pCd0ZHALpC?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 21 Jun 2023 14:28:52 -0400
+Received: from mail-io1-xd50.google.com (mail-io1-xd50.google.com [IPv6:2607:f8b0:4864:20::d50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E6B2716
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:28:18 -0700 (PDT)
+Received: by mail-io1-xd50.google.com with SMTP id ca18e2360f4ac-76c5c78bc24so651470939f.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:28:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687372033; x=1689964033;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SM44jaBHDK4+HpvQQwzk0Gkvb0ZUSmlYthl5LL2RKq4=;
+        b=FrpVhH8OvPs8PPmURPyWJn2iMay/wA60a86wJIfB0rbjVCJL2Qnz3p0ezD4zWQyrty
+         Zhoe1dITmvoxL4sLwyIz05mMgMHEM+KvBh11mTEhPcTY4WeXFLWntu99Uza5xFqSsRws
+         RMICOTe77FBYhoZchuL0//Tmxc9aIoxVcwKNOJN1LioWn0eJjOMQHKhQSNnqCsD4zu8z
+         ty9bdz5R4W3724KnpncFEp8ehFsmteFxl+L+X9tHhL6dT2dF/qd8Yavk2915YWoPUpfq
+         jVuSzIuTOesGy8hLnAMiMlE3P3QzmupKMRPWyEIxG2UBYfLJ5SXudpniMNUoISBeWP6k
+         zrtg==
+X-Gm-Message-State: AC+VfDwckGmG7dW7jBr78/NpsCW2IbVXsDhofq469BohD2Wzt5Jo1WC+
+        2Yitd7yg4Qkw3v8dY7378t6rNLFmDkwoCu58DofrqjFw8YpR
+X-Google-Smtp-Source: ACHHUZ7jHo5FZZPRy71WKzHWombGzEdTy3syd1PGh14WTAvKMyegefApYIwOM5qO5JZsvxJE4Ymtvh1w2P2gpX99qmq0SKTpEGsy
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR21MB3116.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 27130c74-aa2e-4ae6-0c2e-08db72852129
-X-MS-Exchange-CrossTenant-originalarrivaltime: 21 Jun 2023 18:27:11.5055
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: unZEW1P2lqcW7gACVjFljBLRe5g6PGznxuhFlQKSXk3e9hJ6UCrNYO1urNMWEAxWvBUXcCporB19pSaElKX1+Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR21MB3809
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Received: by 2002:a02:9402:0:b0:426:7963:1177 with SMTP id
+ a2-20020a029402000000b0042679631177mr3463331jai.0.1687372033518; Wed, 21 Jun
+ 2023 11:27:13 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 11:27:13 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a973eb05fea7ea3d@google.com>
+Subject: [syzbot] [batman?] WARNING in batadv_dat_free (2)
+From:   syzbot <syzbot+6c881e6772625dc7feed@syzkaller.appspotmail.com>
+To:     a@unstable.cc, b.a.t.m.a.n@lists.open-mesh.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, mareklindner@neomailbox.ch,
+        netdev@vger.kernel.org, pabeni@redhat.com, sven@narfation.org,
+        sw@simonwunderlich.de, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -133,194 +57,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    970308a7b544 selftests/bpf: Set the default value of consu..
+git tree:       bpf-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1788094b280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ba5f40cc4484255a
+dashboard link: https://syzkaller.appspot.com/bug?extid=6c881e6772625dc7feed
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/fc4c2bba1144/disk-970308a7.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1075dd8a55dc/vmlinux-970308a7.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/59f3fdc83b37/bzImage-970308a7.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6c881e6772625dc7feed@syzkaller.appspotmail.com
+
+bond0 (unregistering): (slave bond_slave_1): Releasing backup interface
+bond0 (unregistering): (slave bond_slave_0): Releasing backup interface
+bond0 (unregistering): Released all slaves
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 1005 at kernel/workqueue.c:642 set_work_data kernel/workqueue.c:642 [inline]
+WARNING: CPU: 1 PID: 1005 at kernel/workqueue.c:642 clear_work_data kernel/workqueue.c:705 [inline]
+WARNING: CPU: 1 PID: 1005 at kernel/workqueue.c:642 __cancel_work_timer+0x4d1/0x570 kernel/workqueue.c:3278
+Modules linked in:
+CPU: 1 PID: 1005 Comm: kworker/u4:5 Not tainted 6.4.0-rc3-syzkaller-00722-g970308a7b544 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Workqueue: netns cleanup_net
+RIP: 0010:set_work_data kernel/workqueue.c:642 [inline]
+RIP: 0010:clear_work_data kernel/workqueue.c:705 [inline]
+RIP: 0010:__cancel_work_timer+0x4d1/0x570 kernel/workqueue.c:3278
+Code: e8 34 08 0e 00 e9 e1 fb ff ff e8 2a 41 30 00 e8 55 f5 bb 08 e9 51 fd ff ff e8 1b 41 30 00 0f 0b e9 a6 fc ff ff e8 0f 41 30 00 <0f> 0b e9 c0 fd ff ff e8 b3 4e 83 00 e9 fd fe ff ff e8 f9 40 30 00
+RSP: 0018:ffffc90005237920 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88802076d940 RSI: ffffffff815401c1 RDI: 0000000000000001
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: ffff888019b654b0
+R13: 1ffff92000a46f25 R14: 0000000000000001 R15: ffff88802076d940
+FS:  0000000000000000(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f31ad4beba8 CR3: 000000002a10a000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000600
+Call Trace:
+ <TASK>
+ batadv_dat_free+0x45/0xe0 net/batman-adv/distributed-arp-table.c:840
+ batadv_mesh_free+0x89/0x170 net/batman-adv/main.c:270
+ batadv_softif_free+0x15/0x20 net/batman-adv/soft-interface.c:984
+ netdev_run_todo+0x6bf/0x1100 net/core/dev.c:10395
+ default_device_exit_batch+0x456/0x5b0 net/core/dev.c:11395
+ ops_exit_list+0x125/0x170 net/core/net_namespace.c:175
+ cleanup_net+0x4ee/0xb10 net/core/net_namespace.c:614
+ process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+ worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
 
-> -----Original Message-----
-> From: souradeep chakrabarti <schakrabarti@linux.microsoft.com>
-> Sent: Wednesday, June 21, 2023 6:29 AM
-> To: KY Srinivasan <kys@microsoft.com>; Haiyang Zhang
-> <haiyangz@microsoft.com>; wei.liu@kernel.org; Dexuan Cui
-> <decui@microsoft.com>; davem@davemloft.net; edumazet@google.com;
-> kuba@kernel.org; pabeni@redhat.com; Long Li <longli@microsoft.com>; Ajay
-> Sharma <sharmaajay@microsoft.com>; leon@kernel.org;
-> cai.huoqing@linux.dev; ssengar@linux.microsoft.com; vkuznets@redhat.com;
-> tglx@linutronix.de; linux-hyperv@vger.kernel.org; netdev@vger.kernel.org;
-> linux-kernel@vger.kernel.org; linux-rdma@vger.kernel.org
-> Cc: Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
-> Subject: [PATCH] net: mana: Fix MANA VF unload when host is unresponsive
->=20
-> From: Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
->=20
-> This patch addresses  the VF unload issue, where mana_dealloc_queues()
-> gets stuck in infinite while loop, because of host unresponsiveness.
-> It adds a timeout in the while loop, to fix it.
->=20
-> Also this patch adds a new attribute in mana_context, which gets set when
-> mana_hwc_send_request() hits a timeout because of host unresponsiveness.
-> This flag then helps to avoid the timeouts in successive calls.
->=20
-> Signed-off-by: Souradeep Chakrabarti <schakrabarti@linux.microsoft.com>
-> ---
->  .../net/ethernet/microsoft/mana/gdma_main.c   |  4 +++-
->  .../net/ethernet/microsoft/mana/hw_channel.c  | 12 ++++++++++-
->  drivers/net/ethernet/microsoft/mana/mana_en.c | 21 +++++++++++++++++--
->  include/net/mana/mana.h                       |  2 ++
->  4 files changed, 35 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/net/ethernet/microsoft/mana/gdma_main.c
-> b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-> index 8f3f78b68592..5cc43ae78334 100644
-> --- a/drivers/net/ethernet/microsoft/mana/gdma_main.c
-> +++ b/drivers/net/ethernet/microsoft/mana/gdma_main.c
-> @@ -946,10 +946,12 @@ int mana_gd_deregister_device(struct gdma_dev
-> *gd)
->  	struct gdma_context *gc =3D gd->gdma_context;
->  	struct gdma_general_resp resp =3D {};
->  	struct gdma_general_req req =3D {};
-> +	struct mana_context *ac;
->  	int err;
->=20
->  	if (gd->pdid =3D=3D INVALID_PDID)
->  		return -EINVAL;
-> +	ac =3D (struct mana_context *)gd->driver_data;
->=20
->  	mana_gd_init_req_hdr(&req.hdr, GDMA_DEREGISTER_DEVICE,
-> sizeof(req),
->  			     sizeof(resp));
-> @@ -957,7 +959,7 @@ int mana_gd_deregister_device(struct gdma_dev *gd)
->  	req.hdr.dev_id =3D gd->dev_id;
->=20
->  	err =3D mana_gd_send_request(gc, sizeof(req), &req, sizeof(resp), &resp=
-);
-> -	if (err || resp.hdr.status) {
-> +	if ((err || resp.hdr.status) && !ac->vf_unload_timeout) {
->  		dev_err(gc->dev, "Failed to deregister device: %d, 0x%x\n",
->  			err, resp.hdr.status);
->  		if (!err)
-> diff --git a/drivers/net/ethernet/microsoft/mana/hw_channel.c
-> b/drivers/net/ethernet/microsoft/mana/hw_channel.c
-> index 9d1507eba5b9..557b890ad0ae 100644
-> --- a/drivers/net/ethernet/microsoft/mana/hw_channel.c
-> +++ b/drivers/net/ethernet/microsoft/mana/hw_channel.c
-> @@ -1,8 +1,10 @@
->  // SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
->  /* Copyright (c) 2021, Microsoft Corporation. */
->=20
-> +#include "asm-generic/errno.h"
->  #include <net/mana/gdma.h>
->  #include <net/mana/hw_channel.h>
-> +#include <net/mana/mana.h>
->=20
->  static int mana_hwc_get_msg_index(struct hw_channel_context *hwc, u16
-> *msg_id)
->  {
-> @@ -786,12 +788,19 @@ int mana_hwc_send_request(struct
-> hw_channel_context *hwc, u32 req_len,
->  	struct hwc_wq *txq =3D hwc->txq;
->  	struct gdma_req_hdr *req_msg;
->  	struct hwc_caller_ctx *ctx;
-> +	struct mana_context *ac;
->  	u32 dest_vrcq =3D 0;
->  	u32 dest_vrq =3D 0;
->  	u16 msg_id;
->  	int err;
->=20
->  	mana_hwc_get_msg_index(hwc, &msg_id);
-> +	ac =3D (struct mana_context *)hwc->gdma_dev->driver_data;
-> +	if (ac->vf_unload_timeout) {
-> +		dev_err(hwc->dev, "HWC: vport is already unloaded.\n");
-> +		err =3D -ETIMEDOUT;
-> +		goto out;
-> +	}
->=20
->  	tx_wr =3D &txq->msg_buf->reqs[msg_id];
->=20
-> @@ -825,9 +834,10 @@ int mana_hwc_send_request(struct
-> hw_channel_context *hwc, u32 req_len,
->  		goto out;
->  	}
->=20
-> -	if (!wait_for_completion_timeout(&ctx->comp_event, 30 * HZ)) {
-> +	if (!wait_for_completion_timeout(&ctx->comp_event, 5 * HZ)) {
->  		dev_err(hwc->dev, "HWC: Request timed out!\n");
->  		err =3D -ETIMEDOUT;
-> +		ac->vf_unload_timeout =3D true;
->  		goto out;
->  	}
->=20
-> diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c
-> b/drivers/net/ethernet/microsoft/mana/mana_en.c
-> index d907727c7b7a..24f5508d2979 100644
-> --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-> +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-> @@ -2330,7 +2330,10 @@ static int mana_dealloc_queues(struct net_device
-> *ndev)
->  	struct mana_port_context *apc =3D netdev_priv(ndev);
->  	struct gdma_dev *gd =3D apc->ac->gdma_dev;
->  	struct mana_txq *txq;
-> +	struct sk_buff *skb;
-> +	struct mana_cq *cq;
->  	int i, err;
-> +	unsigned long timeout;
->=20
->  	if (apc->port_is_up)
->  		return -EINVAL;
-> @@ -2348,13 +2351,26 @@ static int mana_dealloc_queues(struct net_device
-> *ndev)
->  	 *
->  	 * Drain all the in-flight TX packets
->  	 */
-> +
-> +	timeout =3D jiffies + 120 * HZ;
->  	for (i =3D 0; i < apc->num_queues; i++) {
->  		txq =3D &apc->tx_qp[i].txq;
-> -
-> -		while (atomic_read(&txq->pending_sends) > 0)
-> +		while (atomic_read(&txq->pending_sends) > 0 &&
-> +		       time_before(jiffies, timeout)) {
->  			usleep_range(1000, 2000);
-> +		}
->  	}
->=20
-> +	for (i =3D 0; i < apc->num_queues; i++) {
-> +		txq =3D &apc->tx_qp[i].txq;
-> +		cq =3D &apc->tx_qp[i].tx_cq;
-> +		while (atomic_read(&txq->pending_sends)) {
-> +			skb =3D skb_dequeue(&txq->pending_skbs);
-> +			mana_unmap_skb(skb, apc);
-> +			napi_consume_skb(skb, cq->budget);
-> +			atomic_sub(1, &txq->pending_sends);
-> +		}
-> +	}
->  	/* We're 100% sure the queues can no longer be woken up, because
->  	 * we're sure now mana_poll_tx_cq() can't be running.
->  	 */
-> @@ -2605,6 +2621,7 @@ int mana_probe(struct gdma_dev *gd, bool
-> resuming)
->  		}
->  	}
->=20
-> +	ac->vf_unload_timeout =3D false;
->  	err =3D add_adev(gd);
->  out:
->  	if (err)
-> diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
-> index 9eef19972845..34f5d8e06ede 100644
-> --- a/include/net/mana/mana.h
-> +++ b/include/net/mana/mana.h
-> @@ -361,6 +361,8 @@ struct mana_context {
->  	struct mana_eq *eqs;
->=20
->  	struct net_device *ports[MAX_PORTS_IN_MANA_DEV];
-> +
-> +	bool vf_unload_timeout;
->  };
->=20
->  struct mana_port_context {
-> --
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Please specify "net" branch for fixes.
-Also Cc: stable@vger.kernel.org So it will be ported to stable trees.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Thanks,
-- Haiyang
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
