@@ -2,100 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E677737963
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 04:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F23373796C
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 05:00:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjFUCyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 22:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54108 "EHLO
+        id S229984AbjFUDAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 23:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjFUCyU (ORCPT
+        with ESMTP id S229470AbjFUDAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 22:54:20 -0400
-Received: from forward501b.mail.yandex.net (forward501b.mail.yandex.net [178.154.239.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917851704;
-        Tue, 20 Jun 2023 19:54:18 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-10.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-10.sas.yp-c.yandex.net [IPv6:2a02:6b8:c14:2481:0:640:e0:0])
-        by forward501b.mail.yandex.net (Yandex) with ESMTP id 036065F01D;
-        Wed, 21 Jun 2023 05:54:16 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-10.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id DsXQr41DViE0-SPDjKbks;
-        Wed, 21 Jun 2023 05:54:15 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687316055;
-        bh=elhQiYgc/jirqX3wBHnMttM8AI1mnDD23NxVQeQhyPE=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=d/wmJgV+Kb8xW7NsO5+V8bCyHSYmrnnfmeiuJWLSpvJXZ4DBbqSZeZt4zgbDSCVTq
-         SZ8PBm9LbeD7Lf7kDGuUqT4QtVhtuzEtIXXssbOYqNeaC4sATlhJziXs2qjhlEoZ+A
-         1H4d6VRu6sG3IJcu3c51ifBApQuFx8lz7Z8enlKY=
-Authentication-Results: mail-nwsmtp-smtp-production-main-10.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-Message-ID: <a874f022-bdd9-8f87-e571-75626f5901ee@yandex.ru>
-Date:   Wed, 21 Jun 2023 07:54:13 +0500
+        Tue, 20 Jun 2023 23:00:51 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF860E7E;
+        Tue, 20 Jun 2023 20:00:50 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-77e2c42de06so176194439f.1;
+        Tue, 20 Jun 2023 20:00:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687316450; x=1689908450;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yk+CCzKPoEK1DNGd+x8aPT6YCsf+viHVDJzfkXgbxwM=;
+        b=VRgq37DNHaxMgTnBuph6L5V1HPRkptAq8ksZwGPsvwidL2Xvf6TPy/M9KpkfUx0ZsC
+         iSVwUvnf9FMnQU44mimALZbKUh/FkA6Jsdla2+Q6qxYjhqSsWceFrngsZzqVr6UieB1R
+         GxJOORpgtrvXvXhpPNn89+bku4KgEnmGzzBqERZLxnRTMEut3yw6nmxCzXvuFU1dvm+R
+         Bh+OVpfnwT09V5A72HMZ1lTeh2fXxlelsKk9YzP+yZ8qiYcHpOhZvr4Bgd3N/EA9zikm
+         Q2E71GNrAlIaD4WhIBvhbSB19T9dVLcwbOjIucMNtjJmOnPB9IqubxVhMD5m3gNiAOlM
+         s75Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687316450; x=1689908450;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yk+CCzKPoEK1DNGd+x8aPT6YCsf+viHVDJzfkXgbxwM=;
+        b=CofBt2hm425r1r3Y4T7INGtdtXnIvfp+2BKSZ9SqRLp991W7CEOK9GzurCoRaEUV/5
+         38B3aXH+495Ceqmi8h1a6C1BpsXr6ndTPnq71OHYps+i7kYNBKB9cWnJrBP7PO+u7e1U
+         NACcsoadmk9UQsjnv3LdahcadRSHOWZDbZ7y/qLaO9FZdZBWuKNERTTbbbRt6y681I4l
+         NFPixB3wpQ9CA/Kw36L0oZJzzlLFIDrmpbdYp42B1UJDB6FiWb7fhh6/3W4A61J7fYea
+         oIBHXxRLNOZRVfYw2UN/3RGCSrHOK49kAH4DW9tbvZ1QF8cSqvihl9rPmwte1mKqEET4
+         0DRg==
+X-Gm-Message-State: AC+VfDyeaHNfU2wr0wGbIlO+TU+9PMDeApbDaDJQgukLp+qeOaXsAsvn
+        IRmORK/u/Kff4tZGwtI1XpukeoKnVoPfeQ==
+X-Google-Smtp-Source: ACHHUZ5tdpP+vH8ZxE1GLqqc/SHVOSQIlQ7gzYXMLVfVTpncwMOS3+mzoZuOl84qGUimIfjvOsU0LQ==
+X-Received: by 2002:a5e:8909:0:b0:777:b6cd:5a93 with SMTP id k9-20020a5e8909000000b00777b6cd5a93mr12837261ioj.2.1687316450166;
+        Tue, 20 Jun 2023 20:00:50 -0700 (PDT)
+Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
+        by smtp.gmail.com with ESMTPSA id x6-20020a029706000000b0042682dd951dsm1035008jai.87.2023.06.20.20.00.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Jun 2023 20:00:49 -0700 (PDT)
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Bodo Stroesser <bostroesser@gmail.com>
+Cc:     linux-hardening@vger.kernel.org,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] scsi: Replace strlcpy with strscpy
+Date:   Wed, 21 Jun 2023 03:00:31 +0000
+Message-ID: <20230621030033.3800351-1-azeemshaikh38@gmail.com>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/3] fd/locks: allow get the lock owner by F_OFD_GETLK
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Jeff Layton <jlayton@kernel.org>, linux-kernel@vger.kernel.org,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org
-References: <eaccc14ddc6b546e5913eb557fec55f77cb5424d.camel@kernel.org>
- <5f644a24-90b5-a02f-b593-49336e8e0f5a@yandex.ru>
- <2eb8566726e95a01536b61a3b8d0343379092b94.camel@kernel.org>
- <d70b6831-3443-51d0-f64c-6f6996367a85@yandex.ru>
- <d0c18369245db91a3b78017fabdc81417418af67.camel@kernel.org>
- <ddb48e05-ab26-ae5d-86d5-01e47f0f0cd2@yandex.ru>
- <ZJGtmrej8LraEsjj@casper.infradead.org>
- <cb88d464-30d8-810e-f3c4-35432d12a32d@yandex.ru>
- <ZJG5ZOK8HKl/eWmM@casper.infradead.org>
- <08612562-d2d7-a931-0c40-c401fff772c7@yandex.ru>
- <ZJHcT9DPGWVlTsHg@casper.infradead.org>
-From:   stsp <stsp2@yandex.ru>
-In-Reply-To: <ZJHcT9DPGWVlTsHg@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series replaces strlcpy in the scsi subsystem wherever trivial
+replacement is possible, i.e return value from strlcpy is unused. The patches
+themselves are independent of each other and are included as a series for
+ease of review. 
 
-20.06.2023 22:05, Matthew Wilcox пишет:
->> Does this mean, by any chance, that the
->> recipient actually owns an fd before
->> recvmsg() is done?
-> no, it's not in their fd table.  they don't own it.
-OK, thanks for showing this pathological
-case. Let me just note that this changes
-nothing at all. :)
+Azeem Shaikh (2):
+  scsi: Replace strlcpy with strscpy
+  scsi: target: tcmu: Replace strlcpy with strscpy
 
-The important thing to note here is that
-any lock query is race-prone: locks can
-come and go at any time. So if you need
-some sequence of operations, you need
-to employ some global locking for that.
-I use flock(LOCK_EX) on the same fd, before
-doing F_OFD_GETLK, and I do flock(LOCK_UN)
-only when the entire sequence of operations
-is completed. And I do the same on an
-F_OFD_SETLK's side to guarantee the
-atomicity. You can't do it otherwise,
-it would be race-prone.
+ drivers/scsi/ncr53c8xx.c          | 2 +-
+ drivers/target/target_core_user.c | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-So given the above, the only thing we
-need for l_pid consistency is for the
-"donor" process to put LOCK_EX on an
-fd before doing SCM_RIGHTS, and the
-recipient should do LOCK_UN. Then
-the other side, which also uses LOCK_EX,
-will never see the owner-less state.
-And as for the kernel's POV, l_pid should
-be set to -1 only when there is no owner,
-like in an example you mentioned.
+-- 
+2.41.0.162.gfafddb0af9-goog
+
