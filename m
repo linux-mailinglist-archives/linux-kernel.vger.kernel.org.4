@@ -2,110 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A56E738609
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA8A73860B
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231389AbjFUOBU convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 10:01:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
+        id S232656AbjFUOBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:01:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229872AbjFUOA5 (ORCPT
+        with ESMTP id S232476AbjFUOBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:00:57 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E858D1BE2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:00:54 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1qByO4-0005A0-OB; Wed, 21 Jun 2023 16:00:44 +0200
-Message-ID: <0f1095ef333da7ea103486a1121ca9038815e57c.camel@pengutronix.de>
-Subject: Re: [PATCH v10 03/11] drm/etnaviv: Add dedicated functions to
- create and destroy platform device
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>,
-        Sui Jingfeng <18949883232@163.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        etnaviv@lists.freedesktop.org
-Date:   Wed, 21 Jun 2023 16:00:38 +0200
-In-Reply-To: <30d80802-2d9d-2816-1a02-240145f6dd3a@loongson.cn>
-References: <20230620094716.2231414-1-18949883232@163.com>
-         <20230620094716.2231414-4-18949883232@163.com>
-         <0daa7182d6600a24988d1c81cf8fe3c0c9487f52.camel@pengutronix.de>
-         <1c7596fd-7e63-6719-2574-7d7820687832@loongson.cn>
-         <6d287bbb1733814009dfeb7d48f08cb6f44dc56c.camel@pengutronix.de>
-         <30d80802-2d9d-2816-1a02-240145f6dd3a@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 21 Jun 2023 10:01:03 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38561BF1;
+        Wed, 21 Jun 2023 07:00:58 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f8fe9dc27aso45838415e9.3;
+        Wed, 21 Jun 2023 07:00:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687356057; x=1689948057;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=e0TQPSS7a9Jk8gsZ9aLEqJ9x+mgzVCzVi1FpIGNdrBw=;
+        b=ZY+A+AK+0hrEqCQD5smhWHxGBgM513DkVqUqEYh8CTkbDkfBqlijxtada3pe1oO6RU
+         qAnRJTWbOw7A82AmMVkjSnGgvX4adfXs8QGiXJrf6X7elEipSkUouVQM6KxJnfJaRw+8
+         vdbu4y6FXWx7It3diymV26tO8gGqKRoKSSoMTKckwFi82e0p3wvuaMs8aGQchu5XJApv
+         QkZrVCkbKpxYOjOFUwzBkcJUPPHlM8kE7qx8DZKyA5a6EVkt5cdvnNqjMdW4F9A2c0YB
+         cR94RYWH0IbE/c70GB4u4tsRVhXZX3L3HbV4cX8rncCg6FMQcXkp4KO/kfrnykD+lcBw
+         f4pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687356057; x=1689948057;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e0TQPSS7a9Jk8gsZ9aLEqJ9x+mgzVCzVi1FpIGNdrBw=;
+        b=EMLmnNOykIzH40j0JFdOmpmPlrnVyMp1JddyM1zX0xCXrJ/A+T84PO+OnDPkD3Svpk
+         n/u2C/2ARy95f2AGPm5A9bvRqGVG0MjFfMRYPb5yN+oafB/0IJzLTm8IfHaRgXzhjL7t
+         6lMrf5++Jn1SzPAyd/YZ6kIWbxt/yMgIIVDvVMoBfFcJqjEsHm1pYhI9HfCoI5qFfTdJ
+         U1dHqir0jK5G7fRAtO/gfeJcaHBdObiIi/QruGAN6imk+rcvXH34lUwxGYbAqo+Xwzr7
+         5lFESThKITTGHpXXQCFsoUBqci85KUqHW2fCumR/yhzEMcC0LNEVDp2jZalDkGZHzdxm
+         Gdnw==
+X-Gm-Message-State: AC+VfDyg2vKw1f1UVE+EVRc7VK7ZLI2FfLqv67IMjuhtVwQ1cJYLrsJA
+        v6JqjSml5dIfAJFIX1oDOA95RrTb8tS4ZQ==
+X-Google-Smtp-Source: ACHHUZ6USQ+jPF1zdYOcOD+fTnKNaYk6s6ff02iOn4dDuGOymqK21PvMoHXjGTGWe7LJlza2cc3yvw==
+X-Received: by 2002:a05:600c:2158:b0:3f9:aaa:37e7 with SMTP id v24-20020a05600c215800b003f90aaa37e7mr7285270wml.0.1687356056879;
+        Wed, 21 Jun 2023 07:00:56 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id u15-20020a05600c210f00b003f18b942338sm5118938wml.3.2023.06.21.07.00.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 07:00:56 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] hpfs: remove redundant variable r
+Date:   Wed, 21 Jun 2023 15:00:55 +0100
+Message-Id: <20230621140055.2679143-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, dem 21.06.2023 um 21:31 +0800 schrieb Sui Jingfeng:
-> On 2023/6/21 18:23, Lucas Stach wrote:
-> > > While back to the question you ask, I want etnaviv_create_platform_device() to be generic,
-> > > 
-> > > can be used by multiple place for multiple purpose.
-> > > 
-> > > I have successfully copy this to a another drm driver by simply renaming.
-> > > 
-> > > The body of the function itself does not need to change.
-> > But it isn't shared,
-> 
-> This can be shared for drm/etnaviv in the future,
-> 
-> currently, we just need an opportunity to use this function.
-> 
-I'm not convinced, yet.
+Variable r is being assigned a value that is not being read, the
+assignment and the variable are redundant and can be removed. It
+is also useful to remove r as it's a confusing shadow of another
+variable r declared in a higher scope. Cleans up clang scan build
+warning:
 
-> I want to create a dummy platform device,
-> 
-> let this dummy platform be bound to the single PCI GPU master.
-> 
-> 
-> etnaviv_create_platform_device("dummy", &dummy_device);
-> 
-> 
-> 1) To verify the component code path on PCI case.
-> 
-My favorite option would be to just always use the component path even
-when the GPU is on a PCI device to keep both paths mostly aligned. One
-could easily image both a 3D and a 2D core being made available though
-the same PCI device.
+fs/hpfs/namei.c:560:8: warning: Although the value stored to 'r'
+is used in the enclosing expression, the value is never actually
+read from 'r' [deadcode.DeadStores]
 
-> 2) Possibly for create a device for some other tiny hardware logic
-> come with the platform
-> 
-Do you have something in mind here? Until now I assumed that only the
-GPU core is behind the PCI abstraction. Is there something else sharing
-the MMIO space?
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ fs/hpfs/namei.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Regards,
-Lucas
-
-> 3) Revival component_compare_dev_name() function.
-> 
-> > in this compilation unit this function is specific
-> > to the etnaviv driver and I don't see why we shouldn't have etnaviv
-> > specifics in there if it makes the code of this driver easier to
-> > follow.
-> 
+diff --git a/fs/hpfs/namei.c b/fs/hpfs/namei.c
+index 69fb40b2c99a..d892a6f74431 100644
+--- a/fs/hpfs/namei.c
++++ b/fs/hpfs/namei.c
+@@ -556,8 +556,7 @@ static int hpfs_rename(struct mnt_idmap *idmap, struct inode *old_dir,
+ 	de.hidden = new_name[0] == '.';
+ 
+ 	if (new_inode) {
+-		int r;
+-		if ((r = hpfs_remove_dirent(old_dir, dno, dep, &qbh, 1)) != 2) {
++		if (hpfs_remove_dirent(old_dir, dno, dep, &qbh, 1) != 2) {
+ 			if ((nde = map_dirent(new_dir, hpfs_i(new_dir)->i_dno, new_name, new_len, NULL, &qbh1))) {
+ 				clear_nlink(new_inode);
+ 				copy_de(nde, &de);
+-- 
+2.39.2
 
