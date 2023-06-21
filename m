@@ -2,34 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F6F738E09
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:02:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69631738DDD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:56:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231660AbjFUSCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 14:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34864 "EHLO
+        id S231826AbjFUR4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 13:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231146AbjFUSCf (ORCPT
+        with ESMTP id S231139AbjFURzn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 14:02:35 -0400
+        Wed, 21 Jun 2023 13:55:43 -0400
 Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [213.239.216.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 42ED9173F;
-        Wed, 21 Jun 2023 11:02:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A87419AB;
+        Wed, 21 Jun 2023 10:54:45 -0700 (PDT)
 Received: from lexxgentoo.devos.club (unknown [77.239.252.99])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id 1AA4014077E;
-        Wed, 21 Jun 2023 17:52:14 +0000 (UTC)
+        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id F150C1408B3;
+        Wed, 21 Jun 2023 17:52:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postmarketos.org;
-        s=donut; t=1687369934;
+        s=donut; t=1687369959;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=d3oc9wyPXtC9CgyzWqubRp9/AD3soSg8F+ca20KMsmU=;
-        b=bwe2BKlk0a7rvdtN2Ou7xHYCGeVopXBOzfv0QNxJVnX9pBwEZvkqRyNTZPy9Oi89D5hoxc
-        5i3+Kb6vmQDD6WAtCTcrL2kkJJTmSc5nv+KYgF/gdNOpImOzkh6QNELrx7AnKBnjIvlb0C
-        ArNcxl3W4g1esMD7SL8nhGm3yJhilUk=
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=spj7M1eu0BpTeWO4D88uXHofRs63AcicfCjtgCEG0j4=;
+        b=bUP0j+i7VThOhmj1qULSbsnS2q8655wfM/XpfJNl53YC4HK7km1yUcz5GBjPsrwQtrYOzT
+        isUEBs95ZytRcRA/wMVGrEHCOxyLzG3GfiWf4DzgtLbi5EFx+ZGmPJ6GsoDThl46xQk3bh
+        P9+yHoMSdQ7mLSvfECwFnVjK1SfbUME=
 From:   Alexey Minnekhanov <alexeymin@postmarketos.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -41,12 +42,13 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Alexey Minnekhanov <alexeymin@postmarketos.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 1/3] dt-bindings: remoteproc: qcom,msm8996-mss-pil: Add SDM660 compatible
-Date:   Wed, 21 Jun 2023 20:50:44 +0300
-Message-Id: <20230621175046.61521-1-alexeymin@postmarketos.org>
+        Alexey Minnekhanov <alexeymin@postmarketos.org>
+Subject: [PATCH v2 3/3] arm64: dts: qcom: sdm630: Add support for modem remoteproc
+Date:   Wed, 21 Jun 2023 20:50:46 +0300
+Message-Id: <20230621175046.61521-3-alexeymin@postmarketos.org>
 X-Mailer: git-send-email 2.39.3
+In-Reply-To: <20230621175046.61521-1-alexeymin@postmarketos.org>
+References: <20230621175046.61521-1-alexeymin@postmarketos.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -59,37 +61,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mention sdm660-mss-pil in compatibles list.
+Modem subsystem in SDM630/660 is similar to MSM8998 and
+device tree node for it is based on the one from msm8998.dtsi.
 
 Signed-off-by: Alexey Minnekhanov <alexeymin@postmarketos.org>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/qcom/sdm630.dtsi | 65 ++++++++++++++++++++++++++++
+ 1 file changed, 65 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml b/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
-index c1ac6ca1e759..09da5616e1e5 100644
---- a/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
-+++ b/Documentation/devicetree/bindings/remoteproc/qcom,msm8996-mss-pil.yaml
-@@ -19,6 +19,7 @@ properties:
-     enum:
-       - qcom,msm8996-mss-pil
-       - qcom,msm8998-mss-pil
-+      - qcom,sdm660-mss-pil
-       - qcom,sdm845-mss-pil
+diff --git a/arch/arm64/boot/dts/qcom/sdm630.dtsi b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+index 014237d4b5b2..ad01f2951154 100644
+--- a/arch/arm64/boot/dts/qcom/sdm630.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm630.dtsi
+@@ -1028,6 +1028,71 @@ data-pins {
+ 			};
+ 		};
  
-   reg:
-@@ -245,7 +246,9 @@ allOf:
-   - if:
-       properties:
-         compatible:
--          const: qcom,msm8998-mss-pil
-+          enum:
-+            - qcom,msm8998-mss-pil
-+            - qcom,sdm660-mss-pil
-     then:
-       properties:
-         clocks:
++		remoteproc_mss: remoteproc@4080000 {
++			compatible = "qcom,sdm660-mss-pil";
++			reg = <0x04080000 0x100>, <0x04180000 0x40>;
++			reg-names = "qdsp6", "rmb";
++
++			interrupts-extended = <&intc GIC_SPI 448 IRQ_TYPE_EDGE_RISING>,
++					      <&modem_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
++					      <&modem_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
++					      <&modem_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
++					      <&modem_smp2p_in 3 IRQ_TYPE_EDGE_RISING>,
++					      <&modem_smp2p_in 7 IRQ_TYPE_EDGE_RISING>;
++			interrupt-names = "wdog",
++					  "fatal",
++					  "ready",
++					  "handover",
++					  "stop-ack",
++					  "shutdown-ack";
++
++			clocks = <&gcc GCC_MSS_CFG_AHB_CLK>,
++				 <&gcc GCC_BIMC_MSS_Q6_AXI_CLK>,
++				 <&gcc GCC_BOOT_ROM_AHB_CLK>,
++				 <&gcc GPLL0_OUT_MSSCC>,
++				 <&gcc GCC_MSS_SNOC_AXI_CLK>,
++				 <&gcc GCC_MSS_MNOC_BIMC_AXI_CLK>,
++				 <&rpmcc RPM_SMD_QDSS_CLK>,
++				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
++			clock-names = "iface",
++				      "bus",
++				      "mem",
++				      "gpll0_mss",
++				      "snoc_axi",
++				      "mnoc_axi",
++				      "qdss",
++				      "xo";
++
++			qcom,smem-states = <&modem_smp2p_out 0>;
++			qcom,smem-state-names = "stop";
++
++			resets = <&gcc GCC_MSS_RESTART>;
++			reset-names = "mss_restart";
++
++			qcom,halt-regs = <&tcsr_regs_1 0x3000 0x5000 0x4000>;
++
++			power-domains = <&rpmpd SDM660_VDDCX>,
++					<&rpmpd SDM660_VDDMX>;
++			power-domain-names = "cx", "mx";
++
++			status = "disabled";
++
++			mba {
++				memory-region = <&mba_region>;
++			};
++
++			mpss {
++				memory-region = <&mpss_region>;
++			};
++
++			glink-edge {
++				interrupts = <GIC_SPI 452 IRQ_TYPE_EDGE_RISING>;
++				label = "modem";
++				qcom,remote-pid = <1>;
++				mboxes = <&apcs_glb 15>;
++			};
++		};
++
+ 		adreno_gpu: gpu@5000000 {
+ 			compatible = "qcom,adreno-508.0", "qcom,adreno";
+ 
 -- 
 2.39.3
 
