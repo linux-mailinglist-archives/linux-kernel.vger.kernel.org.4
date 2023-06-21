@@ -2,73 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8DE73817F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA935738006
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:09:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbjFUJUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 05:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54910 "EHLO
+        id S230496AbjFUJVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 05:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231811AbjFUJUN (ORCPT
+        with ESMTP id S230148AbjFUJVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 05:20:13 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3E9F6E69
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:20:11 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8AxhMTJwJJkbxQAAA--.157S3;
-        Wed, 21 Jun 2023 17:20:09 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxzM7IwJJk8F4AAA--.2408S3;
-        Wed, 21 Jun 2023 17:20:08 +0800 (CST)
-Message-ID: <52751b55-ce34-f3a8-b3c0-4858ad984622@loongson.cn>
-Date:   Wed, 21 Jun 2023 17:20:08 +0800
+        Wed, 21 Jun 2023 05:21:11 -0400
+Received: from chinatelecom.cn (prt-mail.chinatelecom.cn [42.123.76.223])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9DBF51B4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:21:09 -0700 (PDT)
+HMM_SOURCE_IP: 172.18.0.48:41464.1037017731
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-36.111.64.85 (unknown [172.18.0.48])
+        by chinatelecom.cn (HERMES) with SMTP id A0D352800BB;
+        Wed, 21 Jun 2023 17:21:01 +0800 (CST)
+X-189-SAVE-TO-SEND: +liuq131@chinatelecom.cn
+Received: from  ([36.111.64.85])
+        by app0024 with ESMTP id fa69a156f7714ae4ae7368d0327bf29c for akpm@linux-foundation.org;
+        Wed, 21 Jun 2023 17:21:07 CST
+X-Transaction-ID: fa69a156f7714ae4ae7368d0327bf29c
+X-Real-From: liuq131@chinatelecom.cn
+X-Receive-IP: 36.111.64.85
+X-MEDUSA-Status: 0
+Sender: liuq131@chinatelecom.cn
+From:   liuq <liuq131@chinatelecom.cn>
+To:     akpm@linux-foundation.org
+Cc:     ying.huang@intel.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, liuq <liuq131@chinatelecom.cn>
+Subject: [PATCH v3] mm/min_free_kbytes: modify min_free_kbytes calculation rules
+Date:   Wed, 21 Jun 2023 17:20:48 +0800
+Message-Id: <20230621092048.5242-1-liuq131@chinatelecom.cn>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v10 01/11] drm/etnaviv: Add a dedicated function to
- register an irq handler
-Content-Language: en-US
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Sui Jingfeng <18949883232@163.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        etnaviv@lists.freedesktop.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20230620094716.2231414-1-18949883232@163.com>
- <20230620094716.2231414-2-18949883232@163.com>
- <77f62814f98dd2728a1e4747f0db6b2a3cfa2c11.camel@pengutronix.de>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <77f62814f98dd2728a1e4747f0db6b2a3cfa2c11.camel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxzM7IwJJk8F4AAA--.2408S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxCr45CF18Xr4DJFWUXFy5trc_yoW5ur17pF
-        ZrGFyYyr1kua42g34xXF98ZFya9w4xXayxCr1Dt3sI9ws0yrn5tryYkF4jka4fAr95Cw4x
-        tr4jgr17uF4YvrXCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67
-        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14
-        v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4Xo7DU
-        UUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,108 +49,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The current calculation of min_free_kbytes only uses ZONE_DMA and
+ZONE_NORMAL pages,but the ZONE_MOVABLE zone->_watermark[WMARK_MIN]
+will also divide part of min_free_kbytes.This will cause the min
+watermark of ZONE_NORMAL to be too small in the presence of ZONE_MOVEABLE.
 
-On 2023/6/21 17:07, Lucas Stach wrote:
-> Am Dienstag, dem 20.06.2023 um 17:47 +0800 schrieb Sui Jingfeng:
->> From: Sui Jingfeng <suijingfeng@loongson.cn>
->>
->> Because getting IRQ from a device is platform-dependent, PCI devices have
->> different methods for getting an IRQ. This patch is a preparation to extend
->> this driver for supporting the PCI devices.
->>
->> Cc: Lucas Stach <l.stach@pengutronix.de>
->> Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
->> Cc: Philipp Zabel <p.zabel@pengutronix.de>
->> Cc: Bjorn Helgaas <bhelgaas@google.com>
->> Cc: Daniel Vetter <daniel@ffwll.ch>
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->> ---
->>   drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 32 +++++++++++++++++++--------
->>   1 file changed, 23 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
->> index de8c9894967c..a03e81337d8f 100644
->> --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
->> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
->> @@ -1817,6 +1817,27 @@ static const struct of_device_id etnaviv_gpu_match[] = {
->>   };
->>   MODULE_DEVICE_TABLE(of, etnaviv_gpu_match);
->>   
->> +static int etnaviv_gpu_register_irq(struct etnaviv_gpu *gpu, int irq)
->> +{
->> +	struct device *dev = gpu->dev;
->> +	int err;
->> +
->> +	if (irq < 0)
->> +		return irq;
->> +
->> +	err = devm_request_irq(dev, irq, irq_handler, 0, dev_name(dev), gpu);
->> +	if (err) {
->> +		dev_err(dev, "failed to request irq %u: %d\n", irq, err);
->> +		return err;
->> +	}
->> +
->> +	gpu->irq = irq;
->> +
->> +	dev_info(dev, "irq(%d) handler registered\n", irq);
-> There is no reason to put this into the kernel log.
+__GFP_HIGH and PF_MEMALLOC allocations usually don't need movable
+zone pages, so just like ZONE_HIGHMEM, cap pages_min to a small
+value in __setup_per_zone_wmarks.
 
-I want to see the IRQ of the device when debugging,
+On my testing machine with 16GB of memory (transparent hugepage is
+turned off by default, and movablecore=12G is configured)
+The following is a comparative test data of watermark_min
 
-etnaviv actually print very less.
+		no patch	add patch
+ZONE_DMA	1		8
+ZONE_DMA32	151		709
+ZONE_NORMAL	233		1113
+ZONE_MOVABLE	1434		128
+min_free_kbytes	7288		7326
 
-This serve as a minimal signal  to us the etnaviv_gpu_register_irq() 
-function is successful at driver load time.
+Signed-off-by: liuq <liuq131@chinatelecom.cn>
+---
+ mm/page_alloc.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
->   It's no different
-> than other resources to the driver and we don't log each one of those
-> either.
->
-> In fact I don't see any reason for this change in the first place.
-> Effectively you are moving a single function call into a new function,
-> which doesn't seem like an improvement.
-
-This is to make the patch easy to review, each patch is only introduce a 
-small function,
-
-which is paving the way for we introducing the PCI device driver.
-
-Otherwise when we introducing the PCI device driver, the patch is looks 
-ugly,
-
-It is difficult to review.
-
-> Regards,
-> Lucas
->
->> +
->> +	return 0;
->> +}
->> +
->>   static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
->>   {
->>   	struct device *dev = &pdev->dev;
->> @@ -1837,16 +1858,9 @@ static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
->>   		return PTR_ERR(gpu->mmio);
->>   
->>   	/* Get Interrupt: */
->> -	gpu->irq = platform_get_irq(pdev, 0);
->> -	if (gpu->irq < 0)
->> -		return gpu->irq;
->> -
->> -	err = devm_request_irq(&pdev->dev, gpu->irq, irq_handler, 0,
->> -			       dev_name(gpu->dev), gpu);
->> -	if (err) {
->> -		dev_err(dev, "failed to request IRQ%u: %d\n", gpu->irq, err);
->> +	err = etnaviv_gpu_register_irq(gpu, platform_get_irq(pdev, 0));
->> +	if (err)
->>   		return err;
->> -	}
->>   
->>   	/* Get Clocks: */
->>   	gpu->clk_reg = devm_clk_get_optional(&pdev->dev, "reg");
-
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 47421bedc12b..590ed8725e09 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -6362,9 +6362,9 @@ static void __setup_per_zone_wmarks(void)
+ 	struct zone *zone;
+ 	unsigned long flags;
+ 
+-	/* Calculate total number of !ZONE_HIGHMEM pages */
++	/* Calculate total number of !ZONE_HIGHMEM and !ZONE_MOVABLE pages */
+ 	for_each_zone(zone) {
+-		if (!is_highmem(zone))
++		if (!is_highmem(zone) && zone_idx(zone) != ZONE_MOVABLE)
+ 			lowmem_pages += zone_managed_pages(zone);
+ 	}
+ 
+@@ -6374,15 +6374,15 @@ static void __setup_per_zone_wmarks(void)
+ 		spin_lock_irqsave(&zone->lock, flags);
+ 		tmp = (u64)pages_min * zone_managed_pages(zone);
+ 		do_div(tmp, lowmem_pages);
+-		if (is_highmem(zone)) {
++		if (is_highmem(zone) || zone_idx(zone) == ZONE_MOVABLE) {
+ 			/*
+ 			 * __GFP_HIGH and PF_MEMALLOC allocations usually don't
+-			 * need highmem pages, so cap pages_min to a small
+-			 * value here.
++			 * need highmem and movable zones pages, so cap pages_min
++			 * to a small  value here.
+ 			 *
+ 			 * The WMARK_HIGH-WMARK_LOW and (WMARK_LOW-WMARK_MIN)
+ 			 * deltas control async page reclaim, and so should
+-			 * not be capped for highmem.
++			 * not be capped for highmem and movable zones.
+ 			 */
+ 			unsigned long min_pages;
+ 
 -- 
-Jingfeng
+2.27.0
 
