@@ -2,142 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085ED738AFE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E43A0738B13
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbjFUQZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:25:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50172 "EHLO
+        id S232009AbjFUQ0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:26:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbjFUQZI (ORCPT
+        with ESMTP id S231478AbjFUQ0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:25:08 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C941BC;
-        Wed, 21 Jun 2023 09:25:07 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-519c0ad1223so7549737a12.0;
-        Wed, 21 Jun 2023 09:25:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687364706; x=1689956706;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QL1t4miGxRnnxQzf8bjjL0+PFINXfuxB+zoinGDtes8=;
-        b=irrMpAFNJpTfbjVuH28fbCCV4lH0Ch8ytsOoxweDj1qnoZo3ylZ2LN/OTyjLU5p91D
-         9gQ9eu5tXdmVWpJcJL6oYE8gKOgzBr7Oi0/Cz5BZNewF5k7wTS9wJwpj3TstACyyC5Zh
-         nb1wnAQOSQMf2QDyHj3LAYOMZCJR2OA3xM8u7hSTUCJ1lnf0iQlWOC53zf7Upi5uT6FT
-         RgzdWPTkbpkdxUxiGNPgDtbfFNB8YOdE5sv0pqkpvw1VAkeR5wUPIWIoU2Ufl2DwIh/9
-         ZLedVmJNSAqgB9T1tATySiZW5XPEXlwrBRf6UN9dDJL3ZSVUDXB8VlYOyNNRv2L06Uy4
-         qESw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687364706; x=1689956706;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QL1t4miGxRnnxQzf8bjjL0+PFINXfuxB+zoinGDtes8=;
-        b=Cwh6FfdDLYV1FE0BMg4XNZ3UJJbl0DUiDHrIp9IqA0gxe5+moSLjyxAPbUcZqG3Gx8
-         /Ts54Fn/0OC1uDV9OykpFd4bUAIC3iF/F3+6+sLHYNCfJGBii93k6MqLQOXIBXQbx9q8
-         Tppd42lEgOYt7RIF48SQWo6ST7QOYX2zrx54W+VjToffeTf6AjVDuhhWwIhFAZqtZfFF
-         cjtHBbOqChdKsLbMdbuT+mGnVgYgiOr67Dow3VzZJvblJef2kZ4vJdBiSk7qEy4dctp8
-         Ffnv8jRsEjI4MbneT4jNy95AOfRX5jLBZNjWvlguz+2OLvY2TRLPqDMjTsPbmAGwndOA
-         VduQ==
-X-Gm-Message-State: AC+VfDwimRsKmCB+Gjd5+Vy0nzSYn24ZTmGuCZgzx64tPyOkBoIKSyiR
-        FrNG1PahPXJspo4tBtYd42RXNfB+PfVp/LseVgM+cgnb
-X-Google-Smtp-Source: ACHHUZ4lwnpU6y2DEqkwAjOhowAtut67tG33cF4WNAz5zfOTSljr0nDzT8AJQpyZqkWm82NcD83fJBnQqxZ06OqUACg=
-X-Received: by 2002:aa7:c6c5:0:b0:51a:4d98:e5ce with SMTP id
- b5-20020aa7c6c5000000b0051a4d98e5cemr7411614eds.36.1687364705636; Wed, 21 Jun
- 2023 09:25:05 -0700 (PDT)
+        Wed, 21 Jun 2023 12:26:36 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8166B10DB
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:26:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687364795; x=1718900795;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9qwoYapZpwMMsm49T+9E9pkufHxpAbl+dzHeAFwezxk=;
+  b=GkSRvJTZU2thQcONm+2MVFCJrfaqPPACxmYrJSRlVOIc93WnsnAFrwV/
+   +3oQQWvvA5vKxfipNRqpXS69LGAhddBCzNIOByXHcP5kbkvJxgDfKpOcd
+   ByTaUdaI68gEAdViCXkSUWaFUlrSyTHMXQNW3t2MpJEldhvjdfYhvhd2K
+   bPDsA1xxqsoV9CC3kWQSAae/N8kmX9xibFgqsSl3YZEHJfDhM5EPclf84
+   Yu3cT2tnbqoXbqaYSNF5OFg17Azs4BtCsYQWQ4nscb+8Sh9YGHOxtjo42
+   h6BU4yYO9iLCfivsVauUXigcaP7k1LBPOR2L4OeXJKfzeFnpNq2Cjjp82
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="426178623"
+X-IronPort-AV: E=Sophos;i="6.00,261,1681196400"; 
+   d="scan'208";a="426178623"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 09:26:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="804435801"
+X-IronPort-AV: E=Sophos;i="6.00,261,1681196400"; 
+   d="scan'208";a="804435801"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 21 Jun 2023 09:26:21 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 6137B1FD; Wed, 21 Jun 2023 19:26:31 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>
+Subject: [PATCH v1 0/2] bimap API: Add couple of files to MAINTAINERS
+Date:   Wed, 21 Jun 2023 19:26:24 +0300
+Message-Id: <20230621162626.86033-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-References: <20230619100121.27534-1-puranjay12@gmail.com> <20230619100121.27534-4-puranjay12@gmail.com>
- <ZJMXqTffB22LSOkd@FVFF77S0Q05N>
-In-Reply-To: <ZJMXqTffB22LSOkd@FVFF77S0Q05N>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Wed, 21 Jun 2023 09:24:54 -0700
-Message-ID: <CAADnVQJqDOMABEx8JuU6r_Dehyf=SkDfRNChx1oNfqPoo7pSrw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 3/3] bpf, arm64: use bpf_jit_binary_pack_alloc
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Puranjay Mohan <puranjay12@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        bpf <bpf@vger.kernel.org>, KP Singh <kpsingh@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 8:31=E2=80=AFAM Mark Rutland <mark.rutland@arm.com>=
- wrote:
->
-> On Mon, Jun 19, 2023 at 10:01:21AM +0000, Puranjay Mohan wrote:
-> > Use bpf_jit_binary_pack_alloc for memory management of JIT binaries in
-> > ARM64 BPF JIT. The bpf_jit_binary_pack_alloc creates a pair of RW and R=
-X
-> > buffers. The JIT writes the program into the RW buffer. When the JIT is
-> > done, the program is copied to the final RX buffer
-> > with bpf_jit_binary_pack_finalize.
-> >
-> > Implement bpf_arch_text_copy() and bpf_arch_text_invalidate() for ARM64
-> > JIT as these functions are required by bpf_jit_binary_pack allocator.
-> >
-> > Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
->
-> From a quick look, I don't beleive the I-cache maintenance is quite right=
- --
-> explanation below.
->
-> > @@ -1562,34 +1610,39 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf=
-_prog *prog)
-> >
-> >       /* 3. Extra pass to validate JITed code. */
-> >       if (validate_ctx(&ctx)) {
-> > -             bpf_jit_binary_free(header);
-> >               prog =3D orig_prog;
-> > -             goto out_off;
-> > +             goto out_free_hdr;
-> >       }
-> >
-> >       /* And we're done. */
-> >       if (bpf_jit_enable > 1)
-> >               bpf_jit_dump(prog->len, prog_size, 2, ctx.image);
-> >
-> > -     bpf_flush_icache(header, ctx.image + ctx.idx);
-> > +     bpf_flush_icache(ro_header, ctx.ro_image + ctx.idx);
->
-> I think this is too early; we haven't copied the instructions into the
-> ro_header yet, so that still contains stale instructions.
->
-> IIUC at the whole point of this is to pack multiple programs into shared =
-ROX
-> pages, and so there can be an executable mapping of the RO page at this p=
-oint,
-> and the CPU can fetch stale instructions throught that.
->
-> Note that *regardless* of whether there is an executeable mapping at this=
- point
-> (and even if no executable mapping exists until after the copy), we at le=
-ast
-> need a data cache clean to the PoU *after* the copy (so fetches don't get=
- a
-> stale value from the PoU), and the I-cache maintenance has to happeon the=
- VA
-> the instrutions will be executed from (or VIPT I-caches can still contain=
- stale
-> instructions).
+During discussion
+https://lore.kernel.org/r/20230509051403.2748545-1-lucas.demarchi@intel.com
+I was started wondering why neither Yury nor Rasmus commented on that.
 
-Good catch.
-Also considering the boot issue reported in the other thread
-I removed this series from bpf-next.
-Looks like another respin is necessary.
+Hence I wanted to add some headers to the bitmap API MAINTAINERS for
+watching the changes made elsewhere are they may correlate with bit
+operations.
+
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>
+
+Andy Shevchenko (2):
+  MAINTAINERS: Add bits.h to the BITMAP API record
+  MAINTAINERS: Add bitfield.h to the BITMAP API record
+
+ MAINTAINERS | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+-- 
+2.40.0.1.gaa8946217a0b
+
