@@ -2,128 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F337382E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:13:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4780E7382F9
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230421AbjFULxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 07:53:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
+        id S230476AbjFULyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 07:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbjFULx3 (ORCPT
+        with ESMTP id S230471AbjFULx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 07:53:29 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250A9170A
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 04:53:28 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-31272fcedf6so2795335f8f.2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 04:53:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1687348406; x=1689940406;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=VWVbrBam1C3VHFxu2Gp+YYi2JGVprd45HzgEWZLjxNI=;
-        b=m4NkOGZMB4TCMVjcELrLjRRubYuX8F1IGWT0PfmzIQSLSjXRajmdfJhKqn4XFjJL+Q
-         eRCVpVSB9sTomVtJdbAvTYMqrY35FdnFXS+piL/ZI7D4zTYkVVedZ4O45KfmXLmZUmSo
-         dyPWKtwtIy+G5RM0B3ciFRoFRa0lqxrvgkrp2/PjoYCGJsHAq2Wq8zqQYRzOVhtfVYOP
-         bEEsyZvxH68MlHiWvEyHpHQNL866S4AvvqoMfRvV3ekbZI6I04U0pddSwK6oWF392SYg
-         W5HB6vUWMe46K8v9Oi+tVhbAblBpJPnZ0bxSwYrNwrPDxP9NpOOKqSd0D/S3sPMWblaF
-         86gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687348406; x=1689940406;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VWVbrBam1C3VHFxu2Gp+YYi2JGVprd45HzgEWZLjxNI=;
-        b=Cn2/s0xNWMrND1hMddlvDmWr2t2LnZm9wZMwe1IzVWpBTkRmt2Ddt21O3F3MiiIx40
-         TObmL6iZU5hIXTOl+NCKHu521rmopkfqiTrjHszv0NuiuN3wxZJahFMLUhKL9zbysi9M
-         Ntqrp/pQ96EiyGT3dP2TeFDJhOS7C+dZlozQDcBzym2rrbmodxo674PLB6A0NH4/VOyz
-         ss9NmuduyIeGc/57b1wWVPhSmaFYJGFdN+HnhFWBu5KZTFgiuPwBvwK9swGGZEa8oF7Y
-         Mc33Q19z0UNDvdeavnqrpPfB0r2dqRNMZ4yAUbw7JV8BKSHSYfL5nWjPPk9rOEfyC8Py
-         INLg==
-X-Gm-Message-State: AC+VfDxY/iQqJa+DVOVeLBgGOadttIIiTGRsIWB+rsIqzIKHRncgZC9Y
-        eMRN0I6o+1AuVR6+PNmznAQBRQ==
-X-Google-Smtp-Source: ACHHUZ5c8gzF87ZPOzSygN9j53VtOdiY9gi5DBzBT3zEwY7bTIXpP8dgWGQLA/+KsDQtBIq8+e5vDw==
-X-Received: by 2002:a05:6000:1252:b0:311:1712:621 with SMTP id j18-20020a056000125200b0031117120621mr10087707wrx.46.1687348406491;
-        Wed, 21 Jun 2023 04:53:26 -0700 (PDT)
-Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
-        by smtp.gmail.com with ESMTPSA id b8-20020adff248000000b003063772a55bsm4283305wrp.61.2023.06.21.04.53.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 04:53:25 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 13:53:24 +0200
-From:   Jiri Pirko <jiri@resnulli.us>
-To:     Petr Oros <poros@redhat.com>
-Cc:     Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
-        kuba@kernel.org, vadfed@meta.com, jonathan.lemon@gmail.com,
-        pabeni@redhat.com, corbet@lwn.net, davem@davemloft.net,
-        edumazet@google.com, vadfed@fb.com, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, saeedm@nvidia.com, leon@kernel.org,
-        richardcochran@gmail.com, sj@kernel.org, javierm@redhat.com,
-        ricardo.canuelo@collabora.com, mst@redhat.com, tzimmermann@suse.de,
-        michal.michalik@intel.com, gregkh@linuxfoundation.org,
-        jacek.lawrynowicz@linux.intel.com, airlied@redhat.com,
-        ogabbay@kernel.org, arnd@arndb.de, nipun.gupta@amd.com,
-        axboe@kernel.dk, linux@zary.sk, masahiroy@kernel.org,
-        benjamin.tissoires@redhat.com, geert+renesas@glider.be,
-        milena.olech@intel.com, kuniyu@amazon.com, liuhangbin@gmail.com,
-        hkallweit1@gmail.com, andy.ren@getcruise.com, razor@blackwall.org,
-        idosch@nvidia.com, lucien.xin@gmail.com, nicolas.dichtel@6wind.com,
-        phil@nwl.cc, claudiajkang@gmail.com, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, mschmidt@redhat.com,
-        linux-clk@vger.kernel.org, vadim.fedorenko@linux.dev
-Subject: Re: [RFC PATCH v8 04/10] dpll: netlink: Add DPLL framework base
- functions
-Message-ID: <ZJLktA6RJaVo3BdH@nanopsycho>
-References: <20230609121853.3607724-1-arkadiusz.kubalewski@intel.com>
- <20230609121853.3607724-5-arkadiusz.kubalewski@intel.com>
- <c7480d0a71fb8d62108624878f549c0d91d4c9e6.camel@redhat.com>
+        Wed, 21 Jun 2023 07:53:58 -0400
+Received: from fallback1.i.mail.ru (fallback1.i.mail.ru [79.137.243.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2057C170A
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 04:53:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru; s=mail4;
+        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=Dt0Pfw4hhB64UidxR15sPo8nXNsoSpkcj1h2rZuo8hk=;
+        t=1687348436;x=1687438436; 
+        b=ErmyDf9eSzTcVcbMKX2BxI7Eg4KGVatBaGgTdUySgH+tR3ZnXuoHTQ52yq39PT5kmLUO4X5Rqu3uu+l4EydxOgiIKwh16CS3uD/MNIfb7fYgZ6p0bRtVMVSfXiGF+fCf/5jDPpKuqUWRkm0sHUFHB+1Zp5shO3gj6nUQi2Y4hzyqkF8ZYm1vv7cj7DHohY3ESPiVrAjCrHEegpNE93NcKG8o9Am/jH3C1/QWYpXI+zdIa9D4lwV5l+RyMyWYb7c1hAZ2LrjKQw01rTgglMn7+e4KjY3CfsBleaXwwIy7mtUNHZB0XN2GleZdgtV+zuttRtNqTMRFzxhPJ6KE+0mnpQ==;
+Received: from [10.161.55.49] (port=42924 helo=smtpng1.i.mail.ru)
+        by fallback1.i.mail.ru with esmtp (envelope-from <fido_max@inbox.ru>)
+        id 1qBwPK-00FkSl-0R
+        for linux-kernel@vger.kernel.org; Wed, 21 Jun 2023 14:53:54 +0300
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru; s=mail4;
+        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=Dt0Pfw4hhB64UidxR15sPo8nXNsoSpkcj1h2rZuo8hk=;
+        t=1687348434;x=1687438434; 
+        b=EhqWlY9UNZPMaYAxaQuA3mpXBqDCSotzyYyYC4ZLQPKnBs9ZH3x4r3Ct60kYm22CfSTx6rjGH97IuGShbwcpoaOWmwBDMzr0Ouj6JoTRj49zl3D5ye1RAEYY/B0xok1iEKzozmbCG1UhYUkMnF6d6whJyj/7QevgCNcu0eGAkkYF8gRkRzHTiqZpkt7cuKrz26wYR7/sMv6/4NYU6yx5tEbg2dnl0/Szc4sbpmlaf33qy5VCYn1K3Ao0DSCbGNzR4ciY77CQVwmTxFrRxLRCoOmjpaEkiUo4xd2Y46iiAHEX5Snb/suCCyyhtALVeAAzHnqXmi7Edo9ZyQEHlPwiHQ==;
+Received: by smtpng1.m.smailru.net with esmtpa (envelope-from <fido_max@inbox.ru>)
+        id 1qBwP5-0000gW-SZ; Wed, 21 Jun 2023 14:53:40 +0300
+From:   Maxim Kochetkov <fido_max@inbox.ru>
+To:     alsa-devel@alsa-project.org
+Cc:     Maxim Kochetkov <fido_max@inbox.ru>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Benjamin Mugnier <benjamin.mugnier@foss.st.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] ASoC: codecs: max98090: Allow dsp_a mode
+Date:   Wed, 21 Jun 2023 14:53:27 +0300
+Message-Id: <20230621115328.156457-1-fido_max@inbox.ru>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <c7480d0a71fb8d62108624878f549c0d91d4c9e6.camel@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Mailru-Src: smtp
+X-7564579A: 646B95376F6C166E
+X-77F55803: 4F1203BC0FB41BD95D99986233CC4DDC4468B86CD3C8787546E8D189E2EBE9EA182A05F53808504070B069C72436E1D2D5A4E71BD025E4125047B1DA41A3FADE443584DC68319CB8
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7A140E7B1D51EB231EA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F79006374D0D183F14C070BA8638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D83712544A9697989658D127D5918B20866F9789CCF6C18C3F8528715B7D10C86859CC434672EE6371117882F4460429724CE54428C33FAD305F5C1EE8F4F765FC3A703B70628EAD7BA471835C12D1D9774AD6D5ED66289B52BA9C0B312567BB23117882F4460429728776938767073520C24E1E72F37C03A0CB629EEF1311BF91D2E47CDBA5A96583BA9C0B312567BB231DD303D21008E29813377AFFFEAFD269A417C69337E82CC2E827F84554CEF50127C277FBC8AE2E8BA83251EDC214901ED5E8D9A59859A8B67393CE827C55B5F775ECD9A6C639B01B4E70A05D1297E1BBCB5012B2E24CD356
+X-C1DE0DAB: 0D63561A33F958A53ED0F0D15519928FD04AAF18DCFED2499590945C3EDE3FF3F87CCE6106E1FC07E67D4AC08A07B9B0A6C7FFFE744CA7FB9C5DF10A05D560A950611B66E3DA6D700B0A020F03D25A0997E3FB2386030E77
+X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CF874C60ACDD5FE242F57F3AD3431D0F7AB6867A931EA55A5E929DFB5A80A42D569B332213384B5353C17492877F82D9B86CE4D2ACC560A8F38AAD56CD3798406E04DA52CF61C1B8024C41F94D744909CEE921556F0E976A29E6EC0772259F8F8F8815B87D7EC76CB9
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojw7uTMtz3/lzKbCaM7tQQkw==
+X-Mailru-Sender: 689FA8AB762F73930F533AC2B33E986B42AF639ED9E053B675404323CF2E7D5998CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
+X-Mras: Ok
+X-7564579A: 646B95376F6C166E
+X-77F55803: 6242723A09DB00B4E9028C5D3AAACA54E8DC16345F01FC93132BCC4B5F627A4CB647ED114AB003ACB18A032C91B96DF475D01A0B191F359A97BF0508C385DA8C9D94EE637B74D14D
+X-7FA49CB5: 0D63561A33F958A594549CC4FF3B142D6E5D536DC6E77C76452CA37571F42238CACD7DF95DA8FC8BD5E8D9A59859A8B67EB76A845F84D5F3
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5xhPKz0ZEsZ5k6NOOPWz5QAiZSCXKGQRq3/7KxbCLSB2ESzQkaOXqCBFZPLWFrEGlV1shfWe2EVcxl5toh0c/aCGOghz/frdRhzMe95NxDFdGZgddNfoakPLJDztWF3qfQ==
+X-Mailru-MI: C000000000000800
+X-Mras: Ok
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Wed, Jun 21, 2023 at 01:18:59PM CEST, poros@redhat.com wrote:
->Arkadiusz Kubalewski píše v Pá 09. 06. 2023 v 14:18 +0200:
->> From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
+TDM mode for max98090 is dsp_a compatible. So allow it.
 
-[...]
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+---
+ sound/soc/codecs/max98090.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Could you perhaps cut out the text you don't comment? Saves some time
-finding your reply.
+diff --git a/sound/soc/codecs/max98090.c b/sound/soc/codecs/max98090.c
+index 7bc463910d4f..403926254c84 100644
+--- a/sound/soc/codecs/max98090.c
++++ b/sound/soc/codecs/max98090.c
+@@ -1635,7 +1635,7 @@ static int max98090_dai_set_fmt(struct snd_soc_dai *codec_dai,
+ 			regval |= M98090_RJ_MASK;
+ 			break;
+ 		case SND_SOC_DAIFMT_DSP_A:
+-			/* Not supported mode */
++			break;
+ 		default:
+ 			dev_err(component->dev, "DAI format unsupported");
+ 			return -EINVAL;
+-- 
+2.40.1
 
-
->> +static int
->> +dpll_set_from_nlattr(struct dpll_device *dpll, struct genl_info
->> *info)
->> +{
->> +       const struct dpll_device_ops *ops = dpll_device_ops(dpll);
->> +       struct nlattr *tb[DPLL_A_MAX + 1];
->> +       int ret = 0;
->> +
->> +       nla_parse(tb, DPLL_A_MAX, genlmsg_data(info->genlhdr),
->> +                 genlmsg_len(info->genlhdr), NULL, info->extack);
->> +       if (tb[DPLL_A_MODE]) {
->Hi,
->
->Here should be something like:
->               if (!ops->mode_set)
->                       return -EOPNOTSUPP;
-
-Why? All drivers implement that.
-I believe that it's actullaly better that way. For a called setting up
-the same mode it is the dpll in, there should be 0 return by the driver.
-Note that driver holds this value. I'd like to keep this code as it is.
-
-[...]
