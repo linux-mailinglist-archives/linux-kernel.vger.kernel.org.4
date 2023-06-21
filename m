@@ -2,160 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B906739037
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9550C73903B
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbjFUTh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 15:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
+        id S229448AbjFUThk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 15:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbjFUThV (ORCPT
+        with ESMTP id S230472AbjFUTh1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 15:37:21 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2114.outbound.protection.outlook.com [40.107.96.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80871171C;
-        Wed, 21 Jun 2023 12:37:14 -0700 (PDT)
+        Wed, 21 Jun 2023 15:37:27 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2123.outbound.protection.outlook.com [40.107.95.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B2119AE;
+        Wed, 21 Jun 2023 12:37:20 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ECEHgkg63KvEdaYchBpTSNjwkR1/Rf/xd8O7t9S8Sz3HHPN050nFposUwCNEW09yeHtgMFGrMY0Tz+ePuNa6Osyfc7DQQ0sGMwej8CuXmKpRkVSqh3JsW2FoMxZiO9ZzORanOrr5BJXlXl7KUa5evWoAZLVQB+zCOvIFBTqZjhdAdVPtx1a8xx4Ohbj7MYHCkTwaUFaB5FyFeFoNrLnDdNLZ9VL2c/MNHBswVaIfzTLvW4IJn4w68snV8y26rDST0L8Km6R0U3cBLPXLEsUfwSZseJNTYWmZwk9PK35k999hP3U6S0Dvh3gzDFtSPS8c5s3fQpZjxlXD1bRMQzRlRA==
+ b=moujL0AYeUHkqmcWL4qC7q8qmPBIiw6fF4XlfoT4NsC+BFHJzzOpIMU2FriemFEHOJG3Cirxw22/liGbct7RO4g/eNrMcet47je2mQroXuyHpUvn4jukKYLWQ7IoOJl0D1kJmoBcTmtPsJXQNIqobgG7XSuqhbhmVyDtnmwX9gXgw/k3WlUFcxNur1DVbswPgk182xJlCTJ76YKM9rcmApkxkHmZUoj2Qxx0Oop7Vq51C/gM4IXpPI/osWGneOggbsjri5H4PMn5Y6NS2ZITBN2bL5QtdXNsiiNn60acbyU+Yi2k6DOg1u07AxBFIgTQwQjyV54YHQRekT3VfiDijw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tv7KCvjy8yxVoEF+arXRQUxHlARgS9e5ZnQhOk04KKk=;
- b=UWd2aVoa+oi121QMQzTyn1fH0crNYJ7jET9VMzekf99mPSEqbnocUR1y70oOIisT4GQzZdTp5sSVMqNJL9eRpBG8A3hX963i5EpvaIbCvx00HrO5lrQNcEFdHWObv3cgOGVOHuSP02PyMWBGy5WKh45KX7jrnmzlDClLJ0F/4oyVizAXH5naQG78MoeseLZY8vIHcEVUTge2fGinFVOUk7XWRCJdJxx7+cvCFrsg6UsaeS9j5SoWRrzOaxqvAL7aQ8tjJlEQIcdDUZ4SYZl3Q5/UdDCQjLcL/6s+nsqox7kre2NwUYtPDtGjnVq1nO8d3wdKHmWA0mEQdA0+ZLj5xQ==
+ bh=Lb7a2yAITuVZFpdgg1h2iGprPd5hySPQ1VtBuy6PAAQ=;
+ b=kCcgnVc5vGN3kOitGOGsZH8o4WDoIHYc83YJjw8dzBeYo0PyRCO+9N1bumaEhgrQ/JY68X4rFpqaQQ0xwpSMm4K4IkHbAHGFoSu9PFoWeLBxpeNm1L7ezhNw8tbxjHa5Al2kNWcYknhnpEEKakQ5jsHy8muoumk1jK7FUaJBh4d2C7I6RlgEiO+kNxzfmsKHCXaAP7lunJAsRb79RNgmDCZZi+WfR7wkP2MU9T75SUelGOfnJp1jSR2ewtPA71aV1jOud9q6GkPg6aqgoPJLsrR8aVEGXqFI+jgeJwMROhRsaLoVUaQQxhsExL8MeN/NESAdgd2uFaIW8mC8mm30ug==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=cornelisnetworks.com; dmarc=pass action=none
- header.from=cornelisnetworks.com; dkim=pass header.d=cornelisnetworks.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cornelisnetworks.com;
- s=selector1;
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tv7KCvjy8yxVoEF+arXRQUxHlARgS9e5ZnQhOk04KKk=;
- b=H6SmVNI0iLHKmQYA8Eo2RePGFgjhHDDc0dlJLrcZHgB6yD7lm2dGkTRnU1/BQCtiq/DuwakWUOE8SA3xsq5uvOLXmtJP63TItgh1dpx7zvG5COwqEaKVrnU//c8KS9dNQ66JdoMuLEpU3SccE21zZVpCaAS+tE1b6/IxXmWaBQVMTW9YF2185cxcUprMIv8rZjbw7+AtbQcQ8pjBkDphneCUOexwvBfJzWd6Bv3N4Br6St/gbEg5VFmZUlgPTBSoG5SU/T3OjC7PV1tCkPnh00h2jWR0d6QyJr4UoZAWZE84cH01gfvEvaTLOMWiP1f7uHayuInbD6oO1+kZ2FomvQ==
+ bh=Lb7a2yAITuVZFpdgg1h2iGprPd5hySPQ1VtBuy6PAAQ=;
+ b=o3sZNVgBAEx91E1tZPhZ8aIHLjnKSG27nU2V+i2WYK61uNNph/lzbJmUEHDdP0OfYfWB9TzQHAhwpiiq6daWD57BstPIUuoCs9JBbuG1+miOSQYKyeMG+UbAEcwZbJIgaNBlmVQYnqFoCIo0naDbaAcckfSOzX5ajiKQOY+r97M=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=cornelisnetworks.com;
-Received: from BL0PR01MB4099.prod.exchangelabs.com (2603:10b6:208:42::12) by
- SA1PR01MB6687.prod.exchangelabs.com (2603:10b6:806:1a6::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6500.37; Wed, 21 Jun 2023 19:37:10 +0000
-Received: from BL0PR01MB4099.prod.exchangelabs.com
- ([fe80::938b:a632:32e8:95cb]) by BL0PR01MB4099.prod.exchangelabs.com
- ([fe80::938b:a632:32e8:95cb%6]) with mapi id 15.20.6500.036; Wed, 21 Jun 2023
- 19:37:10 +0000
-Message-ID: <21ba5d93-2717-3b8f-848a-a001cd911695@cornelisnetworks.com>
-Date:   Wed, 21 Jun 2023 15:37:07 -0400
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH 05/79] qib_fs: switch to new ctime accessors
-Content-Language: en-US
-To:     Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230621144507.55591-1-jlayton@kernel.org>
- <20230621144735.55953-1-jlayton@kernel.org>
- <20230621144735.55953-4-jlayton@kernel.org>
-From:   Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
-In-Reply-To: <20230621144735.55953-4-jlayton@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0095.namprd13.prod.outlook.com
- (2603:10b6:208:2b9::10) To BL0PR01MB4099.prod.exchangelabs.com
- (2603:10b6:208:42::12)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by MN2PR13MB4152.namprd13.prod.outlook.com (2603:10b6:208:26c::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.35; Wed, 21 Jun
+ 2023 19:37:16 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6521.023; Wed, 21 Jun 2023
+ 19:37:15 +0000
+Date:   Wed, 21 Jun 2023 21:37:09 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Alexandra Winter <wintera@linux.ibm.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: Re: [PATCH] s390/net: lcs: use IS_ENABLED() for kconfig detection
+Message-ID: <ZJNRZZCkGdvp+k34@corigine.com>
+References: <20230615222152.13250-1-rdunlap@infradead.org>
+ <ea55623d-d469-ddaf-92ce-3daf1d2d726f@infradead.org>
+ <ZJMc3oS2nxORPASN@corigine.com>
+ <66fd6106-16a5-d61a-4202-02ff99b84f76@infradead.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <66fd6106-16a5-d61a-4202-02ff99b84f76@infradead.org>
+X-ClientProxiedBy: AS4P192CA0012.EURP192.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5da::20) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL0PR01MB4099:EE_|SA1PR01MB6687:EE_
-X-MS-Office365-Filtering-Correlation-Id: c198dbae-9ea4-46cd-e380-08db728ee786
-X-MS-Exchange-AtpMessageProperties: SA
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MN2PR13MB4152:EE_
+X-MS-Office365-Filtering-Correlation-Id: 572a355e-2021-42db-1707-08db728eeae5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nHEHclT1gaeLAhKBVpztpHgXvrMkLBJCR+PXv7FWHMmuWLFI6pvwWJF3jyuZiAAbBK/MeSnNN+nBfE6gKY/eRFykN/D2l4UqqXkXK42b1yHiqjH0v69zkUhGwhBUZjVpZrfXCa7uUpLzeOsuudlr1K/mhmsljh6+DlXKHZbn1A+s6RNEpFr/JCrpeTMR4RrvQn06qC15qIhTTTnX22HvhSXjx9J1Xx9JswAPIM1+U9wYHtZ177fATE+0fSA7B/mNf+UKVsaWRuDV8aIia+NG294HgCJ7Mw1N3ip+4oSxuI1qw0EHizrmr49dkv4EWxI8opswcUMuNg7kBPEV/Ls9OyJV80VhUS6hA1S7XbqoD9Vn8QIl7Ms0SHzk1MG19dtF01aQ6oh6OzStH5dPLJxy1fNwA23+v4tHif7+1YqVEsWPNxomsf/WGOvHWKCAILidk7djbFm/hyEYRJAX0jmevEEIw8+CcJnyubDCGlrmVP+lvWYedEQQLS96KZOWw+mnCbrMfEe+p0bey5zIsUNIo3tNn6Ltx9TnHWmOKwjx7LWUxR5LaytySonZMv+vvE6Lkxozqri02Xf5q27C9fh3TNitCoK0ifYJ4g+n4iNbBXjcV9WglgqeFMqtpjaDu1axKFTdiTzoxF8KFEet6yqquw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR01MB4099.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(39840400004)(396003)(136003)(346002)(451199021)(110136005)(478600001)(4326008)(54906003)(26005)(6506007)(6512007)(53546011)(6486002)(186003)(6666004)(52116002)(36756003)(2906002)(8936002)(8676002)(66946007)(41300700001)(66476007)(66556008)(316002)(5660300002)(31696002)(44832011)(38350700002)(83380400001)(31686004)(38100700002)(86362001)(2616005)(43740500002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: egk0miir/CxnsW4TVvNfmCc0GUPwfR5NuVPY/FnK9Zec57BcFHipbL6xvIR1iXskR77+AvRU/EzBhHFl/DWc3cMIiduVaB7pO8FELCv66mUSaH3ISCWnUSq6glxoSPx1Jf0/5cZUQRbyv6X5pEMGmdnXxPYTY6H7MWOZOGVgaw0Ebe+6pIMeVvlDHq7sB8l0B1gJG3UGKljEBrFIj5i6Xm5quWOy3qL0jBFycLSk1k/PnWapCGQvhwjo8tImoGFOHVMyy8iR540W6rSvheJUcNb+6tb2JXtUIEMJ2jbMnUqd4C8iCW5ArSOcttGDgAaxChLYOWRecb6MrYNRh33jrBGBNQu9/RVmFCmdDpkfZgXfVuzO/81Ofto5hkRjC3vn5W7nWRAYswtgb3weJl85/zHvMBpkV7Lz5e2Z2en5w4lNfqgOsVwJmoDOE3HPDC4a0Bz/UDaaxYZUfeK1Lh1QufzYHmQiUcZVjpEWw9GstudCaHHvAX825X7BkIrpqvspwStJj09PvUSOXkoBRfiLfIYHJn5zNY0BZ3zxXNI7+/C7lJt6CFCGx+yz4RkqgXBPawV56VOtkz4nRY5oaf9QFN7aPHJ1+PR+DfpjBWgQkD24F4GL/dM9RLsOZoAbdaDqb3wH2O7d24lanrW4CnwZyQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(346002)(366004)(39840400004)(396003)(451199021)(38100700002)(6486002)(2906002)(26005)(8676002)(53546011)(6506007)(2616005)(6512007)(186003)(83380400001)(7416002)(44832011)(966005)(41300700001)(5660300002)(8936002)(6666004)(36756003)(478600001)(66946007)(66556008)(4326008)(6916009)(316002)(86362001)(54906003)(66476007)(67856001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z0lMVWxyTXQ5Q2hkdGpPcVNqSXY4dGZSMDJOamNENnpmcjNpdjVaTDdjM2g5?=
- =?utf-8?B?K0huL3BwdE1RckNleGM2aE9XYVN6MXcrakVuL00rZVVhM3V2WCtXZzlzUWN0?=
- =?utf-8?B?dUxxRTFaT0V0NGxOREVONVlGRTUvNzMwRVp4ZUpOQVNtYXowbUtXT0VFbzdG?=
- =?utf-8?B?elhEMHFOTURvVng3VDVWYmZOVDVCRWloNnFEUmNWSmZQT3d6WUhYTUdiMWo5?=
- =?utf-8?B?NTl3Z3VaTjFzSytVak1oVC9pN2VhWlFtS2JVOHVEZjduczRydURrZ3dkdDIz?=
- =?utf-8?B?Y2I2NG55UnlLZkhKM0ZwNVhBT2VXVnZZSnhYSnFXWVc1OVdjRjQ3d3Ixd3lI?=
- =?utf-8?B?UmNiRXlZUTJTMGhTRThWU1RoRlg5WW9UQldwQWwyNWN5UTVzUHJKTnY0d3Zn?=
- =?utf-8?B?YlBOaUVPbGw0aTc4ZzdPTTE4ZHRZUUs2Rk0zbnpTU2V5K2RBSituYXAzQ3BC?=
- =?utf-8?B?VFJkY1hTL2pISGVQMjdRb3NnM0sxbmNEY3d6cVFaTG1sUDlkaHJGSUR2cjMx?=
- =?utf-8?B?d3JMdnE0UFhjeXJzeXl0VXBUUTJWeFBzalVTNWIxamhzaXZkSTJWc0VwaFcr?=
- =?utf-8?B?dHlqM2VEb3NBZFlHaXk3eUtVWCsrVlFMbUJWVXlLU3pxN29XMVZ5OFh0bUZo?=
- =?utf-8?B?aVRSSE9rMEFQKzJHK013bTZrMjNHcFc2dVBHWmhkM1FwQ3VOdHZvOVh6a3VS?=
- =?utf-8?B?bEdJWXp3Z3U2aEJrdDZ3MWpzcnBheklkUTlOM2EzaXBicjBSU0dGcFRQMU9W?=
- =?utf-8?B?SVBhRER6L1lzR0M3UWkva3RmYkVnd09JWTNVVW15TVpJMGpScWVKUmFpcnpz?=
- =?utf-8?B?MU10ZDlqbDRCNXM3NjJXY3M4ZExEM1Voait6aUtNekVKSmNoWVlMN1NPRm1P?=
- =?utf-8?B?VWt6SU9VQS8weFJtcWhDTDEwbzh5Y2FhblRuYW1XdUFWNFIyNERma01WUDZI?=
- =?utf-8?B?YXhxcW8xVFpTbVFXMVMvQ2p1TUNkdlI5d3VOYlk0OWQxWjhVdEJFSmJQSzFK?=
- =?utf-8?B?UUFObmJDVjNqMFdFT3hsYW9BT2UzL2d4VWo0aHZuYk9BQ21zN1BBMjdaL2Z4?=
- =?utf-8?B?UVpVK1pmdjFlQVRjRCtLN3dNcFo0L1dKM2lXZXkwTEtxYUVka1dpUkFPSEpF?=
- =?utf-8?B?bStFRTNvS2N5MWhPWDZ5ZzR6ajhFaWRTYlNsOGR4eitueER6dkFmUm5oMnJY?=
- =?utf-8?B?c1laREJCcG56KzgxUTJkQ0ZmYWdZejFIMTZBZzUybGNteVMxeFVqYnBibUtu?=
- =?utf-8?B?OS9od3A1d3p4TWZqQVNOeWlFS050SnAwRThiRFhvUExKa0ZnRXN1ZXVZeDFy?=
- =?utf-8?B?VENlMlZjZ0FaQnQ1eDNJSmM0RGxzODRmZXhUc0NvRVV2bU5RcFp4bnJzYUpn?=
- =?utf-8?B?YnhuV1pOY0RqTjBTbzFaN1czdFRDN3FsWjR4bDZHSTlaUG5WQjh0QjdaRXYx?=
- =?utf-8?B?MGVQeXNzWWFpdWMvT2hFUFpGYitiNkZtU2tSbVpja1FyS3E0aVVnbklQaFAr?=
- =?utf-8?B?Q2VhUlhRL1lzTTB3eDVDT2hndU1LRmpXSnRPWVAwRXVEckFRdHVXSnVRWkFl?=
- =?utf-8?B?NjBFZ2FWc2cvMitIRk5yRkRqSldwNWZDTG1VSTA4Ny9sVUtzUkR4VllxL0x3?=
- =?utf-8?B?MnRDTTNoeDNXL3k0NlBEL0p5L25OM2Rxb1JPMlpVUEo3eE1MZ0xzU3dGT0Y2?=
- =?utf-8?B?TWhVc1RvT0RSMjg1dHdEM3N4QnlIeTBJY2FNMFd1aHJEK0FLTmlaRU16enY2?=
- =?utf-8?B?aWxHZS9yK0kvckltOUQvaFVzZFRTaytQdGJka2t1MWlLNHJuVnJBcUszNU5H?=
- =?utf-8?B?RDZheFkya3FGT0xhSkhEV1NTRlQvNU9NUWVnQTNRMUVwdXg3b1FRbjFWL0J6?=
- =?utf-8?B?bmZYdWVldnU1TGF0aVhOS0RqR3p3YTFleDczUGdqdGRkcTVpQ3pDSllNWnF0?=
- =?utf-8?B?QXViT1QzTWZ1cmsvazlsamMwTEM4NENMTU50Z1hKaGwweHd2WWJYdys2Qm9L?=
- =?utf-8?B?Q0h5L051TThMM1FSenlYQnRPNzZCcU9QU1FWNkxqc0Y4bE51OTR1eWJVbEdE?=
- =?utf-8?B?bG9xd3dUYTIvT0dsOXVUN252OUF1MWZQT25QT002OFA3TFI2ejBKeWdxMkxV?=
- =?utf-8?B?QkJCditHbnpmZDVKMjdMSHFZWklhNVA4Q1dvdGV1K2RlN2VhTmpjUTdWQUVI?=
- =?utf-8?Q?5+7sgwz5cU4iuEBEFVhBEUU=3D?=
-X-OriginatorOrg: cornelisnetworks.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c198dbae-9ea4-46cd-e380-08db728ee786
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR01MB4099.prod.exchangelabs.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?BCCctOtXnUK6NZqtLiXEOuM3inF0J6MbvM3OgX5uMwAORqhVJhqLTKefOkra?=
+ =?us-ascii?Q?e4iEOVEM3rwNTq5NOLQdzOVkO2fZ/RMLe59cQ44GlwPRW3yvLqn0xS/Rfb0M?=
+ =?us-ascii?Q?ePjO9j9rC/QO2vuvaW7SxoMMFN0Vsx3pWcZj4RH/mr0NvRYL85IVjhAx9Xeb?=
+ =?us-ascii?Q?KtA1x9OrYyTfdA8potFpPFdMitp+UEuVi6JKNzsfXNEX06Gg1/y5gV8gYBJ8?=
+ =?us-ascii?Q?Vkqy9NnxQAufNNr9JNppwmarlUrG2rLTZKaqAo9OGbKS8NycoYyTZpT9JRWX?=
+ =?us-ascii?Q?PiEwra/96SM9VN3QPTCKIJPeWukHjpssjWi9eGovSBuz94LL2bEPMHvcrqf2?=
+ =?us-ascii?Q?IycIAUm/VsH6VyReTHoTFtHJFP4UzvkAyuIc36BnNFY49ibFwGvPQkzOicOE?=
+ =?us-ascii?Q?gJmwUiwUhgO79+ZtEAZ2Y+REXUH/8yUSPsX9JfVv5Uv0SldkiF/sRacn8Aro?=
+ =?us-ascii?Q?Fq6W5KjRZ+fT5dAK69nFpO4t8Xu9zL72f8Lk2SgZjmop0jzvjhsAdb+zDBfG?=
+ =?us-ascii?Q?EAqoxiB41AD3QHjFSC2l1U7QIL5Lkn0eW5ld+HYGFJoYkeYtI5n5S+4wXRN8?=
+ =?us-ascii?Q?myqGc0sfNYucFiXO+M7QA4FbEblchHSRehVPRgxioEuEmVcu3FwfWJJC7Cqx?=
+ =?us-ascii?Q?3o0M/nN8V7fdnJqJlUQAlLUPsOfIFx+YK0sXXZKZ1sG/gGDkA9I+ceGV7ESv?=
+ =?us-ascii?Q?UvURE/zEVVW8padWZbwfmVr1K7eeId1PbxthsWB5+ZS+Cix84zXEeN5DUljL?=
+ =?us-ascii?Q?nGn9iV0GNqgUx5isDzXaMEzVBFKioa8iVgsipPgvaWXlujX9yXJ4rdFx9Ddg?=
+ =?us-ascii?Q?LAM5LNpaF7iXViWnMgd0cbmdaFhxknny+f2QvcBGP9mSumLRt6H+uBHgrwX/?=
+ =?us-ascii?Q?ZBfik3HEhutDodRrXQ3Z4k8FoDOqQi8Hg1f//Jv3DYtPV2YKnVJka32iZG64?=
+ =?us-ascii?Q?jpfDcgsACgSl0Jtmf30XiO8VgNaH5k8o9c4oSEvK+vLcS5Ck2ch4EST9zmIY?=
+ =?us-ascii?Q?awSY55Pj05V9KLj7H1iEJM/GAs2dj5INQCxiwV4bpoKbTKDCnJeIJZ5pE9zO?=
+ =?us-ascii?Q?g3/7G2ZsBfxxain75Lgusrhdy/vD1beS3rQNRo0vfNHSZFMOsCrOCotn4ruO?=
+ =?us-ascii?Q?bFRHhjLE7GedLYq14694KiLIHFMr8r11nZsBUNDjbDYNHgXQIxQS/NyfKaZ2?=
+ =?us-ascii?Q?V25y/pm+rv4crPvLOovu9Bw7vC3ewFHOyU9MSnwBIMNGEyajCqjZELgitwEu?=
+ =?us-ascii?Q?vKRlzcsSxz6SH4KUIB0aYg3Sn0JpOQOD17ql9vL5HPbE0Ur0duvuJ6OxJpxT?=
+ =?us-ascii?Q?30hxGuxSMSZ5FOsqoMPv8iVittW2zP5PlfOieQVRq0e+mngVtrAWwbHq/wwd?=
+ =?us-ascii?Q?giTOPW0NmRCn1KWLuETLpihpRxdYcGYQm01bW3YK2rYScj1AGT9qrBDcST+C?=
+ =?us-ascii?Q?9i2/O/Z+wxZMkaGDFQ3SEOshOjcVG3Y1wv0gthYLdQ9yLHOhU/E/D5uRZ4dE?=
+ =?us-ascii?Q?XNwN6xecfEGc0u80UQkVf6K8a0TwTH4v0M9lIpE7kluoZydA19IXseqyiSPi?=
+ =?us-ascii?Q?zQQxdGtL5GlJzrtgVsyu6lAippLag1S6feVJY3K/w6qorkViCdiSumh2OZbK?=
+ =?us-ascii?Q?uA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 572a355e-2021-42db-1707-08db728eeae5
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 19:37:09.9681
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 19:37:15.7844
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4dbdb7da-74ee-4b45-8747-ef5ce5ebe68a
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LvvZkIRXz8WwndN4g5/oRRa1jERiMDc222+QMOZqh3koEiEZxwy2o1P0/kFEB8COvhGT9uOch7zVC9Pom6/QqGUEuHMuRZjbvgi00K4u3B1PykJYdJsdDjU9mnWk7u3w
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR01MB6687
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5gFH2VsMVQF6E0yfiPCdI7rp+WCgPF3pR4/derRmvKmlJw2E1fb0qptyGJnlp7S73flakEXKAvNPLI2J17vjO/y+2i8f3L1C8laAafjhFKI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR13MB4152
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/21/23 10:45 AM, Jeff Layton wrote:
-> In later patches, we're going to change how the ctime.tv_nsec field is
-> utilized. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
+On Wed, Jun 21, 2023 at 11:08:05AM -0700, Randy Dunlap wrote:
+> Hi Simon,
 > 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> ---
->  drivers/infiniband/hw/qib/qib_fs.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> diff --git a/drivers/infiniband/hw/qib/qib_fs.c b/drivers/infiniband/hw/qib/qib_fs.c
-> index a973905afd13..db008f2884e4 100644
-> --- a/drivers/infiniband/hw/qib/qib_fs.c
-> +++ b/drivers/infiniband/hw/qib/qib_fs.c
-> @@ -64,9 +64,7 @@ static int qibfs_mknod(struct inode *dir, struct dentry *dentry,
->  	inode->i_uid = GLOBAL_ROOT_UID;
->  	inode->i_gid = GLOBAL_ROOT_GID;
->  	inode->i_blocks = 0;
-> -	inode->i_atime = current_time(inode);
-> -	inode->i_mtime = inode->i_atime;
-> -	inode->i_ctime = inode->i_atime;
-> +	inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
->  	inode->i_private = data;
->  	if (S_ISDIR(mode)) {
->  		inode->i_op = &simple_dir_inode_operations;
+> On 6/21/23 08:53, Simon Horman wrote:
+> > On Tue, Jun 20, 2023 at 07:35:17PM -0700, Randy Dunlap wrote:
+> >> Hi,
+> >>
+> >> On 6/15/23 15:21, Randy Dunlap wrote:
+> >>> When CONFIG_ETHERNET=m or CONFIG_FDDI=m, lcs.s has build errors or
+> >>> warnings:
+> >>>
+> >>> ../drivers/s390/net/lcs.c:40:2: error: #error Cannot compile lcs.c without some net devices switched on.
+> >>>    40 | #error Cannot compile lcs.c without some net devices switched on.
+> >>> ../drivers/s390/net/lcs.c: In function 'lcs_startlan_auto':
+> >>> ../drivers/s390/net/lcs.c:1601:13: warning: unused variable 'rc' [-Wunused-variable]
+> >>>  1601 |         int rc;
+> >>>
+> >>> Solve this by using IS_ENABLED(CONFIG_symbol) instead of ifdef
+> >>> CONFIG_symbol. The latter only works for builtin (=y) values
+> >>> while IS_ENABLED() works for builtin or modular values.
+> >>>
+> >>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> >>> Cc: Alexandra Winter <wintera@linux.ibm.com>
+> >>> Cc: Wenjia Zhang <wenjia@linux.ibm.com>
+> >>> Cc: linux-s390@vger.kernel.org
+> >>> Cc: netdev@vger.kernel.org
+> >>> Cc: Heiko Carstens <hca@linux.ibm.com>
+> >>> Cc: Vasily Gorbik <gor@linux.ibm.com>
+> >>> Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+> >>> Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+> >>> Cc: Sven Schnelle <svens@linux.ibm.com>
+> >>> ---
+> >>>  drivers/s390/net/lcs.c |   10 +++++-----
+> >>>  1 file changed, 5 insertions(+), 5 deletions(-)
+> >>>
+> >>> diff -- a/drivers/s390/net/lcs.c b/drivers/s390/net/lcs.c
+> >>> --- a/drivers/s390/net/lcs.c
+> >>> +++ b/drivers/s390/net/lcs.c
+> >>> @@ -36,7 +36,7 @@
+> >>>  #include "lcs.h"
+> >>>  
+> >>>  
+> >>> -#if !defined(CONFIG_ETHERNET) && !defined(CONFIG_FDDI)
+> >>> +#if !IS_ENABLED(CONFIG_ETHERNET) && !IS_ENABLED(CONFIG_FDDI)
+> >>>  #error Cannot compile lcs.c without some net devices switched on.
+> >>>  #endif
+> >>>  
+> >>> @@ -1601,14 +1601,14 @@ lcs_startlan_auto(struct lcs_card *card)
+> >>>  	int rc;
+> >>>  
+> >>>  	LCS_DBF_TEXT(2, trace, "strtauto");
+> >>> -#ifdef CONFIG_ETHERNET
+> >>> +#if IS_ENABLED(CONFIG_ETHERNET)
+> >>>  	card->lan_type = LCS_FRAME_TYPE_ENET;
+> >>>  	rc = lcs_send_startlan(card, LCS_INITIATOR_TCPIP);
+> >>>  	if (rc == 0)
+> >>>  		return 0;
+> >>>  
+> >>>  #endif
+> >>> -#ifdef CONFIG_FDDI
+> >>> +#if IS_ENABLED(CONFIG_FDDI)
+> >>>  	card->lan_type = LCS_FRAME_TYPE_FDDI;
+> >>>  	rc = lcs_send_startlan(card, LCS_INITIATOR_TCPIP);
+> >>>  	if (rc == 0)
+> >>> @@ -2139,13 +2139,13 @@ lcs_new_device(struct ccwgroup_device *c
+> >>>  		goto netdev_out;
+> >>>  	}
+> >>>  	switch (card->lan_type) {
+> >>> -#ifdef CONFIG_ETHERNET
+> >>> +#if IS_ENABLED(CONFIG_ETHERNET)
+> >>>  	case LCS_FRAME_TYPE_ENET:
+> >>>  		card->lan_type_trans = eth_type_trans;
+> >>>  		dev = alloc_etherdev(0);
+> >>>  		break;
+> >>>  #endif
+> >>> -#ifdef CONFIG_FDDI
+> >>> +#if IS_ENABLED(CONFIG_FDDI)
+> >>>  	case LCS_FRAME_TYPE_FDDI:
+> >>>  		card->lan_type_trans = fddi_type_trans;
+> >>>  		dev = alloc_fddidev(0);
+> >>
+> >>
+> >> kernel test robot reports build errors from this patch when
+> >> ETHERNET=y, FDDI=m, LCS=y:
+> >>
+> >>   https://lore.kernel.org/all/202306202129.pl0AqK8G-lkp@intel.com/
+> >>
+> >> Since the code before my patch expected (supported) FDDI=y only
+> >> (by checking for CONFIG_FDDI only and not checking for CONFIG_FDDI_MODULE),
+> >> the best solution that I can see is to enforce that expectation in
+> >> drivers/s390/net/Kconfig:
+> >>
+> >> diff -- a/drivers/s390/net/Kconfig b/drivers/s390/net/Kconfig
+> >> --- a/drivers/s390/net/Kconfig
+> >> +++ b/drivers/s390/net/Kconfig
+> >> @@ -5,7 +5,7 @@ menu "S/390 network device drivers"
+> >>  config LCS
+> >>  	def_tristate m
+> >>  	prompt "Lan Channel Station Interface"
+> >> -	depends on CCW && NETDEVICES && (ETHERNET || FDDI)
+> >> +	depends on CCW && NETDEVICES && (ETHERNET || FDDI = y)
+> > 
+> > Hi Randy,
+> > 
+> > Unfortunately I don't think this helps.
+> > In the config given at the link above, ETHERNET is y.
+> > And the error regarding fddi_type_trans and alloc_fddidev being undefined
+> > seems to occur regardless of your change.
+> 
+> Hmph, somehow I missed that. :(
+> 
+> > I did have better luck with this.
+> > 
+> > diff --git a/drivers/s390/net/Kconfig b/drivers/s390/net/Kconfig
+> > index 9c67b97faba2..303220251495 100644
+> > --- a/drivers/s390/net/Kconfig
+> > +++ b/drivers/s390/net/Kconfig
+> > @@ -6,6 +6,7 @@ config LCS
+> >         def_tristate m
+> >         prompt "Lan Channel Station Interface"
+> >         depends on CCW && NETDEVICES && (ETHERNET || FDDI)
+> > +       depends on FDDI=y || FDDI=n
+> >         help
+> >           Select this option if you want to use LCS networking on IBM System z.
+> >           This device driver supports FDDI (IEEE 802.7) and Ethernet.
+> > 
+> > I am assuming that LCS=m and FDDI=m can't work at runtime
+> > because there is no guarantee that FDDI is loaded before LCS.
+> > But I could well be wrong here.
+> 
+> There's probably some way to make that work, but I don't know.
+> 
+> I think that your patch is acceptable.
+> I would prefer to also add to the help text that if FDDI is used,
+> it must be builtin (=y).
 
-Acked-by: Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>
+Thanks Randy,
+
+Feel free to take the snippet above and work it into a proper patch.
+Else I can take a shot at it.
+
+> >>  	help
+> >>  	  Select this option if you want to use LCS networking on IBM System z.
+> >>  	  This device driver supports FDDI (IEEE 802.7) and Ethernet.
+> >>
+> >> What do people think of that change?
+> >> Any other ideas/suggestions?
+> >>
+> >> thanks.
+> >> -- 
+> >> ~Randy
+> >>
+> 
+> Thanks for your help.
+> -- 
+> ~Randy
