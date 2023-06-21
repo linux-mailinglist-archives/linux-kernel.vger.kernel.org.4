@@ -2,141 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 314C5738BAF
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:40:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83B2B738BB5
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:40:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjFUQki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33388 "EHLO
+        id S229930AbjFUQkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231765AbjFUQjo (ORCPT
+        with ESMTP id S232334AbjFUQjz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:39:44 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E03552130
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:39:16 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8DxkfGxJ5NkVDQAAA--.396S3;
-        Thu, 22 Jun 2023 00:39:13 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxF82xJ5NkRewAAA--.3256S3;
-        Thu, 22 Jun 2023 00:39:13 +0800 (CST)
-Message-ID: <0359ffb6-684e-777a-36ec-ad9fe4da6e48@loongson.cn>
-Date:   Thu, 22 Jun 2023 00:39:13 +0800
+        Wed, 21 Jun 2023 12:39:55 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25A51BCA
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:39:30 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-987c932883bso739803166b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:39:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687365568; x=1689957568;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5y48c1wpF6+Mt2hNg3vBn4NH1hPD+Xn2/odxxkX/bS4=;
+        b=myEgp1LtAS76zbgSyQbj/EadEI1S6v7AhAdFppSTkzQGol8cFF9Yi6WqvHyFsnqAMb
+         2+9/TDpSREMD1KYMvTj1wI1VxSm1AByydiU0Qwet03iktVYztjke1sdQetFeB8y0C0Zl
+         6kk/0ozUP8KHYofh0hKQiOMwSJcX9K3cRA7cuPZEModdREvksBMTtwh1UVi37y184BCM
+         ubcWgWBrkbS6AuBd1EfFKuv91UGp5rSLXGfWpPtTXGhF75ArGbj4E2Om5oYznBeQ5+vd
+         95d2z9Qn3Go2TBqk/eFY91f2nRrdIw/tPZs2Qw1FAIquFDF+CjVCfFAPvsp5hxPTXhhj
+         Ieyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687365568; x=1689957568;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5y48c1wpF6+Mt2hNg3vBn4NH1hPD+Xn2/odxxkX/bS4=;
+        b=A+bdjqF+IlOqYwhoLnX3pgUhOIo1+/zwWqEtgsSO2PXncyJmWP1MItEBxyV8LsX1g0
+         N5wTDbLue2dWPgX7cI1my2NsZ5cC5CiPNuVTs9DYKe/HCq/BI51ZMug187oUxYWPyV6m
+         ubNpb8uU25h+PL+Cm3ZTo9YVS5/NLbc7nIBGotkqQPMWZRhYImjG87FNope+GwvagMPu
+         NCMkL7iNBGSRGnmPnEFAWAjKSbo+5y1l5zrXwbNphg0jnBdSfqlvQvR9oloUNz5g5rBV
+         WKUsOKjnVSPZUeT/jjUfMnKFgHSdSF1nGmmbgnuvY6tUWS1KutQqDqvtstmNxd+J7QY5
+         httQ==
+X-Gm-Message-State: AC+VfDxpNnDBe2kn5kYIK//W+g/dq5cWoI8MJJA+7iptHfTNDSrxWfJ7
+        QSgSjFWxibNxqnG4YCqivuSZJg==
+X-Google-Smtp-Source: ACHHUZ6qpdEWlOv74pmH4mmnpmMJfoU5Nu2hjjfpNN7zraQ14UmDv0ENsrB8eBMs/eimeAmgY/1XwA==
+X-Received: by 2002:a17:907:7ba4:b0:977:ecff:3367 with SMTP id ne36-20020a1709077ba400b00977ecff3367mr16818253ejc.40.1687365568223;
+        Wed, 21 Jun 2023 09:39:28 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id g4-20020a17090670c400b00988aff89806sm3473027ejk.14.2023.06.21.09.39.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jun 2023 09:39:27 -0700 (PDT)
+Message-ID: <aa5c6184-4b64-4dfb-4d3c-93d44cbfd11e@linaro.org>
+Date:   Wed, 21 Jun 2023 18:39:26 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v10 07/11] drm/etnaviv: Add support for the dma coherent
- device
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 3/3] power: supply: Introduce MM8013 fuel gauge driver
 Content-Language: en-US
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Sui Jingfeng <18949883232@163.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        etnaviv@lists.freedesktop.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20230620094716.2231414-1-18949883232@163.com>
- <20230620094716.2231414-8-18949883232@163.com>
- <8f74f0962c8bab6c832919a5340667c54e1a7ddc.camel@pengutronix.de>
- <aa73348d-5ec8-4ac0-2ec0-0cce24756c63@loongson.cn>
- <87c9576e6ca1b58fa94e0bc1a2f4be3847f0518c.camel@pengutronix.de>
- <9c8afcb4-70c0-a920-2a78-78a9ac884c80@loongson.cn>
- <737b07582ef2a4b2f134a1a931b6621ff96adb77.camel@pengutronix.de>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <737b07582ef2a4b2f134a1a931b6621ff96adb77.camel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxF82xJ5NkRewAAA--.3256S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW7tr43Zw4DAw48Jr1fGFyrKrX_yoW8tr1rpF
-        4Dta4YyrW8Xr10gwnFqw45XF13Kw1fXFyI9r9rJwn09ws0yryUKFy5Kr45CF90qr1rGr1a
-        van0qryxXFy2yrXCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
-        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWr
-        XwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
-        k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l
-        4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_ZF0_GFyUMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8KNt3UUUU
-        U==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20230621-topic-mm8013-v1-0-4407c6260053@linaro.org>
+ <20230621-topic-mm8013-v1-3-4407c6260053@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230621-topic-mm8013-v1-3-4407c6260053@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 21/06/2023 17:39, Konrad Dybcio wrote:
+> Add a driver for the Mitsumi MM8013 fuel gauge. The driver is a vastly
+> cleaned up and improved version of the one that shipped in some obscure
+> Lenovo downstream kernel [1], with some register definitions borrowed from
+> ChromeOS EC platform code [2].
+> 
 
-On 2023/6/22 00:12, Lucas Stach wrote:
-> Am Mittwoch, dem 21.06.2023 um 23:41 +0800 schrieb Sui Jingfeng:
->> On 2023/6/21 23:23, Lucas Stach wrote:
->>> Am Mittwoch, dem 21.06.2023 um 22:44 +0800 schrieb Sui Jingfeng:
->>>> Hi,
->>>>
->>>> On 2023/6/21 18:00, Lucas Stach wrote:
->>>>>> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.h b/drivers/gpu/drm/etnaviv/etnaviv_drv.h
->>>>>> index 9cd72948cfad..644e5712c050 100644
->>>>>> --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.h
->>>>>> +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.h
->>>>>> @@ -46,6 +46,12 @@ struct etnaviv_drm_private {
->>>>>>     	struct xarray active_contexts;
->>>>>>     	u32 next_context_id;
->>>>>>     
->>>>>> +	/*
->>>>>> +	 * If true, the GPU is capable of snooping cpu cache. Here, it
->>>>>> +	 * also means that cache coherency is enforced by the hardware.
->>>>>> +	 */
->>>>>> +	bool dma_coherent;
->>>>>> +
->>>>> No need for this, I think. Just use dev_is_dma_coherent() where you
->>>>> need to know this.
->>>>>
->>>> No, we want this value cached by the driver.
->>>>
->>> Why? dev_is_dma_coherent() is a header-only function with a single
->>> pointer chasing operation. Your cache is also a single pointer chasing
->>> access, just that we now need storage for this information in both
->>> struct device and struct etnaviv_gpu.
->>
->> You don't need store it in struct etnaviv_gpu.
->>
->> As this variable is shared across the device, so it is better to be put
->> in the struct etnaviv_drm_private.
->>
->> I don't think another 4 bytes allocation is something what we can't pay for.
->>
->>
->> My patch doesn't mentioned that it need to store it inside of struct
->> etnaviv_gpu, do I?
-> You are right, I was mistaken about the etnaviv struct this is added
-> to. However there is still the fundamental question: what's the gain of
-> this cache? The information is already available in struct device and
-> will be accessed with the same amount of loads if you care that much
-> about micro-optimization.
+...
 
-Sometime, in some function it is more convenient(easier) to fetch 
-'struct etnaviv_drm_private *priv'
+> +
+> +static struct i2c_driver mm8013_i2c_driver = {
+> +	.probe = mm8013_probe,
+> +	.id_table = mm8013_id_table,
+> +	.driver = {
+> +		.name = "mm8013",
+> +		.owner = THIS_MODULE,
 
-than the 'struct device *dev',  I think this is obvious.
+Drop owner.
 
-> Regards,
-> Lucas
-
--- 
-Jingfeng
+Best regards,
+Krzysztof
 
