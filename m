@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98322738B9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6136738BA0
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231750AbjFUQjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33242 "EHLO
+        id S232098AbjFUQj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjFUQjC (ORCPT
+        with ESMTP id S229513AbjFUQjC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 21 Jun 2023 12:39:02 -0400
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A422D2102
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:38:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=An+C0VbpadAK9DfnzOg8IsiKKHs6Mfr+wM5S8OrzUqo=; b=EWDHlaPJenuW/W/kA1tPqLj2bs
-        a1fNdJLYwe2wwlh7AG9RnC0gjxpFNy5tAILAlO/3VikggC3JX+nzqgA6lGW/N+tSyxhQEH3J4RQtn
-        +9c59/67kTgo9VQNDn77Gh/Ixwj47veX+LKfeEz4V93sjEEdgzqXpAnq8+0zK1nozeg5lgHqdVF6O
-        0gpAmk/MLB1Gx7jA5wiIUcJWnCP0NKdFJ8pA5j8mpX2/u0PedSL7KnyXIChUbNFO7H67CV2b8B0OM
-        XxQWEJm8hPLgaHJ1+bEEvcQ2SFrW2UnQTe+Qnp4LsCuKjEv3VQzamiU38/hFfIRki0k37hSOBdSDk
-        ZXfh0rGA==;
-Received: from [179.113.218.86] (helo=[192.168.1.111])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1qC0qi-001OBo-2K; Wed, 21 Jun 2023 18:38:28 +0200
-Message-ID: <1d638ba7-b34c-472a-0816-72758da20ec7@igalia.com>
-Date:   Wed, 21 Jun 2023 13:38:23 -0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFC PATCH v3 3/4] drm/amdgpu: Implement DRM_IOCTL_GET_RESET
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     kernel-dev@igalia.com, alexander.deucher@amd.com,
-        pierre-eric.pelloux-prayer@amd.com,
-        Simon Ser <contact@emersion.fr>,
-        Rob Clark <robdclark@gmail.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Stone <daniel@fooishbar.org>,
-        =?UTF-8?B?J01hcmVrIE9sxaHDoWsn?= <maraeo@gmail.com>,
-        Dave Airlie <airlied@gmail.com>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>,
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA89210C1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:38:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 64E351FF3A;
+        Wed, 21 Jun 2023 16:38:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1687365523; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1+Kbmlgc5A8uS9DJQna3QJnRBNQVG0etfbPkRzxEKrI=;
+        b=HV3GsErnCA4YwRnezHFbEqnvcbX94w06aNV/ReORMbnHYo9hNTFNvTsjRIn065XRZLDMvU
+        MjLgEex6ZFhjowXKlRWH7QogU7SgBpKAVHcmQn/vCNGnd1r4HCB3FVViFem0SF4oEXbM/c
+        I7e/WDbErdK+HGfgWmnY4hpTE0n0Uy4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1687365523;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1+Kbmlgc5A8uS9DJQna3QJnRBNQVG0etfbPkRzxEKrI=;
+        b=sgDcs4FUR/4sSaEZaV4Wo9SKd9pzZS7WgsgnacmjrAu+0kGyb7qX3CxioTXTJPdUtmFH6q
+        aEScYHH1CYa+yOBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 573A7133E6;
+        Wed, 21 Jun 2023 16:38:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GZBMFZMnk2ThRAAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 21 Jun 2023 16:38:43 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id E61B0A075D; Wed, 21 Jun 2023 18:38:42 +0200 (CEST)
+Date:   Wed, 21 Jun 2023 18:38:42 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
         linux-kernel@vger.kernel.org
-References: <20230621005719.836857-1-andrealmeid@igalia.com>
- <20230621005719.836857-4-andrealmeid@igalia.com>
- <5a0876a6-c3db-73b6-15c1-ef0b8cc8c732@amd.com>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <5a0876a6-c3db-73b6-15c1-ef0b8cc8c732@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Subject: Re: [PATCH 09/79] adfs: switch to new ctime accessors
+Message-ID: <20230621163842.7orhklwa5mhhfwwy@quack3>
+References: <20230621144507.55591-1-jlayton@kernel.org>
+ <20230621144735.55953-1-jlayton@kernel.org>
+ <20230621144735.55953-8-jlayton@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621144735.55953-8-jlayton@kernel.org>
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,196 +74,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em 21/06/2023 04:40, Christian König escreveu:
-> Am 21.06.23 um 02:57 schrieb André Almeida:
->> Implement get_reset ioctl for amdgpu
+On Wed 21-06-23 10:45:22, Jeff Layton wrote:
+> In later patches, we're going to change how the ctime.tv_nsec field is
+> utilized. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
 > 
-> Well that pretty much won't work since the jobs are destroyed much later 
-> than the contexts.
-> 
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-Why does this prevents the code to work? If the context is detroyed, it 
-can't be queried anyway.
+Looks good to me. Feel free to add:
 
-> Christian.
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  fs/adfs/inode.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
->>
->> Signed-off-by: André Almeida <andrealmeid@igalia.com>
->> ---
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c  |  4 ++-
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c | 35 +++++++++++++++++++++++++
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.h |  5 ++++
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c |  1 +
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_job.c | 12 +++++++--
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_job.h |  2 ++
->>   6 files changed, 56 insertions(+), 3 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c 
->> b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->> index 2eb2c66843a8..0ba26b4b039c 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c
->> @@ -1262,8 +1262,10 @@ static int amdgpu_cs_submit(struct 
->> amdgpu_cs_parser *p,
->>       uint64_t seq;
->>       int r;
->> -    for (i = 0; i < p->gang_size; ++i)
->> +    for (i = 0; i < p->gang_size; ++i) {
->> +        p->jobs[i]->ctx = p->ctx;
->>           drm_sched_job_arm(&p->jobs[i]->base);
->> +    }
->>       for (i = 0; i < p->gang_size; ++i) {
->>           struct dma_fence *fence;
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c 
->> b/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c
->> index d2139ac12159..d3e292382d4a 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c
->> @@ -322,6 +322,9 @@ static int amdgpu_ctx_init(struct amdgpu_ctx_mgr 
->> *mgr, int32_t priority,
->>       ctx->init_priority = priority;
->>       ctx->override_priority = AMDGPU_CTX_PRIORITY_UNSET;
->> +    ctx->global_reset_counter = 
->> atomic_read(&mgr->adev->gpu_reset_counter);
->> +    ctx->local_reset_counter = 0;
->> +
->>       r = amdgpu_ctx_get_stable_pstate(ctx, &current_stable_pstate);
->>       if (r)
->>           return r;
->> @@ -963,3 +966,35 @@ void amdgpu_ctx_mgr_usage(struct amdgpu_ctx_mgr 
->> *mgr,
->>       }
->>       mutex_unlock(&mgr->lock);
->>   }
->> +
->> +int amdgpu_get_reset(struct drm_file *filp, struct drm_device *dev,
->> +             struct drm_get_reset *reset)
->> +{
->> +    struct amdgpu_device *adev = drm_to_adev(dev);
->> +    struct amdgpu_ctx *ctx;
->> +    struct amdgpu_ctx_mgr *mgr;
->> +    unsigned int id = reset->ctx_id;
->> +    struct amdgpu_fpriv *fpriv = filp->driver_priv;
->> +
->> +    mgr = &fpriv->ctx_mgr;
->> +    mutex_lock(&mgr->lock);
->> +    ctx = idr_find(&mgr->ctx_handles, id);
->> +    if (!ctx) {
->> +        mutex_unlock(&mgr->lock);
->> +        return -EINVAL;
->> +    }
->> +
->> +    reset->dev_reset_count =
->> +        atomic_read(&adev->gpu_reset_counter) - 
->> ctx->global_reset_counter;
->> +
->> +    reset->ctx_reset_count = ctx->local_reset_counter;
->> +
->> +    if (amdgpu_in_reset(adev))
->> +        reset->flags |= DRM_RESET_IN_PROGRESS;
->> +
->> +    if (ctx->vram_lost_counter != atomic_read(&adev->vram_lost_counter))
->> +        reset->flags |= DRM_RESET_VRAM_LOST;
->> +
->> +    mutex_unlock(&mgr->lock);
->> +    return 0;
->> +}
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.h 
->> b/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.h
->> index 0fa0e56daf67..0c9815695884 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.h
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.h
->> @@ -57,6 +57,9 @@ struct amdgpu_ctx {
->>       unsigned long            ras_counter_ce;
->>       unsigned long            ras_counter_ue;
->>       uint32_t            stable_pstate;
->> +
->> +    uint64_t            global_reset_counter;
->> +    uint64_t            local_reset_counter;
->>   };
->>   struct amdgpu_ctx_mgr {
->> @@ -97,4 +100,6 @@ void amdgpu_ctx_mgr_fini(struct amdgpu_ctx_mgr *mgr);
->>   void amdgpu_ctx_mgr_usage(struct amdgpu_ctx_mgr *mgr,
->>                 ktime_t usage[AMDGPU_HW_IP_NUM]);
->> +int amdgpu_get_reset(struct drm_file *file_priv, struct drm_device *dev,
->> +             struct drm_get_reset *reset);
->>   #endif
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c 
->> b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
->> index c9a41c997c6c..431791b2c3cb 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
->> @@ -2805,6 +2805,7 @@ static const struct drm_driver amdgpu_kms_driver 
->> = {
->>   #ifdef CONFIG_PROC_FS
->>       .show_fdinfo = amdgpu_show_fdinfo,
->>   #endif
->> +    .get_reset = amdgpu_get_reset,
->>       .prime_handle_to_fd = drm_gem_prime_handle_to_fd,
->>       .prime_fd_to_handle = drm_gem_prime_fd_to_handle,
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c 
->> b/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c
->> index c3d9d75143f4..1553a2633d46 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c
->> @@ -35,11 +35,20 @@ static enum drm_gpu_sched_stat 
->> amdgpu_job_timedout(struct drm_sched_job *s_job)
->>   {
->>       struct amdgpu_ring *ring = to_amdgpu_ring(s_job->sched);
->>       struct amdgpu_job *job = to_amdgpu_job(s_job);
->> +    struct drm_sched_entity *entity = job->base.entity;
->>       struct amdgpu_task_info ti;
->>       struct amdgpu_device *adev = ring->adev;
->>       int idx;
->>       int r;
->> +    memset(&ti, 0, sizeof(struct amdgpu_task_info));
->> +    amdgpu_vm_get_task_info(ring->adev, job->pasid, &ti);
->> +
->> +    if (job->ctx) {
->> +        DRM_INFO("Increasing ctx reset count for %s (%d)\n", 
->> ti.process_name, ti.pid);
->> +        job->ctx->local_reset_counter++;
->> +    }
->> +
->>       if (!drm_dev_enter(adev_to_drm(adev), &idx)) {
->>           DRM_INFO("%s - device unplugged skipping recovery on 
->> scheduler:%s",
->>                __func__, s_job->sched->name);
->> @@ -48,7 +57,6 @@ static enum drm_gpu_sched_stat 
->> amdgpu_job_timedout(struct drm_sched_job *s_job)
->>           return DRM_GPU_SCHED_STAT_ENODEV;
->>       }
->> -    memset(&ti, 0, sizeof(struct amdgpu_task_info));
->>       adev->job_hang = true;
->>       if (amdgpu_gpu_recovery &&
->> @@ -58,7 +66,6 @@ static enum drm_gpu_sched_stat 
->> amdgpu_job_timedout(struct drm_sched_job *s_job)
->>           goto exit;
->>       }
->> -    amdgpu_vm_get_task_info(ring->adev, job->pasid, &ti);
->>       DRM_ERROR("ring %s timeout, signaled seq=%u, emitted seq=%u\n",
->>             job->base.sched->name, 
->> atomic_read(&ring->fence_drv.last_seq),
->>             ring->fence_drv.sync_seq);
->> @@ -105,6 +112,7 @@ int amdgpu_job_alloc(struct amdgpu_device *adev, 
->> struct amdgpu_vm *vm,
->>        */
->>       (*job)->base.sched = &adev->rings[0]->sched;
->>       (*job)->vm = vm;
->> +    (*job)->ctx = NULL;
->>       amdgpu_sync_create(&(*job)->explicit_sync);
->>       (*job)->vram_lost_counter = atomic_read(&adev->vram_lost_counter);
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_job.h 
->> b/drivers/gpu/drm/amd/amdgpu/amdgpu_job.h
->> index 52f2e313ea17..0d463babaa60 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_job.h
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_job.h
->> @@ -63,6 +63,8 @@ struct amdgpu_job {
->>       uint32_t        oa_base, oa_size;
->>       uint32_t        vram_lost_counter;
->> +    struct amdgpu_ctx    *ctx;
->> +
->>       /* user fence handling */
->>       uint64_t        uf_addr;
->>       uint64_t        uf_sequence;
+> diff --git a/fs/adfs/inode.c b/fs/adfs/inode.c
+> index c3ac613d0975..266191e6b80c 100644
+> --- a/fs/adfs/inode.c
+> +++ b/fs/adfs/inode.c
+> @@ -270,7 +270,7 @@ adfs_iget(struct super_block *sb, struct object_info *obj)
+>  	inode->i_mode	 = adfs_atts2mode(sb, inode);
+>  	adfs_adfs2unix_time(&inode->i_mtime, inode);
+>  	inode->i_atime = inode->i_mtime;
+> -	inode->i_ctime = inode->i_mtime;
+> +	inode_ctime_set(inode, inode->i_mtime);
+>  
+>  	if (S_ISDIR(inode->i_mode)) {
+>  		inode->i_op	= &adfs_dir_inode_operations;
+> @@ -331,7 +331,7 @@ adfs_notify_change(struct mnt_idmap *idmap, struct dentry *dentry,
+>  	if (ia_valid & ATTR_ATIME)
+>  		inode->i_atime = attr->ia_atime;
+>  	if (ia_valid & ATTR_CTIME)
+> -		inode->i_ctime = attr->ia_ctime;
+> +		inode_ctime_set(inode, attr->ia_ctime);
+>  	if (ia_valid & ATTR_MODE) {
+>  		ADFS_I(inode)->attr = adfs_mode2atts(sb, inode, attr->ia_mode);
+>  		inode->i_mode = adfs_atts2mode(sb, inode);
+> -- 
+> 2.41.0
 > 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
