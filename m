@@ -2,145 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47C8D737B2D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6889737B34
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:25:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjFUGTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 02:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
+        id S230075AbjFUGUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 02:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjFUGTf (ORCPT
+        with ESMTP id S230190AbjFUGUB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 02:19:35 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA90F118
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:19:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a5YPZAAoxtVF6Vk/UQa25L/Hq9Pp8U16HX6zxHgcPhkA/TTs6ncN2exI8IGwLxIbyZI2zeuDXZqmdw4Hb0QREIdmpOw324aIu8LfBZ7Vd06RSgZTvx34HGJ8gXcfCmBP3jxJQZHD82hHNGWUHcwdZ5CSCpAJhUc7opUW1kUGs0UjLLPFV8PD54KsG3bHmW/vqaRZzsrE1nXN6Q7vWYEkqyxoExDU+OHjk0t0urj6idDofDshYgArV8QVoaXNI15Y0F8Wi3auAKRYrZQAtB4F5BQ8QurKeu1FguW22b7oBZg6ggTrMhKrifZb3JWJsii5BgZX84aoSffIt4vuiXEQ8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=P4PrwyniEukTYvPgE5ESkBr2G5YngTXPLJgj1TExeAM=;
- b=WhRvT1E05gI/XyCpNfR/IKZoKnDu9rSZybIpXOCTeZQI2h8feobNgU3V+IMwaMd7znxNlyDc1NrK1Phm1De7oKKpNiVxagOaxBahJLGd0Agcd7RP9x7Q8292LjLMHWenKf+fd9G/5UvSBGlasr73G/39zDWreTD3TOgojAziyrjdC2WPGjZ+VNxv0MRsbgAmMQ661rTNRyfzVZBN5M5WsurU05ZiMxH1J8qqD93ABOlLTy0it0maEkEqN2OXp58GMSWlr+nOq4BK6cLvVZpM7I1GdCKG/rzvtMT+ismUXsg3MAMhFcUT7TlDV2K+XqKi3Ur1+JeXDcNRHOCPSkI2xQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=lists.freedesktop.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=P4PrwyniEukTYvPgE5ESkBr2G5YngTXPLJgj1TExeAM=;
- b=CilMzAGapSzZR1QYW5hlDTISuuscDZanNE+s8rTEI0f9y9oTWZJ+G8BAtK0xGCBE4Aeb5wN98/KttYeNQDoD5wKBdPQvdLiNDz9nAzxx/InBa1/66AJ2JVYioE6IzOREU7ZKE0G8aUccvZiARvBxZd51A1xNo4q1TFYwQUW+fb2lzgw5mdCp8LUUdj1nmxhvN7Pb1yYc5eORlqjYvCl5svuSltjENs1cBchgCZA5M5cGJdHjDPiTtHjfwf7ikQM7b3rCHATy/zbcEU4ZWp2AMGA0PrcC34wuBB+hgNu0rwxgAp7ms6X+VHGxprol2RRwz00FSIf5u5U/FFHaeY6SOg==
-Received: from PH0PR07CA0046.namprd07.prod.outlook.com (2603:10b6:510:e::21)
- by BL1PR12MB5804.namprd12.prod.outlook.com (2603:10b6:208:394::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Wed, 21 Jun
- 2023 06:19:32 +0000
-Received: from SA2PEPF000015C8.namprd03.prod.outlook.com
- (2603:10b6:510:e:cafe::29) by PH0PR07CA0046.outlook.office365.com
- (2603:10b6:510:e::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.21 via Frontend
- Transport; Wed, 21 Jun 2023 06:19:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- SA2PEPF000015C8.mail.protection.outlook.com (10.167.241.198) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6521.19 via Frontend Transport; Wed, 21 Jun 2023 06:19:30 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 20 Jun 2023
- 23:19:21 -0700
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Tue, 20 Jun 2023 23:19:21 -0700
-Received: from rcampbell-dev.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server id 15.2.986.37 via Frontend
- Transport; Tue, 20 Jun 2023 23:19:21 -0700
-From:   Ralph Campbell <rcampbell@nvidia.com>
-To:     <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-CC:     Jani Nikula <jani.nikula@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Ralph Campbell <rcampbell@nvidia.com>
-Subject: [PATCH v2] drm/edid: Add quirk for OSVR HDK 2.0
-Date:   Tue, 20 Jun 2023 23:19:03 -0700
-Message-ID: <20230621061903.3422648-1-rcampbell@nvidia.com>
-X-Mailer: git-send-email 2.40.1
+        Wed, 21 Jun 2023 02:20:01 -0400
+Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C7FE69
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:19:57 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VlesG-._1687328392;
+Received: from 30.97.48.59(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VlesG-._1687328392)
+          by smtp.aliyun-inc.com;
+          Wed, 21 Jun 2023 14:19:53 +0800
+Message-ID: <ccab6877-7b48-e5c2-5264-67b8148849da@linux.alibaba.com>
+Date:   Wed, 21 Jun 2023 14:20:13 +0800
 MIME-Version: 1.0
-X-NVConfidentiality: public
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA2PEPF000015C8:EE_|BL1PR12MB5804:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3780a8ec-7f01-4b2a-1ff0-08db721f797e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jMsmffO5he3+HW6W/WzlYc1OusKVQJWUuU4qzIbjDYjS4Oqsy+c5jI95HKzYGMTMQwXxrr6xTYgWI8N1Z9+CeQhRTwe81BeyPQhgsKKvNYC3J5oaMHR8SCOR1A4XaEL1GEF5tpxQYrkY6z6DYMG2E0xjAdv2b3mWuJYdI/lKJFEyl3tPsunl81AnQxeF2ifkFAEt3clzix9VVpL0Y5kbpT2H8kfkj9NdoWrvbvLPs3N0lGEjYdBIjIJSRX+QrL6QilUW76sdDMds8ZEFBh65++Pn9PPp94XWlr4LMzcqsuWZlDR3tjc2N11LaPIQlebSoNgHznyj4cvXwKCjRT+VdLyZegx26kqcaH65yibw5wouS5D4imjti/vpXKEBZJm1F8qRULDlcO5cSSNC1Kcu+pRb4ngjlGQa68sFuuG1P23HihvHY+MVn/LwNXX4BhN7mhBra2Yj2MwaCxiY2XMb7W/fnpcxC2HnjT0NbDh/cBA54XusXaKY1yI1VOhAfo4G9C9vXKYjlru/YAOpHVt2XHfs5qbl+Uw8pPCRlkMEZI/s62UnJ2UinI+7rTCTUXXYmCmQyWufP8uYeDFj8L+Hvx9+ojVhajkoAU0UJLI3vGpZ9Pr75kQRH7UPMa/s1RIsjUUvk1AhDxkqS6B3IPCPuuRiC1MirceXqVfuV3fJaQuRgkPxx7vVXFiavAFr7mrWV//mlM0Teycr8r3dNleliW1eeeAJDoPGXRPfUWIFJrYpTsLhhsIOPutzg2vykklq
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(346002)(136003)(451199021)(46966006)(36840700001)(40470700004)(478600001)(6666004)(4326008)(54906003)(110136005)(7696005)(1076003)(107886003)(186003)(26005)(70586007)(2906002)(82310400005)(8676002)(8936002)(41300700001)(70206006)(316002)(5660300002)(7636003)(82740400003)(356005)(40460700003)(86362001)(36756003)(40480700001)(47076005)(2616005)(426003)(336012)(36860700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 06:19:30.9668
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3780a8ec-7f01-4b2a-1ff0-08db721f797e
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: SA2PEPF000015C8.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5804
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH -next v2 1/2] mm: compaction: convert to use a folio in
+ isolate_migratepages_block()
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>, akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        willy@infradead.org, jgowans@amazon.com, yuzhao@google.com
+References: <20230619110718.65679-1-wangkefeng.wang@huawei.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20230619110718.65679-1-wangkefeng.wang@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The OSVR virtual reality headset HDK 2.0 uses a different EDID
-vendor and device identifier than the HDK 1.1 - 1.4 headsets.
-Add the HDK 2.0 vendor and device identifier to the quirks table so
-that window managers do not try to display the desktop screen on the
-headset display.
+Hi
 
-Signed-off-by: Ralph Campbell <rcampbell@nvidia.com>
-Tested-by: Ralph Campbell <rcampbell@nvidia.com>
----
- drivers/gpu/drm/drm_edid.c | 1 +
- 1 file changed, 1 insertion(+)
+On 6/19/2023 7:07 PM, Kefeng Wang wrote:
+> Directly use a folio instead of page_folio() when page successfully
+> isolated (hugepage and movable page) and after folio_get_nontail_page(),
+> which removes several calls to compound_head().
+> 
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+> v2:
+> - update comments and use node_stat_mod_folio, per Matthew Wilcox
+> - add missed PageLRU conversion and rebase on next-20230619
+> 
+>   mm/compaction.c | 84 ++++++++++++++++++++++++++-----------------------
+>   1 file changed, 44 insertions(+), 40 deletions(-)
+> 
+> diff --git a/mm/compaction.c b/mm/compaction.c
+> index 6149a2d324be..0334eefe4bfa 100644
+> --- a/mm/compaction.c
+> +++ b/mm/compaction.c
+> @@ -795,6 +795,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+>   	struct lruvec *lruvec;
+>   	unsigned long flags = 0;
+>   	struct lruvec *locked = NULL;
+> +	struct folio *folio = NULL;
+>   	struct page *page = NULL, *valid_page = NULL;
+>   	struct address_space *mapping;
+>   	unsigned long start_pfn = low_pfn;
+> @@ -891,7 +892,7 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+>   		if (!valid_page && pageblock_aligned(low_pfn)) {
+>   			if (!isolation_suitable(cc, page)) {
+>   				low_pfn = end_pfn;
+> -				page = NULL;
+> +				folio = NULL;
+>   				goto isolate_abort;
+>   			}
+>   			valid_page = page;
+> @@ -923,7 +924,8 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+>   				 * Hugepage was successfully isolated and placed
+>   				 * on the cc->migratepages list.
+>   				 */
+> -				low_pfn += compound_nr(page) - 1;
+> +				folio = page_folio(page);
+> +				low_pfn += folio_nr_pages(folio) - 1;
+>   				goto isolate_success_no_list;
+>   			}
+>   
+> @@ -991,8 +993,10 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+>   					locked = NULL;
+>   				}
+>   
+> -				if (isolate_movable_page(page, mode))
+> +				if (isolate_movable_page(page, mode)) {
+> +					folio = page_folio(page);
+>   					goto isolate_success;
+> +				}
+>   			}
+>   
+>   			goto isolate_fail;
+> @@ -1003,7 +1007,8 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+>   		 * sure the page is not being freed elsewhere -- the
+>   		 * page release code relies on it.
+>   		 */
+> -		if (unlikely(!get_page_unless_zero(page)))
+> +		folio = folio_get_nontail_page(page);
 
-I don't know how many of these VR headsets are still around but I have a
-working one and I saw an entry for HDK 1.x so I thought it would be good
-to add HDK 2.0.
-
-v2: The vendor ID was byte swapped.
-I'm not sure how I missed that in v1.
-
-diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-index 0454da505687..3b8cc1fe05e8 100644
---- a/drivers/gpu/drm/drm_edid.c
-+++ b/drivers/gpu/drm/drm_edid.c
-@@ -230,6 +230,7 @@ static const struct edid_quirk {
- 
- 	/* OSVR HDK and HDK2 VR Headsets */
- 	EDID_QUIRK('S', 'V', 'R', 0x1019, EDID_QUIRK_NON_DESKTOP),
-+	EDID_QUIRK('A', 'U', 'O', 0x1111, EDID_QUIRK_NON_DESKTOP),
- };
- 
- /*
--- 
-2.40.1
-
+I'm just curious, how can you make sure the 'page' is not a tail page? 
+Since the validation is lockless.
