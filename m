@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E275737FF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9B5A7380F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbjFUJYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 05:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57740 "EHLO
+        id S231776AbjFUJYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 05:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231428AbjFUJYW (ORCPT
+        with ESMTP id S230338AbjFUJYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 05:24:22 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE161FCD
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:24:02 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-31129591288so3921767f8f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:24:02 -0700 (PDT)
+        Wed, 21 Jun 2023 05:24:23 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499B219BF
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:24:04 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-51a3e6a952aso6851296a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:24:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687339441; x=1689931441;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687339442; x=1689931442;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=S3yb9swE3xTiKnV49xmW7qQT7kAh84V+/Srm0DQQmxA=;
-        b=x4YWo/dRgd3X1CXi35YBtv7s4YeY0ryc8LBoz5C1znXUZ4qpZmvgbeA75ObRCxYC5M
-         h1XBldnohWKXdZpZtDM3VAU7/kkv5vP0Qho9j1LvleCyUJPglEcq/jPLE9n6DdjU9Qu+
-         Ng2VjFCleB6NhIxz0uE0YJoAKEExD/0cOZCkerXlzsEELo2fqCTDKUbxx8riLQMtYsb2
-         89SmXnAjPt81FEv8oatHcckOq2p6JhqAXtfUoUyaB1N5Tku4lKDoUEUHBRKbVWz0Ayt9
-         BTmqCDy2K13LALirN5MlP02JiisY3IzrSOwagkN2XIEQEovHLnOp2jl+4v4YWGt61wt0
-         zLpQ==
+        bh=LE1vT+gVNirEsJxbTiTmA/33w+JDDyn/z8+OkH6Uatg=;
+        b=dh/Yscpx9g50WP8aUQec7esEdqkMVckT3xmVw5qZUmxNn8Lnkpby8IzbVZxOkbudQ1
+         dR5a6nkp17Pn0vSgWzUsFeApujZpPlq8DvW9F6cn4SoKlOPPHmvyWvXo/XEgH/v1Xjhp
+         d0gzl7pJo4T/8Ea7xeTevcKvSQAm4tg84t6Li6oi2XxrgDKYJKUrU5QO+OJZUmcn/pW8
+         WgN3lJONfebk19tQqqGWv1PBAFnjqam9Hm3hhUp/V1h9hKt/3nybAv0+65aU0McJ3Sct
+         U+MigjS8Fq7nIP9+sx1pDlBh59lrTSFdqy1cYRhDwwYdcIAfIhrkmUsd1f5G+ApwD6Ex
+         LGTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687339441; x=1689931441;
+        d=1e100.net; s=20221208; t=1687339442; x=1689931442;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=S3yb9swE3xTiKnV49xmW7qQT7kAh84V+/Srm0DQQmxA=;
-        b=PX0W/pQG2SaickjBDxcTZvcMfvJPH6tuDnOCqSf7FSMORGlmBD8pcTtOA/dJhhsw68
-         P9aiMlVY4pnV4KdX6bCLKvPwcM46TKnZFrPySYLr3awAMWWhbuLiEQLS66gvHj5I8Nr9
-         5zQST+1YfY53yOBLQoGIBU174uUqM54ldkaWQV3A0836pVJ1muQsVP6uNoYhsXEg+aeR
-         Jln/21wRUjactztxUl9FD5nVtgR+EKOBOdxPu9br/p/kGYP+y44jR6gAz7ZnSCkidVUr
-         ByQgrtO/gSObQSGVIRK44iouFYdwNxSqfYA6obt7QnAj1APX6IZaiig/CpkYkyQOnAsG
-         O2Wg==
-X-Gm-Message-State: AC+VfDzYqCuyACuAMP9tSOjaHdvQ8qg6RzVrUEufiKAHrOvt7abMiuCv
-        Sgr/85UdSAbL9oaqeHr74IK7FQ==
-X-Google-Smtp-Source: ACHHUZ4bqQlJaFCvx+3AffW3dpFHExJEQziJdGScuvpiXckJsPH9Jmtck1XrxSNuUqtVz1m0fTMbAw==
-X-Received: by 2002:adf:ffce:0:b0:30f:b045:8b60 with SMTP id x14-20020adfffce000000b0030fb0458b60mr9833679wrs.69.1687339441432;
-        Wed, 21 Jun 2023 02:24:01 -0700 (PDT)
+        bh=LE1vT+gVNirEsJxbTiTmA/33w+JDDyn/z8+OkH6Uatg=;
+        b=ElxKoKGkairFAG1GIrNRuzHasZfhJwYRKLMJFAbG7R7LkXTWzyRP26bLSPplNJ2cnJ
+         N2u461u1auVEgOzW3z6ZNnd0cG6FsSlOQc6659qQi7Ac353tn4ilH1srPkp/3kuIOgwv
+         Lv7idM7hHZzlZyOFEqNmDWd1uLo0IEUOuoUw868mwCm05dogcG1rSuEGhPaZJcbFk3a0
+         l4mhXwDu7kgbnvbSkIk/LYJo2ih2KJftm/tCi3T595igCEKDvGLQwEreq/o6ksXo0AHg
+         0PxwGJX5bxGoQAb4aVvB67Hl8P8YQaBOFMP/xsVc8+/sjjhpjdQND6B9ZD4DbZE+vubU
+         VvrA==
+X-Gm-Message-State: AC+VfDzE6NkDfqwehK2utcaxTntrrWacjQbSEhs7EBOvdZeO5776ZgBk
+        ThhQDVsuMXkB7PSiLJ7l7v9l8w==
+X-Google-Smtp-Source: ACHHUZ7IYIJzPl+IZdr+yo0zGtbLHILTndtfPgoJd1ib2x2wssIJxDu9j+PC5fysl1booVNBKkNFgA==
+X-Received: by 2002:a17:906:58d2:b0:988:8a11:ab88 with SMTP id e18-20020a17090658d200b009888a11ab88mr8539198ejs.33.1687339442703;
+        Wed, 21 Jun 2023 02:24:02 -0700 (PDT)
 Received: from blmsp.fritz.box ([2001:4091:a247:82fa:b762:4f68:e1ed:5041])
-        by smtp.gmail.com with ESMTPSA id i11-20020adffdcb000000b002fda1b12a0bsm4022115wrs.2.2023.06.21.02.24.00
+        by smtp.gmail.com with ESMTPSA id i11-20020adffdcb000000b002fda1b12a0bsm4022115wrs.2.2023.06.21.02.24.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 02:24:01 -0700 (PDT)
+        Wed, 21 Jun 2023 02:24:02 -0700 (PDT)
 From:   Markus Schneider-Pargmann <msp@baylibre.com>
 To:     Marc Kleine-Budde <mkl@pengutronix.de>,
         Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
@@ -63,9 +63,9 @@ Cc:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
         netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
         Julien Panis <jpanis@baylibre.com>,
         Markus Schneider-Pargmann <msp@baylibre.com>
-Subject: [PATCH v4 05/12] can: m_can: Add tx coalescing ethtool support
-Date:   Wed, 21 Jun 2023 11:23:43 +0200
-Message-Id: <20230621092350.3130866-6-msp@baylibre.com>
+Subject: [PATCH v4 06/12] can: m_can: Use u32 for putidx
+Date:   Wed, 21 Jun 2023 11:23:44 +0200
+Message-Id: <20230621092350.3130866-7-msp@baylibre.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230621092350.3130866-1-msp@baylibre.com>
 References: <20230621092350.3130866-1-msp@baylibre.com>
@@ -81,85 +81,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add TX support to get/set functions for ethtool coalescing.
-tx-frames-irq and tx-usecs-irq can only be set/unset together.
-tx-frames-irq needs to be less than TXE and TXB.
-
-As rx and tx share the same timer, rx-usecs-irq and tx-usecs-irq can be
-enabled/disabled individually but they need to have the same value if
-enabled.
+putidx is not an integer normally, it is an unsigned field used in
+hardware registers. Use a u32 for it.
 
 Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
 ---
- drivers/net/can/m_can/m_can.c | 38 ++++++++++++++++++++++++++++++++++-
- 1 file changed, 37 insertions(+), 1 deletion(-)
+ drivers/net/can/m_can/m_can.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/net/can/m_can/m_can.c b/drivers/net/can/m_can/m_can.c
-index 5238a5967971..d1435d1466b2 100644
+index d1435d1466b2..6f8043636c54 100644
 --- a/drivers/net/can/m_can/m_can.c
 +++ b/drivers/net/can/m_can/m_can.c
-@@ -1953,6 +1953,8 @@ static int m_can_get_coalesce(struct net_device *dev,
+@@ -467,7 +467,7 @@ static void m_can_clean(struct net_device *net)
+ 	struct m_can_classdev *cdev = netdev_priv(net);
  
- 	ec->rx_max_coalesced_frames_irq = cdev->rx_max_coalesced_frames_irq;
- 	ec->rx_coalesce_usecs_irq = cdev->rx_coalesce_usecs_irq;
-+	ec->tx_max_coalesced_frames_irq = cdev->tx_max_coalesced_frames_irq;
-+	ec->tx_coalesce_usecs_irq = cdev->tx_coalesce_usecs_irq;
+ 	if (cdev->tx_skb) {
+-		int putidx = 0;
++		u32 putidx = 0;
  
- 	return 0;
- }
-@@ -1979,16 +1981,50 @@ static int m_can_set_coalesce(struct net_device *dev,
- 		netdev_err(dev, "rx-frames-irq and rx-usecs-irq can only be set together\n");
- 		return -EINVAL;
- 	}
-+	if (ec->tx_max_coalesced_frames_irq > cdev->mcfg[MRAM_TXE].num) {
-+		netdev_err(dev, "tx-frames-irq %u greater than the TX event FIFO %u\n",
-+			   ec->tx_max_coalesced_frames_irq,
-+			   cdev->mcfg[MRAM_TXE].num);
-+		return -EINVAL;
-+	}
-+	if (ec->tx_max_coalesced_frames_irq > cdev->mcfg[MRAM_TXB].num) {
-+		netdev_err(dev, "tx-frames-irq %u greater than the TX FIFO %u\n",
-+			   ec->tx_max_coalesced_frames_irq,
-+			   cdev->mcfg[MRAM_TXB].num);
-+		return -EINVAL;
-+	}
-+	if (ec->tx_max_coalesced_frames_irq == 0 != ec->tx_coalesce_usecs_irq == 0) {
-+		netdev_err(dev, "tx-frames-irq and tx-usecs-irq can only be set together\n");
-+		return -EINVAL;
-+	}
-+	if (ec->rx_coalesce_usecs_irq != 0 && ec->tx_coalesce_usecs_irq != 0 &&
-+	    ec->rx_coalesce_usecs_irq != ec->tx_coalesce_usecs_irq) {
-+		netdev_err(dev, "rx-usecs-irq %u needs to be equal to tx-usecs-irq %u if both are enabled\n",
-+			   ec->rx_coalesce_usecs_irq,
-+			   ec->tx_coalesce_usecs_irq);
-+		return -EINVAL;
-+	}
- 
- 	cdev->rx_max_coalesced_frames_irq = ec->rx_max_coalesced_frames_irq;
- 	cdev->rx_coalesce_usecs_irq = ec->rx_coalesce_usecs_irq;
-+	cdev->tx_max_coalesced_frames_irq = ec->tx_max_coalesced_frames_irq;
-+	cdev->tx_coalesce_usecs_irq = ec->tx_coalesce_usecs_irq;
-+
-+	if (cdev->rx_coalesce_usecs_irq)
-+		cdev->irq_timer_wait =
-+			ns_to_ktime(cdev->rx_coalesce_usecs_irq * NSEC_PER_USEC);
-+	else
-+		cdev->irq_timer_wait =
-+			ns_to_ktime(cdev->tx_coalesce_usecs_irq * NSEC_PER_USEC);
- 
+ 		net->stats.tx_errors++;
+ 		if (cdev->version > 30)
+@@ -1673,12 +1673,12 @@ static int m_can_close(struct net_device *dev)
  	return 0;
  }
  
- static const struct ethtool_ops m_can_ethtool_ops = {
- 	.supported_coalesce_params = ETHTOOL_COALESCE_RX_USECS_IRQ |
--		ETHTOOL_COALESCE_RX_MAX_FRAMES_IRQ,
-+		ETHTOOL_COALESCE_RX_MAX_FRAMES_IRQ |
-+		ETHTOOL_COALESCE_TX_USECS_IRQ |
-+		ETHTOOL_COALESCE_TX_MAX_FRAMES_IRQ,
- 	.get_ts_info = ethtool_op_get_ts_info,
- 	.get_coalesce = m_can_get_coalesce,
- 	.set_coalesce = m_can_set_coalesce,
+-static int m_can_next_echo_skb_occupied(struct net_device *dev, int putidx)
++static int m_can_next_echo_skb_occupied(struct net_device *dev, u32 putidx)
+ {
+ 	struct m_can_classdev *cdev = netdev_priv(dev);
+ 	/*get wrap around for loopback skb index */
+ 	unsigned int wrap = cdev->can.echo_skb_max;
+-	int next_idx;
++	u32 next_idx;
+ 
+ 	/* calculate next index */
+ 	next_idx = (++putidx >= wrap ? 0 : putidx);
+@@ -1698,7 +1698,7 @@ static netdev_tx_t m_can_tx_handler(struct m_can_classdev *cdev)
+ 	u32 cccr, fdflags;
+ 	u32 txfqs;
+ 	int err;
+-	int putidx;
++	u32 putidx;
+ 
+ 	cdev->tx_skb = NULL;
+ 
 -- 
 2.40.1
 
