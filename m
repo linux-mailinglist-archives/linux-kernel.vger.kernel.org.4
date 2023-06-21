@@ -2,104 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9D7737DAA
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7082737D77
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231225AbjFUIZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 04:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56554 "EHLO
+        id S230423AbjFUI3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 04:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjFUIZc (ORCPT
+        with ESMTP id S229840AbjFUI3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 04:25:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94B5BC
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:24:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687335890;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fUccefOuSwG5NnSN4ddLna/NjIQ7wL0BEwFtqmuNSfE=;
-        b=XEiPlw5rCfU7gHm4NE9NZpGHl+osbHL1dsRnupQeTNv5/oZPtnAfYBRv/3z1WtwTYJILoe
-        gjwMlWd7c7cjQfRTdu7HFEFfDQbpMyq2auFE4GBswlhHSySLv8U5Z0P+AAoQotICyHzTOW
-        hRIMEIsTC40gPdrHEFaQYX9SCr3zVXE=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-590-Ed0Fh2SCOY6uEcNi_fYlzQ-1; Wed, 21 Jun 2023 04:24:48 -0400
-X-MC-Unique: Ed0Fh2SCOY6uEcNi_fYlzQ-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f9456dd899so18909035e9.2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:24:48 -0700 (PDT)
+        Wed, 21 Jun 2023 04:29:09 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B8910DA
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:29:08 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-51a200fc3eeso7437629a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:29:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687336147; x=1689928147;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nk1REjxh13RDFMixwQF0Wa6MImxEsHq1Btoq+GOXg2o=;
+        b=gL8pf0ZnrQlh0QuUD9HbLVyd9CpIiQ7jLKx6Zn/byg9iWx8klb6/iYvqwsW4kc+frm
+         40nT/ceeyqpMv2Tnza1+0CMDmGTir2FGUWrnMNHyvomKX0kEvsmiMywdW+QMLXDZC4fP
+         +VBIOYJCpSQpyGEU4OYyPG0Ukk8gHZ44jqhIK2g1A/36r3rLg1LwjqlZiiBY4uWePfsx
+         Xb66AOP1h7IjlJMYCpJIFVfzVdCyUwHrDx5pupPb7RhKrVSeBy7wpOalNl0zEhmOHlsn
+         xjW1RFPiHsa7+rRn7YDAHHHD5xroKFA92kAY5XDdSh7vJqjc/dNQs2UWbwrxAzPCRPks
+         gFlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687335887; x=1689927887;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fUccefOuSwG5NnSN4ddLna/NjIQ7wL0BEwFtqmuNSfE=;
-        b=Kv0K1bMgaEgH9JsCyrD8cEOwOvkK/cJyru3malM8+BTEwhFgi/KiXx8iwAwuVozdke
-         1dJGC+8NduivFsgyLq4bh8DdTh1wLva+xq5hg+MNqZ41Tr2AWVr7HG9VUHLx+oDaU383
-         zxFOEXlASi3cSTVhU6oL3yW5VFjHP4xO/kA4M4WalrbTQJTlL3Gyp+Bt7kVh6OMfuadf
-         CbTrszEya74gC7/xlPbsOvGYzv/2dIBl0n6m1YBd1/y5Ixm7VxeNqUoOHoF8dTsHo4U3
-         V05GkojH6YmqngcU/AfFQcCU0dUdAlY/1741BzdSfQ3XTi/QsrIoSsl9DK/hEWqjC5Wo
-         tR7w==
-X-Gm-Message-State: AC+VfDwsTtFvcaSHav6wuCgpNJQlJt18v3+CAwebaxryGkaGti/ge5pe
-        UL+tzp7OmfEaT7psr5nBu7c/8tHFm2tBPfM/+7WIHib/nqhJCFWwvq0AZZgBQ+1WhLKveI6JKN8
-        NJ+8t8qYXV7eNf8aWPHiTCtwZsf/+u8vK
-X-Received: by 2002:a5d:6a4b:0:b0:311:f8f:64da with SMTP id t11-20020a5d6a4b000000b003110f8f64damr13842454wrw.12.1687335887398;
-        Wed, 21 Jun 2023 01:24:47 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5Ntl5FD/2rvVaTufr6bnzeX+WCLFXklw1uXom0fMAPZuQ+RRkStwBK9UEGiLvc2Cg5gAQZcg==
-X-Received: by 2002:a5d:6a4b:0:b0:311:f8f:64da with SMTP id t11-20020a5d6a4b000000b003110f8f64damr13842438wrw.12.1687335887040;
-        Wed, 21 Jun 2023 01:24:47 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70b:9c00:7978:3030:9d9a:1aef? (p200300cbc70b9c00797830309d9a1aef.dip0.t-ipconnect.de. [2003:cb:c70b:9c00:7978:3030:9d9a:1aef])
-        by smtp.gmail.com with ESMTPSA id f2-20020a056000128200b003062c0ef959sm3824392wrx.69.2023.06.21.01.24.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 01:24:46 -0700 (PDT)
-Message-ID: <c3c6e8bf-e8cd-7e33-5193-c1f78b8bbef4@redhat.com>
-Date:   Wed, 21 Jun 2023 10:24:45 +0200
+        d=1e100.net; s=20221208; t=1687336147; x=1689928147;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nk1REjxh13RDFMixwQF0Wa6MImxEsHq1Btoq+GOXg2o=;
+        b=a8nupkBqRyNdSjaXgKvoQjEPoqbODl0DqQc17kx1XAtbZz3eihiWbMN1H2BNxBzXJr
+         832OsjYLOLpVaVfThQQeXz/S2nPaQ0o8e57Vw0mKb5ekubDe0mMPwyYu0apdaMlnVqzt
+         J43G3BM6ZHPKY3az1F8Oa03WitbymZfce1IqxMfmaRIABB8LWS5+CkjZpjZTYAofJ+bj
+         ZJxG+IJwveQt9K7LNquLYHLIoYNshXRUDgOPa0clG4aFGqOoczsrcJwTTI9hDTkrPgvO
+         k+LrZOLdODSEKwTXUaP9CtUoj9Ah3xdli21ilW8jnEiSF5BVx06EJmQyAOxH/3r4WdWK
+         XJcQ==
+X-Gm-Message-State: AC+VfDxNI9NyiSzkr2aRcCqHfdyme98C0pzWe5QatsW/3RT+acRO1VBg
+        ZNMJHtEblYyUOqtqTGgKiyfsIPsRDR2PuI3mdFs=
+X-Google-Smtp-Source: ACHHUZ5vCt0Y7ukOoL4v3riqB4xsP8+kCrpqJtePDRhN93rcN4HJaZV1EpHcrNBMm/5cE0TN16x74POF5bllWC4ECsA=
+X-Received: by 2002:aa7:c314:0:b0:516:3261:17d with SMTP id
+ l20-20020aa7c314000000b005163261017dmr9542121edq.20.1687336146807; Wed, 21
+ Jun 2023 01:29:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] mm/memory_hotplug.c: don't fail hot unplug quite so
- eagerly
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Oscar Salvador <osalvador@suse.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-mm@kvack.org
-References: <20230620011719.155379-1-jhubbard@nvidia.com>
- <ed83df65-f785-7077-ddd0-4e53d6fa6056@redhat.com>
- <80e01fa9-28c0-37e8-57f8-5bb4ce9a9db7@nvidia.com>
- <83689f25-ca50-7ece-45f0-a936e704df7d@redhat.com>
-Organization: Red Hat
-In-Reply-To: <83689f25-ca50-7ece-45f0-a936e704df7d@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230424123522.18302-1-nikita.shubin@maquefel.me>
+ <20230601053546.9574-10-nikita.shubin@maquefel.me> <ZHudRkB1YcMD_DaQ@surfacebook>
+ <35bc18b2e685e8596b1fdc1a2e6212dc98725cd4.camel@maquefel.me>
+In-Reply-To: <35bc18b2e685e8596b1fdc1a2e6212dc98725cd4.camel@maquefel.me>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 21 Jun 2023 11:28:30 +0300
+Message-ID: <CAHp75VdygQvzeWUHcQBteKZmvC6nBDeQv1c2ZJ-SBCHcjn4h+A@mail.gmail.com>
+Subject: Re: [PATCH v1 09/43] clocksource: ep93xx: Add driver for Cirrus Logic EP93xx
+To:     Nikita Shubin <nikita.shubin@maquefel.me>
+Cc:     Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Michael Peters <mpeters@embeddedts.com>,
+        Kris Bahnsen <kris@embeddedts.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
+On Wed, Jun 21, 2023 at 11:22=E2=80=AFAM Nikita Shubin
+<nikita.shubin@maquefel.me> wrote:
 
-> 
-> There is still arch/powerpc/platforms/pseries/hotplug-memory.c that calls
-> device_offline() and would fail on signals (not sure if relevant, like for virtio-mem it
-> shouldn't be that relevant).
+...
 
-Oh, and of course the ACPI-triggered device_offline().
+> > > +       irq =3D irq_of_parse_and_map(np, 0);
+> > > +       if (irq <=3D 0) {
+> > > +               pr_err("ERROR: invalid interrupt number\n");
+> > > +               ret =3D -EINVAL;
+> >
+> > Shadowed error in case of negative returned code. Why?
+>
+> Majority of clocksource drivers shadow it. Same like above.
 
--- 
-Cheers,
+It doesn't mean they are correct or using brand new APIs.
 
-David / dhildenb
+Can you use fwnode_irq_get() instead?
+The shadowing is most likely due to nasty =3D0 comparison.
 
+Also that ERROR is a bit weird, pr_err() is already on error level.
+
+--=20
+With Best Regards,
+Andy Shevchenko
