@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECD65738AD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97277738ADA
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:20:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbjFUQUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
+        id S232124AbjFUQU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjFUQUP (ORCPT
+        with ESMTP id S230129AbjFUQUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 21 Jun 2023 12:20:15 -0400
-Received: from imap5.colo.codethink.co.uk (imap5.colo.codethink.co.uk [78.40.148.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC324E69
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:20:09 -0700 (PDT)
+Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk [188.40.203.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DF3F10CE
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:20:10 -0700 (PDT)
 Received: from [167.98.27.226] (helo=rainbowdash)
-        by imap5.colo.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
-        id 1qC0Yw-00CSaq-JA; Wed, 21 Jun 2023 17:20:07 +0100
+        by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
+        id 1qC0Yx-0016ia-Dk; Wed, 21 Jun 2023 17:20:07 +0100
 Received: from ben by rainbowdash with local (Exim 4.96)
         (envelope-from <ben@rainbowdash>)
-        id 1qC0Yx-001z4c-0U;
+        id 1qC0Yx-001z4h-0Y;
         Wed, 21 Jun 2023 17:20:07 +0100
 From:   Ben Dooks <ben.dooks@codethink.co.uk>
 To:     linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
         alexandre.belloni@bootlin.com
 Cc:     Ben Dooks <ben.dooks@codethink.co.uk>
-Subject: [RFC 3/5] i3c: show node when printing unsupported 10-bit i2c dev
-Date:   Wed, 21 Jun 2023 17:20:03 +0100
-Message-Id: <20230621162005.473049-4-ben.dooks@codethink.co.uk>
+Subject: [RFC 4/5] i3c: show error messages in of_i3c_master_add_i3c_boardinfo
+Date:   Wed, 21 Jun 2023 17:20:04 +0100
+Message-Id: <20230621162005.473049-5-ben.dooks@codethink.co.uk>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230621162005.473049-1-ben.dooks@codethink.co.uk>
 References: <20230621162005.473049-1-ben.dooks@codethink.co.uk>
@@ -43,29 +43,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When an i2c device is errored due to not being supported, the OF node
-is not show (unlike errors from of_i2c_get_board_info). Make the failed
-node explict in the of_i3c_master_add_i2c_boardinfo() to aid in tracking
-down incorrect entries in the device tree.
+If of_i3c_master_add_i3c_boardinfo() fails, then there's no much to say
+what the issue was (most of the error returns are -EINVAL), so add some
+printing of the errors using dev_err() showing the node that failed and
+what the issue was.
+
+This should help with finding which device-tree node was causing the
+issue and also mirrors the i2c case where it shows the node and the
+error.
 
 Signed-off-by: Ben Dooks <ben.dooks@codethink.co.uk>
 ---
- drivers/i3c/master.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i3c/master.c | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/i3c/master.c b/drivers/i3c/master.c
-index 6316f3fc914a..bc42669f5c6d 100644
+index bc42669f5c6d..2a9ebb1d9d57 100644
 --- a/drivers/i3c/master.c
 +++ b/drivers/i3c/master.c
-@@ -2023,7 +2023,7 @@ of_i3c_master_add_i2c_boardinfo(struct i3c_master_controller *master,
- 	 * DEFSLVS command.
- 	 */
- 	if (boardinfo->base.flags & I2C_CLIENT_TEN) {
--		dev_err(dev, "I2C device with 10 bit address not supported.");
-+		dev_err(dev, "%pOF: I2C device with 10 bit address not supported.", node);
- 		return -ENOTSUPP;
+@@ -2050,32 +2050,42 @@ of_i3c_master_add_i3c_boardinfo(struct i3c_master_controller *master,
+ 		return -ENOMEM;
+ 
+ 	if (reg[0]) {
+-		if (reg[0] > I3C_MAX_ADDR)
++		if (reg[0] > I3C_MAX_ADDR) {
++			dev_err(dev, "%pOF: address too big\n", node);
+ 			return -EINVAL;
++		}
+ 
+ 		addrstatus = i3c_bus_get_addr_slot_status(&master->bus,
+ 							  reg[0]);
+-		if (addrstatus != I3C_ADDR_SLOT_FREE)
++		if (addrstatus != I3C_ADDR_SLOT_FREE) {
++			dev_err(dev, "%pOF: slot in use\n", node);
+ 			return -EINVAL;
++		}
  	}
  
+ 	boardinfo->static_addr = reg[0];
+ 
+ 	if (!of_property_read_u32(node, "assigned-address", &init_dyn_addr)) {
+-		if (init_dyn_addr > I3C_MAX_ADDR)
++		if (init_dyn_addr > I3C_MAX_ADDR) {
++			dev_err(dev, "%pOF: cannot assign address\n", node);
+ 			return -EINVAL;
++		}
+ 
+ 		addrstatus = i3c_bus_get_addr_slot_status(&master->bus,
+ 							  init_dyn_addr);
+-		if (addrstatus != I3C_ADDR_SLOT_FREE)
++		if (addrstatus != I3C_ADDR_SLOT_FREE) {
++			dev_err(dev, "%pOF: slot in use\n", node);
+ 			return -EINVAL;
++		}
+ 	}
+ 
+ 	boardinfo->pid = ((u64)reg[1] << 32) | reg[2];
+ 
+ 	if ((boardinfo->pid & GENMASK_ULL(63, 48)) ||
+-	    I3C_PID_RND_LOWER_32BITS(boardinfo->pid))
++	    I3C_PID_RND_LOWER_32BITS(boardinfo->pid)) {
++		dev_err(dev, "%pOF: bad PID\n", node);
+ 		return -EINVAL;
++	}
+ 
+ 	boardinfo->init_dyn_addr = init_dyn_addr;
+ 	boardinfo->of_node = of_node_get(node);
 -- 
 2.40.1
 
