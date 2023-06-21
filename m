@@ -2,118 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78D4F73851A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 017BB738533
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232603AbjFUN3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
+        id S230072AbjFUNcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232593AbjFUN3m (ORCPT
+        with ESMTP id S231200AbjFUNb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:29:42 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2648119B1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:29:34 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f9b9863bfdso105455e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:29:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687354172; x=1689946172;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EdD6cJh6qu5svt4tCCc88YcqEs1pBBrW5+aY8WHVANw=;
-        b=FVWCzeaws/zcBjOjUu1n3j7WTelwG9JXw5CEnSXuVyoExnw46Vm7mXMycj7Ey0QchI
-         UVjgVZ4W3h5G5DyoOoZIhV8s+QLEGIuDiv7FHV5vIOU910wUI0T7BqJIL3hiUULNn3pB
-         VdLBj/gmBNQfPFQVDSrnzVcXK2S0UMtK8OtAgvQT4uoauo/jz+/SpPUkkiLkSsQxZd2z
-         AEO/hNolEPFpBTzv4Bg80pQfyL3BI9NXzGgzGhDMGTnQxEUxqfg/L5oCp96E0x9VwNVo
-         gpzHx1Oy1YyVpGtZNzIKXvRaHqC7XKKGAEWWjdzzHQPIo3iS6lSAwNv8U3KzzfxEcpnE
-         heFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687354172; x=1689946172;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EdD6cJh6qu5svt4tCCc88YcqEs1pBBrW5+aY8WHVANw=;
-        b=XM36Cehf8XhwCJbJaVvRjxoVYCY49TVVehFhlvNIZVLvP3yHjjN+A7p9akkRKJ5yN2
-         QgJfAyWAvs1rc1YO/yKECGrofP0UmzhmJeRQDNMqrBXyIRkbohaXwDvErQc1Uq63DEUK
-         yTqJwgGESzZCscoC2znx/WEHjOPDMWYJa6Xx+5JZkwa683/OSqFarlrnhfg2Fh5r445Z
-         b2yfZTtRsfPSs1EuT3+1A35SIGoRMP75PXiBJHqtPmAv9LBFQQk3dyb/9gjevBeutc9I
-         MqEoaCz7YJTui0ko2iW6Prsg5vWtSXoOebsMJwUuKG84FRp8mL14nHGBgO3oDAvEigG7
-         MXjw==
-X-Gm-Message-State: AC+VfDwAY8D1WavrImNcmg/CZ+wDYioIgwFztdMXqS2/cPP6jVBdc1p8
-        c11p7e3PE7rO0WvBAHIqEzeFAR8wqaHau0gMu4CKAw==
-X-Google-Smtp-Source: ACHHUZ5oAZ9+8akmbC5AZy2U+cfa4H8NZ/OYc/GWPMsKsUpaTNBCrKI6BrBopugvdCFxO09eZzJcDuVKBMM6NPG7gzE=
-X-Received: by 2002:a05:600c:3ac9:b0:3f7:3e85:36a with SMTP id
- d9-20020a05600c3ac900b003f73e85036amr1128926wms.7.1687354172487; Wed, 21 Jun
- 2023 06:29:32 -0700 (PDT)
+        Wed, 21 Jun 2023 09:31:58 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC0E5199A
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:31:42 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8BxU8S9+5Jk4iQAAA--.265S3;
+        Wed, 21 Jun 2023 21:31:41 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx4eS8+5JkGLYAAA--.4269S3;
+        Wed, 21 Jun 2023 21:31:41 +0800 (CST)
+Message-ID: <30d80802-2d9d-2816-1a02-240145f6dd3a@loongson.cn>
+Date:   Wed, 21 Jun 2023 21:31:40 +0800
 MIME-Version: 1.0
-References: <20230615141144.665148-1-usama.anjum@collabora.com>
- <20230615141144.665148-3-usama.anjum@collabora.com> <ZJHp6hSeS6lMo7qx@gmail.com>
- <1c1beeda-ceed-fdab-bbf5-1881e0a8b102@collabora.com>
-In-Reply-To: <1c1beeda-ceed-fdab-bbf5-1881e0a8b102@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Wed, 21 Jun 2023 15:29:20 +0200
-Message-ID: <CABb0KFHpE+jJH0MmxZTFaQ9FNFNUnJcnnv7sSGDYqDqqB_FRqw@mail.gmail.com>
-Subject: Re: [PATCH v19 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Andrei Vagin <avagin@gmail.com>, Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v10 03/11] drm/etnaviv: Add dedicated functions to create
+ and destroy platform device
+Content-Language: en-US
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Sui Jingfeng <18949883232@163.com>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        etnaviv@lists.freedesktop.org
+References: <20230620094716.2231414-1-18949883232@163.com>
+ <20230620094716.2231414-4-18949883232@163.com>
+ <0daa7182d6600a24988d1c81cf8fe3c0c9487f52.camel@pengutronix.de>
+ <1c7596fd-7e63-6719-2574-7d7820687832@loongson.cn>
+ <6d287bbb1733814009dfeb7d48f08cb6f44dc56c.camel@pengutronix.de>
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <6d287bbb1733814009dfeb7d48f08cb6f44dc56c.camel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8Dx4eS8+5JkGLYAAA--.4269S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrtr4fWr4DKF4fuw4UKrWDZFc_yoWDZFbEkr
+        s7ZFsrK3yftwsYqFyakFW8AF17Ga9IvrZ5Jw1Utwn5K343X3yDZ3ykArs2va4rXa1I9rsI
+        grnxur1Sy3sI9osvyTuYvTs0mTUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUbg8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6F4UJVW0owAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
+        Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_
+        Jw1lYx0Ex4A2jsIE14v26F4j6r4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+        1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26F4j6r4U
+        JwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnUUI43ZEXa7IU8oGQD
+        UUUUU==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 at 08:35, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> On 6/20/23 11:03=E2=80=AFPM, Andrei Vagin wrote:
-> ...
-> >> +struct pagemap_scan_private {
-> >> +    struct page_region *vec_buf, cur_buf;
-> >> +    unsigned long long vec_buf_len, vec_buf_index, max_pages, found_p=
-ages, flags;
-> >
-> > should it be just unsigned long?
-> These internal values are storing data coming from user in struct
-> pm_scan_arg in which all variables are 64 bit(__u64) explicitly. This is
-> why we have unsigned long long here. It is absolutely necessary.
 
-vec_buf_len and vec_buf_index can only have values in 0..512 range.
-flags has only a few lower bits defined (this is checked on ioctl
-entry) and max_pages can be limited to ULONG_MAX. Actually putting `if
-(!max_pages || max_pages > ULONG_MAX) max_pages =3D ULONG_MAX` would
-avoid having to check !max_pages during the walk.
+On 2023/6/21 18:23, Lucas Stach wrote:
+>> While back to the question you ask, I want etnaviv_create_platform_device() to be generic,
+>>
+>> can be used by multiple place for multiple purpose.
+>>
+>> I have successfully copy this to a another drm driver by simply renaming.
+>>
+>> The body of the function itself does not need to change.
+> But it isn't shared,
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+This can be shared for drm/etnaviv in the future,
+
+currently, we just need an opportunity to use this function.
+
+I want to create a dummy platform device,
+
+let this dummy platform be bound to the single PCI GPU master.
+
+
+etnaviv_create_platform_device("dummy", &dummy_device);
+
+
+1) To verify the component code path on PCI case.
+
+2) Possibly for create a device for some other tiny hardware logic
+come with the platform
+
+3) Revival component_compare_dev_name() function.
+
+> in this compilation unit this function is specific
+> to the etnaviv driver and I don't see why we shouldn't have etnaviv
+> specifics in there if it makes the code of this driver easier to
+> follow.
+
+-- 
+Jingfeng
+
