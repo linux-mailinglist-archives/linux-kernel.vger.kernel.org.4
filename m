@@ -2,212 +2,363 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BA3A737937
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 04:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 470AB737939
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 04:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjFUCf4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 22:35:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47916 "EHLO
+        id S229948AbjFUCgF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 22:36:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjFUCfw (ORCPT
+        with ESMTP id S229482AbjFUCf6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 22:35:52 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF54B4
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 19:35:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687314950; x=1718850950;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=JVvQST5dvkSDuVed5oWfHnUUwlzGo7ZA66zyXpCcK24=;
-  b=hVNdOeVbQcAxNWTIuzacfWNi9uAWT12UAQMHXPaseSUEifuWT7BtNJwO
-   0cfYJIKol9KkK4cfHDC+1Gc0hojSco3c09mnUg+vXE1IbYGzm5UobABKo
-   sRY0wU13K749FsVRQL0azW8eJUYX36drtQN1K5ursmOHe/M/oIETns0DS
-   b3uDeMSOLfqHsox8O/rMmtgIw79Bup0aVW6zO32J7cXD8GGdOhKHyYgVt
-   TJwvml0dQkRWwJab64ivN6ws/4Vu5me9BTLec5+gOWhs6fJui2Fpm+uzI
-   hruAVW2Irlrl3RRtOhdEoIZPIg+BPZeqEQf33aR4ZfgGzRHGmVTLFHhLh
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="362586629"
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="scan'208";a="362586629"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Jun 2023 19:35:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="664469293"
-X-IronPort-AV: E=Sophos;i="6.00,259,1681196400"; 
-   d="scan'208";a="664469293"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga003.jf.intel.com with ESMTP; 20 Jun 2023 19:35:47 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 20 Jun 2023 19:35:48 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Tue, 20 Jun 2023 19:35:47 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Tue, 20 Jun 2023 19:35:47 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Tue, 20 Jun 2023 19:35:47 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YORQah6jcgEz912BMf45DnxWN7Ymcix7sZx4XJp+l/AYOLm7sQuEaseFL1eIT1PcGkeZU76RWxYm1hvjl357TipNf/vzVz6/AwEE4snIdiTx8t2lobEwDFmidQna7oL9ushfIBuXtqhGFmDeMxIvdmgG1oFYzgyefK8/AkHUmQkBPcTWf5b1VEhY4rQxUUu2Uj5Ks5pEVi/IWOIPRXDw5HlZlA2f+94oomB429Nx4UooEM4/vanTc4bR4IOmLTqOgicIzM3FsrhF/Ey3pEuNdbmMkHiVcOU+P2Fi1wWdvypR50sZ+pVLi+NF7pmPdf0NmhEBB3ieQ2XzGQEdH/+D8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TgmD7CYoVKoXQ/OgR4b7OIhMrc2YGQ991bTq9f5eHlM=;
- b=cJGzE+FseCVNJAv4xBnDiLFAWdkV0F39hN+EbOrzxgzCFULmYq0h2qNKc2YIFQY0Pu/elaX9bPSnvUJr1qI99mHT6ETvAZebdbEvZqFB8p3HgdHWgz3TE8DX17VuRAYQns7jLeQXT4D9yKzw14nxRIS/EaOkSRZyAXNmrrzSbNkC/ZyM+izPaP/sjGzKF70lNv6ocBHnspPHcmctTKG3My8QTsdv8Qiiv1xNPCUm61gBh/pGHZN1AbBCslwGZmdDppBprIbrGyY78FWg39SrwLfkpEwpyrnsIBzKEiDhtupI1l7/xkiZUXz36thDG+8eoOEes0RveDaSxkvqLnuuuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3062.namprd11.prod.outlook.com (2603:10b6:a03:92::18)
- by SJ2PR11MB8401.namprd11.prod.outlook.com (2603:10b6:a03:539::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.29; Wed, 21 Jun
- 2023 02:35:46 +0000
-Received: from BYAPR11MB3062.namprd11.prod.outlook.com
- ([fe80::4103:d2e0:996d:cf1a]) by BYAPR11MB3062.namprd11.prod.outlook.com
- ([fe80::4103:d2e0:996d:cf1a%5]) with mapi id 15.20.6521.020; Wed, 21 Jun 2023
- 02:35:45 +0000
-Date:   Wed, 21 Jun 2023 10:35:34 +0800
-From:   Aaron Lu <aaron.lu@intel.com>
-To:     David Vernet <void@manifault.com>
-CC:     Peter Zijlstra <peterz@infradead.org>,
-        <linux-kernel@vger.kernel.org>, <mingo@redhat.com>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <rostedt@goodmis.org>, <dietmar.eggemann@arm.com>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <joshdon@google.com>,
-        <roman.gushchin@linux.dev>, <tj@kernel.org>, <kernel-team@meta.com>
-Subject: Re: [RFC PATCH 3/3] sched: Implement shared wakequeue in CFS
-Message-ID: <20230621023534.GA236337@ziqianlu-dell>
-References: <20230613052004.2836135-1-void@manifault.com>
- <20230613052004.2836135-4-void@manifault.com>
- <20230613083203.GR4253@hirez.programming.kicks-ass.net>
- <20230614043529.GA1942@ziqianlu-dell>
- <20230615000103.GC2883716@maniforge>
- <20230615044917.GA109334@ziqianlu-dell>
- <20230615073153.GA110814@ziqianlu-dell>
- <20230615232605.GB2915572@maniforge>
- <20230616005338.GA115001@ziqianlu-dell>
- <20230620173626.GA3027191@maniforge>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230620173626.GA3027191@maniforge>
-X-ClientProxiedBy: SI1PR02CA0027.apcprd02.prod.outlook.com
- (2603:1096:4:1f4::18) To BYAPR11MB3062.namprd11.prod.outlook.com
- (2603:10b6:a03:92::18)
+        Tue, 20 Jun 2023 22:35:58 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB1AB4;
+        Tue, 20 Jun 2023 19:35:56 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4Qm70S63Xkz4f3jLf;
+        Wed, 21 Jun 2023 10:35:52 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgAHvbAFYpJk9pSxMA--.19888S3;
+        Wed, 21 Jun 2023 10:35:51 +0800 (CST)
+Subject: Re: [PATCH -next 1/8] md: move initialization and destruction of
+ 'io_acct_set' to md.c
+To:     Xiao Ni <xni@redhat.com>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     song@kernel.org, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230619204826.755559-1-yukuai1@huaweicloud.com>
+ <20230619204826.755559-2-yukuai1@huaweicloud.com>
+ <CALTww281XOxzFXFQmZ-HWcekMzC30bryJ3YtYGRoERTrk2SHCQ@mail.gmail.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <849ddead-2a0c-38e8-b578-a85f843a6920@huaweicloud.com>
+Date:   Wed, 21 Jun 2023 10:35:49 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3062:EE_|SJ2PR11MB8401:EE_
-X-MS-Office365-Filtering-Correlation-Id: de642b92-2898-4b61-6623-08db7200368b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: I/F4TOox4ZARMRlTadcdM2Rm1tefNtoFahS22hDbIjyeoTbE1lLDr47g+oJRlhco74BbDr9/0oaTZnTnB4fl0RCjxw0sXaaFOosKNLtM6N6Jy/PhYwyyDGH+iMz1uRXG4gzIcxfh6q7ESe2HGCpsHb4mYLL1iRl3Vj65RHU2TKqzWJxmeY+yAXItH+Mi6rp6n9fxZJe+Phe4qAokx9BAhsX3loiYmWjrFHzPetNnfFyswclwPE3d+pJ7OYBcrpnAJFPz+YALV+XaUZ3uIJWSIcXLumUpkUzTsYx5pzP/aP7LaEMhGenflXcfLOaFzXGJd7a+cEmgAfKDvCl/l5AiCAAT8pDQBob8UnWCAH4v+ozzujtMBKpMKahjwvT4xDk+pqSmfXeV+nfAtO4ePG0PsV2HGcLc7FisidlIF4JZ5ADxKcsaEj4iYTAw9JHkZAiaSDRDKPSCVdkzVRSvDXq5UT69BIwpCCoQzoDmsZ7+xSgh+NR6YrM16GBXHAzS1WRwytS1e4DiNJfOoaNvWfC4bLmkp25Ebm6bndR4d0efCRRmxm2c1Al8XEResE7CMzx3
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3062.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(366004)(396003)(346002)(39860400002)(136003)(376002)(451199021)(5660300002)(8936002)(83380400001)(33716001)(82960400001)(66556008)(33656002)(38100700002)(316002)(41300700001)(6506007)(44832011)(26005)(6916009)(66476007)(2906002)(6486002)(9686003)(66946007)(6512007)(478600001)(7416002)(86362001)(4326008)(8676002)(1076003)(6666004)(186003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jGtM7R3w5QT7XsG67pKReFEMZS3b4ydTgO1Vn9ZtF1PBbkg5jNiYObIfaKcX?=
- =?us-ascii?Q?0n57BjzwMaYOwmCC/vr3jGI0c472BPOEmkde9IiCcsyO4BCbZ84tRgzWnvP4?=
- =?us-ascii?Q?qm4pLOyLayvpJOpJmUILl2NT3kY2abH/ebEYBBD94mTHFLw+Ix6UqQ97Pwj3?=
- =?us-ascii?Q?AtZEuCbg74wwTXQ0GEgR1hFSwnnKPYVM4iVyp3t8W0gwiVL3jFk549A94Tue?=
- =?us-ascii?Q?GdWc+dOb00+fyi1PYKxDPxwZVMBciyaQAiPpOzeFZrFMi4sGRwD9se//PHKK?=
- =?us-ascii?Q?Wlh1jHDPRy2+NH0n5dLyjcHYQJHeZqm1P5E9w1iR86Qo+syiY0G062J/m9ah?=
- =?us-ascii?Q?WNv1pZLsl6gaURh+eAVCk9jNzIje7RygfCKIzN70TF54se6UecC/mnKgu/Zx?=
- =?us-ascii?Q?q0Rozykxrekrc/ukeLgi6P9jxh9jqRjSTBwrBPUrdF/jiANjydPsaFyWrT+h?=
- =?us-ascii?Q?1t+cjue9TRSst/V9E1h0VhJqUIHLBhffHtjIqtJhMwBvNkHIXDDMKGCeCsag?=
- =?us-ascii?Q?erTOPCxG2s6GR6D8PzEGEkVslPWUCcmHFBp19oZ5/AWLSHLUzeMVG/KJLrcK?=
- =?us-ascii?Q?h6AzSYTdwX446yCsh1GytB5szZRFw8o3BSG/wKNHypi98sUcO4VekACFBPM8?=
- =?us-ascii?Q?DVuiyBj4SgMB8veFhzKVaGyimwSp34BQXNtGsDYF2BsEb5Z4K6hrTBtYhZW6?=
- =?us-ascii?Q?x3o3hldY2KnCyn17ziN00Nb31FMPR5LtL3o2ZuxC1gP4LiPknL+mCH5LVCQW?=
- =?us-ascii?Q?ou+Kov8nDQyAMyZCJLpiVTNNRCU6SN/JeWXQE+q+uTo/m/zQUgzatLmd6jwy?=
- =?us-ascii?Q?fTGe1OzXQU+ICQ7VgGlcKLRIBrXGPyiiM6DSY+8WnF7tNey6KOv6IHfuak/r?=
- =?us-ascii?Q?zvaj+spS6JDY5y9k5h/8jhi1YxCrQpcGKCnCd6ZUFnEBi+pRnvhI08BFTuAJ?=
- =?us-ascii?Q?o0A8e+L/aBqywETCXcGtNMqKzpaxNEhDp4j5EAbcHy7eK7mHoRfNhjoiF85Q?=
- =?us-ascii?Q?iwU8LcPvVZTnCSOpIg9n3xR4+Qsv8c3XiT8xsPldEnXGRkR+PbOw0cKpReBh?=
- =?us-ascii?Q?6lXf75eGbtGUyztAM4uSXUqutuPFSm/9q0Di5yNkTrsZmVvOE0HVYAfFQabB?=
- =?us-ascii?Q?lwOZlRMtFpYazgUWv1gNzlQsloeH7QGcfi+fSK4J6K8Xv9Sx9rMAdJTQUBpG?=
- =?us-ascii?Q?/ptOA5gwkC9DGPkFjKYgIkjvp91DkyoRDtmoYKwtgabvDEEchY1snfpI7P91?=
- =?us-ascii?Q?5IzCClopB+b6eBKcc5wTR24HPB2qU0qxxo8lv2xknD7Rzt2zxm66OpWM6y3G?=
- =?us-ascii?Q?Zl+9Jz9JpigkvUfz6U4CYZnSAxwYMamObsUOjR2X8gyWkxax4KhZE+yyN++8?=
- =?us-ascii?Q?sIbW5mrmwkvuZvqcnbjCTWEKelPBIFTwBtdNaTp0KCKWSZtLlCvPsDedwwcC?=
- =?us-ascii?Q?LOfsGDnyAXpLD2YHtcXvM3WCG3ujEMtyKDs3CfQv0b352ovfOUQpXBaSvqJe?=
- =?us-ascii?Q?Sj49V85iqPc7jJN8cvWVs1qxtF2ThA3Hnk4c3vMnoIfpQsGyMhM9MMU+PeEL?=
- =?us-ascii?Q?jBrwETkE4IL01w8beKXKkUtbLhf6K6s24Ve8+2zz?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: de642b92-2898-4b61-6623-08db7200368b
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3062.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 02:35:45.0021
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6PbmMYM9HqRHxpD8qN2YJNOJHGHBrRqT7ictPLex7hsqDeu/NPjX6CrugZ48d+TunpohQ0cR4RipjXATYubeew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB8401
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CALTww281XOxzFXFQmZ-HWcekMzC30bryJ3YtYGRoERTrk2SHCQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgAHvbAFYpJk9pSxMA--.19888S3
+X-Coremail-Antispam: 1UD129KBjvJXoW3Jw18try5Gr1kWw1DGrW3KFg_yoWfKryDpa
+        92qF1Ygr40qFWag34Ut3yv9a4Fvr1kKr97KrW3J348Aws2vr1DKFy5Wr4rur9rA34rCr1r
+        Zw4rKFZrur1xKFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j
+        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUZa9
+        -UUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 12:36:26PM -0500, David Vernet wrote:
-> On Fri, Jun 16, 2023 at 08:53:38AM +0800, Aaron Lu wrote:
-> > I also tried that on the 18cores/36threads/LLC Skylake and the contention
-> > is indeed much smaller than UDP_RR:
-> > 
-> >      7.30%     7.29%  [kernel.vmlinux]      [k]      native_queued_spin_lock_slowpath
-> > 
-> > But I wouldn't say it's entirely gone. Also consider Skylake has a lot
-> > fewer cores per LLC than later Intel servers like Icelake and Sapphire
-> > Rapids and I expect things would be worse on those two machines.
+Hi,
+
+在 2023/06/20 16:35, Xiao Ni 写道:
+> On Mon, Jun 19, 2023 at 8:50 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>>
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>
+>> 'io_acct_set' is only used for raid0 and raid456, prepare to use it for
+>> raid1 and raid10, so that io accounting from different levels can be
+>> consistent.
+>>
+>> By the way, follow up patches will also use this io clone mechanism to
+>> make sure 'active_io' represents in flight io, not io that is dispatching,
+>> so that mddev_suspend will wait for io to be done as desgined.
 > 
-> I cannot reproduce this contention locally, even on a slightly larger
+> Hi Kuai
+> 
+> typo error: s/desgined/designed/g
+> 
+> Before this patch the personality uses ->quiesce method to wait until
+> all inflight ios come back. But I like this solution. It makes the
+> codes simpler. Not sure if it can cause problems because it changes
+> the meaning of ->active_io. I'm doing regression tests to check.
 
-With netperf client number equal to nr_cpu?
+Yes, actually this is the first step that I'm tring to synchronize io
+and raid configuration, and I'm planing to use 'active_io' to check if
+normal io exist, following are follow up plans:
 
-> Skylake. Not really sure what to make of the difference here. Perhaps
-> it's because you're running with CONFIG_SCHED_CORE=y? What is the
-
-Yes I had that config on but I didn't tag any tasks or groups.
-
-> change in throughput when you run the default workload on your SKL?
-
-The throughput dropped a little with SWQUEUE:
-
-                 avg_throughput    native_queued_spin_lock_slowpath%
-NO_SWQUEUE:      9528.061111111108      0.09%
-SWQUEUE:         8984.369722222222      8.05%
-
-avg_throughput: average throughput of all netperf client's throughput,
-higher is better.
-
-I run this workload like this:
-"
-netserver
-
-for i in `seq 72`; do
-        netperf -l 60 -n 72 -6 &
-done
-
-sleep 30
-perf record -ag -e cycles:pp -- sleep 5 &
-
-wait
-"
-(the '-n 72' should be redundant but I just keep it there)
+1. add a new counter(perhaps we can reuse queue->q_usage_counter), and
+grab it for sync io;
+2. refactor and expand 'pers->quiesce', allow normal io and sync io
+to be both quiesced;
+3. call 'pers->quiesce' before raid configuration;
+4. add a new helper to iterate rdev, grab the new counter first;
+5. a lot of cleanups;
 
 Thanks,
-Aaron
+Kuai
+> 
+>>
+>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>> ---
+>>   drivers/md/md.c    | 27 ++++++++++-----------------
+>>   drivers/md/md.h    |  2 --
+>>   drivers/md/raid0.c | 16 ++--------------
+>>   drivers/md/raid5.c | 41 +++++++++++------------------------------
+>>   4 files changed, 23 insertions(+), 63 deletions(-)
+>>
+>> diff --git a/drivers/md/md.c b/drivers/md/md.c
+>> index 8d62f85d2ab0..42347289195a 100644
+>> --- a/drivers/md/md.c
+>> +++ b/drivers/md/md.c
+>> @@ -5886,6 +5886,13 @@ int md_run(struct mddev *mddev)
+>>                          goto exit_bio_set;
+>>          }
+>>
+>> +       if (!bioset_initialized(&mddev->io_acct_set)) {
+>> +               err = bioset_init(&mddev->io_acct_set, BIO_POOL_SIZE,
+>> +                                 offsetof(struct md_io_acct, bio_clone), 0);
+>> +               if (err)
+>> +                       goto exit_sync_set;
+>> +       }
+>> +
+>>          spin_lock(&pers_lock);
+>>          pers = find_pers(mddev->level, mddev->clevel);
+>>          if (!pers || !try_module_get(pers->owner)) {
+>> @@ -6063,6 +6070,8 @@ int md_run(struct mddev *mddev)
+>>          module_put(pers->owner);
+>>          md_bitmap_destroy(mddev);
+>>   abort:
+>> +       bioset_exit(&mddev->io_acct_set);
+>> +exit_sync_set:
+>>          bioset_exit(&mddev->sync_set);
+>>   exit_bio_set:
+>>          bioset_exit(&mddev->bio_set);
+>> @@ -6286,6 +6295,7 @@ static void __md_stop(struct mddev *mddev)
+>>          percpu_ref_exit(&mddev->active_io);
+>>          bioset_exit(&mddev->bio_set);
+>>          bioset_exit(&mddev->sync_set);
+>> +       bioset_exit(&mddev->io_acct_set);
+>>   }
+>>
+>>   void md_stop(struct mddev *mddev)
+>> @@ -8651,23 +8661,6 @@ void md_submit_discard_bio(struct mddev *mddev, struct md_rdev *rdev,
+>>   }
+>>   EXPORT_SYMBOL_GPL(md_submit_discard_bio);
+>>
+>> -int acct_bioset_init(struct mddev *mddev)
+>> -{
+>> -       int err = 0;
+>> -
+>> -       if (!bioset_initialized(&mddev->io_acct_set))
+>> -               err = bioset_init(&mddev->io_acct_set, BIO_POOL_SIZE,
+>> -                       offsetof(struct md_io_acct, bio_clone), 0);
+>> -       return err;
+>> -}
+>> -EXPORT_SYMBOL_GPL(acct_bioset_init);
+>> -
+>> -void acct_bioset_exit(struct mddev *mddev)
+>> -{
+>> -       bioset_exit(&mddev->io_acct_set);
+>> -}
+>> -EXPORT_SYMBOL_GPL(acct_bioset_exit);
+>> -
+>>   static void md_end_io_acct(struct bio *bio)
+>>   {
+>>          struct md_io_acct *md_io_acct = bio->bi_private;
+>> diff --git a/drivers/md/md.h b/drivers/md/md.h
+>> index 7cab9c7c45b8..11299d94b239 100644
+>> --- a/drivers/md/md.h
+>> +++ b/drivers/md/md.h
+>> @@ -776,8 +776,6 @@ extern void md_error(struct mddev *mddev, struct md_rdev *rdev);
+>>   extern void md_finish_reshape(struct mddev *mddev);
+>>   void md_submit_discard_bio(struct mddev *mddev, struct md_rdev *rdev,
+>>                          struct bio *bio, sector_t start, sector_t size);
+>> -int acct_bioset_init(struct mddev *mddev);
+>> -void acct_bioset_exit(struct mddev *mddev);
+>>   void md_account_bio(struct mddev *mddev, struct bio **bio);
+>>
+>>   extern bool __must_check md_flush_request(struct mddev *mddev, struct bio *bio);
+>> diff --git a/drivers/md/raid0.c b/drivers/md/raid0.c
+>> index f8ee9a95e25d..38d9209cada1 100644
+>> --- a/drivers/md/raid0.c
+>> +++ b/drivers/md/raid0.c
+>> @@ -365,7 +365,6 @@ static void raid0_free(struct mddev *mddev, void *priv)
+>>          struct r0conf *conf = priv;
+>>
+>>          free_conf(mddev, conf);
+>> -       acct_bioset_exit(mddev);
+>>   }
+>>
+>>   static int raid0_run(struct mddev *mddev)
+>> @@ -380,16 +379,11 @@ static int raid0_run(struct mddev *mddev)
+>>          if (md_check_no_bitmap(mddev))
+>>                  return -EINVAL;
+>>
+>> -       if (acct_bioset_init(mddev)) {
+>> -               pr_err("md/raid0:%s: alloc acct bioset failed.\n", mdname(mddev));
+>> -               return -ENOMEM;
+>> -       }
+>> -
+>>          /* if private is not null, we are here after takeover */
+>>          if (mddev->private == NULL) {
+>>                  ret = create_strip_zones(mddev, &conf);
+>>                  if (ret < 0)
+>> -                       goto exit_acct_set;
+>> +                       return ret;
+>>                  mddev->private = conf;
+>>          }
+>>          conf = mddev->private;
+>> @@ -420,15 +414,9 @@ static int raid0_run(struct mddev *mddev)
+>>
+>>          ret = md_integrity_register(mddev);
+>>          if (ret)
+>> -               goto free;
+>> +               free_conf(mddev, conf);
+>>
+>>          return ret;
+>> -
+>> -free:
+>> -       free_conf(mddev, conf);
+>> -exit_acct_set:
+>> -       acct_bioset_exit(mddev);
+>> -       return ret;
+>>   }
+>>
+>>   static void raid0_handle_discard(struct mddev *mddev, struct bio *bio)
+>> diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+>> index f8bc74e16811..29cf5455d7a5 100644
+>> --- a/drivers/md/raid5.c
+>> +++ b/drivers/md/raid5.c
+>> @@ -7787,19 +7787,12 @@ static int raid5_run(struct mddev *mddev)
+>>          struct md_rdev *rdev;
+>>          struct md_rdev *journal_dev = NULL;
+>>          sector_t reshape_offset = 0;
+>> -       int i, ret = 0;
+>> +       int i;
+>>          long long min_offset_diff = 0;
+>>          int first = 1;
+>>
+>> -       if (acct_bioset_init(mddev)) {
+>> -               pr_err("md/raid456:%s: alloc acct bioset failed.\n", mdname(mddev));
+>> +       if (mddev_init_writes_pending(mddev) < 0)
+>>                  return -ENOMEM;
+>> -       }
+>> -
+>> -       if (mddev_init_writes_pending(mddev) < 0) {
+>> -               ret = -ENOMEM;
+>> -               goto exit_acct_set;
+>> -       }
+>>
+>>          if (mddev->recovery_cp != MaxSector)
+>>                  pr_notice("md/raid:%s: not clean -- starting background reconstruction\n",
+>> @@ -7830,8 +7823,7 @@ static int raid5_run(struct mddev *mddev)
+>>              (mddev->bitmap_info.offset || mddev->bitmap_info.file)) {
+>>                  pr_notice("md/raid:%s: array cannot have both journal and bitmap\n",
+>>                            mdname(mddev));
+>> -               ret = -EINVAL;
+>> -               goto exit_acct_set;
+>> +               return -EINVAL;
+>>          }
+>>
+>>          if (mddev->reshape_position != MaxSector) {
+>> @@ -7856,15 +7848,13 @@ static int raid5_run(struct mddev *mddev)
+>>                  if (journal_dev) {
+>>                          pr_warn("md/raid:%s: don't support reshape with journal - aborting.\n",
+>>                                  mdname(mddev));
+>> -                       ret = -EINVAL;
+>> -                       goto exit_acct_set;
+>> +                       return -EINVAL;
+>>                  }
+>>
+>>                  if (mddev->new_level != mddev->level) {
+>>                          pr_warn("md/raid:%s: unsupported reshape required - aborting.\n",
+>>                                  mdname(mddev));
+>> -                       ret = -EINVAL;
+>> -                       goto exit_acct_set;
+>> +                       return -EINVAL;
+>>                  }
+>>                  old_disks = mddev->raid_disks - mddev->delta_disks;
+>>                  /* reshape_position must be on a new-stripe boundary, and one
+>> @@ -7880,8 +7870,7 @@ static int raid5_run(struct mddev *mddev)
+>>                  if (sector_div(here_new, chunk_sectors * new_data_disks)) {
+>>                          pr_warn("md/raid:%s: reshape_position not on a stripe boundary\n",
+>>                                  mdname(mddev));
+>> -                       ret = -EINVAL;
+>> -                       goto exit_acct_set;
+>> +                       return -EINVAL;
+>>                  }
+>>                  reshape_offset = here_new * chunk_sectors;
+>>                  /* here_new is the stripe we will write to */
+>> @@ -7903,8 +7892,7 @@ static int raid5_run(struct mddev *mddev)
+>>                          else if (mddev->ro == 0) {
+>>                                  pr_warn("md/raid:%s: in-place reshape must be started in read-only mode - aborting\n",
+>>                                          mdname(mddev));
+>> -                               ret = -EINVAL;
+>> -                               goto exit_acct_set;
+>> +                               return -EINVAL;
+>>                          }
+>>                  } else if (mddev->reshape_backwards
+>>                      ? (here_new * chunk_sectors + min_offset_diff <=
+>> @@ -7914,8 +7902,7 @@ static int raid5_run(struct mddev *mddev)
+>>                          /* Reading from the same stripe as writing to - bad */
+>>                          pr_warn("md/raid:%s: reshape_position too early for auto-recovery - aborting.\n",
+>>                                  mdname(mddev));
+>> -                       ret = -EINVAL;
+>> -                       goto exit_acct_set;
+>> +                       return -EINVAL;
+>>                  }
+>>                  pr_debug("md/raid:%s: reshape will continue\n", mdname(mddev));
+>>                  /* OK, we should be able to continue; */
+>> @@ -7939,10 +7926,8 @@ static int raid5_run(struct mddev *mddev)
+>>          else
+>>                  conf = mddev->private;
+>>
+>> -       if (IS_ERR(conf)) {
+>> -               ret = PTR_ERR(conf);
+>> -               goto exit_acct_set;
+>> -       }
+>> +       if (IS_ERR(conf))
+>> +               return PTR_ERR(conf);
+>>
+>>          if (test_bit(MD_HAS_JOURNAL, &mddev->flags)) {
+>>                  if (!journal_dev) {
+>> @@ -8140,10 +8125,7 @@ static int raid5_run(struct mddev *mddev)
+>>          free_conf(conf);
+>>          mddev->private = NULL;
+>>          pr_warn("md/raid:%s: failed to run raid set.\n", mdname(mddev));
+>> -       ret = -EIO;
+>> -exit_acct_set:
+>> -       acct_bioset_exit(mddev);
+>> -       return ret;
+>> +       return -EIO;
+>>   }
+>>
+>>   static void raid5_free(struct mddev *mddev, void *priv)
+>> @@ -8151,7 +8133,6 @@ static void raid5_free(struct mddev *mddev, void *priv)
+>>          struct r5conf *conf = priv;
+>>
+>>          free_conf(conf);
+>> -       acct_bioset_exit(mddev);
+>>          mddev->to_remove = &raid5_attrs_group;
+>>   }
+>>
+>> --
+>> 2.39.2
+>>
+> 
+> The patch is good for me.
+> 
+> Reviewed-by: Xiao Ni <xni@redhat.com>
+> 
+> .
+> 
+
