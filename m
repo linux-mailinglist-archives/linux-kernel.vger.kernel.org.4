@@ -2,49 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23168738D8F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FADA738D94
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbjFURsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 13:48:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50344 "EHLO
+        id S230320AbjFURth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 13:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjFURr7 (ORCPT
+        with ESMTP id S229452AbjFURtf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 13:47:59 -0400
-Received: from mail-40135.protonmail.ch (mail-40135.protonmail.ch [185.70.40.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE621726
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 10:47:58 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 17:47:48 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1687369676; x=1687628876;
-        bh=8wOHeVh8ASp47LbruLjcoxPj0RWoySUx98rYNUG5rns=;
-        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID:BIMI-Selector;
-        b=SYii8ho0XGyfqCNuwG/oM+9hEVubfi+O/ds5Uo160ej92Hj0GASJshaRdzDWPvi8n
-         O1B8jG8XXWN2awTZbZlWhAvYPKt0t654Se5EEQoessoAA/prD8Rxc+x5CO29ihKxEJ
-         /JxglePMyzNecSRfqUn7DFgqFNduVasE/c6JSO824p9UdeKHn4e87Jv7Y2S97+Jk8y
-         ESR0FH9eFK7L2cNngnt3zLVmBdwkv2MqHpCMbwS5kNfm+374i97iSO3btn9q9zdBAi
-         juplSdmMY4dbvNqcIrUWl+x/KzCtDxZfvx3JT4zYfW8CVVxHr1q9To2t4H+zkR9IvI
-         3qVxCO/cnoBxA==
-To:     lee@kernel.org
-From:   Raymond Hackley <raymondhackley@protonmail.com>
-Cc:     devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        luca@z3ntu.xyz, pavel@ucw.cz, raymondhackley@protonmail.com,
-        robh+dt@kernel.org
-Subject: Re: [PATCH 1/2] dt-bindings: leds: sgm3140: Document richtek,rt5033 compatible
-Message-ID: <20230621174735.1161-1-raymondhackley@protonmail.com>
-In-Reply-To: <20230621150141.GE10378@google.com>
-References: <20230602130644.259933-1-raymondhackley@protonmail.com> <20230602131009.260239-1-raymondhackley@protonmail.com> <20230621150141.GE10378@google.com>
-Feedback-ID: 49437091:user:proton
+        Wed, 21 Jun 2023 13:49:35 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84D21718
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 10:49:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687369774; x=1718905774;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=I08I0tFez5dKhmqeca820CtuAFLZd/1a4u1jpCZwwdI=;
+  b=DqgwkkVDS+dRXP3TQqwa5oZhuBlWzkondIvEtjdOzTjrCEjMUaGn+vZN
+   ZbSOo8BUbnqHuOqdN/TM9FhlHhjoGtGRLvMjM7eC/Xls7GpQ6vd//GYVY
+   d/ZtShKUk1grGcZL8cmdRMQ9uLzOop4hzIXYfGtuxzphvCTA513dNa3DW
+   k9hOoJrDEUVifkVMwD5Gjsj7HDGHet3bqoopbZXIqzmo7A+dPp+C8dPvp
+   +5dFq76TijcRJJasAsp7CXXLfcAU8ggMUn172WEAQRXrwx2E81kt4/YVs
+   aAM9HJvJoVryq97UB1p6aC6FnLtGwvbKoePTnKsrQVDjEn0OT8sMYdoiy
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="389819222"
+X-IronPort-AV: E=Sophos;i="6.00,261,1681196400"; 
+   d="scan'208";a="389819222"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 10:49:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="708807532"
+X-IronPort-AV: E=Sophos;i="6.00,261,1681196400"; 
+   d="scan'208";a="708807532"
+Received: from rmathew-mobl2.amr.corp.intel.com (HELO [10.212.134.235]) ([10.212.134.235])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 10:49:32 -0700
+Message-ID: <22bba771-f10b-8624-1874-5eb747e798dd@intel.com>
+Date:   Wed, 21 Jun 2023 10:49:31 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] x86,NUMA:Get the number of ram pages directly in
+ numa_meminfo_cover_memory()
+Content-Language: en-US
+To:     Liam Ni <zhiguangni01@gmail.com>, dave.hansen@linux.intel.com,
+        luto@kernel.org, peterz@infradead.org, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        akpm@linux-foundation.org, rppt@kernel.org
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <20230615142016.419570-1-zhiguangni01@gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230615142016.419570-1-zhiguangni01@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,50 +68,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lee,
+On 6/15/23 07:20, Liam Ni wrote:
+> In a previous implementation,The ram page is calculated
+> by counting the number of holes,
+> however,the number of ram pages is calculated during hole calculation.
+> Therefore,we can directly calculate the amount of ram pages.
 
-On Wednesday, June 21st, 2023 at 3:01 PM, Lee Jones <lee@kernel.org> wrote:
-
-
-> On Fri, 02 Jun 2023, Raymond Hackley wrote:
->=20
-> > Add devicetree binding for Richtek RT5033 Flash LED charge pump used fo=
-r
-> > camera flash LEDs.
-> >=20
-> > Signed-off-by: Raymond Hackley raymondhackley@protonmail.com
-> > ---
-> > Documentation/devicetree/bindings/leds/leds-sgm3140.yaml | 1 +
-> > 1 file changed, 1 insertion(+)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml b=
-/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml
-> > index 4d2ffe5fcfc7..37d2a93780ab 100644
-> > --- a/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml
-> > +++ b/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml
-> > @@ -20,6 +20,7 @@ properties:
-> > compatible:
-> > enum:
-> > - ocs,ocp8110
-> > + - richtek,rt5033-led
->=20
->=20
-> Why is "-led" appended on to this one and not the others?
->=20
-
-"richtek,rt5033" has already been taken by a MFD device, and this LED is
-a part of rt5033 MFD, so "-led" is appended here.
-
-> > - sgmicro,sgm3140
-> >=20
-> > enable-gpios:
-> > --
-> >=20
-> > 2.30.2
-
-I tried to configure protonmail not to send encrypted mails.
-Hope that it works for you.
-
-Regards,
-Raymond
-
+What problem does this patch solve?
