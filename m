@@ -2,257 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0392F738CBB
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F90738CC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:11:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjFURIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 13:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51782 "EHLO
+        id S230346AbjFURLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 13:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbjFURIl (ORCPT
+        with ESMTP id S229514AbjFURLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 13:08:41 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2080.outbound.protection.outlook.com [40.107.244.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24167135;
-        Wed, 21 Jun 2023 10:08:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PYB8VTtneW8mjooQaNGTFmVJ6Zm4JWNfFVP+HzfMglMnOHmN/dbstI9x9LJ3I8WcJtul926GS6oHzUZ0c/Njo7xJg5IsRCFmh6MfRG+/XQfyt/GIA2o0JmbTAtTOAtq9HJvqDR3C//kinr6u0l4kZYV/2ry3e8/6ZQ6L8m49ynSKstbElSpam8ClGgA+c2KRnW3b/93Y/cTx5/ASq0Q+LmdI7Cqi7J5hcaXh0TmURF7UfZDpkioO0ISPw8K8485sX6HagOYj29KTLqijitMj61GRVi+JwrvX8IDtps07enT2J9rW5HDeMieiV8iaWJ9s/N1G+r9nkCa28Leeo1rVFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C9KX6vjWCiEaoz9+fmMzriIOIhMMBvv8jQarjqQypBk=;
- b=igb/CrHGRnhD9nlaqThRdCQmHKLziuQ0r2bzotLnvfJ+GBscya4PNKAt+pwL8GXj19wDNwNUaD7Hs44/EJ4/UJL9ZpEv64Ka2dyC2jm4IMbB9/DcMxGCJEyt3+7lbsjgzauiIA+LWqrb1B+JgumtnCKB+iD0UBcE9f5yVfOfOR/EGQpulz1PGe+UQdi4wxJsLGfPRGOthrIdoO6e/CI5Aqgi/GgAjyllojKH2zsUkU3HgYsJGBE3me0SMyWnvBxmwySfJjCh9HSlzZAU36HSzOZxLOS1Xe9S/H79/Uk6R1nCTh3ERoEDXxhSkPEuu5AwEKGsNekORXoBWjKeF54ZCw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C9KX6vjWCiEaoz9+fmMzriIOIhMMBvv8jQarjqQypBk=;
- b=UNpsF/FuMDA5HK/k3JPC+6zBIhy8Z9CaFOlEpaAiqhEeD92hYqgQSnZP3VDcTK95PlYQrFrlowFtTFbmJpku2qM97+URS4zkl0kNMOW1758hYxmjK1KL+e7k7KxQQ6HiiMziVndo2qzrMDIfdqa5kCMUlpcl0ffobFe2ii8c7PI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by IA1PR12MB6259.namprd12.prod.outlook.com (2603:10b6:208:3e5::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.21; Wed, 21 Jun
- 2023 17:08:37 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::dfcf:f53c:c778:6f70%5]) with mapi id 15.20.6521.020; Wed, 21 Jun 2023
- 17:08:37 +0000
-Message-ID: <33d80292-e639-91d0-4d0f-3ed973f89e14@amd.com>
-Date:   Wed, 21 Jun 2023 12:08:33 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-Subject: Re: [PATCH V4 1/8] drivers/acpi: Add support for Wifi band RF
- mitigations
-Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Johannes Berg <johannes@sipsolutions.net>,
-        Evan Quan <evan.quan@amd.com>, rafael@kernel.org,
-        lenb@kernel.org, alexander.deucher@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, mdaenzer@redhat.com,
-        maarten.lankhorst@linux.intel.com, tzimmermann@suse.de,
-        hdegoede@redhat.com, jingyuwang_vip@163.com, lijo.lazar@amd.com,
-        jim.cromie@gmail.com, bellosilicio@gmail.com,
-        andrealmeid@igalia.com, trix@redhat.com, jsg@jsg.id.au,
-        arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-acpi@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <20230621054603.1262299-1-evan.quan@amd.com>
- <20230621054603.1262299-2-evan.quan@amd.com>
- <3a7c8ffa-de43-4795-ae76-5cd9b00c52b5@lunn.ch>
- <216f3c5aa1299100a0009ddf4e95b019855a32be.camel@sipsolutions.net>
- <b1abec47-04df-4481-d680-43c5ff3cbb48@amd.com>
- <36902dda-9e51-41b3-b5fc-c641edf6f1fb@lunn.ch>
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-In-Reply-To: <36902dda-9e51-41b3-b5fc-c641edf6f1fb@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SN4PR0501CA0120.namprd05.prod.outlook.com
- (2603:10b6:803:42::37) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        Wed, 21 Jun 2023 13:11:38 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68AF129;
+        Wed, 21 Jun 2023 10:11:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687367497; x=1718903497;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version:content-transfer-encoding;
+  bh=ouyyW1RWLlx0D/6B8cVMwnjeunonC+1tIEAPC3PI5cE=;
+  b=aXi4i72lUUQ6WFhq8rDVpPBNtfU1S0WclvUwRX6N2bfqhho0DXTJ/y+9
+   ehcWds4QuAMlOJuWiwfeuMCDeU4AVdtFnpcc5nZqMeX2OGc9xtMnVln9d
+   dUh2ngSAlk9xrnllBaVZo0xEZdsYEpF3hA+OQrLkNEOjnSsjVysKlDL9L
+   pM/z6OhpuQohbB2wWGPrsVefQr4KA/kXPKPaA/uHv6a8NgYZ9IkyQv2QA
+   7Wxn/h+NS6vaSO74qScEl6mNLKlmfePq6djwzUJA0fhdm3fwQY8LIQve6
+   AoVGrd+c5/JDbQBDCFK73xEgRM8Z9ukmc7IbSLU1ot8v8wPodk+LjtiSA
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="344977732"
+X-IronPort-AV: E=Sophos;i="6.00,261,1681196400"; 
+   d="scan'208";a="344977732"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 10:10:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="714580017"
+X-IronPort-AV: E=Sophos;i="6.00,261,1681196400"; 
+   d="scan'208";a="714580017"
+Received: from jarteaga-mobl1.amr.corp.intel.com (HELO vcostago-mobl3) ([10.212.165.203])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 10:10:28 -0700
+From:   Vinicius Costa Gomes <vinicius.gomes@intel.com>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com
+Cc:     linux-pci@vger.kernel.org,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] igc: Ignore AER reset when device is suspended
+In-Reply-To: <20230620123636.1854690-1-kai.heng.feng@canonical.com>
+References: <20230620123636.1854690-1-kai.heng.feng@canonical.com>
+Date:   Wed, 21 Jun 2023 10:10:27 -0700
+Message-ID: <87cz1ospvg.fsf@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|IA1PR12MB6259:EE_
-X-MS-Office365-Filtering-Correlation-Id: dab95048-8de4-4020-ecc2-08db727a2748
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LKaCygsjdpm9d9kYBclL1gVH7sih1jzYUE1i3hT02TVqLlCHA+2PTS73psXg3dJy8U33SvV2gvx+BSkGJsFUbJzwaM47DWRll+h57O/dQaqv+MkFuH4i3a0kL9ESLNj6/gd1JrBTkB4A34w7NToTV4EtosOdSlDjTwbc3wrQD0E39GMOqOmugMCF25R9l7X5XQ+Ph/P1usEbGXL7FsZIV/uggXidD0lqOEmUED1QVVNhZFKTaAIDtRhJb89+ab7EoF/6ZC7PcanZpmeoA0ivN+6Wmu6itf6sYjEGYy+BbkjPYLVTPq2IlB/wvucmPlKKRB+pGrq9bO97lx+5+glutncS9urtX7UbCZYRQ5q9A7MvSvDyhnpqRJgw0pnFn9ZLhReyIJ76crKsjYwKIPfqMkkWZxSpJd/qOiQpx32tjyVSr74d4/LI25rdCNtNnZfKCWqCr3rs5+UPHnjSH3jw5uY+UCmxbxyu+0Yp4BT+dIotbkJYEVnbNHFdtDiwBWXdkp2pZ3cpEd/ROLVWyFbimJirVbjoiPxBIe+Xe3e0ecinX9wE0mzESZzyZJFQwjkeyASSxNeimOzDhXv2Olt45bnHAWp4TGkBYoM0DyHBTmGFtlxKWBbtLoRqYdFjd8b9403nvBFIUBG4anf9G1Mo/Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(376002)(396003)(39860400002)(136003)(451199021)(26005)(478600001)(6486002)(2616005)(6666004)(54906003)(83380400001)(6506007)(53546011)(6512007)(2906002)(7416002)(5660300002)(36756003)(86362001)(66946007)(4326008)(31696002)(316002)(8676002)(6916009)(8936002)(38100700002)(66476007)(41300700001)(66556008)(31686004)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YUVkeHBBWm9kWEVqRGdFRnZMQWtQZHRXS0M5WVRBOTVqSFg2cHNyZ1JLQk9K?=
- =?utf-8?B?WjFwclc3R1RNQi9uM01tNVg4L1pSQ1NKNXd4djV3YkpZSHd1QmFEZUltUlJE?=
- =?utf-8?B?NXRmV1NGMWMzdWRnYnorQnNCaXUzS1FiTjZFSC9ZTFJDNkZCUDJWU3VTRndR?=
- =?utf-8?B?bEdYcGxKNVUyVk1wR2pnY0JNZ2tCOGpDdytCMjFjOUd5SU1CY1oybGZZcXgx?=
- =?utf-8?B?Y1QwM2k5WU9mZHJBNEpWQmd3VDY5Wk1wTU84QVdDMUdVcjg5amNNeFhCeEw0?=
- =?utf-8?B?aW1sc1hTWlNJbmRLOTZjYjd3VkFsRVhtT3ZPVDdmWFhRTUcwbW5tc0V5clNT?=
- =?utf-8?B?MmZTejhoUldLblhSL0lrSGVMUlowdWl3cFE4Q0tTbmFlR0ZKRzVMR2N5THNr?=
- =?utf-8?B?d29kRkFxWlhpMWRHUkIzRjdsTmJsNTI4NlMzZ0UvYU1HVG9mRERaQlE0QzhN?=
- =?utf-8?B?YlF5NEtYV1A4RmtXTk5ZTjFnUUlpSXpmUi9pV1N2U1YvK2FJRTl4M1BpQWJ2?=
- =?utf-8?B?bnl1aUFraDZZRWI5L3FxYnF2TUV0U0liV1h3VVpNWjByNC9FWlV1djI2OXVB?=
- =?utf-8?B?Nkc4ajVpd09tYjllTjhBMzBPemlLb1BMOHpCZUNidkt1ZUtSYlRGbmhUU2NU?=
- =?utf-8?B?ZnlNdXY5czl1eVIwMzRObzhnUmwyZ0tNMXlpUnk5ejlzVG1tRlZLQnFoMmIw?=
- =?utf-8?B?V3FQNDRhZWkza1A4QUMvODFCOUJ5VER5ekx5c1AvczViTzl0SlhBQzNHMWhM?=
- =?utf-8?B?UUYzVW5LS1dxRG1ldEVtaS85Z3hJQkhpUTFoMmwwY1BFUTBIaTVsQlhONi9F?=
- =?utf-8?B?YVBUV0Y1SUJoajV0bVA2UmpiVzNsVnJTQzZXSVNsaHhjWSs2b01qQ2E2U2pv?=
- =?utf-8?B?RlRXMkdqVGtDVE02WTk5aDF6dGNSc2pQVjNPSE4vUXhrSGd4ejdWdUZOdVJk?=
- =?utf-8?B?eGw4aklMMVM3VHpwbWhYT3NkUkkvejJ3VEE2QlRFMngyazk4M1RucDVnRG9C?=
- =?utf-8?B?Q29QMUF1RmFnTHA1Y0RLS0gvWTZoZnVaV1BQdzF2c2RlWm5CR1ZSOGlqTnNr?=
- =?utf-8?B?bytvbk5wMGtwRjVJUG9pcG56aWhsSG1uWktBaTQrdjd4bEFSVlMrRHU1RW1P?=
- =?utf-8?B?Sm4yS29lQVRSbkZ6TzRNTEMrYitWOGhhTUFpUUlZcUFTaDgxMGE2Y1RlUU5w?=
- =?utf-8?B?VU5sY3JQRHNJR3E4UWtjSTZuaFpVNVBSeDE0RmdBRWNwOUI3ZjdpbkRDTlE2?=
- =?utf-8?B?SHc3QmJCS1ZoQXQxTEFqMTNBZVJFSG12ZzExYzRxVUZJMXJndnorMlBDRTJK?=
- =?utf-8?B?SnFUNDRUbGpiMnc2Z0c4Yk1BcFV2WDRPbzZicUppQVRHNzVEK0VhT056MlZY?=
- =?utf-8?B?THFsb2lsN1NJcGJCc2NLRFlXbG5qaG1OR0puR045ZkF0dkF5NzhjWGhoeU50?=
- =?utf-8?B?RzJua3pNaGRXZmJMQjd0WFFGbVpLQVV3SndFM3Vabm9CdC9GNm9yMzd0T1pO?=
- =?utf-8?B?NUFBWGpXODNxZm1UTG1uYmxaOERxbEVYUzRzNlpaVk9tdjRBb043Nkc5b2Jq?=
- =?utf-8?B?QVpkeHI3RTFGM1lNNnpMYU13WEt5OXdHNFZia2t4K3hwM1BsR3dlN2pWVDNT?=
- =?utf-8?B?V1BMbHRQOHhXQnVudFM5WmFYdmhCenA3MWxhRXU5ODIxWld6MUIyK3JoM2Yw?=
- =?utf-8?B?VFdmTWpBRWJLOU81a2ZnUGRhVGdDQUxMK0hpMWg5RUs3dFFjbE5zUEhHUkdO?=
- =?utf-8?B?VGZUR294em0xQ09zTzcxazJZL05rNDRjNmNabk9GNW1EVEpqR1BoYXMxKzhu?=
- =?utf-8?B?bE1aek9OeUpjZTVESGpvQUEwRnlGWGY3UW9sZlZCb3JESE13ZG15bzV4azlD?=
- =?utf-8?B?VUh6SmZIVXFsMDNVeG9la3FzZ2pJZXNHQ3BIWUl5cWNabEpZYkZSUnh1d1Jp?=
- =?utf-8?B?YTNEdDhwU1Zud2MyVThvSWN0aDdFZDVkR1AzSDRZaWswVjRhKzEyd2NYamVG?=
- =?utf-8?B?N0FRSjdTR0YrUTZFZllMcHBYeXZuRXhnTndNV1UvaFpWL0k4OU9UZmxFUFg3?=
- =?utf-8?B?TVE2aHZ4b1VCNVphQXhiOVR2ZVhsN3lDYWJyWW9FN2dvVHJPNUNxSkJ6cFRO?=
- =?utf-8?Q?K5Hlxc/XGyGtBsMq5N+OG7xlN?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dab95048-8de4-4020-ecc2-08db727a2748
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 17:08:37.5273
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2FBWPmZUh1kT+RCT90pFbIwQWqF4hjf+rDulOmBg3YIdiqG4cqS67rLtk4q58mDW83BZHJbJUa3wRfawNBthhw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6259
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Kai-Heng Feng <kai.heng.feng@canonical.com> writes:
 
-On 6/21/2023 11:52 AM, Andrew Lunn wrote:
-> On Wed, Jun 21, 2023 at 11:15:00AM -0500, Limonciello, Mario wrote:
->> On 6/21/2023 10:39 AM, Johannes Berg wrote:
->>> On Wed, 2023-06-21 at 17:36 +0200, Andrew Lunn wrote:
->>>> On Wed, Jun 21, 2023 at 01:45:56PM +0800, Evan Quan wrote:
->>>>> From: Mario Limonciello <mario.limonciello@amd.com>
->>>>>
->>>>> Due to electrical and mechanical constraints in certain platform designs
->>>>> there may be likely interference of relatively high-powered harmonics of
->>>>> the (G-)DDR memory clocks with local radio module frequency bands used
->>>>> by Wifi 6/6e/7.
->>>>>
->>>>> To mitigate this, AMD has introduced an ACPI based mechanism that
->>>>> devices can use to notify active use of particular frequencies so
->>>>> that devices can make relative internal adjustments as necessary
->>>>> to avoid this resonance.
->>>> Do only ACPI based systems have:
->>>>
->>>>      interference of relatively high-powered harmonics of the (G-)DDR
->>>>      memory clocks with local radio module frequency bands used by
->>>>      Wifi 6/6e/7."
->>>>
->>>> Could Device Tree based systems not experience this problem?
->>> They could, of course, but they'd need some other driver to change
->>> _something_ in the system? I don't even know what this is doing
->>> precisely under the hood in the ACPI BIOS, perhaps it adjusts the DDR
->>> memory clock frequency in response to WiFi using a frequency that will
->>> cause interference with harmonics.
->> The way that WBRF has been architected, it's intended to be able
->> to scale to any type of device pair that has harmonic issues.
-> So you set out to make something generic...
+> When a system that connects to a Thunderbolt dock equipped with I225,
+> I225 stops working after S3 resume:
 >
->> In the first use (Wifi 6e + specific AMD dGPUs) that matches this
->> series BIOS has the following purposes:
->>
->> 1) The existence of _DSM indicates that the system may not have
->> adequate shielding and should be using these mitigations.
->>
->> 2) Notification mechanism of frequency use.
->>
->> For the first problematic devices we *could* have done notifications
->> entirely in native Linux kernel code with notifier chains.
->> However that still means you need a hint from the platform that the
->> functionality is needed like a _DSD bit.
->>
->> It's also done this way so that AML could do some of the notifications
->> directly to applicable devices in the future without needing "consumer"
->> driver participation.
-> And then tie is very closely to ACPI.
+> [  606.527643] pcieport 0000:00:1d.0: AER: Multiple Corrected error recei=
+ved: 0000:00:1d.0
+> [  606.527791] pcieport 0000:00:1d.0: PCIe Bus Error: severity=3DCorrecte=
+d, type=3DTransaction Layer, (Receiver ID)
+> [  606.527795] pcieport 0000:00:1d.0:   device [8086:7ab0] error status/m=
+ask=3D00008000/00002000
+> [  606.527800] pcieport 0000:00:1d.0:    [15] HeaderOF
+> [  606.527806] pcieport 0000:00:1d.0: AER:   Error of this Agent is repor=
+ted first
+> [  606.527853] pcieport 0000:07:04.0: PCIe Bus Error: severity=3DCorrecte=
+d, type=3DData Link Layer, (Receiver ID)
+> [  606.527856] pcieport 0000:07:04.0:   device [8086:0b26] error status/m=
+ask=3D00000080/00002000
+> [  606.527861] pcieport 0000:07:04.0:    [ 7] BadDLLP
+> [  606.527931] pcieport 0000:00:1d.0: AER: Multiple Uncorrected (Non-Fata=
+l) error received: 0000:00:1d.0
+> [  606.528064] pcieport 0000:00:1d.0: PCIe Bus Error: severity=3DUncorrec=
+ted (Non-Fatal), type=3DTransaction Layer, (Requester ID)
+> [  606.528068] pcieport 0000:00:1d.0:   device [8086:7ab0] error status/m=
+ask=3D00100000/00004000
+> [  606.528072] pcieport 0000:00:1d.0:    [20] UnsupReq               (Fir=
+st)
+> [  606.528075] pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 0a00005=
+2 00000000 00000000
+> [  606.528079] pcieport 0000:00:1d.0: AER:   Error of this Agent is repor=
+ted first
+> [  606.528098] pcieport 0000:04:01.0: PCIe Bus Error: severity=3DUncorrec=
+ted (Non-Fatal), type=3DTransaction Layer, (Requester ID)
+> [  606.528101] pcieport 0000:04:01.0:   device [8086:1136] error status/m=
+ask=3D00300000/00000000
+> [  606.528105] pcieport 0000:04:01.0:    [20] UnsupReq               (Fir=
+st)
+> [  606.528107] pcieport 0000:04:01.0:    [21] ACSViol
+> [  606.528110] pcieport 0000:04:01.0: AER:   TLP Header: 34000000 0400005=
+2 00000000 00000000
+> [  606.528187] thunderbolt 0000:05:00.0: AER: can't recover (no error_det=
+ected callback)
+> [  606.558729] ------------[ cut here ]------------
+> [  606.558729] igc 0000:38:00.0: disabling already-disabled device
+> [  606.558738] WARNING: CPU: 0 PID: 209 at drivers/pci/pci.c:2248 pci_dis=
+able_device+0xf6/0x150
+> [  606.558743] Modules linked in: rfcomm ccm cmac algif_hash algif_skciph=
+er af_alg usbhid bnep snd_hda_codec_hdmi snd_ctl_led snd_hda_codec_realtek =
+joydev snd_hda_codec_generic ledtrig_audio binfmt_misc snd_sof_pci_intel_tg=
+l snd_sof_intel_hda_common snd_soc_acpi_intel_match snd_soc_acpi snd_soc_hd=
+ac_hda snd_sof_pci snd_sof_xtensa_dsp x86_pkg_temp_thermal snd_sof_intel_hd=
+a_mlink intel_powerclamp snd_sof_intel_hda snd_sof snd_sof_utils snd_hda_ex=
+t_core snd_soc_core snd_compress snd_hda_intel coretemp snd_intel_dspcfg sn=
+d_hda_codec snd_hwdep kvm_intel snd_hda_core iwlmvm nls_iso8859_1 i915 snd_=
+pcm kvm mac80211 crct10dif_pclmul crc32_pclmul i2c_algo_bit uvcvideo ghash_=
+clmulni_intel snd_seq mei_pxp drm_buddy videobuf2_vmalloc sch_fq_codel sha5=
+12_ssse3 libarc4 aesni_intel mei_hdcp videobuf2_memops btusb uvc crypto_sim=
+d drm_display_helper snd_seq_device btrtl videobuf2_v4l2 cryptd snd_timer i=
+ntel_rapl_msr btbcm drm_kms_helper videodev iwlwifi snd btintel rapl input_=
+leds wmi_bmof hid_sensor_rotation btmtk hid_sensor_accel_3d
+> [  606.558778]  hid_sensor_gyro_3d hid_sensor_als syscopyarea videobuf2_c=
+ommon intel_cstate serio_raw soundcore bluetooth hid_sensor_trigger thunder=
+bolt sysfillrect cfg80211 mc mei_me industrialio_triggered_buffer sysimgblt=
+ processor_thermal_device_pci hid_sensor_iio_common hid_multitouch ecdh_gen=
+eric processor_thermal_device kfifo_buf cec 8250_dw mei ecc processor_therm=
+al_rfim industrialio rc_core processor_thermal_mbox ucsi_acpi processor_the=
+rmal_rapl ttm typec_ucsi intel_rapl_common msr typec video int3403_thermal =
+int340x_thermal_zone int3400_thermal intel_hid wmi acpi_pad acpi_thermal_re=
+l sparse_keymap acpi_tad mac_hid parport_pc ppdev lp parport drm ramoops re=
+ed_solomon efi_pstore ip_tables x_tables autofs4 hid_sensor_custom hid_sens=
+or_hub intel_ishtp_hid spi_pxa2xx_platform hid_generic dw_dmac dw_dmac_core=
+ rtsx_pci_sdmmc e1000e i2c_i801 igc nvme i2c_smbus intel_lpss_pci rtsx_pci =
+intel_ish_ipc nvme_core intel_lpss xhci_pci i2c_hid_acpi intel_ishtp idma64=
+ xhci_pci_renesas i2c_hid hid pinctrl_alderlake
+> [  606.558809] CPU: 0 PID: 209 Comm: irq/124-aerdrv Not tainted 6.4.0-rc7=
++ #119
+> [  606.558811] Hardware name: HP HP ZBook Fury 16 G9 Mobile Workstation P=
+C/89C6, BIOS U96 Ver. 01.07.01 04/06/2023
+> [  606.558812] RIP: 0010:pci_disable_device+0xf6/0x150
+> [  606.558814] Code: 4d 85 e4 75 07 4c 8b a3 d0 00 00 00 48 8d bb d0 00 0=
+0 00 e8 5c f5 1f 00 4c 89 e2 48 c7 c7 f8 e6 37 ae 48 89 c6 e8 9a 3e 86 ff <=
+0f> 0b e9 3c ff ff ff 48 8d 55 e6 be 04 00 00 00 48 89 df e8 62 0b
+> [  606.558815] RSP: 0018:ffffa70040a4fca0 EFLAGS: 00010246
+> [  606.558816] RAX: 0000000000000000 RBX: ffff8ac8434b2000 RCX: 000000000=
+0000000
+> [  606.558817] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 000000000=
+0000000
+> [  606.558818] RBP: ffffa70040a4fcc0 R08: 0000000000000000 R09: 000000000=
+0000000
+> [  606.558818] R10: 0000000000000000 R11: 0000000000000000 R12: ffff8ac84=
+3435dd0
+> [  606.558818] R13: ffff8ac84277c000 R14: 0000000000000001 R15: ffff8ac84=
+34b2150
+> [  606.558819] FS:  0000000000000000(0000) GS:ffff8acbd6a00000(0000) knlG=
+S:0000000000000000
+> [  606.558820] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  606.558821] CR2: 00007f9740ba28e8 CR3: 00000001eb43a000 CR4: 000000000=
+0f50ef0
+> [  606.558822] PKRU: 55555554
+> [  606.558822] Call Trace:
+> [  606.558823]  <TASK>
+> [  606.558825]  ? show_regs+0x76/0x90
+> [  606.558828]  ? pci_disable_device+0xf6/0x150
+> [  606.558830]  ? __warn+0x91/0x160
+> [  606.558832]  ? pci_disable_device+0xf6/0x150
+> [  606.558834]  ? report_bug+0x1bf/0x1d0
+> [  606.558838] nvme nvme0: 24/0/0 default/read/poll queues
+> [  606.558837]  ? handle_bug+0x46/0x90
+> [  606.558841]  ? exc_invalid_op+0x1d/0x90
+> [  606.558843]  ? asm_exc_invalid_op+0x1f/0x30
+> [  606.558846]  ? pci_disable_device+0xf6/0x150
+> [  606.558849]  igc_io_error_detected+0x40/0x70 [igc]
+> [  606.558857]  report_error_detected+0xdb/0x1d0
+> [  606.558860]  ? __pfx_report_normal_detected+0x10/0x10
+> [  606.558862]  report_normal_detected+0x1a/0x30
+> [  606.558864]  pci_walk_bus+0x78/0xb0
+> [  606.558866]  pcie_do_recovery+0xba/0x340
+> [  606.558868]  ? __pfx_aer_root_reset+0x10/0x10
+> [  606.558870]  aer_process_err_devices+0x168/0x220
+> [  606.558871]  aer_isr+0x1d3/0x1f0
+> [  606.558874]  ? __pfx_irq_thread_fn+0x10/0x10
+> [  606.558876]  irq_thread_fn+0x29/0x70
+> [  606.558877]  irq_thread+0xee/0x1c0
+> [  606.558878]  ? __pfx_irq_thread_dtor+0x10/0x10
+> [  606.558879]  ? __pfx_irq_thread+0x10/0x10
+> [  606.558880]  kthread+0xf8/0x130
+> [  606.558882]  ? __pfx_kthread+0x10/0x10
+> [  606.558884]  ret_from_fork+0x29/0x50
+> [  606.558887]  </TASK>
+> [  606.558887] ---[ end trace 0000000000000000 ]---
+> [  606.570223] i915 0000:00:02.0: [drm] GT0: HuC: authenticated!
+> [  606.570228] i915 0000:00:02.0: [drm] GT0: GUC: submission disabled
+> [  606.570231] i915 0000:00:02.0: [drm] GT0: GUC: SLPC disabled
+> [  606.663042] xhci_hcd 0000:39:00.0: AER: can't recover (no error_detect=
+ed callback)
+> [  606.663111] pcieport 0000:00:1d.0: AER: device recovery failed
+> [  606.721642] iwlwifi 0000:00:14.3: WFPM_UMAC_PD_NOTIFICATION: 0x1f
+> [  606.721677] iwlwifi 0000:00:14.3: WFPM_LMAC2_PD_NOTIFICATION: 0x1f
+> [  606.721687] iwlwifi 0000:00:14.3: WFPM_AUTH_KEY_0: 0x90
+> [  606.721698] iwlwifi 0000:00:14.3: CNVI_SCU_SEQ_DATA_DW9: 0x0
+> [  606.842877] usb 1-8: reset high-speed USB device number 3 using xhci_h=
+cd
+> [  607.048340] genirq: Flags mismatch irq 164. 00000000 (enp56s0) vs. 000=
+00000 (enp56s0)
+> [  607.050313] ------------[ cut here ]------------
+> ...
+> [  609.064160] igc 0000:38:00.0 enp56s0: Register Dump
+> [  609.064167] igc 0000:38:00.0 enp56s0: Register Name   Value
+> [  609.064181] igc 0000:38:00.0 enp56s0: CTRL            081c0641
+> [  609.064188] igc 0000:38:00.0 enp56s0: STATUS          40280401
+> [  609.064195] igc 0000:38:00.0 enp56s0: CTRL_EXT        100000c0
+> [  609.064202] igc 0000:38:00.0 enp56s0: MDIC            18017949
+> [  609.064208] igc 0000:38:00.0 enp56s0: ICR             80000010
+> [  609.064214] igc 0000:38:00.0 enp56s0: RCTL            04408022
+> [  609.064232] igc 0000:38:00.0 enp56s0: RDLEN[0-3]      00001000 0000100=
+0 00001000 00001000
+> [  609.064251] igc 0000:38:00.0 enp56s0: RDH[0-3]        00000000 0000000=
+0 00000000 00000000
+> [  609.064270] igc 0000:38:00.0 enp56s0: RDT[0-3]        000000ff 000000f=
+f 000000ff 000000ff
+> [  609.064289] igc 0000:38:00.0 enp56s0: RXDCTL[0-3]     00040808 0004080=
+8 00040808 00040808
+> [  609.064308] igc 0000:38:00.0 enp56s0: RDBAL[0-3]      ffc62000 fff6b00=
+0 fff6c000 fff6d000
+> [  609.064326] igc 0000:38:00.0 enp56s0: RDBAH[0-3]      00000000 0000000=
+0 00000000 00000000
+> [  609.064333] igc 0000:38:00.0 enp56s0: TCTL            a50400fa
+> [  609.064351] igc 0000:38:00.0 enp56s0: TDBAL[0-3]      fff6d000 ffcdf00=
+0 ffce0000 ffce1000
+> [  609.064369] igc 0000:38:00.0 enp56s0: TDBAH[0-3]      00000000 0000000=
+0 00000000 00000000
+> [  609.064387] igc 0000:38:00.0 enp56s0: TDLEN[0-3]      00001000 0000100=
+0 00001000 00001000
+> [  609.064405] igc 0000:38:00.0 enp56s0: TDH[0-3]        00000000 0000000=
+0 00000000 00000000
+> [  609.064423] igc 0000:38:00.0 enp56s0: TDT[0-3]        00000004 0000000=
+0 00000000 00000000
+> [  609.064441] igc 0000:38:00.0 enp56s0: TXDCTL[0-3]     00100108 0010010=
+8 00100108 00100108
+> [  609.064445] igc 0000:38:00.0 enp56s0: Reset adapter
 >
-> Now, you are AMD, i get that ACPI is what you have. But i think as
-> kernel Maintainers, we need to consider that ACPI is not the only
-> thing used. Do we want the APIs to be agnostic? I think APIs used by
-> drivers should be agnostic.
+> The issue is that the PTM requests are sending before driver resumes the
+> device. Since the issue can also be observed on Windows, it's quite
+> likely a firmware/hardwar limitation.
 >
->        Andrew
-I think what you're asking for is another layer of indirection
-like CONFIG_WBRF in addition to CONFIG_ACPI_WBRF.
+> So avoid resetting the device if it's not resumed. Once the device is
+> fully resumed, the device can work normally.
+>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D216850
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
 
-Producers would call functions like wbrf_supported_producer()
-where the source file is not guarded behind CONFIG_ACPI_WBRF,
-but instead by CONFIG_WBRF and locally use CONFIG_ACPI_WBRF within
-it.  So a producer could look like this:
+Feel free to add my:
 
-bool wbrf_supported_producer(struct device *dev)
-{
-#ifdef CONFIG_ACPI_WBRF
-     struct acpi_device *adev = ACPI_COMPANION(dev);
+Acked-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
 
-     if (adev)
-         return check_acpi_wbrf(adev->handle,
-                        WBRF_REVISION,
-                        1ULL << WBRF_RECORD);
-#endif
-     return -ENODEV;
+After the comments are addressed.
 
-}
-EXPORT_SYMBOL_GPL(wbrf_supported_producer);
 
-And then adding/removing could look something like this
-
-int wbrf_add_exclusion(struct device *dev,
-                struct wbrf_ranges_in *in)
-{
-#ifdef CONFIG_ACPI_WBRF
-     struct acpi_device *adev = ACPI_COMPANION(dev);
-
-     if (adev)
-         return wbrf_record(adev, WBRF_RECORD_ADD, in);
-#endif
-     return -ENODEV;
-}
-EXPORT_SYMBOL_GPL(wbrf_add_exclusion);
-
-int wbrf_remove_exclusion(struct device *dev,
-                struct wbrf_ranges_in *in)
-{
-#ifdef CONFIG_ACPI_WBRF
-     struct acpi_device *adev = ACPI_COMPANION(dev);
-
-     if (adev)
-         return wbrf_record(adev, WBRF_RECORD_REMOVE, in);
-#endif
-     return -ENODEV;
-}
-EXPORT_SYMBOL_GPL(wbrf_remove_exclusion);
-
-This would allow anyone interested in making a non-ACPI implementation
-be able to slide it into those functions.
-
-How does that sound?
-
+Cheers,
+--=20
+Vinicius
