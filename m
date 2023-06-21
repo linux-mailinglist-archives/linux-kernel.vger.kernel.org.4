@@ -2,164 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29393738EDF
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:33:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4494E738EE6
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 20:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231225AbjFUSdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 14:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57378 "EHLO
+        id S231305AbjFUSeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 14:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbjFUSda (ORCPT
+        with ESMTP id S229743AbjFUSeT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 14:33:30 -0400
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10D81730
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:33:28 -0700 (PDT)
-Received: from fews01-sea.riseup.net (fews01-sea-pn.riseup.net [10.0.1.109])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mx1.riseup.net (Postfix) with ESMTPS id 4QmXFN1CPqzDqQZ;
-        Wed, 21 Jun 2023 18:33:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1687372408; bh=Ygwht59UeqNC4HljDIALvqvdMres18Xj0eWA0Ceti/E=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QRmaLiP+7k8UnTYaFtcjZWg+5IjsJwfrZaq57/41RqWzI0rY1BCa4CbR39STBJ0dW
-         XV149DwHulvGHbVMDT7qaAshwtU5dZZp+WUteLN1dBrs0M4XXy4IpEEwZtN3uB1aSN
-         J/oMtLISzw/rA76jlCr/lV9CJjsy3IEuqLmHKlB4=
-X-Riseup-User-ID: 7D49E1C82EA2BFED9008EFF8AAC5C3150B648584A3E60BEC1C72C39F2BA3C13D
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews01-sea.riseup.net (Postfix) with ESMTPSA id 4QmXFL3xTRzJntM;
-        Wed, 21 Jun 2023 18:33:26 +0000 (UTC)
-Message-ID: <d813dbe5-4d9a-94d2-22f2-b480f68a8f6f@riseup.net>
-Date:   Wed, 21 Jun 2023 15:33:24 -0300
+        Wed, 21 Jun 2023 14:34:19 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140961996
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:34:03 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9896216338cso183986566b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 11:34:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687372441; x=1689964441;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MkTkg0yk5G+m/3RuQi582p9no07noJpOVWR1uVt2QJ8=;
+        b=jhU2qXV7zgZAHlPuzJt9roWj9xYxOAu1wdHns/nRruICat6vZgD6g7WT66fmeD7eJC
+         SYrdE5LfxQViiL6lSz4LSuSIoJr9/06WPjE8nkVTCvYQbI7uT6RcV3QmKgya8iN2QkVD
+         ddp8ZNe0TBekwvv68uje4kaxI8i10czLrcDvDhsRwfiKW950/CS5k07O93fwZNlyieBo
+         L4DAIRaspsoyTxggLGA5y651H1fMcenqDEg44Ab00oou5Iy3ni91xvXPrZiGTaVBfrad
+         B/bhazmIbrfha7bOoi56i8PYPVUf2uMiHfQ17gYuCwaWR3Y1C64AIx92fJ6PXll7A4Ym
+         gTmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687372441; x=1689964441;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MkTkg0yk5G+m/3RuQi582p9no07noJpOVWR1uVt2QJ8=;
+        b=ibQFt04/wJMzp/cbh/ext29pBRmZe/ETNG+H4QbiunD4dFIADoJM9x/oAWooWvTzQZ
+         YHc3vdTNWTb+MhUnPaFX7bd1V39pWwQsAwiue/7IL2+mJJtjO0PkTezy4KTvhLbSmkYv
+         Ru89lLCLlk0sM2ENSdPDuSVxI/2TO2Oil2CSxV3v7geKLR9styu+WsWqUKXGglRv22Fp
+         ErXayd1vLCmZ8+xOkNerU6qBGzQhwYdSSLTm8jH7ugB5R8XpWyf7KYlcTXjxDMnfKv3V
+         TnjrdLigPZ4bRtFWFXhb6ct1ezuywOK+VXJOzorvzRuwzHO5M2RTMt3yORXYOCcCkgeu
+         q0ZQ==
+X-Gm-Message-State: AC+VfDzvLOdXWo8nq3e9jKLE3NwpliJ+Ma8avIsS0ebFMvNhfkA+b26H
+        xvWstzgbs66yKH51k127+58h/KprTV/lJ6olOI36Sg==
+X-Google-Smtp-Source: ACHHUZ56mWPIZN9zRu60o7GkY+dtcQe/JAx8qk37vaGZg5yLb4G/foH80j+heYxIq88Od3vZR0/ZK5nlyTE1OnKvpwg=
+X-Received: by 2002:a17:907:3e92:b0:988:7cdb:943a with SMTP id
+ hs18-20020a1709073e9200b009887cdb943amr11674209ejc.30.1687372441404; Wed, 21
+ Jun 2023 11:34:01 -0700 (PDT)
 MIME-Version: 1.0
-Subject: Re: [PATCH] drm/tests: Add test case for drm_rect_clip_scaled()
-Content-Language: en-US
-To:     nelsonbogado99 <nelosonbrizue99@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>,
-        Javier Martinez Canillas <javierm@redhat.com>
-References: <20230614175431.6496-1-nelosonbrizue99@gmail.com>
-From:   Arthur Grillo Queiroz Cabral <arthurgrillo@riseup.net>
-In-Reply-To: <20230614175431.6496-1-nelosonbrizue99@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230618000856.1714902-1-mizhang@google.com> <20230619120051.00001f0f.zhi.wang.linux@gmail.com>
+In-Reply-To: <20230619120051.00001f0f.zhi.wang.linux@gmail.com>
+From:   Mingwei Zhang <mizhang@google.com>
+Date:   Wed, 21 Jun 2023 11:33:25 -0700
+Message-ID: <CAL715WKF8Ws1E0UNvRNQ7ZqisrFD6srC3o24g8FU=f=f0YwUKw@mail.gmail.com>
+Subject: Re: [PATCH 0/6] KVM: Documentation: Update document description for
+ kvm_mmu_page and kvm_mmu_page_role
+To:     Zhi Wang <zhi.wang.linux@gmail.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 19, 2023 at 2:00=E2=80=AFAM Zhi Wang <zhi.wang.linux@gmail.com>=
+ wrote:
+>
+> On Sun, 18 Jun 2023 00:08:50 +0000
+> Mingwei Zhang <mizhang@google.com> wrote:
+>
+> > When reading the KVM MMU documentation for nested virtualization, I fee=
+l
+> > that the description of kvm_mmu_page (and kvm_mmu_page_role) has been
+> > lagging for around 1-2 years. The descriptions for several fields in st=
+ruct
+> > kvm_mmu_page and struct kvm_mmu_page_role are missing. So I think it mi=
+ght
+> > be good to add them to make it consistent with the current code.
+> >
+>
+> This is so nice. A trivial comment, maybe refining the tittle of PATCH 1-=
+6 a
+> bit: "Add the missing comment of xxxx into xxxx". It is a little bit conf=
+using
+> by just looking at the titles at the first glance, more like some members=
+ are
+> missing, not the comments. :)
+>
 
+Sure. Yeah, the shortlog looks slightly confusing as if I am changing
+the actual data structures. I will update those in the next version.
+Thanks for your comments.
 
-On 14/06/23 14:54, nelsonbogado99 wrote:
-> From: Nelson Bogado <nelosonbrizue99@gmail.com>
-> 
-> To evaluate the behavior of the drm_rect_clip_scaled() helper function
-> with misplaced rectangles and improve the robustness and quality of it.
-> 
-> The new test was executed using the following command:
-> 
->   $ ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm/tests/
->   [01:48:12] ================== drm_rect (10 subtests) ==================
->   ...
->   [01:48:12] [PASSED] drm_test_rect_clip_scaled_out_of_bounds
-> 
-> Signed-off-by: Nelson Bogado <nelosonbrizue99@gmail.com>
-> ---
->  drivers/gpu/drm/tests/drm_rect_test.c | 53 +++++++++++++++++++++++++++
->  1 file changed, 53 insertions(+)
-Hello,
-
-here are a couple of suggestions to make the code more readable ;).
-
-> 
-> diff --git a/drivers/gpu/drm/tests/drm_rect_test.c b/drivers/gpu/drm/tests/drm_rect_test.c
-> index 76332cd2ead8..b3bfdd420123 100644
-> --- a/drivers/gpu/drm/tests/drm_rect_test.c
-> +++ b/drivers/gpu/drm/tests/drm_rect_test.c
-> @@ -209,6 +209,58 @@ static void drm_test_rect_clip_scaled_signed_vs_unsigned(struct kunit *test)
->  	KUNIT_EXPECT_FALSE_MSG(test, drm_rect_visible(&src), "Source should not be visible\n");
->  }
->  
-> +static void drm_test_rect_clip_scaled_out_of_bounds(struct kunit *test)
-> +{
-> +	/* Definition of the rectangles and visible variables */
-I think it would be great to decrease the amount of comments, you don't need
-to comment that you're declaring some variable. Maybe just keep the comments
-that explain what you're testing
-
-> +	struct drm_rect src, dst, clip;
-> +	bool visible;
-> +
-> +	/*
-> +	 * Both rectangles are completely out of bounds, initialize the src,
-> +	 * dst and clip rectangles with specific coordinates and sizes.
-> +	 */
-like this one.
-
-> +	drm_rect_init(&src, -10, -10, -5, -5);
-> +	drm_rect_init(&dst, -20, -20, -15, -15);
-> +	drm_rect_init(&clip, 0, 0, 100, 100);
-> +
-> +	/* Function call drm_rect_clip_scaled to determine visibility */
-> +	visible = drm_rect_clip_scaled(&src, &dst, &clip);
-> +
-> +	/* Check expected results */
-> +	KUNIT_EXPECT_FALSE_MSG(test, visible, "Destination should not be visible\n");
-> +	KUNIT_EXPECT_FALSE_MSG(test, drm_rect_visible(&src), "Source should not be visible\n");
-> +
-> +	/*
-> +	 * Only source rectangle is out of bounds, reinitialize the src,
-> +	 * dst and clip rectangles with new values.
-> +	 */
-> +	drm_rect_init(&src, -10, -10, -5, -5);
-Use `DRM_RECT_INIT` instead, this way you don't need to pass the variable as an
-argument. I think it would be more readable.
-
-~Arthur Grillo
-
-> +	drm_rect_init(&dst, 0, 0, 10, 10);
-> +	drm_rect_init(&clip, 0, 0, 100, 100);
-> +
-> +	/* Function call drm_rect_clip_scaled to determine visibility */
-> +	visible = drm_rect_clip_scaled(&src, &dst, &clip);
-> +
-> +	/* Check expected results */
-> +	KUNIT_EXPECT_TRUE_MSG(test, visible, "Destination should be visible\n\n");
-> +	KUNIT_EXPECT_FALSE_MSG(test, drm_rect_visible(&src), "Source should not be visible\n");
-> +
-> +	/*
-> +	 * Only source rectangle is out of bounds, reinitialize the src,
-> +	 * dst and clip rectangles with new values.
-> +	 */
-> +	drm_rect_init(&src, 0, 0, 10, 10);
-> +	drm_rect_init(&dst, -10, -10, -5, -5);
-> +	drm_rect_init(&clip, 0, 0, 100, 100);
-> +
-> +	/* Function call drm_rect_clip_scaled to determine visibility */
-> +	visible = drm_rect_clip_scaled(&src, &dst, &clip);
-> +
-> +	/* Check expected results */
-> +	KUNIT_EXPECT_FALSE_MSG(test, visible, "Destination should not be visible\n");
-> +	KUNIT_EXPECT_FALSE_MSG(test, drm_rect_visible(&src), "Source should not be visible\n");
-> +}
-> +
->  struct drm_rect_intersect_case {
->  	const char *description;
->  	struct drm_rect r1, r2;
-> @@ -511,6 +563,7 @@ static struct kunit_case drm_rect_tests[] = {
->  	KUNIT_CASE(drm_test_rect_clip_scaled_not_clipped),
->  	KUNIT_CASE(drm_test_rect_clip_scaled_clipped),
->  	KUNIT_CASE(drm_test_rect_clip_scaled_signed_vs_unsigned),
-> +	KUNIT_CASE(drm_test_rect_clip_scaled_out_of_bounds),
->  	KUNIT_CASE_PARAM(drm_test_rect_intersect, drm_rect_intersect_gen_params),
->  	KUNIT_CASE_PARAM(drm_test_rect_calc_hscale, drm_rect_scale_gen_params),
->  	KUNIT_CASE_PARAM(drm_test_rect_calc_vscale, drm_rect_scale_gen_params),
+-Mingwei
