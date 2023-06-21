@@ -2,77 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81454738B6D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F4004738B72
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231732AbjFUQfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:35:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56596 "EHLO
+        id S232704AbjFUQfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233073AbjFUQfK (ORCPT
+        with ESMTP id S232705AbjFUQfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:35:10 -0400
+        Wed, 21 Jun 2023 12:35:32 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0A41BD0;
-        Wed, 21 Jun 2023 09:34:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5A91FC0;
+        Wed, 21 Jun 2023 09:34:57 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id AEB272199E;
-        Wed, 21 Jun 2023 16:34:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1687365262; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7C99F21DCF;
+        Wed, 21 Jun 2023 16:34:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1687365281; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nP97CZRMi7DzHuqo3ZRpLhOQxus1icZrg2m4Gx76Tsw=;
-        b=bzbna+hlHAKeGsV1/PiehUW/1VgYgGkIixL5MqK8MJcl85KtxZQAErWUxpwpK0MNH/5wjz
-        iDD9V1MjrFlFn8pM9yO9KUZelNSqIG7zPZzUtpHgH80tRcYZHsUJRGjs8huyCGN6PTowBb
-        zcycPg0NGa579PoAZ33AAP60Wc2ctMA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1687365262;
+        bh=TQUlt748x2mthmmwCeGxqz+K1WLJtQOlSRo4IA/8aG4=;
+        b=VBqtAVhTryP9lQwMFcXJKI6NAf1LEjITh+tNAAhpJGDufxah2noB0ZYvZRU2JJ/S3EG5U6
+        Tb9IOFRunDzMyL9gNnqMP9oQE520p/edubXaxN+cBwwmXPxvyF3RaWZ2JR8xJvQTXluTD5
+        qrS5BdkI0eExiM7pq/53c6SQe8QUpy4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1687365281;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nP97CZRMi7DzHuqo3ZRpLhOQxus1icZrg2m4Gx76Tsw=;
-        b=UlBAF8kOJR4yUNnNtzxj7DprWyeel6m/433ZEs5yCwgIsE7i3cpXIG8pW0OylRnXjPsCQH
-        ic+uOb6ZgkuZJ8Dw==
+        bh=TQUlt748x2mthmmwCeGxqz+K1WLJtQOlSRo4IA/8aG4=;
+        b=LsWHivZhNjM2cDFHFSHgCX8PfKl7v/B15u4fW4119YT/igSoRGi7Rd9ygL6rCYF+lzrpW5
+        Hv0V1q1/rTSmPJDA==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7B0B1133E6;
-        Wed, 21 Jun 2023 16:34:22 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 67C49133E6;
+        Wed, 21 Jun 2023 16:34:41 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id nXcMHY4mk2ToQgAAMHmgww
-        (envelope-from <tiwai@suse.de>); Wed, 21 Jun 2023 16:34:22 +0000
-Date:   Wed, 21 Jun 2023 18:34:22 +0200
-Message-ID: <87352krcz5.wl-tiwai@suse.de>
-From:   Takashi Iwai <tiwai@suse.de>
-To:     =?ISO-8859-1?Q?=22N=EDcolas_F=2E_R=2E_A=2E=22?= Prado 
-        <nfraprado@collabora.com>
-Cc:     Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-        kernel@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/2] kselftest/alsa: pcm-test: Decrease stream duration from 4 to 2 seconds
-In-Reply-To: <5c2d5213-5299-44f1-9611-26002c8a5d3a@notapiano>
-References: <20230620220839.2215057-1-nfraprado@collabora.com>
-        <20230620220839.2215057-3-nfraprado@collabora.com>
-        <33bea0d3-b8dd-4936-812e-392166df4437@sirena.org.uk>
-        <443f697b-fecf-6e8e-0b76-65257aff7da8@perex.cz>
-        <9069ad0c-d166-4620-a3de-a36ab233cab0@sirena.org.uk>
-        <5c2d5213-5299-44f1-9611-26002c8a5d3a@notapiano>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: 8bit
+        id /K9RGaEmk2QNQwAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 21 Jun 2023 16:34:41 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id F1D96A075D; Wed, 21 Jun 2023 18:34:40 +0200 (CEST)
+Date:   Wed, 21 Jun 2023 18:34:40 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 03/79] s390: switch to new ctime accessors
+Message-ID: <20230621163440.xn4qav2f6garzgx6@quack3>
+References: <20230621144507.55591-1-jlayton@kernel.org>
+ <20230621144735.55953-1-jlayton@kernel.org>
+ <20230621144735.55953-2-jlayton@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621144735.55953-2-jlayton@kernel.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -83,48 +79,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 18:03:22 +0200,
-Nícolas F. R. A. Prado wrote:
+On Wed 21-06-23 10:45:16, Jeff Layton wrote:
+> In later patches, we're going to change how the ctime.tv_nsec field is
+> utilized. Switch to using accessor functions instead of raw accesses of
+> inode->i_ctime.
 > 
-> On Wed, Jun 21, 2023 at 03:39:12PM +0100, Mark Brown wrote:
-> > On Wed, Jun 21, 2023 at 04:08:47PM +0200, Jaroslav Kysela wrote:
-> > 
-> > > I think that the problem is somewhere else here. The overall test timeout
-> > > should be calculated dynamically. All tests may be queried for the maximal
-> > > expected interval based on the hardware/software capabilities. It's a bit
-> > > pitfall to have a fixed time limit where the realtime tests depend on the
-> > > number of devices.
-> > 
-> > I tend to agree here, unfortunately Shuah hasn't responded to queries
-> > from Nícolas about this which I imagine is what inspired this patch.  We
-> > also have problems with mixer-test on one of the Dialog CODECs with a
-> > couple of 64k value controls and no cache only mode.
-> 
-> Yes, exactly. I've tried increasing the timeout for this test to a larger fixed
-> value previously, and later asked for more information on how to deal with the
-> kselftest timeout. [1]
-> 
-> Since I didn't hear back, I thought this patch would be a way to at least
-> mitigate the issue for now, without limiting the test coverage, which was a
-> concern with having limited scopes for the test.
-> 
-> I've just noticed that in the mean time a way to override the timeout when
-> running kselftest has been introduced [2], so I suppose we could use that to
-> work around the timeout limitation in CI systems and be able to run through
-> completion on the different hardware at the lab. But I still believe, like you
-> do, that calculating the timeout at runtime based on the hardware would make
-> much more sense, though if there's such a desire to keep kselftests under the
-> 45s mark, I'm not sure if it would be acceptable.
-> 
-> [1] https://lore.kernel.org/all/5302e70d-cb58-4e70-b44f-ff81b138a2e1@notapiano/
-> [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f6a01213e3f8
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-So, we're back to square...  Unless anyone has a strong objection, I'm
-inclined to take this as a workaround for 6.5 for now, as the merge
-window deadline is coming.  We can improve things at the same time for
-the future kernel, too.
+Looks good to me. Feel free to add:
 
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-thanks,
+								Honza
 
-Takashi
+> ---
+>  arch/s390/hypfs/inode.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/s390/hypfs/inode.c b/arch/s390/hypfs/inode.c
+> index ee919bfc8186..30fa336ec63e 100644
+> --- a/arch/s390/hypfs/inode.c
+> +++ b/arch/s390/hypfs/inode.c
+> @@ -53,7 +53,7 @@ static void hypfs_update_update(struct super_block *sb)
+>  	struct inode *inode = d_inode(sb_info->update_file);
+>  
+>  	sb_info->last_update = ktime_get_seconds();
+> -	inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
+> +	inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
+>  }
+>  
+>  /* directory tree removal functions */
+> @@ -101,7 +101,7 @@ static struct inode *hypfs_make_inode(struct super_block *sb, umode_t mode)
+>  		ret->i_mode = mode;
+>  		ret->i_uid = hypfs_info->uid;
+>  		ret->i_gid = hypfs_info->gid;
+> -		ret->i_atime = ret->i_mtime = ret->i_ctime = current_time(ret);
+> +		ret->i_atime = ret->i_mtime = inode_ctime_set_current(ret);
+>  		if (S_ISDIR(mode))
+>  			set_nlink(ret, 2);
+>  	}
+> -- 
+> 2.41.0
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
