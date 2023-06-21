@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87B6C7380BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B3D7381F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbjFUJhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 05:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38800 "EHLO
+        id S231508AbjFUJhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 05:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232016AbjFUJhN (ORCPT
+        with ESMTP id S231738AbjFUJgj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 05:37:13 -0400
+        Wed, 21 Jun 2023 05:36:39 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B390230E1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:35:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CE02112
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:35:13 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1qBuCp-0006Qe-Sn; Wed, 21 Jun 2023 11:32:51 +0200
+        id 1qBuCp-0006Qd-Sp; Wed, 21 Jun 2023 11:32:52 +0200
 Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1qBuCm-00906Z-0G; Wed, 21 Jun 2023 11:32:48 +0200
+        id 1qBuCl-00906V-RR; Wed, 21 Jun 2023 11:32:47 +0200
 Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1qBuCk-000KLT-Ru; Wed, 21 Jun 2023 11:32:46 +0200
+        id 1qBuCk-000KLd-Sb; Wed, 21 Jun 2023 11:32:46 +0200
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     Abel Vesa <abelvesa@kernel.org>,
         Michael Turquette <mturquette@baylibre.com>,
@@ -40,7 +40,8 @@ To:     Abel Vesa <abelvesa@kernel.org>,
         "David S. Miller" <davem@davemloft.net>,
         Dmitry Torokhov <dmitry.torokhov@gmail.com>,
         Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Rob Herring <robh@kernel.org>, kernel@pengutronix.de,
         Peng Fan <peng.fan@nxp.com>,
         Fabio Estevam <festevam@gmail.com>,
         NXP Linux Team <linux-imx@nxp.com>,
@@ -53,9 +54,9 @@ Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
         linux-input@vger.kernel.org, linux-mmc@vger.kernel.org
-Subject: [PATCH v2 4/5] dt-bindings: clock: imx6ul: Support optional enet*_ref_pad clocks
-Date:   Wed, 21 Jun 2023 11:32:44 +0200
-Message-Id: <20230621093245.78130-5-o.rempel@pengutronix.de>
+Subject: [PATCH v2 5/5] dt-bindings: input: touchscreen: edt-ft5x06: Add 'threshold' property
+Date:   Wed, 21 Jun 2023 11:32:45 +0200
+Message-Id: <20230621093245.78130-6-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230621093245.78130-1-o.rempel@pengutronix.de>
 References: <20230621093245.78130-1-o.rempel@pengutronix.de>
@@ -74,46 +75,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Extend the 'clocks' and 'clock-names' properties to support optional
-'enet1_ref_pad' and 'enet2_ref_pad' clocks to resolve the following
-dtbs_check warning:
-imx6ul-prti6g.dtb: clock-controller@20c4000: clocks: [[17], [18], [19], [20], [21]] is too long
-imx6ul-prti6g.dtb: clock-controller@20c4000: clock-names: ['ckil', 'osc', 'ipp_di0', 'ipp_di1', 'enet1_ref_pad'] is too long
+Add a new property 'threshold' to the edt-ft5x06 touchscreen binding.
+This property allows setting the "click"-threshold in the range from 0
+to 255. This change addresses the following dtbs_check warning:
+imx6dl-lanmcu.dtb: touchscreen@38: 'threshold' does not match any of the regexes: 'pinctrl-[0-9]+'
 
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/clock/imx6ul-clock.yaml | 6 ++++++
+ .../devicetree/bindings/input/touchscreen/edt-ft5x06.yaml   | 6 ++++++
  1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/imx6ul-clock.yaml b/Documentation/devicetree/bindings/clock/imx6ul-clock.yaml
-index be54d4df5afa2..3b71ebc100bf6 100644
---- a/Documentation/devicetree/bindings/clock/imx6ul-clock.yaml
-+++ b/Documentation/devicetree/bindings/clock/imx6ul-clock.yaml
-@@ -28,18 +28,24 @@ properties:
-     const: 1
+diff --git a/Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.yaml b/Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.yaml
+index ef4c841387bdd..f2808cb4d99df 100644
+--- a/Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.yaml
++++ b/Documentation/devicetree/bindings/input/touchscreen/edt-ft5x06.yaml
+@@ -93,6 +93,12 @@ properties:
+     minimum: 1
+     maximum: 255
  
-   clocks:
-+    minItems: 4
-     items:
-       - description: 32k osc
-       - description: 24m osc
-       - description: ipp_di0 clock input
-       - description: ipp_di1 clock input
-+      - description: Optional lenet1_ref_pad or enet2_ref_pad clocks
-+      - description: Optional lenet1_ref_pad or enet2_ref_pad clocks
- 
-   clock-names:
-+    minItems: 4
-     items:
-       - const: ckil
-       - const: osc
-       - const: ipp_di0
-       - const: ipp_di1
-+      - pattern: '^enet[12]_ref_pad$'
-+      - pattern: '^enet[12]_ref_pad$'
- 
- required:
-   - compatible
++  threshold:
++    description: Allows setting the  "click"-threshold in the range from 0 to 255.
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 0
++    maximum: 255
++
+   touchscreen-size-x: true
+   touchscreen-size-y: true
+   touchscreen-fuzz-x: true
 -- 
 2.39.2
 
