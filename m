@@ -2,113 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2664C7382A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:13:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9460E73829D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbjFULaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 07:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51790 "EHLO
+        id S230381AbjFULcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 07:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231876AbjFULax (ORCPT
+        with ESMTP id S229789AbjFULcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 07:30:53 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EDC01E57;
-        Wed, 21 Jun 2023 04:30:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7324A1063;
-        Wed, 21 Jun 2023 04:31:35 -0700 (PDT)
-Received: from [10.57.35.147] (unknown [10.57.35.147])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 410803F663;
-        Wed, 21 Jun 2023 04:30:50 -0700 (PDT)
-Message-ID: <d35d86c2-76ae-98e9-5c27-c0284c52e15b@arm.com>
-Date:   Wed, 21 Jun 2023 12:30:42 +0100
+        Wed, 21 Jun 2023 07:32:54 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B043E72
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 04:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=rDVtJ+rsOl47VM5THJFC+Sl5c0+nicbm6KDRLGgH0Rs=; b=g+WVSO2hyrrNoLih+rJSpWIr9g
+        t9NuS7d/s68Kte48/26yZmcAoZu+Af2GGQrJRvA/NHGqcBideR2UPpDbOaAdsRd7SrrBa38edrjs+
+        vaEBhmVcoGrqRifIopTauqes/HCK7CRq5MTJh7t88F47V2lHhj84jAe76eASzdSEqhH+jWPP6XRm/
+        jewJjd0xT658p9nlwuMphZVMJfArz9q7Ok2jKY+AkOp/M+ZeEDn9WKol4wU07nsALs3lMPbQT/aUp
+        1CV2YR5hs57kh4pXTkAhmsN9scPnPDVCrPVA516kTIOEiafbWEg1PKHCuZZ72dd6XdGGSEevpOspg
+        nOz8Srog==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qBw4h-00EHLw-S7; Wed, 21 Jun 2023 11:32:35 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E02F1300137;
+        Wed, 21 Jun 2023 13:32:33 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id A36B526671702; Wed, 21 Jun 2023 13:32:33 +0200 (CEST)
+Date:   Wed, 21 Jun 2023 13:32:33 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Mel Gorman <mgorman@suse.de>
+Cc:     Miaohe Lin <linmiaohe@huawei.com>, mingo@redhat.com,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] sched/fair: Use recent_used_cpu to test p->cpus_ptr
+Message-ID: <20230621113233.GC2053369@hirez.programming.kicks-ass.net>
+References: <20230620080747.359122-1-linmiaohe@huawei.com>
+ <20230621101915.k323amaxqxjjefzn@suse.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: Question about reserved_regions w/ Intel IOMMU
-To:     Alexander Duyck <alexander.duyck@gmail.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Baolu Lu <baolu.lu@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-pci <linux-pci@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>
-References: <b24a6c7b-27fc-41c0-5c82-15696b4a7dc1@arm.com>
- <ZIiRK2Dzl2/9Jqle@ziepe.ca>
- <BN9PR11MB52765C24405D2475CF3CBEBE8C58A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZIxTmGU4a5dniEY3@nvidia.com>
- <CAKgT0UfmdOOPSD5YvpHnh1A02URn9zxVLbyXJM_67On7xojLcA@mail.gmail.com>
- <520e2be4-726f-c680-c010-a308cdddbae0@arm.com> <ZIyxFpzh3WG+ifws@nvidia.com>
- <90823b33-1f44-8789-9a38-282407fd9f15@arm.com> <ZJBf5DP60prFH5R2@nvidia.com>
- <CAKgT0UccM=_D-gJdzjqeUmRZWnSHVaUABjgQBEamLYauE8WTCA@mail.gmail.com>
- <ZJHaE2+XOgQj1q2k@nvidia.com>
- <CAKgT0UdbjDDkwV_uUGCTONGj2Xw_+Tb6J5enAX_+Wq0eKt=nGA@mail.gmail.com>
-Content-Language: en-GB
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CAKgT0UdbjDDkwV_uUGCTONGj2Xw_+Tb6J5enAX_+Wq0eKt=nGA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621101915.k323amaxqxjjefzn@suse.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-20 18:47, Alexander Duyck wrote:
-> On Tue, Jun 20, 2023 at 9:55 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
->>
->> On Tue, Jun 20, 2023 at 07:57:57AM -0700, Alexander Duyck wrote:
->>
->>> I think this may have gone off down a rathole as my original question
->>> wasn't anything about adding extra reserved regions. It was about
->>> exposing what the IOVA is already reserving so it could be user
->>> visible.
->>
->> Your question points out that dma-iommu.c uses a different set of
->> reserved regions than everything else, and its set is closer to
->> functionally correct.
->>
->> IMHO the resolution to what you are talking about is not to add more
->> debugging to dma-iommu but to make the set of reserved regions
->> consistently correct for everyone, which will make them viewable in
->> sysfs.
+On Wed, Jun 21, 2023 at 11:19:15AM +0100, Mel Gorman wrote:
+> On Tue, Jun 20, 2023 at 04:07:47PM +0800, Miaohe Lin wrote:
+> > When checking whether a recently used CPU can be a potential idle
+> > candidate, recent_used_cpu should be used to test p->cpus_ptr as
+> > p->recent_used_cpu is not equal to recent_used_cpu and candidate
+> > decision is made based on recent_used_cpu here.
+> > 
+> > Fixes: 89aafd67f28c ("sched/fair: Use prev instead of new target as recent_used_cpu")
 > 
-> Okay, that makes sense to me, and I agree. If we had a consistent set
-> of reserved regions then it would make it easier to understand.
+> Acked-by: Mel Gorman <mgorman@suse.de>
 
-It would also be wrong, unfortunately, because it's conflating multiple 
-different things (there are overlapping notions of "reserve" at play 
-here...). IOMMU API reserved regions are specific things that the IOMMU 
-driver knows are special and all IOMMU domain users definitely need to 
-be aware of. iommu-dma is merely one of those users; it is another layer 
-on top of the API which manages its own IOVA space how it sees fit, just 
-like VFIO or other IOMMU-aware drivers. It honours those reserved 
-regions (via iommu_group_create_direct_mappings()), but it also carves 
-out plenty of IOVA space which is probably perfectly usable - some of 
-which is related to possible upstream bus constraints, to save the 
-hassle of checking; some purely for its own convenience, like the page 
-at IOVA 0 - but it still *doesn't* carve out more IOVA regions which are 
-also unusable overall due to other upstream bus or endpoint constraints, 
-since those are handled dynamically in its allocator instead (dma_mask, 
-bus_dma_limit etc.)
-
-> If
-> nothing else my request would be to expose the iova reserved regions
-> and then most likely the other ones could be deprecated since they
-> seem to all be consolidated in the IOVA anyway.
-
-FWIW there's no upstream provision for debugging iommu-dma from 
-userspace since it's not something that anyone other than me has ever 
-had any apparent need to do, and you can get an idea of how long it's 
-been since even I thought about that from when I seem to have given up 
-rebasing my local patches for it[1] :)
-
-Thanks,
-Robin.
-
-[1] https://gitlab.arm.com/linux-arm/linux-rm/-/commits/iommu/misc/
+Thanks!
