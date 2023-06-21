@@ -2,65 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C0C47384E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B8427384E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232490AbjFUNXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
+        id S229905AbjFUNYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjFUNXu (ORCPT
+        with ESMTP id S231265AbjFUNYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:23:50 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 636E3191;
-        Wed, 21 Jun 2023 06:23:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0DB641FB;
-        Wed, 21 Jun 2023 06:24:32 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.27.65])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 097DC3F64C;
-        Wed, 21 Jun 2023 06:23:45 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 14:23:43 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        will@kernel.org, catalin.marinas@arm.com,
-        Mark Brown <broonie@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Suzuki Poulose <suzuki.poulose@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH V12 00/10] arm64/perf: Enable branch stack sampling
-Message-ID: <ZJL538Ud9C6xgDid@FVFF77S0Q05N>
-References: <20230615133239.442736-1-anshuman.khandual@arm.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615133239.442736-1-anshuman.khandual@arm.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 21 Jun 2023 09:24:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C72191;
+        Wed, 21 Jun 2023 06:24:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F671614C7;
+        Wed, 21 Jun 2023 13:24:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6CB1C433C9;
+        Wed, 21 Jun 2023 13:24:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687353845;
+        bh=PK2Q9rLKjKer9YEWmryJ25tGPzX9SXDt3JrNu6UDuAA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hS4QEI5VFEbmFmiIYGKr3OHBWOYeFFqKiywdQmR9V9Rf2djX5cIbwBjmdG3VtaDnk
+         jognR97OXw29YRpuwR3ES64aWWQ/rvlFAR/08SxCQUzMCf5/odi374WR4HEk5A5N8l
+         BQ8VKM8eK0nrdi8OP5Gq5BJfhXnorjmPKRn8DPyjdw9C299MhTnZ6io6UVAefbYqdN
+         vfKuD6hgNIlG0K17E8kff2fjMDsmKyqybX/aq2c+hVJ1w+o+fB0e5d4/OfNlPsvrvW
+         /1bKJsznpyWUpyD0dwMrV+ixszRndZXslNbACWUSkkEZsTg01RmqlM4ty1yRQF8uHP
+         z+cUQpV/b0JEg==
+From:   Mark Brown <broonie@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+Subject: [GIT PULL] SPI fixes for v6.4-rc7
+Date:   Wed, 21 Jun 2023 14:23:50 +0100
+Message-Id: <20230621132404.E6CB1C433C9@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 07:02:29PM +0530, Anshuman Khandual wrote:
-> This series enables perf branch stack sampling support on arm64 platform
-> via a new arch feature called Branch Record Buffer Extension (BRBE). All
-> relevant register definitions could be accessed here.
-> 
-> https://developer.arm.com/documentation/ddi0601/2021-12/AArch64-Registers
-> 
-> This series applies on 6.4-rc6.
+The following changes since commit eee43699217504ba69cadefc85c6992df555e33f:
 
-This largely looks good, but obviously this will need a respin to address the
-fallout on 32-bit.
+  spi: dw: Replace incorrect spi_get_chipselect with set (2023-06-13 20:19:26 +0100)
 
-Thanks,
-Mark.
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git tags/spi-fix-v6.4-rc7
+
+for you to fetch changes up to 9d7054fb3ac2e8d252aae1268f20623f244e644f:
+
+  spi: spi-geni-qcom: correctly handle -EPROBE_DEFER from dma_request_chan() (2023-06-15 14:58:45 +0100)
+
+----------------------------------------------------------------
+spi: Fix for v6.4
+
+One last fix for SPI, just a simple fix for incorrect handling of probe
+deferral for DMA in the Qualcomm GENI driver.
+
+----------------------------------------------------------------
+Neil Armstrong (1):
+      spi: spi-geni-qcom: correctly handle -EPROBE_DEFER from dma_request_chan()
+
+ drivers/spi/spi-geni-qcom.c | 2 ++
+ 1 file changed, 2 insertions(+)
