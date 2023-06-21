@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB1B738051
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:10:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFEE7381DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232480AbjFUKiv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 06:38:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49640 "EHLO
+        id S232070AbjFUKiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 06:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231968AbjFUKiW (ORCPT
+        with ESMTP id S231978AbjFUKiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 06:38:22 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C06AC210E;
-        Wed, 21 Jun 2023 03:37:24 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-988e6fc41ccso343128866b.3;
-        Wed, 21 Jun 2023 03:37:24 -0700 (PDT)
+        Wed, 21 Jun 2023 06:38:23 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FFD2113;
+        Wed, 21 Jun 2023 03:37:25 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-988aefaa44eso481525066b.2;
+        Wed, 21 Jun 2023 03:37:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687343843; x=1689935843;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5LLokvFJRr0ZS2/J+RyaPCEgCPP7mcKpknVtjbysX64=;
-        b=aJaEcdo/WXsjqvY6b3OmYlnmUBegG+pi6a/jfHi7NPGD0Ghq3KAxY/9j91CCoIbkys
-         e6jFshOjb9E6+DDuezEGFRwhQFZh7ghMopz7vwnC3gm8DPGyL0/q+XmfDUh/tMUCrLX7
-         e+9ddaQ1WTrWpR9zBbKhpD75Teh+wF/O0BnbchgJvmdE2rC+DeHLSJtiLn+6qbmaah7t
-         p8Aq0fmRYpb6W/G5Lbu0VVrIiiu3ppt57JbokvDwxte75C5KTKVKwZnTOtLpSczgBVSQ
-         piNkUosIQ6D9WNaNyuXD4wsqCQ5GNGpLFmth/J7O3zUEvEWPiVZVoZtqdavA56uAneLI
-         IX4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687343843; x=1689935843;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20221208; t=1687343844; x=1689935844;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5LLokvFJRr0ZS2/J+RyaPCEgCPP7mcKpknVtjbysX64=;
-        b=YLXa/IxmzT4TVEFs/s0xYHFubOVe8N8c2XBpcHN/oRmMQ0MmOm20ABaFq1zPPqmrzV
-         T039jI2SpyyYvM7Mv/aeje/aU9wJA9RgTdSJB8+noYxidmP7MNUcVBDhmKI5QbS2WvZP
-         g0vcLy09AuOGn8JcJSBY15hYIQJUK12on2SSHEQ3M2DhslOVgmbnTL4Y3jNha2/447qB
-         dBMfE4lERd9EaXfwKmoyAX6mKk+jW4FBP2WvZTGF6y8uU4w74AzeJ1ER1s2p78PMXmrC
-         iQw6cIGjLXuFHc+aIMyI5Rj4ArAClKQ/g6jkIDWhZJgdUqm4w7XKST8mIGSCOt1nvQF4
-         wiRg==
-X-Gm-Message-State: AC+VfDwC0xqnHmp86c+gFbQ/I8Taj3sFUgrvyOn9BIzcUGD1Rr4TwYUS
-        GYnwHkJAkfB3iznx3EMoRYA=
-X-Google-Smtp-Source: ACHHUZ4AMAXLQ2VODo60XAY+XGQ82nEkQz5gsitczhta2Sp8+R5DzfROGEx23e5eqEQo/KvZh5C/CA==
-X-Received: by 2002:a17:907:1b08:b0:971:eb29:a082 with SMTP id mp8-20020a1709071b0800b00971eb29a082mr11779512ejc.49.1687343842917;
-        Wed, 21 Jun 2023 03:37:22 -0700 (PDT)
+        bh=alj5XJx3xHWqgp1qRnBOikrTF0Qcwk6IxtFo9ldPUY0=;
+        b=V8sUi6N1QcFViw01BPLMNc8AWo+BTiT+q71Zv3r5/V3ytoTusospV5+0s0IHPKiwTS
+         Cc9l+DSoK1FGn1s7jvABtw1jscyRVtQ+Eh0dIdfayoAdiV72xxPpvNpt24MSOJ5PvUN5
+         l5M/W8WkTKzmwXxZAm3Qx5M6//SLmwYELFZknAWBhcL+nhhzCDGFOaI0NrzuVUZrYIT4
+         gKrhEMdxYeAtf9lMB8pDeYz6TZdLD5FQ8F4VhDVRzNE7/IzHAePk3JksClAh3/Ou7VjS
+         zkfri1Okqha9Z3xEeF3M+KbkwthsVqiAT0WSPq9o5iA2CeL1x/T6QB6kxiaxHGLeR4GT
+         wHOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687343844; x=1689935844;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=alj5XJx3xHWqgp1qRnBOikrTF0Qcwk6IxtFo9ldPUY0=;
+        b=TRA1s6QA2wLzpr+iPJceeEOj/bW2wz5em3EzemhUTzEkOB85PUZT+GygcH+6ZxDoZ+
+         wdgGY7EGGkSePjqq9UfxCVZ+9NOwC2y8FtRzYhDc/A0yfXwhHfDnGGhMX/wbAoRA1aNH
+         ot4VLk9B/ovZa/+JujjUKZ0XHB3+yV8TZqvDFUA+wmmpgapVVTnDEK5+ZX4SlcaHkwZD
+         PbNB1yUZZWuvE6EdGwtPHGQmtb/TGFKlkb6fgS4//e4YD5sFVuKNXDA0npx/qe0PMxs3
+         F8LB69MljAQ2pWEB6Plu9pbDtMv577M3uIg5m1HPyQoRlEZ4Qa+arZDJN6gLYlUGMt8r
+         NTyg==
+X-Gm-Message-State: AC+VfDycywUiy9WVAvvsVOxFEjMzt48F6Jy+hDpsHDRY2lwm/EwCEMce
+        a0mf6opcLdUACNGJmeq1Rtk=
+X-Google-Smtp-Source: ACHHUZ5BUFCWo5dwef6cuqNstsM8TxYPLk8NNGHFFZr/YOvGVLoFEzk3Vhk9bH2ZEjfHIG/Y/GNyLQ==
+X-Received: by 2002:a17:907:7245:b0:982:a454:6d24 with SMTP id ds5-20020a170907724500b00982a4546d24mr13502589ejc.74.1687343843679;
+        Wed, 21 Jun 2023 03:37:23 -0700 (PDT)
 Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id c2-20020a1709060fc200b0098880feae36sm2931758ejk.153.2023.06.21.03.37.22
+        by smtp.gmail.com with ESMTPSA id c2-20020a1709060fc200b0098880feae36sm2931758ejk.153.2023.06.21.03.37.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 03:37:22 -0700 (PDT)
+        Wed, 21 Jun 2023 03:37:23 -0700 (PDT)
 From:   Benjamin Bara <bbara93@gmail.com>
-Subject: [PATCH 0/4] usb: misc: onboard_usb_hub: add support for Cypress
- HX3 USB 3.0 family
-Date:   Wed, 21 Jun 2023 12:37:15 +0200
-Message-Id: <20230620-hx3-v1-0-690000b6d60d@skidata.com>
+Date:   Wed, 21 Jun 2023 12:37:16 +0200
+Subject: [PATCH 1/4] usb: misc: onboard-hub: resort by VID and PID
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANzSkmQC/x2MWwqAIBAArxL7nWDag7pK9OFjy4WwUAohuntLn
- zMM80DGRJhhqh5IeFOmIzI0dQUumLihIM8MSioteyVFKFo4O+rOtqv3Qw9cWpNR2GSiC9zGa99
- ZnglXKv96Xt73Az3SbARqAAAA
+Message-Id: <20230620-hx3-v1-1-690000b6d60d@skidata.com>
+References: <20230620-hx3-v1-0-690000b6d60d@skidata.com>
+In-Reply-To: <20230620-hx3-v1-0-690000b6d60d@skidata.com>
 To:     Matthias Kaehlcke <mka@chromium.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -79,37 +78,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+From: Benjamin Bara <benjamin.bara@skidata.com>
 
-This series adds support for the Cypress HX3 USB 3.0 family (3/4). For
-now, it just contains the USB-related aspects and ignores the option to
-connect it via i2c (4/4).
+Resort the existing entries by VID and then by PID to be able to find
+entries easier.
 
-For a better overview, the current entries are first re-ordered by VID
-and then by PID (1/4).
-
-As the HX3 family operates with two power supplies, multiple power
-supply support is implemented (2/4).
-
-Thanks & best regards,
-Benjamin
-
+Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
 ---
-Benjamin Bara (4):
-      usb: misc: onboard-hub: resort by VID and PID
-      usb: misc: onboard-hub: support multiple power supplies
-      usb: misc: onboard-hub: add support for Cypress HX3 USB 3.0 family
-      dt-bindings: usb: Add binding for Cypress HX3 USB 3.0 family
+ drivers/usb/misc/onboard_usb_hub.c | 12 ++++++------
+ drivers/usb/misc/onboard_usb_hub.h |  8 ++++----
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
- .../devicetree/bindings/usb/cypress,hx3.yaml       | 77 ++++++++++++++++++++++
- drivers/usb/misc/onboard_usb_hub.c                 | 55 +++++++++++-----
- drivers/usb/misc/onboard_usb_hub.h                 | 16 +++--
- 3 files changed, 128 insertions(+), 20 deletions(-)
----
-base-commit: 45a3e24f65e90a047bef86f927ebdc4c710edaa1
-change-id: 20230620-hx3-cb935b4fdd76
+diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+index 12fc6eb67c3b..94006714c273 100644
+--- a/drivers/usb/misc/onboard_usb_hub.c
++++ b/drivers/usb/misc/onboard_usb_hub.c
+@@ -329,10 +329,10 @@ static struct platform_driver onboard_hub_driver = {
+ 
+ /************************** USB driver **************************/
+ 
+-#define VENDOR_ID_GENESYS	0x05e3
+ #define VENDOR_ID_MICROCHIP	0x0424
+-#define VENDOR_ID_REALTEK	0x0bda
+ #define VENDOR_ID_TI		0x0451
++#define VENDOR_ID_GENESYS	0x05e3
++#define VENDOR_ID_REALTEK	0x0bda
+ #define VENDOR_ID_VIA		0x2109
+ 
+ /*
+@@ -407,16 +407,16 @@ static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
+ }
+ 
+ static const struct usb_device_id onboard_hub_id_table[] = {
+-	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
+-	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0610) }, /* Genesys Logic GL852G USB 2.0 */
+ 	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2514) }, /* USB2514B USB 2.0 */
+ 	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2517) }, /* USB2517 USB 2.0 */
++	{ USB_DEVICE(VENDOR_ID_TI, 0x8140) }, /* TI USB8041 3.0 */
++	{ USB_DEVICE(VENDOR_ID_TI, 0x8142) }, /* TI USB8041 2.0 */
++	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
++	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0610) }, /* Genesys Logic GL852G USB 2.0 */
+ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0411) }, /* RTS5411 USB 3.1 */
+ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5411) }, /* RTS5411 USB 2.1 */
+ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0414) }, /* RTS5414 USB 3.2 */
+ 	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5414) }, /* RTS5414 USB 2.1 */
+-	{ USB_DEVICE(VENDOR_ID_TI, 0x8140) }, /* TI USB8041 3.0 */
+-	{ USB_DEVICE(VENDOR_ID_TI, 0x8142) }, /* TI USB8041 2.0 */
+ 	{ USB_DEVICE(VENDOR_ID_VIA, 0x0817) }, /* VIA VL817 3.1 */
+ 	{ USB_DEVICE(VENDOR_ID_VIA, 0x2817) }, /* VIA VL817 2.0 */
+ 	{}
+diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
+index aca5f50eb0da..ff8925aa6d3a 100644
+--- a/drivers/usb/misc/onboard_usb_hub.h
++++ b/drivers/usb/misc/onboard_usb_hub.h
+@@ -14,10 +14,6 @@ static const struct onboard_hub_pdata microchip_usb424_data = {
+ 	.reset_us = 1,
+ };
+ 
+-static const struct onboard_hub_pdata realtek_rts5411_data = {
+-	.reset_us = 0,
+-};
+-
+ static const struct onboard_hub_pdata ti_tusb8041_data = {
+ 	.reset_us = 3000,
+ };
+@@ -30,6 +26,10 @@ static const struct onboard_hub_pdata genesys_gl852g_data = {
+ 	.reset_us = 50,
+ };
+ 
++static const struct onboard_hub_pdata realtek_rts5411_data = {
++	.reset_us = 0,
++};
++
+ static const struct onboard_hub_pdata vialab_vl817_data = {
+ 	.reset_us = 10,
+ };
 
-Best regards,
 -- 
-Benjamin Bara <benjamin.bara@skidata.com>
+2.34.1
 
