@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C0173796E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 05:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E0AD737970
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 05:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230062AbjFUDBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 20 Jun 2023 23:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55568 "EHLO
+        id S230078AbjFUDBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 20 Jun 2023 23:01:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230030AbjFUDBO (ORCPT
+        with ESMTP id S230012AbjFUDBS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 20 Jun 2023 23:01:14 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C717A19B6;
-        Tue, 20 Jun 2023 20:01:07 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id e9e14a558f8ab-340bba768acso26378875ab.2;
-        Tue, 20 Jun 2023 20:01:07 -0700 (PDT)
+        Tue, 20 Jun 2023 23:01:18 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1B25199A;
+        Tue, 20 Jun 2023 20:01:12 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-3420b22365fso26443895ab.1;
+        Tue, 20 Jun 2023 20:01:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687316466; x=1689908466;
+        d=gmail.com; s=20221208; t=1687316472; x=1689908472;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9i3TwOUjrba6y/sZ16lkUZi/PKa7z6zduQ0cJPwPLqg=;
-        b=KzJ4T/HpsfXuydpnH5TcpZW3RZy68kv09P93asfMP/FwSRCRDaCrwxIyh/j24Dfq0+
-         xAnYbxEhSYfYilQOdTz6isg3cTnormzf2gSO8/Py5wuEmTOZ9lx6B977xnnpcI0VW67j
-         gvPsQNS/NEu1LKWiPN/K/ZLNEJlSSh/VjHcdsZyKHMhQnbbScUTcjgosvYccUrfeS3S2
-         QRQoEumHUPnUBYHzTboO5XL3qgQOh8O6I5/hzQJpmatN9lgYSYcMAQH4PeRicSzkvWnY
-         MGLTNQZrLXr7SHhMREY3cWf30rUzrYahIBq8xx9yHp5jbHIalORjY5K+5LMkCAoJ1a9S
-         0KHA==
+        bh=3ymvo1yb6hBMOYst3q5f6+Qj67WzRYCMDxb+OaKy61M=;
+        b=fviI+sflWeNoKMpAzsUSp+vaO2FvMfkSnBJ4p7z6kSa7Yl18CQQxgO4BSJOsX6oX0i
+         VKR3QZGMQ7MRnUJ6z+aDI3MXofS8Q7I3BXSimp69sEZ3HoCAta6cUnx+4yD4DNAD3a9M
+         3/P136W2TDKEI4hyhlDsAdVXmT47KmvlbZVJlhn84dHx5EA4T+kX5Enk0Y8ZjwIQgSni
+         s3hKbT3MG2V7NAy+2wxq29kZwVKrDaAQHs15SG8mxA8VwY7mGeSgxAAlCAGv5ivDqQL8
+         9j3dWjOve7XGIcMWh7EbXCDd/OYew/yTbX7IUJgQmG7tboorii3WvtOJ9GRFPYup0MTk
+         TPeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687316466; x=1689908466;
+        d=1e100.net; s=20221208; t=1687316472; x=1689908472;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9i3TwOUjrba6y/sZ16lkUZi/PKa7z6zduQ0cJPwPLqg=;
-        b=h9w6jt9sNLM69dHENyihm+HPO4innwu/3QAUBsrEhuPHVpb0tfCw5Qn1dY9PpBdCsc
-         UU7LsFn9A8oH6p7DZJDKliP6HAZQYNWSYC2Jv9hkn42twwO7OSjZukIJs+1j4Lfj72Eo
-         gfELBT5CFbxzeZfermXxQUaUN8OZfznJd/mQsfSqeuRA1g3JTPo3ZvMYOZyKDAkckI2i
-         pZlHjJPZt3/j1QRglnngjPVCtwlc7zV7MFNQrEQfsXW5Mn+WYVHHP2cSBctc9ZKs9gsf
-         uamfl3DSXhkp5K8yPMe7NvcVJCjkzI5KsH+NoNZ6svy4jqxLS8ZDhHwMjvZ2lXp1C+Rt
-         jHPg==
-X-Gm-Message-State: AC+VfDwvG62KTF9Nwtbh2Tn4rpbuS74V9545Ul6lKHvroJxfiKHHjmIS
-        O+00GXDsxYI3WymELjtPX+A=
-X-Google-Smtp-Source: ACHHUZ6E5Oy77f4SmFCfxx6uJ93Rl7pB5cRGyN/JxOBjfA5Zzy6rp+P+wBjfWtNWsJItDkJQwX41xQ==
-X-Received: by 2002:a92:d4c4:0:b0:332:e5aa:f9b8 with SMTP id o4-20020a92d4c4000000b00332e5aaf9b8mr592276ilm.13.1687316466620;
-        Tue, 20 Jun 2023 20:01:06 -0700 (PDT)
+        bh=3ymvo1yb6hBMOYst3q5f6+Qj67WzRYCMDxb+OaKy61M=;
+        b=NUgDG/Y9P30ZeqgKPR1zEIQmPdCF+6S/Lk6uY88c1q2G+Erk+/aaBsVGgkrp25XSqz
+         rGUUkXpJeC2GlSvGnfgJBRAhYxzAOTGOlxAwdosqaSxM0yBAbuGu+ZED78ZI2xihFoQr
+         XW1Z18/kpJrBwqqz3OeoymkKfO/276vLn/F9ORqBlssXaWxh/zdtU77GfIWQMpO8Y92m
+         JFfyF61WQtzhe5ddSIF+t577B2NqscBreU2/9UyVcNi06ElB5KGpLzdh8qxlXCHs+0De
+         Nnk22HV6xYA9pCx8h+IlWBd2FVQKwvHT71bpQmTxbavfgnsIt0Sp713wY84RG51pvOtc
+         PPFA==
+X-Gm-Message-State: AC+VfDyJvWuQ+ATwag+UIRGLNXVzFSlnIspTGhX/xr3sYVbNJxZva5o8
+        6eDEqXlx3v9aQxjG9pmyZ/A=
+X-Google-Smtp-Source: ACHHUZ5ketWPs0ojDilB4XOdWLwA7W6OoZTreZL4pnCosRTIm3zavncQabT1d7KNdfFI2FRCZnmrAw==
+X-Received: by 2002:a92:d905:0:b0:331:4f70:a2b with SMTP id s5-20020a92d905000000b003314f700a2bmr11631651iln.5.1687316471819;
+        Tue, 20 Jun 2023 20:01:11 -0700 (PDT)
 Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id x6-20020a029706000000b0042682dd951dsm1035008jai.87.2023.06.20.20.01.06
+        by smtp.gmail.com with ESMTPSA id x6-20020a029706000000b0042682dd951dsm1035008jai.87.2023.06.20.20.01.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 Jun 2023 20:01:06 -0700 (PDT)
+        Tue, 20 Jun 2023 20:01:11 -0700 (PDT)
 From:   Azeem Shaikh <azeemshaikh38@gmail.com>
 To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
@@ -57,9 +57,9 @@ To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
 Cc:     linux-hardening@vger.kernel.org,
         Azeem Shaikh <azeemshaikh38@gmail.com>,
         linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] scsi: Replace strlcpy with strscpy
-Date:   Wed, 21 Jun 2023 03:00:32 +0000
-Message-ID: <20230621030033.3800351-2-azeemshaikh38@gmail.com>
+Subject: [PATCH 2/2] scsi: target: tcmu: Replace strlcpy with strscpy
+Date:   Wed, 21 Jun 2023 03:00:33 +0000
+Message-ID: <20230621030033.3800351-3-azeemshaikh38@gmail.com>
 X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
 In-Reply-To: <20230621030033.3800351-1-azeemshaikh38@gmail.com>
 References: <20230621030033.3800351-1-azeemshaikh38@gmail.com>
@@ -89,22 +89,30 @@ No return values were used, so direct replacement is safe.
 
 Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
 ---
- drivers/scsi/ncr53c8xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/target/target_core_user.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/ncr53c8xx.c b/drivers/scsi/ncr53c8xx.c
-index 4458449c960b..35869b4f9329 100644
---- a/drivers/scsi/ncr53c8xx.c
-+++ b/drivers/scsi/ncr53c8xx.c
-@@ -4555,7 +4555,7 @@ static void ncr_detach(struct ncb *np)
- 	char inst_name[16];
+diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
+index 15ffc8d2ac7b..22cc6cac0ba2 100644
+--- a/drivers/target/target_core_user.c
++++ b/drivers/target/target_core_user.c
+@@ -2820,14 +2820,14 @@ static ssize_t tcmu_dev_config_store(struct config_item *item, const char *page,
+ 			pr_err("Unable to reconfigure device\n");
+ 			return ret;
+ 		}
+-		strlcpy(udev->dev_config, page, TCMU_CONFIG_LEN);
++		strscpy(udev->dev_config, page, TCMU_CONFIG_LEN);
  
- 	/* Local copy so we don't access np after freeing it! */
--	strlcpy(inst_name, ncr_name(np), sizeof(inst_name));
-+	strscpy(inst_name, ncr_name(np), sizeof(inst_name));
+ 		ret = tcmu_update_uio_info(udev);
+ 		if (ret)
+ 			return ret;
+ 		return count;
+ 	}
+-	strlcpy(udev->dev_config, page, TCMU_CONFIG_LEN);
++	strscpy(udev->dev_config, page, TCMU_CONFIG_LEN);
  
- 	printk("%s: releasing host resources\n", ncr_name(np));
- 
+ 	return count;
+ }
 -- 
 2.41.0.162.gfafddb0af9-goog
 
