@@ -2,158 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621997388C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9BC7388CC
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:22:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232657AbjFUPV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59516 "EHLO
+        id S230393AbjFUPWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 11:22:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233320AbjFUPUx (ORCPT
+        with ESMTP id S233349AbjFUPVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:20:53 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968B41BF5;
-        Wed, 21 Jun 2023 08:18:22 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f8775126d3so3943182e87.1;
-        Wed, 21 Jun 2023 08:18:22 -0700 (PDT)
+        Wed, 21 Jun 2023 11:21:46 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCE1212F;
+        Wed, 21 Jun 2023 08:19:54 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b46d4e1b0aso63373751fa.2;
+        Wed, 21 Jun 2023 08:19:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687360700; x=1689952700;
+        d=gmail.com; s=20221208; t=1687360793; x=1689952793;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oSen+zBAIg18Rp9jlGNUtOajx7SmCBDVFIEONdBtLJ8=;
-        b=kP95B7iNAo4PTHQy1CUM8QHZcb5D8EGkG9PB0zTlSOEX0ORI6UBQBCN2tvE2x84YSH
-         fmfsxRvrICJYuTCMAvx0teUgOzuJCi9tsKZMK2jlh20YpHDvPL5o+IaUWyR0L1u2Pz4Y
-         GaezGubGfrVa1jZK796btfZhmAcTG6Ji66xVwlALZrulos6hmPdIjCAbVMTbGUG+ft3E
-         nT/e3GiYoUSOzWspLI1kqD6em5PKJ12f6ulcmmJ0gKvX1J9RG0mvHosYfFwhKDsic0bA
-         wsWZct13WdkMxxnoIKs/IEVsg2iIB4AIDZjbizzXroK9PiXuQIdhQSzpEdbnq+DumpDx
-         w9eQ==
+        bh=YFy+7jY3Q/B3fIYTXq5qOshlUqCtAeH0fFjxezMJ7mU=;
+        b=GOBaPld/+7/uckPmlyvUEOrUHbnzb/xeQVb9ttphaPlOVx7SyWpw3q1EZ9lqCOrFr1
+         f8VlC75jrLsv+1oSumRkFGEobcO2HjohE6wMZ/Lkv73OS2pSAfCwpH0uaQ4sE0JSC+Db
+         A14lHcRRcAU/PcHq9jab/BUjltkYhk9zTXsbt4bD2qH/PkTs4Jdwc2JxFcE1SymsO7qs
+         peyVC9iKCNhEfaCkgylo0eYlRMhRaYETf3cPqeXd5Bcjfub2Dq7JSFQXnM5nIrIqv38f
+         Hz8O6R7OtyG1OrGo3a+TncT2DvoDQcNUVfteo64tKc82njjnV2xrFc95C0DCJEDf+UhT
+         RJfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687360700; x=1689952700;
+        d=1e100.net; s=20221208; t=1687360793; x=1689952793;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oSen+zBAIg18Rp9jlGNUtOajx7SmCBDVFIEONdBtLJ8=;
-        b=OlbM7CbNVQboZVVooLLJK0Olk0yfyVTusmLYay57sYwfuUxmpxjQgupMRPWSlEZ4Ym
-         dZbQnwsTVlfl/6lPnZMJmhh4q7EqGK0l7Vsbj7CNHkA6Em1r5Y0DJ7m00r7OAa9xnvdz
-         llaGyYJlhBgvGCuJCNxa2YIt/VxGcLueiXF0dAGXnATMRk5YugQIYxuHKjWCGGbI4LVv
-         cNl3dCqnJLB28IgrwuiU1h6q83WLKDXmXXBoGSSg8aqdDssK1mr7IA1nlRnYTtb3S4YG
-         ppU7TMgcdepWm156F1oGCAT+NWgnPOLENmJIeJWA/LyJoULMZgEiPC8RcYGk8Q9iHt+s
-         bGxA==
-X-Gm-Message-State: AC+VfDzPYKGYhVVjL6jfuJkYrD8y65t6KWPgToVZcSJIgaaISneBTKcg
-        u0SONJbFJYZB8SAR9+HNvaTHTCHeXY74be4Wz6SvhTCe
-X-Google-Smtp-Source: ACHHUZ5Q+boYEtKLhRKO9zR4Wwu+QRmt9F4DaCw3EB8iFelWGcVJFWtqt0ElqfrniHY8S/jp4EAZaKh5G+4tDsCppag=
-X-Received: by 2002:a19:f203:0:b0:4f5:f736:cb9f with SMTP id
- q3-20020a19f203000000b004f5f736cb9fmr9842715lfh.67.1687360700051; Wed, 21 Jun
- 2023 08:18:20 -0700 (PDT)
+        bh=YFy+7jY3Q/B3fIYTXq5qOshlUqCtAeH0fFjxezMJ7mU=;
+        b=ZcjmTmzLTeH+JHCtK4DwggY1k1fl1+o6RhPe/68sSSdcKN1/aa/PPjFtPNBAB4w7bN
+         DCyeEL7GK7tQ0VR391LBX/lLE5/fax0algd4wRPlpRcc8s8Xwex+TJ7z/qm32/gzhoct
+         G+cbezmTkx2fgBcia0Cupp58cwXCBZn0plUYa61b7Kvt9P99XchL/7goBa6qHvzxbc2q
+         b+EB+Dt4CbQKdWf2KrHEhY8v4fuEn0Afo8rFofPN3XVLdmYrL3KADzCF+lg+J6G+LR0h
+         0fWGv/gB2+l0Jt7U/2F8qYMj9UqawcNwdn2ztTYoHtKtYVAB6nPMs9wY2uIbzXwHmbaY
+         1vEg==
+X-Gm-Message-State: AC+VfDx46UPcP271zzroK5ty7XfHqPagfN8+MglklxdCEWE4VDkOZRMw
+        Z0yabaAPWIo9l+qt60GQIWaaFJ1E+t7D85M6l54=
+X-Google-Smtp-Source: ACHHUZ7S366xJDGv2BenqM0RSR5nG3v/w66oTeggW0Zt6a61/Wjn/ZeU0yVAL/ODGB0B6G6jG4VWc+DojP3NyAQ/DmI=
+X-Received: by 2002:a2e:80c9:0:b0:2b1:c039:e977 with SMTP id
+ r9-20020a2e80c9000000b002b1c039e977mr9673072ljg.16.1687360792618; Wed, 21 Jun
+ 2023 08:19:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230607214102.2113-1-jason.gerecke@wacom.com> <20230608213828.2108-1-jason.gerecke@wacom.com>
-In-Reply-To: <20230608213828.2108-1-jason.gerecke@wacom.com>
-From:   Jason Gerecke <killertofu@gmail.com>
-Date:   Wed, 21 Jun 2023 08:18:08 -0700
-Message-ID: <CANRwn3R-XbfB+mP9AQ-J7R_19jLi4eS3MhswaWjL+LCEih-7pg@mail.gmail.com>
-Subject: Re: [PATCH v2] HID: wacom: Use ktime_t rather than int when dealing
- with timestamps
-To:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>
-Cc:     Ping Cheng <pinglinux@gmail.com>,
-        Aaron Armstrong Skomra <skomra@gmail.com>,
-        Joshua Dickens <Joshua@joshua-dickens.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>,
-        Jason Gerecke <jason.gerecke@wacom.com>, stable@vger.kernel.org
+References: <CA+G9fYuifLivwhCh33kedtpU=6zUpTQ_uSkESyzdRKYp8WbTFQ@mail.gmail.com>
+ <ZJLzsWsIPD57pDgc@FVFF77S0Q05N> <CA+G9fYvwriD8X+kmDx35PavSv-youSUmYTuYTfQ4oBWnZzVRUQ@mail.gmail.com>
+ <CANk7y0imD3tK1Jox_V_f1vfzFi2tPhUzGOA_mLLkYy-VDHdncg@mail.gmail.com> <CA+G9fYuK4FWaLizcuVyW3ApR6fcgjMccYp3YxdAm61BOedXxzQ@mail.gmail.com>
+In-Reply-To: <CA+G9fYuK4FWaLizcuVyW3ApR6fcgjMccYp3YxdAm61BOedXxzQ@mail.gmail.com>
+From:   Puranjay Mohan <puranjay12@gmail.com>
+Date:   Wed, 21 Jun 2023 17:19:41 +0200
+Message-ID: <CANk7y0g9Qhe4H+WTbrsEUa_XXn_GkXWDOE4kP1icbxfJyri8XQ@mail.gmail.com>
+Subject: Re: next: Rpi4: Unexpected kernel BRK exception at EL1
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Song Liu <song@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-rpi-kernel@lists.infradead.org,
+        Netdev <netdev@vger.kernel.org>, lkft-triage@lists.linaro.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        bpf <bpf@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following up since no action seems to have been taken on this patch yet.
+Hi,
 
-On Thu, Jun 8, 2023 at 2:38=E2=80=AFPM Jason Gerecke <killertofu@gmail.com>=
- wrote:
+On Wed, Jun 21, 2023 at 4:41=E2=80=AFPM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
 >
-> Code which interacts with timestamps needs to use the ktime_t type
-> returned by functions like ktime_get. The int type does not offer
-> enough space to store these values, and attempting to use it is a
-> recipe for problems. In this particular case, overflows would occur
-> when calculating/storing timestamps leading to incorrect values being
-> reported to userspace. In some cases these bad timestamps cause input
-> handling in userspace to appear hung.
+> On Wed, 21 Jun 2023 at 19:46, Puranjay Mohan <puranjay12@gmail.com> wrote=
+:
+> >
+> > Hi,
+> >
+> > On Wed, Jun 21, 2023 at 3:39=E2=80=AFPM Naresh Kamboju
+> > <naresh.kamboju@linaro.org> wrote:
+> > >
+> > > On Wed, 21 Jun 2023 at 18:27, Mark Rutland <mark.rutland@arm.com> wro=
+te:
+> > > >
+> > > > On Wed, Jun 21, 2023 at 06:06:51PM +0530, Naresh Kamboju wrote:
+> > > > > Following boot warnings and crashes noticed on arm64 Rpi4 device =
+running
+> > > > > Linux next-20230621 kernel.
+> > > > >
+> > > > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > > > >
+> > > > > boot log:
+> > > > >
+> > > > > [   22.331748] Kernel text patching generated an invalid instruct=
+ion
+> > > > > at 0xffff8000835d6580!
+> > > > > [   22.340579] Unexpected kernel BRK exception at EL1
+> > > > > [   22.346141] Internal error: BRK handler: 00000000f2000100 [#1]=
+ PREEMPT SMP
+> > > >
+> > > > This indicates execution of AARCH64_BREAK_FAULT.
+> > >
+> > > I see kernel panic with kselftest merge configs on Juno-r2 and Rpi4.
+> >
+> > Is there a way to reproduce this setup on Qemu?
 >
-> Link: https://gitlab.freedesktop.org/libinput/libinput/-/issues/901
-> Fixes: 17d793f3ed53 ("HID: wacom: insert timestamp to packed Bluetooth (B=
-T) events")
-> CC: stable@vger.kernel.org
-> Signed-off-by: Jason Gerecke <jason.gerecke@wacom.com>
-> ---
-> v2: Use div_u64 to perform division to deal with ARC and ARM architecture=
-s
->     (as found by the kernel test robot)
+> Not reproducible on Qemu-arm64.
+> I see only on arm64 devices Juno-r2 and Rpi4.
 >
->  drivers/hid/wacom_wac.c | 6 +++---
->  drivers/hid/wacom_wac.h | 2 +-
->  2 files changed, 4 insertions(+), 4 deletions(-)
+> >
+> > I am able to build the linux-next kernel with the config given below.
+> > But the bug doesn't reproduce in Qemu with debian rootfs.
+> >
+> > I guess I would need the Rootfs that is being used here to reproduce it=
+.
+> > Can you point me to the rootfs for this?
 >
-> diff --git a/drivers/hid/wacom_wac.c b/drivers/hid/wacom_wac.c
-> index 2ccf838371343..174bf03908d7c 100644
-> --- a/drivers/hid/wacom_wac.c
-> +++ b/drivers/hid/wacom_wac.c
-> @@ -1314,7 +1314,7 @@ static void wacom_intuos_pro2_bt_pen(struct wacom_w=
-ac *wacom)
->         struct input_dev *pen_input =3D wacom->pen_input;
->         unsigned char *data =3D wacom->data;
->         int number_of_valid_frames =3D 0;
-> -       int time_interval =3D 15000000;
-> +       ktime_t time_interval =3D 15000000;
->         ktime_t time_packet_received =3D ktime_get();
->         int i;
+> Here is the link for rootfs - OE one.
+> https://storage.tuxsuite.com/public/linaro/lkft/oebuilds/2RVA7dHPf73agY0g=
+DJD6XEdBQBI/images/juno/
+
+I tested this rootfs and couldn't reproduce on Qemu. Now, I will try
+to use my raspberry pi and try to reproduce this.
+
+Thanks.
+
 >
-> @@ -1348,7 +1348,7 @@ static void wacom_intuos_pro2_bt_pen(struct wacom_w=
-ac *wacom)
->         if (number_of_valid_frames) {
->                 if (wacom->hid_data.time_delayed)
->                         time_interval =3D ktime_get() - wacom->hid_data.t=
-ime_delayed;
-> -               time_interval /=3D number_of_valid_frames;
-> +               time_interval =3D div_u64(time_interval, number_of_valid_=
-frames);
->                 wacom->hid_data.time_delayed =3D time_packet_received;
->         }
+> >
+> > Thanks,
+> > Puranjay
+> >
+> > > metadata:
+> > >   git_ref: master
+> > >   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+> > >   git_sha: 15e71592dbae49a674429c618a10401d7f992ac3
+> > >   git_describe: next-20230621
+> > >   kernel_version: 6.4.0-rc7
+> > >   kernel-config:
+> > >     https://storage.tuxsuite.com/public/linaro/lkft/builds/2RVAA4lj35=
+ia3YDkqaoV6ztyqdW/config
+> > >   artifact-location:
+> > >     https://storage.tuxsuite.com/public/linaro/lkft/builds/2RVAA4lj35=
+ia3YDkqaoV6ztyqdW/
+> > >   toolchain: gcc-11
+> > >   build_name: gcc-11-lkftconfig-kselftest
+> > >
+> > >
+> > > --
+> > > Linaro LKFT
+> > > https://lkft.linaro.org
 >
-> @@ -1359,7 +1359,7 @@ static void wacom_intuos_pro2_bt_pen(struct wacom_w=
-ac *wacom)
->                 bool range =3D frame[0] & 0x20;
->                 bool invert =3D frame[0] & 0x10;
->                 int frames_number_reversed =3D number_of_valid_frames - i=
- - 1;
-> -               int event_timestamp =3D time_packet_received - frames_num=
-ber_reversed * time_interval;
-> +               ktime_t event_timestamp =3D time_packet_received - frames=
-_number_reversed * time_interval;
->
->                 if (!valid)
->                         continue;
-> diff --git a/drivers/hid/wacom_wac.h b/drivers/hid/wacom_wac.h
-> index 1a40bb8c5810c..ee21bb260f22f 100644
-> --- a/drivers/hid/wacom_wac.h
-> +++ b/drivers/hid/wacom_wac.h
-> @@ -324,7 +324,7 @@ struct hid_data {
->         int ps_connected;
->         bool pad_input_event_flag;
->         unsigned short sequence_number;
-> -       int time_delayed;
-> +       ktime_t time_delayed;
->  };
->
->  struct wacom_remote_data {
-> --
-> 2.41.0
->
+> - Naresh
+
+
+
+--
+Thanks and Regards
+
+Yours Truly,
+
+Puranjay Mohan
