@@ -2,237 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0704737FCE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8E0737FDD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:09:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232469AbjFUKjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 06:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
+        id S232516AbjFUKjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 06:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232359AbjFUKif (ORCPT
+        with ESMTP id S232046AbjFUKix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 06:38:35 -0400
-Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0DA212F
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 03:37:30 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
-        by localhost (Postfix) with ESMTP id 4QmKh92qDZz9s92;
-        Wed, 21 Jun 2023 12:37:29 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase1.c-s.fr ([192.168.12.234])
-        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 4xhzUEe5FVJi; Wed, 21 Jun 2023 12:37:29 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase1.c-s.fr (Postfix) with ESMTP id 4QmKh925rBz9s7p;
-        Wed, 21 Jun 2023 12:37:29 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 44CB98B779;
-        Wed, 21 Jun 2023 12:37:29 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id SZKo2q5ARpRi; Wed, 21 Jun 2023 12:37:29 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 2484E8B763;
-        Wed, 21 Jun 2023 12:37:29 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 35LAbS2a2082505
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Wed, 21 Jun 2023 12:37:28 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 35LAbRh92082499;
-        Wed, 21 Jun 2023 12:37:27 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH] powerpc/ptrace: Split gpr32_set_common
-Date:   Wed, 21 Jun 2023 12:37:19 +0200
-Message-Id: <3086d189fa629e6c7bf800832921669450cc09bf.1687343697.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.40.1
+        Wed, 21 Jun 2023 06:38:53 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A8FE41;
+        Wed, 21 Jun 2023 03:38:11 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-988a5383fd4so607071566b.0;
+        Wed, 21 Jun 2023 03:38:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687343889; x=1689935889;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5LLokvFJRr0ZS2/J+RyaPCEgCPP7mcKpknVtjbysX64=;
+        b=psutatsGxydYgWSl+BY5wAswU+hFJg2oJ86pCvNQRPDPGiH0bhYaOW700wLsnW8bqZ
+         5umR3jsZBh6u5Vq/bts7qxJkMphxfI9f+z2Aj3MMieAUwzu0250Vtpta4JHcZaSGLlYt
+         mdCj1ORADCqEcsM6qXjyoCB41oYDLfQQWqiws+f9x9ejKSrimsHZLzzXYR4+d3Ae+MpT
+         wgkyizyqx2zqp0jl+WxthhynKrS0xbCiLlmmSqzCvWuEnpZ8VvHiUgpuUts2sXqhaxPt
+         YNUkrTxOVaNPKOUKE6urzJOc3k0ll+jIJfICB3v1sdeGP2D0ToyS6j/wZo7Oug3GWE0U
+         wm4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687343889; x=1689935889;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5LLokvFJRr0ZS2/J+RyaPCEgCPP7mcKpknVtjbysX64=;
+        b=HIUW7MF1P04j5MEp5676zAi6XOPMJUxywE9Fgx1wEpzP6NHbySH8SGReeIqDljjjpH
+         yJFhfCQNcowruzbuW0U8WpePZZ0xkt3Ob2P45KiwyIU76JtDs1gXA54bGOGxavyWhQ4a
+         6h5xkbOnuHKVPTToQfkAzcSUcg8+BI+mSErlhGYQU+oXoyXtpPYVq8JssxXrBs/gtXhK
+         Aq8KSZ/xMQRhSEMZhrcaIm2v4yXkjODiPlHtcL5ONecgr6UoxVqZTaUA0NZDkXpZYcAQ
+         /7DaRwY81opS8ggg0Y4Q6WgWqd/uN+LrJKNmenbUTGBoPNs7OIGvCXSO+Vs/TUoKhthP
+         kM1A==
+X-Gm-Message-State: AC+VfDx0YbnRfc7uz09ZstkV45EFOB7tJ+f9+iqdK3LeJ61xFJ7jgod6
+        yFFTmpkGXkJUFCuLzoPyDSs8mC7+jp2djA==
+X-Google-Smtp-Source: ACHHUZ7ZWzBkH3e6JOfUWUjILkZGl3c2ywJZPQrzaeH/HIzRsnfvHwY8i0Va9FtFvoPo2n5ru41UGw==
+X-Received: by 2002:a17:906:4fd1:b0:97e:17cc:cc95 with SMTP id i17-20020a1709064fd100b0097e17cccc95mr11112015ejw.36.1687343889306;
+        Wed, 21 Jun 2023 03:38:09 -0700 (PDT)
+Received: from [127.0.1.1] ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id a6-20020a1709063a4600b00987e76827b2sm2873055ejf.53.2023.06.21.03.38.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 03:38:09 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+Subject: [PATCH 0/4] usb: misc: onboard_usb_hub: add support for Cypress
+ HX3 USB 3.0 family
+Date:   Wed, 21 Jun 2023 12:37:59 +0200
+Message-Id: <20230620-hx3-v1-0-3a649b34c85b@skidata.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1687343837; l=4896; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=87jZTsLox0Q+cISFx/4st2uh+EnbYxcjB3dk0hf51i4=; b=4QNxwZVKp7QycY3Ewc2GtTiWsHvK2ton7tYsHpd5ctrmGjBW2pJi8WyE8tmY2NR9aCm1Y4UDY SCXHJlsKW4nDj1jupHWwpd1E95nx8Lq8qsO5XNojnmGKF09J6snxYLG
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAfTkmQC/x2MWwqAIBAArxL7nWDag7pK9OFjy4WwUAohuntLn
+ zMM80DGRJhhqh5IeFOmIzI0dQUumLihIM8MSioteyVFKFo4O+rOtqv3Qw9cWpNR2GSiC9zGa99
+ ZnglXKv96Xt73Az3SbARqAAAA
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Benjamin Bara <benjamin.bara@skidata.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-objtool report the following warning:
+Hi!
 
-  arch/powerpc/kernel/ptrace/ptrace-view.o: warning: objtool:
-    gpr32_set_common+0x23c (.text+0x860): redundant UACCESS disable
+This series adds support for the Cypress HX3 USB 3.0 family (3/4). For
+now, it just contains the USB-related aspects and ignores the option to
+connect it via i2c (4/4).
 
-gpr32_set_common() conditionnaly opens and closes UACCESS based on
-whether kbuf point is NULL or not. This is wackelig.
+For a better overview, the current entries are first re-ordered by VID
+and then by PID (1/4).
 
-Split gpr32_set_common() in two fonctions, one for user one for
-kernel.
+As the HX3 family operates with two power supplies, multiple power
+supply support is implemented (2/4).
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Thanks & best regards,
+Benjamin
+
 ---
- arch/powerpc/kernel/ptrace/ptrace-view.c | 106 ++++++++++++++---------
- 1 file changed, 67 insertions(+), 39 deletions(-)
+Benjamin Bara (4):
+      usb: misc: onboard-hub: resort by VID and PID
+      usb: misc: onboard-hub: support multiple power supplies
+      usb: misc: onboard-hub: add support for Cypress HX3 USB 3.0 family
+      dt-bindings: usb: Add binding for Cypress HX3 USB 3.0 family
 
-diff --git a/arch/powerpc/kernel/ptrace/ptrace-view.c b/arch/powerpc/kernel/ptrace/ptrace-view.c
-index 3910cd7bb2d9..1b0c2a234a7e 100644
---- a/arch/powerpc/kernel/ptrace/ptrace-view.c
-+++ b/arch/powerpc/kernel/ptrace/ptrace-view.c
-@@ -716,73 +716,89 @@ int gpr32_get_common(struct task_struct *target,
- 	return membuf_zero(&to, (ELF_NGREG - PT_REGS_COUNT) * sizeof(u32));
- }
- 
--int gpr32_set_common(struct task_struct *target,
--		     const struct user_regset *regset,
--		     unsigned int pos, unsigned int count,
--		     const void *kbuf, const void __user *ubuf,
--		     unsigned long *regs)
-+int gpr32_set_common_kernel(struct task_struct *target,
-+			    const struct user_regset *regset,
-+			    unsigned int pos, unsigned int count,
-+			    const void *kbuf, unsigned long *regs)
- {
- 	const compat_ulong_t *k = kbuf;
-+
-+	pos /= sizeof(compat_ulong_t);
-+	count /= sizeof(compat_ulong_t);
-+
-+	for (; count > 0 && pos < PT_MSR; --count)
-+		regs[pos++] = *k++;
-+
-+	if (count > 0 && pos == PT_MSR) {
-+		set_user_msr(target, *k++);
-+		++pos;
-+		--count;
-+	}
-+
-+	for (; count > 0 && pos <= PT_MAX_PUT_REG; --count)
-+		regs[pos++] = *k++;
-+	for (; count > 0 && pos < PT_TRAP; --count, ++pos)
-+		++k;
-+
-+	if (count > 0 && pos == PT_TRAP) {
-+		set_user_trap(target, *k++);
-+		++pos;
-+		--count;
-+	}
-+
-+	kbuf = k;
-+	pos *= sizeof(compat_ulong_t);
-+	count *= sizeof(compat_ulong_t);
-+	user_regset_copyin_ignore(&pos, &count, &kbuf, NULL,
-+				  (PT_TRAP + 1) * sizeof(compat_ulong_t), -1);
-+	return 0;
-+}
-+
-+int gpr32_set_common_user(struct task_struct *target,
-+			  const struct user_regset *regset,
-+			  unsigned int pos, unsigned int count,
-+			  const void __user *ubuf, unsigned long *regs)
-+{
- 	const compat_ulong_t __user *u = ubuf;
- 	compat_ulong_t reg;
- 
--	if (!kbuf && !user_read_access_begin(u, count))
-+	if (!user_read_access_begin(u, count))
- 		return -EFAULT;
- 
- 	pos /= sizeof(reg);
- 	count /= sizeof(reg);
- 
--	if (kbuf)
--		for (; count > 0 && pos < PT_MSR; --count)
--			regs[pos++] = *k++;
--	else
--		for (; count > 0 && pos < PT_MSR; --count) {
--			unsafe_get_user(reg, u++, Efault);
--			regs[pos++] = reg;
--		}
--
-+	for (; count > 0 && pos < PT_MSR; --count) {
-+		unsafe_get_user(reg, u++, Efault);
-+		regs[pos++] = reg;
-+	}
- 
- 	if (count > 0 && pos == PT_MSR) {
--		if (kbuf)
--			reg = *k++;
--		else
--			unsafe_get_user(reg, u++, Efault);
-+		unsafe_get_user(reg, u++, Efault);
- 		set_user_msr(target, reg);
- 		++pos;
- 		--count;
- 	}
- 
--	if (kbuf) {
--		for (; count > 0 && pos <= PT_MAX_PUT_REG; --count)
--			regs[pos++] = *k++;
--		for (; count > 0 && pos < PT_TRAP; --count, ++pos)
--			++k;
--	} else {
--		for (; count > 0 && pos <= PT_MAX_PUT_REG; --count) {
--			unsafe_get_user(reg, u++, Efault);
--			regs[pos++] = reg;
--		}
--		for (; count > 0 && pos < PT_TRAP; --count, ++pos)
--			unsafe_get_user(reg, u++, Efault);
-+	for (; count > 0 && pos <= PT_MAX_PUT_REG; --count) {
-+		unsafe_get_user(reg, u++, Efault);
-+		regs[pos++] = reg;
- 	}
-+	for (; count > 0 && pos < PT_TRAP; --count, ++pos)
-+		unsafe_get_user(reg, u++, Efault);
- 
- 	if (count > 0 && pos == PT_TRAP) {
--		if (kbuf)
--			reg = *k++;
--		else
--			unsafe_get_user(reg, u++, Efault);
-+		unsafe_get_user(reg, u++, Efault);
- 		set_user_trap(target, reg);
- 		++pos;
- 		--count;
- 	}
--	if (!kbuf)
--		user_read_access_end();
-+	user_read_access_end();
- 
--	kbuf = k;
- 	ubuf = u;
- 	pos *= sizeof(reg);
- 	count *= sizeof(reg);
--	user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf,
-+	user_regset_copyin_ignore(&pos, &count, NULL, &ubuf,
- 				  (PT_TRAP + 1) * sizeof(reg), -1);
- 	return 0;
- 
-@@ -791,6 +807,18 @@ int gpr32_set_common(struct task_struct *target,
- 	return -EFAULT;
- }
- 
-+int gpr32_set_common(struct task_struct *target,
-+		     const struct user_regset *regset,
-+		     unsigned int pos, unsigned int count,
-+		     const void *kbuf, const void __user *ubuf,
-+		     unsigned long *regs)
-+{
-+	if (kbuf)
-+		return gpr32_set_common_kernel(target, regset, pos, count, kbuf, regs);
-+	else
-+		return gpr32_set_common_user(target, regset, pos, count, ubuf, regs);
-+}
-+
- static int gpr32_get(struct task_struct *target,
- 		     const struct user_regset *regset,
- 		     struct membuf to)
+ .../devicetree/bindings/usb/cypress,hx3.yaml       | 77 ++++++++++++++++++++++
+ drivers/usb/misc/onboard_usb_hub.c                 | 55 +++++++++++-----
+ drivers/usb/misc/onboard_usb_hub.h                 | 16 +++--
+ 3 files changed, 128 insertions(+), 20 deletions(-)
+---
+base-commit: 45a3e24f65e90a047bef86f927ebdc4c710edaa1
+change-id: 20230620-hx3-cb935b4fdd76
+
+Best regards,
 -- 
-2.40.1
+Benjamin Bara <benjamin.bara@skidata.com>
 
