@@ -2,163 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64719738066
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 026EB738104
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbjFUK27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 06:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
+        id S232003AbjFUK3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 06:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232003AbjFUK2u (ORCPT
+        with ESMTP id S231933AbjFUK3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 06:28:50 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1359170F
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 03:28:38 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9741caaf9d4so699432466b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 03:28:38 -0700 (PDT)
+        Wed, 21 Jun 2023 06:29:01 -0400
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE4D10D0;
+        Wed, 21 Jun 2023 03:28:54 -0700 (PDT)
+Received: by mail-vk1-xa2a.google.com with SMTP id 71dfb90a1353d-4715758343aso1755874e0c.1;
+        Wed, 21 Jun 2023 03:28:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687343317; x=1689935317;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EEz+PLO7wWGAm3nSxnfvXJdbjny/vsgxgeM8/QFXhTw=;
-        b=nwXSgD+j9vxn8vdVFzYjX5g68s41Ln+WQ6I8qVhIun1Pjh9jtH/y9lMZoc7qMjiIwY
-         PqG9JwWwc8imgvcj0W3BQ+jhHVLDVwwbBe5iqFUgxb01TquQYx3Z1m2zSByBylI5Z9/K
-         98TSaDdT78q0SB47m56T8ntCC+HuwwNdh/UP9HPnWIvEdiYhJwQh8NjzmH5YYf8vGJDN
-         DQWrKAWwGCLJnmeIJ3SBfMlI440A+czvQoZX0FK2BXQAXjSRM9OR9B5ax67CEtirUdma
-         ucOLGzStKD1uHzUZrA+lMRGIuiXLo1HvSM1Msh+HRvarK1RcKsO4Aw96p7HGQEdB7HYC
-         m4QQ==
+        d=gmail.com; s=20221208; t=1687343334; x=1689935334;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DePKvnQF58e7NgVJzJR+MJy8hVAWvCat6JztHMBEOEs=;
+        b=ihBu3CWYl2pzRaktU1TEgJkUaK+BVQGxBX87Ah/HVKVyDXAUuWZt5YMIm2EspeAHAI
+         sDpdejQfTXJEpdicBbtKAby3YJYccyIdFhXV6h1b6TUZBR11vZpMflmvrMSOvUBJMPNm
+         nQuhPANQ7kCQz0U1hy85clD5XTX0/3ajKf5OF1nGwgqrfjZxztrq9+nyQL3+0BYu1WBq
+         X5hvEqB2YkrWt2mDVo2S56Taf9YwkYOGXBZeq6xtd7myymnrxcvMPUKJcSndTs17Kr57
+         HRSY29mCIsYec5XGBlVxsJEeXOwptM1vAzVRWt53JkylEtKaaS95MTm/MC0HnZnog41x
+         B7Mg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687343317; x=1689935317;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EEz+PLO7wWGAm3nSxnfvXJdbjny/vsgxgeM8/QFXhTw=;
-        b=arzswlU6Dq8yJfc854sxhnt6yw6fwRqETR8guND4cFYRHLzy6UM/ALW6A1E4QKg02v
-         aJ0LDyVadEB3JKqOQiC6ZzrnIT/hxDSPRy072fSCXMLymfJRug3hkYk/13ybchdUkWlz
-         q+43pAX5NC0FfcsId6VfRWPGWM6/Ev0203cart32uS1PyD5rKjnlnMarlPh1meLjoXOt
-         WUUHad7/L6mMQlfwrACZGR91PsJEKeEFVb0f7fE6QjYKgGmQZ54XO8055B9nDETFU9OD
-         zab9VHwuXL730IpyvqpytiaL1Sq0qed9/D7NJQLHaJmNi3phmpey4D3bxFpZBtGzABef
-         Uhlw==
-X-Gm-Message-State: AC+VfDzGXex4OwPbMl+55VQoSipaxC6Q8LXcvrWPunZhg7KeQ6PMuVpK
-        SnxvbGPWK4y44HK4GgIY30yx/w==
-X-Google-Smtp-Source: ACHHUZ6f0/qixc74hYOnLdoHW64xh2szrTHHBWV4AlU08bNCkBFtr/Zv2b9LXR6ZCtDRtFHXDSQIzQ==
-X-Received: by 2002:a17:907:2d28:b0:973:940e:a01b with SMTP id gs40-20020a1709072d2800b00973940ea01bmr16068426ejc.60.1687343317128;
-        Wed, 21 Jun 2023 03:28:37 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id k21-20020a1709065fd500b009886aaeb722sm2915769ejv.137.2023.06.21.03.28.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 03:28:36 -0700 (PDT)
-Message-ID: <32557326-650c-192d-9a82-ca5451b01f70@linaro.org>
-Date:   Wed, 21 Jun 2023 12:28:34 +0200
+        d=1e100.net; s=20221208; t=1687343334; x=1689935334;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DePKvnQF58e7NgVJzJR+MJy8hVAWvCat6JztHMBEOEs=;
+        b=b7eGfjf4dJTgVjL+qSD0jaNRQIsx7g5Y3I7mO+hInLjVRG+CbZATDOIhuluyMzsA91
+         7ONpE2xSe7jnEIehZTMFi9DxTW2iJ2bmVP6uliL4Hx0a5+kOrL/ndTTJOp/+0rDireaG
+         6V2w85eaKGyD6TTMovdCovSqhmIlk8dgR+j72hkjGoMaPzXFPl+x2YivJhVX9TAF0LJ4
+         f2JmN1RiVNPDatC2L2+k9cxRltdsnpF1Z7RUI2jXMUosSrwBuStGEHrIcDOPAv9rdLqy
+         aMKkCjBXGf5VXnO1HWZtTX83yPygJs3qdawpj5v3e0BC9K+/LdwyFVLz/4Ux1DNmQdFn
+         AP1Q==
+X-Gm-Message-State: AC+VfDy/K5K79caa8XnVYro5UvrEA8v4GMF/rCOSXMCBixBRHWkYj0E3
+        aCNei9r0x3PUQ6s7IMFtgQeookLczu5Ern5aB0Q=
+X-Google-Smtp-Source: ACHHUZ6dOxjO5Wv1a3t72CZoI+4tK5Lj4vcRay90kKn5VJZZGCtSj6NPJvfAk28Jvpui/RquSimuKf+zBEV3o4N+kKo=
+X-Received: by 2002:a1f:418e:0:b0:471:24c3:6cd3 with SMTP id
+ o136-20020a1f418e000000b0047124c36cd3mr5588568vka.11.1687343333674; Wed, 21
+ Jun 2023 03:28:53 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 5/6] can: tcan4x5x: Add support for tcan4552/4553
-Content-Language: en-US
-To:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Vivek Yadav <vivek.2311@samsung.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Simon Horman <simon.horman@corigine.com>
-References: <20230621093103.3134655-1-msp@baylibre.com>
- <20230621093103.3134655-6-msp@baylibre.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230621093103.3134655-6-msp@baylibre.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230331105546.13607-1-victor.shih@genesyslogic.com.tw>
+ <20230331105546.13607-11-victor.shih@genesyslogic.com.tw> <08355847-0639-3ac9-23b6-6788f3ca5400@intel.com>
+In-Reply-To: <08355847-0639-3ac9-23b6-6788f3ca5400@intel.com>
+From:   Victor Shih <victorshihgli@gmail.com>
+Date:   Wed, 21 Jun 2023 18:28:41 +0800
+Message-ID: <CAK00qKDYjDC6k-9sYAEYdtYFsOx0HvKab6s03Zxp6=xFoRYHxQ@mail.gmail.com>
+Subject: Re: [PATCH V7 10/23] mmc: sdhci-uhs2: add reset function and
+ uhs2_mode function
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     ulf.hansson@linaro.org, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benchuanggli@gmail.com,
+        HL.Liu@genesyslogic.com.tw, Greg.tu@genesyslogic.com.tw,
+        takahiro.akashi@linaro.org, dlunev@chromium.org,
+        Victor Shih <victor.shih@genesyslogic.com.tw>,
+        Ben Chuang <ben.chuang@genesyslogic.com.tw>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2023 11:31, Markus Schneider-Pargmann wrote:
-> tcan4552 and tcan4553 do not have wake or state pins, so they are
-> currently not compatible with the generic driver. The generic driver
-> uses tcan4x5x_disable_state() and tcan4x5x_disable_wake() if the gpios
-> are not defined. These functions use register bits that are not
-> available in tcan4552/4553.
-> 
-> This patch adds support by introducing version information to reflect if
-> the chip has wake and state pins. Also the version is now checked.
-> 
-> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> ---
->  drivers/net/can/m_can/tcan4x5x-core.c | 128 +++++++++++++++++++++-----
->  1 file changed, 104 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
-> index fb9375fa20ec..756acd122075 100644
-> --- a/drivers/net/can/m_can/tcan4x5x-core.c
-> +++ b/drivers/net/can/m_can/tcan4x5x-core.c
-> @@ -7,6 +7,7 @@
->  #define TCAN4X5X_EXT_CLK_DEF 40000000
->  
->  #define TCAN4X5X_DEV_ID1 0x00
-> +#define TCAN4X5X_DEV_ID1_TCAN 0x4e414354 /* ASCII TCAN */
->  #define TCAN4X5X_DEV_ID2 0x04
->  #define TCAN4X5X_REV 0x08
->  #define TCAN4X5X_STATUS 0x0C
-> @@ -103,6 +104,13 @@
->  #define TCAN4X5X_WD_3_S_TIMER BIT(29)
->  #define TCAN4X5X_WD_6_S_TIMER (BIT(28) | BIT(29))
->  
-> +struct tcan4x5x_version_info {
-> +	u32 id2_register;
-> +
-> +	bool has_wake_pin;
-> +	bool has_state_pin;
-> +};
-> +
->  static inline struct tcan4x5x_priv *cdev_to_priv(struct m_can_classdev *cdev)
->  {
->  	return container_of(cdev, struct tcan4x5x_priv, cdev);
-> @@ -254,18 +262,68 @@ static int tcan4x5x_disable_state(struct m_can_classdev *cdev)
->  				  TCAN4X5X_DISABLE_INH_MSK, 0x01);
->  }
->  
-> -static int tcan4x5x_get_gpios(struct m_can_classdev *cdev)
-> +static const struct tcan4x5x_version_info tcan4x5x_generic;
-> +static const struct of_device_id tcan4x5x_of_match[];
-> +
-> +static const struct tcan4x5x_version_info
-> +*tcan4x5x_find_version_info(struct tcan4x5x_priv *priv, u32 id2_value)
-> +{
-> +	for (int i = 0; tcan4x5x_of_match[i].data; ++i) {
-> +		const struct tcan4x5x_version_info *vinfo =
-> +			tcan4x5x_of_match[i].data;
-> +		if (!vinfo->id2_register || id2_value == vinfo->id2_register) {
-> +			dev_warn(&priv->spi->dev, "TCAN device is %s, please use it in DT\n",
-> +				 tcan4x5x_of_match[i].compatible);
-> +			return vinfo;
-> +		}
-> +	}
-> +
-> +	return &tcan4x5x_generic;
+Hi, Adrian
 
-I don't understand what do you want to achieve here. Kernel job is not
-to validate DTB, so if DTB says you have 4552, there is no need to
-double check. On the other hand, you have Id register so entire idea of
-custom compatibles can be dropped and instead you should detect the
-variant based on the ID.
+On Wed, Apr 12, 2023 at 9:10=E2=80=AFPM Adrian Hunter <adrian.hunter@intel.=
+com> wrote:
+>
+> On 31/03/23 13:55, Victor Shih wrote:
+> > Sdhci_uhs2_reset() does a UHS-II specific reset operation.
+> >
+> > Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+> > Signed-off-by: AKASHI Takahiro <takahiro.akashi@linaro.org>
+> > Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
+> > ---
+> >  drivers/mmc/host/sdhci-uhs2.c | 46 +++++++++++++++++++++++++++++++++++
+> >  drivers/mmc/host/sdhci-uhs2.h |  2 ++
+> >  2 files changed, 48 insertions(+)
+> >
+> > diff --git a/drivers/mmc/host/sdhci-uhs2.c b/drivers/mmc/host/sdhci-uhs=
+2.c
+> > index 524d7cb6f2fd..67621eaabafc 100644
+> > --- a/drivers/mmc/host/sdhci-uhs2.c
+> > +++ b/drivers/mmc/host/sdhci-uhs2.c
+> > @@ -10,7 +10,9 @@
+> >   *  Author: AKASHI Takahiro <takahiro.akashi@linaro.org>
+> >   */
+> >
+> > +#include <linux/delay.h>
+> >  #include <linux/module.h>
+> > +#include <linux/iopoll.h>
+> >
+> >  #include "sdhci.h"
+> >  #include "sdhci-uhs2.h"
+> > @@ -49,6 +51,50 @@ void sdhci_uhs2_dump_regs(struct sdhci_host *host)
+> >  }
+> >  EXPORT_SYMBOL_GPL(sdhci_uhs2_dump_regs);
+> >
+> > +/*********************************************************************=
+********\
+> > + *                                                                    =
+       *
+> > + * Low level functions                                                =
+       *
+> > + *                                                                    =
+       *
+> > +\*********************************************************************=
+********/
+> > +
+> > +bool sdhci_uhs2_mode(struct sdhci_host *host)
+> > +{
+> > +     return host->mmc->flags & MMC_UHS2_SUPPORT;
+> > +}
+> > +
+> > +/**
+> > + * sdhci_uhs2_reset - invoke SW reset
+> > + * @host: SDHCI host
+> > + * @mask: Control mask
+> > + *
+> > + * Invoke SW reset, depending on a bit in @mask and wait for completio=
+n.
+> > + */
+> > +void sdhci_uhs2_reset(struct sdhci_host *host, u16 mask)
+> > +{
+> > +     unsigned long timeout;
+> > +     u32 val;
+> > +
+> > +     sdhci_writew(host, mask, SDHCI_UHS2_SW_RESET);
+> > +
+> > +     if (mask & SDHCI_UHS2_SW_RESET_FULL)
+> > +             host->clock =3D 0;
+> > +
+> > +     /* Wait max 100 ms */
+> > +     timeout =3D 100000;
+> > +
+> > +     /* hw clears the bit when it's done */
+> > +     if (read_poll_timeout_atomic(sdhci_readw, val, !(val & mask), 10,
+> > +                                  timeout, true, host, SDHCI_UHS2_SW_R=
+ESET)) {
+> > +             pr_err("%s: %s: Reset 0x%x never completed.\n",
+> > +                                            __func__, mmc_hostname(hos=
+t->mmc), (int)mask);
+>
+> CHECK: Alignment should match open parenthesis
+> #70: FILE: drivers/mmc/host/sdhci-uhs2.c:89:
+> +               pr_err("%s: %s: Reset 0x%x never completed.\n",
+> +                                              __func__, mmc_hostname(hos=
+t->mmc), (int)mask);
+>
 
-Best regards,
-Krzysztof
+I will fix it in the V8 version.
 
+> > +             pr_err("%s: clean reset bit\n",
+> > +                                            mmc_hostname(host->mmc));
+>
+> Line wrap not needed
+>
+
+I will update it to the V8 version.
+
+> > +             sdhci_writeb(host, 0, SDHCI_UHS2_SW_RESET);
+> > +             return;
+> > +     }
+> > +}
+> > +EXPORT_SYMBOL_GPL(sdhci_uhs2_reset);
+> > +
+> >  /*********************************************************************=
+********\
+> >   *                                                                    =
+       *
+> >   * Driver init/exit                                                   =
+       *
+> > diff --git a/drivers/mmc/host/sdhci-uhs2.h b/drivers/mmc/host/sdhci-uhs=
+2.h
+> > index e948119348da..6834893eee85 100644
+> > --- a/drivers/mmc/host/sdhci-uhs2.h
+> > +++ b/drivers/mmc/host/sdhci-uhs2.h
+> > @@ -178,5 +178,7 @@
+> >  struct sdhci_host;
+> >
+> >  void sdhci_uhs2_dump_regs(struct sdhci_host *host);
+> > +bool sdhci_uhs2_mode(struct sdhci_host *host);
+> > +void sdhci_uhs2_reset(struct sdhci_host *host, u16 mask);
+> >
+> >  #endif /* __SDHCI_UHS2_H */
+>
+
+Thanks, Victor Shih
