@@ -2,113 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 119967384C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 020CC7384CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:20:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbjFUNUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50748 "EHLO
+        id S232492AbjFUNUa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 09:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232559AbjFUNUD (ORCPT
+        with ESMTP id S232482AbjFUNUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:20:03 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C56E57;
-        Wed, 21 Jun 2023 06:20:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687353601; x=1718889601;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gXKkCfw0L0vm2oisoVKbq0dOluIkKgZ/dLrFgppTtNQ=;
-  b=UTj8qhqAmKUHpYfgEaPbDJLWVAVf+jkrsxT1h2tS8FZNh5fXcS6vbZE1
-   YXKLhDi428GbGf1uzGoZT640M6PogHMwv589DZQrLa+x8xtvJP5NL8gTy
-   yFmzPK9AJjXyvkn7a8Li7NU0nlwBRYW+6hkfUbhXKoLRbq3J57O3jcatb
-   bq2B2kdtmccn7uxEPBagWYwquaHokhFv/OVl40XmsZ9jG2v28u8L9XFjD
-   BTR2UZDIA6RCv0GRaB4LtlOZ5X9Ka/pUBtXgl8m4PNYTdp102wfnHwkky
-   K02nXp/mR5yixPmBLQ9hBLL8MhZA6v1M/xmxOXNL4h01Snnm1H8twVD5x
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="349900487"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="349900487"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 06:20:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="804378806"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="804378806"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Jun 2023 06:19:59 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qBxkb-005VOb-1r;
-        Wed, 21 Jun 2023 16:19:57 +0300
-Date:   Wed, 21 Jun 2023 16:19:57 +0300
-From:   "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>
-To:     Andi Shyti <andi.shyti@kernel.org>
-Cc:     Michael Brunner <michael.brunner@kontron.com>,
-        "acpica-devel@lists.linuxfoundation.org" 
-        <acpica-devel@lists.linuxfoundation.org>,
-        "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        "robert.moore@intel.com" <robert.moore@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "lenb@kernel.org" <lenb@kernel.org>
-Subject: Re: [PATCH v1 1/2] ACPI: platform: Ignore SMB0001 only when it has
- resources
-Message-ID: <ZJL4/X1Z9gCdESxp@smile.fi.intel.com>
-References: <20230620163534.1042-1-andriy.shevchenko@linux.intel.com>
- <b9af5a068cc0b5e785c8e2ddfc70d811fd5929cd.camel@kontron.com>
- <20230621093056.5qfa3kn7ldgwsyeg@intel.intel>
+        Wed, 21 Jun 2023 09:20:25 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3B81998
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:20:21 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1qBxko-0005HW-8D; Wed, 21 Jun 2023 15:20:10 +0200
+Message-ID: <45a52563d8ebc7e8715ef363d26125b7757b50ab.camel@pengutronix.de>
+Subject: Re: [PATCH] drm: etnaviv: Replace of_platform.h with explicit
+ includes
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Rob Herring <robh@kernel.org>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     etnaviv@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 21 Jun 2023 15:20:08 +0200
+In-Reply-To: <CAL_JsqLeAvEVa8h3qywqESkqGG1O+9QWqA7fc1EJeDGkmAV7Fw@mail.gmail.com>
+References: <20230410232647.1561308-1-robh@kernel.org>
+         <CAL_JsqLeAvEVa8h3qywqESkqGG1O+9QWqA7fc1EJeDGkmAV7Fw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621093056.5qfa3kn7ldgwsyeg@intel.intel>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 11:30:56AM +0200, Andi Shyti wrote:
-> On Wed, Jun 21, 2023 at 07:46:42AM +0000, Michael Brunner wrote:
-> > On Tue, 2023-06-20 at 19:35 +0300, Andy Shevchenko wrote:
-> > > After switchind i2c-scmi driver to be a plaform one it stopped
-> > > being enumerated on number of Kontron platformsm, because it's
-> > > listed in the forbidden_id_list.
-> > > 
-> > > To resolve the situation, split the list to generic one and
-> > > another that holds devices that has to be skiped if and only if
-> > > they have bogus resources attached (_CRS method returns some).
-> > > 
-> > > Fixes: 03d4287add6e ("i2c: scmi: Convert to be a platform driver")
-> > > Closes: https://lore.kernel.org/r/60c1756765b9a3f1eab0dcbd84f59f00fe1caf48.camel@kontron.com
-> > > Reported-by: Michael Brunner <michael.brunner@kontron.com>
-> > > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Am Freitag, dem 09.06.2023 um 14:17 -0600 schrieb Rob Herring:
+> On Mon, Apr 10, 2023 at 5:26 PM Rob Herring <robh@kernel.org> wrote:
 > > 
-> > Works as expected - the SMB0001 device shows up as platform device and
-> > the i2c-scmi driver is enumerated again on the affected boards.
-> > Thanks a lot!
+> > Etnaviv doesn't use anything from of_platform.h, but depends on
+> > of.h, of_device.h, and platform_device.h which are all implicitly
+> > included, but that is going to be removed soon.
+> > 
+> > Signed-off-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  drivers/gpu/drm/etnaviv/etnaviv_drv.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> is this a "Tested-by: Michael Brunner <michael.brunner@kontron.com>" :)
+> Ping!
 
-Michael, indeed, it would be nice to have a formal tag.
-After that I will send a v2 with tags and fixed typos
-as Andi noticed (thank you, Andi!).
+Thanks, applied to etnaviv/next.
 
+Regards,
+Lucas
 
--- 
-With Best Regards,
-Andy Shevchenko
-
+> 
+> > 
+> > diff --git a/drivers/gpu/drm/etnaviv/etnaviv_drv.c b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> > index 44ca803237a5..c68e83ed5a23 100644
+> > --- a/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> > +++ b/drivers/gpu/drm/etnaviv/etnaviv_drv.c
+> > @@ -6,7 +6,9 @@
+> >  #include <linux/component.h>
+> >  #include <linux/dma-mapping.h>
+> >  #include <linux/module.h>
+> > -#include <linux/of_platform.h>
+> > +#include <linux/of.h>
+> > +#include <linux/of_device.h>
+> > +#include <linux/platform_device.h>
+> >  #include <linux/uaccess.h>
+> > 
+> >  #include <drm/drm_debugfs.h>
+> > --
+> > 2.39.2
+> > 
 
