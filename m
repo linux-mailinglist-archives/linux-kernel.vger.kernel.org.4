@@ -2,178 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9BC7388CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1D5C7388CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbjFUPWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
+        id S233322AbjFUPWS convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 11:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233349AbjFUPVq (ORCPT
+        with ESMTP id S233352AbjFUPVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:21:46 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFCE1212F;
-        Wed, 21 Jun 2023 08:19:54 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b46d4e1b0aso63373751fa.2;
-        Wed, 21 Jun 2023 08:19:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687360793; x=1689952793;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YFy+7jY3Q/B3fIYTXq5qOshlUqCtAeH0fFjxezMJ7mU=;
-        b=GOBaPld/+7/uckPmlyvUEOrUHbnzb/xeQVb9ttphaPlOVx7SyWpw3q1EZ9lqCOrFr1
-         f8VlC75jrLsv+1oSumRkFGEobcO2HjohE6wMZ/Lkv73OS2pSAfCwpH0uaQ4sE0JSC+Db
-         A14lHcRRcAU/PcHq9jab/BUjltkYhk9zTXsbt4bD2qH/PkTs4Jdwc2JxFcE1SymsO7qs
-         peyVC9iKCNhEfaCkgylo0eYlRMhRaYETf3cPqeXd5Bcjfub2Dq7JSFQXnM5nIrIqv38f
-         Hz8O6R7OtyG1OrGo3a+TncT2DvoDQcNUVfteo64tKc82njjnV2xrFc95C0DCJEDf+UhT
-         RJfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687360793; x=1689952793;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YFy+7jY3Q/B3fIYTXq5qOshlUqCtAeH0fFjxezMJ7mU=;
-        b=ZcjmTmzLTeH+JHCtK4DwggY1k1fl1+o6RhPe/68sSSdcKN1/aa/PPjFtPNBAB4w7bN
-         DCyeEL7GK7tQ0VR391LBX/lLE5/fax0algd4wRPlpRcc8s8Xwex+TJ7z/qm32/gzhoct
-         G+cbezmTkx2fgBcia0Cupp58cwXCBZn0plUYa61b7Kvt9P99XchL/7goBa6qHvzxbc2q
-         b+EB+Dt4CbQKdWf2KrHEhY8v4fuEn0Afo8rFofPN3XVLdmYrL3KADzCF+lg+J6G+LR0h
-         0fWGv/gB2+l0Jt7U/2F8qYMj9UqawcNwdn2ztTYoHtKtYVAB6nPMs9wY2uIbzXwHmbaY
-         1vEg==
-X-Gm-Message-State: AC+VfDx46UPcP271zzroK5ty7XfHqPagfN8+MglklxdCEWE4VDkOZRMw
-        Z0yabaAPWIo9l+qt60GQIWaaFJ1E+t7D85M6l54=
-X-Google-Smtp-Source: ACHHUZ7S366xJDGv2BenqM0RSR5nG3v/w66oTeggW0Zt6a61/Wjn/ZeU0yVAL/ODGB0B6G6jG4VWc+DojP3NyAQ/DmI=
-X-Received: by 2002:a2e:80c9:0:b0:2b1:c039:e977 with SMTP id
- r9-20020a2e80c9000000b002b1c039e977mr9673072ljg.16.1687360792618; Wed, 21 Jun
- 2023 08:19:52 -0700 (PDT)
-MIME-Version: 1.0
-References: <CA+G9fYuifLivwhCh33kedtpU=6zUpTQ_uSkESyzdRKYp8WbTFQ@mail.gmail.com>
- <ZJLzsWsIPD57pDgc@FVFF77S0Q05N> <CA+G9fYvwriD8X+kmDx35PavSv-youSUmYTuYTfQ4oBWnZzVRUQ@mail.gmail.com>
- <CANk7y0imD3tK1Jox_V_f1vfzFi2tPhUzGOA_mLLkYy-VDHdncg@mail.gmail.com> <CA+G9fYuK4FWaLizcuVyW3ApR6fcgjMccYp3YxdAm61BOedXxzQ@mail.gmail.com>
-In-Reply-To: <CA+G9fYuK4FWaLizcuVyW3ApR6fcgjMccYp3YxdAm61BOedXxzQ@mail.gmail.com>
-From:   Puranjay Mohan <puranjay12@gmail.com>
-Date:   Wed, 21 Jun 2023 17:19:41 +0200
-Message-ID: <CANk7y0g9Qhe4H+WTbrsEUa_XXn_GkXWDOE4kP1icbxfJyri8XQ@mail.gmail.com>
-Subject: Re: next: Rpi4: Unexpected kernel BRK exception at EL1
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Song Liu <song@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-rpi-kernel@lists.infradead.org,
-        Netdev <netdev@vger.kernel.org>, lkft-triage@lists.linaro.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        bpf <bpf@vger.kernel.org>
+        Wed, 21 Jun 2023 11:21:53 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31187268F
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:20:21 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1qBzcv-0007yD-MP; Wed, 21 Jun 2023 17:20:09 +0200
+Message-ID: <6ef512179a4cc9ce24890e5ed50c6fabd86a18c1.camel@pengutronix.de>
+Subject: Re: [PATCH v10 03/11] drm/etnaviv: Add dedicated functions to
+ create and destroy platform device
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Sui Jingfeng <suijingfeng@loongson.cn>,
+        Sui Jingfeng <18949883232@163.com>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        etnaviv@lists.freedesktop.org
+Date:   Wed, 21 Jun 2023 17:20:04 +0200
+In-Reply-To: <ab17a1e6-c621-9a92-73fc-8b762fd0800e@loongson.cn>
+References: <20230620094716.2231414-1-18949883232@163.com>
+         <20230620094716.2231414-4-18949883232@163.com>
+         <0daa7182d6600a24988d1c81cf8fe3c0c9487f52.camel@pengutronix.de>
+         <1c7596fd-7e63-6719-2574-7d7820687832@loongson.cn>
+         <6d287bbb1733814009dfeb7d48f08cb6f44dc56c.camel@pengutronix.de>
+         <30d80802-2d9d-2816-1a02-240145f6dd3a@loongson.cn>
+         <0f1095ef333da7ea103486a1121ca9038815e57c.camel@pengutronix.de>
+         <ab17a1e6-c621-9a92-73fc-8b762fd0800e@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Am Mittwoch, dem 21.06.2023 um 22:35 +0800 schrieb Sui Jingfeng:
+> Hi,
+> 
+> On 2023/6/21 22:00, Lucas Stach wrote:
+> > Am Mittwoch, dem 21.06.2023 um 21:31 +0800 schrieb Sui Jingfeng:
+> > > On 2023/6/21 18:23, Lucas Stach wrote:
+> > > > > While back to the question you ask, I want etnaviv_create_platform_device() to be generic,
+> > > > > 
+> > > > > can be used by multiple place for multiple purpose.
+> > > > > 
+> > > > > I have successfully copy this to a another drm driver by simply renaming.
+> > > > > 
+> > > > > The body of the function itself does not need to change.
+> > > > But it isn't shared,
+> > > This can be shared for drm/etnaviv in the future,
+> > > 
+> > > currently, we just need an opportunity to use this function.
+> > > 
+> > I'm not convinced, yet.
+> > 
+> > > I want to create a dummy platform device,
+> > > 
+> > > let this dummy platform be bound to the single PCI GPU master.
+> > > 
+> > > 
+> > > etnaviv_create_platform_device("dummy", &dummy_device);
+> > > 
+> > > 
+> > > 1) To verify the component code path on PCI case.
+> > > 
+> > My favorite option would be to just always use the component path even
+> > when the GPU is on a PCI device to keep both paths mostly aligned. One
+> > could easily image both a 3D and a 2D core being made available though
+> > the same PCI device.
+> 
+> Component is for something that is possible not available. (or something 
+> is optional)
+> 
+> Yes it provided flexibly, but don't forget, it rely on the DT.
 
-On Wed, Jun 21, 2023 at 4:41=E2=80=AFPM Naresh Kamboju
-<naresh.kamboju@linaro.org> wrote:
->
-> On Wed, 21 Jun 2023 at 19:46, Puranjay Mohan <puranjay12@gmail.com> wrote=
-:
-> >
-> > Hi,
-> >
-> > On Wed, Jun 21, 2023 at 3:39=E2=80=AFPM Naresh Kamboju
-> > <naresh.kamboju@linaro.org> wrote:
-> > >
-> > > On Wed, 21 Jun 2023 at 18:27, Mark Rutland <mark.rutland@arm.com> wro=
-te:
-> > > >
-> > > > On Wed, Jun 21, 2023 at 06:06:51PM +0530, Naresh Kamboju wrote:
-> > > > > Following boot warnings and crashes noticed on arm64 Rpi4 device =
-running
-> > > > > Linux next-20230621 kernel.
-> > > > >
-> > > > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > > > >
-> > > > > boot log:
-> > > > >
-> > > > > [   22.331748] Kernel text patching generated an invalid instruct=
-ion
-> > > > > at 0xffff8000835d6580!
-> > > > > [   22.340579] Unexpected kernel BRK exception at EL1
-> > > > > [   22.346141] Internal error: BRK handler: 00000000f2000100 [#1]=
- PREEMPT SMP
-> > > >
-> > > > This indicates execution of AARCH64_BREAK_FAULT.
-> > >
-> > > I see kernel panic with kselftest merge configs on Juno-r2 and Rpi4.
-> >
-> > Is there a way to reproduce this setup on Qemu?
->
-> Not reproducible on Qemu-arm64.
-> I see only on arm64 devices Juno-r2 and Rpi4.
->
-> >
-> > I am able to build the linux-next kernel with the config given below.
-> > But the bug doesn't reproduce in Qemu with debian rootfs.
-> >
-> > I guess I would need the Rootfs that is being used here to reproduce it=
-.
-> > Can you point me to the rootfs for this?
->
-> Here is the link for rootfs - OE one.
-> https://storage.tuxsuite.com/public/linaro/lkft/oebuilds/2RVA7dHPf73agY0g=
-DJD6XEdBQBI/images/juno/
+The component framework itself doesn't rely on DT in any way. By
+providing a appropriate match function you can make it work with any
+kind of device. In fact etnaviv supports platform devices instantiated
+via board code today. They don't need to come from DT.
 
-I tested this rootfs and couldn't reproduce on Qemu. Now, I will try
-to use my raspberry pi and try to reproduce this.
+If we could make the PCI stuff work the same way, that would be my
+preferred option.
 
-Thanks.
+> 
+> 
+> But for the PCIe device, it always the case that all of the hardware is 
+> available at the same time
+> 
+> when the device driver(kernel module) is loaded.
+That isn't the issue solved by the component framework. On the existing
+SoCs all the hardware is available when the driver is probed. The
+component framework just makes sure that we only expose the DRM device
+after all GPU cores that should be managed by a single DRM device
+instance are probed.
 
->
-> >
-> > Thanks,
-> > Puranjay
-> >
-> > > metadata:
-> > >   git_ref: master
-> > >   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-> > >   git_sha: 15e71592dbae49a674429c618a10401d7f992ac3
-> > >   git_describe: next-20230621
-> > >   kernel_version: 6.4.0-rc7
-> > >   kernel-config:
-> > >     https://storage.tuxsuite.com/public/linaro/lkft/builds/2RVAA4lj35=
-ia3YDkqaoV6ztyqdW/config
-> > >   artifact-location:
-> > >     https://storage.tuxsuite.com/public/linaro/lkft/builds/2RVAA4lj35=
-ia3YDkqaoV6ztyqdW/
-> > >   toolchain: gcc-11
-> > >   build_name: gcc-11-lkftconfig-kselftest
-> > >
-> > >
-> > > --
-> > > Linaro LKFT
-> > > https://lkft.linaro.org
->
-> - Naresh
+One could easily image a PCI device that containing a 2D and a 3D
+Vivante GPU that should be made available through a single DRM device.
+In that case you'll also need to use the component framework.
 
+> 
+> 
+> > > 2) Possibly for create a device for some other tiny hardware logic
+> > > come with the platform
+> > > 
+> > Do you have something in mind here? Until now I assumed that only the
+> > GPU core is behind the PCI abstraction. Is there something else sharing
+> > the MMIO space?
+> 
+> A display controller, HDMI phy, vga encoder etc
+> 
+> 
+> I have a discrete PCIe GPU card from another vendor,
+> 
+> It integrated display controller and vivante GPU and unknown VPUs.
+> 
+> All of the  hardware block mentioned above sharing the MMIO space.
+> 
+> There are available on the same time when you mount this discrete PCIe 
+> GPU card on the mother board
+> 
+But they surely should not all be made available through the etnaviv
+driver. Etnaviv deals with the Vivante GPUs. If you have a PCI device
+with multiple IP cores behind the shared MMIO space you should have a
+PCI driver instantiating platform devices so the respective drivers for
+those IP cores can bind to the platform device. Etnaviv is not that
+driver.
 
+Regards,
+Lucas
 
---
-Thanks and Regards
+> > 
+> > Regards,
+> > Lucas
+> > 
+> > > 3) Revival component_compare_dev_name() function.
+> > > 
+> > > > in this compilation unit this function is specific
+> > > > to the etnaviv driver and I don't see why we shouldn't have etnaviv
+> > > > specifics in there if it makes the code of this driver easier to
+> > > > follow.
+> 
 
-Yours Truly,
-
-Puranjay Mohan
