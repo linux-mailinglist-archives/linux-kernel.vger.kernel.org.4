@@ -2,259 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45BE27384EC
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B9D7384F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:27:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbjFUNZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54358 "EHLO
+        id S232549AbjFUN1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232535AbjFUNYu (ORCPT
+        with ESMTP id S232537AbjFUN1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:24:50 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4792A19AB
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:24:47 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f9b9863bfdso104505e9.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:24:47 -0700 (PDT)
+        Wed, 21 Jun 2023 09:27:38 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D74C198D
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:27:37 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51bdca52424so767180a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:27:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687353885; x=1689945885;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N6OJlvihTdu/SdNfuqNeAnU4YSYkZQL9ZXTp7Fb/ZPI=;
-        b=MWwh+xsH+RhAc4rloZAcukZaevHxJ0XrZj7zoSmeqaEFu7F4Q9r4Jc2CUsTGPkHP5u
-         /SGw7u0/eXSaxA6sXam0vyvjg8zN2GFQdpVqkWZb59LnXxEQ+awxRzaDJtSZkFsjBAHc
-         a+gWwQ5lM/PqXQK7D0POQh4LZ57r/s209FXcUJJniolflfJ3aTWiOkd4tjRyCxfHMa9v
-         c2a+kGNtFWKtxjV0Jx0g3zUL8nZdtlF/8KuSUujQ8lTBQrTHkwJCtjmwbcVlTpl494L7
-         CLm5Asn0vcpUJpryyMwYBdPrfY/DoGWkyTK8WYKUmFOSMyaNpNvmQB4O7XUSlh0AVCnI
-         kjNA==
+        d=linaro.org; s=google; t=1687354055; x=1689946055;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=967DLvqkZucBWYuQQC7ZvvfSLYp3m3iK1g1tSsAsumo=;
+        b=b0O4xEb9ZgvBDfAGPENTwzAsvbIfPfAXPyywF1IvFaK7E4iAFAOsT2rVj59NMabncB
+         RYlmwz8b04PN+WED8HMqotadj13ih5Ho5ynizGWLKuMo3klYbYiIEwprcLLKmDi2jA7F
+         qZlO8XOO/CSBDsQeIni4i23JZIDiLXzH+kvPykMnj9g9p8NaGhUBUN2RL0LYRoHvQWi6
+         MtRaq3EgXDLB3cj+OWIYtHp2TGvwHxrgq/6TStVM3mfuY7Cd0Krb1G7OXkdLvCSel85k
+         NihN7lEvlw0uh3LJTly0wKnOWFudJ7N9hv07OJ+TnIeN4/0VWSoCbSC7OFqUSCu6Nh1E
+         hl/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687353885; x=1689945885;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N6OJlvihTdu/SdNfuqNeAnU4YSYkZQL9ZXTp7Fb/ZPI=;
-        b=lYE41TA0owjyH1l06B7TjlW5mcGmowNUuMCfGCjNdCrs/froYFT4r64KFNz+Pta7GZ
-         5MD/4O1JPzsmdqz6sJx/SbTyPqraK0IjWKvPnSeOnViUcyU/j99C5oaxiFwqGGd1gfy4
-         PPvNYWQGem1RXmvfaobkkB78/6KkJgpsEqHnMGkm0FX19A7g2xE7al0pnabv31qpSDY3
-         l4hPc91WxpFDBe3wK4TOunCSvvbS1ycfdPpyOTKamcQ0Y7QjpnH2gbxeu7GDvmNcRGc/
-         GDLfxBw6MyhnyClvIHvQyGSjW/I4xBtdvaERonWWvBPOAxrcRrxK4Mm+sYqaglt2RaH6
-         t9YQ==
-X-Gm-Message-State: AC+VfDwocsDLgjc2lEt+YEpJwDXQP5m3LX0rVfSTODGZ3Gm5PL7ArPtR
-        147+ZM4uMxLd6z6WxUbF8O0sj78Jd6BTi6szTp36hQ==
-X-Google-Smtp-Source: ACHHUZ7cCuOESPo/cKbciN4iRBmfV03uDZkex3iULJ2eeXruwtKzJY+NvZby1DF9X/fEjXmoFxCZGYsMSXoaU68CHfs=
-X-Received: by 2002:a05:600c:1d9f:b0:3f7:ba55:d038 with SMTP id
- p31-20020a05600c1d9f00b003f7ba55d038mr619210wms.6.1687353885487; Wed, 21 Jun
- 2023 06:24:45 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687354055; x=1689946055;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=967DLvqkZucBWYuQQC7ZvvfSLYp3m3iK1g1tSsAsumo=;
+        b=Mpa3O0aqFkq8vDgAC9qH9niOTjKkX/4QCy3tBBwC85E9mcwhpToOGuvaHjjFD5tzbs
+         XcI5SB5N8vOZJrj2+Wyshw+CS5GXZhYS96+Synds+XqRiCQF3+FiGJjQ5ahvSTYiVNjo
+         K7DpBDzo9Z642PWgZ0H0iUL+Jg/u80OVv2RMAb851HKgluq0mNtGELMJ23xww1md/sKs
+         oxDdsfA4JOUQCKrK0Dufayikca3rk7ChKatO73LzxcsCLe3NwpcYes9SHTh2ySzYjblX
+         DGp+Mgt9ev8EfWRX/xTjxdgAZFHVt5AOWUu0netE4Fyu78GmaFOoFV3fM2DQPhDMiCZH
+         b4rw==
+X-Gm-Message-State: AC+VfDwrEv4R1cJoBsJeWqj+2LMxtH+2AwVt4u810szDfPyWBhwmWCmL
+        w0M7jKZwpZFAwLnKxnJZPO6Pyg==
+X-Google-Smtp-Source: ACHHUZ79KyX8mAuWiGAGoUg3ClcvXNY78P0aSXypVeZrGzKCSfDscpmx6uPTblSOyPq98SOb0CnADQ==
+X-Received: by 2002:a05:6402:6d8:b0:514:9e2c:90c6 with SMTP id n24-20020a05640206d800b005149e2c90c6mr10332144edy.38.1687354055724;
+        Wed, 21 Jun 2023 06:27:35 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id w1-20020aa7da41000000b005163c11700csm2621598eds.74.2023.06.21.06.27.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jun 2023 06:27:35 -0700 (PDT)
+Message-ID: <dfcc114f-56f1-e4ab-7b36-f9a4ce3e8c8c@linaro.org>
+Date:   Wed, 21 Jun 2023 15:27:33 +0200
 MIME-Version: 1.0
-References: <20230613102905.2808371-1-usama.anjum@collabora.com>
- <20230613102905.2808371-3-usama.anjum@collabora.com> <CABb0KFHWnbrf2ythvO0OKsd1ZS9b4D9BNzwBCbn6g9OX4n6ZOg@mail.gmail.com>
- <0db01d90-09d6-08a4-bbb8-70670d3baa94@collabora.com> <CABb0KFEn5TU480A=YiN82nLRtGyKMABi8cZjuiGUU_jFZZo+8g@mail.gmail.com>
- <34203acf-7270-7ade-a60e-ae0f729dcf70@collabora.com> <CABb0KFFaXgJD99pWfx3MC+qrq5jUaPis_kZo6U8yL_8xdp0GJA@mail.gmail.com>
- <96b7cc00-d213-ad7d-1b48-b27f75b04d22@collabora.com> <CABb0KFEy_mRaT86TEOQ-BoTe_XOVw3Kp5VdzOfEEaiZJuT754g@mail.gmail.com>
- <39bc8212-9ee8-dbc1-d468-f6be438b683b@collabora.com> <CABb0KFHx2hV9M7oinCdKnagRmcrGHagH9eAO3TkVTQH+o9x=5A@mail.gmail.com>
- <2e1b80f1-0385-0674-ae5f-9703a6ef975d@collabora.com> <CABb0KFGOx69Sz6w9JenYUwSTFmW-Cmcns3X-oDyWsC+H57vkvg@mail.gmail.com>
- <444ed144-a2ee-cb16-880a-128383c83a08@collabora.com> <CABb0KFEqJasf9nM3wL1oaK9ObcYzwzjtrRBcWRc3wGqdZRUpXg@mail.gmail.com>
- <9b6d55e3-1f5f-04e1-d68f-0591a0f4f60c@collabora.com>
-In-Reply-To: <9b6d55e3-1f5f-04e1-d68f-0591a0f4f60c@collabora.com>
-From:   =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>
-Date:   Wed, 21 Jun 2023 15:24:33 +0200
-Message-ID: <CABb0KFFwe_cRUjV5K1-J5TTWP69X78XZvTr2jw=0ZYGjYoxvqw@mail.gmail.com>
-Subject: Re: [PATCH v18 2/5] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: Regression: NULL pointer dereference after NFS_V4_2_READ_PLUS
+ (commit 7fd461c47)
+Content-Language: en-US
+To:     Anna Schumaker <schumaker.anna@gmail.com>
+Cc:     Trond Myklebust <trondmy@hammerspace.com>,
+        Anna Schumaker <Anna.Schumaker@netapp.com>,
+        linux-nfs <linux-nfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <f591b13c-4600-e2a4-8efa-aac6ad828dd1@linaro.org>
+ <CAFX2Jfmz7QqZBEdzbPUhPs0yctnXVaVF68tX1c57YX=6ki=0TA@mail.gmail.com>
+ <4fe39d77-eb7c-a578-aefa-45b76e2247c2@linaro.org>
+ <CAFX2JfmdRMsHPTySiw4vm7BwJfRZj3s0V3_v7NJ+XwMxBBSo9A@mail.gmail.com>
+ <a3683dd3-3f30-bb4c-539d-d1519de6e5bf@linaro.org>
+ <CAFX2JfnS9GVc4NaxKhr9E4y10NNv6SPgcv1yoeHTfEw5NvZgMg@mail.gmail.com>
+ <86d8e252-975f-5d48-4567-0911d5ef9a44@linaro.org>
+ <CAFX2Jfn_DSs38WQYsRs2ifLi5w+T3BhZfSU2W80T6dK48_Bb5g@mail.gmail.com>
+ <e8d31e48-df6a-fde4-4c6b-c4ccf1664ded@linaro.org>
+ <c8d454b0-d355-f599-f720-b7e64374fb56@linaro.org>
+ <CAFX2JfmvMZ7DzD9znWeOHXywgPbUKDS1irMjUerEuborjRBpcg@mail.gmail.com>
+ <CAFX2JfnhOz+HiOd4vBwBK+5d19Kb8wfBNQhxRZHQoP8S2qiwFw@mail.gmail.com>
+ <CAFX2Jf=5WV=dY9J4-7tp5NB85fDOkwiv8rxQqHziqG+ED1cUJw@mail.gmail.com>
+ <CAFX2Jf=TxojviigtdQ=F_8FcHFFC4RNdfkoS=157jnXQCQSq5g@mail.gmail.com>
+ <85851031-cf43-07d2-8ec7-b40c8c00be91@linaro.org>
+ <CAFX2JfnH_rOFxn+uT4e1Eutea5En4_z26a-u_qCwOsnr5EowRw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAFX2JfnH_rOFxn+uT4e1Eutea5En4_z26a-u_qCwOsnr5EowRw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 at 06:44, Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
-> On 6/21/23 3:05=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
-> > On Tue, 20 Jun 2023 at 13:16, Muhammad Usama Anjum
-> > <usama.anjum@collabora.com> wrote:
-> >> On 6/19/23 1:16=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> >>> On Fri, 16 Jun 2023 at 08:57, Muhammad Usama Anjum
-> >>> <usama.anjum@collabora.com> wrote:
-> >>>>
-> >>>> On 6/16/23 1:07=E2=80=AFAM, Micha=C5=82 Miros=C5=82aw wrote:
-> >>>>> On Thu, 15 Jun 2023 at 17:11, Muhammad Usama Anjum
-> >>>>> <usama.anjum@collabora.com> wrote:
-> >>>>>> On 6/15/23 7:52=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> >>>>>>> On Thu, 15 Jun 2023 at 15:58, Muhammad Usama Anjum
-> >>>>>>> <usama.anjum@collabora.com> wrote:
-> >>>>>>>> I'll send next revision now.
-> >>>>>>>> On 6/14/23 11:00=E2=80=AFPM, Micha=C5=82 Miros=C5=82aw wrote:
-> >>>>>>>>> (A quick reply to answer open questions in case they help the n=
-ext version.)
-> >>> [...]
-> >>>>>>>>> I guess this will be reworked anyway, but I'd prefer this didn'=
-t need
-> >>>>>>>>> custom errors etc. If we agree to decoupling the selection and =
-GET
-> >>>>>>>>> output, it could be:
-> >>>>>>>>>
-> >>>>>>>>> bool is_interesting_page(p, flags); // this one does the
-> >>>>>>>>> required/anyof/excluded match
-> >>>>>>>>> size_t output_range(p, start, len, flags); // this one fills th=
-e
-> >>>>>>>>> output vector and returns how many pages were fit
-> >>>>>>>>>
-> >>>>>>>>> In this setup, `is_interesting_page() && (n_out =3D output_rang=
-e()) <
-> >>>>>>>>> n_pages` means this is the final range, no more will fit. And i=
-f
-> >>>>>>>>> `n_out =3D=3D 0` then no pages fit and no WP is needed (no othe=
-r special
-> >>>>>>>>> cases).
-> >>>>>>>> Right now, pagemap_scan_output() performs the work of both of th=
-ese two
-> >>>>>>>> functions. The part can be broken into is_interesting_pages() an=
-d we can
-> >>>>>>>> leave the remaining part as it is.
-> >>>>>>>>
-> >>>>>>>> Saying that n_out < n_pages tells us the buffer is full covers o=
-ne case.
-> >>>>>>>> But there is case of maximum pages have been found and walk need=
-s to be
-> >>>>>>>> aborted.
-> >>>>>>>
-> >>>>>>> This case is exactly what `n_out < n_pages` will cover (if scan_o=
-utput
-> >>>>>>> uses max_pages properly to limit n_out).
-> >>>>>>> Isn't it that when the buffer is full we want to abort the scan a=
-lways
-> >>>>>>> (with WP if `n_out > 0`)?
-> >>>>>> Wouldn't it be duplication of condition if buffer is full inside
-> >>>>>> pagemap_scan_output() and just outside it. Inside pagemap_scan_out=
-put() we
-> >>>>>> check if we have space before putting data inside it. I'm using th=
-is same
-> >>>>>> condition to indicate that buffer is full.
-> >>>>>
-> >>>>> I'm not sure what do you mean? The buffer-full conditions would be
-> >>>>> checked in ..scan_output() and communicated to the caller by return=
-ing
-> >>>>> N less than `n_pages` passed in. This is exactly how e.g. read()
-> >>>>> works: if you get less than requested you've hit the end of the fil=
-e.
-> >>>>> If the file happens to have size that is equal to the provided buff=
-er
-> >>>>> length, the next read() will return 0.
-> >>>> Right now we have:
-> >>>>
-> >>>> pagemap_scan_output():
-> >>>>         if (p->vec_buf_index >=3D p->vec_buf_len)
-> >>>>                 return PM_SCAN_BUFFER_FULL;
-> >>>>         if (p->found_pages =3D=3D p->max_pages)
-> >>>>                 return PM_SCAN_FOUND_MAX_PAGES;
-> >>>
-> >>> Why do you need to differentiate between those cases?
-> >>>
-> >>>> pagemap_scan_pmd_entry():
-> >>>>         ret =3D pagemap_scan_output(bitmap, p, start, n_pages);
-> >>>>         if (ret >=3D 0) // success
-> >>>>                 make_UFFD_WP and flush
-> >>>>         else
-> >>>>                 buffer_error
-> >>>>
-> >>>> You are asking me to do:
-> >>>>
-> >>>> pagemap_scan_output():
-> >>>>         if (p->vec_buf_index >=3D p->vec_buf_len)
-> >>>>                 return 0;
-> >>>
-> >>>>         if (p->found_pages =3D=3D p->max_pages)
-> >>>>                 return PM_SCAN_FOUND_MAX_PAGES;
-> >>>
-> >>> This should be instead:
-> >>>
-> >>> n_pages =3D min(p->max_pags - p_found_pages, n_pages)
-> >>> ...
-> >>> return n_pages;
-> >> You are missing the optimization here that we check for full buffer ev=
-ery
-> >> time adding to user buffer. This was added to remove extra iteration o=
-f
-> >> page walk if buffer is full already. The way you are suggesting will r=
-emove it.
-> >>
-> >> So you are returning remaining pages to be found now. This doesn't see=
-m
-> >> right. If max_pages is 520, found_pages is 0 and n_pages is 512 before
-> >> calling pagemap_scan_output(). found_pages would become 512 after addi=
-ng
-> >> 512 pages to output buffer. But n_pages would return 8 instead of 512.=
- You
-> >> were saying we should return the number of pages added to the output b=
-uffer.
-> >
-> > Ok, if we want this optimization, then i'd rework it so that we have:
-> >
-> > bool pagemap_scan_output(..., int *n_pages)
-> > {
-> >    limit n_pages;
-> >   ...
-> >   return have_more_room_in_output;
-> > }
-> This is becoming more and more closer to what I have in the code. The onl=
-y
-> difference now is that you are asking me to not return the buffer full
-> status from inside this function and instead there should be a input+outp=
-ut
-> pointer to n_pages and the caller would return the buffer full status. As
-> compared to the suggestion, the current form looks simpler. My earlier
-> point (
-> https://lore.kernel.org/all/2e1b80f1-0385-0674-ae5f-9703a6ef975d@collabor=
-a.com
-> ) is valid again. I don't want to bring logic out of pagemap_scan_output(=
-).
-> This is internal function. There could be thousand ways how internal code
-> can be written. I've really liked so many optimizations which you have
-> advised. This isn't something worth doing. It would increase lines of cod=
-e
-> with no added readability benefit.
+On 21/06/2023 14:49, Anna Schumaker wrote:
+> On Sat, Jun 17, 2023 at 6:09 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 15/06/2023 21:38, Anna Schumaker wrote:
+>>> On Thu, Jun 15, 2023 at 1:16 PM Anna Schumaker <schumaker.anna@gmail.com> wrote:
+>>>>
+>>>> On Thu, Jun 15, 2023 at 1:04 PM Anna Schumaker <schumaker.anna@gmail.com> wrote:
+>>>>>
+>>>>> On Thu, Jun 15, 2023 at 9:01 AM Anna Schumaker <schumaker.anna@gmail.com> wrote:
+>>>>>>
+>>>>>> On Thu, Jun 15, 2023 at 4:55 AM Krzysztof Kozlowski
+>>>>>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>>>>>
+>>>>>>> On 15/06/2023 10:52, Krzysztof Kozlowski wrote:
+>>>>>>>> On 14/06/2023 22:55, Anna Schumaker wrote:
+>>>>>>>>>>>> Still null ptr (built on 420b2d4 with your patch):
+>>>>>>>>>>>
+>>>>>>>>>>> We're through the merge window and at rc1 now, so I can spend more
+>>>>>>>>>>> time scratching my head over your bug again. We've come up with a
+>>>>>>>>>>> patch (attached) that adds a bunch of printks to show us what the
+>>>>>>>>>>> kernel thinks is going on. Do you mind trying it out and letting us
+>>>>>>>>>>> know what gets printed out? You'll need to make sure
+>>>>>>>>>>> CONFIG_NFS_V4_2_READ_PLUS is enabled when compiling the kernel.
+>>>>>>>>>>
+>>>>>>>>>> The patch does not apply. I tried: v6.4-rc1, v6.4-rc5, next-20230609.
+>>>>>>>>>
+>>>>>>>>> Can you try the attached patch on top of my 3-patch series from the
+>>>>>>>>> other day, and let me know what gets printed out? It adds a bunch of
+>>>>>>>>> printk()s at strategic points to print out what is going on with the
+>>>>>>>>> xdr scratch buffer since it's suddenly a bad memory address after
+>>>>>>>>> working for a bit on your machine.
+>>>>>>>>>
+>>>>>>>>
+>>>>>>>> Here you have entire log - attached (113 kB, I hope goes past mailing
+>>>>>>>> lists/spam filters).
+>>>>>>>
+>>>>>>> As expected this bounced from the mailing lists, but I hope you got it.
+>>>>>>> If not, let me know.
+>>>>>>
+>>>>>> I did still receive it. Thanks!
+>>>>>
+>>>>> Can you swap out yesterday's patch with this patch? I've adjusted what
+>>>>> gets printed out, and added printk()s to xdr_copy_to_scratch().  I'm
+>>>>> starting to think that the xdr scratch buffer is fine, and that it's
+>>>>> the other pointer passed to memcpy() in that function that's the
+>>>>> problem, and the output from this patch will confirm for me.
+>>>>
+>>>> Oh, and can you add this one on top of the v2 patch as well?
+>>>
+>>> Sorry about the noise today. Can you use this patch instead of the two
+>>> I attached earlier? I cleaned up the output and cut down on extra
+>>> output..
+>>>
+>>
+>> Here you have - attached.
+> 
+> This is good, thanks! I was finally able to figure out how to hit the
+> bug using a 32bit x86 VM, so hopefully the next thing you hear from me
+> is a patch fixing the bug!
 
-Yes, I try to suggest a minimal change. The benefit is that you don't
-need special error values anymore and so the cognitive load to
-understand the code flow is less. The idea is not to strictly save on
-lines typed, but on localising the information needed as much as
-possible. Also the distinction between BUFFER_FULL and FOUND_MAX_PAGES
-is only in which criteria was detected, but otherwise the code should
-behave the same way.
+QEMU also has 32-bit ARM and x86...
 
-Best Regards
-Micha=C5=82 Miros=C5=82aw
+Best regards,
+Krzysztof
+
