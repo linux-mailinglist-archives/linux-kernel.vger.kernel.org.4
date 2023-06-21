@@ -2,182 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BEF7738A4F
+	by mail.lfdr.de (Postfix) with ESMTP id 95818738A50
 	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:59:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233850AbjFUP7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59700 "EHLO
+        id S233810AbjFUP7P convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 11:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjFUP6t (ORCPT
+        with ESMTP id S233790AbjFUP66 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:58:49 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5446F186;
-        Wed, 21 Jun 2023 08:58:48 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-978863fb00fso926917966b.3;
-        Wed, 21 Jun 2023 08:58:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687363127; x=1689955127;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cXp+vDAywJj5cJVg/DGBbIIG0LrSwQcuzIbyxZXKO/k=;
-        b=Gb0TzHqwzv+RP62LSJ5Lt6UkdvX0M2muoGWBR0e6byr6bsn/YJ2+MRGJs3PECwO4NW
-         an/fwqqeu2Q5yHmmUmFMcnzsv1i/dg03aRtHinJAle3rXcfzRDBlatfppktjkVEx8PSW
-         qDKccS+VKRZ9lCt92x47XN8TwIVJ1VAWgGCOPRY6uXMFOxtCDUvfoVbXBNfn8a0ORZbr
-         1T5R2ZSm7wq05lD7XwTGtJcLi0znJOfFJ1jmA88TZtgvtl1egqvKMFvcHNAqXBD8c0i1
-         qDWSw4PK0jLfiHLdmdTiErNAZq5EBUdeypjEhTjD68wHbpFtY6P+E6Ap4EcKa47hWrwF
-         c3+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687363127; x=1689955127;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cXp+vDAywJj5cJVg/DGBbIIG0LrSwQcuzIbyxZXKO/k=;
-        b=CekqBatEwwXzFeiVTo3Q0ZRpHwSzbS+Pi8XohCifDYqSwTMxSUqYjjlxxqyslJu/PF
-         wVzzuAWCGGX00dlFyCN4Rkl+70LAKPzuhxo7d4b13lyJWJZusi9HnNfZwaVxJy63M7N1
-         kFb1SUm6FzwA+rkzSDcfnyaToQ1y/t6cc52dR0mUnahE6OKfks4b2kB09vwmohUxxfze
-         o6cvgkWmzOVhuUqpCFj7fsBQ+ykj15Rwxtb8972R+OllOFWlZfQAkZdE4SWNuYgIHmHv
-         hh9X23PlpGgMKaelVMmy5FVHzx520XnoACmu3Um3r0NGoZ3aUaiUn/S0QCC1kQT8GzlT
-         Hk5Q==
-X-Gm-Message-State: AC+VfDyCsLnENBO+47PtTQ0KKxIOlbkkUV07EGjben26isVcV+i9izmW
-        j4IGt/C1y1cySqD7f0MoF81KGgzqd3l9Tw==
-X-Google-Smtp-Source: ACHHUZ6iDd8OnFoFXyuyEiDuhqCz1LfwMXgR0d/91+nypJbXgHUQYPJx6t0ysho5OcIwD2jD2mWGRw==
-X-Received: by 2002:a17:907:60d6:b0:973:ca90:1f18 with SMTP id hv22-20020a17090760d600b00973ca901f18mr16990926ejc.76.1687363126769;
-        Wed, 21 Jun 2023 08:58:46 -0700 (PDT)
-Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id w20-20020a1709060a1400b00977eec7b7e8sm3349316ejf.68.2023.06.21.08.58.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 08:58:46 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Wed, 21 Jun 2023 17:58:32 +0200
-Subject: [PATCH v3 3/3] dt-bindings: usb: Add binding for Cypress HX3 USB
- 3.0 family
+        Wed, 21 Jun 2023 11:58:58 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4A919C
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:58:54 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1qC0EI-0004tn-Eh; Wed, 21 Jun 2023 17:58:46 +0200
+Message-ID: <8212078bd56c54ce508205eae0ed0b69e78d4c38.camel@pengutronix.de>
+Subject: Re: [PATCH v10 07/11] drm/etnaviv: Add support for the dma coherent
+ device
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Sui Jingfeng <suijingfeng@loongson.cn>,
+        Sui Jingfeng <18949883232@163.com>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        etnaviv@lists.freedesktop.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Date:   Wed, 21 Jun 2023 17:58:43 +0200
+In-Reply-To: <66fc74ae-299c-a5de-9cfb-07ae24fb3f07@loongson.cn>
+References: <20230620094716.2231414-1-18949883232@163.com>
+         <20230620094716.2231414-8-18949883232@163.com>
+         <8f74f0962c8bab6c832919a5340667c54e1a7ddc.camel@pengutronix.de>
+         <66fc74ae-299c-a5de-9cfb-07ae24fb3f07@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230620-hx3-v3-3-2acbc03ca949@skidata.com>
-References: <20230620-hx3-v3-0-2acbc03ca949@skidata.com>
-In-Reply-To: <20230620-hx3-v3-0-2acbc03ca949@skidata.com>
-To:     Matthias Kaehlcke <mka@chromium.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Benjamin Bara <benjamin.bara@skidata.com>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Benjamin Bara <benjamin.bara@skidata.com>
+Am Mittwoch, dem 21.06.2023 um 23:30 +0800 schrieb Sui Jingfeng:
+> Hi,
+> 
+> On 2023/6/21 18:00, Lucas Stach wrote:
+> > >   		dma_sync_sgtable_for_cpu(dev->dev, etnaviv_obj->sgt,
+> > >   					 etnaviv_op_to_dma_dir(op));
+> > >   		etnaviv_obj->last_cpu_prep_op = op;
+> > > @@ -408,8 +421,9 @@ int etnaviv_gem_cpu_fini(struct drm_gem_object *obj)
+> > >   {
+> > >   	struct drm_device *dev = obj->dev;
+> > >   	struct etnaviv_gem_object *etnaviv_obj = to_etnaviv_bo(obj);
+> > > +	struct etnaviv_drm_private *priv = dev->dev_private;
+> > >   
+> > > -	if (etnaviv_obj->flags & ETNA_BO_CACHED) {
+> > > +	if (!priv->dma_coherent && etnaviv_obj->flags & ETNA_BO_CACHED) {
+> > >   		/* fini without a prep is almost certainly a userspace error */
+> > >   		WARN_ON(etnaviv_obj->last_cpu_prep_op == 0);
+> > >   		dma_sync_sgtable_for_device(dev->dev, etnaviv_obj->sgt,
+> > > diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
+> > > index 3524b5811682..754126992264 100644
+> > > --- a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
+> > > +++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
+> > > @@ -112,11 +112,16 @@ static const struct etnaviv_gem_ops etnaviv_gem_prime_ops = {
+> > >   struct drm_gem_object *etnaviv_gem_prime_import_sg_table(struct drm_device *dev,
+> > >   	struct dma_buf_attachment *attach, struct sg_table *sgt)
+> > >   {
+> > > +	struct etnaviv_drm_private *priv = dev->dev_private;
+> > >   	struct etnaviv_gem_object *etnaviv_obj;
+> > >   	size_t size = PAGE_ALIGN(attach->dmabuf->size);
+> > > +	u32 cache_flags = ETNA_BO_WC;
+> > >   	int ret, npages;
+> > >   
+> > > -	ret = etnaviv_gem_new_private(dev, size, ETNA_BO_WC,
+> > > +	if (priv->dma_coherent)
+> > > +		cache_flags = ETNA_BO_CACHED;
+> > > +
+> > Drop this change. Instead etnaviv_gem_new_impl() should do the upgrade
+> > from WC to CACHED as necessary by adding something like this:
+> 
+> I understand you are a profession person in vivante GPU driver domain.
+> 
+> I respect you reviews and instruction.
+> 
+> But, I'm really reluctant to agree with this, is there any space to 
+> negotiate?
+> 
+> > /*
+> >   * Upgrade WC to CACHED when the device is hardware coherent and the
+> >   * platform doesn't allow mixing cached and writecombined mappings to
+> >   * the same memory area.
+> >   */
+> > if ((flags & ETNA_BO_CACHE_MASK) == ETNA_BO_WC &&
+> >      dev_is_dma_coherent(dev) && !drm_arch_can_wc_memory())
+> >          flags = (flags & ~ETNA_BO_CACHE_MASK) & ETNA_BO_CACHED;
+> 
+> This is policy, not a mechanism.
+> 
+> Using what cache property is a user-space program's choice.
+> 
+> While you are override the WC with CACHED mapping. This is not correct 
+> in the concept!
+> 
+Please explain why you think that this isn't correct. If using WC
+mappings cause a potential loss of coherency on your platform, then we
+can not allow the userspace driver to use WC mappings.
 
-The HX3 family comes in different variants (up to 4 USB 3.0 ports;
-multi-TT), e.g. CYUSB330x/CYUSB331x/CYUSB332x/CYUSB230x.
+As I would like to keep the option of WC mappings, I've asked you if
+there are ways to prepare the cache in a way that WC mappings aren't
+causing any troubles on your platform. You told me that this might be
+possible but needs confirmation from a HW engineer and such
+confirmation could take a long time.
 
-This initial version of the binding only describes USB related aspects
-of the HX3 family, it does not cover the option of connecting the
-controller as an i2c slave.
+With that in mind, our only option right now is to upgrade the mappings
+to cached  in order to not lay out traps for the userspace driver.
+ 
+> you approach forbidden any possibility to use the WC BO at anywhere.
+> 
+> 
+> My approach need only check once, while you approach need at least 3 
+> check plus
+> 
+> so much bit-wise logic operations,  plus a function call  (&, ==, &&,  
+> &, ~, &) .
+> 
+> and every time you create a BO. This nasty judgement happens.
+> 
+BO creation again is not a fast path. You are committing to allocate
+new memory, which is a few orders of magnitude more costly than the few
+instructions needed for those comparisons.
 
-Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
----
- .../devicetree/bindings/usb/cypress,hx3.yaml       | 77 ++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+> 
+> Please keep our original implement, it's simple and clear, Please?
+> 
 
-diff --git a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-new file mode 100644
-index 000000000000..47add0d85fb8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-@@ -0,0 +1,77 @@
-+# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/usb/cypress,hx3.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cypress HX3 USB 3.0 hub controller family
-+
-+maintainers:
-+  - Benjamin Bara <benjamin.bara@skidata.com>
-+
-+allOf:
-+  - $ref: usb-device.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - usb4b4,6504
-+      - usb4b4,6506
-+
-+  reg: true
-+
-+  reset-gpios:
-+    items:
-+      - description: GPIO specifier for RESETN pin.
-+
-+  vdd-supply:
-+    description:
-+      1V2 power supply (VDD_EFUSE, AVDD12, DVDD12).
-+
-+  vdd2-supply:
-+    description:
-+      3V3 power supply (AVDD33, VDD_IO).
-+
-+  peer-hub:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      phandle to the peer hub on the controller.
-+
-+required:
-+  - compatible
-+  - reg
-+  - peer-hub
-+  - vdd-supply
-+  - vdd2-supply
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    usb {
-+        dr_mode = "host";
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        /* 2.0 hub on port 1 */
-+        hub_2_0: hub@1 {
-+          compatible = "usb4b4,6504";
-+          reg = <1>;
-+          peer-hub = <&hub_3_0>;
-+          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+          vdd-supply = <&reg_1v2_usb>;
-+          vdd2-supply = <&reg_3v3_usb>;
-+        };
-+
-+        /* 3.0 hub on port 2 */
-+        hub_3_0: hub@2 {
-+          compatible = "usb4b4,6506";
-+          reg = <2>;
-+          peer-hub = <&hub_2_0>;
-+          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+          vdd-supply = <&reg_1v2_usb>;
-+          vdd2-supply = <&reg_3v3_usb>;
-+        };
-+    };
+It isn't as simple and clear for the userspace interface. It allows
+userspace to use WC mappings that would potentially cause loss of
+coherency between CPU and GPU, which isn't acceptable.
 
--- 
-2.34.1
-
+Regards,
+Lucas
