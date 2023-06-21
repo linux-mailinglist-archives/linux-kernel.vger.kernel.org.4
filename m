@@ -2,57 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8333A738FB1
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:11:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D776F738FB4
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 21:12:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjFUTLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 15:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50428 "EHLO
+        id S230339AbjFUTMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 15:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjFUTLo (ORCPT
+        with ESMTP id S229624AbjFUTMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 15:11:44 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9246A1710
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 12:11:42 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8CxqMVtS5NkcEEAAA--.431S3;
-        Thu, 22 Jun 2023 03:11:41 +0800 (CST)
-Received: from openarena.loongson.cn (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax3c5rS5NkGRkBAA--.6502S2;
-        Thu, 22 Jun 2023 03:11:39 +0800 (CST)
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-To:     Dave Airlie <airlied@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/mgag200: Fix a warning reported by Fi.CI.SPARSE
-Date:   Thu, 22 Jun 2023 03:11:39 +0800
-Message-Id: <20230621191139.2291139-1-suijingfeng@loongson.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 21 Jun 2023 15:12:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BCA1AC;
+        Wed, 21 Jun 2023 12:12:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A735A6148F;
+        Wed, 21 Jun 2023 19:12:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7BBCC433C0;
+        Wed, 21 Jun 2023 19:12:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687374751;
+        bh=pvCW0ClizpVygxK7cLsFvnijZg0ttHOEE9V2jUKQpgk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oHL9+XIgNaaOilNmMrifzgvsqMAt/28ocdOB2oS9N75pxCDkggkVGFVcp5CObbkkP
+         NbwVU7rrIPvSYFWHFpuOKBGp56aOE30dPo7wGq+KLJzMXRq6R25Ra9UClqYyb+3KYr
+         AwCzyup08Mpeo4vw0G/b2iZpv97eKWfZBarkjrOoJd72LjmGOJ5+4zbnY9lfWRwZUZ
+         00SAkjcmvY++1Vi0cbSFj7GrVB40e6CnWKKDXT9TxnqGWNehXMH1OMsK8h0kM4wh5D
+         w0DMeItYBJD68kX4TYgu6DUK4oxYrbdK61Rl+Ji2FRGAQMpEOE/qQH407qWB951RmN
+         yh/lXrNNDJg/w==
+Date:   Wed, 21 Jun 2023 20:12:24 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Manikandan Muralidharan <manikandan.m@microchip.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        sam@ravnborg.org, bbrezillon@kernel.org, airlied@gmail.com,
+        daniel@ffwll.ch, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, Hari.PrasathGE@microchip.com,
+        Balamanikandan.Gunasundar@microchip.com,
+        Durai.ManickamKR@microchip.com, Nayabbasha.Sayed@microchip.com,
+        Dharma.B@microchip.com, Varshini.Rajendran@microchip.com,
+        Balakrishnan.S@microchip.com
+Subject: Re: [PATCH 2/9] mfd: atmel-hlcdc: Add compatible for SAM9X7 HLCD
+ controller
+Message-ID: <20230621-pampers-dial-07b6c3e7602a@spud>
+References: <20230613070426.467389-1-manikandan.m@microchip.com>
+ <20230613070426.467389-3-manikandan.m@microchip.com>
+ <20230621175645.GR10378@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Ax3c5rS5NkGRkBAA--.6502S2
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj9xXoWrKr1UtF4DWw48JFyDXF4DWrX_yoWfAFc_Ca
-        nYyF9xZrWjvrs7Cr9rCF4xWFySv34UuF4fZ34ft3Zayr1DCr4DXF1qqr4Uur17JrWUt3Zr
-        Ga4rtF13AF1DGosvyTuYvTs0mTUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvT
-        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
-        cSsGvfJTRUUUb28YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
-        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I
-        8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AK
-        xVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7V
-        AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
-        r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6x
-        IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAI
-        w20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7
-        CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UMCJPUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="zsZwVK0nRU6jEjva"
+Content-Disposition: inline
+In-Reply-To: <20230621175645.GR10378@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,30 +69,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-drivers/gpu/drm/mgag200/mgag200_drv.c:23:5: warning: symbol 'mgag200_modeset' was not declared. Should it be static?
 
-Found in the log of Fi.CI.SPARSE test [1]
+--zsZwVK0nRU6jEjva
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[1] https://patchwork.freedesktop.org/series/119249/
+On Wed, Jun 21, 2023 at 06:56:45PM +0100, Lee Jones wrote:
+> On Tue, 13 Jun 2023, Manikandan Muralidharan wrote:
+>=20
+> > Add compatible for SAM9X7 HLCD controller.
+> >=20
+> > Signed-off-by: Manikandan Muralidharan <manikandan.m@microchip.com>
+> > ---
+> >  drivers/mfd/atmel-hlcdc.c | 1 +
+> >  1 file changed, 1 insertion(+)
+>=20
+> Applied, thanks
 
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
----
- drivers/gpu/drm/mgag200/mgag200_drv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hmm, Nicolas pointed out that this compatible is likely insufficient,
+and it'll likely need to be sam9x70 & sam9x75 as there are differences
+between what each of these SoCs support.
+https://lore.kernel.org/all/ef09246c-9220-4c71-4ac2-2792d9ca519d@microchip.=
+com/
+I guess it doesn't really matter, since the binding didn't get applied
+and what's in the driver can be arbitrarily changed?
 
-diff --git a/drivers/gpu/drm/mgag200/mgag200_drv.c b/drivers/gpu/drm/mgag200/mgag200_drv.c
-index 976f0ab2006b..abddf37f0ea1 100644
---- a/drivers/gpu/drm/mgag200/mgag200_drv.c
-+++ b/drivers/gpu/drm/mgag200/mgag200_drv.c
-@@ -20,7 +20,7 @@
- 
- #include "mgag200_drv.h"
- 
--int mgag200_modeset = -1;
-+static int mgag200_modeset = -1;
- MODULE_PARM_DESC(modeset, "Disable/Enable modesetting");
- module_param_named(modeset, mgag200_modeset, int, 0400);
- 
--- 
-2.25.1
+Cheers,
+Conor.
 
+--zsZwVK0nRU6jEjva
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJNLmAAKCRB4tDGHoIJi
+0vYDAQCrn4A14yblpV2uYnp7eJiwUWDuCmKo5+fc3VkNOrvitQEA5QIV7hQdQCRR
+lzZK9jhg9rQhq32EGUiTjXEFKLzAKQw=
+=/8eC
+-----END PGP SIGNATURE-----
+
+--zsZwVK0nRU6jEjva--
