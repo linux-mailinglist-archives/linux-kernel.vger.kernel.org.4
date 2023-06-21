@@ -2,204 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0A0F73868E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8117E73869F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:17:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232918AbjFUOPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
+        id S232660AbjFUOR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233195AbjFUOPP (ORCPT
+        with ESMTP id S232694AbjFUOR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:15:15 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A82401BFD;
-        Wed, 21 Jun 2023 07:14:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=olkfJFJHmdPF0qnYYe5wpm6Uq97XftMPhiu1DWdUHp4=; b=SEPaIvjbiZ9lxdf4JKSWf9/muM
-        7kpEvyox/R5SDvyjmv/ZatjeZ7FozBPEWRPKKYJ9+BTuorwCPKdcJjBjKgkKbnwo3XtjnIlXzumwh
-        FP5fKODdLvTMBnXLbx9Fmz+wJKLVjfd2BWAiDc2ImCrYNwiOHDNub9X5dpiH5vt3WmJY=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:45778 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1qBybN-0004sm-Vk; Wed, 21 Jun 2023 10:14:30 -0400
-Date:   Wed, 21 Jun 2023 10:14:29 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     a.zummo@towertech.it, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230621101429.7f86490aa7590f0d978834ce@hugovil.com>
-In-Reply-To: <Y8rl452Xm1FrnFfF@mail.local>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
-        <Y8rl452Xm1FrnFfF@mail.local>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Wed, 21 Jun 2023 10:17:26 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA19294;
+        Wed, 21 Jun 2023 07:17:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687357045; x=1718893045;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rqIpWeE4xesI6qrEd6LN7Ec+WOzNpkbsOTd3PZCftzA=;
+  b=Zc6yjTwbWtt9aXwEbSGrCbvL0ZtZ7Isjnu+B9IzUwFaX6Th9Hoqix9xW
+   QHiZhS0zbILmSes9MZ7viH6BFf747mVU4ljQY4n6WwGXeFhpKxzbs5OH7
+   wUKVqjN/R8X9lonODiL45IGWqwlaMvA/vp+/vN7Mcq2+UU17wISCMrZcG
+   SkXzXgU2snq0LqMZ0jo4EyO6cubHyBvvR4Zbg0Ytk5AtF9sFv+uP01g2j
+   aeX8sSUUZZ2q2ZVeRt6hrt5eyEfQMXU3gToBxNi8rqPvN0uq51cZKeBWJ
+   BcfMNx0/eCGX6ES4VbTR263t6q+0pMsG24o8OXEsoBvEPkO/tgUxp/dMM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="363606395"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="363606395"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 07:17:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="744186433"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="744186433"
+Received: from araj-dh-work.jf.intel.com (HELO araj-dh-work) ([10.165.157.158])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 07:17:18 -0700
+Date:   Wed, 21 Jun 2023 07:15:40 -0700
+From:   Ashok Raj <ashok_raj@linux.intel.com>
+To:     linan666@huaweicloud.com
+Cc:     axboe@kernel.dk, linan122@huawei.com, dan.j.williams@intel.com,
+        vishal.l.verma@intel.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com, houtao1@huawei.com, yangerkun@huawei.com,
+        Ashok Raj <ashok.raj@intel.com>
+Subject: Re: [PATCH v3 4/4] block/badblocks: fix the bug of reverse order
+Message-ID: <ZJMGDLkRbaVD9VA8@araj-dh-work>
+References: <20230621172052.1499919-1-linan666@huaweicloud.com>
+ <20230621172052.1499919-5-linan666@huaweicloud.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621172052.1499919-5-linan666@huaweicloud.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 00/14] rtc: pcf2127: add PCF2131 driver
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 20 Jan 2023 20:05:07 +0100
-Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
-
-> Hello,
+On Thu, Jun 22, 2023 at 01:20:52AM +0800, linan666@huaweicloud.com wrote:
+> From: Li Nan <linan122@huawei.com>
 > 
-> I know I've been holding off on the review of this series for a while
-> and I'm sorry for that.
-> 
-> One of the main issue that is remaining is that the driver ends up being
-> 53% bigger and generaly less efficient for no added functionality for
-> the existing RTCs.
-> 
-> I know performance is not a concern however, having more code in the
-> set/read time and irq paths means that it is more difficult to set an
-> get the time precisely.
+> Order of badblocks will be reversed if we set a large area at once. 'hi'
+> remains unchanged while adding continuous badblocks is wrong, the next
+> setting is greater than 'hi', it should be added to the next position.
+> Let 'hi' +1 each cycle.
 
-Hi Alexandre,
-one way to keep rtc_read_time() as efficient as before, and even more
-efficient by reading 7 instead of 10 registers, would be to drop reading
-the CTRL3 register, which is only used to detect and display an info
-message for the low battery condition. This low battery check could be
-moved to an ioctl call, like it is done in the PCF8523 driver.
-
-Hugo.
-
-
-> I guess I'll take it as a merged driver but I took a different decision
-> for other RTCs.
+The commitlog needs more work. 
 > 
-> On 15/12/2022 10:02:01-0500, Hugo Villeneuve wrote:
-> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > 
-> > Hello,
-> > this patch series adds the driver for the PCF2131 real-time clock.
-> > 
-> > This RTC is very similar in functionality to the PCF2127/29 with the
-> > following differences:
-> >   -supports two new control registers at offsets 4 and 5
-> >   -supports a new reset register
-> >   -supports 4 tamper detection functions instead of 1
-> >   -has no nvmem (like the PCF2129)
-> >   -has two output interrupt pins instead of one
-> >   -has 1/100th seconds capabilities (not supported in this driver)
-> >   -pcf2127 has watchdog clock sources: 1/60,   1, 64 and 4096Hz
-> >    pcf2131 has watchdog clock sources: 1/64, 1/4,  4 and   64Hz
-> >   -watchdog value register cannot be read after being set
-> > 
-> > Most of the register addresses are very different, although they still
-> > follow the same layout. For example, the time/date and tamper registers
-> > have a different base address, but the offsets are all the same.
-> > Consequently, the source code of the PCF2127 driver can be easily adapted
-> > to support this new device.
-> > 
-> > Patches 1 to 6 modify the existing pcf2127 driver to make it more generic
-> > and able to support multiple variants, like the PCF2131. This is done
-> > mostly by using offsets instead of absolute hardcoded register addresses.
-> > 
-> > Patch 7 add actual support for the PCF2131.
-> > 
-> > Patch 8 configures all interrupt sources to go through the INT A pin.
-> > 
-> > Patch 9 changes the PWRMNG bits to be the same with the PCF2131 as they
-> >       are with the PCF2127/29 (different default values).
-> > 
-> > Patch 10 allow to confirm PCF2131 device presence by reading the reset
-> >       register fixed pattern.
-> > 
-> > Patch 11 adapt the time/date registers write sequence for PCF2131 (STOP and
-> >       CPR bits).
-> > 
-> > Patch 12 add support for generic watchdog timing configuration.
-> > 
-> > Patch 13 add a new flag to identify if device has read support for reading
-> >       watchdog register value.
-> >       Since the watchdog value register cannot be read on the PCF2131 after
-> >       being set, it seems that we cannot detect if watchdog timer was
-> >       started by bootloader. I am not sure what is the best way to handle
-> >       this situation, suggestions are welcomed.
-> > 
-> > Patch 14 add the dt-bindings for the PCF2131.
-> > 
-> > I have tested the driver using a PCF2131-ARD evaluation board connected to
-> > an NXP imx8mp evaluation board:
-> >   - Time get/set ok;
-> >   - Alarms get/set ok
-> >   - Timestamp 1 to 4 ok
-> >   - IRQ alarm ok
-> >   - Watchdog ok
-> >   - Also tested successfully with "RTC Driver Test Example" from
-> >     Documentation/rtc.txt
-> > 
-> > I have also tested the driver on a custom PCF2129 adapter board connected to a
-> > beaglebone black.
-> > 
-> > Thank you.
-> > 
-> > Link: [v1] https://patchwork.ozlabs.org/project/rtc-linux/patch/20220125200009.900660-2-hugo@hugovil.com/
-> > Link: [v2] https://patchwork.ozlabs.org/project/rtc-linux/list/?series=285734
-> > 
-> > Changes for V3:
-> > - Rebased for kernel v6.1
-> > 
-> > Changes for V2:
-> > - In general, fix and improvements after I have tested on real hardware
-> > - Fix alarm interrupt A/B mask setting for PCF2131:
-> >   PCF2131_BIT_INT_AIE must be cleared, not set, to enable interrupt.
-> > - Remove low_reg validation: only check if TS interrupt flag is
-> >   defined, as low_reg is defined at address 0 for PCF2127/29.
-> > - Change PWRMNG value for PCF2131: default is different than PCF2127/29.
-> > - Adapt time/date registers write sequence for PCF2131 (STOP and CPR bits).
-> > - Map all interrupt sources to INT A pin
-> > - Read and validate PCF2131 device presence from RESET register
-> > - Adapt watchdog configuration for PCF2131
-> > 
-> > Hugo Villeneuve (14):
-> >   rtc: pcf2127: add variant-specific configuration structure
-> >   rtc: pcf2127: adapt for time/date registers at any offset
-> >   rtc: pcf2127: adapt for alarm registers at any offset
-> >   rtc: pcf2127: adapt for WD registers at any offset
-> >   rtc: pcf2127: adapt for CLKOUT register at any offset
-> >   rtc: pcf2127: add support for multiple TS functions
-> >   rtc: pcf2127: add support for PCF2131 RTC
-> >   rtc: pcf2127: add support for PCF2131 interrupts on output INT_A
-> >   rtc: pcf2127: set PWRMNG value for PCF2131
-> >   rtc: pcf2127: read and validate PCF2131 device signature
-> >   rtc: pcf2127: adapt time/date registers write sequence for PCF2131
-> >   rtc: pcf2127: support generic watchdog timing configuration
-> >   rtc: pcf2127: add flag for watchdog register value read support
-> >   dt-bindings: rtc: pcf2127: add PCF2131
-> > 
-> >  .../devicetree/bindings/rtc/nxp,pcf2127.yaml  |   4 +-
-> >  drivers/rtc/Kconfig                           |   4 +-
-> >  drivers/rtc/rtc-pcf2127.c                     | 939 ++++++++++++++----
-> >  3 files changed, 752 insertions(+), 195 deletions(-)
-> > 
-> > -- 
-> > 2.30.2
-> > 
+>   # echo 0 2048 > bad_blocks
+>   # cat bad_blocks
+>     1536 512
+>     1024 512
+>     512 512
+>     0 512
+
+Is the above before or after this patch is applied?
+
 > 
+> Fixes: 9e0e252a048b ("badblocks: Add core badblock management code")
+> Signed-off-by: Li Nan <linan122@huawei.com>
+> ---
+>  block/badblocks.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/block/badblocks.c b/block/badblocks.c
+> index 2c2ef8284a3f..3b816690b940 100644
+> --- a/block/badblocks.c
+> +++ b/block/badblocks.c
+> @@ -301,6 +301,7 @@ int badblocks_set(struct badblocks *bb, sector_t s, int sectors,
+>  			p[hi] = BB_MAKE(s, this_sectors, acknowledged);
+>  			sectors -= this_sectors;
+>  			s += this_sectors;
+> +			hi++;
+>  			changed = true;
+>  		}
+>  	}
 > -- 
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> 2.39.2
 > 
