@@ -2,87 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC38738B1C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E5F738B2A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:29:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbjFUQ15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51880 "EHLO
+        id S232102AbjFUQ2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjFUQ1z (ORCPT
+        with ESMTP id S230477AbjFUQ2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:27:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19EDCE68
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:27:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA847615EB
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 16:27:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C61ABC433C9;
-        Wed, 21 Jun 2023 16:27:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687364873;
-        bh=LwsnqI9P+WpJ5PCzUBSCELK7UQa5GydFt4q1g7NlhXY=;
-        h=In-Reply-To:References:Date:From:To:Subject:From;
-        b=TsGJuS6FJ9lBZ2bAEIJIH9bh5QPAKywM/HhWIInNQNbwKdv1URR5W6yZFFzrX0TAw
-         WWK9X2QZdgb8jyao7Sgj68HfxqrxctEDgMLJ5UWznYsgDhbO1yxBcxw+yUY9J+Xq8y
-         3WXsCWicp9FVVFkU0NGYa9Bo895XRAs/ix6tG7mCr2HWIyfaHscDhbza7JX5ZMS/kU
-         g5NVhFnbM9RWCEnp4MAepOcpW/q+c9c6Mpa//hrOrrADpj2R/ykUR7j+dam4wx+ZxM
-         L1AqnNy806+GNKTdu30liB1VyTAS5s9mptcXmLxL7pS20BRj/1YcVoVuwopk5zrmzd
-         BoElvjqT6ZZDA==
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailauth.nyi.internal (Postfix) with ESMTP id AB7BC27C005B;
-        Wed, 21 Jun 2023 12:27:51 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute3.internal (MEProxy); Wed, 21 Jun 2023 12:27:51 -0400
-X-ME-Sender: <xms:ByWTZEK_YBa8I2yeFLHYdjQoh4GOvlr97_oYeuLufU58qRWMgwQ8yQ>
-    <xme:ByWTZELX1EcYlX-57AG2IP2oqFOpKR0Fely_PKq6URqNsuai24rVHDrmTIL_2tjm7
-    81vq0lTQaSsT5kU8gc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeefledgtdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvffutgesthdtredtreertdenucfhrhhomhepfdetnhgu
-    hicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenucggtf
-    frrghtthgvrhhnpedthfehtedtvdetvdetudfgueeuhfdtudegvdelveelfedvteelfffg
-    fedvkeegfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedukeeh
-    ieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinhhugi
-    drlhhuthhordhush
-X-ME-Proxy: <xmx:ByWTZEtLPXPM9U57U9RFyCeKbN9MYbaVqMBJuk5vDxPIpVHa3nQJ1w>
-    <xmx:ByWTZBbdxdo-19m-hlIkBLRAbIZTC78-jg7iLxDHF2Acdf2bTjF9Fg>
-    <xmx:ByWTZLaqbAuiEvD6KaUsRgviYJtWue-6YWQKmOxB9Hw_ZUw8zCDaDw>
-    <xmx:ByWTZFlvBKNb2MvShC6H7caNYCA0W_FwuBbm0Q8_6q0fU1Nxxd8Kpw>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 43C5C31A0063; Wed, 21 Jun 2023 12:27:51 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <7fbad052-4c4a-4a49-913d-ea836c180dc2@app.fastmail.com>
-In-Reply-To: <20230621151442.2152425-1-per.bilse@citrix.com>
-References: <20230621151442.2152425-1-per.bilse@citrix.com>
-Date:   Wed, 21 Jun 2023 09:27:31 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Per Bilse" <per.bilse@citrix.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Juergen Gross" <jgross@suse.com>,
-        "Stefano Stabellini" <sstabellini@kernel.org>,
-        "Oleksandr Tyshchenko" <oleksandr_tyshchenko@epam.com>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        "moderated list:XEN HYPERVISOR INTERFACE" 
-        <xen-devel@lists.xenproject.org>
-Subject: Re: [PATCH] Updates to Xen hypercall preemption
-Content-Type: text/plain
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 21 Jun 2023 12:28:47 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2B8FE69
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 09:28:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=twjQf8R86b3wIe7w+v/y0vrm9B6yITXlFsoZ7q0uaz0=; b=PilaYNCPRtDyNeptm+tMztdcUx
+        q524gSe07wN7rFu0YTNLX8UJ8SFdpcnU17kS6OjgoG+cqf/YpnU34HnNjeDNDFi6EZBkTb99EmhB9
+        yk63FT3P36aPWLz/5K29WR1CFzkgIQ+VENoj/w/JfAiam4gh/LpW8Ww52yutY7o+XatdSiJ0mjXui
+        LCEErASJ16DnnXsDuITj5qskFVwtwTedV7GGIKX3+03csOfEGMMO+XdZMEZBI05gk3PrhZSkJDSPx
+        Q487GTB4r8yHIX/NrdwDjnAe4U4pLzaQE4d7cbP1Xn4loRzal1RcpyixrWITwGuppfbqYvXnTE7UQ
+        V9M2A1+Q==;
+Received: from [179.113.218.86] (helo=[192.168.1.111])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1qC0hD-001NyD-Ft; Wed, 21 Jun 2023 18:28:39 +0200
+Message-ID: <26a4f7f3-33fa-c28e-dd71-e44e61ffa229@igalia.com>
+Date:   Wed, 21 Jun 2023 13:28:34 -0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [RFC PATCH v3 1/4] drm/doc: Document DRM device reset
+ expectations
+Content-Language: en-US
+To:     Pekka Paalanen <ppaalanen@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
+        alexander.deucher@amd.com, christian.koenig@amd.com,
+        pierre-eric.pelloux-prayer@amd.com,
+        Simon Ser <contact@emersion.fr>,
+        Rob Clark <robdclark@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Stone <daniel@fooishbar.org>,
+        =?UTF-8?B?J01hcmVrIE9sxaHDoWsn?= <maraeo@gmail.com>,
+        Dave Airlie <airlied@gmail.com>,
+        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>,
+        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
+        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
+        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>
+References: <20230621005719.836857-1-andrealmeid@igalia.com>
+ <20230621005719.836857-2-andrealmeid@igalia.com>
+ <20230621105842.0c21b161@eldfell>
+From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
+In-Reply-To: <20230621105842.0c21b161@eldfell>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,42 +71,198 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023, at 8:14 AM, Per Bilse wrote:
-> Some Xen hypercalls issued by dom0 guests may run for many 10s of
-> seconds, potentially causing watchdog timeouts and other problems.
-> It's rare for this to happen, but it does in extreme circumstances,
-> for instance when shutting down VMs with very large memory allocations
-> (> 0.5 - 1TB).  These hypercalls are preemptible, but the fixes in the
-> kernel to ensure preemption have fallen into a state of disrepair, and
-> are currently ineffective.  This patch brings things up to date by way of:
->
-> 1) Update general feature selection from XEN_PV to XEN_DOM0.
-> The issue is unique to dom0 Xen guests, but isn't unique to PV dom0s,
-> and will occur in future PVH dom0s.  XEN_DOM0 depends on either PV or PVH,
-> as well as the appropriate details for dom0.
->
-> 2) Update specific feature selection from !PREEMPTION to !PREEMPT.
-> The following table shows the relationship between different preemption
-> features and their indicators/selectors (Y = "=Y", N = "is not set",
-> . = absent):
->
->                             | np-s | np-d | vp-s | vp-d | fp-s | fp-d
->     CONFIG_PREEMPT_DYNAMIC      N      Y      N      Y      N      Y
->          CONFIG_PREEMPTION      .      Y      .      Y      Y      Y
->             CONFIG_PREEMPT      N      N      N      N      Y      Y
->   CONFIG_PREEMPT_VOLUNTARY      N      N      Y      Y      N      N
->        CONFIG_PREEMPT_NONE      Y      Y      N      N      N      N
->
-> Unless PREEMPT is set, we need to enable the fixes.
+Em 21/06/2023 04:58, Pekka Paalanen escreveu:
+> On Tue, 20 Jun 2023 21:57:16 -0300
+> André Almeida <andrealmeid@igalia.com> wrote:
+> 
+>> Create a section that specifies how to deal with DRM device resets for
+>> kernel and userspace drivers.
+>>
+>> Signed-off-by: André Almeida <andrealmeid@igalia.com>
+> 
+> Hi André,
+> 
+> nice to see this! I ended up giving lots of grammar comments, but I'm
+> not a native speaker. Generally it looks good to me.
 
-This code is a horrible mess, with and without your patches.  I think that, if this were new, there's no way it would make it in to the kernel.
+Thank you for your feedback :)
 
-I propose one of two rather radical changes:
+> 
+>> ---
+>>   Documentation/gpu/drm-uapi.rst | 65 ++++++++++++++++++++++++++++++++++
+>>   1 file changed, 65 insertions(+)
+>>
+>> diff --git a/Documentation/gpu/drm-uapi.rst b/Documentation/gpu/drm-uapi.rst
+>> index 65fb3036a580..da4f8a694d8d 100644
+>> --- a/Documentation/gpu/drm-uapi.rst
+>> +++ b/Documentation/gpu/drm-uapi.rst
+>> @@ -285,6 +285,71 @@ for GPU1 and GPU2 from different vendors, and a third handler for
+>>   mmapped regular files. Threads cause additional pain with signal
+>>   handling as well.
+>>   
+>> +Device reset
+>> +============
+>> +
+>> +The GPU stack is really complex and is prone to errors, from hardware bugs,
+>> +faulty applications and everything in between the many layers. To recover
+>> +from this kind of state, sometimes is needed to reset the device. This section
+> 
+> It seems unclear what "this kind of state" refers to, so maybe just write "errors"?
+> 
+> Maybe:
+> 
+> 	Some errors require resetting the device in order to make the
+> 	device usable again.
+> 
+> I presume that recovery does not mean that the failed job could recover.
+> 
+>> +describes what's the expectations for DRM and usermode drivers when a device
+>> +resets and how to propagate the reset status.
+>> +
+>> +Kernel Mode Driver
+>> +------------------
+>> +
+>> +The KMD is responsible for checking if the device needs a reset, and to perform
+>> +it as needed. Usually a hung is detected when a job gets stuck executing. KMD
+> 
+> s/hung/hang/ ?
+> 
+>> +then update it's internal reset tracking to be ready when userspace asks the
+> 
+> updates its
+> 
+> "update reset tracking"... do you mean that KMD records information
+> about the reset in case userspace asks for it later?
 
-1. (preferred) Just delete all of it and make support for dom0 require either full or dynamic preempt, and make a dynamic preempt kernel booting as dom0 run as full preempt.
+Yes, kernel drivers do annotate whenever a reset happens, so it can 
+report to userspace when it asks about resets.
 
-2. Forget about trying to preempt a hypercall in the sense of scheduling from an interrupt.  Instead teach the interrupt code to detect that it's in a preemptible hypercall and change RIP to a landing pad that does a cond_resched() and then resumes the hypercall.
+For instance, this is the amdgpu implementation of 
+AMDGPU_CTX_OP_QUERY_STATE2:
 
-I don't think the entry code should have a whole special preempt implementation just for this nasty special case.
+https://elixir.bootlin.com/linux/v6.3.8/source/drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c#L548 
 
---Andy
+
+You can see there stored information about resets.
+
+> 
+>> +kernel about reset information. Drivers should implement the DRM_IOCTL_GET_RESET
+>> +for that.
+> 
+> At this point, I'm not sure what "reset tracking" or "reset
+> information" entails. Could something be said about those?
+>  >> +
+>> +User Mode Driver
+>> +----------------
+>> +
+>> +The UMD should check before submitting new commands to the KMD if the device has
+>> +been reset, and this can be checked more often if it requires to. The
+>> +DRM_IOCTL_GET_RESET is the default interface for those kind of checks. After
+>> +detecting a reset, UMD will then proceed to report it to the application using
+>> +the appropriated API error code, as explained in the bellow section about
+> 
+> s/bellow/below/
+> 
+>> +robustness.
+>> +
+>> +Robustness
+>> +----------
+>> +
+>> +The only way to try to keep an application working after a reset is if it
+>> +complies with the robustness aspects of the graphical API that is using.
+> 
+> that it is using.
+> 
+>> +
+>> +Graphical APIs provide ways to application to deal with device resets. However,
+> 
+> provide ways for applications to deal with
+> 
+>> +there's no guarantee that the app will be correctly using such features, and UMD
+>> +can implement policies to close the app if it's a repeating offender, likely in
+>> +a broken loop. This is done to ensure that it doesn't keeps blocking the user
+> 
+> does not keep
+> 
+> I think contractions are usually avoided in documents, but I'm not
+> bothering to flag them all.
+> 
+>> +interface to be correctly displayed.
+> 
+> interface from being correctly displayed.
+> 
+>> +
+>> +OpenGL
+>> +~~~~~~
+>> +
+>> +Apps using OpenGL can rely on ``GL_ARB_robustness`` to be robust. This extension
+>> +tells if a reset has happened, and if so, all the context state is considered
+>> +lost and the app proceeds by creating new ones. If robustness isn't in use, UMD
+>> +will terminate the app when a reset is detected, giving that the contexts are
+>> +lost and the app won't be able to figure this out and recreate the contexts.
+> 
+> What about GL ES? Is GL_ARB_robustness implemented or even defined there?
+> 
+
+I found this: 
+https://registry.khronos.org/OpenGL/extensions/EXT/EXT_robustness.txt
+
+"Since this is intended to be a version of ARB_robustness for OpenGL ES, 
+it should be named accordingly."
+
+I can add this to this paragraph.
+
+> What about EGL returning errors like EGL_CONTEXT_LOST, would handling that not
+> be enough from the app? The documented expectation is: "The application
+> must destroy all contexts and reinitialise OpenGL ES state and objects
+> to continue rendering."
+
+I couldn't find the spec for EGL_CONTEXT_LOST, but I found for 
+GL_CONTEXT_LOST, which I assume is similar.
+
+GL_CONTEXT_LOST is only returned in some specific commands (that might 
+cause a polling application to block indefinitely), so I don't think 
+it's enough, given that the we can't guarantee that the application will 
+call such commands after a reset, thus not being able to notice a reset.
+
+https://registry.khronos.org/OpenGL-Refpages/gl4/html/glGetGraphicsResetStatus.xhtml
+
+> 
+>> +
+>> +Vulkan
+>> +~~~~~~
+>> +
+>> +Apps using Vulkan should check for ``VK_ERROR_DEVICE_LOST`` for submissions.
+>> +This error code means, among other things, that a device reset has happened and
+>> +it needs to recreate the contexts to keep going.
+>> +
+>> +Reporting resets causes
+>> +-----------------------
+>> +
+>> +Apart from propagating the reset through the stack so apps can recover, it's
+>> +really useful for driver developers to learn more about what caused the reset in
+>> +first place. DRM devices should make use of devcoredump to store relevant
+>> +information about the reset, so this information can be added to user bug
+>> +reports.
+>> +
+>>   .. _drm_driver_ioctl:
+>>   
+>>   IOCTL Support on Device Nodes
+> 
+> What about VRAM contents? If userspace holds a dmabuf handle, can a GPU
+> reset wipe that buffer? How would that be communicated?
+> 
+
+Yes, it can.
+
+> The dmabuf may have originated in another process.
+> 
+
+Indeed, I think we might need to add an error code for dmabuf calls so 
+the buffer user knows that it's invalid now because a reset has happened 
+in the other device. I will need to read more dmabuf code to make sure 
+how this would be possible.
+
+> 
+> Thanks,
+> pq
