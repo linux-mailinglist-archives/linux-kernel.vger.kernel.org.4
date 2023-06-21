@@ -2,85 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0BD737C3E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 09:36:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73672737C6F
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 09:36:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbjFUHLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 03:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52252 "EHLO
+        id S231220AbjFUHNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 03:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbjFUHLN (ORCPT
+        with ESMTP id S229970AbjFUHND (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 03:11:13 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEE710FB
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 00:11:11 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-988aefaa44eso453503666b.2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 00:11:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687331470; x=1689923470;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5dvTyi8wxIQmAPseTg3IqsVlndTJNTzpv8zE7pEM+Jk=;
-        b=K5JEgidftDrgX4O6Ea812KJMDIEzYWSIODKLFTGNkp3MVJfaVprSw7KBGFf7I45q2M
-         qgJ1XaUuABTcr063x03nc1xqMv56ms7mmy6/6Amf01Inf/uygPCO4+j/tk35/YM602Jy
-         tOTcjI23G5U+jln0btEifG7I24Tml0+EmCS41ZAldRMFtXqxXACxqy0qHAApkUeJlC3t
-         7o4Dogju7tveXaxoNRPt3eC+Kkw/7QNkK+aUFnBRLok+N5KOqDon9ZNUc3lzrviWiHUs
-         Ixt0K/0FZzXqZVRHGI87RrGKR1N2eaG4UjAObDCW4jC+u8o3TSEwBdvMGyOh31p1+RYZ
-         E1nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687331470; x=1689923470;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5dvTyi8wxIQmAPseTg3IqsVlndTJNTzpv8zE7pEM+Jk=;
-        b=XOYNILAow3q0iqXh7BeIE2JFvdJd+1u2SbjgdyxsXPzZiRGwTpNVqVFccMzqswPFQK
-         bmwQp8AZh3mqF2yOpGxvrLyP30ckxK2+BkLx+lKdBRsii5OfwiEP5UJab3tOFpPHEHcZ
-         WYnY8r4/kbH+zVLgATIIZ4j/7B1cJpQSiJijdZ5xayHUks/lHSlOufzTkM7wAtbaO+l1
-         BjKTUhoN5v47FGPsaTnq+3z4gN9e8VKPAZpB0sexixl26KwYX0qBHBplMNuqYN8ZQsGW
-         K3C/ncpAsk03t06pIQAMG4q/DYjhrO7nBBbPNagLMvETfi3kT3h+Mpbl1OCcc9IJBNVH
-         FZzQ==
-X-Gm-Message-State: AC+VfDxGppS7+/beLrJvF3RlIfBVXcIk+0sG7aO/1NpXh//aAmJ7shiC
-        GF1vXmlolwXVsgegnlzZ+xw=
-X-Google-Smtp-Source: ACHHUZ4nMVtcJV0GIVaj4PcObJnRidJ6Emufia2L+6+DueBmYR+usB7SZv2ThR2j3CD0rVADJIhG6w==
-X-Received: by 2002:a17:906:6a0c:b0:988:bb33:53a8 with SMTP id qw12-20020a1709066a0c00b00988bb3353a8mr6730841ejc.9.1687331470222;
-        Wed, 21 Jun 2023 00:11:10 -0700 (PDT)
-Received: from [93.173.115.83] (93-173-115-83.bb.netvision.net.il. [93.173.115.83])
-        by smtp.gmail.com with ESMTPSA id g2-20020a17090669c200b00982be08a9besm2606062ejs.172.2023.06.21.00.11.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 00:11:09 -0700 (PDT)
-Message-ID: <380c8269-7d2a-293f-7919-8de6776f1cdb@gmail.com>
-Date:   Wed, 21 Jun 2023 10:09:34 +0300
+        Wed, 21 Jun 2023 03:13:03 -0400
+Received: from bmailout3.hostsharing.net (bmailout3.hostsharing.net [176.9.242.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5725110D2;
+        Wed, 21 Jun 2023 00:13:01 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout3.hostsharing.net (Postfix) with ESMTPS id 62097100FC16D;
+        Wed, 21 Jun 2023 09:12:59 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 2ECED110A0; Wed, 21 Jun 2023 09:12:59 +0200 (CEST)
+Date:   Wed, 21 Jun 2023 09:12:59 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>, oohall@gmail.com,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Fontenot Nathan <Nathan.Fontenot@amd.com>
+Subject: Re: [PATCH v2 2/2] PCI: pciehp: Clear the optional capabilities in
+ DEVCTL2 on a hot-plug
+Message-ID: <20230621071259.GA2028@wunner.de>
+References: <20230418210526.36514-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20230418210526.36514-3-Smita.KoralahalliChannabasappa@amd.com>
+ <20230511111902.GA10720@wunner.de>
+ <cc36bb5b-6a4a-258b-6707-4d019154e019@amd.com>
+ <20230616182409.GA8894@wunner.de>
+ <d9cf3451-c0c1-ab86-0528-2c05982e7872@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 9/9] char: xillybus: make xillybus_class a static const
- structure
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-References: <20230620143751.578239-10-gregkh@linuxfoundation.org>
- <20230620143751.578239-18-gregkh@linuxfoundation.org>
-From:   Eli Billauer <eli.billauer@gmail.com>
-In-Reply-To: <20230620143751.578239-18-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d9cf3451-c0c1-ab86-0528-2c05982e7872@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is fine with me.
+On Fri, Jun 16, 2023 at 04:34:27PM -0700, Smita Koralahalli wrote:
+> On 6/16/2023 11:24 AM, Lukas Wunner wrote:
+> > On Mon, May 22, 2023 at 03:23:31PM -0700, Smita Koralahalli wrote:
+> > > On 5/11/2023 4:19 AM, Lukas Wunner wrote:
+> > > > On Tue, Apr 18, 2023 at 09:05:26PM +0000, Smita Koralahalli wrote:
+> > > Some couple of ways we think could be:
+> > > [1] Check if these bits are enabled by Platform at boot time, clear them
+> > > only it is set during hotplug flow.
+> > > [2] Clear them unconditionally as I did..
+> > > [3] Enable 10-bits tags in Linux when a device is probed just like how
+> > > we do for ARI..
+> > > 
+> > > Similarly call pci_enable_atomic_ops_to_root() during a hot add..
+> > 
+> > Personally I'm fine with option [2].  If you or Bjorn prefer option [3],
+> > I'm fine with that as well.
+> 
+> Looking forward for Bjorn comments!
+
+You may want to consider first doing [2], i.e. clear the DevCtl2 bits
+on hot removal, and then in a separate step do [3], i.e. add support
+for enabling 10 bit tags and atomic ops in the kernel.  Having that
+would certainly be useful, but it's more complex than just clearing
+the DevCtl2 bits on unplug.  So you may want to do the latter as a
+stop-gap.
 
 Thanks,
-    Eli
 
-Acked-by: Eli Billauer <eli.billauer@gmail.com>
+Lukas
