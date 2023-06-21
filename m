@@ -2,131 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC270738A0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E017738A10
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:47:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbjFUPqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
+        id S233538AbjFUPrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 11:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233600AbjFUPqa (ORCPT
+        with ESMTP id S232254AbjFUPrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:46:30 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A174DE69
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:46:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687362376; x=1718898376;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=6aeZt3AGr6ft5yHMkjJnVz9mKRAHdriZ/qLt81RNsCk=;
-  b=U30gY86F34elzbJcD7pVKT0tTJgCQCVFIxnOsUp5p1SNQ8AV7c/13u71
-   2Oeji41n05ypobXn0QpXxnz1J1OQ2neCNrb327omMN0/7JexvD5eVN/kG
-   P2pt6CXKu513i5s9fi9bCCM9YSIjwwelsOTbRPqzoYRjipHDmd3x9Xlr3
-   WJo14mSNEndKD+d0A88FVqXC7MQXVKU9wuU5ekvxHU5VI/OWMpBpJMRbf
-   0Egvn/s4xw/O03b+cY94FTu326IStrWmWlhBLRRWYGocH7JWE2Oe78zfV
-   XHXomBzX7zqaUAOkK7CqUiWd7A3ByEnQakAr9EriOgbe1d42YHT2T3FUd
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="359082022"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="359082022"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 08:46:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="717704974"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="717704974"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 21 Jun 2023 08:46:10 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qC025-0006uv-2s;
-        Wed, 21 Jun 2023 15:46:09 +0000
-Date:   Wed, 21 Jun 2023 23:45:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: arc-rimi.c:undefined reference to `ioremap'
-Message-ID: <202306212350.fgz5R8Xv-lkp@intel.com>
+        Wed, 21 Jun 2023 11:47:16 -0400
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5003BC;
+        Wed, 21 Jun 2023 08:47:15 -0700 (PDT)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-1b52bf6e669so47781795ad.2;
+        Wed, 21 Jun 2023 08:47:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687362435; x=1689954435;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G5Mcef6zMkNz9FKaMVVsQpbKPOPdZ24sc4KU/lOwhoA=;
+        b=Bi/cXZWeZgWMODnp89bAt8fNFY8oQ4OLLzKrznbVOLQnLvoLjTMSMZS9xlAdJM4Yil
+         2tUFAlgT9tERxr196lRy3dXaO3CCKOsw0NgHGmHPKG5074D5ffWD2ODkK49bP8erhHaM
+         HsV8auPVLV4sLHXvKLIBT0//rpX9V/mhkT/mJV2cgHPqpTSZvlF6NNRCbgq6eHfnxCDJ
+         vsMjmFv5EYeRELE6XJqeZhRuidsuf5AVvjAso70JdY0ru/l3kmuYEfyyNfZsi8WB5enM
+         tdF/HHyjP53GuBgezZOnYZhh5VjhVQvaUvUHaKVTdNiNzHqEaSwKEGUpSW6XvV0zDoPj
+         yIcw==
+X-Gm-Message-State: AC+VfDwx2b3j2wNtVJM71Fn5Hd7yGE3xnDERXs6i4oofqGRVp5AlDA9j
+        b5ypiSgrD0yBEz6ky8qkZawK1IlbZco=
+X-Google-Smtp-Source: ACHHUZ5TZ+AEE0tR2knWzeb7OcqtZ05gFVcqzh+aTH+zi7o1/qW/EOI3CETf/JsKXR8pyNBDrqhJfw==
+X-Received: by 2002:a17:903:2682:b0:1b1:9d14:1537 with SMTP id jf2-20020a170903268200b001b19d141537mr13780419plb.55.1687362435057;
+        Wed, 21 Jun 2023 08:47:15 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:9bb2:be1e:34e3:7c45? ([2620:15c:211:201:9bb2:be1e:34e3:7c45])
+        by smtp.gmail.com with ESMTPSA id d5-20020a170902cec500b001b54d064a4bsm3629752plg.259.2023.06.21.08.47.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jun 2023 08:47:14 -0700 (PDT)
+Message-ID: <93834519-c945-94a7-f1f8-7bf85bf86dd5@acm.org>
+Date:   Wed, 21 Jun 2023 08:47:10 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] scsi/sg: don't grab scsi host module reference
+Content-Language: en-US
+To:     Yu Kuai <yukuai1@huaweicloud.com>, hch@lst.de,
+        chaitanyak@nvidia.com, shinichiro.kawasaki@wdc.com,
+        dgilbert@interlog.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, yukuai3@huawei.com, axboe@kernel.dk
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com
+References: <20230621160111.1433521-1-yukuai1@huaweicloud.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20230621160111.1433521-1-yukuai1@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Heiko,
+On 6/21/23 09:01, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> In order to prevent request_queue to be freed before cleaning up
+> blktrace debugfs entries, commit db59133e9279 ("scsi: sg: fix blktrace
+> debugfs entries leakage") use scsi_device_get(), however,
+> scsi_device_get() will also grab scsi module reference and scsi module
+> can't be removed.
+> 
+> It's reported that blktests can't unload scsi_debug after block/001:
+> 
+> blktests (master) # ./check block
+> block/001 (stress device hotplugging) [failed]
+>       +++ /root/blktests/results/nodev/block/001.out.bad 2023-06-19
+>        Running block/001
+>        Stressing sd
+>       +modprobe: FATAL: Module scsi_debug is in use.
+> 
+> Fix this problem by grabbing request_queue reference directly, so that
+> scsi host module can still be unloaded while request_queue will be
+> pinged by sg device.
 
-FYI, the error/warning still remains.
+pinged -> pinned
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   e660abd551f1172e428b4e4003de887176a8a1fd
-commit: 6ef55060a1cc29dd54ff390f22cb3de266dab2b0 s390: make use of CONFIG_FUNCTION_ALIGNMENT
-date:   3 months ago
-config: s390-randconfig-r035-20230621 (https://download.01.org/0day-ci/archive/20230621/202306212350.fgz5R8Xv-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230621/202306212350.fgz5R8Xv-lkp@intel.com/reproduce)
+Otherwise this patch looks good to me.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306212350.fgz5R8Xv-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   s390-linux-ld: drivers/clk/clk-fixed-mmio.o: in function `fixed_mmio_clk_setup':
-   clk-fixed-mmio.c:(.text+0x92): undefined reference to `of_iomap'
-   s390-linux-ld: clk-fixed-mmio.c:(.text+0xda): undefined reference to `iounmap'
-   s390-linux-ld: drivers/dma/fsl-edma.o: in function `fsl_edma_probe':
-   fsl-edma.c:(.text+0xa02): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: fsl-edma.c:(.text+0xc86): undefined reference to `devm_platform_ioremap_resource'
-   s390-linux-ld: drivers/dma/qcom/hidma.o: in function `hidma_probe':
-   hidma.c:(.text+0x137a): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: hidma.c:(.text+0x13d4): undefined reference to `devm_ioremap_resource'
-   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `ipwireless_detach':
-   main.c:(.text+0x90): undefined reference to `iounmap'
-   s390-linux-ld: main.c:(.text+0xd4): undefined reference to `iounmap'
-   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `config_ipwireless':
-   main.c:(.text+0x23e): undefined reference to `iounmap'
-   s390-linux-ld: main.c:(.text+0x35c): undefined reference to `iounmap'
-   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `ipwireless_probe.part.0':
-   main.c:(.text+0x468): undefined reference to `ioremap'
-   s390-linux-ld: main.c:(.text+0x51c): undefined reference to `ioremap'
-   s390-linux-ld: main.c:(.text+0x56a): undefined reference to `iounmap'
-   s390-linux-ld: main.c:(.text+0x59e): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `check_mirror':
->> arc-rimi.c:(.text+0x2ba): undefined reference to `ioremap'
->> s390-linux-ld: arc-rimi.c:(.text+0x2dc): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `arc_rimi_exit':
-   arc-rimi.c:(.exit.text+0x2e): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `arcrimi_found':
-   arc-rimi.c:(.init.text+0xec): undefined reference to `ioremap'
-   s390-linux-ld: arc-rimi.c:(.init.text+0x184): undefined reference to `iounmap'
-   s390-linux-ld: arc-rimi.c:(.init.text+0x2a4): undefined reference to `iounmap'
-   s390-linux-ld: arc-rimi.c:(.init.text+0x37e): undefined reference to `ioremap'
-   s390-linux-ld: arc-rimi.c:(.init.text+0x466): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/ethernet/smsc/smc91c92_cs.o: in function `smc91c92_release':
-   smc91c92_cs.c:(.text+0x9ce): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/ethernet/smsc/smc91c92_cs.o: in function `smc91c92_config':
-   smc91c92_cs.c:(.text+0x1a3a): undefined reference to `ioremap'
-   s390-linux-ld: drivers/net/ethernet/xircom/xirc2ps_cs.o: in function `xirc2ps_release':
-   xirc2ps_cs.c:(.text+0x39e): undefined reference to `iounmap'
-   s390-linux-ld: drivers/net/ethernet/xircom/xirc2ps_cs.o: in function `xirc2ps_config':
-   xirc2ps_cs.c:(.text+0x1674): undefined reference to `ioremap'
-   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `set_cis_map':
-   cistpl.c:(.text+0x4a4): undefined reference to `ioremap'
-   s390-linux-ld: cistpl.c:(.text+0x4de): undefined reference to `iounmap'
-   s390-linux-ld: cistpl.c:(.text+0x562): undefined reference to `iounmap'
-   s390-linux-ld: cistpl.c:(.text+0x574): undefined reference to `ioremap'
-   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `release_cis_mem':
-   cistpl.c:(.text+0xdb6): undefined reference to `iounmap'
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Bart.
