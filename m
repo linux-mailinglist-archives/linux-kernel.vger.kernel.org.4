@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED8977384AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:16:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F383C7384A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231861AbjFUNQi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:16:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        id S232395AbjFUNPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbjFUNQf (ORCPT
+        with ESMTP id S231274AbjFUNPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:16:35 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3051994;
-        Wed, 21 Jun 2023 06:16:31 -0700 (PDT)
-X-QQ-mid: bizesmtp64t1687353381tybgz1rn
-Received: from linux-lab-host.localdomain ( [116.30.126.60])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 21 Jun 2023 21:16:20 +0800 (CST)
-X-QQ-SSF: 01200000000000D0V000000A0000000
-X-QQ-FEAT: OtIeQkg1QQGRU6D6w1usUxm5UtoUxl8mHkGDNVB6rKGyKV5kvrl1yVbh7EPcT
-        YR7tOU85DSoQ0Z0birjpP0DbP9SyBUaeu8YgRnIl+kX2dhPTaOp2uVTTw2qlzqvirWouum2
-        T/nPkr61O1qJUrgpGptq7at6lRZndbusEdtbR88mSPvh8BVHOJK+VMdej8eknGixsuHHUtD
-        VDyUxNsgO8ENogsBF8U5GKwnwdqDC6mnohFDX0R45jdvxPDoWfP4iwcXMhAeVSmzIas7VrX
-        o09AxNafPK/tp5+tnsbEfzimFzAFdWRkepC7gPLul6j6YJF5QrjvtwFklYs113Jdzr1N/dB
-        AzokAAND7DPeo8iRsfs/OVUYJ9AnaDMAtGJhXrrESOxbGRtwS9jyBQCFiHewQ==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 1238278600326820981
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     thomas@t-8ch.de, arnd@arndb.de, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v1 14/17] selftests/nolibc: rename chroot_exe to chroot_file
-Date:   Wed, 21 Jun 2023 21:13:20 +0800
-Message-Id: <217a4460a1f4e5fa6fd0312340ea7b7b32ac225f.1687344643.git.falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1687344643.git.falcon@tinylab.org>
-References: <cover.1687344643.git.falcon@tinylab.org>
+        Wed, 21 Jun 2023 09:15:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 53E19E57;
+        Wed, 21 Jun 2023 06:15:21 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F12081042;
+        Wed, 21 Jun 2023 06:16:04 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.27.65])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EAF0C3F64C;
+        Wed, 21 Jun 2023 06:15:18 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 14:15:15 +0100
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        will@kernel.org, catalin.marinas@arm.com,
+        Mark Brown <broonie@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH V12 08/10] arm64/perf: Add struct brbe_regset helper
+ functions
+Message-ID: <ZJL346ZgQRcHNA7E@FVFF77S0Q05N>
+References: <20230615133239.442736-1-anshuman.khandual@arm.com>
+ <20230615133239.442736-9-anshuman.khandual@arm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230615133239.442736-9-anshuman.khandual@arm.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,66 +52,192 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When there is no procfs, let's use tmpfs and create a tmp file for
-chroot_exe test.
+Hi Anshuman,
 
-Since chroot_exe is mainly testing the not directory case (ENOTDIR), so,
-rename it to chroot_file may be better.
+Thanks, this is looking much better; I just a have a couple of minor comments.
 
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+With those fixed up:
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index c900564219e8..19e4ef5ce578 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -547,11 +547,14 @@ int run_syscall(int min, int max)
- 	int has_proc;
- 	int test;
- 	int tmp;
-+	int fd;
- 	int ret = 0;
- 	void *p1, *p2;
- 	int has_gettid = 1;
- 	int has_tmpdir = 0;
-+	int has_tmpfile = 0;
- 	char *tmpdir = NULL;
-+	char *tmpfile = NULL;
- 
- 	/* <has_proc> indicates whether or not /proc is mounted */
- 	has_proc = stat("/proc", &stat_buf) == 0;
-@@ -560,10 +563,20 @@ int run_syscall(int min, int max)
- 	if (stat("/proc/self/net", &stat_buf) == 0) {
- 		tmpdir = "/proc/self/net";
- 		has_tmpdir = 1;
-+
-+		tmpfile = "/proc/self/exe";
-+		has_tmpfile = 1;
- 	} else if (stat("/tmp/.", &stat_buf) == 0) {
- 		tmpdir = "/tmp/blah";
- 		if (mkdir(tmpdir, 0755) == 0)
- 			has_tmpdir = 1;
-+
-+		tmpfile = "/tmp/dummy";
-+		fd = open(tmpfile, O_CREAT);
-+		if (fd != -1) {
-+			has_tmpfile = 1;
-+			close(fd);
-+		}
- 	}
- 
- 	/* this will be used to skip certain tests that can't be run unprivileged */
-@@ -599,7 +612,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(chown_self);        EXPECT_SYSER(has_proc, chown("/proc/self", 0, 0), -1, EPERM); break;
- 		CASE_TEST(chroot_root);       EXPECT_SYSZR(is_root, chroot("/")); break;
- 		CASE_TEST(chroot_blah);       EXPECT_SYSER(1, chroot("/proc/self/blah"), -1, ENOENT); break;
--		CASE_TEST(chroot_exe);        EXPECT_SYSER(has_proc, chroot("/proc/self/exe"), -1, ENOTDIR); break;
-+		CASE_TEST(chroot_file);       EXPECT_SYSER(has_tmpfile, chroot(tmpfile), -1, ENOTDIR); break;
- 		CASE_TEST(close_m1);          EXPECT_SYSER(1, close(-1), -1, EBADF); break;
- 		CASE_TEST(close_dup);         EXPECT_SYSZR(1, close(dup(0))); break;
- 		CASE_TEST(dup_0);             tmp = dup(0);  EXPECT_SYSNE(1, tmp, -1); close(tmp); break;
--- 
-2.25.1
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
+Mark.
+
+On Thu, Jun 15, 2023 at 07:02:37PM +0530, Anshuman Khandual wrote:
+> The primary abstraction level for fetching branch records from BRBE HW has
+> been changed as 'struct brbe_regset', which contains storage for all three
+> BRBE registers i.e BRBSRC, BRBTGT, BRBINF. Whether branch record processing
+> happens in the task sched out path, or in the PMU IRQ handling path, these
+> registers need to be extracted from the HW. Afterwards both live and stored
+> sets need to be stitched together to create final branch records set. This
+> adds required helper functions for such operations.
+> 
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Cc: Mark Rutland <mark.rutland@arm.com>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Tested-by: James Clark <james.clark@arm.com>
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> ---
+>  drivers/perf/arm_brbe.c | 127 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 127 insertions(+)
+> 
+> diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
+> index 4729cb49282b..f6693699fade 100644
+> --- a/drivers/perf/arm_brbe.c
+> +++ b/drivers/perf/arm_brbe.c
+> @@ -44,6 +44,133 @@ static void select_brbe_bank(int bank)
+>  	isb();
+>  }
+>  
+> +static bool __read_brbe_regset(struct brbe_regset *entry, int idx)
+> +{
+> +	entry->brbinf = get_brbinf_reg(idx);
+> +
+> +	/*
+> +	 * There are no valid entries anymore on the buffer.
+> +	 * Abort the branch record processing to save some
+> +	 * cycles and also reduce the capture/process load
+> +	 * for the user space as well.
+> +	 */
+
+This comment refers to the process of handling multiple entries, though it's
+only handling one entry, and I don't think we need to mention saving cycles here.
+
+Could we please delete this comment entirely? The comment above
+capture_brbe_regset() already explains that we read until the first invalid
+entry.
+
+> +	if (brbe_invalid(entry->brbinf))
+> +		return false;
+> +
+> +	entry->brbsrc = get_brbsrc_reg(idx);
+> +	entry->brbtgt = get_brbtgt_reg(idx);
+> +	return true;
+> +}
+> +
+> +/*
+> + * This scans over BRBE register banks and captures individual branch records
+> + * [BRBSRC, BRBTGT, BRBINF] into a pre-allocated 'struct brbe_regset' buffer,
+> + * until an invalid one gets encountered. The caller for this function needs
+> + * to ensure BRBE is an appropriate state before the records can be captured.
+> + */
+
+Could we simplify this to:
+
+/*
+ * Read all BRBE entries in HW until the first invalid entry.
+ *
+ * The caller must ensure that the BRBE is not concurrently modifying these
+ * entries.
+ */
+
+> +static int capture_brbe_regset(int nr_hw_entries, struct brbe_regset *buf)
+> +{
+> +	int idx = 0;
+> +
+> +	select_brbe_bank(BRBE_BANK_IDX_0);
+> +	while (idx < nr_hw_entries && idx < BRBE_BANK0_IDX_MAX) {
+> +		if (!__read_brbe_regset(&buf[idx], idx))
+> +			return idx;
+> +		idx++;
+> +	}
+> +
+> +	select_brbe_bank(BRBE_BANK_IDX_1);
+> +	while (idx < nr_hw_entries && idx < BRBE_BANK1_IDX_MAX) {
+> +		if (!__read_brbe_regset(&buf[idx], idx))
+> +			return idx;
+> +		idx++;
+> +	}
+> +	return idx;
+> +}
+> +
+> +/*
+> + * This function concatenates branch records from stored and live buffer
+> + * up to maximum nr_max records and the stored buffer holds the resultant
+> + * buffer. The concatenated buffer contains all the branch records from
+> + * the live buffer but might contain some from stored buffer considering
+> + * the maximum combined length does not exceed 'nr_max'.
+> + *
+> + *	Stored records	Live records
+> + *	------------------------------------------------^
+> + *	|	S0	|	L0	|	Newest	|
+> + *	---------------------------------		|
+> + *	|	S1	|	L1	|		|
+> + *	---------------------------------		|
+> + *	|	S2	|	L2	|		|
+> + *	---------------------------------		|
+> + *	|	S3	|	L3	|		|
+> + *	---------------------------------		|
+> + *	|	S4	|	L4	|		nr_max
+> + *	---------------------------------		|
+> + *	|		|	L5	|		|
+> + *	---------------------------------		|
+> + *	|		|	L6	|		|
+> + *	---------------------------------		|
+> + *	|		|	L7	|		|
+> + *	---------------------------------		|
+> + *	|		|		|		|
+> + *	---------------------------------		|
+> + *	|		|		|	Oldest	|
+> + *	------------------------------------------------V
+> + *
+> + *
+> + * S0 is the newest in the stored records, where as L7 is the oldest in
+> + * the live records. Unless the live buffer is detected as being full
+> + * thus potentially dropping off some older records, L7 and S0 records
+> + * are contiguous in time for a user task context. The stitched buffer
+> + * here represents maximum possible branch records, contiguous in time.
+> + *
+> + *	Stored records  Live records
+> + *	------------------------------------------------^
+> + *	|	L0	|	L0	|	Newest	|
+> + *	---------------------------------		|
+> + *	|	L0	|	L1	|		|
+> + *	---------------------------------		|
+> + *	|	L2	|	L2	|		|
+> + *	---------------------------------		|
+> + *	|	L3	|	L3	|		|
+> + *	---------------------------------		|
+> + *	|	L4	|	L4	|	      nr_max
+> + *	---------------------------------		|
+> + *	|	L5	|	L5	|		|
+> + *	---------------------------------		|
+> + *	|	L6	|	L6	|		|
+> + *	---------------------------------		|
+> + *	|	L7	|	L7	|		|
+> + *	---------------------------------		|
+> + *	|	S0	|		|		|
+> + *	---------------------------------		|
+> + *	|	S1	|		|    Oldest	|
+> + *	------------------------------------------------V
+> + *	|	S2	| <----|
+> + *	-----------------      |
+> + *	|	S3	| <----| Dropped off after nr_max
+> + *	-----------------      |
+> + *	|	S4	| <----|
+> + *	-----------------
+> + */
+> +static int stitch_stored_live_entries(struct brbe_regset *stored,
+> +				      struct brbe_regset *live,
+> +				      int nr_stored, int nr_live,
+> +				      int nr_max)
+> +{
+> +	int nr_move = min(nr_stored, nr_max - nr_live);
+> +
+> +	/* Move the tail of the buffer to make room for the new entries */
+> +	memmove(&stored[nr_live], &stored[0], nr_move * sizeof(*stored));
+> +
+> +	/* Copy the new entries into the head of the buffer */
+> +	memcpy(&stored[0], &live[0], nr_live * sizeof(*stored));
+> +
+> +	/* Return the number of entries in the stitched buffer */
+> +	return min(nr_live + nr_stored, nr_max);
+> +}
+> +
+>  /*
+>   * Generic perf branch filters supported on BRBE
+>   *
+> -- 
+> 2.25.1
+> 
