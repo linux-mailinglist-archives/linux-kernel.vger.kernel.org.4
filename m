@@ -2,178 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49B8F73822C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00EFE738227
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231993AbjFUJlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 05:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43874 "EHLO
+        id S232116AbjFUJin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 05:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232549AbjFUJk5 (ORCPT
+        with ESMTP id S231955AbjFUJiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 05:40:57 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A25C72D49
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:39:23 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8Cx68YYxJJkMRUAAA--.135S3;
-        Wed, 21 Jun 2023 17:34:16 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxvM4WxJJko2MAAA--.2509S3;
-        Wed, 21 Jun 2023 17:34:15 +0800 (CST)
-Message-ID: <7659b79a-7e13-3be8-0be7-0b8d250206d8@loongson.cn>
-Date:   Wed, 21 Jun 2023 17:34:14 +0800
+        Wed, 21 Jun 2023 05:38:24 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6AF296D
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:36:37 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51878f8e541so6755819a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 02:36:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687340184; x=1689932184;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j6elu26YtJfohzcS72Xjup0fvXIh+C0cjlp4750l45E=;
+        b=0jJIXDRE/dKzNejhP+OjYi3MzC5xg50Bl+mytGFvV2hHFM9edrgynGWJX9XgPFrye2
+         ir2Up9TlMiZYfpRmkFVvyf3lgGenvMkpRAcTIDTHUXCFtAl6KFjQwPrS8Jv13m68e+4s
+         SgOv1A0sRPqc8qe/stnqTEn786oINj0AXqPnf941/AH2ReV/T6yCgVbuRAj/0snLjDWF
+         Lyd2+J/TbbTVgSl60noS6q7ZuI7U7pSYv/biLUIJWj2mxjmAxkQ24B8BQeJRwQEfB6Ce
+         zgB5JwmCEVOb74jk6nhkgKkuymsCxfr9a/3jMc2Kb7ugeFDiOL9y2Zt2hSIdE+R8r+oE
+         W30g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687340184; x=1689932184;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j6elu26YtJfohzcS72Xjup0fvXIh+C0cjlp4750l45E=;
+        b=V0RDuqZg+5aUe4xFtfeIH6ZKzD18x+yDpowHgB4MbkG/NL+IYIuPcib1BlRP+6wXgA
+         osMFnqo/bYUUu35Q/J9z+0RiMLVCLUDFY0cfKvZNs7Pg7ZS8plcNhBul2vZtScFjjfF2
+         61EBaIGnalTNJZBUIhENuGzIOGAeQ/55/qnCPgCo9XRDf+cJKVKGUae/m+scO+f5uL4Z
+         v/OvymEBuIjxLyACllK+AHuNbrLSI8WHJseu7aJaE29qvkDC3lblfWIEz2NktuJqMovM
+         LRTKIuIUtoBlVolzcyGKmBsy4hqN9eHpThtyjPpX4dJxPXa5mBWjNluz45kdfimep6pa
+         BQJQ==
+X-Gm-Message-State: AC+VfDxhzwQQndRwccJ+zbCpX5s7Deax4LyMmhzxK6EEp9OGfcngf8Ti
+        kNUvDZhaVucTpUo8VBaRtd6ielZd+qxgGehyrXc=
+X-Google-Smtp-Source: ACHHUZ5/2qNwBEnLurkUDa66kVeGNaGFVf728nFX+LisHTCTh8RsynfWNIKoix7OvUyk36H+bVvTAA==
+X-Received: by 2002:a05:6402:692:b0:51a:3334:f87f with SMTP id f18-20020a056402069200b0051a3334f87fmr9232463edy.37.1687340184246;
+        Wed, 21 Jun 2023 02:36:24 -0700 (PDT)
+Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id w17-20020a50fa91000000b00514b3dd8638sm2335019edr.67.2023.06.21.02.36.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jun 2023 02:36:23 -0700 (PDT)
+Message-ID: <dca88551-5fa0-c259-32d8-673f1e81944a@baylibre.com>
+Date:   Wed, 21 Jun 2023 11:36:22 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v10 01/11] drm/etnaviv: Add a dedicated function to
- register an irq handler
+Subject: Re: [PATCH 3/3] drm/mediatek: Use devm variant for
+ pm_runtime_enable() when possible
 Content-Language: en-US
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Sui Jingfeng <18949883232@163.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        etnaviv@lists.freedesktop.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20230620094716.2231414-1-18949883232@163.com>
- <20230620094716.2231414-2-18949883232@163.com>
- <77f62814f98dd2728a1e4747f0db6b2a3cfa2c11.camel@pengutronix.de>
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <77f62814f98dd2728a1e4747f0db6b2a3cfa2c11.camel@pengutronix.de>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, chunkuang.hu@kernel.org
+Cc:     p.zabel@pengutronix.de, airlied@gmail.com, daniel@ffwll.ch,
+        matthias.bgg@gmail.com, dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
+References: <20230608101209.126499-1-angelogioacchino.delregno@collabora.com>
+ <20230608101209.126499-4-angelogioacchino.delregno@collabora.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20230608101209.126499-4-angelogioacchino.delregno@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8CxvM4WxJJko2MAAA--.2509S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoWxCr45CF18Xr4DJFWUXFy5trc_yoW5Zry5pF
-        Z7GFyYkr1kua42g347ZFZ8ZFya9w4xXayxCr1Dt3sFk390yrs5tryYkF4UG34fAryfCw4I
-        qr4jgr47uF1YvrXCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-        xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-        AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-        tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
-        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67
-        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
-        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14
-        v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxU4Xo7DU
-        UUU
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 08/06/2023 12:12, AngeloGioacchino Del Regno wrote:
+> Simplify the error path of return functions and drop the call to
+> pm_runtime_disable() in remove functions by switching to
+> devm_pm_runtime_enable() where possible.
 
-On 2023/6/21 17:07, Lucas Stach wrote:
-> Am Dienstag, dem 20.06.2023 um 17:47 +0800 schrieb Sui Jingfeng:
->> From: Sui Jingfeng <suijingfeng@loongson.cn>
->>
->> Because getting IRQ from a device is platform-dependent, PCI devices have
->> different methods for getting an IRQ. This patch is a preparation to extend
->> this driver for supporting the PCI devices.
->>
->> Cc: Lucas Stach <l.stach@pengutronix.de>
->> Cc: Christian Gmeiner <christian.gmeiner@gmail.com>
->> Cc: Philipp Zabel <p.zabel@pengutronix.de>
->> Cc: Bjorn Helgaas <bhelgaas@google.com>
->> Cc: Daniel Vetter <daniel@ffwll.ch>
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->> ---
->>   drivers/gpu/drm/etnaviv/etnaviv_gpu.c | 32 +++++++++++++++++++--------
->>   1 file changed, 23 insertions(+), 9 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
->> index de8c9894967c..a03e81337d8f 100644
->> --- a/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
->> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gpu.c
->> @@ -1817,6 +1817,27 @@ static const struct of_device_id etnaviv_gpu_match[] = {
->>   };
->>   MODULE_DEVICE_TABLE(of, etnaviv_gpu_match);
->>   
->> +static int etnaviv_gpu_register_irq(struct etnaviv_gpu *gpu, int irq)
->> +{
->> +	struct device *dev = gpu->dev;
->> +	int err;
->> +
->> +	if (irq < 0)
->> +		return irq;
->> +
->> +	err = devm_request_irq(dev, irq, irq_handler, 0, dev_name(dev), gpu);
->> +	if (err) {
->> +		dev_err(dev, "failed to request irq %u: %d\n", irq, err);
->> +		return err;
->> +	}
->> +
->> +	gpu->irq = irq;
->> +
->> +	dev_info(dev, "irq(%d) handler registered\n", irq);
-> There is no reason to put this into the kernel log. It's no different
-> than other resources to the driver and we don't log each one of those
-> either.
->
-> In fact I don't see any reason for this change in the first place.
-> Effectively you are moving a single function call into a new function,
-> which doesn't seem like an improvement.
-
-Hi, another reason is that we observed that
-
-It(register irq) has no relationship to rest of the 
-etnaviv_gpu_driver_create() funciton,
-
-so it should be stand alone.
-
-After stand alone, it is not platform-dependent any more,
-
-it can be shared by both the PCI device driver and the platform device 
-driver.
-
-
-So, this is what I'm thinking when I create this function.
-
-> Regards,
-> Lucas
->
->> +
->> +	return 0;
->> +}
->> +
->>   static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
->>   {
->>   	struct device *dev = &pdev->dev;
->> @@ -1837,16 +1858,9 @@ static int etnaviv_gpu_platform_probe(struct platform_device *pdev)
->>   		return PTR_ERR(gpu->mmio);
->>   
->>   	/* Get Interrupt: */
->> -	gpu->irq = platform_get_irq(pdev, 0);
->> -	if (gpu->irq < 0)
->> -		return gpu->irq;
->> -
->> -	err = devm_request_irq(&pdev->dev, gpu->irq, irq_handler, 0,
->> -			       dev_name(gpu->dev), gpu);
->> -	if (err) {
->> -		dev_err(dev, "failed to request IRQ%u: %d\n", gpu->irq, err);
->> +	err = etnaviv_gpu_register_irq(gpu, platform_get_irq(pdev, 0));
->> +	if (err)
->>   		return err;
->> -	}
->>   
->>   	/* Get Clocks: */
->>   	gpu->clk_reg = devm_clk_get_optional(&pdev->dev, "reg");
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 
 -- 
-Jingfeng
+Regards,
+Alexandre
 
