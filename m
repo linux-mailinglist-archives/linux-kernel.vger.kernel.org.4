@@ -2,112 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04EAE7380E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA266738196
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232220AbjFUJvy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 05:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49498 "EHLO
+        id S230244AbjFUJw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 05:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232113AbjFUJvZ (ORCPT
+        with ESMTP id S229951AbjFUJwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 05:51:25 -0400
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375821728;
-        Wed, 21 Jun 2023 02:50:34 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-31114d47414so1270311f8f.1;
-        Wed, 21 Jun 2023 02:50:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687341033; x=1689933033;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=foLI8oofbou4hrt7TVAkrvJDeJCFo178hS/ZQokH0vY=;
-        b=lWFu5BQrlbd+itODc5zHIy53obAPEc0y+6ptIVyD8qQhCiYiBFD+NLnd8+RFUhlDPQ
-         iBaQg3NX8ohqweNX8ci2ZOgyV9jQhqGybnx4zMXYMbrB7kA2uNFRJtovffVomi58lHiY
-         CK6YTmnaBPOcyIfcrmFxPqSSOqbSydozkhD9l1bohaejzmbe/mmvLTeuLFkw0sx6Sj/Z
-         1uoPXGhRJAFU9MrJkrwLC9vdj0VPB9pFhfZ8U8cdpeQvv6kHQ7cbeXM7iNflhYk/3U+X
-         Tq0OsDiJEUQI7HGbWDsJY4C9K0wU9wsZpfHS9de6CX0vSJicdbSd6Q5LUUmefPctT8SW
-         ecMA==
-X-Gm-Message-State: AC+VfDwIrSPhd0Y4xTAjD2kuwCrTzI9D+VP8Fe7sdwCFCv7BVUbyqbZW
-        UgA49meeNGf6rjY98yWRgSLD/+sScDw=
-X-Google-Smtp-Source: ACHHUZ4Hah7qAiMDMVHWF7ildurOLQasEXFh5ekDJrboVLcvEPHKdYejnUi/v+YlmoRmMei1jMIPWw==
-X-Received: by 2002:adf:f312:0:b0:30e:460b:bede with SMTP id i18-20020adff312000000b0030e460bbedemr12934277wro.5.1687341032561;
-        Wed, 21 Jun 2023 02:50:32 -0700 (PDT)
-Received: from [192.168.64.192] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
-        by smtp.gmail.com with ESMTPSA id h9-20020a5d4fc9000000b0031134bcdacdsm3998202wrw.42.2023.06.21.02.50.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 02:50:31 -0700 (PDT)
-Message-ID: <083e29ff-4ad0-d05f-0521-56ace13629e6@grimberg.me>
-Date:   Wed, 21 Jun 2023 12:50:29 +0300
+        Wed, 21 Jun 2023 05:52:53 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C3210A;
+        Wed, 21 Jun 2023 02:52:52 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1FB486606F73;
+        Wed, 21 Jun 2023 10:52:50 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687341170;
+        bh=HjDAudkKipQLczGA3Z+Xcf4LUnUH5z5iQaIO41AWYto=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=e4nqUfiWPdOPILSnlwY/fnUauQ1CgUSbBk904O3wxRq8jufIdx8Se0MUH8zg2LTa6
+         F07saruQacith8Q7T55AI+b2nspXoX4g5eiOtdk4qrDdC74qOcbephNt7p/2ryX5ci
+         Cfu5P9NI2QgrEEyVHqPZzrz85w5mjlqirx3nGX3iv1QWwizOKwo6LV08oTaWT6+JfS
+         3jwuzOq7ILskZxpSV6FUQ7JgX7lPuOdjkAQck2+rRDKqhjHH3e2xAdWRVb2IcdY+NN
+         PhbzBizMVGXgFDHl+evY1+z4mECWBOFGqWcr+qyAW74O7oHu+3yxRxc7G2kvZTEM6R
+         gQZSyraCMBQfQ==
+Message-ID: <d26ea42b-5749-bf08-997b-4a3b6062aed4@collabora.com>
+Date:   Wed, 21 Jun 2023 11:52:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH blktests v1 1/3] nvme/048: Check for queue count check
- directly
+Subject: Re: [PATCH 1/2] kselftest/alsa: pcm-test: Move stream duration and
+ margin to variables
 Content-Language: en-US
-To:     Daniel Wagner <dwagner@suse.de>
-Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-block@vger.kernel.org, Chaitanya Kulkarni <kch@nvidia.com>,
-        Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
-        Hannes Reinecke <hare@suse.de>,
-        James Smart <jsmart2021@gmail.com>,
-        Martin Belanger <Martin.Belanger@dell.com>
-References: <20230620132703.20648-1-dwagner@suse.de>
- <20230620132703.20648-2-dwagner@suse.de>
- <380cde65-8794-cfbc-237f-30a8d7e9330c@grimberg.me>
- <f6rvvhgim4nk34onfgbwyfctgvgdbdigwbsugjvizgtli46p57@s7c4gkqrpjqy>
-From:   Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <f6rvvhgim4nk34onfgbwyfctgvgdbdigwbsugjvizgtli46p57@s7c4gkqrpjqy>
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>
+Cc:     kernel@collabora.com, Jaroslav Kysela <perex@perex.cz>,
+        Shuah Khan <shuah@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+References: <20230620220839.2215057-1-nfraprado@collabora.com>
+ <20230620220839.2215057-2-nfraprado@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230620220839.2215057-2-nfraprado@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
->>> +nvmf_wait_for_queue_count() {
->>> +	local subsys_name="$1"
->>> +	local queue_count="$2"
->>> +	local nvmedev
->>> +
->>> +	nvmedev=$(_find_nvme_dev "${subsys_name}")
->>> +
->>> +	queue_count_file="/sys/class/nvme-fabrics/ctl/${nvmedev}/queue_count"
->>> +
->>> +	nvmf_wait_for_state "${subsys_name}" "live" || return 1
->>> +
->>> +	queue_count=$((queue_count + 1))
->>> +	if grep -q "${queue_count}" "${queue_count_file}"; then
->>> +		return 0
->>> +	fi
->>> +
->>> +	echo "expected queue count ${queue_count} not set"
->>> +	return 1
->>> +}
->>> +
->>>    set_nvmet_attr_qid_max() {
->>>    	local nvmet_subsystem="$1"
->>>    	local qid_max="$2"
->>> @@ -56,10 +76,7 @@ set_qid_max() {
->>>    	local qid_max="$3"
->>>    	set_nvmet_attr_qid_max "${subsys_name}" "${qid_max}"
->>> -
->>> -	# Setting qid_max forces a disconnect and the reconntect attempt starts
->>> -	nvmf_wait_for_state "${subsys_name}" "connecting" || return 1
->>> -	nvmf_wait_for_state "${subsys_name}" "live" || return 1
->>> +	nvmf_wait_for_queue_count "${subsys_name}" "${qid_max}" || return 1
->>
->> Why not simply wait for live? The connecting is obviously racy...
+Il 21/06/23 00:08, Nícolas F. R. A. Prado ha scritto:
+> The duration to stream for and time margin to consider the stream failed
+> are currently hardcoded values. Move them to variables so they can be
+> reused and more easily changed.
 > 
-> That is what the new version is doing. It's waiting for the live state and then
-> checks the queue count.
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> 
 
-Maybe don't fold waiting for live into waiting for queue_count.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+
