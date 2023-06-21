@@ -2,88 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D45F73866D
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A984D738671
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:11:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232521AbjFUOLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57208 "EHLO
+        id S232831AbjFUOLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:11:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232786AbjFUOKd (ORCPT
+        with ESMTP id S232813AbjFUOLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:10:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B101FD6
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:10:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1F9C61537
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:10:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 19080C433C0;
-        Wed, 21 Jun 2023 14:10:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687356625;
-        bh=3WCUOcr5UNscK3AWTclNUDhLVN3+J9o9BqthU//QGdI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=QZ2rBM+CNeEZf0Dc9hWyC53QeatBgDD6fMFLu03inGDH2VZJjaOleP21agcMwNimJ
-         NTFYFDLXCA2abpE4WVl7Xw7OY5J99+OYi6jZ6xB9ZbiZF7xT8l1efy/mtPmGhnbIJv
-         5buXcEmsY3NLZKV/hxu1XAz8nYp3KDRX/ZUBPPCK6c/vDyAbXjn5zuR7gBqlNBNjna
-         XJPjTGan3egQmS16PHsDqzTRPTcXIqZQuRLjtwPwpAzIiM/2eyRPfxHF+7a289iC3s
-         SJZZHZrVk1jr1/oSotL6dCWKg4sF3rFtPBswX6tHb6WyvVbwWz+7w5PjJFxRdGTpNl
-         P31VQ+TgZGJOw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EA07BC4316B;
-        Wed, 21 Jun 2023 14:10:24 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 21 Jun 2023 10:11:11 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B932122;
+        Wed, 21 Jun 2023 07:10:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687356646; x=1718892646;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ouC2uUhcHNQmb+8A8CRknY0+a4vXftp/tDcG/6xIf3k=;
+  b=cqouId86rn07+PZad4CF7TXoV9I0PrINz+6v1D3N9dgZbLNAN6MTaqmN
+   yvIR8a08ZW/rnGhw+YMjvOqLejUyKfCFymtAQq/d4ZwqRERdwH19LDT4f
+   uv//9Qyd7T3jg538txcr5uYD2eqRDNjWPNSlb4E0H4X2pb6/Rp9acdViF
+   /lC23SRMaN5hMWk0KkX0dm4Y225U2AUviR3h3F3YI2VJTq9ajbs6yzKoX
+   bGE2fTOuL5aBjhRdk9swr2YF3JdYa5FgNDsgfoLMjANXXnlfb/yjkgagT
+   IHWkvCCnZZvLMS3ZQ0lRKwN7e0Nr14bfpDhq/qwy0oT5STfZyQtRPHpNg
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="389693891"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="389693891"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 07:10:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="691868682"
+X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
+   d="scan'208";a="691868682"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 21 Jun 2023 07:10:41 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1qByXf-005Vxe-2e;
+        Wed, 21 Jun 2023 17:10:39 +0300
+Date:   Wed, 21 Jun 2023 17:10:39 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     George Stark <gnstark@sberdevices.ru>
+Cc:     jic23@kernel.org, lars@metafoo.de, neil.armstrong@linaro.org,
+        khilman@baylibre.com, jbrunet@baylibre.com,
+        martin.blumenstingl@googlemail.com, nuno.sa@analog.com,
+        linux-iio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        kernel@sberdevices.ru
+Subject: Re: [PATCH v1 0/3] meson saradc: add iio channels to read channel 7
+ mux inputs
+Message-ID: <ZJME39cOHsKkJu2Y@smile.fi.intel.com>
+References: <20230621062715.455652-1-gnstark@sberdevices.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3] net: micrel: Change to receive timestamp in the
- frame for lan8841
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168735662495.3443.6450450622724986833.git-patchwork-notify@kernel.org>
-Date:   Wed, 21 Jun 2023 14:10:24 +0000
-References: <20230615094740.627051-1-horatiu.vultur@microchip.com>
-In-Reply-To: <20230615094740.627051-1-horatiu.vultur@microchip.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, richardcochran@gmail.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621062715.455652-1-gnstark@sberdevices.ru>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Thu, 15 Jun 2023 11:47:40 +0200 you wrote:
-> Currently for each timestamp frame, the SW needs to go and read the
-> received timestamp over the MDIO bus. But the HW has the capability
-> to store the received nanoseconds part and the least significant two
-> bits of the seconds in the reserved field of the PTP header. In this
-> way we could save few MDIO transactions (actually a little more
-> transactions because the access to the PTP registers are indirect)
-> for each received frame.
+On Wed, Jun 21, 2023 at 09:26:07AM +0300, George Stark wrote:
+> From: George Stark <GNStark@sberdevices.ru>
 > 
-> [...]
+> In meson saradc channel7 is connected to muxer which allows to measure
+> inner sources like Vdd, GND, several Vdd dividers. This patch series
+> adds independent iio channel (with label) for every chan7 mux input.
+> Mux switch is handled transparent for clients.
+> This functionality can help debug\test\calibrate adc.
+> This code is relevant for all supported amlogic soc families
 
-Here is the summary with links:
-  - [net-next,v3] net: micrel: Change to receive timestamp in the frame for lan8841
-    https://git.kernel.org/netdev/net-next/c/cc7554954848
+Code wise looks good to me, some remarks about commit messages and comments.
 
-You are awesome, thank you!
+> This patch series was created after discussion [1], [2]
+> 
+> [1] https://lore.kernel.org/lkml/20230524000111.14370-1-gnstark@sberdevices.ru/
+> [2] https://lore.kernel.org/lkml/20230527214854.126517-1-gnstark@sberdevices.ru/
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+With Best Regards,
+Andy Shevchenko
 
 
