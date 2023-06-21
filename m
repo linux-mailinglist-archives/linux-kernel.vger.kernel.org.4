@@ -2,60 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BDD0738687
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:14:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BAE738685
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbjFUOOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57956 "EHLO
+        id S232912AbjFUOOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:14:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232793AbjFUONr (ORCPT
+        with ESMTP id S232784AbjFUONq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:13:47 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758642682;
-        Wed, 21 Jun 2023 07:13:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=xGHrx/SxxYpLEbuHR4G6bfgSgL2Rdngy/C8CJ4Cb4KE=; b=lLiL6HG2Gc7UyBg8LM2FjaNSHu
-        4F14ugN6cRl2Xj5Fj+/lNKMPozekXHSBscfDUfCTUqM4fhYdSgoyb+TjdOCZPvihfG7MfZ/2ZMdv9
-        F6bBEUPUufyWiG1s6fYLBY5uoQAxqOl7PkVN13qsFBNcqF32E4972NuSoEu1WnvEADP0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1qBya3-00H9Ha-D4; Wed, 21 Jun 2023 16:13:07 +0200
-Date:   Wed, 21 Jun 2023 16:13:07 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Guo Samin <samin.guo@starfivetech.com>
-Cc:     Conor Dooley <conor@kernel.org>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        Peter Geis <pgwipeout@gmail.com>,
-        Frank <Frank.Sae@motor-comm.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        Wed, 21 Jun 2023 10:13:46 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECA5213E;
+        Wed, 21 Jun 2023 07:13:12 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (213-243-189-158.bb.dnainternet.fi [213.243.189.158])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3D7A2105;
+        Wed, 21 Jun 2023 16:12:35 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1687356755;
+        bh=Q6gLfttyYNyv7Ic+tR22YEZY26euzVq7wKTAMWUvU0s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=r0DIjYKo+0Osx2KQHLVhCXXDUegjqBJgOiv4hf304R3UPHjMjZ8nQ0wVZeyEXalxT
+         gV0t0DaAq7dJd75bX46mprnyebvJybDFpD7pivybx4CdqGA8gOqKE8WqJfhccnfDo7
+         k4TqFlenzwRU3GVLTqT13XMCeKvhVDMh9RflR/NM=
+Date:   Wed, 21 Jun 2023 17:13:07 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Michal Simek <michal.simek@amd.com>
+Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
+        michal.simek@xilinx.com, git@xilinx.com,
+        Conor Dooley <conor+dt@kernel.org>,
+        Harini Katakam <harini.katakam@amd.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Yanhong Wang <yanhong.wang@starfivetech.com>
-Subject: Re: [PATCH v3 1/2] dt-bindings: net: motorcomm: Add pad driver
- strength cfg
-Message-ID: <e43d9cf4-8e44-4918-a181-2a3daa9c9b3c@lunn.ch>
-References: <20230526090502.29835-1-samin.guo@starfivetech.com>
- <20230526090502.29835-2-samin.guo@starfivetech.com>
- <20230526-glutinous-pristine-fed571235b80@spud>
- <1dbf113c-7592-68bd-6aaf-05ff1d8c538c@starfivetech.com>
- <15eb4ffe-ea12-9a2c-ae9d-c34860384b60@starfivetech.com>
- <b0a61cf4-adb1-4261-b6a5-aeb1e3c1b1aa@lunn.ch>
- <8e2a50b2-a9ab-e164-a3c2-b7bc11ccdb53@starfivetech.com>
+        Michael Grzeschik <m.grzeschik@pengutronix.de>,
+        Parth Gajjar <parth.gajjar@amd.com>,
+        Piyush Mehta <piyush.mehta@xilinx.com>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Tanmay Shah <tanmay.shah@amd.com>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] arm64: zynqmp: Fix dwc3 usb interrupt description
+Message-ID: <20230621141307.GC18703@pendragon.ideasonboard.com>
+References: <6544d13afd9f3d8f5413e32684aa16e4d155e331.1687160244.git.michal.simek@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <8e2a50b2-a9ab-e164-a3c2-b7bc11ccdb53@starfivetech.com>
+In-Reply-To: <6544d13afd9f3d8f5413e32684aa16e4d155e331.1687160244.git.michal.simek@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -66,13 +58,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> When we need to deal with current values at different voltages,
-> using register values in drives may be simpler, comparing the
-> current value.
+Hi Michal,
 
-Register values in DT are only allowed in the worst case if its all
-undocumented vendor magic. You have the needed documentation, and its
-easy code to write, lookup a value in a table.
+Thank you for the patch.
 
-     Andrew
+On Mon, Jun 19, 2023 at 09:37:54AM +0200, Michal Simek wrote:
+> Based on DT binding dwc_usb3 is single entry without anything else. That's
+> why combination dwc3_usb3, otg is not allowed. That's why split it to host
+> and peripheral pair which both points to the same IRQ.
+> DWC3 code is reading these two properties first before generic dwc_usb3.
+> 
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
+> 
+>  arch/arm64/boot/dts/xilinx/zynqmp.dtsi | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> index 02cfcc716936..e8104ffc6663 100644
+> --- a/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> +++ b/arch/arm64/boot/dts/xilinx/zynqmp.dtsi
+> @@ -888,8 +888,8 @@ dwc3_0: usb@fe200000 {
+>  				compatible = "snps,dwc3";
+>  				reg = <0x0 0xfe200000 0x0 0x40000>;
+>  				interrupt-parent = <&gic>;
+> -				interrupt-names = "dwc_usb3", "otg";
+> -				interrupts = <0 65 4>, <0 69 4>;
+> +				interrupt-names = "host", "peripheral", "otg";
+> +				interrupts = <0 65 4>, <0 65 4>, <0 69 4>;
 
+This should read
+
+				interrupts = <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>,
+					     <GIC_SPI 65 IRQ_TYPE_LEVEL_HIGH>,
+					     <GIC_SPI 69 IRQ_TYPE_LEVEL_HIGH>;
+
+The issue isn't introduced by this patch, so it should probably be fixed
+by a separate patch on top, to convert the whole zynqmp.dtsi file. Do
+you have any plan to do so, or should I ?
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+>  				clock-names = "bus_early", "ref";
+>  				iommus = <&smmu 0x860>;
+>  				snps,quirk-frame-length-adjustment = <0x20>;
+> @@ -915,8 +915,8 @@ dwc3_1: usb@fe300000 {
+>  				compatible = "snps,dwc3";
+>  				reg = <0x0 0xfe300000 0x0 0x40000>;
+>  				interrupt-parent = <&gic>;
+> -				interrupt-names = "dwc_usb3", "otg";
+> -				interrupts = <0 70 4>, <0 74 4>;
+> +				interrupt-names = "host", "peripheral", "otg";
+> +				interrupts = <0 70 4>, <0 70 4>, <0 74 4>;
+>  				clock-names = "bus_early", "ref";
+>  				iommus = <&smmu 0x861>;
+>  				snps,quirk-frame-length-adjustment = <0x20>;
+
+-- 
+Regards,
+
+Laurent Pinchart
