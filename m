@@ -2,103 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B59673820F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E60E47381CB
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:11:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232184AbjFUKMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 06:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32966 "EHLO
+        id S232240AbjFUKOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 06:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231898AbjFUKLv (ORCPT
+        with ESMTP id S232224AbjFUKNn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 06:11:51 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CE451BCB
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 03:11:15 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-987c932883bso690185566b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 03:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687342274; x=1689934274;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JtjhjLVfg04akTkdiibA+NwINqQwIqQCJGUJibyu5wQ=;
-        b=dpYS+MO/S9ZRkfjV5PqgIWfu1tcbDUpYNGHMHMvbjfrYG36Mnidl0+WvqsW7Pd8mvD
-         rKEmN0UW3yYAe1r/LhNnZRhh4gioL2mxqvTIM4Gab8x5U+Pc6AgYz3xSEAFbUKY9unC2
-         K139Ix+LXUNdUsOodmMD16t+qIGRIoyfd86/JKUpVM/khOuflbp4JQUDThhGkWE6/7lE
-         3bRpISJy9Z0rn4bEGH8Qs/fxVH9WO8OKd1eMO5pgUM+eYbESiZv/0o2IQSGd1G99NzVW
-         afZrWvC/hKUGkRzc225CxQi3HYp/UCoJh8K8C+NKxSF8UBNpxQaoTBewQ9NL/MHoXgcr
-         X4VQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687342274; x=1689934274;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JtjhjLVfg04akTkdiibA+NwINqQwIqQCJGUJibyu5wQ=;
-        b=eq9dQhsvYRSgdAEIKmxj3Eb3+S6PRGOq+jnCOyaNh/nHn54P/ZWWIVTOkmb29QLxwf
-         rgPXTm6c51R6cUDSeJoMcoDzFPuYmCjBH1/5G/gG38w3RCFaJETSWm7+lGC2Jg6brYUa
-         nH9OsjGo/fvb7VXmnbaBEXQnvchiqaG2zpf1XAMLkJ+r9ITH92FCA9Z0qOERmahdBSqW
-         J3+2PNGSX2yn3mavyCvZhpNk02e8JfRC5e5oB7srDHYhGuyKrUQ2ubBCT64WPz2b132g
-         G9DloreCQ5kPw0Z9NCbu+lbGZDuNAbDOJLpYSlLOhAPxej1/rSIyZ4Zl8ynbxAzuEHv4
-         jTKA==
-X-Gm-Message-State: AC+VfDyirqS/Xx5YCrBMuuzDFAoR/ciuSnt09zhqHprDLygVaNIDshDU
-        TnSCIjI4eyYW/1NEmSfVeApqkg==
-X-Google-Smtp-Source: ACHHUZ5pfTVfBtS3MJwsD21zgHNuKFo/GdCgwG7gdMfOGPIee1trYy/f90DoOnO8Q+ogpECi9dZbJA==
-X-Received: by 2002:a17:907:969f:b0:947:335f:5a0d with SMTP id hd31-20020a170907969f00b00947335f5a0dmr13607379ejc.62.1687342273999;
-        Wed, 21 Jun 2023 03:11:13 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id s9-20020a1709062ec900b009787062d21csm2898560eji.77.2023.06.21.03.11.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 03:11:13 -0700 (PDT)
-Message-ID: <80cd8bb9-54ad-4c5c-f3ce-c8655cd2ff74@linaro.org>
-Date:   Wed, 21 Jun 2023 12:11:11 +0200
+        Wed, 21 Jun 2023 06:13:43 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181AC170C;
+        Wed, 21 Jun 2023 03:13:08 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35L99KPH029693;
+        Wed, 21 Jun 2023 10:12:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=gUmj21gH3bLd729QgzUszORR2zfcQYaMTPFMTdZi6aQ=;
+ b=BTlTY3NqB9Z3X3tICIjVVlyJk0Tq8Uv5R/1XvxKpT+Ssv4yUMboTERpl5uoHVs0dgU9I
+ qqO3ZSLN6vj/fYopLDTXAsWsN2Y7voKRI8YXfl4zsdxtEP1O+dNmOJHcKe7uDZJwEBV+
+ ro1KOkl8deHF5YvtkGKNvC8vCmJJ91HguyJR1Ez3yU15N6r7n/in8S2TbJm9ROQciDbV
+ Zhjt+l3G3BmLNQe+IIXRQTI7uyqnr3kJDfcZaX+pHEORgyUHvDwew0ruKmYcx6EMlhl2
+ g3Z6WEtvieQadmxyXGXIbyOTtWePXpugfy8jUDMT8gxFzq8JXVRiUw72kIvNo8Ewo8bV ew== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rb7suu7px-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jun 2023 10:12:29 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35LACS89011080
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 21 Jun 2023 10:12:28 GMT
+Received: from varda-linux.qualcomm.com (10.80.80.8) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Wed, 21 Jun 2023 03:12:19 -0700
+Date:   Wed, 21 Jun 2023 15:42:15 +0530
+From:   Varadarajan Narayanan <quic_varada@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <vkoul@kernel.org>,
+        <kishon@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <p.zabel@pengutronix.de>, <arnd@arndb.de>,
+        <geert+renesas@glider.be>, <neil.armstrong@linaro.org>,
+        <nfraprado@collabora.com>, <broonie@kernel.org>,
+        <rafal@milecki.pl>, <quic_srichara@quicinc.com>,
+        <quic_varada@quicinc.org>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH 2/9] dt-bindings: phy: qcom,m31: Document qcom,m31 USB phy
+Message-ID: <20230621101214.GB3533@varda-linux.qualcomm.com>
+References: <cover.1686126439.git.quic_varada@quicinc.com>
+ <14f60578e2935c0844537eab162af3afa52ffe39.1686126439.git.quic_varada@quicinc.com>
+ <98960024-7dbc-91a3-75de-90b529637916@linaro.org>
+ <20230615052746.GB22186@varda-linux.qualcomm.com>
+ <aca54f67-cc09-ff4f-93ca-6973d153db2c@linaro.org>
+ <20230620093225.GA9966@varda-linux.qualcomm.com>
+ <dd78b449-8ff8-108d-cc49-fbddbb660c76@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] dt-bindings: clock: ast2600: Add I3C and MAC reset
- definitions
-Content-Language: en-US
-To:     Dylan Hung <dylan_hung@aspeedtech.com>, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     BMC-SW@aspeedtech.com
-References: <20230621094545.707-1-dylan_hung@aspeedtech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230621094545.707-1-dylan_hung@aspeedtech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <dd78b449-8ff8-108d-cc49-fbddbb660c76@linaro.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Tzr6RSq6epP8dYrnQHwcDmS_aots0hgE
+X-Proofpoint-ORIG-GUID: Tzr6RSq6epP8dYrnQHwcDmS_aots0hgE
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-21_07,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 priorityscore=1501 bulkscore=0 phishscore=0
+ mlxlogscore=737 suspectscore=0 spamscore=0 mlxscore=0 adultscore=0
+ clxscore=1015 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2305260000 definitions=main-2306210086
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2023 11:45, Dylan Hung wrote:
-> Add reset definitions of AST2600 I3C and MAC controllers.
-> 
-> Signed-off-by: Dylan Hung <dylan_hung@aspeedtech.com>
-> ---
->  include/dt-bindings/clock/ast2600-clock.h | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/dt-bindings/clock/ast2600-clock.h b/include/dt-bindings/clock/ast2600-clock.h
-> index e149eee61588..07377589f8f4 100644
-> --- a/include/dt-bindings/clock/ast2600-clock.h
-> +++ b/include/dt-bindings/clock/ast2600-clock.h
-> @@ -90,7 +90,18 @@
->  /* Only list resets here that are not part of a clock gate + reset pair */
->  #define ASPEED_RESET_ADC		55
->  #define ASPEED_RESET_JTAG_MASTER2	54
-> -#define ASPEED_RESET_I3C_DMA		39
+On Wed, Jun 21, 2023 at 10:43:38AM +0200, Krzysztof Kozlowski wrote:
+> On 20/06/2023 11:32, Varadarajan Narayanan wrote:
+>
+> >
+> >> And then we have... existing bindings qcom,usb-hs-phy.yaml. Don't create
+> >> something similar with difference in the hyphen. Just use device
+> >> specific compatible thus device specific filename.
+> >
+> > qcom,usb-hs-phy.yaml seems to be for ULPI mode phy and the
+> > driver we are introducing is for UTMI. We would have to
+> > modify phy-qcom-usb-hs.c to accomodate M31. Will that be
+> > acceptable to phy-qcom-usb-hs.c owners/maintainers?
+>
+> We don't talk about drivers here but bindings. Why would you need to
+> modify the driver when introducing new binding for different device?
 
-This will break all the users.
+Sorry. I misunderstood your feedback as "use the existing bindings".
 
-Best regards,
-Krzysztof
+Will name the bindings file as qcom,ipq5332-usb-hsphy.yaml and post
+the next version.
 
+Thanks
+Varada
