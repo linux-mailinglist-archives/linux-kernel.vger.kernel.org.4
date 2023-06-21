@@ -2,102 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECA8A73860B
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5709C738612
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232656AbjFUOBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
+        id S232756AbjFUOCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbjFUOBD (ORCPT
+        with ESMTP id S232761AbjFUOBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:01:03 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38561BF1;
-        Wed, 21 Jun 2023 07:00:58 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f8fe9dc27aso45838415e9.3;
-        Wed, 21 Jun 2023 07:00:58 -0700 (PDT)
+        Wed, 21 Jun 2023 10:01:45 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E681BFE
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:01:42 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id ada2fe7eead31-44098ef627eso1927143137.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:01:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687356057; x=1689948057;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=e0TQPSS7a9Jk8gsZ9aLEqJ9x+mgzVCzVi1FpIGNdrBw=;
-        b=ZY+A+AK+0hrEqCQD5smhWHxGBgM513DkVqUqEYh8CTkbDkfBqlijxtada3pe1oO6RU
-         qAnRJTWbOw7A82AmMVkjSnGgvX4adfXs8QGiXJrf6X7elEipSkUouVQM6KxJnfJaRw+8
-         vdbu4y6FXWx7It3diymV26tO8gGqKRoKSSoMTKckwFi82e0p3wvuaMs8aGQchu5XJApv
-         QkZrVCkbKpxYOjOFUwzBkcJUPPHlM8kE7qx8DZKyA5a6EVkt5cdvnNqjMdW4F9A2c0YB
-         cR94RYWH0IbE/c70GB4u4tsRVhXZX3L3HbV4cX8rncCg6FMQcXkp4KO/kfrnykD+lcBw
-         f4pQ==
+        d=linaro.org; s=google; t=1687356101; x=1689948101;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=sQij4wQznsR5F2fxwwkBmYe5wHBeledhlw5RjB1MrFk=;
+        b=NwWhpwZ3uuatMmOugjTDVZU/f79JRrQT/EdiyhkGVUhZoTOqqYUhj+j7+Of42ZxvXY
+         GDXH45Pfnu0sEf3jPzTud1mYefqDEXkT7ZBclg/YI4D/2pzWexdDC/AhnKcUsRV2ZpTR
+         cf0cF9QGd+iGQ5lxF8YNIVtE7WL+K7SD18+YQbTWB0adpXmH9/yq1TZyOMem+0NWXGZu
+         vexZksiGTvSZcHtXH+p7zUCic6cA+Ey+pWsl4Xjl6jpgPLOVOQ1du7mBXLP7LNSypHxD
+         fZtGqN2SMhuXyXXyFa6UEEVuV3ZFFYGdQ0/ECfnKlAnEkVoiqBKMTPVa8HRcFfQHiH5U
+         Azbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687356057; x=1689948057;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=e0TQPSS7a9Jk8gsZ9aLEqJ9x+mgzVCzVi1FpIGNdrBw=;
-        b=EMLmnNOykIzH40j0JFdOmpmPlrnVyMp1JddyM1zX0xCXrJ/A+T84PO+OnDPkD3Svpk
-         n/u2C/2ARy95f2AGPm5A9bvRqGVG0MjFfMRYPb5yN+oafB/0IJzLTm8IfHaRgXzhjL7t
-         6lMrf5++Jn1SzPAyd/YZ6kIWbxt/yMgIIVDvVMoBfFcJqjEsHm1pYhI9HfCoI5qFfTdJ
-         U1dHqir0jK5G7fRAtO/gfeJcaHBdObiIi/QruGAN6imk+rcvXH34lUwxGYbAqo+Xwzr7
-         5lFESThKITTGHpXXQCFsoUBqci85KUqHW2fCumR/yhzEMcC0LNEVDp2jZalDkGZHzdxm
-         Gdnw==
-X-Gm-Message-State: AC+VfDyg2vKw1f1UVE+EVRc7VK7ZLI2FfLqv67IMjuhtVwQ1cJYLrsJA
-        v6JqjSml5dIfAJFIX1oDOA95RrTb8tS4ZQ==
-X-Google-Smtp-Source: ACHHUZ6USQ+jPF1zdYOcOD+fTnKNaYk6s6ff02iOn4dDuGOymqK21PvMoHXjGTGWe7LJlza2cc3yvw==
-X-Received: by 2002:a05:600c:2158:b0:3f9:aaa:37e7 with SMTP id v24-20020a05600c215800b003f90aaa37e7mr7285270wml.0.1687356056879;
-        Wed, 21 Jun 2023 07:00:56 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id u15-20020a05600c210f00b003f18b942338sm5118938wml.3.2023.06.21.07.00.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 07:00:56 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Mikulas Patocka <mikulas@artax.karlin.mff.cuni.cz>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] hpfs: remove redundant variable r
-Date:   Wed, 21 Jun 2023 15:00:55 +0100
-Message-Id: <20230621140055.2679143-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20221208; t=1687356101; x=1689948101;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sQij4wQznsR5F2fxwwkBmYe5wHBeledhlw5RjB1MrFk=;
+        b=l03vZ26nWjkqR63sUEaV0/FT3C+6bHqFbGRJXKjBf7Uw8SruW9/umTtJZRVeK8mZHz
+         ZMCRPOavtO0/FVh4ZC0f2V0k0WH9F4BhfzNlsTVNVPm9oMMHS/pyH3fhporgQtsPWI1r
+         SWx83nvzvjPRZJRuO/taxCsfGsifF4QYUXBCyfCMkJExZ1BC4YOaAhPoKDO53tlHY9tj
+         gZR5Zuw1H45wtgUxAfpZw0EJ3WeQg2H2BTklbWqH37ymN2YlAneEdRlytVbKRIXhaenb
+         lkmaG6zjvu4P4/CaRdV3mXNTIK+0PLc3m+10gSj+1AolAg78OZeWumAeCPPuX30duzzR
+         g41Q==
+X-Gm-Message-State: AC+VfDzcmXhN5YEmVO0v7kGW8WqJghwMN3RZlQa+A6FZHwLbDjE7EiVn
+        wKegIrPGLSBlGG0OGrza9hM793rZ/DK37bxZ8avFFLjKWCxcZT/mChsmXw==
+X-Google-Smtp-Source: ACHHUZ7xdIJUeh4hZ7I54b7bLEO89fpN300504s2wq/4nNI2/3k6dHahRRll87ZLl5WIf6YkM1HJArctWAgSZeTNgT4=
+X-Received: by 2002:a67:f514:0:b0:440:9cda:df51 with SMTP id
+ u20-20020a67f514000000b004409cdadf51mr7209167vsn.28.1687356100440; Wed, 21
+ Jun 2023 07:01:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 21 Jun 2023 19:31:29 +0530
+Message-ID: <CA+G9fYtKCZeAUTtwe69iK8Xcz1mOKQzwcy49wd+imZrfj6ifXA@mail.gmail.com>
+Subject: next: ltp: fs: read_all: block sda: the capability attribute has been
+ deprecated. - supervisor instruction fetch in kernel mode
+To:     open list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, lkft-triage@lists.linaro.org,
+        linux-block <linux-block@vger.kernel.org>,
+        LTP List <ltp@lists.linux.it>, linux-mm <linux-mm@kvack.org>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Carpenter <dan.carpenter@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable r is being assigned a value that is not being read, the
-assignment and the variable are redundant and can be removed. It
-is also useful to remove r as it's a confusing shadow of another
-variable r declared in a higher scope. Cleans up clang scan build
-warning:
+While running LTP fs testing on x86_64 device the following kernel BUG:
+notice with Linux next-20230621.
 
-fs/hpfs/namei.c:560:8: warning: Although the value stored to 'r'
-is used in the enclosing expression, the value is never actually
-read from 'r' [deadcode.DeadStores]
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- fs/hpfs/namei.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Steps to reproduce:
 
-diff --git a/fs/hpfs/namei.c b/fs/hpfs/namei.c
-index 69fb40b2c99a..d892a6f74431 100644
---- a/fs/hpfs/namei.c
-+++ b/fs/hpfs/namei.c
-@@ -556,8 +556,7 @@ static int hpfs_rename(struct mnt_idmap *idmap, struct inode *old_dir,
- 	de.hidden = new_name[0] == '.';
- 
- 	if (new_inode) {
--		int r;
--		if ((r = hpfs_remove_dirent(old_dir, dno, dep, &qbh, 1)) != 2) {
-+		if (hpfs_remove_dirent(old_dir, dno, dep, &qbh, 1) != 2) {
- 			if ((nde = map_dirent(new_dir, hpfs_i(new_dir)->i_dno, new_name, new_len, NULL, &qbh1))) {
- 				clear_nlink(new_inode);
- 				copy_de(nde, &de);
--- 
-2.39.2
+# cd /opt/ltp
+# ./runltp -f fs
 
+Test log:
+======
+read_all.c:687: TPASS: Finished reading files
+Summary:
+passed   1
+failed   0
+broken   0
+skipped  0
+warnings 0
+tst_test.c:1558: TINFO: Timeout per run is 0h 06m 40s
+read_all.c:568: TINFO: Worker timeout set to 10% of max_runtime: 1000ms
+[ 1344.664349] block sda: the capability attribute has been deprecated.
+[ 1344.679885] BUG: kernel NULL pointer dereference, address: 0000000000000000
+[ 1344.686839] #PF: supervisor instruction fetch in kernel mode
+[ 1344.692490] #PF: error_code(0x0010) - not-present page
+[ 1344.697620] PGD 8000000105569067 P4D 8000000105569067 PUD 1056ed067 PMD 0
+[ 1344.704494] Oops: 0010 [#1] PREEMPT SMP PTI
+[ 1344.708680] CPU: 0 PID: 5649 Comm: read_all Not tainted
+6.4.0-rc7-next-20230621 #1
+[ 1344.716245] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
+2.5 11/26/2020
+[ 1344.723629] RIP: 0010:0x0
+[ 1344.726257] Code: Unable to access opcode bytes at 0xffffffffffffffd6.
+[ 1344.732780] RSP: 0018:ffff98d38123bd38 EFLAGS: 00010286
+[ 1344.737998] RAX: 0000000000000000 RBX: ffffffffbea38720 RCX: 0000000000000000
+[ 1344.745123] RDX: ffff979e42e31000 RSI: ffffffffbea38720 RDI: ffff979e40371900
+[ 1344.752246] RBP: ffff98d38123bd48 R08: ffff979e4080a0f0 R09: 0000000000000001
+[ 1344.759371] R10: ffff979e42e31000 R11: 0000000000000000 R12: ffff979e42e31000
+[ 1344.766495] R13: 0000000000000001 R14: ffff979e432dd2f8 R15: ffff979e432dd2d0
+[ 1344.773621] FS:  00007ff745d4b740(0000) GS:ffff97a1a7a00000(0000)
+knlGS:0000000000000000
+[ 1344.781704] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[ 1344.787442] CR2: ffffffffffffffd6 CR3: 000000010563c004 CR4: 00000000003706f0
+[ 1344.794587] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[ 1344.801733] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[ 1344.808857] Call Trace:
+[ 1344.811301]  <TASK>
+[ 1344.813399]  ? show_regs+0x6e/0x80
+[ 1344.816804]  ? __die+0x29/0x70
+[ 1344.819857]  ? page_fault_oops+0x154/0x470
+[ 1344.823957]  ? do_user_addr_fault+0x355/0x6c0
+[ 1344.828314]  ? exc_page_fault+0x6e/0x170
+[ 1344.832239]  ? asm_exc_page_fault+0x2b/0x30
+[ 1344.836420]  max_phase_adjustment_show+0x23/0x50
+[ 1344.841038]  dev_attr_show+0x1e/0x60
+[ 1344.844616]  sysfs_kf_seq_show+0xb5/0x100
+[ 1344.848628]  kernfs_seq_show+0x28/0x40
+[ 1344.852374]  seq_read_iter+0x112/0x4a0
+[ 1344.856125]  ? inode_security+0x27/0x60
+[ 1344.859967]  kernfs_fop_read_iter+0x145/0x1a0
+[ 1344.864325]  ? security_file_permission+0x52/0x60
+[ 1344.869031]  vfs_read+0x1c7/0x310
+[ 1344.872350]  ksys_read+0x6b/0xf0
+[ 1344.875602]  __x64_sys_read+0x1d/0x30
+[ 1344.879274]  do_syscall_64+0x3c/0x90
+[ 1344.882846]  entry_SYSCALL_64_after_hwframe+0x6e/0xd8
+[ 1344.887898] RIP: 0033:0x7ff745e4a292
+[ 1344.891476] Code: c0 e9 d2 fe ff ff 50 48 8d 3d 6a d5 0b 00 e8 15
+ed 01 00 0f 1f 44 00 00 f3 0f 1e fa 64 8b 04 25 18 00 00 00 85 c0 75
+10 0f 05 <48> 3d 00 f0 ff ff 77 56 c3 0f 1f 44 00 00 48 83 ec 28 48 89
+54 24
+[ 1344.910213] RSP: 002b:00007fff8e8dd828 EFLAGS: 00000246 ORIG_RAX:
+0000000000000000
+[ 1344.917770] RAX: ffffffffffffffda RBX: 00000000008dabc0 RCX: 00007ff745e4a292
+[ 1344.924896] RDX: 00000000000003ff RSI: 00007fff8e8dd8e0 RDI: 0000000000000003
+[ 1344.932029] RBP: 00007ff745d40028 R08: 00000000001b4e6e R09: 00007fff8e903170
+[ 1344.939159] R10: 0000000000000004 R11: 0000000000000246 R12: 0000000000000030
+[ 1344.946283] R13: 0000000000000003 R14: 00007ff745d3c000 R15: 0000000000001611
+[ 1344.953411]  </TASK>
+[ 1344.955617] Modules linked in: tun x86_pkg_temp_thermal
+[ 1344.960836] CR2: 0000000000000000
+[ 1344.964148] ---[ end trace 0000000000000000 ]---
+[ 1344.964149] BUG: kernel NULL pointer dereference, address: 0000000000000000
+[ 1344.968766] RIP: 0010:0x0
+[ 1344.975717] #PF: supervisor instruction fetch in kernel mode
+[ 1344.978334] Code: Unable to access opcode bytes at 0xffffffffffffffd6.
+[ 1344.983983] #PF: error_code(0x0010) - not-present page
+[ 1344.990502] RSP: 0018:ffff98d38123bd38 EFLAGS: 00010286
+[ 1344.995633] PGD 800000011c4c4067 P4D 800000011c4c4067
+
+
+Links:
+https://lkft.validation.linaro.org/scheduler/job/6531405#L2063
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230621/testrun/17701281/suite/log-parser-test/tests/
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230621/testrun/17701281/suite/log-parser-test/test/check-kernel-bug/details/
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230621/testrun/17701281/suite/log-parser-test/test/check-kernel-bug/log
+
+metadata:
+  git_ref: master
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+  git_sha: 15e71592dbae49a674429c618a10401d7f992ac3
+  git_describe: next-20230621
+  kernel_version: 6.4.0-rc7
+  kernel-config:
+    https://storage.tuxsuite.com/public/linaro/lkft/builds/2RVA4HTFTr9mUVGTxGUDk0W0i9b/config
+  artifact-location:
+    https://storage.tuxsuite.com/public/linaro/lkft/builds/2RVA4HTFTr9mUVGTxGUDk0W0i9b/
+
+--
+Linaro LKFT
+https://lkft.linaro.org
