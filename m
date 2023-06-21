@@ -2,289 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7003737D80
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36482737D6B
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbjFUIPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 04:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51940 "EHLO
+        id S230505AbjFUIPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 04:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbjFUIPb (ORCPT
+        with ESMTP id S230444AbjFUIP3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 04:15:31 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 836B91992;
-        Wed, 21 Jun 2023 01:15:25 -0700 (PDT)
-X-QQ-mid: bizesmtp66t1687335309teso3e1f
-Received: from [192.168.1.114] ( [58.240.82.166])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 21 Jun 2023 16:15:07 +0800 (CST)
-X-QQ-SSF: 00200000000000B08000000A0000000
-X-QQ-FEAT: RmDZc/K2LPHkePvbIYcyOcv8WSIevYLqRYqULiUoktSn0E2lvPBqJpf71nLkt
-        UKsOQIaYUe++kA+kbZWbzKXhtxnKBgyLTia2YCXoXgg7gJZvGTKP5hAleuBugb0uIq3+XNg
-        D7fnGuzAfzTl8WRh9AoKQt+Y3CvB374QPb0JuVhPZQU4zE7i076y2fowONxcdjzv2qYjR/9
-        Zc3ZaPUwWrQs0zjBtAOlj77oHOhtMnrcXtiHkVRn8692t89EEOzFsRKPHHelFCdHHp4tHY5
-        pYZ1XbWcVizVlVFof9p7one/rRjQhdN2BDKRi5AFX7epcYwNK59QEQJxcRwCkl/DHGxMLiV
-        XPc1K3x+kyhouMPcAozftDjtN9NnxgD/K31bfa7qrMRF7yWVBE=
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 13412959673347868458
-Message-ID: <131BBACE35371733+d5902eda-c4ea-b74d-a17c-70fd1a166b6f@tinylab.org>
-Date:   Wed, 21 Jun 2023 16:15:07 +0800
+        Wed, 21 Jun 2023 04:15:29 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B37170D;
+        Wed, 21 Jun 2023 01:15:24 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7BCE566028F5;
+        Wed, 21 Jun 2023 09:15:22 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687335323;
+        bh=J5+6n5TNhUkGKqSQjVla6pRqh5pugN4fdqYwLgyx+/I=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gRy6R3NXbwlRJ7/zTLGBgql+fU1KFe8NjzpTesAxI7C+7PCP+sq0gPejpuSkQWpSP
+         6oY5OJrezvn+yeGhsqjrcOAf5x7p67YFUDujj1fSHMukPsp0sTeHWMkF6RfLkQ8f/V
+         sJjLkGZMGOrg77wJvJdVXf4qkhqnaVHP4s9lriDX1H7CVrGS9bC12CKfWbcOB6hfvx
+         1TGIEhiXPhDPbrsT6yzP+h4ehizua1Nsif8qqbkC3l90hZ3frfTE/0c369rr8aTEoH
+         qUi6pZmo4ypylXt7g1EwighX83XZymaB9DezZ1yocTZ4/ulSFOuNDpT2NjqO65HsDy
+         PeoBtQYlNvJSw==
+Message-ID: <13bd0198-457f-e0fb-89bd-fd6b6954b8b3@collabora.com>
+Date:   Wed, 21 Jun 2023 10:15:19 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 2/3] Documentation: riscv: Add early boot document
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Sunil V L <sunilvl@ventanamicro.com>,
-        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        songshuaishuai@tinylab.org
-References: <20230621072234.9900-1-alexghiti@rivosinc.com>
- <20230621072234.9900-2-alexghiti@rivosinc.com>
-From:   Song Shuai <songshuaishuai@tinylab.org>
-In-Reply-To: <20230621072234.9900-2-alexghiti@rivosinc.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v4 12/14] drm/mediatek: Improve compatibility of display
+ driver
+Content-Language: en-US
+To:     Hsiao Chien Sung <shawn.sung@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Singo Chang <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        Jason-JH Lin <jason-jh.lin@mediatek.com>
+References: <20230621031938.5884-1-shawn.sung@mediatek.com>
+ <20230621031938.5884-13-shawn.sung@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230621031938.5884-13-shawn.sung@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-3
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2023/6/21 15:22, Alexandre Ghiti 写道:
-> This document describes the constraints and requirements of the early
-> boot process in a RISC-V kernel.
+Il 21/06/23 05:19, Hsiao Chien Sung ha scritto:
+> - Add new functions to enable/disable components, and
+>    reuse them when clock enable/disable
+> - Check if the component is defined before using it since
+>    some modules are MT8188 only (ex. PADDING)
+> - Control components according to its type rather than ID
+> - Use a for-loop to add/remove components in an arrays,
+>    so we can only maintain this array to make sure every
+>    component will be initialized properly
 > 
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
-> Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
+> Signed-off-by: Hsiao Chien Sung <shawn.sung@mediatek.com>
 > ---
->   Documentation/riscv/boot-image-header.rst |   3 -
->   Documentation/riscv/boot.rst              | 170 ++++++++++++++++++++++
->   Documentation/riscv/index.rst             |   1 +
->   3 files changed, 171 insertions(+), 3 deletions(-)
->   create mode 100644 Documentation/riscv/boot.rst
+>   .../gpu/drm/mediatek/mtk_disp_ovl_adaptor.c   | 186 +++++++++---------
+>   1 file changed, 96 insertions(+), 90 deletions(-)
 > 
-> diff --git a/Documentation/riscv/boot-image-header.rst b/Documentation/riscv/boot-image-header.rst
-> index d7752533865f..a4a45310c4c4 100644
-> --- a/Documentation/riscv/boot-image-header.rst
-> +++ b/Documentation/riscv/boot-image-header.rst
-> @@ -7,9 +7,6 @@ Boot image header in RISC-V Linux
+> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c b/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
+> index c0a38f5217ee..69ae531294ff 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_disp_ovl_adaptor.c
+> @@ -51,6 +51,7 @@ enum mtk_ovl_adaptor_comp_id {
 >   
->   This document only describes the boot image header details for RISC-V Linux.
+>   struct ovl_adaptor_comp_match {
+>   	enum mtk_ovl_adaptor_comp_type type;
+> +	enum mtk_ddp_comp_id comp_id;
+>   	int alias_id;
+>   };
 >   
-> -TODO:
-> -  Write a complete booting guide.
+> @@ -67,21 +68,78 @@ static const char * const private_comp_stem[OVL_ADAPTOR_TYPE_NUM] = {
+>   };
+>   
+>   static const struct ovl_adaptor_comp_match comp_matches[OVL_ADAPTOR_ID_MAX] = {
+> -	[OVL_ADAPTOR_MDP_RDMA0]	= { OVL_ADAPTOR_TYPE_RDMA, 0 },
+> -	[OVL_ADAPTOR_MDP_RDMA1]	= { OVL_ADAPTOR_TYPE_RDMA, 1 },
+> -	[OVL_ADAPTOR_MDP_RDMA2]	= { OVL_ADAPTOR_TYPE_RDMA, 2 },
+> -	[OVL_ADAPTOR_MDP_RDMA3]	= { OVL_ADAPTOR_TYPE_RDMA, 3 },
+> -	[OVL_ADAPTOR_MDP_RDMA4]	= { OVL_ADAPTOR_TYPE_RDMA, 4 },
+> -	[OVL_ADAPTOR_MDP_RDMA5]	= { OVL_ADAPTOR_TYPE_RDMA, 5 },
+> -	[OVL_ADAPTOR_MDP_RDMA6]	= { OVL_ADAPTOR_TYPE_RDMA, 6 },
+> -	[OVL_ADAPTOR_MDP_RDMA7]	= { OVL_ADAPTOR_TYPE_RDMA, 7 },
+> -	[OVL_ADAPTOR_MERGE0]	= { OVL_ADAPTOR_TYPE_MERGE, 1 },
+> -	[OVL_ADAPTOR_MERGE1]	= { OVL_ADAPTOR_TYPE_MERGE, 2 },
+> -	[OVL_ADAPTOR_MERGE2]	= { OVL_ADAPTOR_TYPE_MERGE, 3 },
+> -	[OVL_ADAPTOR_MERGE3]	= { OVL_ADAPTOR_TYPE_MERGE, 4 },
+> -	[OVL_ADAPTOR_ETHDR0]	= { OVL_ADAPTOR_TYPE_ETHDR, 0 },
+> +	[OVL_ADAPTOR_ETHDR0] = { OVL_ADAPTOR_TYPE_ETHDR, DDP_COMPONENT_ETHDR_MIXER, 0 },
+> +	[OVL_ADAPTOR_MDP_RDMA0] = { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONENT_MDP_RDMA0, 0 },
+> +	[OVL_ADAPTOR_MDP_RDMA1] = { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONENT_MDP_RDMA1, 1 },
+> +	[OVL_ADAPTOR_MDP_RDMA2] = { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONENT_MDP_RDMA2, 2 },
+> +	[OVL_ADAPTOR_MDP_RDMA3] = { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONENT_MDP_RDMA3, 3 },
+> +	[OVL_ADAPTOR_MDP_RDMA4] = { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONENT_MDP_RDMA4, 4 },
+> +	[OVL_ADAPTOR_MDP_RDMA5] = { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONENT_MDP_RDMA5, 5 },
+> +	[OVL_ADAPTOR_MDP_RDMA6] = { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONENT_MDP_RDMA6, 6 },
+> +	[OVL_ADAPTOR_MDP_RDMA7] = { OVL_ADAPTOR_TYPE_RDMA, DDP_COMPONENT_MDP_RDMA7, 7 },
+> +	[OVL_ADAPTOR_MERGE0] = { OVL_ADAPTOR_TYPE_MERGE, DDP_COMPONENT_MERGE1, 1 },
+> +	[OVL_ADAPTOR_MERGE1] = { OVL_ADAPTOR_TYPE_MERGE, DDP_COMPONENT_MERGE2, 2 },
+> +	[OVL_ADAPTOR_MERGE2] = { OVL_ADAPTOR_TYPE_MERGE, DDP_COMPONENT_MERGE3, 3 },
+> +	[OVL_ADAPTOR_MERGE3] = { OVL_ADAPTOR_TYPE_MERGE, DDP_COMPONENT_MERGE4, 4 },
+>   };
+>   
+> +static int mtk_ovl_adaptor_enable(struct device *dev, enum mtk_ovl_adaptor_comp_type type)
+> +{
+> +	int ret = 0;
+
+int ret;
+
+> +
+> +	if (!dev)
+
+if (!dev)
+	return -ENODEV;
+
+> +		goto end;
+> +
+> +	switch (type) {
+> +	case OVL_ADAPTOR_TYPE_ETHDR:
+> +		ret = mtk_ethdr_clk_enable(dev);
+> +		break;
+> +	case OVL_ADAPTOR_TYPE_MERGE:
+> +		ret = mtk_merge_clk_enable(dev);
+
+We already have a .clk_enable() callback in struct mtk_ddp_comp_funcs: to
+greatly enhance your nice cleanup, you could use that instead, which basically
+eliminates the need of having any if branch and/or switch.
+
+> +		break;
+> +	case OVL_ADAPTOR_TYPE_RDMA:
+> +		// only LARB users need to do this
+
+Please, C-style comments only.
+
+> +		ret = pm_runtime_get_sync(dev);
+> +		if (ret < 0) {
+> +			dev_err(dev, "Failed to enable power domain, error(%d)\n", ret);
+> +			goto end;
+> +		}
+> +		ret = mtk_mdp_rdma_clk_enable(dev);
+> +		if (ret)
+> +			pm_runtime_put(dev);
+> +		break;
+> +	default:
+> +		dev_err(dev, "Unknown type: %d\n", type);
+
+Are we supposed to return 0 for unknown type?!
+
+> +	}
+> +
+> +	if (ret)
+> +		dev_err(dev, "Failed to enable clock: error(%d)\n", ret);
+
+if (ret) {
+	dev_err(...)
+	return ret;
+}
+
+return 0;
+
+> +
+> +end:
+> +	return ret;
+> +}
+> +
+> +static void mtk_ovl_adaptor_disable(struct device *dev, enum mtk_ovl_adaptor_comp_type type)
+> +{
+> +	if (!dev)
+> +		return;
+> +
+> +	switch (type) {
+> +	case OVL_ADAPTOR_TYPE_ETHDR:
+> +		mtk_ethdr_clk_disable(dev);
+> +		break;
+> +	case OVL_ADAPTOR_TYPE_MERGE:
+> +		mtk_merge_clk_disable(dev);
+> +		break;
+> +	case OVL_ADAPTOR_TYPE_RDMA:
+> +		mtk_mdp_rdma_clk_disable(dev);
+> +		pm_runtime_put(dev);
+> +		break;
+> +	default:
+> +		dev_err(dev, "Unknown type: %d\n", type);
+> +	}
+> +}
+> +
+>   void mtk_ovl_adaptor_layer_config(struct device *dev, unsigned int idx,
+>   				  struct mtk_plane_state *state,
+>   				  struct cmdq_pkt *cmdq_pkt)
+> @@ -186,72 +244,30 @@ void mtk_ovl_adaptor_stop(struct device *dev)
+>   int mtk_ovl_adaptor_clk_enable(struct device *dev)
+>   {
+>   	struct mtk_disp_ovl_adaptor *ovl_adaptor = dev_get_drvdata(dev);
+> -	struct device *comp;
+> -	int ret;
+> +	int ret = 0;
+
+Keep `int ret;`
+
+>   	int i;
+>   
+> -	for (i = 0; i < OVL_ADAPTOR_MERGE0; i++) {
+> -		comp = ovl_adaptor->ovl_adaptor_comp[i];
+> -		ret = pm_runtime_get_sync(comp);
+> -		if (ret < 0) {
+> -			dev_err(dev, "Failed to enable power domain %d, err %d\n", i, ret);
+> -			goto pwr_err;
+> -		}
+> -	}
 > -
->   The following 64-byte header is present in decompressed Linux kernel image::
->   
->   	u32 code0;		  /* Executable code */
-> diff --git a/Documentation/riscv/boot.rst b/Documentation/riscv/boot.rst
-> new file mode 100644
-> index 000000000000..019ee818686d
-> --- /dev/null
-> +++ b/Documentation/riscv/boot.rst
-> @@ -0,0 +1,170 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +
-> +===============================================
-> +RISC-V Kernel Boot Requirements and Constraints
-> +===============================================
-> +
-> +:Author: Alexandre Ghiti <alexghiti@rivosinc.com>
-> +:Date: 23 May 2023
-> +
-> +This document describes what the RISC-V kernel expects from bootloaders and
-> +firmware, but also the constraints that any developer must have in mind when
-> +touching the early boot process. For the purposes of this document, the
-> +'early boot process' refers to any code that runs before the final virtual
-> +mapping is set up.
-> +
-> +Pre-kernel Requirements and Constraints
-> +=======================================
-> +
-> +The RISC-V kernel expects the following of bootloaders and platform firmware:
-> +
-> +Register state
-> +--------------
-> +
-> +The RISC-V kernel expects:
-> +
-> +  * `$a0` to contain the hartid of the current core.
-> +  * `$a1` to contain the address of the devicetree in memory.
-> +
-> +CSR state
-> +---------
-> +
-> +The RISC-V kernel expects:
-> +
-> +  * `$satp = 0`: the MMU, if present, must be disabled.
-> +
-> +Reserved memory for resident firmware
-> +-------------------------------------
-> +
-> +The RISC-V kernel must not map any resident memory, or memory protected with
-> +PMPs, in the direct mapping, so the firmware must correctly mark those regions
-> +as per the devicetree specification and/or the UEFI specification.
-> +
-> +Kernel location
-> +---------------
-> +
-> +The RISC-V kernel expects to be placed at a PMD boundary (2MB aligned for rv64
-> +and 4MB aligned for rv32). Note that the EFI stub will physically relocate the
-> +kernel if that's not the case.
-> +
-> +Hardware description
-> +--------------------
-> +
-> +The firmware can pass either a devicetree or ACPI tables to the RISC-V kernel.
-> +
-> +The devicetree is either passed directly to the kernel from the previous stage
-> +using the `$a1` register, or when booting with UEFI, it can be passed using the
-> +EFI configuration table.
-> +
-> +The ACPI tables are passed to the kernel using the EFI configuration table. In
-> +this case, a tiny devicetree is still created by the EFI stub. Please refer to
-> +"EFI stub and devicetree" tree section below for details about this devicetree.
-> +
-> +Kernel entrance
-> +---------------
-> +
-> +On SMP systems, there are 2 methods to enter the kernel:
-> +
-> +- `RISCV_BOOT_SPINWAIT`: the firmware releases all harts in the kernel, one hart
-> +  wins a lottery and executes the early boot code while the other harts are
-> +  parked waiting for the initialization to finish. This method is mostly used to
-> +  support older firmwares without SBI HSM extension and M-mode RISC-V kernel.
-> +- `Ordered booting`: the firmware releases only one hart that will execute the
-> +  initialization phase and then will start all other harts using the SBI HSM
-> +  extension. The ordered booting method is the preferred booting method for
-> +  booting the RISC-V kernel because it can support cpu hotplug and kexec.
-> +
-> +UEFI
-> +----
-> +
-> +UEFI memory map
-> +~~~~~~~~~~~~~~~
-> +
-> +When booting with UEFI, the RISC-V kernel will use only the EFI memory map to
-> +populate the system memory.
-> +
-> +The UEFI firmware must parse the subnodes of the `/reserved-memory` devicetree
-> +node and abide by the devicetree specification to convert the attributes of
-> +those subnodes (`no-map` and `reusable`) into their correct EFI equivalent
-> +(refer to section "3.5.4 /reserved-memory and UEFI" of the devicetree
-> +specification v0.4-rc1).
-append this note ?
+>   	for (i = 0; i < OVL_ADAPTOR_ID_MAX; i++) {
+> -		comp = ovl_adaptor->ovl_adaptor_comp[i];
+> -
+> -		if (i < OVL_ADAPTOR_MERGE0)
+> -			ret = mtk_mdp_rdma_clk_enable(comp);
+> -		else if (i < OVL_ADAPTOR_ETHDR0)
+> -			ret = mtk_merge_clk_enable(comp);
+> -		else
+> -			ret = mtk_ethdr_clk_enable(comp);
+> +		ret = mtk_ovl_adaptor_enable(ovl_adaptor->ovl_adaptor_comp[i],
+> +					     comp_matches[i].type);
+>   		if (ret) {
+> -			dev_err(dev, "Failed to enable clock %d, err %d\n", i, ret);
+> -			goto clk_err;
+> +			while (--i >= 0)
+> +				mtk_ovl_adaptor_disable(ovl_adaptor->ovl_adaptor_comp[i],
+> +							comp_matches[i].type);
+> +			break;
 
-Note that RISC-V edk2 diverges from the devicetree specification to 
-declare the !no-map regions as EfiReservedMemoryType instead of 
-EfiBootServicesData.
-> +
-> +RISCV_EFI_BOOT_PROTOCOL
-> +~~~~~~~~~~~~~~~~~~~~~~~
-> +
-> +When booting with UEFI, the EFI stub requires the boot hartid in order to pass
-> +it to the RISC-V kernel in `$a1`. The EFI stub retrieves the boot hartid using
-> +one of the following methods:
-> +
-> +- `RISCV_EFI_BOOT_PROTOCOL` (**preferred**).
-> +- `boot-hartid` devicetree subnode (**deprecated**).
-> +
-> +Any new firmware must implement `RISCV_EFI_BOOT_PROTOCOL` as the devicetree
-> +based approach is deprecated now.
-> +
-> +Early Boot Requirements and Constraints
-> +=======================================
-> +
-> +The RISC-V kernel's early boot process operates under the following constraints:
-> +
-> +EFI stub and devicetree
-> +-----------------------
-> +
-> +When booting with UEFI, the devicetree is supplemented (or created) by the EFI
-> +stub with the same parameters as arm64 which are described at the paragraph
-> +"UEFI kernel support on ARM" in Documentation/arm/uefi.rst.
-> +
-> +Virtual mapping installation
-> +----------------------------
-> +
-> +The installation of the virtual mapping is done in 2 steps in the RISC-V kernel:
-> +
-> +1. :c:func:`setup_vm` installs a temporary kernel mapping in
-> +   :c:var:`early_pg_dir` which allows discovery of the system memory. Only the
-> +   kernel text/data are mapped at this point. When establishing this mapping, no
-> +   allocation can be done (since the system memory is not known yet), so
-> +   :c:var:`early_pg_dir` page table is statically allocated (using only one
-> +   table for each level).
-> +
-> +2. :c:func:`setup_vm_final` creates the final kernel mapping in
-> +   :c:var:`swapper_pg_dir` and takes advantage of the discovered system memory
-> +   to create the linear mapping. When establishing this mapping, the kernel
-> +   can allocate memory but cannot access it directly (since the direct mapping
-> +   is not present yet), so it uses temporary mappings in the fixmap region to
-> +   be able to access the newly allocated page table levels.
-> +
-> +For :c:func:`virt_to_phys` and :c:func:`phys_to_virt` to be able to correctly
-> +convert direct mapping addresses to physical addresses, they need to know the
-> +start of the DRAM. This happens after step 1, right before step 2 installs the
-> +direct mapping (see :c:func:`setup_bootmem` function in arch/riscv/mm/init.c).
-> +Any usage of those macros before the final virtual mapping is installed must
-> +be carefully examined.
-> +
-> +Device-tree mapping via fixmap
-> +------------------------------
-> +
-> +The RISC-V kernel uses the fixmap region to map the devicetree because the
-> +devicetree virtual mapping must remain the same between :c:func:`setup_vm` and
-> +:c:func:`setup_vm_final` calls since the :c:var:`reserved_mem` array is
-> +initialized with virtual addresses established by :c:func:`setup_vm` and used
-> +with the mapping established by :c:func:`setup_vm_final`.
-> +
-> +Pre-MMU execution
-> +-----------------
-> +
-> +A few pieces of code need to run before even the first virtual mapping is
-> +established. These are the installation of the first virtual mapping itself,
-> +patching of early alternatives and the early parsing of the kernel command line.
-> +That code must be very carefully compiled as:
-> +
-> +- `-fno-pie`: This is needed for relocatable kernels which use `-fPIE`, since
-> +  otherwise, any access to a global symbol would go through the GOT which is
-> +  only relocated virtually.
-> +- `-mcmodel=medany`: Any access to a global symbol must be PC-relative to avoid
-> +  any relocations to happen before the MMU is setup.
-> +- *all* instrumentation must also be disabled (that includes KASAN, ftrace and
-> +  others).
-> +
-> +As using a symbol from a different compilation unit requires this unit to be
-> +compiled with those flags, we advise, as much as possible, not to use external
-> +symbols.
-> diff --git a/Documentation/riscv/index.rst b/Documentation/riscv/index.rst
-> index 175a91db0200..1f66062def6d 100644
-> --- a/Documentation/riscv/index.rst
-> +++ b/Documentation/riscv/index.rst
-> @@ -5,6 +5,7 @@ RISC-V architecture
->   .. toctree::
->       :maxdepth: 1
->   
-> +    boot
->       boot-image-header
->       vm-layout
->       hwprobe
+Instead of a break here, just return ret?
 
--- 
-Thanks
-Song Shuai
+>   		}
+>   	}
+> -
+> -	return ret;
+> -
+> -clk_err:
+> -	while (--i >= 0) {
+> -		comp = ovl_adaptor->ovl_adaptor_comp[i];
+> -		if (i < OVL_ADAPTOR_MERGE0)
+> -			mtk_mdp_rdma_clk_disable(comp);
+> -		else if (i < OVL_ADAPTOR_ETHDR0)
+> -			mtk_merge_clk_disable(comp);
+> -		else
+> -			mtk_ethdr_clk_disable(comp);
+> -	}
+> -	i = OVL_ADAPTOR_MERGE0;
+> -
+> -pwr_err:
+> -	while (--i >= 0)
+> -		pm_runtime_put(ovl_adaptor->ovl_adaptor_comp[i]);
+> -
+>   	return ret;
+
+...and return 0 here.
+
+>   }
+>   
+
+Regards,
+Angelo
+
