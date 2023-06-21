@@ -2,125 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF407389A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 827907389DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233399AbjFUPhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:37:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44212 "EHLO
+        id S233559AbjFUPkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 11:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233627AbjFUPhb (ORCPT
+        with ESMTP id S233757AbjFUPk1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:37:31 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8B618C
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:37:12 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-3ff25fd5fa0so14191801cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:37:12 -0700 (PDT)
+        Wed, 21 Jun 2023 11:40:27 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D0519AB
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:39:59 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f7677a94d1so8371955e87.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:39:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687361822; x=1689953822;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zhyDs3itTHDCoC64j3sr5/tt6k09x+qbX7EDax7WYRE=;
-        b=IG6/F3nmLpziRagtGrFoXkfHEsGTer519eGvx34USzermhAXZWJU+cAtI3yBjkhXuN
-         latVrkD7VwSN1YSRNqYBAtqRM8yFR3VoSorT/L4/5zHbrMF/kQTsSKTderBTGvizy/hn
-         WpLLpRPc4ooV9VWxWDDpnmCsvGDF6caLMAap/R/0TkLralGXsOLz3t6abOZWVOnrNZnR
-         1wb7dYQh/pnvD+gkVgotpX3S15+lK1cxiatQIimoYlzL1aiptoUdEix0vi+ZMvOnVEmo
-         yXI+B/jOoBFU0kPfPbqfkciSHGpTQMx+R0YWEr7+8cVE6FYyq3WgeR+G33SCCvy5OVez
-         9GZw==
+        d=linaro.org; s=google; t=1687361954; x=1689953954;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yU4DV2qo9BxVFrJ0f3oHAMCv7phtgI3uu2fRJ4KVI1I=;
+        b=RABOo37gtI2gSDuyRxUhcC9bRFMK+Azm0M9SbVGWxO5NkcEi2tcTgK6zRIySUGfa3W
+         8o/bvaSsJS0sqC4B0CqqyBJXVVWEojIHawe75FrmtpH0mFx4W2Z4BjZgptosXUjK+uBd
+         P5UoqPcon2JfRdOkdSzFQZKOMqXwVBfiHbqwA3xqDds0mBn0xWD4+AIamkFL3fXa0o9w
+         v6W1JD8lFD7jDzazhcFZ1Eyqf2njZc5+DKZy9buPZiEUx0sxNP2aZOITKGW5yOej+4bp
+         aXNYixcYqAz7hGfM2kgLQmAkOWYGtAZQ89xJ1Tq8LRlOB95grFyDcX8Xpk39/YI6zcZz
+         Ixlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687361822; x=1689953822;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zhyDs3itTHDCoC64j3sr5/tt6k09x+qbX7EDax7WYRE=;
-        b=bBNTrg+QNB32105+N5OqLxlY8lCclb0cM1R0T2vflZveaVza4m39A99WNemTz7Z0nP
-         nTWRbDGkw68rkcB0iyyxBj3Yj19HXGQVz0/RPoAIhFyS7939+kj3X50yfVub2q2rC2sW
-         PSMTL3aQbDsISy//kt81S5V7/SG0m+4F9STB5NT4FYJtoU+ZK+ojgPOkwpwp840N7hGE
-         ks0sVUNpQp0tH8QpzKFLcfiGXXnRwJ0HdpLkCOI8ftAqPqB5vkFrwoGuhHgzWzhdm9dF
-         xLDOYr3nEdqCLzrjwjRKHUoxvOw2Hhn7ghmHU//oejrGU7FUvp7SY9jaGgLhKrdrw9YB
-         2Ghw==
-X-Gm-Message-State: AC+VfDy09ahGFISSoM+QjPIaaVSFqL9cSN9UtzlDEQzc4doKBSUhGpDQ
-        vUXJ2mjiK/JvGqWvZoFSUL0gCQ==
-X-Google-Smtp-Source: ACHHUZ4ZfCyfI8EkmJ1YsjZWHa8pt0BJxKpxF0qXp0h4kiAVACJ+tDEuA3XGHgOX2jJvq8zjzP6SKA==
-X-Received: by 2002:a05:622a:181c:b0:3ff:20dd:cc2b with SMTP id t28-20020a05622a181c00b003ff20ddcc2bmr8861999qtc.3.1687361822049;
-        Wed, 21 Jun 2023 08:37:02 -0700 (PDT)
-Received: from jassi-Alienware-x17-R2.. (wnpgmb0311w-ds01-45-177-228.dynamic.bellmts.net. [206.45.177.228])
-        by smtp.gmail.com with ESMTPSA id bp20-20020a05622a1b9400b003ff251b17c8sm2483488qtb.10.2023.06.21.08.37.00
+        d=1e100.net; s=20221208; t=1687361954; x=1689953954;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yU4DV2qo9BxVFrJ0f3oHAMCv7phtgI3uu2fRJ4KVI1I=;
+        b=YEYxuD5TB1B0a++52JHq3PgwBH5lgBtMfwLuxh2p+DnQBVmR6mPU4e6sKxXPKdncuY
+         /+H148HR1SEvHHN0gBH3xsaQv8v7no8rGzOkdz+keAWfQPxMEtDM/cf5QB+UYgSKQvO3
+         QIG5HvYiykpO00B0QBJKpvxxu6+De1hDJIPVvvBFV2cIKADzS7jLxNk8JDcfw+Ybnb+E
+         ITqkOn4PmaLge3u8N/bQkUUTxqskEYLJVYP1hK6PRWaYhEzU9tWZFAt5QKuDT2bZ/6AQ
+         QwDy3/YE4opKb0ArAvw5dJMrGpCJw7DwEX+2YbUWSE9VUjAwllDXH0XqQLFc2UHcOE2Y
+         BCJw==
+X-Gm-Message-State: AC+VfDwd+Uqsd+QnLFgXY09KyE906HqRok1KkzcTKysuVtMJwBsZo2JQ
+        KEP8uIN3nxbVc8HBypsOgwWygQ==
+X-Google-Smtp-Source: ACHHUZ5ENZHzRzdViOmmayq8OUmXpLToc/yyrOxLYyDp5e/YRB+phDLb9Zb3+5TpILvzqtnY5HwPRQ==
+X-Received: by 2002:a19:644e:0:b0:4f8:442d:6335 with SMTP id b14-20020a19644e000000b004f8442d6335mr9815058lfj.46.1687361954131;
+        Wed, 21 Jun 2023 08:39:14 -0700 (PDT)
+Received: from [192.168.1.101] (abxj193.neoplus.adsl.tpnet.pl. [83.9.3.193])
+        by smtp.gmail.com with ESMTPSA id l15-20020a19c20f000000b004f73eac0308sm821078lfc.183.2023.06.21.08.39.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 08:37:01 -0700 (PDT)
-From:   jaswinder.singh@linaro.org
-To:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, robh@kernel.org,
-        ilias.apalodimas@linaro.org, ryosuke.saito@linaro.org,
-        masahisa.kojima@linaro.org, Jassi Brar <jaswinder.singh@linaro.org>
-Subject: [PATCHv3] dt-bindings: arm: socionext: add Synquacer platforms
-Date:   Wed, 21 Jun 2023 10:36:58 -0500
-Message-Id: <20230621153658.60646-1-jaswinder.singh@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230620170725.13794-1-jaswinder.singh@linaro.org>
-References: <20230620170725.13794-1-jaswinder.singh@linaro.org>
+        Wed, 21 Jun 2023 08:39:13 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH 0/3] MM8013 fg driver
+Date:   Wed, 21 Jun 2023 17:39:09 +0200
+Message-Id: <20230621-topic-mm8013-v1-0-4407c6260053@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJ0Zk2QC/x2NywqDMBAAf0X27EIeVGN/RTwkca0LGiWxpRD89
+ y49zsAwFQplpgLPpkKmDxc+koBuG4irTy9CnoXBKGNVZzRex8kR990pbdH2Xf8YaHDBOJAk+EI
+ Ysk9xlSi9t03kmWnh7/8xTvf9A5tOsqlzAAAA
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687361953; l=947;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=wlDoFGQ2X3QoRRnQnmr+8jyUX0iHnnC3N7J/uAgmyW0=;
+ b=Lz6Tr/zNos6A7HdUs7FmQehcXQuDKZH2FHJlBZ9FzrYWASEAB3PocnmW+4916ymvQocmkCUjA
+ pgVaRmC1mIdA0+DvpHrQdOLkqVBKbKkT3za2908lbrS6AKlt+/iM5fU
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jassi Brar <jaswinder.singh@linaro.org>
+This series brings support for the Mitsumi MM8013 Li-Ion fuel gauge.
 
-Socionext's DeveloperBox is based on the SC2A11B SoC (Synquacer).
-Specify bindings for the platform and boards based on that.
-
-Signed-off-by: Jassi Brar <jaswinder.singh@linaro.org>
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
+Konrad Dybcio (3):
+      dt-bindings: vendor-prefixes: Add Mitsumi Electric Co., Ltd.
+      dt-bindings: power: supply: Document Mitsumi MM8013 fuel gauge
+      power: supply: Introduce MM8013 fuel gauge driver
 
- * Revert back to using the brand name Synquacer instead of sc2a11b
+ .../bindings/power/supply/mitsumi,mm8013.yaml      |  35 +++
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ MAINTAINERS                                        |   5 +
+ drivers/power/supply/Kconfig                       |   9 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/mm8013.c                      | 280 +++++++++++++++++++++
+ 6 files changed, 332 insertions(+)
+---
+base-commit: 15e71592dbae49a674429c618a10401d7f992ac3
+change-id: 20230621-topic-mm8013-376759e98b28
 
- .../bindings/arm/socionext/synquacer.yaml     | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/arm/socionext/synquacer.yaml
-
-diff --git a/Documentation/devicetree/bindings/arm/socionext/synquacer.yaml b/Documentation/devicetree/bindings/arm/socionext/synquacer.yaml
-new file mode 100644
-index 000000000000..72554a4f1c92
---- /dev/null
-+++ b/Documentation/devicetree/bindings/arm/socionext/synquacer.yaml
-@@ -0,0 +1,28 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/arm/socionext/synquacer.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Socionext Synquacer platform
-+
-+maintainers:
-+  - Masahisa Kojima <masahisa.kojima@linaro.org>
-+  - Jassi Brar <jaswinder.singh@linaro.org>
-+
-+description:
-+  Socionext SC2A11B (Synquacer) SoC based boards
-+
-+properties:
-+  $nodename:
-+    const: '/'
-+  compatible:
-+    oneOf:
-+      - items:
-+          - enum:
-+              - socionext,developer-box
-+          - const: socionext,synquacer
-+
-+additionalProperties: true
-+
-+...
+Best regards,
 -- 
-2.34.1
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
