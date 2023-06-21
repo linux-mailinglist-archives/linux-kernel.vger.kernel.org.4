@@ -2,50 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35B2737B3C
+	by mail.lfdr.de (Postfix) with ESMTP id 678E1737B3B
 	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 08:25:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbjFUGPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 02:15:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
+        id S230227AbjFUGRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 02:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjFUGPc (ORCPT
+        with ESMTP id S230302AbjFUGQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 02:15:32 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4E510DA
-        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:15:29 -0700 (PDT)
-Received: from dggpemm100001.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QmCqY4CnszLmsC;
-        Wed, 21 Jun 2023 14:13:29 +0800 (CST)
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm100001.china.huawei.com (7.185.36.93) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 21 Jun 2023 14:15:26 +0800
-Message-ID: <aba31303-e992-9ad7-995f-d159f79a55f7@huawei.com>
-Date:   Wed, 21 Jun 2023 14:15:26 +0800
+        Wed, 21 Jun 2023 02:16:49 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A49681FCD
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:16:33 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9887ebe16d0so454742366b.2
+        for <linux-kernel@vger.kernel.org>; Tue, 20 Jun 2023 23:16:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687328191; x=1689920191;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fixAEq2fesQspEmY/rSbt0mS+POR0uhtDQXTB9EXkGI=;
+        b=NpxPkoKNn9bqutXKY1SBLdUxStfUPsyabnbNYlyXj/CSxvX8YRakf1YcxvkPym68OU
+         uleZrV+XAig33EJif7Qvmraqps3YpE6lkGPJzBc6pl0+AFJ6qZc4L30GLooj10JXEgwI
+         RHRwEBrsfYW1QcR6xSkmZUWHIR8ky34PXZ7M/nALttf1GEmkBA+D3LWISl1oa3fVePgx
+         nis5yrEySKBCUZKGviIM69tzlmJo5c5yaVetc3WSHWNx+12VrSXDTGJKzsBksrNwn67v
+         xR1OOAa0XN8sNNBjOd7g6AcorZduTDuFSYDaADcrRoL+/DIaszZ4Y5aTA1GxF6beFC1z
+         PXBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687328191; x=1689920191;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fixAEq2fesQspEmY/rSbt0mS+POR0uhtDQXTB9EXkGI=;
+        b=hww9Hc+T0YWDY9mXsvBkgb3YUe4e/MMahgYyC6dr9Lxn1ef3HdIb7oI44qCdWMYhG7
+         GRdzv5IJdwOSaIUMvNTRmeSChu0oqLlaLHaa8mv47PfJdGcZtXtCVIGabi3LR/htLEe8
+         4MeIqDdvGqyuoub+NrJnedNB26iuxaa+AoaJ0iVrPmC9ml9R5EjhzvJTmPOJmX4zpuEH
+         zxZj6GA56gk2Rn33enbAkFoy1dgvv55CVCzy8QfBFwBPdSvGGC6uHsc2spbGrejOQc0u
+         9hdOo5RmBhT/KMOgrmZjw8T25a0oMuGfXf9wkciHQ1quoPqBZkM2YqS+r3VoMlo+en7D
+         WBsg==
+X-Gm-Message-State: AC+VfDzc4X36luwF89zJkh6mpl0B9Pb8+5MgUHbLH7/XjUThcGKnFuA1
+        Jl/uMd2aL/7M8785AK9TuCv8uw==
+X-Google-Smtp-Source: ACHHUZ7KYUf7HH9290LpEYW9xsmzd0YHZYDWGwFzt/9TTjq+OQoCHiaGT7Xbj3QSYV6YPUX9ryqAnA==
+X-Received: by 2002:a17:907:7249:b0:975:bbd:d205 with SMTP id ds9-20020a170907724900b009750bbdd205mr13202505ejc.9.1687328191605;
+        Tue, 20 Jun 2023 23:16:31 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id w17-20020a1709062f9100b009885a03467csm2532646eji.31.2023.06.20.23.16.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 20 Jun 2023 23:16:31 -0700 (PDT)
+Message-ID: <9d85c828-1be2-6b6a-099b-fd997304339b@linaro.org>
+Date:   Wed, 21 Jun 2023 08:16:29 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] riscv: mm: try VMA lock-based page fault handling first
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] dt-bindings: bus: ti-sysc: fix typo
 Content-Language: en-US
-To:     Jisheng Zhang <jszhang@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>
-References: <20230523165942.2630-1-jszhang@kernel.org>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20230523165942.2630-1-jszhang@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm100001.china.huawei.com (7.185.36.93)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+To:     Mans Rullgard <mans@mansr.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Tony Lindgren <tony@atomide.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230620200917.24958-1-mans@mansr.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230620200917.24958-1-mans@mansr.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,100 +76,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/5/24 0:59, Jisheng Zhang wrote:
-> Attempt VMA lock-based page fault handling first, and fall back to the
-> existing mmap_lock-based handling if that fails.
+On 20/06/2023 22:09, Mans Rullgard wrote:
+> Fix typo (period vs comma) in list of valid clock names.
 > 
-> A simple running the ebizzy benchmark on Lichee Pi 4A shows that
-> PER_VMA_LOCK can improve the ebizzy benchmark by about 32.68%. In
-> theory, the more CPUs, the bigger improvement, but I don't have any
-> HW platform which has more than 4 CPUs.
-> 
-> This is the riscv variant of "x86/mm: try VMA lock-based page fault
-> handling first".
-> 
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> Signed-off-by: Mans Rullgard <mans@mansr.com>
 > ---
-> Any performance numbers are welcome! Especially the numbers on HW
-> platforms with 8 or more CPUs.
-> 
->   arch/riscv/Kconfig    |  1 +
->   arch/riscv/mm/fault.c | 33 +++++++++++++++++++++++++++++++++
->   2 files changed, 34 insertions(+)
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 62e84fee2cfd..b958f67f9a12 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -42,6 +42,7 @@ config RISCV
->   	select ARCH_SUPPORTS_DEBUG_PAGEALLOC if MMU
->   	select ARCH_SUPPORTS_HUGETLBFS if MMU
->   	select ARCH_SUPPORTS_PAGE_TABLE_CHECK if MMU
-> +	select ARCH_SUPPORTS_PER_VMA_LOCK if MMU
+>  Documentation/devicetree/bindings/bus/ti-sysc.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-no need if mmu，  see PER_VMA_LOCK
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+Best regards,
+Krzysztof
 
-config PER_VMA_LOCK
-         bool "allow VMA lock-based page fault"
-         def_bool y
-         depends on ARCH_SUPPORTS_PER_VMA_LOCK && MMU && SMP
-
-Reviewed-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-
->   	select ARCH_USE_MEMTEST
->   	select ARCH_USE_QUEUED_RWLOCKS
->   	select ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT if MMU
-> diff --git a/arch/riscv/mm/fault.c b/arch/riscv/mm/fault.c
-> index 8685f85a7474..eccdddf26f4b 100644
-> --- a/arch/riscv/mm/fault.c
-> +++ b/arch/riscv/mm/fault.c
-> @@ -286,6 +286,36 @@ void handle_page_fault(struct pt_regs *regs)
->   		flags |= FAULT_FLAG_WRITE;
->   	else if (cause == EXC_INST_PAGE_FAULT)
->   		flags |= FAULT_FLAG_INSTRUCTION;
-> +#ifdef CONFIG_PER_VMA_LOCK
-> +	if (!(flags & FAULT_FLAG_USER))
-> +		goto lock_mmap;
-> +
-> +	vma = lock_vma_under_rcu(mm, addr);
-> +	if (!vma)
-> +		goto lock_mmap;
-> +
-> +	if (unlikely(access_error(cause, vma))) {
-> +		vma_end_read(vma);
-> +		goto lock_mmap;
-> +	}
-> +
-> +	fault = handle_mm_fault(vma, addr, flags | FAULT_FLAG_VMA_LOCK, regs);
-> +	vma_end_read(vma);
-> +
-> +	if (!(fault & VM_FAULT_RETRY)) {
-> +		count_vm_vma_lock_event(VMA_LOCK_SUCCESS);
-> +		goto done;
-> +	}
-> +	count_vm_vma_lock_event(VMA_LOCK_RETRY);
-> +
-> +	if (fault_signal_pending(fault, regs)) {
-> +		if (!user_mode(regs))
-> +			no_context(regs, addr);
-> +		return;
-> +	}
-> +lock_mmap:
-> +#endif /* CONFIG_PER_VMA_LOCK */
-> +
->   retry:
->   	mmap_read_lock(mm);
->   	vma = find_vma(mm, addr);
-> @@ -355,6 +385,9 @@ void handle_page_fault(struct pt_regs *regs)
->   
->   	mmap_read_unlock(mm);
->   
-> +#ifdef CONFIG_PER_VMA_LOCK
-> +done:
-> +#endif
->   	if (unlikely(fault & VM_FAULT_ERROR)) {
->   		tsk->thread.bad_cause = cause;
->   		mm_fault_error(regs, addr, fault);
