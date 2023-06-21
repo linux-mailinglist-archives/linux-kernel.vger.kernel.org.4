@@ -2,117 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B643738A0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC270738A0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:46:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233378AbjFUPpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:45:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53260 "EHLO
+        id S232994AbjFUPqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 11:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232254AbjFUPpg (ORCPT
+        with ESMTP id S233600AbjFUPqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:45:36 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE8691;
-        Wed, 21 Jun 2023 08:45:34 -0700 (PDT)
+        Wed, 21 Jun 2023 11:46:30 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A174DE69
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:46:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687362334; x=1718898334;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=fShmEjl8Wh4baxLKMYHpBk3MTQgN6MNwn0v6pEROKsg=;
-  b=koFfURn08Rt6aECoS9uF0FYElM8830jbBfaxeIxKaWrndfA0y63/SA8Y
-   YYVVvhCkyI6iBDiccGsnJ+yM51u8cC65Fq6zkiKpYAtMcBMS4cN2ojdHB
-   aA/LRN2Vwrgpx0bKL17Rp4MsmGsHNpkRGTQ2GQ5ldhkvR+mdxBA2xYu4E
-   y6mDIkeT8I5K+p+gk+A5372GEhxeoDhYPD7gZ+9ZIopk16oqHZtAA+1rv
-   0AGcQq9Ef+lJpspv2eaQqvCHGxAUq6aQkKvSY8E3i92qmeZKn1bf8Gfxm
-   A0wYDIqb62qZxQB4+6HzDaoxWzC9sEwZ1Y1uLjEQktfHrZoI2v0cCxSil
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="423876538"
+  t=1687362376; x=1718898376;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6aeZt3AGr6ft5yHMkjJnVz9mKRAHdriZ/qLt81RNsCk=;
+  b=U30gY86F34elzbJcD7pVKT0tTJgCQCVFIxnOsUp5p1SNQ8AV7c/13u71
+   2Oeji41n05ypobXn0QpXxnz1J1OQ2neCNrb327omMN0/7JexvD5eVN/kG
+   P2pt6CXKu513i5s9fi9bCCM9YSIjwwelsOTbRPqzoYRjipHDmd3x9Xlr3
+   WJo14mSNEndKD+d0A88FVqXC7MQXVKU9wuU5ekvxHU5VI/OWMpBpJMRbf
+   0Egvn/s4xw/O03b+cY94FTu326IStrWmWlhBLRRWYGocH7JWE2Oe78zfV
+   XHXomBzX7zqaUAOkK7CqUiWd7A3ByEnQakAr9EriOgbe1d42YHT2T3FUd
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="359082022"
 X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="423876538"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 08:45:10 -0700
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="748744954"
+   d="scan'208";a="359082022"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 08:46:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="717704974"
 X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="748744954"
-Received: from lfrecald-mobl2.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.26.147])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 08:45:10 -0700
-Message-ID: <13fbb134dda72f979b9a02e6abec12ebac18aef8.camel@linux.intel.com>
-Subject: Re: [PATCH 0/7] thermal: processor_thermal: Suport workload hint
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     rui.zhang@intel.com, daniel.lezcano@linaro.org,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 21 Jun 2023 08:45:10 -0700
-In-Reply-To: <CAJZ5v0jGp_Rsu6S+znmrKhQ+y88Mqf9PLf66Ec-SffdFdyH_4g@mail.gmail.com>
-References: <20230620230150.3068704-1-srinivas.pandruvada@linux.intel.com>
-         <CAJZ5v0jGp_Rsu6S+znmrKhQ+y88Mqf9PLf66Ec-SffdFdyH_4g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+   d="scan'208";a="717704974"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 21 Jun 2023 08:46:10 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qC025-0006uv-2s;
+        Wed, 21 Jun 2023 15:46:09 +0000
+Date:   Wed, 21 Jun 2023 23:45:31 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Heiko Carstens <hca@linux.ibm.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: arc-rimi.c:undefined reference to `ioremap'
+Message-ID: <202306212350.fgz5R8Xv-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-06-21 at 16:58 +0200, Rafael J. Wysocki wrote:
-> On Wed, Jun 21, 2023 at 1:01 AM Srinivas Pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> > 
-> > Add support for Meteor Lake workload hints. Before adding this
-> > support,
-> > some reorganization and clean up is required.
-> > First four changes are for clean up and to reorganize code to add
-> > support for workload hint. The last patch adds a test program as
-> > part
-> > of self tests.
-> > 
-> > Srinivas Pandruvada (7):
-> >   thermal: int340x: processor_thermal: Move mailbox code to common
-> >     module
-> >   thermal: int340x: processor_thermal: Add interrupt configuration
-> >   thermal: int340x: processor_thermal: Use non MSI interrupts
-> >   thermal/drivers/int340x: Remove PROC_THERMAL_FEATURE_WLT_REQ for
-> >     Meteor Lake
-> >   thermal: int340x: processor_thermal: Add workload type hint
-> >   thermal/drivers/int340x: Support workload hint interrupts
-> >   selftests/thermel/intel: Add test to read workload hint
-> > 
-> >  .../driver-api/thermal/intel_dptf.rst         |  38 +++
-> >  .../thermal/intel/int340x_thermal/Makefile    |   2 +
-> >  .../processor_thermal_device.c                |  17 +-
-> >  .../processor_thermal_device.h                |  21 +-
-> >  .../processor_thermal_device_pci.c            |  76 ++++--
-> >  .../processor_thermal_device_pci_legacy.c     |   3 +-
-> >  .../int340x_thermal/processor_thermal_mbox.c  | 179 ++++---------
-> >  .../processor_thermal_wlt_hint.c              | 239
-> > ++++++++++++++++++
-> >  .../processor_thermal_wlt_req.c               | 137 ++++++++++
-> >  .../testing/selftests/thermal/intel/Makefile  |  16 ++
-> >  .../thermal/intel/workload_hint_test.c        | 114 +++++++++
-> >  11 files changed, 680 insertions(+), 162 deletions(-)
-> >  create mode 100644
-> > drivers/thermal/intel/int340x_thermal/processor_thermal_wlt_hint.c
-> >  create mode 100644
-> > drivers/thermal/intel/int340x_thermal/processor_thermal_wlt_req.c
-> >  create mode 100644 tools/testing/selftests/thermal/intel/Makefile
-> >  create mode 100644
-> > tools/testing/selftests/thermal/intel/workload_hint_test.c
-> > 
-> > --
-> 
-> Because of the timing of the first posting, I'm going to treat this
-> series as 6.6 material.
-That is fine. Just review is important, so that it can be back ported
-to Chrome kernel.
+Hi Heiko,
 
-Thanks,
-Srinivas
+FYI, the error/warning still remains.
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   e660abd551f1172e428b4e4003de887176a8a1fd
+commit: 6ef55060a1cc29dd54ff390f22cb3de266dab2b0 s390: make use of CONFIG_FUNCTION_ALIGNMENT
+date:   3 months ago
+config: s390-randconfig-r035-20230621 (https://download.01.org/0day-ci/archive/20230621/202306212350.fgz5R8Xv-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230621/202306212350.fgz5R8Xv-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306212350.fgz5R8Xv-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   s390-linux-ld: drivers/clk/clk-fixed-mmio.o: in function `fixed_mmio_clk_setup':
+   clk-fixed-mmio.c:(.text+0x92): undefined reference to `of_iomap'
+   s390-linux-ld: clk-fixed-mmio.c:(.text+0xda): undefined reference to `iounmap'
+   s390-linux-ld: drivers/dma/fsl-edma.o: in function `fsl_edma_probe':
+   fsl-edma.c:(.text+0xa02): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: fsl-edma.c:(.text+0xc86): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/dma/qcom/hidma.o: in function `hidma_probe':
+   hidma.c:(.text+0x137a): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: hidma.c:(.text+0x13d4): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `ipwireless_detach':
+   main.c:(.text+0x90): undefined reference to `iounmap'
+   s390-linux-ld: main.c:(.text+0xd4): undefined reference to `iounmap'
+   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `config_ipwireless':
+   main.c:(.text+0x23e): undefined reference to `iounmap'
+   s390-linux-ld: main.c:(.text+0x35c): undefined reference to `iounmap'
+   s390-linux-ld: drivers/tty/ipwireless/main.o: in function `ipwireless_probe.part.0':
+   main.c:(.text+0x468): undefined reference to `ioremap'
+   s390-linux-ld: main.c:(.text+0x51c): undefined reference to `ioremap'
+   s390-linux-ld: main.c:(.text+0x56a): undefined reference to `iounmap'
+   s390-linux-ld: main.c:(.text+0x59e): undefined reference to `iounmap'
+   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `check_mirror':
+>> arc-rimi.c:(.text+0x2ba): undefined reference to `ioremap'
+>> s390-linux-ld: arc-rimi.c:(.text+0x2dc): undefined reference to `iounmap'
+   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `arc_rimi_exit':
+   arc-rimi.c:(.exit.text+0x2e): undefined reference to `iounmap'
+   s390-linux-ld: drivers/net/arcnet/arc-rimi.o: in function `arcrimi_found':
+   arc-rimi.c:(.init.text+0xec): undefined reference to `ioremap'
+   s390-linux-ld: arc-rimi.c:(.init.text+0x184): undefined reference to `iounmap'
+   s390-linux-ld: arc-rimi.c:(.init.text+0x2a4): undefined reference to `iounmap'
+   s390-linux-ld: arc-rimi.c:(.init.text+0x37e): undefined reference to `ioremap'
+   s390-linux-ld: arc-rimi.c:(.init.text+0x466): undefined reference to `iounmap'
+   s390-linux-ld: drivers/net/ethernet/smsc/smc91c92_cs.o: in function `smc91c92_release':
+   smc91c92_cs.c:(.text+0x9ce): undefined reference to `iounmap'
+   s390-linux-ld: drivers/net/ethernet/smsc/smc91c92_cs.o: in function `smc91c92_config':
+   smc91c92_cs.c:(.text+0x1a3a): undefined reference to `ioremap'
+   s390-linux-ld: drivers/net/ethernet/xircom/xirc2ps_cs.o: in function `xirc2ps_release':
+   xirc2ps_cs.c:(.text+0x39e): undefined reference to `iounmap'
+   s390-linux-ld: drivers/net/ethernet/xircom/xirc2ps_cs.o: in function `xirc2ps_config':
+   xirc2ps_cs.c:(.text+0x1674): undefined reference to `ioremap'
+   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `set_cis_map':
+   cistpl.c:(.text+0x4a4): undefined reference to `ioremap'
+   s390-linux-ld: cistpl.c:(.text+0x4de): undefined reference to `iounmap'
+   s390-linux-ld: cistpl.c:(.text+0x562): undefined reference to `iounmap'
+   s390-linux-ld: cistpl.c:(.text+0x574): undefined reference to `ioremap'
+   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `release_cis_mem':
+   cistpl.c:(.text+0xdb6): undefined reference to `iounmap'
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
