@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40A677387C8
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EEFC7387CA
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbjFUOub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56864 "EHLO
+        id S232377AbjFUOum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232244AbjFUOt0 (ORCPT
+        with ESMTP id S230050AbjFUOth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:49:26 -0400
+        Wed, 21 Jun 2023 10:49:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A5D2680
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:48:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8809F2690
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:48:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 686FD615A1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:48:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AC3EC433C0;
-        Wed, 21 Jun 2023 14:48:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A68AA6159A
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:48:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CBC3C433C0;
+        Wed, 21 Jun 2023 14:48:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687358887;
-        bh=rS8eAUo4HUuOpWAJVMd8WnT/H+XVhSHn5PZIGcE/ffY=;
+        s=k20201202; t=1687358889;
+        bh=vzPEOgyxqOCaktmDwbXapks+d0FmANIoL7/H7EX46FQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VH4xfG3r0mZawNGCKw4ezDw42voUP+aKbhk48s0Ply0L9PksOUKRfbRYlGLyeL6GY
-         MSboueO6SsAh7qECRSj/3SA7xEpB7+558hNBwgO8ziP8ZCH8jpsZvmLX9h/b0DUyBr
-         8WRmOS8W7mjUtc0k2mnZPFtXbB12Yn5PtVocI3XuQ4cBhyW6x/afoGtzGf80v/Tiko
-         QCDBS84lljUuHdEA2JTCGMhDeqdv5IVBOae/PCPxl9d5i/n5J5AEXiQHSFMicqM9uq
-         6Y3r/D0H+IPUEmGLoVdpp9/BwRaqMAn9fCD3as02qJFVacxUOwrUTHhpICJizXrjqt
-         nR2bk7/w3PSvQ==
+        b=q9lEJm3hzh3HO8gS2e9FdAKLPhWVnCLIlKqURQo59Y8p/5acagZxwfMRNn0wpU27X
+         t1WK0rMIkofFBBodKmiD7OBo20SIc32KHkqiuFwx5eiRlimyvPmz716as7LX2UG4sF
+         vkUhlcunvaafLJKf4CxSjWtkypQ2BcIy0WJkgD9VOam28yzWGfEaYYjlJHUHGZkcC7
+         cP/fcKwF1229IUK21aAJnYvRa0GpJWpKW2l7puwFrA32Ui7zg2GiR7T19MyA6KFZj1
+         bNo6MqzwuaX1C2Ptgj12KDHtIYb5JH/NSWcPdy76KRnKa4HjZLtmBsQ6SN9wITd+hx
+         uInwNzb+pCAyg==
 From:   Jeff Layton <jlayton@kernel.org>
 To:     Christian Brauner <brauner@kernel.org>,
-        Joel Becker <jlbec@evilplan.org>,
-        Christoph Hellwig <hch@lst.de>
+        Nicolas Pitre <nico@fluxnic.net>
 Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 19/79] configfs: switch to new ctime accessors
-Date:   Wed, 21 Jun 2023 10:45:32 -0400
-Message-ID: <20230621144735.55953-18-jlayton@kernel.org>
+Subject: [PATCH 20/79] cramfs: switch to new ctime accessors
+Date:   Wed, 21 Jun 2023 10:45:33 -0400
+Message-ID: <20230621144735.55953-19-jlayton@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230621144735.55953-1-jlayton@kernel.org>
 References: <20230621144507.55591-1-jlayton@kernel.org>
@@ -64,40 +63,22 @@ inode->i_ctime.
 
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- fs/configfs/inode.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ fs/cramfs/inode.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/configfs/inode.c b/fs/configfs/inode.c
-index 1c15edbe70ff..21466f7f655f 100644
---- a/fs/configfs/inode.c
-+++ b/fs/configfs/inode.c
-@@ -89,7 +89,7 @@ static inline void set_default_inode_attr(struct inode * inode, umode_t mode)
- {
- 	inode->i_mode = mode;
- 	inode->i_atime = inode->i_mtime =
--		inode->i_ctime = current_time(inode);
-+		inode_ctime_set_current(inode);
- }
+diff --git a/fs/cramfs/inode.c b/fs/cramfs/inode.c
+index 27c6597aa1be..039ce0f8858b 100644
+--- a/fs/cramfs/inode.c
++++ b/fs/cramfs/inode.c
+@@ -133,7 +133,7 @@ static struct inode *get_cramfs_inode(struct super_block *sb,
+ 	}
  
- static inline void set_inode_attr(struct inode * inode, struct iattr * iattr)
-@@ -99,7 +99,7 @@ static inline void set_inode_attr(struct inode * inode, struct iattr * iattr)
- 	inode->i_gid = iattr->ia_gid;
- 	inode->i_atime = iattr->ia_atime;
- 	inode->i_mtime = iattr->ia_mtime;
--	inode->i_ctime = iattr->ia_ctime;
-+	inode_ctime_set(inode, iattr->ia_ctime);
- }
- 
- struct inode *configfs_new_inode(umode_t mode, struct configfs_dirent *sd,
-@@ -172,7 +172,7 @@ struct inode *configfs_create(struct dentry *dentry, umode_t mode)
- 		return ERR_PTR(-ENOMEM);
- 
- 	p_inode = d_inode(dentry->d_parent);
--	p_inode->i_mtime = p_inode->i_ctime = current_time(p_inode);
-+	p_inode->i_mtime = inode_ctime_set_current(p_inode);
- 	configfs_set_inode_lock_class(sd, inode);
- 	return inode;
- }
+ 	/* Struct copy intentional */
+-	inode->i_mtime = inode->i_atime = inode->i_ctime = zerotime;
++	inode->i_mtime = inode->i_atime = inode_ctime_set(inode, zerotime);
+ 	/* inode->i_nlink is left 1 - arguably wrong for directories,
+ 	   but it's the best we can do without reading the directory
+ 	   contents.  1 yields the right result in GNU find, even
 -- 
 2.41.0
 
