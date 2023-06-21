@@ -2,76 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06699738604
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A518C738610
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232743AbjFUOAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49298 "EHLO
+        id S232684AbjFUOCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232476AbjFUOA0 (ORCPT
+        with ESMTP id S232702AbjFUOBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:00:26 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF2041BF5
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:59:46 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id DDDB65FD89;
-        Wed, 21 Jun 2023 16:59:44 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1687355984;
-        bh=zWFbewBe5gfGgxwvybbxWY3tmBMH88HB0q4OqowM55g=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=REuh7nlI6eKQgPgchgREMfasK9VVxf4ZLeudY6Tp9LHidWn1d+qtZljMcxlveqXD1
-         dmPZp4MR/YKBuNtXtGpk06GCX0YfvrpUomIO5T4/z0nrCYKQLH8kmfy6snssQIbT1r
-         crSzOAJ7yFB4VY2j7Cuc+sadc9rrNDGxWpD611oD84NyhfonYPunHf2IWR8QPGimLy
-         3oj9PFa5fkkeXRRHbZSPOCR7OZRq91ijgfzESIcNP/pe3qwmFuMN8I+easwEMbJDLl
-         iWqmyVcICjmwu173iFRTPG+wwwl+awe4o65tvW/2j1zkdCv6aNoGMqd30WnWWkkj86
-         tQNyYZrI85Uxg==
-Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 21 Jun 2023 16:59:44 +0300 (MSK)
-From:   Alexey Romanov <AVRomanov@sberdevices.ru>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-CC:     Minchan Kim <minchan@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [PATCH v1 1/2] zsmalloc: add allocated objects counter for
- subpage
-Thread-Topic: [PATCH v1 1/2] zsmalloc: add allocated objects counter for
- subpage
-Thread-Index: AQHZortECyHNmKOx4kiy6hdprH0m0a+TTmOAgAALNICAAbQNAIAABsUAgAAD2wCAAAE2AA==
-Date:   Wed, 21 Jun 2023 13:59:43 +0000
-Message-ID: <20230621135938.outx6qezuholc3hy@cab-wsm-0029881>
-References: <20230619143506.45253-1-avromanov@sberdevices.ru>
- <20230619143506.45253-2-avromanov@sberdevices.ru>
- <20230620103629.GA42985@google.com>
- <20230620111635.gztldehfzvuzkdnj@cab-wsm-0029881>
- <20230621131716.GC2934656@google.com>
- <20230621134130.tm2oucg5eskelwzr@cab-wsm-0029881>
- <20230621135518.GD2934656@google.com>
-In-Reply-To: <20230621135518.GD2934656@google.com>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.18.93]
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <F62146241E180D478EB8590748B8D9E3@sberdevices.ru>
-Content-Transfer-Encoding: quoted-printable
+        Wed, 21 Jun 2023 10:01:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1D971FCE
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:00:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687356041;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KFZAtgrQch7A5U4wgSpfS/jvQRtXk8ffgaPSS2oGLeU=;
+        b=GO1YdxmMfiKYXrCzGTVi07JKa2sbQKreQ/cwUGGtOg9luCta44Qwa2bCJwhYPLJqSJUuQA
+        c2ZcVDryx3SlG+oWp77npivd2aPrGnTWZoFb7XcAz74Wa8kpAtSNUcgZZwVcMVL5C2JiOu
+        hKiekj5yfRS4hiQvB9XC6mpD7gS1pm8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-461-Zv36G5imOcut5ARR-nnz_A-1; Wed, 21 Jun 2023 10:00:38 -0400
+X-MC-Unique: Zv36G5imOcut5ARR-nnz_A-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EFACE382C5D0;
+        Wed, 21 Jun 2023 13:59:52 +0000 (UTC)
+Received: from [10.22.17.140] (unknown [10.22.17.140])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 51F981402C06;
+        Wed, 21 Jun 2023 13:59:52 +0000 (UTC)
+Message-ID: <7f2424df-1846-6c38-e446-b3d5aa693ecd@redhat.com>
+Date:   Wed, 21 Jun 2023 09:59:52 -0400
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/21 11:37:00 #21545586
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 2/5] x86/idle: Disable IBRS when cpu is offline
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-pm@vger.kernel.org,
+        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>
+References: <20230620140625.1001886-1-longman@redhat.com>
+ <20230620140625.1001886-3-longman@redhat.com>
+ <20230621072313.GA2046280@hirez.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230621072313.GA2046280@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,45 +75,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 10:55:18PM +0900, Sergey Senozhatsky wrote:
-> On (23/06/21 13:41), Alexey Romanov wrote:
-> [..]
-> > > +static bool zspage_empty(struct zspage *zspage)
-> > > +{
-> > > +	return get_zspage_inuse(zspage) =3D=3D 0;
-> > > +}
-> > > +
-> > >  /**
-> > >   * zs_lookup_class_index() - Returns index of the zsmalloc &size_cla=
-ss
-> > >   * that hold objects of the provided size.
-> > > @@ -1787,6 +1792,10 @@ static void migrate_zspage(struct zs_pool *poo=
-l, struct size_class *class,
-> > >  		obj_idx++;
-> > >  		record_obj(handle, free_obj);
-> > >  		obj_free(class->size, used_obj, NULL);
-> > > +
-> > > +		/* Stop if there are no more objects to migrate */
-> > > +		if (zspage_empty(get_zspage(s_page)))
-> > > +			break;
-> > >  	}
-> >=20
-> > Yes it seems my version is not as good as I thought. Looks bad for an
-> > architecturally dependent PAGE_SIZE. [..]
->=20
-> Well, we are looking for a solution that is both reasonable (perf wise)
-> and is maintainable.
->=20
-> > I can implement this option. I'll test this and send patch this week.
->=20
-> Either that or, if Suggested-by: Alexey Romanov <AVRomanov@sberdevices.ru=
->
-> is good enough for you, then I can send a series tonight or tomorrow (aft=
-er
-> some testing). I have two more patches on top of that one.
 
-Yeah, Suggested-by is OK. Let's send a patch. Thank you.
+On 6/21/23 03:23, Peter Zijlstra wrote:
+> On Tue, Jun 20, 2023 at 10:06:22AM -0400, Waiman Long wrote:
+>> Commit bf5835bcdb96 ("intel_idle: Disable IBRS during long idle")
+>> disables IBRS when the CPU enters long idle. However, when a CPU becomes
+>> offline, the IBRS bit is still set when X86_FEATURE_KERNEL_IBRS is
+>> enabled. That will impact the performance of a sibling CPU. Mitigate
+>> this performance impact by clearing all the mitigation bits in SPEC_CTRL
+>> MSR when offline and restoring the value of the MSR when it becomes
+>> online again.
+>>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   arch/x86/kernel/smpboot.c | 13 +++++++++++++
+>>   1 file changed, 13 insertions(+)
+>>
+>> diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
+>> index 352f0ce1ece4..5ff82fef413c 100644
+>> --- a/arch/x86/kernel/smpboot.c
+>> +++ b/arch/x86/kernel/smpboot.c
+>> @@ -84,6 +84,7 @@
+>>   #include <asm/hw_irq.h>
+>>   #include <asm/stackprotector.h>
+>>   #include <asm/sev.h>
+>> +#include <asm/nospec-branch.h>
+>>   
+>>   /* representing HT siblings of each logical CPU */
+>>   DEFINE_PER_CPU_READ_MOSTLY(cpumask_var_t, cpu_sibling_map);
+>> @@ -1838,12 +1839,24 @@ void __noreturn hlt_play_dead(void)
+>>   
+>>   void native_play_dead(void)
+>>   {
+>> +	u64 spec_ctrl = spec_ctrl_current();
+>> +
+>> +	if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS)) {
+>> +		this_cpu_write(x86_spec_ctrl_current, 0);
+>> +		native_wrmsrl(MSR_IA32_SPEC_CTRL, 0);
+>> +	}
+>> +
+>>   	play_dead_common();
+>>   	tboot_shutdown(TB_SHUTDOWN_WFS);
+>>   
+>>   	mwait_play_dead();
+>>   	if (cpuidle_play_dead())
+>>   		hlt_play_dead();
+>> +
+>> +	if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS)) {
+>> +		native_wrmsrl(MSR_IA32_SPEC_CTRL, spec_ctrl);
+>> +		this_cpu_write(x86_spec_ctrl_current, spec_ctrl);
+>> +	}
+>>   }
+> play_dead() is marked __noreturn
 
---=20
-Thank you,
-Alexey=
+There are different versions of play_dead() in the kernel. Some of them 
+are indeed marked __noreturn like the non-SMP one in 
+arch/x86/kernel/process.c. The native_play_dead() that I am patching 
+isn't one of those.
+
+Cheers,
+Longman
+
