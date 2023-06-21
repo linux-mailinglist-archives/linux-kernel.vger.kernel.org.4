@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 846A873881A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3EB0738817
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:56:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232958AbjFUO4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34980 "EHLO
+        id S232923AbjFUO4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:56:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233008AbjFUOx6 (ORCPT
+        with ESMTP id S233007AbjFUOx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 21 Jun 2023 10:53:58 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B542213E;
-        Wed, 21 Jun 2023 07:50:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7192680;
+        Wed, 21 Jun 2023 07:50:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9474F61539;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BCA7615C4;
+        Wed, 21 Jun 2023 14:49:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB368C433C8;
         Wed, 21 Jun 2023 14:49:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3759BC433C0;
-        Wed, 21 Jun 2023 14:49:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687358990;
-        bh=ZvoZjIEuldwlKWZnI9Mxmed4hFt/g32HDEOmUzdJH4c=;
+        s=k20201202; t=1687358991;
+        bh=BiaJ5jpIOWljnOkZ7WeAt5Z0pozvTMv5IciOmpdTiC0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I7N/JO0lu4Yj4i43TUis4tlHzDByV5tzoMO+jPEQAs0ArK/U10XS5GR4B/2cC/D37
-         sXC+VKMTOE+reQNE3XyN0PvmKvQM8A3vXw3/+cUTv48p6R54DDcFelLqG1M9RFE70T
-         gC1Gi3RPeD1HC7BYOLgMm1cAYg1HJJDjUgAQcuzzxvHe92tFHHZevOQzaBv8GLUzYQ
-         ywwuaTl0ATJAX+XqUOmFg6FIbEStDaSFKEhHfZV3Z2kIHR8i+nBbI7H7gXkM2Hm5oK
-         V0+WuTvjpxUFIEKIX0RzUT4x9i8F8V3AuZdVLdkB9V7nqHZHZes7O/EjNdZ/2LtleJ
-         Xn37XaisI05gg==
+        b=c4lhUOxjgWZaORXhjiT0ymA4hLJhfJWZkvH4rxtLAEw7wqxOhE+e+W3lY1BYmWIyj
+         2jtRj5IXXQgdB9uKvZhTlnGTXeqntH/1XA90X3V2bMQpa039ZaimPFCprbd/mz194p
+         YBA3uCEd/FPISjPRQe2UUSYuk0djBw0An5PbAZbzJXgRmMa3oaJw2xHR5E0+Wo6KJ3
+         LVuBck367fZw1ghK9JP2djxIM9pa8YsjoF8TB8PZCSpV1ORztGvWnk0v/FDAGm2nwJ
+         PfpM9TYiqZxJo3oetNq4LH/DF07+/+eq6CTONLIHMwHuo20iJK5cU9lBzReGCRWhww
+         rDpdl89Zqmj1w==
 From:   Jeff Layton <jlayton@kernel.org>
 To:     Christian Brauner <brauner@kernel.org>,
         Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>
 Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 77/79] security: switch to new ctime accessors
-Date:   Wed, 21 Jun 2023 10:46:30 -0400
-Message-ID: <20230621144735.55953-76-jlayton@kernel.org>
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 78/79] selinux: switch to new ctime accessors
+Date:   Wed, 21 Jun 2023 10:46:31 -0400
+Message-ID: <20230621144735.55953-77-jlayton@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230621144735.55953-1-jlayton@kernel.org>
 References: <20230621144507.55591-1-jlayton@kernel.org>
@@ -65,22 +65,22 @@ inode->i_ctime.
 
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- security/inode.c | 2 +-
+ security/selinux/selinuxfs.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/security/inode.c b/security/inode.c
-index 6c326939750d..086280390793 100644
---- a/security/inode.c
-+++ b/security/inode.c
-@@ -145,7 +145,7 @@ static struct dentry *securityfs_create_dentry(const char *name, umode_t mode,
+diff --git a/security/selinux/selinuxfs.c b/security/selinux/selinuxfs.c
+index bad1f6b685fd..d3908baddb30 100644
+--- a/security/selinux/selinuxfs.c
++++ b/security/selinux/selinuxfs.c
+@@ -1197,7 +1197,7 @@ static struct inode *sel_make_inode(struct super_block *sb, int mode)
  
- 	inode->i_ino = get_next_ino();
- 	inode->i_mode = mode;
--	inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
-+	inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
- 	inode->i_private = data;
- 	if (S_ISDIR(mode)) {
- 		inode->i_op = &simple_dir_inode_operations;
+ 	if (ret) {
+ 		ret->i_mode = mode;
+-		ret->i_atime = ret->i_mtime = ret->i_ctime = current_time(ret);
++		ret->i_atime = ret->i_mtime = inode_ctime_set_current(ret);
+ 	}
+ 	return ret;
+ }
 -- 
 2.41.0
 
