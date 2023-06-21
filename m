@@ -2,271 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B165738755
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A4A73875A
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:41:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232072AbjFUOlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:41:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
+        id S231948AbjFUOln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:41:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231873AbjFUOlB (ORCPT
+        with ESMTP id S231425AbjFUOlb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:41:01 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F31C2105;
-        Wed, 21 Jun 2023 07:40:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687358444; x=1718894444;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TcYAwXLJCQtwMhxBdRxn+LT7Iv+clwkYaPMHiZpZl20=;
-  b=PFofnBVSy9lqkCew083fk7mchPTHRuK/pqktW3kzNLqgklDAWvhnh58Q
-   wt5TbnfLpaiOYoBNClqgli59T94vxKSJW+IJ21vLOQuS294+/SKD6SX2K
-   Qk/94ZffHrccEpybCzme2pPzDBQ/59fzImZ0+uHUsY2rKjlc0cT6TWDfk
-   D+/21gc5MLV69xvl3z8TXLDH3kKyYNyBHKx43yoj1ZhBp035NcJ8hk138
-   vriCJDMRvJy146zQSz+Hco+f+rSuzJYotq3HT1HoVQQLRjV/j4rJWQuMR
-   q38EqVNCAj0bKDWqx9vAsNp4z5TtKCUCcIe0VDpGFrTUCX371oHFdzfwj
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="339808311"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="339808311"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 07:40:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="888682114"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="888682114"
-Received: from lfrecald-mobl2.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.26.147])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 07:40:43 -0700
-Message-ID: <c62a7f5a33096d08ddb1f962dea85033df2c838f.camel@linux.intel.com>
-Subject: Re: [PATCH 7/7] selftests/thermel/intel: Add test to read workload
- hint
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     "Zhang, Rui" <rui.zhang@intel.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>
-Cc:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Date:   Wed, 21 Jun 2023 07:40:43 -0700
-In-Reply-To: <41d7a9144881cd536e545b57e193afc956646478.camel@intel.com>
-References: <20230620230150.3068704-1-srinivas.pandruvada@linux.intel.com>
-         <20230620230150.3068704-8-srinivas.pandruvada@linux.intel.com>
-         <41d7a9144881cd536e545b57e193afc956646478.camel@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Wed, 21 Jun 2023 10:41:31 -0400
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 808A31FC8
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:41:09 -0700 (PDT)
+Received: by mail-ua1-x936.google.com with SMTP id a1e0cc1a2514c-76d846a4b85so2150029241.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:41:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687358468; x=1689950468;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9+4gmWWpq7Djs7g2QPfPh4TUyGT/CtkLCGk8CipnQN0=;
+        b=PDUMfmFQYAMB9vCmB0Ttn4YY59y81gbLnOttuI3SXA3hvMlhcNUlMys3cJxMKNvkIn
+         R0jyaB2SqQFBVjvACAj8dvUUMmZAXHpF9aJeD3ojF92pNf7oBSdvyYk5tq6g1Ux86zkQ
+         9JWneBdpO5hhTq0dvZYdUDMbAF/aQ5QQHliarM5V6a25fv31RWp3+Ess0ufl6nRRaXtz
+         tfJI3RMDuC6LBt/zQD0lsJHRJMesm4CTp3QJKF/vGKt5rDjl5Ei1Q5UpHghp/VSkf887
+         UwOvoyATy6XdSDzN1sUR6KGdyX9fN1kCKfS5NZWY6dZIJlPAuRCjGk20P4/h42gXLiPJ
+         4xxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687358468; x=1689950468;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9+4gmWWpq7Djs7g2QPfPh4TUyGT/CtkLCGk8CipnQN0=;
+        b=NZJVCk1h5N45DU6KGroYXJb0VSRuXPCs8GJdf1r1lsSZ6aBAmG/nS55bURo2TTLXX3
+         4Bw7SglKnD+/61B1sjKhN/Fjfb2ONrVFuITPdtN/ww8lWeNGUXDNLCsTveShSPBbYUgs
+         /gJlSngOU5zhjVi2REHuvRawUz9897UGmuHIRMG62za1xT8uGttRvn0Z0ph1zd6pcuhc
+         EYaZQXpU7YrZBc1EFA66ZjcMPQqrsA4J9LNycyrMy4/YCOI8IIk5VbSQUu8cgIpoqKoz
+         OSu+NvYXADWEVBd+jMiFgIOZZd2siofVWt3ePIFF3YDsn7rzZZuZAgJ6Run3VWv+csng
+         G8wQ==
+X-Gm-Message-State: AC+VfDyg6yAorTN9hvQLDd4W4rgDOwD2lqcpZMuY2EMuw8HZe2b0Vsy3
+        grBdi8mQ69YoaX3vm/8IQKN0jDeoreRIwDOTRwjmRQ==
+X-Google-Smtp-Source: ACHHUZ4dq1LdhGzp3OOX38Raaet+ZVvDOyLhKykwG3qnsrV/Eq5wqqTteVExZp7zyq0CSly4JMNNtgMuIM2LuwsGjYs=
+X-Received: by 2002:a67:f99a:0:b0:440:92ac:a909 with SMTP id
+ b26-20020a67f99a000000b0044092aca909mr6641454vsq.28.1687358468495; Wed, 21
+ Jun 2023 07:41:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CA+G9fYuifLivwhCh33kedtpU=6zUpTQ_uSkESyzdRKYp8WbTFQ@mail.gmail.com>
+ <ZJLzsWsIPD57pDgc@FVFF77S0Q05N> <CA+G9fYvwriD8X+kmDx35PavSv-youSUmYTuYTfQ4oBWnZzVRUQ@mail.gmail.com>
+ <CANk7y0imD3tK1Jox_V_f1vfzFi2tPhUzGOA_mLLkYy-VDHdncg@mail.gmail.com>
+In-Reply-To: <CANk7y0imD3tK1Jox_V_f1vfzFi2tPhUzGOA_mLLkYy-VDHdncg@mail.gmail.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 21 Jun 2023 20:10:57 +0530
+Message-ID: <CA+G9fYuK4FWaLizcuVyW3ApR6fcgjMccYp3YxdAm61BOedXxzQ@mail.gmail.com>
+Subject: Re: next: Rpi4: Unexpected kernel BRK exception at EL1
+To:     Puranjay Mohan <puranjay12@gmail.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Song Liu <song@kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-rpi-kernel@lists.infradead.org,
+        Netdev <netdev@vger.kernel.org>, lkft-triage@lists.linaro.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-06-21 at 14:30 +0000, Zhang, Rui wrote:
-> On Tue, 2023-06-20 at 16:01 -0700, Srinivas Pandruvada wrote:
-> > Some SoCs have in built firmware support to classify current
-> > running
-> > workload and pass to OS for making power management decisions.
-> > 
-> > This test program waits for notification of workload type change
-> > and prints. This program can be used to test this feature and also
-> > allows other user space programs to use as a reference.
-> > 
-> > Signed-off-by: Srinivas Pandruvada
-> > <srinivas.pandruvada@linux.intel.com>
-> > ---
-> >  .../testing/selftests/thermal/intel/Makefile  |  16 +++
-> >  .../thermal/intel/workload_hint_test.c        | 114
-> > ++++++++++++++++++
-> >  2 files changed, 130 insertions(+)
-> >  create mode 100644 tools/testing/selftests/thermal/intel/Makefile
-> >  create mode 100644
-> > tools/testing/selftests/thermal/intel/workload_hint_test.c
-> > 
-> > diff --git a/tools/testing/selftests/thermal/intel/Makefile
-> > b/tools/testing/selftests/thermal/intel/Makefile
-> > new file mode 100644
-> > index 000000000000..02459e271ef7
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/thermal/intel/Makefile
-> > @@ -0,0 +1,16 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +ifndef CROSS_COMPILE
-> > +uname_M := $(shell uname -m 2>/dev/null || echo not)
-> > +ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e
-> > s/x86_64/x86/)
-> > +
-> > +ifeq ($(ARCH),x86)
-> > +TEST_PROGS := workload_hint_test
-> > +
-> > +all: $(TEST_PROGS)
-> > +
-> > +include ../../lib.mk
-> > +
-> > +clean:
-> > +       rm -fr $(TEST_PROGS)
-> > +endif
-> > +endif
-> > diff --git
-> > a/tools/testing/selftests/thermal/intel/workload_hint_test.c
-> > b/tools/testing/selftests/thermal/intel/workload_hint_test.c
-> > new file mode 100644
-> > index 000000000000..69a48a8ccbb4
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/thermal/intel/workload_hint_test.c
-> > @@ -0,0 +1,114 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +
-> > +#define _GNU_SOURCE
-> > +
-> > +#include <stdio.h>
-> > +#include <string.h>
-> > +#include <stdlib.h>
-> > +#include <unistd.h>
-> > +#include <fcntl.h>
-> > +#include <poll.h>
-> > +
-> > +#define WORKLOAD_NOTIFICATION_DELAY_ATTRIBUTE
-> > "/sys/bus/pci/devices/0000:00:04.0/workload_hint/notification_delay
-> > _m
-> > s"
-> > +#define WORKLOAD_ENABLE_ATTRIBUTE
-> > "/sys/bus/pci/devices/0000:00:04.0/workload_hint/workload_hint_enab
-> > le
-> > "
-> > +#define WORKLOAD_TYPE_INDEX_ATTRIBUTE 
-> > "/sys/bus/pci/devices/0000:00:04.0/workload_hint/workload_type_inde
-> > x"
-> > +
-> > +static const char * const workload_types[] = {
-> > +       "idle",
-> > +       "battery_life",
-> > +       "sustained",
-> > +       "bursty",
-> > +       NULL
-> > +};
-> > +
-> > +#define WORKLOAD_TYPE_MAX_INDEX        3
-> > +
-> > +int main(int argc, char **argv) {
-> > +       struct pollfd ufd;
-> > +       char index_str[4];
-> > +       int fd, ret, index;
-> > +       int delay = 0;
-> > +
-> > +       if (argc > 1) {
-> > +               char delay_str[64];
-> > +
-> > +               sscanf(argv[1], "%d", &delay);
-> > +               printf("Setting notification delay to %d ms\n",
-> > delay);
-> > +
-> > +               if (delay < 0)
-> > +                       exit(1);
-> > +
-> > +               sprintf(delay_str, "%s\n", argv[1]);
-> > +
-> > +               if ((fd =
-> > open(WORKLOAD_NOTIFICATION_DELAY_ATTRIBUTE,
-> > O_RDWR)) < 0) {
-> > +                       perror("Unable to open workload
-> > notification
-> > delay\n");
-> > +                       exit(1);
-> > +               }
-> > +
-> > +               if (write(fd, delay_str, strlen(delay_str)) < 0) {
-> > +                       perror("Can't set delay\n");
-> > +                       exit(1);
-> > +               }
-> > +
-> > +               close(fd);
-> > +
-> > +       }
-> > +
-> > +       /* Enable feature via sysfs knob */
-> > +       if ((fd = open(WORKLOAD_ENABLE_ATTRIBUTE, O_RDWR)) < 0) {
-> > +               perror("Unable to open workload type feature enable
-> > file\n");
-> > +               exit(1);
-> > +       }
-> > +
-> > +       if (write(fd, "1\n", 2) < 0) {
-> > +               perror("Can' enable workload hints\n");
-> > +               exit(1);
-> > +       }
-> > +
-> > +       close(fd);
-> 
-> This enables WORKLOAD_ENABLE_ATTRIBUTE without disabling it again.
-> As a test program, maybe we can add a timeout, and stop polling &
-> disable the WORKLOAD_ENABLE_ATTRIBUTE after the timeout?
-> 
-We can or use signal to catch ctrl-c and do disable.
+On Wed, 21 Jun 2023 at 19:46, Puranjay Mohan <puranjay12@gmail.com> wrote:
+>
+> Hi,
+>
+> On Wed, Jun 21, 2023 at 3:39=E2=80=AFPM Naresh Kamboju
+> <naresh.kamboju@linaro.org> wrote:
+> >
+> > On Wed, 21 Jun 2023 at 18:27, Mark Rutland <mark.rutland@arm.com> wrote=
+:
+> > >
+> > > On Wed, Jun 21, 2023 at 06:06:51PM +0530, Naresh Kamboju wrote:
+> > > > Following boot warnings and crashes noticed on arm64 Rpi4 device ru=
+nning
+> > > > Linux next-20230621 kernel.
+> > > >
+> > > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> > > >
+> > > > boot log:
+> > > >
+> > > > [   22.331748] Kernel text patching generated an invalid instructio=
+n
+> > > > at 0xffff8000835d6580!
+> > > > [   22.340579] Unexpected kernel BRK exception at EL1
+> > > > [   22.346141] Internal error: BRK handler: 00000000f2000100 [#1] P=
+REEMPT SMP
+> > >
+> > > This indicates execution of AARCH64_BREAK_FAULT.
+> >
+> > I see kernel panic with kselftest merge configs on Juno-r2 and Rpi4.
+>
+> Is there a way to reproduce this setup on Qemu?
 
-Thanks,
-Srinivas
+Not reproducible on Qemu-arm64.
+I see only on arm64 devices Juno-r2 and Rpi4.
 
-> thanks,
-> rui
-> > +
-> > +       while (1) {
-> > +               if ((fd = open(WORKLOAD_TYPE_INDEX_ATTRIBUTE,
-> > O_RDONLY)) < 0) {
-> > +                       perror("Unable to open workload type
-> > file\n");
-> > +                       exit(1);
-> > +               }
-> > +
-> > +               if ((lseek(fd, 0L, SEEK_SET)) < 0) {
-> > +                       fprintf(stderr, "Failed to set pointer to
-> > beginning\n");
-> > +                       exit(1);
-> > +               }
-> > +
-> > +               if (read(fd, index_str, sizeof(index_str)) < 0) {
-> > +                       fprintf(stderr, "Failed to read from:%s\n",
-> > +                       WORKLOAD_TYPE_INDEX_ATTRIBUTE);
-> > +                       exit(1);
-> > +               }
-> > +
-> > +               ufd.fd = fd;
-> > +               ufd.events = POLLPRI;
-> > +
-> > +               if ((ret = poll(&ufd, 1, -1)) < 0) {
-> > +                       perror("poll error");
-> > +                       exit(1);
-> > +               } else if (ret == 0) {
-> > +                       printf("Poll Timeout\n");
-> > +               } else {
-> > +                       if ((lseek(fd, 0L, SEEK_SET)) < 0) {
-> > +                               fprintf(stderr, "Failed to set
-> > pointer to beginning\n");
-> > +                               exit(1);
-> > +                       }
-> > +
-> > +                       if (read(fd, index_str, sizeof(index_str))
-> > <
-> > 0) {
-> > +                               exit(0);
-> > +                       }
-> > +
-> > +                       sscanf(index_str, "%d", &index);
-> > +                       if (index > WORKLOAD_TYPE_MAX_INDEX)
-> > +                               printf("Invalid workload type
-> > index\n");
-> > +                       else
-> > +                               printf("workload type:%s\n",
-> > workload_types[index]);
-> > +               }
-> > +
-> > +               close(fd);
-> > +       }
-> > +}
-> 
+>
+> I am able to build the linux-next kernel with the config given below.
+> But the bug doesn't reproduce in Qemu with debian rootfs.
+>
+> I guess I would need the Rootfs that is being used here to reproduce it.
+> Can you point me to the rootfs for this?
 
+Here is the link for rootfs - OE one.
+https://storage.tuxsuite.com/public/linaro/lkft/oebuilds/2RVA7dHPf73agY0gDJ=
+D6XEdBQBI/images/juno/
+
+>
+> Thanks,
+> Puranjay
+>
+> > metadata:
+> >   git_ref: master
+> >   git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+> >   git_sha: 15e71592dbae49a674429c618a10401d7f992ac3
+> >   git_describe: next-20230621
+> >   kernel_version: 6.4.0-rc7
+> >   kernel-config:
+> >     https://storage.tuxsuite.com/public/linaro/lkft/builds/2RVAA4lj35ia=
+3YDkqaoV6ztyqdW/config
+> >   artifact-location:
+> >     https://storage.tuxsuite.com/public/linaro/lkft/builds/2RVAA4lj35ia=
+3YDkqaoV6ztyqdW/
+> >   toolchain: gcc-11
+> >   build_name: gcc-11-lkftconfig-kselftest
+> >
+> >
+> > --
+> > Linaro LKFT
+> > https://lkft.linaro.org
+
+- Naresh
