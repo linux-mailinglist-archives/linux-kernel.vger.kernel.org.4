@@ -2,65 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048F6738886
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 765A073888D
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:13:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233269AbjFUPMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51340 "EHLO
+        id S233286AbjFUPNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 11:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232725AbjFUPMO (ORCPT
+        with ESMTP id S231517AbjFUPNb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:12:14 -0400
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0B759E1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:07:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=jL1QYc7CYkSFsjBqnkl5XGMhYY+Hx3fWKo9ZfFjCEKw=; b=nq4VCxhBqPE45qfk0dW4eeUFPl
-        Nz5dONCjhVCN9z38ew6WDGm5DkdhpYp6CRfApQ71lX70NLbbQeIPklvnzuLUs8gGSqX8Ky3LwrgiP
-        F1Wvw4kKYEyCU3vsluTQSEKOotrhuY0LhY8/3Rcpkehudc3rQmDX1cK0B578a1nbqNRhqGGVpu+4t
-        3UO6RieKMjnr8jaW9ZI5ZpqJEKLP+XHF4YJplwzXvhAznpTCegIJ2lbr0QQBJ2WC4l2yBH+qAaEeQ
-        D8p8KD4er1qAgfiNr2WHHwXcd6HmH2uP9Eiwp927yihj236qahTlbUmhCgMhiVdjI6VoO/R9eMY27
-        b6ET7rdQ==;
-Received: from [179.113.218.86] (helo=[192.168.1.111])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1qBzQG-001Ld8-6E; Wed, 21 Jun 2023 17:07:04 +0200
-Message-ID: <195dd084-a97b-ef08-a221-e39ffcd7cc09@igalia.com>
-Date:   Wed, 21 Jun 2023 12:06:58 -0300
+        Wed, 21 Jun 2023 11:13:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 975432978;
+        Wed, 21 Jun 2023 08:09:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DC06A6156A;
+        Wed, 21 Jun 2023 15:08:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 627C6C433C8;
+        Wed, 21 Jun 2023 15:08:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687360122;
+        bh=V9aNr83+u4TubllrTyVD8v0+IvuXLd+mK4FoyaNTvno=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=C2UeTRX4eHzvBgEqrb+Oq6Ge/hQePE/4ifvWoFw22vovfEY/gA8irW+Ke17wZ1xMa
+         MfASFyK2Czc6hcRTZd+ZOGp9a+BR0UElYRfo3BVKno9heiqyvHy4scdN4oQnS4iH8l
+         8mtOujFjq4vtRYjCQbhdGmpp4x1MrLdLjEtKyW8QhFD6k+x/WlEiX4jfP0a6GXcHGc
+         nQB0vx/NZkoPrB035dQF/4dyGZO+snpCPLg/8eJBAN+B4w17feILAAkTA2qoNu2f2k
+         D2Sm0uVcVwNg2MUtfnwnMLYUoDo5ZIAhNqNrKVJYggxxIqG5klEc37iV/9qGbxOCsf
+         D61f8vB+y0W8A==
+Date:   Wed, 21 Jun 2023 16:08:38 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Tony Lindgren <tony@atomide.com>, linux-omap@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mfd: twl6040: Use maple tree register cache
+Message-ID: <20230621150838.GG10378@google.com>
+References: <20230609-mfd-twl6040-maple-v1-1-3493d051cd6f@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [RFC PATCH v3 0/4] drm: Standardize device reset notification
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     kernel-dev@igalia.com, alexander.deucher@amd.com,
-        pierre-eric.pelloux-prayer@amd.com,
-        Simon Ser <contact@emersion.fr>, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
-        Pekka Paalanen <ppaalanen@gmail.com>,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Stone <daniel@fooishbar.org>,
-        =?UTF-8?B?J01hcmVrIE9sxaHDoWsn?= <maraeo@gmail.com>,
-        Dave Airlie <airlied@gmail.com>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>
-References: <20230621005719.836857-1-andrealmeid@igalia.com>
- <caa69e8e-f330-d819-e8cd-7b06aa8eb855@amd.com>
-Content-Language: en-US
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-In-Reply-To: <caa69e8e-f330-d819-e8cd-7b06aa8eb855@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <20230609-mfd-twl6040-maple-v1-1-3493d051cd6f@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,111 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em 21/06/2023 04:42, Christian König escreveu:
-> Am 21.06.23 um 02:57 schrieb André Almeida:
->> Hi,
->>
->> This is a new version of the documentation for DRM device resets. As I 
->> dived
->> more in the subject, I started to believe that part of the problem was 
->> the lack
->> of a DRM API to get reset information from the driver. With an API, we 
->> can
->> better standardize reset queries, increase common code from both DRM 
->> and Mesa,
->> and make easier to write end-to-end tests.
->>
->> So this patchset, along with the documentation, comes with a new IOCTL 
->> and two
->> implementations of it for amdgpu and i915 (although just the former 
->> was really
->> tested). This IOCTL uses the "context id" to query reset information, 
->> but this
->> might be not generic enough to be included in a DRM API.
-> 
-> Well the basic problem with that is that we don't have a standard DRM 
-> context defined.
-> 
-> If you want to do this you should probably start there first.
+On Sat, 10 Jun 2023, Mark Brown wrote:
 
-Any idea on how to start this? I tried to find previous work about that, 
-but I didn't find.
+> The twl6040 is only capable of performing single register read and write
+> operations which means it gains no advantage from using a rbtree register
+> cache, convert it to using the more modern maple tree register cache
+> instead. This should be more efficient.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  drivers/mfd/twl6040.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> Apart from that this looks like a really really good idea to me, 
-> especially that we document the reset expectations.
+This has been applied for a while.
 
-I think I'll submit just the doc for the next version then, given that 
-the IOCTL will need a lot of rework.
+> diff --git a/drivers/mfd/twl6040.c b/drivers/mfd/twl6040.c
+> index e982119bbefa..523439a16b7c 100644
+> --- a/drivers/mfd/twl6040.c
+> +++ b/drivers/mfd/twl6040.c
+> @@ -608,7 +608,7 @@ static const struct regmap_config twl6040_regmap_config = {
+>  	.volatile_reg = twl6040_volatile_reg,
+>  	.writeable_reg = twl6040_writeable_reg,
+>  
+> -	.cache_type = REGCACHE_RBTREE,
+> +	.cache_type = REGCACHE_MAPLE,
+>  	.use_single_read = true,
+>  	.use_single_write = true,
+>  };
+> 
+> ---
+> base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
+> change-id: 20230609-mfd-twl6040-maple-0904598891f2
+> 
+> Best regards,
+> -- 
+> Mark Brown <broonie@kernel.org>
+> 
 
-> 
-> Regards,
-> Christian.
-> 
->>    At least for amdgpu,
->> this information is encapsulated by libdrm so one can't just call the 
->> ioctl
->> directly from the UMD as I was planning to, but a small refactor can 
->> be done to
->> expose the id. Anyway, I'm sharing it as it is to gather feedback if 
->> this seems
->> to work.
->>
->> The amdgpu and i915 implementations are provided as a mean of testing 
->> and as
->> exemplification, and not as reference code yet, as the goal is more 
->> about the
->> interface itself then the driver parts.
->>
->> For the documentation itself, after spending some time reading the 
->> reset path in
->> the kernel in Mesa, I decide to rewrite it to better reflect how it 
->> works, from
->> bottom to top.
->>
->> You can check the userspace side of the IOCLT here:
->>   Mesa: 
->> https://gitlab.freedesktop.org/andrealmeid/mesa/-/commit/cd687b22fb32c21b23596c607003e2a495f465
->>   libdrm: 
->> https://gitlab.freedesktop.org/andrealmeid/libdrm/-/commit/b31e5404893ee9a85d1aa67e81c2f58c1dac3c46
->>
->> For testing, I use this vulkan app that has an infinity loop in the 
->> shader:
->> https://github.com/andrealmeid/vulkan-triangle-v1
->>
->> Feedbacks are welcomed!
->>
->> Thanks,
->>         André
->>
->> v2: 
->> https://lore.kernel.org/all/20230227204000.56787-1-andrealmeid@igalia.com/
->> v1: 
->> https://lore.kernel.org/all/20230123202646.356592-1-andrealmeid@igalia.com/
->>
->> André Almeida (4):
->>    drm/doc: Document DRM device reset expectations
->>    drm: Create DRM_IOCTL_GET_RESET
->>    drm/amdgpu: Implement DRM_IOCTL_GET_RESET
->>    drm/i915: Implement DRM_IOCTL_GET_RESET
->>
->>   Documentation/gpu/drm-uapi.rst                | 51 ++++++++++++++++
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_cs.c        |  4 +-
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.c       | 35 +++++++++++
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_ctx.h       |  5 ++
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c       |  1 +
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_job.c       | 12 +++-
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_job.h       |  2 +
->>   drivers/gpu/drm/drm_debugfs.c                 |  2 +
->>   drivers/gpu/drm/drm_ioctl.c                   | 58 +++++++++++++++++++
->>   drivers/gpu/drm/i915/gem/i915_gem_context.c   | 18 ++++++
->>   drivers/gpu/drm/i915/gem/i915_gem_context.h   |  2 +
->>   .../gpu/drm/i915/gem/i915_gem_context_types.h |  2 +
->>   drivers/gpu/drm/i915/i915_driver.c            |  2 +
->>   include/drm/drm_device.h                      |  3 +
->>   include/drm/drm_drv.h                         |  3 +
->>   include/uapi/drm/drm.h                        | 21 +++++++
->>   include/uapi/drm/drm_mode.h                   | 15 +++++
->>   17 files changed, 233 insertions(+), 3 deletions(-)
->>
-> 
+-- 
+Lee Jones [李琼斯]
