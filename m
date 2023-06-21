@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57FD873878F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:47:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E141738791
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:48:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231894AbjFUOru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:47:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
+        id S232035AbjFUOr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231959AbjFUOrq (ORCPT
+        with ESMTP id S231963AbjFUOrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:47:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05051997;
-        Wed, 21 Jun 2023 07:47:40 -0700 (PDT)
+        Wed, 21 Jun 2023 10:47:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851DD19AA
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:47:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54D236157B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CCA86158B
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 14:47:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80C7CC433C8;
         Wed, 21 Jun 2023 14:47:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBE5AC433C0;
-        Wed, 21 Jun 2023 14:47:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687358859;
-        bh=SerVS37LZ+M9Q1DrVXe11/DarECztwBfuFbsJZAaL/s=;
+        s=k20201202; t=1687358861;
+        bh=+ZbVNnWFJyrnkyx7x/5Q61rWw0/EOzbgoTsZmaMWSrY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b0fWvZziCaDEPNv8e772X/4hR0ZOvdZvEbjB6p+JeCO+zyl3Iy6ikH62A+bQP/ydN
-         cQaq5bP9anibGG10Aqrfckh6kUGFswV7aHPM/cPOiBKX89C9oUvTA4YvJDulF5h3cb
-         OVap2sebFw8Yly04wHw1ihAaQQcVQwegi11RFHA400KxId71KUhWQhzZPZ/NV+VaS8
-         MmV6ItyfcBfC5wEQqDJJdt8SnF7Ym6jI/6ZzH+Ebt+3JPW1vY505jC90DjKbbiNbkw
-         hoEAoBTSoHXOD+TcvXEp6S8970563oPpdjqLM7HAhbgLR8bwiAOQzZVSo7pbf7GZsE
-         9Us5QMgUSJ8JA==
+        b=kdwQL++zke5r0Tkn8M0bI30T5o5R4QI5cpiziRr7IQWMdP1/4cAEvIXkgekYm3QBd
+         SOkh53XgsgFrozB7y1c0+GgLUCbLWCKuAr8dIDZwC8xQqNNhJcymT3Dhp7lOScmZg3
+         0LpZI25nGxG7UreHahXG49KK4wpOwExNxw5i0OSqsco1t1s5IJ3uevQuLYFAqZ1SHb
+         v3r0KXlzurc8J8mXT+dfCBtL1tYFr9/BT+AKFWhdxjzUMDYRDWUJTS1w/MHYTyUYuX
+         W2bJNm244PhLGaKE19TZEi+gG2wfxf+XHFIDysoYWeeBIukRG36l0E9cpwIMqKzfQv
+         AvMi/JdB3qNUQ==
 From:   Jeff Layton <jlayton@kernel.org>
 To:     Christian Brauner <brauner@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Suren Baghdasaryan <surenb@google.com>
 Cc:     Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 03/79] s390: switch to new ctime accessors
-Date:   Wed, 21 Jun 2023 10:45:16 -0400
-Message-ID: <20230621144735.55953-2-jlayton@kernel.org>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 04/79] binderfs: switch to new ctime accessors
+Date:   Wed, 21 Jun 2023 10:45:17 -0400
+Message-ID: <20230621144735.55953-3-jlayton@kernel.org>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20230621144735.55953-1-jlayton@kernel.org>
 References: <20230621144507.55591-1-jlayton@kernel.org>
  <20230621144735.55953-1-jlayton@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,31 +69,49 @@ inode->i_ctime.
 
 Signed-off-by: Jeff Layton <jlayton@kernel.org>
 ---
- arch/s390/hypfs/inode.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/android/binderfs.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/s390/hypfs/inode.c b/arch/s390/hypfs/inode.c
-index ee919bfc8186..30fa336ec63e 100644
---- a/arch/s390/hypfs/inode.c
-+++ b/arch/s390/hypfs/inode.c
-@@ -53,7 +53,7 @@ static void hypfs_update_update(struct super_block *sb)
- 	struct inode *inode = d_inode(sb_info->update_file);
+diff --git a/drivers/android/binderfs.c b/drivers/android/binderfs.c
+index 76e7d6676657..b6b1220e1e55 100644
+--- a/drivers/android/binderfs.c
++++ b/drivers/android/binderfs.c
+@@ -153,7 +153,7 @@ static int binderfs_binder_device_create(struct inode *ref_inode,
+ 		goto err;
  
- 	sb_info->last_update = ktime_get_seconds();
--	inode->i_atime = inode->i_mtime = inode->i_ctime = current_time(inode);
-+	inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
- }
+ 	inode->i_ino = minor + INODE_OFFSET;
+-	inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
++	inode->i_mtime = inode->i_atime = inode_ctime_set_current(inode);
+ 	init_special_inode(inode, S_IFCHR | 0600,
+ 			   MKDEV(MAJOR(binderfs_dev), minor));
+ 	inode->i_fop = &binder_fops;
+@@ -432,7 +432,7 @@ static int binderfs_binder_ctl_create(struct super_block *sb)
+ 	}
  
- /* directory tree removal functions */
-@@ -101,7 +101,7 @@ static struct inode *hypfs_make_inode(struct super_block *sb, umode_t mode)
+ 	inode->i_ino = SECOND_INODE;
+-	inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
++	inode->i_mtime = inode->i_atime = inode_ctime_set_current(inode);
+ 	init_special_inode(inode, S_IFCHR | 0600,
+ 			   MKDEV(MAJOR(binderfs_dev), minor));
+ 	inode->i_fop = &binder_ctl_fops;
+@@ -474,7 +474,7 @@ static struct inode *binderfs_make_inode(struct super_block *sb, int mode)
+ 	if (ret) {
+ 		ret->i_ino = iunique(sb, BINDERFS_MAX_MINOR + INODE_OFFSET);
  		ret->i_mode = mode;
- 		ret->i_uid = hypfs_info->uid;
- 		ret->i_gid = hypfs_info->gid;
 -		ret->i_atime = ret->i_mtime = ret->i_ctime = current_time(ret);
 +		ret->i_atime = ret->i_mtime = inode_ctime_set_current(ret);
- 		if (S_ISDIR(mode))
- 			set_nlink(ret, 2);
  	}
+ 	return ret;
+ }
+@@ -703,7 +703,7 @@ static int binderfs_fill_super(struct super_block *sb, struct fs_context *fc)
+ 	inode->i_ino = FIRST_INODE;
+ 	inode->i_fop = &simple_dir_operations;
+ 	inode->i_mode = S_IFDIR | 0755;
+-	inode->i_mtime = inode->i_atime = inode->i_ctime = current_time(inode);
++	inode->i_mtime = inode->i_atime = inode_ctime_set_current(inode);
+ 	inode->i_op = &binderfs_dir_inode_operations;
+ 	set_nlink(inode, 2);
+ 
 -- 
 2.41.0
 
