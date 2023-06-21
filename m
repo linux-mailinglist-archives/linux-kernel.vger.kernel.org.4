@@ -2,103 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66B03738D0F
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDADF738D11
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231148AbjFUR1Q convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 13:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35116 "EHLO
+        id S230262AbjFUR2E convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 13:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbjFUR1L (ORCPT
+        with ESMTP id S229507AbjFUR2C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 13:27:11 -0400
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9866110A;
-        Wed, 21 Jun 2023 10:27:09 -0700 (PDT)
-Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-6b13e2af122so4715219a34.2;
-        Wed, 21 Jun 2023 10:27:09 -0700 (PDT)
+        Wed, 21 Jun 2023 13:28:02 -0400
+Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com [209.85.221.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE43BE2;
+        Wed, 21 Jun 2023 10:28:01 -0700 (PDT)
+Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-471c9f2f47aso1327092e0c.3;
+        Wed, 21 Jun 2023 10:28:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687368428; x=1689960428;
+        d=1e100.net; s=20221208; t=1687368481; x=1689960481;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6MhTlH8vHzbFj0GHoNEXbCWkZrmdxXHp7k0D25qpFIY=;
-        b=iSM4ymv1QQf9c87PTCPEKNxLg0B0Eyx+OpgM4K9bVTIHNTD7sjXRkKPhvmzstro36W
-         y5qyMHeQy/mVzVC6Nvfp0b6T0kkYAT/yXnj4mZdPnMjDIrCd96ZLXTCR1DDTqghKy2Iy
-         QsPmXVUU88y6/UwQXFsQvMbAEx8FkRDH/alOoy/nv7rrdxxHcScoyMlTYnlVV4sQ5abu
-         DtBCurYhkPMQ9T/EBdYllFHRy3GuUB+062ZpTO4mB1xL3orxeTUtWN/wd4OiSjdaSGV7
-         com8ksYlmJOd0WEkdN8Hxk4cBUDDqRG87BNX/NS743YD5+8Iwl/z7AaH3V6XqxudcVYm
-         55lA==
-X-Gm-Message-State: AC+VfDxDunpY9RKY4GcZWO1iG99yCOhdBhXgcV1K4vByKIKqvh71KDJL
-        TdNGnGxDGCCdDfAgdgJmPzDzzgO0cdajxvjd6VQ=
-X-Google-Smtp-Source: ACHHUZ7CpzAA56ymr68U+nb7voKKV4Fv2xOoyYVjFCg9D7Wn8Izt7AUBpxHCWogRFm8nm+70ABUop9Jyj/qtTfJweGs=
-X-Received: by 2002:a05:6359:c07:b0:12e:32a1:d83e with SMTP id
- gn7-20020a0563590c0700b0012e32a1d83emr7478466rwb.23.1687368428516; Wed, 21
- Jun 2023 10:27:08 -0700 (PDT)
+        bh=CmaOCoyILhi3FgVCCQ1JmKKyeL3P35Rtqp7/2iklqXE=;
+        b=kw9h7ZlWfdigCSS2vZleN/9MR1q8JoGfBY9IgB6cmRzj3wdMGehxx952L6uQL+eb+v
+         MrulV5Y+TO8CDUDqkYp/Ddm63BYErbA3E4Aic7dqzD0u05Dw+6QES0ScMjQ5BIH23+xa
+         Vr0rmz0umhpueu9M55SVaJrWpj6hjQS98XvZtoLWdjxIvJezl+W0QW0UkDe+tYp6sG5I
+         zL615N6rtCf38504xzz4KNdyEFNaVewwhzJ72cmnu2uhZo1JVSd/BIF0d+eVixkv2hw4
+         sXEd3x5UmM2NrI+JNP4lp+f2IdxioF+H0bOIFhsYNyp26dljqnGyLIEyaGTGGmTQgKEM
+         gPwA==
+X-Gm-Message-State: AC+VfDwTRoXzYJRGGNg+O8OCbCCwjZGzVva3hN7LbEHNhtXPQuFPznZT
+        DsJ6zft+PBfn2E6KZ3tLOi6DoMhXeUpnNI7W3E4ui9xKd/0=
+X-Google-Smtp-Source: ACHHUZ4rdMM40f9UaN+w8M9TF6iOsxZdswgln6yT/olT5EUVpeMzGIgKTjsQgAhV0bZNhPLOfEULfoxpx7J0VUFFmq8=
+X-Received: by 2002:a1f:bd16:0:b0:471:5427:39a4 with SMTP id
+ n22-20020a1fbd16000000b00471542739a4mr7529723vkf.0.1687368480680; Wed, 21 Jun
+ 2023 10:28:00 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230619082036.410-1-lidong@vivo.com> <CAM9d7chHMH-uJryUVBYZ6emrGLVH8Huc5frDz4YqG7TU29G-6A@mail.gmail.com>
- <CA+JHD93f_c8OJf4Kg68C_Xo=_rcO669G0QJ_mjL78upLmUwfoA@mail.gmail.com> <CAM9d7cj-t-jko=7mBb_dLrXFCC7s03W0Jz7jrO4nZkWZKeJAAA@mail.gmail.com>
-In-Reply-To: <CAM9d7cj-t-jko=7mBb_dLrXFCC7s03W0Jz7jrO4nZkWZKeJAAA@mail.gmail.com>
+References: <20230615040715.2064350-1-irogers@google.com> <CAM9d7cigCUz4i-t2rHaz9Ch0oWxjYWmvnVB73uV1cm+47DtpXw@mail.gmail.com>
+In-Reply-To: <CAM9d7cigCUz4i-t2rHaz9Ch0oWxjYWmvnVB73uV1cm+47DtpXw@mail.gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 21 Jun 2023 10:26:57 -0700
-Message-ID: <CAM9d7cj0HLf1YSu+Y1GbhfR_yxtS2UDGtAuPbOAQhiCwCuF9nA@mail.gmail.com>
-Subject: Re: [PATCH] tools: Fix incorrect calculation of object size by sizeof
-To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Li Dong <lidong@vivo.com>, Peter Zijlstra <peterz@infradead.org>,
+Date:   Wed, 21 Jun 2023 10:27:49 -0700
+Message-ID: <CAM9d7cg_PoRu=6u5WYvHeyPLv0_-70_2TevrnPP6Bi=-oxX=eg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] perf sharded_mutex: Introduce sharded_mutex
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+        Jiri Olsa <jolsa@kernel.org>,
         Adrian Hunter <adrian.hunter@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-kernel@vger.kernel.org>, opensource.kernel@vivo.com
+        Yuan Can <yuancan@huawei.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Andres Freund <andres@anarazel.de>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 3:42 PM Namhyung Kim <namhyung@kernel.org> wrote:
+On Tue, Jun 20, 2023 at 3:15 PM Namhyung Kim <namhyung@kernel.org> wrote:
 >
-> Hi Arnaldo,
+> On Wed, Jun 14, 2023 at 9:07 PM Ian Rogers <irogers@google.com> wrote:
+> >
+> > Per object mutexes may come with significant memory cost while a
+> > global mutex can suffer from unnecessary contention. A sharded mutex
+> > is a compromise where objects are hashed and then a particular mutex
+> > for the hash of the object used. Contention can be controlled by the
+> > number of shards.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
 >
-> On Tue, Jun 20, 2023 at 3:06 PM Arnaldo Carvalho de Melo
-> <arnaldo.melo@gmail.com> wrote:
-> >
-> >
-> >
-> > On Tue, Jun 20, 2023, 3:19 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >>
-> >> Hello,
-> >>
-> >> On Mon, Jun 19, 2023 at 1:21 AM Li Dong <lidong@vivo.com> wrote:
-> >> >
-> >> > What we need to calculate is the size of the object, not the size of the
-> >> > pointer.
-> >> >
-> >> > Signed-off-by: Li Dong <lidong@vivo.com>
-> >>
-> >> Since this problem was introduced in the current dev cycle and not in the
-> >> mainline yet, I think we can skip the Fixes tag.
-> >>
-> >> Acked-by: Namhyung Kim <namhyung@kernel.org>
-> >
-> >
-> > I think we should have it anyway, if not for the stable guys to pick it up, for documentation sake :-)
->
-> Ok, I'll add that.  Thanks for the reply while on your vacation. :)
+> Acked-by: Namhyung Kim <namhyung@kernel.org>
 
-Applied to perf-tools-next with the below tag, thanks!
-
-Fixed: 51cfe7a3e87e ("perf python: Avoid 2 leak sanitizer issues")
+Applied both patches to perf-tools-next, thanks!
