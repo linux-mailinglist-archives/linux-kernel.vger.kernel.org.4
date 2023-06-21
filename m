@@ -2,87 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E122737CF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:08:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87712737CEE
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 10:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231641AbjFUIEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 04:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
+        id S231685AbjFUIFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 04:05:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230404AbjFUIEe (ORCPT
+        with ESMTP id S231708AbjFUIF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 04:04:34 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3401BFE
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:04:32 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-311167ba376so5526235f8f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 01:04:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687334670; x=1689926670;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=CPBuD0hfcllQGTh5WqNHVA5zv/gzXAnk+NTTWVeHYTc=;
-        b=zd0rlMjAtccV9iqyp/+iVgmNk8Vgd2/STCy1hZANr4Y60EQxIEiynGuJ4NYDYScQsd
-         5J9wwPBTR45dJEFUaxEjaRkhbFq1X9rchqdktXcCehCzdQPZcnEVRwABcqS1SSoxnDCm
-         2V4y2zkSt8OWlzixFBdlZeCae05aFQH3hHP0cJuri8AyHinZY0p+qXR0in4eXJoiqhuT
-         XQugxK51RR3AcuKsZHziV/aB1stniM59iyiBgZAl8MIabaKHYLT2GORaGgNOXp1QbJfK
-         1Ke1B8sENPNrmlR+ZYjf0a6lqbDDRvz1O+7S6rhUBtEcsThppRwJx1pPxkQWzDNlo2YA
-         SI3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687334670; x=1689926670;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=CPBuD0hfcllQGTh5WqNHVA5zv/gzXAnk+NTTWVeHYTc=;
-        b=M17q3/i8O52utYvV//3ksfK8KyEx9I3A8xK5gCl06w9ttv1i/NRe5/+I+nWW41BzE8
-         yU3ytsXFjvJlQ+s0oQjbnvJRs95ad4QiGLCcLzKVvPt8gH9W+tUUQEyiE6/hi6/3LV3S
-         Ni9ckbLt5HQK6PDhg8RSUBxt3bymKmGQMTmWCquHQEJnK1HnjID5Z8weUEY+TmnSruhj
-         6hjQ4X5IxvY9Tg8uNyzjWqYmXjPiwuBDWRCZiSl5TdsxrcYtfOV53u0FNL5T54na+9Yl
-         XIpM2lVL8YYLiMGASN9vNUq+vb70ZI4OTL8wjfxlL8hz68+XW2JkWiw65A6n4aJx/VPl
-         8h0w==
-X-Gm-Message-State: AC+VfDxp3yjR1eYU+QnWTpHcPcjY6718Q6dWoVO9IqCZlnxVhHYmmsZA
-        TOo7quT/44bE8fJWMJERSK7PkA==
-X-Google-Smtp-Source: ACHHUZ5M6VpCzKTbpZqsnQKndJo876Awl5O2+ZBZTlAVumRVz63cwUZ7Br2daEGLUzxtiRofknQp5Q==
-X-Received: by 2002:a5d:440c:0:b0:30a:e511:e65c with SMTP id z12-20020a5d440c000000b0030ae511e65cmr10286387wrq.37.1687334670468;
-        Wed, 21 Jun 2023 01:04:30 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:b158:3e69:8736:455d? ([2a01:e0a:982:cbb0:b158:3e69:8736:455d])
-        by smtp.gmail.com with ESMTPSA id y9-20020adfdf09000000b0031122bd3c82sm3785271wrl.17.2023.06.21.01.04.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 01:04:30 -0700 (PDT)
-Message-ID: <6fe5dfb6-5f18-feca-a2e7-8cfb78627e01@linaro.org>
-Date:   Wed, 21 Jun 2023 10:04:28 +0200
+        Wed, 21 Jun 2023 04:05:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E691199E;
+        Wed, 21 Jun 2023 01:05:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3222B6148D;
+        Wed, 21 Jun 2023 08:05:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 533AFC433C0;
+        Wed, 21 Jun 2023 08:05:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687334723;
+        bh=A0nwC/s2ji+8UKgD6FCXPyKxJZJQg3sYdNzUYtkF8cc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TF1TB1X1ojZbqpj39jYJnNpIrddkPfoGr61YuBVsLHjD7C/ixqCfulfKAU4cj7USq
+         cfbumCWgDf3xGlK7BdjT5IFed2TMYYIkbB6eRyczbUwlmS2WqkShU/RnsFDweJz5mr
+         khf41H49v1SoN4AMQbMDMBOj1J7S2w1THHnUHmo6A/k/oR0TB0bYN0TTclQ8OwJYv+
+         eLobEDN9pM3iJq7VX/nMiyIbxuoK4Ilox7QxVugRG4859Dij9mjU0iTQyLmAMEquzm
+         CG1jMbrRRMFA9eVnxdW88IcGi1Px7Gebg7jAdc7EW18XQqFUYzObnWVEElZheu4G4X
+         9AAZLvsoxtINA==
+Date:   Wed, 21 Jun 2023 01:05:21 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     syzbot <syzbot+510dcbdc6befa1e6b2f6@syzkaller.appspotmail.com>,
+        djwong@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [xfs?] UBSAN: array-index-out-of-bounds in
+ xfs_attr3_leaf_add_work
+Message-ID: <20230621080521.GB56560@sol.localdomain>
+References: <0000000000001c8edb05fe518644@google.com>
+ <ZI+3QXDHiohgv/Pb@dread.disaster.area>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH v2 2/2] arm64: dts: meson-t7-a311d2-khadas-vim4: add
- initial device-tree
-Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Lucas Tanure <tanure@linux.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Yixun Lan <dlan@gentoo.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>, Nick <nick@khadas.com>,
-        Artem <art@khadas.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230620134857.238941-1-tanure@linux.com>
- <20230620134857.238941-3-tanure@linux.com> <ZJIjtphyKdC48JrN@ofant>
- <76a7f819-f3d2-d39d-1bc9-f1e7f837fd22@linaro.org>
- <CAJX_Q+3im20qphOXzn-=58Kx4--ajbaF4P8BVvRcDcPXn1Qheg@mail.gmail.com>
- <20230621-barber-enjoyably-04806271daea@wendy>
-Organization: Linaro Developer Services
-In-Reply-To: <20230621-barber-enjoyably-04806271daea@wendy>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZI+3QXDHiohgv/Pb@dread.disaster.area>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,69 +59,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21/06/2023 10:01, Conor Dooley wrote:
-> On Wed, Jun 21, 2023 at 08:37:02AM +0100, Lucas Tanure wrote:
->> On Wed, Jun 21, 2023 at 7:02 AM Krzysztof Kozlowski
->> <krzysztof.kozlowski@linaro.org> wrote:
->>>
->>> On 21/06/2023 00:09, Yixun Lan wrote:
->>>>> +            apb4: bus@fe000000 {
->>>>> +                    compatible = "simple-bus";
->>>>> +                    reg = <0x0 0xfe000000 0x0 0x480000>;
->>>>> +                    #address-cells = <2>;
->>>>> +                    #size-cells = <2>;
->>>>> +                    ranges = <0x0 0x0 0x0 0xfe000000 0x0 0x480000>;
->>>>> +
->>>>> +                    uart_A: serial@78000 {
->>>>> +                            compatible = "amlogic,meson-t7-uart",
->>>>                                                ~~~~~~~~~~~~~~~~~
->>>> if you introduce new compatible string, then at least you need to document it
->>>> so Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml need to be updated
->>>>
->>>> but my qeustion here, why bother introducing new compatible string if nothing
->>>> changed with the compatible data? given the uart is same IP with g12a, can't we just
->>>> use "amlogic,meson-g12-uart" for this? no only it will reduce the structure length of
->>>> meson_uart_dt_match[], but also relieve maintainer's review burden?
->>>
->>> https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
->>>
->>> Best regards,
->>> Krzysztof
->>>
->> Hi, I did not understand the recommendation here.
->> Can I add "amlogic,meson-t7-uart" without Documentation changes?
-> 
-> No, you can't.
-> 
->> I think Yes, as I can see a few compatible strings in dts that don't
->> exist anywhere else.
-> 
-> Aye, but we do not want to propagate that. New stuff should not be
-> adding undocumented compatibles, and those that are undocumented should
-> be documented.
+Hi Dave,
 
-Documentation is ongoing, it takes time !
-
-Neil
-
+On Mon, Jun 19, 2023 at 12:02:41PM +1000, 'Dave Chinner' via syzkaller-bugs wrote:
+> On Sat, Jun 17, 2023 at 04:22:59AM -0700, syzbot wrote:
+> > Hello,
+> > 
+> > syzbot found the following issue on:
+> > 
+> > HEAD commit:    1f6ce8392d6f Add linux-next specific files for 20230613
+> > git tree:       linux-next
+> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=14e629dd280000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=d103d5f9125e9fe9
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=510dcbdc6befa1e6b2f6
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=139d8d2d280000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11b371f1280000
+> > 
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/2d9bf45aeae9/disk-1f6ce839.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/e0b03ef83e17/vmlinux-1f6ce839.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/b6c21a24174d/bzImage-1f6ce839.xz
+> > mounted in repro: https://storage.googleapis.com/syzbot-assets/65eca6891c21/mount_0.gz
+> > 
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+510dcbdc6befa1e6b2f6@syzkaller.appspotmail.com
+> > 
+> > XFS (loop0): Mounting V4 Filesystem 5e6273b8-2167-42bb-911b-418aa14a1261
+> > XFS (loop0): Ending clean mount
+> > xfs filesystem being mounted at /root/file0 supports timestamps until 2038-01-19 (0x7fffffff)
+> > ================================================================================
+> > UBSAN: array-index-out-of-bounds in fs/xfs/libxfs/xfs_attr_leaf.c:1560:3
+> > index 14 is out of range for type '__u8 [1]'
+> > CPU: 1 PID: 5021 Comm: syz-executor198 Not tainted 6.4.0-rc6-next-20230613-syzkaller #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/25/2023
+> > Call Trace:
+> >  <TASK>
+> >  __dump_stack lib/dump_stack.c:88 [inline]
+> >  dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
+> >  ubsan_epilogue lib/ubsan.c:217 [inline]
+> >  __ubsan_handle_out_of_bounds+0xd5/0x140 lib/ubsan.c:348
+> >  xfs_attr3_leaf_add_work+0x1528/0x1730 fs/xfs/libxfs/xfs_attr_leaf.c:1560
+> >  xfs_attr3_leaf_add+0x750/0x880 fs/xfs/libxfs/xfs_attr_leaf.c:1438
+> >  xfs_attr_leaf_try_add+0x1b7/0x660 fs/xfs/libxfs/xfs_attr.c:1242
+> >  xfs_attr_leaf_addname fs/xfs/libxfs/xfs_attr.c:444 [inline]
+> >  xfs_attr_set_iter+0x16c4/0x2f90 fs/xfs/libxfs/xfs_attr.c:721
+> >  xfs_xattri_finish_update+0x3c/0x140 fs/xfs/xfs_attr_item.c:332
 > 
->> My idea here is to add "amlogic,meson-t7-uart" for future use if ever
->> created, like if we find a bug in the future that is only relevant to
->> T7 soc.
->> But for now, fallback to s4 uart, as it seems to be the same controller.
->>
->> >From Krzysztof said in the writing-bindings.rst, I am following the rules.
->>
->> So, what's the path forward here?
+> The on disk format for this field is defined as:
 > 
-> You are following the rules from the dts point of view, you just need a
-> 3rd patch in which you document the pattern you have added here in
-> amlogic,meson-uart.yaml. It is probably something like:
-> +      - items:
-> +          - const: amlogic,meson-t7-uart
-> +          - const: amlogic,meson-s4-uart
-> But I have not tested that, I just wrote that in my mail client.
+> typedef struct xfs_attr_leaf_name_local {
+>         __be16  valuelen;               /* number of bytes in value */
+>         __u8    namelen;                /* length of name bytes */
+>         __u8    nameval[1];             /* name/value bytes */
+> } xfs_attr_leaf_name_local_t
 > 
-> Cheers,
-> Conor.
+> If someone wants to do change the on-disk format definition to use
+> "kernel proper" flex arrays in both the kernel code and user space,
+> update all the documentation and do all the validation work that
+> on-disk format changes require for all XFS disk structures that are
+> defined this way, then we'll fix this.
+> 
+> But as it stands, these structures have been defined this way for 25
+> years and the code accessing them has been around for just as long.
+> The code is not broken and it does not need fixing. We have way more
+> important things to be doing that fiddling with on disk format
+> definitions and long standing, working code just to shut up UBSAN
+> and/or syzbot.
+> 
+> WONTFIX, NOTABUG.
 
+My understanding is that the main motivation for the conversions to flex arrays
+is kernel hardening, as it allows bounds checking to be enabled.
+
+You can probably get away with not fixing this for a little while longer, as
+that stuff is still a work in progress.  But I would suggest you be careful
+about potentially getting yourself into a position where XFS is blocking
+enabling security mitigations for the whole kernel...
+
+- Eric
