@@ -2,66 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B1C7389F6
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D711B738A02
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233799AbjFUPnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 11:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50496 "EHLO
+        id S233788AbjFUPnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 11:43:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233705AbjFUPmq (ORCPT
+        with ESMTP id S233725AbjFUPn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:42:46 -0400
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32116E68;
-        Wed, 21 Jun 2023 08:42:24 -0700 (PDT)
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1b50e309602so47944165ad.0;
-        Wed, 21 Jun 2023 08:42:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687362122; x=1689954122;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FTJzUZXq823ZXnmLS5AS4rZZIfTqatFrJY6YpC4QzpE=;
-        b=BoocG/dCUaNbOvH580ePfIw424DALlxJpTkKvSEKXH7mR7tpaLzPk1+JLpVttUy2t6
-         LM7wGbHTwWpJLJRExnC9fMrO2Kcx23CnQ2ZTOykU+vllB8pjhJdgDJtVFrSf/oa6TYaL
-         /EKD/HrhztwjLJ+vbpeHyVyMnUh6aoRKFROsTiWzgrutzI2LVG+SvRHl5qTBV5RwqO7X
-         Qbf8M0DTwmKwxImUsRx7JEnkCxYmuiJF3P5kgCw7IOhZkhe+RYoEU5pLYKkqpTZtK3bH
-         E7ORuuNs7H8PTdXFer2Mn1C3ck7GM7NWr2yuGw73zqLcFskL2FsYpPwsgNna4VbZFJqI
-         ClXQ==
-X-Gm-Message-State: AC+VfDzFoYTRdPW6EntrmsGNkyaAm2o3t77CHtexfASIQZXua5coZ+xG
-        W0lYKL6cf4+DR+HVNSXCQAc=
-X-Google-Smtp-Source: ACHHUZ75AgZuplMcSb1kEuUFuGEsTg5FBp+Eusurp/PRz9+EQrBqDaV+XQmO0a4stt8z/TTWglepIQ==
-X-Received: by 2002:a17:903:1108:b0:1b0:2d08:eb51 with SMTP id n8-20020a170903110800b001b02d08eb51mr19783283plh.12.1687362122342;
-        Wed, 21 Jun 2023 08:42:02 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:9bb2:be1e:34e3:7c45? ([2620:15c:211:201:9bb2:be1e:34e3:7c45])
-        by smtp.gmail.com with ESMTPSA id u9-20020a17090341c900b001ac741dfd29sm3637788ple.295.2023.06.21.08.42.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Jun 2023 08:42:01 -0700 (PDT)
-Message-ID: <debdc47a-c377-e457-5643-415d93ced54a@acm.org>
-Date:   Wed, 21 Jun 2023 08:41:58 -0700
+        Wed, 21 Jun 2023 11:43:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B85173F
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:42:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687362146;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=v3qZ6ovJeq5tWh1iDUXLwP6mu+mEkpr462zbbeksiXQ=;
+        b=RzAiRfuSOxrQmeHhiVj7RlblR+OzEGJT8aNEAdbijlYI1/BQfKtMP11lYLHljXKp7OXSYC
+        lQy0XO+yv/K/5NRcFXrJ6BJIMILK9ESiUFoKE6WPWJmtrMZqy1fTNdt0fGthtjH5wJkdHf
+        DqHK7MuuNpQCWLIu9HcwBcTj27vgC94=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-92-BlHZtMNEOVibyvZpBmsRGw-1; Wed, 21 Jun 2023 11:42:24 -0400
+X-MC-Unique: BlHZtMNEOVibyvZpBmsRGw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 28C99280BC80;
+        Wed, 21 Jun 2023 15:42:21 +0000 (UTC)
+Received: from [10.22.17.140] (unknown [10.22.17.140])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 76EB0492B02;
+        Wed, 21 Jun 2023 15:42:20 +0000 (UTC)
+Message-ID: <184ee986-340d-95f2-72c7-f63bcb703530@redhat.com>
+Date:   Wed, 21 Jun 2023 11:42:20 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-From:   Bart Van Assche <bvanassche@acm.org>
-Subject: Re: [PATCH] docs: target: Convert tcm_mod_builder.py print syntax to
- python3
-To:     Rong Tao <rtoax@foxmail.com>, martin.petersen@oracle.com
-Cc:     rongtao@cestc.cn, Jonathan Corbet <corbet@lwn.net>,
-        "open list:SCSI TARGET SUBSYSTEM" <linux-scsi@vger.kernel.org>,
-        "open list:SCSI TARGET SUBSYSTEM" <target-devel@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Mike Christie <michael.christie@oracle.com>
-References: <tencent_F3895D0EA868BCCE8C56221619BC093D660A@qq.com>
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2 2/5] x86/idle: Disable IBRS when cpu is offline
 Content-Language: en-US
-In-Reply-To: <tencent_F3895D0EA868BCCE8C56221619BC093D660A@qq.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-pm@vger.kernel.org,
+        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>
+References: <20230620140625.1001886-1-longman@redhat.com>
+ <20230620140625.1001886-3-longman@redhat.com>
+ <20230621072313.GA2046280@hirez.programming.kicks-ass.net>
+ <7f2424df-1846-6c38-e446-b3d5aa693ecd@redhat.com>
+ <20230621143602.GI2053369@hirez.programming.kicks-ass.net>
+ <5cb81f3b-45a0-d566-3d63-569b5706e9fe@redhat.com>
+ <20230621144848.GJ2053369@hirez.programming.kicks-ass.net>
+ <309d15f5-0dd8-aee8-14a6-621a071bc363@redhat.com>
+ <20230621145436.GK2053369@hirez.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230621145436.GK2053369@hirez.programming.kicks-ass.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,24 +81,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/21/23 00:33, Rong Tao wrote:
-> diff --git a/Documentation/target/tcm_mod_builder.py b/Documentation/target/tcm_mod_builder.py
-> index 54492aa813b9..e2ef72925de3 100755
-> --- a/Documentation/target/tcm_mod_builder.py
-> +++ b/Documentation/target/tcm_mod_builder.py
-> @@ -20,7 +20,7 @@ fabric_mod_port = ""
->   fabric_mod_init_port = ""
->   
->   def tcm_mod_err(msg):
-> -	print msg
-> +	print(msg)
->   	sys.exit(1)
+On 6/21/23 10:54, Peter Zijlstra wrote:
+> On Wed, Jun 21, 2023 at 10:51:33AM -0400, Waiman Long wrote:
+>> On 6/21/23 10:48, Peter Zijlstra wrote:
+>>> On Wed, Jun 21, 2023 at 10:44:23AM -0400, Waiman Long wrote:
+>>>
+>>>> Well, hlt_play_dead() is only called if cpuidle_play_dead() returns an error
+>>>> which is not the typical case. My testing does confirm that this patch is
+>>>> able to keep the IBRS bit off when a CPU is offline via its online sysfs
+>>>> file.
+>>> The point is; your re-enable IBRS hunk at the end is dead-code. It
+>>> should never ever run and having it is confusing.
+>> What I meant is that hlt_play_dead() should never be called unless there is
+>> some serious problem with the system and native_play_dead() does return in
+>> normal usage.
+> This is all through arch_cpu_idle_dead() which is __noreturn. And no,
+> none of this must ever return.
+>
+> If you want an offline CPU to come back, you re-init.
 
-How about deleting the file Documentation/target/tcm_mod_builder.py? I
-don't think anyone is using this script. Additionally, it takes effort
-to keep this script in sync with the rest of the SCSI target code. I'm
-not sure anyone is interested in maintaining this script.
+Yes, you are right. I thought it will return. I will update the patch 
+accordingly.
 
 Thanks,
+Longman
 
-Bart.
