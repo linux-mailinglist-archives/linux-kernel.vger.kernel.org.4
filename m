@@ -2,135 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DADB3739338
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 01:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F34C73933A
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 01:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229903AbjFUXto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 19:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
+        id S229935AbjFUXub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 19:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbjFUXtm (ORCPT
+        with ESMTP id S229645AbjFUXu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 19:49:42 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B64B010C1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 16:49:41 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-54f87d5f1abso3066712a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 16:49:41 -0700 (PDT)
+        Wed, 21 Jun 2023 19:50:28 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7C6171C
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 16:50:27 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-311099fac92so7537719f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 16:50:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687391381; x=1689983381;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qf6e3zoK2lsWX8TAhmhXGe8qT9YHqy+yrmBlFlT9OBM=;
-        b=c5YuTRy9R2yb2eiPTBYXT2zor3k2ndwHM7Z5Nd7s9q1+mLBz0lrz9Te3PBUdI/CRMr
-         gYOSYN9K4kxbL9H5UQRxV1pjPbUCgBX+5aDsvcs9HeWrYIO3xebc6wABof7qNNl15ovb
-         u3zKMOKhENXOjtAtM7LIG3U2QCZ453qy1irqs=
+        d=chromium.org; s=google; t=1687391425; x=1689983425;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NhYNZ0vxtpjuX5s0wcMa09N91qzj3byTq4ke4NqIBlc=;
+        b=HZDteg5s2Vpl4Dj3x2y2xDB5nI/Qbe7Mj8TIWbglj/Afe2Df8ThS6myu4ctAr7BySI
+         lN6IEuMEfPC2jekn2PiCOzacJ5o3hhPY0TVfjYc90WW++TO4fcWk3jVeIIqDxZW+Ag+v
+         3gWB4WdyMMmHkHwc3FuCxBT4mKHgXUkDjtvgA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687391381; x=1689983381;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qf6e3zoK2lsWX8TAhmhXGe8qT9YHqy+yrmBlFlT9OBM=;
-        b=LWpwZdGq+xjjR5iM1dAsjhFTf23lZK+j+INOVDfbkkD3PGf9OqSGKkEnPllpHo3CqB
-         h+Nx5YlLLZrJ2ZBXU62RDd7rwLITafZHnnJPkhiDqtAxdr2A3NxFnjwhT6Pvein99MPq
-         ESNPL2bF6b62udzBm+8OZvpfFbi+1FwGCvRUSgL5exbhLMX8eOG2iPcYu6wEeesXLeDU
-         uNstvik305NGcMxrG2Dogf/8Vv068AeE39gdU0EVKiUOzKzKS4+Zq2gnw9lmnZM1jn2s
-         Wmv06fkZWKipDvlmZhwv0FJHXBvkGUKkWTAouEV5TPnIH8zRV3Z5JZs5jL7fgNnzBcks
-         3Zfw==
-X-Gm-Message-State: AC+VfDxgb1GdJwm+6Z4I+kgyPYVxuvRLEVyqdLFSvPIpor4g7urslG4J
-        MzuYeRJaWseQBLxfPCIi9af1rA==
-X-Google-Smtp-Source: ACHHUZ5RRv6lO7lptwFwZwCIvhWJ2DKoOHfR/syo0v3pV9+ibIJneyN8vuWWvvovrkxhJaXmUQ/z1Q==
-X-Received: by 2002:a05:6a20:5496:b0:123:21e7:cf22 with SMTP id i22-20020a056a20549600b0012321e7cf22mr3510740pzk.52.1687391381205;
-        Wed, 21 Jun 2023 16:49:41 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:4fc5:ca67:5b9a:cee0])
-        by smtp.gmail.com with ESMTPSA id p18-20020a170902ebd200b001b523714ed5sm3940880plg.252.2023.06.21.16.49.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 16:49:40 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Petr Mladek <pmladek@suse.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Douglas Anderson <dianders@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH] powerpc: Move arch_trigger_cpumask_backtrace from nmi.h to irq.h
-Date:   Wed, 21 Jun 2023 16:48:19 -0700
-Message-ID: <20230621164809.1.Ice67126857506712559078e7de26d32d26e64631@changeid>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+        d=1e100.net; s=20221208; t=1687391425; x=1689983425;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NhYNZ0vxtpjuX5s0wcMa09N91qzj3byTq4ke4NqIBlc=;
+        b=aHVhknSbSPbq6OOT4fBGWqC5WdmtYCihivJP7q/6uL2KOc0AK5MOpE++46mg8eMAKt
+         vuuHf0fwUqEspYOCk2z4Unt8ME8lKqg2f5Zrmihi2EjQh7PjNWleEroMMNlGDbZEwMqz
+         B0pv1PtEnqDe0MSzD6LfLNAG7hHmaxRFuDuGKfaG7/6Hv0I89gPi+4IBme7UR9uBq5lN
+         8f0uY36Bf7elGIlrSoLTZdJMWH1fvilWkl4Rq+chrC+xakOIsE53a5e4pbU4rgIkU6ki
+         MhZN/DcBwqAFB5jtpmWAisjgsJIfIp5oiP2CYNfEKnVfON7W2WCRkqcRxUaXLRNtt7gf
+         hKJA==
+X-Gm-Message-State: AC+VfDx/6SG2+6151VWEMBI5Af5QENkzFHe3eXAQcryms74yNj3dQLrn
+        pb3ICqt0oHSlSV/aEPgvgpClYew/925vJZZAA7MLA8SR
+X-Google-Smtp-Source: ACHHUZ6V7NGmleJ/6OBlGvqXbnNIV7YLoXv18uFifh149UB2TVe1VucB0pdYRtI6AXivpUfNw51zag==
+X-Received: by 2002:adf:ee51:0:b0:311:12b0:4b36 with SMTP id w17-20020adfee51000000b0031112b04b36mr14084910wro.58.1687391425375;
+        Wed, 21 Jun 2023 16:50:25 -0700 (PDT)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id i9-20020a056402054900b0051873c201a0sm3166068edx.26.2023.06.21.16.50.24
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jun 2023 16:50:25 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-516500163b2so732a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 16:50:24 -0700 (PDT)
+X-Received: by 2002:a50:c35e:0:b0:519:7d2:e256 with SMTP id
+ q30-20020a50c35e000000b0051907d2e256mr4978edb.0.1687391424164; Wed, 21 Jun
+ 2023 16:50:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20230616150618.6073-1-pmladek@suse.com> <20230616150618.6073-7-pmladek@suse.com>
+ <871qi5otdh.fsf@mail.lhotse>
+In-Reply-To: <871qi5otdh.fsf@mail.lhotse>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 21 Jun 2023 16:50:12 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XgC0JkjMZjx0z-gt0iXp-UJr87nutB9xWKhB6qMzWWNg@mail.gmail.com>
+Message-ID: <CAD=FV=XgC0JkjMZjx0z-gt0iXp-UJr87nutB9xWKhB6qMzWWNg@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] watchdog/hardlockup: Define HARDLOCKUP_DETECTOR_ARCH
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Petr Mladek <pmladek@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        Nicholas Piggin <npiggin@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        sparclinux@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The powerpc architecture was the only one that defined
-arch_trigger_cpumask_backtrace() in asm/nmi.h instead of
-asm/irq.h. Move it to be consistent.
+Hi,
 
-This fixes compile time errors introduced by commit 7ca8fe94aa92
-("watchdog/hardlockup: define HARDLOCKUP_DETECTOR_ARCH"). That commit
-caused <asm/nmi.h> to stop being included if the hardlockup detector
-wasn't enabled. The specific errors were:
-  error: implicit declaration of function ‘nmi_cpu_backtrace’
-  error: implicit declaration of function ‘nmi_trigger_cpumask_backtrace’
+On Wed, Jun 21, 2023 at 6:08=E2=80=AFAM Michael Ellerman <mpe@ellerman.id.a=
+u> wrote:
+>
+> Petr Mladek <pmladek@suse.com> writes:
+> > The HAVE_ prefix means that the code could be enabled. Add another
+> > variable for HAVE_HARDLOCKUP_DETECTOR_ARCH without this prefix.
+> > It will be set when it should be built. It will make it compatible
+> > with the other hardlockup detectors.
+> >
+> > The change allows to clean up dependencies of PPC_WATCHDOG
+> > and HAVE_HARDLOCKUP_DETECTOR_PERF definitions for powerpc.
+> >
+> > As a result HAVE_HARDLOCKUP_DETECTOR_PERF has the same dependencies
+> > on arm, x86, powerpc architectures.
+> >
+> > Signed-off-by: Petr Mladek <pmladek@suse.com>
+> > Reviewed-by: Douglas Anderson <dianders@chromium.org>
+> > ---
+> >  arch/powerpc/Kconfig | 5 ++---
+> >  include/linux/nmi.h  | 2 +-
+> >  lib/Kconfig.debug    | 9 +++++++++
+> >  3 files changed, 12 insertions(+), 4 deletions(-)
+>
+> Something in this patch is breaking the powerpc g5_defconfig, I don't
+> immediately see what though.
+>
+> ../arch/powerpc/kernel/stacktrace.c: In function =E2=80=98handle_backtrac=
+e_ipi=E2=80=99:
+> ../arch/powerpc/kernel/stacktrace.c:171:9: error: implicit declaration of=
+ function =E2=80=98nmi_cpu_backtrace=E2=80=99 [-Werror=3Dimplicit-function-=
+declaration]
+>   171 |         nmi_cpu_backtrace(regs);
+>       |         ^~~~~~~~~~~~~~~~~
+> ../arch/powerpc/kernel/stacktrace.c: In function =E2=80=98arch_trigger_cp=
+umask_backtrace=E2=80=99:
+> ../arch/powerpc/kernel/stacktrace.c:226:9: error: implicit declaration of=
+ function =E2=80=98nmi_trigger_cpumask_backtrace=E2=80=99; did you mean =E2=
+=80=98arch_trigger_cpumask_backtrace=E2=80=99? [-Werror=3Dimplicit-function=
+-declaration]
+>   226 |         nmi_trigger_cpumask_backtrace(mask, exclude_self, raise_b=
+acktrace_ipi);
+>       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>       |         arch_trigger_cpumask_backtrace
+> cc1: all warnings being treated as errors
 
-Fixes: 7ca8fe94aa92 ("watchdog/hardlockup: define HARDLOCKUP_DETECTOR_ARCH")
-Reported-by: Michael Ellerman <mpe@ellerman.id.au>
-Closes: https://lore.kernel.org/r/871qi5otdh.fsf@mail.lhotse
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-I'd expect that this would land in Andrew Morton's tree along with the
-other lockup detector stuff.
+Yeah, I can reproduce that.
 
- arch/powerpc/include/asm/irq.h | 6 ++++++
- arch/powerpc/include/asm/nmi.h | 6 ------
- 2 files changed, 6 insertions(+), 6 deletions(-)
+The problem is that before ${SUBJECT} patch "include/linux/nmi.h"
+would include <asm/nmi.h>. Now it won't.
 
-diff --git a/arch/powerpc/include/asm/irq.h b/arch/powerpc/include/asm/irq.h
-index 94dffa1dd223..f7a90b6f3ceb 100644
---- a/arch/powerpc/include/asm/irq.h
-+++ b/arch/powerpc/include/asm/irq.h
-@@ -53,5 +53,11 @@ void __do_IRQ(struct pt_regs *regs);
- 
- int irq_choose_cpu(const struct cpumask *mask);
- 
-+#ifdef CONFIG_NMI_IPI
-+extern void arch_trigger_cpumask_backtrace(const cpumask_t *mask,
-+					   bool exclude_self);
-+#define arch_trigger_cpumask_backtrace arch_trigger_cpumask_backtrace
-+#endif
-+
- #endif /* _ASM_IRQ_H */
- #endif /* __KERNEL__ */
-diff --git a/arch/powerpc/include/asm/nmi.h b/arch/powerpc/include/asm/nmi.h
-index ce25318c3902..49a75340c3e0 100644
---- a/arch/powerpc/include/asm/nmi.h
-+++ b/arch/powerpc/include/asm/nmi.h
-@@ -9,12 +9,6 @@ void watchdog_hardlockup_set_timeout_pct(u64 pct);
- static inline void watchdog_hardlockup_set_timeout_pct(u64 pct) {}
- #endif
- 
--#ifdef CONFIG_NMI_IPI
--extern void arch_trigger_cpumask_backtrace(const cpumask_t *mask,
--					   bool exclude_self);
--#define arch_trigger_cpumask_backtrace arch_trigger_cpumask_backtrace
--#endif
--
- extern void hv_nmi_check_nonrecoverable(struct pt_regs *regs);
- 
- #endif /* _ASM_NMI_H */
--- 
-2.41.0.162.gfafddb0af9-goog
+There are a ton of different ways to fix this, but I think the one
+that makes sense is to be consistent with other architectures and move
+the "arch_trigger_cpumask_backtrace" definitions to asm/irq.h.
 
+https://lore.kernel.org/r/20230621164809.1.Ice67126857506712559078e7de26d32=
+d26e64631@changeid
+
+-Doug
