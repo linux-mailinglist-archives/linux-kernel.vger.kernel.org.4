@@ -2,326 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82600738230
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFD2738233
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 13:12:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbjFULMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 07:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41084 "EHLO
+        id S231806AbjFULM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 07:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjFULMQ (ORCPT
+        with ESMTP id S231437AbjFULMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 07:12:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C933B186;
-        Wed, 21 Jun 2023 04:12:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E94B6150C;
-        Wed, 21 Jun 2023 11:12:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0303EC433C0;
-        Wed, 21 Jun 2023 11:12:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687345933;
-        bh=hemcQkLtj8eWOKOF5ziGhqriVgYi/b1g7rj4VltgJCo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oUqEMkZZyULF/pzRaSsITTNpCD4gR0JyXNpDI4McoFlgJ2Nz13WNKcEig6H2ml1/P
-         kxdt74OU71d/nzwWs4Vm2xaaoc5NkVu30moVjVD7/pFETuTiboDiexS5/6X+CVCzSI
-         S7MJsAkt0zmBZkRj93ApPwM9rG7BoWnXsDi4ULFcaxeI1TQ78nhbU0oSRIk41zkEAG
-         4L3Tono77SSGEHVG+FMiZf1ZqKBsTDwe1UYB10PzrkBnHF2Eh928CZ3R3iYz9nHdSH
-         yYniY4l9NE8LRSDiTXSZ7AfuTCQzwbk9zygg8KEbU7A/3h3jaq7qyGDG0ccfrmMFqA
-         kzGkpw6Sm4Ygw==
-Date:   Wed, 21 Jun 2023 16:42:09 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Minda Chen <minda.chen@starfivetech.com>
-Cc:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Conor Dooley <conor@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Roger Quadros <rogerq@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-riscv@lists.infradead.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Mason Huo <mason.huo@starfivetech.com>
-Subject: Re: [PATCH v7 3/5] phy: starfive: Add JH7110 USB 2.0 PHY driver
-Message-ID: <ZJLbCbG9+XnGVjKb@matsya>
-References: <20230619094759.21013-1-minda.chen@starfivetech.com>
- <20230619094759.21013-4-minda.chen@starfivetech.com>
+        Wed, 21 Jun 2023 07:12:24 -0400
+Received: from mail.netfilter.org (mail.netfilter.org [217.70.188.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE63619F;
+        Wed, 21 Jun 2023 04:12:20 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 13:12:14 +0200
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     Florent Revest <revest@chromium.org>
+Cc:     netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, kadlec@netfilter.org, fw@strlen.de,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, lirongqing@baidu.com, wangli39@baidu.com,
+        zhangyu31@baidu.com, daniel@iogearbox.net, ast@kernel.org,
+        kpsingh@kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH nf] netfilter: conntrack: Avoid nf_ct_helper_hash uses
+ after free
+Message-ID: <ZJLbDiwsQnQkkZvy@calendula>
+References: <20230615152918.3484699-1-revest@chromium.org>
+ <ZJFIy+oJS+vTGJer@calendula>
+ <CABRcYmJjv-JoadtzZwU5A+SZwbmbgnzWb27UNZ-UC+9r+JnVxg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230619094759.21013-4-minda.chen@starfivetech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABRcYmJjv-JoadtzZwU5A+SZwbmbgnzWb27UNZ-UC+9r+JnVxg@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19-06-23, 17:47, Minda Chen wrote:
-> Add Starfive JH7110 SoC USB 2.0 PHY driver support.
-> USB 2.0 PHY default connect to Cadence USB controller.
+On Wed, Jun 21, 2023 at 12:20:44PM +0200, Florent Revest wrote:
+> On Tue, Jun 20, 2023 at 8:35 AM Pablo Neira Ayuso <pablo@netfilter.org> wrote:
+> >
+> > On Thu, Jun 15, 2023 at 05:29:18PM +0200, Florent Revest wrote:
+> > > If register_nf_conntrack_bpf() fails (for example, if the .BTF section
+> > > contains an invalid entry), nf_conntrack_init_start() calls
+> > > nf_conntrack_helper_fini() as part of its cleanup path and
+> > > nf_ct_helper_hash gets freed.
+> > >
+> > > Further netfilter modules like netfilter_conntrack_ftp don't check
+> > > whether nf_conntrack initialized correctly and call
+> > > nf_conntrack_helpers_register() which accesses the freed
+> > > nf_ct_helper_hash and causes a uaf.
+> > >
+> > > This patch guards nf_conntrack_helper_register() from accessing
+> > > freed/uninitialized nf_ct_helper_hash maps and fixes a boot-time
+> > > use-after-free.
+> >
+> > How could this possibly happen?
 > 
-> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
-> Reviewed-by: Roger Quadros <rogerq@kernel.org>
-> ---
->  MAINTAINERS                           |   6 ++
->  drivers/phy/Kconfig                   |   1 +
->  drivers/phy/Makefile                  |   1 +
->  drivers/phy/starfive/Kconfig          |  15 +++
->  drivers/phy/starfive/Makefile         |   2 +
->  drivers/phy/starfive/phy-jh7110-usb.c | 150 ++++++++++++++++++++++++++
->  6 files changed, 175 insertions(+)
->  create mode 100644 drivers/phy/starfive/Kconfig
->  create mode 100644 drivers/phy/starfive/Makefile
->  create mode 100644 drivers/phy/starfive/phy-jh7110-usb.c
+> Here is one way to reproduce this bug:
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f794002a192e..d2ce89a8d31c 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -20174,6 +20174,12 @@ S:	Supported
->  F:	Documentation/devicetree/bindings/watchdog/starfive*
->  F:	drivers/watchdog/starfive-wdt.c
->  
-> +STARFIVE JH71X0 USB PHY DRIVER
-> +M:	Minda Chen <minda.chen@starfivetech.com>
-> +S:	Supported
-> +F:	Documentation/devicetree/bindings/phy/starfive,jh7110-usb-phy.yaml
-> +F:	drivers/phy/starfive/phy-jh7110-usb.c
-> +
->  STATIC BRANCH/CALL
->  M:	Peter Zijlstra <peterz@infradead.org>
->  M:	Josh Poimboeuf <jpoimboe@kernel.org>
-> diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-> index f46e3148d286..0000149edbc4 100644
-> --- a/drivers/phy/Kconfig
-> +++ b/drivers/phy/Kconfig
-> @@ -91,6 +91,7 @@ source "drivers/phy/rockchip/Kconfig"
->  source "drivers/phy/samsung/Kconfig"
->  source "drivers/phy/socionext/Kconfig"
->  source "drivers/phy/st/Kconfig"
-> +source "drivers/phy/starfive/Kconfig"
->  source "drivers/phy/sunplus/Kconfig"
->  source "drivers/phy/tegra/Kconfig"
->  source "drivers/phy/ti/Kconfig"
-> diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
-> index 54f312c10a40..fb3dc9de6111 100644
-> --- a/drivers/phy/Makefile
-> +++ b/drivers/phy/Makefile
-> @@ -31,6 +31,7 @@ obj-y					+= allwinner/	\
->  					   samsung/	\
->  					   socionext/	\
->  					   st/		\
-> +					   starfive/	\
->  					   sunplus/	\
->  					   tegra/	\
->  					   ti/		\
-> diff --git a/drivers/phy/starfive/Kconfig b/drivers/phy/starfive/Kconfig
-> new file mode 100644
-> index 000000000000..2283feadfc76
-> --- /dev/null
-> +++ b/drivers/phy/starfive/Kconfig
-> @@ -0,0 +1,15 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +#
-> +# Phy drivers for StarFive platforms
-> +#
-> +
-> +config PHY_STARFIVE_JH7110_USB
-> +	tristate "Starfive JH7110 USB 2.0 PHY support"
-> +	depends on USB_SUPPORT
-> +	select GENERIC_PHY
-> +	select USB_PHY
-> +	help
-> +	  Enable this to support the StarFive USB 2.0 PHY,
-> +	  used with the Cadence USB controller.
-> +	  If M is selected, the module will be called
-> +	  phy-jh7110-usb.ko.
-> diff --git a/drivers/phy/starfive/Makefile b/drivers/phy/starfive/Makefile
-> new file mode 100644
-> index 000000000000..52e9a09cc619
-> --- /dev/null
-> +++ b/drivers/phy/starfive/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +obj-$(CONFIG_PHY_STARFIVE_JH7110_USB)	+= phy-jh7110-usb.o
-> diff --git a/drivers/phy/starfive/phy-jh7110-usb.c b/drivers/phy/starfive/phy-jh7110-usb.c
-> new file mode 100644
-> index 000000000000..90d788423705
-> --- /dev/null
-> +++ b/drivers/phy/starfive/phy-jh7110-usb.c
-> @@ -0,0 +1,150 @@
-> +// SPDX-License-Identifier: GPL-2.0+
-> +/*
-> + * StarFive JH7110 USB 2.0 PHY driver
-> + *
-> + * Copyright (C) 2023 StarFive Technology Co., Ltd.
-> + * Author: Minda Chen <minda.chen@starfivetech.com>
-> + */
-> +
-> +#include <linux/bits.h>
-> +#include <linux/clk.h>
-> +#include <linux/err.h>
-> +#include <linux/io.h>
-> +#include <linux/module.h>
-> +#include <linux/phy/phy.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/usb/of.h>
-> +
-> +#define USB_125M_CLK_RATE		125000000
-> +#define USB_LS_KEEPALIVE_OFF		0x4
-> +#define USB_LS_KEEPALIVE_ENABLE		BIT(4)
-> +
-> +struct jh7110_usb2_phy {
-> +	struct phy *phy;
-> +	void __iomem *regs;
-> +	struct clk *usb_125m_clk;
-> +	struct clk *app_125m;
-> +	enum phy_mode mode;
-> +};
-> +
-> +static void jh7110_usb2_mode_set(struct jh7110_usb2_phy *phy)
-> +{
-> +	unsigned int val;
-> +
-> +	if (phy->mode != PHY_MODE_USB_HOST) {
-> +		/* Enable the LS speed keep-alive signal */
-> +		val = readl(phy->regs + USB_LS_KEEPALIVE_OFF);
-> +		val |= USB_LS_KEEPALIVE_ENABLE;
-> +		writel(val, phy->regs + USB_LS_KEEPALIVE_OFF);
-> +	}
+>   # Use nf/main
+>   git clone git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf.git
+>   cd nf
+> 
+>   # Start from a minimal config
+>   make LLVM=1 LLVM_IAS=0 defconfig
+> 
+>   # Enable KASAN, BTF and nf_conntrack_ftp
+>   scripts/config -e KASAN -e BPF_SYSCALL -e DEBUG_INFO -e
+> DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT -e DEBUG_INFO_BTF -e
+> NF_CONNTRACK_FTP
+>   make LLVM=1 LLVM_IAS=0 olddefconfig
+> 
+>   # Build without the LLVM integrated assembler
+>   make LLVM=1 LLVM_IAS=0 -j `nproc`
+> 
+> (Note that the use of LLVM_IAS=0, KASAN and BTF is just to trigger a
+> bug in BTF that will be fixed by
+> https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf.git/commit/?id=9724160b3942b0a967b91a59f81da5593f28b8ba
+> Independently of that specific BTF bug, it shows how an error in
+> nf_conntrack_bpf can cause a boot-time uaf in netfilter)
+> 
+> Then, booting gives me:
+> 
+> [    4.624666] BPF: [13893] FUNC asan.module_ctor
+> [    4.625611] BPF: type_id=1
+> [    4.626176] BPF:
+> [    4.626601] BPF: Invalid name
+> [    4.627208] BPF:
+> [    4.627723] ==================================================================
+> [    4.628610] BUG: KASAN: slab-use-after-free in
+> nf_conntrack_helper_register+0x129/0x2f0
+> [    4.628610] Read of size 8 at addr ffff888102d24000 by task swapper/0/1
+> [    4.628610]
+> [    4.628610] CPU: 1 PID: 1 Comm: swapper/0 Not tainted
+> 6.4.0-rc4-00244-gab39b113e747 #47
+> [    4.628610] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009),
+> BIOS 1.16.0-debian-1.16.0-5 04/01/2014
+> [    4.628610] Call Trace:
+> [    4.628610]  <TASK>
+> [    4.636584] i801_smbus 0000:00:1f.3: SMBus using PCI interrupt
+> [    4.628610]  dump_stack_lvl+0x97/0xd0
+> [    4.638738] i2c i2c-0: 1/1 memory slots populated (from DMI)
+> [    4.628610]  print_report+0x17e/0x570
+> [    4.640118] i2c i2c-0: Memory type 0x07 not supported yet, not
+> instantiating SPD
+> [    4.628610]  ? __virt_addr_valid+0xe4/0x160
+> [    4.628610]  kasan_report+0x169/0x1a0
+> [    4.628610]  ? nf_conntrack_helper_register+0x129/0x2f0
+> [    4.628610]  nf_conntrack_helper_register+0x129/0x2f0
+> [    4.628610]  nf_conntrack_helpers_register+0x24/0x60
+> [    4.628610]  nf_conntrack_ftp_init+0x114/0x140
+> [    4.628610]  ? __pfx_nf_conntrack_ftp_init+0x10/0x10
+> [    4.628610]  do_one_initcall+0xe6/0x310
+> [    4.628610]  ? kasan_set_track+0x61/0x80
+> [    4.628610]  ? kasan_set_track+0x4f/0x80
+> [    4.628610]  ? __kasan_kmalloc+0x72/0x90
+> [    4.628610]  ? __kmalloc+0xa7/0x1a0
+> [    4.628610]  ? do_initcalls+0x1b/0x70
+> [    4.628610]  ? kernel_init_freeable+0x174/0x1e0
+> [    4.628610]  ? kernel_init+0x18/0x1b0
+> [    4.628610]  ? ret_from_fork+0x29/0x50
+> [    4.628610]  ? sysvec_apic_timer_interrupt+0xe/0x80
+> [    4.628610]  ? asm_sysvec_apic_timer_interrupt+0x1a/0x20
+> [    4.628610]  ? __pfx_ignore_unknown_bootoption+0x10/0x10
+> [    4.628610]  ? next_arg+0x20b/0x250
+> [    4.628610]  ? strlen+0x21/0x40
+> [    4.628610]  ? parse_args+0xc7/0x5f0
+> [    4.628610]  do_initcall_level+0xa6/0x140
+> [    4.628610]  do_initcalls+0x3e/0x70
+> [    4.628610]  kernel_init_freeable+0x174/0x1e0
+> [    4.628610]  ? __pfx_kernel_init+0x10/0x10
+> [    4.628610]  kernel_init+0x18/0x1b0
+> [    4.628610]  ? __pfx_kernel_init+0x10/0x10
+> [    4.628610]  ret_from_fork+0x29/0x50
+> [    4.628610]  </TASK>
+> [    4.628610]
+> [    4.628610] Allocated by task 1:
+> [    4.628610]  kasan_set_track+0x4f/0x80
+> [    4.628610]  __kasan_kmalloc+0x72/0x90
+> [    4.628610]  __kmalloc_node+0xa7/0x190
+> [    4.628610]  kvmalloc_node+0x44/0x120
+> [    4.628610]  nf_ct_alloc_hashtable+0x5b/0xe0
+> [    4.628610]  nf_conntrack_helper_init+0x1f/0x60
+> [    4.628610]  nf_conntrack_init_start+0x1c9/0x2d0
+> [    4.628610]  nf_conntrack_standalone_init+0xb/0xa0
+> [    4.628610]  do_one_initcall+0xe6/0x310
+> [    4.628610]  do_initcall_level+0xa6/0x140
+> [    4.628610]  do_initcalls+0x3e/0x70
+> [    4.628610]  kernel_init_freeable+0x174/0x1e0
+> [    4.628610]  kernel_init+0x18/0x1b0
+> [    4.628610]  ret_from_fork+0x29/0x50
+> [    4.628610]
+> [    4.628610] Freed by task 1:
+> [    4.628610]  kasan_set_track+0x4f/0x80
+> [    4.628610]  kasan_save_free_info+0x2b/0x50
+> [    4.628610]  ____kasan_slab_free+0x116/0x1a0
+> [    4.628610]  __kmem_cache_free+0xc4/0x200
+> [    4.628610]  nf_conntrack_init_start+0x29c/0x2d0
+> [    4.628610]  nf_conntrack_standalone_init+0xb/0xa0
+> [    4.628610]  do_one_initcall+0xe6/0x310
+> [    4.628610]  do_initcall_level+0xa6/0x140
+> [    4.628610]  do_initcalls+0x3e/0x70
+> [    4.628610]  kernel_init_freeable+0x174/0x1e0
+> [    4.628610]  kernel_init+0x18/0x1b0
+> [    4.628610]  ret_from_fork+0x29/0x50
+> [    4.628610]
+> [    4.628610] The buggy address belongs to the object at ffff888102d24000
+> [    4.628610]  which belongs to the cache kmalloc-4k of size 4096
+> [    4.628610] The buggy address is located 0 bytes inside of
+> [    4.628610]  freed 4096-byte region [ffff888102d24000, ffff888102d25000)
+> [    4.628610]
+> [    4.628610] The buggy address belongs to the physical page:
+> [    4.628610] page:000000001eb64ba1 refcount:1 mapcount:0
+> mapping:0000000000000000 index:0x0 pfn:0x102d20
+> [    4.628610] head:000000001eb64ba1 order:3 entire_mapcount:0
+> nr_pages_mapped:0 pincount:0
+> [    4.628610] flags: 0x200000000010200(slab|head|node=0|zone=2)
+> [    4.628610] page_type: 0xffffffff()
+> [    4.628610] raw: 0200000000010200 ffff888100043040 dead000000000122
+> 0000000000000000
+> [    4.628610] raw: 0000000000000000 0000000000040004 00000001ffffffff
+> 0000000000000000
+> [    4.628610] page dumped because: kasan: bad access detected
+> ...
+> 
+> > nf_conntrack_ftp depends on nf_conntrack.
+> >
+> > If nf_conntrack fails to load, how can nf_conntrack_ftp be loaded?
+> 
+> Is this maybe only true of dynamically loaded kmods ? With
+> CONFIG_NF_CONNTRACK_FTP=y, it seems to me that nf_conntrack_ftp_init()
+> will be called as an __init function, independently of whether
+> nf_conntrack_init_start() succeeded or not. Am I missing something ?
 
-looks like this sets only for host, so why not call it
-jh7110_usb2_set_host_mode() rather than get confused about
-jh7110_usb2_mode_set/jh7110_usb2_phy_set_mode
+No idea, nf_conntrack init path invokes nf_conntrack_helper_init()
+which initializes the helper hashtable.
 
-> +}
-> +
-> +static int jh7110_usb2_phy_set_mode(struct phy *_phy,
-> +				    enum phy_mode mode, int submode)
-> +{
-> +	struct jh7110_usb2_phy *phy = phy_get_drvdata(_phy);
-> +
-> +	switch (mode) {
-> +	case PHY_MODE_USB_HOST:
-> +	case PHY_MODE_USB_DEVICE:
-> +	case PHY_MODE_USB_OTG:
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (mode != phy->mode) {
-> +		dev_dbg(&_phy->dev, "Changing phy to %d\n", mode);
-> +		phy->mode = mode;
-> +		jh7110_usb2_mode_set(phy);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int jh7110_usb2_phy_init(struct phy *_phy)
-> +{
-> +	struct jh7110_usb2_phy *phy = phy_get_drvdata(_phy);
-> +	int ret;
-> +
-> +	ret = clk_set_rate(phy->usb_125m_clk, USB_125M_CLK_RATE);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = clk_prepare_enable(phy->app_125m);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
-> +static int jh7110_usb2_phy_exit(struct phy *_phy)
-> +{
-> +	struct jh7110_usb2_phy *phy = phy_get_drvdata(_phy);
-> +
-> +	clk_disable_unprepare(phy->app_125m);
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct phy_ops jh7110_usb2_phy_ops = {
-> +	.init		= jh7110_usb2_phy_init,
-> +	.exit		= jh7110_usb2_phy_exit,
-> +	.set_mode	= jh7110_usb2_phy_set_mode,
-> +	.owner		= THIS_MODULE,
-> +};
-> +
-> +static int jh7110_usb_phy_probe(struct platform_device *pdev)
-> +{
-> +	struct jh7110_usb2_phy *phy;
-> +	struct device *dev = &pdev->dev;
-> +	struct phy_provider *phy_provider;
-> +
-> +	phy = devm_kzalloc(dev, sizeof(*phy), GFP_KERNEL);
-> +	if (!phy)
-> +		return -ENOMEM;
-> +
-> +	phy->usb_125m_clk = devm_clk_get(dev, "125m");
-> +	if (IS_ERR(phy->usb_125m_clk))
-> +		return dev_err_probe(dev, PTR_ERR(phy->usb_125m_clk),
-> +			"Failed to get 125m clock\n");
-> +
-> +	phy->app_125m = devm_clk_get(dev, "app_125m");
-> +	if (IS_ERR(phy->app_125m))
-> +		return dev_err_probe(dev, PTR_ERR(phy->app_125m),
-> +			"Failed to get app 125m clock\n");
-> +
-> +	phy->regs = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(phy->regs))
-> +		return dev_err_probe(dev, PTR_ERR(phy->regs),
-> +			"Failed to map phy base\n");
-> +
-> +	phy->phy = devm_phy_create(dev, NULL, &jh7110_usb2_phy_ops);
-> +	if (IS_ERR(phy->phy))
-> +		return dev_err_probe(dev, PTR_ERR(phy->phy),
-> +			"Failed to create phy\n");
-> +
-> +	phy_set_drvdata(phy->phy, phy);
-> +	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
-> +
-> +	return PTR_ERR_OR_ZERO(phy_provider);
-> +}
-> +
-> +static const struct of_device_id jh7110_usb_phy_of_match[] = {
-> +	{ .compatible = "starfive,jh7110-usb-phy" },
-> +	{ /* sentinel */ },
-> +};
-> +MODULE_DEVICE_TABLE(of, jh7110_usb_phy_of_match);
-> +
-> +static struct platform_driver jh7110_usb_phy_driver = {
-> +	.probe	= jh7110_usb_phy_probe,
-> +	.driver = {
-> +		.of_match_table	= jh7110_usb_phy_of_match,
-> +		.name  = "jh7110-usb-phy",
-> +	}
-> +};
-> +module_platform_driver(jh7110_usb_phy_driver);
-
-A very light driver, only setting couple of things for hw. Can you
-explain how phy registers are configured, am sure there would be many
-more..? Do you rely on bootloader or some other entity for that?
-
-> +
-> +MODULE_DESCRIPTION("StarFive JH7110 USB 2.0 PHY driver");
-> +MODULE_AUTHOR("Minda Chen <minda.chen@starfivetech.com>");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.17.1
-
--- 
-~Vinod
+How is it that you can nf_conntrack_helpers_register() call before the
+initialization path of nf_conntrack is run, that I don't know.
