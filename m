@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E2817386F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:27:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0743B7386F8
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232974AbjFUO1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41352 "EHLO
+        id S232981AbjFUO1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232258AbjFUO1P (ORCPT
+        with ESMTP id S232272AbjFUO1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 21 Jun 2023 10:27:15 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 031A119A3;
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0716610D5;
+        Wed, 21 Jun 2023 07:26:44 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b4745834f3so54991031fa.2;
         Wed, 21 Jun 2023 07:26:43 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-987a977f62aso548682466b.1;
-        Wed, 21 Jun 2023 07:26:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687357601; x=1689949601;
+        d=gmail.com; s=20221208; t=1687357602; x=1689949602;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NcKKa+7GIbUbn3aIE6VV0tQ+KglpEI27I8tdXAPUVmE=;
-        b=Rft1ZcHbjS+0PnQAzgXbc0duGtDgNU92Y3/fCrC+UCURUsCbQrKvURpffGO3c1GRB0
-         iRY65I9f0YEADwgNBkb9+HRddotuXR6txlKh530OI6wCFl8l1mgbKM7e0BGbeXvuqGyi
-         C99Vwgx/6P5p8vRCQZETJYzZYzYaCi9NfKL7sAiEL/CQ5nD6QIMZ5Qucmlab/6bJxsWj
-         6tGpc06sw0mpirT+Dl/1qlHghDCTFT3Kd+VXRjD0HeguNyKL0MhtEd9PiA0trfq0qK3q
-         czY082pxlYOSIY45KyGw1Gr9v1FVhcFId9Hw1yyjlJFm+DoZV/RtzlFalvl8Hb4ElXkf
-         9CGA==
+        bh=cXp+vDAywJj5cJVg/DGBbIIG0LrSwQcuzIbyxZXKO/k=;
+        b=UP3OyWN+5ecr1xlIb7pHYBadTYZQly/kIMPmuS9kujYlNimputz+zZOzKhPlZmJBuF
+         aG1lwHGq6a2UZc4oRSj0chrcqOv2F5UzWHFfOhfLEdOHa5Knynk5rKni1va7viwNhzkP
+         tdlNVksai/R6T1u9cUsT7fyRR2Rg/ebjSzJTAq68how2dfz+PipYdYaNWIZ/6ZGcmtqS
+         /GZOhk5sQ58FhqzmeDOd8GomVZNTt0ZYjhXhfnEyADpJD8U05nXZjYqGjbEdYMbjQ+kA
+         SGJveeESLeQJ7ACg/4N6bHWXDxbdMOhq0V/fUtpBc267r6SH3T04VRmCNUPCk1EJoiy4
+         W0rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687357601; x=1689949601;
+        d=1e100.net; s=20221208; t=1687357602; x=1689949602;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NcKKa+7GIbUbn3aIE6VV0tQ+KglpEI27I8tdXAPUVmE=;
-        b=b9XwKFv4h6TWoQD7EFhcgoTcsKuC5V3byxtwD6/m9DRYyKeqgCC3/5RRO8+HUedUOv
-         Sd+QvuGCNx6DqmvEZd8noCWa7EpUXFjuHcFpRWIW/t/yd87TFRGGzNB2p7geyDxXUfWV
-         hLP/kz1ZZ76GiSuBb5qX9brkdelQ0Qs/NoNUP7o9/HgqEVDhmfQFt/aykK4wkxT5rfvd
-         N6Odvxf1qcYwmEIDbTPxJInfHdIUIenC/45eQN71Clijqn7zaKY8s+RKcfA61dMu3xe1
-         cAX5wJG61daTeIIa19QPJSsNl9PjLksHkM/srII1E34djA56SpDJghjCk37DiivJ6CnL
-         SpRQ==
-X-Gm-Message-State: AC+VfDw1DIySQwv1oZJ3efOFRrV3fAlY7pek0mRJ6EobHIY8nyYFiZ3T
-        dhUpdLdjEyVFqeCSEKLHw6c=
-X-Google-Smtp-Source: ACHHUZ5G587pM6Aiojr6sHXnPyDfOizNOGotzhHpzsjZmt4xzkyNgnwI/noBBxbBRTt6b8OiDFMWjg==
-X-Received: by 2002:a17:907:3f18:b0:983:cb6c:8aa3 with SMTP id hq24-20020a1709073f1800b00983cb6c8aa3mr12795543ejc.59.1687357600935;
-        Wed, 21 Jun 2023 07:26:40 -0700 (PDT)
+        bh=cXp+vDAywJj5cJVg/DGBbIIG0LrSwQcuzIbyxZXKO/k=;
+        b=lpTmzDglVJhIVgPGyPUwcIZ+vcwZNmBnhk3F+5Ig/MgjspKu5OGmxE4kR4h0wRWOS9
+         5siO3wwVfgG1JvDgWJWMUZzckKGYobgwdL9/mPOiChrJTc5L4G3KRYbZwZHwXy4Oh7K7
+         vqoTlE2/sWP8XWvmG5xBM9m9eatdoLFm/ZddZDjXQb7DaL6EKdSAmjlTB3qT88q4C3C1
+         2rslhtXe/cDAG1T0ruEeTzvmoBf0JgF5c5mosrPBddZHwkQS+K83dP5JAYj29GefJDAl
+         TI1+U2/5ILUo1NTFMVjP9AhQMGB+YQgl683+6nFL5vOMwUx96xktUFg+7W7RSCfbrm9L
+         RqFA==
+X-Gm-Message-State: AC+VfDwApdcYKv+BzzHCWbYCH6DkL2q9Wl3Um7o/+TiRgMpvSWNlJQ7D
+        M1Jg4y/oZKobm9mZxUFYLto=
+X-Google-Smtp-Source: ACHHUZ41bK7GbPj4Q4/ms1CfUJQsjI2LU88qpxC0XJoGOKFGgJiDpf8tUoe6KWqbHNCdOEkRJxqEKA==
+X-Received: by 2002:a2e:6e07:0:b0:2b4:4a68:a95 with SMTP id j7-20020a2e6e07000000b002b44a680a95mr10759042ljc.8.1687357601846;
+        Wed, 21 Jun 2023 07:26:41 -0700 (PDT)
 Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id l11-20020a170906644b00b00988956f244csm3266156ejn.6.2023.06.21.07.26.40
+        by smtp.gmail.com with ESMTPSA id l11-20020a170906644b00b00988956f244csm3266156ejn.6.2023.06.21.07.26.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 07:26:40 -0700 (PDT)
+        Wed, 21 Jun 2023 07:26:41 -0700 (PDT)
 From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Wed, 21 Jun 2023 16:26:28 +0200
-Subject: [PATCH v2 2/3] usb: misc: onboard-hub: add support for Cypress HX3
- USB 3.0 family
+Date:   Wed, 21 Jun 2023 16:26:29 +0200
+Subject: [PATCH v2 3/3] dt-bindings: usb: Add binding for Cypress HX3 USB
+ 3.0 family
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230620-hx3-v2-2-76a53434c713@skidata.com>
+Message-Id: <20230620-hx3-v2-3-76a53434c713@skidata.com>
 References: <20230620-hx3-v2-0-76a53434c713@skidata.com>
 In-Reply-To: <20230620-hx3-v2-0-76a53434c713@skidata.com>
 To:     Matthias Kaehlcke <mka@chromium.org>,
@@ -72,7 +72,8 @@ X-Mailer: b4 0.12.2
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -81,73 +82,101 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Benjamin Bara <benjamin.bara@skidata.com>
 
-The HX3 comes in different variants (up to 4 USB 3.0 ports; multi-TT),
-e.g. CYUSB330x/CYUSB331x/CYUSB332x/CYUSB230x. It operates with two
-different power supplies: 1V2 and 3V3.
+The HX3 family comes in different variants (up to 4 USB 3.0 ports;
+multi-TT), e.g. CYUSB330x/CYUSB331x/CYUSB332x/CYUSB230x.
 
-Add the support for this hub, for controlling the reset pin and the
-power supplies.
-
-Reset time is extracted from data sheet, page 24:
-"The RESETN pin can be tied to VDD_IO through an external resistor and
-to ground (GND) through an external capacitor (minimum 5 ms time
-constant)."
-V_IH min is given at 0.7 * 3V3 (page 34), therefore use 10ms.
-
-Also add USB PIDs for the USB 2.0 and USB 3.0 root hub.
+This initial version of the binding only describes USB related aspects
+of the HX3 family, it does not cover the option of connecting the
+controller as an i2c slave.
 
 Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
 ---
- drivers/usb/misc/onboard_usb_hub.c | 3 +++
- drivers/usb/misc/onboard_usb_hub.h | 7 +++++++
- 2 files changed, 10 insertions(+)
+ .../devicetree/bindings/usb/cypress,hx3.yaml       | 77 ++++++++++++++++++++++
+ 1 file changed, 77 insertions(+)
 
-diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
-index 3de30356a684..06e448b7e8cf 100644
---- a/drivers/usb/misc/onboard_usb_hub.c
-+++ b/drivers/usb/misc/onboard_usb_hub.c
-@@ -349,6 +349,7 @@ static struct platform_driver onboard_hub_driver = {
- 
- /************************** USB driver **************************/
- 
-+#define VENDOR_ID_CYPRESS	0x04b4
- #define VENDOR_ID_GENESYS	0x05e3
- #define VENDOR_ID_MICROCHIP	0x0424
- #define VENDOR_ID_REALTEK	0x0bda
-@@ -427,6 +428,8 @@ static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
- }
- 
- static const struct usb_device_id onboard_hub_id_table[] = {
-+	{ USB_DEVICE(VENDOR_ID_CYPRESS, 0x6504) }, /* CYUSB33{0,1,2}x/CYUSB230x 3.0 */
-+	{ USB_DEVICE(VENDOR_ID_CYPRESS, 0x6506) }, /* CYUSB33{0,1,2}x/CYUSB230x 2.0 */
- 	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
- 	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0610) }, /* Genesys Logic GL852G USB 2.0 */
- 	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2514) }, /* USB2514B USB 2.0 */
-diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
-index 657190bf1799..145e476b1d6c 100644
---- a/drivers/usb/misc/onboard_usb_hub.h
-+++ b/drivers/usb/misc/onboard_usb_hub.h
-@@ -23,6 +23,11 @@ static const struct onboard_hub_pdata ti_tusb8041_data = {
- 	.reset_us = 3000,
- };
- 
-+static const struct onboard_hub_pdata cypress_hx3_data = {
-+	.reset_us = 10000,
-+	.supplies_num = 2,
-+};
+diff --git a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+new file mode 100644
+index 000000000000..47add0d85fb8
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+@@ -0,0 +1,77 @@
++# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/cypress,hx3.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- static const struct onboard_hub_pdata genesys_gl850g_data = {
- 	.reset_us = 3,
- };
-@@ -40,6 +45,8 @@ static const struct of_device_id onboard_hub_match[] = {
- 	{ .compatible = "usb424,2517", .data = &microchip_usb424_data, },
- 	{ .compatible = "usb451,8140", .data = &ti_tusb8041_data, },
- 	{ .compatible = "usb451,8142", .data = &ti_tusb8041_data, },
-+	{ .compatible = "usb4b4,6504", .data = &cypress_hx3_data, },
-+	{ .compatible = "usb4b4,6506", .data = &cypress_hx3_data, },
- 	{ .compatible = "usb5e3,608", .data = &genesys_gl850g_data, },
- 	{ .compatible = "usb5e3,610", .data = &genesys_gl852g_data, },
- 	{ .compatible = "usbbda,411", .data = &realtek_rts5411_data, },
++title: Cypress HX3 USB 3.0 hub controller family
++
++maintainers:
++  - Benjamin Bara <benjamin.bara@skidata.com>
++
++allOf:
++  - $ref: usb-device.yaml#
++
++properties:
++  compatible:
++    enum:
++      - usb4b4,6504
++      - usb4b4,6506
++
++  reg: true
++
++  reset-gpios:
++    items:
++      - description: GPIO specifier for RESETN pin.
++
++  vdd-supply:
++    description:
++      1V2 power supply (VDD_EFUSE, AVDD12, DVDD12).
++
++  vdd2-supply:
++    description:
++      3V3 power supply (AVDD33, VDD_IO).
++
++  peer-hub:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      phandle to the peer hub on the controller.
++
++required:
++  - compatible
++  - reg
++  - peer-hub
++  - vdd-supply
++  - vdd2-supply
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    usb {
++        dr_mode = "host";
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        /* 2.0 hub on port 1 */
++        hub_2_0: hub@1 {
++          compatible = "usb4b4,6504";
++          reg = <1>;
++          peer-hub = <&hub_3_0>;
++          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
++          vdd-supply = <&reg_1v2_usb>;
++          vdd2-supply = <&reg_3v3_usb>;
++        };
++
++        /* 3.0 hub on port 2 */
++        hub_3_0: hub@2 {
++          compatible = "usb4b4,6506";
++          reg = <2>;
++          peer-hub = <&hub_2_0>;
++          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
++          vdd-supply = <&reg_1v2_usb>;
++          vdd2-supply = <&reg_3v3_usb>;
++        };
++    };
 
 -- 
 2.34.1
