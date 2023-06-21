@@ -2,161 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3323738367
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F337382E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:13:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbjFULvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 07:51:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
+        id S230421AbjFULxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 07:53:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbjFULvm (ORCPT
+        with ESMTP id S230417AbjFULx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 07:51:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE0610DB
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 04:50:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687348257;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AZCxbwN/fBZM1/IqvleFuFO1GiX4lYJkVAnMsqMaFMw=;
-        b=E7zoJzMVExyq2ilZ4Yq5QwJs8D61mnUHaGCcTi7SZyHY0aPa8J5N+EkKbovDMp1sycVTox
-        z7T1eMUXv0BVbb/Ej+wQePyNCLw2zWnOQ0lX/jS3SzqlfnOrS42It+NDz7NIvhmpw42xOM
-        wfQEvUuQcIkrgywZaeiYbpDnBLr9X0k=
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
- [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-34-bF1V1xdNNCO-7EWjIYl0Hw-1; Wed, 21 Jun 2023 07:50:55 -0400
-X-MC-Unique: bF1V1xdNNCO-7EWjIYl0Hw-1
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-77e33466fa2so344139039f.2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 04:50:55 -0700 (PDT)
+        Wed, 21 Jun 2023 07:53:29 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 250A9170A
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 04:53:28 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-31272fcedf6so2795335f8f.2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 04:53:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1687348406; x=1689940406;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=VWVbrBam1C3VHFxu2Gp+YYi2JGVprd45HzgEWZLjxNI=;
+        b=m4NkOGZMB4TCMVjcELrLjRRubYuX8F1IGWT0PfmzIQSLSjXRajmdfJhKqn4XFjJL+Q
+         eRCVpVSB9sTomVtJdbAvTYMqrY35FdnFXS+piL/ZI7D4zTYkVVedZ4O45KfmXLmZUmSo
+         dyPWKtwtIy+G5RM0B3ciFRoFRa0lqxrvgkrp2/PjoYCGJsHAq2Wq8zqQYRzOVhtfVYOP
+         bEEsyZvxH68MlHiWvEyHpHQNL866S4AvvqoMfRvV3ekbZI6I04U0pddSwK6oWF392SYg
+         W5HB6vUWMe46K8v9Oi+tVhbAblBpJPnZ0bxSwYrNwrPDxP9NpOOKqSd0D/S3sPMWblaF
+         86gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687348255; x=1689940255;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AZCxbwN/fBZM1/IqvleFuFO1GiX4lYJkVAnMsqMaFMw=;
-        b=lnNhKw0W9IJaJdmjxQZGbSJsVW3mkOKVRtMlraK8akwPWOpLh1dqstw4Dht+p9AO22
-         h2jaf5HS3jnLbtfN4RxZaA3bwijEj46ilPblfIVBXDunui5tIoqZ8DZUxMKMw5rTf3eF
-         s+UAZBTkqsuw1u8zK1R5JAnPcbH6AiqnMWrT8lgapLAc9yT7prMHR2To9cFkhhv1CCyH
-         xDojx0+iGNRVNGTlPMXr8Ff32Y0gnM9mmfbtCkSMdQJHeMdSQzjTDnKDsBsPXHfewrCa
-         MlvZUUl57md/hXI+YxSStqy7jKQKr/a7mE39rapqr8+Y/JtO7aOAAa/LguqiLEG7k1Is
-         q/1w==
-X-Gm-Message-State: AC+VfDztv1O6VfL2hV87SmgbhGFQYX/DeM1e8LM7oD/jdczYSGShHuau
-        foJmP+1l/jbU6UOnEDafSQPIqrc4YQtqLIK6ypBS0e3D8pGYlKcFtNjU+N0y9yOwqOjPwZLFy/T
-        ejbz2t4gj/R3RIiZ+uOmaKqHyTd0AjANB7k0uu22OHXkj905MI80=
-X-Received: by 2002:a92:d9cb:0:b0:340:9f52:a981 with SMTP id n11-20020a92d9cb000000b003409f52a981mr10565083ilq.2.1687348254848;
-        Wed, 21 Jun 2023 04:50:54 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ76KxJo9Yk/hYbLA5LofTwK7sebnG7qzFyA6+bsQ06fuBfM3XCfpffFr4o0yohCtXfXEwtar35+6FVQNAHy/fc=
-X-Received: by 2002:a92:d9cb:0:b0:340:9f52:a981 with SMTP id
- n11-20020a92d9cb000000b003409f52a981mr10565079ilq.2.1687348254601; Wed, 21
- Jun 2023 04:50:54 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687348406; x=1689940406;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VWVbrBam1C3VHFxu2Gp+YYi2JGVprd45HzgEWZLjxNI=;
+        b=Cn2/s0xNWMrND1hMddlvDmWr2t2LnZm9wZMwe1IzVWpBTkRmt2Ddt21O3F3MiiIx40
+         TObmL6iZU5hIXTOl+NCKHu521rmopkfqiTrjHszv0NuiuN3wxZJahFMLUhKL9zbysi9M
+         Ntqrp/pQ96EiyGT3dP2TeFDJhOS7C+dZlozQDcBzym2rrbmodxo674PLB6A0NH4/VOyz
+         ss9NmuduyIeGc/57b1wWVPhSmaFYJGFdN+HnhFWBu5KZTFgiuPwBvwK9swGGZEa8oF7Y
+         Mc33Q19z0UNDvdeavnqrpPfB0r2dqRNMZ4yAUbw7JV8BKSHSYfL5nWjPPk9rOEfyC8Py
+         INLg==
+X-Gm-Message-State: AC+VfDxY/iQqJa+DVOVeLBgGOadttIIiTGRsIWB+rsIqzIKHRncgZC9Y
+        eMRN0I6o+1AuVR6+PNmznAQBRQ==
+X-Google-Smtp-Source: ACHHUZ5c8gzF87ZPOzSygN9j53VtOdiY9gi5DBzBT3zEwY7bTIXpP8dgWGQLA/+KsDQtBIq8+e5vDw==
+X-Received: by 2002:a05:6000:1252:b0:311:1712:621 with SMTP id j18-20020a056000125200b0031117120621mr10087707wrx.46.1687348406491;
+        Wed, 21 Jun 2023 04:53:26 -0700 (PDT)
+Received: from localhost (host-213-179-129-39.customer.m-online.net. [213.179.129.39])
+        by smtp.gmail.com with ESMTPSA id b8-20020adff248000000b003063772a55bsm4283305wrp.61.2023.06.21.04.53.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 04:53:25 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 13:53:24 +0200
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     Petr Oros <poros@redhat.com>
+Cc:     Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>,
+        kuba@kernel.org, vadfed@meta.com, jonathan.lemon@gmail.com,
+        pabeni@redhat.com, corbet@lwn.net, davem@davemloft.net,
+        edumazet@google.com, vadfed@fb.com, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, saeedm@nvidia.com, leon@kernel.org,
+        richardcochran@gmail.com, sj@kernel.org, javierm@redhat.com,
+        ricardo.canuelo@collabora.com, mst@redhat.com, tzimmermann@suse.de,
+        michal.michalik@intel.com, gregkh@linuxfoundation.org,
+        jacek.lawrynowicz@linux.intel.com, airlied@redhat.com,
+        ogabbay@kernel.org, arnd@arndb.de, nipun.gupta@amd.com,
+        axboe@kernel.dk, linux@zary.sk, masahiroy@kernel.org,
+        benjamin.tissoires@redhat.com, geert+renesas@glider.be,
+        milena.olech@intel.com, kuniyu@amazon.com, liuhangbin@gmail.com,
+        hkallweit1@gmail.com, andy.ren@getcruise.com, razor@blackwall.org,
+        idosch@nvidia.com, lucien.xin@gmail.com, nicolas.dichtel@6wind.com,
+        phil@nwl.cc, claudiajkang@gmail.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, linux-rdma@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, mschmidt@redhat.com,
+        linux-clk@vger.kernel.org, vadim.fedorenko@linux.dev
+Subject: Re: [RFC PATCH v8 04/10] dpll: netlink: Add DPLL framework base
+ functions
+Message-ID: <ZJLktA6RJaVo3BdH@nanopsycho>
+References: <20230609121853.3607724-1-arkadiusz.kubalewski@intel.com>
+ <20230609121853.3607724-5-arkadiusz.kubalewski@intel.com>
+ <c7480d0a71fb8d62108624878f549c0d91d4c9e6.camel@redhat.com>
 MIME-Version: 1.0
-References: <20230621083209.116024-1-jefflexu@linux.alibaba.com>
-In-Reply-To: <20230621083209.116024-1-jefflexu@linux.alibaba.com>
-From:   Alexander Larsson <alexl@redhat.com>
-Date:   Wed, 21 Jun 2023 11:50:43 +0000
-Message-ID: <CAL7ro1EmCcienVMY7Pi_mEFbUiLZq24EGOyFovexmpJMGbfjcA@mail.gmail.com>
-Subject: Re: [RFC 0/2] erofs: introduce bloom filter for xattr
-To:     Jingbo Xu <jefflexu@linux.alibaba.com>
-Cc:     hsiangkao@linux.alibaba.com, chao@kernel.org, huyue2@coolpad.com,
-        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c7480d0a71fb8d62108624878f549c0d91d4c9e6.camel@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 10:32=E2=80=AFAM Jingbo Xu <jefflexu@linux.alibaba.=
-com> wrote:
->
-> Background
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> Filesystems with ACL enabled generally need to read
-> "system.posix_acl_access"/"system.posix_acl_default" xattr to get the
-> access and default ACL.  When filesystem is mounted with ACL enabled
-> while files in the system have not set access/default ACL, the getattr()
-> will run in vain while the round trip can decrease the performance in
-> workload like "ls -lR".
->
-> For example, there's a 12% performance boost if erofs is mounted with
-> "noacl" when running "ls -lR" workload on dataset [1] (given in [2]).
->
-> We'd better offer a fastpath to boost the above workload, as well as
-> other negative xattr lookup.
->
->
-> Proposal
-> =3D=3D=3D=3D=3D=3D=3D=3D
-> Introduce a per-inode bloom filter for xattrs to boost the negative
-> xattr queries.
->
-> As following shows, a 32-bit bloom filter is introduced for each inode,
-> describing if a xattr with specific name exists on this inode.
->
-> ```
->  struct erofs_xattr_ibody_header {
-> -       __le32 h_reserved;
-> +       __le32 h_map; /* bloom filter */
->         ...
-> }
-> ```
->
-> Following are some implementation details for bloom filter.
->
-> 1. Reverse bit value
-> --------------------
-> The bloom filter structure describes if a given data is inside the set.
-> It will map the given data into several bits of the bloom filter map.
-> The data must not exist inside the set if any mapped bit is 0, while the
-> data may be not inside the set even if all mapped bits is 1.
->
-> While in our use case, as erofs_xattr_ibody_header.h_map is previously a
-> (all zero) reserved field, the bit value for the bloom filter has a
-> reverse semantics in consideration for compatibility.  That is, for a
-> given data, the mapped bits will be cleared to 0.  Thus for a previously
-> built image without support for bloom filter, the bloom filter is all
-> zero and when it's mounted by the new kernel with support for bloom
-> filter, it can not determine if the queried xattr exists on the inode and
-> thus will fallback to the original routine of iterating all on-disk
-> xattrs to determine if the queried xattr exists.
->
->
-> 2. The number of hash functions
-> -------------------------------
-> The optimal value for the number of the hash functions (k) is (ln2 *
-> m/n), where m stands the number of bits of the bloom filter map, while n
-> stands the number of all candidates may be inside the set.
->
-> In our use case, the number of common used xattr (n) is approximately 8,
-> including system.[posix_acl_access|posix_acl_default],
-> security.[capability|selinux] and
-> security.[SMACK64|SMACK64TRANSMUTE|SMACK64EXEC|SMACK64MMAP].
->
-> Given the number of bits of the bloom filter (m) is 32, the optimal value
-> for the number of the hash functions (k) is 2 (ln2 * m/n =3D 2.7).
+Wed, Jun 21, 2023 at 01:18:59PM CEST, poros@redhat.com wrote:
+>Arkadiusz Kubalewski píše v Pá 09. 06. 2023 v 14:18 +0200:
+>> From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
 
-This is indeed the optimal value in a traditional use of bloom
-filters. However, I think it is based on a much larger set of values.
-For this usecase it may be better to choose a different value.
+[...]
 
-I did some research a while ago on this, and I thought about the
-counts too. Having more than one hash function is useful because it
-allows you to avoid problems if two values happen to hash to the same
-bucket, but this happens at the cost of there being less "unique
-buckets".  I spent some time looking for common xattr values
-(including some from userspace) and ended up with a list of about 30.
-If we can choose a single hash function that maps all (or most) of
-these to a unique bucket (mod 32), then it seems to me that having
-just that single hash function is better, as it is faster to compute,
-and is good enough to uniquely identify each of these commonly used
-xattrs.
+Could you perhaps cut out the text you don't comment? Saves some time
+finding your reply.
 
+
+>> +static int
+>> +dpll_set_from_nlattr(struct dpll_device *dpll, struct genl_info
+>> *info)
+>> +{
+>> +       const struct dpll_device_ops *ops = dpll_device_ops(dpll);
+>> +       struct nlattr *tb[DPLL_A_MAX + 1];
+>> +       int ret = 0;
+>> +
+>> +       nla_parse(tb, DPLL_A_MAX, genlmsg_data(info->genlhdr),
+>> +                 genlmsg_len(info->genlhdr), NULL, info->extack);
+>> +       if (tb[DPLL_A_MODE]) {
+>Hi,
+>
+>Here should be something like:
+>               if (!ops->mode_set)
+>                       return -EOPNOTSUPP;
+
+Why? All drivers implement that.
+I believe that it's actullaly better that way. For a called setting up
+the same mode it is the dpll in, there should be 0 return by the driver.
+Note that driver holds this value. I'd like to keep this code as it is.
+
+[...]
