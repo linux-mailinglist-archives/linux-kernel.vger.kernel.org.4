@@ -2,136 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18ACE7384B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:17:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30F967384B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 15:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231933AbjFUNRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 09:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49294 "EHLO
+        id S232441AbjFUNSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 09:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbjFUNRX (ORCPT
+        with ESMTP id S231134AbjFUNSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 09:17:23 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4508310C1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:17:22 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id 5614622812f47-39eab4bbe8aso3855301b6e.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 06:17:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687353441; x=1689945441;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fveJ7t6dKInkV6jkCt7drrsyoXqW38rNIYDTeWubez4=;
-        b=E5HvcT690zg+3SJvbU2ye/7aCf3qOHKmVyWxSZ8zZFFCLcVymtvrkKamjL7GOEDwIF
-         W5p00yU/aYFHwRrAYv08KgzzdbAHMwxmFf/QkHGs3VXRTjepf1PAkD6xWULRRCOj3kfJ
-         nncOnnlGuNfdUacAr4Xub0PoYo1811vMIVkOA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687353441; x=1689945441;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fveJ7t6dKInkV6jkCt7drrsyoXqW38rNIYDTeWubez4=;
-        b=FWCkQDQYQmp+Uo6kUZcou8Xe/bQ3eG3AXZFissjZisw/T8YDMiup6UkSexoYHYc1iH
-         GCr4FDxo1H1acBVhQk9iytRAmh5yo21Cgmy6RpQZrn0ftZ4kmc0bryPCudNgFYGgqyjC
-         jCyIEhWeg0Lxrj9YiYFUdJ8CL707KGmbOUx6815EAw/WArtd/Uy8lxDxeXv7LYifa8az
-         qBfc5O0MCx/Et0zot4mK8ejlM9NsNRs2GKolvQKA5UW9C0tBGfwlYP39ziNzE4vVTvk2
-         SdN1dYqDRqao/7p9ihslfpKq2o1rAoBMk+D+kI9ax/4chYAtRX05nskqD95W/1hoMXxV
-         CWxg==
-X-Gm-Message-State: AC+VfDzQtAGPPvCHobZ39EWB079z84zzrYJdrC26+TjzUtBSTeGRdFtf
-        Io7VLJCa9kyffFq8EBlLUTeR7A==
-X-Google-Smtp-Source: ACHHUZ7q8wqmAuAZwE/ilkAlX8mW6biKsOIk7awi7X5/HP2WZyi0pwxE24q2pSrC5SxjG0I6wVKBCA==
-X-Received: by 2002:a54:4518:0:b0:39e:de8b:54a2 with SMTP id l24-20020a544518000000b0039ede8b54a2mr8097176oil.29.1687353441344;
-        Wed, 21 Jun 2023 06:17:21 -0700 (PDT)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id fr3-20020a17090ae2c300b0024de39e8746sm8952526pjb.11.2023.06.21.06.17.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 06:17:20 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 22:17:16 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Alexey Romanov <AVRomanov@sberdevices.ru>,
-        Minchan Kim <minchan@kernel.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [PATCH v1 1/2] zsmalloc: add allocated objects counter for
- subpage
-Message-ID: <20230621131716.GC2934656@google.com>
-References: <20230619143506.45253-1-avromanov@sberdevices.ru>
- <20230619143506.45253-2-avromanov@sberdevices.ru>
- <20230620103629.GA42985@google.com>
- <20230620111635.gztldehfzvuzkdnj@cab-wsm-0029881>
+        Wed, 21 Jun 2023 09:18:02 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B7410C1;
+        Wed, 21 Jun 2023 06:17:59 -0700 (PDT)
+X-QQ-mid: bizesmtp80t1687353470tqb4088x
+Received: from linux-lab-host.localdomain ( [116.30.126.60])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 21 Jun 2023 21:17:48 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: zYANrwvFNEKo4kt9/IM+Z6O3uQ2N0g38rzgWEiNei8PpKKJkVpDPF6pN8KziJ
+        rxg8gGEy4RPWbsvLnscapbN3BkZoCJD/Cs48De4zkxkNJTFGc8YgwxAmotNmeZ7eKpJugoI
+        S8h+nzJTEeXi4Pf93/gi6Y7+xM+uBFltocdJPtDe9lcP7fBCWccTa1Y0z7cHJ7b/dhSCZeU
+        M1STV7DoKWbyJfoSw/WYY/3K5DLEvIYn8MD81UevVeCx/H/RFvKKN/etT3CenPTMa7nwhk/
+        FlOZhtdQMmcgpOdJ2vqrBO9cJBzjioWyPAozqSvAnQWPB0hvGub0c+hMC3FGISl8hBUbFv3
+        UKj7bFko031nm2XzD4Bz/SSOZ5i+OwXB4Z/om86KdeJ/JQ8otvgP/tgstXyiw==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 16675278491565794052
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     thomas@t-8ch.de, arnd@arndb.de, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v1 15/17] selftests/nolibc: vfprintf: silence memfd_create() warning
+Date:   Wed, 21 Jun 2023 21:17:25 +0800
+Message-Id: <f0bbf3a7920d86ff37edab5f0c085cb0afb5d8b9.1687344643.git.falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1687344643.git.falcon@tinylab.org>
+References: <cover.1687344643.git.falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230620111635.gztldehfzvuzkdnj@cab-wsm-0029881>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/06/20 11:16), Alexey Romanov wrote:
-> If sizeof(unsigned int) >= 32 bits the this will be enough for us. 
-> Of course, in rare cases this will not be the case. But it seems that
-> zram and kernel already has similiar places. For example, if page size
-> is 256 Kb and sizeof(unsigned int) = 16 bits (2 byte), zram will not
-> wotk on such system, because we can't store offset. But such case is
-> very rare, most systems have unsigned int over 32 bits. 
-> 
-> Therefore, I think that my idea is still applicable, we just need to
-> change the counter type. What do you think?
+pass MFD_NOEXEC_SEAL flag to memfd_create() to silence this kernel
+warning inserted in the middle of the whole test result:
 
-My gut feeling is that we better avoid mixing in architecture specific
-magic into generic code. It works fine until it doesn't. May be Minchan
-will have a different opinion tho.
+    memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=1
 
-There can be other ways to avoid linear scan of empty sub-pages. For
-instance, something like below probably can cover less cases than your
-patch 0002, but on the other hand is rather generic, trivial and doesn't
-contain any assumptions on the architecture specifics.
+The mixed test result looks this:
 
-(composed/edited in mail client, so likely is broken, but outlines
- the idea)
+    Running test 'vfprintf'
+    0 emptymemfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=1 'init'
+     "" = ""                                                  [OK]
 
-====================================================================
+From v6.2, MFD_NOEXEC_SEAL must be passed for the non-executable memfd.
 
-mm/zsmalloc: do not scan empty zspages
+Since MFD_NOEXEC_SEAL is a whole new flag, to avoid adding ugly #ifdef
+macros, let's use magic number here directly.
 
-We already stop zspage migration when we detect that target
-zspage has no space left for any new objects. There is
-one more thing we can do in order to avoid doing useless
-work: stop scanning for allocated objects in sub-pages when
-we have migrated the last inuse object from the zspage in
-question.
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index 02f7f414aade..2875152e6497 100644
---- a/mm/zsmalloc.c
-+++ b/mm/zsmalloc.c
-@@ -1263,6 +1263,11 @@ static bool zspage_full(struct size_class *class, struct zspage *zspage)
-        return get_zspage_inuse(zspage) == class->objs_per_zspage;
- }
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 19e4ef5ce578..8b1ce9911c5c 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -774,7 +774,17 @@ static int expect_vfprintf(int llen, size_t c, const char *expected, const char
+ 	FILE *memfile;
+ 	va_list args;
  
-+static bool zspage_empty(struct zspage *zspage)
-+{
-+	return get_zspage_inuse(zspage) == 0;
-+}
+-	fd = memfd_create("vfprintf", 0);
++	/* silence warning for kernel >= v6.2:
++	 *
++	 *   "memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=<pid>"
++	 *
++	 * try MFD_NOEXEC_SEAL (0x0008U) flag for kernels >= v6.2, error means
++	 * the kernel is too old and require old flags
++	 */
++	fd = memfd_create("vfprintf", 0x0008U);
++	if (fd == -1)
++		fd = memfd_create("vfprintf", 0);
 +
- /**
-  * zs_lookup_class_index() - Returns index of the zsmalloc &size_class
-  * that hold objects of the provided size.
-@@ -1787,6 +1792,10 @@ static void migrate_zspage(struct zs_pool *pool, struct size_class *class,
- 		obj_idx++;
- 		record_obj(handle, free_obj);
- 		obj_free(class->size, used_obj, NULL);
-+
-+		/* Stop if there are no more objects to migrate */
-+		if (zspage_empty(get_zspage(s_page)))
-+			break;
- 	}
+ 	if (fd == -1) {
+ 		pad_spc(llen, 64, "[FAIL]\n");
+ 		return 1;
+-- 
+2.25.1
+
