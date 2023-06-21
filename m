@@ -2,63 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8804973861C
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D764738618
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 16:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbjFUOEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 10:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
+        id S230309AbjFUOD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 10:03:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbjFUOEL (ORCPT
+        with ESMTP id S231609AbjFUODU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 10:04:11 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0038A107;
-        Wed, 21 Jun 2023 07:04:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687356250; x=1718892250;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=B3WkrieyXyIX7KwvKr4S3D6Hsup+3jNM58nqpAkT058=;
-  b=dP32R2VASl/w2rahudzK/2llfP7qLj5DX2fP+hi35CFCq461LuR2Ufjn
-   Q/Pp6OGB+qvxLKApz6Fe0B+BoU3eIWaF85MZlQoSWz4Vom+CgUJcIO98v
-   GBkcVjnyDxWBPyoyQOiAyD4u3mNAYrWY5S7p7p/QmBqWWY/CbZsHP0am/
-   KPjM7STZ8BNHlgYWGVi+R75yymuQxY0PBOVOYaqOgmJrhiG1n5h/s8Kna
-   bRx3wt6jJbFwEX3H3zmS04HZZKhfrIvOL5Ict+Itf87flZcSpVn2EzIjG
-   u4Zv74SYU7xwn1v+rcqk6WaOMmPb95d34gIgUROU/u2aWysLImv1PGc7P
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="340527115"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="340527115"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 07:04:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="708709876"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="708709876"
-Received: from araj-dh-work.jf.intel.com (HELO araj-dh-work) ([10.165.157.158])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 07:04:08 -0700
-Date:   Wed, 21 Jun 2023 07:02:30 -0700
-From:   Ashok Raj <ashok_raj@linux.intel.com>
-To:     linan666@huaweicloud.com
-Cc:     axboe@kernel.dk, linan122@huawei.com, dan.j.williams@intel.com,
-        vishal.l.verma@intel.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com, houtao1@huawei.com, yangerkun@huawei.com,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: Re: [PATCH v3 1/4] block/badblocks: change some members of badblocks
- to bool
-Message-ID: <ZJMC9rWFRqOTYgVk@araj-dh-work>
-References: <20230621172052.1499919-1-linan666@huaweicloud.com>
- <20230621172052.1499919-2-linan666@huaweicloud.com>
+        Wed, 21 Jun 2023 10:03:20 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E46501BDA
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 07:03:17 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8BxFsUjA5NkDCcAAA--.322S3;
+        Wed, 21 Jun 2023 22:03:15 +0800 (CST)
+Received: from [10.20.42.43] (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Ax8uQiA5NkzL4AAA--.4409S3;
+        Wed, 21 Jun 2023 22:03:14 +0800 (CST)
+Message-ID: <74a45dff-a0ea-9d05-36e4-e5d6822dfcec@loongson.cn>
+Date:   Wed, 21 Jun 2023 22:03:14 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621172052.1499919-2-linan666@huaweicloud.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v10 03/11] drm/etnaviv: Add dedicated functions to create
+ and destroy platform device
+Content-Language: en-US
+To:     Lucas Stach <l.stach@pengutronix.de>,
+        Sui Jingfeng <18949883232@163.com>,
+        Russell King <linux+etnaviv@armlinux.org.uk>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        etnaviv@lists.freedesktop.org
+References: <20230620094716.2231414-1-18949883232@163.com>
+ <20230620094716.2231414-4-18949883232@163.com>
+ <0daa7182d6600a24988d1c81cf8fe3c0c9487f52.camel@pengutronix.de>
+ <1c7596fd-7e63-6719-2574-7d7820687832@loongson.cn>
+ <6d287bbb1733814009dfeb7d48f08cb6f44dc56c.camel@pengutronix.de>
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+Organization: Loongson
+In-Reply-To: <6d287bbb1733814009dfeb7d48f08cb6f44dc56c.camel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Ax8uQiA5NkzL4AAA--.4409S3
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrZrW3trWxWFykAr1DKr4fCrX_yoWxKFX_CF
+        1xuwnrJw1fW392qr42yrW7JF4xJa90gr9Fq3y8ZwnxKFy3JrWDZaykAa92ka4UXryxursx
+        Jr98Jw4DJ34a9osvyTuYvTs0mTUanT9S1TB71UUUUjUqnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUbgkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        WUJVW8JwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6F4UJVW0owAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
+        Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_
+        Jw1lYx0Ex4A2jsIE14v26r4UJVWxJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+        8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67
+        AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIY
+        rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14
+        v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8Jr0_
+        Cr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUcz
+        VbDUUUU
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,124 +78,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 01:20:49AM +0800, linan666@huaweicloud.com wrote:
-> From: Li Nan <linan122@huawei.com>
-> 
-> "changed" and "unacked_exist" are used as boolean type. Change the type
-> of them to bool. And reorder fields to reduce memory hole.
+Hi,
 
-minor nit: If you use a .gitorderfile to list .h before .c it will help review them in
-order.
+On 2023/6/21 18:23, Lucas Stach wrote:
+> That's right, but all you do with those indirections through the
+> parameter list is move which of the functions is non-pure, in your case
+> it's etnaviv_init/etnaviv_exit,
 
-I don't know if its even worth doing this manual compaction unless you are
-storing the entire struct in some flash or its in a sensitive cache
-thrashing structure.
+But there is a difference,  etnaviv_init() and etnaviv_exit() is 
+impossible to be shared
 
-bool is useful that it makes the code easier to read and can eliminate some
-class of bugs that you would otherwise use !! operator.
+there are only get called once when the module is loaded.
 
-> 
-> No functional changed intended.
-> 
-> Signed-off-by: Li Nan <linan122@huawei.com>
-> ---
->  block/badblocks.c         | 14 +++++++-------
->  include/linux/badblocks.h | 10 +++++-----
->  2 files changed, 12 insertions(+), 12 deletions(-)
-> 
-> diff --git a/block/badblocks.c b/block/badblocks.c
-> index 3afb550c0f7b..1b4caa42c5f1 100644
-> --- a/block/badblocks.c
-> +++ b/block/badblocks.c
-> @@ -141,7 +141,7 @@ static void badblocks_update_acked(struct badblocks *bb)
->  	}
->  
->  	if (!unacked)
-> -		bb->unacked_exist = 0;
-> +		bb->unacked_exist = false;
->  }
->  
->  /**
-> @@ -302,9 +302,9 @@ int badblocks_set(struct badblocks *bb, sector_t s, int sectors,
->  		}
->  	}
->  
-> -	bb->changed = 1;
-> +	bb->changed = true;
->  	if (!acknowledged)
-> -		bb->unacked_exist = 1;
-> +		bb->unacked_exist = true;
->  	else
->  		badblocks_update_acked(bb);
->  	write_sequnlock_irqrestore(&bb->lock, flags);
-> @@ -414,7 +414,7 @@ int badblocks_clear(struct badblocks *bb, sector_t s, int sectors)
->  	}
->  
->  	badblocks_update_acked(bb);
-> -	bb->changed = 1;
-> +	bb->changed = true;
->  out:
->  	write_sequnlock_irq(&bb->lock);
->  	return rv;
-> @@ -435,7 +435,7 @@ void ack_all_badblocks(struct badblocks *bb)
->  		return;
->  	write_seqlock_irq(&bb->lock);
->  
-> -	if (bb->changed == 0 && bb->unacked_exist) {
-> +	if (bb->changed == false && bb->unacked_exist) {
+They can never be reused anymore, except here.
 
-	if (!bb->changed && bb->unacked_exist)
+And etnaviv_init() and etnaviv_exit() don't have a choice.
 
 
->  		u64 *p = bb->page;
->  		int i;
->  
-> @@ -447,7 +447,7 @@ void ack_all_badblocks(struct badblocks *bb)
->  				p[i] = BB_MAKE(start, len, 1);
->  			}
->  		}
-> -		bb->unacked_exist = 0;
-> +		bb->unacked_exist = false;
->  	}
->  	write_sequnlock_irq(&bb->lock);
->  }
-> @@ -493,7 +493,7 @@ ssize_t badblocks_show(struct badblocks *bb, char *page, int unack)
->  				length << bb->shift);
->  	}
->  	if (unack && len == 0)
-> -		bb->unacked_exist = 0;
-> +		bb->unacked_exist = false;
->  
->  	if (read_seqretry(&bb->lock, seq))
->  		goto retry;
-> diff --git a/include/linux/badblocks.h b/include/linux/badblocks.h
-> index 2426276b9bd3..c2723f97d22d 100644
-> --- a/include/linux/badblocks.h
-> +++ b/include/linux/badblocks.h
-> @@ -27,15 +27,15 @@
->  struct badblocks {
->  	struct device *dev;	/* set by devm_init_badblocks */
->  	int count;		/* count of bad blocks */
-> -	int unacked_exist;	/* there probably are unacknowledged
-> -				 * bad blocks.  This is only cleared
-> -				 * when a read discovers none
-> -				 */
->  	int shift;		/* shift from sectors to block size
->  				 * a -ve shift means badblocks are
->  				 * disabled.*/
-> +	bool unacked_exist;	/* there probably are unacknowledged
-> +				 * bad blocks.  This is only cleared
-> +				 * when a read discovers none
+But for etnaviv_create_platform_device() function,
 
-read of what?
+there is a possibility to be reused in the future.
 
-> +				 */
-> +	bool changed;
->  	u64 *page;		/* badblock list */
-> -	int changed;
->  	seqlock_t lock;
->  	sector_t sector;
->  	sector_t size;		/* in sectors */
-> -- 
-> 2.39.2
-> 
+
+> with the indirection dropped it's
+> etnaviv_create_platform_device/etnaviv_destroy_platform_device.
+
+-- 
+Jingfeng
+
