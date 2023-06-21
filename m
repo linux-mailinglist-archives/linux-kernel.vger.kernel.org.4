@@ -2,61 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1580A738DCE
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E6E6738DCD
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjFURx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 13:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52902 "EHLO
+        id S231787AbjFURw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 13:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbjFURxM (ORCPT
+        with ESMTP id S231480AbjFURwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 13:53:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 328812D7C
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 10:52:08 -0700 (PDT)
+        Wed, 21 Jun 2023 13:52:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625D02D42;
+        Wed, 21 Jun 2023 10:51:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0343A61668
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 17:51:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFA13C433C8;
-        Wed, 21 Jun 2023 17:51:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7579061652;
+        Wed, 21 Jun 2023 17:51:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93172C433C8;
+        Wed, 21 Jun 2023 17:51:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687369869;
-        bh=z8h5oRBpUjD/vlwParcejf7w/puARjba0CWI1Xgexlo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WwMLAntWMTm/M6O4PJW+igS7jgGz/1ryrqDjyXu5qAXqnJPBX1FQSMK72Rcldeh76
-         Q02OMMFAk6mf6wBL0XXJ9KR64/sG79ftm+ChTD2vFp3ZtJ+ak021wDR4h45Vpip+h7
-         Ct3PCAflYVr+/CdW8MivG0ScPVd/mEw0oE9d/XPianpQB6s/z8GYk3k+IAMnPJmeip
-         ZAtHEJ1r47JAxpHhoNKw208JnOLTC6y0daD7NDGFhdG1OmgvDQ81E3ZBR/CTG19XlQ
-         Fvbq+GCFKFhxkD9XexNj2wQyP0hUdKHKhzyrDExpm/AYbQ7YGk/tO6GQTZeLCv+gEV
-         ShR9bRZy/C5UQ==
-Date:   Wed, 21 Jun 2023 23:21:05 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Marcin Wierzbicki <mawierzb@cisco.com>
-Cc:     Kishon Vijay Abraham I <kishon@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Swapnil Jakhade <sjakhade@cadence.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org, xe-linux-external@cisco.com,
-        danielwa@cisco.com, olicht@cisco.com,
-        Bartosz Wawrzyniak <bwawrzyn@cisco.com>
-Subject: Re: [PATCH v3] phy: cadence: Sierra: Add single link SGMII register
- configuration
-Message-ID: <ZJM4iUrlMIVwlfK+@matsya>
-References: <20230522172415.1668975-1-mawierzb@cisco.com>
- <ZJM1uQbXM7rciJ3l@matsya>
+        s=k20201202; t=1687369877;
+        bh=47uIKnKw2ZmtP3m7XAXg6y/7ErK+KJP6FPCWISl4Zpw=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=cludjbY8A0OmOUSGdXGXEAtWaET058YOwRyqV9eSI3tF7/aL4HlSEBp+3S+QFoEkJ
+         xUpbFf+BSS2vOu0dnhAPs6zrMl+WBk9RkpKsgs7Wh0hJd1OOFL/OxAYHrMaW79jiUg
+         IufRKhp/PY3TAnGBqwlDOVKnaKqhByaoVZ5IWRXXD9tT4lQ2J8IdUm5ywK6A1gqHKr
+         ZSa/vVG4Cqt25jZgHruRoyoJ0U5cw+zeATnvPDSlHi+IhFH/ME/F6rMbk2pJmCnNc8
+         kqWTJ9HDaLsjiOHcBPygAdyYFEAU+kqdQjJfbvhrZbHNV6hyyYWeK8uIr0Ip1jaP8D
+         iIFxgfteGJUcg==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Conor Dooley <conor@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     ndesaulniers@google.com, jszhang@kernel.org, llvm@lists.linux.dev,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+In-Reply-To: <20230621-hungrily-pancake-9e1ff5b0b02a@spud>
+References: <mhng-8caf7779-aa9e-496a-b2ee-2e6d6d1d76ff@palmer-ri-x1c9a>
+ <mhng-861ea8a6-c92c-4a78-a1a6-dfb4df554aee@palmer-ri-x1c9a>
+ <20230621-hungrily-pancake-9e1ff5b0b02a@spud>
+Date:   Wed, 21 Jun 2023 19:51:15 +0200
+Message-ID: <87wmzwn1po.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZJM1uQbXM7rciJ3l@matsya>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,27 +61,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 21-06-23, 23:09, Vinod Koul wrote:
-> On 22-05-23, 17:24, Marcin Wierzbicki wrote:
-> > Add single link SGMII register configuration for no SSC for
-> > cdns,sierra-phy-t0 compatibility string.
-> > The configuration is based on Sierra Programmer's Guide and
-> > validated in Cisco CrayAR SoC.
-> 
-> Applied, thanks
+Conor Dooley <conor@kernel.org> writes:
 
-This breaks build for me, so dropped. This is with arm64 allmodconfig
-and gcc-aarch4 toolchain
+[...]
 
-drivers/phy/cadence/phy-cadence-sierra.c:2556:32: error: initialized field overwritten [-Werror=override-init]
- 2556 |                 [TYPE_SGMII] = {
-      |                                ^
-drivers/phy/cadence/phy-cadence-sierra.c:2556:32: note: (near initialization for ‘cdns_map_sierra.pma_cmn_vals[3]’)
-drivers/phy/cadence/phy-cadence-sierra.c:2599:32: error: initialized field overwritten [-Werror=override-init]
- 2599 |                 [TYPE_SGMII] = {
-      |                                ^
-drivers/phy/cadence/phy-cadence-sierra.c:2599:32: note: (near initialization for ‘cdns_map_sierra.pma_ln_vals[3]’)
-cc1: all warnings being treated as errors
+>> So I'm no longer actually sure there's a hang, just something slow.=20=20
+>> That's even more of a grey area, but I think it's sane to call a 1-hour=
+=20
+>> link time a regression -- unless it's expected that this is just very=20
+>> slow to link?
+>
+> I dunno, if it was only a thing for allyesconfig, then whatever - but
+> it's gonna significantly increase build times for any large kernels if LLD
+> is this much slower than LD. Regression in my book.
+>
+> I'm gonna go and experiment with mixed toolchain builds, I'll report
+> back..
 
--- 
-~Vinod
+I took palmer/for-next (1bd2963b2175 ("Merge patch series "riscv: enable
+HAVE_LD_DEAD_CODE_DATA_ELIMINATION"")) for a tuxmake build with llvm-16:
+
+  | ~/src/tuxmake/run -v --wrapper ccache --target-arch riscv \
+  |     --toolchain=3Dllvm-16 --runtime docker --directory . -k \
+  |     allyesconfig
+
+Took forever, but passed after 2.5h.
+
+CONFIG_CC_VERSION_TEXT=3D"Debian clang version 16.0.6 (++20230610113307+7cb=
+f1a259152-1~exp1~20230610233402.106)"
+
+
+Bj=C3=B6rn
+
