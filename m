@@ -2,158 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95818738A50
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 17:59:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 095EB738A55
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 18:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233810AbjFUP7P convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 11:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59848 "EHLO
+        id S233829AbjFUQAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 12:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233790AbjFUP66 (ORCPT
+        with ESMTP id S233832AbjFUQAJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 11:58:58 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F4A919C
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 08:58:54 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1qC0EI-0004tn-Eh; Wed, 21 Jun 2023 17:58:46 +0200
-Message-ID: <8212078bd56c54ce508205eae0ed0b69e78d4c38.camel@pengutronix.de>
-Subject: Re: [PATCH v10 07/11] drm/etnaviv: Add support for the dma coherent
- device
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Sui Jingfeng <suijingfeng@loongson.cn>,
-        Sui Jingfeng <18949883232@163.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        etnaviv@lists.freedesktop.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Date:   Wed, 21 Jun 2023 17:58:43 +0200
-In-Reply-To: <66fc74ae-299c-a5de-9cfb-07ae24fb3f07@loongson.cn>
-References: <20230620094716.2231414-1-18949883232@163.com>
-         <20230620094716.2231414-8-18949883232@163.com>
-         <8f74f0962c8bab6c832919a5340667c54e1a7ddc.camel@pengutronix.de>
-         <66fc74ae-299c-a5de-9cfb-07ae24fb3f07@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 21 Jun 2023 12:00:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331F41BD0;
+        Wed, 21 Jun 2023 08:59:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB684615D1;
+        Wed, 21 Jun 2023 15:59:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 021D6C433C8;
+        Wed, 21 Jun 2023 15:59:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687363161;
+        bh=2Ze8HUxaIR1pjHExyMgnxzUkH8NIRpvWbQ5QDE3U2DA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dpql9chfrRr0qLA0W1y38ZTzwuOPlt1pVkiwfymxOZO24UyxVEPbs9L2ChpZdnF9H
+         V+6u+lcdJs3gpNb3cWtAltPszahuzY0QExG6NF3+pSf3RxDCyMzZP/jBZNYyPaqrRQ
+         Ufe7490JYMe1iff993VCRu+UV2266OhUibm08M4k=
+Date:   Wed, 21 Jun 2023 17:59:18 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Benjamin Bara <bbara93@gmail.com>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH 1/4] usb: misc: onboard-hub: resort by VID and PID
+Message-ID: <2023062136-subgroup-aground-01e2@gregkh>
+References: <20230620-hx3-v1-0-3a649b34c85b@skidata.com>
+ <20230620-hx3-v1-1-3a649b34c85b@skidata.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620-hx3-v1-1-3a649b34c85b@skidata.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Mittwoch, dem 21.06.2023 um 23:30 +0800 schrieb Sui Jingfeng:
-> Hi,
+On Wed, Jun 21, 2023 at 12:38:00PM +0200, Benjamin Bara wrote:
+> From: Benjamin Bara <benjamin.bara@skidata.com>
 > 
-> On 2023/6/21 18:00, Lucas Stach wrote:
-> > >   		dma_sync_sgtable_for_cpu(dev->dev, etnaviv_obj->sgt,
-> > >   					 etnaviv_op_to_dma_dir(op));
-> > >   		etnaviv_obj->last_cpu_prep_op = op;
-> > > @@ -408,8 +421,9 @@ int etnaviv_gem_cpu_fini(struct drm_gem_object *obj)
-> > >   {
-> > >   	struct drm_device *dev = obj->dev;
-> > >   	struct etnaviv_gem_object *etnaviv_obj = to_etnaviv_bo(obj);
-> > > +	struct etnaviv_drm_private *priv = dev->dev_private;
-> > >   
-> > > -	if (etnaviv_obj->flags & ETNA_BO_CACHED) {
-> > > +	if (!priv->dma_coherent && etnaviv_obj->flags & ETNA_BO_CACHED) {
-> > >   		/* fini without a prep is almost certainly a userspace error */
-> > >   		WARN_ON(etnaviv_obj->last_cpu_prep_op == 0);
-> > >   		dma_sync_sgtable_for_device(dev->dev, etnaviv_obj->sgt,
-> > > diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
-> > > index 3524b5811682..754126992264 100644
-> > > --- a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
-> > > +++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
-> > > @@ -112,11 +112,16 @@ static const struct etnaviv_gem_ops etnaviv_gem_prime_ops = {
-> > >   struct drm_gem_object *etnaviv_gem_prime_import_sg_table(struct drm_device *dev,
-> > >   	struct dma_buf_attachment *attach, struct sg_table *sgt)
-> > >   {
-> > > +	struct etnaviv_drm_private *priv = dev->dev_private;
-> > >   	struct etnaviv_gem_object *etnaviv_obj;
-> > >   	size_t size = PAGE_ALIGN(attach->dmabuf->size);
-> > > +	u32 cache_flags = ETNA_BO_WC;
-> > >   	int ret, npages;
-> > >   
-> > > -	ret = etnaviv_gem_new_private(dev, size, ETNA_BO_WC,
-> > > +	if (priv->dma_coherent)
-> > > +		cache_flags = ETNA_BO_CACHED;
-> > > +
-> > Drop this change. Instead etnaviv_gem_new_impl() should do the upgrade
-> > from WC to CACHED as necessary by adding something like this:
+> Resort the existing entries by VID and then by PID to be able to find
+> entries easier.
 > 
-> I understand you are a profession person in vivante GPU driver domain.
+> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+> ---
+>  drivers/usb/misc/onboard_usb_hub.c | 12 ++++++------
+>  drivers/usb/misc/onboard_usb_hub.h |  8 ++++----
+>  2 files changed, 10 insertions(+), 10 deletions(-)
 > 
-> I respect you reviews and instruction.
-> 
-> But, I'm really reluctant to agree with this, is there any space to 
-> negotiate?
-> 
-> > /*
-> >   * Upgrade WC to CACHED when the device is hardware coherent and the
-> >   * platform doesn't allow mixing cached and writecombined mappings to
-> >   * the same memory area.
-> >   */
-> > if ((flags & ETNA_BO_CACHE_MASK) == ETNA_BO_WC &&
-> >      dev_is_dma_coherent(dev) && !drm_arch_can_wc_memory())
-> >          flags = (flags & ~ETNA_BO_CACHE_MASK) & ETNA_BO_CACHED;
-> 
-> This is policy, not a mechanism.
-> 
-> Using what cache property is a user-space program's choice.
-> 
-> While you are override the WC with CACHED mapping. This is not correct 
-> in the concept!
-> 
-Please explain why you think that this isn't correct. If using WC
-mappings cause a potential loss of coherency on your platform, then we
-can not allow the userspace driver to use WC mappings.
+> diff --git a/drivers/usb/misc/onboard_usb_hub.c b/drivers/usb/misc/onboard_usb_hub.c
+> index 12fc6eb67c3b..94006714c273 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.c
+> +++ b/drivers/usb/misc/onboard_usb_hub.c
+> @@ -329,10 +329,10 @@ static struct platform_driver onboard_hub_driver = {
+>  
+>  /************************** USB driver **************************/
+>  
+> -#define VENDOR_ID_GENESYS	0x05e3
+>  #define VENDOR_ID_MICROCHIP	0x0424
+> -#define VENDOR_ID_REALTEK	0x0bda
+>  #define VENDOR_ID_TI		0x0451
+> +#define VENDOR_ID_GENESYS	0x05e3
+> +#define VENDOR_ID_REALTEK	0x0bda
+>  #define VENDOR_ID_VIA		0x2109
 
-As I would like to keep the option of WC mappings, I've asked you if
-there are ways to prepare the cache in a way that WC mappings aren't
-causing any troubles on your platform. You told me that this might be
-possible but needs confirmation from a HW engineer and such
-confirmation could take a long time.
+This is fine, but:
 
-With that in mind, our only option right now is to upgrade the mappings
-to cached  in order to not lay out traps for the userspace driver.
- 
-> you approach forbidden any possibility to use the WC BO at anywhere.
-> 
-> 
-> My approach need only check once, while you approach need at least 3 
-> check plus
-> 
-> so much bit-wise logic operations,  plus a function call  (&, ==, &&,  
-> &, ~, &) .
-> 
-> and every time you create a BO. This nasty judgement happens.
-> 
-BO creation again is not a fast path. You are committing to allocate
-new memory, which is a few orders of magnitude more costly than the few
-instructions needed for those comparisons.
+>  
+>  /*
+> @@ -407,16 +407,16 @@ static void onboard_hub_usbdev_disconnect(struct usb_device *udev)
+>  }
+>  
+>  static const struct usb_device_id onboard_hub_id_table[] = {
+> -	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
+> -	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0610) }, /* Genesys Logic GL852G USB 2.0 */
+>  	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2514) }, /* USB2514B USB 2.0 */
+>  	{ USB_DEVICE(VENDOR_ID_MICROCHIP, 0x2517) }, /* USB2517 USB 2.0 */
+> +	{ USB_DEVICE(VENDOR_ID_TI, 0x8140) }, /* TI USB8041 3.0 */
+> +	{ USB_DEVICE(VENDOR_ID_TI, 0x8142) }, /* TI USB8041 2.0 */
+> +	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0608) }, /* Genesys Logic GL850G USB 2.0 */
+> +	{ USB_DEVICE(VENDOR_ID_GENESYS, 0x0610) }, /* Genesys Logic GL852G USB 2.0 */
+>  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0411) }, /* RTS5411 USB 3.1 */
+>  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5411) }, /* RTS5411 USB 2.1 */
+>  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x0414) }, /* RTS5414 USB 3.2 */
+>  	{ USB_DEVICE(VENDOR_ID_REALTEK, 0x5414) }, /* RTS5414 USB 2.1 */
+> -	{ USB_DEVICE(VENDOR_ID_TI, 0x8140) }, /* TI USB8041 3.0 */
+> -	{ USB_DEVICE(VENDOR_ID_TI, 0x8142) }, /* TI USB8041 2.0 */
+>  	{ USB_DEVICE(VENDOR_ID_VIA, 0x0817) }, /* VIA VL817 3.1 */
+>  	{ USB_DEVICE(VENDOR_ID_VIA, 0x2817) }, /* VIA VL817 2.0 */
+>  	{}
 
-> 
-> Please keep our original implement, it's simple and clear, Please?
-> 
+This does nothing except make backports harder over time :(
 
-It isn't as simple and clear for the userspace interface. It allows
-userspace to use WC mappings that would potentially cause loss of
-coherency between CPU and GPU, which isn't acceptable.
 
-Regards,
-Lucas
+
+> diff --git a/drivers/usb/misc/onboard_usb_hub.h b/drivers/usb/misc/onboard_usb_hub.h
+> index aca5f50eb0da..ff8925aa6d3a 100644
+> --- a/drivers/usb/misc/onboard_usb_hub.h
+> +++ b/drivers/usb/misc/onboard_usb_hub.h
+> @@ -14,10 +14,6 @@ static const struct onboard_hub_pdata microchip_usb424_data = {
+>  	.reset_us = 1,
+>  };
+>  
+> -static const struct onboard_hub_pdata realtek_rts5411_data = {
+> -	.reset_us = 0,
+> -};
+> -
+>  static const struct onboard_hub_pdata ti_tusb8041_data = {
+>  	.reset_us = 3000,
+>  };
+> @@ -30,6 +26,10 @@ static const struct onboard_hub_pdata genesys_gl852g_data = {
+>  	.reset_us = 50,
+>  };
+>  
+> +static const struct onboard_hub_pdata realtek_rts5411_data = {
+> +	.reset_us = 0,
+> +};
+
+And this also does nothing to help really, so it's not needed, sorry.
+
+thanks,
+
+greg k-h
