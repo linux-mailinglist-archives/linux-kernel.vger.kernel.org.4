@@ -2,61 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A6BB73838E
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 799B173832B
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 14:13:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231377AbjFUMTq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 08:19:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44458 "EHLO
+        id S231823AbjFUMHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 08:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231750AbjFUMTm (ORCPT
+        with ESMTP id S229822AbjFUMHc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 08:19:42 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B769D1FD3;
-        Wed, 21 Jun 2023 05:19:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687349980; x=1718885980;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=H2On4BkiK842BWT2+FLgDrsxTV7abLUQsx5UxDHkU+U=;
-  b=Zvj1qvsC/h5Zl3wZyafQwYYRS71T+F71ToUTCy46KoQi9vMwN54IPG/4
-   B9dfPTv0IRM/UycXPcJoZtBEylFFQKvIXlmEFG7Ok8cpEd302QBOaF+yO
-   2AWDgPzjbb4vpjVlnb6XfxkCthS9twJ/lLxGGvAJ0QfXaqYjIk0gH4bnb
-   FqzUeREMbHxtROFQu3DRRD8KHcOChSU0GU72ulpbtQmEUkE9z8pSvXaEu
-   zO20VtJk7Ktm6shuilhjZPxZQ/OWKYiTxw6/N2ZhNTqK13zBSPxvq3owO
-   sQXVlhDAq8Kx8Jawd8gmNLNy/cHQ3OFBYCNbeFJkKo4HhfpKQMV0sQL88
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="349885595"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="349885595"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 05:19:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10747"; a="827411431"
-X-IronPort-AV: E=Sophos;i="6.00,260,1681196400"; 
-   d="scan'208";a="827411431"
-Received: from chang-linux-3.sc.intel.com ([172.25.66.173])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Jun 2023 05:19:38 -0700
-From:   "Chang S. Bae" <chang.seok.bae@intel.com>
-To:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        ebiggers@kernel.org, x86@kernel.org, tglx@linutronix.de,
-        mingo@kernel.org, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, chang.seok.bae@intel.com
-Subject: [PATCH] crypto: x86/aesni: Align the address before aes_set_key_common()
-Date:   Wed, 21 Jun 2023 05:06:53 -0700
-Message-Id: <20230621120653.121759-1-chang.seok.bae@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <f1093780-cdda-35ec-3ef1-e5fab4139bef@intel.com>
-References: <f1093780-cdda-35ec-3ef1-e5fab4139bef@intel.com>
+        Wed, 21 Jun 2023 08:07:32 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2053.outbound.protection.outlook.com [40.107.93.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EFA170A;
+        Wed, 21 Jun 2023 05:07:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WiyBIlovyyYbDCqBTT4Nea5GFFBXRwSlZ6hl1KiKj/GeyRV/1jdbGfy2IIBBYCzm0+rDhagH3xZWvy6uzED4UxIsG4iqfuREZVwbyWfU71vTQ90l/NknS32+eWPfIDPH6sxlDfm9SsMvf8qnK8S54VqPMgflq4G6FYdcmdenNu145aRG9VHshMbw3KuIPjaEUVKdgCj3zYPBYN2sKEucfIVOzj47hHUh/aXtSbhhgXPJKkl9xxHS6xYsY9cxtotp9r5ONUCfff5j6TAEkhfTN3nP8Ry/kbOw/gLh7nFi0tbfc0vDJbf684oVwr6/qjCWaSOTwzhcqkb/N/JwNxoFWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7CIJyHdknQiV2j/HwBUVj/YthK3XmQd2QxSjx6TZRiA=;
+ b=exWC+534lvrnjY4TszrZMqrzzBXuR4y+B6OzJAd0cE/vhuRangt5UXGuZjg/vkwuV70zdkIxfKIOlnQ3nU0+pKpGpxEBcAutOoxZUGoefY8GjOOfzIiAwtIoBZFoiu6QOqPdILOcwzEwkQuQer0wysOyclsEw9146PNVlhe2MoeUuDpBr2yqiWgvYxPjkEL0KTKttGWbt5YI+3FBfaXsvJ4eYmqbmvCHp0aUjIZWu9nQEZkvH/y3FxAep7Bj2dMg0XstmPeJGlqxuMqAeVcgYWC5EavJZss4OtoVZGVyIBCoFlnEtL6JAuxS2rK3CAa+7rAfrqypfdMI9J3q6e86/Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7CIJyHdknQiV2j/HwBUVj/YthK3XmQd2QxSjx6TZRiA=;
+ b=t+1dYg+txaTd6dKTHoRgSR516uTTF7vxh/ajKUlsJ8RIs51q4DzdTWHpDu5zQrXJWm/LVcdDIhvWBXnAXlfBo06qZHabgnhnniSe2d6gJcxoDYAayesu3K5qVagNG8OMomUeAgaFYG8u1otEvZo93lDW/jZq7WsT4M5TOpmsgr/4mSEmd981gIYveVt0rTVErmhhhYwcN1lJom6+4f9PmjMGi6aymDDbRnmkbPzvuk1/17yYVGwS0j7pq0Ll8xgsyD19bnDyR280LTC5cVYsbUoCwPKPxQhNtyYoFY+4OA4LZBgjovHvbmKV8tSeV5uDIPqh9q+28gcVvumi/vglCA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by SJ0PR12MB6877.namprd12.prod.outlook.com (2603:10b6:a03:47f::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.21; Wed, 21 Jun
+ 2023 12:07:28 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::f7a7:a561:87e9:5fab%7]) with mapi id 15.20.6500.031; Wed, 21 Jun 2023
+ 12:07:28 +0000
+Date:   Wed, 21 Jun 2023 09:07:25 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Cc:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v2 00/11] iommufd: Add nesting infrastructure
+Message-ID: <ZJLn/d4UHAejDSgL@nvidia.com>
+References: <20230511143844.22693-1-yi.l.liu@intel.com>
+ <BN9PR11MB5276DAF0A11809CF8433EE338C7C9@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZGdiS2m8jcd5OOt5@nvidia.com>
+ <BN9PR11MB5276A74B2DA86C79908A420B8C419@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZH9AGWf1yRDu/86q@nvidia.com>
+ <BN9PR11MB52763C7B838B04D3200322FD8C58A@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZJBL8QLLBiwRsUSI@nvidia.com>
+ <BN9PR11MB527663567ECB8AD52D3170818C5CA@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZJGf3sgLKr9HLZuE@nvidia.com>
+ <SJ0PR11MB67441A87771D9140D1A1F2DC925DA@SJ0PR11MB6744.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <SJ0PR11MB67441A87771D9140D1A1F2DC925DA@SJ0PR11MB6744.namprd11.prod.outlook.com>
+X-ClientProxiedBy: BYAPR05CA0056.namprd05.prod.outlook.com
+ (2603:10b6:a03:74::33) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SJ0PR12MB6877:EE_
+X-MS-Office365-Filtering-Correlation-Id: c77404e9-b93d-4d69-d111-08db72501529
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: A8BrVtkxAj35v8xpuEp6W/Uty3oV9azRX6Ff6AeTLEmWYfZN9cN6Zl7mtqEL0ZaT3MASDoPRg7YnwMCLt78AAoJhsP3C4eSFwWj3Xqb5/c5oFEN7xJjmdTcBS9ryf4dkrQkij+tXOkF8IqdBNnl6bw/JZvYd3WILxPhhGw3zVqa/3JMyUQHRorDzC+UMy1WhPb1Z+jEUOETeZZdbb11h+1mBgjcZsKaG6cnK6+ac5MnhOPW/ySWjWtpOWMbN4LoZbTwY7QMyF+ZxFq3GJL1eBwnFwBOXs/X68DLsv1XuarRVQ8cgSM+CIKZ0SK1Vugy9/E7d4NNFBwlwgoqXxJZuHI83bNrDK+gET94E5pgQ0+LxwwFWwkAjzWxVkv0yKprZ93SkmeC7AQ70XR2CNSfS5FPf9sfuFjCOIFLzqr+dh+GLRxA9xxnTcO5L8O137oh4gFvR2jZzGnPzXbie48fazdGiBgMcbHaVkKuZFnMxmOYh0r2z2vC9x3eEJiUEsU9XeCMDjQx5wy0FeiHwkrN+E40teWWHVv0c26PQNhanQGi9vTGjmjdtntSDKwiMJVIPcg7KVVlM7MHIA1XwhBmfDw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(346002)(39860400002)(366004)(376002)(451199021)(83380400001)(6512007)(41300700001)(8936002)(8676002)(66946007)(4326008)(6916009)(5660300002)(66476007)(7416002)(316002)(66556008)(2616005)(36756003)(86362001)(26005)(186003)(6506007)(38100700002)(478600001)(6666004)(2906002)(966005)(6486002)(54906003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WLqO31fEmnN0sbX99c4PXGA2tWdAZGnkw74VYctzCnojkGvfsqtx/TT5f7MD?=
+ =?us-ascii?Q?fxG424/x61xdZKBuF8DV9dPU83seSWYxxm7zGq6UHiI2FJ34RhhELoJYuPC3?=
+ =?us-ascii?Q?HSv+ltBWdWkLzNSkz04Ho7IWYsbn1APB/GJJdhMaepAEOJlDMOqILU02s5cO?=
+ =?us-ascii?Q?sqnZYlhMB9k01+O50wSicaylB/1aZ1jCZvr36CVysN5OyT0IMu+jOQLY3b9z?=
+ =?us-ascii?Q?P0gpO1Xum2gfd1OQ5NEmfBAzdMev3BWFwQuBU2x6xzbHW7o7mps2mn2STGug?=
+ =?us-ascii?Q?ENGg/CxGI7YLgPLJ6E4Yk0LxICkLOVH2TWvaY04le/XE6fQX5JKaPGGvfcZx?=
+ =?us-ascii?Q?XR+q6KdhkABDLLdrFRYnoyNcKlTQn574hEZt5qBvLijIf9apgq5iGHIgJjX9?=
+ =?us-ascii?Q?A1yUxGOPPQIOpE6Js9g7eLVdmtjagZ7KiG/Vx93spdqY4+Kza2YiT3PZ6ZCn?=
+ =?us-ascii?Q?Jdd+AA/57gDt+VtpKy0wMXotpRkkaGuP60OfhY7u5a2Q+gbtPLEF9pfAot3M?=
+ =?us-ascii?Q?l9l6f0V/fz/SjMu0ylR/r+AtqeG93otT/7mpBpWOamWSMpbgDc2D7eSUx95W?=
+ =?us-ascii?Q?56EfEVnwBgXBfGbhiHXHyvtV+vCLN/zVMsU08bfChfbjHKQdj7Zd8CjQPUl2?=
+ =?us-ascii?Q?PQ1iKCrGSWevtJV/Hqlbfuyvi6Lwu9lNqP0BBK2xH++lgzQUAvUTNMpd3Lpv?=
+ =?us-ascii?Q?LaUsVbxJrRwHMcW0njwnuCkgF2yqsvdFwT3FWmOYJKbdd4NtFKsAqJBAkPMH?=
+ =?us-ascii?Q?afHcVMBKUY7WgR0ba6i5Oz4OdpxVYxh53xLhV3MU/OZSf64Txd9mNeIY2c/n?=
+ =?us-ascii?Q?+p7LGU+RwYG1jN/dCd4ylkoF6AI3a7IKNxUxrUn2nikI11qjUExGVxz+FtGm?=
+ =?us-ascii?Q?kAekOBg36H3mrk8ZWzdm75xjDZ0qSeryIsNfNTIbA+jSh8PcHjpbBPKdQ6oD?=
+ =?us-ascii?Q?oRgah0Mvdg5CeYCmnx42yX5GjiUvUhzhI6bgbMtn9cfG+qAkJMBrHGvJbP0+?=
+ =?us-ascii?Q?y1S+67vzByGn77CtiJb5yX9l1FFyhaJ50n9jEEfivHhHcSFFKScA590hqZgL?=
+ =?us-ascii?Q?TLcD9J5BW74ca3WsPnJAoxxDShRjt/S4Soq6yzXvjnlcI+4eRj16EFf0wgBF?=
+ =?us-ascii?Q?YNDfdw1xGiWQwZQB2XY9FzszmoJevuY36UcS2pyVQ9EL7c85F/BV3tS7yBBD?=
+ =?us-ascii?Q?3OITS61mogmfNgLd+dvdcu4JWe2DJAGH3hnjyqCw45Apuvz745gB39lhmilv?=
+ =?us-ascii?Q?bA+xzcSk88XNPR9f29NSU9PtcvCjqExCBAOIK4BJfBaIqWF/GeLIHZyR/vuB?=
+ =?us-ascii?Q?EZEF6oyAxZpwPlu7VCxg1nzzbZGGIu/6IGQ1SWfHRzs3rY6m8yRKQ90NH0E6?=
+ =?us-ascii?Q?L/UspbUVFNLwR7qzp3o1yt0w7CqCtu5omRtStGsNgmUybfYkrN5lyHOoCAZ4?=
+ =?us-ascii?Q?6V9Nupz2bpGQDCyNpkNa688/NUD+NVdW2yGSaFca3Fv+U6bj3eK7akTLM62h?=
+ =?us-ascii?Q?ndwaZ4NTTXsAjQVQquZ/3rs40nk2jlU6k62MyAOY++K+IO6L/AbU3aL8Xs6v?=
+ =?us-ascii?Q?wsNNjeRpje9C/Hdd9CzgFEFc9VcuSZcOZTf5KZgT?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c77404e9-b93d-4d69-d111-08db72501529
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Jun 2023 12:07:28.2546
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Anatfgk1tfkNOsqHSUjjSvBhQX0SR0txtaY2hIJ21+TFZl5tqlPtSfj4iHRltK3O
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6877
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,87 +143,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-aes_set_key_common() performs runtime alignment to the void *raw_ctx
-pointer. This facilitates consistent access to the 16byte-aligned
-address during key extension.
+On Wed, Jun 21, 2023 at 08:29:09AM +0000, Duan, Zhenzhong wrote:
+> >-----Original Message-----
+> >From: Jason Gunthorpe <jgg@nvidia.com>
+> >Sent: Tuesday, June 20, 2023 8:47 PM
+> >Subject: Re: [PATCH v2 00/11] iommufd: Add nesting infrastructure
+> >
+> >On Tue, Jun 20, 2023 at 01:43:42AM +0000, Tian, Kevin wrote:
+> >> I wonder whether we have argued passed each other.
+> >>
+> >> This series adds reserved regions to S2. I challenged the necessity as
+> >> S2 is not directly accessed by the device.
+> >>
+> >> Then you replied that doing so still made sense to support identity
+> >> S1.
+> >
+> >I think I said/ment if we attach the "s2" iommu domain as a direct attach for
+> >identity - eg at boot time, then the IOAS must gain the reserved regions. This is
+> >our normal protocol.
+> There is code to fail the attaching for device with RMRR in intel iommu driver,
+> do we plan to remove below check for IOMMUFD soon or later?
+> 
+> static int intel_iommu_attach_device(struct iommu_domain *domain,
+>                                      struct device *dev)
+> {
+>         struct device_domain_info *info = dev_iommu_priv_get(dev);
+>         int ret;
+> 
+>         if (domain->type == IOMMU_DOMAIN_UNMANAGED &&
+>             device_is_rmrr_locked(dev)) {
+>                 dev_warn(dev, "Device is ineligible for IOMMU domain attach due to platform RMRR requirement.  Contact your platform vendor.\n");
+>                 return -EPERM;
+>         }
 
-However, the alignment is already handlded in the GCM-related setkey
-functions before invoking the common function. Consequently, the
-alignment in the common function is unnecessary for those functions.
+Not really, systems with RMRR cannot support VFIO at all. Baolu sent a
+series lifting this restriction up higher in the stack:
 
-To establish a consistent approach throughout the glue code, remove
-the aes_ctx() call from its current location. Instead, place it at
-each call site where the runtime alignment is currently absent.
+https://lore.kernel.org/all/20230607035145.343698-1-baolu.lu@linux.intel.com/
 
-Link: https://lore.kernel.org/lkml/20230605024623.GA4653@quark.localdomain/
-Suggested-by: Eric Biggers <ebiggers@kernel.org>
-Signed-off-by: Chang S. Bae <chang.seok.bae@intel.com>
-Cc: linux-crypto@vger.kernel.org
-Cc: x86@kernel.org
-Cc: linux-kernel@vger.kernel.org
----
-The need for this fix was discovered during Eric's review of the Key
-Locker series [1]. Considering the upstream code also requires this
-improvement, this is applicable regardless of the Key Locker enabling
-[2].
-
-[1] https://lore.kernel.org/lkml/20230605024623.GA4653@quark.localdomain/
-[2] https://lore.kernel.org/lkml/f1093780-cdda-35ec-3ef1-e5fab4139bef@intel.com/
----
- arch/x86/crypto/aesni-intel_glue.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/crypto/aesni-intel_glue.c b/arch/x86/crypto/aesni-intel_glue.c
-index a5b0cb3efeba..c4eea7e746e7 100644
---- a/arch/x86/crypto/aesni-intel_glue.c
-+++ b/arch/x86/crypto/aesni-intel_glue.c
-@@ -229,10 +229,10 @@ static inline struct crypto_aes_ctx *aes_ctx(void *raw_ctx)
- 	return (struct crypto_aes_ctx *)ALIGN(addr, align);
- }
- 
--static int aes_set_key_common(struct crypto_tfm *tfm, void *raw_ctx,
-+static int aes_set_key_common(struct crypto_tfm *tfm,
-+			      struct crypto_aes_ctx *ctx,
- 			      const u8 *in_key, unsigned int key_len)
- {
--	struct crypto_aes_ctx *ctx = aes_ctx(raw_ctx);
- 	int err;
- 
- 	if (key_len != AES_KEYSIZE_128 && key_len != AES_KEYSIZE_192 &&
-@@ -253,7 +253,7 @@ static int aes_set_key_common(struct crypto_tfm *tfm, void *raw_ctx,
- static int aes_set_key(struct crypto_tfm *tfm, const u8 *in_key,
- 		       unsigned int key_len)
- {
--	return aes_set_key_common(tfm, crypto_tfm_ctx(tfm), in_key, key_len);
-+	return aes_set_key_common(tfm, aes_ctx(crypto_tfm_ctx(tfm)), in_key, key_len);
- }
- 
- static void aesni_encrypt(struct crypto_tfm *tfm, u8 *dst, const u8 *src)
-@@ -286,7 +286,7 @@ static int aesni_skcipher_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 			         unsigned int len)
- {
- 	return aes_set_key_common(crypto_skcipher_tfm(tfm),
--				  crypto_skcipher_ctx(tfm), key, len);
-+				  aes_ctx(crypto_skcipher_ctx(tfm)), key, len);
- }
- 
- static int ecb_encrypt(struct skcipher_request *req)
-@@ -893,13 +893,13 @@ static int xts_aesni_setkey(struct crypto_skcipher *tfm, const u8 *key,
- 	keylen /= 2;
- 
- 	/* first half of xts-key is for crypt */
--	err = aes_set_key_common(crypto_skcipher_tfm(tfm), ctx->raw_crypt_ctx,
-+	err = aes_set_key_common(crypto_skcipher_tfm(tfm), aes_ctx(ctx->raw_crypt_ctx),
- 				 key, keylen);
- 	if (err)
- 		return err;
- 
- 	/* second half of xts-key is for tweak */
--	return aes_set_key_common(crypto_skcipher_tfm(tfm), ctx->raw_tweak_ctx,
-+	return aes_set_key_common(crypto_skcipher_tfm(tfm), aes_ctx(ctx->raw_tweak_ctx),
- 				  key + keylen, keylen);
- }
- 
--- 
-2.34.1
-
+Jason
