@@ -2,216 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C07738C7A
-	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:00:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A60D738CA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 21 Jun 2023 19:05:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjFUQ75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 12:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49270 "EHLO
+        id S230213AbjFURFe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 13:05:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjFUQ7z (ORCPT
+        with ESMTP id S229501AbjFURFc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 12:59:55 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74913122;
-        Wed, 21 Jun 2023 09:59:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=QWhxaay5PJc+KsTl/Lhu1K76aM7YIdIpDTiZCsIAbyI=; b=YUjKEuhnWXkbvH6USeNTm6NKio
-        oDIsJenHigdyyNI4KR9BxmxTktwOwWZcC9iVlUxFqL8Oro6kEv+ZDmXtciBAboq2bt3JTuMA5qmZW
-        SplyVGb9rm87a4GJ3q/YuS70ddSDOZkWoaVTomEhuNUWtlE4Ntp6ek+Q+xwBQfO4SJGc=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:57298 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1qC1BJ-0006ZR-QH; Wed, 21 Jun 2023 12:59:47 -0400
-Date:   Wed, 21 Jun 2023 12:59:45 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Hugo Villeneuve <hugo@hugovil.com>
-Cc:     Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        a.zummo@towertech.it, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-rtc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Message-Id: <20230621125945.1f10b66832d0d1c61e21f78d@hugovil.com>
-In-Reply-To: <20230621101429.7f86490aa7590f0d978834ce@hugovil.com>
-References: <20221215150214.1109074-1-hugo@hugovil.com>
-        <Y8rl452Xm1FrnFfF@mail.local>
-        <20230621101429.7f86490aa7590f0d978834ce@hugovil.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
+        Wed, 21 Jun 2023 13:05:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C780610D;
+        Wed, 21 Jun 2023 10:05:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 01F5261601;
+        Wed, 21 Jun 2023 17:05:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B3EEC433C8;
+        Wed, 21 Jun 2023 17:05:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687367129;
+        bh=VgDrDN1AlEKLSxfcxPdZIOC6m3JNO0J57lFupt0/nRM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tkiqn8dhJ2BLxGzsNwrl7GH0zA9Q2H5HA2XY0mrYmVXJ6UNtMexUiyMjqkDv5Kgik
+         wvjbpIdNK5OTZmbd6YaDrpat/twBHL9TgvP7hTZwo/6AZqFuP/KZt1YU71JyjrBkFO
+         gRG0hut4nnXW1zF5UzAVUXGNU9oUj70HB46C8QPdCwUrBQyw6GAWxKgYaIEQNNehom
+         m5pTHhEnmjfSimTT5xIpvfOZI1kPNyLgocS54PZmAyCBiF8AqzZvy9hUViASUnIRNU
+         RbnC+T8/mx9jvkucXKyxDUIy5CehRIMGzejVLjXtZ58N1UPzY6R6Joz8NEsYzwxbts
+         xq58MM9uoNpcQ==
+Date:   Wed, 21 Jun 2023 18:05:24 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Raymond Hackley <raymondhackley@protonmail.com>,
+        linux-kernel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Luca Weiss <luca@z3ntu.xyz>,
+        "open list:LED SUBSYSTEM" <linux-leds@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+Subject: Re: [PATCH 1/2] dt-bindings: leds: sgm3140: Document richtek,rt5033
+ compatible
+Message-ID: <20230621170524.GJ10378@google.com>
+References: <20230602130644.259933-1-raymondhackley@protonmail.com>
+ <20230602131009.260239-1-raymondhackley@protonmail.com>
+ <20230621150141.GE10378@google.com>
+ <20230621150302.GF10378@google.com>
+ <20230621-stuffed-revolt-435d3d2dd4aa@spud>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230621-stuffed-revolt-435d3d2dd4aa@spud>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
-Subject: Re: [PATCH v3 00/14] rtc: pcf2127: add PCF2131 driver
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 10:14:29 -0400
-Hugo Villeneuve <hugo@hugovil.com> wrote:
+On Wed, 21 Jun 2023, Conor Dooley wrote:
 
-> On Fri, 20 Jan 2023 20:05:07 +0100
-> Alexandre Belloni <alexandre.belloni@bootlin.com> wrote:
+> Raymond,
 > 
-> > Hello,
+> On Wed, Jun 21, 2023 at 04:03:02PM +0100, Lee Jones wrote:
+> > On Wed, 21 Jun 2023, Lee Jones wrote:
 > > 
-> > I know I've been holding off on the review of this series for a while
-> > and I'm sorry for that.
+> > > On Fri, 02 Jun 2023, Raymond Hackley wrote:
+> > > 
+> > > > Add devicetree binding for Richtek RT5033 Flash LED charge pump used for
+> > > > camera flash LEDs.
+> > > > 
+> > > > Signed-off-by: Raymond Hackley <raymondhackley@protonmail.com>
+> > > > ---
+> > > >  Documentation/devicetree/bindings/leds/leds-sgm3140.yaml | 1 +
+> > > >  1 file changed, 1 insertion(+)
+> > > > 
+> > > > diff --git a/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml b/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml
+> > > > index 4d2ffe5fcfc7..37d2a93780ab 100644
+> > > > --- a/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml
+> > > > +++ b/Documentation/devicetree/bindings/leds/leds-sgm3140.yaml
+> > > > @@ -20,6 +20,7 @@ properties:
+> > > >    compatible:
+> > > >      enum:
+> > > >        - ocs,ocp8110
+> > > > +      - richtek,rt5033-led
+> > > 
+> > > Why is "-led" appended on to this one and not the others?
 > > 
-> > One of the main issue that is remaining is that the driver ends up being
-> > 53% bigger and generaly less efficient for no added functionality for
-> > the existing RTCs.
-> > 
-> > I know performance is not a concern however, having more code in the
-> > set/read time and irq paths means that it is more difficult to set an
-> > get the time precisely.
+> > It's unusual for me to have to dump through a bunch of hoops just to
+> > read and then subsequently reply to mail.  Can you consider removing
+> > whatever encryption you have enabled please?
 > 
-> Hi Alexandre,
-> one way to keep rtc_read_time() as efficient as before, and even more
-> efficient by reading 7 instead of 10 registers, would be to drop reading
-> the CTRL3 register, which is only used to detect and display an info
-> message for the low battery condition. This low battery check could be
-> moved to an ioctl call, like it is done in the PCF8523 driver.
-> 
-> Hugo.
+> https://www.kernel.org/doc/html/latest/process/email-clients.html#proton-mail
 
-Hi,
-in fact it is already part of the ioctl, so it is even simpler...
+Thanks for the link.  This is perfect!
 
-Hugo.
+At least I know it's not just me being unreasonable.
 
+> I was under the impression that there was no way to disable this
+> behaviour, but I saw mention somewhere that they managed to patch the
+> open source version of the protonmail bridge to function. I cannot find
+> this on lore, because the person's domain was not a proton one and I
+> completely forget their name as it was several months ago.
+> I'll reply here if I find it.
 
-> 
-> 
-> > I guess I'll take it as a merged driver but I took a different decision
-> > for other RTCs.
-> > 
-> > On 15/12/2022 10:02:01-0500, Hugo Villeneuve wrote:
-> > > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > 
-> > > Hello,
-> > > this patch series adds the driver for the PCF2131 real-time clock.
-> > > 
-> > > This RTC is very similar in functionality to the PCF2127/29 with the
-> > > following differences:
-> > >   -supports two new control registers at offsets 4 and 5
-> > >   -supports a new reset register
-> > >   -supports 4 tamper detection functions instead of 1
-> > >   -has no nvmem (like the PCF2129)
-> > >   -has two output interrupt pins instead of one
-> > >   -has 1/100th seconds capabilities (not supported in this driver)
-> > >   -pcf2127 has watchdog clock sources: 1/60,   1, 64 and 4096Hz
-> > >    pcf2131 has watchdog clock sources: 1/64, 1/4,  4 and   64Hz
-> > >   -watchdog value register cannot be read after being set
-> > > 
-> > > Most of the register addresses are very different, although they still
-> > > follow the same layout. For example, the time/date and tamper registers
-> > > have a different base address, but the offsets are all the same.
-> > > Consequently, the source code of the PCF2127 driver can be easily adapted
-> > > to support this new device.
-> > > 
-> > > Patches 1 to 6 modify the existing pcf2127 driver to make it more generic
-> > > and able to support multiple variants, like the PCF2131. This is done
-> > > mostly by using offsets instead of absolute hardcoded register addresses.
-> > > 
-> > > Patch 7 add actual support for the PCF2131.
-> > > 
-> > > Patch 8 configures all interrupt sources to go through the INT A pin.
-> > > 
-> > > Patch 9 changes the PWRMNG bits to be the same with the PCF2131 as they
-> > >       are with the PCF2127/29 (different default values).
-> > > 
-> > > Patch 10 allow to confirm PCF2131 device presence by reading the reset
-> > >       register fixed pattern.
-> > > 
-> > > Patch 11 adapt the time/date registers write sequence for PCF2131 (STOP and
-> > >       CPR bits).
-> > > 
-> > > Patch 12 add support for generic watchdog timing configuration.
-> > > 
-> > > Patch 13 add a new flag to identify if device has read support for reading
-> > >       watchdog register value.
-> > >       Since the watchdog value register cannot be read on the PCF2131 after
-> > >       being set, it seems that we cannot detect if watchdog timer was
-> > >       started by bootloader. I am not sure what is the best way to handle
-> > >       this situation, suggestions are welcomed.
-> > > 
-> > > Patch 14 add the dt-bindings for the PCF2131.
-> > > 
-> > > I have tested the driver using a PCF2131-ARD evaluation board connected to
-> > > an NXP imx8mp evaluation board:
-> > >   - Time get/set ok;
-> > >   - Alarms get/set ok
-> > >   - Timestamp 1 to 4 ok
-> > >   - IRQ alarm ok
-> > >   - Watchdog ok
-> > >   - Also tested successfully with "RTC Driver Test Example" from
-> > >     Documentation/rtc.txt
-> > > 
-> > > I have also tested the driver on a custom PCF2129 adapter board connected to a
-> > > beaglebone black.
-> > > 
-> > > Thank you.
-> > > 
-> > > Link: [v1] https://patchwork.ozlabs.org/project/rtc-linux/patch/20220125200009.900660-2-hugo@hugovil.com/
-> > > Link: [v2] https://patchwork.ozlabs.org/project/rtc-linux/list/?series=285734
-> > > 
-> > > Changes for V3:
-> > > - Rebased for kernel v6.1
-> > > 
-> > > Changes for V2:
-> > > - In general, fix and improvements after I have tested on real hardware
-> > > - Fix alarm interrupt A/B mask setting for PCF2131:
-> > >   PCF2131_BIT_INT_AIE must be cleared, not set, to enable interrupt.
-> > > - Remove low_reg validation: only check if TS interrupt flag is
-> > >   defined, as low_reg is defined at address 0 for PCF2127/29.
-> > > - Change PWRMNG value for PCF2131: default is different than PCF2127/29.
-> > > - Adapt time/date registers write sequence for PCF2131 (STOP and CPR bits).
-> > > - Map all interrupt sources to INT A pin
-> > > - Read and validate PCF2131 device presence from RESET register
-> > > - Adapt watchdog configuration for PCF2131
-> > > 
-> > > Hugo Villeneuve (14):
-> > >   rtc: pcf2127: add variant-specific configuration structure
-> > >   rtc: pcf2127: adapt for time/date registers at any offset
-> > >   rtc: pcf2127: adapt for alarm registers at any offset
-> > >   rtc: pcf2127: adapt for WD registers at any offset
-> > >   rtc: pcf2127: adapt for CLKOUT register at any offset
-> > >   rtc: pcf2127: add support for multiple TS functions
-> > >   rtc: pcf2127: add support for PCF2131 RTC
-> > >   rtc: pcf2127: add support for PCF2131 interrupts on output INT_A
-> > >   rtc: pcf2127: set PWRMNG value for PCF2131
-> > >   rtc: pcf2127: read and validate PCF2131 device signature
-> > >   rtc: pcf2127: adapt time/date registers write sequence for PCF2131
-> > >   rtc: pcf2127: support generic watchdog timing configuration
-> > >   rtc: pcf2127: add flag for watchdog register value read support
-> > >   dt-bindings: rtc: pcf2127: add PCF2131
-> > > 
-> > >  .../devicetree/bindings/rtc/nxp,pcf2127.yaml  |   4 +-
-> > >  drivers/rtc/Kconfig                           |   4 +-
-> > >  drivers/rtc/rtc-pcf2127.c                     | 939 ++++++++++++++----
-> > >  3 files changed, 752 insertions(+), 195 deletions(-)
-> > > 
-> > > -- 
-> > > 2.30.2
-> > > 
-> > 
-> > -- 
-> > Alexandre Belloni, co-owner and COO, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com
-> > 
+Thanks.
+
+-- 
+Lee Jones [李琼斯]
