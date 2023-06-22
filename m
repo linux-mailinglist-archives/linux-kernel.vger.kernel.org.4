@@ -2,269 +2,379 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89525739AD1
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 10:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B69739AF0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 10:55:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231440AbjFVIwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 04:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
+        id S230255AbjFVIzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 04:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjFVIvw (ORCPT
+        with ESMTP id S231451AbjFVIy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 04:51:52 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F35C1BDA
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:51:47 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QmvDd1sKgz67K8h;
-        Thu, 22 Jun 2023 16:49:05 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 22 Jun
- 2023 09:51:44 +0100
-Date:   Thu, 22 Jun 2023 09:51:43 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>
-CC:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Besar Wicaksono <bwicaksono@nvidia.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/4] perf: arm_cspmu: ampere_cspmu: Add support for
- Ampere SoC PMU
-Message-ID: <20230622095143.0000009f@Huawei.com>
-In-Reply-To: <20230622011141.328029-5-ilkka@os.amperecomputing.com>
-References: <20230622011141.328029-1-ilkka@os.amperecomputing.com>
-        <20230622011141.328029-5-ilkka@os.amperecomputing.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 22 Jun 2023 04:54:28 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A371BF2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:54:03 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b5585e84b4so6826475ad.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:54:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1687424042; x=1690016042;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=18F0YS9tzXnhZD6XOWg4z/iuVQH+DQZqb8vPxg9LKNc=;
+        b=bUEjGGPBWzIMiiRBz0Z9HpEnEYWJQPKAu3xmR2QNx+U2rfpQIaz0QKy6Y8Lr0rwlY7
+         1OLme9KEsNQn8XGK2qGb8bZZEKsTy6KCerwTW6t8BlrnGEHcJPoTeYVlsTwqVPjOayrF
+         dsEDpR3qeM/IUUmwBI2Ol2NBy7oFP9Se6fdmGr198St9q6UTySsYC0xYY8Zy/QXRUyEy
+         AG08aZMF6NePIP4V69qmLzCv7Cf9ff6kYyyIu+49L68vu9KAD2GfEPQ4jIPGdqKLdU8u
+         4wTK5NlERU3NRVU+OLlSCld8xhStDAuDuZWrYsxpaNciHdM6zTbgIxYaNbWQg2PSdYTJ
+         19HQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687424042; x=1690016042;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=18F0YS9tzXnhZD6XOWg4z/iuVQH+DQZqb8vPxg9LKNc=;
+        b=REPTHX6M4qkjCMFKioyxRQ3fevYbLscF35Zc484VtwqPqVDEVst3W7fABbsudWDQ+s
+         kCZMpzACJMZAzEZh5G9C//RyqwzTGqsOzvqKSp8CBVO+JnDYOMV2PetKzgExMgTeYxWK
+         s1bSYBQd2Y+kRzBfBfvsqK53Ba9i62uyHIr8eLZ2WEmOQRIbSBrrvtdohmGYDxAsVJjl
+         W7gm3VvvrietsuYwiOHSiKEYxCnkUIlD6H35Pk47qUcCCrwmGZGoZjT4w6YibhP038Oz
+         TnL0lxnvifcrOTRosmRozZjN+OzWRprtIm6dhinDb8g4rmwKF66I7gb7U2yW/K6WqqsI
+         GXDg==
+X-Gm-Message-State: AC+VfDzQ98wixglslzdut6ajRevi85xBtt8y0Kr9rwLg1NcXLkB+z+JW
+        CPhVSwp8uZiLE1vhSHcWsF0azQ==
+X-Google-Smtp-Source: ACHHUZ7tnYlzDA7Fu4iKKHZ/SyjbSwiKqkCQ8vesEKB/Fu9/UuDv/k/NRhRg959nnXG3X3ZwdczzWg==
+X-Received: by 2002:a17:902:ea01:b0:1a9:6467:aa8d with SMTP id s1-20020a170902ea0100b001a96467aa8dmr21668996plg.1.1687424042552;
+        Thu, 22 Jun 2023 01:54:02 -0700 (PDT)
+Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.254])
+        by smtp.gmail.com with ESMTPSA id h2-20020a170902f7c200b001b549fce345sm4806971plw.230.2023.06.22.01.53.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 01:54:02 -0700 (PDT)
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+To:     akpm@linux-foundation.org, david@fromorbit.com, tkhai@ya.ru,
+        vbabka@suse.cz, roman.gushchin@linux.dev, djwong@kernel.org,
+        brauner@kernel.org, paulmck@kernel.org, tytso@mit.edu
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, dm-devel@redhat.com,
+        linux-raid@vger.kernel.org, linux-bcache@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [PATCH 00/29] use refcount+RCU method to implement lockless slab shrink
+Date:   Thu, 22 Jun 2023 16:53:06 +0800
+Message-Id: <20230622085335.77010-1-zhengqi.arch@bytedance.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 18:11:41 -0700
-Ilkka Koskinen <ilkka@os.amperecomputing.com> wrote:
+Hi all,
 
-> Ampere SoC PMU follows CoreSight PMU architecture. It uses implementation
-> specific registers to filter events rather than PMEVFILTnR registers.
-> 
-> Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
-Hi Ilkka,
+1. Background
+=============
 
-Drive by review so not super detailed (I was curious) but a few questions/comments inline.
+We used to implement the lockless slab shrink with SRCU [1], but then kernel
+test robot reported -88.8% regression in stress-ng.ramfs.ops_per_sec test
+case [2], so we reverted it [3].
 
-Jonathan
+This patch series aims to re-implement the lockless slab shrink using the
+refcount+RCU method proposed by Dave Chinner [4].
 
-> ---
->  .../admin-guide/perf/ampere_cspmu.rst         |  29 +++
->  drivers/perf/arm_cspmu/Makefile               |   2 +-
->  drivers/perf/arm_cspmu/ampere_cspmu.c         | 232 ++++++++++++++++++
->  drivers/perf/arm_cspmu/ampere_cspmu.h         |  17 ++
->  drivers/perf/arm_cspmu/arm_cspmu.c            |   7 +
->  5 files changed, 286 insertions(+), 1 deletion(-)
->  create mode 100644 Documentation/admin-guide/perf/ampere_cspmu.rst
->  create mode 100644 drivers/perf/arm_cspmu/ampere_cspmu.c
->  create mode 100644 drivers/perf/arm_cspmu/ampere_cspmu.h
-> 
-> diff --git a/Documentation/admin-guide/perf/ampere_cspmu.rst b/Documentation/admin-guide/perf/ampere_cspmu.rst
-> new file mode 100644
-> index 000000000000..bf86bffeef63
-> --- /dev/null
-> +++ b/Documentation/admin-guide/perf/ampere_cspmu.rst
-> @@ -0,0 +1,29 @@
+[1]. https://lore.kernel.org/lkml/20230313112819.38938-1-zhengqi.arch@bytedance.com/
+[2]. https://lore.kernel.org/lkml/202305230837.db2c233f-yujie.liu@intel.com/
+[3]. https://lore.kernel.org/all/20230609081518.3039120-1-qi.zheng@linux.dev/
+[4]. https://lore.kernel.org/lkml/ZIJhou1d55d4H1s0@dread.disaster.area/
 
-> +
-> +Example for perf tool use::
-> +
-> +  / # perf list ampere
-> +
-> +    ampere_mcu_pmu_0/act_sent/                         [Kernel PMU event]
-> +    <...>
-> +    ampere_mcu_pmu_1/rd_sent/                          [Kernel PMU event]
-> +    <...>
-> +
-> +  / # perf stat -a -e ampere_mcu_pmu_0/act_sent,filter_enable=3,bank=5,rank=3,threshold=2/,ampere_mcu_pmu_1/rd_sent/ \
-> +        sleep 1
+2. Implementation
+=================
 
-Why filter_enable=3?
+Currently, the shrinker instances can be divided into the following three types:
 
+a) global shrinker instance statically defined in the kernel, such as
+   workingset_shadow_shrinker.
 
+b) global shrinker instance statically defined in the kernel modules, such as
+   mmu_shrinker in x86.
 
-> +static u32 ampere_cspmu_event_filter(const struct perf_event *event)
-> +{
+c) shrinker instance embedded in other structures.
 
-Whilst lots of other comments on this - perhaps add another one here to
-why this is a noop.
+For *case a*, the memory of shrinker instance is never freed. For *case b*, the
+memory of shrinker instance will be freed after the module is unloaded. But we
+will call synchronize_rcu() in free_module() to wait for RCU read-side critical
+section to exit. For *case c*, we need to dynamically allocate these shrinker
+instances, then the memory of shrinker instance can be dynamically freed alone
+by calling kfree_rcu(). Then we can use rcu_read_{lock,unlock}() to ensure that
+the shrinker instance is valid.
 
-> +	return 0;
-> +}
-> +
-> +static void ampere_cspmu_set_ev_filter(struct arm_cspmu *cspmu,
-> +				       struct hw_perf_event *hwc,
-> +				       u32 filter)
-> +{
-> +	struct perf_event *event;
-> +	unsigned int idx;
-> +	u32 threshold, rank, bank;
-> +
-> +	/*
-> +	 * At this point, all the events have the same filter settings.
-> +	 * Therefore, take the first event and use its configuration.
-> +	 */
-> +	idx = find_first_bit(cspmu->hw_events.used_ctrs,
-> +			     cspmu->cycle_counter_logical_idx);
-> +
-> +	event = cspmu->hw_events.events[idx];
-> +
-> +	threshold	= get_threshold(event);
-> +	rank		= get_rank(event);
-> +	bank		= get_bank(event);
-> +
-> +	writel(threshold, cspmu->base0 + PMAUXR0);
-> +	writel(rank, cspmu->base0 + PMAUXR1);
-> +	writel(bank, cspmu->base0 + PMAUXR2);
-> +}
-> +
-> +static int ampere_cspmu_validate_configs(struct perf_event *event,
-> +					 struct perf_event *event2)
-> +{
-> +	if (get_threshold(event) != get_threshold(event2) ||
-> +	    get_rank(event) != get_rank(event2) ||
-> +	    get_bank(event) != get_bank(event2))
-> +		return -EINVAL;
-> +
-> +	return 0;
-> +}
-> +
-> +static int ampere_cspmu_validate_event(struct arm_cspmu *cspmu,
-> +				       struct perf_event *new)
-> +{
-> +	struct perf_event *curr, *leader = new->group_leader;
-> +	unsigned int idx;
-> +	int ret;
-> +
-> +	ret = ampere_cspmu_validate_configs(new, leader);
-> +	if (ret)
-> +		return ret;
-> +
-> +	/* We compare the global filter settings to existing events */
-> +	idx = find_first_bit(cspmu->hw_events.used_ctrs,
-> +			     cspmu->cycle_counter_logical_idx);
-> +
-> +	/* This is the first event */
+The shrinker::refcount mechanism ensures that the shrinker instance will not be
+run again after unregistration. So the structure that records the pointer of
+shrinker instance can be safely freed without waiting for the RCU read-side
+critical section.
 
-Maybe add why that matters to the comment?
+In this way, while we implement the lockless slab shrink, we don't need to be
+blocked in unregister_shrinker() to wait RCU read-side critical section.
 
-> +	if (idx == cspmu->cycle_counter_logical_idx)
-> +		return 0;
-> +
-> +	curr = cspmu->hw_events.events[idx];
-> +
-> +	return ampere_cspmu_validate_configs(curr, new);
-> +}
-> +
-> +static char *ampere_cspmu_format_name(const struct arm_cspmu *cspmu,
-> +				      const char *name_pattern)
-> +{
-> +	struct device *dev = cspmu->dev;
-> +	static atomic_t pmu_generic_idx = {0};
+PATCH 1 ~ 2: infrastructure for dynamically allocating shrinker instances
+PATCH 3 ~ 21: dynamically allocate the shrinker instances in case c
+PATCH 22: introduce pool_shrink_rwsem to implement private synchronize_shrinkers()
+PATCH 23 ~ 28: implement the lockless slab shrink
+PATCH 29: move shrinker-related code into a separate file
 
-Why not an ida?
+3. Testing
+==========
 
-If the pmu drivers ever become easy to unbind then you won't get ID
-reusage like this an eventually you will run into overflow problems.
+3.1 slab shrink stress test
+---------------------------
 
-> +
-> +	return devm_kasprintf(dev, GFP_KERNEL, name_pattern,
-> +			      atomic_fetch_inc(&pmu_generic_idx));
-> +}
-> +
-> +int ampere_cspmu_init_ops(struct arm_cspmu *cspmu)
-> +{
-> +	struct device *dev = cspmu->dev;
-> +	struct ampere_cspmu_ctx *ctx;
-> +	struct arm_cspmu_impl_ops *impl_ops = &cspmu->impl.ops;
-> +
-> +	ctx = devm_kzalloc(dev, sizeof(struct ampere_cspmu_ctx), GFP_KERNEL);
-> +	if (!ctx)
-> +		return -ENOMEM;
-> +
-> +	ctx->event_attr		= ampereone_mcu_pmu_event_attrs;
-> +	ctx->format_attr	= ampereone_mcu_format_attrs;
-> +	ctx->name		= ampere_cspmu_format_name(cspmu,
-> +							   "ampere_mcu_pmu_%u");
+We can reproduce the down_read_trylock() hotspot through the following script:
 
-Long line and need to break avoided if you don't bother trying to align the = signs...
-Personally I don't like this style as it causes a lot of churn as drivers
-evolve, but meh, it's up to you.
+```
 
-Given the result is confusing if the allocation fails (name not what is expected)
-I would also check that allocation and error out if it fails.  Obviously it won't
-under realistic circumstances, but a bit of paranoia never hurt anyone.
+DIR="/root/shrinker/memcg/mnt"
 
-> +	cspmu->impl.ctx = ctx;
-> +
-> +	impl_ops->event_filter		= ampere_cspmu_event_filter;
-> +	impl_ops->set_ev_filter		= ampere_cspmu_set_ev_filter;
-> +	impl_ops->validate_event	= ampere_cspmu_validate_event;
-> +	impl_ops->get_name		= ampere_cspmu_get_name;
-> +	impl_ops->get_event_attrs	= ampere_cspmu_get_event_attrs;
-> +	impl_ops->get_format_attrs	= ampere_cspmu_get_format_attrs;
-> +
-> +	return 0;
-> +}
-> +
-> +MODULE_LICENSE("GPL v2");
+do_create()
+{
+    mkdir -p /sys/fs/cgroup/memory/test
+    mkdir -p /sys/fs/cgroup/perf_event/test
+    echo 4G > /sys/fs/cgroup/memory/test/memory.limit_in_bytes
+    for i in `seq 0 $1`;
+    do
+        mkdir -p /sys/fs/cgroup/memory/test/$i;
+        echo $$ > /sys/fs/cgroup/memory/test/$i/cgroup.procs;
+        echo $$ > /sys/fs/cgroup/perf_event/test/cgroup.procs;
+        mkdir -p $DIR/$i;
+    done
+}
 
-...
+do_mount()
+{
+    for i in `seq $1 $2`;
+    do
+        mount -t tmpfs $i $DIR/$i;
+    done
+}
 
-> diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c b/drivers/perf/arm_cspmu/arm_cspmu.c
-> index 471d6d7ac81a..587515eea0b4 100644
-> --- a/drivers/perf/arm_cspmu/arm_cspmu.c
-> +++ b/drivers/perf/arm_cspmu/arm_cspmu.c
-> @@ -29,6 +29,7 @@
->  #include <linux/perf_event.h>
->  #include <linux/platform_device.h>
->  
-> +#include "ampere_cspmu.h"
+do_touch()
+{
+    for i in `seq $1 $2`;
+    do
+        echo $$ > /sys/fs/cgroup/memory/test/$i/cgroup.procs;
+        echo $$ > /sys/fs/cgroup/perf_event/test/cgroup.procs;
+            dd if=/dev/zero of=$DIR/$i/file$i bs=1M count=1 &
+    done
+}
 
-I'd be tempted to keep the generic header in a separate block then
-follow with the vendor ones.  Not particularly important though.
+case "$1" in
+  touch)
+    do_touch $2 $3
+    ;;
+  test)
+    do_create 4000
+    do_mount 0 4000
+    do_touch 0 3000
+    ;;
+  *)
+    exit 1
+    ;;
+esac
+```
 
->  #include "arm_cspmu.h"
->  #include "nvidia_cspmu.h"
->  
-> @@ -114,6 +115,7 @@
->  
->  /* JEDEC-assigned JEP106 identification code */
->  #define ARM_CSPMU_IMPL_ID_NVIDIA		0x36B
-> +#define ARM_CSPMU_IMPL_ID_AMPERE		0xA16
->  
->  static unsigned long arm_cspmu_cpuhp_state;
->  
-> @@ -388,6 +390,11 @@ static const struct impl_match impl_match[] = {
->  	  .mask = ARM_CSPMU_PMIIDR_IMPLEMENTER,
->  	  .impl_init_ops = nv_cspmu_init_ops
->  	},
-> +	{
-> +	  .pmiidr = ARM_CSPMU_IMPL_ID_AMPERE,
-> +	  .mask = ARM_CSPMU_PMIIDR_IMPLEMENTER,
-> +	  .impl_init_ops = ampere_cspmu_init_ops
-> +	},
->  	{}
->  };
->  
+Save the above script, then run test and touch commands. Then we can use the
+following perf command to view hotspots:
+
+perf top -U -F 999 [-g]
+
+1) Before applying this patchset:
+
+  35.34%  [kernel]             [k] down_read_trylock
+  18.44%  [kernel]             [k] shrink_slab
+  15.98%  [kernel]             [k] pv_native_safe_halt
+  15.08%  [kernel]             [k] up_read
+   5.33%  [kernel]             [k] idr_find
+   2.71%  [kernel]             [k] _find_next_bit
+   2.21%  [kernel]             [k] shrink_node
+   1.29%  [kernel]             [k] shrink_lruvec
+   0.66%  [kernel]             [k] do_shrink_slab
+   0.33%  [kernel]             [k] list_lru_count_one
+   0.33%  [kernel]             [k] __radix_tree_lookup
+   0.25%  [kernel]             [k] mem_cgroup_iter
+
+-   82.19%    19.49%  [kernel]                  [k] shrink_slab
+   - 62.00% shrink_slab
+        36.37% down_read_trylock
+        15.52% up_read
+        5.48% idr_find
+        3.38% _find_next_bit
+      + 0.98% do_shrink_slab
+
+2) After applying this patchset:
+
+  46.83%  [kernel]           [k] shrink_slab
+  20.52%  [kernel]           [k] pv_native_safe_halt
+   8.85%  [kernel]           [k] do_shrink_slab
+   7.71%  [kernel]           [k] _find_next_bit
+   1.72%  [kernel]           [k] xas_descend
+   1.70%  [kernel]           [k] shrink_node
+   1.44%  [kernel]           [k] shrink_lruvec
+   1.43%  [kernel]           [k] mem_cgroup_iter
+   1.28%  [kernel]           [k] xas_load
+   0.89%  [kernel]           [k] super_cache_count
+   0.84%  [kernel]           [k] xas_start
+   0.66%  [kernel]           [k] list_lru_count_one
+
+-   65.50%    40.44%  [kernel]                  [k] shrink_slab
+   - 22.96% shrink_slab
+        13.11% _find_next_bit
+      - 9.91% do_shrink_slab
+         - 1.59% super_cache_count
+              0.92% list_lru_count_one
+
+We can see that the first perf hotspot becomes shrink_slab, which is what we
+expect.
+
+3.2 registeration and unregisteration stress test
+-------------------------------------------------
+
+Run the command below to test:
+
+stress-ng --timeout 60 --times --verify --metrics-brief --ramfs 9 &
+
+1) Before applying this patchset:
+
+ setting to a 60 second run per stressor
+ dispatching hogs: 9 ramfs
+ stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s
+                           (secs)    (secs)    (secs)   (real time) (usr+sys time)
+ ramfs            880623     60.02      7.71    226.93     14671.45        3753.09
+ ramfs:
+          1 System Management Interrupt
+ for a 60.03s run time:
+    5762.40s available CPU time
+       7.71s user time   (  0.13%)
+     226.93s system time (  3.94%)
+     234.64s total time  (  4.07%)
+ load average: 8.54 3.06 2.11
+ passed: 9: ramfs (9)
+ failed: 0
+ skipped: 0
+ successful run completed in 60.03s (1 min, 0.03 secs)
+
+2) After applying this patchset:
+
+ setting to a 60 second run per stressor
+ dispatching hogs: 9 ramfs
+ stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s
+                           (secs)    (secs)    (secs)   (real time) (usr+sys time)
+ ramfs            847562     60.02      7.44    230.22     14120.66        3566.23
+ ramfs:
+          4 System Management Interrupts
+ for a 60.12s run time:
+    5771.95s available CPU time
+       7.44s user time   (  0.13%)
+     230.22s system time (  3.99%)
+     237.66s total time  (  4.12%)
+ load average: 8.18 2.43 0.84
+ passed: 9: ramfs (9)
+ failed: 0
+ skipped: 0
+ successful run completed in 60.12s (1 min, 0.12 secs)
+
+We can see that the ops/s has hardly changed.
+
+This series is based on next-20230613.
+
+Comments and suggestions are welcome.
+
+Thanks,
+Qi.
+
+Qi Zheng (29):
+  mm: shrinker: add shrinker::private_data field
+  mm: vmscan: introduce some helpers for dynamically allocating shrinker
+  drm/i915: dynamically allocate the i915_gem_mm shrinker
+  drm/msm: dynamically allocate the drm-msm_gem shrinker
+  drm/panfrost: dynamically allocate the drm-panfrost shrinker
+  dm: dynamically allocate the dm-bufio shrinker
+  dm zoned: dynamically allocate the dm-zoned-meta shrinker
+  md/raid5: dynamically allocate the md-raid5 shrinker
+  bcache: dynamically allocate the md-bcache shrinker
+  vmw_balloon: dynamically allocate the vmw-balloon shrinker
+  virtio_balloon: dynamically allocate the virtio-balloon shrinker
+  mbcache: dynamically allocate the mbcache shrinker
+  ext4: dynamically allocate the ext4-es shrinker
+  jbd2,ext4: dynamically allocate the jbd2-journal shrinker
+  NFSD: dynamically allocate the nfsd-client shrinker
+  NFSD: dynamically allocate the nfsd-reply shrinker
+  xfs: dynamically allocate the xfs-buf shrinker
+  xfs: dynamically allocate the xfs-inodegc shrinker
+  xfs: dynamically allocate the xfs-qm shrinker
+  zsmalloc: dynamically allocate the mm-zspool shrinker
+  fs: super: dynamically allocate the s_shrink
+  drm/ttm: introduce pool_shrink_rwsem
+  mm: shrinker: add refcount and completion_wait fields
+  mm: vmscan: make global slab shrink lockless
+  mm: vmscan: make memcg slab shrink lockless
+  mm: shrinker: make count and scan in shrinker debugfs lockless
+  mm: vmscan: hold write lock to reparent shrinker nr_deferred
+  mm: shrinkers: convert shrinker_rwsem to mutex
+  mm: shrinker: move shrinker-related code into a separate file
+
+ drivers/gpu/drm/i915/gem/i915_gem_shrinker.c  |  27 +-
+ drivers/gpu/drm/i915/i915_drv.h               |   3 +-
+ drivers/gpu/drm/msm/msm_drv.h                 |   2 +-
+ drivers/gpu/drm/msm/msm_gem_shrinker.c        |  25 +-
+ drivers/gpu/drm/panfrost/panfrost_device.h    |   2 +-
+ .../gpu/drm/panfrost/panfrost_gem_shrinker.c  |  24 +-
+ drivers/gpu/drm/ttm/ttm_pool.c                |  15 +
+ drivers/md/bcache/bcache.h                    |   2 +-
+ drivers/md/bcache/btree.c                     |  23 +-
+ drivers/md/bcache/sysfs.c                     |   2 +-
+ drivers/md/dm-bufio.c                         |  23 +-
+ drivers/md/dm-cache-metadata.c                |   2 +-
+ drivers/md/dm-thin-metadata.c                 |   2 +-
+ drivers/md/dm-zoned-metadata.c                |  25 +-
+ drivers/md/raid5.c                            |  28 +-
+ drivers/md/raid5.h                            |   2 +-
+ drivers/misc/vmw_balloon.c                    |  16 +-
+ drivers/virtio/virtio_balloon.c               |  26 +-
+ fs/btrfs/super.c                              |   2 +-
+ fs/ext4/ext4.h                                |   2 +-
+ fs/ext4/extents_status.c                      |  21 +-
+ fs/jbd2/journal.c                             |  32 +-
+ fs/kernfs/mount.c                             |   2 +-
+ fs/mbcache.c                                  |  39 +-
+ fs/nfsd/netns.h                               |   4 +-
+ fs/nfsd/nfs4state.c                           |  20 +-
+ fs/nfsd/nfscache.c                            |  33 +-
+ fs/proc/root.c                                |   2 +-
+ fs/super.c                                    |  40 +-
+ fs/xfs/xfs_buf.c                              |  25 +-
+ fs/xfs/xfs_buf.h                              |   2 +-
+ fs/xfs/xfs_icache.c                           |  27 +-
+ fs/xfs/xfs_mount.c                            |   4 +-
+ fs/xfs/xfs_mount.h                            |   2 +-
+ fs/xfs/xfs_qm.c                               |  24 +-
+ fs/xfs/xfs_qm.h                               |   2 +-
+ include/linux/fs.h                            |   2 +-
+ include/linux/jbd2.h                          |   2 +-
+ include/linux/shrinker.h                      |  35 +-
+ mm/Makefile                                   |   4 +-
+ mm/shrinker.c                                 | 750 ++++++++++++++++++
+ mm/shrinker_debug.c                           |  26 +-
+ mm/vmscan.c                                   | 702 ----------------
+ mm/zsmalloc.c                                 |  28 +-
+ 44 files changed, 1128 insertions(+), 953 deletions(-)
+ create mode 100644 mm/shrinker.c
+
+-- 
+2.30.2
 
