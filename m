@@ -2,105 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A06B73993D
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 10:19:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E3B73994A
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 10:20:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjFVIT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 04:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
+        id S230134AbjFVITx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 04:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbjFVITY (ORCPT
+        with ESMTP id S229891AbjFVITs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 04:19:24 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172C71BE3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:19:18 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-51a2c8e5a2cso9010280a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:19:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tessares.net; s=google; t=1687421957; x=1690013957;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jHOSAVpysPPk0w7f3FRoclTHTOeGMXkD/WXz6o43PNs=;
-        b=3Qv846galtOKu5j1ZWBEoKDHHvAGKed9GxYf8jtUaOyAmrvsfZjDSr11Mtds2ZkfsI
-         z8E8JaX+BZgWcwZ2px/vjwXcVXe/G2papWnvWRx6juFbdgri5wzM8KU/VFH3hTMSEY/0
-         VfuMGKTLX1S39ewKkuOV2SpC+iB2Qxt8EdDCl8XAOUYAhUTLDSJj03+VyN3vhCChcTCl
-         lrqf85TQV4hEAXb07GWK4bCN0TBaaVw/tm7VOhXosmsRqHnh6sbKdsnQJ3TgsnBbZGFI
-         ddqk0x6z9ItamUScnrwLYCUjQwH4H12zJ3Nk3UozHB53yrgaeMe70sas3bN2pKoz74Zq
-         Os1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687421957; x=1690013957;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jHOSAVpysPPk0w7f3FRoclTHTOeGMXkD/WXz6o43PNs=;
-        b=BjuvQFL1kdjBSqtwgduVJSXxApa8CaG856IyHtgYVXoJV9d04dmiWBrwf3jSLE4TDH
-         ZWmIenE0/hFi8y6N/xHvK9gfSIIKj2tOR2e8TTuzD5sKQ9aRdeyn2KNkFUKyt5d8bzmf
-         PcZl+aWiYEskhDXs/yVWgx09oZL8SklAzYbamOqH14kxZRIR/b5IueskRsVSFe/qaqg2
-         98YHS6y537ztGYbmKSg1yX6dfsnzF5S7uXolUd0HsFd2MgyyfyalEFqRygZ6+q5a5q1v
-         jKLHBZTctOJTx2VVZZmWVjnQDYB4pId+qGd73irM6KJoRlq9JxHMeikhVKo6g12I2zIc
-         2RNQ==
-X-Gm-Message-State: AC+VfDzOwvPxBDB/A91Vtx51JVcDZGqlR/fFOHS4rBBNVg8cslmtak2a
-        eviTvYRrNOv/ZpZuUGhm3egXAw==
-X-Google-Smtp-Source: ACHHUZ5DAgOwgq4jsUtrZx0dccBdImVh49Nsq8bOifuGfOiRsZ8BsC2vF2kKv6FbxkokTfB+nxu/0g==
-X-Received: by 2002:a17:907:e93:b0:989:1a52:72b0 with SMTP id ho19-20020a1709070e9300b009891a5272b0mr7626807ejc.36.1687421957297;
-        Thu, 22 Jun 2023 01:19:17 -0700 (PDT)
-Received: from ?IPV6:2a02:578:8593:1200:c154:8b90:b6a7:cb1d? ([2a02:578:8593:1200:c154:8b90:b6a7:cb1d])
-        by smtp.gmail.com with ESMTPSA id q13-20020a170906360d00b009827b97c89csm4166097ejb.102.2023.06.22.01.19.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 01:19:17 -0700 (PDT)
-Message-ID: <88685bc2-8467-b999-4b2e-91c381c04d8e@tessares.net>
-Date:   Thu, 22 Jun 2023 10:19:11 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 7/8] selftests: mptcp: connect: fix comment typo
-To:     Yueh-Shun Li <shamrocklee@posteo.net>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>
-Cc:     linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230622012627.15050-1-shamrocklee@posteo.net>
- <20230622012627.15050-8-shamrocklee@posteo.net>
-Content-Language: en-GB
-From:   Matthieu Baerts <matthieu.baerts@tessares.net>
-In-Reply-To: <20230622012627.15050-8-shamrocklee@posteo.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 22 Jun 2023 04:19:48 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A7A2107;
+        Thu, 22 Jun 2023 01:19:40 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 1203D5C0050;
+        Thu, 22 Jun 2023 04:19:38 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 22 Jun 2023 04:19:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1687421978; x=1687508378; bh=hH
+        5vwg3g4lUW3WmAdhq/KzkSN793TkjIdYbcki+6e+w=; b=OXIy2i50Tz5HGVbJFi
+        DIhaQBTjDkFzVMALCr5fRCcm61jknGTDPDuzPloUnOYcWPg9Q+QU1TpID/dgSk88
+        dcABXsiNfBKwHEC+evQPO8wCKn6XQyYTtNCFFYbJWEJDvaQl1slR2gmVHGmiHMfz
+        CNvH6r+AX31uDmM+kYT0yv1oiFXz4pWZ+G14DVLaMlHhd4DMZV2BJfcWnyTs1f9m
+        jZE5n76RltClHzRln41/FTuT2VGw/KVb3z1cGiuk3K1qLCAjI1/wFCnbiM0XT9Vp
+        a9zqqjMUvzue+6CPbQjOQhUtLnMTZfuZCEDdY/g+SjN3cWcv/Eo1qYn5Th31varM
+        8THQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687421978; x=1687508378; bh=hH5vwg3g4lUW3
+        WmAdhq/KzkSN793TkjIdYbcki+6e+w=; b=Ao+L34WB7V+0i7miCDQlBM67jy3K1
+        p6XdD9YgSsDuUGkPgRFjIQJwDQBQTGWjHlg0X0Gdd3aUd4dalQXVx3W/oEjrMbYP
+        I4ixCXHUGIbkjjy5GdWzCUcSSSe0cSMq6LW0rhwoCrCcJEd7zDMa4d7T+CLkOClH
+        jaYfE+UCVYBVAkisE30v5FR469hQV95oMUx+pByOoinMBDhgKFmqbLDtfuf6vqrP
+        XZWsdYmyozfbgC6muoOMKu5VGaloz7Vq1pWRpcPmCPX0hODR2urAtTmJml8v9mA6
+        Ao5dFuVlbWzS6UyDfc/p0S7hLJ0VHGijm/Li3mTvBcvML5g0oFeHOQvxA==
+X-ME-Sender: <xms:GQSUZCj4mtnORLxM-BazYgnhP7TSiNTnxUt_EscqfJO5jUxB8LkLGA>
+    <xme:GQSUZDC1xZ5tIbRxqOmkVOMaYUdXpwNAudaUayDok5QaiLDAc4Paogsz-SxIZ7rtr
+    np15-KgjI4fRFvQcwo>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeguddgtddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:GQSUZKGdl9oCjOvdVx9gluYXok0_6FW8LNJM9TpjzI-9j3CI7aKv6Q>
+    <xmx:GQSUZLQvfH3ThMxfyMdjV0qiHJ_Mhh-AyCi_Jf59TG_tNErUDxxJNA>
+    <xmx:GQSUZPzL706tMl5J33ZAmj1n9uh7ezvycovGGSm5VUwSUx55vr9ZvA>
+    <xmx:GgSUZBtrUpLok7qyGimZiFrl-MSIbH5C0EzjgPCqBIZ68CgjiKJrkQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 9465FB60086; Thu, 22 Jun 2023 04:19:37 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <afeb9fad-0d3b-48ac-82da-218dcd8010e7@app.fastmail.com>
+In-Reply-To: <20230622104810.30055fb1@canb.auug.org.au>
+References: <20230622104810.30055fb1@canb.auug.org.au>
+Date:   Thu, 22 Jun 2023 10:19:17 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Stephen Rothwell" <sfr@canb.auug.org.au>,
+        "Olof Johansson" <olof@lixom.net>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     "Rob Herring" <robh@kernel.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+Subject: Re: linux-next: build warning after merge of the arm-soc tree
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yueh-Shun,
+On Thu, Jun 22, 2023, at 02:48, Stephen Rothwell wrote:
+> Hi all,
+>
+> After merging the arm-soc tree, today's linux-next build (arm
+> multi_v7_defconfig) produced this warning:
+>
+> arch/arm/boot/dts/marvell/armada-390-db.dts:84.10-106.4: Warning 
+> (spi_bus_reg): /soc/spi@10680/flash@1: SPI bus unit address format 
+> error, expected "0"
+>
+> I am not sure why this has only shown up now.
 
-On 22/06/2023 03:26, Yueh-Shun Li wrote:
-> Spell "transmissions" properly.
-> 
-> Found by searching for keyword "tranm".
-> 
-> Signed-off-by: Yueh-Shun Li <shamrocklee@posteo.net>
+Thanks for the report, I also just ran into the same thing.
+It's probably instroduced by 89e73afc3f540 ("ARM: dts: marvell:
+align SPI NOR node name with dtschema"), but I don't know why
+there was no warning before.
 
-Reviewed-by: Matthieu Baerts <matthieu.baerts@tessares.net>
+Added the fixup patch now.
 
-Thanks,
-Matt
--- 
-Tessares | Belgium | Hybrid Access Solutions
-www.tessares.net
+    Arnd
+
+---
+commit 7dc3be1745d05c1ed7d385487238ec06a07f4f29
+Author: Arnd Bergmann <arnd@arndb.de>
+Date:   Thu Jun 22 10:14:02 2023 +0200
+
+    ARM: mvebu: fix unit address on armada-390-db flash
+    
+    The unit address needs to be changed to match the reg property:
+    
+    arch/arm/boot/dts/marvell/armada-390-db.dts:84.10-106.4: Warning (spi_bus_reg): /soc/spi@10680/flash@1: SPI bus unit address format error, expected "0"
+    
+    Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+    Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+
+diff --git a/arch/arm/boot/dts/marvell/armada-390-db.dts b/arch/arm/boot/dts/marvell/armada-390-db.dts
+index 792d0a0184e82..20f518dbac971 100644
+--- a/arch/arm/boot/dts/marvell/armada-390-db.dts
++++ b/arch/arm/boot/dts/marvell/armada-390-db.dts
+@@ -81,7 +81,7 @@ &spi1 {
+ 	pinctrl-0 = <&spi1_pins>;
+ 	pinctrl-names = "default";
+ 
+-	flash@1 {
++	flash@0 {
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
+ 		compatible = "n25q128a13",
