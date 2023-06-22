@@ -2,117 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A08173AC61
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 00:10:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D739473AC69
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 00:15:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbjFVWKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 18:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47952 "EHLO
+        id S231234AbjFVWPw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 18:15:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjFVWKb (ORCPT
+        with ESMTP id S230452AbjFVWPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 18:10:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE9A1FF5;
-        Thu, 22 Jun 2023 15:10:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 74A77618C4;
-        Thu, 22 Jun 2023 22:10:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 903F5C433C8;
-        Thu, 22 Jun 2023 22:10:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687471829;
-        bh=Ke/TK6For1fPBUENdncOwbByNc7GJYM1Ix6ru4BSrcA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=r/zgV1WnCYrMoedTMcuJEVB4haogeQSZK2ir4Y71ITbROdx+6RrAus63venoBPG5G
-         aVmPYa/O7N0H4VwivYHptCkg6uuakE3eK+xjYZwVuj7TcTyXoWgcp/6ONuJJNhLKdy
-         XxdwUc6QerH+nmlocQMfZXIFWACEbX/3LeTa6Szsal6ocNdk0rRCch7q4hyMoEg6+a
-         A9ZPhorPeaqhJhmixicxtB3ywA1osWmbhdAORjS74wszSXm7aG+gnVhAwwcAcPFETT
-         mXtln1D01q+C4lNPOppR/FevOLWf8CnHEd/PpSEPj/GkND9AYqkaL5wiQM3hkd1gWy
-         nA81a8VEpCfHA==
-Date:   Thu, 22 Jun 2023 17:10:28 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Len Brown <lenb@kernel.org>, linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v4] PCI: Call _REG when transitioning D-states
-Message-ID: <20230622221028.GA138247@bhelgaas>
+        Thu, 22 Jun 2023 18:15:50 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A2F2114
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 15:15:49 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id 5614622812f47-39eab4bcee8so4811680b6e.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 15:15:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1687472148; x=1690064148;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=RWTgYq2UUxEsCsczZywS54H3UJIh7PEQ08XF3T1QNQI=;
+        b=erEg5tOQrXPIIkPMrTVT0g485cXgkF/mSZwczNIMFvys3/3M8s5touTnozJgkJnrv8
+         MFgmH40Daa20QkYuk/ODWSbN3LRXmOTp58f7zONk5K1txgIR2E8530LaoJ51BKnZY5aO
+         q2mU71Au/pRMDG+NvsVvPFmQc6ZfVXk4ZJnNrQHF6MhxbN3POquh8W6sbg6BpsfU+l9Z
+         TkwUKpPMpEYhD1uL94U3aeq6C4rVRimj2eXjJmERe1oophqJqKOGbPxQE61zl4rUBY/F
+         iOzC66FM7hcAoKz+QXRHotEMNHJjsYwHuYiVdOFUNE5F6uu2fIgvAz22mSWoEyV6S/OC
+         H5vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687472148; x=1690064148;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RWTgYq2UUxEsCsczZywS54H3UJIh7PEQ08XF3T1QNQI=;
+        b=O4HHePUjKQfKgaRbGLLuS+Xw7QBR7ZEB0/mlwhwJ8Eb8rNvtxZ6m6H4vEOmSrb0QBf
+         m/CFIw74dhxByrRn3jM5WFgaDK6oACPCmulp4nMfr7Hk7e8k8ShqTJh/gjKBqXdA4Vr9
+         TZPY8NVWLZ37u/knEDsPkkE1NhEVvtISJ4u+Wmk0IFh0wYzw80O/PgPzWHE3ZtmS/zRF
+         +IBWRp/24fM0ic8/MZeP/YF8y+opmkM+MYgY0m4PSaO6VSC+xMIZeO6Jb7xE3CtnA8w4
+         EkIl7WL2Pjlj9Myi/+7dq3ku8bIXpxsbGh/81J/zObF0Sn9b6PSN++uAxxbA5i+sdWQs
+         /EzA==
+X-Gm-Message-State: AC+VfDxXSCuhJ9kHJnXDK4qBnCH/lecr8HxHecFfZPyjlskORZuTalOa
+        xg0mBT6xoja9D2GLvQE7I56mWg==
+X-Google-Smtp-Source: ACHHUZ5xFMVs4yYQ56AKSUP4WsX6unDFAVwqpLuAsR4Evt1ihNZo7GTkH/lU8pygoBB2omszfgADtw==
+X-Received: by 2002:a05:6808:1b0f:b0:39a:aafd:dda7 with SMTP id bx15-20020a0568081b0f00b0039aaafddda7mr22999807oib.35.1687472148243;
+        Thu, 22 Jun 2023 15:15:48 -0700 (PDT)
+Received: from dread.disaster.area (pa49-180-13-202.pa.nsw.optusnet.com.au. [49.180.13.202])
+        by smtp.gmail.com with ESMTPSA id d24-20020a17090ac25800b0025b83c6227asm217949pjx.3.2023.06.22.15.15.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 15:15:47 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1qCSaf-00F0Us-05;
+        Fri, 23 Jun 2023 08:15:45 +1000
+Date:   Fri, 23 Jun 2023 08:15:45 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     stsp <stsp2@yandex.ru>
+Cc:     Chuck Lever III <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
+Subject: Re: [PATCH 2/2] selftests: add OFD lock tests
+Message-ID: <ZJTIEaqwkc1U050E@dread.disaster.area>
+References: <20230621152214.2720319-1-stsp2@yandex.ru>
+ <20230621152214.2720319-3-stsp2@yandex.ru>
+ <4db7c65bee0739fe7983059296cfc95f20647fa3.camel@kernel.org>
+ <7bbb29d2-4cae-48bd-1b97-9f4dbf6ffb19@yandex.ru>
+ <8F45F47C-86C0-472E-B701-001A4FF90DBC@oracle.com>
+ <26a798ae-b93b-2f68-71ed-35950240927d@yandex.ru>
+ <187C3E49-A977-492E-99CB-97F032B24E5F@oracle.com>
+ <4582a51d-2b29-f430-2f8f-ed1239d70f70@yandex.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <03e5d343-848c-02c7-2deb-917d1b93ce8c@amd.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <4582a51d-2b29-f430-2f8f-ed1239d70f70@yandex.ru>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 05:52:52PM -0500, Limonciello, Mario wrote:
+On Thu, Jun 22, 2023 at 10:31:06PM +0500, stsp wrote:
 > 
-> On 6/21/2023 5:28 PM, Bjorn Helgaas wrote:
-> > On Tue, Jun 20, 2023 at 09:04:51AM -0500, Mario Limonciello wrote:
-> > > Section 6.5.4 of the ACPI 6.4 spec describes how AML is unable to access
-> > > an OperationRegion unless `_REG` has been called.
-> > > 
-> > > "The OS runs _REG control methods to inform AML code of a change in the
-> > > availability of an operation region. When an operation region handler
-> > > is unavailable, AML cannot access data fields in that region.
-> > > (Operation region writes will be ignored and reads will return
-> > > indeterminate data.)"
-> > > 
-> > > The PCI core does not call `_REG` at anytime, leading to the undefined
-> > > behavior mentioned in the spec.
+> 22.06.2023 22:12, Chuck Lever III пишет:
+> > I don't have a strong preference. A good choice is to
+> > push the test before the kernel changes are merged.
+> It will fail though w/o kernel changes.
+> So what exactly is the policy?
 
-> I double checked a BIOS debug log which shows ACPI calls
-> to confirm and didn't see a single _REG call for any device
-> before this patch across a boot/suspend/resume cycle.
+filesystem unit test functionality needs to be pushed into fstests
+and/or ltp. The preference is the former, because just about every
+filesystem developer and distro QA team is running this as part of
+their every-day testing workflow.
 
-OK, thanks, I didn't see one either, which surprised me.
+fstests is written to probe whether the kernel supports a given
+feature or not before testing it. It will _not_run() a test that
+doesn't have the required kernel/fs/device support, and this is not
+considered a test failure.
 
-Based on the weird exception in sec 6.5.4:
+Yes, it means you have to also write the userspace feature probing
+code, but that should be trivial to do because userspace already has
+to be able to safely discover that this extension exists, right?
 
-  Since the [PCI_Config operation region on a PCI root bus containing
-  a _BBN object] is permanently available, no _REG methods are
-  required, nor will OSPM evaluate any _REG methods that appear in the
-  same scope as the operation region declaration(s) of this type.
-
-it seems like when we add a PCI host bridge, we should evaluate any
-_REG in the host bridge scope if it does not include _BBN.
-
-The example:
-
-  It should be noted that PCI Config Space Operation Regions are ready
-  as soon the host controller or bridge controller has been programmed
-  with a bus number. PCI1’s _REG method would not be run until the
-  PCI-PCI bridge has been properly configured.
-
-suggests that when we set a PCI-PCI bridge's secondary bus number, we
-should evaluate any _REG in its scope.
-
-  At the same time, the OS will also run ETH0’s _REG method since its
-  PCI Config Space would be also available. The OS will again run
-  ETH0’s _REG method when the ETH0 device is started.
-
-So evidently we should evaluate ETH0._REG once after setting PCI1's
-secondary bus number, and again when "ETH0 is started."  I have no
-idea what "started" means.
-
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> For the new patch.
-
-Thanks for taking a look at it!
-
-I think we're missing some other _REG stuff, but it seems like what
-this patch adds does match the per-endpoint power management requires,
-so I applied these to pci/pm for v6.5.
-
-Bjorn
+-Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
