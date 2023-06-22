@@ -2,120 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29ED273AD31
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 01:30:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08DD773AD34
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 01:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbjFVXaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 19:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52282 "EHLO
+        id S231147AbjFVXcA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 19:32:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbjFVX35 (ORCPT
+        with ESMTP id S229934AbjFVXb6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 19:29:57 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 489D31FF7
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 16:29:55 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id DC3D85C01F2;
-        Thu, 22 Jun 2023 19:29:51 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 22 Jun 2023 19:29:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1687476591; x=1687562991; bh=wZHmmu6KvxmT8vFXqnS3eIjYDdZ0UuOzPPy
-        195vr5vA=; b=upeRMZ/DZhxynCIhJkq0oh2TBP8tODn1Hk/riWnr6M9c2krUw4i
-        +QxqyIX2RaPB+SfXIqnxm0zii+8OF6voZaFkYKR4JaCVJppBPfAISXwBvVeRDe4M
-        P69Gqew1eTIoprENOmYqh4BazRLz/Q1wNOO5tPmo4K1t2jdQ0eDo6XJWbl/aozLY
-        6gQeS29V6jUkigwMI2yF8iYfIEq8tNDVRZXf74BESw4kmD/TjIBsgGP2SbpnP/I2
-        F1nu7yflv0SVfeH4lHRfy4DmopifkSJO6N3t/z1nmDh9W+TwQtLvtjdPjdbIyMJ5
-        PbUx6HZYH3va+WZg2VhxPl6mPUDz/1MCQnA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1687476591; x=1687562991; bh=wZHmmu6KvxmT8vFXqnS3eIjYDdZ0UuOzPPy
-        195vr5vA=; b=CGBpcC/WoW5bVKVXxwPR/ezoRUZECPBXl8CEf2feAQbT2Q26Vot
-        2c97CtWD59vu2ln/883O0HPTkLB9muCdVL0R8FtSuDabIXNclEagiJMSQLoE9pTm
-        CiUGSK6+PYMzrSqVEum4COyrtYphGOo/wyuzO1abVvj3jnGjKaGlHg9HV5BzAyhV
-        AMXXIo2HfmKF8AEgsOIMrqr5OW03pQao7/b5+FUNb1rq8m0qfTlH/DSl8F49r2Uo
-        dECxcbOnGFEB98LTJ4gfLuHn6MHZbYcWY7zYVm1lFLtCTUc0eNMP9fdl8VheWZpS
-        F1oCXl2WJh+6eccS5lifhJHSQM+qVB59RLg==
-X-ME-Sender: <xms:b9mUZAZGVf2OrKJuDLZ77o4mgfT_qro1RTNy1H2xMRvPiq66bAf5BA>
-    <xme:b9mUZLZQtoPI8BppnlWCTxhYjrFLLyNbhERQ0FS1A9kDBrdGnKafaC0em_7ThrGu0
-    78tzlz7mXcnC_wdru0>
-X-ME-Received: <xmr:b9mUZK85TBS1GH7kboTNv3p5-k14-PgWJ8ubRq2Y1ItrbFnYCyTtoaMXlftWwFeLwMky2A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeegvddgvddtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkffuhffvveffjghftgfgfgggsehtqhertddtreejnecuhfhrohhmpefnuhhk
-    vgculfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdguvghvqeenucggtffrrghtthgvrh
-    hnpedvuefhveduieffledtleeuhfeuteethfelieejudduhefhveevjeeghefggeekveen
-    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgihhtlhgrsgdrtghomhenucevlhhush
-    htvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvgeslhhjohhn
-    vghsrdguvghv
-X-ME-Proxy: <xmx:b9mUZKo1f1Q-j34veDBEYxJ9bcdIeUUfMHgMtP6e8klkFs_uytmlUg>
-    <xmx:b9mUZLpZXGXKkqYA4C2-8fmA-n5flumiDWnrL1mw6oySzCBy0TRrBg>
-    <xmx:b9mUZITsTaVkM0b5-Pigfc1tRs3lto5qLbnGks1uO8JYg8H6SVnH2w>
-    <xmx:b9mUZMmpv4-0XnfTDyj3BWBazV2SFCR2PXYhwEqwLvRlC_jUv6-xYQ>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 22 Jun 2023 19:29:48 -0400 (EDT)
-Message-ID: <349dd967fd5c201619cea0c54e3a09e933bfd377.camel@ljones.dev>
-Subject: Re: [PATCH v4] ALSA: hda/realtek: Add quirks for ROG ALLY CS35l41
- audio
-From:   Luke Jones <luke@ljones.dev>
-To:     Andrei Matei <andreimatei1@gmail.com>, tiwai@suse.de
-Cc:     linux-kernel@vger.kernel.org, perex@perex.cz,
-        ruinairas1992@gmail.com, sbinding@opensource.cirrus.com,
-        tiwai@suse.com
-Date:   Fri, 23 Jun 2023 11:29:41 +1200
-In-Reply-To: <CABWLsesOzR=Wpc1TTp3PLXAuWUfX-heUnUys7ffM=Jzn-mEbxw@mail.gmail.com>
-References: <CABWLsesOzR=Wpc1TTp3PLXAuWUfX-heUnUys7ffM=Jzn-mEbxw@mail.gmail.com>
+        Thu, 22 Jun 2023 19:31:58 -0400
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3168C210A
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 16:31:57 -0700 (PDT)
+Received: by mail-vk1-xa2e.google.com with SMTP id 71dfb90a1353d-47167a4ce3cso28441e0c.2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 16:31:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687476716; x=1690068716;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=67piO5m5kwhgkGZRSCs+P2mt8JZPTPY6ZNmz3uFEERw=;
+        b=Go9OPZrCjyYQrsGYmeyjij/CYhyZz00UzA7dWA9yE65QecRbdBxLjHb3CHXsjMLhgE
+         cHOBEJyeVN5chDlUh00cwig04AbPvMnUmLiS7c9iR1pFC2dRjvhIpHnbmq112EW1f9th
+         WR2cmAM8Al8Q/WbPfSwc0vJl4NkTl7vLJYvpqHo7KYa3tyErj29HOJ4HsFNergrI31U2
+         MJVW/Czc3AdfmGXsRk2YmM+QXV9rh5kaUf0eNvt6cqbat9Y92TT4V6CKZQLD3s6s5B4n
+         Le0KRFp7o6I6fiA26eSskq/Vr+AvyD7atFVXYPMv1bm+lDSdRpl0sVOnNORrJSb1C1um
+         QB4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687476716; x=1690068716;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=67piO5m5kwhgkGZRSCs+P2mt8JZPTPY6ZNmz3uFEERw=;
+        b=gdksEbzvSiFRe87VY3aHOrOduLtd7E/N4CKEyiFY85d/gtZBygO2wJZ+tgZhcy3xCX
+         2cO1KmZSv8/9wESEjUiQPXNFWE17KyGwzId3333nHOXc8nKTN683+ezjPo85lx520Z1R
+         GAeth5T7E/Fr1/aKSZTNWlQHfeH9rRt/CO+fQKwDDCthJPWGJM8uG7ru/MQhs2nRBeAK
+         7X6ozJGLtlbhOTAkvMga6XS4ndm/pBv51YJY40DDHNKEZiFPwstTGT11Won8hKYZxr4t
+         y0/txtb0u8LM3FipwM72XoGyMv0+pevBqMhgUNcFZheOVjixX+rJZqWM9FDKjPHjzypF
+         FNBw==
+X-Gm-Message-State: AC+VfDxO19XNVl5WgANXzsvri6Kct7JdJJ2bNCUviqAMcDUIqcdFFu2d
+        3D0fs6cM2rBg9SUOOSxpkoJbGt+gfWGry74eNPcv+w==
+X-Google-Smtp-Source: ACHHUZ4yBGctwXzyOZ7e9UbJK1NZq9tQ5XS38jtR9N8MJn8TxhDelZEf+HQlQgnvEqQ9UsmFPsgR3BRng60Q7TltBmI=
+X-Received: by 2002:a1f:5744:0:b0:471:5110:49e8 with SMTP id
+ l65-20020a1f5744000000b00471511049e8mr9920922vkb.4.1687476714680; Thu, 22 Jun
+ 2023 16:31:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+ <972e1d5c5ec53e2757fb17a586558c5385e987dd.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+ <64876bf6c30e2_1433ac29415@dwillia2-xfh.jf.intel.com.notmuch>
+In-Reply-To: <64876bf6c30e2_1433ac29415@dwillia2-xfh.jf.intel.com.notmuch>
+From:   Erdem Aktas <erdemaktas@google.com>
+Date:   Thu, 22 Jun 2023 16:31:43 -0700
+Message-ID: <CAAYXXYzOUQC0G7yoh1i2+SW-FodCABwhD6TgArLf28iG=i65zw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] selftests/tdx: Test GetQuote TDX attestation feature
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Dionna Amalie Glaze <dionnaglaze@google.com>,
+        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        dhowells@redhat.com, brijesh.singh@amd.com, atishp@rivosinc.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.3 (by Flathub.org) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-06-22 at 08:35 -0400, Andrei Matei wrote:
-> Hello,
-> Is this patch specific to the Ally, or does it cover other Asus
-> laptops discussed in this thread [1]?
->=20
-> Thanks!
->=20
-> [1]
-> https://lore.kernel.org/lkml/b4c202b2-ab29-e2aa-b141-0c967b2c1645@opensou=
-rce.cirrus.com/T/#m42ec3f3f4ceb610430587b916281b570fbb666df
+On Mon, Jun 12, 2023 at 12:03=E2=80=AFPM Dan Williams <dan.j.williams@intel=
+.com> wrote:
+>
+> [ add David, Brijesh, and Atish]
+>
+> Kuppuswamy Sathyanarayanan wrote:
+> > In TDX guest, the second stage of the attestation process is Quote
+> > generation. This process is required to convert the locally generated
+> > TDREPORT into a remotely verifiable Quote. It involves sending the
+> > TDREPORT data to a Quoting Enclave (QE) which will verify the
+> > integrity of the TDREPORT and sign it with an attestation key.
+> >
+> > Intel's TDX attestation driver exposes TDX_CMD_GET_QUOTE IOCTL to
+> > allow the user agent to get the TD Quote.
+> >
+> > Add a kernel selftest module to verify the Quote generation feature.
+> >
+> > TD Quote generation involves following steps:
+> >
+> > * Get the TDREPORT data using TDX_CMD_GET_REPORT IOCTL.
+> > * Embed the TDREPORT data in quote buffer and request for quote
+> >   generation via TDX_CMD_GET_QUOTE IOCTL request.
+> > * Upon completion of the GetQuote request, check for non zero value
+> >   in the status field of Quote header to make sure the generated
+> >   quote is valid.
+>
+> What this cover letter does not say is that this is adding another
+> instance of the similar pattern as SNP_GET_REPORT.
+>
+> Linux is best served when multiple vendors trying to do similar
+> operations are brought together behind a common ABI. We see this in the
+> history of wrangling SCSI vendors behind common interfaces. Now multiple
 
+Compared to the number of SCSI vendors, I think the number of CPU
+vendors for confidential computing seems manageable to me. Is this
+really a good comparison?
 
-It is Ally specific. Most of the laptops will require a set of similar
-quirks, but for a different codec susbsystem ID.
+> confidential computing vendors trying to develop similar flows with
+> differentiated formats where that differentiation need not leak over the
+> ABI boundary.
 
-Some others have now been submitted, if your laptop is not yet
-supported please file a bug report, if it is a ROG laptop you can
-submit something here https://gitlab.com/asus-linux/asusctl and I will
-help plus submit any fixes upstream per usual.
+<Just my personal opinion below>
+I agree with this statement in the high level but it is also somehow
+surprising for me after all the discussion happened around this topic.
+Honestly, I feel like there are multiple versions of "Intel"  working
+in different directions.
 
-Do keep in mind that the 2023 range of ASUS laptops are almost all
-missing the _DSD properties for the Cirrus amp they are using, and so
-you will be missing bass/midrange until a solution is agreed upon (or
-you add an ssdt patch) - you also need the correct firmware tunings for
-your laptop. It is very highly unlikely ASUS will add the missing
-properties to a bios update for each and every one of the laptops + the
-variants in the full 2023 range.
+If we want multiple vendors trying to do the similar things behind a
+common ABI, it should start with the spec. Since this comment is
+coming from Intel, I wonder if there is any plan to combine the GHCB
+and GHCI interfaces under common ABI in the future or why it did not
+even happen in the first place.
 
-Regards,
-Luke.
+What I see is that Intel has GETQUOTE TDVMCALL interface in its spec
+and again Intel does not really want to provide support for it in
+linux. It feels really frustrating.
+
+>
+> My observation of SNP_GET_REPORT and TDX_CMD_GET_REPORT is that they are
+> both passing blobs across the user/kernel and platform/kernel boundary
+> for the purposes of unlocking other resources. To me that is a flow that
+> the Keys subsystem has infrastructure to handle. It has the concept of
+> upcalls and asynchronous population of blobs by handles and mechanisms
+> to protect and cache those communications. Linux / the Keys subsystem
+> could benefit from the enhancements it would need to cover these 2
+> cases. Specifically, the benefit that when ARM and RISC-V arrive with
+> similar communications with platform TSMs (Trusted Security Module) they
+> can build upon the same infrastructure.
+>
+> David, am I reaching with that association? My strawman mapping of
+> TDX_CMD_GET_QUOTE to request_key() is something like:
+>
+> request_key(coco_quote, "description", "<uuencoded tdreport>")
+>
+> Where this is a common key_type for all vendors, but the description and
+> arguments have room for vendor differentiation when doing the upcall to
+> the platform TSM, but userspace never needs to contend with the
+> different vendor formats, that is all handled internally to the kernel.
+
+I think the problem definition here is not accurate. With AMD SNP,
+guests need to do a hypercall to KVM and KVM needs to issue a
+SNP_GUEST_REQUEST(MSG_REPORT_REQ) to the SP firmware. In TDX, guests
+need to do a TDCALL to TDXMODULE to get the TDREPORT and then it needs
+to get that report delivered to the host userspace to get the TDQUOTE
+generated by the SGX quoting enclave. Also TDQUOTE is designed to work
+async while the SNP_GUEST_REQUESTS are blocking vmcalls.
+
+Those are completely different flows. Are you suggesting that intel
+should also come down to a single call to get the TDQUOTE like AMD
+SNP?
+
+The TDCALL interface asking for the TDREPORT is already there. AMD
+does not need to ask the report and the quote separately.
+
+Here, the problem was that Intel (or "upstream community") did not
+want to implement/accept hypercall for TDQUOTE which would be handled
+by the user space VMM. The alternative implementation (using vsock)
+does not work for many use cases including ours. I do not see how your
+suggestion addresses the problem that this patch was trying to solve.
+
+So while I like the suggested direction, I am not sure how much it is
+possible to come up with a common ABI even with just only for 2
+vendors (AMD and Intel) without doing spec changes which is a multi
+year effort imho.
+
+>
+> At this point I am just looking for confirmation that the "every vendor
+> invent a new character device + ioctl" does not scale and a deeper
+> conversation is needed. Keys is a plausible solution to that ABI
+> proliferation problem.
