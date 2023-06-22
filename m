@@ -2,121 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E279673A939
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7BC73A93B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbjFVTzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 15:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
+        id S231132AbjFVT4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 15:56:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjFVTzt (ORCPT
+        with ESMTP id S229643AbjFVT4Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 15:55:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D93F1;
-        Thu, 22 Jun 2023 12:55:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 99A13618DB;
-        Thu, 22 Jun 2023 19:55:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07AD0C433C0;
-        Thu, 22 Jun 2023 19:55:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687463748;
-        bh=hFUatM9PSRU0Dtg23g2n8VgrlPwM86dU8bJ9w0p+FCQ=;
+        Thu, 22 Jun 2023 15:56:24 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDB2F1;
+        Thu, 22 Jun 2023 12:56:22 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 21:56:19 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1687463780; bh=sjhMAnWC+WRXas1AobjF7bEqN7SCFpSlpfEgghDu3ZY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dVNb0e2EKqjI5Qc332vgXziWEwH7cj78nZGHidT7flsGhZ2Pc3uG2tHz3SLHBH+i6
-         RuuQuvNvxS/T1Z41sK5bHowla2XhehXYTtybi0w+V/em4hg7YKn7HLrXfBqD2it2Zo
-         L85qzCl9mbs65Sa4XYLV1RQycOUZaQEEtBASRZfPKVIsIDSK4ub1qdX3aw9zN7tYhT
-         XJD1gdLiHkUezRZpIpRZy2hxMbv6fveTmd+JKl0PcFoPE0dBSBxLtn+Kf+vTG3aYds
-         LHiEdtmX8wV7ck3OTU2Ts8UC2FAMCeuiymrOY+L5b6770xGy+A/xh3CTXpqTPjaaFL
-         /xbX7pzPi3ynQ==
-Date:   Thu, 22 Jun 2023 20:55:42 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Robert Marko <robimarko@gmail.com>,
-        Das Srinagesh <quic_gurus@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-Subject: Re: [PATCH 1/2] dt-bindings: firmware: qcom,scm: Allow interconnect
- on SC8280XP
-Message-ID: <20230622-santa-alias-6fb047a12794@spud>
-References: <20230622-topic-8280scmicc-v1-0-6ef318919ea5@linaro.org>
- <20230622-topic-8280scmicc-v1-1-6ef318919ea5@linaro.org>
+        b=lg4BaVBZWGV5eFXgYBMM7duPkZ4vK9SZ9Kd2MWai1NvPvpBmP4Akvz4cYcbP9gAkC
+         f0ePQyBJPmsU1uy7aW8D9ivtVgAcbx0PvfqBqNS8rMSFcRao+HKEkc9mHi8xlwWPbk
+         wFvNiz5HFpPmVzN12e749DBZHpK55liL57uZZZEQ=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Zhangjin Wu <falcon@tinylab.org>
+Cc:     arnd@arndb.de, david.laight@aculab.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, w@1wt.eu
+Subject: Re: [PATCH v4 10/10] selftests/nolibc: add mmap and munmap test cases
+Message-ID: <97fbbe17-b261-475c-8959-71cccaa5a2f5@t-8ch.de>
+References: <bff82ea6-610b-4471-a28b-6c76c28604a6@t-8ch.de>
+ <20230622193249.1190336-1-falcon@tinylab.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="y6lHOH+nZzJT02Is"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230622-topic-8280scmicc-v1-1-6ef318919ea5@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230622193249.1190336-1-falcon@tinylab.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Zhangjin,
 
---y6lHOH+nZzJT02Is
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 2023-06-23 03:32:49+0800, Zhangjin Wu wrote:
+> > On 2023-06-19 23:55:41+0800, Zhangjin Wu wrote:
+> > > Three mmap/munmap related test cases are added:
+> > > 
+> > > - mmap(NULL, 0, PROT_READ, MAP_PRIVATE, 0, 0), MAP_FAILED, EINVAL)
+> > > 
+> > >   The length argument must be greater than 0, otherwise, fail with -EINVAL.
+> > > 
+> > > - munmap((void *)-1, 4*1024), -1, EINVAL)
+> > > 
+> > >   Invalid (void *)-1 address fail with -EINVAL.
+> > > 
+> > > - test_mmap_munmap(4*1024)
+> > > 
+> > >   It finds a init file, mmap() it and then munmap().
+> > > 
+> > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > > ---
+> > >  tools/testing/selftests/nolibc/nolibc-test.c | 31 ++++++++++++++++++++
+> > >  1 file changed, 31 insertions(+)
+> > > 
+> > > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> > > index 80ab29e2887c..f7c0ca72cb28 100644
+> > > --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> > > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> > > @@ -592,6 +592,34 @@ static int test_stat_timestamps(void)
+> > >  	return 0;
+> > >  }
+> > >  
+> > > +int test_mmap_munmap(int size)
+> > > +{
+> > > +	char init_files[5][20] = {"/init", "/sbin/init", "/etc/init", "/bin/init", "/bin/sh"};
+> > 
+> > Why not /proc/1/exe or even /proc/self/exe?
+> > 
+> > I know your other series tries to remove the procfs dependency, but
+> > we're not there yet :-).
+> > 
+> 
+> Yeah, '/proc/self/exe' is a choice, if so, the 'has_proc' should be added ;-)
 
-On Thu, Jun 22, 2023 at 05:56:15PM +0200, Konrad Dybcio wrote:
-> Just like all other Qualcomm SoCs, SC8280XP SCM should be fed an
-> interconnect path. Do so.
->=20
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Currently procfs is a hard requirement. So I would leave 'has_proc' to
+the other series that may change this.
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> > Also does it make sense to pass a size parameter?
+> > Why not use either PAGE_SIZE or the real size of the binary from
+> > fstat().
+> > 
+> 
+> Ok, as the manpage of mmap shows:
+> 
+>        For mmap(), offset must be a multiple of the underlying huge page
+>        size.  The system automatically aligns length to be a multiple of
+>        the underlying huge page size.
+> 
+>        For munmap(), addr, and length must both be a multiple of the
+>        underlying huge page size.
+> 
+> perhaps we should do further tests:
+> 
+> * the real size/length
+> * even > the real size
+> * the PAGE_SIZE
+> * not aligned with PAGE_SIZE
+> 
+> If such tests are required, the 'size' and even 'offset' arguments could be
+> provided to cover different combination or we do such tests internally, then,
+> the arguments are not required.
 
-Cheers,
-Conor.
+I think task of nolibc-test is to test the code in nolibc itself.
+The custom mmap implementation is trivial and directly calls the
+syscall. These additionally proposed tests would effectively test the
+core kernels implementation of mmap() and not the code of nolibc.
 
-> ---
->  Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/D=
-ocumentation/devicetree/bindings/firmware/qcom,scm.yaml
-> index 09073e1d88ff..42d064be753b 100644
-> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
-> @@ -174,6 +174,7 @@ allOf:
->              contains:
->                enum:
->                  - qcom,scm-qdu1000
-> +                - qcom,scm-sc8280xp
->                  - qcom,scm-sm8450
->                  - qcom,scm-sm8550
->      then:
->=20
-> --=20
-> 2.41.0
->=20
+Therefore I don't think they are necessary in nolibc-test and the
+functionality is hopefully already be tested in another testsuite.
 
---y6lHOH+nZzJT02Is
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+Note:
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJSnPgAKCRB4tDGHoIJi
-0jlIAP4h7eOJcII1qn4nFLfKSdk1p0Feg0+Vi4ccqrhZJwNKOAEAlGbcQW+dynEQ
-ZQJj2xuB5X6bT7VckV39IkMvhdjUMwI=
-=AnV9
------END PGP SIGNATURE-----
+Testing mmap is indeed useful to test the implementation of
+my_syscall6() by providing a bogus value in the 'offset' parameter.
+I think we do have such a testcase.
 
---y6lHOH+nZzJT02Is--
+<snip>
+
+Thomas
