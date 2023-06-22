@@ -2,121 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB87773A8CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8925973A8D0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbjFVTGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 15:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46360 "EHLO
+        id S230355AbjFVTJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 15:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231476AbjFVTF6 (ORCPT
+        with ESMTP id S229549AbjFVTJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 15:05:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29828210C;
-        Thu, 22 Jun 2023 12:05:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A592C618D9;
-        Thu, 22 Jun 2023 19:05:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF333C433C8;
-        Thu, 22 Jun 2023 19:05:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687460754;
-        bh=ys+KisNqnAg7Tah0SJFa7QXN8LXLO3X3kYZ3umnLK1E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=YvsLOkjtKw9rv2BwGFtUphgK9rqJT3a3DQQlwtHRV5z73bJJfcQqE62DdWRwY/xU4
-         hjo5Kn1eMjp12Nt5PcurYdDORqUDMoprylAYHgejB0l1A/JShQ7+xVffQrzjKaidmG
-         eDoDiI9k3fQGHXi9wMqZyA6gbrWIuTnmVTVNCM/Zj/H4p7IxyUlIXoC5YtDTOirLWN
-         RB0XcJWyxulmcQmgIfaLhXLaW7O+7R7cTqMkiDEid9YkXZyIupijaJAWxN1a8/0ruj
-         1xVaVudGNhvsCr5gy7wNDZw3WIS0cDENJDeRC1nQBSzzLyF0UdgrP9HBNgXZNaSwMS
-         Gx6xkIYwmOqhA==
-Date:   Thu, 22 Jun 2023 20:05:48 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Praveen Talari <quic_ptalari@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com,
-        quic_vnivarth@quicinc.com, quic_arandive@quicinc.com
-Subject: Re: [PATCH v3 2/3] spi: dt-bindings: qcom,spi-geni-qcom: Add SPI
- device mode support for GENI based QuPv3
-Message-ID: <20230622-sustained-marauding-5c6c8a76c834@spud>
-References: <20230622135955.941-1-quic_ptalari@quicinc.com>
- <20230622135955.941-3-quic_ptalari@quicinc.com>
+        Thu, 22 Jun 2023 15:09:04 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A848FA2;
+        Thu, 22 Jun 2023 12:09:01 -0700 (PDT)
+X-QQ-mid: bizesmtp68t1687460925t3449k82
+Received: from linux-lab-host.localdomain ( [116.30.126.60])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 23 Jun 2023 03:08:43 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: zT6n3Y95oi0+GF2rz41IpqKmQQtPn9dIE2aj0KkXMIaCuzLAVuWvOc3JP5oeO
+        PKznVlOojlNN6dUd5Tr33s/TsUPIxkR/zyEGfmHjEhnYEGfmqpPLcHD6P44A3G0OtsIngvF
+        zg8X/8uKlWtzEIjFJNh9Ehw81v8ZGwOSu2nEKWXvPcLYUKpP8OLaOTK3yX9FWRe+wlt/wW1
+        Cjjg9MamTX7Ydembt+uVrXDW/myWX152jB9blHmVoU9/TqU1kj0d2hRbhF3XtI77FI3slHf
+        jxB8z+eCNy+gZVBtxzvpTJPhcVlMwsRZYsAcVsA5bJooVK3U2mqFfztB79sbX+oFQFDynek
+        Gv1xDLxCtuiH78WOuPu9VSZCYQEaH9Pl3OOyZ/ZhJgSBZCh/EqUlpzwqhhbhQ==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 11068915257765438877
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, w@1wt.eu
+Subject: Re: [PATCH v4 07/10] tools/nolibc: clean up mmap() support
+Date:   Fri, 23 Jun 2023 03:08:43 +0800
+Message-Id: <20230622190843.1189684-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <31d85464-5731-4df6-8fcd-2b0be11eac90@t-8ch.de>
+References: <31d85464-5731-4df6-8fcd-2b0be11eac90@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="BpA4WeFicj+70oUn"
-Content-Disposition: inline
-In-Reply-To: <20230622135955.941-3-quic_ptalari@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Thomas
 
---BpA4WeFicj+70oUn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On 2023-06-19 23:51:20+0800, Zhangjin Wu wrote:
+> > Do several cleanups together:
+> > 
+> > - Since all supported architectures have my_syscall6() now, remove the
+> >   #ifdef check.
+> > 
+> > - Move the mmap() related macros to tools/include/nolibc/types.h
+> > 
+> > - Apply the new __sysret() to convert the calling of sys_map() to
+> >   oneline code
+> > 
+> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > ---
+> >  tools/include/nolibc/sys.h   | 24 +-----------------------
+> >  tools/include/nolibc/types.h | 11 +++++++++++
+> >  2 files changed, 12 insertions(+), 23 deletions(-)
+> > 
+> > diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+> > index 8a6e16472d54..1c02cec3bcd9 100644
+> > --- a/tools/include/nolibc/sys.h
+> > +++ b/tools/include/nolibc/sys.h
+> > @@ -624,26 +624,11 @@ int mknod(const char *path, mode_t mode, dev_t dev)
+> >  	return __sysret(sys_mknod(path, mode, dev));
+> >  }
+> >  
+> > -#ifndef MAP_SHARED
+> > -#define MAP_SHARED		0x01	/* Share changes */
+> > -#define MAP_PRIVATE		0x02	/* Changes are private */
+> > -#define MAP_SHARED_VALIDATE	0x03	/* share + validate extension flags */
+> > -#endif
+> > -
+> > -#ifndef MAP_FAILED
+> > -#define MAP_FAILED ((void *)-1)
+> > -#endif
+> > -
+> >  #ifndef sys_mmap
+> >  static __attribute__((unused))
+> >  void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
+> >  	       off_t offset)
+> 
+> This could return a plain integer type instead to save some casts.
+> Not sure if API compatibility is guaranteed for the raw sys_ functions.
+>
 
-On Thu, Jun 22, 2023 at 07:29:54PM +0530, Praveen Talari wrote:
-> Add a property to configure QUPv3 SE as SPI Device mode.
->=20
-> Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
-> ---
-> v2 -> v3:
-> - modified commit message to use device mode instead of slave mode
+Seems musl simply not provide the sys_xxx() functions, but let the library
+routines call __syscall() directly. If we can treat these sys_xxx() as internal
+functions, perhaps we can simply let the return type of sys_xxx() as 'long' to.
 
-Suitability or w/e of the property aside, I don't understand this.
-Why not change the *property*, which has far more visibility than the
-commit message, to use device rather than slave?
+    $ grep "^void \*sys_" -ur tools/include/nolibc/sys.h 
+    void *sys_brk(void *addr)
+    void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
 
-Chers,
-Conor.
+Thanks,
+Zhangjin
 
-> ---
->  Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yam=
-l b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-> index 2e20ca313ec1..5c7d0293bbf7 100644
-> --- a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-> +++ b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-> @@ -66,6 +66,10 @@ properties:
->    reg:
->      maxItems: 1
-> =20
-> +  qcom,slv-ctrl:
-> +    description: configure QUPv3 SE as Device mode
-> +    type: boolean
-> +
->  required:
->    - compatible
->    - clocks
-> --=20
-> 2.17.1
->=20
 
---BpA4WeFicj+70oUn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJSbjAAKCRB4tDGHoIJi
-0rQBAP9VpTT/MeUMABsfUwyLydR8mL17cNI3B76hNRLlyLp64AEAqfYCLzbG42gx
-ytwOhlHoaVCMHkXXoV3Z855RkLCYXAU=
-=n14M
------END PGP SIGNATURE-----
-
---BpA4WeFicj+70oUn--
+> >  {
+> > -#ifndef my_syscall6
+> > -	/* Function not implemented. */
+> > -	return (void *)-ENOSYS;
+> > -#else
+> > -
+> >  	int n;
+> >  
+> >  #if defined(__NR_mmap2)
+> > @@ -654,20 +639,13 @@ void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
+> >  #endif
+> >  
+> >  	return (void *)my_syscall6(n, addr, length, prot, flags, fd, offset);
+> > -#endif
+> >  }
+> >  #endif
+> >  
+> >  static __attribute__((unused))
+> >  void *mmap(void *addr, size_t length, int prot, int flags, int fd, off_t offset)
+> >  {
+> > -	void *ret = sys_mmap(addr, length, prot, flags, fd, offset);
+> > -
+> > -	if ((unsigned long)ret >= -4095UL) {
+> > -		SET_ERRNO(-(long)ret);
+> > -		ret = MAP_FAILED;
+> > -	}
+> > -	return ret;
+> > +	return (void *)__sysret((unsigned long)sys_mmap(addr, length, prot, flags, fd, offset));
+> >  }
+> >  
+> >  static __attribute__((unused))
+> > diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
+> > index f96e28bff4ba..f889d4e0ac7e 100644
+> > --- a/tools/include/nolibc/types.h
+> > +++ b/tools/include/nolibc/types.h
+> > @@ -81,6 +81,17 @@
+> >  #define MAXPATHLEN     (PATH_MAX)
+> >  #endif
+> >  
+> > +/* flags for mmap */
+> > +#ifndef MAP_SHARED
+> > +#define MAP_SHARED		0x01	/* Share changes */
+> > +#define MAP_PRIVATE		0x02	/* Changes are private */
+> > +#define MAP_SHARED_VALIDATE	0x03	/* share + validate extension flags */
+> > +#endif
+> > +
+> > +#ifndef MAP_FAILED
+> > +#define MAP_FAILED ((void *)-1)
+> > +#endif
+> > +
+> >  /* whence values for lseek() */
+> >  #define SEEK_SET       0
+> >  #define SEEK_CUR       1
+> > -- 
+> > 2.25.1
+> > 
