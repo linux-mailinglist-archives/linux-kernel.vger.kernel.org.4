@@ -2,145 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB8B6739F41
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 13:05:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53310739F4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 13:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231604AbjFVLFg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 07:05:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56970 "EHLO
+        id S230440AbjFVLOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 07:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231657AbjFVLFG (ORCPT
+        with ESMTP id S230218AbjFVLOa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 07:05:06 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6612D2105;
-        Thu, 22 Jun 2023 04:04:55 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-312824aa384so2687822f8f.1;
-        Thu, 22 Jun 2023 04:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687431893; x=1690023893;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cD2IBQ3gllS/hNv9a8DJi4PWdalaNeoSJkKF5Grc1bE=;
-        b=nvxWHbTtQVgOa7Tr0IuekEY+8zoy8HJJWJh8LEXJOgUw3FAtyaH+OYNFIbZItGkFqw
-         N1AoUSjwlCVIcHPVsjpOhesoIFviK0w8hcmPmyfMoVT1hg1yA7yF76QUUWLd/QnF4Jmh
-         UzJVaKNykZeNynBJWv/f2okpfKmzWybjwqohMPb5xe1mWhr9IMjGTulZ5aoM7osOcQQf
-         fuKZ6gUkK1eqhbFLd70Y0rCxAsNWHYOIiaeIq3ZAWxl1yLWo/GgK/z5RWjI2ByIwM8Wt
-         9Er8YosVejJME/jd6kMobtvlInPjAImj96Tx1yfT/SuO6qz53mJyldzRc7SThfiSc+ss
-         sF/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687431893; x=1690023893;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cD2IBQ3gllS/hNv9a8DJi4PWdalaNeoSJkKF5Grc1bE=;
-        b=BGIBwuMV2dFUIVyFZ1jkvb0PiqZrD1d+REZaE7rZHyxLuNq/S3kMdM91XkhMZvjbSP
-         5aIyQX4dpvNZReWyJYMos1Gj7/1kMIphMCZJX5WNK31KIyFHNOEGHKQDsu7YN5cvd5Yk
-         MI0R3cYZdVueJa+UWQkidsjvipkVglf/rEc8CNkHsIISEhn65yH39mkPFigOo6TIwgq+
-         aIbEZmoVWVgu6ZufmcZIEs0zN3MVhpibgQVBcN6gunV9uYFeYNrWmQpBg/vEK9MEYU/R
-         0Cz19mxZfG5pfZwlWw/6MVP+y9EB8z/G61WJ/mt1sI4qZ+rWp7sH8kkhnI8H9Sx0SjwR
-         VvEA==
-X-Gm-Message-State: AC+VfDxwvI7VvICybYkpXZlEu3TYSYS+i/T63NmHyW9du1qeIf60gkdR
-        OB788v22Nn/nnyTTUePxofqjpTpd/JI=
-X-Google-Smtp-Source: ACHHUZ5bINkxxH24XYUaYNOiQ7GTOWsBVdUhZawiCNWlNns0nKL4ZKOtbnWKE+eH+RsT+bRLzVOj+Q==
-X-Received: by 2002:adf:fd82:0:b0:30e:19a8:4b15 with SMTP id d2-20020adffd82000000b0030e19a84b15mr13326159wrr.30.1687431893200;
-        Thu, 22 Jun 2023 04:04:53 -0700 (PDT)
-Received: from localhost.localdomain (61.red-88-10-54.dynamicip.rima-tde.net. [88.10.54.61])
-        by smtp.gmail.com with ESMTPSA id h9-20020a5d4fc9000000b0031134bcdacdsm6751766wrw.42.2023.06.22.04.04.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 04:04:52 -0700 (PDT)
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To:     devicetree@vger.kernel.org
-Cc:     tglx@linutronix.de, maz@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: interrupt-controller: add Ralink SoCs interrupt controller
-Date:   Thu, 22 Jun 2023 13:04:51 +0200
-Message-Id: <20230622110451.1504823-1-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 22 Jun 2023 07:14:30 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850E310C1;
+        Thu, 22 Jun 2023 04:14:28 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QmyP91RtCz67RCM;
+        Thu, 22 Jun 2023 19:11:41 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 22 Jun
+ 2023 12:14:24 +0100
+Date:   Thu, 22 Jun 2023 12:14:24 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Terry Bowman <terry.bowman@amd.com>
+CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
+        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
+        <linux-cxl@vger.kernel.org>, <rrichter@amd.com>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
+Subject: Re: [PATCH v6 07/27] cxl/core/regs: Add @dev to cxl_register_map
+Message-ID: <20230622121424.00004b46@Huawei.com>
+In-Reply-To: <20230622035126.4130151-8-terry.bowman@amd.com>
+References: <20230622035126.4130151-1-terry.bowman@amd.com>
+        <20230622035126.4130151-8-terry.bowman@amd.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add YAML doc for the interrupt controller which is present on Ralink SoCs.
+On Wed, 21 Jun 2023 22:51:06 -0500
+Terry Bowman <terry.bowman@amd.com> wrote:
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
-Changes in v2:
- - Drop label from the example.
+> From: Robert Richter <rrichter@amd.com>
+> 
+> The corresponding device of a register mapping is used for devm
+> operations and logging. For operations with struct cxl_register_map
+> the device needs to be kept track separately. To simpify the involved
+> function interfaces, add @dev to cxl_register_map.
+> 
+> While at it also reorder function arguments of cxl_map_device_regs()
+> and cxl_map_component_regs() to have the object @cxl_register_map
+> first.
+> 
+> In a result a bunch of functions are available to be used with a
 
- .../ralink,rt2880-intc.yaml                   | 54 +++++++++++++++++++
- 1 file changed, 54 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/interrupt-controller/ralink,rt2880-intc.yaml
+As a result?  Not quite sure what this sentence means..
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/ralink,rt2880-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/ralink,rt2880-intc.yaml
-new file mode 100644
-index 000000000000..533d6d03aa75
---- /dev/null
-+++ b/Documentation/devicetree/bindings/interrupt-controller/ralink,rt2880-intc.yaml
-@@ -0,0 +1,54 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/interrupt-controller/ralink,rt2880-intc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Ralink SoCs Interrupt Controller
-+
-+maintainers:
-+  - Sergio Paracuellos <sergio.paracuellos@gmail.com>
-+
-+allOf:
-+  - $ref: /schemas/interrupt-controller.yaml#
-+
-+description: |
-+  This interrupt controller support a central point for interrupt aggregation
-+  for platform related blocks.
-+
-+properties:
-+  compatible:
-+    const: ralink,rt2880-intc
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  interrupt-controller: true
-+
-+  '#interrupt-cells':
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - interrupt-controller
-+  - '#interrupt-cells'
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    interrupt-controller@200 {
-+      compatible = "ralink,rt2880-intc";
-+      reg = <0x200 0x100>;
-+      interrupt-controller;
-+      #interrupt-cells = <1>;
-+
-+      interrupt-parent = <&cpuintc>;
-+      interrupts = <2>;
-+    };
-+...
--- 
-2.25.1
+> @cxl_register_map object.
+> 
+> This patch is in preparation of reworking the component register setup
+> code.
+> 
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+I've no strong opinion on the reordering though I slightly prefer it as
+you have it after this. Will let Dan comment on whether he likes that or not.
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+> ---
+>  drivers/cxl/core/hdm.c  |  4 ++--
+>  drivers/cxl/core/regs.c | 18 ++++++++++++------
+>  drivers/cxl/cxl.h       | 10 ++++++----
+>  drivers/cxl/pci.c       | 23 +++++++++++------------
+>  4 files changed, 31 insertions(+), 24 deletions(-)
+> 
+> diff --git a/drivers/cxl/core/hdm.c b/drivers/cxl/core/hdm.c
+> index 7889ff203a34..5abfa9276dac 100644
+> --- a/drivers/cxl/core/hdm.c
+> +++ b/drivers/cxl/core/hdm.c
+> @@ -85,6 +85,7 @@ static int map_hdm_decoder_regs(struct cxl_port *port, void __iomem *crb,
+>  				struct cxl_component_regs *regs)
+>  {
+>  	struct cxl_register_map map = {
+> +		.dev = &port->dev,
+>  		.resource = port->component_reg_phys,
+>  		.base = crb,
+>  		.max_size = CXL_COMPONENT_REG_BLOCK_SIZE,
+> @@ -97,8 +98,7 @@ static int map_hdm_decoder_regs(struct cxl_port *port, void __iomem *crb,
+>  		return -ENODEV;
+>  	}
+>  
+> -	return cxl_map_component_regs(&port->dev, regs, &map,
+> -				      BIT(CXL_CM_CAP_CAP_ID_HDM));
+> +	return cxl_map_component_regs(&map, regs, BIT(CXL_CM_CAP_CAP_ID_HDM));
+>  }
+>  
+>  static bool should_emulate_decoders(struct cxl_endpoint_dvsec_info *info)
+> diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
+> index 6c4b33133918..713e4a9ca35a 100644
+> --- a/drivers/cxl/core/regs.c
+> +++ b/drivers/cxl/core/regs.c
+> @@ -199,9 +199,11 @@ void __iomem *devm_cxl_iomap_block(struct device *dev, resource_size_t addr,
+>  	return ret_val;
+>  }
+>  
+> -int cxl_map_component_regs(struct device *dev, struct cxl_component_regs *regs,
+> -			   struct cxl_register_map *map, unsigned long map_mask)
+> +int cxl_map_component_regs(struct cxl_register_map *map,
+> +			   struct cxl_component_regs *regs,
+> +			   unsigned long map_mask)
+>  {
+> +	struct device *dev = map->dev;
+>  	struct mapinfo {
+>  		struct cxl_reg_map *rmap;
+>  		void __iomem **addr;
+> @@ -231,10 +233,10 @@ int cxl_map_component_regs(struct device *dev, struct cxl_component_regs *regs,
+>  }
+>  EXPORT_SYMBOL_NS_GPL(cxl_map_component_regs, CXL);
+>  
+> -int cxl_map_device_regs(struct device *dev,
+> -			struct cxl_device_regs *regs,
+> -			struct cxl_register_map *map)
+> +int cxl_map_device_regs(struct cxl_register_map *map,
+> +			struct cxl_device_regs *regs)
+>  {
+> +	struct device *dev = map->dev;
+>  	resource_size_t phys_addr = map->resource;
+>  	struct mapinfo {
+>  		struct cxl_reg_map *rmap;
+> @@ -302,7 +304,11 @@ int cxl_find_regblock(struct pci_dev *pdev, enum cxl_regloc_type type,
+>  	u32 regloc_size, regblocks;
+>  	int regloc, i;
+>  
+> -	map->resource = CXL_RESOURCE_NONE;
+> +	*map = (struct cxl_register_map) {
+> +		.dev = &pdev->dev,
+> +		.resource = CXL_RESOURCE_NONE,
+> +	};
+> +
+>  	regloc = pci_find_dvsec_capability(pdev, PCI_DVSEC_VENDOR_ID_CXL,
+>  					   CXL_DVSEC_REG_LOCATOR);
+>  	if (!regloc)
+> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+> index 754cfe59ae37..bd68d5fabf21 100644
+> --- a/drivers/cxl/cxl.h
+> +++ b/drivers/cxl/cxl.h
+> @@ -231,6 +231,7 @@ struct cxl_device_reg_map {
+>  
+>  /**
+>   * struct cxl_register_map - DVSEC harvested register block mapping parameters
+> + * @dev: device for devm operations and logging
+>   * @base: virtual base of the register-block-BAR + @block_offset
+>   * @resource: physical resource base of the register block
+>   * @max_size: maximum mapping size to perform register search
+> @@ -239,6 +240,7 @@ struct cxl_device_reg_map {
+>   * @device_map: cxl_reg_maps for device registers
+>   */
+>  struct cxl_register_map {
+> +	struct device *dev;
+>  	void __iomem *base;
+>  	resource_size_t resource;
+>  	resource_size_t max_size;
+> @@ -253,11 +255,11 @@ void cxl_probe_component_regs(struct device *dev, void __iomem *base,
+>  			      struct cxl_component_reg_map *map);
+>  void cxl_probe_device_regs(struct device *dev, void __iomem *base,
+>  			   struct cxl_device_reg_map *map);
+> -int cxl_map_component_regs(struct device *dev, struct cxl_component_regs *regs,
+> -			   struct cxl_register_map *map,
+> +int cxl_map_component_regs(struct cxl_register_map *map,
+> +			   struct cxl_component_regs *regs,
+>  			   unsigned long map_mask);
+> -int cxl_map_device_regs(struct device *dev, struct cxl_device_regs *regs,
+> -			struct cxl_register_map *map);
+> +int cxl_map_device_regs(struct cxl_register_map *map,
+> +			struct cxl_device_regs *regs);
+>  
+>  enum cxl_regloc_type;
+>  int cxl_find_regblock(struct pci_dev *pdev, enum cxl_regloc_type type,
+> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+> index 0872f2233ed0..0a89b96e6a8d 100644
+> --- a/drivers/cxl/pci.c
+> +++ b/drivers/cxl/pci.c
+> @@ -274,9 +274,9 @@ static int cxl_pci_setup_mailbox(struct cxl_dev_state *cxlds)
+>  	return 0;
+>  }
+>  
+> -static int cxl_map_regblock(struct pci_dev *pdev, struct cxl_register_map *map)
+> +static int cxl_map_regblock(struct cxl_register_map *map)
+>  {
+> -	struct device *dev = &pdev->dev;
+> +	struct device *dev = map->dev;
+>  
+>  	map->base = ioremap(map->resource, map->max_size);
+>  	if (!map->base) {
+> @@ -288,18 +288,17 @@ static int cxl_map_regblock(struct pci_dev *pdev, struct cxl_register_map *map)
+>  	return 0;
+>  }
+>  
+> -static void cxl_unmap_regblock(struct pci_dev *pdev,
+> -			       struct cxl_register_map *map)
+> +static void cxl_unmap_regblock(struct cxl_register_map *map)
+>  {
+>  	iounmap(map->base);
+>  	map->base = NULL;
+>  }
+>  
+> -static int cxl_probe_regs(struct pci_dev *pdev, struct cxl_register_map *map)
+> +static int cxl_probe_regs(struct cxl_register_map *map)
+>  {
+>  	struct cxl_component_reg_map *comp_map;
+>  	struct cxl_device_reg_map *dev_map;
+> -	struct device *dev = &pdev->dev;
+> +	struct device *dev = map->dev;
+>  	void __iomem *base = map->base;
+>  
+>  	switch (map->reg_type) {
+> @@ -346,12 +345,12 @@ static int cxl_setup_regs(struct pci_dev *pdev, enum cxl_regloc_type type,
+>  	if (rc)
+>  		return rc;
+>  
+> -	rc = cxl_map_regblock(pdev, map);
+> +	rc = cxl_map_regblock(map);
+>  	if (rc)
+>  		return rc;
+>  
+> -	rc = cxl_probe_regs(pdev, map);
+> -	cxl_unmap_regblock(pdev, map);
+> +	rc = cxl_probe_regs(map);
+> +	cxl_unmap_regblock(map);
+>  
+>  	return rc;
+>  }
+> @@ -688,7 +687,7 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  	if (rc)
+>  		return rc;
+>  
+> -	rc = cxl_map_device_regs(&pdev->dev, &cxlds->regs.device_regs, &map);
+> +	rc = cxl_map_device_regs(&map, &cxlds->regs.device_regs);
+>  	if (rc)
+>  		return rc;
+>  
+> @@ -703,8 +702,8 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
+>  
+>  	cxlds->component_reg_phys = map.resource;
+>  
+> -	rc = cxl_map_component_regs(&pdev->dev, &cxlds->regs.component,
+> -				    &map, BIT(CXL_CM_CAP_CAP_ID_RAS));
+> +	rc = cxl_map_component_regs(&map, &cxlds->regs.component,
+> +				    BIT(CXL_CM_CAP_CAP_ID_RAS));
+>  	if (rc)
+>  		dev_dbg(&pdev->dev, "Failed to map RAS capability.\n");
+>  
 
