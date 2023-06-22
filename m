@@ -2,162 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB51739A8E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 10:47:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40FBA739AD0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 10:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229716AbjFVIrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 04:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33064 "EHLO
+        id S231278AbjFVIw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 04:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjFVIrW (ORCPT
+        with ESMTP id S231515AbjFVIvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 04:47:22 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79DB1735;
-        Thu, 22 Jun 2023 01:47:21 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id 38308e7fff4ca-2b44eddb52dso100455931fa.3;
-        Thu, 22 Jun 2023 01:47:21 -0700 (PDT)
+        Thu, 22 Jun 2023 04:51:47 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EA81981
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:51:41 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b4f95833c7so36539485ad.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:51:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687423640; x=1690015640;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ep2nmcwhqoubpUdoFoZiWlPysqbDDgRr+0DZ2J7o3XE=;
-        b=RJixZshx3SJx3vK9bdq7GVj+cUXmPXuTZVIJJAQTFcQ68CQzLNUJ09lGmememENSft
-         Y7doBAAcYDz+s1spBZL1vlBiBjKHF23pLMycLSFU3px9e9lf9IH6NjknT8UaqLc9pP4o
-         Tqfn5gLm3/2k4oNOEDCD0WFfQrbeA9OaidJv/YGgld2ulPeb1szl2bur+XJqttgChpd4
-         bH5vlR/jzBRgIKkb4qfJG/uj/JPOTC1VdLNwLmbPTIwUWcD9OFRbqBXASes7XjCXJhbK
-         PxfW4Ut96w3wrPMKMLADtIpd/BNLKef4kwtRZqu2ajNqEFI/gIMXU13UvJthWfSQoB9P
-         WJeA==
+        d=linaro.org; s=google; t=1687423901; x=1690015901;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jBASIqyXLSyx4ohPlvkpc6vmBqbM05l9NnN2xOGWiY0=;
+        b=ZV0A9BA9V7hgFXz84L4WIGWx6ReJdC2NiwWESB6rlR3FkBo2KmqKSi1tN0sXMwF6Zo
+         ddvVMw6kG3ZQcFjCNVo0UwC8QfYNKKQjSblgy7T1OaNfOuqTK9j/PTTLI2FQtNs8TUuv
+         qs8buUvtjymzZyaM6NtOsGN5nKA6kWHWyDpwGmBbIK9VpnMGrjah1gywbfn7sdpboDnh
+         PqKvR1efixnZY+Mct1tCX2JFu2Mkb5ClG4dFEdtTT00MDWvP7+8J5IfsEkwNg3VSSf0K
+         kW4cpoPmcrcjklWWD5aPCPjuq0Zi0H9vLYkbOf7euwhL9IdcaApt3ysLpwqhDjLhpuc4
+         kYrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687423640; x=1690015640;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ep2nmcwhqoubpUdoFoZiWlPysqbDDgRr+0DZ2J7o3XE=;
-        b=W4+keb9/Ykm4ri6xiPYGdZ0vfsH9yNqeCqb1jSwB68MsnDZNe5YqE52z5LyRnPtPhZ
-         ljalIOGYvwGDOXIUfXiqqI7bnHet0+UgDGvLHdbhgV8yu3Sd58hc+ph7aDO+aHJjR4Ec
-         WLYnoJFtRlKoIZ1zSwCeHe85ZK48Z6Pc90HsMcxKUrzHBub5EUgzUUsUv7CdkvIe42NR
-         0Z8WPybfSBozWKGPvlv7x2TDR0+pqnMUNqQeJMk0PHTNqVErsJF8/g6hJ4cqetuLQtbA
-         RqzUg48KZ4V4QW7o2QF8vH5NTyU/DDtDYVkRh6eUh12coxo1XPzAB9fUouuL6RK+8ZgL
-         Flyw==
-X-Gm-Message-State: AC+VfDw7FstylV9nDlKj0iXfJ1l/Vcxqw2rGsb5bDa1ikHJFhvvjXGmA
-        GZ9sIFuMC2ChjBuG/zkvEvunOBqz+TUDdx6ngG5BZryd7b5Unhlf7sU=
-X-Google-Smtp-Source: ACHHUZ5ettnmOIGPAQ5ZENLICkzufS9+rfxEAdPUjWtPlkSQhng2OX/mSNvyVeYSimj9Exds/y2TnnYUfHYnqCYrJt0=
-X-Received: by 2002:a2e:2d02:0:b0:2ac:7852:4096 with SMTP id
- t2-20020a2e2d02000000b002ac78524096mr10605090ljt.24.1687423639478; Thu, 22
- Jun 2023 01:47:19 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687423901; x=1690015901;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jBASIqyXLSyx4ohPlvkpc6vmBqbM05l9NnN2xOGWiY0=;
+        b=Stiy/VA/UlTqQNg/lM5zIVgGw0Ws1Ru9g+Ke/qgUUwCS3sSldTWp2zzeBQFBFghLCv
+         Jpf/CpozpuRb63UQrES5pZgwyhS+Jwe7aIOdkW0etqskPydRPj130uwjZw5SkU2Lz2bx
+         oHxa3/FmvyrNFGP+NUVc1cc0Y+ZP527iF5xC6j8p3XHTQP0OK/VizsLHoCqIS2CXszp/
+         IR0jZN90SnpfVZSARskv3XDNdxirY4WfaJ/RSegGrvuHGuTiM/Xrr5TGEbshQB1OQ0cA
+         YM3zOndln3KoZDlqvRZgq29/jfJkRk03Gn951WAiEvUBL2TrfTCYuRhmVF6A9Z4cJlvV
+         juGw==
+X-Gm-Message-State: AC+VfDzDxnm/UH5R6hXGwzjOknt9p/7xHhpLzFdMYqEkT4gjcCKepBH7
+        0FZLYIew/wBF0rFKpHHZzpg/9Q==
+X-Google-Smtp-Source: ACHHUZ7Za4yKdOM+MTL5yOnySZFXlzx34O/RbRRbWQAtkUaAfBKGQTAB+8KGeEyA08qo8v5OmxXaNw==
+X-Received: by 2002:a17:903:1ca:b0:1b6:9b38:600d with SMTP id e10-20020a17090301ca00b001b69b38600dmr3665054plh.46.1687423901043;
+        Thu, 22 Jun 2023 01:51:41 -0700 (PDT)
+Received: from localhost.localdomain (fp9875a45d.knge128.ap.nuro.jp. [152.117.164.93])
+        by smtp.gmail.com with ESMTPSA id z6-20020a170903018600b001b02bd00c61sm4820154plg.237.2023.06.22.01.51.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 01:51:40 -0700 (PDT)
+From:   Masahisa Kojima <masahisa.kojima@linaro.org>
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
+Cc:     Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Masahisa Kojima <masahisa.kojima@linaro.org>,
+        Jan Kiszka <jan.kiszka@siemens.com>
+Subject: [PATCH v6 0/4] introduce tee-based EFI Runtime Variable Service
+Date:   Thu, 22 Jun 2023 17:51:07 +0900
+Message-Id: <20230622085112.1521-1-masahisa.kojima@linaro.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <20230619100121.27534-1-puranjay12@gmail.com> <20230619100121.27534-4-puranjay12@gmail.com>
- <ZJMXqTffB22LSOkd@FVFF77S0Q05N> <CANk7y0h5ucxmMz4K8sGx7qogFyx6PRxYxmFtwTRO7=0Y=B4ugw@mail.gmail.com>
- <ZJQE9PIjxuA3Q8Sm@FVFF77S0Q05N>
-In-Reply-To: <ZJQE9PIjxuA3Q8Sm@FVFF77S0Q05N>
-From:   Puranjay Mohan <puranjay12@gmail.com>
-Date:   Thu, 22 Jun 2023 10:47:08 +0200
-Message-ID: <CANk7y0jtm9yYobPLsMEHAem+R-wKjVOLWo=EeU-bojYks9tetQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 3/3] bpf, arm64: use bpf_jit_binary_pack_alloc
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, catalin.marinas@arm.com,
-        bpf@vger.kernel.org, kpsingh@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+This series introduces the tee based EFI Runtime Variable Service.
 
-On Thu, Jun 22, 2023 at 10:23=E2=80=AFAM Mark Rutland <mark.rutland@arm.com=
-> wrote:
->
-> On Wed, Jun 21, 2023 at 10:57:20PM +0200, Puranjay Mohan wrote:
-> > On Wed, Jun 21, 2023 at 5:31=E2=80=AFPM Mark Rutland <mark.rutland@arm.=
-com> wrote:
-> > > On Mon, Jun 19, 2023 at 10:01:21AM +0000, Puranjay Mohan wrote:
-> > > > @@ -1562,34 +1610,39 @@ struct bpf_prog *bpf_int_jit_compile(struct=
- bpf_prog *prog)
-> > > >
-> > > >       /* 3. Extra pass to validate JITed code. */
-> > > >       if (validate_ctx(&ctx)) {
-> > > > -             bpf_jit_binary_free(header);
-> > > >               prog =3D orig_prog;
-> > > > -             goto out_off;
-> > > > +             goto out_free_hdr;
-> > > >       }
-> > > >
-> > > >       /* And we're done. */
-> > > >       if (bpf_jit_enable > 1)
-> > > >               bpf_jit_dump(prog->len, prog_size, 2, ctx.image);
-> > > >
-> > > > -     bpf_flush_icache(header, ctx.image + ctx.idx);
-> > > > +     bpf_flush_icache(ro_header, ctx.ro_image + ctx.idx);
-> > >
-> > > I think this is too early; we haven't copied the instructions into th=
-e
-> > > ro_header yet, so that still contains stale instructions.
-> > >
-> > > IIUC at the whole point of this is to pack multiple programs into sha=
-red ROX
-> > > pages, and so there can be an executable mapping of the RO page at th=
-is point,
-> > > and the CPU can fetch stale instructions throught that.
-> > >
-> > > Note that *regardless* of whether there is an executeable mapping at =
-this point
-> > > (and even if no executable mapping exists until after the copy), we a=
-t least
-> > > need a data cache clean to the PoU *after* the copy (so fetches don't=
- get a
-> > > stale value from the PoU), and the I-cache maintenance has to happeon=
- the VA
-> > > the instrutions will be executed from (or VIPT I-caches can still con=
-tain stale
-> > > instructions).
-> >
-> > Thanks for catching this, It is a big miss from my side.
-> >
-> > I was able to reproduce the boot issue in the other thread on my
-> > raspberry pi. I think it is connected to the
-> > wrong I-cache handling done by me.
-> >
-> > As you rightly pointed out: We need to do bpf_flush_icache() after
-> > copying the instructions to the ro_header or the CPU can run
-> > incorrect instructions.
-> >
-> > When I move the call to bpf_flush_icache() after
-> > bpf_jit_binary_pack_finalize() (this does the copy to ro_header), the
-> > boot issue
-> > is fixed. Would this change be enough to make this work or I would
-> > need to do more with the data cache as well to catch other
-> > edge cases?
->
-> AFAICT, bpf_flush_icache() calls flush_icache_range(). Despite its name,
-> flush_icache_range() has d-cache maintenance, i-cache maintenance, and co=
-ntext
-> synchronization (i.e. it does everything necessary).
->
-> As long as you call that with the VAs the code will be executed from, tha=
-t
-> should be sufficient, and you don't need to do any other work.
+The eMMC device is typically owned by the non-secure world(linux in
+this case). There is an existing solution utilizing eMMC RPMB partition
+for EFI Variables, it is implemented by interacting with
+OP-TEE, StandaloneMM(as EFI Variable Service Pseudo TA), eMMC driver
+and tee-supplicant. The last piece is the tee-based variable access
+driver to interact with OP-TEE and StandaloneMM.
 
-Thanks for explaining this.
-After reading your explanation, I feel this should work.
+Changelog:
+v5 -> v6
+- new patch #4 is added in this series, #1-#3 patches are unchanged.
+  automatically update super block flag when the efivarops support
+  SetVariable runtime service, so that user does not need to manually
+  remount the efivarfs as RW.
 
-bpf_jit_binary_pack_finalize() will copy the instructions from
-rw_header to ro_header.
-After the copy, calling bpf_flush_icache(ro_header, ctx.ro_image +
-ctx.idx); will invalidate the caches
-for the VAs in the ro_header, this is where the code will be executed from.
+v4 -> v5
+- rebase to efi-next based on v6.4-rc1
+- set generic_ops.query_variable_info, it works as expected as follows.
+$ df -h /sys/firmware/efi/efivars/
+Filesystem      Size  Used Avail Use% Mounted on
+efivarfs         16K  1.3K   15K   8% /sys/firmware/efi/efivars
 
-I will send the v4 patchset with this change.
+v3 -> v4:
+- replace the reference from EDK2 to PI Specification
+- remove EDK2 source code reference comments
+- prepare nonblocking variant of set_variable, it just returns
+  EFI_UNSUPPORTED
+- remove redundant buffer size check
+- argument name change in mm_communicate
+- function interface changes in setup_mm_hdr to remove (void **) cast
 
-Thanks,
-Puranjay
+v2 -> v3:
+- add CONFIG_EFI dependency to TEE_STMM_EFI
+- add missing return code check for tee_client_invoke_func()
+- directly call efivars_register/unregister from tee_stmm_efi.c
+
+rfc v1 -> v2:
+- split patch into three patches, one for drivers/tee,
+  one for include/linux/efi.h, and one for the driver/firmware/efi/stmm
+- context/session management into probe() and remove() same as other tee
+client driver
+- StMM variable driver is moved from driver/tee/optee to driver/firmware/efi
+- use "tee" prefix instead of "optee" in driver/firmware/efi/stmm/tee_stmm_efi.c,
+  this file does not contain op-tee specific code, abstracted by tee layer and
+  StMM variable driver will work on other tee implementation.
+- PTA_STMM_CMD_COMMUNICATE -> PTA_STMM_CMD_COMMUNICATE
+- implement query_variable_store() but currently not used
+- no use of TEEC_SUCCESS, it is defined in driver/tee/optee/optee_private.h.
+  Other tee client drivers use 0 instead of using TEEC_SUCCESS
+- remove TEEC_ERROR_EXCESS_DATA status, it is referred just to output
+error message
+
+Masahisa Kojima (4):
+  efi: expose efivar generic ops register function
+  efi: Add EFI_ACCESS_DENIED status code
+  efi: Add tee-based EFI variable driver
+  efivarfs: automatically update super block flag
+
+ drivers/firmware/efi/Kconfig                 |  15 +
+ drivers/firmware/efi/Makefile                |   1 +
+ drivers/firmware/efi/efi.c                   |  18 +
+ drivers/firmware/efi/stmm/mm_communication.h | 236 +++++++
+ drivers/firmware/efi/stmm/tee_stmm_efi.c     | 638 +++++++++++++++++++
+ drivers/firmware/efi/vars.c                  |   8 +
+ fs/efivarfs/super.c                          |  33 +
+ include/linux/efi.h                          |  12 +
+ 8 files changed, 961 insertions(+)
+ create mode 100644 drivers/firmware/efi/stmm/mm_communication.h
+ create mode 100644 drivers/firmware/efi/stmm/tee_stmm_efi.c
+
+
+base-commit: d0a1865cf7e2211d9227592ef4141f4632e33908
+-- 
+2.30.2
+
