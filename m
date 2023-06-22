@@ -2,72 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D20173A310
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 874F573A31E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbjFVOag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 10:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39966 "EHLO
+        id S231338AbjFVOdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 10:33:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjFVOad (ORCPT
+        with ESMTP id S231178AbjFVOdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 10:30:33 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id D1C421FFE
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:29:51 -0700 (PDT)
-Received: (qmail 717012 invoked by uid 1000); 22 Jun 2023 10:29:43 -0400
-Date:   Thu, 22 Jun 2023 10:29:43 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Guiting Shen <aarongt.shen@gmail.com>
-Cc:     gregkh@linuxfoundation.org, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: ohci-at91: Fix the unhandle interrupt when resume
-Message-ID: <4cf867a9-3c78-403a-aaeb-91f6cf099a3d@rowland.harvard.edu>
-References: <20230622025739.13934-1-aarongt.shen@gmail.com>
+        Thu, 22 Jun 2023 10:33:33 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64BEB1BD1;
+        Thu, 22 Jun 2023 07:33:19 -0700 (PDT)
+Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35MBs6Be022907;
+        Thu, 22 Jun 2023 10:32:58 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3rbvr2t86v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 10:32:58 -0400
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 35MEWu4U046723
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 22 Jun 2023 10:32:56 -0400
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Thu, 22 Jun 2023 10:32:56 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Thu, 22 Jun 2023 10:32:55 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Thu, 22 Jun 2023 10:32:55 -0400
+Received: from kimedia-VirtualBox.ad.analog.com (KPALLER2-L02.ad.analog.com [10.116.242.96])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 35MEWcZM030643;
+        Thu, 22 Jun 2023 10:32:41 -0400
+From:   Kim Seer Paller <kimseer.paller@analog.com>
+CC:     <jic23@kernel.org>, <lars@metafoo.de>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <Michael.Hennerich@analog.com>,
+        <andy.shevchenko@gmail.com>, <robh@kernel.org>,
+        <krzysztof.kozlowski@linaro.org>, <conor+dt@kernel.org>,
+        <kimseer.paller@analog.com>, <linux-iio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: [PATCH v8 1/2] dt-bindings: iio: adc: add max14001
+Date:   Thu, 22 Jun 2023 22:32:26 +0800
+Message-ID: <20230622143227.30147-1-kimseer.paller@analog.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230622025739.13934-1-aarongt.shen@gmail.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: hKqowHUP6re9g13lKHmKZ1uQcWgs2ecN
+X-Proofpoint-ORIG-GUID: hKqowHUP6re9g13lKHmKZ1uQcWgs2ecN
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-22_09,2023-06-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ mlxscore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=999
+ spamscore=0 phishscore=0 suspectscore=0 clxscore=1015 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306220122
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 10:57:39AM +0800, Guiting Shen wrote:
-> The ohci_hcd_at91_drv_suspend() sets ohci->rh_state to OHCI_RH_HALTED when
-> suspend which will let the ohci_irq() skip the interrupt after resume. And
-> nobody to handle this interrupt.
-> 
-> Set the ohci->rh_state to OHCI_RH_SUSPEND instead of OHCI_RH_HALTED when
-> suspend to fix it.
-> 
-> Signed-off-by: Guiting Shen <aarongt.shen@gmail.com>
-> ---
->  drivers/usb/host/ohci-at91.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
-> index b9ce8d80f20b..7a970e573668 100644
-> --- a/drivers/usb/host/ohci-at91.c
-> +++ b/drivers/usb/host/ohci-at91.c
-> @@ -645,7 +645,7 @@ ohci_hcd_at91_drv_suspend(struct device *dev)
->  	 * REVISIT: some boards will be able to turn VBUS off...
->  	 */
->  	if (!ohci_at91->wakeup) {
-> -		ohci->rh_state = OHCI_RH_HALTED;
-> +		ohci->rh_state = OHCI_RH_SUSPENDED;
+The MAX14001 is a configurable, isolated 10-bit ADC for multi-range
+binary inputs.
 
-It looks like this change ignores the comment immediately above it 
-(just before the start of this hunk).
+Signed-off-by: Kim Seer Paller <kimseer.paller@analog.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+V7 -> V8: Added "Reviewed-by" tag.
+V6 -> V7: No changes.
+V5 -> V6: Removed tags.
+V3 -> V5: Added spaces between prefixes in subject. Fixed MAINTAINERS reference.
 
-If you want to find a way to handle IRQs better after the controller 
-resumes, maybe you should change the resume routine instead of the 
-suspend routine.
+ .../bindings/iio/adc/adi,max14001.yaml        | 54 +++++++++++++++++++
+ MAINTAINERS                                   |  7 +++
+ 2 files changed, 61 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/adi,max14001.yaml
 
-Alan Stern
+diff --git a/Documentation/devicetree/bindings/iio/adc/adi,max14001.yaml b/Documentation/devicetree/bindings/iio/adc/adi,max14001.yaml
+new file mode 100644
+index 000000000000..9d03c611fca3
+--- /dev/null
++++ b/Documentation/devicetree/bindings/iio/adc/adi,max14001.yaml
+@@ -0,0 +1,54 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++# Copyright 2023 Analog Devices Inc.
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/iio/adc/adi,max14001.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Analog Devices MAX14001 ADC
++
++maintainers:
++  - Kim Seer Paller <kimseer.paller@analog.com>
++
++description: |
++    Single channel 10 bit ADC with SPI interface. Datasheet
++    can be found here:
++      https://www.analog.com/media/en/technical-documentation/data-sheets/MAX14001-MAX14002.pdf
++
++properties:
++  compatible:
++    enum:
++      - adi,max14001
++
++  reg:
++    maxItems: 1
++
++  spi-max-frequency:
++    maximum: 5000000
++
++  vref-supply:
++    description: Voltage reference to establish input scaling.
++
++required:
++  - compatible
++  - reg
++
++allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    spi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        adc@0 {
++            compatible = "adi,max14001";
++            reg = <0>;
++            spi-max-frequency = <5000000>;
++            vref-supply = <&vref_reg>;
++        };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index f794002a192e..dcea2c31f920 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12670,6 +12670,13 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/sound/max9860.txt
+ F:	sound/soc/codecs/max9860.*
+ 
++MAX14001 IIO ADC DRIVER
++M:	Kim Seer Paller <kimseer.paller@analog.com>
++L:	linux-iio@vger.kernel.org
++S:	Supported
++W:	https://ez.analog.com/linux-software-drivers
++F:	Documentation/devicetree/bindings/iio/adc/adi,max14001.yaml
++
+ MAXBOTIX ULTRASONIC RANGER IIO DRIVER
+ M:	Andreas Klinger <ak@it-klinger.de>
+ L:	linux-iio@vger.kernel.org
+
+base-commit: 6f449d52b90fdd927fcf9df0388701de6d5381c6
+-- 
+2.34.1
+
