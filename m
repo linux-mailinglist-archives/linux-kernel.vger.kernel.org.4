@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332477397AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 08:56:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 862367397AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 08:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbjFVG4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 02:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
+        id S231154AbjFVG4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 02:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231243AbjFVGzg (ORCPT
+        with ESMTP id S230463AbjFVGzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 02:55:36 -0400
+        Thu, 22 Jun 2023 02:55:50 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A33D26A5;
-        Wed, 21 Jun 2023 23:55:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49FF12119;
+        Wed, 21 Jun 2023 23:55:16 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0775C14BF;
-        Wed, 21 Jun 2023 23:55:40 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0A1A71063;
+        Wed, 21 Jun 2023 23:55:45 -0700 (PDT)
 Received: from a077893.blr.arm.com (unknown [10.162.40.20])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6A0603F777;
-        Wed, 21 Jun 2023 23:54:51 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A3ACB3F59C;
+        Wed, 21 Jun 2023 23:54:56 -0700 (PDT)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
@@ -33,9 +33,9 @@ Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         linux-perf-users@vger.kernel.org
-Subject: [PATCH V13 09/10] arm64/perf: Implement branch records save on task sched out
-Date:   Thu, 22 Jun 2023 12:23:50 +0530
-Message-Id: <20230622065351.1092893-10-anshuman.khandual@arm.com>
+Subject: [PATCH V13 10/10] arm64/perf: Implement branch records save on PMU IRQ
+Date:   Thu, 22 Jun 2023 12:23:51 +0530
+Message-Id: <20230622065351.1092893-11-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230622065351.1092893-1-anshuman.khandual@arm.com>
 References: <20230622065351.1092893-1-anshuman.khandual@arm.com>
@@ -50,12 +50,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This modifies current armv8pmu_sched_task(), to implement a branch records
-save mechanism via armv8pmu_branch_save() when a task scheds out of a cpu.
-BRBE is paused and disabled for all exception levels before branch records
-get captured, which then get concatenated with all existing stored records
-present in the task context maintaining the contiguity. Although the final
-length of the concatenated buffer does not exceed implemented BRBE length.
+This modifies armv8pmu_branch_read() to concatenate live entries along with
+task context stored entries and then process the resultant buffer to create
+perf branch entry array for perf_sample_data. It follows the same principle
+like task sched out.
 
 Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Will Deacon <will@kernel.org>
@@ -66,110 +64,113 @@ Tested-by: James Clark <james.clark@arm.com>
 Acked-by: Mark Rutland <mark.rutland@arm.com>
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- arch/arm/include/asm/arm_pmuv3.h    |  1 +
- arch/arm64/include/asm/perf_event.h |  2 ++
- drivers/perf/arm_brbe.c             | 30 +++++++++++++++++++++++++++++
- drivers/perf/arm_pmuv3.c            | 14 ++++++++++++--
- 4 files changed, 45 insertions(+), 2 deletions(-)
+ drivers/perf/arm_brbe.c | 69 +++++++++++++++++++----------------------
+ 1 file changed, 32 insertions(+), 37 deletions(-)
 
-diff --git a/arch/arm/include/asm/arm_pmuv3.h b/arch/arm/include/asm/arm_pmuv3.h
-index 1f948eaed1c6..6c65357de94d 100644
---- a/arch/arm/include/asm/arm_pmuv3.h
-+++ b/arch/arm/include/asm/arm_pmuv3.h
-@@ -254,5 +254,6 @@ static inline void armv8pmu_branch_probe(struct arm_pmu *arm_pmu) { }
- static inline void armv8pmu_branch_reset(void) { }
- static inline int armv8pmu_task_ctx_cache_alloc(struct arm_pmu *arm_pmu) { return 0; }
- static inline void armv8pmu_task_ctx_cache_free(struct arm_pmu *arm_pmu) { }
-+static inline void armv8pmu_branch_save(struct arm_pmu *arm_pmu, void *ctx) { }
- #endif
- #endif
-diff --git a/arch/arm64/include/asm/perf_event.h b/arch/arm64/include/asm/perf_event.h
-index b0c12a5882df..36e7dfb466a6 100644
---- a/arch/arm64/include/asm/perf_event.h
-+++ b/arch/arm64/include/asm/perf_event.h
-@@ -40,6 +40,7 @@ void armv8pmu_branch_probe(struct arm_pmu *arm_pmu);
- void armv8pmu_branch_reset(void);
- int armv8pmu_task_ctx_cache_alloc(struct arm_pmu *arm_pmu);
- void armv8pmu_task_ctx_cache_free(struct arm_pmu *arm_pmu);
-+void armv8pmu_branch_save(struct arm_pmu *arm_pmu, void *ctx);
- #else
- static inline void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
- {
-@@ -66,6 +67,7 @@ static inline void armv8pmu_branch_probe(struct arm_pmu *arm_pmu) { }
- static inline void armv8pmu_branch_reset(void) { }
- static inline int armv8pmu_task_ctx_cache_alloc(struct arm_pmu *arm_pmu) { return 0; }
- static inline void armv8pmu_task_ctx_cache_free(struct arm_pmu *arm_pmu) { }
-+static inline void armv8pmu_branch_save(struct arm_pmu *arm_pmu, void *ctx) { }
- #endif
- #endif
- #endif
 diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
-index 203cd4f350d5..2177632befa6 100644
+index 2177632befa6..cb765aaf1b52 100644
 --- a/drivers/perf/arm_brbe.c
 +++ b/drivers/perf/arm_brbe.c
-@@ -165,6 +165,36 @@ static int stitch_stored_live_entries(struct brbe_regset *stored,
- 	return min(nr_live + nr_stored, nr_max);
+@@ -647,41 +647,44 @@ void armv8pmu_branch_reset(void)
+ 	isb();
  }
  
-+static int brbe_branch_save(struct brbe_regset *live, int nr_hw_entries)
-+{
-+	u64 brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
-+	int nr_live;
-+
-+	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-+	isb();
-+
-+	nr_live = capture_brbe_regset(live, nr_hw_entries);
-+
-+	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-+	isb();
-+
-+	return nr_live;
+-static bool capture_branch_entry(struct pmu_hw_events *cpuc,
+-				 struct perf_event *event, int idx)
++static void brbe_regset_branch_entries(struct pmu_hw_events *cpuc, struct perf_event *event,
++				       struct brbe_regset *regset, int idx)
+ {
+ 	struct perf_branch_entry *entry = &cpuc->branches->branch_entries[idx];
+-	u64 brbinf = get_brbinf_reg(idx);
+-
+-	/*
+-	 * There are no valid entries anymore on the buffer.
+-	 * Abort the branch record processing to save some
+-	 * cycles and also reduce the capture/process load
+-	 * for the user space as well.
+-	 */
+-	if (brbe_invalid(brbinf))
+-		return false;
++	u64 brbinf = regset[idx].brbinf;
+ 
+ 	perf_clear_branch_entry_bitfields(entry);
+ 	if (brbe_record_is_complete(brbinf)) {
+-		entry->from = get_brbsrc_reg(idx);
+-		entry->to = get_brbtgt_reg(idx);
++		entry->from = regset[idx].brbsrc;
++		entry->to = regset[idx].brbtgt;
+ 	} else if (brbe_record_is_source_only(brbinf)) {
+-		entry->from = get_brbsrc_reg(idx);
++		entry->from = regset[idx].brbsrc;
+ 		entry->to = 0;
+ 	} else if (brbe_record_is_target_only(brbinf)) {
+ 		entry->from = 0;
+-		entry->to = get_brbtgt_reg(idx);
++		entry->to = regset[idx].brbtgt;
+ 	}
+ 	capture_brbe_flags(entry, event, brbinf);
+-	return true;
 +}
 +
-+void armv8pmu_branch_save(struct arm_pmu *arm_pmu, void *ctx)
++static void process_branch_entries(struct pmu_hw_events *cpuc, struct perf_event *event,
++				   struct brbe_regset *regset, int nr_regset)
 +{
-+	struct arm64_perf_task_context *task_ctx = ctx;
++	int idx;
++
++	for (idx = 0; idx < nr_regset; idx++)
++		brbe_regset_branch_entries(cpuc, event, regset, idx);
++
++	cpuc->branches->branch_stack.nr = nr_regset;
++	cpuc->branches->branch_stack.hw_idx = -1ULL;
+ }
+ 
+ void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+ {
+-	int nr_hw_entries = brbe_get_numrec(cpuc->percpu_pmu->reg_brbidr);
++	struct arm64_perf_task_context *task_ctx = event->pmu_ctx->task_ctx_data;
 +	struct brbe_regset live[BRBE_MAX_ENTRIES];
 +	int nr_live, nr_store, nr_hw_entries;
-+
-+	nr_hw_entries = brbe_get_numrec(arm_pmu->reg_brbidr);
-+	nr_live = brbe_branch_save(live, nr_hw_entries);
-+	nr_store = task_ctx->nr_brbe_records;
-+	nr_store = stitch_stored_live_entries(task_ctx->store, live, nr_store,
-+					      nr_live, nr_hw_entries);
-+	task_ctx->nr_brbe_records = nr_store;
-+}
-+
- /*
-  * Generic perf branch filters supported on BRBE
-  *
-diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
-index 3c079051a63a..53f404618891 100644
---- a/drivers/perf/arm_pmuv3.c
-+++ b/drivers/perf/arm_pmuv3.c
-@@ -907,9 +907,19 @@ static int armv8pmu_user_event_idx(struct perf_event *event)
- static void armv8pmu_sched_task(struct perf_event_pmu_context *pmu_ctx, bool sched_in)
- {
- 	struct arm_pmu *armpmu = to_arm_pmu(pmu_ctx->pmu);
-+	void *task_ctx = pmu_ctx ? pmu_ctx->task_ctx_data : NULL;
+ 	u64 brbfcr, brbcr;
+-	int idx = 0;
  
--	if (sched_in && armpmu->has_branch_stack)
--		armv8pmu_branch_reset();
-+	if (armpmu->has_branch_stack) {
-+		/* Save branch records in task_ctx on sched out */
-+		if (task_ctx && !sched_in) {
-+			armv8pmu_branch_save(armpmu, task_ctx);
-+			return;
-+		}
-+
-+		/* Reset branch records on sched in */
-+		if (sched_in)
-+			armv8pmu_branch_reset();
-+	}
- }
+ 	brbcr = read_sysreg_s(SYS_BRBCR_EL1);
+ 	brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+@@ -693,25 +696,17 @@ void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+ 	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+ 	isb();
  
- /*
+-	/* Loop through bank 0 */
+-	select_brbe_bank(BRBE_BANK_IDX_0);
+-	while (idx < nr_hw_entries && idx <= BRBE_BANK0_IDX_MAX) {
+-		if (!capture_branch_entry(cpuc, event, idx))
+-			goto skip_bank_1;
+-		idx++;
+-	}
+-
+-	/* Loop through bank 1 */
+-	select_brbe_bank(BRBE_BANK_IDX_1);
+-	while (idx < nr_hw_entries && idx <= BRBE_BANK1_IDX_MAX) {
+-		if (!capture_branch_entry(cpuc, event, idx))
+-			break;
+-		idx++;
++	nr_hw_entries = brbe_get_numrec(cpuc->percpu_pmu->reg_brbidr);
++	nr_live = capture_brbe_regset(live, nr_hw_entries);
++	if (event->ctx->task) {
++		nr_store = task_ctx->nr_brbe_records;
++		nr_store = stitch_stored_live_entries(task_ctx->store, live, nr_store,
++						      nr_live, nr_hw_entries);
++		process_branch_entries(cpuc, event, task_ctx->store, nr_store);
++		task_ctx->nr_brbe_records = 0;
++	} else {
++		process_branch_entries(cpuc, event, live, nr_live);
+ 	}
+-
+-skip_bank_1:
+-	cpuc->branches->branch_stack.nr = idx;
+-	cpuc->branches->branch_stack.hw_idx = -1ULL;
+ 	process_branch_aborts(cpuc);
+ 
+ 	/* Unpause the buffer */
 -- 
 2.25.1
 
