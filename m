@@ -2,199 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB81F73A375
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:45:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C63E73A378
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:45:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231764AbjFVOpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 10:45:08 -0400
+        id S231271AbjFVOpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 10:45:22 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbjFVOoj (ORCPT
+        with ESMTP id S232068AbjFVOox (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 10:44:39 -0400
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982AD2713
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:44:10 -0700 (PDT)
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-3fde82c8ca7so57192231cf.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:44:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687445011; x=1690037011;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7CnhTqHAVyX7UVlzcZHYvI6F7kSNqIP0gMnyF6qXKEY=;
-        b=jA8M7u0nSf0+pvtEPfSfsFWLaIzZEqIhwhlh8lcl7wAD74/uwPmZtHcXKiYNagXtZH
-         mMSb9FwDMuvlnloHliul+QFpt/DXme7Mca7AyYFJQfd2g0U2PQRB9Aa7gXQ+pDq9jQc8
-         J6EQ76YBNzjbqfSbnPaIqvZ2Zv0lpRqxT2qF3i2Z0g19yxb7sofURvqpAD1d2YcMhFSO
-         rBMO3aRebAwtXXfI/ssxIszSoILH87f4TP7YS6lvYcCn25xR9HirY1vhR/GRaZPhn3KG
-         DLdevvr2tAKaWdPIKX7x5EzWndVVMQRmPDR2pEf+woWASpu6Zye5C4oUCoLkp1i4HRl7
-         LuWQ==
-X-Gm-Message-State: AC+VfDz4oyUcZ0I7p5mooiCeQfSJx4Ah8MfFho0qb2VMJOW3eunD59gn
-        0v0kyOgC+vBbnfEyq82lSn8=
-X-Google-Smtp-Source: ACHHUZ6IduvbWpPOXs0xSPi6fexDsrPSr6SpItGDQdFgkwEnAJcV6GaO+w8gMYEczszM7gn3bOZUYA==
-X-Received: by 2002:ac8:4e96:0:b0:400:817a:50ff with SMTP id 22-20020ac84e96000000b00400817a50ffmr945067qtp.33.1687445010209;
-        Thu, 22 Jun 2023 07:43:30 -0700 (PDT)
-Received: from maniforge ([2620:10d:c091:400::5:d965])
-        by smtp.gmail.com with ESMTPSA id d24-20020ac84e38000000b003ff0d00a71esm716801qtw.13.2023.06.22.07.43.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 07:43:29 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 09:43:27 -0500
-From:   David Vernet <void@manifault.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        rostedt@goodmis.org, dietmar.eggemann@arm.com, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        joshdon@google.com, roman.gushchin@linux.dev, tj@kernel.org,
-        kernel-team@meta.com
-Subject: Re: [RFC PATCH 3/3] sched: Implement shared wakequeue in CFS
-Message-ID: <20230622144327.GA113759@maniforge>
-References: <20230613052004.2836135-1-void@manifault.com>
- <20230613052004.2836135-4-void@manifault.com>
- <20230621142020.GG2053369@hirez.programming.kicks-ass.net>
- <20230621203445.GC15990@maniforge>
- <20230622105841.GH4253@hirez.programming.kicks-ass.net>
-MIME-Version: 1.0
+        Thu, 22 Jun 2023 10:44:53 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on20715.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe59::715])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A882699;
+        Thu, 22 Jun 2023 07:44:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AllV9syy3hYMKddyLt1XSZOGP9LvGOvMUOG93fuOXT/f0VYExiq1FcYvoLoM8p+xcozUSuFTMyJMfqhk/4Qm4hDf25XZK2GuxVBFaR+y7cChjvb9P2EtXreBSPwCkJNTxwFekfUStnGd6oJUWTJndVip8jeJYbd0/8xdHaFJoNbNru+Iiyg4GsgKfA3UMPSjXgx+H3vB1PYPq1l51G9w3wgtXt4OfdORmCJdFEmYFx0THJmwh2d+C03yZ7vdMWF3m0BGMyqUUFkxJpvQn1lIu54ArRGFDThs+/QaweSwHNaOmbchbmiYOXFUuXmJOn6YhYpr3qurTgTEGqPnn+erxw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EJeY5ibdnpRmsomQfUYESaWdssHf40rWMh1d6/AIkI4=;
+ b=EP2zApA/dwk4iLBj9bkjOMWOFGW5dcquvmMXkdBhls+77oX9/hLKJTstOzAqDaq40xvOWZhy5XrL6qC9PnV7cljcZmoH1f/tgSbPrvf727benzdl4AhR9d01p9/9QB1OaIQDfiFtKXyJ1afKrwgxDUgbc7ddZX/JLLNgeX4YzRX84nF4r1E9wcp+44s9GfesZSx4VrbD5hV5FDK0KmE8FqjFYUs7sy79f9qP0ZXzZaUCxSfvmMDODV18JmFI+XepIaFL6hUD4XrYKwaYWDhYul2oh/tZDL8cdu4MSzajsAiOHzPuu424QCiDaaCD7NYZzW3ax7g7mLdsR7MbRFlyPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EJeY5ibdnpRmsomQfUYESaWdssHf40rWMh1d6/AIkI4=;
+ b=Hr/geyTCHIhxiolm98HQn67kihwb8TMzNZufAandRw99mqXu7MCaq82/0Rpplp+hsoce7Yjda0Ay3UtH3YtcbTasnQpXPalXy4wyd4wqaTvAw8omOO5NDxqSAMVfkIuJmQmjzSTLvxvS2iZKRTURwKZLakatBMiGZE/dAOVFf0g=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CH2PR13MB4474.namprd13.prod.outlook.com (2603:10b6:610:6d::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 22 Jun
+ 2023 14:44:01 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6521.023; Thu, 22 Jun 2023
+ 14:44:01 +0000
+Date:   Thu, 22 Jun 2023 16:43:51 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Choong Yong Liang <yong.liang.choong@linux.intel.com>
+Cc:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        David E Box <david.e.box@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Wong Vee Khee <veekhee@apple.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Revanth Kumar Uppala <ruppala@nvidia.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jochen Henneberg <jh@henneberg-systemdesign.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+        Tan@web.codeaurora.org, Tee Min <tee.min.tan@linux.intel.com>,
+        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Lai Peter Jun Ann <jun.ann.lai@intel.com>
+Subject: Re: [PATCH net-next 3/6] net: phy: update in-band AN mode when
+ changing interface by PHY driver
+Message-ID: <ZJReJ2yxqKGQx1BU@corigine.com>
+References: <20230622041905.629430-1-yong.liang.choong@linux.intel.com>
+ <20230622041905.629430-4-yong.liang.choong@linux.intel.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230622105841.GH4253@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/2.2.10 (2023-03-25)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230622041905.629430-4-yong.liang.choong@linux.intel.com>
+X-ClientProxiedBy: AS4PR09CA0029.eurprd09.prod.outlook.com
+ (2603:10a6:20b:5d4::18) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH2PR13MB4474:EE_
+X-MS-Office365-Filtering-Correlation-Id: 11d523a9-53de-4e0f-ce20-08db732f1e59
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Hk2/iYTQFVOXF8s5A1lsWFrtLIlh4SuyeouK5Z/kgUjyxZxIjAKZDexVLLIf6zwdDqbJkj8A2/LA82UZnRlqxzp1AsoVZZDuvmec1Ui5NHvmVN/Tn+1R0m8c5TwXmXEE+OmNlgekVRtzMfB4vgzWjVfdPXncjhThvZ47stGYI+qhvTKv1tdmiwQeyr0Tn0qobF0x8FBgBubFePhgS/A8CfV94VrQuXOZu0LUwUUUhtPGxV2PECN5QjtKnd712KhDVkA2FOJfmrVhPJ6cQgIbt/RugpQSmz6yyFc64hgR2+d2q560jF7GDHlmjRGSby5iPj/aWeI4B0HzhJIh479/leLp2Jwy5dUBdogzmo5PZL9OXDl1a1Qyzeukxu+nJja8WVPXv+kJai6Izy7ELsx8ukdxzTRDzPUyLwCxQi3Gq8CHbI0GjzVL91NX1Bu8qcv7FvtDmPfKFhMEew97SAZuOnqr6yh8U3TA9F2VnjFr/wYj1ypQ3Go6YAVdcxKnfGWNbMzl6K/Op9q6ztVec5rXjfXan+4uhcXA7JASt8nUQ2wy/vZWm3m+TNlFwzSbtxyILQBruTvBxr6aokqkMTl/VCpdpPCR7nCbLadE0foEZuY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39830400003)(396003)(366004)(136003)(346002)(451199021)(7416002)(44832011)(7406005)(5660300002)(8936002)(36756003)(8676002)(38100700002)(15650500001)(2906002)(478600001)(6666004)(6486002)(186003)(54906003)(86362001)(2616005)(6512007)(6506007)(6916009)(4326008)(66946007)(66476007)(66556008)(41300700001)(316002)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9dMpTHa43my7AJEr/qWdSpgNX8ZdFXhOAGifq7k+vhXt+gIfwnxCjzF2kBKF?=
+ =?us-ascii?Q?1GX6Qd2vH2JvQSpRjxMVkSV41zEtw4vgVgpAgnZTSJFS0P5U78x5jNn20AQa?=
+ =?us-ascii?Q?c/Uk7dCfzqGj47sexnXHJxCxacL456anYEPfjw6qMAhQEKFpq/7g/CIdOEUl?=
+ =?us-ascii?Q?47Nd8K2fkjUuqCuwMG7otznPX1qnWLrKY9JVDMnJrpUDX9pPWRixbMcr4HJ5?=
+ =?us-ascii?Q?Bl9HPP+u2Dv4qbwqmwrziqRubdNPtRQbA+tObmXhK1ddDBKZCCuhNq9VGrBU?=
+ =?us-ascii?Q?8f+wF5pIAXv8XjFN6NNRtUlh7zRUZrxK8KSnkDOWllzXYDN/AYgfV9S5EA3g?=
+ =?us-ascii?Q?ZlbKhw5eeTyQMV9boEAIls0vIzQYLFnIzoGOkmv5f+g2B4VO9VjeFmzCt0Zq?=
+ =?us-ascii?Q?gzFiQgyHA9I/VZBK3yoc/em5qKzdG8tCm+aMJ0bnp2JZoRgOEEplrWlYlEmY?=
+ =?us-ascii?Q?AiL5LwSO7WD1wk6lMGjWOFqTS9Ryln+u4VqwNjpX8m4oOZp0d0fzaSU5mar1?=
+ =?us-ascii?Q?Y3hbqp2oaVduCcweN//ZMdQ+tV9joa1j+mFjUPpToREq6ffpyuJF2vcPpHP5?=
+ =?us-ascii?Q?LLM10drRSPWs3Lnmn4ycaeDE6dHJGePZBWWSzqPNK3f+1DfbFJdfrpyLhJJs?=
+ =?us-ascii?Q?DmtOEFtk7KeQC8qfcXbzYIr4amIcLP+32153SgK3l+aUySraKv/A1jnsU9Zv?=
+ =?us-ascii?Q?/jwjPTHOIGblNR4SrotvQae+jKuVv7nQttFFish+h7ECsR8Nl3wL2miu86/Y?=
+ =?us-ascii?Q?AQ3hhy+qnEPCOe13+LnVer9iR8BALiSnXOBzDVfGK0bDWr7DfrH4mGdPmJ0Z?=
+ =?us-ascii?Q?rveNKe3uqk6Vr1Sd0fFNxUsyXiq5An/g2jDNHYSshXp/rNB4GQsGTWge5Hbq?=
+ =?us-ascii?Q?wcvUUQr4yqqdsNXc+QUoiJ3eAeK4lUc4M/wk6rvb4U02EVc6RyTfF26Zz4TF?=
+ =?us-ascii?Q?yNmtWVT0HeR6UBRdP2pCmLe8pIqQVshp5l2TWfHkNulnamZuFaMlgwvDiHK5?=
+ =?us-ascii?Q?CTNOThqGF75gTslZzLn/xkwv16lglkrgUPCalRO8uCfZmxCXorFHV8ErR0qn?=
+ =?us-ascii?Q?sSJdx4h6BMfIPbhx4TBydYeMiTEdmoiRK6696+ukNR3xAhPmOQG0Eb5mM+Wu?=
+ =?us-ascii?Q?5g/95KQaCSnA/jqa1hE/eHcvewez1+a8ivWBWqGe+hIsFo1gR2F3Yj8SrWpD?=
+ =?us-ascii?Q?DdBizqknnXeW1wvYLUye2mB1UPcjAiFAKqDAT3DNrbfzTLVn7l2ukl5cTvKb?=
+ =?us-ascii?Q?8hmhrmJhu2aYKUzOJBz1ULIMFHocavF76ynQfIZD+7NZdUz0iVy3TcL0aCF8?=
+ =?us-ascii?Q?REo2p0aFBpL+DhiTRyNg/HJHLyCSfNad2E19j6OPD0SPiCPlgu99ag2lXBof?=
+ =?us-ascii?Q?4bhS4FONXJIp6h0hMYEUMhR+m1WGgwQ3gRHmg4LYu4tnQC5qwRBLzh8yabM2?=
+ =?us-ascii?Q?IYAeo512VWPyuerj+lgFPs+Sv1gqlgzu3hMTgG1o0oHDApPXqUvxtFyOvM63?=
+ =?us-ascii?Q?6S6Pnwxv4nZNjCD24Z4HijitXJnsSLZuvJaXOKxTI8F2titb6KBeZ3UyNJxa?=
+ =?us-ascii?Q?aPOCR5YMpt7nLCJXUtcd62z5WfcPncaTf4a/rdHQ1jsoRuGBRvZMzyfd4yBP?=
+ =?us-ascii?Q?ej7TqQu0m7es2zfV2XyfjtQhYNJ0A0s6u6hsn70dpcLEB0M33p0rBhY5bsoQ?=
+ =?us-ascii?Q?G6hp9w=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11d523a9-53de-4e0f-ce20-08db732f1e59
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 14:44:01.3988
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: f+wLiHjfjojaYeZJtx8vcX3IbehvfGVePKRAYJ+8vUhjPpkgYYPGMDvNIQYozkV+Vo6SU/uEPXgjJLzfDHgUANG/qAwsx6YX/Ccrn9VtV9I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR13MB4474
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 12:58:41PM +0200, Peter Zijlstra wrote:
-> On Wed, Jun 21, 2023 at 03:34:45PM -0500, David Vernet wrote:
-> > On Wed, Jun 21, 2023 at 04:20:20PM +0200, Peter Zijlstra wrote:
-> > > On Tue, Jun 13, 2023 at 12:20:04AM -0500, David Vernet wrote:
-> > > > +struct swqueue {
-> > > > +	struct list_head list;
-> > > > +	spinlock_t lock;
-> > > > +} ____cacheline_aligned;
-> > > 
-> > > I'm thinking you can shard this just fine, it makes that pop() needs to
-> > > iterate all shards, but that shouldn't be a problem, and it would still
-> > > only need to take a single lock.
-> > 
-> > Is the idea here to have multiple sharded queues per LLC, with a single
-> > lock protecting them? 
+On Thu, Jun 22, 2023 at 12:19:02PM +0800, Choong Yong Liang wrote:
+> From: "Tan, Tee Min" <tee.min.tan@linux.intel.com>
 > 
-> No, each shard will have it's own lock, each shard it's own cacheline.
+> Add cur_link_an_mode into phy_device struct for PHY drivers to
+> communicate the in-band AN mode setting with phylink framework.
 > 
-> > Or did I misunderstand your suggestion entirely?
+> As there is a mechanism in PHY drivers to switch the PHY interface
+> between SGMII and 2500BaseX according to link speed. In this case,
+> the in-band AN mode should be switching based on the PHY interface
+> as well, if the PHY interface has been changed/updated by PHY driver.
 > 
-> Yup, so each shard is basically the above struct, whole cacheline with a
-> lock and list. Then on enqueue we hash to a shard (possibly based on cpu
-> -- this gives the least amount of bounces) and stick it on.
+> For e.g., disable in-band AN in 2500BaseX mode, or enable in-band AN
+> back for SGMII mode (10/100/1000Mbps).
 > 
-> Then on pop we iterate the shards, the first non-empty shard gets the
-> lock taken, and pop'ed. If you start iteration based on the cpu->shard
-> map used for enqueue you can even get a sense of 'locality' depending on
-> the mapping.
+> Signed-off-by: Tan, Tee Min <tee.min.tan@linux.intel.com>
+> Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
 
-That's nifty. Even if we don't get locality from it, it seems prudent to
-do to avoid contention.
+...
 
-> So pop is O(n) in shards, but on average will only take a single lock --
+> diff --git a/include/linux/phy.h b/include/linux/phy.h
+> index 11c1e91563d4..c685b526e307 100644
+> --- a/include/linux/phy.h
+> +++ b/include/linux/phy.h
+> @@ -756,6 +756,8 @@ struct phy_device {
+>  	/* MACsec management functions */
+>  	const struct macsec_ops *macsec_ops;
+>  #endif
+> +	/* For communicate the AN mode setting with phylink framework. */
+> +	u8 cur_link_an_mode;
+>  };
 
-Ah, so it's 1 lock on average -- thanks for clarifying.
+Hi Choong Yong Liang,
 
-I like this idea and will implement it for v2. I'm not keen on the idea
-of artificially having multiple independent swqueues (yes, I'll think of
-a less evil name) per-LLC to avoid contending, but sharding like this
-seems like a simple but effective solution to the scalability issue;
-assuming having a sufficiently high N doesn't slow down the pop path by
-too much as you pointed out below.
-
-> there is an obvious race where it might see a non-empty queue, but race
-> on lock and find the queue empty once acquired, but meh.
-
-Yep, I would be surprised if this race caused a problem in practice.
-Especially if we spread the poppers by starting iteration based on the
-cpu->shared map as you suggested.
-
-> > > I'm thinking 4 or 8 shards should be plenty, even for Intel LLC.
-
-I'll try out a few combinations and see what works.
-
-> > > 
-> > > >  #ifdef CONFIG_SMP
-> > > 
-> > > > +static struct task_struct *swqueue_pull_task(struct swqueue *swqueue)
-> > > > +{
-> > > > +	unsigned long flags;
-> > > > +
-> > > > +	struct task_struct *p;
-> > > > +
-> > > > +	spin_lock_irqsave(&swqueue->lock, flags);
-> > > > +	p = list_first_entry_or_null(&swqueue->list, struct task_struct,
-> > > > +				     swqueue_node);
-> > > > +	if (p)
-> > > > +		list_del_init(&p->swqueue_node);
-> > > > +	spin_unlock_irqrestore(&swqueue->lock, flags);
-> > > > +
-> > > > +	return p;
-> > > > +}
-> > > 
-> > > Would this not normally be called pop() or somesuch?
-> > 
-> > Yes, I'll improve the name in the next iteration. swqueue_dequeue() and
-> > swqueue_enqueue() seem like the most canonical. Let me know if you have another
-> > preference.
-> 
-> Well, there's two layers intermixed here, which is, I think, what gave
-> rise to the whole wonky naming.
-> 
-> If you implement the queue primitives as: push, pop, del
-> and then build, using them, the scheduler primitives: enqueue, dequeue,
-> pick, things should become saner.
-
-Right, will do
-
-> > > > +	if (!task_wakeup || task_migrated || p->nr_cpus_allowed == 1)
-> > > > +		return;
-> > > 
-> > > Elsewhere you mentioned heuristics, this smells like them. This and the
-> > > is_cpus_allowed() thing makes you loose plenty of opportunities.
-> > 
-> > Yeah fair enough, these certainly are heuristics as well.
-> > 
-> > I thought it best to try and avoid swqueue getting in the way of
-> > select_task_rq_fair() (at least to start out with), but we could always
-> > remove that and run other experiments to see how it does.
-> 
-> So, part of the problem is that you might be hooking at the wrong level
-> (see also my earlier email about the queue only containing running tasks
-> and none of the ready tasks).
-> 
-> If you were to hook at the __{en,de}queue_entity() level you'll
-> automagically dequeue running tasks and enqueue any ready tasks. OTOH
-> you get to deal with the problem that not all entities are tasks, but
-> that shouldn't be too hard.
-> 
-> Also, you end up with more enqueue/dequeue -- so that might hurt.
-
-If this doesn't cause untenable contention then it seems preferable if
-the overall goal is work conservation. Using your shard idea would
-hopefully mitigate that concern somewhat as well. I'll try this out for
-v2 and compare it to keeping the enqueues to only be on the wakeup path.
-
-If there's too much contention we can always just go back to the wakeup
-case, but I'm hopeful this works out.
-
-> Also, at this point you're nr_cpus/N away from simply scanning the
-> runqueues and pulling things from non-empty runqueues. But for large
-> nr_cpus and smallish N it might be a win over-all. Dunno..
-
-Given that we're not seeing any contention on smaller LLCs but still
-observing perf wins, I'm optimistic.
-
-Thanks,
-David
+Please consider adding cur_link_an_mode to the kernel doc
+for struct phy_device - which is above the definition of struct phy_device.
