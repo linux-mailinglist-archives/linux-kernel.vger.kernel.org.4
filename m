@@ -2,212 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D50467397C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:05:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 426107397CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229780AbjFVHFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 03:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33280 "EHLO
+        id S230022AbjFVHGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 03:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjFVHFr (ORCPT
+        with ESMTP id S229866AbjFVHGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 03:05:47 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5681BD8
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:05:46 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <l.goehrs@pengutronix.de>)
-        id 1qCENv-0007Gs-Fg; Thu, 22 Jun 2023 09:05:39 +0200
-Message-ID: <6a1a17df-7436-0434-4fcd-6c5cb4732f47@pengutronix.de>
-Date:   Thu, 22 Jun 2023 09:05:38 +0200
+        Thu, 22 Jun 2023 03:06:38 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9203D1BD4
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:06:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687417595; x=1718953595;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/wq6+yTnYpMw02hwVnOW3jogD7Dj8TJmexZDFIKeaBo=;
+  b=VbEyVJsaA4ks14RdFYHEq0PKX1ZpKlLhsJn/EoMzVYVTzASYjSI1XyOr
+   92i47395POCiHPT3jAkgzzWRQ8X+CU5p1q6v1i7XFka0jb8hWMA/52m/d
+   mZMzdl8bZgmxHmqWIrh52Bn/oqVIU7qYJXcaO5KCZ/yNMHK3oEmmpzv4X
+   lfgfZrUB72oY9Zce/O0NE+cs2J7mkvamMGxYwcdXVuFQWxmGsymSAwl9r
+   egq/8MKiwNwhwtGydErNud7yDGmca7Y90eyekg1HTkLoyBKlZwf+mibbZ
+   y7/7TXH1Yo8ihl/AoA3mxGPSEDbWZ/ToH2ludFHC6sxb9woZrLMRqQTYf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="340746380"
+X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
+   d="scan'208";a="340746380"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 00:06:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="708979704"
+X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
+   d="scan'208";a="708979704"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 22 Jun 2023 00:06:33 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qCEOl-0007Ox-2L;
+        Thu, 22 Jun 2023 07:06:31 +0000
+Date:   Thu, 22 Jun 2023 15:05:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: drivers/net/wireless/legacy/wl3501_cs.c:258:2: warning: performing
+ pointer arithmetic on a null pointer has undefined behavior
+Message-ID: <202306221526.elbjF1ot-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v1] iio: adc: add buffering support to the TI LMP92064 ADC
- driver
-Content-Language: en-US-large
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     kernel@pengutronix.de, Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230614075537.3525194-1-l.goehrs@pengutronix.de>
- <20230617192729.4868d96f@jic23-huawei>
-From:   =?UTF-8?Q?Leonard_G=c3=b6hrs?= <l.goehrs@pengutronix.de>
-In-Reply-To: <20230617192729.4868d96f@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.goehrs@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Kalle,
+
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dad9774deaf1cf8e8f7483310dfb2690310193d2
+commit: 298e50ad8eb8fa12ea68bb2da45bb8ef4edcd0ec wifi: move raycs, wl3501 and rndis_wlan to legacy directory
+date:   3 months ago
+config: riscv-randconfig-r021-20230621 (https://download.01.org/0day-ci/archive/20230622/202306221526.elbjF1ot-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce: (https://download.01.org/0day-ci/archive/20230622/202306221526.elbjF1ot-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306221526.elbjF1ot-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:743:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insb(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/net/wireless/legacy/wl3501_cs.c:33:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insw(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
+   #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/net/wireless/legacy/wl3501_cs.c:33:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insl(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
+   #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   In file included from drivers/net/wireless/legacy/wl3501_cs.c:33:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsb(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/net/wireless/legacy/wl3501_cs.c:33:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsw(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
+   #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/net/wireless/legacy/wl3501_cs.c:33:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           outsl(addr, buffer, count);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
+   #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   In file included from drivers/net/wireless/legacy/wl3501_cs.c:33:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> drivers/net/wireless/legacy/wl3501_cs.c:258:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           wl3501_outsb(this->base_addr + WL3501_NIC_IODPA, src, size);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/net/wireless/legacy/wl3501_cs.c:70:33: note: expanded from macro 'wl3501_outsb'
+   #define wl3501_outsb(a, b, c) { outsb(a, b, c); slow_down_io(); }
+                                   ^~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
+   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
+                                              ~~~~~~~~~~ ^
+   drivers/net/wireless/legacy/wl3501_cs.c:281:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           insb(this->base_addr + WL3501_NIC_IODPA, dest, size);
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
+   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
+                                            ~~~~~~~~~~ ^
+   15 warnings generated.
 
 
-On 17.06.23 20:27, Jonathan Cameron wrote:
-> On Wed, 14 Jun 2023 09:55:36 +0200
-> Leonard Göhrs <l.goehrs@pengutronix.de> wrote:
-> 
->> Enable buffered reading of samples from the LMP92064 ADC.
->> The main benefit of this change is being able to read out current and
->> voltage measurements in a single transfer, allowing instantaneous power
->> measurements.
->>
->> Reads into the buffer can be triggered by any software triggers, e.g.
->> the iio-trig-hrtimer:
->>
->>      $ mkdir /sys/kernel/config/iio/triggers/hrtimer/my-trigger
->>      $ cat /sys/bus/iio/devices/iio\:device3/name
->>      lmp92064
->>      $ iio_readdev -t my-trigger -b 16 iio:device3 | hexdump
->>      WARNING: High-speed mode not enabled
->>      0000000 0000 0176 0101 0001 5507 abd5 7645 1768
->>      0000010 0000 016d 0101 0001 ee1e ac6b 7645 1768
->>      ...
->>
->> Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
->> ---
->>   drivers/iio/adc/ti-lmp92064.c | 54 +++++++++++++++++++++++++++++++++++
->>   1 file changed, 54 insertions(+)
->>
->> diff --git a/drivers/iio/adc/ti-lmp92064.c b/drivers/iio/adc/ti-lmp92064.c
->> index c30ed824924f3..03765c4057dda 100644
->> --- a/drivers/iio/adc/ti-lmp92064.c
->> +++ b/drivers/iio/adc/ti-lmp92064.c
->> @@ -16,7 +16,10 @@
->>   #include <linux/spi/spi.h>
->>   
->>   #include <linux/iio/iio.h>
->> +#include <linux/iio/buffer.h>
->>   #include <linux/iio/driver.h>
->> +#include <linux/iio/triggered_buffer.h>
->> +#include <linux/iio/trigger_consumer.h>
->>   
->>   #define TI_LMP92064_REG_CONFIG_A 0x0000
->>   #define TI_LMP92064_REG_CONFIG_B 0x0001
->> @@ -91,6 +94,13 @@ static const struct iio_chan_spec lmp92064_adc_channels[] = {
->>   		.address = TI_LMP92064_CHAN_INC,
->>   		.info_mask_separate =
->>   			BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
->> +		.scan_index = 0,
->> +		.scan_type = {
->> +			.sign = 'u',
->> +			.realbits = 12,
->> +			.storagebits = 16,
->> +			.shift = 0,
-> 
-> As zero is the 'obvious' default for shift (do nothing case) and c will set it to 0 for
-> you anyway, no need to set it explicitly like this.
-> 
->> +		},
->>   		.datasheet_name = "INC",
->>   	},
->>   	{
->> @@ -98,8 +108,16 @@ static const struct iio_chan_spec lmp92064_adc_channels[] = {
->>   		.address = TI_LMP92064_CHAN_INV,
->>   		.info_mask_separate =
->>   			BIT(IIO_CHAN_INFO_RAW) | BIT(IIO_CHAN_INFO_SCALE),
->> +		.scan_index = 1,
->> +		.scan_type = {
->> +			.sign = 'u',
->> +			.realbits = 12,
->> +			.storagebits = 16,
->> +			.shift = 0,
-> 
-> Same here. No need for this last line.
-> 
->> +		},
->>   		.datasheet_name = "INV",
->>   	},
->> +	IIO_CHAN_SOFT_TIMESTAMP(2),
->>   };
->>   
->>   static int lmp92064_read_meas(struct lmp92064_adc_priv *priv, u16 *res)
->> @@ -171,6 +189,37 @@ static int lmp92064_read_raw(struct iio_dev *indio_dev,
->>   	}
->>   }
->>   
->> +static irqreturn_t lmp92064_trigger_handler(int irq, void *p)
->> +{
->> +	struct iio_poll_func *pf = p;
->> +	struct iio_dev *indio_dev = pf->indio_dev;
->> +	struct lmp92064_adc_priv *priv = iio_priv(indio_dev);
->> +	int i = 0, j, ret;
->> +	u16 raw[2];
->> +	u16 *data;
->> +
->> +	ret = lmp92064_read_meas(priv, raw);
->> +	if (ret < 0)
->> +		goto done;
->> +
->> +	data = kmalloc(indio_dev->scan_bytes, GFP_KERNEL);
-> 
-> A driver shouldn't be directly accessing scan_bytes.
-> You will see iio.h that it is marked [INTERN] to show it should only be accessed
-> by the IIO core code.
-> 
-> The reasoning is closely related to Lars' point. This is almost always a small
-> structure with a known maximum size (across all possible channel configurations)
-> so allocate that space once not every scan (will be 16 bytes I think)
+vim +258 drivers/net/wireless/legacy/wl3501_cs.c
 
-Sounds reasonable. I've more or less copied the trigger handler from
-iio_simple_dummy_buffer.c assuming it contained the best practice when
-it comes to buffer handling w.r.t. size and alignment (which I was not quite
-sure about how to do right).
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  237  
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  238  /**
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  239   * wl3501_set_to_wla - Move 'size' bytes from PC to card
+2307d0bc9d8b60 drivers/net/wireless/wl3501_cs.c Lee Jones      2020-08-26  240   * @this: Card
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  241   * @dest: Card addressing space
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  242   * @src: PC addressing space
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  243   * @size: Bytes to move
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  244   *
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  245   * Move 'size' bytes from PC to card. (Shouldn't be interrupted)
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  246   */
+ff1d2767d5a43c drivers/net/wireless/wl3501_cs.c Jouni Malinen  2005-05-12  247  static void wl3501_set_to_wla(struct wl3501_card *this, u16 dest, void *src,
+ff1d2767d5a43c drivers/net/wireless/wl3501_cs.c Jouni Malinen  2005-05-12  248  			      int size)
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  249  {
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  250  	/* switch to SRAM Page 0 */
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  251  	wl3501_switch_page(this, (dest & 0x8000) ? WL3501_BSS_SPAGE1 :
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  252  						   WL3501_BSS_SPAGE0);
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  253  	/* set LMAL and LMAH */
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  254  	wl3501_outb(dest & 0xff, this->base_addr + WL3501_NIC_LMAL);
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  255  	wl3501_outb(((dest >> 8) & 0x7f), this->base_addr + WL3501_NIC_LMAH);
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  256  
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  257  	/* rep out to Port A */
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16 @258  	wl3501_outsb(this->base_addr + WL3501_NIC_IODPA, src, size);
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  259  }
+^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  260  
 
-I've sent a V2 now that uses a stack allocated structure as buffer. This makes
-the whole trigger handler a lot more concise.
+:::::: The code at line 258 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
 
->> +	if (!data)
->> +		goto done;
->> +
->> +	for_each_set_bit(j, indio_dev->active_scan_mask, indio_dev->masklength)
->> +		data[i++] = raw[j];
-> When a sensor 'always' reads the two channels, we can leave the necessary data
-> mangling up to the IIO core.
-> 
-> Provide available_scan_masks and then always push the lot every time.
-> Mostly people will want both channels anyway (as they paid for them ;)
-> so that core code that moves the data around will do nothing.  In the cases
-> where they only want one channel it will handle the complexity for you.
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
 
-Thanks for the tip! This simplifies the trigger handler even further.
-
->> +
->> +	iio_push_to_buffers_with_timestamp(indio_dev, data,
->> +					   iio_get_time_ns(indio_dev));
->> +
->> +	kfree(data);
->> +
->> +done:
->> +	iio_trigger_notify_done(indio_dev->trig);
->> +
->> +	return IRQ_HANDLED;
->> +}
->> +
->>   static int lmp92064_reset(struct lmp92064_adc_priv *priv,
->>   			  struct gpio_desc *gpio_reset)
->>   {
->> @@ -302,6 +351,11 @@ static int lmp92064_adc_probe(struct spi_device *spi)
->>   	indio_dev->num_channels = ARRAY_SIZE(lmp92064_adc_channels);
->>   	indio_dev->info = &lmp92064_adc_info;
->>   
->> +	ret = devm_iio_triggered_buffer_setup(dev, indio_dev, NULL,
->> +					      lmp92064_trigger_handler, NULL);
->> +	if (ret)
->> +		return dev_err_probe(dev, ret, "Failed to setup buffered read\n");
->> +
->>   	return devm_iio_device_register(dev, indio_dev);
->>   }
->>   
->>
->> base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
-> 
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
