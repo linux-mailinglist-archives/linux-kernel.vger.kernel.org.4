@@ -2,75 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92217398BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D98157398D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 10:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjFVH6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 03:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
+        id S229957AbjFVIAL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 04:00:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230453AbjFVH6d (ORCPT
+        with ESMTP id S231191AbjFVH7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 03:58:33 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866031FEA
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:58:06 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2b455855fb2so94585441fa.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:58:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687420679; x=1690012679;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eoH4TBC0JXa4HF+16J32SMlFEUZb3HDAGDzfvr+ddQI=;
-        b=Cqk7bC+rMdN6LWVm4P1WxZhVVsQ1i+A2OBJpHjrP0dcYZ9kttyL616l4E4STIgjc8X
-         sGq0F336C1y2Q0ixgy9e+Pk4UXNuUMEEaPURL6qo8R+6CuI/kbqVjfPq+/s0DG6xlktM
-         sWsNr5G9uC6tzDfjhpDHt3XWtQ8pIt0tlRnATo5VLg1OUdV02xxhdVulbzeXc9G95Gki
-         YI5kh4+wBKF2F36x0SASlSO6FGmHuRuz5UveUuuC8qL1c2DPGFkqaPX9DmPi40UYb+86
-         HOw0qIcMPNzf1h1eYf4E9Ie7rrjwe+1F/5PAS7+FAIQLG/Dt+VTGHsqEir1KbsHsvq/b
-         of3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687420679; x=1690012679;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eoH4TBC0JXa4HF+16J32SMlFEUZb3HDAGDzfvr+ddQI=;
-        b=luQTTKWyD4KfAIa2kj5i7WMG7jU88RCmML4kDtTjkvkXSR7F1fzRe9hLwm9tYDFXx8
-         9hYyjLRvQJxiTXJhqWYcrC3lD7QjdHNPlMpFakPjVWFZNUZ51fHJQdcLRJXdNlzLM/4y
-         SlUOjEUej+QRYvN2XFDKqzvfkBbx9ln+L0AlB5aN4zFxaP5JXlXmZP/NcG5K0Ha4QpAv
-         QCEhVeUN52Eop1R9F6XDUnQ5tcaqjGna+eOXpcM2oTuQTFHb19fDHbwWjOWsvuYEn9dV
-         jN38f2kGCdaBUCv12zPFhs6jFxA6fkKLQB9nCgslEweevWjCp+DZDez2RVEVu7nr7zYb
-         Qsng==
-X-Gm-Message-State: AC+VfDxk4kxGGl5SzfgT9CAh6mrcsVPAFt8zNPcoMWm3G0rDfpcoePQ1
-        oiMUFgTdsqByMVmCIQs1QPj75w==
-X-Google-Smtp-Source: ACHHUZ5UXqIo89zYUy4OGRb5+TvhvC+o+5R16dzg4IwyRN20Eiakd5XgdOMmN2DFgAkviZpRz1d8ug==
-X-Received: by 2002:a2e:90d2:0:b0:2b5:80c9:126d with SMTP id o18-20020a2e90d2000000b002b580c9126dmr4225985ljg.46.1687420679046;
-        Thu, 22 Jun 2023 00:57:59 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id u23-20020a05600c00d700b003f78fd2cf5esm7000683wmm.40.2023.06.22.00.57.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 00:57:58 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-To:     Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Cc:     "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-In-Reply-To: <38f87b22-d9a8-b8d8-ba7b-a2c2d7311b04@gmail.com>
-References: <38f87b22-d9a8-b8d8-ba7b-a2c2d7311b04@gmail.com>
-Subject: Re: [PATCH resend] MAINTAINERS: add PHY-related files to Amlogic
- SoC file list
-Message-Id: <168742067824.2178283.2801774863315651148.b4-ty@linaro.org>
-Date:   Thu, 22 Jun 2023 09:57:58 +0200
+        Thu, 22 Jun 2023 03:59:52 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFB819B5;
+        Thu, 22 Jun 2023 00:59:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687420791; x=1718956791;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=N61d6qM+RBKMdklc4MnkRjGJayI+qHEHLd53+uPTlp4=;
+  b=kcmdIMW1gGLv7BfVERZT3x1mnbBYILLX3c7Pecrrw5T8M2y0bcvhqTfz
+   vLiTPLoMop9XuhGfHUP/woLgdFPwlvY0mV4fZCMO7dgoZy5TK86DUi/wx
+   c7Zwhgk2fhisbwcKmiKINdemnF4X3w2xcQzVjkrPU3eTaxvERtBqLKfRw
+   hslDyfrTOndY5WIM0Vw7o8QqK6IpP5C3pvHaw/WWK2mIixymr6UZBTqqV
+   0tZlv/3di4u1G8f7JHXPbhbOuKYI6G52aIXGETs8zcYLtp3I5iNsc+E6r
+   xQuhOB7oDagQDZt/TCR42KK9Jq2JsyQO0F5oh9j3Rf3gNR6ZMvNut54Qk
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="357912109"
+X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
+   d="scan'208";a="357912109"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 00:59:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="1045076176"
+X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
+   d="scan'208";a="1045076176"
+Received: from unknown (HELO localhost.localdomain) ([10.226.216.117])
+  by fmsmga005.fm.intel.com with ESMTP; 22 Jun 2023 00:59:44 -0700
+From:   kah.jing.lee@intel.com
+To:     Dinh Nguyen <dinguyen@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Kah Jing Lee <kah.jing.lee@intel.com>
+Subject: [PATCH 0/2]: Enable UBIFS support
+Date:   Thu, 22 Jun 2023 15:58:33 +0800
+Message-Id: <20230622075833.470675-1-kah.jing.lee@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,39 +64,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Kah Jing Lee <kah.jing.lee@intel.com>
 
-On Sun, 15 Jan 2023 15:26:05 +0100, Heiner Kallweit wrote:
-> Add PHY-related files to the Amlogic SoC file list.
-> 
-> 
+Hi, 
+The patchset is to update the qspi mtd partition range for UBIFS on
+socfpga platform. The subsequent patch is enable the UBIFS in defconfig.
 
-Thanks, Applied to https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git (v6.5/drivers)
+Alif Zakuan Yuslaimi (2):
+  HSD 14017166971: arch: arm64: boot: dts: Updated QSPI Flash layout for
+    UBIFS
+  HSD 14017166971: arch: arm64: configs: Enable UBI and UBIFS
 
-[1/1] MAINTAINERS: add PHY-related files to Amlogic SoC file list
-      https://git.kernel.org/amlogic/c/9e70e49474bb37ba8f43336d8a775d503b20aebc
-
-These changes has been applied on the intermediate git tree [1].
-
-The v6.5/drivers branch will then be sent via a formal Pull Request to the Linux SoC maintainers
-for inclusion in their intermediate git branches in order to be sent to Linus during
-the next merge window, or sooner if it's a set of fixes.
-
-In the cases of fixes, those will be merged in the current release candidate
-kernel and as soon they appear on the Linux master branch they will be
-backported to the previous Stable and Long-Stable kernels [2].
-
-The intermediate git branches are merged daily in the linux-next tree [3],
-people are encouraged testing these pre-release kernels and report issues on the
-relevant mailing-lists.
-
-If problems are discovered on those changes, please submit a signed-off-by revert
-patch followed by a corrective changeset.
-
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/amlogic/linux.git
-[2] https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-[3] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+ arch/arm64/boot/dts/altera/socfpga_stratix10_socdk.dts | 8 ++++----
+ arch/arm64/boot/dts/intel/socfpga_agilex_socdk.dts     | 8 ++++----
+ arch/arm64/configs/defconfig                           | 2 ++
+ 3 files changed, 10 insertions(+), 8 deletions(-)
 
 -- 
-Neil
+2.25.1
 
