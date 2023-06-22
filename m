@@ -2,178 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EF9973A52B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:36:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6682973A52D
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232380AbjFVPgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 11:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
+        id S231176AbjFVPg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 11:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232429AbjFVPgD (ORCPT
+        with ESMTP id S232085AbjFVPgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 11:36:03 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 215C11BF7;
-        Thu, 22 Jun 2023 08:36:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687448161; x=1718984161;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Dyj4SeykY11snPRTEN/aGYstQHhK2ydlfJSFeO+QgYg=;
-  b=UUfT0Gjmwc7pFw6PDQwo1EH5+0xLBkrhVjT184sVc0ltewEOl/07Tkr5
-   TxcIpQ826EKqDYf3Wo1nIGSGCt7rArbFhLfT6shuknK5gVqUlLiT6SItj
-   mjHd21bOR4b3xRwG0cTWqLSwLc1f5Hvw0k87I3V3GhUrrVFk87/H/M6LC
-   VdWy4u5W44rJwMFtqaz4mmDnIouqCI5zFcnKna4X2Xf6kMowwHgaa0FGk
-   gkhLjsMRWQ4og7UaXkH7SuT5dvxlAU6WGsM1N6yFm6+diS2qrPv89jAB/
-   ntj9dri5I40VQtHNN+kZfAUy0vI+VomXbicnL31+xZgjnGpzODpIu9W+k
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="390290090"
-X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
-   d="scan'208";a="390290090"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 08:35:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="889088705"
-X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
-   d="scan'208";a="889088705"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga005.jf.intel.com with ESMTP; 22 Jun 2023 08:35:32 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 22 Jun 2023 08:35:32 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 22 Jun 2023 08:35:31 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 22 Jun 2023 08:35:31 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.42) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 22 Jun 2023 08:35:30 -0700
+        Thu, 22 Jun 2023 11:36:21 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2076.outbound.protection.outlook.com [40.107.223.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C178BE42;
+        Thu, 22 Jun 2023 08:36:18 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lk6/bbM7Yk/ODnVuaE7b96RwWuZr6Xh2XyS61v/DocTw+OJfxY2Hvwxj/LGk+0OJf7HlHiE6OGsOE8OIZMzAWVwEUSY9yZPWYZqRsL1Rb4IeyoGr9p77whxBhSJk+4ZvC37hKIx4q4xijxMaw2OG9raJu3QkFiyNFplm9uLIGbhtIoCXccmJpGLhJCSOW+obIWqAS3bbbmfe9gHtfa0967u03tbemwUAD2qZxqn9dsxEB8uU82lnGo7ljKaz5vGyyBhmaSdt4MLzsUdWcADirRWkvwvTj4/cAg+ZJpqT2mInKOe9T0lsiGl08l8a9+Uu7D1fRIrLns2f9l6BnDdzJQ==
+ b=apon558/odtCKX4PENSkkynPNzgEas9yD2oX8F2niU56bk13Gj1fXcuadhRHIEehwbEHX6EetzJSADLZ1pkoRzTa9V4JpMHsCeZFu7nGYlGsQ26l0oKJzA2yePzj1pyU0f0MIOKRy9eQqZL+NRd+cD3wYC1JDC+XH6IbdezYhlcOuXxx/ZHAl0QAiocs6cfduzq4i8c6LZ9yMbTySmwtUCEexXc5qkrd240vdBnRzPu/iCf8I3E5cvo5rVKdYYhj7RBs9u2McfnhWMNGwKku7r4Tiet8ecPEOKaDav7mah2FB7CtfFyfGNkO1Yc6qxgzT0SmyDgMKxYeAMQJ7tYflQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hSEhfwiSps9H5ws+3J8k1rjLQ9XhCWWeCwvS1FiYA1o=;
- b=FEsYtHn9Z1l0SJ0O1ViV4gfry/j8A3PTr28E0ledVcHKVvaCz3haOGH8lig/dqI8FeyPZytb7obbgEIBq4xvrjiweR77K+3QPhriv1bzhNowXhMLHAa469K3aokZYkno6M7dH8H+Wc0zfaPbft7GZayQgsChRv4Q5MqiYZh5q/kpetPObfexdbbMbCNOoSkM8/pGu5rSE2Wg5bEY0bXgxdmgNGANSBw0NyHjk5efPDtLe+rBkKW7Z3X7WtskE25Ch+DKCgT0ezHD/AOTRYo3VJkI5Okw6Fto0MypL0yNRrMY0w3T6EYGfILxa6xobMOYTj83pIkFrnifax++jnS1RA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by CO1PR11MB4819.namprd11.prod.outlook.com (2603:10b6:303:91::22) with
+ bh=Mc+RFBLhHBbj+BpmB2sMllwjT1d6e33rEgLutCGjt+c=;
+ b=kL0gAUqejn2rxDFnJzjbmce1pYeJ8tZbvE2J05RLORVkPYXgQxV+sVPEN7s6q9Wu/wYsWz00P6niIZuaHwx7Na0xGP39/pfbUApNiDvv77T3jzblN1y8Bc/kXrfFETjVbfR/sEPmvf1KL2+BZe2ooSkNdsqSGfTrx/vJW63NssTGsi+rOOy5udpE8ew90OTGBecakW0q7uzge3t1dpYZ6XGADPvIJn7GmPeXU2Chjagz4UuE/pXAfkfFCxFNoMqJYpWCv+BmB32CKuVYLq9uFpcF9fPQskwnLK5mBPdcFj/tdhnnx+jUeHlPT6MZcOhFFnBbRYbiVkgpWls7LhrKUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=chromium.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Mc+RFBLhHBbj+BpmB2sMllwjT1d6e33rEgLutCGjt+c=;
+ b=uBfJbK+mu1GWLXYFlPhUQDcLqmvh/sSRzemfpbO+dYnBLxHq33QIRPpeY9fpBrPwg2mYLReqhXoOaVBHrYcdKoGIwF9QZEBVVG3OM6ZoW/EhRYlCkIPXERBFv/CCyk77XPk52D/VdvG+Mtiq7x4en3YzKl+zuyVwfw0uhtQJ2mabXPuRwa4SZCHIVwncI2v4y1+JiEtqVgWt7N7SCJ6gdxtFWvZUNFu+ncbe52gSThTqc8SBw1TwK0IWLYYaKwiLv4eobq9QkTsYolfcrEwZYGtecg998dCePB8m4+BQoWPwH80mkQ+ovf3KjxEL0+isroJHYrej0cl7mPBkI/L4IQ==
+Received: from MW4PR04CA0326.namprd04.prod.outlook.com (2603:10b6:303:82::31)
+ by CH3PR12MB7619.namprd12.prod.outlook.com (2603:10b6:610:14b::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 22 Jun
- 2023 15:35:27 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::f232:e1a0:b936:2aed]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::f232:e1a0:b936:2aed%7]) with mapi id 15.20.6521.024; Thu, 22 Jun 2023
- 15:35:27 +0000
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     Yazen Ghannam <yazen.ghannam@amd.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: RE: [PATCH 1/2] x86/mce: Disable preemption for CPER decoding
-Thread-Topic: [PATCH 1/2] x86/mce: Disable preemption for CPER decoding
-Thread-Index: AQHZpQwiSV5YEcM40EuivrL9zu2Y2a+W8n2Q
-Date:   Thu, 22 Jun 2023 15:35:27 +0000
-Message-ID: <SJ1PR11MB6083664BCFC8047A5FE8F6A9FC22A@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <20230622131841.3153672-1-yazen.ghannam@amd.com>
- <20230622131841.3153672-2-yazen.ghannam@amd.com>
-In-Reply-To: <20230622131841.3153672-2-yazen.ghannam@amd.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|CO1PR11MB4819:EE_
-x-ms-office365-filtering-correlation-id: 47a8831a-40e9-47d7-852e-08db73364e1a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9AjU/eyXIJcrbn0TP2iMKhbGpzeaX2qa9FfhwpqtyiaeWmGC5Z7qZBSRG7qwGtCYGYKaQKZnIb1JgS5LEwMVIAVkX7u390H5/xdM8UHXIGsO+B0JBJZpoAczVFgjqoq20D4VwvjIdmVuqg8DaEpUNR7LFWhz7ZUG0uB0kuhjgjIA05clC7I4c6n9AELXh2uqkmP2ZgUnlCoxIEdULvKayV7trAWIBC02dEir2SY5jNSM3AVg6Q8o8QzXn5OtV74KldDTLPdVMJSg6kmxmW8DiT64/Fpm3K5IThVahSTxFPLvxeuJdNacuqYezqSV3ZJ7PTeIz3+y+0VykveRwVzbhx3P4wHrbmoGDlHZMIJrZ3vH2Fblz5dT/uGl7KhVzKnqxGc6nUn15mi7aocBnkXk1TfgTphUmvx7uYp5OztZFvZmHxO1y5Ssinq0ZXTrhEAMgKuYPgcyWyDmBeQgFxnp/Vd4n8vqzQycmuxdbXtmBWRELbbyFsriD5bKX162VTJZF5lEyPu1hlzNPKgbR/HuSCkwI+iqrsbBDNZkuu/lMcvy1N8PUQoET5DMWEJo99yc2GdPNU2vZxvTE1Q6w3bXKFqvqM9/C9CjPM8j10wAcTbmHlo6JUJW9FGvE7kdGp89
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(376002)(366004)(346002)(39860400002)(396003)(451199021)(82960400001)(9686003)(5660300002)(186003)(4744005)(71200400001)(52536014)(6506007)(478600001)(7696005)(26005)(122000001)(38070700005)(2906002)(38100700002)(8936002)(8676002)(41300700001)(66946007)(66556008)(66476007)(110136005)(54906003)(55016003)(33656002)(83380400001)(316002)(64756008)(86362001)(66446008)(76116006)(4326008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?PtBsyWM7iRiVLu+zJ2zgPG6EFHjto6kbo+o9c/Fx1XR1JCJVIHmhQCbU/Yda?=
- =?us-ascii?Q?ZVHyPoEISmeQdUzWhoPKNqmaIJx1lVQ7PQ/oUDJW247KNTWaJ2TQmDgGmXXO?=
- =?us-ascii?Q?CFLKxuBGle1IgXSm849aDpWKMAV1UmNv/F3HIG22oAf+ShEeGK2eSeiOfdZW?=
- =?us-ascii?Q?uIKOv60IX8RUrG7+0xEVoaC5sVoD6wi//Vnp2WPHtNUnBf3mdVtsSlAUUtFD?=
- =?us-ascii?Q?4lWyMisYZchzCkYfQCt18VsX5OFNynjNTN4u9NTGE015K/ZQEUhbSY7kQSZh?=
- =?us-ascii?Q?I5oS52Ggi5GbbN+dqdJz2k7gQCMJmsW1fyeXhZ/9qSjwkrlD85iUiU44ML7x?=
- =?us-ascii?Q?fNe3bm8KSe0WbYVlhkW7H0crmwtVQ/THKAShd61C+IEA0NK04kaYTEVq56S0?=
- =?us-ascii?Q?OBMWLULZfDSe9VTXFjIxxXlfmv1hOZ979NBZy4Kz9FyRfg1r1MPYq0bt5Q2G?=
- =?us-ascii?Q?MVxnj+cvqf4Hp8F4/pXtyc8Bp9FSpvKVW2GiGHYqLglxmMzx6ALZtxXvMZTo?=
- =?us-ascii?Q?ZG8ut32UYtk22GAe+DBxItnfNEIPJhj+9FcWGO3mqPTB2GjVCZl7NlEUbsXA?=
- =?us-ascii?Q?DP/nWbtt2g7Crp6XrAZ1FAmLxgLgoj12483q9had+jmUrVv1Fk1FXuO6aH+Q?=
- =?us-ascii?Q?wMZKSO+PYLdQ+dFALoW5W3aejenX/6VYP9TAD+JPZZzpv28dgOv3aty8UwBi?=
- =?us-ascii?Q?3pdggppdOQHkEuAK8f3MTxXoOIwFbIIA2y2X2lToPDoxDIEVenSdOq9nOc6C?=
- =?us-ascii?Q?NRbQW6KxQi8ftEJURPDN2EaoTK/fNKc9BTX9DbZ7OsAsrGKsxmA5XatfcPTD?=
- =?us-ascii?Q?EkIRhgqebgdqWgd31JEj7juzdt5iUnOLF9/7PLm8y7IX7GuvOfYbjVEdiad9?=
- =?us-ascii?Q?GYHz49/FW4jiK5AsRV5CmYp51haCkadaO6UqdVmS4rX+TOuZ1dhxZIz3vHNh?=
- =?us-ascii?Q?TSuIPfA5fDK6StE8v0N8qxOyskDkziOJG0B7hWhE3fIGnjl+FG5wvQOKmi35?=
- =?us-ascii?Q?NAxv+EudBAlye7e6fOD87J+s0wDia+dYGpFolkW1QaFQ7wHhOBR5hTsWkgoH?=
- =?us-ascii?Q?S827G6IsqATRjj60lzjByA/zkTpHbTZDdKTp6dojalUKKvNBWeNHAfgJVBYw?=
- =?us-ascii?Q?lf0rRVHtXGIlwlAxZvU3LVR+lcOk+OT2TEx4JwgzzUIWWpqWxwtSkzjxSOwY?=
- =?us-ascii?Q?dlNR2cjsgS/gtLoC6nEZm3KzN0P8qR/JRVdeoZKLUAnRMQb/a3E8lrQGwkA1?=
- =?us-ascii?Q?YNPu8czkJomCgSVi3oHMYAjgoIKIFNjtrRsGJDRxqQDCUBLZ0NOjRxOk/50e?=
- =?us-ascii?Q?oyatIjj4OrL5sCOrB8TNwoxCQRjaGpEqKfgA1RLclNnbnpwbYpJBH8q59woB?=
- =?us-ascii?Q?qZnRpHNA73HglJuIhlZUE/EHTryLu82C+VlIjOL04W+E7iLljQ2SfoDridyP?=
- =?us-ascii?Q?jW3WgUFR3mRuL0miOh5BieBKnwOe3PhMDCYLIjCLrZM9EjZyC1f7eADRheTG?=
- =?us-ascii?Q?PJ3G8IvisVDiz+IX/tSMSdvfzSvo5jybV4Ffvj2kVbEUTBl8kM0S5XZh+sDf?=
- =?us-ascii?Q?BfpD6UTcdu/IMJ3yIcA=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Thu, 22 Jun
+ 2023 15:36:16 +0000
+Received: from MWH0EPF000989E6.namprd02.prod.outlook.com
+ (2603:10b6:303:82:cafe::d8) by MW4PR04CA0326.outlook.office365.com
+ (2603:10b6:303:82::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24 via Frontend
+ Transport; Thu, 22 Jun 2023 15:36:16 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ MWH0EPF000989E6.mail.protection.outlook.com (10.167.241.133) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.19 via Frontend Transport; Thu, 22 Jun 2023 15:36:15 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 22 Jun 2023
+ 08:36:05 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 22 Jun
+ 2023 08:36:05 -0700
+Received: from build-jeshuas-20230620T084931826.internal (10.127.8.14) by
+ mail.nvidia.com (10.129.68.8) with Microsoft SMTP Server id 15.2.986.37 via
+ Frontend Transport; Thu, 22 Jun 2023 08:36:05 -0700
+From:   Jeshua Smith <jeshuas@nvidia.com>
+To:     <keescook@chromium.org>, <tony.luck@intel.com>,
+        <gpiccoli@igalia.com>, <lenb@kernel.org>, <james.morse@arm.com>,
+        <bp@alien8.de>
+CC:     <rafael@kernel.org>, <linux-hardening@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Jeshua Smith <jeshuas@nvidia.com>
+Subject: [PATCH] ACPI: APEI: Use ERST timeout for slow devices
+Date:   Thu, 22 Jun 2023 15:35:54 +0000
+Message-ID: <20230622153554.16847-1-jeshuas@nvidia.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 47a8831a-40e9-47d7-852e-08db73364e1a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jun 2023 15:35:27.8374
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWH0EPF000989E6:EE_|CH3PR12MB7619:EE_
+X-MS-Office365-Filtering-Correlation-Id: c42a7d06-dc54-46cf-0f0a-08db73366ad5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VewTLpB4Zyu+5vBwPBMCKxoRxkC1aPxJb/0M+506/TH0D9Qt+U2iVidSnq208Z86ecRZlHFoy1RaQJLdTITXSTtgH8Bj0YQEVgicmkykZTI52gDeSyvSRwYrC/e54m+ejeYGwkgqZIQDAVJ4IjlUwumzotrPypfQ7tgpyHkKPtdHJ5KNqQaL72Up3PRR9x/C7zT7Nbe65kyvZ+0yCeXOyJAyLjbj/kTaKtks9Ir01eJnl1h0cLuWOQ9KFQUGe75fKcKqRcsKwHUa4J7sVGhc0IOd+m1KRW3VAPj9tbWiCR9o7KKStCsg7v0IL3h2DzYgk2DyiGIVbcyL2Hc6OHKCyYV29qv4yqwuRZVvFyJcfYvBkeP38WJ8k0EEXxQdO02knDlP4odZIQ25ZDpk9Z8Z4CUtTMOzJMOwqzsgrMwOWg7BdjLWBb52wghIOKQBalTWXMMr+KxxmFEeXE25tCXEWeokklUWvCbDQoBt/gSTDMhVM3bYEkM98hPhYSWDVZu+Qj5Ito+Mn315mTaqPQAyi7TIhoFOmhKjnoPZV3WRRgYfQ1HJ4so+3wJjZXbOQ5ZIUFvMCmuKUF/SWl4FFkfPCWFRSv9TzlBgCON2VYbJXBAagwMb/InKhjOz++IVKJ4WPABSZ5r4CUzpbBZyvA6OgJ3PFdH1C8hA1OGhCPwzur7g9IIYP6xZAwxJfukSCQAJcux9hP3FZQFPWjJPAroGE/kovmlVzX0kWAAsftrQ3dj/4DZS2vDztazJfL1NAuXK
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(396003)(39860400002)(376002)(451199021)(46966006)(36840700001)(40470700004)(478600001)(6666004)(54906003)(110136005)(4326008)(47076005)(40480700001)(336012)(83380400001)(426003)(86362001)(36756003)(36860700001)(40460700003)(2616005)(70586007)(2906002)(82310400005)(1076003)(107886003)(26005)(186003)(356005)(7636003)(82740400003)(41300700001)(8676002)(7416002)(8936002)(70206006)(316002)(5660300002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 15:36:15.9895
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: EXjwm9AKJ1k/VlW/FRE0HCkBs2l2cXR5E6s/WeARJMmYN/EIHKQvkhQOjR1fxyUJ6V4e6Z8UYEHtvS+xE+d6Eg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4819
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: c42a7d06-dc54-46cf-0f0a-08db73366ad5
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: MWH0EPF000989E6.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7619
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> All the above is done when the BERT is processed during late init. This
-> can be scheduled on any CPU, and it may be preemptible.
+Slow devices such as flash may not meet the default 1ms timeout value,
+so use the ERST max execution time value that they provide as the
+timeout if it is larger.
 
-> 2) mce_setup() will pull info from the executing CPU, so some info in
->   struct mce may be incorrect for the CPU with the error. For example,
->   in a dual-socket system, an error logged in socket 1 CPU but
->   processed by a socket 0 CPU will save the PPIN of the socket 0 CPU.
+Signed-off-by: Jeshua Smith <jeshuas@nvidia.com>
+---
+ drivers/acpi/apei/erst.c | 41 ++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 37 insertions(+), 4 deletions(-)
 
-> Fix the first issue by locally disabling preemption before calling
-> mce_setup().
+diff --git a/drivers/acpi/apei/erst.c b/drivers/acpi/apei/erst.c
+index 247989060e29..eb0a05f032df 100644
+--- a/drivers/acpi/apei/erst.c
++++ b/drivers/acpi/apei/erst.c
+@@ -10,6 +10,7 @@
+  *
+  * Copyright 2010 Intel Corp.
+  *   Author: Huang Ying <ying.huang@intel.com>
++ * Copyright (c) 2023 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
+  */
+ 
+ #include <linux/kernel.h>
+@@ -59,6 +60,12 @@ static struct acpi_table_erst *erst_tab;
+ #define ERST_RANGE_NVRAM	0x0002
+ #define ERST_RANGE_SLOW		0x0004
+ 
++/* ERST Exec timings */
++#define ERST_EXEC_TIMING_MAX_MASK      0xFFFFFFFF00000000
++#define ERST_EXEC_TIMING_MAX_SHIFT     32
++#define ERST_EXEC_TIMING_TYPICAL_MASK  0x00000000FFFFFFFF
++#define ERST_EXEC_TIMING_TYPICAL_SHIFT 0
++
+ /*
+  * ERST Error Log Address Range, used as buffer for reading/writing
+  * error records.
+@@ -68,6 +75,7 @@ static struct erst_erange {
+ 	u64 size;
+ 	void __iomem *vaddr;
+ 	u32 attr;
++	u64 timings;
+ } erst_erange;
+ 
+ /*
+@@ -97,6 +105,19 @@ static inline int erst_errno(int command_status)
+ 	}
+ }
+ 
++static inline u64 erst_get_timeout(void)
++{
++	u64 timeout = FIRMWARE_TIMEOUT;
++
++	if (erst_erange.attr & ERST_RANGE_SLOW) {
++		timeout = ((erst_erange.timings & ERST_EXEC_TIMING_MAX_MASK) >>
++			ERST_EXEC_TIMING_MAX_SHIFT) * NSEC_PER_MSEC;
++		if (timeout < FIRMWARE_TIMEOUT)
++			timeout = FIRMWARE_TIMEOUT;
++	}
++	return timeout;
++}
++
+ static int erst_timedout(u64 *t, u64 spin_unit)
+ {
+ 	if ((s64)*t < spin_unit) {
+@@ -191,9 +212,11 @@ static int erst_exec_stall_while_true(struct apei_exec_context *ctx,
+ {
+ 	int rc;
+ 	u64 val;
+-	u64 timeout = FIRMWARE_TIMEOUT;
++	u64 timeout;
+ 	u64 stall_time;
+ 
++	timeout = erst_get_timeout();
++
+ 	if (ctx->var1 > FIRMWARE_MAX_STALL) {
+ 		if (!in_nmi())
+ 			pr_warn(FW_WARN
+@@ -389,6 +412,10 @@ static int erst_get_erange(struct erst_erange *range)
+ 	if (rc)
+ 		return rc;
+ 	range->attr = apei_exec_ctx_get_output(&ctx);
++	rc = apei_exec_run(&ctx, ACPI_ERST_EXECUTE_TIMINGS);
++	if (rc)
++		return rc;
++	range->timings = apei_exec_ctx_get_output(&ctx);
+ 
+ 	return 0;
+ }
+@@ -621,10 +648,12 @@ EXPORT_SYMBOL_GPL(erst_get_record_id_end);
+ static int __erst_write_to_storage(u64 offset)
+ {
+ 	struct apei_exec_context ctx;
+-	u64 timeout = FIRMWARE_TIMEOUT;
++	u64 timeout;
+ 	u64 val;
+ 	int rc;
+ 
++	timeout = erst_get_timeout();
++
+ 	erst_exec_ctx_init(&ctx);
+ 	rc = apei_exec_run_optional(&ctx, ACPI_ERST_BEGIN_WRITE);
+ 	if (rc)
+@@ -660,10 +689,12 @@ static int __erst_write_to_storage(u64 offset)
+ static int __erst_read_from_storage(u64 record_id, u64 offset)
+ {
+ 	struct apei_exec_context ctx;
+-	u64 timeout = FIRMWARE_TIMEOUT;
++	u64 timeout;
+ 	u64 val;
+ 	int rc;
+ 
++	timeout = erst_get_timeout();
++
+ 	erst_exec_ctx_init(&ctx);
+ 	rc = apei_exec_run_optional(&ctx, ACPI_ERST_BEGIN_READ);
+ 	if (rc)
+@@ -703,10 +734,12 @@ static int __erst_read_from_storage(u64 record_id, u64 offset)
+ static int __erst_clear_from_storage(u64 record_id)
+ {
+ 	struct apei_exec_context ctx;
+-	u64 timeout = FIRMWARE_TIMEOUT;
++	u64 timeout;
+ 	u64 val;
+ 	int rc;
+ 
++	timeout = erst_get_timeout();
++
+ 	erst_exec_ctx_init(&ctx);
+ 	rc = apei_exec_run_optional(&ctx, ACPI_ERST_BEGIN_CLEAR);
+ 	if (rc)
+-- 
+2.25.1
 
-It doesn't really fix the issue, it just makes the warnings go away.
-
-The BERT record was created because some error crashed the
-system. It's being parsed by a CPU that likely had nothing
-to do with the actual error that occurred in the previous incarnation
-of the OS.
-
-If there is a CPER record in the BERT data that includes CPU
-information, that would be the right thing to use. Alternatively
-is there some invalid CPU value that could be loaded into the
-"struct mce"?
-
--Tony
