@@ -2,122 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157F07398AA
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51DF27398AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:57:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjFVH52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 03:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54966 "EHLO
+        id S230404AbjFVH5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 03:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbjFVH50 (ORCPT
+        with ESMTP id S230381AbjFVH5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 03:57:26 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95C7419AB;
-        Thu, 22 Jun 2023 00:57:25 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 08C2E5C00B2;
-        Thu, 22 Jun 2023 03:57:25 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 22 Jun 2023 03:57:25 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1687420645; x=1687507045; bh=Gk
-        KZ59lQ593WQfkM2Ne32UUdJV1b5jkhK8Vh4H1Zzd8=; b=3QIUvH519S7xyxVwHe
-        t4OjA4EnxuqZcAvkAAyjlbzZGsvXllDD/qPYz/3rUESwqTHTgA3RLkvg2r1pQefz
-        +8f1GWsbXk3MiZw8s+XFTPTVvcP7e+p6jN5dN7ZXoeMj/CJf4KRJHNJfT4v/DURC
-        uWiu+mEgGx+sN62dmZw4bkUc1VNLPdIp1JVuBbK6OpdHNnJ54Ecum70/3u2XSXKW
-        Ry6XMjlpls2wy2lL59sxfZtHWrCTemuRgq28HFLQEAQLEQj/0F6T1dL0Z5cVvzDo
-        Jm2u04mOjkA9oBZXFdbPSiOEfPYnE4Iw2GCbDvFA7AnhV7TgRezHSeZMwf/YVw14
-        TDyg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687420645; x=1687507045; bh=GkKZ59lQ593WQ
-        fkM2Ne32UUdJV1b5jkhK8Vh4H1Zzd8=; b=BPSsm07+RlhpSIFyYJ4wNWomqf3Zy
-        0LEnJ5+TGP099pVOZDS/NIDaL0iX4oYy3jP8lv6nL4TKOBqIzgq0v8qBI2pYUdyE
-        rK4TbM3cl0ZAl4noq2NIAuT+97JUvDSOJAGJo2jAxKt2M+DBSvrbRYvXdg3EqAwP
-        WW6O36IIzQdykvbVWv6kvVPVeZ3w9wDJnXa3MFATVSQ0QMDTu8L8s9VjJ5ZccFwj
-        DF6LM/O8So01hgbs5gB2AC9Kjbgi606nbw8Iwwm7xt8KOYPvpqNHABR6CoNgsFXq
-        5jIoJ1lTbx7A/93MjueHqD1ZGBTF62Jie4rN7E7ZRceaaboo2xhsmrs1A==
-X-ME-Sender: <xms:5P6TZAnLvQmm-88vFK30Qq-3F3-RBrJYNCa5ajPBSQ-hENzahoWllQ>
-    <xme:5P6TZP2ke-wfLwwI6WDkhAdluGe0w1mT4pf8iV_VjsU3e0PeMvxMDBcp8sE7Tp1Pf
-    Tglq4z9b2A0xQuhGpk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeegtddguddulecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
-    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:5P6TZOrlfD17IHkZf9NvgbSqKsIORpiR3O-4CTYXB9wxDiXSexpTNw>
-    <xmx:5P6TZMmMWYkJtNmEmbQazf6cQP-n404fDkUOfVf0FD-1znuODexKRg>
-    <xmx:5P6TZO1LLUOSnybP5kWX1LEq-hF0lNl69UWYhcJHzmT2gabZtmW4DQ>
-    <xmx:5f6TZB34Fpjv_gKy09J7s47__5-Q8NL-Vrq5-k3HIudombGwGYVQHg>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 4D1E3B60086; Thu, 22 Jun 2023 03:57:24 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <6d7d1f99-02e3-4e13-ae50-96e8b38a6bb0@app.fastmail.com>
-In-Reply-To: <6d3c01d0-c809-b420-335f-551c98956493@foss.st.com>
-References: <20230602132859.16442-1-alexandre.torgue@foss.st.com>
- <20230602132859.16442-5-alexandre.torgue@foss.st.com>
- <24e9c526-4128-4e63-8d28-c4ef1647f886@roeck-us.net>
- <6d3c01d0-c809-b420-335f-551c98956493@foss.st.com>
-Date:   Thu, 22 Jun 2023 09:57:03 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Alexandre Torgue" <alexandre.torgue@foss.st.com>,
-        "Guenter Roeck" <linux@roeck-us.net>,
-        "Arnaud POULIQUEN" <arnaud.pouliquen@foss.st.com>
-Cc:     "Rob Herring" <robh+dt@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org,
-        "Conor Dooley" <conor+dt@kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>, "Olof Johansson" <olof@lixom.net>,
-        soc@kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-kernel@vger.kernel.org,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>
-Subject: Re: [PATCH v2 04/10] arm64: introduce STM32 family on Armv8 architecture
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 22 Jun 2023 03:57:34 -0400
+Received: from mail-pg1-x541.google.com (mail-pg1-x541.google.com [IPv6:2607:f8b0:4864:20::541])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D75119AB;
+        Thu, 22 Jun 2023 00:57:33 -0700 (PDT)
+Received: by mail-pg1-x541.google.com with SMTP id 41be03b00d2f7-54fac3b7725so3214140a12.3;
+        Thu, 22 Jun 2023 00:57:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687420653; x=1690012653;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sSrox6nZu5QisyWxc0yjYaiViKB1+/tnFUYJAfTfoEM=;
+        b=gBESjUDwZc68KmBsSEzmnm1I19QdU3P6QZDbfADNgX+GCuAMFXA0VnAD9fgHZXn5OH
+         Vtx1bWsoTrOXvZ5J2qw35/yCtII+l95zIeP7WvwHvZgEcdgiS7OOkNDKb9vZZWb4vWh/
+         eGMNHvbuK/3Z6mvB7SQitqMkMB1rvJoMrWi1gH75a9DxeuF0/yig4Hzv+a0Qb3+CpqDA
+         XvzauPe2Dj7HWzMYHixSBqlwatfPF/gHY2TltYzn0YcC26Y6z5+tGKFdTYz4Ok+LUdDM
+         xhcKyTBzQTCYLEExdcaeE1Jppk4FUncbfrNQsiU5VPDjVPeqOTww0yfP++kHMyoB2pIu
+         /pDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687420653; x=1690012653;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sSrox6nZu5QisyWxc0yjYaiViKB1+/tnFUYJAfTfoEM=;
+        b=hQqUFSVm4/E0D2KYwo+r0Q07YPZpX1b0lvb1fA0aysfEhROEAO8eawjmYfX8pEU63d
+         Xtbss4zerjjW8QlnWe+hKJBtSFeE8jhiLT1Q1yIZOOavT8inAYZuDkpjmfnsNATRfn5F
+         1IpyVtfzhxQHbXqr4omMwt26SKtOx4Ols3rFhgfAPh2h4oA5xqvkbwTShZJG/weE/Idd
+         5Gbu0zrjp5ex5ZWRDXzrkDjVrGxuv0qtre8vWrc8oL8o/oqTctedAabW6JePoSeQLJP1
+         9rQIYPN2JoJsEaI/hH1A0oYGUn838l3X4Hs6Zvn+vMAzbQiBjEOzJFgrVrkb00MT3Jus
+         TuZQ==
+X-Gm-Message-State: AC+VfDyjsYJx0UuNXyv76exmEPhL5hlNsu/pVTmK1BiL+gD7ZSsjCmKT
+        KEitOVhzYC3cpoUzjOVymrg=
+X-Google-Smtp-Source: ACHHUZ4YlN5Zn3b8QblLLYKVAAHkJuqTHvNhxz3lwfTRHrGWrK5D2+ZlIHoNPbm12tJOFHoDUAbpCg==
+X-Received: by 2002:a05:6a20:4fa3:b0:11d:2b0c:7f49 with SMTP id gh35-20020a056a204fa300b0011d2b0c7f49mr13471857pzb.36.1687420652704;
+        Thu, 22 Jun 2023 00:57:32 -0700 (PDT)
+Received: from localhost.localdomain ([203.205.141.82])
+        by smtp.gmail.com with ESMTPSA id iz3-20020a170902ef8300b001b3e84240b4sm4733338plb.67.2023.06.22.00.57.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 00:57:32 -0700 (PDT)
+From:   menglong8.dong@gmail.com
+X-Google-Original-From: imagedong@tencent.com
+To:     yhs@meta.com, alexei.starovoitov@gmail.com
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, benbjiang@tencent.com,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>
+Subject: [PATCH bpf-next v7 0/3] bpf, x86: allow function arguments up to 12 for TRACING
+Date:   Thu, 22 Jun 2023 15:57:12 +0800
+Message-Id: <20230622075715.1818144-1-imagedong@tencent.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023, at 09:50, Alexandre TORGUE wrote:
-> On 6/22/23 02:57, Guenter Roeck wrote:
->> 
->> On Fri, Jun 02, 2023 at 03:28:53PM +0200, Alexandre Torgue wrote:
->>> Add a dedicated ARCH_STM32 for STM32 SoCs config. First STM32 Armv8 SoC
->>> family is the STM32MP25 which is composed of STM32MP251, STM32MP253,
->>> STM32MP255, STM32MP257 SoCs.
->>>
->>> Signed-off-by: Alexandre Torgue <alexandre.torgue@foss.st.com>
->>>
->> 
->> This patch (or patch series) results in the following build error when
->> trying to build arm64:allmodconfig.
->> 
->> Building arm64:allmodconfig ... failed
->
-> Should be fixed by this patch:
->
-> https://lore.kernel.org/linux-arm-kernel/9ebb9a5a-7bc8-da67-529f-5193b9352b23@infradead.org/T/
+From: Menglong Dong <imagedong@tencent.com>
 
-I added that patch to my the soc/newsoc branch now.
+For now, the BPF program of type BPF_PROG_TYPE_TRACING can only be used
+on the kernel functions whose arguments count less than or equal to 6, if
+not considering '> 8 bytes' struct argument. This is not friendly at all,
+as too many functions have arguments count more than 6. According to the
+current kernel version, below is a statistics of the function arguments
+count:
 
-    Arnd
+argument count | function count
+7              | 704
+8              | 270
+9              | 84
+10             | 47
+11             | 47
+12             | 27
+13             | 22
+14             | 5
+15             | 0
+16             | 1
+
+Therefore, let's enhance it by increasing the function arguments count
+allowed in arch_prepare_bpf_trampoline(), for now, only x86_64.
+
+In the 1st patch, we save/restore regs with BPF_DW size to make the code
+in save_regs()/restore_regs() simpler.
+
+In the 2nd patch, we make arch_prepare_bpf_trampoline() support to copy
+function arguments in stack for x86 arch. Therefore, the maximum
+arguments can be up to MAX_BPF_FUNC_ARGS for FENTRY, FEXIT and
+MODIFY_RETURN. Meanwhile, we clean the potential garbage value when we
+copy the arguments on-stack.
+
+And the 3rd patch is for the testcases of the this series.
+
+Changes since v6:
+- somit nits from commit message and comment in the 1st patch
+- remove the inline in get_nr_regs() in the 1st patch
+- rename some function and various in the 1st patch
+
+Changes since v5:
+- adjust the commit log of the 1st patch, avoiding confusing people that
+  bugs exist in current code
+- introduce get_nr_regs() to get the space that used to pass args on
+  stack correct in the 2nd patch
+- add testcases to tracing_struct.c instead of fentry_test.c and
+  fexit_test.c
+
+Changes since v4:
+- consider the case of the struct in arguments can't be hold by regs
+- add comment for some code
+- add testcases for MODIFY_RETURN
+- rebase to the latest
+
+Changes since v3:
+- try make the stack pointer 16-byte aligned. Not sure if I'm right :)
+- introduce clean_garbage() to clean the grabage when argument count is 7
+- use different data type in bpf_testmod_fentry_test{7,12}
+- add testcase for grabage values in ctx
+
+Changes since v2:
+- keep MAX_BPF_FUNC_ARGS still
+- clean garbage value in upper bytes in the 2nd patch
+- move bpf_fentry_test{7,12} to bpf_testmod.c and rename them to
+  bpf_testmod_fentry_test{7,12} meanwhile in the 3rd patch
+
+Changes since v1:
+- change the maximun function arguments to 14 from 12
+- add testcases (Jiri Olsa)
+- instead EMIT4 with EMIT3_off32 for "lea" to prevent overflow
+
+Menglong Dong (3):
+  bpf, x86: save/restore regs with BPF_DW size
+  bpf, x86: allow function arguments up to 12 for TRACING
+  selftests/bpf: add testcase for TRACING with 6+ arguments
+
+ arch/x86/net/bpf_jit_comp.c                   | 246 +++++++++++++++---
+ net/bpf/test_run.c                            |  23 +-
+ .../selftests/bpf/bpf_testmod/bpf_testmod.c   |  49 +++-
+ .../selftests/bpf/prog_tests/fentry_fexit.c   |   4 +-
+ .../selftests/bpf/prog_tests/fentry_test.c    |   2 +
+ .../selftests/bpf/prog_tests/fexit_test.c     |   2 +
+ .../selftests/bpf/prog_tests/modify_return.c  |  20 +-
+ .../selftests/bpf/prog_tests/tracing_struct.c |  19 ++
+ .../testing/selftests/bpf/progs/fentry_test.c |  32 +++
+ .../testing/selftests/bpf/progs/fexit_test.c  |  33 +++
+ .../selftests/bpf/progs/modify_return.c       |  40 +++
+ .../selftests/bpf/progs/tracing_struct.c      |  54 ++++
+ 12 files changed, 474 insertions(+), 50 deletions(-)
+
+-- 
+2.40.1
+
