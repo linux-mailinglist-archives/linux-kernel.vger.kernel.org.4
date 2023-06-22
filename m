@@ -2,142 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EA6473A13F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:52:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97C5573A143
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231434AbjFVMwn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 08:52:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51354 "EHLO
+        id S231305AbjFVMw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 08:52:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbjFVMwk (ORCPT
+        with ESMTP id S231474AbjFVMwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 08:52:40 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D98519AF;
-        Thu, 22 Jun 2023 05:52:39 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-3129c55e1d1so663221f8f.0;
-        Thu, 22 Jun 2023 05:52:39 -0700 (PDT)
+        Thu, 22 Jun 2023 08:52:55 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C171BFC
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:52:52 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9896216338cso272978166b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:52:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687438358; x=1690030358;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3Gd2rN+LYgXaVXhDv5TDP/9OSYFS9BOQ/d4mluuIDQQ=;
-        b=W1SASCkJJx2JO4wmg5Y6XkrTiXnrIUmpqlOoiFo3KS15TLJ6H/xk0vQ4Hm0HZkO68F
-         GDlJbHZ7dKmp82vgwqfoPTjib2LdB9lTTD/5o8RWM3YvcTatPyqdhuOOhQindOKs5EGr
-         K4wZgoIMzmQywDiTJhxSJ4yHq8rCaNFppDdMrqRXs1DsEDzETwMgpd5i1M3rFyjrHch7
-         F5jFUvcWPTGXsPdoH7lmjFhSHFNs5cqtfyShsm84McHFcCsMYwCkGCyFboY44d8iO8QB
-         OdX8UgmKwO0u3cGc5ulLlNWdMonv+t7d5Eu1ytR7gpP7IOceNDZX69hdNYHkQyCmukPc
-         8eIQ==
+        d=linaro.org; s=google; t=1687438371; x=1690030371;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vJn4qK5D0/zBLT8ePA8blzrHlwW1q+g3bf+ZWr4iToU=;
+        b=n8kXF96Ou8tJCUZABlfYEiawtFnTorpd6T6wVvKKTS9oU8/wRhv59tqvt+uvAkNr/I
+         0wmEqgx6EfnyZV9KUDTjS0YydCVrbGsC1dsZRImLRa0O9dsqeT1RrbG+YDObVXyStten
+         2Xhwa00KD+H3SaTiQevquHYXLwCcP3kvSULg2frdOi1Q0l54/zm0MMd0cJ/KIAIYANOT
+         obZpyacfm+blrmEvwXYTTtE1u016ho2iADX/o0dl1VV5apDMd0oqmeSxNa2PnnhR4iJY
+         bg0mi6k6XBpbTiBjnEU3NiJhMzbwcoeRn3WyNinJdFigx5QvQQ9G0E/z0jLJsSOfvmZC
+         NdoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687438358; x=1690030358;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1687438371; x=1690030371;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3Gd2rN+LYgXaVXhDv5TDP/9OSYFS9BOQ/d4mluuIDQQ=;
-        b=FD/O3GEY+CYpxYifcZAXmkYsvdyv2o+gus3txksbxoIExDqhCFdjqd4OmH+8TAaSG5
-         2L/syDw+cGx/+sNqFk/oJCp3UzY8MuQghwDefvEFieFVOB7GNFUyrZQAen65ky7HBVQr
-         iF78kleS19zY6bfurd0E/gz2fsKOQOsJS6fiDsD2Y5svNESKah6AzVUcBZt5aUZufbcT
-         k2K+cicAWKZw4B3cx8Y+QfMzUz1smuV5Vkq293//cVMFyv2M7cdbvgcjjZohCg93sC0X
-         u4CLBn/Zp5WsL6sKvLHszWFO9zDu0Vk2Hkxc7Nh+gl1qB+OvI6Z1RVVC2h58wLS6osQx
-         mUuQ==
-X-Gm-Message-State: AC+VfDybm01i0RB/vcbrqHZqyzhEfjztY1DvOzK5K6tLuuDFwdAYBgKH
-        U4LJ3zIbHLA0qJ4R8Yixuio=
-X-Google-Smtp-Source: ACHHUZ7ZYlmGLpIp0K2LCIOaOUR7YxW9hjMU9sBUEZ4cRW5uMjQdIBs4ZoVUvmJM6BFMi/rCW1clng==
-X-Received: by 2002:a05:6000:1191:b0:30a:b147:69db with SMTP id g17-20020a056000119100b0030ab14769dbmr17036899wrx.24.1687438357849;
-        Thu, 22 Jun 2023 05:52:37 -0700 (PDT)
-Received: from [192.168.50.244] (83.8.116.77.ipv4.supernova.orange.pl. [83.8.116.77])
-        by smtp.gmail.com with ESMTPSA id g3-20020adff3c3000000b0030e52d4c1bcsm7017073wrp.71.2023.06.22.05.52.36
+        bh=vJn4qK5D0/zBLT8ePA8blzrHlwW1q+g3bf+ZWr4iToU=;
+        b=ZwvWJQwEx2gVJNaAz8eLwTAD0UPzblj0zC2gArVSNvWIVxQfbvVMc+5dKSx8M44wT/
+         roovcDzJJ5JTSZ7JVXF5esJfEY56H05w03oihIuygsrWVRou9NgCO+gCnL9FpVgL3bGz
+         YxUAqvS4SeZMiP4+weSkYM2MqsPzjG3/cverandz+jxZ3jBu9WgeWHzWbdp6GxSo/JeZ
+         fo+weKz4xn78BcOMF8lWN+qRMppNuNpMfaROc5fb8QcWjTz7+tdxAcRsUtTL1gLdIjgu
+         sem8lculA/trYkkhmvjsIW8Aup/Y/JXZbd+iHNemYMHaCm7Midt37RnBCVN+19eBIVaW
+         BxDw==
+X-Gm-Message-State: AC+VfDwYwuaoA9PbqD/EczFMI3dVw0aZCElhOVh9lizcd8O1XSPuccqK
+        zH8IaemSUhJgan8MWpHvep36bA==
+X-Google-Smtp-Source: ACHHUZ6BL7cV1ab79Z1DXqI3js9EbbIJO29PsCcID0NCQKXDLIPdAJcdnDuaLOt1M2ocx9LetkrqQg==
+X-Received: by 2002:a17:906:9b88:b0:988:91cb:afd1 with SMTP id dd8-20020a1709069b8800b0098891cbafd1mr12407657ejc.29.1687438370948;
+        Thu, 22 Jun 2023 05:52:50 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id x14-20020a170906134e00b009828e26e519sm4559218ejb.122.2023.06.22.05.52.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 05:52:37 -0700 (PDT)
-Message-ID: <72af054e-e82b-917c-1f9b-fe231dcfa5bf@gmail.com>
-Date:   Thu, 22 Jun 2023 14:52:35 +0200
+        Thu, 22 Jun 2023 05:52:50 -0700 (PDT)
+Message-ID: <e2cc150b-49e3-7f2f-ce7f-a5982d129346@linaro.org>
+Date:   Thu, 22 Jun 2023 14:52:48 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.2
-From:   Artur Weber <aweber.kernel@gmail.com>
-Subject: Re: [PATCH v4] ARM: dts: exynos: Add Samsung Galaxy Tab 3 8.0 boards
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Olof Johansson <olof@lixom.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, soc@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht
-References: <20230604165627.16963-1-aweber.kernel@gmail.com>
- <aae10e8f-b4f2-7417-ab08-41d6ec9ab8fc@linaro.org>
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v2 5/6] can: tcan4x5x: Add support for tcan4552/4553
 Content-Language: en-US
-In-Reply-To: <aae10e8f-b4f2-7417-ab08-41d6ec9ab8fc@linaro.org>
+To:     Markus Schneider-Pargmann <msp@baylibre.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Vivek Yadav <vivek.2311@samsung.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Simon Horman <simon.horman@corigine.com>
+References: <20230621093103.3134655-1-msp@baylibre.com>
+ <20230621093103.3134655-6-msp@baylibre.com>
+ <32557326-650c-192d-9a82-ca5451b01f70@linaro.org>
+ <20230621123158.fd3pd6i7aefawobf@blmsp>
+ <21f12495-ffa9-a0bf-190a-11b6ae30ca45@linaro.org>
+ <20230622122339.6tkajdcenj5r3vdm@blmsp>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230622122339.6tkajdcenj5r3vdm@blmsp>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/06/2023 21:15, Krzysztof Kozlowski wrote:
-> On 04/06/2023 18:56, Artur Weber wrote:
->> +/*
->> + * This device does not use the built-in RTC; instead, the RTC in the
->> + * S5M8786 PMIC is used instead. Remove the unused node to avoid DTB check
->> + * warnings.
->> + */
->> +/delete-node/ &rtc;
+On 22/06/2023 14:23, Markus Schneider-Pargmann wrote:
+>>
+>> Yeah, but your code is different, although maybe we just misunderstood
+>> each other. You wrote that you cannot use the GPIOs, so I assumed you
+>> need to know the variant before using the GPIOs. Then you need
+>> compatibles. It's not the case here. You can read the variant and based
+>> on this skip entirely GPIOs as they are entirely missing.
 > 
-> This is not the solution. The S3C RTC is there. Just like all other
-> boards we have two RTCs and DTS should be complete. Definitely you
-> should not remove something just because there were warnings. Instead
-> warnings should be fixed.
+> The version information is always readable for that chip, regardless of
+> state and wake GPIOs as far as I know. So yes it is possible to setup
+> the GPIOs based on the content of the ID register.
+> 
+> I personally would prefer separate compatibles. The binding
+> documentation needs to address that wake and state GPIOs are not
+> available for tcan4552/4553. I think having compatibles that are for
+> these chips would make sense then. However this is my opinion, you are
+> the maintainer.
 
-The problem is that the built-in RTC does not seem to work on this
-device. I attempted to add it, using the same clocks as other devices
-in mainline using the S5M8676 PMIC:
+We do not talk about compatibles in the bindings here. This is
+discussion about your driver. The entire logic of validating DTB is
+flawed and not needed. Detect the variant and act based on this.
 
-&rtc {
-	status = "okay";
-	clocks = <&clock CLK_RTC>, <&s5m8767_osc S2MPS11_CLK_AP>;
-	clock-names = "rtc", "rtc_src";
-};
+Best regards,
+Krzysztof
 
-However, it just prints the following on startup:
-
- s3c-rtc 10070000.rtc: rtc disabled, re-enabling
- s3c-rtc 10070000.rtc: registered as rtc0
- s3c-rtc 10070000.rtc: hctosys: unable to read the hardware clock
-
-Since the internal RTC gets registered as rtc0, it's used as the default
-by the OS, whereas the working RTC from the PMIC is registered as rtc1.
-Writing to the internal RTC succeeds but the settings are not kept after
-a reboot. The PMIC's RTC works fine.
-
-This isn't a mainline-only issue; the internal RTC does not work in the
-downstream kernel on this device either.
-
-Not adding the RTC node results in a warning about missing clocks
-(exynos4.dtsi only provides 1 clock, whereas bindings require 2):
-
-arch/arm/boot/dts/exynos4212-tab3-3g8.dtb: rtc@10070000: clocks: [[5, 346]] is too short
-	From schema: /mnt/linux/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-arch/arm/boot/dts/exynos4212-tab3-3g8.dtb: rtc@10070000: clock-names: ['rtc'] is too short
-	From schema: /mnt/linux/Documentation/devicetree/bindings/rtc/s3c-rtc.yaml
-
-...which makes sense, since we don't want to add clocks given that we're
-not going to be using this RTC. I suppose deleting the node with
-delete-node is a bit too destructive though.
-
-I guess a good solution would be to set up the &rtc node as seen in
-the snippet I sent earlier, but keep it disabled + add a note explaining
-why it's done.
-
-In your opinion, what would be the best solution?
-
-Best regards
-Artur
