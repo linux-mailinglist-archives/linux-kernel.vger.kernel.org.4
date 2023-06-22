@@ -2,168 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B333E739716
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 07:54:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8FFC739717
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 07:58:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231142AbjFVFyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 01:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
+        id S231132AbjFVF6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 01:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbjFVFyo (ORCPT
+        with ESMTP id S229776AbjFVF6h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 01:54:44 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 626A310F0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 22:54:42 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-3fde9bfb3c8so84061cf.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 22:54:42 -0700 (PDT)
+        Thu, 22 Jun 2023 01:58:37 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD92EA;
+        Wed, 21 Jun 2023 22:58:36 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id e9e14a558f8ab-341c81d71f6so29579425ab.0;
+        Wed, 21 Jun 2023 22:58:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687413281; x=1690005281;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F3YNCvHVBh6f5985fs1PM5llxz1wl3G7BMCoa8Ui5Y4=;
-        b=jWAnJ3S40v/MJxJRmfuVpU9OaAQN2PgYBYv7/cd6zod/5Ict5iXkK8uPJ6ViEy7h/K
-         NgGf8guh+Gkj1/e4t7WQSpfLX8V9u6QepA6BsTIKddtPnT+ueMeflAvSpVu/SSq5DeZS
-         BYXDqVKycYzbkRodJG1mfHP84Qq3cR0JM1aEuHGn45m4iofCV+guz8VmR2vWoMINorCp
-         E7HfvsVvzQJny96GLYkb+ALMzXcR0Y8nTBfToqwak6Hp8gNhgQ9nivnwud/1MFtYKitq
-         zVFq7K72ZcARs8uznLNvuE0HqqurqhBm5Z8SmuSBnNQBjHUHIDVvSXgfzyqFQPEYmAKy
-         te5g==
+        d=gmail.com; s=20221208; t=1687413515; x=1690005515;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=6LgDdsVWxwuIcdGWkXM+//E7h6q+sL/ftkkHRO/sno0=;
+        b=d5XoRu21YNy2Tz7y9D8qfodXjHbHjPINszK1ZfNE0peIL9eYeTiIbubpZ56jtzGw3T
+         +Hty8mSDnuslgGvyVH32WLlQ/F7daHeVADWwvEB+LO5DLWeJERZVY0h/Jku8eARL2hdz
+         nb1UXVqbl7qoRhJW076ed2FQ1pld8LaLjGu+Ke4rZHCC9DzNcb60kGwrg4RM1zHAEMbk
+         LRvfZbN7QwbM9z8mw23ahBy1+X1h7yOkrm+2T1vDm3rNRR6AePPB+gs/rjykywx6YosF
+         GaguGalfzFzKTWqqhYYQhn7l0n2a38Dx0VVNQzTUYOdjOmKvdic/uwuPQ9Z28JIqeqgo
+         NfUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687413281; x=1690005281;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F3YNCvHVBh6f5985fs1PM5llxz1wl3G7BMCoa8Ui5Y4=;
-        b=bBZ0QHZyB7S+7jM6ynbXCdWsahG8/TknhOWYOtnjknFkGyoh0t+JYp14VaZF2wGReh
-         VwrnH4nEzsHT8KIDaDX7yUSQDXljUE0r02GN7/95uevCC7wo6ItoDXs2WYlZqi/cbTej
-         wDxvEMnsnt358aB31oOtQ/8NOnEmIq5R+PGup2PXDac1oZ4HlzaOvxk+fuWd96i8IJ/N
-         vBGUd16yf1NUOFJXdsZZRLD2Vut3ohNFIWEPBaZwGTI0uF4qLgelDCq8VD7ZUCpvS6hw
-         FQxR/+jGxKNuep6sVN9htmFN1hVHk+MAheRtAfGgtagwyPF5i+SNfJAB0FJVikF/JNkk
-         fPGw==
-X-Gm-Message-State: AC+VfDzCjrAcyiy9r4W2E+dcZ+O7ctIc+JNXx4LBuL111X28aLDqoGPs
-        qUHIUY0z9w2dWN4XFA+podqmx9QhYzEZKUNl2EsoeA==
-X-Google-Smtp-Source: ACHHUZ6lWG1QBdONLxsl9IqvdM2Y3NOBZzdN7diFaTRUlr4FZoijuFDDcZLgqOuGKZVq3sY5vvUJVj0JwVEQs3rYoqY=
-X-Received: by 2002:ac8:7fcf:0:b0:3f3:75c2:7466 with SMTP id
- b15-20020ac87fcf000000b003f375c27466mr724316qtk.8.1687413281285; Wed, 21 Jun
- 2023 22:54:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230621063749.3358430-1-irogers@google.com> <CAM9d7cg-r7Nw807egNFVRBgEXwgBV=A2pVEb+MBS4gvFgnNynQ@mail.gmail.com>
- <CAP-5=fVBbXoGuNeaYADA1RgY4wfSN8CgAJVEBjmOQGZ=-OiOAQ@mail.gmail.com> <CAM9d7cixNAgxU58YNLHOpdZzDqk1t_ypOCQKEyo8+chFHd1HrQ@mail.gmail.com>
-In-Reply-To: <CAM9d7cixNAgxU58YNLHOpdZzDqk1t_ypOCQKEyo8+chFHd1HrQ@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 21 Jun 2023 22:54:30 -0700
-Message-ID: <CAP-5=fXkjSEgFmKNYYBzh11+xVD=j_KCOS7eQf=sBAALpMWK-w@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] perf symbol: Remove symbol_name_rb_node
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
+        d=1e100.net; s=20221208; t=1687413515; x=1690005515;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6LgDdsVWxwuIcdGWkXM+//E7h6q+sL/ftkkHRO/sno0=;
+        b=MB//zwVjWdZRndIOLodaJkinaXXYUomNvgTZ6APtVp61l4HXNdk3XU55lxVyXxfpN6
+         gMe1p7Bcq46YeBLoAzjluo4KAmZ1Zgv5grQ2OB7/Dj4FmgAk+RusnM40dg5M8xah0H0e
+         hTjm8eXe8Ct1x52RsyBcvBkPpR7eiYdoxjPLBcLQiISxjG57gw9x0aUgJjaQNf+SBjdL
+         YR6YeB8rchDEhul8ZgktH2eSFVBUlaRZlkyJkMLQ9dG4E8icvRYL2gGcPCAvZfOY3PJ7
+         58kQXlEvUh1vvsM9Vjwv0jAuOQfezyqIQpHZmW3B5yGJN42sbhf7U09e3FuByj0Ud+ZU
+         paiA==
+X-Gm-Message-State: AC+VfDxEJqOdIWQ1YeGu2mCmmbWBMop6m3CMjm/dV0NngZzm/K5jUd3S
+        9htKaajizd7q96W5qdda0DM=
+X-Google-Smtp-Source: ACHHUZ789G4G84oxl5HwGSknm9yhTAsw0RzfQx88pkLl+3Itw3SttMaLnRYxkk+2J363iWmHZ+f4VQ==
+X-Received: by 2002:a92:c081:0:b0:340:9132:f99 with SMTP id h1-20020a92c081000000b0034091320f99mr16765919ile.22.1687413515652;
+        Wed, 21 Jun 2023 22:58:35 -0700 (PDT)
+Received: from moohyul.svl.corp.google.com ([2620:15c:2a3:200:ad24:b28c:6f03:5b78])
+        by smtp.gmail.com with ESMTPSA id b25-20020aa78719000000b0063b8d21be5asm3903607pfo.147.2023.06.21.22.58.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 22:58:35 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org,
         Kan Liang <kan.liang@linux.intel.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Carsten Haitzler <carsten.haitzler@arm.com>,
-        Changbin Du <changbin.du@huawei.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Jason Wang <wangborong@cdjrlc.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URI_DOTEDU,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+        Andi Kleen <ak@linux.intel.com>
+Subject: [PATCH] perf test: Remove x permission from lib/stat_output.sh
+Date:   Wed, 21 Jun 2023 22:58:32 -0700
+Message-ID: <20230622055832.83476-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 10:21=E2=80=AFPM Namhyung Kim <namhyung@kernel.org>=
- wrote:
->
-> On Wed, Jun 21, 2023 at 9:28=E2=80=AFPM Ian Rogers <irogers@google.com> w=
-rote:
-> >
-> > On Wed, Jun 21, 2023 at 8:51=E2=80=AFPM Namhyung Kim <namhyung@kernel.o=
-rg> wrote:
-> > >
-> > > Hi Ian,
-> > >
-> > > On Tue, Jun 20, 2023 at 11:37=E2=80=AFPM Ian Rogers <irogers@google.c=
-om> wrote:
-> > > >
-> > > > Most perf commands want to sort symbols by name and this is done vi=
-a
-> > > > an invasive rbtree that on 64-bit systems costs 24 bytes. Sorting t=
-he
-> > > > symbols in a DSO by name is optional and not done by default, howev=
-er,
-> > > > if sorting is requested the 24 bytes is allocated for every
-> > > > symbol.
-> > > >
-> > > > This change removes the rbtree and uses a sorted array of symbol
-> > > > pointers instead (costing 8 bytes per symbol). As the array is crea=
-ted
-> > > > on demand then there are further memory savings. The complexity of
-> > > > sorting the array and using the rbtree are the same.
-> > > >
-> > > > To support going to the next symbol, the index of the current symbo=
-l
-> > > > needs to be passed around as a pair with the current symbol. This
-> > > > requires some API changes.
-> > > >
-> > > > Signed-off-by: Ian Rogers <irogers@google.com>
-> > > >
-> > > > v2. map__find_symbol_by_name_idx so that map__find_symbol_by_name
-> > > >     doesn't need an optional parameter. Separate out
-> > > >     symbol_conf.sort_by_name removal.
-> > > > ---
-> > >
-> > > [SNIP]
-> > > >  void dso__sort_by_name(struct dso *dso)
-> > > >  {
-> > > > -       dso__set_sorted_by_name(dso);
-> > > > -       return symbols__sort_by_name(&dso->symbol_names, &dso->symb=
-ols);
-> > > > +       mutex_lock(&dso->lock);
-> > > > +       if (!dso__sorted_by_name(dso)) {
-> > > > +               size_t len;
-> > > > +
-> > > > +               dso->symbol_names =3D symbols__sort_by_name(&dso->s=
-ymbols, &len);
-> > > > +               if (dso->symbol_names) {
-> > > > +                       dso->symbol_names_len =3D len;
-> > > > +                       dso__set_sorted_by_name(dso);
-> > > > +               }
-> > > > +       }
-> > > > +       mutex_unlock(&dso->lock);
-> > >
-> > > I think this part deserves a separate commit.
-> >
-> > Using the mutex or the use of sorted_by_name?
->
-> For the mutex originally, but might be better to split further. :)
+The commit fc51fc87b1b8 factored out the helper functions to a library
+but the new file had execute permission.  Due to the way it detects
+the shell test scripts, it showed up in the perf test list unexpectedly.
 
-I can add the locks first. There's an obvious leak with the array
-approach if two threads are sorting. With the invasive rbtree a leak
-isn't possible but corruption could be.
+  $ ./perf test list 2>&1 | grep 86
+   76: x86 bp modify
+   77: x86 Sample parsing
+   78: x86 hybrid
+   86:                        <---- (here)
 
-> And now it grabs the mutex unconditionally, I think
-> we can check the condition without the mutex first
-> and again with the mutex if not sorted.
+  $ ./perf test -v 86
+   86:                                                                 :
+  --- start ---
+  test child forked, pid 1932207
+  test child finished with 0
+  ---- end ----
+  : Ok
 
-Is there a kernel pattern for double checked locking that isn't broken
-in the normal ways double checked locking is broken?
-https://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html
+As it's a collection of library functions, it should not run as is.
+Let's remove the execute permission.
 
-Thanks,
-Ian
+Fixes: fc51fc87b1b8 ("perf test: Move all the check functions of stat CSV output to lib")
+Cc: Kan Liang <kan.liang@linux.intel.com>
+Cc: Andi Kleen <ak@linux.intel.com>
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+---
+ tools/perf/tests/shell/lib/stat_output.sh | 0
+ 1 file changed, 0 insertions(+), 0 deletions(-)
+ mode change 100755 => 100644 tools/perf/tests/shell/lib/stat_output.sh
 
-> Thanks,
-> Namhyung
+diff --git a/tools/perf/tests/shell/lib/stat_output.sh b/tools/perf/tests/shell/lib/stat_output.sh
+old mode 100755
+new mode 100644
+-- 
+2.41.0.162.gfafddb0af9-goog
+
