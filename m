@@ -2,189 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAA6173A3C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B26373A3CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232052AbjFVOyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 10:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60134 "EHLO
+        id S231553AbjFVO5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 10:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232003AbjFVOya (ORCPT
+        with ESMTP id S230062AbjFVO5V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 10:54:30 -0400
-Received: from MW2PR02CU002.outbound.protection.outlook.com (mail-westus2azon11013011.outbound.protection.outlook.com [52.101.49.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E45A1BD1;
-        Thu, 22 Jun 2023 07:54:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NkFlL1BmcEOZBLOXgNGfCZIXC26+ZG9rWLFFkDUjvtP12KaoM58/2BtBlgEvNRlkFljKiRZuMx9wlq+5dtzXlmj+IXlBpxlSBToDdtG4VQEfmS/8GhoVllNim+0IrJSajZfmxXiu1ykak6Ccj6NVCMB5kKSUtozuIbfALCJIznMkKyFn1qQQMjZGGBgy9Tg4vy7oNmDrFX+YOYyaXt7Li4/GLzmIy8ajxnPM3w2zk1oQlgYJd2QciROZRP0seO/xjOcFNvjhaODUzmKELQNcfIX7V7xDCfVrvjHC+SBDBdxgK2lqOmzutv5JSplHKRnMbehN3l6g1Y2N0RevMWavYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+rz6HTRol4AVrVwQ2NZhxzVzW0QkGJ5oDQTxETvofQc=;
- b=S472lWSv+Kq7unfIVy0KUPd5MhrdhINSTjD13jG7QXHwmDIiuLkYHxDxd6ctcM5ZFCiy10QCia3Pbs+P88Akb3kbHB5h/suCXAE7q5EQGJ0/4sLudVhtPS8dRt1wF+Dz/bLLyDEdtSAhZq5/iYyK7hiLnipmc5JYOX6xRNEAXopAbdBc+ouaHtsalXPYNJW5+CeQuFbdmBVXFqejWDdT2mM+wV1n+pEuxIsYonb2gUmWjma6z2RySmq2UitkX4GeLC3ccAKwqdh4MBjywmioDkMI2IHj9aabZiPiPzAEOp9z5l6evb+GpMGfTq/lDBoxhFwpEZF1GKIJlD/UmTvJCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
- dkim=pass header.d=vmware.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+rz6HTRol4AVrVwQ2NZhxzVzW0QkGJ5oDQTxETvofQc=;
- b=IHzeHGAgAQgqrEX1bHPjzpSSS9iPAJBe+1YL3Rd/wTS7mFBwLYFUiAVcBy+Y/JS1/eIdhnuivSEDeFzy4+6Vjd2IRvSUGOupAikpuiNtSK75Lg/Rm1Ma299o9+OCGYvyJwGdiF0hf1mLZDXta27oFnwyObTDTGunF7DZcN43GTQ=
-Received: from BL0PR05MB5409.namprd05.prod.outlook.com (2603:10b6:208:6e::17)
- by PH0PR05MB8076.namprd05.prod.outlook.com (2603:10b6:510:97::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 22 Jun
- 2023 14:54:24 +0000
-Received: from BL0PR05MB5409.namprd05.prod.outlook.com
- ([fe80::68a4:3da6:4981:4793]) by BL0PR05MB5409.namprd05.prod.outlook.com
- ([fe80::68a4:3da6:4981:4793%7]) with mapi id 15.20.6521.024; Thu, 22 Jun 2023
- 14:54:23 +0000
-From:   Ashwin Dayanand Kamat <kashwindayan@vmware.com>
-To:     Xin Long <lucien.xin@gmail.com>
-CC:     Simon Horman <simon.horman@corigine.com>,
-        Vlad Yasevich <vyasevich@gmail.com>,
-        Neil Horman <nhorman@tuxdriver.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
-        Ajay Kaher <akaher@vmware.com>,
-        Tapas Kundu <tkundu@vmware.com>,
-        Keerthana Kalyanasundaram <keerthanak@vmware.com>
-Subject: Re: [PATCH v3] net/sctp: Make sha1 as default algorithm if fips is
- enabled
-Thread-Topic: [PATCH v3] net/sctp: Make sha1 as default algorithm if fips is
- enabled
-Thread-Index: AQHZlLVqGf2QnmjSNEO1bZtdH71JDa93oJ6AgACGZICAHuJwgA==
-Date:   Thu, 22 Jun 2023 14:54:23 +0000
-Message-ID: <7BD8EC18-86EA-411B-9155-8A7633747C7F@vmware.com>
-References: <1685643474-18654-1-git-send-email-kashwindayan@vmware.com>
- <ZHoHfcMgYqO3l7Np@corigine.com>
- <CADvbK_fCPPHto4XjPeTJPJ9NTXoJGgO7jjEcy1Bq3nQSFAzR9A@mail.gmail.com>
-In-Reply-To: <CADvbK_fCPPHto4XjPeTJPJ9NTXoJGgO7jjEcy1Bq3nQSFAzR9A@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vmware.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL0PR05MB5409:EE_|PH0PR05MB8076:EE_
-x-ms-office365-filtering-correlation-id: db9bedcc-003b-4fe1-566a-08db73309170
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ZB9QAQZmJtOUEk69PsS0VcD7XQCN859aiZDJ4g8wvY+aXKjo1DbfiPLn++pPMAS0j/nS/NkBo+b6xlsmRz9EG6yy7U7fYUhgXGcNB/dlpqC9a4BETFPJVeKNFHKrHiupAkfPeHvSXFDbPn5PjGay43NWoAhICgXzilxgUnjeJuKvfLsvzw+zSuiuOP5SZ8MKQIz1GIcbhL+l894MrMAt9nUJKQPbdWJ9r6OK81PHGaD9Rue0THTFy690Lh0L6UYo8YJVDcKpfUbrADPIxCeAQE/GaieWu7CwGltFFWnYc7KV5KYUyR5aBMRNREVGbszYALZtNsB5P2zZz4Fy9PCb7Q8U85PLuqE4APpfic31gTz97ga6DK42Iy0UQd1Lftjuv9ZdjsQ/aJlR1MoMLRuLmsbn1vYnqNdprVIuY7p7Mb+HQjwZVRs0/GztMbQRrinhUqtEaHm4M/RgczshuBgZLrTsigyfpcTxnTycUCERA5ufzpM+jfqDdU6XEYe1NyUssKi2i+db7KyxStIyFn5zUWWUAmG1JYHPV3zYYqRRoi1v61/szvX1Jf9yKM35ZZShsAtuxFKbcaSUzcuJR4ZGwfppD4g4b3FLQAzX72tUDtPCKLxWeEkCry8ZWuKF0AlVHY71XhPPSqx9VvmTQk+toA3r5dYT5CTHppbGcuDXiRzeBgQ4tWINPH1DyN9ItGjSkrsXgm1badJb9DTjwVo95A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR05MB5409.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(366004)(136003)(396003)(39860400002)(346002)(451199021)(107886003)(33656002)(122000001)(53546011)(6512007)(6506007)(71200400001)(186003)(6486002)(478600001)(54906003)(2616005)(86362001)(6916009)(64756008)(66446008)(66476007)(76116006)(66946007)(4326008)(66556008)(83380400001)(7416002)(41300700001)(316002)(5660300002)(2906002)(38100700002)(36756003)(8936002)(8676002)(38070700005)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?V3hURHppdmt1VmNaYmtnVDdCclM1VFk1eUVEOEJhQ2JSUUNyd2FpSlZiR3lT?=
- =?utf-8?B?L2t4QVh3KzR0c3FlT2NrbmJhRWZzbXJYY01BNUNPWi9VTGhoMGlWL09Zcnhi?=
- =?utf-8?B?dElMc0lINDVDRS8rYkE5cnhYT3BEOUNmNENHdXpTTXlMV1M0SEc2YTFJamRa?=
- =?utf-8?B?bGVuMUhwUzRYZU5neUdpREJ2SE8vNmRtaXl3WUE3bmlDeVdMVUsyUW9vd3A1?=
- =?utf-8?B?VXFycDVldDBwSkZoTnRScEtPRlY4aFdFOWVhdEhmd2RPRk5DcTEzYnArYkpN?=
- =?utf-8?B?aEdNZk93Qk1IcjgzUkxWNWg3bjBVKzY2R2pkbW56bGw0S3kyTFRlOUErUmV1?=
- =?utf-8?B?T3JhdEJJci9TTjhoVlFYUGJmUnFoaTNXZ2NQUTBWWkhFNEVLeGFnMnJtK2cv?=
- =?utf-8?B?Ti9pZU1EMlJBZDFwQTFiTU8rWnF1Y1Jpd1ZCdTk4eXgzd0xLd3huejZMeStS?=
- =?utf-8?B?RC9BRW9UenRSRlhJVTRob2l6OVR1cStzdFJyMERnRVpRMjdrc3ZyeHJjNXVJ?=
- =?utf-8?B?alF5K3JObVVqWU5PYzZjZGJPVDhGYU44Ui9WbHFwUUpIc0lmL2F6UUlMYXRS?=
- =?utf-8?B?QmJieUo2YWI0RlBlR0w1YVJ4dTBibjlzVTFzSS9WQkJ6S2NBWCtWUDVTekZz?=
- =?utf-8?B?TGRFOEExQ0pvUnFnWVkrdndHbnlBYUwxRDNMY0lzMzZpaG0wVzNkN2h0Qmgw?=
- =?utf-8?B?bjVrVWFUYU9jLzhFRFNXSUFRbm1BRjB3SEJHelVzVDZQSFdDTUNqaTV4S3B0?=
- =?utf-8?B?VzZ5cGRYS25jRktxc2tLdDlVbU5PbUtuUlZHUWRNQzNpM3haOXVoVWJvR2Rx?=
- =?utf-8?B?K1pOQ1F3WkZTVmttbmc2WjFSVU82eXlEM1IzTHNoYlVXSCthZFNOUmlqQU8w?=
- =?utf-8?B?c05XTWtsU3FHdTM2cERMMi9jRWFETE1tcmxtVnB5NFdvQ0Y5S1MxSitYekJF?=
- =?utf-8?B?REp1ZzVmR2RCRktaYlBPNFZXdEE5bFBySEtZTzdqWm9zVzcwWG95TFN0eitJ?=
- =?utf-8?B?QlpPa1ZmTVhyOFlKVnB1bE9zTEJiNXZ6UCtvN0pwMlFXRGw3VkdyUmlDNVkv?=
- =?utf-8?B?ZjdrUXFoV1d0eTJEdGRSSjRvdTBoeDRDYklrUXJNclFtQlNoaVBHNTRxRDY4?=
- =?utf-8?B?QWtiSjFmRVVhTHFXVFNDUE0rVzJXc3pHcXVZT0lkVk5Ma1NMS0dVSGhZZ1or?=
- =?utf-8?B?ejNBK1hkcmtZRkpFcDgzenNUaEZoVTYyL2pGNXNkMTA2QWFhVWc4QlRQeEMx?=
- =?utf-8?B?eEZpVG1VcGtocFBRWU9YUk9QekorL1RmSVZqMHJjN1hhWHkxejZPTFJ3Nnp0?=
- =?utf-8?B?cldQcG9aVmp1cjVoS1BDek45NjBQakoydTdGSmpHOWw2Q29ISnBNM2YrV2Fu?=
- =?utf-8?B?cDdDY2duSzlLSmlwYjNZeXZOY0xVVWk3czU4a3ZhSENLbkpsZGIwd0tjR0Y1?=
- =?utf-8?B?V0VNc1NzY2JEalc3QTZpeGNuekdncG5JbWhlUDNIWVAyK3Rla2MrVmNMY1FT?=
- =?utf-8?B?aVRoT2VSOGJyVU50a1VHZ0lkMGtpN0RqbVIraGQwSm1SWWhDai9jRllJaEtE?=
- =?utf-8?B?Q3ZxRUpKREQyZkdRRzFKWlBSS0ptUUVNbDJ1cmkyWm81K2pnVVRnb3Z1RWZQ?=
- =?utf-8?B?TG1oOER6T28wVGl5bWoxY3lXNnBWUTlxMG5maGlURE16VnFJTnV3WENwQTlU?=
- =?utf-8?B?cEM5NEJPeTFDOFYzWEUwUTJFUDF2OUF4WGxqWUlBWjhIei9XWk5GN09YRzcz?=
- =?utf-8?B?VTFiNkFKVGtwajNPUmFnNUN5VVVJZWpqTFpGclkvaXp1RW1MS21Sd2ZjcW1K?=
- =?utf-8?B?K0lvT1BCTHJoYkpmRnVTMEVhRXhOZnd6RjR5Z3BGRUxjdy83Yk83cENsSXNq?=
- =?utf-8?B?KzNaUzRqYllFdkVKajFoTCtZYnBDMTdjV0lWUFpxa3JreUdDVEYxYWQ1cUw3?=
- =?utf-8?B?ZnVreG5Mb0NEcThiMmpYQ1VtTGZESytwaDU3TTI5V280Mm43SlN3Uk5IaVZ3?=
- =?utf-8?B?TXAvV0J2RnZ3d2RMNFRWd2tQMkFRQ2w0VllaeGdnYzBTMTh2WDBNbHZiNnh4?=
- =?utf-8?B?dmM2NUtnZHJYeElxSnhLbGExRm5NZGt4SDk1TnB3bFAvT2t5azlyanAwVktG?=
- =?utf-8?B?OXlFZzg5Lzl1QnMyVzNrVDRuWk1vVnVNVlZ3NHBvM2huYjNmYXB3WlI3S3A2?=
- =?utf-8?B?NjZ3S1UzU256eFd4M1YvcE1FZUJDUGRKODNDRXV0NVUvQ3BOa0l0NW5WaDlI?=
- =?utf-8?B?SlVBWnhwaytlUEdLWlNJSm04Tm1RPT0=?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <32985418D1938E40A243D32C3EEB97B3@namprd05.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 22 Jun 2023 10:57:21 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0BDE9;
+        Thu, 22 Jun 2023 07:57:20 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35MBmrCI025928;
+        Thu, 22 Jun 2023 14:56:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=TObwiHTb4XM5wqihoSvZlLhvS03t5wiD+Y1C/4bCTaA=;
+ b=HzBXOAy4Hore4Y+K4YQgLmMbFzF9v7d2PApdXZclw2emZAe3yN7ptaWuha4sBP6wfThP
+ xaWEBZ0lstOd1+0oC+XPo4eCoByP9bdMiKNXBSXSaiDm5pQXHar8WOu9asWPBP1/FAl1
+ 1aumJ0fDP13/31CdiDcaD5PEFXA1v0o+96WH2VinYA00mPv4pnZOKnUIv+jQJ5c2uK0E
+ Ndyn4X2Bg8f9aGbp44XEW01lLWfOFC2uUdTSa7d/jaOc7KdnbzuJ5eZuwXKq2YUJkBBA
+ 1+nVxBDSuPQez/8Dbbv4moj3SwKSvj0+FvkE9UVkiB6s2t2GgXrc2ChLwAI9w0KMTld+ hA== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rcj6n94yx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 14:56:50 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35MEun9x024619
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 14:56:49 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 22 Jun
+ 2023 07:55:51 -0700
+Message-ID: <e880bad8-4fcb-97c1-ec9c-9122e1b550e6@quicinc.com>
+Date:   Thu, 22 Jun 2023 08:55:50 -0600
 MIME-Version: 1.0
-X-OriginatorOrg: vmware.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL0PR05MB5409.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: db9bedcc-003b-4fe1-566a-08db73309170
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Jun 2023 14:54:23.8648
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SgsymRhGeG/j4eRIi250YnGQrikeGqHsm9O2GvLNyC0UpHGl5k/BmPZG6rkyXIt06X3406pZcIGSHazythBhsQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR05MB8076
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 3/9] clk: qcom: gcc-msm8998: Control MMSS and GPUSS GPLL0
+ outputs properly
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>
+CC:     Marijn Suijten <marijn.suijten@somainline.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230622-topic-8998clk-v1-0-5b7a0d6e98b1@linaro.org>
+ <20230622-topic-8998clk-v1-3-5b7a0d6e98b1@linaro.org>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20230622-topic-8998clk-v1-3-5b7a0d6e98b1@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 8OS5IFA_EKdROOwi-ecRBXqnDKYve9MH
+X-Proofpoint-ORIG-GUID: 8OS5IFA_EKdROOwi-ecRBXqnDKYve9MH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-22_10,2023-06-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ bulkscore=0 suspectscore=0 impostorscore=0 mlxlogscore=999 adultscore=0
+ clxscore=1015 spamscore=0 phishscore=0 malwarescore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306220126
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gT24gMDMtSnVuLTIwMjMsIGF0IDQ6NDYgQU0sIFhpbiBMb25nIDxsdWNpZW4ueGluQGdt
-YWlsLmNvbT4gd3JvdGU6DQo+IA0KPiAhISBFeHRlcm5hbCBFbWFpbA0KPiANCj4gT24gRnJpLCBK
-dW4gMiwgMjAyMyBhdCAxMToxNeKAr0FNIFNpbW9uIEhvcm1hbiA8c2ltb24uaG9ybWFuQGNvcmln
-aW5lLmNvbT4gd3JvdGU6DQo+PiANCj4+ICsgWGluIExvbmcNCj4+IA0KPj4gT24gVGh1LCBKdW4g
-MDEsIDIwMjMgYXQgMTE6NDc6NTRQTSArMDUzMCwgQXNod2luIERheWFuYW5kIEthbWF0IHdyb3Rl
-Og0KPj4+IE1ENSBpcyBub3QgRklQUyBjb21wbGlhbnQuIEJ1dCBzdGlsbCBtZDUgd2FzIHVzZWQg
-YXMgdGhlDQo+Pj4gZGVmYXVsdCBhbGdvcml0aG0gZm9yIHNjdHAgaWYgZmlwcyB3YXMgZW5hYmxl
-ZC4NCj4+PiBEdWUgdG8gdGhpcywgbGlzdGVuKCkgc3lzdGVtIGNhbGwgaW4gbHRwIHRlc3RzIHdh
-cw0KPj4+IGZhaWxpbmcgZm9yIHNjdHAgaW4gZmlwcyBlbnZpcm9ubWVudCwgd2l0aCBiZWxvdyBl
-cnJvciBtZXNzYWdlLg0KPj4+IA0KPj4+IFsgNjM5Ny44OTI2NzddIHNjdHA6IGZhaWxlZCB0byBs
-b2FkIHRyYW5zZm9ybSBmb3IgbWQ1OiAtMg0KPj4+IA0KPj4+IEZpeCBpcyB0byBub3QgYXNzaWdu
-IG1kNSBhcyBkZWZhdWx0IGFsZ29yaXRobSBmb3Igc2N0cA0KPj4+IGlmIGZpcHNfZW5hYmxlZCBp
-cyB0cnVlLiBJbnN0ZWFkIG1ha2Ugc2hhMSBhcyBkZWZhdWx0IGFsZ29yaXRobS4NCj4+PiBUaGUg
-aXNzdWUgZml4ZXMgbHRwIHRlc3RjYXNlIGZhaWx1cmUgImN2ZS0yMDE4LTU4MDMgc2N0cF9iaWdf
-Y2h1bmsiDQo+IEhpLCBBc2h3aW4sDQo+IA0KPiBJIGhhdmUgdGhlIHNhbWUgcXVlc3Rpb24gYXMg
-UGFvbG8gYWJvdXQgInRoaXMgcGF0Y2ggZ2V0cyBmaXBzIGNvbXBsaWFuY2UNCj4gX2Rpc2FibGlu
-Z18gdGhlIGVuY3J5cHRpb24iLCBpcyBpdCBmcm9tIGFueSBzdGFuZGFyZD8NCj4gDQo+IElmIG5v
-dCwgIGNhbid0IHlvdSBmaXggdGhlIGx0cCB0ZXN0Y2FzZSBmb3IgZmlwcyBlbnZpcm9ubWVudCBi
-eSBzeXNjdGw/DQo+IG9yIHNldCAnQ09ORklHX1NDVFBfREVGQVVMVF9DT09LSUVfSE1BQ19TSEEx
-PXknIGluc3RlYWQgaW4gY29uZmlnLg0KPiANCj4gU29ycnkgaWYgSSBkb24ndCB1bmRlcnN0YW5k
-IHRoaXMgd2VsbC4gWW91J3JlIHRyeWluZyB0byBhdm9pZCBTQ1RQIGNvZGUNCj4gY2FsbGluZyBj
-cnlwdG9fYWxsb2Nfc2hhc2goTUQ1KSwgcmlnaHQ/IFdoYXQgYWJvdXQgb3RoZXIgcGxhY2VzDQo+
-IHdoZXJlIGl0IG1heSBhbHNvIGRvIGl0IGluIGtlcm5lbD8gKHdoZXJlIGx0cCBqdXN0IGRvZXNu
-J3QgY292ZXIpDQo+IA0KPiBJIGRvbid0IHRoaW5rIGl0IG1ha2VzIHNlbnNlIHRvIGxldCBTQ1RQ
-IGhhdmUgc29tZSBjb2RlIHJlcGx5IG9uDQo+IEZJUFMgb25seSB0byBtYWtlIGx0cCB0ZXN0Y2Fz
-ZSBoYXBweSwgd2hpbGUgd2UgY2FuIGFjdHVhbGx5IGZpeCBpdA0KPiBpbiBsdHAgYnkgInN5c2N0
-bCIuDQo+IA0KPiBUaGFua3MuDQo+IA0KSGkgWGksDQpUaGFua3MgZm9yIHlvdXIgaW5wdXRzLiBJ
-IGhhdmUgc2VudCB0aGUgcGF0Y2hlcyB0byBsdHAgdXBzdHJlYW0gdG8gaGFuZGxlIHRoZSBmaXgg
-ZnJvbSBsdHAgY29kZWJhc2UuDQoNClJlZ2FyZHMsDQpBc2h3aW4gS2FtYXQNCj4+PiANCj4+PiBT
-aWduZWQtb2ZmLWJ5OiBBc2h3aW4gRGF5YW5hbmQgS2FtYXQgPGthc2h3aW5kYXlhbkB2bXdhcmUu
-Y29tPg0KPj4+IC0tLQ0KPj4+IHYzOg0KPj4+ICogUmVzb2x2ZWQgaHVuayBmYWlsdXJlcy4NCj4+
-PiAqIENoYW5nZWQgdGhlIHJhdGVsaW1pdGVkIG5vdGljZSB0byBiZSBtb3JlIG1lYW5pbmdmdWwu
-DQo+Pj4gKiBVc2VkIHRlcm5hcnkgY29uZGl0aW9uIGZvciBpZi9lbHNlIGNvbmR0aW9uLg0KPj4+
-IHYyOg0KPj4+ICogVGhlIGxpc3RlbmVyIGNhbiBzdGlsbCBmYWlsIGlmIGZpcHMgbW9kZSBpcyBl
-bmFibGVkIGFmdGVyDQo+Pj4gIHRoYXQgdGhlIG5ldG5zIGlzIGluaXRpYWxpemVkLg0KPj4+ICog
-Rml4ZWQgdGhpcyBpbiBzY3RwX2xpc3Rlbl9zdGFydCgpIGFzIHN1Z2dlc3RlZCBieQ0KPj4+ICBQ
-YW9sbyBBYmVuaSA8cGFiZW5pQHJlZGhhdC5jb20+DQo+PiANCj4+IEZXSUlXLCB0aGlzIHNlZW1z
-IHJlYXNvbmFibGUgdG8gbWUuDQo+PiANCj4+IFJldmlld2VkLWJ5OiBTaW1vbiBIb3JtYW4gPHNp
-bW9uLmhvcm1hbkBjb3JpZ2luZS5jb20+DQo+IA0KPiAhISBFeHRlcm5hbCBFbWFpbDogVGhpcyBl
-bWFpbCBvcmlnaW5hdGVkIGZyb20gb3V0c2lkZSBvZiB0aGUgb3JnYW5pemF0aW9uLiBEbyBub3Qg
-Y2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IHJlY29nbml6ZSB0aGUg
-c2VuZGVyLg0KDQo=
+On 6/22/2023 5:57 AM, Konrad Dybcio wrote:
+> Up until now, we've been relying on some non-descript hardware magic
+> to pinkypromise turn the clocks on for us. While new SoCs shine with
+> that feature, MSM8998 can not always be fully trusted.
+> 
+> Register the MMSS and GPUSS GPLL0 legs with the CCF to allow for manual
+> enable voting.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/clk/qcom/gcc-msm8998.c | 58 ++++++++++++++++++++++++++++++++++++++++++
+>   1 file changed, 58 insertions(+)
+> 
+> diff --git a/drivers/clk/qcom/gcc-msm8998.c b/drivers/clk/qcom/gcc-msm8998.c
+> index be024f8093c5..cccb19cae481 100644
+> --- a/drivers/clk/qcom/gcc-msm8998.c
+> +++ b/drivers/clk/qcom/gcc-msm8998.c
+> @@ -25,6 +25,9 @@
+>   #include "reset.h"
+>   #include "gdsc.h"
+>   
+> +#define GCC_MMSS_MISC	0x0902C
+> +#define GCC_GPU_MISC	0x71028
+> +
+>   static struct pll_vco fabia_vco[] = {
+>   	{ 250000000, 2000000000, 0 },
+>   	{ 125000000, 1000000000, 1 },
+> @@ -1367,6 +1370,22 @@ static struct clk_branch gcc_boot_rom_ahb_clk = {
+>   	},
+>   };
+>   
+> +static struct clk_branch gcc_mmss_gpll0_div_clk = {
+> +	.halt_check = BRANCH_HALT_DELAY,
+> +	.clkr = {
+> +		.enable_reg = 0x5200c,
+> +		.enable_mask = BIT(0),
+> +		.hw.init = &(struct clk_init_data){
+> +			.name = "gcc_mmss_gpll0_div_clk",
+> +			.parent_hws = (const struct clk_hw *[]) {
+> +				&gpll0_out_main.clkr.hw,
+> +			},
+> +			.num_parents = 1,
+> +			.ops = &clk_branch2_ops,
+> +		},
+> +	},
+> +};
+> +
+>   static struct clk_branch gcc_mmss_gpll0_clk = {
+>   	.halt_check = BRANCH_HALT_DELAY,
+>   	.clkr = {
+> @@ -1395,6 +1414,38 @@ static struct clk_branch gcc_mss_gpll0_div_clk_src = {
+>   	},
+>   };
+>   
+> +static struct clk_branch gcc_gpu_gpll0_div_clk = {
+> +	.halt_check = BRANCH_HALT_DELAY,
+> +	.clkr = {
+> +		.enable_reg = 0x5200c,
+> +		.enable_mask = BIT(3),
+> +		.hw.init = &(struct clk_init_data){
+> +			.name = "gcc_gpu_gpll0_div_clk",
+> +			.parent_hws = (const struct clk_hw *[]) {
+> +				&gpll0_out_main.clkr.hw,
+> +			},
+> +			.num_parents = 1,
+> +			.ops = &clk_branch2_ops,
+> +		},
+> +	},
+> +};
+> +
+> +static struct clk_branch gcc_gpu_gpll0_clk = {
+> +	.halt_check = BRANCH_HALT_DELAY,
+> +	.clkr = {
+> +		.enable_reg = 0x5200c,
+> +		.enable_mask = BIT(4),
+> +		.hw.init = &(struct clk_init_data){
+> +			.name = "gcc_gpu_gpll0_clk",
+> +			.parent_hws = (const struct clk_hw *[]) {
+> +				&gpll0_out_main.clkr.hw,
+> +			},
+> +			.num_parents = 1,
+> +			.ops = &clk_branch2_ops,
+> +		},
+> +	},
+> +};
+> +
+>   static struct clk_branch gcc_blsp1_ahb_clk = {
+>   	.halt_reg = 0x17004,
+>   	.halt_check = BRANCH_HALT_VOTED,
+> @@ -3080,6 +3131,9 @@ static struct clk_regmap *gcc_msm8998_clocks[] = {
+>   	[AGGRE2_SNOC_NORTH_AXI] = &aggre2_snoc_north_axi_clk.clkr,
+>   	[SSC_XO] = &ssc_xo_clk.clkr,
+>   	[SSC_CNOC_AHBS_CLK] = &ssc_cnoc_ahbs_clk.clkr,
+> +	[GCC_MMSS_GPLL0_DIV_CLK] = &gcc_mmss_gpll0_div_clk.clkr,
+> +	[GCC_GPU_GPLL0_DIV_CLK] = &gcc_gpu_gpll0_div_clk.clkr,
+> +	[GCC_GPU_GPLL0_CLK] = &gcc_gpu_gpll0_clk.clkr,
+>   };
+>   
+>   static struct gdsc *gcc_msm8998_gdscs[] = {
+> @@ -3235,6 +3289,10 @@ static int gcc_msm8998_probe(struct platform_device *pdev)
+>   	if (ret)
+>   		return ret;
+>   
+> +	/* Disable the GPLL0 active input to MMSS and GPU via MISC registers */
+> +	regmap_write(regmap, GCC_MMSS_MISC, 0x10003);
+> +	regmap_write(regmap, GCC_GPU_MISC, 0x10003);
+
+I wonder, does this disrupt a handoff of an active display from the 
+bootloader to Linux?
