@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AFC673A737
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B4673A738
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjFVR0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 13:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
+        id S229873AbjFVR1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 13:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjFVR0l (ORCPT
+        with ESMTP id S230262AbjFVR1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 13:26:41 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3605173F
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:26:40 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b52875b8d9so13005ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:26:40 -0700 (PDT)
+        Thu, 22 Jun 2023 13:27:16 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F17DF1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:27:15 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-4007b5bafceso11781cf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:27:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687454800; x=1690046800;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gp0t+PLucuEtsm8QBIhhl2b8jQzEk9CK2+LuMCdHbHY=;
-        b=2eo53V8GN6cveuVkUHlZRsCKdn6oG2YXGQjxCOTV4meYN/t4hLRLFk7Bw7ZJFu9YAS
-         n9NLFKwgU9QALg7gsLsZz189l3E9fwfS/q6d+07n0QkgDcB7bw3NkGj7LTYmvlQ3ZvER
-         OwLIYcB+zWsT/OUj+fFll72BBVeAbetIvVPeXgQduHl5wbk2uQdKUqxGTPwpklbupYKP
-         0pvZnb0BWcPJozEVoM2tSFP2tebAZcMJnmPq0CoE3pileVicN/IgJwWAYaQAI2qwQ4tO
-         r6ZG6p2mc6FeSpAYD9MYEXWs7ddb2KIxq0NI2XbPxDfYnKNT866iOo4AWiDGXCEeNAhx
-         8f0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687454800; x=1690046800;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1687454834; x=1690046834;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Gp0t+PLucuEtsm8QBIhhl2b8jQzEk9CK2+LuMCdHbHY=;
-        b=YlGPeEqxJF61HsA7/+e7x4S+8hsrokRpuDs6vYwY+5LymSXpy15dLLTL+3Mbhql2wF
-         em6hXFvVoqjEfj+qPIoCKXmWsdCDZD31kCH7S1fI52BWww82Go1Bo/uQNrxbsfBYHaGD
-         MQjXSa7P3LH4u2Ub10QmwZhsntQA2inIBSGDYh9LGk2WNCIQoWyT0yKnP9F4Jlb2TQ0K
-         Y89itkSp+CP1bkjQWDXU34fSXVJNIoXP8tDx17k6bkN+TzE181Y3dLsbttvvahE04Egj
-         Nacli9Q0uoWplCqyQkQ8hUiGGtgEkM9MpWvx0/WSyQhiRylBWDTp9jA8cQlG3/8Sg6ui
-         iQXQ==
-X-Gm-Message-State: AC+VfDysfBFNIGl/e1kdC14VcBoy8g4782j4D8/uGbEgogNcARXQoz8p
-        v9MJCI2qQpgangwOE7HU+TnyDw==
-X-Google-Smtp-Source: ACHHUZ4+G/oeecut6TKOIjj0aeUUFs58jdW0biSd6uS6KQajdC89E1A7CiKsEZo6nWrRuaFm3UNoBA==
-X-Received: by 2002:a17:902:d2c6:b0:19c:c5d4:afd2 with SMTP id n6-20020a170902d2c600b0019cc5d4afd2mr129416plc.11.1687454799910;
-        Thu, 22 Jun 2023 10:26:39 -0700 (PDT)
-Received: from google.com ([2620:15c:2d:3:44d3:c215:d3c3:9a46])
-        by smtp.gmail.com with ESMTPSA id l18-20020a656812000000b00514256c05c2sm4711761pgt.7.2023.06.22.10.26.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 10:26:39 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 10:26:35 -0700
-From:   Isaac Manjarres <isaacmanjarres@google.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     John Stultz <jstultz@google.com>, Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
-        Mukesh Ojha <mojha@codeaurora.org>,
-        Prasad Sodagudi <psodagud@codeaurora.org>,
-        kernel-team@android.com, linux-hardening@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pstore/ram: Add support for dynamically allocated
- ramoops memory regions
-Message-ID: <ZJSES98P+zzrhBI5@google.com>
-References: <20230622005213.458236-1-isaacmanjarres@google.com>
- <CANDhNCrEhx4LUPaz-FHZZJMG2yX670hk-vGTZs=HxiGR18zm5A@mail.gmail.com>
- <202306212212.5E53607@keescook>
+        bh=zpAAA1t2APTPIL6TPZrRweRbUpiJB6pmgpDTWMvn/FY=;
+        b=ajJCaXRDlhuKvi0JuMH0jHQN9zU/adnA6jpAoXryuU5WQ214eidnG1B3qIMV5EtJW+
+         j3NWJdZbfDzrgST1YaxpZUKbRk1uDtMOvViaJsWHZ3rw6xEK4p4iXjludjzYnLVvuZls
+         PzLDL+uOR+s/2UaCqngW3Mc8rB9JtOoIQbZcaO5R2SarOhdGFSAYx5jM7sLKuqgAfC78
+         MEDwG1CpgHBm/54DeSGOygxeog9oztqbe5uhxqDKZrnXZvN9EBADBEbujbs2n+ykCH5s
+         c4rAcgjn6rHl1g176cAu+0vmWM7cK0jO3Vi5EfjngEaaxsGpd4Ewfri0PlPDYt9SvSEp
+         o91w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687454834; x=1690046834;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zpAAA1t2APTPIL6TPZrRweRbUpiJB6pmgpDTWMvn/FY=;
+        b=KdcoJDnoXerCbCscXVK+fzhs1C3xuqqxMw2/1tuMKZP3TFAhaAJLlZ69AJhssGyuMe
+         q4ie7MHzI6j23C3qzm/C9Pevcs/0aFwRIxW+b1EISeSQfbXrQiVKr2SPW0O2uSE5k0X3
+         zFAY9Ffwd7baFII5k3nImV3mHDXkR7Szd2NSY/Ioxqx/2Lb4LPYq0L/zO5BICGIeo+RW
+         7uw/xsLPKU7yjN8K32Tv9UPAkectWdYPOp7t4kCxKACg1BQTXiz6mtkg1QsTBbRfGhP8
+         n73fsLPhZs2ZzWrY371FfbBlqE2Yt2Cn4TlDM6+JGmZPI9DBJayn8xVlbUmZk0Fhjdov
+         wpVg==
+X-Gm-Message-State: AC+VfDzJRQpIt3OquYTljqsnskHCjekHIqgbiK3nZqYEYyYA5ZoTWYh8
+        x4i7JPgHDTVks+hxNddblCYXhMlau1lIEyApbMF3xA==
+X-Google-Smtp-Source: ACHHUZ7xXJVU1iaVQHNWBcjIROUN8XBx6twf/NQXOFch3Z0Pg9XmNAKotuHXqSCRwZCmUiFWOYZ3pyng/357JWNd2Hs=
+X-Received: by 2002:a05:622a:85:b0:3f8:5b2:aeed with SMTP id
+ o5-20020a05622a008500b003f805b2aeedmr1600635qtw.21.1687454834160; Thu, 22 Jun
+ 2023 10:27:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202306212212.5E53607@keescook>
+References: <20230620201818.1670753-1-namhyung@kernel.org> <20230620201818.1670753-3-namhyung@kernel.org>
+In-Reply-To: <20230620201818.1670753-3-namhyung@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 22 Jun 2023 10:27:02 -0700
+Message-ID: <CAP-5=fWvxMyzbY6gg7R-TzWNpbRcUKHpxoyJq-04c84CzkW4Cw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] perf machine: Include data symbols in the kernel map
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,94 +75,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 10:15:45PM -0700, Kees Cook wrote:
-> On Wed, Jun 21, 2023 at 09:47:26PM -0700, John Stultz wrote:
-> > > The reserved memory region for ramoops is assumed to be at a fixed
-> > > and known location when read from the devicetree. This is not desirable
-> > > in environments where it is preferred for the region to be dynamically
-> > > allocated early during boot (i.e. the memory region is defined with
-> > > the "alloc-ranges" property instead of the "reg" property).
-> > >
-> > 
-> > Thanks for sending this out, Isaac!
-> > 
-> > Apologies, I've forgotten much of the details around dt bindings here,
-> > so forgive my questions:
-> > If the memory is dynamically allocated from a specific range, is it
-> > guaranteed to be consistently the same address boot to boot?
-> > 
-> > > Since ramoops regions are part of the reserved-memory devicetree
-> > > node, they exist in the reserved_mem array. This means that the
-> > > of_reserved_mem_lookup() function can be used to retrieve the
-> > > reserved_mem structure for the ramoops region, and that structure
-> > > contains the base and size of the region, even if it has been
-> > > dynamically allocated.
-> > 
-> > I think this is answering my question above, but it's a little opaque,
-> > so I'm not sure.
-> 
-> Yeah, I had exactly the same question: will this be the same
-> boot-to-boot?
+On Tue, Jun 20, 2023 at 1:18=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
+wrote:
+>
+> When perf record -d is used, it needs data mmaps to symbolize global data=
+.
+> But it missed to collect kernel data maps so it cannot symbolize them.
+> Instead of having a separate map, just increase the kernel map size to
+> include the data section.
+>
+> Probably we can have a separate kernel map for data, but the current
+> code assumes a single kernel map.  So it'd require more changes in other
+> places and looks error-prone.  I decided not to go that way for now.
+>
+> Also it seems the kernel module size already includes the data section.
+>
+> For example, my system has the following.
+>
+>   $ grep -e _stext -e _etext -e _edata /proc/kallsyms
+>   ffffffff99800000 T _stext
+>   ffffffff9a601ac8 T _etext
+>   ffffffff9b446a00 D _edata
+>
+> Size of the text section is (0x9a601ac8 - 0x99800000 =3D 0xe01ac8) and
+> size of the data section is (0x9b446a00 - 0x99800000 =3D 0x1c46a00).
+>
+> Before:
+>   $ perf record -d true
+>
+>   $ perf report -D | grep MMAP | head -1
+>   0 0 0x460 [0x60]: PERF_RECORD_MMAP -1/0: [0xffffffff99800000(0xe01ac8) =
+@ 0xffffffff99800000]: x [kernel.kallsyms]_text
+>                                                                ^^^^^^^^
+>                                                                  here
 
-Hi Kees,
+nit: should the ^^^ be under 0xe01ac8?
 
-Thank you for taking a look at this patch and for your review! When the
-alloc-ranges property is used to describe a memory region, the memory
-region will always be allocated within that range, but it's not
-guaranteed to be allocated at the same base address across reboots.
+> After:
+>   $ perf report -D | grep MMAP | head -1
+>   0 0 0x460 [0x60]: PERF_RECORD_MMAP -1/0: [0xffffffff99800000(0x1c46a00)=
+ @ 0xffffffff99800000]: x [kernel.kallsyms]_text
+>                                                                ^^^^^^^^^
 
-I had proposed re-wording the end of the commit message in my response
-to John as follows:
+nit: and here under 0x1c46a00 ?
 
-"...and that structure contains the address of the base of the region
-that was allocated at boot anywhere within the range specified by the
-"alloc-ranges" devicetree property."
+>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
-Does that clarify things better?
-
-> > 
-> > > Thus invoke of_reserved_mem_lookup() in case the call to
-> > > platform_get_resource() fails in order to support dynamically
-> > > allocated ramoops memory regions.
-> > >
-> > > Signed-off-by: Isaac J. Manjarres <isaacm@codeaurora.org>
-> > > Signed-off-by: Mukesh Ojha <mojha@codeaurora.org>
-> > > Signed-off-by: Prasad Sodagudi <psodagud@codeaurora.org>
-> > > Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
-> 
-> I think this should have "Co-developed-by:"s for each person, since this
-> isn't explicitly a S-o-B chain...
-
-Noted. I'll fix this up for v2 of the patch.
-
-> > > @@ -643,6 +644,7 @@ static int ramoops_parse_dt(struct platform_device *pdev,
-> > >  {
-> > >         struct device_node *of_node = pdev->dev.of_node;
-> > >         struct device_node *parent_node;
-> > > +       struct reserved_mem *rmem;
-> > >         struct resource *res;
-> > >         u32 value;
-> > >         int ret;
-> > > @@ -651,13 +653,20 @@ static int ramoops_parse_dt(struct platform_device *pdev,
-> > >
-> > >         res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> > >         if (!res) {
-> > > -               dev_err(&pdev->dev,
-> > > -                       "failed to locate DT /reserved-memory resource\n");
-> > > -               return -EINVAL;
-> > > +               rmem = of_reserved_mem_lookup(of_node);
-> > 
-> > Nit: you could keep rmem scoped locally here.
-> > 
-> > Otherwise the code looks sane, I just suspect the commit message could
-> > be more clear in explaining the need/utility of the dts entry using
-> > alloc-ranges.
-> 
-> I haven't looked closely at the API here, but does this need a "put"
-> like the "get" stuff? (I assume not, given the "lookup" is on a node...)
-
-No, it doesn't need a put, since of_reserved_mem_lookup() doesn't
-acquire a reference to anything.
+Acked-by: Ian Rogers <irogers@google.com>
 
 Thanks,
-Isaac
+Ian
+
+> ---
+>  tools/perf/util/machine.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+> index ddc0a2130caf..e93a66f6e0b3 100644
+> --- a/tools/perf/util/machine.c
+> +++ b/tools/perf/util/machine.c
+> @@ -1218,7 +1218,10 @@ static int machine__get_running_kernel_start(struc=
+t machine *machine,
+>
+>         *start =3D addr;
+>
+> -       err =3D kallsyms__get_function_start(filename, "_etext", &addr);
+> +       if (machine->has_data_mmap)
+> +               err =3D kallsyms__get_symbol_start(filename, "_edata", &a=
+ddr);
+> +       else
+> +               err =3D kallsyms__get_function_start(filename, "_etext", =
+&addr);
+>         if (!err)
+>                 *end =3D addr;
+>
+> --
+> 2.41.0.185.g7c58973941-goog
+>
