@@ -2,159 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A5B73A0D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2071273A0D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:26:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbjFVM0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 08:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
+        id S231280AbjFVM0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 08:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbjFVMZx (ORCPT
+        with ESMTP id S231234AbjFVM0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 08:25:53 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6B61BCA
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:25:52 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id ada2fe7eead31-440a495d73dso1449642137.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:25:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1687436751; x=1690028751;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LfXyQrUfadjr8GnkWzNVYudXWoJvyTwyORcnxDrw72I=;
-        b=N/OcqIg+9X1ZFyS2Xesam6kAIxWkO3Aox0KRyQupWTJt3saeePsFJmkmxqlYNtFyEz
-         s93LdrFJ6Ll0U9MLdZ4/vxv+fypKnHyw67tnMDYwkhQlqB4Nv4OTWwo8l/veUJJfIWUl
-         +KXTYo/S7ggyIbuSAMXfnEyIW6bhFtEWxoX+Jeg9CPj52BdOaAvv6ltkWLveKCjhI93a
-         vXK7j4K6qwSa5CeAveq38n+bzTgv/FrqOhwdhhHY2PQsj483PzbG6P5LKf+XAfrHxjQd
-         t4TSkVmnYUz0QlOmL+2mMesB5EyicVZsEbppQ3yCI91ufysl8E1r5Qa31fFJQvp3WXLk
-         5Ozg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687436751; x=1690028751;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LfXyQrUfadjr8GnkWzNVYudXWoJvyTwyORcnxDrw72I=;
-        b=Egj6CjaNyubhV+CqIrYstMFdUL33y1NBbyd7p+nC7DB98EhpdW5a+7badCh58PEome
-         EyxKiij/Ca/sKb2lpYiRsErOS5EvqmXnM+ygGrn4TwLx0nHCo++diHv/BquVllRtfxQa
-         KzvbEHGOr5F6NALQMlDVZ5GAjrA75Xy+tzLIhh76o6jA5QTRMOIyioeNaKvFGbh+ErKN
-         UUen8mXUqTne27/FCSbRFcBalPvFUJi8H/mwb9wJ3HGaIzWvXgkPr+ffsfAr1niAkEq0
-         a0ZfHvPVuTdkJtXSQh5Z8xEr0E92iJ+iWXPKZ3XQ5sIXsjyBuKL2TbWzjBTeQl5cuj81
-         cm7g==
-X-Gm-Message-State: AC+VfDy0SzCfdFKV16tLz5pr08r2PSR7xYe19+CIqhTODsjRyYZAYbrd
-        6El2PYcc+42eUhLwu9CSKstAzaoQoGf9wtZWZ/K5Xg==
-X-Google-Smtp-Source: ACHHUZ6SnNysVqnQMX32/VGp1JafxeiEraOqNdQgR8u2Q27PiGxy3hRuTzgEhX3Wz9Z/6G3DxHhWxRsPEa15hB0FdTA=
-X-Received: by 2002:a67:fdc2:0:b0:440:ac0e:66e1 with SMTP id
- l2-20020a67fdc2000000b00440ac0e66e1mr5309391vsq.13.1687436751354; Thu, 22 Jun
- 2023 05:25:51 -0700 (PDT)
+        Thu, 22 Jun 2023 08:26:10 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6391BC1;
+        Thu, 22 Jun 2023 05:26:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687436769; x=1718972769;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8ykAfU4ybX7kOIGgt2rKCTn4qKCgwC29PxZ2VXhOQwY=;
+  b=Q/kc4MyrPvg2XJGXA0/DJ4e2hN+Hl0lEpgZCXgX9REm+s7Ks8uOhvA2W
+   BPHP89bMzAoSPtuuG6Z7WCf5Oe1qWZ5E4EGpjg4sPISqhAiasx1JB71ce
+   MluGOhotSbSCFhRsJptAix3ZG51Hrq3ce1cBsX/usfDRFf7dmDMO9oTJc
+   y377Qzbfw4KwbfOV3PRgUy0YeqNXyZQCIW0y6FsaDg15sip1bbuu5CQu9
+   27ItGAJrmBNCav4NgKkNIzEHDj/fVgv2Z+cumIdrUGglMwT+VdsG9XJ2u
+   3S1L8/XtVzXFo1pP4shwvJZEdWpugHnauiHkVXI+e7MR1NEcO3FimbT2l
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="360489716"
+X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
+   d="scan'208";a="360489716"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 05:26:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="889049903"
+X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
+   d="scan'208";a="889049903"
+Received: from nirmoyda-mobl.ger.corp.intel.com (HELO [10.249.46.93]) ([10.249.46.93])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 05:26:06 -0700
+Message-ID: <ac1e7e44-8b49-fab3-602e-5a4644c07b2a@linux.intel.com>
+Date:   Thu, 22 Jun 2023 14:26:03 +0200
 MIME-Version: 1.0
-References: <20230621153650.440350-1-brgl@bgdev.pl> <20230621153650.440350-8-brgl@bgdev.pl>
- <ZJQ7PX01NAXmr7RV@corigine.com>
-In-Reply-To: <ZJQ7PX01NAXmr7RV@corigine.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 22 Jun 2023 14:25:40 +0200
-Message-ID: <CAMRc=McXAdvnxyULwhK_0+oLdo6s32q9bU06Upec-a3-zhrqyw@mail.gmail.com>
-Subject: Re: [PATCH net-next 07/11] net: stmmac: platform: provide stmmac_pltfr_remove_no_dt()
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Junxiao Chang <junxiao.chang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [Intel-gfx] [PATCH 1/4] drm/ttm: Fix ttm_lru_bulk_move_pos_tail()
+Content-Language: en-US
+To:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>, intel-xe@lists.freedesktop.org
+Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Yunxiang.Li@amd.com
+References: <20230622101412.78426-1-thomas.hellstrom@linux.intel.com>
+ <20230622101412.78426-2-thomas.hellstrom@linux.intel.com>
+From:   Nirmoy Das <nirmoy.das@linux.intel.com>
+In-Reply-To: <20230622101412.78426-2-thomas.hellstrom@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 2:15=E2=80=AFPM Simon Horman <simon.horman@corigine=
-.com> wrote:
->
-> On Wed, Jun 21, 2023 at 05:36:46PM +0200, Bartosz Golaszewski wrote:
-> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> >
-> > Add a variant of stmmac_pltfr_remove() that only frees resources
-> > allocated by stmmac_pltfr_probe() and - unlike stmmac_pltfr_remove() -
-> > does not call stmmac_remove_config_dt().
-> >
-> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> > ---
-> >  .../ethernet/stmicro/stmmac/stmmac_platform.c | 20 +++++++++++++++++--
-> >  .../ethernet/stmicro/stmmac/stmmac_platform.h |  1 +
-> >  2 files changed, 19 insertions(+), 2 deletions(-)
-> >
->
-> Hi Bartosz,
->
-> some minor feedback from my side as it looks like there will be a v2 anyw=
-ay.
->
-> > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/dr=
-ivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-> > index df417cdab8c1..58d5c5cc2269 100644
-> > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-> > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-> > @@ -762,6 +762,23 @@ int stmmac_pltfr_probe(struct platform_device *pde=
-v,
-> >  }
-> >  EXPORT_SYMBOL_GPL(stmmac_pltfr_probe);
-> >
-> > +/**
-> > + * stmmac_pltfr_remove_no_dt
-> > + * @pdev: pointer to the platform device
-> > + * Description: This undoes the effects of stmmac_pltfr_probe() by rem=
-oving the
-> > + * driver and calling the platform's exit() callback.
-> > + */
-> > +void stmmac_pltfr_remove_no_dt(struct platform_device *pdev)
-> > +{
-> > +     struct net_device *ndev =3D platform_get_drvdata(pdev);
-> > +     struct stmmac_priv *priv =3D netdev_priv(ndev);
-> > +     struct plat_stmmacenet_data *plat =3D priv->plat;
->
-> nit: please use reverse xmas tree - longest line to shortest - for
->      new Networking code.
->
->      e.g.:
->
->         struct net_device *ndev =3D platform_get_drvdata(pdev);
->         struct stmmac_priv *priv =3D netdev_priv(ndev);
->         struct plat_stmmacenet_data *plat =3D plat;
->
->         plat =3D priv->plat;
->
+Hi Thomas,
 
-I normally stick to this convention but here, you need 5 lines for the
-same effect and you make it more confusing by initializing some of the
-variables at their declaration and some not. In other places in this
-driver the same approach is used i.e. not adhering to reverse xmas
-tree when all variables are initialized when declared.
+Saw a fix from Yunxiang for this: 
+https://patchwork.freedesktop.org/patch/543652/?series=119697&rev=1
 
-Bart
 
-> > +
-> > +     stmmac_dvr_remove(&pdev->dev);
-> > +     stmmac_pltfr_exit(pdev, plat);
-> > +}
-> > +EXPORT_SYMBOL_GPL(stmmac_pltfr_remove_no_dt);
-> > +
-> >  /**
-> >   * stmmac_pltfr_remove
-> >   * @pdev: platform device pointer
+Regards,
+
+Nirmoy
+
+On 6/22/2023 12:14 PM, Thomas Hellström wrote:
+> The value of pos->first was not updated when the first resource of the
+> range was moved. This could lead to errors like the one below.
+> Fix this by updating pos->first when needed.
 >
-> ...
+> <3> [218.963342] BUG: KASAN: null-ptr-deref in ttm_lru_bulk_move_del+0xc5/0x180 [ttm]
+> <3> [218.963456] Read of size 8 at addr 0000000000000038 by task xe_evict/1529
+> <3> [218.963546]
+> <3> [218.963566] CPU: 0 PID: 1529 Comm: xe_evict Not tainted 6.3.0-xe #1
+> <3> [218.963664] Hardware name: Intel Corporation Tiger Lake Client Platform/TigerLake H DDR4 SODIMM RVP, BIOS TGLSFWI1.R00.4064.A00.2102041619 02/04/2021
+> <3> [218.963841] Call Trace:
+> <3> [218.963881]  <TASK>
+> <3> [218.963915]  dump_stack_lvl+0x64/0xb0
+> <3> [218.963976]  print_report+0x3e5/0x600
+> <3> [218.964036]  ? ttm_lru_bulk_move_del+0xc5/0x180 [ttm]
+> <3> [218.964127]  kasan_report+0x96/0xc0
+> <3> [218.964183]  ? ttm_lru_bulk_move_del+0xc5/0x180 [ttm]
+> <3> [218.964276]  ttm_lru_bulk_move_del+0xc5/0x180 [ttm]
+> <3> [218.964365]  ttm_bo_set_bulk_move+0x92/0x140 [ttm]
+> <3> [218.964454]  xe_gem_object_close+0xc8/0x120 [xe]
+> <3> [218.964675]  ? __pfx_xe_gem_object_close+0x10/0x10 [xe]
+> <3> [218.964908]  ? drm_gem_object_handle_put_unlocked+0xc7/0x170 [drm]
+> <3> [218.965071]  drm_gem_object_release_handle+0x45/0x80 [drm]
+> <3> [218.965220]  ? __pfx_drm_gem_object_release_handle+0x10/0x10 [drm]
+> <3> [218.965381]  idr_for_each+0xc9/0x180
+> <3> [218.965437]  ? __pfx_idr_for_each+0x10/0x10
+> <3> [218.965504]  drm_gem_release+0x20/0x30 [drm]
+> <3> [218.965637]  drm_file_free.part.0+0x4cb/0x4f0 [drm]
+> <3> [218.965778]  ? drm_close_helper.isra.0+0xb7/0xe0 [drm]
+> <3> [218.965921]  drm_release_noglobal+0x49/0x90 [drm]
+> <3> [218.966061]  __fput+0x122/0x450
+> <3> [218.966115]  task_work_run+0xfe/0x190
+> <3> [218.966175]  ? __pfx_task_work_run+0x10/0x10
+> <3> [218.966239]  ? do_raw_spin_unlock+0xa7/0x140
+> <3> [218.966308]  do_exit+0x55f/0x1430
+> <3> [218.966364]  ? __pfx_lock_release+0x10/0x10
+> <3> [218.966431]  ? do_raw_spin_lock+0x11d/0x1e0
+> <3> [218.966498]  ? __pfx_do_exit+0x10/0x10
+> <3> [218.966554]  ? __pfx_do_raw_spin_lock+0x10/0x10
+> <3> [218.966625]  ? mark_held_locks+0x24/0x90
+> <3> [218.966688]  ? lockdep_hardirqs_on_prepare+0x136/0x210
+> <3> [218.966768]  do_group_exit+0x68/0x110
+> <3> [218.966828]  __x64_sys_exit_group+0x2c/0x30
+> <3> [218.966896]  do_syscall_64+0x3c/0x90
+> <3> [218.966955]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> <3> [218.967035] RIP: 0033:0x7f77b194f146
+> <3> [218.967094] Code: Unable to access opcode bytes at 0x7f77b194f11c.
+> <3> [218.967174] RSP: 002b:00007ffc64791188 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+> <3> [218.967271] RAX: ffffffffffffffda RBX: 00007f77b1a548a0 RCX: 00007f77b194f146
+> <3> [218.967364] RDX: 0000000000000062 RSI: 000000000000003c RDI: 0000000000000062
+> <3> [218.967458] RBP: 0000000000000062 R08: 00000000000000e7 R09: ffffffffffffff78
+> <3> [218.967553] R10: 0000000000000058 R11: 0000000000000246 R12: 00007f77b1a548a0
+> <3> [218.967648] R13: 0000000000000003 R14: 00007f77b1a5d2e8 R15: 0000000000000000
+> <3> [218.967745]  </TASK>
+>
+> Fixes: fee2ede15542 ("drm/ttm: rework bulk move handling v5")
+> Cc: "Christian König" <christian.koenig@amd.com>
+> Cc: "Christian König" <ckoenig.leichtzumerken@gmail.com>
+> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: <stable@vger.kernel.org> # v5.19+
+> Link: https://gitlab.freedesktop.org/drm/xe/kernel/-/issues/411
+> Signed-off-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+> ---
+>   drivers/gpu/drm/ttm/ttm_resource.c | 2 ++
+>   1 file changed, 2 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/ttm/ttm_resource.c b/drivers/gpu/drm/ttm/ttm_resource.c
+> index 7333f7a87a2f..cb05e0a36576 100644
+> --- a/drivers/gpu/drm/ttm/ttm_resource.c
+> +++ b/drivers/gpu/drm/ttm/ttm_resource.c
+> @@ -86,6 +86,8 @@ static void ttm_lru_bulk_move_pos_tail(struct ttm_lru_bulk_move_pos *pos,
+>   				       struct ttm_resource *res)
+>   {
+>   	if (pos->last != res) {
+> +		if (pos->first == res)
+> +			pos->first = list_next_entry(res, lru);
+>   		list_move(&res->lru, &pos->last->lru);
+>   		pos->last = res;
+>   	}
