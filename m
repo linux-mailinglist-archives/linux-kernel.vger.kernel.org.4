@@ -2,174 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566E77395D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 05:30:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05E877395D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 05:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjFVDai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 23:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51506 "EHLO
+        id S229852AbjFVDax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 23:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjFVDae (ORCPT
+        with ESMTP id S229593AbjFVDat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 23:30:34 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A111BCD;
-        Wed, 21 Jun 2023 20:30:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687404633; x=1718940633;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AZvU9ZeEZYTZ0Y5lwWUlf/o2NDHD8zNYuhg9CSqAe5k=;
-  b=S7N4uPTuEfnhAyiyKuqGsGbcgYt6BwO4m0sdQtjfTKZmn02lAJybrm/I
-   VSse/psOBbPu/hL8/OB3LROWp4Z2qfOYJ4MGxvZ0EzSZyksqeJkMctpSg
-   pfN+88f0Zoi0ExQXW5OYvqqG2bG+1IYfq3HbUix1K8ExaiD+y7BkJJYdk
-   YgFo/E5f1eN+n8pR13e3l+4YOJAZHDfhR6JGTpDbUVi+5T9549mQGmySc
-   bcTijXW0cikqhvjesN5WE79MtJZkUOXHTfeXVSI1OTiDpKQG5xn3wofwp
-   Fl86pdGBBIKBj0Gx0LfmHztllJsUWeSCdRGm1BomOzC46QjE3FOEemQES
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="357869008"
-X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
-   d="scan'208";a="357869008"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 20:30:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="827727304"
-X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
-   d="scan'208";a="827727304"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 21 Jun 2023 20:30:28 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qCB1f-0007In-31;
-        Thu, 22 Jun 2023 03:30:27 +0000
-Date:   Thu, 22 Jun 2023 11:29:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jack Zhu <jack.zhu@starfivetech.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>, bryan.odonoghue@linaro.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, jack.zhu@starfivetech.com,
-        changhuang.liang@starfivetech.com
-Subject: Re: [PATCH v7 5/6] media: starfive: camss: Add ISP driver
-Message-ID: <202306221112.MnLtMzRo-lkp@intel.com>
-References: <20230619112838.19797-6-jack.zhu@starfivetech.com>
+        Wed, 21 Jun 2023 23:30:49 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2054.outbound.protection.outlook.com [40.107.101.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EDA1BE6;
+        Wed, 21 Jun 2023 20:30:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VpRCPo1f3EFbzVamRbYGfnUmEwGHAtRpizNsw0YZCSV2C/3+i0FOO6jOR1oV3rL7ZP1tyhgkYMvSjJvrlt+gUX9mVCf3bxkk5La3vV4XvuFFZEGPxY1GUSyFFMkJE46WcW8R93gtJ5q5U8vGvqj65PK/e6S8c8pZLw/NJApxOkhsaLegcL996fo171y1IdG5fJ1K+bsRWoD+AdsF6agIucJayj9tehFM96updBvpD1MvCD1UfCK0aM/lrKpDrPrvW/l2U2/dnE3CEdkzRTCvEoEdkCS/MIRiE1+x4mtiDz9OKqoA5FOvQgYdaCl3Zh5ILozoXGMMv3cL6qD252GBLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=dKwvvxk5oOrTj3r5txUojjV8kS4zXgz6SBf1HMHXR6A=;
+ b=BB7SdOCxbdm5wVEX3wvo8ioLSZxAtFTaMZui4vGw9QZMNW5NdnMVPr4GTGx7PRJ1ekYPW0w94ri4b/aJIFM5WQxrUuMsiP9McovwSEY53b9O7FmPs7mOSCEvwffM+aoPeQhI0H4bnTmawQ01+V94thBOQTmclQLkPDshTujOqvJOWBoMc0z4tSREInCQiQ6vSPW5Lyt+R0kL2ajOtUD5BbHRB7eqpRl8a1TFBmMe4C56kMkCppUkFnFvMOw2ho7YumTToWEPoX6bEsi6y/TbdTbvD48sacG4YLxNEJx7QBMaWA+bTv2El1hcUssyMyRqAT+apP24poq4H2xBnw26Uw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=dKwvvxk5oOrTj3r5txUojjV8kS4zXgz6SBf1HMHXR6A=;
+ b=fX1LgI+ELs7mgR0YEAyBOJ1aUF9yQEBPMk2NYvc0mnKZlifHY/c2yT+WqamQ6ah2VjUg6EssW2MFnDmFIqTEStIYCGwJUuxuPu1Zy5662Wao3E6xO8Ca+UzwNnKK5STEw+rqbxEji779WwVaIC5GCmJr7djNOJdr2PiEYmF11rE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by DM6PR12MB4564.namprd12.prod.outlook.com (2603:10b6:5:2a9::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 22 Jun
+ 2023 03:30:40 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::b4a6:94bb:6895:645]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::b4a6:94bb:6895:645%4]) with mapi id 15.20.6521.024; Thu, 22 Jun 2023
+ 03:30:40 +0000
+Message-ID: <7458cdcf-0f35-5707-45ed-bec6e11a9165@amd.com>
+Date:   Thu, 22 Jun 2023 09:00:27 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] perf/amd: Prevent grouping of IBS events
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Ian Rogers <irogers@google.com>, peterz@infradead.org,
+        acme@kernel.org, jolsa@kernel.org, bp@alien8.de, x86@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com,
+        santosh.shukla@amd.com, Ravi Bangoria <ravi.bangoria@amd.com>
+References: <20230620091603.269-1-ravi.bangoria@amd.com>
+ <CAP-5=fXS726wY1taYEYXDz3YZ4ZwxcL+nhh_yNM7rwamMd8mWg@mail.gmail.com>
+ <3b0abd4a-6450-c282-65ff-ec0c7df67b03@amd.com>
+ <CAM9d7chNA44HxRYOHLxtBP_7azivrE_MxdKos1gUO3KxnbK_Dw@mail.gmail.com>
+Content-Language: en-US
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <CAM9d7chNA44HxRYOHLxtBP_7azivrE_MxdKos1gUO3KxnbK_Dw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0236.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:eb::20) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230619112838.19797-6-jack.zhu@starfivetech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|DM6PR12MB4564:EE_
+X-MS-Office365-Filtering-Correlation-Id: 912b3893-9fe8-448f-ae9d-08db72d10cdd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XZgJyrUm8P5/sHTcmYLaWHkKvXkdEf5yn2pTBiyP3rRIrNzmDfGu9um1TJq6e93lD1oDd9V7JXpOz3sqtdOom3whwbtiPaOo6rHvXDib2cpDGzJ7Sw2lSZug1IU3N3LA89jJF1pawsJpnYbQ0cS1bUl8Nn8HdZM1PJTaBqaxOD6ytzvuYHZQfTwLCbivSCzTSLxz+IXIO43NExktSEDJWwE+vSjWU7PYbCvCe6Hp42Q+FeRWpAfjZ4sVAy7h0xjCTFsuenKirFVuc+XQJJ2OtUWPdKq5Pm2Tls0L+DLkOw8wNeKl1llfMQKhgT4nuC65nMlaEJ5HtknuoC2vRC/p+CptMyk9l8F50psNVU9hSw5pcTVFl8ClSSHcwswa1thaCGuL7Dgm6LXY0yOfpbCBUGQBfnvqb3HSqeVuscD948YDRJCiwAY3OGM3U30qmxEiaslweHsvt8XRdWn1XEjJmr6EoEUS/jszhiIJLmgi/FYNMHmUpYbrrDN1q6G/78vb8MBqpIHpoS3mbjMh9aTM7mWN8kH8mo8UlzraECJHwxxXGHFaTJwThm69Wq3WIeaUUUfyRDMFiI/nR4PEFvICW3WOjN1Erai0EYEn6IL1I1njVCEXXMVuMz3Ngh0Tbxz3xEdK0UZljFRLdhoAKXkauw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(39860400002)(366004)(396003)(376002)(451199021)(38100700002)(8936002)(2616005)(2906002)(54906003)(66556008)(66946007)(66476007)(6916009)(558084003)(4326008)(31696002)(86362001)(36756003)(316002)(8676002)(41300700001)(6486002)(5660300002)(186003)(6512007)(44832011)(6666004)(26005)(31686004)(478600001)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QWpKK3ZKaUlPSlFibHhGd3FPb0tzT3lzTVFJM0dLT3ZaMFAySTEyR09hWUdP?=
+ =?utf-8?B?ZWo5YWlUMHFic1FIa2twaUdzaU1WVjlSS2pmL0dpaUUrWWVJZ2h4OGlBWS9n?=
+ =?utf-8?B?cUI3dVA0dGUrOWVWelFkRVZZWStScCtod2RBVWhlTjF4bm9kZ1YwK2VOM0hw?=
+ =?utf-8?B?WlZObDhwWlN2RlZtZmtTUzREQnZNc0FUYTVrN0xmWE1ZWitGdUtvOGdiVXZ6?=
+ =?utf-8?B?NjREZEZvOStkWVVUcWZnVC8vNjBUcTJzV2RMLzIyYmJ2dzNwRk9sNkdtUmM1?=
+ =?utf-8?B?ZUR2ZUJLKzJrb3hJMEpsN3V0djhmZDFBamgvdTIzT2p4K3JkbGxJdXZ2RXJt?=
+ =?utf-8?B?b1VPVy8rZ2RkcmtVZDJkYjBock0yVDlRTnJNZGFLZHgwckhPVmUzdW4yclY1?=
+ =?utf-8?B?cWdvZjZ2MWhQTjU0QzhDYXpDRDhlTEdWNnVua2lWanZqRlZzM0JnaEMvMXFC?=
+ =?utf-8?B?cW5oM2FMOVNEWjBtTXdnbjRVTFVUbHUvenpoZzM3TGg2SzEya3NSV21PR3B3?=
+ =?utf-8?B?VTRoS3BXMEFOVzdyNUlhMVBHM2xER2NFTk04T0JpNmQ3R3V3dVNqNTNkRTlv?=
+ =?utf-8?B?K0Zvcy9QQnN4MWcyVUE0c1RtNVprY3dFZUF1WStYRGpWN3ZLY3hTU3Z0WFFm?=
+ =?utf-8?B?Wmg0SGIvcFBjQ1pwaktJbHVlVGlHcWFvWityVWtTWUZSbFY5d3dsWVhpc3V0?=
+ =?utf-8?B?WXdZTS9SZGJhRTRWT3hnYmxscSsyOE5uSjhVWGZ0ODhKMlhwVWxZc0xkQjBT?=
+ =?utf-8?B?OWpTWDNFQW9yOVpWQjg4RkFLU3dZWTUySWpXSWNFRmZHcUVzSHRzRW5UTkFL?=
+ =?utf-8?B?VXRDc0hpalB3YmIyRGdNZ1NJYkFjMFhsa0hScGcvY3FuZm5rSDdoSjBGVTRB?=
+ =?utf-8?B?ZWc5dW9vTTNkZXZuaGM5T3hTS2VYYzFKdEdpRC9EK2lUd1ZpV3NwS2dmMVFr?=
+ =?utf-8?B?L1U4RjJGQlVWb0RvWlNLN1JvZUZDS00yYm0wVjdzWXhVdkVadEJMMUhEREVW?=
+ =?utf-8?B?bDh3QmczTjl3SmRoY2o3ZGhnUks2alIrR25id2J3ZEE2SlNzNjNlMlQySDQ3?=
+ =?utf-8?B?d2ZXWU1FM2xpcUxDYSs4NkZpZXJBcnE4MWFFNlAwVi9BUWQ4czJFSDlWcEhj?=
+ =?utf-8?B?aW91bWlBcXQ1a3A1S2RIRnZ3R3RMZWErQzhIL1pjMUJFMmVDWFNNdHR1NzBQ?=
+ =?utf-8?B?d0JIc1VsT0pYVmQyZk56bWtPZS9iOUFkazVmU1FKUGpUKzdBRDlMNkFld1JR?=
+ =?utf-8?B?LzFnMVBQdXZMY3ZXbHhIZGFnVE5JaXUvbE1vYUdBam5oSHZsRDEydzNuaUNm?=
+ =?utf-8?B?MUE2RnArU2VnN2dRVCtqNEtSMEdnN1h0YTI5MzNoU3BmdzJjNlB5U1dqaXp5?=
+ =?utf-8?B?cVQ0TkhhRi9pMFlZN0tBcnpPK0NmQUZxaERWcUpDSWNORklGc01ncUJxTSth?=
+ =?utf-8?B?ZmF0SWFMNWxwQU1aMW4vWkN4UklvUlVnWmNOZXR2NkQzNThXaStSVGU5TEE2?=
+ =?utf-8?B?Y3JBSmFwZ0lxSWh0S0pCbVRPS2JzVWdYakNLNENNL0tOMzBGMDM2Mlh5bzQr?=
+ =?utf-8?B?bE9LYmVDYUNJM0JGSjFMQ0syZm1jUWgwUmp4aG0zczNXQlNzRCsyOEJwQ3J6?=
+ =?utf-8?B?bEdjTnVRNGU1WnlSYndsakJ1M05kckxGVzFBM01OSnp1c01IRFY5OHdCUGRV?=
+ =?utf-8?B?b1ZoVTNSdUs5L1hNTHRKaGVJNWtMb0s4ejZ3S3A4anFCUUp4bm93S2NhQ0xo?=
+ =?utf-8?B?SmV5MXRNUkVkWkpFdlF0QXN4NEZRdisvdTdrWFM2Nk9iUmFxUFRHTzl1cjFB?=
+ =?utf-8?B?a2dvYUszemNDUytTOStMVTlKOFA1aXA0bEp0bHN5Z1hWN3ZDSWVUWXNYckFt?=
+ =?utf-8?B?ZmVWTWJ3TjltYkgrL1hUVDVtaFlmaFJuUCtCSVBnQ2NNMHdQMVQxUTVSVTlj?=
+ =?utf-8?B?ZGl5MUtDamdOd2t6UXMwTEtiQXpXS0w3cG5nb2FXYThpcW9ZR2tSRy9zdm05?=
+ =?utf-8?B?anFkVDd2NHdLZWlEMCticTEvTHBQbWJJUHQ1RHE1K0EvY3F4cXpobmU1M21w?=
+ =?utf-8?B?RHk5amkwaU0rbER3ZjN0cGdoRitsZ2U1YzRZb3Y1MXVtMytPeXBCL1lqWTln?=
+ =?utf-8?Q?GyF0ml36cyxfXO+IpLhj6Slw8?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 912b3893-9fe8-448f-ae9d-08db72d10cdd
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 03:30:40.0109
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 1hF4pkMlKQjIVo0WNCxqKwdOdLpDTDavF/ND2DbL/oS9foFI5It7dUM5unlIRclGUb4Fim6EtYPx+dz3jTmJkw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4564
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jack,
+Hi Namhyung,
 
-kernel test robot noticed the following build warnings:
+> I'm just curious if ibs_fetch and ibs_op can be grouped together.
 
-[auto build test WARNING on media-tree/master]
-[also build test WARNING on robh/for-next linus/master v6.4-rc7 next-20230621]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+No. Both are independent hardware pmus and thus can not be grouped
+together.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jack-Zhu/media-dt-bindings-Add-JH7110-Camera-Subsystem/20230619-193105
-base:   git://linuxtv.org/media_tree.git master
-patch link:    https://lore.kernel.org/r/20230619112838.19797-6-jack.zhu%40starfivetech.com
-patch subject: [PATCH v7 5/6] media: starfive: camss: Add ISP driver
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230622/202306221112.MnLtMzRo-lkp@intel.com/config)
-compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project.git 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
-reproduce: (https://download.01.org/0day-ci/archive/20230622/202306221112.MnLtMzRo-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306221112.MnLtMzRo-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/media/platform/starfive/camss/stf_camss.c:173:13: warning: variable 'pad_num' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           } else if (port == STF_PORT_DVP) {
-                      ^~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/starfive/camss/stf_camss.c:178:18: note: uninitialized use occurs here
-           for (i = 0; i < pad_num; ++i) {
-                           ^~~~~~~
-   drivers/media/platform/starfive/camss/stf_camss.c:173:9: note: remove the 'if' if its condition is always true
-           } else if (port == STF_PORT_DVP) {
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/starfive/camss/stf_camss.c:168:25: note: initialize the variable 'pad_num' to silence this warning
-           unsigned int i, pad_num;
-                                  ^
-                                   = 0
-   1 warning generated.
---
->> drivers/media/platform/starfive/camss/stf_isp.c:113:13: warning: variable 'formats' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           } else if (pad == STF_ISP_PAD_SRC) {
-                      ^~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/starfive/camss/stf_isp.c:127:18: note: uninitialized use occurs here
-           for (i = 0; i < formats->nfmts; i++) {
-                           ^~~~~~~
-   drivers/media/platform/starfive/camss/stf_isp.c:113:9: note: remove the 'if' if its condition is always true
-           } else if (pad == STF_ISP_PAD_SRC) {
-                  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/media/platform/starfive/camss/stf_isp.c:105:40: note: initialize the variable 'formats' to silence this warning
-           const struct isp_format_table *formats;
-                                                 ^
-                                                  = NULL
-   1 warning generated.
-
-
-vim +173 drivers/media/platform/starfive/camss/stf_camss.c
-
-   156	
-   157	static int stfcamss_subdev_notifier_bound(struct v4l2_async_notifier *async,
-   158						  struct v4l2_subdev *subdev,
-   159						  struct v4l2_async_subdev *asd)
-   160	{
-   161		struct stfcamss *stfcamss =
-   162			container_of(async, struct stfcamss, notifier);
-   163		struct stfcamss_async_subdev *csd =
-   164			container_of(asd, struct stfcamss_async_subdev, asd);
-   165		enum stf_port_num port = csd->port;
-   166		struct stf_isp_dev *isp_dev = &stfcamss->isp_dev;
-   167		struct media_pad *pad[STF_PADS_NUM];
-   168		unsigned int i, pad_num;
-   169	
-   170		if (port == STF_PORT_CSI2RX) {
-   171			pad[0] = &isp_dev->pads[STF_PAD_SINK];
-   172			pad_num = 1;
- > 173		} else if (port == STF_PORT_DVP) {
-   174			dev_err(stfcamss->dev, "Not support DVP sensor\n");
-   175			return -EPERM;
-   176		}
-   177	
-   178		for (i = 0; i < pad_num; ++i) {
-   179			int ret;
-   180	
-   181			ret = v4l2_create_fwnode_links_to_pad(subdev, pad[i], 0);
-   182			if (ret < 0)
-   183				return ret;
-   184		}
-   185	
-   186		return 0;
-   187	}
-   188	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thanks,
+Ravi
