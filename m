@@ -2,38 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 913237393A8
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 02:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6B27393A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 02:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjFVAQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 20:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
+        id S230253AbjFVAPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 20:15:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjFVAQi (ORCPT
+        with ESMTP id S230120AbjFVAPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 20:16:38 -0400
+        Wed, 21 Jun 2023 20:15:24 -0400
+X-Greylist: delayed 449 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 21 Jun 2023 17:15:23 PDT
 Received: from mail-4321.protonmail.ch (mail-4321.protonmail.ch [185.70.43.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DAE1FEE
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 17:16:05 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 00:04:19 +0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594311A1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 17:15:22 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 00:04:25 +0000
 Authentication-Results: mail-4321.protonmail.ch;
-        dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="Pua/4TE4"
+        dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="J3HGnhIZ"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1687392268; x=1687651468;
-        bh=QApTeqmmt2Nt3CTduRIU2TRUUTK8LTmbK6PcMDg3L28=;
-        h=Date:To:From:Subject:Message-ID:In-Reply-To:References:
+        s=protonmail3; t=1687392279; x=1687651479;
+        bh=7io2nYrzkHD3aXlPybSWf16LW6ApjJS6Dz0Z07AACno=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
          Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID:BIMI-Selector;
-        b=Pua/4TE4VN5I8Ezbf+dzMRhmuI9ft4Vhmi1I9q/bvNlFDqDHKRR3E+wg6FGN/XnvQ
-         52Rqp9crgI4X/2ZjADQnvrGRVT/ZKFUmsoNYh+8Wm5y3ID8YzjHz0Cvql+BLwdpp0F
-         7zps+1MhZ/V74iLGeUpg/o6+rSPxoeDDh0ebPL5AuvqHT7djhMYevALjpMl3SiUral
-         rOz8XfpXG7XsUp/OpONOXeIIQa4vos7JrPxjZLwX+3d2lbgu3+gbqfwkQHSDDbJcQ0
-         qWwmTT5felMlgULZgpv+85v4OnRrPrlxUJMjavQ5/ZM0Rc1vZAHfrpXQF2vA1IfPc4
-         LmEpDrLvyNtqQ==
+        b=J3HGnhIZuW2c0V617HbLENla7VuW4MpttI+pL/EhcZ8Mr1eOBgMbLIJj+1K67zdZl
+         Hacf+Dud6NyVDwsZzt93pIoBg0p+uh6TLqcWg5mSoem5VR01qHfBDGTtFgiyMhpv4h
+         hdWlex33whlRhAPD9u29aSiYinmwuGBzCMbHSwHgcUSXT8eGBEQkkDkSxcn2rk4b6B
+         9EFu0ggCqS4+ZKwmNMBm/WgwGNDimLKhjmoYK/Bfzgzt0bapLh/bynklunTvYFsyAx
+         QgWuLf+SgkKuMY9Im5b2U22TtFzK2lynIkOx3yTuqmYpL5AAXt0gHf7E43PetSMzJ0
+         336O4ySxkjuoQ==
 To:     linux-kernel@vger.kernel.org
 From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
-Subject: [PATCH 3/7] ARM: dts: qcom-msm8916-samsung-fortuna: Include dts from arm64
-Message-ID: <20230622000322.48298-1-linmengbo0689@protonmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Nikita Travkin <nikita@trvn.ru>, soc@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Joe Mason <buddyjojo06@outlook.com>,
+        "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
+Subject: [PATCH 4/7] arm64: dts: qcom: msm8916-samsung-fortuna: Add rt5033 battery
+Message-ID: <20230622000338.48315-1-linmengbo0689@protonmail.com>
 In-Reply-To: <20230622000007.48219-1-linmengbo0689@protonmail.com>
 References: <20230622000007.48219-1-linmengbo0689@protonmail.com>
 Feedback-ID: 40467236:user:proton
@@ -43,80 +58,70 @@ Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After adding all necessary support for MSM8916 SMP/cpuidle without PSCI
-on ARM32, build fortunaltezt and heatqlte device trees from the arm64
-tree together with the ARM32 include to allow booting this device on ARM32.
+From: Joe Mason <buddyjojo06@outlook.com>
 
-The approach to include device tree files from other architectures is
-inspired from e.g. the Raspberry Pi (bcm2711-rpi-4-b.dts) where this is
-used to build the device tree for both ARM32 and ARM64.
+Like the Samsung Galaxy A3/A5, the Grand Prime uses a Richtek RT5033 PMIC
+as battery fuel gauge, charger, flash LED and for some regulators.
+For now, only add the fuel gauge/battery device to the device tree, so we
+can check the remaining battery percentage.
 
-[Add workaround to TSENS problem]
-Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-[Add heatqlte]
-Signed-off-by: Gareth Peoples <mail@gpeopl.es>
+The other RT5033 drivers need some more work first before they can be used
+properly.
+
+Signed-off-by: Joe Mason <buddyjojo06@outlook.com>
 Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
 ---
- arch/arm/boot/dts/Makefile                              | 2 ++
- arch/arm/boot/dts/qcom-msm8916-samsung-fortunaltezt.dts | 8 ++++++++
- arch/arm/boot/dts/qcom-msm8916-samsung-heatqlte.dts     | 8 ++++++++
- 3 files changed, 18 insertions(+)
- create mode 100644 arch/arm/boot/dts/qcom-msm8916-samsung-fortunaltezt.dts
- create mode 100644 arch/arm/boot/dts/qcom-msm8916-samsung-heatqlte.dts
+ .../qcom/msm8916-samsung-fortuna-common.dtsi  | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 2503d1c5eee3..9305c5f3bc3f 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -1099,7 +1099,9 @@ dtb-$(CONFIG_ARCH_QCOM) +=3D \
- =09qcom-msm8660-surf.dtb \
- =09qcom-msm8916-samsung-e5.dtb \
- =09qcom-msm8916-samsung-e7.dtb \
-+=09qcom-msm8916-samsung-fortunaltezt.dtb \
- =09qcom-msm8916-samsung-grandmax.dtb \
-+=09qcom-msm8916-samsung-heatqlte.dtb \
- =09qcom-msm8916-samsung-serranove.dtb \
- =09qcom-msm8960-cdp.dtb \
- =09qcom-msm8960-samsung-expressatt.dtb \
-diff --git a/arch/arm/boot/dts/qcom-msm8916-samsung-fortunaltezt.dts b/arch=
-/arm/boot/dts/qcom-msm8916-samsung-fortunaltezt.dts
-new file mode 100644
-index 000000000000..b9704fea7029
---- /dev/null
-+++ b/arch/arm/boot/dts/qcom-msm8916-samsung-fortunaltezt.dts
-@@ -0,0 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include "arm64/qcom/msm8916-samsung-fortunaltezt.dts"
-+#include "qcom-msm8916-smp.dtsi"
+diff --git a/arch/arm64/boot/dts/qcom/msm8916-samsung-fortuna-common.dtsi b=
+/arch/arm64/boot/dts/qcom/msm8916-samsung-fortuna-common.dtsi
+index 40c8edc795b0..ca147310c27a 100644
+--- a/arch/arm64/boot/dts/qcom/msm8916-samsung-fortuna-common.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8916-samsung-fortuna-common.dtsi
+@@ -79,6 +79,21 @@ muic: extcon@25 {
+ =09};
+ };
+=20
++&blsp_i2c4 {
++=09status =3D "okay";
 +
-+&tsens {
-+=09/* FIXME: The device crashes when accessing the SROT region for some re=
-ason */
-+=09status =3D "disabled";
-+};
-diff --git a/arch/arm/boot/dts/qcom-msm8916-samsung-heatqlte.dts b/arch/arm=
-/boot/dts/qcom-msm8916-samsung-heatqlte.dts
-new file mode 100644
-index 000000000000..ec3edd4f31c3
---- /dev/null
-+++ b/arch/arm/boot/dts/qcom-msm8916-samsung-heatqlte.dts
-@@ -0,0 +1,8 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+#include "arm64/qcom/msm8916-samsung-heatqlte.dts"
-+#include "qcom-msm8916-smp.dtsi"
++=09battery@35 {
++=09=09compatible =3D "richtek,rt5033-battery";
++=09=09reg =3D <0x35>;
 +
-+&tsens {
-+=09/* FIXME: The device crashes when accessing the SROT region for some re=
-ason */
-+=09status =3D "disabled";
++=09=09interrupt-parent =3D <&tlmm>;
++=09=09interrupts =3D <121 IRQ_TYPE_EDGE_FALLING>;
++
++=09=09pinctrl-0 =3D <&fg_alert_default>;
++=09=09pinctrl-names =3D "default";
++=09};
 +};
++
+ &blsp_uart2 {
+ =09status =3D "okay";
+ };
+@@ -127,6 +142,13 @@ &wcnss_iris {
+ };
+=20
+ &tlmm {
++=09fg_alert_default: fg-alert-default-state {
++=09=09pins =3D "gpio121";
++=09=09function =3D "gpio";
++=09=09drive-strength =3D <2>;
++=09=09bias-disable;
++=09};
++
+ =09gpio_keys_default: gpio-keys-default-state {
+ =09=09pins =3D "gpio107", "gpio109";
+ =09=09function =3D "gpio";
 --=20
 2.39.2
 
