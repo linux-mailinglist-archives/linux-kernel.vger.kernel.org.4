@@ -2,77 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9A373A13B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2332173A13C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:52:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbjFVMvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 08:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
+        id S231281AbjFVMwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 08:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjFVMvV (ORCPT
+        with ESMTP id S229437AbjFVMwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 08:51:21 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB0F193
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:51:20 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-988a2715b8cso111216166b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:51:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687438279; x=1690030279;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qPLLdjKr1T1TMeOs9HNgAHkxnOJhuqDp1+6ZK+CYadQ=;
-        b=AxYBSkHxNyDe50EWSXFM1fxxf1J7CxUzZEqYwfyCdT/uPQt1wfiCqfF5gYrj9k9GDb
-         LyQIFjW5Yt4uUy3She0fPGidJgdnKLJ+oThp0fUpLV3hqxEV4zMK9GQzly7WNWUMF5rQ
-         Lyj46mTbtjrTgdAfI0II43GjmbSR1p6PFkw495LHWUSj9C2WHJvLnQ596JgMdI/KZQsB
-         NIHb/I82nL9rKrMMIGY2K9GcpPXnpd9Aw84eT5Zzskd3HchbYBk7yab6ZnMU5+82bSsU
-         XEq2UWrOzGxLPga/QWWrWBjN55f5mKGDmfoKDmXw3ud4Of7LwSjvrPz7p0Q+xWc1KmVv
-         xqcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687438279; x=1690030279;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qPLLdjKr1T1TMeOs9HNgAHkxnOJhuqDp1+6ZK+CYadQ=;
-        b=gK1sr9gw+NArGzw7Wqgva3YAP79WXVcF0F5O6ntziIenoKxdRu4WOPkAddYBb8yxc2
-         C+LseBPIWpkEB/UeLAA3c3lW6DTmLtwq96wBOAcUsUmvGuP/gqrXv8fiJ7i3rdkOxtpF
-         2ylUKRJN0RWqAVZFWyXnIDnKZmNFizSofU/LnNYu9/u0TbsGr/n6Xek1cYBI3Ck4O+AY
-         MDD9gw2QKyP8o2NC5iwh5/SEWMUzhhqBDWA5GX6iFNnNSojYHJi4Ew/oX0Z0i/0fLv+v
-         FB25JrUOGUJfH/9ZzWxqoS/850JZ/U7Dj9mz2yJP/7+vYbUSLRQzaKfZM6bPWPZwXuk0
-         zyUw==
-X-Gm-Message-State: AC+VfDxnjAW/ZNtZ+e9zBr9b8RNKcNPmc8k+nEYc7XgWJAKvLYqYpxHn
-        o92zMMEhRF43nikn1TCZbDQfWw==
-X-Google-Smtp-Source: ACHHUZ4S14WYYw+6K1MYEB5KsPu0/dxQvijq6/XJjgxA0XHHUU/L/wZUPjlCOF3E5GPHIQyPmh+fOg==
-X-Received: by 2002:a17:907:7209:b0:989:1a52:72a1 with SMTP id dr9-20020a170907720900b009891a5272a1mr6933542ejc.28.1687438279198;
-        Thu, 22 Jun 2023 05:51:19 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id n19-20020a17090625d300b009890e402a6bsm4686348ejb.221.2023.06.22.05.51.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 05:51:18 -0700 (PDT)
-Message-ID: <73b33d5c-e363-cd0a-0790-6764f42a6ada@linaro.org>
-Date:   Thu, 22 Jun 2023 14:51:16 +0200
+        Thu, 22 Jun 2023 08:52:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A66F18C
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:52:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B18D46182E
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 12:52:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7373FC433C8;
+        Thu, 22 Jun 2023 12:51:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687438320;
+        bh=PSC33hESgFExf5tG2kZ0py17djoyBcdSMaPPGvVFKaU=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=ukrpDNkerHgmi5t32CoX13rRMbL8aGK6TuU9OmgwZ8Y6i840zSV1vwldqCboeP122
+         c5rnEe7O2K1Ipm4u14uDomC1UAokQWdSDoo7YINWM9LKpW6qIySvNWa/61qA27LQS3
+         bBlT6W83rHRDsR7Urbj/FBYKD2kyZfXs/B0j16RvX+ZoYzEUtqp429lXD7b0a4esS3
+         oAppNw7EfG/1fKvc3/q+83GzIvzkrSMnqtz6oqFmBxmHKMSKxO6Oy2Fu0pXk2pxcbo
+         lvpPkPURMuG0u94GGmAAMKrxJffUHDcnrRZCtqxmTwQwOKsj41qq0omezBo9fPIIVT
+         Rq0FLjDMMSTuQ==
+Message-ID: <d316dca7c248693575dae3d8032e9e3332bbae7a.camel@kernel.org>
+Subject: Re: [PATCH 15/79] bfs: switch to new ctime accessors
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Jan Kara <jack@suse.cz>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        linux-kernel@vger.kernel.org,
+        "damien.lemoal" <damien.lemoal@opensource.wdc.com>
+Date:   Thu, 22 Jun 2023 08:51:58 -0400
+In-Reply-To: <20230622123050.thpf7qdnmidq3thj@quack3>
+References: <20230621144507.55591-1-jlayton@kernel.org>
+         <20230621144735.55953-1-jlayton@kernel.org>
+         <20230621144735.55953-14-jlayton@kernel.org>
+         <20230621164808.5lhujni7qb36hhtk@quack3>
+         <646b7283ede4945b335ad16aea5ff60e1361241e.camel@kernel.org>
+         <20230622123050.thpf7qdnmidq3thj@quack3>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 2/2] arm64: defconfig: Enable UBI and UBIFS
-Content-Language: en-US
-To:     kah.jing.lee@intel.com, Dinh Nguyen <dinguyen@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Alif Zakuan Yuslaimi <alif.zakuan.yuslaimi@intel.com>
-References: <20230622123254.593308-1-kah.jing.lee@intel.com>
- <20230622123657.593719-1-kah.jing.lee@intel.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230622123657.593719-1-kah.jing.lee@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,47 +64,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2023 14:36, kah.jing.lee@intel.com wrote:
-> From: Alif Zakuan Yuslaimi <alif.zakuan.yuslaimi@intel.com>
-> 
-> This patch is to enable UBI and UBIFS in Linux defconfig for socfpga
-> Agilex and Stratix10 platform.
-> 
-> Signed-off-by: Alif Zakuan Yuslaimi <alif.zakuan.yuslaimi@intel.com>
-> Signed-off-by: Kah Jing Lee <kah.jing.lee@intel.com>
-> ---
-> v2: Update subject prefix and align defconfig config place
-> ---
->  arch/arm64/configs/defconfig | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-> index a24609e14d50..8c3c6fd20d77 100644
-> --- a/arch/arm64/configs/defconfig
-> +++ b/arch/arm64/configs/defconfig
-> @@ -267,6 +267,7 @@ CONFIG_MTD_NAND_BRCMNAND=m
->  CONFIG_MTD_NAND_FSL_IFC=y
->  CONFIG_MTD_NAND_QCOM=y
->  CONFIG_MTD_SPI_NOR=y
-> +CONFIG_MTD_UBI=y
+On Thu, 2023-06-22 at 14:30 +0200, Jan Kara wrote:
+> On Wed 21-06-23 12:57:19, Jeff Layton wrote:
+> > On Wed, 2023-06-21 at 18:48 +0200, Jan Kara wrote:
+> > > On Wed 21-06-23 10:45:28, Jeff Layton wrote:
+> > > > In later patches, we're going to change how the ctime.tv_nsec field=
+ is
+> > > > utilized. Switch to using accessor functions instead of raw accesse=
+s of
+> > > > inode->i_ctime.
+> > > >=20
+> > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > >=20
+> > > ...
+> > >=20
+> > > > diff --git a/fs/bfs/inode.c b/fs/bfs/inode.c
+> > > > index 1926bec2c850..c964316be32b 100644
+> > > > --- a/fs/bfs/inode.c
+> > > > +++ b/fs/bfs/inode.c
+> > > > @@ -82,10 +82,10 @@ struct inode *bfs_iget(struct super_block *sb, =
+unsigned long ino)
+> > > >  	inode->i_blocks =3D BFS_FILEBLOCKS(di);
+> > > >  	inode->i_atime.tv_sec =3D  le32_to_cpu(di->i_atime);
+> > > >  	inode->i_mtime.tv_sec =3D  le32_to_cpu(di->i_mtime);
+> > > > -	inode->i_ctime.tv_sec =3D  le32_to_cpu(di->i_ctime);
+> > > > +	inode_ctime_set_sec(inode, le32_to_cpu(di->i_ctime));
+> > > >  	inode->i_atime.tv_nsec =3D 0;
+> > > >  	inode->i_mtime.tv_nsec =3D 0;
+> > > > -	inode->i_ctime.tv_nsec =3D 0;
+> > > > +	inode_ctime_set_nsec(inode, 0);
+> > >=20
+> > > So I'm somewhat wondering here - in other filesystem you construct
+> > > timespec64 and then use inode_ctime_set(). Here you use
+> > > inode_ctime_set_sec() + inode_ctime_set_nsec(). What's the benefit? I=
+t
+> > > seems these two functions are not used that much some maybe we could =
+just
+> > > live with just inode_ctime_set() and constructing timespec64 when nee=
+ded?
+> > >=20
+> > > 								Honza
+> >=20
+> > The main advantage is that by using that, I didn't need to do quite so
+> > much of this conversion by hand. My coccinelle skills are pretty
+> > primitive. I went with whatever conversion was going to give minimal
+> > changes, to the existing accesses for the most part.
+> >=20
+> > We could certainly do it the way you suggest, it just means having to
+> > re-touch a lot of this code by hand, or someone with better coccinelle
+> > chops suggesting a way to declare a temporary variables in place.
+>=20
+> Well, maybe temporary variables aren't that convenient but we could provi=
+de
+> function setting ctime from sec & nsec value without having to declare
+> temporary timespec64? Attached is a semantic patch that should deal with
+> that - at least it seems to handle all the cases I've found.
+>=20
 
-=m
+Ok, let me try respinning this with your cocci script and see how it
+looks.
 
-(and wait till discussion finished)
+Damien also suggested in a reply to the zonefs patch a preference for
+the naming style you have above. Should I also rename these like?
 
->  CONFIG_BLK_DEV_LOOP=y
->  CONFIG_BLK_DEV_NBD=m
->  CONFIG_VIRTIO_BLK=y
-> @@ -1444,6 +1445,7 @@ CONFIG_TMPFS_POSIX_ACL=y
->  CONFIG_HUGETLBFS=y
->  CONFIG_CONFIGFS_FS=y
->  CONFIG_EFIVAR_FS=y
-> +CONFIG_UBIFS_FS=y
+    inode_ctime_peek -> inode_get_ctime
+    inode_ctime_set -> inode_set_ctime
 
-Also =m
-
-
-
-Best regards,
-Krzysztof
-
+This would be the time to change it if that's preferred.
+--=20
+Jeff Layton <jlayton@kernel.org>
