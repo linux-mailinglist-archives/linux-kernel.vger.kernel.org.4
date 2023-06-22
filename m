@@ -2,494 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9DED73A2D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1713573A2CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231699AbjFVOO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 10:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231615AbjFVOOR (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231622AbjFVOOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 22 Jun 2023 10:14:17 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2305D1FED;
-        Thu, 22 Jun 2023 07:13:56 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-666eef03ebdso3242634b3a.1;
-        Thu, 22 Jun 2023 07:13:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687443236; x=1690035236;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NZIzshyEXvO+GMr2MxUbz2W/g/qd87fRl8ljhcscWKk=;
-        b=TRYsQWHby4zYuQr124gQ98AaJGzMIdSoi6qDkUhzHtwtstnHkYqno37q79yEBUxN2C
-         4tTJR/WX+egbkny3j/QE9SpQq0GKcI5O8oZ0vtO4cyETWsjvXSeEE9ftPronuaCDoxKT
-         xpR3Hn9oRq/qMuuBOwVFI/KDza9LtbdUgugHQnYnsaMh7b1NxTr1phJN060UzCwJHIkj
-         zf3IV0+UQF3nex1yxNCPApw8NGtX/rfPXrrLDlla6qBvq+gQxhStvNNBn67DwMK0PCzs
-         +W5tAB/chkGN7OwhnnQ5xHDQQ4ON9UnsvBgRdYGvtCAmqZFPTpQRiHwd1vBwnKiCHWFW
-         YW5A==
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230526AbjFVOOB (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 22 Jun 2023 10:14:01 -0400
+Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8571F1BD9
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:13:49 -0700 (PDT)
+Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-77e33466fa2so488722539f.2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:13:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687443236; x=1690035236;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NZIzshyEXvO+GMr2MxUbz2W/g/qd87fRl8ljhcscWKk=;
-        b=eE1tnWIVz2vIlluf01X/hHsWsGWYa+iVJ1A9LB4DqoSLZQBbvvKoRoLrr5mGPclGRS
-         PKAuDUut69lq8qGrgxYgQ9b2Bo+bJOhZDP1tXs0YZ62NknLHe8wH8DauwhuQHP4cCi2D
-         3r4VL+OS2JKOfU70OZHc2V5BmrfmLf2tQoLv1tPFzdzcdQ0bq1bZYkHKQ2kc6+S1Wq3T
-         /v6XWlvTa7WrlBNt/C1B8Hy4G9s6ewXYmWU1xmzJ/WPjKdJzNPY1f8nx14FrErQ8T5fU
-         b4whCy78rKi13IcIaVc3+0gEwInT7PAu3qC0zdNcr3Lx9wnUMmKpc0MrCSVrWdYV7K3A
-         iTeA==
-X-Gm-Message-State: AC+VfDwiP47l+nAf9EVLDvCCk3I9HtX1cXFBlNvoPp/ilnbkH9kOCGls
-        T+gS50Bf0wmp6bj37wmYQuY=
-X-Google-Smtp-Source: ACHHUZ50JoZHxIG2jJV56QASNGxSs75mNnBcI2+doxpz2bbf560w3L/K7bsW8mzupmpYvyiKd4Tnnw==
-X-Received: by 2002:a05:6a00:1486:b0:66a:3818:8aa3 with SMTP id v6-20020a056a00148600b0066a38188aa3mr6308934pfu.0.1687443235960;
-        Thu, 22 Jun 2023 07:13:55 -0700 (PDT)
-Received: from a28aa0606c51.. (60-250-192-107.hinet-ip.hinet.net. [60.250.192.107])
-        by smtp.gmail.com with ESMTPSA id i20-20020aa79094000000b0065a1b05193asm4604268pfa.185.2023.06.22.07.13.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 07:13:55 -0700 (PDT)
-From:   Jacky Huang <ychuang570808@gmail.com>
-To:     mturquette@baylibre.com, sboyd@kernel.org, arnd@arndb.de,
-        gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-clk@vger.kernel.org, soc@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, schung@nuvoton.com,
-        Jacky Huang <ychuang3@nuvoton.com>
-Subject: [PATCH v3 3/3] clk: nuvoton: Use clk_parent_data instead of string for parent clock
-Date:   Thu, 22 Jun 2023 14:13:43 +0000
-Message-Id: <20230622141343.13595-4-ychuang570808@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230622141343.13595-1-ychuang570808@gmail.com>
-References: <20230622141343.13595-1-ychuang570808@gmail.com>
+        d=1e100.net; s=20221208; t=1687443228; x=1690035228;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ejmIg4Qx6xd91FDWYJpla2pPTx9JtjXCeXyQAb4fjkY=;
+        b=Akp4xPHN4KEKgk0b1TDhKuobBXljj2bJ0guqWSTJhV0XEs/JKe/UJ9m0TpCpB6jgoG
+         MWUcc1BqJwsWF509tFzppX9t/RiDi6/9iXDoVehr86l9mkWd6OJADIPC9MY0StCL5+Jr
+         n7x8qqnhW6alj9E6+PHTIXtZfjMouIXZNJWA6RA2vKY8hWhiqJ+/ogoGnfaxflvt3mdQ
+         pdgwqmAlrTkH7TCPOLkVtdTNlt3ERqbirFEbreU8phLhE+o8WE7Myt0vKhU2tPnSbVZn
+         6XTOcgtWxTNwlH9gIkpAcEcTgk9KlK99XamhI6yt8pFK/3CREbUW9gb8UwVEmC0kHPrx
+         cFbA==
+X-Gm-Message-State: AC+VfDw57xQuhuMxn15WJ7GNGonQQ7BA2bqUhol+qUf3RPrgexIY5GD9
+        t1MhUCdlOEnBsdMGqpCC4rTPteNaEjxSxeE3wagtGIHv2iiH
+X-Google-Smtp-Source: ACHHUZ51ZMIGUQVsUB3fuUc9g7Uh8e+GoTdifBINW07w+HkvOAo7enampj28OOohwaV7EBZtfcBZtMOdPreP51HF6PW6RnhxMVQQ
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:8506:0:b0:423:1100:682c with SMTP id
+ g6-20020a028506000000b004231100682cmr5919572jai.0.1687443228729; Thu, 22 Jun
+ 2023 07:13:48 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 07:13:48 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003a29fe05feb87e4e@google.com>
+Subject: [syzbot] [btrfs?] WARNING in btrfs_run_delayed_refs (2)
+From:   syzbot <syzbot+810ea5febd3b79bdd384@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jacky Huang <ychuang3@nuvoton.com>
+Hello,
 
-For the declaration of parent clocks, use struct clk_parent_data instead
-of a string. Due to the change in the passed arguments, replace the usage
-of devm_clk_hw_register_mux() with clk_hw_register_mux_parent_data() for
-all cases.
+syzbot found the following issue on:
 
-Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+HEAD commit:    dad9774deaf1 Merge tag 'timers-urgent-2023-06-21' of git:/..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=16198bb7280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=e74b395fe4978721
+dashboard link: https://syzkaller.appspot.com/bug?extid=810ea5febd3b79bdd384
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11acf600a80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1474fa3f280000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/fce56e230cb4/disk-dad9774d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e12b4efd53ae/vmlinux-dad9774d.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/38be193d7202/bzImage-dad9774d.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/2b9fc185d47b/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+810ea5febd3b79bdd384@syzkaller.appspotmail.com
+
+BTRFS error (device loop0): failed to run delayed ref for logical 5251072 num_bytes 4096 type 176 action 1 ref_mod 1: -28
+------------[ cut here ]------------
+BTRFS: Transaction aborted (error -28)
+WARNING: CPU: 0 PID: 4996 at fs/btrfs/extent-tree.c:2127 btrfs_run_delayed_refs+0x444/0x480 fs/btrfs/extent-tree.c:2127
+Modules linked in:
+CPU: 0 PID: 4996 Comm: syz-executor740 Not tainted 6.4.0-rc7-syzkaller-00072-gdad9774deaf1 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:btrfs_run_delayed_refs+0x444/0x480 fs/btrfs/extent-tree.c:2127
+Code: fe c1 38 c1 0f 8c 54 fc ff ff 48 89 ef e8 44 fe 60 fe e9 47 fc ff ff e8 9a 26 09 fe 48 c7 c7 00 95 29 8b 89 ee e8 4c a5 d0 fd <0f> 0b eb 9e f3 0f 1e fa e8 7f 26 09 fe 48 8b 44 24 18 42 80 3c 28
+RSP: 0018:ffffc90003a6f070 EFLAGS: 00010246
+RAX: b1a953d201add500 RBX: ffff88807d0f8001 RCX: ffff888027350000
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: 00000000ffffffe4 R08: ffffffff81530142 R09: fffff5200074ddc1
+R10: 0000000000000000 R11: dffffc0000000001 R12: ffff888076ab7e70
+R13: dffffc0000000000 R14: 0000000000000000 R15: ffff8880146a1000
+FS:  00007fa312072700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00005645cf4d5000 CR3: 0000000077a2a000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ btrfs_commit_transaction+0x427/0x3370 fs/btrfs/transaction.c:2158
+ btrfs_sync_file+0xcb3/0x10e0 fs/btrfs/file.c:2001
+ generic_write_sync include/linux/fs.h:2469 [inline]
+ btrfs_do_write_iter+0xccd/0x1270 fs/btrfs/file.c:1684
+ do_iter_write+0x7b1/0xcb0 fs/read_write.c:860
+ iter_file_splice_write+0x843/0xfe0 fs/splice.c:795
+ do_splice_from fs/splice.c:873 [inline]
+ direct_splice_actor+0xe7/0x1c0 fs/splice.c:1039
+ splice_direct_to_actor+0x4c4/0xbd0 fs/splice.c:994
+ do_splice_direct+0x283/0x3d0 fs/splice.c:1082
+ do_sendfile+0x620/0xff0 fs/read_write.c:1254
+ __do_sys_sendfile64 fs/read_write.c:1322 [inline]
+ __se_sys_sendfile64+0x17c/0x1e0 fs/read_write.c:1308
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fa3120ce3e9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 a1 17 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fa312072208 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
+RAX: ffffffffffffffda RBX: 00007fa312151788 RCX: 00007fa3120ce3e9
+RDX: 0000000000000000 RSI: 0000000000000005 RDI: 0000000000000004
+RBP: 00007fa312151780 R08: 0000000000000000 R09: 0000000000000000
+R10: 000000000880000c R11: 0000000000000246 R12: 00007fa31215178c
+R13: 00007fffc2cae10f R14: 00007fa312072300 R15: 0000000000022000
+ </TASK>
+
+
 ---
- drivers/clk/nuvoton/clk-ma35d1.c | 306 ++++++++++++++++++++++---------
- 1 file changed, 219 insertions(+), 87 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/clk/nuvoton/clk-ma35d1.c b/drivers/clk/nuvoton/clk-ma35d1.c
-index 733750dda0f4..f1fe7edd21b5 100644
---- a/drivers/clk/nuvoton/clk-ma35d1.c
-+++ b/drivers/clk/nuvoton/clk-ma35d1.c
-@@ -63,167 +63,298 @@ static DEFINE_SPINLOCK(ma35d1_lock);
- #define PLL_MODE_SS             2
- 
- static const struct clk_parent_data ca35clk_sel_clks[] = {
--	{ .index = 0 },  /* HXT */
--	{ .index = 1 },  /* CAPLL */
--	{ .index = 2 }   /* DDRPLL */
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "capll", },
-+	{ .fw_name = "ddrpll", },
- };
- 
--static const char *const sysclk0_sel_clks[] = {
--	"epll_div2", "syspll"
-+static const struct clk_parent_data sysclk0_sel_clks[] = {
-+	{ .fw_name = "epll_div2", },
-+	{ .fw_name = "syspll", },
- };
- 
--static const char *const sysclk1_sel_clks[] = {
--	"hxt", "syspll"
-+static const struct clk_parent_data sysclk1_sel_clks[] = {
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "syspll", },
- };
- 
--static const char *const axiclk_sel_clks[] = {
--	"capll_div2", "capll_div4"
-+static const struct clk_parent_data axiclk_sel_clks[] = {
-+	{ .fw_name = "capll_div2", },
-+	{ .fw_name = "capll_div4", },
- };
- 
--static const char *const ccap_sel_clks[] = {
--	"hxt", "vpll", "apll", "syspll"
-+static const struct clk_parent_data ccap_sel_clks[] = {
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "vpll", },
-+	{ .fw_name = "apll", },
-+	{ .fw_name = "syspll", },
- };
- 
--static const char *const sdh_sel_clks[] = {
--	"syspll", "apll", "dummy", "dummy"
-+static const struct clk_parent_data sdh_sel_clks[] = {
-+	{ .fw_name = "syspll", },
-+	{ .fw_name = "apll", },
- };
- 
--static const char *const dcu_sel_clks[] = {
--	"epll_div2", "syspll"
-+static const struct clk_parent_data dcu_sel_clks[] = {
-+	{ .fw_name = "epll_div2", },
-+	{ .fw_name = "syspll", },
- };
- 
--static const char *const gfx_sel_clks[] = {
--	"epll", "syspll"
-+static const struct clk_parent_data gfx_sel_clks[] = {
-+	{ .fw_name = "epll", },
-+	{ .fw_name = "syspll", },
- };
- 
--static const char *const dbg_sel_clks[] = {
--	"hirc", "syspll"
-+static const struct clk_parent_data dbg_sel_clks[] = {
-+	{ .fw_name = "hirc", },
-+	{ .fw_name = "syspll", },
- };
- 
--static const char *const timer0_sel_clks[] = {
--	"hxt", "lxt", "pclk0", "dummy", "dummy", "lirc", "dummy", "hirc"
-+static const struct clk_parent_data timer0_sel_clks[] = {
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "lxt", },
-+	{ .fw_name = "pclk0", },
-+	{ .index = -1, },
-+	{ .index = -1, },
-+	{ .fw_name = "lirc", },
-+	{ .index = -1, },
-+	{ .fw_name = "hirc", },
- };
- 
--static const char *const timer1_sel_clks[] = {
--	"hxt", "lxt", "pclk0", "dummy", "dummy", "lirc", "dummy", "hirc"
-+static const struct clk_parent_data timer1_sel_clks[] = {
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "lxt", },
-+	{ .fw_name = "pclk0", },
-+	{ .index = -1, },
-+	{ .index = -1, },
-+	{ .fw_name = "lirc", },
-+	{ .index = -1, },
-+	{ .fw_name = "hirc", },
- };
- 
--static const char *const timer2_sel_clks[] = {
--	"hxt", "lxt", "pclk1", "dummy", "dummy", "lirc", "dummy", "hirc"
-+static const struct clk_parent_data timer2_sel_clks[] = {
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "lxt", },
-+	{ .fw_name = "pclk1", },
-+	{ .index = -1, },
-+	{ .index = -1, },
-+	{ .fw_name = "lirc", },
-+	{ .index = -1, },
-+	{ .fw_name = "hirc", },
- };
- 
--static const char *const timer3_sel_clks[] = {
--	"hxt", "lxt", "pclk1", "dummy", "dummy", "lirc", "dummy", "hirc"
-+static const struct clk_parent_data timer3_sel_clks[] = {
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "lxt", },
-+	{ .fw_name = "pclk1", },
-+	{ .index = -1, },
-+	{ .index = -1, },
-+	{ .fw_name = "lirc", },
-+	{ .index = -1, },
-+	{ .fw_name = "hirc", },
- };
- 
--static const char *const timer4_sel_clks[] = {
--	"hxt", "lxt", "pclk2", "dummy", "dummy", "lirc", "dummy", "hirc"
-+static const struct clk_parent_data timer4_sel_clks[] = {
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "lxt", },
-+	{ .fw_name = "pclk2", },
-+	{ .index = -1, },
-+	{ .index = -1, },
-+	{ .fw_name = "lirc", },
-+	{ .index = -1, },
-+	{ .fw_name = "hirc", },
- };
- 
--static const char *const timer5_sel_clks[] = {
--	"hxt", "lxt", "pclk2", "dummy", "dummy", "lirc", "dummy", "hirc"
-+static const struct clk_parent_data timer5_sel_clks[] = {
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "lxt", },
-+	{ .fw_name = "pclk2", },
-+	{ .index = -1, },
-+	{ .index = -1, },
-+	{ .fw_name = "lirc", },
-+	{ .index = -1, },
-+	{ .fw_name = "hirc", },
- };
- 
--static const char *const timer6_sel_clks[] = {
--	"hxt", "lxt", "pclk0", "dummy", "dummy", "lirc", "dummy", "hirc"
-+static const struct clk_parent_data timer6_sel_clks[] = {
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "lxt", },
-+	{ .fw_name = "pclk0", },
-+	{ .index = -1, },
-+	{ .index = -1, },
-+	{ .fw_name = "lirc", },
-+	{ .index = -1, },
-+	{ .fw_name = "hirc", },
- };
- 
--static const char *const timer7_sel_clks[] = {
--	"hxt", "lxt", "pclk0", "dummy", "dummy", "lirc", "dummy", "hirc"
-+static const struct clk_parent_data timer7_sel_clks[] = {
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "lxt", },
-+	{ .fw_name = "pclk0", },
-+	{ .index = -1, },
-+	{ .index = -1, },
-+	{ .fw_name = "lirc", },
-+	{ .index = -1, },
-+	{ .fw_name = "hirc", },
- };
- 
--static const char *const timer8_sel_clks[] = {
--	"hxt", "lxt", "pclk1", "dummy", "dummy", "lirc", "dummy", "hirc"
-+static const struct clk_parent_data timer8_sel_clks[] = {
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "lxt", },
-+	{ .fw_name = "pclk1", },
-+	{ .index = -1, },
-+	{ .index = -1, },
-+	{ .fw_name = "lirc", },
-+	{ .index = -1, },
-+	{ .fw_name = "hirc", },
- };
- 
--static const char *const timer9_sel_clks[] = {
--	"hxt", "lxt", "pclk1", "dummy", "dummy", "lirc", "dummy", "hirc"
-+static const struct clk_parent_data timer9_sel_clks[] = {
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "lxt", },
-+	{ .fw_name = "pclk1", },
-+	{ .index = -1, },
-+	{ .index = -1, },
-+	{ .fw_name = "lirc", },
-+	{ .index = -1, },
-+	{ .fw_name = "hirc", },
- };
- 
--static const char *const timer10_sel_clks[] = {
--	"hxt", "lxt", "pclk2", "dummy", "dummy", "lirc", "dummy", "hirc"
-+static const struct clk_parent_data timer10_sel_clks[] = {
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "lxt", },
-+	{ .fw_name = "pclk2", },
-+	{ .index = -1, },
-+	{ .index = -1, },
-+	{ .fw_name = "lirc", },
-+	{ .index = -1, },
-+	{ .fw_name = "hirc", },
- };
- 
--static const char *const timer11_sel_clks[] = {
--	"hxt", "lxt", "pclk2", "dummy", "dummy", "lirc", "dummy", "hirc"
-+static const struct clk_parent_data timer11_sel_clks[] = {
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "lxt", },
-+	{ .fw_name = "pclk2", },
-+	{ .index = -1, },
-+	{ .index = -1, },
-+	{ .fw_name = "lirc", },
-+	{ .index = -1, },
-+	{ .fw_name = "hirc", },
- };
- 
--static const char *const uart_sel_clks[] = {
--	"hxt", "sysclk1_div2", "dummy", "dummy"
-+static const struct clk_parent_data uart_sel_clks[] = {
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "sysclk1_div2", },
- };
- 
--static const char *const wdt0_sel_clks[] = {
--	"dummy", "lxt", "pclk3_div4096", "lirc"
-+static const struct clk_parent_data wdt0_sel_clks[] = {
-+	{ .index = -1, },
-+	{ .fw_name = "lxt", },
-+	{ .fw_name = "pclk3_div4096", },
-+	{ .fw_name = "lirc", },
- };
- 
--static const char *const wdt1_sel_clks[] = {
--	"dummy", "lxt", "pclk3_div4096", "lirc"
-+static const struct clk_parent_data wdt1_sel_clks[] = {
-+	{ .index = -1, },
-+	{ .fw_name = "lxt", },
-+	{ .fw_name = "pclk3_div4096", },
-+	{ .fw_name = "lirc", },
- };
- 
--static const char *const wdt2_sel_clks[] = {
--	"dummy", "lxt", "pclk4_div4096", "lirc"
-+static const struct clk_parent_data wdt2_sel_clks[] = {
-+	{ .index = -1, },
-+	{ .fw_name = "lxt", },
-+	{ .fw_name = "pclk4_div4096", },
-+	{ .fw_name = "lirc", },
- };
- 
--static const char *const wwdt0_sel_clks[] = {
--	"dummy", "dummy", "pclk3_div4096", "lirc"
-+static const struct clk_parent_data wwdt0_sel_clks[] = {
-+	{ .index = -1, },
-+	{ .index = -1, },
-+	{ .fw_name = "pclk3_div4096", },
-+	{ .fw_name = "lirc", },
- };
- 
--static const char *const wwdt1_sel_clks[] = {
--	"dummy", "dummy", "pclk3_div4096", "lirc"
-+static const struct clk_parent_data wwdt1_sel_clks[] = {
-+	{ .index = -1, },
-+	{ .index = -1, },
-+	{ .fw_name = "pclk3_div4096", },
-+	{ .fw_name = "lirc", },
- };
- 
--static const char *const wwdt2_sel_clks[] = {
--	"dummy", "dummy", "pclk4_div4096", "lirc"
-+static const struct clk_parent_data wwdt2_sel_clks[] = {
-+	{ .index = -1, },
-+	{ .index = -1, },
-+	{ .fw_name = "pclk4_div4096", },
-+	{ .fw_name = "lirc", },
- };
- 
--static const char *const spi0_sel_clks[] = {
--	"pclk1", "apll", "dummy", "dummy"
-+static const struct clk_parent_data spi0_sel_clks[] = {
-+	{ .fw_name = "pclk1", },
-+	{ .fw_name = "apll", },
- };
- 
--static const char *const spi1_sel_clks[] = {
--	"pclk2", "apll", "dummy", "dummy"
-+static const struct clk_parent_data spi1_sel_clks[] = {
-+	{ .fw_name = "pclk2", },
-+	{ .fw_name = "apll", },
- };
- 
--static const char *const spi2_sel_clks[] = {
--	"pclk1", "apll", "dummy", "dummy"
-+static const struct clk_parent_data spi2_sel_clks[] = {
-+	{ .fw_name = "pclk1", },
-+	{ .fw_name = "apll", },
- };
- 
--static const char *const spi3_sel_clks[] = {
--	"pclk2", "apll", "dummy", "dummy"
-+static const struct clk_parent_data spi3_sel_clks[] = {
-+	{ .fw_name = "pclk2", },
-+	{ .fw_name = "apll", },
- };
- 
--static const char *const qspi0_sel_clks[] = {
--	"pclk0", "apll", "dummy", "dummy"
-+static const struct clk_parent_data qspi0_sel_clks[] = {
-+	{ .fw_name = "pclk0", },
-+	{ .fw_name = "apll", },
- };
- 
--static const char *const qspi1_sel_clks[] = {
--	"pclk0", "apll", "dummy", "dummy"
-+static const struct clk_parent_data qspi1_sel_clks[] = {
-+	{ .fw_name = "pclk0", },
-+	{ .fw_name = "apll", },
- };
- 
--static const char *const i2s0_sel_clks[] = {
--	"apll", "sysclk1_div2", "dummy", "dummy"
-+static const struct clk_parent_data i2s0_sel_clks[] = {
-+	{ .fw_name = "apll", },
-+	{ .fw_name = "sysclk1_div2", },
- };
- 
--static const char *const i2s1_sel_clks[] = {
--	"apll", "sysclk1_div2", "dummy", "dummy"
-+static const struct clk_parent_data i2s1_sel_clks[] = {
-+	{ .fw_name = "apll", },
-+	{ .fw_name = "sysclk1_div2", },
- };
- 
--static const char *const can_sel_clks[] = {
--	"apll", "vpll"
-+static const struct clk_parent_data can_sel_clks[] = {
-+	{ .fw_name = "apll", },
-+	{ .fw_name = "vpll", },
- };
- 
--static const char *const cko_sel_clks[] = {
--	"hxt", "lxt", "hirc", "lirc", "capll_div4", "syspll",
--	"ddrpll", "epll_div2", "apll", "vpll", "dummy", "dummy",
--	"dummy", "dummy", "dummy", "dummy"
-+static const struct clk_parent_data cko_sel_clks[] = {
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "lxt", },
-+	{ .fw_name = "hirc", },
-+	{ .fw_name = "lirc", },
-+	{ .fw_name = "capll_div4", },
-+	{ .fw_name = "syspll", },
-+	{ .fw_name = "ddrpll", },
-+	{ .fw_name = "epll_div2", },
-+	{ .fw_name = "apll", },
-+	{ .fw_name = "vpll", },
- };
- 
--static const char *const smc_sel_clks[] = {
--	"hxt", "pclk4"
-+static const struct clk_parent_data smc_sel_clks[] = {
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "pclk4", },
- };
- 
--static const char *const kpi_sel_clks[] = {
--	"hxt", "lxt"
-+static const struct clk_parent_data kpi_sel_clks[] = {
-+	{ .fw_name = "hxt", },
-+	{ .fw_name = "lxt", },
- };
- 
- static const struct clk_div_table ip_div_table[] = {
-@@ -255,11 +386,12 @@ static struct clk_hw *ma35d1_clk_mux_parent(struct device *dev, const char *name
- 
- static struct clk_hw *ma35d1_clk_mux(struct device *dev, const char *name,
- 				     void __iomem *reg, u8 shift, u8 width,
--				     const char *const *parents, int num_parents)
-+				     const struct clk_parent_data *pdata,
-+				     int num_pdata)
- {
--	return devm_clk_hw_register_mux(dev, name, parents, num_parents,
--					CLK_SET_RATE_NO_REPARENT, reg, shift,
--					width, 0, &ma35d1_lock);
-+	return clk_hw_register_mux_parent_data(dev, name, pdata, num_pdata,
-+					       CLK_SET_RATE_NO_REPARENT, reg, shift,
-+					       width, 0, &ma35d1_lock);
- }
- 
- static struct clk_hw *ma35d1_clk_divider(struct device *dev, const char *name,
--- 
-2.34.1
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
