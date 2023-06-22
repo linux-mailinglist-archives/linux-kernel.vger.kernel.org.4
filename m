@@ -2,238 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A6C73AD59
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 01:48:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5AC73AD69
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 01:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231758AbjFVXsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 19:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57636 "EHLO
+        id S231830AbjFVXun (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 19:50:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbjFVXsR (ORCPT
+        with ESMTP id S230106AbjFVXui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 19:48:17 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8853B2121;
-        Thu, 22 Jun 2023 16:48:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687477696; x=1719013696;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=qFN/7O/IOUid8uKDjKNk1nakIvRnpSKQGjwVflZsZXU=;
-  b=nfa3wIyFVvDDOCX/rvPOJDnwAxFh2JHDW4AJLGwREN9ZT7GEP74QFNzP
-   6NvVzqTeDgBDfOs2CgwIhqEYos8nh2/rUjDDKW87y+7xD+dUCQ3nunnC7
-   Vsh38L0enyufbkemL5h4AWBWZ+1zokgW6r7BFydGEVnida69vrX2D2AFx
-   8PbklhftiloTH69TbXXVzqgS2BwwmUKdBtUOtfZuZGTrqAlIOdsbhGFcq
-   /hHsC7x9Q3CfvzFEXbCBMofkdrbUornSFCjlx9eghi6QCDJt15cLo+9Rt
-   PHfnLHUz0U0yuSFmENSmSrBQ9n8L+ZBozjHbF2qcggUr6hHYUZrCyTL6L
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="340981526"
-X-IronPort-AV: E=Sophos;i="6.01,150,1684825200"; 
-   d="scan'208";a="340981526"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 16:48:15 -0700
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="749536267"
-X-IronPort-AV: E=Sophos;i="6.01,150,1684825200"; 
-   d="scan'208";a="749536267"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga001.jf.intel.com with ESMTP; 22 Jun 2023 16:48:12 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 22 Jun 2023 16:48:11 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 22 Jun 2023 16:48:11 -0700
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.42) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+        Thu, 22 Jun 2023 19:50:38 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BC22133;
+        Thu, 22 Jun 2023 16:50:33 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35MNb9rq015791;
+        Thu, 22 Jun 2023 23:50:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : subject :
+ date : message-id : mime-version : content-type :
+ content-transfer-encoding : to : cc; s=qcppdkim1;
+ bh=S7tSUJnPn1dEzpKf2XgWOApz3pVTip7ZL3T8bKa5CHc=;
+ b=PcCgbVulhQSvpozQk8I2Ezf0L1saeGAp0zjU7uRGGsuX3QCm3068WZADpbwE0muKBP4r
+ jje/mubZYeqg26OYzpQz2aZ8f0vIyhKU6UzkcBw6Wv7bm2NupejJJVmnAGxkHloHh3bv
+ 63fg+qMyaO1+FDkMGxsmehgHd0NyqqT9jCgLSQOSQ+gumwEAdUl4zuecI92Gpl5EkjaM
+ e70CA4sCPQ8vV+TFJYKj6IKHuIBbfV9mrzcQefHUJFvCJoEFxVaqiUWD6wGaBQogFvWc
+ cVcA895otqhANDct2/52DcZShSG1ru57IxvpOKq0Y+cPxAumgkm3UAwHnEqV9KpUtH3D Ow== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rc6b2bfv5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 23:50:26 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35MNoP11024816
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 23:50:25 GMT
+Received: from hu-rmccann-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 22 Jun 2023 16:48:11 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZIomqXRa/EQsfVdWEvrdWNAouHoxVbDejzeYMUo3RBwUA7B8FAx/loPLJ72f60pBN3Xl1e4TkVhT4QOt1dEBYQbA425RY+4QuRO+Vz1JF1nstOldamceUAptlkcozjHL2LFV3Ud+o6gKVNReI5nq494ZerVncYDGD8c0aZHB1TdGxp6JW+BRyYAjPiaeIoTg5WcJGWbLI/GhRqxke4dqQE1aKeCiD9VirBYKwZ+0TBC+G6r4L9ek4+E/jmDxXyIyePpnsaeJ/8VgczhBoAIdyLvbdY6G2VMGiuKu6CvqwyOpR0eheD75GUsUAlIGcDfj7g9d6RotLQUpaS2CNSKRrA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lPcAmoQH/Kf0IBibo7jM51xXWIut4OJJIZaH5VRyf1k=;
- b=bhLYGkezydQ8+OVk4NLmR+X6P6lW/5N2KY3iPMUdAyYz6Z8MF1u+j4NHllb6C3e7BEFY5ut2UlkFll8KHAmNS/pQYtY5cPt6hQMZ+tMOnAbZQV5xOPlfAZLGAzxr7U2h4cuskBoFqnuZF/NsUD5gmY6oO+3rAyyJWGOkxkNcBeKUxOK95Q+cRuhV+HrMnHBVOd2MzwCybcbU4GBaYw797IrfP68jqq9mmpRJYYY9bm55ROqBZo1A63UsFsNitFIcMzc2LZrPZi9hJo8VA4vmuYNIi//EP0gnxgUareyEcFcYEDS+dVhnorUq0lgBYuYQZgXcFyjq8O3URQaEjOngLw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH7PR11MB5984.namprd11.prod.outlook.com (2603:10b6:510:1e3::15)
- by IA1PR11MB6540.namprd11.prod.outlook.com (2603:10b6:208:3a0::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6500.40; Thu, 22 Jun
- 2023 23:48:10 +0000
-Received: from PH7PR11MB5984.namprd11.prod.outlook.com
- ([fe80::ef38:9181:fb78:b528]) by PH7PR11MB5984.namprd11.prod.outlook.com
- ([fe80::ef38:9181:fb78:b528%7]) with mapi id 15.20.6521.024; Thu, 22 Jun 2023
- 23:48:10 +0000
-Message-ID: <a451d410-4acb-8d79-36ed-da14bfd5a9c6@intel.com>
-Date:   Thu, 22 Jun 2023 16:48:06 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Betterbird/102.11.1
-Subject: Re: [PATCH v6 12/27] cxl/regs: Remove early capability checks in
- Component Register setup
-To:     Terry Bowman <terry.bowman@amd.com>, <alison.schofield@intel.com>,
-        <vishal.l.verma@intel.com>, <ira.weiny@intel.com>,
-        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
-        <Jonathan.Cameron@huawei.com>, <linux-cxl@vger.kernel.org>
-CC:     <rrichter@amd.com>, <linux-kernel@vger.kernel.org>,
-        <bhelgaas@google.com>
-References: <20230622035126.4130151-1-terry.bowman@amd.com>
- <20230622035126.4130151-13-terry.bowman@amd.com>
-Content-Language: en-US
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20230622035126.4130151-13-terry.bowman@amd.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR07CA0001.namprd07.prod.outlook.com
- (2603:10b6:a02:bc::14) To PH7PR11MB5984.namprd11.prod.outlook.com
- (2603:10b6:510:1e3::15)
+ 15.2.986.42; Thu, 22 Jun 2023 16:50:24 -0700
+From:   Ryan McCann <quic_rmccann@quicinc.com>
+Subject: [PATCH 0/6] Add support to print sub block registers in dpu hw
+ catalog
+Date:   Thu, 22 Jun 2023 16:48:52 -0700
+Message-ID: <20230622-devcoredump_patch-v1-0-3b2cdcc6a576@quicinc.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH7PR11MB5984:EE_|IA1PR11MB6540:EE_
-X-MS-Office365-Filtering-Correlation-Id: ab897432-5e9d-450a-e6fb-08db737b2256
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wD8rdANW+5ro/ebZCbrFEdFIrN/mkM53kKPfAKVuAYRYku8qaGBRUlIpgOfrQCzAl+NtPzXgUgx1uEJjMwwAPPL6K5ALZ4xWGG60yyQf525Ago9GNBKd18WWWewos+i+744M0yLV3kvH4CmMG7t4VCVfIIaSYtGm0NQLPF4Eb0spVM9iHkQ+DqgbBZwEYDvDsc+/yao/uHtLmBncKoQYxhh0qSsQ0VqiBDOKd8h/1eBdd0aBpOwQ4pvOh/aHex0jZYN2S10cftFaSsItkLkiNDlXa4cIaJfuxdUFmAjvl6GebMRI2cIOkpkNU4ECwFPbmoCxodLfD8qNBrWnPuX9vcRhSTHphmhfeMODRa5JgociKkdrWRrmxdqK/6RBuNNtOs8ziXeEy8t3XuYLW4Tvr+4kQHmfjDoZ2/yVGHNok5TofjvHsZ/6eSxOqlGg9+eiOdq4DPHOM09ignqiEnp8Zx/E8oOk4UCLkKLYsHe3sQo37Rj0XDmZMhsBNC1ruoHP80B/ugKMz/m5pYhdBolLSxe8FuFFWfBH7PPIwPodcSQpWZGfsRfEjs/wXx057W0jVashfpfk9+MJRGDNXrNlfWsx3jMFbD0g3n1tR9QOz6S0JyLbkPiBeEpt/HeqsFtulnoxfkaS6dZTbRpXUh8ehQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB5984.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(396003)(346002)(39860400002)(376002)(136003)(451199021)(53546011)(82960400001)(38100700002)(26005)(6506007)(83380400001)(2616005)(186003)(6512007)(44832011)(8936002)(41300700001)(8676002)(5660300002)(36756003)(6666004)(66946007)(6486002)(478600001)(4326008)(66476007)(66556008)(31696002)(86362001)(316002)(2906002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bTVKWHJVWjFzNVBOQVd3OUtEek8zOGRyVzFEVGIxeHljM1pZY1pmMjJkTVg3?=
- =?utf-8?B?Nk1nRHkxMTV3WEM5dEJvNjRvQzNVeEJFMC85aUxVL3ZIVUtVMHhQbzdVcjJP?=
- =?utf-8?B?MFFYTm1BWk9PM2REUFNIb0hXTGJzUC9Sc1RGYkVwNzFjR3lMVHNiYjFpOERV?=
- =?utf-8?B?a2VWRjZRQmdJd3UwRUR1YkRlZGdobjRIaHRsN2F0OCs5M1BpZGlpcElCblpL?=
- =?utf-8?B?Mi9oTStkYjRzNk41RXowaXllUXBRRjRUUkkrdCs3WmZLT3BtRlFIcmw2My9w?=
- =?utf-8?B?OHhvdWJERTdSdTRNZXVUcTJKdDZCRUNKMGllMFJ1NkVvK3BOcU81NUNJZDNl?=
- =?utf-8?B?YjM2MW0ralBZRDd0ckxJMEtoSEpGbURDci9aQWhhc1V2V09iVHpNMHBienZO?=
- =?utf-8?B?TTc1N2hZMGI3MHM0MWVDUGp4QUdFK3VUT09ZOEZNZDI0N3FMVHJFa2FFd0Uw?=
- =?utf-8?B?RmQ5cVVsNVdQTk9GNGZPTXpmMUNZbmVsbFZMMG1wbkRjeDJKNy94cjBFY1N4?=
- =?utf-8?B?ZmV3aCt2U2dDK3ZleWd6NXRBUmxDNW0zL2VuUXhQZitmb3EzU0I1Y2hWNlpr?=
- =?utf-8?B?OVV0SW1CeXlnVG0yeis1RlV3TG41Snh5QTVaQ0RRaUk5eUd4dGE1L2s0VEla?=
- =?utf-8?B?ellkczgwNjhSOHBML1oxZHZ2VjQ1RjExMkxKd2k3VWk2cmxEUm5NaUQ1VURE?=
- =?utf-8?B?QXdZRzkvZFBrWlQ4SzM2VTlaZndRaUs3Nm8xZFVMbUdFa2F2bk8wVDVvVmhS?=
- =?utf-8?B?WDJML1dldXBJWGEzaUxCTXBLVGhGTEM0NjRQWk9USUtxMW85U0ZSckZ5OVFo?=
- =?utf-8?B?N3IwTllsL0FoNnk2UktaKzR0eEhUNFI0K2gwZU1kVXQ5NGJ5WlFWeVlFYlAy?=
- =?utf-8?B?M2ZsQytrQVpRS2dMQ3UyK25pNXp3Mno2V3FDMGdsemRmMS9od1RidFRjNWp3?=
- =?utf-8?B?ek1rZHVHUkhnYmpQV2VYdFh4Si83Q0dkcmxUdEJVbGpMTFBOektqTDhMTGtL?=
- =?utf-8?B?TnUvaWZ2cERSR1lrWDlZVW1yVWlBUXRCYkEzWUtlNmY4YUtUMHI4Nzdnb05u?=
- =?utf-8?B?b3JmYjRBNDZGTXJZMlZlNkI1ZGJjWGlHdC9HUUcwakhTa1RvUnljTWJQL2RK?=
- =?utf-8?B?WDlOc0E3OXpOWEJsWHFxMjd5dXdBK3hBa3plQkJhL1dnVVIyRjE4MU1PM3Ar?=
- =?utf-8?B?Vm9Ca25LWGU2ZnN0a2lON1FmZWMyK2ZtMVV0M3RsOFY3VGRCSnNRSmhwVk1i?=
- =?utf-8?B?TzFGWjU2a0hHUERLNFoyTDBYRm1DVEVLaDVBQWtNblNoWnorcmNldHN2RXBh?=
- =?utf-8?B?TVNzTlRaR0FkT3djd0hFUmZWMUV4YWNjY2YvZkFBN1RXYU9hYi9SaDdxYUpa?=
- =?utf-8?B?VWVndC9HVTNscjU4OFhpckwveFVCMDk5RlRNek54eTZIak9jcmdDNkdOTEV5?=
- =?utf-8?B?c1NNTGtxQmhqcW9pOHV1UFlOTWJMTnNRUVI0TE1JZk5oNUl2RTJMRGZaYS9j?=
- =?utf-8?B?RUMwT2c0YTdaU0xPS1RBZWZQT3hBQURGdWlEUVNtVzE3K2xISkpRRXlWQ1lH?=
- =?utf-8?B?S2hFRlpIS2srYTdyOURoQlRUYTQxaTJSMDREeC9tZHBwdVVWdC9iU2ROSUhR?=
- =?utf-8?B?aHl3UVBlUEJ0QkZlZThnTmNsQkJ4aFNXVkxTbDNRTnZzNGZrS2lOQUE3L3Iw?=
- =?utf-8?B?amVQYysybitUWnFQOC9DNmgvcWQyUDhtRnNzenUvTUluazgwaU5qWmtLSU1W?=
- =?utf-8?B?NFdqdGM1UlMyM0RMWlRZYUZ1Z1ZHcTI1bFNjYXJSL2dva2FzZ0RPOThSUFZv?=
- =?utf-8?B?eVoyT1lQRmsxeUY1MmkwZ0hhZk05aFo4M0FpYkdsSXZpZlk4WlVFWFlZbWZs?=
- =?utf-8?B?cHZmQWJNb1ZwQytDc1JRTGpnMmxwcWRTcGJLOUgwSE1COTNDUXB2Zk1STTN3?=
- =?utf-8?B?eDdzZkRSYXpHeEVwTm4zZHE0V1A2TUtEOFgyOG92WkEvRUE5b1RNU0h6bHNH?=
- =?utf-8?B?RzU3SGxrNWNaUGNxckpLeTVlTFlkRkdCVE5HODQyMzVQcnV4aDB4ZnlPZXM0?=
- =?utf-8?B?K2JJWU5HT3ZkRVN1VDZ0RjcwQnM1dllQb09pVWpGdHVoTTRXWmpBb2JBY2RJ?=
- =?utf-8?B?aXBIOEYrcTJDb242NHBqK0tXNzM1R0xtTzJTc25zS0lvRG1tMzhLcUJzYUhG?=
- =?utf-8?B?QXc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ab897432-5e9d-450a-e6fb-08db737b2256
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB5984.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 23:48:09.9343
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LX5NTDN7+KuhXNflYGp/3stJ4hKTEN1gD0+ob2Fiko1p9EjiMbpJ2WcfiQh++Fp0powe7v014M0Wn/E/VfrUiQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6540
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOTdlGQC/x2NQQqDMBAAvyJ77oKNkJY+oU9okRKTjQk0MeyqC
+ OLfG3scmGF2EOJIAo9mB6Y1SpxyheulARtMHgmjqwyqVV2rlUJHq52Y3JLKp5jZBnT+RnevvdO
+ dgtoNRggHNtmGs3y+MEnCTNuM3yWZ8XQKk4/b//vuj+MHSGGB34cAAAA=
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+CC:     Rob Clark <robdclark@chromium.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <quic_jesszhan@quicinc.com>, Ryan McCann <quic_rmccann@quicinc.com>
+X-Mailer: b4 0.13-dev-8a804
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687477824; l=1750;
+ i=quic_rmccann@quicinc.com; s=20230622; h=from:subject:message-id;
+ bh=E88LvHnVfsIwBxX5au8105/4Zv5bvv3I2h+zxYlOCBY=;
+ b=L+m23s/ufPuFXEJGhMF8B51F3f3aKv8nuRs5+XNQhv9eeIofW86ro9RCqDLvU5ZUaWtbOV84m
+ Wra59R6lvMBCNqOu+VR98r6RDRaLxKIM56gs9fdC71cI/+Qce1aQHYR
+X-Developer-Key: i=quic_rmccann@quicinc.com; a=ed25519;
+ pk=d/uP3OwPGpj/bTtiHvV1RBZ2S6q4AL6j1+A5y+dmbTI=
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 3WXUgvl2XMAJTcaNye_gkodPDx-dNWRB
+X-Proofpoint-GUID: 3WXUgvl2XMAJTcaNye_gkodPDx-dNWRB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-22_17,2023-06-22_02,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
+ malwarescore=0 spamscore=0 phishscore=0 suspectscore=0 priorityscore=1501
+ mlxlogscore=785 lowpriorityscore=0 impostorscore=0 mlxscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306220205
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The purpose of this patch series is to add support to print the registers
+of sub blocks in the dpu hardware catalog and fix the order in which all
+hardware blocks are dumped for a device core dump. This involves:
 
+1. Changing data structure from stack to queue to fix the printing order
+of the device core dump.
 
-On 6/21/23 20:51, Terry Bowman wrote:
-> From: Robert Richter <rrichter@amd.com>
-> 
-> When probing the Component Registers in function cxl_probe_regs()
-> there are also checks for the existence of the HDM and RAS
-> capabilities. The checks may fail for components that do not implement
-> the HDM capability causing the Component Registers setup to fail too.
-> 
-> Remove the checks for a generalized use of cxl_probe_regs() and check
-> them directly before mapping the RAS or HDM capabilities. This allows
-> it to setup other Component Registers esp. of an RCH Downstream Port,
-> which will be implemented in a follow-on patch.
-> 
-> Signed-off-by: Robert Richter <rrichter@amd.com>
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+2. Removing redundant suffix of sub block names.
 
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-> ---
->   drivers/cxl/core/regs.c | 8 --------
->   drivers/cxl/pci.c       | 2 ++
->   drivers/cxl/port.c      | 5 ++++-
->   3 files changed, 6 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/cxl/core/regs.c b/drivers/cxl/core/regs.c
-> index e035ad8827a4..e68848075bb6 100644
-> --- a/drivers/cxl/core/regs.c
-> +++ b/drivers/cxl/core/regs.c
-> @@ -369,14 +369,6 @@ static int cxl_probe_regs(struct cxl_register_map *map)
->   	case CXL_REGLOC_RBI_COMPONENT:
->   		comp_map = &map->component_map;
->   		cxl_probe_component_regs(dev, base, comp_map);
-> -		if (!comp_map->hdm_decoder.valid) {
-> -			dev_err(dev, "HDM decoder registers not found\n");
-> -			return -ENXIO;
-> -		}
-> -
-> -		if (!comp_map->ras.valid)
-> -			dev_dbg(dev, "RAS registers not found\n");
-> -
->   		dev_dbg(dev, "Set up component registers\n");
->   		break;
->   	case CXL_REGLOC_RBI_MEMDEV:
-> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
-> index ac17bc0430dc..945ca0304d68 100644
-> --- a/drivers/cxl/pci.c
-> +++ b/drivers/cxl/pci.c
-> @@ -630,6 +630,8 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->   	rc = cxl_pci_setup_regs(pdev, CXL_REGLOC_RBI_COMPONENT, &map);
->   	if (rc)
->   		dev_warn(&pdev->dev, "No component registers (%d)\n", rc);
-> +	else if (!map.component_map.ras.valid)
-> +		dev_dbg(&pdev->dev, "RAS registers not found\n");
->   
->   	cxlds->component_reg_phys = map.resource;
->   
-> diff --git a/drivers/cxl/port.c b/drivers/cxl/port.c
-> index 4cef2bf45ad2..01e84ea54f56 100644
-> --- a/drivers/cxl/port.c
-> +++ b/drivers/cxl/port.c
-> @@ -102,8 +102,11 @@ static int cxl_endpoint_port_probe(struct cxl_port *port)
->   		return rc;
->   
->   	cxlhdm = devm_cxl_setup_hdm(port, &info);
-> -	if (IS_ERR(cxlhdm))
-> +	if (IS_ERR(cxlhdm)) {
-> +		if (PTR_ERR(cxlhdm) == -ENODEV)
-> +			dev_err(&port->dev, "HDM decoder registers not found\n");
->   		return PTR_ERR(cxlhdm);
-> +	}
->   
->   	/* Cache the data early to ensure is_visible() works */
->   	read_cdat_data(port);
+3. Removing redundant prefix of sub block names.
+
+4. Eliminating unused variable from relevant macros.
+
+5. Defining names for sub blocks that have not yet been defined.
+
+6. Implementing wrapper function that prints the registers of sub blocks
+when there is a need.
+
+Sample Output of the sspp_0 block and its sub blocks for devcore dump:
+======sspp_0======
+...registers
+...
+====sspp_0_scaler====
+...
+...
+====sspp_0_csc====
+...
+...
+====next_block====
+...
+
+Signed-off-by: Ryan McCann <quic_rmccann@quicinc.com>
+---
+Ryan McCann (6):
+      drm/msm: Update dev core dump to not print backwards
+      drm/msm/dpu: Drop unused num argument from relevant macros
+      drm/msm/dpu: Define names for unnamed sblks
+      drm/msm/dpu: Remove redundant suffix in name of sub blocks
+      drm/msm/disp: Remove redundant prefix in name of sub blocks
+      drm/msm/dpu: Update dev core dump to dump registers of sub blocks
+
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    |  90 +++++-----
+ drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c           | 194 +++++++++++++++++++---
+ drivers/gpu/drm/msm/disp/msm_disp_snapshot_util.c |   2 +-
+ 3 files changed, 214 insertions(+), 72 deletions(-)
+---
+base-commit: 710025fdedb3767655823c3a12d27d404d209f75
+change-id: 20230622-devcoredump_patch-df7e8f6fd632
+
+Best regards,
+-- 
+Ryan McCann <quic_rmccann@quicinc.com>
+
