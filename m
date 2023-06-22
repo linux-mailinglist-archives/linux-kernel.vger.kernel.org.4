@@ -2,142 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D796673A886
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 20:46:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E78873A889
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 20:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjFVSqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 14:46:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36630 "EHLO
+        id S231446AbjFVSqy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 14:46:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbjFVSqh (ORCPT
+        with ESMTP id S231403AbjFVSqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 14:46:37 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A5B2103;
-        Thu, 22 Jun 2023 11:46:30 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f8fb0e7709so75151545e9.2;
-        Thu, 22 Jun 2023 11:46:30 -0700 (PDT)
+        Thu, 22 Jun 2023 14:46:47 -0400
+Received: from mail-il1-x12f.google.com (mail-il1-x12f.google.com [IPv6:2607:f8b0:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43352118
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 11:46:36 -0700 (PDT)
+Received: by mail-il1-x12f.google.com with SMTP id e9e14a558f8ab-338bd590bc1so5145055ab.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 11:46:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687459589; x=1690051589;
+        d=linuxfoundation.org; s=google; t=1687459596; x=1690051596;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=bPXpGa9jfvplqLyUF1fKF2LVSy/7Wa6tdzEbo3m24+4=;
-        b=nuZ6XntxCEqRkeej37RLEv64b5NxPJAhPbyionQG1zuttFqIw4iqd6bAyZS4CvBhM2
-         Tu8VCWPjrufKrBLybTXIJvxFM334JkE0VmLo+bBjlKFAfm31bDOGQOVWlKxE+HJ1VgD6
-         e9xRtbtLnRzoat4eRtyifWvBUcYOkEpTTYLPgRA03cuczlnb80SdUMLD5XJqStD3dtN1
-         8pyrBfNIbnwYaStG6CPLAgNUiHbvyVWI6WB//qTPRSzTSaF38HKsh6YI8Xwag3hh9vOm
-         haMIgsF1a3LR9gpScqWKobKRNUZG5Mm42J3z9HaD0aR6gYqlZZhLJQ6j8LIecle/H8Z+
-         WHvA==
+        bh=manSCipOOhmWOPB1AQ+dPEX6xxX8Josbxr+cGJcmDTw=;
+        b=BF0clXInxT/cyf32LbIk93WOsKiO08d4WNaZaiK5Jlzy1NZ1uHoiZtnlIMZuCQfkrD
+         6KiPrvyI1cIyL440IlfvkV9mvxuiTnRSaZLjGM/R0LrSfRjkmYtiI2O4Cuqh7KUZlDen
+         CDCI52XDqLUV16ARPWW5rdJnTccK6UKgy3aLI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687459589; x=1690051589;
+        d=1e100.net; s=20221208; t=1687459596; x=1690051596;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bPXpGa9jfvplqLyUF1fKF2LVSy/7Wa6tdzEbo3m24+4=;
-        b=O4O0I5XxjyYWFSYwuCCS37L8gzUHKQ7eVX2fmH5b2ew/YUC67GnRg2ekBHk33aqL+K
-         bU8D9+Bw0fEGW1hKU++ecYRalnPUQRlI+xgvAE0XjHuMZ+Pmp+XWUi28Yjjk2C/qdM/q
-         jNycz0nQT5ya8Wm4FVOEcxUS3Wpr95ZgxE/cuYEA3+kigMTVh1LBGvl2ZuCDm6kX42Sh
-         WwTZSDRQTypc54Krxybh8bJ045vU66KVxV9oJku97Yd0oPbqylJXXuBjePJLjRjm06Tr
-         nMzD/651olEg872ZcHXecys+dxtUxTRQVlRJylRsbn/73pinvRlQcXU8lKDiLMAqXgRB
-         DMRA==
-X-Gm-Message-State: AC+VfDypH3nAn71lCNzqlVg9geH3OcFDMkfOOI45HKfwAScnrHglBB50
-        Y3JWVHD0G90o/xk5WI/xn/uPFpNMyb6wqQ==
-X-Google-Smtp-Source: ACHHUZ7wH9qHBX81FAbtBvr0POaf7xSsPESlkJ3r2wQNrXUPW6zbsx0ZYaHHpcBIUBjThvYl1O5Tdw==
-X-Received: by 2002:adf:ef12:0:b0:306:3912:a7f0 with SMTP id e18-20020adfef12000000b003063912a7f0mr14197642wro.50.1687459588851;
-        Thu, 22 Jun 2023 11:46:28 -0700 (PDT)
-Received: from [192.168.0.112] ([77.220.140.242])
-        by smtp.gmail.com with ESMTPSA id x14-20020adfec0e000000b0030aee3da084sm7627849wrn.49.2023.06.22.11.46.26
+        bh=manSCipOOhmWOPB1AQ+dPEX6xxX8Josbxr+cGJcmDTw=;
+        b=dv9ulvsnEEVSvLbs9RnolaAn3bAr8er1KqNSJO00NkYvduPQaDQMWhek0vsiwc3D1c
+         VMxuRPXDDloV7pd+52K+tK9v3059GIy0aHmz6KOn0gpT8yxFzn4hei1dzNlTs6ck93mv
+         vsRVSwFuNw23CoW0PGcVLzIzmQqRgPYAuX3BoiCtk4VHcfBlQGd0eykFNSqZdon9pA/y
+         NEC5ost+RjKEAABYmruvXZpBD1Kuyk4gYu+dkR+LeDxryv+TUHXJZ8iTmuLB0t8pRa1e
+         MUAfq879AvfS2OcIaJGUdoMu6ee/kWqORS2HXL/IurLTQbkFF9/X/30BJaAMPxBddCpV
+         DZZg==
+X-Gm-Message-State: AC+VfDx4DjhY37tSrRfM5lyET2S+dqDmykYygXFKm3UVpP+dkOjflPzV
+        T1dvXMtnE/euk6eoBzLGWANzcQ==
+X-Google-Smtp-Source: ACHHUZ5qRksVQUc529ilEx05M1/JeEvBhIQIatLjK3cFdJpcMXoMxSJVzYBIbdbPXvmVV1YjZ8jF/g==
+X-Received: by 2002:a92:740d:0:b0:338:4b36:5097 with SMTP id p13-20020a92740d000000b003384b365097mr18131055ilc.1.1687459596143;
+        Thu, 22 Jun 2023 11:46:36 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id x10-20020a92060a000000b0034255d2d3c5sm2143703ilg.48.2023.06.22.11.46.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 11:46:28 -0700 (PDT)
-Message-ID: <9f0b6bba-701c-a95d-d326-bb207e319f2a@gmail.com>
-Date:   Thu, 22 Jun 2023 21:46:26 +0300
+        Thu, 22 Jun 2023 11:46:35 -0700 (PDT)
+Message-ID: <74c961a0-4a36-51db-5ed7-6f0185e499ce@linuxfoundation.org>
+Date:   Thu, 22 Jun 2023 12:46:34 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH RFC net-next v4 6/8] virtio/vsock: support dgrams
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 5.15 000/107] 5.15.118-rc1 review
 Content-Language: en-US
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Simon Horman <simon.horman@corigine.com>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        bpf@vger.kernel.org
-References: <20230413-b4-vsock-dgram-v4-0-0cebbb2ae899@bytedance.com>
- <20230413-b4-vsock-dgram-v4-6-0cebbb2ae899@bytedance.com>
- <92b3a6df-ded3-6470-39d1-fe0939441abc@gmail.com>
- <ppx75eomyyb354knfkwbwin3il2ot7hf5cefwrt6ztpcbc3pps@q736cq5v4bdh>
-From:   Arseniy Krasnov <oxffffaa@gmail.com>
-In-Reply-To: <ppx75eomyyb354knfkwbwin3il2ot7hf5cefwrt6ztpcbc3pps@q736cq5v4bdh>
-Content-Type: text/plain; charset=UTF-8
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230619102141.541044823@linuxfoundation.org>
+ <f7bf3aa8-f1b8-a1b5-8e51-46d51d002633@linuxfoundation.org>
+ <2023062150-expansive-polygon-7b5f@gregkh>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <2023062150-expansive-polygon-7b5f@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 22.06.2023 19:09, Stefano Garzarella wrote:
-> On Sun, Jun 11, 2023 at 11:49:02PM +0300, Arseniy Krasnov wrote:
->> Hello Bobby!
->>
->> On 10.06.2023 03:58, Bobby Eshleman wrote:
->>> This commit adds support for datagrams over virtio/vsock.
+On 6/21/23 07:59, Greg Kroah-Hartman wrote:
+> On Tue, Jun 20, 2023 at 03:04:12PM -0600, Shuah Khan wrote:
+>> On 6/19/23 04:29, Greg Kroah-Hartman wrote:
+>>> This is the start of the stable review cycle for the 5.15.118 release.
+>>> There are 107 patches in this series, all will be posted as a response
+>>> to this one.  If anyone has any issues with these being applied, please
+>>> let me know.
 >>>
->>> Message boundaries are preserved on a per-skb and per-vq entry basis.
+>>> Responses should be made by Wed, 21 Jun 2023 10:21:12 +0000.
+>>> Anything received after that time might be too late.
+>>>
+>>> The whole patch series can be found in one patch at:
+>>> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.118-rc1.gz
+>>> or in the git tree and branch at:
+>>> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+>>> and the diffstat can be found below.
+>>>
+>>> thanks,
+>>>
+>>> greg k-h
+>>>
 >>
->> I'm a little bit confused about the following case: let vhost sends 4097 bytes
->> datagram to the guest. Guest uses 4096 RX buffers in it's virtio queue, each
->> buffer has attached empty skb to it. Vhost places first 4096 bytes to the first
->> buffer of guests RX queue, and 1 last byte to the second buffer. Now IIUC guest
->> has two skb in it rx queue, and user in guest wants to read data - does it read
->> 4097 bytes, while guest has two skb - 4096 bytes and 1 bytes? In seqpacket there is
->> special marker in header which shows where message ends, and how it works here?
+>> Compiled and boots, but doesn't get to login prompt. Keeps running
+>> into NMIs and watchdog detects had lockups.
+>>
+>> I am starting bisect and will keep you updated.
 > 
-> I think the main difference is that DGRAM is not connection-oriented, so
-> we don't have a stream and we can't split the packet into 2 (maybe we
-> could, but we have no guarantee that the second one for example will be
-> not discarded because there is no space).
+> Very odd, let me know what you find, thanks!
 > 
-> So I think it is acceptable as a restriction to keep it simple.
+> greg k-h
 
-Ah, I see, idea is that any "corruptions" of data could be considered as
-"DGRAM is not reliable anyway, so that's it" :)
+Bisect flagged the following commit and I don't think
+this commit could be the cause on an AMD system
 
-> 
-> My only doubt is, should we make the RX buffer size configurable,
-> instead of always using 4k?
+# first bad commit: [17627e3f8f0cca041becbec376c07724968c1bf5] of: overlay: rename variables to be consistent
 
-I guess this is useful only for DGRAM usage, when we want to tune buffers
-for some specific case - may be for exact length of messages (for example if we have
-4096 buffers, while senders wants to send 5000 bytes always by each 'send()' - I think it
-will be really strange that reader ALWAYS dequeues 4096 and 4 bytes as two packets).
-For stream types of socket I think size of rx buffers is not big deal in most of cases.
+Please go ahead with the release. I will keep debugging.
 
-Thanks, Arseniy
+thanks,
+-- Shuah
 
-> 
-> Thanks,
-> Stefano
-> 
+
