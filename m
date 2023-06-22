@@ -2,154 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5174F73A8BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:01:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55DA273A8BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbjFVTBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 15:01:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44120 "EHLO
+        id S230243AbjFVTBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 15:01:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230449AbjFVTBw (ORCPT
+        with ESMTP id S229944AbjFVTBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 15:01:52 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D816186
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 12:01:51 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-76246351f0cso652109685a.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 12:01:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687460510; x=1690052510;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4qsg1RqLEPdlYVYZT9sFftBXtwp261XsDqIoUJonI4s=;
-        b=Oi8wiXY4ddFjysagRcHGHlOMMjiG+hAmmEXjDGXNjZxztkm1QSgAWy5PgF0ixA1iw+
-         2izk782YhO+lvIJIvDOHLTFlOhjV1BI9bcWtiUsM8UZzNDwq1DbIBN25V8tvt5xJxI7X
-         QXBzCV6RBQF6Oj/4iEYeJYV68KMEEbtOQ3Ea+kuhBPh+RdAiyyu92KBcZbx1dzqY5/qX
-         c7uiEXlB2mRu5p3c3L3UX8dFm50HJCIAmnYnb9mBMh9Hzt+iSakLDxsDaQbo+Y4bUQ+H
-         MV3tFVAHb6NU879Rw0T/6v1lJDi+Bo00ergwhJCoCfT/0KiN6iHmxFV/Th0G2SM6Bcpq
-         de4Q==
+        Thu, 22 Jun 2023 15:01:49 -0400
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4659B;
+        Thu, 22 Jun 2023 12:01:48 -0700 (PDT)
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-31121494630so8626255f8f.3;
+        Thu, 22 Jun 2023 12:01:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687460510; x=1690052510;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4qsg1RqLEPdlYVYZT9sFftBXtwp261XsDqIoUJonI4s=;
-        b=Gy8fjbHZPY+dC66S3e09Yoz52CeH8BRBTJXFH+BSyTPuQGXuBhF+CpYoFBxdsuD+DN
-         pdWnVx+3VFzMtZPiE5bIOYMkIbeGeNu4oJ3hm/ZEQCBVEeOD2Jcdl+1U3DhWnfvpaEkp
-         +rckmvuykvwtoqp3DVFPckDp7W3NAy19JAvQdMoSYd0gar1VhU+nx47CNqB7z7nB4WzP
-         cKM+2EIXGkr7TY8Ac16qv2hfDVCd5Webc3wjv25eEy8rpKWR/cEwhikBjuz04BpQqdyG
-         +du+/P4O46HmGvLhE95mbOPqvs6zICSazq0MDgfO3c7Y87wWwkDk4+esLe0HHQ02iEOK
-         H6UA==
-X-Gm-Message-State: AC+VfDyaUplbjLNoYw56EusNo5JZkvCaN6vexnfS/Jl3LFQhE+bjKSbi
-        5SpxepGSa/FST/0SiZ+a+JpUjtpG1/aK+J34HEzxqw==
-X-Google-Smtp-Source: ACHHUZ7gJZgU33kEAEEraVJxbs1L3PgvLGOZGKq0NrHlnNt51Km5xcWPc/m4RLy9Ld8IpRrDpPg5xbPGx8DMX9yf+uI=
-X-Received: by 2002:ad4:4ea6:0:b0:62f:fd5d:4ff with SMTP id
- ed6-20020ad44ea6000000b0062ffd5d04ffmr14151653qvb.21.1687460510566; Thu, 22
- Jun 2023 12:01:50 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687460506; x=1690052506;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JQKzGLLngarWVhVTw2URKzbQiX5Xh0ThcGjikbK/29A=;
+        b=UDaogkxedFUKrLBbokO3Ju1XWzQsshU4NzizhE111YxjVL/KNgAdifnWs3aZVyEqnh
+         vZLqxNQG2p5Z41RNyZ2k1HYP7KJToFUID1byUceENvRpFn2nmR/Fk/3WzleWGvlOzZBg
+         cbtsILSaBxvPwgt6bsmd3HEx6TR2HX3bnAuRa0OHGTEDRRUKAYhbmcvyN+XtUXdS/smy
+         TqIuucLOcep/obdp00dn2uafwYJ/S4an7+fCBuCNKM4VQh2n7V5rQ5kAexgk9ST+XZnL
+         BsB9yEtdUnp3AvAw+5NPltZEX4Znv66aHgXRugSSkasJa4s8vfAHsOaoVqBv/jNSCYWT
+         wHaw==
+X-Gm-Message-State: AC+VfDzUGonVeZqp2rk4tW0X5cz5cCvSnqP0udUDlT/eVoGBUMoR85aJ
+        NuctXn7FZLyWZHinSTcAZt0=
+X-Google-Smtp-Source: ACHHUZ4Fm507H6gAfhlPKOCV3A52LQqvUW+RMQ+AjS6G760+nRpx0UGIk5+/UcW36fRpV4dsuqghUA==
+X-Received: by 2002:a5d:67cd:0:b0:2ef:b052:1296 with SMTP id n13-20020a5d67cd000000b002efb0521296mr17148852wrw.22.1687460506529;
+        Thu, 22 Jun 2023 12:01:46 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-004.fbsv.net. [2a03:2880:31ff:4::face:b00c])
+        by smtp.gmail.com with ESMTPSA id j11-20020a5d604b000000b003078681a1e8sm7680789wrt.54.2023.06.22.12.01.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 12:01:46 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 12:01:44 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, leit@meta.com,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steve French <stfrench@microsoft.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Simon Ser <contact@emersion.fr>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:IO_URING" <io-uring@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
+Subject: Re: [PATCH] io_uring: Add io_uring command support for sockets
+Message-ID: <ZJSamAduIRJ3b/TX@gmail.com>
+References: <20230621232129.3776944-1-leitao@debian.org>
+ <2023062231-tasting-stranger-8882@gregkh>
+ <ZJRijTDv5lUsVo+j@gmail.com>
+ <2023062208-animosity-squabble-c1ba@gregkh>
+ <ZJR49xji1zmISlTs@gmail.com>
+ <2023062228-cloak-wish-ec12@gregkh>
+ <20230622103948.33cbb0dd@kernel.org>
 MIME-Version: 1.0
-References: <20230620120521.688124-1-masahiroy@kernel.org> <20230620120521.688124-2-masahiroy@kernel.org>
-In-Reply-To: <20230620120521.688124-2-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 22 Jun 2023 12:01:39 -0700
-Message-ID: <CAKwvOdnuXJOiDrdGjux6JMb8akYQTi1ohPZtH1i_ZhYuJpshbQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] modpost: factor out Elf_Sym pointer calculation to section_rel()
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230622103948.33cbb0dd@kernel.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,FSL_HELO_FAKE,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 5:05=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
-rg> wrote:
->
-> Pass the Elf_Sym pointer to addend_arm_rel() as well as to
-> check_section_mismatch().
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+On Thu, Jun 22, 2023 at 10:39:48AM -0700, Jakub Kicinski wrote:
+> On Thu, 22 Jun 2023 19:03:04 +0200 Greg Kroah-Hartman wrote:
+> > > Correct. For now we are just using 0xa0 and 0xa1, and eventually we
+> > > might need more ioctls numbers.
+> > > 
+> > > I got these numbers finding a unused block and having some room for
+> > > expansion, as suggested by Documentation/userspace-api/ioctl/ioctl-number.rst,
+> > > that says:
+> > > 
+> > > 	If you are writing a driver for a new device and need a letter, pick an
+> > > 	unused block with enough room for expansion: 32 to 256 ioctl commands.  
+> > 
+> > So is this the first io_uring ioctl?  If so, why is this an ioctl and
+> > not just a "normal" io_uring call?
+> 
+> +1, the mixing with classic ioctl seems confusing and I'm not sure 
+> if it buys us anything.
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-
-> ---
->
->  scripts/mod/modpost.c | 9 +++++----
->  1 file changed, 5 insertions(+), 4 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 2551ac9d5bd3..ffe45c54f024 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -1295,10 +1295,9 @@ static int32_t sign_extend32(int32_t value, int in=
-dex)
->         return (int32_t)(value << shift) >> shift;
->  }
->
-> -static int addend_arm_rel(void *loc, struct elf_info *elf, Elf_Rela *r)
-> +static int addend_arm_rel(void *loc, Elf_Sym *sym, Elf_Rela *r)
->  {
->         unsigned int r_typ =3D ELF_R_TYPE(r->r_info);
-> -       Elf_Sym *sym =3D elf->symtab_start + ELF_R_SYM(r->r_info);
->         uint32_t inst, upper, lower, sign, j1, j2;
->         int32_t offset;
->
-> @@ -1493,6 +1492,7 @@ static void section_rel(struct module *mod, struct =
-elf_info *elf,
->                 return;
->
->         for (rel =3D start; rel < stop; rel++) {
-> +               Elf_Sym *tsym;
->                 void *loc;
->
->                 r.r_offset =3D TO_NATIVE(rel->r_offset);
-> @@ -1514,6 +1514,7 @@ static void section_rel(struct module *mod, struct =
-elf_info *elf,
->                 r.r_addend =3D 0;
->
->                 loc =3D sym_get_data_by_offset(elf, fsecndx, r.r_offset);
-> +               tsym =3D elf->symtab_start + ELF_R_SYM(r.r_info);
->
->                 switch (elf->hdr->e_machine) {
->                 case EM_386:
-> @@ -1521,7 +1522,7 @@ static void section_rel(struct module *mod, struct =
-elf_info *elf,
->                                 continue;
->                         break;
->                 case EM_ARM:
-> -                       if (addend_arm_rel(loc, elf, &r))
-> +                       if (addend_arm_rel(loc, tsym, &r))
->                                 continue;
->                         break;
->                 case EM_MIPS:
-> @@ -1532,7 +1533,7 @@ static void section_rel(struct module *mod, struct =
-elf_info *elf,
->                         fatal("Please add code to calculate addend for th=
-is architecture\n");
->                 }
->
-> -               check_section_mismatch(mod, elf, elf->symtab_start + r_sy=
-m,
-> +               check_section_mismatch(mod, elf, tsym,
->                                        fsecndx, fromsec, r.r_offset, r.r_=
-addend);
->         }
->  }
-> --
-> 2.39.2
->
-
-
---=20
-Thanks,
-~Nick Desaulniers
+Sure, let me remove the dependency on ioctl()s then.
