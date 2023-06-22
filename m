@@ -2,235 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F33CD73A49B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:19:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A1773A4AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:21:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231871AbjFVPTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 11:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
+        id S231880AbjFVPVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 11:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230462AbjFVPTh (ORCPT
+        with ESMTP id S232270AbjFVPVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 11:19:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320E4E4B;
-        Thu, 22 Jun 2023 08:19:36 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: bbrezillon)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 215D8660710B;
-        Thu, 22 Jun 2023 16:19:34 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687447174;
-        bh=ymAvndbR0zQBZ6PsdI4dsyg00gB/daFooEXzShbNbkg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QfXy7i3h/S4AMm/V50YZvXkbkgHGS0OQgQSl3FvJSMnTDRY9r+2CoP4rO2a6i1KEY
-         15njbA+8IGDM05DKS40WHUPK/500Wx2km6asQMi43djGyDeOEGge9wFGz14g+xlYJw
-         JjXjbATQYp8rw+s2EYVi7wp+nxis0cCLnGVGmuPkzihslp5e2+q8YhpD6vWZPtM3jd
-         o91pxsM80t05TYKLs7SVihntiUzNl+jNIgYND7d3PGVtSm2960iL2Ee7Cqnj3Xr9E3
-         OvZsZrOIr4HdSTNXrNZK1APjkWTClXIaJz/T2lOGxx/hCoaJhrW8aUeSKd/nRujT/E
-         BFybPr4z80fWA==
-Date:   Thu, 22 Jun 2023 17:19:31 +0200
-From:   Boris Brezillon <boris.brezillon@collabora.com>
-To:     Danilo Krummrich <dakr@redhat.com>
-Cc:     matthew.brost@intel.com, airlied@gmail.com, daniel@ffwll.ch,
-        tzimmermann@suse.de, mripard@kernel.org, corbet@lwn.net,
-        christian.koenig@amd.com, bskeggs@redhat.com,
-        Liam.Howlett@oracle.com, alexdeucher@gmail.com, ogabbay@kernel.org,
-        bagasdotme@gmail.com, willy@infradead.org, jason@jlekstrand.net,
-        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH drm-next v5 00/14] [RFC] DRM GPUVA Manager & Nouveau
- VM_BIND UAPI
-Message-ID: <20230622171931.1c46f745@collabora.com>
-In-Reply-To: <b04b3dbb-0509-fec1-4e8e-90f724443836@redhat.com>
-References: <20230620004217.4700-1-dakr@redhat.com>
-        <20230620112540.19142ef3@collabora.com>
-        <94adfd82-e77d-f99c-1d94-8b6397d39310@redhat.com>
-        <20230622150101.229391e5@collabora.com>
-        <b04b3dbb-0509-fec1-4e8e-90f724443836@redhat.com>
-Organization: Collabora
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Thu, 22 Jun 2023 11:21:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50F1E75
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 08:20:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687447225;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=GMA8wGndW1W3qKjciAhlPaH569xG8UzR5aTyG8RbL8A=;
+        b=cHFcmLEBlty9JjwmgRO0OtBC9USxDgIL4yHrEIlhsArSeAFFwiag+AIwYlM/D/8FvR74oN
+        DhksVPo+PLkgpeoB8VpMnAGuQDC811bbZOL4j2elitPYCK6RGa0b/gAOojcz8+pLHFLOQC
+        PXlMU0s6trmRxFxq7OmJb4LlH5Nxya8=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-437-t34ytYsHPmKAG7dgdJZmLQ-1; Thu, 22 Jun 2023 11:20:23 -0400
+X-MC-Unique: t34ytYsHPmKAG7dgdJZmLQ-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-76248f3057bso97349685a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 08:20:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687447222; x=1690039222;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GMA8wGndW1W3qKjciAhlPaH569xG8UzR5aTyG8RbL8A=;
+        b=TuWQQ+vMMHAI9gFzB7OjOR91SRVq1lIdp3e6LMWibURu6IpbDm1Gk8GcLbBa1SiwWi
+         luIJ+iRczXFQxQCRDbDLuyHFHiu1ylBMFwPm0QwLOdzTRhb2AbLq+mFETbuqLFjcSLB8
+         9ktlHt8Cf0kwVwSzh9ya6vxe1DZo11smxFhohYY98YucaOjMzCZranDVWcPbGEhUhlwA
+         3DcwHxzDM1mxZF7dOI++wmFkxS8jFOS1QCeRMFuoqgwz27h+hzzzcqwRXTBBenVR94BR
+         Ex/0ZMOPHdBKeYjyFS06f4MiqXAm7UmE9Twp1/kpBLcR7kVe06L5nY6MegTvErAbHD29
+         WGCQ==
+X-Gm-Message-State: AC+VfDzSf5CzfMCnTDlSKZZGT4wPUKEdZtTBH4tp57J+R+NM6AJTV6yG
+        h8Ssgc1DMEDO2jQ/gptA5mEJPqROzjOi3VVN2qcZzfAUI+b4ExFjaCKtRHs3HP0D4h/spFaqbuj
+        gE7TBhbS//5Go0WQMFw8A5JODxkTPUgUsygbcfX/lhUDPRqrZqE2QdVtCaG1n9HBu5UYUaAbsjS
+        XGoWy8pJE=
+X-Received: by 2002:a05:622a:1b8c:b0:3fd:def0:57fb with SMTP id bp12-20020a05622a1b8c00b003fddef057fbmr22153329qtb.6.1687447221716;
+        Thu, 22 Jun 2023 08:20:21 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7bOzGejNL9heS5tg9yZzKLbqW+z4bcegBQgxfOE33k3iRU6uDJF1Thh4gS9a3ffxTuKXKluQ==
+X-Received: by 2002:a05:622a:1b8c:b0:3fd:def0:57fb with SMTP id bp12-20020a05622a1b8c00b003fddef057fbmr22153311qtb.6.1687447221348;
+        Thu, 22 Jun 2023 08:20:21 -0700 (PDT)
+Received: from kherbst.pingu (ip5f5a301e.dynamic.kabel-deutschland.de. [95.90.48.30])
+        by smtp.gmail.com with ESMTPSA id bp20-20020a05622a1b9400b003ff251b17c8sm3701072qtb.10.2023.06.22.08.20.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 08:20:20 -0700 (PDT)
+From:   Karol Herbst <kherbst@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Karol Herbst <kherbst@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@gmail.com>,
+        nouveau@lists.freedesktop.org, stable@vger.kernel.org
+Subject: [PATCH v2] drm/nouveau/gr: enable memory loads on helper invocation on all channels
+Date:   Thu, 22 Jun 2023 17:20:17 +0200
+Message-ID: <20230622152017.2512101-1-kherbst@redhat.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Danilo,
+We have a lurking bug where Fragment Shader Helper Invocations can't load
+from memory. But this is actually required in OpenGL and is causing random
+hangs or failures in random shaders.
 
-On Thu, 22 Jun 2023 15:58:23 +0200
-Danilo Krummrich <dakr@redhat.com> wrote:
+It is unknown how widespread this issue is, but shaders hitting this can
+end up with infinite loops.
 
-> Hi Boris,
-> 
-> On 6/22/23 15:01, Boris Brezillon wrote:
-> > Hi Danilo,
-> > 
-> > On Tue, 20 Jun 2023 14:46:07 +0200
-> > Danilo Krummrich <dakr@redhat.com> wrote:
-> >   
-> >>> The only thing I'm worried about is the 'sync mapping requests have to
-> >>> go through the async path and wait for all previous async requests to
-> >>> be processed' problem I mentioned in one of your previous submission,
-> >>> but I'm happy leave that for later.  
-> >>
-> >> Yes, I'm aware of this limitation.
-> >>
-> >> Let me quickly try to explain where this limitation comes from and how I
-> >> intend to address it.
-> >>
-> >> In order to be able to allocate the required page tables for a mapping
-> >> request and in order to free corresponding page tables once the (async)
-> >> job finished I need to know the corresponding sequence of operations
-> >> (drm_gpuva_ops) to fulfill the mapping request.
-> >>
-> >> This requires me to update the GPUVA space in the ioctl() rather than in
-> >> the async stage, because otherwise I would need to wait for previous
-> >> jobs to finish before being able to submit subsequent jobs to the job
-> >> queue, since I need an up to date view of the GPUVA space in order to
-> >> calculate the sequence of operations to fulfill a mapping request.
-> >>
-> >> As a consequence all jobs need to be processed in the order they were
-> >> submitted, including synchronous jobs.
-> >>
-> >> @Matt: I think you will have the same limitation with synchronous jobs
-> >> as your implementation in XE should be similar?
-> >>
-> >> In order to address it I want to switch to using callbacks rather than
-> >> 'pre-allocated' drm_gpuva_ops and update the GPUVA space within the
-> >> asynchronous stage.
-> >> This would allow me to 'fit' synchronous jobs
-> >> between jobs waiting in the async job queue. However, to do this I have
-> >> to re-work how the page table handling in Nouveau is implemented, since
-> >> this would require me to be able to manage the page tables without
-> >> knowing the exact sequence of operations to fulfill a mapping request.  
-> > 
-> > Ok, so I think that's more or less what we're trying to do right
-> > now in PowerVR.
-> > 
-> > - First, we make sure we reserve enough MMU page tables for a given map
-> >    operation to succeed no matter the VM state in the VM_BIND job
-> >    submission path (our VM_BIND ioctl). That means we're always
-> >    over-provisioning and returning unused memory back when the operation
-> >    is done if we end up using less memory.
-> > - We pre-allocate for the mapple-tree insertions.
-> > - Then we map using drm_gpuva_sm_map() and the callbacks we provided in
-> >    the drm_sched::run_job() path. We guarantee that no memory is
-> >    allocated in that path thanks to the pre-allocation/reservation we've
-> >    done at VM_BIND job submission time.
-> > 
-> > The problem I see with this v5 is that:
-> > 
-> > 1/ We now have a dma_resv_lock_held() in drm_gpuva_{link,unlink}(),
-> >     which, in our case, is called in the async drm_sched::run_job() path,
-> >     and we don't hold the lock in that path (it's been released just
-> >     after the job submission).  
-> 
-> My solution to this, as by now, is to - in the same way we pre-allocate 
-> - to just pre-link and pre-unlink. And then fix things up in the cleanup 
-> path.
-> 
-> However, depending on the driver, this might require you to set a flag 
-> in the driver specific structure (embedding struct drm_gpuva) whether 
-> the gpuva is actually mapped (as in has active page table entries). 
-> Maybe we could also just add such a flag to struct drm_gpuva. But yeah, 
-> doesn't sound too nice to be honest...
-> 
-> > 2/ I'm worried that Liam's plan to only reserve what's actually needed
-> >     based on the mapple tree state is going to play against us, because
-> >     the mapple-tree is only modified at job exec time, and we might have
-> >     several unmaps happening between the moment we created and queued the
-> >     jobs, and the moment they actually get executed, meaning the
-> >     mapple-tree reservation might no longer fit the bill.  
-> 
-> Yes, I'm aware and I explained to Liam in detail why we need the 
-> mas_preallocate_worst_case() way of doing it.
-> 
-> See this mail: 
-> https://lore.kernel.org/nouveau/68cd25de-e767-725e-2e7b-703217230bb0@redhat.com/T/#ma326e200b1de1e3c9df4e9fcb3bf243061fee8b5
-> 
-> He hasn't answered yet, but I hope we can just get (or actually keep) 
-> such a function (hopefully with better naming), since it shouldn't 
-> interfere with anything else.
+We enable those only on all Kepler and newer GPUs where we use our own
+Firmware.
 
-My bad, I started reading your reply and got interrupted. Never got
-back to it, which I should definitely have done before posting my
-questions. Anyway, glad to hear we're on the same page regarding the
-mas_preallocate_worst_case() thing.
+Nvidia's firmware provides a way to set a kernelspace controlled list of
+mmio registers in the gr space from push buffers via MME macros.
 
-> 
-> > 
-> > For issue #1, it shouldn't be to problematic if we use a regular lock to
-> > insert to/remove from the GEM gpuva list.  
-> 
-> Yes, that's why I had a separate GEM gpuva list lock in the first place. 
-> However, this doesn't really work when generating ops rather than using 
-> the callback interface.
-> 
-> Have a look at drm_gpuva_gem_unmap_ops_create() requested by Matt for 
-> XE. This function generates drm_gpuva_ops to unmap all mappings of a 
-> given GEM. In order to do that the function must iterate the GEM's gpuva 
-> list and allocate operations for each mapping. As a consequence the 
-> gpuva list lock wouldn't be allowed to be taken in the fence signalling 
-> path (run_job()) any longer. Hence, we can just protect the list with 
-> the GEM's dma-resv lock.
+v2: drop code for gm200 and newer.
 
-Yeah, I see why using dma_resv when pre-inserting the mapping is
-useful, it just didn't really work with late mapping insertion.
+Cc: Ben Skeggs <bskeggs@redhat.com>
+Cc: David Airlie <airlied@gmail.com>
+Cc: nouveau@lists.freedesktop.org
+Cc: stable@vger.kernel.org
+Signed-off-by: Karol Herbst <kherbst@redhat.com>
+---
+ drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgf100.h  |  1 +
+ drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk104.c  |  4 +++-
+ drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk110.c  | 10 ++++++++++
+ drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk110b.c |  1 +
+ drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk208.c  |  1 +
+ drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgm107.c  |  1 +
+ 6 files changed, 17 insertions(+), 1 deletion(-)
 
-> 
-> However, I can understand that it might be inconvenient for the callback 
-> interface and admittedly my solution to that isn't that nice as well. 
-> Hence the following idea:
-> 
-> For drivers to be able to use their own lock for that it would be enough 
-> to get rid of the lockdep checks. We could just add a flag to the GPUVA 
-> manager to let the driver indicate it wants to do it's own locking for 
-> the GPUVA list and skip the lockdep checks for the dma-resv lock in that 
-> case.
+diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgf100.h b/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgf100.h
+index 00dbeda7e346..de161e7a04aa 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgf100.h
++++ b/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgf100.h
+@@ -117,6 +117,7 @@ void gk104_grctx_generate_r418800(struct gf100_gr *);
+ 
+ extern const struct gf100_grctx_func gk110_grctx;
+ void gk110_grctx_generate_r419eb0(struct gf100_gr *);
++void gk110_grctx_generate_r419f78(struct gf100_gr *);
+ 
+ extern const struct gf100_grctx_func gk110b_grctx;
+ extern const struct gf100_grctx_func gk208_grctx;
+diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk104.c b/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk104.c
+index 94233d0119df..52a234b1ef01 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk104.c
++++ b/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk104.c
+@@ -906,7 +906,9 @@ static void
+ gk104_grctx_generate_r419f78(struct gf100_gr *gr)
+ {
+ 	struct nvkm_device *device = gr->base.engine.subdev.device;
+-	nvkm_mask(device, 0x419f78, 0x00000001, 0x00000000);
++
++	/* bit 3 set disables loads in fp helper invocations, we need it enabled */
++	nvkm_mask(device, 0x419f78, 0x00000009, 0x00000000);
+ }
+ 
+ void
+diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk110.c b/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk110.c
+index 4391458e1fb2..3acdd9eeb74a 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk110.c
++++ b/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk110.c
+@@ -820,6 +820,15 @@ gk110_grctx_generate_r419eb0(struct gf100_gr *gr)
+ 	nvkm_mask(device, 0x419eb0, 0x00001000, 0x00001000);
+ }
+ 
++void
++gk110_grctx_generate_r419f78(struct gf100_gr *gr)
++{
++	struct nvkm_device *device = gr->base.engine.subdev.device;
++
++	/* bit 3 set disables loads in fp helper invocations, we need it enabled */
++	nvkm_mask(device, 0x419f78, 0x00000008, 0x00000000);
++}
++
+ const struct gf100_grctx_func
+ gk110_grctx = {
+ 	.main  = gf100_grctx_generate_main,
+@@ -854,4 +863,5 @@ gk110_grctx = {
+ 	.gpc_tpc_nr = gk104_grctx_generate_gpc_tpc_nr,
+ 	.r418800 = gk104_grctx_generate_r418800,
+ 	.r419eb0 = gk110_grctx_generate_r419eb0,
++	.r419f78 = gk110_grctx_generate_r419f78,
+ };
+diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk110b.c b/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk110b.c
+index 7b9a34f9ec3c..5597e87624ac 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk110b.c
++++ b/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk110b.c
+@@ -103,4 +103,5 @@ gk110b_grctx = {
+ 	.gpc_tpc_nr = gk104_grctx_generate_gpc_tpc_nr,
+ 	.r418800 = gk104_grctx_generate_r418800,
+ 	.r419eb0 = gk110_grctx_generate_r419eb0,
++	.r419f78 = gk110_grctx_generate_r419f78,
+ };
+diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk208.c b/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk208.c
+index c78d07a8bb7d..612656496541 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk208.c
++++ b/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgk208.c
+@@ -568,4 +568,5 @@ gk208_grctx = {
+ 	.dist_skip_table = gf117_grctx_generate_dist_skip_table,
+ 	.gpc_tpc_nr = gk104_grctx_generate_gpc_tpc_nr,
+ 	.r418800 = gk104_grctx_generate_r418800,
++	.r419f78 = gk110_grctx_generate_r419f78,
+ };
+diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgm107.c b/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgm107.c
+index beac66eb2a80..9906974ac3f0 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgm107.c
++++ b/drivers/gpu/drm/nouveau/nvkm/engine/gr/ctxgm107.c
+@@ -988,4 +988,5 @@ gm107_grctx = {
+ 	.r406500 = gm107_grctx_generate_r406500,
+ 	.gpc_tpc_nr = gk104_grctx_generate_gpc_tpc_nr,
+ 	.r419e00 = gm107_grctx_generate_r419e00,
++	.r419f78 = gk110_grctx_generate_r419f78,
+ };
+-- 
+2.41.0
 
-Sounds good to me.
-
-> 
-> > 
-> > For issue #2, I can see a way out if, instead of freeing gpuva nodes,
-> > we flag those as unused when we see that something happening later in
-> > the queue is going to map a section being unmapped. All of this implies
-> > keeping access to already queued VM_BIND jobs (using the spsc queue at
-> > the entity level is not practical), and iterating over them every time
-> > a new sync or async job is queued to flag what needs to be retained. It
-> > would obviously be easier if we could tell the mapple-tree API
-> > 'provision as if the tree was empty', so all we have to do is just
-> > over-provision for both the page tables and mapple-tree insertion, and
-> > free the unused mem when the operation is done.
-> > 
-> > Don't know if you already thought about that and/or have solutions to
-> > solve these issues.  
-> 
-> As already mentioned above, I'd just expect we can keep it the 
-> over-provision way, as you say. I think it's a legit use case to not 
-> know the state of the maple tree at the time the pre-allocated nodes 
-> will be used and keeping that should not interfere with Liams plan to 
-> (hopefully separately) optimize for the pre-allocation use case they 
-> have within -mm.
-> 
-> But let's wait for his take on that.
-
-Sure. As I said, I'm fine getting this version merged, we can sort out
-the changes needed for PowerVR later. Just thought I'd mention those
-issues early, so you're not surprised when we come back with crazy
-requests (which apparently are not that crazy ;-)).
-
-Regards,
-
-Boris
