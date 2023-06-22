@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE1273A5B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 18:10:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C04F73A5CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 18:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbjFVQKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 12:10:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50430 "EHLO
+        id S229765AbjFVQOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 12:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230459AbjFVQKP (ORCPT
+        with ESMTP id S229561AbjFVQOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 12:10:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4271FC2;
-        Thu, 22 Jun 2023 09:10:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2103B618BB;
-        Thu, 22 Jun 2023 16:10:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8138C433C8;
-        Thu, 22 Jun 2023 16:10:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687450204;
-        bh=xLyXvexgDPhNaQNSn+EFSDO6E/yJrPCxAprammFlvbQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BnXgHjpi2MOfptfmTAtE/YPjGIuBTYzlKRUp7fENW/t9oQhN2Xrrt73Twhx75Hn7C
-         gr4CxvjVQBjaREfgJZ5Nef/HZ4D3NIdLzoJf0HgA8jE1lsD3372UNRGhhtBy5ZqDvv
-         A7jW+W2Xlc2fbpFJvEfeBL4UEM8NxIgJSRpd7iGc=
-Date:   Thu, 22 Jun 2023 18:10:00 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Breno Leitao <leitao@debian.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, leit@meta.com,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steve French <stfrench@microsoft.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Simon Ser <contact@emersion.fr>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:IO_URING" <io-uring@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
-Subject: Re: [PATCH] io_uring: Add io_uring command support for sockets
-Message-ID: <2023062208-animosity-squabble-c1ba@gregkh>
-References: <20230621232129.3776944-1-leitao@debian.org>
- <2023062231-tasting-stranger-8882@gregkh>
- <ZJRijTDv5lUsVo+j@gmail.com>
+        Thu, 22 Jun 2023 12:14:20 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF3B8199E
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 09:14:19 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1b549e81cecso26572985ad.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 09:14:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687450459; x=1690042459;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=i0FbDlfDxURlDXYEi38TcdTGclJW1LEzUZRr4Kw0XLs=;
+        b=Np1jwQwnFpdlbUFnPpVBOrewXW9ExPYci8ShZZuNUoVBC34MoYoQUfl6IgqkDQsROF
+         fuIWNovw4cWxSRsatLQDzkvKDjAbJ955QSnMG8OguGnASNGAsMHTE6/ZHKcFoJ6OKsGL
+         246YVXImIzEFM1e2snp3uvUAqWpk5yS3aVSPA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687450459; x=1690042459;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i0FbDlfDxURlDXYEi38TcdTGclJW1LEzUZRr4Kw0XLs=;
+        b=LAkiGHpQ9jl9nkkyxR+YUz1golVjMOQ6Y5c4rAT7kAPqq9s4Zfh52TNlh4CEoy7TTs
+         pBHD1G5O1cMSY1Oha5njpmkP4tMLEgjFAKdlhLH+o4b6c/+iiyNf8aA1nMIz2OHV2yyt
+         uSKsr8ucNOR0GM0cHvWK98U2cijSGjkLyFUP3vLksdL8whM0DGNAujs27viXy+6pZbyv
+         z7sSSwkuzyMPexRlw7De0ZOQRcvL/qf0HQR9tFaEqp5tOa6IA5e1ZT/DaQm1t95kynqj
+         S0/CW+9F5V90tqO/q9D3+nfG5Hxavw2bXF/fpHAbNbgyjGxek/PMuuMXS/t9yg3qWbiT
+         dkyA==
+X-Gm-Message-State: AC+VfDxDzazZ298ExG4aDuHo2Rf9woGL92Ocsbk1UDD5QssqbmPF/vYF
+        MElclDfdWgpVhlaZvNy/otyZDw==
+X-Google-Smtp-Source: ACHHUZ52inhU/E+BWcOqnh7p9sHYuGDBp27alNqN8E/eV6LbwF4dxbHIyl2TQzURk0xaAmIq45BYbg==
+X-Received: by 2002:a17:903:18e:b0:1ae:4c3b:bb0b with SMTP id z14-20020a170903018e00b001ae4c3bbb0bmr12964602plg.5.1687450459311;
+        Thu, 22 Jun 2023 09:14:19 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id w1-20020a170902e88100b001b55aab3301sm5588503plg.130.2023.06.22.09.14.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 09:14:18 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 09:14:17 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, alyssa.milburn@linux.intel.com,
+        linux-kernel@vger.kernel.org, samitolvanen@google.com,
+        jpoimboe@kernel.org, joao@overdrivepizza.com, brgerst@gmail.com
+Subject: Re: [PATCH v2 0/6] x86/cfi: Fix FineIBT
+Message-ID: <202306220913.2482F76F@keescook>
+References: <20230622144218.860926475@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZJRijTDv5lUsVo+j@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230622144218.860926475@infradead.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,55 +69,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 08:02:37AM -0700, Breno Leitao wrote:
-> On Thu, Jun 22, 2023 at 07:20:48AM +0200, Greg Kroah-Hartman wrote:
-> > On Wed, Jun 21, 2023 at 04:21:26PM -0700, Breno Leitao wrote:
-> > > Enable io_uring commands on network sockets. Create two new
-> > > SOCKET_URING_OP commands that will operate on sockets. Since these
-> > > commands are similar to ioctl, uses the _IO{R,W} helpers to embedded the
-> > > argument size and operation direction. Also allocates a unused ioctl
-> > > chunk for uring command usage.
-> > > 
-> > > In order to call ioctl on sockets, use the file_operations->uring_cmd
-> > > callbacks, and map it to a uring socket function, which handles the
-> > > SOCKET_URING_OP accordingly, and calls socket ioctls.
-> > > 
-> > > This patches was tested by creating a new test case in liburing.
-> > > Link: https://github.com/leitao/liburing/commit/3340908b742c6a26f662a0679c4ddf9df84ef431
-> > > 
-> > > Signed-off-by: Breno Leitao <leitao@debian.org>
-> > > ---
-> > 
-> > Isn't this a new version of an older patch?
+On Thu, Jun 22, 2023 at 04:42:18PM +0200, Peter Zijlstra wrote:
+> Alyssa reported a FineIBT issue (patch 6) which led to the discovery of
+> a kCFI issue (patch 5) and a bunch of cleanups and enhancements (the
+> rest).
 > 
-> Yes, this should have tagged as V2.
+> Backports can probably suffice with just the last two.
 > 
-> [1] https://lore.kernel.org/lkml/20230406144330.1932798-1-leitao@debian.org/#r
-
-Great, also add what changed below the --- line please.
-
-> > > --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
-> > > +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
-> > > @@ -361,6 +361,7 @@ Code  Seq#    Include File                                           Comments
-> > >  0xCB  00-1F                                                          CBM serial IEC bus in development:
-> > >                                                                       <mailto:michael.klein@puffin.lb.shuttle.de>
-> > >  0xCC  00-0F  drivers/misc/ibmvmc.h                                   pseries VMC driver
-> > > +0xCC  A0-BF  uapi/linux/io_uring.h                                   io_uring cmd subsystem
-> > 
-> > This change is nice, but not totally related to this specific one,
-> > shouldn't it be separate?
+> Much thanks to Brian for the better ret_from_fork() cleanup.
 > 
-> This is related to this patch, since I am using it below, in the
-> following part:
-> 
-> 	+#define SOCKET_URING_OP_SIOCINQ _IOR(0xcc, 0xa0, int)
-> 	+#define SOCKET_URING_OP_SIOCOUTQ _IOR(0xcc, 0xa1, int)
-> 
-> Should I have a different patch, even if they are related?
+> Tested using llvm-16 on an Alderlake with both FineIBT and kCFI.
 
-Yes, as you are not using the 0xa2-0xbf range that you just carved out
-here, right?  Where did those numbers come from?
+Thanks! This looks really nice. For the series:
 
-thanks,
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-greg k-h
+-- 
+Kees Cook
