@@ -2,72 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A8FA73A37D
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28B0773A384
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbjFVOrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 10:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52880 "EHLO
+        id S231767AbjFVOsB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 10:48:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230317AbjFVOq7 (ORCPT
+        with ESMTP id S231775AbjFVOrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 10:46:59 -0400
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CD9212C;
-        Thu, 22 Jun 2023 07:46:31 -0700 (PDT)
-Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-3420b22365fso33473465ab.1;
-        Thu, 22 Jun 2023 07:46:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687445190; x=1690037190;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jMBFysAIHtFf8K9nvyV9q2jbJEw4yuc6x8Rv0sjnvNI=;
-        b=jbe1P46BTir007qo3wcuGXiAV8f6xIuhVP3RTffNrdpYnTJV+FgjiwXpyTP8mW6D74
-         ivRvuAGlYjgsIkXqF7AlpS009+zXSAt3adPYOeV36xxdGL0taY/Wv8BcK5oToNWx3Dx6
-         nZP27M9CWaAHmuuHSV1fAqOSdU1eN3LS59SvLc2zlDEKm2hnA3VYcwkpmWN1N7fVtYbq
-         LXEBgnRHIcnjOv8HT8vRsti+lunMPJP1mMH6mnRY4qkL/l18vDMijFaNmjyzg0zyb7ts
-         Yp0Rw5z24wgLbTw1Eaq7Ysp0kPvR7vbL6cd2ggYLL63r0jmzTz17o902IK35hCyE1j+s
-         fyAg==
-X-Gm-Message-State: AC+VfDwA1Y5s2gzsa35qWHgajIBk4Mn3+bJNKxMC7PrnqUpsJ5ASZEcq
-        Ljo3Glp+SBo+ACrwNxh1JA==
-X-Google-Smtp-Source: ACHHUZ5T5ZwrQRIEi6+5DfyEG/ByZLrf2TzL/S8CzsTEPJIpIhLW1p4vaatqGIe+MUsMU+lOLlZ3HQ==
-X-Received: by 2002:a05:6e02:5c5:b0:339:f011:77f5 with SMTP id l5-20020a056e0205c500b00339f01177f5mr18727841ils.12.1687445190529;
-        Thu, 22 Jun 2023 07:46:30 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.250])
-        by smtp.gmail.com with ESMTPSA id m10-20020a92d70a000000b0034221d8a8dbsm2030492iln.71.2023.06.22.07.46.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 07:46:29 -0700 (PDT)
-Received: (nullmailer pid 1678247 invoked by uid 1000);
-        Thu, 22 Jun 2023 14:46:27 -0000
-Date:   Thu, 22 Jun 2023 08:46:27 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        vkoul@kernel.org, kishon@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        gregkh@linuxfoundation.org, catalin.marinas@arm.com,
-        will@kernel.org, p.zabel@pengutronix.de, arnd@arndb.de,
-        geert+renesas@glider.be, neil.armstrong@linaro.org,
-        nfraprado@collabora.com, broonie@kernel.org, rafal@milecki.pl,
-        quic_srichara@quicinc.com, quic_varada@quicinc.org,
-        quic_wcheng@quicinc.com, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 2/6] dt-bindings: phy: qcom,m31: Document qcom,m31 USB
- phy
-Message-ID: <20230622144627.GA1672260-robh@kernel.org>
-References: <cover.1687414716.git.quic_varada@quicinc.com>
- <4f4136a91b24d3ad35fa12bd19fe14b83da9affe.1687414716.git.quic_varada@quicinc.com>
+        Thu, 22 Jun 2023 10:47:53 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290D019B7;
+        Thu, 22 Jun 2023 07:47:53 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35MBsGtf000857;
+        Thu, 22 Jun 2023 14:47:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=b2UBZuHskh15s+DurO9NcN4i7Jbj0PA/9fZzBou2Cu4=;
+ b=KGkf/CvFf6W0EfWPmxcJPggyxu3m6KmvnUDYocqkLfGFT5Vi0CHovMjdQMgdXmXfJAOj
+ KCwyEDmfKV3vyvsp4EIBunOAGF64/6J8ZINdrcKx6j87GAPQzKo08CFNmB2T1Iae2cxr
+ qkFQITf6oODUPajPdk6kUIEit5CjC7THd1GTd7k+cc7bF43Pm9VEEup2bv/fb+OCjmTq
+ KDvHnr1Q3XhEU567KpLWW9nuks53P/M6I92qCSgR5NRpM/vCswg3o/7mF0w2D0XRk/tO
+ OeCJljKI5bJDCWAW0b8BPCsU6yR80TUioh298fhnT7miaJ4/1ueB+rx/ivtIT8OWVsKT SA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rc359jt40-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 14:47:23 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35MElI1G030070
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 14:47:19 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 22 Jun
+ 2023 07:47:17 -0700
+Message-ID: <c5be82d0-c1bb-a447-a6c9-33e4e65f7c1f@quicinc.com>
+Date:   Thu, 22 Jun 2023 08:47:16 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4f4136a91b24d3ad35fa12bd19fe14b83da9affe.1687414716.git.quic_varada@quicinc.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 2/9] dt-bindings: clock: qcom,mmcc: Add GPLL0_DIV for
+ MSM8998
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>
+CC:     Marijn Suijten <marijn.suijten@somainline.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230622-topic-8998clk-v1-0-5b7a0d6e98b1@linaro.org>
+ <20230622-topic-8998clk-v1-2-5b7a0d6e98b1@linaro.org>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20230622-topic-8998clk-v1-2-5b7a0d6e98b1@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: MVPTnqiCj0s2FOsc0Hi24gCohzADQsG7
+X-Proofpoint-ORIG-GUID: MVPTnqiCj0s2FOsc0Hi24gCohzADQsG7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-22_10,2023-06-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 bulkscore=0 mlxscore=0 malwarescore=0 mlxlogscore=822
+ spamscore=0 impostorscore=0 clxscore=1015 phishscore=0 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306220125
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,103 +90,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 11:52:09AM +0530, Varadarajan Narayanan wrote:
-> Document the M31 USB2 phy present in IPQ5332.
+On 6/22/2023 5:57 AM, Konrad Dybcio wrote:
+> We've not been consuming that clock for no apparent reason. Describe it.
 > 
-> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
-> v1:
-> 	Rename qcom,m31.yaml -> qcom,ipq5332-usb-hsphy.yaml
-> 	Drop default binding "m31,usb-hsphy"
-> 	Add clock
-> 	Remove 'oneOf' from compatible
-> 	Remove 'qscratch' region from register space as it is not needed
-> 	Remove reset-names
-> 	Fix the example definition
-> ---
->  .../bindings/phy/qcom,ipq5332-usb-hsphy.yaml       | 51 ++++++++++++++++++++++
->  1 file changed, 51 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml b/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml
-> new file mode 100644
-> index 0000000..ab2e945
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/qcom,ipq5332-usb-hsphy.yaml
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/qcom,ipq5332-usb-hsphy.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: M31 (https://www.m31tech.com) USB PHY
 
-Put the URL in 'description'.
+Nice catch.
 
-> +
-> +maintainers:
-> +  - Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> +  - Varadarajan Narayanan <quic_varada@quicinc.org>
-
-.org? It's .com everywhere else.
-
-> +
-> +description:
-> +  USB M31 PHY found in Qualcomm IPQ5018, IPQ5332 SoCs.
-
-Where's the IPQ5018 compatible?
-
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - qcom,ipq5332-usb-hsphy
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  clock-names:
-> +    maxItems: 1
-> +    contains:
-
-'contains' is not appropriate here. Drop.
-> +      items:
-> +        - const: cfg_ahb
-
-Don't need both items list and maxItems. Really, you don't need 
-'clock-names' at all because there is only 1 clock.
-
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/qcom,ipq5332-gcc.h>
-> +    usbphy0: ipq5332-hsphy@7b000 {
-
-Drop unused labels.
-
-> +    	compatible = "qcom,ipq5332-usb-hsphy";
-> +    	reg = <0x0007b000 0x12c>;
-> +
-> +    	clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>;
-> +    	clock-names = "cfg_ahb";
-> +
-> +    	resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
-
-Whitespace errors in here.
-
-> +    };
-> +
-> -- 
-> 2.7.4
-> 
+Acked-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
