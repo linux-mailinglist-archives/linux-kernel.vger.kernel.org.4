@@ -2,100 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351E67395A6
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 04:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9AE37395AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 05:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbjFVC5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 22:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
+        id S229974AbjFVDBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 23:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229784AbjFVC5u (ORCPT
+        with ESMTP id S229595AbjFVDB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 22:57:50 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B172C171C;
-        Wed, 21 Jun 2023 19:57:48 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-54f75f85a17so3608421a12.0;
-        Wed, 21 Jun 2023 19:57:48 -0700 (PDT)
+        Wed, 21 Jun 2023 23:01:26 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E535E171C;
+        Wed, 21 Jun 2023 20:01:25 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b512309d18so35498875ad.3;
+        Wed, 21 Jun 2023 20:01:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687402668; x=1689994668;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=baRINIxlSWtAcWNB0GnBkwJVhbIeRDHzK+M6uQUBCxY=;
-        b=UiHan2d1ePk+GkYMfi1riVe8TWvV+IgmOiBYEV+MdEsZRGhtYq2xL3blysO644ApQb
-         8sgv7LM2MzIRD9tu9zok8gypjqlwkaTtx4cg4r2cjrmUcwuPeos5IIpMYU2K2M5sd3Tu
-         7/4wuBrUr47rVeE6FJtglmeIx+ZbX2HEd4JRWGe1GMEYnJPuoHfgTfkmvDgb9tBlx+2j
-         4aIobbKx5Xa1vnBaQb5C+SXxzdxkQ7Bc1zisrRQ7gXInIamZSIhcFL25pU7iy3ym2z6k
-         D51wqdh4F6C6yFYvFyrwRuq5kG2t4v8MDzV6gwCpm0R9t1gj0YH1F8lgZPapEOLCsnUN
-         7aKA==
+        d=gmail.com; s=20221208; t=1687402885; x=1689994885;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=D/ohZ8gW5mbp6/IBtkD8r/oSawNtp6lcTXgmllygMQo=;
+        b=KOhlP+tvcjZI//qQeKRbgVYdFUKFXwlPIXoZxxhXZxDbAH0jW+KMnGDGw0INZeKvua
+         aEf0+j8ehlGypsvZQ5PiJuhwAx8rAW2oWthq4h7o7dbvVES09PRy6UdBelZUyN0KcveF
+         rbJrFiM0YRWuvcRbCMgXrFl/uKafmcVKx9vFCntFbhSFUyty+JOJBUk6TC9Ncp3bslbH
+         lpnoKwRfNRvjo0EsVxjK9ZoZcf9YniWVPJXKnxAbq+TBuXWDl7SuvTwkxnkASGxYLBxR
+         0LbxY/QnmOUQ6hd3gNtAHsT5jj/MGchcYtzK+tsibgtPpoYcR8CRi6IVcNz/AhhWXTBy
+         djfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687402668; x=1689994668;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1687402885; x=1689994885;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=baRINIxlSWtAcWNB0GnBkwJVhbIeRDHzK+M6uQUBCxY=;
-        b=BfOuVSAOxbIjzu2KFt2aQjAv8zjyz3tqlrTuPRU/Al4n70hKpjM8XIW15udzQCDDqj
-         HqPMo+Uz9EF2OBa9QKUxLiWWnsy8ZbTm4/MkMKj6A7wQuC37QFybwVNON3HzCA3TCeRO
-         N5Mvr4WAea+ISWmalJ1VklZGcZiBg3NWHMp1TNkiVDKxL9FWFlLqXtzKhF62Es7N3BlU
-         qQzKlxaXFYHpufdZwiVEIwDoGJoAFlaXnWxgRggMf9q9TJuhQaO7OzIXjVZ4ISZcBB6e
-         0BDbeu1fi1+k6GOxpsH77waH7uF5P6tx6oR5b6XiKTNbMPYPHVeopi5sXjUPttq/LMie
-         tFvw==
-X-Gm-Message-State: AC+VfDx1+pN5q2wnw6R2jIvMwnIgkLwzkvUf/c+F/fUfMgYNirhlgyJw
-        q0mnC5cAP+xI7nM0PU+msKWMUuLwo9t6UpfVdAk=
-X-Google-Smtp-Source: ACHHUZ5WmLGa0KabM5PrJGqArh26LKaN/KvGk3iNwbGJKvW2iChEEaIElSh9lOhtptkWEdlzaNwpaA==
-X-Received: by 2002:a05:6a20:394a:b0:121:b1fc:1a48 with SMTP id r10-20020a056a20394a00b00121b1fc1a48mr9291508pzg.3.1687402668160;
-        Wed, 21 Jun 2023 19:57:48 -0700 (PDT)
-Received: from localhost.localdomain ([113.66.180.22])
-        by smtp.gmail.com with ESMTPSA id h8-20020a170902b94800b001ac444fd07fsm4154020pls.100.2023.06.21.19.57.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 19:57:47 -0700 (PDT)
-From:   Guiting Shen <aarongt.shen@gmail.com>
-To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
-        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-        claudiu.beznea@microchip.com
-Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Guiting Shen <aarongt.shen@gmail.com>
-Subject: [PATCH] usb: ohci-at91: Fix the unhandle interrupt when resume
-Date:   Thu, 22 Jun 2023 10:57:39 +0800
-Message-Id: <20230622025739.13934-1-aarongt.shen@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=D/ohZ8gW5mbp6/IBtkD8r/oSawNtp6lcTXgmllygMQo=;
+        b=BkaiULak+wfu6X5RKYDjFqYPlsk8J6w3VLfQr5uTxxjprQf8WSCMIoE7grGhygDuFv
+         qmPihLA57L45t7XygNUdZmMKwyi9kB3xHV45/2NfYOtTq/Ba4QezVzHjoiJfM5PacWXM
+         a3z0fO77ih8kw+sYtcOjKzCQa0xjmpQlaDR5hDjAinW+iTs3aEArjSqjKK0P9qKkRdLF
+         jgsA4lfRIs+oRRmBR5o+04mxuzJLuURajp0l3vUMWMvS2bGBseD1JuYtkG03VKWDQ0iP
+         WZg0i+8N+TBAoInZyY21xOYp1SaCZtweat2Z/ywDmhkCBgMnGl0/mLaD5uqRZesraAMb
+         QYpQ==
+X-Gm-Message-State: AC+VfDwyPry7MWD5quyP3Set40ZlH84FUVnLXtFK4Xb2l0jHmddNc/ku
+        0d7BSrn2MVS3AY+tFZMCL4uipZKJz4g=
+X-Google-Smtp-Source: ACHHUZ5AMtZhQpL4UTMDTbP3cpAMuNUQ3DamGmvDbZEawwuHA1w+JNzKx+l/w+KZRLtaXIjJDQUqdQ==
+X-Received: by 2002:a17:902:8bcc:b0:1b2:450f:9b6 with SMTP id r12-20020a1709028bcc00b001b2450f09b6mr10411709plo.8.1687402885233;
+        Wed, 21 Jun 2023 20:01:25 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id k12-20020a170902694c00b001ae469ca0c0sm4119062plt.245.2023.06.21.20.01.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jun 2023 20:01:24 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <167e83a0-8666-27af-5e2c-4ddda917795a@roeck-us.net>
+Date:   Wed, 21 Jun 2023 20:01:22 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/2] ata: octeon: Add compile test support
+Content-Language: en-US
+To:     Damien Le Moal <dlemoal@kernel.org>, Rob Herring <robh@kernel.org>
+Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-ide@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230614173633.2430653-1-robh@kernel.org>
+ <20230614173633.2430653-2-robh@kernel.org>
+ <23325977-ba37-4360-afb5-4ab38a66107e@roeck-us.net>
+ <feef6589-d0d6-8e64-fefd-914c234dcfba@kernel.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <feef6589-d0d6-8e64-fefd-914c234dcfba@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ohci_hcd_at91_drv_suspend() sets ohci->rh_state to OHCI_RH_HALTED when
-suspend which will let the ohci_irq() skip the interrupt after resume. And
-nobody to handle this interrupt.
+On 6/21/23 17:57, Damien Le Moal wrote:
+> On 6/22/23 01:51, Guenter Roeck wrote:
+>> On Wed, Jun 14, 2023 at 11:36:33AM -0600, Rob Herring wrote:
+>>> Add COMPILE_TEST to enable building Cavium Octeon drivers in MIPS
+>>> allyesconfig/allmodconfig builds. There's a dependency on MIPS headers,
+>>> so other arches can't be enabled.
+>>>
+>>> Signed-off-by: Rob Herring <robh@kernel.org>
+>>> ---
+>>> Tested on allmodconfig build. Not sure if there's other MIPS configs
+>>> where this doesn't work. We'll see what 0-day says.
+>>
+>> Odd, in next-20230621 I get:
+>>
+>> Building mips:allmodconfig ... failed
+> 
+> Indeed odd. Given that this is an allmodconfig, I would assume that
+> CONFIG_CAVIUM_OCTEON_SOC is set ?
+> 
 
-Set the ohci->rh_state to OHCI_RH_SUSPEND instead of OHCI_RH_HALTED when
-suspend to fix it.
+No, it is not. CONFIG_CAVIUM_OCTEON_SOC is a choice option,
+meaning only one of the choices can be set, and mips:allmodconfig
+selects a different choice.
 
-Signed-off-by: Guiting Shen <aarongt.shen@gmail.com>
----
- drivers/usb/host/ohci-at91.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Guenter
 
-diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
-index b9ce8d80f20b..7a970e573668 100644
---- a/drivers/usb/host/ohci-at91.c
-+++ b/drivers/usb/host/ohci-at91.c
-@@ -645,7 +645,7 @@ ohci_hcd_at91_drv_suspend(struct device *dev)
- 	 * REVISIT: some boards will be able to turn VBUS off...
- 	 */
- 	if (!ohci_at91->wakeup) {
--		ohci->rh_state = OHCI_RH_HALTED;
-+		ohci->rh_state = OHCI_RH_SUSPENDED;
- 
- 		/* flush the writes */
- 		(void) ohci_readl (ohci, &ohci->regs->control);
--- 
-2.25.1
+>> --------------
+>> Error log:
+>> ERROR: modpost: "__udivdi3" [drivers/ata/pata_octeon_cf.ko] undefined!
+>> ERROR: modpost: "octeon_get_io_clock_rate" [drivers/ata/pata_octeon_cf.ko] undefined!
+>> ERROR: modpost: "__tracepoint_ata_bmdma_stop" [drivers/ata/pata_octeon_cf.ko] undefined!
+>> ERROR: modpost: "__traceiter_ata_bmdma_stop" [drivers/ata/pata_octeon_cf.ko] undefined!
+>> ERROR: modpost: "__divdi3" [drivers/ata/pata_octeon_cf.ko] undefined!
+>> make[2]: [scripts/Makefile.modpost:144: Module.symvers] Error 1 (ignored)
+>> make[2]: *** No rule to make target 'kernel/locking/locktorture.ko', needed by '__modfinal'.  Stop.
+>> make[1]: [Makefile:1933: modules] Error 2 (ignored)
+>>
+>> Guenter
+> 
 
