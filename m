@@ -2,189 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7578773A70E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB3173A70F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229643AbjFVRRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 13:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51382 "EHLO
+        id S230129AbjFVRRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 13:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjFVRR2 (ORCPT
+        with ESMTP id S230125AbjFVRRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 13:17:28 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF48173F
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:17:27 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-668704a5b5bso4686336b3a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:17:27 -0700 (PDT)
+        Thu, 22 Jun 2023 13:17:46 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6E4A19B4
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:17:42 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3fde9bfb3c8so12371cf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:17:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687454246; x=1690046246;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+caNylAFJnS4RfDuuqPQ5kEyaoWMVveGgJSagPXpK3E=;
-        b=eWwIE86gJ1vNE6oGTJapOZQFT46TllCzUn6zfU2GJowNtlE4ccaAhmjBf1y6GkqZMQ
-         Jav+kIow91KofjqIfAO67sRRofF5Lc3/t38LsiHYAXUYTAxQLN7SFoAttjh96+DhY+FA
-         TxusneS92lYEmaAbHSGHOV5jRmE2njvUR81kooDRK6RS2zHGqhaTZJL5L/TJB3gWpNYs
-         ZRYJ1C/Z1HtyufIbMTq6CSXbOkYWLaSfZEDR1aMWR7EcQKcxtXegPTtDIWhI86ZZ3PEG
-         iaRxBCeSN3cuCMYJsP7PBCYE5qfoQ0qHuUeuhpYPaUmvk9TVOMXrp2Ps+OKItL5slb+c
-         UA/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687454246; x=1690046246;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1687454262; x=1690046262;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+caNylAFJnS4RfDuuqPQ5kEyaoWMVveGgJSagPXpK3E=;
-        b=CzeMnOmZDOBf3Nd2P/PpkAL9RF7Qfo9HVaSARTtySJpgyfOI2EcaLSDifgjrjwEgjt
-         F7X5HmppNzRtijRsT548aV1pXGv2pFHkVSwtPsweVkdWiF1RXTXWiF5vaJHZ5mOX5o3P
-         X9p5k/qS1BfQEUOyx94df7ycevussrL5K6LZ+ewdxXIJsY09aV/2+ACr4mtzCxGtMwqu
-         HabLRy3LRlmGWxKdYqwTG003+7aoPHYUcLHE0rbdv0pY+aRGc8SOpmdku6WBbp8EUMcG
-         3GCVJdwtqhn1/7FB+JW9ZaJOz60vBcZ09AS2LqGwLm9ZADwbCjlDvzVMpMNopn35Ztet
-         qkKQ==
-X-Gm-Message-State: AC+VfDzIiw5rJU5HiXZsilRHumki3pyDWFjhHqNZLpdYoHnVEBay6k0N
-        pZ5lbNVF9XfDBEQwWPeiHSPkTQ==
-X-Google-Smtp-Source: ACHHUZ7q4CWIXONGO3DtA6c8gq+2V5G73vpjcuVPbpvkFAZ173Ft2Wc6ltykzzv7Oo0mrdOFGu+tYA==
-X-Received: by 2002:a05:6a20:7d8b:b0:122:7e50:f71b with SMTP id v11-20020a056a207d8b00b001227e50f71bmr11414744pzj.34.1687454246493;
-        Thu, 22 Jun 2023 10:17:26 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:2d81:4abe:75da:eae])
-        by smtp.gmail.com with ESMTPSA id c11-20020a62e80b000000b00649ac17779csm4780000pfi.160.2023.06.22.10.17.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 10:17:25 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 11:17:22 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v13 00/11] Add support for MT8195 SCP 2nd core
-Message-ID: <ZJSCIhhLTv/pP/HA@p14s>
-References: <20230607072222.8628-1-tinghan.shen@mediatek.com>
- <5a9beeec-5762-c469-6e03-b71babb5f7ed@collabora.com>
+        bh=uWt+gn8qnnsRd4hczLc7upMPaOxgzy9Y94xYvJKUOMY=;
+        b=VUGY7kxb9VHRN6e84rBL9s4O5s181GemwpGZ/csWQatxMgRzcvcXJDAVxcxUzIZg0I
+         H+4MG+NachV+DjohCPDiFYwavX6RD6Q5rSBoeDVQyNssoN2E7LaXkEgWgD61H8rWoixX
+         P/Wr7eSb72CDVu8+YYinBonxp1g08JRmeNX6M42ds0jM5gxQlaQQe/eHivOl2XCzY5B0
+         cMvoXD1QnPy7L9IdkQdk7YUb77cT3qTE1QvzmshJLwXVjLhocIivR2Ktk8I6Anj290hf
+         rSBaEthYTg7JOneFyws9fKfonqVMZAcXDzKs7vSrtHRZPVUE2bjwr4epVzRAvLGgAx7F
+         iovw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687454262; x=1690046262;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uWt+gn8qnnsRd4hczLc7upMPaOxgzy9Y94xYvJKUOMY=;
+        b=IRP7zorSXlkeK6PgbNcQyVJCqHlCHAcp4ML9lrMBr4crkbpt/kfJ9zoGssbHe0EN2T
+         6ZQ2YDsZKncrgCv5iTahggCS+spjJDG5NnmB8gT8DIDonzxD7TmKRSDS8ToEipaSVs5U
+         koVHhspe2TseuSIy9ho6kIYuQ4FpTpVMxtp8hpRx9w8QO/FUZmZ+2SeBIZdo7L7/0OO+
+         SJGU7oXDEr36kcG2Ysew4njffYvuxEt3shbg7BbkokxYkMBJNZdFZIfauZJ9qFcW33iC
+         DV6m4MbQQ2f32nSIp3AMrvLzVQF2i/XfVZBn50RDwr3M1UfqFYPHB+L34sCAMX9iXHYr
+         nEXQ==
+X-Gm-Message-State: AC+VfDxsuXIMusH9QSJcNhrtdrkQjMFNAlgQKD5oOn370bfp5OI27uFW
+        qmaTw2LDWJ9KXo0Z4Gt32WoJKLkAiCjfnmUZd2DVKI3q4QaKDyprTMXoPA==
+X-Google-Smtp-Source: ACHHUZ5a/XjG6Gsmc3QGHSX7fE80pPs2VgMjwdGbNodKzLGk+UGp5SN/7eBjog8HoYJdXtzXhNTGI8qerEL6nwU+dZs=
+X-Received: by 2002:a05:622a:110e:b0:3f8:5b2:aef5 with SMTP id
+ e14-20020a05622a110e00b003f805b2aef5mr1736546qty.29.1687454261750; Thu, 22
+ Jun 2023 10:17:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5a9beeec-5762-c469-6e03-b71babb5f7ed@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230620201818.1670753-1-namhyung@kernel.org>
+In-Reply-To: <20230620201818.1670753-1-namhyung@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 22 Jun 2023 10:17:30 -0700
+Message-ID: <CAP-5=fV1Em7fdVsSanvFr4Fj=k1sp_guSA7S-BvvVstyg9aXug@mail.gmail.com>
+Subject: Re: [PATCH 1/3] perf machine: Add machine->has_data_mmap field
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 12:00:08PM +0200, AngeloGioacchino Del Regno wrote:
-> Il 07/06/23 09:22, Tinghan Shen ha scritto:
-> > The mediatek remoteproc driver currently only allows bringing up a
-> > single core SCP, e.g. MT8183. It also only bringing up the 1st
-> > core in SoCs with a dual-core SCP, e.g. MT8195. This series support
-> > to bring-up the 2nd core of the dual-core SCP.
-> > 
-> 
-> Hello TingHan,
-> 
-> Can you please address the comments on patch [05/11] and send a new version ASAP?
-> That's the only remaining issue, so after that the series should be ready.
-> 
+On Tue, Jun 20, 2023 at 1:18=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
+wrote:
+>
+> So that it can indicate the it needs to collect data mappings.  This is
+> needed especially for kernel maps.
+>
+> At first, I just wanted to add it to struct machines only and to use the
+> machine->machines to check the value.  But it turned out that some of
+> machine didn't belong to any machines (eg. some test codes), so I just
+> copied the value to individual struct machine.
+>
+> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 
-There is also the refactoring work in patch 07, and I expect that to take a
-while.
+Acked-by: Ian Rogers <irogers@google.com>
 
-> Thanks,
-> Angelo
-> 
-> > v12 -> v13:
-> > 1. replace subdevice with new mediatek scp operations in patchset 7
-> > 2. add review tag to patchset 3
-> > 3. modify mediatek,scp phandle name of video-codec@18000000 at patchset 11
-> > 
-> > v11 -> v12:
-> > 1. add scp_add_single/multi_core() to patchset 6
-> > 2. remove unused comment in patchset 6
-> > 3. rename list name from mtk_scp_cluster to mtk_scp_list
-> > 4. rewrite the multi-core probe flow
-> > 5. disable rproc->autoboot and boot rproc by request_firmware_nowait at patchset 7
-> > 6. remove patchset 7 review tag
-> > 
-> > v10 -> v11:
-> > 1. rewrite patchset 5 to probe single-core SCP with the cluster list
-> > 2. Also in patchset 5, move the pointer of mtk_scp object from the
-> >     platform data property to the driver data property
-> > 3. move the appearance of mtk_scp cluster property to patcheset 7
-> > 
-> > v9 -> v10:
-> > 1. move the global mtk_scp list into the platform device driver data structure
-> > 2. remove an unnecessary if() condition
-> > 
-> > v8 -> v9:
-> > 1. initialize l1tcm_size/l1tcm_phys at patchset 05/11
-> > 2. rewrite patchset 06/11 to unify the flow and remove hacks
-> > 
-> > v7 -> v8:
-> > 1. update the node name of mt8192 asurada SCP rpmsg subnode
-> > 2. squash register definitions into driver patches
-> > 3. initialize local variables on the declaration at patch v8 06/11
-> > 
-> > v6 -> v7:
-> > 1. merge the mtk_scp_cluster struct into the mtk_scp structure
-> >     at the "Probe multi-core SCP" patch
-> > 
-> > v5 -> v6:
-> > 1. move the mtk_scp_of_regs structure from mtk_common.h to mtk_scp.c
-> > 2. rename the SCP core 0 label from 'scp' to 'scp_c0'
-> > 
-> > v4 -> v5:
-> > 1. move resource release actions to the platform driver remove operation
-> > 2. fix dual-core watchdog handling
-> > 
-> > v3 -> v4:
-> > 1. change the representation of dual-core SCP in dts file and update SCP yaml
-> > 2. rewrite SCP driver to reflect the change of dts node
-> > 3. drop 'remove redundant call of rproc_boot for SCP' in v3 for further investigation
-> > 
-> > v2 -> v3:
-> > 1. change the representation of dual-core SCP in dts file and update SCP yaml
-> > 2. rewrite SCP driver to reflect the change of dts node
-> > 3. add SCP core 1 node to mt8195.dtsi
-> > 4. remove redundant call of rproc_boot for SCP
-> > 5. refine IPI error message
-> > 
-> > v1 -> v2:
-> > 1. update dt-binding property description
-> > 2. remove kconfig for scp dual driver
-> > 3. merge mtk_scp_dual.c and mtk_scp_subdev.c to mtk_scp.c
-> > 
-> > 
-> > Tinghan Shen (11):
-> >    dt-bindings: remoteproc: mediatek: Improve the rpmsg subnode
-> >      definition
-> >    arm64: dts: mediatek: Update the node name of SCP rpmsg subnode
-> >    dt-bindings: remoteproc: mediatek: Support MT8195 dual-core SCP
-> >    remoteproc: mediatek: Add MT8195 SCP core 1 operations
-> >    remoteproc: mediatek: Introduce cluster on single-core SCP
-> >    remoteproc: mediatek: Probe multi-core SCP
-> >    remoteproc: mediatek: Add scp_boot_peers and scp_shutdown_peers
-> >      operations
-> >    remoteproc: mediatek: Setup MT8195 SCP core 1 SRAM offset
-> >    remoteproc: mediatek: Handle MT8195 SCP core 1 watchdog timeout
-> >    remoteproc: mediatek: Refine ipi handler error message
-> >    arm64: dts: mediatek: mt8195: Add SCP 2nd core
-> > 
-> >   .../bindings/remoteproc/mtk,scp.yaml          | 176 +++++++-
-> >   .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   2 +-
-> >   .../boot/dts/mediatek/mt8192-asurada.dtsi     |   2 +-
-> >   .../boot/dts/mediatek/mt8195-cherry.dtsi      |   6 +-
-> >   arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  32 +-
-> >   drivers/remoteproc/mtk_common.h               |  26 ++
-> >   drivers/remoteproc/mtk_scp.c                  | 425 ++++++++++++++++--
-> >   7 files changed, 594 insertions(+), 75 deletions(-)
-> > 
-> 
+> ---
+>  tools/perf/builtin-inject.c         |  2 +-
+>  tools/perf/builtin-record.c         |  2 +-
+>  tools/perf/tests/vmlinux-kallsyms.c |  4 ++--
+>  tools/perf/util/machine.c           | 12 +++++++-----
+>  tools/perf/util/machine.h           | 10 ++++++++--
+>  tools/perf/util/session.c           |  4 ++--
+>  tools/perf/util/session.h           |  4 ++--
+>  7 files changed, 23 insertions(+), 15 deletions(-)
+>
+> diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
+> index c8cf2fdd9cff..481adaa97a68 100644
+> --- a/tools/perf/builtin-inject.c
+> +++ b/tools/perf/builtin-inject.c
+> @@ -2325,7 +2325,7 @@ int cmd_inject(int argc, const char **argv)
+>         }
+>
+>         inject.session =3D __perf_session__new(&data, repipe,
+> -                                            output_fd(&inject),
+> +                                            output_fd(&inject), false,
+>                                              &inject.tool);
+>         if (IS_ERR(inject.session)) {
+>                 ret =3D PTR_ERR(inject.session);
+> diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+> index aec18db7ff23..b4d0154dcb18 100644
+> --- a/tools/perf/builtin-record.c
+> +++ b/tools/perf/builtin-record.c
+> @@ -2373,7 +2373,7 @@ static int __cmd_record(struct record *rec, int arg=
+c, const char **argv)
+>                 signal(SIGUSR2, SIG_IGN);
+>         }
+>
+> -       session =3D perf_session__new(data, tool);
+> +       session =3D __perf_session__new(data, false, -1, rec->opts.sample=
+_address, tool);
+>         if (IS_ERR(session)) {
+>                 pr_err("Perf session creation failed.\n");
+>                 return PTR_ERR(session);
+> diff --git a/tools/perf/tests/vmlinux-kallsyms.c b/tools/perf/tests/vmlin=
+ux-kallsyms.c
+> index 1078a93b01aa..1f1ba3ae88aa 100644
+> --- a/tools/perf/tests/vmlinux-kallsyms.c
+> +++ b/tools/perf/tests/vmlinux-kallsyms.c
+> @@ -131,8 +131,8 @@ static int test__vmlinux_matches_kallsyms(struct test=
+_suite *test __maybe_unused
+>          * Init the machines that will hold kernel, modules obtained from
+>          * both vmlinux + .ko files and from /proc/kallsyms split by modu=
+les.
+>          */
+> -       machine__init(&kallsyms, "", HOST_KERNEL_ID);
+> -       machine__init(&vmlinux, "", HOST_KERNEL_ID);
+> +       machine__init(&kallsyms, "", HOST_KERNEL_ID, false);
+> +       machine__init(&vmlinux, "", HOST_KERNEL_ID, false);
+>
+>         maps =3D machine__kernel_maps(&vmlinux);
+>
+> diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
+> index 4e62843d51b7..ddc0a2130caf 100644
+> --- a/tools/perf/util/machine.c
+> +++ b/tools/perf/util/machine.c
+> @@ -110,7 +110,7 @@ static void thread__set_guest_comm(struct thread *thr=
+ead, pid_t pid)
+>         thread__set_comm(thread, comm, 0);
+>  }
+>
+> -int machine__init(struct machine *machine, const char *root_dir, pid_t p=
+id)
+> +int machine__init(struct machine *machine, const char *root_dir, pid_t p=
+id, bool has_data_mmap)
+>  {
+>         int err =3D -ENOMEM;
+>
+> @@ -128,6 +128,7 @@ int machine__init(struct machine *machine, const char=
+ *root_dir, pid_t pid)
+>         machine->env =3D NULL;
+>
+>         machine->pid =3D pid;
+> +       machine->has_data_mmap =3D has_data_mmap;
+>
+>         machine->id_hdr_size =3D 0;
+>         machine->kptr_restrict_warned =3D false;
+> @@ -170,7 +171,7 @@ struct machine *machine__new_host(void)
+>         struct machine *machine =3D malloc(sizeof(*machine));
+>
+>         if (machine !=3D NULL) {
+> -               machine__init(machine, "", HOST_KERNEL_ID);
+> +               machine__init(machine, "", HOST_KERNEL_ID, false);
+
+nit: when passing constants it can be nice to name the parameter, so
+here "/*data_mmap=3D*/false". There are some checkers based on this
+like:
+https://clang.llvm.org/extra/clang-tidy/checks/bugprone/argument-comment.ht=
+ml
+
+Thanks,
+Ian
+
+>
+>                 if (machine__create_kernel_maps(machine) < 0)
+>                         goto out_delete;
+> @@ -272,10 +273,11 @@ void machine__delete(struct machine *machine)
+>         }
+>  }
+>
+> -void machines__init(struct machines *machines)
+> +void __machines__init(struct machines *machines, bool have_data_mmap)
+>  {
+> -       machine__init(&machines->host, "", HOST_KERNEL_ID);
+> +       machine__init(&machines->host, "", HOST_KERNEL_ID, have_data_mmap=
+);
+>         machines->guests =3D RB_ROOT_CACHED;
+> +       machines->have_data_mmaps =3D have_data_mmap;
+>  }
+>
+>  void machines__exit(struct machines *machines)
+> @@ -295,7 +297,7 @@ struct machine *machines__add(struct machines *machin=
+es, pid_t pid,
+>         if (machine =3D=3D NULL)
+>                 return NULL;
+>
+> -       if (machine__init(machine, root_dir, pid) !=3D 0) {
+> +       if (machine__init(machine, root_dir, pid, machines->have_data_mma=
+ps) !=3D 0) {
+>                 free(machine);
+>                 return NULL;
+>         }
+> diff --git a/tools/perf/util/machine.h b/tools/perf/util/machine.h
+> index d034ecaf89c1..f54e5c888a99 100644
+> --- a/tools/perf/util/machine.h
+> +++ b/tools/perf/util/machine.h
+> @@ -46,6 +46,7 @@ struct machine {
+>         bool              comm_exec;
+>         bool              kptr_restrict_warned;
+>         bool              single_address_space;
+> +       bool              has_data_mmap;
+>         char              *root_dir;
+>         char              *mmap_name;
+>         char              *kallsyms_filename;
+> @@ -160,9 +161,14 @@ typedef void (*machine__process_t)(struct machine *m=
+achine, void *data);
+>  struct machines {
+>         struct machine host;
+>         struct rb_root_cached guests;
+> +       bool have_data_mmaps;
+>  };
+>
+> -void machines__init(struct machines *machines);
+> +void __machines__init(struct machines *machines, bool data_mmap);
+> +static inline void machines__init(struct machines *machines)
+> +{
+> +       __machines__init(machines, false);
+> +}
+>  void machines__exit(struct machines *machines);
+>
+>  void machines__process_guests(struct machines *machines,
+> @@ -181,7 +187,7 @@ void machines__set_comm_exec(struct machines *machine=
+s, bool comm_exec);
+>
+>  struct machine *machine__new_host(void);
+>  struct machine *machine__new_kallsyms(void);
+> -int machine__init(struct machine *machine, const char *root_dir, pid_t p=
+id);
+> +int machine__init(struct machine *machine, const char *root_dir, pid_t p=
+id, bool has_data_mmap);
+>  void machine__exit(struct machine *machine);
+>  void machine__delete_threads(struct machine *machine);
+>  void machine__delete(struct machine *machine);
+> diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
+> index 00d18c74c090..e09a02ec8f28 100644
+> --- a/tools/perf/util/session.c
+> +++ b/tools/perf/util/session.c
+> @@ -191,7 +191,7 @@ static int ordered_events__deliver_event(struct order=
+ed_events *oe,
+>  }
+>
+>  struct perf_session *__perf_session__new(struct perf_data *data,
+> -                                        bool repipe, int repipe_fd,
+> +                                        bool repipe, int repipe_fd, bool=
+ data_mmap,
+>                                          struct perf_tool *tool)
+>  {
+>         int ret =3D -ENOMEM;
+> @@ -205,7 +205,7 @@ struct perf_session *__perf_session__new(struct perf_=
+data *data,
+>         session->decomp_data.zstd_decomp =3D &session->zstd_data;
+>         session->active_decomp =3D &session->decomp_data;
+>         INIT_LIST_HEAD(&session->auxtrace_index);
+> -       machines__init(&session->machines);
+> +       __machines__init(&session->machines, data_mmap);
+>         ordered_events__init(&session->ordered_events,
+>                              ordered_events__deliver_event, NULL);
+>
+> diff --git a/tools/perf/util/session.h b/tools/perf/util/session.h
+> index ee3715e8563b..465610e81e95 100644
+> --- a/tools/perf/util/session.h
+> +++ b/tools/perf/util/session.h
+> @@ -64,13 +64,13 @@ struct decomp {
+>  struct perf_tool;
+>
+>  struct perf_session *__perf_session__new(struct perf_data *data,
+> -                                        bool repipe, int repipe_fd,
+> +                                        bool repipe, int repipe_fd, bool=
+ data_mmap,
+>                                          struct perf_tool *tool);
+>
+>  static inline struct perf_session *perf_session__new(struct perf_data *d=
+ata,
+>                                                      struct perf_tool *to=
+ol)
+>  {
+> -       return __perf_session__new(data, false, -1, tool);
+> +       return __perf_session__new(data, false, -1, false, tool);
+>  }
+>
+>  void perf_session__delete(struct perf_session *session);
+> --
+> 2.41.0.185.g7c58973941-goog
+>
