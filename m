@@ -2,79 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB812739C3A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E84C5739C3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:11:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232182AbjFVJLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 05:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52972 "EHLO
+        id S231700AbjFVJLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 05:11:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232566AbjFVJKh (ORCPT
+        with ESMTP id S231548AbjFVJKu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 05:10:37 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DAD36183
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:01:34 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f8689fbf59so509681e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:01:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687424492; x=1690016492;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HuuBBXQRXqbvE5vROGPmTwqLe/WvTDPvMlHP3MNkgys=;
-        b=UnpKqYyiW4Jt2PWixwtAILAQN8rKl+j8TqzfWphL3lOy/zkCg1MthzeFvGU1HDbLLz
-         e1kySMcguRYATHvAFk6WhmHoGhYsq5PnTPhnQxmL50T5V61D2qAc63GmGUSHyXe/x1q/
-         GjmkKmqLk1h9PUsSSBxqN2Y+d1BDaZ36EEAOw30viLEzM+3YKfpm5z4IODDJLmNvp4dF
-         eYnhXSv30oYj8yln7nZ+a3reEbd1CVAh1o4lVFjd7nioY9gIvo5UpY7ZG4s6kWIWiTNO
-         2rjclQyEcvvlamBifzDCHsUYKFNYW7UXmwXM0d6sSCQyB+AhJYQjAbFj7J5xhXNPIQEM
-         Z26Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687424492; x=1690016492;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HuuBBXQRXqbvE5vROGPmTwqLe/WvTDPvMlHP3MNkgys=;
-        b=Nu/ifY89OY4uInJ+TwibSsNf+S/kzgpEWoCa4hJgn0Bv1rrF456lSO65M14gQXyjQ8
-         MvVDzUlRxVDwZKAIaUro5Yg+y34OxVlSp/Rq9uMxt2X6cOEF10sg11bpMv5P2oyxBOVv
-         Gz277fXbEZdaCRoJuf1HKYePnbJvQKS8swaALHJTqm+V71v6v/Ki8c5b7L8/X6gHJHUX
-         b0xT6AvbLOCHkrBVhy+HXOwLkbCcCZfKXWtOwpZI58FOT9B+WPXF0jV9MGS9xHibDpJ+
-         WEGndRzJV7DN1teGdRem8Iif+dkNkUmUGYY7UKMkFsgWQfzIoLETObRGeMnh7prOENGU
-         ulSw==
-X-Gm-Message-State: AC+VfDxPIYpSQlT8PrQ3ZNUgcupcadVbPoT1LYcO7X7cJD14p1FTbSpC
-        i/tru6AEQtqrqukepZ5nxBk0Dw==
-X-Google-Smtp-Source: ACHHUZ6kunDlGqaQpCCwej5LcAT5OPVBT8o1FRYcIxoOpuj2TM/xAfBeyMsoT06Lq8AgYyRyMjzvSQ==
-X-Received: by 2002:a19:5007:0:b0:4f8:52a8:d123 with SMTP id e7-20020a195007000000b004f852a8d123mr6181133lfb.12.1687424492535;
-        Thu, 22 Jun 2023 02:01:32 -0700 (PDT)
-Received: from [192.168.1.101] (abyl165.neoplus.adsl.tpnet.pl. [83.9.31.165])
-        by smtp.gmail.com with ESMTPSA id w8-20020a19c508000000b004f75c9872b6sm1046255lfe.227.2023.06.22.02.01.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 02:01:32 -0700 (PDT)
-Message-ID: <ebb44179-7e6f-7391-74f1-7db664612dc8@linaro.org>
-Date:   Thu, 22 Jun 2023 11:01:30 +0200
+        Thu, 22 Jun 2023 05:10:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C65E95FE2;
+        Thu, 22 Jun 2023 02:01:50 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 460231042;
+        Thu, 22 Jun 2023 02:02:34 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.78.69])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2BCF3F663;
+        Thu, 22 Jun 2023 02:01:49 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 10:01:48 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Zhao Liu <zhao1.liu@intel.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>,
+        Zhao Liu <zhao1.liu@linux.intel.com>
+Subject: Re: [PATCH v4 06/24] sched/fair: Collect load-balancing stats for
+ IPC classes
+Message-ID: <ZJQN/KIwCUmzYoiN@arm.com>
+References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
+ <20230613042422.5344-7-ricardo.neri-calderon@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 4/5] arm64: dts: qcom: msm89xx-mtp: add chassis-type
- property
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230622-topic-sm8x50-upstream-chassis-type-v1-0-13f676eb71f3@linaro.org>
- <20230622-topic-sm8x50-upstream-chassis-type-v1-4-13f676eb71f3@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230622-topic-sm8x50-upstream-chassis-type-v1-4-13f676eb71f3@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230613042422.5344-7-ricardo.neri-calderon@linux.intel.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,54 +63,202 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.06.2023 10:57, Neil Armstrong wrote:
-> Qualcomm's Mobile Test Platforms devices are handsets, set the
-> chassis-type property to 'handset'.
-> 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Hi Ricardo,
 
-Konrad
->  arch/arm64/boot/dts/qcom/msm8916-mtp.dts | 1 +
->  arch/arm64/boot/dts/qcom/msm8996-mtp.dts | 1 +
->  arch/arm64/boot/dts/qcom/msm8998-mtp.dts | 1 +
->  3 files changed, 3 insertions(+)
+On Monday 12 Jun 2023 at 21:24:04 (-0700), Ricardo Neri wrote:
+> When selecting the busiest scheduling group between two otherwise identical
+> groups of types asym_packing or fully_busy, IPC classes can be used to
+> break the tie.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-mtp.dts b/arch/arm64/boot/dts/qcom/msm8916-mtp.dts
-> index 438eb1faee1d..ac527a3a0826 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-mtp.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-mtp.dts
-> @@ -10,6 +10,7 @@
->  / {
->  	model = "Qualcomm Technologies, Inc. MSM 8916 MTP";
->  	compatible = "qcom,msm8916-mtp", "qcom,msm8916-mtp/1", "qcom,msm8916";
-> +	chassis-type = "handset";
+> Compute the IPC class performance score for a scheduling group. It is
+> defined as the sum of the IPC scores of the tasks at the back of each
+> runqueue in the group. Load balancing starts by pulling tasks from the back
+> of the runqueue first, making this tiebreaker more useful.
+> 
+> Also, track the IPC class with the lowest score in the scheduling group. A
+> task of this class will be pulled when the destination CPU has lower
+> priority than the fully_busy busiest group.
+> 
+> These two metrics will be used during idle load balancing to compute the
+> current and the potential IPC class score of a scheduling group in a
+> subsequent changeset.
+> 
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Lukasz Luba <lukasz.luba@arm.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Perry Yuan <Perry.Yuan@amd.com>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Tim C. Chen <tim.c.chen@intel.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: Zhao Liu <zhao1.liu@linux.intel.com>
+> Cc: x86@kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> ---
+> Changes since v3:
+>  * Do not compute the IPCC stats using the current tasks of runqueues.
+>    Instead, use the tasks at the back of the queue. These are the tasks
+>    that will be pulled first during load balance. (Vincent)
+> 
+> Changes since v2:
+>  * Also excluded deadline and realtime tasks from IPCC stats. (Dietmar)
+>  * Also excluded tasks that cannot run on the destination CPU from the
+>    IPCC stats.
+>  * Folded struct sg_lb_ipcc_stats into struct sg_lb_stats. (Dietmar)
+>  * Reworded description sg_lb_stats::min_ipcc. (Ionela)
+>  * Handle errors of arch_get_ipcc_score(). (Ionela)
+> 
+> Changes since v1:
+>  * Implemented cleanups and reworks from PeterZ. Thanks!
+>  * Used the new interface names.
+> ---
+>  kernel/sched/fair.c | 79 +++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 79 insertions(+)
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 6189d1a45635..c0cab5e501b6 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -9110,6 +9110,11 @@ struct sg_lb_stats {
+>  	unsigned int nr_numa_running;
+>  	unsigned int nr_preferred_running;
+>  #endif
+> +#ifdef CONFIG_IPC_CLASSES
+> +	unsigned long min_score; /* Min(score(rq->curr->ipcc)) */
+                                              ^^^^^^^^^^^^^^
+> +	unsigned short min_ipcc; /* Class of the task with the minimum IPCC score in the rq */
+> +	unsigned long sum_score; /* Sum(score(rq->curr->ipcc)) */
+                                              ^^^^^^^^^^^^^^
+These no longer apply. It might be easier to describe them all in a
+comment just above their declaration. Something like:
+
+"The sum, min and its class of the IPC scores of the tasks at the back of each
+runqueue in the group."
+
+> +#endif
+>  };
 >  
->  	aliases {
->  		serial0 = &blsp_uart2;
-> diff --git a/arch/arm64/boot/dts/qcom/msm8996-mtp.dts b/arch/arm64/boot/dts/qcom/msm8996-mtp.dts
-> index 495d45a16e63..6e9c9caf25b1 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8996-mtp.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8996-mtp.dts
-> @@ -10,6 +10,7 @@
->  / {
->  	model = "Qualcomm Technologies, Inc. MSM 8996 MTP";
->  	compatible = "qcom,msm8996-mtp", "qcom,msm8996";
-> +	chassis-type = "handset";
+>  /*
+> @@ -9387,6 +9392,77 @@ group_type group_classify(unsigned int imbalance_pct,
+>  	return group_has_spare;
+>  }
 >  
->  	aliases {
->  		serial0 = &blsp2_uart2;
-> diff --git a/arch/arm64/boot/dts/qcom/msm8998-mtp.dts b/arch/arm64/boot/dts/qcom/msm8998-mtp.dts
-> index 453a1c9e9808..4319f4da8996 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8998-mtp.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8998-mtp.dts
-> @@ -11,6 +11,7 @@
->  / {
->  	model = "Qualcomm Technologies, Inc. MSM8998 v1 MTP";
->  	compatible = "qcom,msm8998-mtp", "qcom,msm8998";
-> +	chassis-type = "handset";
+> +#ifdef CONFIG_IPC_CLASSES
+> +static void init_rq_ipcc_stats(struct sg_lb_stats *sgs)
+> +{
+> +	/* All IPCC stats have been set to zero in update_sg_lb_stats(). */
+> +	sgs->min_score = ULONG_MAX;
+> +}
+> +
+> +static int rq_last_task_ipcc(int dst_cpu, struct rq *rq, unsigned short *ipcc)
+> +{
+> +	struct list_head *tasks = &rq->cfs_tasks;
+> +	struct task_struct *p;
+> +	struct rq_flags rf;
+> +	int ret = -EINVAL;
+> +
+
+It's more typical of ret to be initialised to 0 and changed to an error
+value when there's an error case.
+
+> +	rq_lock_irqsave(rq, &rf);
+> +	if (list_empty(tasks))
+> +		goto out;
+> +
+> +	p = list_last_entry(tasks, struct task_struct, se.group_node);
+> +	if (p->flags & PF_EXITING || is_idle_task(p) ||
+> +	    !cpumask_test_cpu(dst_cpu, p->cpus_ptr))
+> +		goto out;
+> +
+> +	ret = 0;
+> +	*ipcc = p->ipcc;
+> +out:
+> +	rq_unlock(rq, &rf);
+> +	return ret;
+> +}
+> +
+> +/* Called only if cpu_of(@rq) is not idle and has tasks running. */
+> +static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
+> +				    struct rq *rq)
+> +{
+> +	unsigned short ipcc;
+> +	unsigned long score;
+> +
+> +	if (!sched_ipcc_enabled())
+> +		return;
+> +
+> +	if (rq_last_task_ipcc(dst_cpu, rq, &ipcc))
+> +		return;
+> +
+> +	score = arch_get_ipcc_score(ipcc, cpu_of(rq));
+> +
+> +	/*
+> +	 * Ignore tasks with invalid scores. When finding the busiest group, we
+> +	 * prefer those with higher sum_score. This group will not be selected.
+> +	 */
+
+nit: the comment is unnecessary, and a bit misleading, IMO.
+
+The comment says "This group will not be selected." but the only way to
+guarantee that here is to reset the sum_score to 0 when you find an
+invalid score, which I don't believe is your intention.
+
+Also the use of sum_score is captured in later functions, so I don't
+believe there's a need for additional comments here.
+
+Hope it helps,
+Ionela.
+
+> +	if (IS_ERR_VALUE(score))
+> +		return;
+> +
+> +	sgs->sum_score += score;
+> +
+> +	if (score < sgs->min_score) {
+> +		sgs->min_score = score;
+> +		sgs->min_ipcc = ipcc;
+> +	}
+> +}
+> +
+> +#else /* CONFIG_IPC_CLASSES */
+> +static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
+> +				    struct rq *rq)
+> +{
+> +}
+> +
+> +static void init_rq_ipcc_stats(struct sg_lb_stats *sgs)
+> +{
+> +}
+> +#endif /* CONFIG_IPC_CLASSES */
+> +
+>  /**
+>   * sched_use_asym_prio - Check whether asym_packing priority must be used
+>   * @sd:		The scheduling domain of the load balancing
+> @@ -9477,6 +9553,7 @@ static inline void update_sg_lb_stats(struct lb_env *env,
+>  	int i, nr_running, local_group;
 >  
->  	qcom,board-id = <8 0>;
+>  	memset(sgs, 0, sizeof(*sgs));
+> +	init_rq_ipcc_stats(sgs);
 >  
+>  	local_group = group == sds->local;
+>  
+> @@ -9526,6 +9603,8 @@ static inline void update_sg_lb_stats(struct lb_env *env,
+>  			if (sgs->group_misfit_task_load < load)
+>  				sgs->group_misfit_task_load = load;
+>  		}
+> +
+> +		update_sg_lb_ipcc_stats(env->dst_cpu, sgs, rq);
+>  	}
+>  
+>  	sgs->group_capacity = group->sgc->capacity;
+> -- 
+> 2.25.1
 > 
