@@ -2,171 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 895D77396BA
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 07:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79D4F7396BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 07:16:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230143AbjFVFPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 01:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53558 "EHLO
+        id S230206AbjFVFQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 01:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbjFVFPt (ORCPT
+        with ESMTP id S230125AbjFVFQu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 01:15:49 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6B71BCB
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 22:15:47 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-54fac329a71so3641422a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 22:15:47 -0700 (PDT)
+        Thu, 22 Jun 2023 01:16:50 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A96CE9;
+        Wed, 21 Jun 2023 22:16:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687410947; x=1690002947;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=x9soCak5raKcjZvJvMtE+uNsH2FPMIxS+OErwqzv9v8=;
-        b=Hc6c/JC6Js4sO/XgQOqhO+zupd9oBK1lS7N42qvtzAoPwy5z2C6gqP6sV0sgsLOole
-         KUQ0YwS58O6QJE7p5+R69qSEgsSh0eTXij5BFmO963NHp+VZw30Kl4ByiMLI8DrCcvdY
-         8isFvVhXZG6tFqTaaZIHZLj7PnfGQIaWeMK6Q=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687410947; x=1690002947;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x9soCak5raKcjZvJvMtE+uNsH2FPMIxS+OErwqzv9v8=;
-        b=DYJ58c24cdr4ZG/A1Lq7elC0ZI8lo2B05KlG5NzxomUl5PjnY4QFW68M6liAPwI+Tt
-         +rZJHNMMGyQAttyaTPr5/LcKd4coVWvh1IfTXIMt+7rdw9IUfcv+W59DxUjydPRd82Ql
-         7xNmX2hcKlYz55qNIghjXNJgbg+xK0VJZ27PpAUiIXRBXN+Ep1+yDdN5YsvxWCDpo0pl
-         baPCsikUj3PbsyUU6cpU3k99tFIn7bTCz3Qywnux0OTYJ8g4wqWQZ7Wg4lNFNKdeaP2/
-         q16hr8I3ygwkN1D8nboR5K/crtvh/BUZDxEjLps1TU1zDQo0e/50iXswJG/rA7hOFYES
-         Iwhg==
-X-Gm-Message-State: AC+VfDzxCpYx74JQPwrSfeJs9HWcK8NE2CJ4a0B1p7L5QNmjCKQvyXW8
-        wEyprjB2VCOBFumgHhR0N4tmiD/k/oSf3sL0cvM=
-X-Google-Smtp-Source: ACHHUZ4kxeAPlCYHMJ4z3pJKW/cHTMxNWmyYnjBc+EHck+ckiyMvuhkwiIr3wXI65RbsSnDZYFW9Wg==
-X-Received: by 2002:a05:6a20:a11f:b0:122:fa7e:85b5 with SMTP id q31-20020a056a20a11f00b00122fa7e85b5mr4717354pzk.42.1687410946941;
-        Wed, 21 Jun 2023 22:15:46 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id ba6-20020a170902720600b001a285269b70sm4319201plb.280.2023.06.21.22.15.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 22:15:46 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 22:15:45 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     John Stultz <jstultz@google.com>
-Cc:     "Isaac J. Manjarres" <isaacmanjarres@google.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
-        Mukesh Ojha <mojha@codeaurora.org>,
-        Prasad Sodagudi <psodagud@codeaurora.org>,
-        kernel-team@android.com, linux-hardening@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pstore/ram: Add support for dynamically allocated
- ramoops memory regions
-Message-ID: <202306212212.5E53607@keescook>
-References: <20230622005213.458236-1-isaacmanjarres@google.com>
- <CANDhNCrEhx4LUPaz-FHZZJMG2yX670hk-vGTZs=HxiGR18zm5A@mail.gmail.com>
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1687411008; x=1718947008;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=IXSa4QLaPeHRSIGngAkBe0zIJ6RCzTLgtQw4tPfpGj4=;
+  b=e7IBghg0fb1mWZ4RAs3wFC7yAc6gVailOafPGo+tKmkHMRJn9tXybbkw
+   gbtPmk5k3qlgu8o2XLd1+NASOcc9klO2G1rtI/Em9HLsu5Qa4YRw00lYh
+   6mtOQvPA9WsA0z/O4X5rYKZHA3OcDapWag0v42C9NeWXq2LO0tv0TpT62
+   DF0gjeN/BxyJ1aLRdKvPiggJpCx+HOA6Hp2G+0iGxTUZAE25WQBy5YxNC
+   kyB51SRGqsMcI/eozLRvcy/K/9HQXBVsHNtEthIOf7YNPFgPxaJ7M2yN1
+   e+V1w2eKjq/tOxJtJzws9I8JnvpkUIkiQ9xHmIFj8a3LXRGJzU4JoZO5c
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,262,1681164000"; 
+   d="scan'208";a="31548948"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 22 Jun 2023 07:16:46 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 3052528007C;
+        Thu, 22 Jun 2023 07:16:46 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     Benjamin Bara <bbara93@gmail.com>,
+        Matthias Kaehlcke <mka@chromium.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Benjamin Bara <benjamin.bara@skidata.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] usb: misc: onboard-hub: support multiple power supplies
+Date:   Thu, 22 Jun 2023 07:16:45 +0200
+Message-ID: <8701196.DvuYhMxLoT@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <ZJMPv6Fm3On0ITFi@google.com>
+References: <20230620-hx3-v2-0-76a53434c713@skidata.com> <20230620-hx3-v2-1-76a53434c713@skidata.com> <ZJMPv6Fm3On0ITFi@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANDhNCrEhx4LUPaz-FHZZJMG2yX670hk-vGTZs=HxiGR18zm5A@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 09:47:26PM -0700, John Stultz wrote:
-> On Wed, Jun 21, 2023 at 5:52 PM 'Isaac J. Manjarres' via kernel-team
-> <kernel-team@android.com> wrote:
-> >
-> > From: "Isaac J. Manjarres" <isaacm@codeaurora.org>
-> >
-> > The reserved memory region for ramoops is assumed to be at a fixed
-> > and known location when read from the devicetree. This is not desirable
-> > in environments where it is preferred for the region to be dynamically
-> > allocated early during boot (i.e. the memory region is defined with
-> > the "alloc-ranges" property instead of the "reg" property).
-> >
-> 
-> Thanks for sending this out, Isaac!
-> 
-> Apologies, I've forgotten much of the details around dt bindings here,
-> so forgive my questions:
-> If the memory is dynamically allocated from a specific range, is it
-> guaranteed to be consistently the same address boot to boot?
-> 
-> > Since ramoops regions are part of the reserved-memory devicetree
-> > node, they exist in the reserved_mem array. This means that the
-> > of_reserved_mem_lookup() function can be used to retrieve the
-> > reserved_mem structure for the ramoops region, and that structure
-> > contains the base and size of the region, even if it has been
-> > dynamically allocated.
-> 
-> I think this is answering my question above, but it's a little opaque,
-> so I'm not sure.
+Hi,
 
-Yeah, I had exactly the same question: will this be the same
-boot-to-boot?
-
-> 
-> > Thus invoke of_reserved_mem_lookup() in case the call to
-> > platform_get_resource() fails in order to support dynamically
-> > allocated ramoops memory regions.
-> >
-> > Signed-off-by: Isaac J. Manjarres <isaacm@codeaurora.org>
-> > Signed-off-by: Mukesh Ojha <mojha@codeaurora.org>
-> > Signed-off-by: Prasad Sodagudi <psodagud@codeaurora.org>
-> > Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
-
-I think this should have "Co-developed-by:"s for each person, since this
-isn't explicitly a S-o-B chain...
-
+Am Mittwoch, 21. Juni 2023, 16:57:03 CEST schrieb Matthias Kaehlcke:
+> ********************
+> Achtung externe E-Mail: =D6ffnen Sie Anh=E4nge und Links nur, wenn Sie wi=
+ssen,
+> dass diese aus einer sicheren Quelle stammen und sicher sind. Leiten Sie
+> die E-Mail im Zweifelsfall zur Pr=FCfung an den IT-Helpdesk weiter.
+> Attention external email: Open attachments and links only if you know that
+> they are from a secure source and are safe. In doubt forward the email to
+> the IT-Helpdesk to check it. ********************
+>=20
+> Hi,
+>=20
+> On Wed, Jun 21, 2023 at 04:26:27PM +0200, Benjamin Bara wrote:
+> > From: Benjamin Bara <benjamin.bara@skidata.com>
+> >=20
+> > As some of the onboard hubs require multiple power supplies, provide the
+> > environment to support them.
+> >=20
+> > Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+>=20
+> Overall this looks good to me, a few nits inside.
+>=20
 > > ---
-> >  fs/pstore/ram.c | 19 ++++++++++++++-----
-> >  1 file changed, 14 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
-> > index ade66dbe5f39..e4bbba187011 100644
-> > --- a/fs/pstore/ram.c
-> > +++ b/fs/pstore/ram.c
-> > @@ -20,6 +20,7 @@
-> >  #include <linux/compiler.h>
-> >  #include <linux/of.h>
-> >  #include <linux/of_address.h>
-> > +#include <linux/of_reserved_mem.h>
-> >
-> >  #include "internal.h"
-> >  #include "ram_internal.h"
-> > @@ -643,6 +644,7 @@ static int ramoops_parse_dt(struct platform_device *pdev,
+> > v2:
+> > - replace (err !=3D 0) with (err)
+> > ---
+> >=20
+> >  drivers/usb/misc/onboard_usb_hub.c | 36
+> >  ++++++++++++++++++++++++++++-------- drivers/usb/misc/onboard_usb_hub.h
+> >  |  1 +
+> >  2 files changed, 29 insertions(+), 8 deletions(-)
+> >=20
+> > diff --git a/drivers/usb/misc/onboard_usb_hub.c
+> > b/drivers/usb/misc/onboard_usb_hub.c index 12fc6eb67c3b..3de30356a684
+> > 100644
+> > --- a/drivers/usb/misc/onboard_usb_hub.c
+> > +++ b/drivers/usb/misc/onboard_usb_hub.c
+> > @@ -27,6 +27,12 @@
+> >=20
+> >  #include "onboard_usb_hub.h"
+> >=20
+> > +#define SUPPLIES_NUM_MAX 2
+>=20
+> MAX_SUPPLIES?
+
+Do we need this MAX_SUPPLIES macro at all? This essentially is=20
+ARRAY_SIZE(supply_names), no? At least it should be
+> #define MAX_SUPPLIES ARRAY_SIZE(supply_names)
+
+>=20
+> add empty line
+>=20
+> > +static const char * const supply_names[] =3D {
+> > +	"vdd",
+> > +	"vdd2",
+> > +};
+> > +
+> >=20
+> >  static void onboard_hub_attach_usb_driver(struct work_struct *work);
+> > =20
+> >  static struct usb_device_driver onboard_hub_usbdev_driver;
+> >=20
+> > @@ -40,7 +46,8 @@ struct usbdev_node {
+> >=20
+> >  };
+> > =20
+> >  struct onboard_hub {
+> >=20
+> > -	struct regulator *vdd;
+> > +	struct regulator_bulk_data supplies[SUPPLIES_NUM_MAX];
+> > +	unsigned int supplies_num;
+>=20
+> num_supplies?
+>=20
+> >  	struct device *dev;
+> >  	const struct onboard_hub_pdata *pdata;
+> >  	struct gpio_desc *reset_gpio;
+> >=20
+> > @@ -55,9 +62,9 @@ static int onboard_hub_power_on(struct onboard_hub *h=
+ub)
+> >=20
 > >  {
-> >         struct device_node *of_node = pdev->dev.of_node;
-> >         struct device_node *parent_node;
-> > +       struct reserved_mem *rmem;
-> >         struct resource *res;
-> >         u32 value;
-> >         int ret;
-> > @@ -651,13 +653,20 @@ static int ramoops_parse_dt(struct platform_device *pdev,
-> >
-> >         res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> >         if (!res) {
-> > -               dev_err(&pdev->dev,
-> > -                       "failed to locate DT /reserved-memory resource\n");
-> > -               return -EINVAL;
-> > +               rmem = of_reserved_mem_lookup(of_node);
-> 
-> Nit: you could keep rmem scoped locally here.
-> 
-> Otherwise the code looks sane, I just suspect the commit message could
-> be more clear in explaining the need/utility of the dts entry using
-> alloc-ranges.
+> > =20
+> >  	int err;
+> >=20
+> > -	err =3D regulator_enable(hub->vdd);
+> > +	err =3D regulator_bulk_enable(hub->supplies_num, hub->supplies);
+> >=20
+> >  	if (err) {
+> >=20
+> > -		dev_err(hub->dev, "failed to enable regulator: %d\n",=20
+err);
+> > +		dev_err(hub->dev, "failed to enable supplies: %d\n", err);
+> >=20
+> >  		return err;
+> >  =09
+> >  	}
+> >=20
+> > @@ -75,9 +82,9 @@ static int onboard_hub_power_off(struct onboard_hub
+> > *hub)
+> >=20
+> >  	gpiod_set_value_cansleep(hub->reset_gpio, 1);
+> >=20
+> > -	err =3D regulator_disable(hub->vdd);
+> > +	err =3D regulator_bulk_disable(hub->supplies_num, hub->supplies);
+> >=20
+> >  	if (err) {
+> >=20
+> > -		dev_err(hub->dev, "failed to disable regulator: %d\n",=20
+err);
+> > +		dev_err(hub->dev, "failed to disable supplies: %d\n",=20
+err);
+> >=20
+> >  		return err;
+> >  =09
+> >  	}
+> >=20
+> > @@ -232,6 +239,7 @@ static int onboard_hub_probe(struct platform_device
+> > *pdev)>=20
+> >  	const struct of_device_id *of_id;
+> >  	struct device *dev =3D &pdev->dev;
+> >  	struct onboard_hub *hub;
+> >=20
+> > +	unsigned int i;
+> >=20
+> >  	int err;
+> >  =09
+> >  	hub =3D devm_kzalloc(dev, sizeof(*hub), GFP_KERNEL);
+> >=20
+> > @@ -246,9 +254,21 @@ static int onboard_hub_probe(struct platform_device
+> > *pdev)>=20
+> >  	if (!hub->pdata)
+> >  =09
+> >  		return -EINVAL;
+> >=20
+> > -	hub->vdd =3D devm_regulator_get(dev, "vdd");
+> > -	if (IS_ERR(hub->vdd))
+> > -		return PTR_ERR(hub->vdd);
+> > +	if (hub->pdata->supplies_num > SUPPLIES_NUM_MAX)
+> > +		return dev_err_probe(dev, -EINVAL, "max %d supplies=20
+supported!\n",
+> > +				     SUPPLIES_NUM_MAX);
+> > +	hub->supplies_num =3D 1;
+> > +	if (hub->pdata->supplies_num > 1)
+> > +		hub->supplies_num =3D hub->pdata->supplies_num;
+>=20
+> Please change the above to:
+>=20
+> 	if (hub->pdata->supplies_num !=3D 0)
+> 		hub->supplies_num =3D hub->pdata->supplies_num;
+> 	else
+> 		hub->supplies_num =3D 1;
+>=20
 
-I haven't looked closely at the API here, but does this need a "put"
-like the "get" stuff? (I assume not, given the "lookup" is on a node...)
+In the kernel there is also this style:
+> hub->supplies_num =3D hub->pdata->supplies_num? : 1;
 
--Kees
+But it's up to you which one you prefer.
 
--- 
-Kees Cook
+Best regards,
+Alexander
+
+> > +
+> > +	for (i =3D 0; i < SUPPLIES_NUM_MAX; i++)
+> > +		hub->supplies[i].supply =3D supply_names[i];
+> > +
+> > +	err =3D devm_regulator_bulk_get(dev, hub->supplies_num, hub-
+>supplies);
+> > +	if (err) {
+> > +		dev_err(dev, "Failed to get regulator supplies: %d\n",=20
+err);
+> > +		return err;
+> > +	}
+> >=20
+> >  	hub->reset_gpio =3D devm_gpiod_get_optional(dev, "reset",
+> >  =09
+> >  						  GPIOD_OUT_HIGH);
+> >=20
+> > diff --git a/drivers/usb/misc/onboard_usb_hub.h
+> > b/drivers/usb/misc/onboard_usb_hub.h index aca5f50eb0da..657190bf1799
+> > 100644
+> > --- a/drivers/usb/misc/onboard_usb_hub.h
+> > +++ b/drivers/usb/misc/onboard_usb_hub.h
+> > @@ -8,6 +8,7 @@
+> >=20
+> >  struct onboard_hub_pdata {
+> > =20
+> >  	unsigned long reset_us;		/* reset pulse width in us=20
+*/
+> >=20
+> > +	unsigned int supplies_num;	/* num of supplies: 0 considered as 1=20
+*/
+>=20
+> num_supplies?
+>=20
+> s/num of/number of/
+>=20
+> >  };
+
+
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
+
+
