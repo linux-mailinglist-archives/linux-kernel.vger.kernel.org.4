@@ -2,370 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6493E73A64E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 18:43:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C95573A65F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 18:46:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbjFVQn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 12:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37832 "EHLO
+        id S231336AbjFVQqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 12:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbjFVQnU (ORCPT
+        with ESMTP id S231327AbjFVQqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 12:43:20 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B29D2113
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 09:42:51 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b3ecb17721so12341295ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 09:42:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1687452171; x=1690044171;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oifDDt/8MZ0rdnM+EbP9Ms7uDYDrGRiSNH3qP5ivz9M=;
-        b=KKJR3vP/aDTBFoiL8C2VURDFgbQzXT8bt6jZJWvSavw2WDHezOeya5vW78vIkq8k4g
-         fSZUGN3oqSTVdWHH+8LY0PIzQhw7hdz+yovCjA0QKtoYFJSzVDV+UCRs73xDlUw5E1Rk
-         BX0FaUT2YiauHQkTsEmyVDzZHXJRtepniI+5WQ9N+kRL9P50Ciu+2AnXF1t3+S1BQlQY
-         m9l6LD/TrMu2kFtjdGSXnkWQ+rKLarz9e5SaMu+vm3nIOdIp4FP55r1f8pqlnAc1Cn2r
-         1KRsEo5qY8FG5GwnPXecA2uJiXZVJc8xfsyVlk1/VH0KqInyKkzrVmeqK6QU9hnL7iS9
-         FysQ==
+        Thu, 22 Jun 2023 12:46:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36E31FE9
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 09:45:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687452356;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q6LLoDXAD0fPuc6AsW0BAVbjdcqFGmumwyZ+jo/wBt4=;
+        b=EAP0luXV8HS3pyarly0r2FpVdEmrbuF6Y6ZF5yYbviIT+LfW9xFnqYjES2Tha7w7GX5mdr
+        tmQMkk+yBcCLeJtXd9yaI1LFweZP+lzja15RUHvftL9R8qOL5FZWtuTOXzzmiFdIWzZbGW
+        sXRWINhhNVKlpaXCcRqB8mnE6o6YOxs=
+Received: from mail-ot1-f70.google.com (mail-ot1-f70.google.com
+ [209.85.210.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-171-cUCP10kKMh-Ex1YhINPNxA-1; Thu, 22 Jun 2023 12:45:54 -0400
+X-MC-Unique: cUCP10kKMh-Ex1YhINPNxA-1
+Received: by mail-ot1-f70.google.com with SMTP id 46e09a7af769-6b58a12d65dso4242748a34.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 09:45:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687452171; x=1690044171;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oifDDt/8MZ0rdnM+EbP9Ms7uDYDrGRiSNH3qP5ivz9M=;
-        b=H0CwkhYZXgX0xlPvmwhRPS/mzD5WNiVzxucKD0vERvXxSDSJbrrCTUaWkRRTcxRtdu
-         gS6xAgAk+qBfSuMF5hbQL1Mt7ZMTbiNh/zX13uUiiBMX+RcjPb3T+m5ZJhoG1CNcHXl6
-         dt/mT6hCl+zOVTT749TF3a7Ll6YEHPU9MgrxZiCOuE0KrJiIfkMjwocZx9xH1U+lDKUa
-         YmUlZRSdTuSHVuCwpXg9tNEnz2sGraOKAtwHfkljOyWj3N/DUKUN92DU29VhPVR7fnZo
-         hZuoiLbzktG0SbwhUfRrIZyOg3g0iOaUvpDdQgfhp70EEmAmz/Ld41CUk0WaRjxLY167
-         cmGg==
-X-Gm-Message-State: AC+VfDxTse4kclkjb8631hnImXSs1abLhOA6isQA/LtPrQImQgYYj7xI
-        YYEkDQXctqlb5o51c+qgGQYinw==
-X-Google-Smtp-Source: ACHHUZ5eOaprsNeMGoS/c3YRbgjq0Q3etzQC5gGN62kzJzL3UknVNp4h1mzWf/mLVXZ4etMQnPzcug==
-X-Received: by 2002:a17:902:da91:b0:1b0:3d54:358f with SMTP id j17-20020a170902da9100b001b03d54358fmr22008253plx.0.1687452170916;
-        Thu, 22 Jun 2023 09:42:50 -0700 (PDT)
-Received: from [10.4.168.167] ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id o5-20020a1709026b0500b001b077301a58sm5615540plk.79.2023.06.22.09.42.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 09:42:50 -0700 (PDT)
-Message-ID: <bfcf8b34-2efc-258e-bcec-d6ce10220205@bytedance.com>
-Date:   Fri, 23 Jun 2023 00:42:41 +0800
+        d=1e100.net; s=20221208; t=1687452348; x=1690044348;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q6LLoDXAD0fPuc6AsW0BAVbjdcqFGmumwyZ+jo/wBt4=;
+        b=GNCqNlc0hmwotpLjiW7AuTJNjKNzG6CJKoEEzCgp715N/h2pV0jCXPHziF6rTdekm6
+         x1YpTB6YZtCg1snQKePqYQENLYEmKte/zd1FEFrM8Nd3IAdRCrFhnoKWSvqbaKa737M0
+         NzcIBQAQoKdprwmjDr786xOgwWRBcvQiIeovJpBLEo9C/ijNFXOqLzKzonsjKXEn9on0
+         C1/BLaD4fBLFsPtLsIgFIUyxjy6+YEzdGUFAABWS+MV7vI6+79tbxxc8TSdBPK6GghaO
+         4i1Zj3R3SMkCLySY0EICoZECh4vmnPK4N4z563uLoMGD+5YmaHtAbm0F2Ea9bS6OpKgy
+         53Lg==
+X-Gm-Message-State: AC+VfDz5c+/OcqfnSGJkeABuN48PYHryKXfQyZ9FCcilLKRuJVyQ39dX
+        un7OPQ4/MU6TDXiamfZDxQFgcN6XcxrM0Oq5133NVRSdJqs7DTUbfV9l4Pkd9BeZU0P0iBc3Ovs
+        L2YG4yhem8uA/+CJAIslqnxZ3
+X-Received: by 2002:a9d:7cc9:0:b0:6b5:b654:6d52 with SMTP id r9-20020a9d7cc9000000b006b5b6546d52mr5972040otn.8.1687452348486;
+        Thu, 22 Jun 2023 09:45:48 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ58fV++PhlPXYEECuy/QGlkeVFyp9FOiUQFioQbIDyJnts066atIqJRXo+P+fhPbGGa+c0vZw==
+X-Received: by 2002:a9d:7cc9:0:b0:6b5:b654:6d52 with SMTP id r9-20020a9d7cc9000000b006b5b6546d52mr5972023otn.8.1687452348243;
+        Thu, 22 Jun 2023 09:45:48 -0700 (PDT)
+Received: from halaney-x13s ([2600:1700:1ff0:d0e0::f])
+        by smtp.gmail.com with ESMTPSA id p13-20020a056830130d00b006b469ace1b1sm3007058otq.22.2023.06.22.09.45.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 09:45:47 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 11:45:44 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Biggers <ebiggers@kernel.org>, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: Re: [RESEND v7 2/3] scsi: ufs: ufs-qcom: Switch to the new ICE API
+Message-ID: <20230622164544.4exzdv2hoptgitdx@halaney-x13s>
+References: <20230612192847.1599416-1-abel.vesa@linaro.org>
+ <20230612192847.1599416-3-abel.vesa@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.12.0
-Subject: Re: [PATCH 24/29] mm: vmscan: make global slab shrink lockless
-Content-Language: en-US
-To:     Vlastimil Babka <vbabka@suse.cz>, akpm@linux-foundation.org,
-        david@fromorbit.com, tkhai@ya.ru, roman.gushchin@linux.dev,
-        djwong@kernel.org, brauner@kernel.org, paulmck@kernel.org,
-        tytso@mit.edu
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, dm-devel@redhat.com,
-        linux-raid@vger.kernel.org, linux-bcache@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-btrfs@vger.kernel.org
-References: <20230622085335.77010-1-zhengqi.arch@bytedance.com>
- <20230622085335.77010-25-zhengqi.arch@bytedance.com>
- <cf0d9b12-6491-bf23-b464-9d01e5781203@suse.cz>
-From:   Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <cf0d9b12-6491-bf23-b464-9d01e5781203@suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230612192847.1599416-3-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/6/22 23:12, Vlastimil Babka wrote:
-> On 6/22/23 10:53, Qi Zheng wrote:
->> The shrinker_rwsem is a global read-write lock in
->> shrinkers subsystem, which protects most operations
->> such as slab shrink, registration and unregistration
->> of shrinkers, etc. This can easily cause problems in
->> the following cases.
->>
->> 1) When the memory pressure is high and there are many
->>     filesystems mounted or unmounted at the same time,
->>     slab shrink will be affected (down_read_trylock()
->>     failed).
->>
->>     Such as the real workload mentioned by Kirill Tkhai:
->>
->>     ```
->>     One of the real workloads from my experience is start
->>     of an overcommitted node containing many starting
->>     containers after node crash (or many resuming containers
->>     after reboot for kernel update). In these cases memory
->>     pressure is huge, and the node goes round in long reclaim.
->>     ```
->>
->> 2) If a shrinker is blocked (such as the case mentioned
->>     in [1]) and a writer comes in (such as mount a fs),
->>     then this writer will be blocked and cause all
->>     subsequent shrinker-related operations to be blocked.
->>
->> Even if there is no competitor when shrinking slab, there
->> may still be a problem. If we have a long shrinker list
->> and we do not reclaim enough memory with each shrinker,
->> then the down_read_trylock() may be called with high
->> frequency. Because of the poor multicore scalability of
->> atomic operations, this can lead to a significant drop
->> in IPC (instructions per cycle).
->>
->> We used to implement the lockless slab shrink with
->> SRCU [1], but then kernel test robot reported -88.8%
->> regression in stress-ng.ramfs.ops_per_sec test case [2],
->> so we reverted it [3].
->>
->> This commit uses the refcount+RCU method [4] proposed by
->> by Dave Chinner to re-implement the lockless global slab
->> shrink. The memcg slab shrink is handled in the subsequent
->> patch.
->>
->> Currently, the shrinker instances can be divided into
->> the following three types:
->>
->> a) global shrinker instance statically defined in the kernel,
->> such as workingset_shadow_shrinker.
->>
->> b) global shrinker instance statically defined in the kernel
->> modules, such as mmu_shrinker in x86.
->>
->> c) shrinker instance embedded in other structures.
->>
->> For case a, the memory of shrinker instance is never freed.
->> For case b, the memory of shrinker instance will be freed
->> after the module is unloaded. But we will call synchronize_rcu()
->> in free_module() to wait for RCU read-side critical section to
->> exit. For case c, the memory of shrinker instance will be
->> dynamically freed by calling kfree_rcu(). So we can use
->> rcu_read_{lock,unlock}() to ensure that the shrinker instance
->> is valid.
->>
->> The shrinker::refcount mechanism ensures that the shrinker
->> instance will not be run again after unregistration. So the
->> structure that records the pointer of shrinker instance can be
->> safely freed without waiting for the RCU read-side critical
->> section.
->>
->> In this way, while we implement the lockless slab shrink, we
->> don't need to be blocked in unregister_shrinker() to wait
->> RCU read-side critical section.
->>
->> The following are the test results:
->>
->> stress-ng --timeout 60 --times --verify --metrics-brief --ramfs 9 &
->>
->> 1) Before applying this patchset:
->>
->>   setting to a 60 second run per stressor
->>   dispatching hogs: 9 ramfs
->>   stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s
->>                             (secs)    (secs)    (secs)   (real time) (usr+sys time)
->>   ramfs            880623     60.02      7.71    226.93     14671.45        3753.09
->>   ramfs:
->>            1 System Management Interrupt
->>   for a 60.03s run time:
->>      5762.40s available CPU time
->>         7.71s user time   (  0.13%)
->>       226.93s system time (  3.94%)
->>       234.64s total time  (  4.07%)
->>   load average: 8.54 3.06 2.11
->>   passed: 9: ramfs (9)
->>   failed: 0
->>   skipped: 0
->>   successful run completed in 60.03s (1 min, 0.03 secs)
->>
->> 2) After applying this patchset:
->>
->>   setting to a 60 second run per stressor
->>   dispatching hogs: 9 ramfs
->>   stressor       bogo ops real time  usr time  sys time   bogo ops/s     bogo ops/s
->>                             (secs)    (secs)    (secs)   (real time) (usr+sys time)
->>   ramfs            847562     60.02      7.44    230.22     14120.66        3566.23
->>   ramfs:
->>            4 System Management Interrupts
->>   for a 60.12s run time:
->>      5771.95s available CPU time
->>         7.44s user time   (  0.13%)
->>       230.22s system time (  3.99%)
->>       237.66s total time  (  4.12%)
->>   load average: 8.18 2.43 0.84
->>   passed: 9: ramfs (9)
->>   failed: 0
->>   skipped: 0
->>   successful run completed in 60.12s (1 min, 0.12 secs)
->>
->> We can see that the ops/s has hardly changed.
->>
->> [1]. https://lore.kernel.org/lkml/20230313112819.38938-1-zhengqi.arch@bytedance.com/
->> [2]. https://lore.kernel.org/lkml/202305230837.db2c233f-yujie.liu@intel.com/
->> [3]. https://lore.kernel.org/all/20230609081518.3039120-1-qi.zheng@linux.dev/
->> [4]. https://lore.kernel.org/lkml/ZIJhou1d55d4H1s0@dread.disaster.area/
->>
->> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
->> ---
->>   include/linux/shrinker.h |  6 ++++++
->>   mm/vmscan.c              | 33 ++++++++++++++-------------------
->>   2 files changed, 20 insertions(+), 19 deletions(-)
->>
->> diff --git a/include/linux/shrinker.h b/include/linux/shrinker.h
->> index 7bfeb2f25246..b0c6c2df9db8 100644
->> --- a/include/linux/shrinker.h
->> +++ b/include/linux/shrinker.h
->> @@ -74,6 +74,7 @@ struct shrinker {
->>   
->>   	refcount_t refcount;
->>   	struct completion completion_wait;
->> +	struct rcu_head rcu;
->>   
->>   	void *private_data;
->>   
->> @@ -123,6 +124,11 @@ struct shrinker *shrinker_alloc_and_init(count_objects_cb count,
->>   void shrinker_free(struct shrinker *shrinker);
->>   void unregister_and_free_shrinker(struct shrinker *shrinker);
->>   
->> +static inline bool shrinker_try_get(struct shrinker *shrinker)
->> +{
->> +	return refcount_inc_not_zero(&shrinker->refcount);
->> +}
->> +
->>   static inline void shrinker_put(struct shrinker *shrinker)
->>   {
->>   	if (refcount_dec_and_test(&shrinker->refcount))
->> diff --git a/mm/vmscan.c b/mm/vmscan.c
->> index 6f9c4750effa..767569698946 100644
->> --- a/mm/vmscan.c
->> +++ b/mm/vmscan.c
->> @@ -57,6 +57,7 @@
->>   #include <linux/khugepaged.h>
->>   #include <linux/rculist_nulls.h>
->>   #include <linux/random.h>
->> +#include <linux/rculist.h>
->>   
->>   #include <asm/tlbflush.h>
->>   #include <asm/div64.h>
->> @@ -742,7 +743,7 @@ void register_shrinker_prepared(struct shrinker *shrinker)
->>   	down_write(&shrinker_rwsem);
->>   	refcount_set(&shrinker->refcount, 1);
->>   	init_completion(&shrinker->completion_wait);
->> -	list_add_tail(&shrinker->list, &shrinker_list);
->> +	list_add_tail_rcu(&shrinker->list, &shrinker_list);
->>   	shrinker->flags |= SHRINKER_REGISTERED;
->>   	shrinker_debugfs_add(shrinker);
->>   	up_write(&shrinker_rwsem);
->> @@ -800,7 +801,7 @@ void unregister_shrinker(struct shrinker *shrinker)
->>   	wait_for_completion(&shrinker->completion_wait);
->>   
->>   	down_write(&shrinker_rwsem);
->> -	list_del(&shrinker->list);
->> +	list_del_rcu(&shrinker->list);
->>   	shrinker->flags &= ~SHRINKER_REGISTERED;
->>   	if (shrinker->flags & SHRINKER_MEMCG_AWARE)
->>   		unregister_memcg_shrinker(shrinker);
->> @@ -845,7 +846,7 @@ EXPORT_SYMBOL(shrinker_free);
->>   void unregister_and_free_shrinker(struct shrinker *shrinker)
->>   {
->>   	unregister_shrinker(shrinker);
->> -	kfree(shrinker);
->> +	kfree_rcu(shrinker, rcu);
->>   }
->>   EXPORT_SYMBOL(unregister_and_free_shrinker);
->>   
->> @@ -1067,33 +1068,27 @@ static unsigned long shrink_slab(gfp_t gfp_mask, int nid,
->>   	if (!mem_cgroup_disabled() && !mem_cgroup_is_root(memcg))
->>   		return shrink_slab_memcg(gfp_mask, nid, memcg, priority);
->>   
->> -	if (!down_read_trylock(&shrinker_rwsem))
->> -		goto out;
->> -
->> -	list_for_each_entry(shrinker, &shrinker_list, list) {
->> +	rcu_read_lock();
->> +	list_for_each_entry_rcu(shrinker, &shrinker_list, list) {
->>   		struct shrink_control sc = {
->>   			.gfp_mask = gfp_mask,
->>   			.nid = nid,
->>   			.memcg = memcg,
->>   		};
->>   
->> +		if (!shrinker_try_get(shrinker))
->> +			continue;
->> +		rcu_read_unlock();
+On Mon, Jun 12, 2023 at 10:28:46PM +0300, Abel Vesa wrote:
+> Now that there is a new dedicated ICE driver, drop the ufs-qcom-ice and
+> use the new ICE api provided by the Qualcomm soc driver ice. The platforms
+> that already have ICE support will use the API as library since there will
+> not be a devicetree node, but instead they have reg range. In this case,
+> the of_qcom_ice_get will return an ICE instance created for the consumer's
+> device. But if there are platforms that do not have ice reg in the
+> consumer devicetree node and instead provide a dedicated ICE devicetree
+> node, the of_qcom_ice_get will look up the device based on qcom,ice
+> property and will get the ICE instance registered by the probe function
+> of the ice driver.
 > 
-> I don't think you can do this unlock?
+> The ICE clock is now handle by the new driver. This is done by enabling
+> it on the creation of the ICE instance and then enabling/disabling it on
+> UFS runtime resume/suspend.
 > 
->> +
->>   		ret = do_shrink_slab(&sc, shrinker, priority);
->>   		if (ret == SHRINK_EMPTY)
->>   			ret = 0;
->>   		freed += ret;
->> -		/*
->> -		 * Bail out if someone want to register a new shrinker to
->> -		 * prevent the registration from being stalled for long periods
->> -		 * by parallel ongoing shrinking.
->> -		 */
->> -		if (rwsem_is_contended(&shrinker_rwsem)) {
->> -			freed = freed ? : 1;
->> -			break;
->> -		}
->> -	}
->>   
->> -	up_read(&shrinker_rwsem);
->> -out:
->> +		rcu_read_lock();
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+>  drivers/ufs/host/Kconfig        |   2 +-
+>  drivers/ufs/host/Makefile       |   4 +-
+>  drivers/ufs/host/ufs-qcom-ice.c | 244 --------------------------------
+>  drivers/ufs/host/ufs-qcom.c     |  99 ++++++++++++-
+>  drivers/ufs/host/ufs-qcom.h     |  32 +----
+>  5 files changed, 104 insertions(+), 277 deletions(-)
+>  delete mode 100644 drivers/ufs/host/ufs-qcom-ice.c
 > 
-> That new rcu_read_lock() won't help AFAIK, the whole
-> list_for_each_entry_rcu() needs to be under the single rcu_read_lock() to be
-> safe.
+> diff --git a/drivers/ufs/host/Kconfig b/drivers/ufs/host/Kconfig
+> index 8793e3433580..16624ba08050 100644
+> --- a/drivers/ufs/host/Kconfig
+> +++ b/drivers/ufs/host/Kconfig
+> @@ -59,7 +59,7 @@ config SCSI_UFS_QCOM
+>  	depends on SCSI_UFSHCD_PLATFORM && ARCH_QCOM
+>  	depends on GENERIC_MSI_IRQ
+>  	depends on RESET_CONTROLLER
+> -	select QCOM_SCM if SCSI_UFS_CRYPTO
+> +	select QCOM_INLINE_CRYPTO_ENGINE if SCSI_UFS_CRYPTO
+>  	help
+>  	  This selects the QCOM specific additions to UFSHCD platform driver.
+>  	  UFS host on QCOM needs some vendor specific configuration before
+> diff --git a/drivers/ufs/host/Makefile b/drivers/ufs/host/Makefile
+> index d7c5bf7fa512..4573aead02eb 100644
+> --- a/drivers/ufs/host/Makefile
+> +++ b/drivers/ufs/host/Makefile
+> @@ -3,9 +3,7 @@
+>  obj-$(CONFIG_SCSI_UFS_DWC_TC_PCI) += tc-dwc-g210-pci.o ufshcd-dwc.o tc-dwc-g210.o
+>  obj-$(CONFIG_SCSI_UFS_DWC_TC_PLATFORM) += tc-dwc-g210-pltfrm.o ufshcd-dwc.o tc-dwc-g210.o
+>  obj-$(CONFIG_SCSI_UFS_CDNS_PLATFORM) += cdns-pltfrm.o
+> -obj-$(CONFIG_SCSI_UFS_QCOM) += ufs_qcom.o
+> -ufs_qcom-y += ufs-qcom.o
+> -ufs_qcom-$(CONFIG_SCSI_UFS_CRYPTO) += ufs-qcom-ice.o
+> +obj-$(CONFIG_SCSI_UFS_QCOM) += ufs-qcom.o
 
-In the unregister_shrinker() path, we will wait for the refcount to zero
-before deleting the shrinker from the linked list. Here, we first took
-the rcu lock, and then decrement the refcount of this shrinker.
+The change from ufs_qcom.o to ufs-qcom.o here makes ufs_qcom.ko turn
+into ufs-qcom.ko.
 
-     shrink_slab                 unregister_shrinker
-     ===========                 ===================
-				
-				/* wait for B */
-				wait_for_completion()
-   rcu_read_lock()
+That broke a (fragile :P ) initramfs development script I play with. Not
+sure if that's any sort of contract with userspace or not, but thought
+I'd report it at least in case someone has a strong opinion.
 
-   shrinker_put() --> (B)
-				list_del_rcu()
-                                 /* wait for rcu_read_unlock() */
-				kfree_rcu()
+Thanks,
+Andrew
 
-   /*
-    * so this shrinker will not be freed here,
-    * and can be used to traverse the next node
-    * normally?
-    */
-   list_for_each_entry()
-
-   shrinker_try_get()
-   rcu_read_unlock()
-
-Did I miss something?
-
-> 
-> IIUC this is why Dave in [4] suggests unifying shrink_slab() with
-> shrink_slab_memcg(), as the latter doesn't iterate the list but uses IDR.
-> 
->> +		shrinker_put(shrinker);
->> +	}
->> +	rcu_read_unlock();
->>   	cond_resched();
->>   	return freed;
->>   }
-> 
