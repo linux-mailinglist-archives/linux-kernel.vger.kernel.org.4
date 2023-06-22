@@ -2,129 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1A4C739855
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:44:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36C69739857
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjFVHoo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 03:44:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48004 "EHLO
+        id S230148AbjFVHpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 03:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229893AbjFVHom (ORCPT
+        with ESMTP id S229993AbjFVHp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 03:44:42 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C49FC
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:44:40 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qCEzd-0006k9-EK; Thu, 22 Jun 2023 09:44:37 +0200
-Message-ID: <675a8893-429d-05be-b647-089b249c814c@leemhuis.info>
-Date:   Thu, 22 Jun 2023 09:44:36 +0200
+        Thu, 22 Jun 2023 03:45:27 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EFE3199E
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:45:26 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f6283d0d84so9463161e87.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:45:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687419924; x=1690011924;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=e2G6Ue8V4mRrKRwqehC5x19V+QhPz8CK/6cX5tEJLKo=;
+        b=ZcFyvFScRGUXITKWgPViPmDQicGubfs1vxVvXMns5+Qyf3/shHpYw6yqxPCjZ+/ydW
+         ou1m8UB4FFNDasObzLBEKJOI26e4ZQi2mrkJX/5+93OaiP/c9ESejqjBEaxJS5Wdas+J
+         4XvYDKGYGz95XYRjcI9t0b7o9TGB77rduZQOZ43hVO8EXmmNFSxvGbXq7DDgLtmqZsAm
+         UuiQ1WDKHtEP9sMaXbr7DIZ/VYr+zsxhTZ492jx7SQlc7vOfPSsn6fKq7/durcWKePGU
+         vqhXpWCxtxp0DgJmB/pSuiSy+x8WmLp3pLWjMNPCnJ1DYY62T48UL6StjId2uNDTCS+h
+         /twA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687419924; x=1690011924;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e2G6Ue8V4mRrKRwqehC5x19V+QhPz8CK/6cX5tEJLKo=;
+        b=ibnjhEdxcfKYWSIK+BWf2xj7Rf69QxeNfB4OVFUURMT+uPCES1PUDw2JdkmyBgSbzI
+         YAhaZurxcMG5pZUbL5sv3BUJLqw7gEFNAlCxE/uKGPbe90rmqduvDIUwZFm2PQkOov2E
+         R9nmxDLKp9rHSb9Lf2duE8dfZi6kKTjfhvPItnHq67jmQIuOoeQRZso0Gotp89SProKn
+         OPvCGUSPcE+RDENocKt4pKL+bz/+BH4pAaLng7LiPz/3DB1FVGee/2jH+Tv2+DQUXKnb
+         4kZNo0O0RW5PmfhcISXEsyhBdRd+z6pthr1Qvtr1UpdeeTtyBYdSSqpsgV2D8e6tk7ZP
+         3Bfw==
+X-Gm-Message-State: AC+VfDy0fhsm8slAXgh18rSLEMFeBHKqbh9QqufkPvTJ424aNirIuBcb
+        9NZSQH+QuDn1kdFvco0rGA7/fMCIACpj1Qb6mbo=
+X-Google-Smtp-Source: ACHHUZ4m5DkLY5dTb2o2vBj1uxRz4AA9uyGvYBqoIVOitPvrbciR4ZIJo1FkNX9tGlDk7nKza45OxQ==
+X-Received: by 2002:a05:6512:32af:b0:4f8:6e1a:b552 with SMTP id q15-20020a05651232af00b004f86e1ab552mr7966033lfe.28.1687419924420;
+        Thu, 22 Jun 2023 00:45:24 -0700 (PDT)
+Received: from Fecusia.lan (c-05d8225c.014-348-6c756e10.bbcust.telenor.se. [92.34.216.5])
+        by smtp.gmail.com with ESMTPSA id y11-20020a19750b000000b004f4cabba7desm1037465lfe.74.2023.06.22.00.45.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 00:45:24 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Dmitry Osipenko <digetx@gmail.com>
+Subject: [PATCH] misc/genalloc: Name subpools by of_node_full_name()
+Date:   Thu, 22 Jun 2023 09:45:20 +0200
+Message-Id: <20230622074520.3058027-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Re: [6.4-rc6] Crash during a kexec operation
- (tpm_amd_is_rng_defective)
-Content-Language: en-US, de-DE
-To:     Sachin Sant <sachinp@linux.ibm.com>,
-        Michael Ellerman <michaele@au1.ibm.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, jarkko@kernel.org
-References: <99B81401-DB46-49B9-B321-CF832B50CAC3@linux.ibm.com>
- <87o7lhfmoh.fsf@mail.lhotse>
- <CA0088E4-2851-4AFF-94F8-2A07C5CDA8D8@linux.ibm.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-In-Reply-To: <CA0088E4-2851-4AFF-94F8-2A07C5CDA8D8@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1687419880;2dcd4107;
-X-HE-SMSGID: 1qCEzd-0006k9-EK
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
-for once, to make this easily accessible to everyone.
+A previous commit tried to come up with more generic subpool
+names, but this isn't quite working: the node name was used
+elsewhere to match pools to consumers which regressed the
+nVidia Tegra 2/3 video decoder.
 
-As Linus will likely release 6.4 on this or the following Sunday a quick
-question: is there any hope this regression might be fixed any time
-soon? Doesn't look like it, as it seems nothing happened for a few days,
-but maybe I missed something.
+Revert back to an earlier approach using of_node_full_name()
+instead of just the name to make sure the pool name is more
+unique, and change both sites using this in the kernel.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+It is not perfect since two SRAM nodes could have the same
+subpool name but it makes the situation better than before.
 
-#regzbot poke
+Reported-by: Dmitry Osipenko <digetx@gmail.com>
+Fixes: 21e5a2d10c8f ("misc: sram: Generate unique names for subpools")
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+---
+ drivers/misc/sram.c | 2 +-
+ lib/genalloc.c      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-On 15.06.23 06:57, Sachin Sant wrote:
-> 
->>> [ 34.381788] Code: 5463063e 408201c8 38210080 4e800020 60000000 60000000 60000000 7c0802a6 fbe10078 7c7f1b78 f8010090 e9230728 <e9890050> 2c2c0000 41820020 7d8903a6 
->>
->>  2c:   28 07 23 e9     ld      r9,1832(r3)
->>  30:   50 00 89 e9     ld      r12,80(r9)
->>
->> Where r3 is *chip.
->> r9 is NULL, and 80 = 0x50.
->>
->> Looks like a NULL chip->ops, which oopses in:
->>
->> static int tpm_request_locality(struct tpm_chip *chip)
->> {
->> int rc;
->>
->> if (!chip->ops->request_locality)
->>
->>
->> Can you test the patch below?
->>
-> 
-> It proceeds further but then run into following crash
-> 
-> [  103.269574] Kernel attempted to read user page (18) - exploit attempt? (uid: 0)
-> [  103.269589] BUG: Kernel NULL pointer dereference on read at 0x00000018
-> [  103.269595] Faulting instruction address: 0xc0000000009dcf34
-> [  103.269599] Oops: Kernel access of bad area, sig: 11 [#1]
-> [  103.269602] LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA pSeries
-> [  103.269606] Modules linked in: dm_mod(E) nft_fib_inet(E) nft_fib_ipv4(E) nft_fib_ipv6(E) nft_fib(E) nft_reject_inet(E) nf_reject_ipv4(E) nf_reject_ipv6(E) nft_reject(E) nft_ct(E) nft_chain_nat(E) nf_nat(E) nf_conntrack(E) nf_defrag_ipv6(E) nf_defrag_ipv4(E) bonding(E) tls(E) rfkill(E) ip_set(E) sunrpc(E) nf_tables(E) nfnetlink(E) pseries_rng(E) aes_gcm_p10_crypto(E) drm(E) drm_panel_orientation_quirks(E) xfs(E) libcrc32c(E) sd_mod(E) sr_mod(E) t10_pi(E) crc64_rocksoft_generic(E) cdrom(E) crc64_rocksoft(E) crc64(E) sg(E) ibmvscsi(E) scsi_transport_srp(E) ibmveth(E) vmx_crypto(E) fuse(E)
-> [  103.269644] CPU: 18 PID: 6872 Comm: kexec Kdump: loaded Tainted: G            E      6.4.0-rc6-dirty #8
-> [  103.269649] Hardware name: IBM,9080-HEX POWER10 (raw) 0x800200 0xf000006 of:IBM,FW1030.20 (NH1030_058) hv:phyp pSeries
-> [  103.269653] NIP:  c0000000009dcf34 LR: c0000000009dd2bc CTR: c0000000009eaa60
-> [  103.269656] REGS: c0000000a113f510 TRAP: 0300   Tainted: G            E       (6.4.0-rc6-dirty)
-> [  103.269660] MSR:  800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  CR: 88484886  XER: 00000001
-> [  103.269669] CFAR: c0000000009dd2b8 DAR: 0000000000000018 DSISR: 40000000 IRQMASK: 0  [  103.269669] GPR00: c0000000009dd2bc c0000000a113f7b0 c0000000014a1500 c000000090310000  [  103.269669] GPR04: c00000009f770000 0000000000000016 0000060000007a01 0000000000000016  [  103.269669] GPR08: c00000009f770000 0000000000000000 0000000000000000 0000000000008000  [  103.269669] GPR12: c0000000009eaa60 c00000135fab7f00 0000000000000000 0000000000000000  [  103.269669] GPR16: 0000000000000000 0000000000000000 0000000000000000 0000000000000000  [  103.269669] GPR20: 0000000000000000 0000000000000000 0000000000000000 0000000000000000  [  103.269669] GPR24: 0000000000000000 0000000000000016 c000000090310000 0000000000001000  [  103.269669] GPR28: c00000009f770000 000000007a010000 c00000009f770000 c000000090310000  [  103.269707] NIP [c0000000009dcf34] tpm_try_transmit+0x74/0x300
-> [  103.269713] LR [c0000000009dd2bc] tpm_transmit+0xfc/0x190
-> [  103.269717] Call Trace:
-> [  103.269718] [c0000000a113f7b0] [c0000000a113f880] 0xc0000000a113f880 (unreliable)
-> [  103.269724] [c0000000a113f840] [c0000000009dd2bc] tpm_transmit+0xfc/0x190
-> [  103.269727] [c0000000a113f900] [c0000000009dd398] tpm_transmit_cmd+0x48/0x110
-> [  103.269731] [c0000000a113f980] [c0000000009df1b0] tpm2_get_tpm_pt+0x140/0x230
-> [  103.269736] [c0000000a113fa20] [c0000000009db208] tpm_amd_is_rng_defective+0xb8/0x250
-> [  103.269739] [c0000000a113faa0] [c0000000009db828] tpm_chip_unregister+0x138/0x160
-> [  103.269743] [c0000000a113fae0] [c0000000009eaa94] tpm_ibmvtpm_remove+0x34/0x130
-> [  103.269748] [c0000000a113fb50] [c000000000115738] vio_bus_remove+0x58/0xd0
-> [  103.269754] [c0000000a113fb90] [c000000000a01dcc] device_shutdown+0x21c/0x39c
-> [  103.269758] [c0000000a113fc20] [c0000000001a2684] kernel_restart_prepare+0x54/0x70
-> [  103.269762] [c0000000a113fc40] [c000000000292c48] kernel_kexec+0xa8/0x100
-> [  103.269766] [c0000000a113fcb0] [c0000000001a2cd4] __do_sys_reboot+0x214/0x2c0
-> [  103.269770] [c0000000a113fe10] [c000000000034adc] system_call_exception+0x13c/0x340
-> [  103.269776] [c0000000a113fe50] [c00000000000d05c] system_call_vectored_common+0x15c/0x2ec
-> [  103.269781] --- interrupt: 3000 at 0x7fff805459f0
-> [  103.269784] NIP:  00007fff805459f0 LR: 0000000000000000 CTR: 0000000000000000
-> [  103.269786] REGS: c0000000a113fe80 TRAP: 3000   Tainted: G            E       (6.4.0-rc6-dirty)
-> [  103.269790] MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 42422884  XER: 00000000
-> [  103.269799] IRQMASK: 0  [  103.269799] GPR00: 0000000000000058 00007fffc07a68c0 0000000110437f00 fffffffffee1dead  [  103.269799] GPR04: 0000000028121969 0000000045584543 0000000000000000 0000000000000003  [  103.269799] GPR08: 0000000000100000 0000000000000000 0000000000000000 0000000000000000  [  103.269799] GPR12: 0000000000000000 00007fff8089b2c0 000000011042f598 0000000000000000  [  103.269799] GPR16: ffffffffffffffff 0000000000000000 000000011040fcc0 0000000000000000  [  103.269799] GPR20: 0000000000008913 0000000000008914 0000000149c61020 0000000000000003  [  103.269799] GPR24: 0000000000000000 0000000000000001 0000000000000003 00007fffc07a6a40  [  103.269799] GPR28: 0000000110409f10 00007fff806419c0 0000000149c61080 0000000149c61040  [  103.269833] NIP [00007fff805459f0] 0x7fff805459f0
-> [  103.269836] LR [0000000000000000] 0x0
-> [  103.269838] --- interrupt: 3000
-> [  103.269839] Code: 83a40006 2c090000 41820208 7c0802a6 79250020 7c25d840 f80100a0 41810224 fbe10088 f8410018 7c7f1b78 e9230728 <e9890018> 7d8903a6 4e800421 e8410018  [  103.269852] ---[ end trace 0000000000000000 ]—
-> 
-> - Sachin
+diff --git a/drivers/misc/sram.c b/drivers/misc/sram.c
+index 5757adf418b1..61209739dc43 100644
+--- a/drivers/misc/sram.c
++++ b/drivers/misc/sram.c
+@@ -236,7 +236,7 @@ static int sram_reserve_regions(struct sram_dev *sram, struct resource *res)
+ 			}
+ 			if (!label)
+ 				block->label = devm_kasprintf(sram->dev, GFP_KERNEL,
+-							      "%s", dev_name(sram->dev));
++							      "%s", of_node_full_name(child));
+ 			else
+ 				block->label = devm_kstrdup(sram->dev,
+ 							    label, GFP_KERNEL);
+diff --git a/lib/genalloc.c b/lib/genalloc.c
+index 0c883d6fbd44..6c644f954bc5 100644
+--- a/lib/genalloc.c
++++ b/lib/genalloc.c
+@@ -895,7 +895,7 @@ struct gen_pool *of_gen_pool_get(struct device_node *np,
+ 
+ 		of_property_read_string(np_pool, "label", &name);
+ 		if (!name)
+-			name = np_pool->name;
++			name = of_node_full_name(np_pool);
+ 	}
+ 	if (pdev)
+ 		pool = gen_pool_get(&pdev->dev, name);
+-- 
+2.34.1
+
