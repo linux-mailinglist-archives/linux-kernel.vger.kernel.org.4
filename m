@@ -2,137 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 848CA73938E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 02:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6691739390
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 02:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230082AbjFVAJL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 21 Jun 2023 20:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
+        id S230149AbjFVAJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 20:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjFVAJJ (ORCPT
+        with ESMTP id S230229AbjFVAJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 20:09:09 -0400
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0712A3;
-        Wed, 21 Jun 2023 17:09:08 -0700 (PDT)
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-bc43a73ab22so156416276.0;
-        Wed, 21 Jun 2023 17:09:08 -0700 (PDT)
+        Wed, 21 Jun 2023 20:09:45 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C7FD2
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 17:09:36 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-54fb3c168fcso5172644a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 17:09:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687392576; x=1689984576;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zPCjWQuh0tMubZzzG3kZbKYTL4R1/Hyq1qgdTGl4eLI=;
+        b=MJFZFMsHmr01OG2VNsbcorKDHR/vf8xMKy5enKEXfwqs7HCBtGpP7Nc7/h079s754A
+         /qudvs/X1buT/gSM133Ua1jBrcqB1/QIh3I8CxhYIU4fN1+WQGl8m/6GGAdVu+NBd82e
+         s1ZxoS+R9OpUPRCoxLPF/80e9K3x8AqYqzWtSr9s3nHpklaLwzL5iM9GhOBBlyox4TBl
+         qJu1aHiE4E8Sy1Td1qsTlbz7ib+pw3BZbZ6ZdPg/W1TRNAhYuFanVGwQjICxj4GhlBGu
+         pCWvy2TYBojkD6FOvZYMUzUnThgcUHfDhsk4miI0CTBr6OQMmLRHF54+PxIGyP5TMaE9
+         4MxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687392548; x=1689984548;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9JwY1z34HajMBEgQFRBHMRG7XdiQHDpLz+pOguTwHBg=;
-        b=XccwjGChuYsp9P1EdYh8lix3pWLrz4+yUsQv1a1yXRRcUedXR3O4FHEsa396TM/geR
-         Ds4MJPYwtjRBMx7FMBVMynWeO/J1Cku3vRrT1RbRMcP34PoMRlWm/xXkrRjT4fwSwmXv
-         Pgvi/+JtFBkHMVHK43RveO9kGCmlFNrFL+1IIe21VHg8oIh3cNJ+I7vHmjgkciujPAFp
-         1QxXGz2Rk/GCJ3bZXS+6oU4taQLFdgudiViWJuSlNVjdL29CCqOU54ulZYcPGouuyP6T
-         AyFY8Zdr66QdqEUVXhJoOguGjtyPzeWRZZtgo0QvEke1+BG5UPI9Nepidj6OmJYgvXXS
-         kb0Q==
-X-Gm-Message-State: AC+VfDxawuZIq+JQGb2ipfsNo/MHfXOrNFIp6I3QLwbJK+uvBQhCYbLt
-        yBSfWPPKWTkFkNOlJGZSPyx3zw7XNiOyZ4pO6vg=
-X-Google-Smtp-Source: ACHHUZ714CDLV6yfRZXyThDivy47Gt/f0HjzChbg9nlc8R9IE/46OU2Rnt5RAzPo4DKpW9xpz0G1fVcI0481rbwVdbI=
-X-Received: by 2002:a25:2c5:0:b0:bd4:58f0:2014 with SMTP id
- 188-20020a2502c5000000b00bd458f02014mr16481989ybc.6.1687392547748; Wed, 21
- Jun 2023 17:09:07 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230620170027.1861012-1-weilin.wang@intel.com>
-In-Reply-To: <20230620170027.1861012-1-weilin.wang@intel.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 21 Jun 2023 17:08:56 -0700
-Message-ID: <CAM9d7cichi8QpVFjCDUf8e5aJEuZg1JPHtMBEs_FSNtsm8VoeA@mail.gmail.com>
-Subject: Re: [PATCH v5 0/3] Add metric value validation test
-To:     Weilin Wang <weilin.wang@intel.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>, ravi.bangoria@amd.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1687392576; x=1689984576;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zPCjWQuh0tMubZzzG3kZbKYTL4R1/Hyq1qgdTGl4eLI=;
+        b=jppJgiPvEzn8mzxp2lRMFa1UP3Nd54pp0YDt06XHjFpTHxMzPSfToetdETaM5IYHrG
+         7VqqSSdXmNYfbU5fIk+ExBN4vRWc+gRm1QPb0ebcLVxowzLPhVg7oxpE78JQjwDh7A6+
+         jUy+PXclBYKBH0PEMOFmJhAy4p06ds2+iyDrSK21ooeR/zJ6EYX6/Bl0I4A2PF1AgsaQ
+         dH6AJDaw5MZJRy9z/5gTN6NU9bdCpqWIgSMc5eDSEoHG85C2nN/z6uKQV1V0pJDTIEx8
+         ai3dKOq4jL2fCaLw4UZnqILLmMY6fGM1MDqf1/Lg6L2ikC6oagyr8IH6LJtjMVqTAE7C
+         Fe/A==
+X-Gm-Message-State: AC+VfDxgFQvCF2mLbgVXBtmlegq217P/5aMovQy/FfuBDwyLThP9saJj
+        0S+xjHAEqlEhC8/lgw0zJvtJyw==
+X-Google-Smtp-Source: ACHHUZ4Btzr1xeO/iX9cHkLZZjSPO3a2rNBzXJNf8ixnyKeGhNl8zc6BsoRgI7UHfigPu4sBdmhRdQ==
+X-Received: by 2002:a05:6a20:7290:b0:120:1baf:e56e with SMTP id o16-20020a056a20729000b001201bafe56emr14880065pzk.19.1687392576167;
+        Wed, 21 Jun 2023 17:09:36 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id n11-20020a170902d2cb00b001ab01598f40sm4037924plc.173.2023.06.21.17.09.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 17:09:35 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 17:09:35 -0700 (PDT)
+X-Google-Original-Date: Wed, 21 Jun 2023 17:08:56 PDT (-0700)
+Subject:     Re: [PATCH v3 0/5] riscv: Introduce KASLR
+In-Reply-To: <20230606123242.20804-1-alexghiti@rivosinc.com>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        Ard Biesheuvel <ardb@kernel.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-efi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        alexghiti@rivosinc.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     alexghiti@rivosinc.com
+Message-ID: <mhng-665efaa0-223e-411c-9c96-4ce1fba5396d@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Tue, Jun 20, 2023 at 10:00 AM Weilin Wang <weilin.wang@intel.com> wrote:
+On Tue, 06 Jun 2023 05:32:37 PDT (-0700), alexghiti@rivosinc.com wrote:
+> The following KASLR implementation allows to randomize the kernel mapping:
 >
-> This is the fifth version of metric value validation tests.
+> - virtually: we expect the bootloader to provide a seed in the device-tree
+> - physically: only implemented in the EFI stub, it relies on the firmware to
+>   provide a seed using EFI_RNG_PROTOCOL. arm64 has a similar implementation
+>   hence the patch 3 factorizes KASLR related functions for riscv to take
+>   advantage.
 >
-> We made the following changes from v4 to v5:
->  - Update "()" to "{}" to avoid creating sub shell and successfully skip test on non-Intel
->  platform. [Ravi]
+> The new virtual kernel location is limited by the early page table that only
+> has one PUD and with the PMD alignment constraint, the kernel can only take
+> < 512 positions.
 >
-> v4: https://lore.kernel.org/lkml/20230618172820.751560-1-weilin.wang@intel.com/
+> base-commit-tag: v6.4-rc2
 >
-> Weilin Wang (3):
->   perf test: Add metric value validation test
->   perf test: Add skip list for metrics known would fail
->   perf test: Rerun failed metrics with longer workload
+> Changes in v3:
+>   * Rebase on top of 6.4-rc2
+>   * Make RANDOMIZE_BASE depend on 64bit
+>   * Fix efi_icache_sync and efi_get_kimg_min_align which were undefined
+>     in x86 (and certainly other archs)
+>   * Add patch 4 to fix warning on rv32
+>
+> Changes in v2:
+>   * Rebase on top of 6.3-rc1
+>   * Add a riscv cache sync after memcpying the kernel
+>   * Add kaslr_offset implementation for KCOV
+>   * Add forward declaration to quiet LLVM
+>
+> Alexandre Ghiti (5):
+>   riscv: Introduce virtual kernel mapping KASLR
+>   riscv: Dump out kernel offset information on panic
+>   arm64: libstub: Move KASLR handling functions to efi-stub-helper.c
+>   libstub: Fix compilation warning for rv32
+>   riscv: libstub: Implement KASLR by using generic functions
+>
+>  arch/arm64/include/asm/efi.h                  |   4 +
+>  arch/riscv/Kconfig                            |  19 +++
+>  arch/riscv/include/asm/efi.h                  |   4 +
+>  arch/riscv/include/asm/page.h                 |   3 +
+>  arch/riscv/kernel/image-vars.h                |   1 +
+>  arch/riscv/kernel/pi/Makefile                 |   2 +-
+>  arch/riscv/kernel/pi/cmdline_early.c          |  13 ++
+>  arch/riscv/kernel/pi/fdt_early.c              |  30 ++++
+>  arch/riscv/kernel/setup.c                     |  25 +++
+>  arch/riscv/mm/init.c                          |  36 ++++-
+>  drivers/firmware/efi/libstub/arm64-stub.c     | 112 +------------
+>  drivers/firmware/efi/libstub/arm64.c          |   5 +
+>  .../firmware/efi/libstub/efi-stub-helper.c    | 151 ++++++++++++++++++
+>  drivers/firmware/efi/libstub/efistub.h        |  18 +++
+>  drivers/firmware/efi/libstub/riscv-stub.c     |  28 ++--
+>  drivers/firmware/efi/libstub/riscv.c          |   5 +
+>  16 files changed, 332 insertions(+), 124 deletions(-)
+>  create mode 100644 arch/riscv/kernel/pi/fdt_early.c
 
-Tested-by: Namhyung Kim <namhyung@kernel.org>
-
-Thanks,
-Namhyung
-
-
-$ ./perf test -v validation
-
-107: perf metrics value validation                                   :
---- start ---
-test child forked, pid 1900992
-Launch python validation script ./tests/shell/lib/perf_metric_validation.py
-Output will be stored in: /tmp/__perf_test.program.Mm9Rw
-Starting perf collection
-...
-Workload:  perf bench futex hash -r 2 -s
-Total metrics collected:  200
-Non-negative metric count:  200
-Total Test Count:  100
-Passed Test Count:  100
-Test validation finished. Final report:
-[
-    {
-        "Workload": "perf bench futex hash -r 2 -s",
-        "Report": {
-            "Metric Validation Statistics": {
-                "Total Rule Count": 100,
-                "Passed Rule Count": 100
-            },
-            "Tests in Category": {
-                "PositiveValueTest": {
-                    "Total Tests": 200,
-                    "Passed Tests": 200,
-                    "Failed Tests": []
-                },
-                "RelationshipTest": {
-                    "Total Tests": 5,
-                    "Passed Tests": 5,
-                    "Failed Tests": []
-                },
-                "SingleMetricTest": {
-                    "Total Tests": 95,
-                    "Passed Tests": 95,
-                    "Failed Tests": []
-                }
-            },
-            "Errors": []
-        }
-    }
-]
-test child finished with 0
----- end ----
-perf metrics value validation: Ok
+I'm marking this one as changes requested as well as LKP is pointing at 
+some build failures.  It also touches libstub so I'd really prefer an 
+Ack, but folks might not be looking with the build issues.
