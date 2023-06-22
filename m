@@ -2,276 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D4F7396BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 07:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 077E77396C6
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 07:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230206AbjFVFQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 01:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53976 "EHLO
+        id S230218AbjFVFU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 01:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbjFVFQu (ORCPT
+        with ESMTP id S229921AbjFVFUy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 01:16:50 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A96CE9;
-        Wed, 21 Jun 2023 22:16:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1687411008; x=1718947008;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=IXSa4QLaPeHRSIGngAkBe0zIJ6RCzTLgtQw4tPfpGj4=;
-  b=e7IBghg0fb1mWZ4RAs3wFC7yAc6gVailOafPGo+tKmkHMRJn9tXybbkw
-   gbtPmk5k3qlgu8o2XLd1+NASOcc9klO2G1rtI/Em9HLsu5Qa4YRw00lYh
-   6mtOQvPA9WsA0z/O4X5rYKZHA3OcDapWag0v42C9NeWXq2LO0tv0TpT62
-   DF0gjeN/BxyJ1aLRdKvPiggJpCx+HOA6Hp2G+0iGxTUZAE25WQBy5YxNC
-   kyB51SRGqsMcI/eozLRvcy/K/9HQXBVsHNtEthIOf7YNPFgPxaJ7M2yN1
-   e+V1w2eKjq/tOxJtJzws9I8JnvpkUIkiQ9xHmIFj8a3LXRGJzU4JoZO5c
-   A==;
-X-IronPort-AV: E=Sophos;i="6.00,262,1681164000"; 
-   d="scan'208";a="31548948"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 22 Jun 2023 07:16:46 +0200
-Received: from steina-w.localnet (unknown [10.123.53.21])
+        Thu, 22 Jun 2023 01:20:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E60E9;
+        Wed, 21 Jun 2023 22:20:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 3052528007C;
-        Thu, 22 Jun 2023 07:16:46 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Benjamin Bara <bbara93@gmail.com>,
-        Matthias Kaehlcke <mka@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Benjamin Bara <benjamin.bara@skidata.com>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] usb: misc: onboard-hub: support multiple power supplies
-Date:   Thu, 22 Jun 2023 07:16:45 +0200
-Message-ID: <8701196.DvuYhMxLoT@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <ZJMPv6Fm3On0ITFi@google.com>
-References: <20230620-hx3-v2-0-76a53434c713@skidata.com> <20230620-hx3-v2-1-76a53434c713@skidata.com> <ZJMPv6Fm3On0ITFi@google.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 463ED61724;
+        Thu, 22 Jun 2023 05:20:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27178C433C0;
+        Thu, 22 Jun 2023 05:20:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687411251;
+        bh=eGLXi+uLksYHHBlslNR0JrkdmKSXNfPy+zdjEsn8oDk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Lqd5vzo92XkWQozOq8THy9F79ZZK2SH1MUWBLiCUkEZ/AIYHqQJj72S6F5IJs/xGb
+         cZBlbHIdi3KeL13Y9f02+PQ786Jog6Evg5Kc6nqVcpjRvf9E08ua9XAgFEs7erbeRO
+         CK++HIJlGMruS9JaFkW0lycQeHg3+GILARbQb9eM=
+Date:   Thu, 22 Jun 2023 07:20:48 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Breno Leitao <leitao@debian.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, leit@meta.com,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steve French <stfrench@microsoft.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Simon Ser <contact@emersion.fr>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:IO_URING" <io-uring@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
+Subject: Re: [PATCH] io_uring: Add io_uring command support for sockets
+Message-ID: <2023062231-tasting-stranger-8882@gregkh>
+References: <20230621232129.3776944-1-leitao@debian.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621232129.3776944-1-leitao@debian.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Jun 21, 2023 at 04:21:26PM -0700, Breno Leitao wrote:
+> Enable io_uring commands on network sockets. Create two new
+> SOCKET_URING_OP commands that will operate on sockets. Since these
+> commands are similar to ioctl, uses the _IO{R,W} helpers to embedded the
+> argument size and operation direction. Also allocates a unused ioctl
+> chunk for uring command usage.
+> 
+> In order to call ioctl on sockets, use the file_operations->uring_cmd
+> callbacks, and map it to a uring socket function, which handles the
+> SOCKET_URING_OP accordingly, and calls socket ioctls.
+> 
+> This patches was tested by creating a new test case in liburing.
+> Link: https://github.com/leitao/liburing/commit/3340908b742c6a26f662a0679c4ddf9df84ef431
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
 
-Am Mittwoch, 21. Juni 2023, 16:57:03 CEST schrieb Matthias Kaehlcke:
-> ********************
-> Achtung externe E-Mail: =D6ffnen Sie Anh=E4nge und Links nur, wenn Sie wi=
-ssen,
-> dass diese aus einer sicheren Quelle stammen und sicher sind. Leiten Sie
-> die E-Mail im Zweifelsfall zur Pr=FCfung an den IT-Helpdesk weiter.
-> Attention external email: Open attachments and links only if you know that
-> they are from a secure source and are safe. In doubt forward the email to
-> the IT-Helpdesk to check it. ********************
->=20
-> Hi,
->=20
-> On Wed, Jun 21, 2023 at 04:26:27PM +0200, Benjamin Bara wrote:
-> > From: Benjamin Bara <benjamin.bara@skidata.com>
-> >=20
-> > As some of the onboard hubs require multiple power supplies, provide the
-> > environment to support them.
-> >=20
-> > Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
->=20
-> Overall this looks good to me, a few nits inside.
->=20
-> > ---
-> > v2:
-> > - replace (err !=3D 0) with (err)
-> > ---
-> >=20
-> >  drivers/usb/misc/onboard_usb_hub.c | 36
-> >  ++++++++++++++++++++++++++++-------- drivers/usb/misc/onboard_usb_hub.h
-> >  |  1 +
-> >  2 files changed, 29 insertions(+), 8 deletions(-)
-> >=20
-> > diff --git a/drivers/usb/misc/onboard_usb_hub.c
-> > b/drivers/usb/misc/onboard_usb_hub.c index 12fc6eb67c3b..3de30356a684
-> > 100644
-> > --- a/drivers/usb/misc/onboard_usb_hub.c
-> > +++ b/drivers/usb/misc/onboard_usb_hub.c
-> > @@ -27,6 +27,12 @@
-> >=20
-> >  #include "onboard_usb_hub.h"
-> >=20
-> > +#define SUPPLIES_NUM_MAX 2
->=20
-> MAX_SUPPLIES?
+Isn't this a new version of an older patch?
 
-Do we need this MAX_SUPPLIES macro at all? This essentially is=20
-ARRAY_SIZE(supply_names), no? At least it should be
-> #define MAX_SUPPLIES ARRAY_SIZE(supply_names)
+>  .../userspace-api/ioctl/ioctl-number.rst      |  1 +
+>  include/linux/io_uring.h                      |  6 +++++
+>  include/uapi/linux/io_uring.h                 |  6 +++++
+>  io_uring/uring_cmd.c                          | 27 +++++++++++++++++++
+>  net/socket.c                                  |  2 ++
+>  5 files changed, 42 insertions(+)
+> 
+> diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst b/Documentation/userspace-api/ioctl/ioctl-number.rst
+> index 4f7b23faebb9..23348636f2ef 100644
+> --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
+> +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
+> @@ -361,6 +361,7 @@ Code  Seq#    Include File                                           Comments
+>  0xCB  00-1F                                                          CBM serial IEC bus in development:
+>                                                                       <mailto:michael.klein@puffin.lb.shuttle.de>
+>  0xCC  00-0F  drivers/misc/ibmvmc.h                                   pseries VMC driver
+> +0xCC  A0-BF  uapi/linux/io_uring.h                                   io_uring cmd subsystem
 
->=20
-> add empty line
->=20
-> > +static const char * const supply_names[] =3D {
-> > +	"vdd",
-> > +	"vdd2",
-> > +};
-> > +
-> >=20
-> >  static void onboard_hub_attach_usb_driver(struct work_struct *work);
-> > =20
-> >  static struct usb_device_driver onboard_hub_usbdev_driver;
-> >=20
-> > @@ -40,7 +46,8 @@ struct usbdev_node {
-> >=20
-> >  };
-> > =20
-> >  struct onboard_hub {
-> >=20
-> > -	struct regulator *vdd;
-> > +	struct regulator_bulk_data supplies[SUPPLIES_NUM_MAX];
-> > +	unsigned int supplies_num;
->=20
-> num_supplies?
->=20
-> >  	struct device *dev;
-> >  	const struct onboard_hub_pdata *pdata;
-> >  	struct gpio_desc *reset_gpio;
-> >=20
-> > @@ -55,9 +62,9 @@ static int onboard_hub_power_on(struct onboard_hub *h=
-ub)
-> >=20
-> >  {
-> > =20
-> >  	int err;
-> >=20
-> > -	err =3D regulator_enable(hub->vdd);
-> > +	err =3D regulator_bulk_enable(hub->supplies_num, hub->supplies);
-> >=20
-> >  	if (err) {
-> >=20
-> > -		dev_err(hub->dev, "failed to enable regulator: %d\n",=20
-err);
-> > +		dev_err(hub->dev, "failed to enable supplies: %d\n", err);
-> >=20
-> >  		return err;
-> >  =09
-> >  	}
-> >=20
-> > @@ -75,9 +82,9 @@ static int onboard_hub_power_off(struct onboard_hub
-> > *hub)
-> >=20
-> >  	gpiod_set_value_cansleep(hub->reset_gpio, 1);
-> >=20
-> > -	err =3D regulator_disable(hub->vdd);
-> > +	err =3D regulator_bulk_disable(hub->supplies_num, hub->supplies);
-> >=20
-> >  	if (err) {
-> >=20
-> > -		dev_err(hub->dev, "failed to disable regulator: %d\n",=20
-err);
-> > +		dev_err(hub->dev, "failed to disable supplies: %d\n",=20
-err);
-> >=20
-> >  		return err;
-> >  =09
-> >  	}
-> >=20
-> > @@ -232,6 +239,7 @@ static int onboard_hub_probe(struct platform_device
-> > *pdev)>=20
-> >  	const struct of_device_id *of_id;
-> >  	struct device *dev =3D &pdev->dev;
-> >  	struct onboard_hub *hub;
-> >=20
-> > +	unsigned int i;
-> >=20
-> >  	int err;
-> >  =09
-> >  	hub =3D devm_kzalloc(dev, sizeof(*hub), GFP_KERNEL);
-> >=20
-> > @@ -246,9 +254,21 @@ static int onboard_hub_probe(struct platform_device
-> > *pdev)>=20
-> >  	if (!hub->pdata)
-> >  =09
-> >  		return -EINVAL;
-> >=20
-> > -	hub->vdd =3D devm_regulator_get(dev, "vdd");
-> > -	if (IS_ERR(hub->vdd))
-> > -		return PTR_ERR(hub->vdd);
-> > +	if (hub->pdata->supplies_num > SUPPLIES_NUM_MAX)
-> > +		return dev_err_probe(dev, -EINVAL, "max %d supplies=20
-supported!\n",
-> > +				     SUPPLIES_NUM_MAX);
-> > +	hub->supplies_num =3D 1;
-> > +	if (hub->pdata->supplies_num > 1)
-> > +		hub->supplies_num =3D hub->pdata->supplies_num;
->=20
-> Please change the above to:
->=20
-> 	if (hub->pdata->supplies_num !=3D 0)
-> 		hub->supplies_num =3D hub->pdata->supplies_num;
-> 	else
-> 		hub->supplies_num =3D 1;
->=20
-
-In the kernel there is also this style:
-> hub->supplies_num =3D hub->pdata->supplies_num? : 1;
-
-But it's up to you which one you prefer.
-
-Best regards,
-Alexander
-
-> > +
-> > +	for (i =3D 0; i < SUPPLIES_NUM_MAX; i++)
-> > +		hub->supplies[i].supply =3D supply_names[i];
-> > +
-> > +	err =3D devm_regulator_bulk_get(dev, hub->supplies_num, hub-
->supplies);
-> > +	if (err) {
-> > +		dev_err(dev, "Failed to get regulator supplies: %d\n",=20
-err);
-> > +		return err;
-> > +	}
-> >=20
-> >  	hub->reset_gpio =3D devm_gpiod_get_optional(dev, "reset",
-> >  =09
-> >  						  GPIOD_OUT_HIGH);
-> >=20
-> > diff --git a/drivers/usb/misc/onboard_usb_hub.h
-> > b/drivers/usb/misc/onboard_usb_hub.h index aca5f50eb0da..657190bf1799
-> > 100644
-> > --- a/drivers/usb/misc/onboard_usb_hub.h
-> > +++ b/drivers/usb/misc/onboard_usb_hub.h
-> > @@ -8,6 +8,7 @@
-> >=20
-> >  struct onboard_hub_pdata {
-> > =20
-> >  	unsigned long reset_us;		/* reset pulse width in us=20
-*/
-> >=20
-> > +	unsigned int supplies_num;	/* num of supplies: 0 considered as 1=20
-*/
->=20
-> num_supplies?
->=20
-> s/num of/number of/
->=20
-> >  };
+This change is nice, but not totally related to this specific one,
+shouldn't it be separate?
 
 
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
+>  0xCD  01     linux/reiserfs_fs.h
+>  0xCE  01-02  uapi/linux/cxl_mem.h                                    Compute Express Link Memory Devices
+>  0xCF  02     fs/smb/client/cifs_ioctl.h
+> diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
+> index 7fe31b2cd02f..d1b20e2a9fb0 100644
+> --- a/include/linux/io_uring.h
+> +++ b/include/linux/io_uring.h
+> @@ -71,6 +71,7 @@ static inline void io_uring_free(struct task_struct *tsk)
+>  	if (tsk->io_uring)
+>  		__io_uring_free(tsk);
+>  }
+> +int uring_sock_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags);
+>  #else
+>  static inline int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+>  			      struct iov_iter *iter, void *ioucmd)
+> @@ -102,6 +103,11 @@ static inline const char *io_uring_get_opcode(u8 opcode)
+>  {
+>  	return "";
+>  }
+> +static inline int uring_sock_cmd(struct io_uring_cmd *cmd,
+> +				 unsigned int issue_flags)
+> +{
+> +	return -EOPNOTSUPP;
+> +}
+>  #endif
+>  
+>  #endif
+> diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+> index 0716cb17e436..e20ba410859d 100644
+> --- a/include/uapi/linux/io_uring.h
+> +++ b/include/uapi/linux/io_uring.h
+> @@ -703,6 +703,12 @@ struct io_uring_recvmsg_out {
+>  	__u32 flags;
+>  };
+>  
+> +/*
+> + * Argument for IORING_OP_URING_CMD when file is a socket
+> + */
+> +#define SOCKET_URING_OP_SIOCINQ _IOR(0xcc, 0xa0, int)
+> +#define SOCKET_URING_OP_SIOCOUTQ _IOR(0xcc, 0xa1, int)
+> +
+>  #ifdef __cplusplus
+>  }
+>  #endif
+> diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+> index 5e32db48696d..dcbe6493b03f 100644
+> --- a/io_uring/uring_cmd.c
+> +++ b/io_uring/uring_cmd.c
+> @@ -7,6 +7,7 @@
+>  #include <linux/nospec.h>
+>  
+>  #include <uapi/linux/io_uring.h>
+> +#include <uapi/asm-generic/ioctls.h>
+>  
+>  #include "io_uring.h"
+>  #include "rsrc.h"
+> @@ -156,3 +157,29 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+>  	return io_import_fixed(rw, iter, req->imu, ubuf, len);
+>  }
+>  EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
+> +
+> +int uring_sock_cmd(struct io_uring_cmd *cmd, unsigned int issue_flags)
+> +{
+> +	struct socket *sock = cmd->file->private_data;
+> +	struct sock *sk = sock->sk;
+> +	int ret, arg = 0;
+> +
+> +	if (!sk->sk_prot || !sk->sk_prot->ioctl)
+> +		return -EOPNOTSUPP;
+> +
+> +	switch (cmd->sqe->cmd_op) {
+> +	case SOCKET_URING_OP_SIOCINQ:
+> +		ret = sk->sk_prot->ioctl(sk, SIOCINQ, &arg);
+> +		if (ret)
+> +			return ret;
+> +		return arg;
+> +	case SOCKET_URING_OP_SIOCOUTQ:
+> +		ret = sk->sk_prot->ioctl(sk, SIOCOUTQ, &arg);
+> +		if (ret)
+> +			return ret;
+> +		return arg;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +}
+> +EXPORT_SYMBOL_GPL(uring_sock_cmd);
 
+Did you forget the "io_" prefix?
 
+thanks,
+
+greg k-h
