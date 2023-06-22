@@ -2,115 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7DE073A6E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1091073A6F9
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbjFVRDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 13:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46486 "EHLO
+        id S230113AbjFVRIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 13:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjFVRDJ (ORCPT
+        with ESMTP id S229802AbjFVRIw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 13:03:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45094171C;
-        Thu, 22 Jun 2023 10:03:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5DF36189D;
-        Thu, 22 Jun 2023 17:03:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFC32C433C0;
-        Thu, 22 Jun 2023 17:03:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687453387;
-        bh=bTPWSed6ATavN9U5OfmHvXOmtlfLENbeNFQ2nEWL28k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cqgTLammDQGkc9nRI3L+FPR4xD/n/+LA+BC7NUMTKssxHlmUTQkbZn3zzlij2wg8K
-         q8rKPbqVl34LFlKDbmsSubW9/ucihWzklC8Sq6rRs2p0Jx8TZMcYD65vEma9W0I3ip
-         t9h1OX2xT/Ngwu+fvgTjdThlK0T3lqetXfJ71rr8=
-Date:   Thu, 22 Jun 2023 19:03:04 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Breno Leitao <leitao@debian.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, leit@meta.com,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steve French <stfrench@microsoft.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Simon Ser <contact@emersion.fr>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:IO_URING" <io-uring@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
-Subject: Re: [PATCH] io_uring: Add io_uring command support for sockets
-Message-ID: <2023062228-cloak-wish-ec12@gregkh>
-References: <20230621232129.3776944-1-leitao@debian.org>
- <2023062231-tasting-stranger-8882@gregkh>
- <ZJRijTDv5lUsVo+j@gmail.com>
- <2023062208-animosity-squabble-c1ba@gregkh>
- <ZJR49xji1zmISlTs@gmail.com>
+        Thu, 22 Jun 2023 13:08:52 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48499C3;
+        Thu, 22 Jun 2023 10:08:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687453731; x=1718989731;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Cf+dpIYfAbSBeiWlETELLtCHHrcSgMWgIRdJXuiqLaE=;
+  b=nicibwG0x6SZ68yxH1a7avLcbIeR/E51LExxCtTg5xQdUlbc5sL4zESY
+   HNUmxOhz0qgn6EIpkeo+VFpZr2LkNO80+6uyIE5pfvUhwY9nhT5UpeX4n
+   HWGSCQBLhMX+CTDFeI1VGHQTpgnGoIZGlXUrOYHwUBlMFBDr8imb4PYnj
+   h8g7cX3DIY0sP52xoIOTkupkaGbfG/HTFpIDXozhTRHHBeVMI5GDTtc/p
+   implGM17DHq+FHz6v1kUnMYd+A08Mi5Mq5Q0Ph3iilKw2CE/o8lKapCrr
+   WjDbxmoYih6lkVT/oqGpNTOUMHj5rQHF/K3phBOqg9TPyzT7wnUu7rwTe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="363104865"
+X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
+   d="scan'208";a="363104865"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 10:04:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="1045277900"
+X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
+   d="scan'208";a="1045277900"
+Received: from shari19x-mobl1.gar.corp.intel.com (HELO [10.249.254.173]) ([10.249.254.173])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 10:03:59 -0700
+Message-ID: <ef5d91b8-c68b-5edc-d611-6a4dbf55c945@linux.intel.com>
+Date:   Thu, 22 Jun 2023 19:03:56 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZJR49xji1zmISlTs@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.1
+Subject: Re: [Intel-gfx] [PATCH 3/4] drm/ttm: Don't leak a resource on
+ eviction error
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Andi Shyti <andi.shyti@linux.intel.com>
+Cc:     intel-xe@lists.freedesktop.org,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Huang Rui <ray.huang@amd.com>,
+        dri-devel@lists.freedesktop.org
+References: <20230622101412.78426-1-thomas.hellstrom@linux.intel.com>
+ <20230622101412.78426-4-thomas.hellstrom@linux.intel.com>
+ <ZJRSyp7fT6VXpow7@ashyti-mobl2.lan>
+ <3a089ebb-7389-3d3e-beb0-13a8d64eb04d@linux.intel.com>
+ <196a7f74-66ac-1eae-4795-a42691f4793e@amd.com>
+From:   =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>
+In-Reply-To: <196a7f74-66ac-1eae-4795-a42691f4793e@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 09:38:15AM -0700, Breno Leitao wrote:
-> On Thu, Jun 22, 2023 at 06:10:00PM +0200, Greg Kroah-Hartman wrote:
-> > On Thu, Jun 22, 2023 at 08:02:37AM -0700, Breno Leitao wrote:
-> > > On Thu, Jun 22, 2023 at 07:20:48AM +0200, Greg Kroah-Hartman wrote:
-> > > > On Wed, Jun 21, 2023 at 04:21:26PM -0700, Breno Leitao wrote:
-> > > > > --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
-> > > > > +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
-> > > > > @@ -361,6 +361,7 @@ Code  Seq#    Include File                                           Comments
-> > > > >  0xCB  00-1F                                                          CBM serial IEC bus in development:
-> > > > >                                                                       <mailto:michael.klein@puffin.lb.shuttle.de>
-> > > > >  0xCC  00-0F  drivers/misc/ibmvmc.h                                   pseries VMC driver
-> > > > > +0xCC  A0-BF  uapi/linux/io_uring.h                                   io_uring cmd subsystem
-> > > > 
-> > > > This change is nice, but not totally related to this specific one,
-> > > > shouldn't it be separate?
-> > > 
-> > > This is related to this patch, since I am using it below, in the
-> > > following part:
-> > > 
-> > > 	+#define SOCKET_URING_OP_SIOCINQ _IOR(0xcc, 0xa0, int)
-> > > 	+#define SOCKET_URING_OP_SIOCOUTQ _IOR(0xcc, 0xa1, int)
-> > > 
-> > > Should I have a different patch, even if they are related?
-> > 
-> > Yes, as you are not using the 0xa2-0xbf range that you just carved out
-> > here, right?  Where did those numbers come from?
-> 
-> Correct. For now we are just using 0xa0 and 0xa1, and eventually we
-> might need more ioctls numbers.
-> 
-> I got these numbers finding a unused block and having some room for
-> expansion, as suggested by Documentation/userspace-api/ioctl/ioctl-number.rst,
-> that says:
-> 
-> 	If you are writing a driver for a new device and need a letter, pick an
-> 	unused block with enough room for expansion: 32 to 256 ioctl commands.
 
-So is this the first io_uring ioctl?  If so, why is this an ioctl and
-not just a "normal" io_uring call?
+On 6/22/23 16:48, Christian König wrote:
+>
+>
+> Am 22.06.23 um 16:08 schrieb Thomas Hellström:
+>>
+>> On 6/22/23 15:55, Andi Shyti wrote:
+>>> Hi Thomas,
+>>>
+>>> On Thu, Jun 22, 2023 at 12:14:11PM +0200, Thomas Hellström wrote:
+>>>> On eviction errors other than -EMULTIHOP we were leaking a resource.
+>>>> Fix.
+>>>>
+>>>> Fixes: 403797925768 ("drm/ttm: Fix multihop assert on eviction.")
+>>>> Cc: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+>>>> Cc: Christian König <christian.koenig@amd.com>
+>>>> Cc: Christian Koenig <christian.koenig@amd.com>
+>>>> Cc: Huang Rui <ray.huang@amd.com>
+>>>> Cc: dri-devel@lists.freedesktop.org
+>>>> Cc: <stable@vger.kernel.org> # v5.15+
+>>>> Signed-off-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+>>>> ---
+>>>>   drivers/gpu/drm/ttm/ttm_bo.c | 16 ++++++++--------
+>>>>   1 file changed, 8 insertions(+), 8 deletions(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/ttm/ttm_bo.c 
+>>>> b/drivers/gpu/drm/ttm/ttm_bo.c
+>>>> index 615d30c4262d..89530f2a027f 100644
+>>>> --- a/drivers/gpu/drm/ttm/ttm_bo.c
+>>>> +++ b/drivers/gpu/drm/ttm/ttm_bo.c
+>>>> @@ -462,14 +462,14 @@ static int ttm_bo_evict(struct 
+>>>> ttm_buffer_object *bo,
+>>>>       ret = ttm_bo_handle_move_mem(bo, evict_mem, true, ctx, &hop);
+>>>>       if (ret == -EMULTIHOP) {
+>>>>           ret = ttm_bo_bounce_temp_buffer(bo, &evict_mem, ctx, &hop);
+>>>> -        if (ret) {
+>>>> -            if (ret != -ERESTARTSYS && ret != -EINTR)
+>>>> -                pr_err("Buffer eviction failed\n");
+>>>> -            ttm_resource_free(bo, &evict_mem);
+>>>> -            goto out;
+>>>> -        }
+>>>> -        /* try and move to final place now. */
+>>>> -        goto bounce;
+>>>> +        if (!ret)
+>>>> +            /* try and move to final place now. */
+>>>> +            goto bounce;
+>>> As we are at this, can't we replace this with a while()? Goto's
+>>> used instead of a while loop are a fist in the eye...
+>>
+>> I'm completely OK with that. this patch already did away with one of 
+>> them. Let's hear Christian's opinion first, though.
+>
+> I'm not a fan of that goto either, but could we somehow avoid the 
+> while(1) ? E.g. something like do { } while (!ret) after handling the 
+> multihop?
 
-thanks,
+I think the construct that makes it most obvious what's happening, 
+although it needs two tests for -EMULTIHOP is something like
 
-greg k-h
+do {
+....
+    if (ret != -EMULTIHOP)
+       break;
+    ....
+} while (ret ==-EMULTIHOP);
+
+Will be out tomorrow, though, so I don't have time to respin before Monday.
+
+/Thomas
+
+
+>
+> Christian.
+>
+>>
+>> Thanks,
+>>
+>> Thomas
+>>
+>>
+>>
+>>
+>>
+>>>
+>>> It looks even better:
+>>>
+>>>     while (1) {
+>>>         ret = ttm_bo_handle_move_mem(bo, evict_mem, true, ctx, &hop);
+>>>         if (!ret)
+>>>             break;
+>>>
+>>>         if (ret == -EMULTIHOP)
+>>>             ret = ttm_bo_bounce_temp_buffer(bo, &evict_mem,
+>>>                             ctx, &hop);
+>>>
+>>>         /* try again */
+>>>         if (!ret)
+>>>             continue;
+>>>
+>>>         ttm_resource_free(bo, &evict_mem);
+>>>         if (ret != -ERESTARTSYS && ret != -EINTR)
+>>>             pr_err("Buffer eviction failed\n");
+>>>
+>>>         break;
+>>>     }
+>>>
+>>> Andi
+>>>
+>>>> +    }
+>>>> +    if (ret) {
+>>>> +        ttm_resource_free(bo, &evict_mem);
+>>>> +        if (ret != -ERESTARTSYS && ret != -EINTR)
+>>>> +            pr_err("Buffer eviction failed\n");
+>>>>       }
+>>>>   out:
+>>>>       return ret;
+>>>> -- 
+>>>> 2.40.1
+>
