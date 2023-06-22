@@ -2,144 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6859A73ABE5
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 23:53:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEEE073ABFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 23:59:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjFVVxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 17:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44520 "EHLO
+        id S230245AbjFVV7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 17:59:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjFVVxc (ORCPT
+        with ESMTP id S230116AbjFVV7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 17:53:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 161AB1FEF;
-        Thu, 22 Jun 2023 14:53:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A78E46190C;
-        Thu, 22 Jun 2023 21:53:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C5D7C433C0;
-        Thu, 22 Jun 2023 21:53:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687470810;
-        bh=PJGfxTyAnCqu8Vna68rQ2voA4n9bS/jsrshp8nOUR3k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s2Y6v8fxX47hw/xJfyeIYjRJzAWpg8aRRtbtReWBMPAgcH9AfSyoIsdC7/mZGL2eX
-         e0+EZzJOrFT4sygyF0qGhmEKCrOUa6w73xYFv6j8L/2hBJ5qwKfEPu6CqbArm0/VU0
-         dD2y/4hj2fhuO3cGQiFQNfRHww0m43HysUddCGxJy4smBIuqFKNMWCdI3HfIkicAYA
-         cFOgxJU9LLNLfHnpqlY3KMIWoftnhwzzzSRFUxEVcsrTs26WY/ijGDjN4vFQixpkVn
-         XJy5AFHSUd3UqWfbGzcClQwAAoxRgXpeBFVI/v+Yv0+O48ThhxXoaR4cA9sgspSXPR
-         CPDbi17v2qfdg==
-Date:   Thu, 22 Jun 2023 21:53:27 +0000
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     bjorn@kernel.org, ndesaulniers@google.com,
-        Conor Dooley <conor@kernel.org>, jszhang@kernel.org,
-        llvm@lists.linux.dev, Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, Arnd Bergmann <arnd@arndb.de>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-Message-ID: <20230622215327.GA1135447@dev-arch.thelio-3990X>
-References: <87wmzwn1po.fsf@all.your.base.are.belong.to.us>
- <mhng-1d790a82-44ad-4b9c-bfe4-6303f09b0705@palmer-ri-x1c9a>
+        Thu, 22 Jun 2023 17:59:41 -0400
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92921739;
+        Thu, 22 Jun 2023 14:59:38 -0700 (PDT)
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-3fa7512e5efso502755e9.2;
+        Thu, 22 Jun 2023 14:59:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687471177; x=1690063177;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y7xfVnKi0DP1NtittcvkACNIGuIXZxKZkDplBO6fS4M=;
+        b=bVmsxVcpsjj+glJlJOyj/g1+RHTlaMMaVIkEmgNEBO3klmQTM/S/B7u82sIlsEjmz7
+         lZ/uTyV3uDY7k7QWZnvGHtKK1bN8n5EAznsylam3845C37f7JxWpGZ09Q087lnFxGgxc
+         ZgMk94I2HgMcubLJVRp5aHPpIds1sKBoJ4w0DJcSBEwDi22kBcmyi+ZX/PGE/4zFvnTt
+         7KoeLfyzsMt2mDFSOjc6NDHrjJhJExIS1/ETNRm9x/5MG77EQJT9PVskCr9O6pJ2oAjA
+         70hQgeFiehjm70B3Xy/h63yYXCXQMA46e1I0v43LYjJ5YUPdUD3hpG+YBEaESZycfjUU
+         RIDw==
+X-Gm-Message-State: AC+VfDxlU55LVuDJYmKnzAw6Oh0efMuvAiwcFkVRNDIIz2e0Vz1Yf0ei
+        ORSCOH7WxFzXijiME2TqIYq35hPeXX0Wjw==
+X-Google-Smtp-Source: ACHHUZ6iZEQYDBr5SMoG1sHSwnJvbRZ7ITDmy6q/mQpoMIhzYBRmjUBzUIWxn1ZVEcWk37P0LJzbaQ==
+X-Received: by 2002:a7b:c8c2:0:b0:3f7:5d:49ff with SMTP id f2-20020a7bc8c2000000b003f7005d49ffmr20473599wml.1.1687471176826;
+        Thu, 22 Jun 2023 14:59:36 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-012.fbsv.net. [2a03:2880:31ff:c::face:b00c])
+        by smtp.gmail.com with ESMTPSA id c25-20020a7bc019000000b003fa52928fcbsm561126wmb.19.2023.06.22.14.59.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 14:59:36 -0700 (PDT)
+From:   Breno Leitao <leitao@debian.org>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     gregkh@linuxfoundation.org,
+        io-uring@vger.kernel.org (open list:IO_URING),
+        linux-kernel@vger.kernel.org (open list),
+        netdev@vger.kernel.org (open list:NETWORKING [GENERAL])
+Subject: [PATCH v3] io_uring: Add io_uring command support for sockets
+Date:   Thu, 22 Jun 2023 14:59:14 -0700
+Message-Id: <20230622215915.2565207-1-leitao@debian.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <mhng-1d790a82-44ad-4b9c-bfe4-6303f09b0705@palmer-ri-x1c9a>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 11:19:31AM -0700, Palmer Dabbelt wrote:
-> On Wed, 21 Jun 2023 10:51:15 PDT (-0700), bjorn@kernel.org wrote:
-> > Conor Dooley <conor@kernel.org> writes:
-> > 
-> > [...]
-> > 
-> > > > So I'm no longer actually sure there's a hang, just something
-> > > > slow.  That's even more of a grey area, but I think it's sane to
-> > > > call a 1-hour link time a regression -- unless it's expected
-> > > > that this is just very slow to link?
-> > > 
-> > > I dunno, if it was only a thing for allyesconfig, then whatever - but
-> > > it's gonna significantly increase build times for any large kernels if LLD
-> > > is this much slower than LD. Regression in my book.
-> > > 
-> > > I'm gonna go and experiment with mixed toolchain builds, I'll report
-> > > back..
-> > 
-> > I took palmer/for-next (1bd2963b2175 ("Merge patch series "riscv: enable
-> > HAVE_LD_DEAD_CODE_DATA_ELIMINATION"")) for a tuxmake build with llvm-16:
-> > 
-> >   | ~/src/tuxmake/run -v --wrapper ccache --target-arch riscv \
-> >   |     --toolchain=llvm-16 --runtime docker --directory . -k \
-> >   |     allyesconfig
-> > 
-> > Took forever, but passed after 2.5h.
-> 
-> Thanks.  I just re-ran mine 17/trunk LLD under time (rather that just
-> checking top sometimes), it's at 1.5h but even that seems quite long.
-> 
-> I guess this is sort of up to the LLVM folks: if it's expected that DCE
-> takes a very long time to link then I'm not opposed to allowing it, but if
-> this is probably a bug in LLD then it seems best to turn it off until we
-> sort things out over there.
-> 
-> I think maybe Nick or Nathan is the best bet to know?
+Enable io_uring commands on network sockets. Create two new
+SOCKET_URING_OP commands that will operate on sockets.
 
-I can confirm a regression with allyesconfig but not allmodconfig using
-LLVM 16.0.6 on my 80-core Ampere Altra system.
+In order to call ioctl on sockets, use the file_operations->io_uring_cmd
+callbacks, and map it to a uring socket function, which handles the
+SOCKET_URING_OP accordingly, and calls socket ioctls.
 
-allmodconfig: 8m 4s
-allmodconfig + CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=n: 7m 4s
-allyesconfig: 1h 58m 30s
-allyesconfig + CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=n: 12m 41s
+This patches was tested by creating a new test case in liburing.
+Link: https://github.com/leitao/liburing/tree/io_uring_cmd
 
-I am sure there is something that ld.lld can do better, given GNU ld
-does not have any problems as earlier established, so that should
-definitely be explored further. I see Nick already had a response about
-writing up a report (I wrote most of this before that email so I am
-still sending this one).
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+V1 -> V2:
+	* Keep uring code outside of network core subsystem
+	* Uses ioctl to define uring operation
+	* Use a generic ioctl function, instead of copying it over
+V2 -> V3:
+	* Do not use ioctl() helpers to create uring operations
+	* Rename uring_sock_cmd to io_uring_cmd_sock
+---
+ include/linux/io_uring.h      |  6 ++++++
+ include/uapi/linux/io_uring.h |  8 ++++++++
+ io_uring/uring_cmd.c          | 27 +++++++++++++++++++++++++++
+ net/socket.c                  |  2 ++
+ 4 files changed, 43 insertions(+)
 
-However, allyesconfig is pretty special and not really indicative of a
-"real world" kernel build in my opinion (which will either be a fully
-modular kernel to allow use on a wide range of hardware or a monolithic
-kernel with just the drivers needed for a specific platform, which will
-be much smaller than allyesconfig); it has given us problems with large
-kernels before on other architectures.
+diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
+index 7fe31b2cd02f..f00baf2929ff 100644
+--- a/include/linux/io_uring.h
++++ b/include/linux/io_uring.h
+@@ -71,6 +71,7 @@ static inline void io_uring_free(struct task_struct *tsk)
+ 	if (tsk->io_uring)
+ 		__io_uring_free(tsk);
+ }
++int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags);
+ #else
+ static inline int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+ 			      struct iov_iter *iter, void *ioucmd)
+@@ -102,6 +103,11 @@ static inline const char *io_uring_get_opcode(u8 opcode)
+ {
+ 	return "";
+ }
++static inline int io_uring_cmd_sock(struct io_uring_cmd *cmd,
++				    unsigned int issue_flags)
++{
++	return -EOPNOTSUPP;
++}
+ #endif
+ 
+ #endif
+diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
+index 0716cb17e436..5c25f8c98aa8 100644
+--- a/include/uapi/linux/io_uring.h
++++ b/include/uapi/linux/io_uring.h
+@@ -703,6 +703,14 @@ struct io_uring_recvmsg_out {
+ 	__u32 flags;
+ };
+ 
++/*
++ * Argument for IORING_OP_URING_CMD when file is a socket
++ */
++enum {
++	SOCKET_URING_OP_SIOCINQ		= 0,
++	SOCKET_URING_OP_SIOCOUTQ,
++};
++
+ #ifdef __cplusplus
+ }
+ #endif
+diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
+index 5e32db48696d..31ce59567295 100644
+--- a/io_uring/uring_cmd.c
++++ b/io_uring/uring_cmd.c
+@@ -7,6 +7,7 @@
+ #include <linux/nospec.h>
+ 
+ #include <uapi/linux/io_uring.h>
++#include <uapi/asm-generic/ioctls.h>
+ 
+ #include "io_uring.h"
+ #include "rsrc.h"
+@@ -156,3 +157,29 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
+ 	return io_import_fixed(rw, iter, req->imu, ubuf, len);
+ }
+ EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
++
++int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
++{
++	struct socket *sock = cmd->file->private_data;
++	struct sock *sk = sock->sk;
++	int ret, arg = 0;
++
++	if (!sk->sk_prot || !sk->sk_prot->ioctl)
++		return -EOPNOTSUPP;
++
++	switch (cmd->sqe->cmd_op) {
++	case SOCKET_URING_OP_SIOCINQ:
++		ret = sk->sk_prot->ioctl(sk, SIOCINQ, &arg);
++		if (ret)
++			return ret;
++		return arg;
++	case SOCKET_URING_OP_SIOCOUTQ:
++		ret = sk->sk_prot->ioctl(sk, SIOCOUTQ, &arg);
++		if (ret)
++			return ret;
++		return arg;
++	default:
++		return -EOPNOTSUPP;
++	}
++}
++EXPORT_SYMBOL_GPL(io_uring_cmd_sock);
+diff --git a/net/socket.c b/net/socket.c
+index b778fc03c6e0..09b105d00445 100644
+--- a/net/socket.c
++++ b/net/socket.c
+@@ -88,6 +88,7 @@
+ #include <linux/xattr.h>
+ #include <linux/nospec.h>
+ #include <linux/indirect_call_wrapper.h>
++#include <linux/io_uring.h>
+ 
+ #include <linux/uaccess.h>
+ #include <asm/unistd.h>
+@@ -159,6 +160,7 @@ static const struct file_operations socket_file_ops = {
+ #ifdef CONFIG_COMPAT
+ 	.compat_ioctl = compat_sock_ioctl,
+ #endif
++	.uring_cmd =    io_uring_cmd_sock,
+ 	.mmap =		sock_mmap,
+ 	.release =	sock_close,
+ 	.fasync =	sock_fasync,
+-- 
+2.34.1
 
-CONFIG_LD_DEAD_CODE_DATA_ELIMINATION is already marked with 'depends on
-EXPERT' and its help text mentions its perils, so it does not seem
-unreasonable to me to add an additional dependency on !COMPILE_TEST so
-that allmodconfig and allyesconfig cannot flip this on, something like
-the following perhaps?
-
-diff --git a/init/Kconfig b/init/Kconfig
-index 32c24950c4ce..25434cbd2a6e 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1388,7 +1388,7 @@ config HAVE_LD_DEAD_CODE_DATA_ELIMINATION
- config LD_DEAD_CODE_DATA_ELIMINATION
- 	bool "Dead code and data elimination (EXPERIMENTAL)"
- 	depends on HAVE_LD_DEAD_CODE_DATA_ELIMINATION
--	depends on EXPERT
-+	depends on EXPERT && !COMPILE_TEST
- 	depends on $(cc-option,-ffunction-sections -fdata-sections)
- 	depends on $(ld-option,--gc-sections)
- 	help
-
-If applying that dependency to all architectures is too much, the
-selection in arch/riscv/Kconfig could be gated on the same condition.
-
-Cheers,
-Nathan
