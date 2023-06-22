@@ -2,149 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01A6739C28
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD7C1739C2B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232229AbjFVJI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 05:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
+        id S232160AbjFVJJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 05:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231950AbjFVJId (ORCPT
+        with ESMTP id S232155AbjFVJIr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 05:08:33 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECC81FF9
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:59:55 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b45b6adffbso93191631fa.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:59:55 -0700 (PDT)
+        Thu, 22 Jun 2023 05:08:47 -0400
+Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F4EA30DB
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:00:07 -0700 (PDT)
+Received: by mail-oi1-x22c.google.com with SMTP id 5614622812f47-3a0423ea749so1616111b6e.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:00:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687424389; x=1690016389;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gcskLwOTpD8wQSkQDaTOdQc/F5jugyU14yNTRSoQkfI=;
-        b=J7LCCSKRjCnUrBvwdX4x4251uRUWXoPSXfcl/E300OWDc186++vlIlw7+1IAXOfcpT
-         hNmdb013UqBn/pWOOCs8CyZ1mfnmNI88CnddM2ecYAVXhQPm43iNqJV373hCb3CbhbhR
-         BRpvo27CRDMUlGRfC1rga1TRG4/Fv4IZhz1dQcdeVRSdnKiheTtk3N2gD3b2GdwuuoF6
-         GanOb9UVQr32K9cipk5Ec6pvGiNXZybe7OHeYL7LVDos20ipFes0+KgmftgfslmuHeUK
-         kGTxCOytkRpYoOwAE/E1pI8k8N8HIvMGhio/Swmv/P+I4GdmGnEhV9FpssG1eslUSkcH
-         asSQ==
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1687424400; x=1690016400;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jPSAB1IsF/VpYmXqBS/Ay90kwHTcXo9Cx9zDFJ8+ziU=;
+        b=ycoJuwPuH0fNU7QpZXfw4G0SJgU7/eWOxsDi+DHFOUtOJUcbqkREd4Wgb+HEiaX4rG
+         nStYztqmuBeIsp/9XQtxHBFVkZkaHcncwvhnv7sxAw+Op2tRla6LadaTlVKBd2uP7oB2
+         2qXskmBr7lvibTY6tdkIdsGK/6bN9JcDEw51sNHpanxfu/AkgRvZ5iwUBEq24MZa+nJa
+         9f/4gim+B2adRghgqinEFLusFys9UfWnzkCMDcTwJlB44mkASVwri8cq09i+vbJn8B51
+         WG1CMOAM7A9wBkffEtmFaHXXCra04QsKRqkdsixAUTX1PJB99OJRedQfz8mU+/YCheTX
+         XeAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687424389; x=1690016389;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gcskLwOTpD8wQSkQDaTOdQc/F5jugyU14yNTRSoQkfI=;
-        b=i7qvxpxYY4zM9syVjEvhxKdughfHHX7+wEI4tTx4sVUO3sgbaOjvYuPKJEgulcPWxN
-         oOUKb/z3pRkJT+kkuwOdQXdhP7qGkWyzQbiLvVftLp/m57DN9ibsn+Ao/8eoFzJ93k0s
-         S5CFB6LEbsaUc/CM4BKfHpswyIcdI83rZ16i6pgHT3T+6+9j0klvLpK7Ae4jXCn3bGA9
-         w5GzftYLCCr4yGBSY/F64dXkr+VikrLDLOGcpdcjvmNO+bHO2XHREusqNqg+//r9E22G
-         /4ed+LJnE33IcovupMk8hMo7joJ4pcMQyWxNn7SxtQyR+LKXW9Eub4Le3bCuItsGxFMr
-         wjMw==
-X-Gm-Message-State: AC+VfDzf2SvkYVCh4/u9vFNm9LKW+QkrDRpnBEPdv59KCkDt+fKoX+yv
-        x5SKFM5+npBp7B69Xcf7iTpQKw==
-X-Google-Smtp-Source: ACHHUZ709zw/bPwq517EI6mXV/c0cXMHUC0RPzt1Z9/s7ik6OC9/9EwtODaLvfVuXoQlrBDTp1YH7Q==
-X-Received: by 2002:ac2:5052:0:b0:4f8:655f:e127 with SMTP id a18-20020ac25052000000b004f8655fe127mr9328029lfm.64.1687424389329;
-        Thu, 22 Jun 2023 01:59:49 -0700 (PDT)
-Received: from [192.168.1.101] (abyl165.neoplus.adsl.tpnet.pl. [83.9.31.165])
-        by smtp.gmail.com with ESMTPSA id k11-20020ac2456b000000b004f6150e0899sm1020542lfm.290.2023.06.22.01.59.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 01:59:49 -0700 (PDT)
-Message-ID: <eedf1f91-d884-6bef-7a39-efcdea37c474@linaro.org>
-Date:   Thu, 22 Jun 2023 10:59:47 +0200
+        d=1e100.net; s=20221208; t=1687424400; x=1690016400;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jPSAB1IsF/VpYmXqBS/Ay90kwHTcXo9Cx9zDFJ8+ziU=;
+        b=TDag1L96pblPlgI9Tl7JMa0NiusO0PGvGntJAvRg+wjRHlWXQtBjfmDQSbP+CACZ68
+         jKgRe2nLBm5yfsfib0Som/UKn+r8WFebFDtHsCCr109ipznyxcjqoUSgaZIo2SGD2gDY
+         UrGUZ6ZDLm1OPGK857bIIOBP9B23AIlj8n6BaF8tjdk2ybMsx5h4FHMszf6kaEoebrpJ
+         T6xmZ8//PfRdbLCLk2F7Wg3ODSPV40zj4FIQbahZRlr8o65RWvDpjfsutCt9Ily9g0av
+         rAh4kBJu4F7XZUxOPRNrAp0PQwN7JHstQh+kEi/q8oUErv9aV+V8RUyN4qWjkb0uU0pM
+         bh0g==
+X-Gm-Message-State: AC+VfDz70JS4ZjlXf5IMu3sSvFiWt1xrRzOR/V4+X2jR8vho8ly/+IbY
+        5NrBCEFcq/sE6OEtmuXc80x+yA==
+X-Google-Smtp-Source: ACHHUZ4Vh4Xpzv6yUURTmtbS6smTEGwjM3MVIC3+EUzRzo0B3ipbuKGT2tK6Qgn0p86wGjhLxhT54g==
+X-Received: by 2002:a05:6808:424d:b0:38e:a824:27d3 with SMTP id dp13-20020a056808424d00b0038ea82427d3mr16982583oib.27.1687424400035;
+        Thu, 22 Jun 2023 02:00:00 -0700 (PDT)
+Received: from dread.disaster.area (pa49-180-13-202.pa.nsw.optusnet.com.au. [49.180.13.202])
+        by smtp.gmail.com with ESMTPSA id ev8-20020a17090aeac800b0024e4f169931sm10409008pjb.2.2023.06.22.01.59.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 01:59:59 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1qCGAW-00Emvj-0o;
+        Thu, 22 Jun 2023 18:59:56 +1000
+Date:   Thu, 22 Jun 2023 18:59:56 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     syzbot <syzbot+9d0b0d54a8bd799f6ae4@syzkaller.appspotmail.com>,
+        dchinner@redhat.com, djwong@kernel.org, hch@lst.de,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [xfs?] WARNING: Reset corrupted AGFL on AG NUM. NUM
+ blocks leaked. Please unmount and run xfs_repair.
+Message-ID: <ZJQNjFJhLh0C84u/@dread.disaster.area>
+References: <000000000000ffcb2e05fe9a445c@google.com>
+ <ZJKhoxnkNF3VspbP@dread.disaster.area>
+ <20230621075421.GA56560@sol.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 1/5] arm64: dts: qcom: sm8[1235]50-mtp: add chassis-type
- property
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230622-topic-sm8x50-upstream-chassis-type-v1-0-13f676eb71f3@linaro.org>
- <20230622-topic-sm8x50-upstream-chassis-type-v1-1-13f676eb71f3@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230622-topic-sm8x50-upstream-chassis-type-v1-1-13f676eb71f3@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621075421.GA56560@sol.localdomain>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.06.2023 10:57, Neil Armstrong wrote:
-> Qualcomm's Mobile Test Platforms devices are handsets, set the
-> chassis-type property to 'handset'.
+On Wed, Jun 21, 2023 at 12:54:21AM -0700, Eric Biggers wrote:
+> On Wed, Jun 21, 2023 at 05:07:15PM +1000, 'Dave Chinner' via syzkaller-bugs wrote:
+> > On Tue, Jun 20, 2023 at 07:10:19PM -0700, syzbot wrote:
+> > So exactly what is syzbot complaining about here? There's no kernel
+> > issue here at all.
+> > 
+> > Also, I cannot tell syzbot "don't ever report this as a bug again",
+> > so the syzbot developers are going to have to triage and fix this
+> > syzbot problem themselves so it doesn't keep getting reported to
+> > us...
 > 
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
-Bit of a thick "handset" :P
+> I think the problem here was that XFS logged a message beginning with
+> "WARNING:", followed by a stack trace.  In the log that looks like a warning
+> generated by the WARN_ON() macro, which is meant for reporting recoverable
+> kernel bugs.  It's difficult for any program to understand the log in cases like
+> this.  This is why include/asm-generic/bug.h contains the following comment:
+> 
+>  * Do not include "BUG"/"WARNING" in format strings manually to make these
+>  * conditions distinguishable from kernel issues.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Nice.
 
-Konrad
->  arch/arm64/boot/dts/qcom/sm8150-mtp.dts | 1 +
->  arch/arm64/boot/dts/qcom/sm8250-mtp.dts | 1 +
->  arch/arm64/boot/dts/qcom/sm8350-mtp.dts | 1 +
->  arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 1 +
->  4 files changed, 4 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8150-mtp.dts b/arch/arm64/boot/dts/qcom/sm8150-mtp.dts
-> index 34ec84916bdd..286350ac7751 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8150-mtp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8150-mtp.dts
-> @@ -16,6 +16,7 @@
->  / {
->  	model = "Qualcomm Technologies, Inc. SM8150 MTP";
->  	compatible = "qcom,sm8150-mtp", "qcom,sm8150";
-> +	chassis-type = "handset";
->  
->  	aliases {
->  		serial0 = &uart2;
-> diff --git a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-> index 4c9de236676d..ad2b60e281eb 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
-> @@ -18,6 +18,7 @@
->  / {
->  	model = "Qualcomm Technologies, Inc. SM8250 MTP";
->  	compatible = "qcom,sm8250-mtp", "qcom,sm8250";
-> +	chassis-type = "handset";
->  
->  	aliases {
->  		serial0 = &uart12;
-> diff --git a/arch/arm64/boot/dts/qcom/sm8350-mtp.dts b/arch/arm64/boot/dts/qcom/sm8350-mtp.dts
-> index d21d2aacf201..c5a6c8745606 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8350-mtp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8350-mtp.dts
-> @@ -17,6 +17,7 @@
->  / {
->  	model = "Qualcomm Technologies, Inc. sm8350 MTP";
->  	compatible = "qcom,sm8350-mtp", "qcom,sm8350";
-> +	chassis-type = "handset";
->  
->  	aliases {
->  		serial0 = &uart2;
-> diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-> index ec86c5f38045..00c7e1704a8c 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
-> @@ -18,6 +18,7 @@
->  / {
->  	model = "Qualcomm Technologies, Inc. SM8550 MTP";
->  	compatible = "qcom,sm8550-mtp", "qcom,sm8550";
-> +	chassis-type = "handset";
->  
->  	aliases {
->  		serial0 = &uart7;
-> 
+Syzbot author doesn't like log messages using certain key words
+because it's hard for syzbot to work out what went wrong.
+
+Gets new rule added to kernel in a comment in some header file that
+almost nobody doing kernel development work ever looks at.
+
+Nothing was added to the coding style rules or checkpatch so nobody
+is likely to accidentally trip over this new rule that nobody has
+been told about.
+
+Syzbot maintainer also fails to do an audit of the kernel to remove
+all existing "WARNING" keywords from existing log messages so leaves
+landmines for subsystems to have to handle at some time in the
+future.
+
+Five years later, syzbot trips over a log message containing WARNING
+in it that was in code introduced before the rule was "introduced".
+Subsystem maintainers are blamed for not know the rule existed.
+
+Result: *yet again* we are being told that our only option is
+to *change code that is not broken* just to *shut up some fucking
+bot* we have no control over and could happily live without.
+
+> If you have a constructive suggestion of how all programs that
+> parse the kernel log can identify real warnings reliably without
+> getting confused by cases like this, I'm sure that would be
+> appreciated.  It would need to be documented and then the guidance
+> in bug.h could then be removed.  But until then, the above is the
+> current guidance.
+
+That is so not the problem here, Eric.
+
+-- 
+Dave Chinner
+david@fromorbit.com
