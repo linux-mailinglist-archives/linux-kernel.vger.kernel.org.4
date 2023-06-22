@@ -2,97 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A25A173A7F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 20:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B0073A831
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 20:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231464AbjFVSKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 14:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50672 "EHLO
+        id S230244AbjFVS0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 14:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjFVSKd (ORCPT
+        with ESMTP id S230062AbjFVS0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 14:10:33 -0400
-X-Greylist: delayed 1203 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Jun 2023 11:10:32 PDT
-Received: from mta-102a.earthlink-vadesecure.net (mta-102a.earthlink-vadesecure.net [51.81.61.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E831FED;
-        Thu, 22 Jun 2023 11:10:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; bh=f7xXfWZM+MImUrtRNOoXYVPJtna4w7j0w+27iz
- otiB0=; c=relaxed/relaxed; d=earthlink.net; h=from:reply-to:subject:
- date:to:cc:resent-date:resent-from:resent-to:resent-cc:in-reply-to:
- references:list-id:list-help:list-unsubscribe:list-subscribe:list-post:
- list-owner:list-archive; q=dns/txt; s=dk12062016; t=1687455275;
- x=1688060075; b=UVKoTQ9UlsU2ArvOLqN4BbwzMiANvmZIWLwq7xM9iF/Dk2pvkXQ9Qdu
- DYm4oacA5i1909lqw1FSY7rJPTYIiwwPDjVbGCjhggz3GJPSTOtTtI9qSfd6ux86mem4z9W
- epSwD+Ni4YK7tBRlFWZ8TzP6GoAVrQ1subcJFL0FDL9HS605MgzYUH153QK1KuuTMMRDD5Z
- AsvwdAMRkYSYoUqM39+URIKeHzaPjWe5sfMcRwTHP6vOC0lHW+Sy2GHr3NQR3neKhKMWLEe
- tEX1fTmw6iwGlCuUNKfpMP/IVZsco828De8ilCiczilAklUFL6xYNyhnxTwpY7wwTsfsdSV
- O+A==
-Received: from FRANKSTHINKPAD ([174.174.49.201])
- by vsel1nmtao02p.internal.vadesecure.com with ngmta
- id cef2d9db-176b0ba1903c281b; Thu, 22 Jun 2023 17:34:34 +0000
-From:   "Frank Filz" <ffilzlnx@mindspring.com>
-To:     "'Chuck Lever III'" <chuck.lever@oracle.com>,
-        "'stsp'" <stsp2@yandex.ru>
-Cc:     "'Jeff Layton'" <jlayton@kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "'Al Viro'" <viro@zeniv.linux.org.uk>,
-        "'Christian Brauner'" <brauner@kernel.org>,
-        <linux-fsdevel@vger.kernel.org>, "'Shuah Khan'" <shuah@kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <linux-api@vger.kernel.org>
-References: <20230621152214.2720319-1-stsp2@yandex.ru> <20230621152214.2720319-3-stsp2@yandex.ru> <4db7c65bee0739fe7983059296cfc95f20647fa3.camel@kernel.org> <7bbb29d2-4cae-48bd-1b97-9f4dbf6ffb19@yandex.ru> <8F45F47C-86C0-472E-B701-001A4FF90DBC@oracle.com> <26a798ae-b93b-2f68-71ed-35950240927d@yandex.ru> <187C3E49-A977-492E-99CB-97F032B24E5F@oracle.com>
-In-Reply-To: <187C3E49-A977-492E-99CB-97F032B24E5F@oracle.com>
-Subject: RE: [PATCH 2/2] selftests: add OFD lock tests
-Date:   Thu, 22 Jun 2023 10:34:33 -0700
-Message-ID: <0a2001d9a52f$cfd24450$6f76ccf0$@mindspring.com>
+        Thu, 22 Jun 2023 14:26:09 -0400
+X-Greylist: delayed 1802 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Jun 2023 11:26:04 PDT
+Received: from 6.mo563.mail-out.ovh.net (6.mo563.mail-out.ovh.net [46.105.55.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8182B2111
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 11:26:04 -0700 (PDT)
+Received: from director4.derp.mail-out.ovh.net (director4.derp.mail-out.ovh.net [79.137.60.37])
+        by mo563.mail-out.ovh.net (Postfix) with ESMTPS id 32F02239B6;
+        Thu, 22 Jun 2023 17:49:13 +0000 (UTC)
+Received: from director4.derp.mail-out.ovh.net (director4.derp.mail-out.ovh.net. [127.0.0.1])
+        by director4.derp.mail-out.ovh.net (inspect_sender_mail_agent) with SMTP
+        for <conor+dt@kernel.org>; Thu, 22 Jun 2023 17:49:13 +0000 (UTC)
+Received: from pro2.mail.ovh.net (unknown [10.108.20.246])
+        by director4.derp.mail-out.ovh.net (Postfix) with ESMTPS id 1D0591FE6D;
+        Thu, 22 Jun 2023 17:49:13 +0000 (UTC)
+Received: from [192.168.1.41] (88.161.25.233) by DAG1EX1.emp2.local
+ (172.16.2.1) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 22 Jun
+ 2023 19:49:12 +0200
+Message-ID: <e9d23080-3916-f8ff-e179-4572d02c57b0@traphandler.com>
+Date:   Thu, 22 Jun 2023 19:49:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain;
-        charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 15.0
-Content-Language: en-us
-Thread-Index: AQFRuQ0uoMlieQo9bLavrmguyfHQFQJxeCDcAuSmYXMCWoer6wFUNlsYArCPQ1cBeWn8P7A9dY2w
-Authentication-Results: earthlink-vadesecure.net;
- auth=pass smtp.auth=ffilzlnx@mindspring.com smtp.mailfrom=ffilzlnx@mindspring.com;
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v9 5/5] leds: Add a multicolor LED driver to group
+ monochromatic LEDs
+To:     Lee Jones <lee@kernel.org>
+CC:     <pavel@ucw.cz>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <linux-leds@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230616095746.872220-1-jjhiblot@traphandler.com>
+ <20230616095746.872220-6-jjhiblot@traphandler.com>
+ <20230621193321.GU10378@google.com>
+Content-Language: en-US
+From:   Jean-Jacques Hiblot <jjhiblot@traphandler.com>
+In-Reply-To: <20230621193321.GU10378@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [88.161.25.233]
+X-ClientProxiedBy: DAG3EX1.emp2.local (172.16.2.21) To DAG1EX1.emp2.local
+ (172.16.2.1)
+X-Ovh-Tracer-Id: 9914956058122861019
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: 0
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeguddgudduiecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfqggfjpdevjffgvefmvefgnecuuegrihhlohhuthemucehtddtnecunecujfgurhepkfffgggfuffvvehfhfgjtgfgihesthejredttdefjeenucfhrhhomheplfgvrghnqdflrggtqhhuvghsucfjihgslhhothcuoehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomheqnecuggftrfgrthhtvghrnhepieejfedukeevudfghfetudevhffhhfekjeeiudegtdehueevgfdvgeeivdeifedvnecukfhppedtrddtrddtrddtpdekkedrudeiuddrvdehrddvfeefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopeguihhrvggtthhorhegrdguvghrphdrmhgrihhlqdhouhhtrdhovhhhrdhnvghtpdhinhgvtheptddrtddrtddrtddpmhgrihhlfhhrohhmpehjjhhhihgslhhothesthhrrghphhgrnhgulhgvrhdrtghomhdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhlvggushesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheeife
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > On Jun 22, 2023, at 1:05 PM, stsp <stsp2@yandex.ru> wrote:
-> >
-> >
-> > 22.06.2023 21:58, Chuck Lever III =D0=BF=D0=B8=D1=88=D0=B5=D1=82:
-> >> IMO that's not a reason not to do this properly.
-> >>
-> >> You should work with Jeff and the maintainer of xfstests to make it
-> >> happen.
-> > But its not going to be in this patch-set anyway, as its a different
-> > source tree...
->=20
-> If others agree with me, then please drop the selftests patch from =
-this series.
-> There is a considerably higher probability that the new test will be =
-run frequently
-> by CI if it's in xfstests.
->=20
->=20
-> > So I should prepare it when this is merged, or?
->=20
-> I don't have a strong preference. A good choice is to push the test =
-before the
-> kernel changes are merged.
-
-As an aside, an additional testing option for OFD locks is the multilock =
-test tool that is in the nfs-ganesha project. In preparation to use OFD =
-locks in Ganesha, I added them to multilock to check them out, and that =
-incidentally also allows testing how the NFS client and server work when =
-OFD locks are taken on a file from an NFS mount.
-
-Frank
 
 
+On 21/06/2023 21:33, Lee Jones wrote:
+> On Fri, 16 Jun 2023, Jean-Jacques Hiblot wrote:
+> 
+>>   create mode 100644 drivers/leds/rgb/leds-group-multicolor.c
+> 
+> Sorry to do this too you, but there are too many nits that I can't pass by.
+That's alright. I'll fix them in the next (hopefully last) round
+> 
+>> +		/* Restore sysfs access when the multicolor LED is released */
+> 
+
+> Out of interest, why are we doing this?
+To prevent the user to play with the individual LEDs of the group, their 
+sysfs interface is disabled (read-only). The interface must be 
+re-enabled when the group is destroyed.
+> 
+>> +		devm_add_action_or_reset(dev, restore_sysfs_access, led_cdev);
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static const struct of_device_id of_led_group_multicolor_match[] = {
+> 
+> "leds"
+> 
+>> +	{ .compatible = "leds-group-multicolor" },
+>> +	{}
+>> +};
+>> +MODULE_DEVICE_TABLE(of, of_led_group_multicolor_match);
+>> +
+>> +static struct platform_driver led_group_multicolor_driver = {
+> 
+> "leds"
+> 
+>> +	.probe		= led_mcg_probe,
+>> +	.driver		= {
+>> +		.name	= "leds_group_multicolor",
+>> +		.of_match_table = of_led_group_multicolor_match,
+>> +	}
+>> +};
+>> +module_platform_driver(led_group_multicolor_driver);
+>> +
+>> +MODULE_AUTHOR("Jean-Jacques Hiblot <jjhiblot@traphandler.com>");
+>> +MODULE_DESCRIPTION("LEDs group multicolor driver");
+>> +MODULE_LICENSE("GPL");
+>> +MODULE_ALIAS("platform:leds-group-multicolor");
+>> -- 
+>> 2.34.1
+>>
+> 
