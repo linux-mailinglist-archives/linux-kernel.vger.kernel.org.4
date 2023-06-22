@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84D7B73A1B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 15:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D51CA73A1B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 15:14:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231750AbjFVNOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 09:14:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32834 "EHLO
+        id S231697AbjFVNOW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 09:14:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbjFVNOB (ORCPT
+        with ESMTP id S231599AbjFVNOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 09:14:01 -0400
+        Thu, 22 Jun 2023 09:14:02 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDCF1BD7;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D98831BF5;
         Thu, 22 Jun 2023 06:14:00 -0700 (PDT)
 Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7d72:676c:e745:a6ef])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id CAD856607121;
-        Thu, 22 Jun 2023 14:13:58 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4DD366607128;
+        Thu, 22 Jun 2023 14:13:59 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1687439639;
-        bh=AARgP4b8y2Xc1aS5YL8NqmR9rbb2o30p7zaaWtG32hU=;
+        bh=Gzf/ktNZ3NOcffLCLpulGdLdygvof7OsvFbMBCI7WyY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZxTiNMH1hDCi1nmk94lamG1X/2drYWUgcsGIuJCmAR05Ubc5m56NTZ+iGvO/n0COj
-         nne8y6hoklBPJ4I4t+WDe+eTO2xu+fS1eTuXPRnUScsede9aTvM654IoXdkFqk/GnG
-         3mlubjY9Uu2T3PqDO/7ETnGGa7FqWaMwdW5l/zCaTM9bRqXcsyj6ro6OMKhffFAnL6
-         jUETkWD2LsuwYKGL2MAfHw4aQEE6iuZZD+SfZ8qz1s9PM68lv2tgozf3XHVDQd3dHi
-         k5RcUi5+R72uhu9shyNTsVUXzQDGH02zvUa16zSSJTA1JSma86yxCtjJ7lcwBFsmUI
-         rQ2YJSV5cVQ1A==
+        b=aMvDuxSN0D+ICceIa2k0/8ICJfyucHrHRy6tMCtP/unZ6iPcQKKAEFLkWsTfyZZKa
+         tYZvz+3gLPPQgWb5r2zlBEe0pFVZEHNFtzut4Y2T929FVyI6i1VRb5DpNhpRGOljp8
+         8ChyFAD7r82W9PHtPu4lrMufSVdbn+TERA+ogPra54nVT1haZrF3K6Hd5NL7Po/6jX
+         mCpx047zWZHtydN5YRQypOVaHxAxXx0tJgal/ffcKkpC6Q+o3m8R3dICGjJz6aqD98
+         eM0fO8vwWuZcWWfz5EyZzI2f9vUdJ0vr03/nsSOcUe3jyH+deoHQMw9RBI+u1WworB
+         /9QEx87W6XWaA==
 From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
 To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
         ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
@@ -43,9 +43,9 @@ Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
         kernel@collabora.com,
         Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v3 03/11] media: videobuf2: Remove VB2_MAX_FRAME limit on buffer storage
-Date:   Thu, 22 Jun 2023 15:13:41 +0200
-Message-Id: <20230622131349.144160-4-benjamin.gaignard@collabora.com>
+Subject: [PATCH v3 04/11] media: videobuf2: Stop define VB2_MAX_FRAME as global
+Date:   Thu, 22 Jun 2023 15:13:42 +0200
+Message-Id: <20230622131349.144160-5-benjamin.gaignard@collabora.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
 References: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
@@ -60,63 +60,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove VB2_MAX_FRAME buffer limit since Xarray allows to store
-more than that.
+After changing bufs arrays to a dynamic allocated array
+VB2_MAX_FRAME doesn't mean anything for videobuf2 core.
+Remove it from the core definitions but keep it for drivers internal
+needs.
 
 Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
 ---
- drivers/media/common/videobuf2/videobuf2-core.c | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+ drivers/media/common/videobuf2/videobuf2-core.c               | 2 ++
+ drivers/media/platform/amphion/vdec.c                         | 1 +
+ .../media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c | 2 ++
+ drivers/media/platform/qcom/venus/hfi.h                       | 2 ++
+ drivers/media/platform/verisilicon/hantro_hw.h                | 2 ++
+ drivers/staging/media/ipu3/ipu3-v4l2.c                        | 2 ++
+ include/media/videobuf2-core.h                                | 1 -
+ include/media/videobuf2-v4l2.h                                | 4 ----
+ 8 files changed, 11 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index f1ff7af34a9f..86e1e926fa45 100644
+index 86e1e926fa45..899783f67580 100644
 --- a/drivers/media/common/videobuf2/videobuf2-core.c
 +++ b/drivers/media/common/videobuf2/videobuf2-core.c
-@@ -455,9 +455,9 @@ static int __vb2_queue_alloc(struct vb2_queue *q, enum vb2_memory memory,
- 	struct vb2_buffer *vb;
- 	int ret;
+@@ -31,6 +31,8 @@
  
--	/* Ensure that q->num_buffers+num_buffers is below VB2_MAX_FRAME */
-+	/* Ensure that q->num_buffers + num_buffers is UINT_MAX */
- 	num_buffers = min_t(unsigned int, num_buffers,
--			    VB2_MAX_FRAME - q->num_buffers);
-+			    UINT_MAX - q->num_buffers);
+ #include <trace/events/vb2.h>
  
- 	for (buffer = 0; buffer < num_buffers; ++buffer) {
- 		/* Allocate vb2 buffer structures */
-@@ -858,9 +858,9 @@ int vb2_core_reqbufs(struct vb2_queue *q, enum vb2_memory memory,
- 	/*
- 	 * Make sure the requested values and current defaults are sane.
- 	 */
--	WARN_ON(q->min_buffers_needed > VB2_MAX_FRAME);
-+	WARN_ON(q->min_buffers_needed > UINT_MAX);
- 	num_buffers = max_t(unsigned int, *count, q->min_buffers_needed);
--	num_buffers = min_t(unsigned int, num_buffers, VB2_MAX_FRAME);
-+	num_buffers = min_t(unsigned int, num_buffers, UINT_MAX);
- 	memset(q->alloc_devs, 0, sizeof(q->alloc_devs));
- 	/*
- 	 * Set this now to ensure that drivers see the correct q->memory value
-@@ -976,11 +976,6 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
- 	bool no_previous_buffers = !q->num_buffers;
- 	int ret;
++#define VB2_MAX_FRAME	32
++
+ static int debug;
+ module_param(debug, int, 0644);
  
--	if (q->num_buffers == VB2_MAX_FRAME) {
--		dprintk(q, 1, "maximum number of buffers already allocated\n");
--		return -ENOBUFS;
--	}
+diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platform/amphion/vdec.c
+index 3fa1a74a2e20..b3219f6d17fa 100644
+--- a/drivers/media/platform/amphion/vdec.c
++++ b/drivers/media/platform/amphion/vdec.c
+@@ -28,6 +28,7 @@
+ 
+ #define VDEC_MIN_BUFFER_CAP		8
+ #define VDEC_MIN_BUFFER_OUT		8
++#define VB2_MAX_FRAME			32
+ 
+ struct vdec_fs_info {
+ 	char name[8];
+diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+index 6532a69f1fa8..a1e0f24bb91c 100644
+--- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
++++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+@@ -16,6 +16,8 @@
+ #include "../vdec_drv_if.h"
+ #include "../vdec_vpu_if.h"
+ 
++#define VB2_MAX_FRAME	32
++
+ /* reset_frame_context defined in VP9 spec */
+ #define VP9_RESET_FRAME_CONTEXT_NONE0 0
+ #define VP9_RESET_FRAME_CONTEXT_NONE1 1
+diff --git a/drivers/media/platform/qcom/venus/hfi.h b/drivers/media/platform/qcom/venus/hfi.h
+index f25d412d6553..bd5ca5a8b945 100644
+--- a/drivers/media/platform/qcom/venus/hfi.h
++++ b/drivers/media/platform/qcom/venus/hfi.h
+@@ -10,6 +10,8 @@
+ 
+ #include "hfi_helper.h"
+ 
++#define VB2_MAX_FRAME				32
++
+ #define VIDC_SESSION_TYPE_VPE			0
+ #define VIDC_SESSION_TYPE_ENC			1
+ #define VIDC_SESSION_TYPE_DEC			2
+diff --git a/drivers/media/platform/verisilicon/hantro_hw.h b/drivers/media/platform/verisilicon/hantro_hw.h
+index e83f0c523a30..9e8faf7ba6fb 100644
+--- a/drivers/media/platform/verisilicon/hantro_hw.h
++++ b/drivers/media/platform/verisilicon/hantro_hw.h
+@@ -15,6 +15,8 @@
+ #include <media/v4l2-vp9.h>
+ #include <media/videobuf2-core.h>
+ 
++#define VB2_MAX_FRAME	32
++
+ #define DEC_8190_ALIGN_MASK	0x07U
+ 
+ #define MB_DIM			16
+diff --git a/drivers/staging/media/ipu3/ipu3-v4l2.c b/drivers/staging/media/ipu3/ipu3-v4l2.c
+index e530767e80a5..6627b5c2d4d6 100644
+--- a/drivers/staging/media/ipu3/ipu3-v4l2.c
++++ b/drivers/staging/media/ipu3/ipu3-v4l2.c
+@@ -10,6 +10,8 @@
+ #include "ipu3.h"
+ #include "ipu3-dmamap.h"
+ 
++#define VB2_MAX_FRAME	32
++
+ /******************** v4l2_subdev_ops ********************/
+ 
+ #define IPU3_RUNNING_MODE_VIDEO		0
+diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+index 77921cf894ef..080b783d608d 100644
+--- a/include/media/videobuf2-core.h
++++ b/include/media/videobuf2-core.h
+@@ -20,7 +20,6 @@
+ #include <media/media-request.h>
+ #include <media/frame_vector.h>
+ 
+-#define VB2_MAX_FRAME	(32)
+ #define VB2_MAX_PLANES	(8)
+ 
+ /**
+diff --git a/include/media/videobuf2-v4l2.h b/include/media/videobuf2-v4l2.h
+index 5a845887850b..88a7a565170e 100644
+--- a/include/media/videobuf2-v4l2.h
++++ b/include/media/videobuf2-v4l2.h
+@@ -15,10 +15,6 @@
+ #include <linux/videodev2.h>
+ #include <media/videobuf2-core.h>
+ 
+-#if VB2_MAX_FRAME != VIDEO_MAX_FRAME
+-#error VB2_MAX_FRAME != VIDEO_MAX_FRAME
+-#endif
 -
- 	if (no_previous_buffers) {
- 		if (q->waiting_in_dqbuf && *count) {
- 			dprintk(q, 1, "another dup()ped fd is waiting for a buffer\n");
-@@ -1005,7 +1000,7 @@ int vb2_core_create_bufs(struct vb2_queue *q, enum vb2_memory memory,
- 			return -EINVAL;
- 	}
- 
--	num_buffers = min(*count, VB2_MAX_FRAME - q->num_buffers);
-+	num_buffers = min(*count, UINT_MAX - q->num_buffers);
- 
- 	if (requested_planes && requested_sizes) {
- 		num_planes = requested_planes;
+ #if VB2_MAX_PLANES != VIDEO_MAX_PLANES
+ #error VB2_MAX_PLANES != VIDEO_MAX_PLANES
+ #endif
 -- 
 2.39.2
 
