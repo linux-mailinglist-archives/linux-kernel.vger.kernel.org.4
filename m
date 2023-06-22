@@ -2,237 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 426107397CD
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54F527397CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbjFVHGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 03:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
+        id S230063AbjFVHGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 03:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbjFVHGi (ORCPT
+        with ESMTP id S229954AbjFVHGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 03:06:38 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9203D1BD4
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:06:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687417595; x=1718953595;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/wq6+yTnYpMw02hwVnOW3jogD7Dj8TJmexZDFIKeaBo=;
-  b=VbEyVJsaA4ks14RdFYHEq0PKX1ZpKlLhsJn/EoMzVYVTzASYjSI1XyOr
-   92i47395POCiHPT3jAkgzzWRQ8X+CU5p1q6v1i7XFka0jb8hWMA/52m/d
-   mZMzdl8bZgmxHmqWIrh52Bn/oqVIU7qYJXcaO5KCZ/yNMHK3oEmmpzv4X
-   lfgfZrUB72oY9Zce/O0NE+cs2J7mkvamMGxYwcdXVuFQWxmGsymSAwl9r
-   egq/8MKiwNwhwtGydErNud7yDGmca7Y90eyekg1HTkLoyBKlZwf+mibbZ
-   y7/7TXH1Yo8ihl/AoA3mxGPSEDbWZ/ToH2ludFHC6sxb9woZrLMRqQTYf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="340746380"
-X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
-   d="scan'208";a="340746380"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 00:06:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="708979704"
-X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
-   d="scan'208";a="708979704"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 22 Jun 2023 00:06:33 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qCEOl-0007Ox-2L;
-        Thu, 22 Jun 2023 07:06:31 +0000
-Date:   Thu, 22 Jun 2023 15:05:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: drivers/net/wireless/legacy/wl3501_cs.c:258:2: warning: performing
- pointer arithmetic on a null pointer has undefined behavior
-Message-ID: <202306221526.elbjF1ot-lkp@intel.com>
+        Thu, 22 Jun 2023 03:06:13 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DC51BD4
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:05:59 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f90a7325f6so57288935e9.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:05:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20221208.gappssmtp.com; s=20221208; t=1687417557; x=1690009557;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VIhSOYk52hVuqfcboW85OQLI0NHly7jy25hrkyJ2YAw=;
+        b=WZQ2qdOUncD9AsxUeqky0Sv9plZI/2WtRmFLj/vUPrLspAKtFdJAjDNBfRiM90Wl6l
+         Bu52No9UiIMeNp5vJfqV4tdzKNy4gqSSkZZgdTA2tEhX9UhJ0VFvTD1WUjcyZjBnxsqM
+         CY6kI+W0r2aC0t58Ot4ae4EkJpbEUxEO+qU0IzQugmgTpIX9f4Vdc6bAsBsmzf0/VZPu
+         oMD/OCT9ypK+CBaNDZaMdjjZbvVgK6KKjigdSYdUY6tPiNMyp/u8BcNpj7C6Q76VkPqd
+         cFeXbCEhZGKbNKcefxvBWXoomyu9ZEWY69AGbsxFJ97j4shY74xka5Cdz8D7NjEiYYcZ
+         YJOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687417557; x=1690009557;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VIhSOYk52hVuqfcboW85OQLI0NHly7jy25hrkyJ2YAw=;
+        b=iTY6SFmeymwTdd/hJk1Xs9tAlT4V7RoehZJRmPNdH2tHEiAMNPCPHqG89J14GMJOqf
+         ojrAq0o7yM7C7t18B4SxQCkaV0R6hRuyOnC0dgy+qZCCriXnh1ukoi+mH9aUsQVr2mLr
+         VCWW0v2qwsz4NP+eLNl25GX6cAZV99cK3Gi67wVfAvnulXy/mbj+SIwR+j9sarax4RYA
+         3YAwN0ES7wl5+Hj8NB3IY6JJomKAPLpB6Xqq5RoxdN1b7aR56nx91Xle6XcMx8PaNfFV
+         n4q7F5/3in4/AaQ8MXzryOaN6U6WTyG0ecrqu18DMRe7RzwnQKGwDnvpPlNtY871KC9D
+         jtVg==
+X-Gm-Message-State: AC+VfDx7bW3hGnSB8iOb+UTJ5u9WD3YIUNtM2wjHzbJuXDZwEH8eswdz
+        dIWOBpvXusA5j+VzMq+Mo9GHWw==
+X-Google-Smtp-Source: ACHHUZ47nqUaHErWDVz/sLK5UcH8SW19SUG16keT/oe5Rk5/giZmsiFYSgziHOgHrlK6XzxNNrCLiA==
+X-Received: by 2002:a1c:7415:0:b0:3fa:77c8:6724 with SMTP id p21-20020a1c7415000000b003fa77c86724mr51349wmc.10.1687417557595;
+        Thu, 22 Jun 2023 00:05:57 -0700 (PDT)
+Received: from localhost ([86.61.181.4])
+        by smtp.gmail.com with ESMTPSA id 17-20020a05600c231100b003f8ec58995fsm6919930wmo.6.2023.06.22.00.05.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 00:05:57 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 09:05:56 +0200
+From:   Jiri Pirko <jiri@resnulli.us>
+To:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>
+Cc:     "kuba@kernel.org" <kuba@kernel.org>,
+        "vadfed@meta.com" <vadfed@meta.com>,
+        "jonathan.lemon@gmail.com" <jonathan.lemon@gmail.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "vadfed@fb.com" <vadfed@fb.com>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "M, Saeed" <saeedm@nvidia.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "sj@kernel.org" <sj@kernel.org>,
+        "javierm@redhat.com" <javierm@redhat.com>,
+        "ricardo.canuelo@collabora.com" <ricardo.canuelo@collabora.com>,
+        "mst@redhat.com" <mst@redhat.com>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "Michalik, Michal" <michal.michalik@intel.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "jacek.lawrynowicz@linux.intel.com" 
+        <jacek.lawrynowicz@linux.intel.com>,
+        "airlied@redhat.com" <airlied@redhat.com>,
+        "ogabbay@kernel.org" <ogabbay@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "nipun.gupta@amd.com" <nipun.gupta@amd.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "linux@zary.sk" <linux@zary.sk>,
+        "masahiroy@kernel.org" <masahiroy@kernel.org>,
+        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+        "geert+renesas@glider.be" <geert+renesas@glider.be>,
+        "Olech, Milena" <milena.olech@intel.com>,
+        "kuniyu@amazon.com" <kuniyu@amazon.com>,
+        "liuhangbin@gmail.com" <liuhangbin@gmail.com>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "andy.ren@getcruise.com" <andy.ren@getcruise.com>,
+        "razor@blackwall.org" <razor@blackwall.org>,
+        "idosch@nvidia.com" <idosch@nvidia.com>,
+        "lucien.xin@gmail.com" <lucien.xin@gmail.com>,
+        "nicolas.dichtel@6wind.com" <nicolas.dichtel@6wind.com>,
+        "phil@nwl.cc" <phil@nwl.cc>,
+        "claudiajkang@gmail.com" <claudiajkang@gmail.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, poros <poros@redhat.com>,
+        mschmidt <mschmidt@redhat.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "vadim.fedorenko@linux.dev" <vadim.fedorenko@linux.dev>
+Subject: Re: [RFC PATCH v8 03/10] dpll: core: Add DPLL framework base
+ functions
+Message-ID: <ZJPy1FBvMC4z5SG2@nanopsycho>
+References: <20230609121853.3607724-1-arkadiusz.kubalewski@intel.com>
+ <20230609121853.3607724-4-arkadiusz.kubalewski@intel.com>
+ <ZIS1FX0QAqDSvVUK@nanopsycho>
+ <DM6PR11MB46570B50A01D81F54F1068369B5DA@DM6PR11MB4657.namprd11.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <DM6PR11MB46570B50A01D81F54F1068369B5DA@DM6PR11MB4657.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kalle,
+Wed, Jun 21, 2023 at 08:55:35PM CEST, arkadiusz.kubalewski@intel.com wrote:
+>>From: Jiri Pirko <jiri@resnulli.us>
+>>Sent: Saturday, June 10, 2023 7:38 PM
+>>
+>>Fri, Jun 09, 2023 at 02:18:46PM CEST, arkadiusz.kubalewski@intel.com wrote:
+>>>From: Vadim Fedorenko <vadim.fedorenko@linux.dev>
+>>>
+>>>DPLL framework is used to represent and configure DPLL devices
+>>>in systems. Each device that has DPLL and can configure inputs
+>>>and outputs can use this framework.
+>>>
+>>>Implement core framework functions for further interactions
+>>>with device drivers implementing dpll subsystem, as well as for
+>>>interactions of DPLL netlink framework part with the subsystem
+>>>itself.
+>>>
+>>>Co-developed-by: Milena Olech <milena.olech@intel.com>
+>>>Signed-off-by: Milena Olech <milena.olech@intel.com>
+>>>Co-developed-by: Michal Michalik <michal.michalik@intel.com>
+>>>Signed-off-by: Michal Michalik <michal.michalik@intel.com>
+>>>Signed-off-by: Vadim Fedorenko <vadim.fedorenko@linux.dev>
+>>>Co-developed-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+>>>Signed-off-by: Arkadiusz Kubalewski <arkadiusz.kubalewski@intel.com>
+>>>---
+>>> drivers/dpll/dpll_core.c | 953 +++++++++++++++++++++++++++++++++++++++
+>>> drivers/dpll/dpll_core.h | 104 +++++
+>>
+>>Overall, looks very good! I pinpointed couple of nits below, nothing big.
+>>General question: Why do you put documentation comment to every static
+>>function? Does not make any sense to me. Even for non-exported functions
+>>I think it is overkill. Most of them (if not all) give the reader no
+>>additional information and only make the code a bit harder to read.
+>>Care to drop them?
+>>
+>
+>I forgot to respond here.. I would rather leave it, but if the others think
+>the same way, we could remove them.
 
-First bad commit (maybe != root cause):
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dad9774deaf1cf8e8f7483310dfb2690310193d2
-commit: 298e50ad8eb8fa12ea68bb2da45bb8ef4edcd0ec wifi: move raycs, wl3501 and rndis_wlan to legacy directory
-date:   3 months ago
-config: riscv-randconfig-r021-20230621 (https://download.01.org/0day-ci/archive/20230622/202306221526.elbjF1ot-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project.git f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce: (https://download.01.org/0day-ci/archive/20230622/202306221526.elbjF1ot-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306221526.elbjF1ot-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:743:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           insb(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
-   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
-                                            ~~~~~~~~~~ ^
-   In file included from drivers/net/wireless/legacy/wl3501_cs.c:33:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:751:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           insw(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:105:53: note: expanded from macro 'insw'
-   #define insw(addr, buffer, count) __insw(PCI_IOBASE + (addr), buffer, count)
-                                            ~~~~~~~~~~ ^
-   In file included from drivers/net/wireless/legacy/wl3501_cs.c:33:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:759:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           insl(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:106:53: note: expanded from macro 'insl'
-   #define insl(addr, buffer, count) __insl(PCI_IOBASE + (addr), buffer, count)
-                                            ~~~~~~~~~~ ^
-   In file included from drivers/net/wireless/legacy/wl3501_cs.c:33:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:768:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           outsb(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
-   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-                                              ~~~~~~~~~~ ^
-   In file included from drivers/net/wireless/legacy/wl3501_cs.c:33:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:777:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           outsw(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:119:55: note: expanded from macro 'outsw'
-   #define outsw(addr, buffer, count) __outsw(PCI_IOBASE + (addr), buffer, count)
-                                              ~~~~~~~~~~ ^
-   In file included from drivers/net/wireless/legacy/wl3501_cs.c:33:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:786:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           outsl(addr, buffer, count);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:120:55: note: expanded from macro 'outsl'
-   #define outsl(addr, buffer, count) __outsl(PCI_IOBASE + (addr), buffer, count)
-                                              ~~~~~~~~~~ ^
-   In file included from drivers/net/wireless/legacy/wl3501_cs.c:33:
-   In file included from include/linux/interrupt.h:11:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/riscv/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/riscv/include/asm/io.h:136:
-   include/asm-generic/io.h:1134:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
-                                                     ~~~~~~~~~~ ^
->> drivers/net/wireless/legacy/wl3501_cs.c:258:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           wl3501_outsb(this->base_addr + WL3501_NIC_IODPA, src, size);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/net/wireless/legacy/wl3501_cs.c:70:33: note: expanded from macro 'wl3501_outsb'
-   #define wl3501_outsb(a, b, c) { outsb(a, b, c); slow_down_io(); }
-                                   ^~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:118:55: note: expanded from macro 'outsb'
-   #define outsb(addr, buffer, count) __outsb(PCI_IOBASE + (addr), buffer, count)
-                                              ~~~~~~~~~~ ^
-   drivers/net/wireless/legacy/wl3501_cs.c:281:2: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           insb(this->base_addr + WL3501_NIC_IODPA, dest, size);
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/riscv/include/asm/io.h:104:53: note: expanded from macro 'insb'
-   #define insb(addr, buffer, count) __insb(PCI_IOBASE + (addr), buffer, count)
-                                            ~~~~~~~~~~ ^
-   15 warnings generated.
-
-
-vim +258 drivers/net/wireless/legacy/wl3501_cs.c
-
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  237  
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  238  /**
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  239   * wl3501_set_to_wla - Move 'size' bytes from PC to card
-2307d0bc9d8b60 drivers/net/wireless/wl3501_cs.c Lee Jones      2020-08-26  240   * @this: Card
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  241   * @dest: Card addressing space
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  242   * @src: PC addressing space
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  243   * @size: Bytes to move
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  244   *
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  245   * Move 'size' bytes from PC to card. (Shouldn't be interrupted)
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  246   */
-ff1d2767d5a43c drivers/net/wireless/wl3501_cs.c Jouni Malinen  2005-05-12  247  static void wl3501_set_to_wla(struct wl3501_card *this, u16 dest, void *src,
-ff1d2767d5a43c drivers/net/wireless/wl3501_cs.c Jouni Malinen  2005-05-12  248  			      int size)
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  249  {
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  250  	/* switch to SRAM Page 0 */
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  251  	wl3501_switch_page(this, (dest & 0x8000) ? WL3501_BSS_SPAGE1 :
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  252  						   WL3501_BSS_SPAGE0);
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  253  	/* set LMAL and LMAH */
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  254  	wl3501_outb(dest & 0xff, this->base_addr + WL3501_NIC_LMAL);
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  255  	wl3501_outb(((dest >> 8) & 0x7f), this->base_addr + WL3501_NIC_LMAH);
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  256  
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  257  	/* rep out to Port A */
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16 @258  	wl3501_outsb(this->base_addr + WL3501_NIC_IODPA, src, size);
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  259  }
-^1da177e4c3f41 drivers/net/wireless/wl3501_cs.c Linus Torvalds 2005-04-16  260  
-
-:::::: The code at line 258 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Could you explain what is the benefit of leaving them? What are they
+good for. From what I see, they are obvious and only add blank LOC.
