@@ -2,203 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB03073A644
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 18:42:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A9EB73A64D
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 18:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbjFVQmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 12:42:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
+        id S230022AbjFVQnS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 12:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjFVQmf (ORCPT
+        with ESMTP id S231318AbjFVQnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 12:42:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7CB1FE6
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 09:41:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687452105;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pKQxo2ybKG3VitBeJfoexX4S6PJQFIvYCFny4nwoy3Y=;
-        b=BI6pljdJIHVaYYIhkuJTqiTRaHnfZYoGBx0jNmlnbfbL38w5mm7RhKIW/7oOwJGE/0sG4C
-        YJTQAkfHNPA7ik1p04WYNsMuZmVIc797Rvcdp0pA4jEhU57qnNQWV1iX9QFUl+F6PVsqrn
-        SYh+3Zshsjl77lvgr9GN2AoGnTAk1ls=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-533-KoHvMP2fOXOeJSUJvnhfcw-1; Thu, 22 Jun 2023 12:41:34 -0400
-X-MC-Unique: KoHvMP2fOXOeJSUJvnhfcw-1
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-1b679ec24f7so21557115ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 09:41:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687452086; x=1690044086;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pKQxo2ybKG3VitBeJfoexX4S6PJQFIvYCFny4nwoy3Y=;
-        b=BOKADNWdMo1tkunr93ZghfFLZRp7hQBGJLTtnlQ4MPgzFhF9RkquTpjuhmPnLvMQHa
-         8I+ElLiDm+2Ckfjk2ZtKwqnOFrY9pMnNAFO+EO//o791lNXsrMZKZuDUUKoeNGQx8qb/
-         pY5i71uR7lg1GoZVgqT9vYe3QAyeVDbmYDfrNs/koepwSMzj4BUctMM8VVTWxKJVrp75
-         CbOHRaSqX0GAorM9NuPGPI1mXMWcWw0k6fzms2kTmsvrnhxsYutmbh6f032t6kQvpJcT
-         uCd32tWWZKDJcifqe15blEcCW90SZtGbZy95xSbRe1Bz3ALuKPF0QXu/h1zcSs+EfJkG
-         NyLg==
-X-Gm-Message-State: AC+VfDzfVtuJkJNgztPHOx3U8TQbkPxZM4TjxGghZpeDBou2SI+f69uU
-        RAOQPr6gX8Ptkz+nadL3wECxTMhY08LTsOrBcz/TOL1a4UiZvPwmZW0dymdtk2Ull0PtY4R6N4o
-        p+YexbmPzFyksxccbtMtx9QO7
-X-Received: by 2002:a17:902:d682:b0:1b2:a63:9587 with SMTP id v2-20020a170902d68200b001b20a639587mr8026095ply.36.1687452086556;
-        Thu, 22 Jun 2023 09:41:26 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ70F0+HQZlh5eNwYNO6SGbE2N5G7FJeFBkwR3g4WVuO3ZqYMiBjBKa4G94Qgr+Vu1E+d8T3Jw==
-X-Received: by 2002:a17:902:d682:b0:1b2:a63:9587 with SMTP id v2-20020a170902d68200b001b20a639587mr8026077ply.36.1687452086223;
-        Thu, 22 Jun 2023 09:41:26 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:4b3f:de9c:642:1aff:fe31:a15c? ([2a02:810d:4b3f:de9c:642:1aff:fe31:a15c])
-        by smtp.gmail.com with ESMTPSA id jk14-20020a170903330e00b001b536aaf7c2sm5639127plb.189.2023.06.22.09.41.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 09:41:25 -0700 (PDT)
-Message-ID: <26d8fbcf-d34f-0a79-9d91-8c60e66f7341@redhat.com>
-Date:   Thu, 22 Jun 2023 18:41:19 +0200
+        Thu, 22 Jun 2023 12:43:13 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2042.outbound.protection.outlook.com [40.107.20.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598AA2107;
+        Thu, 22 Jun 2023 09:43:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EA/DUTfqmB3gV9+rUppqpDrXrRo6DIOkirzU0nWj3eU=;
+ b=8JdBDWmCQg1AmGWX+O79mq355t9UBwxJOiopXlCCXPQs71GVJFsRz5Tsfj0OWr3FKAvD9UAbqYwRekUOJVypyE5JXQ9Gs/+dSoBhdsoVYN9AYwUwOE9dKjjbziICFiEDtGhSBds/kT7U9rW88e4oKo+xZS7PERKB06sakJC8OXs=
+Received: from DUZPR01CA0115.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:4bc::27) by AM7PR08MB5383.eurprd08.prod.outlook.com
+ (2603:10a6:20b:102::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Thu, 22 Jun
+ 2023 16:42:54 +0000
+Received: from DBAEUR03FT017.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:10:4bc:cafe::28) by DUZPR01CA0115.outlook.office365.com
+ (2603:10a6:10:4bc::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24 via Frontend
+ Transport; Thu, 22 Jun 2023 16:42:54 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+ pr=C
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ DBAEUR03FT017.mail.protection.outlook.com (100.127.142.243) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6521.24 via Frontend Transport; Thu, 22 Jun 2023 16:42:54 +0000
+Received: ("Tessian outbound 52217515e112:v142"); Thu, 22 Jun 2023 16:42:53 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: 128e7f28d2ae9b1c
+X-CR-MTA-TID: 64aa7808
+Received: from f23967a44e06.1
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 1E0577D1-55FA-47A6-B77C-3023F0419000.1;
+        Thu, 22 Jun 2023 16:42:46 +0000
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id f23967a44e06.1
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Thu, 22 Jun 2023 16:42:46 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j9DJ1Q/QNuDRL/cI4RxzWmcmnhZkvzL0nsyt147gE+qx/6mg6MzQa3TxZgkdqy8jDFPtny1mpUcSYz0J+9wS2qriatfZMswi2ZF33nWNcEB9OPkQGckSowA9JAXkutjslpnxxYzLwIV5Jkz1Rt17bO8HdsviKRFNUrVr3VA4nzFIYCE6qFgd6IsjrApXAa53jinDdeu/lq/RQ85ntT0iVPv/Am4YPodnMWKqj54ibdWnNgIRr5gBJbGPXloxIqxmc8mlvWpnnR0UzG4v0cYCCIBWMRUMKGfo/K2UPKPQFUc5m17OK9iOhgnA00iO26MXvJ2SWI2dQ8WFu7R/wOPxIQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EA/DUTfqmB3gV9+rUppqpDrXrRo6DIOkirzU0nWj3eU=;
+ b=EpRn7DfPXTuYfJfAkJeQQLnjc3CTwGHZ6wQZQjJm1pwN6Hjz0zfa8atsp89GJgtMeOdBDiTtKiQ0gOMi63SWUEHl9wMLGREkk3PjHok1sUzU2+hxd3XKIql6ioKwV9JUM3MhRmc3jwTuWGWKkILLGDLadTZmPKyKqKpicgvOpQbGblFOOo3QQHozaYrR0h+gr7ULIBBD62snXFpTS1Ys8OnH4kokwtyMhVzjTF5OqDK5wCqUBbDEQD5tCHMGjt7vAtPTjWg3Ud9kLe2t5KOWR4jEB/kKi2ECUjaD8X2gvZytM7RlVnFnQEx7Q2lH4CTLZ//OX3piQaND+06vkqfYUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EA/DUTfqmB3gV9+rUppqpDrXrRo6DIOkirzU0nWj3eU=;
+ b=8JdBDWmCQg1AmGWX+O79mq355t9UBwxJOiopXlCCXPQs71GVJFsRz5Tsfj0OWr3FKAvD9UAbqYwRekUOJVypyE5JXQ9Gs/+dSoBhdsoVYN9AYwUwOE9dKjjbziICFiEDtGhSBds/kT7U9rW88e4oKo+xZS7PERKB06sakJC8OXs=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
+ by DU2PR08MB10230.eurprd08.prod.outlook.com (2603:10a6:10:46e::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Thu, 22 Jun
+ 2023 16:42:41 +0000
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::43b7:3a83:5cbe:4559]) by DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::43b7:3a83:5cbe:4559%4]) with mapi id 15.20.6521.023; Thu, 22 Jun 2023
+ 16:42:40 +0000
+Date:   Thu, 22 Jun 2023 17:42:11 +0100
+From:   "szabolcs.nagy@arm.com" <szabolcs.nagy@arm.com>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "Xu, Pengfei" <pengfei.xu@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "kcc@google.com" <kcc@google.com>,
+        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
+        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "Schimpe, Christina" <christina.schimpe@intel.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "corbet@lwn.net" <corbet@lwn.net>, "nd@arm.com" <nd@arm.com>,
+        "dethoma@microsoft.com" <dethoma@microsoft.com>,
+        "jannh@google.com" <jannh@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "pavel@ucw.cz" <pavel@ucw.cz>, "bp@alien8.de" <bp@alien8.de>,
+        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "rppt@kernel.org" <rppt@kernel.org>,
+        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "john.allen@amd.com" <john.allen@amd.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "bsingharora@gmail.com" <bsingharora@gmail.com>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "gorcunov@gmail.com" <gorcunov@gmail.com>,
+        "Yu, Yu-cheng" <yu-cheng.yu@intel.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "Syromiatnikov, Eugene" <esyr@redhat.com>,
+        "Torvalds, Linus" <torvalds@linux-foundation.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Yang, Weijiang" <weijiang.yang@intel.com>,
+        "Eranian, Stephane" <eranian@google.com>
+Subject: Re: [PATCH v9 23/42] Documentation/x86: Add CET shadow stack
+ description
+Message-ID: <ZJR545en+dYx399c@arm.com>
+References: <ZImZ6eUxf5DdLYpe@arm.com>
+ <64837d2af3ae39bafd025b3141a04f04f4323205.camel@intel.com>
+ <ZJAWMSLfSaHOD1+X@arm.com>
+ <5794e4024a01e9c25f0951a7386cac69310dbd0f.camel@intel.com>
+ <ZJFukYxRbU1MZlQn@arm.com>
+ <e676c4878c51ab4b6018c9426b5edacdb95f2168.camel@intel.com>
+ <ZJLgp29mM3BLb3xa@arm.com>
+ <c5ae83588a7e107beaf858ab04961e70d16fe32c.camel@intel.com>
+ <ZJQR7slVHvjeCQG8@arm.com>
+ <CALCETrW+30_a2QQE-yw9djVFPxSxm7-c2FZFwZ50dOEmnmkeDA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALCETrW+30_a2QQE-yw9djVFPxSxm7-c2FZFwZ50dOEmnmkeDA@mail.gmail.com>
+X-ClientProxiedBy: DS7PR03CA0154.namprd03.prod.outlook.com
+ (2603:10b6:5:3b2::9) To DB9PR08MB7179.eurprd08.prod.outlook.com
+ (2603:10a6:10:2cc::19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 14/16] maple_tree: Refine mas_preallocate() node
- calculations
-Content-Language: en-US
-To:     "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     maple-tree@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Peng Zhang <zhangpeng.00@bytedance.com>,
-        David Airlie <airlied@redhat.com>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-References: <20230612203953.2093911-1-Liam.Howlett@oracle.com>
- <20230612203953.2093911-15-Liam.Howlett@oracle.com>
-From:   Danilo Krummrich <dakr@redhat.com>
-Organization: RedHat
-In-Reply-To: <20230612203953.2093911-15-Liam.Howlett@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|DU2PR08MB10230:EE_|DBAEUR03FT017:EE_|AM7PR08MB5383:EE_
+X-MS-Office365-Filtering-Correlation-Id: c3778a74-cb59-41b5-57a1-08db733fba09
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original: fKWg56gc052v8Z59iBUecFoVNqPWeWHoCPXiAQy7DZHgj4J45pDJRsgDiVUY83MOiLMyIqskN4LuMWrMTkhLDHpIrPfVh2KDIXhTk03W6LnqMETOD6MvstU0pz7M5vO9PTxdl/6pCYUn/v5hYIRmzdwkGp9Ha1V+MTvgoK4p6npsqp5d36fUg+Gqdqz1Z2QkvBzVirKg1PMM2U7QM34xAqqP2SJX62Y/XmNfvVLf2J4+6nBqc6rR1HQ38G6ClCdmt6J131BRxvhUeUSWSpbjSPa/AKkqE4fEBvafChGt5iFhRlAXK8unsGwJYg5gOor7wVW0VrOnsaHj4+G5SC/rDfxseqTqb+Ieani7pvsl/v4TkI5X4dzU+HfF1Qgurhw4V4Bf6A5DU/0sfwr+yb8NZHYE70V0YebBxfFbXZEQH4TciUbSnhxS5X/F5u4Zglx8uZYLWQ0P+GaB8dxVwK/tR/vutIICtGJ+YL5KboUIbsZOKCUCgNyCWCjYriMG4KaORYxBqYyE6zEWPC6yBi1KHZKY/BU7V41gWd4gjipjASMFgZ1x5ldLutBE1kw5XTpml3r478eXMRiwBPMuIXpnoah2ab7xcJtsscjJQ6Jyz4w=
+X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(366004)(346002)(136003)(396003)(451199021)(54906003)(4326008)(478600001)(6666004)(6512007)(53546011)(26005)(6486002)(2906002)(186003)(66476007)(66556008)(8936002)(316002)(7406005)(66946007)(6916009)(5660300002)(41300700001)(7416002)(8676002)(38100700002)(6506007)(36756003)(2616005)(83380400001)(86362001)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR08MB10230
+Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT017.eop-EUR03.prod.protection.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs: d65093b2-bfcc-47e2-460c-08db733fb12d
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5FC2es5rEd5D3YDcD3O9IZZCVwYoxkp9Tt+eMisyOOGOTSkho6/4nEePut3Cnj6ql1ftOZ6Vyavs+yHfSV8R11CHvdNXwpfbgDRTcP1FV9LG84t6c5zpp7KttlX4QFaYtGmAuES2zNGlzrijJ6+g4aKQnrKwRUI8rC/s1rK/L/163Flu8MR0lRy+9uJ6kwlXNY8Eo/8sJBDsu99kZlri67iOBvO/+KLaC8qacG7opj478ClmDDOGcVKLc+5W1uqqwhznLzaRJ9PW3qfQqhZOibgGFbRmvqCv2695WTre6ai4K8d9XKwnxMhwUPGhtSPS/oEC/ufoV0ad4m8PZ0rffe786Gu0iKE1a1gnni9SHa6uQLwTLfSUC8+lUlVq+FjYfKSQCTvyIUMFM2gBSr5quFYucM1qCDFqVmZxV4ifyBjIbZ8axfafPUZnRpKmLl/2Cil/7ZTh5frmgkivCftJg6DSdtzaewIFDBHst4dppwdLYWlnZyJstr53pEo0ElIoUSBmKTCq35Q773keyaue5PX+K/K7XGGxeNvvhEwA2yBgVDzC8gClG85xhrFIjl+9LSsHVp9yXnf3T4ufSYl0EdiwGY1FR8/whSCmc1OK7e3+EQGae7H07KVm0Cv2sPQo+6iblG+tPY16vfPKciR3Q9nChjBCIXSc4ezMROBQyPFibI0DAwOb7pvot+3AxAQitw4c8ZJHZfjiQleexcP7qUYpfHucdBNnghkcB4D/N4sVF4IDflWq7RcwBNl2Mz49MgjPy8L84uO90AgyUP+fvQ==
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(346002)(136003)(451199021)(36840700001)(46966006)(40470700004)(82310400005)(36860700001)(36756003)(53546011)(40460700003)(81166007)(70206006)(356005)(5660300002)(6862004)(41300700001)(86362001)(8676002)(4326008)(450100002)(40480700001)(316002)(8936002)(70586007)(82740400003)(107886003)(6486002)(47076005)(26005)(6506007)(186003)(2616005)(6512007)(2906002)(478600001)(336012)(6666004)(54906003)(83380400001)(67856001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 16:42:54.4209
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c3778a74-cb59-41b5-57a1-08db733fba09
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT017.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR08MB5383
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/12/23 22:39, Liam R. Howlett wrote:
-> Calculate the number of nodes based on the pending write action instead
-> of assuming the worst case.
-
-Liam already gave me a heads-up on this patch, which I already replied 
-to [1].
-
-However, I think it might make sense to also reply to this patch directly.
-
-For a mas_preallocate() calculating the actual required nodes to be 
-allocated instead of assuming the worst to work, it is required to 
-ensure that the tree does not change between calling mas_preallocate() 
-and mas_store_prealloc() if my understanding is correct.
-
-In DRM however, more specifically the DRM GPUVA Manager [2], we do have 
-the case that we are not able to ensure this:
-
-Jobs to create GPU mappings can be submitted by userspace, are queued up 
-by the kernel and are processed asynchronously in dma-fence signalling 
-critical paths, e.g. by using the drm_gpu_scheduler. Hence, we must be 
-able to allocate the worst case amount of node, since at the time a job 
-is submitted we can't predict the state the maple tree keeping track of 
-mappings has once a mapping is inserted in the (asynchronous) dma-fence 
-signalling critical path.
-
-A more detailed explanation can be found in [1].
-
-Could we keep a separate function for allocating the worst case amount 
-of nodes additionally to this optimization? E.g. something like 
-mas_preallocate_worst_case() or mas_preallocate_unlocked() (since I 
-guess the new one requires the maple tree to be kept locked in order not 
-to change)?
-
-[1] 
-https://lore.kernel.org/nouveau/68cd25de-e767-725e-2e7b-703217230bb0@redhat.com/T/#ma326e200b1de1e3c9df4e9fcb3bf243061fee8b5
-
-[2] 
-https://lore.kernel.org/linux-mm/20230620004217.4700-8-dakr@redhat.com/T/#m47ab82310f87793d0f0cc1825a316eb30ad5b653
-
-- Danilo
-
+The 06/22/2023 08:26, Andy Lutomirski wrote:
+> On Thu, Jun 22, 2023 at 2:28 AM szabolcs.nagy@arm.com
+> <szabolcs.nagy@arm.com> wrote:
+> >
+> > The 06/21/2023 18:54, Edgecombe, Rick P wrote:
+> > > On Wed, 2023-06-21 at 12:36 +0100, szabolcs.nagy@arm.com wrote:
+> > > > > The 06/20/2023 19:34, Edgecombe, Rick P wrote:
+> > > > > > > I actually did a POC for this, but rejected it. The problem is,
+> > > > > > > if
+> > > > > > > there is a shadow stack overflow at that point then the kernel
+> > > > > > > > > can't
+> > > > > > > push the shadow stack token to the old stack. And shadow stack
+> > > > > > > > > overflow
+> > > > > > > is exactly the alt shadow stack use case. So it doesn't really
+> > > > > > > > > solve
+> > > > > > > the problem.
+> > > > >
+> > > > > the restore token in the alt shstk case does not regress anything
+> > > > > but
+> > > > > makes some use-cases work.
+> > > > >
+> > > > > alt shadow stack is important if code tries to jump in and out of
+> > > > > signal handlers (dosemu does this with swapcontext) and for that a
+> > > > > restore token is needed.
+> > > > >
+> > > > > alt shadow stack is important if the original shstk did not
+> > > > > overflow
+> > > > > but the signal handler would overflow it (small thread stack, huge
+> > > > > sigaltstack case).
+> > > > >
+> > > > > alt shadow stack is also important for crash reporting on shstk
+> > > > > overflow even if longjmp does not work then. longjmp to a
+> > > > > makecontext
+> > > > > stack would still work and longjmp back to the original stack can
+> > > > > be
+> > > > > made to mostly work by an altshstk option to overwrite the top
+> > > > > entry
+> > > > > with a restore token on overflow (this can break unwinding though).
+> > > > >
+> > >
+> > > There was previously a request to create an alt shadow stack for the
+> > > purpose of handling shadow stack overflow. So you are now suggesting to
+> > > to exclude that and instead target a different use case for alt shadow
+> > > stack?
+> >
+> > that is not what i said.
+> >
+> > > But I'm not sure how much we should change the ABI at this point since
+> > > we are constrained by existing userspace. If you read the history, we
+> > > may end up needing to deprecate the whole elf bit for this and other
+> > > reasons.
+> >
+> > i'm not against deprecating the elf bit, but i think binary
+> > marking will be difficult for this kind of feature no matter what
+> > (code may be incompatible for complex runtime dependent reasons).
+> >
+> > > So should we struggle to find a way to grow the existing ABI without
+> > > disturbing the existing userspace? Or should we start with something,
+> > > finally, and see where we need to grow and maybe get a chance at a
+> > > fresh start to grow it?
+> > >
+> > > Like, maybe 3 people will show up saying "hey, I *really* need to use
+> > > shadow stack and longjmp from a ucontext stack", and no one says
+> > > anything about shadow stack overflow. Then we know what to do. And
+> > > maybe dosemu decides it doesn't need to implement shadow stack (highly
+> > > likely I would think). Now that I think about it, AFAIU SS_AUTODISARM
+> > > was created for dosemu, and the alt shadow stack patch adopted this
+> > > behavior. So it's speculation that there is even a problem in that
+> > > scenario.
+> > >
+> > > Or maybe people just enable WRSS for longjmp() and directly jump back
+> > > to the setjmp() point. Do most people want fast setjmp/longjmp() at the
+> > > cost of a little security?
+> > >
+> > > Even if, with enough discussion, we could optimize for all
+> > > hypotheticals without real user feedback, I don't see how it helps
+> > > users to hold shadow stack. So I think we should move forward with the
+> > > current ABI.
+> >
+> > you may not get a second chance to fix a security feature.
+> > it will be just disabled if it causes problems.
 > 
-> This addresses a performance regression introduced in platforms that
-> have longer allocation timing.
+> *I* would use altshadowstack.
 > 
-> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
-> ---
->   lib/maple_tree.c | 48 +++++++++++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 47 insertions(+), 1 deletion(-)
+> I run a production system (that cares about correctness *and*
+> performance, but that's not really relevant here -- SHSTK ought to be
+> fast).  And, if it crashes, I want to know why.  So I handle SIGSEGV,
+> etc so I have good logs if it crashes.  And I want those same logs if
+> I overflow the stack.
 > 
-> diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-> index 048d6413a114..7ac5b5457603 100644
-> --- a/lib/maple_tree.c
-> +++ b/lib/maple_tree.c
-> @@ -5541,9 +5541,55 @@ EXPORT_SYMBOL_GPL(mas_store_prealloc);
->    */
->   int mas_preallocate(struct ma_state *mas, void *entry, gfp_t gfp)
->   {
-> +	MA_WR_STATE(wr_mas, mas, entry);
-> +	unsigned char node_size;
-> +	int request = 1;
->   	int ret;
->   
-> -	mas_node_count_gfp(mas, 1 + mas_mt_height(mas) * 3, gfp);
-> +
-> +	if (unlikely(!mas->index && mas->last == ULONG_MAX))
-> +		goto ask_now;
-> +
-> +	mas_wr_store_setup(&wr_mas);
-> +	wr_mas.content = mas_start(mas);
-> +	/* Root expand */
-> +	if (unlikely(mas_is_none(mas) || mas_is_ptr(mas)))
-> +		goto ask_now;
-> +
-> +	if (unlikely(!mas_wr_walk(&wr_mas))) {
-> +		/* Spanning store, use worst case for now */
-> +		request = 1 + mas_mt_height(mas) * 3;
-> +		goto ask_now;
-> +	}
-> +
-> +	/* At this point, we are at the leaf node that needs to be altered. */
-> +	/* Exact fit, no nodes needed. */
-> +	if (wr_mas.r_min == mas->index && wr_mas.r_max == mas->last)
-> +		return 0;
-> +
-> +	mas_wr_end_piv(&wr_mas);
-> +	node_size = mas_wr_new_end(&wr_mas);
-> +	/* Slot store can avoid using any nodes */
-> +	if (node_size == wr_mas.node_end && wr_mas.offset_end - mas->offset == 1)
-> +		return 0;
-> +
-> +	if (node_size >= mt_slots[wr_mas.type]) {
-> +		/* Split, worst case for now. */
-> +		request = 1 + mas_mt_height(mas) * 2;
-> +		goto ask_now;
-> +	}
-> +
-> +	/* Appending does not need any nodes */
-> +	if (node_size == wr_mas.node_end + 1 && mas->offset == wr_mas.node_end)
-> +		return 0;
-> +
-> +	/* Potential spanning rebalance collapsing a node, use worst-case */
-> +	if (node_size  - 1 <= mt_min_slots[wr_mas.type])
-> +		request = mas_mt_height(mas) * 2 - 1;
-> +
-> +	/* node store needs one node */
-> +ask_now:
-> +	mas_node_count_gfp(mas, request, gfp);
->   	mas->mas_flags |= MA_STATE_PREALLOC;
->   	if (likely(!mas_is_err(mas)))
->   		return 0;
+> That being said, I have no need for longjmp or siglongjmp for this.  I
+> use exit(2) to escape.
 
+the same crash handler that prints a log on shstk overflow should
+work when a different cause of SIGSEGV is recoverable via longjmp.
+to me this means that alt shstk must work with longjmp at least in
+the non-shstk overflow case (which can be declared non-recoverable).
+
+> For what it's worth, setjmp/longjmp is a bad API.  The actual pattern
+> that ought to work well (and that could be supported well by fancy
+> compilers and non-C languages, as I understand it) is more like a
+> function call that has two ways out.  Like this (pseudo-C):
+> 
+> void function(struct better_jmp_buf &buf, args...)
+> {
+>    ...
+>        if (condition)
+>           better_long_jump(buf);  // long jumps out!
+>        // could also pass buf to another function
+>    ...
+>        // could also return normally
+> }
+> 
+> better_call_with_jmp_buf(function, args);
+> 
+> *This* could support altshadowstack just fine.  And many users might
+> be okay with the understanding that, if altshadowstack is on, you have
+> to use a better long jump to get out (or a normal sigreturn or _exit).
+
+i don't understand why this would work fine when longjmp does not.
+how does the shstk switch happen?
+
+> No one is getting an altshadowstack signal handler without code
+> changes.
+
+assuming the same component is doing the alt shstk setup as the
+longjmp.
+
+> siglongjmp() could support altshadowstack with help from the kernel,
+> but we probably don't want to go there.
+
+what kind of help? maybe we need that help..
+
+e.g. if the signal frame token is detected by longjmp on
+the shstk then doing an rt_sigreturn with the right signal
+frame context allows longjmp to continue unwinding the shstk.
+however kernel sigcontext layout can change so userspace may
+not know it so longjmp needs a helper, but only in the jump
+across signal frame case.
+
+(this is a different design than what i proposed earlier,
+it also makes longjmp from alt shstk work without wrss,
+the downside is that longjmp across makecontext needs a
+separate solution then which implies that all shstk needs
+a detectable token at the end of the shstk.. so again
+something that we have to get right now and cannot add
+later.)
