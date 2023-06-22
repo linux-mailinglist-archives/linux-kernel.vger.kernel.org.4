@@ -2,58 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 898B173AB6E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 23:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65E4573AB75
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 23:18:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbjFVVQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 17:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34224 "EHLO
+        id S231209AbjFVVSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 17:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229986AbjFVVQv (ORCPT
+        with ESMTP id S229721AbjFVVSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 17:16:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDB7195;
-        Thu, 22 Jun 2023 14:16:50 -0700 (PDT)
+        Thu, 22 Jun 2023 17:18:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27898F1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 14:18:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C57361903;
-        Thu, 22 Jun 2023 21:16:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FB0EC433C8;
-        Thu, 22 Jun 2023 21:16:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FCCA6190E
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 21:18:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A149C433C0;
+        Thu, 22 Jun 2023 21:18:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687468609;
-        bh=xSZmrtBW6K2rFKUlZrWXt4n85rXjSVP9x5eUXJgvqlw=;
+        s=k20201202; t=1687468716;
+        bh=DZ6KSu/L/tBR0J1/oT6QXZ3+nwsYKmM+bE2i/fxRL7M=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GWOWGlXKarrlCwefPs3N9AZYJF7/V69mjTQH5dY7oYTdXl96w80eQks0w6kb9DXIl
-         3MCXebr6FFkL4gWeuhLDUaG7BRQwdliUwS1t1ZjCI6WppJUmUC5zBZiAiMkrvO0hJ6
-         EumX4G34tn8LzfFU3hgon6XcXqgIBhiB9tz5GqPM5uU8xLYq/trbuQwq8MD4DL57Kn
-         1u11VAIytyWQGo1EFZxOY3dI2LyJB5mmVXDRWw0LkBBch3MzMpzZBGLENIxzX6NShd
-         b0PPjUcVbumaPcZVESJfw0M6DypUW8ZTmzjTosWiqDtbDqAMLKNuqQcTI1jGrSzhWK
-         alHlYpiXJv4zA==
-Date:   Thu, 22 Jun 2023 22:16:42 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        krzysztof.kozlowski@linaro.org, andi@etezian.org, kernel@axis.com,
-        alim.akhtar@samsung.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 3/4] spi: Split transfers larger than max size
-Message-ID: <ZJS6OnzRapPCboC8@finisterre.sirena.org.uk>
-References: <20220927112117.77599-1-vincent.whitchurch@axis.com>
- <20220927112117.77599-4-vincent.whitchurch@axis.com>
- <6dff003d-c727-e4a3-b5d3-f58beb2b02cb@linux.ibm.com>
+        b=F4NNu7Suak7UiG/ID6dX+Q+PBZg+Tp8u6Cq7kclS9Fq4i+V31quJnKzfrEtLzEavW
+         cuGQ3acLp7V5aKeOmYL1GVhxoymK6cGMViF5sc0AR/iv2JfVwk7JlEJ+RAc+Iy40KI
+         MC1Go7Ptj9DAw6lcarXaue6pDNB56gIHeUj8b/uS908ACdSbTDDUj+ck7lFTAzEFs+
+         WK8Kh11BS5qEsBXCz9wmFsLz8F9nrwa9f5A7JnKCaI97BtYeax1Mt89E2RmO4oOsJf
+         VFHROCKPGXrRcxa0Q0kIS65s6fq/iRk+RaxUBxAM+KG/c7N0RGz6dzCLfHA51ibNLQ
+         vEOlXOxI3VRxA==
+Date:   Thu, 22 Jun 2023 23:18:32 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        John Stultz <jstultz@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Oleg Nesterov <oleg@redhat.com>
+Subject: Re: [patch 08/45] posix-timers: Convert timer list to hlist
+Message-ID: <ZJS6qMzF-thMEUzj@localhost.localdomain>
+References: <20230606132949.068951363@linutronix.de>
+ <20230606142031.475141256@linutronix.de>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NQj34PwTfnw4PHDi"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <6dff003d-c727-e4a3-b5d3-f58beb2b02cb@linux.ibm.com>
-X-Cookie: Slow day.  Practice crawling.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230606142031.475141256@linutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,54 +63,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le Tue, Jun 06, 2023 at 04:37:31PM +0200, Thomas Gleixner a écrit :
+> No requirement for a real list. Spare a few bytes.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
---NQj34PwTfnw4PHDi
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Jun 22, 2023 at 02:48:36PM -0500, Eddie James wrote:
-> On 9/27/22 06:21, Vincent Whitchurch wrote:
-> > A couple of drivers call spi_split_transfers_maxsize() from their
-> > ->prepare_message() callbacks to split transfers which are too big for
-> > them to handle.  Add support in the core to do this based on
-> > ->max_transfer_size() to avoid code duplication.
-
-> I've been testing AT25 functionality in linux 6.1 and I believe this patch
-> is breaking the AT25 protocol. It will split a write command up such that
-> some of the data is in a different transfer than=A0 the write enable and
-> address. According to my understanding of the AT25 spec, that doesn't
-> work... Someone correct me if I'm wrong though. Do we need a flag to
-> enable/disable this behavior depending on the client perhaps?
-
-Could you be more specific about the manner in which you think this is
-breaking things?  The size of transfer is immaterial to the client
-device on SPI, the client will be counting clocks while the chip select
-is asserted.  How the controller chooses to split things up is really
-not particularly visible or relevant, it might bitbang things out one
-bit at a time, transfer a single word at a time or batch things up
-further.  So long as the chip select is asserted it's all the same to
-the client device.
-
-In any case this is all based on the maximum transfer size advertised by
-the conteroller driver, if the device can physically handle larger
-transfers then there's no reason for it to set a limit.  If the driver
-can't physically handle larger transfers and it does make a difference
-then the system simply won't work.
-
---NQj34PwTfnw4PHDi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSUujkACgkQJNaLcl1U
-h9CPqgf/X1FRQ/Sr3bPuUa1Qk8QD6FT06cmknaYG6mWBtbznGfhPMgnpM0ivm/2c
-FKdQxPc7eUI5mBzxjx3wsm6Agmnw3LEV7kfgrwNYBUlwMH6BcMxmQ9S6rBqhvgXj
-tBXUiGkEjui8JRRBQZKy+lYexFEp6tGeFeW6OiLYShkyIZtZQiX93RhXB8zhLglK
-TMuOVuzrJDnXG35gAaa2ws0NQDkjI+5x/gsnQqkeRKOAyf8My2euyWMi2I2MWK7z
-L2dW33I3biwLv4X0fK75Yd5IhbRNBuu+hLv1WLutJ/v2yB4MHYaljnFbwlW57ooA
-EIT4Z/A4Qgo5MQl1zHN2TEGYH8+wIg==
-=vzqY
------END PGP SIGNATURE-----
-
---NQj34PwTfnw4PHDi--
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
