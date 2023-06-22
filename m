@@ -2,154 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBA01739422
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 02:52:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CACA739426
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 02:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbjFVAwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 20:52:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36620 "EHLO
+        id S229784AbjFVA41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 20:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbjFVAwT (ORCPT
+        with ESMTP id S229605AbjFVA4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 20:52:19 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A18E198
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 17:52:18 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-57320c10635so60051137b3.3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 17:52:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687395137; x=1689987137;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=udHRmMpy+xwUknnQXeH45s8WH+sOsn0OoP200LprEk8=;
-        b=GAJEjs2YZoM/GNZOZEMFVk5T7kspISkVDy/DFO4zdDGLHaO58YIs0C+goCRA6w7FzX
-         XsoR4zIwn2U7KXr86Epk78qLKvDKcmlmwzgG8YJt+IFdU5RbFzDfU6LU9T4QK7rt6lOK
-         SqOu2GTA7iNSkTXAecvssfTivjwu0eJx57ddopDEq5TgWfb9mUIsSvlzWrm0JkHiaE2k
-         tH69P30RnQ6ejx7AwVF6sbLpZEyMoc6/D3ZSNhCqi6rEytTLWhmqclLEdLEQcD3pJEzl
-         6SW0KfpS74Qxf7bfjYh972DHh5xr9NNZl83oQhXq2R4dEBPMaSJIw+unH7T+ZD8Qq81U
-         7Imw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687395137; x=1689987137;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=udHRmMpy+xwUknnQXeH45s8WH+sOsn0OoP200LprEk8=;
-        b=CRzxAjzZtq6/txdkJJYEYbEH3fX49TAChhED/ilPx7KyW8GEbmrwz49fJsiiAyOf0S
-         LeLgkAnRVt2Z223KCtep+Z6bqNjlxO+lFrOESnYaPTWhCiRMyfoQCmCo39iP8N1ZuDzt
-         4IIwOVgrdrG0uKfFwMT66Snpo+fXSyjleJ3GKfCelCjDGYLHKfhStB3Z6qhK0nYqkAns
-         Np3eQywfdsXH0GYvojXtvtJoXx52jhkgaf0sCudzuz3h1YShIxkUfLd0B8GVXQiB2Ex+
-         q5SKONWa9R/HXw8yLKih2Xh2sEHNHqRZwz5DYTVQVFe390+7hS5VppcNpebmjOW5qN/4
-         mE7w==
-X-Gm-Message-State: AC+VfDzb6MV0iYtmDm5ziwrribUIu1cozweDrVRgsg1Sdwb7qFhM1GTq
-        OA2NgrOjXp+ewNkm9XrBkS/lAJlzj79HFhG4cuf7Bw==
-X-Google-Smtp-Source: ACHHUZ6u/7QlT4SDhN5KmiFjdmeN3Fuopi3BZMJM2tVW4FzTPKmxujg2fqXpY+4iNdUaSWeUTkYINsttv57coIFDE2Na1w==
-X-Received: from isaacmanjarres.irv.corp.google.com ([2620:15c:2d:3:e855:b0d7:44f2:fbb7])
- (user=isaacmanjarres job=sendgmr) by 2002:a81:af46:0:b0:56c:e6fa:6ce9 with
- SMTP id x6-20020a81af46000000b0056ce6fa6ce9mr7022607ywj.8.1687395137684; Wed,
- 21 Jun 2023 17:52:17 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 17:52:13 -0700
+        Wed, 21 Jun 2023 20:56:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC20AC;
+        Wed, 21 Jun 2023 17:56:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC3A76171C;
+        Thu, 22 Jun 2023 00:56:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A06BC433C8;
+        Thu, 22 Jun 2023 00:56:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687395383;
+        bh=wv/ccikv6JtB50wcnc91LNHFaXUxXG+y7SLjpMce8Wk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=MLtuv5NgFvsMK3jKukhwekdJ2QpVGz32URilHaErz72s9gQ5M0NAG+ztRwzb1RwAP
+         Ch1i54PH9SzkwrqvZO6pPF5j6Habgu2y4YpuYjIo9dWqnwB1EhsnmRqQi86dWx/h2s
+         mb7iS1AFHGDn7bPuqSLAmmL8jrpo2Sp1XFouUcQ7Kooco3zWgKfQ9brZyNGjD/pxbC
+         QJ1RoltNJCQhfXWsUwYEUep7JBRtSrBSd4IDKgZ5AklcO9FLTP0l4Zzrb4BS/pNBRb
+         CUkQyj8Wc1hjxWSiXbOBSwanfyx2nAXyPQrZE+VQ9yWW7HXJquY0MDmLoO/W9d4z5G
+         jLZdnl3ZM6E+w==
+Date:   Thu, 22 Jun 2023 09:56:19 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Florent Revest <revest@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] tracing/probes: Fix tracepoint event with $arg* to
+ fetch correct argument
+Message-Id: <20230622095619.2fd219543719d20806707a7e@kernel.org>
+In-Reply-To: <20230621190337.4635ead7@gandalf.local.home>
+References: <168657113778.3038017.12245893750241701312.stgit@mhiramat.roam.corp.google.com>
+        <20230621190337.4635ead7@gandalf.local.home>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.178.g377b9f9a00-goog
-Message-ID: <20230622005213.458236-1-isaacmanjarres@google.com>
-Subject: [PATCH] pstore/ram: Add support for dynamically allocated ramoops
- memory regions
-From:   "Isaac J. Manjarres" <isaacmanjarres@google.com>
-To:     Kees Cook <keescook@chromium.org>, Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     "Isaac J. Manjarres" <isaacm@codeaurora.org>,
-        Mukesh Ojha <mojha@codeaurora.org>,
-        Prasad Sodagudi <psodagud@codeaurora.org>,
-        "Isaac J . Manjarres" <isaacmanjarres@google.com>,
-        kernel-team@android.com, linux-hardening@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Isaac J. Manjarres" <isaacm@codeaurora.org>
+On Wed, 21 Jun 2023 19:03:37 -0400
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-The reserved memory region for ramoops is assumed to be at a fixed
-and known location when read from the devicetree. This is not desirable
-in environments where it is preferred for the region to be dynamically
-allocated early during boot (i.e. the memory region is defined with
-the "alloc-ranges" property instead of the "reg" property).
+> On Mon, 12 Jun 2023 20:58:57 +0900
+> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+> 
+> > From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > To hide the first dummy 'data' argument on the tracepoint probe events,
+> > the BTF argument array was modified (skip the first argument for tracepoint),
+> > but the '$arg*' meta argument parser missed that.
+> > 
+> > Fix to increment the argument index if it is tracepoint probe. And decrement
+> > the index when searching the type of the argument.
+> 
+> I'm curious. What if we want a variable that points to that data argument? ;-)
 
-If the location of the ramoops region is not fixed via the "reg"
-devicetree property, the call to platform_get_resource() will fail
-because resources of type IORESOURCE_MEM must be described with the
-"reg" property.
+That is a dummy parameter which is passed when registering the callback, so
+it is passed from trace_fprobe.c. Currently trace_fprobe.c passed NULL to
+the data argument.
 
-Since ramoops regions are part of the reserved-memory devicetree
-node, they exist in the reserved_mem array. This means that the
-of_reserved_mem_lookup() function can be used to retrieve the
-reserved_mem structure for the ramoops region, and that structure
-contains the base and size of the region, even if it has been
-dynamically allocated.
+> 
+> Probably just add a new type I guess.
 
-Thus invoke of_reserved_mem_lookup() in case the call to
-platform_get_resource() fails in order to support dynamically
-allocated ramoops memory regions.
+Yeah, if we get any idea to use it, it will be accessed by a new $-variable.
 
-Signed-off-by: Isaac J. Manjarres <isaacm@codeaurora.org>
-Signed-off-by: Mukesh Ojha <mojha@codeaurora.org>
-Signed-off-by: Prasad Sodagudi <psodagud@codeaurora.org>
-Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
----
- fs/pstore/ram.c | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
+> 
+> Anyway,
+> 
+> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-diff --git a/fs/pstore/ram.c b/fs/pstore/ram.c
-index ade66dbe5f39..e4bbba187011 100644
---- a/fs/pstore/ram.c
-+++ b/fs/pstore/ram.c
-@@ -20,6 +20,7 @@
- #include <linux/compiler.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
-+#include <linux/of_reserved_mem.h>
- 
- #include "internal.h"
- #include "ram_internal.h"
-@@ -643,6 +644,7 @@ static int ramoops_parse_dt(struct platform_device *pdev,
- {
- 	struct device_node *of_node = pdev->dev.of_node;
- 	struct device_node *parent_node;
-+	struct reserved_mem *rmem;
- 	struct resource *res;
- 	u32 value;
- 	int ret;
-@@ -651,13 +653,20 @@ static int ramoops_parse_dt(struct platform_device *pdev,
- 
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	if (!res) {
--		dev_err(&pdev->dev,
--			"failed to locate DT /reserved-memory resource\n");
--		return -EINVAL;
-+		rmem = of_reserved_mem_lookup(of_node);
-+		if (rmem) {
-+			pdata->mem_size = rmem->size;
-+			pdata->mem_address = rmem->base;
-+		} else {
-+			dev_err(&pdev->dev,
-+				"failed to locate DT /reserved-memory resource\n");
-+			return -EINVAL;
-+		}
-+	} else {
-+		pdata->mem_size = resource_size(res);
-+		pdata->mem_address = res->start;
- 	}
- 
--	pdata->mem_size = resource_size(res);
--	pdata->mem_address = res->start;
- 	/*
- 	 * Setting "unbuffered" is deprecated and will be ignored if
- 	 * "mem_type" is also specified.
+Thank you!
+
+> 
+> -- Steve
+> 
+> > 
+> > Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > ---
+> >  kernel/trace/trace_probe.c |   10 ++++++++--
+> >  1 file changed, 8 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
+> > index 473e1c43bc57..643aa3a51d5a 100644
+> > --- a/kernel/trace/trace_probe.c
+> > +++ b/kernel/trace/trace_probe.c
+> > @@ -456,7 +456,10 @@ static int parse_btf_arg(const char *varname, struct fetch_insn *code,
+> >  
+> >  		if (name && !strcmp(name, varname)) {
+> >  			code->op = FETCH_OP_ARG;
+> > -			code->param = i;
+> > +			if (ctx->flags & TPARG_FL_TPOINT)
+> > +				code->param = i + 1;
+> > +			else
+> > +				code->param = i;
+> >  			return 0;
+> >  		}
+> >  	}
+> > @@ -470,8 +473,11 @@ static const struct fetch_type *parse_btf_arg_type(int arg_idx,
+> >  	struct btf *btf = traceprobe_get_btf();
+> >  	const char *typestr = NULL;
+> >  
+> > -	if (btf && ctx->params)
+> > +	if (btf && ctx->params) {
+> > +		if (ctx->flags & TPARG_FL_TPOINT)
+> > +			arg_idx--;
+> >  		typestr = type_from_btf_id(btf, ctx->params[arg_idx].type);
+> > +	}
+> >  
+> >  	return find_fetch_type(typestr, ctx->flags);
+> >  }
+> 
+
+
 -- 
-2.41.0.178.g377b9f9a00-goog
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
