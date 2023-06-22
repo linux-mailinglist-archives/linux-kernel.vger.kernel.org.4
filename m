@@ -2,107 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F33EA73A7BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDCC73A7C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231450AbjFVRwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 13:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43850 "EHLO
+        id S229978AbjFVRxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 13:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231418AbjFVRwU (ORCPT
+        with ESMTP id S230081AbjFVRxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 13:52:20 -0400
-X-Greylist: delayed 109523 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Jun 2023 10:52:14 PDT
-Received: from smtpng1.i.mail.ru (smtpng1.i.mail.ru [94.100.181.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFD2B210E;
-        Thu, 22 Jun 2023 10:52:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru; s=mail4;
-        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=zXjoDRbVXMU6vb06CWzK6yq3hVHeHFiXaIRJZFK7fbU=;
-        t=1687456334;x=1687546334; 
-        b=A3bRCrGZSyaU7yTanXj5jsWR+IfCFg8tLOheLqAz273Y3RzSEfFAywU19wI42cyovTy2EICll3tpwthFw5K2uJZ6NLyXMSZwQxBIgto4QZT+smueWfRnCJlS02OA46lJW239p0RLvPV7PEvTM3Ghx/rBmjobosWwXcTjukLUCL70U2t5vPq9u4UEGjuQ7chsK7jhM5aRwKgqeJ7n1LXFr2c0u5glXbOz9ZhzBNrW8eY1iz7TngehpYaHWNX3seW2svu/VEI/J0y0d9/C2ca/nCYdj5ovfZ5L3iaiz2oePwlgE5VtPDoe9RSqVd/7kpEk+uIz48w415sBLpTHaxDikg==;
-Received: by smtpng1.m.smailru.net with esmtpa (envelope-from <fido_max@inbox.ru>)
-        id 1qCOTa-0007nX-6I; Thu, 22 Jun 2023 20:52:10 +0300
-From:   Maxim Kochetkov <fido_max@inbox.ru>
-To:     netdev@vger.kernel.org
-Cc:     Maxim Kochetkov <fido_max@inbox.ru>,
-        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Michal Simek <michal.simek@amd.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Robert Hancock <robert.hancock@calian.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/1] net: axienet: Move reset before DMA detection
-Date:   Thu, 22 Jun 2023 20:52:00 +0300
-Message-Id: <20230622175200.74033-1-fido_max@inbox.ru>
-X-Mailer: git-send-email 2.40.1
+        Thu, 22 Jun 2023 13:53:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8050226BD
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:52:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687456360;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=46vg04rCWqnBcEfjOgg6c4cwQ2Em/pBNIxUfI3u2wTo=;
+        b=L9NhGwsUl1myxZUt5yzf7/N7lQCawPXPMcGzFYJ2EiRP6DBMuGQun29ARuaWpalT3hfyuG
+        rvOfMm+RcrpTHEYFYmnF0oya1xjLCOzQTRJG9zbzNlItow/fy/80JBOIF0Xl/V9EJSDVh3
+        AADRBn+6C32xzDHLt4vriBq6DNPtDN0=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-632-hFJuyI5ONtOJntGRvmo_Jg-1; Thu, 22 Jun 2023 13:52:38 -0400
+X-MC-Unique: hFJuyI5ONtOJntGRvmo_Jg-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-98864f473c7so344332766b.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:52:37 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687456356; x=1690048356;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=46vg04rCWqnBcEfjOgg6c4cwQ2Em/pBNIxUfI3u2wTo=;
+        b=luSWgLPMHNdM2INgumh2k7QOfAgHxRs3aC1gy97K5ycajAuI2kalLgLRvluLLlJQ/q
+         TNr1gBfAW6VfQ8B/lDsHbHQG5uIPv7xga+PnCIez13evl5upNrV19dJr9OWAI6/09oqB
+         eIlMA8gcORMm3a7ynuSpy99t8qvJGehAsF3pRyX0DJSNJwxlgNf61OjAaTh6O5HbK7GT
+         wiQmyXvdqEnNVQ1ERWJ1MJjnQ2TOTd02XvlB4w+tL53dqPEIcc9EJkjNygiHqPpgkvps
+         6Dxyq/ebMvSvCywWZ29OJqR0hTssvzvX3myC3+j/TcFpcpr/qZCwynC3M1WjUjuWlQRb
+         nYcg==
+X-Gm-Message-State: AC+VfDxvVOfUv08Wtexz4Zaa7s5GoURqD5momxj18Wsu072vRrqj9dI8
+        F5RlxGAXHkVQdHq6VxqdBmC+IaZ/ZfaEuA1987XJrTbtOPiNvgGqvYLsRQ9KyrZ6cKPpbNh0SXf
+        9WgCyCG6zW4VtJbzO1U7FThEr
+X-Received: by 2002:a17:907:7e95:b0:987:350e:771a with SMTP id qb21-20020a1709077e9500b00987350e771amr15915308ejc.72.1687456356699;
+        Thu, 22 Jun 2023 10:52:36 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6exKxf71yvlJ+qFOwdh0qxw8LT5S9YrIKwORF8ZM/FRULuUP7x2/Rc12hOO4HPKl6m++Z+jg==
+X-Received: by 2002:a17:907:7e95:b0:987:350e:771a with SMTP id qb21-20020a1709077e9500b00987350e771amr15915291ejc.72.1687456356347;
+        Thu, 22 Jun 2023 10:52:36 -0700 (PDT)
+Received: from redhat.com ([2.52.149.110])
+        by smtp.gmail.com with ESMTPSA id s17-20020a170906bc5100b009889baa6a34sm4864089ejv.48.2023.06.22.10.52.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 10:52:35 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 13:52:32 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Edward Liaw <edliaw@google.com>
+Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Suwan Kim <suwan.kim027@gmail.com>,
+        "Roberts, Martin" <martin.roberts@intel.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        virtualization@lists.linux-foundation.org,
+        linux-block@vger.kernel.org
+Subject: Re: [PATCH v2] Revert "virtio-blk: support completion batching for
+ the IRQ path"
+Message-ID: <20230622135204-mutt-send-email-mst@kernel.org>
+References: <336455b4f630f329380a8f53ee8cad3868764d5c.1686295549.git.mst@redhat.com>
+ <ZJIuG9hyTYIIDbF5@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Authentication-Results: smtpng1.m.smailru.net; auth=pass smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
-X-Mailru-Src: smtp
-X-7564579A: B8F34718100C35BD
-X-77F55803: 4F1203BC0FB41BD95D99986233CC4DDC426F77D841B18B42694044EA105F6AAD182A05F5380850400B44E5DFD61226C9C164A172F770E7E1DA5BCD2A2C70F13C704E025EC0715AAF
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE7BB17EE3498E810FEEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637AAEFEF2B38A4D0058638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8D42730F99B4A620FC0CB81695E71B88E6F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE71AE4D56B06699BBC9FA2833FD35BB23D9E625A9149C048EE1E561CDFBCA1751FF04B652EEC242312D2E47CDBA5A96583BD4B6F7A4D31EC0BC014FD901B82EE079FA2833FD35BB23D27C277FBC8AE2E8B3238885582065B7B389733CBF5DBD5E9B5C8C57E37DE458B9E9CE733340B9D5F3BBE47FD9DD3FB595F5C1EE8F4F765FC72CEEB2601E22B093A03B725D353964B0B7D0EA88DDEDAC722CA9DD8327EE4930A3850AC1BE2E735D2D576BCF940C736C4224003CC83647689D4C264860C145E
-X-C1DE0DAB: 0D63561A33F958A5AD745CCC44C3CF219B89CBA18E19EEEC570D8D2E4A392975F87CCE6106E1FC07E67D4AC08A07B9B062B3BD3CC35DA5889C5DF10A05D560A950611B66E3DA6D700B0A020F03D25A0997E3FB2386030E77
-X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CFC1113EE3D37281C80ABCF84072D8F5A13505A1F3356E4527FD752AB42C1274D4F85183ADB301C8A8B05B57073EAFDF970A0C62A06E3D37BB78FE44A23B5A427121BEC6C0C71ED4F84C41F94D744909CEE921556F0E976A29E6EC0772259F8F8F8815B87D7EC76CB9
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojB41c+mu8Ac+/kSHgJhDwrg==
-X-Mailru-Sender: 689FA8AB762F73930F533AC2B33E986B862EE9EDEFF493C6A39EF55076659A0A98CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
-X-Mras: Ok
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJIuG9hyTYIIDbF5@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DMA detection will fail if axinet was started before (by boot loader,
-boot ROM, etc). In this state axinet will not start properly.
-XAXIDMA_TX_CDESC_OFFSET + 4 register (MM2S_CURDESC_MSB) is used to detect
-64 DMA capability here. But datasheet says: When DMACR.RS is 1
-(axinet is in enabled state), CURDESC_PTR becomes Read Only (RO) and
-is used to fetch the first descriptor. So iowrite32()/ioread32() trick
-to this register to detect DMA will not work.
-So move axinet reset before DMA detection.
+On Tue, Jun 20, 2023 at 10:54:19PM +0000, Edward Liaw wrote:
+> On Fri, Jun 09, 2023 at 03:27:24AM -0400, Michael S. Tsirkin wrote:
+> > This reverts commit 07b679f70d73483930e8d3c293942416d9cd5c13.
+> This commit was also breaking kernel tests on a virtual Android device
+> (cuttlefish).  We were seeing hangups like:
+> 
+> [ 2889.910733] INFO: task kworker/u8:2:6312 blocked for more than 720 seconds.
+> [ 2889.910967]       Tainted: G           OE      6.2.0-mainline-g5c05cafa8df7-ab9969617 #1
+> [ 2889.911143] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> [ 2889.911389] task:kworker/u8:2    state:D stack:12160 pid:6312  ppid:2      flags:0x00004000
+> [ 2889.911567] Workqueue: writeback wb_workfn (flush-254:57)
+> [ 2889.911771] Call Trace:
+> [ 2889.911831]  <TASK>
+> [ 2889.911893]  __schedule+0x55f/0x880
+> [ 2889.912021]  schedule+0x6a/0xc0
+> [ 2889.912110]  schedule_timeout+0x58/0x1a0
+> [ 2889.912200]  wait_for_common+0xf7/0x1b0
+> [ 2889.912289]  wait_for_completion+0x1c/0x40
+> [ 2889.912377]  f2fs_issue_checkpoint+0x14c/0x210
+> [ 2889.912504]  f2fs_sync_fs+0x4c/0xb0
+> [ 2889.912597]  f2fs_balance_fs_bg+0x2f6/0x340
+> [ 2889.912736]  ? can_migrate_task+0x39/0x2b0
+> [ 2889.912872]  f2fs_write_node_pages+0x77/0x240
+> [ 2889.912989]  do_writepages+0xde/0x240
+> [ 2889.913094]  __writeback_single_inode+0x3f/0x360
+> [ 2889.913231]  writeback_sb_inodes+0x320/0x5f0
+> [ 2889.913349]  ? move_expired_inodes+0x58/0x210
+> [ 2889.913470]  __writeback_inodes_wb+0x97/0x100
+> [ 2889.913587]  wb_writeback+0x17e/0x390
+> [ 2889.913682]  wb_workfn+0x35f/0x500
+> [ 2889.913774]  process_one_work+0x1d9/0x3b0
+> [ 2889.913870]  worker_thread+0x251/0x410
+> [ 2889.913960]  kthread+0xeb/0x110
+> [ 2889.914052]  ? __cfi_worker_thread+0x10/0x10
+> [ 2889.914168]  ? __cfi_kthread+0x10/0x10
+> [ 2889.914257]  ret_from_fork+0x29/0x50
+> [ 2889.914364]  </TASK>
+> [ 2889.914565] INFO: task mkdir09:6425 blocked for more than 720 seconds.
+> [ 2889.916065]       Tainted: G           OE      6.2.0-mainline-g5c05cafa8df7-ab9969617 #1
+> [ 2889.916255] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> [ 2889.916450] task:mkdir09         state:D stack:13016 pid:6425  ppid:6423   flags:0x00004000
+> [ 2889.916656] Call Trace:
+> [ 2889.916900]  <TASK>
+> [ 2889.917004]  __schedule+0x55f/0x880
+> [ 2889.917129]  schedule+0x6a/0xc0
+> [ 2889.917273]  schedule_timeout+0x58/0x1a0
+> [ 2889.917425]  wait_for_common+0xf7/0x1b0
+> [ 2889.917535]  wait_for_completion+0x1c/0x40
+> [ 2889.917670]  f2fs_issue_checkpoint+0x14c/0x210
+> [ 2889.917844]  f2fs_sync_fs+0x4c/0xb0
+> [ 2889.917969]  f2fs_do_sync_file+0x3a8/0x8c0
+> [ 2889.918090]  ? mt_find+0xa0/0x1a0
+> [ 2889.918216]  f2fs_sync_file+0x2f/0x60
+> [ 2889.918310]  vfs_fsync_range+0x74/0x90
+> [ 2889.918567]  __se_sys_msync+0x176/0x270
+> [ 2889.918730]  __x64_sys_msync+0x1c/0x40
+> [ 2889.918873]  do_syscall_64+0x53/0xb0
+> [ 2889.918996]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+> [ 2889.919178] RIP: 0033:0x7540b08bcf47
+> [ 2889.919297] RSP: 002b:00007fff5fcbeea8 EFLAGS: 00000206 ORIG_RAX: 000000000000001a
+> [ 2889.919496] RAX: ffffffffffffffda RBX: 0000000000001000 RCX: 00007540b08bcf47
+> [ 2889.919828] RDX: 0000000000000004 RSI: 0000000000001000 RDI: 00007540b4ae7000
+> [ 2889.920227] RBP: 0000000000000000 R08: 721e0000010b0016 R09: 0000000000000003
+> [ 2889.920435] R10: 0000000000000100 R11: 0000000000000206 R12: 00005d2f95fd2f08
+> [ 2889.920793] R13: 00005d2f95fbc310 R14: 00007540b08e1bb8 R15: 00005d2f95fbc310
+> [ 2889.921072]  </TASK>
+> 
+> in random tests in the LTP (linux test project) test suite.
+> 
+> > ---
+> > 
+> > Since v1:
+> > 	fix build error
+> > 
+> > Still completely untested as I'm traveling.
+> > Martin, Suwan, could you please test and report?
+> > Suwan if you have a better revert in mind pls post and
+> > I will be happy to drop this.
+> > 
+> > Thanks!
+> > 
+> This revert appears to have resolved the test failures for me.
+> 
+> Tested-by: edliaw@google.com
 
-Fixes: 04cc2da39698 ("net: axienet: reset core on initialization prior to MDIO access")
-Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
----
- drivers/net/ethernet/xilinx/xilinx_axienet_main.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-index 3e310b55bce2..734822321e0a 100644
---- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-+++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-@@ -2042,6 +2042,11 @@ static int axienet_probe(struct platform_device *pdev)
- 		goto cleanup_clk;
- 	}
- 
-+	/* Reset core now that clocks are enabled, prior to accessing MDIO */
-+	ret = __axienet_device_reset(lp);
-+	if (ret)
-+		goto cleanup_clk;
-+
- 	/* Autodetect the need for 64-bit DMA pointers.
- 	 * When the IP is configured for a bus width bigger than 32 bits,
- 	 * writing the MSB registers is mandatory, even if they are all 0.
-@@ -2096,11 +2101,6 @@ static int axienet_probe(struct platform_device *pdev)
- 	lp->coalesce_count_tx = XAXIDMA_DFT_TX_THRESHOLD;
- 	lp->coalesce_usec_tx = XAXIDMA_DFT_TX_USEC;
- 
--	/* Reset core now that clocks are enabled, prior to accessing MDIO */
--	ret = __axienet_device_reset(lp);
--	if (ret)
--		goto cleanup_clk;
--
- 	ret = axienet_mdio_setup(lp);
- 	if (ret)
- 		dev_warn(&pdev->dev,
+Does Android have VIRTIO_BLK_F_ZONED ? Could you list the
+features this device has please? Thanks!
+
 -- 
-2.40.1
+MST
 
