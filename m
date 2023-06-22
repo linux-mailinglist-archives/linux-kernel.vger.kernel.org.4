@@ -2,113 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C95F73A7D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A77973A7D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbjFVR5q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 13:57:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
+        id S231462AbjFVR6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 13:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjFVR5o (ORCPT
+        with ESMTP id S231454AbjFVR6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 13:57:44 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E3261FE7;
-        Thu, 22 Jun 2023 10:57:42 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 19:57:38 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1687456660; bh=Lh5/dT2/13B9EXy2EOf+33Uc0+KDF5N223sZ8gY2ghQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a0jIRN6uorF/F9EBzVqYUuTtrds07ROblRlgUxndZHn9hogyVPkXLdTvXTO2UkIEg
-         5NJ6D7H4aayk10KSXeDefsxm80Krs5ulztsuXcgyyX6455EaAatxYTI5PLJNKY5J2x
-         EGDjVFq8DyAUrAUEtt9JtfNlCLmTtT9m6jZYNpmo=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>,
-        Guillem Jover <guillem@hadrons.org>,
-        Jeff Moyer <jmoyer@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Michael William Jonathan <moe@gnuweeb.org>,
-        Matthew Patrick <ThePhoenix576@gnuweeb.org>,
-        io-uring Mailing List <io-uring@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: Re: [RFC PATCH liburing v1 3/3] src/Makefile: Allow using stack
- protector with libc
-Message-ID: <6734a933-6e61-45b1-969c-1767f1aad43b@t-8ch.de>
-References: <20230622172029.726710-1-ammarfaizi2@gnuweeb.org>
- <20230622172029.726710-4-ammarfaizi2@gnuweeb.org>
+        Thu, 22 Jun 2023 13:58:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8662C2105;
+        Thu, 22 Jun 2023 10:58:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A9046188D;
+        Thu, 22 Jun 2023 17:58:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57BBDC433C0;
+        Thu, 22 Jun 2023 17:58:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687456683;
+        bh=Jve0JXuUNEDhINVuwULP+VQmXRRWVYgAlHyNdpfaxzg=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=Os/eOnhVqUemxJ5rZo6K9mQ6Z+zXKEmp1QCvl5y0+Pry6fwv4M3GzPIHPYTwqN+mF
+         VOiPvqI3gVsgnzHhFYpPhK9q24YHg2QgBrGIzKXtt7QNGtjIMruwi6lNKreB+Toly7
+         rCKfAm5aYYQw05+2qX4pneam+GjueKTZq2vFpT04kdAm9eKbAATNbs/0MrKD6DDGwk
+         IUZjwekdgIDDbeBVHVLZq1XlUY09+1Ziicp6RrzQP+C99p0ho9C8PlG9rJ1rzMB8wj
+         edWXeG/gzDwT6hPyl2SxVde/c3KKKL0/zOg4JNATBiFNmHEXZ2BW4SbR8PeSf/faj4
+         LyFzLQXlcPnJQ==
+Date:   Thu, 22 Jun 2023 10:58:01 -0700
+From:   Kees Cook <kees@kernel.org>
+To:     Isaac Manjarres <isaacmanjarres@google.com>,
+        Kees Cook <keescook@chromium.org>
+CC:     John Stultz <jstultz@google.com>, Tony Luck <tony.luck@intel.com>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        "Isaac J. Manjarres" <isaacm@codeaurora.org>,
+        Mukesh Ojha <mojha@codeaurora.org>,
+        Prasad Sodagudi <psodagud@codeaurora.org>,
+        kernel-team@android.com, linux-hardening@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH=5D_pstore/ram=3A_Add_support_for_dy?= =?US-ASCII?Q?namically_allocated_ramoops_memory_regions?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <ZJSES98P+zzrhBI5@google.com>
+References: <20230622005213.458236-1-isaacmanjarres@google.com> <CANDhNCrEhx4LUPaz-FHZZJMG2yX670hk-vGTZs=HxiGR18zm5A@mail.gmail.com> <202306212212.5E53607@keescook> <ZJSES98P+zzrhBI5@google.com>
+Message-ID: <3A2CFB4D-27D0-4FEB-93B4-2F888305DE5A@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230622172029.726710-4-ammarfaizi2@gnuweeb.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-06-23 00:20:29+0700, Ammar Faizi wrote:
-> Currently, the stack protector is forcefully disabled. Let's allow using
-> the stack protector feature only if libc is used.
-> 
-> The stack protector will remain disabled by default if no custom CFLAGS
-> are provided. This ensures the default behavior doesn't change while
-> still offering the option to enable the stack protector.
+On June 22, 2023 10:26:35 AM PDT, Isaac Manjarres <isaacmanjarres@google=2E=
+com> wrote:
+>On Wed, Jun 21, 2023 at 10:15:45PM -0700, Kees Cook wrote:
+>> On Wed, Jun 21, 2023 at 09:47:26PM -0700, John Stultz wrote:
+>> > > The reserved memory region for ramoops is assumed to be at a fixed
+>> > > and known location when read from the devicetree=2E This is not des=
+irable
+>> > > in environments where it is preferred for the region to be dynamica=
+lly
+>> > > allocated early during boot (i=2Ee=2E the memory region is defined =
+with
+>> > > the "alloc-ranges" property instead of the "reg" property)=2E
+>> > >
+>> >=20
+>> > Thanks for sending this out, Isaac!
+>> >=20
+>> > Apologies, I've forgotten much of the details around dt bindings here=
+,
+>> > so forgive my questions:
+>> > If the memory is dynamically allocated from a specific range, is it
+>> > guaranteed to be consistently the same address boot to boot?
+>> >=20
+>> > > Since ramoops regions are part of the reserved-memory devicetree
+>> > > node, they exist in the reserved_mem array=2E This means that the
+>> > > of_reserved_mem_lookup() function can be used to retrieve the
+>> > > reserved_mem structure for the ramoops region, and that structure
+>> > > contains the base and size of the region, even if it has been
+>> > > dynamically allocated=2E
+>> >=20
+>> > I think this is answering my question above, but it's a little opaque=
+,
+>> > so I'm not sure=2E
+>>=20
+>> Yeah, I had exactly the same question: will this be the same
+>> boot-to-boot?
+>
+>Hi Kees,
+>
+>Thank you for taking a look at this patch and for your review! When the
+>alloc-ranges property is used to describe a memory region, the memory
+>region will always be allocated within that range, but it's not
+>guaranteed to be allocated at the same base address across reboots=2E
+>
+>I had proposed re-wording the end of the commit message in my response
+>to John as follows:
+>
+>"=2E=2E=2Eand that structure contains the address of the base of the regi=
+on
+>that was allocated at boot anywhere within the range specified by the
+>"alloc-ranges" devicetree property=2E"
+>
+>Does that clarify things better?
 
-FYI
+I am probably misunderstanding something still, but it it varies from boot=
+ to boot, what utility is there for pstore if it changes? I=2Ee=2E the thin=
+gs written during the last boot would then no longer accessible at the next=
+ boot? E=2Eg=2E:
 
-There are patches in the pipeline that enable stackprotector support for
-nolibc [0]. They should land in 6.5.
+Boot 1=2E
+Get address Foo=2E
+Crash, write to Foo=2E
+Boot 2=2E
+Get address Bar, different from Foo=2E
+Nothing found at Bar, so nothing populated in pstorefs; crash report from =
+Boot 1 unavailable=2E
 
-It only supports "global" mode and not per-thread-data.
-But as nolibc does not support threads anyways that should not matter.
-A compiler flag has to be passed though, but that can be automated [1].
+I feel like there is something I don't understand about the Foo/Bar addres=
+ses in my example=2E
 
-So the -fno-stack-protector can probably be removed completely.
+-Kees
 
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/tree/tools/include/nolibc/stackprotector.h?h=dev.2023.06.16a
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/tree/tools/testing/selftests/nolibc/Makefile?h=dev.2023.06.16a#n81
 
-> Cc: Stefan Hajnoczi <stefanha@redhat.com>
-> Cc: Guillem Jover <guillem@hadrons.org>
-> Co-authored-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-> Signed-off-by: Alviro Iskandar Setiawan <alviro.iskandar@gnuweeb.org>
-> Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
-> ---
->  src/Makefile | 7 +++----
->  1 file changed, 3 insertions(+), 4 deletions(-)
-> 
-> diff --git a/src/Makefile b/src/Makefile
-> index 951c48fc6797be75..c4c28cbe87c7a8de 100644
-> --- a/src/Makefile
-> +++ b/src/Makefile
-> @@ -10,9 +10,8 @@ CPPFLAGS ?=
->  override CPPFLAGS += -D_GNU_SOURCE \
->  	-Iinclude/ -include ../config-host.h \
->  	-D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
-> -CFLAGS ?= -g -O3 -Wall -Wextra
-> +CFLAGS ?= -g -O3 -Wall -Wextra -fno-stack-protector
->  override CFLAGS += -Wno-unused-parameter \
-> -	-fno-stack-protector \
->  	-DLIBURING_INTERNAL \
->  	$(LIBURING_CFLAGS)
->  SO_CFLAGS=-fPIC $(CFLAGS)
-> @@ -46,8 +45,8 @@ liburing_srcs := setup.c queue.c register.c syscall.c version.c
->  
->  ifeq ($(CONFIG_NOLIBC),y)
->  	liburing_srcs += nolibc.c
-> -	override CFLAGS += -nostdlib -nodefaultlibs -ffreestanding -fno-builtin
-> -	override CPPFLAGS += -nostdlib -nodefaultlibs -ffreestanding -fno-builtin
-> +	override CFLAGS += -nostdlib -nodefaultlibs -ffreestanding -fno-builtin -fno-stack-protector
-> +	override CPPFLAGS += -nostdlib -nodefaultlibs -ffreestanding -fno-builtin -fno-stack-protector
->  	override LINK_FLAGS += -nostdlib -nodefaultlibs
->  endif
->  
-> -- 
-> Ammar Faizi
-> 
+
+--=20
+Kees Cook
