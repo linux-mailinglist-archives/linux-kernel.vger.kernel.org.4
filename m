@@ -2,154 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8817E73A0C1
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:21:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF0573A0C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjFVMVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 08:21:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
+        id S230502AbjFVMXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 08:23:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbjFVMVm (ORCPT
+        with ESMTP id S229812AbjFVMXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 08:21:42 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2058.outbound.protection.outlook.com [40.107.21.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFEA110F2;
-        Thu, 22 Jun 2023 05:21:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fOOU3mpPZvcULR7amGDZlGq7Qka4ubk7BSGYsqZcPbgAypQNWyjoQ8VXtKb8j3G4ReSCnr+j7mEmtXokwP0nj0DR/EeQNy5lK9M0/NG0TfRioXygxrEW/1tEowlq/KSUlB2Rld7cEiEw+Nt7zNbrR7f4QNGyOndW8D+Duieb360WTmrBUcAfoNqLHBMXVDVWfuCWDBfk/tgDQ6svYsBUOEYd2mXXq+OtCPMvOXxzt6sfofl+COZMYFPjjRBK0P6oH1wnhMk/Im1ERbRchGz+Lx4rnVHcpVs1ksCZD4LaAbrEqpaubPSqDYOvkrufpCId19O3yfgbmt/cWAcJeM8TCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sHG2R3fqM7ZyySYD0bGSf/Pr26QKEsVMEmNbx3I/eLE=;
- b=MGmfyIy8c956xtlAXuxPjme9uuXQq6KVekwBlOU3dfVQv0ei1+pNqQcX5l6DG0NdBmdrfqvu/mgZRvEpWGDkxz8jpKC6tLX2cx79IGA0ANb9oVwc71lR85OI/6GEr2c3fqIkQpkqrthmnsy545O4SUgGlFcK6FZfGVRGoQfGmNgge5zk1cVJK7mHAvkBhB42Ry/MbT4GYz6PReBG/UPevie3cVpMfM/pWMjM+0GloCpiTHuET+CWmrEW9dGbv4z2rhWZVIX+xanrjG6uIzCxxIkSNlYdnZ1akxj9zF7IW8Xr6dwPuxy7sYj5hTYpnVbhjeSVcpminCalXFUeqNbmpw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
- dkim=pass header.d=oss.nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
- s=selector2-NXP1-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sHG2R3fqM7ZyySYD0bGSf/Pr26QKEsVMEmNbx3I/eLE=;
- b=cJhJ7e7aZhCjxTbW9cYFMlBBo4s/TMJaW1wM66sRfD5pfekXu5MOIg4eYbGSVndCt9j+dtZbaUxqFQu185joKnv9jw18h174eOLIk2MyC8lECo7YOETyc9K6VIXCeJmfWrwey7tLWfyZjVHncEluI8OdzEHBl+rrrnRRxk9YpzE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oss.nxp.com;
-Received: from AM9PR04MB8954.eurprd04.prod.outlook.com (2603:10a6:20b:409::7)
- by AS1PR04MB9407.eurprd04.prod.outlook.com (2603:10a6:20b:4d9::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 22 Jun
- 2023 12:21:36 +0000
-Received: from AM9PR04MB8954.eurprd04.prod.outlook.com
- ([fe80::5356:c79f:ef9f:dc29]) by AM9PR04MB8954.eurprd04.prod.outlook.com
- ([fe80::5356:c79f:ef9f:dc29%4]) with mapi id 15.20.6521.024; Thu, 22 Jun 2023
- 12:21:34 +0000
-Message-ID: <39388ce8-44d8-8869-965c-a66f855fb4ab@oss.nxp.com>
-Date:   Thu, 22 Jun 2023 15:21:32 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net-next v1 03/14] net: phy: nxp-c45-tja11xx: remove RX
- BIST frame counters
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        richardcochran@gmail.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, sebastian.tobuschat@nxp.com
-References: <20230616135323.98215-1-radu-nicolae.pirea@oss.nxp.com>
- <20230616135323.98215-4-radu-nicolae.pirea@oss.nxp.com>
- <e77a1ddc-feec-4de8-972f-4929e0bf2fc6@lunn.ch>
-Content-Language: en-US
-From:   "Radu Pirea (OSS)" <radu-nicolae.pirea@oss.nxp.com>
-In-Reply-To: <e77a1ddc-feec-4de8-972f-4929e0bf2fc6@lunn.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AS4PR10CA0012.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:5dc::15) To AM9PR04MB8954.eurprd04.prod.outlook.com
- (2603:10a6:20b:409::7)
+        Thu, 22 Jun 2023 08:23:46 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F01D19A1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:23:44 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f90b8acefeso52992235e9.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:23:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687436622; x=1690028622;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IZTvColTzRsoYYuXx98QVc9rgM+Sp5furEz7cmDxQqk=;
+        b=FrdrBAh1oY9rhtVQjUyUaFAaGqRpbvPQjKnSFRgHkGPfttcKiwR+y/3oj436ntxKTD
+         akF4OCyeqLPrY7j5rbRe2fiEkXmNPxKauFkmwgwqZeMjpiF5n5YJqff1Q6TZhOOVLufZ
+         JepgQ/bIl1KkLeJWfzYlgsMk4BvnDZqp6fC1hLEVn4+8SKF94e+LSm3LhepY8fUQRc7q
+         lGUC/S/Nj1OHp766ZJBxQxTdF5Nf/uRZ7jhrKyPyiVlH0u1Z3LWflIhvxkuZdqxJJYXe
+         8qMkkWX2jB9wG1MEBKsvnOlSsV/eYQNUlxHECwjqMJiWC+/gTV4X0NyH70KlVJKfTDCG
+         aepQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687436622; x=1690028622;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IZTvColTzRsoYYuXx98QVc9rgM+Sp5furEz7cmDxQqk=;
+        b=lg6rH+RrpmmexX5mMFfr0avcgqbSQwPJo6V0CITIkPSLN9viafBwQq2x/+rtHAxOoH
+         p/BehrE4EAwzuBNRvHxG8i4sr2MuipsOC8aYJX0yZqR6hAhynom/fEl4GPqFlJc8UQOn
+         0qb3ZUDKPgtzFgXDRl75HTgnIhND18gWwefoW26LunlC3gc8jDBkf1CMHuGwaaXfOW7T
+         Ms6M0BrDjgFF6tXsLwHGnDi03PgrN0glnVwsOcqrxdLSUGVVupFpZaB8bddaChOvS+aB
+         5nYMZoyyRcSPSpPcgKVQv9DH3oiwylbo75uVGsMiZBpJUZOCqsXgEZmdJicqRO/mwzlM
+         VS/Q==
+X-Gm-Message-State: AC+VfDy2wVdJV7U3BVsi1YsyFUu3x8j6g+BCsn/T77Kh4hmpK2SvxSl/
+        w1fY69/SfJCANir4Y6V3gn9m8w==
+X-Google-Smtp-Source: ACHHUZ49yPhRB3Bsa6UwNftE5A3qbasCqFJ2m3h6OWnmPw2gcLquyHRYJ35Gq1sHi5pE0z7HxWfdwg==
+X-Received: by 2002:a1c:7209:0:b0:3f9:a10:10d0 with SMTP id n9-20020a1c7209000000b003f90a1010d0mr10666150wmc.17.1687436621924;
+        Thu, 22 Jun 2023 05:23:41 -0700 (PDT)
+Received: from blmsp ([2001:4091:a247:82fa:b762:4f68:e1ed:5041])
+        by smtp.gmail.com with ESMTPSA id c25-20020a7bc859000000b003f90ab2fff9sm7600746wml.9.2023.06.22.05.23.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 05:23:41 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 14:23:39 +0200
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Vivek Yadav <vivek.2311@samsung.com>,
+        linux-can@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH v2 5/6] can: tcan4x5x: Add support for tcan4552/4553
+Message-ID: <20230622122339.6tkajdcenj5r3vdm@blmsp>
+References: <20230621093103.3134655-1-msp@baylibre.com>
+ <20230621093103.3134655-6-msp@baylibre.com>
+ <32557326-650c-192d-9a82-ca5451b01f70@linaro.org>
+ <20230621123158.fd3pd6i7aefawobf@blmsp>
+ <21f12495-ffa9-a0bf-190a-11b6ae30ca45@linaro.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR04MB8954:EE_|AS1PR04MB9407:EE_
-X-MS-Office365-Filtering-Correlation-Id: 51a4a5ab-4af9-4c8e-b7d9-08db731b3817
-X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WXrAgwPc9zmZ7sAFfaY8fJ83NDiAoGfX84ZQ6uTmvc42QMfzfUeg2+/ozG1W4i+QZGGsB1W+o+u3jSNdh1ISQLmTWOwJo1C6MfBHD+vI33qdbhfLWAtFL3QuMvXPDJe8k8wUTUaRC0noABOq8dD7n61a55ud8fc+kqsASgeImEwGFmD0jgXI24VGt/VKlFbMe8l2MN4eEfs+3oGwCPVgb3mGbQ9IrksHzbz7y8O4+zMbUD+GQ5zQnZRoSeidqUG4X6b3WzeAKTf1MS0ckozUioi19rXkM0JpV2NSntDr2R0waKGcaqw3El3CGllWliR+ABo0MqaXCdbaK4JqWS5EgVtifVgbosEurR+oUf83fW9aid4zkxxYgDIZUZxyj54uquT6gA0KbxQTl9GGSwioacIl1FtUCFC3Phax/+Zy2h0c2c589EmqJ2Rq8jTtww+ungI6syk3Etr12frZNhHTbNbTe+xnDkD/TSbNbgs/TeOrHkSd/uRWT7QxUDPxVnV8zLbbvcUBg9GUhOqia1dSxiTziVZRxMaH2Y0FoJS+AwGSKQ0y5GTedq2CRCyxObIMH9SMzHy0tLYVQpcABna0y7t4iWz9CGeoxGkbt/MwJGY4cVXEaqScfIsefl9yeOJzBRiCbQqsNKHpZ0QkUmehUQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8954.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(39860400002)(136003)(376002)(396003)(451199021)(8676002)(8936002)(316002)(6486002)(186003)(26005)(41300700001)(7416002)(6512007)(6506007)(53546011)(478600001)(31686004)(66946007)(66476007)(66556008)(6916009)(4326008)(31696002)(4744005)(2906002)(2616005)(38100700002)(5660300002)(86362001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SEQ2SnpvNmNCMEo2Z1pLdi9XeFQ3bWJjd3lDUHd5djgzVlpsMDlQOVRrYXo5?=
- =?utf-8?B?ZlpXRkVQVjhpWm1CWkJVNUtxQTd0UU9GdmZqb0hUa3RTWUhZMEJyRk5UZTBR?=
- =?utf-8?B?YnNHVFpCYXpHNnY3UGlGOW5HN0JWZGVjbWgzY29UZCt0OHhyNmlHQ01qeXU3?=
- =?utf-8?B?SlpiUnFwa2lXVWVYQlcxQklDUnRzeXBvU0pKcnk0VnFBK3JkSU1iYjlJbk9p?=
- =?utf-8?B?Qy9pamtocnJIVldHS3p5UzBlY3pockJhdUFRM3VkeFBKMUphVEkwOUhQeW9a?=
- =?utf-8?B?Zk5WUjlJY2NTdGZrVGtrZzhCR1JuSlZONEFIWnozalF3NkZGT3IxMDZCVHhP?=
- =?utf-8?B?S2g1NHkxS1I1bGE0WG5CUG9PWVZ1TWFWZ2JRTUtQK1E0bFQ1dzgvM05qWWlY?=
- =?utf-8?B?UFBLTlhnclNPeW9jcFlHeEMxK3V4M0tyV2hOV3ZXWHE5Z25rWVNVVnIvakpB?=
- =?utf-8?B?K3U2dndrWjdFZ3FTNnNnd21xanhTZlpqLyswNjVBamkzOTZPY0JhV1RmWWU5?=
- =?utf-8?B?OUYyOGlSM1I4dUc2dWN0NXE5OWhmTkFiQ0VGYmdIWmpERnI0K01obHZUSSt4?=
- =?utf-8?B?cmMyQWU1WGQ0YUVSNjBycnUyMHNLT3dJNjlTSFp5U2FEb3R6a0pGTDE1QkJz?=
- =?utf-8?B?TjQ5UmNDMW01UmdMVzd4dHBNcUxldkc5UHdUNHIxMHB5NW5OVWdWMUZ3cmlZ?=
- =?utf-8?B?OXdHRHloMmNWd0lrR2ZEYVFTSTZtN1p4WGNkZFFXazk5bmVZdEc4Nm4xbFI0?=
- =?utf-8?B?cFlaWlZQY0xVNGYrVDR6dkFtWDlyWE5WV3J3UDZOQXJkbTlKSnZ0aVkwOXYy?=
- =?utf-8?B?azEvV3ozbHpBUUlpaE5YbEtZRUN0Q081eUVPWkEyVzRvejJLYVFia3NrNCtu?=
- =?utf-8?B?SG1CUlNDenJyRnhadHdqMDFoMURSRWR5ZndweGpnVmdNL1dBenFvS0J1SWNj?=
- =?utf-8?B?RTNjN1dWekVYOHphemJWUWJkWEFISDcvM3I5R3JKRzk4RkpIeVpseWdJMFB1?=
- =?utf-8?B?bklDeVFLb20zMWVrMkV5MlVsTW5rYmdUVERlejNPUjdWMzFvWlNvckwvamJB?=
- =?utf-8?B?M29Rby9xTWNoSmQ0KytsdTBJTGJSdjZOL2RzcWlod2tzOWNjeE1tME05VjNJ?=
- =?utf-8?B?ZFdENVROUUdUNWdBSS91VS9aSW5BQjNJOHoxSU9NZm1Kd1JrWEYrenZxY0FE?=
- =?utf-8?B?MWJPc0Voa1dhWkVIUkxTMFpTcVRGdEhnOW90djU1RkMzdGNsdlNEVENBUFJC?=
- =?utf-8?B?NG03SG5KMGZjMXVROVk3OW82MTlSUStSMGFHUktpYWl3TkZlTFVabUt0QWNh?=
- =?utf-8?B?R3JxZEN6cklEQldWQlBFT3lTTU95eS92WHNCSCszYnRiOVFNNFZGdDZKRHhx?=
- =?utf-8?B?elJ3T3JTcktGYmpoMDZpazlsY2pOU0FFRjhXUFhmQXArakw4RXNVTGx0bkk1?=
- =?utf-8?B?Sys1Q2FMN1BYUU03ditIYjZMR0lid2RrNE1heEFtRGEwdzNsZzRxSjdGUW9U?=
- =?utf-8?B?ZmVQOTFZUHNQYml2SWhWS1lQRzZNSnNLSzRNc3dXaC93T1B3OEYyZVoyUmJr?=
- =?utf-8?B?QU93OHo1YVpDVEtmbHliZTlzMGY0OFdDT2h5SjBwbWFIWVZZeFVBMHpscU5Z?=
- =?utf-8?B?QWVjMEs1MFhja1pHanBSTHdKMWt6QTc3WTNzOHkrdzlJNGxBdGc5VWVockdO?=
- =?utf-8?B?eXBuTzBBWStJeGV4disvb1JyVExQMnhrd0hQa1o1UGkvYlBBSmc1MlNjU09R?=
- =?utf-8?B?aXBqUis0QVJGOERVUVg1MnRjREg5cmRPa0NyTGhKZjRodVlXUTZwbWR0bTlu?=
- =?utf-8?B?UGFqTkdJUjJiWmh0WnRGdXdVYmhINk9FUC9vK2h1ekJycGd3Y3BnWFQ0WXBI?=
- =?utf-8?B?UTRFamp0NWxXdmZLL3Z1ZmZ5a3h4M0cwOFMzeEU5aVdPcnBnOU9ZRjZ5dW5n?=
- =?utf-8?B?SFdMM1hmaXBNNjd6RnlXNXJoMDN3UXRxMGNMZE9DTXN4QTMwTzJCMkltWWhV?=
- =?utf-8?B?QTFIeTB2VCtUdy9HT0pEd0pMWG4zWU56eGdXaEkwVkFUR3JWK0dBYkZKYlBv?=
- =?utf-8?B?ZUFCSFQ1S1lLb1BteHowYWZ1UVFZWCtkOEhoR1piWjU5TnRHVkhvUCtJeGNS?=
- =?utf-8?B?eFBkZlVSak9WQThBdWp6SlhXaCt4ZGFqTkF2dHEzM2JTTW84YWJUbTdWb0wr?=
- =?utf-8?B?REE9PQ==?=
-X-OriginatorOrg: oss.nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 51a4a5ab-4af9-4c8e-b7d9-08db731b3817
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8954.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 12:21:34.8163
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SdxcIrnWb56N7Y0iwz0oxKMsNG3Cb0GfosANeelo+eQKgkodUr1f2YRCqzKtV+0T8YfZZEhpTnQ+7J7FnuIxHUReIgArR/D3Sp+FZqXIqGY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9407
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <21f12495-ffa9-a0bf-190a-11b6ae30ca45@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16.06.2023 23:39, Andrew Lunn wrote:
-> On Fri, Jun 16, 2023 at 04:53:12PM +0300, Radu Pirea (NXP OSS) wrote:
->> RX BIST frame counters can be used only when the PHY is in test mode. In
->> production mode, the counters will be always read as 0. So, they don't
->> provide any useful information and are removed from the statistics.
-> 
-> Hummm
-> 
-> I wounder if this would be considered an ABI change?
-> 
->          Andrew
+Hi Krzysztof,
 
-It can be considered an ABI change, but will not break the userspace 
-compilation. A functional change will be introduced anyway because these 
-counters will not be reported, but they don't provide useful 
-information. These counters will always be 0. In the worst-case 
-scenario, we can add them back.
+On Wed, Jun 21, 2023 at 03:00:39PM +0200, Krzysztof Kozlowski wrote:
+> On 21/06/2023 14:31, Markus Schneider-Pargmann wrote:
+> > Hi Krzysztof,
+> > 
+> > On Wed, Jun 21, 2023 at 12:28:34PM +0200, Krzysztof Kozlowski wrote:
+> >> On 21/06/2023 11:31, Markus Schneider-Pargmann wrote:
+> >>> tcan4552 and tcan4553 do not have wake or state pins, so they are
+> >>> currently not compatible with the generic driver. The generic driver
+> >>> uses tcan4x5x_disable_state() and tcan4x5x_disable_wake() if the gpios
+> >>> are not defined. These functions use register bits that are not
+> >>> available in tcan4552/4553.
+> >>>
+> >>> This patch adds support by introducing version information to reflect if
+> >>> the chip has wake and state pins. Also the version is now checked.
+> >>>
+> >>> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> >>> ---
+> >>>  drivers/net/can/m_can/tcan4x5x-core.c | 128 +++++++++++++++++++++-----
+> >>>  1 file changed, 104 insertions(+), 24 deletions(-)
+> >>>
+> >>> diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
+> >>> index fb9375fa20ec..756acd122075 100644
+> >>> --- a/drivers/net/can/m_can/tcan4x5x-core.c
+> >>> +++ b/drivers/net/can/m_can/tcan4x5x-core.c
+> >>> @@ -7,6 +7,7 @@
+> >>>  #define TCAN4X5X_EXT_CLK_DEF 40000000
+> >>>  
+> >>>  #define TCAN4X5X_DEV_ID1 0x00
+> >>> +#define TCAN4X5X_DEV_ID1_TCAN 0x4e414354 /* ASCII TCAN */
+> >>>  #define TCAN4X5X_DEV_ID2 0x04
+> >>>  #define TCAN4X5X_REV 0x08
+> >>>  #define TCAN4X5X_STATUS 0x0C
+> >>> @@ -103,6 +104,13 @@
+> >>>  #define TCAN4X5X_WD_3_S_TIMER BIT(29)
+> >>>  #define TCAN4X5X_WD_6_S_TIMER (BIT(28) | BIT(29))
+> >>>  
+> >>> +struct tcan4x5x_version_info {
+> >>> +	u32 id2_register;
+> >>> +
+> >>> +	bool has_wake_pin;
+> >>> +	bool has_state_pin;
+> >>> +};
+> >>> +
+> >>>  static inline struct tcan4x5x_priv *cdev_to_priv(struct m_can_classdev *cdev)
+> >>>  {
+> >>>  	return container_of(cdev, struct tcan4x5x_priv, cdev);
+> >>> @@ -254,18 +262,68 @@ static int tcan4x5x_disable_state(struct m_can_classdev *cdev)
+> >>>  				  TCAN4X5X_DISABLE_INH_MSK, 0x01);
+> >>>  }
+> >>>  
+> >>> -static int tcan4x5x_get_gpios(struct m_can_classdev *cdev)
+> >>> +static const struct tcan4x5x_version_info tcan4x5x_generic;
+> >>> +static const struct of_device_id tcan4x5x_of_match[];
+> >>> +
+> >>> +static const struct tcan4x5x_version_info
+> >>> +*tcan4x5x_find_version_info(struct tcan4x5x_priv *priv, u32 id2_value)
+> >>> +{
+> >>> +	for (int i = 0; tcan4x5x_of_match[i].data; ++i) {
+> >>> +		const struct tcan4x5x_version_info *vinfo =
+> >>> +			tcan4x5x_of_match[i].data;
+> >>> +		if (!vinfo->id2_register || id2_value == vinfo->id2_register) {
+> >>> +			dev_warn(&priv->spi->dev, "TCAN device is %s, please use it in DT\n",
+> >>> +				 tcan4x5x_of_match[i].compatible);
+> >>> +			return vinfo;
+> >>> +		}
+> >>> +	}
+> >>> +
+> >>> +	return &tcan4x5x_generic;
+> >>
+> >> I don't understand what do you want to achieve here. Kernel job is not
+> >> to validate DTB, so if DTB says you have 4552, there is no need to
+> >> double check. On the other hand, you have Id register so entire idea of
+> >> custom compatibles can be dropped and instead you should detect the
+> >> variant based on the ID.
+> > 
+> > I can read the ID register but tcan4552 and 4553 do not have two
+> > devicetree properties that tcan4550 has, namely state and wake gpios.
+> 
+> Does not matter, you don't use OF matching to then differentiate
+> handling of GPIOs to then read the register. You first read registers,
+> so everything is auto-detectable.
+> 
+> > See v1 discussion about that [1].
+> 
+> Yeah, but your code is different, although maybe we just misunderstood
+> each other. You wrote that you cannot use the GPIOs, so I assumed you
+> need to know the variant before using the GPIOs. Then you need
+> compatibles. It's not the case here. You can read the variant and based
+> on this skip entirely GPIOs as they are entirely missing.
 
--- 
-Radu P.
+The version information is always readable for that chip, regardless of
+state and wake GPIOs as far as I know. So yes it is possible to setup
+the GPIOs based on the content of the ID register.
+
+I personally would prefer separate compatibles. The binding
+documentation needs to address that wake and state GPIOs are not
+available for tcan4552/4553. I think having compatibles that are for
+these chips would make sense then. However this is my opinion, you are
+the maintainer.
+
+Best,
+Markus
+
+> 
+> > 
+> > In v1 Marc pointed out that mcp251xfd is using an autodetection and warn
+> > mechanism which I implemented here as well. [2]
+> 
+> But why? Just read the ID and detect the variant based on this. Your DT
+> still can have separate compatibles followed by fallback, that's not a
+> problem.
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
