@@ -2,106 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA83973A0E3
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ECE473A0EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjFVM2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 08:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39084 "EHLO
+        id S230186AbjFVM3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 08:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbjFVM2D (ORCPT
+        with ESMTP id S231226AbjFVM33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 08:28:03 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBFF199D
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:27:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687436840;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=erLEJFFmN1Si57UTDFO+md6AnHLgrWd6t+5xkKTrdTo=;
-        b=WjAEYcDddX2z0wcR9meFjGolps5fzbDl5zzg0qgO/+oPReM/XSSQhZlWlfnHl/OSJsfWec
-        QD1tHe+9KMphF27z/U/HjXmKCmci6lwTLSTwwZrs2H3/eIrnL8QqHjz+ZGaKhWpx4Q7tO3
-        yzBDJY1bm2LE4CNqsjN18IedeYnvtGs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-21-guJMTKOAPz-lqf1ByoKNRw-1; Thu, 22 Jun 2023 08:27:15 -0400
-X-MC-Unique: guJMTKOAPz-lqf1ByoKNRw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3692E83FC20;
-        Thu, 22 Jun 2023 12:27:14 +0000 (UTC)
-Received: from [10.22.17.29] (unknown [10.22.17.29])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 663244087C70;
-        Thu, 22 Jun 2023 12:27:13 +0000 (UTC)
-Message-ID: <921e1b98-af36-1f51-5abe-dea36425b706@redhat.com>
-Date:   Thu, 22 Jun 2023 08:27:13 -0400
+        Thu, 22 Jun 2023 08:29:29 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF7AB4;
+        Thu, 22 Jun 2023 05:29:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687436969; x=1718972969;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=DUgGotXhMv1WrSS/NSFaFGHTb5xR4LxoJgck4Fh0kTY=;
+  b=K5PR+D9rySeBahdjDWyWrOJYLOmsJDDxGv4shHPL9aOpuOvglv+iDSK3
+   FPQZxxnWkxW8nQEfU0hFv1uEnN2gK20+xOM1kmig1cf33DNZLXcNLyko/
+   lsSw98nLHqjLiugobW+QFoxZgvCz5t/rfV7eo/VFvITat5nsIJ0E/qTqo
+   iWjtOoExKvtIipFFI7Vkvl1igyl6CG/729uExJ78O+D3ot8N0WbKt0D0F
+   3MgvT1pGVNF0bhqddzhBQj1HTsisU4pr+5KmM9KzuFSXzFKTqJk5OaN71
+   DMTVsayy5VxIOcIs11NxMCMuZf8BFk7GN7oYIMJ2n2QE201OexWZiQ2dK
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="390192392"
+X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
+   d="scan'208";a="390192392"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 05:29:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="709077606"
+X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
+   d="scan'208";a="709077606"
+Received: from unknown (HELO localhost.localdomain) ([10.226.216.117])
+  by orsmga007.jf.intel.com with ESMTP; 22 Jun 2023 05:29:08 -0700
+From:   kah.jing.lee@intel.com
+To:     Dinh Nguyen <dinguyen@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        kah.jing.lee@intel.com
+Subject: Re: [PATCH 0/2]: Enable UBIFS support
+Date:   Thu, 22 Jun 2023 20:27:21 +0800
+Message-Id: <20230622122719.593138-1-kah.jing.lee@intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <b7ffa43c-3dee-b0cf-2672-6b56fcbcd0e6@linaro.org>
+References: <b7ffa43c-3dee-b0cf-2672-6b56fcbcd0e6@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 1/3] x86/idle: Disable IBRS when cpu is offline
-Content-Language: en-US
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-pm@vger.kernel.org,
-        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>
-References: <20230622003603.1188364-1-longman@redhat.com>
- <20230622003603.1188364-2-longman@redhat.com>
- <20230622054053.uy577qezu5a65buc@treble>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230622054053.uy577qezu5a65buc@treble>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/22/23 01:40, Josh Poimboeuf wrote:
-> On Wed, Jun 21, 2023 at 08:36:01PM -0400, Waiman Long wrote:
->> +/*
->> + * naitve_play_dead() is essentially a __noreturn function, but it can't
->> + * be marked as such as the compiler may complain about it.
->> + */
-> FWIW, we could in theory do so by marking the smp_ops.play_dead function
-> pointer as __noreturn, but it would be tricky to teach objtool how to
-> understand that.
-I added the comment here because I had taken out the MSR restoration 
-code. We can always replace that later on if there is a better way to do 
-that.
->
->>   void native_play_dead(void)
->>   {
->> +	if (cpu_feature_enabled(X86_FEATURE_KERNEL_IBRS)) {
->> +		this_cpu_write(x86_spec_ctrl_current, 0);
->> +		native_wrmsrl(MSR_IA32_SPEC_CTRL, 0);
->> +	}
-> Can update_spec_ctrl() be used instead?
+From: <kah.jing.lee@intel.com>
 
-Yes, the code is similar to what has been done in update_spec_ctrl(). 
-Using it, however, will require exporting the function either by putting 
-it into a public header or making it a global function.
-
-Cheers,
-Longman
+> 
+> Your patchset has also broken/missing threading. Read carefully submitting
+> patches and rest of documentation.
+Updated in v2.
 
 >
+> Best regards,
+> Krzysztof
 
+Thanks for quick reply.
+
+Regards,
+Kah Jing
