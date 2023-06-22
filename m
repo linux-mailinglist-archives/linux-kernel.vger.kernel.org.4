@@ -2,63 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C22573A0F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34D9173A0F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbjFVMbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 08:31:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41036 "EHLO
+        id S231321AbjFVMcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 08:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjFVMbr (ORCPT
+        with ESMTP id S231286AbjFVMcm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 08:31:47 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C76CAB4
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:31:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687437106; x=1718973106;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VJAOY2tOh8YJLH4ChJtkKP7Ffaf6ITsW6/7BsgVWH2c=;
-  b=Rf4fiH6j0HfbAa5sAEO+WDP+qpYYzoVC7tL2kmt2/j6+hzqRaUxJQkWT
-   AAqvip60Dnz8TPfdJb2xW+/Zpy0NH9KJQrnXeA0VJq+cKRtRTc/9iM1tL
-   u4/hSkPcXedYh+1HrV6rRGCw6WP046br6QMFaLnkAXdL9CyEjeBfq6DIE
-   4pwlwFpcf1Dfy/+0uEn9eXx12ASyxc9LQ3muf5AoWYSZzsQ4xuOYobovJ
-   JbYapm5bz3lY9uXjO/I69RRKr7enCgYq76zQTmxDbtBKXrdCVw3zMeFwZ
-   AOw7zeQE3xZiEI8PvLu+Ll1YaMF/6MJx+ALhbXbzSH7HbX42wxrgLA+q7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="340810619"
-X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
-   d="scan'208";a="340810619"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 05:31:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="1045145887"
-X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
-   d="scan'208";a="1045145887"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 22 Jun 2023 05:31:45 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qCJTU-005lRA-0W;
-        Thu, 22 Jun 2023 15:31:44 +0300
-Date:   Thu, 22 Jun 2023 15:31:43 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Lee Jones <lee@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] mfd: ipaq-micro: Use %*ph for printing hexdump of
- a small buffer
-Message-ID: <ZJQ/L7+hpCLi7grQ@smile.fi.intel.com>
-References: <20230612212007.3621-1-andriy.shevchenko@linux.intel.com>
- <20230621171040.GK10378@google.com>
+        Thu, 22 Jun 2023 08:32:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1741730
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:32:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687437120;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XHz9E7zZxsLUl3CoUFODhh8sjTY5W8aaMW7xXwi0QZ4=;
+        b=A0SCNNA2wDBVYoX8xvMqFhY3mBHIiATXu230CD23yM14TtVl6tA4eUsBuBmuFgmqem+ov8
+        EZ6oKtEtg1g2C9rJNP+zU3bRp59lw1mQlG6uWL/2VvOU22NRyty81eKlj9LDXY/Jvm5Nyz
+        FJ8K17Ica96QPJydWi5/DodB6PfvT/k=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-507-4Ekn8PXCOCe4mV43ZjKflQ-1; Thu, 22 Jun 2023 08:31:58 -0400
+X-MC-Unique: 4Ekn8PXCOCe4mV43ZjKflQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 18D4E881B25;
+        Thu, 22 Jun 2023 12:31:58 +0000 (UTC)
+Received: from [10.22.17.29] (unknown [10.22.17.29])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 722CA200A3AD;
+        Thu, 22 Jun 2023 12:31:57 +0000 (UTC)
+Message-ID: <7b8a5195-83c4-5433-6261-24e0941a1cab@redhat.com>
+Date:   Thu, 22 Jun 2023 08:31:57 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621171040.GK10378@google.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 2/3] intel_idle: Sync up the SPEC_CTRL MSR value to
+ x86_spec_ctrl_current
+Content-Language: en-US
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-pm@vger.kernel.org,
+        Robin Jarry <rjarry@redhat.com>, Joe Mario <jmario@redhat.com>
+References: <20230622003603.1188364-1-longman@redhat.com>
+ <20230622003603.1188364-3-longman@redhat.com>
+ <20230622054633.ulrurzzvzjijvdhn@treble>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20230622054633.ulrurzzvzjijvdhn@treble>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,22 +76,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 06:10:40PM +0100, Lee Jones wrote:
-> On Tue, 13 Jun 2023, Andy Shevchenko wrote:
-> 
-> > The kernel already has a helper to print a hexdump of a small
-> > buffer via pointer extension. Use that instead of open coded
-> > variant.
-> 
-> That's not all you're doing is it?
-> 
-> Nice try.  2 patches please.
+On 6/22/23 01:46, Josh Poimboeuf wrote:
+> On Wed, Jun 21, 2023 at 08:36:02PM -0400, Waiman Long wrote:
+>> When intel_idle_ibrs() is called, it modifies the SPEC_CTRL MSR to
+>> 0 in order disable IBRS. However, the new MSR value isn't reflected
+>> in x86_spec_ctrl_current which is at odd with the other code that
+>> keep track of its state in that percpu variable. Fix that by updating
+>> x86_spec_ctrl_current percpu value to always match the content of the
+>> SPEC_CTRL MSR.
+> Is this fixing an actual bug or is there some other reason for doing
+> this?
+It is not a bug per se. It is mainly to make the per cpu variable more 
+up to date.
+>
+>> Signed-off-by: Waiman Long <longman@redhat.com>
+>> ---
+>>   drivers/idle/intel_idle.c | 8 ++++++--
+>>   1 file changed, 6 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+>> index aa2d19db2b1d..07fa23707b3c 100644
+>> --- a/drivers/idle/intel_idle.c
+>> +++ b/drivers/idle/intel_idle.c
+>> @@ -181,13 +181,17 @@ static __cpuidle int intel_idle_ibrs(struct cpuidle_device *dev,
+>>   	u64 spec_ctrl = spec_ctrl_current();
+>>   	int ret;
+>>   
+>> -	if (smt_active)
+>> +	if (smt_active) {
+>> +		__this_cpu_write(x86_spec_ctrl_current, 0);
+>>   		native_wrmsrl(MSR_IA32_SPEC_CTRL, 0);
+>> +	}
+>>   
+>>   	ret = __intel_idle(dev, drv, index);
+>>   
+>> -	if (smt_active)
+>> +	if (smt_active) {
+>>   		native_wrmsrl(MSR_IA32_SPEC_CTRL, spec_ctrl);
+>> +		__this_cpu_write(x86_spec_ctrl_current, spec_ctrl);
+>> +	}
+> More candidates for update_spec_ctrl()?
 
-I'm not sure it's possible to split to two clean patches that don't overlap
-each other like by 70%. Can you elaborate a bit more on your vision on this?
+I don't think we can use update_spec_ctrl() here simply because of the 
+noinstr requirement. See commit 9b461a6faae7 ("cpuidle, intel_idle: Fix 
+CPUIDLE_FLAG_IBRS").
 
--- 
-With Best Regards,
-Andy Shevchenko
-
+Cheers,
+Longman
 
