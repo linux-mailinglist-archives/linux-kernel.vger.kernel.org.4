@@ -2,60 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F79B73A935
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E279673A939
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229851AbjFVTzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 15:55:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
+        id S230117AbjFVTzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 15:55:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230256AbjFVTzI (ORCPT
+        with ESMTP id S229643AbjFVTzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 15:55:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B96210E;
-        Thu, 22 Jun 2023 12:55:03 -0700 (PDT)
+        Thu, 22 Jun 2023 15:55:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D93F1;
+        Thu, 22 Jun 2023 12:55:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D19B8618DB;
-        Thu, 22 Jun 2023 19:55:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE8A4C433C8;
-        Thu, 22 Jun 2023 19:54:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 99A13618DB;
+        Thu, 22 Jun 2023 19:55:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07AD0C433C0;
+        Thu, 22 Jun 2023 19:55:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687463702;
-        bh=/Y3hDobY50UVjtDFqg+IraerI8qLf+JHDe3DFP5DZNY=;
+        s=k20201202; t=1687463748;
+        bh=hFUatM9PSRU0Dtg23g2n8VgrlPwM86dU8bJ9w0p+FCQ=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FHO5bqdKzTmfFARCy6yMYqX9cFKuDjqxGHm77u9dM/S/d6ZigzqGEKIKSmZS6+dKj
-         IIVJQiytOhSdzOJIvZlM/TCOex53Vsw/t5AeksiOyYJvrl7U0TQifGsnJ1X7+P4v3Z
-         5iHdlaGEzxgs0ISDke4AOS0i1YyLmgfoMN8FOhrCzYpXK9Jdn9/YLsxW8cpfSyty/2
-         yZOtOeM+5trESt1nnk1+1JqokAcvHfgOgJ1MHaMxVBZlHJch69tlYSiFdlS5NiGfaF
-         eT0qs5/KAUjsj23kbJ9qS5Y87DXfU1YUvre67z3vErEHZIM9LcrSYmOPbFJo5gnORL
-         Xx1Tcb6AfNCzQ==
-Date:   Thu, 22 Jun 2023 20:54:57 +0100
+        b=dVNb0e2EKqjI5Qc332vgXziWEwH7cj78nZGHidT7flsGhZ2Pc3uG2tHz3SLHBH+i6
+         RuuQuvNvxS/T1Z41sK5bHowla2XhehXYTtybi0w+V/em4hg7YKn7HLrXfBqD2it2Zo
+         L85qzCl9mbs65Sa4XYLV1RQycOUZaQEEtBASRZfPKVIsIDSK4ub1qdX3aw9zN7tYhT
+         XJD1gdLiHkUezRZpIpRZy2hxMbv6fveTmd+JKl0PcFoPE0dBSBxLtn+Kf+vTG3aYds
+         LHiEdtmX8wV7ck3OTU2Ts8UC2FAMCeuiymrOY+L5b6770xGy+A/xh3CTXpqTPjaaFL
+         /xbX7pzPi3ynQ==
+Date:   Thu, 22 Jun 2023 20:55:42 +0100
 From:   Conor Dooley <conor@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next] dt-bindings: net: altr,tse: Fix error in
- "compatible" conditional schema
-Message-ID: <20230622-germless-unless-02d29924ddf2@spud>
-References: <20230621231012.3816139-1-robh@kernel.org>
+        Robert Marko <robimarko@gmail.com>,
+        Das Srinagesh <quic_gurus@quicinc.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Subject: Re: [PATCH 1/2] dt-bindings: firmware: qcom,scm: Allow interconnect
+ on SC8280XP
+Message-ID: <20230622-santa-alias-6fb047a12794@spud>
+References: <20230622-topic-8280scmicc-v1-0-6ef318919ea5@linaro.org>
+ <20230622-topic-8280scmicc-v1-1-6ef318919ea5@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="a/Cjr6/h5jMrqHAk"
+        protocol="application/pgp-signature"; boundary="y6lHOH+nZzJT02Is"
 Content-Disposition: inline
-In-Reply-To: <20230621231012.3816139-1-robh@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230622-topic-8280scmicc-v1-1-6ef318919ea5@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,59 +70,53 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---a/Cjr6/h5jMrqHAk
+--y6lHOH+nZzJT02Is
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hey Rob,
-
-On Wed, Jun 21, 2023 at 05:10:12PM -0600, Rob Herring wrote:
-> The conditional if/then schema has an error as the "enum" values have
-> "const" in them. Drop the "const".
+On Thu, Jun 22, 2023 at 05:56:15PM +0200, Konrad Dybcio wrote:
+> Just like all other Qualcomm SoCs, SC8280XP SCM should be fed an
+> interconnect path. Do so.
 >=20
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-You waiting for some of these to land before updating dt-schema?
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
 Cheers,
 Conor.
 
 > ---
->  Documentation/devicetree/bindings/net/altr,tse.yaml | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  Documentation/devicetree/bindings/firmware/qcom,scm.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 >=20
-> diff --git a/Documentation/devicetree/bindings/net/altr,tse.yaml b/Docume=
-ntation/devicetree/bindings/net/altr,tse.yaml
-> index 9d02af468906..f5d3b70af07a 100644
-> --- a/Documentation/devicetree/bindings/net/altr,tse.yaml
-> +++ b/Documentation/devicetree/bindings/net/altr,tse.yaml
-> @@ -72,8 +72,8 @@ allOf:
->          compatible:
->            contains:
->              enum:
-> -              - const: altr,tse-1.0
-> -              - const: ALTR,tse-1.0
-> +              - altr,tse-1.0
-> +              - ALTR,tse-1.0
+> diff --git a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml b/D=
+ocumentation/devicetree/bindings/firmware/qcom,scm.yaml
+> index 09073e1d88ff..42d064be753b 100644
+> --- a/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+> +++ b/Documentation/devicetree/bindings/firmware/qcom,scm.yaml
+> @@ -174,6 +174,7 @@ allOf:
+>              contains:
+>                enum:
+>                  - qcom,scm-qdu1000
+> +                - qcom,scm-sc8280xp
+>                  - qcom,scm-sm8450
+>                  - qcom,scm-sm8550
 >      then:
->        properties:
->          reg:
+>=20
 > --=20
-> 2.40.1
+> 2.41.0
 >=20
 
---a/Cjr6/h5jMrqHAk
+--y6lHOH+nZzJT02Is
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJSnEQAKCRB4tDGHoIJi
-0ms8AQCmtnDqlu3WQfbAKGmFyABvaTBCVbHGQ5/+gOrtZoyTDQD/Scy8/gY7sVIA
-Y9M1+ImUvdMHcOEcNeAR4HeOFR+CiAM=
-=V1Bu
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJSnPgAKCRB4tDGHoIJi
+0jlIAP4h7eOJcII1qn4nFLfKSdk1p0Feg0+Vi4ccqrhZJwNKOAEAlGbcQW+dynEQ
+ZQJj2xuB5X6bT7VckV39IkMvhdjUMwI=
+=AnV9
 -----END PGP SIGNATURE-----
 
---a/Cjr6/h5jMrqHAk--
+--y6lHOH+nZzJT02Is--
