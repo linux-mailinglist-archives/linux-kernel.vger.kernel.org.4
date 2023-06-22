@@ -2,154 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99B4673A738
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37C5F73A73B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229873AbjFVR1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 13:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57982 "EHLO
+        id S230498AbjFVR20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 13:28:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbjFVR1Q (ORCPT
+        with ESMTP id S229854AbjFVR2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 13:27:16 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F17DF1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:27:15 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id d75a77b69052e-4007b5bafceso11781cf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:27:15 -0700 (PDT)
+        Thu, 22 Jun 2023 13:28:24 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED8E195
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:28:23 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id 5614622812f47-38e04d1b2b4so5098619b6e.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:28:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687454834; x=1690046834;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1687454902; x=1690046902;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zpAAA1t2APTPIL6TPZrRweRbUpiJB6pmgpDTWMvn/FY=;
-        b=ajJCaXRDlhuKvi0JuMH0jHQN9zU/adnA6jpAoXryuU5WQ214eidnG1B3qIMV5EtJW+
-         j3NWJdZbfDzrgST1YaxpZUKbRk1uDtMOvViaJsWHZ3rw6xEK4p4iXjludjzYnLVvuZls
-         PzLDL+uOR+s/2UaCqngW3Mc8rB9JtOoIQbZcaO5R2SarOhdGFSAYx5jM7sLKuqgAfC78
-         MEDwG1CpgHBm/54DeSGOygxeog9oztqbe5uhxqDKZrnXZvN9EBADBEbujbs2n+ykCH5s
-         c4rAcgjn6rHl1g176cAu+0vmWM7cK0jO3Vi5EfjngEaaxsGpd4Ewfri0PlPDYt9SvSEp
-         o91w==
+        bh=LG+SNuCveJ3k9ZN/Bizrp7A+pc/Q1Y7lTPWIVH04fxs=;
+        b=T4I3aijPx32FFgw6FOHR4Ruv4anJ/z6F+8J8R3KxSSBtkaY0EbMuS4skm/dDmK8OpR
+         vFlZY+b5HP+SGUiOwEE/tsifiyA746cimvL34ghxa5Mpuk2IcHRB8IbkcivmgGhDw76h
+         4R7f5O8draGsNBPtqFpB4troLWRAbfbUXGljQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687454834; x=1690046834;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1687454902; x=1690046902;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zpAAA1t2APTPIL6TPZrRweRbUpiJB6pmgpDTWMvn/FY=;
-        b=KdcoJDnoXerCbCscXVK+fzhs1C3xuqqxMw2/1tuMKZP3TFAhaAJLlZ69AJhssGyuMe
-         q4ie7MHzI6j23C3qzm/C9Pevcs/0aFwRIxW+b1EISeSQfbXrQiVKr2SPW0O2uSE5k0X3
-         zFAY9Ffwd7baFII5k3nImV3mHDXkR7Szd2NSY/Ioxqx/2Lb4LPYq0L/zO5BICGIeo+RW
-         7uw/xsLPKU7yjN8K32Tv9UPAkectWdYPOp7t4kCxKACg1BQTXiz6mtkg1QsTBbRfGhP8
-         n73fsLPhZs2ZzWrY371FfbBlqE2Yt2Cn4TlDM6+JGmZPI9DBJayn8xVlbUmZk0Fhjdov
-         wpVg==
-X-Gm-Message-State: AC+VfDzJRQpIt3OquYTljqsnskHCjekHIqgbiK3nZqYEYyYA5ZoTWYh8
-        x4i7JPgHDTVks+hxNddblCYXhMlau1lIEyApbMF3xA==
-X-Google-Smtp-Source: ACHHUZ7xXJVU1iaVQHNWBcjIROUN8XBx6twf/NQXOFch3Z0Pg9XmNAKotuHXqSCRwZCmUiFWOYZ3pyng/357JWNd2Hs=
-X-Received: by 2002:a05:622a:85:b0:3f8:5b2:aeed with SMTP id
- o5-20020a05622a008500b003f805b2aeedmr1600635qtw.21.1687454834160; Thu, 22 Jun
- 2023 10:27:14 -0700 (PDT)
+        bh=LG+SNuCveJ3k9ZN/Bizrp7A+pc/Q1Y7lTPWIVH04fxs=;
+        b=Pg+bsoFrv3VstYA9ZAtukbrxalfyRLjIhFk9GFzPmSYtiSdQY8/bdM5pMWPcGUbvPb
+         nKmiOpFyPbu28zSJh9yOatjjaG/s1xvZhewwt4P2efVNTKGHMStmlxtqD0JTQunvEBEs
+         AfmV0dWY6lcWF/DtpouAeiYC23O6OyURsYAOF0eICQ0suKU2/aFUxmEzcC0v6uxpxkzw
+         j6S/WXWgr3jEV7PL/KZiZmUVd75mb3v/zcesH/13oywBApK6hWwimGEEMVDu1AgGYyVS
+         oo13ji0r1jMZl/Lv1T6nC4Ucp4mrpEWrtEmWxX28w79c+lTBBm0rLHlQDGxYv4eB26XY
+         O8cg==
+X-Gm-Message-State: AC+VfDxWy43/68cBNeyIumSJVJGURgnt5XybOhFUstToUw+OYyQKP2cH
+        wZCbae4mFCqH1WSGi47XOouZKg==
+X-Google-Smtp-Source: ACHHUZ6aaAPgxRA2SMPMem3yPU+gg1InPzmqDPfdl3P3URnZ3GiIprPeBfYXA2NatKXYAXb9bAdDHg==
+X-Received: by 2002:a05:6808:6243:b0:398:9ee4:1dac with SMTP id dt3-20020a056808624300b003989ee41dacmr21175501oib.32.1687454902406;
+        Thu, 22 Jun 2023 10:28:22 -0700 (PDT)
+Received: from ballway1.c.googlers.com.com (97.173.125.34.bc.googleusercontent.com. [34.125.173.97])
+        by smtp.gmail.com with ESMTPSA id q15-20020a17090a064f00b002533ce5b261sm36645pje.10.2023.06.22.10.28.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 10:28:22 -0700 (PDT)
+From:   Allen Ballway <ballway@chromium.org>
+To:     ballway@chromium.org
+Cc:     arun.r.murthy@intel.com, dri-devel@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, jani.nikula@linux.intel.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] drm/i915/quirk: Add quirk for devices that cannot be dimmed
+Date:   Thu, 22 Jun 2023 17:28:15 +0000
+Message-ID: <20230622172817.2281527-1-ballway@chromium.org>
+X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
+In-Reply-To: <20230606211901.1.I06e778109090b5dc85c44da7b742d185aa6adb59@changeid>
+References: <20230606211901.1.I06e778109090b5dc85c44da7b742d185aa6adb59@changeid>
 MIME-Version: 1.0
-References: <20230620201818.1670753-1-namhyung@kernel.org> <20230620201818.1670753-3-namhyung@kernel.org>
-In-Reply-To: <20230620201818.1670753-3-namhyung@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Thu, 22 Jun 2023 10:27:02 -0700
-Message-ID: <CAP-5=fWvxMyzbY6gg7R-TzWNpbRcUKHpxoyJq-04c84CzkW4Cw@mail.gmail.com>
-Subject: Re: [PATCH 3/3] perf machine: Include data symbols in the kernel map
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 1:18=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
-wrote:
->
-> When perf record -d is used, it needs data mmaps to symbolize global data=
-.
-> But it missed to collect kernel data maps so it cannot symbolize them.
-> Instead of having a separate map, just increase the kernel map size to
-> include the data section.
->
-> Probably we can have a separate kernel map for data, but the current
-> code assumes a single kernel map.  So it'd require more changes in other
-> places and looks error-prone.  I decided not to go that way for now.
->
-> Also it seems the kernel module size already includes the data section.
->
-> For example, my system has the following.
->
->   $ grep -e _stext -e _etext -e _edata /proc/kallsyms
->   ffffffff99800000 T _stext
->   ffffffff9a601ac8 T _etext
->   ffffffff9b446a00 D _edata
->
-> Size of the text section is (0x9a601ac8 - 0x99800000 =3D 0xe01ac8) and
-> size of the data section is (0x9b446a00 - 0x99800000 =3D 0x1c46a00).
->
-> Before:
->   $ perf record -d true
->
->   $ perf report -D | grep MMAP | head -1
->   0 0 0x460 [0x60]: PERF_RECORD_MMAP -1/0: [0xffffffff99800000(0xe01ac8) =
-@ 0xffffffff99800000]: x [kernel.kallsyms]_text
->                                                                ^^^^^^^^
->                                                                  here
+Cybernet T10C cannot be dimmed without the backlight strobing. Create a
+new quirk to lock the minimum brightness to the highest supported value.
+This aligns the device with its behavior on Windows, which will not
+lower the brightness below maximum.
 
-nit: should the ^^^ be under 0xe01ac8?
+Signed-off-by: Allen Ballway <ballway@chromium.org>
+---
+V1 -> V2: Fix style issue.
 
-> After:
->   $ perf report -D | grep MMAP | head -1
->   0 0 0x460 [0x60]: PERF_RECORD_MMAP -1/0: [0xffffffff99800000(0x1c46a00)=
- @ 0xffffffff99800000]: x [kernel.kallsyms]_text
->                                                                ^^^^^^^^^
+ .../gpu/drm/i915/display/intel_backlight.c    |  5 ++++
+ drivers/gpu/drm/i915/display/intel_quirks.c   | 27 +++++++++++++++++++
+ drivers/gpu/drm/i915/display/intel_quirks.h   |  1 +
+ 3 files changed, 33 insertions(+)
 
-nit: and here under 0x1c46a00 ?
+diff --git a/drivers/gpu/drm/i915/display/intel_backlight.c b/drivers/gpu/drm/i915/display/intel_backlight.c
+index 2e8f17c045222..049e95105e8b6 100644
+--- a/drivers/gpu/drm/i915/display/intel_backlight.c
++++ b/drivers/gpu/drm/i915/display/intel_backlight.c
+@@ -1192,6 +1192,11 @@ static u32 get_backlight_min_vbt(struct intel_connector *connector)
 
->
-> Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+ 	drm_WARN_ON(&i915->drm, panel->backlight.pwm_level_max == 0);
 
-Acked-by: Ian Rogers <irogers@google.com>
++	if (intel_has_quirk(i915, QUIRK_NO_DIM)) {
++		/* Cannot dim backlight, set minimum to hightest value */
++		return panel->backlight.pwm_level_max - 1;
++	}
++
+ 	/*
+ 	 * XXX: If the vbt value is 255, it makes min equal to max, which leads
+ 	 * to problems. There are such machines out there. Either our
+diff --git a/drivers/gpu/drm/i915/display/intel_quirks.c b/drivers/gpu/drm/i915/display/intel_quirks.c
+index a280448df771a..910c95840a539 100644
+--- a/drivers/gpu/drm/i915/display/intel_quirks.c
++++ b/drivers/gpu/drm/i915/display/intel_quirks.c
+@@ -65,6 +65,12 @@ static void quirk_no_pps_backlight_power_hook(struct drm_i915_private *i915)
+ 	drm_info(&i915->drm, "Applying no pps backlight power quirk\n");
+ }
 
-Thanks,
-Ian
++static void quirk_no_dim(struct drm_i915_private *i915)
++{
++	intel_set_quirk(i915, QUIRK_NO_DIM);
++	drm_info(&i915->drm, "Applying no dim quirk\n");
++}
++
+ struct intel_quirk {
+ 	int device;
+ 	int subsystem_vendor;
+@@ -90,6 +96,12 @@ static int intel_dmi_no_pps_backlight(const struct dmi_system_id *id)
+ 	return 1;
+ }
 
-> ---
->  tools/perf/util/machine.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/perf/util/machine.c b/tools/perf/util/machine.c
-> index ddc0a2130caf..e93a66f6e0b3 100644
-> --- a/tools/perf/util/machine.c
-> +++ b/tools/perf/util/machine.c
-> @@ -1218,7 +1218,10 @@ static int machine__get_running_kernel_start(struc=
-t machine *machine,
->
->         *start =3D addr;
->
-> -       err =3D kallsyms__get_function_start(filename, "_etext", &addr);
-> +       if (machine->has_data_mmap)
-> +               err =3D kallsyms__get_symbol_start(filename, "_edata", &a=
-ddr);
-> +       else
-> +               err =3D kallsyms__get_function_start(filename, "_etext", =
-&addr);
->         if (!err)
->                 *end =3D addr;
->
-> --
-> 2.41.0.185.g7c58973941-goog
->
++static int intel_dmi_no_dim(const struct dmi_system_id *id)
++{
++	DRM_INFO("No dimming allowed on %s\n", id->ident);
++	return 1;
++}
++
+ static const struct intel_dmi_quirk intel_dmi_quirks[] = {
+ 	{
+ 		.dmi_id_list = &(const struct dmi_system_id[]) {
+@@ -136,6 +148,20 @@ static const struct intel_dmi_quirk intel_dmi_quirks[] = {
+ 		},
+ 		.hook = quirk_no_pps_backlight_power_hook,
+ 	},
++	{
++		.dmi_id_list = &(const struct dmi_system_id[]) {
++			{
++				.callback = intel_dmi_no_dim,
++				.ident = "Cybernet T10C Tablet",
++				.matches = {DMI_EXACT_MATCH(DMI_BOARD_VENDOR,
++							    "Cybernet Manufacturing Inc."),
++					    DMI_EXACT_MATCH(DMI_BOARD_NAME, "T10C Tablet"),
++				},
++			},
++			{ }
++		},
++		.hook = quirk_no_dim,
++	},
+ };
+
+ static struct intel_quirk intel_quirks[] = {
+@@ -218,6 +244,7 @@ void intel_init_quirks(struct drm_i915_private *i915)
+ 		     q->subsystem_device == PCI_ANY_ID))
+ 			q->hook(i915);
+ 	}
++
+ 	for (i = 0; i < ARRAY_SIZE(intel_dmi_quirks); i++) {
+ 		if (dmi_check_system(*intel_dmi_quirks[i].dmi_id_list) != 0)
+ 			intel_dmi_quirks[i].hook(i915);
+diff --git a/drivers/gpu/drm/i915/display/intel_quirks.h b/drivers/gpu/drm/i915/display/intel_quirks.h
+index 10a4d163149fd..b41c7bbf0a5e3 100644
+--- a/drivers/gpu/drm/i915/display/intel_quirks.h
++++ b/drivers/gpu/drm/i915/display/intel_quirks.h
+@@ -17,6 +17,7 @@ enum intel_quirk_id {
+ 	QUIRK_INVERT_BRIGHTNESS,
+ 	QUIRK_LVDS_SSC_DISABLE,
+ 	QUIRK_NO_PPS_BACKLIGHT_POWER_HOOK,
++	QUIRK_NO_DIM,
+ };
+
+ void intel_init_quirks(struct drm_i915_private *i915);
+--
+2.41.0.162.gfafddb0af9-goog
+
