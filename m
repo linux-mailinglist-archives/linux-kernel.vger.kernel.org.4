@@ -2,122 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63F507395C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 05:16:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A10197395C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 05:22:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjFVDQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 23:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49122 "EHLO
+        id S229733AbjFVDWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 23:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjFVDQO (ORCPT
+        with ESMTP id S229437AbjFVDW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 23:16:14 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792681BCD;
-        Wed, 21 Jun 2023 20:16:13 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QmlrV3Bvhz4x04;
-        Thu, 22 Jun 2023 13:16:10 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1687403771;
-        bh=4QeuJyJpgKxrumCndMNF5jV1ekgOSpVmwiEy6ir+L9E=;
-        h=Date:From:To:Cc:Subject:From;
-        b=n6oT5gEFqAzzNMFXU5Nyt70Ti849dZTQMBIw44SHAX/czW4z58UZ2bymX5XqfQmKc
-         8xGuJgNxNWy78HXBm8XG1jLvLScfaZGHv7lErd6mqmQ8lQ/CulSCo+5LfvN0+YdtUz
-         hWTiZyb0342G3tGsfGpTbwNSNZvgLbIedg3c/1l3T31ZITQPWhy/34M4NcwsTkNvfF
-         sdD/+Wyf7IiEpLbgqNR5kxQoN0Rpyr0/WNxdT8dHqmU3htIqPSVUYq6iqKClh4JYVx
-         G7bT91excTVynonbC1yajIJtZhWTDqMYfQ+PMg80xSJ1Hr3TZcUzi0+RgQvtIHRS93
-         T16iw+282y5dA==
-Date:   Thu, 22 Jun 2023 13:16:09 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Ryan Roberts <ryan.roberts@arm.com>
-Subject: linux-next: manual merge of the tip tree with the mm-stable tree
-Message-ID: <20230622131609.3fdf314d@canb.auug.org.au>
+        Wed, 21 Jun 2023 23:22:29 -0400
+Received: from mx6.didiglobal.com (mx6.didiglobal.com [111.202.70.123])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id C45601A4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 20:22:26 -0700 (PDT)
+Received: from mail.didiglobal.com (unknown [10.79.65.12])
+        by mx6.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id 7B1201100E9C09;
+        Thu, 22 Jun 2023 11:22:23 +0800 (CST)
+Received: from didi-ThinkCentre-M930t-N000 (10.79.64.101) by
+ ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 22 Jun 2023 11:22:23 +0800
+Date:   Thu, 22 Jun 2023 11:22:17 +0800
+X-MD-Sfrom: tiozhang@didiglobal.com
+X-MD-SrcIP: 10.79.65.12
+From:   tiozhang <tiozhang@didiglobal.com>
+To:     <tj@kernel.org>, <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <dietmar.eggemann@arm.com>,
+        <rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
+        <bristot@redhat.com>, <vschneid@redhat.com>,
+        <fuyuanli@didiglobal.com>, <zwp10758@gmail.com>,
+        <zyhtheonly@gmail.com>, <zyhtheonly@yeah.net>,
+        <tiozhang@didiglobal.com>
+Subject: [PATCH v3] sched/isolation: add a workqueue parameter onto isolcpus
+ to constrain unbound CPUs
+Message-ID: <20230622032133.GA29012@didi-ThinkCentre-M930t-N000>
+Mail-Followup-To: tj@kernel.org, mingo@redhat.com, peterz@infradead.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com, fuyuanli@didiglobal.com,
+        zwp10758@gmail.com, zyhtheonly@gmail.com, zyhtheonly@yeah.net
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/dPngXCYV1Had5_29rk5pHpH";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZJNizvI-7A2hFDoM@slm.duckdns.org>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.79.64.101]
+X-ClientProxiedBy: ZJY01-PUBMBX-01.didichuxing.com (10.79.64.32) To
+ ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/dPngXCYV1Had5_29rk5pHpH
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Motivation of doing this is to better improve boot times for devices when
+we want to prevent our workqueue works from running on some specific CPUs,
+i,e, some CPUs are busy with interrupts.
 
-Hi all,
+Also remove HK_FLAG_WQ from nohz_full to prevent nohz_full overriding
+workqueue's cpu config.
 
-Today's linux-next merge of the tip tree got a conflict in:
+Suggested-by: Tejun Heo <tj@kernel.org>
+Signed-off-by: tiozhang <tiozhang@didiglobal.com>
+---
+ kernel/sched/isolation.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-  mm/migrate.c
+diff --git a/kernel/sched/isolation.c b/kernel/sched/isolation.c
+index 373d42c707bc..5cd67c51622e 100644
+--- a/kernel/sched/isolation.c
++++ b/kernel/sched/isolation.c
+@@ -181,8 +181,8 @@ static int __init housekeeping_nohz_full_setup(char *str)
+ {
+ 	unsigned long flags;
+ 
+-	flags = HK_FLAG_TICK | HK_FLAG_WQ | HK_FLAG_TIMER | HK_FLAG_RCU |
+-		HK_FLAG_MISC | HK_FLAG_KTHREAD;
++	flags = HK_FLAG_TICK | HK_FLAG_TIMER | HK_FLAG_RCU | HK_FLAG_MISC
++		| HK_FLAG_KTHREAD;
+ 
+ 	return housekeeping_setup(str, flags);
+ }
+@@ -208,6 +208,12 @@ static int __init housekeeping_isolcpus_setup(char *str)
+ 			continue;
+ 		}
+ 
++		if (!strncmp(str, "workqueue,", 10)) {
++			str += 10;
++			flags |= HK_FLAG_WQ;
++			continue;
++		}
++
+ 		if (!strncmp(str, "managed_irq,", 12)) {
+ 			str += 12;
+ 			flags |= HK_FLAG_MANAGED_IRQ;
+-- 
+2.17.1
 
-between commit:
-
-  c33c794828f2 ("mm: ptep_get() conversion")
-
-from the mm-stable tree and commit:
-
-  23a219c1860b ("mm: Make pte_mkwrite() take a VMA")
-
-from the tip tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc mm/migrate.c
-index 6f4066425d47,8b46b722f1a4..000000000000
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@@ -220,8 -219,8 +220,8 @@@ static bool remove_migration_pte(struc
-  		if (folio_test_dirty(folio) && is_migration_entry_dirty(entry))
-  			pte =3D pte_mkdirty(pte);
-  		if (is_writable_migration_entry(entry))
-- 			pte =3D pte_mkwrite(pte);
-+ 			pte =3D pte_mkwrite(pte, vma);
- -		else if (pte_swp_uffd_wp(*pvmw.pte))
- +		else if (pte_swp_uffd_wp(old_pte))
-  			pte =3D pte_mkuffd_wp(pte);
- =20
-  		if (folio_test_anon(folio) && !is_readable_migration_entry(entry))
-
---Sig_/dPngXCYV1Had5_29rk5pHpH
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmSTvPkACgkQAVBC80lX
-0Gx9+Af+L6Kvxcj/+tF5s2Z4bVylxonNrdsWnz1wAfY1sGIR2iTQXswKrTAh3iiW
-CEuqmgJuiDN7kjFboNBB+QaFrrjdCe9jcCXOCuuVB9UhX91LNgJ+fIMkNkT+YOtt
-YrL/8l9kyzPFh2LGdG2N0We1auK7nkrvAPSOLQxApjD+gEcw72UsWYMMjujGdOg/
-qjIKwekmskBzshBUpqooohHV/3u6W2Wwcw733QurWH7fhr/sAeeeZ1mppkf3bpw/
-8lQtNHmxIrfW8AVCH0ZsiYai7EoTnxh27CLPBNCJ7U3WvkEWUqzgtkeizA6+sJ0S
-7ukeYp7Ssphfha+ZcL2HULsRuZu3sA==
-=Tq32
------END PGP SIGNATURE-----
-
---Sig_/dPngXCYV1Had5_29rk5pHpH--
