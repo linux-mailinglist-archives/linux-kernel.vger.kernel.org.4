@@ -2,134 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E7BC73A93B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEA5473A93E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231132AbjFVT4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 15:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60706 "EHLO
+        id S231144AbjFVT5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 15:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjFVT4Y (ORCPT
+        with ESMTP id S229726AbjFVT5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 15:56:24 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCDB2F1;
-        Thu, 22 Jun 2023 12:56:22 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 21:56:19 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1687463780; bh=sjhMAnWC+WRXas1AobjF7bEqN7SCFpSlpfEgghDu3ZY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lg4BaVBZWGV5eFXgYBMM7duPkZ4vK9SZ9Kd2MWai1NvPvpBmP4Akvz4cYcbP9gAkC
-         f0ePQyBJPmsU1uy7aW8D9ivtVgAcbx0PvfqBqNS8rMSFcRao+HKEkc9mHi8xlwWPbk
-         wFvNiz5HFpPmVzN12e749DBZHpK55liL57uZZZEQ=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     arnd@arndb.de, david.laight@aculab.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, w@1wt.eu
-Subject: Re: [PATCH v4 10/10] selftests/nolibc: add mmap and munmap test cases
-Message-ID: <97fbbe17-b261-475c-8959-71cccaa5a2f5@t-8ch.de>
-References: <bff82ea6-610b-4471-a28b-6c76c28604a6@t-8ch.de>
- <20230622193249.1190336-1-falcon@tinylab.org>
+        Thu, 22 Jun 2023 15:57:47 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7131D1BF0;
+        Thu, 22 Jun 2023 12:57:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687463866; x=1718999866;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BgpRqo4puNcohYTMFAWxOVTW7DldqwzOBNgi36hCvWc=;
+  b=P+4zkcKWB/q9HpxDCd/eRNI94SwcTW4jBesvOHLqgF+3O4tjxqD4+PoS
+   CMGM2gffjr3xuYVZZWC2ioDvfWtLlBCAqpQsPcn+DG5OI0aXsyrpZKJKy
+   da9b+lyJA2v+t82VmEZReO/S2sWvvEfRnxdsVpTv4c8bB3/TRycS8UMVG
+   CTzTpp6b4aNnLLt6iO9ISU3LDiupbsEiRCtrB/z785+YvVtkE2ALMJU7h
+   2mkMBHwTIeiJsL7xUzK78+7wt+NplIqbCGsaM2BqcdTVOM/zquRZf2utI
+   X5lZBY0YdkCYOoSu271+khdf1VqK7bUTOZl+1uFYJUSgwBI9UzaeBasbK
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="358088608"
+X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
+   d="scan'208";a="358088608"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 12:57:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="889204563"
+X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
+   d="scan'208";a="889204563"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga005.jf.intel.com with ESMTP; 22 Jun 2023 12:57:28 -0700
+From:   Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     hdegoede@redhat.com, markgross@kernel.org
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Subject: [PATCH] platform/x86/intel/tpmi: Prevent overflow for cap_offset
+Date:   Thu, 22 Jun 2023 12:57:17 -0700
+Message-Id: <20230622195717.3125088-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230622193249.1190336-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhangjin,
+cap_offset is a u16 field, so multiplying with TPMI_CAP_OFFSET_UNIT
+(which is equal to 1024) to covert to bytes will cause overflow. This
+will be a problem once more TPMI features are added.
 
-On 2023-06-23 03:32:49+0800, Zhangjin Wu wrote:
-> > On 2023-06-19 23:55:41+0800, Zhangjin Wu wrote:
-> > > Three mmap/munmap related test cases are added:
-> > > 
-> > > - mmap(NULL, 0, PROT_READ, MAP_PRIVATE, 0, 0), MAP_FAILED, EINVAL)
-> > > 
-> > >   The length argument must be greater than 0, otherwise, fail with -EINVAL.
-> > > 
-> > > - munmap((void *)-1, 4*1024), -1, EINVAL)
-> > > 
-> > >   Invalid (void *)-1 address fail with -EINVAL.
-> > > 
-> > > - test_mmap_munmap(4*1024)
-> > > 
-> > >   It finds a init file, mmap() it and then munmap().
-> > > 
-> > > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> > > ---
-> > >  tools/testing/selftests/nolibc/nolibc-test.c | 31 ++++++++++++++++++++
-> > >  1 file changed, 31 insertions(+)
-> > > 
-> > > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> > > index 80ab29e2887c..f7c0ca72cb28 100644
-> > > --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> > > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> > > @@ -592,6 +592,34 @@ static int test_stat_timestamps(void)
-> > >  	return 0;
-> > >  }
-> > >  
-> > > +int test_mmap_munmap(int size)
-> > > +{
-> > > +	char init_files[5][20] = {"/init", "/sbin/init", "/etc/init", "/bin/init", "/bin/sh"};
-> > 
-> > Why not /proc/1/exe or even /proc/self/exe?
-> > 
-> > I know your other series tries to remove the procfs dependency, but
-> > we're not there yet :-).
-> > 
-> 
-> Yeah, '/proc/self/exe' is a choice, if so, the 'has_proc' should be added ;-)
+This field is not used except for calculating pfs->vsec_offset. So, leave
+cap_offset field unchanged and multiply with TPMI_CAP_OFFSET_UNIT while
+calculating pfs->vsec_offset.
 
-Currently procfs is a hard requirement. So I would leave 'has_proc' to
-the other series that may change this.
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+Rebased on top of
+https://kernel.googlesource.com/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86
+review-hans 
 
-> > Also does it make sense to pass a size parameter?
-> > Why not use either PAGE_SIZE or the real size of the binary from
-> > fstat().
-> > 
-> 
-> Ok, as the manpage of mmap shows:
-> 
->        For mmap(), offset must be a multiple of the underlying huge page
->        size.  The system automatically aligns length to be a multiple of
->        the underlying huge page size.
-> 
->        For munmap(), addr, and length must both be a multiple of the
->        underlying huge page size.
-> 
-> perhaps we should do further tests:
-> 
-> * the real size/length
-> * even > the real size
-> * the PAGE_SIZE
-> * not aligned with PAGE_SIZE
-> 
-> If such tests are required, the 'size' and even 'offset' arguments could be
-> provided to cover different combination or we do such tests internally, then,
-> the arguments are not required.
+ drivers/platform/x86/intel/tpmi.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-I think task of nolibc-test is to test the code in nolibc itself.
-The custom mmap implementation is trivial and directly calls the
-syscall. These additionally proposed tests would effectively test the
-core kernels implementation of mmap() and not the code of nolibc.
+diff --git a/drivers/platform/x86/intel/tpmi.c b/drivers/platform/x86/intel/tpmi.c
+index 9c606ee2030c..d1fd6e69401c 100644
+--- a/drivers/platform/x86/intel/tpmi.c
++++ b/drivers/platform/x86/intel/tpmi.c
+@@ -356,9 +356,7 @@ static int intel_vsec_tpmi_init(struct auxiliary_device *auxdev)
+ 		if (!pfs_start)
+ 			pfs_start = res_start;
+ 
+-		pfs->pfs_header.cap_offset *= TPMI_CAP_OFFSET_UNIT;
+-
+-		pfs->vsec_offset = pfs_start + pfs->pfs_header.cap_offset;
++		pfs->vsec_offset = pfs_start + pfs->pfs_header.cap_offset * TPMI_CAP_OFFSET_UNIT;
+ 
+ 		/*
+ 		 * Process TPMI_INFO to get PCI device to CPU package ID.
+-- 
+2.38.1
 
-Therefore I don't think they are necessary in nolibc-test and the
-functionality is hopefully already be tested in another testsuite.
-
-
-Note:
-
-Testing mmap is indeed useful to test the implementation of
-my_syscall6() by providing a bogus value in the 'offset' parameter.
-I think we do have such a testcase.
-
-<snip>
-
-Thomas
