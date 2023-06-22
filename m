@@ -2,49 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B049873A39A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E07CB73A395
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231971AbjFVOvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 10:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
+        id S231281AbjFVOui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 10:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbjFVOug (ORCPT
+        with ESMTP id S231661AbjFVOuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 10:50:36 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BACD19B7
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:50:35 -0700 (PDT)
+        Thu, 22 Jun 2023 10:50:35 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88CAE57
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:50:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Type:MIME-Version:References:
+        d=infradead.org; s=desiato.20200630; h=Content-Type:MIME-Version:References:
         Subject:Cc:To:From:Date:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:
         Content-ID:Content-Description:In-Reply-To;
-        bh=QJieZYDWzFCRvSf0wOeMBiP6eKWnKstpX1vra/Nb2RE=; b=t5FAyWdSCA8MhmTF70mRlJ8+bF
-        PtTAVofzOV0VUJ4IiR6Mj3h2bermXWeNMQu6CTVlEUAHj7O9WATPVBktgOnDycDJWu9ZAh6nY7JXL
-        Kci/BqJJMsb5tUV3YqtNL2Q/x7x0IZFV0DMecRpsvSf127dAPsa0FsRHtSaRyTX6RVBa49KwKbFkU
-        f5rNyS8G8XvzWrM82W1/Q2pUh6uZ7SSeSYKMOKNY9ugxyEXvyyV/d2AZHHsChCjBAMmsdYuasMPTp
-        Vl5cd+fqKKEiEuTe9gWblRPAtTOjqmUdvLcptOBXcBHu2oGQxRO2B6ohEXYnT7IbnHN/4TQrCzJnr
-        kwc3bnog==;
+        bh=LGsdeHWEpXVTOOsTrfyXxkvr7QjEX8WnxEDVS86hVu0=; b=Vc1PCzlgv53QVpsR+WDW+RQqb6
+        hK7KNjrcjl+OM0sSOaXWHo1TLrdWF6Ft+sYwXsr6/tvfbojEmVncYsiUxhSWg/ccffx5Vp5h+E65l
+        iTOfakYBU57ARcTK5pLhxLX1TwdYs+p+rSAi35g9L7X/LffRI+NRdtOrMWDspVfMgzmS1h0vWfayf
+        92OwwNzhL4uiLlFDCTrtaT0x3lah4hMBUKxB/5tLAOxbTKp31oapEesD7UR1+ROiQbXFVLC2HgORi
+        SQp/YPBNcgr0rmbQmi37UXBKkT/rDdl8fS3inb9MhS5FPUIHGwQtdpek14S6NsTFIbr4tFvPPh9nA
+        mhbSdVtQ==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qCLdh-00FgfC-Ru; Thu, 22 Jun 2023 14:50:26 +0000
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qCLdh-001CzP-1B;
+        Thu, 22 Jun 2023 14:50:25 +0000
 Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3390C3006D5;
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3999330075E;
         Thu, 22 Jun 2023 16:50:24 +0200 (CEST)
 Received: by hirez.programming.kicks-ass.net (Postfix, from userid 0)
-        id 1C78A209D8B3D; Thu, 22 Jun 2023 16:50:24 +0200 (CEST)
-Message-ID: <20230622144321.494426891@infradead.org>
+        id 20EF6209D8B3E; Thu, 22 Jun 2023 16:50:24 +0200 (CEST)
+Message-ID: <20230622144321.561264520@infradead.org>
 User-Agent: quilt/0.66
-Date:   Thu, 22 Jun 2023 16:42:21 +0200
+Date:   Thu, 22 Jun 2023 16:42:22 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     x86@kernel.org, alyssa.milburn@linux.intel.com
 Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
         samitolvanen@google.com, keescook@chromium.org,
         jpoimboe@kernel.org, joao@overdrivepizza.com, brgerst@gmail.com
-Subject: [PATCH v2 3/6] x86/cfi: Extend ENDBR sealing to kCFI
+Subject: [PATCH v2 4/6] x86/32: Remove schedule_tail_wrapper()
 References: <20230622144218.860926475@infradead.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,100 +59,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kees noted that IBT sealing could be extended to kCFI.
+From: Brian Gerst <brgerst@gmail.com>
 
-Fundamentally it is the list of functions that do not have their
-address taken and are thus never called indirectly. It doesn't matter
-that objtool uses IBT infrastructure to determine this list, once we
-have it it can also be used to clobber kCFI hashes and seal kCFI
-indirect calls.
+The unwinder expects a return address at the very top of the kernel
+stack just below pt_regs and before any stack frame is created.  Instead
+of calling a wrapper, set up a return address as if ret_from_fork()
+was called from the syscall entry code.
 
-Suggested-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Brian Gerst <brgerst@gmail.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/20230622120750.5549-2-brgerst@gmail.com
 ---
- arch/x86/kernel/alternative.c |   44 +++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 43 insertions(+), 1 deletion(-)
+ arch/x86/entry/entry_32.S |   32 ++++++++++----------------------
+ 1 file changed, 10 insertions(+), 22 deletions(-)
 
---- a/arch/x86/kernel/alternative.c
-+++ b/arch/x86/kernel/alternative.c
-@@ -778,6 +778,8 @@ void __init_or_module noinline apply_ret
- 
- #ifdef CONFIG_X86_KERNEL_IBT
- 
-+static void poison_cfi(void *addr);
-+
- static void __init_or_module poison_endbr(void *addr, bool warn)
- {
- 	u32 endbr, poison = gen_endbr_poison();
-@@ -802,6 +804,9 @@ static void __init_or_module poison_endb
+--- a/arch/x86/entry/entry_32.S
++++ b/arch/x86/entry/entry_32.S
+@@ -720,26 +720,6 @@ SYM_CODE_END(__switch_to_asm)
+ .popsection
  
  /*
-  * Generated by: objtool --ibt
-+ *
-+ * Seal the functions for indirect calls by clobbering the ENDBR instructions
-+ * and the kCFI hash value.
+- * The unwinder expects the last frame on the stack to always be at the same
+- * offset from the end of the page, which allows it to validate the stack.
+- * Calling schedule_tail() directly would break that convention because its an
+- * asmlinkage function so its argument has to be pushed on the stack.  This
+- * wrapper creates a proper "end of stack" frame header before the call.
+- */
+-.pushsection .text, "ax"
+-SYM_FUNC_START(schedule_tail_wrapper)
+-	FRAME_BEGIN
+-
+-	pushl	%eax
+-	call	schedule_tail
+-	popl	%eax
+-
+-	FRAME_END
+-	RET
+-SYM_FUNC_END(schedule_tail_wrapper)
+-.popsection
+-
+-/*
+  * A newly forked process directly context switches into this address.
+  *
+  * eax: prev task we switched from
+@@ -748,7 +728,13 @@ SYM_FUNC_END(schedule_tail_wrapper)
   */
- void __init_or_module noinline apply_seal_endbr(s32 *start, s32 *end)
- {
-@@ -812,7 +817,7 @@ void __init_or_module noinline apply_sea
- 
- 		poison_endbr(addr, true);
- 		if (IS_ENABLED(CONFIG_FINEIBT))
--			poison_endbr(addr - 16, false);
-+			poison_cfi(addr - 16);
- 	}
- }
- 
-@@ -1177,6 +1182,41 @@ static void __apply_fineibt(s32 *start_r
- 	pr_err("Something went horribly wrong trying to rewrite the CFI implementation.\n");
- }
- 
-+static inline void poison_hash(void *addr)
-+{
-+	*(u32 *)addr = 0;
-+}
+ .pushsection .text, "ax"
+ SYM_CODE_START(ret_from_fork)
+-	call	schedule_tail_wrapper
++	/* return address for the stack unwinder */
++	pushl	$.Lsyscall_32_done
++	FRAME_BEGIN
 +
-+static void poison_cfi(void *addr)
-+{
-+	switch (cfi_mode) {
-+	case CFI_FINEIBT:
-+		/*
-+		 * __cfi_\func:
-+		 *	osp nopl (%rax)
-+		 *	subl	$0, %r10d
-+		 *	jz	1f
-+		 *	ud2
-+		 * 1:	nop
-+		 */
-+		poison_endbr(addr, false);
-+		poison_hash(addr + fineibt_preamble_hash);
-+		break;
-+
-+	case CFI_KCFI:
-+		/*
-+		 * __cfi_\func:
-+		 *	movl	$0, %eax
-+		 *	.skip	11, 0x90
-+		 */
-+		poison_hash(addr + 1);
-+		break;
-+
-+	default:
-+		break;
-+	}
-+}
-+
- #else
++	pushl	%eax
++	call	schedule_tail
++	addl	$4, %esp
  
- static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
-@@ -1184,6 +1224,8 @@ static void __apply_fineibt(s32 *start_r
- {
- }
- 
-+static void poison_cfi(void *addr) { }
+ 	testl	%ebx, %ebx
+ 	jnz	1f		/* kernel threads are uncommon */
+@@ -757,7 +743,9 @@ SYM_CODE_START(ret_from_fork)
+ 	/* When we fork, we trace the syscall return in the child, too. */
+ 	movl    %esp, %eax
+ 	call    syscall_exit_to_user_mode
+-	jmp     .Lsyscall_32_done
 +
- #endif
++	FRAME_END
++	RET
  
- void apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
+ 	/* kernel thread */
+ 1:	movl	%edi, %eax
 
 
