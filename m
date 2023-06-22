@@ -2,80 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 666ED739DB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:50:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E0C739DC5
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:53:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232109AbjFVJtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 05:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51102 "EHLO
+        id S231221AbjFVJxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 05:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbjFVJtV (ORCPT
+        with ESMTP id S231262AbjFVJwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 05:49:21 -0400
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A127D3C3F
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:39:04 -0700 (PDT)
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-4f955850e30so527116e87.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:39:04 -0700 (PDT)
+        Thu, 22 Jun 2023 05:52:43 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32CF2705;
+        Thu, 22 Jun 2023 02:46:46 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-31121494630so7952908f8f.3;
+        Thu, 22 Jun 2023 02:46:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687426372; x=1690018372;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8s6TTePfFx4UahAkqH36CT2LOt9/xy+BAl43FeNd4Us=;
-        b=ejcoopfASwKeuRq0dLWPyB+ShWYr+CVDR9vCSd2ksHS548Ml8OquVh1+/llOuBTCxY
-         o+regOHWg5IG92yw6K+kJYTqoDDyKhl7YaCgWpHznVORrTr7LGFodRpsT057oKfahwFU
-         CxM9U5cUnxLLvTgdpX+n6kgG1dcNVMXptpCTe0MO/ZJB3jI/Z8Abdq+1SPKBP+NL2gLn
-         YncJptGWj6ilVLdJBkfNn6YGSYKsPiBXtvJkkk1OLUtqYHC1fpC3lAXMGuM4pzijtvYM
-         DM3ufeBnBKw7LCbn4KmmwrwsNSQxtiMcAJggwTm7A0ZWVk6G4vRdfnQMUxhFCfKoKN4p
-         ZIJg==
+        d=gmail.com; s=20221208; t=1687427205; x=1690019205;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aHpyFabujAR7xCKXJiA903bm7LVteFnni+c1+YvwBHU=;
+        b=Dn+yG8E1DKOoiUlaavLuNEu+TIGc9uNEThriGRqffLiuDOUcOSKDHwPN0Vg3vVepej
+         wlWaREY/PEiSZuCwFcuC3adG7M7X14j6dm+yz12gb7wj9QovHmSiY/U0DAfJWHz1bzw7
+         SZSDesZbVavI6+ExE70y2niQi+3t9ddGh+jpcSDrykKA2MxoEds2EIVjpTEkD+qmkWrm
+         mKI7RL0EIAdXL4H2iL8OIhfAB2m9XwEB5DzJ6xf9fIsTV4XCFjv/P8WMawgVm7g6cXs9
+         WeNkpPPQkYIyAMOPhtVyOv8WnErrlsElOVynL7NTmtr/YYqypjUB7QirJC4PzM/TodQ1
+         0spA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687426372; x=1690018372;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8s6TTePfFx4UahAkqH36CT2LOt9/xy+BAl43FeNd4Us=;
-        b=hox18vxqCXGZy3LbWAAHAVxs2F6HSSpg9svjO4Mcjy/gyUC5bvbmlp9MJ48GMKc6VI
-         E8ZVz8CPIgdwUwcNCmo01n0Sf9/ktib2lfutfBoIxAFqjZ5s5wgyRplWhQpTsjhSxDcp
-         RmTz9bcbJghbhTXOwpWICePCoz08SdjACcV+0O2itFXPfAES+CeBRIeA3g9Ln/qz/tG1
-         ZMsxK5T1ko6n+wnpwDr8rn13wsndMyjXJN8SHvNH3ufO3ba7RkXCAjFQ3YeFnfId1P/J
-         Ij/TF7tRFrw4vOlS36n956KoQVIrkt3wHwueBy6lbsMp9ej1NzgAliP7Dai5RJhIHtEz
-         y8DQ==
-X-Gm-Message-State: AC+VfDzzn3yMFPI+TNttHf/FrqCXvH1V3libh15YQHSmM8GLIU3Fxk2l
-        MvJv3bzfQN0Efo3VZqVA/w71VZ/ZvcjyyaPTpGA=
-X-Google-Smtp-Source: ACHHUZ6DyExXq6xsJmHFTcnNbLo7gM5LGwGv8P5W6Ngz4h7z84Q/K3JrmOQ7FXpSU1pZoADuq68MaA==
-X-Received: by 2002:a05:6512:108d:b0:4f9:5582:a7d3 with SMTP id j13-20020a056512108d00b004f95582a7d3mr2313298lfg.22.1687426371626;
-        Thu, 22 Jun 2023 02:32:51 -0700 (PDT)
-Received: from [192.168.1.101] (abyl165.neoplus.adsl.tpnet.pl. [83.9.31.165])
-        by smtp.gmail.com with ESMTPSA id v21-20020a2e9915000000b002adb0164258sm1242072lji.112.2023.06.22.02.32.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 02:32:51 -0700 (PDT)
-Message-ID: <79413af7-da90-6503-c939-a24fc6f273b4@linaro.org>
-Date:   Thu, 22 Jun 2023 11:32:49 +0200
+        d=1e100.net; s=20221208; t=1687427205; x=1690019205;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aHpyFabujAR7xCKXJiA903bm7LVteFnni+c1+YvwBHU=;
+        b=k5c9r22Xsv/54Muv38I5saR9iB5K96eAWGZ2/VarYzhOmT1tWlw2/d+Eq+pMtzQioD
+         F4arbJyJE8bPmEH86ZZ7tfLt4OP05eLWWKLtbR10W9ZFEj6+5GCIuReFN5KWk1VWDxH8
+         1USUIXt7oGvEYTBxvXOJrbnefMfpcBbAvM7m8Kl7suxcvVVrJu57Qus1ah7SsbHEbVEZ
+         0/KY8D5unyHv5k6SWwOd4CqTq2IgqLhmSIBawSG4S6moVzbPGb0boZIPZekkooj6PwGK
+         Sh+b1jZKlOf3Lvd4xmfr7b0dQ31T4YherS0YwtZeDDf5gHle7tpzn+T5egwY+lJFPsZh
+         n5kw==
+X-Gm-Message-State: AC+VfDxiO23MLCW8mVjYya/lZQkX2setpOTS2MVIay7/wm4btehACOZX
+        zqJeYZq+6GNjUNHGOKE5vc36xUqbFC2/jA==
+X-Google-Smtp-Source: ACHHUZ4WVcsofhVfB3fHYglrZh6vPocrM3myf2coC3e6xUlfhj83msUrJhYUulr33m1XuYImow6kwA==
+X-Received: by 2002:a7b:cbd8:0:b0:3fa:781a:3d07 with SMTP id n24-20020a7bcbd8000000b003fa781a3d07mr135318wmi.35.1687426444609;
+        Thu, 22 Jun 2023 02:34:04 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id u16-20020a7bc050000000b003f080b2f9f4sm18276548wmc.27.2023.06.22.02.34.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 02:34:04 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     "Darrick J . Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>, linux-xfs@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] xfs: remove redundant initializations of pointers drop_leaf and save_leaf
+Date:   Thu, 22 Jun 2023 10:34:03 +0100
+Message-Id: <20230622093403.2829382-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v5 3/6] iommu/qcom: Disable and reset context bank before
- programming
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, agross@kernel.org
-Cc:     andersson@kernel.org, luca@z3ntu.xyz, dmitry.baryshkov@linaro.org,
-        joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, robdclark@gmail.com,
-        linux-arm-msm@vger.kernel.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kernel@collabora.com
-References: <20230622092742.74819-1-angelogioacchino.delregno@collabora.com>
- <20230622092742.74819-4-angelogioacchino.delregno@collabora.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230622092742.74819-4-angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,38 +70,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.06.2023 11:27, AngeloGioacchino Del Regno wrote:
-> Writing	the new	TTBRs, TCRs and MAIRs on a previously enabled
-> context bank may trigger a context fault, resulting in firmware
-> driven AP resets: change the domain initialization programming
-> sequence to disable the context bank(s) and to also clear the
-> related fault address (CB_FAR) and fault status (CB_FSR)
-> registers before writing new values to TTBR0/1, TCR/TCR2, MAIR0/1.
-> 
-> Fixes: 0ae349a0f33f ("iommu/qcom: Add qcom_iommu")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Pointers drop_leaf and save_leaf are initialized with values that are never
+read, they are being re-assigned later on just before they are used. Remove
+the redundant early initializations and keep the later assignments at the
+point where they are used. Cleans up two clang scan build warnings:
 
-Konrad
->  drivers/iommu/arm/arm-smmu/qcom_iommu.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/iommu/arm/arm-smmu/qcom_iommu.c b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-> index 8face57c4180..f1bd7c035db8 100644
-> --- a/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-> +++ b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-> @@ -273,6 +273,13 @@ static int qcom_iommu_init_domain(struct iommu_domain *domain,
->  			ctx->secure_init = true;
->  		}
->  
-> +		/* Disable context bank before programming */
-> +		iommu_writel(ctx, ARM_SMMU_CB_SCTLR, 0);
-> +
-> +		/* Clear context bank fault address fault status registers */
-> +		iommu_writel(ctx, ARM_SMMU_CB_FAR, 0);
-> +		iommu_writel(ctx, ARM_SMMU_CB_FSR, ARM_SMMU_FSR_FAULT);
-> +
->  		/* TTBRs */
->  		iommu_writeq(ctx, ARM_SMMU_CB_TTBR0,
->  				pgtbl_cfg.arm_lpae_s1_cfg.ttbr |
+fs/xfs/libxfs/xfs_attr_leaf.c:2288:29: warning: Value stored to 'drop_leaf'
+during its initialization is never read [deadcode.DeadStores]
+fs/xfs/libxfs/xfs_attr_leaf.c:2289:29: warning: Value stored to 'save_leaf'
+during its initialization is never read [deadcode.DeadStores]
+
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ fs/xfs/libxfs/xfs_attr_leaf.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/fs/xfs/libxfs/xfs_attr_leaf.c b/fs/xfs/libxfs/xfs_attr_leaf.c
+index beee51ad75ce..3091d40a1eb6 100644
+--- a/fs/xfs/libxfs/xfs_attr_leaf.c
++++ b/fs/xfs/libxfs/xfs_attr_leaf.c
+@@ -2285,8 +2285,8 @@ xfs_attr3_leaf_unbalance(
+ 	struct xfs_da_state_blk	*drop_blk,
+ 	struct xfs_da_state_blk	*save_blk)
+ {
+-	struct xfs_attr_leafblock *drop_leaf = drop_blk->bp->b_addr;
+-	struct xfs_attr_leafblock *save_leaf = save_blk->bp->b_addr;
++	struct xfs_attr_leafblock *drop_leaf;
++	struct xfs_attr_leafblock *save_leaf;
+ 	struct xfs_attr3_icleaf_hdr drophdr;
+ 	struct xfs_attr3_icleaf_hdr savehdr;
+ 	struct xfs_attr_leaf_entry *entry;
+-- 
+2.39.2
+
