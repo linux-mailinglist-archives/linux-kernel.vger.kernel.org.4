@@ -2,62 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D8B739CE9
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2081F739CF1
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:28:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232099AbjFVJ1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 05:27:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34728 "EHLO
+        id S230169AbjFVJ2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 05:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232367AbjFVJ1S (ORCPT
+        with ESMTP id S231697AbjFVJ1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 05:27:18 -0400
+        Thu, 22 Jun 2023 05:27:37 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F262D57;
-        Thu, 22 Jun 2023 02:17:35 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DFB330E3;
+        Thu, 22 Jun 2023 02:18:33 -0700 (PDT)
+Received: from [IPV6:2a01:cb08:8af8:5b00:626e:5b8f:fa0f:ad38] (2a01cb088af85b00626e5b8ffa0fad38.ipv6.abo.wanadoo.fr [IPv6:2a01:cb08:8af8:5b00:626e:5b8f:fa0f:ad38])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 308F3660706D;
-        Thu, 22 Jun 2023 10:17:33 +0100 (BST)
+        (Authenticated sender: jmassot)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4419A660706D;
+        Thu, 22 Jun 2023 10:18:31 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687425454;
-        bh=IuIUzfBhqxhEujnKE3pRGX/RsY3huBnGBBoAUWN0ozU=;
+        s=mail; t=1687425511;
+        bh=Ib/XVk9MKhVAdq/PW9I6LfZTNNz9ldYe634L1da0PJE=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Rs2HEyvtAnTvvHWbc2BHol0XYFnvPTCd0X/e4JlUGz7Hnbth73eQpoEtyLdtCeRHB
-         S9XwoQTsIYtfsFjTH1c4QdEvaH1/Fo1Ibb8ri+lpQsKHeH3FJ4xroeE8APTMoEWlpT
-         4EH+O2dJBzAULp0dXBJSFeKh+8BdisbE3kScvPeEudG8jEKvgRNwbp6/hUkYejpQok
-         MZuYas5JLqo27S5drZvFdo4FeWNNTxhovSXSc8Nwv5KgP1aESWXCZkLV6SZTDOAAbG
-         XwFehcNSEOLRN8i77QcTDZ8c6IUb8K8gqBAqBQAP4hMpeG/WciIAHIe4Ap4O3R1+LD
-         3NLAHF6Z2AmlQ==
-Message-ID: <5f82829a-829a-c8f6-ed73-6ee2a8e05151@collabora.com>
-Date:   Thu, 22 Jun 2023 11:17:31 +0200
+        b=cNGZJRWIJEJqj20bZ08SVZUQGVjovz0AjrSAbe2+zw9B5x++aWZED3bI4YQ1Tvn4a
+         ckWexvmoTd1VpynP1/gUXT6Tp+8joUzgHR4OBqgp3oTIKQnqWtgGeZlYxDCcivV/f+
+         VkTO16Pt3F2jWB9Zoj+c77GSkCfq5J1ajf/z3gygM2Fdll73jzVt4ZOEJkejSYVcBb
+         w5AwZD/p/ymfKdFFDHMBiI9jjPllwKkNz9iwmtdD8NWhNBJ9ghcPq6UxSmVyRg5HZy
+         rGI23lu0mqj0IPKJ9zfg3guCjFyIfICo8EAIqoRi1Lxr9/N/rupU6PT+i650gGjjRF
+         ff5rF/3/Ta00g==
+Message-ID: <512f54f5-60d5-db68-dce3-96cf70519b6c@collabora.com>
+Date:   Thu, 22 Jun 2023 11:18:28 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.12.0
-Subject: Re: [PATCH v5 6/8] soc: mediatek: Add support for WAY_EN operations
+Subject: Re: [PATCH v7 00/13] CSI2RX support on J721E
 Content-Language: en-US
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Alexandre Bailon <abailon@baylibre.com>,
-        Fabien Parent <fparent@baylibre.com>
-References: <20230619085344.2885311-1-msp@baylibre.com>
- <20230619085344.2885311-7-msp@baylibre.com>
- <590f9a11-a153-abaf-0f99-9496882ee929@collabora.com>
- <20230622083921.tc3wsl6jyluenmru@blmsp>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230622083921.tc3wsl6jyluenmru@blmsp>
+To:     Vaishnav Achath <vaishnav.a@ti.com>, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, mripard@kernel.org, mchehab@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        laurent.pinchart@ideasonboard.com, sakari.ailus@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org, bparrot@ti.com,
+        niklas.soderlund+renesas@ragnatech.se, j-luthra@ti.com,
+        devarsht@ti.com, praneeth@ti.com, u-kumar1@ti.com, vigneshr@ti.com,
+        nm@ti.com, martyn.welch@collabora.com,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+References: <20230314115516.667-1-vaishnav.a@ti.com>
+ <28707378-c4e7-38b6-48f5-63b0834c18c9@ideasonboard.com>
+From:   Julien Massot <julien.massot@collabora.com>
+In-Reply-To: <28707378-c4e7-38b6-48f5-63b0834c18c9@ideasonboard.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,182 +64,253 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 22/06/23 10:39, Markus Schneider-Pargmann ha scritto:
-> On Mon, Jun 19, 2023 at 11:29:18AM +0200, AngeloGioacchino Del Regno wrote:
->> Il 19/06/23 10:53, Markus Schneider-Pargmann ha scritto:
->>> From: Alexandre Bailon <abailon@baylibre.com>
->>>
->>> This updates the power domain to support WAY_EN operations. WAY_EN
->>> operations on mt8365 are using a different component to check for the
->>> acknowledgment, namely the infracfg-nao component. Also to enable a way
->>> it the bit needs to be cleared while disabling a way needs a bit to be
->>> set. To support these two operations two flags are added,
->>> BUS_PROT_INVERTED and BUS_PROT_STA_COMPONENT_INFRA_NAO. Additionally
->>> another regmap is created if the INFRA_NAO capability is set.
->>>
->>> This operation is required by the mt8365 for the MM power domain.
->>>
->>> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
->>> Signed-off-by: Fabien Parent <fparent@baylibre.com>
->>> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
->>> ---
->>>    drivers/soc/mediatek/mtk-pm-domains.c | 39 +++++++++++++++++++++++----
->>>    drivers/soc/mediatek/mtk-pm-domains.h |  7 +++--
->>>    2 files changed, 39 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/soc/mediatek/mtk-pm-domains.c
->>> index 3cdf62c0b6bd..4659f0a0aa08 100644
->>> --- a/drivers/soc/mediatek/mtk-pm-domains.c
->>> +++ b/drivers/soc/mediatek/mtk-pm-domains.c
->>> @@ -44,6 +44,7 @@ struct scpsys_domain {
->>>    	struct clk_bulk_data *clks;
->>>    	int num_subsys_clks;
->>>    	struct clk_bulk_data *subsys_clks;
->>> +	struct regmap *infracfg_nao;
->>>    	struct regmap *infracfg;
->>>    	struct regmap *smi;
->>>    	struct regulator *supply;
->>> @@ -127,13 +128,26 @@ static struct regmap *scpsys_bus_protect_get_regmap(struct scpsys_domain *pd,
->>>    		return pd->infracfg;
->>>    }
->>> +static struct regmap *scpsys_bus_protect_get_sta_regmap(struct scpsys_domain *pd,
->>> +							const struct scpsys_bus_prot_data *bpd)
->>> +{
->>> +	if (bpd->flags & BUS_PROT_STA_COMPONENT_INFRA_NAO)
->>> +		return pd->infracfg_nao;
->>> +	else
->>> +		return scpsys_bus_protect_get_regmap(pd, bpd);
->>> +}
->>> +
->>>    static int scpsys_bus_protect_clear(struct scpsys_domain *pd,
->>>    				    const struct scpsys_bus_prot_data *bpd)
->>>    {
->>> +	struct regmap *sta_regmap = scpsys_bus_protect_get_sta_regmap(pd, bpd);
->>>    	struct regmap *regmap = scpsys_bus_protect_get_regmap(pd, bpd);
->>> +	u32 expected_ack;
->>>    	u32 val;
->>>    	u32 sta_mask = bpd->bus_prot_sta_mask;
->>> +	expected_ack = (bpd->flags & BUS_PROT_STA_COMPONENT_INFRA_NAO ? sta_mask : 0);
->>> +
->>>    	if (bpd->flags & BUS_PROT_REG_UPDATE)
->>>    		regmap_clear_bits(regmap, bpd->bus_prot_clr, bpd->bus_prot_set_clr_mask);
->>>    	else
->>> @@ -142,14 +156,15 @@ static int scpsys_bus_protect_clear(struct scpsys_domain *pd,
->>>    	if (bpd->flags & BUS_PROT_IGNORE_CLR_ACK)
->>>    		return 0;
->>> -	return regmap_read_poll_timeout(regmap, bpd->bus_prot_sta,
->>> -					val, !(val & sta_mask),
->>> +	return regmap_read_poll_timeout(sta_regmap, bpd->bus_prot_sta,
->>> +					val, (val & sta_mask) == expected_ack,
->>>    					MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
->>>    }
->>>    static int scpsys_bus_protect_set(struct scpsys_domain *pd,
->>>    				  const struct scpsys_bus_prot_data *bpd)
->>>    {
->>> +	struct regmap *sta_regmap = scpsys_bus_protect_get_sta_regmap(pd, bpd);
->>>    	struct regmap *regmap = scpsys_bus_protect_get_regmap(pd, bpd);
->>>    	u32 val;
->>>    	u32 sta_mask = bpd->bus_prot_sta_mask;
->>> @@ -159,7 +174,7 @@ static int scpsys_bus_protect_set(struct scpsys_domain *pd,
->>>    	else
->>>    		regmap_write(regmap, bpd->bus_prot_set, bpd->bus_prot_set_clr_mask);
->>> -	return regmap_read_poll_timeout(regmap, bpd->bus_prot_sta,
->>> +	return regmap_read_poll_timeout(sta_regmap, bpd->bus_prot_sta,
->>>    					val, (val & sta_mask) == sta_mask,
->>>    					MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
->>>    }
->>> @@ -173,7 +188,10 @@ static int scpsys_bus_protect_enable(struct scpsys_domain *pd)
->>>    		if (!bpd->bus_prot_set_clr_mask)
->>>    			break;
->>> -		ret = scpsys_bus_protect_set(pd, bpd);
->>> +		if (bpd->flags & BUS_PROT_INVERTED)
->>> +			ret = scpsys_bus_protect_clear(pd, bpd);
->>> +		else
->>> +			ret = scpsys_bus_protect_set(pd, bpd);
->>>    		if (ret)
->>>    			return ret;
->>>    	}
->>> @@ -190,7 +208,10 @@ static int scpsys_bus_protect_disable(struct scpsys_domain *pd)
->>>    		if (!bpd->bus_prot_set_clr_mask)
->>>    			continue;
->>> -		ret = scpsys_bus_protect_clear(pd, bpd);
->>> +		if (bpd->flags & BUS_PROT_INVERTED)
->>> +			ret = scpsys_bus_protect_set(pd, bpd);
->>> +		else
->>> +			ret = scpsys_bus_protect_clear(pd, bpd);
->>>    		if (ret)
->>>    			return ret;
->>>    	}
->>> @@ -377,6 +398,14 @@ generic_pm_domain *scpsys_add_one_domain(struct scpsys *scpsys, struct device_no
->>>    			return ERR_CAST(pd->smi);
->>>    	}
->>> +	pd->infracfg_nao = syscon_regmap_lookup_by_phandle(node, "mediatek,infracfg-nao");
->>
->> If we don't expect infracfg-nao to be present, what's the point about trying to
->> get a regmap handle and then failing only if we do expect it to be there?
->>
->> At this point you can just do...
->>
->> 	if (MTK_SCPD_CAPS(pd, MTK_SCPD_HAS_INFRA_NAO)) {
->> 		pd->infracfg_nao = syscon_regmap_lookup_by_phandle(...);
->> 		if (IS_ERR(....))
->> 			return ....
->> 	}
-> 
-> Yes! My code looks stupid. Thanks!
-> 
+Hi Vaishnav,
 
-Hahaha, no worries!
+  On 14/03/2023 13:55, Vaishnav Achath wrote:
+> Hi,
+>
+> This series adds support for CSI2 capture on J721E. It includes some
+> fixes to the Cadence CSI2RX driver, and adds the TI CSI2RX wrapper 
+> driver.
+We are testing this patch series and experienced some strange behaviour,
+with the same sequence of 5-10 frames repeated over and over.
+(Almost the same sequence since frames have different md5sum)
 
->>
->>> +	if (IS_ERR(pd->infracfg_nao)) {
->>> +		if (MTK_SCPD_CAPS(pd, MTK_SCPD_HAS_INFRA_NAO))
->>> +			return ERR_CAST(pd->infracfg_nao);
->>> +
->>> +		pd->infracfg_nao = NULL;
->>> +	}
->>> +
->>>    	num_clks = of_clk_get_parent_count(node);
->>>    	if (num_clks > 0) {
->>>    		/* Calculate number of subsys_clks */
->>> diff --git a/drivers/soc/mediatek/mtk-pm-domains.h b/drivers/soc/mediatek/mtk-pm-domains.h
->>> index 356788263db2..562d4e92ce16 100644
->>> --- a/drivers/soc/mediatek/mtk-pm-domains.h
->>> +++ b/drivers/soc/mediatek/mtk-pm-domains.h
->>> @@ -11,6 +11,7 @@
->>>    /* can't set MTK_SCPD_KEEP_DEFAULT_OFF at the same time */
->>>    #define MTK_SCPD_ALWAYS_ON		BIT(5)
->>>    #define MTK_SCPD_EXT_BUCK_ISO		BIT(6)
->>> +#define MTK_SCPD_HAS_INFRA_NAO		BIT(7)
->>>    #define MTK_SCPD_CAPS(_scpd, _x)	((_scpd)->data->caps & (_x))
->>>    #define SPM_VDE_PWR_CON			0x0210
->>> @@ -45,8 +46,10 @@
->>>    enum scpsys_bus_prot_flags {
->>>    	BUS_PROT_REG_UPDATE = BIT(1),
->>>    	BUS_PROT_IGNORE_CLR_ACK = BIT(2),
->>> -	BUS_PROT_COMPONENT_INFRA = BIT(3),
->>> -	BUS_PROT_COMPONENT_SMI = BIT(4),
->>> +	BUS_PROT_INVERTED = BIT(3),
->>
->> I get the reason why you're setting inverted as bit 3, but at that point you can
->> just set BUS_PROT_COMPONENT_INFRA to bit 4 from the very beginning, instead of
->> using bit 3 for that and then changing them all in a subsequent commit (this one).
-> 
-> Yes, I was torn between making the commits independent and avoiding this
-> move later on. I decided for the first. If you prefer I can set it to
-> the correct bits right from the beginning.
-> 
+To solve this issue we had to forward port some functions from the TI 
+BSP Kernel[1] such as ti_csi2rx_restart_dma, and ti_csi2rx_drain_dma.
 
-I don't see how setting BUS_PROT_COMPONENT_INFRA to bit(4) from the beginning
-would add dependencies between commits. The first commit alone will still work,
-with the added benefit of less noise in this commit.
+Can you consider this issue for the next patchset version?
 
-You should, at that point, mention in the commit message that you're setting
-INFRA to BIT(4) because BIT(3) "is going to be populated in a later commit".
-
-That, unless anyone else has strong opinions against.
-
-Cheers,
-Angelo
+Thank you,
+Julien
 
 
+Here are the modifications we made for information only.
+
+---
+  .../platform/ti/j721e-csi2rx/j721e-csi2rx.c   | 138 +++++++++++++++---
+  1 file changed, 117 insertions(+), 21 deletions(-)
+
+diff --git a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c 
+b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
+index 1af7b0b09cfc..e8579dbf07b4 100644
+--- a/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
++++ b/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c
+@@ -46,6 +46,8 @@
+  #define MAX_WIDTH_BYTES			SZ_16K
+  #define MAX_HEIGHT_LINES		SZ_16K
+
++#define DRAIN_TIMEOUT_MS		50
++
+  struct ti_csi2rx_fmt {
+  	u32				fourcc;	/* Four character code. */
+  	u32				code;	/* Mbus code. */
+@@ -498,6 +500,59 @@ static void ti_csi2rx_setup_shim(struct 
+ti_csi2rx_dev *csi)
+  	writel(reg, csi->shim + SHIM_PSI_CFG0);
+  }
+
++static void ti_csi2rx_drain_callback(void *param)
++{
++	struct completion *drain_complete = param;
++
++	complete(drain_complete);
++}
++
++static int ti_csi2rx_drain_dma(struct ti_csi2rx_dev *csi)
++{
++	struct dma_async_tx_descriptor *desc;
++	struct device *dev = csi->dma.chan->device->dev;
++	struct completion drain_complete;
++	void *buf;
++	size_t len = csi->v_fmt.fmt.pix.sizeimage;
++	dma_addr_t addr;
++	dma_cookie_t cookie;
++	int ret;
++
++	init_completion(&drain_complete);
++
++	buf = dma_alloc_coherent(dev, len, &addr, GFP_KERNEL | GFP_ATOMIC);
++	if (!buf)
++		return -ENOMEM;
++
++	desc = dmaengine_prep_slave_single(csi->dma.chan, addr, len,
++					   DMA_DEV_TO_MEM,
++					   DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
++	if (!desc) {
++		ret = -EIO;
++		goto out;
++	}
++
++	desc->callback = ti_csi2rx_drain_callback;
++	desc->callback_param = &drain_complete;
++
++	cookie = dmaengine_submit(desc);
++	ret = dma_submit_error(cookie);
++	if (ret)
++		goto out;
++
++	dma_async_issue_pending(csi->dma.chan);
++
++	if (!wait_for_completion_timeout(&drain_complete,
++					 msecs_to_jiffies(DRAIN_TIMEOUT_MS))) {
++		dmaengine_terminate_sync(csi->dma.chan);
++		ret = -ETIMEDOUT;
++		goto out;
++	}
++out:
++	dma_free_coherent(dev, len, buf, addr);
++	return ret;
++}
++
+  static void ti_csi2rx_dma_callback(void *param)
+  {
+  	struct ti_csi2rx_buffer *buf = param;
+@@ -564,24 +619,61 @@ static int ti_csi2rx_start_dma(struct 
+ti_csi2rx_dev *csi,
+  }
+
+  static void ti_csi2rx_cleanup_buffers(struct ti_csi2rx_dev *csi,
+-				      enum vb2_buffer_state state)
++				      enum vb2_buffer_state buf_state)
+  {
+  	struct ti_csi2rx_dma *dma = &csi->dma;
+-	struct ti_csi2rx_buffer *buf = NULL, *tmp;
++	struct ti_csi2rx_buffer *buf = NULL, *tmp, *curr;;
++	enum ti_csi2rx_dma_state state;
+  	unsigned long flags;
++	int ret;
+
+  	spin_lock_irqsave(&dma->lock, flags);
+  	list_for_each_entry_safe(buf, tmp, &csi->dma.queue, list) {
+  		list_del(&buf->list);
+-		vb2_buffer_done(&buf->vb.vb2_buf, state);
++		vb2_buffer_done(&buf->vb.vb2_buf, buf_state);
+  	}
+
+-	if (dma->curr)
+-		vb2_buffer_done(&dma->curr->vb.vb2_buf, state);
+-
++	curr = csi->dma.curr;
++	state = csi->dma.state;
+  	dma->curr = NULL;
+  	dma->state = TI_CSI2RX_DMA_STOPPED;
+  	spin_unlock_irqrestore(&dma->lock, flags);
++
++	if (state != TI_CSI2RX_DMA_STOPPED) {
++		ret = ti_csi2rx_drain_dma(csi);
++		if (ret)
++			dev_dbg(csi->dev,
++				"Failed to drain DMA. Next frame might be bogus\n");
++		dmaengine_terminate_sync(csi->dma.chan);
++	}
++
++	if (curr)
++		vb2_buffer_done(&curr->vb.vb2_buf, buf_state);
++}
++
++static int ti_csi2rx_restart_dma(struct ti_csi2rx_dev *csi,
++				 struct ti_csi2rx_buffer *buf)
++{
++	struct ti_csi2rx_dma *dma = &csi->dma;
++	unsigned long flags = 0;
++	int ret = 0;
++
++	ret = ti_csi2rx_drain_dma(csi);
++	if (ret)
++		dev_warn(csi->dev,
++			 "Failed to drain DMA. Next frame might be bogus\n");
++
++	ret = ti_csi2rx_start_dma(csi, buf);
++	if (ret) {
++		dev_err(csi->dev, "Failed to start DMA: %d\n", ret);
++		spin_lock_irqsave(&dma->lock, flags);
++		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
++		dma->curr = NULL;
++		dma->state = TI_CSI2RX_DMA_IDLE;
++		spin_unlock_irqrestore(&dma->lock, flags);
++	}
++
++	return ret;
+  }
+
+  static int ti_csi2rx_queue_setup(struct vb2_queue *q, unsigned int 
+*nbuffers,
+@@ -622,6 +714,7 @@ static void ti_csi2rx_buffer_queue(struct vb2_buffer 
+*vb)
+  	struct ti_csi2rx_dev *csi = vb2_get_drv_priv(vb->vb2_queue);
+  	struct ti_csi2rx_buffer *buf;
+  	struct ti_csi2rx_dma *dma = &csi->dma;
++	bool restart_dma = false;
+  	unsigned long flags = 0;
+  	int ret;
+
+@@ -634,21 +727,30 @@ static void ti_csi2rx_buffer_queue(struct 
+vb2_buffer *vb)
+  	 * But if DMA has stalled due to lack of buffers, restart it now.
+  	 */
+  	if (dma->state == TI_CSI2RX_DMA_IDLE) {
+-		ret = ti_csi2rx_start_dma(csi, buf);
+-		if (ret) {
+-			dev_err(csi->dev, "Failed to start DMA: %d\n", ret);
+-			vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_QUEUED);
+-			goto unlock;
+-		}
+-
++		/*
++		 * Do not restart DMA with the lock held because
++		 * ti_csi2rx_drain_dma() might block when allocating a buffer.
++		 * There won't be a race on queueing DMA anyway since the
++		 * callback is not being fired.
++		 */
++		restart_dma = true;
+  		dma->curr = buf;
+  		dma->state = TI_CSI2RX_DMA_ACTIVE;
+  	} else {
+  		list_add_tail(&buf->list, &dma->queue);
+  	}
+-
+-unlock:
+  	spin_unlock_irqrestore(&dma->lock, flags);
++
++	if (restart_dma) {
++		/*
++		 * Once frames start dropping, some data gets stuck in the DMA
++		 * pipeline somewhere. So the first DMA transfer after frame
++		 * drops gives a partial frame. This is obviously not useful to
++		 * the application and will only confuse it. Issue a DMA
++		 * transaction to drain that up.
++		 */
++		ti_csi2rx_restart_dma(csi, buf);
++	}
+  }
+
+  static int ti_csi2rx_start_streaming(struct vb2_queue *vq, unsigned 
+int count)
+@@ -718,12 +820,6 @@ static void ti_csi2rx_stop_streaming(struct 
+vb2_queue *vq)
+
+  	writel(0, csi->shim + SHIM_CNTL);
+
+-	ret = dmaengine_terminate_sync(csi->dma.chan);
+-	if (ret)
+-		dev_err(csi->dev, "Failed to stop DMA: %d\n", ret);
+-
+-	writel(0, csi->shim + SHIM_DMACNTX);
+-
+  	ti_csi2rx_cleanup_buffers(csi, VB2_BUF_STATE_ERROR);
+  }
+
+-- 
+2.41.0
+
+
+[1] TI BSP kernel : 
+https://git.ti.com/cgit/ti-linux-kernel/ti-linux-kernel/tree/drivers/media/platform/ti/j721e-csi2rx/j721e-csi2rx.c?h=ti-linux-6.1.y-cicd
+
+-- 
+Julien Massot
+Senior Software Engineer
+Collabora Ltd.
+Platinum Building, St John's Innovation Park, Cambridge CB4 0DS, UK
+Registered in England & Wales, no. 5513718
