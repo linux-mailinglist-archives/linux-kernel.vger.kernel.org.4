@@ -2,87 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B90D673A91F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4F073A925
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjFVTvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 15:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57526 "EHLO
+        id S230516AbjFVTwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 15:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjFVTvW (ORCPT
+        with ESMTP id S230200AbjFVTwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 15:51:22 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C38F41A4;
-        Thu, 22 Jun 2023 12:51:20 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35MIqlQw017777;
-        Thu, 22 Jun 2023 19:51:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=s9s/2Rs8x4/PmDN8FquCVNbw7cfY/g4elf9n8G/TnFM=;
- b=Zrr/efPzEMjLZMMbaryMQgXpM+OtVSdhh1VgFiEZyUjWOg14CUlnLv8ywb1F55XMktEb
- zSmC54s5pOXg+hq0WPMwj7B9Ok6MDus+q0havg3e0FO9mDTCUN5zwPkEfpgohISUUlw4
- X/Fcb3N7bz8DTkco5fwfQrVvpW8JgKyqJpzm/cBW0sCUE8DWFMChbeLzZezTWMaAlhfd
- o50PqVYDfXDjI3XCQUlm4olOKSYCwiQvArTBLnzn3SSwmx0JPnJcb5gtiaqChukFpT6Q
- yGl4dvldIDL1K7WwvSqxVPeir5aRicFQ1v6kSAFOR1MUply0mJ5BelB66IeCnGqtR6R4 Tw== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rbvr1mn1e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Jun 2023 19:51:03 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35MJp2AM028911
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Jun 2023 19:51:02 GMT
-Received: from [10.71.111.76] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 22 Jun
- 2023 12:51:01 -0700
-Message-ID: <a2c9417b-3a50-bea4-dd39-2f021c196fa1@quicinc.com>
-Date:   Thu, 22 Jun 2023 12:51:00 -0700
+        Thu, 22 Jun 2023 15:52:06 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E057A199E
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 12:52:05 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 280AE3200921;
+        Thu, 22 Jun 2023 15:52:05 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Thu, 22 Jun 2023 15:52:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1687463524; x=1687549924; bh=YyBjDWBRBBm9cIGRJGADyk3vUYbrQamK+ab
+        F3MBizlE=; b=TFXTVTJwnbAGITjqhDM6iX2Ze+haXedHzjMWwzSbqK2o30Xb6p8
+        6qqcqvTzY6p5TQT4yebCL8gdVRiApaYF7ccQ+Z4f5RwEnnbpllWna1DifyXTy01A
+        3u7cvpBCb/KzKpqtbm/LoDHg7RfdzIYAY5z7XGXLApDyewNleQgY5K7WpYGBkWGd
+        wNL7P/huCCPGRvRk4eX/mt0oH7DX3Hchn0rL/mVfCI51Hp7eT+m/r9CEMqCKdcJp
+        RvvFoPD4c4TB9RsQ9gebnJzZZUF4NHIAC6GC5okS87NTZdEP0ozaQ0fujvi7M06e
+        +sucj6KvfBxuU9XxGSAulhuwCxKaaJTK+uw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1687463524; x=1687549924; bh=YyBjDWBRBBm9c
+        IGRJGADyk3vUYbrQamK+abF3MBizlE=; b=RNvoky+6cOi8g89p7ekUuB51jw1Yh
+        HOs7Gc3w2EHMSdz1LMDIyFqGGyg4hAMc0dS+XtzDqCJFIDTbAi7WN+xZtZpS1dc8
+        9MoJI2NSLYhfHZkWlXL8O0SV6eEtDMWpzMniAiVzG75a+xqKD6LC9LPX7+pAV7mc
+        nYofEemvB5sZHtee8eazCENk4/f8ljNb9bOzwYmHSR1oq0ea6xSSaH56Q4IAxJr3
+        pkZ3GH9TFNfA1YEx/o3GMPI9yBNdOQQ5G5dfw2lPICq4zk7sORdyqToTOjWZJ5p5
+        NhDLfwGFaTYAaIZ7UsJG2h83t5Zq1IaCYOqhp+HWe8rEvbsnekCWRG17g==
+X-ME-Sender: <xms:ZKaUZEfw79jF8odBkyywafiESJfhWjH3BrvgMcx88_RYCRU2tRdlLg>
+    <xme:ZKaUZGM0c0vT7LHsRXeYt_LmhXOJtfxXw8Kcyub--F6Ith1NYgQU66b6-fYl-2p2B
+    evF3WoE2WbYZM8>
+X-ME-Received: <xmr:ZKaUZFiYwr3OhWODovYiZREkRazdr7aTazDKz3WBMH1UEzgTitGjpOFxDPc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeguddgudegvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttdejnecuhfhrohhmpeffvghm
+    ihcuofgrrhhivgcuqfgsvghnohhurhcuoeguvghmihesihhnvhhishhisghlvghthhhinh
+    hgshhlrggsrdgtohhmqeenucggtffrrghtthgvrhhnpedvjeetgeekhfetudfhgfetffeg
+    fffguddvgffhffeifeeikeektdehgeetheffleenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpeguvghmihesihhnvhhishhisghlvghthhhinhhg
+    shhlrggsrdgtohhm
+X-ME-Proxy: <xmx:ZKaUZJ9ZvaaoFNsoLzN5woXqOYi3tovGOaD_1Zo-xBFl4tfi7syzAA>
+    <xmx:ZKaUZAvH-9lSvzDNVK-QERCU3IBY23HGbpd-DkIrPitbfjbRYYeB1w>
+    <xmx:ZKaUZAE-Eo4Eavmaf1Fwa52cruOqLyAb5Ttvk0nlZr4CL01eBIXqdw>
+    <xmx:ZKaUZJ6KdtCxZxDadj7LCUfjNzkZMoC_JW9eEfyW1f56R1oZzjR-pA>
+Feedback-ID: iac594737:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 22 Jun 2023 15:52:04 -0400 (EDT)
+Date:   Thu, 22 Jun 2023 15:51:59 -0400
+From:   Demi Marie Obenour <demi@invisiblethingslab.com>
+To:     Mike Snitzer <snitzer@kernel.org>, mpatocka@redhat.com
+Cc:     Alasdair Kergon <agk@redhat.com>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] device-mapper: Check that target specs are
+ sufficiently aligned
+Message-ID: <ZJSmYgvwoSY6Gb4f@itl-email>
+References: <20230601212456.1533-1-demi@invisiblethingslab.com>
+ <20230603145244.1538-1-demi@invisiblethingslab.com>
+ <20230603145244.1538-2-demi@invisiblethingslab.com>
+ <ZJR2rGZw0Ddf3TFK@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] pstore/ram: Add support for dynamically allocated ramoops
- memory regions
-To:     Kees Cook <kees@kernel.org>,
-        Isaac Manjarres <isaacmanjarres@google.com>,
-        Kees Cook <keescook@chromium.org>
-CC:     John Stultz <jstultz@google.com>, Tony Luck <tony.luck@intel.com>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        <kernel-team@android.com>, <linux-hardening@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Trilok Soni" <quic_tsoni@quicinc.com>,
-        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-        Mukesh Ojha <quic_mojha@quicinc.com>
-References: <20230622005213.458236-1-isaacmanjarres@google.com>
- <CANDhNCrEhx4LUPaz-FHZZJMG2yX670hk-vGTZs=HxiGR18zm5A@mail.gmail.com>
- <202306212212.5E53607@keescook> <ZJSES98P+zzrhBI5@google.com>
- <3A2CFB4D-27D0-4FEB-93B4-2F888305DE5A@kernel.org>
-Content-Language: en-US
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <3A2CFB4D-27D0-4FEB-93B4-2F888305DE5A@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Og8jgFM6lkb1nqz1ADNk84_1sO88GHfR
-X-Proofpoint-ORIG-GUID: Og8jgFM6lkb1nqz1ADNk84_1sO88GHfR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-22_14,2023-06-22_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- mlxlogscore=911 lowpriorityscore=0 priorityscore=1501 suspectscore=0
- impostorscore=0 phishscore=0 mlxscore=0 bulkscore=0 malwarescore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306220169
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="YQ5Jmkqp6Z3iRGa0"
+Content-Disposition: inline
+In-Reply-To: <ZJR2rGZw0Ddf3TFK@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,75 +91,101 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--YQ5Jmkqp6Z3iRGa0
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Thu, 22 Jun 2023 15:51:59 -0400
+From: Demi Marie Obenour <demi@invisiblethingslab.com>
+To: Mike Snitzer <snitzer@kernel.org>, mpatocka@redhat.com
+Cc: Alasdair Kergon <agk@redhat.com>, dm-devel@redhat.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] device-mapper: Check that target specs are
+ sufficiently aligned
 
-On 6/22/2023 10:58 AM, Kees Cook wrote:
-> On June 22, 2023 10:26:35 AM PDT, Isaac Manjarres <isaacmanjarres@google.com> wrote:
->> On Wed, Jun 21, 2023 at 10:15:45PM -0700, Kees Cook wrote:
->>> On Wed, Jun 21, 2023 at 09:47:26PM -0700, John Stultz wrote:
->>>>> The reserved memory region for ramoops is assumed to be at a fixed
->>>>> and known location when read from the devicetree. This is not desirable
->>>>> in environments where it is preferred for the region to be dynamically
->>>>> allocated early during boot (i.e. the memory region is defined with
->>>>> the "alloc-ranges" property instead of the "reg" property).
->>>>>
->>>>
->>>> Thanks for sending this out, Isaac!
->>>>
->>>> Apologies, I've forgotten much of the details around dt bindings here,
->>>> so forgive my questions:
->>>> If the memory is dynamically allocated from a specific range, is it
->>>> guaranteed to be consistently the same address boot to boot?
->>>>
->>>>> Since ramoops regions are part of the reserved-memory devicetree
->>>>> node, they exist in the reserved_mem array. This means that the
->>>>> of_reserved_mem_lookup() function can be used to retrieve the
->>>>> reserved_mem structure for the ramoops region, and that structure
->>>>> contains the base and size of the region, even if it has been
->>>>> dynamically allocated.
->>>>
->>>> I think this is answering my question above, but it's a little opaque,
->>>> so I'm not sure.
->>>
->>> Yeah, I had exactly the same question: will this be the same
->>> boot-to-boot?
->>
->> Hi Kees,
->>
->> Thank you for taking a look at this patch and for your review! When the
->> alloc-ranges property is used to describe a memory region, the memory
->> region will always be allocated within that range, but it's not
->> guaranteed to be allocated at the same base address across reboots.
->>
->> I had proposed re-wording the end of the commit message in my response
->> to John as follows:
->>
->> "...and that structure contains the address of the base of the region
->> that was allocated at boot anywhere within the range specified by the
->> "alloc-ranges" devicetree property."
->>
->> Does that clarify things better?
-> 
-> I am probably misunderstanding something still, but it it varies from boot to boot, what utility is there for pstore if it changes? I.e. the things written during the last boot would then no longer accessible at the next boot? E.g.:
-> 
-> Boot 1.
-> Get address Foo.
-> Crash, write to Foo.
-> Boot 2.
-> Get address Bar, different from Foo.
-> Nothing found at Bar, so nothing populated in pstorefs; crash report from Boot 1 unavailable.
-> 
-> I feel like there is something I don't understand about the Foo/Bar addresses in my example.
-> 
+On Thu, Jun 22, 2023 at 12:28:28PM -0400, Mike Snitzer wrote:
+> On Sat, Jun 03 2023 at 10:52P -0400,
+> Demi Marie Obenour <demi@invisiblethingslab.com> wrote:
+>=20
+> > Otherwise subsequent code will dereference a misaligned
+> > `struct dm_target_spec *`, which is undefined behavior.
+> >=20
+> > Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+> > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> > Cc: stable@vger.kernel.org
+> > ---
+> >  drivers/md/dm-ioctl.c | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >=20
+> > diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
+> > index cc77cf3d410921432eb0c62cdede7d55b9aa674a..34fa74c6a70db8aa67aaba3=
+f6a2fc4f38ef736bc 100644
+> > --- a/drivers/md/dm-ioctl.c
+> > +++ b/drivers/md/dm-ioctl.c
+> > @@ -1394,6 +1394,13 @@ static inline fmode_t get_mode(struct dm_ioctl *=
+param)
+> >  static int next_target(struct dm_target_spec *last, uint32_t next, voi=
+d *end,
+> >  		       struct dm_target_spec **spec, char **target_params)
+> >  {
+> > +	static_assert(_Alignof(struct dm_target_spec) <=3D 8,
+> > +		      "struct dm_target_spec has excessive alignment requirements");
+>=20
+> Really not sure what you mean by "has excessive alignment requirements"...
 
-I believe this is being added to support the QCOM SoC minidump feature. 
-Mukesh has posted it on the mailing lists here:
+This patch checks that struct dm_target_spec is 8-byte aligned.  That is
+okay if its alignment is 8 or less, but not if is 16 or more, so I added
+a static assert to check that struct dm_target_spec indeed requires at
+most 8-byte alignment.  That said, =E2=80=9Cexcessive alignment requirement=
+s=E2=80=9D is
+(as shown by you having to ask this question) a bad error message.
+Would =E2=80=9Cmust not require more than 8-byte alignment=E2=80=9D be bett=
+er?
 
-https://lore.kernel.org/all/1683133352-10046-1-git-send-email-quic_mojha@quicinc.com/
+> > +	if (next % 8) {
+> > +		DMERR("Next target spec (offset %u) is not 8-byte aligned", next);
+> > +		return -EINVAL;
+> > +	}
+> > +
+> >  	*spec =3D (struct dm_target_spec *) ((unsigned char *) last + next);
+> >  	*target_params =3D (char *) (*spec + 1);
+> > =20
+>=20
+> But this patch and patches 2 and 3 need more review. I'd like Mikulas to =
+review.
+>=20
+> I did pick up patches 4-6 for the upcoming 6.5 merge window.
 
-https://lore.kernel.org/all/1683133352-10046-10-git-send-email-quic_mojha@quicinc.com/
+Thanks!
 
-Mukesh, could you comment whether this patch is wanted for us in the 
-version you have posted? It looks like maybe not based on the commit 
-text in patch #9.
+> Note, please prefix with "dm ioctl" instead of "device-mapper".
 
-  - Elliot
+Good to know, thanks!  I have several additional patches written that
+require patch 4.  Should I send patches 1 through 3 in the same series
+as well?
+--=20
+Sincerely,
+Demi Marie Obenour (she/her/hers)
+Invisible Things Lab
+
+--YQ5Jmkqp6Z3iRGa0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEdodNnxM2uiJZBxxxsoi1X/+cIsEFAmSUpmIACgkQsoi1X/+c
+IsGx1Q//Ydm7G9PCVgmVGbDeKxdO3GmtNGYNtOcV5It8IRFK8eO2JRQLJ8Bpji+t
+IrRgCesejh3uZ+qu98BcYkUAnivmJuEK/ZOAVXgmO2qsehY45BZY32ZrNQy+2ruS
++JQAwDmIVRY7srRUom1ZetReo+ysDmuY56eaNG5D1DWfgUMOiqzCRoMdljyM+L55
+Tm9PmAWYHYBcfeXgDKua/LYt+K3A0iX2GgnG0Wt9Mg9VzBNvH7GLosMSCKnx0pTF
+uQi4jVK3u/aL/ItPZynt6Jh8nqlM+ZrX2pO2AmTiKSQU6bNNNgfhTjHPYXP2dM+w
+thNB/84reRF9YoQqOIo3RNX2y0mIL9zuNKiLCbYLMDnPXtRGrK77uUvzSBlCHoYM
++04q9IwFRnWDpW1hgv9TgwOLJWQAKMvXgx+9l3uunDXM27tssUSJ3tgiwOjyG328
+pql6iAdMWY263n4smC0OOw85q51EgmBWanF208lM4KMRPPgwtQrH97psbf1RAdwF
+EMgHlF9En/VCBB2ELvFl4UgNNlaVKowF9fa4ORe+p0JaVWiA3694xhf+mnhCRoNv
+KS2AaW4Uix+vZ1Cr4rfr6HprFGcM4yr6yfEpV/KVNOrfXVN4s9eEB9J/vU/zX8jB
+SBSDNOcsi1OCIqIRRlZUTgxPW1inau6wlF3qr11A8JimGBL0nhA=
+=a9VT
+-----END PGP SIGNATURE-----
+
+--YQ5Jmkqp6Z3iRGa0--
