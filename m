@@ -2,80 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F56B73A05B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:02:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D455573A062
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:02:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbjFVMCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 08:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54874 "EHLO
+        id S231348AbjFVMCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 08:02:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbjFVMBq (ORCPT
+        with ESMTP id S231315AbjFVMCN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 08:01:46 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209CA1FDF
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:01:14 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-988c30a540aso541351766b.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:01:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687435272; x=1690027272;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OJO36223izG+C9qQi7iamTccoqBJo/QNHYh7HXecRzA=;
-        b=G6Dp7eTk94QKFAHD259XrKUe6Qkc1Moib9RTbUECpD8CK7w5ozkeV/iVXfAA68p4Ac
-         aaEj7jIstcKWPftk0pZh6GnNpuTcJTyA+pWOVRqVVcLLEB7jO3omcn1chowFf9SLKQHT
-         FFWlAWO87r2D3LzG8kedZKyeIjCXeQrm87cUfCcREgenIbMi0wzBwQ1WT8oCy0pN0ADt
-         yPCAjFcj+8LkvOIHIBFcVaKfUw2zfZjnTmEimO/UfGfVlHhHctEperKt6Aug4KUOC9tp
-         8C0xljUbvR8y6fRV66cFQ+xvHKnD25Cl0XLIOSe6RxF5zmcONVvPzldkle8tUg+NcptR
-         zhBg==
+        Thu, 22 Jun 2023 08:02:13 -0400
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11E4D1BF9
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:01:51 -0700 (PDT)
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-34087ba5febso59465285ab.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:01:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687435272; x=1690027272;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OJO36223izG+C9qQi7iamTccoqBJo/QNHYh7HXecRzA=;
-        b=NO6/W0o6yUvgSCmExPoI19/P1/PTcD/nF4m3aZViC9QDc/C5/1cGjP/QBtfaN1SH/T
-         bhxAKbeQBEx0rFEE8bhFi23XaOPNwZUED28WE3U2GVxh3itwk2DHOP7AopjDf8GRVaxr
-         H9WY3TJ8s72MC5MMcA3moVFF/kC6defr3c4S6V0TW0GHY6gFJDmnlQrC6FkKWReR3SJU
-         g8MDm7u8SKE3yFhbMk4bQDbc333FigT29JUioGiWQtdF7TizJtP8j92R+WWbnO0qiotN
-         TOlOgto0KAj9fXfQNA4w8M6Lq0Svt22F16wvRWFJ/z17RJjQ4+LZbbhMkn265RL1K2lT
-         s80A==
-X-Gm-Message-State: AC+VfDxnbndgrE8yq0AlFr1ElPTrT12Oa+wotpHPWZm7DpfPAC1A1iXl
-        CEciCM8d4Emu9ta5BrnkYwM=
-X-Google-Smtp-Source: ACHHUZ4HzGbtHbMLHa4pubZ1PFW/hPDlDPFZ8YSaf50fndXACzWoLhuv9P4ywl9FJ+EnYBC4ruvTIw==
-X-Received: by 2002:a17:907:728d:b0:988:f2ad:73e9 with SMTP id dt13-20020a170907728d00b00988f2ad73e9mr7810771ejc.52.1687435272255;
-        Thu, 22 Jun 2023 05:01:12 -0700 (PDT)
-Received: from gmail.com (1F2EF3D5.nat.pool.telekom.hu. [31.46.243.213])
-        by smtp.gmail.com with ESMTPSA id m25-20020a17090607d900b009883a3edcfcsm4620183ejc.171.2023.06.22.05.01.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 05:01:11 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Thu, 22 Jun 2023 14:01:07 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>, vincent.guittot@linaro.org,
-        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
-        qyousef@layalina.io, chris.hyser@oracle.com,
-        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
-        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com,
-        timj@gnu.org, kprateek.nayak@amd.com, yu.c.chen@intel.com,
-        youssefesmat@chromium.org, efault@gmx.de, tglx@linutronix.de
-Subject: Re: [PATCH 08/15] sched: Commit to EEVDF
-Message-ID: <ZJQ4A2Jm4VoGMKbl@gmail.com>
-References: <20230531115839.089944915@infradead.org>
- <20230531124604.137187212@infradead.org>
- <20230616212353.GA628850@google.com>
+        d=1e100.net; s=20221208; t=1687435305; x=1690027305;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=N1cxu0iAoPZS1HY5aOwRamdOMX95U6KeklcxbDcJhB8=;
+        b=iUVXf9J429SxlkKqVH3nABW3IKsXKK9sCFN0aVUtBG1zqcOcRmpmYmWPNq7tKBsqqE
+         qlnJ4fn+E/aBBrxk1O1Vrb4tOT8zUY5BzHFWLgACy848erNmklNPsoSgPzlAVHl1uGyI
+         k4HFIhPAQTDZkolhgT1WCpoiDFtqneBT3tiruMjCLVZInWU9/V2s7x3/xhNcuklj9P1C
+         P38n7lBxZg0eLECyFXFJvv09/nhbT99AoWVee0++7UHguJJLQxyLA0LxgLgG0r/39A3I
+         KC/zK4weXGSR6i9uaXjNyLmsMEEWApBc1YhPtzbgKWWnXp6Uc3ObNkaIECuW3OMztHGh
+         /M/A==
+X-Gm-Message-State: AC+VfDxoVuz25V3m/3yFdNlFFfio5KOnIsu72NPg9pLvyyYQXBcmSA+m
+        0VJSjwQkC4ky2KeQ7xwEwcMKAOpiVv0HCAgY0XKTyII+FRIm
+X-Google-Smtp-Source: ACHHUZ5VA9fpHn051cyL3FqA2cB/6o0LMEt0X/lJxekftRL5iu/OUPfMv/9LEpV9hv+xsKY91s7dnx/kb2X4WxARq4AOFydQFyPn
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230616212353.GA628850@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Received: by 2002:a05:6e02:541:b0:341:e2fe:bddd with SMTP id
+ i1-20020a056e02054100b00341e2febdddmr7424038ils.3.1687435304888; Thu, 22 Jun
+ 2023 05:01:44 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 05:01:44 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000edf08305feb6a5f6@google.com>
+Subject: [syzbot] [ext4?] UBSAN: shift-out-of-bounds in ext4_handle_clustersize
+From:   syzbot <syzbot+f4cf49c6365d87eb8e0e@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,42 +56,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-* Joel Fernandes <joel@joelfernandes.org> wrote:
+syzbot found the following issue on:
 
-> On Wed, May 31, 2023 at 01:58:47PM +0200, Peter Zijlstra wrote:
-> > EEVDF is a better defined scheduling policy, as a result it has less
-> > heuristics/tunables. There is no compelling reason to keep CFS around.
-> > 
-> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> > ---
-> >  kernel/sched/debug.c    |    6 
-> >  kernel/sched/fair.c     |  465 +++---------------------------------------------
-> 
-> Whether EEVDF helps us improve our CFS latency issues or not, I do like the
-> merits of this diffstat alone and the lesser complexity and getting rid of
-> those horrible knobs is kinda nice.
+HEAD commit:    1b29d271614a Merge tag 'staging-6.4-rc7' of git://git.kern..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15fefd03280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7ff8f87c7ab0e04e
+dashboard link: https://syzkaller.appspot.com/bug?extid=f4cf49c6365d87eb8e0e
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-To to be fair, the "removal" in this patch is in significant part an 
-artifact of the patch series itself, because first EEVDF bits get added by 
-three earlier patches, in parallel to CFS:
+Unfortunately, I don't have any reproducer for this issue yet.
 
- kernel/sched/fair.c     |  137 +++++++++++++++++++++++++++++++++++++++++++++++++--
- kernel/sched/fair.c     |  162 +++++++++++++++++++++++++++++++++++++-----------
- kernel/sched/fair.c     |  338 +++++++++++++++++++++++++++++++++++++++++-------
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/bd5aafc3a720/disk-1b29d271.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/6689979a4ad9/vmlinux-1b29d271.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/7f1acb11ce85/bzImage-1b29d271.xz
 
-... and then we remove the old CFS policy code in this 'commit to EEVDF' patch:
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f4cf49c6365d87eb8e0e@syzkaller.appspotmail.com
 
- kernel/sched/fair.c     |  465 +++---------------------------------------------
+UBSAN: shift-out-of-bounds in fs/ext4/super.c:4401:27
+shift exponent 374 is too large for 32-bit type 'int'
+CPU: 0 PID: 27421 Comm: syz-executor.0 Not tainted 6.4.0-rc6-syzkaller-00269-g1b29d271614a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:217 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x3c3/0x420 lib/ubsan.c:387
+ ext4_handle_clustersize+0x592/0x5c0 fs/ext4/super.c:4401
+ __ext4_fill_super fs/ext4/super.c:5279 [inline]
+ ext4_fill_super+0x3a66/0x6c60 fs/ext4/super.c:5672
+ get_tree_bdev+0x405/0x620 fs/super.c:1303
+ vfs_get_tree+0x8c/0x270 fs/super.c:1510
+ do_new_mount+0x28f/0xae0 fs/namespace.c:3039
+ do_mount fs/namespace.c:3382 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2d9/0x3c0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f7e1888d8ba
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f7e195cef88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 000000000000043c RCX: 00007f7e1888d8ba
+RDX: 0000000020000440 RSI: 0000000020000180 RDI: 00007f7e195cefe0
+RBP: 00007f7e195cf020 R08: 00007f7e195cf020 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000202 R12: 0000000020000440
+R13: 0000000020000180 R14: 00007f7e195cefe0 R15: 00000000200001c0
+ </TASK>
+================================================================================
 
-The combined diffstat is close to 50% / 50% balanced:
 
- kernel/sched/fair.c              | 1105 ++++++++++++++++++--------------------
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-But having said that, I do agree that EEVDF as submitted by Peter is better 
-defined, with fewer heuristics, which is an overall win - so no complaints 
-from me!
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Thanks,
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-	Ingo
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
