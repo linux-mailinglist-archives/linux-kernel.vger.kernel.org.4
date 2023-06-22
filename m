@@ -2,134 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D287395DB
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 05:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF267395DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 05:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjFVDbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 23:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
+        id S229862AbjFVDeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 23:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjFVDbp (ORCPT
+        with ESMTP id S229513AbjFVDe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 23:31:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 206EE1A4;
-        Wed, 21 Jun 2023 20:31:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AAE761735;
-        Thu, 22 Jun 2023 03:31:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13E1DC433C0;
-        Thu, 22 Jun 2023 03:31:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687404701;
-        bh=WBmd0nq3sx1Y1vI60yLf61g1XYsV04DTZ0OhzpLUGBA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qKpiAZdZxPraq1RHCCL2jgP4YMW8kD2nFTP6eBOg6qczrJnu9ZGo/6DDbPxBeDNVY
-         TaEwXKKO2PSwiHanFWf48B0ZTZvbh58cGgfPY37mVnHWMmGSMtmWy2YjFnLV/r5BfS
-         PDY0A84VD1Cqhib3Ux1c+imtQkS40Z8CGN4+HvzG9q6iz3G9VNq5uWjXw234FqTLZT
-         BdkMdjZUBX7/Q2lhWxiyfDaY2oogiVdU1zdJ/jARqLAaQJ+3/fYNILN798xC6rWmbM
-         M2u49QkBp9ekoyCGigaqRW7jCPn1uoDzvESuzSeLg3cGNFH7IermGnIOQxG6kZooGP
-         bWOwX+R1fud7Q==
-Date:   Thu, 22 Jun 2023 12:31:37 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Ajay Kaher <akaher@vmware.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        "mhiramat@kernel.org" <mhiramat@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        Ching-lin Yu <chinglinyu@google.com>,
-        Nadav Amit <namit@vmware.com>,
-        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
-        Tapas Kundu <tkundu@vmware.com>,
-        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>
-Subject: Re: [PATCH v3 00/10] tracing: introducing eventfs
-Message-Id: <20230622123137.4b74a306c9032de70cd99c51@kernel.org>
-In-Reply-To: <1C7D95B2-3DF0-43AB-8F8B-7D3F7AE7FC0D@vmware.com>
-References: <1685610013-33478-1-git-send-email-akaher@vmware.com>
-        <34E6364B-2B3D-4597-8143-1EEA645B6CDD@vmware.com>
-        <20230620110227.6a944a19@gandalf.local.home>
-        <1C7D95B2-3DF0-43AB-8F8B-7D3F7AE7FC0D@vmware.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 21 Jun 2023 23:34:28 -0400
+Received: from mx5.didiglobal.com (mx5.didiglobal.com [111.202.70.122])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 599D41BD4
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 20:34:26 -0700 (PDT)
+Received: from mail.didiglobal.com (unknown [10.79.65.12])
+        by mx5.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id 9A257B007D639;
+        Thu, 22 Jun 2023 11:34:24 +0800 (CST)
+Received: from didi-ThinkCentre-M930t-N000 (10.79.64.101) by
+ ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 22 Jun 2023 11:34:24 +0800
+Date:   Thu, 22 Jun 2023 11:34:09 +0800
+X-MD-Sfrom: tiozhang@didiglobal.com
+X-MD-SrcIP: 10.79.65.12
+From:   tiozhang <tiozhang@didiglobal.com>
+To:     <tj@kernel.org>
+CC:     <jiangshanlai@gmail.com>, <linux-kernel@vger.kernel.org>,
+        <zyhtheonly@yeah.net>, <zwp10758@gmail.com>,
+        <zyhtheonly@gmail.com>, <tiozhang@didiglobal.com>
+Subject: [PATCH] workqueue: add cmdline parameter `unbound_workqueue_cpus` to
+ further constrain wq_unbound_cpumask at boot time
+Message-ID: <20230622033353.GA29115@didi-ThinkCentre-M930t-N000>
+Mail-Followup-To: tj@kernel.org, jiangshanlai@gmail.com,
+        linux-kernel@vger.kernel.org, zyhtheonly@yeah.net,
+        zwp10758@gmail.com, zyhtheonly@gmail.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.79.64.101]
+X-ClientProxiedBy: ZJY01-PUBMBX-01.didichuxing.com (10.79.64.32) To
+ ZJY02-ACTMBX-02.didichuxing.com (10.79.65.12)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 11:42:24 +0000
-Ajay Kaher <akaher@vmware.com> wrote:
+Motivation of doing this is to better improve boot times for devices when
+we want to prevent our workqueue works from running on some specific CPUs,
+e,g, some CPUs are busy with interrupts.
 
-> 
-> 
-> > On 20-Jun-2023, at 8:32 PM, Steven Rostedt <rostedt@goodmis.org> wrote:
-> > 
-> > !! External Email
-> > 
-> > On Mon, 19 Jun 2023 05:38:25 +0000
-> > Ajay Kaher <akaher@vmware.com> wrote:
-> > 
-> >> # of passed:  65
-> >> # of failed:  3
-> > 
-> > Unrelated to your patches, but have you checked why these fail? Do you have
-> > the latest tests running on the latest kernel?
-> > 
-> 
-> Failed test got passed after enabling /proc/kallsyms, using:
-> echo 0  > /proc/sys/kernel/kptr_restrict
+Signed-off-by: tiozhang <tiozhang@didiglobal.com>
+---
+ kernel/workqueue.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-Oh, interesting. It should be 'unresolved' (skipped) if that happens.
-
-[23] event filter function - test event filtering on functions [FAIL]
-[60] Kprobe events - probe points [FAIL]
-[106] (instance)  event filter function - test event filtering on functions [FAIL]
-
-OK, let me see.
-
-Thanks for reporting!
-
-> Following is the report of ftracetest on Linux v6.4.0-rc7 (with/without eventfs):
-> # of passed:  68
-> # of failed:  0
-> # of unresolved:  6
-> # of untested:  0
-> # of unsupported:  45
-> # of xfailed:  0
-> # of undefined(test bug):  0 
-> 
-> If lockdep is enabled getting same warning as reported by 'kernel test robot' for v3 09/10:
-> https://lore.kernel.org/all/1686640004-47546-1-git-send-email-akaher@vmware.com/
-> 
-> >> # of unresolved:  6
-> >> # of untested:  0
-> >> # of unsupported:  44
-> >> # of xfailed:  0
-> >> # of undefined(test bug):  0
-> >> 
-> >> These results are same with/without eventfs.
-> > 
-> > I'm hoping to look at these patches this week.
-> 
-> Yes, please. Thanks.
-> 
-> -Ajay
-> 
-
-
+diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+index 7cd5f5e7e0a1..47e7b29df5fe 100644
+--- a/kernel/workqueue.c
++++ b/kernel/workqueue.c
+@@ -329,6 +329,9 @@ static bool workqueue_freezing;		/* PL: have wqs started freezing? */
+ /* PL: allowable cpus for unbound wqs and work items */
+ static cpumask_var_t wq_unbound_cpumask;
+ 
++/* for further constrain wq_unbound_cpumask by cmdline parameter*/
++static cpumask_var_t wq_cmdline_cpumask;
++
+ /* CPU where unbound work was last round robin scheduled from this CPU */
+ static DEFINE_PER_CPU(int, wq_rr_cpu_last);
+ 
+@@ -6006,6 +6009,10 @@ void __init workqueue_init_early(void)
+ 	cpumask_copy(wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_WQ));
+ 	cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_DOMAIN));
+ 
++	if (!cpumask_empty(wq_cmdline_cpumask))
++		cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, wq_cmdline_cpumask);
++	free_bootmem_cpumask_var(wq_cmdline_cpumask);
++
+ 	pwq_cache = KMEM_CACHE(pool_workqueue, SLAB_PANIC);
+ 
+ 	/* initialize CPU pools */
+@@ -6129,3 +6136,21 @@ void __init workqueue_init(void)
+  */
+ void __warn_flushing_systemwide_wq(void) { }
+ EXPORT_SYMBOL(__warn_flushing_systemwide_wq);
++
++
++static int __init unbound_workqueue_cpus_setup(char *str)
++{
++	cpumask_var_t cpumask;
++
++	alloc_bootmem_cpumask_var(&wq_cmdline_cpumask);
++	alloc_bootmem_cpumask_var(&cpumask);
++	if (cpulist_parse(str, cpumask) < 0)
++		pr_warn("unbound_workqueue_cpus: incorrect CPU range\n");
++	else
++		cpumask_copy(wq_cmdline_cpumask, cpumask);
++
++	free_bootmem_cpumask_var(cpumask);
++
++	return 0;
++}
++__setup("unbound_workqueue_cpus=", unbound_workqueue_cpus_setup);
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+2.17.1
+
