@@ -2,149 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA54739E71
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 12:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 951F6739E74
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 12:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231411AbjFVKVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 06:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
+        id S231570AbjFVKV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 06:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231392AbjFVKU6 (ORCPT
+        with ESMTP id S231462AbjFVKVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 06:20:58 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 019A31BC5;
-        Thu, 22 Jun 2023 03:20:49 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8AFA81042;
-        Thu, 22 Jun 2023 03:21:33 -0700 (PDT)
-Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.78.69])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 433EF3F64C;
-        Thu, 22 Jun 2023 03:20:49 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 11:20:47 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Zhao Liu <zhao1.liu@intel.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>,
-        Zhao Liu <zhao1.liu@linux.intel.com>
-Subject: Re: [PATCH v4 18/24] sched/task_struct: Add helpers for IPC
- classification
-Message-ID: <ZJQgf1PtrHWLA9q1@arm.com>
-References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
- <20230613042422.5344-19-ricardo.neri-calderon@linux.intel.com>
+        Thu, 22 Jun 2023 06:21:07 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1AF0129
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 03:20:54 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6b44b5adfd3so5402752a34.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 03:20:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1687429254; x=1690021254;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=D2qD8QXeW1O1s2cMX0TkIRyFuX9czqXlwvZZFZHoQDY=;
+        b=yqVQLcwzGNpgScZWKwZ2oxMUR1L394NPzJZ9pS8bQoNaFmQPpbx/RADmMjKSptUuJt
+         dMAKIwucw9mb+b39kaa6uMxwGHYIi8sMdClIWV4319i9APynEn+EAQVzDlX8M8t4g4zJ
+         /RYbpIi4bIiOLjQrZiMx6fnOH7zpcNtfqTZHvpqog4MCq9+iRuN7/ch1M7zWK84XaU7s
+         rw6pXihH1kCaDeawfmT79p2raM7v8ADLStFRVHst9kaKjrLAU87mLCp9BI8d/qPwWr4k
+         zWHSVk36IH/y/UHsUmv+o3crPzwixco9ARo6bnIx4zUN+rm8gi2CnLMT87TNrNhOcrA0
+         IoUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687429254; x=1690021254;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D2qD8QXeW1O1s2cMX0TkIRyFuX9czqXlwvZZFZHoQDY=;
+        b=b/sjycLc5NZI7h1SnWTXE6ab/+KWmVZyBDFzhynLq7h9vYXhCXmOffRRhU4/VD1bx/
+         XriLHS6IEJa0ao4wU/1Z1vn7XWkvzoAphds++LXn1ngFL0gASSDL8sV+mnQNYFCrmABT
+         qGPEtkjTg/gTGpe99ry1SLQ+wjTEXAOfDh1Dt3vNGbso+kKCMEngpi6mENL8aYxY8AGY
+         rpJS82Vz2PS8l6gzayNcSkLaFdEJoppAZbD7xecHwirATToxioybW/GrQ/FI1ywIW4eZ
+         6mWQEvaDnRfL5jbOBIrA76Pej+KQGzAGJO6w+RBlM+HBwtCCAsTx7eVdjOT2+84ybCMf
+         V42w==
+X-Gm-Message-State: AC+VfDxP1JsQbBk6sOpVp+yx5qoL/K8IGwr3jbXlMo6vgxw692UOEIqb
+        OlERgnS7uR72+x/2nxB+i+72wQ==
+X-Google-Smtp-Source: ACHHUZ7JbXlk1XHbh8Wgd/RM+ZqC1mNu0PVTcfaGw8H4IWQRxyldxnTIxSbk3oCd5H7E5JmFF6GYfw==
+X-Received: by 2002:a05:6358:f0e:b0:12b:ed05:18bb with SMTP id b14-20020a0563580f0e00b0012bed0518bbmr12781423rwj.27.1687429254013;
+        Thu, 22 Jun 2023 03:20:54 -0700 (PDT)
+Received: from dread.disaster.area (pa49-180-13-202.pa.nsw.optusnet.com.au. [49.180.13.202])
+        by smtp.gmail.com with ESMTPSA id o2-20020a63e342000000b0053fb37fb626sm4594800pgj.43.2023.06.22.03.20.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 03:20:53 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1qCHQo-00EoCh-0Y;
+        Thu, 22 Jun 2023 20:20:50 +1000
+Date:   Thu, 22 Jun 2023 20:20:50 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Hannes Reinecke <hare@suse.de>
+Cc:     Pankaj Raghav <p.raghav@samsung.com>, willy@infradead.org,
+        gost.dev@samsung.com, mcgrof@kernel.org, hch@lst.de,
+        jwong@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC 0/4] minimum folio order support in filemap
+Message-ID: <ZJQggr3ymd7eXgA4@dread.disaster.area>
+References: <CGME20230621083825eucas1p1b05a6d7e0bf90e7a3d8e621f6578ff0a@eucas1p1.samsung.com>
+ <20230621083823.1724337-1-p.raghav@samsung.com>
+ <b311ae01-cec9-8e06-02a6-f139e37d5863@suse.de>
+ <ZJN0pvgA2TqOQ9BC@dread.disaster.area>
+ <4270b5c7-04b4-28e0-6181-ef98d1f5130c@suse.de>
+ <94d9e935-c8a4-896a-13ac-263831a78dd5@suse.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230613042422.5344-19-ricardo.neri-calderon@linux.intel.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <94d9e935-c8a4-896a-13ac-263831a78dd5@suse.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Jun 22, 2023 at 08:50:06AM +0200, Hannes Reinecke wrote:
+> On 6/22/23 07:51, Hannes Reinecke wrote:
+> > On 6/22/23 00:07, Dave Chinner wrote:
+> > > On Wed, Jun 21, 2023 at 11:00:24AM +0200, Hannes Reinecke wrote:
+> > > > On 6/21/23 10:38, Pankaj Raghav wrote:
+> > > > Hmm. Most unfortunate; I've just finished my own patchset
+> > > > (duplicating much
+> > > > of this work) to get 'brd' running with large folios.
+> > > > And it even works this time, 'fsx' from the xfstest suite runs
+> > > > happily on
+> > > > that.
+> > > 
+> > > So you've converted a filesystem to use bs > ps, too? Or is the
+> > > filesystem that fsx is running on just using normal 4kB block size?
+> > > If the latter, then fsx is not actually testing the large folio page
+> > > cache support, it's mostly just doing 4kB aligned IO to brd....
+> > > 
+> > I have been running fsx on an xfs with bs=16k, and it worked like a charm.
+> > I'll try to run the xfstest suite once I'm finished with merging
+> > Pankajs patches into my patchset.
+> > Well, would've been too easy.
+> 'fsx' bails out at test 27 (collapse), with:
+> 
+> XFS (ram0): Corruption detected. Unmount and run xfs_repair
+> XFS (ram0): Internal error isnullstartblock(got.br_startblock) at line 5787
+> of file fs/xfs/libxfs/xfs_bmap.c.  Caller
+> xfs_bmap_collapse_extents+0x2d9/0x320 [xfs]
+> 
+> Guess some more work needs to be done here.
 
-On Monday 12 Jun 2023 at 21:24:16 (-0700), Ricardo Neri wrote:
-> The raw classification that hardware provides for a task may not
-> be directly usable by the scheduler: the classification may change too
-> frequently or architecture-specific implementations may need to consider
-> additional factors. For instance, some processors with Intel Thread
-> Director need to consider the state of the SMT siblings of a core.
-> 
-> Provide per-task helper variables that architectures can use to
-> postprocess the classification that hardware provides.
-> 
-> Cc: Ben Segall <bsegall@google.com>
-> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
-> Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Lukasz Luba <lukasz.luba@arm.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Perry Yuan <Perry.Yuan@amd.com>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Tim C. Chen <tim.c.chen@intel.com>
-> Cc: Valentin Schneider <vschneid@redhat.com>
-> Cc: Zhao Liu <zhao1.liu@linux.intel.com>
-> Cc: x86@kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> ---
-> Changes since v3:
->  * None
-> 
-> Changes since v2:
->  * None
-> 
-> Changes since v1:
->  * Used bit-fields to fit all the IPC class data in 4 bytes. (PeterZ)
->  * Shortened names of the helpers.
->  * Renamed helpers with the ipcc_ prefix.
->  * Reworded commit message for clarity
-> ---
->  include/linux/sched.h | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 0e1c38ad09c2..719147460ca8 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -1541,7 +1541,17 @@ struct task_struct {
->  	 * A hardware-defined classification of task that reflects but is
->  	 * not identical to the number of instructions per cycle.
->  	 */
-> -	unsigned short			ipcc;
-> +	unsigned int			ipcc : 9;
-> +	/*
-> +	 * A candidate classification that arch-specific implementations
-> +	 * qualify for correctness.
-> +	 */
-> +	unsigned int			ipcc_tmp : 9;
-> +	/*
-> +	 * Counter to filter out transient candidate classifications
-> +	 * of a task.
-> +	 */
-> +	unsigned int			ipcc_cntr : 14;
->  #endif
->  
+Yup, start by trying to get the fstests that run fsx through cleanly
+first. That'll get you through the first 100,000 or so test ops
+in a few different run configs. Those canned tests are:
 
-Why does this need to be split in task_struct? Isn't this architecture
-specific? IMO the scheduler should never make use of class information
-itself. It only receives the value though the call of an arch function
-and passes it as an argument to an arch function to get a performance
-score. So the way one interprets the class value (splits it in relevant
-and helper bits) should be defined and considered in the architecture
-specific code.
+tests/generic/075
+tests/generic/112
+tests/generic/127
+tests/generic/231
+tests/generic/455
+tests/generic/457
 
-Thanks,
-Ionela.
+Cheers,
 
->  	/*
-> -- 
-> 2.25.1
-> 
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
