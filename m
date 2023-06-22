@@ -2,132 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8C27395E4
+	by mail.lfdr.de (Postfix) with ESMTP id 31D287395E3
 	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 05:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjFVDrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 23:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
+        id S229902AbjFVDr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 23:47:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjFVDrU (ORCPT
+        with ESMTP id S229513AbjFVDr4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 23:47:20 -0400
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73941BCA
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 20:47:18 -0700 (PDT)
-Received: by mail-oo1-xc2e.google.com with SMTP id 006d021491bc7-55e1a9ff9d4so138602eaf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 20:47:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687405638; x=1689997638;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QrQ4pMlhuN5RPf831t214Aq/9pqMzT3UkPKa92aAjMU=;
-        b=k1S9Qlx6DpdFXPkJhL80whZ0sFKSR2kRpj2C0YRXbCrpgmCvy68gybu3it8XW+Ma8y
-         L9gHhFAI8GZHevsY89WyeWqnXNBCkhj3P7T+ch8khHLFwNNPs2e/BiesTHlFMTLmoQeY
-         gJKOB3NOMxt2N0DKxQE65xiAfTgNDe13KulJrMIA8Zd9nOm4BXqoBqPLujKTU7q6Pao6
-         Aow6HoCAJZh1DKiqY+vl98H51GlgR1r92Eg20+8Mm1yeDyKB9GYV/KF5NYWd0fXRM8Lv
-         neB19PWKMLihXn5z4RDvgaElXXydyOLQquYnBwNbjRq3j+Ujy3TqV9+GqIIajuV9J0Z/
-         rnkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687405638; x=1689997638;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QrQ4pMlhuN5RPf831t214Aq/9pqMzT3UkPKa92aAjMU=;
-        b=jAlEt5BXRrgQBZK8MRezrmuGOFeJ2iEBFMjfSPKTUC5nohbVZFyUACko/5K7hJe46c
-         0EigNXs1DpvKOG7ziX2OQKznC73GVZNjiAxePGY51C/RANA1b7xqfau12P79F+jKfl5q
-         4kA5fDfaiawqvrBhong+DOGzmkyOkSE0LB+cNg5HIVkR3Vce7xVO++pqSlYh2/ahg1or
-         khHmpQxX0bJcWk5NU7UIuBfvo3J5FxmtODEczv3rsfjwWjBMpPjULPwl7Q+CEd8vuxoV
-         FLbnIbejAD1mQ/NPgTqi37sP/p6X3wsUdMytL1IG7utmE96ZGApaU6smJ7Q9YnbP8qNN
-         mZfg==
-X-Gm-Message-State: AC+VfDz1G2nS3Jg08JW5bVJ/p9pIo3c8ExCbA0KkOX9KxDGup4Eg0pDn
-        W4IkY7ZC+vupNjAFG0a+wPy+cYmo9oQJuOmJUgg=
-X-Google-Smtp-Source: ACHHUZ4+K75TjqDX9BQbQ/AyA2GIGg3XeRAXOWQnTvTvtdydKRJACsXbVoYlF/kRsIx7qECQ7weoVTg2PgyDKCOFWCA=
-X-Received: by 2002:aca:3288:0:b0:3a0:30c9:8281 with SMTP id
- y130-20020aca3288000000b003a030c98281mr4849897oiy.16.1687405638113; Wed, 21
- Jun 2023 20:47:18 -0700 (PDT)
+        Wed, 21 Jun 2023 23:47:56 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88821BCA
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 20:47:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Cc:Content-ID:Content-Description;
+        bh=F3XXSu+N1iG+/xUm80loSBe6g1P122NWH55Ml+HL9xU=; b=hm5x5ZJzRK4Wj6AO+gBh/YY6+p
+        1eV36gEX3YoHNbyYmLzVBSoTxhtjw1erJMNI9DYuljQdk1I3vXQviPDf/CArFrmNvtpqa4i06DQpo
+        qjeekb4BEj+EYN31Le8HFbpGVZ4hc6vG5ZLfzdokJdsVAi4qWtZ32jUepmCsvf6LIX9tnmMEVOIA4
+        01N9WSua5dRS+4ozAUwR09wTC70Q6vQP0C//Da+dszS9sXnzHH0XRO48CnDrgqKIrkgvtxJAYLtkZ
+        cGI8iQcMsMx2KGP38vSi63R2KcgyNYUjHrEBtvbYN6149dBRkkjnxXbDsVLvti1DtUSQoCm5iATUw
+        l/ekxF4w==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qCBIY-00GhRq-2g;
+        Thu, 22 Jun 2023 03:47:54 +0000
+Message-ID: <88e569b6-69d6-90c2-8000-9dd542aaf007@infradead.org>
+Date:   Wed, 21 Jun 2023 20:47:54 -0700
 MIME-Version: 1.0
-References: <20230613092819.GA18487@didi-ThinkCentre-M930t-N000>
- <20230614091923.GA1059@didi-ThinkCentre-M930t-N000> <ZJNizvI-7A2hFDoM@slm.duckdns.org>
-In-Reply-To: <ZJNizvI-7A2hFDoM@slm.duckdns.org>
-From:   Yuanhan Zhang <zyhtheonly@gmail.com>
-Date:   Thu, 22 Jun 2023 11:47:06 +0800
-Message-ID: <CAEQmJ=jW7O=EVQC7UxGSX+YDK8aTTcF3gje5HgwuTY9cnE0C2g@mail.gmail.com>
-Subject: Re: [PATCH v2] sched/isolation: add a workqueue parameter to
- constrain unbound CPUs
-To:     Tejun Heo <tj@kernel.org>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.co,
-        vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        fuyuanli@didiglobal.com, zwp10758@gmail.com, zyhtheonly@yeah.net
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.2
+Subject: Re: [PATCH] workqueue: add cmdline parameter `unbound_workqueue_cpus`
+ to further constrain wq_unbound_cpumask at boot time
+Content-Language: en-US
+To:     tj@kernel.org, jiangshanlai@gmail.com,
+        linux-kernel@vger.kernel.org, zyhtheonly@yeah.net,
+        zwp10758@gmail.com, zyhtheonly@gmail.com
+References: <20230622033353.GA29115@didi-ThinkCentre-M930t-N000>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230622033353.GA29115@didi-ThinkCentre-M930t-N000>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tejun Heo <tj@kernel.org> =E4=BA=8E2023=E5=B9=B46=E6=9C=8822=E6=97=A5=E5=91=
-=A8=E5=9B=9B 04:51=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Wed, Jun 14, 2023 at 05:19:45PM +0800, tiozhang wrote:
-> ...
-> > @@ -181,8 +181,8 @@ static int __init housekeeping_nohz_full_setup(char=
- *str)
-> >  {
-> >       unsigned long flags;
-> >
-> > -     flags =3D HK_FLAG_TICK | HK_FLAG_WQ | HK_FLAG_TIMER | HK_FLAG_RCU=
- |
-> > -             HK_FLAG_MISC | HK_FLAG_KTHREAD;
-> > +     flags =3D HK_FLAG_TICK | HK_FLAG_TIMER | HK_FLAG_RCU | HK_FLAG_MI=
-SC
-> > +             | HK_FLAG_KTHREAD;
->
-> Why is WQ being taken out of nohz_full setup? The patch description doesn=
-'t
-> mention anything.
 
-To prevent nohz_full from rewriting workqueue's choice. Add a
-description in patch v3.
 
->
-> > @@ -208,6 +208,12 @@ static int __init housekeeping_isolcpus_setup(char=
- *str)
-> >                       continue;
-> >               }
-> >
-> > +             if (!strncmp(str, "workqueue,", 10)) {
-> > +                     str +=3D 10;
-> > +                     flags |=3D HK_FLAG_WQ;
-> > +                     continue;
-> > +             }
->
-> I wonder whether it'd be better to just add a workqueue boot param but if
+On 6/21/23 20:34, tiozhang wrote:
+> Motivation of doing this is to better improve boot times for devices when
+> we want to prevent our workqueue works from running on some specific CPUs,
+> e,g, some CPUs are busy with interrupts.
+> 
+> Signed-off-by: tiozhang <tiozhang@didiglobal.com>
+> ---
+>  kernel/workqueue.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+> 
 
-I also write a patch this way, please see '[PATCH] workqueue: add
-cmdline parameter
-`unbound_workqueue_cpus` to further constrain wq_unbound_cpumask at boot ti=
-me'.
-If you think it is better I'm happy to continue on this :)
+Documentation for this new command line parameter should be added to
+Documentation/admin-guide/kernel-parameters.rst (in alphabetical order).
 
-> this works it's fine too.
+Thanks.
 
-It works since we use this cpumask to constrain wq_unbound_cpumask in
-workqueue's early init.
+> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> index 7cd5f5e7e0a1..47e7b29df5fe 100644
+> --- a/kernel/workqueue.c
+> +++ b/kernel/workqueue.c
+> @@ -329,6 +329,9 @@ static bool workqueue_freezing;		/* PL: have wqs started freezing? */
+>  /* PL: allowable cpus for unbound wqs and work items */
+>  static cpumask_var_t wq_unbound_cpumask;
+>  
+> +/* for further constrain wq_unbound_cpumask by cmdline parameter*/
+> +static cpumask_var_t wq_cmdline_cpumask;
+> +
+>  /* CPU where unbound work was last round robin scheduled from this CPU */
+>  static DEFINE_PER_CPU(int, wq_rr_cpu_last);
+>  
+> @@ -6006,6 +6009,10 @@ void __init workqueue_init_early(void)
+>  	cpumask_copy(wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_WQ));
+>  	cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_DOMAIN));
+>  
+> +	if (!cpumask_empty(wq_cmdline_cpumask))
+> +		cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, wq_cmdline_cpumask);
+> +	free_bootmem_cpumask_var(wq_cmdline_cpumask);
+> +
+>  	pwq_cache = KMEM_CACHE(pool_workqueue, SLAB_PANIC);
+>  
+>  	/* initialize CPU pools */
+> @@ -6129,3 +6136,21 @@ void __init workqueue_init(void)
+>   */
+>  void __warn_flushing_systemwide_wq(void) { }
+>  EXPORT_SYMBOL(__warn_flushing_systemwide_wq);
+> +
+> +
+> +static int __init unbound_workqueue_cpus_setup(char *str)
+> +{
+> +	cpumask_var_t cpumask;
+> +
+> +	alloc_bootmem_cpumask_var(&wq_cmdline_cpumask);
+> +	alloc_bootmem_cpumask_var(&cpumask);
+> +	if (cpulist_parse(str, cpumask) < 0)
+> +		pr_warn("unbound_workqueue_cpus: incorrect CPU range\n");
+> +	else
+> +		cpumask_copy(wq_cmdline_cpumask, cpumask);
+> +
+> +	free_bootmem_cpumask_var(cpumask);
+> +
+> +	return 0;
+> +}
+> +__setup("unbound_workqueue_cpus=", unbound_workqueue_cpus_setup);
 
->
-> Thanks.
->
-> --
-> tejun
-
-Thank you,
-tiozhang
+-- 
+~Randy
