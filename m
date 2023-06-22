@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73E37739379
+	by mail.lfdr.de (Postfix) with ESMTP id BCB1F73937A
 	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 02:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbjFVACP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 20:02:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43140 "EHLO
+        id S230203AbjFVAC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 20:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbjFVACM (ORCPT
+        with ESMTP id S230214AbjFVAC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 20:02:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1995212C;
-        Wed, 21 Jun 2023 17:01:31 -0700 (PDT)
+        Wed, 21 Jun 2023 20:02:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99639210B
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 17:01:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E35E561703;
-        Thu, 22 Jun 2023 00:00:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4A0A0C433C8;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 190846171C
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:00:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 71213C43397;
         Thu, 22 Jun 2023 00:00:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1687392021;
-        bh=/uMLt2E1rz9exuqGr5hQn1iG0P4+0/KdRlRethHTB4w=;
+        bh=yZrAdNwWtgDHw+tFjhrL08lNU2dXLHjvwtacUaya9RU=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=IBB0vPirVqsC388SKFlL7nZP43HWMnizxH2Ko6+kaOyVC3+yLciavVzzheGiENssf
-         E9BoMWlS/s3hk9VG3JyGRCQn7jW0Dnm8gxVY0IUIXCsZ1Z2iSxLwpFeYrde8DwdXlz
-         CMP7datQeInUbXiCxNMwy+fjcJDApODgKstKXjXcPXmICcg5v+qzo046rmFfBbJvCB
-         9HbkRlmzgF9Im7TxGV2N6KVKbbisHzYB3gMMxJK9kKR7fFKFw5uefdHSWFfMOuUkXE
-         hMZROMUOlBwST3MhiqEmx3sJQMxTvskf20I5CtcBlC96SYpgMNtpuw6ucR4GmF0Jy7
-         i3P6GqJah0rbw==
+        b=XaGA+rX0xFfkBjXhDg1XDP7zY9fccj60A4XOBgig50x4W4atPQr/oSj9RuNSjAYUl
+         UaH7cn6hHSWcmxhMlM36unc6qhuiv7TJzIwVBjs3OOn5G82ubjgMU9I+LOet+xAxOb
+         G8NwxsNRplf0f0gYWy239Vu94sUMvXm39vCWTLhzBNIFc586AbNRz1MfIBzNZg8FUF
+         j86Tnc+u63ooZ8e4lWiqSrIVu/M282TdMk56wVYDDTYUFsh7/dLg/iobJKBN2hDOz5
+         ExDPIcpJXdQGIePYXE8i6Q+Wx2hgijEVQ4ipVoJENJgN19mRwrzaZDKgdaKdxCnk2Z
+         CsJQqC4sDyJKw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 29973E2A044;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4DF90E4D027;
         Thu, 22 Jun 2023 00:00:21 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] dt-bindings: net: micrel,ks8851: allow SPI device
- properties
+Subject: Re: [PATCH v2 net-next] net: hsr: Disable promiscuous mode in offload
+ mode
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168739202116.22621.14381446710922927523.git-patchwork-notify@kernel.org>
+Message-Id: <168739202131.22621.267223043566352469.git-patchwork-notify@kernel.org>
 Date:   Thu, 22 Jun 2023 00:00:21 +0000
-References: <20230619170134.65395-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230619170134.65395-1-krzysztof.kozlowski@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230614114710.31400-1-r-gunasekaran@ti.com>
+In-Reply-To: <20230614114710.31400-1-r-gunasekaran@ti.com>
+To:     Ravi Gunasekaran <r-gunasekaran@ti.com>
 Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        marex@denx.de, netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        pabeni@redhat.com, bigeasy@linutronix.de,
+        simon.horman@corigine.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rogerq@kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,19 +66,19 @@ Hello:
 This patch was applied to netdev/net-next.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Mon, 19 Jun 2023 19:01:34 +0200 you wrote:
-> The Micrel KS8851 can be attached to SPI or parallel bus and the
-> difference is expressed in compatibles.  Allow common SPI properties
-> when this is a SPI variant and narrow the parallel memory bus properties
-> to the second case.
+On Wed, 14 Jun 2023 17:17:10 +0530 you wrote:
+> When port-to-port forwarding for interfaces in HSR node is enabled,
+> disable promiscuous mode since L2 frame forward happens at the
+> offloaded hardware.
 > 
-> This fixes dtbs_check warning:
+> Signed-off-by: Ravi Gunasekaran <r-gunasekaran@ti.com>
+> Reviewed-by: Simon Horman <simon.horman@corigine.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next] dt-bindings: net: micrel,ks8851: allow SPI device properties
-    https://git.kernel.org/netdev/net-next/c/1ca09f5746ed
+  - [v2,net-next] net: hsr: Disable promiscuous mode in offload mode
+    https://git.kernel.org/netdev/net-next/c/e748d0fd66ab
 
 You are awesome, thank you!
 -- 
