@@ -2,49 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ECBA73AC8B
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 00:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED45873AC8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 00:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbjFVWds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 18:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
+        id S231349AbjFVWdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 18:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbjFVWdp (ORCPT
+        with ESMTP id S231253AbjFVWdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 18:33:45 -0400
+        Thu, 22 Jun 2023 18:33:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F2819AF
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 15:33:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17B881997;
+        Thu, 22 Jun 2023 15:33:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 086BA61923
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 22:33:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB3D2C433C8;
-        Thu, 22 Jun 2023 22:33:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1A356191C;
+        Thu, 22 Jun 2023 22:33:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F27CC433CA;
+        Thu, 22 Jun 2023 22:33:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687473220;
-        bh=wP5iYCJHzA+hCBB51KqK3bEREmtRlXHKh26/82qwFDE=;
+        s=k20201202; t=1687473224;
+        bh=Fx3v4G/Q/qRPvxtg3Mgx/rYdfAvEoHue1uehMtXOhZQ=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=ssH+p4BaxnsIM0BKtv2UJNG2p5L0vhErzN1IOK6XILmij1WwGEh1ViosLCPKaFOzr
-         dtW7Ca/Sdfb1PzLV0XPv4fb0bExLCFS64R2Wdi2VKHCGa6qyawvN+n88JW4oLRF7+i
-         vP69ZO24fYXHexeWj2TNR8lGPL3703hktTrlMTJ9qdKPEGpEAkCN6vNCr3i6sQSBFu
-         m+IZ5SHfp6qGeDpv89J0Sl54TS4Vuowue8HEKC7HrvuI5hSS5ezjXnvaLd/LX1xK5/
-         x0lYBLgIhwU+l1VA/NAr4GwvvImVaq0ArrV/GBxnPexv+t5RbCH+/kaBPpv6BkHu1v
-         0LkI2DbzYQKOA==
+        b=Jk5peD++dJDfFdJZnWbVzS3MvLCy9R+jOHoXLYovKYM9fB5hizu5axPGxPBWRYp2e
+         dX0fTz91H0BC3BlqDJOwEfeyO426zb9qctjpO/37mf+5DxLAPSBRHWhPxGpcsvdQsa
+         GdqM3W4TfHjLqT39SAm6sGe8RoPD97ISunnC3sB0x3cKqyvDLzy/VVhf23wG5fzb1h
+         KWi8bVxAUlXv1rtUV5dEWxsS4Vf0Yl0gSBVla+pdgqD/lrCqRxhPofk/huDYpbw7Mw
+         xbK3hE8R009lLxgJ0IexZNUluF/7g+av++i9JRk+WFzCkBIFdDdfvk2BhgOYmeTPTG
+         sfc6hflfW85Ww==
 From:   Mark Brown <broonie@kernel.org>
-To:     Yingkun Meng <mengyingkun@loongson.cn>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230622101235.3230941-1-arnd@kernel.org>
-References: <20230622101235.3230941-1-arnd@kernel.org>
-Subject: Re: [PATCH] ASoC: loongson: fix address space confusion
-Message-Id: <168747321729.318849.3547476102614344468.b4-ty@kernel.org>
-Date:   Thu, 22 Jun 2023 23:33:37 +0100
+In-Reply-To: <20230621231044.3816914-1-robh@kernel.org>
+References: <20230621231044.3816914-1-robh@kernel.org>
+Subject: Re: [PATCH] ASoC: dt-bindings: microchip,sama7g5-pdmc: Simplify
+ "microchip,mic-pos" constraints
+Message-Id: <168747322064.318849.2286093832255639633.b4-ty@kernel.org>
+Date:   Thu, 22 Jun 2023 23:33:40 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -59,22 +62,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Jun 2023 12:12:22 +0200, Arnd Bergmann wrote:
-> The i2s driver uses the mapped __iomem address of the FIFO as the DMA
-> address for the device. This apparently works on loongarch because of
-> the way it handles __iomem pointers as aliases of physical addresses,
-> but this is not portable to other architectures and causes a compiler
-> warning when dma addresses are not the same size as pointers:
+On Wed, 21 Jun 2023 17:10:44 -0600, Rob Herring wrote:
+> "enum" values should be integers or strings, not arrays (though json-schema
+> does allow arrays, we do not). In this case, all possible combinations are
+> allowed anyways, so there's little point in expressing as an array.
 > 
-> sound/soc/loongson/loongson_i2s_pci.c: In function 'loongson_i2s_pci_probe':
-> sound/soc/loongson/loongson_i2s_pci.c:110:29: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
->   110 |         tx_data->dev_addr = (dma_addr_t)i2s->reg_base + LS_I2S_TX_DATA;
->       |                             ^
-> sound/soc/loongson/loongson_i2s_pci.c:113:29: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
->   113 |         rx_data->dev_addr = (dma_addr_t)i2s->reg_base + LS_I2S_RX_DATA;
->       |                             ^
 > 
-> [...]
 
 Applied to
 
@@ -82,8 +75,8 @@ Applied to
 
 Thanks!
 
-[1/1] ASoC: loongson: fix address space confusion
-      commit: 012fa2622e30675f61413485785e708ba02be78b
+[1/1] ASoC: dt-bindings: microchip,sama7g5-pdmc: Simplify "microchip,mic-pos" constraints
+      commit: b2c28785b125acb28a681462510297410cbbabd7
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
