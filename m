@@ -2,104 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE309739890
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E288739894
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:55:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbjFVHyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 03:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53740 "EHLO
+        id S230338AbjFVHzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 03:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjFVHyf (ORCPT
+        with ESMTP id S229891AbjFVHzt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 03:54:35 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8011F185;
-        Thu, 22 Jun 2023 00:54:34 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f122ff663eso9407844e87.2;
-        Thu, 22 Jun 2023 00:54:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687420473; x=1690012473;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Eie20f3ss91sUplEeIPYPp60+FBbWFR7xGUasT7bn5c=;
-        b=qU/htB9JCiIHSUq3832RTd4+lIgZfeF8QP6ZVgo8g2sL/eKmb9cmuAqZbJRiKehPHI
-         UycnuBYxKb4jQ+BQkGlV27c/8esqag2xF5U+5Nb9P2YLNwR1Zyfv4Cr4pyC0rCmCc4bJ
-         6XpkL4bMJYgZraUYCKsb5YjhIGv645+/ksLNnhMoBj1+C2IjBwNm2c6SaLV4qrks3JxU
-         xKJ/0U6r0HzQwHuZpV4sTS5T/reiQcPZvxgKp9LKr7ro13w/UHfSG85idp805/PIApIR
-         dNYTRsyw6yo8UFGEclCjQD6qG0HZk3TQB4vzdZzLpp2j2aBnPWNwZTLDMM+tOgGAhYOv
-         HTjg==
+        Thu, 22 Jun 2023 03:55:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 832F5E75
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:55:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687420507;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=Eox6kzJ0KXGmAxPu1zCtO8SWj1o8YH/kpH0QF8X1TQs=;
+        b=AvjvZFGq1D7F7kUm268mcKadsIlbaY53/rkh4kIe+5SKdZhN7hAKdvXu2NWUL2Duh/3dCp
+        x5PhTAYrIRGiM5SSFTg3GJC8cHwPbBQnP2gFizLH1+v5pEib3GKTt7gvXk6GOLUMTNq60T
+        /UxeqN4VAShAnvCcGJTjAj0D2aq5f/M=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-466-bH3rKUNVNvyZqvaCjX5MIg-1; Thu, 22 Jun 2023 03:55:06 -0400
+X-MC-Unique: bH3rKUNVNvyZqvaCjX5MIg-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-31273e0507dso1843812f8f.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:55:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687420473; x=1690012473;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Eie20f3ss91sUplEeIPYPp60+FBbWFR7xGUasT7bn5c=;
-        b=mADkof7/TJ8GMJB495//UfgHvPsfZ+gIl+3BjFwHQiDUJP26z5D6aNCCJclO3yzZib
-         oMR7/iGGSOmAet+fGGHzqFCFxZoAf34RdV9RC+lYsUfXQzHkrpr9i59xwwRbNBoisM0R
-         2MLdAeXhmT4i1AYoT9JnzM3/cRWQtMAlUEK5rUbDaM49uLudwR+iJtHNT4AWlc3awuX7
-         AHM6TePZCYNyP+tNZAaapMCyXT2DisnAokDDDBn/KRKF+a8j4X/mtPJmiBlYfXHLNuva
-         8oT7KDDIcXrTU63YhtZFj24p+z90ZyS8nKHqOjhHLQCQro694QL0sRxgDWTBRjdcPB2M
-         nF9Q==
-X-Gm-Message-State: AC+VfDwvjhHNcqF6EMdo7Q0wliltQWpqxr/4T9qoR5WiatIAXtwm1maW
-        0T4PvU5k1inw6fCayQJCmhg=
-X-Google-Smtp-Source: ACHHUZ5V7PFqhRZ/OooYKSnOyIwbW2Sb1pABO0QSB8jezdhTlqu529QtFTTjTxqbWUqUscCxwLjHbw==
-X-Received: by 2002:ac2:4d84:0:b0:4f8:5ede:d457 with SMTP id g4-20020ac24d84000000b004f85eded457mr7913343lfe.55.1687420472453;
-        Thu, 22 Jun 2023 00:54:32 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id z12-20020a05600c114c00b003f9b4330880sm6985723wmz.29.2023.06.22.00.54.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 00:54:31 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH][next] btrfs: remove redundant initialization of variables leaf and slot
-Date:   Thu, 22 Jun 2023 08:54:30 +0100
-Message-Id: <20230622075430.2794134-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20221208; t=1687420505; x=1690012505;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Eox6kzJ0KXGmAxPu1zCtO8SWj1o8YH/kpH0QF8X1TQs=;
+        b=Tl07rGYBTjJ/hWlyuK5NzJwqZcco+09wvN/H2IL5/UTQfVQ2yRDLgv9pLcUzV7F4Xc
+         nDYqUSSko8HN86fGIZFdiKnuXUy8v88VaThZREB6q6DgNCBmoKCGiZ6M1coWVoqeFUoO
+         xUa8lKYnbNNo7nWH1cTNQyNuoNlPbfR7lBrk7rN3dPqPMd99917CqQw2q8nBGNZJJ7rV
+         iv0KskZkg6xGJ4WPeDjx/2r5dK/HMfEjKjwJQlddg8blFqV74si+RHGMu5H4bfK8FDnP
+         Yy0BHVCrM9zfimqypqb1lLt+Vpb8kzROe+8Uiys2j5FZ3tshunG5I9669MWCiLwdwWlP
+         xQew==
+X-Gm-Message-State: AC+VfDzAXosWBQY8KFGvqojjAQBovQGxHgmD2HxvIc6jO5MM8It5E+wD
+        3FtKvHrWCSzNDKm5Kus94qtBbayDdCDPwADRRvPQGoksojo9+eLkv5t2nmjXCeV9dIFVo00LR7v
+        POTuthr5LurCcK1Ym1cEYqAdL8twfKozIhnzzsr2M
+X-Received: by 2002:a5d:590c:0:b0:30a:8995:1dbc with SMTP id v12-20020a5d590c000000b0030a89951dbcmr13481437wrd.26.1687420505050;
+        Thu, 22 Jun 2023 00:55:05 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5XXdP5mBFYeXjHFqCUFXHfOsqZzMCP4KunAaLqWfIWum2C8ZQg8p8aPknYzd7pBcBBJ2gzkZCOOq3kQ/vNoxc=
+X-Received: by 2002:a5d:590c:0:b0:30a:8995:1dbc with SMTP id
+ v12-20020a5d590c000000b0030a89951dbcmr13481390wrd.26.1687420504759; Thu, 22
+ Jun 2023 00:55:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Vitaly Grinberg <vgrinber@redhat.com>
+Date:   Thu, 22 Jun 2023 10:54:54 +0300
+Message-ID: <CACLnSDiBML3R_K5ncFsuritvid5nGsBLx5pGR2c9pR9L=qhPiQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v8 00/10] Create common DPLL configuration API
+To:     "Kubalewski, Arkadiusz" <arkadiusz.kubalewski@intel.com>
+Cc:     David Airlie <airlied@redhat.com>, andy.ren@getcruise.com,
+        anthony.l.nguyen@intel.com, arnd@arndb.de, axboe@kernel.dk,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        claudiajkang@gmail.com, corbet@lwn.net, davem@davemloft.net,
+        edumazet@google.com, geert+renesas@glider.be,
+        gregkh@linuxfoundation.org, hkallweit1@gmail.com,
+        idosch@nvidia.com, intel-wired-lan@lists.osuosl.org,
+        jacek.lawrynowicz@linux.intel.com,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        jesse.brandeburg@intel.com, jiri@resnulli.us,
+        jonathan.lemon@gmail.com, kuba@kernel.org, kuniyu@amazon.com,
+        leon@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux@zary.sk, liuhangbin@gmail.com, lucien.xin@gmail.com,
+        masahiroy@kernel.org, michal.michalik@intel.com,
+        milena.olech@intel.com, Michal Schmidt <mschmidt@redhat.com>,
+        Michael Tsirkin <mst@redhat.com>, netdev@vger.kernel.org,
+        nicolas.dichtel@6wind.com, nipun.gupta@amd.com, ogabbay@kernel.org,
+        Paolo Abeni <pabeni@redhat.com>, phil@nwl.cc,
+        Petr Oros <poros@redhat.com>, razor@blackwall.org,
+        ricardo.canuelo@collabora.com, richardcochran@gmail.com,
+        saeedm@nvidia.com, sj@kernel.org, tzimmermann@suse.de,
+        vadfed@fb.com, vadfed@meta.com, vadim.fedorenko@linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The variables leaf and slot are initialized when declared but the values
-assigned to them are never read as they are being re-assigned later on.
-The initializations are redundant and can be removed. Cleans up clang
-scan build warings:
-
-fs/btrfs/tree-log.c:6797:25: warning: Value stored to 'leaf' during its
-initialization is never read [deadcode.DeadStores]
-fs/btrfs/tree-log.c:6798:7: warning: Value stored to 'slot' during its
-initialization is never read [deadcode.DeadStores]
-
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- fs/btrfs/tree-log.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
-index 365a1cc0a3c3..8ad7e7e38d18 100644
---- a/fs/btrfs/tree-log.c
-+++ b/fs/btrfs/tree-log.c
-@@ -6794,8 +6794,8 @@ static int log_new_ancestors(struct btrfs_trans_handle *trans,
- 
- 	while (true) {
- 		struct btrfs_fs_info *fs_info = root->fs_info;
--		struct extent_buffer *leaf = path->nodes[0];
--		int slot = path->slots[0];
-+		struct extent_buffer *leaf;
-+		int slot;
- 		struct btrfs_key search_key;
- 		struct inode *inode;
- 		u64 ino;
--- 
-2.39.2
+Hi,
+Could it be possible to add PPS DPLL phase offset to the netlink API?
+We are relying on it in the E810-based grandmaster implementation.
+Thanks,
+Vitaly
 
