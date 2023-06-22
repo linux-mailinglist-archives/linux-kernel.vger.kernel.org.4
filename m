@@ -2,80 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 744097396B3
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 07:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EA887396B8
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 07:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbjFVFNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 01:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52782 "EHLO
+        id S230113AbjFVFOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 01:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjFVFNS (ORCPT
+        with ESMTP id S229608AbjFVFOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 01:13:18 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F101AE9;
-        Wed, 21 Jun 2023 22:13:16 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-544c0d768b9so5346903a12.0;
-        Wed, 21 Jun 2023 22:13:16 -0700 (PDT)
+        Thu, 22 Jun 2023 01:14:31 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 927FEE9;
+        Wed, 21 Jun 2023 22:14:30 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1aa291b3fc7so3778873fac.1;
+        Wed, 21 Jun 2023 22:14:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687410796; x=1690002796;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7V9c1bRadtvspE8RX0+kzHasXFfz3GpqArsWjj0tqQ0=;
-        b=kaSh3OC+Z/AIqk3/6hSw/Glei8j8XdAvZYMFoaTsnLdck8Q/vBT8YWKIga7P3nR+vB
-         FAEaa5Xq+tk5UQgWWm3PkOv1OWqTAymAYryjoyIeFyBn1iXBxATDt2K5ZffMIQOB/jB2
-         vR5S/P+SCm+lF49Ks/18IMQFJ+fQbTCdBAUVQG3Tvt2drkRWyDmjQ8vPKcnYvh5yEsls
-         eGoZD3t58fD/5eoe9WKd71i1jAq3CWsyFPUWV2+MX2NhqeuJKfWCF47YQuvRXMH03wpL
-         1/nAmsa/woxa+K7lcC7MlwgtVBsOsb4wv2eqcomqAE13xuWyNgrwgtjzIl3rjgbiojs4
-         bIjg==
+        d=gmail.com; s=20221208; t=1687410869; x=1690002869;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bLkAJTK2rHXLnydfvNobWwhxqrckKAUg+e7vHH2WIEo=;
+        b=KzmQSF0vF7g0mvNuBSbFNTNPE91YWovm35WSTXpxHNiNQ1TTHMGvtrN/B8a0YTfGCD
+         ByFqAgQY3kutEpzHlCW0ID6+WOH0WGfdb+PGwk4suGSfPTSBru81XAu6xOtmrK5BINt9
+         UrNv/jlyN0A7HzEgsKHF1rb2VuK1kqiVUKsXkyLyKSo43G+/gkoV3VReDrUoQ1VMT6mp
+         c7apfIZIqTLqfAfYkf6UURF4GB3U8ocITo4pO7MRcwfE9csIgr7KS6Afw6u3t1R24//G
+         RFIriwMZX5DU2nbmiluxalBSiDPwN2RiTrk3l8kApI3AMqPA70H9ZDQxRpYvIFNLtND2
+         0Vsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687410796; x=1690002796;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7V9c1bRadtvspE8RX0+kzHasXFfz3GpqArsWjj0tqQ0=;
-        b=IxUoH5soXisITsDyVV9SYoKDfa97H5AbIujPH22d6Ek6EVreDXCl3beyZil6JKmpy2
-         vgSz3+nFa+exua2nhrT+dczKEbjvq4iI8O1fmVP0jUKSja0NckGj0nqoPxrgGi1FB1ot
-         ArBat9bAOIaLLaii3i4DtxhM5HR1oBbXoWrs/zDw3bWsA+OMG5+ND7hCiVBcFEvR119d
-         czNwigwM+0EupSscUsO2OWxuuIosmqkFZvjOHlxDsYP0VFHbyB59cyk18zeKnxhrSzHD
-         rGmSHDamIL7xItDM/9rM4isbhi2s3DkCsrIRtVqLJIPfWqj43i4WwI6Q7kV3KZhF2Y4O
-         VFpA==
-X-Gm-Message-State: AC+VfDx11/Mp2KPIoxI/O5bv3WfdrsSngShMJBqyzXJejasUVYj8pwse
-        uPL6mG1vAdQwaUOIjMZ5uq0=
-X-Google-Smtp-Source: ACHHUZ42cb21K95tQ49HcbND9JdpfRq6/wkmjgnjUJyszkamhgcDC+PGduxT+71nMR8BCJzWHQKeZg==
-X-Received: by 2002:a05:6a20:5495:b0:122:5ed2:b521 with SMTP id i21-20020a056a20549500b001225ed2b521mr8864866pzk.59.1687410795736;
-        Wed, 21 Jun 2023 22:13:15 -0700 (PDT)
-Received: from sumitra.com ([59.89.167.84])
-        by smtp.gmail.com with ESMTPSA id a7-20020a170902ecc700b001b53be3d942sm4320318plh.232.2023.06.21.22.13.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 22:13:15 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 22:13:06 -0700
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ira Weiny <ira.weiny@intel.com>,
-        Deepak R Varma <drv@mailo.com>,
-        Sumitra Sharma <sumitraartsy@gmail.com>
-Subject: Re: [PATCH v2] lib/test_bpf: Call page_address() on page acquired
- with GFP_KERNEL flag
-Message-ID: <20230622051306.GA422371@sumitra.com>
-References: <20230613071756.GA359746@sumitra.com>
- <3564297.R56niFO833@suse>
+        d=1e100.net; s=20221208; t=1687410869; x=1690002869;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bLkAJTK2rHXLnydfvNobWwhxqrckKAUg+e7vHH2WIEo=;
+        b=g+hxSrLKG3gPy6YgRDO6H+OeSYeXNWAZ+YpWMdvFKx4K27ecs66YGtDgznV8MAaSWA
+         Cp8htUXaHJTDBZb29LeRRiSLFygsrmHgwPN9QDNHotWOelwBMr+S3ik+BEm2PR88xNCM
+         HnjtgVgkvzW4epWbIzjmSx/aLQgW0L++SHMO+jOAnEhcAb1bE9nH9yMcxPrJxX1Z1FnT
+         Nb5xr+Kx5TZeruwanLT/w4MA+McsLYuWWutAJZ+Q3TTJ0fYTslH7JaikVxISIWNpDt9c
+         GRNHHi32BIGsFL//lLv9IiJk1AxGFjU2g1AFhNcWHrveezYn+vEflOk/iwwGpD3vB5Un
+         RB2w==
+X-Gm-Message-State: AC+VfDy12b7gH3LAP9a+v4GNRcgWXpOQVGY1IK2xmeMMbSJyshkalwR4
+        cAjuZJ0LexRy7UL2M8MEIR9cx2P/MHP4ax70hKX6OiDN
+X-Google-Smtp-Source: ACHHUZ7NSH1J2uf00lMQRtT+29fESbvRfKoQxMnSKTKtBUBjXBg/uoOcTxTdfI+NT2zDK6iDYWq7vpa/tKUqux+U2/A=
+X-Received: by 2002:a05:6870:5a87:b0:1a9:89eb:36d1 with SMTP id
+ dt7-20020a0568705a8700b001a989eb36d1mr12144545oab.47.1687410868951; Wed, 21
+ Jun 2023 22:14:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3564297.R56niFO833@suse>
+References: <20230620100231.1412582-1-sergio.paracuellos@gmail.com> <168739869603.42044.12383139966264039986.robh@kernel.org>
+In-Reply-To: <168739869603.42044.12383139966264039986.robh@kernel.org>
+From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date:   Thu, 22 Jun 2023 07:14:17 +0200
+Message-ID: <CAMhs-H_fUSnXHgO0ZXuGOX7gkuM98HXm+Y_jq1DxCv5Az=3Rag@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: timer: add Ralink SoCs timer
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        tglx@linutronix.de, robh+dt@kernel.org, daniel.lezcano@linaro.org,
+        devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -86,79 +70,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jun 18, 2023 at 07:07:00AM +0200, Fabio M. De Francesco wrote:
-> On martedì 13 giugno 2023 09:17:56 CEST Sumitra Sharma wrote:
-> > generate_test_data() acquires a page with alloc_page(GFP_KERNEL). Pages
-> > allocated with GFP_KERNEL cannot come from Highmem. This is why
-> > there is no need to call kmap() on them.
-> > 
-> > Therefore, use a plain page_address() on that page.
-> > 
-> > Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> > Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+On Thu, Jun 22, 2023 at 3:51=E2=80=AFAM Rob Herring <robh@kernel.org> wrote=
+:
+>
+>
+> On Tue, 20 Jun 2023 12:02:31 +0200, Sergio Paracuellos wrote:
+> > Add YAML documentation for the timer which is present on Ralink SoCs.
+> >
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 > > ---
-> > 
 > > Changes in v2:
-> > 	- Remove the kmap() call and call page_address() instead.
-> 
-> NIT: Give credit to whom asked you for this removal and explain why the 
-> mapping is not required.
+> > - Remove redundant 'documentation' word from subject.
+> > - Drop clock-names property.
+> >
+> >  .../bindings/timer/ralink,rt2880-timer.yaml   | 44 +++++++++++++++++++
+> >  1 file changed, 44 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/timer/ralink,rt28=
+80-timer.yaml
+> >
+>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+>
 
-> 
-> > 	- Change the commit subject and message.
-> > 
-> >  lib/test_bpf.c | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> > 
-> > diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-> > index ade9ac672adb..70fcd0bcf14b 100644
-> > --- a/lib/test_bpf.c
-> > +++ b/lib/test_bpf.c
-> > @@ -14388,11 +14388,10 @@ static void *generate_test_data(struct bpf_test
-> > *test, int sub) if (!page)
-> >  			goto err_kfree_skb;
-> > 
-> > -		ptr = kmap(page);
-> > +		ptr = page_address(page);
-> >  		if (!ptr)
-> >  			goto err_free_page;
-> 
-> What is the reason of this test? Could "ptr" ever be NULL? What is the code 
-> checking just few lines above this latter test?
-> 
+Thanks! Which tree is this supposed to go through?
 
-
-The code is allocating a page using alloc_page() with the GFP_KERNEL flag to 
-obtain a kernel page frame. The checks if (!page) and if (!ptr) are verifying 
-if the page allocation or the mapping operation were successful. 
-
-If the pages obtained through page_address() are not from the highmem zone, 
-the page_address() function will always return a valid kernel virtual address 
-and will not return NULL. Hence, the check !ptr can be ignored while the !page
-must remain.
-
-I will be working on the v2 patch.
-
-I will also add the credits and add new lines to commit message
-explaining why the mapping is not required.
-
-Thank you for the help.
-
-Thanks & regards
-Sumitra
-
-> Please, take a deeper look at this function as a whole.
-> 
-> Fabio
-> 
-> >  		memcpy(ptr, test->frag_data, MAX_DATA);
-> > -		kunmap(page);
-> >  		skb_add_rx_frag(skb, 0, page, 0, MAX_DATA, MAX_DATA);
-> >  	}
-> > 
-> > --
-> > 2.25.1
-> 
-> 
-> 
-> 
+Best regards,
+    Sergio Paracuellos
