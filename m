@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB6C7397ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:12:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3F7B7397EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbjFVHMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 03:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37568 "EHLO
+        id S230481AbjFVHMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 03:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230386AbjFVHMm (ORCPT
+        with ESMTP id S229813AbjFVHMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 03:12:42 -0400
+        Thu, 22 Jun 2023 03:12:43 -0400
 Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DAB1BE5;
-        Thu, 22 Jun 2023 00:12:40 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-98934f000a5so333339466b.2;
-        Thu, 22 Jun 2023 00:12:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6911BD3;
+        Thu, 22 Jun 2023 00:12:41 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-988aefaa44eso612042266b.2;
+        Thu, 22 Jun 2023 00:12:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687417959; x=1690009959;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=LnnCUI2XGWv9OUUv5C9cUpD2Y2mbvDs2GL4yDfqqOwI=;
-        b=WokkXeHBtRxrHlyy2/xFvxbYYvfkcNIftGnQm6oCYJZBx6/HLMh8yxNs0GlMuBCBmF
-         uP4jaqrstX2mcV90x6vrIqiEo3JEpjMNJlRAGbhdpEt421cD+t2Odb1zGpEm5mwAdEU/
-         ckcua6pF8gMoVUXOTax3G1JGtGpLld4CXKyCCMlxPyS0E/4O8QOmbvf2Y8/Q4kJoPc+7
-         1UEYg5EtO+RgFmBHt30t+xG0TPDZPCCZyQI4FiIwzFB508y5qly6D5XKSD7VVea+QhPM
-         AUnZ14kpRnAtXaBVuxJsN7qLf6C1/s+QiMdS1K+eLDSGdsxhjMihsNrPCfzaBtgqLLd4
-         jCUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687417959; x=1690009959;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20221208; t=1687417960; x=1690009960;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LnnCUI2XGWv9OUUv5C9cUpD2Y2mbvDs2GL4yDfqqOwI=;
-        b=LccxUT/eHuW/VgHFp4WrN491FxRekbHzIzgmhYDu1Aimsf+3c4BjQo5RPD56h4JAWx
-         S2ffh23idX/xYMzxasziGRbvFegj1FUqLYmPF4zRkpGWHHzoggfTuXg+zwpAGs8RoMmR
-         TO+pVaSGE3vwEhSyUJTTgnVQHlEGsJVqlA2XbxYuym+EJSUOhAUOq4Iifg7fFI+LJdNs
-         RayjvzwEmZHbN6fDEPdFppNnXohJnFAoo/yBSMpi19RmaNJFz0nhbo9lTLJIyfKinuZS
-         0cf0/OvZ+FsT9X5buSPzYY/dFYtiYVF//Ph26AUw7ozC0HwUj0cLlHVcTRijBfktYl5c
-         fgkQ==
-X-Gm-Message-State: AC+VfDwm5YFcEMRL1m2wA24L+KLEiqzlxVLCzxfZwHjBg0X9pdd0e9/R
-        ayVRUTqVDwuXemJMZjTrc8B7k8d4B3R8Cg==
-X-Google-Smtp-Source: ACHHUZ7ULiZqJOSc9kKACeB4oEsVZYM0IZtsRc+uaKWKnBr+/Z/ld0jA++qn26Ua4hvN8s4BSwxmZw==
-X-Received: by 2002:a17:906:5d10:b0:988:922b:7a86 with SMTP id g16-20020a1709065d1000b00988922b7a86mr9119121ejt.39.1687417958982;
-        Thu, 22 Jun 2023 00:12:38 -0700 (PDT)
+        bh=8gmM3ZejwGC+6a07ZhZTgRTiQBNhhfo6Vw23/zoB7sk=;
+        b=cDcH26/paITTZSI8ehibrO5cWG6UIxZBad7iixEvpHqtOzFS7pr8CnC81NmiQ3BPAs
+         iDEkSqORwhMTjpoEPtNTSL8YhI2z9iK9K4tXU1JUfGoB28LZqnl+slY/iMfROhD/1mUz
+         87Z1JDaL+x+YY/d3I+1DO5uai0I9ZXocIdV3Bfh3rgZDXkwV6muFCslLe7j19iqmP//6
+         oTTxfqVEVocSII6ba6lYduwQRy9DsYkCwX5HwnxsWjB36C0pHwU6kpvI+mrTAWHC9pUK
+         PvcNTyngkOlRHUFnp9AJn16Ib9V6c50qlaVm/ZR9X2AY8IQj9LQMptDVGB9uFckDZVAi
+         JEqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687417960; x=1690009960;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8gmM3ZejwGC+6a07ZhZTgRTiQBNhhfo6Vw23/zoB7sk=;
+        b=LtHOmqTTcAVrEedqNjjitQMSdRGhd9S4vc8HS1lpJWtllFNbAZ3c4cycf0ls/CTpr4
+         n1HQtII5ZxTwKsLjrDsaHtEKOhMhuviFjbgMwNC2in0C0svL6FoMzBwspjeI5AUkSqkP
+         jmZY4R6+yMUcXXXEQ0l57qjSD6Lz+1RQe9NWU+uHWCKeH1Z0GO1qrxFgArFsNc9LO7+G
+         Yp86Lxa8TT3iD0C2/LXwEp8ObkgquH0mcOmvtq3CbJUr22vvkUpY3tBihYMCwAXCqhDz
+         sc4HxkaMr8i0vVUkW2D2sOgvraq3UNbscGGu8UGm0HXXF1cOqS4p1HW3Vbmv2zVxvqww
+         MfbQ==
+X-Gm-Message-State: AC+VfDyLz5NUzU+AtPjYn6qz7mrgXRFBF70gGt0vo5GVzUHtZ8YFcDrr
+        tSbFy+Yq+2UKADHuTZe+EJE=
+X-Google-Smtp-Source: ACHHUZ4D49wXTy2HY7IGzI8M9ZLBvwiGtYoqrCCRD08tjy9ejVj8lyCyXp/bNm7jzAY5s0n2Z7/OPQ==
+X-Received: by 2002:a17:907:7da1:b0:98d:470d:932e with SMTP id oz33-20020a1709077da100b0098d470d932emr105051ejc.48.1687417959764;
+        Thu, 22 Jun 2023 00:12:39 -0700 (PDT)
 Received: from [127.0.1.1] ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id bq26-20020a170906d0da00b0096f5b48fe43sm4134923ejb.47.2023.06.22.00.12.38
+        by smtp.gmail.com with ESMTPSA id bq26-20020a170906d0da00b0096f5b48fe43sm4134923ejb.47.2023.06.22.00.12.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 00:12:38 -0700 (PDT)
+        Thu, 22 Jun 2023 00:12:39 -0700 (PDT)
 From:   Benjamin Bara <bbara93@gmail.com>
-Subject: [PATCH WIP RFC v2 0/2] media: uapi: Add V4L2_CID_VTOTAL control
-Date:   Thu, 22 Jun 2023 09:12:22 +0200
-Message-Id: <20230609-v4l2-vtotal-v2-0-cf29925f4517@skidata.com>
+Date:   Thu, 22 Jun 2023 09:12:23 +0200
+Subject: [PATCH WIP RFC v2 1/2] media: uapi: Add V4L2_CID_{V,H}TOTAL
+ controls
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAFb0k2QC/21OPQvCMBT8K/JmI2laDToJguAmLg7S4SV5tcG2k
- SQEpfS/m3Z2Ou6LuxECeUsBDqsRPCUbrBsyEesV6BaHJzFrMgfBRcl3fM9S1QmWoovYMVLF1pR
- SY0MIuaEwEFMeB93OnR5DJD8bb0+N/SwzD7hfrrN2O5+gztjaEJ3/Lg9SsST+jqWCcVYpaYgkc
- VnSMbyswYgb7Xqop2n6Ad52XlXNAAAA
+Message-Id: <20230609-v4l2-vtotal-v2-1-cf29925f4517@skidata.com>
+References: <20230609-v4l2-vtotal-v2-0-cf29925f4517@skidata.com>
+In-Reply-To: <20230609-v4l2-vtotal-v2-0-cf29925f4517@skidata.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Manivannan Sadhasivam <mani@kernel.org>
 Cc:     laurent.pinchart@ideasonboard.com, jacopo.mondi@ideasonboard.com,
@@ -77,62 +77,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+From: Benjamin Bara <benjamin.bara@skidata.com>
 
-This series adds new controls for the vertical and horizontal total
-size. Camera sensors usually have registers regarding the total size and
-not the blanking size. Also user space prefers to calculate with total
-frame sizes. Therefore, this would simplify implementations on both
-sides and could be seen as a replacement or upgrade for V4L2_CID_VBLANK.
-Additionally, its value is independent from format changes and therefore
-simplifies calculations in user space.
+Currently, V4L2_CID_{V,H}BLANK can be used to control the frame duration
+of a stream. However, camera sensors usually have a register for the
+total size (image data + blanking), e.g. {V,H}MAX on the imx290. As the
+user space also typically wants to set a frame size, both sides
+currently have to calculate with values they actually don't care about.
 
-For v2, I added a little bit more documentation and my personal
-expectations to 1/2. As I am fairly new to the camera world, they might
-be a little bit naive so please correct me if this is utopical. I added
-the RFC tag for that reason. However, my intention is to define a
-documented behaviour regarding the values and limits which could
-basically depend on HTOTAL. Currently, HBLANK is always set to the
-minimum in libcamera (I guess to simplify calculations). I think with
-HTOTAL, we could always use WIDTH_MAX(all modes) + HBLANK_MIN(WIDTH_MAX)
-as default to enable a constant frame size. If the current HTOTAL value
-differs from the default, we could infer that the user wants to either
-have a higher frame rate, or a higher exposure and could adapt to that.
-E.g. use the minimums to get the highest frame rate possible if the
-current values are outside of the possible range, or not limiting the
-exposure control by the current vertical blanking as it is done now. I
-guess this would help the driver to "understand" the needs of the user
-space, and therefore allow it to react in a defined and expected manner.
+The dependency between format height and vertical blanking also results
+to a change of the vertical blanking value and limits whenever the
+format of the frame is changed and therefore makes it harder for user
+space to do calculations, e.g. the frame duration.
+V4L2_CID_{V,H}TOTAL do not depend on the format and therefore simplify
+calculations. Additionally, they represent the hardware "better" and
+therefore also simplify calculations on the driver side.
 
-2/2 is a WIP (same as in v1) and currently implements VTOTAL for the
-imx290, basically extending the current V4L2_CID_VBLANK implementation.
+Add additional documentation about V4L2_CID_HTOTAL to have a control
+which enables the user space to express its intends to the driver. The
+driver can then update its controls and limits accordingly, and can do
+possible re-calculations during mode switches in a defined behaviour.
+This increases compatibility between different camera sensors.
 
-Thanks Dave for the feedback, insights and the examples (ov5647,
-ov9282). I might need some time to skim through the data sheets to learn
-why they do stuff like it is done now.
-
+Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
 ---
-Changes in v2:
-- 1/2: add HTOTAL
-- 1/2: add documentation about expectations
-- Link to v1: https://lore.kernel.org/r/20230609-v4l2-vtotal-v1-0-4b7dee7e073e@skidata.com
-
+v2:
+- add HTOTAL
+- add documentation about expectations
 ---
-Benjamin Bara (2):
-      media: uapi: Add V4L2_CID_{V,H}TOTAL controls
-      media: i2c: imx290: Add support for V4L2_CID_VTOTAL
+ Documentation/driver-api/media/camera-sensor.rst         | 11 +++++++++--
+ .../userspace-api/media/v4l/ext-ctrls-image-source.rst   | 16 ++++++++++++++++
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c                |  2 ++
+ include/uapi/linux/v4l2-controls.h                       |  2 ++
+ 4 files changed, 29 insertions(+), 2 deletions(-)
 
- Documentation/driver-api/media/camera-sensor.rst   | 11 ++++-
- .../media/v4l/ext-ctrls-image-source.rst           | 16 ++++++++
- drivers/media/i2c/imx290.c                         | 47 ++++++++++++++++------
- drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  2 +
- include/uapi/linux/v4l2-controls.h                 |  2 +
- 5 files changed, 64 insertions(+), 14 deletions(-)
----
-base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
-change-id: 20230609-v4l2-vtotal-eb15d37cafea
+diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
+index c7d4891bd24e..3ddeb0533728 100644
+--- a/Documentation/driver-api/media/camera-sensor.rst
++++ b/Documentation/driver-api/media/camera-sensor.rst
+@@ -85,12 +85,14 @@ a result of the configuration of a number of camera sensor implementation
+ specific parameters. Luckily, these parameters tend to be the same for more or
+ less all modern raw camera sensors.
+ 
+-The frame interval is calculated using the following equation::
++The frame interval is calculated using one of the following equations::
+ 
+ 	frame interval = (analogue crop width + horizontal blanking) *
+ 			 (analogue crop height + vertical blanking) / pixel rate
+ 
+-The formula is bus independent and is applicable for raw timing parameters on
++	frame interval = horizontal total size * vertical total size / pixel rate
++
++The formulas are bus independent and are applicable for raw timing parameters on
+ large variety of devices beyond camera sensors. Devices that have no analogue
+ crop, use the full source image size, i.e. pixel array size.
+ 
+@@ -100,6 +102,11 @@ is pixels and the unit of the ``V4L2_CID_VBLANK`` is lines. The pixel rate in
+ the sensor's **pixel array** is specified by ``V4L2_CID_PIXEL_RATE`` in the same
+ sub-device. The unit of that control is pixels per second.
+ 
++Additionally, the horizontal and vertical total sizes are specified by
++``V4L2_CID_HTOTAL`` and ``V4L2_CID_VTOTAL``, respectively. The unit of the
++``V4L2_CID_HTOTAL`` control is pixels and the unit of the ``V4L2_CID_VTOTAL`` is
++lines, analogous to the blanking.
++
+ Register list based drivers need to implement read-only sub-device nodes for the
+ purpose. Devices that are not register list based need these to configure the
+ device's internal processing pipeline.
+diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
+index 71f23f131f97..5451fa0223cd 100644
+--- a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
++++ b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
+@@ -59,6 +59,22 @@ Image Source Control IDs
+     non-sensitive.
+     This control is required for automatic calibration of sensors/cameras.
+ 
++``V4L2_CID_VTOTAL (integer)``
++    Number of total lines per frame, including data and idle lines (blanking).
++    The unit of the vertical total size is a line. Every line has length of the
++    image width plus horizontal blanking at the pixel rate defined by
++    ``V4L2_CID_PIXEL_RATE`` control in the same sub-device.
++
++``V4L2_CID_HTOTAL (integer)``
++    Number of total pixels per line, including data and idle pixels (blanking).
++    The unit of the horizontal total size is pixels. The default value of this
++    control is set to a value which allows a constant total size for every
++    supported mode of the sensor. The control can be used to indicate the driver
++    if a high frame rate (value < default) or a high exposure (value > default)
++    should be achieved. With value = default, a constant frame size across the
++    different modes is targeted. Note that the actual frame rate depends on the
++    ``V4L2_CID_PIXEL_RATE`` control, which might vary between mode switches.
++
+ .. c:type:: v4l2_area
+ 
+ .. flat-table:: struct v4l2_area
+diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+index 564fedee2c88..34e17e1faa7a 100644
+--- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
++++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
+@@ -1112,6 +1112,8 @@ const char *v4l2_ctrl_get_name(u32 id)
+ 	case V4L2_CID_TEST_PATTERN_BLUE:	return "Blue Pixel Value";
+ 	case V4L2_CID_TEST_PATTERN_GREENB:	return "Green (Blue) Pixel Value";
+ 	case V4L2_CID_NOTIFY_GAINS:		return "Notify Gains";
++	case V4L2_CID_VTOTAL:			return "Vertical Total Size";
++	case V4L2_CID_HTOTAL:			return "Horizontal Total Size";
+ 
+ 	/* Image processing controls */
+ 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
+diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
+index 5e80daa4ffe0..a4bbd91b8aef 100644
+--- a/include/uapi/linux/v4l2-controls.h
++++ b/include/uapi/linux/v4l2-controls.h
+@@ -1117,6 +1117,8 @@ enum v4l2_jpeg_chroma_subsampling {
+ #define V4L2_CID_TEST_PATTERN_GREENB		(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 7)
+ #define V4L2_CID_UNIT_CELL_SIZE			(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 8)
+ #define V4L2_CID_NOTIFY_GAINS			(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 9)
++#define V4L2_CID_VTOTAL				(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 10)
++#define V4L2_CID_HTOTAL				(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 11)
+ 
+ 
+ /* Image processing controls */
 
-Best regards,
 -- 
-Benjamin Bara <benjamin.bara@skidata.com>
+2.34.1
 
