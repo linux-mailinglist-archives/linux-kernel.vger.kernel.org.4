@@ -2,93 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85FB1739C14
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D01A6739C28
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:09:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232195AbjFVJHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 05:07:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48726 "EHLO
+        id S232229AbjFVJI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 05:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232087AbjFVJE5 (ORCPT
+        with ESMTP id S231950AbjFVJId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 05:04:57 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540E026B8
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:58:20 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f9c2913133so16117795e9.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:58:20 -0700 (PDT)
+        Thu, 22 Jun 2023 05:08:33 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AECC81FF9
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:59:55 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2b45b6adffbso93191631fa.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:59:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687424258; x=1690016258;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qSEmFq3YxbeiKoCeFTkl05+Yz5x7Lbhx+LsHriK4Ets=;
-        b=AcpEkm69lZTPzghNku1SKmsXl3pXsejyjq1KyPcAqOVJZJ9ojyuOyoRjpFTNMIaPto
-         kYf2DT246JTt5KaPbGnx6jhTvs+Jm7ZjJZsPnDhV2Yb7o3UUcQyHnN0w4fjYecQSpDlU
-         g+uwtAI2YDi6d4ePomUYjqIV/adsw9jcRJ3H3YFLF06Qq+TulLygauI6t6El+RYGXISt
-         ntoRCF4LKKtoyKzK0YZPARN5o/3iRzCa0/TsnyxaiTsFP/WvLh+bMSmm+806GSEaHFIm
-         ja/dtOOtvEXojcG5imDx6twaE2sDhsD//g/r5a+uPFwcGvcUDOjsayEeRknIvjFaLDkt
-         wCEw==
+        d=linaro.org; s=google; t=1687424389; x=1690016389;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gcskLwOTpD8wQSkQDaTOdQc/F5jugyU14yNTRSoQkfI=;
+        b=J7LCCSKRjCnUrBvwdX4x4251uRUWXoPSXfcl/E300OWDc186++vlIlw7+1IAXOfcpT
+         hNmdb013UqBn/pWOOCs8CyZ1mfnmNI88CnddM2ecYAVXhQPm43iNqJV373hCb3CbhbhR
+         BRpvo27CRDMUlGRfC1rga1TRG4/Fv4IZhz1dQcdeVRSdnKiheTtk3N2gD3b2GdwuuoF6
+         GanOb9UVQr32K9cipk5Ec6pvGiNXZybe7OHeYL7LVDos20ipFes0+KgmftgfslmuHeUK
+         kGTxCOytkRpYoOwAE/E1pI8k8N8HIvMGhio/Swmv/P+I4GdmGnEhV9FpssG1eslUSkcH
+         asSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687424258; x=1690016258;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qSEmFq3YxbeiKoCeFTkl05+Yz5x7Lbhx+LsHriK4Ets=;
-        b=aFCmFMlftaWLBD5wEGEnNukmt9i8jNVWlrV1TwkauUyok8yQvP9X3NURGnKowrnnwQ
-         3jcuCT8+HA9bpkzm7+7nPl4LYTKuU2DHLt3g0NnYVttyAiLTLzuxv4Krtyp3xcA++6B2
-         Grku+0KSJ9iQ5GhJe4eahPzLEinIPoME4NJ9P8E5S4wCgeDyqHm9soNtpDqYK6GtB4GK
-         tPUdfRJW2GIykzUUyf4p5QcgaoWbLplek6wy1H9KiZoTAtsI0Tn4mV1bYb0lzm3upeP2
-         RlOv5CdkGT3e/wDiqJks0ypiJT32aCpZxfIWrUBacyKmCmwzmtDbdXfTMjzan7UYNxyf
-         tJYg==
-X-Gm-Message-State: AC+VfDwSvai2B4S1nhtQx5F6rDWcgHP/CBwrhxrypKlEPxgiE4C0sphL
-        3bF0feq9OciTU+n056yVjMg2DQ==
-X-Google-Smtp-Source: ACHHUZ7h75jqzLOPjpnQdyDGHX83w2l/2PhBZLFxuDZfDnXQyWvLT7kzHLkoNx26oPO46lPwuFCOcg==
-X-Received: by 2002:a7b:c4d0:0:b0:3fa:7828:df33 with SMTP id g16-20020a7bc4d0000000b003fa7828df33mr8183wmk.35.1687424258442;
-        Thu, 22 Jun 2023 01:57:38 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id y10-20020a05600c20ca00b003f9b29ba838sm7136305wmm.35.2023.06.22.01.57.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 01:57:37 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Thu, 22 Jun 2023 10:57:22 +0200
-Subject: [PATCH 5/5] arm64: dts: qcom: sdm845-mtp: add chassis-type
- property
+        d=1e100.net; s=20221208; t=1687424389; x=1690016389;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gcskLwOTpD8wQSkQDaTOdQc/F5jugyU14yNTRSoQkfI=;
+        b=i7qvxpxYY4zM9syVjEvhxKdughfHHX7+wEI4tTx4sVUO3sgbaOjvYuPKJEgulcPWxN
+         oOUKb/z3pRkJT+kkuwOdQXdhP7qGkWyzQbiLvVftLp/m57DN9ibsn+Ao/8eoFzJ93k0s
+         S5CFB6LEbsaUc/CM4BKfHpswyIcdI83rZ16i6pgHT3T+6+9j0klvLpK7Ae4jXCn3bGA9
+         w5GzftYLCCr4yGBSY/F64dXkr+VikrLDLOGcpdcjvmNO+bHO2XHREusqNqg+//r9E22G
+         /4ed+LJnE33IcovupMk8hMo7joJ4pcMQyWxNn7SxtQyR+LKXW9Eub4Le3bCuItsGxFMr
+         wjMw==
+X-Gm-Message-State: AC+VfDzf2SvkYVCh4/u9vFNm9LKW+QkrDRpnBEPdv59KCkDt+fKoX+yv
+        x5SKFM5+npBp7B69Xcf7iTpQKw==
+X-Google-Smtp-Source: ACHHUZ709zw/bPwq517EI6mXV/c0cXMHUC0RPzt1Z9/s7ik6OC9/9EwtODaLvfVuXoQlrBDTp1YH7Q==
+X-Received: by 2002:ac2:5052:0:b0:4f8:655f:e127 with SMTP id a18-20020ac25052000000b004f8655fe127mr9328029lfm.64.1687424389329;
+        Thu, 22 Jun 2023 01:59:49 -0700 (PDT)
+Received: from [192.168.1.101] (abyl165.neoplus.adsl.tpnet.pl. [83.9.31.165])
+        by smtp.gmail.com with ESMTPSA id k11-20020ac2456b000000b004f6150e0899sm1020542lfm.290.2023.06.22.01.59.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Jun 2023 01:59:49 -0700 (PDT)
+Message-ID: <eedf1f91-d884-6bef-7a39-efcdea37c474@linaro.org>
+Date:   Thu, 22 Jun 2023 10:59:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230622-topic-sm8x50-upstream-chassis-type-v1-5-13f676eb71f3@linaro.org>
-References: <20230622-topic-sm8x50-upstream-chassis-type-v1-0-13f676eb71f3@linaro.org>
-In-Reply-To: <20230622-topic-sm8x50-upstream-chassis-type-v1-0-13f676eb71f3@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 1/5] arm64: dts: qcom: sm8[1235]50-mtp: add chassis-type
+ property
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=691;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=4ovpoZV7TNdBivA7TBVkyWbrfZACOHU5mXUZCTQ4xms=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBklAz8YamBE9TsOeQpQM0WkSYoLVPjXb6QEtgOVjSX
- C3WE91uJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZJQM/AAKCRB33NvayMhJ0XwCD/
- 9DMijzaiA1q/QP+BqDeEmM8MR/yBeUmmewK3FH8Fszp/4+zRtYzeLu3lYhu3xDDO6kt8A52sLKZe6m
- lcMy4OX6KnvXZgJBC/+1eQyDxJyh/vU80YF00F7V5gSKqVJKlE83x+HBSusb9bVB95iv7PKbSNssuQ
- gtu0ntwRhETOt9lMzP1rROQ3ZiFhGSr9iSHK6bbCvKx5kLlsxrBWw3rLsbkqROasNF0zqMVI5Nhfpe
- F3svv3TXghBkHvBNyWN+IPxzs8iAQ7VQPSVDPdg76ri+ZiKpHniF2w+06h63BJwjKWs2Uzk5Yc/M8h
- 4gg+DDCLNBaDCVHAJvwiz/y93pOBY1s4NNIsiEBeoX75e0OEYsp5vgFAB/9p+2ZXtDjjpobNbZilUe
- d8/f+vHw026CHRPzynca3E6FZ8L+MRKJU81p75IekdCKI7xHtLpvSo9mzxd7l+OIZCWx3cIMt30Hhb
- w/taQjzXUL/NSTKz0L144QMrwntg+L27wt2A3w0oumBPzgMxMZDrCPO38cxNVWHtI/UyMXAyGseNNS
- xHQLRNuTcIsIq8dS3n5Tt4zaMvW3wh8qEe4YbCmW7Py9kULlVY09rkB46dKT8wuHhJ3HcVMz9aK4Yu
- 1yPNqPuPeFBhqVYCK59jvMMkJXeHqsOQWdSkebiCIXzPy822DibT0slo7VLA==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        linux-kernel@vger.kernel.org
+References: <20230622-topic-sm8x50-upstream-chassis-type-v1-0-13f676eb71f3@linaro.org>
+ <20230622-topic-sm8x50-upstream-chassis-type-v1-1-13f676eb71f3@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230622-topic-sm8x50-upstream-chassis-type-v1-1-13f676eb71f3@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,27 +82,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qualcomm's Mobile Test Platforms devices are handsets, set the
-chassis-type property to 'handset'.
+On 22.06.2023 10:57, Neil Armstrong wrote:
+> Qualcomm's Mobile Test Platforms devices are handsets, set the
+> chassis-type property to 'handset'.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+Bit of a thick "handset" :P
 
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
----
- arch/arm64/boot/dts/qcom/sdm845-mtp.dts | 1 +
- 1 file changed, 1 insertion(+)
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-index b2d4336e764b..41675a8de268 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-+++ b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
-@@ -15,6 +15,7 @@
- / {
- 	model = "Qualcomm Technologies, Inc. SDM845 MTP";
- 	compatible = "qcom,sdm845-mtp", "qcom,sdm845";
-+	chassis-type = "handset";
- 
- 	aliases {
- 		serial0 = &uart9;
-
--- 
-2.34.1
-
+Konrad
+>  arch/arm64/boot/dts/qcom/sm8150-mtp.dts | 1 +
+>  arch/arm64/boot/dts/qcom/sm8250-mtp.dts | 1 +
+>  arch/arm64/boot/dts/qcom/sm8350-mtp.dts | 1 +
+>  arch/arm64/boot/dts/qcom/sm8550-mtp.dts | 1 +
+>  4 files changed, 4 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm8150-mtp.dts b/arch/arm64/boot/dts/qcom/sm8150-mtp.dts
+> index 34ec84916bdd..286350ac7751 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8150-mtp.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8150-mtp.dts
+> @@ -16,6 +16,7 @@
+>  / {
+>  	model = "Qualcomm Technologies, Inc. SM8150 MTP";
+>  	compatible = "qcom,sm8150-mtp", "qcom,sm8150";
+> +	chassis-type = "handset";
+>  
+>  	aliases {
+>  		serial0 = &uart2;
+> diff --git a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
+> index 4c9de236676d..ad2b60e281eb 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8250-mtp.dts
+> @@ -18,6 +18,7 @@
+>  / {
+>  	model = "Qualcomm Technologies, Inc. SM8250 MTP";
+>  	compatible = "qcom,sm8250-mtp", "qcom,sm8250";
+> +	chassis-type = "handset";
+>  
+>  	aliases {
+>  		serial0 = &uart12;
+> diff --git a/arch/arm64/boot/dts/qcom/sm8350-mtp.dts b/arch/arm64/boot/dts/qcom/sm8350-mtp.dts
+> index d21d2aacf201..c5a6c8745606 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8350-mtp.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8350-mtp.dts
+> @@ -17,6 +17,7 @@
+>  / {
+>  	model = "Qualcomm Technologies, Inc. sm8350 MTP";
+>  	compatible = "qcom,sm8350-mtp", "qcom,sm8350";
+> +	chassis-type = "handset";
+>  
+>  	aliases {
+>  		serial0 = &uart2;
+> diff --git a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
+> index ec86c5f38045..00c7e1704a8c 100644
+> --- a/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
+> +++ b/arch/arm64/boot/dts/qcom/sm8550-mtp.dts
+> @@ -18,6 +18,7 @@
+>  / {
+>  	model = "Qualcomm Technologies, Inc. SM8550 MTP";
+>  	compatible = "qcom,sm8550-mtp", "qcom,sm8550";
+> +	chassis-type = "handset";
+>  
+>  	aliases {
+>  		serial0 = &uart7;
+> 
