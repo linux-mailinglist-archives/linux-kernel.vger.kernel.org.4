@@ -2,128 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85E0473A94B
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 22:03:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9095773A94F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 22:07:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbjFVUDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 16:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34102 "EHLO
+        id S230350AbjFVUHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 16:07:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjFVUDW (ORCPT
+        with ESMTP id S229549AbjFVUHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 16:03:22 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D5919B;
-        Thu, 22 Jun 2023 13:03:19 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1b54f5aac48so36121385ad.2;
-        Thu, 22 Jun 2023 13:03:18 -0700 (PDT)
+        Thu, 22 Jun 2023 16:07:08 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E9119B
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 13:07:07 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b53b8465daso38208595ad.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 13:07:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687464198; x=1690056198;
+        d=chromium.org; s=google; t=1687464427; x=1690056427;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3177D2gAzh/TeV5rsITAvPzX0EvWliaupFIrZiwcQgU=;
-        b=U2QO1iZnkEYG5tFjxVYjbsRptW+ljrGwOC1E9dEXLMEoO1wvmjbm2z6kcRevY6JGV7
-         M1XC3yURdVxtbe37bW7pV8R1ABkXwWjWWvyWs0ur9zmXE07Nze0UOwLiWVj1rcjHGlMf
-         pwAHFE1hyJWUnFvX3WdpegD5xcppKv3afR72/qFrJXKzNowNFJmZd3sfIQVPSzjP6+Wr
-         YioNRpvN14dTSZen6cI0nfz1KSoOv7YC4zSGEOc2dTqc3l0RsBRWifCZzDmCaa6ioCxh
-         1V3SQQxdUUE5x/wnM9y/q9pgEsBw0Vxp87oUc8NliTG1bP0rNI0iANVmkiSARHf3l4Qw
-         0ZHg==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rRceC2Em04Mn9wWhJvKcNrbkdrle685Lc8A6OEbK70c=;
+        b=bsirya4zb/3ljIjxpSptQZleePVH2CV1o92QhMq5NxKbXezIIWsrETVcJPExRmrWI0
+         VHMWYzwCE0iMHi45bkHW3s864nrpv+huGC+J3hhyUhbEK63ZXZrIy9cGbq0A3JZ6CMdm
+         JKUEQOL5VVmno+2HdwPSKy9rHYMCuMBSTbeCo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687464198; x=1690056198;
+        d=1e100.net; s=20221208; t=1687464427; x=1690056427;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3177D2gAzh/TeV5rsITAvPzX0EvWliaupFIrZiwcQgU=;
-        b=CzYf9YUu3MwOzfbk1AV/LeaB4qdlMIkolRDdxr+4K7/IGP+4UvU+F3KzcUhoZkPOfz
-         dLSW/xMz0JPi7NZVtJPyL+N0/PRg4jMyYbzXId23WMpKV2wzyJqCPaWLeXjL5hlj7CpO
-         /OzkrNG3fPX6ixuU+7gPQskvGg9IIyIxoCKwsIcIRbMZKmCpIejn03aeXjkEUl8hRd96
-         A4mSV/y6k6FB570bf4Bpo2ObKh3AvSk5C/Vz9Y3/KTHVnR8fUE+tP/vsp7oR/L3T4orr
-         BU7Mq25l4c+B6Cb52hdmBGO1d6pufw0tHV344c6GVbRjEB2o1Z6Eh91OgTGpZFh3C0E4
-         SveQ==
-X-Gm-Message-State: AC+VfDyXNp7HEYxiCUU2V1uSjPx9UE8bu38GIJEYgmvZe76+P2NbwbJO
-        /hTBSVKQ/YxsXjDn3i7TAqI=
-X-Google-Smtp-Source: ACHHUZ6crq2VsaP9wDkpkR+RTiTCArAxscpqktlsgquWXOY01GQ9oDt/9KlKLECD8we2CNW/R2Sgog==
-X-Received: by 2002:a17:903:442:b0:1b1:d39e:28bb with SMTP id iw2-20020a170903044200b001b1d39e28bbmr14380110plb.34.1687464198196;
-        Thu, 22 Jun 2023 13:03:18 -0700 (PDT)
-Received: from yoga ([2400:1f00:13:f188:5597:fb56:d39:775f])
-        by smtp.gmail.com with ESMTPSA id m14-20020a170902db0e00b001b045c9abd2sm5746924plx.143.2023.06.22.13.03.14
+        bh=rRceC2Em04Mn9wWhJvKcNrbkdrle685Lc8A6OEbK70c=;
+        b=OYVWBqMmlBBhHP1lArGWqDUixI8QsQC3DUPKZrXzYjYTVWPUUxN0PIffEik5+IP03T
+         deS00j8UIqTrB2uYd7FotddRP8TLZNP0TPndAcfSo4+Xm2EMGOHfKoMJdXdXXzAWeaQG
+         RlrO8rvlQUDYkKttd/pfVOsqGGrvbMlPOGY6ckro5nc0Q5bYIuPcT0o+mAvCwOoIKRlN
+         JFiRGXqUCGh/fPczNrFAUjyjIigpHdJqwwAuXavyDBYJQkJRjmEEXF7rvK3gRSI37SFT
+         RuHLSea9HYlhGWtVObZsprbz3bsHQgT7lhoEXwgWiRY8X6IEsiapZehD9rt0BRQeRcdT
+         D6bg==
+X-Gm-Message-State: AC+VfDwT6js+0umxhCuh/YrRVTCdMHwxlgFfeAEtlXAuhGpL7qUDpLH7
+        0HUuHmA1qUg9hYe6SI9GsCHivw==
+X-Google-Smtp-Source: ACHHUZ6SuJ4+KH06vVHTEyfMKFigI3xO/NPcNvbNy7RgwL5n4tcxFj7GSoXHgSW2Xxso/W7fTzjZ7w==
+X-Received: by 2002:a17:903:190:b0:1b1:9968:53be with SMTP id z16-20020a170903019000b001b1996853bemr14191367plg.64.1687464426840;
+        Thu, 22 Jun 2023 13:07:06 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id iy9-20020a170903130900b001aaed524541sm5735306plb.227.2023.06.22.13.07.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 13:03:17 -0700 (PDT)
-From:   Anup Sharma <anupnewsmail@gmail.com>
-X-Google-Original-From: Anup Sharma <AnupSharma>
-Date:   Fri, 23 Jun 2023 01:33:10 +0530
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Anup Sharma <anupnewsmail@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/9] Add support for Firefox's gecko profile format
-Message-ID: <ZJSo/uzJNyfcflNY@yoga>
-References: <cover.1687375189.git.anupnewsmail@gmail.com>
- <a44290cc-5954-8d5a-f84c-9e5a68732ea4@intel.com>
+        Thu, 22 Jun 2023 13:07:05 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 13:07:04 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Baruch Siach <baruch@tkos.co.il>
+Cc:     Eric Biederman <ebiederm@xmission.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] elf: correct note name comment
+Message-ID: <202306221305.5F23BC4@keescook>
+References: <a7e56e9c0f821348a4c833ac07e7518f457cbdb8.1687413763.git.baruch@tkos.co.il>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a44290cc-5954-8d5a-f84c-9e5a68732ea4@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a7e56e9c0f821348a4c833ac07e7518f457cbdb8.1687413763.git.baruch@tkos.co.il>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 07:43:13AM +0300, Adrian Hunter wrote:
-> On 21/06/23 22:35, Anup Sharma wrote:
-> > This patch series adds support for Firefox's gecko profile format.
-> > The format is documented here [1]
-> > 
-> > The series adds a new python script that can be used to convert the 
-> > perf script to gecko profile format. To use this script, use the
-> > following commands: 
-> > 
-> > perf record 
-> > perf script -F +pid > perf_data.txt
-> > python3 firefox-gecko-converter.py > gecko_profile.json
+On Thu, Jun 22, 2023 at 09:02:43AM +0300, Baruch Siach wrote:
+> Only the NT_PRFPREG note is named "LINUX". Correct the comment
+> accordingly.
 > 
-> Why not use the perf script python interface?
+> Fixes: 00e19ceec80b ("ELF: Add ELF program property parsing support")
+> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
+> ---
+> 
+> Resending in hope kvack.org mail server would be willing to accept my
+> submission this time.
+> 
+> Adding LKML as a safety net.
+> ---
+>  include/uapi/linux/elf.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git include/uapi/linux/elf.h include/uapi/linux/elf.h
+> index ac3da855fb19..a8a0cced62c6 100644
+> --- include/uapi/linux/elf.h
+> +++ include/uapi/linux/elf.h
+> @@ -372,7 +372,7 @@ typedef struct elf64_shdr {
+>   * Notes used in ET_CORE. Architectures export some of the arch register sets
+>   * using the corresponding note types via the PTRACE_GETREGSET and
+>   * PTRACE_SETREGSET requests.
+> - * The note name for all these is "LINUX".
+> + * The note name for most types is "CORE". NT_PRFPREG note is named "LINUX".
+>   */
+>  #define NT_PRSTATUS	1
+>  #define NT_PRFPREG	2
 
-Hi Adrian,
-Thank you for your suggestion. I am working on it and will try to implement 
-it in the next version.
+Is this accurate? I see this logic in fs/binfmt_elf.c:
 
-> https://perf.wiki.kernel.org/index.php/Latest_Manual_Page_of_perf-script-python.1
-> 
-> > 
-> > Also dont forget to change the chown of the output file to the user[2].
-> > 
-> > [1] https://github.com/firefox-devtools/profiler/blob/main/docs-developer/gecko-profile-format.md
-> > [2] https://bugzilla.mozilla.org/show_bug.cgi?id=1823421
-> > 
-> > Anup Sharma (9):
-> >   scripts: python: Add check for correct perf script format
-> >   scripts: python: implement add sample function and return it
-> >   scripts: python: Introduce thread sample processing in
-> >     convertPerfScriptProfile
-> >   scripts: python: Implement parsing of input data in
-> >     convertPerfScriptProfile
-> >   scripts: python: implement function for thread creation
-> >   scripts: python: implement get or create stack function
-> >   scripts: python: implement get or create frame function
-> >   scripts: python: Finalize convertPerfScriptProfile and return profile
-> >     data
-> >   scripts: python: Add temporary main function for testing purposes
-> > 
-> >  .../scripts/python/firefox-gecko-converter.py | 249 ++++++++++++++++++
-> >  1 file changed, 249 insertions(+)
-> >  create mode 100644 tools/perf/scripts/python/firefox-gecko-converter.py
-> > 
-> 
+                bool is_fpreg = note_type == NT_PRFPREG;
+		...
+                fill_note(&t->notes[note_iter], is_fpreg ? "CORE" : "LINUX",
+                          note_type, ret, data);
+
+i.e. only FPREG is named "CORE", otherwise "LINUX".
+
+Shouldn't this patch have CORE and LINUX swapped?
+
+-- 
+Kees Cook
