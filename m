@@ -2,90 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97C5573A143
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D87173A147
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231305AbjFVMw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 08:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
+        id S230237AbjFVMzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 08:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbjFVMwz (ORCPT
+        with ESMTP id S230063AbjFVMzV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 08:52:55 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C171BFC
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:52:52 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9896216338cso272978166b.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:52:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687438371; x=1690030371;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vJn4qK5D0/zBLT8ePA8blzrHlwW1q+g3bf+ZWr4iToU=;
-        b=n8kXF96Ou8tJCUZABlfYEiawtFnTorpd6T6wVvKKTS9oU8/wRhv59tqvt+uvAkNr/I
-         0wmEqgx6EfnyZV9KUDTjS0YydCVrbGsC1dsZRImLRa0O9dsqeT1RrbG+YDObVXyStten
-         2Xhwa00KD+H3SaTiQevquHYXLwCcP3kvSULg2frdOi1Q0l54/zm0MMd0cJ/KIAIYANOT
-         obZpyacfm+blrmEvwXYTTtE1u016ho2iADX/o0dl1VV5apDMd0oqmeSxNa2PnnhR4iJY
-         bg0mi6k6XBpbTiBjnEU3NiJhMzbwcoeRn3WyNinJdFigx5QvQQ9G0E/z0jLJsSOfvmZC
-         NdoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687438371; x=1690030371;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vJn4qK5D0/zBLT8ePA8blzrHlwW1q+g3bf+ZWr4iToU=;
-        b=ZwvWJQwEx2gVJNaAz8eLwTAD0UPzblj0zC2gArVSNvWIVxQfbvVMc+5dKSx8M44wT/
-         roovcDzJJ5JTSZ7JVXF5esJfEY56H05w03oihIuygsrWVRou9NgCO+gCnL9FpVgL3bGz
-         YxUAqvS4SeZMiP4+weSkYM2MqsPzjG3/cverandz+jxZ3jBu9WgeWHzWbdp6GxSo/JeZ
-         fo+weKz4xn78BcOMF8lWN+qRMppNuNpMfaROc5fb8QcWjTz7+tdxAcRsUtTL1gLdIjgu
-         sem8lculA/trYkkhmvjsIW8Aup/Y/JXZbd+iHNemYMHaCm7Midt37RnBCVN+19eBIVaW
-         BxDw==
-X-Gm-Message-State: AC+VfDwYwuaoA9PbqD/EczFMI3dVw0aZCElhOVh9lizcd8O1XSPuccqK
-        zH8IaemSUhJgan8MWpHvep36bA==
-X-Google-Smtp-Source: ACHHUZ6BL7cV1ab79Z1DXqI3js9EbbIJO29PsCcID0NCQKXDLIPdAJcdnDuaLOt1M2ocx9LetkrqQg==
-X-Received: by 2002:a17:906:9b88:b0:988:91cb:afd1 with SMTP id dd8-20020a1709069b8800b0098891cbafd1mr12407657ejc.29.1687438370948;
-        Thu, 22 Jun 2023 05:52:50 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id x14-20020a170906134e00b009828e26e519sm4559218ejb.122.2023.06.22.05.52.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 05:52:50 -0700 (PDT)
-Message-ID: <e2cc150b-49e3-7f2f-ce7f-a5982d129346@linaro.org>
-Date:   Thu, 22 Jun 2023 14:52:48 +0200
+        Thu, 22 Jun 2023 08:55:21 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5511F10F6;
+        Thu, 22 Jun 2023 05:55:20 -0700 (PDT)
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35MChoZZ013565;
+        Thu, 22 Jun 2023 12:55:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=VCuQ5gG0TnmWKwG3oiEM5w2mHyN88iriwTagvgLQmcU=;
+ b=c+dtaSjcSvGfhD0Q0YpVtpB7jrw6Zh/xvb02vkBBKTlfgSXnWPOkCdocp/X+3CrrXP4L
+ aNBO8RMapv9ZEzNmR6B9Y4qCzNzx+o7dOStao2bwZX5a0D5RJsn4fD0XJEj+ffwdSTkf
+ dbPAD9kMq0PwspVUg1YaxjdqjR+woGgkiZ1BhwW0Q0nUtmNGKyCrU/DTtEUjzncTsn/R
+ CPtvfRBqpWq3gLj3MZxiWHuDhEMajZBgoRagByOxkEF1kH7uDmGUcLGX5lJWvVXXy7jI
+ s1uHjcKdijSRAre8XSaRl2O5G2HvQqc6b7+jvAY6wZhA4mtr8n+YpXU1ObuN3UcMdFcT oA== 
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3rcpj78a3c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 12:55:16 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 35M8G2WO024574;
+        Thu, 22 Jun 2023 12:55:15 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3r94f5ammx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 12:55:14 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 35MCt9j624576588
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Jun 2023 12:55:09 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 79D6B20043;
+        Thu, 22 Jun 2023 12:55:09 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2FEB82004F;
+        Thu, 22 Jun 2023 12:55:09 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 22 Jun 2023 12:55:09 +0000 (GMT)
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Ulrich Weigand <Ulrich.Weigand@de.ibm.com>,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] s390/decompresser: fix misaligned symbol build error
+Date:   Thu, 22 Jun 2023 14:55:08 +0200
+Message-Id: <20230622125508.1068457-1-hca@linux.ibm.com>
+X-Mailer: git-send-email 2.39.2
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: asdIpcSa8pPfj8Xz50nagA6-Sp0SJTWT
+X-Proofpoint-ORIG-GUID: asdIpcSa8pPfj8Xz50nagA6-Sp0SJTWT
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v2 5/6] can: tcan4x5x: Add support for tcan4552/4553
-Content-Language: en-US
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Vivek Yadav <vivek.2311@samsung.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Simon Horman <simon.horman@corigine.com>
-References: <20230621093103.3134655-1-msp@baylibre.com>
- <20230621093103.3134655-6-msp@baylibre.com>
- <32557326-650c-192d-9a82-ca5451b01f70@linaro.org>
- <20230621123158.fd3pd6i7aefawobf@blmsp>
- <21f12495-ffa9-a0bf-190a-11b6ae30ca45@linaro.org>
- <20230622122339.6tkajdcenj5r3vdm@blmsp>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230622122339.6tkajdcenj5r3vdm@blmsp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-22_08,2023-06-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 mlxscore=0 phishscore=0 bulkscore=0 mlxlogscore=999
+ clxscore=1011 adultscore=0 priorityscore=1501 suspectscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306220105
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,28 +86,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2023 14:23, Markus Schneider-Pargmann wrote:
->>
->> Yeah, but your code is different, although maybe we just misunderstood
->> each other. You wrote that you cannot use the GPIOs, so I assumed you
->> need to know the variant before using the GPIOs. Then you need
->> compatibles. It's not the case here. You can read the variant and based
->> on this skip entirely GPIOs as they are entirely missing.
-> 
-> The version information is always readable for that chip, regardless of
-> state and wake GPIOs as far as I know. So yes it is possible to setup
-> the GPIOs based on the content of the ID register.
-> 
-> I personally would prefer separate compatibles. The binding
-> documentation needs to address that wake and state GPIOs are not
-> available for tcan4552/4553. I think having compatibles that are for
-> these chips would make sense then. However this is my opinion, you are
-> the maintainer.
+Nathan Chancellor reported a kernel build error on Fedora 39:
 
-We do not talk about compatibles in the bindings here. This is
-discussion about your driver. The entire logic of validating DTB is
-flawed and not needed. Detect the variant and act based on this.
+$ clang --version | head -1
+clang version 16.0.5 (Fedora 16.0.5-1.fc39)
 
-Best regards,
-Krzysztof
+$ s390x-linux-gnu-ld --version | head -1
+GNU ld version 2.40-1.fc39
+
+$ make -skj"$(nproc)" ARCH=s390 CC=clang CROSS_COMPILE=s390x-linux-gnu- olddefconfig all
+s390x-linux-gnu-ld: arch/s390/boot/startup.o(.text+0x5b4): misaligned symbol `_decompressor_end' (0x35b0f) for relocation R_390_PC32DBL
+make[3]: *** [.../arch/s390/boot/Makefile:78: arch/s390/boot/vmlinux] Error 1
+
+It turned out that the problem with misaligned symbols on s390 was fixed
+with commit 80ddf5ce1c92 ("s390: always build relocatable kernel") for the
+kernel image, but did not take into account that the decompressor uses its
+own set of CFLAGS, which come without -fPIE.
+
+Add the -fPIE flag also to the decompresser CFLAGS to fix this.
+
+Reported-by: Nathan Chancellor <nathan@kernel.org>
+Suggested-by: Ulrich Weigand <Ulrich.Weigand@de.ibm.com>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1747
+Signed-off-by: Heiko Carstens <hca@linux.ibm.com>
+---
+ arch/s390/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/s390/Makefile b/arch/s390/Makefile
+index ed646c583e4f..5ed242897b0d 100644
+--- a/arch/s390/Makefile
++++ b/arch/s390/Makefile
+@@ -27,6 +27,7 @@ KBUILD_CFLAGS_DECOMPRESSOR += -fno-delete-null-pointer-checks -msoft-float -mbac
+ KBUILD_CFLAGS_DECOMPRESSOR += -fno-asynchronous-unwind-tables
+ KBUILD_CFLAGS_DECOMPRESSOR += -ffreestanding
+ KBUILD_CFLAGS_DECOMPRESSOR += -fno-stack-protector
++KBUILD_CFLAGS_DECOMPRESSOR += -fPIE
+ KBUILD_CFLAGS_DECOMPRESSOR += $(call cc-disable-warning, address-of-packed-member)
+ KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO),-g)
+ KBUILD_CFLAGS_DECOMPRESSOR += $(if $(CONFIG_DEBUG_INFO_DWARF4), $(call cc-option, -gdwarf-4,))
+-- 
+2.39.2
 
