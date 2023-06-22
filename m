@@ -2,192 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2ACC373A074
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7892373A079
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbjFVMDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 08:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55364 "EHLO
+        id S231157AbjFVMEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 08:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229802AbjFVMCZ (ORCPT
+        with ESMTP id S231461AbjFVMDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 08:02:25 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B96C210B
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:02:05 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f9bece8e19so21936465e9.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:02:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1687435316; x=1690027316;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ehfVzvQExF8A0HC8WC/ILIhv/WTmHbal1y8W4TeN1es=;
-        b=ZpJlE94aIfdZ9blu2+e25WvPl8E39qqcqv4OIVo9dcwtr02ZZPnabvhB6ySYT1BSvw
-         ETcVMk0WKIXLkk2VIzg4qbrJ5ibZ0fZa367vc1GgCC2cP/rWtmaNWjRI5u+bLebeKm6D
-         jEj1SShT6AdDF4NUSmVUOv8yXLBUk4AiuBnwehuZn0aNh4sEveOJv7IcHdjNEoQnj4Zl
-         q4D7hHxRwyfBpFCZWPtjeGYQDUxbQq92/eFlHwXdCD0Ib7HWc1iU6sjyf7/8Q5/1OGgl
-         BjR9e4xabZljgBBLYoAQ2L3IRq/cLZhktBx91P1TxVnJJIeatGpjdV6rCC/gGya1WxWk
-         QGIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687435316; x=1690027316;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ehfVzvQExF8A0HC8WC/ILIhv/WTmHbal1y8W4TeN1es=;
-        b=RuQZUy4eWEyNR1wPOijV6ccnIy/1EaklKV88pqJmnIcuc93Oxj+jG4vUCYKDasy5BS
-         gYCEU/GaF8BLBRrnF/l6wQ6wHVg4eu5chanDsqBrzITR+VzETYJQCZXfaXFJ3I6Sh/iW
-         d+pZp024+k8WUlas2UKYK44mRmZQOlV4xoHw7XFkSU/Iw88b57Cy1/48FN3lyjnyKVQa
-         wgnydXIewvrUxPfrD/LPkJrBo1UHWMhrc/vY7QKm6ExxfA14dJ9DUyk2Tw8Zl9kSb+S8
-         s/lQ8xTnj8wrpA5OWBRYQw21VrYEXcWWIDi+jC8HxZB093dfQgTM2bfwGb8fHkD6FnTz
-         zSxQ==
-X-Gm-Message-State: AC+VfDwZLuEr5NpHX0wkq1C/k7M9vuW/HqrBaK/zO7wBv9G7IAa3DRwa
-        NQBiQSHq7f2emeJsr3TVYluY1w==
-X-Google-Smtp-Source: ACHHUZ7FpEJIjzvQwxNwPUBwmllXRykV33/rRLw9bzvXYHni/kpzPOKVm3FCkT6F91vdGlY1pyzwxg==
-X-Received: by 2002:a05:600c:2206:b0:3f9:515:ccfb with SMTP id z6-20020a05600c220600b003f90515ccfbmr16742469wml.12.1687435316511;
-        Thu, 22 Jun 2023 05:01:56 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:d785:af3e:3bf5:7f36])
-        by smtp.gmail.com with ESMTPSA id 17-20020a05600c231100b003f8ec58995fsm7594296wmo.6.2023.06.22.05.01.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 05:01:56 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [RESEND PATCH v2 5/5] arm64: dts: qcom: sa8775p-ride: enable ethernet0
-Date:   Thu, 22 Jun 2023 14:01:42 +0200
-Message-Id: <20230622120142.218055-6-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230622120142.218055-1-brgl@bgdev.pl>
-References: <20230622120142.218055-1-brgl@bgdev.pl>
+        Thu, 22 Jun 2023 08:03:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DE58268C
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:03:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7305761804
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 12:02:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83053C433C8;
+        Thu, 22 Jun 2023 12:02:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687435378;
+        bh=lYc3kQQ/9qegKQOhk3TC3ONAYzKaU732PlGw0dTEwJg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=uBtT3U2LF14hjRlX5/u9C1qQKTFS6W7m50cCEfnBkhxRlAjKRYFKOR2Voyxj0/CRj
+         M8rGdmlVBMMOKWU2h2mvgzCwzyC48o2ZPBI30N1wFH2OOyE9Cwb+6/dwikGcwV2H1n
+         9+hmvuFrstfioQ1K6Imz03c43epe9RrjD715aGmbJxkXNXGwELiu5vuNE+BDUZjHPU
+         /6Sl+b5ugb0zclQu1igZVvuPakOOhtLnukurqe0VfT8xhabpLDODv9zU+HhYATJE+M
+         XvYMxFfer5nKR4tyUx7GhOw+/QI0c75Edr5T2GDSnEw0w8tjVAKZ5Q8aPs42TQ8kd0
+         bW84C0aKxV4oA==
+Message-ID: <fc0af540-37fb-d2ac-3e3d-e0cb43747e69@kernel.org>
+Date:   Thu, 22 Jun 2023 07:02:56 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 2/2] firmware: stratix10-svc: fix bug in saving
+ controller data
+Content-Language: en-US
+To:     tien.sung.ang@intel.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20230621064645.1431883-1-tien.sung.ang@intel.com>
+ <20230621064645.1431883-3-tien.sung.ang@intel.com>
+From:   Dinh Nguyen <dinguyen@kernel.org>
+In-Reply-To: <20230621064645.1431883-3-tien.sung.ang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Again, I asked you base this patch 1st! That way I can send this patch 
+only to Greg KH. The patch to support N SVC clients need more time.
 
-Enable the first 1Gb ethernet port on sa8775p-ride development board.
+Dinh
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sa8775p-ride.dts | 88 +++++++++++++++++++++++
- 1 file changed, 88 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-index bf90f825ff67..b2aa16037707 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8775p-ride.dts
-@@ -261,6 +261,94 @@ vreg_l8e: ldo8 {
- 	};
- };
- 
-+&ethernet0 {
-+	phy-mode = "sgmii";
-+	phy-handle = <&sgmii_phy>;
-+
-+	pinctrl-0 = <&ethernet0_default>;
-+	pinctrl-names = "default";
-+
-+	snps,mtl-rx-config = <&mtl_rx_setup>;
-+	snps,mtl-tx-config = <&mtl_tx_setup>;
-+	snps,ps-speed = <1000>;
-+
-+	status = "okay";
-+
-+	mdio {
-+		compatible = "snps,dwmac-mdio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		reset-gpios = <&pmm8654au_2_gpios 8 GPIO_ACTIVE_LOW>;
-+		reset-delay-us = <11000>;
-+		reset-post-delay-us = <70000>;
-+
-+		sgmii_phy: phy@8 {
-+			reg = <0x8>;
-+			device_type = "ethernet-phy";
-+		};
-+	};
-+
-+	mtl_rx_setup: rx-queues-config {
-+		snps,rx-queues-to-use = <4>;
-+		snps,rx-sched-sp;
-+
-+		queue0 {
-+			snps,dcb-algorithm;
-+			snps,map-to-dma-channel = <0x0>;
-+			snps,route-up;
-+			snps,priority = <0x1>;
-+		};
-+
-+		queue1 {
-+			snps,dcb-algorithm;
-+			snps,map-to-dma-channel = <0x1>;
-+			snps,route-ptp;
-+		};
-+
-+		queue2 {
-+			snps,avb-algorithm;
-+			snps,map-to-dma-channel = <0x2>;
-+			snps,route-avcp;
-+		};
-+
-+		queue3 {
-+			snps,avb-algorithm;
-+			snps,map-to-dma-channel = <0x3>;
-+			snps,priority = <0xc>;
-+		};
-+	};
-+
-+	mtl_tx_setup: tx-queues-config {
-+		snps,tx-queues-to-use = <4>;
-+		snps,tx-sched-sp;
-+
-+		queue0 {
-+			snps,dcb-algorithm;
-+		};
-+
-+		queue1 {
-+			snps,dcb-algorithm;
-+		};
-+
-+		queue2 {
-+			snps,avb-algorithm;
-+			snps,send_slope = <0x1000>;
-+			snps,idle_slope = <0x1000>;
-+			snps,high_credit = <0x3e800>;
-+			snps,low_credit = <0xffc18000>;
-+		};
-+
-+		queue3 {
-+			snps,avb-algorithm;
-+			snps,send_slope = <0x1000>;
-+			snps,idle_slope = <0x1000>;
-+			snps,high_credit = <0x3e800>;
-+			snps,low_credit = <0xffc18000>;
-+		};
-+	};
-+};
-+
- &i2c11 {
- 	clock-frequency = <400000>;
- 	pinctrl-0 = <&qup_i2c11_default>;
--- 
-2.39.2
-
+On 6/21/23 01:46, tien.sung.ang@intel.com wrote:
+> From: Ang Tien Sung <tien.sung.ang@intel.com>
+> 
+> Fix the incorrect usage of platform_set_drvdata and dev_set_drvdata.
+> They both are of the same data and overrides each other. This resulted
+> in the rmmod of the svc driver to fail and throw a kernel panic
+> for kthread_stop and fifo free.
+> 
+> Fixes: b5dc75c915cd ("firmware: stratix10-svc: extend svc to support new RSU features")
+> Signed-off-by: Ang Tien Sung <tien.sung.ang@intel.com>
+> ---
+>   drivers/firmware/stratix10-svc.c | 7 ++++---
+>   1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/firmware/stratix10-svc.c b/drivers/firmware/stratix10-svc.c
+> index ca713f39107e..60e08987c402 100644
+> --- a/drivers/firmware/stratix10-svc.c
+> +++ b/drivers/firmware/stratix10-svc.c
+> @@ -130,6 +130,7 @@ struct stratix10_svc_data {
+>    * @complete_status: state for completion
+>    * @invoke_fn: function to issue secure monitor call or hypervisor call
+>    * @sdm_lock: a mutex lock to allow only one pending sdm message per client
+> + * @svc: manages the list of client svc drivers
+>    *
+>    * This struct is used to create communication channels for service clients, to
+>    * handle secure monitor or hypervisor call.
+> @@ -144,6 +145,7 @@ struct stratix10_svc_controller {
+>   	svc_invoke_fn *invoke_fn;
+>   	/* Enforces atomic command sending to SDM */
+>   	struct mutex *sdm_lock;
+> +	struct stratix10_svc *svc;
+>   };
+>   
+>   /**
+> @@ -1252,6 +1254,7 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
+>   		ret = -ENOMEM;
+>   		goto err_free_kfifo;
+>   	}
+> +	controller->svc = svc;
+>   
+>   	svc->stratix10_svc_rsu = platform_device_alloc(STRATIX10_RSU, 0);
+>   	if (!svc->stratix10_svc_rsu) {
+> @@ -1279,8 +1282,6 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
+>   		goto err_unregister_dev;
+>   	}
+>   
+> -	dev_set_drvdata(dev, svc);
+> -
+>   	pr_info("Intel Service Layer Driver Initialized\n");
+>   
+>   	return 0;
+> @@ -1296,8 +1297,8 @@ static int stratix10_svc_drv_probe(struct platform_device *pdev)
+>   
+>   static int stratix10_svc_drv_remove(struct platform_device *pdev)
+>   {
+> -	struct stratix10_svc *svc = dev_get_drvdata(&pdev->dev);
+>   	struct stratix10_svc_controller *ctrl = platform_get_drvdata(pdev);
+> +	struct stratix10_svc *svc = ctrl->svc;
+>   
+>   	platform_device_unregister(svc->intel_svc_fcs);
+>   	platform_device_unregister(svc->stratix10_svc_rsu);
