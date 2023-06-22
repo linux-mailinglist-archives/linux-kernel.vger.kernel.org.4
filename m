@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E997373A7FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 20:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CD5873A7FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 20:12:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbjFVSMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 14:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51394 "EHLO
+        id S231518AbjFVSMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 14:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229564AbjFVSMG (ORCPT
+        with ESMTP id S229564AbjFVSMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 14:12:06 -0400
+        Thu, 22 Jun 2023 14:12:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B821BF6;
-        Thu, 22 Jun 2023 11:12:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4781FE9
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 11:12:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F08E618CF;
-        Thu, 22 Jun 2023 18:12:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56859C433C0;
-        Thu, 22 Jun 2023 18:12:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1687457524;
-        bh=sbgN011gcBN7s2BCAlLe1ljxtv7/CztCExKzSZ2O7j4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=c5o1PUNASBKoAIeJ1NYb0kD6UC4BmgTam/VUlDTb9tYzKIk+gGwYKL1R59n7TVXEm
-         kyQeX6DmUfyXZlhAFRAklTgI7w+UMtdpG51gsgVQiVBPw2vSzZQPD88Jo0J1Nag+38
-         8NMslLP/MHw5MIR6Emn8fsot/4bDiPNRUkZoT81s=
-Date:   Thu, 22 Jun 2023 20:12:01 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Saurabh Singh Sengar <ssengar@microsoft.com>
-Cc:     Saurabh Sengar <ssengar@linux.microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
-Subject: Re: [EXTERNAL] Re: [PATCH v2 2/5] tools: hv: Add vmbus_bufring
-Message-ID: <2023062243-dazzling-patio-3ef9@gregkh>
-References: <1686766512-2589-1-git-send-email-ssengar@linux.microsoft.com>
- <1686766512-2589-3-git-send-email-ssengar@linux.microsoft.com>
- <2023061430-facedown-getting-d9f7@gregkh>
- <PUZP153MB07492FF43240CFD055CF268ABE5CA@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
- <2023062020-swung-sensitive-4866@gregkh>
- <SEZP153MB0742B43EC4E490E2FEACDA4ABE22A@SEZP153MB0742.APCP153.PROD.OUTLOOK.COM>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A33EA618C7
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 18:12:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CC78C433C0;
+        Thu, 22 Jun 2023 18:12:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687457556;
+        bh=3voyAzfGrtM2hCUsVSFe/G6QJ7KTcAlIITK7RFZZfKk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BeSVipOHf6K1iDWyC9PfTd5evoVvNx6BLxGjYl9ESPwCk6pcXDSthl6bbPTZnnL0b
+         VXv0qbINbaiSoX/p+9wOB896WJXAjUn8YjSSpqD7wptnWW4RfiwEb5f6wp3SNt7P57
+         GZlotEkMT8/H74L2psL/S4TBDtoZo2rWPhj03RNDdNqSQP07K82JPXcrPJ+4xJEhNj
+         L/WzvggSLLJXoez5lQ2dWdBCNHdGqCGcGsgq09v9QdJl+LwAU5fLNj6ssJ90V8E8fp
+         VUbbxcWTSXfIk2s9GrHrW5NF7vtjQg0d4iD5LEByGfwOpFh8RaOUY+eObFoJMezyHa
+         RzHjobdhmUiRg==
+Date:   Thu, 22 Jun 2023 11:12:34 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org,
+        Alexander Duyck <alexander.duyck@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+Subject: Re: [PATCH net-next v3 01/18] net: Copy slab data for
+ sendmsg(MSG_SPLICE_PAGES)
+Message-ID: <20230622111234.23aadd87@kernel.org>
+In-Reply-To: <20230620145338.1300897-2-dhowells@redhat.com>
+References: <20230620145338.1300897-1-dhowells@redhat.com>
+        <20230620145338.1300897-2-dhowells@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <SEZP153MB0742B43EC4E490E2FEACDA4ABE22A@SEZP153MB0742.APCP153.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,47 +65,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 05:47:58PM +0000, Saurabh Singh Sengar wrote:
-> 
-> 
-> > -----Original Message-----
-> > From: Greg KH <gregkh@linuxfoundation.org>
-> > Sent: Tuesday, June 20, 2023 12:36 PM
-> > To: Saurabh Singh Sengar <ssengar@microsoft.com>
-> > Cc: Saurabh Sengar <ssengar@linux.microsoft.com>; KY Srinivasan
-> > <kys@microsoft.com>; Haiyang Zhang <haiyangz@microsoft.com>;
-> > wei.liu@kernel.org; Dexuan Cui <decui@microsoft.com>; Michael Kelley
-> > (LINUX) <mikelley@microsoft.com>; corbet@lwn.net; linux-
-> > kernel@vger.kernel.org; linux-hyperv@vger.kernel.org; linux-
-> > doc@vger.kernel.org
-> > Subject: Re: [EXTERNAL] Re: [PATCH v2 2/5] tools: hv: Add vmbus_bufring
-> > 
-> > On Tue, Jun 20, 2023 at 05:25:06AM +0000, Saurabh Singh Sengar wrote:
-> > > > > diff --git a/tools/hv/vmbus_bufring.c b/tools/hv/vmbus_bufring.c
-> > > > > new file mode 100644 index 000000000000..d44a06d45b03
-> > > > > --- /dev/null
-> > > > > +++ b/tools/hv/vmbus_bufring.c
-> > > > > @@ -0,0 +1,322 @@
-> > > > > +// SPDX-License-Identifier: BSD-3-Clause
-> > > > > +/*
-> > > > > + * Copyright (c) 2009-2012,2016,2023 Microsoft Corp.
-> > > > > + * Copyright (c) 2012 NetApp Inc.
-> > > > > + * Copyright (c) 2012 Citrix Inc.
-> > > > > + * All rights reserved.
-> > > >
-> > > > No copyright for the work you did?
-> > >
-> > > I have added 2023 Microsoft Corp. Please let me know if I need to add
-> > > anything more.
-> > 
-> > Please contact your lawyers about EXACTLY what you need to do here, that's
-> > up to them, not me!
-> 
-> I have cross verified this with our legal team and they are fine with it.
+On Tue, 20 Jun 2023 15:53:20 +0100 David Howells wrote:
+> If sendmsg() is passed MSG_SPLICE_PAGES and is given a buffer that contains
+> some data that's resident in the slab, copy it rather than returning EIO.
 
-Wonderful, please have them sign-off on the patch as well when you
-resubmit it.
+How did that happen? I thought MSG_SPLICE_PAGES comes from former
+sendpage users and sendpage can't operate on slab pages.
 
-thanks,
+> This can be made use of by a number of drivers in the kernel, including:
+> iwarp, ceph/rds, dlm, nvme, ocfs2, drdb.  It could also be used by iscsi,
+> rxrpc, sunrpc, cifs and probably others.
+> 
+> skb_splice_from_iter() is given it's own fragment allocator as
+> page_frag_alloc_align() can't be used because it does no locking to prevent
+> parallel callers from racing.
 
-greg k-h
+The locking is to local_bh_disable(). Does the milliont^w new frag
+allocator have any additional benefits?
+
+>  alloc_skb_frag() uses a separate folio for
+> each cpu and locks to the cpu whilst allocating, reenabling cpu migration
+> around folio allocation.
