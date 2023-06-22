@@ -2,497 +2,530 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED3F73A321
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FEC273A318
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231567AbjFVOds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 10:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41580 "EHLO
+        id S230421AbjFVOcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 10:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231282AbjFVOdl (ORCPT
+        with ESMTP id S230350AbjFVOcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 10:33:41 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C561FD8;
-        Thu, 22 Jun 2023 07:33:23 -0700 (PDT)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35MBb3FY022929;
-        Thu, 22 Jun 2023 10:33:06 -0400
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3rbvr2t87r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Jun 2023 10:33:05 -0400
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 35MEX4sV026230
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 22 Jun 2023 10:33:04 -0400
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Thu, 22 Jun 2023 10:33:03 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Thu, 22 Jun 2023 10:33:03 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Thu, 22 Jun 2023 10:33:03 -0400
-Received: from kimedia-VirtualBox.ad.analog.com (KPALLER2-L02.ad.analog.com [10.116.242.96])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 35MEWcZN030643;
-        Thu, 22 Jun 2023 10:32:50 -0400
-From:   Kim Seer Paller <kimseer.paller@analog.com>
-CC:     <jic23@kernel.org>, <lars@metafoo.de>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <Michael.Hennerich@analog.com>,
-        <andy.shevchenko@gmail.com>, <robh@kernel.org>,
-        <krzysztof.kozlowski@linaro.org>, <conor+dt@kernel.org>,
-        <kimseer.paller@analog.com>, <linux-iio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        "kernel test robot" <lkp@intel.com>
-Subject: [PATCH v8 2/2] iio: adc: max14001: New driver
-Date:   Thu, 22 Jun 2023 22:32:27 +0800
-Message-ID: <20230622143227.30147-2-kimseer.paller@analog.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230622143227.30147-1-kimseer.paller@analog.com>
-References: <20230622143227.30147-1-kimseer.paller@analog.com>
+        Thu, 22 Jun 2023 10:32:41 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2086.outbound.protection.outlook.com [40.107.243.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E2319BE;
+        Thu, 22 Jun 2023 07:32:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=M+zoj/l1byT4umdYEAwwo/5TlwaqTreHi7odC+Z5FBS+JQgE2URQYtZT1cfi+5mf+YA0zrFdTkcjkL+v1/Y+EkxVk0EXiyUktwsNjRp4c0xfu+JFtqR3E9zLm3ko6JKa/Db+VKc30DzbSGxgcprVuEKDiyN+B/325zQSZNL4D8ERCbOiBZWK9wM/qvx9iJBx8vzc8l6Iwj4qNpBWbA6JwlNvskQB3O7yC3RfEiutDxj7RACpRw5uPqvSfNU1CAbgPFeUvNDgQ2bp+mZxtDYxKdrQ2SK9jBgzjvt07K2FfbKJ3qu/iB2dOanLxMEZSvQ8obOW9JhGRdl9fScM9lPmfg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4lyC5XP60I1pfW6xw8TswS5IWf2B55Z/R5/DINLRNLA=;
+ b=Rt47t/J0lHXVjjMKV8IkDfaB8/J9G5M1DhT7q/AJmIf0T2FNTMq56k8N42GvYcUB81q5J6lUirpXg9RjCRSHUgjYSgrgfCThwrNgckCjqcNtvWihGk/U04WLwfTOsN/RtOWhY/yIkoOFhiIWGQvFByW1Rtklmvkc1qx5BLBnaGwYCE74Sytm95UmTQc1tyiZQlD1dWMZjZpLzj7H1TJS5zBJeWXY0Xvej+yK8uNk9pagl7LOkUrOSK4OGu8n7iWeTqy4Y3I1C2gYDbsPhmekL2sx4DWP7sZJetkHChlH7BhhI9OOwJ98HNC7KOZOjEr2wn7XmWTBiXFBC+gWpXOXSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4lyC5XP60I1pfW6xw8TswS5IWf2B55Z/R5/DINLRNLA=;
+ b=30oH3GutF+EuXmDuuzNHOWjDhnE4v3G/NXXpf4p1EkHi4nmSzdDVfL73pbRnK1BbD2yBqepOfV5e8pAJVaXRQTh1iXv1RHsaNtKeVmzjTnkdJetvS0Zh5CDlpo5nxTJpuBHt7zRpYDKojCjFjmmsgGWP6uDNXi5XpOfAUpKxWG0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1SPRMB0007.namprd12.prod.outlook.com (2603:10b6:208:39e::8)
+ by SA3PR12MB8812.namprd12.prod.outlook.com (2603:10b6:806:312::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 22 Jun
+ 2023 14:32:36 +0000
+Received: from BL1SPRMB0007.namprd12.prod.outlook.com
+ ([fe80::3404:aab:eb6f:8754]) by BL1SPRMB0007.namprd12.prod.outlook.com
+ ([fe80::3404:aab:eb6f:8754%7]) with mapi id 15.20.6521.023; Thu, 22 Jun 2023
+ 14:32:35 +0000
+Message-ID: <4f84f895-a733-df1d-552a-862a2f60933c@amd.com>
+Date:   Thu, 22 Jun 2023 09:32:31 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] docs: security: Confidential computing intro and
+ threat model for x86 virtualization
+Content-Language: en-US
+To:     corbet@lwn.net
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ardb@kernel.org, kraxel@redhat.com, dovmurik@linux.ibm.com,
+        elena.reshetova@intel.com, dave.hansen@linux.intel.com,
+        Dhaval.Giani@amd.com, michael.day@amd.com,
+        pavankumar.paluri@amd.com, David.Kaplan@amd.com,
+        Reshma.Lal@amd.com, Jeremy.Powell@amd.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        alexander.shishkin@linux.intel.com, thomas.lendacky@amd.com,
+        tglx@linutronix.de, dgilbert@redhat.com,
+        gregkh@linuxfoundation.org, dinechin@redhat.com,
+        linux-coco@lists.linux.dev, berrange@redhat.com, mst@redhat.com,
+        tytso@mit.edu, jikos@kernel.org, joro@8bytes.org, leon@kernel.org,
+        richard.weinberger@gmail.com, lukas@wunner.de, jejb@linux.ibm.com,
+        cdupontd@redhat.com, jasowang@redhat.com, sameo@rivosinc.com,
+        bp@alien8.de, seanjc@google.com, security@kernel.org,
+        Larry Dewey <larry.dewey@amd.com>
+References: <20230612164727.3935657-1-carlos.bilbao@amd.com>
+From:   Carlos Bilbao <carlos.bilbao@amd.com>
+In-Reply-To: <20230612164727.3935657-1-carlos.bilbao@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SA0PR11CA0193.namprd11.prod.outlook.com
+ (2603:10b6:806:1bc::18) To BL1SPRMB0007.namprd12.prod.outlook.com
+ (2603:10b6:208:39e::8)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: c4niLw0mdA_HIwUfrhmNi3nyI-4FBnP0
-X-Proofpoint-ORIG-GUID: c4niLw0mdA_HIwUfrhmNi3nyI-4FBnP0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-22_09,2023-06-22_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
- mlxscore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=999
- spamscore=0 phishscore=0 suspectscore=0 clxscore=1015 bulkscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306220122
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL1SPRMB0007:EE_|SA3PR12MB8812:EE_
+X-MS-Office365-Filtering-Correlation-Id: a6875df5-568b-424a-932b-08db732d85b7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: pNTALVG6yyBlUcgGsnb9zNqfEWIuMumj4XbSdvagFsoEUBqS5TYO91TVWlxSVnZJF0QWOsPfrui/UpIb4jt9bWHjgMRSCKuXAAhbaAwY5L2r8FiG34aKoO6jMRX+KzfwnUGazSS+cMjWvYZtuYA5UejV/ljJYv6qhl3knu0dEbM3Y2WyxvIw3stlI6/hEeF86N3C3VQ/MWigrK3f+YbYCUZMiSL842kCrNB2JBILRrwjVDkW9lNv0BZHZ9SRBMiPD50EBscCuX5rN2kmcVpgWTrODiLmDcmf8HisSK73Ia9iVcsn//mu99MkJbWn5dT3vosT6RXdl6TLJI2jZ+JqfXxAkwWHDHdWUpR61c8wnArAAK1sEav6UyBC7ygdy9++i0Dh/BNP3xgKbPoA8gfw150wZziK7AiYE6VeUMbnin0wdGcIdAjqCnERbbUOgd91Jjv2lF22f03/aoRM9ukX4aEBfBEplHr/PLa4qj24PjHov/ZAjPEQICkQaatjar2x7KxVZxbEBqld+kFNoLZmDS6mHVjPsjCllZIpNhxAwNH155Jxn5/1CkJELMR6LgE85ITtfkCqc/eHqpPE75tkdSpHuxnFCwkVLS4uYxjtUFy0JNuGJdTG7tkU9GiGVHv20YmPDwl4cW6ZXPzd2L6pZJL+HW/DLK2SiGXRNfdws08=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1SPRMB0007.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(346002)(366004)(376002)(136003)(451199021)(6512007)(4326008)(6666004)(966005)(26005)(186003)(36756003)(2906002)(31686004)(31696002)(86362001)(2616005)(316002)(44832011)(8936002)(66946007)(6916009)(66476007)(66556008)(5660300002)(478600001)(53546011)(6486002)(7406005)(6506007)(30864003)(15650500001)(7416002)(83380400001)(41300700001)(8676002)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OG8xbGorWmVBVUV0dmZsUWF2VUJhMEQwMjREb21WdERsTndOakEvRG80ejhq?=
+ =?utf-8?B?M0w5VDd4WmVFSVc5OENla2w1RnFVYUVUZm9CVFZqalFBaW91UUdlQkN1dnFv?=
+ =?utf-8?B?dUVuNGNRVWQ1anA2WFZTTjV4ZW92NHNTajFnN09tWDJranU4OStFM2xLZXB0?=
+ =?utf-8?B?aGQzOXhaY0RXNnMxYkdyMEhlU3gydjhFb2xkVlJtNzV2Y0ZXRlVsTWIxUXh1?=
+ =?utf-8?B?cG5YbmtXbjQrWXhDOWE5MXRQWkk0eVJvaXQxMEdvVW5mTEtrdFF0aHc0dUUy?=
+ =?utf-8?B?M1JOWVcyTEJLTGJDaVlsZld5TkE5R0tMM3VacVF1bGpxdDBjU1BnWWNaUWdt?=
+ =?utf-8?B?SC92UGN3NnVWalovckdhaW1ydityUktaM01kSXc5RzE5RENSZ1lNYTdnRjhX?=
+ =?utf-8?B?T1ZwRFY3d2ppMVQ2RW9STGhSMU1LWE9uM2tUSVhJR2l2MW9xa01XVVozazFy?=
+ =?utf-8?B?SXluQmRiemdGTlJFb3JqdHE4WDhxNlFBVGkxbGpxcGJvTi9lUktqaFV0ekdU?=
+ =?utf-8?B?Z3dDNWk4bFpnaWRNRUl0dnhlenR3RWl0bmtkUkZzcVh5bkdpc0lFSUYyNlVD?=
+ =?utf-8?B?ZldBS3JBNitTOVpydm9IS25nRVFQZEd3WjFiOTdnTVZwWXV4UExQTzhlSEN1?=
+ =?utf-8?B?WG11WkdaV2YvTEZuVW9zZDFoNG8rblBFaXhMRWZ2bDdQTmdORHlhd0VBSWNM?=
+ =?utf-8?B?czFhMkFUYm5JS1FoeDBTMGUvTVhFRFBpSXg0dDhaUUt3YkhzWTNRSEZFaFUr?=
+ =?utf-8?B?algrVExlbjByWWFZaEoxaXRtbXN2aDQ0VGxRZ1YrUXBBYXFVWXA3aWZBY0RH?=
+ =?utf-8?B?SjViWnhYMkc4UlhlKyszQTRwSU9jZVRHSkd5UTA0VFdVNWJ0NVU1a3JZVGhh?=
+ =?utf-8?B?U3VCZWNvdFlJWmkrczdoejZtUngyMWRyZjExTEEvZTJoRVJFeHJmYkMvQ1Z2?=
+ =?utf-8?B?RVVUVy9iUEVTeHpMa1h6LzlUQ1ZvQmVFb1dEK3ZUenh6bXhVbG1wcFdoUk9E?=
+ =?utf-8?B?aVF4cEpNSnNtU1lTS3Nhbyt3WWNoc0d2YVJLU25yTEZOSTVxUkFmMVhTUGlI?=
+ =?utf-8?B?ODBhbVhoNllpT0RHUS95aitvbzBDbDA2Tm1NNXhPdmZMZlEyVDArSU9oUUE5?=
+ =?utf-8?B?VGZ6UjJNbTdnRmRjTzNZZW5aZitxQ2NCMDdycmp0TzZpTDBmSFFxZU1Ld1B0?=
+ =?utf-8?B?VHkwek1Jc2ZPYW1UUUZnczFDWnBBUGljem9pRFp2MkpNMDdqMGM3dXkyWEw2?=
+ =?utf-8?B?U0laRnhTc2IxQ2hpMmVGNzBkalduVWV2QldBYzRUVnd3QzZNVEJKV29MZEFl?=
+ =?utf-8?B?SVptSFI0RjFMRU5lR3RQRkc2MUMrZjJ5WXJmdnltNTFEbTNGZU0wVlAvNmtK?=
+ =?utf-8?B?ZVlZTFpMcHF4WjFYWTNEM2tPL1h5a2x0OC9lZkgwZWY4SDZweExMeEowZkZZ?=
+ =?utf-8?B?OFh2T3lWbjNHSFRKTmkveVcvYXJXMkxEaXZNWjE3QjRMc3BoL1IyWVpMd3pL?=
+ =?utf-8?B?NnNYZ1pWY3UyaU9UM2p1TGYvbjhPUnJReFNFL3lBZmljNVVzR3dydFBQak40?=
+ =?utf-8?B?R1Jtd3NkMXdlV29WTno5QVB3RjhzbTExRHN4T0N5bE51SkR4cDB5a3JpTlh2?=
+ =?utf-8?B?MWdpcFlYdVovTTQyRVRZV3d2eUZkeE9RYVdYd3BPSlNkYXc4UHVWWU0xcDJL?=
+ =?utf-8?B?L1dLM0s2NUlrd2hwdDBJNE9NdGp5emJaS0xNVkNIUzJrdEljTzcyQTBJZFhn?=
+ =?utf-8?B?aUc3WUlqSjBRUmZnUDNQTzdTQUVPZzZyMHY5V0tYMllpTmZSb2Jaek1RMUxH?=
+ =?utf-8?B?Tkozc1g0OW5OQXNrT1BpSXFDYnJoaGtQZWhwUlFYL1V1UVQxalJyK3c4aXls?=
+ =?utf-8?B?TTlBUUlJeS9NTTU0cDFHZDJ6amlUeEVtRFVZazNIVWZTQkt3Z1F6by85aDlr?=
+ =?utf-8?B?SEsxekp4Q3RwUzJiZTRpbVlRelZacWF2TENLWjdnMWlwSXpxRzlwZzhKOTBZ?=
+ =?utf-8?B?N2d1bHRXakFaMHgwdFFLMUd3bEVndXpCNUg5eWJhWkNXdnhZYW0yQVBKVC9j?=
+ =?utf-8?B?aC9qNFNiSWpJVzE0eTY3NklIQm40TjZNcDNuUW9GbXdHZU84QjlieldlZDJv?=
+ =?utf-8?Q?pJfSHb+kbrxCM2Jhh6dHo0xm8?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a6875df5-568b-424a-932b-08db732d85b7
+X-MS-Exchange-CrossTenant-AuthSource: BL1SPRMB0007.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 14:32:35.8801
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: iHJ0xyERU3syaxcfjc4HkcvT6uwB91CRC/oV7DgHRcp70vdYPSnpDThuvBWdMsoZ8IStTaUpqo7AhvIPoQcOdQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8812
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MAX14001 is configurable, isolated 10-bit ADCs for multi-range
-binary inputs.
+On 6/12/23 11:47, Carlos Bilbao wrote:
+> Kernel developers working on confidential computing for virtualized
+> environments in x86 operate under a set of assumptions regarding the Linux
+> kernel threat model that differs from the traditional view. Historically,
+> the Linux threat model acknowledges attackers residing in userspace, as
+> well as a limited set of external attackers that are able to interact with
+> the kernel through networking or limited HW-specific exposed interfaces
+> (e.g. USB, thunderbolt). The goal of this document is to explain additional
+> attack vectors that arise in the virtualized confidential computing space
+> and discuss the proposed protection mechanisms for the Linux kernel.
 
-Signed-off-by: Kim Seer Paller <kimseer.paller@analog.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202306211545.7b6CdqsL-lkp@intel.com/
----
-V7 -> V8: Added a bitwise OR operation to combine the bitfield element 
-with the reg_data value.
-V6 -> V7: Swapped ADC external vref source and regulator_get_voltage 
-calls. Added forced cast and comment to addressed endian warning.
-V5 -> V6: Replaced fixed length assignment with dynamic size 
-assignment in xfers struct initialization. Removed .channel 
-assignment in max14001_channels definition.
-V4 -> V5: No changes.
-V3 -> V4: Removed regmap setup, structures, and include.
+To expedite things, I'm going to outline the changes to make for v3 based
+on the given feedback. Please, take a look and let me know if I'm missing
+something. Changes for v3:
 
- MAINTAINERS                |   1 +
- drivers/iio/adc/Kconfig    |  10 ++
- drivers/iio/adc/Makefile   |   1 +
- drivers/iio/adc/max14001.c | 340 +++++++++++++++++++++++++++++++++++++
- 4 files changed, 352 insertions(+)
- create mode 100644 drivers/iio/adc/max14001.c
+- Remove pKVM from the document. Although there are clear overlaps in the
+   threat models (as the discussions have shown), it might be good to omit
+   pKVM for now to avoid further complexity. In the future, when pKVM is
+   more mature, we can revisit and discuss its inclusion.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index dcea2c31f920..b527cf471d7a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12676,6 +12676,7 @@ L:	linux-iio@vger.kernel.org
- S:	Supported
- W:	https://ez.analog.com/linux-software-drivers
- F:	Documentation/devicetree/bindings/iio/adc/adi,max14001.yaml
-+F:	drivers/iio/adc/max14001.c
- 
- MAXBOTIX ULTRASONIC RANGER IIO DRIVER
- M:	Andreas Klinger <ak@it-klinger.de>
-diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
-index eb2b09ef5d5b..e599d166e98d 100644
---- a/drivers/iio/adc/Kconfig
-+++ b/drivers/iio/adc/Kconfig
-@@ -706,6 +706,16 @@ config MAX11410
- 	  To compile this driver as a module, choose M here: the module will be
- 	  called max11410.
- 
-+config MAX14001
-+	tristate "Analog Devices MAX14001 ADC driver"
-+	depends on SPI
-+	help
-+	  Say yes here to build support for Analog Devices MAX14001 Configurable,
-+	  Isolated 10-bit ADCs for Multi-Range Binary Inputs.
-+
-+	  To compile this driver as a module, choose M here: the module will be
-+	  called max14001.
-+
- config MAX1241
- 	tristate "Maxim max1241 ADC driver"
- 	depends on SPI_MASTER
-diff --git a/drivers/iio/adc/Makefile b/drivers/iio/adc/Makefile
-index e07e4a3e6237..9f8964258f03 100644
---- a/drivers/iio/adc/Makefile
-+++ b/drivers/iio/adc/Makefile
-@@ -65,6 +65,7 @@ obj-$(CONFIG_MAX11100) += max11100.o
- obj-$(CONFIG_MAX1118) += max1118.o
- obj-$(CONFIG_MAX11205) += max11205.o
- obj-$(CONFIG_MAX11410) += max11410.o
-+obj-$(CONFIG_MAX14001) += max14001.o
- obj-$(CONFIG_MAX1241) += max1241.o
- obj-$(CONFIG_MAX1363) += max1363.o
- obj-$(CONFIG_MAX9611) += max9611.o
-diff --git a/drivers/iio/adc/max14001.c b/drivers/iio/adc/max14001.c
-new file mode 100644
-index 000000000000..a21ebcde71fa
---- /dev/null
-+++ b/drivers/iio/adc/max14001.c
-@@ -0,0 +1,340 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-3-Clause)
-+/*
-+ * Analog Devices MAX14001 ADC driver
-+ *
-+ * Copyright 2023 Analog Devices Inc.
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/bitrev.h>
-+#include <linux/device.h>
-+#include <linux/iio/iio.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/property.h>
-+#include <linux/regulator/consumer.h>
-+#include <linux/spi/spi.h>
-+#include <linux/slab.h>
-+#include <linux/types.h>
-+
-+#include <asm/unaligned.h>
-+
-+/* MAX14001 Registers Address */
-+#define MAX14001_ADC			0x00
-+#define MAX14001_FADC			0x01
-+#define MAX14001_FLAGS			0x02
-+#define MAX14001_FLTEN			0x03
-+#define MAX14001_THL			0x04
-+#define MAX14001_THU			0x05
-+#define MAX14001_INRR			0x06
-+#define MAX14001_INRT			0x07
-+#define MAX14001_INRP			0x08
-+#define MAX14001_CFG			0x09
-+#define MAX14001_ENBL			0x0A
-+#define MAX14001_ACT			0x0B
-+#define MAX14001_WEN			0x0C
-+
-+#define MAX14001_VERIFICATION_REG(x)	((x) + 0x10)
-+
-+#define MAX14001_CFG_EXRF		BIT(5)
-+
-+#define MAX14001_ADDR_MASK		GENMASK(15, 11)
-+#define MAX14001_DATA_MASK		GENMASK(9, 0)
-+#define MAX14001_FILTER_MASK		GENMASK(3, 2)
-+
-+#define MAX14001_SET_WRITE_BIT		BIT(10)
-+#define MAX14001_WRITE_WEN		0x294
-+
-+struct max14001_state {
-+	struct spi_device	*spi;
-+	/*
-+	 * lock protect against multiple concurrent accesses, RMW sequence, and
-+	 * SPI transfer
-+	 */
-+	struct mutex		lock;
-+	int			vref_mv;
-+	/*
-+	 * DMA (thus cache coherency maintenance) requires the
-+	 * transfer buffers to live in their own cache lines.
-+	 */
-+	__be16			spi_tx_buffer __aligned(IIO_DMA_MINALIGN);
-+	__be16			spi_rx_buffer;
-+};
-+
-+static int max14001_read(void *context, unsigned int reg_addr, unsigned int *data)
-+{
-+	struct max14001_state *st = context;
-+	int ret;
-+
-+	struct spi_transfer xfers[] = {
-+		{
-+			.tx_buf = &st->spi_tx_buffer,
-+			.len = sizeof(st->spi_tx_buffer),
-+			.cs_change = 1,
-+		}, {
-+			.rx_buf = &st->spi_rx_buffer,
-+			.len = sizeof(st->spi_rx_buffer),
-+		},
-+	};
-+
-+	/*
-+	 * Convert transmit buffer to big-endian format and reverse transmit
-+	 * buffer to align with the LSB-first input on SDI port.
-+	 */
-+	st->spi_tx_buffer = cpu_to_be16(bitrev16(FIELD_PREP(MAX14001_ADDR_MASK,
-+								reg_addr)));
-+
-+	ret = spi_sync_transfer(st->spi, xfers, ARRAY_SIZE(xfers));
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Align received data from the receive buffer, reversing and reordering
-+	 * it to match the expected MSB-first format.
-+	 */
-+	*data = (__force u16)(be16_to_cpu(bitrev16(st->spi_rx_buffer))) &
-+							MAX14001_DATA_MASK;
-+
-+	return 0;
-+}
-+
-+static int max14001_write(void *context, unsigned int reg_addr, unsigned int data)
-+{
-+	struct max14001_state *st = context;
-+
-+	/*
-+	 * Convert transmit buffer to big-endian format and reverse transmit
-+	 * buffer to align with the LSB-first input on SDI port.
-+	 */
-+	st->spi_tx_buffer = (__force u16)(cpu_to_be16(bitrev16(
-+				FIELD_PREP(MAX14001_ADDR_MASK, reg_addr) |
-+				FIELD_PREP(MAX14001_SET_WRITE_BIT, 1) |
-+				FIELD_PREP(MAX14001_DATA_MASK, data))));
-+
-+	return spi_write(st->spi, &st->spi_tx_buffer, sizeof(st->spi_tx_buffer));
-+}
-+
-+static int max14001_write_verification_reg(struct max14001_state *st,
-+						unsigned int reg_addr)
-+{
-+	unsigned int reg_data;
-+	int ret;
-+
-+	ret = max14001_read(st, reg_addr, &reg_data);
-+	if (ret)
-+		return ret;
-+
-+	return max14001_write(st, MAX14001_VERIFICATION_REG(reg_addr), reg_data);
-+}
-+
-+static int max14001_reg_update(struct max14001_state *st,
-+				unsigned int reg_addr,
-+				unsigned int mask,
-+				unsigned int val)
-+{
-+	int ret;
-+	unsigned int reg_data;
-+
-+	/* Enable SPI Registers Write */
-+	ret = max14001_write(st, MAX14001_WEN, MAX14001_WRITE_WEN);
-+	if (ret)
-+		return ret;
-+
-+	ret = max14001_read(st, reg_addr, &reg_data);
-+	if (ret)
-+		return ret;
-+
-+	reg_data |= FIELD_PREP(mask, val);
-+
-+	ret = max14001_write(st, reg_addr, reg_data);
-+	if (ret)
-+		return ret;
-+
-+	/* Write Verification Register */
-+	ret = max14001_write_verification_reg(st, reg_addr);
-+	if (ret)
-+		return ret;
-+
-+	/* Disable SPI Registers Write */
-+	return max14001_write(st, MAX14001_WEN, 0);
-+}
-+
-+static int max14001_read_raw(struct iio_dev *indio_dev,
-+			     struct iio_chan_spec const *chan,
-+			     int *val, int *val2, long mask)
-+{
-+	struct max14001_state *st = iio_priv(indio_dev);
-+	unsigned int data;
-+	int ret;
-+
-+	switch (mask) {
-+	case IIO_CHAN_INFO_RAW:
-+		mutex_lock(&st->lock);
-+		ret = max14001_read(st, MAX14001_ADC, &data);
-+		mutex_unlock(&st->lock);
-+		if (ret < 0)
-+			return ret;
-+
-+		*val = data;
-+
-+		return IIO_VAL_INT;
-+	case IIO_CHAN_INFO_SCALE:
-+		*val = st->vref_mv;
-+		*val2 = 10;
-+
-+		return IIO_VAL_FRACTIONAL_LOG2;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
-+static const struct iio_info max14001_info = {
-+	.read_raw = max14001_read_raw,
-+};
-+
-+static const struct iio_chan_spec max14001_channels[] = {
-+	{
-+		.type = IIO_VOLTAGE,
-+		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
-+				      BIT(IIO_CHAN_INFO_SCALE),
-+	}
-+};
-+
-+static void max14001_regulator_disable(void *data)
-+{
-+	struct regulator *reg = data;
-+
-+	regulator_disable(reg);
-+}
-+
-+static int max14001_init(struct max14001_state *st)
-+{
-+	int ret;
-+
-+	/* Enable SPI Registers Write */
-+	ret = max14001_write(st, MAX14001_WEN, MAX14001_WRITE_WEN);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Reads all registers and writes the values back to their appropriate
-+	 * verification registers to clear the Memory Validation fault.
-+	 */
-+	ret = max14001_write_verification_reg(st, MAX14001_FLTEN);
-+	if (ret)
-+		return ret;
-+
-+	ret = max14001_write_verification_reg(st, MAX14001_THL);
-+	if (ret)
-+		return ret;
-+
-+	ret = max14001_write_verification_reg(st, MAX14001_THU);
-+	if (ret)
-+		return ret;
-+
-+	ret = max14001_write_verification_reg(st, MAX14001_INRR);
-+	if (ret)
-+		return ret;
-+
-+	ret = max14001_write_verification_reg(st, MAX14001_INRT);
-+	if (ret)
-+		return ret;
-+
-+	ret = max14001_write_verification_reg(st, MAX14001_INRP);
-+	if (ret)
-+		return ret;
-+
-+	ret = max14001_write_verification_reg(st, MAX14001_CFG);
-+	if (ret)
-+		return ret;
-+
-+	ret = max14001_write_verification_reg(st, MAX14001_ENBL);
-+	if (ret)
-+		return ret;
-+
-+	/* Disable SPI Registers Write */
-+	return max14001_write(st, MAX14001_WEN, 0);
-+}
-+
-+static int max14001_probe(struct spi_device *spi)
-+{
-+	struct iio_dev *indio_dev;
-+	struct max14001_state *st;
-+	struct regulator *vref;
-+	struct device *dev = &spi->dev;
-+	int ret;
-+
-+	indio_dev = devm_iio_device_alloc(dev, sizeof(*st));
-+	if (!indio_dev)
-+		return -ENOMEM;
-+
-+	st = iio_priv(indio_dev);
-+	st->spi = spi;
-+
-+	indio_dev->name = "max14001";
-+	indio_dev->info = &max14001_info;
-+	indio_dev->channels = max14001_channels;
-+	indio_dev->num_channels = ARRAY_SIZE(max14001_channels);
-+	indio_dev->modes = INDIO_DIRECT_MODE;
-+
-+	ret = max14001_init(st);
-+	if (ret)
-+		return ret;
-+
-+	vref = devm_regulator_get_optional(dev, "vref");
-+	if (IS_ERR(vref)) {
-+		if (PTR_ERR(vref) != -ENODEV)
-+			return dev_err_probe(dev, PTR_ERR(vref),
-+					     "Failed to get vref regulator");
-+
-+		/* internal reference */
-+		st->vref_mv = 1250;
-+	} else {
-+		ret = regulator_enable(vref);
-+		if (ret)
-+			return dev_err_probe(dev, ret,
-+					"Failed to enable vref regulators\n");
-+
-+		ret = devm_add_action_or_reset(dev, max14001_regulator_disable,
-+					       vref);
-+		if (ret)
-+			return ret;
-+
-+		ret = regulator_get_voltage(vref);
-+		if (ret < 0)
-+			return dev_err_probe(dev, ret,
-+					     "Failed to get vref\n");
-+
-+		st->vref_mv = ret / 1000;
-+
-+		/* select external voltage reference source for the ADC */
-+		ret = max14001_reg_update(st, MAX14001_CFG,
-+					  MAX14001_CFG_EXRF, 1);
-+		if (ret < 0)
-+			return ret;
-+	}
-+
-+	mutex_init(&st->lock);
-+
-+	return devm_iio_device_register(dev, indio_dev);
-+}
-+
-+static const struct of_device_id max14001_of_match[] = {
-+	{ .compatible = "adi,max14001" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, max14001_of_match);
-+
-+static struct spi_driver max14001_driver = {
-+	.driver = {
-+		.name = "max14001",
-+		.of_match_table = max14001_of_match,
-+	},
-+	.probe = max14001_probe,
-+};
-+module_spi_driver(max14001_driver);
-+
-+MODULE_AUTHOR("Kim Seer Paller");
-+MODULE_DESCRIPTION("MAX14001 ADC driver");
-+MODULE_LICENSE("GPL");
--- 
-2.34.1
+- Change file name to "snp-tdx-threat-model.rst".
 
+- Replace hyphens (dashes) for parenthesis in a parenthetical sentence.
+
+- Change "technology specific" for "technology-specific".
+
+> 
+> Reviewed-by: Larry Dewey <larry.dewey@amd.com>
+> Reviewed-by: David Kaplan <david.kaplan@amd.com>
+> Co-developed-by: Elena Reshetova <elena.reshetova@intel.com>
+> Signed-off-by: Elena Reshetova <elena.reshetova@intel.com>
+> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+> ---
+> 
+> V1 can be found in:
+>   https://lore.kernel.org/lkml/20230327141816.2648615-1-carlos.bilbao@amd.com/
+> Changes since v1:
+> 
+> - Apply feedback from first version of the patch
+> - Clarify that the document applies only to a particular angle of
+>    confidential computing, namely confidential computing for virtualized
+>    environments. Also, state that the document is specific to x86 and
+>    that the main goal is to discuss the emerging threats.
+> - Change commit message and file name accordingly
+> - Replace AMD's link to AMD SEV SNP white paper
+> - Minor tweaking and clarifications
+> 
+> ---
+>   Documentation/security/index.rst              |   1 +
+>   .../security/x86-confidential-computing.rst   | 298 ++++++++++++++++++
+>   MAINTAINERS                                   |   6 +
+>   3 files changed, 305 insertions(+)
+>   create mode 100644 Documentation/security/x86-confidential-computing.rst
+> 
+> diff --git a/Documentation/security/index.rst b/Documentation/security/index.rst
+> index 6ed8d2fa6f9e..bda919aecb37 100644
+> --- a/Documentation/security/index.rst
+> +++ b/Documentation/security/index.rst
+> @@ -6,6 +6,7 @@ Security Documentation
+>      :maxdepth: 1
+>   
+>      credentials
+> +   x86-confidential-computing
+>      IMA-templates
+>      keys/index
+>      lsm
+> diff --git a/Documentation/security/x86-confidential-computing.rst b/Documentation/security/x86-confidential-computing.rst
+> new file mode 100644
+> index 000000000000..5c52b8888089
+> --- /dev/null
+> +++ b/Documentation/security/x86-confidential-computing.rst
+> @@ -0,0 +1,298 @@
+> +======================================================
+> +Confidential Computing in Linux for x86 virtualization
+> +======================================================
+> +
+> +.. contents:: :local:
+> +
+> +By: Elena Reshetova <elena.reshetova@intel.com> and Carlos Bilbao <carlos.bilbao@amd.com>
+> +
+> +Motivation
+> +==========
+> +
+> +Kernel developers working on confidential computing for virtualized
+> +environments in x86 operate under a set of assumptions regarding the Linux
+> +kernel threat model that differ from the traditional view. Historically,
+> +the Linux threat model acknowledges attackers residing in userspace, as
+> +well as a limited set of external attackers that are able to interact with
+> +the kernel through various networking or limited HW-specific exposed
+> +interfaces (USB, thunderbolt). The goal of this document is to explain
+> +additional attack vectors that arise in the confidential computing space
+> +and discuss the proposed protection mechanisms for the Linux kernel.
+> +
+> +Overview and terminology
+> +========================
+> +
+> +Confidential Computing (CoCo) is a broad term covering a wide range of
+> +security technologies that aim to protect the confidentiality and integrity
+> +of data in use (vs. data at rest or data in transit). At its core, CoCo
+> +solutions provide a Trusted Execution Environment (TEE), where secure data
+> +processing can be performed and, as a result, they are typically further
+> +classified into different subtypes depending on the SW that is intended
+> +to be run in TEE. This document focuses on a subclass of CoCo technologies
+> +that are targeting virtualized environments and allow running Virtual
+> +Machines (VM) inside TEE. From now on in this document will be referring
+> +to this subclass of CoCo as 'Confidential Computing (CoCo) for the
+> +virtualized environments (VE)'.
+> +
+> +CoCo, in the virtualization context, refers to a set of HW and/or SW
+> +technologies that allow for stronger security guarantees for the SW running
+> +inside a CoCo VM. Namely, confidential computing allows its users to
+> +confirm the trustworthiness of all SW pieces to include in its reduced
+> +Trusted Computing Base (TCB) given its ability to attest the state of these
+> +trusted components.
+> +
+> +While the concrete implementation details differ between technologies, all
+> +available mechanisms aim to provide increased confidentiality and
+> +integrity for the VM's guest memory and execution state (vCPU registers),
+> +more tightly controlled guest interrupt injection, as well as some
+> +additional mechanisms to control guest-host page mapping. More details on
+> +the x86-specific solutions can be found in
+> +:doc:`Intel Trust Domain Extensions (TDX) </arch/x86/tdx>` and
+> +`AMD Memory Encryption <https://www.amd.com/system/files/techdocs/sev-snp-strengthening-vm-isolation-with-integrity-protection-and-more.pdf>`_.
+> +
+> +The basic CoCo guest layout includes the host, guest, the interfaces that
+> +communicate guest and host, a platform capable of supporting CoCo VMs, and
+> +a trusted intermediary between the guest VM and the underlying platform
+> +that acts as a security manager. The host-side virtual machine monitor
+> +(VMM) typically consists of a subset of traditional VMM features and
+> +is still in charge of the guest lifecycle, i.e. create or destroy a CoCo
+> +VM, manage its access to system resources, etc. However, since it
+> +typically stays out of CoCo VM TCB, its access is limited to preserve the
+> +security objectives.
+> +
+> +In the following diagram, the "<--->" lines represent bi-directional
+> +communication channels or interfaces between the CoCo security manager and
+> +the rest of the components (data flow for guest, host, hardware) ::
+> +
+> +    +-------------------+      +-----------------------+
+> +    | CoCo guest VM     |<---->|                       |
+> +    +-------------------+      |                       |
+> +      | Interfaces |           | CoCo security manager |
+> +    +-------------------+      |                       |
+> +    | Host VMM          |<---->|                       |
+> +    +-------------------+      |                       |
+> +                               |                       |
+> +    +--------------------+     |                       |
+> +    | CoCo platform      |<--->|                       |
+> +    +--------------------+     +-----------------------+
+> +
+> +The specific details of the CoCo security manager vastly diverge between
+> +technologies. For example, in some cases, it will be implemented in HW
+> +while in others it may be pure SW. In some cases, such as for the
+> +`Protected kernel-based virtual machine (pKVM) <https://github.com/intel-staging/pKVM-IA>`,
+> +the CoCo security manager is a small, isolated and highly privileged
+> +(compared to the rest of SW running on the host) part of a traditional
+> +VMM.
+> +
+> +Existing Linux kernel threat model
+> +==================================
+> +
+> +The overall components of the current Linux kernel threat model are::
+> +
+> +     +-----------------------+      +-------------------+
+> +     |                       |<---->| Userspace         |
+> +     |                       |      +-------------------+
+> +     |   External attack     |         | Interfaces |
+> +     |       vectors         |      +-------------------+
+> +     |                       |<---->| Linux Kernel      |
+> +     |                       |      +-------------------+
+> +     +-----------------------+      +-------------------+
+> +                                    | Bootloader/BIOS   |
+> +                                    +-------------------+
+> +                                    +-------------------+
+> +                                    | HW platform       |
+> +                                    +-------------------+
+> +
+> +There is also communication between the bootloader and the kernel during
+> +the boot process, but this diagram does not represent it explicitly. The
+> +"Interfaces" box represents the various interfaces that allow
+> +communication between kernel and userspace. This includes system calls,
+> +kernel APIs, device drivers, etc.
+> +
+> +The existing Linux kernel threat model typically assumes execution on a
+> +trusted HW platform with all of the firmware and bootloaders included on
+> +its TCB. The primary attacker resides in the userspace, and all of the data
+> +coming from there is generally considered untrusted, unless userspace is
+> +privileged enough to perform trusted actions. In addition, external
+> +attackers are typically considered, including those with access to enabled
+> +external networks (e.g. Ethernet, Wireless, Bluetooth), exposed hardware
+> +interfaces (e.g. USB, Thunderbolt), and the ability to modify the contents
+> +of disks offline.
+> +
+> +Regarding external attack vectors, it is interesting to note that in most
+> +cases external attackers will try to exploit vulnerabilities in userspace
+> +first, but that it is possible for an attacker to directly target the
+> +kernel; particularly if the host has physical access. Examples of direct
+> +kernel attacks include the vulnerabilities CVE-2019-19524, CVE-2022-0435
+> +and CVE-2020-24490.
+> +
+> +Confidential Computing threat model and its security objectives
+> +===============================================================
+> +
+> +Confidential Computing adds a new type of attacker to the above list: a
+> +potentially misbehaving host (which can also include some part of a
+> +traditional VMM or all of it), which is typically placed outside of the
+> +CoCo VM TCB due to its large SW attack surface. It is important to note
+> +that this doesn’t imply that the host or VMM are intentionally
+> +malicious, but that there exists a security value in having a small CoCo
+> +VM TCB. This new type of adversary may be viewed as a more powerful type
+> +of external attacker, as it resides locally on the same physical machine
+> +-in contrast to a remote network attacker- and has control over the guest
+> +kernel communication with most of the HW::
+> +
+> +                                 +------------------------+
+> +                                 |    CoCo guest VM       |
+> +   +-----------------------+     |  +-------------------+ |
+> +   |                       |<--->|  | Userspace         | |
+> +   |                       |     |  +-------------------+ |
+> +   |   External attack     |     |     | Interfaces |     |
+> +   |       vectors         |     |  +-------------------+ |
+> +   |                       |<--->|  | Linux Kernel      | |
+> +   |                       |     |  +-------------------+ |
+> +   +-----------------------+     |  +-------------------+ |
+> +                                 |  | Bootloader/BIOS   | |
+> +   +-----------------------+     |  +-------------------+ |
+> +   |                       |<--->+------------------------+
+> +   |                       |          | Interfaces |
+> +   |                       |     +------------------------+
+> +   |     CoCo security     |<--->| Host/Host-side VMM |
+> +   |      manager          |     +------------------------+
+> +   |                       |     +------------------------+
+> +   |                       |<--->|   CoCo platform        |
+> +   +-----------------------+     +------------------------+
+> +
+> +While traditionally the host has unlimited access to guest data and can
+> +leverage this access to attack the guest, the CoCo systems mitigate such
+> +attacks by adding security features like guest data confidentiality and
+> +integrity protection. This threat model assumes that those features are
+> +available and intact.
+> +
+> +The **Linux kernel CoCo VM security objectives** can be summarized as follows:
+> +
+> +1. Preserve the confidentiality and integrity of CoCo guest's private
+> +memory and registers.
+> +
+> +2. Prevent privileged escalation from a host into a CoCo guest Linux kernel.
+> +While it is true that the host (and host-side VMM) requires some level of
+> +privilege to create, destroy, or pause the guest, part of the goal of
+> +preventing privileged escalation is to ensure that these operations do not
+> +provide a pathway for attackers to gain access to the guest's kernel.
+> +
+> +The above security objectives result in two primary **Linux kernel CoCo
+> +VM assets**:
+> +
+> +1. Guest kernel execution context.
+> +2. Guest kernel private memory.
+> +
+> +The host retains full control over the CoCo guest resources, and can deny
+> +access to them at any time. Examples of resources include CPU time, memory
+> +that the guest can consume, network bandwidth, etc. Because of this, the
+> +host Denial of Service (DoS) attacks against CoCo guests are beyond the
+> +scope of this threat model.
+> +
+> +The **Linux CoCo VM attack surface** is any interface exposed from a CoCo
+> +guest Linux kernel towards an untrusted host that is not covered by the
+> +CoCo technology SW/HW protection. This includes any possible
+> +side-channels, as well as transient execution side channels. Examples of
+> +explicit (not side-channel) interfaces include accesses to port I/O, MMIO
+> +and DMA interfaces, access to PCI configuration space, VMM-specific
+> +hypercalls (towards Host-side VMM), access to shared memory pages,
+> +interrupts allowed to be injected into the guest kernel by the host, as
+> +well as CoCo technology specific hypercalls, if present. Additionally, the
+> +host in a CoCo system typically controls the process of creating a CoCo
+> +guest: it has a method to load into a guest the firmware and bootloader
+> +images, the kernel image together with the kernel command line. All of this
+> +data should also be considered untrusted until its integrity and
+> +authenticity is established via attestation.
+> +
+> +The table below shows a threat matrix for the CoCo guest Linux kernel with
+> +the potential mitigation strategies. The matrix refers to CoCo-specific
+> +versions of the guest, host and platform.
+> +
+> +.. list-table:: CoCo Linux guest kernel threat matrix
+> +   :widths: auto
+> +   :align: center
+> +   :header-rows: 1
+> +
+> +   * - Threat name
+> +     - Threat description
+> +     - Mitigation strategies
+> +
+> +   * - Guest malicious configuration
+> +     - A misbehaving host modifies one of the following guest's
+> +       configuration:
+> +
+> +       1. Guest firmware or bootloader
+> +
+> +       2. Guest kernel or module binaries
+> +
+> +       3. Guest command line parameters
+> +
+> +       This allows the host to break the integrity of the code running
+> +       inside a CoCo guest, and violates the CoCo security objectives.
+> +     - The integrity of the guest's configuration passed via untrusted host
+> +       must be ensured by methods such as remote attestation and signing.
+> +       This should be largely transparent to the guest kernel, and would
+> +       allow it to assume a trusted state at the time of boot.
+> +
+> +   * - CoCo guest data attacks
+> +     - A misbehaving host retains full control of the CoCo guest's data
+> +       in-transit between the guest and the host-managed physical or
+> +       virtual devices. This allows any attack against confidentiality,
+> +       integrity or freshness of such data.
+> +     - The CoCo guest is responsible for ensuring the confidentiality,
+> +       integrity and freshness of such data using well-established
+> +       security mechanisms. For example, for any guest external network
+> +       communications passed via the untrusted host, an end-to-end
+> +       secure session must be established between a guest and a trusted
+> +       remote endpoint using well-known protocols such as TLS.
+> +       This requirement also applies to protection of the guest's disk
+> +       image.
+> +
+> +   * - Malformed runtime input
+> +     - A misbehaving host injects malformed input via any communication
+> +       interface used by the guest's kernel code. If the code is not
+> +       prepared to handle this input correctly, this can result in a host
+> +       --> guest kernel privilege escalation. This includes traditional
+> +       side-channel and/or transient execution attack vectors.
+> +     - The attestation or signing process cannot help to mitigate this
+> +       threat since this input is highly dynamic. Instead, a different set
+> +       of mechanisms is required:
+> +
+> +       1. *Limit the exposed attack surface*. Whenever possible, disable
+> +       complex kernel features and device drivers (not required for guest
+> +       operation) that actively use the communication interfaces between
+> +       the untrusted host and the guest. This is not a new concept for the
+> +       Linux kernel, since it already has mechanisms to disable external
+> +       interfaces, such as attacker's access via USB/Thunderbolt subsystem.
+> +
+> +       2. *Harden the exposed attack surface*. Any code that uses such
+> +       interfaces must treat the input from the untrusted host as malicious,
+> +       and do sanity checks before processing it. This can be ensured by
+> +       performing a code audit of such device drivers as well as employing
+> +       other standard techniques for testing the code robustness, such as
+> +       fuzzing. This is again a well-known concept for the Linux kernel,
+> +       since all its networking code has been previously analyzed under
+> +       presumption of processing malformed input from a network attacker.
+> +
+> +   * - Malicious runtime input
+> +     - A misbehaving host injects a specific input value via any
+> +       communication interface used by the guest's kernel code. The
+> +       difference with the previous attack vector (malformed runtime input)
+> +       is that this input is not malformed, but its value is crafted to
+> +       impact the guest's kernel security. Examples of such inputs include
+> +       providing a malicious time to the guest or the entropy to the guest
+> +       random number generator. Additionally, the timing of such events can
+> +       be an attack vector on its own, if it results in a particular guest
+> +       kernel action (i.e. processing of a host-injected interrupt).
+> +     - Similarly, as with the previous attack vector, it is not possible to
+> +       use attestation mechanisms to address this threat. Instead, such
+> +       attack vectors (i.e. interfaces) must be either disabled or made
+> +       resistant to supplied host input.
+> +
+> +As can be seen from the above table, the potential mitigation strategies
+> +to secure the CoCo Linux guest kernel vary, but can be roughly split into
+> +mechanisms that either require or do not require changes to the existing
+> +Linux kernel code. One main goal of the CoCo security architecture is to
+> +minimize changes to the Linux kernel code, while also providing usable
+> +and scalable means to facilitate the security of a CoCo guest kernel.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a73486c4aa6e..1d4ae60cdee9 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -5197,6 +5197,12 @@ S:	Orphan
+>   W:	http://accessrunner.sourceforge.net/
+>   F:	drivers/usb/atm/cxacru.c
+>   
+> +CONFIDENTIAL COMPUTING THREAT MODEL FOR X86 VIRTUALIZATION
+> +M:    Elena Reshetova <elena.reshetova@intel.com>
+> +M:    Carlos Bilbao <carlos.bilbao@amd.com>
+> +S:    Maintained
+> +F:    Documentation/security/x86-confidential-computing.rst
+> +
+>   CONFIGFS
+>   M:	Joel Becker <jlbec@evilplan.org>
+>   M:	Christoph Hellwig <hch@lst.de>
+
+Thanks,
+Carlos
