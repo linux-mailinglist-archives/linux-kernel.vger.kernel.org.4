@@ -2,129 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9881A739D86
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19497739D8A
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232443AbjFVJgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 05:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42518 "EHLO
+        id S232457AbjFVJhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 05:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbjFVJfh (ORCPT
+        with ESMTP id S231777AbjFVJgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 05:35:37 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECD4A2D49
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:28:52 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-3113675d582so4457532f8f.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:28:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687426131; x=1690018131;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=a8I/X4DIkumE0o217fuyqlb4csZOvMDW/UlSifsV2GU=;
-        b=bYzxCtFqXPloCjCKlMFQWGOz34JRH3wCnPD3AX38cFSLTi6Cm/moRaAzr/P9UvW8yK
-         T1UlfaUEMwKRoiHsYP2AP1eNfAXLJpOw6fuiK9KovJ6TTbshtiNVn6qpKJwQbplR7OOg
-         cx6Tisg37W53vmqv5m1Z8lPI4korclfp1prU7mkLZhjPR9+rdDrp6MRwgW2Ncm7RM0tH
-         EKlfS2nMwEz3mW4p3CO9SV7SgitOCSSmw0Hb3yAyfNuhyh4ElkPZLngym63CKrx/nmnW
-         QWcMXIrvh+PraUYucMC8xzhBhv0/T9lnF2rJXI9ik824sFmQmQnBhTTJQeTPzfNemHg1
-         WgqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687426131; x=1690018131;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=a8I/X4DIkumE0o217fuyqlb4csZOvMDW/UlSifsV2GU=;
-        b=Oy4kVq06PXaTJ5NVAj2FfQ/U22cF7CFqFh226Yb/lBH36cwtGgje5n8ligdeayNalh
-         +6um/sM70+k6jOkJcTsSmJXto7c4HSNVaN+bLhEdIhHGX/Lh64yUHK8LCkw4ebA2O99J
-         WCQJkbB2GpxAahnZ10lsBibf1y4pQbQl0t73uj98CEa5uu8ppKllsESOIBNprQJjpcXr
-         AAGSTnb/ZY6AS7ziYhKXcdBe15U/sqxnsWjijafOT7o1i2CNuXv7sNe6otzIwbrDbt+I
-         g2LWqt2iEe03upvjZ5FFccYBHBKINhK/j+rxgYh375CGFHf2jm1teI6QMpwz2iwcU620
-         cxfQ==
-X-Gm-Message-State: AC+VfDzL8CWZayJd3NAzVsdLksnJJjnQ5W6L2QVi3sOooDaDh3mVUmDV
-        LwVnMoW56jytW8E6877hC082jQ==
-X-Google-Smtp-Source: ACHHUZ4T77alv8uvZQD/zqnC6VfvSZmzxDS+DYzTGDKhKFLEX9r7QGKfu+W2jacagsaCQjaDDoaMnw==
-X-Received: by 2002:a5d:591c:0:b0:311:1a9d:98e with SMTP id v28-20020a5d591c000000b003111a9d098emr11415672wrd.58.1687426131213;
-        Thu, 22 Jun 2023 02:28:51 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id c11-20020a056000104b00b003063a92bbf5sm6641190wrx.70.2023.06.22.02.28.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 02:28:50 -0700 (PDT)
-Message-ID: <35253eaa-78b0-8976-aaf4-8917331e7823@linaro.org>
-Date:   Thu, 22 Jun 2023 11:28:47 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v7 1/3] dt-bindings: ufs: qcom: Add ICE phandle
-Content-Language: en-US
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
+        Thu, 22 Jun 2023 05:36:13 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683501995;
+        Thu, 22 Jun 2023 02:29:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687426180; x=1718962180;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=mVEis/WqWWY+Y0u9TfS2GzXtVSmOeIPHMKAdIbtLulg=;
+  b=RHom6d0pcOuEqSpltwSzCoOXRUjGVXwj0bWfTw3klfut408xA09pZHfn
+   xTiD4plq3jKd1I+eJdEta7k/k3kuLNWyx0pMi7ZVB7h514hRNGMZkjM4P
+   HAcVnpKCRjKvrZXvzDtYNDBMeYiFIp7ziiFtSMd9HVC9/pfZSiCuM6JkT
+   pGw3Ztib8I1ShubXkNceIRBJ9SQ/z2P7rl0gO+UWFKUO6jhbsnlBCP0q+
+   qO6/FEvhbfbRNEL6Frb5sNdJlUyXqD6/oVy3Xh340xZxiijiSAb+OwoBJ
+   DYN1JOok21/nTAEC/c4Gnv6Xrnb8JqT8fWzgUXHJbpTUbbRD8Eu3GvRgf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="390124941"
+X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
+   d="scan'208";a="390124941"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 02:29:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="718010339"
+X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
+   d="scan'208";a="718010339"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 22 Jun 2023 02:29:35 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qCGdC-0007Tz-2q;
+        Thu, 22 Jun 2023 09:29:34 +0000
+Date:   Thu, 22 Jun 2023 17:29:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Benjamin Bara <bbara93@gmail.com>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Biggers <ebiggers@kernel.org>, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-References: <20230408214041.533749-1-abel.vesa@linaro.org>
- <20230408214041.533749-2-abel.vesa@linaro.org>
- <4aadaf24-11f6-5cc1-4fbd-addbef4f891b@linaro.org>
- <yq1ilbgqoq6.fsf@ca-mkp.ca.oracle.com>
- <80ca0da4-5243-9771-0c4c-62b956e97b2f@linaro.org>
- <ZJPyGW2I4fHqFMRV@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZJPyGW2I4fHqFMRV@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Benjamin Bara <benjamin.bara@skidata.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 1/3] usb: misc: onboard-hub: support multiple power
+ supplies
+Message-ID: <202306221742.xnLvAlnW-lkp@intel.com>
+References: <20230620-hx3-v5-1-319c9c4c846f@skidata.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230620-hx3-v5-1-319c9c4c846f@skidata.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2023 09:02, Abel Vesa wrote:
-> On 23-06-22 08:07:51, Krzysztof Kozlowski wrote:
->> On 22/06/2023 03:19, Martin K. Petersen wrote:
->>>
->>> Abel,
->>>
->>>> Un-reviewed. This is broken and was never tested. After applying this
->>>> patch, I can see many new warnings in all DTBs (so it is easy to spot
->>>> that it was not actually tested).
->>>>
->>>> Your probably meant here:
->>>>   if:
->>>>     required:
->>>
->>> Please provide a fix for this. I don't want to rebase this late in the
->>> cycle.
->>
->> AFAIK, this was not applied. At least as of next 20210621 and I
->> commented on this few days ago. Anything changed here?
-> 
-> Check this one:
-> https://lore.kernel.org/all/yq1a5x1wl4g.fsf@ca-mkp.ca.oracle.com/
-> 
+Hi Benjamin,
 
-So staging tree is not in next? If it cannot be rebased "that late in
-the cycle", this means it should be in the next. :/
+kernel test robot noticed the following build warnings:
 
-Best regards,
-Krzysztof
+[auto build test WARNING on 45a3e24f65e90a047bef86f927ebdc4c710edaa1]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Bara/usb-misc-onboard-hub-support-multiple-power-supplies/20230622-161859
+base:   45a3e24f65e90a047bef86f927ebdc4c710edaa1
+patch link:    https://lore.kernel.org/r/20230620-hx3-v5-1-319c9c4c846f%40skidata.com
+patch subject: [PATCH v5 1/3] usb: misc: onboard-hub: support multiple power supplies
+config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20230622/202306221742.xnLvAlnW-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230622/202306221742.xnLvAlnW-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306221742.xnLvAlnW-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/usb/misc/onboard_usb_hub.c: In function 'onboard_hub_probe':
+>> drivers/usb/misc/onboard_usb_hub.c:262:58: warning: format '%d' expects argument of type 'int', but argument 4 has type 'long unsigned int' [-Wformat=]
+     262 |                 return dev_err_probe(dev, -EINVAL, "max %d supplies supported!\n",
+         |                                                         ~^
+         |                                                          |
+         |                                                          int
+         |                                                         %ld
+
+
+vim +262 drivers/usb/misc/onboard_usb_hub.c
+
+   240	
+   241	static int onboard_hub_probe(struct platform_device *pdev)
+   242	{
+   243		const struct of_device_id *of_id;
+   244		struct device *dev = &pdev->dev;
+   245		struct onboard_hub *hub;
+   246		unsigned int i;
+   247		int err;
+   248	
+   249		hub = devm_kzalloc(dev, sizeof(*hub), GFP_KERNEL);
+   250		if (!hub)
+   251			return -ENOMEM;
+   252	
+   253		of_id = of_match_device(onboard_hub_match, &pdev->dev);
+   254		if (!of_id)
+   255			return -ENODEV;
+   256	
+   257		hub->pdata = of_id->data;
+   258		if (!hub->pdata)
+   259			return -EINVAL;
+   260	
+   261		if (hub->pdata->num_supplies > MAX_SUPPLIES)
+ > 262			return dev_err_probe(dev, -EINVAL, "max %d supplies supported!\n",
+   263					     MAX_SUPPLIES);
+   264	
+   265		for (i = 0; i < hub->pdata->num_supplies; i++)
+   266			hub->supplies[i].supply = supply_names[i];
+   267	
+   268		err = devm_regulator_bulk_get(dev, hub->pdata->num_supplies, hub->supplies);
+   269		if (err) {
+   270			dev_err(dev, "Failed to get regulator supplies: %d\n", err);
+   271			return err;
+   272		}
+   273	
+   274		hub->reset_gpio = devm_gpiod_get_optional(dev, "reset",
+   275							  GPIOD_OUT_HIGH);
+   276		if (IS_ERR(hub->reset_gpio))
+   277			return dev_err_probe(dev, PTR_ERR(hub->reset_gpio), "failed to get reset GPIO\n");
+   278	
+   279		hub->dev = dev;
+   280		mutex_init(&hub->lock);
+   281		INIT_LIST_HEAD(&hub->udev_list);
+   282	
+   283		dev_set_drvdata(dev, hub);
+   284	
+   285		err = onboard_hub_power_on(hub);
+   286		if (err)
+   287			return err;
+   288	
+   289		/*
+   290		 * The USB driver might have been detached from the USB devices by
+   291		 * onboard_hub_remove() (e.g. through an 'unbind' by userspace),
+   292		 * make sure to re-attach it if needed.
+   293		 *
+   294		 * This needs to be done deferred to avoid self-deadlocks on systems
+   295		 * with nested onboard hubs.
+   296		 */
+   297		schedule_work(&attach_usb_driver_work);
+   298	
+   299		return 0;
+   300	}
+   301	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
