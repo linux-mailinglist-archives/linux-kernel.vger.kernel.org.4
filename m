@@ -2,121 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 689FE739ED8
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 12:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F9E4739EFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 12:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjFVKtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 06:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50182 "EHLO
+        id S230395AbjFVKzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 06:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbjFVKtS (ORCPT
+        with ESMTP id S230203AbjFVKzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 06:49:18 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A16619B5
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 03:49:16 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f95bf5c493so2275924e87.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 03:49:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687430954; x=1690022954;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eTlu1IkqRgiab8MtP9YjYrxSdaogyHj/YUZGxV1xbag=;
-        b=pKCKAjRKGtLC/WPqvh/sY5SR+6rnqhTkwvWRmItMYFHnIAiFYEBATvUFy3njhowtuw
-         D87rSOu0yVqzDMD+gIuaWDXxtnK0w7GH8MFePZOEfHU+UglZqP3YW4zMLGP2YBH+H7QU
-         lmSG+728zKV+k7+VeGRbOhhQc1isTCemjYU1YlbQ1g3AqRKX7xiSIb0WMsN+h2oqSm2K
-         FrlBDVduwHBVCc2iQ0AO7CDv4lWlBMxVu+prldXbhnk5OE+3mU0EhHPY7eErd+vHp7Sk
-         ycZz2AF7OF/CW4pIe4KsmVZvY6Ftqe+27T65xlKBvDa36X5stAxceWPH68xkAWkmQtZg
-         epBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687430954; x=1690022954;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eTlu1IkqRgiab8MtP9YjYrxSdaogyHj/YUZGxV1xbag=;
-        b=MpPyR92SnIWIuaDFPclV+k+QB6r6b26twPLYpwFdU1TRJ0Y809lM5ZfyaDcstxf6NT
-         7mMQRuOAfXVp/4h78Ttc1H3DN6+nTv323eEqmnzs7KtfL2E32bk8SlAMhcipEn0ElswV
-         7B1T75e0hvxsTpaloqzLLMdIHIFWYPDFHONQ7lgyqBToppVsj0MqD9Tl236gckZvLme1
-         7N7050+lmWX/+/MZik5rEC6s3AlJpR55cgeREpyjnIUwA2KigMOP/0Pt77mI9plgzgyv
-         G+TY76/UwxQ6QUsqFMmQNI+DYdUCrv3sFLEU3G5/3j3nW6GtAyTCQBWJsXbG1h47wFnn
-         +JYQ==
-X-Gm-Message-State: AC+VfDztSsdecb9XsEXfxeyg9U8UOGzfzQw3BVxPaPn1dXy1CFxThzQM
-        n7W4WaOMQkGYoY0ryEb85lKm1g==
-X-Google-Smtp-Source: ACHHUZ5+UVhdOZgsQM2Fh4e445mlxmzsDvz88bXhNTNChuAjhPxjP7pEHzByjsFvDryIRBBcTzdieQ==
-X-Received: by 2002:a05:6512:234a:b0:4f9:607a:6508 with SMTP id p10-20020a056512234a00b004f9607a6508mr1839292lfu.50.1687430954560;
-        Thu, 22 Jun 2023 03:49:14 -0700 (PDT)
-Received: from [192.168.1.101] (abyl165.neoplus.adsl.tpnet.pl. [83.9.31.165])
-        by smtp.gmail.com with ESMTPSA id q11-20020a19a40b000000b004f13bc97b00sm1066984lfc.119.2023.06.22.03.49.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 03:49:14 -0700 (PDT)
-Message-ID: <091a281f-b4c3-39e5-6d9c-5df903a020f5@linaro.org>
-Date:   Thu, 22 Jun 2023 12:49:12 +0200
+        Thu, 22 Jun 2023 06:55:03 -0400
+Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420E41BC5
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 03:55:01 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+        by localhost (Postfix) with ESMTP id 4Qmy1r3Pcwz9sRF;
+        Thu, 22 Jun 2023 12:54:56 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id XbfJliOpw3c2; Thu, 22 Jun 2023 12:54:56 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4Qmy1q5zgVz9sRh;
+        Thu, 22 Jun 2023 12:54:55 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id C782A8B77C;
+        Thu, 22 Jun 2023 12:54:55 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id Jhq4CNWlVTjO; Thu, 22 Jun 2023 12:54:55 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.14])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 7954E8B768;
+        Thu, 22 Jun 2023 12:54:55 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 35MAslvw2382515
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 12:54:47 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 35MAskIe2382511;
+        Thu, 22 Jun 2023 12:54:46 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        Naveen N Rao <naveen@kernel.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v2 00/14] powerpc/objtool: uaccess validation for PPC32 (v2)
+Date:   Thu, 22 Jun 2023 12:54:22 +0200
+Message-Id: <cover.1687430631.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 5/5] arm64: dts: qcom: sdm845-mtp: add chassis-type
- property
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230622-topic-sm8x50-upstream-chassis-type-v1-0-13f676eb71f3@linaro.org>
- <20230622-topic-sm8x50-upstream-chassis-type-v1-5-13f676eb71f3@linaro.org>
- <CAA8EJpphEZa1Vfs1ipm+1x7MvYgF7HMiW-GfNzYi37YPoMzKVw@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CAA8EJpphEZa1Vfs1ipm+1x7MvYgF7HMiW-GfNzYi37YPoMzKVw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687431271; l=3072; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=Dg5zdi84TXnAtT8CD6i72DeNJLQHkYOORwQ7HSHb3nA=; b=/dakf9ZGZCCVtBFnQ82TXejVmhGFFcDD2/Ph/28PUBrubyWdIkls8BgvPDjqaoG5G6NEgZLHh 9xoWbp1L9A9BYa/445Eq4TtSoUBZTVGXe/dwCuYI+Vac+x/jP75Uc+B
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.06.2023 12:48, Dmitry Baryshkov wrote:
-> On Thu, 22 Jun 2023 at 12:06, Neil Armstrong <neil.armstrong@linaro.org> wrote:
->>
->> Qualcomm's Mobile Test Platforms devices are handsets, set the
->> chassis-type property to 'handset'.
-> 
-> Is it really a device that you can take into your hand and put close
-> to the head?
-If you don't mind getting a bit microwavey, yes
+This series adds UACCESS validation for PPC32. It includes half
+a dozen of changes to objtool core.
 
-Konrad
-> 
->>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> ---
->>  arch/arm64/boot/dts/qcom/sdm845-mtp.dts | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
->> index b2d4336e764b..41675a8de268 100644
->> --- a/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
->> +++ b/arch/arm64/boot/dts/qcom/sdm845-mtp.dts
->> @@ -15,6 +15,7 @@
->>  / {
->>         model = "Qualcomm Technologies, Inc. SDM845 MTP";
->>         compatible = "qcom,sdm845-mtp", "qcom,sdm845";
->> +       chassis-type = "handset";
->>
->>         aliases {
->>                 serial0 = &uart9;
->>
->> --
->> 2.34.1
->>
-> 
-> 
+It is almost mature, performs code analysis for all PPC32, only
+missing marking of UACCESS enable/disable for book3s/32.
+
+Most object files are correctly decoded, only a few
+'unreachable instruction' warnings remain due to more complex
+switch table cases:
+- Loading of table address after the dynamic jump
+- Nested switches
+
+It allowed to detect some UACCESS mess in a few files. They've been
+fixed through other patches.
+
+Christophe Leroy (14):
+  powerpc/kuap: Avoid unnecessary reads of MD_AP
+  powerpc/kuap: Avoid useless jump_label on empty function
+  powerpc/kuap: Refactor static branch for disabling kuap
+  powerpc/kuap: Make disabling KUAP at boottime impossible except on
+    book3s/64
+  powerpc/kuap: KUAP enabling/disabling functions must be
+    __always_inline
+  Revert "powerpc/bug: Provide better flexibility to
+    WARN_ON/__WARN_FLAGS() with asm goto"
+  objtool: Allow an architecture to disable objtool on ASM files
+  objtool: Fix JUMP_ENTRY_SIZE for bi-arch like powerpc
+  objtool: Add INSN_RETURN_CONDITIONAL
+  objtool: Add support for relative switch tables
+  objtool: Remove too strict constraint in jump table search
+  objtool: Add support for more complex UACCESS control
+  powerpc/bug: Annotate reachable after warning trap
+  powerpc: Implement UACCESS validation on PPC32
+
+ arch/Kconfig                                  |  5 ++
+ arch/powerpc/Kconfig                          |  2 +
+ arch/powerpc/include/asm/book3s/32/kup.h      | 39 ++++-----
+ arch/powerpc/include/asm/book3s/64/kup.h      | 36 ++++----
+ arch/powerpc/include/asm/bug.h                | 77 ++++-------------
+ arch/powerpc/include/asm/kup.h                | 66 ++++++++++-----
+ arch/powerpc/include/asm/nohash/32/kup-8xx.h  | 52 +++++-------
+ arch/powerpc/include/asm/nohash/kup-booke.h   | 49 +++++------
+ arch/powerpc/include/asm/uaccess.h            |  6 +-
+ arch/powerpc/kernel/misc_32.S                 |  2 +-
+ arch/powerpc/kernel/traps.c                   |  9 +-
+ arch/powerpc/kexec/core_32.c                  |  4 +-
+ arch/powerpc/mm/book3s32/kuap.c               | 18 ++--
+ arch/powerpc/mm/init-common.c                 |  3 +
+ arch/powerpc/mm/nohash/kup.c                  | 11 +--
+ include/linux/objtool.h                       | 14 ++++
+ scripts/Makefile.build                        |  4 +
+ tools/objtool/arch/powerpc/decode.c           | 82 +++++++++++++++++--
+ .../arch/powerpc/include/arch/special.h       |  2 +-
+ tools/objtool/arch/powerpc/special.c          | 44 +++++++++-
+ tools/objtool/arch/x86/special.c              |  3 +-
+ tools/objtool/check.c                         | 79 ++++++++++++++----
+ tools/objtool/include/objtool/arch.h          |  1 +
+ tools/objtool/include/objtool/elf.h           |  1 +
+ tools/objtool/include/objtool/special.h       |  2 +-
+ tools/objtool/special.c                       | 55 ++++++-------
+ 26 files changed, 395 insertions(+), 271 deletions(-)
+
+-- 
+2.40.1
+
