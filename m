@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3189B73A3F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE39E73A3F6
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232165AbjFVO6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 10:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34894 "EHLO
+        id S231493AbjFVO6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 10:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232076AbjFVO6S (ORCPT
+        with ESMTP id S232072AbjFVO6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 10:58:18 -0400
+        Thu, 22 Jun 2023 10:58:19 -0400
 Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8042FE9;
-        Thu, 22 Jun 2023 07:58:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D447170C;
+        Thu, 22 Jun 2023 07:58:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
         ; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:References:
         In-Reply-To:Message-Id:Date:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
         Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
         List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=6I1cEHhy5Roy7I0XVKIfzmtn2VgEqrBDuhUdFcLK8pA=; b=CUn3JunHbMJzvxbPy/JLVjvKCk
-        157bRh19u+SdhEFCKCYS4oyfwNzwPU5/zvacYfdWrbammRSTB+otpF7E4nat0oB4E2f55bzI4fZJS
-        MC3tzXAccE+hvjbCTo0uGhYj+xhkrHfAqDfhdr2zFlACriHDHA5i8ttI9x8qE7t9cULc=;
+        bh=6R3OBnyiBxxxiVIfdj1hEGO2s8km5su18Wx8/Afaa5w=; b=XZZF1vztOkOYq29iqRaHJ9e5BO
+        8SpGnc4p/9R6AD0/n0vChVSwD9dr5KMjdgU/XbWooZwf4F2krnoiLbKzWP0ZEqhfytPtFB4m9vOpG
+        ad6N7CeIKQc63bHAZ780vSA0rQ2J6somn71uMII5ikFJSrAnXie1T/nf11LgqikjFLPI=;
 Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:55382 helo=localhost.localdomain)
         by mail.hugovil.com with esmtpa (Exim 4.92)
         (envelope-from <hugo@hugovil.com>)
-        id 1qCLlE-0002fr-Rd; Thu, 22 Jun 2023 10:58:13 -0400
+        id 1qCLlF-0002fr-W1; Thu, 22 Jun 2023 10:58:14 -0400
 From:   Hugo Villeneuve <hugo@hugovil.com>
 To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
@@ -36,8 +36,8 @@ Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, hugo@hugovil.com,
         Hugo Villeneuve <hvilleneuve@dimonoff.com>,
         Bruno Thomsen <bruno.thomsen@gmail.com>
-Date:   Thu, 22 Jun 2023 10:57:51 -0400
-Message-Id: <20230622145800.2442116-9-hugo@hugovil.com>
+Date:   Thu, 22 Jun 2023 10:57:52 -0400
+Message-Id: <20230622145800.2442116-10-hugo@hugovil.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230622145800.2442116-1-hugo@hugovil.com>
 References: <20230622145800.2442116-1-hugo@hugovil.com>
@@ -51,7 +51,7 @@ X-Spam-Level:
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Subject: [PATCH v4 08/17] rtc: pcf2127: adapt for WD registers at any offset
+Subject: [PATCH v4 09/17] rtc: pcf2127: adapt for CLKOUT register at any offset
 X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
 X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
@@ -64,78 +64,53 @@ This will simplify the implementation of new variants into this driver.
 
 Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 Reviewed-by: Bruno Thomsen <bruno.thomsen@gmail.com>
-Tested-by: Bruno Thomsen <bruno.thomsen@gmail.com>
 ---
- drivers/rtc/rtc-pcf2127.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+ drivers/rtc/rtc-pcf2127.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/rtc/rtc-pcf2127.c b/drivers/rtc/rtc-pcf2127.c
-index 31f6bba81212..ce7fe6e2fd47 100644
+index ce7fe6e2fd47..21fa42870dd4 100644
 --- a/drivers/rtc/rtc-pcf2127.c
 +++ b/drivers/rtc/rtc-pcf2127.c
-@@ -99,6 +99,8 @@ struct pcf21xx_config {
- 	unsigned int has_bit_wd_ctl_cd0:1;
- 	u8 reg_time_base; /* Time/date base register. */
+@@ -101,6 +101,7 @@ struct pcf21xx_config {
  	u8 regs_alarm_base; /* Alarm function base registers. */
-+	u8 reg_wd_ctl; /* Watchdog control register. */
-+	u8 reg_wd_val; /* Watchdog value register. */
+ 	u8 reg_wd_ctl; /* Watchdog control register. */
+ 	u8 reg_wd_val; /* Watchdog value register. */
++	u8 reg_clkout; /* Clkout register. */
  };
  
  struct pcf2127 {
-@@ -269,7 +271,7 @@ static int pcf2127_wdt_ping(struct watchdog_device *wdd)
- {
- 	struct pcf2127 *pcf2127 = watchdog_get_drvdata(wdd);
- 
--	return regmap_write(pcf2127->regmap, PCF2127_REG_WD_VAL, wdd->timeout);
-+	return regmap_write(pcf2127->regmap, pcf2127->cfg->reg_wd_val, wdd->timeout);
- }
- 
- /*
-@@ -303,7 +305,7 @@ static int pcf2127_wdt_stop(struct watchdog_device *wdd)
- {
- 	struct pcf2127 *pcf2127 = watchdog_get_drvdata(wdd);
- 
--	return regmap_write(pcf2127->regmap, PCF2127_REG_WD_VAL,
-+	return regmap_write(pcf2127->regmap, pcf2127->cfg->reg_wd_val,
- 			    PCF2127_WD_VAL_STOP);
- }
- 
-@@ -352,7 +354,7 @@ static int pcf2127_watchdog_init(struct device *dev, struct pcf2127 *pcf2127)
- 	watchdog_set_drvdata(&pcf2127->wdd, pcf2127);
- 
- 	/* Test if watchdog timer is started by bootloader */
--	ret = regmap_read(pcf2127->regmap, PCF2127_REG_WD_VAL, &wdd_timeout);
-+	ret = regmap_read(pcf2127->regmap, pcf2127->cfg->reg_wd_val, &wdd_timeout);
- 	if (ret)
- 		return ret;
- 
-@@ -627,6 +629,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
- 		.has_bit_wd_ctl_cd0 = 1,
- 		.reg_time_base = PCF2127_REG_TIME_BASE,
+@@ -631,6 +632,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
  		.regs_alarm_base = PCF2127_REG_ALARM_BASE,
-+		.reg_wd_ctl = PCF2127_REG_WD_CTL,
-+		.reg_wd_val = PCF2127_REG_WD_VAL,
+ 		.reg_wd_ctl = PCF2127_REG_WD_CTL,
+ 		.reg_wd_val = PCF2127_REG_WD_VAL,
++		.reg_clkout = PCF2127_REG_CLKOUT,
  	},
  	[PCF2129] = {
  		.type = PCF2129,
-@@ -635,6 +639,8 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
- 		.has_bit_wd_ctl_cd0 = 0,
- 		.reg_time_base = PCF2127_REG_TIME_BASE,
+@@ -641,6 +643,7 @@ static struct pcf21xx_config pcf21xx_cfg[] = {
  		.regs_alarm_base = PCF2127_REG_ALARM_BASE,
-+		.reg_wd_ctl = PCF2127_REG_WD_CTL,
-+		.reg_wd_val = PCF2127_REG_WD_VAL,
+ 		.reg_wd_ctl = PCF2127_REG_WD_CTL,
+ 		.reg_wd_val = PCF2127_REG_WD_VAL,
++		.reg_clkout = PCF2127_REG_CLKOUT,
  	},
  };
  
-@@ -736,7 +742,7 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
- 	 * as T. Bits labeled as T must always be written with
- 	 * logic 0.
- 	 */
--	ret = regmap_update_bits(pcf2127->regmap, PCF2127_REG_WD_CTL,
-+	ret = regmap_update_bits(pcf2127->regmap, pcf2127->cfg->reg_wd_ctl,
- 				 PCF2127_BIT_WD_CTL_CD1 |
- 				 PCF2127_BIT_WD_CTL_CD0 |
- 				 PCF2127_BIT_WD_CTL_TF1 |
+@@ -720,12 +723,12 @@ static int pcf2127_probe(struct device *dev, struct regmap *regmap,
+ 	regmap_clear_bits(pcf2127->regmap, PCF2127_REG_CTRL1,
+ 				PCF2127_BIT_CTRL1_POR_OVRD);
+ 
+-	ret = regmap_read(pcf2127->regmap, PCF2127_REG_CLKOUT, &val);
++	ret = regmap_read(pcf2127->regmap, pcf2127->cfg->reg_clkout, &val);
+ 	if (ret < 0)
+ 		return ret;
+ 
+ 	if (!(val & PCF2127_BIT_CLKOUT_OTPR)) {
+-		ret = regmap_set_bits(pcf2127->regmap, PCF2127_REG_CLKOUT,
++		ret = regmap_set_bits(pcf2127->regmap, pcf2127->cfg->reg_clkout,
+ 				      PCF2127_BIT_CLKOUT_OTPR);
+ 		if (ret < 0)
+ 			return ret;
 -- 
 2.30.2
 
