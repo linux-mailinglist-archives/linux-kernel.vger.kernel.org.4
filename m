@@ -2,200 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEEE073ABFA
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 23:59:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C3173AC44
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 00:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230245AbjFVV7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 17:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45300 "EHLO
+        id S230458AbjFVWA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 18:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbjFVV7l (ORCPT
+        with ESMTP id S229747AbjFVWAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 17:59:41 -0400
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92921739;
-        Thu, 22 Jun 2023 14:59:38 -0700 (PDT)
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-3fa7512e5efso502755e9.2;
-        Thu, 22 Jun 2023 14:59:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687471177; x=1690063177;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y7xfVnKi0DP1NtittcvkACNIGuIXZxKZkDplBO6fS4M=;
-        b=bVmsxVcpsjj+glJlJOyj/g1+RHTlaMMaVIkEmgNEBO3klmQTM/S/B7u82sIlsEjmz7
-         lZ/uTyV3uDY7k7QWZnvGHtKK1bN8n5EAznsylam3845C37f7JxWpGZ09Q087lnFxGgxc
-         ZgMk94I2HgMcubLJVRp5aHPpIds1sKBoJ4w0DJcSBEwDi22kBcmyi+ZX/PGE/4zFvnTt
-         7KoeLfyzsMt2mDFSOjc6NDHrjJhJExIS1/ETNRm9x/5MG77EQJT9PVskCr9O6pJ2oAjA
-         70hQgeFiehjm70B3Xy/h63yYXCXQMA46e1I0v43LYjJ5YUPdUD3hpG+YBEaESZycfjUU
-         RIDw==
-X-Gm-Message-State: AC+VfDxlU55LVuDJYmKnzAw6Oh0efMuvAiwcFkVRNDIIz2e0Vz1Yf0ei
-        ORSCOH7WxFzXijiME2TqIYq35hPeXX0Wjw==
-X-Google-Smtp-Source: ACHHUZ6iZEQYDBr5SMoG1sHSwnJvbRZ7ITDmy6q/mQpoMIhzYBRmjUBzUIWxn1ZVEcWk37P0LJzbaQ==
-X-Received: by 2002:a7b:c8c2:0:b0:3f7:5d:49ff with SMTP id f2-20020a7bc8c2000000b003f7005d49ffmr20473599wml.1.1687471176826;
-        Thu, 22 Jun 2023 14:59:36 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-012.fbsv.net. [2a03:2880:31ff:c::face:b00c])
-        by smtp.gmail.com with ESMTPSA id c25-20020a7bc019000000b003fa52928fcbsm561126wmb.19.2023.06.22.14.59.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 14:59:36 -0700 (PDT)
-From:   Breno Leitao <leitao@debian.org>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     gregkh@linuxfoundation.org,
-        io-uring@vger.kernel.org (open list:IO_URING),
-        linux-kernel@vger.kernel.org (open list),
-        netdev@vger.kernel.org (open list:NETWORKING [GENERAL])
-Subject: [PATCH v3] io_uring: Add io_uring command support for sockets
-Date:   Thu, 22 Jun 2023 14:59:14 -0700
-Message-Id: <20230622215915.2565207-1-leitao@debian.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 22 Jun 2023 18:00:54 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B111988;
+        Thu, 22 Jun 2023 15:00:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687471253; x=1719007253;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=fWYQw7YkqZaC3rzHqhX8WgjjZeuhKInvStJbx+K0+hw=;
+  b=Zm41cHNjl7TzJEzDE8UIZI1fFCVQZGbdKnujfOS7XySN5FhX3pxun29O
+   jO2k2IUrR1ALO9T1TzmtRC7lGSnjvzPHMZeWXDMPb2DENUfX8GGjmrDjn
+   j0NWXQbfpoGKfPcv6uWpIhgsp0AVz2vAkgpQwxQyLvYofH0Fuo0o/j7tm
+   UV7HKcJBWUfjh3G2HaXMHrn+01io0CzhtmNRXH539tUztgyh4v/PVrCjC
+   /SH8/GvMCh3wVRvB8s2UNUG/cyRPZ5oSeGcuJ/9nKHFP16pnQleFDuj9D
+   YjjBimDzp55Q2H+tnP81j9aZYj3SlRM5JpVPL8klNO5/9/c2vN0IF4auN
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="359490220"
+X-IronPort-AV: E=Sophos;i="6.01,150,1684825200"; 
+   d="scan'208";a="359490220"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 15:00:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="715095781"
+X-IronPort-AV: E=Sophos;i="6.01,150,1684825200"; 
+   d="scan'208";a="715095781"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 22 Jun 2023 15:00:47 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qCSMA-0007mp-31;
+        Thu, 22 Jun 2023 22:00:46 +0000
+Date:   Fri, 23 Jun 2023 06:00:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sumitra Sharma <sumitraartsy@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, Ira Weiny <ira.weiny@intel.com>,
+        Fabio <fmdefrancesco@gmail.com>, Deepak R Varma <drv@mailo.com>,
+        Sumitra Sharma <sumitraartsy@gmail.com>
+Subject: Re: [PATCH v3] lib/test_bpf: Call page_address() on page acquired
+ with GFP_KERNEL flag
+Message-ID: <202306230559.hU5Aonpl-lkp@intel.com>
+References: <20230622080729.GA426913@sumitra.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230622080729.GA426913@sumitra.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable io_uring commands on network sockets. Create two new
-SOCKET_URING_OP commands that will operate on sockets.
+Hi Sumitra,
 
-In order to call ioctl on sockets, use the file_operations->io_uring_cmd
-callbacks, and map it to a uring socket function, which handles the
-SOCKET_URING_OP accordingly, and calls socket ioctls.
+kernel test robot noticed the following build warnings:
 
-This patches was tested by creating a new test case in liburing.
-Link: https://github.com/leitao/liburing/tree/io_uring_cmd
+[auto build test WARNING on bpf-next/master]
+[also build test WARNING on bpf/master linus/master v6.4-rc7 next-20230622]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
-V1 -> V2:
-	* Keep uring code outside of network core subsystem
-	* Uses ioctl to define uring operation
-	* Use a generic ioctl function, instead of copying it over
-V2 -> V3:
-	* Do not use ioctl() helpers to create uring operations
-	* Rename uring_sock_cmd to io_uring_cmd_sock
----
- include/linux/io_uring.h      |  6 ++++++
- include/uapi/linux/io_uring.h |  8 ++++++++
- io_uring/uring_cmd.c          | 27 +++++++++++++++++++++++++++
- net/socket.c                  |  2 ++
- 4 files changed, 43 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Sumitra-Sharma/lib-test_bpf-Call-page_address-on-page-acquired-with-GFP_KERNEL-flag/20230622-160846
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
+patch link:    https://lore.kernel.org/r/20230622080729.GA426913%40sumitra.com
+patch subject: [PATCH v3] lib/test_bpf: Call page_address() on page acquired with GFP_KERNEL flag
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230623/202306230559.hU5Aonpl-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20230623/202306230559.hU5Aonpl-lkp@intel.com/reproduce)
 
-diff --git a/include/linux/io_uring.h b/include/linux/io_uring.h
-index 7fe31b2cd02f..f00baf2929ff 100644
---- a/include/linux/io_uring.h
-+++ b/include/linux/io_uring.h
-@@ -71,6 +71,7 @@ static inline void io_uring_free(struct task_struct *tsk)
- 	if (tsk->io_uring)
- 		__io_uring_free(tsk);
- }
-+int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags);
- #else
- static inline int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
- 			      struct iov_iter *iter, void *ioucmd)
-@@ -102,6 +103,11 @@ static inline const char *io_uring_get_opcode(u8 opcode)
- {
- 	return "";
- }
-+static inline int io_uring_cmd_sock(struct io_uring_cmd *cmd,
-+				    unsigned int issue_flags)
-+{
-+	return -EOPNOTSUPP;
-+}
- #endif
- 
- #endif
-diff --git a/include/uapi/linux/io_uring.h b/include/uapi/linux/io_uring.h
-index 0716cb17e436..5c25f8c98aa8 100644
---- a/include/uapi/linux/io_uring.h
-+++ b/include/uapi/linux/io_uring.h
-@@ -703,6 +703,14 @@ struct io_uring_recvmsg_out {
- 	__u32 flags;
- };
- 
-+/*
-+ * Argument for IORING_OP_URING_CMD when file is a socket
-+ */
-+enum {
-+	SOCKET_URING_OP_SIOCINQ		= 0,
-+	SOCKET_URING_OP_SIOCOUTQ,
-+};
-+
- #ifdef __cplusplus
- }
- #endif
-diff --git a/io_uring/uring_cmd.c b/io_uring/uring_cmd.c
-index 5e32db48696d..31ce59567295 100644
---- a/io_uring/uring_cmd.c
-+++ b/io_uring/uring_cmd.c
-@@ -7,6 +7,7 @@
- #include <linux/nospec.h>
- 
- #include <uapi/linux/io_uring.h>
-+#include <uapi/asm-generic/ioctls.h>
- 
- #include "io_uring.h"
- #include "rsrc.h"
-@@ -156,3 +157,29 @@ int io_uring_cmd_import_fixed(u64 ubuf, unsigned long len, int rw,
- 	return io_import_fixed(rw, iter, req->imu, ubuf, len);
- }
- EXPORT_SYMBOL_GPL(io_uring_cmd_import_fixed);
-+
-+int io_uring_cmd_sock(struct io_uring_cmd *cmd, unsigned int issue_flags)
-+{
-+	struct socket *sock = cmd->file->private_data;
-+	struct sock *sk = sock->sk;
-+	int ret, arg = 0;
-+
-+	if (!sk->sk_prot || !sk->sk_prot->ioctl)
-+		return -EOPNOTSUPP;
-+
-+	switch (cmd->sqe->cmd_op) {
-+	case SOCKET_URING_OP_SIOCINQ:
-+		ret = sk->sk_prot->ioctl(sk, SIOCINQ, &arg);
-+		if (ret)
-+			return ret;
-+		return arg;
-+	case SOCKET_URING_OP_SIOCOUTQ:
-+		ret = sk->sk_prot->ioctl(sk, SIOCOUTQ, &arg);
-+		if (ret)
-+			return ret;
-+		return arg;
-+	default:
-+		return -EOPNOTSUPP;
-+	}
-+}
-+EXPORT_SYMBOL_GPL(io_uring_cmd_sock);
-diff --git a/net/socket.c b/net/socket.c
-index b778fc03c6e0..09b105d00445 100644
---- a/net/socket.c
-+++ b/net/socket.c
-@@ -88,6 +88,7 @@
- #include <linux/xattr.h>
- #include <linux/nospec.h>
- #include <linux/indirect_call_wrapper.h>
-+#include <linux/io_uring.h>
- 
- #include <linux/uaccess.h>
- #include <asm/unistd.h>
-@@ -159,6 +160,7 @@ static const struct file_operations socket_file_ops = {
- #ifdef CONFIG_COMPAT
- 	.compat_ioctl = compat_sock_ioctl,
- #endif
-+	.uring_cmd =    io_uring_cmd_sock,
- 	.mmap =		sock_mmap,
- 	.release =	sock_close,
- 	.fasync =	sock_fasync,
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306230559.hU5Aonpl-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   lib/test_bpf.c: In function 'generate_test_data':
+>> lib/test_bpf.c:14395:1: warning: label 'err_free_page' defined but not used [-Wunused-label]
+   14395 | err_free_page:
+         | ^~~~~~~~~~~~~
+
+
+vim +/err_free_page +14395 lib/test_bpf.c
+
+64a8946b447e41 Alexei Starovoitov 2014-05-08  14358  
+10f18e0ba1ea7e Daniel Borkmann    2014-05-23  14359  static void *generate_test_data(struct bpf_test *test, int sub)
+64a8946b447e41 Alexei Starovoitov 2014-05-08  14360  {
+bac142acb90e95 Nicolas Schichan   2015-08-04  14361  	struct sk_buff *skb;
+bac142acb90e95 Nicolas Schichan   2015-08-04  14362  	struct page *page;
+bac142acb90e95 Nicolas Schichan   2015-08-04  14363  
+10f18e0ba1ea7e Daniel Borkmann    2014-05-23  14364  	if (test->aux & FLAG_NO_DATA)
+10f18e0ba1ea7e Daniel Borkmann    2014-05-23  14365  		return NULL;
+64a8946b447e41 Alexei Starovoitov 2014-05-08  14366  
+f516420f683d14 Xu Kuohai          2022-03-21  14367  	if (test->aux & FLAG_LARGE_MEM)
+f516420f683d14 Xu Kuohai          2022-03-21  14368  		return kmalloc(test->test[sub].data_size, GFP_KERNEL);
+f516420f683d14 Xu Kuohai          2022-03-21  14369  
+10f18e0ba1ea7e Daniel Borkmann    2014-05-23  14370  	/* Test case expects an skb, so populate one. Various
+10f18e0ba1ea7e Daniel Borkmann    2014-05-23  14371  	 * subtests generate skbs of different sizes based on
+10f18e0ba1ea7e Daniel Borkmann    2014-05-23  14372  	 * the same data.
+10f18e0ba1ea7e Daniel Borkmann    2014-05-23  14373  	 */
+bac142acb90e95 Nicolas Schichan   2015-08-04  14374  	skb = populate_skb(test->data, test->test[sub].data_size);
+bac142acb90e95 Nicolas Schichan   2015-08-04  14375  	if (!skb)
+bac142acb90e95 Nicolas Schichan   2015-08-04  14376  		return NULL;
+bac142acb90e95 Nicolas Schichan   2015-08-04  14377  
+bac142acb90e95 Nicolas Schichan   2015-08-04  14378  	if (test->aux & FLAG_SKB_FRAG) {
+bac142acb90e95 Nicolas Schichan   2015-08-04  14379  		/*
+bac142acb90e95 Nicolas Schichan   2015-08-04  14380  		 * when the test requires a fragmented skb, add a
+bac142acb90e95 Nicolas Schichan   2015-08-04  14381  		 * single fragment to the skb, filled with
+bac142acb90e95 Nicolas Schichan   2015-08-04  14382  		 * test->frag_data.
+bac142acb90e95 Nicolas Schichan   2015-08-04  14383  		 */
+bac142acb90e95 Nicolas Schichan   2015-08-04  14384  		page = alloc_page(GFP_KERNEL);
+bac142acb90e95 Nicolas Schichan   2015-08-04  14385  
+bac142acb90e95 Nicolas Schichan   2015-08-04  14386  		if (!page)
+bac142acb90e95 Nicolas Schichan   2015-08-04  14387  			goto err_kfree_skb;
+bac142acb90e95 Nicolas Schichan   2015-08-04  14388  
+4a8b1daa0ee566 Sumitra Sharma     2023-06-22  14389  		memcpy(page_address(page), test->frag_data, MAX_DATA);
+bac142acb90e95 Nicolas Schichan   2015-08-04  14390  		skb_add_rx_frag(skb, 0, page, 0, MAX_DATA, MAX_DATA);
+bac142acb90e95 Nicolas Schichan   2015-08-04  14391  	}
+bac142acb90e95 Nicolas Schichan   2015-08-04  14392  
+bac142acb90e95 Nicolas Schichan   2015-08-04  14393  	return skb;
+bac142acb90e95 Nicolas Schichan   2015-08-04  14394  
+bac142acb90e95 Nicolas Schichan   2015-08-04 @14395  err_free_page:
+bac142acb90e95 Nicolas Schichan   2015-08-04  14396  	__free_page(page);
+bac142acb90e95 Nicolas Schichan   2015-08-04  14397  err_kfree_skb:
+bac142acb90e95 Nicolas Schichan   2015-08-04  14398  	kfree_skb(skb);
+bac142acb90e95 Nicolas Schichan   2015-08-04  14399  	return NULL;
+10f18e0ba1ea7e Daniel Borkmann    2014-05-23  14400  }
+10f18e0ba1ea7e Daniel Borkmann    2014-05-23  14401  
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
