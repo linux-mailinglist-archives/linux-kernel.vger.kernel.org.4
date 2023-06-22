@@ -2,263 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E84C5739C3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:11:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20EA739C42
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbjFVJLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 05:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
+        id S230017AbjFVJLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 05:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbjFVJKu (ORCPT
+        with ESMTP id S232253AbjFVJLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 05:10:50 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C65E95FE2;
-        Thu, 22 Jun 2023 02:01:50 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 460231042;
-        Thu, 22 Jun 2023 02:02:34 -0700 (PDT)
-Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.78.69])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2BCF3F663;
-        Thu, 22 Jun 2023 02:01:49 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 10:01:48 +0100
-From:   Ionela Voinescu <ionela.voinescu@arm.com>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Zhao Liu <zhao1.liu@intel.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>, x86@kernel.org,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        "Tim C . Chen" <tim.c.chen@intel.com>,
-        Zhao Liu <zhao1.liu@linux.intel.com>
-Subject: Re: [PATCH v4 06/24] sched/fair: Collect load-balancing stats for
- IPC classes
-Message-ID: <ZJQN/KIwCUmzYoiN@arm.com>
-References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
- <20230613042422.5344-7-ricardo.neri-calderon@linux.intel.com>
+        Thu, 22 Jun 2023 05:11:15 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D2B6194
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:02:09 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fa7512e599so2334695e9.2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687424528; x=1690016528;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FNA1YL50Xe6xIWLWDbv/5+owKWV0B11hHH1r7HBWhJQ=;
+        b=MgwAvf6ErqDqXvFqlTHH+VdQgYRKVikpI7RfA1KVMYaNdmdGKV1HgoQ4A779PIIoX2
+         ko8jojCsTVVOu3k/CwAJKJlOVq3baneWs+wurW2rUSBs1hjJQgssg2YVfztcTGRp1KFG
+         ef9cf0jcppd52qYVyslcLJPJ4GFtYzN8WZBGtEnOcs06AShqefslylE8LN/AgSWp8nhT
+         2u4atoEyw7zL/ckd/Fc6zfJWfkPTaFa2oL2XGFcs0sAvcK448xEZl+K5NU3XtVzbQ/6H
+         B26IiSFbDZ+0b/TqHS1vN4z3ul6Dp86JAFQNsVz63muCMoHHOYPOCXY5yIso6pSQ0CsX
+         LYrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687424528; x=1690016528;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FNA1YL50Xe6xIWLWDbv/5+owKWV0B11hHH1r7HBWhJQ=;
+        b=F+gO1tvvW5ZmNi4H8zVokXsPpLsOAgcmPTGruBvH+by4S1pSoezarzcZZ64XzsqRFd
+         R9dj5g+M3YON04vmv5+tQUQWpoEHKped+EH8ub3G8KjtUpSnMufnFuoxMYUZNyw90DSm
+         imPJ2OtzOyZDoiHXAifkO4ipqs1NDF3OIh/zA34wlTtoTV8LdpoxU1i9sJL+yTu/byCq
+         rlGr7dg2WArKMy92CI/8VsmstWkiofZ4B3yma4q8h63OYuA9/Y+o1373oyZIYU8OWMGO
+         2QHNr5mmBMrHDidr+whnu0P994/s2UaUveodAHh2gCZXckyAcYDUOzSrr1yfjR4CYHJx
+         l8qA==
+X-Gm-Message-State: AC+VfDyQnnQtTUQlXOP6ynF4PYUx0c4cD4XG5osFPpQQ6GGE/ln9+EKO
+        D33z5rkPiKHPFYusg7SS4g0uKg==
+X-Google-Smtp-Source: ACHHUZ6ULGTZVS356/YkGIuUHehLy8QCjNnTymSxu6WJeiQC839ut9fvHVvZsBmjcD0sdyahKdGqNA==
+X-Received: by 2002:a05:600c:3799:b0:3fa:6fc:679f with SMTP id o25-20020a05600c379900b003fa06fc679fmr1475598wmr.25.1687424528163;
+        Thu, 22 Jun 2023 02:02:08 -0700 (PDT)
+Received: from blmsp ([2001:4091:a247:82fa:b762:4f68:e1ed:5041])
+        by smtp.gmail.com with ESMTPSA id f9-20020a7bc8c9000000b003f9b0f640b1sm7074125wml.22.2023.06.22.02.02.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 02:02:07 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 11:02:06 +0200
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Marc Kleine-Budde <mkl@pengutronix.de>,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Julien Panis <jpanis@baylibre.com>
+Subject: Re: [PATCH v4 04/12] can: m_can: Add rx coalescing ethtool support
+Message-ID: <20230622090206.qkzts2qlbqeiukhs@blmsp>
+References: <20230621092350.3130866-1-msp@baylibre.com>
+ <20230621092350.3130866-5-msp@baylibre.com>
+ <ZJMHlIp9x8HL97qT@corigine.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230613042422.5344-7-ricardo.neri-calderon@linux.intel.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZJMHlIp9x8HL97qT@corigine.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
+Hi Simon,
 
-On Monday 12 Jun 2023 at 21:24:04 (-0700), Ricardo Neri wrote:
-> When selecting the busiest scheduling group between two otherwise identical
-> groups of types asym_packing or fully_busy, IPC classes can be used to
-> break the tie.
+On Wed, Jun 21, 2023 at 04:22:12PM +0200, Simon Horman wrote:
+> On Wed, Jun 21, 2023 at 11:23:42AM +0200, Markus Schneider-Pargmann wrote:
 > 
-> Compute the IPC class performance score for a scheduling group. It is
-> defined as the sum of the IPC scores of the tasks at the back of each
-> runqueue in the group. Load balancing starts by pulling tasks from the back
-> of the runqueue first, making this tiebreaker more useful.
+> ...
 > 
-> Also, track the IPC class with the lowest score in the scheduling group. A
-> task of this class will be pulled when the destination CPU has lower
-> priority than the fully_busy busiest group.
+> > +static int m_can_set_coalesce(struct net_device *dev,
+> > +			      struct ethtool_coalesce *ec,
+> > +			      struct kernel_ethtool_coalesce *kec,
+> > +			      struct netlink_ext_ack *ext_ack)
+> > +{
+> > +	struct m_can_classdev *cdev = netdev_priv(dev);
+> > +
+> > +	if (cdev->can.state != CAN_STATE_STOPPED) {
+> > +		netdev_err(dev, "Device is in use, please shut it down first\n");
+> > +		return -EBUSY;
+> > +	}
+> > +
+> > +	if (ec->rx_max_coalesced_frames_irq > cdev->mcfg[MRAM_RXF0].num) {
+> > +		netdev_err(dev, "rx-frames-irq %u greater than the RX FIFO %u\n",
+> > +			   ec->rx_max_coalesced_frames_irq,
+> > +			   cdev->mcfg[MRAM_RXF0].num);
+> > +		return -EINVAL;
+> > +	}
+> > +	if (ec->rx_max_coalesced_frames_irq == 0 != ec->rx_coalesce_usecs_irq == 0) {
 > 
-> These two metrics will be used during idle load balancing to compute the
-> current and the potential IPC class score of a scheduling group in a
-> subsequent changeset.
+> Hi Markus,
 > 
-> Cc: Ben Segall <bsegall@google.com>
-> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
-> Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Lukasz Luba <lukasz.luba@arm.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Perry Yuan <Perry.Yuan@amd.com>
-> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Tim C. Chen <tim.c.chen@intel.com>
-> Cc: Valentin Schneider <vschneid@redhat.com>
-> Cc: Zhao Liu <zhao1.liu@linux.intel.com>
-> Cc: x86@kernel.org
-> Cc: linux-pm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-> ---
-> Changes since v3:
->  * Do not compute the IPCC stats using the current tasks of runqueues.
->    Instead, use the tasks at the back of the queue. These are the tasks
->    that will be pulled first during load balance. (Vincent)
+> For a W=1 build GCC 12.3.0 suggests, rather forcefully, that it would like
+> some more parentheses here.
 > 
-> Changes since v2:
->  * Also excluded deadline and realtime tasks from IPCC stats. (Dietmar)
->  * Also excluded tasks that cannot run on the destination CPU from the
->    IPCC stats.
->  * Folded struct sg_lb_ipcc_stats into struct sg_lb_stats. (Dietmar)
->  * Reworded description sg_lb_stats::min_ipcc. (Ionela)
->  * Handle errors of arch_get_ipcc_score(). (Ionela)
+>  drivers/net/can/m_can/m_can.c: In function 'm_can_set_coalesce':
+>  drivers/net/can/m_can/m_can.c:1978:45: warning: suggest parentheses around comparison in operand of '!=' [-Wparentheses]
+>   1978 |         if (ec->rx_max_coalesced_frames_irq == 0 != ec->rx_coalesce_usecs_irq == 0) {
+>        |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
+>  drivers/net/can/m_can/m_can.c:1978:50: warning: suggest parentheses around comparison in operand of '==' [-Wparentheses]
+>   1978 |         if (ec->rx_max_coalesced_frames_irq == 0 != ec->rx_coalesce_usecs_irq == 0) {
+>        |             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Thanks, yes I just changed it because checkpatch doesn't like it the
+other way. I am going to change it back. Also I am wondering why clang
+doesn't complain at this point.
+
+Best,
+Markus
+
 > 
-> Changes since v1:
->  * Implemented cleanups and reworks from PeterZ. Thanks!
->  * Used the new interface names.
-> ---
->  kernel/sched/fair.c | 79 +++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 79 insertions(+)
+> > +		netdev_err(dev, "rx-frames-irq and rx-usecs-irq can only be set together\n");
+> > +		return -EINVAL;
+> > +	}
+> > +
+> > +	cdev->rx_max_coalesced_frames_irq = ec->rx_max_coalesced_frames_irq;
+> > +	cdev->rx_coalesce_usecs_irq = ec->rx_coalesce_usecs_irq;
+> > +
+> > +	return 0;
+> > +}
 > 
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 6189d1a45635..c0cab5e501b6 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -9110,6 +9110,11 @@ struct sg_lb_stats {
->  	unsigned int nr_numa_running;
->  	unsigned int nr_preferred_running;
->  #endif
-> +#ifdef CONFIG_IPC_CLASSES
-> +	unsigned long min_score; /* Min(score(rq->curr->ipcc)) */
-                                              ^^^^^^^^^^^^^^
-> +	unsigned short min_ipcc; /* Class of the task with the minimum IPCC score in the rq */
-> +	unsigned long sum_score; /* Sum(score(rq->curr->ipcc)) */
-                                              ^^^^^^^^^^^^^^
-These no longer apply. It might be easier to describe them all in a
-comment just above their declaration. Something like:
-
-"The sum, min and its class of the IPC scores of the tasks at the back of each
-runqueue in the group."
-
-> +#endif
->  };
->  
->  /*
-> @@ -9387,6 +9392,77 @@ group_type group_classify(unsigned int imbalance_pct,
->  	return group_has_spare;
->  }
->  
-> +#ifdef CONFIG_IPC_CLASSES
-> +static void init_rq_ipcc_stats(struct sg_lb_stats *sgs)
-> +{
-> +	/* All IPCC stats have been set to zero in update_sg_lb_stats(). */
-> +	sgs->min_score = ULONG_MAX;
-> +}
-> +
-> +static int rq_last_task_ipcc(int dst_cpu, struct rq *rq, unsigned short *ipcc)
-> +{
-> +	struct list_head *tasks = &rq->cfs_tasks;
-> +	struct task_struct *p;
-> +	struct rq_flags rf;
-> +	int ret = -EINVAL;
-> +
-
-It's more typical of ret to be initialised to 0 and changed to an error
-value when there's an error case.
-
-> +	rq_lock_irqsave(rq, &rf);
-> +	if (list_empty(tasks))
-> +		goto out;
-> +
-> +	p = list_last_entry(tasks, struct task_struct, se.group_node);
-> +	if (p->flags & PF_EXITING || is_idle_task(p) ||
-> +	    !cpumask_test_cpu(dst_cpu, p->cpus_ptr))
-> +		goto out;
-> +
-> +	ret = 0;
-> +	*ipcc = p->ipcc;
-> +out:
-> +	rq_unlock(rq, &rf);
-> +	return ret;
-> +}
-> +
-> +/* Called only if cpu_of(@rq) is not idle and has tasks running. */
-> +static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
-> +				    struct rq *rq)
-> +{
-> +	unsigned short ipcc;
-> +	unsigned long score;
-> +
-> +	if (!sched_ipcc_enabled())
-> +		return;
-> +
-> +	if (rq_last_task_ipcc(dst_cpu, rq, &ipcc))
-> +		return;
-> +
-> +	score = arch_get_ipcc_score(ipcc, cpu_of(rq));
-> +
-> +	/*
-> +	 * Ignore tasks with invalid scores. When finding the busiest group, we
-> +	 * prefer those with higher sum_score. This group will not be selected.
-> +	 */
-
-nit: the comment is unnecessary, and a bit misleading, IMO.
-
-The comment says "This group will not be selected." but the only way to
-guarantee that here is to reset the sum_score to 0 when you find an
-invalid score, which I don't believe is your intention.
-
-Also the use of sum_score is captured in later functions, so I don't
-believe there's a need for additional comments here.
-
-Hope it helps,
-Ionela.
-
-> +	if (IS_ERR_VALUE(score))
-> +		return;
-> +
-> +	sgs->sum_score += score;
-> +
-> +	if (score < sgs->min_score) {
-> +		sgs->min_score = score;
-> +		sgs->min_ipcc = ipcc;
-> +	}
-> +}
-> +
-> +#else /* CONFIG_IPC_CLASSES */
-> +static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
-> +				    struct rq *rq)
-> +{
-> +}
-> +
-> +static void init_rq_ipcc_stats(struct sg_lb_stats *sgs)
-> +{
-> +}
-> +#endif /* CONFIG_IPC_CLASSES */
-> +
->  /**
->   * sched_use_asym_prio - Check whether asym_packing priority must be used
->   * @sd:		The scheduling domain of the load balancing
-> @@ -9477,6 +9553,7 @@ static inline void update_sg_lb_stats(struct lb_env *env,
->  	int i, nr_running, local_group;
->  
->  	memset(sgs, 0, sizeof(*sgs));
-> +	init_rq_ipcc_stats(sgs);
->  
->  	local_group = group == sds->local;
->  
-> @@ -9526,6 +9603,8 @@ static inline void update_sg_lb_stats(struct lb_env *env,
->  			if (sgs->group_misfit_task_load < load)
->  				sgs->group_misfit_task_load = load;
->  		}
-> +
-> +		update_sg_lb_ipcc_stats(env->dst_cpu, sgs, rq);
->  	}
->  
->  	sgs->group_capacity = group->sgc->capacity;
-> -- 
-> 2.25.1
-> 
+> ...
