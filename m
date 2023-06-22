@@ -2,71 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD707396B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 07:11:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 744097396B3
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 07:13:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbjFVFLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 01:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51814 "EHLO
+        id S229927AbjFVFNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 01:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230191AbjFVFKo (ORCPT
+        with ESMTP id S229608AbjFVFNS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 01:10:44 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4DF1BCB
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 22:10:33 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5704995f964so82246727b3.2
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 22:10:33 -0700 (PDT)
+        Thu, 22 Jun 2023 01:13:18 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F101AE9;
+        Wed, 21 Jun 2023 22:13:16 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-544c0d768b9so5346903a12.0;
+        Wed, 21 Jun 2023 22:13:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687410632; x=1690002632;
-        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Iwkvo3drwBmCh3irzLZqUQdw68f0F8NzA1rA0HnILRE=;
-        b=DhKdtVPrmYHxiqjIKCbVGRxMjbXrvSQn+TCrG60I5aPx7c7YMFttQxbOAnjuiNvSKt
-         ZBZ64IyZ6mpIB4RKj4p4a89tn8PJjxXPagqSybROjPUgGS0esLOwOEWVfi3U41BZrUKg
-         Pr0ZYPWUaLrEeNgzVXC6UNOtI8+cFJKyDveKgVvWtzn4RxbD+CF1FbKnoaa58+ROWh5L
-         InT4O4Bzo/yyWR3xkWxHPIoW/V3Jthf6X6MVMpCrFl8rTr/mtKpGB1bQvA7GIbYr1b8q
-         B6eVEqekcxhU4dSVNyP3JbV8XRuhEhyfgwc6OEFURVr9h49gl+/Bh0Peos6QsbUGeJbs
-         ov5Q==
+        d=gmail.com; s=20221208; t=1687410796; x=1690002796;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=7V9c1bRadtvspE8RX0+kzHasXFfz3GpqArsWjj0tqQ0=;
+        b=kaSh3OC+Z/AIqk3/6hSw/Glei8j8XdAvZYMFoaTsnLdck8Q/vBT8YWKIga7P3nR+vB
+         FAEaa5Xq+tk5UQgWWm3PkOv1OWqTAymAYryjoyIeFyBn1iXBxATDt2K5ZffMIQOB/jB2
+         vR5S/P+SCm+lF49Ks/18IMQFJ+fQbTCdBAUVQG3Tvt2drkRWyDmjQ8vPKcnYvh5yEsls
+         eGoZD3t58fD/5eoe9WKd71i1jAq3CWsyFPUWV2+MX2NhqeuJKfWCF47YQuvRXMH03wpL
+         1/nAmsa/woxa+K7lcC7MlwgtVBsOsb4wv2eqcomqAE13xuWyNgrwgtjzIl3rjgbiojs4
+         bIjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687410632; x=1690002632;
-        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Iwkvo3drwBmCh3irzLZqUQdw68f0F8NzA1rA0HnILRE=;
-        b=Zuc18KZI2bLpkfz5bIJnGm0Sa3E3VaawF+2vspQ36xAYAJig7SqHno1kyy0B31Cpaw
-         W8I+6zVOlZc+nqTZIShmASirqDSK9xr8skIEVdpo3WpQdczD0dVKNeLAjhqbS8dbpUUg
-         vZ50nhmaG9BNBbgkdSqQy7uSbnTNO3JCfaCCFVx7E2zyJdrskMggrPgKKVOVsYRWvI9W
-         FC60FoprEtALXG4LkCkd5wluhAwAlHAQA2lPCuJdYyI+eykRZniLMU0kPO+0JFlvpmJ+
-         fTokVPV+q9IZwKgfzFScbfjvIWGb57mrkfgPgtdF0BcnE0KNHuSee8j3ImbboS5Wk8T2
-         arnQ==
-X-Gm-Message-State: AC+VfDzXHxWFW+Z3apalqGpxtXrF4NDY4nnVrMkdFYLTpy3wasfe975N
-        8huYjxEuNdjKt0u1m9EHIT4e4aUCpfMc
-X-Google-Smtp-Source: ACHHUZ5T7atXtGkQMSxCdZ4xuhdT4/Ifw+IX69REESlIEt/eN1LK8ciV7SNPoINgMMdPTtphocXQrxUgq6WM
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:91f3:1da5:6427:50d6])
- (user=irogers job=sendgmr) by 2002:a05:690c:70e:b0:573:4ed9:c69a with SMTP id
- bs14-20020a05690c070e00b005734ed9c69amr3818009ywb.10.1687410632774; Wed, 21
- Jun 2023 22:10:32 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 22:10:29 -0700
-Message-Id: <20230622051029.3733815-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Subject: [PATCH v1 1/1] perf unwind: Fix map reference counts
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Ivan Babrou <ivan@cloudflare.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        d=1e100.net; s=20221208; t=1687410796; x=1690002796;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7V9c1bRadtvspE8RX0+kzHasXFfz3GpqArsWjj0tqQ0=;
+        b=IxUoH5soXisITsDyVV9SYoKDfa97H5AbIujPH22d6Ek6EVreDXCl3beyZil6JKmpy2
+         vgSz3+nFa+exua2nhrT+dczKEbjvq4iI8O1fmVP0jUKSja0NckGj0nqoPxrgGi1FB1ot
+         ArBat9bAOIaLLaii3i4DtxhM5HR1oBbXoWrs/zDw3bWsA+OMG5+ND7hCiVBcFEvR119d
+         czNwigwM+0EupSscUsO2OWxuuIosmqkFZvjOHlxDsYP0VFHbyB59cyk18zeKnxhrSzHD
+         rGmSHDamIL7xItDM/9rM4isbhi2s3DkCsrIRtVqLJIPfWqj43i4WwI6Q7kV3KZhF2Y4O
+         VFpA==
+X-Gm-Message-State: AC+VfDx11/Mp2KPIoxI/O5bv3WfdrsSngShMJBqyzXJejasUVYj8pwse
+        uPL6mG1vAdQwaUOIjMZ5uq0=
+X-Google-Smtp-Source: ACHHUZ42cb21K95tQ49HcbND9JdpfRq6/wkmjgnjUJyszkamhgcDC+PGduxT+71nMR8BCJzWHQKeZg==
+X-Received: by 2002:a05:6a20:5495:b0:122:5ed2:b521 with SMTP id i21-20020a056a20549500b001225ed2b521mr8864866pzk.59.1687410795736;
+        Wed, 21 Jun 2023 22:13:15 -0700 (PDT)
+Received: from sumitra.com ([59.89.167.84])
+        by smtp.gmail.com with ESMTPSA id a7-20020a170902ecc700b001b53be3d942sm4320318plh.232.2023.06.21.22.13.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 22:13:15 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 22:13:06 -0700
+From:   Sumitra Sharma <sumitraartsy@gmail.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ira Weiny <ira.weiny@intel.com>,
+        Deepak R Varma <drv@mailo.com>,
+        Sumitra Sharma <sumitraartsy@gmail.com>
+Subject: Re: [PATCH v2] lib/test_bpf: Call page_address() on page acquired
+ with GFP_KERNEL flag
+Message-ID: <20230622051306.GA422371@sumitra.com>
+References: <20230613071756.GA359746@sumitra.com>
+ <3564297.R56niFO833@suse>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3564297.R56niFO833@suse>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,53 +86,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The result of thread__find_map is the map in the passed in
-addr_location. Calling addr_location__exit puts that map and so copies
-need to do a map__get. Add in the corresponding map__puts.
+On Sun, Jun 18, 2023 at 07:07:00AM +0200, Fabio M. De Francesco wrote:
+> On martedì 13 giugno 2023 09:17:56 CEST Sumitra Sharma wrote:
+> > generate_test_data() acquires a page with alloc_page(GFP_KERNEL). Pages
+> > allocated with GFP_KERNEL cannot come from Highmem. This is why
+> > there is no need to call kmap() on them.
+> > 
+> > Therefore, use a plain page_address() on that page.
+> > 
+> > Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> > Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+> > ---
+> > 
+> > Changes in v2:
+> > 	- Remove the kmap() call and call page_address() instead.
+> 
+> NIT: Give credit to whom asked you for this removal and explain why the 
+> mapping is not required.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/unwind-libunwind-local.c | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
+> 
+> > 	- Change the commit subject and message.
+> > 
+> >  lib/test_bpf.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > 
+> > diff --git a/lib/test_bpf.c b/lib/test_bpf.c
+> > index ade9ac672adb..70fcd0bcf14b 100644
+> > --- a/lib/test_bpf.c
+> > +++ b/lib/test_bpf.c
+> > @@ -14388,11 +14388,10 @@ static void *generate_test_data(struct bpf_test
+> > *test, int sub) if (!page)
+> >  			goto err_kfree_skb;
+> > 
+> > -		ptr = kmap(page);
+> > +		ptr = page_address(page);
+> >  		if (!ptr)
+> >  			goto err_free_page;
+> 
+> What is the reason of this test? Could "ptr" ever be NULL? What is the code 
+> checking just few lines above this latter test?
+> 
 
-diff --git a/tools/perf/util/unwind-libunwind-local.c b/tools/perf/util/unwind-libunwind-local.c
-index 36bf5100bad2..9cb82d7c7dc7 100644
---- a/tools/perf/util/unwind-libunwind-local.c
-+++ b/tools/perf/util/unwind-libunwind-local.c
-@@ -419,7 +419,8 @@ static struct map *find_map(unw_word_t ip, struct unwind_info *ui)
- 	struct map *ret;
- 
- 	addr_location__init(&al);
--	ret = thread__find_map(ui->thread, PERF_RECORD_MISC_USER, ip, &al);
-+	thread__find_map(ui->thread, PERF_RECORD_MISC_USER, ip, &al);
-+	ret = map__get(al.map);
- 	addr_location__exit(&al);
- 	return ret;
- }
-@@ -476,11 +477,11 @@ find_proc_info(unw_addr_space_t as, unw_word_t ip, unw_proc_info_t *pi,
- 
- 		memset(&di, 0, sizeof(di));
- 		if (dwarf_find_debug_frame(0, &di, ip, base, symfile, start, map__end(map)))
--			return dwarf_search_unwind_table(as, ip, &di, pi,
--							 need_unwind_info, arg);
-+			ret = dwarf_search_unwind_table(as, ip, &di, pi,
-+							need_unwind_info, arg);
- 	}
- #endif
--
-+	map__put(map);
- 	return ret;
- }
- 
-@@ -539,7 +540,7 @@ static int access_dso_mem(struct unwind_info *ui, unw_word_t addr,
- 
- 	size = dso__data_read_addr(dso, map, ui->machine,
- 				   addr, (u8 *) data, sizeof(*data));
--
-+	map__put(map);
- 	return !(size == sizeof(*data));
- }
- 
--- 
-2.41.0.162.gfafddb0af9-goog
 
+The code is allocating a page using alloc_page() with the GFP_KERNEL flag to 
+obtain a kernel page frame. The checks if (!page) and if (!ptr) are verifying 
+if the page allocation or the mapping operation were successful. 
+
+If the pages obtained through page_address() are not from the highmem zone, 
+the page_address() function will always return a valid kernel virtual address 
+and will not return NULL. Hence, the check !ptr can be ignored while the !page
+must remain.
+
+I will be working on the v2 patch.
+
+I will also add the credits and add new lines to commit message
+explaining why the mapping is not required.
+
+Thank you for the help.
+
+Thanks & regards
+Sumitra
+
+> Please, take a deeper look at this function as a whole.
+> 
+> Fabio
+> 
+> >  		memcpy(ptr, test->frag_data, MAX_DATA);
+> > -		kunmap(page);
+> >  		skb_add_rx_frag(skb, 0, page, 0, MAX_DATA, MAX_DATA);
+> >  	}
+> > 
+> > --
+> > 2.25.1
+> 
+> 
+> 
+> 
