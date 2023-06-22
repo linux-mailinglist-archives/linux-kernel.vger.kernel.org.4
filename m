@@ -2,130 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475EC739C4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3893C739C4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjFVJMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 05:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52976 "EHLO
+        id S232164AbjFVJMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 05:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbjFVJL5 (ORCPT
+        with ESMTP id S232095AbjFVJMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 05:11:57 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0AC421D;
-        Thu, 22 Jun 2023 02:02:40 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-666683eb028so4137691b3a.0;
-        Thu, 22 Jun 2023 02:02:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687424560; x=1690016560;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=d6zDpm6SD0RxKjfR478ABKL+HYLdKnnccJQGQalujl4=;
-        b=g6onHDg9F0lEFx/R2IRBdwp6L8NUCjELS+bgfsk/By0fR2WkH3iL2Xvw6PDOj5vPGf
-         DLMQ95UwluXPLqmbLmx1t0B0WZ+y/zcoSbOQvaOD3ZC+rtEOtl7ooFrUvS4UgZbwgFFl
-         ceHYSAXXfqMFT2TZvMZgcmRE4XmoiCfSnopXfFWH11ZAdV17zsIN+eMsTAjjfTOj6BdB
-         h3gPmeXwdhTg+xB1qpy7oH/zlmDCKQTtR3LH6t7XPNWzrf3u0w8cvoqa9eCDBWNQ6Qwr
-         Wy/v1TH6JQmcYHFf3yam22eWMnvnc4far8rEAkoVibEpjOkyeKdxW48KER0V7tug8Oye
-         zVjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687424560; x=1690016560;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=d6zDpm6SD0RxKjfR478ABKL+HYLdKnnccJQGQalujl4=;
-        b=PYmbU0AFIRcruJGfqkMe5XDSJVuQT4XCwfMgolDI+Cxya/uvsc7fWuSo7yEE9CAERN
-         GNR+KZh/Zs8vwVAC/EiKqhTtSNicFaqrRBEunZMIEc7mkUNucjg8bvxAfS4NTfAVzWPr
-         p9M8JLVT/w/A8aNMJx+fHI+fDFMyOih/exCjul98Tj+suoMtwWNG4vL1vwkHJBYfOeFz
-         d8y1pzLX58Em8MXFAHHrtiDaxaY8RQI0/+HFZ5knKVjK5sKuK+WljhWkOimdcpBEgGfU
-         BuXNXD+Kg2e5At0dhUn63flp6Z0AX614pXi4p603IKjHtVlWC4j258vHasCXksh83vs2
-         x1dw==
-X-Gm-Message-State: AC+VfDy6L6d47572I02uNFIsofzeezPm5W9WA5GTWeCRGBhbBCCLgAwo
-        3L65deyThEzkfej7hmBdGKM=
-X-Google-Smtp-Source: ACHHUZ7/YeU8hZPjv85Errxr+74DQRBJc4FlkRd2uCXZ8gqyASlBT4K+/rmK5nuMdES9y2SDeiKPFg==
-X-Received: by 2002:a05:6a00:1995:b0:668:95c1:ec9d with SMTP id d21-20020a056a00199500b0066895c1ec9dmr7261032pfl.28.1687424560173;
-        Thu, 22 Jun 2023 02:02:40 -0700 (PDT)
-Received: from chcpu13.cse.ust.hk (191host119.mobilenet.cse.ust.hk. [143.89.191.119])
-        by smtp.gmail.com with ESMTPSA id j25-20020a62e919000000b00662610cf7a8sm4239614pfh.172.2023.06.22.02.02.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 02:02:39 -0700 (PDT)
-From:   Wei Chen <harperchen1110@gmail.com>
-To:     tonyhuang.sunplus@gmail.com
-Cc:     lhjeff911@gmail.com, ulf.hansson@linaro.org,
-        p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Wei Chen <harperchen1110@gmail.com>
-Subject: [PATCH] mmc: sunplus: fix return value check of mmc_add_host()
-Date:   Thu, 22 Jun 2023 09:02:33 +0000
-Message-Id: <20230622090233.188539-1-harperchen1110@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 22 Jun 2023 05:12:01 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B901E268F;
+        Thu, 22 Jun 2023 02:02:46 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 132451063;
+        Thu, 22 Jun 2023 02:03:30 -0700 (PDT)
+Received: from localhost (ionvoi01-desktop.cambridge.arm.com [10.2.78.69])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A41063F663;
+        Thu, 22 Jun 2023 02:02:45 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 10:02:44 +0100
+From:   Ionela Voinescu <ionela.voinescu@arm.com>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        Zhao Liu <zhao1.liu@intel.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>, x86@kernel.org,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>,
+        Zhao Liu <zhao1.liu@linux.intel.com>
+Subject: Re: [PATCH v4 07/24] sched/fair: Compute IPC class scores for load
+ balancing
+Message-ID: <ZJQONIinvSengWa8@arm.com>
+References: <20230613042422.5344-1-ricardo.neri-calderon@linux.intel.com>
+ <20230613042422.5344-8-ricardo.neri-calderon@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230613042422.5344-8-ricardo.neri-calderon@linux.intel.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mmc_add_host() may return error, if we ignore its return value,
-1. the memory allocated in mmc_alloc_host() will be leaked
-2. null-ptr-deref will happen when calling mmc_remove_host()
-in remove function spmmc_drv_remove() because deleting not
-added device.
+On Monday 12 Jun 2023 at 21:24:05 (-0700), Ricardo Neri wrote:
+> When using IPCC scores to break ties between two scheduling groups, it is
+> necessary to consider both the current score and the score that would
+> result after load balancing.
+> 
+> Compute the combined IPC class score of a scheduling group and the local
+> scheduling group. Compute both the current score and the prospective score.
+> 
+> Collect IPCC statistics only for asym_packing and fully_busy scheduling
+> groups. These are the only cases that use IPCC scores.
+> 
+> These IPCC statistics are used during idle load balancing. The candidate
+> scheduling group will have one fewer busy CPU after load balancing. This
+> observation is important for cores with SMT support.
+> 
+> The IPCC score of scheduling groups composed of SMT siblings needs to
+> consider that the siblings share CPU resources. When computing the total
+> IPCC score of the scheduling group, divide the score of each sibling by
+> the number of busy siblings.
+> 
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> Cc: Joel Fernandes (Google) <joel@joelfernandes.org>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Lukasz Luba <lukasz.luba@arm.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Perry Yuan <Perry.Yuan@amd.com>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Tim C. Chen <tim.c.chen@intel.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: Zhao Liu <zhao1.liu@linux.intel.com>
+> Cc: x86@kernel.org
+> Cc: linux-pm@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> ---
+> Changes since v3:
+>  * None
+> 
+> Changes since v2:
+>  * Also collect IPCC stats for fully_busy sched groups.
+>  * Restrict use of IPCC stats to SD_ASYM_PACKING. (Ionela)
+>  * Handle errors of arch_get_ipcc_score(). (Ionela)
+> 
+> Changes since v1:
+>  * Implemented cleanups and reworks from PeterZ. I took all his
+>    suggestions, except the computation of the  IPC score before and after
+>    load balancing. We are computing not the average score, but the *total*.
+>  * Check for the SD_SHARE_CPUCAPACITY to compute the throughput of the SMT
+>    siblings of a physical core.
+>  * Used the new interface names.
+>  * Reworded commit message for clarity.
+> ---
+>  kernel/sched/fair.c | 68 +++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index c0cab5e501b6..a51c65c9335f 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -9114,6 +9114,8 @@ struct sg_lb_stats {
+>  	unsigned long min_score; /* Min(score(rq->curr->ipcc)) */
+>  	unsigned short min_ipcc; /* Class of the task with the minimum IPCC score in the rq */
+>  	unsigned long sum_score; /* Sum(score(rq->curr->ipcc)) */
+> +	long ipcc_score_after; /* Prospective IPCC score after load balancing */
+> +	unsigned long ipcc_score_before; /* IPCC score before load balancing */
+>  #endif
+>  };
+>  
+> @@ -9452,6 +9454,62 @@ static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
+>  	}
+>  }
+>  
+> +static void update_sg_lb_stats_scores(struct sg_lb_stats *sgs,
+> +				      struct sched_group *sg,
+> +				      struct lb_env *env)
+> +{
+> +	unsigned long score_on_dst_cpu, before;
+> +	int busy_cpus;
+> +	long after;
+> +
+> +	if (!sched_ipcc_enabled())
+> +		return;
+> +
+> +	/*
+> +	 * IPCC scores are only useful during idle load balancing. For now,
+> +	 * only asym_packing uses IPCC scores.
+> +	 */
+> +	if (!(env->sd->flags & SD_ASYM_PACKING) ||
+> +	    env->idle == CPU_NOT_IDLE)
+> +		return;
+> +
+> +	/*
+> +	 * IPCC scores are used to break ties only between these types of
+> +	 * groups.
+> +	 */
+> +	if (sgs->group_type != group_fully_busy &&
+> +	    sgs->group_type != group_asym_packing)
+> +		return;
+> +
+> +	busy_cpus = sgs->group_weight - sgs->idle_cpus;
+> +
+> +	/* No busy CPUs in the group. No tasks to move. */
+> +	if (!busy_cpus)
+> +		return;
+> +
+> +	score_on_dst_cpu = arch_get_ipcc_score(sgs->min_ipcc, env->dst_cpu);
+> +
+> +	/*
+> +	 * Do not use IPC scores. sgs::ipcc_score_{after, before} will be zero
+> +	 * and not used.
+> +	 */
+> +	if (IS_ERR_VALUE(score_on_dst_cpu))
+> +		return;
+> +
+> +	before = sgs->sum_score;
+> +	after = before - sgs->min_score;
 
-Fix this by checking the return value of mmc_add_host(). Moreover,
-I fixed the error handling path of spmmc_drv_probe() to clean up.
+I don't believe this can end up being negative as the sum of all
+scores should be higher or equal to the min score, right?
 
-Signed-off-by: Wei Chen <harperchen1110@gmail.com>
----
- drivers/mmc/host/sunplus-mmc.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+I'm just wondering if ipcc_score_after can be made unsigned long as well,
+just for consistency.
 
-diff --git a/drivers/mmc/host/sunplus-mmc.c b/drivers/mmc/host/sunplus-mmc.c
-index db5e0dcdfa7f..a96e90ea6541 100644
---- a/drivers/mmc/host/sunplus-mmc.c
-+++ b/drivers/mmc/host/sunplus-mmc.c
-@@ -902,7 +902,7 @@ static int spmmc_drv_probe(struct platform_device *pdev)
- 
- 	ret = mmc_of_parse(mmc);
- 	if (ret)
--		goto probe_free_host;
-+		goto clk_disable;
- 
- 	mmc->ops = &spmmc_ops;
- 	mmc->f_min = SPMMC_MIN_CLK;
-@@ -911,7 +911,7 @@ static int spmmc_drv_probe(struct platform_device *pdev)
- 
- 	ret = mmc_regulator_get_supply(mmc);
- 	if (ret)
--		goto probe_free_host;
-+		goto clk_disable;
- 
- 	if (!mmc->ocr_avail)
- 		mmc->ocr_avail = MMC_VDD_32_33 | MMC_VDD_33_34;
-@@ -927,9 +927,17 @@ static int spmmc_drv_probe(struct platform_device *pdev)
- 	host->tuning_info.enable_tuning = 1;
- 	pm_runtime_set_active(&pdev->dev);
- 	pm_runtime_enable(&pdev->dev);
--	mmc_add_host(mmc);
-+	ret = mmc_add_host(mmc);
-+	if (ret)
-+		goto pm_disable;
- 
--	return ret;
-+	return 0;
-+
-+pm_disable:
-+	pm_runtime_disable(&pdev->dev);
-+
-+clk_disable:
-+	clk_disable_unprepare(host->clk);
- 
- probe_free_host:
- 	if (mmc)
--- 
-2.25.1
+> +
+> +	/* SMT siblings share throughput. */
+> +	if (busy_cpus > 1 && sg->flags & SD_SHARE_CPUCAPACITY) {
+> +		before /= busy_cpus;
+> +		/* One sibling will become idle after load balance. */
+> +		after /= busy_cpus - 1;
+> +	}
+> +
+> +	sgs->ipcc_score_after = after + score_on_dst_cpu;
+> +	sgs->ipcc_score_before = before;
 
+Shouldn't the score_on_dst_cpu be added to "after" before being divided
+between the SMT siblings?
+
+Thanks,
+Ionela.
+
+> +}
+> +
+>  #else /* CONFIG_IPC_CLASSES */
+>  static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
+>  				    struct rq *rq)
+> @@ -9461,6 +9519,13 @@ static void update_sg_lb_ipcc_stats(int dst_cpu, struct sg_lb_stats *sgs,
+>  static void init_rq_ipcc_stats(struct sg_lb_stats *sgs)
+>  {
+>  }
+> +
+> +static void update_sg_lb_stats_scores(struct sg_lb_stats *sgs,
+> +				      struct sched_group *sg,
+> +				      struct lb_env *env)
+> +{
+> +}
+> +
+>  #endif /* CONFIG_IPC_CLASSES */
+>  
+>  /**
+> @@ -9620,6 +9685,9 @@ static inline void update_sg_lb_stats(struct lb_env *env,
+>  
+>  	sgs->group_type = group_classify(env->sd->imbalance_pct, group, sgs);
+>  
+> +	if (!local_group)
+> +		update_sg_lb_stats_scores(sgs, group, env);
+> +
+>  	/* Computing avg_load makes sense only when group is overloaded */
+>  	if (sgs->group_type == group_overloaded)
+>  		sgs->avg_load = (sgs->group_load * SCHED_CAPACITY_SCALE) /
+> -- 
+> 2.25.1
+> 
