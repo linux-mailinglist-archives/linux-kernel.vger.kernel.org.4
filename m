@@ -2,151 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C5D739885
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A86F73988B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230272AbjFVHxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 03:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52346 "EHLO
+        id S230280AbjFVHxt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 03:53:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230154AbjFVHxK (ORCPT
+        with ESMTP id S229593AbjFVHxr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 03:53:10 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1163F1FC3;
-        Thu, 22 Jun 2023 00:52:53 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-25e9e5f9e0cso3901892a91.0;
-        Thu, 22 Jun 2023 00:52:53 -0700 (PDT)
+        Thu, 22 Jun 2023 03:53:47 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2093.outbound.protection.outlook.com [40.107.223.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33581BF5;
+        Thu, 22 Jun 2023 00:53:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LCgm1A2SqpZaDEWGOFifYmbzQ8pki1vKnrCXXcXP57oGf/+nP7KjkBx1Gj+QEvgWORyz4o9UBBxy5gFxQ/kevnpYS1hK5yqC9a1uSM6wZfQjbxApyRxF1nY3baVRMkaE++7ZNOJpM45y259KVIYt4f1i7VDpIe9LCQd013NqStWCrBy2Xg0DRLBY7sYAboO2xC5o1vgfplbhN0OALQAgT66A16w0iISdwWfddpCDXbacNqn9wc43fuWemReQbuLWQy5edd7So/UEaXIyEwNqD8mnQ3KTByWYozNsYiZpKiIXRhUuOa6LO9+yTn4bAoF2Tzu07Og0tebHOy7NUwxIUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PL/DBYEYAc2al9q683ws/N5Mfdn1mq2wCKAUpM7uRG4=;
+ b=En4sSutNXNbuy2NA8L/XXIj05R/yY9NTLnEPOt1wJJhzz+XN/tlcd1xbFAwcCAgpAuT0Y7lJ1szaTt6r/aruTgDOA/Kt3KSliDPnpRKUD2HATCG8nr8XBRs9NNhtZbHdUskGGWyiJKfpsfQUkb9Ho75IHpHa88NWjCFbVTBzDDRm53pVcBHCFW9Av3x8jS8KA3TfKpNIWIkJ1DVvS7mfW9vJhJP+DhE8TPos4U4pBIisNNxpWlzYU7x02V03nNEB8wCDgXolF6m2laxwDlO+asRa4tbA8ocrDrzmGPstKw2RF4fhQKm0vdAfDb9LoVYu/KLe3Pe66a+1W09MOuIbww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687420372; x=1690012372;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1zvHJttdtiCO46p+k5M+Fw9sy+2nAJFqu/9noB7Z5VY=;
-        b=A/8+Y5aZUmT/FJHf7VZQZDImXfjS8v2Xesr4SFZO5W0RMcwQADwQFJpnrfVOTItlI6
-         Jso3SwSF8TJlzVGc2hTa+T4X3VWy9PrJnyGZTFbEE2kJS6Pk49gQPO0BrUHRlquxOe8x
-         roalo8anv5CtyBrHvDV3dmWi2yLM2w2NZAfE+LeeqvHRJVfdwydCKHM5/rw/Q2RNOr8X
-         EGvkZg16WCU/ISbmAH4PQlIGgSkvR2S9rJvGYN1HcWIoUSt3rGwKwt8CfyptOqwlH8gE
-         +NCwv+E2ZP8AdF6KpfiZDdYvd2FlGmGBBypIMHnhTZuug4U5fB6KrtsqDEBhZWbqrpM8
-         m51w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687420372; x=1690012372;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1zvHJttdtiCO46p+k5M+Fw9sy+2nAJFqu/9noB7Z5VY=;
-        b=V3C6F0NUkpdCzZyljFV87mb8rJVvmMOnp8/YYtIoceIhNL6z4bFfaL+JmXlbRfCFQx
-         sIKENMqFUeQA+GU24aW4x2Tbqi+6w+4/1sTBBWy4dyPTP7i96BoqsKx7Yo1cwDXyr3ep
-         1I7SjYTpyRWn07Qe2VAQX/6Ul25m5NSER+EWtnu2nQRncJGlrgkJkkdpq3rK9CoBmiFU
-         7gmG0pNR8BaAfQSBrNx6wc5YnSpKDzmITUhBRrSpnAPQY92KxOkRha+s2qAUL9VWTUT1
-         QddtWhd2QyXjIL6x0RtUrTqUn+pkSVKN1NZmUCG7r8cc/eBGTNk/XyvvKgo5/Y+Fj/hQ
-         KJzw==
-X-Gm-Message-State: AC+VfDx0iAvqs4jW9DU+QExVJzUWN4LiMFttRuJRaImlELlZ5OEPPFEf
-        2nlo4T1ekoeVLzjNgypC6p0=
-X-Google-Smtp-Source: ACHHUZ5Cq7hLqb63EB0zYMu1LZxRizxqR3fW77sTUixr6RNC/ul4FXs68NMHfkfeOXiaYm8tHf1S8Q==
-X-Received: by 2002:a17:90a:c7cd:b0:25b:e081:54e6 with SMTP id gf13-20020a17090ac7cd00b0025be08154e6mr14006745pjb.37.1687420372288;
-        Thu, 22 Jun 2023 00:52:52 -0700 (PDT)
-Received: from sumitra.com ([59.89.167.84])
-        by smtp.gmail.com with ESMTPSA id l2-20020a17090b078200b00259b53dccddsm4281769pjz.34.2023.06.22.00.52.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 00:52:51 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 00:52:44 -0700
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ira Weiny <ira.weiny@intel.com>, Fabio <fmdefrancesco@gmail.com>,
-        Deepak R Varma <drv@mailo.com>,
-        Sumitra Sharma <sumitraartsy@gmail.com>
-Subject: [PATCH v3] lib/test_bpf: Call page_address() on page acquired with
- GFP_KERNEL flag
-Message-ID: <20230622075244.GA426694@sumitra.com>
-MIME-Version: 1.0
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PL/DBYEYAc2al9q683ws/N5Mfdn1mq2wCKAUpM7uRG4=;
+ b=oxXmOFwE1aLoUpUtzQ9eC+gxLilZYZy9RBIJcHzi/JL/nHbLQPiyhTQRTtn5Vrog86GK+4ABPV0MMdQ7sRPu0zVl26ascmrSjAvahom3UtJND54lEvSIVVh9ZEPN63CgHHU8kFnHmEHcih1Hu10Qt1Y+SKH19zh5Z+RO+UNkip0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by MW3PR13MB4042.namprd13.prod.outlook.com (2603:10b6:303:54::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Thu, 22 Jun
+ 2023 07:53:33 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::eb8f:e482:76e0:fe6e%5]) with mapi id 15.20.6521.023; Thu, 22 Jun 2023
+ 07:53:33 +0000
+Date:   Thu, 22 Jun 2023 09:53:26 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Alexandra Winter <wintera@linux.ibm.com>
+Cc:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH] s390/net: lcs: fix build errors when FDDI is a loadable
+ module
+Message-ID: <ZJP99hSRt5MakBXC@corigine.com>
+References: <20230621213742.8245-1-rdunlap@infradead.org>
+ <98375832-3d29-1f03-145f-8d6e763dd2d2@linux.ibm.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <98375832-3d29-1f03-145f-8d6e763dd2d2@linux.ibm.com>
+X-ClientProxiedBy: AM9P193CA0007.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21e::12) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MW3PR13MB4042:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7187d197-c102-4d82-e73c-08db72f5c729
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: fkK2Ec4gSluXJ6WtBYGgxS7UIxjBcat2BB1gCW43Af9auCSXXzvL09DfhdBcp4MzyOvNJPeNLGEsr6JjGTGAueNQimlZujd2k8mhJA3cxKYIAt54dsPK8hWeSyevoux6D7OJEBXa7T72ZOWXWUcetXvlJ2r5uth6EnJEm+9q0gDUvaFeEtM1iNwOmXRfAYJ7/244T0zi1rkd75NVIwBn1JzfdBPEsDGuYC7vhIoQHdMBViMhP9OQsbhiGvXGlI9O2SVPybKlLvOLqniP2dZIsuazY44aucFLznGkiZcb6hmTxsSZ+NXYIDdnXq7sTFMoChqTYGsaWL1QV50yXlqGBTDBNzdRhU/c/+hZ3Cn0WkhL+9c8nBwNsQTny+/kiZwyONK4oj15Eq4mJdPQ54euM1udQdTDZ3brth9nKGfQCjSw9WJSN9Mi8HPQst0m8cPBLgE2zBI6o4otxS86ghxpobrTGTIOguU4bRzaXXGw9yaD9rqHHuvuq3v6VJ38uaLlV6k+sd2C6W/dayFQzMQ5oIQykczTeq+7H/ag1dKoFWZjn43UcFfS1RtM9eaJXHfmkUTakIG9/kSE/YB4YOHDpt6FSjzpJPouHjyiLlSSijI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(136003)(376002)(39840400004)(396003)(451199021)(2906002)(8936002)(8676002)(7416002)(86362001)(44832011)(316002)(6916009)(4326008)(66476007)(66946007)(84970400001)(66556008)(478600001)(41300700001)(54906003)(5660300002)(83380400001)(6666004)(38100700002)(6486002)(2616005)(186003)(6512007)(6506007)(36756003)(53546011);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?I9M5UUS5je4wTT7ov5gpRhsjlZkOzu2xMa20oR9gWFCuTrW1uq95R8EKD41n?=
+ =?us-ascii?Q?Sy4+9/yz8P6y8PiBriS9klT9RAyY0XRUCMsrua0u45TC1uhTmlvzpdsn2a3d?=
+ =?us-ascii?Q?9cjVhjtPQhOekscWMGj7P0q50pJgMKSoQqXjG4M9GvxTi3au9EtutgaxDIzy?=
+ =?us-ascii?Q?kbDhu+efaEpjDq2iBR/swFVu52NBmw7PfvH0UynBxx+pr3W+wW4pjhjE8ya6?=
+ =?us-ascii?Q?jXVEvKIyq0olO/DJ7zloBcl3izTjlxWtUXg8XciVuHEPhnb6gojU57aOZSzl?=
+ =?us-ascii?Q?O8YGqM56OoeJD9O5G5zVmfh0WifosEKFDVlbhAIJXLzUCxHi7LKkD4UvN4vN?=
+ =?us-ascii?Q?vCEZThL4KFUKx3k+QItUVBLLAnvuHSiu8RwKh3GzFJnTD4XJKJQ+etulyKr0?=
+ =?us-ascii?Q?mJELVqcfZUJweSsjxX4m6FyJxA7nFCOed8ymjUolofb6UVVbEGWI24xYOi8w?=
+ =?us-ascii?Q?JN/HA5Ji0+zxr4cOWMh2sQJ9jzJzpw5BYq8ExA0jYjOGeuGntdIjAwsKlQS/?=
+ =?us-ascii?Q?bCEgW9I7dozWqdzYbuPToxbKlq4zTBwbLUvak5m+g02HgLxw0r30qHnZIdKE?=
+ =?us-ascii?Q?j/GLQIqF8eMpa83R63gqnYOtj60OUeuw7uMz/ppaVAmcqdbWP8jWYutKwWec?=
+ =?us-ascii?Q?mgz4SQ69gSbKazzfELGU3OLTxpoWpUbsWNanJ/oT+Q1vSjM2gO3Ja0nt+pt5?=
+ =?us-ascii?Q?x8HaZboR3YHhtodaLUPFlDJ3cubJINhKZ2TZe7rmUfq/XU3wey+SzeLd4KHW?=
+ =?us-ascii?Q?nYFkl8NLSGKAeDaKrmz4ghbJCknb8Iq6zrJVMDLG/XYOeUtQBKvk//bfc8zv?=
+ =?us-ascii?Q?sqZwlGnpvmSGWvo638QIBq0zR6wn7L9szYdDEHdFEtsjoIyiNdLX2VTqdsLp?=
+ =?us-ascii?Q?7h8lljN+IIvygrrRCqKJ9nH+0qE+4hmj26w8zi2C5Pxd1zLm9fd4GgQbfnoH?=
+ =?us-ascii?Q?eIifyQGuwHY9Irgsfg+VJzuMjGTku4/90KTwkJ8Yzc1i3fsa5FRpa/lMHUqR?=
+ =?us-ascii?Q?w3XxDzef7aLI7HyOCLOclpnvwYtFza/S5i1b/5rp28rOhSIl41jCsHuvDZgI?=
+ =?us-ascii?Q?JSLomg+Xigtd36x17LIe/Zv5VWdPvg02RbYgyxwW9nD2lwHmIPzy3UE6zKMM?=
+ =?us-ascii?Q?Eh5e/JGIAqebI35uePEn1ZTlHc2knOv45h3xXxYAJKvE8jiWfQqLr/OtXsf5?=
+ =?us-ascii?Q?83DJzLyvEV6ZWj59MtCq4WpYzCILvNiSNQTmjsjeshTO7Cben+n1y1HUBwZs?=
+ =?us-ascii?Q?fHMNbb2Nj/4ig/vbmTt0iGpyGjZTlTccCW9auwlXvmomsHBa1g9m/kOSZYRG?=
+ =?us-ascii?Q?j6AS+nH23L5wiLu39FrYVwvQCuA1CoLaMc2d/zJq0qS3QjBIJ+e3OS9ipIUb?=
+ =?us-ascii?Q?Hx3FU+zGi91Ia8vNv/vWs5+tibabN2HDt75lQrZaEE8kS4ZUbD/5o0m/fhuE?=
+ =?us-ascii?Q?hzMgoskmOhlDAs9mK/7GEej1ojtO0phMfcCHuJq6xTunJnVfOLTwC5UBZOa1?=
+ =?us-ascii?Q?naNYBCMI3QNgm7gRWjvgAld9N0OwFGVch6ODe7V2n1DsxXeMTLy0v090Gy6Z?=
+ =?us-ascii?Q?a/MaRO6ZvbO4th9Du6OtLLnEmpNZM513kWfZHRM1mpa4CduxvDTkHlnfzwcb?=
+ =?us-ascii?Q?8JU9oxOuNkav9I/ThjmdPO0L0zT2myPMm8/bvJCBYEk+ID0LS5Sj6A8b6KtI?=
+ =?us-ascii?Q?23TbWg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7187d197-c102-4d82-e73c-08db72f5c729
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 07:53:33.8053
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sfvScSGposxMTonAi9E8ypSnWm4QDE9Ym4wuj8kodUB5tXMromE86pXgflDXokGvSRAB8npVtlCZOMQBgM/GvUehmrrBUMJCeYlK/ABAzco=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR13MB4042
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-generate_test_data() acquires a page with alloc_page(GFP_KERNEL).
-The GFP_KERNEL is typical for kernel-internal allocations.
-The caller requires ZONE_NORMAL or a lower zone for direct access.
+On Thu, Jun 22, 2023 at 09:15:24AM +0200, Alexandra Winter wrote:
+> 
+> 
+> On 21.06.23 23:37, Randy Dunlap wrote:
+> > Require FDDI to be built-in if it is used. LCS needs FDDI to be
+> > built-in to build without errors.
+> > 
+> > Prevents these build errors:
+> > s390-linux-ld: drivers/s390/net/lcs.o: in function `lcs_new_device':
+> > drivers/s390/net/lcs.c:2150: undefined reference to `fddi_type_trans'
+> > s390-linux-ld: drivers/s390/net/lcs.c:2151: undefined reference to `alloc_fddidev'
+> > 
+> > This FDDI requirement effectively restores the previous condition
+> > before the blamed patch, when #ifdef CONFIG_FDDI was used, without
+> > testing for CONFIG_FDDI_MODULE.
+> > 
+> > Fixes: 128272336120 ("s390/net: lcs: use IS_ENABLED() for kconfig detection")
+> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Link: lore.kernel.org/r/202306202129.pl0AqK8G-lkp@intel.com
+> > Suggested-by: Simon Horman <simon.horman@corigine.com>
+> > Cc: Alexandra Winter <wintera@linux.ibm.com>
+> > Cc: Wenjia Zhang <wenjia@linux.ibm.com>
+> > Cc: linux-s390@vger.kernel.org
+> > Cc: netdev@vger.kernel.org
+> > Cc: Heiko Carstens <hca@linux.ibm.com>
+> > Cc: Vasily Gorbik <gor@linux.ibm.com>
+> > Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+> > Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+> > Cc: Sven Schnelle <svens@linux.ibm.com>
+> > Cc: David S. Miller <davem@davemloft.net>
+> > Cc: Eric Dumazet <edumazet@google.com>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Paolo Abeni <pabeni@redhat.com>
+> > ---
+> >  drivers/s390/net/Kconfig |    2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff -- a/drivers/s390/net/Kconfig b/drivers/s390/net/Kconfig
+> > --- a/drivers/s390/net/Kconfig
+> > +++ b/drivers/s390/net/Kconfig
+> > @@ -6,11 +6,13 @@ config LCS
+> >  	def_tristate m
+> >  	prompt "Lan Channel Station Interface"
+> >  	depends on CCW && NETDEVICES && (ETHERNET || FDDI)
+> > +	depends on FDDI=y || FDDI=n
+> >  	help
+> >  	  Select this option if you want to use LCS networking on IBM System z.
+> >  	  This device driver supports FDDI (IEEE 802.7) and Ethernet.
+> >  	  To compile as a module, choose M. The module name is lcs.
+> >  	  If you do not know what it is, it's safe to choose Y.
+> > +	  If FDDI is used, it must be built-in (=y).
+> >  
+> >  config CTCM
+> >  	def_tristate m
+> > 
+> 
+> 
+> Wow Randy and Simon, you are reacting faster than I was able to evaluate this yesterday.
+> 2 thoughts:
+> 
+> 1) As ETHERNET cannot be a module and this patch prevents FDDI from being a module, then 
+> 128272336120 ("s390/net: lcs: use IS_ENABLED() for kconfig detection")
+> is kind of pointless and can as well be reverted instead of doing this fix.
+> Or am I missing something?
 
-Therefore the page cannot come from ZONE_HIGHMEM. Thus there's
-no need to map it with kmap().
+I'll leave that one to Randy at this point.
 
-Also, the kmap() is being deprecated in favor of
-kmap_local_page() [1].
+> 2) I wonder whether
+> 
+>   	depends on CCW && NETDEVICES && (ETHERNET || FDDI)
+>  +	depends on FDDI || FDDI=n
+> 
+> would do what we want here:
+> When FDDI is a loadable module, LCS mustn't be built-in.
+> 
+> I will do some experiments and let you know.
 
-Hence, use a plain page_address() directly.
-
-Since the page passed to the page_address() is not from the highmem
-zone, the page_address() function will always return a valid kernel
-virtual address and will not return NULL. Hence, remove the check
-'if (!ptr)'.
-
-Remove the unused variable 'ptr'.
-
-[1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny
-@intel.com/
-
-Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
----
-
-- Link to v1: https://lore.kernel.org/bpf/20230613073020.GA359792@sumitra.com/T/
-- Link to v2: https://lore.kernel.org/lkml/3564297.R56niFO833@suse/T/
-
-Changes in v3:
-Noted by: Fabio M. De Francesco<fmdefrancesco@gmail.com>
-	- Remove the check 'if (!ptr)'.
-	- Remove the unused variable 'ptr'.
-	- Change the commit message.
-
-Changes in v2:
-Noted by: Fabio M. De Francesco<fmdefrancesco@gmail.com>
-	- Remove the kmap() call and call page_address() instead.
-	- Change the commit subject and message.
-
-
- lib/test_bpf.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
-
-diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index ade9ac672adb..448bc1b0b8b5 100644
---- a/lib/test_bpf.c
-+++ b/lib/test_bpf.c
-@@ -14381,18 +14381,12 @@ static void *generate_test_data(struct bpf_test *test, int sub)
- 		 * single fragment to the skb, filled with
- 		 * test->frag_data.
- 		 */
--		void *ptr;
--
- 		page = alloc_page(GFP_KERNEL);
- 
- 		if (!page)
- 			goto err_kfree_skb;
- 
--		ptr = kmap(page);
--		if (!ptr)
--			goto err_free_page;
--		memcpy(ptr, test->frag_data, MAX_DATA);
--		kunmap(page);
-+		memcpy(page_address(page), test->frag_data, MAX_DATA);
- 		skb_add_rx_frag(skb, 0, page, 0, MAX_DATA, MAX_DATA);
- 	}
- 
--- 
-2.25.1
-
+It does seem to on my side.
+But checking would be much appreciated.
