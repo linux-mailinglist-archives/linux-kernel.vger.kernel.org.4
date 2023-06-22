@@ -2,127 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36B6E73A8E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:20:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C04BD73A8EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:23:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231509AbjFVTUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 15:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50548 "EHLO
+        id S231523AbjFVTW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 15:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjFVTT6 (ORCPT
+        with ESMTP id S230191AbjFVTWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 15:19:58 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEBFABA;
-        Thu, 22 Jun 2023 12:19:57 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id B210E320092A;
-        Thu, 22 Jun 2023 15:19:56 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Thu, 22 Jun 2023 15:19:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        joshtriplett.org; h=cc:cc:content-type:content-type:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1687461596; x=1687547996; bh=6+6r2jl0FgLMZhz62vz2TuajhsbnfKNl/0S
-        YnIJgOYk=; b=cKc5M8i/kxkAd48cHUJPl/dMTVQeBtrTTPo3fcmtqYcNAoVtikC
-        L66GZDOJ8ySjYAko8YPGVGDBaLQGFW8fxIgAgIyQ+AQIBfItHSJ6xo6DZQUNCemk
-        4lirbqL5J/JiPmYEO8u6X3YAaU6/LHgkPub3hwi2Kz3+n7ZY8BSqyEI29V0tA6KR
-        T0UDAdYPNyQXjvd/CoXvhAG2kNTZEME+ZW4MwxkmQytphbPk++lh8pdyPBYx/Zhk
-        IOo71hSiLDCss0wuHwI2T00VBPgKycmlTkR7u+IAE2Qj9DXqv7xRt6d2jfOv+3L8
-        Z/mi4gfNXHHkC4vl7Vo/JGbGo/fGMGoCvOA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687461596; x=1687547996; bh=6+6r2jl0FgLMZ
-        hz62vz2TuajhsbnfKNl/0SYnIJgOYk=; b=bdSACyKrfoSxEzz3j8tmMKJgKOTjs
-        d1v5Y9JB8u4kRSXpc+LyIY88+HFfrr2YQ1yJ/6kUylSzPdA05Ist8JhhEa9QzKKE
-        ytiJGk7wJBOmgDGlcnOJYy/onAbwc0Rr+bGTrHqKR0pcfPOWuOMuuJlo0e/y4GrR
-        BcGQDp7ykjbhjB2ZtXERGpIOAEaCjmMVymHLDjzjK+pS+luFViTdK1Glm2ANHtCe
-        8yhsepfIkjP06N5dMO4sDHYgAfnrFZGoF0TYksDKKHtwX+bpDVU4dxP/WvDYP9zQ
-        niufq1rHAQG8mM6XcjRkI/DYBEf6MYQy7jvGjV/MIZnWTPvflm7chy71A==
-X-ME-Sender: <xms:256UZNJgPtwKwtJFe8ePUMOdcV00ejlEdbW6WbcbC21IJVr411xY4Q>
-    <xme:256UZJIBGnfSmui_3XbELMffei0asPNlRkjnpLIKbj1swFcCb-LWnN5c9rxZ_BwEX
-    JcvXAaZL_iyj3Z4b5M>
-X-ME-Received: <xmr:256UZFsvdBl-9fDTBU6BQurzYksmq_hnbxH0oceDiVyxtsFHPJSOdfEmLg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeguddgudefhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeflohhs
-    hhcuvfhrihhplhgvthhtuceojhhoshhhsehjohhshhhtrhhiphhlvghtthdrohhrgheqne
-    cuggftrfgrthhtvghrnhepvdekleffgfetfeeijedtieehtdeuhfegueejkeevueeileff
-    gfduleffjeffuddvnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvg
-    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjohhshhesjhhoshhhthhr
-    ihhplhgvthhtrdhorhhg
-X-ME-Proxy: <xmx:256UZOZXyw9mfSAiTP-_NotkHTTvaS-n4CJWRxrLzXgJXMvd6Npl7g>
-    <xmx:256UZEbV2CJ1fEu1aKGeglboa7DlB4SgiC-zHd39mwspV8wx-GEM4A>
-    <xmx:256UZCBPXneMptxjUXeHbPGqXg4lDvpql72i5rztHLo2SRP7eZxZ5Q>
-    <xmx:3J6UZJOeLbPLbL1w77Sem6cLk8cFggj5w8HpjdHqK_GsAI5BFUNUvg>
-Feedback-ID: i83e94755:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 22 Jun 2023 15:19:54 -0400 (EDT)
-Date:   Thu, 22 Jun 2023 12:19:53 -0700
-From:   Josh Triplett <josh@joshtriplett.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Ben Hutchings <ben@decadent.org.uk>,
-        linux-snps-arc@lists.infradead.org,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH] kbuild: builddeb: always make modules_install, to install
- modules.builtin*
-Message-ID: <f7e9220aad3d98bd174f7dcbd68031e1e15ea968.1687461492.git.josh@joshtriplett.org>
-References: <20230615111743.883891-1-masahiroy@kernel.org>
+        Thu, 22 Jun 2023 15:22:53 -0400
+Received: from smtpng3.i.mail.ru (smtpng3.i.mail.ru [94.100.177.149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23441A3;
+        Thu, 22 Jun 2023 12:22:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=inbox.ru; s=mail4;
+        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=DP2aFJtkmkPxyLzd3TP0gmVk+NDndbi0hOnw9eCQjcA=;
+        t=1687461770;x=1687551770; 
+        b=FTTx7r/ZThWpG/LoGp+TFmzz2PcUeAwX9VmldpVsdsN9mtOcv5O7l1cCyfZdZrSeSvH2cvSCr4mWcGr0jDLFM7TKgg3/Vfp/MG/RJABAmbx/3dfk7wUB+aVWi077A4d3+TqBe5bWbq5gMIWcOl551WsQ5nf49gdfh5djogvONKqMVmXtv2+nFNxAt+pHIavuZSxpdBO7c8Py9D9lT9rL4luKsNXaZ2Gcss3UFjuXsA4jpZHlXy5BvVFkGeJaIGDeFPOYaOoGWH7EhIS7jo4EgReAWMsT2LPTWLfFnHXIqLOqEC8eOVCfYlSCGbwyAU4EbaKP5QBMYDcc0c/X4dr7uA==;
+Received: by smtpng3.m.smailru.net with esmtpa (envelope-from <fido_max@inbox.ru>)
+        id 1qCPtI-000166-9f; Thu, 22 Jun 2023 22:22:48 +0300
+From:   Maxim Kochetkov <fido_max@inbox.ru>
+To:     netdev@vger.kernel.org
+Cc:     Maxim Kochetkov <fido_max@inbox.ru>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Andre Przywara <andre.przywara@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v4 1/1] net: axienet: Move reset before 64-bit DMA detection
+Date:   Thu, 22 Jun 2023 22:22:45 +0300
+Message-Id: <20230622192245.116864-1-fido_max@inbox.ru>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230615111743.883891-1-masahiroy@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Authentication-Results: smtpng3.m.smailru.net; auth=pass smtp.auth=fido_max@inbox.ru smtp.mailfrom=fido_max@inbox.ru
+X-Mailru-Src: smtp
+X-7564579A: 646B95376F6C166E
+X-77F55803: 4F1203BC0FB41BD95D99986233CC4DDCD825FF3AA070ECA3C2EE242F31DB0C21182A05F538085040073D0E8D12A2D78F4B42AA8A878AB305792FE63BB0E7FDDDC9ADD231A8CD152C
+X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE78C6616F30072131EEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637E724D704EAF55A818638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8E8A6527D39C418ACBD59F620FC74EEC56F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE767883B903EA3BAEA9FA2833FD35BB23D9E625A9149C048EE1E561CDFBCA1751FBDFBBEFFF4125B51D2E47CDBA5A96583BD4B6F7A4D31EC0BC014FD901B82EE079FA2833FD35BB23D27C277FBC8AE2E8B89C3E995CBB71A93A471835C12D1D977C4224003CC8364762BB6847A3DEAEFB0F43C7A68FF6260569E8FC8737B5C2249EC8D19AE6D49635B68655334FD4449CB9ECD01F8117BC8BEAAAE862A0553A39223F8577A6DFFEA7C468D16C903838CAB43847C11F186F3C59DAA53EE0834AAEE
+X-C1DE0DAB: 0D63561A33F958A56BA840BED89C6299901EC1DEE3F3305E17CBEFDF7E0A7940F87CCE6106E1FC07E67D4AC08A07B9B0A6C7FFFE744CA7FB9C5DF10A05D560A950611B66E3DA6D700B0A020F03D25A0997E3FB2386030E77
+X-C8649E89: 1C3962B70DF3F0ADE00A9FD3E00BEEDF77DD89D51EBB7742D3581295AF09D3DF87807E0823442EA2ED31085941D9CD0AF7F820E7B07EA4CFB8B6392F04A2BEA40076E750EE125CC8FA124D79BBB7AFE643172A17CB2DB903A30287D0F4871F18B05B57073EAFDF97EBCADA21C28D8569D75048356C5CA95821BEC6C0C71ED4F84C41F94D744909CEE921556F0E976A29E6EC0772259F8F8F8815B87D7EC76CB9
+X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojB41c+mu8Ac9oQf9MPmksBw==
+X-Mailru-Sender: 689FA8AB762F73930F533AC2B33E986B854CA481D18055A7E573327C5F59393698CC072019C18A892CA7F8C7C9492E1F2F5E575105D0B01ADBE2EF17B331888EEAB4BC95F72C04283CDA0F3B3F5B9367
+X-Mras: Ok
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Even for a non-modular kernel, the kernel builds modules.builtin and
-modules.builtin.modinfo, with information about the built-in modules.
-Tools such as initramfs-tools need these files to build a working
-initramfs on some systems, such as those requiring firmware.
+64-bit DMA detection will fail if axienet was started before (by boot
+loader, boot ROM, etc). In this state axienet will not start properly.
+XAXIDMA_TX_CDESC_OFFSET + 4 register (MM2S_CURDESC_MSB) is used to detect
+64-bit DMA capability here. But datasheet says: When DMACR.RS is 1
+(axienet is in enabled state), CURDESC_PTR becomes Read Only (RO) and
+is used to fetch the first descriptor. So iowrite32()/ioread32() trick
+to this register to detect 64-bit DMA will not work.
+So move axienet reset before 64-bit DMA detection.
 
-Now that `make modules_install` works even in non-modular kernels and
-installs these files, unconditionally invoke it when building a Debian
-package.
-
-Signed-off-by: Josh Triplett <josh@joshtriplett.org>
+Fixes: f735c40ed93c ("net: axienet: Autodetect 64-bit DMA capability")
+Signed-off-by: Maxim Kochetkov <fido_max@inbox.ru>
+Reviewed-by: Robert Hancock <robert.hancock@calian.com>
+Reviewed-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
 ---
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-This patch depends on
-https://lore.kernel.org/lkml/20230615111743.883891-1-masahiroy@kernel.org/
-
- scripts/package/builddeb | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/scripts/package/builddeb b/scripts/package/builddeb
-index 252faaa5561c..f500e3910158 100755
---- a/scripts/package/builddeb
-+++ b/scripts/package/builddeb
-@@ -62,8 +62,8 @@ install_linux_image () {
- 		${MAKE} -f ${srctree}/Makefile INSTALL_DTBS_PATH="${pdir}/usr/lib/linux-image-${KERNELRELEASE}" dtbs_install
- 	fi
+diff --git a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+index 3e310b55bce2..734822321e0a 100644
+--- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
++++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+@@ -2042,6 +2042,11 @@ static int axienet_probe(struct platform_device *pdev)
+ 		goto cleanup_clk;
+ 	}
  
-+	${MAKE} -f ${srctree}/Makefile INSTALL_MOD_PATH="${pdir}" modules_install
- 	if is_enabled CONFIG_MODULES; then
--		${MAKE} -f ${srctree}/Makefile INSTALL_MOD_PATH="${pdir}" modules_install
- 		rm -f "${pdir}/lib/modules/${KERNELRELEASE}/build"
- 		rm -f "${pdir}/lib/modules/${KERNELRELEASE}/source"
- 		if [ "${SRCARCH}" = um ] ; then
++	/* Reset core now that clocks are enabled, prior to accessing MDIO */
++	ret = __axienet_device_reset(lp);
++	if (ret)
++		goto cleanup_clk;
++
+ 	/* Autodetect the need for 64-bit DMA pointers.
+ 	 * When the IP is configured for a bus width bigger than 32 bits,
+ 	 * writing the MSB registers is mandatory, even if they are all 0.
+@@ -2096,11 +2101,6 @@ static int axienet_probe(struct platform_device *pdev)
+ 	lp->coalesce_count_tx = XAXIDMA_DFT_TX_THRESHOLD;
+ 	lp->coalesce_usec_tx = XAXIDMA_DFT_TX_USEC;
+ 
+-	/* Reset core now that clocks are enabled, prior to accessing MDIO */
+-	ret = __axienet_device_reset(lp);
+-	if (ret)
+-		goto cleanup_clk;
+-
+ 	ret = axienet_mdio_setup(lp);
+ 	if (ret)
+ 		dev_warn(&pdev->dev,
 -- 
 2.40.1
 
