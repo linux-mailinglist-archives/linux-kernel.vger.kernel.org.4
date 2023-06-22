@@ -2,66 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8AAA739386
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 02:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 913237393A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 02:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjFVAFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 20:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
+        id S229707AbjFVAQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 20:16:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbjFVAFn (ORCPT
+        with ESMTP id S229624AbjFVAQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 20:05:43 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381251BD5
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 17:05:16 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b53e1cd0ffso29202475ad.0
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 17:05:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687392239; x=1689984239;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xq0dkv7azkvedb0KULWF4WuIbSO15dlwApz3MpULLXE=;
-        b=AwtajXI8+J6DndfxRUIKzXCkBY8xGz60/k5sDcezJKwVGjGClzxX4hXpgteDe2dQ9h
-         4d2HnnsDKY90T8y0a3ww96+rL99eVgWq1UXwqto72GaZgsChKyMxxDHywAY92C/ZdF6T
-         X74yKEqM1f90KQ6KGhb8eT7QKMRkG+1RM2z/Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687392239; x=1689984239;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xq0dkv7azkvedb0KULWF4WuIbSO15dlwApz3MpULLXE=;
-        b=Xs98sYxKgf7BjCwhrusP53vLFpdAainE5YgO6sh6NXlIe2hoLh9LKMUpJnZMUsmdVQ
-         zoiEfypZaNCONcc74rxycVzQEmLUUVvbsr/TJuVhQAaptXANns8XDh1/zn08d0taj+Hm
-         m5RuDcv91Ae60dbIH8RtMUhEP5O9byUiBScIGi9dWnKg4BxnJDuO7ojvCkZqH7rM7aRB
-         Y6EZlciC+Ojy7IdAb0x6kKiEXabZAThjZF5oC1YzeS4Ck+tnkKyK0dGnS2S2ncj9xfjE
-         4xxUQMg7RkeAEJvnk/sD7hez7mjAP23xwzS3q6NZp1+l87a1ObGJZNFFqAy/FKGPVayL
-         RUtg==
-X-Gm-Message-State: AC+VfDyxbOW5CcHY+v0yqeK5G22M6gU6nbvutjdMF4170KBSxJzx8ZKU
-        5SxrN2U6ZKm+uQbCMkajX8dN8aRj5Mn6Y2Z7mjg=
-X-Google-Smtp-Source: ACHHUZ53xmAEhlIo0pgHgTU4ZsSk7xwA4q8JgCHr72rMOhDtXySNGOwMcP4W8fBuxFBj5os20ReXhQ==
-X-Received: by 2002:a17:902:e544:b0:1b6:7c9a:3a53 with SMTP id n4-20020a170902e54400b001b67c9a3a53mr6912803plf.67.1687392239478;
-        Wed, 21 Jun 2023 17:03:59 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id lg13-20020a170902fb8d00b0019aeddce6casm4013845plb.205.2023.06.21.17.03.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 17:03:58 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 17:03:58 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     reiserfs-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] reiserfs: Replace one-element array with
- flexible-array member
-Message-ID: <202306211703.9AC418A@keescook>
-References: <ZJN9Kqhcs0ZGET/8@work>
+        Wed, 21 Jun 2023 20:16:38 -0400
+Received: from mail-4321.protonmail.ch (mail-4321.protonmail.ch [185.70.43.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DAE1FEE
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 17:16:05 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 00:04:19 +0000
+Authentication-Results: mail-4321.protonmail.ch;
+        dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="Pua/4TE4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1687392268; x=1687651468;
+        bh=QApTeqmmt2Nt3CTduRIU2TRUUTK8LTmbK6PcMDg3L28=;
+        h=Date:To:From:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=Pua/4TE4VN5I8Ezbf+dzMRhmuI9ft4Vhmi1I9q/bvNlFDqDHKRR3E+wg6FGN/XnvQ
+         52Rqp9crgI4X/2ZjADQnvrGRVT/ZKFUmsoNYh+8Wm5y3ID8YzjHz0Cvql+BLwdpp0F
+         7zps+1MhZ/V74iLGeUpg/o6+rSPxoeDDh0ebPL5AuvqHT7djhMYevALjpMl3SiUral
+         rOz8XfpXG7XsUp/OpONOXeIIQa4vos7JrPxjZLwX+3d2lbgu3+gbqfwkQHSDDbJcQ0
+         qWwmTT5felMlgULZgpv+85v4OnRrPrlxUJMjavQ5/ZM0Rc1vZAHfrpXQF2vA1IfPc4
+         LmEpDrLvyNtqQ==
+To:     linux-kernel@vger.kernel.org
+From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
+Subject: [PATCH 3/7] ARM: dts: qcom-msm8916-samsung-fortuna: Include dts from arm64
+Message-ID: <20230622000322.48298-1-linmengbo0689@protonmail.com>
+In-Reply-To: <20230622000007.48219-1-linmengbo0689@protonmail.com>
+References: <20230622000007.48219-1-linmengbo0689@protonmail.com>
+Feedback-ID: 40467236:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZJN9Kqhcs0ZGET/8@work>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,26 +50,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 04:43:54PM -0600, Gustavo A. R. Silva wrote:
-> One-element arrays are deprecated, and we are replacing them with flexible
-> array members instead. So, replace one-element array with flexible-array
-> member in direntry_uarea structure, and refactor the rest of the code,
-> accordingly.
-> 
-> Worth mentioning is that before these changes, the original implementation
-> was returning two-too many bytes in function direntry_create_vi():
-> 
-> fs/reiserfs/item_ops.c:464:     int size = sizeof(struct direntry_uarea);
-> ...
-> fs/reiserfs/item_ops.c-490-     size += (dir_u->entry_count * sizeof(short));
-> ...
-> fs/reiserfs/item_ops.c-517-     return size;
-> 
-> Link: https://github.com/KSPP/linux/issues/79
-> Link: https://github.com/KSPP/linux/issues/290
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+After adding all necessary support for MSM8916 SMP/cpuidle without PSCI
+on ARM32, build fortunaltezt and heatqlte device trees from the arm64
+tree together with the ARM32 include to allow booting this device on ARM32.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+The approach to include device tree files from other architectures is
+inspired from e.g. the Raspberry Pi (bcm2711-rpi-4-b.dts) where this is
+used to build the device tree for both ARM32 and ARM64.
 
--- 
-Kees Cook
+[Add workaround to TSENS problem]
+Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+[Add heatqlte]
+Signed-off-by: Gareth Peoples <mail@gpeopl.es>
+Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
+---
+ arch/arm/boot/dts/Makefile                              | 2 ++
+ arch/arm/boot/dts/qcom-msm8916-samsung-fortunaltezt.dts | 8 ++++++++
+ arch/arm/boot/dts/qcom-msm8916-samsung-heatqlte.dts     | 8 ++++++++
+ 3 files changed, 18 insertions(+)
+ create mode 100644 arch/arm/boot/dts/qcom-msm8916-samsung-fortunaltezt.dts
+ create mode 100644 arch/arm/boot/dts/qcom-msm8916-samsung-heatqlte.dts
+
+diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
+index 2503d1c5eee3..9305c5f3bc3f 100644
+--- a/arch/arm/boot/dts/Makefile
++++ b/arch/arm/boot/dts/Makefile
+@@ -1099,7 +1099,9 @@ dtb-$(CONFIG_ARCH_QCOM) +=3D \
+ =09qcom-msm8660-surf.dtb \
+ =09qcom-msm8916-samsung-e5.dtb \
+ =09qcom-msm8916-samsung-e7.dtb \
++=09qcom-msm8916-samsung-fortunaltezt.dtb \
+ =09qcom-msm8916-samsung-grandmax.dtb \
++=09qcom-msm8916-samsung-heatqlte.dtb \
+ =09qcom-msm8916-samsung-serranove.dtb \
+ =09qcom-msm8960-cdp.dtb \
+ =09qcom-msm8960-samsung-expressatt.dtb \
+diff --git a/arch/arm/boot/dts/qcom-msm8916-samsung-fortunaltezt.dts b/arch=
+/arm/boot/dts/qcom-msm8916-samsung-fortunaltezt.dts
+new file mode 100644
+index 000000000000..b9704fea7029
+--- /dev/null
++++ b/arch/arm/boot/dts/qcom-msm8916-samsung-fortunaltezt.dts
+@@ -0,0 +1,8 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include "arm64/qcom/msm8916-samsung-fortunaltezt.dts"
++#include "qcom-msm8916-smp.dtsi"
++
++&tsens {
++=09/* FIXME: The device crashes when accessing the SROT region for some re=
+ason */
++=09status =3D "disabled";
++};
+diff --git a/arch/arm/boot/dts/qcom-msm8916-samsung-heatqlte.dts b/arch/arm=
+/boot/dts/qcom-msm8916-samsung-heatqlte.dts
+new file mode 100644
+index 000000000000..ec3edd4f31c3
+--- /dev/null
++++ b/arch/arm/boot/dts/qcom-msm8916-samsung-heatqlte.dts
+@@ -0,0 +1,8 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include "arm64/qcom/msm8916-samsung-heatqlte.dts"
++#include "qcom-msm8916-smp.dtsi"
++
++&tsens {
++=09/* FIXME: The device crashes when accessing the SROT region for some re=
+ason */
++=09status =3D "disabled";
++};
+--=20
+2.39.2
+
+
