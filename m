@@ -2,101 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2212739D5A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E866739D69
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231754AbjFVJdt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 05:33:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
+        id S232376AbjFVJea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 05:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232386AbjFVJdP (ORCPT
+        with ESMTP id S231480AbjFVJdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 05:33:15 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FFB31BC5
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:26:52 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-3112c11fdc9so4927674f8f.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:26:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687426011; x=1690018011;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/aC8mCOVavwd5bkCHY05FoCaArXFgiYwfyDm/yPyuJs=;
-        b=draD3nbDhpHj052iMV+axxX3WTJI5C9dqU2WTC5xp3fYwUUh2+Plh5RXbnezXZObOH
-         0O/ZCEgacb3secdyRIKHhHfRYtpd8BjICuKSWK5//3bOaMreZMPvKODVhKgMdyegKVvm
-         YozOFUUcUIxGteip9jfkdsSUujemEPwJHYGQBcz64adZzQRWz/Y7KMvWfzGRycX4yRq1
-         z4W0F1NDACGfS2QnbKRMn0hsAkqPH1EHbcNdFYnk9bzPD6x5W5HKASnH3I9XObNHx91W
-         NPr+CZTUYINR5wwhdA3oukobmvPImFewLK/pTfhSVSK9S7cP2GriBwKqA7OoZ1eSWqAS
-         qZ0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687426011; x=1690018011;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/aC8mCOVavwd5bkCHY05FoCaArXFgiYwfyDm/yPyuJs=;
-        b=W431tK4weXX5Z5bCUv7uc34YK5hFWqm19dh4P7MrMx71UdKjTMUcuXM2IaspoVrabq
-         tQIFBQIQv3nxL3jmKbbzqi88fRoZZBKyh4GbA3xJBOFboDXEd98roLIclq8PFGTc9zno
-         Klwzf5ILHsE32eWBys7pnfCqFR4RxBRW/7JVSYbnXPU8Gh986plzQh1Tb8SSEvvaK+zF
-         IZCqYyDIUTHsyyPVY8IvzEae475WKd80fcSPXe1/QcmX0ntKtUIICGSMueakYSLTbp7z
-         lgx96Qcaj+i9XeJFhccP259JIk9T31iBuqYlJ6Y87Cp5EcuQJB/XXh6PQ64nXeIiWy7q
-         pjtQ==
-X-Gm-Message-State: AC+VfDzSsXCsTAAEHbIEP7hmcu80QXeAdUIwOS1HI6VVQLTfCIPQ7qjs
-        eGPtMdL911YJyMBnhQy/ysAL0A==
-X-Google-Smtp-Source: ACHHUZ4TX56WP8rsXkEdHgG92WgSIInFIdhK/0r9I6Yny2/T+tWmwnxJgeM4yFWmXcBLeyDL/ivuog==
-X-Received: by 2002:adf:df89:0:b0:30f:cdbd:f990 with SMTP id z9-20020adfdf89000000b0030fcdbdf990mr12719312wrl.53.1687426010883;
-        Thu, 22 Jun 2023 02:26:50 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id x1-20020a5d4441000000b00311d8c2561bsm6599907wrr.60.2023.06.22.02.26.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 02:26:50 -0700 (PDT)
-Message-ID: <b7ffa43c-3dee-b0cf-2672-6b56fcbcd0e6@linaro.org>
-Date:   Thu, 22 Jun 2023 11:26:48 +0200
+        Thu, 22 Jun 2023 05:33:35 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96CC22680;
+        Thu, 22 Jun 2023 02:27:57 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0FD896607073;
+        Thu, 22 Jun 2023 10:27:55 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687426076;
+        bh=n60Nnkye8r/c8jtqTXR1I8KmtkRw4j4pm889IszmYGQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NECcTL/2YOvYlEw23rdS9SLXKzrwVcPE3gZzI6if3iQH0VmvoT7MMCgVIBImwEC6u
+         p2KOpCtSWUdNX2Wk5mcRflVDktMD4NmzY4IpL0ypwFdTZUJKALvX30qUbDW24fmooH
+         ptbd7xOW06a0BWniHhLhsk3/t86n19S4zqulXy/7I3zXM6W1e2YsvPj6mK9+sY8tEY
+         w/e2fKUh5RWUkMFhgDlilka1Cqd0MBIrsD9xxrdqm07QUNMUWEJkbdItWq8lHD+lRS
+         diQtcI5Jrf1DgrDpT76/fKekf3+Lq2g+G155k9VP+qfowucpNB/ZGEv9upu2rwlx8R
+         xHdF16df94NSA==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     agross@kernel.org
+Cc:     andersson@kernel.org, luca@z3ntu.xyz, konrad.dybcio@linaro.org,
+        dmitry.baryshkov@linaro.org, joro@8bytes.org, will@kernel.org,
+        robin.murphy@arm.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        robdclark@gmail.com, linux-arm-msm@vger.kernel.org,
+        iommu@lists.linux.dev, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com
+Subject: [PATCH v5 0/6] Add support for Qualcomm's legacy IOMMU v2
+Date:   Thu, 22 Jun 2023 11:27:36 +0200
+Message-Id: <20230622092742.74819-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 0/2]: Enable UBIFS support
-Content-Language: en-US
-To:     kah.jing.lee@intel.com, Dinh Nguyen <dinguyen@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-References: <20230622080435.471363-1-kah.jing.lee@intel.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230622080435.471363-1-kah.jing.lee@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2023 10:04, kah.jing.lee@intel.com wrote:
-> From: Kah Jing Lee <kah.jing.lee@intel.com>
-> 
-> Hi,
-> The patchset is to update the qspi mtd partition range for UBIFS on
-> socfpga platform. The subsequent patch is enable the UBIFS in defconfig.
-> 
-> Alif Zakuan Yuslaimi (2):
->   arch: arm64: boot: dts: Updated QSPI Flash layout for UBIFS
->   arch: arm64: configs: Enable UBI and UBIFS
+This series adds support for handling "v2" firmware's IOMMU, found
+on at least MSM8956 and MSM8976 (some other SoCs also need the same
+but I honestly don't remember which ones precisely).
 
-Please use subject prefixes matching the subsystem. You can get them for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching.
+This is strictly required to get functional IOMMUs on these SoCs.
 
-Your patchset has also broken/missing threading. Read carefully
-submitting patches and rest of documentation.
+I'm sorry for not performing a much needed schema conversion on
+qcom,iommu.txt, but I really didn't have time to do that :-(
 
-Best regards,
-Krzysztof
+This series was tested on Sony Xperia X and X Compact (MSM8956):
+ADSP, LPASS, Venus, MSS, MDP and GPU are happy :-)
+
+Changes in v5:
+ - Renamed "qcom,ctx-num" to "qcom,ctx-asid" as suggested
+   by Rob Herring
+
+Changes in v4:
+ - Rebase over next-20230619
+ - Rewrite qcom,iommu.txt changes to qcom,iommu.yaml
+ - Changed reset writes to only disable CB through CB_SCTLR
+   and reset CB_FSR and CB_FAR
+ - Addressed misc reviewer's comments
+
+Changes in v3:
+ - Removed useless FSRRESTORE reset and definition as pointed
+   out in Robin Murphy's review
+ - Fixed qcom,iommu.txt changes: squashed MSM8976 compatible
+   string addition with msm-iommu-v2 generics addition
+
+Changes in v2:
+ - Added back Marijn's notes (sorry man!)
+ - Added ARM_SMMU_CB_FSRRESTORE definition
+ - Changed context bank reset to properly set FSR and FSRRESTORE
+
+AngeloGioacchino Del Regno (6):
+  dt-bindings: iommu: qcom,iommu: Add qcom,ctx-asid property
+  iommu/qcom: Use the asid read from device-tree if specified
+  iommu/qcom: Disable and reset context bank before programming
+  iommu/qcom: Index contexts by asid number to allow asid 0
+  dt-bindings: iommu: qcom,iommu: Add QSMMUv2 and MSM8976 compatibles
+  iommu/qcom: Add support for QSMMUv2 and QSMMU-500 secured contexts
+
+ .../devicetree/bindings/iommu/qcom,iommu.yaml | 22 +++++--
+ drivers/iommu/arm/arm-smmu/qcom_iommu.c       | 62 ++++++++++++++-----
+ 2 files changed, 64 insertions(+), 20 deletions(-)
+
+-- 
+2.40.1
 
