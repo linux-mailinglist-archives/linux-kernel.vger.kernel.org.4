@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 570AD739450
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 03:12:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AF6E739451
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 03:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjFVBMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 21:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41144 "EHLO
+        id S230012AbjFVBM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 21:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230074AbjFVBMl (ORCPT
+        with ESMTP id S230089AbjFVBMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 21:12:41 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2092.outbound.protection.outlook.com [40.107.92.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB551BEA
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 18:12:38 -0700 (PDT)
+        Wed, 21 Jun 2023 21:12:49 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2116.outbound.protection.outlook.com [40.107.95.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B93A1BD9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 18:12:42 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WvT84yydpXI6FjX1/bCSC8vhLO/uKVQ5kuP+ti1hng/SGUm855FIc/Chbas9u292e8gUorcpRfAZSPdjn9VeVDkOVYwxIjPJdjJRfT2TVRQ5dMzyNZf+6etoXZPodj3+F9rRAUsPvNjGjAZb40xBbiabFjXRTuskcA1DgRl9ypOR9zRrqKZ1iPehT5ZFzMcstVt8KlbQtO0wa9V3MNS4IjCYykL+doPKGEe1XtTON8yi8GMwUOrz3BwbdZ8wAwkb3dDaV0h6Yta7xuGFBxENqw4T10sIqiwh2OAPyejgfqKtKx0a1DzlZuFu5bHmuL07ieB/e+6B1brkvJQ9MOab4g==
+ b=WL/pf9TTPuUaEze8YYGOkuMyRIcPFEdIohwPIOlscNIsLIEez5Yzx8x6JSjDIIaJMDAOpyqJWPxVrACr44d12TU+JlDMxm4KCHq98GmOsYuovAtVFV5L0NwbkjdlKEDCdPpWb36b2Bm3Qp45ISy7xK29gpYzhGvxZVh396TUmM4azBoud1L+v7Ka72J4AqGoM3IaGRrsLK4oAEiwYgNmjc8LaaWSqqiakPiiDpBv1GlnZ2D8t34B0sg6xMhHBOoadfHI8xnaJj8pUu/Xz4kzeslC3vB87/s0+Ju4Q0j280EqVg+ABouzJEigyy0+BtB4hAasrRJp8a6bJilFyro2+Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=j1Np9axgFb3diOIO8yZgWlgDmY3jjcwVHh+rWeAvk3s=;
- b=CQUffigQLuCmFmJ5jIIWBOp01zQL2hrVtnMVwiqG4k12Lz4LUHisQwDm8oXYzH5KcERIOFz4WUpmaddv23w88RSQYQ0flAf1HnW2aW+sqYLsd5aGmoPf5GJPqQcZxpwUfQUQ/Ef46Zz+rVY2QWpZjNsPDOPtW4rJD3BPx1uLGdE5ZfhpsPAA8hencd7rJEtN4uWH04LDDgSQIggHq9slM0LB1K0lMJyV78gZph0aZfNtV/vnbDdk4DgwtOYsa/7DfqyNR/sW/kMhT1hTveH+NWAE0R3S38A14MwIYdSZ3sXtI11VgwetAcLuPqv0q+O1CS5h3R44CWLweDmaJ2acMw==
+ bh=Ty7h61NH/aqjod1K1j+vBv8EmKWo6p+iMP5xswS5Pic=;
+ b=gMdSUJ+bZhZ3bDa/oJTH/+m7NTmdyqmuAdTui/JrefojlFGdjY6g49RQyUAqD/7fpEI02MaEGv66rm3LF/8ff9MTGkP/0M4+EI9CsGQqLdZvTnPQB4hdVnSEfJueJZPXBcXM6YxT5zr8NT5wq+2snFkLn5XuOEnDu2TMY8171gEk9klQtiW+Q6RTAQBB1bwrqB1Dy1WgJfwHhwoqCMMLMS9ucyu+QsyQXV+wCruv3fk6pPcRtK6EMqFqLuwm4PjoXXZ7viSdLVUED5OyLkY8oEPCdMocLyfgkRD1l5XVhCu0AAbWqeaUGR9dTFBR4qJhQv80huEL2CoZ7lyULske2Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
  header.from=os.amperecomputing.com; dkim=pass
@@ -29,18 +29,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=os.amperecomputing.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j1Np9axgFb3diOIO8yZgWlgDmY3jjcwVHh+rWeAvk3s=;
- b=Y1bXb8Qfv6xSh5yrH92rmEx9/4SZDucnnVJoHFHUlBLrh4lOpqF3OxrCfmde66+4u4BCfqZTYufkVKntprJUnScylLbRomIXyl9i+7lJyfuv6bx3h59P5kZIaQfx3CIxRcPNNnyfQMQeNowIKg6F+XNJBXnYoCQYuEwt9d8lA90=
+ bh=Ty7h61NH/aqjod1K1j+vBv8EmKWo6p+iMP5xswS5Pic=;
+ b=iX350sP+jZ6mZnoJKrK1Z/LnEAS2z5xL4dJqvwwd38ZQ8I3RcUBq6iDs+qqb78BpXJnI0C+meJ4RgjsDc/fmcGZqkklUGMqAPMVbHrqzffDDeac6S086XJIIo04KJtMjGFYymTevf4Hm3H7KrRAh0f31ZHRg9jqG0UQbpnQH9r4=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
 Received: from DM5PR0102MB3590.prod.exchangelabs.com (2603:10b6:4:a4::25) by
  DS7PR01MB7805.prod.exchangelabs.com (2603:10b6:8:7c::15) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6521.21; Thu, 22 Jun 2023 01:12:36 +0000
+ 15.20.6521.21; Thu, 22 Jun 2023 01:12:39 +0000
 Received: from DM5PR0102MB3590.prod.exchangelabs.com
  ([fe80::a323:29a7:2fd7:621]) by DM5PR0102MB3590.prod.exchangelabs.com
  ([fe80::a323:29a7:2fd7:621%4]) with mapi id 15.20.6500.036; Thu, 22 Jun 2023
- 01:12:36 +0000
+ 01:12:39 +0000
 From:   Ilkka Koskinen <ilkka@os.amperecomputing.com>
 To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
         Besar Wicaksono <bwicaksono@nvidia.com>,
@@ -48,9 +48,9 @@ To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
         Mark Rutland <mark.rutland@arm.com>
 Cc:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] perf: arm_cspmu: Support implementation specific validation
-Date:   Wed, 21 Jun 2023 18:11:40 -0700
-Message-Id: <20230622011141.328029-4-ilkka@os.amperecomputing.com>
+Subject: [PATCH 4/4] perf: arm_cspmu: ampere_cspmu: Add support for Ampere SoC PMU
+Date:   Wed, 21 Jun 2023 18:11:41 -0700
+Message-Id: <20230622011141.328029-5-ilkka@os.amperecomputing.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230622011141.328029-1-ilkka@os.amperecomputing.com>
 References: <20230622011141.328029-1-ilkka@os.amperecomputing.com>
@@ -62,51 +62,51 @@ X-ClientProxiedBy: CH0PR13CA0017.namprd13.prod.outlook.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DM5PR0102MB3590:EE_|DS7PR01MB7805:EE_
-X-MS-Office365-Filtering-Correlation-Id: 58d710fb-c0aa-450b-8c29-08db72bdc404
+X-MS-Office365-Filtering-Correlation-Id: a9da79b9-ecb1-470f-8486-08db72bdc5c9
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HeKi/zMF7y0QTVMmtGnfVgXkbnupKL73vwe9dqVoAWvAsBv+fveHiFDxDW3F8gSTDb6Zch5Kd0WzMFxyYgusnkXyo1O9EUM60zRnaQaE1U/ijSd792acEyPK7LtEhN8JdV3b7WPgOiyobVpM+XuCFmuKLoVKaZPiJjajdnQKros7K+f0oDWGtOs/qiEXFllwIyX5R0Gxlj1lgol5HwTCIKdGPLeosP69Ew/FGsLe6nyxeQSkOSg+8Uvb0U3vnkshgkKrhRJYFcJEf4LALEoH78rg/gditgLDE07axzokpZfIjwG4BCdLZRCXnsP1qmtyDwGNt7o7bsW5p4Sh1Wq7RCida+d/s7R+2R1YAYI0DLnDKWg/8Bjoii0bxD2u9xM6KAvLh9X04zXHY6/MCoe/Dl9woq94QbpTb6tqI63e3ldOH4cBtnm9l1BOPlUlC/q85De219EExXhdnt4adkPZ1zbevmOKw2ecM3Mug4M1yIzse0LFJCHaz+DqDvh8UR4EVc/Rz1qVy2tY+Kym1Y9SjTJu71Bu4YFIb0oFYSnxA1FHsh5Ti7AGlQplHFFBfP9Oe/fXDUpjwmvAgnDwMFcjWMFF0oRM7rLD4aFvp/LOKhBuMq12GEpAhgmYXxoJHZcl
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR0102MB3590.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39850400004)(346002)(136003)(366004)(396003)(451199021)(8936002)(41300700001)(186003)(8676002)(26005)(1076003)(6506007)(2906002)(6512007)(86362001)(110136005)(66476007)(66556008)(4326008)(66946007)(6486002)(6666004)(316002)(38350700002)(38100700002)(478600001)(52116002)(2616005)(83380400001)(5660300002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: zVAybRCmso13uuuEZDoP8f5bc7w2rZ1P/HkUEjDYF61sD5QVcwhh6mh/Y8sHtJ81eYtWg6Bv+TqCrbSWGt8Cj/nbBBY6GBFjT3fbi4YK2hTCqsQ98h11K2WOupESv7aLhLZlLTuTvu12EaKF0nTHxHGIxgYrbXDrMHZWKn6n1hQT7RpUoq0mkq6kQdsMymrou0HQnnyVNbVHTIX3IDZF4D5TS4OZ3KRvo9oModvZna6ujkGHzuKc1itusNiy/98qva+86JRvOs2LrmRS3+oMShToWkiSzUUgMvstnNKWsrs78hgJOKEU8nBQGw99PRguIpNnxR4kj4XK7qIld/Jc1OwoRbPbWafo9y5RhepXJvTByPltLAZpy5F/YkOVDr5PLzvHm4/zbWSTxHcvn0BHJwRh1M9ebkNeeh5sBqnoJKGD432zkyI+sexVL0fG2aHsFngM7kJDafD7CookGxCJREr5QtV/bpBrKZjUvDMMQ6JelxRjp6tRzr3HDM6k+pm36ZwGQxz8x5Kau/ewmLOFyJ8RThuhcjuihhYkVnXaBlmleIH/4Jgpek1pRb7ik0nN0A3xNghhNlQQ/JjGUaRCJ4CSIJ3G0C+eRBc/ggdIoj6TFPVgTZexnmjJHkrilKpj
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR0102MB3590.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39850400004)(346002)(136003)(366004)(396003)(451199021)(8936002)(41300700001)(186003)(8676002)(26005)(1076003)(6506007)(2906002)(6512007)(86362001)(110136005)(66476007)(66556008)(4326008)(66946007)(6486002)(6666004)(316002)(38350700002)(38100700002)(478600001)(52116002)(2616005)(83380400001)(30864003)(5660300002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?EBLSFT27DV2Zes68rL0GL3RYrznhxz8rFs8QzKbnKiUF28EdWrIm01AbsiZg?=
- =?us-ascii?Q?sk3IzEoHehl/8Tis8788m7sDGRi0RpdN5BsVbDSDGxeFQpIgdOtn8TcmBXFj?=
- =?us-ascii?Q?5sq7pIfItFGjKf1YdH+5RFQWVvMz6astFBOT+lwvBuSPc7Lz6vWNS6uLuxYA?=
- =?us-ascii?Q?oHcD+YUyWnSpp+/Peoi+R/ZiBcvHSvDwGe7IykSdkW6HgFdFHy/KDDJNwjQN?=
- =?us-ascii?Q?IkXxgsf42QZGx9D35LqKQF4nSDkjuXNBXEOYIJIolEU16CStXvID4uRMf4wP?=
- =?us-ascii?Q?JjqNMnl+kwG3ULgtEu8zz+7lw08COYjD2+gLaktExlmVN4Vtr7QJR2Ap5u6Q?=
- =?us-ascii?Q?UQo6BuyW/Uav8FX+AnGib7Dia0KGNJO36JrS944hX7aubXfSZhQls3DJ7XdI?=
- =?us-ascii?Q?1cVYWffrK0X/t+cJxrc0TiRYm7nLQ1ZrnNrTFe/uNGTLJk/Kzw87EZLfYwtA?=
- =?us-ascii?Q?/lMfFeEj0sX+4VcLNLH8aCD8KyCXSCZHUeiorz8UbZOos3EsV3tWuKSnmvmn?=
- =?us-ascii?Q?82//dT0NWUePr/rYTXECuqtxWzMPuZNztgfqz7HsLtCD4B8YwOlEAEoLTN+Z?=
- =?us-ascii?Q?K1sNMDJaRMHuxPw/W+ZuB5kCKFfc0XfTKh3irdI65XHHXzhLZE2VTx4xAL5D?=
- =?us-ascii?Q?NWA8MTsKhbJ8LkAwpCuljFULOHI/HoWZP/+ukbMl9wjzhQ40H+85sWq5nzvV?=
- =?us-ascii?Q?hZMm1HtkepPcYdQp85C478Ps7DnzOwp3XYZLx/zKGhd7wamh6L5YslIjkQKa?=
- =?us-ascii?Q?XKL418rKNf+dNDsc/2La1Fn4s9CXPSRLv3yRInbvPhM0wJDv7UCjjRPOz/bt?=
- =?us-ascii?Q?6SsLPMOH9Y3tHxLA7Vasy5aJ6Ci+gCh/eW1OawNs7NIaXuEjUKhnBXSzdyzr?=
- =?us-ascii?Q?fH30IG/VfPsJY3tBjkHCpoePIVp1+s4Mu3KaEczMR0bCoTORSpt2pn3eQKJD?=
- =?us-ascii?Q?L8M9+8ORfU2XoScVoeAlWzKgxsx/txdlO0kucEOru6xwEMWaRKHuUZaqIEZo?=
- =?us-ascii?Q?kVcDJY+qkdVFJyVNnP8SuFernLFtEz2fJb1n+FwSMl7kcN+ELWiW4f6Fw8kT?=
- =?us-ascii?Q?3nPM0EiSysAm2SrrKKzey2mUh6LJb6OShC0S52tUPK2dx8cUiIRfuBn+nN4l?=
- =?us-ascii?Q?nFLFXYXIiL9TmH8B3VaIFsEo68TXyFP7Qe2rlU0RCUX/HI2isAk21XB5ks1Y?=
- =?us-ascii?Q?7iqwMyDT/Xr3aIeGHbHm+xsR5/j/njf1zFjgIoxHNSp8f+RoWgRJ9GSenM7d?=
- =?us-ascii?Q?yDNcdT/rbfMxhVzZrerGpYias39RKNSJN7iC4EYARlJSylcZ4Ye6qJ2KSnHg?=
- =?us-ascii?Q?CBNc1yGlWZL3ySxDNNUgfOt+fQcdqeKEPmf6kliYo7Ng6dLUoVPU50fZWido?=
- =?us-ascii?Q?7Pezz/rlGPM1hcYbCiE6biPX+iI0UwEgHxw9NDCEYt4LhW7E6zw9XMf8C9an?=
- =?us-ascii?Q?IVyP88VqhPMPzfnrOi0Mqp4s9v5lg5s11NrZgSh0alZDKeL3jvZUCEdei2Az?=
- =?us-ascii?Q?z3dWmB8Zzd9dbuQZEuLh6KsfUENk3BDfKgMYK1IpI5UyGwV7f7MdE67yoydn?=
- =?us-ascii?Q?ylXXgkMCIGw6DeLGkDCtY9adjdzvOkr9rl/12FCLaKL0wNki1I2+zkAMYORE?=
- =?us-ascii?Q?X/o9imAgjAKH1bHjdUXzhw0=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?USw9BD6nzBn8P9ApKp37Rvkg7ewLO540zN9RfhdWq+AwI/wQ0VgaOWBrtP+D?=
+ =?us-ascii?Q?NU8O/jkvcJF3OSvmnYXRNgXMXUUwEcSH0vD8o0Iyrj09aCpmujNawnhwjJGh?=
+ =?us-ascii?Q?vF8Aw52HeXajjF0WjN80wpsuqM/pJI4Pn2rSID41wd7Qry6v/6apBgDP/LiG?=
+ =?us-ascii?Q?PfYEJBnxJYZNW3mXfUIeMprj4s9jhvoVyj74Oh7diIR8QiUFDz+ccm7LxqBq?=
+ =?us-ascii?Q?+F1MIGAeH3zLM/2DRJ8o7RJ2lCsj4PM/XAo5kxUaMxdXWO8tvTf4U4V0RciH?=
+ =?us-ascii?Q?QzGltQ0YAjuoCu3qITQQYMWhXWWMbl70DWvf3Kf1bNPwG461V9oV3+/Kn/aH?=
+ =?us-ascii?Q?ABiycriqrDque5X4MmR8uVuf0yRrFtjQIJCFnttYDC3STd2q4bGz5ura6cOi?=
+ =?us-ascii?Q?4VnTvvD/2IddD78i8OJEqyZ1yxp3ggsa3Rw6On8f+LhgIHcduMkChFMUpUo2?=
+ =?us-ascii?Q?E4frdp1sSJzQ9MFrKqJySG8goMLn5nfLXA8RuvSMYTixPfQd4FA4SLnn5T+i?=
+ =?us-ascii?Q?o83YgzEFfhfCiaze0J9VCMYBqXTVUDSObaqbbskI+MCm2Krf1LiyydEd+V0s?=
+ =?us-ascii?Q?wrvxn5txJ9v+jzmQCF58PTbutwMdug9jlnA5NN2FXLl5mhgQlKtE3NSHJadu?=
+ =?us-ascii?Q?IslyxdLYN9bOO4pRa384UqfKhNO7IMs9mXh2oRyShyvDVA7iR8hVcR05bdya?=
+ =?us-ascii?Q?LX3ow6mS75Es8qtwhfrXwiQwejnkE/oJSC89cXZ1iV1DM0QfFLQgFkV2RthJ?=
+ =?us-ascii?Q?Yw8fGcZXdfAIuO/jBvbF9zIZH36VOLYjJuQyM7lFQE6o5RYGc9Y7ZMqDeTC1?=
+ =?us-ascii?Q?iEV9p8xP2ayrpm/T0a3LuaBmIDyMJyNt4OD69f2ekyMmo9jGz++FX2dhOZVt?=
+ =?us-ascii?Q?8IIxPsWf+DryCK2tMcISIk6tfMLOhYvWyNEa2aJiBlsKdlz0snU8RnW25Zyj?=
+ =?us-ascii?Q?746NnzgT5VFiWFi9cn/Vzsk2hx1RFrSWtePuYASuKvItBujFVH4TfhiKoXU7?=
+ =?us-ascii?Q?BftSC9wbl6Mr1i9lcHufnwXZBZMRcoNHkkqV+bLXWexoU7LmMauWs0QWbQ2h?=
+ =?us-ascii?Q?o3vRkXv9xZCL9I563SfnjMBdT0fXSAfIzbjQu9yXyfPWburupMWNDcux+Ivi?=
+ =?us-ascii?Q?qrErV+2S36GWeE6RkuKxoBkv4jGy391yK1vYaFq6frgWvqfwbibJPgsR+6K9?=
+ =?us-ascii?Q?oorFYik0bvg90jkxsQmwTACxupflaVG+OGuRWV3FQ2VR2o7rKp+Up2sU0s74?=
+ =?us-ascii?Q?mkYWgSl4ZmefQ8m1WHad4WMaQ8+Kb6nePNRLwwJatjrDwKDfo+qMIhDYz5XS?=
+ =?us-ascii?Q?g51/6rrvgBWHsR6PYXon2Cw1WOLxtt1P1Q4ywoCfVw/4HgQNTmLwfHM4IsM/?=
+ =?us-ascii?Q?RawhfbQBrUzUVszJa55ymQ+1l2UDKUx32yLGBzzuOM3KwQbPNo0jMdeXVoHk?=
+ =?us-ascii?Q?cJ6nFtlYLfjXXz92kl2a0wGAL03FJEQDaC8kAHe1wj+spSoysWyfI3+OLBr/?=
+ =?us-ascii?Q?k7F2wQEfbDEYU+M0k+idRzA+LEWoYIblJsdabNh8oFXZVJd24gztSGDDztCs?=
+ =?us-ascii?Q?YeNIqYj8mK9KZC0AvbQXfFGv4wwdz48bY9Y59v3ecp3ARywGsm9fe8ybMaEJ?=
+ =?us-ascii?Q?B7AMYgf1FfPoH0q1g9RzygY=3D?=
 X-OriginatorOrg: os.amperecomputing.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 58d710fb-c0aa-450b-8c29-08db72bdc404
+X-MS-Exchange-CrossTenant-Network-Message-Id: a9da79b9-ecb1-470f-8486-08db72bdc5c9
 X-MS-Exchange-CrossTenant-AuthSource: DM5PR0102MB3590.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 01:12:36.7319
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 01:12:39.7275
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mlKnYQeJQOZySLBJqrVe5XPQZ39uYyfPnUfhVhEXTYF7oKeX0ThA9ah+0vqxf0XuetNrRvNeh0BTUaBKbhXGozwP3Q1fu6KZRWTpDI3uVx6VvYJGpTo+FNCTZulI6otR
+X-MS-Exchange-CrossTenant-UserPrincipalName: SWIaxcTQp/5PQgwSNTeKftj3eeo26Vx7+sn52+m745vtWrSvMUo8eOVyZYMnPyU/9tSk24HsyliH97kB8eRTBV06YigYR1t3QPL+QNLG8W6WvMZm99MH+LxFSJavHXXO
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR01MB7805
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -118,55 +118,359 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some platforms may use e.g. different filtering mechanism and, thus,
-may need different way to validate the events and group.
+Ampere SoC PMU follows CoreSight PMU architecture. It uses implementation
+specific registers to filter events rather than PMEVFILTnR registers.
 
 Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
 ---
- drivers/perf/arm_cspmu/arm_cspmu.c | 8 +++++++-
- drivers/perf/arm_cspmu/arm_cspmu.h | 3 +++
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ .../admin-guide/perf/ampere_cspmu.rst         |  29 +++
+ drivers/perf/arm_cspmu/Makefile               |   2 +-
+ drivers/perf/arm_cspmu/ampere_cspmu.c         | 232 ++++++++++++++++++
+ drivers/perf/arm_cspmu/ampere_cspmu.h         |  17 ++
+ drivers/perf/arm_cspmu/arm_cspmu.c            |   7 +
+ 5 files changed, 286 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/admin-guide/perf/ampere_cspmu.rst
+ create mode 100644 drivers/perf/arm_cspmu/ampere_cspmu.c
+ create mode 100644 drivers/perf/arm_cspmu/ampere_cspmu.h
 
+diff --git a/Documentation/admin-guide/perf/ampere_cspmu.rst b/Documentation/admin-guide/perf/ampere_cspmu.rst
+new file mode 100644
+index 000000000000..bf86bffeef63
+--- /dev/null
++++ b/Documentation/admin-guide/perf/ampere_cspmu.rst
+@@ -0,0 +1,29 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++============================================
++Ampere SoC Performance Monitoring Unit (PMU)
++============================================
++
++Ampere SoC PMU is a generic PMU IP that follows Arm CoreSight PMU architecture.
++Therefore, the driver is implemented as a submodule of arm_cspmu driver. At the
++first phase it's used for counting MCU events on AmpereOne.
++
++
++MCU PMU events
++--------------
++
++The PMU driver supports setting filters for "rank", "bank", and "threshold".
++Note, that the filters are per PMU instance rather than per event.
++
++
++Example for perf tool use::
++
++  / # perf list ampere
++
++    ampere_mcu_pmu_0/act_sent/                         [Kernel PMU event]
++    <...>
++    ampere_mcu_pmu_1/rd_sent/                          [Kernel PMU event]
++    <...>
++
++  / # perf stat -a -e ampere_mcu_pmu_0/act_sent,filter_enable=3,bank=5,rank=3,threshold=2/,ampere_mcu_pmu_1/rd_sent/ \
++        sleep 1
+diff --git a/drivers/perf/arm_cspmu/Makefile b/drivers/perf/arm_cspmu/Makefile
+index fedb17df982d..b80a8bd8da54 100644
+--- a/drivers/perf/arm_cspmu/Makefile
++++ b/drivers/perf/arm_cspmu/Makefile
+@@ -3,4 +3,4 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ obj-$(CONFIG_ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU) += arm_cspmu_module.o
+-arm_cspmu_module-y := arm_cspmu.o nvidia_cspmu.o
++arm_cspmu_module-y := arm_cspmu.o nvidia_cspmu.o ampere_cspmu.o
+diff --git a/drivers/perf/arm_cspmu/ampere_cspmu.c b/drivers/perf/arm_cspmu/ampere_cspmu.c
+new file mode 100644
+index 000000000000..62dc893c94c1
+--- /dev/null
++++ b/drivers/perf/arm_cspmu/ampere_cspmu.c
+@@ -0,0 +1,232 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Ampere SoC PMU (Performance Monitor Unit)
++ *
++ * Copyright (c) 2023, Ampere Computing LLC
++ */
++
++#include "ampere_cspmu.h"
++
++#define PMAUXR0		0xD80
++#define PMAUXR1		0xD84
++#define PMAUXR2		0xD88
++#define PMAUXR3		0xD8C
++
++#define to_ampere_cspmu_ctx(cspmu)	((struct ampere_cspmu_ctx *)(cspmu->impl.ctx))
++
++struct ampere_cspmu_ctx {
++	const char *name;
++	struct attribute **event_attr;
++	struct attribute **format_attr;
++};
++
++#define SOC_PMU_EVENT_ATTR_EXTRACTOR(_name, _config, _start, _end)        \
++	static inline u32 get_##_name(const struct perf_event *event)     \
++	{                                                                 \
++		return FIELD_GET(GENMASK_ULL(_end, _start),               \
++				 event->attr._config);                    \
++	}                                                                 \
++
++SOC_PMU_EVENT_ATTR_EXTRACTOR(event, config, 0, 8);
++SOC_PMU_EVENT_ATTR_EXTRACTOR(threshold, config1, 0, 7);
++SOC_PMU_EVENT_ATTR_EXTRACTOR(rank, config1, 8, 23);
++SOC_PMU_EVENT_ATTR_EXTRACTOR(bank, config2, 0, 31);
++
++static struct attribute *ampereone_mcu_pmu_event_attrs[] = {
++	ARM_CSPMU_EVENT_ATTR(cycle_count,		0x00),
++	ARM_CSPMU_EVENT_ATTR(act_sent,			0x01),
++	ARM_CSPMU_EVENT_ATTR(pre_sent,			0x02),
++	ARM_CSPMU_EVENT_ATTR(rd_sent,			0x03),
++	ARM_CSPMU_EVENT_ATTR(rda_sent,			0x04),
++	ARM_CSPMU_EVENT_ATTR(wr_sent,			0x05),
++	ARM_CSPMU_EVENT_ATTR(wra_sent,			0x06),
++	ARM_CSPMU_EVENT_ATTR(pd_entry_vld,		0x07),
++	ARM_CSPMU_EVENT_ATTR(sref_entry_vld,		0x08),
++	ARM_CSPMU_EVENT_ATTR(prea_sent,			0x09),
++	ARM_CSPMU_EVENT_ATTR(pre_sb_sent,		0x0a),
++	ARM_CSPMU_EVENT_ATTR(ref_sent,			0x0b),
++	ARM_CSPMU_EVENT_ATTR(rfm_sent,			0x0c),
++	ARM_CSPMU_EVENT_ATTR(ref_sb_sent,		0x0d),
++	ARM_CSPMU_EVENT_ATTR(rfm_sb_sent,		0x0e),
++	ARM_CSPMU_EVENT_ATTR(rd_rda_sent,		0x0f),
++	ARM_CSPMU_EVENT_ATTR(wr_wra_sent,		0x10),
++	ARM_CSPMU_EVENT_ATTR(raw_hazard,		0x11),
++	ARM_CSPMU_EVENT_ATTR(war_hazard,		0x12),
++	ARM_CSPMU_EVENT_ATTR(waw_hazard,		0x13),
++	ARM_CSPMU_EVENT_ATTR(rar_hazard,		0x14),
++	ARM_CSPMU_EVENT_ATTR(raw_war_waw_hazard,	0x15),
++	ARM_CSPMU_EVENT_ATTR(hprd_lprd_wr_req_vld,	0x16),
++	ARM_CSPMU_EVENT_ATTR(lprd_req_vld,		0x17),
++	ARM_CSPMU_EVENT_ATTR(hprd_req_vld,		0x18),
++	ARM_CSPMU_EVENT_ATTR(hprd_lprd_req_vld,		0x19),
++	ARM_CSPMU_EVENT_ATTR(prefetch_tgt,		0x1a),
++	ARM_CSPMU_EVENT_ATTR(wr_req_vld,		0x1b),
++	ARM_CSPMU_EVENT_ATTR(partial_wr_req_vld,	0x1c),
++	ARM_CSPMU_EVENT_ATTR(rd_retry,			0x1d),
++	ARM_CSPMU_EVENT_ATTR(wr_retry,			0x1e),
++	ARM_CSPMU_EVENT_ATTR(retry_gnt,			0x1f),
++	ARM_CSPMU_EVENT_ATTR(rank_change,		0x20),
++	ARM_CSPMU_EVENT_ATTR(dir_change,		0x21),
++	ARM_CSPMU_EVENT_ATTR(rank_dir_change,		0x22),
++	ARM_CSPMU_EVENT_ATTR(rank_active,		0x23),
++	ARM_CSPMU_EVENT_ATTR(rank_idle,			0x24),
++	ARM_CSPMU_EVENT_ATTR(rank_pd,			0x25),
++	ARM_CSPMU_EVENT_ATTR(rank_sref,			0x26),
++	ARM_CSPMU_EVENT_ATTR(queue_fill_gt_thresh,	0x27),
++	ARM_CSPMU_EVENT_ATTR(queue_rds_gt_thresh,	0x28),
++	ARM_CSPMU_EVENT_ATTR(queue_wrs_gt_thresh,	0x29),
++	ARM_CSPMU_EVENT_ATTR(phy_updt_complt,		0x2a),
++	ARM_CSPMU_EVENT_ATTR(tz_fail,			0x2b),
++	ARM_CSPMU_EVENT_ATTR(dram_errc,			0x2c),
++	ARM_CSPMU_EVENT_ATTR(dram_errd,			0x2d),
++	ARM_CSPMU_EVENT_ATTR(read_data_return,		0x32),
++	ARM_CSPMU_EVENT_ATTR(chi_wr_data_delta,		0x33),
++	ARM_CSPMU_EVENT_ATTR(zq_start,			0x34),
++	ARM_CSPMU_EVENT_ATTR(zq_latch,			0x35),
++	ARM_CSPMU_EVENT_ATTR(wr_fifo_full,		0x36),
++	ARM_CSPMU_EVENT_ATTR(info_fifo_full,		0x37),
++	ARM_CSPMU_EVENT_ATTR(cmd_fifo_full,		0x38),
++	ARM_CSPMU_EVENT_ATTR(dfi_nop,			0x39),
++	ARM_CSPMU_EVENT_ATTR(dfi_cmd,			0x3a),
++	ARM_CSPMU_EVENT_ATTR(rd_run_len,		0x3b),
++	ARM_CSPMU_EVENT_ATTR(wr_run_len,		0x3c),
++
++	ARM_CSPMU_EVENT_ATTR(cycles, ARM_CSPMU_EVT_CYCLES_DEFAULT),
++	NULL,
++};
++
++static struct attribute *ampereone_mcu_format_attrs[] = {
++	ARM_CSPMU_FORMAT_EVENT_ATTR,
++	ARM_CSPMU_FORMAT_ATTR(threshold, "config1:0-7"),
++	ARM_CSPMU_FORMAT_ATTR(rank, "config1:8-23"),
++	ARM_CSPMU_FORMAT_ATTR(bank, "config2:0-31"),
++	NULL,
++};
++
++static struct attribute **
++ampere_cspmu_get_event_attrs(const struct arm_cspmu *cspmu)
++{
++	const struct ampere_cspmu_ctx *ctx = to_ampere_cspmu_ctx(cspmu);
++
++	return ctx->event_attr;
++}
++
++static struct attribute **
++ampere_cspmu_get_format_attrs(const struct arm_cspmu *cspmu)
++{
++	const struct ampere_cspmu_ctx *ctx = to_ampere_cspmu_ctx(cspmu);
++
++	return ctx->format_attr;
++}
++
++static const char *
++ampere_cspmu_get_name(const struct arm_cspmu *cspmu)
++{
++	const struct ampere_cspmu_ctx *ctx = to_ampere_cspmu_ctx(cspmu);
++
++	return ctx->name;
++}
++
++static u32 ampere_cspmu_event_filter(const struct perf_event *event)
++{
++	return 0;
++}
++
++static void ampere_cspmu_set_ev_filter(struct arm_cspmu *cspmu,
++				       struct hw_perf_event *hwc,
++				       u32 filter)
++{
++	struct perf_event *event;
++	unsigned int idx;
++	u32 threshold, rank, bank;
++
++	/*
++	 * At this point, all the events have the same filter settings.
++	 * Therefore, take the first event and use its configuration.
++	 */
++	idx = find_first_bit(cspmu->hw_events.used_ctrs,
++			     cspmu->cycle_counter_logical_idx);
++
++	event = cspmu->hw_events.events[idx];
++
++	threshold	= get_threshold(event);
++	rank		= get_rank(event);
++	bank		= get_bank(event);
++
++	writel(threshold, cspmu->base0 + PMAUXR0);
++	writel(rank, cspmu->base0 + PMAUXR1);
++	writel(bank, cspmu->base0 + PMAUXR2);
++}
++
++static int ampere_cspmu_validate_configs(struct perf_event *event,
++					 struct perf_event *event2)
++{
++	if (get_threshold(event) != get_threshold(event2) ||
++	    get_rank(event) != get_rank(event2) ||
++	    get_bank(event) != get_bank(event2))
++		return -EINVAL;
++
++	return 0;
++}
++
++static int ampere_cspmu_validate_event(struct arm_cspmu *cspmu,
++				       struct perf_event *new)
++{
++	struct perf_event *curr, *leader = new->group_leader;
++	unsigned int idx;
++	int ret;
++
++	ret = ampere_cspmu_validate_configs(new, leader);
++	if (ret)
++		return ret;
++
++	/* We compare the global filter settings to existing events */
++	idx = find_first_bit(cspmu->hw_events.used_ctrs,
++			     cspmu->cycle_counter_logical_idx);
++
++	/* This is the first event */
++	if (idx == cspmu->cycle_counter_logical_idx)
++		return 0;
++
++	curr = cspmu->hw_events.events[idx];
++
++	return ampere_cspmu_validate_configs(curr, new);
++}
++
++static char *ampere_cspmu_format_name(const struct arm_cspmu *cspmu,
++				      const char *name_pattern)
++{
++	struct device *dev = cspmu->dev;
++	static atomic_t pmu_generic_idx = {0};
++
++	return devm_kasprintf(dev, GFP_KERNEL, name_pattern,
++			      atomic_fetch_inc(&pmu_generic_idx));
++}
++
++int ampere_cspmu_init_ops(struct arm_cspmu *cspmu)
++{
++	struct device *dev = cspmu->dev;
++	struct ampere_cspmu_ctx *ctx;
++	struct arm_cspmu_impl_ops *impl_ops = &cspmu->impl.ops;
++
++	ctx = devm_kzalloc(dev, sizeof(struct ampere_cspmu_ctx), GFP_KERNEL);
++	if (!ctx)
++		return -ENOMEM;
++
++	ctx->event_attr		= ampereone_mcu_pmu_event_attrs;
++	ctx->format_attr	= ampereone_mcu_format_attrs;
++	ctx->name		= ampere_cspmu_format_name(cspmu,
++							   "ampere_mcu_pmu_%u");
++	cspmu->impl.ctx = ctx;
++
++	impl_ops->event_filter		= ampere_cspmu_event_filter;
++	impl_ops->set_ev_filter		= ampere_cspmu_set_ev_filter;
++	impl_ops->validate_event	= ampere_cspmu_validate_event;
++	impl_ops->get_name		= ampere_cspmu_get_name;
++	impl_ops->get_event_attrs	= ampere_cspmu_get_event_attrs;
++	impl_ops->get_format_attrs	= ampere_cspmu_get_format_attrs;
++
++	return 0;
++}
++
++MODULE_LICENSE("GPL v2");
+diff --git a/drivers/perf/arm_cspmu/ampere_cspmu.h b/drivers/perf/arm_cspmu/ampere_cspmu.h
+new file mode 100644
+index 000000000000..9b3e1628d1d6
+--- /dev/null
++++ b/drivers/perf/arm_cspmu/ampere_cspmu.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++
++/*
++ * Ampere SoC PMU (Performance Monitor Unit)
++ *
++ * Copyright (c) 2023, Ampere Computing LLC
++ */
++
++#ifndef __AMPERE_CSPMU_H__
++#define __AMPERE_CSPMU_H__
++
++#include "arm_cspmu.h"
++
++/* Allocate AMPERE descriptor. */
++int ampere_cspmu_init_ops(struct arm_cspmu *cspmu);
++
++#endif /* __AMPERE_CSPMU_H__ */
 diff --git a/drivers/perf/arm_cspmu/arm_cspmu.c b/drivers/perf/arm_cspmu/arm_cspmu.c
-index fafd734c3218..471d6d7ac81a 100644
+index 471d6d7ac81a..587515eea0b4 100644
 --- a/drivers/perf/arm_cspmu/arm_cspmu.c
 +++ b/drivers/perf/arm_cspmu/arm_cspmu.c
-@@ -553,7 +553,7 @@ static void arm_cspmu_disable(struct pmu *pmu)
- static int arm_cspmu_get_event_idx(struct arm_cspmu_hw_events *hw_events,
- 				struct perf_event *event)
- {
--	int idx;
-+	int idx, ret;
- 	struct arm_cspmu *cspmu = to_arm_cspmu(event->pmu);
+@@ -29,6 +29,7 @@
+ #include <linux/perf_event.h>
+ #include <linux/platform_device.h>
  
- 	if (supports_cycle_counter(cspmu)) {
-@@ -587,6 +587,12 @@ static int arm_cspmu_get_event_idx(struct arm_cspmu_hw_events *hw_events,
- 	if (idx >= cspmu->num_logical_ctrs)
- 		return -EAGAIN;
++#include "ampere_cspmu.h"
+ #include "arm_cspmu.h"
+ #include "nvidia_cspmu.h"
  
-+	if (cspmu->impl.ops.validate_event) {
-+		ret = cspmu->impl.ops.validate_event(cspmu, event);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	set_bit(idx, hw_events->used_ctrs);
+@@ -114,6 +115,7 @@
  
- 	return idx;
-diff --git a/drivers/perf/arm_cspmu/arm_cspmu.h b/drivers/perf/arm_cspmu/arm_cspmu.h
-index d6d88c246a23..5070d34c2285 100644
---- a/drivers/perf/arm_cspmu/arm_cspmu.h
-+++ b/drivers/perf/arm_cspmu/arm_cspmu.h
-@@ -104,6 +104,9 @@ struct arm_cspmu_impl_ops {
- 	/* Set event filter */
- 	void (*set_ev_filter)(struct arm_cspmu *cspmu,
- 			      struct hw_perf_event *hwc, u32 filter);
-+	/* Implementation specific event validation */
-+	int (*validate_event)(struct arm_cspmu *cspmu,
-+			      struct perf_event *event);
- 	/* Hide/show unsupported events */
- 	umode_t (*event_attr_is_visible)(struct kobject *kobj,
- 					 struct attribute *attr, int unused);
+ /* JEDEC-assigned JEP106 identification code */
+ #define ARM_CSPMU_IMPL_ID_NVIDIA		0x36B
++#define ARM_CSPMU_IMPL_ID_AMPERE		0xA16
+ 
+ static unsigned long arm_cspmu_cpuhp_state;
+ 
+@@ -388,6 +390,11 @@ static const struct impl_match impl_match[] = {
+ 	  .mask = ARM_CSPMU_PMIIDR_IMPLEMENTER,
+ 	  .impl_init_ops = nv_cspmu_init_ops
+ 	},
++	{
++	  .pmiidr = ARM_CSPMU_IMPL_ID_AMPERE,
++	  .mask = ARM_CSPMU_PMIIDR_IMPLEMENTER,
++	  .impl_init_ops = ampere_cspmu_init_ops
++	},
+ 	{}
+ };
+ 
 -- 
 2.40.1
 
