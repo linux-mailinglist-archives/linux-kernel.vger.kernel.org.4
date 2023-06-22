@@ -2,167 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA3973985F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9A16739860
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229504AbjFVHrW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 03:47:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49098 "EHLO
+        id S230013AbjFVHrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 03:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229903AbjFVHrT (ORCPT
+        with ESMTP id S230190AbjFVHr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 03:47:19 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 664591A1;
-        Thu, 22 Jun 2023 00:47:18 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1qCF2B-0007GM-LL; Thu, 22 Jun 2023 09:47:15 +0200
-Message-ID: <5240ce3f-37fa-2747-92ee-23d71619f3ef@leemhuis.info>
-Date:   Thu, 22 Jun 2023 09:47:14 +0200
+        Thu, 22 Jun 2023 03:47:29 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E7241BE1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:47:27 -0700 (PDT)
+X-GND-Sasl: miquel.raynal@bootlin.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1687420045;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=89WP1q/8S6g2s5tTpGK/iOZXZ5QteoJHJMjMT1W427M=;
+        b=C5SSSVQk7NMUCrYxoxCCtHop04npnYWlkIUxThInbZrqvNGHLr9zQGLT3M9Bei4Qp1HD7/
+        ikSTpjyatD6tYhBcqkfccGPmZ/91N7F9gAedkeJ2BwGAY728ozlgn3FsmjtD6qQb3vn0Kp
+        k1jMSr/gn8FBXSPr9I5bJ0IvBZrvU1tsP/gC+Sf2nAFQuK69qotxdV3qssbhs6UxkT25Ae
+        kFkboaUsRi6gkDPu2jstaz3SZMJH3jr8kFowwXVYH/B0h1lFKEps7EHW6p+6NDiQHMvuK3
+        l/weV/JA/jPcgp00VG0AaK7Pahms5b0ZgSvDrXUa6aM0oTklSqkt0uphCS/tcw==
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+X-GND-Sasl: miquel.raynal@bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B706E24000C;
+        Thu, 22 Jun 2023 07:47:24 +0000 (UTC)
+Date:   Thu, 22 Jun 2023 09:47:23 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Olivier Maignial <olivier.maignial@hotmail.fr>
+Cc:     olivier.maignial@somfy.com, Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mikhail Kshevetskiy <mikhail.kshevetskiy@iopsys.eu>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mtd: spinand: winbond|toshiba: Fix ecc_get_status
+Message-ID: <20230622094723.37b70bd3@xps-13>
+In-Reply-To: <DB4P250MB103296BD8C6C8CD514A46E83FE5CA@DB4P250MB1032.EURP250.PROD.OUTLOOK.COM>
+References: <DB4P250MB103296BD8C6C8CD514A46E83FE5CA@DB4P250MB1032.EURP250.PROD.OUTLOOK.COM>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] arm64: dts: qcom: sdm845-db845c: Move LVS regulator nodes
- up
-Content-Language: en-US, de-DE
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Doug Anderson <dianders@chromium.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Amit Pundir <amit.pundir@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        dt <devicetree@vger.kernel.org>,
-        lkml <linux-kernel@vger.kernel.org>
-References: <20230602161246.1855448-1-amit.pundir@linaro.org>
- <358c69ad-fa8a-7386-fe75-92369883ee48@leemhuis.info>
- <0f6c9dcb-b7f6-fff9-6bed-f4585ea8e487@linaro.org>
- <CAD=FV=Xt2KYGY15+f+nHxkzKnwhHzw1A7=o+5kgCDWvHDv0DNg@mail.gmail.com>
- <20230620155902.clspxncyvpodixft@ripper>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <20230620155902.clspxncyvpodixft@ripper>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1687420038;6ef2419a;
-X-HE-SMSGID: 1qCF2B-0007GM-LL
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
-for once, to make this easily accessible to everyone.
+Hi Olivier,
 
-As Linus will likely release 6.4 on this or the following Sunday a quick
-status inquiry so I can brief him appropriately: is there any hope the
-regression this patch tried to fix will be resolved any time soon?
-Doesn't look like it from below message and this thread, but maybe I
-missed something.
+olivier.maignial@hotmail.fr wrote on Tue, 20 Jun 2023 23:16:15 +0200:
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+> Reading ECC status is failing in toshiba & winbond spi-nand drivers.
+>=20
+> tx58cxgxsxraix_ecc_get_status() and w25n02kv_ecc_get_status()
+> functions are using on-stack buffers which are not suitable
+> for DMA needs of spi-mem.
+>=20
+> Fix this by using the spi-mem operations dedicated buffer
+> spinand->scratchbuf
 
-#regzbot poke
+Missing period       .
 
-On 20.06.23 17:59, Bjorn Andersson wrote:
-> On Wed, Jun 14, 2023 at 12:44:15PM -0700, Doug Anderson wrote:
->> Hi,
->>
->> On Wed, Jun 14, 2023 at 11:47 AM Krzysztof Kozlowski
->> <krzysztof.kozlowski@linaro.org> wrote:
->>>
->>> On 14/06/2023 20:18, Linux regression tracking (Thorsten Leemhuis) wrote:
->>>> On 02.06.23 18:12, Amit Pundir wrote:
->>>>> Move lvs1 and lvs2 regulator nodes up in the rpmh-regulators
->>>>> list to workaround a boot regression uncovered by the upstream
->>>>> commit ad44ac082fdf ("regulator: qcom-rpmh: Revert "regulator:
->>>>> qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"").
->>>>>
->>>>> Without this fix DB845c fail to boot at times because one of the
->>>>> lvs1 or lvs2 regulators fail to turn ON in time.
->>>>
->>>> /me waves friendly
->>>>
->>>> FWIW, as it's not obvious: this...
->>>>
->>>>> Link: https://lore.kernel.org/all/CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com/
->>>>
->>>> ...is a report about a regression. One that we could still solve before
->>>> 6.4 is out. One I'll likely will point Linus to, unless a fix comes into
->>>> sight.
->>>>
->>>> When I noticed the reluctant replies to this patch I earlier today asked
->>>> in the thread with the report what the plan forward was:
->>>> https://lore.kernel.org/all/CAD%3DFV%3DV-h4EUKHCM9UivsFHRsJPY5sAiwXV3a1hUX9DUMkkxdg@mail.gmail.com/
->>>>
->>>> Dough there replied:
->>>>
->>>> ```
->>>> Of the two proposals made (the revert vs. the reordering of the dts),
->>>> the reordering of the dts seems better. It only affects the one buggy
->>>> board (rather than preventing us to move to async probe for everyone)
->>>> and it also has a chance of actually fixing something (changing the
->>>> order that regulators probe in rpmh-regulator might legitimately work
->>>> around the problem). That being said, just like the revert the dts
->>>> reordering is still just papering over the problem and is fragile /
->>>> not guaranteed to work forever.
->>>> ```
->>>>
->>>> Papering over obviously is not good, but has anyone a better idea to fix
->>>> this? Or is "not fixing" for some reason an viable option here?
->>>>
->>>
->>> I understand there is a regression, although kernel is not mainline
->>> (hash df7443a96851 is unknown) and the only solutions were papering the
->>> problem. Reverting commit is a temporary workaround. Moving nodes in DTS
->>> is not acceptable because it hides actual problem and only solves this
->>> one particular observed problem, while actual issue is still there. It
->>> would be nice to be able to reproduce it on real mainline with normal
->>> operating system (not AOSP) - with ramdiks/without/whatever. So far no
->>> one did it, right?
->>
->> The worry I have about the revert here is that it will never be able
->> to be undone and that doesn't seem great long term. I'm all for a
->> temporary revert to fix a problem while the root cause is understood,
->> but in this case I have a hard time believing that we'll make more
->> progress towards a root cause once the revert lands. All the
->> investigation we've done so far seems to indicate that the revert only
->> fixes the problem by luck...
->>
->> I completely agree that moving the nodes in the DTS is a hack and just
->> hides the problem. However, it also at least limits the workaround to
->> the one board showing the problem and doesn't mean we're stuck with
->> synchronous probe for rpmh-regulator for all eternity because nobody
->> can understand this timing issue on db845c.
->>
-> 
-> I agree that we shouldn't hide this by reverting the regulator change.
-> 
-> 
-> And as has been stated a few times already, the symptom indicates that
-> we have a misconfigured system.
-> 
-> Before accepting a patch just shuffling the bricks, I'd like to see some
-> more analysis of what happens wrt the rpmh right before the timeout.
-> Perhaps the landing team can assist here?
-> 
-> Regards,
-> Bjorn
-> 
-> 
+>=20
+> See
+> spinand->scratchbuf:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/i=
+nclude/linux/mtd/spinand.h?h=3Dv6.3#n418
+> spi_mem_check_op():
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/d=
+rivers/spi/spi-mem.c?h=3Dv6.3#n199
+
+Could you add a Cc: stable and a Fixes tag? It might require to address
+both drivers independently (in two different commits), this is not a
+problem.
+
+Otherwise LGTM!
+
+Thanks,
+Miqu=C3=A8l
+
+> Signed-off-by: Olivier Maignial <olivier.maignial@hotmail.fr>
+> ---
+>  drivers/mtd/nand/spi/toshiba.c | 4 ++--
+>  drivers/mtd/nand/spi/winbond.c | 4 ++--
+>  2 files changed, 4 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/mtd/nand/spi/toshiba.c b/drivers/mtd/nand/spi/toshib=
+a.c
+> index 7380b1ebaccd..a80427c13121 100644
+> --- a/drivers/mtd/nand/spi/toshiba.c
+> +++ b/drivers/mtd/nand/spi/toshiba.c
+> @@ -73,7 +73,7 @@ static int tx58cxgxsxraix_ecc_get_status(struct spinand=
+_device *spinand,
+>  {
+>  	struct nand_device *nand =3D spinand_to_nand(spinand);
+>  	u8 mbf =3D 0;
+> -	struct spi_mem_op op =3D SPINAND_GET_FEATURE_OP(0x30, &mbf);
+> +	struct spi_mem_op op =3D SPINAND_GET_FEATURE_OP(0x30, spinand->scratchb=
+uf);
+> =20
+>  	switch (status & STATUS_ECC_MASK) {
+>  	case STATUS_ECC_NO_BITFLIPS:
+> @@ -92,7 +92,7 @@ static int tx58cxgxsxraix_ecc_get_status(struct spinand=
+_device *spinand,
+>  		if (spi_mem_exec_op(spinand->spimem, &op))
+>  			return nanddev_get_ecc_conf(nand)->strength;
+> =20
+> -		mbf >>=3D 4;
+> +		mbf =3D *(spinand->scratchbuf) >> 4;
+> =20
+>  		if (WARN_ON(mbf > nanddev_get_ecc_conf(nand)->strength || !mbf))
+>  			return nanddev_get_ecc_conf(nand)->strength;
+> diff --git a/drivers/mtd/nand/spi/winbond.c b/drivers/mtd/nand/spi/winbon=
+d.c
+> index 3ad58cd284d8..f507e3759301 100644
+> --- a/drivers/mtd/nand/spi/winbond.c
+> +++ b/drivers/mtd/nand/spi/winbond.c
+> @@ -108,7 +108,7 @@ static int w25n02kv_ecc_get_status(struct spinand_dev=
+ice *spinand,
+>  {
+>  	struct nand_device *nand =3D spinand_to_nand(spinand);
+>  	u8 mbf =3D 0;
+> -	struct spi_mem_op op =3D SPINAND_GET_FEATURE_OP(0x30, &mbf);
+> +	struct spi_mem_op op =3D SPINAND_GET_FEATURE_OP(0x30, spinand->scratchb=
+uf);
+> =20
+>  	switch (status & STATUS_ECC_MASK) {
+>  	case STATUS_ECC_NO_BITFLIPS:
+> @@ -126,7 +126,7 @@ static int w25n02kv_ecc_get_status(struct spinand_dev=
+ice *spinand,
+>  		if (spi_mem_exec_op(spinand->spimem, &op))
+>  			return nanddev_get_ecc_conf(nand)->strength;
+> =20
+> -		mbf >>=3D 4;
+> +		mbf =3D *(spinand->scratchbuf) >> 4;
+> =20
+>  		if (WARN_ON(mbf > nanddev_get_ecc_conf(nand)->strength || !mbf))
+>  			return nanddev_get_ecc_conf(nand)->strength;
+
