@@ -2,74 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B306573A00D
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 13:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA200739FF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 13:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbjFVLsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 07:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46586 "EHLO
+        id S230215AbjFVLpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 07:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbjFVLsj (ORCPT
+        with ESMTP id S231284AbjFVLpA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 07:48:39 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539BB1731;
-        Thu, 22 Jun 2023 04:48:36 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Thu, 22 Jun 2023 07:45:00 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A66DFDD
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 04:44:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=SymJEPzxOntUq4SC4sJskmBwvT6BPbdAgd+6pfYGU3o=; b=H7eu7PC+LZCqk4fNSJhv/kl69W
+        8U6V8As6KOBmKg2kD5ex4wFGKKWnPtRo803Fx+Yf30QGwCRgBfeRiL4qzw4TRbjnTosdQIuejaCFC
+        1iNTa3iMcZ2uXF769jUGLi5kNQ6tf1IksNX3/LkdMVB2B38p9cxSxNN+whLaC5IT/fLoRQn1AL1dl
+        Ns4tSlKDPsD86UjDMQ/JUNmvXBElj6Qr0AnuV/qkfgz5h7fAlt7/JZqDz8vNsx3OAo1nM3RR+EpB9
+        4JEhwDORlVc53v42mVogMtwbIU9Djps5h8LL6LxUHa3abkTEfEtYPFaGZzPL/xS3fNbxOwLR/R64p
+        pk98TjzQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qCIk1-00FYgJ-0p; Thu, 22 Jun 2023 11:44:45 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BB51622B6D;
-        Thu, 22 Jun 2023 11:48:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1687434514;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y2bo3BezbC3IaVeW+LgWKC9T1dfujMgmaH4qS/I0ji0=;
-        b=CcJ+QbALg8rjY6nIx6fj+jaKhR+50PwGideyCRGqbw1ZPCHvL7fM2DwJXaDo43f+sNvpy+
-        LwpjvhMZ8TdPHfSkPVL7nPEMQLAZMgwEztx/arlpgmKubV1QPUyd/KnczNzL9PLJcTfJV9
-        9Uhucm0k2Qa9gBuX2GBHswx5iULYQ+I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1687434514;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y2bo3BezbC3IaVeW+LgWKC9T1dfujMgmaH4qS/I0ji0=;
-        b=USdMxlR8UwhjZ2zppUh+BAPWo+cfuKxNqpJPGGRw8cvYP9HVBKmZIOiZizjXiOamulMrGA
-        kfzGdTf68DjBefDg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 125B2132BE;
-        Thu, 22 Jun 2023 11:48:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id IeD6ARI1lGS8WwAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Thu, 22 Jun 2023 11:48:34 +0000
-Date:   Thu, 22 Jun 2023 13:42:09 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Christian Brauner <brauner@kernel.org>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 16/79] btrfs: switch to new ctime accessors
-Message-ID: <20230622114209.GT16168@suse.cz>
-Reply-To: dsterba@suse.cz
-References: <20230621144507.55591-1-jlayton@kernel.org>
- <20230621144735.55953-1-jlayton@kernel.org>
- <20230621144735.55953-15-jlayton@kernel.org>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3B293300274;
+        Thu, 22 Jun 2023 13:44:43 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 1F39524263361; Thu, 22 Jun 2023 13:44:43 +0200 (CEST)
+Date:   Thu, 22 Jun 2023 13:44:43 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        Naveen N Rao <naveen@kernel.org>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v2 08/14] objtool: Fix JUMP_ENTRY_SIZE for bi-arch like
+ powerpc
+Message-ID: <20230622114443.GJ4253@hirez.programming.kicks-ass.net>
+References: <cover.1687430631.git.christophe.leroy@csgroup.eu>
+ <85a0e5fde0c36219332a74871ef4699008ec7edb.1687430631.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230621144735.55953-15-jlayton@kernel.org>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+In-Reply-To: <85a0e5fde0c36219332a74871ef4699008ec7edb.1687430631.git.christophe.leroy@csgroup.eu>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,392 +64,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 10:45:29AM -0400, Jeff Layton wrote:
-> In later patches, we're going to change how the ctime.tv_nsec field is
-> utilized. Switch to using accessor functions instead of raw accesses of
-> inode->i_ctime.
+On Thu, Jun 22, 2023 at 12:54:30PM +0200, Christophe Leroy wrote:
+> 	struct jump_entry {
+> 		s32 code;
+> 		s32 target;
+> 		long key;
+> 	};
 > 
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> It means that the size of the third argument depends on
+> whether we are building a 32 bits or 64 bits kernel.
+> 
+> Therefore JUMP_ENTRY_SIZE must depend on elf_class_addrsize(elf).
+> 
+> To allow that, entries[] table must be initialised at runtime. This is
+> easily done by moving it into its only user which is special_get_alts().
+> 
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
+However, it doesn't apply to tip/objtool/core because Josh went and
+renamed a bunch of things including elf_class_addrsize(). It's now
+elf_addr_siize().
+
 > ---
->  fs/btrfs/delayed-inode.c | 10 +++---
->  fs/btrfs/file.c          | 24 +++++----------
->  fs/btrfs/inode.c         | 66 ++++++++++++++++------------------------
->  fs/btrfs/ioctl.c         |  2 +-
->  fs/btrfs/reflink.c       |  7 ++---
->  fs/btrfs/transaction.c   |  3 +-
->  fs/btrfs/tree-log.c      |  4 +--
->  fs/btrfs/xattr.c         |  4 +--
->  8 files changed, 48 insertions(+), 72 deletions(-)
+>  .../arch/powerpc/include/arch/special.h       |  2 +-
+>  tools/objtool/special.c                       | 55 +++++++++----------
+>  2 files changed, 28 insertions(+), 29 deletions(-)
 > 
-> diff --git a/fs/btrfs/delayed-inode.c b/fs/btrfs/delayed-inode.c
-> index c0a6a1784697..ae493a4dc206 100644
-> --- a/fs/btrfs/delayed-inode.c
-> +++ b/fs/btrfs/delayed-inode.c
-> @@ -1808,9 +1808,9 @@ static void fill_stack_inode_item(struct btrfs_trans_handle *trans,
->  				      inode->i_mtime.tv_nsec);
+> diff --git a/tools/objtool/arch/powerpc/include/arch/special.h b/tools/objtool/arch/powerpc/include/arch/special.h
+> index ffef9ada7133..ede05633c2e4 100644
+> --- a/tools/objtool/arch/powerpc/include/arch/special.h
+> +++ b/tools/objtool/arch/powerpc/include/arch/special.h
+> @@ -6,7 +6,7 @@
+>  #define EX_ORIG_OFFSET 0
+>  #define EX_NEW_OFFSET 4
 >  
->  	btrfs_set_stack_timespec_sec(&inode_item->ctime,
-> -				     inode->i_ctime.tv_sec);
-> +				     inode_ctime_peek(inode).tv_sec);
->  	btrfs_set_stack_timespec_nsec(&inode_item->ctime,
-> -				      inode->i_ctime.tv_nsec);
-> +				      inode_ctime_peek(inode).tv_nsec);
+> -#define JUMP_ENTRY_SIZE 16
+> +#define JUMP_ENTRY_SIZE (8 + elf_class_addrsize(elf)) /* 12 on PPC32, 16 on PPC64 */
+>  #define JUMP_ORIG_OFFSET 0
+>  #define JUMP_NEW_OFFSET 4
+>  #define JUMP_KEY_OFFSET 8
+> diff --git a/tools/objtool/special.c b/tools/objtool/special.c
+> index baa85c31526b..4015c1cd0fe1 100644
+> --- a/tools/objtool/special.c
+> +++ b/tools/objtool/special.c
+> @@ -26,34 +26,6 @@ struct special_entry {
+>  	unsigned char key; /* jump_label key */
+>  };
 >  
->  	btrfs_set_stack_timespec_sec(&inode_item->otime,
->  				     BTRFS_I(inode)->i_otime.tv_sec);
-> @@ -1861,8 +1861,10 @@ int btrfs_fill_inode(struct inode *inode, u32 *rdev)
->  	inode->i_mtime.tv_sec = btrfs_stack_timespec_sec(&inode_item->mtime);
->  	inode->i_mtime.tv_nsec = btrfs_stack_timespec_nsec(&inode_item->mtime);
->  
-> -	inode->i_ctime.tv_sec = btrfs_stack_timespec_sec(&inode_item->ctime);
-> -	inode->i_ctime.tv_nsec = btrfs_stack_timespec_nsec(&inode_item->ctime);
-> +	inode_ctime_set_sec(inode,
-> +			    btrfs_stack_timespec_sec(&inode_item->ctime));
-> +	inode_ctime_set_nsec(inode,
-> +			     btrfs_stack_timespec_nsec(&inode_item->ctime));
->  
->  	BTRFS_I(inode)->i_otime.tv_sec =
->  		btrfs_stack_timespec_sec(&inode_item->otime);
-> diff --git a/fs/btrfs/file.c b/fs/btrfs/file.c
-> index fd03e689a6be..b4082b322b41 100644
-> --- a/fs/btrfs/file.c
-> +++ b/fs/btrfs/file.c
-> @@ -1108,17 +1108,10 @@ void btrfs_check_nocow_unlock(struct btrfs_inode *inode)
->  
->  static void update_time_for_write(struct inode *inode)
+> -static const struct special_entry entries[] = {
+> -	{
+> -		.sec = ".altinstructions",
+> -		.group = true,
+> -		.size = ALT_ENTRY_SIZE,
+> -		.orig = ALT_ORIG_OFFSET,
+> -		.orig_len = ALT_ORIG_LEN_OFFSET,
+> -		.new = ALT_NEW_OFFSET,
+> -		.new_len = ALT_NEW_LEN_OFFSET,
+> -		.feature = ALT_FEATURE_OFFSET,
+> -	},
+> -	{
+> -		.sec = "__jump_table",
+> -		.jump_or_nop = true,
+> -		.size = JUMP_ENTRY_SIZE,
+> -		.orig = JUMP_ORIG_OFFSET,
+> -		.new = JUMP_NEW_OFFSET,
+> -		.key = JUMP_KEY_OFFSET,
+> -	},
+> -	{
+> -		.sec = "__ex_table",
+> -		.size = EX_ENTRY_SIZE,
+> -		.orig = EX_ORIG_OFFSET,
+> -		.new = EX_NEW_OFFSET,
+> -	},
+> -	{},
+> -};
+> -
+>  void __weak arch_handle_alternative(unsigned short feature, struct special_alt *alt)
 >  {
-> -	struct timespec64 now;
-> -
->  	if (IS_NOCMTIME(inode))
->  		return;
+>  }
+> @@ -144,6 +116,33 @@ int special_get_alts(struct elf *elf, struct list_head *alts)
+>  	unsigned int nr_entries;
+>  	struct special_alt *alt;
+>  	int idx, ret;
+> +	const struct special_entry entries[] = {
+> +		{
+> +			.sec = ".altinstructions",
+> +			.group = true,
+> +			.size = ALT_ENTRY_SIZE,
+> +			.orig = ALT_ORIG_OFFSET,
+> +			.orig_len = ALT_ORIG_LEN_OFFSET,
+> +			.new = ALT_NEW_OFFSET,
+> +			.new_len = ALT_NEW_LEN_OFFSET,
+> +			.feature = ALT_FEATURE_OFFSET,
+> +		},
+> +		{
+> +			.sec = "__jump_table",
+> +			.jump_or_nop = true,
+> +			.size = JUMP_ENTRY_SIZE,
+> +			.orig = JUMP_ORIG_OFFSET,
+> +			.new = JUMP_NEW_OFFSET,
+> +			.key = JUMP_KEY_OFFSET,
+> +		},
+> +		{
+> +			.sec = "__ex_table",
+> +			.size = EX_ENTRY_SIZE,
+> +			.orig = EX_ORIG_OFFSET,
+> +			.new = EX_NEW_OFFSET,
+> +		},
+> +		{},
+> +	};
 >  
-> -	now = current_time(inode);
-> -	if (!timespec64_equal(&inode->i_mtime, &now))
-> -		inode->i_mtime = now;
-> -
-> -	if (!timespec64_equal(&inode->i_ctime, &now))
-> -		inode->i_ctime = now;
-> +	inode->i_mtime = inode_ctime_set_current(inode);
+>  	INIT_LIST_HEAD(alts);
 >  
->  	if (IS_I_VERSION(inode))
->  		inode_inc_iversion(inode);
-> @@ -2460,8 +2453,9 @@ int btrfs_replace_file_extents(struct btrfs_inode *inode,
->  		inode_inc_iversion(&inode->vfs_inode);
->  
->  		if (!extent_info || extent_info->update_times) {
-> -			inode->vfs_inode.i_mtime = current_time(&inode->vfs_inode);
-> -			inode->vfs_inode.i_ctime = inode->vfs_inode.i_mtime;
-> +			struct inode *vinode = &inode->vfs_inode;
-
-Please use vfs_inode for the variable name.
-
-> +
-> +			vinode->i_mtime = inode_ctime_set_current(vinode);
->  		}
->  
->  		ret = btrfs_update_inode(trans, root, inode);
-> @@ -2703,8 +2697,7 @@ static int btrfs_punch_hole(struct file *file, loff_t offset, loff_t len)
->  
->  	ASSERT(trans != NULL);
->  	inode_inc_iversion(inode);
-> -	inode->i_mtime = current_time(inode);
-> -	inode->i_ctime = inode->i_mtime;
-> +	inode->i_mtime = inode_ctime_set_current(inode);
->  	ret = btrfs_update_inode(trans, root, BTRFS_I(inode));
->  	updated_inode = true;
->  	btrfs_end_transaction(trans);
-> @@ -2721,11 +2714,8 @@ static int btrfs_punch_hole(struct file *file, loff_t offset, loff_t len)
->  		 * for detecting, at fsync time, if the inode isn't yet in the
->  		 * log tree or it's there but not up to date.
->  		 */
-> -		struct timespec64 now = current_time(inode);
-> -
->  		inode_inc_iversion(inode);
-> -		inode->i_mtime = now;
-> -		inode->i_ctime = now;
-> +		inode->i_mtime = inode_ctime_set_current(inode);
->  		trans = btrfs_start_transaction(root, 1);
->  		if (IS_ERR(trans)) {
->  			ret = PTR_ERR(trans);
-> @@ -2796,7 +2786,7 @@ static int btrfs_fallocate_update_isize(struct inode *inode,
->  	if (IS_ERR(trans))
->  		return PTR_ERR(trans);
->  
-> -	inode->i_ctime = current_time(inode);
-> +	inode_ctime_set_current(inode);
->  	i_size_write(inode, end);
->  	btrfs_inode_safe_disk_i_size_write(BTRFS_I(inode), 0);
->  	ret = btrfs_update_inode(trans, root, BTRFS_I(inode));
-> diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
-> index 601fdc956484..4bbb6c6a7516 100644
-> --- a/fs/btrfs/inode.c
-> +++ b/fs/btrfs/inode.c
-> @@ -3901,8 +3901,10 @@ static int btrfs_read_locked_inode(struct inode *inode,
->  	inode->i_mtime.tv_sec = btrfs_timespec_sec(leaf, &inode_item->mtime);
->  	inode->i_mtime.tv_nsec = btrfs_timespec_nsec(leaf, &inode_item->mtime);
->  
-> -	inode->i_ctime.tv_sec = btrfs_timespec_sec(leaf, &inode_item->ctime);
-> -	inode->i_ctime.tv_nsec = btrfs_timespec_nsec(leaf, &inode_item->ctime);
-> +	inode_ctime_set_sec(inode,
-> +			    btrfs_timespec_sec(leaf, &inode_item->ctime));
-> +	inode_ctime_set_nsec(inode,
-> +			     btrfs_timespec_nsec(leaf, &inode_item->ctime));
->  
->  	BTRFS_I(inode)->i_otime.tv_sec =
->  		btrfs_timespec_sec(leaf, &inode_item->otime);
-> @@ -4073,9 +4075,9 @@ static void fill_inode_item(struct btrfs_trans_handle *trans,
->  				      inode->i_mtime.tv_nsec);
->  
->  	btrfs_set_token_timespec_sec(&token, &item->ctime,
-> -				     inode->i_ctime.tv_sec);
-> +				     inode_ctime_peek(inode).tv_sec);
->  	btrfs_set_token_timespec_nsec(&token, &item->ctime,
-> -				      inode->i_ctime.tv_nsec);
-> +				      inode_ctime_peek(inode).tv_nsec);
->  
->  	btrfs_set_token_timespec_sec(&token, &item->otime,
->  				     BTRFS_I(inode)->i_otime.tv_sec);
-> @@ -4273,9 +4275,8 @@ static int __btrfs_unlink_inode(struct btrfs_trans_handle *trans,
->  	btrfs_i_size_write(dir, dir->vfs_inode.i_size - name->len * 2);
->  	inode_inc_iversion(&inode->vfs_inode);
->  	inode_inc_iversion(&dir->vfs_inode);
-> -	inode->vfs_inode.i_ctime = current_time(&inode->vfs_inode);
-> -	dir->vfs_inode.i_mtime = inode->vfs_inode.i_ctime;
-> -	dir->vfs_inode.i_ctime = inode->vfs_inode.i_ctime;
-> +	inode_ctime_set_current(&inode->vfs_inode);
-> +	dir->vfs_inode.i_mtime = inode_ctime_set_current(&dir->vfs_inode);
->  	ret = btrfs_update_inode(trans, root, dir);
->  out:
->  	return ret;
-> @@ -4448,8 +4449,7 @@ static int btrfs_unlink_subvol(struct btrfs_trans_handle *trans,
->  
->  	btrfs_i_size_write(dir, dir->vfs_inode.i_size - fname.disk_name.len * 2);
->  	inode_inc_iversion(&dir->vfs_inode);
-> -	dir->vfs_inode.i_mtime = current_time(&dir->vfs_inode);
-> -	dir->vfs_inode.i_ctime = dir->vfs_inode.i_mtime;
-> +	dir->vfs_inode.i_mtime = inode_ctime_set_current(&dir->vfs_inode);
->  	ret = btrfs_update_inode_fallback(trans, root, dir);
->  	if (ret)
->  		btrfs_abort_transaction(trans, ret);
-> @@ -5090,10 +5090,8 @@ static int btrfs_setsize(struct inode *inode, struct iattr *attr)
->  	 */
->  	if (newsize != oldsize) {
->  		inode_inc_iversion(inode);
-> -		if (!(mask & (ATTR_CTIME | ATTR_MTIME))) {
-> -			inode->i_mtime = current_time(inode);
-> -			inode->i_ctime = inode->i_mtime;
-> -		}
-> +		if (!(mask & (ATTR_CTIME | ATTR_MTIME)))
-> +			inode->i_mtime = inode_ctime_set_current(inode);
->  	}
->  
->  	if (newsize > oldsize) {
-> @@ -5736,9 +5734,7 @@ static struct inode *new_simple_dir(struct super_block *s,
->  	inode->i_opflags &= ~IOP_XATTR;
->  	inode->i_fop = &simple_dir_operations;
->  	inode->i_mode = S_IFDIR | S_IRUGO | S_IWUSR | S_IXUGO;
-> -	inode->i_mtime = current_time(inode);
-> -	inode->i_atime = inode->i_mtime;
-> -	inode->i_ctime = inode->i_mtime;
-> +	inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
-
-Please don't use chained assignments in btrfs code.
-
-	inode->i_mtime = inode_ctime_set_current(inode);
-	inode->i_atime = inode->i_mtime;
-
->  	BTRFS_I(inode)->i_otime = inode->i_mtime;
->  
->  	return inode;
-> @@ -6075,7 +6071,7 @@ static int btrfs_update_time(struct inode *inode, struct timespec64 *now,
->  	if (flags & S_VERSION)
->  		dirty |= inode_maybe_inc_iversion(inode, dirty);
->  	if (flags & S_CTIME)
-> -		inode->i_ctime = *now;
-> +		inode_ctime_set(inode, *now);
->  	if (flags & S_MTIME)
->  		inode->i_mtime = *now;
->  	if (flags & S_ATIME)
-> @@ -6378,9 +6374,7 @@ int btrfs_create_new_inode(struct btrfs_trans_handle *trans,
->  		goto discard;
->  	}
->  
-> -	inode->i_mtime = current_time(inode);
-> -	inode->i_atime = inode->i_mtime;
-> -	inode->i_ctime = inode->i_mtime;
-> +	inode->i_atime = inode->i_mtime = inode_ctime_set_current(inode);
-
-	inode->i_mtime = inode_ctime_set_current(inode);
-	inode->i_atime = inode->i_mtime;
-
->  	BTRFS_I(inode)->i_otime = inode->i_mtime;
->  
->  	/*
-> @@ -6545,12 +6539,9 @@ int btrfs_add_link(struct btrfs_trans_handle *trans,
->  	 * log replay procedure is responsible for setting them to their correct
->  	 * values (the ones it had when the fsync was done).
->  	 */
-> -	if (!test_bit(BTRFS_FS_LOG_RECOVERING, &root->fs_info->flags)) {
-> -		struct timespec64 now = current_time(&parent_inode->vfs_inode);
-> +	if (!test_bit(BTRFS_FS_LOG_RECOVERING, &root->fs_info->flags))
-> +		parent_inode->vfs_inode.i_mtime = inode_ctime_set_current(&parent_inode->vfs_inode);
->  
-> -		parent_inode->vfs_inode.i_mtime = now;
-> -		parent_inode->vfs_inode.i_ctime = now;
-> -	}
->  	ret = btrfs_update_inode(trans, root, parent_inode);
->  	if (ret)
->  		btrfs_abort_transaction(trans, ret);
-> @@ -6690,7 +6681,7 @@ static int btrfs_link(struct dentry *old_dentry, struct inode *dir,
->  	BTRFS_I(inode)->dir_index = 0ULL;
->  	inc_nlink(inode);
->  	inode_inc_iversion(inode);
-> -	inode->i_ctime = current_time(inode);
-> +	inode_ctime_set_current(inode);
->  	ihold(inode);
->  	set_bit(BTRFS_INODE_COPY_EVERYTHING, &BTRFS_I(inode)->runtime_flags);
->  
-> @@ -8778,7 +8769,6 @@ static int btrfs_rename_exchange(struct inode *old_dir,
->  	struct btrfs_root *dest = BTRFS_I(new_dir)->root;
->  	struct inode *new_inode = new_dentry->d_inode;
->  	struct inode *old_inode = old_dentry->d_inode;
-> -	struct timespec64 ctime = current_time(old_inode);
->  	struct btrfs_rename_ctx old_rename_ctx;
->  	struct btrfs_rename_ctx new_rename_ctx;
->  	u64 old_ino = btrfs_ino(BTRFS_I(old_inode));
-> @@ -8909,12 +8899,10 @@ static int btrfs_rename_exchange(struct inode *old_dir,
->  	inode_inc_iversion(new_dir);
->  	inode_inc_iversion(old_inode);
->  	inode_inc_iversion(new_inode);
-> -	old_dir->i_mtime = ctime;
-> -	old_dir->i_ctime = ctime;
-> -	new_dir->i_mtime = ctime;
-> -	new_dir->i_ctime = ctime;
-> -	old_inode->i_ctime = ctime;
-> -	new_inode->i_ctime = ctime;
-> +	old_dir->i_mtime = inode_ctime_set_current(old_dir);
-> +	new_dir->i_mtime = inode_ctime_set_current(new_dir);
-> +	inode_ctime_set_current(old_inode);
-> +	inode_ctime_set_current(new_inode);
->  
->  	if (old_dentry->d_parent != new_dentry->d_parent) {
->  		btrfs_record_unlink_dir(trans, BTRFS_I(old_dir),
-> @@ -9178,11 +9166,9 @@ static int btrfs_rename(struct mnt_idmap *idmap,
->  	inode_inc_iversion(old_dir);
->  	inode_inc_iversion(new_dir);
->  	inode_inc_iversion(old_inode);
-> -	old_dir->i_mtime = current_time(old_dir);
-> -	old_dir->i_ctime = old_dir->i_mtime;
-> -	new_dir->i_mtime = old_dir->i_mtime;
-> -	new_dir->i_ctime = old_dir->i_mtime;
-> -	old_inode->i_ctime = old_dir->i_mtime;
-> +	old_dir->i_mtime = inode_ctime_set_current(old_dir);
-> +	new_dir->i_mtime = inode_ctime_set_current(new_dir);
-> +	inode_ctime_set_current(old_inode);
->  
->  	if (old_dentry->d_parent != new_dentry->d_parent)
->  		btrfs_record_unlink_dir(trans, BTRFS_I(old_dir),
-> @@ -9204,7 +9190,7 @@ static int btrfs_rename(struct mnt_idmap *idmap,
->  
->  	if (new_inode) {
->  		inode_inc_iversion(new_inode);
-> -		new_inode->i_ctime = current_time(new_inode);
-> +		inode_ctime_set_current(new_inode);
->  		if (unlikely(btrfs_ino(BTRFS_I(new_inode)) ==
->  			     BTRFS_EMPTY_SUBVOL_DIR_OBJECTID)) {
->  			ret = btrfs_unlink_subvol(trans, BTRFS_I(new_dir), new_dentry);
-> @@ -9744,7 +9730,7 @@ static int __btrfs_prealloc_file_range(struct inode *inode, int mode,
->  		*alloc_hint = ins.objectid + ins.offset;
->  
->  		inode_inc_iversion(inode);
-> -		inode->i_ctime = current_time(inode);
-> +		inode_ctime_set_current(inode);
->  		BTRFS_I(inode)->flags |= BTRFS_INODE_PREALLOC;
->  		if (!(mode & FALLOC_FL_KEEP_SIZE) &&
->  		    (actual_len > inode->i_size) &&
-> diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-> index a895d105464b..3d50bd67ec85 100644
-> --- a/fs/btrfs/ioctl.c
-> +++ b/fs/btrfs/ioctl.c
-> @@ -384,7 +384,7 @@ int btrfs_fileattr_set(struct mnt_idmap *idmap,
->  	binode->flags = binode_flags;
->  	btrfs_sync_inode_flags_to_i_flags(inode);
->  	inode_inc_iversion(inode);
-> -	inode->i_ctime = current_time(inode);
-> +	inode_ctime_set_current(inode);
->  	ret = btrfs_update_inode(trans, root, BTRFS_I(inode));
->  
->   out_end_trans:
-> diff --git a/fs/btrfs/reflink.c b/fs/btrfs/reflink.c
-> index 0474bbe39da7..3cf4716dea46 100644
-> --- a/fs/btrfs/reflink.c
-> +++ b/fs/btrfs/reflink.c
-> @@ -29,10 +29,9 @@ static int clone_finish_inode_update(struct btrfs_trans_handle *trans,
->  	int ret;
->  
->  	inode_inc_iversion(inode);
-> -	if (!no_time_update) {
-> -		inode->i_mtime = current_time(inode);
-> -		inode->i_ctime = inode->i_mtime;
-> -	}
-> +	if (!no_time_update)
-> +		inode->i_mtime = inode_ctime_set_current(inode);
-> +
->  	/*
->  	 * We round up to the block size at eof when determining which
->  	 * extents to clone above, but shouldn't round up the file size.
-> diff --git a/fs/btrfs/transaction.c b/fs/btrfs/transaction.c
-> index e7cfc992e02a..138f919646e2 100644
-> --- a/fs/btrfs/transaction.c
-> +++ b/fs/btrfs/transaction.c
-> @@ -1831,8 +1831,7 @@ static noinline int create_pending_snapshot(struct btrfs_trans_handle *trans,
->  
->  	btrfs_i_size_write(BTRFS_I(parent_inode), parent_inode->i_size +
->  						  fname.disk_name.len * 2);
-> -	parent_inode->i_mtime = current_time(parent_inode);
-> -	parent_inode->i_ctime = parent_inode->i_mtime;
-> +	parent_inode->i_mtime = inode_ctime_set_current(parent_inode);
->  	ret = btrfs_update_inode_fallback(trans, parent_root, BTRFS_I(parent_inode));
->  	if (ret) {
->  		btrfs_abort_transaction(trans, ret);
-> diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
-> index 365a1cc0a3c3..c862d1450365 100644
-> --- a/fs/btrfs/tree-log.c
-> +++ b/fs/btrfs/tree-log.c
-> @@ -4148,9 +4148,9 @@ static void fill_inode_item(struct btrfs_trans_handle *trans,
->  				      inode->i_mtime.tv_nsec);
->  
->  	btrfs_set_token_timespec_sec(&token, &item->ctime,
-> -				     inode->i_ctime.tv_sec);
-> +				     inode_ctime_peek(inode).tv_sec);
->  	btrfs_set_token_timespec_nsec(&token, &item->ctime,
-> -				      inode->i_ctime.tv_nsec);
-> +				      inode_ctime_peek(inode).tv_nsec);
->  
->  	/*
->  	 * We do not need to set the nbytes field, in fact during a fast fsync
-> diff --git a/fs/btrfs/xattr.c b/fs/btrfs/xattr.c
-> index fc4b20c2688a..a2d331436963 100644
-> --- a/fs/btrfs/xattr.c
-> +++ b/fs/btrfs/xattr.c
-> @@ -264,7 +264,7 @@ int btrfs_setxattr_trans(struct inode *inode, const char *name,
->  		goto out;
->  
->  	inode_inc_iversion(inode);
-> -	inode->i_ctime = current_time(inode);
-> +	inode_ctime_set_current(inode);
->  	ret = btrfs_update_inode(trans, root, BTRFS_I(inode));
->  	if (ret)
->  		btrfs_abort_transaction(trans, ret);
-> @@ -407,7 +407,7 @@ static int btrfs_xattr_handler_set_prop(const struct xattr_handler *handler,
->  	ret = btrfs_set_prop(trans, inode, name, value, size, flags);
->  	if (!ret) {
->  		inode_inc_iversion(inode);
-> -		inode->i_ctime = current_time(inode);
-> +		inode_ctime_set_current(inode);
->  		ret = btrfs_update_inode(trans, root, BTRFS_I(inode));
->  		if (ret)
->  			btrfs_abort_transaction(trans, ret);
 > -- 
-> 2.41.0
+> 2.40.1
 > 
