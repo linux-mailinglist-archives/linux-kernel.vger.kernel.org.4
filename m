@@ -2,206 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF0573A0C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6B9173A0C9
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbjFVMXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 08:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36988 "EHLO
+        id S231147AbjFVMZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 08:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbjFVMXq (ORCPT
+        with ESMTP id S229812AbjFVMZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 08:23:46 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F01D19A1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:23:44 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f90b8acefeso52992235e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:23:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687436622; x=1690028622;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IZTvColTzRsoYYuXx98QVc9rgM+Sp5furEz7cmDxQqk=;
-        b=FrdrBAh1oY9rhtVQjUyUaFAaGqRpbvPQjKnSFRgHkGPfttcKiwR+y/3oj436ntxKTD
-         akF4OCyeqLPrY7j5rbRe2fiEkXmNPxKauFkmwgwqZeMjpiF5n5YJqff1Q6TZhOOVLufZ
-         JepgQ/bIl1KkLeJWfzYlgsMk4BvnDZqp6fC1hLEVn4+8SKF94e+LSm3LhepY8fUQRc7q
-         lGUC/S/Nj1OHp766ZJBxQxTdF5Nf/uRZ7jhrKyPyiVlH0u1Z3LWflIhvxkuZdqxJJYXe
-         8qMkkWX2jB9wG1MEBKsvnOlSsV/eYQNUlxHECwjqMJiWC+/gTV4X0NyH70KlVJKfTDCG
-         aepQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687436622; x=1690028622;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IZTvColTzRsoYYuXx98QVc9rgM+Sp5furEz7cmDxQqk=;
-        b=lg6rH+RrpmmexX5mMFfr0avcgqbSQwPJo6V0CITIkPSLN9viafBwQq2x/+rtHAxOoH
-         p/BehrE4EAwzuBNRvHxG8i4sr2MuipsOC8aYJX0yZqR6hAhynom/fEl4GPqFlJc8UQOn
-         0qb3ZUDKPgtzFgXDRl75HTgnIhND18gWwefoW26LunlC3gc8jDBkf1CMHuGwaaXfOW7T
-         Ms6M0BrDjgFF6tXsLwHGnDi03PgrN0glnVwsOcqrxdLSUGVVupFpZaB8bddaChOvS+aB
-         5nYMZoyyRcSPSpPcgKVQv9DH3oiwylbo75uVGsMiZBpJUZOCqsXgEZmdJicqRO/mwzlM
-         VS/Q==
-X-Gm-Message-State: AC+VfDy2wVdJV7U3BVsi1YsyFUu3x8j6g+BCsn/T77Kh4hmpK2SvxSl/
-        w1fY69/SfJCANir4Y6V3gn9m8w==
-X-Google-Smtp-Source: ACHHUZ49yPhRB3Bsa6UwNftE5A3qbasCqFJ2m3h6OWnmPw2gcLquyHRYJ35Gq1sHi5pE0z7HxWfdwg==
-X-Received: by 2002:a1c:7209:0:b0:3f9:a10:10d0 with SMTP id n9-20020a1c7209000000b003f90a1010d0mr10666150wmc.17.1687436621924;
-        Thu, 22 Jun 2023 05:23:41 -0700 (PDT)
-Received: from blmsp ([2001:4091:a247:82fa:b762:4f68:e1ed:5041])
-        by smtp.gmail.com with ESMTPSA id c25-20020a7bc859000000b003f90ab2fff9sm7600746wml.9.2023.06.22.05.23.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 05:23:41 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 14:23:39 +0200
-From:   Markus Schneider-Pargmann <msp@baylibre.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Vivek Yadav <vivek.2311@samsung.com>,
-        linux-can@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH v2 5/6] can: tcan4x5x: Add support for tcan4552/4553
-Message-ID: <20230622122339.6tkajdcenj5r3vdm@blmsp>
-References: <20230621093103.3134655-1-msp@baylibre.com>
- <20230621093103.3134655-6-msp@baylibre.com>
- <32557326-650c-192d-9a82-ca5451b01f70@linaro.org>
- <20230621123158.fd3pd6i7aefawobf@blmsp>
- <21f12495-ffa9-a0bf-190a-11b6ae30ca45@linaro.org>
+        Thu, 22 Jun 2023 08:25:13 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5E24199D;
+        Thu, 22 Jun 2023 05:25:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687436712; x=1718972712;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=VFIhXIMBVxone3gWtsN0Ctk34JSxSUHhD8XO85Zqc1I=;
+  b=AmVCj3wmH569Bd6Soedwup9+huG+6lAz0KdYXppUWoIocEGIyW3i6sSf
+   VAXc8OLnaF9GmhgyfxxUvjoc6WkTxtsnD6k34+XVZN7CSoF9iyRkNchV7
+   NHvtI6mjKu4ydfBh1FYT4BRB1M4ETyAzAgfFbaIOimcWlLvrgilplBUzM
+   Xvd13xolFvsFN7yq06kNV2LcKjSRYROlgVPhjM8rGmiCaPGVfFEwmw0xK
+   0G9Ks9lahQGuh4dcMAccXk9DRTtbJz3u66Vrxe4mUqW4P9C2GO6W5xEd1
+   j+GYB6c0PtJ+6j+ZkBcw6a4TTmwbyX7PAyjTujpfyRRhP3NUKd9JfC8CR
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="360489511"
+X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
+   d="scan'208";a="360489511"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 05:25:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="839028264"
+X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
+   d="scan'208";a="839028264"
+Received: from nirmoyda-mobl.ger.corp.intel.com (HELO [10.249.46.93]) ([10.249.46.93])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 05:25:09 -0700
+Message-ID: <206f92ee-ed18-a503-6119-bc03779cd516@linux.intel.com>
+Date:   Thu, 22 Jun 2023 14:25:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <21f12495-ffa9-a0bf-190a-11b6ae30ca45@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 3/4] drm/ttm: Don't leak a resource on eviction error
+Content-Language: en-US
+To:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
+        <thomas.hellstrom@linux.intel.com>, intel-xe@lists.freedesktop.org
+Cc:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Huang Rui <ray.huang@amd.com>,
+        dri-devel@lists.freedesktop.org,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+References: <20230622101412.78426-1-thomas.hellstrom@linux.intel.com>
+ <20230622101412.78426-4-thomas.hellstrom@linux.intel.com>
+From:   Nirmoy Das <nirmoy.das@linux.intel.com>
+In-Reply-To: <20230622101412.78426-4-thomas.hellstrom@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
 
-On Wed, Jun 21, 2023 at 03:00:39PM +0200, Krzysztof Kozlowski wrote:
-> On 21/06/2023 14:31, Markus Schneider-Pargmann wrote:
-> > Hi Krzysztof,
-> > 
-> > On Wed, Jun 21, 2023 at 12:28:34PM +0200, Krzysztof Kozlowski wrote:
-> >> On 21/06/2023 11:31, Markus Schneider-Pargmann wrote:
-> >>> tcan4552 and tcan4553 do not have wake or state pins, so they are
-> >>> currently not compatible with the generic driver. The generic driver
-> >>> uses tcan4x5x_disable_state() and tcan4x5x_disable_wake() if the gpios
-> >>> are not defined. These functions use register bits that are not
-> >>> available in tcan4552/4553.
-> >>>
-> >>> This patch adds support by introducing version information to reflect if
-> >>> the chip has wake and state pins. Also the version is now checked.
-> >>>
-> >>> Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> >>> ---
-> >>>  drivers/net/can/m_can/tcan4x5x-core.c | 128 +++++++++++++++++++++-----
-> >>>  1 file changed, 104 insertions(+), 24 deletions(-)
-> >>>
-> >>> diff --git a/drivers/net/can/m_can/tcan4x5x-core.c b/drivers/net/can/m_can/tcan4x5x-core.c
-> >>> index fb9375fa20ec..756acd122075 100644
-> >>> --- a/drivers/net/can/m_can/tcan4x5x-core.c
-> >>> +++ b/drivers/net/can/m_can/tcan4x5x-core.c
-> >>> @@ -7,6 +7,7 @@
-> >>>  #define TCAN4X5X_EXT_CLK_DEF 40000000
-> >>>  
-> >>>  #define TCAN4X5X_DEV_ID1 0x00
-> >>> +#define TCAN4X5X_DEV_ID1_TCAN 0x4e414354 /* ASCII TCAN */
-> >>>  #define TCAN4X5X_DEV_ID2 0x04
-> >>>  #define TCAN4X5X_REV 0x08
-> >>>  #define TCAN4X5X_STATUS 0x0C
-> >>> @@ -103,6 +104,13 @@
-> >>>  #define TCAN4X5X_WD_3_S_TIMER BIT(29)
-> >>>  #define TCAN4X5X_WD_6_S_TIMER (BIT(28) | BIT(29))
-> >>>  
-> >>> +struct tcan4x5x_version_info {
-> >>> +	u32 id2_register;
-> >>> +
-> >>> +	bool has_wake_pin;
-> >>> +	bool has_state_pin;
-> >>> +};
-> >>> +
-> >>>  static inline struct tcan4x5x_priv *cdev_to_priv(struct m_can_classdev *cdev)
-> >>>  {
-> >>>  	return container_of(cdev, struct tcan4x5x_priv, cdev);
-> >>> @@ -254,18 +262,68 @@ static int tcan4x5x_disable_state(struct m_can_classdev *cdev)
-> >>>  				  TCAN4X5X_DISABLE_INH_MSK, 0x01);
-> >>>  }
-> >>>  
-> >>> -static int tcan4x5x_get_gpios(struct m_can_classdev *cdev)
-> >>> +static const struct tcan4x5x_version_info tcan4x5x_generic;
-> >>> +static const struct of_device_id tcan4x5x_of_match[];
-> >>> +
-> >>> +static const struct tcan4x5x_version_info
-> >>> +*tcan4x5x_find_version_info(struct tcan4x5x_priv *priv, u32 id2_value)
-> >>> +{
-> >>> +	for (int i = 0; tcan4x5x_of_match[i].data; ++i) {
-> >>> +		const struct tcan4x5x_version_info *vinfo =
-> >>> +			tcan4x5x_of_match[i].data;
-> >>> +		if (!vinfo->id2_register || id2_value == vinfo->id2_register) {
-> >>> +			dev_warn(&priv->spi->dev, "TCAN device is %s, please use it in DT\n",
-> >>> +				 tcan4x5x_of_match[i].compatible);
-> >>> +			return vinfo;
-> >>> +		}
-> >>> +	}
-> >>> +
-> >>> +	return &tcan4x5x_generic;
-> >>
-> >> I don't understand what do you want to achieve here. Kernel job is not
-> >> to validate DTB, so if DTB says you have 4552, there is no need to
-> >> double check. On the other hand, you have Id register so entire idea of
-> >> custom compatibles can be dropped and instead you should detect the
-> >> variant based on the ID.
-> > 
-> > I can read the ID register but tcan4552 and 4553 do not have two
-> > devicetree properties that tcan4550 has, namely state and wake gpios.
-> 
-> Does not matter, you don't use OF matching to then differentiate
-> handling of GPIOs to then read the register. You first read registers,
-> so everything is auto-detectable.
-> 
-> > See v1 discussion about that [1].
-> 
-> Yeah, but your code is different, although maybe we just misunderstood
-> each other. You wrote that you cannot use the GPIOs, so I assumed you
-> need to know the variant before using the GPIOs. Then you need
-> compatibles. It's not the case here. You can read the variant and based
-> on this skip entirely GPIOs as they are entirely missing.
+On 6/22/2023 12:14 PM, Thomas Hellström wrote:
+> On eviction errors other than -EMULTIHOP we were leaking a resource.
+> Fix.
+>
+> Fixes: 403797925768 ("drm/ttm: Fix multihop assert on eviction.")
+> Cc: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
+> Cc: Christian König <christian.koenig@amd.com>
+> Cc: Christian Koenig <christian.koenig@amd.com>
+> Cc: Huang Rui <ray.huang@amd.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: <stable@vger.kernel.org> # v5.15+
+> Signed-off-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
 
-The version information is always readable for that chip, regardless of
-state and wake GPIOs as far as I know. So yes it is possible to setup
-the GPIOs based on the content of the ID register.
+Reviewed-by: Nirmoy Das <nirmoy.das@intel.com>
 
-I personally would prefer separate compatibles. The binding
-documentation needs to address that wake and state GPIOs are not
-available for tcan4552/4553. I think having compatibles that are for
-these chips would make sense then. However this is my opinion, you are
-the maintainer.
-
-Best,
-Markus
-
-> 
-> > 
-> > In v1 Marc pointed out that mcp251xfd is using an autodetection and warn
-> > mechanism which I implemented here as well. [2]
-> 
-> But why? Just read the ID and detect the variant based on this. Your DT
-> still can have separate compatibles followed by fallback, that's not a
-> problem.
-> 
-> 
-> Best regards,
-> Krzysztof
-> 
+> ---
+>   drivers/gpu/drm/ttm/ttm_bo.c | 16 ++++++++--------
+>   1 file changed, 8 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
+> index 615d30c4262d..89530f2a027f 100644
+> --- a/drivers/gpu/drm/ttm/ttm_bo.c
+> +++ b/drivers/gpu/drm/ttm/ttm_bo.c
+> @@ -462,14 +462,14 @@ static int ttm_bo_evict(struct ttm_buffer_object *bo,
+>   	ret = ttm_bo_handle_move_mem(bo, evict_mem, true, ctx, &hop);
+>   	if (ret == -EMULTIHOP) {
+>   		ret = ttm_bo_bounce_temp_buffer(bo, &evict_mem, ctx, &hop);
+> -		if (ret) {
+> -			if (ret != -ERESTARTSYS && ret != -EINTR)
+> -				pr_err("Buffer eviction failed\n");
+> -			ttm_resource_free(bo, &evict_mem);
+> -			goto out;
+> -		}
+> -		/* try and move to final place now. */
+> -		goto bounce;
+> +		if (!ret)
+> +			/* try and move to final place now. */
+> +			goto bounce;
+> +	}
+> +	if (ret) {
+> +		ttm_resource_free(bo, &evict_mem);
+> +		if (ret != -ERESTARTSYS && ret != -EINTR)
+> +			pr_err("Buffer eviction failed\n");
+>   	}
+>   out:
+>   	return ret;
