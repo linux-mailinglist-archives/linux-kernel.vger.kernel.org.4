@@ -2,205 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 313247397E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:12:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB6C7397ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:12:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229544AbjFVHMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 03:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
+        id S230469AbjFVHMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 03:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjFVHMb (ORCPT
+        with ESMTP id S230386AbjFVHMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 03:12:31 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC02C1BD2;
-        Thu, 22 Jun 2023 00:12:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687417949; x=1718953949;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iiKG2Nc97I/QEfTHupxvuEuFIeC9zZ8TZ7uChT3UV6k=;
-  b=jkyJeMGFgTRI7m0N9dJRkaMcBNaz8vjIGLetzuEy5y+DFZ16csSa5z/8
-   FM55JFcWbiYGEsRiWGS/Yb19TPZT38GDbUKPOW6eCXa45y1M186IAUFkZ
-   s17wDzQD0ru1sfluImoB2eAHDE+59buwHcwH/0KgIQsvYAYFRjXbp+iW6
-   ynqW2mcW11rCo6TKE30xYYNHPK/3XAs79dG2ZQNXijxHeKhwxHe55tOMq
-   zT8PBn8pqN2GAlzGZBstW5Bhz0u68MFSPYtgkNBtsFCIu/RTgsSF6iGYX
-   k/aI1gv7gs+lPqKv1LU+7I1YLc6zy9/cArnKWlv3N+cMfBORBUhJccaVe
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
-   d="asc'?scan'208";a="231524607"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Jun 2023 00:12:29 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 22 Jun 2023 00:12:28 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 22 Jun 2023 00:12:26 -0700
-Date:   Thu, 22 Jun 2023 08:11:59 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Lucas Tanure <tanure@linux.com>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>, Nick <nick@khadas.com>,
-        Artem <art@khadas.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v3 2/3] dt-bindings: serial: amlogic,meson-uart: Add
- compatible string for T7
-Message-ID: <20230622-hardhat-elitism-26f0d0df204f@wendy>
-References: <20230621133215.109254-1-tanure@linux.com>
- <20230621133215.109254-3-tanure@linux.com>
- <20f25e98-d02e-f914-c4e7-72bb9ddb1ae5@linaro.org>
- <20230621-uncaring-impeding-15cfbe8e0e7c@spud>
- <CAJX_Q+342dx9S4C2C814uQgOj_QR3EBKhETH9eVZOm7PtzFAVQ@mail.gmail.com>
- <e4c993e1-8409-1ec0-c1b2-175603052e46@linaro.org>
- <CAJX_Q+09WLqmnWwOL7QESEuDzwZvVVzbtg9Upd5j2LOAYs=vmA@mail.gmail.com>
+        Thu, 22 Jun 2023 03:12:42 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3DAB1BE5;
+        Thu, 22 Jun 2023 00:12:40 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-98934f000a5so333339466b.2;
+        Thu, 22 Jun 2023 00:12:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687417959; x=1690009959;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LnnCUI2XGWv9OUUv5C9cUpD2Y2mbvDs2GL4yDfqqOwI=;
+        b=WokkXeHBtRxrHlyy2/xFvxbYYvfkcNIftGnQm6oCYJZBx6/HLMh8yxNs0GlMuBCBmF
+         uP4jaqrstX2mcV90x6vrIqiEo3JEpjMNJlRAGbhdpEt421cD+t2Odb1zGpEm5mwAdEU/
+         ckcua6pF8gMoVUXOTax3G1JGtGpLld4CXKyCCMlxPyS0E/4O8QOmbvf2Y8/Q4kJoPc+7
+         1UEYg5EtO+RgFmBHt30t+xG0TPDZPCCZyQI4FiIwzFB508y5qly6D5XKSD7VVea+QhPM
+         AUnZ14kpRnAtXaBVuxJsN7qLf6C1/s+QiMdS1K+eLDSGdsxhjMihsNrPCfzaBtgqLLd4
+         jCUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687417959; x=1690009959;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LnnCUI2XGWv9OUUv5C9cUpD2Y2mbvDs2GL4yDfqqOwI=;
+        b=LccxUT/eHuW/VgHFp4WrN491FxRekbHzIzgmhYDu1Aimsf+3c4BjQo5RPD56h4JAWx
+         S2ffh23idX/xYMzxasziGRbvFegj1FUqLYmPF4zRkpGWHHzoggfTuXg+zwpAGs8RoMmR
+         TO+pVaSGE3vwEhSyUJTTgnVQHlEGsJVqlA2XbxYuym+EJSUOhAUOq4Iifg7fFI+LJdNs
+         RayjvzwEmZHbN6fDEPdFppNnXohJnFAoo/yBSMpi19RmaNJFz0nhbo9lTLJIyfKinuZS
+         0cf0/OvZ+FsT9X5buSPzYY/dFYtiYVF//Ph26AUw7ozC0HwUj0cLlHVcTRijBfktYl5c
+         fgkQ==
+X-Gm-Message-State: AC+VfDwm5YFcEMRL1m2wA24L+KLEiqzlxVLCzxfZwHjBg0X9pdd0e9/R
+        ayVRUTqVDwuXemJMZjTrc8B7k8d4B3R8Cg==
+X-Google-Smtp-Source: ACHHUZ7ULiZqJOSc9kKACeB4oEsVZYM0IZtsRc+uaKWKnBr+/Z/ld0jA++qn26Ua4hvN8s4BSwxmZw==
+X-Received: by 2002:a17:906:5d10:b0:988:922b:7a86 with SMTP id g16-20020a1709065d1000b00988922b7a86mr9119121ejt.39.1687417958982;
+        Thu, 22 Jun 2023 00:12:38 -0700 (PDT)
+Received: from [127.0.1.1] ([91.230.2.244])
+        by smtp.gmail.com with ESMTPSA id bq26-20020a170906d0da00b0096f5b48fe43sm4134923ejb.47.2023.06.22.00.12.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 00:12:38 -0700 (PDT)
+From:   Benjamin Bara <bbara93@gmail.com>
+Subject: [PATCH WIP RFC v2 0/2] media: uapi: Add V4L2_CID_VTOTAL control
+Date:   Thu, 22 Jun 2023 09:12:22 +0200
+Message-Id: <20230609-v4l2-vtotal-v2-0-cf29925f4517@skidata.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="7wAwkGZijd5j48sc"
-Content-Disposition: inline
-In-Reply-To: <CAJX_Q+09WLqmnWwOL7QESEuDzwZvVVzbtg9Upd5j2LOAYs=vmA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFb0k2QC/21OPQvCMBT8K/JmI2laDToJguAmLg7S4SV5tcG2k
+ SQEpfS/m3Z2Ou6LuxECeUsBDqsRPCUbrBsyEesV6BaHJzFrMgfBRcl3fM9S1QmWoovYMVLF1pR
+ SY0MIuaEwEFMeB93OnR5DJD8bb0+N/SwzD7hfrrN2O5+gztjaEJ3/Lg9SsST+jqWCcVYpaYgkc
+ VnSMbyswYgb7Xqop2n6Ad52XlXNAAAA
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>
+Cc:     laurent.pinchart@ideasonboard.com, jacopo.mondi@ideasonboard.com,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---7wAwkGZijd5j48sc
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Hi!
 
-On Thu, Jun 22, 2023 at 07:43:31AM +0100, Lucas Tanure wrote:
-> On Thu, Jun 22, 2023 at 7:05=E2=80=AFAM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> > On 22/06/2023 07:32, Lucas Tanure wrote:
-> > > On Wed, Jun 21, 2023 at 7:12=E2=80=AFPM Conor Dooley <conor@kernel.or=
-g> wrote:
-> > >> On Wed, Jun 21, 2023 at 03:53:04PM +0200, Krzysztof Kozlowski wrote:
-> > >>> On 21/06/2023 15:32, Lucas Tanure wrote:
-> > >>>> Amlogic T7 SoCs uses the same UART controller as S4 SoCs and G12A.
-> > >>>> There is no need for an extra compatible line in the driver, but
-> > >>>> add T7 compatible line for documentation.
-> > >>>>
-> > >>>> Signed-off-by: Lucas Tanure <tanure@linux.com>
-> > >>>> ---
-> > >>>>  .../devicetree/bindings/serial/amlogic,meson-uart.yaml          |=
- 2 ++
-> > >>>>  1 file changed, 2 insertions(+)
-> > >>>>
-> > >>>> diff --git a/Documentation/devicetree/bindings/serial/amlogic,meso=
-n-uart.yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.y=
-aml
-> > >>>> index 01ec45b3b406..860ab58d87b0 100644
-> > >>>> --- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.=
-yaml
-> > >>>> +++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.=
-yaml
-> > >>>> @@ -33,6 +33,7 @@ properties:
-> > >>>>                - amlogic,meson8b-uart
-> > >>>>                - amlogic,meson-gx-uart
-> > >>>>                - amlogic,meson-s4-uart
-> > >>>> +              - amlogic,meson-t7-uart
-> > >>>>            - const: amlogic,meson-ao-uart
-> > >>>>        - description: Always-on power domain UART controller on G1=
-2A SoCs
-> > >>>>          items:
-> > >>>> @@ -46,6 +47,7 @@ properties:
-> > >>>>            - amlogic,meson8b-uart
-> > >>>>            - amlogic,meson-gx-uart
-> > >>>>            - amlogic,meson-s4-uart
-> > >>>> +          - amlogic,meson-t7-uart
-> > >>>
-> > >>> It does not look like you tested the DTS against bindings. Please r=
-un
-> > >>> `make dtbs_check` (see
-> > >>> Documentation/devicetree/bindings/writing-schema.rst or
-> > >>> https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetr=
-ee-sources-with-the-devicetree-schema/
-> > >>> for instructions).
-> > >>
-> > >> Check back on the previous version, I should've posted an untested
-> > >> version of what you need to add.
-> > > I saw that, but adding a S4 doesn't make sense to me. And you didn't
-> > > show the entire change, so I can't understand what you want there.
-> >
-> > For sure you need something which does not trigger errors. If you claim
-> > adding S4 as fallback does not make sense, then why did you use it?
-> > Sending a code which is clearly incorrect does not make sense.
-> >
-> Sorry, I think we are talking about different things. It does not make
-> sense to me to add an S4 line in the documentation when it is already
-> there. So I could not understand or make sense of the patch Conor sent
-> in reply to my V2.
+This series adds new controls for the vertical and horizontal total
+size. Camera sensors usually have registers regarding the total size and
+not the blanking size. Also user space prefers to calculate with total
+frame sizes. Therefore, this would simplify implementations on both
+sides and could be seen as a replacement or upgrade for V4L2_CID_VBLANK.
+Additionally, its value is independent from format changes and therefore
+simplifies calculations in user space.
 
-That is just how it works. You need to spell out exactly which
-combinations are permitted. The current entry for s4 says that s4 is
-only permitted in isolation.
-Since you are adding "amlogic,meson-t7-uart", "amlogic,meson-s4-uart"
-you need to explicitly allow that combination. You'll notice if you look
-at the file that the gx uart appears more than once.
+For v2, I added a little bit more documentation and my personal
+expectations to 1/2. As I am fairly new to the camera world, they might
+be a little bit naive so please correct me if this is utopical. I added
+the RFC tag for that reason. However, my intention is to define a
+documented behaviour regarding the values and limits which could
+basically depend on HTOTAL. Currently, HBLANK is always set to the
+minimum in libcamera (I guess to simplify calculations). I think with
+HTOTAL, we could always use WIDTH_MAX(all modes) + HBLANK_MIN(WIDTH_MAX)
+as default to enable a constant frame size. If the current HTOTAL value
+differs from the default, we could infer that the user wants to either
+have a higher frame rate, or a higher exposure and could adapt to that.
+E.g. use the minimums to get the highest frame rate possible if the
+current values are outside of the possible range, or not limiting the
+exposure control by the current vertical blanking as it is done now. I
+guess this would help the driver to "understand" the needs of the user
+space, and therefore allow it to react in a defined and expected manner.
 
-Given the g12a was the most recently added compatible, it might make
-sense to follow the pattern that it had set, given the thing your
-original patch copied the match data from was the g12a. That change to
-the dt-binding would look like:
-diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.ya=
-ml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-index 01ec45b3b406..eae11e87b88a 100644
---- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-+++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-@@ -50,6 +50,13 @@ properties:
-         items:
-           - const: amlogic,meson-g12a-uart
-           - const: amlogic,meson-gx-uart
-+      - description:
-+          Everything-Else power domain UART controller on G12A compatible =
-SoCs
-+        items:
-+          - enum:
-+              - amlogic,meson-t7-uart
-+          - const: amlogic,meson-g12a-uart
-+          - const: amlogic,meson-gx-uart
-=20
-   reg:
-     maxItems: 1
+2/2 is a WIP (same as in v1) and currently implements VTOTAL for the
+imx290, basically extending the current V4L2_CID_VBLANK implementation.
 
-/I/ don't really care whether you do that, or do the s4 version of it,
-but following the most recent pattern might make more sense. When I
-suggested s4, it was because I only looked at the driver patch rather
-than the code itself.
+Thanks Dave for the feedback, insights and the examples (ov5647,
+ov9282). I might need some time to skim through the data sheets to learn
+why they do stuff like it is done now.
 
-> Krzysztof, I will check again with dtbs_check and re-send.
+---
+Changes in v2:
+- 1/2: add HTOTAL
+- 1/2: add documentation about expectations
+- Link to v1: https://lore.kernel.org/r/20230609-v4l2-vtotal-v1-0-4b7dee7e073e@skidata.com
 
-Cheers,
-Conor.
+---
+Benjamin Bara (2):
+      media: uapi: Add V4L2_CID_{V,H}TOTAL controls
+      media: i2c: imx290: Add support for V4L2_CID_VTOTAL
 
---7wAwkGZijd5j48sc
-Content-Type: application/pgp-signature; name="signature.asc"
+ Documentation/driver-api/media/camera-sensor.rst   | 11 ++++-
+ .../media/v4l/ext-ctrls-image-source.rst           | 16 ++++++++
+ drivers/media/i2c/imx290.c                         | 47 ++++++++++++++++------
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  2 +
+ include/uapi/linux/v4l2-controls.h                 |  2 +
+ 5 files changed, 64 insertions(+), 14 deletions(-)
+---
+base-commit: 9561de3a55bed6bdd44a12820ba81ec416e705a7
+change-id: 20230609-v4l2-vtotal-eb15d37cafea
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+-- 
+Benjamin Bara <benjamin.bara@skidata.com>
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJP0OgAKCRB4tDGHoIJi
-0q6WAP9XGs4Pi8Gamw+GyApCv+GY203fgy/Z6D7WVqAyiPyfAgD9FcOdHANKxIe9
-0wdzlANzNI58TqJ+gy5bdFdmXmcuPAA=
-=Fm11
------END PGP SIGNATURE-----
-
---7wAwkGZijd5j48sc--
