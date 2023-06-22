@@ -2,142 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798A073A9A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 22:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE3C73A9A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 22:49:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbjFVUuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 16:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45180 "EHLO
+        id S230474AbjFVUt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 16:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231270AbjFVUuG (ORCPT
+        with ESMTP id S229657AbjFVUt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 16:50:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AC7199D
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 13:49:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687466958;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=71euS97JqDaYftzvmNJahHa0ohhMOQyQZdTI3d5Cdjk=;
-        b=gsrZM0fbVir4NwRPoPAPMHm+i14GVFarOciLu8LHgAeuqLu4malNQMAKPidnEy6Klevrsp
-        LycGxBDH27sXQaPYiidVnwJqWaMYYwIMU8jJbtmudBBIihU8ko7/7IKiqeAfC55wB5enhg
-        r8r2+ZyOoqZd1WERrJOTG8QO8fwGhwI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-12-sHV2WgY9PIi-WFyhF7pZrg-1; Thu, 22 Jun 2023 16:49:15 -0400
-X-MC-Unique: sHV2WgY9PIi-WFyhF7pZrg-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5B5EC2807D8B;
-        Thu, 22 Jun 2023 20:49:04 +0000 (UTC)
-Received: from max-t490s.redhat.com (unknown [10.39.208.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 54FE1422B0;
-        Thu, 22 Jun 2023 20:49:02 +0000 (UTC)
-From:   Maxime Coquelin <maxime.coquelin@redhat.com>
-To:     xieyongji@bytedance.com, jasowang@redhat.com, mst@redhat.com,
-        xuanzhuo@linux.alibaba.com
-Cc:     gregkh@linuxfoundation.org, sheng.zhao@bytedance.com,
-        parav@nvidia.com, virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        Maxime Coquelin <maxime.coquelin@redhat.com>
-Subject: [PATCH v2] vduse: fix NULL pointer dereference
-Date:   Thu, 22 Jun 2023 22:48:51 +0200
-Message-ID: <20230622204851.318125-1-maxime.coquelin@redhat.com>
+        Thu, 22 Jun 2023 16:49:56 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C4A1FF0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 13:49:55 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1b52875b8d9so54845ad.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 13:49:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687466994; x=1690058994;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nChPRQmBEdAld5P1YTfYa7xMMLzbYPI8K4mtrRYjvDM=;
+        b=dB+ig1Pcj7r64qksetWZdkdmdJz69lxdLEthpkskL1yyQ+x+do18djKd+AKKa8RMcx
+         ZwGCDoYm3PzEJcVPRSf2CzsIGREsIbkugewY+IHFPvKKjFR1tbebC6P6L4ioW6+50gi+
+         POdehvdALRnWD4V+26Haz69Xokuh/HN7x0LcCOJn5H+vABsHT4e7nMowaIbObrE/IMc9
+         kQQNi+RHIsQsZ59+8AKC/BkzIllKxwMPVZxPDAwdJmmEPypL2fPSMHtKHgZe4eMukZQT
+         IIop1/m+lWLkpjQLuHG+wDUMJgaPivXSbBA9kpK6d2sS8mkrNrheaA/pQnfbSB3jtMYZ
+         rpFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687466994; x=1690058994;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nChPRQmBEdAld5P1YTfYa7xMMLzbYPI8K4mtrRYjvDM=;
+        b=Y3VJ3+63FCxkNilHudvWs6hq1LWVUK8FODzzDZio0apXEIteWUe3JMdeAEdEvKcK+y
+         cGN0P/yzZOZMl79383Uicscp1Yn1WF7fRyfViIAyINNQ/aYKU5zGG8ilkF0CH8YwgtyE
+         MRLqda0fycxPsRsVxpm+F50nLdgfPHyytGsbPMQdSWirUyKxazfZRs2FLAF7+VMbio7U
+         45iCYtQj7f/MZbY1ZDHQhNvz5imcupacJV425imzs7Pms3+dMp84zOKn/Xg2fZo+EWQP
+         e2x7gLwWKqWiemsThkcrv7CgbN1vJndJvZ00C7VZ47fvUyiPWLv9oAzmGRdVBtiZwP+y
+         Ql+Q==
+X-Gm-Message-State: AC+VfDyh8PlperWK0S8rf8GmeG5AeVPws/VqkRT/8sU0oYsshlcgpbfx
+        NIkvpow3V3us2e6y6VWuV2woWQ==
+X-Google-Smtp-Source: ACHHUZ6V+7NlQ6d7/ARX2UAVvIYtzs/uF88h/BcNAqlV3+MBWKZdvHwg/brmCyGXVbv1KMV9j1lsGQ==
+X-Received: by 2002:a17:903:228d:b0:1b3:c4c0:3aba with SMTP id b13-20020a170903228d00b001b3c4c03abamr625426plh.0.1687466994394;
+        Thu, 22 Jun 2023 13:49:54 -0700 (PDT)
+Received: from bsegall-glaptop.localhost (c-73-158-249-138.hsd1.ca.comcast.net. [73.158.249.138])
+        by smtp.gmail.com with ESMTPSA id jm16-20020a17090304d000b001b680aab2f0sm5548297plb.121.2023.06.22.13.49.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 13:49:53 -0700 (PDT)
+From:   Benjamin Segall <bsegall@google.com>
+To:     Phil Auld <pauld@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>
+Subject: Re: [PATCH] Sched/fair: Block nohz tick_stop when cfs bandwidth in use
+References: <20230622132751.2900081-1-pauld@redhat.com>
+Date:   Thu, 22 Jun 2023 13:49:52 -0700
+In-Reply-To: <20230622132751.2900081-1-pauld@redhat.com> (Phil Auld's message
+        of "Thu, 22 Jun 2023 09:27:51 -0400")
+Message-ID: <xm26zg4r8bnz.fsf@google.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vduse_vdpa_set_vq_affinity callback can be called
-with NULL value as cpu_mask when deleting the vduse
-device.
+Phil Auld <pauld@redhat.com> writes:
 
-This patch resets virtqueue's IRQ affinity mask value
-to set all CPUs instead of dereferencing NULL cpu_mask.
+> CFS bandwidth limits and NOHZ full don't play well together.  Tasks
+> can easily run well past their quotas before a remote tick does
+> accounting.  This leads to long, multi-period stalls before such
+> tasks can run again. Currentlyi, when presented with these conflicting
+> requirements the scheduler is favoring nohz_full and letting the tick
+> be stopped. However, nohz tick stopping is already best-effort, there
+> are a number of conditions that can prevent it, whereas cfs runtime
+> bandwidth is expected to be enforced.
+>
+> Make the scheduler favor bandwidth over stopping the tick by setting
+> TICK_DEP_BIT_SCHED when the only running task is a cfs task with
+> runtime limit enabled.
+>
+> Add sched_feat HZ_BW (off by default) to control this behavior.
+>
+> Signed-off-by: Phil Auld <pauld@redhat.com>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> Cc: Juri Lelli <juri.lelli@redhat.com>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: Ben Segall <bsegall@google.com>
+> ---
+>  kernel/sched/fair.c     | 33 ++++++++++++++++++++++++++++++++-
+>  kernel/sched/features.h |  2 ++
+>  2 files changed, 34 insertions(+), 1 deletion(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 373ff5f55884..880eadfac330 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -6139,6 +6139,33 @@ static void __maybe_unused unthrottle_offline_cfs_rqs(struct rq *rq)
+>  	rcu_read_unlock();
+>  }
+>  
+> +#ifdef CONFIG_NO_HZ_FULL
+> +/* called from pick_next_task_fair() */
+> +static void sched_fair_update_stop_tick(struct rq *rq, struct task_struct *p)
+> +{
+> +	struct cfs_rq *cfs_rq = task_cfs_rq(p);
+> +	int cpu = cpu_of(rq);
+> +
+> +	if (!sched_feat(HZ_BW) || !cfs_bandwidth_used())
+> +		return;
+> +
+> +	if (!tick_nohz_full_cpu(cpu))
+> +		return;
+> +
+> +	if (rq->nr_running != 1 || !sched_can_stop_tick(rq))
+> +		return;
+> +
+> +	/*
+> +	 *  We know there is only one task runnable and we've just picked it. The
+> +	 *  normal enqueue path will have cleared TICK_DEP_BIT_SCHED if we will
+> +	 *  be otherwise able to stop the tick. Just need to check if we are using
+> +	 *  bandwidth control.
+> +	 */
+> +	if (cfs_rq->runtime_enabled)
+> +		tick_nohz_dep_set_cpu(cpu, TICK_DEP_BIT_SCHED);
+> +}
+> +#endif
 
-[ 4760.952149] BUG: kernel NULL pointer dereference, address: 0000000000000000
-[ 4760.959110] #PF: supervisor read access in kernel mode
-[ 4760.964247] #PF: error_code(0x0000) - not-present page
-[ 4760.969385] PGD 0 P4D 0
-[ 4760.971927] Oops: 0000 [#1] PREEMPT SMP PTI
-[ 4760.976112] CPU: 13 PID: 2346 Comm: vdpa Not tainted 6.4.0-rc6+ #4
-[ 4760.982291] Hardware name: Dell Inc. PowerEdge R640/0W23H8, BIOS 2.8.1 06/26/2020
-[ 4760.989769] RIP: 0010:memcpy_orig+0xc5/0x130
-[ 4760.994049] Code: 16 f8 4c 89 07 4c 89 4f 08 4c 89 54 17 f0 4c 89 5c 17 f8 c3 cc cc cc cc 66 66 2e 0f 1f 84 00 00 00 00 00 66 90 83 fa 08 72 1b <4c> 8b 06 4c 8b 4c 16 f8 4c 89 07 4c 89 4c 17 f8 c3 cc cc cc cc 66
-[ 4761.012793] RSP: 0018:ffffb1d565abb830 EFLAGS: 00010246
-[ 4761.018020] RAX: ffff9f4bf6b27898 RBX: ffff9f4be23969c0 RCX: ffff9f4bcadf6400
-[ 4761.025152] RDX: 0000000000000008 RSI: 0000000000000000 RDI: ffff9f4bf6b27898
-[ 4761.032286] RBP: 0000000000000000 R08: 0000000000000008 R09: 0000000000000000
-[ 4761.039416] R10: 0000000000000000 R11: 0000000000000600 R12: 0000000000000000
-[ 4761.046549] R13: 0000000000000000 R14: 0000000000000080 R15: ffffb1d565abbb10
-[ 4761.053680] FS:  00007f64c2ec2740(0000) GS:ffff9f635f980000(0000) knlGS:0000000000000000
-[ 4761.061765] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 4761.067513] CR2: 0000000000000000 CR3: 0000001875270006 CR4: 00000000007706e0
-[ 4761.074645] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[ 4761.081775] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[ 4761.088909] PKRU: 55555554
-[ 4761.091620] Call Trace:
-[ 4761.094074]  <TASK>
-[ 4761.096180]  ? __die+0x1f/0x70
-[ 4761.099238]  ? page_fault_oops+0x171/0x4f0
-[ 4761.103340]  ? exc_page_fault+0x7b/0x180
-[ 4761.107265]  ? asm_exc_page_fault+0x22/0x30
-[ 4761.111460]  ? memcpy_orig+0xc5/0x130
-[ 4761.115126]  vduse_vdpa_set_vq_affinity+0x3e/0x50 [vduse]
-[ 4761.120533]  virtnet_clean_affinity.part.0+0x3d/0x90 [virtio_net]
-[ 4761.126635]  remove_vq_common+0x1a4/0x250 [virtio_net]
-[ 4761.131781]  virtnet_remove+0x5d/0x70 [virtio_net]
-[ 4761.136580]  virtio_dev_remove+0x3a/0x90
-[ 4761.140509]  device_release_driver_internal+0x19b/0x200
-[ 4761.145742]  bus_remove_device+0xc2/0x130
-[ 4761.149755]  device_del+0x158/0x3e0
-[ 4761.153245]  ? kernfs_find_ns+0x35/0xc0
-[ 4761.157086]  device_unregister+0x13/0x60
-[ 4761.161010]  unregister_virtio_device+0x11/0x20
-[ 4761.165543]  device_release_driver_internal+0x19b/0x200
-[ 4761.170770]  bus_remove_device+0xc2/0x130
-[ 4761.174782]  device_del+0x158/0x3e0
-[ 4761.178276]  ? __pfx_vdpa_name_match+0x10/0x10 [vdpa]
-[ 4761.183336]  device_unregister+0x13/0x60
-[ 4761.187260]  vdpa_nl_cmd_dev_del_set_doit+0x63/0xe0 [vdpa]
-
-Fixes: 28f6288eb63d ("vduse: Support set_vq_affinity callback")
-Cc: xieyongji@bytedance.com
-
-Signed-off-by: Maxime Coquelin <maxime.coquelin@redhat.com>
----
- drivers/vdpa/vdpa_user/vduse_dev.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
-index 5f5c21674fdc..0d84e6a9c3cc 100644
---- a/drivers/vdpa/vdpa_user/vduse_dev.c
-+++ b/drivers/vdpa/vdpa_user/vduse_dev.c
-@@ -726,7 +726,11 @@ static int vduse_vdpa_set_vq_affinity(struct vdpa_device *vdpa, u16 idx,
- {
- 	struct vduse_dev *dev = vdpa_to_vduse(vdpa);
- 
--	cpumask_copy(&dev->vqs[idx]->irq_affinity, cpu_mask);
-+	if (cpu_mask)
-+		cpumask_copy(&dev->vqs[idx]->irq_affinity, cpu_mask);
-+	else
-+		cpumask_setall(&dev->vqs[idx]->irq_affinity);
-+
- 	return 0;
- }
- 
--- 
-2.41.0
-
+So from a CFS_BANDWIDTH pov runtime_enabled && nr_running == 1 seems
+fine. But working around sched_can_stop_tick instead of with it seems
+sketchy in general, and in an edge case like "migrate a task onto the
+cpu and then off again" you'd get sched_update_tick_dependency resetting
+the TICK_DEP_BIT and then not call PNT (ie a task wakes up onto this cpu
+without preempting, and then another cpu goes idle and pulls it, causing
+this cpu to go into nohz_full).
