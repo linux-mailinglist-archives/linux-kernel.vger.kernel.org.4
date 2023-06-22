@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A220B739D1F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:31:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D497739D18
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:31:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232362AbjFVJbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 05:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
+        id S230113AbjFVJai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 05:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232333AbjFVJ3t (ORCPT
+        with ESMTP id S232000AbjFVJ3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 05:29:49 -0400
-Received: from baptiste.telenet-ops.be (baptiste.telenet-ops.be [IPv6:2a02:1800:120:4::f00:13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9264C3D
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:22:46 -0700 (PDT)
+        Thu, 22 Jun 2023 05:29:43 -0400
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987604220
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:22:44 -0700 (PDT)
 Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed20:991a:a831:ea4b:6058])
-        by baptiste.telenet-ops.be with bizsmtp
-        id C9Nj2A0011yfRTD019Njq6; Thu, 22 Jun 2023 11:22:43 +0200
+        by andre.telenet-ops.be with bizsmtp
+        id C9Nj2A0021yfRTD019NjNe; Thu, 22 Jun 2023 11:22:43 +0200
 Received: from rox.of.borg ([192.168.97.57])
         by ramsan.of.borg with esmtp (Exim 4.95)
         (envelope-from <geert@linux-m68k.org>)
-        id 1qCGWX-000BvR-BY;
+        id 1qCGWX-000BvU-CF;
         Thu, 22 Jun 2023 11:22:43 +0200
 Received: from geert by rox.of.borg with local (Exim 4.95)
         (envelope-from <geert@linux-m68k.org>)
-        id 1qCGWY-003Vvq-Uo;
+        id 1qCGWY-003Vvt-VX;
         Thu, 22 Jun 2023 11:22:42 +0200
 From:   Geert Uytterhoeven <geert+renesas@glider.be>
 To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
@@ -37,9 +37,9 @@ To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
 Cc:     dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH 03/39] drm: renesas: shmobile: Fix overlay plane disable
-Date:   Thu, 22 Jun 2023 11:21:15 +0200
-Message-Id: <9feb39aaab796fc4b59c6c83c3d96757482f714d.1687423204.git.geert+renesas@glider.be>
+Subject: [PATCH 04/39] drm: renesas: shmobile: Fix ARGB32 overlay format typo
+Date:   Thu, 22 Jun 2023 11:21:16 +0200
+Message-Id: <7cc1dea4833e6fb9b30aa35f801f14338578dfb1.1687423204.git.geert+renesas@glider.be>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1687423204.git.geert+renesas@glider.be>
 References: <cover.1687423204.git.geert+renesas@glider.be>
@@ -55,35 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Merely writing zero to the CHn Source Image Format Register is not
-sufficient to disable a plane, as the programmed register value is not
-propagated immediately to the current side.  This can be seen when using
-the -P option of modetest: the extra plane is displayed correctly, but
-does not disappear after exit.
+When configurating a CHn Source Image Format Register (LDBBSIFR), one
+should use the corresponding LDBBSIFR_RPKF_* definition for overlay
+planes, not the DDFR_PKF_* definition for the primary plane.
 
-Fix this by doing the full update dance using the Blend Control
-Register, like is done when enabling the plane.
+Fortunately both definitions resolve to the same value, so this bug did
+not cause any harm.
 
 Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- drivers/gpu/drm/renesas/shmobile/shmob_drm_plane.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/drm/renesas/shmobile/shmob_drm_plane.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/gpu/drm/renesas/shmobile/shmob_drm_plane.c b/drivers/gpu/drm/renesas/shmobile/shmob_drm_plane.c
-index 850986cee848226a..0e34573c3cb3d032 100644
+index 0e34573c3cb3d032..7e49e2873da1bb6f 100644
 --- a/drivers/gpu/drm/renesas/shmobile/shmob_drm_plane.c
 +++ b/drivers/gpu/drm/renesas/shmobile/shmob_drm_plane.c
-@@ -215,7 +215,10 @@ static int shmob_drm_plane_disable(struct drm_plane *plane,
- 
- 	splane->format = NULL;
- 
-+	lcdc_write(sdev, LDBCR, LDBCR_UPC(splane->index));
- 	lcdc_write(sdev, LDBnBSIFR(splane->index), 0);
-+	lcdc_write(sdev, LDBCR,
-+		   LDBCR_UPF(splane->index) | LDBCR_UPD(splane->index));
- 	return 0;
- }
- 
+@@ -94,10 +94,10 @@ static void __shmob_drm_plane_setup(struct shmob_drm_plane *splane,
+ 		format |= LDBBSIFR_AL_1 | LDBBSIFR_RY | LDBBSIFR_RPKF_RGB24;
+ 		break;
+ 	case DRM_FORMAT_ARGB8888:
+-		format |= LDBBSIFR_AL_PK | LDBBSIFR_RY | LDDFR_PKF_ARGB32;
++		format |= LDBBSIFR_AL_PK | LDBBSIFR_RY | LDBBSIFR_RPKF_ARGB32;
+ 		break;
+ 	case DRM_FORMAT_XRGB8888:
+-		format |= LDBBSIFR_AL_1 | LDBBSIFR_RY | LDDFR_PKF_ARGB32;
++		format |= LDBBSIFR_AL_1 | LDBBSIFR_RY | LDBBSIFR_RPKF_ARGB32;
+ 		break;
+ 	case DRM_FORMAT_NV12:
+ 	case DRM_FORMAT_NV21:
 -- 
 2.34.1
 
