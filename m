@@ -2,126 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 518C17393CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 02:34:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2EB7393EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 02:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjFVAee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 20:34:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59556 "EHLO
+        id S229967AbjFVAiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 20:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjFVAec (ORCPT
+        with ESMTP id S229798AbjFVAiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 20:34:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F0B71710
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 17:34:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 21 Jun 2023 20:38:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF10D199F
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 17:36:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687394208;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=JClsVInx+SfJQwVlXcLVSsPnUQ6NqCBnYMZfU8zrapQ=;
+        b=H5217mcVJ6cf2JO2feUfRdB67a+Y8vg1UkV3L/lTikVCK0tK6dhWZUpHaiDF7G4nGF8xiy
+        tX+bXKBP0aRau5/boQn0hRvsQy45ttkcXFGUT3Ka+qCf01QtaK2zi81VMvYmn/ET/fi4Cc
+        EgB6ETMa8JPGYpO+ITmIUIgMYe/Aagc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-468-h3nYqPbcM1-QS6yb3y4lTg-1; Wed, 21 Jun 2023 20:36:43 -0400
+X-MC-Unique: h3nYqPbcM1-QS6yb3y4lTg-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 209B261702
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:34:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DF99C433C8;
-        Thu, 22 Jun 2023 00:34:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687394070;
-        bh=AiZo/yWVr6AaszhH++L2NsU42IKDuEpbVQ7bGj7ECf4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=vAorBcPFmLvJTgk2RkidGZUjcsqiRPLMtFSoPBlyahiZDWeOO6gojp2QwLG8RMcW1
-         fSdHDXu+oCcr3PMFKXtBDl2gDTDJVZXjJeKxUEqYuXipK1Pc7xlEXWyX5B3OOKSljV
-         t2iZEiz1qV0qI8FWEeIFvnC6GJpHu4jeqa44M7URp72oXtP92tP3x1K1XU2vERtEpb
-         INrVQx7HTI7Kme9INelS5Bvbb79anLy3CoZUNiqhBIOMbLzH4FBUTPw3dxHZbSfTnl
-         J6aC7wab7Z3jhSUBFGG6FtyEntEX+kBgn/eYcHHYUmd6IZZ6vCje5bheOVJOFZtoyM
-         yb9Td4DcPhCtQ==
-Date:   Wed, 21 Jun 2023 17:34:29 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     carlos.fernandez@technica-engineering.de
-Cc:     davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Sabrina Dubroca <sd@queasysnail.net>
-Subject: Re: [PATCH v3] net: macsec SCI assignment for ES = 0
-Message-ID: <20230621173429.18348fc8@kernel.org>
-In-Reply-To: <20230620091301.21981-1-carlos.fernandez@technica-engineering.de>
-References: <20230620091301.21981-1-carlos.fernandez@technica-engineering.de>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ECB4E8C5868;
+        Thu, 22 Jun 2023 00:36:41 +0000 (UTC)
+Received: from llong.com (unknown [10.22.33.143])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 033EE112132C;
+        Thu, 22 Jun 2023 00:36:23 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Len Brown <lenb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-pm@vger.kernel.org, Robin Jarry <rjarry@redhat.com>,
+        Joe Mario <jmario@redhat.com>, Waiman Long <longman@redhat.com>
+Subject: [PATCH v3 0/3] x86/speculation: Disable IBRS when idle
+Date:   Wed, 21 Jun 2023 20:36:00 -0400
+Message-Id: <20230622003603.1188364-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A few nit picks and questions, when you repost please make sure to CC 
-Sabrina Dubroca <sd@queasysnail.net>
+ v3:
+  - Drop patches 1 ("x86/speculation: Provide a debugfs file to dump
+    SPEC_CTRL MSRs") and 5 ("x86/idle: Disable IBRS entering mwait idle
+    and enable it on wakeup") for now.
+  - Drop the MSR restoration code in ("x86/idle: Disable IBRS when cpu
+    is offline") as native_play_dead() does not return.
+  - For patch ("intel_idle: Add ibrs_off module parameter to force
+    disable IBRS"), change the name from "no_ibrs" to "ibrs_off" and
+    document the new parameter in intel_idle.rst.
 
-On Tue, 20 Jun 2023 11:13:01 +0200
-carlos.fernandez@technica-engineering.de wrote:
-> -static sci_t macsec_frame_sci(struct macsec_eth_header *hdr, bool sci_present)
-> +static sci_t macsec_frame_sci(struct macsec_eth_header *hdr, bool sci_present,
-> +			      struct macsec_rxh_data *rxd)
->  {
-> +	struct macsec_dev *macsec_device;
->  	sci_t sci;
->  
-> -	if (sci_present)
-> +	if (sci_present) {
->  		memcpy(&sci, hdr->secure_channel_id,
-> -		       sizeof(hdr->secure_channel_id));
-> -	else
-> +			sizeof(hdr->secure_channel_id));
+For Intel processors that need to turn on IBRS to protect against
+Spectre v2 and Retbleed, the IBRS bit in the SPEC_CTRL MSR affects
+the performance of the whole core even if only one thread is turning
+it on when running in the kernel. For user space heavy applications,
+the performance impact of occasionally turning IBRS on during syscalls
+shouldn't be significant. Unfortunately, that is not the case when the
+sibling thread is idling in the kernel. In that case, the performance
+impact can be significant.
 
-the alignment of sizeof() was correct, don't change it
+When DPDK is running on an isolated CPU thread processing network packets
+in user space while its sibling thread is idle. The performance of the
+busy DPDK thread with IBRS on and off in the sibling idle thread are:
 
-> +	} else if (0 == (hdr->tci_an & (MACSEC_TCI_ES | MACSEC_TCI_SC))) {
+                                IBRS on         IBRS off
+                                -------         --------
+  packets/second:                  7.8M           10.4M
+  avg tsc cycles/packet:         282.26          209.86
 
-Just
-	} else if (hdr->tci_an & (MACSEC_TCI_ES | MACSEC_TCI_SC)) {
+This is a 25% performance degradation. The test system is a Intel Xeon
+4114 CPU @ 2.20GHz.
 
-> +		list_for_each_entry_rcu(macsec_device, &rxd->secys, secys) {
-> +			struct macsec_rx_sc *rx_sc;
-> +			struct macsec_secy *secy = &macsec_device->secy;
+Commit bf5835bcdb96 ("intel_idle: Disable IBRS during long idle")
+disables IBRS when the CPU enters long idle (C6 or below). However, there
+are existing users out there who have set "intel_idle.max_cstate=1"
+to decrease latency. Those users won't be able to benefit from this
+commit. This patch series extends this commit by providing a new
+"intel_idle.ibrs_off" module parameter to force disable IBRS even when
+"intel_idle.max_cstate=1" at the expense of increased IRQ response
+latency. It also includes a commit to allow the disabling of IBRS when
+a CPU becomes offline.
 
-You should reorder these two declaration, networking likes local
-variable declaration lines longest to shortest.
+Waiman Long (3):
+  x86/idle: Disable IBRS when cpu is offline
+  intel_idle: Sync up the SPEC_CTRL MSR value to x86_spec_ctrl_current
+  intel_idle: Add ibrs_off module parameter to force disable IBRS
 
-> +			for_each_rxsc(secy, rx_sc) {
-> +				rx_sc = rx_sc ? macsec_rxsc_get(rx_sc) : NULL;
-> +				if (rx_sc && rx_sc->active)
-> +					return rx_sc->sci;
-> +			}
+ Documentation/admin-guide/pm/intel_idle.rst | 17 +++++++++++++++-
+ arch/x86/kernel/smpboot.c                   | 10 ++++++++++
+ drivers/idle/intel_idle.c                   | 22 +++++++++++++++++----
+ 3 files changed, 44 insertions(+), 5 deletions(-)
 
-I haven't looked in detail but are you possibly returning rx_sc->sci
-here just to ...
-
-> +		}
-> +		/* If not found, use MAC in hdr as default*/
->  		sci = make_sci(hdr->eth.h_source, MACSEC_PORT_ES);
-> -
-> +	} else {
-> +		sci = make_sci(hdr->eth.h_source, MACSEC_PORT_ES);
-> +	}
->  	return sci;
->  }
->  
-> @@ -1150,11 +1165,12 @@ static rx_handler_result_t macsec_handle_frame(struct sk_buff **pskb)
->  
->  	macsec_skb_cb(skb)->has_sci = !!(hdr->tci_an & MACSEC_TCI_SC);
->  	macsec_skb_cb(skb)->assoc_num = hdr->tci_an & MACSEC_AN_MASK;
-> -	sci = macsec_frame_sci(hdr, macsec_skb_cb(skb)->has_sci);
->  
->  	rcu_read_lock();
->  	rxd = macsec_data_rcu(skb->dev);
->  
-> +	sci = macsec_frame_sci(hdr, macsec_skb_cb(skb)->has_sci, rxd);
-> +
->  	list_for_each_entry_rcu(macsec, &rxd->secys, secys) {
->  		struct macsec_rx_sc *sc = find_rx_sc(&macsec->secy, sci);
-
-... look up the rx_sc based on the sci? 
 -- 
-pw-bot: cr
+2.31.1
+
