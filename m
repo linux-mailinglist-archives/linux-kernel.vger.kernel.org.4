@@ -2,134 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC5A73A764
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A45F973A76E
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:40:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbjFVRjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 13:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35052 "EHLO
+        id S229757AbjFVRkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 13:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjFVRjb (ORCPT
+        with ESMTP id S231393AbjFVRjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 13:39:31 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6081BD6
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:39:30 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-111-196.bstnma.fios.verizon.net [173.48.111.196])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 35MHdDCG014082
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Jun 2023 13:39:14 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1687455556; bh=8LMsnDg3PnnvGhnL9RsuzWWRCWQ2nXEzpByDEPyMuRA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=Lp7Qc9l30GMXKzSLw65ja4VPIrZaI6rpa3r6zvlflf2HKZH14LQ6iuOP9mpY0tajo
-         Uk8AEk26JYLOO7Rs16O5R+s8XrBfvhdWKbhJWxV2hzse/3BZYfe7umN/W2mK8dIB++
-         QdsCP5+8FolEY/tLNy365kwxrS6I/jz+K/kTPmxuJCjUIo659IByzO1wdSluOCmniq
-         8KSnYJdE22j7J1b528y/IqFHLMwCt6N5xY5+ag4BMSBxBNFxvWr7yzIwDByitnMsHd
-         /Kzv0fJTul8ur7sxcZR9a1zUfN5uvAwVijmLQfS07ORkiW5cuCTKKrhCGnhHjmAKwL
-         nCG+BFv/PvE0Q==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 6763B15C027E; Thu, 22 Jun 2023 13:39:13 -0400 (EDT)
-Date:   Thu, 22 Jun 2023 13:39:13 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Finn Thain <fthain@linux-m68k.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        tech-board-discuss@lists.linux-foundation.org,
-        Kees Cook <keescook@chromium.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Documentation: Linux Contribution Maturity Model and the
- wider community
-Message-ID: <20230622173913.GA34229@mit.edu>
-References: <20230620212502.GI286961@mit.edu>
- <5490402b-8b9f-f52d-3896-41090e639e51@linux-m68k.org>
- <2023062144-hefty-why-305d@gregkh>
- <04cd7204-cdee-c333-8815-57acbab82721@linux-m68k.org>
+        Thu, 22 Jun 2023 13:39:53 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFA92118
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:39:46 -0700 (PDT)
+Received: from i53875bdf.versanet.de ([83.135.91.223] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1qCOHN-0001Ae-3y; Thu, 22 Jun 2023 19:39:33 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     palmer@dabbelt.com, Stefan O'Rear <sorear@fastmail.com>
+Cc:     linux-riscv@lists.infradead.org, samuel@sholland.org,
+        guoren@kernel.org, christoph.muellner@vrull.eu,
+        conor.dooley@microchip.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC 2/2] RISC-V: add T-Head vector errata handling
+Date:   Thu, 22 Jun 2023 19:39:32 +0200
+Message-ID: <1941316.PYKUYFuaPT@diego>
+In-Reply-To: <75071be8-272d-45e7-989f-5d717f313fe2@app.fastmail.com>
+References: <20230228215435.3366914-1-heiko@sntech.de>
+ <20230228215435.3366914-3-heiko@sntech.de>
+ <75071be8-272d-45e7-989f-5d717f313fe2@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <04cd7204-cdee-c333-8815-57acbab82721@linux-m68k.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 05:02:10PM +1000, Finn Thain wrote:
+Hi Stefan,
+
+Am Dienstag, 13. Juni 2023, 08:35:53 CEST schrieb Stefan O'Rear:
+> On Tue, Feb 28, 2023, at 4:54 PM, Heiko Stuebner wrote:
+> > @@ -29,6 +78,7 @@ static __always_inline bool has_vector(void)
+> >  static inline void __vstate_clean(struct pt_regs *regs)
+> >  {
+> >  	regs->status = (regs->status & ~(SR_VS)) | SR_VS_CLEAN;
+> > +
+> >  }
+> > 
+> >  static inline void vstate_off(struct pt_regs *regs)
+> > @@ -58,30 +108,75 @@ static __always_inline void rvv_disable(void)
+> > 
+> >  static __always_inline void __vstate_csr_save(struct __riscv_v_state *dest)
+> >  {
+> > -	asm volatile (
+> > +	register u32 t1 asm("t1") = (SR_FS);
+> > +
+> > +	/*
+> > +	 * CSR_VCSR is defined as
+> > +	 * [2:1] - vxrm[1:0]
+> > +	 * [0] - vxsat
+> > +	 * The earlier vector spec implemented by T-Head uses separate
+> > +	 * registers for the same bit-elements, so just combine those
+> > +	 * into the existing output field.
+> > +	 *
+> > +	 * Additionally T-Head cores need FS to be enabled when accessing
+> > +	 * the VXRM and VXSAT CSRs, otherwise ending in illegal instructions.
+> > +	 */
+> > +	asm volatile (ALTERNATIVE(
+> >  		"csrr	%0, " CSR_STR(CSR_VSTART) "\n\t"
+> >  		"csrr	%1, " CSR_STR(CSR_VTYPE) "\n\t"
+> >  		"csrr	%2, " CSR_STR(CSR_VL) "\n\t"
+> >  		"csrr	%3, " CSR_STR(CSR_VCSR) "\n\t"
+> > +		__nops(5),
+> > +		"csrs	sstatus, t1\n\t"
+> > +		"csrr	%0, " CSR_STR(CSR_VSTART) "\n\t"
+> > +		"csrr	%1, " CSR_STR(CSR_VTYPE) "\n\t"
+> > +		"csrr	%2, " CSR_STR(CSR_VL) "\n\t"
+> > +		"csrr	%3, " CSR_STR(THEAD_C9XX_CSR_VXRM) "\n\t"
+> > +		"slliw	%3, %3, " CSR_STR(VCSR_VXRM_SHIFT) "\n\t"
+> > +		"csrr	t4, " CSR_STR(THEAD_C9XX_CSR_VXSAT) "\n\t"
+> > +		"or	%3, %3, t4\n\t"
+> > +		"csrc	sstatus, t1\n\t",
+> > +		THEAD_VENDOR_ID,
+> > +		ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
+> >  		: "=r" (dest->vstart), "=r" (dest->vtype), "=r" (dest->vl),
+> > -		  "=r" (dest->vcsr) : :);
+> > +		  "=r" (dest->vcsr) : "r"(t1) : "t4");
+> >  }
+> > 
+> >  static __always_inline void __vstate_csr_restore(struct __riscv_v_state *src)
+> >  {
+> > -	asm volatile (
+> > +	register u32 t1 asm("t1") = (SR_FS);
+> > +
+> > +	/*
+> > +	 * Similar to __vstate_csr_save above, restore values for the
+> > +	 * separate VXRM and VXSAT CSRs from the vcsr variable.
+> > +	 */
+> > +	asm volatile (ALTERNATIVE(
+> >  		"vsetvl	 x0, %2, %1\n\t"
+> >  		"csrw	" CSR_STR(CSR_VSTART) ", %0\n\t"
+> >  		"csrw	" CSR_STR(CSR_VCSR) ", %3\n\t"
+> > +		__nops(6),
+> > +		"csrs	sstatus, t1\n\t"
+> > +		"vsetvl	 x0, %2, %1\n\t"
+> > +		"csrw	" CSR_STR(CSR_VSTART) ", %0\n\t"
+> > +		"srliw	t4, %3, " CSR_STR(VCSR_VXRM_SHIFT) "\n\t"
+> > +		"andi	t4, t4, " CSR_STR(VCSR_VXRM_MASK) "\n\t"
+> > +		"csrw	" CSR_STR(THEAD_C9XX_CSR_VXRM) ", t4\n\t"
+> > +		"andi	%3, %3, " CSR_STR(VCSR_VXSAT_MASK) "\n\t"
+> > +		"csrw	" CSR_STR(THEAD_C9XX_CSR_VXSAT) ", %3\n\t"
+> > +		"csrc	sstatus, t1\n\t",
+> > +		THEAD_VENDOR_ID,
+> > +		ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
+> >  		: : "r" (src->vstart), "r" (src->vtype), "r" (src->vl),
+> > -		    "r" (src->vcsr) :);
+> > +		    "r" (src->vcsr), "r"(t1): "t4");
+> >  }
 > 
-> You mentioned wasted resources. If you want to generate e-waste, remove 
-> drivers from the kernel. If you want to prevent e-waste, add drivers for 
-> obsolete hardware and then watch the user count climb from zero as devices 
-> get pulled from drawers and dusted off.
+> vxrm and vxsat are part of fcsr in 0.7.1, so they should already have been
+> handled by __fstate_save and __fstate_restore, and this code is likely to
+> misbehave (saving the new process's vxrm/vxsat in the old process's save area
+> because float state is swapped before vector state in __switch_to).
 
-You seem to making a lot of assumptions here, with no evidence to back
-up your assertions.  The driver question is from twenty years ago, and
-talks to SCSI cards using LVD (low-voltage diferential) SCSI 3 cables
-(for 160 MB/s).  SCSI Disks from that era are typically 20GB to 30GB.
-Compare that to modern SATA disks today that are 10-18 TB in size, and
-SATA-3 transfers data at 600 MB/s.
+I'm not sure I follow your description but may be overlooking or have
+misunderstood something.
 
-So you are assuming (a) that people just "happen" to have ancient, 20
-year old cards justlying around in drawers, (b) they have 20 year old
-SCSI disks and SCSI cables that these cards would actually talk to,
-and (c) they would think it would make sense from a power, space, and
-cooling perspective to take this kind of antique storage solutions are
-use it for actually storing data.
+Somehow I way to often have trouble resolving CSR addresses, but according
+to openSBI, FCSR has the location of 0x3
+(#define CSR_FCSR 0x003 in include/sbi/riscv_encoding.h)
 
-> Anyway, your reaction is an interesting example of strong feelings in the 
-> community as to how contributed code should or should not be used. E.g. 
-> some get upset if their code runs on weapons systems, others get upset if 
-> the latest release might not run on suitable hardware in the immediate 
-> future. Some add or remove licence terms according to their convictions.
+where CSR_VXSAT and CSR_VXRM are at 0x9 and 0xa respectively.
+(#define CSR_VXSAT 0x9 and  #define CSR_VXRM 0xa)
 
-Um, I don't even know where this came from.  In any case, the Linux
-Kernel is licensed under the GPL2, which, like all Open Source
-compliant licenses, does not distribute against fields of endeavor
-(such as weapons systems, etc.)
 
-As far as getting upset if the latest release doesn't run on "suitable
-hardware", if they are upset they can submit a bug report, or better
-yet, submit a patch to address the situation.  What people seem to
-forget is that free software does not mean that people will fix your
-software for your use case for free.  It means that *you* are free to
-fix the software, or to pay someone to fix the software in question.
+And looking at __fstate_save + __fstate_restore the only CSRs accessed seem
+to be CSR_STATUS and FCSR itself.
 
-> If there was consensus, it might be feasible to give a formula for 
-> "recognized usage" which could be quantified. From there we could create a 
-> kind of heat map to show which commits, maintainers, processes, models, 
-> modules etc. were the most "useful" within some time interval.
+I definitly won't claim to be right, but don't see the issue yet.
 
-The best we have is we can see what users submit bug reports about
-(especially, for example, when we discover that some driver was
-accidentally broken a few years ago due to the need to upgrade code to
-use newer API's as we improve and refactor code, and no one has
-complained about the driver being used --- that's a good hint that no
-one cares), and what individuals and companies choose to spend time
-working to improve certain parts of the kernel.  If code is under
-active maintenance, then it's worth *someone's* time to keep
-maintained.
 
-And of course, if remove a driver because it is unmaintained and is
-for obsolete hardware, if someone shows up saying (a) they care about
-that driver, and (b) they are willing to volunteer to maintain the
-driver, or are willing to pay someone to maintain the driver, and they
-have contracted with XYZ developer working for ABC company, then it's
-super simple to revert the driver removal.  It is, after all, only a
-"git revert" away.
+Thanks for a hint
+Heiko
 
-I do have to concur with Greg that relying on this as way to get new
-people to be work on Linux kernel is a *terrible* idea.  The number of
-people who are interested in retro-computing is quite small, in my
-experience.
-
-Cheers,
-
-					- Ted
 
