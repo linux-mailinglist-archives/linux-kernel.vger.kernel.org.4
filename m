@@ -2,153 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AA9A739DDD
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC87739DDE
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjFVJ4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 05:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55188 "EHLO
+        id S231262AbjFVJ47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 05:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbjFVJ4J (ORCPT
+        with ESMTP id S231211AbjFVJ4f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 05:56:09 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2333B2693
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:53:22 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-51bec86b9c9so306317a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:53:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1687427600; x=1690019600;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=31alUebk/ciyOeOfe0Ga+rH2I3KmjnSBY8Zf5b0Gyzc=;
-        b=QJeuHmARmrdOa+uEuCmXkQ6bvCQUMljTS9ijUL9P8Kcs0U6h9wEi3mKgOqjQpWeBwp
-         rULeP1a1Jg53+ShOpw3RMEu/SJ9zikZiQBjAxnEUkIlRtLlEmEvoyk6KJiI6rFSLTW2G
-         tX0mFn5cRHkunIpZWP6U/hJYowwetp8MTa36vlu4exEok4VcTVxY48d0uyV//GycVu3q
-         GyoYVljyhmh4nKJKWL7mPdAQIQL3ZAkeagY430qE1iWZ4vkqIovoKxu1XrQG6Vc0BOL/
-         V8Jz3AntsbpOLLrSUV7ZCjui0gJmjhH6J62wdjQj2bxXqYThQoM1j/QzXi6eFFXiAzUO
-         HJDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687427600; x=1690019600;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=31alUebk/ciyOeOfe0Ga+rH2I3KmjnSBY8Zf5b0Gyzc=;
-        b=C6IwqV0vw/kb7puiAFcJCqfQIHputQuLcxUfa/FvKXW+ThTCLZva9ZHl+xa/Yd1pxW
-         g7e2VG/LcWTdEDCrP7MXaa1m6yxTfem6/YJV4hvEgr1EXDQhuqKI5mqx6hbl8fdKUcgu
-         XeFnmijAHGidyCe/+0kX6RgFNAr2IAjggKFNaMYnfwyPjz7qP6XRgGq8Fc105MFC3Zfm
-         yufFWmnhCYdPZUqoEAglOEBYS8LGLbKlQGIQKMIjtgnQ0KEoHU+a8/P9Hwfhn8ijti86
-         e8eJa2PWpu6IoXLbLYBKvMexxNyjps+sPRgmwD1gWvfEX6e1xHKB+0z46dPgeE1D6hvm
-         c3/w==
-X-Gm-Message-State: AC+VfDzvY7F6DTxVjT0FkSWSEo1SxcSMzF9SBBbCA54BpFgjpBb76djZ
-        OMYHVi1v84WZ3AGr3udBgSob0Q==
-X-Google-Smtp-Source: ACHHUZ58boCUF8nU9mqADahfTdIZzJGoIdxaJvO19qR7crWs+PYHRjkY1QH7AILYHBRDwc7faaTX2A==
-X-Received: by 2002:a17:907:5c8:b0:94f:3980:bf91 with SMTP id wg8-20020a17090705c800b0094f3980bf91mr16725775ejb.19.1687427600660;
-        Thu, 22 Jun 2023 02:53:20 -0700 (PDT)
-Received: from zh-lab-node-5.home ([2a02:168:f656:0:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id u17-20020a1709064ad100b0098cd2814a2esm2193557ejt.70.2023.06.22.02.53.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 02:53:20 -0700 (PDT)
-From:   Anton Protopopov <aspsk@isovalent.com>
-To:     bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Vernet <void@manifault.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Anton Protopopov <aspsk@isovalent.com>
-Subject: [PATCH bpf-next] bpf, docs: document existing macros instead of deprecated
-Date:   Thu, 22 Jun 2023 09:54:24 +0000
-Message-Id: <20230622095424.1024244-1-aspsk@isovalent.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 22 Jun 2023 05:56:35 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1006272C;
+        Thu, 22 Jun 2023 02:54:29 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Qmwd02cb9z6J7h0;
+        Thu, 22 Jun 2023 17:51:48 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 22 Jun
+ 2023 10:54:27 +0100
+Date:   Thu, 22 Jun 2023 10:54:26 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Terry Bowman <terry.bowman@amd.com>
+CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
+        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
+        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
+        <linux-cxl@vger.kernel.org>, <rrichter@amd.com>,
+        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
+Subject: Re: [PATCH v6 05/27] cxl: Rename member @dport of struct cxl_dport
+ to @dport_dev
+Message-ID: <20230622105426.0000145d@Huawei.com>
+In-Reply-To: <20230622035126.4130151-6-terry.bowman@amd.com>
+References: <20230622035126.4130151-1-terry.bowman@amd.com>
+        <20230622035126.4130151-6-terry.bowman@amd.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The BTF_TYPE_SAFE_NESTED macro was replaced by the BTF_TYPE_SAFE_TRUSTED,
-BTF_TYPE_SAFE_RCU, and BTF_TYPE_SAFE_RCU_OR_NULL macros. Fix the docs
-correspondingly.
+On Wed, 21 Jun 2023 22:51:04 -0500
+Terry Bowman <terry.bowman@amd.com> wrote:
 
-Fixes: 6fcd486b3a0a ("bpf: Refactor RCU enforcement in the verifier.")
-Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
----
- Documentation/bpf/kfuncs.rst | 38 ++++++++++++++++++++++++++++++------
- 1 file changed, 32 insertions(+), 6 deletions(-)
+> From: Robert Richter <rrichter@amd.com>
+> 
+> Reading code like dport->dport does not immediately suggest that this
+> points to the corresponding device structure of the dport. Rename
+> struct member @dport to @dport_dev.
+> 
+> While at it, also rename @new argument of add_dport() to @dport. This
+> better describes the variable as a dport (e.g. new->dport becomes to
+> dport->dport_dev).
+> 
+> Co-developed-by: Terry Bowman <terry.bowman@amd.com>
+> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+Excellent improvement in readability.  I've fallen down this trap a few times
+so glad to have it closed.
 
-diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-index 7a3d9de5f315..0d2647fb358d 100644
---- a/Documentation/bpf/kfuncs.rst
-+++ b/Documentation/bpf/kfuncs.rst
-@@ -227,23 +227,49 @@ absolutely no ABI stability guarantees.
- 
- As mentioned above, a nested pointer obtained from walking a trusted pointer is
- no longer trusted, with one exception. If a struct type has a field that is
--guaranteed to be valid as long as its parent pointer is trusted, the
--``BTF_TYPE_SAFE_NESTED`` macro can be used to express that to the verifier as
--follows:
-+guaranteed to be valid (trusted or rcu, as in KF_RCU description below) as long
-+as its parent pointer is valid, the following macros can be used to express
-+that to the verifier:
-+
-+* ``BTF_TYPE_SAFE_TRUSTED``
-+* ``BTF_TYPE_SAFE_RCU``
-+* ``BTF_TYPE_SAFE_RCU_OR_NULL``
-+
-+For example,
-+
-+.. code-block:: c
-+
-+	BTF_TYPE_SAFE_TRUSTED(struct socket) {
-+		struct sock *sk;
-+	};
-+
-+or
- 
- .. code-block:: c
- 
--	BTF_TYPE_SAFE_NESTED(struct task_struct) {
-+	BTF_TYPE_SAFE_RCU(struct task_struct) {
- 		const cpumask_t *cpus_ptr;
-+		struct css_set __rcu *cgroups;
-+		struct task_struct __rcu *real_parent;
-+		struct task_struct *group_leader;
- 	};
- 
- In other words, you must:
- 
--1. Wrap the trusted pointer type in the ``BTF_TYPE_SAFE_NESTED`` macro.
-+1. Wrap the valid pointer type in a ``BTF_TYPE_SAFE_*`` macro.
- 
--2. Specify the type and name of the trusted nested field. This field must match
-+2. Specify the type and name of the valid nested field. This field must match
-    the field in the original type definition exactly.
- 
-+A new type declared by a ``BTF_TYPE_SAFE_*`` macro also needs to be emitted so
-+that it appears in BTF. For example, ``BTF_TYPE_SAFE_TRUSTED(struct socket)``
-+is emitted in the ``type_is_trusted()`` function as follows:
-+
-+.. code-block:: c
-+
-+	BTF_TYPE_EMIT(BTF_TYPE_SAFE_TRUSTED(struct socket));
-+
-+
- 2.4.5 KF_SLEEPABLE flag
- -----------------------
- 
--- 
-2.34.1
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+> ---
+>  drivers/cxl/core/port.c   | 20 ++++++++++----------
+>  drivers/cxl/core/region.c |  4 ++--
+>  drivers/cxl/cxl.h         |  4 ++--
+>  3 files changed, 14 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
+> index 76888c75dae4..7d3079f5b7b5 100644
+> --- a/drivers/cxl/core/port.c
+> +++ b/drivers/cxl/core/port.c
+> @@ -605,7 +605,7 @@ static int devm_cxl_link_parent_dport(struct device *host,
+>  	if (!parent_dport)
+>  		return 0;
+>  
+> -	rc = sysfs_create_link(&port->dev.kobj, &parent_dport->dport->kobj,
+> +	rc = sysfs_create_link(&port->dev.kobj, &parent_dport->dport_dev->kobj,
+>  			       "parent_dport");
+>  	if (rc)
+>  		return rc;
+> @@ -658,7 +658,7 @@ static struct cxl_port *cxl_port_alloc(struct device *uport,
+>  		if (iter->host_bridge)
+>  			port->host_bridge = iter->host_bridge;
+>  		else if (parent_dport->rch)
+> -			port->host_bridge = parent_dport->dport;
+> +			port->host_bridge = parent_dport->dport_dev;
+>  		else
+>  			port->host_bridge = iter->uport;
+>  		dev_dbg(uport, "host-bridge: %s\n", dev_name(port->host_bridge));
+> @@ -847,22 +847,22 @@ static struct cxl_dport *find_dport(struct cxl_port *port, int id)
+>  	return NULL;
+>  }
+>  
+> -static int add_dport(struct cxl_port *port, struct cxl_dport *new)
+> +static int add_dport(struct cxl_port *port, struct cxl_dport *dport)
+>  {
+>  	struct cxl_dport *dup;
+>  	int rc;
+>  
+>  	device_lock_assert(&port->dev);
+> -	dup = find_dport(port, new->port_id);
+> +	dup = find_dport(port, dport->port_id);
+>  	if (dup) {
+>  		dev_err(&port->dev,
+>  			"unable to add dport%d-%s non-unique port id (%s)\n",
+> -			new->port_id, dev_name(new->dport),
+> -			dev_name(dup->dport));
+> +			dport->port_id, dev_name(dport->dport_dev),
+> +			dev_name(dup->dport_dev));
+>  		return -EBUSY;
+>  	}
+>  
+> -	rc = xa_insert(&port->dports, (unsigned long)new->dport, new,
+> +	rc = xa_insert(&port->dports, (unsigned long)dport->dport_dev, dport,
+>  		       GFP_KERNEL);
+>  	if (rc)
+>  		return rc;
+> @@ -895,8 +895,8 @@ static void cxl_dport_remove(void *data)
+>  	struct cxl_dport *dport = data;
+>  	struct cxl_port *port = dport->port;
+>  
+> -	xa_erase(&port->dports, (unsigned long) dport->dport);
+> -	put_device(dport->dport);
+> +	xa_erase(&port->dports, (unsigned long) dport->dport_dev);
+> +	put_device(dport->dport_dev);
+>  }
+>  
+>  static void cxl_dport_unlink(void *data)
+> @@ -954,7 +954,7 @@ __devm_cxl_add_dport(struct cxl_port *port, struct device *dport_dev,
+>  		dev_dbg(dport_dev, "Component Registers found for dport: %pa\n",
+>  			&component_reg_phys);
+>  
+> -	dport->dport = dport_dev;
+> +	dport->dport_dev = dport_dev;
+>  	dport->port_id = port_id;
+>  	dport->component_reg_phys = component_reg_phys;
+>  	dport->port = port;
+> diff --git a/drivers/cxl/core/region.c b/drivers/cxl/core/region.c
+> index f822de44bee0..13cda989d944 100644
+> --- a/drivers/cxl/core/region.c
+> +++ b/drivers/cxl/core/region.c
+> @@ -1162,7 +1162,7 @@ static int cxl_port_setup_targets(struct cxl_port *port,
+>  			dev_dbg(&cxlr->dev, "%s:%s: %s expected %s at %d\n",
+>  				dev_name(port->uport), dev_name(&port->dev),
+>  				dev_name(&cxlsd->cxld.dev),
+> -				dev_name(ep->dport->dport),
+> +				dev_name(ep->dport->dport_dev),
+>  				cxl_rr->nr_targets_set);
+>  			return -ENXIO;
+>  		}
+> @@ -1173,7 +1173,7 @@ static int cxl_port_setup_targets(struct cxl_port *port,
+>  	cxl_rr->nr_targets_set += inc;
+>  	dev_dbg(&cxlr->dev, "%s:%s target[%d] = %s for %s:%s @ %d\n",
+>  		dev_name(port->uport), dev_name(&port->dev),
+> -		cxl_rr->nr_targets_set - 1, dev_name(ep->dport->dport),
+> +		cxl_rr->nr_targets_set - 1, dev_name(ep->dport->dport_dev),
+>  		dev_name(&cxlmd->dev), dev_name(&cxled->cxld.dev), pos);
+>  
+>  	return 0;
+> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+> index 7c8674079f1a..7232c2a0e27c 100644
+> --- a/drivers/cxl/cxl.h
+> +++ b/drivers/cxl/cxl.h
+> @@ -589,7 +589,7 @@ struct cxl_rcrb_info {
+>  
+>  /**
+>   * struct cxl_dport - CXL downstream port
+> - * @dport: PCI bridge or firmware device representing the downstream link
+> + * @dport_dev: PCI bridge or firmware device representing the downstream link
+>   * @port_id: unique hardware identifier for dport in decoder target list
+>   * @component_reg_phys: downstream port component registers
+>   * @rcrb: Data about the Root Complex Register Block layout
+> @@ -597,7 +597,7 @@ struct cxl_rcrb_info {
+>   * @port: reference to cxl_port that contains this downstream port
+>   */
+>  struct cxl_dport {
+> -	struct device *dport;
+> +	struct device *dport_dev;
+>  	int port_id;
+>  	resource_size_t component_reg_phys;
+>  	struct cxl_rcrb_info rcrb;
 
