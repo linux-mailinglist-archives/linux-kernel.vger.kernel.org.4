@@ -2,110 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2AE873983F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC9B3739843
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:39:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbjFVHiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 03:38:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
+        id S230090AbjFVHj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 03:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjFVHh4 (ORCPT
+        with ESMTP id S229437AbjFVHjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 03:37:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A3E1995;
-        Thu, 22 Jun 2023 00:37:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D09461776;
-        Thu, 22 Jun 2023 07:37:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F3CAC433C0;
-        Thu, 22 Jun 2023 07:37:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687419474;
-        bh=7My5TbCKzY2U2rW5PVXxJ8ZYOpqZiHwu3YsTNzSNpn8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KVVuYw+zM4Mlc4gRuAIEOU2NvYPn8hwwnsozQk3kWeyHgrY6MyOXIS/8RTKOcbiZJ
-         Pu9f/UeN0RMZtbISEEbFm1ewDDRPkizeCAk9Y9Ot1OTTjts5Ju4V5IDd173cvmNQbX
-         ExwLoo/k1NkxxQ6vtqckVYXFn0pNlSxleg8kEQgSeko1fSUPDL2fD76jbnL1TTVgBD
-         QyqrIGmQNTTgrLsd39R6BCYkwL57HPy8OpAFWi04Btjg1WlH1WucDMQ327YOJj3Zwz
-         uH1frTtB8C4G2qPMHsTsHPZVAhf+ClU2D+ODUT3riZBIvA5BXevtAE2ctiW7lv+sVV
-         u/SHqpHb+VH0A==
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     alberto.dassatti@heig-vd.ch,
-        Rick Wertenbroek <rick.wertenbroek@gmail.com>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>, xxm@rock-chips.com,
-        dlemoal@kernel.org, Shawn Lin <shawn.lin@rock-chips.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Brian Norris <briannorris@chromium.org>,
-        Caleb Connolly <kc@postmarketos.org>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Corentin Labbe <clabbe@baylibre.com>,
-        Hugh Cole-Baker <sigmaris@gmail.com>,
-        Arnaud Ferraris <arnaud.ferraris@collabora.com>,
-        Judy Hsiao <judyhsiao@chromium.org>, linux-pci@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v5 00/11] PCI: rockchip: Fix RK3399 PCIe endpoint controller driver
-Date:   Thu, 22 Jun 2023 09:37:45 +0200
-Message-Id: <168741944967.107568.16531340809111423642.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230418074700.1083505-1-rick.wertenbroek@gmail.com>
-References: <20230418074700.1083505-1-rick.wertenbroek@gmail.com>
+        Thu, 22 Jun 2023 03:39:24 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCC771992
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:39:22 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-986d8332f50so803445666b.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 00:39:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1687419561; x=1690011561;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kyBZGQlE3g+2vxed0mGUpWgi1BkyuNRNZMTHS+0UClg=;
+        b=jcZEYMmaTGfXSJNIG6AiYj8K3pqSThJfZs0FMuItw9Dv4JqW0WLJzUjqbRfygZ68/Z
+         tpJ3T8yshvY07weAiyJFAEJTqIZerhK7aJ+snvJ6VDjfdnzxIM35Z+0cM0eO96rrcgy8
+         91PGYUb2r6b57MtyDqFXg0vddX6HnEfFZYlpLfi199bag1Kswfd3gRV4HrQl3VRPxTkd
+         xsr/EWr/nG967uc1vdraW+eXvkmjloQFHlZdUn4BvjQq8i8OuDmhTR5pq+Oy7NUPWY/q
+         E/qtm3UaXGm4DeWKenb38y70CufRY712AzbNgK8/Sx7PguEsLjdrC2+/som1eWDnyDvh
+         7mkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687419561; x=1690011561;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kyBZGQlE3g+2vxed0mGUpWgi1BkyuNRNZMTHS+0UClg=;
+        b=WbleQKtiR2Aim5YqLAnM+U5niIbQYieu4u0I6wBhzHgrXmkvLUJ0Jy/5fTDqWD8oTG
+         2CFEm4WdedBW/42JOm87NyTwacNmBZwfEfPtnoGA7Mxd5D/i1cH/V6gj/gf/Q8560Zb2
+         x5Wj5MigF1K4wTSlJYMp3CyP7y8NH3p7eAmfo5QbrALlgmiVyWLcb8lPsgkB7/KKfrt6
+         UzH/oxooO784RrC6vky+wxiX74+fRJrhyL4QxY0kMgnlK+cqaU/edukrfTC0PKgMdxg3
+         e4n4MD7C5ALieJtzf+42rrKTG0wFXT0EL1hwnt/zXc3txqvV3jd8tYA8INboYDJ/8Ix3
+         0pGA==
+X-Gm-Message-State: AC+VfDzLMYS7lGkkCZTyDWgFvdNzvXSoekoeY8EBVPK8vvlvD92vJcxl
+        oat5Bqy70ssDvRhro85ROlI/KA==
+X-Google-Smtp-Source: ACHHUZ5W1Hm5W+HPcY3dmYtKyH5Zrzts4JCIeqr67/DMIHwyqq+LW+oLBpq8rwfO7/YWEuBleGLAsg==
+X-Received: by 2002:a17:907:3f87:b0:984:bd75:6a3 with SMTP id hr7-20020a1709073f8700b00984bd7506a3mr14238689ejc.58.1687419561108;
+        Thu, 22 Jun 2023 00:39:21 -0700 (PDT)
+Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id kk10-20020a170907766a00b00988a6421831sm4223077ejc.93.2023.06.22.00.39.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Jun 2023 00:39:20 -0700 (PDT)
+Message-ID: <68cf749a-4248-1250-6e6e-713649ec8578@baylibre.com>
+Date:   Thu, 22 Jun 2023 09:39:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v1] erofs: Fix detection of atomic context
+To:     Sandeep Dhavale <dhavale@google.com>, Gao Xiang <xiang@kernel.org>,
+        Chao Yu <chao@kernel.org>, Yue Hu <huyue2@coolpad.com>,
+        Jeffle Xu <jefflexu@linux.alibaba.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Will Shiu <Will.Shiu@mediatek.com>, kernel-team@android.com,
+        linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230621220848.3379029-1-dhavale@google.com>
+Content-Language: en-US
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20230621220848.3379029-1-dhavale@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 18 Apr 2023 09:46:47 +0200, Rick Wertenbroek wrote:
-> This is a series of patches that fixes the PCIe endpoint controller driver
-> for the Rockchip RK3399 SoC. The driver was introduced in commit
-> cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
-> The original driver had issues and would not allow for the RK3399 to
-> operate in PCIe endpoint mode correctly. This patch series fixes that so
-> that the PCIe core controller of the RK3399 SoC can now act as a PCIe
-> endpoint. This is v5 of the patch series and addresses the comments received
-> during the review of the v4 [1]. The changes to the v4 are minor and none of
-> them change the logic of the driver.
+On 22/06/2023 00:08, Sandeep Dhavale wrote:
+> Current check for atomic context is not sufficient as
+> z_erofs_decompressqueue_endio can be called under rcu lock
+> from blk_mq_flush_plug_list(). See the stacktrace [1]
 > 
-> [...]
+> In such case we should hand off the decompression work for async
+> processing rather than trying to do sync decompression in current
+> context. Patch fixes the detection by checking for
+> rcu_read_lock_any_held() and while at it use more appropriate
+> !in_task() check than in_atomic().
+> 
+> Background: Historically erofs would always schedule a kworker for
+> decompression which would incur the scheduling cost regardless of
+> the context. But z_erofs_decompressqueue_endio() may not always
+> be in atomic context and we could actually benefit from doing the
+> decompression in z_erofs_decompressqueue_endio() if we are in
+> thread context, for example when running with dm-verity.
+> This optimization was later added in patch [2] which has shown
+> improvement in performance benchmarks.
 
-Applied to controller/rockchip, thanks!
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-[01/11] PCI: rockchip: Remove writes to unused registers
-        https://git.kernel.org/pci/pci/c/92a9c57c325d
-[02/11] PCI: rockchip: Write PCI Device ID to correct register
-        https://git.kernel.org/pci/pci/c/1f1c42ece18d
-[03/11] PCI: rockchip: Assert PCI Configuration Enable bit after probe
-        https://git.kernel.org/pci/pci/c/f397fd4ac1fa
-[04/11] PCI: rockchip: Add poll and timeout to wait for PHY PLLs to be locked
-        https://git.kernel.org/pci/pci/c/9dd3c7c4c8c3
-[06/11] dt-bindings: PCI: Update the RK3399 example to a valid one
-        https://git.kernel.org/pci/pci/c/21a2960d5ea2
-[07/11] PCI: rockchip: Fix legacy IRQ generation for RK3399 PCIe endpoint core
-        https://git.kernel.org/pci/pci/c/166e89d99dd8
-[08/11] PCI: rockchip: Fix window mapping and address translation for endpoint
-        https://git.kernel.org/pci/pci/c/dc73ed0f1b8b
-[09/11] PCI: rockchip: Use u32 variable to access 32-bit registers
-        https://git.kernel.org/pci/pci/c/8962b2cb3911
-[10/11] PCI: rockchip: Don't advertise MSI-X in PCIe capabilities
-        https://git.kernel.org/pci/pci/c/a52587e0bee1
-[11/11] PCI: rockchip: Set address alignment for endpoint mode
-        https://git.kernel.org/pci/pci/c/7e6689b34a81
-
-Thanks,
-Lorenzo
+-- 
+Regards,
+Alexandre
