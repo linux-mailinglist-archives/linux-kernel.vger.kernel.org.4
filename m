@@ -2,89 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67F11739492
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 03:31:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3AF739474
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 03:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjFVBbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 21:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48344 "EHLO
+        id S229927AbjFVB0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 21:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjFVBbu (ORCPT
+        with ESMTP id S229804AbjFVB0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 21:31:50 -0400
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F0C193
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 18:31:48 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 4C671240027
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 03:31:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
-        t=1687397507; bh=PH1KTW93yxQOAMZiyGIfxED4MfP22HPHVIo76AOnWsE=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:
-         Content-Transfer-Encoding:From;
-        b=ZaGMfBO1YJLW8Sr8W75zXhOIWFQqgWxhgUwx3dVLxNirgYBOgEnx71Wf3xizT7rfO
-         MS75mCaPfxV3qSm/zb+tvlF5E+YtiO6l6LrWJQsUqFDUXZYgR0c4pFgVYiKvcluMvo
-         Zaj+w4xxY6j8P5ciaM49J4o9l9Xt1G2KcIFlnMZbGkVbzOcNB4yETjBuxR2ozg7U8S
-         fhpedcdLW0BIFZkCJcDcyDI7TEUwqLL+BEoCHi2AWFQW716yvjoJkDo620NAPLomPH
-         rDY79yhK+3ZRTUbN4j9iAuX2KNN9d8qxlzWNlmUlN69sbJPX884GZLWX2v3LvJBzDc
-         b7lq8aX1eqnLA==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4QmjWw0Ntlz6twX;
-        Thu, 22 Jun 2023 03:31:39 +0200 (CEST)
-From:   Yueh-Shun Li <shamrocklee@posteo.net>
-To:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Kalle Valo <kvalo@kernel.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Andy Whitcroft <apw@canonical.com>,
-        Joe Perches <joe@perches.com>
-Cc:     linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
-        linux-wireless@vger.kernel.org, linux-scsi@vger.kernel.org,
-        mptcp@lists.linux.dev, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yueh-Shun Li <shamrocklee@posteo.net>
-Subject: [PATCH 2/8] i40e, xsk: fix comment typo
-Date:   Thu, 22 Jun 2023 01:26:25 +0000
-Message-Id: <20230622012627.15050-3-shamrocklee@posteo.net>
-In-Reply-To: <20230622012627.15050-1-shamrocklee@posteo.net>
-References: <20230622012627.15050-1-shamrocklee@posteo.net>
+        Wed, 21 Jun 2023 21:26:48 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34581BDF;
+        Wed, 21 Jun 2023 18:26:47 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35LLcM6u014079;
+        Thu, 22 Jun 2023 01:26:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2023-03-30;
+ bh=cSSXJvzwbsP7uvbiIhgg/wXMRZzlf7HkionQCzwDMMc=;
+ b=VXI9CBi/3GMTuGF15duSZRXzzV5TeZDsfFCCUguhyiJuX2XYFLYk3+0Jey7LbG2D0GxW
+ HACKhwQFR1GjOek+jQSQRkZIa6sv2o4td6tv8x/GfZ60RacGLhSDSsHsHPvpnxkrF8CU
+ etZ6UfzB6T46iB+UhBorltf3ZxGNNtQGwTqb23PdxNPXXy5eyHM4zGHNDCyv//IwB9a3
+ 55X4pk02IgNy2C3ky84bkq+mgEIIdibhYOrIhLDKQhysjH3i/6MLZkFAfwof1cf9LLy9
+ u/b3DOWpkyzq2tQ25c7DwTmkt7KWenhA2L8XBUll2vlRAvQdiLrrMlLfjsyVDxxkc01K Ew== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3r93e1gs4u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Jun 2023 01:26:38 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 35M0pi6g038617;
+        Thu, 22 Jun 2023 01:26:37 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3r9396tj09-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 22 Jun 2023 01:26:37 +0000
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 35M1QXb7038374;
+        Thu, 22 Jun 2023 01:26:36 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3r9396thxp-9;
+        Thu, 22 Jun 2023 01:26:36 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Po-Wen Kao <powen.kao@mediatek.com>
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        wsd_upstream@mediatek.com, peter.wang@mediatek.com,
+        stanley.chu@mediatek.com, alice.chao@mediatek.com,
+        naomi.chu@mediatek.com, chun-hung.wu@mediatek.com,
+        cc.chou@mediatek.com, eddie.huang@mediatek.com
+Subject: Re: [PATCH v1 0/4] ufs: Introduce MCQ Quirks for MediaTek host
+Date:   Wed, 21 Jun 2023 21:26:27 -0400
+Message-Id: <168739587248.247655.6838498435493216526.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230612085817.12275-1-powen.kao@mediatek.com>
+References: <20230612085817.12275-1-powen.kao@mediatek.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-21_14,2023-06-16_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 suspectscore=0
+ adultscore=0 mlxscore=0 mlxlogscore=828 malwarescore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
+ definitions=main-2306220009
+X-Proofpoint-GUID: JDCv5bixHWDoYLjfTImxiueTaAZT7aUr
+X-Proofpoint-ORIG-GUID: JDCv5bixHWDoYLjfTImxiueTaAZT7aUr
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Spell "transmission" properly.
+On Mon, 12 Jun 2023 16:58:08 +0800, Po-Wen Kao wrote:
 
-Found by searching for keyword "tranm".
+> v1
+> Introduce quirks for non-standard part of UFSHCI and address Bart's comment
+> from last patch
+> https://lore.kernel.org/all/20230328103801.11198-1-powen.kao@mediatek.com/
+> 
+> 
+> Po-Wen Kao (4):
+>   scsi: ufs: core: Add host quirk UFSHCD_QUIRK_MCQ_BROKEN_INTR
+>   scsi: ufs: core: Add host quirk UFSHCD_QUIRK_MCQ_BROKEN_RTC
+>   scsi: ufs: ufs-mediatek: Set UFSHCD_QUIRK_MCQ_BROKEN_INTR quirk
+>   scsi: ufs: ufs-mediatek: Set UFSHCD_QUIRK_MCQ_BROKEN_RTC quirk
+> 
+> [...]
 
-Signed-off-by: Yueh-Shun Li <shamrocklee@posteo.net>
----
- drivers/net/ethernet/intel/i40e/i40e_xsk.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied to 6.5/scsi-queue, thanks!
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_xsk.c b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-index cd7b52fb6b46..05ec1181471e 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_xsk.c
-@@ -582,7 +582,7 @@ static void i40e_clean_xdp_tx_buffer(struct i40e_ring *tx_ring,
-  * @vsi: Current VSI
-  * @tx_ring: XDP Tx ring
-  *
-- * Returns true if cleanup/tranmission is done.
-+ * Returns true if cleanup/transmission is done.
-  **/
- bool i40e_clean_xdp_tx_irq(struct i40e_vsi *vsi, struct i40e_ring *tx_ring)
- {
+[1/4] scsi: ufs: core: Add host quirk UFSHCD_QUIRK_MCQ_BROKEN_INTR
+      https://git.kernel.org/mkp/scsi/c/c4ad4f2e6646
+[2/4] scsi: ufs: core: Add host quirk UFSHCD_QUIRK_MCQ_BROKEN_RTC
+      https://git.kernel.org/mkp/scsi/c/aa9d5d0015a8
+[3/4] scsi: ufs: ufs-mediatek: Set UFSHCD_QUIRK_MCQ_BROKEN_INTR quirk
+      https://git.kernel.org/mkp/scsi/c/95cd364ccc97
+[4/4] scsi: ufs: ufs-mediatek: Set UFSHCD_QUIRK_MCQ_BROKEN_RTC quirk
+      https://git.kernel.org/mkp/scsi/c/3c9b49be6666
+
 -- 
-2.38.1
-
+Martin K. Petersen	Oracle Linux Engineering
