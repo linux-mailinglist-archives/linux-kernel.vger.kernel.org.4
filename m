@@ -2,132 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EDA673ACE7
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 01:06:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D4873ACE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 01:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbjFVXG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 19:06:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
+        id S230472AbjFVXHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 19:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbjFVXGV (ORCPT
+        with ESMTP id S230239AbjFVXH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 19:06:21 -0400
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DBD2128;
-        Thu, 22 Jun 2023 16:06:11 -0700 (PDT)
-Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6b5915d0816so94715a34.1;
-        Thu, 22 Jun 2023 16:06:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687475171; x=1690067171;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ouszZxBWK4Y/7BnPKGCua1rglERmrS5y1sP9g0y1NxU=;
-        b=aTB1pvy0DXHIer0JV5RF4ky0pZJjqqTMNLnoz3OJFDzXR2M1WhUq1IKpMh911OPGMb
-         GMIL5ZdCS66V+dz0MCNHe4rkphypdFwdgBQCmUh4+dakL9F8ZzsSktXpbYbB5/PQEfNx
-         LvyxoJc2bw34I8JQ8y3cbCwykwlJhcf5QjI2Rtp3ntF6yVvu2+mAGffWnayVss1LIXTC
-         Tb2vpZD7lnViDjTmWqiEw8mVm1czpGyLzU3KIxLsI2txruv50G1S/vLnHIqvYVAEHrzA
-         y4NtmYcKzNJV6ek3hEP52Nph+NwmjCZ3jaCgPE58l9O7MvMPzTPFFMP05eXoxWQeMyTR
-         GbnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687475171; x=1690067171;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ouszZxBWK4Y/7BnPKGCua1rglERmrS5y1sP9g0y1NxU=;
-        b=FokVQ9Uf2+NiSpLsC2zV4o2XRRoRkHtMSpl3RRLZcu6Ig35ud17bV5fcsoP039Wc0f
-         5304GaWW2emDWL55ypFIo7rzG70thnNs/85hAVpxgj5xo0CaoFKO1trWTLeFpZi+sLRj
-         tljApsf1DIMvLzx7sWWRzr/gz5GctICf/rl1XOCGe5Lm0tFHtGkH7rWGNmduZ/NVfnQ/
-         U8JYcCL2YlfUcjdL/fTEKpGkUJVz2pDBgaPiD2djIHMFrDX+sygk1ljFpK5BPF9Y+WR/
-         u/ZlAazBEOjSD1ZO2kjgRXW7wiwIbQpSgX4CK3IjLh871v1pG2d6jDhQnweqAnzoUH9Z
-         Zpgg==
-X-Gm-Message-State: AC+VfDzacCbw9FTP+6lYAVO8KrmoTpkoC9f45Cc0cVdZ/Odv5TLizrlk
-        OPjThx1ro7z119Y/Al0WeUw=
-X-Google-Smtp-Source: ACHHUZ5BE2JaRf9U/RJpZMsASVAr/InFv9I3p6UcUaGtwKesvlbWrLfzH9LHqG+tmTWYjJCn3wl8NA==
-X-Received: by 2002:a05:6359:b95:b0:12b:d23d:f5bf with SMTP id gf21-20020a0563590b9500b0012bd23df5bfmr15658173rwb.0.1687475171058;
-        Thu, 22 Jun 2023 16:06:11 -0700 (PDT)
-Received: from localhost (ec2-54-67-115-33.us-west-1.compute.amazonaws.com. [54.67.115.33])
-        by smtp.gmail.com with ESMTPSA id d18-20020a63f252000000b0054febe8a5f6sm5348113pgk.82.2023.06.22.16.06.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 16:06:10 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 23:06:09 +0000
-From:   Bobby Eshleman <bobbyeshleman@gmail.com>
-To:     Stefano Garzarella <sgarzare@redhat.com>
-Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        linux-hyperv@vger.kernel.org,
-        Stefan Hajnoczi <stefanha@redhat.com>, kvm@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        virtualization@lists.linux-foundation.org,
-        Eric Dumazet <edumazet@google.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        Jiang Wang <jiang.wang@bytedance.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH RFC net-next v4 5/8] virtio/vsock: add
- VIRTIO_VSOCK_F_DGRAM feature bit
-Message-ID: <ZJTT4QTwD824pBsh@bullseye>
-References: <20230413-b4-vsock-dgram-v4-0-0cebbb2ae899@bytedance.com>
- <20230413-b4-vsock-dgram-v4-5-0cebbb2ae899@bytedance.com>
- <med476cdkdhkylddqa5wbhjpgyw2yiqfthvup2kics3zbb5vpb@ovzg57adewfw>
+        Thu, 22 Jun 2023 19:07:29 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17F42135
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 16:07:28 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1687475245;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gvYbXwq2eSAZRz3hMFUqvNYl8+fG5F3sO59deliWYI0=;
+        b=2sJUWJyocUarp+h83+VJcOl63TkpanwxdYEGl/8lSrlBpDzzCTx7exhEN8L3OcQ0fEvJYJ
+        EfN8TkSWyfmDJ7DoyTuL2eXuq3HL+QJyyD4oAKaWhQuJlj1av5l7SwMUIeTW6aJmQ+qzaG
+        XCeJDXiHy52+Ytuc/pOnvrnWGo2wucdriFZBcVfChKyf+v5zjzvcYrXNdH0HBSoWyRIohs
+        18YS84ZLUIud1ue9bKP7XVfqxNuLWx4O1pdqH89MiemZxODmSIr7KMNj7n6/oHSRByjqEa
+        pX0bTkgF26NBdM8PSFMTPxk4g3b78PqYFlqqo3IA3mGf3+TRA7zhpfnOQyyv2Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1687475245;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=gvYbXwq2eSAZRz3hMFUqvNYl8+fG5F3sO59deliWYI0=;
+        b=ZQjvlkM0XNNM0OJhmGLAgWzrVc5BXrcT5iDrkNn/rU+1eKhNflA5lHvUFlrLzxqEMOafEz
+        EWb/fXO8Xboi9ICA==
+To:     Feng Tang <feng.tang@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        "Paul E . McKenney" <paulmck@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        tim.c.chen@intel.com
+Subject: Re: [Patch v2 2/2] x86/tsc: use logical_packages as a better
+ estimation of socket numbers
+In-Reply-To: <87h6qz7et0.ffs@tglx>
+References: <20230613052523.1106821-1-feng.tang@intel.com>
+ <20230613052523.1106821-2-feng.tang@intel.com>
+ <20230615092021.GE1683497@hirez.programming.kicks-ass.net>
+ <ZIwMstkB7CG3pDYu@feng-clx> <87h6qz7et0.ffs@tglx>
+Date:   Fri, 23 Jun 2023 01:07:24 +0200
+Message-ID: <87edm36qqb.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <med476cdkdhkylddqa5wbhjpgyw2yiqfthvup2kics3zbb5vpb@ovzg57adewfw>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 05:29:08PM +0200, Stefano Garzarella wrote:
-> On Sat, Jun 10, 2023 at 12:58:32AM +0000, Bobby Eshleman wrote:
-> > This commit adds a feature bit for virtio vsock to support datagrams.
-> > 
-> > Signed-off-by: Jiang Wang <jiang.wang@bytedance.com>
-> > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
-> > ---
-> > include/uapi/linux/virtio_vsock.h | 1 +
-> > 1 file changed, 1 insertion(+)
-> 
-> LGTM, but I'll give the R-b when we merge the virtio-spec.
-> 
-> Stefano
-> 
+On Thu, Jun 22 2023 at 16:27, Thomas Gleixner wrote:
+> On Fri, Jun 16 2023 at 15:18, Feng Tang wrote:
+> So something like the below should just work.
 
-Roger that.
+Well it works in principle, but does not take any of the command line
+parameters which limit nr_possible CPUs or the actual kernel
+configuration into account. But the principle itself works correctly.
 
-> > 
-> > diff --git a/include/uapi/linux/virtio_vsock.h b/include/uapi/linux/virtio_vsock.h
-> > index 64738838bee5..9c25f267bbc0 100644
-> > --- a/include/uapi/linux/virtio_vsock.h
-> > +++ b/include/uapi/linux/virtio_vsock.h
-> > @@ -40,6 +40,7 @@
-> > 
-> > /* The feature bitmap for virtio vsock */
-> > #define VIRTIO_VSOCK_F_SEQPACKET	1	/* SOCK_SEQPACKET supported */
-> > +#define VIRTIO_VSOCK_F_DGRAM		3	/* SOCK_DGRAM supported */
-> > 
-> > struct virtio_vsock_config {
-> > 	__le64 guest_cid;
-> > 
-> > -- 
-> > 2.30.2
-> > 
-> 
-> _______________________________________________
-> Virtualization mailing list
-> Virtualization@lists.linux-foundation.org
-> https://lists.linuxfoundation.org/mailman/listinfo/virtualization
+Below is an updated version, which takes them into account.
+
+The data here is from a two socket system with 32 CPUs per socket.
+
+No command line parameters (NR_CPUS=64):
+
+ smpboot: Allowing 64 CPUs, 32 hotplug CPUs
+ clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x1e3306b9ada, max_idle_ns: 440795224413 ns
+ smp: Brought up 1 node, 32 CPUs
+ smpboot: Max logical packages ACPI enumeration: 2
+
+"possible_cpus=32" (NR_CPUS=64) or
+No command line parameter (NR_CPUS=32):
+
+ smpboot: Allowing 32 CPUs, 0 hotplug CPUs
+ clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x1e3306b9ada, max_idle_ns: 440795224413 ns
+ smp: Brought up 1 node, 32 CPUs
+ smpboot: Max logical packages ACPI enumeration: 1
+
+maxcpus=32
+ smpboot: Allowing 64 CPUs, 0 hotplug CPUs
+ clocksource: tsc-early: mask: 0xffffffffffffffff max_cycles: 0x1e3306b9ada, max_idle_ns: 440795224413 ns
+ smp: Brought up 1 node, 32 CPUs
+ smpboot: Max logical packages ACPI enumeration: 2
+
+But that's really all we should do. If the ACPI table enumerates CPUs as
+hotpluggable which can never arrive, then so be it.
+
+We have enough parameters to override the BIOS nonsense. Trying to do
+more magic MAD table parsing with heuristics is just wrong.
+
+We already have way too many heuristics and workarounds for broken
+firmware, but for the problem at hand, we really don't need more.
+
+The only systems I observed so far which have a non-sensical amount of
+"hotpluggable" CPUs are high-end server machines. It's a resonable
+expectation that machines with high-end price tags come with correct
+firmware. Trying to work around that (except with the existing command
+line options) is just proliferating this mess. This has to stop.
+
+Thanks,
+
+        tglx
+---
+
+--- a/arch/x86/include/asm/apic.h
++++ b/arch/x86/include/asm/apic.h
+@@ -509,9 +509,12 @@ extern int default_check_phys_apicid_pre
+ #ifdef CONFIG_SMP
+ bool apic_id_is_primary_thread(unsigned int id);
+ void apic_smt_update(void);
++extern unsigned int apic_to_pkg_shift;
++void logical_packages_update(u32 apicid, bool enabled);
+ #else
+ static inline bool apic_id_is_primary_thread(unsigned int id) { return false; }
+ static inline void apic_smt_update(void) { }
++static inline void logical_packages_update(u32 apicid, bool enabled) { }
+ #endif
+ 
+ struct msi_msg;
+--- a/arch/x86/kernel/acpi/boot.c
++++ b/arch/x86/kernel/acpi/boot.c
+@@ -178,6 +178,7 @@ static int acpi_register_lapic(int id, u
+ 	}
+ 
+ 	if (!enabled) {
++		logical_packages_update(acpiid, false);
+ 		++disabled_cpus;
+ 		return -EINVAL;
+ 	}
+@@ -189,6 +190,8 @@ static int acpi_register_lapic(int id, u
+ 	if (cpu >= 0)
+ 		early_per_cpu(x86_cpu_to_acpiid, cpu) = acpiid;
+ 
++	logical_packages_update(acpiid, cpu >= 0);
++
+ 	return cpu;
+ }
+ 
+--- a/arch/x86/kernel/cpu/amd.c
++++ b/arch/x86/kernel/cpu/amd.c
+@@ -692,6 +692,8 @@ static void early_init_amd(struct cpuinf
+ 		}
+ 	}
+ 
++	detect_extended_topology_early(c);
++
+ 	if (cpu_has(c, X86_FEATURE_TOPOEXT))
+ 		smp_num_siblings = ((cpuid_ebx(0x8000001e) >> 8) & 0xff) + 1;
+ }
+--- a/arch/x86/kernel/cpu/topology.c
++++ b/arch/x86/kernel/cpu/topology.c
+@@ -29,6 +29,8 @@ unsigned int __max_die_per_package __rea
+ EXPORT_SYMBOL(__max_die_per_package);
+ 
+ #ifdef CONFIG_SMP
++unsigned int apic_to_pkg_shift __ro_after_init;
++
+ /*
+  * Check if given CPUID extended topology "leaf" is implemented
+  */
+@@ -66,7 +68,7 @@ int detect_extended_topology_early(struc
+ {
+ #ifdef CONFIG_SMP
+ 	unsigned int eax, ebx, ecx, edx;
+-	int leaf;
++	int leaf, subleaf;
+ 
+ 	leaf = detect_extended_topology_leaf(c);
+ 	if (leaf < 0)
+@@ -80,6 +82,14 @@ int detect_extended_topology_early(struc
+ 	 */
+ 	c->initial_apicid = edx;
+ 	smp_num_siblings = max_t(int, smp_num_siblings, LEVEL_MAX_SIBLINGS(ebx));
++
++	for (subleaf = 1; subleaf < 8; subleaf++) {
++		cpuid_count(leaf, subleaf, &eax, &ebx, &ecx, &edx);
++
++		if (ebx == 0 || !LEAFB_SUBTYPE(ecx))
++			break;
++		apic_to_pkg_shift = BITS_SHIFT_NEXT_LEVEL(eax);
++	}
+ #endif
+ 	return 0;
+ }
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -1501,17 +1501,91 @@ void __init native_smp_prepare_boot_cpu(
+ 	native_pv_lock_init();
+ }
+ 
++struct logical_pkg {
++	unsigned int	enabled_cpus;
++	unsigned int	disabled_cpus;
++};
++
++/*
++ * Needs to be size of NR_CPUS because virt allows to create the weirdest
++ * topologies just because it can.
++ */
++static struct logical_pkg logical_pkgs[NR_CPUS] __refdata;
++
++void logical_packages_update(u32 apicid, bool enabled)
++{
++	struct logical_pkg *lp;
++	unsigned int pkg;
++
++	if (!apic_to_pkg_shift || system_state != SYSTEM_BOOTING)
++		return;
++
++	pkg = (apicid >> apic_to_pkg_shift);
++
++	lp = logical_pkgs + pkg;
++	if (enabled)
++		lp->enabled_cpus++;
++	else
++		lp->disabled_cpus++;
++
++	if (++pkg > __max_logical_packages)
++		__max_logical_packages = pkg;
++}
++
++static void __init logical_packages_finish_setup(unsigned int possible)
++{
++	unsigned int pkg, maxpkg = 0, maxcpus = 0;
++
++	if (!apic_to_pkg_shift)
++		return;
++
++	/* Scan the enabled CPUs first */
++	for (pkg = 0; pkg < __max_logical_packages; pkg++) {
++		if (!logical_pkgs[pkg].enabled_cpus)
++			continue;
++
++		maxpkg++;
++		maxcpus += logical_pkgs[pkg].enabled_cpus;
++
++		if (maxcpus >= possible) {
++			__max_logical_packages = maxpkg;
++			return;
++		}
++	}
++
++	/* There is still room, scan for disabled CPUs */
++	for (pkg = 0; pkg < __max_logical_packages; pkg++) {
++		if (logical_pkgs[pkg].enabled_cpus || !logical_pkgs[pkg].disabled_cpus)
++			continue;
++
++		maxpkg++;
++		maxcpus += logical_pkgs[pkg].disabled_cpus;
++
++		if (maxcpus >= possible)
++			break;
++	}
++
++	__max_logical_packages = maxpkg;
++}
++
+ void __init calculate_max_logical_packages(void)
+ {
+ 	int ncpus;
+ 
++	if (__max_logical_packages) {
++		pr_info("Max logical packages ACPI enumeration: %u\n",
++		       __max_logical_packages);
++		return;
++	}
++
+ 	/*
+ 	 * Today neither Intel nor AMD support heterogeneous systems so
+ 	 * extrapolate the boot cpu's data to all packages.
+ 	 */
+ 	ncpus = cpu_data(0).booted_cores * topology_max_smt_threads();
+ 	__max_logical_packages = DIV_ROUND_UP(total_cpus, ncpus);
+-	pr_info("Max logical packages: %u\n", __max_logical_packages);
++
++	pr_info("Max logical packages estimated: %u\n", __max_logical_packages);
+ }
+ 
+ void __init native_smp_cpus_done(unsigned int max_cpus)
+@@ -1619,6 +1693,8 @@ early_param("possible_cpus", _setup_poss
+ 
+ 	for (i = 0; i < possible; i++)
+ 		set_cpu_possible(i, true);
++
++	logical_packages_finish_setup(possible);
+ }
+ 
+ #ifdef CONFIG_HOTPLUG_CPU
+
+
+
