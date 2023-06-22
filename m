@@ -2,60 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F2773A134
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CAB273A213
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 15:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbjFVMtl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 08:49:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49310 "EHLO
+        id S230098AbjFVNmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 09:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjFVMtk (ORCPT
+        with ESMTP id S229874AbjFVNmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 08:49:40 -0400
-Received: from smtp-fw-9105.amazon.com (smtp-fw-9105.amazon.com [207.171.188.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C562193;
-        Thu, 22 Jun 2023 05:49:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1687438180; x=1718974180;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=NlzD/CvLWWdttX4UrB2Vhmi3xDeUykPh+lPbouFV1UY=;
-  b=LHS2OFrFefCXSV/Vv1idO/jtFrbP5/OwlrmMohZS5l1rzZlJ+x+W0Ix9
-   2UIdm1wVzcSvfaiscVV2y/mbf/q2x23Vdm+okZv2S7nEwFdPoRGVg8rha
-   3YWat2HbJSYPZ2Cwy+5e5g846UBnuZbZvoRXxXYeuj+znTa8A1a0tBqQy
-   w=;
-X-IronPort-AV: E=Sophos;i="6.00,263,1681171200"; 
-   d="scan'208";a="656430713"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-m6i4x-54a853e6.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-9105.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 12:49:33 +0000
-Received: from EX19MTAUEA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1a-m6i4x-54a853e6.us-east-1.amazon.com (Postfix) with ESMTPS id 2039F45F4A;
-        Thu, 22 Jun 2023 12:49:30 +0000 (UTC)
-Received: from EX19MTAUEC001.ant.amazon.com (10.252.135.222) by
- EX19MTAUEA001.ant.amazon.com (10.252.134.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 22 Jun 2023 12:49:29 +0000
-Received: from dev-dsk-mngyadam-1c-a2602c62.eu-west-1.amazon.com (10.15.1.225)
- by mail-relay.amazon.com (10.252.135.200) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Thu, 22 Jun 2023 12:49:29 +0000
-Received: by dev-dsk-mngyadam-1c-a2602c62.eu-west-1.amazon.com (Postfix, from userid 23907357)
-        id 0C35E2016; Thu, 22 Jun 2023 12:49:29 +0000 (UTC)
-From:   Mahmoud Adam <mngyadam@amazon.com>
-To:     <dhowells@redhat.com>
-CC:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <keyrings@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Mahmoud Adam <mngyadam@amazon.com>
-Subject: [PATCH v3] KEYS: use kfree_sensitive with key
-Date:   Thu, 22 Jun 2023 12:47:22 +0000
-Message-ID: <20230622124719.93393-1-mngyadam@amazon.com>
-X-Mailer: git-send-email 2.40.1
+        Thu, 22 Jun 2023 09:42:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4874C1735
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 06:41:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687441314;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eFmMS1U29te7tFKtgkPWLc+o83wVHmxe900XZpUTdy8=;
+        b=KYQsJetNVO4CB77BH1qhcrSzLyRnFbjUq87hVEoUpynS/XaVj1X5G7XOtNqw0byEwIsqmo
+        N6Z1eNDOaMKwAkw+OJfxRvGy11+oTdvYqbZu4KND/Dapd0muVW1/NNJQWHto7N8qnbNQeG
+        /A2YJtVns/hp15EEM4TH9vyrbmoldHg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-522-gHPWKO21MFaNd35SQfD9XQ-1; Thu, 22 Jun 2023 09:41:52 -0400
+X-MC-Unique: gHPWKO21MFaNd35SQfD9XQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D2FA8104458A;
+        Thu, 22 Jun 2023 13:41:48 +0000 (UTC)
+Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 9FD83112132C;
+        Thu, 22 Jun 2023 13:41:47 +0000 (UTC)
+Received: by tpad.localdomain (Postfix, from userid 1000)
+        id 7AF94400E05F5; Thu, 22 Jun 2023 09:47:22 -0300 (-03)
+Date:   Thu, 22 Jun 2023 09:47:22 -0300
+From:   Marcelo Tosatti <mtosatti@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Yair Podemsky <ypodemsk@redhat.com>, ppandit@redhat.com,
+        david@redhat.com, linux@armlinux.org.uk, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        davem@davemloft.net, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        keescook@chromium.org, paulmck@kernel.org, frederic@kernel.org,
+        will@kernel.org, ardb@kernel.org, samitolvanen@google.com,
+        juerg.haefliger@canonical.com, arnd@arndb.de,
+        rmk+kernel@armlinux.org.uk, geert+renesas@glider.be,
+        linus.walleij@linaro.org, akpm@linux-foundation.org,
+        sebastian.reichel@collabora.com, rppt@kernel.org,
+        aneesh.kumar@linux.ibm.com, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] send tlb_remove_table_smp_sync IPI only to
+ necessary CPUs
+Message-ID: <ZJRC2s4sIuJ9V3A0@tpad>
+References: <20230620144618.125703-1-ypodemsk@redhat.com>
+ <20230621074337.GF2046280@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230621074337.GF2046280@hirez.programming.kicks-ass.net>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,56 +80,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-key might contain private part of the key, so better use
-kfree_sensitive to free it
----
-v1: conflicts with c3d03e8e35e0:
-KEYS: asymmetric: Copy sig and digest in public_key_verify_signature()
-kfree_sensitive the buf variable also because it might has private
-part
+On Wed, Jun 21, 2023 at 09:43:37AM +0200, Peter Zijlstra wrote:
+> On Tue, Jun 20, 2023 at 05:46:16PM +0300, Yair Podemsky wrote:
+> > Currently the tlb_remove_table_smp_sync IPI is sent to all CPUs
+> > indiscriminately, this causes unnecessary work and delays notable in
+> > real-time use-cases and isolated cpus.
+> > By limiting the IPI to only be sent to cpus referencing the effected
+> > mm.
+> > a config to differentiate architectures that support mm_cpumask from
+> > those that don't will allow safe usage of this feature.
+> > 
+> > changes from -v1:
+> > - Previous version included a patch to only send the IPI to CPU's with
+> > context_tracking in the kernel space, this was removed due to race 
+> > condition concerns.
+> > - for archs that do not maintain mm_cpumask the mask used should be
+> >  cpu_online_mask (Peter Zijlstra).
+> >  
+> 
+> Would it not be much better to fix the root cause? As per the last time,
+> there's patches that cure the thp abuse of this.
 
- crypto/asymmetric_keys/public_key.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+The other case where the IPI can happen is:
 
-diff --git a/crypto/asymmetric_keys/public_key.c b/crypto/asymmetric_keys/public_key.c
-index 50c933f86b21..170f06982381 100644
---- a/crypto/asymmetric_keys/public_key.c
-+++ b/crypto/asymmetric_keys/public_key.c
-@@ -43,7 +43,7 @@ static void public_key_describe(const struct key *asymmetric_key,
- void public_key_free(struct public_key *key)
- {
- 	if (key) {
--		kfree(key->key);
-+		kfree_sensitive(key->key);
- 		kfree(key->params);
- 		kfree(key);
- 	}
-@@ -218,7 +218,7 @@ static int software_key_query(const struct kernel_pkey_params *params,
- 	ret = 0;
+CPU-0                                   CPU-1
 
- error_free_key:
--	kfree(key);
-+	kfree_sensitive(key);
- error_free_tfm:
- 	crypto_free_akcipher(tfm);
- 	pr_devel("<==%s() = %d\n", __func__, ret);
-@@ -303,7 +303,7 @@ static int software_key_eds_op(struct kernel_pkey_params *params,
- 		ret = req->dst_len;
+tlb_remove_table
+tlb_remove_table_sync_one
+IPI
+                                        local_irq_disable
+                                        gup_fast
+                                        local_irq_enable
 
- error_free_key:
--	kfree(key);
-+	kfree_sensitive(key);
- error_free_req:
- 	akcipher_request_free(req);
- error_free_tfm:
-@@ -460,7 +460,7 @@ int public_key_verify_signature(const struct public_key *pkey,
- 	ret = crypto_wait_req(crypto_akcipher_verify(req), &cwait);
 
- error_free_buf:
--	kfree(buf);
-+	kfree_sensitive(buf);
- error_free_req:
- 	akcipher_request_free(req);
- error_free_tfm:
---
-2.40.1
+So its not only the THP case.
+
