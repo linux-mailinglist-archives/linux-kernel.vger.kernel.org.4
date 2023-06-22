@@ -2,135 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1F5B739671
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 06:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4E2739676
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 06:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbjFVEjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 00:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44860 "EHLO
+        id S230473AbjFVEn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 00:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229694AbjFVEjj (ORCPT
+        with ESMTP id S229694AbjFVEnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 00:39:39 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B280EE69;
-        Wed, 21 Jun 2023 21:39:38 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35M3rpGN000655;
-        Thu, 22 Jun 2023 04:39:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=b3QY04BaXwdxDByWW6IPZPiZMwPBhZgi2RIteR6pKGQ=;
- b=B6nso4tg9DmX7jyXWouafFaVpAEiIY2tdnU+3G5xsWjW3PeB26xFPXkLLrCC1bdxB1Gl
- /93vpMZW3lcuIGHKLS+Wp9zisRDaXWesWpEZfSUzAq8kj4TbpuFmOcUsiPqZb/9XFRBc
- v8kN3nQnLOPlhpW9vao8MDvuvtlY9ALvgXSdvOMv5doMwnhOAKGHneX4gMVb9rTOo8xm
- QFx320XvRmxDNypu2uf7TfhQMs4xoM12qKploqQU7xjQF+S813ZWTWTMVr1jI6K/JvKj
- cOGcThqo2lvZ8HsD4pUwQPQpASjqRSqZyBN2psXAn5R2nd8UwDAX4fI7OEy/ob34x/gH tw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rbqjbaxfe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Jun 2023 04:39:23 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35M4dL2n000851
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Jun 2023 04:39:21 GMT
-Received: from [10.216.6.225] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 21 Jun
- 2023 21:39:16 -0700
-Message-ID: <3f9957ad-cc73-2a4b-f11c-98b0b79f829c@quicinc.com>
-Date:   Thu, 22 Jun 2023 10:09:13 +0530
+        Thu, 22 Jun 2023 00:43:22 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F248B1721;
+        Wed, 21 Jun 2023 21:43:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687409000; x=1718945000;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=wQoR2q3uW5UBsZHTzuc+u5TdXp0RPHRVzU+umLlMx20=;
+  b=fLDac3bCVzJST0SHlg6g/Yh/UUcZGuy/YBmky0VcwGs3Xf4ZbzNvsteB
+   DnfcZqt/mJAtZMxwXj3FiW3JlYOpXhGand6v9dOovjVc6RNDXNY3Ku/jN
+   Fl0YZma7sVupZiluhBGI5QrPdnqQhHTj4jt2ytvmLr2b+WyllDRCwMH00
+   ti/0c/1IC9ij5mzOvewyi/VFVIP2mSJNd2dkjVFUpkpdubpmAYYQBTy2k
+   XUub2+Nju1iEcGI/EXZkYjROipiQGXOQMe1Fxj21TqEdZKDhnHQsjE1K4
+   EAyP2XJgvDdkkcsMj0R9NJXCRMUXc3osxnM+CNoY5FqWu8L/8vQXAQDzN
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="339993596"
+X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
+   d="scan'208";a="339993596"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 21:43:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="888947079"
+X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
+   d="scan'208";a="888947079"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.249.46.4])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 21:43:16 -0700
+Message-ID: <a44290cc-5954-8d5a-f84c-9e5a68732ea4@intel.com>
+Date:   Thu, 22 Jun 2023 07:43:13 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.1
-Subject: Re: [PATCH v8 6/9] usb: dwc3: qcom: Add multiport controller support
- for qcom wrapper
-To:     Johan Hovold <johan@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Andy Gross" <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
-        "quic_harshq@quicinc.com" <quic_harshq@quicinc.com>,
-        "ahalaney@redhat.com" <ahalaney@redhat.com>
-References: <82553597-ce0e-48f4-44d4-9eeaaf4cb1c4@quicinc.com>
- <ZIBsDQJtgDZRe7MG@hovoldconsulting.com>
- <99cded6f-6a71-ffce-8479-c7c0726bfb8e@quicinc.com>
- <ZIGihYS5EacISEFm@hovoldconsulting.com>
- <279fff8b-57e2-cfc8-cd6d-c69d00e71799@quicinc.com>
- <20230608175705.2ajrteztdeqdrkzg@synopsys.com>
- <ZILgW5CwfSlBxzNB@hovoldconsulting.com>
- <20230609181602.ljxdchgzl7kzk73n@synopsys.com>
- <acd46bb7-0708-d095-c3c6-53653f9e47d6@quicinc.com>
- <20230615210800.lvmekpvxjiszkrh4@synopsys.com>
- <ZJKo3LyIMD1xr2ru@hovoldconsulting.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.12.0
+Subject: Re: [PATCH 0/9] Add support for Firefox's gecko profile format
+To:     Anup Sharma <anupnewsmail@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1687375189.git.anupnewsmail@gmail.com>
 Content-Language: en-US
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <ZJKo3LyIMD1xr2ru@hovoldconsulting.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <cover.1687375189.git.anupnewsmail@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: E9IEAhF4tL47Moo3iCf2rcMMLYffulG6
-X-Proofpoint-GUID: E9IEAhF4tL47Moo3iCf2rcMMLYffulG6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-22_02,2023-06-16_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- adultscore=0 suspectscore=0 bulkscore=0 impostorscore=0 priorityscore=1501
- phishscore=0 lowpriorityscore=0 malwarescore=0 spamscore=0 mlxlogscore=659
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2305260000
- definitions=main-2306220036
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 6/21/2023 1:08 PM, Johan Hovold wrote:
-> On Thu, Jun 15, 2023 at 09:08:01PM +0000, Thinh Nguyen wrote:
->> On Thu, Jun 15, 2023, Krishna Kurapati PSSNV wrote:
+On 21/06/23 22:35, Anup Sharma wrote:
+> This patch series adds support for Firefox's gecko profile format.
+> The format is documented here [1]
 > 
->>>   How about we add compatible data indicating the number of usb2/usb3 ports.
->>> That way we needn't parse the DT or read xhci registers atleast as a
->>> temporary solution to unblock other patches. Once this series is merged, we
->>> can get back to fixing the port count calculation. Does it seem fine ?
->>>
->>
->> Temporary solution should not involve DT as it's not easily reverted or
->> changed. Just include xhci-ext-caps.h and use the inline function. I
->> think Johan is fine with that. If not, he can provide more feedback.
+> The series adds a new python script that can be used to convert the 
+> perf script to gecko profile format. To use this script, use the
+> following commands: 
 > 
-> Yes, I already suggested that as a quick way forward since it is already
-> used this way by the xhci debug driver.
+> perf record 
+> perf script -F +pid > perf_data.txt
+> python3 firefox-gecko-converter.py > gecko_profile.json
+
+Why not use the perf script python interface?
+
+https://perf.wiki.kernel.org/index.php/Latest_Manual_Page_of_perf-script-python.1
+
 > 
-> Johan
+> Also dont forget to change the chown of the output file to the user[2].
+> 
+> [1] https://github.com/firefox-devtools/profiler/blob/main/docs-developer/gecko-profile-format.md
+> [2] https://bugzilla.mozilla.org/show_bug.cgi?id=1823421
+> 
+> Anup Sharma (9):
+>   scripts: python: Add check for correct perf script format
+>   scripts: python: implement add sample function and return it
+>   scripts: python: Introduce thread sample processing in
+>     convertPerfScriptProfile
+>   scripts: python: Implement parsing of input data in
+>     convertPerfScriptProfile
+>   scripts: python: implement function for thread creation
+>   scripts: python: implement get or create stack function
+>   scripts: python: implement get or create frame function
+>   scripts: python: Finalize convertPerfScriptProfile and return profile
+>     data
+>   scripts: python: Add temporary main function for testing purposes
+> 
+>  .../scripts/python/firefox-gecko-converter.py | 249 ++++++++++++++++++
+>  1 file changed, 249 insertions(+)
+>  create mode 100644 tools/perf/scripts/python/firefox-gecko-converter.py
+> 
 
-Hi Johan, Thinh,
-
-  Pushed a v9 following the above suggestion.
-
-Thanks,
-Krishna,
