@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4169073A356
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2C573A357
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231739AbjFVOml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 10:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48388 "EHLO
+        id S231743AbjFVOmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 10:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231680AbjFVOmh (ORCPT
+        with ESMTP id S231723AbjFVOmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 10:42:37 -0400
+        Thu, 22 Jun 2023 10:42:38 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B2E3170C
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:42:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8F3D1BFC
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:42:30 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BA1BCC14;
-        Thu, 22 Jun 2023 07:43:11 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 927601042;
+        Thu, 22 Jun 2023 07:43:14 -0700 (PDT)
 Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 335663F663;
-        Thu, 22 Jun 2023 07:42:25 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0E8A43F663;
+        Thu, 22 Jun 2023 07:42:27 -0700 (PDT)
 From:   Ryan Roberts <ryan.roberts@arm.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -43,10 +43,12 @@ To:     Catalin Marinas <catalin.marinas@arm.com>,
 Cc:     Ryan Roberts <ryan.roberts@arm.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org
-Subject: [PATCH v1 00/14] Transparent Contiguous PTEs for User Mappings
-Date:   Thu, 22 Jun 2023 15:41:55 +0100
-Message-Id: <20230622144210.2623299-1-ryan.roberts@arm.com>
+Subject: [PATCH v1 01/14] arm64/mm: set_pte(): New layer to manage contig bit
+Date:   Thu, 22 Jun 2023 15:41:56 +0100
+Message-Id: <20230622144210.2623299-2-ryan.roberts@arm.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230622144210.2623299-1-ryan.roberts@arm.com>
+References: <20230622144210.2623299-1-ryan.roberts@arm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
@@ -58,176 +60,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+Create a new layer for the in-table PTE manipulation APIs. For now, The
+existing API is prefixed with double underscore to become the
+arch-private API and the public API is just a simple wrapper that calls
+the private API.
 
-This is a series to opportunistically and transparently use contpte mappings
-(set the contiguous bit in ptes) for user memory when those mappings meet the
-requirements. It is part of a wider effort to improve performance of the 4K
-kernel with the aim of approaching the performance of the 16K kernel, but
-without breaking compatibility and without the associated increase in memory. It
-also benefits the 16K and 64K kernels by enabling 2M THP, since this is the
-contpte size for those kernels.
+The public API implementation will subsequently be used to transparently
+manipulate the contiguous bit where appropriate. But since there are
+already some contig-aware users (e.g. hugetlb, kernel mapper), we must
+first ensure those users use the private API directly so that the future
+contig-bit manipulations in the public API do not interfere with those
+existing uses.
 
-Of course this is only one half of the change. We require the mapped physical
-memory to be the correct size and alignment for this to actually be useful (i.e.
-64K for 4K pages, or 2M for 16K/64K pages). Fortunately folios are solving this
-problem for us. Filesystems that support it (XFS, AFS, EROFS, tmpfs) will
-allocate large folios up to the PMD size today, and more filesystems are coming.
-And the other half of my work, to enable the use of large folios for anonymous
-memory, aims to make contpte sized folios prevalent for anonymous memory too.
+No behavioural changes intended.
 
+Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+---
+ arch/arm64/include/asm/pgtable.h | 23 ++++++++++++++++++++---
+ arch/arm64/kernel/efi.c          |  2 +-
+ arch/arm64/mm/fixmap.c           |  2 +-
+ arch/arm64/mm/kasan_init.c       |  4 ++--
+ arch/arm64/mm/mmu.c              |  2 +-
+ arch/arm64/mm/pageattr.c         |  2 +-
+ arch/arm64/mm/trans_pgd.c        |  4 ++--
+ 7 files changed, 28 insertions(+), 11 deletions(-)
 
-Dependencies
-------------
-
-While there is a complicated set of hard and soft dependencies that this patch
-set depends on, I wanted to split it out as best I could and kick off proper
-review independently.
-
-The series applies on top of these other patch sets, with a tree at:
-https://gitlab.arm.com/linux-arm/linux-rr/-/tree/features/granule_perf/contpte-lkml_v1
-
-v6.4-rc6
-  - base
-
-set_ptes()
-  - hard dependency
-  - Patch set from Matthew Wilcox to set multiple ptes with a single API call
-  - Allows arch backend to more optimally apply contpte mappings
-  - https://lore.kernel.org/linux-mm/20230315051444.3229621-1-willy@infradead.org/
-
-ptep_get() pte encapsulation
-  - hard dependency
-  - Enabler series from me to ensure none of the core code ever directly
-    dereferences a pte_t that lies within a live page table.
-  - Enables gathering access/dirty bits from across the whole contpte range
-  - in mm-stable and linux-next at time of writing
-  - https://lore.kernel.org/linux-mm/d38dc237-6093-d4c5-993e-e8ffdd6cb6fa@arm.com/
-
-Report on physically contiguous memory in smaps
-  - soft dependency
-  - Enables visibility on how much memory is physically contiguous and how much
-    is contpte-mapped - useful for debug
-  - https://lore.kernel.org/linux-mm/20230613160950.3554675-1-ryan.roberts@arm.com/
-
-Additionally there are a couple of other dependencies:
-
-anonfolio
-  - soft dependency
-  - ensures more anonymous memory is allocated in contpte-sized folios, so
-    needed to realize the performance improvements (this is the "other half"
-    mentioned above).
-  - RFC: https://lore.kernel.org/linux-mm/20230414130303.2345383-1-ryan.roberts@arm.com/
-  - Intending to post v1 shortly.
-
-exefolio
-  - soft dependency
-  - Tweak readahead to ensure executable memory are in 64K-sized folios, so
-    needed to see reduction in iTLB pressure.
-  - Don't intend to post this until we are further down the track with contpte
-    and anonfolio.
-
-Arm ARM Clarification
-  - hard dependency
-  - Current wording disallows the fork() optimization in the final patch.
-  - Arm (ATG) have proposed tightening the wording to permit it.
-  - In conversation with partners to check this wouldn't cause problems for any
-    existing HW deployments
-
-All of the _hard_ dependencies need to be resolved before this can be considered
-for merging.
-
-
-Performance
------------
-
-Below results show 2 benchmarks; kernel compilation and speedometer 2.0 (a
-javascript benchmark running in Chromium). Both cases are running on Ampere
-Altra with 1 NUMA node enabled, Ubuntu 22.04 and XFS filesystem. Each benchmark
-is repeated 15 times over 5 reboots and averaged.
-
-All improvements are relative to baseline-4k. anonfolio and exefolio are as
-described above. contpte is this series. (Note that exefolio only gives an
-improvement because contpte is already in place).
-
-Kernel Compilation (smaller is better):
-
-| kernel       |   real-time |   kern-time |   user-time |
-|:-------------|------------:|------------:|------------:|
-| baseline-4k  |        0.0% |        0.0% |        0.0% |
-| anonfolio    |       -5.4% |      -46.0% |       -0.3% |
-| contpte      |       -6.8% |      -45.7% |       -2.1% |
-| exefolio     |       -8.4% |      -46.4% |       -3.7% |
-| baseline-16k |       -8.7% |      -49.2% |       -3.7% |
-| baseline-64k |      -10.5% |      -66.0% |       -3.5% |
-
-Speedometer 2.0 (bigger is better):
-
-| kernel       |   runs_per_min |
-|:-------------|---------------:|
-| baseline-4k  |           0.0% |
-| anonfolio    |           1.2% |
-| contpte      |           3.1% |
-| exefolio     |           4.2% |
-| baseline-16k |           5.3% |
-
-I've also run Speedometer 2.0 on Pixel 6 with an Ubuntu SW stack and see similar
-gains.
-
-I've also verified that running the contpte changes without anonfolio and
-exefolio does not cause any regression vs baseline-4k.
-
-
-Opens
------
-
-The only potential issue that I see right now is that due to there only being 1
-access/dirty bit per contpte range, if a single page in the range is
-accessed/dirtied then all the adjacent pages are reported as accessed/dirtied
-too. Access/dirty is managed by the kernel per _folio_, so this information gets
-collapsed down anyway, and nothing changes there. However, the per _page_
-access/dirty information is reported through pagemap to user space. I'm not sure
-if this would/should be considered a break? Thoughts?
-
-Thanks,
-Ryan
-
-
-Ryan Roberts (14):
-  arm64/mm: set_pte(): New layer to manage contig bit
-  arm64/mm: set_ptes()/set_pte_at(): New layer to manage contig bit
-  arm64/mm: pte_clear(): New layer to manage contig bit
-  arm64/mm: ptep_get_and_clear(): New layer to manage contig bit
-  arm64/mm: ptep_test_and_clear_young(): New layer to manage contig bit
-  arm64/mm: ptep_clear_flush_young(): New layer to manage contig bit
-  arm64/mm: ptep_set_wrprotect(): New layer to manage contig bit
-  arm64/mm: ptep_set_access_flags(): New layer to manage contig bit
-  arm64/mm: ptep_get(): New layer to manage contig bit
-  arm64/mm: Split __flush_tlb_range() to elide trailing DSB
-  arm64/mm: Wire up PTE_CONT for user mappings
-  arm64/mm: Add ptep_get_and_clear_full() to optimize process teardown
-  mm: Batch-copy PTE ranges during fork()
-  arm64/mm: Implement ptep_set_wrprotects() to optimize fork()
-
- arch/arm64/include/asm/pgtable.h  | 305 +++++++++++++++++---
- arch/arm64/include/asm/tlbflush.h |  11 +-
- arch/arm64/kernel/efi.c           |   4 +-
- arch/arm64/kernel/mte.c           |   2 +-
- arch/arm64/kvm/guest.c            |   2 +-
- arch/arm64/mm/Makefile            |   3 +-
- arch/arm64/mm/contpte.c           | 443 ++++++++++++++++++++++++++++++
- arch/arm64/mm/fault.c             |  12 +-
- arch/arm64/mm/fixmap.c            |   4 +-
- arch/arm64/mm/hugetlbpage.c       |  40 +--
- arch/arm64/mm/kasan_init.c        |   6 +-
- arch/arm64/mm/mmu.c               |  16 +-
- arch/arm64/mm/pageattr.c          |   6 +-
- arch/arm64/mm/trans_pgd.c         |   6 +-
- include/linux/pgtable.h           |  13 +
- mm/memory.c                       | 149 +++++++---
- 16 files changed, 896 insertions(+), 126 deletions(-)
- create mode 100644 arch/arm64/mm/contpte.c
-
---
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index 6fd012663a01..7f5ce5687466 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -93,7 +93,8 @@ static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
+ 	__pte(__phys_to_pte_val((phys_addr_t)(pfn) << PAGE_SHIFT) | pgprot_val(prot))
+ 
+ #define pte_none(pte)		(!pte_val(pte))
+-#define pte_clear(mm,addr,ptep)	set_pte(ptep, __pte(0))
++#define pte_clear(mm, addr, ptep) \
++				__set_pte(ptep, __pte(0))
+ #define pte_page(pte)		(pfn_to_page(pte_pfn(pte)))
+ 
+ /*
+@@ -260,7 +261,7 @@ static inline pte_t pte_mkdevmap(pte_t pte)
+ 	return set_pte_bit(pte, __pgprot(PTE_DEVMAP | PTE_SPECIAL));
+ }
+ 
+-static inline void set_pte(pte_t *ptep, pte_t pte)
++static inline void __set_pte(pte_t *ptep, pte_t pte)
+ {
+ 	WRITE_ONCE(*ptep, pte);
+ 
+@@ -352,7 +353,7 @@ static inline void __set_pte_at(struct mm_struct *mm, unsigned long addr,
+ 
+ 	__check_safe_pte_update(mm, ptep, pte);
+ 
+-	set_pte(ptep, pte);
++	__set_pte(ptep, pte);
+ }
+ 
+ static inline void set_ptes(struct mm_struct *mm, unsigned long addr,
+@@ -1117,6 +1118,22 @@ extern pte_t ptep_modify_prot_start(struct vm_area_struct *vma,
+ extern void ptep_modify_prot_commit(struct vm_area_struct *vma,
+ 				    unsigned long addr, pte_t *ptep,
+ 				    pte_t old_pte, pte_t new_pte);
++
++/*
++ * The below functions constitute the public API that arm64 presents to the
++ * core-mm to manipulate PTE entries within the their page tables (or at least
++ * this is the subset of the API that arm64 needs to implement). These public
++ * versions will automatically and transparently apply the contiguous bit where
++ * it makes sense to do so. Therefore any users that are contig-aware (e.g.
++ * hugetlb, kernel mapper) should NOT use these APIs, but instead use the
++ * private versions, which are prefixed with double underscore.
++ */
++
++static inline void set_pte(pte_t *ptep, pte_t pte)
++{
++	__set_pte(ptep, pte);
++}
++
+ #endif /* !__ASSEMBLY__ */
+ 
+ #endif /* __ASM_PGTABLE_H */
+diff --git a/arch/arm64/kernel/efi.c b/arch/arm64/kernel/efi.c
+index baab8dd3ead3..7a28b6a08a82 100644
+--- a/arch/arm64/kernel/efi.c
++++ b/arch/arm64/kernel/efi.c
+@@ -115,7 +115,7 @@ static int __init set_permissions(pte_t *ptep, unsigned long addr, void *data)
+ 	else if (IS_ENABLED(CONFIG_ARM64_BTI_KERNEL) &&
+ 		 system_supports_bti() && spd->has_bti)
+ 		pte = set_pte_bit(pte, __pgprot(PTE_GP));
+-	set_pte(ptep, pte);
++	__set_pte(ptep, pte);
+ 	return 0;
+ }
+ 
+diff --git a/arch/arm64/mm/fixmap.c b/arch/arm64/mm/fixmap.c
+index c0a3301203bd..51cd4501816d 100644
+--- a/arch/arm64/mm/fixmap.c
++++ b/arch/arm64/mm/fixmap.c
+@@ -121,7 +121,7 @@ void __set_fixmap(enum fixed_addresses idx,
+ 	ptep = fixmap_pte(addr);
+ 
+ 	if (pgprot_val(flags)) {
+-		set_pte(ptep, pfn_pte(phys >> PAGE_SHIFT, flags));
++		__set_pte(ptep, pfn_pte(phys >> PAGE_SHIFT, flags));
+ 	} else {
+ 		pte_clear(&init_mm, addr, ptep);
+ 		flush_tlb_kernel_range(addr, addr+PAGE_SIZE);
+diff --git a/arch/arm64/mm/kasan_init.c b/arch/arm64/mm/kasan_init.c
+index e969e68de005..40125b217195 100644
+--- a/arch/arm64/mm/kasan_init.c
++++ b/arch/arm64/mm/kasan_init.c
+@@ -112,7 +112,7 @@ static void __init kasan_pte_populate(pmd_t *pmdp, unsigned long addr,
+ 		if (!early)
+ 			memset(__va(page_phys), KASAN_SHADOW_INIT, PAGE_SIZE);
+ 		next = addr + PAGE_SIZE;
+-		set_pte(ptep, pfn_pte(__phys_to_pfn(page_phys), PAGE_KERNEL));
++		__set_pte(ptep, pfn_pte(__phys_to_pfn(page_phys), PAGE_KERNEL));
+ 	} while (ptep++, addr = next, addr != end && pte_none(READ_ONCE(*ptep)));
+ }
+ 
+@@ -275,7 +275,7 @@ static void __init kasan_init_shadow(void)
+ 	 * so we should make sure that it maps the zero page read-only.
+ 	 */
+ 	for (i = 0; i < PTRS_PER_PTE; i++)
+-		set_pte(&kasan_early_shadow_pte[i],
++		__set_pte(&kasan_early_shadow_pte[i],
+ 			pfn_pte(sym_to_pfn(kasan_early_shadow_page),
+ 				PAGE_KERNEL_RO));
+ 
+diff --git a/arch/arm64/mm/mmu.c b/arch/arm64/mm/mmu.c
+index af6bc8403ee4..c84dc87d08b9 100644
+--- a/arch/arm64/mm/mmu.c
++++ b/arch/arm64/mm/mmu.c
+@@ -178,7 +178,7 @@ static void init_pte(pmd_t *pmdp, unsigned long addr, unsigned long end,
+ 	do {
+ 		pte_t old_pte = READ_ONCE(*ptep);
+ 
+-		set_pte(ptep, pfn_pte(__phys_to_pfn(phys), prot));
++		__set_pte(ptep, pfn_pte(__phys_to_pfn(phys), prot));
+ 
+ 		/*
+ 		 * After the PTE entry has been populated once, we
+diff --git a/arch/arm64/mm/pageattr.c b/arch/arm64/mm/pageattr.c
+index 8e2017ba5f1b..057097acf9e0 100644
+--- a/arch/arm64/mm/pageattr.c
++++ b/arch/arm64/mm/pageattr.c
+@@ -41,7 +41,7 @@ static int change_page_range(pte_t *ptep, unsigned long addr, void *data)
+ 	pte = clear_pte_bit(pte, cdata->clear_mask);
+ 	pte = set_pte_bit(pte, cdata->set_mask);
+ 
+-	set_pte(ptep, pte);
++	__set_pte(ptep, pte);
+ 	return 0;
+ }
+ 
+diff --git a/arch/arm64/mm/trans_pgd.c b/arch/arm64/mm/trans_pgd.c
+index 4ea2eefbc053..f9997b226614 100644
+--- a/arch/arm64/mm/trans_pgd.c
++++ b/arch/arm64/mm/trans_pgd.c
+@@ -40,7 +40,7 @@ static void _copy_pte(pte_t *dst_ptep, pte_t *src_ptep, unsigned long addr)
+ 		 * read only (code, rodata). Clear the RDONLY bit from
+ 		 * the temporary mappings we use during restore.
+ 		 */
+-		set_pte(dst_ptep, pte_mkwrite(pte));
++		__set_pte(dst_ptep, pte_mkwrite(pte));
+ 	} else if (debug_pagealloc_enabled() && !pte_none(pte)) {
+ 		/*
+ 		 * debug_pagealloc will removed the PTE_VALID bit if
+@@ -53,7 +53,7 @@ static void _copy_pte(pte_t *dst_ptep, pte_t *src_ptep, unsigned long addr)
+ 		 */
+ 		BUG_ON(!pfn_valid(pte_pfn(pte)));
+ 
+-		set_pte(dst_ptep, pte_mkpresent(pte_mkwrite(pte)));
++		__set_pte(dst_ptep, pte_mkpresent(pte_mkwrite(pte)));
+ 	}
+ }
+ 
+-- 
 2.25.1
 
