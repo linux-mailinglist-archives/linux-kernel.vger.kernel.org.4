@@ -2,190 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FF5073A84F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 20:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F9F73A852
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 20:36:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbjFVSdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 14:33:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58886 "EHLO
+        id S231235AbjFVSgS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 14:36:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbjFVSdN (ORCPT
+        with ESMTP id S229961AbjFVSgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 14:33:13 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 671DF19AD;
-        Thu, 22 Jun 2023 11:33:12 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35MER6qE013156;
-        Thu, 22 Jun 2023 18:32:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=k/2KjtUkCTlnzexn8wa+BLiuKLkbtU1GdqoVpiiv8W0=;
- b=MFyuJM16/g5d/JGU0X7ChoD9VoUBfelGT9L2S8r0KIXuDv/7abpTKwbO7086Y2Cej5gQ
- 9hCSy34C+4rmRsncM6x0oHJcfanIGiWwZVHaGTn2eo571jIdJzLxJqraQzMTZ0nsUqNS
- 2RLxIiyaAF60/TH4sr71mrSpblVtiKkPdn3pX0yQRrV1d9d5WuTllg5AOVWeAlJsqTNa
- eSdrJRjOjy1Z9A3/UeiJyhbgOiV+5dz4Q3xNZ0RxKTjG2c+SGrLA+KN53rywfRmD3Pnd
- V+V9UMB6aYwP/rsoQEL25MOJzUj7DyIsDZaAIKh/iwV4lGvfZ/YlvTjzTW8yoKUzHPnw yQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rc2rckgm2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Jun 2023 18:32:52 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35MIWpFD014960
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 22 Jun 2023 18:32:51 GMT
-Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 22 Jun
- 2023 11:32:51 -0700
-Message-ID: <add6f941-284e-7c38-b536-14541e518bcc@quicinc.com>
-Date:   Thu, 22 Jun 2023 11:32:50 -0700
+        Thu, 22 Jun 2023 14:36:14 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22F52105
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 11:36:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687458973; x=1718994973;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=yWLvnl8GBxtfpixtJGOFm07hcrmmJHs+aRhEjmyx6TY=;
+  b=FTs7I5ddUTx6kuua4bSkzQcd98tvORUuZEcJcm41DnDOvvaDi3QAs4Yd
+   V2KwwRd+wFKVZwAVAOr0Yd0tFnri1JdgqNGfHl/1+PE3ga/t+ExxQuC1L
+   xohSsbpaEdcReEsNbbSqBUL573rSTlm8t9KGjZO0BnoYvsyGY6CQRLdXQ
+   xMW0jPEdx/wUeldgEGIrHlqB+mK6wH8EVAeRYEXD1O6b9UGwmnmJSaVI3
+   O16a5ig+IU2xaDxJmzU7TNgavkfHSyJw7Ni/MMP1ZiyBsoskUqPZZOuYd
+   3hRuVK6Mm/6GVK9/Tb7mUwzQpgGnybOQdhMClI1ASffWLqnH9IYibtqRi
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="350336491"
+X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
+   d="scan'208";a="350336491"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 11:36:10 -0700
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="749444245"
+X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
+   d="scan'208";a="749444245"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga001.jf.intel.com with ESMTP; 22 Jun 2023 11:36:08 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 560C724F; Thu, 22 Jun 2023 21:36:19 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH v1 0/3] regmap: Drop never (properly) worked 64-bit support
+Date:   Thu, 22 Jun 2023 21:36:10 +0300
+Message-Id: <20230622183613.58762-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.40.0.1.gaa8946217a0b
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 1/2] drm/msm/dpu: retrieve DSI DSC struct through
- priv->dsi[0]
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>
-CC:     <quic_jesszhan@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <marijn.suijten@somainline.org>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1687364298-29430-1-git-send-email-quic_khsieh@quicinc.com>
- <1687364298-29430-2-git-send-email-quic_khsieh@quicinc.com>
- <a73ea5f4-310d-23c8-e686-decc3e59d602@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <a73ea5f4-310d-23c8-e686-decc3e59d602@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: FuO0yvdrooMIookhBtRsvla40XuOQjaE
-X-Proofpoint-GUID: FuO0yvdrooMIookhBtRsvla40XuOQjaE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
- definitions=2023-06-22_14,2023-06-22_02,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- priorityscore=1501 mlxscore=0 spamscore=0 impostorscore=0 adultscore=0
- suspectscore=0 clxscore=1011 lowpriorityscore=0 mlxlogscore=808
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2305260000 definitions=main-2306220158
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+regmap API internally operates on unsigned int values for the register
+offsets and data. The commit back in 2015 that introduces 64-bit
+excerpts in the code made a false impression that it works. Not really.
 
+Consider two things:
+ 1/ register offset
+ 2/ data
 
-On 6/22/2023 7:00 AM, Dmitry Baryshkov wrote:
-> On 21/06/2023 19:18, Kuogee Hsieh wrote:
->> Currently DSI DSC struct is populated at display setup during
->> system bootup. This mechanism works fine with embedded display
->> but not for pluggable displays as the DSC struct will become
->> stale once external display unplugged.
->>
->> Move storing of DSI DSC struct to both atomic_mode_set() and
->> atomic_enable() so that same mechanism will work for both
->> embedded display and pluggable displays.
->>
->> Changes in v4:
->> -- fix checkpatch.pl warning
->>
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 30 
->> +++++++++++++++++++++++++----
->>   1 file changed, 26 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->> index 2e1873d..367d374 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->> @@ -543,11 +543,24 @@ bool dpu_encoder_use_dsc_merge(struct 
->> drm_encoder *drm_enc)
->>       return (num_dsc > 0) && (num_dsc > intf_count);
->>   }
->> +static struct drm_dsc_config *dpu_encoder_get_dsc_config(struct 
->> drm_encoder *drm_enc)
->> +{
->> +    struct msm_drm_private *priv = drm_enc->dev->dev_private;
->> +    struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
->> +    int index = dpu_enc->disp_info.h_tile_instance[0];
->> +
->> +    if (dpu_enc->disp_info.intf_type == INTF_DSI)
->> +        return msm_dsi_get_dsc_config(priv->dsi[index]);
->> +
->> +    return NULL;
->> +}
->> +
->>   static struct msm_display_topology dpu_encoder_get_topology(
->>               struct dpu_encoder_virt *dpu_enc,
->>               struct dpu_kms *dpu_kms,
->>               struct drm_display_mode *mode,
->> -            struct drm_crtc_state *crtc_state)
->> +            struct drm_crtc_state *crtc_state,
->> +            struct drm_dsc_config *dsc)
->>   {
->>       struct msm_display_topology topology = {0};
->>       int i, intf_count = 0;
->> @@ -579,7 +592,7 @@ static struct msm_display_topology 
->> dpu_encoder_get_topology(
->>       topology.num_intf = intf_count;
->> -    if (dpu_enc->dsc) {
->> +    if (dsc) {
->>           /*
->>            * In case of Display Stream Compression (DSC), we would use
->>            * 2 DSC encoders, 2 layer mixers and 1 interface
->> @@ -605,6 +618,7 @@ static int dpu_encoder_virt_atomic_check(
->>       struct drm_display_mode *adj_mode;
->>       struct msm_display_topology topology;
->>       struct dpu_global_state *global_state;
->> +    struct drm_dsc_config *dsc;
->>       int i = 0;
->>       int ret = 0;
->> @@ -640,7 +654,9 @@ static int dpu_encoder_virt_atomic_check(
->>           }
->>       }
->> -    topology = dpu_encoder_get_topology(dpu_enc, dpu_kms, adj_mode, 
->> crtc_state);
->> +    dsc = dpu_encoder_get_dsc_config(drm_enc);
->> +
->> +    topology = dpu_encoder_get_topology(dpu_enc, dpu_kms, adj_mode, 
->> crtc_state, dsc);
->>       /*
->>        * Release and Allocate resources on every modeset
->> @@ -1056,6 +1072,8 @@ static void 
->> dpu_encoder_virt_atomic_mode_set(struct drm_encoder *drm_enc,
->>       trace_dpu_enc_mode_set(DRMID(drm_enc));
->> +    dpu_enc->dsc = dpu_encoder_get_dsc_config(drm_enc);
->> +
->>       /* Query resource that have been reserved in atomic check step. */
->>       num_pp = dpu_rm_get_assigned_resources(&dpu_kms->rm, global_state,
->>           drm_enc->base.id, DPU_HW_BLK_PINGPONG, hw_pp,
->> @@ -1187,6 +1205,8 @@ static void 
->> dpu_encoder_virt_atomic_enable(struct drm_encoder *drm_enc,
->>       dpu_enc = to_dpu_encoder_virt(drm_enc);
->> +    dpu_enc->dsc = dpu_encoder_get_dsc_config(drm_enc);
-> 
-> Let's have a single place where dpu_enc->dsc is set. I have slight 
-> preference for atomic_enable, but atomic_mode_set is fine too.
-> 
+For the first one is very rarely we need (except probably an MMIO case)
+it. Even though, it won't work due to 32-bit limitations of the base offset.
+Considering, let's say, 4 bytes stride the current implementation may
+cover 36-bit of address space _only_. And 37-bit for the 8 bytes stride.
 
-Yes, it was in a single place in v3. Then some mistake happened and it 
-got dropped in v4. Now, it has been added back for v5.
+For the second one it's obviously that we want _all_ bits to be covered
+in the data (otherwise what's the point?) and unsigned int gives us
+only 32-bits.
 
-Sorry for the confusion.
+With all this, revert all 64-bit excerpts from regmap API to avoid
+false impressions and new code that never works.
+
+Note, there are no users with such sizes in the kernel.
+
+Andy Shevchenko (3):
+  regmap: Revert "add 64-bit mode support" and Co.
+  regmap: cache: Revert "Add 64-bit mode support"
+  regmap: mmio: Remove unused 64-bit support code
+
+ drivers/base/regmap/regcache.c    |  15 ----
+ drivers/base/regmap/regmap-mmio.c |  24 ------
+ drivers/base/regmap/regmap.c      | 122 ------------------------------
+ 3 files changed, 161 deletions(-)
+
+-- 
+2.40.0.1.gaa8946217a0b
+
