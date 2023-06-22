@@ -2,93 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE0B773A897
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 20:50:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D542773A899
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 20:50:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbjFVSuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 14:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
+        id S231356AbjFVSux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 14:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbjFVSuK (ORCPT
+        with ESMTP id S230071AbjFVSuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 14:50:10 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06294195;
-        Thu, 22 Jun 2023 11:50:09 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-77e2c42de06so263563539f.1;
-        Thu, 22 Jun 2023 11:50:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687459808; x=1690051808;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YoqKoCGD22r5x5TeJTnO4aO3qshyt7k/108oz2dWFVM=;
-        b=ef2yQscTpwf7n4KiHLRh6c4s+xIN4XgQISZYvu2mQatB000a88NnB9WtUyBRWKPgH5
-         c8THlyujQvlhIgyFS5E02s/8dAJAn53nKF8WzM3RRfWUwgOOWx7W6z/7xhpf91FGK+Ta
-         XyHGBZgJLiI2mfbgZKWvCX3Pm15BFlFVt5g/3ZSSAMNkCKvAZXakiZsrQadnGcdqW41r
-         qG4UwFmhNRbA8nr0WnnMJSUI/VYTT6vYgUNEfHdpn4h93do8VMIiu7RwX6tKSxVwrPJf
-         9FzzE0TU6R7CeqT7qzz9owIVNV2lYb6e8usC575oTy1812Oki1QKCHe/XgoltAPHfl/4
-         TD3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687459808; x=1690051808;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YoqKoCGD22r5x5TeJTnO4aO3qshyt7k/108oz2dWFVM=;
-        b=M9EA3Zloi7ahCa67APenPblUHxntw8HszDomhdjNCNATZ8WfuC6QpPj4A8NVJ9gP0T
-         kReZq0ASRm/yudtGMeoc/CSiXWUrkEAxQ01LvhIn80nBNrspKSMS+60t+QdLl4lN9H5W
-         YDq6p3OBEYpmIDmEnRI5ZzYPYfMs6CppMhGKnb2mAbq9gfCwR75KO3tO0dcsX0O2TuGt
-         H/neL46PIcydx/tS2iAYqhsTtIqFMeLFJHi8zqQQF1UeVi7ixoMw1DGTt1hr4SU0NcHi
-         slVmkSnUh/K0WtUOmRea3rpA05VGdsVZRaFUMMzhkhuhys0V4hlK/oo0YP+Ahzk+s5Fz
-         HXUg==
-X-Gm-Message-State: AC+VfDyv6zOkdLArOm9z/JV/Y6G4Ycu9ff7sOW60imF7w7MNLHkd3ZGi
-        dWKtfmx7qc6XknDhPpnbdZ8OMP2IAUV6HA==
-X-Google-Smtp-Source: ACHHUZ67W8LShsgIAl8y0YsmIuLltL4MvdIcB2Y4QCWzzwBn42H5eRhINUmkS1S3dU6ByyZPnZezyg==
-X-Received: by 2002:a05:6602:2184:b0:780:cc4a:d3 with SMTP id b4-20020a056602218400b00780cc4a00d3mr2983597iob.10.1687459808014;
-        Thu, 22 Jun 2023 11:50:08 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:287f])
-        by smtp.gmail.com with ESMTPSA id u12-20020a6be40c000000b0077e3acd5ea1sm2268718iog.53.2023.06.22.11.50.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 11:50:07 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 22 Jun 2023 08:50:05 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-Cc:     Steven Price <steven.price@arm.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: [PATCH][next] cgroup: Avoid -Wstringop-overflow warnings
-Message-ID: <ZJSX3bjnYTL0mCHj@slm.duckdns.org>
-References: <ZIpm3pcs3iCP9UaR@work>
- <726aae97-755d-9806-11d4-2fb21aa93428@arm.com>
- <0d6377ef-bc34-784a-8694-478d0ade085e@embeddedor.com>
+        Thu, 22 Jun 2023 14:50:51 -0400
+Received: from smtpcmd02101.aruba.it (smtpcmd02101.aruba.it [62.149.158.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EFAA2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 11:50:49 -0700 (PDT)
+Received: from [192.168.50.162] ([146.241.96.150])
+        by Aruba Outgoing Smtp  with ESMTPSA
+        id CPOJqUQ4W7skLCPOJqI8Pq; Thu, 22 Jun 2023 20:50:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
+        t=1687459848; bh=NiL5KJY63hJ4jA23FuSWyQhcwnYWpVK+f6seEcG9u6o=;
+        h=Date:MIME-Version:Subject:To:From:Content-Type;
+        b=AAOPqMmunz1BKpXzVO0l7wO8cXRPc4XnCeUZqacKrZZIoRiBFLuqU5ji7G++xkuXL
+         ezJQPQVZu5hi2LpJ2ZH/K+dydL8bMSD+JQQeD4fFu/LiKrUOjY+LA5iXKtGD3JMjvs
+         EGCcVeXa981EtexBs8U7eHKdMJXWLAY7SewP2CA22Ttkocsd8lsFlqhGOEV3reApvC
+         2GC3dbsiIX5E0g3mU0wWQT/smXyR7AsRiB/W/rTkibYjd5hpFaE9TcD+Awv5ScAnBW
+         ZfCkJXLde7CDXyw30vYbV6qJh+UqQsN2IzvECIBfnrpBy+xxnxRt6Gl6axgyd/OJbW
+         VaptUwg3BQAuw==
+Message-ID: <ec6fbaae-323e-5986-3930-a62fa365193a@benettiengineering.com>
+Date:   Thu, 22 Jun 2023 20:50:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0d6377ef-bc34-784a-8694-478d0ade085e@embeddedor.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH] net: phy: broadcom: drop brcm_phy_setbits() and use
+ phy_set_bits() instead
+Content-Language: en-US
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230622123737.8649-1-giulio.benetti@benettiengineering.com>
+ <12d3d3e7-da90-cc73-57e6-1aa7859dce90@benettiengineering.com>
+ <ZJRqMLepCTPqvCD9@corigine.com>
+From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
+In-Reply-To: <ZJRqMLepCTPqvCD9@corigine.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfPgOOi/LCA4VeUvKOAH9MIyz0KRj9UZKaH5rDQXASx+NILAQrSp/XoIyKQzSdzqn2+3Rfmn3+rJPP5nCDVJv5sR/ye1UVAW0WkX4OIKcBbFaLmRUV9w8
+ m4z+JLokFSIvd4o9oVhp9oNdYS3bmIxdMH6nlw0DvpAInymiHku8ALzCKFsvdXKLYXDG82JTtGglwXwenaF4dXOZgWSVLyio95ddILby+xV194rTyserouU7
+ P828/F0nS141CL1eCVJTI5HKYMSCr/wIQiHI/JSJg8eV7r1CIYa3Wqqys66BeQe8Zq+FRqm23v5mEMP3UnQ19eB2WLzcJwu0Ohoc772CmTjEGTUsNhXX/N38
+ 0fxNGPtU09RY7kU3ntgPCYfqV9Z/vt+oJHrlDma4ackjGPt54pvC6G7rfUV6v0TgNDX2Y6kge4HJydiAAgIugdqlh2CxiMnE9y7d3lEahndrJwvC2Ri7UDEQ
+ YMbnMpUbYrJ1tBn/7W/AmdoChAaVN4kz53WiQP22rg2zqC2RKLNIyN+DQym23OSuWUQtutLa6bFTv9o0VwOtFBP32bIUzrRL4L+ojV1X4+rY0qBCdITrdpbB
+ TLU=
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 08:09:03AM -0600, Gustavo A. R. Silva wrote:
-> > Reverting this commit on the head of linux-next gets the board working
-> > again.
+Hi Simon,
+
+On 22/06/23 17:35, Simon Horman wrote:
+> On Thu, Jun 22, 2023 at 02:48:46PM +0200, Giulio Benetti wrote:
+>> Pardon,
+>>
+>> On 22/06/23 14:37, Giulio Benetti wrote:
+>>> Linux provides phy_set_bits() helper so let's drop brcm_phy_setbits() and
+>>> use phy_set_bits() in its place.
+>>>
+>>> Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
+>>> ---
+>>>    drivers/net/phy/broadcom.c | 15 ++-------------
+>>>    1 file changed, 2 insertions(+), 13 deletions(-)
+>>>
+>>> diff --git a/drivers/net/phy/broadcom.c b/drivers/net/phy/broadcom.c
+>>> index ad71c88c87e7..d684c5be529a 100644
+>>> --- a/drivers/net/phy/broadcom.c
+>>> +++ b/drivers/net/phy/broadcom.c
+>>> @@ -608,17 +608,6 @@ static int bcm54616s_read_status(struct phy_device *phydev)
+>>>    	return err;
+>>>    }
+>>> -static int brcm_phy_setbits(struct phy_device *phydev, int reg, int set)
+>>> -{
+>>> -	int val;
+>>> -
+>>> -	val = phy_read(phydev, reg);
+>>> -	if (val < 0)
+>>> -		return val;
+>>> -
+>>> -	return phy_write(phydev, reg, val | set);
+>>> -}
+>>> -
+>>>    static int brcm_fet_config_init(struct phy_device *phydev)
+>>>    {
+>>>    	int reg, err, err2, brcmtest;
+>>> @@ -689,14 +678,14 @@ static int brcm_fet_config_init(struct phy_device *phydev)
+>>>    		goto done;
+>>>    	/* Enable auto MDIX */
+>>> -	err = brcm_phy_setbits(phydev, MII_BRCM_FET_SHDW_MISCCTRL,
+>>> +	err = phy_set_bits(phydev, MII_BRCM_FET_SHDW_MISCCTRL,
+>>>    				       MII_BRCM_FET_SHDW_MC_FAME);
+>>
+>> I've missed to checkpatch.pl and there is a style error ^^^
+>>
+>>>    	if (err < 0)
+>>>    		goto done;
+>>>    	if (phydev->dev_flags & PHY_BRCM_AUTO_PWRDWN_ENABLE) {
+>>>    		/* Enable auto power down */
+>>> -		err = brcm_phy_setbits(phydev, MII_BRCM_FET_SHDW_AUXSTAT2,
+>>> +		err = phy_set_bits(phydev, MII_BRCM_FET_SHDW_AUXSTAT2,
+>>>    					       MII_BRCM_FET_SHDW_AS2_APDE);
+>>
+>>                                        and here ^^^
+>>
+>> I wait some time for any feedback and then I send a V2.
 > 
-> Thanks for reporting this issue. I'll take a look.
+> Hi Giulio,
+> 
+> Please include the target tree, net-next, when you send v2:
+> 
+> 	Subject: [PATCH net-next v2] ...
 
-I'm reverting the commit from cgroup/for-6.5. Let's try again later.
+Thank you,
 
-Thanks.
+I've just sent the v2 in reply to this.
 
+Best regards
 -- 
-tejun
+Giulio Benetti
+CEO&CTO@Benetti Engineering sas
