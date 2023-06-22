@@ -2,41 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A45F973A76E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:40:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8682D73A770
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:40:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjFVRkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 13:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
+        id S231311AbjFVRkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 13:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231393AbjFVRjx (ORCPT
+        with ESMTP id S231418AbjFVRjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 13:39:53 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFA92118
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:39:46 -0700 (PDT)
-Received: from i53875bdf.versanet.de ([83.135.91.223] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1qCOHN-0001Ae-3y; Thu, 22 Jun 2023 19:39:33 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     palmer@dabbelt.com, Stefan O'Rear <sorear@fastmail.com>
-Cc:     linux-riscv@lists.infradead.org, samuel@sholland.org,
-        guoren@kernel.org, christoph.muellner@vrull.eu,
-        conor.dooley@microchip.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 2/2] RISC-V: add T-Head vector errata handling
-Date:   Thu, 22 Jun 2023 19:39:32 +0200
-Message-ID: <1941316.PYKUYFuaPT@diego>
-In-Reply-To: <75071be8-272d-45e7-989f-5d717f313fe2@app.fastmail.com>
-References: <20230228215435.3366914-1-heiko@sntech.de>
- <20230228215435.3366914-3-heiko@sntech.de>
- <75071be8-272d-45e7-989f-5d717f313fe2@app.fastmail.com>
+        Thu, 22 Jun 2023 13:39:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCD31FD2;
+        Thu, 22 Jun 2023 10:39:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C65C618CA;
+        Thu, 22 Jun 2023 17:39:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52726C433C8;
+        Thu, 22 Jun 2023 17:39:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687455589;
+        bh=6Mcce3nF6YdsClruQbW80qlgIDWGMFESghPF7l7JYTM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=c/wGJVyyFBHOwRk677FOXLxKHfOpmo7aYhn8TXoCyysBSD9UN0HRCi/VIEy4fVtc3
+         d1Gtwc4Tlz0ZMOG6N2t6zeJCnCq0Ac3UfKvnIvE5ZZRksc5XHdNUCO3ys3TEVyYqB9
+         O5aTb6ejHzcie2Y3dxe6TFO3Tx54mwjqIDfllxxT2yeNQkcittmTYy4ty+rg7d5x/5
+         gYUetO9mpIHBZhBPcQIevv1XEy0sHwQScl/zfyoUZDduBaQ4FV+wexEVRBjKC+uN3K
+         nVASNPf6jJeZE8DcXCk8LoxzJA9L3gYZjf9cqV9w6ceYkEMCGPZirph5X8Wsb8TCwX
+         wosPPNlFHhh3g==
+Date:   Thu, 22 Jun 2023 10:39:48 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Breno Leitao <leitao@debian.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, leit@meta.com,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steve French <stfrench@microsoft.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Simon Ser <contact@emersion.fr>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:IO_URING" <io-uring@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
+Subject: Re: [PATCH] io_uring: Add io_uring command support for sockets
+Message-ID: <20230622103948.33cbb0dd@kernel.org>
+In-Reply-To: <2023062228-cloak-wish-ec12@gregkh>
+References: <20230621232129.3776944-1-leitao@debian.org>
+        <2023062231-tasting-stranger-8882@gregkh>
+        <ZJRijTDv5lUsVo+j@gmail.com>
+        <2023062208-animosity-squabble-c1ba@gregkh>
+        <ZJR49xji1zmISlTs@gmail.com>
+        <2023062228-cloak-wish-ec12@gregkh>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,111 +75,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stefan,
-
-Am Dienstag, 13. Juni 2023, 08:35:53 CEST schrieb Stefan O'Rear:
-> On Tue, Feb 28, 2023, at 4:54 PM, Heiko Stuebner wrote:
-> > @@ -29,6 +78,7 @@ static __always_inline bool has_vector(void)
-> >  static inline void __vstate_clean(struct pt_regs *regs)
-> >  {
-> >  	regs->status = (regs->status & ~(SR_VS)) | SR_VS_CLEAN;
-> > +
-> >  }
+On Thu, 22 Jun 2023 19:03:04 +0200 Greg Kroah-Hartman wrote:
+> > Correct. For now we are just using 0xa0 and 0xa1, and eventually we
+> > might need more ioctls numbers.
 > > 
-> >  static inline void vstate_off(struct pt_regs *regs)
-> > @@ -58,30 +108,75 @@ static __always_inline void rvv_disable(void)
+> > I got these numbers finding a unused block and having some room for
+> > expansion, as suggested by Documentation/userspace-api/ioctl/ioctl-number.rst,
+> > that says:
 > > 
-> >  static __always_inline void __vstate_csr_save(struct __riscv_v_state *dest)
-> >  {
-> > -	asm volatile (
-> > +	register u32 t1 asm("t1") = (SR_FS);
-> > +
-> > +	/*
-> > +	 * CSR_VCSR is defined as
-> > +	 * [2:1] - vxrm[1:0]
-> > +	 * [0] - vxsat
-> > +	 * The earlier vector spec implemented by T-Head uses separate
-> > +	 * registers for the same bit-elements, so just combine those
-> > +	 * into the existing output field.
-> > +	 *
-> > +	 * Additionally T-Head cores need FS to be enabled when accessing
-> > +	 * the VXRM and VXSAT CSRs, otherwise ending in illegal instructions.
-> > +	 */
-> > +	asm volatile (ALTERNATIVE(
-> >  		"csrr	%0, " CSR_STR(CSR_VSTART) "\n\t"
-> >  		"csrr	%1, " CSR_STR(CSR_VTYPE) "\n\t"
-> >  		"csrr	%2, " CSR_STR(CSR_VL) "\n\t"
-> >  		"csrr	%3, " CSR_STR(CSR_VCSR) "\n\t"
-> > +		__nops(5),
-> > +		"csrs	sstatus, t1\n\t"
-> > +		"csrr	%0, " CSR_STR(CSR_VSTART) "\n\t"
-> > +		"csrr	%1, " CSR_STR(CSR_VTYPE) "\n\t"
-> > +		"csrr	%2, " CSR_STR(CSR_VL) "\n\t"
-> > +		"csrr	%3, " CSR_STR(THEAD_C9XX_CSR_VXRM) "\n\t"
-> > +		"slliw	%3, %3, " CSR_STR(VCSR_VXRM_SHIFT) "\n\t"
-> > +		"csrr	t4, " CSR_STR(THEAD_C9XX_CSR_VXSAT) "\n\t"
-> > +		"or	%3, %3, t4\n\t"
-> > +		"csrc	sstatus, t1\n\t",
-> > +		THEAD_VENDOR_ID,
-> > +		ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
-> >  		: "=r" (dest->vstart), "=r" (dest->vtype), "=r" (dest->vl),
-> > -		  "=r" (dest->vcsr) : :);
-> > +		  "=r" (dest->vcsr) : "r"(t1) : "t4");
-> >  }
-> > 
-> >  static __always_inline void __vstate_csr_restore(struct __riscv_v_state *src)
-> >  {
-> > -	asm volatile (
-> > +	register u32 t1 asm("t1") = (SR_FS);
-> > +
-> > +	/*
-> > +	 * Similar to __vstate_csr_save above, restore values for the
-> > +	 * separate VXRM and VXSAT CSRs from the vcsr variable.
-> > +	 */
-> > +	asm volatile (ALTERNATIVE(
-> >  		"vsetvl	 x0, %2, %1\n\t"
-> >  		"csrw	" CSR_STR(CSR_VSTART) ", %0\n\t"
-> >  		"csrw	" CSR_STR(CSR_VCSR) ", %3\n\t"
-> > +		__nops(6),
-> > +		"csrs	sstatus, t1\n\t"
-> > +		"vsetvl	 x0, %2, %1\n\t"
-> > +		"csrw	" CSR_STR(CSR_VSTART) ", %0\n\t"
-> > +		"srliw	t4, %3, " CSR_STR(VCSR_VXRM_SHIFT) "\n\t"
-> > +		"andi	t4, t4, " CSR_STR(VCSR_VXRM_MASK) "\n\t"
-> > +		"csrw	" CSR_STR(THEAD_C9XX_CSR_VXRM) ", t4\n\t"
-> > +		"andi	%3, %3, " CSR_STR(VCSR_VXSAT_MASK) "\n\t"
-> > +		"csrw	" CSR_STR(THEAD_C9XX_CSR_VXSAT) ", %3\n\t"
-> > +		"csrc	sstatus, t1\n\t",
-> > +		THEAD_VENDOR_ID,
-> > +		ERRATA_THEAD_VECTOR, CONFIG_ERRATA_THEAD_VECTOR)
-> >  		: : "r" (src->vstart), "r" (src->vtype), "r" (src->vl),
-> > -		    "r" (src->vcsr) :);
-> > +		    "r" (src->vcsr), "r"(t1): "t4");
-> >  }
+> > 	If you are writing a driver for a new device and need a letter, pick an
+> > 	unused block with enough room for expansion: 32 to 256 ioctl commands.  
 > 
-> vxrm and vxsat are part of fcsr in 0.7.1, so they should already have been
-> handled by __fstate_save and __fstate_restore, and this code is likely to
-> misbehave (saving the new process's vxrm/vxsat in the old process's save area
-> because float state is swapped before vector state in __switch_to).
+> So is this the first io_uring ioctl?  If so, why is this an ioctl and
+> not just a "normal" io_uring call?
 
-I'm not sure I follow your description but may be overlooking or have
-misunderstood something.
-
-Somehow I way to often have trouble resolving CSR addresses, but according
-to openSBI, FCSR has the location of 0x3
-(#define CSR_FCSR 0x003 in include/sbi/riscv_encoding.h)
-
-where CSR_VXSAT and CSR_VXRM are at 0x9 and 0xa respectively.
-(#define CSR_VXSAT 0x9 and  #define CSR_VXRM 0xa)
-
-
-And looking at __fstate_save + __fstate_restore the only CSRs accessed seem
-to be CSR_STATUS and FCSR itself.
-
-I definitly won't claim to be right, but don't see the issue yet.
-
-
-Thanks for a hint
-Heiko
-
-
++1, the mixing with classic ioctl seems confusing and I'm not sure 
+if it buys us anything.
+-- 
+pw-bot: cr
