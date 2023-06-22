@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF953739DF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 12:00:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC90739DF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 12:02:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231363AbjFVKAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 06:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
+        id S230281AbjFVKBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 06:01:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230125AbjFVKAX (ORCPT
+        with ESMTP id S229999AbjFVKBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 06:00:23 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3055118;
-        Thu, 22 Jun 2023 03:00:12 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 19E83660704A;
-        Thu, 22 Jun 2023 11:00:11 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687428011;
-        bh=gpCgJrBqi/2Xavz4ppF0dv3Ye/36nrT5W9Yjh2qoe0c=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dmxEV7AKk6Fn2OONdeYVF5RAlqjAorSfESIYtHjPtfiWP4ItjKBQz9N4u8rrRBtr9
-         Y8xvfIbyQjSXUun1o3912RrISFNu3EdQyNL58h7HIMKA89INioEaxhbdIvhUtSOSz6
-         WyITPwvDU9zX+O6AZ6EP5sGZICKCR1BZ98HGExiTe2Oh/142tmB5jUNJfyAMZ+d+80
-         eIv9PtiLrgp77MOrs4zqsHDiVK1E6pNPsDB5kmfWQBCkgtv0ps2N2NpzLWPSBUOiE/
-         ri4cxwbeAd5T6uuem/i7uSSadSJ9TdORN+LHKkWEBzjvbtrlScTB2ATpumT7uPjVva
-         6rj7m9XuqTeJw==
-Message-ID: <5a9beeec-5762-c469-6e03-b71babb5f7ed@collabora.com>
-Date:   Thu, 22 Jun 2023 12:00:08 +0200
+        Thu, 22 Jun 2023 06:01:52 -0400
+Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33DE1A2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 03:01:41 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+        by localhost (Postfix) with ESMTP id 4QmwrM6bmFz9sRZ;
+        Thu, 22 Jun 2023 12:01:39 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+        by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id RK95xLhTf3n4; Thu, 22 Jun 2023 12:01:39 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase1.c-s.fr (Postfix) with ESMTP id 4QmwrM5vZBz9sRX;
+        Thu, 22 Jun 2023 12:01:39 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id C6B2F8B767;
+        Thu, 22 Jun 2023 12:01:39 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id fISwiA53pAFa; Thu, 22 Jun 2023 12:01:39 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.14])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 895B68B763;
+        Thu, 22 Jun 2023 12:01:39 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 35MA1XYR2369438
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 12:01:33 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 35MA1WnH2369368;
+        Thu, 22 Jun 2023 12:01:32 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v2] powerpc/ptrace: Split gpr32_set_common
+Date:   Thu, 22 Jun 2023 12:01:23 +0200
+Message-Id: <b8d6ae4483fcfd17524e79d803c969694a85cc02.1687428075.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v13 00/11] Add support for MT8195 SCP 2nd core
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20230607072222.8628-1-tinghan.shen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230607072222.8628-1-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1687428082; l=4986; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=x7WBIUROaeeEePPB8kKEkVksIM/j0JxJ7CLtcjIgVBU=; b=w82uxJfFgPFgw1VFeR7wjL7eAKwvFNATy2EKHvGy/VDBdXkLDvCId1SDfx+U4DCWXQWYQI9m9 5K2i5XYV25jDIWqHmLlSMZDMdlgTeVlcAA6dxfVRGpwjVjDyGQpHAB2
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,105 +65,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 07/06/23 09:22, Tinghan Shen ha scritto:
-> The mediatek remoteproc driver currently only allows bringing up a
-> single core SCP, e.g. MT8183. It also only bringing up the 1st
-> core in SoCs with a dual-core SCP, e.g. MT8195. This series support
-> to bring-up the 2nd core of the dual-core SCP.
-> 
+objtool report the following warning:
 
-Hello TingHan,
+  arch/powerpc/kernel/ptrace/ptrace-view.o: warning: objtool:
+    gpr32_set_common+0x23c (.text+0x860): redundant UACCESS disable
 
-Can you please address the comments on patch [05/11] and send a new version ASAP?
-That's the only remaining issue, so after that the series should be ready.
+gpr32_set_common() conditionnaly opens and closes UACCESS based on
+whether kbuf point is NULL or not. This is wackelig.
 
-Thanks,
-Angelo
+Split gpr32_set_common() in two fonctions, one for user one for
+kernel.
 
-> v12 -> v13:
-> 1. replace subdevice with new mediatek scp operations in patchset 7
-> 2. add review tag to patchset 3
-> 3. modify mediatek,scp phandle name of video-codec@18000000 at patchset 11
-> 
-> v11 -> v12:
-> 1. add scp_add_single/multi_core() to patchset 6
-> 2. remove unused comment in patchset 6
-> 3. rename list name from mtk_scp_cluster to mtk_scp_list
-> 4. rewrite the multi-core probe flow
-> 5. disable rproc->autoboot and boot rproc by request_firmware_nowait at patchset 7
-> 6. remove patchset 7 review tag
-> 
-> v10 -> v11:
-> 1. rewrite patchset 5 to probe single-core SCP with the cluster list
-> 2. Also in patchset 5, move the pointer of mtk_scp object from the
->     platform data property to the driver data property
-> 3. move the appearance of mtk_scp cluster property to patcheset 7
-> 
-> v9 -> v10:
-> 1. move the global mtk_scp list into the platform device driver data structure
-> 2. remove an unnecessary if() condition
-> 
-> v8 -> v9:
-> 1. initialize l1tcm_size/l1tcm_phys at patchset 05/11
-> 2. rewrite patchset 06/11 to unify the flow and remove hacks
-> 
-> v7 -> v8:
-> 1. update the node name of mt8192 asurada SCP rpmsg subnode
-> 2. squash register definitions into driver patches
-> 3. initialize local variables on the declaration at patch v8 06/11
-> 
-> v6 -> v7:
-> 1. merge the mtk_scp_cluster struct into the mtk_scp structure
->     at the "Probe multi-core SCP" patch
-> 
-> v5 -> v6:
-> 1. move the mtk_scp_of_regs structure from mtk_common.h to mtk_scp.c
-> 2. rename the SCP core 0 label from 'scp' to 'scp_c0'
-> 
-> v4 -> v5:
-> 1. move resource release actions to the platform driver remove operation
-> 2. fix dual-core watchdog handling
-> 
-> v3 -> v4:
-> 1. change the representation of dual-core SCP in dts file and update SCP yaml
-> 2. rewrite SCP driver to reflect the change of dts node
-> 3. drop 'remove redundant call of rproc_boot for SCP' in v3 for further investigation
-> 
-> v2 -> v3:
-> 1. change the representation of dual-core SCP in dts file and update SCP yaml
-> 2. rewrite SCP driver to reflect the change of dts node
-> 3. add SCP core 1 node to mt8195.dtsi
-> 4. remove redundant call of rproc_boot for SCP
-> 5. refine IPI error message
-> 
-> v1 -> v2:
-> 1. update dt-binding property description
-> 2. remove kconfig for scp dual driver
-> 3. merge mtk_scp_dual.c and mtk_scp_subdev.c to mtk_scp.c
-> 
-> 
-> Tinghan Shen (11):
->    dt-bindings: remoteproc: mediatek: Improve the rpmsg subnode
->      definition
->    arm64: dts: mediatek: Update the node name of SCP rpmsg subnode
->    dt-bindings: remoteproc: mediatek: Support MT8195 dual-core SCP
->    remoteproc: mediatek: Add MT8195 SCP core 1 operations
->    remoteproc: mediatek: Introduce cluster on single-core SCP
->    remoteproc: mediatek: Probe multi-core SCP
->    remoteproc: mediatek: Add scp_boot_peers and scp_shutdown_peers
->      operations
->    remoteproc: mediatek: Setup MT8195 SCP core 1 SRAM offset
->    remoteproc: mediatek: Handle MT8195 SCP core 1 watchdog timeout
->    remoteproc: mediatek: Refine ipi handler error message
->    arm64: dts: mediatek: mt8195: Add SCP 2nd core
-> 
->   .../bindings/remoteproc/mtk,scp.yaml          | 176 +++++++-
->   .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   2 +-
->   .../boot/dts/mediatek/mt8192-asurada.dtsi     |   2 +-
->   .../boot/dts/mediatek/mt8195-cherry.dtsi      |   6 +-
->   arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  32 +-
->   drivers/remoteproc/mtk_common.h               |  26 ++
->   drivers/remoteproc/mtk_scp.c                  | 425 ++++++++++++++++--
->   7 files changed, 594 insertions(+), 75 deletions(-)
-> 
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+v2: Mark gpr32_set_common_kernel() and gpr32_set_common_user() static
+---
+ arch/powerpc/kernel/ptrace/ptrace-view.c | 106 ++++++++++++++---------
+ 1 file changed, 67 insertions(+), 39 deletions(-)
+
+diff --git a/arch/powerpc/kernel/ptrace/ptrace-view.c b/arch/powerpc/kernel/ptrace/ptrace-view.c
+index 3910cd7bb2d9..42abbed452cd 100644
+--- a/arch/powerpc/kernel/ptrace/ptrace-view.c
++++ b/arch/powerpc/kernel/ptrace/ptrace-view.c
+@@ -716,73 +716,89 @@ int gpr32_get_common(struct task_struct *target,
+ 	return membuf_zero(&to, (ELF_NGREG - PT_REGS_COUNT) * sizeof(u32));
+ }
+ 
+-int gpr32_set_common(struct task_struct *target,
+-		     const struct user_regset *regset,
+-		     unsigned int pos, unsigned int count,
+-		     const void *kbuf, const void __user *ubuf,
+-		     unsigned long *regs)
++static int gpr32_set_common_kernel(struct task_struct *target,
++				   const struct user_regset *regset,
++				   unsigned int pos, unsigned int count,
++				   const void *kbuf, unsigned long *regs)
+ {
+ 	const compat_ulong_t *k = kbuf;
++
++	pos /= sizeof(compat_ulong_t);
++	count /= sizeof(compat_ulong_t);
++
++	for (; count > 0 && pos < PT_MSR; --count)
++		regs[pos++] = *k++;
++
++	if (count > 0 && pos == PT_MSR) {
++		set_user_msr(target, *k++);
++		++pos;
++		--count;
++	}
++
++	for (; count > 0 && pos <= PT_MAX_PUT_REG; --count)
++		regs[pos++] = *k++;
++	for (; count > 0 && pos < PT_TRAP; --count, ++pos)
++		++k;
++
++	if (count > 0 && pos == PT_TRAP) {
++		set_user_trap(target, *k++);
++		++pos;
++		--count;
++	}
++
++	kbuf = k;
++	pos *= sizeof(compat_ulong_t);
++	count *= sizeof(compat_ulong_t);
++	user_regset_copyin_ignore(&pos, &count, &kbuf, NULL,
++				  (PT_TRAP + 1) * sizeof(compat_ulong_t), -1);
++	return 0;
++}
++
++static int gpr32_set_common_user(struct task_struct *target,
++				 const struct user_regset *regset,
++				 unsigned int pos, unsigned int count,
++				 const void __user *ubuf, unsigned long *regs)
++{
+ 	const compat_ulong_t __user *u = ubuf;
+ 	compat_ulong_t reg;
+ 
+-	if (!kbuf && !user_read_access_begin(u, count))
++	if (!user_read_access_begin(u, count))
+ 		return -EFAULT;
+ 
+ 	pos /= sizeof(reg);
+ 	count /= sizeof(reg);
+ 
+-	if (kbuf)
+-		for (; count > 0 && pos < PT_MSR; --count)
+-			regs[pos++] = *k++;
+-	else
+-		for (; count > 0 && pos < PT_MSR; --count) {
+-			unsafe_get_user(reg, u++, Efault);
+-			regs[pos++] = reg;
+-		}
+-
++	for (; count > 0 && pos < PT_MSR; --count) {
++		unsafe_get_user(reg, u++, Efault);
++		regs[pos++] = reg;
++	}
+ 
+ 	if (count > 0 && pos == PT_MSR) {
+-		if (kbuf)
+-			reg = *k++;
+-		else
+-			unsafe_get_user(reg, u++, Efault);
++		unsafe_get_user(reg, u++, Efault);
+ 		set_user_msr(target, reg);
+ 		++pos;
+ 		--count;
+ 	}
+ 
+-	if (kbuf) {
+-		for (; count > 0 && pos <= PT_MAX_PUT_REG; --count)
+-			regs[pos++] = *k++;
+-		for (; count > 0 && pos < PT_TRAP; --count, ++pos)
+-			++k;
+-	} else {
+-		for (; count > 0 && pos <= PT_MAX_PUT_REG; --count) {
+-			unsafe_get_user(reg, u++, Efault);
+-			regs[pos++] = reg;
+-		}
+-		for (; count > 0 && pos < PT_TRAP; --count, ++pos)
+-			unsafe_get_user(reg, u++, Efault);
++	for (; count > 0 && pos <= PT_MAX_PUT_REG; --count) {
++		unsafe_get_user(reg, u++, Efault);
++		regs[pos++] = reg;
+ 	}
++	for (; count > 0 && pos < PT_TRAP; --count, ++pos)
++		unsafe_get_user(reg, u++, Efault);
+ 
+ 	if (count > 0 && pos == PT_TRAP) {
+-		if (kbuf)
+-			reg = *k++;
+-		else
+-			unsafe_get_user(reg, u++, Efault);
++		unsafe_get_user(reg, u++, Efault);
+ 		set_user_trap(target, reg);
+ 		++pos;
+ 		--count;
+ 	}
+-	if (!kbuf)
+-		user_read_access_end();
++	user_read_access_end();
+ 
+-	kbuf = k;
+ 	ubuf = u;
+ 	pos *= sizeof(reg);
+ 	count *= sizeof(reg);
+-	user_regset_copyin_ignore(&pos, &count, &kbuf, &ubuf,
++	user_regset_copyin_ignore(&pos, &count, NULL, &ubuf,
+ 				  (PT_TRAP + 1) * sizeof(reg), -1);
+ 	return 0;
+ 
+@@ -791,6 +807,18 @@ int gpr32_set_common(struct task_struct *target,
+ 	return -EFAULT;
+ }
+ 
++int gpr32_set_common(struct task_struct *target,
++		     const struct user_regset *regset,
++		     unsigned int pos, unsigned int count,
++		     const void *kbuf, const void __user *ubuf,
++		     unsigned long *regs)
++{
++	if (kbuf)
++		return gpr32_set_common_kernel(target, regset, pos, count, kbuf, regs);
++	else
++		return gpr32_set_common_user(target, regset, pos, count, ubuf, regs);
++}
++
+ static int gpr32_get(struct task_struct *target,
+ 		     const struct user_regset *regset,
+ 		     struct membuf to)
+-- 
+2.40.1
 
