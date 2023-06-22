@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 309B3739C71
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 302B3739C82
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:19:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230317AbjFVJRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 05:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58114 "EHLO
+        id S231518AbjFVJTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 05:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232285AbjFVJQ4 (ORCPT
+        with ESMTP id S232026AbjFVJTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 05:16:56 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862B52D58
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:09:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687424940; x=1718960940;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ovfx1LTbut8HywX7Xq3FCbWILW96L9FEgTbKCNIh7kk=;
-  b=BXTPX0TXsG86F0Atzvz79q9kkmIcbdkeFB2CRGLA9aOVJW5RfLDHXofu
-   HKloa0ze3qJZq4dxSN8sjS4s8+Mm9SEqs4wFAOyOIng9hXaJjZy4THw5y
-   DteuEmUMFrv3kHvdMrO3cp7cuFuKsnUHMhg2regRUWWOID3piWcLMTFq6
-   RXm6I9MHItZO5+MHz5jKKgCR1KKudNUrDq7F7AiqojgzUCBatGCR7CPaj
-   +bFBLUqM096N+r8f/IpNJOqCRB+6qn3LhHmO1cK8EXh1CFPjjNJoq7WY0
-   hurL/DOtPgdlnjQ5N2kqdMM1S4H9314cAI+YlwfR53TFtjOLUAQL7Zkch
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="359296552"
-X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
-   d="scan'208";a="359296552"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 02:07:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="961503684"
-X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
-   d="scan'208";a="961503684"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga006.fm.intel.com with ESMTP; 22 Jun 2023 02:07:27 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qCGHl-005jHK-2l;
-        Thu, 22 Jun 2023 12:07:25 +0300
-Date:   Thu, 22 Jun 2023 12:07:25 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Subject: Re: [PATCH v1 0/2] bimap API: Add couple of files to MAINTAINERS
-Message-ID: <ZJQPTcfzxM/9lHqY@smile.fi.intel.com>
-References: <20230621162626.86033-1-andriy.shevchenko@linux.intel.com>
- <ZJM8TBQJjR40y9/e@yury-ThinkPad>
+        Thu, 22 Jun 2023 05:19:13 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B1B358E;
+        Thu, 22 Jun 2023 02:10:39 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7D0B8660706C;
+        Thu, 22 Jun 2023 10:10:37 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687425038;
+        bh=5uxh5lKnVnM46Q8SEQodnpqC2oAD7Fjq5YEoHjE5Sx4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KPUAgmSdKBe8F1sbK0PJohKxD/iIlloBxRbdx2mXToR6bT0FdS/9cnpdpHyDyWPiV
+         9LYisjtoi9lQjkY6At9xAj4YncbpeIshMKIzGUJIMWyOqj3QittZD7V+6FnIquTZnH
+         kyANnfNm+j8bI8c/535TwPqRf62LvcR+18KpLAlQcC1hEy8GqAeUwjX2JbLeasux8I
+         JMqpyRqAtZuGljolnyporGOo6z6ZzqXm//GGQROy/CNoq5PYvnLri1W+ItKNrAnqxa
+         9CVUOFrfDlfafgmh31726rulYjimvN7Q790qDQmFLPxCVksLehwVx3/BZVXkSSbYjN
+         y7zmKhrAZTPiw==
+Message-ID: <99adec72-da7b-ce46-27be-b823a208a39e@collabora.com>
+Date:   Thu, 22 Jun 2023 11:10:34 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZJM8TBQJjR40y9/e@yury-ThinkPad>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v3 8/8] leds: leds-mt6323: Add support for WLEDs and
+ MT6332
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     pavel@ucw.cz, lee@kernel.org, sean.wang@mediatek.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, llvm@lists.linux.dev
+References: <20230601110813.2373764-1-angelogioacchino.delregno@collabora.com>
+ <20230601110813.2373764-9-angelogioacchino.delregno@collabora.com>
+ <20230621213124.GA2689001@dev-arch.thelio-3990X>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230621213124.GA2689001@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,26 +65,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 11:07:08AM -0700, Yury Norov wrote:
-> On Wed, Jun 21, 2023 at 07:26:24PM +0300, Andy Shevchenko wrote:
-> > During discussion
-> > https://lore.kernel.org/r/20230509051403.2748545-1-lucas.demarchi@intel.com
-> > I was started wondering why neither Yury nor Rasmus commented on that.
-> > 
-> > Hence I wanted to add some headers to the bitmap API MAINTAINERS for
-> > watching the changes made elsewhere are they may correlate with bit
-> > operations.
-> > 
-> > Cc: Lucas De Marchi <lucas.demarchi@intel.com>
+Il 21/06/23 23:31, Nathan Chancellor ha scritto:
+> Hi Angelo,
 > 
-> Thanks Andy!
+> On Thu, Jun 01, 2023 at 01:08:13PM +0200, AngeloGioacchino Del Regno wrote:
+>> Add basic code to turn on and off WLEDs and wire up MT6332 support
+>> to take advantage of it.
+>> This is a simple approach due to the aforementioned PMIC supporting
+>> only on/off status so, at the time of writing, it is impossible for me
+>> to validate more advanced functionality due to lack of hardware.
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 > 
-> Acked-by: Yury Norov <yury.norov@gmail.com>
+> After this patch as commit 9bb0a9e0626c ("leds: leds-mt6323: Add support
+> for WLEDs and MT6332") in -next, I see the following warnings from
+> clang, which are basically flagging potential kernel Control Flow
+> Integrity [1] violations that will be visible at runtime (this warning
+> is not enabled for the kernel yet but we would like it to be):
+> 
+>    drivers/leds/leds-mt6323.c:598:49: error: incompatible function pointer types assigning to 'int (*)(struct led_classdev *, enum led_brightness)' from 'int (struct led_classdev *, unsigned int)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>      598 |                         leds->led[reg]->cdev.brightness_set_blocking =
+>          |                                                                      ^
+>      599 |                                                 mt6323_wled_set_brightness;
+>          |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    drivers/leds/leds-mt6323.c:600:40: error: incompatible function pointer types assigning to 'enum led_brightness (*)(struct led_classdev *)' from 'unsigned int (struct led_classdev *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>      600 |                         leds->led[reg]->cdev.brightness_get =
+>          |                                                             ^
+>      601 |                                                 mt6323_get_wled_brightness;
+>          |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    2 errors generated.
+> 
+>  From what I can tell/understand, 'enum led_brightness' is obsolete and
+> the value that is passed via ->brightness_set_blocking() is an 'unsigned
+> int' as well but it seems 'enum led_brightness' is used as the parameter
+> in a lot of different callback implementations, so the prototype cannot
+> be easily updated without a lot of extra work. Is there any reason not
+> to just do something like this to avoid this issue?
+> 
 
-Thank you! I assume you take them.
+I don't think that this would bring any issue to the table.
 
--- 
-With Best Regards,
-Andy Shevchenko
+The rework will possibly be done globally, for all drivers, when time comes... so
+feel free to send the proposed patch.
+
+Thanks,
+Angelo
+
+> [1]: https://lwn.net/Articles/898040/
+> 
+> Cheers,
+> Nathan
+> 
+> diff --git a/drivers/leds/leds-mt6323.c b/drivers/leds/leds-mt6323.c
+> index e8fecfc2e90a..24f35bdb55fb 100644
+> --- a/drivers/leds/leds-mt6323.c
+> +++ b/drivers/leds/leds-mt6323.c
+> @@ -76,7 +76,7 @@ struct mt6323_led {
+>   	int			id;
+>   	struct mt6323_leds	*parent;
+>   	struct led_classdev	cdev;
+> -	unsigned int		current_brightness;
+> +	enum led_brightness	current_brightness;
+>   };
+>   
+>   /**
+> @@ -451,7 +451,7 @@ static int mtk_wled_hw_off(struct led_classdev *cdev)
+>   	return 0;
+>   }
+>   
+> -static unsigned int mt6323_get_wled_brightness(struct led_classdev *cdev)
+> +static enum led_brightness mt6323_get_wled_brightness(struct led_classdev *cdev)
+>   {
+>   	struct mt6323_led *led = container_of(cdev, struct mt6323_led, cdev);
+>   	struct mt6323_leds *leds = led->parent;
+> @@ -471,7 +471,7 @@ static unsigned int mt6323_get_wled_brightness(struct led_classdev *cdev)
+>   }
+>   
+>   static int mt6323_wled_set_brightness(struct led_classdev *cdev,
+> -				      unsigned int brightness)
+> +				      enum led_brightness brightness)
+>   {
+>   	struct mt6323_led *led = container_of(cdev, struct mt6323_led, cdev);
+>   	struct mt6323_leds *leds = led->parent;
 
 
