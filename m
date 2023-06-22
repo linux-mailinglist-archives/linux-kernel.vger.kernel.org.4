@@ -2,72 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8682D73A770
+	by mail.lfdr.de (Postfix) with ESMTP id 3F04373A76F
 	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:40:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231311AbjFVRkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 13:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35368 "EHLO
+        id S231318AbjFVRkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 13:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231418AbjFVRjy (ORCPT
+        with ESMTP id S231414AbjFVRjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 22 Jun 2023 13:39:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CCD31FD2;
-        Thu, 22 Jun 2023 10:39:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C65C618CA;
-        Thu, 22 Jun 2023 17:39:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52726C433C8;
-        Thu, 22 Jun 2023 17:39:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687455589;
-        bh=6Mcce3nF6YdsClruQbW80qlgIDWGMFESghPF7l7JYTM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=c/wGJVyyFBHOwRk677FOXLxKHfOpmo7aYhn8TXoCyysBSD9UN0HRCi/VIEy4fVtc3
-         d1Gtwc4Tlz0ZMOG6N2t6zeJCnCq0Ac3UfKvnIvE5ZZRksc5XHdNUCO3ys3TEVyYqB9
-         O5aTb6ejHzcie2Y3dxe6TFO3Tx54mwjqIDfllxxT2yeNQkcittmTYy4ty+rg7d5x/5
-         gYUetO9mpIHBZhBPcQIevv1XEy0sHwQScl/zfyoUZDduBaQ4FV+wexEVRBjKC+uN3K
-         nVASNPf6jJeZE8DcXCk8LoxzJA9L3gYZjf9cqV9w6ceYkEMCGPZirph5X8Wsb8TCwX
-         wosPPNlFHhh3g==
-Date:   Thu, 22 Jun 2023 10:39:48 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Breno Leitao <leitao@debian.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, leit@meta.com,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steve French <stfrench@microsoft.com>,
-        Lu Baolu <baolu.lu@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Simon Ser <contact@emersion.fr>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:IO_URING" <io-uring@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
-Subject: Re: [PATCH] io_uring: Add io_uring command support for sockets
-Message-ID: <20230622103948.33cbb0dd@kernel.org>
-In-Reply-To: <2023062228-cloak-wish-ec12@gregkh>
-References: <20230621232129.3776944-1-leitao@debian.org>
-        <2023062231-tasting-stranger-8882@gregkh>
-        <ZJRijTDv5lUsVo+j@gmail.com>
-        <2023062208-animosity-squabble-c1ba@gregkh>
-        <ZJR49xji1zmISlTs@gmail.com>
-        <2023062228-cloak-wish-ec12@gregkh>
+Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9EB1BF5
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:39:49 -0700 (PDT)
+Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-77e2c123e8aso567522639f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:39:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687455588; x=1690047588;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vMw5eT7Dqt5FIPh3vvSLGqZ/Chp2Isd/CXfCmTLAyNY=;
+        b=c40m8s629z7nUxG0djrGM9TmXrJwwRWlwLiR0JqOZ9yeDx1GTmpGjsmtN2GKdiBBQa
+         9uzuxgPWl1aNnNhADMg7XnEeQCrW0Naue94wHR5nYb+1v5l68W4TO7+W9fu9TzhU1smC
+         jMbIo13f4r0RfRZDeiVu0j9CO5ALIcso/0s1HPtgRHC5YjHnP+HSyazD+dFMsPL0UewT
+         b9XUHnAXgi/Ir0zNyRf5TNTdskvEEtDgxDZ3eiyoESW1T/W+nhKPe+XWawg62V5kDnyD
+         oAV9goeI16o56vUkUe5J+MaFJTSpDY5nc0VHCEy1BSl6ok8qrPW8DedTBKwSXx5Oq5Hc
+         8cQw==
+X-Gm-Message-State: AC+VfDwDcJPLiGNfX5bF0KtSv2MZEjc6E09liTowz5J6nyBJx4Irgyc/
+        V1sxxmyes1NGrozYVMddul+uoNcUV7RLlN2vA0gIAfSsXdc0
+X-Google-Smtp-Source: ACHHUZ4uCoU11SiMUR/V6HBOqLN+B+mpGqiVD8qRA7mPGSBQAjIGbL+3K/olNtg/0UFccYA0iiKJgrLRJl206IiNiXg3pbyswm1g
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a6b:d808:0:b0:777:afc6:8da0 with SMTP id
+ y8-20020a6bd808000000b00777afc68da0mr6942611iob.1.1687455588688; Thu, 22 Jun
+ 2023 10:39:48 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 10:39:48 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f02c0005febb5e74@google.com>
+Subject: [syzbot] [reiserfs?] [fat?] [acpi?] KASAN: slab-use-after-free Write
+ in collect_expired_timers
+From:   syzbot <syzbot+fb8d39ebb665f80c2ec1@syzkaller.appspotmail.com>
+To:     linkinjeon@kernel.org, linux-acpi@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        reiserfs-devel@vger.kernel.org, sj1557.seo@samsung.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,21 +57,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Jun 2023 19:03:04 +0200 Greg Kroah-Hartman wrote:
-> > Correct. For now we are just using 0xa0 and 0xa1, and eventually we
-> > might need more ioctls numbers.
-> > 
-> > I got these numbers finding a unused block and having some room for
-> > expansion, as suggested by Documentation/userspace-api/ioctl/ioctl-number.rst,
-> > that says:
-> > 
-> > 	If you are writing a driver for a new device and need a letter, pick an
-> > 	unused block with enough room for expansion: 32 to 256 ioctl commands.  
-> 
-> So is this the first io_uring ioctl?  If so, why is this an ioctl and
-> not just a "normal" io_uring call?
+Hello,
 
-+1, the mixing with classic ioctl seems confusing and I'm not sure 
-if it buys us anything.
--- 
-pw-bot: cr
+syzbot found the following issue on:
+
+HEAD commit:    dad9774deaf1 Merge tag 'timers-urgent-2023-06-21' of git:/..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1682f600a80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2cbd298d0aff1140
+dashboard link: https://syzkaller.appspot.com/bug?extid=fb8d39ebb665f80c2ec1
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17effe1f280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14972500a80000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/fd1a285f59ed/disk-dad9774d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/3121ad3d6486/vmlinux-dad9774d.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6a57f0b6184a/bzImage-dad9774d.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/c4a7e9030518/mount_1.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+fb8d39ebb665f80c2ec1@syzkaller.appspotmail.com
+
+BUG: unable to handle page fault for address: fffff5200002af99
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 0 P4D 0 
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 4993 Comm: syz-executor193 Not tainted 6.4.0-rc7-syzkaller-00072-gdad9774deaf1 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
+RIP: 0010:hlist_move_list include/linux/list.h:1029 [inline]
+RIP: 0010:collect_expired_timers+0x13b/0x200 kernel/time/timer.c:1772
+Code: 49 89 45 00 48 89 44 24 10 74 29 e8 bf 21 11 00 48 8b 44 24 10 48 b9 00 00 00 00 00 fc ff df 48 8d 78 08 48 89 fa 48 c1 ea 03 <80> 3c 0a 00 75 7a 4c 89 68 08 e8 96 21 11 00 4d 89 fd 49 c7 04 24
+RSP: 0018:ffffc900001e0e20 EFLAGS: 00010016
+RAX: ffffc90000157cc0 RBX: 0000000000000000 RCX: dffffc0000000000
+RDX: 1ffff9200002af99 RSI: ffffffff81732551 RDI: ffffc90000157cc8
+RBP: 00000000ffff9b50 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: ffff8880b993cf98 R12: ffff8880b99297e0
+R13: ffffc900001e0eb8 R14: ffff8880b9929720 R15: ffffc900001e0ec0
+FS:  00005555561173c0(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: fffff5200002af99 CR3: 0000000079098000 CR4: 0000000000350ee0
+Call Trace:
+ <IRQ>
+----------------
+Code disassembly (best guess):
+   0:	49 89 45 00          	mov    %rax,0x0(%r13)
+   4:	48 89 44 24 10       	mov    %rax,0x10(%rsp)
+   9:	74 29                	je     0x34
+   b:	e8 bf 21 11 00       	callq  0x1121cf
+  10:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+  15:	48 b9 00 00 00 00 00 	movabs $0xdffffc0000000000,%rcx
+  1c:	fc ff df
+  1f:	48 8d 78 08          	lea    0x8(%rax),%rdi
+  23:	48 89 fa             	mov    %rdi,%rdx
+  26:	48 c1 ea 03          	shr    $0x3,%rdx
+* 2a:	80 3c 0a 00          	cmpb   $0x0,(%rdx,%rcx,1) <-- trapping instruction
+  2e:	75 7a                	jne    0xaa
+  30:	4c 89 68 08          	mov    %r13,0x8(%rax)
+  34:	e8 96 21 11 00       	callq  0x1121cf
+  39:	4d 89 fd             	mov    %r15,%r13
+  3c:	49                   	rex.WB
+  3d:	c7                   	.byte 0xc7
+  3e:	04 24                	add    $0x24,%al
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
