@@ -2,150 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F9BB7398FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 10:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5AAD739907
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 10:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230327AbjFVIHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 04:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
+        id S230332AbjFVIJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 04:09:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjFVIHi (ORCPT
+        with ESMTP id S229969AbjFVIJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 04:07:38 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B44810DB;
-        Thu, 22 Jun 2023 01:07:37 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b4f9583404so52231565ad.2;
-        Thu, 22 Jun 2023 01:07:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687421256; x=1690013256;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+bE3N/UI7ZUwen2f+LeNQb5BD3FLwzMmTY3rL27DjvE=;
-        b=i+FNykShYH4jFcW3TH3D6qVUD8GYa2TuyJft85fNgUu4Qv5JIjyoCffqwumCHJM3Rm
-         qxuRBkLfEz6K0utBAqS1fz4aoYBwWcq3EpGnxHDQOR0k5Rn5DvnQzs1BJgGSoinQkbDI
-         Oge474VnLaBQGLIqOLpUTMjDwVkOgp33iyWlWQGtE+ob++mffNYlsyX+1YWmOYb6et7j
-         aDy1bxcxBcvcGRJK9dEzghG63fP6LDku7+LTjM0mlUk6JAPtZup6fAGd6nRN7aSmlcq8
-         D5NuaOmrwkbdir/AuCyzqLQlAetqlLAe6W/NKl0S65ZkKqbmAppOsReU1zCW0csNWj/C
-         y2jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687421256; x=1690013256;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+bE3N/UI7ZUwen2f+LeNQb5BD3FLwzMmTY3rL27DjvE=;
-        b=C/DxyEscEl41ak5WSJpfxXGu/+Aw3rA3G8INSjrGxJxVx4PmZqkVUpesaW38HBI/9w
-         Os35sst/zoosDdTtNXDoLhlU/ly/C6a1dnk6h/3sCEVGNMwAQ5w6/wm1uQLysTCi7/a9
-         CC7hb70UZiV7qIHhS+9L+K07z8zD9n4Uw7Ap/kl7vO7fJ3t7o7aerwzp6IURr5v2lEbT
-         rqh2vu302oC8NvUp1iQjKkYCDiZPhCllgWhYyqszYtDTTSC1ynuwMJxnB+byQTbMkRgG
-         Re05D1rLVJPnsWXXFWVlIl4GnboQFBLF9dPbkRa9UQ1Ibe4Hp4Y/Y/qJbJLc75wB04+7
-         ZmKw==
-X-Gm-Message-State: AC+VfDykanw2wHeU+ceDAcQz4u5BWlBlniFlFPc6B3xlgfOzMfMEfmWH
-        1vYGMRI4jsFeqx2Yp98g2OM=
-X-Google-Smtp-Source: ACHHUZ4z8GVwnVb3URT4P5uVyCV/p8NXmq2tUChLjyJVdkL2sTYs+bNGDyA7P2txMeYBuoTeJKUdfw==
-X-Received: by 2002:a17:903:18a:b0:1b0:1095:f4f6 with SMTP id z10-20020a170903018a00b001b01095f4f6mr21510085plg.24.1687421256536;
-        Thu, 22 Jun 2023 01:07:36 -0700 (PDT)
-Received: from sumitra.com ([59.89.167.84])
-        by smtp.gmail.com with ESMTPSA id 5-20020a170902c24500b001b51b3e84cesm4760568plg.166.2023.06.22.01.07.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 01:07:36 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 01:07:29 -0700
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ira Weiny <ira.weiny@intel.com>, Fabio <fmdefrancesco@gmail.com>,
-        Deepak R Varma <drv@mailo.com>,
-        Sumitra Sharma <sumitraartsy@gmail.com>
-Subject: [PATCH v3] lib/test_bpf: Call page_address() on page acquired with
- GFP_KERNEL flag
-Message-ID: <20230622080729.GA426913@sumitra.com>
+        Thu, 22 Jun 2023 04:09:22 -0400
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F18D199D;
+        Thu, 22 Jun 2023 01:09:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=gianlocX80/93eqK3HsoSta6CY4KDZkx0aSwUig8SOo=; b=cNcQN1PUrrAPsIiMMBu5Q61mAA
+        c2Q8/YhZOYWHEhHGRJfTUZkXgViIlRFObjz78p5rz6N1wsgDGzo16ht4p4U671QMK6ysUt8qeQLAN
+        AT3bjQ7bbOtH7mVatt8WqZbkh+8o9YhYHFxQS/BZKWSUAxB/iNVHH6/zJQKO+iPi3LWjqKf3P3Nqq
+        0Pi+xuhC83aFPtXWn2+5XyGR2vuPaFOwiOsbdhHDJzyjzKv8xRYC8AvYEwE0pBaOlMVTQCqKnDSDO
+        jukwb8bwdpZSbYWvTaEGtH/WkGKk5m9hLTppw/FtUM3ZCkdrD6dp/nretkbMLwLnNNxY5wOxznKtR
+        qjidrj0g==;
+Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:56706 helo=[192.168.69.84])
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.96)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1qCFNV-00GeLD-2A;
+        Thu, 22 Jun 2023 10:09:17 +0200
+Message-ID: <b05eaef8-3371-1a4b-c264-b6d350155293@norik.com>
+Date:   Thu, 22 Jun 2023 10:09:17 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] rtc: rv3028: Improve trickle charger logic
+Content-Language: en-GB
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     a.zummo@towertech.it, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, upstream@phytec.de
+References: <20230622071609.4032736-1-andrej.picej@norik.com>
+ <20230622073458dcd9f636@mail.local>
+From:   Andrej Picej <andrej.picej@norik.com>
+In-Reply-To: <20230622073458dcd9f636@mail.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-generate_test_data() acquires a page with alloc_page(GFP_KERNEL).
-The GFP_KERNEL is typical for kernel-internal allocations.
-The caller requires ZONE_NORMAL or a lower zone for direct access.
+Hi Alexandre,
 
-Therefore the page cannot come from ZONE_HIGHMEM. Thus there's
-no need to map it with kmap().
+On 22. 06. 23 09:34, Alexandre Belloni wrote:
+> On 22/06/2023 09:16:09+0200, Andrej Picej wrote:
+>> Property "trickle-resistor-ohms" allows us to set trickle charger
+>> resistor. However there is no possibility to disable it afterwards.
+>>
+>>  From now on, disable trickle charger circuit in case device-tree
+>> property "trickle-resistor-ohms" is set to -1.
+>>
+>> Additionally, lets make sure we only update internal EEPROM in case of a
+>> change. This prevents wear due to excessive EEPROM writes on each probe.
+>>
+>> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+>> ---
+>> Changes in v2:
+>> - disable trickle charger if device tree property trickle-resistor-ohms
+>>    is set to -1.
+> 
+> What about using aux-voltage-chargeable which is the generic property
+> for this?
 
-Also, the kmap() is being deprecated in favor of
-kmap_local_page() [1].
+I thought that this is more of a property for specifying if connected 
+battery/supercap has charging capabilities. I guess at the end it would 
+be the same thing as knowingly disabling the trickle charger even if 
+battery/supercap can be charged.
+Do you want that I change and use "aux-voltage-chargeable"?
 
-Hence, use a plain page_address() directly.
+BR,
+Andrej
 
-Since the page passed to the page_address() is not from the highmem
-zone, the page_address() function will always return a valid kernel
-virtual address and will not return NULL. Hence, remove the check
-'if (!ptr)'.
-
-Remove the unused variable 'ptr'.
-
-[1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@intel.com/
-
-Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
----
-
-- Link to v1: https://lore.kernel.org/bpf/20230613073020.GA359792@sumitra.com/T/
-- Link to v2: https://lore.kernel.org/lkml/3564297.R56niFO833@suse/T/
-
-Changes in v3:
-Noted by: Fabio M. De Francesco<fmdefrancesco@gmail.com>
-	- Remove the check 'if (!ptr)'.
-	- Remove the unused variable 'ptr'.
-	- Change the commit message.
-
-Changes in v2:
-Noted by: Fabio M. De Francesco<fmdefrancesco@gmail.com>
-    - Remove the kmap() call and call page_address() instead.
-    - Change the commit subject and message.
-
-
- lib/test_bpf.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
-
-diff --git a/lib/test_bpf.c b/lib/test_bpf.c
-index ade9ac672adb..448bc1b0b8b5 100644
---- a/lib/test_bpf.c
-+++ b/lib/test_bpf.c
-@@ -14381,18 +14381,12 @@ static void *generate_test_data(struct bpf_test *test, int sub)
- 		 * single fragment to the skb, filled with
- 		 * test->frag_data.
- 		 */
--		void *ptr;
--
- 		page = alloc_page(GFP_KERNEL);
- 
- 		if (!page)
- 			goto err_kfree_skb;
- 
--		ptr = kmap(page);
--		if (!ptr)
--			goto err_free_page;
--		memcpy(ptr, test->frag_data, MAX_DATA);
--		kunmap(page);
-+		memcpy(page_address(page), test->frag_data, MAX_DATA);
- 		skb_add_rx_frag(skb, 0, page, 0, MAX_DATA, MAX_DATA);
- 	}
- 
--- 
-2.25.1
-
+> 
+>> ---
+>>   drivers/rtc/rtc-rv3028.c | 45 +++++++++++++++++++++++++++++-----------
+>>   1 file changed, 33 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/drivers/rtc/rtc-rv3028.c b/drivers/rtc/rtc-rv3028.c
+>> index ec5d7a614e2d..da2ae81fe7c8 100644
+>> --- a/drivers/rtc/rtc-rv3028.c
+>> +++ b/drivers/rtc/rtc-rv3028.c
+>> @@ -859,7 +859,8 @@ static int rv3028_probe(struct i2c_client *client)
+>>   {
+>>   	struct rv3028_data *rv3028;
+>>   	int ret, status;
+>> -	u32 ohms;
+>> +	s32 ohms;
+>> +	int val_old, val;
+>>   	struct nvmem_config nvmem_cfg = {
+>>   		.name = "rv3028_nvram",
+>>   		.word_size = 1,
+>> @@ -937,22 +938,42 @@ static int rv3028_probe(struct i2c_client *client)
+>>   	if (ret)
+>>   		return ret;
+>>   
+>> -	/* setup trickle charger */
+>> -	if (!device_property_read_u32(&client->dev, "trickle-resistor-ohms",
+>> -				      &ohms)) {
+>> -		int i;
+>> +	ret = regmap_read(rv3028->regmap, RV3028_BACKUP, &val_old);
+>> +	if (ret < 0)
+>> +		return ret;
+>> +
+>> +	/* mask out only trickle charger bits */
+>> +	val_old = val_old & (RV3028_BACKUP_TCE | RV3028_BACKUP_TCR_MASK);
+>>   
+>> -		for (i = 0; i < ARRAY_SIZE(rv3028_trickle_resistors); i++)
+>> -			if (ohms == rv3028_trickle_resistors[i])
+>> -				break;
+>> +	/* setup trickle charger */
+>> +	if (!of_property_read_s32(client->dev.of_node, "trickle-resistor-ohms",
+>> +				  &ohms)) {
+>> +		/* disable trickle charger if trickle-resistor-ohms = <(-1)>; */
+>> +		if (ohms == -1) {
+>> +			val = val_old & ~RV3028_BACKUP_TCE;
+>> +		} else {
+>> +			int i;
+>> +
+>> +			for (i = 0; i < ARRAY_SIZE(rv3028_trickle_resistors); i++)
+>> +				if (ohms == rv3028_trickle_resistors[i])
+>> +					break;
+>> +
+>> +			if (i < ARRAY_SIZE(rv3028_trickle_resistors)) {
+>> +				/* enable trickle charger and its resistor */
+>> +				val = RV3028_BACKUP_TCE | i;
+>> +			} else {
+>> +				dev_warn(&client->dev, "invalid trickle resistor value\n");
+>> +				/* don't update the trickle charger regs */
+>> +				val = val_old;
+>> +			}
+>> +		}
+>>   
+>> -		if (i < ARRAY_SIZE(rv3028_trickle_resistors)) {
+>> +		/* only update EEPROM if changes are necessary */
+>> +		if (val_old != val) {
+>>   			ret = rv3028_update_cfg(rv3028, RV3028_BACKUP, RV3028_BACKUP_TCE |
+>> -						 RV3028_BACKUP_TCR_MASK, RV3028_BACKUP_TCE | i);
+>> +						RV3028_BACKUP_TCR_MASK, val);
+>>   			if (ret)
+>>   				return ret;
+>> -		} else {
+>> -			dev_warn(&client->dev, "invalid trickle resistor value\n");
+>>   		}
+>>   	}
+>>   
+>> -- 
+>> 2.25.1
+>>
+> 
