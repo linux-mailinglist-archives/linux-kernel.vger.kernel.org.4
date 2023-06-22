@@ -2,144 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7251A73ABCA
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 23:49:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FC0073ABE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 23:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjFVVtW convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 22 Jun 2023 17:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
+        id S231215AbjFVVwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 17:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229972AbjFVVtU (ORCPT
+        with ESMTP id S229628AbjFVVwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 17:49:20 -0400
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAC61FEF;
-        Thu, 22 Jun 2023 14:49:19 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-bc40d4145feso7106322276.1;
-        Thu, 22 Jun 2023 14:49:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687470559; x=1690062559;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q3O7vHNH1CH0WOmympzRGlXkSOKdbKkxR1VXAbXylCc=;
-        b=fIm/pUDgNKZEG+YMoJ6i/f+tHN9R/2A0/3ig7+p/PBh1cxgJF6ocy8qU+bmKWZxE8k
-         OSU9YxutFq2vTTC81WSyYtYchT7o3apJAkBy/txvObS53XXO8y0Qln+1uAfaH6rM2vNO
-         PRfdXt4HQb4tcVUZk1jDCjPpUEy5rzl1klaFTgNwUOfWLKf0TpxAZpmbzb6fod9IDwY2
-         5/OcA6P+AIuhJTpQ8uKe4ECyRqocOti2anKnExQHMiaVIIkybzUBaiC3dtN8vLyFnwrN
-         k2uiRi0vvvwQV+DD3zAxqdELdRe5ETZQ78cT2dUMhcsDKXYHLw2WQXfOQkkaksE115M/
-         fXXg==
-X-Gm-Message-State: AC+VfDxotFkA98IGqTVferCFMclkxbOlP6/9hzHCDzCUriSKuolUknDB
-        gInbrzmI3zGcFlk7QIlEmqN2kb78jtOZ1xXZrrU=
-X-Google-Smtp-Source: ACHHUZ4AzIou+U/Upi4lRxNM9TxiX8CgxmWd9MaK+LjRwNUoCPoVXK/JO1xVK+HrsxHUcUZPJxddrl0y9OOR+B91nyM=
-X-Received: by 2002:a25:ab52:0:b0:ba5:ee5a:f41c with SMTP id
- u76-20020a25ab52000000b00ba5ee5af41cmr16292593ybi.1.1687470558611; Thu, 22
- Jun 2023 14:49:18 -0700 (PDT)
+        Thu, 22 Jun 2023 17:52:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17EF2C3;
+        Thu, 22 Jun 2023 14:52:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A87FB61923;
+        Thu, 22 Jun 2023 21:52:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52A15C433C8;
+        Thu, 22 Jun 2023 21:52:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687470724;
+        bh=dvLWGOBwNTXN6E/yM+CESlG/rZNvOG86KIsYDcJNubQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=baGy2bzOYdXCYc4YfBw/zVvO2zhb1DeCBmAjoIFxDO0dlvEJBA5BL+yzwZTGHr3BU
+         cTMS9lrjn9wCt9Aw3eKcm+UdF5RMnm3T4E2V/x8YY7OFUPh6+ima/DX82wb3Z0oLAq
+         Thh1meLV0NwX7iqtqYeKbazqI6h6NDvHtoKGT3SSpsWew2CE/fEnKY7os1UhRzXn4M
+         FQ5Icj/D2+Y222kt6DT6306ESdc63LSl0oDcougFFwcha30t+7MSWmZ4Q6H3wpoqB9
+         svVbiJoMH4wq6Dcy1WOszrrOvvIhKqsA3B105dWcJCU7Ixz1Yw48qMDRUHAqLd71Cd
+         VpWzO/dDXf0lA==
+Message-ID: <06ded84e-f5ba-c9e6-ce5b-72eaca56bc88@kernel.org>
+Date:   Fri, 23 Jun 2023 06:52:02 +0900
 MIME-Version: 1.0
-References: <20230622050330.3733114-1-irogers@google.com>
-In-Reply-To: <20230622050330.3733114-1-irogers@google.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Thu, 22 Jun 2023 14:49:06 -0700
-Message-ID: <CAM9d7cjWYG4NgMPFUVC0q-u0GGekrvqpw8jU2o4KfiWqFC8x6g@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] perf pmus: Add notion of default PMU for JSON events
-To:     Ian Rogers <irogers@google.com>
-Cc:     Thomas Richter <tmricht@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH 2/2] ata: octeon: Add compile test support
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-ide@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230614173633.2430653-1-robh@kernel.org>
+ <20230614173633.2430653-2-robh@kernel.org>
+ <23325977-ba37-4360-afb5-4ab38a66107e@roeck-us.net>
+ <feef6589-d0d6-8e64-fefd-914c234dcfba@kernel.org>
+ <167e83a0-8666-27af-5e2c-4ddda917795a@roeck-us.net>
+ <78cce73d-16d1-e357-bee7-2176479604f4@kernel.org>
+ <CAL_JsqLdEoiiCR6n1XqQe-6_9-9Hu1t_r17hXG9rTmSAMBZ9OA@mail.gmail.com>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <CAL_JsqLdEoiiCR6n1XqQe-6_9-9Hu1t_r17hXG9rTmSAMBZ9OA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 10:03 PM Ian Rogers <irogers@google.com> wrote:
->
-> JSON events created in pmu-events.c by jevents.py may not specify a
-> PMU they are associated with, in which case it is implied that it is
-> the first core PMU. Care is needed to select this for regular 'cpu',
-> s390 'cpum_cf' and ARMs many names as at the point the name is first
-> needed the core PMUs list hasn't been initialized. Add a helper in
-> perf_pmus to create this value, in the worst case by scanning sysfs.
->
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
+On 6/22/23 22:41, Rob Herring wrote:
+> On Wed, Jun 21, 2023 at 10:26 PM Damien Le Moal <dlemoal@kernel.org> wrote:
+>>
+>> On 6/22/23 12:01, Guenter Roeck wrote:
+>>> On 6/21/23 17:57, Damien Le Moal wrote:
+>>>> On 6/22/23 01:51, Guenter Roeck wrote:
+>>>>> On Wed, Jun 14, 2023 at 11:36:33AM -0600, Rob Herring wrote:
+>>>>>> Add COMPILE_TEST to enable building Cavium Octeon drivers in MIPS
+>>>>>> allyesconfig/allmodconfig builds. There's a dependency on MIPS headers,
+>>>>>> so other arches can't be enabled.
+>>>>>>
+>>>>>> Signed-off-by: Rob Herring <robh@kernel.org>
+>>>>>> ---
+>>>>>> Tested on allmodconfig build. Not sure if there's other MIPS configs
+>>>>>> where this doesn't work. We'll see what 0-day says.
+>>>>>
+>>>>> Odd, in next-20230621 I get:
+>>>>>
+>>>>> Building mips:allmodconfig ... failed
+>>>>
+>>>> Indeed odd. Given that this is an allmodconfig, I would assume that
+>>>> CONFIG_CAVIUM_OCTEON_SOC is set ?
+>>>>
+>>>
+>>> No, it is not. CONFIG_CAVIUM_OCTEON_SOC is a choice option,
+>>> meaning only one of the choices can be set, and mips:allmodconfig
+>>> selects a different choice.
+>>
+>> OK. Then I think I need to drop this patch as I do not see how to allow
+>> COMPILE_TEST without CONFIG_CAVIUM_OCTEON_SOC being set.
+>>
+>> Rob ?
+> 
+> These could be fixed, but not sure it's worth the effort.
 
-[SNIP]
-> diff --git a/tools/perf/util/pmus.c b/tools/perf/util/pmus.c
-> index d891d72c824e..80797e1b862f 100644
-> --- a/tools/perf/util/pmus.c
-> +++ b/tools/perf/util/pmus.c
-> @@ -524,6 +524,37 @@ bool perf_pmus__supports_extended_type(void)
->         return perf_pmus__do_support_extended_type;
->  }
->
-> +char *perf_pmus__default_pmu_name(void)
-> +{
-> +       int fd;
-> +       DIR *dir;
-> +       struct dirent *dent;
-> +       char *result = NULL;
-> +
-> +       if (!list_empty(&core_pmus))
-> +               return strdup(list_first_entry(&core_pmus, struct perf_pmu, list)->name);
-> +
-> +       fd = perf_pmu__event_source_devices_fd();
-> +       if (fd < 0)
-> +               return strdup("cpu");
-> +
-> +       dir = fdopendir(fd);
-> +       if (!dir)
-> +               return strdup("cpu");
-
-close(fd) ?
-
-Thanks,
-Namhyung
+Agreed. And given that we are at rc7 already, this effort should not be now
+anyway. I will drop this patch.
 
 
-> +
-> +       while ((dent = readdir(dir))) {
-> +               if (!strcmp(dent->d_name, ".") || !strcmp(dent->d_name, ".."))
-> +                       continue;
-> +               if (is_pmu_core(dent->d_name)) {
-> +                       result = strdup(dent->d_name);
-> +                       break;
-> +               }
-> +       }
-> +
-> +       closedir(dir);
-> +       return result ?: strdup("cpu");
-> +}
-> +
->  struct perf_pmu *evsel__find_pmu(const struct evsel *evsel)
->  {
->         struct perf_pmu *pmu = evsel->pmu;
-> diff --git a/tools/perf/util/pmus.h b/tools/perf/util/pmus.h
-> index d02ffea5d3a4..a21464432d0f 100644
-> --- a/tools/perf/util/pmus.h
-> +++ b/tools/perf/util/pmus.h
-> @@ -20,5 +20,6 @@ void perf_pmus__print_pmu_events(const struct print_callbacks *print_cb, void *p
->  bool perf_pmus__have_event(const char *pname, const char *name);
->  int perf_pmus__num_core_pmus(void);
->  bool perf_pmus__supports_extended_type(void);
-> +char *perf_pmus__default_pmu_name(void);
->
->  #endif /* __PMUS_H */
-> --
-> 2.41.0.162.gfafddb0af9-goog
->
+-- 
+Damien Le Moal
+Western Digital Research
+
