@@ -2,114 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D032E73A114
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B69B473A11A
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbjFVMis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 08:38:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46096 "EHLO
+        id S231349AbjFVMnI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 08:43:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbjFVMiq (ORCPT
+        with ESMTP id S229806AbjFVMnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 08:38:46 -0400
-X-Greylist: delayed 60 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 22 Jun 2023 05:38:44 PDT
-Received: from smtpdh20-1.aruba.it (smtpdh20-1.aruba.it [62.149.155.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C8210C1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:38:44 -0700 (PDT)
-Received: from localhost.localdomain ([151.79.164.54])
-        by Aruba Outgoing Smtp  with ESMTPSA
-        id CJZEqf8KC1xz6CJZEqE7my; Thu, 22 Jun 2023 14:37:42 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=aruba.it; s=a1;
-        t=1687437462; bh=g03OJMjrBbsiPap55M8C8/eh3feEmOWxGVwXp3EGFpY=;
-        h=From:To:Subject:Date:MIME-Version;
-        b=eNW2RDBrrahovjFeZYjyVuvgwITFcUflLImIHBwPRNH9Upd1xJu5xag4yMSbQ829i
-         WJyFarH57K33ffFtTxfWtKM+2+kbHF80bwpkm5qCLSzYHQSxiB5bHkrd89X4sInQGH
-         JVTqE1ldzEuaMJHYXEtL5CYqbNfVQ7oJw29ibNza8id1sqgudEY4pAFS6VueATpOya
-         84cBolwYe4KjcdyW7tlzvHFVls31tFfn+g8dyGw3gN4crIpV0v1zMCmpQHHxlCMSeD
-         0tQHyTH9kQW5aTMkmf1FNwhve2NB45L+DzH0rl7mQ+7THBwC87/psqaZ/UoxbbGeoC
-         IhsLzFppiKoNA==
-From:   Giulio Benetti <giulio.benetti@benettiengineering.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Giulio Benetti <giulio.benetti@benettiengineering.com>
-Subject: [PATCH] net: phy: broadcom: drop brcm_phy_setbits() and use phy_set_bits() instead
-Date:   Thu, 22 Jun 2023 14:37:37 +0200
-Message-Id: <20230622123737.8649-1-giulio.benetti@benettiengineering.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 22 Jun 2023 08:43:07 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25267DE
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:43:02 -0700 (PDT)
+Received: from mail.alien8.de (mail.alien8.de [IPv6:2a01:4f9:3051:3f93::2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 427581EC034D;
+        Thu, 22 Jun 2023 14:42:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1687437775;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=ckL+0W8wwqe6hcLw5YdMaba45+dh8m6sZiMEuqZIYLU=;
+        b=gRDNcxNdXvjh6yYaYGTmVMEzJ/Ut54uYeYRYibrpFUoi4E98Nd6ouPyE3Vd7XNvRmWk6Be
+        T8iePPn+hQGw3gmj1JmHvmG9q8mroxhD2anQWiWN8TQ9/Kqa3uLJh9D4uCdr3kRKNlM0oF
+        XEt6qFLiUB0LCC5dFw/z5zmE1c28F+U=
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+        header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+        by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id obzi4Wo7Boeg; Thu, 22 Jun 2023 12:42:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+        t=1687437771; bh=ckL+0W8wwqe6hcLw5YdMaba45+dh8m6sZiMEuqZIYLU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Xue+gHR1QPJ2wYg8jr7xR9okfC58hkbn2tvo39jjOyepO6nWT5xkM8C86a7JslksA
+         fWrxd1j5BYwfQCq5/ltiyUPwz7wUmOuvwdac+ZBk7Pq/Z7QB5LFgkAJNwhEf46HJot
+         GsEuAAimTdl59U1lS2VCiaRpFp8E6Zoa6+LSf2UzUIKhmxZyXvLc2QZAl1XhmvGBzP
+         pJ2OZLzXJpVPogfAKdwN5UgEJky41c8Un6/sneDHV2WYsV2m7caZeF56oalkxmGEeV
+         0IWCcePJOmsiBOj1E7JP6plqIYp9iUeuItxtxLM93NSfEGIWU98/SLJ3qDEWi0NwqO
+         Vfh3hjA5pErizMMxfDFe6cLi7bgxJVVbXXERZGAAlfu5bBH5BkfPVuE1/RW/+za32u
+         mHJnJgLXbKsL1A4LHrl+NURkJdiBNzUepDg7xlEeZ0UEemMkXX//76savi+x5wYDBf
+         dHrJHhAXN4OGrcyxoaR1wcJGRzX3Uo9t0RfB715mhD5dCxg/p16oXRIvcMrvnCsKWq
+         NHiHV2M2OhXcUiW/JQX/Bqx/DDQCONrF3X91uBPi3dMAFMtL7T1SbidQtd8crV3gUZ
+         0FKJmzeGfW2AwRabaBIjiNDLtVTqmPri1wx/aMhKOhhbcBiih3o89wnX97HaMcYkUl
+         5+8spfUJdRy48jmVfhxnAB1E=
+Received: from zn.tnic (p200300eA971dC57f329C23FFfEa6A903.dip0.t-ipconnect.de [IPv6:2003:ea:971d:c57f:329c:23ff:fea6:a903])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+        (No client certificate requested)
+        by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9ED5B40E0145;
+        Thu, 22 Jun 2023 12:42:39 +0000 (UTC)
+Date:   Thu, 22 Jun 2023 14:42:38 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Breno Leitao <leitao@debian.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>, leit@fb.com,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2] x86/bugs: Break down mitigations configurations
+Message-ID: <20230622124238.GAZJRBvrJdWloWzy0D@fat_crate.local>
+References: <20230616164851.2559415-1-leitao@debian.org>
+ <20230621001327.qdyebewnx7r5aiy3@desk>
+ <ZJMdKUr98H8zPSAl@gmail.com>
+ <20230621173135.wiprtgzslhw5z5or@desk>
+ <ZJNDRSUZuZ2L+pwo@gmail.com>
+ <20230621194101.bmwesljror2yqjxx@desk>
+ <d9bc78ed-1f05-47db-e916-d4d8bc76634e@intel.com>
+ <ZJN/SGwvOBZmChJw@gmail.com>
+ <0c908258-2b03-ebb3-bc7d-af5ea66479d4@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CMAE-Envelope: MS4xfHJyd/ZEh28BATS8DEkFR2WqXze3wFY5EaNI9gpZ4M9ewFj4saI/IPlanEGmVHTBGnqhO9SLMg0TvAzgIQ1Pf2nsrjngHOJXlr3LVID+EEgwyss0ApMi
- QzwxBMw7JexINdQp6yqOLGLh1f4MrMLEsMuL1dTQPicgScYCZsOd+01Ncma+tdvkjvab2lSdLNMS31/nsW6c1AYgZLR/u9DsE592KZ5bdYurNIByQUy14J2k
- Fi/NbH/YAu0Cl61EJvHNsy7+C7zboB38KW7JuDHGl2LQP0s+4ZcZEL/EAR7taZ654Mtpgn6TfuxY6twCjkBIoLHnoRhPEdm1GfIcsZyECMqI06NTBVJ9/ZI3
- jqREXWN8zBxD5CJdbufGIf9zC4bdxxPJZ3XwRe/KBTc12kPhSVKUsWovzWJ/j9AJSSter4tt3UG7EJezXG3TWHSwl9VB5gYCwdr1LjeiqnyHUIOTyTjozSuk
- OqhrNCaPSbIasDz8iUs+u4EfcVOYLp6awLV7wye4d9vOckgbJlZWXTHzQOZrcH6jH3pIm/BExN8A4gbeg8IX2MP7kCcgeueJyHZsTKMdJK26avUNx1dbyeos
- t7PTdiCUDoQXjimyxd2fGxt2
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <0c908258-2b03-ebb3-bc7d-af5ea66479d4@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linux provides phy_set_bits() helper so let's drop brcm_phy_setbits() and
-use phy_set_bits() in its place.
+On Wed, Jun 21, 2023 at 03:58:10PM -0700, Dave Hansen wrote:
+> Do you like the direction this is going?  Maybe I'm missing something.
 
-Signed-off-by: Giulio Benetti <giulio.benetti@benettiengineering.com>
----
- drivers/net/phy/broadcom.c | 15 ++-------------
- 1 file changed, 2 insertions(+), 13 deletions(-)
+Yeah, see
 
-diff --git a/drivers/net/phy/broadcom.c b/drivers/net/phy/broadcom.c
-index ad71c88c87e7..d684c5be529a 100644
---- a/drivers/net/phy/broadcom.c
-+++ b/drivers/net/phy/broadcom.c
-@@ -608,17 +608,6 @@ static int bcm54616s_read_status(struct phy_device *phydev)
- 	return err;
- }
- 
--static int brcm_phy_setbits(struct phy_device *phydev, int reg, int set)
--{
--	int val;
--
--	val = phy_read(phydev, reg);
--	if (val < 0)
--		return val;
--
--	return phy_write(phydev, reg, val | set);
--}
--
- static int brcm_fet_config_init(struct phy_device *phydev)
- {
- 	int reg, err, err2, brcmtest;
-@@ -689,14 +678,14 @@ static int brcm_fet_config_init(struct phy_device *phydev)
- 		goto done;
- 
- 	/* Enable auto MDIX */
--	err = brcm_phy_setbits(phydev, MII_BRCM_FET_SHDW_MISCCTRL,
-+	err = phy_set_bits(phydev, MII_BRCM_FET_SHDW_MISCCTRL,
- 				       MII_BRCM_FET_SHDW_MC_FAME);
- 	if (err < 0)
- 		goto done;
- 
- 	if (phydev->dev_flags & PHY_BRCM_AUTO_PWRDWN_ENABLE) {
- 		/* Enable auto power down */
--		err = brcm_phy_setbits(phydev, MII_BRCM_FET_SHDW_AUXSTAT2,
-+		err = phy_set_bits(phydev, MII_BRCM_FET_SHDW_AUXSTAT2,
- 					       MII_BRCM_FET_SHDW_AS2_APDE);
- 	}
- 
+f43b9876e857 ("x86/retbleed: Add fine grained Kconfig knobs")
+
+AFAIR, Linus wanted those this way so the only logical next step is to
+add the Kconfig knobs for the missing ones...
+
 -- 
-2.34.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
