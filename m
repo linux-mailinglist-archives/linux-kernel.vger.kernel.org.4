@@ -2,79 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 343A3739AE1
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 10:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CA97739B82
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:04:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbjFVIyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 04:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
+        id S231472AbjFVJCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 05:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231504AbjFVIxq (ORCPT
+        with ESMTP id S231129AbjFVJBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 04:53:46 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A2A210A
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:53:27 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2b466073e19so78122411fa.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:53:27 -0700 (PDT)
+        Thu, 22 Jun 2023 05:01:23 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372FE4201
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:57:01 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-51f64817809so680148a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:57:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687424006; x=1690016006;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EOud5yiCf9vuKq5jIo/hllLQZNDjLVHZzylOU65GmJI=;
-        b=rPDqi0R0+g8TBX9UA0smbbXRrnzrS3JCy/uN6yGpEPSuTzhD7prfpcIAPQ6cEe4RYN
-         VG1yyUmw5VsK1Ea/D5hU9GgK0fUuVbbcEnqXLltVCpStAfg0ysfOdQJjMraKRMqKzgfN
-         83pWFbYaDl+3HXgiV/67k/9zqkdIKK2/7wfQulv5SHg7QGbSGnGsCJjHqu1hq/K54cRR
-         toRbVQEtJO3+r8ZqA06HGiLjYOHzftCvKtyHpIy7MfXifw0POjKTIpEmmn0SGWZ+Nv7X
-         si30P2tJAHGyFlIC+rTlhq63xxu2m3pwZHMSm+0sU2vdqo6hs96AAalZhtDwGhLblsYa
-         ZJ0w==
+        d=bytedance.com; s=google; t=1687424196; x=1690016196;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tuTRU39Llc4f1pG+4j4EE0WoT0ftJSPXyoG6lJxyplk=;
+        b=Ekn/zV8B3Pykd2GrPoTdVnpJwk5evd2tyUP0vKsA0sao3e0fC5CJiY4BTrhaxMXIHV
+         uTPkEPgehKIEn13/c91Rf6hAUh1pL4moe2PR0AHRF6Kdv1EoYZyskenz8RKeyckC9Itb
+         y+HACd1zVUdu9ru2Mkg+skG1k3PTY0I37XiwGKuN4fZctDPgzdbV+AVCjywsN0HsaZ69
+         Cuv8lvpq3tEmZe+xhsg7ur6ivxEYcTfKMKXUZmg3vRSFd562H9J1GbGm5bH6oFZpkxLe
+         LAGfy+lFWFcKu0xxXlVXi22gjm4qtT4oNXfdGZLZ8KWmVvCWym8e4Apiabz+y3j9a60o
+         NyUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687424006; x=1690016006;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EOud5yiCf9vuKq5jIo/hllLQZNDjLVHZzylOU65GmJI=;
-        b=aUFHm3gUb/hoJHYoQWHSiqGzjFwjikU/LGbKjoOoMShr1/3iOCmyq00xHPHSTK/VJ2
-         DIsEsblFFWk71BbQg2DWxvxjO0ztqB3ADidmVDAILgI3+1EE4+6UFpUnfG4SdP69RXXq
-         i+vaLajgnXcdghtvL4XgFRupi3gPEM+0JYA5drtuYk08UAdq8a5+GDOMbMSzFu8DXsqc
-         xZUPSr9hlvw0RTvu2907QRpt15My+wvr4z53bKGOxz78F5vFLQjVa7ztFCu6W2bnE00y
-         ceSmFbxaLUlbFVcgQ/6lsXddk4fZUb8N55ElM+XS0X0hF1Q+HgtTYge62l5Y3++uvWLm
-         /n3g==
-X-Gm-Message-State: AC+VfDxoBR7HxOwde/RGy2NEMkt9B6OpchtYLKHy+8ey2QA6uk+Iquot
-        twVPamXWoxE6utk6QBqTXXXXWw==
-X-Google-Smtp-Source: ACHHUZ7B+URHvhGO5p5GI/nngSr4VyHHJZ/u5wLllsgAdajbEtUs+ag81KiCAsrL6pqfP4Z7hNxwSA==
-X-Received: by 2002:a2e:8349:0:b0:2b2:104d:8f89 with SMTP id l9-20020a2e8349000000b002b2104d8f89mr11357862ljh.0.1687424006145;
-        Thu, 22 Jun 2023 01:53:26 -0700 (PDT)
-Received: from [192.168.1.101] (abyl165.neoplus.adsl.tpnet.pl. [83.9.31.165])
-        by smtp.gmail.com with ESMTPSA id n20-20020a2eb794000000b002b47dabaaa5sm1209035ljo.121.2023.06.22.01.53.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 01:53:25 -0700 (PDT)
-Message-ID: <7b614cd8-1b6e-519b-cc2a-acc1fa5f24b3@linaro.org>
-Date:   Thu, 22 Jun 2023 10:53:24 +0200
+        d=1e100.net; s=20221208; t=1687424196; x=1690016196;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tuTRU39Llc4f1pG+4j4EE0WoT0ftJSPXyoG6lJxyplk=;
+        b=LIyyVpVJciUl5vCxyM2pEL3vwt9RJS+xbrm26A1J6oTcwxH1SiVaaSanBxxWp2C+f1
+         I4vM8GdDUoF0BjRPulOorekXXvA3YnimJbzxAw2oApae/SfDlN7JbpQ6EQGjM3LJ7DIF
+         rKLBwBeADmUX93x+g4URjv/u+ULsfPa6umNhgixbqsn2/ZuoUJoLXOxG/Hmd0Fmjhx9W
+         3cn/Ay50fr+f6cJcVOVPVpW9rCoFRzif9CFN0mYjaN5uS0+DaxHWLKTNwsFR5Gp35jao
+         eGFqxx6p7ItCsaqtaRbgzShjR+I5ZruJNC2K0sNHelx/7fhVjebsDu7o7g/xl37NQG3f
+         5/rw==
+X-Gm-Message-State: AC+VfDzGY84VFY0B4qmbi9oSgfKJFvZKsPKO4QdEjASFx4RFPLaG6m4m
+        FoR8Yb2wuiLiSGfDeOmZ7DbH3g==
+X-Google-Smtp-Source: ACHHUZ67Tf+k1CheKb86ycYHhx5x/FfiuFJZEOT7coQiqeyoaYPxA8zsjGzghk4F71F8kxwZIRTJAQ==
+X-Received: by 2002:a17:902:ecc6:b0:1ae:1364:6086 with SMTP id a6-20020a170902ecc600b001ae13646086mr21603647plh.2.1687424195747;
+        Thu, 22 Jun 2023 01:56:35 -0700 (PDT)
+Received: from C02DW0BEMD6R.bytedance.net ([139.177.225.254])
+        by smtp.gmail.com with ESMTPSA id h2-20020a170902f7c200b001b549fce345sm4806971plw.230.2023.06.22.01.56.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 01:56:35 -0700 (PDT)
+From:   Qi Zheng <zhengqi.arch@bytedance.com>
+To:     akpm@linux-foundation.org, david@fromorbit.com, tkhai@ya.ru,
+        vbabka@suse.cz, roman.gushchin@linux.dev, djwong@kernel.org,
+        brauner@kernel.org, paulmck@kernel.org, tytso@mit.edu
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, dm-devel@redhat.com,
+        linux-raid@vger.kernel.org, linux-bcache@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [PATCH 19/29] xfs: dynamically allocate the xfs-qm shrinker
+Date:   Thu, 22 Jun 2023 16:53:25 +0800
+Message-Id: <20230622085335.77010-20-zhengqi.arch@bytedance.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+In-Reply-To: <20230622085335.77010-1-zhengqi.arch@bytedance.com>
+References: <20230622085335.77010-1-zhengqi.arch@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH] arm64: dts: qcom: ipq9574: Use assigned-clock-rates for
- QUP I2C core clks
-To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_anusha@quicinc.com
-References: <20230615084841.12375-1-quic_devipriy@quicinc.com>
- <1ab63d4b-6358-ce08-818a-b5751f88cdde@linaro.org>
- <d05c7b0e-6edb-bc0f-5875-fc5cb8ea6b8a@quicinc.com>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <d05c7b0e-6edb-bc0f-5875-fc5cb8ea6b8a@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,70 +80,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.06.2023 08:25, Devi Priya wrote:
-> 
-> 
-> On 6/15/2023 2:21 PM, Konrad Dybcio wrote:
->> On 15.06.2023 10:48, Devi Priya wrote:
->>> Use assigned-clock-rates property for configuring the QUP I2C core clocks
->>> to operate at nominal frequency.
->>>
->>> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
->>> ---
->> There's probably some logic behind this, and it almost sounds like
->> it'd be fitting to introduce an OPP table for I2C hosts, especially
->> given the voltage requirements.
->>
->> Konrad
-> The qup i2c core clocks are not scalable and operate at fixed frequency.
-> The assigned-clock-rates are used to configure the clock frequency
-> if it is not done by the bootloaders.
-OPP tables with a single entry are totally fine.
+In preparation for implementing lockless slab shrink,
+we need to dynamically allocate the xfs-qm shrinker,
+so that it can be freed asynchronously using kfree_rcu().
+Then it doesn't need to wait for RCU read-side critical
+section when releasing the struct xfs_quotainfo.
 
-Konrad
-> 
-> Thanks,
-> Devi Priya
->>>   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 8 ++++++++
->>>   1 file changed, 8 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>> index 0baeb10bbdae..78bf7f9c455a 100644
->>> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
->>> @@ -361,6 +361,8 @@
->>>               clocks = <&gcc GCC_BLSP1_QUP2_I2C_APPS_CLK>,
->>>                    <&gcc GCC_BLSP1_AHB_CLK>;
->>>               clock-names = "core", "iface";
->>> +            assigned-clocks = <&gcc GCC_BLSP1_QUP2_I2C_APPS_CLK>;
->>> +            assigned-clock-rates = <50000000>;
->>>               dmas = <&blsp_dma 14>, <&blsp_dma 15>;
->>>               dma-names = "tx", "rx";
->>>               status = "disabled";
->>> @@ -389,6 +391,8 @@
->>>               clocks = <&gcc GCC_BLSP1_QUP3_I2C_APPS_CLK>,
->>>                    <&gcc GCC_BLSP1_AHB_CLK>;
->>>               clock-names = "core", "iface";
->>> +            assigned-clocks = <&gcc GCC_BLSP1_QUP3_I2C_APPS_CLK>;
->>> +            assigned-clock-rates = <50000000>;
->>>               dmas = <&blsp_dma 16>, <&blsp_dma 17>;
->>>               dma-names = "tx", "rx";
->>>               status = "disabled";
->>> @@ -417,6 +421,8 @@
->>>               clocks = <&gcc GCC_BLSP1_QUP4_I2C_APPS_CLK>,
->>>                    <&gcc GCC_BLSP1_AHB_CLK>;
->>>               clock-names = "core", "iface";
->>> +            assigned-clocks = <&gcc GCC_BLSP1_QUP4_I2C_APPS_CLK>;
->>> +            assigned-clock-rates = <50000000>;
->>>               dmas = <&blsp_dma 18>, <&blsp_dma 19>;
->>>               dma-names = "tx", "rx";
->>>               status = "disabled";
->>> @@ -446,6 +452,8 @@
->>>               clocks = <&gcc GCC_BLSP1_QUP5_I2C_APPS_CLK>,
->>>                    <&gcc GCC_BLSP1_AHB_CLK>;
->>>               clock-names = "core", "iface";
->>> +            assigned-clocks = <&gcc GCC_BLSP1_QUP5_I2C_APPS_CLK>;
->>> +            assigned-clock-rates = <50000000>;
->>>               dmas = <&blsp_dma 20>, <&blsp_dma 21>;
->>>               dma-names = "tx", "rx";
->>>               status = "disabled";
+Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+---
+ fs/xfs/xfs_qm.c | 24 +++++++++++++-----------
+ fs/xfs/xfs_qm.h |  2 +-
+ 2 files changed, 14 insertions(+), 12 deletions(-)
+
+diff --git a/fs/xfs/xfs_qm.c b/fs/xfs/xfs_qm.c
+index 6abcc34fafd8..b15320d469cc 100644
+--- a/fs/xfs/xfs_qm.c
++++ b/fs/xfs/xfs_qm.c
+@@ -504,8 +504,7 @@ xfs_qm_shrink_scan(
+ 	struct shrinker		*shrink,
+ 	struct shrink_control	*sc)
+ {
+-	struct xfs_quotainfo	*qi = container_of(shrink,
+-					struct xfs_quotainfo, qi_shrinker);
++	struct xfs_quotainfo	*qi = shrink->private_data;
+ 	struct xfs_qm_isolate	isol;
+ 	unsigned long		freed;
+ 	int			error;
+@@ -539,8 +538,7 @@ xfs_qm_shrink_count(
+ 	struct shrinker		*shrink,
+ 	struct shrink_control	*sc)
+ {
+-	struct xfs_quotainfo	*qi = container_of(shrink,
+-					struct xfs_quotainfo, qi_shrinker);
++	struct xfs_quotainfo	*qi = shrink->private_data;
+ 
+ 	return list_lru_shrink_count(&qi->qi_lru, sc);
+ }
+@@ -680,18 +678,22 @@ xfs_qm_init_quotainfo(
+ 	if (XFS_IS_PQUOTA_ON(mp))
+ 		xfs_qm_set_defquota(mp, XFS_DQTYPE_PROJ, qinf);
+ 
+-	qinf->qi_shrinker.count_objects = xfs_qm_shrink_count;
+-	qinf->qi_shrinker.scan_objects = xfs_qm_shrink_scan;
+-	qinf->qi_shrinker.seeks = DEFAULT_SEEKS;
+-	qinf->qi_shrinker.flags = SHRINKER_NUMA_AWARE;
++	qinf->qi_shrinker = shrinker_alloc_and_init(xfs_qm_shrink_count,
++						    xfs_qm_shrink_scan,
++						    0, DEFAULT_SEEKS,
++						    SHRINKER_NUMA_AWARE, qinf);
++	if (!qinf->qi_shrinker)
++		goto out_free_inos;
+ 
+-	error = register_shrinker(&qinf->qi_shrinker, "xfs-qm:%s",
++	error = register_shrinker(qinf->qi_shrinker, "xfs-qm:%s",
+ 				  mp->m_super->s_id);
+ 	if (error)
+-		goto out_free_inos;
++		goto out_shrinker;
+ 
+ 	return 0;
+ 
++out_shrinker:
++	shrinker_free(qinf->qi_shrinker);
+ out_free_inos:
+ 	mutex_destroy(&qinf->qi_quotaofflock);
+ 	mutex_destroy(&qinf->qi_tree_lock);
+@@ -718,7 +720,7 @@ xfs_qm_destroy_quotainfo(
+ 	qi = mp->m_quotainfo;
+ 	ASSERT(qi != NULL);
+ 
+-	unregister_shrinker(&qi->qi_shrinker);
++	unregister_and_free_shrinker(qi->qi_shrinker);
+ 	list_lru_destroy(&qi->qi_lru);
+ 	xfs_qm_destroy_quotainos(qi);
+ 	mutex_destroy(&qi->qi_tree_lock);
+diff --git a/fs/xfs/xfs_qm.h b/fs/xfs/xfs_qm.h
+index 9683f0457d19..d5c9fc4ba591 100644
+--- a/fs/xfs/xfs_qm.h
++++ b/fs/xfs/xfs_qm.h
+@@ -63,7 +63,7 @@ struct xfs_quotainfo {
+ 	struct xfs_def_quota	qi_usr_default;
+ 	struct xfs_def_quota	qi_grp_default;
+ 	struct xfs_def_quota	qi_prj_default;
+-	struct shrinker		qi_shrinker;
++	struct shrinker		*qi_shrinker;
+ 
+ 	/* Minimum and maximum quota expiration timestamp values. */
+ 	time64_t		qi_expiry_min;
+-- 
+2.30.2
+
