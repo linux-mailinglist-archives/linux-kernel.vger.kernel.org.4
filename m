@@ -2,151 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1713573A2CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA9573A2D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:16:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231622AbjFVOOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 10:14:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
+        id S230425AbjFVOQY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 10:16:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230526AbjFVOOB (ORCPT
+        with ESMTP id S231327AbjFVOQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 10:14:01 -0400
-Received: from mail-io1-f79.google.com (mail-io1-f79.google.com [209.85.166.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8571F1BD9
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:13:49 -0700 (PDT)
-Received: by mail-io1-f79.google.com with SMTP id ca18e2360f4ac-77e33466fa2so488722539f.2
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:13:49 -0700 (PDT)
+        Thu, 22 Jun 2023 10:16:23 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43661BC3;
+        Thu, 22 Jun 2023 07:16:21 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-51be928b31cso891189a12.2;
+        Thu, 22 Jun 2023 07:16:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687443380; x=1690035380;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xbN0CQqVub1z0je9yxvotXH4TJUOIymawWTi90B6Owk=;
+        b=gpq/gqqBxmlQ7IGI39U7bwZq6bm3kV/96d+Q9I2mxvKVpRBfe82uiAiszl3mYVoNTi
+         iyrsDqeHVTW1FHlDDJson88y2OLq+fr5wyqQkETnwHSzQpudFBuiHNAM/avom8v2Hrn/
+         OuardUAwX+6vwv0ksl4slgoiKil/iuaZOces4s0FjTBsngsNAXJKcWCvb0jlfelV8O00
+         Q9r9HrTrZnZuCxXPkYgJcBLoQVjuBzudL8PgqcXWG4jmyaMQE08K/8B6vjH0WkKsnUyK
+         tga5+qYdXEaXCHAP4zZI/DrC5GAp1f9lruC5z+dwcMIXcXZ3KSgur+txMQXrRVJma22T
+         z91g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687443228; x=1690035228;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ejmIg4Qx6xd91FDWYJpla2pPTx9JtjXCeXyQAb4fjkY=;
-        b=Akp4xPHN4KEKgk0b1TDhKuobBXljj2bJ0guqWSTJhV0XEs/JKe/UJ9m0TpCpB6jgoG
-         MWUcc1BqJwsWF509tFzppX9t/RiDi6/9iXDoVehr86l9mkWd6OJADIPC9MY0StCL5+Jr
-         n7x8qqnhW6alj9E6+PHTIXtZfjMouIXZNJWA6RA2vKY8hWhiqJ+/ogoGnfaxflvt3mdQ
-         pdgwqmAlrTkH7TCPOLkVtdTNlt3ERqbirFEbreU8phLhE+o8WE7Myt0vKhU2tPnSbVZn
-         6XTOcgtWxTNwlH9gIkpAcEcTgk9KlK99XamhI6yt8pFK/3CREbUW9gb8UwVEmC0kHPrx
-         cFbA==
-X-Gm-Message-State: AC+VfDw57xQuhuMxn15WJ7GNGonQQ7BA2bqUhol+qUf3RPrgexIY5GD9
-        t1MhUCdlOEnBsdMGqpCC4rTPteNaEjxSxeE3wagtGIHv2iiH
-X-Google-Smtp-Source: ACHHUZ51ZMIGUQVsUB3fuUc9g7Uh8e+GoTdifBINW07w+HkvOAo7enampj28OOohwaV7EBZtfcBZtMOdPreP51HF6PW6RnhxMVQQ
+        d=1e100.net; s=20221208; t=1687443380; x=1690035380;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xbN0CQqVub1z0je9yxvotXH4TJUOIymawWTi90B6Owk=;
+        b=LfFiJDp2QFHCU4F0/4ut1XCoMg4XNbXLKgkjaot4DXpKSdFe+o+mncTdqsCcRNLKid
+         NNTNR1SovLw0iex/RU0VAA01qZ3+WwSP4J8w5qpzwb5GG3M17F5KqI5aCoNe4pO9ZwLL
+         BJBs52i1IAhpR4KA+kVA4PAnMgK9CF0Zk03V/9fK9sjso9Aasff+qbi1OUENNXf4Lb78
+         j0qOVBImMJ6VuAPTRomGpsyfCkxNftVqExYTeDgZB9A5DzYdimVt4G+NHtQsDuyR4iob
+         P8DDQoPL/XSPn87LG0RNPXwPdZQlU4MuMUGGVaj9oBow4IlxogPHsSovghFnOd27U32e
+         le6A==
+X-Gm-Message-State: AC+VfDyH2JmYJh3tFlCBsRM1gYlfJG3XzUBwYOpq4OdwEke9Qrt3FHWZ
+        4vEnRjcUhsI+fiQ9s2zrDm5gSfb3FGkN8DNSVeCPhyvxdmntwQ==
+X-Google-Smtp-Source: ACHHUZ6siwF4mo65UmQ8qmRm5hsQ+CtKqayomLJhLgAFZEGheuJ8AKc6qPjFxDY16DnQjQO+qQfQ1tjblxHzgtNTdMU=
+X-Received: by 2002:a05:6402:498:b0:519:b784:b157 with SMTP id
+ k24-20020a056402049800b00519b784b157mr11420001edv.12.1687443379965; Thu, 22
+ Jun 2023 07:16:19 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a02:8506:0:b0:423:1100:682c with SMTP id
- g6-20020a028506000000b004231100682cmr5919572jai.0.1687443228729; Thu, 22 Jun
- 2023 07:13:48 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 07:13:48 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003a29fe05feb87e4e@google.com>
-Subject: [syzbot] [btrfs?] WARNING in btrfs_run_delayed_refs (2)
-From:   syzbot <syzbot+810ea5febd3b79bdd384@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20230621213115.113266-1-nick.hawkins@hpe.com> <20230621213115.113266-2-nick.hawkins@hpe.com>
+In-Reply-To: <20230621213115.113266-2-nick.hawkins@hpe.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 22 Jun 2023 17:15:43 +0300
+Message-ID: <CAHp75VdJjeMwHt31tKeiVLbS36aGmhDgGowT951UVwkxr2_VXQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/5] gpio: gxp: Add HPE GXP GPIO
+To:     nick.hawkins@hpe.com
+Cc:     verdun@hpe.com, linus.walleij@linaro.org, brgl@bgdev.pl,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        jdelvare@suse.com, linux@roeck-us.net, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hwmon@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, Jun 22, 2023 at 12:35=E2=80=AFAM <nick.hawkins@hpe.com> wrote:
+>
+> From: Nick Hawkins <nick.hawkins@hpe.com>
+>
+> The GXP SoC supports GPIO on multiple interfaces. The interfaces are
+> CPLD and Host. The GPIOs is a combination of both physical and virtual
 
-syzbot found the following issue on:
+GPIOs are
 
-HEAD commit:    dad9774deaf1 Merge tag 'timers-urgent-2023-06-21' of git:/..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=16198bb7280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=e74b395fe4978721
-dashboard link: https://syzkaller.appspot.com/bug?extid=810ea5febd3b79bdd384
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11acf600a80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1474fa3f280000
+> I/O across the interfaces. The gpio-gxp driver specifically covers the
+> CSM(physical), FN2(virtual), and VUHC(virtual) which are the host. The
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/fce56e230cb4/disk-dad9774d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e12b4efd53ae/vmlinux-dad9774d.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/38be193d7202/bzImage-dad9774d.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/2b9fc185d47b/mount_0.gz
+"...are the host"?! hosts?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+810ea5febd3b79bdd384@syzkaller.appspotmail.com
+> driver supports interrupts from the host.
 
-BTRFS error (device loop0): failed to run delayed ref for logical 5251072 num_bytes 4096 type 176 action 1 ref_mod 1: -28
-------------[ cut here ]------------
-BTRFS: Transaction aborted (error -28)
-WARNING: CPU: 0 PID: 4996 at fs/btrfs/extent-tree.c:2127 btrfs_run_delayed_refs+0x444/0x480 fs/btrfs/extent-tree.c:2127
-Modules linked in:
-CPU: 0 PID: 4996 Comm: syz-executor740 Not tainted 6.4.0-rc7-syzkaller-00072-gdad9774deaf1 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 05/27/2023
-RIP: 0010:btrfs_run_delayed_refs+0x444/0x480 fs/btrfs/extent-tree.c:2127
-Code: fe c1 38 c1 0f 8c 54 fc ff ff 48 89 ef e8 44 fe 60 fe e9 47 fc ff ff e8 9a 26 09 fe 48 c7 c7 00 95 29 8b 89 ee e8 4c a5 d0 fd <0f> 0b eb 9e f3 0f 1e fa e8 7f 26 09 fe 48 8b 44 24 18 42 80 3c 28
-RSP: 0018:ffffc90003a6f070 EFLAGS: 00010246
-RAX: b1a953d201add500 RBX: ffff88807d0f8001 RCX: ffff888027350000
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: 00000000ffffffe4 R08: ffffffff81530142 R09: fffff5200074ddc1
-R10: 0000000000000000 R11: dffffc0000000001 R12: ffff888076ab7e70
-R13: dffffc0000000000 R14: 0000000000000000 R15: ffff8880146a1000
-FS:  00007fa312072700(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005645cf4d5000 CR3: 0000000077a2a000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btrfs_commit_transaction+0x427/0x3370 fs/btrfs/transaction.c:2158
- btrfs_sync_file+0xcb3/0x10e0 fs/btrfs/file.c:2001
- generic_write_sync include/linux/fs.h:2469 [inline]
- btrfs_do_write_iter+0xccd/0x1270 fs/btrfs/file.c:1684
- do_iter_write+0x7b1/0xcb0 fs/read_write.c:860
- iter_file_splice_write+0x843/0xfe0 fs/splice.c:795
- do_splice_from fs/splice.c:873 [inline]
- direct_splice_actor+0xe7/0x1c0 fs/splice.c:1039
- splice_direct_to_actor+0x4c4/0xbd0 fs/splice.c:994
- do_splice_direct+0x283/0x3d0 fs/splice.c:1082
- do_sendfile+0x620/0xff0 fs/read_write.c:1254
- __do_sys_sendfile64 fs/read_write.c:1322 [inline]
- __se_sys_sendfile64+0x17c/0x1e0 fs/read_write.c:1308
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa3120ce3e9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 a1 17 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fa312072208 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 00007fa312151788 RCX: 00007fa3120ce3e9
-RDX: 0000000000000000 RSI: 0000000000000005 RDI: 0000000000000004
-RBP: 00007fa312151780 R08: 0000000000000000 R09: 0000000000000000
-R10: 000000000880000c R11: 0000000000000246 R12: 00007fa31215178c
-R13: 00007fffc2cae10f R14: 00007fa312072300 R15: 0000000000022000
- </TASK>
+I will have some comments against the code, but I will try to review
+it probably later on (next week or so). Taking into account the
+approaching release date, I think we have a couple more months for
+polishing this series.
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+--
+With Best Regards,
+Andy Shevchenko
