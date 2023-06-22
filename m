@@ -2,141 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796B973A41C
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F255473A416
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbjFVPCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 11:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39312 "EHLO
+        id S232317AbjFVPAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 11:00:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbjFVPCc (ORCPT
+        with ESMTP id S231836AbjFVPAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 11:02:32 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79807268C
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 08:02:07 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1b52132181aso39459205ad.2
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 08:02:07 -0700 (PDT)
+        Thu, 22 Jun 2023 11:00:31 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062A1212B
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:59:40 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-62ffb475be0so56279916d6.2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:59:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687446079; x=1690038079;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rRdkBzWvxfxb0w3VbAj/JjLYqdb5vKvNBOzrMjbvnZ4=;
-        b=R/z8invRF3TFjDD5ZndbOtRxmhsqjYybp/CiyK7JWC4Fet52AywMb/9DklgK+EzcFM
-         GZX1r2D35pYTtFshs5Iiyad4K8tZmvsRjkesTz5gOb01qU+7scWRXEqyr+TjsoSisMh7
-         O0UQodu1lH5F2Xx3h1NZmd+n/SPriz5HOn/uZvsN+DYNVYn/YDEoteOSNilo5hmywMfA
-         qwxhVDNrVNbI3se6guRRXDutEmkLoup1n4+VD7fuEjfP28esDW4VEfUKuYD3KzEyKips
-         kMG+ezU3TY98nzCb8uKqe9QLp0CiWU2VFncTAKzFvJUna7k6H37qj2DKpFkq5R8zZ2Ml
-         YNbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687446079; x=1690038079;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=ndufresne-ca.20221208.gappssmtp.com; s=20221208; t=1687445963; x=1690037963;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rRdkBzWvxfxb0w3VbAj/JjLYqdb5vKvNBOzrMjbvnZ4=;
-        b=i1A+9Y8k9v5o39A4inbxs4oeoKHfPyzwj+iP98IF0X9CoMCyAIE/uyZeSSLRHr5lcY
-         YJvmzSIQTtISzR70wffTU4RFDWcXvA8t7SZQxifr91+lFNipUE4kBrG3QMkvL6xKLcLg
-         umaEYHIX4CEf3amrNO1H15C6sxQcXi9Fo3DYvjIBiSXL+uK9GTwUqlLkul9GDrW3ew/p
-         rmQejWKh9lAQJC95bqgTKkRyo0+Xv4nTcv6B62gZfBlvxKixC2YFwQsDIC2i5kVvAAgP
-         GIz9QAbiEKK2+g3bHuvusOCULcd5m/xyqrf7A2/UQPOHBFkINHsgPlLy01T5aCkNkN+h
-         HABQ==
-X-Gm-Message-State: AC+VfDyNjcuGcbZp2HYDW8euFFYrrhWouO/T3Adf67GAc3Ckwd6iVTbX
-        VMzJamPYsuUKBskepqgDfcP0VtRAWpd7cg==
-X-Google-Smtp-Source: ACHHUZ7N8KQZGqYQF1FWIcaXUvTIe8GPbWvAVGZGWeKR6BMLl6zU9OMZ/+A2hwmX75wR2qeBRE7w/A==
-X-Received: by 2002:a17:902:d905:b0:1b5:4859:ef36 with SMTP id c5-20020a170902d90500b001b54859ef36mr8976230plz.57.1687446078566;
-        Thu, 22 Jun 2023 08:01:18 -0700 (PDT)
-Received: from localhost ([216.228.127.131])
-        by smtp.gmail.com with ESMTPSA id x17-20020a170902b41100b001b3ec39f40asm5475739plr.270.2023.06.22.08.01.17
+        bh=Isuz+PQC54uI8U8TsiSi06GVeERGmJj43Np0iyUSrfM=;
+        b=dmVv7bPr5iFp2PUKG6EmeBdAvXmiNR3KSnBPMouO1pNeZnqvux25rfVgFEEX5hqouj
+         OEGTfONT4p8xLmJry1j+R04ZUSfHyXJ5jsOt7BkNXERYpD+kht6v4kNsqr38BirdMdNO
+         zYYiJ0yTibnj1K1cCUGI88zgdWBtGUFcMwpRqgKa3zzE/8D6RwxzYXfl1AyzCCytdAj0
+         ApZG9gmNwaHGnADQWCLl0lJC7DpWd1y/X8SrgrXikkIcGr4plRyzZe4XUb6yg2WezDZU
+         guwfPZmzi8hqGmJPm8P1ICL4lziruJGt0uOzaKszwzj/8x/fdwjsNWh716DfhXK2yYod
+         LdMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687445963; x=1690037963;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Isuz+PQC54uI8U8TsiSi06GVeERGmJj43Np0iyUSrfM=;
+        b=h87MHxc/Enui0SvPFKwiN7ZZxz/a7s6pc1QhLZhtkP4wsLGUPtBlnL4rTp5aO5yQCO
+         TuCX0LAa4FItVa//zOKmVQ/lZx6PHDhuGB3ONaeMrMtQiNHsaT8nJr0MAMFNarIFSwaM
+         wERJpt5POJtpUC5g276/EIoeY/6nHScyIJ/be9aQo1y1cbbd1sZ1EgBQKCkrqOn+C/I/
+         Wpi7OfkB/HdJREtKVQtLry+PXojjWrqnMgopcrnxRsNSCz8SZmsrx/Rso54J8bId5lno
+         7CFzMgUEZxD4aLkL/ODSClaeQACKorgyUxAkJYmzSxo99y++cJwvVrtFTvZMq8kS7dpr
+         PWPA==
+X-Gm-Message-State: AC+VfDyqB/nFqIOcjh4t0h9wxVHilotGdF6GD/51cH7XDpni+9teT/lJ
+        9BzCgFFjYUemnDfJsMXsZo3g0bTHQxwWLa4WGSI=
+X-Google-Smtp-Source: ACHHUZ5/R7baqHiN/5RHfljGCs+0RFR1fPdQ92oThBDCni214Ka5UIUJV9e4OiaFi5zT6J8G8DBvbw==
+X-Received: by 2002:a05:6214:e4f:b0:626:3a98:95a with SMTP id o15-20020a0562140e4f00b006263a98095amr21177614qvc.22.1687445963256;
+        Thu, 22 Jun 2023 07:59:23 -0700 (PDT)
+Received: from nicolas-tpx395.localdomain ([2606:6d00:15:c623::7a9])
+        by smtp.gmail.com with ESMTPSA id b9-20020a0cc989000000b0062821057ac7sm3891746qvk.39.2023.06.22.07.59.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 08:01:18 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 07:59:05 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        intel-gfx@lists.freedesktop.org,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        intel-xe@lists.freedesktop.org
-Subject: Re: [PATCH 2/3] linux/bits.h: Add fixed-width GENMASK and BIT macros
-Message-ID: <ZJRhuaebZC+y7B37@yury-ThinkPad>
-References: <20230509051403.2748545-1-lucas.demarchi@intel.com>
- <20230509051403.2748545-3-lucas.demarchi@intel.com>
- <ZJOwC5LIEySpduQJ@yury-ThinkPad>
- <alzfewo3jado7ezyaibq52ep3vuxbyfism4ablchmvmioio3jb@3gyx6vaoscbf>
+        Thu, 22 Jun 2023 07:59:22 -0700 (PDT)
+Message-ID: <873a993dc0e4cc9249593bca494ed25e1d0b7fa8.camel@ndufresne.ca>
+Subject: Re: [PATCH v2] media: rkvdec: removed redundant blank line
+From:   Nicolas Dufresne <nicolas@ndufresne.ca>
+To:     Emma Christy <emma.t.christy@gmail.com>,
+        ezequiel@vanguardiasur.com.ar, mchehab@kernel.org,
+        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Date:   Thu, 22 Jun 2023 10:59:21 -0400
+In-Reply-To: <20230621154247.43983-1-emma.t.christy@gmail.com>
+References: <20230621154247.43983-1-emma.t.christy@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.3 (3.48.3-1.fc38) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alzfewo3jado7ezyaibq52ep3vuxbyfism4ablchmvmioio3jb@3gyx6vaoscbf>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Thanks for taking the time to fix this.
 
-> > -#define __GENMASK(h, l) \
-> > -	(((~UL(0)) - (UL(1) << (l)) + 1) & \
-> > -	 (~UL(0) >> (BITS_PER_LONG - 1 - (h))))
-> > -#define GENMASK(h, l) \
-> > -	(GENMASK_INPUT_CHECK(h, l) + __GENMASK(h, l))
-> > +#define __GENMASK(t, h, l) \
-> > +	(GENMASK_INPUT_CHECK(h, l) + \
-> > +	 (((t)~0ULL - ((t)(1) << (l)) + 1) & \
-> > +	 ((t)~0ULL >> (BITS_PER_TYPE(t) - 1 - (h)))))
-> 
-> yeah... forcing the use of ull and then casting to the type is simpler
-> and does the job. Checked that it does not break the build if h is
-> greater than the type and it works
-> 
-> ../include/linux/bits.h:40:20: error: right shift count >= width of type [-Werror=shift-count-overflow]
->    40 |          ((t)~0ULL >> (BITS_PER_TYPE(t) - 1 - (h)))))
->       |                    ^~
-> 
-> However this new version does increase the size. Using i915 module
-> to test:
-> 
-> $ size build64/drivers/gpu/drm/i915/i915.ko*
->    text    data     bss     dec     hex filename
-> 4355676  213473    7048 4576197  45d3c5 build64/drivers/gpu/drm/i915/i915.ko
-> 4361052  213505    7048 4581605  45e8e5 build64/drivers/gpu/drm/i915/i915.ko.new
+Le mercredi 21 juin 2023 =C3=A0 18:42 +0300, Emma Christy a =C3=A9crit=C2=
+=A0:
+> Adhere to Linux kernel coding style. Removed redundant blank line.
+> Issue found by checkpatch.
+>=20
+> Signed-off-by: Emma Christy <emma.t.christy@gmail.com>
 
-It sounds weird because all that should anyways boil down at compile
-time...
+Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
 
-I enabled DRM_I915 in config and ran bloat-o-meter against today's
-master, and I don't see that much difference.
-
-  $ size vmlinux vmlinux.new
-     text	   data	    bss	    dec	    hex	filename
-  44978613	23962202	3026948	71967763	44a2413	vmlinux
-  44978653	23966298	3026948	71971899	44a343b	vmlinux.new
-  $ scripts/bloat-o-meter vmlinux vmlinux.new 
-  add/remove: 0/0 grow/shrink: 3/2 up/down: 28/-5 (23)
-  Function                                     old     new   delta
-  kvm_mmu_reset_all_pte_masks                  623     639     +16
-  intel_psr_invalidate                        1112    1119      +7
-  intel_drrs_activate                          624     629      +5
-  intel_psr_flush                             1410    1409      -1
-  clk_fractional_divider_general_approximation     207     203      -4
-  Total: Before=35398799, After=35398822, chg +0.00%
-
-Can you please check your numbers?
-
-Interestingly, the kvm_mmu_reset_all_pte_masks() uses GENMASK_ULL(),
-which should generate the same code across versions. Maybe it's just
-a noise? Rasmus, can you please take a look?
-
-Thanks,
-Yury
+> ---
+> Changes in v2:
+>   - Fixed Singed-off-by.
+>   - Fixed Subject line.
+>=20
+>  drivers/staging/media/rkvdec/rkvdec-vp9.c | 1 -
+>  1 file changed, 1 deletion(-)
+>=20
+> diff --git a/drivers/staging/media/rkvdec/rkvdec-vp9.c b/drivers/staging/=
+media/rkvdec/rkvdec-vp9.c
+> index cfae99b40ccb..0e7e16f20eeb 100644
+> --- a/drivers/staging/media/rkvdec/rkvdec-vp9.c
+> +++ b/drivers/staging/media/rkvdec/rkvdec-vp9.c
+> @@ -227,7 +227,6 @@ static void init_intra_only_probs(struct rkvdec_ctx *=
+ctx,
+>  				}
+>  			}
+>  		}
+> -
+>  	}
+> =20
+>  	for (i =3D 0; i < sizeof(v4l2_vp9_kf_uv_mode_prob); ++i) {
 
