@@ -2,270 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC993739DEE
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 12:00:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF953739DF5
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 12:00:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbjFVKAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 06:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
+        id S231363AbjFVKAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 06:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjFVKAE (ORCPT
+        with ESMTP id S230125AbjFVKAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 06:00:04 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2083.outbound.protection.outlook.com [40.107.93.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84ED2C6
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 03:00:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K1Afzg0uJNcs27IJaYSxPMAm3ECDUTWCYHt3g9ubkPuL2dJ78lMIrJIA5ajS4854MovPqbSSTMqtqIO2uHI4JuHGluUvoUIIlrCRCd0YMmOebf14nGOcMovrMaXIogTh0eLKPx0ycVKkV0OQjrsVQze7ruoLKsmibReOnfoVA3ZTx5gBt8ihZ0xNJfTYCi+rgQmtKFn1YSA+5MgHluyw1zhvPwC7vskkxNDqfWtUhmNTfsF4VH4m2ha3CqtWydsfsKZpkIQwhYaEGc8EYBtJxXoOtEyzOCxLq11JB0C1LQewgod1SePfGZGqH4Ek/LywWZwBeoJoOxeVFgYjXxRFSQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C1R5DOUVShpjIRnaTmmSb1HP3397S5/R4q8T3ZmIZc4=;
- b=h8cwFa+WmH09y+lYMv4SrYBOZ8lqVh19j7Xbq75r1+uLW4aHNlCUCK4JTY+f4EJqWn3whelcq3lh4OqKwfpMZ7q6XxGvCLYbXiWpELH7hnWhZvREpCg3nvZI3l25pFQUtKw3wiV8mpZHU9V7w3SDO2TtdkStNd3csZBCIM3XbSmZOlrU1m76MCRWYHp+x8NNY6WS/NiRqaJ5ZVf9+Ag444V/XSg4xPfNRVPJSArci7/YyeDdByUvxL0ReLQmm0/PirUvliai17dXSIRuCeZHdrbZl5yH/OpwMq+HgXzvZ9WNs6ZzFkcXPEaAXl1odNzfJneqXD5AF/2+65BD+JNL+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C1R5DOUVShpjIRnaTmmSb1HP3397S5/R4q8T3ZmIZc4=;
- b=czKpVm/yqhv4UZhEVM12VxPO2tNFRzsGu+GutRGohBzAM51jzJoWjyFwHz8F18a+lzdPI20uNQDk2h8By5t/0tnPvzcxbmpdkS5cAlcX9Hi7FC73SDHjAbsvH8azL/Mofabet8NC4W1hjFuCPglaX8/NkirO18I8eedrYMXLs0c=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by PH8PR12MB7352.namprd12.prod.outlook.com (2603:10b6:510:214::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 22 Jun
- 2023 09:59:58 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::384a:95a4:8819:ee84]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::384a:95a4:8819:ee84%7]) with mapi id 15.20.6521.024; Thu, 22 Jun 2023
- 09:59:57 +0000
-Message-ID: <97886df5-05bd-e28e-7cc3-1c46b460e557@amd.com>
-Date:   Thu, 22 Jun 2023 11:59:51 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RFC PATCH v3 2/4] drm: Create DRM_IOCTL_GET_RESET
-Content-Language: en-US
-To:     Pekka Paalanen <ppaalanen@gmail.com>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>
-Cc:     dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
-        alexander.deucher@amd.com, pierre-eric.pelloux-prayer@amd.com,
-        Simon Ser <contact@emersion.fr>,
-        Rob Clark <robdclark@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Stone <daniel@fooishbar.org>,
-        =?UTF-8?B?J01hcmVrIE9sxaHDoWsn?= <maraeo@gmail.com>,
-        Dave Airlie <airlied@gmail.com>,
-        =?UTF-8?Q?Michel_D=c3=a4nzer?= <michel.daenzer@mailbox.org>,
-        Samuel Pitoiset <samuel.pitoiset@gmail.com>,
-        =?UTF-8?Q?Timur_Krist=c3=b3f?= <timur.kristof@gmail.com>,
-        Bas Nieuwenhuizen <bas@basnieuwenhuizen.nl>
-References: <20230621005719.836857-1-andrealmeid@igalia.com>
- <20230621005719.836857-3-andrealmeid@igalia.com>
- <20230621110931.6f3c8914@eldfell>
- <ab9ebe98-f583-234d-4901-ae570fb89d9f@igalia.com>
- <20230622112241.70d4e941@eldfell>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20230622112241.70d4e941@eldfell>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0242.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:af::12) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Thu, 22 Jun 2023 06:00:23 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3055118;
+        Thu, 22 Jun 2023 03:00:12 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 19E83660704A;
+        Thu, 22 Jun 2023 11:00:11 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687428011;
+        bh=gpCgJrBqi/2Xavz4ppF0dv3Ye/36nrT5W9Yjh2qoe0c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=dmxEV7AKk6Fn2OONdeYVF5RAlqjAorSfESIYtHjPtfiWP4ItjKBQz9N4u8rrRBtr9
+         Y8xvfIbyQjSXUun1o3912RrISFNu3EdQyNL58h7HIMKA89INioEaxhbdIvhUtSOSz6
+         WyITPwvDU9zX+O6AZ6EP5sGZICKCR1BZ98HGExiTe2Oh/142tmB5jUNJfyAMZ+d+80
+         eIv9PtiLrgp77MOrs4zqsHDiVK1E6pNPsDB5kmfWQBCkgtv0ps2N2NpzLWPSBUOiE/
+         ri4cxwbeAd5T6uuem/i7uSSadSJ9TdORN+LHKkWEBzjvbtrlScTB2ATpumT7uPjVva
+         6rj7m9XuqTeJw==
+Message-ID: <5a9beeec-5762-c469-6e03-b71babb5f7ed@collabora.com>
+Date:   Thu, 22 Jun 2023 12:00:08 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|PH8PR12MB7352:EE_
-X-MS-Office365-Filtering-Correlation-Id: fb98be7c-7d4e-497b-557e-08db73076f70
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yQ4UPeaf5D7HnRK0feXysJjgrOLQQjQhBit0OkSUeLVEILnwaEfE8WXTuswYL10Md65UH7XpCBzKwUJJQ+dSWXWgZS0vh9dZrDjcjIjCVyjgs8Ug8Yk01IxksbaMQ5Xac5C5UMrnuOGfjgKPqdtyiX8hrJsdq290ghRT3g8BlifK//v+J1Cb7XkqUJwuR+kHrc1B97Y1+rsfBXM0wDo+5T90vQ/qGC377ApfR9CeWv/PABNJ16iY4FB7vQeXiOqsjbmmgzN7e2pFDCqXSSgXP7o52DPxr15HX6+bugJOl/qEfgOFfB5smdKn+hY+iaEIcc2ddGAQZ1zT2Z/2b7oudplNI2Fyk/w/aGy1C66hUDsCvzNH001GJHRcLrqtZZa/4OPqptaM5FEEqJS6Ou+du5vfq8GIIFX6YUp/enGbxRtXQFENUz2kUfcIS3QeqWJrpfv461bx1a35l1FgWM7s2kqwao87uDRd67dQjjYKrIS9TMgE8ZPHqr9RUOuWmIfEL2Al9v81bA/AWGuBFpu6QOJzrcF+kxcg5SpgS8yH98oAN+CR5YBtppYFVU6s2tJPKxohBBeT4lQa39KqqXSE1OTqxbNzMSx+E2IUFZOneecVP7KRS+EK3WtMu5sMxizyhI0XB5jANOpfce4w8tHkOQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(376002)(346002)(366004)(136003)(451199021)(316002)(83380400001)(41300700001)(7416002)(5660300002)(2906002)(8936002)(8676002)(36756003)(38100700002)(6506007)(6512007)(6666004)(186003)(6486002)(31686004)(66476007)(4326008)(66556008)(66946007)(478600001)(31696002)(110136005)(54906003)(86362001)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YWFCb0VXdGFscktaSER4Q0w3SDYyb1JJa01oZ1RObTJOUlhlY0hpWGw2TDNm?=
- =?utf-8?B?eEtOMFI2eUVIeDc3QlRyYWtRU2F0V24rS2FVeitpRWxIOWt5SUViaTNsZDVB?=
- =?utf-8?B?aWkrMUJ4bUNNRE5OaEJ1bXJqM09tQklXWTkyYkNXR1JSWG1YTWlqRWF1UVZ4?=
- =?utf-8?B?SFhHNnd3dm5vbHd6WlZuZU43OTY0eGhxcTZ5VlJZUTI5eTU4NkRHbVQrY3RJ?=
- =?utf-8?B?U0J2bytHWHprWTZRYm5VRDB6TDUwYk83SG9pclczNXVCK1FOb1R2NG9oc0Rn?=
- =?utf-8?B?RXBlWUVwc2FodEwxTSs1WGNWREk4ZzNRdSs1TGhDUHhEd0g0VXdMMytJd2E3?=
- =?utf-8?B?RzFjSDdKL08yN08vRVRKNjc3czBTS01MdDUwVnpkYm1aQlREcVI0N1pMM1J1?=
- =?utf-8?B?NnhTWlBkN1NGSUdiMXFMT2luTTNRM1lPTHVSSzlkdVY0THptTDZyak40N1JU?=
- =?utf-8?B?RkRPUkFQWEZDTnVsUVBjczNBOGVkb2JVL0xibU55RXdIS3FrQVdaUlhtNXds?=
- =?utf-8?B?U0VLNVVRdk81ZW5zZkprT25GTU5OZzhqZWRCWnVOa0JWSVpjRHFkb2VJbVM3?=
- =?utf-8?B?QUFBdmQ0REc5MGsvbk9FMnJVV3pqTnNuNEtMYnhwU1VCZEZnOU9hSC9lNUhv?=
- =?utf-8?B?TXZQR2JBbGlTbDNBanQzMEk3S3F5TlJSYytWZnYwUmpYakNpVGV1NEIrUEsw?=
- =?utf-8?B?QkJub0ZNdFVjSngya0JUZFJsLzRHUFBGUExGeEJGQU93RlFEYVFPVkhoMWRX?=
- =?utf-8?B?YnRDTUFiOFBNZUIrWC9OZUZ5R05GdWlwdTg4VmkxbGVQc2VmN0VHSWlCdmV2?=
- =?utf-8?B?eWlxM0lmMEFsVmU2MFh2R1VTSjlsMFNXYU00eVNnUEJ6cVRjUXFSbEF2V2xT?=
- =?utf-8?B?WWx4eEI3K2xMWEloY2xXcklXaUtKVFZXZmsyYWgwcjZHb1lhRkhBMHk1WjJx?=
- =?utf-8?B?bEtMS3FFQ29JUllERyswSFZYUmY4ZnlqbXpGOVpoK3cyd1VrenpERFhOTktH?=
- =?utf-8?B?V2dUV1FUc2ZMOFdheHFjaHJ1WUV6cVkvUGp1MDNkem4xQ0Y5QVphN1d4YVlz?=
- =?utf-8?B?RENVSkpxWlRtVVowcEdZWVRvUEFFZWU1eE9EaGVxSlVPcUp5eWx1d1hSRUhG?=
- =?utf-8?B?ZUxIU1g0VDVyVVpJMEtGSHdxYzhJUWF2SVBGY3l4SXBTajJzd0dPNVlwZmg4?=
- =?utf-8?B?OGdsMzlDWVcyUkllYWR1WDVFQWZlY2xib1hZWVN1bnFia1NkVExCKzk3dDJO?=
- =?utf-8?B?ekVZNVBhelRDTCtFT3ZZQmp0SUljbUtXTCtuRUFEL2k2TUpWSlZYVW5pc0Ux?=
- =?utf-8?B?M0xOTmVoSlB3dUZVQ1dvK1RLU0EzWDV1d1ZLRHNEa2hOQXVidmw2MEE3RjRR?=
- =?utf-8?B?Qm8ydHY5KzJsYWR1ZUFzQUcyRGhVUUR0NkY3V0RGZ3RmUHhwYWc5RTMydTVP?=
- =?utf-8?B?aGp3V0htcXRhY25yOEZaV3FFM01jMzdtV1FXc3o5ckNLenJWSFN4M3NVaC9P?=
- =?utf-8?B?WkpzaHhGUWZ6WmhRTXBTTGNvdFhZWWpaQTIwUHBvL2lLVVZRek1SZTRzZWRm?=
- =?utf-8?B?eU9TbFZMNy9aU29YMTRIWTdBTlFwd3FoSU80L1FNbGVkdGwrbzFVODFPVzR2?=
- =?utf-8?B?bGtPS3JVSGZodXVWUXBBSWZGWFpZbzNrRnlESGxBc09waWw0czhtUStEWEZB?=
- =?utf-8?B?MXV5RUl3eC8wY3BWWGxxTWhObDRCYjhBMkpNYnlnSkF0Rkw4SFcwZWJBUGNm?=
- =?utf-8?B?VnU2QVNyNUs5S3hndmJLaU16em91dHlDOFgwSkhYdDAvMFBVcW50NnNoVWJl?=
- =?utf-8?B?TnA3bkg1ZGYzVjlZMFFHc3J2M29aamhVdzhwYXFmRmZybU85R0thQUxUZGVX?=
- =?utf-8?B?Y0VIVVErWGs0MU56eURoSzFGOXhHalA5WTc0ZU4rUzk2M2I2QmNOaS9hbVZi?=
- =?utf-8?B?SEZXL2hFOVJkR2U2dmh6SEVVcTF5dCtFS2Jlbm1wWTd1ZGc1b1NOejExcUN2?=
- =?utf-8?B?emZWcHdVc2ZpTmJXTmoxcTFFOHNXUGg2RXhCaWZ2Zk8zU3RxdGlXZUxqRmxk?=
- =?utf-8?B?UnpoWnZweWdWWGJHRzN6SFE1U1ozV01QWG5NbjJLeEpONnNNamNJWE5wTGY5?=
- =?utf-8?B?dzJwNDRyc0FoeHd0b2NsbkFjbkRSVm9WcDhaYy9ZTUYySzFFa2FQNFY1ODFB?=
- =?utf-8?Q?oLNjzu5kv3D1CRX3u6ZFU1aSDrBzgPLB8uBJuarPuCwr?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fb98be7c-7d4e-497b-557e-08db73076f70
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 09:59:57.6740
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ig5tjSC5Ph8ORZV0Q5wgqPdcKxJhPYIq8fG4CXEdvYDpXzFbeesQa0x/2WKtH/6Q
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7352
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: [PATCH v13 00/11] Add support for MT8195 SCP 2nd core
+Content-Language: en-US
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20230607072222.8628-1-tinghan.shen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230607072222.8628-1-tinghan.shen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 22.06.23 um 10:22 schrieb Pekka Paalanen:
-> On Wed, 21 Jun 2023 13:33:56 -0300
-> André Almeida <andrealmeid@igalia.com> wrote:
->
->> Em 21/06/2023 05:09, Pekka Paalanen escreveu:
->>> On Tue, 20 Jun 2023 21:57:17 -0300
->>> André Almeida <andrealmeid@igalia.com> wrote:
->>>    
->>>> Create a new DRM ioctl operation to get the numbers of resets for a
->>>> given context. The numbers reflect just the resets that happened after
->>>> the context was created, and not since the machine was booted.
->>>>
->>>> Create a debugfs interface to make easier to test the API without real
->>>> resets.
->>>>
->>>> Signed-off-by: André Almeida <andrealmeid@igalia.com>
->>>> ---
->>>>    drivers/gpu/drm/drm_debugfs.c |  2 ++
->>>>    drivers/gpu/drm/drm_ioctl.c   | 58 +++++++++++++++++++++++++++++++++++
->>>>    include/drm/drm_device.h      |  3 ++
->>>>    include/drm/drm_drv.h         |  3 ++
->>>>    include/uapi/drm/drm.h        | 21 +++++++++++++
->>>>    include/uapi/drm/drm_mode.h   | 15 +++++++++
->>>>    6 files changed, 102 insertions(+)
->>> ...
->>>    
->>>> diff --git a/include/uapi/drm/drm.h b/include/uapi/drm/drm.h
->>>> index a87bbbbca2d4..a84559aa0d77 100644
->>>> --- a/include/uapi/drm/drm.h
->>>> +++ b/include/uapi/drm/drm.h
->>>> @@ -1169,6 +1169,27 @@ extern "C" {
->>>>     */
->>>>    #define DRM_IOCTL_MODE_GETFB2		DRM_IOWR(0xCE, struct drm_mode_fb_cmd2)
->>>>    
->>>> +/**
->>>> + * DRM_IOCTL_GET_RESET - Get information about device resets
->>>> + *
->>>> + * This operation requests from the device information about resets. It should
->>>> + * consider only resets that happens after the context is created, therefore,
->>>> + * the counter should be zero during context creation.
->>>> + *
->>>> + * dev_reset_count tells how many resets have happened on this device, and
->>>> + * ctx_reset_count tells how many of such resets were caused by this context.
->>>> + *
->>>> + * Flags can be used to tell if a reset is in progress, and userspace should
->>>> + * wait until it's not in progress anymore to be able to create a new context;
->>>> + * and to tell if the VRAM is considered lost. There's no safe way to clean this
->>>> + * flag so if a context see this flag set, it should be like that until the end
->>>> + * of the context.
->>> Is "this flag" the VRAM_LOST? Or any flag?
->>>
->>> Does this mean that not all resets are fatal to the context? Is there
->>> any kind of reset that should not be fatal to a context? All the
->>> rendering APIs seem to assume that any reset is fatal and the context
->>> must be destroyed.
->> I got this flag from the `AMDGPU_CTX_OP_QUERY_STATE2` operation, and
->> it's used to notify that the reset was fatal for a giving context,
->> although the idea of non-fatal resets seems to be a bit controversial
->> for now, so I think it will be better if I leave this flag for latter
->> improvements of the API.
-> Which flag is "this flag"? There are RESET_IN_PROGRESS and VRAM_LOST.
-> Both are fine by me to exist.
->
-> I think I made a wrong conclusion here. Somehow I read that it would be
-> possible to have a reset happen, and if VRAM is not lost, then the
-> context could work again.
+Il 07/06/23 09:22, Tinghan Shen ha scritto:
+> The mediatek remoteproc driver currently only allows bringing up a
+> single core SCP, e.g. MT8183. It also only bringing up the 1st
+> core in SoCs with a dual-core SCP, e.g. MT8195. This series support
+> to bring-up the 2nd core of the dual-core SCP.
+> 
 
-Yeah, that's exactly what AMD tries to do.
+Hello TingHan,
 
-And no, I'm absolutely not keen about that idea.
+Can you please address the comments on patch [05/11] and send a new version ASAP?
+That's the only remaining issue, so after that the series should be ready.
 
-Regards,
-Christian.
+Thanks,
+Angelo
 
-> Should there be some wording added to say the context is permanently
-> broken on any kind of reset? Or is that for UMD to decide?
->
->
-> Thanks,
-> pq
->
->>>    
->>>> + */
->>>> +#define DRM_IOCTL_GET_RESET		DRM_IOWR(0xCF, struct drm_get_reset)
->>>> +
->>>> +#define DRM_RESET_IN_PROGRESS	0x1
->>>> +#define DRM_RESET_VRAM_LOST	0x2
->>> Ok, so the dmabuf lost is being communicated here, but how would a
->>> userspace process know on which device a dmabuf resides on?
->>>
->>> Let's assume process A uses device 1 to draw, exports a dmabuf, sends
->>> it to process B which imports it to device 2. Device 1 resets and loses
->>> VRAM contents. How would process B notice that the dmabuf is lost when
->>> it never touches device 1 itself?
->>>    
->>>> +
->>>>    /*
->>>>     * Device specific ioctls should only be in their respective headers
->>>>     * The device specific ioctl range is from 0x40 to 0x9f.
->>>> diff --git a/include/uapi/drm/drm_mode.h b/include/uapi/drm/drm_mode.h
->>>> index 43691058d28f..c3257bd1af9c 100644
->>>> --- a/include/uapi/drm/drm_mode.h
->>>> +++ b/include/uapi/drm/drm_mode.h
->>>> @@ -1308,6 +1308,21 @@ struct drm_mode_rect {
->>>>    	__s32 y2;
->>>>    };
->>>>    
->>>> +/**
->>>> + * struct drm_get_reset - Get information about a DRM device resets
->>>> + * @ctx_id: the context id to be queried about resets
->>>> + * @flags: flags
->>>> + * @dev_reset_count: global counter of resets for a given DRM device
->>>> + * @ctx_reset_count: of all the resets counted by this device, how many were
->>>> + * caused by this context.
->>>> + */
->>>> +struct drm_get_reset {
->>>> +	__u32 ctx_id;
->>>> +	__u32 flags;
->>>> +	__u64 dev_reset_count;
->>>> +	__u64 ctx_reset_count;
->>>> +};
->>>> +
->>>>    #if defined(__cplusplus)
->>>>    }
->>>>    #endif
->>> Thanks,
->>> pq
+> v12 -> v13:
+> 1. replace subdevice with new mediatek scp operations in patchset 7
+> 2. add review tag to patchset 3
+> 3. modify mediatek,scp phandle name of video-codec@18000000 at patchset 11
+> 
+> v11 -> v12:
+> 1. add scp_add_single/multi_core() to patchset 6
+> 2. remove unused comment in patchset 6
+> 3. rename list name from mtk_scp_cluster to mtk_scp_list
+> 4. rewrite the multi-core probe flow
+> 5. disable rproc->autoboot and boot rproc by request_firmware_nowait at patchset 7
+> 6. remove patchset 7 review tag
+> 
+> v10 -> v11:
+> 1. rewrite patchset 5 to probe single-core SCP with the cluster list
+> 2. Also in patchset 5, move the pointer of mtk_scp object from the
+>     platform data property to the driver data property
+> 3. move the appearance of mtk_scp cluster property to patcheset 7
+> 
+> v9 -> v10:
+> 1. move the global mtk_scp list into the platform device driver data structure
+> 2. remove an unnecessary if() condition
+> 
+> v8 -> v9:
+> 1. initialize l1tcm_size/l1tcm_phys at patchset 05/11
+> 2. rewrite patchset 06/11 to unify the flow and remove hacks
+> 
+> v7 -> v8:
+> 1. update the node name of mt8192 asurada SCP rpmsg subnode
+> 2. squash register definitions into driver patches
+> 3. initialize local variables on the declaration at patch v8 06/11
+> 
+> v6 -> v7:
+> 1. merge the mtk_scp_cluster struct into the mtk_scp structure
+>     at the "Probe multi-core SCP" patch
+> 
+> v5 -> v6:
+> 1. move the mtk_scp_of_regs structure from mtk_common.h to mtk_scp.c
+> 2. rename the SCP core 0 label from 'scp' to 'scp_c0'
+> 
+> v4 -> v5:
+> 1. move resource release actions to the platform driver remove operation
+> 2. fix dual-core watchdog handling
+> 
+> v3 -> v4:
+> 1. change the representation of dual-core SCP in dts file and update SCP yaml
+> 2. rewrite SCP driver to reflect the change of dts node
+> 3. drop 'remove redundant call of rproc_boot for SCP' in v3 for further investigation
+> 
+> v2 -> v3:
+> 1. change the representation of dual-core SCP in dts file and update SCP yaml
+> 2. rewrite SCP driver to reflect the change of dts node
+> 3. add SCP core 1 node to mt8195.dtsi
+> 4. remove redundant call of rproc_boot for SCP
+> 5. refine IPI error message
+> 
+> v1 -> v2:
+> 1. update dt-binding property description
+> 2. remove kconfig for scp dual driver
+> 3. merge mtk_scp_dual.c and mtk_scp_subdev.c to mtk_scp.c
+> 
+> 
+> Tinghan Shen (11):
+>    dt-bindings: remoteproc: mediatek: Improve the rpmsg subnode
+>      definition
+>    arm64: dts: mediatek: Update the node name of SCP rpmsg subnode
+>    dt-bindings: remoteproc: mediatek: Support MT8195 dual-core SCP
+>    remoteproc: mediatek: Add MT8195 SCP core 1 operations
+>    remoteproc: mediatek: Introduce cluster on single-core SCP
+>    remoteproc: mediatek: Probe multi-core SCP
+>    remoteproc: mediatek: Add scp_boot_peers and scp_shutdown_peers
+>      operations
+>    remoteproc: mediatek: Setup MT8195 SCP core 1 SRAM offset
+>    remoteproc: mediatek: Handle MT8195 SCP core 1 watchdog timeout
+>    remoteproc: mediatek: Refine ipi handler error message
+>    arm64: dts: mediatek: mt8195: Add SCP 2nd core
+> 
+>   .../bindings/remoteproc/mtk,scp.yaml          | 176 +++++++-
+>   .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   2 +-
+>   .../boot/dts/mediatek/mt8192-asurada.dtsi     |   2 +-
+>   .../boot/dts/mediatek/mt8195-cherry.dtsi      |   6 +-
+>   arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  32 +-
+>   drivers/remoteproc/mtk_common.h               |  26 ++
+>   drivers/remoteproc/mtk_scp.c                  | 425 ++++++++++++++++--
+>   7 files changed, 594 insertions(+), 75 deletions(-)
+> 
 
