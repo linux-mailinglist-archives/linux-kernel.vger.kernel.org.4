@@ -2,170 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59048739E03
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 12:05:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 698E7739E0F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 12:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbjFVKF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 06:05:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
+        id S231238AbjFVKK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 06:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbjFVKFY (ORCPT
+        with ESMTP id S229549AbjFVKKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 06:05:24 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F129B4;
-        Thu, 22 Jun 2023 03:05:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1687428323; x=1718964323;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Cxl3Mx88pP5Y2quTc2VGzlQgURMYkhzFdmr6u9GzYN0=;
-  b=QspdcrtpsPMUVWruOWoNh3cJlTqYStypaVZSfZTKSHcXtTEjqla5rRPe
-   L5zFwhiYk7PlUh9KRoOQMdDoyi4R2Zq093ztWB6l7/mkISifS3b6usbV5
-   c/pYaxBheC/UgN8K7TFFEc1riJbbVG9bjdiW1u0kAFgbErPMUIPH0grF+
-   Rwy/wslB0s/kuLj4r8ZB8N/vpreZzkXkIzDx+nGbaVMIbFDYD4wW4iwAP
-   tKy3q7QQ9/gdXQFh4KOpht257QBD7rTy+//5c+/PICk1fPMoZtYB7bPoX
-   4scsLQaDbHld/JofGfEOgR6o4oiXgbL06eQwBeLy1NPKhMPn/Y6RvGhXt
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
-   d="asc'?scan'208";a="158097833"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 Jun 2023 03:05:22 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 22 Jun 2023 03:05:04 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 22 Jun 2023 03:05:01 -0700
-Date:   Thu, 22 Jun 2023 11:04:34 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-CC:     Lucas Tanure <tanure@linux.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>, Nick <nick@khadas.com>,
-        Artem <art@khadas.com>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Conor Dooley <conor@kernel.org>
-Subject: Re: [PATCH v4 2/3] dt-bindings: serial: amlogic,meson-uart: Add
- compatible string for T7
-Message-ID: <20230622-bouncy-nebulizer-d4e487937c03@wendy>
-References: <20230622084045.519203-1-tanure@linux.com>
- <20230622084045.519203-3-tanure@linux.com>
- <20230622-unsent-willing-574906af5e1a@wendy>
- <4a2a2f0c-f9dd-d5c4-1e7e-5852970f87a7@linaro.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="2DL/pp1ncOUXA4aY"
-Content-Disposition: inline
-In-Reply-To: <4a2a2f0c-f9dd-d5c4-1e7e-5852970f87a7@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 22 Jun 2023 06:10:55 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5306DD;
+        Thu, 22 Jun 2023 03:10:53 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4B3E05C008E;
+        Thu, 22 Jun 2023 06:10:53 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 22 Jun 2023 06:10:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1687428653; x=1687515053; bh=rQtLPWivvoqJHEflH1RQG9ep95dMvO0UyWn
+        P9cqsqPs=; b=hgNyx4A21ezJ3AFz5nxXKPLWcENK9ov93cxuU17cpSO5QTceB8g
+        KmE2V/gzSbH899GspBkd/PvmIEHsNMjYTMr1FrPOUJsnUwYIYsADYucLseS5WRov
+        z0RcE1dP105RKCupGkduFjcEy6w27UDxtC2neFgYesjFrzHIaCdo8perNV7FYit2
+        4El7QoaWOVqkZBAlbpGmfYV1+iqDrXl3Ohtb28RhddWYPlSMzFsNHyYvC6qdkOXE
+        B9m0E/bwzhvltmKXAp6y6L9OwrrVIU9py3y0/Wx+Fz5W3bmBuGjdNWiNWuaRp+ZC
+        9OQPj/01xuiA1VcymD8TT/BiHEgfu7EkC9Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1687428653; x=1687515053; bh=rQtLPWivvoqJHEflH1RQG9ep95dMvO0UyWn
+        P9cqsqPs=; b=Lqp8Kg1AF6Jd7qR1ESsLmDMU+KhuEp3ddeHr0n7kSfY4a5ABWsX
+        hfCzcu+NCfFUtPVm1SxnD2LYJPVCidiFquh67PPXWw9G3AyBdj/1fgoGsQyd0sat
+        jpkYxtQITeKVlBlbcxTUQC4D6zuxtsTl19mP6K2M7zFYmiqAl/KTidQqF+270AGO
+        tZsEYjo4eS+6WphReJdTrS9Wh0pdGevpgdEG3BgkjblKtHk7HBRr1Asu/myRFXj7
+        wlgfJAO12LQbCm5Lve05l2Fjx+yQ/kgxhkQbm1XTckKi3DF2qHuyBoBKCH9Jhgyy
+        DALSGSiucppmXislYzs1t6z2yCZjxb0lr1w==
+X-ME-Sender: <xms:LB6UZCybnsLf6vIe7FXvVAz0zeVGSOzfzKDmB5AU_DMrETJAMorXsw>
+    <xme:LB6UZOS1d9mkBJvpX5L--g4RS-RHmGaYGgfhS7n2ySsS1gCWZxExCFk8FYoH752Cv
+    zD6cSU3roBwXlMb6dI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeguddgvdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:LB6UZEWi84JajD8g0Nl8xAB5IB8EtzWp9SMYZxKJDF8noYAusw4yig>
+    <xmx:LB6UZIiBBVj0VlmMbK5_evoPPLaXrtOP-vTTIKSdpQLsoslGgtwmNg>
+    <xmx:LB6UZEAbXALC1hBnp7VHGBrcL9Y4CZ4o4ufIkQ5dMTKDbTaAnPsR8A>
+    <xmx:LR6UZA2mE8ZjDdDUHX9a7RKR56N_QNeBfcvy0eBp19JklhYebBSJSQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 2007BB60086; Thu, 22 Jun 2023 06:10:52 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
+Mime-Version: 1.0
+Message-Id: <c788d873-ad57-4a94-9be0-cdc5d1326cc2@app.fastmail.com>
+In-Reply-To: <19e93057-46e4-1578-9e3e-138bd09cccfc@gmail.com>
+References: <20230621031605.234149-1-ychuang570808@gmail.com>
+ <20230621031605.234149-2-ychuang570808@gmail.com>
+ <69c742e5-3270-4b1c-be31-1552d877677e@app.fastmail.com>
+ <19e93057-46e4-1578-9e3e-138bd09cccfc@gmail.com>
+Date:   Thu, 22 Jun 2023 12:10:29 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Jacky Huang" <ychuang570808@gmail.com>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        "Stephen Boyd" <sboyd@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, soc@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, schung@nuvoton.com,
+        "Jacky Huang" <ychuang3@nuvoton.com>
+Subject: Re: [PATCH v2 1/2] clk: nuvoton: Add clk-ma35d1.h for driver extern functions
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---2DL/pp1ncOUXA4aY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jun 22, 2023, at 03:42, Jacky Huang wrote:
+> On 2023/6/21 =E4=B8=8B=E5=8D=88 10:22, Arnd Bergmann wrote:
+>
+> I will extract the unrelated parts from this patch and create another=20
+> patch for them.
+>
 
-On Thu, Jun 22, 2023 at 11:38:49AM +0200, Neil Armstrong wrote:
-> On 22/06/2023 11:26, Conor Dooley wrote:
-> > On Thu, Jun 22, 2023 at 09:40:44AM +0100, Lucas Tanure wrote:
-> > > Amlogic T7 SoCs uses the same UART controller as S4 SoCs and G12A.
-> > > There is no need for an extra compatible line in the driver, but
-> > > add T7 compatible line for documentation.
-> > >=20
-> > > Co-developed-by: Conor Dooley <conor@kernel.org>
-> >=20
-> > You can delete this, I don't need a Co-developed-by tag for review
-> > feedback.
-> >=20
-> > > Signed-off-by: Lucas Tanure <tanure@linux.com>
-> > > ---
-> > >   .../devicetree/bindings/serial/amlogic,meson-uart.yaml      | 6 +++=
-+++
-> > >   1 file changed, 6 insertions(+)
-> > >=20
-> > > diff --git a/Documentation/devicetree/bindings/serial/amlogic,meson-u=
-art.yaml b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-> > > index 01ec45b3b406..4ca4673169aa 100644
-> > > --- a/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-> > > +++ b/Documentation/devicetree/bindings/serial/amlogic,meson-uart.yaml
-> > > @@ -46,6 +46,12 @@ properties:
-> > >             - amlogic,meson8b-uart
-> > >             - amlogic,meson-gx-uart
-> > >             - amlogic,meson-s4-uart
-> > > +      - description: Everything-Else power domain UART controller on=
- G12A compatible SoCs
-> >=20
-> > s/Everything-Else/Always-on/
->=20
->=20
-> "Everything-Else" was the amlogic naming for the non-always-on power doma=
-in, but it seems
-> it's no more something used on new SoCs like the T7 family.
->=20
-> Anyway, the description is wrong, and it's a mess because we used "amlogi=
-c,meson-ao-uart"
-> for uarts on the Always-On domain, but here it's described as Everything-=
-Else...
->=20
-> Lucas, is there AO_uarts on T7 ? if not drop this amlogic,meson-ao-uart f=
-or the T7 UARTs.
->=20
-> But if there's no more AO uart controller, you'll need to change drivers/=
-tty/serial/meson_uart.c
-> and add a OF_EARLYCON_DECLARE() for amlogic,meson-t7-uart.
->=20
-> But still, why don't you use the amlogic,meson-s4-uart as fallback instea=
-d ?
+Ok, sounds good. It would be great to still get this today or tomorrow
+though, as the merge window probably opens on Monday and I want to
+have the tree in a good state before I send my pull request to Linus.
 
-That's probably my fault, I suggested the g12a in my reply to v3,
-because that is the one from which the match data is being copied, so it
-seemed like it'd make the most sense to me as the fallback.
-
-btw Neil, is the "meson-gx-uart" a wildcard? Dunno the hardware, so
-wasn't sure.
-
-> +      - description: UART controller on T7 compatible SoCs
-> +        items:
-> +          - const: amlogic,meson-t7-uart
-> +          - const: amlogic,meson-s4-uart
-
-As mentioned on v (N-1), I am fine with this either. You can keep the
-Ack Lucas with this change.
-
-> and update meson_uart.c if there's no AO uarts anymore....
->=20
-> Neil
->=20
-> > Otherwise,
-> > Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
-
---2DL/pp1ncOUXA4aY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZJQcsgAKCRB4tDGHoIJi
-0vZeAPsHIYCp0zmida6xe7aOwCiiCzCLyknJ6y/URqM/SYCm5gD/dSRBiHN42psT
-HULI6939ud/hg6iv/iezBvJLBkDu8AA=
-=ew60
------END PGP SIGNATURE-----
-
---2DL/pp1ncOUXA4aY--
+     Arnd
