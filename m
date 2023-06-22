@@ -2,137 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31E3B73994A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 10:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4640739946
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 10:20:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjFVITx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 04:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38672 "EHLO
+        id S230099AbjFVIUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 04:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbjFVITs (ORCPT
+        with ESMTP id S229773AbjFVIUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 04:19:48 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79A7A2107;
-        Thu, 22 Jun 2023 01:19:40 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 1203D5C0050;
-        Thu, 22 Jun 2023 04:19:38 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 22 Jun 2023 04:19:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1687421978; x=1687508378; bh=hH
-        5vwg3g4lUW3WmAdhq/KzkSN793TkjIdYbcki+6e+w=; b=OXIy2i50Tz5HGVbJFi
-        DIhaQBTjDkFzVMALCr5fRCcm61jknGTDPDuzPloUnOYcWPg9Q+QU1TpID/dgSk88
-        dcABXsiNfBKwHEC+evQPO8wCKn6XQyYTtNCFFYbJWEJDvaQl1slR2gmVHGmiHMfz
-        CNvH6r+AX31uDmM+kYT0yv1oiFXz4pWZ+G14DVLaMlHhd4DMZV2BJfcWnyTs1f9m
-        jZE5n76RltClHzRln41/FTuT2VGw/KVb3z1cGiuk3K1qLCAjI1/wFCnbiM0XT9Vp
-        a9zqqjMUvzue+6CPbQjOQhUtLnMTZfuZCEDdY/g+SjN3cWcv/Eo1qYn5Th31varM
-        8THQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1687421978; x=1687508378; bh=hH5vwg3g4lUW3
-        WmAdhq/KzkSN793TkjIdYbcki+6e+w=; b=Ao+L34WB7V+0i7miCDQlBM67jy3K1
-        p6XdD9YgSsDuUGkPgRFjIQJwDQBQTGWjHlg0X0Gdd3aUd4dalQXVx3W/oEjrMbYP
-        I4ixCXHUGIbkjjy5GdWzCUcSSSe0cSMq6LW0rhwoCrCcJEd7zDMa4d7T+CLkOClH
-        jaYfE+UCVYBVAkisE30v5FR469hQV95oMUx+pByOoinMBDhgKFmqbLDtfuf6vqrP
-        XZWsdYmyozfbgC6muoOMKu5VGaloz7Vq1pWRpcPmCPX0hODR2urAtTmJml8v9mA6
-        Ao5dFuVlbWzS6UyDfc/p0S7hLJ0VHGijm/Li3mTvBcvML5g0oFeHOQvxA==
-X-ME-Sender: <xms:GQSUZCj4mtnORLxM-BazYgnhP7TSiNTnxUt_EscqfJO5jUxB8LkLGA>
-    <xme:GQSUZDC1xZ5tIbRxqOmkVOMaYUdXpwNAudaUayDok5QaiLDAc4Paogsz-SxIZ7rtr
-    np15-KgjI4fRFvQcwo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrgeeguddgtddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:GQSUZKGdl9oCjOvdVx9gluYXok0_6FW8LNJM9TpjzI-9j3CI7aKv6Q>
-    <xmx:GQSUZLQvfH3ThMxfyMdjV0qiHJ_Mhh-AyCi_Jf59TG_tNErUDxxJNA>
-    <xmx:GQSUZPzL706tMl5J33ZAmj1n9uh7ezvycovGGSm5VUwSUx55vr9ZvA>
-    <xmx:GgSUZBtrUpLok7qyGimZiFrl-MSIbH5C0EzjgPCqBIZ68CgjiKJrkQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 9465FB60086; Thu, 22 Jun 2023 04:19:37 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-499-gf27bbf33e2-fm-20230619.001-gf27bbf33
-Mime-Version: 1.0
-Message-Id: <afeb9fad-0d3b-48ac-82da-218dcd8010e7@app.fastmail.com>
-In-Reply-To: <20230622104810.30055fb1@canb.auug.org.au>
-References: <20230622104810.30055fb1@canb.auug.org.au>
-Date:   Thu, 22 Jun 2023 10:19:17 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Stephen Rothwell" <sfr@canb.auug.org.au>,
-        "Olof Johansson" <olof@lixom.net>,
-        ARM <linux-arm-kernel@lists.infradead.org>
-Cc:     "Rob Herring" <robh@kernel.org>,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-Subject: Re: linux-next: build warning after merge of the arm-soc tree
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 22 Jun 2023 04:20:08 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339A91BF9;
+        Thu, 22 Jun 2023 01:20:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687422001; x=1718958001;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=plzXo/9KpkA8fY27vWZpNfw42bMgkkIQ5wv0LfbjLtE=;
+  b=B+DvCDBgRwGdHS5DoXDrj3G4gHAKNtkGI0IrpF74btYEhNzvcARwlKjz
+   IEopCjbr/+m5okUvFuXbtml5JbhmsVHJs9Ie0/iRkzM8vn6VlmBBz4xaL
+   OuofWU8G0FavxEFdX2rWAbo9wBmqbv1TbR913FhXinNIIhqFHkTV75yRA
+   PWsRGYk9xwICNU8rNCmMBiXh1Xlo22g5WOhKKVCPjva58e1Oeyiw6uXRs
+   3BtHLhNqspTj8pw6u6wtQhfndtCX/wpzHI8unTIn16h1y73a3K3Z64ljl
+   yMIEjuEdSbzeN2IUXKFemme4ucbAnBQEanQN1J5JT7vCdIt1JPaJOloZg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="363847218"
+X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
+   d="scan'208";a="363847218"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 01:19:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="664961408"
+X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
+   d="scan'208";a="664961408"
+Received: from fandon2x-mobl.ccr.corp.intel.com (HELO localhost) ([10.255.29.29])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 01:19:56 -0700
+Date:   Thu, 22 Jun 2023 16:19:53 +0800
+From:   Yu Zhang <yu.c.zhang@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+5feef0b9ee9c8e9e5689@syzkaller.appspotmail.com,
+        Jim Mattson <jmattson@google.com>
+Subject: Re: [PATCH 1/3] KVM: x86: Disallow KVM_SET_SREGS{2} if incoming CR0
+ is invalid
+Message-ID: <20230622081953.jc4tw6cwczl7bc6j@linux.intel.com>
+References: <20230613203037.1968489-1-seanjc@google.com>
+ <20230613203037.1968489-2-seanjc@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230613203037.1968489-2-seanjc@google.com>
+User-Agent: NeoMutt/20171215
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023, at 02:48, Stephen Rothwell wrote:
-> Hi all,
->
-> After merging the arm-soc tree, today's linux-next build (arm
-> multi_v7_defconfig) produced this warning:
->
-> arch/arm/boot/dts/marvell/armada-390-db.dts:84.10-106.4: Warning 
-> (spi_bus_reg): /soc/spi@10680/flash@1: SPI bus unit address format 
-> error, expected "0"
->
-> I am not sure why this has only shown up now.
+On Tue, Jun 13, 2023 at 01:30:35PM -0700, Sean Christopherson wrote:
+> Reject KVM_SET_SREGS{2} with -EINVAL if the incoming CR0 is invalid,
+> e.g. due to setting bits 63:32, illegal combinations, or to a value that
+> isn't allowed in VMX (non-)root mode.  The VMX checks in particular are
+> "fun" as failure to disallow Real Mode for an L2 that is configured with
+> unrestricted guest disabled, when KVM itself has unrestricted guest
+> enabled, will result in KVM forcing VM86 mode to virtual Real Mode for
+> L2, but then fail to unwind the related metadata when synthesizing a
+> nested VM-Exit back to L1 (which has unrestricted guest enabled).
+> 
+> Opportunistically fix a benign typo in the prototype for is_valid_cr4().
+> 
+> Cc: stable@vger.kernel.org
+> Reported-by: syzbot+5feef0b9ee9c8e9e5689@syzkaller.appspotmail.com
+> Closes: https://lore.kernel.org/all/000000000000f316b705fdf6e2b4@google.com
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/include/asm/kvm-x86-ops.h |  1 +
+>  arch/x86/include/asm/kvm_host.h    |  3 ++-
+>  arch/x86/kvm/svm/svm.c             |  6 ++++++
+>  arch/x86/kvm/vmx/vmx.c             | 28 ++++++++++++++++++------
+>  arch/x86/kvm/x86.c                 | 34 +++++++++++++++++++-----------
+>  5 files changed, 52 insertions(+), 20 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm-x86-ops.h b/arch/x86/include/asm/kvm-x86-ops.h
+> index 13bc212cd4bc..e3054e3e46d5 100644
+> --- a/arch/x86/include/asm/kvm-x86-ops.h
+> +++ b/arch/x86/include/asm/kvm-x86-ops.h
+> @@ -37,6 +37,7 @@ KVM_X86_OP(get_segment)
+>  KVM_X86_OP(get_cpl)
+>  KVM_X86_OP(set_segment)
+>  KVM_X86_OP(get_cs_db_l_bits)
+> +KVM_X86_OP(is_valid_cr0)
+>  KVM_X86_OP(set_cr0)
+>  KVM_X86_OP_OPTIONAL(post_set_cr3)
+>  KVM_X86_OP(is_valid_cr4)
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 28bd38303d70..3bc146dfd38d 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1566,9 +1566,10 @@ struct kvm_x86_ops {
+>  	void (*set_segment)(struct kvm_vcpu *vcpu,
+>  			    struct kvm_segment *var, int seg);
+>  	void (*get_cs_db_l_bits)(struct kvm_vcpu *vcpu, int *db, int *l);
+> +	bool (*is_valid_cr0)(struct kvm_vcpu *vcpu, unsigned long cr0);
+>  	void (*set_cr0)(struct kvm_vcpu *vcpu, unsigned long cr0);
+>  	void (*post_set_cr3)(struct kvm_vcpu *vcpu, unsigned long cr3);
+> -	bool (*is_valid_cr4)(struct kvm_vcpu *vcpu, unsigned long cr0);
+> +	bool (*is_valid_cr4)(struct kvm_vcpu *vcpu, unsigned long cr4);
+>  	void (*set_cr4)(struct kvm_vcpu *vcpu, unsigned long cr4);
+>  	int (*set_efer)(struct kvm_vcpu *vcpu, u64 efer);
+>  	void (*get_idt)(struct kvm_vcpu *vcpu, struct desc_ptr *dt);
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index e265834fe859..b29d0650582e 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -1786,6 +1786,11 @@ static void sev_post_set_cr3(struct kvm_vcpu *vcpu, unsigned long cr3)
+>  	}
+>  }
+>  
+> +static bool svm_is_valid_cr0(struct kvm_vcpu *vcpu, unsigned long cr0)
+> +{
+> +	return true;
+> +}
+> +
+>  void svm_set_cr0(struct kvm_vcpu *vcpu, unsigned long cr0)
+>  {
+>  	struct vcpu_svm *svm = to_svm(vcpu);
+> @@ -4815,6 +4820,7 @@ static struct kvm_x86_ops svm_x86_ops __initdata = {
+>  	.set_segment = svm_set_segment,
+>  	.get_cpl = svm_get_cpl,
+>  	.get_cs_db_l_bits = svm_get_cs_db_l_bits,
+> +	.is_valid_cr0 = svm_is_valid_cr0,
+>  	.set_cr0 = svm_set_cr0,
+>  	.post_set_cr3 = sev_post_set_cr3,
+>  	.is_valid_cr4 = svm_is_valid_cr4,
+> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> index 0ecf4be2c6af..355b0e8c9b00 100644
+> --- a/arch/x86/kvm/vmx/vmx.c
+> +++ b/arch/x86/kvm/vmx/vmx.c
+> @@ -3037,6 +3037,15 @@ static void enter_rmode(struct kvm_vcpu *vcpu)
+>  	struct vcpu_vmx *vmx = to_vmx(vcpu);
+>  	struct kvm_vmx *kvm_vmx = to_kvm_vmx(vcpu->kvm);
+>  
+> +	/*
+> +	 * KVM should never use VM86 to virtualize Real Mode when L2 is active,
+> +	 * as using VM86 is unnecessary if unrestricted guest is enabled, and
+> +	 * if unrestricted guest is disabled, VM-Enter (from L1) with CR0.PG=0
+> +	 * should VM-Fail and KVM should reject userspace attempts to stuff
 
-Thanks for the report, I also just ran into the same thing.
-It's probably instroduced by 89e73afc3f540 ("ARM: dts: marvell:
-align SPI NOR node name with dtschema"), but I don't know why
-there was no warning before.
+VM Enry shall fail(with CR0.PG=0), because SECONDARY_EXEC_UNRESTRICTED_GUEST
+will be cleared in L1's secondary_ctls_high MSR, and hence in its VMCS12?
 
-Added the fixup patch now.
+When will an unrestricted L1 run L2 as a restricted one? Shadow on EPT(L0
+uses EPT for L1 and L1 uses shadow for L2)?
 
-    Arnd
+> +	 * CR0.PG=0 when L2 is active.
+> +	 */
+> +	WARN_ON_ONCE(is_guest_mode(vcpu));
+> +
 
----
-commit 7dc3be1745d05c1ed7d385487238ec06a07f4f29
-Author: Arnd Bergmann <arnd@arndb.de>
-Date:   Thu Jun 22 10:14:02 2023 +0200
-
-    ARM: mvebu: fix unit address on armada-390-db flash
-    
-    The unit address needs to be changed to match the reg property:
-    
-    arch/arm/boot/dts/marvell/armada-390-db.dts:84.10-106.4: Warning (spi_bus_reg): /soc/spi@10680/flash@1: SPI bus unit address format error, expected "0"
-    
-    Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-    Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-diff --git a/arch/arm/boot/dts/marvell/armada-390-db.dts b/arch/arm/boot/dts/marvell/armada-390-db.dts
-index 792d0a0184e82..20f518dbac971 100644
---- a/arch/arm/boot/dts/marvell/armada-390-db.dts
-+++ b/arch/arm/boot/dts/marvell/armada-390-db.dts
-@@ -81,7 +81,7 @@ &spi1 {
- 	pinctrl-0 = <&spi1_pins>;
- 	pinctrl-names = "default";
- 
--	flash@1 {
-+	flash@0 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 		compatible = "n25q128a13",
+B.R.
+Yu
