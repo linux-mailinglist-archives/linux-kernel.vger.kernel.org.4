@@ -2,122 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D2873ACE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 01:06:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EDA673ACE7
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 01:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbjFVXGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 19:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38426 "EHLO
+        id S231368AbjFVXG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 19:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbjFVXGT (ORCPT
+        with ESMTP id S230314AbjFVXGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 19:06:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA032121;
+        Thu, 22 Jun 2023 19:06:21 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1DBD2128;
+        Thu, 22 Jun 2023 16:06:11 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6b5915d0816so94715a34.1;
+        Thu, 22 Jun 2023 16:06:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687475171; x=1690067171;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ouszZxBWK4Y/7BnPKGCua1rglERmrS5y1sP9g0y1NxU=;
+        b=aTB1pvy0DXHIer0JV5RF4ky0pZJjqqTMNLnoz3OJFDzXR2M1WhUq1IKpMh911OPGMb
+         GMIL5ZdCS66V+dz0MCNHe4rkphypdFwdgBQCmUh4+dakL9F8ZzsSktXpbYbB5/PQEfNx
+         LvyxoJc2bw34I8JQ8y3cbCwykwlJhcf5QjI2Rtp3ntF6yVvu2+mAGffWnayVss1LIXTC
+         Tb2vpZD7lnViDjTmWqiEw8mVm1czpGyLzU3KIxLsI2txruv50G1S/vLnHIqvYVAEHrzA
+         y4NtmYcKzNJV6ek3hEP52Nph+NwmjCZ3jaCgPE58l9O7MvMPzTPFFMP05eXoxWQeMyTR
+         GbnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687475171; x=1690067171;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ouszZxBWK4Y/7BnPKGCua1rglERmrS5y1sP9g0y1NxU=;
+        b=FokVQ9Uf2+NiSpLsC2zV4o2XRRoRkHtMSpl3RRLZcu6Ig35ud17bV5fcsoP039Wc0f
+         5304GaWW2emDWL55ypFIo7rzG70thnNs/85hAVpxgj5xo0CaoFKO1trWTLeFpZi+sLRj
+         tljApsf1DIMvLzx7sWWRzr/gz5GctICf/rl1XOCGe5Lm0tFHtGkH7rWGNmduZ/NVfnQ/
+         U8JYcCL2YlfUcjdL/fTEKpGkUJVz2pDBgaPiD2djIHMFrDX+sygk1ljFpK5BPF9Y+WR/
+         u/ZlAazBEOjSD1ZO2kjgRXW7wiwIbQpSgX4CK3IjLh871v1pG2d6jDhQnweqAnzoUH9Z
+         Zpgg==
+X-Gm-Message-State: AC+VfDzacCbw9FTP+6lYAVO8KrmoTpkoC9f45Cc0cVdZ/Odv5TLizrlk
+        OPjThx1ro7z119Y/Al0WeUw=
+X-Google-Smtp-Source: ACHHUZ5BE2JaRf9U/RJpZMsASVAr/InFv9I3p6UcUaGtwKesvlbWrLfzH9LHqG+tmTWYjJCn3wl8NA==
+X-Received: by 2002:a05:6359:b95:b0:12b:d23d:f5bf with SMTP id gf21-20020a0563590b9500b0012bd23df5bfmr15658173rwb.0.1687475171058;
+        Thu, 22 Jun 2023 16:06:11 -0700 (PDT)
+Received: from localhost (ec2-54-67-115-33.us-west-1.compute.amazonaws.com. [54.67.115.33])
+        by smtp.gmail.com with ESMTPSA id d18-20020a63f252000000b0054febe8a5f6sm5348113pgk.82.2023.06.22.16.06.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 22 Jun 2023 16:06:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2291461901;
-        Thu, 22 Jun 2023 23:06:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EC1FC433C0;
-        Thu, 22 Jun 2023 23:06:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687475169;
-        bh=pegMzDXZUMfrU4xRrjxoACjUG6/qK6YYOfic7NwK9pQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=hCs5CNZZoiMELCn9nFEKCsyp66MGgCSd2Hzf8wePvkKGKs/N+DcO7GzoWqVgM/rZh
-         iW+LAI5zdWRxLtq3a0bEgxjjIdjiy+s3XAiwQgU6SoRhvDy7tpbopbMg3wvZw4i2Ij
-         3a8C11GppvO/fKDyUKbhbq2mndKZmjBz1K9wVlDoiASZBWjx51O+bYXKG176utoHSa
-         hoVCcwBOZ4nGfc8mGbBkrjICYP5YjfuZUUihqLLFQEfn0BSO/WchgD+ZnlxSlcMg3c
-         iMKpWlxW7wW7qQcn/92rhrrQg1ZpSJLOTkMoRLkKYLhG6I3gtvpTp4nKouZBXkEc9F
-         b4r1Dh5HAjaZQ==
-Date:   Thu, 22 Jun 2023 18:06:07 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Limonciello, Mario" <mario.limonciello@amd.com>
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>, bhelgaas@google.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Vidya Sagar <vidyas@nvidia.com>,
-        Michael Bottini <michael.a.bottini@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI/ASPM: Enable ASPM on external PCIe devices
-Message-ID: <20230622230607.GA155247@bhelgaas>
+Date:   Thu, 22 Jun 2023 23:06:09 +0000
+From:   Bobby Eshleman <bobbyeshleman@gmail.com>
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        linux-hyperv@vger.kernel.org,
+        Stefan Hajnoczi <stefanha@redhat.com>, kvm@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        virtualization@lists.linux-foundation.org,
+        Eric Dumazet <edumazet@google.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Bryan Tan <bryantan@vmware.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Krasnov Arseniy <oxffffaa@gmail.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        Jiang Wang <jiang.wang@bytedance.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH RFC net-next v4 5/8] virtio/vsock: add
+ VIRTIO_VSOCK_F_DGRAM feature bit
+Message-ID: <ZJTT4QTwD824pBsh@bullseye>
+References: <20230413-b4-vsock-dgram-v4-0-0cebbb2ae899@bytedance.com>
+ <20230413-b4-vsock-dgram-v4-5-0cebbb2ae899@bytedance.com>
+ <med476cdkdhkylddqa5wbhjpgyw2yiqfthvup2kics3zbb5vpb@ovzg57adewfw>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1b4b2c6c-8119-95fd-8958-dbbecc66510c@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <med476cdkdhkylddqa5wbhjpgyw2yiqfthvup2kics3zbb5vpb@ovzg57adewfw>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 20, 2023 at 01:36:59PM -0500, Limonciello, Mario wrote:
-> <snip>
-> > > A variety of Intel chipsets don't support lane width switching
-> > > or speed switching.  When ASPM has been enabled on a dGPU,
-> > > these features are utilized and breakage ensues.
-> > Maybe this helps explain all the completely unmaintainable ASPM
-> > garbage in amdgpu and radeon.
+On Thu, Jun 22, 2023 at 05:29:08PM +0200, Stefano Garzarella wrote:
+> On Sat, Jun 10, 2023 at 12:58:32AM +0000, Bobby Eshleman wrote:
+> > This commit adds a feature bit for virtio vsock to support datagrams.
 > > 
-> > If these devices are broken, we need quirks for them.
+> > Signed-off-by: Jiang Wang <jiang.wang@bytedance.com>
+> > Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+> > ---
+> > include/uapi/linux/virtio_vsock.h | 1 +
+> > 1 file changed, 1 insertion(+)
 > 
-> The problem is which device do you consider "broken"?
-> The dGPU that uses these features when the platform advertises ASPM
-> or the chipset which doesn't support the features that the device
-> uses when ASPM is active?
+> LGTM, but I'll give the R-b when we merge the virtio-spec.
 > 
-> With this problem I'm talking about the dGPU works fine on hosts
-> that support these features.
+> Stefano
+> 
 
-Without more details about what's broken and when, I can't say.  What
-I *think* is that a device that doesn't work per spec needs a quirk.
-Typically it's a device that advertises a capability that doesn't work
-correctly.
+Roger that.
 
-> > > > > I think the pragmatic way to approach it is to (essentially)
-> > > > > apply the policy as BIOS defaults and allow overrides from
-> > > > > that.
-> > > >
-> > > > Do you mean that when enumerating a device (at boot-time or
-> > > > hot-add time), we would read the current ASPM config but not
-> > > > change it?  And users could use the sysfs knobs to
-> > > > enable/disable ASPM as desired?
-> > >
-> > > Yes.
-> > >
-> > Hot-added devices power up with ASPM disabled.  This policy would
-> > mean the user has to explicitly enable it, which doesn't seem
-> > practical to me.
->
-> Could we maybe have the hot added devices follow the policy of
-> the bridge they're connected to by default?
->
-> > > > That wouldn't solve the problem Kai-Heng is trying to solve.
-> > >
-> > > Alone it wouldn't; but if you treated the i225 PCIe device
-> > > connected to the system as a "quirk" to apply ASPM policy
-> > > from the parent device to this child device it could.
-> >
-> > I want quirks for BROKEN devices.  Quirks for working hardware is a
-> > maintenance nightmare.
->
-> If you follow my idea of hot added devices the policy follows
-> the parent would it work for the i225 PCIe device case?
-
-That doesn't *sound* really robust to me because even if the default
-config after hot-add works, the user can change things via sysfs, and
-any configuration we set it to should work as well.  If there are
-land-mines there, we need a quirk that prevents sysfs from running
-into it.
-
-Bjorn
+> > 
+> > diff --git a/include/uapi/linux/virtio_vsock.h b/include/uapi/linux/virtio_vsock.h
+> > index 64738838bee5..9c25f267bbc0 100644
+> > --- a/include/uapi/linux/virtio_vsock.h
+> > +++ b/include/uapi/linux/virtio_vsock.h
+> > @@ -40,6 +40,7 @@
+> > 
+> > /* The feature bitmap for virtio vsock */
+> > #define VIRTIO_VSOCK_F_SEQPACKET	1	/* SOCK_SEQPACKET supported */
+> > +#define VIRTIO_VSOCK_F_DGRAM		3	/* SOCK_DGRAM supported */
+> > 
+> > struct virtio_vsock_config {
+> > 	__le64 guest_cid;
+> > 
+> > -- 
+> > 2.30.2
+> > 
+> 
+> _______________________________________________
+> Virtualization mailing list
+> Virtualization@lists.linux-foundation.org
+> https://lists.linuxfoundation.org/mailman/listinfo/virtualization
