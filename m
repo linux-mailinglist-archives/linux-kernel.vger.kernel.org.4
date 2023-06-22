@@ -2,273 +2,258 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F704739584
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 04:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C22473958A
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 04:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbjFVC1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 22:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42430 "EHLO
+        id S230116AbjFVCgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 22:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjFVC1e (ORCPT
+        with ESMTP id S229542AbjFVCgb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 22:27:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4AC91A1;
-        Wed, 21 Jun 2023 19:27:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 025DD61724;
-        Thu, 22 Jun 2023 02:27:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57D76C433C8;
-        Thu, 22 Jun 2023 02:27:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687400851;
-        bh=wi1QN+X0A4k6VZUiD9sGaUcw+wP/IbFgFpzja7AlxNU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ND4F0QtuKNSyIvNg6K6lv0XSg/WCyfGtV2T/ZusEIhnFS7agDccx9NqPPxUJqcxRb
-         ulwiii0aoknsHIvPIP7DDx9c/6eNWws2KPXyfX1MOycyl9JKRWfsTQqpmmlR2g4vnu
-         isdy2mFjCh7fcaGIRPh7sD2/PYCUm+rWkg8M+MMfwqu656yLBoTGfg9DT/9/3oK4b2
-         pU4iY11Zf+kskXlxvkcm5fNXh+Yg0DSkz1Kee1R4sQDlqGsCE/AxxQvzn040US7tch
-         vZ3M1/CVIB4ih9c7/q0TlADzsKr1ysGZUm5BryUTsxvkh7Ibnj8/3MDsXSgESmKlxo
-         MciDOn6GsACIQ==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1a9acdddb20so126460fac.0;
-        Wed, 21 Jun 2023 19:27:31 -0700 (PDT)
-X-Gm-Message-State: AC+VfDyK2R/cRK6TYYKmK4G6Bif0yOCF0t7MgLKbJ41gAnziGY1yUZNM
-        dAdRRYtIugPVb3o+4MiScvvodLHLxYgVhuxxSQQ=
-X-Google-Smtp-Source: ACHHUZ7uqK58I8UdvuU6orqGHCMZcei2ru+VkR2hVlAJvnCRg6KnKNrH/r4CJjq4yvBJH43PbKAsLdE23OlWC8fAF4I=
-X-Received: by 2002:a05:6871:711:b0:1a6:98ca:4377 with SMTP id
- f17-20020a056871071100b001a698ca4377mr8224287oap.24.1687400850592; Wed, 21
- Jun 2023 19:27:30 -0700 (PDT)
+        Wed, 21 Jun 2023 22:36:31 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ADC1730
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 19:36:30 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5728df0a7d9so56920037b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 19:36:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687401389; x=1689993389;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=v95kJuIKZOvwX2VyzbcG9p4WcOSZqpPbckNEDTbMqbw=;
+        b=O3tP+byBHyqrVuzTTEu8WRLDc/8A9uAf+TdWk4s+4iRKfQ5KOSa7bvLkBzTYKr0W8M
+         j3sRCXur+WjZ9BeHD+FncbDp1prKZ/qXqo9vRO5qA8AQSnrPS9w22qXk+xnyoij9+QY4
+         Acm9ERBt0JMUlTv5p8Jp0yNYMVl5d341AvRtjPFDRxez8WAwHgXzS6SBOEkhSkDpkgzA
+         FicxTEqozjAq1pC+B+ZdlXfR0aFh6Inz+lQvgqOR+F9yGjspH8iPGFbJTwEd3pnnSvO5
+         lsJm1UV477OB7Dih1OhkfIqmAM0XwW9HFmiv+LGL2kzkOO0DnreoAdIjNdFX9CO4XaoS
+         SsqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687401389; x=1689993389;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v95kJuIKZOvwX2VyzbcG9p4WcOSZqpPbckNEDTbMqbw=;
+        b=EZ0mKFiGD8PjjvlV+KZDTmTotkfSx2iHjcL0Pki3wK5mSxS5NQw2ffeBneeaY0uxyJ
+         IVeHSyzoi4CkaoJt0BCgsuYPFX2vtSeI1/o1G87Bi7d5OLz3DIqslglAasgzFBT7fGdi
+         hNT533absie9UBwEUlpZlqtY88PvYKrH0HKcDb7VgbXRAWzV334Tx74nFzAt9VbaXgFy
+         2ZOnuY+l0Ff456h/lohV3sumjkpf5dbD3ZpNm4z3t6s011tYrmHQidR5+3/Oao0/IvfU
+         9w+k4rKoGGH00ZS1Gva8NmsQlKAUMnUT8Dxv/qBnEJZV4AgPiy2tR+PrfybFCJJAdwrz
+         2AWQ==
+X-Gm-Message-State: AC+VfDwNjuI1SXVxAFjzX2C5bObbOgdKstbpVpe5oO1/bqiUz6zU0K/c
+        sjiQ10QnXk+GtBug9aaqZrs8oA==
+X-Google-Smtp-Source: ACHHUZ7nNc0KOSzPxWDeH97+s3XtTQiSXAf5QSy+8GGNP+KxVnc2GWHN4WSyWChzR7EoY+E3ZvtVZQ==
+X-Received: by 2002:a0d:e6d3:0:b0:56d:ffa:f3b0 with SMTP id p202-20020a0de6d3000000b0056d0ffaf3b0mr14905560ywe.52.1687401389086;
+        Wed, 21 Jun 2023 19:36:29 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id e65-20020a0dc244000000b0056cffe97a11sm1564690ywd.13.2023.06.21.19.36.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 19:36:27 -0700 (PDT)
+Date:   Wed, 21 Jun 2023 19:36:11 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Jason Gunthorpe <jgg@ziepe.ca>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David Sc. Miller" <davem@davemloft.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Jann Horn <jannh@google.com>,
+        Vishal Moola <vishal.moola@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v2 05/12] powerpc: add pte_free_defer() for pgtables
+ sharing page
+In-Reply-To: <ZJI7xkXWmjrE1yY3@ziepe.ca>
+Message-ID: <c8284d0-91cb-b65e-4c95-bfeb627234f@google.com>
+References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com> <5cd9f442-61da-4c3d-eca-b7f44d22aa5f@google.com> <ZJGRa4zvsXfc43vB@ziepe.ca> <2ad8b6cf-692a-ff89-ecc-586c20c5e07f@google.com> <ZJI7xkXWmjrE1yY3@ziepe.ca>
 MIME-Version: 1.0
-References: <20230608142428.256985-1-masahiroy@kernel.org> <20230608142428.256985-4-masahiroy@kernel.org>
- <bb5048e7-5e8f-4391-a9a0-ff15b5384186@roeck-us.net>
-In-Reply-To: <bb5048e7-5e8f-4391-a9a0-ff15b5384186@roeck-us.net>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 22 Jun 2023 11:26:53 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQpgx5uYnQTb0Pu=uR=YPWkJX7P75p55Qva5okhRpaN_g@mail.gmail.com>
-Message-ID: <CAK7LNAQpgx5uYnQTb0Pu=uR=YPWkJX7P75p55Qva5okhRpaN_g@mail.gmail.com>
-Subject: Re: [PATCH v7 03/11] kbuild: generate KSYMTAB entries by modpost
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-um@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 1:15=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> =
-wrote:
->
-> On Thu, Jun 08, 2023 at 11:24:20PM +0900, Masahiro Yamada wrote:
-> > Commit 7b4537199a4a ("kbuild: link symbol CRCs at final link, removing
-> > CONFIG_MODULE_REL_CRCS") made modpost output CRCs in the same way
-> > whether the EXPORT_SYMBOL() is placed in *.c or *.S.
-> >
-> ...
->
-> > We can do this better now; modpost can selectively emit KSYMTAB entries
-> > that are really used by modules.
-> >
->
-> This patch results in
->
-> Building alpha:defconfig ... failed
-> --------------
-> Error log:
-> <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp]
-> WARNING: modpost: "saved_config" [vmlinux] is COMMON symbol
-> ERROR: modpost: vmlinux: page_is_ram: EXPORT_SYMBOL used for init symbol.=
- Remove __init or EXPORT_SYMBOL.
->
-> I don't know if other architectures are affected - linux-next is so broke=
-n
-> that it is difficult to find root causes for all the breakages.
+On Tue, 20 Jun 2023, Jason Gunthorpe wrote:
+> On Tue, Jun 20, 2023 at 12:54:25PM -0700, Hugh Dickins wrote:
+> > On Tue, 20 Jun 2023, Jason Gunthorpe wrote:
+> > > On Tue, Jun 20, 2023 at 12:47:54AM -0700, Hugh Dickins wrote:
+> > > > Add powerpc-specific pte_free_defer(), to call pte_free() via call_rcu().
+> > > > pte_free_defer() will be called inside khugepaged's retract_page_tables()
+> > > > loop, where allocating extra memory cannot be relied upon.  This precedes
+> > > > the generic version to avoid build breakage from incompatible pgtable_t.
+> > > > 
+> > > > This is awkward because the struct page contains only one rcu_head, but
+> > > > that page may be shared between PTE_FRAG_NR pagetables, each wanting to
+> > > > use the rcu_head at the same time: account concurrent deferrals with a
+> > > > heightened refcount, only the first making use of the rcu_head, but
+> > > > re-deferring if more deferrals arrived during its grace period.
+> > > 
+> > > You didn't answer my question why we can't just move the rcu to the
+> > > actual free page?
+> > 
+> > I thought that I had answered it, perhaps not to your satisfaction:
+> > 
+> > https://lore.kernel.org/linux-mm/9130acb-193-6fdd-f8df-75766e663978@google.com/
+> > 
+> > My conclusion then was:
+> > Not very good reasons: good enough, or can you supply a better patch?
+> 
+> Oh, I guess I didn't read that email as answering the question..
+> 
+> I was saying to make pte_fragment_free() unconditionally do the
+> RCU. It is the only thing that uses the page->rcu_head, and it means
+> PPC would double RCU the final free on the TLB path, but that is
+> probably OK for now. This means pte_free_defer() won't do anything
+> special on PPC as PPC will always RCU free these things, this address
+> the defer concern too, I think. Overall it is easier to reason about.
+> 
+> I looked at fixing the TLB stuff to avoid the double rcu but quickly
+> got scared that ppc was using a kmem_cache to allocate other page
+> table sizes so there is not a reliable struct page to get a rcu_head
+> from. This looks like the main challenge for ppc... We'd have to teach
+> the tlb code to not do its own RCU stuff for table levels that the
+> arch is already RCU freeing - and that won't get us to full RCU
+> freeing on PPC.
 
+Sorry for being so dense all along: yes, your way is unquestionably
+much better than mine.  I guess I must have been obsessive about
+keeping pte_free_defer()+pte_free_now() "on the outside", as they
+were on x86, and never perceived how much easier it is with a small
+tweak inside pte_fragment_free(); and never reconsidered it since.
 
-Thanks for the comprehensive build tests.
+But I'm not so keen on the double-RCU, extending this call_rcu() to
+all the normal cases, while still leaving the TLB batching in place:
+here is the replacement patch I'd prefer us to go forward with now.
 
-If you compare the build log, you will see
-what has happened.
+Many thanks!
 
+[PATCH v3 05/12] powerpc: add pte_free_defer() for pgtables sharing page
 
+Add powerpc-specific pte_free_defer(), to free table page via call_rcu().
+pte_free_defer() will be called inside khugepaged's retract_page_tables()
+loop, where allocating extra memory cannot be relied upon.  This precedes
+the generic version to avoid build breakage from incompatible pgtable_t.
 
+This is awkward because the struct page contains only one rcu_head, but
+that page may be shared between PTE_FRAG_NR pagetables, each wanting to
+use the rcu_head at the same time.  But powerpc never reuses a fragment
+once it has been freed: so mark the page Active in pte_free_defer(),
+before calling pte_fragment_free() directly; and there call_rcu() to
+pte_free_now() when last fragment is freed and the page is PageActive.
 
-In Linus' tree (without this patch),
+Suggested-by: Jason Gunthorpe <jgg@ziepe.ca>
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+ arch/powerpc/include/asm/pgalloc.h |  4 ++++
+ arch/powerpc/mm/pgtable-frag.c     | 29 ++++++++++++++++++++++++++---
+ 2 files changed, 30 insertions(+), 3 deletions(-)
 
-  MODPOST Module.symvers
-WARNING: modpost: "saved_config" [vmlinux] is COMMON symbol
-WARNING: modpost: vmlinux.o: EXPORT_SYMBOL used for init/exit symbol:
-page_is_ram (section: .init.text)
-
-
-
-In linux-next (with this patch),
-
-
-  MODPOST Module.symvers
-WARNING: modpost: "saved_config" [vmlinux] is COMMON symbol
-ERROR: modpost: vmlinux: page_is_ram: EXPORT_SYMBOL used for init
-symbol. Remove __init or EXPORT_SYMBOL.
-
-
-
-
-
-The change is obvious - I just turned the combination
-of __init and EXPORT_SYMBOL into an error.
-
-But, it seemed too early to do this.
-
-I will hold it back as a warning for now, as follows:
-
-
-
-diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index bdf4244da993..412115a8202a 100644
---- a/scripts/mod/modpost.c
-+++ b/scripts/mod/modpost.c
-@@ -1239,10 +1239,10 @@ static void check_export_symbol(struct module
-*mod, struct elf_info *elf,
-        s->is_func =3D (ELF_ST_TYPE(sym->st_info) =3D=3D STT_FUNC);
-
-        if (match(secname, PATTERNS(INIT_SECTIONS)))
--               error("%s: %s: EXPORT_SYMBOL used for init symbol.
-Remove __init or EXPORT_SYMBOL.\n",
-+               warn("%s: %s: EXPORT_SYMBOL used for init symbol.
-Remove __init or EXPORT_SYMBOL.\n",
-                      mod->name, name);
-        else if (match(secname, PATTERNS(EXIT_SECTIONS)))
--               error("%s: %s: EXPORT_SYMBOL used for exit symbol.
-Remove __exit or EXPORT_SYMBOL.\n",
-+               warn("%s: %s: EXPORT_SYMBOL used for exit symbol.
-Remove __exit or EXPORT_SYMBOL.\n",
-                      mod->name, name);
+diff --git a/arch/powerpc/include/asm/pgalloc.h b/arch/powerpc/include/asm/pgalloc.h
+index 3360cad78ace..3a971e2a8c73 100644
+--- a/arch/powerpc/include/asm/pgalloc.h
++++ b/arch/powerpc/include/asm/pgalloc.h
+@@ -45,6 +45,10 @@ static inline void pte_free(struct mm_struct *mm, pgtable_t ptepage)
+ 	pte_fragment_free((unsigned long *)ptepage, 0);
  }
-
-
-
-
-
-
-Fixing the alpha code is trivial.
-
-
-diff --git a/arch/alpha/kernel/setup.c b/arch/alpha/kernel/setup.c
-index 33bf3a627002..22131e2a9f57 100644
---- a/arch/alpha/kernel/setup.c
-+++ b/arch/alpha/kernel/setup.c
-@@ -385,7 +385,7 @@ setup_memory(void *kernel_end)
- #endif /* CONFIG_BLK_DEV_INITRD */
+ 
++/* arch use pte_free_defer() implementation in arch/powerpc/mm/pgtable-frag.c */
++#define pte_free_defer pte_free_defer
++void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable);
++
+ /*
+  * Functions that deal with pagetables that could be at any level of
+  * the table need to be passed an "index_size" so they know how to
+diff --git a/arch/powerpc/mm/pgtable-frag.c b/arch/powerpc/mm/pgtable-frag.c
+index 20652daa1d7e..0c6b68130025 100644
+--- a/arch/powerpc/mm/pgtable-frag.c
++++ b/arch/powerpc/mm/pgtable-frag.c
+@@ -106,6 +106,15 @@ pte_t *pte_fragment_alloc(struct mm_struct *mm, int kernel)
+ 	return __alloc_for_ptecache(mm, kernel);
  }
-
--int __init
-+int
- page_is_ram(unsigned long pfn)
+ 
++static void pte_free_now(struct rcu_head *head)
++{
++	struct page *page;
++
++	page = container_of(head, struct page, rcu_head);
++	pgtable_pte_page_dtor(page);
++	__free_page(page);
++}
++
+ void pte_fragment_free(unsigned long *table, int kernel)
  {
-        struct memclust_struct * cluster;
+ 	struct page *page = virt_to_page(table);
+@@ -115,8 +124,22 @@ void pte_fragment_free(unsigned long *table, int kernel)
+ 
+ 	BUG_ON(atomic_read(&page->pt_frag_refcount) <= 0);
+ 	if (atomic_dec_and_test(&page->pt_frag_refcount)) {
+-		if (!kernel)
+-			pgtable_pte_page_dtor(page);
+-		__free_page(page);
++		if (kernel)
++			__free_page(page);
++		else if (TestClearPageActive(page))
++			call_rcu(&page->rcu_head, pte_free_now);
++		else
++			pte_free_now(&page->rcu_head);
+ 	}
+ }
++
++#ifdef CONFIG_TRANSPARENT_HUGEPAGE
++void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable)
++{
++	struct page *page;
++
++	page = virt_to_page(pgtable);
++	SetPageActive(page);
++	pte_fragment_free((unsigned long *)pgtable, 0);
++}
++#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+-- 
+2.35.3
 
-
-
-
-
-
-
-I do not know much about the warning for "saved_config".
-
-
-
-__attribute((common)) was added in the following commit:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commit/=
-?id=3D3c7940961fbf9f252e20f9c455f2fe63f273294c
-
-
-It was more than 20 years ago, and there is
-no commit description.
-I do not know the intention of __attribute((common)).
-
-I hope the maintainers will fix the warnings,
-but I do not know if it is likely to happen.
-
-MAINTAINERS says "Odd Fixes"
-
-If you find a build regression, please let me know.
-So far, I did not get new reports from 0day bot.
-
-
-Thanks.
-
-
-
-
-> Guenter
->
-> ---
-> Bisect log:
->
-> # bad: [15e71592dbae49a674429c618a10401d7f992ac3] Add linux-next specific=
- files for 20230621
-> # good: [45a3e24f65e90a047bef86f927ebdc4c710edaa1] Linux 6.4-rc7
-> git bisect start 'HEAD' 'v6.4-rc7'
-> # bad: [e867e67cd55ae460c860ffd896c7fc96add2821c] Merge branch 'master' o=
-f git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
-> git bisect bad e867e67cd55ae460c860ffd896c7fc96add2821c
-> # bad: [57b289d5b1005a9c39d6d6567e0ef6115bd59cea] Merge branch 'for-next'=
- of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git
-> git bisect bad 57b289d5b1005a9c39d6d6567e0ef6115bd59cea
-> # bad: [dc6399fc9ae6d2530fc38fb3ae96bcc8393bd66f] Merge branch 'for-next/=
-perf' of git://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git
-> git bisect bad dc6399fc9ae6d2530fc38fb3ae96bcc8393bd66f
-> # good: [6d366ba598334a0457d917a7bf38efd118c5b7be] Merge branch 'mm-stabl=
-e' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-> git bisect good 6d366ba598334a0457d917a7bf38efd118c5b7be
-> # good: [82fe2e45cdb00de4fa648050ae33bdadf9b3294a] perf pmus: Check if we=
- can encode the PMU number in perf_event_attr.type
-> git bisect good 82fe2e45cdb00de4fa648050ae33bdadf9b3294a
-> # bad: [d2fa756910f88c2f5871775483744407cbf67933] Merge branch 'for-next'=
- of git://git.infradead.org/users/hch/dma-mapping.git
-> git bisect bad d2fa756910f88c2f5871775483744407cbf67933
-> # good: [1b990bc8edc396a37a3ff1a43f7c329c361ee07c] Merge branch 'mm-nonmm=
--unstable' into mm-everything
-> git bisect good 1b990bc8edc396a37a3ff1a43f7c329c361ee07c
-> # good: [cff6e7f50bd315e5b39c4e46c704ac587ceb965f] kbuild: Add CLANG_FLAG=
-S to as-instr
-> git bisect good cff6e7f50bd315e5b39c4e46c704ac587ceb965f
-> # bad: [8f3847e175a0044e2212fef772e7fa912270cd6d] ia64,export.h: replace =
-EXPORT_DATA_SYMBOL* with EXPORT_SYMBOL*
-> git bisect bad 8f3847e175a0044e2212fef772e7fa912270cd6d
-> # good: [3a3f1e573a105328a2cca45a7cfbebabbf5e3192] modpost: fix off by on=
-e in is_executable_section()
-> git bisect good 3a3f1e573a105328a2cca45a7cfbebabbf5e3192
-> # good: [92e74fb6e6196d642505ae2b74a8e327202afef9] scripts/kallsyms: cons=
-tify long_options
-> git bisect good 92e74fb6e6196d642505ae2b74a8e327202afef9
-> # good: [92e2921eeafdfca9acd9b83f07d2b7ca099bac24] ARC: define ASM_NL and=
- __ALIGN(_STR) outside #ifdef __ASSEMBLY__ guard
-> git bisect good 92e2921eeafdfca9acd9b83f07d2b7ca099bac24
-> # bad: [bb2aa9a94b41b883037a56709d995c269204ade0] kbuild: generate KSYMTA=
-B entries by modpost
-> git bisect bad bb2aa9a94b41b883037a56709d995c269204ade0
-> # good: [94d6cb68124b7a63f24fcc345795ba5f9a27e694] modpost: pass struct m=
-odule pointer to check_section_mismatch()
-> git bisect good 94d6cb68124b7a63f24fcc345795ba5f9a27e694
-> # first bad commit: [bb2aa9a94b41b883037a56709d995c269204ade0] kbuild: ge=
-nerate KSYMTAB entries by modpost
-
-
-
---=20
-Best Regards
-Masahiro Yamada
