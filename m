@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14641739D66
+	by mail.lfdr.de (Postfix) with ESMTP id BFFCF739D68
 	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232411AbjFVJei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 05:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
+        id S232421AbjFVJem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 05:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232068AbjFVJdl (ORCPT
+        with ESMTP id S232294AbjFVJdn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 05:33:41 -0400
+        Thu, 22 Jun 2023 05:33:43 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9A92697;
-        Thu, 22 Jun 2023 02:28:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9AC269A;
+        Thu, 22 Jun 2023 02:28:01 -0700 (PDT)
 Received: from IcarusMOD.eternityproject.eu (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8FDE06607075;
-        Thu, 22 Jun 2023 10:27:57 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D40B46607076;
+        Thu, 22 Jun 2023 10:27:58 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687426078;
-        bh=cjwGV4PBGa2G0fyxMUorKbKCregA7+FHFAZQsfL0PRY=;
+        s=mail; t=1687426079;
+        bh=6+3tbpupafFXA1rZOX62kA5wZpU6l7nAzHW/LEoVbSo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m37hezI9O+FIW53mDrj1fpvmgKyTxgIcCC1DpCNs+GjhhVfb9UFw6hqoRzc2LXMPM
-         Qkbk2d6MFxwk+xySVz2XHuURvTzHhfepVbWdVnG1LKvnOgHxuZa2XVi04qbn3yFSCw
-         ATIyD6sh7+zFrrdRKjGqRHKWQSZv5PRjFYf4V1r/yizDBMFJiuSwsL6YG8HfUsBrE1
-         f0QYSj1rl+PSL08dCY3htW3h2Z+LpQQVOzyMyZNUSUz5EZegHDwS7dHgaRr0NfCeGi
-         T3bVFrUlnA19w8/Z7YyRUod2UZpQG3B5dIA4XyKMt1RD1F8Mc191qdn8UmeYSyKNkG
-         wsQImsYA5NYmQ==
+        b=YV5h54SSiaMStnZD8ND7+jqH4UJmBv5qedqLEP4ElMGJuf5tXM9PL1bEg1ZPnWF3N
+         zKIJKRBxV8dY/apgMYDjkZ+tVwscI8IXbd02AEDPrhzHNUblBYQchg8xzWRxcmO6u/
+         9MPh5GCiYyrCl7IPgwiM4LZnWL3TyLfV//cqd6ugDQI107ABq/5u/02BguVqu9QXyY
+         PEF8qYu/U1iAhdrf/HKXdLD/CRUTQU1saehIf+OBS3TV7IXNm3TaK7D3F/R2chkQXs
+         2C7bRmdp3GC6b/M7tqhVagMKDOB8U5nnrehQnSmZ8pVpCHC/hXEt3vv7lTZ4+LRTB3
+         TBLvvh+LtKe0g==
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
 To:     agross@kernel.org
@@ -43,11 +43,10 @@ Cc:     andersson@kernel.org, luca@z3ntu.xyz, konrad.dybcio@linaro.org,
         iommu@lists.linux.dev, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Subject: [PATCH v5 2/6] iommu/qcom: Use the asid read from device-tree if specified
-Date:   Thu, 22 Jun 2023 11:27:38 +0200
-Message-Id: <20230622092742.74819-3-angelogioacchino.delregno@collabora.com>
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com
+Subject: [PATCH v5 3/6] iommu/qcom: Disable and reset context bank before programming
+Date:   Thu, 22 Jun 2023 11:27:39 +0200
+Message-Id: <20230622092742.74819-4-angelogioacchino.delregno@collabora.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230622092742.74819-1-angelogioacchino.delregno@collabora.com>
 References: <20230622092742.74819-1-angelogioacchino.delregno@collabora.com>
@@ -62,72 +61,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As specified in this driver, the context banks are 0x1000 apart but
-on some SoCs the context number does not necessarily match this
-logic, hence we end up using the wrong ASID: keeping in mind that
-this IOMMU implementation relies heavily on SCM (TZ) calls, it is
-mandatory that we communicate the right context number.
+Writing	the new	TTBRs, TCRs and MAIRs on a previously enabled
+context bank may trigger a context fault, resulting in firmware
+driven AP resets: change the domain initialization programming
+sequence to disable the context bank(s) and to also clear the
+related fault address (CB_FAR) and fault status (CB_FSR)
+registers before writing new values to TTBR0/1, TCR/TCR2, MAIR0/1.
 
-Since this is all about how context banks are mapped in firmware,
-which may be board dependent (as a different firmware version may
-eventually change the expected context bank numbers), introduce a
-new property "qcom,ctx-asid": when found, the ASID will be forced
-as read from the devicetree.
-
-When "qcom,ctx-asid" is not found, this driver retains the previous
-behavior as to avoid breaking older devicetrees or systems that do
-not require forcing ASID numbers.
-
-Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
-[Marijn: Rebased over next-20221111]
+Fixes: 0ae349a0f33f ("iommu/qcom: Add qcom_iommu")
 Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- drivers/iommu/arm/arm-smmu/qcom_iommu.c | 18 +++++++++++++++---
- 1 file changed, 15 insertions(+), 3 deletions(-)
+ drivers/iommu/arm/arm-smmu/qcom_iommu.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
 diff --git a/drivers/iommu/arm/arm-smmu/qcom_iommu.c b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-index a503ed758ec3..8face57c4180 100644
+index 8face57c4180..f1bd7c035db8 100644
 --- a/drivers/iommu/arm/arm-smmu/qcom_iommu.c
 +++ b/drivers/iommu/arm/arm-smmu/qcom_iommu.c
-@@ -531,7 +531,8 @@ static int qcom_iommu_of_xlate(struct device *dev, struct of_phandle_args *args)
- 	 * index into qcom_iommu->ctxs:
- 	 */
- 	if (WARN_ON(asid < 1) ||
--	    WARN_ON(asid > qcom_iommu->num_ctxs)) {
-+	    WARN_ON(asid > qcom_iommu->num_ctxs) ||
-+	    WARN_ON(qcom_iommu->ctxs[asid - 1] == NULL)) {
- 		put_device(&iommu_pdev->dev);
- 		return -EINVAL;
- 	}
-@@ -617,7 +618,8 @@ static int qcom_iommu_sec_ptbl_init(struct device *dev)
+@@ -273,6 +273,13 @@ static int qcom_iommu_init_domain(struct iommu_domain *domain,
+ 			ctx->secure_init = true;
+ 		}
  
- static int get_asid(const struct device_node *np)
- {
--	u32 reg;
-+	u32 reg, val;
-+	int asid;
- 
- 	/* read the "reg" property directly to get the relative address
- 	 * of the context bank, and calculate the asid from that:
-@@ -625,7 +627,17 @@ static int get_asid(const struct device_node *np)
- 	if (of_property_read_u32_index(np, "reg", 0, &reg))
- 		return -ENODEV;
- 
--	return reg / 0x1000;      /* context banks are 0x1000 apart */
-+	/*
-+	 * Context banks are 0x1000 apart but, in some cases, the ASID
-+	 * number doesn't match to this logic and needs to be passed
-+	 * from the DT configuration explicitly.
-+	 */
-+	if (!of_property_read_u32(np, "qcom,ctx-asid", &val))
-+		asid = val;
-+	else
-+		asid = reg / 0x1000;
++		/* Disable context bank before programming */
++		iommu_writel(ctx, ARM_SMMU_CB_SCTLR, 0);
 +
-+	return asid;
- }
- 
- static int qcom_iommu_ctx_probe(struct platform_device *pdev)
++		/* Clear context bank fault address fault status registers */
++		iommu_writel(ctx, ARM_SMMU_CB_FAR, 0);
++		iommu_writel(ctx, ARM_SMMU_CB_FSR, ARM_SMMU_FSR_FAULT);
++
+ 		/* TTBRs */
+ 		iommu_writeq(ctx, ARM_SMMU_CB_TTBR0,
+ 				pgtbl_cfg.arm_lpae_s1_cfg.ttbr |
 -- 
 2.40.1
 
