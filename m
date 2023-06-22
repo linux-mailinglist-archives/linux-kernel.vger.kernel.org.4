@@ -2,115 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E88739E87
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 12:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D99F0739E8C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 12:27:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbjFVK0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 06:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
+        id S231180AbjFVK1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 06:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjFVK0L (ORCPT
+        with ESMTP id S229504AbjFVK1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 06:26:11 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A096107;
-        Thu, 22 Jun 2023 03:26:10 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-987c932883bso848763266b.0;
-        Thu, 22 Jun 2023 03:26:10 -0700 (PDT)
+        Thu, 22 Jun 2023 06:27:40 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21F5D3;
+        Thu, 22 Jun 2023 03:27:39 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f9c532f9e3so15950755e9.1;
+        Thu, 22 Jun 2023 03:27:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687429568; x=1690021568;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5akIJbyUW4zT8U4Rlaz6Os1Xyv6VeF2w/hYIIjFJCRQ=;
-        b=WcG4sojjRL/I7b4d0UOTcz8bFofYvlIhpg4/JJLacgbhtGF7PjFll3wFdTHvl6m163
-         yoe5nO0s2XtK/zkcszsD4upJvjPjurJ+bSeijiKnIFXzabjoAN5CargsyvB8EdjSSpkL
-         ePQlwfP6Bzb1v6E48+kNlhbVsyVtS5+w4V54wBz7nyL0yPqlBoMRh3BIoaD2QsIR+6vM
-         PppoIhNgES+RErrY96S2vfENusNtlrki45uApsapqAQ7LV5PegXjC/Q29rHpVksqEbPO
-         9JDh0KCk63XC5DpIcecymEtD5L4erioGLJfM4pPDzJrorcoWWN64MvKc7edneoyQIt7k
-         Mklw==
+        d=gmail.com; s=20221208; t=1687429658; x=1690021658;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HNBLuqw9En2G21h+WbiEp4rYwK/zPxLAjR8JVifNIMU=;
+        b=Gm9kFmFGSjUIWl+mD1+q9YGb2KNmJsxCR97+KEn+BXYSYhNLLHcK8INUrfhmHfH3Rg
+         tLboBrH00ryT8rMmIrLFgCL8u8mPN8yvpb5yK2rE+BS/D3HDa10flbU7V0hMadCuz+LY
+         86hfggpQ7CofYNlniE3OEaDQ13txw8rqII71kvNN+EQl5ewAVeX1xiDLLAQ6DKfeMcYX
+         cG8q7305iU9EzNby0MHEdDIKX+rglW+nQlbQzjcaa3LJQ0oj2C2TRAvXjntk3X0Z+F4R
+         M9qvfeKXdYsdBUCWccJ4Emfhnw1RjmZkfJRXxrA4I4/AW6KDyI2Gh5D6f9AenFlwQrsI
+         XZEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687429568; x=1690021568;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5akIJbyUW4zT8U4Rlaz6Os1Xyv6VeF2w/hYIIjFJCRQ=;
-        b=KR4EUV7rmaYJtAHjuLLtx1UfckTTlQ96RWzlO+V8ycYJizhjzVksh3nm0iNzFwo2Y6
-         qHdU7Z3LYRSQCD4hLT7Zc4ikWONBM676QzRl+iiBlgYVrPmz1Eb9qehKtj4DkSZnBtEG
-         ayddF94xe0uXrikFibbanTWBxYUQePXQ1/F4bzM9dNSEh5SESegE751CHSHJK0cVYqf8
-         EBe4KGadCT6KC1ZQx18iuqzmpc3K6wXMeyAL5LyIuUG3znBmec2atEsRmQNpXT8UENFC
-         SeMoYrwhDVmB7rob8bo/f1zk0jjo2/EStigrb+Cur3OFBRDgSVMa5pwb7vSuP5H1Sdh4
-         N80Q==
-X-Gm-Message-State: AC+VfDyh8zTeGva+jvWdCAgw3aQsDLsmoJPHpHbTilOpXrH31MTX2q02
-        GJPqTWhDdC/5T6AlM2O4ByU=
-X-Google-Smtp-Source: ACHHUZ7gdj3MTdlhw6Kh64TMH4jIz5OyIr1Z8j7MvYu956Njq0HYYQKJnc/9pxZlkUwjWi70EP0xpA==
-X-Received: by 2002:a17:906:ef0b:b0:97a:e0c0:2f91 with SMTP id f11-20020a170906ef0b00b0097ae0c02f91mr17256008ejs.8.1687429568283;
-        Thu, 22 Jun 2023 03:26:08 -0700 (PDT)
-Received: from PCBABN.skidata.net ([91.230.2.244])
-        by smtp.gmail.com with ESMTPSA id f4-20020a170906c08400b009788d51e4b9sm4484359ejz.130.2023.06.22.03.26.07
+        d=1e100.net; s=20221208; t=1687429658; x=1690021658;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HNBLuqw9En2G21h+WbiEp4rYwK/zPxLAjR8JVifNIMU=;
+        b=cocVO/oB/NfRy5Y0m9gldHyI18KCoNM960S/XZG3WZw//AqecIt9Nk0ftdwhN7ioxA
+         d/EvjzYkqWTEZ9sku/K1CrVVqcQ4IuIJ7LKIAEHySp8MVCrBE0+n2/fMVnmcPCydk4Ve
+         R9ENRx+BqcMC2vn4TyOuqPhfyPH3gkuqJ7G+L+5aYY5hz3cgtD3/LQkQyhTK2FnCFlAO
+         gzyc3csRlXgOLduaiQkC4NMsEJhTr33daBKvSRUfe1l/3xM6mTYEoVTGphWyKFJCljj4
+         EIFVq9ImPdJzw62/i0vz4+7aqBHtPbpszH8oCEmD8/4XmsCpfzlWUbHOTV9eY8jyD+o0
+         99xA==
+X-Gm-Message-State: AC+VfDw8RVSXO6BPazs42xgtExBGE4b38ksP+HTBeibrOPn1dGGyvapv
+        vh+Kzv7ZvTpgS+FullhgJVM=
+X-Google-Smtp-Source: ACHHUZ6WOZ9956VMYMFA7ZWmAzrRmUqxfnLfKFFLp8sK1aAZazFPzHyA/4NZFbclQzz8mZoSS/0DDg==
+X-Received: by 2002:a05:600c:3794:b0:3f9:b30f:455f with SMTP id o20-20020a05600c379400b003f9b30f455fmr7658754wmr.9.1687429658218;
+        Thu, 22 Jun 2023 03:27:38 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id l17-20020a05600012d100b002c71b4d476asm6640003wrx.106.2023.06.22.03.27.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 03:26:08 -0700 (PDT)
-From:   Benjamin Bara <bbara93@gmail.com>
-To:     lkp@intel.com
-Cc:     alexander.stein@ew.tq-group.com, bbara93@gmail.com,
-        benjamin.bara@skidata.com, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, gregkh@linuxfoundation.org,
-        krzk@kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, mka@chromium.org,
-        oe-kbuild-all@lists.linux.dev, robh+dt@kernel.org
-Subject: Re: [PATCH v5 1/3] usb: misc: onboard-hub: support multiple power supplies
-Date:   Thu, 22 Jun 2023 12:26:01 +0200
-Message-Id: <20230622102601.2244054-1-bbara93@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <202306221742.xnLvAlnW-lkp@intel.com>
-References: <202306221742.xnLvAlnW-lkp@intel.com>
+        Thu, 22 Jun 2023 03:27:37 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        ocfs2-devel@oss.oracle.com
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] ocfs2: remove redundant assignment to variable bit_off
+Date:   Thu, 22 Jun 2023 11:27:36 +0100
+Message-Id: <20230622102736.2831126-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 22 Jun 2023 at 11:29, kernel test robot <lkp@intel.com> wrote:
->
-> Hi Benjamin,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on 45a3e24f65e90a047bef86f927ebdc4c710edaa1]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Bara/usb-misc-onboard-hub-support-multiple-power-supplies/20230622-161859
-> base:   45a3e24f65e90a047bef86f927ebdc4c710edaa1
-> patch link:    https://lore.kernel.org/r/20230620-hx3-v5-1-319c9c4c846f%40skidata.com
-> patch subject: [PATCH v5 1/3] usb: misc: onboard-hub: support multiple power supplies
-> config: alpha-allyesconfig (https://download.01.org/0day-ci/archive/20230622/202306221742.xnLvAlnW-lkp@intel.com/config)
-> compiler: alpha-linux-gcc (GCC) 12.3.0
-> reproduce: (https://download.01.org/0day-ci/archive/20230622/202306221742.xnLvAlnW-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202306221742.xnLvAlnW-lkp@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
->    drivers/usb/misc/onboard_usb_hub.c: In function 'onboard_hub_probe':
-> >> drivers/usb/misc/onboard_usb_hub.c:262:58: warning: format '%d' expects argument of type 'int', but argument 4 has type 'long unsigned int' [-Wformat=]
->      262 |                 return dev_err_probe(dev, -EINVAL, "max %d supplies supported!\n",
->          |                                                         ~^
->          |                                                          |
->          |                                                          int
->          |                                                         %ld
+Variable bit_off is being assigned a value that is never read, it is
+being re-assigned a new value in the following while loop. Remove the
+assignment. Cleans up clang scan build warning:
 
-Thanks Mr. Robot, seems like I forgot to compile with Werr :/
-I will wait for other feedback and fix this in the next round.
+fs/ocfs2/localalloc.c:976:18: warning: Although the value stored to
+'bit_off' is used in the enclosing expression, the value is never
+actually read from 'bit_off' [deadcode.DeadStores]
 
-Sorry for that...
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ fs/ocfs2/localalloc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-best regards,
-Benjamin
+diff --git a/fs/ocfs2/localalloc.c b/fs/ocfs2/localalloc.c
+index c4426d12a2ad..c803c10dd97e 100644
+--- a/fs/ocfs2/localalloc.c
++++ b/fs/ocfs2/localalloc.c
+@@ -973,7 +973,7 @@ static int ocfs2_sync_local_to_main(struct ocfs2_super *osb,
+ 	la_start_blk = ocfs2_clusters_to_blocks(osb->sb,
+ 						le32_to_cpu(la->la_bm_off));
+ 	bitmap = la->la_bitmap;
+-	start = count = bit_off = 0;
++	start = count = 0;
+ 	left = le32_to_cpu(alloc->id1.bitmap1.i_total);
+ 
+ 	while ((bit_off = ocfs2_find_next_zero_bit(bitmap, left, start))
+-- 
+2.39.2
+
