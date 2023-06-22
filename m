@@ -2,57 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE1673A628
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 18:34:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 122E073A626
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 18:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231176AbjFVQen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 12:34:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33970 "EHLO
+        id S231199AbjFVQeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 12:34:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbjFVQeT (ORCPT
+        with ESMTP id S230270AbjFVQeH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 12:34:19 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16CBD1BD8
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 09:34:18 -0700 (PDT)
-Received: from [127.0.0.1] ([73.231.166.163])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 35MGXcO02980495
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Thu, 22 Jun 2023 09:33:38 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 35MGXcO02980495
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2023061001; t=1687451619;
-        bh=V/krA/FiwLB04skP64ycol5Kjyh+0K7zIpQefk1QiZs=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=EWOxaldq07Pt6TwvXZON8Dpx2IybTpBkVqHOdCQqAcQfBsoSaGybQxMizhtQVztAG
-         uw07hug8x8XN8mPlWt/El16C0AfjosOEgDQkiK1L3EYd2TTWAPwtQ5djT8MF0Wp+6G
-         evS551sSjxCMCPZ12ZGGnCKivqbqh9QOpTpi9mK3JYOoXkKlvB40mko8PXutveDi+l
-         bTOw+KuwuGhPYl3O1sMvMQXRzDEBNyFjXRt+LMY7o2vHnZU4LjC8X+3miNkRVNqF0b
-         kJ8JqTqdCOHgSbXoV8LGqogmDd+l3pc3YNp954WivP968IJMncts9IhPozT5auffV5
-         e2MS8NMT4eOVQ==
-Date:   Thu, 22 Jun 2023 09:33:36 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Brian Gerst <brgerst@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>, xin3.li@Intel.com
-CC:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Sami Tolvanen <samitolvanen@google.com>,
-        alyssa.milburn@linux.intel.com, keescook@chromium.org,
-        jpoimboe@kernel.org, joao@overdrivepizza.com,
-        tim.c.chen@linux.intel.com
-Subject: Re: [PATCH 2/2] x86: Rewrite ret_from_fork() in C
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAMzpN2gpT-TN8Ffbhd1Frw3Yui=JMbW6jnELVQ6GKbY_+5=ctg@mail.gmail.com>
-References: <20230622120750.5549-1-brgerst@gmail.com> <20230622120750.5549-3-brgerst@gmail.com> <20230622132904.GR4253@hirez.programming.kicks-ass.net> <CAMzpN2gpT-TN8Ffbhd1Frw3Yui=JMbW6jnELVQ6GKbY_+5=ctg@mail.gmail.com>
-Message-ID: <A3B8E321-A218-4B4A-BE05-F6FE15E34D7F@zytor.com>
+        Thu, 22 Jun 2023 12:34:07 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E0A1FC0;
+        Thu, 22 Jun 2023 09:34:04 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 35MBoO5J022543;
+        Thu, 22 Jun 2023 09:33:45 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=628f++TG59QTOfc6GmJSe8uaJvcukYTTZOE4wtUfn0A=;
+ b=LP6zgj2K9DCLkVuN0o3h7v20Li3SOaYY566q0Fx0CotLhO+ZGgpaKZUXciYHA70JUKVx
+ iiEXFwqMqFxub+W+/32xKbiijYvFP2ijnXCMK6c8knYbNoMwk+ivw8ClWOs7RtbX4RYK
+ YcrUzK06Iw1x/38nkMdw8xI97LAOsOVmzV7gMX2ZOk1I5H2UB3gYTbC2/o+08UkIKVx/
+ 9t9vSKb+RoHdtSBoY2x0PZGGrfJesjXfqWzMrnFNz1UzYx3OY+XKr9xqTRjazHBWEcgG
+ UPm8hyonLK9GnzGAHwkC8YV2597TmFoFp8S6LSwZCisRsJCssQlMU53E9dWc04tTmfA7 Xg== 
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2103.outbound.protection.outlook.com [104.47.58.103])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3rbnmp8b04-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 09:33:45 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lHm308RP2pTtevhW/KI60d3t+xDaOW4K4pmTfcBANMckdWGxQ5BAzz4nuKSDT29Fh4i04S6bWSRBKOfR2raB5c/oYEOIgX/Jn7/W4O3F86/KNR1gZKmamZFFCapuJMYt4QzkGW4A4/FbzqkxyeUfiHMV7NGMIioG9eLLhFuLRgnDFz7URqkLG6r8bmMH2OcLkouzKfytiNKQWhmBJ2j31GTfM5GcRNnkFXspJTFUCd3wZuA+Uvmwoz+cWq8JunZTMwXH2WxR0O9dupvVxtsgu4eazP+2eMK12e96C6DVMb3Ot2cJ6nk7fk18qrKsi+jqyT0hDrYrYfJE4xWDIO66hg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=628f++TG59QTOfc6GmJSe8uaJvcukYTTZOE4wtUfn0A=;
+ b=bJWGyk2Ph8U8X2Mho27fCPl1tLSrtpCug6l42z97tkwjrBOQGqcvi+xWdQbrYY4J3oVwhfI0CDSXIZmXjY6vMU8LDnWGOi5YqvOCTu4o6kiuwfQe1P7k9NBRZH+0zyGsq73tN9ySiFmRKDtO+jw9Mo6Xjm8AGzjtRjg8I9mQPqhnt0XidOkytQ6Scw2W2pFxkw6+LAmUZ1xzgXP1g5K7UYZeUKAty53EKFtPOdfPIZIQqdXxCy9tkhyBcF5aPfpJdRGG5w7jYZh5Jy6tOGyZ8Ws1VPWS9FQMgsALQh10g/7pTT0JUjPR14cKKaFQZOcmq6qi5AJBRCVvFjpfvgnSFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by SA3PR15MB6099.namprd15.prod.outlook.com (2603:10b6:806:302::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.24; Thu, 22 Jun
+ 2023 16:33:42 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::428f:acec:2c1f:c812]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::428f:acec:2c1f:c812%7]) with mapi id 15.20.6521.024; Thu, 22 Jun 2023
+ 16:33:42 +0000
+Message-ID: <0529b858-b8aa-300b-99d9-54c158e71d0a@meta.com>
+Date:   Thu, 22 Jun 2023 09:33:38 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.12.0
+Subject: Re: [PATCH bpf-next] bpf, docs: BPF Iterator Document
+Content-Language: en-US
+To:     Anton Protopopov <aspsk@isovalent.com>, bpf@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Vernet <void@manifault.com>,
+        Sreevani Sreejith <psreep@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>
+References: <20230622095407.1024053-1-aspsk@isovalent.com>
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <20230622095407.1024053-1-aspsk@isovalent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0212.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c1::7) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|SA3PR15MB6099:EE_
+X-MS-Office365-Filtering-Correlation-Id: 43e6835b-d1ff-4e9f-ae29-08db733e70f0
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mf9nsN1i4/+UDO0sanaomP6oCee4wybA/WIw5gVwk4K3F7tDJ1qmVy+PTix81tNcdVIUA52KFpmBZ46+jA/giizMDbjd5LmtH6ROr8dZxcAZVHDYUmI+lJRdkCfCgi4e+xSX0S3JHIXuNfj3VY9NdVQMkIuyzWWLQeCNpK4jb43jMJNp2txw42OvXt6BUOTnd8LAXfaNdpBPCT5u+rSIAfVGdJXsa5+ONW1vwYi+dSlvdDZrrKc95o37vrE1TgDiIoMD3rRfXv/RmYSdb3756ih2MtqcmEPYXy7wAuPIuSeokyQzI1iphYKk9V+PyxaFBa94EAX8WhDwjwfHfnG5MD/0PDkeWxOHVzunGHTOxSN79tMqCi/i+Db6HrVLgJVuUpoBtSyaufZcD+ma5u+ulOCLSxXa2PdhuDSKVIqV46z/RHt3m6JnRuD6giOPCEm3rUgDa4h8nLPsRGo8LlAjMvgjsU1Byc17EwPjf9K1cinH07jmPEIZcdvOqBIHxJutGTLESbw/WMLLpwHVkIOYKZrZm1S8ipJdm2JEgzyiXn6ni/wDZfR4cVZullkGT+B38ti/3zJ0NcG8/5okN+LUIQ/SlYvX4TYxYDgOT5/GjSAcd+tFHe6tNTpVKLrqs+3fU9xjjZbBILN+Pnx3mCLaeDD5YBpevmECtFZQCRHkL+o=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(346002)(366004)(376002)(39860400002)(451199021)(8676002)(8936002)(6506007)(6512007)(5660300002)(38100700002)(921005)(41300700001)(6666004)(31686004)(7416002)(186003)(53546011)(2906002)(4744005)(6486002)(66556008)(66476007)(36756003)(110136005)(478600001)(2616005)(66946007)(316002)(86362001)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WTZ5d0J3S0svY2JOdks3cmV5ZmMycjlFRWpSY3hZeWM1dlFPNzFCZ3JjSXJj?=
+ =?utf-8?B?U1NyNFZKdUw2aTZYcWF6UUFpd3F1SHNWdERaOUZzSDhxNjB1QVNBTWZYdzlO?=
+ =?utf-8?B?MTN4dVZmU1I3Q29jc3Q1bGhLU29TYm9hRXgxR09GdEx5M0dCSDI4UWw5WE1r?=
+ =?utf-8?B?UEhWY20xMTBra3FMTzB3RTFwZzc5MFM2aUpqWW11QVZpdnJza2lCNkVaMjJn?=
+ =?utf-8?B?eGpUVnJjUW1jVk5sSEZNUlZVMG5xS1Z3STQrN3V3OFFwRmhUaDdGWEhITkZn?=
+ =?utf-8?B?MHZyWitsR0FGeGxUMFJwTU14N25SRmZmY1VtUDNkVmVVN0w2NVhxTlV6cytk?=
+ =?utf-8?B?WGJFb0oxWEpKSWdVaUVsTnlqejRzZXJ2M1BVRkZoQXhpZnFMbEM4NW9pd3JB?=
+ =?utf-8?B?NlpzWnFKR0hPYlZ3SCsvb1pMOEplMnlGMnVWdjdSMmR5ZTV1MFIwQzRiUE5K?=
+ =?utf-8?B?Y0dpY2h2MzFNNzBQVFZjaytUL2dBQ0dPamVIMG1VYWJ0aUtBT1J1T0RmdXF3?=
+ =?utf-8?B?eTdoSkVOSG1HMkdOQ25oN1hHZ2ZoaVk3Uzd1c3U5L1FHdlVpL3JmSThGaTBC?=
+ =?utf-8?B?Z2ZIR0ZPOVNFNUZBU2ZmU1IwaU84V0dWR3VoWS9BekVubzZObzlpOUl1VEov?=
+ =?utf-8?B?cUNTY3NSUlZWYm0zajZPUWV2TUVaRkwxcDVzVkhSaW9ITFRJdTExVVRTNzBy?=
+ =?utf-8?B?cG5qc2lwL28vTGVEdkxiZjB3RG90OXJ4T09UdDVwaHF5QVZteU82M3RnMmRI?=
+ =?utf-8?B?aEVtVjlxZXFqVUsrWUNtUGRPYVZNR3pDWmJHM0NLaTAwdmlxOHdLdzlVcFpY?=
+ =?utf-8?B?WURoQnNpeStNa3M0MXpNRUxWY081dm1Wd2wzOGExL2RtdHpYbVQ5SGx0WS9H?=
+ =?utf-8?B?RTd6NG1XQVF5amt1ZWJYdFl3Y0RwcWNZR1NFOXhKcW50V0lLMTY3SXphanJK?=
+ =?utf-8?B?VGhpeVl2YXFiVEJJbGhKVWNGUC9oVS82SGhVYXlMNlV1VzFadHBHNU1JK2Jz?=
+ =?utf-8?B?TmxxU3doRGNjVWtpTjYrS0Rxb3VPYmNKaHl1VFFtQ0ZQaitBT3V5OS90WURE?=
+ =?utf-8?B?RmRtVnlxZ2wrWXc2eDBtR24xb0ttRkxyWGdQUzhHK2U5UlBHUUJwdFdNS3lN?=
+ =?utf-8?B?MU5XYy9CcFZBZHZ0Q210MHd1QU1hNGptOVErZncyOWllR0Y1RUhLNnJkc3FU?=
+ =?utf-8?B?WkdKVS9RekZMUmtwZ2FoUlFvdko5ZTQrcXJWUlVMZnliWStUVWtQSzUwSUJ2?=
+ =?utf-8?B?UVBpejRjd3V5T2lyM3ArYTBZMVl5aVpPZkdFSExEdjdBbnUrVGhsZ010dHlH?=
+ =?utf-8?B?Uml1NVJsdjh2WkxpNEpoMXUwanl3VFdRTU43NklEMEFZdEJsS1RGRkJzQ0Qw?=
+ =?utf-8?B?Qjk4aDVUTEROTjVZbXlUeDRZdHpXT2ZZMC9wUjA0bEZRV1luNHYxbkZBYmhP?=
+ =?utf-8?B?Z1pwUXM2bmp1R3hxNVQ3aFRjbFRZaEEzL2dtdFQrcjZDalZIQ2M5Zlo0bHFh?=
+ =?utf-8?B?M0Z1UXc3eW9ZNkVDT2c5b2RyaE90YUxpblFMM3BYbVJ1UHM1OXh2NnUvV1Y2?=
+ =?utf-8?B?d3J3d1hRb0Y5WUdnWHJwMWdudHpNVlE3dGtMMG1oUnJObGgyejFzcWR1Zjgv?=
+ =?utf-8?B?clRBN0VLZklJQm9XOWpJR3h5Rno3ZjgxNWlieU5idnhQZ21mcnVhcDBPdHF5?=
+ =?utf-8?B?MVE5MTYwdHZmN3lFWkgya3cvK1grOW1DN2FtOXV2eWJTMHExUVZ1aHlrMEJH?=
+ =?utf-8?B?ajA4bk94UUJMZjZXNDBnelVvRVpHVW9zaGQxMVRkNzY5bGRBYkRudEJQbGVV?=
+ =?utf-8?B?M0lXc0Mva0tHTlNnOTlGZGt5c0ZrcC8xN0xJQ1hiNzRwRDRibjkrOHVleHg2?=
+ =?utf-8?B?MWlMUHRKbnMrY1MzYjYvalZUZ05Ob3JkMlYxR3FBVkhDZ0oyWWxIRXBTWDhS?=
+ =?utf-8?B?NXIwSkp0a3IxWHEzczZzcEVDWFoxc1RVbGp1aTlDQTErbGR4NFRzRG1RSm94?=
+ =?utf-8?B?R0VXeTNpRGFmczV5YzBjdHI4cC9Ma3l3cDJuLysyMUMrN20xOHkybFVxWHVp?=
+ =?utf-8?B?UWF0M1JrUG9LNVlLMGh1MWp4OTlWejBDMjYrWDd5K0tGRERJRVVkU0JPSFI2?=
+ =?utf-8?B?YnV3dzBTdTEvMVVjZ3orK1owcEpXdmRNUjFsMUgzWU1WVWphcThBRlBSTVMw?=
+ =?utf-8?B?Znc9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 43e6835b-d1ff-4e9f-ae29-08db733e70f0
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 16:33:42.4675
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dWAQERs/I/Fmtztgl5n0qeBeRu2W0buU2twFRX63ngyodjMs88+b9UMx+NXx6Idy
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR15MB6099
+X-Proofpoint-GUID: C3XwDXm3qILeRcg6GNUMHGL8jkLEvV9-
+X-Proofpoint-ORIG-GUID: C3XwDXm3qILeRcg6GNUMHGL8jkLEvV9-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-22_11,2023-06-22_02,2023-05-22_02
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,99 +152,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On June 22, 2023 9:04:03 AM PDT, Brian Gerst <brgerst@gmail=2Ecom> wrote:
->On Thu, Jun 22, 2023 at 9:29=E2=80=AFAM Peter Zijlstra <peterz@infradead=
-=2Eorg> wrote:
->>
->> On Thu, Jun 22, 2023 at 08:07:50AM -0400, Brian Gerst wrote:
->> > When kCFI is enabled, special handling is needed for the indirect cal=
-l
->> > to the kernel thread function=2E  Rewrite the ret_from_fork() functio=
-n in
->> > C so that the compiler can properly handle the indirect call=2E
->> >
->> > Suggested-by: Peter Zijlstra (Intel) <peterz@infradead=2Eorg>
->> > Signed-off-by: Brian Gerst <brgerst@gmail=2Ecom>
->>
->> This is much nicer indeed=2E I'll take these patches into my series and
->> repost later today if you don't mind=2E
->
->Yes, that's fine=2E
->
->> One little niggle below=2E=2E
->>
->> > ---
->>
->> > diff --git a/arch/x86/entry/entry_64=2ES b/arch/x86/entry/entry_64=2E=
-S
->> > index f31e286c2977=2E=2E5ee32e7e29e8 100644
->> > --- a/arch/x86/entry/entry_64=2ES
->> > +++ b/arch/x86/entry/entry_64=2ES
->> > @@ -284,36 +284,21 @@ SYM_FUNC_END(__switch_to_asm)
->> >   * r12: kernel thread arg
->> >   */
->> >  =2Epushsection =2Etext, "ax"
->> > +SYM_CODE_START(ret_from_fork_asm)
->> >       UNWIND_HINT_END_OF_STACK
->> >       ANNOTATE_NOENDBR // copy_thread
->> >       CALL_DEPTH_ACCOUNT
->> >
->> > +     /* return address for the stack unwinder */
->> > +     pushq   $swapgs_restore_regs_and_return_to_usermode
->> > +     UNWIND_HINT_FUNC
->> >
->> > +     movq    %rax, %rdi              /* prev */
->> > +     movq    %rsp, %rsi              /* regs */
->> > +     movq    %rbx, %rdx              /* fn */
->> > +     movq    %r12, %rcx              /* fn_arg */
->> > +     jmp     ret_from_fork
->> > +SYM_CODE_END(ret_from_fork_asm)
->> >  =2Epopsection
->> >
->> >  =2Emacro DEBUG_ENTRY_ASSERT_IRQS_OFF
->>
->> > diff --git a/arch/x86/kernel/process=2Ec b/arch/x86/kernel/process=2E=
-c
->> > index dac41a0072ea=2E=2Ef5dbfebac076 100644
->> > --- a/arch/x86/kernel/process=2Ec
->> > +++ b/arch/x86/kernel/process=2Ec
->> > @@ -28,6 +28,7 @@
->> >  #include <linux/static_call=2Eh>
->> >  #include <trace/events/power=2Eh>
->> >  #include <linux/hw_breakpoint=2Eh>
->> > +#include <linux/entry-common=2Eh>
->> >  #include <asm/cpu=2Eh>
->> >  #include <asm/apic=2Eh>
->> >  #include <linux/uaccess=2Eh>
->> > @@ -134,6 +135,25 @@ static int set_new_tls(struct task_struct *p, un=
-signed long tls)
->> >               return do_set_thread_area_64(p, ARCH_SET_FS, tls);
->> >  }
->> >
->> > +__visible noinstr void ret_from_fork(struct task_struct *prev, struc=
-t pt_regs *regs,
->> > +                                  int (*fn)(void *), void *fn_arg)
->>
->> So I had noinstr in my initial patch, but it leads to objtool
->> complaints=2E I suppose we can actually handle tracing and all the othe=
-r
->> gunk at this point, so I've removed it=2E
->
->I'm not an expert on noinstr usage, but looking at the other syscall
->functions, instrumentation needs to be disabled before
->syscall_exit_to_user_mode() is called=2E  Perhaps adding an
->instrumentation_begin()/instrumentation_end() pair to this function is
->needed?
->
->Brian Gerst
->
 
-I don't have the code in front of me right now, but how does this affect F=
-RED enabling? In the case of FRED, the exit path is much simpler; in the FR=
-ED enabling patchset we simply deal with it by alternatives-patching the te=
-rminal jump after resetting the stack pointer to the standard FRED user spa=
-ce exit stub (which simply pops the user space registers and executes ERETU=
-=2E)
 
-I'm assuming this is still valid/possible after your patches, since resett=
-ing the stack pointer isn't possible in C, but I wanted to double check=2E
+On 6/22/23 2:54 AM, Anton Protopopov wrote:
+> Fix the description of the seq_info field of the bpf_iter_reg structure which
+> was wrong due to an accidental copy/paste of the previous field's description.
+> 
+> Fixes: 8972e18a439d ("bpf, docs: BPF Iterator Document")
+> Signed-off-by: Anton Protopopov <aspsk@isovalent.com>
+
+Thanks for fixing the bpf_iter documentation!
+
+Acked-by: Yonghong Song <yhs@fb.com>
