@@ -2,163 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9879D739FF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 13:45:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD52373A012
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 13:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjFVLpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 07:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45354 "EHLO
+        id S230071AbjFVLtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 07:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbjFVLpT (ORCPT
+        with ESMTP id S230308AbjFVLss (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 07:45:19 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF9D5198
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 04:45:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+BhRaW8LJ0oFZlmeLIyUm12tgrUbyFfd68xPlAxbVpE=; b=fMJt4AOMjXc4uuWTLSapOMlRAe
-        lNyyrb8ba1QPINqj48d7uvTSg6HJNkjQ/OTKcxea50O8qGe0M2uS48Dn4XTB8JhBvAe8XWJngfRnj
-        IUkGNxyeNO8o/Zt+4rVthJMvUmP7A9y69xZTAK3/3jSIdwTdc3r30yhTI/v0aa3iSLfV2WFUMNPl7
-        XDrSXKyWq4Q+TiGwXTt3BtD5z4DGRtC/h2Y7am/d9ww/HXdbDbzq+DFhXoWghUOMHkcFR705kePnz
-        IgCHMCT9MQgsbY37VkMsaH4FOOpEmbV12S8yNkr96WJN3XJ0+qJp3etev5hKrn9B/rbLZ4ZprcVfW
-        3pBztRUw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qCIkL-001AnW-0d;
-        Thu, 22 Jun 2023 11:45:05 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B9860300137;
-        Thu, 22 Jun 2023 13:45:04 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A8EFE24263360; Thu, 22 Jun 2023 13:45:04 +0200 (CEST)
-Date:   Thu, 22 Jun 2023 13:45:04 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Naveen N Rao <naveen@kernel.org>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2 09/14] objtool: Add INSN_RETURN_CONDITIONAL
-Message-ID: <20230622114504.GK4253@hirez.programming.kicks-ass.net>
-References: <cover.1687430631.git.christophe.leroy@csgroup.eu>
- <c25524d42cb03b1acfb7ab325b9e8881befba53b.1687430631.git.christophe.leroy@csgroup.eu>
+        Thu, 22 Jun 2023 07:48:48 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2AE1A1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 04:48:46 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-630074df712so51282936d6.1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 04:48:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687434526; x=1690026526;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HRNXXzDvxFGlDR0rIu/cnMH16Thw35CVdY0uuwW92MI=;
+        b=qD/hy4tmMxs4KxrxVDR2KlTRSdNI8BnPp+WNRuhvC2wnqO9iJtY9NqWHujJfB2U1y+
+         9SC6tlP/SR9qwKYSiXzbZ86FKWVPNpDFOuUxfq4Q38tcIaNp6Y3GZmvD0tjivNNrDo2X
+         VWNrVubn1O/XgCdvylp8VRvlWkMy2OfkygF1WuU2qS+K3SslL/HpFkkpq0YL3SdaIc4L
+         1ZpTkX8J1dy56Zq6/cl2ub6L8BJl/RcpcM+FUYm44P6dEOA186caxcxkzA0LqQZnS986
+         wJUlGewC5ScWT58/ZhGvXu5Is5CyeE9GSbjvKIDN8Bs0AGjjMnP4kB2CZl0JucuQ+CD9
+         JkNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687434526; x=1690026526;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HRNXXzDvxFGlDR0rIu/cnMH16Thw35CVdY0uuwW92MI=;
+        b=hRkWMo8ea/2ZDKd5VdLeYW0lO/7o81SEycKaSPjdhdpA6eXPbSL50B4ag8jcqaBFjk
+         Rl9PHXaztZW+Q9Gm6FpAhnfOrpfMImTjvSg6UiAuc06xMYbnFmYKne8AuuKwYQqR3vkb
+         RRfUNgUZgZXM9RkLBhT1sc68SqFEFc201chIl1UkM/+n6Eeh2ENgn0Mm2dgH3SAKaXFL
+         Y2EhmgJTR0Q5buitS+XcwbuLD+XCav+Y/dj/5P6CTBvatiNI3NVUXWRFe0M0UF0YskPQ
+         YWw+yoNSXMxIE3fU1IDBRtrs0U6gkJd2HrOQjbt//gyiNVZMuk+yzOqNyEED2wRZP4Km
+         A8dg==
+X-Gm-Message-State: AC+VfDwHqTzj2uN6NbFrXdUnMG/t0A7cP1cF6OSNRKIhOzi3FcF344wB
+        n9bjf6QNo94MLx0xQlIY0kilv2De2jF4uWXDalT9yg==
+X-Google-Smtp-Source: ACHHUZ4/BsJLeju2PLbt5pAlNKs9HCs+L/a+aoGadZdc5126qFYXsWl4ZqqsKOGOHls+GZh/YouqzAYQs4MpSz2iIZM=
+X-Received: by 2002:a05:6214:27c6:b0:632:2101:c449 with SMTP id
+ ge6-20020a05621427c600b006322101c449mr1727469qvb.25.1687434525929; Thu, 22
+ Jun 2023 04:48:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c25524d42cb03b1acfb7ab325b9e8881befba53b.1687430631.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230602161246.1855448-1-amit.pundir@linaro.org>
+ <358c69ad-fa8a-7386-fe75-92369883ee48@leemhuis.info> <0f6c9dcb-b7f6-fff9-6bed-f4585ea8e487@linaro.org>
+ <CAD=FV=Xt2KYGY15+f+nHxkzKnwhHzw1A7=o+5kgCDWvHDv0DNg@mail.gmail.com>
+ <20230620155902.clspxncyvpodixft@ripper> <5240ce3f-37fa-2747-92ee-23d71619f3ef@leemhuis.info>
+In-Reply-To: <5240ce3f-37fa-2747-92ee-23d71619f3ef@leemhuis.info>
+From:   Amit Pundir <amit.pundir@linaro.org>
+Date:   Thu, 22 Jun 2023 17:18:09 +0530
+Message-ID: <CAMi1Hd2zunc=WNUE7KT-423RXTiX6LrY2hcWQdV3Dp3o8RdJtg@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: qcom: sdm845-db845c: Move LVS regulator nodes up
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        dt <devicetree@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 12:54:31PM +0200, Christophe Leroy wrote:
-> Most functions have an unconditional return at the end, like
-> this one:
-> 
-> 	00000000 <is_exec_fault>:
-> 	   0:	81 22 04 d0 	lwz     r9,1232(r2)
-> 	   4:	38 60 00 00 	li      r3,0
-> 	   8:	2c 09 00 00 	cmpwi   r9,0
-> 	   c:	4d 82 00 20 	beqlr		<== Conditional return
-> 	  10:	80 69 00 a0 	lwz     r3,160(r9)
-> 	  14:	54 63 00 36 	clrrwi  r3,r3,4
-> 	  18:	68 63 04 00 	xori    r3,r3,1024
-> 	  1c:	7c 63 00 34 	cntlzw  r3,r3
-> 	  20:	54 63 d9 7e 	srwi    r3,r3,5
-> 	  24:	4e 80 00 20 	blr		<== Unconditional return
-> 
-> But other functions like this other one below only have
-> conditional returns:
-> 
-> 	00000028 <pte_update.isra.0>:
-> 	  28:	81 25 00 00 	lwz     r9,0(r5)
-> 	  2c:	2c 08 00 00 	cmpwi   r8,0
-> 	  30:	7d 29 30 78 	andc    r9,r9,r6
-> 	  34:	7d 27 3b 78 	or      r7,r9,r7
-> 	  38:	54 84 65 3a 	rlwinm  r4,r4,12,20,29
-> 	  3c:	81 23 00 18 	lwz     r9,24(r3)
-> 	  40:	41 82 00 58 	beq     98 <pte_update.isra.0+0x70>
-> 	  44:	7d 29 20 2e 	lwzx    r9,r9,r4
-> 	  48:	55 29 07 3a 	rlwinm  r9,r9,0,28,29
-> 	  4c:	2c 09 00 0c 	cmpwi   r9,12
-> 	  50:	41 82 00 08 	beq     58 <pte_update.isra.0+0x30>
-> 	  54:	39 00 00 80 	li      r8,128
-> 	  58:	2c 08 00 01 	cmpwi   r8,1
-> 	  5c:	90 e5 00 00 	stw     r7,0(r5)
-> 	  60:	4d a2 00 20 	beqlr+		<== Conditional return
-> 	  64:	7c e9 3b 78 	mr      r9,r7
-> 	  68:	39 40 00 00 	li      r10,0
-> 	  6c:	39 4a 00 04 	addi    r10,r10,4
-> 	  70:	7c 0a 40 00 	cmpw    r10,r8
-> 	  74:	91 25 00 04 	stw     r9,4(r5)
-> 	  78:	91 25 00 08 	stw     r9,8(r5)
-> 	  7c:	38 a5 00 10 	addi    r5,r5,16
-> 	  80:	91 25 ff fc 	stw     r9,-4(r5)
-> 	  84:	4c 80 00 20 	bgelr		<== Conditional return
-> 	  88:	55 49 60 26 	slwi    r9,r10,12
-> 	  8c:	7d 29 3a 14 	add     r9,r9,r7
-> 	  90:	91 25 00 00 	stw     r9,0(r5)
-> 	  94:	4b ff ff d8 	b       6c <pte_update.isra.0+0x44>
-> 	  98:	39 00 00 04 	li      r8,4
-> 	  9c:	4b ff ff bc 	b       58 <pte_update.isra.0+0x30>
-> 
-> If conditional returns are decoded as INSN_OTHER, objtool considers
-> that the second function never returns.
-> 
-> If conditional returns are decoded as INSN_RETURN, objtool considers
-> that code after that conditional return is dead.
-> 
-> To overcome this situation, introduce INSN_RETURN_CONDITIONAL which
-> is taken as a confirmation that a function is not noreturn but still
-> sees following code as reachable.
-> 
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+On Thu, 22 Jun 2023 at 13:17, Linux regression tracking (Thorsten
+Leemhuis) <regressions@leemhuis.info> wrote:
+>
+> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+> for once, to make this easily accessible to everyone.
+>
+> As Linus will likely release 6.4 on this or the following Sunday a quick
+> status inquiry so I can brief him appropriately: is there any hope the
+> regression this patch tried to fix will be resolved any time soon?
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+We are most likely to miss v6.4. I'm trying to reproduce the crash
+with tracing enabled, to share some more debug information.
 
-> ---
->  tools/objtool/check.c                | 2 +-
->  tools/objtool/include/objtool/arch.h | 1 +
->  2 files changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-> index 0fcf99c91400..8977cdf93f54 100644
-> --- a/tools/objtool/check.c
-> +++ b/tools/objtool/check.c
-> @@ -259,7 +259,7 @@ static bool __dead_end_function(struct objtool_file *file, struct symbol *func,
->  	func_for_each_insn(file, func, insn) {
->  		empty = false;
->  
-> -		if (insn->type == INSN_RETURN)
-> +		if (insn->type == INSN_RETURN || insn->type == INSN_RETURN_CONDITIONAL)
->  			return false;
->  	}
->  
-> diff --git a/tools/objtool/include/objtool/arch.h b/tools/objtool/include/objtool/arch.h
-> index 2b6d2ce4f9a5..84ba75112934 100644
-> --- a/tools/objtool/include/objtool/arch.h
-> +++ b/tools/objtool/include/objtool/arch.h
-> @@ -19,6 +19,7 @@ enum insn_type {
->  	INSN_CALL,
->  	INSN_CALL_DYNAMIC,
->  	INSN_RETURN,
-> +	INSN_RETURN_CONDITIONAL,
->  	INSN_CONTEXT_SWITCH,
->  	INSN_BUG,
->  	INSN_NOP,
-> -- 
-> 2.40.1
-> 
+Regards,
+Amit Pundir
+
+> Doesn't look like it from below message and this thread, but maybe I
+> missed something.
+>
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
+>
+> #regzbot poke
+>
+> On 20.06.23 17:59, Bjorn Andersson wrote:
+> > On Wed, Jun 14, 2023 at 12:44:15PM -0700, Doug Anderson wrote:
+> >> Hi,
+> >>
+> >> On Wed, Jun 14, 2023 at 11:47=E2=80=AFAM Krzysztof Kozlowski
+> >> <krzysztof.kozlowski@linaro.org> wrote:
+> >>>
+> >>> On 14/06/2023 20:18, Linux regression tracking (Thorsten Leemhuis) wr=
+ote:
+> >>>> On 02.06.23 18:12, Amit Pundir wrote:
+> >>>>> Move lvs1 and lvs2 regulator nodes up in the rpmh-regulators
+> >>>>> list to workaround a boot regression uncovered by the upstream
+> >>>>> commit ad44ac082fdf ("regulator: qcom-rpmh: Revert "regulator:
+> >>>>> qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"").
+> >>>>>
+> >>>>> Without this fix DB845c fail to boot at times because one of the
+> >>>>> lvs1 or lvs2 regulators fail to turn ON in time.
+> >>>>
+> >>>> /me waves friendly
+> >>>>
+> >>>> FWIW, as it's not obvious: this...
+> >>>>
+> >>>>> Link: https://lore.kernel.org/all/CAMi1Hd1avQDcDQf137m2auz2znov4XL8=
+YGrLZsw5edb-NtRJRw@mail.gmail.com/
+> >>>>
+> >>>> ...is a report about a regression. One that we could still solve bef=
+ore
+> >>>> 6.4 is out. One I'll likely will point Linus to, unless a fix comes =
+into
+> >>>> sight.
+> >>>>
+> >>>> When I noticed the reluctant replies to this patch I earlier today a=
+sked
+> >>>> in the thread with the report what the plan forward was:
+> >>>> https://lore.kernel.org/all/CAD%3DFV%3DV-h4EUKHCM9UivsFHRsJPY5sAiwXV=
+3a1hUX9DUMkkxdg@mail.gmail.com/
+> >>>>
+> >>>> Dough there replied:
+> >>>>
+> >>>> ```
+> >>>> Of the two proposals made (the revert vs. the reordering of the dts)=
+,
+> >>>> the reordering of the dts seems better. It only affects the one bugg=
+y
+> >>>> board (rather than preventing us to move to async probe for everyone=
+)
+> >>>> and it also has a chance of actually fixing something (changing the
+> >>>> order that regulators probe in rpmh-regulator might legitimately wor=
+k
+> >>>> around the problem). That being said, just like the revert the dts
+> >>>> reordering is still just papering over the problem and is fragile /
+> >>>> not guaranteed to work forever.
+> >>>> ```
+> >>>>
+> >>>> Papering over obviously is not good, but has anyone a better idea to=
+ fix
+> >>>> this? Or is "not fixing" for some reason an viable option here?
+> >>>>
+> >>>
+> >>> I understand there is a regression, although kernel is not mainline
+> >>> (hash df7443a96851 is unknown) and the only solutions were papering t=
+he
+> >>> problem. Reverting commit is a temporary workaround. Moving nodes in =
+DTS
+> >>> is not acceptable because it hides actual problem and only solves thi=
+s
+> >>> one particular observed problem, while actual issue is still there. I=
+t
+> >>> would be nice to be able to reproduce it on real mainline with normal
+> >>> operating system (not AOSP) - with ramdiks/without/whatever. So far n=
+o
+> >>> one did it, right?
+> >>
+> >> The worry I have about the revert here is that it will never be able
+> >> to be undone and that doesn't seem great long term. I'm all for a
+> >> temporary revert to fix a problem while the root cause is understood,
+> >> but in this case I have a hard time believing that we'll make more
+> >> progress towards a root cause once the revert lands. All the
+> >> investigation we've done so far seems to indicate that the revert only
+> >> fixes the problem by luck...
+> >>
+> >> I completely agree that moving the nodes in the DTS is a hack and just
+> >> hides the problem. However, it also at least limits the workaround to
+> >> the one board showing the problem and doesn't mean we're stuck with
+> >> synchronous probe for rpmh-regulator for all eternity because nobody
+> >> can understand this timing issue on db845c.
+> >>
+> >
+> > I agree that we shouldn't hide this by reverting the regulator change.
+> >
+> >
+> > And as has been stated a few times already, the symptom indicates that
+> > we have a misconfigured system.
+> >
+> > Before accepting a patch just shuffling the bricks, I'd like to see som=
+e
+> > more analysis of what happens wrt the rpmh right before the timeout.
+> > Perhaps the landing team can assist here?
+> >
+> > Regards,
+> > Bjorn
+> >
+> >
