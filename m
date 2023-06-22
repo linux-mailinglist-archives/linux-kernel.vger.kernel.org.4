@@ -2,118 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28212739666
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 06:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75FD0739667
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 06:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbjFVE02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 00:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
+        id S230417AbjFVE2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 00:28:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbjFVE01 (ORCPT
+        with ESMTP id S230358AbjFVE23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 00:26:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE8419F;
-        Wed, 21 Jun 2023 21:26:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B6AB061758;
-        Thu, 22 Jun 2023 04:26:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5276EC433C8;
-        Thu, 22 Jun 2023 04:26:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687407985;
-        bh=wbSerNWu2OAwv80OHJmGq194acVpz6OdwYe2sfJ0nX0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=sQ5WM1lYl9VmXRoERRZDKqzBakqeClJxd+kHFI7V9CaGlWmDl4d/ex8LiwcUlqHSV
-         BZ0xwUvJkqxaZE3ZPtn9IWLoGXZvxQDnjU+/oPMmu5o1zebbIT82I8scGbYwwWqzv4
-         LOz79xnYWXwu6gBb8WEwY7fKTTN5iouT4PuOA4m0mwiJnCFtGGhK5sCQVMeIztNEAL
-         va2JI4lz5BEhtqRmDxsXSeHKPtqh9pLY9W8GwPp56rkNGhxpCoIwDSuekZFyto7aPQ
-         JTXvSO0YrDJFAO1OrV0Q1q2HNEurNuo4femNHW7V1JtS8fJ150RPCZA4Xr7B22R4U/
-         ewODsf3tiyWhw==
-Message-ID: <78cce73d-16d1-e357-bee7-2176479604f4@kernel.org>
-Date:   Thu, 22 Jun 2023 13:26:23 +0900
+        Thu, 22 Jun 2023 00:28:29 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC5DE65
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 21:28:27 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-40079620a83so101271cf.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 21:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687408107; x=1690000107;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yYPH2WyrIzcETLuSO9SQRYjdko7/fZ6dC4eczqzPL1I=;
+        b=TEwuqj7PZA05t9ftRqQIMyya/kh9LQ3+waawCxi+KYK6CqQ3UqqL74xcBf31a2YHch
+         grePcwCzLRMRhTfPWpfOLhlvNnjRPrGFG+HxuKwzjkiNAZhSeBZlRlMgr3qOBffGWiko
+         29BlxaQ7hEu8iVG9H+bJ/pt4XkNQYrAKUHGwxVuuw6JyfqcqVAuB+h5x4xmZTXHxQXsp
+         LTCVa4Kalz8H2P07VeRE3HAL2JV+voYE4pGEREkFQBnhh3nQxMNJXCs5QZXkGEw16Vhf
+         6WmF/jw6hU34lt6OkQqJZRcd5R2ULq4aKHxO38Iha4Ozio+ikSm/1cbQW/4hCp3p64uh
+         9Wfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687408107; x=1690000107;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yYPH2WyrIzcETLuSO9SQRYjdko7/fZ6dC4eczqzPL1I=;
+        b=fpGMzpOGRrup2HYUVK9PpqqRVU8ehGJiBTm5O3ogI7nbV2VsbAHzE8GKgLo0Ty14RH
+         HphOl8bKWg2HZ/SaYj9/8rD3zwwskPjEnBvupLK3wSbDATlP/tJtDWT/xdEHZW86RClw
+         6ofvxt9B6aJe/mNQQLFX0+13NGH5Nu53KwrWYLUx9F5WyipO8DiV6hVxEkwWxZBJe6+x
+         GphfRaFsPZ/clx97n9OoDkaqZcnHBzVx43NlSDW5w7oh/EDWb08XblsheNzZxZTR7sQx
+         nrnYR5bFdljfUMnrqYgc7Oy9ncgJckBwdFB45mOhmuNFy/zikXfrqWR71C7ud0prV6WV
+         /cTQ==
+X-Gm-Message-State: AC+VfDz6PtK5t/FkfSjOxIW0y3RVvz9jTazVClxkwy3JpCoZqS2isWG+
+        Gv7zZ5wlNsOsRuD1/XoBFdzebkp++NYrAeWXHRoz1w==
+X-Google-Smtp-Source: ACHHUZ5lzGs4uLskl2mh03JyO0IhyZ8IjKD6J4YBmH5FYd7n3kIrLO5bjc/3/RsM90YVDuZjbzT/EbEZqUQ8WIeAigY=
+X-Received: by 2002:ac8:5911:0:b0:3fd:ad1b:4e8a with SMTP id
+ 17-20020ac85911000000b003fdad1b4e8amr1874956qty.22.1687408106689; Wed, 21 Jun
+ 2023 21:28:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/2] ata: octeon: Add compile test support
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>, Rob Herring <robh@kernel.org>
-Cc:     Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-ide@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230614173633.2430653-1-robh@kernel.org>
- <20230614173633.2430653-2-robh@kernel.org>
- <23325977-ba37-4360-afb5-4ab38a66107e@roeck-us.net>
- <feef6589-d0d6-8e64-fefd-914c234dcfba@kernel.org>
- <167e83a0-8666-27af-5e2c-4ddda917795a@roeck-us.net>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <167e83a0-8666-27af-5e2c-4ddda917795a@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230621063749.3358430-1-irogers@google.com> <CAM9d7cg-r7Nw807egNFVRBgEXwgBV=A2pVEb+MBS4gvFgnNynQ@mail.gmail.com>
+In-Reply-To: <CAM9d7cg-r7Nw807egNFVRBgEXwgBV=A2pVEb+MBS4gvFgnNynQ@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 21 Jun 2023 21:28:14 -0700
+Message-ID: <CAP-5=fVBbXoGuNeaYADA1RgY4wfSN8CgAJVEBjmOQGZ=-OiOAQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] perf symbol: Remove symbol_name_rb_node
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Carsten Haitzler <carsten.haitzler@arm.com>,
+        Changbin Du <changbin.du@huawei.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Jason Wang <wangborong@cdjrlc.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 6/22/23 12:01, Guenter Roeck wrote:
-> On 6/21/23 17:57, Damien Le Moal wrote:
->> On 6/22/23 01:51, Guenter Roeck wrote:
->>> On Wed, Jun 14, 2023 at 11:36:33AM -0600, Rob Herring wrote:
->>>> Add COMPILE_TEST to enable building Cavium Octeon drivers in MIPS
->>>> allyesconfig/allmodconfig builds. There's a dependency on MIPS headers,
->>>> so other arches can't be enabled.
->>>>
->>>> Signed-off-by: Rob Herring <robh@kernel.org>
->>>> ---
->>>> Tested on allmodconfig build. Not sure if there's other MIPS configs
->>>> where this doesn't work. We'll see what 0-day says.
->>>
->>> Odd, in next-20230621 I get:
->>>
->>> Building mips:allmodconfig ... failed
->>
->> Indeed odd. Given that this is an allmodconfig, I would assume that
->> CONFIG_CAVIUM_OCTEON_SOC is set ?
->>
-> 
-> No, it is not. CONFIG_CAVIUM_OCTEON_SOC is a choice option,
-> meaning only one of the choices can be set, and mips:allmodconfig
-> selects a different choice.
+On Wed, Jun 21, 2023 at 8:51=E2=80=AFPM Namhyung Kim <namhyung@kernel.org> =
+wrote:
+>
+> Hi Ian,
+>
+> On Tue, Jun 20, 2023 at 11:37=E2=80=AFPM Ian Rogers <irogers@google.com> =
+wrote:
+> >
+> > Most perf commands want to sort symbols by name and this is done via
+> > an invasive rbtree that on 64-bit systems costs 24 bytes. Sorting the
+> > symbols in a DSO by name is optional and not done by default, however,
+> > if sorting is requested the 24 bytes is allocated for every
+> > symbol.
+> >
+> > This change removes the rbtree and uses a sorted array of symbol
+> > pointers instead (costing 8 bytes per symbol). As the array is created
+> > on demand then there are further memory savings. The complexity of
+> > sorting the array and using the rbtree are the same.
+> >
+> > To support going to the next symbol, the index of the current symbol
+> > needs to be passed around as a pair with the current symbol. This
+> > requires some API changes.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> >
+> > v2. map__find_symbol_by_name_idx so that map__find_symbol_by_name
+> >     doesn't need an optional parameter. Separate out
+> >     symbol_conf.sort_by_name removal.
+> > ---
+>
+> [SNIP]
+> >  void dso__sort_by_name(struct dso *dso)
+> >  {
+> > -       dso__set_sorted_by_name(dso);
+> > -       return symbols__sort_by_name(&dso->symbol_names, &dso->symbols)=
+;
+> > +       mutex_lock(&dso->lock);
+> > +       if (!dso__sorted_by_name(dso)) {
+> > +               size_t len;
+> > +
+> > +               dso->symbol_names =3D symbols__sort_by_name(&dso->symbo=
+ls, &len);
+> > +               if (dso->symbol_names) {
+> > +                       dso->symbol_names_len =3D len;
+> > +                       dso__set_sorted_by_name(dso);
+> > +               }
+> > +       }
+> > +       mutex_unlock(&dso->lock);
+>
+> I think this part deserves a separate commit.
 
-OK. Then I think I need to drop this patch as I do not see how to allow
-COMPILE_TEST without CONFIG_CAVIUM_OCTEON_SOC being set.
+Using the mutex or the use of sorted_by_name?
 
-Rob ?
+Thanks,
+Ian
 
-> 
-> Guenter
-> 
->>> --------------
->>> Error log:
->>> ERROR: modpost: "__udivdi3" [drivers/ata/pata_octeon_cf.ko] undefined!
->>> ERROR: modpost: "octeon_get_io_clock_rate" [drivers/ata/pata_octeon_cf.ko] undefined!
->>> ERROR: modpost: "__tracepoint_ata_bmdma_stop" [drivers/ata/pata_octeon_cf.ko] undefined!
->>> ERROR: modpost: "__traceiter_ata_bmdma_stop" [drivers/ata/pata_octeon_cf.ko] undefined!
->>> ERROR: modpost: "__divdi3" [drivers/ata/pata_octeon_cf.ko] undefined!
->>> make[2]: [scripts/Makefile.modpost:144: Module.symvers] Error 1 (ignored)
->>> make[2]: *** No rule to make target 'kernel/locking/locktorture.ko', needed by '__modfinal'.  Stop.
->>> make[1]: [Makefile:1933: modules] Error 2 (ignored)
->>>
->>> Guenter
->>
-> 
-
--- 
-Damien Le Moal
-Western Digital Research
-
+> Thanks,
+> Namhyung
