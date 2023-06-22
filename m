@@ -2,146 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AB4073A5D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 18:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A5173A5D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 18:17:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjFVQQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 12:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53950 "EHLO
+        id S230397AbjFVQRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 12:17:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjFVQQe (ORCPT
+        with ESMTP id S229875AbjFVQRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 12:16:34 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F264B1BD3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 09:16:32 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id ffacd0b85a97d-3128fcd58f3so2085601f8f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 09:16:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687450591; x=1690042591;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XmGI8fpO4hj8qhrgOMp2k1vrFf/BptTZ76S4/582UxE=;
-        b=AsO0sqHiUpVRbNCT1c2nhW0kfmo7RcXuuL/ulmARat46Qi9ri8lDonoAewT+oqwVtd
-         VLEESoRpresbHCI5FVVVQlSmDT0LbODq0dVGwt+4uMmFiw0B8E2kwjv7sL3lJ+HN2LCq
-         HCwR9m0ZxB3SmWOMR51B9hll1xo5nKyjyNMFI1K6t8WKpXPeHh07NemgIi7zKdbt9x0k
-         1U4Q593FN51WVyg4xjjOlO6nO1bZplJMYVyaJ756K5bQjUmEh8AM9HZVdUrZz2xTWVfM
-         d9oIkP/lsha62GNVsH8o1Gq7jpJpOKCqsYSWzjcQB7y8S/JJbHHDmqNLLpw4qkLnL51Z
-         9Ycg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687450591; x=1690042591;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XmGI8fpO4hj8qhrgOMp2k1vrFf/BptTZ76S4/582UxE=;
-        b=at8IVO5dbKF9WXEOMkbYkM0Yfko7vet8EC/+HeJyc4CwtzWfmX2123xQs0nFjvPIIE
-         OqMz5kzfvdXy3KJjvs/ddr8H+Mi1AoBtJbC6pOT+JZXO85UfXtpp3G9EOp9L8FG9ZMFi
-         C+2bYgF8jF0DgZ9S8qV8YtDplZ/c78H6dDaYHhTgGRPBbzv+7cBDAerAP0RZ4FDX3FFU
-         Z6uTt7Q0VaGfpXaYOdKdmQkAx6XF6Xo2rlXsvkwtRXQQWkPYvFmZo5eywbP6g3aUgFfK
-         KjUkd6aGAVWvt8f2EXIfeGqaFtaGMh074LaW/dU3SF1FJ0Rf/7d9aGyJBw/gjf8bpudD
-         PU+A==
-X-Gm-Message-State: AC+VfDxV/VIxO+d+TCs8saB3JAhu8W9x0WSilAkXSJxDIHvKXtCzgF+9
-        R5O4Pwu6YAX9eA8mUmx+3lKr0g==
-X-Google-Smtp-Source: ACHHUZ7x0V8vbmVljF4pDKsRKU1+avu539J/OBX21LHkRZCTSHLCdZo37JtP2kcBGGTnHArXTMOzcw==
-X-Received: by 2002:adf:f488:0:b0:311:1b0b:2ec8 with SMTP id l8-20020adff488000000b003111b0b2ec8mr16901097wro.52.1687450591319;
-        Thu, 22 Jun 2023 09:16:31 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
-        by smtp.gmail.com with ESMTPSA id v15-20020a1cf70f000000b003f8d770e935sm19467755wmh.0.2023.06.22.09.16.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 09:16:30 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Thu, 22 Jun 2023 18:16:26 +0200
-Subject: [PATCH] usb: typec: nb7vpq904m: fix CONFIG_DRM dependency
+        Thu, 22 Jun 2023 12:17:41 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2043.outbound.protection.outlook.com [40.107.215.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6409E1BD9
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 09:17:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a7DoH4PuAJLtDwTbp11kRv8xfcETVREmOFhmUl+g78UUWxPQ4Kv7D31tLlrMFvMekKZtMMdWO3c71yk4gL+bbMTxMLqzwPQEr5Ay9+gZ/+7guAk2fdUG+zpBJ8YgkTAHBytdI+u5N/11HyBgNhhc4RTrAMCA7UiTbbOuOBR6Sly9uXOqfsXSEACk2fgnTIiUMmyOplmNMKGhaoQeIIBKRvDPLhfu/PPxzOhFDk2OPfTdnJFvMRUcAEjv5VxbPm8uoPEBFEdje4iXCrzTH9/GbJGRWOVlsxp3apRy8byQNfWP67kFU/ekgixyPRtOgiDtBiLtFZ2wgRDCFhU7NLuRuw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JnIA4eGfMCYXEMlcFnq9u36R1p+VFdYmf3/BF4sqYzI=;
+ b=gNrA4AuacV2vEQ/Zd4FWjwDzYQhH5fzxixq8V3pRxywWhsvAUoWtl4gMFBOJhYc66VChGZlX7KeJXD7sMcIHxKwpTOwyPlc8GBHEv8nT3xfsBDorPO/260dr74tTputIfUejWKAcxT77/msMQggb9NfFBzDX5FYAYsZVcQuVAoz/krBEnIQ8aM6x6slkobHCzSYXhY8z5C21seK8AdgU0JH0q3WnGcadz6yFPh9KFwf9p7vRXj8q3KZLsHceEdDUo63uIYkZHH6TOKfUsq9Kq9p9DJOgO3wiOiX1HEjJD99yoiGo9jy+r7Dk1goHYpU8PESz1/ofmk1W6ewX7ZuZtQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
+ dkim=pass header.d=oppo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JnIA4eGfMCYXEMlcFnq9u36R1p+VFdYmf3/BF4sqYzI=;
+ b=hkELmVS48PWTcdT7ZC1X18JM/+AO+udsJWKQZuBYPoVIbT9p4hkJ+rUN8g679SDzFXf/JYVbhiJDz1sMG/MPpWU9/qVuyYICIPy9oYSSXdVnifMWLU/RDdzqrDBo2nVVMeljvXaBEwvWcKYwXUSwWLc4Qi6LE8sBJuQ0PLkv62U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oppo.com;
+Received: from TY2PR02MB4479.apcprd02.prod.outlook.com (2603:1096:404:800e::7)
+ by KL1PR02MB6189.apcprd02.prod.outlook.com (2603:1096:820:bd::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Thu, 22 Jun
+ 2023 16:17:33 +0000
+Received: from TY2PR02MB4479.apcprd02.prod.outlook.com
+ ([fe80::bc4a:4d7a:4c73:76eb]) by TY2PR02MB4479.apcprd02.prod.outlook.com
+ ([fe80::bc4a:4d7a:4c73:76eb%4]) with mapi id 15.20.6521.020; Thu, 22 Jun 2023
+ 16:17:32 +0000
+From:   Yunlei He <heyunlei@oppo.com>
+To:     jaegeuk@kernel.org, chao@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Yunlei He <heyunlei@oppo.com>
+Subject: [f2fs-dev][PATCH 1/2 v2] f2fs: update mtime and ctime in move file range method
+Date:   Fri, 23 Jun 2023 00:16:46 +0800
+Message-Id: <20230622161647.742012-1-heyunlei@oppo.com>
+X-Mailer: git-send-email 2.40.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR04CA0178.apcprd04.prod.outlook.com
+ (2603:1096:4:14::16) To TY2PR02MB4479.apcprd02.prod.outlook.com
+ (2603:1096:404:800e::7)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230622-topic-sm8x50-upstream-redriver-config-fix-v1-1-005ab6f4d1f5@linaro.org>
-X-B4-Tracking: v=1; b=H4sIANlzlGQC/x2O0QqDMAxFf0XyvECtbLj9ythDrakGtJVERRD/3
- bDHc7gc7glKwqTwqU4Q2lm5ZIP6UUEcQx4IuTcG73zjXt7jWhaOqHN7PB1ui65CYUahXngnwVh
- y4gETH9gmFyg15Gv/But1QQk7CTmOVszbNJlchGz7P/D9XdcNCUhZMJAAAAA=
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Arnd Bergmann <arnd@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1731;
- i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=YWuwhuhkh0Fmn1XOEG+D982lsVlbMVXfL+uI6GDRnW0=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBklHPewjaRA11780sbOr5fywRw8Mgw3aMI9KonBbh6
- 4xGNvG6JAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZJRz3gAKCRB33NvayMhJ0QdvEA
- C6iiVHnaEIUDRzT1TFCOeTvewbi9X+Im4pq/qql/rJNXR7O4YbZwK96wuFaqziN9WRdUzJfOcMC+nZ
- tQy3/gBjwK7XKA1e3KfvmqQJFCk/qLd8Hdq2Zv7TAmJb6QU8h7LlPahF2+s8v8sl+BDD+71xrYwFhV
- AmMq53yR9EScS9UPX3ClCdJPPhzFFVrEzccf5xIuXzhbSkEksDUEsNXveJn7VX3R9+iAmFpvX7ft+B
- ieRYDtJt+sOx5q+9G7uPA7kdL68HXEe/9MKhwZxbSsYdwmdwVQ8btFIr9D0sLG2c2qhdpJwudxwPZh
- yq3TAU029++Ex22kK77+PZLUiQuQ/mxWFF4sQuGni19Gb8kBWHffjTH+xKh6SHifBdfo7CpJDCd4Es
- wk3XRC7Ff0Xbt24x9oN+XEkXYBGk+NOrIcbOHaGLyoHUDKINNy94f+GAEJa2g8PX7fpOwOgWglVhRY
- bpto6WIsnKBwcoXF+GxjHMQNg6tpMpP86MRUCUfuZMyzLHROqHGqd9WMGB2EMgDcySlJJukr64L1vt
- 3YZxyC4yk+/eaOTp4aPLCWsIdu7cs0o4ge6Vrv1n9wSJPyLPRx2OBNCgAjXkcKblbWzVOgmIEJakRD
- ZqziJmfDUa5pVNbI5VpDIsd6+tLLzn06DsWhXYeEBu2S0fEqmk0AjozQnoYg==
-X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
- fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TY2PR02MB4479:EE_|KL1PR02MB6189:EE_
+X-MS-Office365-Filtering-Correlation-Id: a996395c-a53a-40dc-10c0-08db733c2e7d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NV8P1aPqqZ7W3CaKpdGUvXr6grTgOg3DPSQ+JRVvWF3F+3bAY3goFj29jpdVgn4bALsR7TExN03CtJxoXikOaCBhBUIOLaNLmrV3WYc1kueDTsA1j97HXuP24iEozCd1dFr+hO86YxUrS7217PyENz9ZunC6K8BZWsLqlSPB0WJgCFVNSoqklNb/rOzZpK7/2KwviNUK342lVS4WDy3JZdyfIXNfVMk8BDknl2uLAXdZslI9KohdvgwnqCEPRUF9RjtQGOOABxApY0R4pe7R3o26KLSpSRBWu8oepX0IUwiMl1x+fatW0OC69kPLSwzfDmduRIwN4HT3HqDXJMkPooxCfD/CN7nTNFgcYJOpaxslxA8/Tytt707RcN3jOYbRcb5Y3DBa28yUTnlMg655lsp3NLUmKfslbYTTqwikawgcYGHHYypzGwIPq3qG1La3hizptjFtHMEtxU2hQ7ap6Kha1quufnxkLQ3lsrB6QNRLKFnMTQwy4OkztsZWWHwsp3VYfh8bCWtXTayWHX3cvZ/KrwTTa9I8uwiKCnRyAcdtlvEfOdBvknm6CLHcwFBxKkleinRwRAp0Q9Y1UGvefwjpMieOlFSl/cy/mgfR2nE8b55Y4rqEViP6+v8+gtjf
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR02MB4479.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(346002)(376002)(396003)(366004)(451199021)(5660300002)(478600001)(66476007)(66556008)(66946007)(52116002)(4326008)(6666004)(6486002)(316002)(36756003)(86362001)(2616005)(83380400001)(1076003)(26005)(6512007)(6506007)(186003)(38100700002)(107886003)(4744005)(8936002)(2906002)(8676002)(41300700001)(15650500001)(38350700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QHaSTlsaJVQ/P/ieDFpkaIlw1T4YKm9MaOBIFRUP7rxF2U1ZucIzaDfAlQ9d?=
+ =?us-ascii?Q?4vDdqDyg1xZC/C1Gvs1GiGXNyWeUzerf2FFpVlTrQkyxWVgma6DKKnTQImAS?=
+ =?us-ascii?Q?rkMwN7Xgmayl3TiSR7s+DwNSMUYpUKEXAR9TI39abRrW/zp34olZCivJMHdx?=
+ =?us-ascii?Q?jPGTBiEu1AeKWmgcTfqLJ4+4oCunJjVDPnkaYPTZEUxqslFIw3ZGHS/iXi+1?=
+ =?us-ascii?Q?IJprDAS4nZ9knoMa9Xo36iaAXqyabr1FJXXJ6cUd7tHLutYf6vu7vfNsxS+L?=
+ =?us-ascii?Q?6LRbznem5spKT90KeeAEogv5JxhazwJBJvxBRCscGv9FYeemw+8uQkdbYzj0?=
+ =?us-ascii?Q?lY2n9HZSl0XDspaUD3qYfxyRGYcdBSKLzE3mnFyoJl8r2rOgE21wouTHmEzT?=
+ =?us-ascii?Q?AaIjYy82dTNARd3Gbiane8YQw0S2xSTAIW1qSlo4pSRy/xdFojiYUIJ1ufRQ?=
+ =?us-ascii?Q?H0OekxCjwtS4TpMjDVAUn8G6CM+PWLIjSIeg1kHzUracG2S7LR9QzxhV5/kH?=
+ =?us-ascii?Q?/pF9pgD9ExdoPY5Eej9RiNp8TqHjK1Hesr9UvGXEhrqi9unEBSAxAXx6wRqV?=
+ =?us-ascii?Q?cBI9WoqjQvsNEPxadOflUxCXnmLbcy8kRsWaT2BKjxZ1B0FCLMjpLdlPLt1D?=
+ =?us-ascii?Q?v2JBWG8CD9pFcOkgVWvuymVb5sreIQUOU/hqMksC3V7JK3ZNkXX8gXBVWhVw?=
+ =?us-ascii?Q?BU9bu+fd29v0VJTUEZvZTKImDpOV4eA51WprTbA4nBrJbnCgMl0mUuWgQ/9o?=
+ =?us-ascii?Q?4+Y0p6WpMqL94vaRB5ogYcYAuHUFqDMD4ykyCDp9Sn5mP9TYn8EdllTlQUOS?=
+ =?us-ascii?Q?uxDQYcEWr0Dm5+jGJuPxSkXUbSAzbjhLePTwMV9sPXzmVX7VcaK2sZ1qvGjf?=
+ =?us-ascii?Q?2EYEsQxxmqF4DGd9oJbfNeS1JGegV3rx5Jn42V9XTyQI8EADwIE/VFpDK7kj?=
+ =?us-ascii?Q?d81OoT8huafroqIdJXt6IoF+HFh4QEjKZ+aMdvAmhlZ8jsfZp2G/I3m9QPAK?=
+ =?us-ascii?Q?nZOiFAH2lh1P4+lsT+JNbSklTSTIcghToFmtmPtHIYseTz95wFVGret5e9JV?=
+ =?us-ascii?Q?Uj0opAeR4GWk8ytAbbCvVzHP6DAr7V34aqEmE3RJkopokIIeusL4Dv/cgnYA?=
+ =?us-ascii?Q?pk0UlepwgCnRVniZd+iL37HP6hNQlkZqAfl8cUcCeMCJeBOVQkL02DM/k2gl?=
+ =?us-ascii?Q?N6Fpp5jKUbcAoQ5xuYT7xbATW3PzBef9CnNUSg49uk+GK0gYSACbBBhWTD6P?=
+ =?us-ascii?Q?cGUM8ecPJqG1yyg5CJft2gsOUsugQPHIPTfDqvkNeKLog6KYE9Cg//zaMTMF?=
+ =?us-ascii?Q?2Bpt8xqxDWrLETnbLqvAMzlCgIjfjKGhDEpMarBu1AVih7WUtIJF6cmKbgDE?=
+ =?us-ascii?Q?qbW67kikmRfLSTrPXA/50CefiOfwrPaBOlC9awuIxkUcxciPnpy0vSe7kA5f?=
+ =?us-ascii?Q?75+7d75l7HRdRty1sYlmBMpytg0UazFOjmv9BWDaXhO+1TYK+lw9J4ohs1ef?=
+ =?us-ascii?Q?33k8L059vG/qbOD0roLC+CcuMJe3fJ4wTdbPb/MaF/PPosCW8FMOKN4tCfc8?=
+ =?us-ascii?Q?+bYCB3O6ZlB/Sn09MGux3J2P3cuyOxrJX+VUtYk4?=
+X-OriginatorOrg: oppo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a996395c-a53a-40dc-10c0-08db733c2e7d
+X-MS-Exchange-CrossTenant-AuthSource: TY2PR02MB4479.apcprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 16:17:32.0384
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kOKcSgoPpX7h2FoRIuybf9PwlFUwwNu7b6Q9Gl4UotHJR05/RHbxTC9o7RK8VIxEyxRBz+HDPQCEpu1NdvWO5w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR02MB6189
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the following config set:
-CONFIG_DRM=m
-CONFIG_DRM_PANEL=y
-CONFIG_DRM_BRIDGE=y
-CONFIG_DRM_PANEL_BRIDGE=y
-CONFIG_TYPEC_MUX_NB7VPQ904M=y
+Mtime and ctime stay old value without update after move
+file range ioctl. This patch add time update.
 
-vmlinux fails on the following symbols:
-  ld.lld: error: undefined symbol: devm_drm_bridge_add
-  ld.lld: error: undefined symbol: devm_drm_of_get_bridge
-
-Add dependendy on DRM || DRM=no since CONFIG_DRM dependency is optional
-and guarded by:
-IS_ENABLED(CONFIG_OF) && IS_ENABLED(CONFIG_DRM_PANEL_BRIDGE)
-in the drive.
-
-Also add "select DRM_PANEL_BRIDGE if DRM" to clarify DRM_PANEL_BRIDGE
-is required if CONFIG_DRM is enabled.
-
-Fixes: 88d8f3ac9c67 ("usb: typec: add support for the nb7vpq904m Type-C Linear Redriver")
-Reported-by: Arnd Bergmann <arnd@kernel.org>
-Suggested-by: Arnd Bergmann <arnd@kernel.org>
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Signed-off-by: Yunlei He <heyunlei@oppo.com>
 ---
-This is re-spin of [1]
+v2:
+-update both src and dst inode
+ fs/f2fs/file.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-[1] https://lore.kernel.org/all/20230622101813.3453772-1-arnd@kernel.org/
----
- drivers/usb/typec/mux/Kconfig | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/typec/mux/Kconfig b/drivers/usb/typec/mux/Kconfig
-index 8c4d6b8fb75c..784b9d8107e9 100644
---- a/drivers/usb/typec/mux/Kconfig
-+++ b/drivers/usb/typec/mux/Kconfig
-@@ -38,6 +38,8 @@ config TYPEC_MUX_INTEL_PMC
- config TYPEC_MUX_NB7VPQ904M
- 	tristate "On Semiconductor NB7VPQ904M Type-C redriver driver"
- 	depends on I2C
-+	depends on DRM || DRM=n
-+	select DRM_PANEL_BRIDGE if DRM
- 	select REGMAP_I2C
- 	help
- 	  Say Y or M if your system has a On Semiconductor NB7VPQ904M Type-C
-
----
-base-commit: c87d46a9e8ebd2f2c3960927b1d21687096d1109
-change-id: 20230622-topic-sm8x50-upstream-redriver-config-fix-8f0aef3e2129
-
-Best regards,
+diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+index cb42d8464ad9..e59fc8faa035 100644
+--- a/fs/f2fs/file.c
++++ b/fs/f2fs/file.c
+@@ -2886,6 +2886,19 @@ static int f2fs_move_file_range(struct file *file_in, loff_t pos_in,
+ 		f2fs_up_write(&F2FS_I(dst)->i_gc_rwsem[WRITE]);
+ out_src:
+ 	f2fs_up_write(&F2FS_I(src)->i_gc_rwsem[WRITE]);
++
++	if (!ret) {
++		src->i_mtime = src->i_ctime = current_time(src);
++		f2fs_mark_inode_dirty_sync(src, false);
++
++		if (src != dst) {
++			dst->i_mtime = dst->i_ctime = current_time(dst);
++			f2fs_mark_inode_dirty_sync(dst, false);
++		}
++
++		f2fs_update_time(sbi, REQ_TIME);
++	}
++
+ out_unlock:
+ 	if (src != dst)
+ 		inode_unlock(dst);
 -- 
-Neil Armstrong <neil.armstrong@linaro.org>
+2.40.1
 
