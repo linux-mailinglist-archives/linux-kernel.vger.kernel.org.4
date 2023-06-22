@@ -2,133 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B8F73A106
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:36:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9204A73A10C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:36:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231411AbjFVMf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 08:35:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43546 "EHLO
+        id S231421AbjFVMgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 08:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231366AbjFVMfz (ORCPT
+        with ESMTP id S231392AbjFVMgu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 08:35:55 -0400
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537D51BC6
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:35:53 -0700 (PDT)
-Received: by mail-vk1-xa36.google.com with SMTP id 71dfb90a1353d-471b3ad20e1so1399250e0c.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:35:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687437352; x=1690029352;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BwL1XXFpB7Juc23gGcrmpmP3rd5YyIO3kgOAyPIlzcM=;
-        b=CqGj2E1L8WAGd6HSmOq2ffig5DVss6jWELqzntl3GKlXUEYm5evoPvavsg0cZPdyUG
-         uVYi/gfibC8xVIb/UDtPwlUBdDgsGbxguuycXjG2YxnCEy6H8kcNelG4AmVpMpuckiFA
-         eyEowBgxCKXjLiR8L0kyDyIwgAAsE6ldsvwGIJ3f6rUlNWz3fc1ZPRn8DOTpQsHvf9U3
-         rCVWH3iloZlCntq1nkRIF3PZgXJe73H9ULOZzTrIaIObG/zpStYEiw4JdcsdNwNBIaPh
-         qAF5aEyVo3tt/zl56/6m0CiD/OPH7Vi4QYEnxzx/YEwhml9wARWBRGCZwE5R0GDgcGQY
-         E3NA==
+        Thu, 22 Jun 2023 08:36:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 025251BC6
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:35:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687437355;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=o3pBXTuB3tzuuBUsdWyQRug37awOIMzuxqG56/45cYw=;
+        b=YefFbdO1nR2+EZnSXKgq6ZgbTxRQZCQrK3FS8AMBQBRMTNtjr34iPZHqS2DzO3GnqVWJEp
+        V8l0Wvw0ZSGybFA0+II3SkEzCqFBoSkaa8wkbujY6k5yx/4LSZQAky/to0cMN9zohpW+IM
+        AYTKZE1xb7uvX0U2uhp+2pD/PAP6lnQ=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-447-QLAevEJsN3Ctzzd4iEGrbw-1; Thu, 22 Jun 2023 08:35:54 -0400
+X-MC-Unique: QLAevEJsN3Ctzzd4iEGrbw-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-30e4d85e1ffso10645111f8f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:35:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687437352; x=1690029352;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BwL1XXFpB7Juc23gGcrmpmP3rd5YyIO3kgOAyPIlzcM=;
-        b=S1Jg5Rric7lC+ppjR6KmZm6PlkuRtPJHxCUU7Vm18BlPOexbv9zTrLYOhYN0yAT2Mm
-         RQauC8sWHEk5yFte6zI4xG3xjCpnBceTNBK6ZV+SKLGwVCFLZZQU9fTiKiY09NKVYQoi
-         LwjR7lV+tq7GvVnTZRjOtokjr57gs0hdyFbuCJaMYc9hQqZ/lCOyuBLNKwK2oRdTa26G
-         C45DvgCxVRgluUxSQjq6YZcvvrD/a8JAJXaci3nHRYpPSGmOmArxdiWPJQRpfu8tWm/+
-         kGclF6EdxWWYF2s4dMp2kwGwGXv/0JBrtbqjh3CLM5RfAhDBrWazUENZCusV6WbFDGST
-         BPNA==
-X-Gm-Message-State: AC+VfDz87I66BETb75tmGYSE16HiPE2Rr25hoVRVrcBVbu+6pzFtZ5qh
-        0nRkwQJitGVZ7lmOfkYdAuJwpnpQazEwg8HdWybsyw==
-X-Google-Smtp-Source: ACHHUZ4bpL2T9bnI4qregSI95k/VcQbvtJLdxgrvfNu5HuW8eTOaNzhJ0fgEC/46fMtfm/dxsGD0owYkxtdDBTEbKLI=
-X-Received: by 2002:a1f:e201:0:b0:471:4ceb:675f with SMTP id
- z1-20020a1fe201000000b004714ceb675fmr5066318vkg.9.1687437352169; Thu, 22 Jun
- 2023 05:35:52 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1687437353; x=1690029353;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o3pBXTuB3tzuuBUsdWyQRug37awOIMzuxqG56/45cYw=;
+        b=doZ03reTh8ROTlfuj3thtnP2Fgms97IsZhX4Jy3FBYgExeV1ZIk2/LA3yEXwdNowSD
+         ONI+QY27XQ/ZXZs925XLb+7Bsm6enuXhmuZrNJS16fdnJ+D+m0W5HtfsmA7Wx03dodFO
+         hwSmpS7EtZq59NoW8T/LJnPvrnBHQ0j/En1syjHuXzOUEeydp42yaF550HXNIIbvUf5V
+         Mju9AsM+C/H4uF7ZlDJrUZNdSW2XO2doBHo4YNGwbR+3DwDM7bWX63dKx3NnefCAyXfb
+         zb8hIaOhugFyeKA8F50WyvwOeFyUV4z6XGDmzMvsWDIGVcgnxdlTrMJRBVI8cjq2MzcQ
+         NotQ==
+X-Gm-Message-State: AC+VfDzKZOzDfIjUxKIcfLB8aVb6AOvC958KE6HBq4YVp+9ZfTg0a1A8
+        VvHhD66QoguwYvUhZmB7BhCqmWUAuhsTitGwfoeU1HBcm88N64LEnSAW26tiuOsgiwAfTkE9baF
+        nhQ8kmNAFsqNmANeiBENW2KxX
+X-Received: by 2002:adf:df81:0:b0:311:1cd7:68b3 with SMTP id z1-20020adfdf81000000b003111cd768b3mr18688363wrl.57.1687437353357;
+        Thu, 22 Jun 2023 05:35:53 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4/IgalXYDuJ4s/OfSxQU7RlstK05ku6b/vAJRJl/dYkeQFv9nh31ixKyyAH3vZITc0Y/uPcg==
+X-Received: by 2002:adf:df81:0:b0:311:1cd7:68b3 with SMTP id z1-20020adfdf81000000b003111cd768b3mr18688349wrl.57.1687437353049;
+        Thu, 22 Jun 2023 05:35:53 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:c:37e0:ced3:55bd:f454:e722? ([2a01:e0a:c:37e0:ced3:55bd:f454:e722])
+        by smtp.gmail.com with ESMTPSA id a16-20020adfe5d0000000b0030e5a63e2dbsm6993575wrn.80.2023.06.22.05.35.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Jun 2023 05:35:52 -0700 (PDT)
+Message-ID: <8e7011fe-6757-e89f-c3c5-d5f87cf83766@redhat.com>
+Date:   Thu, 22 Jun 2023 14:35:51 +0200
 MIME-Version: 1.0
-References: <CA+G9fYuifLivwhCh33kedtpU=6zUpTQ_uSkESyzdRKYp8WbTFQ@mail.gmail.com>
- <ZJLzsWsIPD57pDgc@FVFF77S0Q05N> <ZJQXdFxoBNUdutYx@FVFF77S0Q05N>
-In-Reply-To: <ZJQXdFxoBNUdutYx@FVFF77S0Q05N>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Thu, 22 Jun 2023 18:05:40 +0530
-Message-ID: <CA+G9fYtAutjL3KpZsQyJuk4WqS=Ydi2iyVb5jdecZ-SOuzKCmA@mail.gmail.com>
-Subject: Re: next: Rpi4: Unexpected kernel BRK exception at EL1
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-rpi-kernel@lists.infradead.org,
-        Netdev <netdev@vger.kernel.org>, lkft-triage@lists.linaro.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Puranjay Mohan <puranjay12@gmail.com>,
-        Song Liu <song@kernel.org>, Alexei Starovoitov <ast@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] drm/mgag200: Fix a warning reported by Fi.CI.SPARSE
+Content-Language: en-US
+To:     Sui Jingfeng <suijingfeng@loongson.cn>,
+        Dave Airlie <airlied@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Tom Rix <trix@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230621191139.2291139-1-suijingfeng@loongson.cn>
+From:   Jocelyn Falempe <jfalempe@redhat.com>
+In-Reply-To: <20230621191139.2291139-1-suijingfeng@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+This patch was already sent by Tom Rix last month:
+https://patchwork.freedesktop.org/series/117881/
 
-On Thu, 22 Jun 2023 at 15:12, Mark Rutland <mark.rutland@arm.com> wrote:
->
-> On Wed, Jun 21, 2023 at 01:57:21PM +0100, Mark Rutland wrote:
-> > On Wed, Jun 21, 2023 at 06:06:51PM +0530, Naresh Kamboju wrote:
-> > > Following boot warnings and crashes noticed on arm64 Rpi4 device running
-> > > Linux next-20230621 kernel.
-> > >
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > >
-> > > boot log:
-> > >
-> > > [   22.331748] Kernel text patching generated an invalid instruction
-> > > at 0xffff8000835d6580!
-> > > [   22.340579] Unexpected kernel BRK exception at EL1
-> > > [   22.346141] Internal error: BRK handler: 00000000f2000100 [#1] PREEMPT SMP
-> >
-> > This indicates execution of AARCH64_BREAK_FAULT.
-> >
-> > That could be from dodgy arguments to aarch64_insn_gen_*(), or elsewhere, and
-> > given this is in the networking code I suspect this'll be related to BPF.
-> >
-> > Looking at next-20230621 I see commit:
-> >
-> >   49703aa2adfaff28 ("bpf, arm64: use bpf_jit_binary_pack_alloc")
-> >
-> > ... which changed the way BPF allocates memory, and has code that pads memory
-> > with a bunch of AARCH64_BREAK_FAULT, so it looks like that *might* be related.
->
-> For the benefit of those just looknig at this thread, there has been some
-> discussion in the original thread for this commit. Summary and links below.
->
-> We identified a potential issue with missing cache maintenance:
->
->   https://lore.kernel.org/linux-arm-kernel/ZJMXqTffB22LSOkd@FVFF77S0Q05N/
->
-> Puranjay verified that was causing the problem seen here:
->
->   https://lore.kernel.org/linux-arm-kernel/CANk7y0h5ucxmMz4K8sGx7qogFyx6PRxYxmFtwTRO7=0Y=B4ugw@mail.gmail.com/
->
-> Alexei has dropped this commit for now:
->
->   https://lore.kernel.org/linux-arm-kernel/CAADnVQJqDOMABEx8JuU6r_Dehyf=SkDfRNChx1oNfqPoo7pSrw@mail.gmail.com/
+I can push it to drm-misc-next, if Thomas is ok.
 
-Thanks for the detailed information.
-I am happy to test any proposed fix patches.
+Best regards,
 
+-- 
 
->
-> Thanks,
-> Mark.
+Jocelyn
 
-- Naresh
+On 21/06/2023 21:11, Sui Jingfeng wrote:
+> drivers/gpu/drm/mgag200/mgag200_drv.c:23:5: warning: symbol 'mgag200_modeset' was not declared. Should it be static?
+> 
+> Found in the log of Fi.CI.SPARSE test [1]
+> 
+> [1] https://patchwork.freedesktop.org/series/119249/
+> 
+> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> ---
+>   drivers/gpu/drm/mgag200/mgag200_drv.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/mgag200/mgag200_drv.c b/drivers/gpu/drm/mgag200/mgag200_drv.c
+> index 976f0ab2006b..abddf37f0ea1 100644
+> --- a/drivers/gpu/drm/mgag200/mgag200_drv.c
+> +++ b/drivers/gpu/drm/mgag200/mgag200_drv.c
+> @@ -20,7 +20,7 @@
+>   
+>   #include "mgag200_drv.h"
+>   
+> -int mgag200_modeset = -1;
+> +static int mgag200_modeset = -1;
+>   MODULE_PARM_DESC(modeset, "Disable/Enable modesetting");
+>   module_param_named(modeset, mgag200_modeset, int, 0400);
+>   
+
