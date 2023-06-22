@@ -2,128 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66E4B73997F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 10:27:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F368C739983
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 10:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbjFVI06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 04:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43560 "EHLO
+        id S230313AbjFVI1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 04:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbjFVI0o (ORCPT
+        with ESMTP id S230301AbjFVI1K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 04:26:44 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFAD7211E
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:26:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=mbXA79XLHxERspEGgZH6j4YxWqZ7fFJ3tIvi+rSHyOk=; b=jljuonf4K1sLymfrWeTD2/MMUL
-        6Jvei8fLyJRLPO2xhFRkPTEX/P9cws5G9NRNZSBrXELNh4ejlE7fXvYInygAh8kHXg1ncBXdf8+Im
-        8o8avMslqDvCS1YoFewmeCMd9YkBnLf5BGNzROXRLYsUr2V+T4VBcNmEIvHkRQOXSoQOd3kOgR9iV
-        SaDAqSk0I1fb0D4nIcLLuHZfNv1AaNYBqVwd076jGXF1F+NEb6iMrrXtNzBeEcK1cOSJOpndElzOx
-        son3dUox7JxXjSQmsyKBkBia3Twhiff5TZYa2+H6WM2MGT3azXZJItdB/tnxfGFbuhQ90NOWIxz2B
-        V8NSddeQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qCFdq-0014SH-0S;
-        Thu, 22 Jun 2023 08:26:10 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 454FA300222;
-        Thu, 22 Jun 2023 10:26:07 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2646E2421619E; Thu, 22 Jun 2023 10:26:07 +0200 (CEST)
-Date:   Thu, 22 Jun 2023 10:26:07 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Juergen Gross <jgross@suse.com>
-Cc:     Per Bilse <Per.Bilse@citrix.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        "open list:X86 ENTRY CODE" <linux-kernel@vger.kernel.org>,
-        "moderated list:XEN HYPERVISOR INTERFACE" 
-        <xen-devel@lists.xenproject.org>
-Subject: Re: [PATCH] Updates to Xen hypercall preemption
-Message-ID: <20230622082607.GD4253@hirez.programming.kicks-ass.net>
-References: <20230621151442.2152425-1-per.bilse@citrix.com>
- <20230621164038.GM2053369@hirez.programming.kicks-ass.net>
- <6523f3e2-8dfc-c2dd-6d14-9e0c3ac93cc8@citrix.com>
- <20230621200409.GC4253@hirez.programming.kicks-ass.net>
- <a8cd2788-a695-964a-3311-dbecb669bb72@suse.com>
+        Thu, 22 Jun 2023 04:27:10 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16791BE6
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:26:58 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f640e48bc3so9214253e87.2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 01:26:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687422417; x=1690014417;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=V6VjWt+6pr3rMzoGINogfGHu4avJHisgEYBXXjQzvm4=;
+        b=sJP11aREhkvOtW+E/okkCh1Vaz7KT352DBLFlOhT58DhvAeJcWYQZcZCH++xpGogcA
+         2SQNgG56+g9ORDK2jpIwazDZF6uTSnnfyDZrOQCueZ5yWNk5K/njoz7izWdHs3JSqidz
+         l/9oq3zdcG1WHlcFnxBVoeYdNfgv0DvFCM1bW6cI/iv01KnDRANY8YBJVoheL6RFvy0M
+         2nN2Nv+rKGUdNzeGH/qTSU5sjQytpD333hQvnuY8I4TC6R138R05ArKEJH3XuH0+vCgb
+         Jh3FhKjA1WZJhYYzREJ3WVQLiMzLKjafEruCGMwtucbJW0PINqXzF10pQ5DppzpGjcNq
+         HVGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687422417; x=1690014417;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V6VjWt+6pr3rMzoGINogfGHu4avJHisgEYBXXjQzvm4=;
+        b=dgkCQA2dfsg2MVik2Y+gTZQgFWUjX71dbuV8VBAybEahE/DRDKaT/ivQfcmd0XWXSL
+         uyxQFaCuMaSBeCxdtrhNMNXEeQPWMSwzWL39aoAcXh+UaGG5TfybXDGLSGT4K6DghNI0
+         lXoqQvVOkcEpOQ7kuiYgkfM1KZE+l7cgCOEbuu5Y0qcprjApg+MQUJdTZRcBuXlnBtxV
+         kyUQixnMLLHcw1zSprX506TuHYm6secKyxKsj9OhWdfka2lvuIIj1vZsNySQZ2Fa6zQg
+         LXyrIfciUit4EKnEPHnnq2YGtewkgYdCjjoviM+18s0UIXXqLSwprUN648gNE7coUmc+
+         b9rw==
+X-Gm-Message-State: AC+VfDyxV7MyEicAHK5wmsGvMoAKTri6EN5BzwJ3mGY/VBzu5spR9/VF
+        wk/g5zWhO3U2dIrIWp0Bxgnysg==
+X-Google-Smtp-Source: ACHHUZ6b4oFoOQN6J6JmbZSNyIU0e6BraZ1C02UbgQCLjZCYi4qFCfrdDZauI6HAeYyiOtqPuTzqEA==
+X-Received: by 2002:a05:6512:23a9:b0:4f9:6221:8faf with SMTP id c41-20020a05651223a900b004f962218fafmr1182949lfv.53.1687422417087;
+        Thu, 22 Jun 2023 01:26:57 -0700 (PDT)
+Received: from [192.168.1.20] ([178.197.219.26])
+        by smtp.gmail.com with ESMTPSA id n6-20020a7bcbc6000000b003f7e4d143cfsm7083436wmi.15.2023.06.22.01.26.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 22 Jun 2023 01:26:56 -0700 (PDT)
+Message-ID: <e9f0518d-e0ba-5fc1-1984-0fcfb9fe9102@linaro.org>
+Date:   Thu, 22 Jun 2023 10:26:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a8cd2788-a695-964a-3311-dbecb669bb72@suse.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.12.0
+Subject: Re: linux-next: build warning after merge of the arm-soc tree
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Olof Johansson <olof@lixom.net>,
+        ARM <linux-arm-kernel@lists.infradead.org>
+Cc:     Rob Herring <robh@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>
+References: <20230622104810.30055fb1@canb.auug.org.au>
+ <afeb9fad-0d3b-48ac-82da-218dcd8010e7@app.fastmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <afeb9fad-0d3b-48ac-82da-218dcd8010e7@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 07:22:53AM +0200, Juergen Gross wrote:
+On 22/06/2023 10:19, Arnd Bergmann wrote:
+> On Thu, Jun 22, 2023, at 02:48, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> After merging the arm-soc tree, today's linux-next build (arm
+>> multi_v7_defconfig) produced this warning:
+>>
+>> arch/arm/boot/dts/marvell/armada-390-db.dts:84.10-106.4: Warning 
+>> (spi_bus_reg): /soc/spi@10680/flash@1: SPI bus unit address format 
+>> error, expected "0"
+>>
+>> I am not sure why this has only shown up now.
+> 
+> Thanks for the report, I also just ran into the same thing.
+> It's probably instroduced by 89e73afc3f540 ("ARM: dts: marvell:
+> align SPI NOR node name with dtschema"), but I don't know why
+> there was no warning before.
+> 
+> Added the fixup patch now.
 
-> The hypercalls we are talking of are synchronous ones. They are running
-> in the context of the vcpu doing the call (like a syscall from userland is
-> running in the process context).
+The unit/reg mismatch was there before my commit. Maybe something
+changed in default flags for dtc compiler, thus the warning appeared?
 
-(so time actually passes from the guest's pov?)
+> 
+>     Arnd
+> 
+> ---
+> commit 7dc3be1745d05c1ed7d385487238ec06a07f4f29
+> Author: Arnd Bergmann <arnd@arndb.de>
+> Date:   Thu Jun 22 10:14:02 2023 +0200
+> 
+>     ARM: mvebu: fix unit address on armada-390-db flash
+>     
+>     The unit address needs to be changed to match the reg property:
+>     
+>     arch/arm/boot/dts/marvell/armada-390-db.dts:84.10-106.4: Warning (spi_bus_reg): /soc/spi@10680/flash@1: SPI bus unit address format error, expected "0"
+>     
+>     Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+>     Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> 
 
-> The hypervisor will return to guest context from time to time by modifying
-> the registers such that the guest will do the hypercall again with different
-> input values for the hypervisor, resulting in a proper continuation of the
-> hypercall processing.
 
-Eeeuw.. that's pretty terrible. And changing this isn't in the cards,
-like at all?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-That is, why isn't this whole thing written like:
+Best regards,
+Krzysztof
 
-	for (;;) {
-		ret = hypercall(foo);
-		if (ret == -EAGAIN) {
-			cond_resched();
-			continue;
-		}
-		break;
-	}
-
-> It is an awful interface and I agree that switching to full preemption in
-> dom0 seems to be the route which we should try to take.
-
-Well, I would very strongly suggest the route to take is to scrap the
-whole thing and invest in doing something saner so we don't have to jump
-through hoops like this.
-
-This is quite possibly the worst possible interface for this Xen could
-have come up with -- awards material for sure.
-
-> The downside would be that some workloads might see worse performance
-> due to backend I/O handling might get preempted.
-
-Is that an actual concern? Mark this a legaxy inteface and anybody who
-wants to get away from it updates.
-
-> Just thinking - can full preemption be enabled per process?
-
-Nope, that's a system wide thing. Preemption is something that's driven
-by the requirements of the tasks that preempt, not something by the
-tasks that get preempted.
-
-Andy's idea of having that thing intercepted as an exception (EXTABLE
-like) and relocating the IP to a place that does cond_resched() before
-going back is an option.. gross, but possibly better, dunno.
-
-Quite the mess indeed :/
