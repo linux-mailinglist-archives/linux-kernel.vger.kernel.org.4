@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB94273A367
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB9573A363
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231708AbjFVOoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 10:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49782 "EHLO
+        id S231840AbjFVOnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 10:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231902AbjFVOnn (ORCPT
+        with ESMTP id S231836AbjFVOnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 10:43:43 -0400
+        Thu, 22 Jun 2023 10:43:32 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A5B17212B
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:43:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD3781FFD
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:43:07 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CB0721516;
-        Thu, 22 Jun 2023 07:43:48 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A45B71042;
+        Thu, 22 Jun 2023 07:43:51 -0700 (PDT)
 Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 46D553F663;
-        Thu, 22 Jun 2023 07:43:02 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 207E63F663;
+        Thu, 22 Jun 2023 07:43:05 -0700 (PDT)
 From:   Ryan Roberts <ryan.roberts@arm.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -43,9 +43,9 @@ To:     Catalin Marinas <catalin.marinas@arm.com>,
 Cc:     Ryan Roberts <ryan.roberts@arm.com>,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org
-Subject: [PATCH v1 13/14] mm: Batch-copy PTE ranges during fork()
-Date:   Thu, 22 Jun 2023 15:42:08 +0100
-Message-Id: <20230622144210.2623299-14-ryan.roberts@arm.com>
+Subject: [PATCH v1 14/14] arm64/mm: Implement ptep_set_wrprotects() to optimize fork()
+Date:   Thu, 22 Jun 2023 15:42:09 +0100
+Message-Id: <20230622144210.2623299-15-ryan.roberts@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230622144210.2623299-1-ryan.roberts@arm.com>
 References: <20230622144210.2623299-1-ryan.roberts@arm.com>
@@ -60,270 +60,222 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert copy_pte_range() to copy a set of ptes that map a physically
-contiguous block of memory in a batch. This will likely improve
-performance by a tiny amount due to batching the folio reference count
-management and calling set_ptes() rather than making individual calls to
-set_pte_at().
+With the core-mm changes in place to batch-copy ptes during fork, we can
+take advantage of this in arm64 to greatly reduce the number of tlbis we
+have to issue, and recover the lost fork performance incured when adding
+support for transparent contiguous ptes.
 
-However, the primary motivation for this change is to reduce the number
-of tlb maintenance operations that the arm64 backend has to perform
-during fork, now that it transparently supports the "contiguous bit" in
-its ptes. By write-protecting the parent using the new
-ptep_set_wrprotects() (note the 's' at the end) function, the backend
-can avoid having to unfold contig ranges of PTEs, which is expensive,
-when all ptes in the range are being write-protected. Similarly, by
-using set_ptes() rather than set_pte_at() to set up ptes in the child,
-the backend does not need to fold a contiguous range once they are all
-populated - they can be initially populated as a contiguous range in the
-first place.
+If we are write-protecting a whole contig range, we can apply the
+write-protection to the whole range and know that it won't change
+whether the range should have the contiguous bit set or not. For ranges
+smaller than the contig range, we will still have to unfold, apply the
+write-protection, then fold if the change now means the range is
+foldable.
 
-This change addresses the core-mm refactoring only, and introduces
-ptep_set_wrprotects() with a default implementation that calls
-ptep_set_wrprotect() for each pte in the range. A separate change will
-implement ptep_set_wrprotects() in the arm64 backend to realize the
-performance improvement.
+Performance tested with the following test written for the will-it-scale
+framework:
+
+-------
+
+char *testcase_description = "fork and exit";
+
+void testcase(unsigned long long *iterations, unsigned long nr)
+{
+	int pid;
+	char *mem;
+
+	mem = malloc(SZ_128M);
+	assert(mem);
+	memset(mem, 1, SZ_128M);
+
+	while (1) {
+		pid = fork();
+		assert(pid >= 0);
+
+		if (!pid)
+			exit(0);
+
+		waitpid(pid, NULL, 0);
+
+		(*iterations)++;
+	}
+}
+
+-------
+
+I see huge performance regression when PTE_CONT support was added, then
+the regression is mostly fixed with the addition of this change. The
+following shows regression relative to before PTE_CONT was enabled
+(bigger negative value is bigger regression):
+
+|   cpus |   before opt |   after opt |
+|-------:|-------------:|------------:|
+|      1 |       -10.4% |       -5.2% |
+|      8 |       -15.4% |       -3.5% |
+|     16 |       -38.7% |       -3.7% |
+|     24 |       -57.0% |       -4.4% |
+|     32 |       -65.8% |       -5.4% |
 
 Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
 ---
- include/linux/pgtable.h |  13 ++++
- mm/memory.c             | 149 +++++++++++++++++++++++++++++++---------
- 2 files changed, 128 insertions(+), 34 deletions(-)
+ arch/arm64/include/asm/pgtable.h | 48 ++++++++++++++++++++++----------
+ arch/arm64/mm/contpte.c          | 41 +++++++++++++++++++++++++++
+ arch/arm64/mm/hugetlbpage.c      |  2 +-
+ 3 files changed, 75 insertions(+), 16 deletions(-)
 
-diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
-index a661a17173fa..6a7b28d520de 100644
---- a/include/linux/pgtable.h
-+++ b/include/linux/pgtable.h
-@@ -547,6 +547,19 @@ static inline void ptep_set_wrprotect(struct mm_struct *mm, unsigned long addres
- }
- #endif
+diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
+index 5963da651da7..479a9e5ab756 100644
+--- a/arch/arm64/include/asm/pgtable.h
++++ b/arch/arm64/include/asm/pgtable.h
+@@ -963,21 +963,25 @@ static inline pmd_t pmdp_huge_get_and_clear(struct mm_struct *mm,
+ #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
  
-+#ifndef ptep_set_wrprotects
-+struct mm_struct;
-+static inline void ptep_set_wrprotects(struct mm_struct *mm,
-+				unsigned long address, pte_t *ptep,
-+				unsigned int nr)
-+{
+ /*
+- * __ptep_set_wrprotect - mark read-only while trasferring potential hardware
++ * __ptep_set_wrprotects - mark read-only while trasferring potential hardware
+  * dirty status (PTE_DBM && !PTE_RDONLY) to the software PTE_DIRTY bit.
+  */
+-static inline void __ptep_set_wrprotect(struct mm_struct *mm,
+-					unsigned long address, pte_t *ptep)
++static inline void __ptep_set_wrprotects(struct mm_struct *mm,
++					unsigned long address, pte_t *ptep,
++					unsigned int nr)
+ {
+ 	pte_t old_pte, pte;
+-
+-	pte = __ptep_get(ptep);
+-	do {
+-		old_pte = pte;
+-		pte = pte_wrprotect(pte);
+-		pte_val(pte) = cmpxchg_relaxed(&pte_val(*ptep),
+-					       pte_val(old_pte), pte_val(pte));
+-	} while (pte_val(pte) != pte_val(old_pte));
 +	unsigned int i;
 +
-+	for (i = 0; i < nr; i++, address += PAGE_SIZE, ptep++)
-+		ptep_set_wrprotect(mm, address, ptep);
-+}
-+#endif
-+
- /*
-  * On some architectures hardware does not set page access bit when accessing
-  * memory page, it is responsibility of software setting this bit. It brings
-diff --git a/mm/memory.c b/mm/memory.c
-index fb30f7523550..9a041cc31c74 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -911,57 +911,126 @@ copy_present_page(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma
- 		/* Uffd-wp needs to be delivered to dest pte as well */
- 		pte = pte_mkuffd_wp(pte);
- 	set_pte_at(dst_vma->vm_mm, addr, dst_pte, pte);
--	return 0;
-+	return 1;
-+}
-+
-+static inline unsigned long page_addr(struct page *page,
-+				struct page *anchor, unsigned long anchor_addr)
-+{
-+	unsigned long offset;
-+	unsigned long addr;
-+
-+	offset = (page_to_pfn(page) - page_to_pfn(anchor)) << PAGE_SHIFT;
-+	addr = anchor_addr + offset;
-+
-+	if (anchor > page) {
-+		if (addr > anchor_addr)
-+			return 0;
-+	} else {
-+		if (addr < anchor_addr)
-+			return ULONG_MAX;
++	for (i = 0; i < nr; i++, address += PAGE_SIZE, ptep++) {
++		pte = __ptep_get(ptep);
++		do {
++			old_pte = pte;
++			pte = pte_wrprotect(pte);
++			pte_val(pte) = cmpxchg_relaxed(&pte_val(*ptep),
++						pte_val(old_pte), pte_val(pte));
++		} while (pte_val(pte) != pte_val(old_pte));
 +	}
-+
-+	return addr;
-+}
-+
-+static int calc_anon_folio_map_pgcount(struct folio *folio,
-+				       struct page *page, pte_t *pte,
-+				       unsigned long addr, unsigned long end)
-+{
-+	pte_t ptent;
-+	int floops;
-+	int i;
-+	unsigned long pfn;
-+
-+	end = min(page_addr(&folio->page + folio_nr_pages(folio), page, addr),
-+		  end);
-+	floops = (end - addr) >> PAGE_SHIFT;
-+	pfn = page_to_pfn(page);
-+	pfn++;
-+	pte++;
-+
-+	for (i = 1; i < floops; i++) {
-+		ptent = ptep_get(pte);
-+
-+		if (!pte_present(ptent) ||
-+		    pte_pfn(ptent) != pfn) {
-+			return i;
-+		}
-+
-+		pfn++;
-+		pte++;
-+	}
-+
-+	return floops;
  }
  
- /*
-- * Copy one pte.  Returns 0 if succeeded, or -EAGAIN if one preallocated page
-- * is required to copy this pte.
-+ * Copy set of contiguous ptes.  Returns number of ptes copied if succeeded
-+ * (always gte 1), or -EAGAIN if one preallocated page is required to copy the
-+ * first pte.
-  */
- static inline int
--copy_present_pte(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma,
--		 pte_t *dst_pte, pte_t *src_pte, unsigned long addr, int *rss,
--		 struct folio **prealloc)
-+copy_present_ptes(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma,
-+		  pte_t *dst_pte, pte_t *src_pte,
-+		  unsigned long addr, unsigned long end,
-+		  int *rss, struct folio **prealloc)
+ #ifdef CONFIG_TRANSPARENT_HUGEPAGE
+@@ -985,7 +989,7 @@ static inline void __ptep_set_wrprotect(struct mm_struct *mm,
+ static inline void pmdp_set_wrprotect(struct mm_struct *mm,
+ 				      unsigned long address, pmd_t *pmdp)
  {
- 	struct mm_struct *src_mm = src_vma->vm_mm;
- 	unsigned long vm_flags = src_vma->vm_flags;
- 	pte_t pte = ptep_get(src_pte);
- 	struct page *page;
- 	struct folio *folio;
-+	bool anon;
-+	int nr;
-+	int i;
- 
- 	page = vm_normal_page(src_vma, addr, pte);
--	if (page)
-+	if (page) {
- 		folio = page_folio(page);
--	if (page && folio_test_anon(folio)) {
--		/*
--		 * If this page may have been pinned by the parent process,
--		 * copy the page immediately for the child so that we'll always
--		 * guarantee the pinned page won't be randomly replaced in the
--		 * future.
--		 */
--		folio_get(folio);
--		if (unlikely(page_try_dup_anon_rmap(page, false, src_vma))) {
--			/* Page may be pinned, we have to copy. */
--			folio_put(folio);
--			return copy_present_page(dst_vma, src_vma, dst_pte, src_pte,
--						 addr, rss, prealloc, page);
-+		anon = folio_test_anon(folio);
-+		nr = calc_anon_folio_map_pgcount(folio, page, src_pte, addr, end);
-+
-+		for (i = 0; i < nr; i++, page++) {
-+			if (anon) {
-+				/*
-+				 * If this page may have been pinned by the
-+				 * parent process, copy the page immediately for
-+				 * the child so that we'll always guarantee the
-+				 * pinned page won't be randomly replaced in the
-+				 * future.
-+				 */
-+				if (unlikely(page_try_dup_anon_rmap(
-+						page, false, src_vma))) {
-+					if (i != 0)
-+						break;
-+					/* Page may be pinned, we have to copy. */
-+					return copy_present_page(dst_vma, src_vma,
-+								 dst_pte, src_pte,
-+								 addr, rss,
-+								 prealloc, page);
-+				}
-+				rss[MM_ANONPAGES]++;
-+				VM_BUG_ON(PageAnonExclusive(page));
-+			} else {
-+				page_dup_file_rmap(page, false);
-+				rss[mm_counter_file(page)]++;
-+			}
- 		}
--		rss[MM_ANONPAGES]++;
--	} else if (page) {
--		folio_get(folio);
--		page_dup_file_rmap(page, false);
--		rss[mm_counter_file(page)]++;
--	}
-+
-+		nr = i;
-+		folio_ref_add(folio, nr);
-+	} else
-+		nr = 1;
- 
- 	/*
- 	 * If it's a COW mapping, write protect it both
- 	 * in the parent and the child
- 	 */
- 	if (is_cow_mapping(vm_flags) && pte_write(pte)) {
--		ptep_set_wrprotect(src_mm, addr, src_pte);
-+		ptep_set_wrprotects(src_mm, addr, src_pte, nr);
- 		pte = pte_wrprotect(pte);
- 	}
--	VM_BUG_ON(page && folio_test_anon(folio) && PageAnonExclusive(page));
- 
- 	/*
- 	 * If it's a shared mapping, mark it clean in
-@@ -974,8 +1043,8 @@ copy_present_pte(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma,
- 	if (!userfaultfd_wp(dst_vma))
- 		pte = pte_clear_uffd_wp(pte);
- 
--	set_pte_at(dst_vma->vm_mm, addr, dst_pte, pte);
--	return 0;
-+	set_ptes(dst_vma->vm_mm, addr, dst_pte, pte, nr);
-+	return nr;
+-	__ptep_set_wrprotect(mm, address, (pte_t *)pmdp);
++	__ptep_set_wrprotects(mm, address, (pte_t *)pmdp, 1);
  }
  
- static inline struct folio *page_copy_prealloc(struct mm_struct *src_mm,
-@@ -1065,15 +1134,28 @@ copy_pte_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma,
- 			 */
- 			WARN_ON_ONCE(ret != -ENOENT);
- 		}
--		/* copy_present_pte() will clear `*prealloc' if consumed */
--		ret = copy_present_pte(dst_vma, src_vma, dst_pte, src_pte,
--				       addr, rss, &prealloc);
-+		/* copy_present_ptes() will clear `*prealloc' if consumed */
-+		ret = copy_present_ptes(dst_vma, src_vma, dst_pte, src_pte,
-+				       addr, end, rss, &prealloc);
+ #define pmdp_establish pmdp_establish
+@@ -1134,6 +1138,8 @@ extern int contpte_ptep_test_and_clear_young(struct vm_area_struct *vma,
+ 				unsigned long addr, pte_t *ptep);
+ extern int contpte_ptep_clear_flush_young(struct vm_area_struct *vma,
+ 				unsigned long addr, pte_t *ptep);
++extern void contpte_set_wrprotects(struct mm_struct *mm, unsigned long addr,
++				pte_t *ptep, unsigned int nr);
+ extern int contpte_ptep_set_access_flags(struct vm_area_struct *vma,
+ 				unsigned long addr, pte_t *ptep,
+ 				pte_t entry, int dirty);
+@@ -1298,13 +1304,25 @@ static inline int ptep_clear_flush_young(struct vm_area_struct *vma,
+ 	return contpte_ptep_clear_flush_young(vma, addr, ptep);
+ }
+ 
++#define ptep_set_wrprotects ptep_set_wrprotects
++static inline void ptep_set_wrprotects(struct mm_struct *mm, unsigned long addr,
++				pte_t *ptep, unsigned int nr)
++{
++	if (!contpte_is_enabled(mm))
++		__ptep_set_wrprotects(mm, addr, ptep, nr);
++	else if (nr == 1) {
++		contpte_try_unfold(mm, addr, ptep, __ptep_get(ptep));
++		__ptep_set_wrprotects(mm, addr, ptep, 1);
++		contpte_try_fold(mm, addr, ptep, __ptep_get(ptep));
++	} else
++		contpte_set_wrprotects(mm, addr, ptep, nr);
++}
 +
- 		/*
- 		 * If we need a pre-allocated page for this pte, drop the
- 		 * locks, allocate, and try again.
- 		 */
- 		if (unlikely(ret == -EAGAIN))
- 			break;
+ #define __HAVE_ARCH_PTEP_SET_WRPROTECT
+ static inline void ptep_set_wrprotect(struct mm_struct *mm,
+ 				unsigned long addr, pte_t *ptep)
+ {
+-	contpte_try_unfold(mm, addr, ptep, __ptep_get(ptep));
+-	__ptep_set_wrprotect(mm, addr, ptep);
+-	contpte_try_fold(mm, addr, ptep, __ptep_get(ptep));
++	ptep_set_wrprotects(mm, addr, ptep, 1);
+ }
+ 
+ #define __HAVE_ARCH_PTEP_SET_ACCESS_FLAGS
+diff --git a/arch/arm64/mm/contpte.c b/arch/arm64/mm/contpte.c
+index 0b585d1c4c94..4f666697547d 100644
+--- a/arch/arm64/mm/contpte.c
++++ b/arch/arm64/mm/contpte.c
+@@ -353,6 +353,47 @@ int contpte_ptep_clear_flush_young(struct vm_area_struct *vma,
+ 	return young;
+ }
+ 
++void contpte_set_wrprotects(struct mm_struct *mm, unsigned long addr,
++					pte_t *ptep, unsigned int nr)
++{
++	unsigned long next;
++	unsigned long end = addr + (nr << PAGE_SHIFT);
++
++	do {
++		next = pte_cont_addr_end(addr, end);
++		nr = (next - addr) >> PAGE_SHIFT;
 +
 +		/*
-+		 * Positive return value is the number of ptes copied.
++		 * If wrprotecting an entire contig range, we can avoid
++		 * unfolding. Just set wrprotect and wait for the later
++		 * mmu_gather flush to invalidate the tlb. Until the flush, the
++		 * page may or may not be wrprotected. After the flush, it is
++		 * guarranteed wrprotected. If its a partial range though, we
++		 * must unfold, because we can't have a case where CONT_PTE is
++		 * set but wrprotect applies to a subset of the PTEs; this would
++		 * cause it to continue to be unpredictable after the flush.
 +		 */
-+		VM_WARN_ON_ONCE(ret < 1);
-+		progress += 8 * ret;
-+		ret--;
-+		dst_pte += ret;
-+		src_pte += ret;
-+		addr += ret << PAGE_SHIFT;
-+		ret = 0;
++		if (nr != CONT_PTES)
++			contpte_try_unfold(mm, addr, ptep, __ptep_get(ptep));
 +
- 		if (unlikely(prealloc)) {
- 			/*
- 			 * pre-alloc page cannot be reused by next time so as
-@@ -1084,7 +1166,6 @@ copy_pte_range(struct vm_area_struct *dst_vma, struct vm_area_struct *src_vma,
- 			folio_put(prealloc);
- 			prealloc = NULL;
- 		}
--		progress += 8;
- 	} while (dst_pte++, src_pte++, addr += PAGE_SIZE, addr != end);
++		__ptep_set_wrprotects(mm, addr, ptep, nr);
++
++		addr = next;
++		ptep += nr;
++
++		/*
++		 * If applying to a partial contig range, the change could have
++		 * made the range foldable. Use the last pte in the range we
++		 * just set for comparison, since contpte_try_fold() only
++		 * triggers when acting on the last pte in the contig range.
++		 */
++		if (nr != CONT_PTES)
++			contpte_try_fold(mm, addr - PAGE_SIZE, ptep - 1,
++					 __ptep_get(ptep - 1));
++
++	} while (addr != end);
++}
++
+ int contpte_ptep_set_access_flags(struct vm_area_struct *vma,
+ 					unsigned long addr, pte_t *ptep,
+ 					pte_t entry, int dirty)
+diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+index 82b2036dbe2f..ecf7bfa761c3 100644
+--- a/arch/arm64/mm/hugetlbpage.c
++++ b/arch/arm64/mm/hugetlbpage.c
+@@ -511,7 +511,7 @@ void huge_ptep_set_wrprotect(struct mm_struct *mm,
+ 	pte_t pte;
  
- 	arch_leave_lazy_mmu_mode();
+ 	if (!pte_cont(__ptep_get(ptep))) {
+-		__ptep_set_wrprotect(mm, addr, ptep);
++		__ptep_set_wrprotects(mm, addr, ptep, 1);
+ 		return;
+ 	}
+ 
 -- 
 2.25.1
 
