@@ -2,150 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 302B3739C82
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:19:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433E8739C99
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 11:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231518AbjFVJTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 05:19:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59496 "EHLO
+        id S232262AbjFVJWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 05:22:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232026AbjFVJTN (ORCPT
+        with ESMTP id S232082AbjFVJVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 05:19:13 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B1B358E;
-        Thu, 22 Jun 2023 02:10:39 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2] (unknown [IPv6:2001:b07:2ed:14ed:c5f8:7372:f042:90a2])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7D0B8660706C;
-        Thu, 22 Jun 2023 10:10:37 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687425038;
-        bh=5uxh5lKnVnM46Q8SEQodnpqC2oAD7Fjq5YEoHjE5Sx4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=KPUAgmSdKBe8F1sbK0PJohKxD/iIlloBxRbdx2mXToR6bT0FdS/9cnpdpHyDyWPiV
-         9LYisjtoi9lQjkY6At9xAj4YncbpeIshMKIzGUJIMWyOqj3QittZD7V+6FnIquTZnH
-         kyANnfNm+j8bI8c/535TwPqRf62LvcR+18KpLAlQcC1hEy8GqAeUwjX2JbLeasux8I
-         JMqpyRqAtZuGljolnyporGOo6z6ZzqXm//GGQROy/CNoq5PYvnLri1W+ItKNrAnqxa
-         9CVUOFrfDlfafgmh31726rulYjimvN7Q790qDQmFLPxCVksLehwVx3/BZVXkSSbYjN
-         y7zmKhrAZTPiw==
-Message-ID: <99adec72-da7b-ce46-27be-b823a208a39e@collabora.com>
-Date:   Thu, 22 Jun 2023 11:10:34 +0200
+        Thu, 22 Jun 2023 05:21:41 -0400
+Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9916D65B0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:12:11 -0700 (PDT)
+Received: by mail-vk1-xa2e.google.com with SMTP id 71dfb90a1353d-47151ee3fe6so2231778e0c.2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 02:12:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1687425130; x=1690017130;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LAUOQODzdCeUTcrDvoPMBORZt9+ufR2Q6MlQ8V9HqcA=;
+        b=mXPKXfCQ5AqfGGN7eLis7zio/LUO4dolZMn9tGoBWo9lQ/0YSYOantIpV+5Aknn1uh
+         3J4AAW5FwrtrCjPqExngKvRZGdsEMMnXiWLjxSlxcZ4Z4hrIKAqnf3JGXGjDgW9P3bL1
+         pFNgcMjEIcXauA2TF31JXquLUpbL+xqhM2fQ9hmTnukCcFG1Mle2eakMHU8X4YmkO6LO
+         bAhMo5m/gWYLFCsmeuIdoTLd4aVKzBQXkX6znVpbHzzsNtQEyUyVQaAV7jfwZ4Hpde4C
+         pcPlmHg9x/K3XVnBI0Byou5ihxHLvg+InoKTxxb2YQ/iI8WDHTP84M7mjcSJauXDobPV
+         PPNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687425130; x=1690017130;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LAUOQODzdCeUTcrDvoPMBORZt9+ufR2Q6MlQ8V9HqcA=;
+        b=c8eoih54TktImkGBS6thMv71acJE/UHrkwt0jA6NFBLWjPeFX/ZNVdq0v8t5RMS4tJ
+         ShTf2gg8REGiFPlBl/2+hb6l7gfpvKs/QUOEhsryc0T63JCcVWXKzp9K2uZKrZVfsTzt
+         FOPX4GHvnrcFPX690He4djOgBaHH/J4y7KW26blO9TfHeg4JxeIMrJPyNrH1HhHVzaFB
+         Vy6M4EzOtcqQeAzDp+TrB+7BA1MKj9caUMGaU2VijWD4E2TBEql5PCutAffN6FMlyKVV
+         k+p3u8CicX9xu2z8yz89eslo8+5/yH7ZJqn4w8+yTO8bx+cXNwHRZw28cosAexXOd0JY
+         8sRA==
+X-Gm-Message-State: AC+VfDxYl1oERxu/FRVtAtxIZ5Wy7OS1Q26VFS1XuksCNJI6WNTaeznT
+        7VrxXapRPfDehR5eDuvfLtKvvXjY2DK4smVApL0qHw==
+X-Google-Smtp-Source: ACHHUZ7Jjoae1j3de5QaDkn+NVntLKV6op75KhbpCaUpXW852Raha07Xg8nXWZ9iLhTkIRdAW16BPNsvDSHUyHVrFYM=
+X-Received: by 2002:a1f:4801:0:b0:471:cfa1:5065 with SMTP id
+ v1-20020a1f4801000000b00471cfa15065mr4808788vka.3.1687425130628; Thu, 22 Jun
+ 2023 02:12:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH v3 8/8] leds: leds-mt6323: Add support for WLEDs and
- MT6332
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     pavel@ucw.cz, lee@kernel.org, sean.wang@mediatek.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, linux-leds@vger.kernel.org,
+References: <20230621093245.78130-1-o.rempel@pengutronix.de> <20230621093245.78130-2-o.rempel@pengutronix.de>
+In-Reply-To: <20230621093245.78130-2-o.rempel@pengutronix.de>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 22 Jun 2023 11:11:33 +0200
+Message-ID: <CAPDyKFqYfuQNCTPiEM56jrzUBe2jevY+MuTOj6K-7OkpO0_daA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] dt-bindings: mmc: fsl-imx-esdhc: Add imx6ul support
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        kernel@pengutronix.de, Peng Fan <peng.fan@nxp.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Michael Trimarchi <michael@amarulasolutions.com>,
+        Mark Brown <broonie@kernel.org>,
+        Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Marek Vasut <marex@denx.de>, linux-clk@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, llvm@lists.linux.dev
-References: <20230601110813.2373764-1-angelogioacchino.delregno@collabora.com>
- <20230601110813.2373764-9-angelogioacchino.delregno@collabora.com>
- <20230621213124.GA2689001@dev-arch.thelio-3990X>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230621213124.GA2689001@dev-arch.thelio-3990X>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 21/06/23 23:31, Nathan Chancellor ha scritto:
-> Hi Angelo,
-> 
-> On Thu, Jun 01, 2023 at 01:08:13PM +0200, AngeloGioacchino Del Regno wrote:
->> Add basic code to turn on and off WLEDs and wire up MT6332 support
->> to take advantage of it.
->> This is a simple approach due to the aforementioned PMIC supporting
->> only on/off status so, at the time of writing, it is impossible for me
->> to validate more advanced functionality due to lack of hardware.
->>
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> 
-> After this patch as commit 9bb0a9e0626c ("leds: leds-mt6323: Add support
-> for WLEDs and MT6332") in -next, I see the following warnings from
-> clang, which are basically flagging potential kernel Control Flow
-> Integrity [1] violations that will be visible at runtime (this warning
-> is not enabled for the kernel yet but we would like it to be):
-> 
->    drivers/leds/leds-mt6323.c:598:49: error: incompatible function pointer types assigning to 'int (*)(struct led_classdev *, enum led_brightness)' from 'int (struct led_classdev *, unsigned int)' [-Werror,-Wincompatible-function-pointer-types-strict]
->      598 |                         leds->led[reg]->cdev.brightness_set_blocking =
->          |                                                                      ^
->      599 |                                                 mt6323_wled_set_brightness;
->          |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
->    drivers/leds/leds-mt6323.c:600:40: error: incompatible function pointer types assigning to 'enum led_brightness (*)(struct led_classdev *)' from 'unsigned int (struct led_classdev *)' [-Werror,-Wincompatible-function-pointer-types-strict]
->      600 |                         leds->led[reg]->cdev.brightness_get =
->          |                                                             ^
->      601 |                                                 mt6323_get_wled_brightness;
->          |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~
->    2 errors generated.
-> 
->  From what I can tell/understand, 'enum led_brightness' is obsolete and
-> the value that is passed via ->brightness_set_blocking() is an 'unsigned
-> int' as well but it seems 'enum led_brightness' is used as the parameter
-> in a lot of different callback implementations, so the prototype cannot
-> be easily updated without a lot of extra work. Is there any reason not
-> to just do something like this to avoid this issue?
-> 
+On Wed, 21 Jun 2023 at 11:32, Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+>
+> Add the 'fsl,imx6ul-usdhc' value to the compatible properties list in
+> the fsl-imx-esdhc.yaml file. This is required to match the compatible
+> strings present in the 'mmc@2190000' node of 'imx6ul-prti6g.dtb'. This
+> commit addresses the following dtbs_check warning:
+> imx6ul-prti6g.dtb:0:0: /soc/bus@2100000/mmc@2190000: failed to match any schema with compatible: ['fsl,imx6ul-usdhc', 'fsl,imx6sx-usdhc']
+>
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-I don't think that this would bring any issue to the table.
+Applied for next, thanks!
 
-The rework will possibly be done globally, for all drivers, when time comes... so
-feel free to send the proposed patch.
-
-Thanks,
-Angelo
-
-> [1]: https://lwn.net/Articles/898040/
-> 
-> Cheers,
-> Nathan
-> 
-> diff --git a/drivers/leds/leds-mt6323.c b/drivers/leds/leds-mt6323.c
-> index e8fecfc2e90a..24f35bdb55fb 100644
-> --- a/drivers/leds/leds-mt6323.c
-> +++ b/drivers/leds/leds-mt6323.c
-> @@ -76,7 +76,7 @@ struct mt6323_led {
->   	int			id;
->   	struct mt6323_leds	*parent;
->   	struct led_classdev	cdev;
-> -	unsigned int		current_brightness;
-> +	enum led_brightness	current_brightness;
->   };
->   
->   /**
-> @@ -451,7 +451,7 @@ static int mtk_wled_hw_off(struct led_classdev *cdev)
->   	return 0;
->   }
->   
-> -static unsigned int mt6323_get_wled_brightness(struct led_classdev *cdev)
-> +static enum led_brightness mt6323_get_wled_brightness(struct led_classdev *cdev)
->   {
->   	struct mt6323_led *led = container_of(cdev, struct mt6323_led, cdev);
->   	struct mt6323_leds *leds = led->parent;
-> @@ -471,7 +471,7 @@ static unsigned int mt6323_get_wled_brightness(struct led_classdev *cdev)
->   }
->   
->   static int mt6323_wled_set_brightness(struct led_classdev *cdev,
-> -				      unsigned int brightness)
-> +				      enum led_brightness brightness)
->   {
->   	struct mt6323_led *led = container_of(cdev, struct mt6323_led, cdev);
->   	struct mt6323_leds *leds = led->parent;
+Kind regards
+Uffe
 
 
+> ---
+>  Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> index fbfd822b92707..82eb7a24c8578 100644
+> --- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
+> @@ -42,6 +42,7 @@ properties:
+>            - enum:
+>                - fsl,imx6sll-usdhc
+>                - fsl,imx6ull-usdhc
+> +              - fsl,imx6ul-usdhc
+>            - const: fsl,imx6sx-usdhc
+>        - items:
+>            - const: fsl,imx7d-usdhc
+> --
+> 2.39.2
+>
