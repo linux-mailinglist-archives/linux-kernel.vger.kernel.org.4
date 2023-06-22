@@ -2,110 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C77173A5D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 18:17:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5F5773A5F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 18:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbjFVQRm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 12:17:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
+        id S230105AbjFVQU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 12:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbjFVQRk (ORCPT
+        with ESMTP id S229522AbjFVQUZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 12:17:40 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2043.outbound.protection.outlook.com [40.107.215.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9451BD8
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 09:17:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G762HZ/+Id5rxxfMLTugcntanCrNxIpER5uPcIb/5cZlG+N5wm9xwB7gABM/MtcpTcQmYm/uIyYXe2GU/iS2AwYHPGRpJ0VdYr/coJAm/pH5ovBZZfZJKfTrANVLiUFi1nznRBzly+4XjbdDiGTW1+lJmeczx5BMS9lO2NjZgPrQJN57QDhuB5YE0tGjkkNPjqS0Az/gLL16kQ4wKdsV0a+A1Eur5pkPaxqai1TMwI3zoo2gxgIOtObaEqA7afo2AJ3/pnqcZOXCPyiXxfhQgwxuV51waPjqlRvXrgWGwugGUIdeHL8+qOKKp+v3auVkT4gaVQpKafjnsoLNkOBQ7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3SUgRU4Lh+anYyhlpU8OjM7HlytBsIPlTH83+HRomeE=;
- b=mv8Diu3JV/WPT6gdYxowAKpglssKt7pGSq6PCxIqDp4wvHdWVzg9cbHlLjrqfg9JzdR2ZHpgxLyTWthfur4SCCziu2GQWfNaUFkGoC/gFt+pB2Ss5uAftGBsRREgth5O3oMzbA90mMnqwKQ3GNQezGrKpwPR1JnYWDe6R5/fJr+LCfT6boUDhysuGWkFK8FTAku2bdJoZj1HiL2uQXrOBTwMD2HG7to3yCI2newsnlhkRvXBZ4bSTUyG5RZVZrF0tbFL/4uJ3OFZzJPyFixg/D/BQ7zzo/5NhiEasYEsMsx62/BNtB04F86/2Ap7v57Mw/OsEe6QrYWdofiRDAAbrg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oppo.com; dmarc=pass action=none header.from=oppo.com;
- dkim=pass header.d=oppo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oppo.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3SUgRU4Lh+anYyhlpU8OjM7HlytBsIPlTH83+HRomeE=;
- b=tcYEI77D8qnqnsapdSNTebCZU1/JuJ0vf4Xa9CfVtPL2HTo+If4KFg9QiFNNwadR/R0yj8yPKbJkaX27ltulNNZAo8H+LLk6uOgXNt8gqlUpptRub/cmTUrSrgbjPU8+MHiDZNWCkBrZ8zmLS3XE1zTnGKoRUh3NKBStKSOLcJ8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=oppo.com;
-Received: from TY2PR02MB4479.apcprd02.prod.outlook.com (2603:1096:404:800e::7)
- by KL1PR02MB6189.apcprd02.prod.outlook.com (2603:1096:820:bd::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6521.23; Thu, 22 Jun
- 2023 16:17:34 +0000
-Received: from TY2PR02MB4479.apcprd02.prod.outlook.com
- ([fe80::bc4a:4d7a:4c73:76eb]) by TY2PR02MB4479.apcprd02.prod.outlook.com
- ([fe80::bc4a:4d7a:4c73:76eb%4]) with mapi id 15.20.6521.020; Thu, 22 Jun 2023
- 16:17:33 +0000
-From:   Yunlei He <heyunlei@oppo.com>
-To:     jaegeuk@kernel.org, chao@kernel.org
-Cc:     linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, Yunlei He <heyunlei@oppo.com>
-Subject: [f2fs-dev][PATCH 2/2]  f2fs: truncate pages if move file range success
-Date:   Fri, 23 Jun 2023 00:16:47 +0800
-Message-Id: <20230622161647.742012-2-heyunlei@oppo.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230622161647.742012-1-heyunlei@oppo.com>
-References: <20230622161647.742012-1-heyunlei@oppo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR04CA0178.apcprd04.prod.outlook.com
- (2603:1096:4:14::16) To TY2PR02MB4479.apcprd02.prod.outlook.com
- (2603:1096:404:800e::7)
+        Thu, 22 Jun 2023 12:20:25 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0841E1BD8
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 09:20:24 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-62fd844ad58so58018586d6.2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 09:20:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1687450823; x=1690042823;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3XELcs0KjDsqiSRNO8EY3VKhL4hoV52jGXB5PnafOp0=;
+        b=CzM7F26e9LXYl0fTNN1xYIPzqGWXfb9wFaBmTtUucf3sth/KsvghYciw+kzlCdA9sK
+         O3gJorqwfPMI/RsBz5OjcLWoZnM6bmNTEUP9a5PbNQTVSBBkMSYXMdEwGfGCWtFcNsVR
+         Iibp9LwkV9yBN2WsCZfJGzY0ofxELsalVTTqQLmQVRPB5Aa89sK99xHpWz7SNDXu2wGs
+         u+6w/aT/A92/B+Qtv2dZkwuGyScVKfBAmpgny2cNtb/E2wWaNz5J1+4GpZBTrHyLdcTf
+         xkxMeFUbWbsR9jvPYAFFBGnyD/QQTeOQsQJ7jCGvQsbe9cR4t2FUoPonbk6OO8p4rz/a
+         /YqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687450823; x=1690042823;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3XELcs0KjDsqiSRNO8EY3VKhL4hoV52jGXB5PnafOp0=;
+        b=DJMhQOqvmPVPTFAT7keFCWqvKbEc1O8CPd6CoViozShpEpIboQhTdgoj44oBVDA9z+
+         j+Jx5+aWnyoSlzL4Hc47isCa+r1pgt+II3W2sFK2VIbXYqoPLFjvyGwEiHkG0mfxVx0e
+         HOdLn/eNR13EPrkT0+1uacEI0nhPQBNyGnax/zJzJq+AHonMe7UuSsBf9N+p1feD4iBR
+         ES59XwOTlGC/+hRTSQ85UXtm1c5u0H/mCa63JdIVgOHpYicJAY9NiJlPqI+QEwUzgpVE
+         J8zL29uhh6VoZCL4au2hpHKOd8l9win0no9guV+M8ZKj6PzF823F5h1HRpykIZvEFEbX
+         m2Dg==
+X-Gm-Message-State: AC+VfDzt2MxJ4dEE2oCxK+vBvsuCr38MmgGjLsqTMT0AHG7Xs8J0Yth8
+        qetr48Fu0IUMgeIHnh1X7g7awEodSyaVLLzVEOD8x4ljUirzIWTo+KLcrw==
+X-Google-Smtp-Source: ACHHUZ4QnOdDZ1SJvTnClzD/x4ZLcqOLIU6cnGayXHpnw19L8DM77/zvixXvQpc42DuoeynwhOOZCzuixWc6rSmW6tE=
+X-Received: by 2002:a05:6214:5098:b0:630:1faa:a404 with SMTP id
+ kk24-20020a056214509800b006301faaa404mr12713532qvb.39.1687450823024; Thu, 22
+ Jun 2023 09:20:23 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TY2PR02MB4479:EE_|KL1PR02MB6189:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2b25d98d-1dd3-41ea-acb8-08db733c2f66
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YjRuVNIbwUEhO5cbC1NuHcUuqeHE4woNXZT4umuyYUfuDIGk+RY5PV0hQnIECEfrRiSYqtrokGat+cf0qZ5Clh7LLeanfNfe2BXEqzNP2flmUR8wprGy0rhgC4v3eNhVpKGRD/I9MnlyisiWS6ZfdusimipcQnE0KMLC8/yKBCzluTFfmd/Ctn/e5KlktnDMp43gtOCKGbDxcofAFMzgVO3l+d/1jMk7ZwktS/h6/vW8p+2+l6+kWaqd03MyFW7Nruo2X3AlB43vISJk6CiJaMIowhMea+fRD9K8sCWI4YrZQfMd3BizNdUgVUtBF17puKimBJbVMraI2Qxb6XQSJ9PK726/oVlV+H/l5npZaXBp70P6Y6Mz/MySWzf5xr9WdgGLuxxTbtaRL1Xkeo0OmsjkAGcMCz1KkBsKXQZOe+1HVh2Cl6jFtmZCR+gkuSbme+WK8PAZD7lATitVGsgBFVcE2oYdURVrcBHtrMqDqi3UWvI4eRDW/qYDu7Wda0x3Pl7vxJ40Awppxf/ZicbFs6YwiMqdeQQB6BJ2nM6FKF3lXO0Z0ji9G1ty4ePXBWqOD1TXPObDc884Wmo2ZZb/0ilge7mpRKfv7zRdOeaGIyTYpe3flJpTl4YpXUhSKMEG
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR02MB4479.apcprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(346002)(376002)(396003)(366004)(451199021)(5660300002)(478600001)(66476007)(66556008)(66946007)(52116002)(4326008)(6666004)(6486002)(316002)(36756003)(86362001)(2616005)(83380400001)(1076003)(26005)(6512007)(6506007)(186003)(38100700002)(107886003)(4744005)(8936002)(2906002)(8676002)(41300700001)(38350700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mkKgDOJOSAUwcdbUe7E7P5J8iWm4KCdyCtkqA/Ncb4XTeuGzqHOkoZl/PIhG?=
- =?us-ascii?Q?0XqoeQsHhvu3Lt1tiZAlxmikshemhQMeKTV2rmBEHbl54MggHiSZcAGdsmr0?=
- =?us-ascii?Q?mWg7k3WQaXDOuFoPtqlX2k4xkJ0VBADv6G1F7rnpIzQkZYyZ9LAGdWqkkINj?=
- =?us-ascii?Q?MvL2RTWgRdCfbhNhWOX21oSJO7AZoYewHba1CIHanqt586botp2lCoMDRdTB?=
- =?us-ascii?Q?QqQC2ym6jwzxzfeXnYZT7wSr4cFX3z7a4dUcy/sElYFp30PcLWGay/LonIQ7?=
- =?us-ascii?Q?xXt0A8JLN1w+H788hbLVsnAP9km+Ehz8kbn0MuTs2YyHQpdQ5nm8j/wesbom?=
- =?us-ascii?Q?rdSmvcBEtqDzofReZw9Fp6gqnFHcomXwqOcle1+4DRnuLeRFvQvxohMC6YLU?=
- =?us-ascii?Q?2ErH85sVS5wtJ3F+DxBvrrZGCo1ZuwRxkyS2z3jFLlb5yFNzK5emg5/qdK4B?=
- =?us-ascii?Q?My+o3zGjivO3PVs2q1V9EMyw+dhOKTXDMCbQ3uxDmBH0NFxPVb9iL9kXhpx3?=
- =?us-ascii?Q?qVozFuh+ZKOcuvt8GBSmEl+kOEqQzLzcjI5jCS/xo7y610b+ujtYARmCBipE?=
- =?us-ascii?Q?Z+8qB9hKnkSiGeoYT9JWpr+5xr8ZJUYtSD2yslqfovlRk6oIVwaAR1jckRw+?=
- =?us-ascii?Q?YF1vlMvkDBsCAaikA6ducF0zAVc+tbyqnugMeIoBFmbuwPdxOQqe0AqXk9FH?=
- =?us-ascii?Q?0M8sM4S55IBRiksAUZJQho5fM3Y4PJDB0Itk7VZjrTzhe0kC9m50udS73WqQ?=
- =?us-ascii?Q?u/f4oagdv8LKdIdbDvBY8A/guDjzliMkbOYZQtcNDVCBppzmKgWxTUqZhIEj?=
- =?us-ascii?Q?qOWSeM3nIO8W2pEF0PNH/YAuBJDaenhJLRgPOZXaCTC2M3R4OProFOVRIre1?=
- =?us-ascii?Q?jUKdF4Bkq6OaCO0dsKwOaiyqFP2pT4eqJYVgxWWuGXFArOauUqe0eHre9C13?=
- =?us-ascii?Q?27C8mddZJLpoqYC3+3l7Flh4tZ5K4m3XMN7pmXMOFTscAxXuE3Dw18Z3rD4t?=
- =?us-ascii?Q?+i3SADjGD5osRE1UyfKlcjsXQxmu/yXMAq5GckYHaWd2ODFzoHHFQi4h77k0?=
- =?us-ascii?Q?T2cuXW8SAydrxQc2+tGcZvdNp0atr6KCS1CR7w0jzJj+jf3E7FVcuaewTago?=
- =?us-ascii?Q?kR0/iCps22r2OVEhWYTgV95rD/voYqHQ7CapeWi1xd12TSeW72GYi0h2+GG1?=
- =?us-ascii?Q?ilNav7P2O5YW0wgRB7VSyp8v213Svwrgy6dT1xc0SrtI/u9aEMICEG5FjzLj?=
- =?us-ascii?Q?LdJaXv6wcFMH4mF/WWpaTYrHvefzwZAJktqLgFV0Sat1vcHhv1etWUXor89R?=
- =?us-ascii?Q?lCI301H6UM6m8xQCTZlxzsfsJtBejaQASzeFLKauQCF7zXRj4dJ4CvFuwVHc?=
- =?us-ascii?Q?rBNNQSjW8bMIORd364/BoOP8cmW8yyWoIjV482k7XTfu0Ba9z4AUTjxUypqP?=
- =?us-ascii?Q?tujHibW8D2x8+5jEpJB0hVmeEUGLnTRdgE45S6iDSCbrXXk8qWsGum2ukhMK?=
- =?us-ascii?Q?jyvjhe3qwNrnp6n33KrDyJ/jcfHp35YtesTWQeE03b4czmPL++P3stWBF7NR?=
- =?us-ascii?Q?CL/2bSbnXSiWkYF5pNjG/BymMncLFkP92yEfEeYV?=
-X-OriginatorOrg: oppo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2b25d98d-1dd3-41ea-acb8-08db733c2f66
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR02MB4479.apcprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Jun 2023 16:17:33.6088
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f1905eb1-c353-41c5-9516-62b4a54b5ee6
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jkIoWyPlhfTrHhdg9pQaPNBPSuWA4phTy0Pr3W2UJ7lWC+q2wtEl+xlZyzA0Jw1U8fY2C1CElipPgD7NyTd0Rw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR02MB6189
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230608142428.256985-1-masahiroy@kernel.org> <20230608142428.256985-4-masahiroy@kernel.org>
+ <bb5048e7-5e8f-4391-a9a0-ff15b5384186@roeck-us.net> <CAK7LNAQpgx5uYnQTb0Pu=uR=YPWkJX7P75p55Qva5okhRpaN_g@mail.gmail.com>
+In-Reply-To: <CAK7LNAQpgx5uYnQTb0Pu=uR=YPWkJX7P75p55Qva5okhRpaN_g@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 22 Jun 2023 09:20:11 -0700
+Message-ID: <CAKwvOdn4n1fqMz+7wcEBv-kxLf7tWHgC2P+m73mGQ7m6BoOxwQ@mail.gmail.com>
+Subject: Re: [PATCH v7 03/11] kbuild: generate KSYMTAB entries by modpost
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        linux-um@lists.infradead.org, Fangrui Song <maskray@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -113,28 +74,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If move file range success, it should remove old data from
-src and dst page cache.
+On Wed, Jun 21, 2023 at 7:27=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+> On Thu, Jun 22, 2023 at 1:15=E2=80=AFAM Guenter Roeck <linux@roeck-us.net=
+> wrote:
+> >
+> > On Thu, Jun 08, 2023 at 11:24:20PM +0900, Masahiro Yamada wrote:
+> > > Commit 7b4537199a4a ("kbuild: link symbol CRCs at final link, removin=
+g
+> > > CONFIG_MODULE_REL_CRCS") made modpost output CRCs in the same way
+> > > whether the EXPORT_SYMBOL() is placed in *.c or *.S.
+> > >
+> > ...
+> >
+> > > We can do this better now; modpost can selectively emit KSYMTAB entri=
+es
+> > > that are really used by modules.
+> > >
+> >
+> > This patch results in
+> >
+> > Building alpha:defconfig ... failed
+> > --------------
+> > Error log:
+> > <stdin>:1519:2: warning: #warning syscall clone3 not implemented [-Wcpp=
+]
+> > WARNING: modpost: "saved_config" [vmlinux] is COMMON symbol
+> I do not know much about the warning for "saved_config".
+>
+>
+>
+> __attribute((common)) was added in the following commit:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/history/history.git/commi=
+t/?id=3D3c7940961fbf9f252e20f9c455f2fe63f273294c
+>
+>
+> It was more than 20 years ago, and there is
+> no commit description.
+> I do not know the intention of __attribute((common)).
 
-Signed-off-by: Yunlei He <heyunlei@oppo.com>
----
- fs/f2fs/file.c | 3 +++
- 1 file changed, 3 insertions(+)
+Adding __attribute__((common)) to a variable declaration, the
+generated assembler will contain a .comm assembler directive.
+https://godbolt.org/z/6jvoaGs8M
+https://sourceware.org/binutils/docs/as/Comm.html
 
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index e59fc8faa035..4bece7c56656 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -2896,6 +2896,9 @@ static int f2fs_move_file_range(struct file *file_in, loff_t pos_in,
- 			f2fs_mark_inode_dirty_sync(dst, false);
- 		}
- 
-+		truncate_pagecache_range(src, pos_in, pos_in + len - 1);
-+		truncate_pagecache_range(dst, pos_out, pos_out + len - 1);
-+
- 		f2fs_update_time(sbi, REQ_TIME);
- 	}
- 
--- 
-2.40.1
+>>> .comm declares a common symbol named symbol. When linking, a common sym=
+bol in one object file may be merged with a defined or common symbol of the=
+ same name in another object file.
 
+When I see this, I think some kind of ODR tricks are afoot.  C doesn't
+have ODR; C++ does, but this attribute allows for ODR-like linker
+merging where the linker discards duplicates because "they ought to be
+the same."
+
+IIRC, I think C++ template instantiations are emitted with common
+linkage.  LLVM IR has a linkage type corresponding to this that I
+initially didn't understand, because without this attribute, I don't
+think that linkage type is ever emitted for C code.
+
+Indeed, for alpha, we can see the same symbol marked common in arch/alpha/:
+arch/alpha/kernel/core_tsunami.c:36:} saved_config[2] __attribute__((common=
+));
+arch/alpha/kernel/sys_sio.c:43:} saved_config __attribute((common));
+arch/alpha/kernel/core_cia.c:577:} saved_config __attribute((common));
+arch/alpha/kernel/core_titan.c:36:} saved_config[4] __attribute__((common))=
+;
+
+All of these have different sizes, so according to the GAS manual,
+this line comes into play:
+
+>>> If ld sees multiple common symbols with the same name, and they do not =
+all have the same size, it will allocate space using the largest size.
+
+This kind of smells like some overcomplicating code to save like 30B
+of static memory.  Fixing this requires careful use of enums.  For
+arch/alpha/ not sure such a rework is worth it, given the imminent
+demise of the architecture I sense looming on the horizon.
+
+
+>
+> I hope the maintainers will fix the warnings,
+> but I do not know if it is likely to happen.
+>
+> MAINTAINERS says "Odd Fixes"
+>
+> If you find a build regression, please let me know.
+> So far, I did not get new reports from 0day bot.
+>
+>
+> Thanks.
+>
+>
+>
+>
+> > Guenter
+> >
+> > ---
+> > Bisect log:
+> >
+> > # bad: [15e71592dbae49a674429c618a10401d7f992ac3] Add linux-next specif=
+ic files for 20230621
+> > # good: [45a3e24f65e90a047bef86f927ebdc4c710edaa1] Linux 6.4-rc7
+> > git bisect start 'HEAD' 'v6.4-rc7'
+> > # bad: [e867e67cd55ae460c860ffd896c7fc96add2821c] Merge branch 'master'=
+ of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
+> > git bisect bad e867e67cd55ae460c860ffd896c7fc96add2821c
+> > # bad: [57b289d5b1005a9c39d6d6567e0ef6115bd59cea] Merge branch 'for-nex=
+t' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git
+> > git bisect bad 57b289d5b1005a9c39d6d6567e0ef6115bd59cea
+> > # bad: [dc6399fc9ae6d2530fc38fb3ae96bcc8393bd66f] Merge branch 'for-nex=
+t/perf' of git://git.kernel.org/pub/scm/linux/kernel/git/will/linux.git
+> > git bisect bad dc6399fc9ae6d2530fc38fb3ae96bcc8393bd66f
+> > # good: [6d366ba598334a0457d917a7bf38efd118c5b7be] Merge branch 'mm-sta=
+ble' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> > git bisect good 6d366ba598334a0457d917a7bf38efd118c5b7be
+> > # good: [82fe2e45cdb00de4fa648050ae33bdadf9b3294a] perf pmus: Check if =
+we can encode the PMU number in perf_event_attr.type
+> > git bisect good 82fe2e45cdb00de4fa648050ae33bdadf9b3294a
+> > # bad: [d2fa756910f88c2f5871775483744407cbf67933] Merge branch 'for-nex=
+t' of git://git.infradead.org/users/hch/dma-mapping.git
+> > git bisect bad d2fa756910f88c2f5871775483744407cbf67933
+> > # good: [1b990bc8edc396a37a3ff1a43f7c329c361ee07c] Merge branch 'mm-non=
+mm-unstable' into mm-everything
+> > git bisect good 1b990bc8edc396a37a3ff1a43f7c329c361ee07c
+> > # good: [cff6e7f50bd315e5b39c4e46c704ac587ceb965f] kbuild: Add CLANG_FL=
+AGS to as-instr
+> > git bisect good cff6e7f50bd315e5b39c4e46c704ac587ceb965f
+> > # bad: [8f3847e175a0044e2212fef772e7fa912270cd6d] ia64,export.h: replac=
+e EXPORT_DATA_SYMBOL* with EXPORT_SYMBOL*
+> > git bisect bad 8f3847e175a0044e2212fef772e7fa912270cd6d
+> > # good: [3a3f1e573a105328a2cca45a7cfbebabbf5e3192] modpost: fix off by =
+one in is_executable_section()
+> > git bisect good 3a3f1e573a105328a2cca45a7cfbebabbf5e3192
+> > # good: [92e74fb6e6196d642505ae2b74a8e327202afef9] scripts/kallsyms: co=
+nstify long_options
+> > git bisect good 92e74fb6e6196d642505ae2b74a8e327202afef9
+> > # good: [92e2921eeafdfca9acd9b83f07d2b7ca099bac24] ARC: define ASM_NL a=
+nd __ALIGN(_STR) outside #ifdef __ASSEMBLY__ guard
+> > git bisect good 92e2921eeafdfca9acd9b83f07d2b7ca099bac24
+> > # bad: [bb2aa9a94b41b883037a56709d995c269204ade0] kbuild: generate KSYM=
+TAB entries by modpost
+> > git bisect bad bb2aa9a94b41b883037a56709d995c269204ade0
+> > # good: [94d6cb68124b7a63f24fcc345795ba5f9a27e694] modpost: pass struct=
+ module pointer to check_section_mismatch()
+> > git bisect good 94d6cb68124b7a63f24fcc345795ba5f9a27e694
+> > # first bad commit: [bb2aa9a94b41b883037a56709d995c269204ade0] kbuild: =
+generate KSYMTAB entries by modpost
+>
+>
+>
+> --
+> Best Regards
+> Masahiro Yamada
+
+
+
+--=20
+Thanks,
+~Nick Desaulniers
