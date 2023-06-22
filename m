@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B6BE7397AB
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 08:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 332477397AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 08:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbjFVGz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 02:55:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
+        id S230417AbjFVG4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 02:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbjFVGzY (ORCPT
+        with ESMTP id S231243AbjFVGzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 02:55:24 -0400
+        Thu, 22 Jun 2023 02:55:36 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 491281BFC;
-        Wed, 21 Jun 2023 23:54:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7A33D26A5;
+        Wed, 21 Jun 2023 23:55:08 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CD61C113E;
-        Wed, 21 Jun 2023 23:55:34 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0775C14BF;
+        Wed, 21 Jun 2023 23:55:40 -0700 (PDT)
 Received: from a077893.blr.arm.com (unknown [10.162.40.20])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7FA213F59C;
-        Wed, 21 Jun 2023 23:54:46 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6A0603F777;
+        Wed, 21 Jun 2023 23:54:51 -0700 (PDT)
 From:   Anshuman Khandual <anshuman.khandual@arm.com>
 To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         will@kernel.org, catalin.marinas@arm.com, mark.rutland@arm.com
@@ -33,9 +33,9 @@ Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
         Ingo Molnar <mingo@redhat.com>,
         Arnaldo Carvalho de Melo <acme@kernel.org>,
         linux-perf-users@vger.kernel.org
-Subject: [PATCH V13 08/10] arm64/perf: Add struct brbe_regset helper functions
-Date:   Thu, 22 Jun 2023 12:23:49 +0530
-Message-Id: <20230622065351.1092893-9-anshuman.khandual@arm.com>
+Subject: [PATCH V13 09/10] arm64/perf: Implement branch records save on task sched out
+Date:   Thu, 22 Jun 2023 12:23:50 +0530
+Message-Id: <20230622065351.1092893-10-anshuman.khandual@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230622065351.1092893-1-anshuman.khandual@arm.com>
 References: <20230622065351.1092893-1-anshuman.khandual@arm.com>
@@ -50,13 +50,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The primary abstraction level for fetching branch records from BRBE HW has
-been changed as 'struct brbe_regset', which contains storage for all three
-BRBE registers i.e BRBSRC, BRBTGT, BRBINF. Whether branch record processing
-happens in the task sched out path, or in the PMU IRQ handling path, these
-registers need to be extracted from the HW. Afterwards both live and stored
-sets need to be stitched together to create final branch records set. This
-adds required helper functions for such operations.
+This modifies current armv8pmu_sched_task(), to implement a branch records
+save mechanism via armv8pmu_branch_save() when a task scheds out of a cpu.
+BRBE is paused and disabled for all exception levels before branch records
+get captured, which then get concatenated with all existing stored records
+present in the task context maintaining the contiguity. Although the final
+length of the concatenated buffer does not exceed implemented BRBE length.
 
 Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Will Deacon <will@kernel.org>
@@ -67,141 +66,110 @@ Tested-by: James Clark <james.clark@arm.com>
 Acked-by: Mark Rutland <mark.rutland@arm.com>
 Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 ---
- drivers/perf/arm_brbe.c | 121 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 121 insertions(+)
+ arch/arm/include/asm/arm_pmuv3.h    |  1 +
+ arch/arm64/include/asm/perf_event.h |  2 ++
+ drivers/perf/arm_brbe.c             | 30 +++++++++++++++++++++++++++++
+ drivers/perf/arm_pmuv3.c            | 14 ++++++++++++--
+ 4 files changed, 45 insertions(+), 2 deletions(-)
 
+diff --git a/arch/arm/include/asm/arm_pmuv3.h b/arch/arm/include/asm/arm_pmuv3.h
+index 1f948eaed1c6..6c65357de94d 100644
+--- a/arch/arm/include/asm/arm_pmuv3.h
++++ b/arch/arm/include/asm/arm_pmuv3.h
+@@ -254,5 +254,6 @@ static inline void armv8pmu_branch_probe(struct arm_pmu *arm_pmu) { }
+ static inline void armv8pmu_branch_reset(void) { }
+ static inline int armv8pmu_task_ctx_cache_alloc(struct arm_pmu *arm_pmu) { return 0; }
+ static inline void armv8pmu_task_ctx_cache_free(struct arm_pmu *arm_pmu) { }
++static inline void armv8pmu_branch_save(struct arm_pmu *arm_pmu, void *ctx) { }
+ #endif
+ #endif
+diff --git a/arch/arm64/include/asm/perf_event.h b/arch/arm64/include/asm/perf_event.h
+index b0c12a5882df..36e7dfb466a6 100644
+--- a/arch/arm64/include/asm/perf_event.h
++++ b/arch/arm64/include/asm/perf_event.h
+@@ -40,6 +40,7 @@ void armv8pmu_branch_probe(struct arm_pmu *arm_pmu);
+ void armv8pmu_branch_reset(void);
+ int armv8pmu_task_ctx_cache_alloc(struct arm_pmu *arm_pmu);
+ void armv8pmu_task_ctx_cache_free(struct arm_pmu *arm_pmu);
++void armv8pmu_branch_save(struct arm_pmu *arm_pmu, void *ctx);
+ #else
+ static inline void armv8pmu_branch_read(struct pmu_hw_events *cpuc, struct perf_event *event)
+ {
+@@ -66,6 +67,7 @@ static inline void armv8pmu_branch_probe(struct arm_pmu *arm_pmu) { }
+ static inline void armv8pmu_branch_reset(void) { }
+ static inline int armv8pmu_task_ctx_cache_alloc(struct arm_pmu *arm_pmu) { return 0; }
+ static inline void armv8pmu_task_ctx_cache_free(struct arm_pmu *arm_pmu) { }
++static inline void armv8pmu_branch_save(struct arm_pmu *arm_pmu, void *ctx) { }
+ #endif
+ #endif
+ #endif
 diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
-index a74459445813..203cd4f350d5 100644
+index 203cd4f350d5..2177632befa6 100644
 --- a/drivers/perf/arm_brbe.c
 +++ b/drivers/perf/arm_brbe.c
-@@ -44,6 +44,127 @@ static void select_brbe_bank(int bank)
- 	isb();
+@@ -165,6 +165,36 @@ static int stitch_stored_live_entries(struct brbe_regset *stored,
+ 	return min(nr_live + nr_stored, nr_max);
  }
  
-+static bool __read_brbe_regset(struct brbe_regset *entry, int idx)
++static int brbe_branch_save(struct brbe_regset *live, int nr_hw_entries)
 +{
-+	entry->brbinf = get_brbinf_reg(idx);
++	u64 brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
++	int nr_live;
 +
-+	if (brbe_invalid(entry->brbinf))
-+		return false;
++	write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
++	isb();
 +
-+	entry->brbsrc = get_brbsrc_reg(idx);
-+	entry->brbtgt = get_brbtgt_reg(idx);
-+	return true;
++	nr_live = capture_brbe_regset(live, nr_hw_entries);
++
++	write_sysreg_s(brbfcr & ~BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
++	isb();
++
++	return nr_live;
 +}
 +
-+/*
-+ * Read all BRBE entries in HW until the first invalid entry.
-+ *
-+ * The caller must ensure that the BRBE is not concurrently modifying these
-+ * branch entries.
-+ */
-+static int capture_brbe_regset(struct brbe_regset *buf, int nr_hw_entries)
++void armv8pmu_branch_save(struct arm_pmu *arm_pmu, void *ctx)
 +{
-+	int idx = 0;
++	struct arm64_perf_task_context *task_ctx = ctx;
++	struct brbe_regset live[BRBE_MAX_ENTRIES];
++	int nr_live, nr_store, nr_hw_entries;
 +
-+	select_brbe_bank(BRBE_BANK_IDX_0);
-+	while (idx < nr_hw_entries && idx <= BRBE_BANK0_IDX_MAX) {
-+		if (!__read_brbe_regset(&buf[idx], idx))
-+			return idx;
-+		idx++;
-+	}
-+
-+	select_brbe_bank(BRBE_BANK_IDX_1);
-+	while (idx < nr_hw_entries && idx <= BRBE_BANK1_IDX_MAX) {
-+		if (!__read_brbe_regset(&buf[idx], idx))
-+			return idx;
-+		idx++;
-+	}
-+	return idx;
-+}
-+
-+/*
-+ * This function concatenates branch records from stored and live buffer
-+ * up to maximum nr_max records and the stored buffer holds the resultant
-+ * buffer. The concatenated buffer contains all the branch records from
-+ * the live buffer but might contain some from stored buffer considering
-+ * the maximum combined length does not exceed 'nr_max'.
-+ *
-+ *	Stored records	Live records
-+ *	------------------------------------------------^
-+ *	|	S0	|	L0	|	Newest	|
-+ *	---------------------------------		|
-+ *	|	S1	|	L1	|		|
-+ *	---------------------------------		|
-+ *	|	S2	|	L2	|		|
-+ *	---------------------------------		|
-+ *	|	S3	|	L3	|		|
-+ *	---------------------------------		|
-+ *	|	S4	|	L4	|		nr_max
-+ *	---------------------------------		|
-+ *	|		|	L5	|		|
-+ *	---------------------------------		|
-+ *	|		|	L6	|		|
-+ *	---------------------------------		|
-+ *	|		|	L7	|		|
-+ *	---------------------------------		|
-+ *	|		|		|		|
-+ *	---------------------------------		|
-+ *	|		|		|	Oldest	|
-+ *	------------------------------------------------V
-+ *
-+ *
-+ * S0 is the newest in the stored records, where as L7 is the oldest in
-+ * the live records. Unless the live buffer is detected as being full
-+ * thus potentially dropping off some older records, L7 and S0 records
-+ * are contiguous in time for a user task context. The stitched buffer
-+ * here represents maximum possible branch records, contiguous in time.
-+ *
-+ *	Stored records  Live records
-+ *	------------------------------------------------^
-+ *	|	L0	|	L0	|	Newest	|
-+ *	---------------------------------		|
-+ *	|	L0	|	L1	|		|
-+ *	---------------------------------		|
-+ *	|	L2	|	L2	|		|
-+ *	---------------------------------		|
-+ *	|	L3	|	L3	|		|
-+ *	---------------------------------		|
-+ *	|	L4	|	L4	|	      nr_max
-+ *	---------------------------------		|
-+ *	|	L5	|	L5	|		|
-+ *	---------------------------------		|
-+ *	|	L6	|	L6	|		|
-+ *	---------------------------------		|
-+ *	|	L7	|	L7	|		|
-+ *	---------------------------------		|
-+ *	|	S0	|		|		|
-+ *	---------------------------------		|
-+ *	|	S1	|		|    Oldest	|
-+ *	------------------------------------------------V
-+ *	|	S2	| <----|
-+ *	-----------------      |
-+ *	|	S3	| <----| Dropped off after nr_max
-+ *	-----------------      |
-+ *	|	S4	| <----|
-+ *	-----------------
-+ */
-+static int stitch_stored_live_entries(struct brbe_regset *stored,
-+				      struct brbe_regset *live,
-+				      int nr_stored, int nr_live,
-+				      int nr_max)
-+{
-+	int nr_move = min(nr_stored, nr_max - nr_live);
-+
-+	/* Move the tail of the buffer to make room for the new entries */
-+	memmove(&stored[nr_live], &stored[0], nr_move * sizeof(*stored));
-+
-+	/* Copy the new entries into the head of the buffer */
-+	memcpy(&stored[0], &live[0], nr_live * sizeof(*stored));
-+
-+	/* Return the number of entries in the stitched buffer */
-+	return min(nr_live + nr_stored, nr_max);
++	nr_hw_entries = brbe_get_numrec(arm_pmu->reg_brbidr);
++	nr_live = brbe_branch_save(live, nr_hw_entries);
++	nr_store = task_ctx->nr_brbe_records;
++	nr_store = stitch_stored_live_entries(task_ctx->store, live, nr_store,
++					      nr_live, nr_hw_entries);
++	task_ctx->nr_brbe_records = nr_store;
 +}
 +
  /*
   * Generic perf branch filters supported on BRBE
   *
+diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
+index 3c079051a63a..53f404618891 100644
+--- a/drivers/perf/arm_pmuv3.c
++++ b/drivers/perf/arm_pmuv3.c
+@@ -907,9 +907,19 @@ static int armv8pmu_user_event_idx(struct perf_event *event)
+ static void armv8pmu_sched_task(struct perf_event_pmu_context *pmu_ctx, bool sched_in)
+ {
+ 	struct arm_pmu *armpmu = to_arm_pmu(pmu_ctx->pmu);
++	void *task_ctx = pmu_ctx ? pmu_ctx->task_ctx_data : NULL;
+ 
+-	if (sched_in && armpmu->has_branch_stack)
+-		armv8pmu_branch_reset();
++	if (armpmu->has_branch_stack) {
++		/* Save branch records in task_ctx on sched out */
++		if (task_ctx && !sched_in) {
++			armv8pmu_branch_save(armpmu, task_ctx);
++			return;
++		}
++
++		/* Reset branch records on sched in */
++		if (sched_in)
++			armv8pmu_branch_reset();
++	}
+ }
+ 
+ /*
 -- 
 2.25.1
 
