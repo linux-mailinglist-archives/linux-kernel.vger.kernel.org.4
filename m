@@ -2,112 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73FD173A5B3
+	by mail.lfdr.de (Postfix) with ESMTP id 2AE1273A5B2
 	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 18:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230516AbjFVQKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 12:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50368 "EHLO
+        id S230469AbjFVQKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 12:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbjFVQKP (ORCPT
+        with ESMTP id S230459AbjFVQKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 22 Jun 2023 12:10:15 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0654D1BF0;
-        Thu, 22 Jun 2023 09:10:06 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-553b2979fceso2281392a12.3;
-        Thu, 22 Jun 2023 09:10:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687450206; x=1690042206;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rmTEYMEORosWT3g8FeP7BMzLvgLTEsW/HH8xExKw8yE=;
-        b=S0vfIew63z49OKINjcENT8D/SoYwUq2hV4c3eSqksmi3DTHy0qmNKl397nZhlw5PzS
-         FGPE5UHJw8yoHeGFcswaz/uTWC9lQzJ8BQ5MCaOW6fNQv8napx8hh5CBvnxVW/UNgPOx
-         4OGieWVui/vWgj6i0iGd2VDd5eIWwbHVuJ2iXWV7TmMUdlKyqwlzTAoZ4F1gRq1CwwqH
-         GSzbYRniN6gmBGdIgCg3541O+d14BV47dVM4htepfGQWNhfdi7YJ7f1tPwZCXW6HqU73
-         HbZ44zfEDEQINpiEuIdJYTBitj2vyXBhfyx3x029qVZ+qsQiQO4/8kVoXrk84A8Eevy5
-         fZfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687450206; x=1690042206;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rmTEYMEORosWT3g8FeP7BMzLvgLTEsW/HH8xExKw8yE=;
-        b=VAT1N7tIOWOmSy7wPfYdjiYrngT+LdmfadJNnMu/BAFeQWlP/y9ismmAJqawEgW3kN
-         7kS1J/qEg6Jm8tHhKCD5b8mwxOWGbnHal+8vQmUOqBoI2ryJSCv7ehNbEgf4CYBIq91Z
-         7C7e6rKaI5NKsO7CiEdQOfECcNoDdpWWDca0OzEXFoAEZXFE0QEb3V88nkC9OVS4EKh4
-         DJrhKNK2P6+ktFRk7HKxSnv9Dk1aMombc6Yl33gNz0TFIQ2PbN/ObJeRjbBIy8kF4bz6
-         D1VQGr98TFnOIpSxXsRZy1lTkJ4sSdvQVSFn8MMXqnz27KmzuPvkXNAS0MHZzPrjuoEc
-         tYsA==
-X-Gm-Message-State: AC+VfDyHeOTVtc5TsnfaiwwCHyPuq4oav8Nt68c0swiOdwxCN+UtLnEC
-        DISA4K17prMxs+syweJrC+YIRp2XQC37IcAMWWw=
-X-Google-Smtp-Source: ACHHUZ72gyVyZay61h+/VDC+gL6mGnZWS9w9xopzG/XDNzZQl9j4SmmjDmLPiVkESb6BDtk9Wk+eKearVvf7lPONL5E=
-X-Received: by 2002:a17:90a:a66:b0:258:99d1:6b84 with SMTP id
- o93-20020a17090a0a6600b0025899d16b84mr14543737pjo.41.1687450206133; Thu, 22
- Jun 2023 09:10:06 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4271FC2;
+        Thu, 22 Jun 2023 09:10:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2103B618BB;
+        Thu, 22 Jun 2023 16:10:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8138C433C8;
+        Thu, 22 Jun 2023 16:10:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1687450204;
+        bh=xLyXvexgDPhNaQNSn+EFSDO6E/yJrPCxAprammFlvbQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BnXgHjpi2MOfptfmTAtE/YPjGIuBTYzlKRUp7fENW/t9oQhN2Xrrt73Twhx75Hn7C
+         gr4CxvjVQBjaREfgJZ5Nef/HZ4D3NIdLzoJf0HgA8jE1lsD3372UNRGhhtBy5ZqDvv
+         A7jW+W2Xlc2fbpFJvEfeBL4UEM8NxIgJSRpd7iGc=
+Date:   Thu, 22 Jun 2023 18:10:00 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Breno Leitao <leitao@debian.org>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, leit@meta.com,
+        Arnd Bergmann <arnd@arndb.de>,
+        Steve French <stfrench@microsoft.com>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Simon Ser <contact@emersion.fr>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:IO_URING" <io-uring@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>
+Subject: Re: [PATCH] io_uring: Add io_uring command support for sockets
+Message-ID: <2023062208-animosity-squabble-c1ba@gregkh>
+References: <20230621232129.3776944-1-leitao@debian.org>
+ <2023062231-tasting-stranger-8882@gregkh>
+ <ZJRijTDv5lUsVo+j@gmail.com>
 MIME-Version: 1.0
-References: <20230615215314.5402-1-aford173@gmail.com>
-In-Reply-To: <20230615215314.5402-1-aford173@gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Thu, 22 Jun 2023 11:09:54 -0500
-Message-ID: <CAHCN7x+Ga6yq0O369XOJNryS0bb4E96Em5q8fQsdTgxEpxR=hA@mail.gmail.com>
-Subject: Re: [PATCH V3 0/3] arm64: dts: imx8mn/imx8mm-beacon: Add HDMI
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     aford@beaconembedded.com, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJRijTDv5lUsVo+j@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 15, 2023 at 4:53=E2=80=AFPM Adam Ford <aford173@gmail.com> wrot=
-e:
->
-> The DSI updates are in the DRM tree and Linux next with some updates
-> that now allow the DSI to connect to an HDMI bridge and successfully
-> sync displays at various resolutions and refresh rates.
->
->
+On Thu, Jun 22, 2023 at 08:02:37AM -0700, Breno Leitao wrote:
+> On Thu, Jun 22, 2023 at 07:20:48AM +0200, Greg Kroah-Hartman wrote:
+> > On Wed, Jun 21, 2023 at 04:21:26PM -0700, Breno Leitao wrote:
+> > > Enable io_uring commands on network sockets. Create two new
+> > > SOCKET_URING_OP commands that will operate on sockets. Since these
+> > > commands are similar to ioctl, uses the _IO{R,W} helpers to embedded the
+> > > argument size and operation direction. Also allocates a unused ioctl
+> > > chunk for uring command usage.
+> > > 
+> > > In order to call ioctl on sockets, use the file_operations->uring_cmd
+> > > callbacks, and map it to a uring socket function, which handles the
+> > > SOCKET_URING_OP accordingly, and calls socket ioctls.
+> > > 
+> > > This patches was tested by creating a new test case in liburing.
+> > > Link: https://github.com/leitao/liburing/commit/3340908b742c6a26f662a0679c4ddf9df84ef431
+> > > 
+> > > Signed-off-by: Breno Leitao <leitao@debian.org>
+> > > ---
+> > 
+> > Isn't this a new version of an older patch?
+> 
+> Yes, this should have tagged as V2.
+> 
+> [1] https://lore.kernel.org/lkml/20230406144330.1932798-1-leitao@debian.org/#r
 
-Shawn,
+Great, also add what changed below the --- line please.
 
-Is it too late to get this series into the 6.5 merge window?
+> > > --- a/Documentation/userspace-api/ioctl/ioctl-number.rst
+> > > +++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
+> > > @@ -361,6 +361,7 @@ Code  Seq#    Include File                                           Comments
+> > >  0xCB  00-1F                                                          CBM serial IEC bus in development:
+> > >                                                                       <mailto:michael.klein@puffin.lb.shuttle.de>
+> > >  0xCC  00-0F  drivers/misc/ibmvmc.h                                   pseries VMC driver
+> > > +0xCC  A0-BF  uapi/linux/io_uring.h                                   io_uring cmd subsystem
+> > 
+> > This change is nice, but not totally related to this specific one,
+> > shouldn't it be separate?
+> 
+> This is related to this patch, since I am using it below, in the
+> following part:
+> 
+> 	+#define SOCKET_URING_OP_SIOCINQ _IOR(0xcc, 0xa0, int)
+> 	+#define SOCKET_URING_OP_SIOCOUTQ _IOR(0xcc, 0xa1, int)
+> 
+> Should I have a different patch, even if they are related?
 
-adam
+Yes, as you are not using the 0xa2-0xbf range that you just carved out
+here, right?  Where did those numbers come from?
 
-> V3:  Alphabetize regulator names.
->      Add register names for EDID and Packet
->      Add I2C address change for the camera since it
->      conflicted with the I2C address of the HDMI bridge.
->
-> V2:  Make 'compatible' the first thing in the new nodes.
->
-> Adam Ford (3):
->   arm64: dts: imx8mn-beacon: Add HDMI video with sound
->   arm64: dts: imx8mm-beacon: Change camera I2C address
->   arm64: dts: imx8mm-beacon: Add HDMI video with sound
->
->  .../freescale/imx8mm-beacon-baseboard.dtsi    |   4 +-
->  .../boot/dts/freescale/imx8mm-beacon-kit.dts  | 131 +++++++++++++++++
->  .../boot/dts/freescale/imx8mn-beacon-kit.dts  | 133 ++++++++++++++++++
->  3 files changed, 266 insertions(+), 2 deletions(-)
->
-> --
-> 2.39.2
->
+thanks,
+
+greg k-h
