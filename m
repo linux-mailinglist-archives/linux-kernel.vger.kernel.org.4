@@ -2,199 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD6B973A447
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:05:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBC8A73A455
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:07:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232381AbjFVPFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 11:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42750 "EHLO
+        id S231644AbjFVPH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 11:07:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232629AbjFVPFe (ORCPT
+        with ESMTP id S232267AbjFVPHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 11:05:34 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1553EE7E
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 08:05:32 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f8467e39cfso9832435e87.3
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 08:05:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687446330; x=1690038330;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4ppBgWBknm380/WbbZgWVPXJGsSlejHE7bJKZ6mCfbY=;
-        b=jefA+A4h3C3ONpxJHbHhYqqOp9Dw8AJHVhVQdKoY9boEjaACPuHV+vU1TGadn4NrTm
-         jpLIrgg8E/4saY8TV08OwrqYlmpEWKB/zH39xPBnyEcEU+7bCG81G0XQjoYqCHLo7QLr
-         WgMNnZCnc36BVBVG5gIrDkuRjuui4C94N2YVG7A5Ko0lm6RTAg6427sDcOLJ0BHMURo1
-         X1C1tUEJ1SDmMf2+IEGQyrIkPdsnyPZ+GF/EL8y+OBQclblijI7kGWJXK6cINdQHxZt0
-         j/4Wk239o95YCDqlnIdWHZVGv+mBwJf1xwoQ6t8T1/sqUpd8R/MWZ5AdUmriZUnc8pD9
-         Wclg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687446330; x=1690038330;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ppBgWBknm380/WbbZgWVPXJGsSlejHE7bJKZ6mCfbY=;
-        b=EIwapJPs0SSulP3aYOx9Cc+ft/hHpmmCspXD24D1PYfjtglIEEmAZpSoDD3tuUmII0
-         o9Zzey0dBZucZAuiNCIhDJmlKKNMDLi3hxmCBq7OBnRrD2uIwYZHkoI8YLpimglP3QE2
-         27GKcz1EsL5Oc5I3kIDyaD0IOrK4udJw4PBkhwcWxCWxeHHe08SXE2F5aZFAmhI8hY2P
-         luXBewJjcmA5UrRsxQazdIk+oJCoUH5fpEa4LnY4Jxmp6+k6eQqSPh60y2jt7u/QgpiA
-         DPgFYW2xdE7uQFWtsoGxdX3b1MB5xmnZoQOCtqCEopKdTJH4mHi3YDnaJvoukNt/YQ8z
-         sEiA==
-X-Gm-Message-State: AC+VfDzBWdoJZ+YJDFpzRGIDjKACkSmQbsHFSeoq0tjnjaghIFN0/hAK
-        6X9FNOSx4zeuct0D6dAahYIfoA==
-X-Google-Smtp-Source: ACHHUZ4lrTEYIvKvQxf8w67Oh+3+SZq+YtD7TDr9HSpK3QqTpm5ZJjx1e4WRxdE1+tElva3hcDb+Hw==
-X-Received: by 2002:ac2:5058:0:b0:4f8:67f0:724e with SMTP id a24-20020ac25058000000b004f867f0724emr9449664lfm.33.1687446330142;
-        Thu, 22 Jun 2023 08:05:30 -0700 (PDT)
-Received: from [192.168.1.101] (abyl165.neoplus.adsl.tpnet.pl. [83.9.31.165])
-        by smtp.gmail.com with ESMTPSA id 17-20020ac24851000000b004f86673a47dsm1161403lfy.75.2023.06.22.08.05.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 08:05:29 -0700 (PDT)
-Message-ID: <18f508e7-8a7e-162b-4bed-eaef45147a22@linaro.org>
-Date:   Thu, 22 Jun 2023 17:05:28 +0200
+        Thu, 22 Jun 2023 11:07:55 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07391731;
+        Thu, 22 Jun 2023 08:07:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=8TPy4M/IgqT8baUzBBF1Ot9HCGGq63OZ2dRMS9U2qEs=; b=hr+LCn33yjNicFl80hCKAgwrYa
+        93pDGSYl0/5FwW8xGbJb8Bzwztin6lA17hYELqtlfCGcjrfacnkQeDW1Lnhs4p6Yp9NR9LNSd0rby
+        dueuqWRwCA/tDevppb+kFIH3iP5TedRM6dFD9YtjJX/8Ws4z3nGPQtt/kPtZ3e1NnRrVf76+qMMas
+        62BEzt/rZsSylnXlBn0qSGDCDDv9NEhrrUizNFGFJRep32eCpFzYECJyP8A5b3s7RW+cRqYqeWdnp
+        VDJTdWx8a7knGFAp2YasyuIJXY4IANgHDg2DsKL018BtVc64glMoFn4kujqH487kklA3eYmyQy7u1
+        E9hIGVdw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:43762)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1qCLtO-0004OW-29; Thu, 22 Jun 2023 16:06:38 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1qCLtH-0000Wx-N7; Thu, 22 Jun 2023 16:06:31 +0100
+Date:   Thu, 22 Jun 2023 16:06:31 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Choong Yong Liang <yong.liang.choong@linux.intel.com>,
+        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        David E Box <david.e.box@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Wong Vee Khee <veekhee@apple.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Revanth Kumar Uppala <ruppala@nvidia.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jochen Henneberg <jh@henneberg-systemdesign.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+        "Tan, Tee Min" <tee.min.tan@linux.intel.com>,
+        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Lai Peter Jun Ann <jun.ann.lai@intel.com>
+Subject: Re: [PATCH net-next 3/6] net: phy: update in-band AN mode when
+ changing interface by PHY driver
+Message-ID: <ZJRjd0oqj95U0nHc@shell.armlinux.org.uk>
+References: <20230622041905.629430-1-yong.liang.choong@linux.intel.com>
+ <20230622041905.629430-4-yong.liang.choong@linux.intel.com>
+ <ZJReJ2yxqKGQx1BU@corigine.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 3/9] clk: qcom: gcc-msm8998: Control MMSS and GPUSS GPLL0
- outputs properly
-Content-Language: en-US
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Jami Kettunen <jami.kettunen@somainline.org>
-References: <20230622-topic-8998clk-v1-0-5b7a0d6e98b1@linaro.org>
- <20230622-topic-8998clk-v1-3-5b7a0d6e98b1@linaro.org>
- <e880bad8-4fcb-97c1-ec9c-9122e1b550e6@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <e880bad8-4fcb-97c1-ec9c-9122e1b550e6@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZJReJ2yxqKGQx1BU@corigine.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.06.2023 16:55, Jeffrey Hugo wrote:
-> On 6/22/2023 5:57 AM, Konrad Dybcio wrote:
->> Up until now, we've been relying on some non-descript hardware magic
->> to pinkypromise turn the clocks on for us. While new SoCs shine with
->> that feature, MSM8998 can not always be fully trusted.
->>
->> Register the MMSS and GPUSS GPLL0 legs with the CCF to allow for manual
->> enable voting.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   drivers/clk/qcom/gcc-msm8998.c | 58 ++++++++++++++++++++++++++++++++++++++++++
->>   1 file changed, 58 insertions(+)
->>
->> diff --git a/drivers/clk/qcom/gcc-msm8998.c b/drivers/clk/qcom/gcc-msm8998.c
->> index be024f8093c5..cccb19cae481 100644
->> --- a/drivers/clk/qcom/gcc-msm8998.c
->> +++ b/drivers/clk/qcom/gcc-msm8998.c
->> @@ -25,6 +25,9 @@
->>   #include "reset.h"
->>   #include "gdsc.h"
->>   +#define GCC_MMSS_MISC    0x0902C
->> +#define GCC_GPU_MISC    0x71028
->> +
->>   static struct pll_vco fabia_vco[] = {
->>       { 250000000, 2000000000, 0 },
->>       { 125000000, 1000000000, 1 },
->> @@ -1367,6 +1370,22 @@ static struct clk_branch gcc_boot_rom_ahb_clk = {
->>       },
->>   };
->>   +static struct clk_branch gcc_mmss_gpll0_div_clk = {
->> +    .halt_check = BRANCH_HALT_DELAY,
->> +    .clkr = {
->> +        .enable_reg = 0x5200c,
->> +        .enable_mask = BIT(0),
->> +        .hw.init = &(struct clk_init_data){
->> +            .name = "gcc_mmss_gpll0_div_clk",
->> +            .parent_hws = (const struct clk_hw *[]) {
->> +                &gpll0_out_main.clkr.hw,
->> +            },
->> +            .num_parents = 1,
->> +            .ops = &clk_branch2_ops,
->> +        },
->> +    },
->> +};
->> +
->>   static struct clk_branch gcc_mmss_gpll0_clk = {
->>       .halt_check = BRANCH_HALT_DELAY,
->>       .clkr = {
->> @@ -1395,6 +1414,38 @@ static struct clk_branch gcc_mss_gpll0_div_clk_src = {
->>       },
->>   };
->>   +static struct clk_branch gcc_gpu_gpll0_div_clk = {
->> +    .halt_check = BRANCH_HALT_DELAY,
->> +    .clkr = {
->> +        .enable_reg = 0x5200c,
->> +        .enable_mask = BIT(3),
->> +        .hw.init = &(struct clk_init_data){
->> +            .name = "gcc_gpu_gpll0_div_clk",
->> +            .parent_hws = (const struct clk_hw *[]) {
->> +                &gpll0_out_main.clkr.hw,
->> +            },
->> +            .num_parents = 1,
->> +            .ops = &clk_branch2_ops,
->> +        },
->> +    },
->> +};
->> +
->> +static struct clk_branch gcc_gpu_gpll0_clk = {
->> +    .halt_check = BRANCH_HALT_DELAY,
->> +    .clkr = {
->> +        .enable_reg = 0x5200c,
->> +        .enable_mask = BIT(4),
->> +        .hw.init = &(struct clk_init_data){
->> +            .name = "gcc_gpu_gpll0_clk",
->> +            .parent_hws = (const struct clk_hw *[]) {
->> +                &gpll0_out_main.clkr.hw,
->> +            },
->> +            .num_parents = 1,
->> +            .ops = &clk_branch2_ops,
->> +        },
->> +    },
->> +};
->> +
->>   static struct clk_branch gcc_blsp1_ahb_clk = {
->>       .halt_reg = 0x17004,
->>       .halt_check = BRANCH_HALT_VOTED,
->> @@ -3080,6 +3131,9 @@ static struct clk_regmap *gcc_msm8998_clocks[] = {
->>       [AGGRE2_SNOC_NORTH_AXI] = &aggre2_snoc_north_axi_clk.clkr,
->>       [SSC_XO] = &ssc_xo_clk.clkr,
->>       [SSC_CNOC_AHBS_CLK] = &ssc_cnoc_ahbs_clk.clkr,
->> +    [GCC_MMSS_GPLL0_DIV_CLK] = &gcc_mmss_gpll0_div_clk.clkr,
->> +    [GCC_GPU_GPLL0_DIV_CLK] = &gcc_gpu_gpll0_div_clk.clkr,
->> +    [GCC_GPU_GPLL0_CLK] = &gcc_gpu_gpll0_clk.clkr,
->>   };
->>     static struct gdsc *gcc_msm8998_gdscs[] = {
->> @@ -3235,6 +3289,10 @@ static int gcc_msm8998_probe(struct platform_device *pdev)
->>       if (ret)
->>           return ret;
->>   +    /* Disable the GPLL0 active input to MMSS and GPU via MISC registers */
->> +    regmap_write(regmap, GCC_MMSS_MISC, 0x10003);
->> +    regmap_write(regmap, GCC_GPU_MISC, 0x10003);
+On Thu, Jun 22, 2023 at 04:43:51PM +0200, Simon Horman wrote:
+> On Thu, Jun 22, 2023 at 12:19:02PM +0800, Choong Yong Liang wrote:
+> > From: "Tan, Tee Min" <tee.min.tan@linux.intel.com>
+> > 
+> > Add cur_link_an_mode into phy_device struct for PHY drivers to
+> > communicate the in-band AN mode setting with phylink framework.
+> > 
+> > As there is a mechanism in PHY drivers to switch the PHY interface
+> > between SGMII and 2500BaseX according to link speed. In this case,
+> > the in-band AN mode should be switching based on the PHY interface
+> > as well, if the PHY interface has been changed/updated by PHY driver.
+> > 
+> > For e.g., disable in-band AN in 2500BaseX mode, or enable in-band AN
+> > back for SGMII mode (10/100/1000Mbps).
+> > 
+> > Signed-off-by: Tan, Tee Min <tee.min.tan@linux.intel.com>
+> > Signed-off-by: Choong Yong Liang <yong.liang.choong@linux.intel.com>
 > 
-> I wonder, does this disrupt a handoff of an active display from the bootloader to Linux?
-My phone's bootloader doesn't initialize the display, if you (or Angelo
-or Jami, +CC) could test this, it'd be wonderful.
+> ...
+> 
+> > diff --git a/include/linux/phy.h b/include/linux/phy.h
+> > index 11c1e91563d4..c685b526e307 100644
+> > --- a/include/linux/phy.h
+> > +++ b/include/linux/phy.h
+> > @@ -756,6 +756,8 @@ struct phy_device {
+> >  	/* MACsec management functions */
+> >  	const struct macsec_ops *macsec_ops;
+> >  #endif
+> > +	/* For communicate the AN mode setting with phylink framework. */
+> > +	u8 cur_link_an_mode;
+> >  };
+> 
+> Hi Choong Yong Liang,
+> 
+> Please consider adding cur_link_an_mode to the kernel doc
+> for struct phy_device - which is above the definition of struct phy_device.
 
-Konrad
+This looks like it's grabbing something from phylink and stuffing it
+into phylib.  However, I have no idea, because I don't seem to have
+received the original patches. I'm guessing the reason is:
+
+2023-06-22 05:21:24 1qCBoy-0003ji-G9 H=mga03.intel.com
+[134.134.136.65]:57703 I=[78.32.30.218]:25
+X=TLS1.2:ECDHE_SECP521R1__RSA_SHA512__AES_256_GCM:256
+F=<yong.liang.choong@linux.intel.com> rejected after DATA: unqualified
+address not permitted: failing address in "Cc:" header is: Tan
+
+Which I suspect came from:
+
+	Tan, Tee Min <tee.min.tan@linux.intel.com>
+
+and someone doesn't realise that a "," in the display-name part of
+an address *must* be quoted, otherwise "," is taken to be a separator
+in the address list.
+
+Consequently, it has now become:
+
+	Tan@web.codeaurora.org, Tee Min <tee.min.tan@linux.intel.com>,
+
+It should have been:
+
+	"Tan, Tee Min" <tee.min.tan@linux.intel.com>
+
+with the double-quotes.
+
+Please do not review this series further, but instead, please can the
+author repost it forthwith with correct conformant headers so that a
+proper review can be undertaken by all?
+
+Thanks.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
