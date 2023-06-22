@@ -2,81 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD8073A0EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F0F573A0ED
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbjFVMbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 08:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40538 "EHLO
+        id S231226AbjFVMa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 08:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjFVMb3 (ORCPT
+        with ESMTP id S229915AbjFVMay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 08:31:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8211171C
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:30:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687437050;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Thu, 22 Jun 2023 08:30:54 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8966199E
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:30:52 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 31DCB20531;
+        Thu, 22 Jun 2023 12:30:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1687437051; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=stc8evGnDDpmXjdbQdBrRjBtyPvD68x7ziZzLCZcBJs=;
-        b=Fotf6dZdJVY0xMyw0NLZdpDKa7A/fulzJrM6YgFPdPqRV6nKDOI4FocbHO1q1+pVFXk9wG
-        H4Mx+nZ+8Lf+eYs5X4oz01mroQtzsZSNGTsc3/F2q+mq4onY1o3z7v8nTJi/6T3wNej1j+
-        /a5FtHVh5PDC7hp5Kd/GFCcxTf0RmZ4=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-358-uHVifh60PXWlO6H4I5sxsA-1; Thu, 22 Jun 2023 08:30:48 -0400
-X-MC-Unique: uHVifh60PXWlO6H4I5sxsA-1
-Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-4f86d450b01so3876258e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:30:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687437047; x=1690029047;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=stc8evGnDDpmXjdbQdBrRjBtyPvD68x7ziZzLCZcBJs=;
-        b=YLriNXNgYfcupjgx5FK6mwUiut8MVZDjyDmZBUpp/zZpm31o3MQOAjUmeiN6FiXE9n
-         8Fiu5+/d2bg7cvf0K5h0AWAV+Gl5npW+g/nO49qk2YZXHd+2BDJqqgPnfQ7TEpb8Y2KT
-         rZmc0i+talvglyKYRC6coPchlPeJQTIpYiZ4qqilyBBHSbe6Czwc0v5q1DnD/nqbRHA7
-         tyrxbw/FvVzvU6+G/R6N1wqwl1Dls3s5/Dc0+EfTOY1SXNdxVFgMKCTUygemOAfbWQLq
-         Nk04d4cNifPejptilBjGfDU9CSuJ3oUW3NOc2Qtf+ya3xxPLTLJFQNTI46zXzVCEYf6g
-         IktQ==
-X-Gm-Message-State: AC+VfDxKqIrkuvDBU1R8qDaZi/MnPV0mH/cfkrkSkpchSZrqV5/oZxy+
-        iTrrk9eg/uK5oCEjoKyC+bYHBMOtLm5/NyJADzakqYBhPKcftb8watDVGpwmsMmmQ3fQjsKLRY1
-        x8v+RD0N0FoDWeCExrSS6G2SI
-X-Received: by 2002:a19:5e41:0:b0:4f8:49a7:2deb with SMTP id z1-20020a195e41000000b004f849a72debmr10149665lfi.8.1687437047149;
-        Thu, 22 Jun 2023 05:30:47 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7biiNx9ILW7ILK23qr0T8GMiDK1wNbm4GZ3fgXl387sQPGqC4MxiUus7jFn4U2cw9kCo72bw==
-X-Received: by 2002:a19:5e41:0:b0:4f8:49a7:2deb with SMTP id z1-20020a195e41000000b004f849a72debmr10149647lfi.8.1687437046661;
-        Thu, 22 Jun 2023 05:30:46 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:c:37e0:ced3:55bd:f454:e722? ([2a01:e0a:c:37e0:ced3:55bd:f454:e722])
-        by smtp.gmail.com with ESMTPSA id y10-20020adff6ca000000b0030f9c3219aasm6910388wrp.47.2023.06.22.05.30.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 05:30:46 -0700 (PDT)
-Message-ID: <bc82a1d3-07cd-53b0-7f1d-0f71850cdb14@redhat.com>
-Date:   Thu, 22 Jun 2023 14:30:45 +0200
+        bh=dzY323mQUEaPSPf813mKgRO+4Beu4snqpHW/IzKYAjU=;
+        b=PS734gUeAK8+AHIpRVUG6bR15AnhvLk28zCVggGpqI2djzWRLhgi1XYLgivZMXTs7KbddO
+        KO+rG6P5bnR+kk9W3G5R8AvmDgOoEGl6izmWm2eessfRCjOc5HOrdfvjIee706GEKB/L9B
+        yG8M97MMKPGZk2XcCvf2/Wgsx7OkqFU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1687437051;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dzY323mQUEaPSPf813mKgRO+4Beu4snqpHW/IzKYAjU=;
+        b=FtuI66ii0CvO+NJsIEzAwGIDY0q59zR5aP0kOORsmZwTD3nDesBkQcmscXhqH/s0QM1W+0
+        Fc3tMs2OwahXILDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2535813905;
+        Thu, 22 Jun 2023 12:30:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 4PoNCfs+lGRMawAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 22 Jun 2023 12:30:51 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 9E41AA0754; Thu, 22 Jun 2023 14:30:50 +0200 (CEST)
+Date:   Thu, 22 Jun 2023 14:30:50 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Jan Kara <jack@suse.cz>, Christian Brauner <brauner@kernel.org>,
+        "Tigran A. Aivazian" <aivazian.tigran@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 15/79] bfs: switch to new ctime accessors
+Message-ID: <20230622123050.thpf7qdnmidq3thj@quack3>
+References: <20230621144507.55591-1-jlayton@kernel.org>
+ <20230621144735.55953-1-jlayton@kernel.org>
+ <20230621144735.55953-14-jlayton@kernel.org>
+ <20230621164808.5lhujni7qb36hhtk@quack3>
+ <646b7283ede4945b335ad16aea5ff60e1361241e.camel@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] MAINTAINERS: Add myself as reviewer for mgag200 and ast
- drivers
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>, airlied@redhat.com,
-        javierm@redhat.com, lyude@redhat.com
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230530142615.57014-1-jfalempe@redhat.com>
- <9fdd63d2-12c6-d589-8b24-3c9333ed98da@suse.de>
-From:   Jocelyn Falempe <jfalempe@redhat.com>
-In-Reply-To: <9fdd63d2-12c6-d589-8b24-3c9333ed98da@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: multipart/mixed; boundary="wmtgul4dtcqfppqy"
+Content-Disposition: inline
+In-Reply-To: <646b7283ede4945b335ad16aea5ff60e1361241e.camel@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,25 +76,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/05/2023 09:08, Thomas Zimmermann wrote:
-> Hi
-> 
-> Am 30.05.23 um 16:26 schrieb Jocelyn Falempe:
->> I've contributed to these two drivers, fixing bugs and performance
->> issues.
-> 
-> Thanks for the work you're doing.
-> 
->>
->> Signed-off-by: Jocelyn Falempe <jfalempe@redhat.com>
-> 
-> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-> 
 
+--wmtgul4dtcqfppqy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Applied to drm-misc-next
+On Wed 21-06-23 12:57:19, Jeff Layton wrote:
+> On Wed, 2023-06-21 at 18:48 +0200, Jan Kara wrote:
+> > On Wed 21-06-23 10:45:28, Jeff Layton wrote:
+> > > In later patches, we're going to change how the ctime.tv_nsec field is
+> > > utilized. Switch to using accessor functions instead of raw accesses of
+> > > inode->i_ctime.
+> > > 
+> > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > 
+> > ...
+> > 
+> > > diff --git a/fs/bfs/inode.c b/fs/bfs/inode.c
+> > > index 1926bec2c850..c964316be32b 100644
+> > > --- a/fs/bfs/inode.c
+> > > +++ b/fs/bfs/inode.c
+> > > @@ -82,10 +82,10 @@ struct inode *bfs_iget(struct super_block *sb, unsigned long ino)
+> > >  	inode->i_blocks = BFS_FILEBLOCKS(di);
+> > >  	inode->i_atime.tv_sec =  le32_to_cpu(di->i_atime);
+> > >  	inode->i_mtime.tv_sec =  le32_to_cpu(di->i_mtime);
+> > > -	inode->i_ctime.tv_sec =  le32_to_cpu(di->i_ctime);
+> > > +	inode_ctime_set_sec(inode, le32_to_cpu(di->i_ctime));
+> > >  	inode->i_atime.tv_nsec = 0;
+> > >  	inode->i_mtime.tv_nsec = 0;
+> > > -	inode->i_ctime.tv_nsec = 0;
+> > > +	inode_ctime_set_nsec(inode, 0);
+> > 
+> > So I'm somewhat wondering here - in other filesystem you construct
+> > timespec64 and then use inode_ctime_set(). Here you use
+> > inode_ctime_set_sec() + inode_ctime_set_nsec(). What's the benefit? It
+> > seems these two functions are not used that much some maybe we could just
+> > live with just inode_ctime_set() and constructing timespec64 when needed?
+> > 
+> > 								Honza
+> 
+> The main advantage is that by using that, I didn't need to do quite so
+> much of this conversion by hand. My coccinelle skills are pretty
+> primitive. I went with whatever conversion was going to give minimal
+> changes, to the existing accesses for the most part.
+> 
+> We could certainly do it the way you suggest, it just means having to
+> re-touch a lot of this code by hand, or someone with better coccinelle
+> chops suggesting a way to declare a temporary variables in place.
 
+Well, maybe temporary variables aren't that convenient but we could provide
+function setting ctime from sec & nsec value without having to declare
+temporary timespec64? Attached is a semantic patch that should deal with
+that - at least it seems to handle all the cases I've found.
+
+								Honza
 -- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
 
-Jocelyn
+--wmtgul4dtcqfppqy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="ctime.cocci"
 
+@@
+struct inode *inode;
+expression val, E1, E2;
+@@
+- inode->i_ctime.tv_sec = val
++ inode_set_ctime(inode, val, 0)
+...
+(
+- inode->i_ctime.tv_nsec = 0;
+|
+- E1 = inode->i_ctime.tv_nsec = 0
++ E1 = 0
+|
+- inode->i_ctime.tv_nsec = E1 = 0
++ E1 = 0
+|
+- inode->i_ctime.tv_nsec = E1 = E2 = 0
++ E1 = E2 = 0
+)
+
+@@
+struct inode *inode;
+expression val, val2;
+@@
+- inode->i_ctime.tv_sec = val
++ inode_set_ctime(inode, val, val2)
+...
+- inode->i_ctime.tv_nsec = val2;
+
+--wmtgul4dtcqfppqy--
