@@ -2,283 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D62BD73A8F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 741DF73A901
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 21:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbjFVT03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 15:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53336 "EHLO
+        id S230373AbjFVTdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 15:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjFVT01 (ORCPT
+        with ESMTP id S229522AbjFVTdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 15:26:27 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B3171BC
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 12:26:25 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8DxvsdfoJRk0IcAAA--.903S3;
-        Fri, 23 Jun 2023 03:26:23 +0800 (CST)
-Received: from [10.20.42.43] (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx_c5eoJRksncCAA--.13556S3;
-        Fri, 23 Jun 2023 03:26:22 +0800 (CST)
-Message-ID: <9f3c3a81-1aca-a36e-8090-d851ea5ce9f7@loongson.cn>
-Date:   Fri, 23 Jun 2023 03:26:22 +0800
+        Thu, 22 Jun 2023 15:33:12 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3D98199B;
+        Thu, 22 Jun 2023 12:33:06 -0700 (PDT)
+X-QQ-mid: bizesmtp81t1687462371tfakqj4c
+Received: from linux-lab-host.localdomain ( [116.30.126.60])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Fri, 23 Jun 2023 03:32:50 +0800 (CST)
+X-QQ-SSF: 01200000002000D0V000B00A0000000
+X-QQ-FEAT: zW5H9jc4KG5qk2INlrOP0oS9aFEXIUGWb1JwxtxbbF7iDK84gQmYLdPeVVZPn
+        UvasRXhCpwWJbIxwFY9KHzOHNQu8BsDVeK3i4ofJpmf6dnH+uUe1FVlFbEIb0r4baDoUW2W
+        YanngRC4rPxrBFpafMd/y0dAlHsQE291QGGPnULqyKsSZX7g4t7JAiorA9fUJ/x1b0XDJ4u
+        UwJ7ojKQdhByAAWoTb1X4/dyQ8ucSc7kX4bopfhI51vptYKUBSM/P2zCp7yVibcOePQglAj
+        zCCq77kf/8V0783pvUNeDavvPtquL8P4KF2bY0HZrxLjJ6gZgyhjNiesB1ezyYWi+dFKX7a
+        EmzvyxkEmDYcwfKIzGkqENi4Sf8b+OxupCFvMBmVUh2NVIdBfgwSAUyD/4KAQ==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 12040008740416056767
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     thomas@t-8ch.de
+Cc:     arnd@arndb.de, david.laight@aculab.com, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, w@1wt.eu
+Subject: Re: [PATCH v4 10/10] selftests/nolibc: add mmap and munmap test cases
+Date:   Fri, 23 Jun 2023 03:32:49 +0800
+Message-Id: <20230622193249.1190336-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <bff82ea6-610b-4471-a28b-6c76c28604a6@t-8ch.de>
+References: <bff82ea6-610b-4471-a28b-6c76c28604a6@t-8ch.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v10 07/11] drm/etnaviv: Add support for the dma coherent
- device
-To:     Lucas Stach <l.stach@pengutronix.de>,
-        Sui Jingfeng <18949883232@163.com>,
-        Russell King <linux+etnaviv@armlinux.org.uk>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        etnaviv@lists.freedesktop.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>
-References: <20230620094716.2231414-1-18949883232@163.com>
- <20230620094716.2231414-8-18949883232@163.com>
- <8f74f0962c8bab6c832919a5340667c54e1a7ddc.camel@pengutronix.de>
- <66fc74ae-299c-a5de-9cfb-07ae24fb3f07@loongson.cn>
- <8212078bd56c54ce508205eae0ed0b69e78d4c38.camel@pengutronix.de>
-Content-Language: en-US
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-Organization: Loongson
-In-Reply-To: <8212078bd56c54ce508205eae0ed0b69e78d4c38.camel@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8Cx_c5eoJRksncCAA--.13556S3
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBj93XoW3Gry5tFWrCF48AF45ZrWfXrc_yoWxXw15pF
-        WavFWYkr4DXrW8Kw1Ivw45Za4S9w4xXFy8Cw1DJwn0vws0kF1j9r4rKF15CFs8GryxWr4a
-        vr4jvFyUWF4kZFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU7529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUP0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-        Jr0_Gr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
-        x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1D
-        McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7
-        I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCF
-        x2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r
-        1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij
-        64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr
-        0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF
-        0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8m2NtUUUUU==
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
-
-On 2023/6/21 23:58, Lucas Stach wrote:
-> Am Mittwoch, dem 21.06.2023 um 23:30 +0800 schrieb Sui Jingfeng:
->> Hi,
->>
->> On 2023/6/21 18:00, Lucas Stach wrote:
->>>>    		dma_sync_sgtable_for_cpu(dev->dev, etnaviv_obj->sgt,
->>>>    					 etnaviv_op_to_dma_dir(op));
->>>>    		etnaviv_obj->last_cpu_prep_op = op;
->>>> @@ -408,8 +421,9 @@ int etnaviv_gem_cpu_fini(struct drm_gem_object *obj)
->>>>    {
->>>>    	struct drm_device *dev = obj->dev;
->>>>    	struct etnaviv_gem_object *etnaviv_obj = to_etnaviv_bo(obj);
->>>> +	struct etnaviv_drm_private *priv = dev->dev_private;
->>>>    
->>>> -	if (etnaviv_obj->flags & ETNA_BO_CACHED) {
->>>> +	if (!priv->dma_coherent && etnaviv_obj->flags & ETNA_BO_CACHED) {
->>>>    		/* fini without a prep is almost certainly a userspace error */
->>>>    		WARN_ON(etnaviv_obj->last_cpu_prep_op == 0);
->>>>    		dma_sync_sgtable_for_device(dev->dev, etnaviv_obj->sgt,
->>>> diff --git a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
->>>> index 3524b5811682..754126992264 100644
->>>> --- a/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
->>>> +++ b/drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c
->>>> @@ -112,11 +112,16 @@ static const struct etnaviv_gem_ops etnaviv_gem_prime_ops = {
->>>>    struct drm_gem_object *etnaviv_gem_prime_import_sg_table(struct drm_device *dev,
->>>>    	struct dma_buf_attachment *attach, struct sg_table *sgt)
->>>>    {
->>>> +	struct etnaviv_drm_private *priv = dev->dev_private;
->>>>    	struct etnaviv_gem_object *etnaviv_obj;
->>>>    	size_t size = PAGE_ALIGN(attach->dmabuf->size);
->>>> +	u32 cache_flags = ETNA_BO_WC;
->>>>    	int ret, npages;
->>>>    
->>>> -	ret = etnaviv_gem_new_private(dev, size, ETNA_BO_WC,
->>>> +	if (priv->dma_coherent)
->>>> +		cache_flags = ETNA_BO_CACHED;
->>>> +
->>> Drop this change. Instead etnaviv_gem_new_impl() should do the upgrade
->>> from WC to CACHED as necessary by adding something like this:
->> I understand you are a profession person in vivante GPU driver domain.
->>
->> I respect you reviews and instruction.
->>
->> But, I'm really reluctant to agree with this, is there any space to
->> negotiate?
->>
->>> /*
->>>    * Upgrade WC to CACHED when the device is hardware coherent and the
->>>    * platform doesn't allow mixing cached and writecombined mappings to
->>>    * the same memory area.
->>>    */
->>> if ((flags & ETNA_BO_CACHE_MASK) == ETNA_BO_WC &&
->>>       dev_is_dma_coherent(dev) && !drm_arch_can_wc_memory())
->>>           flags = (flags & ~ETNA_BO_CACHE_MASK) & ETNA_BO_CACHED;
->> This is policy, not a mechanism.
->>
->> Using what cache property is a user-space program's choice.
->>
->> While you are override the WC with CACHED mapping. This is not correct
->> in the concept!
->>
-> Please explain why you think that this isn't correct.
-
-This is NOT always correct because:
-
-when etnaviv_gem_prime_import_sg_table() is called,
-
-drm/etnaviv is importing buffer from other drivers (for example drm/loongson or drm/ingenic).
-
-drm/etnaviv is the importer, and drm/loongson or drm/ingenic is the exporter.
-
-
-While drm/etnaviv using the WC mapping by default, which may cause *cache aliasing*,
-
-
-Because the imported buffer originally belong to the KMS driver side.
-
-The KMS driver may choose cached mapping by default.
-
-
-For drm/ingenic(jz4770), the BO will be cached, but their hardware can't guarantee coherency.
-
-they have to flush the cache manually when do the frame buffer update(damage update or dirty update).
-
-Because cached mapping is more fast than the WC mapping.
-
-
-
-
-For drm/loongson, shared buffer have to pinned into GTT,
-
-By default, we using the cached mapping for the buffers in the system RAM;
-
-But we are lucky, our the hardware bless us,
-
-the hardware maintain the cache coherency for us.
-
-
-While drm/etnaviv choose the WC mapping for the imported buffer blindly,
-
-when doing the import,
-
-*drm/etnaviv know nothing about the original buffer's caching property.*
-
-This is the problem.
-
-
-Currently, I guess drm/etnaviv only works for drm/imx,
-
-because drm/imx choose WC mapping as the cache property by default for 
-the dumb buffer.
-
-The cache property mapping match, so it works.
-
-But their no communications between the KMS driver and RO driver.
-
-
-I think, drm/etanviv will also wrong on the ARM64 platforms where cache 
-coherency is maintained by the hardware.
-
-If the KMS driver using cached mapping, while drm/etnaviv using WC mapping,
-
-There still will have problems.
-
-I will go to find the hardware, and do the testing for you.
-
-
-> If using WC
-> mappings cause a potential loss of coherency on your platform, then we
-> can not allow the userspace driver to use WC mappings.
-
-I have explained with my broken English,
-
-The point is that loss of coherency may because KMS-RO framework have 
-defect,
-
-maybe software side bug, please don't make the conclusion too fast.
-
-
-Xorg DDX driver (EXA base DDX for an example) fallback to the CPU do the 
-software rendering.
-
-It is even faster than the hardware accelerated implement,
-
-especially in the case where the CPU is fast and the GPU is weak.
-
-LS7A1000(GC1000) + LS3A5000@2.5Ghz X4 core is such a case.
-
-For Discrete on-board VRAM we will using the WC mapping, it will not be 
-shared with other driver,
-
-The CPU use it themself, this is definitionally OK.
-
-In practice, it works like a charm.
-
-For buffers in the system RAM and GTT,
-
-We will using cached mapping for faster CPU software rendering.
-
-hard-coded by the driver.
-
-
-We are benefited so much from the cached mapping.
-
-While when using write-combine caching mapping for a buffer on LoongArch 
-and Loongson Mips CPU,
-
-It is OK for CPU write.
-
-But when you want read from such buffer by the CPU, it is just boil down 
-to uncached.
-
-For our platform, uncached read serve as a kind of SYNC.
-
-It will flush the data in the CPU's write buffer.
-
-This cause performance drop.
-
-
-But we still can use the write-combine caching mapping in the 
-circumstances where do not need the CPU read.
-
-So allow write-combine is providing one more choice to the user-space,
-
-It is just that use it at your own risk.
-
-
-> As I would like to keep the option of WC mappings,
-
-Yeah, I know what's reason.
-
-Because on the platform you love (imx6q, imx8q, for an example),
-
-The hardware don't maintain the cache coherency.
-
-So if fallback to software rendering, you will need to flush the cache frequency.
-
-the performance will drop very much, right?
-
-
--- 
-Jingfeng
-
+Hi, Thomas
+
+> On 2023-06-19 23:55:41+0800, Zhangjin Wu wrote:
+> > Three mmap/munmap related test cases are added:
+> > 
+> > - mmap(NULL, 0, PROT_READ, MAP_PRIVATE, 0, 0), MAP_FAILED, EINVAL)
+> > 
+> >   The length argument must be greater than 0, otherwise, fail with -EINVAL.
+> > 
+> > - munmap((void *)-1, 4*1024), -1, EINVAL)
+> > 
+> >   Invalid (void *)-1 address fail with -EINVAL.
+> > 
+> > - test_mmap_munmap(4*1024)
+> > 
+> >   It finds a init file, mmap() it and then munmap().
+> > 
+> > Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+> > ---
+> >  tools/testing/selftests/nolibc/nolibc-test.c | 31 ++++++++++++++++++++
+> >  1 file changed, 31 insertions(+)
+> > 
+> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> > index 80ab29e2887c..f7c0ca72cb28 100644
+> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> > @@ -592,6 +592,34 @@ static int test_stat_timestamps(void)
+> >  	return 0;
+> >  }
+> >  
+> > +int test_mmap_munmap(int size)
+> > +{
+> > +	char init_files[5][20] = {"/init", "/sbin/init", "/etc/init", "/bin/init", "/bin/sh"};
+> 
+> Why not /proc/1/exe or even /proc/self/exe?
+> 
+> I know your other series tries to remove the procfs dependency, but
+> we're not there yet :-).
+> 
+
+Yeah, '/proc/self/exe' is a choice, if so, the 'has_proc' should be added ;-)
+
+> Also does it make sense to pass a size parameter?
+> Why not use either PAGE_SIZE or the real size of the binary from
+> fstat().
+> 
+
+Ok, as the manpage of mmap shows:
+
+       For mmap(), offset must be a multiple of the underlying huge page
+       size.  The system automatically aligns length to be a multiple of
+       the underlying huge page size.
+
+       For munmap(), addr, and length must both be a multiple of the
+       underlying huge page size.
+
+perhaps we should do further tests:
+
+* the real size/length
+* even > the real size
+* the PAGE_SIZE
+* not aligned with PAGE_SIZE
+
+If such tests are required, the 'size' and even 'offset' arguments could be
+provided to cover different combination or we do such tests internally, then,
+the arguments are not required.
+
+Thanks,
+Zhangjin
+
+> > +	int ret, fd, i;
+> > +	void *mem;
+> > +
+> > +	for (i = 0; i < 5; i++) {
+> > +		ret = fd = open(init_files[i], O_RDONLY);
+> > +		if (ret < 0)
+> > +			continue;
+> > +		else
+> > +			break;
+> > +	}
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	mem = mmap(NULL, size, PROT_READ, MAP_SHARED, fd, 0);
+> > +	if (mem == MAP_FAILED)
+> > +		return -1;
+> > +
+> > +	ret = munmap(mem, size);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +
+> > +	return close(fd);
+> > +}
+> > +
+> > +
+> >  /* Run syscall tests between IDs <min> and <max>.
+> >   * Return 0 on success, non-zero on failure.
+> >   */
+> > @@ -666,6 +694,9 @@ int run_syscall(int min, int max)
+> >  		CASE_TEST(lseek_m1);          EXPECT_SYSER(1, lseek(-1, 0, SEEK_SET), -1, EBADF); break;
+> >  		CASE_TEST(lseek_0);           EXPECT_SYSER(1, lseek(0, 0, SEEK_SET), -1, ESPIPE); break;
+> >  		CASE_TEST(mkdir_root);        EXPECT_SYSER(1, mkdir("/", 0755), -1, EEXIST); break;
+> > +		CASE_TEST(mmap_bad);          EXPECT_PTRER(1, mmap(NULL, 0, PROT_READ, MAP_PRIVATE, 0, 0), MAP_FAILED, EINVAL); break;
+> > +		CASE_TEST(munmap_bad);        EXPECT_SYSER(1, munmap((void *)-1, 0), -1, EINVAL); break;
+> > +		CASE_TEST(mmap_good);         EXPECT_SYSZR(1, test_mmap_munmap(4*1024)); break;
+> >  		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp = open("/dev/null", 0), -1); if (tmp != -1) close(tmp); break;
+> >  		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp = open("/proc/self/blah", 0), -1, ENOENT); if (tmp != -1) close(tmp); break;
+> >  		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
+> > -- 
+> > 2.25.1
+> > 
