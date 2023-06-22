@@ -2,161 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9838473A15E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 15:02:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DCD73A161
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 15:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231433AbjFVNC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 09:02:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
+        id S231515AbjFVNCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 09:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbjFVNCV (ORCPT
+        with ESMTP id S229762AbjFVNC3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 09:02:21 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A5AE10F8
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 06:02:20 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-bb2ffa1e235so6641544276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 06:02:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687438940; x=1690030940;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=DB8d3i9SZQpXK0PITMgG0UJJzhOSPFuZ3siR9gFiirA=;
-        b=JWBLnoCtCGGkUB5i3V5+Wp2c/eM/NkHwaXmiWFfU6SayL+A0epgO0ueS70jSxYr/nf
-         IGwIj9yCsfOqcbMd/s+60X0yXmoW+vfBp2HvF9eWw8z/lOxE6DBtgx0dRSqteKXcdMgV
-         VhUREva8+tHxkRYQPCHu6Qdb8Xbj5zVLFt8vF6mZuKJXflEkrAhv6TxwD7z8R3G6RMB3
-         E3DtBDtPs3MUfBKyryQra6d/agKDhXRd8Ysury1JEWXh/03XYfR8d0k5IXRXM+11nZ5q
-         7oW+g+vezHgxos3gCKh5/zg8g3mOnoFoqeY/VghkRUXkwAwpL1ycTGONEOdtEFR90+M3
-         MzHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687438940; x=1690030940;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DB8d3i9SZQpXK0PITMgG0UJJzhOSPFuZ3siR9gFiirA=;
-        b=aJoVLFyKsbzHEHJAp9+OCMjRQPaxR0Ydf6l731R41MqNhWqCFhdYjV9IToFBAxuq+Z
-         vHTMmOZ4M1QKzBT8wnDXdmEp//eg992kdLZCLk0XOH5dMr/9SHHbyd/veGkT85u1p0mF
-         EIYQEudc4YI3g2mP/DZ0lEDwIhx5yeajLA0EndvYh074sia0XuLX3iVn7fBbW3UTeD9g
-         WJwt/wK7YqhpN0myF5CpwzzugOLm+GKu8SeyAanCTo+EhgTSGpFcCLdpH8lNb6NetzRb
-         cxLXeWLOKYA7e7o7rCXAvPFYhUzUGwP78SG5YZaDMH/H8A2uVoygod1pucRoiXKKh/Pd
-         SP4Q==
-X-Gm-Message-State: AC+VfDxG/2eMqCjLC/9XD207UvVbaZM6lzmDev4WEBTgENWhnCpPBJbc
-        X2Mcg+UFW91z67AE/tx1TicXCZt07k45TiRCc2lSHg==
-X-Google-Smtp-Source: ACHHUZ4ChvoACcCJQotbXKQBZUwe/sEs7gSKFAkswWcZVLaKUoJZrYTOIXV9DhFPqKFims2TUNOSo1U3L5+94nmtzwg=
-X-Received: by 2002:a25:185:0:b0:be7:dee3:1fed with SMTP id
- 127-20020a250185000000b00be7dee31fedmr14146499ybb.65.1687438936863; Thu, 22
- Jun 2023 06:02:16 -0700 (PDT)
+        Thu, 22 Jun 2023 09:02:29 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DD810F8;
+        Thu, 22 Jun 2023 06:02:23 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id D60DE5FDAD;
+        Thu, 22 Jun 2023 16:02:19 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1687438939;
+        bh=w4D8j20IdblRYzBMBoVQwAQ0UD3FpLpcfi4gJumrTeQ=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=lv8HX8NapO5+UDMYVLqguE7sxm2Tq1ry6+DzAv7NHpkG1lbdpUGx3FRZt8AvWIVyU
+         bXlhMfSnZ1z6Vyz95+3AY7nWP3NqAs4swTi7ktrVNHFFVFj0dWUS4X9fvH+sWGJ6bs
+         naEnAWTJj9TJq+p9N0JDEyX50wlx+kxiQ1n3aEtVsSV/blwOVEq2sdRjhPxSH5ZwkZ
+         smy0ZCTZ4psYPdyENpZ7PGdO/PUOClbRKxCL5iW2jbuUBwiaSMxOap1I+tL81DSB1x
+         0yMn4XFxjCv2DQ6Hf0546pe/5qm+6/H1swrBWgA34TrFCjx6c9pB0RCUJUqjddG9+5
+         ikfD5iWHAxmVA==
+Received: from p-i-exch-sc-m01.sberdevices.ru (p-i-exch-sc-m01.sberdevices.ru [172.16.192.107])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Thu, 22 Jun 2023 16:02:16 +0300 (MSK)
+Date:   Thu, 22 Jun 2023 16:02:16 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+CC:     Jerome Brunet <jbrunet@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v2 17/19] clk: meson: a1: move bindings include to main
+ driver
+Message-ID: <20230622130216.ocfvwfnad7amex65@CAB-WSD-L081021>
+References: <20230607-topic-amlogic-upstream-clkid-public-migration-v2-0-38172d17c27a@linaro.org>
+ <20230607-topic-amlogic-upstream-clkid-public-migration-v2-17-38172d17c27a@linaro.org>
 MIME-Version: 1.0
-References: <20230608085544.16211-1-quic_tnimkar@quicinc.com>
- <CAPDyKFqhVkMH42Vz0+a62j5kFh+R_CvGrcSU7hxoW__tjOhfLw@mail.gmail.com>
- <443b00b1-76b8-c31d-53d3-42e3592d26e8@quicinc.com> <CAPDyKFp5L454WmTPo2eYnBuZ=ZMKEtinLgYU09n=J=3DA1FSJQ@mail.gmail.com>
- <29ccc60e-9ef8-883f-9936-95e6ef842746@quicinc.com>
-In-Reply-To: <29ccc60e-9ef8-883f-9936-95e6ef842746@quicinc.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 22 Jun 2023 15:01:40 +0200
-Message-ID: <CAPDyKFqKw-6Qu7YoZw9LQDGvj1PFi3nCDkXcmCJTffxtX75naQ@mail.gmail.com>
-Subject: Re: [PATCH 0/2] Add provision to keep idle state disabled
-To:     Tushar Nimkar <quic_tnimkar@quicinc.com>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-pm@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_lsrao@quicinc.com,
-        quic_mkshah@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230607-topic-amlogic-upstream-clkid-public-migration-v2-17-38172d17c27a@linaro.org>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [100.64.160.123]
+X-ClientProxiedBy: p-i-exch-sc-m01.sberdevices.ru (172.16.192.107) To
+ p-i-exch-sc-m01.sberdevices.ru (172.16.192.107)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/06/22 09:26:00 #21554371
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 at 08:21, Tushar Nimkar <quic_tnimkar@quicinc.com> wrote:
->
-> Many thanks again,
->
-> On 6/16/2023 4:25 PM, Ulf Hansson wrote:
-> > On Wed, 14 Jun 2023 at 08:43, Tushar Nimkar <quic_tnimkar@quicinc.com> wrote:
->
-> >
-> > Right. I am not saying it's the perfect solution, but it seems like it
-> > could potentially solve the problem for many cases.
-> >
-> > If you want some help to turn the cpuidle-psci driver into a loadable
-> > module, just reach out, I am happy to help.
-> >
-> Thanks :)
+On Mon, Jun 12, 2023 at 11:57:34AM +0200, Neil Armstrong wrote:
+> Now the clock ids are no more defined in private headers,
+> cleanup and include the dt-bindings headers from the main
+> driver file.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  drivers/clk/meson/a1-peripherals.c | 2 ++
+>  drivers/clk/meson/a1-peripherals.h | 3 ---
+>  drivers/clk/meson/a1-pll.c         | 2 ++
+>  drivers/clk/meson/a1-pll.h         | 3 ---
+>  4 files changed, 4 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/clk/meson/a1-peripherals.c b/drivers/clk/meson/a1-peripherals.c
+> index a5cab418736a..070ea1427d73 100644
+> --- a/drivers/clk/meson/a1-peripherals.c
+> +++ b/drivers/clk/meson/a1-peripherals.c
+> @@ -15,6 +15,8 @@
+>  #include "clk-regmap.h"
+>  #include "meson-clkc-utils.h"
+>  
+> +#include <dt-bindings/clock/amlogic,a1-peripherals-clkc.h>
+> +
+>  static struct clk_regmap xtal_in = {
+>  	.data = &(struct clk_regmap_gate_data){
+>  		.offset = SYS_OSCIN_CTRL,
+> diff --git a/drivers/clk/meson/a1-peripherals.h b/drivers/clk/meson/a1-peripherals.h
+> index 842b52634ed0..26de8530184a 100644
+> --- a/drivers/clk/meson/a1-peripherals.h
+> +++ b/drivers/clk/meson/a1-peripherals.h
+> @@ -43,7 +43,4 @@
+>  #define PSRAM_CLK_CTRL		0xf4
+>  #define DMC_CLK_CTRL		0xf8
+>  
+> -/* include the CLKIDs that have been made part of the DT binding */
+> -#include <dt-bindings/clock/amlogic,a1-peripherals-clkc.h>
+> -
+>  #endif /* __A1_PERIPHERALS_H */
+> diff --git a/drivers/clk/meson/a1-pll.c b/drivers/clk/meson/a1-pll.c
+> index 25e6b567afd5..7de7d78c3813 100644
+> --- a/drivers/clk/meson/a1-pll.c
+> +++ b/drivers/clk/meson/a1-pll.c
+> @@ -14,6 +14,8 @@
+>  #include "clk-regmap.h"
+>  #include "meson-clkc-utils.h"
+>  
+> +#include <dt-bindings/clock/amlogic,a1-pll-clkc.h>
+> +
+>  static struct clk_regmap fixed_pll_dco = {
+>  	.data = &(struct meson_clk_pll_data){
+>  		.en = {
+> diff --git a/drivers/clk/meson/a1-pll.h b/drivers/clk/meson/a1-pll.h
+> index 0add1c7ea9f5..4be17b2bf383 100644
+> --- a/drivers/clk/meson/a1-pll.h
+> +++ b/drivers/clk/meson/a1-pll.h
+> @@ -25,7 +25,4 @@
+>  #define ANACTRL_HIFIPLL_CTRL4	0xd0
+>  #define ANACTRL_HIFIPLL_STS	0xd4
+>  
+> -/* include the CLKIDs that have been made part of the DT binding */
+> -#include <dt-bindings/clock/amlogic,a1-pll-clkc.h>
+> -
+>  #endif /* __A1_PLL_H */
 
-Np!
+Reviewed-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 
-> Making cpuidle-psci as loadable does not hold good for target does not
-> support DLKM, in addition to it rpmh driver has dependency on
-> cpuidle-psci for pm-domain and rpmh probe will get defer, their are
-> driver which depends on rpmh probe like interconnect, clk etc. And
-> eventually dependent driver probe defers which are essential for Linux
-> boot-up.
-> Hope you got scenario for getting probe defer if we make cpuidle-psci as
-> loadable.
-
-I understand your concern, but you have got my idea wrong.
-
-I was suggesting turning the cpuidle-psci driver into a loadable
-module - not the cpuidle-psci-domain driver. The latter is the genpd
-provider, which consumers like rpmh need to probe.
-
->
-> I have below options as well
-> [A]: Can we think of making "governor/param_governor"
-> module_param_string, string named governor only to load. In that way
-> need to remove check [3]. Let's say string passed as "teo" then it will
-> not load "menu" and loads "teo" once comes-up.
->
-> [B]: Can we think of making cpuidle.off as writable, let governors to
-> register (i.e remove check [4]) and allow cpuidle_init() to happen (i.e
-> remove check [5])
-> So in this way cpuidle.off=1, your idle state can not be selected
-> because [6] and later we can write off=0 to let same check [6] to fail.
->
-> [C]: Coming to this series approach...What is best way to utilize
-> already present Flag-CPUIDLE_FLAG_OFF ?
-> Since we can not add new DT property to take decision in driver as it's
-> not HW feature to be expose in device tree [7]. Can we introduce new
-> module_param() for making idle-state disable default and utilize
-> CPUIDLE_FLAG_OFF? maybe similar to [8]
->
-> happy to hear your thoughts!
-
-In general I am not in favor of module parameters, but maybe it's the
-best option to solve this problem. We need Rafael's and Daniel's
-opinion to conclude.
-
-However, to me, I still think the easiest approach would be to turn
-the cpuidle-psci driver into a loadable module. Let me hack on that
-and post a few patches that you can test for this.
-
->
->
-> [3]
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/cpuidle/governor.c?h=next-20230620#n93
->
-> [4]
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/cpuidle/governor.c?h=next-20230620#n86
->
-> [5]
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/cpuidle/cpuidle.c?h=next-20230620#n808
->
-> [6]
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/kernel/sched/idle.c?h=next-20230620#n167
->
-> [7]
-> https://lore.kernel.org/lkml/20230608085544.16211-1-quic_tnimkar@quicinc.com/T/#m5d6012b0dfcff700f48c0efbba629382f18ee33b
->
-> [8]
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/drivers/idle/intel_idle.c?h=next-20230620#n2160
-> > [...]
-> >
-
-Kind regards
-Uffe
+-- 
+Thank you,
+Dmitry
