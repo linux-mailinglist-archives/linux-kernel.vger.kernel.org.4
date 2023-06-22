@@ -2,97 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318A573A0D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:25:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A5B73A0D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbjFVMZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 08:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37746 "EHLO
+        id S231180AbjFVM0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 08:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231159AbjFVMZa (ORCPT
+        with ESMTP id S231211AbjFVMZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 08:25:30 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E41A1BD1;
-        Thu, 22 Jun 2023 05:25:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687436728; x=1718972728;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=tG380jqTzpNo5ZL67fT6Js9jxrrZXcN1PKFqveEdQic=;
-  b=NwlDBMGJtP4UTso7TepQ6RuMNbRNHor2XrhcBRH5CjZe2h13L1m8mKeI
-   VHceSe+gPQeAn/yS4aoVO04eDF2CnF15Ed8yPd9UpgSYp1ww8he3AE21y
-   wKtIpIk9i8p+NO5QmNLnun6VLoOoBA3lBXSEzFUW8yqOuheu1/uwpnNUW
-   hP1TBSCi5qkzJ33P/dWe6RJLoUM8LuvK2bgcoouGTPTkyDMEJncdlPuiP
-   Yn3/WLWlsST+yqxulS4zsG0Txq40eaKV9SIsN+PB8t/znDuWg1E50VUsq
-   recAFNrWrRq3yTgy7ota/NcuI47fWWIl2rALde/cKZa2tT+d3vc30Hp+b
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="360489581"
-X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
-   d="scan'208";a="360489581"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 05:25:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="839028370"
-X-IronPort-AV: E=Sophos;i="6.00,263,1681196400"; 
-   d="scan'208";a="839028370"
-Received: from nirmoyda-mobl.ger.corp.intel.com (HELO [10.249.46.93]) ([10.249.46.93])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 05:25:25 -0700
-Message-ID: <a7c5f3e4-03ae-1420-6d10-cd0196ee509f@linux.intel.com>
-Date:   Thu, 22 Jun 2023 14:25:24 +0200
+        Thu, 22 Jun 2023 08:25:53 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6B61BCA
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:25:52 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id ada2fe7eead31-440a495d73dso1449642137.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:25:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1687436751; x=1690028751;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LfXyQrUfadjr8GnkWzNVYudXWoJvyTwyORcnxDrw72I=;
+        b=N/OcqIg+9X1ZFyS2Xesam6kAIxWkO3Aox0KRyQupWTJt3saeePsFJmkmxqlYNtFyEz
+         s93LdrFJ6Ll0U9MLdZ4/vxv+fypKnHyw67tnMDYwkhQlqB4Nv4OTWwo8l/veUJJfIWUl
+         +KXTYo/S7ggyIbuSAMXfnEyIW6bhFtEWxoX+Jeg9CPj52BdOaAvv6ltkWLveKCjhI93a
+         vXK7j4K6qwSa5CeAveq38n+bzTgv/FrqOhwdhhHY2PQsj483PzbG6P5LKf+XAfrHxjQd
+         t4TSkVmnYUz0QlOmL+2mMesB5EyicVZsEbppQ3yCI91ufysl8E1r5Qa31fFJQvp3WXLk
+         5Ozg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687436751; x=1690028751;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LfXyQrUfadjr8GnkWzNVYudXWoJvyTwyORcnxDrw72I=;
+        b=Egj6CjaNyubhV+CqIrYstMFdUL33y1NBbyd7p+nC7DB98EhpdW5a+7badCh58PEome
+         EyxKiij/Ca/sKb2lpYiRsErOS5EvqmXnM+ygGrn4TwLx0nHCo++diHv/BquVllRtfxQa
+         KzvbEHGOr5F6NALQMlDVZ5GAjrA75Xy+tzLIhh76o6jA5QTRMOIyioeNaKvFGbh+ErKN
+         UUen8mXUqTne27/FCSbRFcBalPvFUJi8H/mwb9wJ3HGaIzWvXgkPr+ffsfAr1niAkEq0
+         a0ZfHvPVuTdkJtXSQh5Z8xEr0E92iJ+iWXPKZ3XQ5sIXsjyBuKL2TbWzjBTeQl5cuj81
+         cm7g==
+X-Gm-Message-State: AC+VfDy0SzCfdFKV16tLz5pr08r2PSR7xYe19+CIqhTODsjRyYZAYbrd
+        6El2PYcc+42eUhLwu9CSKstAzaoQoGf9wtZWZ/K5Xg==
+X-Google-Smtp-Source: ACHHUZ6SnNysVqnQMX32/VGp1JafxeiEraOqNdQgR8u2Q27PiGxy3hRuTzgEhX3Wz9Z/6G3DxHhWxRsPEa15hB0FdTA=
+X-Received: by 2002:a67:fdc2:0:b0:440:ac0e:66e1 with SMTP id
+ l2-20020a67fdc2000000b00440ac0e66e1mr5309391vsq.13.1687436751354; Thu, 22 Jun
+ 2023 05:25:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 4/4] drm/ttm: Don't leak a resource on swapout move error
-Content-Language: en-US
-To:     =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= 
-        <thomas.hellstrom@linux.intel.com>, intel-xe@lists.freedesktop.org
-Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-References: <20230622101412.78426-1-thomas.hellstrom@linux.intel.com>
- <20230622101412.78426-5-thomas.hellstrom@linux.intel.com>
-From:   Nirmoy Das <nirmoy.das@linux.intel.com>
-In-Reply-To: <20230622101412.78426-5-thomas.hellstrom@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230621153650.440350-1-brgl@bgdev.pl> <20230621153650.440350-8-brgl@bgdev.pl>
+ <ZJQ7PX01NAXmr7RV@corigine.com>
+In-Reply-To: <ZJQ7PX01NAXmr7RV@corigine.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 22 Jun 2023 14:25:40 +0200
+Message-ID: <CAMRc=McXAdvnxyULwhK_0+oLdo6s32q9bU06Upec-a3-zhrqyw@mail.gmail.com>
+Subject: Re: [PATCH net-next 07/11] net: stmmac: platform: provide stmmac_pltfr_remove_no_dt()
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Junxiao Chang <junxiao.chang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Jun 22, 2023 at 2:15=E2=80=AFPM Simon Horman <simon.horman@corigine=
+.com> wrote:
+>
+> On Wed, Jun 21, 2023 at 05:36:46PM +0200, Bartosz Golaszewski wrote:
+> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >
+> > Add a variant of stmmac_pltfr_remove() that only frees resources
+> > allocated by stmmac_pltfr_probe() and - unlike stmmac_pltfr_remove() -
+> > does not call stmmac_remove_config_dt().
+> >
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > ---
+> >  .../ethernet/stmicro/stmmac/stmmac_platform.c | 20 +++++++++++++++++--
+> >  .../ethernet/stmicro/stmmac/stmmac_platform.h |  1 +
+> >  2 files changed, 19 insertions(+), 2 deletions(-)
+> >
+>
+> Hi Bartosz,
+>
+> some minor feedback from my side as it looks like there will be a v2 anyw=
+ay.
+>
+> > diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/dr=
+ivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+> > index df417cdab8c1..58d5c5cc2269 100644
+> > --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+> > +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
+> > @@ -762,6 +762,23 @@ int stmmac_pltfr_probe(struct platform_device *pde=
+v,
+> >  }
+> >  EXPORT_SYMBOL_GPL(stmmac_pltfr_probe);
+> >
+> > +/**
+> > + * stmmac_pltfr_remove_no_dt
+> > + * @pdev: pointer to the platform device
+> > + * Description: This undoes the effects of stmmac_pltfr_probe() by rem=
+oving the
+> > + * driver and calling the platform's exit() callback.
+> > + */
+> > +void stmmac_pltfr_remove_no_dt(struct platform_device *pdev)
+> > +{
+> > +     struct net_device *ndev =3D platform_get_drvdata(pdev);
+> > +     struct stmmac_priv *priv =3D netdev_priv(ndev);
+> > +     struct plat_stmmacenet_data *plat =3D priv->plat;
+>
+> nit: please use reverse xmas tree - longest line to shortest - for
+>      new Networking code.
+>
+>      e.g.:
+>
+>         struct net_device *ndev =3D platform_get_drvdata(pdev);
+>         struct stmmac_priv *priv =3D netdev_priv(ndev);
+>         struct plat_stmmacenet_data *plat =3D plat;
+>
+>         plat =3D priv->plat;
+>
 
-On 6/22/2023 12:14 PM, Thomas Hellström wrote:
-> If moving the bo to system for swapout failed, we were leaking
-> a resource. Fix.
+I normally stick to this convention but here, you need 5 lines for the
+same effect and you make it more confusing by initializing some of the
+variables at their declaration and some not. In other places in this
+driver the same approach is used i.e. not adhering to reverse xmas
+tree when all variables are initialized when declared.
+
+Bart
+
+> > +
+> > +     stmmac_dvr_remove(&pdev->dev);
+> > +     stmmac_pltfr_exit(pdev, plat);
+> > +}
+> > +EXPORT_SYMBOL_GPL(stmmac_pltfr_remove_no_dt);
+> > +
+> >  /**
+> >   * stmmac_pltfr_remove
+> >   * @pdev: platform device pointer
 >
-> Fixes: bfa3357ef9ab ("drm/ttm: allocate resource object instead of embedding it v2")
-> Cc: Christian König <christian.koenig@amd.com>
-> Cc: "Christian König" <ckoenig.leichtzumerken@gmail.com>
-> Cc: dri-devel@lists.freedesktop.org
-> Cc: <stable@vger.kernel.org> # v5.14+
-> Signed-off-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-Reviewed-by: Nirmoy Das <nirmoy.das@intel.com>
-> ---
->   drivers/gpu/drm/ttm/ttm_bo.c | 1 +
->   1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/gpu/drm/ttm/ttm_bo.c b/drivers/gpu/drm/ttm/ttm_bo.c
-> index 89530f2a027f..d737ddd7f4c0 100644
-> --- a/drivers/gpu/drm/ttm/ttm_bo.c
-> +++ b/drivers/gpu/drm/ttm/ttm_bo.c
-> @@ -1166,6 +1166,7 @@ int ttm_bo_swapout(struct ttm_buffer_object *bo, struct ttm_operation_ctx *ctx,
->   		ret = ttm_bo_handle_move_mem(bo, evict_mem, true, ctx, &hop);
->   		if (unlikely(ret != 0)) {
->   			WARN(ret == -EMULTIHOP, "Unexpected multihop in swaput - likely driver bug.\n");
-> +			ttm_resource_free(bo, &evict_mem);
->   			goto out;
->   		}
->   	}
+> ...
