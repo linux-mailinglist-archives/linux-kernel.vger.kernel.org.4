@@ -2,33 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AFB573952E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 04:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4EFC739531
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 04:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbjFVCFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 22:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
+        id S230271AbjFVCGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 22:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbjFVCFg (ORCPT
+        with ESMTP id S229796AbjFVCFz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 22:05:36 -0400
-X-Greylist: delayed 77 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 21 Jun 2023 19:05:32 PDT
-Received: from mail-40140.protonmail.ch (mail-40140.protonmail.ch [185.70.40.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 878191BD8;
-        Wed, 21 Jun 2023 19:05:32 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 02:05:26 +0000
+        Wed, 21 Jun 2023 22:05:55 -0400
+Received: from mail-4324.protonmail.ch (mail-4324.protonmail.ch [185.70.43.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58191992;
+        Wed, 21 Jun 2023 19:05:49 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 02:05:39 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1687399530; x=1687658730;
-        bh=uIImkaJUqEIc4EnN1u23yWQQQI9ILKskx9wiXhE1ldM=;
+        s=protonmail3; t=1687399548; x=1687658748;
+        bh=wbmH1oH6ly/6UPYctPqfteW/k7noLOx6DZi3okRB1Ok=;
         h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
          Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
          Message-ID:BIMI-Selector;
-        b=C3ClYcTssq1Vu2nWdNc92Khz9hdkZelqa6LM+pU9NukIe8kweBetyyxEedAJ2CUac
-         xCmL/nl53Nsx8D4dWdjUK0xnQPsz1i/DFcUEh8gbHYTNczV+rbzmHt8AZCUTFM2UYF
-         es0BN+CclC1UFc1qDC1QjBeoFfoqx7Lq5Jx15xIdR/XH1znSYaDDjC/x1F0pv0s7Gf
-         e+8GnJu2x8cxDy3SdHCCyjcp4046VrDwVoIuLDu31S9NjEEtBpw3FXTaqEzIQPQBR7
-         Apa8imih8wsNzUKeaCGqYS70tjIDfpctEGgBAJcik2IzyLHrGbc6YEJppZhYGdDYFW
-         6jMJQx+a24vFw==
+        b=c5b3GWg8+t1vwqKJS6ttd6IEIUcJlacQMYofXtzNyXc2L72VvVC9gUOZLxsYS6fAY
+         x84JqmCOFCFtgKvzAu+KrfpnQs0HP6SBCGKSjPfnaIS2mWCEidMhGCvNrDH2zCtgK3
+         AW0mYGAr5PYmiWw68Ex1/C4xZm/R/I//xKRPbKrpt0ghdwEvSLQeiL3XUH7JcLXtsc
+         FPizCTmyf117BGG7pnK6fpItRlWp0XTV7DSjp8At6zz7UbOcX/3PDY04DuSJpHJmT2
+         gD04EVdkrYfEjpVTwSsjpmY9VN3zvxTWFHGE9uuE1H/kOLufIOMONS11OzTL53XCKo
+         ADyIsgP0E86Zw==
 To:     linux-kernel@vger.kernel.org
 From:   "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -40,8 +39,8 @@ Cc:     Andy Gross <agross@kernel.org>,
         Stephan Gerhold <stephan@gerhold.net>,
         Nikita Travkin <nikita@trvn.ru>, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH 5/8] arm64: dts: qcom: msm8939-samsung-a7: Add rt5033 battery
-Message-ID: <20230622020515.65823-1-linmengbo0689@protonmail.com>
+Subject: [PATCH 6/8] arm64: dts: qcom: msm8939-samsung-a7: Add NFC
+Message-ID: <20230622020530.65845-1-linmengbo0689@protonmail.com>
 In-Reply-To: <20230622020344.65745-1-linmengbo0689@protonmail.com>
 References: <20230622020344.65745-1-linmengbo0689@protonmail.com>
 Feedback-ID: 40467236:user:proton
@@ -50,55 +49,61 @@ Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Samsung Galaxy A7 uses a Richtek RT5033 PMIC as battery
-fuel gauge, charger, flash LED and for some regulators. For now,
-only add the fuel gauge/battery device to the device tree,
-so we can check the remaining battery percentage.
+The Galaxy A7 has a NXP PN547, which is supported
+by the nxp-nci-i2c driver in mainline. It seems to detect NFC tags
+using "nfctool" just fine, although more testing is difficult given
+there seem to be very few useful applications making use of the
+Linux NFC subsystem.
 
-The other RT5033 drivers need some more work first before
-they can be used properly.
+Note that for some reason Samsung decided to connect the I2C pins
+to GPIOs where no hardware I2C bus is available, so we need to
+fall back to software bit-banging with i2c-gpio.
 
 Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
 ---
- .../boot/dts/qcom/msm8939-samsung-a7.dts      | 37 +++++++++++++++++++
- 1 file changed, 37 insertions(+)
+ .../boot/dts/qcom/msm8939-samsung-a7.dts      | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/msm8939-samsung-a7.dts b/arch/arm64/b=
 oot/dts/qcom/msm8939-samsung-a7.dts
-index 6a817038a3b9..271dcea6da94 100644
+index 271dcea6da94..dcbc8a97ce63 100644
 --- a/arch/arm64/boot/dts/qcom/msm8939-samsung-a7.dts
 +++ b/arch/arm64/boot/dts/qcom/msm8939-samsung-a7.dts
-@@ -69,6 +69,29 @@ button-home {
+@@ -92,6 +92,32 @@ battery@35 {
  =09=09};
  =09};
 =20
-+=09i2c-fg {
++=09i2c-nfc {
 +=09=09compatible =3D "i2c-gpio";
-+=09=09sda-gpios =3D <&tlmm 106 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-+=09=09scl-gpios =3D <&tlmm 105 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
++=09=09sda-gpios =3D <&tlmm 0 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
++=09=09scl-gpios =3D <&tlmm 1 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
 +
-+=09=09pinctrl-0 =3D <&fg_i2c_default>;
++=09=09pinctrl-0 =3D <&nfc_i2c_default>;
 +=09=09pinctrl-names =3D "default";
 +
 +=09=09#address-cells =3D <1>;
 +=09=09#size-cells =3D <0>;
 +
-+=09=09battery@35 {
-+=09=09=09compatible =3D "richtek,rt5033-battery";
-+=09=09=09reg =3D <0x35>;
++=09=09nfc@2b {
++=09=09=09compatible =3D "nxp,pn547", "nxp,nxp-nci-i2c";
++=09=09=09reg =3D <0x2b>;
 +
 +=09=09=09interrupt-parent =3D <&tlmm>;
-+=09=09=09interrupts =3D <121 IRQ_TYPE_EDGE_BOTH>;
++=09=09=09interrupts =3D <21 IRQ_TYPE_EDGE_RISING>;
 +
-+=09=09=09pinctrl-0 =3D <&fg_alert_default>;
++=09=09=09enable-gpios =3D <&tlmm 116 GPIO_ACTIVE_HIGH>;
++=09=09=09firmware-gpios =3D <&tlmm 49 GPIO_ACTIVE_HIGH>;
++
++=09=09=09pinctrl-0 =3D <&nfc_default>;
 +=09=09=09pinctrl-names =3D "default";
 +=09=09};
 +=09};
@@ -106,26 +111,35 @@ index 6a817038a3b9..271dcea6da94 100644
  =09i2c-sensor {
  =09=09compatible =3D "i2c-gpio";
  =09=09sda-gpios =3D <&tlmm 84 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-@@ -234,6 +257,20 @@ accel_int_default: accel-int-default-state {
+@@ -292,6 +318,29 @@ muic_int_default: muic-int-default-state {
  =09=09bias-disable;
  =09};
 =20
-+=09fg_alert_default: fg-alert-default-state {
-+=09=09pins =3D "gpio121";
++=09nfc_default: nfc-default-state {
++=09=09irq-pins {
++=09=09=09pins =3D "gpio21";
++=09=09=09function =3D "gpio";
++=09=09=09drive-strength =3D <2>;
++=09=09=09bias-pull-down;
++=09=09};
++
++=09=09nfc-pins {
++=09=09=09pins =3D "gpio49", "gpio116";
++=09=09=09function =3D "gpio";
++=09=09=09drive-strength =3D <2>;
++=09=09=09bias-disable;
++=09=09};
++=09};
++
++=09nfc_i2c_default: nfc-i2c-default-state {
++=09=09pins =3D "gpio0", "gpio1";
 +=09=09function =3D "gpio";
 +=09=09drive-strength =3D <2>;
 +=09=09bias-disable;
 +=09};
 +
-+=09fg_i2c_default: fg-i2c-default-state {
-+=09=09pins =3D "gpio105", "gpio106";
-+=09=09function =3D "gpio";
-+=09=09drive-strength =3D <2>;
-+=09=09bias-disable;
-+=09};
-+
- =09gpio_hall_sensor_default: gpio-hall-sensor-default-state {
- =09=09pins =3D "gpio52";
+ =09sdc2_cd_default: sdc2-cd-default-state {
+ =09=09pins =3D "gpio38";
  =09=09function =3D "gpio";
 --=20
 2.39.2
