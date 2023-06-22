@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5436373A131
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:49:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD43473A139
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 14:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbjFVMtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 08:49:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48964 "EHLO
+        id S231465AbjFVMu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 08:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjFVMtM (ORCPT
+        with ESMTP id S229437AbjFVMuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 08:49:12 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A41A193
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:49:11 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9741caaf9d4so844911966b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 05:49:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687438149; x=1690030149;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YhvgVoFM6FTq9AwoWanp3xrUukN1AJ5+EdyuAoktyjU=;
-        b=RWw21UIA0cWmKVUVvY38FIClWEnq9pXNU/2G12Dh5g3ztYOHR18AyM3gof/Ic7qZxW
-         aQ81VeBvV8X9rwPQ1hDszxfFzMnVHTgWLUwkU3AJezLO1dRBLHCG/WkeEVzjGCPnxzx1
-         k7VT2Q6YeTlFvRc724KZwlbXyw5rB28snJKdKF12yj7gKwsucxitRufZsSPk+5c4m/Qu
-         +tmFWSBxtK5z0yd0UhXq0PKVjgZFlBRvN0FWEpG9Ci14EkyhlhTr5zFE3+Vw6lUDbp0/
-         qgufW+BiwQARHulz/jObcABSq33XITmhQSsceThzb+r20DrfB162/LQAjII2b88UjMst
-         E7fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687438149; x=1690030149;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YhvgVoFM6FTq9AwoWanp3xrUukN1AJ5+EdyuAoktyjU=;
-        b=aojkqfdlX8Ioqf2jzdcEmd6Dk6Ym/ct0Sz1n+yhIWCCf5JMBCeGa31vx9x/9wrS8DJ
-         1dZKmZG2RMp/9gdYBtq8qngLpGyiEoyttxrqXdOSa7jpgRga0pgL6kUyyDF6XZt888cE
-         yMYFjUzwOM1qmJArpi3G97hA0/AUAuB+4JBbSRchK3ZPtHhKOzA5RboKZiFWBu0fo5Ci
-         MZq8F5QwN3K6hQ/0pN59GR6a3w699WQjMsSv4sQWTMBreKVZvM5SgMptbhm7HBplnRRJ
-         RSKRfhsr6bzo2xqrOqJ9g0G7T92VCrB6cV5haZ3Y8kRuTuzxsKHnGZ/4gssyLzP6W7jO
-         LA+g==
-X-Gm-Message-State: AC+VfDyfpfSCycGjPGUODkRLmbmmMbqlA/hRi254gIu+8rliqp1u++dZ
-        pmpW7Kl73QrU8NAZgi43AoaUrQ4ojCOZ3APxISM=
-X-Google-Smtp-Source: ACHHUZ6+DbQzZ3m80BTWTc3NUMYeTxfE9rWT+/M+MMDDI9r4wD1K9u5wiJnAPvvTMK8FdQYFFkZgCA==
-X-Received: by 2002:a17:907:3e08:b0:982:79fa:453d with SMTP id hp8-20020a1709073e0800b0098279fa453dmr18711830ejc.73.1687438149480;
-        Thu, 22 Jun 2023 05:49:09 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id h7-20020a1709067cc700b00988b86d6c7csm4644020ejp.132.2023.06.22.05.49.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 05:49:09 -0700 (PDT)
-Message-ID: <25439c1e-c9ef-0dc6-8d91-883d7734d0fd@linaro.org>
-Date:   Thu, 22 Jun 2023 14:49:07 +0200
+        Thu, 22 Jun 2023 08:50:25 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8ECD41BC5;
+        Thu, 22 Jun 2023 05:50:22 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8DxfceMQ5Rkv28AAA--.693S3;
+        Thu, 22 Jun 2023 20:50:20 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxWM2LQ5RkrxwCAA--.11455S3;
+        Thu, 22 Jun 2023 20:50:19 +0800 (CST)
+Subject: Re: [PATCH v2 1/2] asm-generic: Unify uapi bitsperlong.h for arm64,
+ riscv and loongarch
+To:     kernel test robot <lkp@intel.com>, Arnd Bergmann <arnd@arndb.de>
+References: <1687336748-4898-2-git-send-email-yangtiezhu@loongson.cn>
+ <202306220334.C80BpATp-lkp@intel.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org,
+        linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
+        linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <27295ba8-f57e-61c1-9cc4-f2207fd97ae0@loongson.cn>
+Date:   Thu, 22 Jun 2023 20:50:19 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 2/2] arch: arm64: configs: Enable UBI and UBIFS
-To:     kah.jing.lee@intel.com, Dinh Nguyen <dinguyen@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-References: <0d1b3c55-4b11-9e63-e388-191d39d88df1@linaro.org>
- <20230622122114.592791-1-kah.jing.lee@intel.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230622122114.592791-1-kah.jing.lee@intel.com>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <202306220334.C80BpATp-lkp@intel.com>
+Content-Type: text/plain; charset=windows-1252; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-CM-TRANSID: AQAAf8CxWM2LQ5RkrxwCAA--.11455S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrtF1ktrWrtFWDtr1xCF13Jrc_yoW3Wrb_A3
+        4aywsrGr1S9Fyqqws8CwsaqFyDJayUC3sruwn5Jw4DGFWIkw48Jws3W3srJF4kKrZxtw13
+        ZasYqr9Yyw17KosvyTuYvTs0mTUanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUbqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
+        6r4UJVWxJr1ln4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12
+        xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y
+        6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr4
+        1lc7I2V7IY0VAS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU89iSPUUUU
+        U==
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,38 +70,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2023 14:21, kah.jing.lee@intel.com wrote:
-> From: Lee, Kah Jing <kah.jing.lee@intel.com>
-> 
->>
-
-You missed my questions.
-
->>>
->>> Signed-off-by: Alif Zakuan Yuslaimi <alif.zakuan.yuslaimi@intel.com>
->>> Signed-off-by: Kah Jing Lee <kah.jing.lee@intel.com>
->>> ---
->>>  arch/arm64/configs/defconfig | 2 ++
->>>  1 file changed, 2 insertions(+)
->>>
->>> diff --git a/arch/arm64/configs/defconfig
->>> b/arch/arm64/configs/defconfig index a24609e14d50..23a6ebcb1a9e
->> 100644
->>> --- a/arch/arm64/configs/defconfig
->>> +++ b/arch/arm64/configs/defconfig
->>> @@ -470,6 +470,8 @@ CONFIG_IPMI_DEVICE_INTERFACE=m
->> CONFIG_IPMI_SI=m
->>> CONFIG_HW_RANDOM=y  CONFIG_HW_RANDOM_VIRTIO=y
->>> +CONFIG_MTD_UBI=y
->>> +CONFIG_UBIFS_FS=y
->>
->> Not modules?
-> Yes, we need to boot with rootfs with UBIFS.
-
-So you miss init ramdisk.
 
 
+On 06/22/2023 04:04 AM, kernel test robot wrote:
+> Hi Tiezhu,
+>
+> kernel test robot noticed the following build warnings:
+>
 
-Best regards,
-Krzysztof
+...
+
+>    In file included from include/asm-generic/bitsperlong.h:5:
+>>> include/uapi/asm-generic/bitsperlong.h:13:9: warning: '__BITS_PER_LONG' macro redefined [-Wmacro-redefined]
+
+Oh, thanks for the report, I am sorry.
+
+In order to silence the build warning, it should check the definition
+of __BITS_PER_LONG first at the beginning of bitsperlong.h, like this:
+
+#ifndef __BITS_PER_LONG
+
+#if defined(__CHAR_BIT__) && defined(__SIZEOF_LONG__)
+#define __BITS_PER_LONG (__CHAR_BIT__ * __SIZEOF_LONG__)
+#else
+#define __BITS_PER_LONG 32
+#endif
+
+#endif
+
+I will test and then send v3 later.
+
+Thanks,
+Tiezhu
 
