@@ -2,172 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E88E73A566
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:53:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45B7773A569
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbjFVPxa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 22 Jun 2023 11:53:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42774 "EHLO
+        id S231559AbjFVPyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 11:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbjFVPx1 (ORCPT
+        with ESMTP id S231151AbjFVPyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 11:53:27 -0400
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4839E10F8;
-        Thu, 22 Jun 2023 08:53:26 -0700 (PDT)
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-98502b12fd4so202445466b.1;
-        Thu, 22 Jun 2023 08:53:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687449205; x=1690041205;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LRq3IplvxHFodqnGJxa2C+GD1dW0/Z+gi8MyiCpWLqY=;
-        b=ezFP1kQ9UrqWGUQwuQdT2Q2yvFI7Zv2wYsBzvyMtP8AyryTNgXYIXPkrrLT648Knva
-         GUU7jraGSfoyW5EVCLhV/PwqGddKmcVUlXrMEh3DzsCsHYY/ORS5+ghJr/qEwWjb//af
-         Cy99O3byqxA/F7ATAPbt9RZIGEvqnjsg7DuePz6ka0umCmk1sNFP7t7sgWoa83gLhM5+
-         +bSziO57seBKN1t5WXORAanIcoE6iVN058fL6V0IMj2Y3b8snZbZksgOOTv0yvNJaOAv
-         lMMoBRVvj77OrIn+r4w/56HJZbj2LYM0oLRpF0JY0fiwwHOh1BRa5vGUQy36GIHb2V/Q
-         kTJA==
-X-Gm-Message-State: AC+VfDyNbC/c177HRBdi/hRuBN3LmiWcd6c/7sl1jh1mRKtRhmiB1Ssm
-        N1jqn+/IFaEjef2zfwuL7SAM3YPxn1Ob8La7NGY=
-X-Google-Smtp-Source: ACHHUZ7LVqAIgZ0Fgp4Dz8vORMJOFzWuw863n68A0YAIPuQ6+qD0UqtP8F+DsinsZ++jl9TQej2WkRT0VHhP8QAroDM=
-X-Received: by 2002:a17:906:100a:b0:987:81d:9d49 with SMTP id
- 10-20020a170906100a00b00987081d9d49mr12869574ejm.7.1687449204470; Thu, 22 Jun
- 2023 08:53:24 -0700 (PDT)
+        Thu, 22 Jun 2023 11:54:15 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888FD10F8;
+        Thu, 22 Jun 2023 08:54:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=xyLbNzZ/cBspjKpPk46G3AEQd+aThHsA32OlsyTI2uY=; b=z1nNxx71rlhpqa2DBWP5mZ3LMv
+        68WRdxR+w6RcUjAX5uM6xXewmBngVeMOIfBjnQchk42q77qWQDnD3RFrw86YUrgTVIIxU1jqqhuW5
+        YUac2edCy4RNDSGoVZL716AJIPzw/+fpCZNuY+7bbDbmjhCV+EZNb2aVy+jzXkVitBez5AdsVmEf+
+        dauMnuxi62mi79HjlJ34nS4teh3hLCImCqKNcmANLw1FjqGqW/K3XmPs46peEhQBccNhde1rkqRqj
+        epMoVTOEb88FMv2PB0BAWuRkXztaetsGm5471a9TU1Fv205BWS3wRWQazPyhUOmnxcsGZ7mGT1gNi
+        a/oNe5kw==;
+Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1qCMdP-001AeD-24;
+        Thu, 22 Jun 2023 15:54:11 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Alexandra Winter <wintera@linux.ibm.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH] revert "s390/net: lcs: use IS_ENABLED() for kconfig detection"
+Date:   Thu, 22 Jun 2023 08:54:09 -0700
+Message-ID: <20230622155409.27311-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-References: <20230621151652.79579-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230621151652.79579-1-andriy.shevchenko@linux.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 22 Jun 2023 17:53:13 +0200
-Message-ID: <CAJZ5v0jt8XCzUxQaBXLz0zXezih1Urq=dt-K9PWVY1JpN=Go6Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] ACPI: platform: Ignore SMB0001 only when it has resources
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, acpica-devel@lists.linuxfoundation.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>,
-        Andi Shyti <andi.shyti@kernel.org>,
-        Robert Moore <robert.moore@intel.com>,
-        Michael Brunner <michael.brunner@kontron.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jun 21, 2023 at 5:16 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> After switching i2c-scmi driver to be a plaform one, it stopped
+The referenced patch is causing build errors when ETHERNET=y and
+FDDI=m. While we work out the preferred patch(es), revert this patch
+to make the pain go away.
 
-"platform"
+Fixes: 128272336120 ("s390/net: lcs: use IS_ENABLED() for kconfig detection")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: lore.kernel.org/r/202306202129.pl0AqK8G-lkp@intel.com
+Cc: Alexandra Winter <wintera@linux.ibm.com>
+Cc: Wenjia Zhang <wenjia@linux.ibm.com>
+Cc: linux-s390@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: Heiko Carstens <hca@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc: Sven Schnelle <svens@linux.ibm.com>
+Cc: David S. Miller <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+---
+ drivers/s390/net/lcs.c |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-> being enumerated on number of Kontron platforms, because it's
-> listed in the forbidden_id_list.
->
-> To resolve the situation, split the list to generic one and
-> another that holds devices that has to be skipped if and only
-
-"have"
-
-> if they have bogus resources attached (_CRS method returns some).
->
-> Fixes: 03d4287add6e ("i2c: scmi: Convert to be a platform driver")
-> Closes: https://lore.kernel.org/r/60c1756765b9a3f1eab0dcbd84f59f00fe1caf48.camel@kontron.com
-> Reported-by: Michael Brunner <michael.brunner@kontron.com>
-> Tested-by: Michael Brunner <michael.brunner@kontron.com>
-> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-> Link: https://lore.kernel.org/r/20230620163534.1042-1-andriy.shevchenko@linux.intel.com
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
-> v2: added tags (Andi, Michael), fixed spelling (Andi)
->  drivers/acpi/acpi_platform.c | 27 +++++++++++++++++++++++++--
->  1 file changed, 25 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/acpi/acpi_platform.c b/drivers/acpi/acpi_platform.c
-> index fe00a5783f53..089a98bd18bf 100644
-> --- a/drivers/acpi/acpi_platform.c
-> +++ b/drivers/acpi/acpi_platform.c
-> @@ -19,13 +19,17 @@
->
->  #include "internal.h"
->
-> +static const struct acpi_device_id forbidden_id_with_resourses[] = {
-
-I don't quite like this name and the driver_data field could be used
-to indicate the need to check the resources.
-
-> +       {"SMB0001",  0},        /* ACPI SMBUS virtual device */
-> +       { }
-> +};
-> +
->  static const struct acpi_device_id forbidden_id_list[] = {
->         {"ACPI0009", 0},        /* IOxAPIC */
->         {"ACPI000A", 0},        /* IOAPIC */
->         {"PNP0000",  0},        /* PIC */
->         {"PNP0100",  0},        /* Timer */
->         {"PNP0200",  0},        /* AT DMA Controller */
-> -       {"SMB0001",  0},        /* ACPI SMBUS virtual device */
->         { }
->  };
->
-> @@ -83,6 +87,15 @@ static void acpi_platform_fill_resource(struct acpi_device *adev,
->                 dest->parent = pci_find_resource(to_pci_dev(parent), dest);
->  }
->
-> +static int acpi_platform_resource_count(struct acpi_resource *ares, void *data)
-> +{
-> +       int *count = data;
-> +
-> +       *count = *count + 1;
-
-Why not (*count)++?
-
-> +
-> +       return 1;
-> +}
-> +
->  /**
->   * acpi_create_platform_device - Create platform device for ACPI device node
->   * @adev: ACPI device node to create a platform device for.
-> @@ -103,7 +116,8 @@ struct platform_device *acpi_create_platform_device(struct acpi_device *adev,
->         struct resource_entry *rentry;
->         struct list_head resource_list;
->         struct resource *resources = NULL;
-> -       int count;
-> +       int count = 0;
-> +       int ret;
->
->         /* If the ACPI node already has a physical device attached, skip it. */
->         if (adev->physical_node_count)
-> @@ -113,6 +127,15 @@ struct platform_device *acpi_create_platform_device(struct acpi_device *adev,
->                 return ERR_PTR(-EINVAL);
->
->         INIT_LIST_HEAD(&resource_list);
-> +       ret = acpi_dev_get_resources(adev, &resource_list, acpi_platform_resource_count, &count);
-> +       if (ret < 0)
-> +               return ERR_PTR(ret);
-
-Why not use acpi_walk_resources() directly here?
-
-Also, this extra resources walk is only needed if the resources check
-is needed to decide whether or not to skip the device, so what's the
-benefit of doing it for every device that's not skipped?
-
-> +
-> +       acpi_dev_free_resource_list(&resource_list);
-> +
-> +       if (count > 0 && !acpi_match_device_ids(adev, forbidden_id_with_resourses))
-> +               return ERR_PTR(-EINVAL);
-> +
->         count = acpi_dev_get_resources(adev, &resource_list, NULL, NULL);
->         if (count < 0)
->                 return NULL;
-> --
+diff -- a/drivers/s390/net/lcs.c b/drivers/s390/net/lcs.c
+--- a/drivers/s390/net/lcs.c
++++ b/drivers/s390/net/lcs.c
+@@ -36,7 +36,7 @@
+ #include "lcs.h"
+ 
+ 
+-#if !IS_ENABLED(CONFIG_ETHERNET) && !IS_ENABLED(CONFIG_FDDI)
++#if !defined(CONFIG_ETHERNET) && !defined(CONFIG_FDDI)
+ #error Cannot compile lcs.c without some net devices switched on.
+ #endif
+ 
+@@ -1601,14 +1601,14 @@ lcs_startlan_auto(struct lcs_card *card)
+ 	int rc;
+ 
+ 	LCS_DBF_TEXT(2, trace, "strtauto");
+-#if IS_ENABLED(CONFIG_ETHERNET)
++#ifdef CONFIG_ETHERNET
+ 	card->lan_type = LCS_FRAME_TYPE_ENET;
+ 	rc = lcs_send_startlan(card, LCS_INITIATOR_TCPIP);
+ 	if (rc == 0)
+ 		return 0;
+ 
+ #endif
+-#if IS_ENABLED(CONFIG_FDDI)
++#ifdef CONFIG_FDDI
+ 	card->lan_type = LCS_FRAME_TYPE_FDDI;
+ 	rc = lcs_send_startlan(card, LCS_INITIATOR_TCPIP);
+ 	if (rc == 0)
+@@ -2139,13 +2139,13 @@ lcs_new_device(struct ccwgroup_device *c
+ 		goto netdev_out;
+ 	}
+ 	switch (card->lan_type) {
+-#if IS_ENABLED(CONFIG_ETHERNET)
++#ifdef CONFIG_ETHERNET
+ 	case LCS_FRAME_TYPE_ENET:
+ 		card->lan_type_trans = eth_type_trans;
+ 		dev = alloc_etherdev(0);
+ 		break;
+ #endif
+-#if IS_ENABLED(CONFIG_FDDI)
++#ifdef CONFIG_FDDI
+ 	case LCS_FRAME_TYPE_FDDI:
+ 		card->lan_type_trans = fddi_type_trans;
+ 		dev = alloc_fddidev(0);
