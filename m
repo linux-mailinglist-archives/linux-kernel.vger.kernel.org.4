@@ -2,51 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96BC573A194
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 15:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C0673A19A
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 15:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbjFVNNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 09:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
+        id S231592AbjFVNOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 09:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjFVNNA (ORCPT
+        with ESMTP id S229437AbjFVNOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 09:13:00 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4D51BD7;
-        Thu, 22 Jun 2023 06:12:58 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.226])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Qn1212SWGz67k9Y;
-        Thu, 22 Jun 2023 21:10:17 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 22 Jun
- 2023 14:12:56 +0100
-Date:   Thu, 22 Jun 2023 14:12:55 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Terry Bowman <terry.bowman@amd.com>
-CC:     <alison.schofield@intel.com>, <vishal.l.verma@intel.com>,
-        <ira.weiny@intel.com>, <bwidawsk@kernel.org>,
-        <dan.j.williams@intel.com>, <dave.jiang@intel.com>,
-        <linux-cxl@vger.kernel.org>, <rrichter@amd.com>,
-        <linux-kernel@vger.kernel.org>, <bhelgaas@google.com>
-Subject: Re: [PATCH v6 25/27] cxl/pci: Disable root port interrupts in RCH
- mode
-Message-ID: <20230622141255.00006d13@Huawei.com>
-In-Reply-To: <20230622035126.4130151-26-terry.bowman@amd.com>
-References: <20230622035126.4130151-1-terry.bowman@amd.com>
-        <20230622035126.4130151-26-terry.bowman@amd.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 22 Jun 2023 09:14:00 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317E210F8;
+        Thu, 22 Jun 2023 06:13:59 -0700 (PDT)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7d72:676c:e745:a6ef])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 411256607115;
+        Thu, 22 Jun 2023 14:13:57 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687439637;
+        bh=7Bj5hAoh3Iuvgs44g1/kDJV9XKTUPPQFWhuUxH1CfxU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=F/M4eSTFBa0RVdvd99Qfx5JodBeCZuvC5W+xcR2jfJ9AoPKorjPt4DR3Aom0jclX7
+         FOld3+gclSyEgJCEeZxnFr7DxjrvNjZSuM5JA+JEoVzLEZ10L9rxNHb4gDuWT7o7oL
+         1aXA2ccbTIZvNlNcCWQAhY2a/FgiXkmFhZZp1vHGUlK9CxDcI33Jh7u13bdfEXsoT2
+         YiSwiNniqrsZj9TjnZM9r6WDNMShGgadZI0PSMPFT17DwPmRsXnYNokP88lmzGB4MI
+         Xon5UQAYvyEJfN/ufvy+FqNaNus1SRDnaFK2nYpSgubd2ikSLAdz+i/wq7f2WUvHeg
+         tuMOaSBrPra+Q==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
+        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
+        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
+        kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH v3 00/11] Add DELETE_BUF ioctl
+Date:   Thu, 22 Jun 2023 15:13:38 +0200
+Message-Id: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,101 +58,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 21 Jun 2023 22:51:24 -0500
-Terry Bowman <terry.bowman@amd.com> wrote:
+Unlike when resolution change on keyframes, dynamic resolution change
+on inter frames doesn't allow to do a stream off/on sequence because
+it is need to keep all previous references alive to decode inter frames.
+This constraint have two main problems:
+- more memory consumption.
+- more buffers in use.
+To solve these issue this series introduce DELETE_BUF ioctl and remove
+the 32 buffers limit per queue.
 
-> The RCH root port contains root command AER registers that should not be
-> enabled.[1] Disable these to prevent root port interrupts.
+VP9 conformance tests using fluster give a score of 210/305.
+The 25 resize inter tests (vp90-2-21-resize_inter_* files) are ok
+but require to use postprocessor.
 
-I'm a little dubious about a 'because the spec says' so argument.
-If we can describe the path by which spurious interrupts turn up then
-great - if not then fair enough.
+Kernel branch is available here:
+https://gitlab.collabora.com/benjamin.gaignard/for-upstream/-/commits/remove_vb2_queue_limit_v3
 
-One trivial spelling thing inline. With that fixed.
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+GStreamer branch to use DELETE_BUF ioctl and testing dynamic resolution
+change is here:
+https://gitlab.freedesktop.org/benjamin.gaignard1/gstreamer/-/commits/VP9_drc
 
-> 
-> [1] CXL 3.0 - 12.2.1.1 RCH Downstream Port-detected Errors
-> 
-> Signed-off-by: Terry Bowman <terry.bowman@amd.com>
-> Signed-off-by: Robert Richter <rrichter@amd.com>
-> ---
->  drivers/cxl/core/core.h |  6 ++++++
->  drivers/cxl/core/pci.c  | 29 +++++++++++++++++++++++++++++
->  drivers/cxl/core/port.c |  3 +++
->  3 files changed, 38 insertions(+)
-> 
-> diff --git a/drivers/cxl/core/core.h b/drivers/cxl/core/core.h
-> index 87467c633123..880bac9db376 100644
-> --- a/drivers/cxl/core/core.h
-> +++ b/drivers/cxl/core/core.h
-> @@ -86,4 +86,10 @@ enum cxl_poison_trace_type {
->  	CXL_POISON_TRACE_CLEAR,
->  };
->  
-> +#ifdef CONFIG_PCIEAER_CXL
-> +void cxl_disable_rch_root_ints(struct cxl_dport *dport);
-> +#else
-> +static inline void cxl_disable_rch_root_ints(struct cxl_dport *dport) { };
-> +#endif
-> +
->  #endif /* __CXL_CORE_H__ */
-> diff --git a/drivers/cxl/core/pci.c b/drivers/cxl/core/pci.c
-> index 9e0eba5ccfc4..39a2f9f4f115 100644
-> --- a/drivers/cxl/core/pci.c
-> +++ b/drivers/cxl/core/pci.c
-> @@ -838,6 +838,35 @@ static void cxl_handle_rdport_errors(struct cxl_dev_state *cxlds)
->  		cxl_handle_rdport_ras(cxlds, dport);
->  }
->  
-> +void cxl_disable_rch_root_ints(struct cxl_dport *dport)
-> +{
-> +	void __iomem *aer_base = dport->regs.dport_aer;
-> +	struct pci_host_bridge *bridge;
-> +	u32 aer_cmd_mask, aer_cmd;
-> +
-> +	if (!aer_base)
-> +		return;
-> +
-> +	bridge = to_pci_host_bridge(dport->dport_dev);
-> +
-> +	/*
-> +	 * Disable RCH root port command interrupts.
-> +	 * CXL 3.0 12.2.1.1 - RCH Downstream Port-detected Errors
-> +	 *
-> +	 * This sequnce may not be necessary. CXL spec states disabling
+changes in version 3:
+- Use Xarray API to store allocated video buffers.
+- No module parameter to limit the number of buffer per queue.
+- Use Xarray inside Verisilicon driver to store postprocessor buffers
+  and remove VB2_MAX_FRAME limit.
+- Allow Versilicon driver to change of resolution while streaming
+- Various fixes the Verisilicon VP9 code to improve fluster score.
+ 
+changes in version 2:
+- Use a dynamic array and not a list to keep trace of allocated buffers.
+  Not use IDR interface because it is marked as deprecated in kernel
+  documentation.
+- Add a module parameter to limit the number of buffer per queue.
+- Add DELETE_BUF ioctl and m2m helpers.
 
-Spell check. (I often forget as well :(
+Benjamin Gaignard (11):
+  media: videobuf2: Access vb2_queue bufs array through helper functions
+  media: videobuf2: Use Xarray instead of static buffers array
+  media: videobuf2: Remove VB2_MAX_FRAME limit on buffer storage
+  media: videobuf2: Stop define VB2_MAX_FRAME as global
+  media: verisilicon: Refactor postprocessor to store more buffers
+  media: verisilicon: Store chroma and motion vectors offset
+  media: verisilicon: vp9: Use destination buffer height to compute
+    chroma offset
+  media: verisilicon: postproc: Fix down scale test
+  media: verisilicon: vp9: Allow to change resolution while streaming
+  media: v4l2: Add DELETE_BUF ioctl
+  media: v4l2: Add mem2mem helpers for DELETE_BUF ioctl
 
+ .../userspace-api/media/v4l/user-func.rst     |   1 +
+ .../media/v4l/vidioc-delete-buf.rst           |  51 ++++
+ .../media/common/videobuf2/videobuf2-core.c   | 275 ++++++++++++++----
+ .../media/common/videobuf2/videobuf2-v4l2.c   |  34 ++-
+ drivers/media/platform/amphion/vdec.c         |   1 +
+ drivers/media/platform/amphion/vpu_dbg.c      |  22 +-
+ .../platform/mediatek/jpeg/mtk_jpeg_core.c    |   6 +-
+ .../vcodec/vdec/vdec_vp9_req_lat_if.c         |   4 +-
+ drivers/media/platform/qcom/venus/hfi.h       |   2 +
+ drivers/media/platform/st/sti/hva/hva-v4l2.c  |   4 +
+ drivers/media/platform/verisilicon/hantro.h   |   8 +-
+ .../platform/verisilicon/hantro_g2_vp9_dec.c  |  10 +-
+ .../media/platform/verisilicon/hantro_hw.h    |   4 +-
+ .../platform/verisilicon/hantro_postproc.c    | 114 +++++---
+ .../media/platform/verisilicon/hantro_v4l2.c  |  37 +--
+ drivers/media/test-drivers/vim2m.c            |   1 +
+ drivers/media/test-drivers/visl/visl-dec.c    |  28 +-
+ drivers/media/v4l2-core/v4l2-dev.c            |   1 +
+ drivers/media/v4l2-core/v4l2-ioctl.c          |  10 +
+ drivers/media/v4l2-core/v4l2-mem2mem.c        |  20 ++
+ .../staging/media/atomisp/pci/atomisp_ioctl.c |   2 +-
+ drivers/staging/media/ipu3/ipu3-v4l2.c        |   2 +
+ include/media/v4l2-ioctl.h                    |   4 +
+ include/media/v4l2-mem2mem.h                  |  12 +
+ include/media/videobuf2-core.h                |  16 +-
+ include/media/videobuf2-v4l2.h                |  15 +-
+ include/uapi/linux/videodev2.h                |   2 +
+ 27 files changed, 523 insertions(+), 163 deletions(-)
+ create mode 100644 Documentation/userspace-api/media/v4l/vidioc-delete-buf.rst
 
-> +	 * the root cmd register's interrupts is required. But, PCI spec
-> +	 * shows these are disabled by default on reset.
-> +	 */
-> +	if (bridge->native_cxl_error) {
-> +		aer_cmd_mask = (PCI_ERR_ROOT_CMD_COR_EN |
-> +				PCI_ERR_ROOT_CMD_NONFATAL_EN |
-> +				PCI_ERR_ROOT_CMD_FATAL_EN);
-> +		aer_cmd = readl(aer_base + PCI_ERR_ROOT_COMMAND);
-> +		aer_cmd &= ~aer_cmd_mask;
-> +		writel(aer_cmd, aer_base + PCI_ERR_ROOT_COMMAND);
-> +	}
-> +}
-> +
->  #else
->  static void cxl_handle_rdport_errors(struct cxl_dev_state *cxlds) { }
->  #endif
-> diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
-> index 87a12e69aa8e..2d812bbaf05f 100644
-> --- a/drivers/cxl/core/port.c
-> +++ b/drivers/cxl/core/port.c
-> @@ -1035,6 +1035,9 @@ __devm_cxl_add_dport(struct cxl_port *port, struct device *dport_dev,
->  
->  	cxl_dport_map_regs(dport);
->  
-> +	if (dport->rch)
-> +		cxl_disable_rch_root_ints(dport);
-> +
->  	cond_cxl_root_lock(port);
->  	rc = add_dport(port, dport);
->  	cond_cxl_root_unlock(port);
+-- 
+2.39.2
 
