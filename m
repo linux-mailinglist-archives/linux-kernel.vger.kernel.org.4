@@ -2,435 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FEDF73A4B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F33CD73A49B
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:19:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbjFVPVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 11:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53736 "EHLO
+        id S231871AbjFVPTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 11:19:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbjFVPV3 (ORCPT
+        with ESMTP id S230462AbjFVPTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 11:21:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15437E57
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 08:20:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1687447244;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YAWCmrAmwCl1N7fCfizEGws+8a3F56UqQiaEh7J5B+E=;
-        b=VZFI8lPos7Vj7QGRZqvwdjHmVfX1QYXbInTe9zMwJ2kocrUMbarOrv0L38+5BwaG2OenRH
-        77T+yl8zwIAxgM/ONWxklsMrJ1g8EcemA831ju/u6+HTlIa4sjBO5OUxEVuPAQLmK9cTjg
-        kzG7ZS4i3ZCFvJlfd81i0INR6kqQGjE=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-563-9O5EMC62NO-wSVsccuRRQA-1; Thu, 22 Jun 2023 11:19:18 -0400
-X-MC-Unique: 9O5EMC62NO-wSVsccuRRQA-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f9d7ff4b6aso6698465e9.1
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 08:19:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687447152; x=1690039152;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YAWCmrAmwCl1N7fCfizEGws+8a3F56UqQiaEh7J5B+E=;
-        b=O9Ztc9rJrkRVQjIqurup1E7zmqPUdhG2HWO1i9pLuRohGhf8rB4sLbOma6+Z5eFIt2
-         ktWaMQhqOnXr6/c25X6mVXMd0v5WAJBBZD2MvqtUa4A8bMpnsHgNqAGb5qp6Uv0axv/J
-         T077smz8kiWzZRQgQvF5oBiaATzZf/gmBrTHw4LMDMbPqx50huwhr+jAfmrtkWCV6nsl
-         hRjEH8Ltun1dAmBr+4sdd1438eLXJNdQCrst6I+8L8+4wyqUw4j66Puh91KzusHPlbrN
-         VCGg3jJgOonzpCiY3HIs7bNsI/9RP1XxndyHTxegiJ2u5X6uLfUtJGF1GTTBB4bQSLPe
-         XTAw==
-X-Gm-Message-State: AC+VfDyMn7TmGwx9KFBoUpOXdu3z7PtX8e/79hQJ6fBvzfRWsfQkRH21
-        4loC03Ofgxs0nPOSEDnxRMMWH1yXDCDgwiD0t/k1viDN8be4NJ5IrWRTlxKhBt5phiDYedTydA6
-        HrAHXikuJQZgWJK/zGF2FvtzC
-X-Received: by 2002:a7b:cd16:0:b0:3f9:b119:e42b with SMTP id f22-20020a7bcd16000000b003f9b119e42bmr9403368wmj.30.1687447152464;
-        Thu, 22 Jun 2023 08:19:12 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4UtO+vdPl4TbSBFba6U7sn8uXDPfnnKtHGMCmuC/vX/EQ7I92imvaPRsCck5pPB0+FXg2gyA==
-X-Received: by 2002:a7b:cd16:0:b0:3f9:b119:e42b with SMTP id f22-20020a7bcd16000000b003f9b119e42bmr9403350wmj.30.1687447152070;
-        Thu, 22 Jun 2023 08:19:12 -0700 (PDT)
-Received: from sgarzare-redhat (host-87-11-6-160.retail.telecomitalia.it. [87.11.6.160])
-        by smtp.gmail.com with ESMTPSA id f20-20020a1c6a14000000b003f8f884ebe5sm8051180wmc.2.2023.06.22.08.19.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 08:19:11 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 17:19:08 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Bobby Eshleman <bobby.eshleman@bytedance.com>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Bryan Tan <bryantan@vmware.com>,
-        Vishnu Dasa <vdasa@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Simon Horman <simon.horman@corigine.com>,
-        Krasnov Arseniy <oxffffaa@gmail.com>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH RFC net-next v4 3/8] vsock: support multi-transport
- datagrams
-Message-ID: <tngyeva5by3aldrhlixajjin2hqmcl6uruvuoed7hyrndlesfd@bbv7aphqye2q>
-References: <20230413-b4-vsock-dgram-v4-0-0cebbb2ae899@bytedance.com>
- <20230413-b4-vsock-dgram-v4-3-0cebbb2ae899@bytedance.com>
+        Thu, 22 Jun 2023 11:19:37 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320E4E4B;
+        Thu, 22 Jun 2023 08:19:36 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a01:e0a:2c:6930:5cf4:84a1:2763:fe0d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: bbrezillon)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 215D8660710B;
+        Thu, 22 Jun 2023 16:19:34 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1687447174;
+        bh=ymAvndbR0zQBZ6PsdI4dsyg00gB/daFooEXzShbNbkg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=QfXy7i3h/S4AMm/V50YZvXkbkgHGS0OQgQSl3FvJSMnTDRY9r+2CoP4rO2a6i1KEY
+         15njbA+8IGDM05DKS40WHUPK/500Wx2km6asQMi43djGyDeOEGge9wFGz14g+xlYJw
+         JjXjbATQYp8rw+s2EYVi7wp+nxis0cCLnGVGmuPkzihslp5e2+q8YhpD6vWZPtM3jd
+         o91pxsM80t05TYKLs7SVihntiUzNl+jNIgYND7d3PGVtSm2960iL2Ee7Cqnj3Xr9E3
+         OvZsZrOIr4HdSTNXrNZK1APjkWTClXIaJz/T2lOGxx/hCoaJhrW8aUeSKd/nRujT/E
+         BFybPr4z80fWA==
+Date:   Thu, 22 Jun 2023 17:19:31 +0200
+From:   Boris Brezillon <boris.brezillon@collabora.com>
+To:     Danilo Krummrich <dakr@redhat.com>
+Cc:     matthew.brost@intel.com, airlied@gmail.com, daniel@ffwll.ch,
+        tzimmermann@suse.de, mripard@kernel.org, corbet@lwn.net,
+        christian.koenig@amd.com, bskeggs@redhat.com,
+        Liam.Howlett@oracle.com, alexdeucher@gmail.com, ogabbay@kernel.org,
+        bagasdotme@gmail.com, willy@infradead.org, jason@jlekstrand.net,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH drm-next v5 00/14] [RFC] DRM GPUVA Manager & Nouveau
+ VM_BIND UAPI
+Message-ID: <20230622171931.1c46f745@collabora.com>
+In-Reply-To: <b04b3dbb-0509-fec1-4e8e-90f724443836@redhat.com>
+References: <20230620004217.4700-1-dakr@redhat.com>
+        <20230620112540.19142ef3@collabora.com>
+        <94adfd82-e77d-f99c-1d94-8b6397d39310@redhat.com>
+        <20230622150101.229391e5@collabora.com>
+        <b04b3dbb-0509-fec1-4e8e-90f724443836@redhat.com>
+Organization: Collabora
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230413-b4-vsock-dgram-v4-3-0cebbb2ae899@bytedance.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jun 10, 2023 at 12:58:30AM +0000, Bobby Eshleman wrote:
->This patch adds support for multi-transport datagrams.
->
->This includes:
->- Per-packet lookup of transports when using sendto(sockaddr_vm)
->- Selecting H2G or G2H transport using VMADDR_FLAG_TO_HOST and CID in
->  sockaddr_vm
->
->To preserve backwards compatibility with VMCI, some important changes
->were made. The "transport_dgram" / VSOCK_TRANSPORT_F_DGRAM is changed to
->be used for dgrams iff there is not yet a g2h or h2g transport that has
+Hi Danilo,
 
-s/iff/if
+On Thu, 22 Jun 2023 15:58:23 +0200
+Danilo Krummrich <dakr@redhat.com> wrote:
 
->been registered that can transmit the packet. If there is a g2h/h2g
->transport for that remote address, then that transport will be used and
->not "transport_dgram". This essentially makes "transport_dgram" a
->fallback transport for when h2g/g2h has not yet gone online, which
->appears to be the exact use case for VMCI.
->
->This design makes sense, because there is no reason that the
->transport_{g2h,h2g} cannot also service datagrams, which makes the role
->of transport_dgram difficult to understand outside of the VMCI context.
->
->The logic around "transport_dgram" had to be retained to prevent
->breaking VMCI:
->
->1) VMCI datagrams appear to function outside of the h2g/g2h
->   paradigm. When the vmci transport becomes online, it registers itself
->   with the DGRAM feature, but not H2G/G2H. Only later when the
->   transport has more information about its environment does it register
->   H2G or G2H. In the case that a datagram socket becomes active
->   after DGRAM registration but before G2H/H2G registration, the
->   "transport_dgram" transport needs to be used.
+> Hi Boris,
+> 
+> On 6/22/23 15:01, Boris Brezillon wrote:
+> > Hi Danilo,
+> > 
+> > On Tue, 20 Jun 2023 14:46:07 +0200
+> > Danilo Krummrich <dakr@redhat.com> wrote:
+> >   
+> >>> The only thing I'm worried about is the 'sync mapping requests have to
+> >>> go through the async path and wait for all previous async requests to
+> >>> be processed' problem I mentioned in one of your previous submission,
+> >>> but I'm happy leave that for later.  
+> >>
+> >> Yes, I'm aware of this limitation.
+> >>
+> >> Let me quickly try to explain where this limitation comes from and how I
+> >> intend to address it.
+> >>
+> >> In order to be able to allocate the required page tables for a mapping
+> >> request and in order to free corresponding page tables once the (async)
+> >> job finished I need to know the corresponding sequence of operations
+> >> (drm_gpuva_ops) to fulfill the mapping request.
+> >>
+> >> This requires me to update the GPUVA space in the ioctl() rather than in
+> >> the async stage, because otherwise I would need to wait for previous
+> >> jobs to finish before being able to submit subsequent jobs to the job
+> >> queue, since I need an up to date view of the GPUVA space in order to
+> >> calculate the sequence of operations to fulfill a mapping request.
+> >>
+> >> As a consequence all jobs need to be processed in the order they were
+> >> submitted, including synchronous jobs.
+> >>
+> >> @Matt: I think you will have the same limitation with synchronous jobs
+> >> as your implementation in XE should be similar?
+> >>
+> >> In order to address it I want to switch to using callbacks rather than
+> >> 'pre-allocated' drm_gpuva_ops and update the GPUVA space within the
+> >> asynchronous stage.
+> >> This would allow me to 'fit' synchronous jobs
+> >> between jobs waiting in the async job queue. However, to do this I have
+> >> to re-work how the page table handling in Nouveau is implemented, since
+> >> this would require me to be able to manage the page tables without
+> >> knowing the exact sequence of operations to fulfill a mapping request.  
+> > 
+> > Ok, so I think that's more or less what we're trying to do right
+> > now in PowerVR.
+> > 
+> > - First, we make sure we reserve enough MMU page tables for a given map
+> >    operation to succeed no matter the VM state in the VM_BIND job
+> >    submission path (our VM_BIND ioctl). That means we're always
+> >    over-provisioning and returning unused memory back when the operation
+> >    is done if we end up using less memory.
+> > - We pre-allocate for the mapple-tree insertions.
+> > - Then we map using drm_gpuva_sm_map() and the callbacks we provided in
+> >    the drm_sched::run_job() path. We guarantee that no memory is
+> >    allocated in that path thanks to the pre-allocation/reservation we've
+> >    done at VM_BIND job submission time.
+> > 
+> > The problem I see with this v5 is that:
+> > 
+> > 1/ We now have a dma_resv_lock_held() in drm_gpuva_{link,unlink}(),
+> >     which, in our case, is called in the async drm_sched::run_job() path,
+> >     and we don't hold the lock in that path (it's been released just
+> >     after the job submission).  
+> 
+> My solution to this, as by now, is to - in the same way we pre-allocate 
+> - to just pre-link and pre-unlink. And then fix things up in the cleanup 
+> path.
+> 
+> However, depending on the driver, this might require you to set a flag 
+> in the driver specific structure (embedding struct drm_gpuva) whether 
+> the gpuva is actually mapped (as in has active page table entries). 
+> Maybe we could also just add such a flag to struct drm_gpuva. But yeah, 
+> doesn't sound too nice to be honest...
+> 
+> > 2/ I'm worried that Liam's plan to only reserve what's actually needed
+> >     based on the mapple tree state is going to play against us, because
+> >     the mapple-tree is only modified at job exec time, and we might have
+> >     several unmaps happening between the moment we created and queued the
+> >     jobs, and the moment they actually get executed, meaning the
+> >     mapple-tree reservation might no longer fit the bill.  
+> 
+> Yes, I'm aware and I explained to Liam in detail why we need the 
+> mas_preallocate_worst_case() way of doing it.
+> 
+> See this mail: 
+> https://lore.kernel.org/nouveau/68cd25de-e767-725e-2e7b-703217230bb0@redhat.com/T/#ma326e200b1de1e3c9df4e9fcb3bf243061fee8b5
+> 
+> He hasn't answered yet, but I hope we can just get (or actually keep) 
+> such a function (hopefully with better naming), since it shouldn't 
+> interfere with anything else.
 
-IIRC we did this, because at that time only VMCI supported DGRAM. Now 
-that there are more transports, maybe DGRAM can follow the h2g/g2h 
-paradigm.
+My bad, I started reading your reply and got interrupted. Never got
+back to it, which I should definitely have done before posting my
+questions. Anyway, glad to hear we're on the same page regarding the
+mas_preallocate_worst_case() thing.
 
->
->2) VMCI seems to require special message be sent by the transport when a
->   datagram socket calls bind(). Under the h2g/g2h model, the transport
->   is selected using the remote_addr which is set by connect(). At
->   bind time there is no remote_addr because often no connect() has been
->   called yet: the transport is null. Therefore, with a null transport
->   there doesn't seem to be any good way for a datagram socket a tell the
->   VMCI transport that it has just had bind() called upon it.
+> 
+> > 
+> > For issue #1, it shouldn't be to problematic if we use a regular lock to
+> > insert to/remove from the GEM gpuva list.  
+> 
+> Yes, that's why I had a separate GEM gpuva list lock in the first place. 
+> However, this doesn't really work when generating ops rather than using 
+> the callback interface.
+> 
+> Have a look at drm_gpuva_gem_unmap_ops_create() requested by Matt for 
+> XE. This function generates drm_gpuva_ops to unmap all mappings of a 
+> given GEM. In order to do that the function must iterate the GEM's gpuva 
+> list and allocate operations for each mapping. As a consequence the 
+> gpuva list lock wouldn't be allowed to be taken in the fence signalling 
+> path (run_job()) any longer. Hence, we can just protect the list with 
+> the GEM's dma-resv lock.
 
-@Vishnu, @Bryan do you think we can avoid this in some way?
+Yeah, I see why using dma_resv when pre-inserting the mapping is
+useful, it just didn't really work with late mapping insertion.
 
->
->Only transports with a special datagram fallback use-case such as VMCI
->need to register VSOCK_TRANSPORT_F_DGRAM.
+> 
+> However, I can understand that it might be inconvenient for the callback 
+> interface and admittedly my solution to that isn't that nice as well. 
+> Hence the following idea:
+> 
+> For drivers to be able to use their own lock for that it would be enough 
+> to get rid of the lockdep checks. We could just add a flag to the GPUVA 
+> manager to let the driver indicate it wants to do it's own locking for 
+> the GPUVA list and skip the lockdep checks for the dma-resv lock in that 
+> case.
 
-Maybe we should rename it in VSOCK_TRANSPORT_F_DGRAM_FALLBACK or
-something like that.
+Sounds good to me.
 
-In any case, we definitely need to update the comment in 
-include/net/af_vsock.h on top of VSOCK_TRANSPORT_F_DGRAM mentioning
-this.
+> 
+> > 
+> > For issue #2, I can see a way out if, instead of freeing gpuva nodes,
+> > we flag those as unused when we see that something happening later in
+> > the queue is going to map a section being unmapped. All of this implies
+> > keeping access to already queued VM_BIND jobs (using the spsc queue at
+> > the entity level is not practical), and iterating over them every time
+> > a new sync or async job is queued to flag what needs to be retained. It
+> > would obviously be easier if we could tell the mapple-tree API
+> > 'provision as if the tree was empty', so all we have to do is just
+> > over-provision for both the page tables and mapple-tree insertion, and
+> > free the unused mem when the operation is done.
+> > 
+> > Don't know if you already thought about that and/or have solutions to
+> > solve these issues.  
+> 
+> As already mentioned above, I'd just expect we can keep it the 
+> over-provision way, as you say. I think it's a legit use case to not 
+> know the state of the maple tree at the time the pre-allocated nodes 
+> will be used and keeping that should not interfere with Liams plan to 
+> (hopefully separately) optimize for the pre-allocation use case they 
+> have within -mm.
+> 
+> But let's wait for his take on that.
 
->
->Signed-off-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
->---
-> drivers/vhost/vsock.c                   |  1 -
-> include/linux/virtio_vsock.h            |  2 -
-> net/vmw_vsock/af_vsock.c                | 78 +++++++++++++++++++++++++--------
-> net/vmw_vsock/hyperv_transport.c        |  6 ---
-> net/vmw_vsock/virtio_transport.c        |  1 -
-> net/vmw_vsock/virtio_transport_common.c |  7 ---
-> net/vmw_vsock/vsock_loopback.c          |  1 -
-> 7 files changed, 60 insertions(+), 36 deletions(-)
->
->diff --git a/drivers/vhost/vsock.c b/drivers/vhost/vsock.c
->index c8201c070b4b..8f0082da5e70 100644
->--- a/drivers/vhost/vsock.c
->+++ b/drivers/vhost/vsock.c
->@@ -410,7 +410,6 @@ static struct virtio_transport vhost_transport = {
-> 		.cancel_pkt               = vhost_transport_cancel_pkt,
->
-> 		.dgram_enqueue            = virtio_transport_dgram_enqueue,
->-		.dgram_bind               = virtio_transport_dgram_bind,
-> 		.dgram_allow              = virtio_transport_dgram_allow,
-> 		.dgram_get_cid		  = virtio_transport_dgram_get_cid,
-> 		.dgram_get_port		  = virtio_transport_dgram_get_port,
->diff --git a/include/linux/virtio_vsock.h b/include/linux/virtio_vsock.h
->index 23521a318cf0..73afa09f4585 100644
->--- a/include/linux/virtio_vsock.h
->+++ b/include/linux/virtio_vsock.h
->@@ -216,8 +216,6 @@ void virtio_transport_notify_buffer_size(struct vsock_sock *vsk, u64 *val);
-> u64 virtio_transport_stream_rcvhiwat(struct vsock_sock *vsk);
-> bool virtio_transport_stream_is_active(struct vsock_sock *vsk);
-> bool virtio_transport_stream_allow(u32 cid, u32 port);
->-int virtio_transport_dgram_bind(struct vsock_sock *vsk,
->-				struct sockaddr_vm *addr);
-> bool virtio_transport_dgram_allow(u32 cid, u32 port);
-> int virtio_transport_dgram_get_cid(struct sk_buff *skb, unsigned int *cid);
-> int virtio_transport_dgram_get_port(struct sk_buff *skb, unsigned int *port);
->diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
->index 74358f0b47fa..ef86765f3765 100644
->--- a/net/vmw_vsock/af_vsock.c
->+++ b/net/vmw_vsock/af_vsock.c
->@@ -438,6 +438,18 @@ vsock_connectible_lookup_transport(unsigned int cid, __u8 flags)
-> 	return transport;
-> }
->
->+static const struct vsock_transport *
->+vsock_dgram_lookup_transport(unsigned int cid, __u8 flags)
->+{
->+	const struct vsock_transport *transport;
->+
->+	transport = vsock_connectible_lookup_transport(cid, flags);
->+	if (transport)
->+		return transport;
->+
->+	return transport_dgram;
->+}
->+
-> /* Assign a transport to a socket and call the .init transport callback.
->  *
->  * Note: for connection oriented socket this must be called when vsk->remote_addr
->@@ -474,7 +486,8 @@ int vsock_assign_transport(struct vsock_sock *vsk, struct vsock_sock *psk)
->
-> 	switch (sk->sk_type) {
-> 	case SOCK_DGRAM:
->-		new_transport = transport_dgram;
->+		new_transport = vsock_dgram_lookup_transport(remote_cid,
->+							     remote_flags);
-> 		break;
-> 	case SOCK_STREAM:
-> 	case SOCK_SEQPACKET:
->@@ -691,6 +704,9 @@ static int __vsock_bind_connectible(struct vsock_sock *vsk,
-> static int __vsock_bind_dgram(struct vsock_sock *vsk,
-> 			      struct sockaddr_vm *addr)
-> {
->+	if (!vsk->transport || !vsk->transport->dgram_bind)
->+		return -EINVAL;
->+
-> 	return vsk->transport->dgram_bind(vsk, addr);
-> }
->
->@@ -1172,19 +1188,24 @@ static int vsock_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
->
-> 	lock_sock(sk);
->
->-	transport = vsk->transport;
->-
->-	err = vsock_auto_bind(vsk);
->-	if (err)
->-		goto out;
->-
->-
-> 	/* If the provided message contains an address, use that.  Otherwise
-> 	 * fall back on the socket's remote handle (if it has been connected).
-> 	 */
-> 	if (msg->msg_name &&
-> 	    vsock_addr_cast(msg->msg_name, msg->msg_namelen,
-> 			    &remote_addr) == 0) {
->+		transport = vsock_dgram_lookup_transport(remote_addr->svm_cid,
->+							 remote_addr->svm_flags);
->+		if (!transport) {
->+			err = -EINVAL;
->+			goto out;
->+		}
->+
->+		if (!try_module_get(transport->module)) {
->+			err = -ENODEV;
->+			goto out;
->+		}
->+
-> 		/* Ensure this address is of the right type and is a valid
-> 		 * destination.
-> 		 */
->@@ -1193,11 +1214,27 @@ static int vsock_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
-> 			remote_addr->svm_cid = transport->get_local_cid();
->
+Sure. As I said, I'm fine getting this version merged, we can sort out
+the changes needed for PowerVR later. Just thought I'd mention those
+issues early, so you're not surprised when we come back with crazy
+requests (which apparently are not that crazy ;-)).
 
- From here ...
+Regards,
 
-> 		if (!vsock_addr_bound(remote_addr)) {
->+			module_put(transport->module);
->+			err = -EINVAL;
->+			goto out;
->+		}
->+
->+		if (!transport->dgram_allow(remote_addr->svm_cid,
->+					    remote_addr->svm_port)) {
->+			module_put(transport->module);
-> 			err = -EINVAL;
-> 			goto out;
-> 		}
->+
->+		err = transport->dgram_enqueue(vsk, remote_addr, msg, len);
-
-... to here, looks like duplicate code, can we get it out of the if 
-block?
-
->+		module_put(transport->module);
-> 	} else if (sock->state == SS_CONNECTED) {
-> 		remote_addr = &vsk->remote_addr;
->+		transport = vsk->transport;
->+
->+		err = vsock_auto_bind(vsk);
->+		if (err)
->+			goto out;
->
-> 		if (remote_addr->svm_cid == VMADDR_CID_ANY)
-> 			remote_addr->svm_cid = transport->get_local_cid();
->@@ -1205,23 +1242,23 @@ static int vsock_dgram_sendmsg(struct socket *sock, struct msghdr *msg,
-> 		/* XXX Should connect() or this function ensure remote_addr is
-> 		 * bound?
-> 		 */
->-		if (!vsock_addr_bound(&vsk->remote_addr)) {
->+		if (!vsock_addr_bound(remote_addr)) {
-> 			err = -EINVAL;
-> 			goto out;
-> 		}
->-	} else {
->-		err = -EINVAL;
->-		goto out;
->-	}
->
->-	if (!transport->dgram_allow(remote_addr->svm_cid,
->-				    remote_addr->svm_port)) {
->+		if (!transport->dgram_allow(remote_addr->svm_cid,
->+					    remote_addr->svm_port)) {
->+			err = -EINVAL;
->+			goto out;
->+		}
->+
->+		err = transport->dgram_enqueue(vsk, remote_addr, msg, len);
->+	} else {
-> 		err = -EINVAL;
-> 		goto out;
-> 	}
->
->-	err = transport->dgram_enqueue(vsk, remote_addr, msg, len);
->-
-> out:
-> 	release_sock(sk);
-> 	return err;
->@@ -1255,13 +1292,18 @@ static int vsock_dgram_connect(struct socket *sock,
-> 	if (err)
-> 		goto out;
->
->+	memcpy(&vsk->remote_addr, remote_addr, sizeof(vsk->remote_addr));
->+
->+	err = vsock_assign_transport(vsk, NULL);
->+	if (err)
->+		goto out;
->+
-> 	if (!vsk->transport->dgram_allow(remote_addr->svm_cid,
-> 					 remote_addr->svm_port)) {
-> 		err = -EINVAL;
-> 		goto out;
-> 	}
->
->-	memcpy(&vsk->remote_addr, remote_addr, sizeof(vsk->remote_addr));
-> 	sock->state = SS_CONNECTED;
->
-> 	/* sock map disallows redirection of non-TCP sockets with sk_state !=
->diff --git a/net/vmw_vsock/hyperv_transport.c b/net/vmw_vsock/hyperv_transport.c
->index ff6e87e25fa0..c00bc5da769a 100644
->--- a/net/vmw_vsock/hyperv_transport.c
->+++ b/net/vmw_vsock/hyperv_transport.c
->@@ -551,11 +551,6 @@ static void hvs_destruct(struct vsock_sock *vsk)
-> 	kfree(hvs);
-> }
->
->-static int hvs_dgram_bind(struct vsock_sock *vsk, struct sockaddr_vm *addr)
->-{
->-	return -EOPNOTSUPP;
->-}
->-
-> static int hvs_dgram_get_cid(struct sk_buff *skb, unsigned int *cid)
-> {
-> 	return -EOPNOTSUPP;
->@@ -841,7 +836,6 @@ static struct vsock_transport hvs_transport = {
-> 	.connect                  = hvs_connect,
-> 	.shutdown                 = hvs_shutdown,
->
->-	.dgram_bind               = hvs_dgram_bind,
-> 	.dgram_get_cid		  = hvs_dgram_get_cid,
-> 	.dgram_get_port		  = hvs_dgram_get_port,
-> 	.dgram_get_length	  = hvs_dgram_get_length,
->diff --git a/net/vmw_vsock/virtio_transport.c b/net/vmw_vsock/virtio_transport.c
->index 5763cdf13804..1b7843a7779a 100644
->--- a/net/vmw_vsock/virtio_transport.c
->+++ b/net/vmw_vsock/virtio_transport.c
->@@ -428,7 +428,6 @@ static struct virtio_transport virtio_transport = {
-> 		.shutdown                 = virtio_transport_shutdown,
-> 		.cancel_pkt               = virtio_transport_cancel_pkt,
->
->-		.dgram_bind               = virtio_transport_dgram_bind,
-> 		.dgram_enqueue            = virtio_transport_dgram_enqueue,
-> 		.dgram_allow              = virtio_transport_dgram_allow,
-> 		.dgram_get_cid		  = virtio_transport_dgram_get_cid,
->diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
->index e6903c719964..d5a3c8efe84b 100644
->--- a/net/vmw_vsock/virtio_transport_common.c
->+++ b/net/vmw_vsock/virtio_transport_common.c
->@@ -790,13 +790,6 @@ bool virtio_transport_stream_allow(u32 cid, u32 port)
-> }
-> EXPORT_SYMBOL_GPL(virtio_transport_stream_allow);
->
->-int virtio_transport_dgram_bind(struct vsock_sock *vsk,
->-				struct sockaddr_vm *addr)
->-{
->-	return -EOPNOTSUPP;
->-}
->-EXPORT_SYMBOL_GPL(virtio_transport_dgram_bind);
->-
-> int virtio_transport_dgram_get_cid(struct sk_buff *skb, unsigned int *cid)
-> {
-> 	return -EOPNOTSUPP;
->diff --git a/net/vmw_vsock/vsock_loopback.c b/net/vmw_vsock/vsock_loopback.c
->index 2f3cabc79ee5..e9de45a26fbd 100644
->--- a/net/vmw_vsock/vsock_loopback.c
->+++ b/net/vmw_vsock/vsock_loopback.c
->@@ -61,7 +61,6 @@ static struct virtio_transport loopback_transport = {
-> 		.shutdown                 = virtio_transport_shutdown,
-> 		.cancel_pkt               = vsock_loopback_cancel_pkt,
->
->-		.dgram_bind               = virtio_transport_dgram_bind,
-> 		.dgram_enqueue            = virtio_transport_dgram_enqueue,
-> 		.dgram_allow              = virtio_transport_dgram_allow,
-> 		.dgram_get_cid		  = virtio_transport_dgram_get_cid,
->
->-- 
->2.30.2
->
-
-The rest LGTM!
-
-Stefano
-
+Boris
