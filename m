@@ -2,110 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46C6073A958
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 22:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 742F873A959
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 22:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjFVUJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 16:09:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
+        id S231138AbjFVUKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 16:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjFVUJv (ORCPT
+        with ESMTP id S230521AbjFVUKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 16:09:51 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61281710
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 13:09:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687464589; x=1719000589;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rMYEm8dbaQOauXtEW2aM8kbljQdU8H0asFUgdMQJAw4=;
-  b=enOHGsdOfpHTHpy5OJD22E8kA8ptPcZXx0VVnr+GBLizUemcg313DfMh
-   8uBKflBLIY49g+l7P69myQW57JdP2SIB07lNeQgngZzq3EP3o8KOt1qMB
-   4YY69+6j7t6kqnxy/wwCJ5PlnVE1xue2+exfytgA8t7w740r4ekD4Aibi
-   qfoUgELg8/DPw7ay3qTvRKDldHYhb3/aYKI8Gmughj7ExW3zjsJH6t7A5
-   sDDFxUuIycBRxUEC+G6tQm5f4eLW2E7rGClmyAh8BkraL0NEepsinlShS
-   WZ+ZaKSlPtctkyVKupRnYkGxz28lq9dtRujUkQ774oE/F0Uqc3dIUThzs
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="350359337"
-X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
-   d="scan'208";a="350359337"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 13:08:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="780372167"
-X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
-   d="scan'208";a="780372167"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 22 Jun 2023 13:08:47 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qCQbm-0007lR-0Q;
-        Thu, 22 Jun 2023 20:08:46 +0000
-Date:   Fri, 23 Jun 2023 04:07:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Sathvika Vasireddy <sv@linux.ibm.com>,
-        Naveen N Rao <naveen@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2 14/14] powerpc: Implement UACCESS validation on PPC32
-Message-ID: <202306230351.SpwvWyz3-lkp@intel.com>
-References: <be282f27ad808418c7475b51a00b4cb035f89a95.1687430631.git.christophe.leroy@csgroup.eu>
+        Thu, 22 Jun 2023 16:10:04 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F5A2118
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 13:10:02 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-666ecf9a081so5688296b3a.2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 13:10:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1687464601; x=1690056601;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gYBy4agZ+KdBreGb8i62JIVz4X9MAhRX6m8qzaJt3g8=;
+        b=JdPrcgZ11nmSN5JnRqhTwTXM+Uegw7fEE8Vnd1cnBhMjln2MO7/ucKgZNYmtqB6VuG
+         IHDXlyR3rIOCsosRfk3Fo71wbaJoMLkRVVfiGqans3ywNGb0w8jlRzAQ8Hfr3mJsth62
+         /va8tsLMaXh8HYfF5kSxCEL4j0rsBtcMjIjNE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687464601; x=1690056601;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gYBy4agZ+KdBreGb8i62JIVz4X9MAhRX6m8qzaJt3g8=;
+        b=RnUTFQaQglnm0JG5gf4NhHVB1+A+UnovbmD7UwrgkuqkB5qtb5Wzq3d1qSSd1MzKrt
+         NLOxxsFYCIAX+KqGA+jNQfjTAVHQqpFbul3VwTeipIqKrm6SFmxxzS2r7T4vKXQVCfvm
+         O9a6nIlbmQbHstjyLLn/tU0NbGakOu9m8v7ZUONmDDSDfJHj0wTDAkZ976ay8m1qZXtL
+         eVwV24kDGol0OgJvdMIbrov2zt0JV8Y2o7uv50fOhJqrT1NbRwQPE3T95DV3Sr2pI1nn
+         sq1hKmJlR8oC0/My/VvX0hMQ2GcNe0t5LrZw9j0swRWEIicdT/B9HnK7xGSQU7WZxvYC
+         DKTA==
+X-Gm-Message-State: AC+VfDxEgQ6zwezQUX4d6P9CzaHS/kjjAetf+3if25yQkM8FpjipcyhJ
+        Rd21CqGD0rIgEL7B4VFv6jsc9g==
+X-Google-Smtp-Source: ACHHUZ4deznPRyCjw65rMtFd2vJ0q9EXRx0bzgQnun51Vs0tYnAUm/sSZkCDNisNN1TouaeAcNNmIQ==
+X-Received: by 2002:a05:6a00:15ca:b0:66a:4fc7:ad04 with SMTP id o10-20020a056a0015ca00b0066a4fc7ad04mr5348470pfu.14.1687464601182;
+        Thu, 22 Jun 2023 13:10:01 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id s17-20020aa78d51000000b0065440a07294sm5011181pfe.95.2023.06.22.13.10.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 13:10:00 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 13:10:00 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     "GONG, Ruiqi" <gongruiqi@huaweicloud.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Christoph Lameter <cl@linux.com>, Tejun Heo <tj@kernel.org>,
+        Dennis Zhou <dennis@kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>, Jann Horn <jannh@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Pedro Falcato <pedro.falcato@gmail.com>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>,
+        Wang Weiyang <wangweiyang2@huawei.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>, linux-mm@kvack.org,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        gongruiqi1@huawei.com
+Subject: Re: [PATCH v3 1/1] Randomized slab caches for kmalloc()
+Message-ID: <202306221307.6CF63BAC20@keescook>
+References: <20230616111843.3677378-1-gongruiqi@huaweicloud.com>
+ <20230616111843.3677378-2-gongruiqi@huaweicloud.com>
+ <3fdc76f0-6c45-c405-0024-d1d69b5bf068@suse.cz>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <be282f27ad808418c7475b51a00b4cb035f89a95.1687430631.git.christophe.leroy@csgroup.eu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <3fdc76f0-6c45-c405-0024-d1d69b5bf068@suse.cz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+On Thu, Jun 22, 2023 at 03:56:04PM +0200, Vlastimil Babka wrote:
+> On 6/16/23 13:18, GONG, Ruiqi wrote:
+> > index a3c95338cd3a..6150e9a946a7 100644
+> > --- a/mm/Kconfig
+> > +++ b/mm/Kconfig
+> > @@ -337,6 +337,55 @@ config SLUB_CPU_PARTIAL
+> >  	  which requires the taking of locks that may cause latency spikes.
+> >  	  Typically one would choose no for a realtime system.
+> >  
+> > +config RANDOM_KMALLOC_CACHES
+> > +	default n
+> > +	depends on SLUB
+> > +	bool "Random slab caches for normal kmalloc"
+> > +	help
+> > +	  A hardening feature that creates multiple copies of slab caches for
+> > +	  normal kmalloc allocation and makes kmalloc randomly pick one based
+> > +	  on code address, which makes the attackers unable to spray vulnerable
+> > +	  memory objects on the heap for exploiting memory vulnerabilities.
+> > +
+> > +choice
+> > +	prompt "Number of random slab caches copies"
+> > +	depends on RANDOM_KMALLOC_CACHES
+> > +	default RANDOM_KMALLOC_CACHES_16
+> > +	help
+> > +	  The number of copies of random slab caches. Bigger value makes the
+> > +	  potentially vulnerable memory object less likely to collide with
+> > +	  objects allocated from other subsystems or modules.
+> 
+> When I read this, without further knowledge, why would I select anything
+> else than the largest value? It should mention memory overhead maybe?
 
-kernel test robot noticed the following build warnings:
+Yeah, good idea.
 
-[auto build test WARNING on powerpc/next]
-[also build test WARNING on powerpc/fixes masahiroy-kbuild/for-next masahiroy-kbuild/fixes linus/master v6.4-rc7]
-[cannot apply to next-20230622]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> Also would anyone really select only "2" and thus limit the collision
+> probability to 50% and not less? "4" also seems quite low for the given
+> purpose? Could we just pick and hardcode 8 or 16 and avoid the selection, at
+> least until there's some more experience with the whole approach?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Leroy/powerpc-kuap-Avoid-unnecessary-reads-of-MD_AP/20230622-185950
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
-patch link:    https://lore.kernel.org/r/be282f27ad808418c7475b51a00b4cb035f89a95.1687430631.git.christophe.leroy%40csgroup.eu
-patch subject: [PATCH v2 14/14] powerpc: Implement UACCESS validation on PPC32
-config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230623/202306230351.SpwvWyz3-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230623/202306230351.SpwvWyz3-lkp@intel.com/reproduce)
+I assume it was for doing performance (speed or space) analysis for
+people interested in tuning it. The default is 16, which is what most
+folks will end up with. i.e. I'm not sure I see a benefit to dropping 2
+and 4, since I imagine people will either want the highest value (16),
+or the ability to do a full comparison of each setting.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306230351.SpwvWyz3-lkp@intel.com/
+Regardless, I would be fine if we dropped 2 and 4, since I am focused on
+the maximum number (16) of hash buckets. :)
 
-All warnings (new ones prefixed by >>):
-
-   arch/powerpc/platforms/powermac/smp.c:416:13: warning: no previous prototype for 'smp_psurge_take_timebase' [-Wmissing-prototypes]
-     416 | void __init smp_psurge_take_timebase(void)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~
-   arch/powerpc/platforms/powermac/smp.c:432:13: warning: no previous prototype for 'smp_psurge_give_timebase' [-Wmissing-prototypes]
-     432 | void __init smp_psurge_give_timebase(void)
-         |             ^~~~~~~~~~~~~~~~~~~~~~~~
->> arch/powerpc/platforms/powermac/smp.o: warning: objtool: .text.pmac_cpu_offline_self: unexpected end of section
+-Kees
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Kees Cook
