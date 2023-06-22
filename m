@@ -2,258 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C22473958A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 04:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB65A739599
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 04:51:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230116AbjFVCgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 22:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
+        id S229774AbjFVCtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 22:49:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjFVCgb (ORCPT
+        with ESMTP id S229542AbjFVCtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 22:36:31 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14ADC1730
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 19:36:30 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5728df0a7d9so56920037b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 19:36:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687401389; x=1689993389;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=v95kJuIKZOvwX2VyzbcG9p4WcOSZqpPbckNEDTbMqbw=;
-        b=O3tP+byBHyqrVuzTTEu8WRLDc/8A9uAf+TdWk4s+4iRKfQ5KOSa7bvLkBzTYKr0W8M
-         j3sRCXur+WjZ9BeHD+FncbDp1prKZ/qXqo9vRO5qA8AQSnrPS9w22qXk+xnyoij9+QY4
-         Acm9ERBt0JMUlTv5p8Jp0yNYMVl5d341AvRtjPFDRxez8WAwHgXzS6SBOEkhSkDpkgzA
-         FicxTEqozjAq1pC+B+ZdlXfR0aFh6Inz+lQvgqOR+F9yGjspH8iPGFbJTwEd3pnnSvO5
-         lsJm1UV477OB7Dih1OhkfIqmAM0XwW9HFmiv+LGL2kzkOO0DnreoAdIjNdFX9CO4XaoS
-         SsqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687401389; x=1689993389;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v95kJuIKZOvwX2VyzbcG9p4WcOSZqpPbckNEDTbMqbw=;
-        b=EZ0mKFiGD8PjjvlV+KZDTmTotkfSx2iHjcL0Pki3wK5mSxS5NQw2ffeBneeaY0uxyJ
-         IVeHSyzoi4CkaoJt0BCgsuYPFX2vtSeI1/o1G87Bi7d5OLz3DIqslglAasgzFBT7fGdi
-         hNT533absie9UBwEUlpZlqtY88PvYKrH0HKcDb7VgbXRAWzV334Tx74nFzAt9VbaXgFy
-         2ZOnuY+l0Ff456h/lohV3sumjkpf5dbD3ZpNm4z3t6s011tYrmHQidR5+3/Oao0/IvfU
-         9w+k4rKoGGH00ZS1Gva8NmsQlKAUMnUT8Dxv/qBnEJZV4AgPiy2tR+PrfybFCJJAdwrz
-         2AWQ==
-X-Gm-Message-State: AC+VfDwNjuI1SXVxAFjzX2C5bObbOgdKstbpVpe5oO1/bqiUz6zU0K/c
-        sjiQ10QnXk+GtBug9aaqZrs8oA==
-X-Google-Smtp-Source: ACHHUZ7nNc0KOSzPxWDeH97+s3XtTQiSXAf5QSy+8GGNP+KxVnc2GWHN4WSyWChzR7EoY+E3ZvtVZQ==
-X-Received: by 2002:a0d:e6d3:0:b0:56d:ffa:f3b0 with SMTP id p202-20020a0de6d3000000b0056d0ffaf3b0mr14905560ywe.52.1687401389086;
-        Wed, 21 Jun 2023 19:36:29 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id e65-20020a0dc244000000b0056cffe97a11sm1564690ywd.13.2023.06.21.19.36.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jun 2023 19:36:27 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 19:36:11 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David Sc. Miller" <davem@davemloft.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Jann Horn <jannh@google.com>,
-        Vishal Moola <vishal.moola@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        linux-arm-kernel@lists.infradead.org, sparclinux@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v2 05/12] powerpc: add pte_free_defer() for pgtables
- sharing page
-In-Reply-To: <ZJI7xkXWmjrE1yY3@ziepe.ca>
-Message-ID: <c8284d0-91cb-b65e-4c95-bfeb627234f@google.com>
-References: <54cb04f-3762-987f-8294-91dafd8ebfb0@google.com> <5cd9f442-61da-4c3d-eca-b7f44d22aa5f@google.com> <ZJGRa4zvsXfc43vB@ziepe.ca> <2ad8b6cf-692a-ff89-ecc-586c20c5e07f@google.com> <ZJI7xkXWmjrE1yY3@ziepe.ca>
+        Wed, 21 Jun 2023 22:49:08 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4BE1BC3
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 19:49:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687402147; x=1718938147;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=5QjLcdbcadTKTQxis9Ri4vrpkA81trw4pcIakR/OOMw=;
+  b=AG21MYgmJ04I1nc6r1pL6kC9xRbrjvMNDf7Sh4zqXVGEiSk1cq9z0DBR
+   qp3osKYnQ/lHo/JkCEFwoxgP4xz7JIOSjylL1pNyySXGCTqLM0Xb0hFvl
+   xBzjoUdhqPFiXqqeOCMOxujvbglYoVRPJ+WBcxIQqZjSR8nqBM9mq5L5T
+   WvzOmg7FMQ+aIejPpEXYV10fy11AUaElMH0JlyNaF6sSlMA6/DmDpnOJo
+   iBeTFZa/3DbHtUr5Ahye7PoJUgglC8tk++p5ntHvWQuvvdovb0DMdnjlV
+   4oirc/wVHt2+gVBM6+KsFCzKMQbvVcRpcbe6wRRabV6mVQdz0XZUnWjxj
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="339976572"
+X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
+   d="scan'208";a="339976572"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 19:48:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="784740117"
+X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
+   d="scan'208";a="784740117"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 21 Jun 2023 19:48:27 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qCAN0-0007HW-32;
+        Thu, 22 Jun 2023 02:48:26 +0000
+Date:   Thu, 22 Jun 2023 10:48:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Huazhong Tan <tanhuazhong@huawei.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:127:25: warning:
+ 'strncpy' specified bound depends on the length of the source argument
+Message-ID: <202306221038.epkS842w-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Jun 2023, Jason Gunthorpe wrote:
-> On Tue, Jun 20, 2023 at 12:54:25PM -0700, Hugh Dickins wrote:
-> > On Tue, 20 Jun 2023, Jason Gunthorpe wrote:
-> > > On Tue, Jun 20, 2023 at 12:47:54AM -0700, Hugh Dickins wrote:
-> > > > Add powerpc-specific pte_free_defer(), to call pte_free() via call_rcu().
-> > > > pte_free_defer() will be called inside khugepaged's retract_page_tables()
-> > > > loop, where allocating extra memory cannot be relied upon.  This precedes
-> > > > the generic version to avoid build breakage from incompatible pgtable_t.
-> > > > 
-> > > > This is awkward because the struct page contains only one rcu_head, but
-> > > > that page may be shared between PTE_FRAG_NR pagetables, each wanting to
-> > > > use the rcu_head at the same time: account concurrent deferrals with a
-> > > > heightened refcount, only the first making use of the rcu_head, but
-> > > > re-deferring if more deferrals arrived during its grace period.
-> > > 
-> > > You didn't answer my question why we can't just move the rcu to the
-> > > actual free page?
-> > 
-> > I thought that I had answered it, perhaps not to your satisfaction:
-> > 
-> > https://lore.kernel.org/linux-mm/9130acb-193-6fdd-f8df-75766e663978@google.com/
-> > 
-> > My conclusion then was:
-> > Not very good reasons: good enough, or can you supply a better patch?
-> 
-> Oh, I guess I didn't read that email as answering the question..
-> 
-> I was saying to make pte_fragment_free() unconditionally do the
-> RCU. It is the only thing that uses the page->rcu_head, and it means
-> PPC would double RCU the final free on the TLB path, but that is
-> probably OK for now. This means pte_free_defer() won't do anything
-> special on PPC as PPC will always RCU free these things, this address
-> the defer concern too, I think. Overall it is easier to reason about.
-> 
-> I looked at fixing the TLB stuff to avoid the double rcu but quickly
-> got scared that ppc was using a kmem_cache to allocate other page
-> table sizes so there is not a reliable struct page to get a rcu_head
-> from. This looks like the main challenge for ppc... We'd have to teach
-> the tlb code to not do its own RCU stuff for table levels that the
-> arch is already RCU freeing - and that won't get us to full RCU
-> freeing on PPC.
+Hi Huazhong,
 
-Sorry for being so dense all along: yes, your way is unquestionably
-much better than mine.  I guess I must have been obsessive about
-keeping pte_free_defer()+pte_free_now() "on the outside", as they
-were on x86, and never perceived how much easier it is with a small
-tweak inside pte_fragment_free(); and never reconsidered it since.
+FYI, the error/warning still remains.
 
-But I'm not so keen on the double-RCU, extending this call_rcu() to
-all the normal cases, while still leaving the TLB batching in place:
-here is the replacement patch I'd prefer us to go forward with now.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dad9774deaf1cf8e8f7483310dfb2690310193d2
+commit: 77e9184869c9fb00a482357ea8eef3bd7ae3d45a net: hns3: refactor dump bd info of debugfs
+date:   2 years, 1 month ago
+config: arm64-defconfig (https://download.01.org/0day-ci/archive/20230622/202306221038.epkS842w-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230622/202306221038.epkS842w-lkp@intel.com/reproduce)
 
-Many thanks!
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306221038.epkS842w-lkp@intel.com/
 
-[PATCH v3 05/12] powerpc: add pte_free_defer() for pgtables sharing page
+All warnings (new ones prefixed by >>):
 
-Add powerpc-specific pte_free_defer(), to free table page via call_rcu().
-pte_free_defer() will be called inside khugepaged's retract_page_tables()
-loop, where allocating extra memory cannot be relied upon.  This precedes
-the generic version to avoid build breakage from incompatible pgtable_t.
+   In function 'hns3_dbg_fill_content',
+       inlined from 'hns3_dbg_rx_bd_info' at drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:358:2:
+>> drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:127:25: warning: 'strncpy' specified bound depends on the length of the source argument [-Wstringop-truncation]
+     127 |                         strncpy(pos, items[i].name, strlen(items[i].name));
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In function 'hns3_dbg_fill_content',
+       inlined from 'hns3_dbg_rx_bd_info' at drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:367:3:
+   drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:125:25: warning: 'strncpy' specified bound depends on the length of the source argument [-Wstringop-truncation]
+     125 |                         strncpy(pos, result[i], strlen(result[i]));
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In function 'hns3_dbg_fill_content',
+       inlined from 'hns3_dbg_tx_bd_info' at drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:432:2:
+>> drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:127:25: warning: 'strncpy' specified bound depends on the length of the source argument [-Wstringop-truncation]
+     127 |                         strncpy(pos, items[i].name, strlen(items[i].name));
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   In function 'hns3_dbg_fill_content',
+       inlined from 'hns3_dbg_tx_bd_info' at drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:441:3:
+   drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c:125:25: warning: 'strncpy' specified bound depends on the length of the source argument [-Wstringop-truncation]
+     125 |                         strncpy(pos, result[i], strlen(result[i]));
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This is awkward because the struct page contains only one rcu_head, but
-that page may be shared between PTE_FRAG_NR pagetables, each wanting to
-use the rcu_head at the same time.  But powerpc never reuses a fragment
-once it has been freed: so mark the page Active in pte_free_defer(),
-before calling pte_fragment_free() directly; and there call_rcu() to
-pte_free_now() when last fragment is freed and the page is PageActive.
 
-Suggested-by: Jason Gunthorpe <jgg@ziepe.ca>
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
- arch/powerpc/include/asm/pgalloc.h |  4 ++++
- arch/powerpc/mm/pgtable-frag.c     | 29 ++++++++++++++++++++++++++---
- 2 files changed, 30 insertions(+), 3 deletions(-)
+vim +/strncpy +127 drivers/net/ethernet/hisilicon/hns3/hns3_debugfs.c
 
-diff --git a/arch/powerpc/include/asm/pgalloc.h b/arch/powerpc/include/asm/pgalloc.h
-index 3360cad78ace..3a971e2a8c73 100644
---- a/arch/powerpc/include/asm/pgalloc.h
-+++ b/arch/powerpc/include/asm/pgalloc.h
-@@ -45,6 +45,10 @@ static inline void pte_free(struct mm_struct *mm, pgtable_t ptepage)
- 	pte_fragment_free((unsigned long *)ptepage, 0);
- }
- 
-+/* arch use pte_free_defer() implementation in arch/powerpc/mm/pgtable-frag.c */
-+#define pte_free_defer pte_free_defer
-+void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable);
-+
- /*
-  * Functions that deal with pagetables that could be at any level of
-  * the table need to be passed an "index_size" so they know how to
-diff --git a/arch/powerpc/mm/pgtable-frag.c b/arch/powerpc/mm/pgtable-frag.c
-index 20652daa1d7e..0c6b68130025 100644
---- a/arch/powerpc/mm/pgtable-frag.c
-+++ b/arch/powerpc/mm/pgtable-frag.c
-@@ -106,6 +106,15 @@ pte_t *pte_fragment_alloc(struct mm_struct *mm, int kernel)
- 	return __alloc_for_ptecache(mm, kernel);
- }
- 
-+static void pte_free_now(struct rcu_head *head)
-+{
-+	struct page *page;
-+
-+	page = container_of(head, struct page, rcu_head);
-+	pgtable_pte_page_dtor(page);
-+	__free_page(page);
-+}
-+
- void pte_fragment_free(unsigned long *table, int kernel)
- {
- 	struct page *page = virt_to_page(table);
-@@ -115,8 +124,22 @@ void pte_fragment_free(unsigned long *table, int kernel)
- 
- 	BUG_ON(atomic_read(&page->pt_frag_refcount) <= 0);
- 	if (atomic_dec_and_test(&page->pt_frag_refcount)) {
--		if (!kernel)
--			pgtable_pte_page_dtor(page);
--		__free_page(page);
-+		if (kernel)
-+			__free_page(page);
-+		else if (TestClearPageActive(page))
-+			call_rcu(&page->rcu_head, pte_free_now);
-+		else
-+			pte_free_now(&page->rcu_head);
- 	}
- }
-+
-+#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-+void pte_free_defer(struct mm_struct *mm, pgtable_t pgtable)
-+{
-+	struct page *page;
-+
-+	page = virt_to_page(pgtable);
-+	SetPageActive(page);
-+	pte_fragment_free((unsigned long *)pgtable, 0);
-+}
-+#endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+   114	
+   115	static void hns3_dbg_fill_content(char *content, u16 len,
+   116					  const struct hns3_dbg_item *items,
+   117					  const char **result, u16 size)
+   118	{
+   119		char *pos = content;
+   120		u16 i;
+   121	
+   122		memset(content, ' ', len);
+   123		for (i = 0; i < size; i++) {
+   124			if (result)
+   125				strncpy(pos, result[i], strlen(result[i]));
+   126			else
+ > 127				strncpy(pos, items[i].name, strlen(items[i].name));
+   128	
+   129			pos += strlen(items[i].name) + items[i].interval;
+   130		}
+   131	
+   132		*pos++ = '\n';
+   133		*pos++ = '\0';
+   134	}
+   135	
+
 -- 
-2.35.3
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
