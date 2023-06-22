@@ -2,112 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934D073971F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 08:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07DAA739722
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 08:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbjFVGA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 02:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
+        id S231160AbjFVGA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 02:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbjFVGA0 (ORCPT
+        with ESMTP id S229776AbjFVGAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 02:00:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7314710F6;
-        Wed, 21 Jun 2023 23:00:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB25861772;
-        Thu, 22 Jun 2023 06:00:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 4A435C433D9;
-        Thu, 22 Jun 2023 06:00:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687413623;
-        bh=SHn5tQe2jYazXUxFSxkxExMVYFmrrKKLAx5OU8zGQzM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=pfBrxp6ZfSXM72a0vzcYyHLQx+uG67RMooZzUU8lg0FoPUBWlQDDNpeZRIQ+VCKEu
-         4Z/xjCooiNDoxumBumOr2a+JndmoPSRy4bfvxZ5yn+jSNqfAwH+4Wf3vS9q40faLS6
-         6LplXgqJU3bCeofuPfathMC3+wEC6yAah3SPiIQG0lHVwDECnY5CDOTlQTmhWbgEIH
-         IFpUT27swQuAmTxj4dmZE8603AOWFDSi8ILbTL7777keEMigTIApYVQfaRX37/Tg+n
-         ZcZuX1CVc/ljFhsUMAdJ2yjKhKrP7igN6rDtYTLv/WK+fQkZQ/jYbZ0UJlAT8psbmB
-         H8KLmgWb4DVxg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 32D09E2A034;
-        Thu, 22 Jun 2023 06:00:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 22 Jun 2023 02:00:55 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081C810F6;
+        Wed, 21 Jun 2023 23:00:53 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-514ab6cb529so475901a12.1;
+        Wed, 21 Jun 2023 23:00:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687413651; x=1690005651;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=u7gKgsjsMfyVBNiMs1mpv7rOGyaAfvold3DdqGyoiUw=;
+        b=oV958KePJ/IPsbb+byG0qYD+PDYiicQmtVEdUUzBAQHs2VctwWkD+nKLHWywItYnkm
+         RWIaYl0Dz904fpo1i4eICLECcjMCeKvrdB3k/XUQg/XKqDFm2cbtGsDVw17o9ZDCe971
+         IO/6evJMqmXZqUZizfqhkFeYpApoookctFeKcpTzLG3J7XuTasWyiXwgQCHO2oO9+4qU
+         wSKol3AQTg8lFaWLSjh7FNdYrE8omfojXyAKW8B2yoQTqExsPNG3Wj+umzjGGrkM8OT9
+         qIi8VZnCegX8jbS9krjjm0vgzyVOJxCu8/brz862GF/zmKPF3DB81piKzVDqmJoSBH41
+         9n/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687413651; x=1690005651;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=u7gKgsjsMfyVBNiMs1mpv7rOGyaAfvold3DdqGyoiUw=;
+        b=K125XvnUyHUnQ0eSMpyzhv+T3lfCLY6tA3tCm3DlL0/9TjWcWfQZHKHa9wOeKyxEjD
+         K6mw40Y5pLkFU1sDPPEWW0z280cKw0f5vTfeoKTOoigQilwsuf55dqZumt1N1agAZcqo
+         JwXVV4LaBKY8DNRFSNrhkcHyZstHtfqHIXGbzcPrdmBoRHyimqVMe9v6SdMkmQm8pK/K
+         EiQvZvTQ6Oj9XMJOY+H45QSN+AxaEXQjHCwpe6mB9mPcLQQ7FkEuxoiP0sBUC4fl9fzb
+         UqNKb72RRTfQUPOERvLy01dLCWSQ2cgxGxLucQKxYgZ3QKq6bGa85+z9SSyLwm7XcXNv
+         BBmg==
+X-Gm-Message-State: AC+VfDyuEwe9W3BlpMsYSqveZbxOsms0nXOOilDCROCoDPWiFacBPfol
+        jKZ1e4vEf/V3S1JFBQfc3+U=
+X-Google-Smtp-Source: ACHHUZ7rqspLzMrzlNYZB3IJsbjLl9nW9TLTOgUKMyQX87x4nCpqdyO8277XbaxzLxIOiSzSRFLjdQ==
+X-Received: by 2002:a17:906:58cd:b0:989:d9d:d90a with SMTP id e13-20020a17090658cd00b009890d9dd90amr8276054ejs.34.1687413650935;
+        Wed, 21 Jun 2023 23:00:50 -0700 (PDT)
+Received: from [192.168.26.149] (031011218106.poznan.vectranet.pl. [31.11.218.106])
+        by smtp.googlemail.com with ESMTPSA id u15-20020a17090626cf00b0098882200623sm4040904ejc.82.2023.06.21.23.00.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 21 Jun 2023 23:00:50 -0700 (PDT)
+Message-ID: <1521fc62-1c8d-ff74-fa52-2acc8dab4c19@gmail.com>
+Date:   Thu, 22 Jun 2023 08:00:48 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] dt-bindings: phy: brcm,brcmstb-usb-phy: Fix error in
+ "compatible" conditional schema
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Al Cooper <alcooperx@gmail.com>
+Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20230621230958.3815818-1-robh@kernel.org>
+From:   =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>
+In-Reply-To: <20230621230958.3815818-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/9] mptcp: expose more info and small
- improvements
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168741362320.8755.12586500995813300263.git-patchwork-notify@kernel.org>
-Date:   Thu, 22 Jun 2023 06:00:23 +0000
-References: <20230620-upstream-net-next-20230620-mptcp-expose-more-info-and-misc-v1-0-62b9444bfd48@tessares.net>
-In-Reply-To: <20230620-upstream-net-next-20230620-mptcp-expose-more-info-and-misc-v1-0-62b9444bfd48@tessares.net>
-To:     Matthieu Baerts <matthieu.baerts@tessares.net>
-Cc:     mptcp@lists.linux.dev, martineau@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        geliang.tang@suse.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 20 Jun 2023 18:30:13 +0200 you wrote:
-> Patch 1-3/9 track and expose some aggregated data counters at the MPTCP
-> level: the number of retransmissions and the bytes that have been
-> transferred. The first patch prepares the work by moving where snd_una
-> is updated for fallback sockets while the last patch adds some tests to
-> cover the new code.
+On 22.06.2023 01:09, Rob Herring wrote:
+> The conditional if/then schema has an error as the "enum" values have
+> "const" in them. Drop the "const".
 > 
-> Patch 4-6/9 introduce a new getsockopt for SOL_MPTCP: MPTCP_FULL_INFO.
-> This new socket option allows to combine info from MPTCP_INFO,
-> MPTCP_TCPINFO and MPTCP_SUBFLOW_ADDRS socket options into one. It can be
-> needed to have all info in one because the path-manager can close and
-> re-create subflows between getsockopt() and fooling the accounting. The
-> first patch introduces a unique subflow ID to easily detect when
-> subflows are being re-created with the same 5-tuple while the last patch
-> adds some tests to cover the new code.
+> Signed-off-by: Rob Herring <robh@kernel.org>
+
+Oops, it's my mistake.
+
+Fixes: 46b616c1574d ("dt-bindings: phy: brcm, brcmstb-usb-phy: add BCM4908 binding")
+
+Acked-by: Rafał Miłecki <rafal@milecki.pl>
+
+Thanks!
+
+
+> ---
+>   .../devicetree/bindings/phy/brcm,brcmstb-usb-phy.yaml         | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> [...]
-
-Here is the summary with links:
-  - [net-next,1/9] mptcp: move snd_una update earlier for fallback socket
-    https://git.kernel.org/netdev/net-next/c/c026d33b8f50
-  - [net-next,2/9] mptcp: track some aggregate data counters
-    https://git.kernel.org/netdev/net-next/c/38967f424b5b
-  - [net-next,3/9] selftests: mptcp: explicitly tests aggregate counters
-    https://git.kernel.org/netdev/net-next/c/5dcff89e1455
-  - [net-next,4/9] mptcp: add subflow unique id
-    https://git.kernel.org/netdev/net-next/c/6f06b4d4d1cc
-  - [net-next,5/9] mptcp: introduce MPTCP_FULL_INFO getsockopt
-    https://git.kernel.org/netdev/net-next/c/492432074e4f
-  - [net-next,6/9] selftests: mptcp: add MPTCP_FULL_INFO testcase
-    https://git.kernel.org/netdev/net-next/c/aa723d5b3541
-  - [net-next,7/9] selftests: mptcp: join: skip check if MIB counter not supported (part 2)
-    https://git.kernel.org/netdev/net-next/c/00079f18c24f
-  - [net-next,8/9] mptcp: consolidate transition to TCP_CLOSE in mptcp_do_fastclose()
-    https://git.kernel.org/netdev/net-next/c/bbd49d114d57
-  - [net-next,9/9] mptcp: pass addr to mptcp_pm_alloc_anno_list
-    https://git.kernel.org/netdev/net-next/c/528cb5f2a1e8
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+> diff --git a/Documentation/devicetree/bindings/phy/brcm,brcmstb-usb-phy.yaml b/Documentation/devicetree/bindings/phy/brcm,brcmstb-usb-phy.yaml
+> index 43a4b880534c..580fbe37b37f 100644
+> --- a/Documentation/devicetree/bindings/phy/brcm,brcmstb-usb-phy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/brcm,brcmstb-usb-phy.yaml
+> @@ -115,8 +115,8 @@ allOf:
+>           compatible:
+>             contains:
+>               enum:
+> -              - const: brcm,bcm4908-usb-phy
+> -              - const: brcm,brcmstb-usb-phy
+> +              - brcm,bcm4908-usb-phy
+> +              - brcm,brcmstb-usb-phy
+>       then:
+>         properties:
+>           reg:
 
