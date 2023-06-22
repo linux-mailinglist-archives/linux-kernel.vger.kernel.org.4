@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3F7B7397EE
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:12:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C297397EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 09:12:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjFVHMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 03:12:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
+        id S230250AbjFVHMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 03:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbjFVHMn (ORCPT
+        with ESMTP id S230390AbjFVHMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 03:12:43 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6911BD3;
-        Thu, 22 Jun 2023 00:12:41 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-988aefaa44eso612042266b.2;
-        Thu, 22 Jun 2023 00:12:41 -0700 (PDT)
+        Thu, 22 Jun 2023 03:12:44 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35EF71BD5;
+        Thu, 22 Jun 2023 00:12:42 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51bebdc4787so181995a12.2;
+        Thu, 22 Jun 2023 00:12:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20221208; t=1687417960; x=1690009960;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8gmM3ZejwGC+6a07ZhZTgRTiQBNhhfo6Vw23/zoB7sk=;
-        b=cDcH26/paITTZSI8ehibrO5cWG6UIxZBad7iixEvpHqtOzFS7pr8CnC81NmiQ3BPAs
-         iDEkSqORwhMTjpoEPtNTSL8YhI2z9iK9K4tXU1JUfGoB28LZqnl+slY/iMfROhD/1mUz
-         87Z1JDaL+x+YY/d3I+1DO5uai0I9ZXocIdV3Bfh3rgZDXkwV6muFCslLe7j19iqmP//6
-         oTTxfqVEVocSII6ba6lYduwQRy9DsYkCwX5HwnxsWjB36C0pHwU6kpvI+mrTAWHC9pUK
-         PvcNTyngkOlRHUFnp9AJn16Ib9V6c50qlaVm/ZR9X2AY8IQj9LQMptDVGB9uFckDZVAi
-         JEqQ==
+        bh=yEEz1N4+BSweLodIciDOwkHhZXsydRRIWfH217+phOg=;
+        b=RMb88+VG5HlFSeBWTVoKI30o0HAB+bw6QQwtqzkurLJMDDjZiSIx07+fxw9SgT1lWt
+         eiX2gZsB9vkFUX5/HcojhxveklMw5CxZeFv0csBkiMvZBKWbJUk1KYtu+KKCuE/LRYyG
+         IudtXNcS+Zue0W4XW/X6NVq/6SXvsM0D4FrLeqDxGggP9HIDBuKQeDhd9YW6/uR4Cf/a
+         cntdGz0n4k3UXDUUiXRTuvlDKaKzxefPp2DheEue/wE179wjRkMcg8ZXJg7R1nBknf4h
+         LlVNDlaf/duqbhqU+uH6FwPWVPgxRi4sN7uUfsjxTEDOrxjMNPsivgsP9O/gx+11wtcW
+         2mkQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1687417960; x=1690009960;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8gmM3ZejwGC+6a07ZhZTgRTiQBNhhfo6Vw23/zoB7sk=;
-        b=LtHOmqTTcAVrEedqNjjitQMSdRGhd9S4vc8HS1lpJWtllFNbAZ3c4cycf0ls/CTpr4
-         n1HQtII5ZxTwKsLjrDsaHtEKOhMhuviFjbgMwNC2in0C0svL6FoMzBwspjeI5AUkSqkP
-         jmZY4R6+yMUcXXXEQ0l57qjSD6Lz+1RQe9NWU+uHWCKeH1Z0GO1qrxFgArFsNc9LO7+G
-         Yp86Lxa8TT3iD0C2/LXwEp8ObkgquH0mcOmvtq3CbJUr22vvkUpY3tBihYMCwAXCqhDz
-         sc4HxkaMr8i0vVUkW2D2sOgvraq3UNbscGGu8UGm0HXXF1cOqS4p1HW3Vbmv2zVxvqww
-         MfbQ==
-X-Gm-Message-State: AC+VfDyLz5NUzU+AtPjYn6qz7mrgXRFBF70gGt0vo5GVzUHtZ8YFcDrr
-        tSbFy+Yq+2UKADHuTZe+EJE=
-X-Google-Smtp-Source: ACHHUZ4D49wXTy2HY7IGzI8M9ZLBvwiGtYoqrCCRD08tjy9ejVj8lyCyXp/bNm7jzAY5s0n2Z7/OPQ==
-X-Received: by 2002:a17:907:7da1:b0:98d:470d:932e with SMTP id oz33-20020a1709077da100b0098d470d932emr105051ejc.48.1687417959764;
-        Thu, 22 Jun 2023 00:12:39 -0700 (PDT)
+        bh=yEEz1N4+BSweLodIciDOwkHhZXsydRRIWfH217+phOg=;
+        b=YOLmfcF2S7ZyRvCTPozwPyxeN2eTCC9mFd0CGXhBpaY8c3+HRNKP9MLXDtVa719u6w
+         r143Zlop/wT3xCoI+yb/sX/ATQHXpU7f8I9gI+M3s2l8mcIc0elwVWSKqHqQoq+AbVWw
+         zuiP2Kf2UUc6mxl6Gn8jJFv+sd6MYDUYNPWV9bM1tyaOEABVHP+q9eS8QZQ5ACNizNL8
+         mWYCMseomdna6wX5bKL+0qfVwdOH5ZeozMdpMWsWl+mPGyLmgku9u4xAhaIuyU5uLOJ8
+         jtUQhFUJIa5a3aIM0K+BGCqFzX3mH7bYXKCd8gZlf+PFqwLamMO7VEPeXO50C0BZUBbv
+         F+5w==
+X-Gm-Message-State: AC+VfDzZdMOY6l8PEIzUSeCvj3J8oU4J9CxbYHMnjdwZ0G5U83L/9rpd
+        7Q8fPoiWVkPlN7ssnYcu0x3aWVzKIfGcIg==
+X-Google-Smtp-Source: ACHHUZ4LXiFyN0aLTZQNzmXiWCPGxKEtQnscCTtPpOAOPM3KBDCNK84whNa8vmKPKLKVOhH84C2eww==
+X-Received: by 2002:a17:907:98c:b0:982:8c28:c50d with SMTP id bf12-20020a170907098c00b009828c28c50dmr12957469ejc.58.1687417960570;
+        Thu, 22 Jun 2023 00:12:40 -0700 (PDT)
 Received: from [127.0.1.1] ([91.230.2.244])
         by smtp.gmail.com with ESMTPSA id bq26-20020a170906d0da00b0096f5b48fe43sm4134923ejb.47.2023.06.22.00.12.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 00:12:39 -0700 (PDT)
+        Thu, 22 Jun 2023 00:12:40 -0700 (PDT)
 From:   Benjamin Bara <bbara93@gmail.com>
-Date:   Thu, 22 Jun 2023 09:12:23 +0200
-Subject: [PATCH WIP RFC v2 1/2] media: uapi: Add V4L2_CID_{V,H}TOTAL
- controls
+Date:   Thu, 22 Jun 2023 09:12:24 +0200
+Subject: [PATCH WIP RFC v2 2/2] media: i2c: imx290: Add support for
+ V4L2_CID_VTOTAL
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230609-v4l2-vtotal-v2-1-cf29925f4517@skidata.com>
+Message-Id: <20230609-v4l2-vtotal-v2-2-cf29925f4517@skidata.com>
 References: <20230609-v4l2-vtotal-v2-0-cf29925f4517@skidata.com>
 In-Reply-To: <20230609-v4l2-vtotal-v2-0-cf29925f4517@skidata.com>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -79,124 +79,144 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Benjamin Bara <benjamin.bara@skidata.com>
 
-Currently, V4L2_CID_{V,H}BLANK can be used to control the frame duration
-of a stream. However, camera sensors usually have a register for the
-total size (image data + blanking), e.g. {V,H}MAX on the imx290. As the
-user space also typically wants to set a frame size, both sides
-currently have to calculate with values they actually don't care about.
-
-The dependency between format height and vertical blanking also results
-to a change of the vertical blanking value and limits whenever the
-format of the frame is changed and therefore makes it harder for user
-space to do calculations, e.g. the frame duration.
-V4L2_CID_{V,H}TOTAL do not depend on the format and therefore simplify
-calculations. Additionally, they represent the hardware "better" and
-therefore also simplify calculations on the driver side.
-
-Add additional documentation about V4L2_CID_HTOTAL to have a control
-which enables the user space to express its intends to the driver. The
-driver can then update its controls and limits accordingly, and can do
-possible re-calculations during mode switches in a defined behaviour.
-This increases compatibility between different camera sensors.
+The new V4L2_CID_VTOTAL control represents the VMAX register.
+Implementing it simplifies calculations in user space, as it is
+independent of the current mode (format height), meaning its value does
+not change with format changes.
 
 Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
 ---
-v2:
-- add HTOTAL
-- add documentation about expectations
----
- Documentation/driver-api/media/camera-sensor.rst         | 11 +++++++++--
- .../userspace-api/media/v4l/ext-ctrls-image-source.rst   | 16 ++++++++++++++++
- drivers/media/v4l2-core/v4l2-ctrls-defs.c                |  2 ++
- include/uapi/linux/v4l2-controls.h                       |  2 ++
- 4 files changed, 29 insertions(+), 2 deletions(-)
+ drivers/media/i2c/imx290.c | 47 ++++++++++++++++++++++++++++++++++------------
+ 1 file changed, 35 insertions(+), 12 deletions(-)
 
-diff --git a/Documentation/driver-api/media/camera-sensor.rst b/Documentation/driver-api/media/camera-sensor.rst
-index c7d4891bd24e..3ddeb0533728 100644
---- a/Documentation/driver-api/media/camera-sensor.rst
-+++ b/Documentation/driver-api/media/camera-sensor.rst
-@@ -85,12 +85,14 @@ a result of the configuration of a number of camera sensor implementation
- specific parameters. Luckily, these parameters tend to be the same for more or
- less all modern raw camera sensors.
+diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+index 5ea25b7acc55..42938400efb0 100644
+--- a/drivers/media/i2c/imx290.c
++++ b/drivers/media/i2c/imx290.c
+@@ -255,6 +255,7 @@ struct imx290 {
+ 	struct v4l2_ctrl *link_freq;
+ 	struct v4l2_ctrl *hblank;
+ 	struct v4l2_ctrl *vblank;
++	struct v4l2_ctrl *vtotal;
+ 	struct v4l2_ctrl *exposure;
+ 	struct {
+ 		struct v4l2_ctrl *hflip;
+@@ -782,8 +783,7 @@ static void imx290_exposure_update(struct imx290 *imx290,
+ {
+ 	unsigned int exposure_max;
  
--The frame interval is calculated using the following equation::
-+The frame interval is calculated using one of the following equations::
+-	exposure_max = imx290->vblank->val + mode->height -
+-		       IMX290_EXPOSURE_OFFSET;
++	exposure_max = imx290->vtotal->val - IMX290_EXPOSURE_OFFSET;
+ 	__v4l2_ctrl_modify_range(imx290->exposure, 1, exposure_max, 1,
+ 				 exposure_max);
+ }
+@@ -794,7 +794,7 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
+ 					     struct imx290, ctrls);
+ 	const struct v4l2_mbus_framefmt *format;
+ 	struct v4l2_subdev_state *state;
+-	int ret = 0, vmax;
++	int ret = 0;
  
- 	frame interval = (analogue crop width + horizontal blanking) *
- 			 (analogue crop height + vertical blanking) / pixel rate
+ 	/*
+ 	 * Return immediately for controls that don't need to be applied to the
+@@ -803,10 +803,22 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
+ 	if (ctrl->flags & V4L2_CTRL_FLAG_READ_ONLY)
+ 		return 0;
  
--The formula is bus independent and is applicable for raw timing parameters on
-+	frame interval = horizontal total size * vertical total size / pixel rate
+-	if (ctrl->id == V4L2_CID_VBLANK) {
+-		/* Changing vblank changes the allowed range for exposure. */
++	/* Changing vtotal changes the allowed range for exposure. */
++	if (ctrl->id == V4L2_CID_VTOTAL)
+ 		imx290_exposure_update(imx290, imx290->current_mode);
+-	}
 +
-+The formulas are bus independent and are applicable for raw timing parameters on
- large variety of devices beyond camera sensors. Devices that have no analogue
- crop, use the full source image size, i.e. pixel array size.
++	/*
++	 * vblank and vtotal depend on each other, therefore also update the
++	 * other one.
++	 */
++	if (ctrl->id == V4L2_CID_VBLANK &&
++	    imx290->vtotal->val != ctrl->val + imx290->current_mode->height)
++		__v4l2_ctrl_s_ctrl(imx290->vtotal,
++				   ctrl->val + imx290->current_mode->height);
++	if (ctrl->id == V4L2_CID_VTOTAL &&
++	    imx290->vblank->val != ctrl->val - imx290->current_mode->height)
++		__v4l2_ctrl_s_ctrl(imx290->vblank,
++				   ctrl->val - imx290->current_mode->height);
  
-@@ -100,6 +102,11 @@ is pixels and the unit of the ``V4L2_CID_VBLANK`` is lines. The pixel rate in
- the sensor's **pixel array** is specified by ``V4L2_CID_PIXEL_RATE`` in the same
- sub-device. The unit of that control is pixels per second.
+ 	/* V4L2 controls values will be applied only when power is already up */
+ 	if (!pm_runtime_get_if_in_use(imx290->dev))
+@@ -821,9 +833,14 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
+ 		break;
  
-+Additionally, the horizontal and vertical total sizes are specified by
-+``V4L2_CID_HTOTAL`` and ``V4L2_CID_VTOTAL``, respectively. The unit of the
-+``V4L2_CID_HTOTAL`` control is pixels and the unit of the ``V4L2_CID_VTOTAL`` is
-+lines, analogous to the blanking.
+ 	case V4L2_CID_VBLANK:
+-		ret = imx290_write(imx290, IMX290_VMAX,
+-				   ctrl->val + imx290->current_mode->height,
+-				   NULL);
++		/* vblank is updated by vtotal. */
++		break;
 +
- Register list based drivers need to implement read-only sub-device nodes for the
- purpose. Devices that are not register list based need these to configure the
- device's internal processing pipeline.
-diff --git a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-index 71f23f131f97..5451fa0223cd 100644
---- a/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-+++ b/Documentation/userspace-api/media/v4l/ext-ctrls-image-source.rst
-@@ -59,6 +59,22 @@ Image Source Control IDs
-     non-sensitive.
-     This control is required for automatic calibration of sensors/cameras.
- 
-+``V4L2_CID_VTOTAL (integer)``
-+    Number of total lines per frame, including data and idle lines (blanking).
-+    The unit of the vertical total size is a line. Every line has length of the
-+    image width plus horizontal blanking at the pixel rate defined by
-+    ``V4L2_CID_PIXEL_RATE`` control in the same sub-device.
++	case V4L2_CID_VTOTAL:
++		ret = imx290_write(imx290, IMX290_VMAX, ctrl->val, NULL);
++		if (ret)
++			goto err;
 +
-+``V4L2_CID_HTOTAL (integer)``
-+    Number of total pixels per line, including data and idle pixels (blanking).
-+    The unit of the horizontal total size is pixels. The default value of this
-+    control is set to a value which allows a constant total size for every
-+    supported mode of the sensor. The control can be used to indicate the driver
-+    if a high frame rate (value < default) or a high exposure (value > default)
-+    should be achieved. With value = default, a constant frame size across the
-+    different modes is targeted. Note that the actual frame rate depends on the
-+    ``V4L2_CID_PIXEL_RATE`` control, which might vary between mode switches.
-+
- .. c:type:: v4l2_area
+ 		/*
+ 		 * Due to the way that exposure is programmed in this sensor in
+ 		 * relation to VMAX, we have to reprogramme it whenever VMAX is
+@@ -834,9 +851,8 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
+ 		ctrl = imx290->exposure;
+ 		fallthrough;
+ 	case V4L2_CID_EXPOSURE:
+-		vmax = imx290->vblank->val + imx290->current_mode->height;
+ 		ret = imx290_write(imx290, IMX290_SHS1,
+-				   vmax - ctrl->val - 1, NULL);
++				   imx290->vtotal->val - ctrl->val - 1, NULL);
+ 		break;
  
- .. flat-table:: struct v4l2_area
-diff --git a/drivers/media/v4l2-core/v4l2-ctrls-defs.c b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-index 564fedee2c88..34e17e1faa7a 100644
---- a/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-+++ b/drivers/media/v4l2-core/v4l2-ctrls-defs.c
-@@ -1112,6 +1112,8 @@ const char *v4l2_ctrl_get_name(u32 id)
- 	case V4L2_CID_TEST_PATTERN_BLUE:	return "Blue Pixel Value";
- 	case V4L2_CID_TEST_PATTERN_GREENB:	return "Green (Blue) Pixel Value";
- 	case V4L2_CID_NOTIFY_GAINS:		return "Notify Gains";
-+	case V4L2_CID_VTOTAL:			return "Vertical Total Size";
-+	case V4L2_CID_HTOTAL:			return "Horizontal Total Size";
+ 	case V4L2_CID_TEST_PATTERN:
+@@ -880,6 +896,7 @@ static int imx290_set_ctrl(struct v4l2_ctrl *ctrl)
+ 		break;
+ 	}
  
- 	/* Image processing controls */
- 	/* Keep the order of the 'case's the same as in v4l2-controls.h! */
-diff --git a/include/uapi/linux/v4l2-controls.h b/include/uapi/linux/v4l2-controls.h
-index 5e80daa4ffe0..a4bbd91b8aef 100644
---- a/include/uapi/linux/v4l2-controls.h
-+++ b/include/uapi/linux/v4l2-controls.h
-@@ -1117,6 +1117,8 @@ enum v4l2_jpeg_chroma_subsampling {
- #define V4L2_CID_TEST_PATTERN_GREENB		(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 7)
- #define V4L2_CID_UNIT_CELL_SIZE			(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 8)
- #define V4L2_CID_NOTIFY_GAINS			(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 9)
-+#define V4L2_CID_VTOTAL				(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 10)
-+#define V4L2_CID_HTOTAL				(V4L2_CID_IMAGE_SOURCE_CLASS_BASE + 11)
++err:
+ 	pm_runtime_mark_last_busy(imx290->dev);
+ 	pm_runtime_put_autosuspend(imx290->dev);
  
+@@ -911,11 +928,14 @@ static void imx290_ctrl_update(struct imx290 *imx290,
+ 	unsigned int vblank_max = IMX290_VMAX_MAX - mode->height;
  
- /* Image processing controls */
+ 	__v4l2_ctrl_s_ctrl(imx290->link_freq, mode->link_freq_index);
++	__v4l2_ctrl_s_ctrl(imx290->vblank, imx290->vtotal->val - mode->height);
+ 
+ 	__v4l2_ctrl_modify_range(imx290->hblank, hblank_min, hblank_max, 1,
+ 				 hblank_min);
+ 	__v4l2_ctrl_modify_range(imx290->vblank, vblank_min, vblank_max, 1,
+ 				 vblank_min);
++	__v4l2_ctrl_modify_range(imx290->vtotal, mode->vmax_min,
++				 IMX290_VMAX_MAX, 1, mode->vmax_min);
+ }
+ 
+ static int imx290_ctrl_init(struct imx290 *imx290)
+@@ -947,7 +967,7 @@ static int imx290_ctrl_init(struct imx290 *imx290)
+ 
+ 	/*
+ 	 * Correct range will be determined through imx290_ctrl_update setting
+-	 * V4L2_CID_VBLANK.
++	 * V4L2_CID_VTOTAL.
+ 	 */
+ 	imx290->exposure = v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
+ 					     V4L2_CID_EXPOSURE, 1, 65535, 1,
+@@ -983,6 +1003,9 @@ static int imx290_ctrl_init(struct imx290 *imx290)
+ 
+ 	imx290->vblank = v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
+ 					   V4L2_CID_VBLANK, 1, 1, 1, 1);
++	imx290->vtotal = v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
++					   V4L2_CID_VTOTAL, 1, IMX290_VMAX_MAX,
++					   1, 1);
+ 
+ 	imx290->hflip = v4l2_ctrl_new_std(&imx290->ctrls, &imx290_ctrl_ops,
+ 					  V4L2_CID_HFLIP, 0, 1, 1, 0);
 
 -- 
 2.34.1
