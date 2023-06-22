@@ -2,132 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C39073A343
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9700873A346
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbjFVOk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 10:40:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46400 "EHLO
+        id S231330AbjFVOlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 10:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbjFVOkz (ORCPT
+        with ESMTP id S231266AbjFVOlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 10:40:55 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839511FDD;
-        Thu, 22 Jun 2023 07:40:46 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id 4992C67373; Thu, 22 Jun 2023 16:40:42 +0200 (CEST)
-Date:   Thu, 22 Jun 2023 16:40:42 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Joern Engel <joern@lazybastard.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Pavel Machek <pavel@ucw.cz>, dm-devel@redhat.com,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-mtd@lists.infradead.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 14/24] init: clear root_wait on all invalid root=
- strings
-Message-ID: <20230622144042.GA21415@lst.de>
-References: <20230523074535.249802-1-hch@lst.de> <20230523074535.249802-15-hch@lst.de> <8c1992bc-110a-4dad-8643-766c14bf6fd4@roeck-us.net> <20230622035149.GA4667@lst.de> <2205ef1e-9bb6-fb1e-9ca3-367c1afe12ac@roeck-us.net> <20230622060001.GA8351@lst.de> <8e6c8365-5c2b-2bad-bf3c-df2d65cc8afa@roeck-us.net>
+        Thu, 22 Jun 2023 10:41:16 -0400
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659DD1BD5;
+        Thu, 22 Jun 2023 07:41:13 -0700 (PDT)
+Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-3427426f2ddso18904815ab.3;
+        Thu, 22 Jun 2023 07:41:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687444872; x=1690036872;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I0Dm+JFVARmVhZwudnoBM+gg0gtAk6DC5x886FY400M=;
+        b=mF+XuIy6QZ4IhyP/58QG9PIVS0nANhZGAUodJ4cxakHf1hyddrmL/RUwNmPif0/B3u
+         kLeyvW+AAGidRPayHG6/K5dV3KlltAg7t5a4hfreNXoDaHMVzKrme55EkIDWfx7eZk/M
+         qSPpSxACxwrD0j21gHNAAKO5vmGuU4DZHByWjhgmdnVmZqDNsdQv5p0BLGolo2J8MBbY
+         Elb4qtlI6CqN6/cAQTS5s8JR8uUbO+Hg3/DPmX94Ae6q+b1HK8o6Mz5b2e3QUr/iG8Yx
+         IvHTvIDFlVDHCK/IJitzjD67yVsui1H23wMEVCfx9DFydQ7vg6zfPKRpqHf+sAuLfpbO
+         C/zw==
+X-Gm-Message-State: AC+VfDzxPbGU/7x93iB7JrJ/DvJPdxYQc3Kcb12qoKeoPXu1aMWeiG20
+        rm9levPzbH03s7EltH9+Xw==
+X-Google-Smtp-Source: ACHHUZ6dNoSOSgXACTvvo6YR8pCRo8iGN1NftBdmef+PZCJTdIlIaXgwj7E8HdIKz7A/lZTiAq5iLw==
+X-Received: by 2002:a92:c989:0:b0:341:d9e7:9d94 with SMTP id y9-20020a92c989000000b00341d9e79d94mr13554737iln.25.1687444872430;
+        Thu, 22 Jun 2023 07:41:12 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.250])
+        by smtp.gmail.com with ESMTPSA id l14-20020a92290e000000b003427601b77esm2035239ilg.21.2023.06.22.07.41.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 07:41:11 -0700 (PDT)
+Received: (nullmailer pid 1671196 invoked by uid 1000);
+        Thu, 22 Jun 2023 14:41:10 -0000
+Date:   Thu, 22 Jun 2023 08:41:10 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Andy Gross <agross@kernel.org>,
+        Nikita Travkin <nikita@trvn.ru>, linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Subject: Re: [PATCH 1/8] dt-bindings: qcom: Document msm8939,a7
+Message-ID: <168744486970.1671157.15368487194326757412.robh@kernel.org>
+References: <20230622020344.65745-1-linmengbo0689@protonmail.com>
+ <20230622020419.65760-1-linmengbo0689@protonmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8e6c8365-5c2b-2bad-bf3c-df2d65cc8afa@roeck-us.net>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230622020419.65760-1-linmengbo0689@protonmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 06:54:41AM -0700, Guenter Roeck wrote:
-> On 6/21/23 23:00, Christoph Hellwig wrote:
->> Hi Guenter,
->>
->> can you try this patch?
->>
->> diff --git a/block/early-lookup.c b/block/early-lookup.c
->> index a5be3c68ed079c..66e4514d671179 100644
->> --- a/block/early-lookup.c
->> +++ b/block/early-lookup.c
->> @@ -174,7 +174,7 @@ static int __init devt_from_devname(const char *name, dev_t *devt)
->>   	while (p > s && isdigit(p[-1]))
->>   		p--;
->>   	if (p == s || !*p || *p == '0')
->> -		return -EINVAL;
->> +		return -ENODEV;
->>     	/* try disk name without <part number> */
->>   	part = simple_strtoul(p, NULL, 10);
->
-> Not completely. Tests with root=/dev/sda still fail.
->
-> "name" passed to devt_from_devname() is "sda".
->
->        for (p = s; *p; p++) {
->                 if (*p == '/')
->                         *p = '!';
->         }
->
-> advances 'p' to the end of the string.
->
->         while (p > s && isdigit(p[-1]))
-> 		p--;
->
-> moves it back to point to the first digit (if there is one).
->
->         if (p == s || !*p || *p == '0')
-> 		return -EINVAL;
->
-> then fails because *p is 0. In other words, the function only accepts
-> drive names with digits at the end (and the first digit must not be '0').
->
-> I don't recall how I hit the other condition earlier. I have various
-> "/dev/mmcblkX" in my tests, where X can be any number including 0.
-> Maybe those fail randomly as well.
->
-> Overall I am not sure though what an "invalid" devicename is supposed
-> to be in this context. I have "sda", "sr0", "vda", "mtdblkX",
-> "nvme0n1", "mmcblkX", and "hda". Why would any of those not be eligible
-> for "rootwait" ?
->
-> In practice, everything not ending with a digit, or ending with
-> '0', fails the first test. Everything ending with a digit > 0
-> fails the second test. But "humptydump3p4" passes all those tests.
 
+On Thu, 22 Jun 2023 02:04:30 +0000, Lin, Meng-Bo wrote:
+> Document samsung,a7 bindings used in its device tree.
+> 
+> Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
+> ---
+>  Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Yeah.  I guess I should give up on the idea of error out in this
-particular parser.  The idea sounded good, but I guess it doesn't
-work.  So we'll probably want his fix:
+Acked-by: Rob Herring <robh@kernel.org>
 
-
-diff --git a/block/early-lookup.c b/block/early-lookup.c
-index a5be3c68ed079c..9e2d5a19de1b3b 100644
---- a/block/early-lookup.c
-+++ b/block/early-lookup.c
-@@ -174,7 +174,7 @@ static int __init devt_from_devname(const char *name, dev_t *devt)
- 	while (p > s && isdigit(p[-1]))
- 		p--;
- 	if (p == s || !*p || *p == '0')
--		return -EINVAL;
-+		return -ENODEV;
- 
- 	/* try disk name without <part number> */
- 	part = simple_strtoul(p, NULL, 10);
-@@ -185,7 +185,7 @@ static int __init devt_from_devname(const char *name, dev_t *devt)
- 
- 	/* try disk name without p<part number> */
- 	if (p < s + 2 || !isdigit(p[-2]) || p[-1] != 'p')
--		return -EINVAL;
-+		return -ENODEV;
- 	p[-1] = '\0';
- 	*devt = blk_lookup_devt(s, part);
- 	if (*devt)
