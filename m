@@ -2,157 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B72F573A952
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 22:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46C6073A958
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 22:09:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbjFVUHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 16:07:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35354 "EHLO
+        id S230270AbjFVUJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 16:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjFVUH3 (ORCPT
+        with ESMTP id S229549AbjFVUJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 16:07:29 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CABD1FF0;
-        Thu, 22 Jun 2023 13:07:26 -0700 (PDT)
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id B368821C20B1;
-        Thu, 22 Jun 2023 13:07:25 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B368821C20B1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1687464445;
-        bh=G/L27QpOPIVcLupzo2qhywZyKrjocR4zy910V2nTJ3Q=;
-        h=From:To:Subject:Date:From;
-        b=CHwBNOAGtb54sJpZs0trgyKQPSn1QcomzqZfVavEKCk6c383qsZXoKkCBmQqXTgon
-         PL4SJuAZBz7cyuCavNNvjChhWlkcoKJbiuQk+Q5xs261zb11r/1FxlgIgcH09kI5z3
-         WgnVT1ElRsYbOqgzp9ckzda3IwyTYcBY5ORKDpLk=
-From:   Kameron Carr <kameroncarr@linux.microsoft.com>
-To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, arnd@arndb.de, linux-hyperv@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: [PATCH] Drivers: hv: Change hv_free_hyperv_page() to take void * argument
-Date:   Thu, 22 Jun 2023 13:07:07 -0700
-Message-Id: <1687464427-4722-1-git-send-email-kameroncarr@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 22 Jun 2023 16:09:51 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61281710
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 13:09:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687464589; x=1719000589;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rMYEm8dbaQOauXtEW2aM8kbljQdU8H0asFUgdMQJAw4=;
+  b=enOHGsdOfpHTHpy5OJD22E8kA8ptPcZXx0VVnr+GBLizUemcg313DfMh
+   8uBKflBLIY49g+l7P69myQW57JdP2SIB07lNeQgngZzq3EP3o8KOt1qMB
+   4YY69+6j7t6kqnxy/wwCJ5PlnVE1xue2+exfytgA8t7w740r4ekD4Aibi
+   qfoUgELg8/DPw7ay3qTvRKDldHYhb3/aYKI8Gmughj7ExW3zjsJH6t7A5
+   sDDFxUuIycBRxUEC+G6tQm5f4eLW2E7rGClmyAh8BkraL0NEepsinlShS
+   WZ+ZaKSlPtctkyVKupRnYkGxz28lq9dtRujUkQ774oE/F0Uqc3dIUThzs
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="350359337"
+X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
+   d="scan'208";a="350359337"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 13:08:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="780372167"
+X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
+   d="scan'208";a="780372167"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga008.fm.intel.com with ESMTP; 22 Jun 2023 13:08:47 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qCQbm-0007lR-0Q;
+        Thu, 22 Jun 2023 20:08:46 +0000
+Date:   Fri, 23 Jun 2023 04:07:59 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Sathvika Vasireddy <sv@linux.ibm.com>,
+        Naveen N Rao <naveen@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v2 14/14] powerpc: Implement UACCESS validation on PPC32
+Message-ID: <202306230351.SpwvWyz3-lkp@intel.com>
+References: <be282f27ad808418c7475b51a00b4cb035f89a95.1687430631.git.christophe.leroy@csgroup.eu>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <be282f27ad808418c7475b51a00b4cb035f89a95.1687430631.git.christophe.leroy@csgroup.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently hv_free_hyperv_page() takes an unsigned long argument, which
-is inconsistent with the void * return value from the corresponding
-hv_alloc_hyperv_page() function and variants. This creates unnecessary
-extra casting.
+Hi Christophe,
 
-Change the hv_free_hyperv_page() argument type to void *.
-Also remove redundant casts from invocations of
-hv_alloc_hyperv_page() and variants.
----
- drivers/hv/connection.c        | 13 ++++++-------
- drivers/hv/hv_common.c         | 10 +++++-----
- include/asm-generic/mshyperv.h |  2 +-
- 3 files changed, 12 insertions(+), 13 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
-index 5978e9d..ebf15f3 100644
---- a/drivers/hv/connection.c
-+++ b/drivers/hv/connection.c
-@@ -209,8 +209,7 @@ int vmbus_connect(void)
- 	 * Setup the vmbus event connection for channel interrupt
- 	 * abstraction stuff
- 	 */
--	vmbus_connection.int_page =
--	(void *)hv_alloc_hyperv_zeroed_page();
-+	vmbus_connection.int_page = hv_alloc_hyperv_zeroed_page();
- 	if (vmbus_connection.int_page == NULL) {
- 		ret = -ENOMEM;
- 		goto cleanup;
-@@ -225,8 +224,8 @@ int vmbus_connect(void)
- 	 * Setup the monitor notification facility. The 1st page for
- 	 * parent->child and the 2nd page for child->parent
- 	 */
--	vmbus_connection.monitor_pages[0] = (void *)hv_alloc_hyperv_page();
--	vmbus_connection.monitor_pages[1] = (void *)hv_alloc_hyperv_page();
-+	vmbus_connection.monitor_pages[0] = hv_alloc_hyperv_page();
-+	vmbus_connection.monitor_pages[1] = hv_alloc_hyperv_page();
- 	if ((vmbus_connection.monitor_pages[0] == NULL) ||
- 	    (vmbus_connection.monitor_pages[1] == NULL)) {
- 		ret = -ENOMEM;
-@@ -333,15 +332,15 @@ void vmbus_disconnect(void)
- 		destroy_workqueue(vmbus_connection.work_queue);
- 
- 	if (vmbus_connection.int_page) {
--		hv_free_hyperv_page((unsigned long)vmbus_connection.int_page);
-+		hv_free_hyperv_page(vmbus_connection.int_page);
- 		vmbus_connection.int_page = NULL;
- 	}
- 
- 	set_memory_encrypted((unsigned long)vmbus_connection.monitor_pages[0], 1);
- 	set_memory_encrypted((unsigned long)vmbus_connection.monitor_pages[1], 1);
- 
--	hv_free_hyperv_page((unsigned long)vmbus_connection.monitor_pages[0]);
--	hv_free_hyperv_page((unsigned long)vmbus_connection.monitor_pages[1]);
-+	hv_free_hyperv_page(vmbus_connection.monitor_pages[0]);
-+	hv_free_hyperv_page(vmbus_connection.monitor_pages[1]);
- 	vmbus_connection.monitor_pages[0] = NULL;
- 	vmbus_connection.monitor_pages[1] = NULL;
- }
-diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-index 542a1d5..6a2258f 100644
---- a/drivers/hv/hv_common.c
-+++ b/drivers/hv/hv_common.c
-@@ -115,12 +115,12 @@ void *hv_alloc_hyperv_zeroed_page(void)
- }
- EXPORT_SYMBOL_GPL(hv_alloc_hyperv_zeroed_page);
- 
--void hv_free_hyperv_page(unsigned long addr)
-+void hv_free_hyperv_page(void *addr)
- {
- 	if (PAGE_SIZE == HV_HYP_PAGE_SIZE)
--		free_page(addr);
-+		free_page((unsigned long)addr);
- 	else
--		kfree((void *)addr);
-+		kfree(addr);
- }
- EXPORT_SYMBOL_GPL(hv_free_hyperv_page);
- 
-@@ -253,7 +253,7 @@ static void hv_kmsg_dump_unregister(void)
- 	atomic_notifier_chain_unregister(&panic_notifier_list,
- 					 &hyperv_panic_report_block);
- 
--	hv_free_hyperv_page((unsigned long)hv_panic_page);
-+	hv_free_hyperv_page(hv_panic_page);
- 	hv_panic_page = NULL;
- }
- 
-@@ -270,7 +270,7 @@ static void hv_kmsg_dump_register(void)
- 	ret = kmsg_dump_register(&hv_kmsg_dumper);
- 	if (ret) {
- 		pr_err("Hyper-V: kmsg dump register error 0x%x\n", ret);
--		hv_free_hyperv_page((unsigned long)hv_panic_page);
-+		hv_free_hyperv_page(hv_panic_page);
- 		hv_panic_page = NULL;
- 	}
- }
-diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index 402a8c1..a8f4b65 100644
---- a/include/asm-generic/mshyperv.h
-+++ b/include/asm-generic/mshyperv.h
-@@ -190,7 +190,7 @@ static inline void vmbus_signal_eom(struct hv_message *msg, u32 old_msg_type)
- 
- void *hv_alloc_hyperv_page(void);
- void *hv_alloc_hyperv_zeroed_page(void);
--void hv_free_hyperv_page(unsigned long addr);
-+void hv_free_hyperv_page(void *addr);
- 
- /**
-  * hv_cpu_number_to_vp_number() - Map CPU to VP.
+[auto build test WARNING on powerpc/next]
+[also build test WARNING on powerpc/fixes masahiroy-kbuild/for-next masahiroy-kbuild/fixes linus/master v6.4-rc7]
+[cannot apply to next-20230622]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Leroy/powerpc-kuap-Avoid-unnecessary-reads-of-MD_AP/20230622-185950
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+patch link:    https://lore.kernel.org/r/be282f27ad808418c7475b51a00b4cb035f89a95.1687430631.git.christophe.leroy%40csgroup.eu
+patch subject: [PATCH v2 14/14] powerpc: Implement UACCESS validation on PPC32
+config: powerpc-allmodconfig (https://download.01.org/0day-ci/archive/20230623/202306230351.SpwvWyz3-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230623/202306230351.SpwvWyz3-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306230351.SpwvWyz3-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   arch/powerpc/platforms/powermac/smp.c:416:13: warning: no previous prototype for 'smp_psurge_take_timebase' [-Wmissing-prototypes]
+     416 | void __init smp_psurge_take_timebase(void)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/platforms/powermac/smp.c:432:13: warning: no previous prototype for 'smp_psurge_give_timebase' [-Wmissing-prototypes]
+     432 | void __init smp_psurge_give_timebase(void)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~
+>> arch/powerpc/platforms/powermac/smp.o: warning: objtool: .text.pmac_cpu_offline_self: unexpected end of section
+
 -- 
-1.8.3.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
