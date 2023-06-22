@@ -2,112 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9095773A94F
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 22:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B72F573A952
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 22:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbjFVUHK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 16:07:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35064 "EHLO
+        id S230472AbjFVUHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 16:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjFVUHI (ORCPT
+        with ESMTP id S229549AbjFVUH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 16:07:08 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E9119B
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 13:07:07 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1b53b8465daso38208595ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 13:07:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1687464427; x=1690056427;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rRceC2Em04Mn9wWhJvKcNrbkdrle685Lc8A6OEbK70c=;
-        b=bsirya4zb/3ljIjxpSptQZleePVH2CV1o92QhMq5NxKbXezIIWsrETVcJPExRmrWI0
-         VHMWYzwCE0iMHi45bkHW3s864nrpv+huGC+J3hhyUhbEK63ZXZrIy9cGbq0A3JZ6CMdm
-         JKUEQOL5VVmno+2HdwPSKy9rHYMCuMBSTbeCo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687464427; x=1690056427;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rRceC2Em04Mn9wWhJvKcNrbkdrle685Lc8A6OEbK70c=;
-        b=OYVWBqMmlBBhHP1lArGWqDUixI8QsQC3DUPKZrXzYjYTVWPUUxN0PIffEik5+IP03T
-         deS00j8UIqTrB2uYd7FotddRP8TLZNP0TPndAcfSo4+Xm2EMGOHfKoMJdXdXXzAWeaQG
-         RlrO8rvlQUDYkKttd/pfVOsqGGrvbMlPOGY6ckro5nc0Q5bYIuPcT0o+mAvCwOoIKRlN
-         JFiRGXqUCGh/fPczNrFAUjyjIigpHdJqwwAuXavyDBYJQkJRjmEEXF7rvK3gRSI37SFT
-         RuHLSea9HYlhGWtVObZsprbz3bsHQgT7lhoEXwgWiRY8X6IEsiapZehD9rt0BRQeRcdT
-         D6bg==
-X-Gm-Message-State: AC+VfDwT6js+0umxhCuh/YrRVTCdMHwxlgFfeAEtlXAuhGpL7qUDpLH7
-        0HUuHmA1qUg9hYe6SI9GsCHivw==
-X-Google-Smtp-Source: ACHHUZ6SuJ4+KH06vVHTEyfMKFigI3xO/NPcNvbNy7RgwL5n4tcxFj7GSoXHgSW2Xxso/W7fTzjZ7w==
-X-Received: by 2002:a17:903:190:b0:1b1:9968:53be with SMTP id z16-20020a170903019000b001b1996853bemr14191367plg.64.1687464426840;
-        Thu, 22 Jun 2023 13:07:06 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id iy9-20020a170903130900b001aaed524541sm5735306plb.227.2023.06.22.13.07.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 13:07:05 -0700 (PDT)
-Date:   Thu, 22 Jun 2023 13:07:04 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Baruch Siach <baruch@tkos.co.il>
-Cc:     Eric Biederman <ebiederm@xmission.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] elf: correct note name comment
-Message-ID: <202306221305.5F23BC4@keescook>
-References: <a7e56e9c0f821348a4c833ac07e7518f457cbdb8.1687413763.git.baruch@tkos.co.il>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a7e56e9c0f821348a4c833ac07e7518f457cbdb8.1687413763.git.baruch@tkos.co.il>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 22 Jun 2023 16:07:29 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CABD1FF0;
+        Thu, 22 Jun 2023 13:07:26 -0700 (PDT)
+Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
+        by linux.microsoft.com (Postfix) with ESMTPSA id B368821C20B1;
+        Thu, 22 Jun 2023 13:07:25 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B368821C20B1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1687464445;
+        bh=G/L27QpOPIVcLupzo2qhywZyKrjocR4zy910V2nTJ3Q=;
+        h=From:To:Subject:Date:From;
+        b=CHwBNOAGtb54sJpZs0trgyKQPSn1QcomzqZfVavEKCk6c383qsZXoKkCBmQqXTgon
+         PL4SJuAZBz7cyuCavNNvjChhWlkcoKJbiuQk+Q5xs261zb11r/1FxlgIgcH09kI5z3
+         WgnVT1ElRsYbOqgzp9ckzda3IwyTYcBY5ORKDpLk=
+From:   Kameron Carr <kameroncarr@linux.microsoft.com>
+To:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, arnd@arndb.de, linux-hyperv@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: [PATCH] Drivers: hv: Change hv_free_hyperv_page() to take void * argument
+Date:   Thu, 22 Jun 2023 13:07:07 -0700
+Message-Id: <1687464427-4722-1-git-send-email-kameroncarr@linux.microsoft.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 09:02:43AM +0300, Baruch Siach wrote:
-> Only the NT_PRFPREG note is named "LINUX". Correct the comment
-> accordingly.
-> 
-> Fixes: 00e19ceec80b ("ELF: Add ELF program property parsing support")
-> Signed-off-by: Baruch Siach <baruch@tkos.co.il>
-> ---
-> 
-> Resending in hope kvack.org mail server would be willing to accept my
-> submission this time.
-> 
-> Adding LKML as a safety net.
-> ---
->  include/uapi/linux/elf.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git include/uapi/linux/elf.h include/uapi/linux/elf.h
-> index ac3da855fb19..a8a0cced62c6 100644
-> --- include/uapi/linux/elf.h
-> +++ include/uapi/linux/elf.h
-> @@ -372,7 +372,7 @@ typedef struct elf64_shdr {
->   * Notes used in ET_CORE. Architectures export some of the arch register sets
->   * using the corresponding note types via the PTRACE_GETREGSET and
->   * PTRACE_SETREGSET requests.
-> - * The note name for all these is "LINUX".
-> + * The note name for most types is "CORE". NT_PRFPREG note is named "LINUX".
->   */
->  #define NT_PRSTATUS	1
->  #define NT_PRFPREG	2
+Currently hv_free_hyperv_page() takes an unsigned long argument, which
+is inconsistent with the void * return value from the corresponding
+hv_alloc_hyperv_page() function and variants. This creates unnecessary
+extra casting.
 
-Is this accurate? I see this logic in fs/binfmt_elf.c:
+Change the hv_free_hyperv_page() argument type to void *.
+Also remove redundant casts from invocations of
+hv_alloc_hyperv_page() and variants.
+---
+ drivers/hv/connection.c        | 13 ++++++-------
+ drivers/hv/hv_common.c         | 10 +++++-----
+ include/asm-generic/mshyperv.h |  2 +-
+ 3 files changed, 12 insertions(+), 13 deletions(-)
 
-                bool is_fpreg = note_type == NT_PRFPREG;
-		...
-                fill_note(&t->notes[note_iter], is_fpreg ? "CORE" : "LINUX",
-                          note_type, ret, data);
-
-i.e. only FPREG is named "CORE", otherwise "LINUX".
-
-Shouldn't this patch have CORE and LINUX swapped?
-
+diff --git a/drivers/hv/connection.c b/drivers/hv/connection.c
+index 5978e9d..ebf15f3 100644
+--- a/drivers/hv/connection.c
++++ b/drivers/hv/connection.c
+@@ -209,8 +209,7 @@ int vmbus_connect(void)
+ 	 * Setup the vmbus event connection for channel interrupt
+ 	 * abstraction stuff
+ 	 */
+-	vmbus_connection.int_page =
+-	(void *)hv_alloc_hyperv_zeroed_page();
++	vmbus_connection.int_page = hv_alloc_hyperv_zeroed_page();
+ 	if (vmbus_connection.int_page == NULL) {
+ 		ret = -ENOMEM;
+ 		goto cleanup;
+@@ -225,8 +224,8 @@ int vmbus_connect(void)
+ 	 * Setup the monitor notification facility. The 1st page for
+ 	 * parent->child and the 2nd page for child->parent
+ 	 */
+-	vmbus_connection.monitor_pages[0] = (void *)hv_alloc_hyperv_page();
+-	vmbus_connection.monitor_pages[1] = (void *)hv_alloc_hyperv_page();
++	vmbus_connection.monitor_pages[0] = hv_alloc_hyperv_page();
++	vmbus_connection.monitor_pages[1] = hv_alloc_hyperv_page();
+ 	if ((vmbus_connection.monitor_pages[0] == NULL) ||
+ 	    (vmbus_connection.monitor_pages[1] == NULL)) {
+ 		ret = -ENOMEM;
+@@ -333,15 +332,15 @@ void vmbus_disconnect(void)
+ 		destroy_workqueue(vmbus_connection.work_queue);
+ 
+ 	if (vmbus_connection.int_page) {
+-		hv_free_hyperv_page((unsigned long)vmbus_connection.int_page);
++		hv_free_hyperv_page(vmbus_connection.int_page);
+ 		vmbus_connection.int_page = NULL;
+ 	}
+ 
+ 	set_memory_encrypted((unsigned long)vmbus_connection.monitor_pages[0], 1);
+ 	set_memory_encrypted((unsigned long)vmbus_connection.monitor_pages[1], 1);
+ 
+-	hv_free_hyperv_page((unsigned long)vmbus_connection.monitor_pages[0]);
+-	hv_free_hyperv_page((unsigned long)vmbus_connection.monitor_pages[1]);
++	hv_free_hyperv_page(vmbus_connection.monitor_pages[0]);
++	hv_free_hyperv_page(vmbus_connection.monitor_pages[1]);
+ 	vmbus_connection.monitor_pages[0] = NULL;
+ 	vmbus_connection.monitor_pages[1] = NULL;
+ }
+diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+index 542a1d5..6a2258f 100644
+--- a/drivers/hv/hv_common.c
++++ b/drivers/hv/hv_common.c
+@@ -115,12 +115,12 @@ void *hv_alloc_hyperv_zeroed_page(void)
+ }
+ EXPORT_SYMBOL_GPL(hv_alloc_hyperv_zeroed_page);
+ 
+-void hv_free_hyperv_page(unsigned long addr)
++void hv_free_hyperv_page(void *addr)
+ {
+ 	if (PAGE_SIZE == HV_HYP_PAGE_SIZE)
+-		free_page(addr);
++		free_page((unsigned long)addr);
+ 	else
+-		kfree((void *)addr);
++		kfree(addr);
+ }
+ EXPORT_SYMBOL_GPL(hv_free_hyperv_page);
+ 
+@@ -253,7 +253,7 @@ static void hv_kmsg_dump_unregister(void)
+ 	atomic_notifier_chain_unregister(&panic_notifier_list,
+ 					 &hyperv_panic_report_block);
+ 
+-	hv_free_hyperv_page((unsigned long)hv_panic_page);
++	hv_free_hyperv_page(hv_panic_page);
+ 	hv_panic_page = NULL;
+ }
+ 
+@@ -270,7 +270,7 @@ static void hv_kmsg_dump_register(void)
+ 	ret = kmsg_dump_register(&hv_kmsg_dumper);
+ 	if (ret) {
+ 		pr_err("Hyper-V: kmsg dump register error 0x%x\n", ret);
+-		hv_free_hyperv_page((unsigned long)hv_panic_page);
++		hv_free_hyperv_page(hv_panic_page);
+ 		hv_panic_page = NULL;
+ 	}
+ }
+diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
+index 402a8c1..a8f4b65 100644
+--- a/include/asm-generic/mshyperv.h
++++ b/include/asm-generic/mshyperv.h
+@@ -190,7 +190,7 @@ static inline void vmbus_signal_eom(struct hv_message *msg, u32 old_msg_type)
+ 
+ void *hv_alloc_hyperv_page(void);
+ void *hv_alloc_hyperv_zeroed_page(void);
+-void hv_free_hyperv_page(unsigned long addr);
++void hv_free_hyperv_page(void *addr);
+ 
+ /**
+  * hv_cpu_number_to_vp_number() - Map CPU to VP.
 -- 
-Kees Cook
+1.8.3.1
+
