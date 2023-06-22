@@ -2,42 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8E273AC7D
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 00:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95DA273AC82
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 00:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbjFVWbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 18:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52066 "EHLO
+        id S231160AbjFVWcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 18:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjFVWbA (ORCPT
+        with ESMTP id S230117AbjFVWcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 18:31:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A3C9195
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 15:30:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC15B618A9
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 22:30:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A264DC433C8;
-        Thu, 22 Jun 2023 22:30:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1687473058;
-        bh=o2GQvxEc5BpUp1uobg6mA0N6S/AMxodCCAZUHy9rv3U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IAJCfDufzQNn/ivwQcKe6WpJWfFm6IrL67dtFzbHyRxVmBK/MZmxySXvhter1OFQj
-         rE+PU0ik9gNKEEjyyBZTpujD7DAvmCxLf6UqdADbC9E0DtshpoTBM8gNCj7p6frZ+8
-         ST6OuLvM9cD2v0BDKifK1y30/xDdnMcMjkctRY0B7CLvIbwrNXssL/V4znZctPSmTk
-         apFHT7ZT/lBuy1bRtBEdQQeRzxQGZBqDhWaw4qNYvcx8fJz6Pj6v1LmQBuveYrEldL
-         HyjQqVRzK33Gq0/BiK2NsiOps9YgHpbTda+OK2JUoPMI2iQPIp7mXbnIcEtbFM/Tyd
-         uuZCfOtxfK3DA==
-Date:   Thu, 22 Jun 2023 23:30:54 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Syed Saba Kareem <Syed.SabaKareem@amd.com>
-Cc:     alsa-devel@alsa-project.org, Vijendar.Mukunda@amd.com,
+        Thu, 22 Jun 2023 18:32:04 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD932122
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 15:31:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1687473114; x=1719009114;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SDXJENEeL/bpt6xMsVy0rg9NPjTbCICx2LYe2RbgEZ0=;
+  b=F9KompVMCsBo8TzqkCSb2YZGlgm46vy8dioL7gVG/NkH7sYDIGI521Up
+   K6u4WHqu+mYUL66nMtQq76rQnuM6UwYF3zOwl620uPh9R+M7SqN8o8nSt
+   uiaMsKbMxaLFi5P2Z2FFkC8ggtv6ZNH/XRr12dbkemzI62rNJfyjchGY4
+   Rzf53/sfHEugTvmMsAwVyUJu6woGdMoUF/NmBNA3c6F1cTRrXZoxkexpO
+   fEiV5A+V+HxPyiVYrHORgOPC5Edl+2gypUuWQdDlBRwjUXpxaeSDS8XIJ
+   5pUAYaG223T1f6Q9QbmJDpyu+ZBf2RDVqXBCy5BJQx5Sc5SYlQ5fu5A6N
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="390494727"
+X-IronPort-AV: E=Sophos;i="6.01,150,1684825200"; 
+   d="scan'208";a="390494727"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 15:31:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="961750214"
+X-IronPort-AV: E=Sophos;i="6.01,150,1684825200"; 
+   d="scan'208";a="961750214"
+Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
+  by fmsmga006.fm.intel.com with ESMTP; 22 Jun 2023 15:31:47 -0700
+Received: from kbuild by 783282924a45 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qCSqB-0007nH-0c;
+        Thu, 22 Jun 2023 22:31:47 +0000
+Date:   Fri, 23 Jun 2023 06:30:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Syed Saba Kareem <Syed.SabaKareem@amd.com>, broonie@kernel.org,
+        alsa-devel@alsa-project.org
+Cc:     oe-kbuild-all@lists.linux.dev, Vijendar.Mukunda@amd.com,
         Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
+        Syed Saba Kareem <Syed.SabaKareem@amd.com>,
         V Sujith Kumar Reddy <vsujithkumar.reddy@amd.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Jaroslav Kysela <perex@perex.cz>,
@@ -50,48 +62,75 @@ Cc:     alsa-devel@alsa-project.org, Vijendar.Mukunda@amd.com,
         open list <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH 04/12] ASoC: amd: acp: add acp i2s master clock
  generation for rembrandt platform
-Message-ID: <ZJTLnhlCFhW/s4Vd@finisterre.sirena.org.uk>
-References: <20230622152406.3709231-1-Syed.SabaKareem@amd.com>
- <20230622152406.3709231-7-Syed.SabaKareem@amd.com>
+Message-ID: <202306230648.6X3y3ujR-lkp@intel.com>
+References: <20230622152406.3709231-7-Syed.SabaKareem@amd.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nQi7X9Rprs7bSeTC"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20230622152406.3709231-7-Syed.SabaKareem@amd.com>
-X-Cookie: I've Been Moved!
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Syed,
 
---nQi7X9Rprs7bSeTC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+kernel test robot noticed the following build warnings:
 
-On Thu, Jun 22, 2023 at 08:53:44PM +0530, Syed Saba Kareem wrote:
-> Add acp i2s master clock generation logic for rembrandt platform.
+[auto build test WARNING on broonie-sound/for-next]
+[also build test WARNING on linus/master v6.4-rc7 next-20230622]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-This doesn't apply against current code, please check and resend.
+url:    https://github.com/intel-lab-lkp/linux/commits/Syed-Saba-Kareem/ASoC-amd-acp-remove-acp-poweroff-function/20230622-233145
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+patch link:    https://lore.kernel.org/r/20230622152406.3709231-7-Syed.SabaKareem%40amd.com
+patch subject: [PATCH 04/12] ASoC: amd: acp: add acp i2s master clock generation for rembrandt platform
+config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20230623/202306230648.6X3y3ujR-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20230623/202306230648.6X3y3ujR-lkp@intel.com/reproduce)
 
---nQi7X9Rprs7bSeTC
-Content-Type: application/pgp-signature; name="signature.asc"
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202306230648.6X3y3ujR-lkp@intel.com/
 
------BEGIN PGP SIGNATURE-----
+All warnings (new ones prefixed by >>):
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmSUy50ACgkQJNaLcl1U
-h9CrIQf/YzqP801ZgPJ9zmTLdD3IDdoFNp8w5tHi7C3z8VNtXZZkbnFZGVAWzlan
-MP8yEnoCvBn0ICgC29Ynunspwp68zp5UgfP/scy0bmYuaaaa74ZAl2QUomJfP+8x
-IRgfKhpr344++V8vie6k8sAybOx5GbPBvsmzq96mLgUlN/JzUXYhESiZUcblFLrr
-1vZb8iYhnvFDzrL4WqpbfwZAyErut78uk1DEZsvBYbL3CsQ4aj3fTjYnV2AsWH85
-Agg2eDKuVpeBWrlvOKBr/fvIRmtd1I9Ro3ncAiZnhLvdTkIXkaS09LybqQViY/qI
-txlasQmpvJ+3OcqOEFgmT/m2GTaYSQ==
-=/2GN
------END PGP SIGNATURE-----
+>> sound/soc/amd/acp/acp-rembrandt.c:169:5: warning: no previous prototype for 'acp6x_master_clock_generate' [-Wmissing-prototypes]
+     169 | int acp6x_master_clock_generate(struct device *dev)
+         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~~
 
---nQi7X9Rprs7bSeTC--
+
+vim +/acp6x_master_clock_generate +169 sound/soc/amd/acp/acp-rembrandt.c
+
+   168	
+ > 169	int acp6x_master_clock_generate(struct device *dev)
+   170	{
+   171		int data = 0;
+   172		struct pci_dev *smn_dev;
+   173	
+   174		smn_dev = pci_get_device(PCI_VENDOR_ID_AMD, HOST_BRIDGE_ID, NULL);
+   175		if (!smn_dev) {
+   176			dev_err(dev, "Failed to get host bridge device\n");
+   177			return -ENODEV;
+   178		}
+   179	
+   180		smn_write(smn_dev, MP1_C2PMSG_93, 0);
+   181		smn_write(smn_dev, MP1_C2PMSG_85, 0xC4);
+   182		smn_write(smn_dev, MP1_C2PMSG_69, 0x4);
+   183		read_poll_timeout(smn_read, data, data, DELAY_US,
+   184				  ACP_TIMEOUT, false, smn_dev, MP1_C2PMSG_93);
+   185		return 0;
+   186	}
+   187	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
