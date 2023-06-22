@@ -2,166 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6A9473A1BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 15:15:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8C5A73A1C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 15:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbjFVNPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 09:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32862 "EHLO
+        id S230237AbjFVNR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 09:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231623AbjFVNOG (ORCPT
+        with ESMTP id S229865AbjFVNRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 09:14:06 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D721BF6;
-        Thu, 22 Jun 2023 06:14:04 -0700 (PDT)
-Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7d72:676c:e745:a6ef])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: benjamin.gaignard)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BD701660713E;
-        Thu, 22 Jun 2023 14:14:02 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1687439643;
-        bh=w7TelsLJmHPPFBbH7cdd4Q4u9mfk8qz6m8m3ILNeG3Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=drrv7EArNlrMc2bqooR2UXQWYueWvIBP+Y1UDX7ZsxJ63fm9MWRTLdvcy/nd3MtmR
-         1tAPfYMWNjrmPUNRS0XxCwqXho+WBGpGewAnYEE2Ie+xdCEP8PrQjPE1/As1XTSeyn
-         xo3B32kzTLEBtIyn4PJwr+EjAOq7FA6fpFlwXN2Z3uefoRQqtw9FpEHPug6LThebK/
-         Phxk51rtR7zmF4yR5QN7vIcsJ7/u5EPHjYGDIFfcOkODSzlshf3WIBEh+wamPxDcUG
-         cWTeOwNzSOsFR7WozNP+PQ3eLDCtl+RCP7lgpfh103fQjpIRJovqxw58Wv7OnDvRLI
-         iyFgvrTal3KYg==
-From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
-To:     mchehab@kernel.org, tfiga@chromium.org, m.szyprowski@samsung.com,
-        ming.qian@nxp.com, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, gregkh@linuxfoundation.org,
-        hverkuil-cisco@xs4all.nl, nicolas.dufresne@collabora.com
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-staging@lists.linux.dev,
-        kernel@collabora.com,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Subject: [PATCH v3 11/11] media: v4l2: Add mem2mem helpers for DELETE_BUF ioctl
-Date:   Thu, 22 Jun 2023 15:13:49 +0200
-Message-Id: <20230622131349.144160-12-benjamin.gaignard@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
-References: <20230622131349.144160-1-benjamin.gaignard@collabora.com>
+        Thu, 22 Jun 2023 09:17:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6FB1FF1
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 06:16:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687439705;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=K2ZkiY3h1e+pdydS87wK/l+Se+zZo9jQmPSOziGg2h4=;
+        b=GyZ7S/p+GegvV66rTigJXybgyTo+BsIOhUd+2aBdwEVaVPsUmnCQxM2JP2yNCk39hq80Uz
+        iUkmyaAbjsw8PmuAdJdftjP7kWV4/MGxLErTdbVZW93qhfpLrQGi8rmLcmG7AzFVz0zIBW
+        BcNmXwfFKW2OAR3MYMQNCKIj7sIF8II=
+Received: from mail-vk1-f199.google.com (mail-vk1-f199.google.com
+ [209.85.221.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-269-QGJXQVlzMye0h8XGLSs_ng-1; Thu, 22 Jun 2023 09:15:02 -0400
+X-MC-Unique: QGJXQVlzMye0h8XGLSs_ng-1
+Received: by mail-vk1-f199.google.com with SMTP id 71dfb90a1353d-471cce5f82fso1264057e0c.0
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 06:15:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687439702; x=1690031702;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K2ZkiY3h1e+pdydS87wK/l+Se+zZo9jQmPSOziGg2h4=;
+        b=FVZqgrpRdTJuV+pjJcSYu3aei0p4+uNHeKsRZFyDgmWX3UOCU32ION2c5lzsqyFnC3
+         ZTsroWz/4bRn7Otr9SRF67AHi97Zob2HeN1skS9sjngrWkBkPWnuBP6OVzB7eRV+9ge9
+         MSJ+LQLLCGSTHnmgjBzvyGYOnbU2SddTdiyHlV/XtuwPdyDHJg8Ok4SZVHm2zTTG2d6u
+         IGtwzsSm3CCrYSddWQeYnGkiIUh381e+Fowh0VYYkt7dirhkVOG/5OVC8rU6GC8GGQwr
+         h8xnPFT3W0S/kIqHKsPoPmbW5IJs0U5AFFXdzEuZ7X2OJ6b9TwWR6kTD6BrPzuz7p53v
+         ObrA==
+X-Gm-Message-State: AC+VfDyzwwZlzNhslTGP1Mjlaoe46Fr/0/hY+fPNJibqtWagIZOoghgd
+        aeEnE0saLioeuKEHDDYRYd5o08BUJ5X4DhY+vzw+lxfCQMYjo6WiHsdFquvPb55pZi5NXS5Wrpo
+        HtHIPvcVGiJ9ZXjBNbr+4YepY
+X-Received: by 2002:a1f:4395:0:b0:471:53e9:376d with SMTP id q143-20020a1f4395000000b0047153e9376dmr4970617vka.4.1687439701750;
+        Thu, 22 Jun 2023 06:15:01 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5W5DxiVuwRx7/IXq3nEY+fcjfbw1GPt92XZe/MPKnssDclCDV9biKYd4cQNHBzgiW8865QqA==
+X-Received: by 2002:a1f:4395:0:b0:471:53e9:376d with SMTP id q143-20020a1f4395000000b0047153e9376dmr4970605vka.4.1687439701380;
+        Thu, 22 Jun 2023 06:15:01 -0700 (PDT)
+Received: from fedora.redhat.com ([2a06:c701:476e:4300:fe29:2a5c:9188:df81])
+        by smtp.gmail.com with ESMTPSA id x22-20020a05620a01f600b00763b9b390b1sm2457874qkn.107.2023.06.22.06.14.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 06:15:00 -0700 (PDT)
+From:   Dana Elfassy <delfassy@redhat.com>
+X-Google-Original-From: Dana Elfassy <dangel101@gmail.com>
+To:     shuah@kernel.org, eballetbo@kernel.org, usama.anjum@collabora.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Dana Elfassy <dangel101@gmail.com>
+Subject: [PATCH] selftests/input: introduce a test for the EVIOCGLED ioctl
+Date:   Thu, 22 Jun 2023 16:14:40 +0300
+Message-ID: <20230622131440.59859-1-dangel101@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create v4l2-mem2mem helpers for VIDIOC_DELETE_BUF ioctl.
+This patch introduces a specific test case for the EVIOCGLED ioctl.
+The test covers the case where len > maxlen in the
+EVIOCGLED(sizeof(all_leds)), all_leds) ioctl.
 
-Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Signed-off-by: Dana Elfassy <dangel101@gmail.com>
 ---
- .../media/platform/verisilicon/hantro_v4l2.c  |  1 +
- drivers/media/test-drivers/vim2m.c            |  1 +
- drivers/media/v4l2-core/v4l2-mem2mem.c        | 20 +++++++++++++++++++
- include/media/v4l2-mem2mem.h                  | 12 +++++++++++
- 4 files changed, 34 insertions(+)
+This patch depends on '[v3] selftests/input: Introduce basic tests for evdev ioctls' [1] sent to the ML.
+[1] https://patchwork.kernel.org/project/linux-input/patch/20230607153214.15933-1-eballetbo@kernel.org/
 
-diff --git a/drivers/media/platform/verisilicon/hantro_v4l2.c b/drivers/media/platform/verisilicon/hantro_v4l2.c
-index cdddfb4179aa..bf418191278f 100644
---- a/drivers/media/platform/verisilicon/hantro_v4l2.c
-+++ b/drivers/media/platform/verisilicon/hantro_v4l2.c
-@@ -720,6 +720,7 @@ const struct v4l2_ioctl_ops hantro_ioctl_ops = {
- 	.vidioc_dqbuf = v4l2_m2m_ioctl_dqbuf,
- 	.vidioc_prepare_buf = v4l2_m2m_ioctl_prepare_buf,
- 	.vidioc_create_bufs = v4l2_m2m_ioctl_create_bufs,
-+	.vidioc_delete_buf = v4l2_m2m_ioctl_delete_buf,
- 	.vidioc_expbuf = v4l2_m2m_ioctl_expbuf,
- 
- 	.vidioc_subscribe_event = v4l2_ctrl_subscribe_event,
-diff --git a/drivers/media/test-drivers/vim2m.c b/drivers/media/test-drivers/vim2m.c
-index 3e3b424b4860..3014b8ee13d0 100644
---- a/drivers/media/test-drivers/vim2m.c
-+++ b/drivers/media/test-drivers/vim2m.c
-@@ -960,6 +960,7 @@ static const struct v4l2_ioctl_ops vim2m_ioctl_ops = {
- 	.vidioc_dqbuf		= v4l2_m2m_ioctl_dqbuf,
- 	.vidioc_prepare_buf	= v4l2_m2m_ioctl_prepare_buf,
- 	.vidioc_create_bufs	= v4l2_m2m_ioctl_create_bufs,
-+	.vidioc_delete_buf	= v4l2_m2m_ioctl_delete_buf,
- 	.vidioc_expbuf		= v4l2_m2m_ioctl_expbuf,
- 
- 	.vidioc_streamon	= v4l2_m2m_ioctl_streamon,
-diff --git a/drivers/media/v4l2-core/v4l2-mem2mem.c b/drivers/media/v4l2-core/v4l2-mem2mem.c
-index 0cc30397fbad..42f51ca25379 100644
---- a/drivers/media/v4l2-core/v4l2-mem2mem.c
-+++ b/drivers/media/v4l2-core/v4l2-mem2mem.c
-@@ -831,6 +831,17 @@ int v4l2_m2m_prepare_buf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
+ tools/testing/selftests/input/evioc-test.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/tools/testing/selftests/input/evioc-test.c b/tools/testing/selftests/input/evioc-test.c
+index ad7b93fe39cf..2bf1b32ae01a 100644
+--- a/tools/testing/selftests/input/evioc-test.c
++++ b/tools/testing/selftests/input/evioc-test.c
+@@ -234,4 +234,21 @@ TEST(eviocsrep_set_repeat_settings)
+ 	selftest_uinput_destroy(uidev);
  }
- EXPORT_SYMBOL_GPL(v4l2_m2m_prepare_buf);
  
-+int v4l2_m2m_delete_buf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
-+			struct v4l2_buffer *buf)
++TEST(eviocgled_get_all_leds)
 +{
-+	struct vb2_queue *vq;
++	struct selftest_uinput *uidev;
++	int leds[2];
++	int rc;
 +
-+	vq = v4l2_m2m_get_vq(m2m_ctx, buf->type);
++	rc = selftest_uinput_create_device(&uidev, -1);
++	ASSERT_EQ(0, rc);
++	ASSERT_NE(NULL, uidev);
 +
-+	return vb2_delete_buf(vq, buf);
++	/* ioctl to set the maxlen = 0 */
++	rc = ioctl(uidev->evdev_fd, EVIOCGLED(0), leds);
++	ASSERT_EQ(0, rc);
++
++	selftest_uinput_destroy(uidev);
 +}
-+EXPORT_SYMBOL_GPL(v4l2_m2m_delete_buf);
 +
- int v4l2_m2m_create_bufs(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- 			 struct v4l2_create_buffers *create)
- {
-@@ -1377,6 +1388,15 @@ int v4l2_m2m_ioctl_create_bufs(struct file *file, void *priv,
- }
- EXPORT_SYMBOL_GPL(v4l2_m2m_ioctl_create_bufs);
- 
-+int v4l2_m2m_ioctl_delete_buf(struct file *file, void *priv,
-+			      struct v4l2_buffer *buf)
-+{
-+	struct v4l2_fh *fh = file->private_data;
-+
-+	return v4l2_m2m_delete_buf(file, fh->m2m_ctx, buf);
-+}
-+EXPORT_SYMBOL_GPL(v4l2_m2m_ioctl_delete_buf);
-+
- int v4l2_m2m_ioctl_querybuf(struct file *file, void *priv,
- 				struct v4l2_buffer *buf)
- {
-diff --git a/include/media/v4l2-mem2mem.h b/include/media/v4l2-mem2mem.h
-index bb9de6a899e0..d062a35c8246 100644
---- a/include/media/v4l2-mem2mem.h
-+++ b/include/media/v4l2-mem2mem.h
-@@ -381,6 +381,16 @@ int v4l2_m2m_dqbuf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- int v4l2_m2m_prepare_buf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
- 			 struct v4l2_buffer *buf);
- 
-+/**
-+ * v4l2_m2m_delete_buf() - delete buffer from the queue
-+ *
-+ * @file: pointer to struct &file
-+ * @m2m_ctx: m2m context assigned to the instance given by struct &v4l2_m2m_ctx
-+ * @buf: pointer to struct &v4l2_buffer
-+ */
-+int v4l2_m2m_delete_buf(struct file *file, struct v4l2_m2m_ctx *m2m_ctx,
-+			struct v4l2_buffer *buf);
-+
- /**
-  * v4l2_m2m_create_bufs() - create a source or destination buffer, depending
-  * on the type
-@@ -846,6 +856,8 @@ int v4l2_m2m_ioctl_reqbufs(struct file *file, void *priv,
- 				struct v4l2_requestbuffers *rb);
- int v4l2_m2m_ioctl_create_bufs(struct file *file, void *fh,
- 				struct v4l2_create_buffers *create);
-+int v4l2_m2m_ioctl_delete_buf(struct file *file, void *priv,
-+			      struct v4l2_buffer *buf);
- int v4l2_m2m_ioctl_querybuf(struct file *file, void *fh,
- 				struct v4l2_buffer *buf);
- int v4l2_m2m_ioctl_expbuf(struct file *file, void *fh,
+ TEST_HARNESS_MAIN
 -- 
-2.39.2
+2.41.0
 
