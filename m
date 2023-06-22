@@ -2,102 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E1BF73A419
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:01:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E75C73A425
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbjFVPBv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 11:01:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35430 "EHLO
+        id S232135AbjFVPCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 11:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232229AbjFVPBn (ORCPT
+        with ESMTP id S232103AbjFVPCu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 11:01:43 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D901FE3;
-        Thu, 22 Jun 2023 08:01:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687446073; x=1718982073;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2oDOGPCCXCPpeOzBEhFuSXa5oGyPeHz5KQj33C5b1S4=;
-  b=PrqrFKu+YRpI4r9cp3pYh44ZCOTbj+ij894EFmtzLydxZNnBUyOMjUK5
-   I3rsNZ7y3vqfYD7te2/0YSv/rEbzMWvDWUFq7E6ZFGwvyRyxWxZiN4gdY
-   2wof+ISi82mn5zfmFacRlODrLtBBFD9/WP+O752S2iquU7nizO5DuF+Ve
-   EPuFZVJZ6eoPVAuK7c6gkbmnJL5GZn3kzQD5E8q7LDyzYxKLLqtegUMBJ
-   aRKEzmLWYTWo3rWDo776ExmuwLotaJnEECrz77AyDgplAa/muPIAV3c3i
-   RNJQ5h5JruRcKYdEmazcoL6IJi2Bpfs/pJlRSNlkjGX5nJvnH/rod7eaq
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="350265391"
-X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
-   d="scan'208";a="350265391"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jun 2023 08:00:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10749"; a="1045213934"
-X-IronPort-AV: E=Sophos;i="6.01,149,1684825200"; 
-   d="scan'208";a="1045213934"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 22 Jun 2023 08:00:08 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1qCLn5-005nAO-0h;
-        Thu, 22 Jun 2023 18:00:07 +0300
-Date:   Thu, 22 Jun 2023 18:00:06 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     =?utf-8?Q?Barnab=C3=A1s_P=C5=91cze?= <pobrn@protonmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Gross <markgross@kernel.org>
-Subject: Re: [PATCH v1 1/2] platform/x86: wmi: Break possible infinite loop
- when parsing GUID
-Message-ID: <ZJRh9o1a0k0yMbOG@smile.fi.intel.com>
-References: <20230621151155.78279-1-andriy.shevchenko@linux.intel.com>
- <25715979-8148-8d1d-fd67-a973661f9781@gmx.de>
- <TnTqU2wwXh3DG07kYUwMAe0hdBiaKiuoMOqBCBIttT27lXdw-KZVV8fZ7x-Zrg_Ux8mJUHClgyFHRbDoCRmhaOI7GwOPhUPYBRLzThV8iYI=@protonmail.com>
- <b4dc2571-1163-805a-f92b-30dcc8b69246@gmx.de>
- <ZJQJqHbZy+00qhsz@smile.fi.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZJQJqHbZy+00qhsz@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 22 Jun 2023 11:02:50 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D147B1FF2
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 08:02:24 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1b51780bed0so56459435ad.3
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 08:02:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1687446130; x=1690038130;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=faWv91VP2z/YbKZA+qDwvC+H5Ebg0LphINaB6C6XGBI=;
+        b=mt+u4MU2N69BdCB48EipZPFZvxxegmfx/OHOcyc/fM4PZHcrYAkSQWkcdFUsmp5rNU
+         a6j2G9cgP05nAPrTpXTrKstR8E5BoO42DmiP6/AZUuIG/6/BBMLFuw5aAo/SAHPeZdEg
+         DNvDehDx9+J7nZG9sBU7G6/wpPi2vu+msKWiZ8QFox3/ruMzFIOZCnfnj843xufxdgu9
+         MeGUmiA7Z/dRVBK3NdT9B4ymhpM9c0qpwKNXpegEvvYhn5T1kxweIZjlNE+fattEVIvn
+         jG1RiXKH3SvzlebwvUPYmft34NdlnUAiikYo4SRSggxh+pPF10pxJtEKozp+lS8TepIG
+         aHrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687446130; x=1690038130;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=faWv91VP2z/YbKZA+qDwvC+H5Ebg0LphINaB6C6XGBI=;
+        b=JVxc8giuyJaDtQf1RJ5Gl6R2J0VkXxzgKYBxhDWEP88NxAiENdbtsRRbmFfLb/v3i8
+         Ee41NomfEtMIh0Yt3k5zAwLM01AywxeW6Istv4ruduv2myVnPsqzYGp74FFrEcR2gI/Y
+         DBCbuFS6Qbv3XYsRG9FJTWHUVtL986ozMkPBqKS8tGGJV0F9jn21u0Tine1CXOonGaUg
+         0mZ1wOLGTpDYET3NWS+x6zr+KUPPgLBUAbucltQIQFanA6/XWZHKuaGWBV7yBCqW0aSD
+         wQqY/gOUClAOTdWrXHxpJnm80AWpXB53I3WbmAfaZt1tpLvbe630WN5M4WYLqneBfV3e
+         1XWQ==
+X-Gm-Message-State: AC+VfDz7Oy6VZBwForVg+XxgPJwXQzlGTw+rxJ6ZW1B+Jf4CldmqLZuN
+        GyX9/bxPkO4GHNehLU3Rib0olA==
+X-Google-Smtp-Source: ACHHUZ7sxI2/l9NYWY43UXjLd7//zIrvDML1M6VqO+WFrtnEGO/KRuc42ZZ7KlADjiu835vi4h/IOA==
+X-Received: by 2002:a17:902:f7c6:b0:1ae:14d:8d0a with SMTP id h6-20020a170902f7c600b001ae014d8d0amr15965819plw.29.1687446130063;
+        Thu, 22 Jun 2023 08:02:10 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id z7-20020a170902708700b001b3dada0e78sm5466709plk.258.2023.06.22.08.02.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Jun 2023 08:02:09 -0700 (PDT)
+Date:   Thu, 22 Jun 2023 08:02:09 -0700 (PDT)
+X-Google-Original-Date: Thu, 22 Jun 2023 08:01:29 PDT (-0700)
+Subject:     Re: [PATCH 11/14] init: consolidate prototypes in linux/init.h
+In-Reply-To: <20230517131102.934196-12-arnd@kernel.org>
+CC:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        Arnd Bergmann <arnd@arndb.de>, linux@armlinux.org.uk,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, monstr@monstr.eu,
+        tsbogend@alpha.franken.de, deller@gmx.de, mpe@ellerman.id.au,
+        hca@linux.ibm.com, tglx@linutronix.de, mingo@redhat.com,
+        x86@kernel.org, rafael@kernel.org, paul@paul-moore.com,
+        eparis@redhat.com, dennis@kernel.org, tj@kernel.org, cl@linux.com,
+        pavel@ucw.cz, peterz@infradead.org, longman@redhat.com,
+        boqun.feng@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, audit@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     arnd@kernel.org
+Message-ID: <mhng-eb6e6d97-fe40-4755-9be5-eb75a690d88c@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 11:43:20AM +0300, Andy Shevchenko wrote:
-> On Wed, Jun 21, 2023 at 11:50:51PM +0200, Armin Wolf wrote:
+On Wed, 17 May 2023 06:10:59 PDT (-0700), arnd@kernel.org wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The init/main.c file contains some extern declarations for functions
+> defined in architecture code, and it defines some other functions that
+> are called from architecture code with a custom prototype. Both of those
+> result in warnings with 'make W=1':
+>
+> init/calibrate.c:261:37: error: no previous prototype for 'calibrate_delay_is_known' [-Werror=missing-prototypes]
+> init/main.c:790:20: error: no previous prototype for 'mem_encrypt_init' [-Werror=missing-prototypes]
+> init/main.c:792:20: error: no previous prototype for 'poking_init' [-Werror=missing-prototypes]
+> arch/arm64/kernel/irq.c:122:13: error: no previous prototype for 'init_IRQ' [-Werror=missing-prototypes]
+> arch/arm64/kernel/time.c:55:13: error: no previous prototype for 'time_init' [-Werror=missing-prototypes]
+> arch/x86/kernel/process.c:935:13: error: no previous prototype for 'arch_post_acpi_subsys_init' [-Werror=missing-prototypes]
+> init/calibrate.c:261:37: error: no previous prototype for 'calibrate_delay_is_known' [-Werror=missing-prototypes]
+> kernel/fork.c:991:20: error: no previous prototype for 'arch_task_cache_init' [-Werror=missing-prototypes]
+>
+> Add prototypes for all of these in include/linux/init.h or another
+> appropriate header, and remove the duplicate declarations from
+> architecture specific code.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm/include/asm/irq.h          |  1 -
+>  arch/microblaze/include/asm/setup.h |  2 --
+>  arch/mips/include/asm/irq.h         |  1 -
+>  arch/parisc/kernel/smp.c            |  1 -
+>  arch/powerpc/include/asm/irq.h      |  1 -
+>  arch/riscv/include/asm/irq.h        |  2 --
+>  arch/riscv/include/asm/timex.h      |  2 --
+>  arch/s390/kernel/entry.h            |  2 --
+>  arch/sh/include/asm/irq.h           |  1 -
+>  arch/sh/include/asm/rtc.h           |  2 --
+>  arch/sparc/include/asm/irq_32.h     |  1 -
+>  arch/sparc/include/asm/irq_64.h     |  1 -
+>  arch/sparc/include/asm/timer_64.h   |  1 -
+>  arch/sparc/kernel/kernel.h          |  4 ----
+>  arch/x86/include/asm/irq.h          |  2 --
+>  arch/x86/include/asm/mem_encrypt.h  |  3 ---
+>  arch/x86/include/asm/time.h         |  1 -
+>  arch/x86/include/asm/tsc.h          |  1 -
+>  include/linux/acpi.h                |  3 ++-
+>  include/linux/delay.h               |  1 +
+>  include/linux/init.h                | 20 ++++++++++++++++++++
+>  init/main.c                         | 18 ------------------
+>  22 files changed, 23 insertions(+), 48 deletions(-)
 
 ...
 
-> I think that WARN_ON() is a bit bogus. First of all, it can be easily
-> transformed to BUG()-equivalent with panic_on_oops and hence kill the
-> entire system. If we need the message about wrong GUID format, it should
-> be done elsewhere (modpost ?). I.o.w. we shan't expect that code,
-> controlled by us, shoots to our foot.
+> diff --git a/arch/riscv/include/asm/irq.h b/arch/riscv/include/asm/irq.h
+> index 43b9ebfbd943..8e10a94430a2 100644
+> --- a/arch/riscv/include/asm/irq.h
+> +++ b/arch/riscv/include/asm/irq.h
+> @@ -16,6 +16,4 @@ void riscv_set_intc_hwnode_fn(struct fwnode_handle *(*fn)(void));
+>
+>  struct fwnode_handle *riscv_get_intc_hwnode(void);
+>
+> -extern void __init init_IRQ(void);
+> -
+>  #endif /* _ASM_RISCV_IRQ_H */
+> diff --git a/arch/riscv/include/asm/timex.h b/arch/riscv/include/asm/timex.h
+> index d6a7428f6248..a06697846e69 100644
+> --- a/arch/riscv/include/asm/timex.h
+> +++ b/arch/riscv/include/asm/timex.h
+> @@ -88,6 +88,4 @@ static inline int read_current_timer(unsigned long *timer_val)
+>  	return 0;
+>  }
+>
+> -extern void time_init(void);
+> -
+>  #endif /* _ASM_RISCV_TIMEX_H */
 
-Additional info. There will be another driver elsewhere that may use similar
-API and also needs GUID in device ID table.
+Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com> # RISC-V
 
-Looking into that implementation it seems that validation should be made in
-file2alias.c for WMI and reused by that driver.
-
-So, taking into account that we have no wrong IDs so far, I would drop
-WARN_ON() here and guarantee that file2alias.c will be changed to validate
-the GUID one way or the other.
-
-Would it work? Hans, what is your comment here?
-
--- 
-With Best Regards,
-Andy Shevchenko
+Thanks!
 
 
