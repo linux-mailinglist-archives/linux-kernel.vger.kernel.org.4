@@ -2,67 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF82C73962E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 06:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E2B1739635
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 06:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbjFVEKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 00:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
+        id S230253AbjFVETp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 00:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjFVEKe (ORCPT
+        with ESMTP id S229608AbjFVETn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 00:10:34 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C917CDD;
-        Wed, 21 Jun 2023 21:10:33 -0700 (PDT)
+        Thu, 22 Jun 2023 00:19:43 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92BA719C;
+        Wed, 21 Jun 2023 21:19:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687407033; x=1718943033;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OpwDpPau9AQnWP8p0KdWhexr5emxOCDtM5hNbv3OmHY=;
-  b=UkzyzI8u1zgD7q/bApStxyDDvf1rSJpNawbGiAz9AGfVfJ7NawmhtS1R
-   QIfnVOSZBTQnp8ENwnLA0B1QsTuwlc/sft0Bwon5KjMtDRV/dHVHuVTOL
-   eQ09XXEOczMsMDAPSwT5RqI/QXmajYQNrwS70f2MJ3CFFLQijf4edmVG7
-   Rm0pbPtdkSKLZbAYJfruy0jMmAh4k8WQIQ4TEsLE2hjy6RvuRkN32o41J
-   ajIoWGu1kwwPyF74AQqNlo4DarozMUILumLw2OhfyfHkcmlkHzfhMzNz4
-   p1mAZ27FIu6LgczZZmdxVFjC9hHCArwAXiLBpHbK28En0LFqJFN/jwipj
+  t=1687407582; x=1718943582;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rKgnFurbdIRdoh4CHd4XKUen+Eh+ergId4ed9rxs1x8=;
+  b=gj96WUnnBYTye/kmRrfT2ZVvXrLM1DUUXYOZQyYq6oV++xu0RFbgIXVM
+   Z1l79ss+1h0KOQziz4jbh3O/VgPQjnp6JNLQOHCGre0jt+aYx71SrwlKR
+   lgCaNfAmcchuHagP/0Zk53Z99bwN/wUD0YOaSIsd7bwF1HPR+8xnaEqyW
+   j4wI8fWuAtxgLTdFg8j7em+3Q2C6x9/2X4qlbhZTurtxHBgTjwDD5tryC
+   K1PcmEQ8BUOzGr0qFkk96Ss3AYgRyvb1tLLMmZlN0C9dzLvGnaiNHijiR
+   FsCCJJJKkUTVEzUm4VmjiDgm8F8PuNj+zp7xmez5GzQKxDopNczzNOGIC
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="360397917"
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="363811732"
 X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
-   d="scan'208";a="360397917"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 21:10:33 -0700
+   d="scan'208";a="363811732"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 21:19:38 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="804627027"
+X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="744453724"
 X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
-   d="scan'208";a="804627027"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 21 Jun 2023 21:10:29 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qCBeO-0007Jv-1j;
-        Thu, 22 Jun 2023 04:10:28 +0000
-Date:   Thu, 22 Jun 2023 12:10:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Besar Wicaksono <bwicaksono@nvidia.com>, suzuki.poulose@arm.com,
-        robin.murphy@arm.com, ilkka@os.amperecomputing.com,
-        catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-tegra@vger.kernel.org, treding@nvidia.com,
-        jonathanh@nvidia.com, vsethi@nvidia.com, rwiley@nvidia.com,
-        efunsten@nvidia.com, Besar Wicaksono <bwicaksono@nvidia.com>
-Subject: Re: [PATCH v4] perf: arm_cspmu: Separate Arm and vendor module
-Message-ID: <202306221135.Z877Um2S-lkp@intel.com>
-References: <20230620041438.32514-1-bwicaksono@nvidia.com>
+   d="scan'208";a="744453724"
+Received: from yongliang-ubuntu20-ilbpg12.png.intel.com ([10.88.229.33])
+  by orsmga008.jf.intel.com with ESMTP; 21 Jun 2023 21:19:27 -0700
+From:   Choong Yong Liang <yong.liang.choong@linux.intel.com>
+To:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        David E Box <david.e.box@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Jose Abreu <Jose.Abreu@synopsys.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Wong Vee Khee <veekhee@apple.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Revanth Kumar Uppala <ruppala@nvidia.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Andrey Konovalov <andrey.konovalov@linaro.org>,
+        Jochen Henneberg <jh@henneberg-systemdesign.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        bpf@vger.kernel.org, Voon Wei Feng <weifeng.voon@intel.com>,
+        Tan@vger.kernel.org, Tee Min <tee.min.tan@linux.intel.com>,
+        Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Lai Peter Jun Ann <jun.ann.lai@intel.com>
+Subject: [PATCH net-next 0/6] TSN auto negotiation between 1G and 2.5G
+Date:   Thu, 22 Jun 2023 12:18:59 +0800
+Message-Id: <20230622041905.629430-1-yong.liang.choong@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230620041438.32514-1-bwicaksono@nvidia.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,55 +97,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Besar,
+Intel platforms’ integrated Gigabit Ethernet controllers support
+2.5Gbps mode statically using BIOS programming. In the current
+implementation, the BIOS menu provides an option to select between
+10/100/1000Mbps and 2.5Gbps modes. Based on the selection, the BIOS
+programs the Phase Lock Loop (PLL) registers. The BIOS also read the
+TSN lane registers from Flexible I/O Adapter (FIA) block and provided
+10/100/1000Mbps/2.5Gbps information to the stmmac driver. But
+auto-negotiation between 10/100/1000Mbps and 2.5Gbps is not allowed.
 
-kernel test robot noticed the following build warnings:
+The new proposal is to support auto-negotiation between 10/100/1000Mbps
+and 2.5Gbps . Auto-negotiation between 10, 100, 1000Mbps will use
+in-band auto negotiation. Auto-negotiation between 10/100/1000Mbps and
+2.5Gbps will work as the following proposed flow, the stmmac driver reads
+the PHY link status registers then identifies the negotiated speed.
+Based on the speed stmmac driver will identify TSN lane registers from
+FIA then send IPC command to the Power Management controller (PMC)
+through PMC driver/API. PMC will act as a proxy to programs the
+PLL registers.
 
-[auto build test WARNING on ea8d1c062a0e876e999e4f347daeb598d5e677ab]
+Choong Yong Liang (1):
+  net: stmmac: Add 1G/2.5G auto-negotiation support for ADL-N
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Besar-Wicaksono/perf-arm_cspmu-Separate-Arm-and-vendor-module/20230620-121723
-base:   ea8d1c062a0e876e999e4f347daeb598d5e677ab
-patch link:    https://lore.kernel.org/r/20230620041438.32514-1-bwicaksono%40nvidia.com
-patch subject: [PATCH v4] perf: arm_cspmu: Separate Arm and vendor module
-config: arm64-randconfig-r011-20230621 (https://download.01.org/0day-ci/archive/20230622/202306221135.Z877Um2S-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce: (https://download.01.org/0day-ci/archive/20230622/202306221135.Z877Um2S-lkp@intel.com/reproduce)
+David E. Box (1):
+  platform/x86: intel_pmc_core: Add IPC mailbox accessor function and
+    add SoC register access
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306221135.Z877Um2S-lkp@intel.com/
+Michael Sit Wei Hong (1):
+  stmmac: intel: Separate driver_data of ADL-N from TGL
 
-All warnings (new ones prefixed by >>):
+Tan, Tee Min (3):
+  net: pcs: xpcs: combine C37 SGMII AN and 2500BASEX for Intel mGbE
+    controller
+  net: phy: update in-band AN mode when changing interface by PHY driver
+  net: stmmac: enable Intel mGbE 1G/2.5G auto-negotiation support
 
->> drivers/perf/arm_cspmu/arm_cspmu.c:386:30: warning: no previous prototype for function 'arm_cspmu_impl_match_get' [-Wmissing-prototypes]
-     386 | struct arm_cspmu_impl_match *arm_cspmu_impl_match_get(u32 pmiidr)
-         |                              ^
-   drivers/perf/arm_cspmu/arm_cspmu.c:386:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     386 | struct arm_cspmu_impl_match *arm_cspmu_impl_match_get(u32 pmiidr)
-         | ^
-         | static 
-   1 warning generated.
-
-
-vim +/arm_cspmu_impl_match_get +386 drivers/perf/arm_cspmu/arm_cspmu.c
-
-   385	
- > 386	struct arm_cspmu_impl_match *arm_cspmu_impl_match_get(u32 pmiidr)
-   387	{
-   388		struct arm_cspmu_impl_match *match = impl_match;
-   389	
-   390		for (; match->pmiidr_val; match++) {
-   391			u32 mask = match->pmiidr_mask;
-   392	
-   393			if ((match->pmiidr_val & mask) == (pmiidr & mask))
-   394				break;
-   395		}
-   396	
-   397		return match;
-   398	}
-   399	
+ MAINTAINERS                                   |   1 +
+ drivers/net/ethernet/stmicro/stmmac/Kconfig   |   1 +
+ .../net/ethernet/stmicro/stmmac/dwmac-intel.c | 183 +++++++++++++++++-
+ .../net/ethernet/stmicro/stmmac/dwmac-intel.h |  81 ++++++++
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c |  20 ++
+ drivers/net/pcs/pcs-xpcs.c                    |  72 +++++--
+ drivers/net/phy/marvell10g.c                  |   6 +
+ drivers/net/phy/phylink.c                     |   3 +
+ drivers/platform/x86/intel/pmc/adl.c          |   2 +-
+ drivers/platform/x86/intel/pmc/cnp.c          |   2 +-
+ drivers/platform/x86/intel/pmc/core.c         |  63 +++++-
+ drivers/platform/x86/intel/pmc/icl.c          |   2 +-
+ drivers/platform/x86/intel/pmc/mtl.c          |   2 +-
+ drivers/platform/x86/intel/pmc/spt.c          |   2 +-
+ drivers/platform/x86/intel/pmc/tgl.c          |   2 +-
+ .../core.h => include/linux/intel_pmc_core.h  |  27 ++-
+ include/linux/pcs/pcs-xpcs.h                  |   1 +
+ include/linux/phy.h                           |   2 +
+ include/linux/stmmac.h                        |   1 +
+ 19 files changed, 449 insertions(+), 24 deletions(-)
+ rename drivers/platform/x86/intel/pmc/core.h => include/linux/intel_pmc_core.h (95%)
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
