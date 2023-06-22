@@ -2,107 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 918B6739598
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 04:51:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 351E67395A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 04:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbjFVCtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 21 Jun 2023 22:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
+        id S229930AbjFVC5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 21 Jun 2023 22:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjFVCtX (ORCPT
+        with ESMTP id S229784AbjFVC5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 21 Jun 2023 22:49:23 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834FA1BE3;
-        Wed, 21 Jun 2023 19:49:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1687402161; x=1718938161;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tt3wX80eeUJQMUKZ5re8uDuyu//FG7twtLDZz+jjnVo=;
-  b=bTEp3xGNcqgazI1fyX8xh9EDWfXO9pnXM+eOqtJ+SbAJnPWwZAkxzMNA
-   9rmgqcNzRdqEImcToVMR0ypXLSHSpvneew+dqf0cDVxqM4XfK1Im1hTDU
-   YokWO3hpVaOlWfcnXnrAL2mQLLsKrImwCbCcOD0ZFWi7SCrJgkeF91YNv
-   y4bcErlZkb6KD5grmEOmOjAxnDc+98r9wLY5CsvnGLZSiBLfvloQeJ2FZ
-   SmSbVURswuiIUJI11o/kRSFGGUrJktaoLVag06dKx6WbXDK9XaVi3AFx7
-   dIue9YTFQ5In16Fu1xft4RzKwy5Dw+O2KgaihDgmp4OHJ/drwIU/QWZbT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="446747569"
-X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
-   d="scan'208";a="446747569"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Jun 2023 19:48:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10748"; a="744432432"
-X-IronPort-AV: E=Sophos;i="6.00,262,1681196400"; 
-   d="scan'208";a="744432432"
-Received: from lkp-server01.sh.intel.com (HELO 783282924a45) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 21 Jun 2023 19:48:27 -0700
-Received: from kbuild by 783282924a45 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qCAN0-0007HO-2b;
-        Thu, 22 Jun 2023 02:48:26 +0000
-Date:   Thu, 22 Jun 2023 10:48:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Junxiao Chang <junxiao.chang@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH net-next 08/11] net: stmmac: platform: provide
- devm_stmmac_probe_config_dt()
-Message-ID: <202306221025.K6fKRmj7-lkp@intel.com>
-References: <20230621153650.440350-9-brgl@bgdev.pl>
+        Wed, 21 Jun 2023 22:57:50 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B172C171C;
+        Wed, 21 Jun 2023 19:57:48 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-54f75f85a17so3608421a12.0;
+        Wed, 21 Jun 2023 19:57:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1687402668; x=1689994668;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=baRINIxlSWtAcWNB0GnBkwJVhbIeRDHzK+M6uQUBCxY=;
+        b=UiHan2d1ePk+GkYMfi1riVe8TWvV+IgmOiBYEV+MdEsZRGhtYq2xL3blysO644ApQb
+         8sgv7LM2MzIRD9tu9zok8gypjqlwkaTtx4cg4r2cjrmUcwuPeos5IIpMYU2K2M5sd3Tu
+         7/4wuBrUr47rVeE6FJtglmeIx+ZbX2HEd4JRWGe1GMEYnJPuoHfgTfkmvDgb9tBlx+2j
+         4aIobbKx5Xa1vnBaQb5C+SXxzdxkQ7Bc1zisrRQ7gXInIamZSIhcFL25pU7iy3ym2z6k
+         D51wqdh4F6C6yFYvFyrwRuq5kG2t4v8MDzV6gwCpm0R9t1gj0YH1F8lgZPapEOLCsnUN
+         7aKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1687402668; x=1689994668;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=baRINIxlSWtAcWNB0GnBkwJVhbIeRDHzK+M6uQUBCxY=;
+        b=BfOuVSAOxbIjzu2KFt2aQjAv8zjyz3tqlrTuPRU/Al4n70hKpjM8XIW15udzQCDDqj
+         HqPMo+Uz9EF2OBa9QKUxLiWWnsy8ZbTm4/MkMKj6A7wQuC37QFybwVNON3HzCA3TCeRO
+         N5Mvr4WAea+ISWmalJ1VklZGcZiBg3NWHMp1TNkiVDKxL9FWFlLqXtzKhF62Es7N3BlU
+         qQzKlxaXFYHpufdZwiVEIwDoGJoAFlaXnWxgRggMf9q9TJuhQaO7OzIXjVZ4ISZcBB6e
+         0BDbeu1fi1+k6GOxpsH77waH7uF5P6tx6oR5b6XiKTNbMPYPHVeopi5sXjUPttq/LMie
+         tFvw==
+X-Gm-Message-State: AC+VfDx1+pN5q2wnw6R2jIvMwnIgkLwzkvUf/c+F/fUfMgYNirhlgyJw
+        q0mnC5cAP+xI7nM0PU+msKWMUuLwo9t6UpfVdAk=
+X-Google-Smtp-Source: ACHHUZ5WmLGa0KabM5PrJGqArh26LKaN/KvGk3iNwbGJKvW2iChEEaIElSh9lOhtptkWEdlzaNwpaA==
+X-Received: by 2002:a05:6a20:394a:b0:121:b1fc:1a48 with SMTP id r10-20020a056a20394a00b00121b1fc1a48mr9291508pzg.3.1687402668160;
+        Wed, 21 Jun 2023 19:57:48 -0700 (PDT)
+Received: from localhost.localdomain ([113.66.180.22])
+        by smtp.gmail.com with ESMTPSA id h8-20020a170902b94800b001ac444fd07fsm4154020pls.100.2023.06.21.19.57.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jun 2023 19:57:47 -0700 (PDT)
+From:   Guiting Shen <aarongt.shen@gmail.com>
+To:     stern@rowland.harvard.edu, gregkh@linuxfoundation.org,
+        nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+        claudiu.beznea@microchip.com
+Cc:     linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Guiting Shen <aarongt.shen@gmail.com>
+Subject: [PATCH] usb: ohci-at91: Fix the unhandle interrupt when resume
+Date:   Thu, 22 Jun 2023 10:57:39 +0800
+Message-Id: <20230622025739.13934-1-aarongt.shen@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230621153650.440350-9-brgl@bgdev.pl>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bartosz,
+The ohci_hcd_at91_drv_suspend() sets ohci->rh_state to OHCI_RH_HALTED when
+suspend which will let the ohci_irq() skip the interrupt after resume. And
+nobody to handle this interrupt.
 
-kernel test robot noticed the following build errors:
+Set the ohci->rh_state to OHCI_RH_SUSPEND instead of OHCI_RH_HALTED when
+suspend to fix it.
 
-[auto build test ERROR on net-next/main]
+Signed-off-by: Guiting Shen <aarongt.shen@gmail.com>
+---
+ drivers/usb/host/ohci-at91.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bartosz-Golaszewski/net-stmmac-platform-provide-stmmac_pltfr_init/20230621-234133
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20230621153650.440350-9-brgl%40bgdev.pl
-patch subject: [PATCH net-next 08/11] net: stmmac: platform: provide devm_stmmac_probe_config_dt()
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20230622/202306221025.K6fKRmj7-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce: (https://download.01.org/0day-ci/archive/20230622/202306221025.K6fKRmj7-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202306221025.K6fKRmj7-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   ld: vmlinux.o: in function `__ksymtab_devm_stmmac_probe_config_dt':
->> stmmac_platform.c:(___ksymtab_gpl+devm_stmmac_probe_config_dt+0x0): undefined reference to `devm_stmmac_probe_config_dt'
-
+diff --git a/drivers/usb/host/ohci-at91.c b/drivers/usb/host/ohci-at91.c
+index b9ce8d80f20b..7a970e573668 100644
+--- a/drivers/usb/host/ohci-at91.c
++++ b/drivers/usb/host/ohci-at91.c
+@@ -645,7 +645,7 @@ ohci_hcd_at91_drv_suspend(struct device *dev)
+ 	 * REVISIT: some boards will be able to turn VBUS off...
+ 	 */
+ 	if (!ohci_at91->wakeup) {
+-		ohci->rh_state = OHCI_RH_HALTED;
++		ohci->rh_state = OHCI_RH_SUSPENDED;
+ 
+ 		/* flush the writes */
+ 		(void) ohci_readl (ohci, &ohci->regs->control);
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.25.1
+
