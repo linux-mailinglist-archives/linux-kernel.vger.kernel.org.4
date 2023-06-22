@@ -2,161 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D1873A2F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70A8D73A2F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 16:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjFVO0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 10:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
+        id S230425AbjFVO13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 10:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbjFVO0B (ORCPT
+        with ESMTP id S229628AbjFVO11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 10:26:01 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7913519AF
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:26:00 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3fde9bfb3c8so135721cf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:26:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687443959; x=1690035959;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3OvkU8UisH4BuGnYm+XG1wAvh/7S0gay7JPC/9n8Vw4=;
-        b=495aCHMsXONb/7fk1o4BWI0cJufNsm6mSfC0X0UydCS7YJ40z6x4y1oFq4O73WAv2/
-         PivI1PeQ6BvsG/OHG81s7Coc0vWWsZr4x9AW4lveNrWCBzR+RRC5J2jR0/ROhvTLskKh
-         d+MoXFylY8oe3cij7GSXwnTQ4A2DOtWO/enmlxXIjyKsMk+WrfJc0WRZXJ7FdgDR07uF
-         dLVCYV44b8onYroGILw3bTZhQCw/clwNlOfOPr4Kn3V9n5q4bxbblymddZeRTMr4ae0l
-         RorrcI45qpKerreWFVfU9QZV5V9Q0VeSXBEjGzOWH+wRAK4dNdmZFBYCWeaVqvBDS58+
-         Oc6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687443959; x=1690035959;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3OvkU8UisH4BuGnYm+XG1wAvh/7S0gay7JPC/9n8Vw4=;
-        b=bZ+5ewq7+XlMHm8NXu8+lviGirGkfy77yUlrnSMwYvrkmNdGEWQWDipTqi/tvKOWok
-         e87gYLleyB6gm0KaHpk5tlCnLhK0V7fiw2BpQi9xt9H30WSbDaye/1G/mewj4D3+qucV
-         7leI84pVw5y5wpp4jNBCwfNIlUHpT2XAHJiqQdm/CO8P0Le6rmTUz/I65Utk2W0gRQtI
-         Ko6N9RuBGGmbImOkwXwLtZdXC5UEljAx+H2l5JLDgMjxtU8oTPuwW0wI8dwy0pfYhpQT
-         9G4hLBXK4Og4mVoCqgstgqdycqJl2fMr/K++h4Pjwl2/9sYhTOA/Gcj9cjDi8ThcsYfo
-         RbNw==
-X-Gm-Message-State: AC+VfDwwVF6OQFOmUnchzIbWpIJBQeTIZ8PBlCDQjTC/npG8G1jZGV4W
-        A1ejFUjJPf0zY0r7AXzjolgo3tniN/PV8afB36Aduw==
-X-Google-Smtp-Source: ACHHUZ7uUs4bnPr21LwAzMF128NWxNRIN5dXaoxu+IPGm/xXmIMIi2Rhx50YN8/p1xyv+58+Bcl5JwW0NuXrO0euY4E=
-X-Received: by 2002:ac8:5954:0:b0:3ef:3083:a437 with SMTP id
- 20-20020ac85954000000b003ef3083a437mr448649qtz.18.1687443959520; Thu, 22 Jun
- 2023 07:25:59 -0700 (PDT)
+        Thu, 22 Jun 2023 10:27:27 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B91919B7
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 07:27:26 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1687444044;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FXNabFu3R+CbSGJ3eO4pu2dnBfEqHysqMWZ3iEe7Y0Q=;
+        b=Q709QPTQzQFuc/s1h83xeJ+U2hg4ZjFW0TzYMIZWZ4t+NvNDqdwmfiluHuy97ZOyoFmloE
+        0Eu63qHBkAKwQHtGlKs1mMMEqSpnwBhmULzITMXod6Nat2eTg1bC9DaZRU8eRYUnquDFaN
+        u2BvF0exfdBFQaonxker0buFCYKPtEGhsXkCjK30PON11Wu84dqh49uYjrpmHpX2I6UBqk
+        4XEvEMvyQoJu065VgwNdLfmNeXtyNWj9SbV8p4sUynCFPJOKujeVpz255uHrf0EGW+nfgD
+        YgUZzFoihyoqSLhskz0waOASK3G6spHrpzk+lxNd5dzE2BkQI8Y/m+AqcgUIAA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1687444044;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FXNabFu3R+CbSGJ3eO4pu2dnBfEqHysqMWZ3iEe7Y0Q=;
+        b=nFRGSvijeky8vzMenKyb5Cz8B4Ih/YoXcicZ1GDA3etHLquMupGs7aus2yCTKMLf1MOAaV
+        cSQpU451LOV4C5Bg==
+To:     Feng Tang <feng.tang@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        "Paul E . McKenney" <paulmck@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, rui.zhang@intel.com,
+        tim.c.chen@intel.com
+Subject: Re: [Patch v2 2/2] x86/tsc: use logical_packages as a better
+ estimation of socket numbers
+In-Reply-To: <ZIwMstkB7CG3pDYu@feng-clx>
+References: <20230613052523.1106821-1-feng.tang@intel.com>
+ <20230613052523.1106821-2-feng.tang@intel.com>
+ <20230615092021.GE1683497@hirez.programming.kicks-ass.net>
+ <ZIwMstkB7CG3pDYu@feng-clx>
+Date:   Thu, 22 Jun 2023 16:27:23 +0200
+Message-ID: <87h6qz7et0.ffs@tglx>
 MIME-Version: 1.0
-References: <20230621174006.42533-1-tony.luck@intel.com> <20230621174006.42533-8-tony.luck@intel.com>
-In-Reply-To: <20230621174006.42533-8-tony.luck@intel.com>
-From:   Peter Newman <peternewman@google.com>
-Date:   Thu, 22 Jun 2023 16:25:48 +0200
-Message-ID: <CALPaoCgF04M0Jc-c4VmbKkRSFo677SBGoPHzNCSeQ4S6Bqb60w@mail.gmail.com>
-Subject: Re: [PATCH v2 7/7] x86/resctrl: Determine if Sub-NUMA Cluster is
- enabled and initialize.
-To:     Tony Luck <tony.luck@intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, x86@kernel.org,
-        Shaopeng Tan <tan.shaopeng@fujitsu.com>,
-        James Morse <james.morse@arm.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        Babu Moger <babu.moger@amd.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, patches@lists.linux.dev,
-        Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tony,
+On Fri, Jun 16 2023 at 15:18, Feng Tang wrote:
+> On Thu, Jun 15, 2023 at 11:20:21AM +0200, Peter Zijlstra wrote:
+> Yes. Rui is working on a MADT based parsing which may take a while
+> before being stable, given all kinds of fancy firmware out there.
 
-On Wed, Jun 21, 2023 at 7:40=E2=80=AFPM Tony Luck <tony.luck@intel.com> wro=
-te:
->
-> There isn't a simple hardware enumeration to indicate to software that
-> a system is running with Sub-NUMA Cluster enabled.
->
-> Compare the number of NUMA nodes with the number of L3 caches to calculat=
-e
-> the number of Sub-NUMA nodes per L3 cache.
->
-> When Sub-NUMA cluster mode is enabled in BIOS setup the RMID counters
-> are distributed equally between the SNC nodes within each socket.
->
-> E.g. if there are 400 RMID counters, and the system is configured with
-> two SNC nodes per socket, then RMID counter 0..199 are used on SNC node
-> 0 on the socket, and RMID counter 200..399 on SNC node 1.
->
-> A model specific MSR (0xca0) can change the configuration of the RMIDs
-> when SNC mode is enabled.
->
-> The MSR controls the interpretation of the RMID field in the
-> IA32_PQR_ASSOC MSR so that the appropriate hardware counters
-> within the SNC node are updated.
->
-> Also initialize a per-cpu RMID offset value. Use this
-> to calculate the value to write to the IA32_QM_EVTSEL MSR when
-> reading RMID event values.
->
-> N.B. this works well for well-behaved NUMA applications that access
-> memory predominantly from the local memory node. For applications that
-> access memory across multiple nodes it may be necessary for the user
-> to read counters for all SNC nodes on a socket and add the values to
-> get the actual LLC occupancy or memory bandwidth. Perhaps this isn't
-> all that different from applications that span across multiple sockets
-> in a legacy system.
+Please not yet another mad table parser.
 
-Unfortunately I'm not getting as good of results with the new series.
-The main difference seems to be updating the 0xca0 MSR instead of
-applying the offset to PQR_ASSOC.
+The topology can be evaluated during early boot via:
 
-In my test case of generating bandwidth on 20 random CPUs in 20 random
-RMIDs, I'm only getting correct counts from CPUs in node 0. Node 1
-CPUs are showing counts which are too small, and nodes 2 and 3 are
-seeing no bandwidth at all:
+  1) The APIC IDs of the possible CPUs.
 
-(expected bandwidth is around 30 GB, value in first parenthesis is L3 cache=
- id)
+  2) CPUID leaf 0xb or 0x1f where the topmost subleaf gives the number
+     of bits to shift the APIC ID right for the package/socket
 
-cpu: 134 (0), rmid: 30 (g29):   0 -> 30640791552 (30640791552)
-cpu: 138 (0), rmid: 103 (g101): 0 -> 28196962304 (28196962304)
+Trying to accomodate for anything else than the documented enumeration
+is crazy. If fancy firmware is broken then they can keep the pieces.
 
-cpu: 35 (0), rmid: 211 (g209):  0 -> 3039232 (3039232)
-cpu: 55 (0), rmid: 113 (g111):  0 -> 4874240 (4874240)
-cpu: 41 (0), rmid: 83 (g81):    0 -> 2637824 (2637824)
-cpu: 42 (0), rmid: 218 (g216):  0 -> 2408448 (2408448)
-cpu: 161 (0), rmid: 8 (g7):     0 -> 7856128 (7856128)
+So something like the below should just work.
 
-cpu: 86 (1), rmid: 171 (g169):  0 -> 0 (0)
-cpu: 86 (1), rmid: 121 (g119):  0 -> 0 (0)
-cpu: 212 (1), rmid: 163 (g161): 0 -> 0 (0)
-cpu: 180 (1), rmid: 129 (g127): 0 -> 0 (0)
-cpu: 205 (1), rmid: 186 (g184): 0 -> 0 (0)
-cpu: 194 (1), rmid: 160 (g158): 0 -> 0 (0)
-cpu: 186 (1), rmid: 196 (g194): 0 -> 0 (0)
-cpu: 106 (1), rmid: 93 (g91):   0 -> 0 (0)
-cpu: 84 (1), rmid: 168 (g166):  0 -> 0 (0)
-cpu: 197 (1), rmid: 104 (g102): 0 -> 0 (0)
-cpu: 64 (1), rmid: 103 (g101):  0 -> 0 (0)
-cpu: 71 (1), rmid: 81 (g79):    0 -> 0 (0)
-cpu: 60 (1), rmid: 221 (g219):  0 -> 0 (0)
+I fundamentally hate the hackery in topology.c, but cleaning this mess
+up is a completely different problem and already worked on.
 
-Here's the output of `cat /sys/devices/system/node/node*/cpulist` on
-this machine for reference:
+Thanks,
 
-0-27,112-139
-28-55,140-167
-56-83,168-195
-84-111,196-223
-
--Peter
+        tglx
+---
+--- a/arch/x86/include/asm/apic.h
++++ b/arch/x86/include/asm/apic.h
+@@ -509,9 +509,12 @@ extern int default_check_phys_apicid_pre
+ #ifdef CONFIG_SMP
+ bool apic_id_is_primary_thread(unsigned int id);
+ void apic_smt_update(void);
++extern unsigned int apic_to_pkg_shift;
++bool logical_packages_update(u32 apicid);
+ #else
+ static inline bool apic_id_is_primary_thread(unsigned int id) { return false; }
+ static inline void apic_smt_update(void) { }
++static inline bool logical_packages_update(u32 apicid) { return true; }
+ #endif
+ 
+ struct msi_msg;
+--- a/arch/x86/kernel/acpi/boot.c
++++ b/arch/x86/kernel/acpi/boot.c
+@@ -177,6 +177,9 @@ static int acpi_register_lapic(int id, u
+ 		return -EINVAL;
+ 	}
+ 
++	if (!logical_packages_update(acpiid))
++		return -EINVAL;
++
+ 	if (!enabled) {
+ 		++disabled_cpus;
+ 		return -EINVAL;
+--- a/arch/x86/kernel/cpu/amd.c
++++ b/arch/x86/kernel/cpu/amd.c
+@@ -692,6 +692,8 @@ static void early_init_amd(struct cpuinf
+ 		}
+ 	}
+ 
++	detect_extended_topology_early(c);
++
+ 	if (cpu_has(c, X86_FEATURE_TOPOEXT))
+ 		smp_num_siblings = ((cpuid_ebx(0x8000001e) >> 8) & 0xff) + 1;
+ }
+--- a/arch/x86/kernel/cpu/topology.c
++++ b/arch/x86/kernel/cpu/topology.c
+@@ -29,6 +29,8 @@ unsigned int __max_die_per_package __rea
+ EXPORT_SYMBOL(__max_die_per_package);
+ 
+ #ifdef CONFIG_SMP
++unsigned int apic_to_pkg_shift __ro_after_init;
++
+ /*
+  * Check if given CPUID extended topology "leaf" is implemented
+  */
+@@ -66,7 +68,7 @@ int detect_extended_topology_early(struc
+ {
+ #ifdef CONFIG_SMP
+ 	unsigned int eax, ebx, ecx, edx;
+-	int leaf;
++	int leaf, subleaf;
+ 
+ 	leaf = detect_extended_topology_leaf(c);
+ 	if (leaf < 0)
+@@ -80,6 +82,14 @@ int detect_extended_topology_early(struc
+ 	 */
+ 	c->initial_apicid = edx;
+ 	smp_num_siblings = max_t(int, smp_num_siblings, LEVEL_MAX_SIBLINGS(ebx));
++
++	for (subleaf = 1; subleaf < 8; subleaf++) {
++		cpuid_count(leaf, subleaf, &eax, &ebx, &ecx, &edx);
++
++		if (ebx == 0 || !LEAFB_SUBTYPE(ecx))
++			break;
++		apic_to_pkg_shift = BITS_SHIFT_NEXT_LEVEL(eax);
++	}
+ #endif
+ 	return 0;
+ }
+--- a/arch/x86/kernel/smpboot.c
++++ b/arch/x86/kernel/smpboot.c
+@@ -1501,17 +1501,50 @@ void __init native_smp_prepare_boot_cpu(
+ 	native_pv_lock_init();
+ }
+ 
++bool logical_packages_update(u32 apicid)
++{
++	unsigned int pkg;
++
++	if (!apic_to_pkg_shift)
++		return true;
++
++	pkg = (apicid >> apic_to_pkg_shift) + 1;
++	if (pkg <= __max_logical_packages)
++		return true;
++
++	if (system_state == SYSTEM_BOOTING) {
++		__max_logical_packages = pkg;
++		return true;
++	}
++
++	pr_err("Physical hotplug APICID %x package %u > max logical packages %u\n",
++	       apicid, pkg, __max_logical_packages);
++	return false;
++}
++
+ void __init calculate_max_logical_packages(void)
+ {
+-	int ncpus;
++	unsigned int ncpus, npkg;
+ 
+ 	/*
+ 	 * Today neither Intel nor AMD support heterogeneous systems so
+ 	 * extrapolate the boot cpu's data to all packages.
+ 	 */
+ 	ncpus = cpu_data(0).booted_cores * topology_max_smt_threads();
+-	__max_logical_packages = DIV_ROUND_UP(total_cpus, ncpus);
+-	pr_info("Max logical packages: %u\n", __max_logical_packages);
++	npkg = DIV_ROUND_UP(total_cpus, ncpus);
++
++	/* Did logical_packages_update() set up __max_logical_packages? */
++	if (!__max_logical_packages) {
++		__max_logical_packages = npkg;
++	} else {
++		pr_info("Max logical packages ACPI enumeration: %u\n",
++		       __max_logical_packages);
++		if (npkg <= __max_logical_packages)
++			return;
++		__max_logical_packages = npkg;
++	}
++
++	pr_info("Max logical packages estimated: %u\n", __max_logical_packages);
+ }
+ 
+ void __init native_smp_cpus_done(unsigned int max_cpus)
