@@ -2,114 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D941473979C
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 08:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71FF073979F
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 08:50:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230265AbjFVGru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 02:47:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54322 "EHLO
+        id S230080AbjFVGuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 02:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230080AbjFVGrr (ORCPT
+        with ESMTP id S229845AbjFVGuJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 02:47:47 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7697A10DB;
-        Wed, 21 Jun 2023 23:47:46 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1aa291b3fc4so3883727fac.0;
-        Wed, 21 Jun 2023 23:47:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1687416465; x=1690008465;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qm05e4OjfSKirTmXzup6QLFGhueq90/W0vX/QkT2XU0=;
-        b=iii1AVAsQ/V4oYfgaI9L/CUTtLUg0Rd1TaLO+IBJ7KJZ7TI+clJ7gSF0oVmPzdVUCj
-         vD23+plFWJz52pUwerUjO0BRaj7RBRHgKQhnSnzI7a+Is5wzV8CBYSSqjrPzQ24QY3Z4
-         0Ch/6MTBDgCzS8zpPx+GkPfMYbgi+KIEQFCUQ6WK2vRWpckjboMe/aK/0/VmzNeeWZzn
-         AixJChElko8SUE2Mf+Dv7ELmaisklHAi3WD20VAERF1rjWLX0ucOih+Fm/uFEM4kGCJh
-         Jc31CsHD13U8GZPpoLeX+1RiFWNNfmGSogiW71Url4PLnLhy7kFC8w7EGv3q5INH5sMR
-         ME+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687416465; x=1690008465;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qm05e4OjfSKirTmXzup6QLFGhueq90/W0vX/QkT2XU0=;
-        b=UkKpAAtFtk6h6nxK62fGH6Fi84U7BLQ84tAzT/OioWioVUazlkHnddLPjqpFxsj4Wh
-         XtXI/IhBG1FLcmG7eP7rmb1r4BtzQch3g+x++Cma+Q2CkQJ9DD2DYS+xzvywKUfITj/I
-         qUheeST7BKJyFM8xK0MeOxILT4K0OxUnJJvaaYhh9hyab8JHb+u7NTfp3VSRV00ejPOD
-         1FOlyZBKFzm0EwoAji/UWYFvx+srmTRDionME4gG12xdUGE/Jp8RvPGKQAqiQaHabqvP
-         Nfb1mU3TnOvSIUGkYZPILGPENXeuB2LwTFj2I2cII4GHmFVBiBXiFtBB2TvlgGzhR+eh
-         dRDg==
-X-Gm-Message-State: AC+VfDz+tFh/dB5t2/IxrOP/ve+wrJ94PFrRFgGltwpYemRtCHY3c1p2
-        Uf5R50F2DBz8GpDwf6OkMLx0hmimmfSL81aFbS0=
-X-Google-Smtp-Source: ACHHUZ6pYQ2K/dd0joq1B6c+l/mP/Q3M90DEW+Qz8EIw3MdKrhSkrLcYTA+AK7m8sAZ2vE5s6kBLDFniEYhS5NceT/Y=
-X-Received: by 2002:a05:6870:1846:b0:1a6:9788:c8dc with SMTP id
- u6-20020a056870184600b001a69788c8dcmr7972164oaf.47.1687416464850; Wed, 21 Jun
- 2023 23:47:44 -0700 (PDT)
+        Thu, 22 Jun 2023 02:50:09 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77863B4;
+        Wed, 21 Jun 2023 23:50:08 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3860422882;
+        Thu, 22 Jun 2023 06:50:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1687416607; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9B0qcrOdREoohRCJHKU4tBeqBNmxmvpM86a3m6k/jlM=;
+        b=sFW7VckQctkAtCtA8p2UEgyyvzOn/1emk99zLmqBx3Sf8k2Wy8nSYS9ruQLhA1wjc6T7lv
+        SJ19FsNXWD7DuhW8+v0xnOywStjIG4a5xzWy2GvCtV+MrAhO0LgUX17676E2IdIHgeh5dY
+        neddWFbmdLQRGUCoOP15JI7WY5H+71g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1687416607;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9B0qcrOdREoohRCJHKU4tBeqBNmxmvpM86a3m6k/jlM=;
+        b=K+FwlG2hn4ZTW5p5BD7Ujb4LDKo2snoqlURkm+sL4fxRcGiEr2s+dYA2mzp0/puHPgMUsH
+        gmpQO8iQ0Vw0dbAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EAF6C132BE;
+        Thu, 22 Jun 2023 06:50:06 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id b5JPOB7vk2TSVwAAMHmgww
+        (envelope-from <hare@suse.de>); Thu, 22 Jun 2023 06:50:06 +0000
+Message-ID: <94d9e935-c8a4-896a-13ac-263831a78dd5@suse.de>
+Date:   Thu, 22 Jun 2023 08:50:06 +0200
 MIME-Version: 1.0
-References: <20230620100231.1412582-1-sergio.paracuellos@gmail.com>
- <168739869603.42044.12383139966264039986.robh@kernel.org> <CAMhs-H_fUSnXHgO0ZXuGOX7gkuM98HXm+Y_jq1DxCv5Az=3Rag@mail.gmail.com>
- <50f75267-492f-d36b-f977-da2fb3a3fd1f@linaro.org>
-In-Reply-To: <50f75267-492f-d36b-f977-da2fb3a3fd1f@linaro.org>
-From:   Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date:   Thu, 22 Jun 2023 08:47:33 +0200
-Message-ID: <CAMhs-H_QU+wXt=GWEOiBmYEGKf8=mA2yUCZk5ALtegve60OtWw@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: timer: add Ralink SoCs timer
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, tglx@linutronix.de,
-        robh+dt@kernel.org, daniel.lezcano@linaro.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [RFC 0/4] minimum folio order support in filemap
+Content-Language: en-US
+From:   Hannes Reinecke <hare@suse.de>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     Pankaj Raghav <p.raghav@samsung.com>, willy@infradead.org,
+        gost.dev@samsung.com, mcgrof@kernel.org, hch@lst.de,
+        jwong@kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <CGME20230621083825eucas1p1b05a6d7e0bf90e7a3d8e621f6578ff0a@eucas1p1.samsung.com>
+ <20230621083823.1724337-1-p.raghav@samsung.com>
+ <b311ae01-cec9-8e06-02a6-f139e37d5863@suse.de>
+ <ZJN0pvgA2TqOQ9BC@dread.disaster.area>
+ <4270b5c7-04b4-28e0-6181-ef98d1f5130c@suse.de>
+In-Reply-To: <4270b5c7-04b4-28e0-6181-ef98d1f5130c@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 8:16=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> On 22/06/2023 07:14, Sergio Paracuellos wrote:
-> > On Thu, Jun 22, 2023 at 3:51=E2=80=AFAM Rob Herring <robh@kernel.org> w=
-rote:
-> >>
-> >>
-> >> On Tue, 20 Jun 2023 12:02:31 +0200, Sergio Paracuellos wrote:
-> >>> Add YAML documentation for the timer which is present on Ralink SoCs.
-> >>>
-> >>> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> >>> ---
-> >>> Changes in v2:
-> >>> - Remove redundant 'documentation' word from subject.
-> >>> - Drop clock-names property.
-> >>>
-> >>>  .../bindings/timer/ralink,rt2880-timer.yaml   | 44 +++++++++++++++++=
-++
-> >>>  1 file changed, 44 insertions(+)
-> >>>  create mode 100644 Documentation/devicetree/bindings/timer/ralink,rt=
-2880-timer.yaml
-> >>>
-> >>
-> >> Reviewed-by: Rob Herring <robh@kernel.org>
-> >>
-> >
-> > Thanks! Which tree is this supposed to go through?
->
-> Preferably clocksource/clockevents/timer drivers tree/
+On 6/22/23 07:51, Hannes Reinecke wrote:
+> On 6/22/23 00:07, Dave Chinner wrote:
+>> On Wed, Jun 21, 2023 at 11:00:24AM +0200, Hannes Reinecke wrote:
+>>> On 6/21/23 10:38, Pankaj Raghav wrote:
+>>>> There has been a lot of discussion recently to support devices and 
+>>>> fs for
+>>>> bs > ps. One of the main plumbing to support buffered IO is to have 
+>>>> a minimum
+>>>> order while allocating folios in the page cache.
+>>>>
+>>>> Hannes sent recently a series[1] where he deduces the minimum folio
+>>>> order based on the i_blkbits in struct inode. This takes a different
+>>>> approach based on the discussion in that thread where the minimum and
+>>>> maximum folio order can be set individually per inode.
+>>>>
+>>>> This series is based on top of Christoph's patches to have iomap aops
+>>>> for the block cache[2]. I rebased his remaining patches to
+>>>> next-20230621. The whole tree can be found here[3].
+>>>>
+>>>> Compiling the tree with CONFIG_BUFFER_HEAD=n, I am able to do a 
+>>>> buffered
+>>>> IO on a nvme drive with bs>ps in QEMU without any issues:
+>>>>
+>>>> [root@archlinux ~]# cat /sys/block/nvme0n2/queue/logical_block_size
+>>>> 16384
+>>>> [root@archlinux ~]# fio -bs=16k -iodepth=8 -rw=write 
+>>>> -ioengine=io_uring -size=500M
+>>>>             -name=io_uring_1 -filename=/dev/nvme0n2 -verify=md5
+>>>> io_uring_1: (g=0): rw=write, bs=(R) 16.0KiB-16.0KiB, (W) 
+>>>> 16.0KiB-16.0KiB, (T) 16.0KiB-16.0KiB, ioengine=io_uring, iodepth=8
+>>>> fio-3.34
+>>>> Starting 1 process
+>>>> Jobs: 1 (f=1): [V(1)][100.0%][r=336MiB/s][r=21.5k IOPS][eta 00m:00s]
+>>>> io_uring_1: (groupid=0, jobs=1): err= 0: pid=285: Wed Jun 21 
+>>>> 07:58:29 2023
+>>>>     read: IOPS=27.3k, BW=426MiB/s (447MB/s)(500MiB/1174msec)
+>>>>     <snip>
+>>>> Run status group 0 (all jobs):
+>>>>      READ: bw=426MiB/s (447MB/s), 426MiB/s-426MiB/s 
+>>>> (447MB/s-447MB/s), io=500MiB (524MB), run=1174-1174msec
+>>>>     WRITE: bw=198MiB/s (207MB/s), 198MiB/s-198MiB/s 
+>>>> (207MB/s-207MB/s), io=500MiB (524MB), run=2527-2527msec
+>>>>
+>>>> Disk stats (read/write):
+>>>>     nvme0n2: ios=35614/4297, merge=0/0, ticks=11283/1441, 
+>>>> in_queue=12725, util=96.27%
+>>>>
+>>>> One of the main dependency to work on a block device with bs>ps is
+>>>> Christoph's work on converting block device aops to use iomap.
+>>>>
+>>>> [1] https://lwn.net/Articles/934651/
+>>>> [2] https://lwn.net/ml/linux-kernel/20230424054926.26927-1-hch@lst.de/
+>>>> [3] 
+>>>> https://github.com/Panky-codes/linux/tree/next-20230523-filemap-order-generic-v1
+>>>>
+>>>> Luis Chamberlain (1):
+>>>>     block: set mapping order for the block cache in set_init_blocksize
+>>>>
+>>>> Matthew Wilcox (Oracle) (1):
+>>>>     fs: Allow fine-grained control of folio sizes
+>>>>
+>>>> Pankaj Raghav (2):
+>>>>     filemap: use minimum order while allocating folios
+>>>>     nvme: enable logical block size > PAGE_SIZE
+>>>>
+>>>>    block/bdev.c             |  9 ++++++++
+>>>>    drivers/nvme/host/core.c |  2 +-
+>>>>    include/linux/pagemap.h  | 46 
+>>>> ++++++++++++++++++++++++++++++++++++----
+>>>>    mm/filemap.c             |  9 +++++---
+>>>>    mm/readahead.c           | 34 ++++++++++++++++++++---------
+>>>>    5 files changed, 82 insertions(+), 18 deletions(-)
+>>>>
+>>>
+>>> Hmm. Most unfortunate; I've just finished my own patchset 
+>>> (duplicating much
+>>> of this work) to get 'brd' running with large folios.
+>>> And it even works this time, 'fsx' from the xfstest suite runs 
+>>> happily on
+>>> that.
+>>
+>> So you've converted a filesystem to use bs > ps, too? Or is the
+>> filesystem that fsx is running on just using normal 4kB block size?
+>> If the latter, then fsx is not actually testing the large folio page
+>> cache support, it's mostly just doing 4kB aligned IO to brd....
+>>
+> I have been running fsx on an xfs with bs=16k, and it worked like a charm.
+> I'll try to run the xfstest suite once I'm finished with merging
+> Pankajs patches into my patchset.
+> Well, would've been too easy.
+'fsx' bails out at test 27 (collapse), with:
 
-Thanks for letting me know :)
+XFS (ram0): Corruption detected. Unmount and run xfs_repair
+XFS (ram0): Internal error isnullstartblock(got.br_startblock) at line 
+5787 of file fs/xfs/libxfs/xfs_bmap.c.  Caller 
+xfs_bmap_collapse_extents+0x2d9/0x320 [xfs]
 
-Best regards,
-    Sergio Paracuellos
+Guess some more work needs to be done here.
 
->
-> Best regards,
-> Krzysztof
->
+Cheers,
+
+Hannes
+-- 
+Dr. Hannes Reinecke                Kernel Storage Architect
+hare@suse.de                              +49 911 74053 688
+SUSE Software Solutions GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), Geschäftsführer: Ivo Totev, Andrew
+Myers, Andrew McDonald, Martje Boudien Moerman
+
