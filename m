@@ -2,133 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2907073969A
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 07:03:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 332B47396A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 07:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229995AbjFVFDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 01:03:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49394 "EHLO
+        id S229993AbjFVFG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 01:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjFVFDq (ORCPT
+        with ESMTP id S229853AbjFVFGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 01:03:46 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1830C19B4
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 22:03:46 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-bd5f9d084c9so7762562276.3
-        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 22:03:46 -0700 (PDT)
+        Thu, 22 Jun 2023 01:06:24 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5916E9
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 22:06:22 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-570877f7838so58723047b3.0
+        for <linux-kernel@vger.kernel.org>; Wed, 21 Jun 2023 22:06:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1687410225; x=1690002225;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=x8Rsb54/MYGUaB2iRhrucGZnS8r6HVo39FnjfvBr1XU=;
-        b=GpRUf2G0Kjjc8MioX56rzakjdiz2XaTj+A/amagDGFOs4eS0bJAORFDFntoapgIt9K
-         AG9Q/X7yigaaRwdGjSNTjAD9vPnnSxMGLlrDwOfydk+lxX43+Guai4OsLplPRJ882O6D
-         hHm5Nyacar5+Hrp3AlLhQxZZgk7HvmvdUlUp7jO5mnkcrpvZjGChdxImGgdCsRWG/8L+
-         a/+D/g91D+Ogsp4+zYrQ9Ybr4jFz+2mH3f50sHqjcJyRTvzOgkHFOtKloGIXG63IWMdm
-         UrJnTgT+980It2KL1Jz0B0WyhMN8wzB4eUtrzBWh2Z7n3RAjVYS5xFeDb8ZdUpotebjH
-         0WAQ==
+        d=gmail.com; s=20221208; t=1687410382; x=1690002382;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MthCju+rZIz8gsMWBktpqG65ZcoIquNN1JdN3p215eU=;
+        b=MAQtGOkk9kv3FBWEGGwDM+cn/NBnQN5GtguG9BsU406oxl0g2RznHS5jTaljD/MQ5D
+         uoCxw55206+2UxWQ25tgkyHKqpylI8l/m+P8KKNmyBmi0Lg8x/lhar4WrcwMFmBJQxZU
+         yoeLUdlZoJiVaps/ZX6kXgrDHffOelo7GxnHaMBmhHuNMR/NImgUCcFRdubxdmQWGAXd
+         kS67jYfCRV6R5ZxE2WnMc+35QfNtg7dyTllhc+FzwoBtuYwk/OoScvjgrVMpkT2yHhx3
+         B4+V9mjxrwOFUK8QRz/Ygw8iRPY9Cu5SDpCzobzfs0k4RJNTl2lm66JYxJxZ/7DnoT2j
+         fVGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687410225; x=1690002225;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x8Rsb54/MYGUaB2iRhrucGZnS8r6HVo39FnjfvBr1XU=;
-        b=g7ciQFszf7ZAOkaGU7w96ZokJ6D45sOcWmRqhFJUa9TcuCsoOeu2RR3giaqPGcP/p1
-         V2pW2ilAw3lzOHFxLIowdVYVQVpLpTxyYT74AzYgorYmcLeZuLepd8p1+FR/R/gnIzwB
-         rNpFChdmBUnvQz7yZAJKKVkaXNGMbhuZA/0ZSOofci6zKfrPd4eY11jGOwH9FLreSOh7
-         yXJXfaPz4nlcSLYMLW417Z7Y4z93r7ykEL3U+59Px/egXvrRnxucdZbUmXoeaRhY16OY
-         D2LM+0Z8nnyYJOJ3Bp3ZpbsSKDb5D3emObcDsCUha0IM5GLjp/YJYWMU9dJCHLntcmI/
-         U2NA==
-X-Gm-Message-State: AC+VfDw0WGpizXBmx4705i8fTsOjcYxOKuLA4t91UdHF2sDDQyfGwxVn
-        nwjiCuuLoPIrs+2xMfWUxO1pTu7E5/sg
-X-Google-Smtp-Source: ACHHUZ7ARfJoVAEvnUkQb8tQpVCFdx+usSVxdKSOM+7ibrCp77WpcmrZhsekCA+OnSG5YZJ3g4/sqKxl+fRn
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2a3:200:91f3:1da5:6427:50d6])
- (user=irogers job=sendgmr) by 2002:a25:7346:0:b0:bfe:9259:8f1d with SMTP id
- o67-20020a257346000000b00bfe92598f1dmr2318249ybc.6.1687410225349; Wed, 21 Jun
- 2023 22:03:45 -0700 (PDT)
-Date:   Wed, 21 Jun 2023 22:03:29 -0700
-In-Reply-To: <20230622050330.3733114-1-irogers@google.com>
-Message-Id: <20230622050330.3733114-2-irogers@google.com>
-Mime-Version: 1.0
-References: <20230622050330.3733114-1-irogers@google.com>
-X-Mailer: git-send-email 2.41.0.162.gfafddb0af9-goog
-Subject: [PATCH v1 2/2] perf pmu: Remove a hard coded cpu PMU assumption
-From:   Ian Rogers <irogers@google.com>
-To:     Thomas Richter <tmricht@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        James Clark <james.clark@arm.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+        d=1e100.net; s=20221208; t=1687410382; x=1690002382;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MthCju+rZIz8gsMWBktpqG65ZcoIquNN1JdN3p215eU=;
+        b=YfND0uHhHaDFMiJ9uyc/Cgt9HMOR6PA516/yYMy49anrshA8My2TqYgepXBz8+7Zr1
+         OyIFG8NK8UDpPekf/K3jWT7ZTznP5J56oOGEzyQhWtuELVHZFqR1C4NhDWI4rN1kvu/V
+         6rcXllKi8UYKyTfpFDiL7oXoRLKapMTiIkTvY6Wd5R/H79sGSh3b/jIs9CqsCAmSfjbG
+         vWV/YF+bEubOMQiinRvtzvZlQlVUbz2Qo5gpxFQ2weAkoRHj8HWbKFSE8dxaO/0HvkgK
+         7x26c72n6cykxVMEBWN4CCabtvpYTqfj1j0hR+6OKQei6RD1OUu7gtkP0T58xy+6PgJC
+         Srig==
+X-Gm-Message-State: AC+VfDyEBp33+iVqYajn4Bs1acU2OHzdnVajtVQKJe8W+4hv60QuqhwV
+        Rs0a2ND0IuWUlbuj19n0elmUnMcYPaj6fdbC7ls=
+X-Google-Smtp-Source: ACHHUZ4PrGtZEFFrewBaR05yFcgsXGgNCDzkJCtEBW8P4mRUZ3wPZzIjyHdtDb4Dc4s8KAXE/aYDdtx5SpuH9HwFmeU=
+X-Received: by 2002:a25:b10c:0:b0:bc7:60cb:5cb4 with SMTP id
+ g12-20020a25b10c000000b00bc760cb5cb4mr12950168ybj.12.1687410381729; Wed, 21
+ Jun 2023 22:06:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230615142016.419570-1-zhiguangni01@gmail.com> <22bba771-f10b-8624-1874-5eb747e798dd@intel.com>
+In-Reply-To: <22bba771-f10b-8624-1874-5eb747e798dd@intel.com>
+From:   Liam Ni <zhiguangni01@gmail.com>
+Date:   Thu, 22 Jun 2023 13:06:10 +0800
+Message-ID: <CACZJ9cU81BObhY3RGb9mdhfWxqhNW=JhjSOyUXpizZ-S8hjdEQ@mail.gmail.com>
+Subject: Re: [PATCH] x86,NUMA:Get the number of ram pages directly in numa_meminfo_cover_memory()
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        akpm@linux-foundation.org, rppt@kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The property of "cpu" when it has no cpu map is true on S390 with the
-PMU cpum_cf. Rather than maintain a list of such PMUs, reuse the
-is_core test result from the caller.
+On Thu, 22 Jun 2023 at 01:49, Dave Hansen <dave.hansen@intel.com> wrote:
+>
+> On 6/15/23 07:20, Liam Ni wrote:
+> > In a previous implementation,The ram page is calculated
+> > by counting the number of holes,
+> > however,the number of ram pages is calculated during hole calculation.
+> > Therefore,we can directly calculate the amount of ram pages.
+>
+> What problem does this patch solve?
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/pmu.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+I has send patch V2 to improve the execution efficiency of
+numa_meminfo_cover_memory()
+by optimize the way of calculating missing pages.
 
-diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-index 963c12f910c5..64fa568a5426 100644
---- a/tools/perf/util/pmu.c
-+++ b/tools/perf/util/pmu.c
-@@ -551,7 +551,7 @@ static int pmu_alias_terms(struct perf_pmu_alias *alias,
-  * Uncore PMUs have a "cpumask" file under sysfs. CPU PMUs (e.g. on arm/arm64)
-  * may have a "cpus" file.
-  */
--static struct perf_cpu_map *pmu_cpumask(int dirfd, const char *name)
-+static struct perf_cpu_map *pmu_cpumask(int dirfd, const char *name, bool is_core)
- {
- 	struct perf_cpu_map *cpus;
- 	const char *templates[] = {
-@@ -575,7 +575,8 @@ static struct perf_cpu_map *pmu_cpumask(int dirfd, const char *name)
- 			return cpus;
- 	}
- 
--	return !strcmp(name, "cpu") ? perf_cpu_map__get(cpu_map__online()) : NULL;
-+	/* Nothing found, for core PMUs assume this means all CPUs. */
-+	return is_core ? perf_cpu_map__get(cpu_map__online()) : NULL;
- }
- 
- static bool pmu_is_uncore(int dirfd, const char *name)
-@@ -886,7 +887,8 @@ struct perf_pmu *perf_pmu__lookup(struct list_head *pmus, int dirfd, const char
- 	if (!pmu)
- 		return NULL;
- 
--	pmu->cpus = pmu_cpumask(dirfd, name);
-+	pmu->is_core = is_pmu_core(name);
-+	pmu->cpus = pmu_cpumask(dirfd, name, pmu->is_core);
- 	pmu->name = strdup(name);
- 	if (!pmu->name)
- 		goto err;
-@@ -903,7 +905,6 @@ struct perf_pmu *perf_pmu__lookup(struct list_head *pmus, int dirfd, const char
- 	}
- 
- 	pmu->type = type;
--	pmu->is_core = is_pmu_core(name);
- 	pmu->is_uncore = pmu_is_uncore(dirfd, name);
- 	if (pmu->is_uncore)
- 		pmu->id = pmu_id(name);
--- 
-2.41.0.162.gfafddb0af9-goog
+patch V2:
+https://lore.kernel.org/all/20230619075315.49114-1-zhiguangni01@gmail.com/
 
+In the previous implementation, We calculate missing pages as follows:
+1. calculate numaram by traverse all the numa_meminfo's and for each of
+them traverse all the regions in memblock.memory to prepare for
+counting missing pages.
+
+2. Traverse all the regions in memblock.memory again to get e820ram.
+
+3. the missing page is (e820ram - numaram )
+
+But,it's enough to count memory in memblock.memory that doesn't have
+the node assigned.
+we only need to traverse memblock.memory **once**.
