@@ -2,63 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0BA73A744
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 407EB73A74C
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 19:32:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbjFVRbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 13:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59326 "EHLO
+        id S231137AbjFVRc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 13:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbjFVRbO (ORCPT
+        with ESMTP id S229746AbjFVRc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 13:31:14 -0400
-Received: from forward501a.mail.yandex.net (forward501a.mail.yandex.net [178.154.239.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B1B1FC6;
-        Thu, 22 Jun 2023 10:31:12 -0700 (PDT)
-Received: from mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net [IPv6:2a02:6b8:c1f:5e51:0:640:23ee:0])
-        by forward501a.mail.yandex.net (Yandex) with ESMTP id 9E1B35EC28;
-        Thu, 22 Jun 2023 20:31:09 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id 6VKKXtODUqM0-DyvVaPAp;
-        Thu, 22 Jun 2023 20:31:08 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail; t=1687455069;
-        bh=NcOau/7zdZ8/BFXcxr6E1z7OtQb5HTRH7dBt5/yHTzQ=;
-        h=From:In-Reply-To:Cc:Date:References:To:Subject:Message-ID;
-        b=BHUqk3yONpOCWh1NKnqJtWU+7I6mwPvKqPle/chE8JGsf8J3qnrQ4lhFPh7PmiKqf
-         Vu80m42o2CaZoi9+CUsdCYcXB2RtZ3OkcgQWfhLjqIe7eTc6ECbx6sTRH8VIRnWcSC
-         LT/ODaPAGXvOZC8GqL9XrnIcgzuCI1eFpwx2VIgI=
-Authentication-Results: mail-nwsmtp-smtp-production-main-51.vla.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-Message-ID: <4582a51d-2b29-f430-2f8f-ed1239d70f70@yandex.ru>
-Date:   Thu, 22 Jun 2023 22:31:06 +0500
+        Thu, 22 Jun 2023 13:32:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F252125
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 10:31:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1687455096;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3A/9MXgBBjsOiJR7aN+jD3J+Q2qngmB+feAsrMbXy+w=;
+        b=JjKGMMxueYREB2uYgZciIv4mBi6/z9XkjDe2dqFY5sXVWQsg1Du7Ht0OI9JhuDwgvpGqmf
+        UK7j83QbzSeXVisfr56p0T2KssPgEaIjilmeTMcntDvY3uLN++Vo00NxRZg7zVPxtazke1
+        GwxiyYFLJSwRffvFbrDeM+XOnfJmUmQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-252-UyN40HpJMXeYe_nUBtgVVA-1; Thu, 22 Jun 2023 13:31:31 -0400
+X-MC-Unique: UyN40HpJMXeYe_nUBtgVVA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1F2C11C08781;
+        Thu, 22 Jun 2023 17:31:28 +0000 (UTC)
+Received: from file1-rdu.file-001.prod.rdu2.dc.redhat.com (unknown [10.11.5.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 11C002166B25;
+        Thu, 22 Jun 2023 17:31:28 +0000 (UTC)
+Received: by file1-rdu.file-001.prod.rdu2.dc.redhat.com (Postfix, from userid 12668)
+        id 0BC4130C0457; Thu, 22 Jun 2023 17:31:28 +0000 (UTC)
+Received: from localhost (localhost [127.0.0.1])
+        by file1-rdu.file-001.prod.rdu2.dc.redhat.com (Postfix) with ESMTP id 0ACF83F7CF;
+        Thu, 22 Jun 2023 19:31:28 +0200 (CEST)
+Date:   Thu, 22 Jun 2023 19:31:28 +0200 (CEST)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+To:     Demi Marie Obenour <demi@invisiblethingslab.com>
+cc:     Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>, dm-devel@redhat.com,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [dm-devel] [PATCH v2 3/6] device-mapper: structs and parameter
+ strings must not overlap
+In-Reply-To: <20230603145244.1538-4-demi@invisiblethingslab.com>
+Message-ID: <c0c36fe0-41cf-abf-727c-bbef17b6face@redhat.com>
+References: <20230601212456.1533-1-demi@invisiblethingslab.com> <20230603145244.1538-1-demi@invisiblethingslab.com> <20230603145244.1538-4-demi@invisiblethingslab.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/2] selftests: add OFD lock tests
-Content-Language: en-US
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>
-References: <20230621152214.2720319-1-stsp2@yandex.ru>
- <20230621152214.2720319-3-stsp2@yandex.ru>
- <4db7c65bee0739fe7983059296cfc95f20647fa3.camel@kernel.org>
- <7bbb29d2-4cae-48bd-1b97-9f4dbf6ffb19@yandex.ru>
- <8F45F47C-86C0-472E-B701-001A4FF90DBC@oracle.com>
- <26a798ae-b93b-2f68-71ed-35950240927d@yandex.ru>
- <187C3E49-A977-492E-99CB-97F032B24E5F@oracle.com>
-From:   stsp <stsp2@yandex.ru>
-In-Reply-To: <187C3E49-A977-492E-99CB-97F032B24E5F@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -66,8 +68,108 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-22.06.2023 22:12, Chuck Lever III пишет:
-> I don't have a strong preference. A good choice is to
-> push the test before the kernel changes are merged.
-It will fail though w/o kernel changes.
-So what exactly is the policy?
+
+On Sat, 3 Jun 2023, Demi Marie Obenour wrote:
+
+> The NUL terminator for each target parameter string must precede the
+> following 'struct dm_target_spec'.  Otherwise, dm_split_args() might
+> corrupt this struct.  Furthermore, the first 'struct dm_target_spec'
+> must come after the 'struct dm_ioctl', as if it overlaps too much
+> dm_split_args() could corrupt the 'struct dm_ioctl'.
+> 
+> Signed-off-by: Demi Marie Obenour <demi@invisiblethingslab.com>
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Cc: stable@vger.kernel.org
+
+Reviewed-by: Mikulas Patocka <mpatocka@redhat.com>
+
+> ---
+>  drivers/md/dm-ioctl.c | 28 +++++++++++++++++++++-------
+>  1 file changed, 21 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
+> index 64e8f16d344c47057de5e2d29e3d63202197dca0..da6ca26b51d0953df380582bb3a51c2ec22c27cb 100644
+> --- a/drivers/md/dm-ioctl.c
+> +++ b/drivers/md/dm-ioctl.c
+> @@ -1391,7 +1391,7 @@ static inline fmode_t get_mode(struct dm_ioctl *param)
+>  	return mode;
+>  }
+>  
+> -static int next_target(struct dm_target_spec *last, uint32_t next, void *end,
+> +static int next_target(struct dm_target_spec *last, uint32_t next, const char *end,
+>  		       struct dm_target_spec **spec, char **target_params)
+>  {
+>  	static_assert(_Alignof(struct dm_target_spec) <= 8,
+> @@ -1404,7 +1404,7 @@ static int next_target(struct dm_target_spec *last, uint32_t next, void *end,
+>  	 * sizeof(struct dm_target_spec) or more, as otherwise *last was
+>  	 * out of bounds already.
+>  	 */
+> -	size_t remaining = (char *)end - (char *)last;
+> +	size_t remaining = end - (char *)last;
+>  
+>  	/*
+>  	 * There must be room for both the next target spec and the
+> @@ -1423,10 +1423,7 @@ static int next_target(struct dm_target_spec *last, uint32_t next, void *end,
+>  	*spec = (struct dm_target_spec *) ((unsigned char *) last + next);
+>  	*target_params = (char *) (*spec + 1);
+>  
+> -	if (*spec < (last + 1))
+> -		return -EINVAL;
+> -
+> -	return invalid_str(*target_params, end);
+> +	return 0;
+>  }
+>  
+>  static int populate_table(struct dm_table *table,
+> @@ -1436,8 +1433,9 @@ static int populate_table(struct dm_table *table,
+>  	unsigned int i = 0;
+>  	struct dm_target_spec *spec = (struct dm_target_spec *) param;
+>  	uint32_t next = param->data_start;
+> -	void *end = (void *) param + param_size;
+> +	const char *const end = (const char *) param + param_size;
+>  	char *target_params;
+> +	size_t min_size = sizeof(struct dm_ioctl);
+>  
+>  	if (!param->target_count) {
+>  		DMERR("%s: no targets specified", __func__);
+> @@ -1445,6 +1443,13 @@ static int populate_table(struct dm_table *table,
+>  	}
+>  
+>  	for (i = 0; i < param->target_count; i++) {
+> +		const char *nul_terminator;
+> +
+> +		if (next < min_size) {
+> +			DMERR("%s: next target spec (offset %u) overlaps %s",
+> +			      __func__, next, i ? "previous target" : "'struct dm_ioctl'");
+> +			return -EINVAL;
+> +		}
+>  
+>  		r = next_target(spec, next, end, &spec, &target_params);
+>  		if (r) {
+> @@ -1452,6 +1457,15 @@ static int populate_table(struct dm_table *table,
+>  			return r;
+>  		}
+>  
+> +		nul_terminator = memchr(target_params, 0, (size_t)(end - target_params));
+> +		if (nul_terminator == NULL) {
+> +			DMERR("%s: target parameters not NUL-terminated", __func__);
+> +			return -EINVAL;
+> +		}
+> +
+> +		/* Add 1 for NUL terminator */
+> +		min_size = (size_t)(nul_terminator - (const char *)spec) + 1;
+> +
+>  		r = dm_table_add_target(table, spec->target_type,
+>  					(sector_t) spec->sector_start,
+>  					(sector_t) spec->length,
+> -- 
+> Sincerely,
+> Demi Marie Obenour (she/her/hers)
+> Invisible Things Lab
+> 
+> --
+> dm-devel mailing list
+> dm-devel@redhat.com
+> https://listman.redhat.com/mailman/listinfo/dm-devel
+> 
+
