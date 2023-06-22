@@ -2,157 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F8873AC8A
-	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 00:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ECBA73AC8B
+	for <lists+linux-kernel@lfdr.de>; Fri, 23 Jun 2023 00:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjFVWda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 18:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53554 "EHLO
+        id S230088AbjFVWds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 18:33:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbjFVWd2 (ORCPT
+        with ESMTP id S231253AbjFVWdp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 18:33:28 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03E1E1993
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 15:33:26 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1b55643507dso44655135ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 15:33:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1687473205; x=1690065205;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ckdenG1i3LyU3fHf2zoe01aFyGsekEsJ7fVPuTD9/YY=;
-        b=s8V71EIldaqGYVwOmX25NCzufmwczbjbrgxg/WeEa1tVZ/X7+ZCVYA8hPC4LG3Qvkn
-         db8MLPdFQ6qQ8dmBGtQ8t94cTsLQ5Ydi1XOKr/+QanuSm2RstQ8Y/fZpEXhaht/7ZwuB
-         GwSuHKtWPc8dq+j7OyEwNJ3i4OpBjaomjqeuva//+BZOjgr0niqPrxVsMO8LY/Oz+uBJ
-         3y8uhc1yQjnf6+cbMQDAoEVpEv4m0GgtIXB9uMz8T29TlxqoD4uEwmnE/HBp538nGqHG
-         NrfpCP3baC5jZLDd9Avv/tTwU5AteyEYhW+fsQM64bGVS3qrPcJ0+t3AJUmVCtX5bCuS
-         e1iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687473205; x=1690065205;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ckdenG1i3LyU3fHf2zoe01aFyGsekEsJ7fVPuTD9/YY=;
-        b=LLJdnoqLWtMSOJYksYwkeoZJp+hK3Il4yYGq0IUAEWdyuHG8GMK3PwEfYV3emVyyWa
-         6+xTVCpZBThlbrttAB2B5sOmf+rwYMhELVasVY13e1fyfOpXkhNJQSEY9qFBpTQLcVOJ
-         wHhtmmOmCnfGB+0jbhCqdf9RY0Ml4YdiAkVyl5uDHzNfLMLxYnsJ/hJmubQmqm30xxJp
-         /9+KBKFOEoJChZFWA+uDKK0rpdz4Gfs3yDoDVUnEkHcqJBhFqKRyxbiu7l7WMENsBLSS
-         tCqEfT9Wfj0il4tno+mI1x9tSE539bAmvKjJ2tNERnZgWFyZc0VXlr3viWkSp4UvLWxX
-         MYcA==
-X-Gm-Message-State: AC+VfDymlTq9aQECxL8WJmNNG0xSBJDR4Qa364298DpBmbTE59sQu/72
-        mIeZi81m/v4IIhWDWEEVtNIBnIqbFwnTdv5n7C8=
-X-Google-Smtp-Source: ACHHUZ5LOl6v4tJzRIJ2CnvEdQKdfTnGSIpNDMNl0rCRrm5pQQdwfVTuR2VbFWMZMSpopn3wI7CtSQ==
-X-Received: by 2002:a17:902:d504:b0:1b5:5ad2:6eac with SMTP id b4-20020a170902d50400b001b55ad26eacmr16116467plg.33.1687473205331;
-        Thu, 22 Jun 2023 15:33:25 -0700 (PDT)
-Received: from dread.disaster.area (pa49-180-13-202.pa.nsw.optusnet.com.au. [49.180.13.202])
-        by smtp.gmail.com with ESMTPSA id jl13-20020a170903134d00b001b3f47ea2e8sm5824366plb.117.2023.06.22.15.33.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 22 Jun 2023 15:33:24 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1qCSri-00F0rw-0R;
-        Fri, 23 Jun 2023 08:33:22 +1000
-Date:   Fri, 23 Jun 2023 08:33:22 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Hannes Reinecke <hare@suse.de>
-Cc:     Pankaj Raghav <p.raghav@samsung.com>, willy@infradead.org,
-        gost.dev@samsung.com, mcgrof@kernel.org, hch@lst.de,
-        jwong@kernel.org, linux-fsdevel@vger.kernel.org,
+        Thu, 22 Jun 2023 18:33:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75F2819AF
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 15:33:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 086BA61923
+        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 22:33:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB3D2C433C8;
+        Thu, 22 Jun 2023 22:33:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687473220;
+        bh=wP5iYCJHzA+hCBB51KqK3bEREmtRlXHKh26/82qwFDE=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=ssH+p4BaxnsIM0BKtv2UJNG2p5L0vhErzN1IOK6XILmij1WwGEh1ViosLCPKaFOzr
+         dtW7Ca/Sdfb1PzLV0XPv4fb0bExLCFS64R2Wdi2VKHCGa6qyawvN+n88JW4oLRF7+i
+         vP69ZO24fYXHexeWj2TNR8lGPL3703hktTrlMTJ9qdKPEGpEAkCN6vNCr3i6sQSBFu
+         m+IZ5SHfp6qGeDpv89J0Sl54TS4Vuowue8HEKC7HrvuI5hSS5ezjXnvaLd/LX1xK5/
+         x0lYBLgIhwU+l1VA/NAr4GwvvImVaq0ArrV/GBxnPexv+t5RbCH+/kaBPpv6BkHu1v
+         0LkI2DbzYQKOA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Yingkun Meng <mengyingkun@loongson.cn>,
+        Arnd Bergmann <arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [RFC 0/4] minimum folio order support in filemap
-Message-ID: <ZJTMMhIhvXKfNz/4@dread.disaster.area>
-References: <CGME20230621083825eucas1p1b05a6d7e0bf90e7a3d8e621f6578ff0a@eucas1p1.samsung.com>
- <20230621083823.1724337-1-p.raghav@samsung.com>
- <b311ae01-cec9-8e06-02a6-f139e37d5863@suse.de>
- <ZJN0pvgA2TqOQ9BC@dread.disaster.area>
- <4270b5c7-04b4-28e0-6181-ef98d1f5130c@suse.de>
- <94d9e935-c8a4-896a-13ac-263831a78dd5@suse.de>
- <ZJQggr3ymd7eXgA4@dread.disaster.area>
- <a42b97a9-88d5-b8cd-e36e-81a168dff7cd@suse.de>
+In-Reply-To: <20230622101235.3230941-1-arnd@kernel.org>
+References: <20230622101235.3230941-1-arnd@kernel.org>
+Subject: Re: [PATCH] ASoC: loongson: fix address space confusion
+Message-Id: <168747321729.318849.3547476102614344468.b4-ty@kernel.org>
+Date:   Thu, 22 Jun 2023 23:33:37 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a42b97a9-88d5-b8cd-e36e-81a168dff7cd@suse.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-c6835
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jun 22, 2023 at 12:23:10PM +0200, Hannes Reinecke wrote:
-> On 6/22/23 12:20, Dave Chinner wrote:
-> > On Thu, Jun 22, 2023 at 08:50:06AM +0200, Hannes Reinecke wrote:
-> > > On 6/22/23 07:51, Hannes Reinecke wrote:
-> > > > On 6/22/23 00:07, Dave Chinner wrote:
-> > > > > On Wed, Jun 21, 2023 at 11:00:24AM +0200, Hannes Reinecke wrote:
-> > > > > > On 6/21/23 10:38, Pankaj Raghav wrote:
-> > > > > > Hmm. Most unfortunate; I've just finished my own patchset
-> > > > > > (duplicating much
-> > > > > > of this work) to get 'brd' running with large folios.
-> > > > > > And it even works this time, 'fsx' from the xfstest suite runs
-> > > > > > happily on
-> > > > > > that.
-> > > > > 
-> > > > > So you've converted a filesystem to use bs > ps, too? Or is the
-> > > > > filesystem that fsx is running on just using normal 4kB block size?
-> > > > > If the latter, then fsx is not actually testing the large folio page
-> > > > > cache support, it's mostly just doing 4kB aligned IO to brd....
-> > > > > 
-> > > > I have been running fsx on an xfs with bs=16k, and it worked like a charm.
-> > > > I'll try to run the xfstest suite once I'm finished with merging
-> > > > Pankajs patches into my patchset.
-> > > > Well, would've been too easy.
-> > > 'fsx' bails out at test 27 (collapse), with:
-> > > 
-> > > XFS (ram0): Corruption detected. Unmount and run xfs_repair
-> > > XFS (ram0): Internal error isnullstartblock(got.br_startblock) at line 5787
-> > > of file fs/xfs/libxfs/xfs_bmap.c.  Caller
-> > > xfs_bmap_collapse_extents+0x2d9/0x320 [xfs]
-> > > 
-> > > Guess some more work needs to be done here.
-> > 
-> > Yup, start by trying to get the fstests that run fsx through cleanly
-> > first. That'll get you through the first 100,000 or so test ops
-> > in a few different run configs. Those canned tests are:
-> > 
-> > tests/generic/075
-> > tests/generic/112
-> > tests/generic/127
-> > tests/generic/231
-> > tests/generic/455
-> > tests/generic/457
-> > 
-> THX.
+On Thu, 22 Jun 2023 12:12:22 +0200, Arnd Bergmann wrote:
+> The i2s driver uses the mapped __iomem address of the FIFO as the DMA
+> address for the device. This apparently works on loongarch because of
+> the way it handles __iomem pointers as aliases of physical addresses,
+> but this is not portable to other architectures and causes a compiler
+> warning when dma addresses are not the same size as pointers:
 > 
-> Any preferences for the filesystem size?
-> I'm currently running off two ramdisks with 512M each; if that's too small I
-> need to increase the memory of the VM ...
+> sound/soc/loongson/loongson_i2s_pci.c: In function 'loongson_i2s_pci_probe':
+> sound/soc/loongson/loongson_i2s_pci.c:110:29: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
+>   110 |         tx_data->dev_addr = (dma_addr_t)i2s->reg_base + LS_I2S_TX_DATA;
+>       |                             ^
+> sound/soc/loongson/loongson_i2s_pci.c:113:29: error: cast from pointer to integer of different size [-Werror=pointer-to-int-cast]
+>   113 |         rx_data->dev_addr = (dma_addr_t)i2s->reg_base + LS_I2S_RX_DATA;
+>       |                             ^
+> 
+> [...]
 
-I generally run my pmem/ramdisk VM on a pair of 8GB ramdisks for 4kB
-filesystem testing.
+Applied to
 
-Because you are using larger block sizes, you are going to want to
-use larger rather than smaller because there are fewer blocks for a
-given size, and metadata blocks hold many more records before they
-spill to multiple nodes/levels.
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-e.g. going from 4kB to 16kB needs a 16x larger fs and file sizes for
-the 16kB filesystem to exercise the same metadata tree depth
-coverage as the 4kB filesystem (i.e. each single block extent is 4x
-larger, each single block metadata block holds 4x as much metadata
-before it spills).
+Thanks!
 
-With this in mind, I'd say you want the 16kB block size ramdisks to
-be as large as you can make them when running fstests....
+[1/1] ASoC: loongson: fix address space confusion
+      commit: 012fa2622e30675f61413485785e708ba02be78b
 
-Cheers,
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
