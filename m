@@ -2,41 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 157B273A98E
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 22:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD1873A98A
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 22:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjFVUgI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 22 Jun 2023 16:36:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42780 "EHLO
+        id S231126AbjFVUeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 16:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbjFVUgG (ORCPT
+        with ESMTP id S229873AbjFVUeO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 16:36:06 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC07BDC
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 13:36:01 -0700 (PDT)
-Received: from i53875bdf.versanet.de ([83.135.91.223] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1qCR1z-00020C-4S; Thu, 22 Jun 2023 22:35:51 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Stefan O'Rear <sorear@fastmail.com>
-Cc:     linux-riscv@lists.infradead.org, samuel@sholland.org,
-        guoren@kernel.org, christoph.muellner@vrull.eu,
-        conor.dooley@microchip.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 2/2] RISC-V: add T-Head vector errata handling
-Date:   Thu, 22 Jun 2023 22:35:50 +0200
-Message-ID: <9132027.CDJkKcVGEf@diego>
-In-Reply-To: <23381fc8-c297-46ed-9e11-a2643e18e4c9@app.fastmail.com>
-References: <20230228215435.3366914-1-heiko@sntech.de> <1941316.PYKUYFuaPT@diego>
- <23381fc8-c297-46ed-9e11-a2643e18e4c9@app.fastmail.com>
+        Thu, 22 Jun 2023 16:34:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3344CDC;
+        Thu, 22 Jun 2023 13:34:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C34BB618E5;
+        Thu, 22 Jun 2023 20:34:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AECE1C433C8;
+        Thu, 22 Jun 2023 20:34:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1687466052;
+        bh=Z5y5hDsI2WXqU5W36Hh41r3e9huUDgznGRpPUg89jlU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=QPKgU8V8Bm+OC675d8kbC5giP4wg168IX3yRQf8iIgbOgedxxh6sD92EQ3G0Hg6eJ
+         u49s99n2DiQRRsAM/l6qclvcPRWUdoWIGeSHRLnszmhNHvqPIFCjhrPa6lwSYdKg6F
+         FutQTuVJ3egS4jNRduAU3JyYM1SHxMaJEzHuO6S9nUD/ejqspFsBdnuWiYknL/rt+4
+         9BpB+1nTM6Q0/KI3BUJ1iLdHnK0vbLUI/C69ULFYK/f+lFIleFW/THdkUDj+M4o/hi
+         q19pikCFEdyAW6CupJYkx97lY8Zl/b0o2Dau3kTW2CxRymkq3HOefRN0VGNv+A9lF2
+         P+E2CHOJtaD3A==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     amit.pundir@linaro.org, Will Deacon <will@kernel.org>,
+        sumit.semwal@linaro.org, linux-arm-msm@vger.kernel.org,
+        konrad.dybcio@somainline.org, linux-arm-kernel@lists.infradead.org,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Nikita Travkin <nikita@trvn.ru>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Das Srinagesh <quic_gurus@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Marko <robimarko@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <mani@kernel.org>
+Subject: Re: (subset) [PATCH v2 1/4] dt-bindings: firmware: qcom,scm: Document that SCM can be dma-coherent
+Date:   Thu, 22 Jun 2023 13:38:10 -0700
+Message-ID: <168746628699.107789.12308094014658247045.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20230616081440.v2.1.Ie79b5f0ed45739695c9970df121e11d724909157@changeid>
+References: <20230616081440.v2.1.Ie79b5f0ed45739695c9970df121e11d724909157@changeid>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,57 +70,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stefan,
 
-Am Donnerstag, 22. Juni 2023, 20:58:37 CEST schrieb Stefan O'Rear:
-> On Thu, Jun 22, 2023, at 1:39 PM, Heiko Stübner wrote:
-> > Am Dienstag, 13. Juni 2023, 08:35:53 CEST schrieb Stefan O'Rear:
-> >> vxrm and vxsat are part of fcsr in 0.7.1, so they should already have been
-> >> handled by __fstate_save and __fstate_restore, and this code is likely to
-> >> misbehave (saving the new process's vxrm/vxsat in the old process's save area
-> >> because float state is swapped before vector state in __switch_to).
-> >
-> > I'm not sure I follow your description but may be overlooking or have
-> > misunderstood something.
-> >
-> > Somehow I way to often have trouble resolving CSR addresses, but according
-> > to openSBI, FCSR has the location of 0x3
-> > (#define CSR_FCSR 0x003 in include/sbi/riscv_encoding.h)
-> >
-> > where CSR_VXSAT and CSR_VXRM are at 0x9 and 0xa respectively.
-> > (#define CSR_VXSAT 0x9 and  #define CSR_VXRM 0xa)
-> >
-> >
-> > And looking at __fstate_save + __fstate_restore the only CSRs accessed seem
-> > to be CSR_STATUS and FCSR itself.
-> >
-> > I definitly won't claim to be right, but don't see the issue yet.
-> >
-> >
-> > Thanks for a hint
-> > Heiko
+On Fri, 16 Jun 2023 08:14:38 -0700, Douglas Anderson wrote:
+> Trogdor devices use firmware backed by TF-A instead of Qualcomm's
+> normal TZ. On TF-A we end up mapping memory as cacheable. Specifically,
+> you can see in Trogdor's TF-A code [1] in qti_sip_mem_assign() that we
+> call qti_mmap_add_dynamic_region() with MT_RO_DATA. This translates
+> down to MT_MEMORY instead of MT_NON_CACHEABLE or MT_DEVICE.
 > 
-> Are you aware of "3.7. Vector Fixed-Point Fields in fcsr" in
-> riscv-v-spec-0.7.1.pdf?
+> Let's allow devices like trogdor to be described properly by allowing
+> "dma-coherent" in the SCM node.
+> 
+> [...]
 
-oh wow, thanks a lot for that pointer, now I understand your concern.
+Applied, thanks!
 
-So in vector-0.7.1 fcsr[10:9] mirrors vxrm and fcsr[8] mirrors vxsat.
+[1/4] dt-bindings: firmware: qcom,scm: Document that SCM can be dma-coherent
+      commit: c0877829ada0406233aee5bd54f6813db79d5f1f
+[2/4] arm64: dts: qcom: sc7180: Mark SCM as dma-coherent for IDP
+      commit: 9a5f0b11e49e27f0a01a73c31d05df4a95bea3fa
+[3/4] arm64: dts: qcom: sc7180: Mark SCM as dma-coherent for trogdor
+      commit: a54b7fa6b9ab6b4ecb7d9aba6b1a0ce1bcc961e3
+[4/4] arm64: dts: qcom: sc7280: Mark SCM as dma-coherent for chrome devices
+      commit: 7b59e8ae92fe089fed8ff1b23e53442ae5b204c9
 
-
-On a positive note, the T-Head cores seem to not implement the full
-vector 0.7.1 specification after all, in the documentation I have [0]
-fcsr[31:8] are declared as "0" and uppermost bits are [7:5] for the "frm"
-field.
-
-So I guess a code comment should suffice to explain :-)
-
-
-Regards
-Heiko
-
-
-[0] https://github.com/T-head-Semi/openc906/blob/main/doc/%E7%8E%84%E9%93%81C906%E7%94%A8%E6%88%B7%E6%89%8B%E5%86%8C.pdf
-16.3.1.3 浮点控制状态寄存器（FCSR） on page 334
-
-
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
