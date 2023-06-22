@@ -2,129 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5907573A495
-	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:18:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CCB373A4A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 22 Jun 2023 17:19:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231650AbjFVPSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 22 Jun 2023 11:18:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51924 "EHLO
+        id S232037AbjFVPTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 22 Jun 2023 11:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231501AbjFVPSK (ORCPT
+        with ESMTP id S232046AbjFVPTr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 22 Jun 2023 11:18:10 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F42E75
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 08:18:05 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-987accb4349so882090566b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 22 Jun 2023 08:18:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1687447083; x=1690039083;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TP/3FQHMmn6RlV6mzj99uRIgWCscxlsWWyg8WN59HdI=;
-        b=lJIK/yH3nbnXvWsDZuW+QWrf6YwAPDDc8/1G8lsfca1YAW88nTfJO8BXwgLKVc4saf
-         dRUddeuJGjeXzDOEKUvXZUC/DZkf69bo8VrYUbMCY3XaTSO6CUYrvAI4MNL4UZkKzf7J
-         iAUCXxZ6x5hw3A3hdhfxe7ARP3A6YOnLgmF2/jLT2D0T6VeTC/zQKjbBXX1xy+xX/Gmc
-         Ay9g8RP4jpdK1vi4We93lj8Tuh2nph6vOOv1KuPXfScI3VlS1xYBQrEXEfsJWEzaKZvA
-         56gnd/Q7FIEicLm7c84+9swor0NtEcWArj2+Q7L9DGh7NkXFXStHIPobtQYLa/IPTDbn
-         E1RQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1687447083; x=1690039083;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TP/3FQHMmn6RlV6mzj99uRIgWCscxlsWWyg8WN59HdI=;
-        b=YMPMdqjrPWfZvbD3FiamMxIxb7mLiAdgH9B+wTkVfWU6z/mB3r+aiuGuhQck1/+W84
-         8Xyi20AKKXBWPj6B/ql5DyBiMbpKM5Og2MCYDlxRKVXBNOAb+8cWFCOa7SIa3DLOdVWH
-         iLIMKVctLq+oXiw1hFtbwfihyICpfMtHXIyGf7WZt88KhuqHhs6BSxguIc8PL7Kw8gaB
-         AXIip7eLh96gTC3KVwY/jVQivi+Y6zT7B2HP0UaqtFFscORPUdVEPbe5DrWhffSLs7Xf
-         gEiH+pWETM4klo9OMKSgCy5fwKol2ybst3QkScId/4qVIdZD/ycjWcL+86e0JBI0Uwvl
-         rfRA==
-X-Gm-Message-State: AC+VfDyl7ajpd/B1/S0PosczDb9a4OsH8zLilbscQivveUaMQNvAlUOR
-        11AO/z9gESLHAEg/Yq2kdKXL9g==
-X-Google-Smtp-Source: ACHHUZ7HTn1t0/6v5JA/MdJ0FjEHkC3btRqN4bImVtZYQPsAKKnKoK87PYfs9u5bd+kjU5xHuSTSpQ==
-X-Received: by 2002:a17:906:6a07:b0:989:ca:a0a2 with SMTP id qw7-20020a1709066a0700b0098900caa0a2mr8810615ejc.69.1687447083554;
-        Thu, 22 Jun 2023 08:18:03 -0700 (PDT)
-Received: from [192.168.1.20] ([178.197.219.26])
-        by smtp.gmail.com with ESMTPSA id l15-20020a170906230f00b0098807b33996sm4679533eja.107.2023.06.22.08.18.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Jun 2023 08:18:03 -0700 (PDT)
-Message-ID: <ac12c499-a4d5-74c7-42ec-f9789253108e@linaro.org>
-Date:   Thu, 22 Jun 2023 17:17:59 +0200
+        Thu, 22 Jun 2023 11:19:47 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CB019B7;
+        Thu, 22 Jun 2023 08:19:45 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 35ME8hFi004001;
+        Thu, 22 Jun 2023 15:19:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=vYBG66qzmFxp2vLXka/Uf8FXHiZVHAxT1SFVB/3LeFs=;
+ b=DItnH4BBWN+4BOe6w4kVwxpRmWnFRpiaeYvVKKGUwQUVQXagat7o9IxH8vth7R8+TAX4
+ yhbSDsQnfl0glHpmyMkfDeXnolT4FEza+g0O4ckkTfcmFhyGIcSp9T6vZDXUp9GohzE7
+ 9Motdbs9tTcLwmLFvtnIhePMXEogHyTVcqoUXO2Xr0kUVD/fMha7oLUV+2UkiWXD+g7n
+ M+nGzdBUyHotlvabeL6h84RGlJjvVBexANQB4VIBIZqix2CsBq967vVD0+AID+Tx4HRy
+ l8WPWwF0iNbVeaP6OaN/tuC/VLdFQkVBMJ39HJ1X/+veQp8ONoFnzNcxVzAZ+ttFw5Za Jw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3rc0sk3aqe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 15:19:12 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 35MFJAb2021948
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 22 Jun 2023 15:19:10 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 22 Jun
+ 2023 08:19:09 -0700
+Message-ID: <f2ca0d67-25e7-1313-9cea-fddb1ad28c9b@quicinc.com>
+Date:   Thu, 22 Jun 2023 09:19:08 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.12.0
-Subject: Re: [PATCH 6/7] arm64: dts: qcom: msm8916-samsung-fortuna: Add
- accelerometer/magnetometer
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH 3/9] clk: qcom: gcc-msm8998: Control MMSS and GPUSS GPLL0
+ outputs properly
 Content-Language: en-US
-To:     "Lin, Meng-Bo" <linmengbo0689@protonmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Nikita Travkin <nikita@trvn.ru>, soc@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Joe Mason <buddyjojo06@outlook.com>,
-        Siddharth Manthan <siddharth.manthan@gmail.com>
-References: <20230622000007.48219-1-linmengbo0689@protonmail.com>
- <20230622000418.48350-1-linmengbo0689@protonmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230622000418.48350-1-linmengbo0689@protonmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Taniya Das <tdas@codeaurora.org>
+CC:     Marijn Suijten <marijn.suijten@somainline.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Jami Kettunen <jami.kettunen@somainline.org>
+References: <20230622-topic-8998clk-v1-0-5b7a0d6e98b1@linaro.org>
+ <20230622-topic-8998clk-v1-3-5b7a0d6e98b1@linaro.org>
+ <e880bad8-4fcb-97c1-ec9c-9122e1b550e6@quicinc.com>
+ <18f508e7-8a7e-162b-4bed-eaef45147a22@linaro.org>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <18f508e7-8a7e-162b-4bed-eaef45147a22@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Kf6rLUAL6MzwSABUrYtFGgX5TOYn69Ek
+X-Proofpoint-ORIG-GUID: Kf6rLUAL6MzwSABUrYtFGgX5TOYn69Ek
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.591,FMLib:17.11.176.26
+ definitions=2023-06-22_10,2023-06-22_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 mlxscore=0
+ phishscore=0 impostorscore=0 mlxlogscore=999 priorityscore=1501
+ malwarescore=0 adultscore=0 spamscore=0 clxscore=1011 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2305260000 definitions=main-2306220129
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/06/2023 02:05, Lin, Meng-Bo wrote:
-> From: Joe Mason <buddyjojo06@outlook.com>
-> 
-> gprimeltecan and grandprimelte use a Bosch BMC150, and fortuna3g has
-> ST LSM303C accelerometer/magnetometer combo.
-> fortunaltezt and rossa have only ST LIS2HH12 accelerometer.
-> 
-> Add support for them.
-> 
-> Signed-off-by: Joe Mason <buddyjojo06@outlook.com>
-> [Add LSM303C]
-> Signed-off-by: Siddharth Manthan <siddharth.manthan@gmail.com>
-> [Move sensors to fortuna.dtsi. Disable them by default]
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> [Enable on grandprimelte. Add LIS2HH12]
-> Signed-off-by: Lin, Meng-Bo <linmengbo0689@protonmail.com>
-> ---
->  .../dts/qcom/msm8216-samsung-fortuna3g.dts    |  8 ++
->  .../qcom/msm8916-samsung-fortuna-common.dtsi  | 80 +++++++++++++++++++
->  .../dts/qcom/msm8916-samsung-fortunaltezt.dts |  8 ++
->  .../dts/qcom/msm8916-samsung-gprimeltecan.dts |  8 ++
->  .../qcom/msm8916-samsung-grandprimelte.dts    |  8 ++
->  .../qcom/msm8916-samsung-rossa-common.dtsi    |  8 ++
+On 6/22/2023 9:05 AM, Konrad Dybcio wrote:
+> On 22.06.2023 16:55, Jeffrey Hugo wrote:
+>> On 6/22/2023 5:57 AM, Konrad Dybcio wrote:
+>>> Up until now, we've been relying on some non-descript hardware magic
+>>> to pinkypromise turn the clocks on for us. While new SoCs shine with
+>>> that feature, MSM8998 can not always be fully trusted.
+>>>
+>>> Register the MMSS and GPUSS GPLL0 legs with the CCF to allow for manual
+>>> enable voting.
+>>>
+>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>>> ---
+>>>    drivers/clk/qcom/gcc-msm8998.c | 58 ++++++++++++++++++++++++++++++++++++++++++
+>>>    1 file changed, 58 insertions(+)
+>>>
+>>> diff --git a/drivers/clk/qcom/gcc-msm8998.c b/drivers/clk/qcom/gcc-msm8998.c
+>>> index be024f8093c5..cccb19cae481 100644
+>>> --- a/drivers/clk/qcom/gcc-msm8998.c
+>>> +++ b/drivers/clk/qcom/gcc-msm8998.c
+>>> @@ -25,6 +25,9 @@
+>>>    #include "reset.h"
+>>>    #include "gdsc.h"
+>>>    +#define GCC_MMSS_MISC    0x0902C
+>>> +#define GCC_GPU_MISC    0x71028
+>>> +
+>>>    static struct pll_vco fabia_vco[] = {
+>>>        { 250000000, 2000000000, 0 },
+>>>        { 125000000, 1000000000, 1 },
+>>> @@ -1367,6 +1370,22 @@ static struct clk_branch gcc_boot_rom_ahb_clk = {
+>>>        },
+>>>    };
+>>>    +static struct clk_branch gcc_mmss_gpll0_div_clk = {
+>>> +    .halt_check = BRANCH_HALT_DELAY,
+>>> +    .clkr = {
+>>> +        .enable_reg = 0x5200c,
+>>> +        .enable_mask = BIT(0),
+>>> +        .hw.init = &(struct clk_init_data){
+>>> +            .name = "gcc_mmss_gpll0_div_clk",
+>>> +            .parent_hws = (const struct clk_hw *[]) {
+>>> +                &gpll0_out_main.clkr.hw,
+>>> +            },
+>>> +            .num_parents = 1,
+>>> +            .ops = &clk_branch2_ops,
+>>> +        },
+>>> +    },
+>>> +};
+>>> +
+>>>    static struct clk_branch gcc_mmss_gpll0_clk = {
+>>>        .halt_check = BRANCH_HALT_DELAY,
+>>>        .clkr = {
+>>> @@ -1395,6 +1414,38 @@ static struct clk_branch gcc_mss_gpll0_div_clk_src = {
+>>>        },
+>>>    };
+>>>    +static struct clk_branch gcc_gpu_gpll0_div_clk = {
+>>> +    .halt_check = BRANCH_HALT_DELAY,
+>>> +    .clkr = {
+>>> +        .enable_reg = 0x5200c,
+>>> +        .enable_mask = BIT(3),
+>>> +        .hw.init = &(struct clk_init_data){
+>>> +            .name = "gcc_gpu_gpll0_div_clk",
+>>> +            .parent_hws = (const struct clk_hw *[]) {
+>>> +                &gpll0_out_main.clkr.hw,
+>>> +            },
+>>> +            .num_parents = 1,
+>>> +            .ops = &clk_branch2_ops,
+>>> +        },
+>>> +    },
+>>> +};
+>>> +
+>>> +static struct clk_branch gcc_gpu_gpll0_clk = {
+>>> +    .halt_check = BRANCH_HALT_DELAY,
+>>> +    .clkr = {
+>>> +        .enable_reg = 0x5200c,
+>>> +        .enable_mask = BIT(4),
+>>> +        .hw.init = &(struct clk_init_data){
+>>> +            .name = "gcc_gpu_gpll0_clk",
+>>> +            .parent_hws = (const struct clk_hw *[]) {
+>>> +                &gpll0_out_main.clkr.hw,
+>>> +            },
+>>> +            .num_parents = 1,
+>>> +            .ops = &clk_branch2_ops,
+>>> +        },
+>>> +    },
+>>> +};
+>>> +
+>>>    static struct clk_branch gcc_blsp1_ahb_clk = {
+>>>        .halt_reg = 0x17004,
+>>>        .halt_check = BRANCH_HALT_VOTED,
+>>> @@ -3080,6 +3131,9 @@ static struct clk_regmap *gcc_msm8998_clocks[] = {
+>>>        [AGGRE2_SNOC_NORTH_AXI] = &aggre2_snoc_north_axi_clk.clkr,
+>>>        [SSC_XO] = &ssc_xo_clk.clkr,
+>>>        [SSC_CNOC_AHBS_CLK] = &ssc_cnoc_ahbs_clk.clkr,
+>>> +    [GCC_MMSS_GPLL0_DIV_CLK] = &gcc_mmss_gpll0_div_clk.clkr,
+>>> +    [GCC_GPU_GPLL0_DIV_CLK] = &gcc_gpu_gpll0_div_clk.clkr,
+>>> +    [GCC_GPU_GPLL0_CLK] = &gcc_gpu_gpll0_clk.clkr,
+>>>    };
+>>>      static struct gdsc *gcc_msm8998_gdscs[] = {
+>>> @@ -3235,6 +3289,10 @@ static int gcc_msm8998_probe(struct platform_device *pdev)
+>>>        if (ret)
+>>>            return ret;
+>>>    +    /* Disable the GPLL0 active input to MMSS and GPU via MISC registers */
+>>> +    regmap_write(regmap, GCC_MMSS_MISC, 0x10003);
+>>> +    regmap_write(regmap, GCC_GPU_MISC, 0x10003);
+>>
+>> I wonder, does this disrupt a handoff of an active display from the bootloader to Linux?
+> My phone's bootloader doesn't initialize the display, if you (or Angelo
+> or Jami, +CC) could test this, it'd be wonderful.
 
-Your split of patches is difficult to follow and understand. You bring
-now, within your first submission, few boards. Then adding one feature
-to this board is not a separate commit. Commit, so a logical change, is
-adding a board. Please organize your patchset so it will be easier to
-review. Now with such changes touching multiple files, seems not
-organized correctly. Your previous patch added multiple boards in one
-commit - also not easy to review.
-
-One commit for the binding, one commit for each board. Optionally common
-file could be a separate commit.
-
-Best regards,
-Krzysztof
-
+Let me carve out some time to try it on the laptop.
